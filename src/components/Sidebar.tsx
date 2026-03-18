@@ -67,7 +67,10 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div className="px-4 py-3 border-t border-sidebar-border">
-        <p className="text-[10px] text-muted-foreground">v1.0.0</p>
+        <p className="text-[10px] text-muted-foreground leading-relaxed">
+          Entwickelt von Davide Bazzani
+        </p>
+        <p className="text-[10px] text-muted-foreground/60">v1.0.0</p>
       </div>
     </aside>
   )

@@ -29,6 +29,8 @@ export type QueryId =
   | 'sw_installed' | 'sw_office' | 'sw_recent' | 'sw_tasks'
   // Events (admin)
   | 'ev_errors' | 'ev_logins' | 'ev_bsod'
+  // Nachrichten (admin)
+  | 'msg_screen' | 'msg_voice'
 
 export interface QueryDefinition {
   id: QueryId

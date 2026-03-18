@@ -271,8 +271,13 @@ export const QUERY_DEFINITIONS: QueryDefinition[] = [
     label: 'Installierte Software',
     adminOnly: true,
     category: 'Software & Anwendungen',
+    // PROBLEM 3 FIX: Alle 3 Quellen abfragen:
+    // 1. HKLM 64-bit + 32-bit (systemweite Installationen)
+    // 2. HKU per SID-Enumeration via ProfileList: findet Software aller aktuell
+    //    angemeldeten Benutzer (deren Hive ist in HKU automatisch geladen).
+    //    Zuverlässiger als reg load/unload weil keine DAT-Dateien geöffnet werden müssen.
     psCommand: (h) =>
-      `Invoke-Command -ComputerName "${h}" -ScriptBlock {Get-ItemProperty "HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*","HKLM:\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*" -ErrorAction SilentlyContinue | Where-Object{$_.DisplayName} | Select-Object DisplayName,DisplayVersion,Publisher,InstallDate | Sort-Object DisplayName} -ErrorAction SilentlyContinue | ConvertTo-Json -Compress`,
+      `Invoke-Command -ComputerName "${h}" -ScriptBlock { $r=@(); $r+=Get-ItemProperty 'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*' -EA SilentlyContinue; $r+=Get-ItemProperty 'HKLM:\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*' -EA SilentlyContinue; $sids=(Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList' -EA SilentlyContinue).PSChildName; foreach($sid in $sids){$r+=Get-ItemProperty "registry::HKU\\$sid\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*" -EA SilentlyContinue}; $r | Where-Object{$_.DisplayName} | Select-Object DisplayName,DisplayVersion,Publisher,InstallDate | Sort-Object DisplayName -Unique | ConvertTo-Json -Compress -Depth 2 } -ErrorAction SilentlyContinue`,
   },
   {
     id: 'sw_office',
@@ -324,13 +329,36 @@ export const QUERY_DEFINITIONS: QueryDefinition[] = [
     psCommand: (h) =>
       `Get-WinEvent -ComputerName "${h}" -FilterHashtable @{LogName="System";Id=41,1001,6008} -MaxEvents 10 -ErrorAction SilentlyContinue | Select-Object TimeCreated,Id,Message | ConvertTo-Json -Compress`,
   },
+
+  // ── Nachrichten versenden (ADMIN) ─────────────────────────────────────────
+  {
+    id: 'msg_screen',
+    label: 'Bildschirmnachricht senden',
+    adminOnly: true,
+    category: 'Nachrichten versenden',
+    // PROBLEM 2 FIX: Ping-Test vor dem Senden + /TIME:60 für längere Anzeigedauer.
+    // msg.exe erfordert keine speziellen Dienste auf Domain-Maschinen (nutzt RPC/Named Pipes).
+    // __MSG__ wird zur Laufzeit in QueryMenu durch den eingegebenen Text ersetzt.
+    psCommand: (h) =>
+      `$online=Test-Connection -ComputerName "${h}" -Count 1 -Quiet -ErrorAction SilentlyContinue; if($online){ $out=cmd /c "msg * /SERVER:${h} /TIME:60 __MSG__ 2>&1"; if($LASTEXITCODE -eq 0){"Nachricht gesendet"}else{"Fehler: $out"} }else{"Gerät nicht erreichbar: ${h}"}`,
+  },
+  {
+    id: 'msg_voice',
+    label: 'Sprachnachricht über Lautsprecher senden',
+    adminOnly: true,
+    category: 'Nachrichten versenden',
+    // __MSG__ and __LANG__ are replaced at runtime (single-quote-escaped)
+    psCommand: (h) =>
+      `Invoke-Command -ComputerName "${h}" -ScriptBlock {param($t,$l);Add-Type -AssemblyName System.Speech;$s=New-Object System.Speech.Synthesis.SpeechSynthesizer;try{$s.SelectVoiceByHints([System.Globalization.CultureInfo]::GetCultureInfo($l))}catch{};$s.Speak($t)} -ArgumentList '__MSG__','__LANG__'`,
+  },
 ]
 
 export const QUERY_CATEGORIES = [
-  { key: 'Netzwerk & Erreichbarkeit', icon: '🌐', adminOnly: false },
-  { key: 'System & Hardware',         icon: '💻', adminOnly: true },
-  { key: 'Active Directory & Benutzer', icon: '🔐', adminOnly: true },
-  { key: 'Sicherheit & Compliance',   icon: '🛡️', adminOnly: true },
-  { key: 'Software & Anwendungen',    icon: '📦', adminOnly: true },
-  { key: 'Ereignisprotokoll',         icon: '📅', adminOnly: true },
+  { key: 'Netzwerk & Erreichbarkeit',  icon: '🌐', adminOnly: false },
+  { key: 'System & Hardware',          icon: '💻', adminOnly: true },
+  { key: 'Active Directory & Benutzer',icon: '🔐', adminOnly: true },
+  { key: 'Sicherheit & Compliance',    icon: '🛡️', adminOnly: true },
+  { key: 'Software & Anwendungen',     icon: '📦', adminOnly: true },
+  { key: 'Ereignisprotokoll',          icon: '📅', adminOnly: true },
+  { key: 'Nachrichten versenden',      icon: '📢', adminOnly: true },
 ]

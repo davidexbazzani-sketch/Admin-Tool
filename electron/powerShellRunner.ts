@@ -1,4 +1,4 @@
-import { spawn } from 'child_process'
+import { spawn, ChildProcess } from 'child_process'
 
 export interface PSResult {
   stdout: string
@@ -7,6 +7,17 @@ export interface PSResult {
   timedOut: boolean
 }
 
+// ── Active process registry (for cancel-all support) ─────────────────────────
+const activeProcesses = new Set<ChildProcess>()
+
+export function killAllProcesses(): void {
+  for (const proc of activeProcesses) {
+    try { proc.kill('SIGTERM') } catch { /* already exited */ }
+  }
+  activeProcesses.clear()
+}
+
+// ── PowerShell runner ─────────────────────────────────────────────────────────
 export function runPowerShell(command: string, timeoutMs = 30000): Promise<PSResult> {
   return new Promise((resolve) => {
     let stdout = ''
@@ -22,6 +33,8 @@ export function runPowerShell(command: string, timeoutMs = 30000): Promise<PSRes
       windowsHide: true,
     })
 
+    activeProcesses.add(proc)
+
     const timer = setTimeout(() => {
       timedOut = true
       proc.kill('SIGTERM')
@@ -32,6 +45,7 @@ export function runPowerShell(command: string, timeoutMs = 30000): Promise<PSRes
 
     proc.on('close', (code) => {
       clearTimeout(timer)
+      activeProcesses.delete(proc)
       resolve({
         stdout: stdout.trim(),
         stderr: stderr.trim(),
@@ -42,6 +56,7 @@ export function runPowerShell(command: string, timeoutMs = 30000): Promise<PSRes
 
     proc.on('error', (err) => {
       clearTimeout(timer)
+      activeProcesses.delete(proc)
       resolve({
         stdout: '',
         stderr: err.message,
@@ -52,6 +67,7 @@ export function runPowerShell(command: string, timeoutMs = 30000): Promise<PSRes
   })
 }
 
+// ── CMD runner ────────────────────────────────────────────────────────────────
 export function runCmd(command: string, timeoutMs = 30000): Promise<PSResult> {
   return new Promise((resolve) => {
     let stdout = ''
@@ -59,6 +75,8 @@ export function runCmd(command: string, timeoutMs = 30000): Promise<PSResult> {
     let timedOut = false
 
     const proc = spawn('cmd', ['/c', command], { windowsHide: true })
+
+    activeProcesses.add(proc)
 
     const timer = setTimeout(() => {
       timedOut = true
@@ -70,11 +88,13 @@ export function runCmd(command: string, timeoutMs = 30000): Promise<PSResult> {
 
     proc.on('close', (code) => {
       clearTimeout(timer)
+      activeProcesses.delete(proc)
       resolve({ stdout: stdout.trim(), stderr: stderr.trim(), exitCode: code ?? -1, timedOut })
     })
 
     proc.on('error', (err) => {
       clearTimeout(timer)
+      activeProcesses.delete(proc)
       resolve({ stdout: '', stderr: err.message, exitCode: -1, timedOut: false })
     })
   })

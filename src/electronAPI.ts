@@ -27,6 +27,10 @@ declare global {
       getSettings(): Promise<Record<string, unknown>>
       setSetting(key: string, value: unknown): Promise<boolean>
       openExternal(url: string): Promise<void>
+      openPath(filePath: string): Promise<{ success: boolean; error?: string }>
+      cancelAll(): Promise<boolean>
+      log(message: string): Promise<void>
+      composeEmail(opts: { to: string; cc: string; subject: string; body: string; attachmentPath?: string }): Promise<{ success: boolean; fallback?: boolean }>
       getAppVersion(): Promise<string>
       onQueryProgress(cb: (data: { deviceId: string; queryId: string; status: string }) => void): () => void
     }
