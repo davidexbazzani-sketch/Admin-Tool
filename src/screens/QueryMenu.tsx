@@ -346,9 +346,10 @@ export default function QueryMenu() {
                         icon={<MessageSquare size={14} />}
                         checked={selectedQueryIds.includes('msg_screen')}
                         onToggle={() => toggleQuery('msg_screen')}
-                        hint="Wird über msg.exe an den Geräteschlüssel gesendet (erfordert Netzwerkzugriff)"
+                        hint="Wird über msg.exe gesendet (erfordert AllowRemoteRPC=1 + aktive Benutzersitzung)"
                         isAdmin={isAdmin}
                         hostnames={hostnames}
+                        showMsgScreenCheck={true}
                       >
                         <div>
                           <label className="block text-[11px] font-medium text-muted-foreground mb-1.5">
@@ -466,14 +467,23 @@ interface NachrichtItemProps {
   children: React.ReactNode
   isAdmin: boolean
   hostnames: string[]
-  // PROBLEM 2: showWinrmCheck=true activates the WinRM pre-flight check section (msg_voice)
+  // showWinrmCheck=true activates the WinRM pre-flight check section (msg_voice)
   showWinrmCheck?: boolean
+  // showMsgScreenCheck=true activates the msg.exe pre-flight check section (msg_screen)
+  showMsgScreenCheck?: boolean
 }
 
-function NachrichtItem({ id, label, icon, checked, onToggle, hint, children, isAdmin, hostnames, showWinrmCheck }: NachrichtItemProps) {
-  // PROBLEM 2: WinRM status per hostname – only used when showWinrmCheck=true
+type MsgScreenCheckState = 'checking' | 'ready' | 'no-session' | 'norpc' | 'offline' | 'error'
+
+function NachrichtItem({ id, label, icon, checked, onToggle, hint, children, isAdmin, hostnames, showWinrmCheck, showMsgScreenCheck }: NachrichtItemProps) {
+  // WinRM status per hostname – only used when showWinrmCheck=true
   const [winrmStatus, setWinrmStatus] = useState<Record<string, 'checking' | 'ok' | 'stopped' | 'error'>>({})
   const [winrmActivating, setWinrmActivating] = useState<Record<string, boolean>>({})
+
+  // msg.exe pre-flight check state – only used when showMsgScreenCheck=true
+  const [msgScreenStatus, setMsgScreenStatus] = useState<Record<string, MsgScreenCheckState>>({})
+  const [msgScreenInfo, setMsgScreenInfo] = useState<Record<string, string>>({})
+  const [msgRpcSetting, setMsgRpcSetting] = useState<Record<string, boolean>>({})
 
   // Check WinRM on each target host via Test-WSMan
   async function checkWinRM() {
@@ -505,6 +515,62 @@ function NachrichtItem({ id, label, icon, checked, onToggle, hint, children, isA
       setWinrmStatus((prev) => ({ ...prev, [hostname]: 'error' }))
     } finally {
       setWinrmActivating((prev) => ({ ...prev, [hostname]: false }))
+    }
+  }
+
+  // Check msg.exe prerequisites: ping, RPC port 135, active sessions
+  async function checkMsgScreen() {
+    const initial: Record<string, MsgScreenCheckState> = {}
+    hostnames.forEach((h) => { initial[h] = 'checking' })
+    setMsgScreenStatus(initial)
+    setMsgScreenInfo({})
+
+    for (const h of hostnames) {
+      try {
+        const cmd = `$ping=Test-Connection -ComputerName "${h}" -Count 1 -Quiet -EA SilentlyContinue; if(!$ping){"offline"; exit}; $rpc=Test-NetConnection -ComputerName "${h}" -Port 135 -WarningAction SilentlyContinue -InformationLevel Quiet -EA SilentlyContinue; if(!$rpc){"norpc"; exit}; $ses=cmd /c "query session /server:${h} 2>&1"; $cnt=($ses | Where-Object{$_ -match 'Active'}).Count; "ok:$cnt"`
+        const result = await api().runPowerShell(cmd, 15000)
+        const out = result.stdout.trim()
+        if (out === 'offline') {
+          setMsgScreenStatus((prev) => ({ ...prev, [h]: 'offline' }))
+          setMsgScreenInfo((prev) => ({ ...prev, [h]: 'Nicht erreichbar (Ping fehlgeschlagen)' }))
+        } else if (out === 'norpc') {
+          setMsgScreenStatus((prev) => ({ ...prev, [h]: 'norpc' }))
+          setMsgScreenInfo((prev) => ({ ...prev, [h]: 'RPC Port 135 nicht erreichbar' }))
+        } else if (out.startsWith('ok:')) {
+          const cnt = parseInt(out.split(':')[1] ?? '0', 10)
+          if (cnt === 0) {
+            setMsgScreenStatus((prev) => ({ ...prev, [h]: 'no-session' }))
+            setMsgScreenInfo((prev) => ({ ...prev, [h]: 'Keine aktive Benutzersitzung' }))
+          } else {
+            setMsgScreenStatus((prev) => ({ ...prev, [h]: 'ready' }))
+            setMsgScreenInfo((prev) => ({ ...prev, [h]: `${cnt} aktive Sitzung(en)` }))
+          }
+        } else {
+          setMsgScreenStatus((prev) => ({ ...prev, [h]: 'error' }))
+          setMsgScreenInfo((prev) => ({ ...prev, [h]: 'Prüfung fehlgeschlagen' }))
+        }
+      } catch {
+        setMsgScreenStatus((prev) => ({ ...prev, [h]: 'error' }))
+        setMsgScreenInfo((prev) => ({ ...prev, [h]: 'Prüfung fehlgeschlagen' }))
+      }
+    }
+  }
+
+  // Set AllowRemoteRPC=1 on target via WinRM (Invoke-Command)
+  async function setAllowRemoteRPC(hostname: string) {
+    setMsgRpcSetting((prev) => ({ ...prev, [hostname]: true }))
+    try {
+      const cmd = `Invoke-Command -ComputerName "${hostname}" -ScriptBlock{Set-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server' -Name AllowRemoteRPC -Value 1 -Type DWord -Force -EA Stop} -EA Stop; Write-Output 'ok'`
+      const result = await api().runPowerShell(cmd, 20000)
+      if (result.stdout.trim().includes('ok')) {
+        setMsgScreenInfo((prev) => ({ ...prev, [hostname]: (prev[hostname] ?? '') + ' | AllowRemoteRPC gesetzt ✓' }))
+      } else {
+        setMsgScreenInfo((prev) => ({ ...prev, [hostname]: (prev[hostname] ?? '') + ' | AllowRemoteRPC fehlgeschlagen' }))
+      }
+    } catch {
+      setMsgScreenInfo((prev) => ({ ...prev, [hostname]: (prev[hostname] ?? '') + ' | Fehler (WinRM benötigt)' }))
+    } finally {
+      setMsgRpcSetting((prev) => ({ ...prev, [hostname]: false }))
     }
   }
 
@@ -575,6 +641,66 @@ function NachrichtItem({ id, label, icon, checked, onToggle, hint, children, isA
                         {winrmActivating[h] ? 'Aktiviere…' : 'WinRM aktivieren'}
                       </button>
                     )}
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* msg.exe pre-flight check – only for msg_screen, only for admins */}
+          {showMsgScreenCheck && isAdmin && hostnames.length > 0 && (
+            <div className="rounded-md border border-border p-3 space-y-2 bg-muted/20">
+              <div className="flex items-center justify-between">
+                <p className="text-[11px] font-medium text-muted-foreground">
+                  Voraussetzungen prüfen (Ping · RPC · Sitzung)
+                </p>
+                <button
+                  onClick={checkMsgScreen}
+                  className="text-[11px] px-2.5 py-0.5 rounded bg-primary/10 text-primary hover:bg-primary/20 transition-colors font-medium"
+                >
+                  Prüfen
+                </button>
+              </div>
+              {Object.keys(msgScreenStatus).length === 0 && (
+                <p className="text-[11px] text-muted-foreground/60">
+                  Klicke „Prüfen" um Ping, RPC Port 135 und aktive Sitzungen zu prüfen.
+                </p>
+              )}
+              {hostnames.map((h) => {
+                const st = msgScreenStatus[h]
+                if (!st) return null
+                const info = msgScreenInfo[h] ?? ''
+                return (
+                  <div key={h} className="flex items-start gap-2 text-[11px]">
+                    <span className="font-mono text-muted-foreground min-w-0 truncate flex-1">{h}</span>
+                    <div className="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
+                      {st === 'checking' && <Loader size={11} className="animate-spin text-blue-400" />}
+                      {st === 'ready' && (
+                        <span className="flex items-center gap-1 text-emerald-400">
+                          <CheckCircle size={10} /> {info}
+                        </span>
+                      )}
+                      {st === 'no-session' && (
+                        <span className="flex items-center gap-1 text-amber-400">
+                          <XCircle size={10} /> {info}
+                        </span>
+                      )}
+                      {(st === 'norpc' || st === 'offline' || st === 'error') && (
+                        <span className="flex items-center gap-1 text-red-400">
+                          <XCircle size={10} /> {info}
+                        </span>
+                      )}
+                      {(st === 'ready' || st === 'no-session') && (
+                        <button
+                          onClick={() => setAllowRemoteRPC(h)}
+                          disabled={msgRpcSetting[h]}
+                          className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 transition-colors disabled:opacity-50"
+                          title="AllowRemoteRPC=1 via WinRM setzen"
+                        >
+                          {msgRpcSetting[h] ? 'Setze…' : 'RPC-Reg setzen'}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 )
               })}

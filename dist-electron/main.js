@@ -30,6 +30,33 @@ const store = new electron_store_1.default({
     },
 });
 let mainWindow = null;
+// PROBLEM 1 (UIPI): When the app runs elevated (HIGH integrity), Windows blocks
+// WM_DROPFILES drag messages from Explorer (MEDIUM integrity). Fix: call
+// ChangeWindowMessageFilterEx to allow those messages per-window.
+async function fixAdminDragDrop(win) {
+    if (process.platform !== 'win32')
+        return;
+    try {
+        const hwnd = win.getNativeWindowHandle().readUInt32LE(0);
+        const ps = [
+            `Add-Type -TypeDefinition @'`,
+            `using System;`,
+            `using System.Runtime.InteropServices;`,
+            `public class WinUipi {`,
+            `    [DllImport("user32.dll", SetLastError=true)]`,
+            `    public static extern bool ChangeWindowMessageFilterEx(IntPtr hWnd, uint msg, uint action, IntPtr pChangeInfo);`,
+            `}`,
+            `'@`,
+            `$h = [IntPtr][uint]${hwnd}`,
+            `[WinUipi]::ChangeWindowMessageFilterEx($h, 0x0233u, 1u, [IntPtr]::Zero) | Out-Null`,
+            `[WinUipi]::ChangeWindowMessageFilterEx($h, 0x004Au, 1u, [IntPtr]::Zero) | Out-Null`,
+            `[WinUipi]::ChangeWindowMessageFilterEx($h, 0x0049u, 1u, [IntPtr]::Zero) | Out-Null`,
+            `Write-Output 'ok'`,
+        ].join('\n');
+        await (0, powerShellRunner_1.runPowerShell)(ps, 15000);
+    }
+    catch { /* non-critical — D&D may not work when running as admin */ }
+}
 function createWindow() {
     mainWindow = new electron_1.BrowserWindow({
         width: 1280,
@@ -56,6 +83,9 @@ function createWindow() {
     }
     mainWindow.once('ready-to-show', () => {
         mainWindow?.show();
+        // Fire-and-forget: allow drag-drop into admin-elevated window
+        if (mainWindow)
+            fixAdminDragDrop(mainWindow);
     });
     mainWindow.on('closed', () => {
         mainWindow = null;

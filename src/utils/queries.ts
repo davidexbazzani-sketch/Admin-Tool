@@ -336,11 +336,11 @@ export const QUERY_DEFINITIONS: QueryDefinition[] = [
     label: 'Bildschirmnachricht senden',
     adminOnly: true,
     category: 'Nachrichten versenden',
-    // PROBLEM 2 FIX: Ping-Test vor dem Senden + /TIME:60 für längere Anzeigedauer.
-    // msg.exe erfordert keine speziellen Dienste auf Domain-Maschinen (nutzt RPC/Named Pipes).
+    // msg.exe erfordert AllowRemoteRPC=1 im Terminal-Server-Registrierungsschlüssel
+    // sowie eine aktive Benutzersitzung auf dem Zielgerät.
     // __MSG__ wird zur Laufzeit in QueryMenu durch den eingegebenen Text ersetzt.
     psCommand: (h) =>
-      `$online=Test-Connection -ComputerName "${h}" -Count 1 -Quiet -ErrorAction SilentlyContinue; if($online){ $out=cmd /c "msg * /SERVER:${h} /TIME:60 __MSG__ 2>&1"; if($LASTEXITCODE -eq 0){"Nachricht gesendet"}else{"Fehler: $out"} }else{"Gerät nicht erreichbar: ${h}"}`,
+      `$online=Test-Connection -ComputerName "${h}" -Count 1 -Quiet -EA SilentlyContinue; if(!$online){"Gerät nicht erreichbar: ${h}"; exit}; try{Invoke-Command -ComputerName "${h}" -ScriptBlock{Set-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server' -Name AllowRemoteRPC -Value 1 -Type DWord -EA Stop} -EA Stop}catch{}; $ses=cmd /c "query session /server:${h} 2>&1"; $cnt=($ses | Where-Object{$_ -match 'Active'}).Count; $out=cmd /c "msg * /SERVER:${h} /TIME:60 __MSG__ 2>&1"; if($LASTEXITCODE -eq 0){"Nachricht gesendet ($cnt aktive Sitzung(en))"}else{"Fehler: $out | Aktive Sitzungen: $cnt"}`,
   },
   {
     id: 'msg_voice',
