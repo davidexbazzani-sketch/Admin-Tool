@@ -2,7 +2,7 @@ import ExcelJS from 'exceljs'
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, BorderStyle, WidthType } from 'docx'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import type { QueryResult } from '../types'
+import type { QueryResult, UserProfileData } from '../types'
 import type { XelionResult } from './adUtils'
 import type { PhoneCheckEntry } from './phoneUtils'
 import { PHONE_FIELD_LABELS } from './phoneUtils'
@@ -420,4 +420,458 @@ export async function exportPdfPhoneCheck(results: PhoneCheckEntry[], savePath: 
 
   const arrayBuffer2 = doc.output('arraybuffer')
   await writeAndCheck(savePath, arrayBufferToBase64(arrayBuffer2))
+}
+
+// ── Permission comparison helpers ─────────────────────────────────────────────
+
+interface PermExportInfo {
+  user: UserProfileData
+  compUser: { SamAccountName: string; DisplayName: string; EmployeeID: string; Department: string; Title: string }
+  missingGroups: string[]
+}
+
+// ── Permission Excel ──────────────────────────────────────────────────────────
+export async function exportExcelPermissions(info: PermExportInfo, savePath: string): Promise<void> {
+  const { user, compUser, missingGroups } = info
+  const wb = new ExcelJS.Workbook()
+  wb.creator = 'IT Admin Tool'; wb.created = new Date()
+
+  const ws = wb.addWorksheet('Berechtigungsanfrage')
+  ws.addRow(['IT Admin Tool — Berechtigungsanfrage'])
+  ws.getRow(1).font = { bold: true, size: 14, color: { argb: 'FF1E40AF' } }
+  ws.addRow([`Erstellt am: ${new Date().toLocaleString('de-DE')}`])
+  ws.addRow([])
+
+  ws.addRow(['Benutzer'])
+  ws.getRow(4).font = { bold: true, color: { argb: 'FFFFFFFF' } }
+  ws.getRow(4).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E40AF' } }
+  ws.addRow(['Name', user.Name || user.Sam])
+  ws.addRow(['Corp ID', user.EmpID || '–'])
+  ws.addRow(['Abteilung', user.Dept || '–'])
+  ws.addRow(['Standort', user.Office || '–'])
+  ws.addRow([])
+
+  ws.addRow(['Vergleichsbasis'])
+  ws.getRow(10).font = { bold: true, color: { argb: 'FFFFFFFF' } }
+  ws.getRow(10).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF374151' } }
+  ws.addRow(['Name', compUser.DisplayName || compUser.SamAccountName])
+  ws.addRow(['Corp ID', compUser.EmployeeID || '–'])
+  ws.addRow(['Jobtitel', compUser.Title || '–'])
+  ws.addRow(['Abteilung', compUser.Department || '–'])
+  ws.addRow([])
+
+  ws.addRow(['Fehlende Berechtigungen', `(${missingGroups.length})`])
+  ws.getRow(16).font = { bold: true, color: { argb: 'FFFFFFFF' } }
+  ws.getRow(16).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD97706' } }
+  for (const g of missingGroups) {
+    ws.addRow([g])
+  }
+  ws.columns.forEach((c) => { c.width = 50 })
+
+  const ab = await wb.xlsx.writeBuffer() as ArrayBuffer
+  await writeAndCheck(savePath, arrayBufferToBase64(ab))
+}
+
+// ── Permission Word ───────────────────────────────────────────────────────────
+export async function exportWordPermissions(info: PermExportInfo, savePath: string): Promise<void> {
+  const { user, compUser, missingGroups } = info
+  const BORDER = { style: BorderStyle.SINGLE, size: 1 }
+  const ALL_BORDERS = { top: BORDER, bottom: BORDER, left: BORDER, right: BORDER, insideH: BORDER, insideV: BORDER }
+
+  const mkRow = (label: string, value: string) => new TableRow({
+    children: [
+      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: label, bold: true })] })] }),
+      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: value })] })] }),
+    ],
+  })
+
+  const children: (Paragraph | Table)[] = [
+    new Paragraph({ text: 'IT Admin Tool — Berechtigungsanfrage', heading: HeadingLevel.HEADING_1 }),
+    new Paragraph({ children: [new TextRun({ text: `Erstellt am: ${new Date().toLocaleString('de-DE')}`, italics: true })] }),
+    new Paragraph({ text: '' }),
+    new Paragraph({ text: 'Benutzer', heading: HeadingLevel.HEADING_2 }),
+    new Table({
+      rows: [
+        mkRow('Name', user.Name || user.Sam),
+        mkRow('Corp ID', user.EmpID || '–'),
+        mkRow('Abteilung', user.Dept || '–'),
+        mkRow('Standort', user.Office || '–'),
+      ],
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      borders: ALL_BORDERS,
+    }),
+    new Paragraph({ text: '' }),
+    new Paragraph({ text: 'Vergleichsbasis', heading: HeadingLevel.HEADING_2 }),
+    new Table({
+      rows: [
+        mkRow('Name', compUser.DisplayName || compUser.SamAccountName),
+        mkRow('Corp ID', compUser.EmployeeID || '–'),
+        mkRow('Jobtitel', compUser.Title || '–'),
+        mkRow('Abteilung', compUser.Department || '–'),
+      ],
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      borders: ALL_BORDERS,
+    }),
+    new Paragraph({ text: '' }),
+    new Paragraph({ text: `Fehlende Berechtigungen (${missingGroups.length})`, heading: HeadingLevel.HEADING_2 }),
+    new Table({
+      rows: [
+        new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Gruppe / Berechtigung', bold: true })] })] })] }),
+        ...missingGroups.map((g) => new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: g, font: 'Courier New' })] })] })] })),
+      ],
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      borders: ALL_BORDERS,
+    }),
+  ]
+
+  const doc = new Document({ sections: [{ children }] })
+  await writeAndCheck(savePath, await Packer.toBase64String(doc))
+}
+
+// ── Permission PDF ────────────────────────────────────────────────────────────
+export async function exportPdfPermissions(info: PermExportInfo, savePath: string): Promise<void> {
+  const { user, compUser, missingGroups } = info
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+
+  doc.setFontSize(18); doc.setTextColor(30, 64, 175)
+  doc.text('Berechtigungsanfrage', 14, 20)
+  doc.setFontSize(9); doc.setTextColor(120)
+  doc.text(`Erstellt am: ${new Date().toLocaleString('de-DE')}`, 14, 27)
+
+  autoTable(doc, {
+    startY: 33,
+    head: [['Benutzer', '']],
+    body: [
+      ['Name', user.Name || user.Sam],
+      ['Corp ID', user.EmpID || '–'],
+      ['Abteilung', user.Dept || '–'],
+      ['Standort', user.Office || '–'],
+    ],
+    styles: { fontSize: 9, cellPadding: 2 },
+    headStyles: { fillColor: [30, 64, 175], textColor: 255 },
+    columnStyles: { 0: { fontStyle: 'bold', cellWidth: 45 } },
+    margin: { left: 14, right: 14 },
+  })
+
+  const y1 = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6
+
+  autoTable(doc, {
+    startY: y1,
+    head: [['Vergleichsbasis', '']],
+    body: [
+      ['Name', compUser.DisplayName || compUser.SamAccountName],
+      ['Corp ID', compUser.EmployeeID || '–'],
+      ['Jobtitel', compUser.Title || '–'],
+      ['Abteilung', compUser.Department || '–'],
+    ],
+    styles: { fontSize: 9, cellPadding: 2 },
+    headStyles: { fillColor: [55, 65, 81], textColor: 255 },
+    columnStyles: { 0: { fontStyle: 'bold', cellWidth: 45 } },
+    margin: { left: 14, right: 14 },
+  })
+
+  const y2 = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6
+
+  autoTable(doc, {
+    startY: y2,
+    head: [[`Fehlende Berechtigungen (${missingGroups.length})`]],
+    body: missingGroups.map((g) => [g]),
+    styles: { fontSize: 8, cellPadding: 2, font: 'courier' },
+    headStyles: { fillColor: [217, 119, 6], textColor: 255 },
+    alternateRowStyles: { fillColor: [254, 243, 199] },
+    margin: { left: 14, right: 14 },
+  })
+
+  await writeAndCheck(savePath, arrayBufferToBase64(doc.output('arraybuffer')))
+}
+
+// ── User Profile helpers ──────────────────────────────────────────────────────
+
+function upField(label: string, value: string | null | undefined): string {
+  return value ? String(value) : '–'
+}
+
+const UP_SECTIONS: { title: string; fields: (keyof UserProfileData)[][]; labels: string[][] }[] = [
+  {
+    title: 'Allgemeine Informationen',
+    fields: [['Name'],['GivenName','Surname'],['Sam','UPN'],['EmpID','Mail'],['Title','Dept'],['Company','Office'],['Street','PostalCode'],['City','Country'],['Desc']],
+    labels: [['Anzeigename'],['Vorname','Nachname'],['SAMAccountName','UPN'],['Corp ID','E-Mail'],['Jobtitel','Abteilung'],['Unternehmen','Standort'],['Straße','PLZ'],['Stadt','Land'],['Beschreibung']],
+  },
+  {
+    title: 'Kontaktdaten',
+    fields: [['Phone','Mobile'],['Fax','IPPhone'],['OtherPhone','OtherMobile']],
+    labels: [['Telefon','Mobil'],['Fax','IP-Telefon/Xelion'],['Weitere Telefon','Weitere Mobil']],
+  },
+  {
+    title: 'Konto & Sicherheit',
+    fields: [['Created','PwdSet'],['PwdExpiry','PwdDaysLeft'],['LastLogon','BadPwdTime'],['BadLogonCount','AcctExpiry']],
+    labels: [['Erstellt am','Letzter PW-Reset'],['PW läuft ab','Tage bis Ablauf'],['Letzter Login','Letzter Fehler-Login'],['Fehler-Anmeldeversuche','Konto läuft ab']],
+  },
+  {
+    title: 'Gerät',
+    fields: [['Device','LogonTime']],
+    labels: [['Gerät','Letzte Anmeldung']],
+  },
+  {
+    title: 'Organisation',
+    fields: [['MgrName','MgrSam']],
+    labels: [['Manager','Manager SAM']],
+  },
+  {
+    title: 'Sonstige Attribute',
+    fields: [['HomeDir','ProfilePath'],['ScriptPath']],
+    labels: [['Home-Verzeichnis','Profilpfad'],['Anmeldeskript']],
+  },
+]
+
+function upFlatRows(p: UserProfileData): string[][] {
+  const rows: string[][] = []
+  for (const sec of UP_SECTIONS) {
+    rows.push([sec.title, '', ''])
+    for (let i = 0; i < sec.fields.length; i++) {
+      const flds = sec.fields[i]; const lbls = sec.labels[i]
+      rows.push([lbls[0] ?? '', upField(lbls[0] ?? '', String(p[flds[0]] ?? '')), flds[1] ? `${lbls[1]}: ${upField(lbls[1], String(p[flds[1]] ?? ''))}` : ''])
+    }
+    rows.push(['', '', ''])
+  }
+  // Groups
+  rows.push(['Gruppen', p.Groups ? p.Groups.split(';').join(', ') : '–', ''])
+  return rows
+}
+
+// ── User Profile Excel ────────────────────────────────────────────────────────
+export async function exportExcelUserProfiles(profiles: UserProfileData[], savePath: string): Promise<void> {
+  const wb = new ExcelJS.Workbook()
+  wb.creator = 'IT Admin Tool'; wb.created = new Date()
+
+  // Summary sheet
+  const summary = wb.addWorksheet('Übersicht')
+  summary.addRow(['Name', 'SAMAccountName', 'Corp ID', 'E-Mail', 'Abteilung', 'Standort', 'Status', 'Gesperrt', 'Gerät', 'Letzter Login'])
+  const sh = summary.getRow(1)
+  sh.font = { bold: true, color: { argb: 'FFFFFFFF' } }
+  sh.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E40AF' } }
+  for (const p of profiles) {
+    summary.addRow([p.Name, p.Sam, p.EmpID, p.Mail, p.Dept, p.Office, p.Enabled ? 'Aktiv' : 'Deaktiviert', p.Locked ? 'Ja' : 'Nein', p.Device, p.LogonTime])
+  }
+  summary.columns.forEach((c) => { c.width = 24 })
+
+  // Per-user sheets
+  for (const p of profiles) {
+    const name = (p.Sam || p.Name || 'Benutzer').slice(0, 28)
+    const ws = wb.addWorksheet(name)
+    ws.addRow(['Feld', 'Wert', 'Details'])
+    const hr = ws.getRow(1)
+    hr.font = { bold: true, color: { argb: 'FFFFFFFF' } }
+    hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E40AF' } }
+
+    for (const row of upFlatRows(p)) {
+      const r = ws.addRow(row)
+      if (row[1] === '' && row[0]) {
+        r.font = { bold: true, color: { argb: 'FF3B82F6' } }
+        r.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E293B' } }
+      }
+    }
+    ws.columns.forEach((c) => { c.width = 32 })
+  }
+
+  const ab = await wb.xlsx.writeBuffer() as ArrayBuffer
+  await writeAndCheck(savePath, arrayBufferToBase64(ab))
+}
+
+// ── User Profile Word ─────────────────────────────────────────────────────────
+export async function exportWordUserProfiles(profiles: UserProfileData[], savePath: string): Promise<void> {
+  const BORDER = { style: BorderStyle.SINGLE, size: 1 }
+  const ALL_BORDERS = { top: BORDER, bottom: BORDER, left: BORDER, right: BORDER, insideH: BORDER, insideV: BORDER }
+
+  const children: (Paragraph | Table)[] = [
+    new Paragraph({ text: 'IT Admin Tool — Benutzerprofile', heading: HeadingLevel.HEADING_1 }),
+    new Paragraph({ children: [new TextRun({ text: `Erstellt am: ${new Date().toLocaleString('de-DE')}`, italics: true })] }),
+    new Paragraph({ text: '' }),
+  ]
+
+  for (const p of profiles) {
+    children.push(new Paragraph({ text: p.Name || p.Sam, heading: HeadingLevel.HEADING_2 }))
+    for (const sec of UP_SECTIONS) {
+      children.push(new Paragraph({ text: sec.title, heading: HeadingLevel.HEADING_3 }))
+      const rows = sec.fields.map((flds, i) => {
+        const lbls = sec.labels[i]
+        const cells: TableCell[] = []
+        for (let j = 0; j < flds.length; j++) {
+          cells.push(new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: lbls[j] ?? '', bold: true })] })] }))
+          cells.push(new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: upField(lbls[j] ?? '', String(p[flds[j]] ?? '')) })] })] }))
+        }
+        return new TableRow({ children: cells })
+      })
+      children.push(new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE }, borders: ALL_BORDERS }))
+      children.push(new Paragraph({ text: '' }))
+    }
+    // Groups
+    children.push(new Paragraph({ text: 'Gruppen', heading: HeadingLevel.HEADING_3 }))
+    children.push(new Paragraph({ children: [new TextRun({ text: p.Groups ? p.Groups.split(';').join(', ') : '–' })] }))
+    children.push(new Paragraph({ text: '' }))
+  }
+
+  const doc = new Document({ sections: [{ children }] })
+  await writeAndCheck(savePath, await Packer.toBase64String(doc))
+}
+
+// ── Remote Doc single-result helpers ─────────────────────────────────────────
+
+type RDParsed =
+  | { type: 'array'; headers: string[]; rows: string[][] }
+  | { type: 'object'; pairs: [string, string][] }
+  | { type: 'text'; text: string }
+
+function parseRemoteDocText(text: string): RDParsed {
+  try {
+    const parsed = JSON.parse(text)
+    if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === 'object' && parsed[0] !== null) {
+      const headers = Object.keys(parsed[0])
+      const rows = (parsed as Record<string, unknown>[]).map(item => headers.map(h => String(item[h] ?? '—')))
+      return { type: 'array', headers, rows }
+    }
+    if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+      const pairs = Object.entries(parsed as Record<string, unknown>).map(([k, v]) => [k, String(v ?? '—')] as [string, string])
+      return { type: 'object', pairs }
+    }
+  } catch { /* not JSON */ }
+  return { type: 'text', text }
+}
+
+export async function exportRemoteDocResultExcel(label: string, text: string, savePath: string): Promise<void> {
+  const wb = new ExcelJS.Workbook()
+  wb.creator = 'IT Admin Tool'
+  wb.created = new Date()
+  const ws = wb.addWorksheet(label.slice(0, 31))
+  const parsed = parseRemoteDocText(text)
+  if (parsed.type === 'array') {
+    ws.addRow(parsed.headers)
+    const hr = ws.getRow(1)
+    hr.font = { bold: true, color: { argb: 'FFFFFFFF' } }
+    hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E40AF' } }
+    for (const row of parsed.rows) ws.addRow(row)
+  } else if (parsed.type === 'object') {
+    ws.addRow(['Eigenschaft', 'Wert'])
+    const hr = ws.getRow(1)
+    hr.font = { bold: true, color: { argb: 'FFFFFFFF' } }
+    hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E40AF' } }
+    for (const [k, v] of parsed.pairs) ws.addRow([k, v])
+  } else {
+    ws.addRow(['Ausgabe'])
+    ws.getRow(1).font = { bold: true }
+    for (const line of parsed.text.split('\n')) ws.addRow([line])
+  }
+  ws.columns.forEach((col) => { col.width = 40 })
+  const arrayBuffer = await wb.xlsx.writeBuffer() as ArrayBuffer
+  await writeAndCheck(savePath, arrayBufferToBase64(arrayBuffer))
+}
+
+export async function exportRemoteDocResultWord(label: string, text: string, savePath: string): Promise<void> {
+  const BORDER = { style: BorderStyle.SINGLE, size: 1 }
+  const ALL_BORDERS = { top: BORDER, bottom: BORDER, left: BORDER, right: BORDER, insideH: BORDER, insideV: BORDER }
+  const parsed = parseRemoteDocText(text)
+  const children: (Paragraph | Table)[] = [
+    new Paragraph({ text: label, heading: HeadingLevel.HEADING_1 }),
+    new Paragraph({ children: [new TextRun({ text: `Erstellt am: ${new Date().toLocaleString('de-DE')}`, italics: true })] }),
+    new Paragraph({ text: '' }),
+  ]
+  if (parsed.type === 'array') {
+    const rows = [
+      new TableRow({ children: parsed.headers.map(h => new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: h, bold: true })] })] })) }),
+      ...parsed.rows.map(row => new TableRow({ children: row.map(cell => new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: cell })] })] })) })),
+    ]
+    children.push(new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE }, borders: ALL_BORDERS }))
+  } else if (parsed.type === 'object') {
+    const rows = parsed.pairs.map(([k, v]) => new TableRow({
+      children: [
+        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: k, bold: true })] })] }),
+        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: v })] })] }),
+      ],
+    }))
+    children.push(new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE }, borders: ALL_BORDERS }))
+  } else {
+    children.push(new Paragraph({ children: [new TextRun({ text: parsed.text, font: 'Courier New' })] }))
+  }
+  const doc = new Document({ sections: [{ children }] })
+  await writeAndCheck(savePath, await Packer.toBase64String(doc))
+}
+
+export async function exportRemoteDocResultPdf(label: string, text: string, savePath: string): Promise<void> {
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
+  doc.setFontSize(16); doc.setTextColor(30, 64, 175)
+  doc.text(label, 14, 18)
+  doc.setFontSize(9); doc.setTextColor(120)
+  doc.text(`Erstellt: ${new Date().toLocaleString('de-DE')}`, 14, 24)
+  const parsed = parseRemoteDocText(text)
+  if (parsed.type === 'array') {
+    autoTable(doc, {
+      startY: 30, head: [parsed.headers], body: parsed.rows,
+      styles: { fontSize: 7, cellPadding: 2 },
+      headStyles: { fillColor: [30, 64, 175], textColor: 255 },
+      alternateRowStyles: { fillColor: [240, 244, 255] },
+      margin: { left: 14, right: 14 },
+    })
+  } else if (parsed.type === 'object') {
+    autoTable(doc, {
+      startY: 30, head: [['Eigenschaft', 'Wert']], body: parsed.pairs,
+      styles: { fontSize: 8, cellPadding: 2 },
+      headStyles: { fillColor: [30, 64, 175], textColor: 255 },
+      alternateRowStyles: { fillColor: [240, 244, 255] },
+      columnStyles: { 0: { fontStyle: 'bold', cellWidth: 60 } },
+      margin: { left: 14, right: 14 },
+    })
+  } else {
+    doc.setFontSize(8); doc.setTextColor(40)
+    doc.text(doc.splitTextToSize(parsed.text, 260), 14, 30)
+  }
+  await writeAndCheck(savePath, arrayBufferToBase64(doc.output('arraybuffer')))
+}
+
+// ── User Profile PDF ──────────────────────────────────────────────────────────
+export async function exportPdfUserProfiles(profiles: UserProfileData[], savePath: string): Promise<void> {
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+
+  for (let pi = 0; pi < profiles.length; pi++) {
+    if (pi > 0) doc.addPage()
+    const p = profiles[pi]
+
+    doc.setFontSize(16); doc.setTextColor(30, 64, 175)
+    doc.text(p.Name || p.Sam || 'Benutzer', 14, 18)
+    doc.setFontSize(9); doc.setTextColor(120)
+    doc.text(`${p.Sam} · ${p.EmpID || '–'} · Exportiert: ${new Date().toLocaleString('de-DE')}`, 14, 24)
+
+    const body: string[][] = [
+      ['Abteilung', p.Dept || '–', 'Standort', p.Office || '–'],
+      ['E-Mail', p.Mail || '–', 'Telefon', p.Phone || '–'],
+      ['Mobil', p.Mobile || '–', 'IP-Telefon', p.IPPhone || '–'],
+      ['Status', p.Enabled ? 'Aktiv' : 'Deaktiviert', 'Gesperrt', p.Locked ? 'Ja' : 'Nein'],
+      ['Erstellt', p.Created || '–', 'PW-Reset', p.PwdSet || '–'],
+      ['PW läuft ab', p.PwdExpiry || (p.PwdNeverExpires ? 'Nie' : '–'), 'Letzter Login', p.LastLogon || '–'],
+      ['Gerät', p.Device || '–', 'Anmeldung', p.LogonTime || '–'],
+      ['Manager', p.MgrName || '–', 'Manager SAM', p.MgrSam || '–'],
+      ['Jobtitel', p.Title || '–', 'Unternehmen', p.Company || '–'],
+    ]
+
+    autoTable(doc, {
+      startY: 28,
+      head: [['Feld', 'Wert', 'Feld', 'Wert']],
+      body,
+      styles: { fontSize: 8, cellPadding: 2 },
+      headStyles: { fillColor: [30, 64, 175], textColor: 255 },
+      alternateRowStyles: { fillColor: [240, 244, 255] },
+      margin: { left: 14, right: 14 },
+      columnStyles: { 0: { fontStyle: 'bold', cellWidth: 35 }, 2: { fontStyle: 'bold', cellWidth: 35 } },
+    })
+
+    const finalY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6
+    // Groups
+    doc.setFontSize(10); doc.setTextColor(30, 64, 175)
+    doc.text('Gruppen', 14, finalY)
+    doc.setFontSize(7); doc.setTextColor(60)
+    const groupText = p.Groups ? p.Groups.split(';').join('  ·  ') : '–'
+    const lines = doc.splitTextToSize(groupText, 180)
+    doc.text(lines, 14, finalY + 5)
+  }
+
+  await writeAndCheck(savePath, arrayBufferToBase64(doc.output('arraybuffer')))
 }

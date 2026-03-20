@@ -258,11 +258,11 @@ export const QUERY_DEFINITIONS: QueryDefinition[] = [
   },
   {
     id: 'sec_services',
-    label: 'Laufende Dienste',
+    label: 'Dienste',
     adminOnly: true,
     category: 'Sicherheit & Compliance',
     psCommand: (h) =>
-      `Get-Service -ComputerName "${h}" -ErrorAction SilentlyContinue | Where-Object{$_.Status -eq "Running"} | Select-Object Name,DisplayName,StartType | ConvertTo-Json -Compress`,
+      `Get-Service -ComputerName "${h}" -ErrorAction SilentlyContinue | Select-Object Name,DisplayName,@{N='Status';E={$_.Status.ToString()}},@{N='StartType';E={$_.StartType.ToString()}} | Sort-Object DisplayName | ConvertTo-Json -Compress`,
   },
 
   // ── Software & Anwendungen (ADMIN) ────────────────────────────────────────

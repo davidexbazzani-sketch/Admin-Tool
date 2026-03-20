@@ -11,12 +11,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   runPowerShell: (command: string, timeoutMs?: number) =>
     ipcRenderer.invoke('ps:run', command, timeoutMs),
 
-  // Admin check
+  // Admin check (Windows process elevation — separate from app auth)
   checkAdmin: () => ipcRenderer.invoke('ps:checkAdmin'),
 
   // File dialogs
   openFileDialog: (filters?: Electron.FileFilter[]) =>
     ipcRenderer.invoke('dialog:openFile', filters),
+  openFilesDialog: (filters?: Electron.FileFilter[]) =>
+    ipcRenderer.invoke('dialog:openFiles', filters),
   saveFileDialog: (defaultPath?: string, filters?: Electron.FileFilter[]) =>
     ipcRenderer.invoke('dialog:saveFile', defaultPath, filters),
   selectDirectory: () =>
@@ -32,9 +34,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   setSetting: (key: string, value: unknown) =>
     ipcRenderer.invoke('store:set', key, value),
 
-  // Shell open (mailto etc.)
+  // Shell open
   openExternal: (url: string) => ipcRenderer.invoke('shell:openExternal', url),
-  // Open local file in default application (e.g. Excel, Acrobat, Word)
   openPath: (filePath: string) => ipcRenderer.invoke('shell:openPath', filePath),
 
   // Cancel all running processes
@@ -55,12 +56,79 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('query:progress', (_e, data) => cb(data))
     return () => ipcRenderer.removeAllListeners('query:progress')
   },
+
+  // ── Auth ──────────────────────────────────────────────────────────────────
+  authInit: () => ipcRenderer.invoke('auth:init'),
+  authLogin: (username: string, password: string) => ipcRenderer.invoke('auth:login', username, password),
+  authSso: () => ipcRenderer.invoke('auth:sso'),
+  authVerifyRecovery: (key: string) => ipcRenderer.invoke('auth:verifyRecovery', key),
+  authResetMasterPassword: (newPassword: string) => ipcRenderer.invoke('auth:resetMasterPassword', newPassword),
+  authHashPassword: (password: string) => ipcRenderer.invoke('auth:hashPassword', password),
+  authGetUsers: () => ipcRenderer.invoke('auth:getUsers'),
+  authCreateAdmin: (params: { username: string; displayName: string; password: string; createdBy: string; role?: 'master_admin' | 'admin' | 'user' }) =>
+    ipcRenderer.invoke('auth:createAdmin', params),
+  authUpdateUser: (userId: string, patch: Record<string, unknown>) =>
+    ipcRenderer.invoke('auth:updateUser', userId, patch),
+  authUpdatePassword: (userId: string, newPassword: string) =>
+    ipcRenderer.invoke('auth:updatePassword', userId, newPassword),
+  authDeleteUser: (userId: string) => ipcRenderer.invoke('auth:deleteUser', userId),
+
+  // ── Activity logging ──────────────────────────────────────────────────────
+  logActivity: (entry: {
+    userId: string; username: string; displayName: string
+    action: string; target?: string; screen: string; timestamp: string
+  }) => ipcRenderer.invoke('auth:log', entry),
+  getLogs: (monthKey?: string) => ipcRenderer.invoke('auth:getLogs', monthKey),
+
+  // ── App config ────────────────────────────────────────────────────────────
+  getAppConfig: () => ipcRenderer.invoke('auth:getConfig'),
+  saveAppConfig: (config: Record<string, unknown>) => ipcRenderer.invoke('auth:saveConfig', config),
+
+  // ── Network storage (for inventory, tasks, bugs, etc.) ───────────────────
+  netReadJson: (relativePath: string) => ipcRenderer.invoke('net:readJson', relativePath),
+  netWriteJson: (relativePath: string, data: unknown) => ipcRenderer.invoke('net:writeJson', relativePath, data),
+  netExists: (relativePath: string) => ipcRenderer.invoke('net:exists', relativePath),
+  netListDir: (relativePath: string) => ipcRenderer.invoke('net:listDir', relativePath),
+  netDeleteFile: (relativePath: string) => ipcRenderer.invoke('net:deleteFile', relativePath),
+  netIsAvailable: () => ipcRenderer.invoke('net:isAvailable'),
+  netGetBasePath: () => ipcRenderer.invoke('net:getBasePath'),
+  netSetBasePath: (path: string) => ipcRenderer.invoke('net:setBasePath', path),
+
+  // ── System info ───────────────────────────────────────────────────────────
+  getWindowsUsername: () => ipcRenderer.invoke('sys:getWindowsUsername'),
+  getHostname: () => ipcRenderer.invoke('sys:getHostname'),
+
+  // ── Context menu ──────────────────────────────────────────────────────────
+  showContextMenu: () => ipcRenderer.invoke('context-menu:show'),
+
+  // ── E-Mail (nodemailer) ───────────────────────────────────────────────────
+  sendEmailRaw: (opts: {
+    to: string; subject: string; body: string; html?: boolean
+    smtp: string; port: number; user: string; pass: string; from?: string
+  }) => ipcRenderer.invoke('mail:sendRaw', opts),
+
+  // ── Heartbeat / crash detection ───────────────────────────────────────────
+  heartbeatSet: (username: string) => ipcRenderer.invoke('heartbeat:set', username),
+  heartbeatClear: (username: string) => ipcRenderer.invoke('heartbeat:clear', username),
+  heartbeatCheck: (username: string) => ipcRenderer.invoke('heartbeat:check', username),
 })
 
-// PROBLEM 1 FIX: Expose Electron webUtils.getPathForFile for reliable Drag & Drop.
-// In Electron 28+ with contextIsolation=true, File.path is no longer directly accessible.
-// webUtils.getPathForFile() is the official Electron API to retrieve the filesystem path
-// from a File object obtained via drag & drop. Available from Electron 28+ (we use 29.4.6).
+// Global right-click context menu for all input/textarea/contenteditable elements
+;(globalThis as unknown as { addEventListener: (event: string, cb: (e: { preventDefault(): void; target: unknown }) => void) => void })
+  .addEventListener('contextmenu', (e) => {
+    const target = e.target as { tagName?: string; isContentEditable?: boolean; closest?: (sel: string) => unknown }
+    const tag = (target.tagName ?? '').toUpperCase()
+    const isEditable =
+      tag === 'INPUT' || tag === 'TEXTAREA' ||
+      target.isContentEditable === true ||
+      (typeof target.closest === 'function' && target.closest('[contenteditable="true"]') !== null)
+    if (isEditable) {
+      e.preventDefault()
+      ipcRenderer.invoke('context-menu:show')
+    }
+  })
+
+// Drag & Drop file path resolution (Electron 28+)
 contextBridge.exposeInMainWorld('electronDrop', {
   getPath: (file: File) => webUtils.getPathForFile(file),
 })

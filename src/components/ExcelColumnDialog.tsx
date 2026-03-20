@@ -6,6 +6,7 @@ type ColumnRole = 'hostname' | 'serial' | 'ignore'
 
 interface Props {
   columns: ExcelColumn[]
+  rows?: Record<string, unknown>[]
   onConfirm: (hostnameColNames: string[], serialColNames: string[]) => void
   onCancel: () => void
 }
@@ -22,7 +23,7 @@ const ROLE_COLORS: Record<ColumnRole, string> = {
   ignore:   'bg-muted text-muted-foreground border-border',
 }
 
-export default function ExcelColumnDialog({ columns, onConfirm, onCancel }: Props) {
+export default function ExcelColumnDialog({ columns, rows, onConfirm, onCancel }: Props) {
   const [roles, setRoles] = useState<Record<string, ColumnRole>>(
     Object.fromEntries(columns.map((c) => [c.name, c.detectedAs]))
   )
@@ -42,7 +43,7 @@ export default function ExcelColumnDialog({ columns, onConfirm, onCancel }: Prop
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-card border border-border rounded-xl shadow-2xl w-[600px] max-h-[80vh] flex flex-col">
+      <div className="bg-card border border-border rounded-xl shadow-2xl w-[720px] max-h-[85vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
           <div className="flex items-center gap-2.5">
@@ -61,6 +62,37 @@ export default function ExcelColumnDialog({ columns, onConfirm, onCancel }: Prop
             <X size={14} />
           </button>
         </div>
+
+        {/* Table preview */}
+        {rows && rows.length > 0 && (
+          <div className="shrink-0 px-5 pt-3 pb-2 border-b border-border">
+            <p className="text-[10px] font-medium text-muted-foreground mb-2">Vorschau (erste {Math.min(rows.length, 8)} Zeilen)</p>
+            <div className="overflow-x-auto rounded-md border border-border">
+              <table className="w-full text-[11px]">
+                <thead>
+                  <tr className="bg-muted/30 border-b border-border">
+                    {columns.map(col => (
+                      <th key={col.name} className="px-2 py-1.5 text-left font-semibold text-muted-foreground whitespace-nowrap">
+                        {col.name}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {rows.slice(0, 8).map((row, i) => (
+                    <tr key={i} className="hover:bg-accent/10">
+                      {columns.map(col => (
+                        <td key={col.name} className="px-2 py-1 text-foreground/80 font-mono whitespace-nowrap max-w-[180px] truncate">
+                          {String(row[col.name] ?? '')}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
         {/* Column list */}
         <div className="flex-1 overflow-y-auto px-5 py-3 space-y-2">

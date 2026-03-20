@@ -1,4 +1,8 @@
-export type Screen = 'home' | 'query-menu' | 'results' | 'xelion' | 'trickkiste' | 'settings'
+export type Screen =
+  | 'home' | 'query-menu' | 'results' | 'user-info' | 'xelion'
+  | 'remote-doc' | 'trickkiste' | 'settings'
+  | 'user-management' | 'user-logs' | 'location-overview'
+  | 'scheduled-tasks' | 'bug-mailbox' | 'dashboards'
 
 export type Prefix = 'DE' | 'DEHAM' | 'DESCH' | 'Sonstige'
 
@@ -66,4 +70,32 @@ export interface AppSettings {
 export interface XelionEntry {
   id: string
   value: string // name or corp-id
+}
+
+export interface UserProfileData {
+  // Identity
+  Sam: string; UPN: string; GivenName: string; Surname: string; Name: string; EmpID: string
+  // General
+  Mail: string; Desc: string; Title: string; Dept: string; Company: string
+  // Manager
+  MgrName: string; MgrSam: string
+  // Location
+  Office: string; Street: string; PostalCode: string; City: string; Country: string
+  // Contact
+  Phone: string; Mobile: string; Fax: string; IPPhone: string; OtherPhone: string; OtherMobile: string
+  // Account
+  Enabled: boolean; Locked: boolean; Created: string
+  PwdSet: string; PwdNeverExpires: boolean; PwdExpiry: string; PwdDaysLeft: number | null
+  LastLogon: string; BadPwdTime: string; BadLogonCount: number
+  AcctExpiry: string; SmartCard: boolean
+  // Groups (semicolon-separated, sorted) + primary group
+  Groups: string
+  PrimaryGroup: string
+  // Reports: "Name~~Sam" entries joined by ";;;"
+  Reports: string
+  // Device (from DC event log / WMI / Kerberos)
+  Device: string; LogonTime: string; CurrentlyOn: boolean; DevMethod: string
+  // Other
+  HomeDir: string; ProfilePath: string; ScriptPath: string
+  ExtAttrs: string // JSON object string
 }

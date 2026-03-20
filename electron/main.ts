@@ -1,8 +1,11 @@
-import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, shell, Menu } from 'electron'
 import { join } from 'path'
-import { readFileSync, writeFileSync, appendFileSync } from 'fs'
+import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync } from 'fs'
+import { userInfo, hostname } from 'os'
 import Store from 'electron-store'
 import { runPowerShell, killAllProcesses } from './powerShellRunner'
+import * as auth from './authManager'
+import * as ns from './networkStorage'
 
 // NOTE: Hardware acceleration intentionally ENABLED.
 // Disabling it (disableHardwareAcceleration) forces CPU-only software rendering.
@@ -242,6 +245,134 @@ ipcMain.handle('mail:compose', async (_e, opts: {
 // App version
 ipcMain.handle('app:version', () => app.getVersion())
 
+// ─── Auth / Network Storage IPC ──────────────────────────────────────────────
+
+// Initialize on startup — check network, create first-run data
+ipcMain.handle('auth:init', async () => {
+  return auth.initializeIfNeeded()
+})
+
+// Login with username + password
+ipcMain.handle('auth:login', async (_e, username: string, password: string) => {
+  return auth.loginWithPassword(username, password)
+})
+
+// SSO: get Windows user and look up / create account
+ipcMain.handle('auth:sso', async () => {
+  const info = userInfo()
+  const winUser = info.username
+  const user = await auth.createOrGetSsoUser(winUser)
+  return { user, windowsUsername: winUser }
+})
+
+// Verify recovery key
+ipcMain.handle('auth:verifyRecovery', async (_e, key: string) => {
+  return auth.verifyRecoveryKey(key)
+})
+
+// Reset master admin password via recovery
+ipcMain.handle('auth:resetMasterPassword', async (_e, newPassword: string) => {
+  return auth.resetMasterPasswordViaRecovery(newPassword)
+})
+
+// Hash a password
+ipcMain.handle('auth:hashPassword', async (_e, password: string) => {
+  return auth.hashPassword(password)
+})
+
+// Compare a password with a hash
+ipcMain.handle('auth:comparePassword', async (_e, password: string, hash: string) => {
+  return auth.comparePassword(password, hash)
+})
+
+// Get all users
+ipcMain.handle('auth:getUsers', () => auth.getUsers())
+
+// Create user (admin, master_admin, or regular user)
+ipcMain.handle('auth:createAdmin', async (_e, params: { username: string; displayName: string; password: string; createdBy: string; role?: 'master_admin' | 'admin' | 'user' }) => {
+  return auth.createAdminUser(params)
+})
+
+// Update user (role, status, blockedFeatures, etc.)
+ipcMain.handle('auth:updateUser', (_e, userId: string, patch: Partial<auth.AppUser>) => {
+  return auth.updateUser(userId, patch)
+})
+
+// Update user password
+ipcMain.handle('auth:updatePassword', async (_e, userId: string, newPassword: string) => {
+  return auth.updateUserPassword(userId, newPassword)
+})
+
+// Delete user
+ipcMain.handle('auth:deleteUser', (_e, userId: string) => {
+  return auth.deleteUser(userId)
+})
+
+// Log an activity
+ipcMain.handle('auth:log', (_e, entry: Parameters<typeof auth.writeActivityLog>[0]) => {
+  auth.writeActivityLog(entry)
+  return true
+})
+
+// Read activity logs
+ipcMain.handle('auth:getLogs', (_e, monthKey?: string) => {
+  return auth.readActivityLogs(monthKey)
+})
+
+// App config
+ipcMain.handle('auth:getConfig', () => auth.getAppConfig())
+ipcMain.handle('auth:saveConfig', (_e, config: Partial<auth.AppConfig>) => {
+  auth.saveAppConfig(config)
+  return true
+})
+
+// Network storage: read/write JSON
+ipcMain.handle('net:readJson', (_e, relativePath: string) => {
+  return ns.readJson(relativePath)
+})
+ipcMain.handle('net:writeJson', (_e, relativePath: string, data: unknown) => {
+  return ns.writeJson(relativePath, data)
+})
+ipcMain.handle('net:exists', (_e, relativePath: string) => {
+  return ns.fileExists(relativePath)
+})
+ipcMain.handle('net:listDir', (_e, relativePath: string) => {
+  return ns.listDir(relativePath)
+})
+ipcMain.handle('net:deleteFile', (_e, relativePath: string) => {
+  ns.deleteFile(relativePath)
+  return true
+})
+ipcMain.handle('net:isAvailable', () => ns.isNetworkAvailable())
+ipcMain.handle('net:getBasePath', () => ns.getBasePath())
+ipcMain.handle('net:setBasePath', (_e, path: string) => { ns.setBasePath(path); return true })
+
+// System info
+ipcMain.handle('sys:getWindowsUsername', () => userInfo().username)
+ipcMain.handle('sys:getHostname', () => hostname())
+
+// Context menu (right-click paste/copy in input fields)
+ipcMain.handle('context-menu:show', (event) => {
+  const menu = Menu.buildFromTemplate([
+    { role: 'cut',       label: 'Ausschneiden' },
+    { role: 'copy',      label: 'Kopieren'     },
+    { role: 'paste',     label: 'Einfügen'     },
+    { type: 'separator' },
+    { role: 'selectAll', label: 'Alles auswählen' },
+  ])
+  const win = BrowserWindow.fromWebContents(event.sender)
+  if (win) menu.popup({ window: win })
+})
+
+// Multi-file open dialog
+ipcMain.handle('dialog:openFiles', async (_e, filters?: Electron.FileFilter[]) => {
+  const result = await dialog.showOpenDialog(mainWindow!, {
+    properties: ['openFile', 'multiSelections'],
+    filters: filters ?? [{ name: 'Alle Dateien', extensions: ['*'] }],
+  })
+  return result.canceled ? [] : result.filePaths
+})
+
 // Window controls (custom titlebar)
 ipcMain.on('window:minimize', () => mainWindow?.minimize())
 ipcMain.on('window:maximize', () => {
@@ -249,3 +380,54 @@ ipcMain.on('window:maximize', () => {
   else mainWindow?.maximize()
 })
 ipcMain.on('window:close', () => mainWindow?.close())
+
+// ── E-Mail via nodemailer ─────────────────────────────────────────────────────
+ipcMain.handle('mail:sendRaw', async (_e, opts: {
+  to: string; subject: string; body: string; html?: boolean
+  smtp: string; port: number; user?: string; pass?: string; from?: string
+  useTls?: boolean
+}) => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const nodemailer = require('nodemailer') as typeof import('nodemailer')
+  const transportOpts: Record<string, unknown> = {
+    host: opts.smtp,
+    port: opts.port,
+    secure: opts.port === 465,      // true only for implicit TLS (port 465)
+    requireTLS: opts.useTls !== false && opts.port !== 465, // STARTTLS on 587
+    tls: { rejectUnauthorized: false },
+  }
+  // Only add auth when credentials are provided (relay mode = no auth needed)
+  if (opts.user && opts.pass) {
+    transportOpts.auth = { user: opts.user, pass: opts.pass }
+  }
+  const transporter = nodemailer.createTransport(transportOpts)
+  await transporter.sendMail({
+    from: opts.from || opts.user || opts.to,
+    to: opts.to,
+    subject: opts.subject,
+    [opts.html ? 'html' : 'text']: opts.body,
+  })
+  return true
+})
+
+// ── Heartbeat (crash detection) ───────────────────────────────────────────────
+let _heartbeatUser: string | null = null
+ipcMain.handle('heartbeat:set', (_e, username: string) => {
+  _heartbeatUser = username
+  ns.writeJson(`heartbeat/${username}.json`, { username, timestamp: new Date().toISOString() })
+  return true
+})
+ipcMain.handle('heartbeat:clear', (_e, username: string) => {
+  _heartbeatUser = null
+  try { ns.deleteFile(`heartbeat/${username}.json`) } catch { /* ignore */ }
+  return true
+})
+ipcMain.handle('heartbeat:check', (_e, username: string) => {
+  return ns.readJson<{ username: string; timestamp: string }>(`heartbeat/${username}.json`)
+})
+app.on('before-quit', () => {
+  if (_heartbeatUser) {
+    try { ns.deleteFile(`heartbeat/${_heartbeatUser}.json`) } catch { /* ignore */ }
+    _heartbeatUser = null
+  }
+})

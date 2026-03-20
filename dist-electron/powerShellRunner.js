@@ -15,6 +15,10 @@ function killAllProcesses() {
     }
     activeProcesses.clear();
 }
+// ── UTF-8 encoding header prepended to every PS command ───────────────────────
+// Wrapped in try-catch: [Console]::OutputEncoding can throw when PowerShell runs
+// without an attached console (child process of a GUI app like Electron).
+const PS_UTF8_HEADER = 'try{[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$OutputEncoding=[System.Text.Encoding]::UTF8}catch{};';
 // ── PowerShell runner ─────────────────────────────────────────────────────────
 function runPowerShell(command, timeoutMs = 30000) {
     return new Promise((resolve) => {
@@ -25,7 +29,7 @@ function runPowerShell(command, timeoutMs = 30000) {
             '-NoProfile',
             '-NonInteractive',
             '-ExecutionPolicy', 'Bypass',
-            '-Command', command,
+            '-Command', PS_UTF8_HEADER + command,
         ], {
             windowsHide: true,
         });
@@ -34,8 +38,8 @@ function runPowerShell(command, timeoutMs = 30000) {
             timedOut = true;
             proc.kill('SIGTERM');
         }, timeoutMs);
-        proc.stdout.on('data', (d) => { stdout += d.toString(); });
-        proc.stderr.on('data', (d) => { stderr += d.toString(); });
+        proc.stdout.on('data', (d) => { stdout += d.toString('utf8'); });
+        proc.stderr.on('data', (d) => { stderr += d.toString('utf8'); });
         proc.on('close', (code) => {
             clearTimeout(timer);
             activeProcesses.delete(proc);

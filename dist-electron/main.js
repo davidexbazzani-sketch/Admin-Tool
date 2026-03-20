@@ -1,4 +1,37 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -6,8 +39,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const path_1 = require("path");
 const fs_1 = require("fs");
+const os_1 = require("os");
 const electron_store_1 = __importDefault(require("electron-store"));
 const powerShellRunner_1 = require("./powerShellRunner");
+const auth = __importStar(require("./authManager"));
+const ns = __importStar(require("./networkStorage"));
 // NOTE: Hardware acceleration intentionally ENABLED.
 // Disabling it (disableHardwareAcceleration) forces CPU-only software rendering.
 // With all query categories open as admin (~40 DOM nodes), every checkbox re-render
@@ -217,6 +253,115 @@ electron_1.ipcMain.handle('mail:compose', async (_e, opts) => {
 });
 // App version
 electron_1.ipcMain.handle('app:version', () => electron_1.app.getVersion());
+// ─── Auth / Network Storage IPC ──────────────────────────────────────────────
+// Initialize on startup — check network, create first-run data
+electron_1.ipcMain.handle('auth:init', async () => {
+    return auth.initializeIfNeeded();
+});
+// Login with username + password
+electron_1.ipcMain.handle('auth:login', async (_e, username, password) => {
+    return auth.loginWithPassword(username, password);
+});
+// SSO: get Windows user and look up / create account
+electron_1.ipcMain.handle('auth:sso', async () => {
+    const info = (0, os_1.userInfo)();
+    const winUser = info.username;
+    const user = await auth.createOrGetSsoUser(winUser);
+    return { user, windowsUsername: winUser };
+});
+// Verify recovery key
+electron_1.ipcMain.handle('auth:verifyRecovery', async (_e, key) => {
+    return auth.verifyRecoveryKey(key);
+});
+// Reset master admin password via recovery
+electron_1.ipcMain.handle('auth:resetMasterPassword', async (_e, newPassword) => {
+    return auth.resetMasterPasswordViaRecovery(newPassword);
+});
+// Hash a password
+electron_1.ipcMain.handle('auth:hashPassword', async (_e, password) => {
+    return auth.hashPassword(password);
+});
+// Compare a password with a hash
+electron_1.ipcMain.handle('auth:comparePassword', async (_e, password, hash) => {
+    return auth.comparePassword(password, hash);
+});
+// Get all users
+electron_1.ipcMain.handle('auth:getUsers', () => auth.getUsers());
+// Create user (admin, master_admin, or regular user)
+electron_1.ipcMain.handle('auth:createAdmin', async (_e, params) => {
+    return auth.createAdminUser(params);
+});
+// Update user (role, status, blockedFeatures, etc.)
+electron_1.ipcMain.handle('auth:updateUser', (_e, userId, patch) => {
+    return auth.updateUser(userId, patch);
+});
+// Update user password
+electron_1.ipcMain.handle('auth:updatePassword', async (_e, userId, newPassword) => {
+    return auth.updateUserPassword(userId, newPassword);
+});
+// Delete user
+electron_1.ipcMain.handle('auth:deleteUser', (_e, userId) => {
+    return auth.deleteUser(userId);
+});
+// Log an activity
+electron_1.ipcMain.handle('auth:log', (_e, entry) => {
+    auth.writeActivityLog(entry);
+    return true;
+});
+// Read activity logs
+electron_1.ipcMain.handle('auth:getLogs', (_e, monthKey) => {
+    return auth.readActivityLogs(monthKey);
+});
+// App config
+electron_1.ipcMain.handle('auth:getConfig', () => auth.getAppConfig());
+electron_1.ipcMain.handle('auth:saveConfig', (_e, config) => {
+    auth.saveAppConfig(config);
+    return true;
+});
+// Network storage: read/write JSON
+electron_1.ipcMain.handle('net:readJson', (_e, relativePath) => {
+    return ns.readJson(relativePath);
+});
+electron_1.ipcMain.handle('net:writeJson', (_e, relativePath, data) => {
+    return ns.writeJson(relativePath, data);
+});
+electron_1.ipcMain.handle('net:exists', (_e, relativePath) => {
+    return ns.fileExists(relativePath);
+});
+electron_1.ipcMain.handle('net:listDir', (_e, relativePath) => {
+    return ns.listDir(relativePath);
+});
+electron_1.ipcMain.handle('net:deleteFile', (_e, relativePath) => {
+    ns.deleteFile(relativePath);
+    return true;
+});
+electron_1.ipcMain.handle('net:isAvailable', () => ns.isNetworkAvailable());
+electron_1.ipcMain.handle('net:getBasePath', () => ns.getBasePath());
+electron_1.ipcMain.handle('net:setBasePath', (_e, path) => { ns.setBasePath(path); return true; });
+// System info
+electron_1.ipcMain.handle('sys:getWindowsUsername', () => (0, os_1.userInfo)().username);
+electron_1.ipcMain.handle('sys:getHostname', () => (0, os_1.hostname)());
+// Context menu (right-click paste/copy in input fields)
+electron_1.ipcMain.handle('context-menu:show', (event) => {
+    const menu = electron_1.Menu.buildFromTemplate([
+        { role: 'cut', label: 'Ausschneiden' },
+        { role: 'copy', label: 'Kopieren' },
+        { role: 'paste', label: 'Einfügen' },
+        { type: 'separator' },
+        { role: 'selectAll', label: 'Alles auswählen' },
+    ]);
+    const win = electron_1.BrowserWindow.fromWebContents(event.sender);
+    if (win)
+        menu.popup({ window: win });
+});
+// Multi-file open dialog
+electron_1.ipcMain.handle('dialog:openFiles', async (_e, filters) => {
+    const result = await electron_1.dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile', 'multiSelections'],
+        filters: filters ?? [{ name: 'Alle Dateien', extensions: ['*'] }],
+    });
+    return result.canceled ? [] : result.filePaths;
+});
 // Window controls (custom titlebar)
 electron_1.ipcMain.on('window:minimize', () => mainWindow?.minimize());
 electron_1.ipcMain.on('window:maximize', () => {
@@ -226,3 +371,54 @@ electron_1.ipcMain.on('window:maximize', () => {
         mainWindow?.maximize();
 });
 electron_1.ipcMain.on('window:close', () => mainWindow?.close());
+// ── E-Mail via nodemailer ─────────────────────────────────────────────────────
+electron_1.ipcMain.handle('mail:sendRaw', async (_e, opts) => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const nodemailer = require('nodemailer');
+    const transportOpts = {
+        host: opts.smtp,
+        port: opts.port,
+        secure: opts.port === 465, // true only for implicit TLS (port 465)
+        requireTLS: opts.useTls !== false && opts.port !== 465, // STARTTLS on 587
+        tls: { rejectUnauthorized: false },
+    };
+    // Only add auth when credentials are provided (relay mode = no auth needed)
+    if (opts.user && opts.pass) {
+        transportOpts.auth = { user: opts.user, pass: opts.pass };
+    }
+    const transporter = nodemailer.createTransport(transportOpts);
+    await transporter.sendMail({
+        from: opts.from || opts.user || opts.to,
+        to: opts.to,
+        subject: opts.subject,
+        [opts.html ? 'html' : 'text']: opts.body,
+    });
+    return true;
+});
+// ── Heartbeat (crash detection) ───────────────────────────────────────────────
+let _heartbeatUser = null;
+electron_1.ipcMain.handle('heartbeat:set', (_e, username) => {
+    _heartbeatUser = username;
+    ns.writeJson(`heartbeat/${username}.json`, { username, timestamp: new Date().toISOString() });
+    return true;
+});
+electron_1.ipcMain.handle('heartbeat:clear', (_e, username) => {
+    _heartbeatUser = null;
+    try {
+        ns.deleteFile(`heartbeat/${username}.json`);
+    }
+    catch { /* ignore */ }
+    return true;
+});
+electron_1.ipcMain.handle('heartbeat:check', (_e, username) => {
+    return ns.readJson(`heartbeat/${username}.json`);
+});
+electron_1.app.on('before-quit', () => {
+    if (_heartbeatUser) {
+        try {
+            ns.deleteFile(`heartbeat/${_heartbeatUser}.json`);
+        }
+        catch { /* ignore */ }
+        _heartbeatUser = null;
+    }
+});

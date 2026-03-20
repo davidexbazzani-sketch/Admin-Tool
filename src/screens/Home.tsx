@@ -258,6 +258,7 @@ export default function Home() {
                 placeholder="z.B. DEHAM12345678"
                 value={singleHostname}
                 onChange={(e) => setSingleHostname(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && hasInput && handleProceed()}
                 className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
               />
             </div>
@@ -275,6 +276,7 @@ export default function Home() {
                   placeholder="z.B. 12345678"
                   value={singleSerial}
                   onChange={(e) => setSingleSerial(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && hasInput && handleProceed()}
                   className="flex-1 px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
@@ -470,6 +472,7 @@ export default function Home() {
       {pendingExcelData && (
         <ExcelColumnDialog
           columns={pendingExcelData.columns}
+          rows={pendingExcelData.rows}
           onConfirm={handleColumnDialogConfirm}
           onCancel={() => setPendingExcelData(null)}
         />

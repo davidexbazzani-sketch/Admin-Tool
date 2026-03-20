@@ -524,6 +524,7 @@ export default function PhoneCheck({ settings }: Props) {
       {pendingExcel && (
         <PhoneColumnDialog
           columns={pendingExcel.columns}
+          rows={pendingExcel.rows}
           onConfirm={handleExcelConfirm}
           onCancel={() => setPendingExcel(null)}
         />

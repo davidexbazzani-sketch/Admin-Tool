@@ -1,10 +1,14 @@
 import { useState } from 'react'
-import { ArrowLeft, Download, FileSpreadsheet, FileText, Printer, Mail, CheckCircle, XCircle, Clock, Loader, FolderOpen, ChevronDown, ChevronRight, Paperclip } from 'lucide-react'
+import { ArrowLeft, Download, FileSpreadsheet, FileText, Printer, Mail, CheckCircle, XCircle, Clock, Loader, FolderOpen, ChevronDown, ChevronRight, Paperclip, Settings2 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { QUERY_DEFINITIONS } from '../utils/queries'
 import { exportExcel, exportWord, exportPdf } from '../utils/exportUtils'
 import { api } from '../electronAPI'
 import type { QueryResult, QueryStatus } from '../types'
+import { SvcItem, svcStatusColor } from '../utils/svcUtils'
+import { ServicePanel } from '../components/ServicePanel'
+
+type SvcSortCol = 'DisplayName' | 'Status' | 'StartType'
 
 function StatusBadge({ status }: { status: QueryStatus }) {
   const map = {
@@ -32,22 +36,22 @@ function getCategory(queryId: string) {
 
 export default function Results() {
   const setScreen = useAppStore((s) => s.setScreen)
-  const results = useAppStore((s) => s.results)
-  const settings = useAppStore((s) => s.settings)
+  const results   = useAppStore((s) => s.results)
+  const settings  = useAppStore((s) => s.settings)
+  const isAdmin   = useAppStore((s) => s.isAdmin)
 
   const [emailDialog, setEmailDialog] = useState(false)
-  const [emailTo, setEmailTo] = useState('')
-  const [emailCc, setEmailCc] = useState('')
+  const [emailTo, setEmailTo]         = useState('')
+  const [emailCc, setEmailCc]         = useState('')
   const [emailSubject, setEmailSubject] = useState('IT-Abfrageergebnisse')
-  const [emailBody, setEmailBody] = useState('')
-  const [exporting, setExporting] = useState(false)
+  const [emailBody, setEmailBody]     = useState('')
+  const [exporting, setExporting]     = useState(false)
   const [exportError, setExportError] = useState('')
   const [lastSavedPath, setLastSavedPath] = useState<string | null>(null)
-  // FIX 3: Attachment option
-  const [attachFile, setAttachFile] = useState(true)
+  const [attachFile, setAttachFile]   = useState(true)
 
-  // FIX 6: sw_installed expandable search state
-  const [swSearch, setSwSearch] = useState<Record<string, string>>({})
+  // sw_installed expandable search state
+  const [swSearch, setSwSearch]     = useState<Record<string, string>>({})
   const [swExpanded, setSwExpanded] = useState<Set<string>>(new Set())
 
   function toggleSwExpand(key: string) {
@@ -55,6 +59,30 @@ export default function Results() {
       const next = new Set(prev)
       next.has(key) ? next.delete(key) : next.add(key)
       return next
+    })
+  }
+
+  // sec_services panel state
+  const [svcSearch, setSvcSearch]   = useState<Record<string, string>>({})
+  const [svcExpanded, setSvcExpanded] = useState<Set<string>>(new Set())
+  const [svcSort, setSvcSort]       = useState<Record<string, { col: SvcSortCol; dir: 'asc' | 'desc' }>>({})
+
+  // sec_services management modal
+  const [svcMgmt, setSvcMgmt] = useState<{ hostname: string; items: SvcItem[] } | null>(null)
+
+  function toggleSvcExpand(key: string) {
+    setSvcExpanded(prev => {
+      const next = new Set(prev)
+      next.has(key) ? next.delete(key) : next.add(key)
+      return next
+    })
+  }
+
+  function toggleSvcSort(key: string, col: SvcSortCol) {
+    setSvcSort(prev => {
+      const cur = prev[key]
+      if (cur?.col === col) return { ...prev, [key]: { col, dir: cur.dir === 'asc' ? 'desc' : 'asc' } }
+      return { ...prev, [key]: { col, dir: 'asc' } }
     })
   }
 
@@ -81,7 +109,6 @@ export default function Results() {
       if (format === 'xlsx') await exportExcel(results, savePath)
       if (format === 'docx') await exportWord(results, savePath)
       if (format === 'pdf')  await exportPdf(results, savePath)
-      // Success — remember path so user can open the file
       setLastSavedPath(savePath)
     } catch (err) {
       setExportError(String(err))
@@ -90,7 +117,6 @@ export default function Results() {
     }
   }
 
-  // FIX 3: sendMail now uses Outlook COM (with attachment support), falls back to mailto:
   async function sendMail() {
     const defaultBody = `IT-Abfrageergebnisse vom ${new Date().toLocaleString('de-DE')}\n\nBitte Anhang beachten.`
     const body = emailBody.trim() || defaultBody
@@ -127,7 +153,6 @@ export default function Results() {
           <button onClick={() => doExport('pdf')} disabled={exporting} className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-foreground transition-colors disabled:opacity-50">
             <Printer size={13} className="text-red-400" /> PDF
           </button>
-          {/* FIX 3: Mail button only active after export */}
           <button
             onClick={() => { setAttachFile(true); setEmailDialog(true) }}
             disabled={!lastSavedPath}
@@ -191,7 +216,8 @@ export default function Results() {
                   <table className="w-full text-sm">
                     <tbody className="divide-y divide-border">
                       {catResults.map((r) => {
-                        // FIX 6: Special expandable panel for sw_installed
+
+                        // ── Special panel: sw_installed ────────────────────────────────
                         if (r.queryId === 'sw_installed' && r.status === 'done' && r.output) {
                           const swKey = `${hostname}::sw_installed`
                           const isExpanded = swExpanded.has(swKey)
@@ -201,10 +227,6 @@ export default function Results() {
                           try {
                             const parsed = JSON.parse(r.output)
                             const raw: typeof swItems = Array.isArray(parsed) ? parsed : [parsed]
-                            // PROBLEM 3 FIX: PS-interne Felder (PSComputerName, RunspaceId,
-                            // PSShowComputerName etc.) filtern – nur Einträge mit DisplayName behalten.
-                            // Diese Felder können durch Invoke-Command in manchen PS-Versionen
-                            // an die JSON-Ausgabe angehängt werden.
                             swItems = raw.filter((item) => item.DisplayName && String(item.DisplayName).trim() !== '')
                           } catch {
                             // JSON parse failed, fall back to raw output
@@ -221,7 +243,6 @@ export default function Results() {
                             return (
                               <tr key={r.queryId} className="hover:bg-accent/20 transition-colors">
                                 <td colSpan={3} className="px-4 py-0">
-                                  {/* Header row */}
                                   <div className="flex items-center gap-2 py-2.5">
                                     <button
                                       onClick={() => toggleSwExpand(swKey)}
@@ -237,7 +258,6 @@ export default function Results() {
                                       {swItems.length} Programme
                                     </span>
                                   </div>
-                                  {/* Expanded panel */}
                                   {isExpanded && (
                                     <div className="pb-3 space-y-2">
                                       <input
@@ -280,7 +300,131 @@ export default function Results() {
                           }
                         }
 
-                        // Default row for all other queries
+                        // ── Special panel: sec_services ────────────────────────────────
+                        if (r.queryId === 'sec_services' && r.status === 'done' && r.output) {
+                          const svcKey = `${hostname}::sec_services`
+                          const isExpanded = svcExpanded.has(svcKey)
+                          const searchTerm = svcSearch[svcKey] ?? ''
+                          const sort = svcSort[svcKey] ?? { col: 'DisplayName' as SvcSortCol, dir: 'asc' as const }
+
+                          let svcItems: SvcItem[] | null = null
+                          try {
+                            const parsed = JSON.parse(r.output)
+                            const raw = Array.isArray(parsed) ? parsed : [parsed]
+                            svcItems = raw.filter((i: SvcItem) => i.Name && String(i.Name).trim() !== '')
+                          } catch {
+                            // fall through to default row
+                          }
+
+                          if (svcItems) {
+                            const running = svcItems.filter(i => i.Status === 'Running').length
+
+                            const filtered = searchTerm
+                              ? svcItems.filter(i =>
+                                  i.DisplayName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                  i.Name?.toLowerCase().includes(searchTerm.toLowerCase())
+                                )
+                              : svcItems
+
+                            const sorted = [...filtered].sort((a, b) => {
+                              const va = String(a[sort.col] ?? '').toLowerCase()
+                              const vb = String(b[sort.col] ?? '').toLowerCase()
+                              return sort.dir === 'asc' ? va.localeCompare(vb) : vb.localeCompare(va)
+                            })
+
+                            function SortIcon({ col }: { col: SvcSortCol }) {
+                              if (sort.col !== col) return <span className="opacity-30 ml-0.5">↕</span>
+                              return <span className="ml-0.5">{sort.dir === 'asc' ? '↑' : '↓'}</span>
+                            }
+
+                            return (
+                              <tr key={r.queryId} className="hover:bg-accent/20 transition-colors">
+                                <td colSpan={3} className="px-4 py-0">
+                                  {/* Header row */}
+                                  <div className="flex items-center gap-2 py-2.5">
+                                    <button
+                                      onClick={() => toggleSvcExpand(svcKey)}
+                                      className="flex items-center gap-1.5 text-foreground text-xs hover:text-primary transition-colors"
+                                    >
+                                      {isExpanded ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+                                      <span>{getLabel(r.queryId)}</span>
+                                    </button>
+                                    <div className="ml-2">
+                                      <StatusBadge status={r.status} />
+                                    </div>
+                                    <span className="text-[11px] text-muted-foreground ml-2">
+                                      {svcItems.length} Dienste
+                                      <span className="text-emerald-400/80 ml-1">({running} aktiv)</span>
+                                    </span>
+                                    {isAdmin && (
+                                      <button
+                                        onClick={() => setSvcMgmt({ hostname, items: svcItems! })}
+                                        className="ml-auto flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                                      >
+                                        <Settings2 size={11} /> Verwalten
+                                      </button>
+                                    )}
+                                  </div>
+                                  {/* Expanded panel */}
+                                  {isExpanded && (
+                                    <div className="pb-3 space-y-2">
+                                      <input
+                                        type="text"
+                                        placeholder="Dienst suchen…"
+                                        value={searchTerm}
+                                        onChange={(e) => setSvcSearch(prev => ({ ...prev, [svcKey]: e.target.value }))}
+                                        className="w-full max-w-sm px-3 py-1.5 text-xs rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                      <div className="text-[11px] text-muted-foreground">
+                                        {filtered.length} von {svcItems.length} Einträgen
+                                      </div>
+                                      <div className="max-h-64 overflow-y-auto rounded-md border border-border">
+                                        <table className="w-full text-[11px]">
+                                          <thead className="sticky top-0 bg-card">
+                                            <tr className="border-b border-border">
+                                              <th
+                                                className="text-left px-3 py-1.5 font-semibold text-muted-foreground cursor-pointer hover:text-foreground select-none"
+                                                onClick={() => toggleSvcSort(svcKey, 'DisplayName')}
+                                              >
+                                                Anzeigename <SortIcon col="DisplayName" />
+                                              </th>
+                                              <th
+                                                className="text-left px-3 py-1.5 font-semibold text-muted-foreground cursor-pointer hover:text-foreground select-none w-24"
+                                                onClick={() => toggleSvcSort(svcKey, 'Status')}
+                                              >
+                                                Status <SortIcon col="Status" />
+                                              </th>
+                                              <th
+                                                className="text-left px-3 py-1.5 font-semibold text-muted-foreground cursor-pointer hover:text-foreground select-none w-28"
+                                                onClick={() => toggleSvcSort(svcKey, 'StartType')}
+                                              >
+                                                Starttyp <SortIcon col="StartType" />
+                                              </th>
+                                            </tr>
+                                          </thead>
+                                          <tbody className="divide-y divide-border">
+                                            {sorted.map((item, idx) => (
+                                              <tr key={idx} className="hover:bg-accent/20">
+                                                <td className="px-3 py-1.5">
+                                                  <div className="text-foreground font-medium">{item.DisplayName || item.Name}</div>
+                                                  <div className="text-muted-foreground font-mono text-[10px]">{item.Name}</div>
+                                                </td>
+                                                <td className={`px-3 py-1.5 font-medium ${svcStatusColor(item.Status)}`}>{item.Status}</td>
+                                                <td className="px-3 py-1.5 text-muted-foreground">{item.StartType}</td>
+                                              </tr>
+                                            ))}
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  )}
+                                </td>
+                              </tr>
+                            )
+                          }
+                        }
+
+                        // ── Default row ────────────────────────────────────────────────
                         return (
                           <tr key={r.queryId} className="hover:bg-accent/20 transition-colors">
                             <td className="px-4 py-2.5 w-56 shrink-0">
@@ -316,7 +460,34 @@ export default function Results() {
         )}
       </div>
 
-      {/* Email dialog */}
+      {/* ── Service management modal ──────────────────────────────────────────── */}
+      {svcMgmt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-card border border-border rounded-xl shadow-2xl w-[760px] max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
+              <div>
+                <h2 className="text-sm font-semibold text-foreground">Dienste verwalten</h2>
+                <p className="text-xs text-muted-foreground font-mono mt-0.5">{svcMgmt.hostname}</p>
+              </div>
+              <button
+                onClick={() => setSvcMgmt(null)}
+                className="w-7 h-7 flex items-center justify-center rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors text-sm"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              <ServicePanel
+                hostname={svcMgmt.hostname}
+                isAdmin={isAdmin}
+                initialItems={svcMgmt.items}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Email dialog ──────────────────────────────────────────────────────── */}
       {emailDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
           <div className="bg-card border border-border rounded-xl p-6 w-[440px] space-y-4 shadow-2xl">
@@ -351,7 +522,6 @@ export default function Results() {
                 className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary resize-none"
               />
             </div>
-            {/* FIX 3: Attachment option */}
             {lastSavedPath && (
               <div className="p-3 rounded-md bg-muted/30 border border-border space-y-2">
                 <label className="flex items-center gap-2.5 cursor-pointer">

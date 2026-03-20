@@ -4,7 +4,13 @@
       "Bash(npm install:*)",
       "Bash(npm run:*)",
       "Bash(npx vite:*)",
-      "Bash(npx electron-builder:*)"
+      "Bash(npx electron-builder:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node -e \"const b = require\\(''bcryptjs''\\); console.log\\(typeof b.hash\\)\")",
+      "Bash(node -e \"const r = require\\(''lucide-react''\\); const keys = Object.keys\\(r\\); console.log\\(keys.filter\\(k => /lock|unlock/i.test\\(k\\)\\).join\\(''\\\\n''\\)\\)\")",
+      "Bash(node -e \"const r = require\\(''react-rnd''\\); console.log\\(''react-rnd ok:'', typeof r.Rnd\\)\")",
+      "Bash(wc -l \"c:/Users/User/Projekte/Admin Tool/src/components/dashboard/\"*.tsx)",
+      "Bash(grep -n \"return\\\\|</div>$\\\\|deleteIds\" src/screens/LocationOverview.tsx)"
     ]
   }
 }
