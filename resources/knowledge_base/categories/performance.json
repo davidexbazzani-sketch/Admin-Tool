@@ -1,0 +1,856 @@
+[
+  {
+    "id": "PROB-PERF-001",
+    "category": "Performance",
+    "title": "CPU 100% allgemein",
+    "keywords": ["CPU", "Prozessor", "Auslastung", "100%", "hoch", "Task-Manager", "Leistung"],
+    "extendedKeywords": ["Computer ist langsam", "Lüfter dreht hoch", "alles ruckelt", "Programme reagieren nicht", "PC macht Geräusche", "CPU am Anschlag", "Prozessor voll ausgelastet", "Rechner braucht ewig", "nichts geht mehr", "alles hängt", "PC stockt", "Computer überlastet", "Auslastung immer bei 100", "Task Manager zeigt 100%", "roter Balken CPU", "System reagiert kaum", "PC dreht durch", "Computer arbeitet ohne Grund", "CPU ständig hoch", "Prozessor permanent belastet"],
+    "typos": ["CPu", "Processer", "Prozzesor", "Auslatung", "Task Manger", "Protzessor"],
+    "symptoms": ["CPU-Auslastung konstant bei 100%", "Lüfter läuft dauerhaft laut", "Programme reagieren verzögert", "Mauszeiger ruckelt"],
+    "quickCheck": "Ist die CPU-Auslastung dauerhaft bei 100% oder nur zeitweise?",
+    "solutions": ["Task-Manager öffnen (Strg+Shift+Esc) und prüfen, welcher Prozess die CPU belastet", "Prozess mit höchster CPU-Last identifizieren und ggf. beenden", "Windows Updates prüfen – oft laufen Updates im Hintergrund", "Antivirenscan durchführen", "Neustart durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_procs_cpuload", "label": "CPU-Auslastung prüfen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["langsam", "hängt", "ruckelt", "CPU rot"],
+    "followUpQuestions": [
+      {"question": "Seit wann besteht das Problem?", "options": ["Seit heute", "Seit einem Update", "Schon länger"], "narrows": "Ursache eingrenzen"},
+      {"question": "Ist ein bestimmter Prozess auffällig?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Prozess-spezifische Lösung"}
+    ],
+    "relatedProblems": ["PROB-PERF-002", "PROB-PERF-003", "PROB-PERF-004"]
+  },
+  {
+    "id": "PROB-PERF-002",
+    "category": "Performance",
+    "title": "CPU 100% durch bestimmten Prozess",
+    "keywords": ["CPU", "Prozess", "Auslastung", "Task-Manager", "einzelner Prozess", "hohe Last", "Programm"],
+    "extendedKeywords": ["ein Programm frisst die CPU", "ein Prozess nimmt alles", "Chrome braucht viel CPU", "Teams macht CPU voll", "ein Programm blockiert alles", "bestimmtes Programm langsam", "Prozess beendet sich nicht", "ein Programm dreht durch", "Software hängt sich auf", "Anwendung reagiert nicht", "Programm nicht reagierend", "weißes Fenster", "Programm eingefroren", "einzelnes Programm Problem", "nur ein Programm macht Probleme", "spezifisches Programm CPU", "App frisst Ressourcen", "Programm verbraucht zu viel", "Anwendung zu langsam", "bestimmte Software CPU hoch"],
+    "typos": ["Prozes", "Prozzes", "Taskmanager", "Protzess", "Progamm"],
+    "symptoms": ["Ein einzelner Prozess zeigt hohe CPU-Auslastung im Task-Manager", "Programm reagiert nicht mehr", "Fenster wird weiß/grau"],
+    "quickCheck": "Welcher Prozess verursacht die hohe CPU-Last?",
+    "solutions": ["Task-Manager öffnen und den Prozess identifizieren", "Prozess über Task-Manager beenden", "Programm neu starten", "Programm aktualisieren oder neu installieren", "Prüfen ob das Programm bekannte Probleme hat"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse anzeigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_procs_killname", "label": "Prozess beenden", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_procs_cpuload", "label": "CPU-Auslastung prüfen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Programm frisst CPU", "ein Prozess", "bestimmte App"],
+    "followUpQuestions": [
+      {"question": "Welches Programm verursacht die Last?", "options": ["Browser", "Teams", "Outlook", "Anderes"], "narrows": "Programmspezifische Lösung"},
+      {"question": "Passiert das regelmäßig?", "options": ["Ja, immer", "Nur manchmal", "Zum ersten Mal"], "narrows": "Wiederkehrendes Problem vs. einmalig"}
+    ],
+    "relatedProblems": ["PROB-PERF-001", "PROB-PERF-007"]
+  },
+  {
+    "id": "PROB-PERF-003",
+    "category": "Performance",
+    "title": "CPU 100% durch System-Prozess",
+    "keywords": ["svchost", "System", "WMI", "Windows Modules", "TiWorker", "ntoskrnl", "System-Prozess", "Windows-Dienst"],
+    "extendedKeywords": ["svchost frisst CPU", "System-Prozess hohe Auslastung", "Windows selbst macht CPU voll", "Systemprozess bei 100%", "Windows Hintergrundprozess", "svchost.exe CPU", "System Interrupts hoch", "Windows macht Computer langsam", "Betriebssystem Problem", "Windows Dienst CPU", "Systemprozess blockiert", "Host-Prozess für Windows", "Windows intern CPU", "kein eigenes Programm schuld", "Windows selbst ist schuld", "Systemdienst frisst Leistung", "Hintergrundaktivität Windows", "Windows arbeitet im Hintergrund", "automatische Wartung", "Windows Wartung CPU"],
+    "typos": ["svhost", "svschost", "svchoost", "Sysem", "Systemprozzes"],
+    "symptoms": ["svchost.exe oder System-Prozess zeigt hohe CPU", "Kein Benutzerprogramm erkennbar als Ursache", "CPU-Last durch Windows-Dienste"],
+    "quickCheck": "Welcher System-Prozess genau verursacht die Last?",
+    "solutions": ["Task-Manager öffnen und System-Prozess identifizieren", "Windows Update prüfen und abwarten", "DISM und SFC durchführen", "Windows-Dienste prüfen (WMI, Windows Update, Superfetch)", "Neustart durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_procs_cpuload", "label": "CPU-Auslastung prüfen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["svchost", "System-Prozess", "Windows Dienst", "ntoskrnl"],
+    "followUpQuestions": [
+      {"question": "Wurde kürzlich ein Windows Update installiert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Update-bezogene Ursache"},
+      {"question": "Läuft das Problem schon länger?", "options": ["Ja, seit Tagen", "Seit ein paar Stunden", "Gerade erst aufgefallen"], "narrows": "Dauer des Problems"}
+    ],
+    "relatedProblems": ["PROB-PERF-001", "PROB-PERF-004", "PROB-PERF-035"]
+  },
+  {
+    "id": "PROB-PERF-004",
+    "category": "Performance",
+    "title": "CPU 100% nach Windows Update",
+    "keywords": ["CPU", "Update", "Windows Update", "TiWorker", "TrustedInstaller", "WudfHost", "nach Update"],
+    "extendedKeywords": ["nach Update langsam", "seit Update CPU hoch", "Windows Update macht PC langsam", "Computer langsam nach Aktualisierung", "nach Neustart wegen Update langsam", "Update installiert und jetzt langsam", "PC seit Update kaputt", "TiWorker hohe CPU", "Trusted Installer CPU", "Windows Update Nacharbeiten", "Patch macht Probleme", "nach monatlichem Update", "Patch Tuesday Problem", "Update hängt", "Update-Nachbearbeitung", "Windows Update im Hintergrund", "nach kumultativem Update", "Feature Update Probleme", "nach Upgrade langsam", "Windows Update Dienst CPU"],
+    "typos": ["Updtae", "Updat", "Widnows Update", "Aktualiseirung", "Updatee"],
+    "symptoms": ["Hohe CPU-Last nach kürzlich installiertem Windows Update", "TiWorker.exe oder TrustedInstaller mit hoher CPU", "System dauerhaft beschäftigt nach Update"],
+    "quickCheck": "Wurde kürzlich ein Windows Update installiert?",
+    "solutions": ["Abwarten – Windows-Updates benötigen oft Nachbearbeitung (bis zu 2 Stunden)", "Neustart durchführen", "Windows Update-Problembehandlung ausführen", "Update-Verlauf prüfen und ggf. fehlerhaftes Update deinstallieren", "SFC /scannow ausführen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_procs_cpuload", "label": "CPU-Auslastung prüfen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["nach Update", "TiWorker", "TrustedInstaller", "seit Patch"],
+    "followUpQuestions": [
+      {"question": "Wie lange ist das Update her?", "options": ["Weniger als 2 Stunden", "Heute", "Gestern oder länger"], "narrows": "Nachbearbeitung vs. echtes Problem"},
+      {"question": "Wurde der PC seitdem neugestartet?", "options": ["Ja", "Nein"], "narrows": "Neustart als Lösung"}
+    ],
+    "relatedProblems": ["PROB-PERF-001", "PROB-PERF-003", "PROB-PERF-031"]
+  },
+  {
+    "id": "PROB-PERF-005",
+    "category": "Performance",
+    "title": "RAM voll – allgemein",
+    "keywords": ["RAM", "Arbeitsspeicher", "Speicher", "Speicherauslastung", "Physischer Speicher", "Memory", "voll"],
+    "extendedKeywords": ["Arbeitsspeicher voll", "RAM ausgelastet", "Speicher fast voll", "Computer hat keinen Speicher mehr", "zu wenig Arbeitsspeicher", "RAM bei 90%", "Speicher wird knapp", "PC hat nicht genug RAM", "Arbeitsspeicher reicht nicht", "Speicherproblem", "zu wenig Memory", "RAM am Limit", "Speicher immer voll", "Arbeitsspeicher aufgebraucht", "physischer Speicher voll", "nicht genug Speicher", "Speicherwarnung", "RAM knapp", "kein freier Speicher", "Speicherverbrauch zu hoch"],
+    "typos": ["Arbeitsspeicher", "Arbeitspeicher", "Speicehr", "Ramm", "Speicherauslastug"],
+    "symptoms": ["Arbeitsspeicher-Auslastung über 90%", "Windows zeigt Speicherwarnung", "Programme starten nicht wegen fehlendem Speicher"],
+    "quickCheck": "Wie hoch ist die aktuelle RAM-Auslastung im Task-Manager?",
+    "solutions": ["Task-Manager öffnen und RAM-Verbrauch pro Prozess prüfen", "Nicht benötigte Programme schließen", "Browser-Tabs reduzieren", "Neustart durchführen (leert den RAM)", "Auslagerungsdatei prüfen und ggf. vergrößern"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_procs_ramload", "label": "RAM-Auslastung prüfen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Speicher voll", "RAM 90%", "Speicherwarnung"],
+    "followUpQuestions": [
+      {"question": "Wie viel RAM ist im PC verbaut?", "options": ["4 GB", "8 GB", "16 GB", "Weiß nicht"], "narrows": "Hardware-Limit vs. Software-Problem"},
+      {"question": "Welche Programme sind geöffnet?", "options": ["Nur Office", "Browser mit vielen Tabs", "Viele Programme", "Wenige Programme"], "narrows": "Ursache der hohen Auslastung"}
+    ],
+    "relatedProblems": ["PROB-PERF-006", "PROB-PERF-007", "PROB-PERF-008"]
+  },
+  {
+    "id": "PROB-PERF-006",
+    "category": "Performance",
+    "title": "RAM-Speicherleck",
+    "keywords": ["Speicherleck", "Memory Leak", "RAM steigt", "Speicher wächst", "Arbeitsspeicher steigt kontinuierlich"],
+    "extendedKeywords": ["RAM wird immer mehr", "Speicher steigt stetig", "nach Stunden kein Speicher mehr", "RAM füllt sich langsam", "Arbeitsspeicher wächst", "Speicher geht nie runter", "Programm frisst immer mehr Speicher", "Memory Leak", "Speicherleck erkennen", "RAM steigt ohne Grund", "Speicher wird nicht freigegeben", "Arbeitsspeicher steigt an", "Programm belegt immer mehr", "nach langer Laufzeit voll", "Speicher akkumuliert", "kumulativer Speicherverbrauch", "steigender RAM", "Arbeitsspeicher steigt über Zeit", "Speicher wird nie freigegeben", "Prozess verbraucht immer mehr RAM"],
+    "typos": ["Speicherleck", "Memory Leek", "Memoryleak", "Speicherleak", "Speicherlekk"],
+    "symptoms": ["RAM-Verbrauch steigt stetig über die Zeit", "Nach langem Betrieb kein freier RAM mehr", "Neustart behebt das Problem temporär"],
+    "quickCheck": "Steigt der RAM-Verbrauch kontinuierlich über die Zeit an?",
+    "solutions": ["Prozess mit steigendem RAM-Verbrauch im Task-Manager identifizieren", "Betroffenes Programm beenden und neu starten", "Programm-Updates prüfen", "Regelmäßigen Neustart planen als Workaround", "Handle-Count des verdächtigen Prozesses prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_procs_ramload", "label": "RAM-Auslastung prüfen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Speicher steigt", "Memory Leak", "RAM wächst"],
+    "followUpQuestions": [
+      {"question": "Seit wann beobachten Sie das?", "options": ["Seit heute", "Seit einigen Tagen", "Schon immer"], "narrows": "Zeitraum eingrenzen"},
+      {"question": "Hilft ein Neustart temporär?", "options": ["Ja", "Nein"], "narrows": "Speicherleck bestätigen"}
+    ],
+    "relatedProblems": ["PROB-PERF-005", "PROB-PERF-019", "PROB-PERF-020"]
+  },
+  {
+    "id": "PROB-PERF-007",
+    "category": "Performance",
+    "title": "RAM voll durch bestimmte Anwendung",
+    "keywords": ["RAM", "Anwendung", "Programm", "Browser", "Chrome", "Teams", "Outlook", "Speicher"],
+    "extendedKeywords": ["Chrome frisst RAM", "Teams braucht viel Speicher", "Outlook verbraucht zu viel RAM", "Browser nimmt allen Speicher", "ein Programm braucht zu viel RAM", "bestimmte App Speicher", "Chrome Tabs Speicher", "Teams Speicherverbrauch", "Anwendung Arbeitsspeicher", "Programm belegt RAM", "Software verbraucht Speicher", "Edge frisst Speicher", "Excel braucht viel RAM", "SAP Speicher hoch", "Java Speicher", "Anwendung Speicherfresser", "bestimmtes Programm RAM", "eine App belegt alles", "Software Speicher", "Programm RAM zu hoch"],
+    "typos": ["Crome", "Temas", "Outlok", "Browswer", "Anwendunh"],
+    "symptoms": ["Eine bestimmte Anwendung belegt übermäßig viel RAM", "Task-Manager zeigt einzelnes Programm mit hohem Speicherverbrauch"],
+    "quickCheck": "Welche Anwendung verbraucht am meisten RAM?",
+    "solutions": ["Anwendung schließen und neu starten", "Bei Browser: Tabs reduzieren und Erweiterungen prüfen", "Programm-Updates installieren", "Programmeinstellungen für Speicherverbrauch optimieren", "Alternative Software in Betracht ziehen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_procs_killname", "label": "Prozess beenden", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_procs_ramload", "label": "RAM-Auslastung prüfen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Chrome RAM", "Teams Speicher", "Browser frisst"],
+    "followUpQuestions": [
+      {"question": "Welche Anwendung ist betroffen?", "options": ["Browser", "Teams", "Outlook", "Andere"], "narrows": "Programmspezifische Lösung"},
+      {"question": "Wie viele Tabs/Fenster sind geöffnet?", "options": ["Wenige (1-5)", "Mittel (5-20)", "Viele (20+)"], "narrows": "Tab-Management als Lösung"}
+    ],
+    "relatedProblems": ["PROB-PERF-005", "PROB-PERF-006"]
+  },
+  {
+    "id": "PROB-PERF-008",
+    "category": "Performance",
+    "title": "Auslagerungsdatei-Probleme",
+    "keywords": ["Auslagerungsdatei", "Pagefile", "Virtual Memory", "virtueller Speicher", "pagefile.sys", "Swap"],
+    "extendedKeywords": ["Auslagerungsdatei voll", "virtueller Speicher zu klein", "Pagefile anpassen", "Auslagerungsdatei vergrößern", "Windows Speicher auslagern", "Fehlermeldung virtueller Speicher", "Pagefile auf SSD", "Auslagerungsdatei verschieben", "Swap-Speicher", "virtuelle Speicher Warnung", "Auslagerungsdatei Größe", "Pagefile Einstellungen", "Meldung virtueller Speicher niedrig", "Auslagerung zu klein", "Festplatte voll wegen Pagefile", "Windows braucht mehr Speicher", "Speicherauslagerung", "Windows Seitenauslagerung", "Pagefile manuell einstellen", "Auslagerungsdatei fehlt"],
+    "typos": ["Auslageurngsdatei", "Pagefiel", "Auslagerunsdatei", "virteulller Speicher"],
+    "symptoms": ["Fehlermeldung: Virtueller Speicher zu niedrig", "System extrem langsam bei hoher RAM-Auslastung", "Festplatte stark beansprucht"],
+    "quickCheck": "Wird eine Fehlermeldung zum virtuellen Speicher angezeigt?",
+    "solutions": ["Auslagerungsdatei-Einstellungen prüfen (Systemsteuerung > System > Erweitert)", "Automatische Verwaltung der Auslagerungsdatei aktivieren", "Manuelle Größe festlegen: 1,5x bis 3x des RAM", "Auslagerungsdatei auf schnellste Festplatte verschieben", "RAM aufrüsten als langfristige Lösung"],
+    "skillMapping": [
+      {"skillId": "rd_procs_ramload", "label": "RAM-Auslastung prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_procs_diskfree", "label": "Festplattenspeicher prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["virtueller Speicher niedrig", "Pagefile", "Auslagerung"],
+    "followUpQuestions": [
+      {"question": "Wie viel RAM ist verbaut?", "options": ["4 GB", "8 GB", "16 GB", "Mehr"], "narrows": "RAM-Erweiterung als Option"},
+      {"question": "Ist die Festplatte fast voll?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Festplattenspeicher als Ursache"}
+    ],
+    "relatedProblems": ["PROB-PERF-005", "PROB-PERF-038"]
+  },
+  {
+    "id": "PROB-PERF-009",
+    "category": "Performance",
+    "title": "Datenträger 100% – allgemein",
+    "keywords": ["Datenträger", "Festplatte", "Disk", "100%", "HDD", "SSD", "I/O", "Datenträgerauslastung"],
+    "extendedKeywords": ["Festplatte bei 100%", "Disk 100 Prozent", "Datenträger am Anschlag", "Festplatte arbeitet dauerhaft", "HDD voll ausgelastet", "Festplatte ständig aktiv", "Datenträger Auslastung hoch", "Festplatte rattert ständig", "SSD 100 Prozent", "Laufwerk überlastet", "Disk immer bei 100", "Festplatte bremst PC", "Datenträger blockiert", "Festplattenaktivität hoch", "Festplatte LED dauerhaft an", "alles wegen Festplatte langsam", "Disk Bottleneck", "Festplatte arbeitet ununterbrochen", "Datenträger rot im Task-Manager", "IO Last hoch"],
+    "typos": ["Datneträger", "Festpaltte", "Datenrtäger", "Datentraeger", "Festplatt"],
+    "symptoms": ["Datenträgerauslastung zeigt 100% im Task-Manager", "PC reagiert extrem langsam", "Programme laden ewig", "Festplatten-LED leuchtet dauerhaft"],
+    "quickCheck": "Zeigt der Task-Manager den Datenträger bei 100% an?",
+    "solutions": ["Task-Manager prüfen, welcher Prozess den Datenträger belastet", "Windows Search-Dienst temporär deaktivieren", "Superfetch/SysMain-Dienst deaktivieren", "CHKDSK ausführen um Festplattenfehler zu prüfen", "SSD-Firmware aktualisieren oder HDD gegen SSD tauschen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "Top Prozesse anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_procs_diskfree", "label": "Festplattenspeicher prüfen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 3, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["Disk 100", "Festplatte voll", "Datenträger rot"],
+    "followUpQuestions": [
+      {"question": "Haben Sie eine SSD oder eine herkömmliche Festplatte (HDD)?", "options": ["SSD", "HDD", "Weiß nicht"], "narrows": "Hardware-spezifische Lösung"},
+      {"question": "Ist das Problem dauerhaft oder nur zeitweise?", "options": ["Dauerhaft", "Zeitweise", "Nur beim Start"], "narrows": "Art des Problems"}
+    ],
+    "relatedProblems": ["PROB-PERF-010", "PROB-PERF-011", "PROB-PERF-012"]
+  },
+  {
+    "id": "PROB-PERF-010",
+    "category": "Performance",
+    "title": "Datenträger 100% durch Windows Search",
+    "keywords": ["Windows Search", "SearchIndexer", "Indexierung", "Datenträger", "SearchProtocolHost", "Suchindex"],
+    "extendedKeywords": ["Windows Search macht Festplatte voll", "SearchIndexer belastet Disk", "Suchindizierung Festplatte", "Windows Suche Datenträger", "Indexer belastet System", "Search Protokoll Host", "Suchfunktion macht PC langsam", "Windows Suche langsam", "Indexierung nach Update", "Suchindex wird aufgebaut", "Windows Search Dienst", "SearchIndexer.exe Festplatte", "Suche macht Disk 100%", "Suchindexer CPU und Disk", "Windows Suche Probleme", "Indizierung Festplatte rattert", "Search Protocol Host hoch", "Suchdienst Auslastung", "Indexer nach Neuinstallation", "Windows Search deaktivieren"],
+    "typos": ["Serach", "Seach Index", "Indixierung", "SearchInexer", "Windwos Search"],
+    "symptoms": ["SearchIndexer.exe oder SearchProtocolHost.exe belastet den Datenträger", "Festplatte bei 100% durch Windows-Suchdienst"],
+    "quickCheck": "Zeigt der Task-Manager SearchIndexer.exe als Verursacher?",
+    "solutions": ["Windows Search-Dienst temporär stoppen: net stop wsearch", "Suchindex neu aufbauen: Systemsteuerung > Indizierungsoptionen > Erweitert > Neu erstellen", "Indizierte Ordner einschränken", "Windows Search-Dienst permanent deaktivieren falls nicht benötigt", "Nach Windows Update abwarten – Neuindizierung ist normal"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_searchreset", "label": "Windows Search zurücksetzen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_procs_topcpu", "label": "Top Prozesse anzeigen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["SearchIndexer", "wsearch", "Suchindex", "Indexer"],
+    "followUpQuestions": [
+      {"question": "Wurde kürzlich ein Update installiert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Neuindizierung nach Update"},
+      {"question": "Nutzen Sie die Windows-Suche aktiv?", "options": ["Ja", "Nein", "Selten"], "narrows": "Deaktivierung als Option"}
+    ],
+    "relatedProblems": ["PROB-PERF-009", "PROB-PERF-015", "PROB-PERF-016"]
+  },
+  {
+    "id": "PROB-PERF-011",
+    "category": "Performance",
+    "title": "Datenträger 100% durch Superfetch/SysMain",
+    "keywords": ["Superfetch", "SysMain", "Prefetch", "Datenträger", "Festplatte", "HDD", "Vorladen"],
+    "extendedKeywords": ["Superfetch macht Festplatte langsam", "SysMain Dienst Datenträger", "Prefetch belastet HDD", "Superfetch deaktivieren", "SysMain hohe Disk-Auslastung", "Festplatte voll durch Superfetch", "Vorladen macht langsam", "SysMain Service", "Superfetch Service", "HDD wegen Superfetch langsam", "Windows lädt Programme vor", "Prefetch deaktivieren", "SysMain abschalten", "Superfetch HDD", "Festplatte rattert Superfetch", "SysMain Disk 100", "Vorladen deaktivieren", "Windows Vorabladen", "SysMain Windows Dienst", "Superfetch Problem HDD"],
+    "typos": ["Superftch", "Superfetsch", "SysMan", "Sysmain", "Prefech"],
+    "symptoms": ["SysMain/Superfetch-Dienst belastet den Datenträger", "Besonders auf HDDs spürbar", "Festplatte rattert dauerhaft"],
+    "quickCheck": "Wird der Dienst 'SysMain' oder 'Superfetch' als Verursacher im Task-Manager angezeigt?",
+    "solutions": ["SysMain-Dienst deaktivieren: services.msc > SysMain > Deaktiviert", "Alternativ über CMD: sc stop SysMain && sc config SysMain start=disabled", "Prefetch-Ordner leeren: C:\\Windows\\Prefetch", "Auf SSD upgraden – Superfetch ist auf SSDs weniger problematisch", "Neustart durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_procs_topcpu", "label": "Top Prozesse anzeigen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_procs_diskfree", "label": "Festplattenspeicher prüfen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["SysMain", "Superfetch", "Prefetch", "Vorladen"],
+    "followUpQuestions": [
+      {"question": "Haben Sie eine SSD oder HDD?", "options": ["SSD", "HDD", "Weiß nicht"], "narrows": "HDD-spezifisches Problem"},
+      {"question": "Soll der Dienst dauerhaft deaktiviert werden?", "options": ["Ja", "Nein, nur temporär"], "narrows": "Art der Lösung"}
+    ],
+    "relatedProblems": ["PROB-PERF-009", "PROB-PERF-010", "PROB-PERF-012"]
+  },
+  {
+    "id": "PROB-PERF-012",
+    "category": "Performance",
+    "title": "Datenträger 100% durch Defragmentierung",
+    "keywords": ["Defragmentierung", "Defrag", "Optimieren", "Festplatte", "Datenträger", "Laufwerk optimieren"],
+    "extendedKeywords": ["Defragmentierung macht PC langsam", "Festplatte wird defragmentiert", "Defrag läuft im Hintergrund", "Laufwerk wird optimiert", "geplante Defragmentierung", "automatische Defragmentierung", "Defragmentierung dauert ewig", "Windows defragmentiert automatisch", "Defrag Datenträger 100%", "Festplattenoptimierung läuft", "Defragmentierung stoppen", "Defrag bei SSD", "TRIM statt Defrag", "Laufwerk optimieren läuft", "Defragmentierung abschalten", "automatische Optimierung deaktivieren", "Defrag braucht zu lange", "Festplatte wird optimiert", "Defragmentierung Zeitplan", "Defrag SSD nicht nötig"],
+    "typos": ["Defragmentirung", "Defrag", "Defragmenteirung", "Defragmentieurng"],
+    "symptoms": ["Defragmentierungsprozess belastet den Datenträger", "Automatische Defragmentierung läuft im Hintergrund"],
+    "quickCheck": "Läuft gerade eine Defragmentierung oder Laufwerksoptimierung?",
+    "solutions": ["Defragmentierung abwarten – sie wird automatisch beendet", "Zeitplan der automatischen Optimierung anpassen", "Bei SSDs: TRIM ist ausreichend, Defrag nicht nötig", "Defragmentierung stoppen: dfrgui.exe öffnen und stoppen", "Zeitplan ändern: Laufwerke optimieren > Einstellungen ändern"],
+    "skillMapping": [
+      {"skillId": "rd_procs_diskfree", "label": "Festplattenspeicher prüfen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Defrag", "Optimierung", "Defragmentierung"],
+    "followUpQuestions": [
+      {"question": "SSD oder HDD?", "options": ["SSD", "HDD", "Weiß nicht"], "narrows": "Bei SSD ist Defrag unnötig"},
+      {"question": "Läuft die Defrag gerade oder ist sie geplant?", "options": ["Läuft gerade", "Geplant", "Weiß nicht"], "narrows": "Sofortmaßnahme vs. Zeitplan"}
+    ],
+    "relatedProblems": ["PROB-PERF-009", "PROB-PERF-011"]
+  },
+  {
+    "id": "PROB-PERF-013",
+    "category": "Performance",
+    "title": "Zu viele Autostart-Programme",
+    "keywords": ["Autostart", "Startup", "Systemstart", "Boot", "Anmeldung", "Programme beim Start"],
+    "extendedKeywords": ["zu viele Programme beim Start", "PC startet langsam wegen Programmen", "alles startet automatisch", "Autostart aufräumen", "beim Hochfahren alles laden", "Systemstart dauert wegen Programmen", "Taskleiste voll beim Start", "zu viele Icons beim Start", "Programme im Autostart entfernen", "automatisch startende Programme", "PC braucht lang zum Hochfahren", "Login dauert wegen Programmen", "Anmeldung langsam Programme", "Startup Programme", "alles lädt beim Starten", "Boot dauert Autostart", "Programmstart beim Hochfahren", "automatische Programme deaktivieren", "Autostart bereinigen", "Autostart ausmisten"],
+    "typos": ["Autosart", "Autostrat", "Auotstart", "Statup", "Systemsatrt"],
+    "symptoms": ["Viele Programme starten automatisch beim Hochfahren", "Login dauert sehr lange", "Taskleiste zeigt viele Programme nach dem Start"],
+    "quickCheck": "Wie viele Programme starten automatisch mit Windows?",
+    "solutions": ["Task-Manager > Autostart: unnötige Programme deaktivieren", "Nur essentielle Programme im Autostart belassen", "msconfig > Systemstart prüfen", "Autoruns-Tool von Microsoft verwenden für detaillierte Übersicht", "Programme einzeln im Autostart deaktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme anzeigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["zu viele beim Start", "alles startet mit", "Autostart voll"],
+    "followUpQuestions": [
+      {"question": "Wissen Sie, welche Programme im Autostart sind?", "options": ["Ja", "Nein"], "narrows": "Übersicht zuerst"},
+      {"question": "Sollen bestimmte Programme im Autostart bleiben?", "options": ["Ja, einige", "Nein, nur Windows-Standard"], "narrows": "Umfang der Bereinigung"}
+    ],
+    "relatedProblems": ["PROB-PERF-014", "PROB-PERF-015", "PROB-PERF-027"]
+  },
+  {
+    "id": "PROB-PERF-014",
+    "category": "Performance",
+    "title": "Autostart bereinigen",
+    "keywords": ["Autostart", "bereinigen", "aufräumen", "deaktivieren", "optimieren", "Startup reduzieren"],
+    "extendedKeywords": ["Autostart aufräumen", "unnötige Programme entfernen", "Autostart optimieren", "Programme aus Autostart nehmen", "Autostart Programme deaktivieren", "welche Autostart Programme brauche ich", "Autostart bereinigen Anleitung", "Programme vom Start entfernen", "Autostart ausdünnen", "Startup optimieren", "Boot beschleunigen Programme", "welche Autostart Programme sind sicher", "Autostart entrümpeln", "unnötige Startprogramme", "Autostart reduzieren", "Programme beim Hochfahren entfernen", "Autostart sortieren", "Startup aufräumen", "Autostart welche brauche ich", "Autostart Programme verwalten"],
+    "typos": ["Autosart berienigen", "Autostrat", "bereinign", "aufäumen"],
+    "symptoms": ["Benutzer möchte Autostart-Programme aufräumen", "System startet zu langsam"],
+    "quickCheck": "Haben Sie bereits den Autostart im Task-Manager geprüft?",
+    "solutions": ["Task-Manager > Autostart öffnen und alle Einträge prüfen", "Startwirkung beachten: Hoch = mehr Einfluss auf Startzeit", "Messenger, Update-Checker und Cloud-Dienste oft deaktivierbar", "Antivirus und VPN-Client im Autostart belassen", "Nach Bereinigung Neustart und Startzeit vergleichen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Autostart aufräumen", "Startup bereinigen", "Programme entfernen Start"],
+    "followUpQuestions": [
+      {"question": "Wie viele Autostart-Einträge gibt es?", "options": ["Weniger als 10", "10-20", "Mehr als 20"], "narrows": "Umfang der Bereinigung"},
+      {"question": "Sind Firmen-Programme darunter?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Firmenprogramme müssen ggf. bleiben"}
+    ],
+    "relatedProblems": ["PROB-PERF-013", "PROB-PERF-027"]
+  },
+  {
+    "id": "PROB-PERF-015",
+    "category": "Performance",
+    "title": "Bestimmtes Autostart-Programm entfernen",
+    "keywords": ["Autostart", "entfernen", "deaktivieren", "bestimmtes Programm", "Registry", "Shell:startup"],
+    "extendedKeywords": ["bestimmtes Programm aus Autostart entfernen", "Programm startet immer mit", "wie entferne ich Programm aus Autostart", "Programm soll nicht mehr automatisch starten", "Autostart Eintrag löschen", "Programm beim Hochfahren verhindern", "wie deaktiviere ich Autostart für Programm", "Programm immer beim Start", "ein bestimmtes Programm Autostart", "spezifisches Programm Autostart entfernen", "Registry Autostart Eintrag", "Shell startup Ordner", "Programm startet trotz Deaktivierung", "Autostart Eintrag kommt wieder", "Programm lässt sich nicht deaktivieren", "hartnäckiges Autostart Programm", "Programm Registry Autostart", "Autostart Ordner Programm", "Verknüpfung im Autostart löschen", "geplante Aufgabe statt Autostart"],
+    "typos": ["Auostart", "entfernne", "deaktiviern", "Proramm"],
+    "symptoms": ["Ein bestimmtes Programm startet immer automatisch mit Windows", "Programm lässt sich über Task-Manager nicht dauerhaft deaktivieren"],
+    "quickCheck": "Welches Programm soll aus dem Autostart entfernt werden?",
+    "solutions": ["Task-Manager > Autostart > Programm rechtsklick > Deaktivieren", "Autostart-Ordner prüfen: Shell:startup", "Registry prüfen: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "In den Programmeinstellungen 'Mit Windows starten' deaktivieren", "Aufgabenplanung prüfen: manche Programme nutzen geplante Tasks"],
+    "skillMapping": [
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_procs_killname", "label": "Prozess beenden", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["Programm startet immer", "aus Autostart entfernen", "nicht mehr starten"],
+    "followUpQuestions": [
+      {"question": "Welches Programm ist es?", "options": ["Freitext"], "narrows": "Programmspezifische Anleitung"},
+      {"question": "Kommt das Programm nach dem Deaktivieren zurück?", "options": ["Ja", "Nein", "Noch nicht probiert"], "narrows": "Hartnäckiges Programm"}
+    ],
+    "relatedProblems": ["PROB-PERF-013", "PROB-PERF-014"]
+  },
+  {
+    "id": "PROB-PERF-016",
+    "category": "Performance",
+    "title": "Indexierung verursacht CPU-Last",
+    "keywords": ["Indexierung", "SearchIndexer", "CPU", "Indizierung", "Windows Search", "Suchindex"],
+    "extendedKeywords": ["Indexierung macht CPU langsam", "SearchIndexer CPU hoch", "Indizierung frisst CPU", "Suchindex CPU Last", "Windows Indexierung CPU", "Indexer verbraucht CPU", "Indexer läuft ständig", "Indizierung im Hintergrund", "Indexierung CPU Auslastung", "SearchIndexer.exe CPU", "Indexierung nach Update CPU", "Suchindexer Prozessor", "Windows Search CPU", "Indexierung dauert ewig", "Indexer nimmt CPU", "Indizierung CPU Spitze", "Suchindex wird erstellt CPU", "Indexierung bremst PC", "SearchIndexer.exe Auslastung", "Windows Indexer CPU"],
+    "typos": ["Indixierung", "Indexirung", "Indezierung", "Indizeirung"],
+    "symptoms": ["SearchIndexer.exe verursacht hohe CPU-Auslastung", "CPU-Spitzen durch Indexierungsprozess", "PC langsam durch Hintergrundindizierung"],
+    "quickCheck": "Zeigt der Task-Manager SearchIndexer.exe mit hoher CPU-Auslastung?",
+    "solutions": ["Indexierung temporär pausieren", "Indizierte Speicherorte einschränken", "Suchindex neu aufbauen", "Windows Search-Dienst deaktivieren falls nicht benötigt", "Nach einem Update normal – abwarten"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_searchreset", "label": "Windows Search zurücksetzen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse anzeigen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_procs_cpuload", "label": "CPU-Auslastung prüfen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Indexer CPU", "SearchIndexer CPU", "Indizierung langsam"],
+    "followUpQuestions": [
+      {"question": "Wurde kürzlich Windows neu installiert oder ein großes Update gemacht?", "options": ["Ja", "Nein"], "narrows": "Erstindizierung vs. dauerhaftes Problem"},
+      {"question": "Benötigen Sie die Windows-Suchfunktion?", "options": ["Ja", "Nein", "Selten"], "narrows": "Deaktivierung als Option"}
+    ],
+    "relatedProblems": ["PROB-PERF-010", "PROB-PERF-017"]
+  },
+  {
+    "id": "PROB-PERF-017",
+    "category": "Performance",
+    "title": "Indexierung deaktivieren",
+    "keywords": ["Indexierung", "deaktivieren", "Windows Search", "abschalten", "Dienst stoppen"],
+    "extendedKeywords": ["Indexierung ausschalten", "Windows Search deaktivieren", "Indizierung abschalten", "Suchindex deaktivieren", "Indexierung stoppen", "Windows Suche abschalten", "Indexer deaktivieren", "Indexierung permanent ausschalten", "Search Dienst deaktivieren", "wsearch deaktivieren", "Indizierung komplett ausschalten", "Suchindex nicht benötigt", "Indexierung Windows deaktivieren", "ohne Indexierung arbeiten", "Indexierung unnötig", "Windows Search Service stoppen", "Suchfunktion deaktivieren", "Indexer permanent aus", "Windows Search aus", "Indizierung brauche ich nicht"],
+    "typos": ["Indixierung deaktiviern", "deaktiveren", "ausscahlten"],
+    "symptoms": ["Benutzer möchte die Windows-Indexierung dauerhaft deaktivieren"],
+    "quickCheck": "Sind Sie sicher, dass Sie die Windows-Suche nicht benötigen?",
+    "solutions": ["Dienste öffnen: services.msc", "Windows Search-Dienst suchen und stoppen", "Starttyp auf 'Deaktiviert' setzen", "Alternativ per CMD: sc config wsearch start=disabled", "Hinweis: Dateissuche in Windows funktioniert dann langsamer"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_searchreset", "label": "Windows Search zurücksetzen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Indexierung aus", "Search deaktivieren", "Suchindex abschalten"],
+    "followUpQuestions": [
+      {"question": "Soll die Indexierung dauerhaft oder nur temporär deaktiviert werden?", "options": ["Dauerhaft", "Temporär"], "narrows": "Art der Deaktivierung"}
+    ],
+    "relatedProblems": ["PROB-PERF-016", "PROB-PERF-010"]
+  },
+  {
+    "id": "PROB-PERF-018",
+    "category": "Performance",
+    "title": "Speicherleck erkennen",
+    "keywords": ["Speicherleck", "Memory Leak", "erkennen", "diagnostizieren", "RAM", "Analyse"],
+    "extendedKeywords": ["Speicherleck finden", "Memory Leak erkennen", "wie erkenne ich ein Speicherleck", "Speicherleck diagnostizieren", "RAM Leak prüfen", "Speicherleck herausfinden", "welches Programm hat Speicherleck", "Memory Leak Analyse", "Speicherleck Tools", "Speicherleck identifizieren", "RAM steigt erkennen", "Memory Leak feststellen", "Speicherleck Windows", "Speicherproblem finden", "RAM Verbrauch analysieren", "Speicherleck überprüfen", "Speicherleck Diagnose", "Memory Leak Windows 10", "Speicherleck aufspüren", "Memory Leak Test"],
+    "typos": ["Speicherlekk", "Memory Leek", "Speicherleak", "erkenenn"],
+    "symptoms": ["Verdacht auf Speicherleck", "RAM steigt über die Zeit", "Neustart behebt temporär"],
+    "quickCheck": "Steigt der RAM-Verbrauch eines Prozesses stetig über die Zeit?",
+    "solutions": ["Task-Manager > Details > Spalte 'Arbeitsspeicher' beobachten", "Ressourcenmonitor verwenden für detaillierte Analyse", "RAMMap von Sysinternals verwenden", "Performance Monitor mit Memory-Countern einrichten", "Verdächtigen Prozess über längeren Zeitraum beobachten"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_procs_ramload", "label": "RAM-Auslastung prüfen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Speicherleck finden", "Memory Leak erkennen"],
+    "followUpQuestions": [
+      {"question": "Wie lange muss der PC laufen bis das Problem auftritt?", "options": ["Minuten", "Stunden", "Tage"], "narrows": "Schwere des Lecks"},
+      {"question": "Gibt es einen Verdacht welches Programm betroffen ist?", "options": ["Ja", "Nein"], "narrows": "Gezielte Analyse"}
+    ],
+    "relatedProblems": ["PROB-PERF-006", "PROB-PERF-019", "PROB-PERF-020"]
+  },
+  {
+    "id": "PROB-PERF-019",
+    "category": "Performance",
+    "title": "Speicherleck – Prozess-Analyse",
+    "keywords": ["Speicherleck", "Prozess", "Analyse", "Working Set", "Private Bytes", "Commit"],
+    "extendedKeywords": ["Prozess Speicher analysieren", "welcher Prozess hat Speicherleck", "Working Set prüfen", "Private Bytes Prozess", "Prozess Speicherverbrauch Detail", "Speicheranalyse Prozess", "RAM Verbrauch einzelner Prozess", "detaillierte Speicheranalyse", "Prozess Memory Detail", "Speicherverbrauch aufschlüsseln", "Prozess RAM Trend", "Arbeitsspeicher Prozess steigt", "Commit Size Prozess", "Speicherverbrauch aufzeichnen", "Prozess Speicher über Zeit", "Performance Counter Memory", "Prozess RAM analysieren", "detaillierter Speicher Prozess", "Private Working Set", "Prozess Speicher Verlauf"],
+    "typos": ["Prozes Analyse", "Arbeitssatz", "Workingset"],
+    "symptoms": ["Ein bestimmter Prozess zeigt stetig steigenden Speicherverbrauch", "Working Set oder Private Bytes eines Prozesses wachsen"],
+    "quickCheck": "Welcher Prozess zeigt den steigenden Speicherverbrauch?",
+    "solutions": ["Task-Manager > Details > Rechtsklick > Spalten auswählen > Arbeitssatz (Speicher)", "Ressourcenmonitor > Arbeitsspeicher > Prozess beobachten", "Performance Monitor: Process > Working Set Counter hinzufügen", "Prozess beenden und neu starten als temporäre Lösung", "Software-Hersteller kontaktieren für permanenten Fix"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_procs_ramload", "label": "RAM-Auslastung prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_procs_killname", "label": "Prozess beenden", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Prozess Speicher steigt", "Working Set wächst"],
+    "followUpQuestions": [
+      {"question": "Ist der Prozess ein Windows-Systemdienst oder eine Drittanbieter-Software?", "options": ["Windows-Dienst", "Drittanbieter", "Weiß nicht"], "narrows": "Update vs. Deinstallation"}
+    ],
+    "relatedProblems": ["PROB-PERF-018", "PROB-PERF-020", "PROB-PERF-006"]
+  },
+  {
+    "id": "PROB-PERF-020",
+    "category": "Performance",
+    "title": "Speicherleck – Handle-Count prüfen",
+    "keywords": ["Handle", "Handle-Count", "GDI", "User Objects", "Handles", "Leak", "Handle-Leak"],
+    "extendedKeywords": ["Handle Count steigt", "Handle Leak", "zu viele Handles", "GDI Objekte steigen", "User Objects Prozess", "Handle Leak erkennen", "Handles Prozess steigt", "GDI Leak", "zu viele offene Handles", "Handle Count wächst", "Prozess Handles", "Handle Ressourcen", "GDI Leak Windows", "Handle Count Analyse", "Handles überwachen", "GDI Objekte Limit", "Handle Limit erreicht", "zu viele GDI Objekte", "Handle Count prüfen", "Handles aufräumen"],
+    "typos": ["Hendel", "Handels", "GDl", "Hadnle"],
+    "symptoms": ["Handle-Count eines Prozesses steigt stetig", "GDI-Objekte erreichen Limit", "System wird instabil durch zu viele Handles"],
+    "quickCheck": "Steigt die Handle-Anzahl eines Prozesses über die Zeit?",
+    "solutions": ["Task-Manager > Details > Spalte 'Handles' hinzufügen", "Prozess mit steigenden Handles identifizieren", "Handle-Trend über Zeit beobachten", "Process Explorer von Sysinternals für detaillierte Handle-Analyse verwenden", "Betroffene Anwendung neu starten"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Handle Leak", "GDI Objekte", "Handle Count"],
+    "followUpQuestions": [
+      {"question": "Wie hoch ist die Handle-Anzahl des verdächtigen Prozesses?", "options": ["Unter 1000", "1000-10000", "Über 10000"], "narrows": "Schwere des Lecks"}
+    ],
+    "relatedProblems": ["PROB-PERF-018", "PROB-PERF-019"]
+  },
+  {
+    "id": "PROB-PERF-021",
+    "category": "Performance",
+    "title": "Energieplan Hochleistung",
+    "keywords": ["Energieplan", "Hochleistung", "High Performance", "Power Plan", "Leistung maximieren"],
+    "extendedKeywords": ["Energieplan auf Hochleistung stellen", "maximale Leistung einstellen", "PC auf Hochleistung", "High Performance aktivieren", "volle Leistung einschalten", "Energieplan wechseln Hochleistung", "Hochleistungsmodus aktivieren", "PC Leistung maximieren", "Energieoptionen Hochleistung", "volle Power einstellen", "Hochleistung Energieplan", "maximale Performance", "Power Plan High Performance", "Leistungsmodus Windows", "Ultimate Performance", "Höchstleistung einstellen", "Computer auf volle Leistung", "Energieplan ändern Performance", "Hochleistungsprofil", "PC soll volle Leistung bringen"],
+    "typos": ["Hochleisstung", "Energiepaln", "Hochleitsugn", "High Perfomance"],
+    "symptoms": ["PC läuft nicht auf voller Leistung", "Energieplan steht auf Ausbalanciert oder Energiesparen"],
+    "quickCheck": "Welcher Energieplan ist aktuell aktiv?",
+    "solutions": ["Energieoptionen öffnen: powercfg.cpl", "Energieplan auf 'Hochleistung' umstellen", "Falls nicht sichtbar: powercfg -duplicatescheme 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c", "Ultimate Performance: powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61", "Prozessor-Energieverwaltung auf 100% Minimum setzen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_powerhigh", "label": "Hochleistung aktivieren", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_sysconfig_powerplan", "label": "Energieplan anzeigen", "priority": 2, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["Hochleistung", "High Performance", "volle Leistung"],
+    "followUpQuestions": [
+      {"question": "Ist es ein Laptop oder Desktop?", "options": ["Laptop", "Desktop"], "narrows": "Bei Laptops Akku-Auswirkung beachten"}
+    ],
+    "relatedProblems": ["PROB-PERF-022", "PROB-PERF-023"]
+  },
+  {
+    "id": "PROB-PERF-022",
+    "category": "Performance",
+    "title": "Energieplan Ausbalanciert",
+    "keywords": ["Energieplan", "Ausbalanciert", "Balanced", "Standard", "Energiesparen", "Power Plan"],
+    "extendedKeywords": ["Energieplan auf Standard", "ausbalanciert einstellen", "Energieplan zurücksetzen", "Standard Energieplan", "balanced Power Plan", "Energieplan ausbalanciert", "normaler Energieplan", "Energieplan Standard zurück", "Standardmäßiger Energieplan", "Windows Standard Power Plan", "Energieplan wiederherstellen", "Energieoptionen Standard", "normaler Modus Energie", "ausgewogener Energieplan", "Energieplan Default", "Standard Leistung", "ausbalancierter Modus", "Energieplan auf normal", "Windows Standard Energieeinstellung", "Energieplan Werkseinstellung"],
+    "typos": ["Ausbalancirt", "Balanciert", "Ausbalanziert", "Enrgieplan"],
+    "symptoms": ["Energieplan soll auf Standard/Ausbalanciert gestellt werden"],
+    "quickCheck": "Welcher Energieplan ist aktuell aktiv?",
+    "solutions": ["Energieoptionen öffnen: powercfg.cpl", "Energieplan auf 'Ausbalanciert' umstellen", "Standardmäßig empfohlen für die meisten Situationen", "Bietet Balance zwischen Leistung und Energieverbrauch", "Für Laptops oft die beste Wahl"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_powerplan", "label": "Energieplan anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_sysconfig_powerhigh", "label": "Hochleistung aktivieren", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Standard Energieplan", "Ausbalanciert", "Normal"],
+    "followUpQuestions": [
+      {"question": "Warum soll der Energieplan geändert werden?", "options": ["Akku sparen", "War auf Hochleistung", "Standard wiederherstellen"], "narrows": "Grund der Änderung"}
+    ],
+    "relatedProblems": ["PROB-PERF-021", "PROB-PERF-023"]
+  },
+  {
+    "id": "PROB-PERF-023",
+    "category": "Performance",
+    "title": "Benutzerdefinierter Energieplan",
+    "keywords": ["Energieplan", "benutzerdefiniert", "anpassen", "Custom", "Erweiterte Einstellungen"],
+    "extendedKeywords": ["eigenen Energieplan erstellen", "Energieplan anpassen", "custom Power Plan", "Energieplan konfigurieren", "erweiterte Energieoptionen", "Energieplan erstellen", "individuellen Energieplan", "Energieeinstellungen anpassen", "benutzerdefinierte Energieoptionen", "Energieplan nach Wunsch", "Energieplan Feineinstellung", "Prozessor Energieverwaltung anpassen", "Festplatte ausschalten Einstellung", "Monitor ausschalten Energieplan", "USB selektives Energiesparen", "PCI Express Energieverwaltung", "Energieplan exportieren", "Energieplan importieren", "powercfg Export", "Energieplaneinstellungen ändern"],
+    "typos": ["benutzerdeifiniert", "Enrgieplan", "anpassen Energipln"],
+    "symptoms": ["Spezifische Energieeinstellungen werden benötigt", "Standard-Energiepläne passen nicht"],
+    "quickCheck": "Welche spezifischen Energieeinstellungen möchten Sie anpassen?",
+    "solutions": ["Energieoptionen öffnen: powercfg.cpl", "Energieplan erstellen: Neuen Plan erstellen", "Erweiterte Energieeinstellungen für Feintuning nutzen", "powercfg /export zum Sichern des Plans", "powercfg /import zum Importieren auf anderem PC"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_powerplan", "label": "Energieplan anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_sysconfig_powerhigh", "label": "Hochleistung aktivieren", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["eigener Energieplan", "anpassen Energie"],
+    "followUpQuestions": [
+      {"question": "Was soll angepasst werden?", "options": ["Festplatte ausschalten", "Bildschirm-Timeout", "Prozessor-Taktung", "Anderes"], "narrows": "Spezifische Einstellung"}
+    ],
+    "relatedProblems": ["PROB-PERF-021", "PROB-PERF-022"]
+  },
+  {
+    "id": "PROB-PERF-024",
+    "category": "Performance",
+    "title": "Lüfter zu laut",
+    "keywords": ["Lüfter", "laut", "Geräusch", "Fan", "Kühlung", "Ventilator", "Drehzahl"],
+    "extendedKeywords": ["Lüfter dreht hoch", "Computer ist laut", "Lüfter läuft ständig", "PC Lüfter Geräusch", "Laptop Lüfter laut", "Lüfter dreht auf Maximum", "Computer brummt", "Lüfter geht nicht aus", "Fan laut", "Lüfter Geräusche", "PC surrt", "Lüfter läuft permanent", "Computer klingt wie Flugzeug", "Ventilator laut PC", "Notebook Lüfter laut", "Lüfter Vollgas", "Lüftergeräusch nervig", "Computer Geräusche laut", "Laptop wird laut", "Lüfter bei wenig Last laut"],
+    "typos": ["Lüftr", "Lüffter", "Lufter", "Geräuche", "Kühlug"],
+    "symptoms": ["Lüfter dreht dauerhaft auf hoher Drehzahl", "PC ist ungewöhnlich laut", "Lüftergeräusche auch bei geringer Last"],
+    "quickCheck": "Dreht der Lüfter dauerhaft hoch oder nur bei bestimmten Aktivitäten?",
+    "solutions": ["CPU-Auslastung im Task-Manager prüfen – hohe Last = hohe Lüfterdrehzahl", "Lüftungsschlitze von Staub reinigen", "Energieplan auf Ausbalanciert stellen", "BIOS-Update prüfen (Lüftersteuerung)", "Thermische Paste auf CPU erneuern (Desktop)"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_procs_cpuload", "label": "CPU-Auslastung prüfen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_sysconfig_powerplan", "label": "Energieplan anzeigen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["laut", "Lüfter", "brummt", "Geräusch"],
+    "followUpQuestions": [
+      {"question": "Laptop oder Desktop?", "options": ["Laptop", "Desktop"], "narrows": "Reinigungsmöglichkeiten"},
+      {"question": "Ist die CPU-Auslastung hoch wenn der Lüfter laut ist?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Software vs. Hardware-Problem"}
+    ],
+    "relatedProblems": ["PROB-PERF-025", "PROB-PERF-001"]
+  },
+  {
+    "id": "PROB-PERF-025",
+    "category": "Performance",
+    "title": "PC überhitzt",
+    "keywords": ["Überhitzung", "Temperatur", "Thermal", "Throttling", "Heiß", "Abschaltung"],
+    "extendedKeywords": ["PC wird zu heiß", "Computer schaltet sich ab wegen Überhitzung", "Laptop wird heiß", "Thermal Throttling", "CPU Temperatur zu hoch", "Computer überhitzt", "Notebook heiß an der Unterseite", "PC fährt runter wegen Hitze", "Thermal Shutdown", "Laptop brennend heiß", "Überhitzungsschutz greift", "PC wird sehr warm", "CPU drosselt wegen Hitze", "Temperatur zu hoch", "Computer schaltet ab Hitze", "Hitze Problem PC", "Temperaturproblem Computer", "Notebook Überhitzung", "PC Hitze Abschaltung", "Thermal Management"],
+    "typos": ["Überhizung", "Tempertur", "Therml", "Überhitzugn"],
+    "symptoms": ["PC wird ungewöhnlich heiß", "System schaltet sich bei Last ab", "Leistung wird gedrosselt (Throttling)"],
+    "quickCheck": "Schaltet sich der PC bei hoher Last ab oder wird die Leistung gedrosselt?",
+    "solutions": ["Lüftungsschlitze und Kühlkörper reinigen", "Für gute Luftzirkulation sorgen", "Laptop-Kühler verwenden", "Thermische Paste erneuern", "BIOS-Einstellungen für Lüftersteuerung prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_cpuload", "label": "CPU-Auslastung prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse anzeigen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["heiß", "Überhitzung", "schaltet ab", "Throttling"],
+    "followUpQuestions": [
+      {"question": "Schaltet sich der PC komplett ab?", "options": ["Ja", "Nein, nur langsamer"], "narrows": "Thermal Shutdown vs. Throttling"},
+      {"question": "Wie alt ist das Gerät?", "options": ["Unter 2 Jahre", "2-5 Jahre", "Über 5 Jahre"], "narrows": "Wartungsbedarf"}
+    ],
+    "relatedProblems": ["PROB-PERF-024", "PROB-PERF-001"]
+  },
+  {
+    "id": "PROB-PERF-026",
+    "category": "Performance",
+    "title": "Langsamer Systemstart",
+    "keywords": ["Boot", "Start", "Hochfahren", "Systemstart", "Startzeit", "Boot-Zeit", "langsam starten"],
+    "extendedKeywords": ["PC braucht ewig zum Starten", "Computer startet langsam", "Hochfahren dauert zu lange", "Windows Start langsam", "Boot dauert Minuten", "Systemstart ewig", "PC braucht 5 Minuten zum Starten", "Windows lädt langsam", "Boot-Zeit zu lang", "Anschalten dauert", "Hochfahren braucht ewig", "Startvorgang langsam", "PC startet nicht schnell", "Computer braucht lange zum Hochfahren", "langsames Booten", "Windows Startzeit verbessern", "Startzeit optimieren", "schneller hochfahren", "Boot beschleunigen", "PC Startzeit verkürzen"],
+    "typos": ["Boot", "Hochfaren", "Syttemstart", "Startzeit"],
+    "symptoms": ["Windows braucht ungewöhnlich lange zum Starten", "Startzeit über 2 Minuten", "Schwarzer Bildschirm beim Start"],
+    "quickCheck": "Wie lange dauert der Start vom Einschalten bis zum Desktop?",
+    "solutions": ["Schnellstart aktivieren: Systemsteuerung > Energieoptionen > Auswählen, was beim Drücken von Netzschaltern geschehen soll", "Autostart-Programme reduzieren", "SSD als Systemlaufwerk verwenden", "BIOS: Schnellboot aktivieren", "Unnötige Dienste deaktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["langsam starten", "Boot ewig", "Hochfahren dauert"],
+    "followUpQuestions": [
+      {"question": "SSD oder HDD als Systemlaufwerk?", "options": ["SSD", "HDD", "Weiß nicht"], "narrows": "Hardware-Upgrade als Lösung"},
+      {"question": "War der Start früher schneller?", "options": ["Ja", "Nein, schon immer langsam"], "narrows": "Verschlechterung vs. Grundproblem"}
+    ],
+    "relatedProblems": ["PROB-PERF-027", "PROB-PERF-028", "PROB-PERF-013"]
+  },
+  {
+    "id": "PROB-PERF-027",
+    "category": "Performance",
+    "title": "Login dauert lange",
+    "keywords": ["Login", "Anmeldung", "Benutzerprofil", "Profil laden", "Anmeldebildschirm", "Willkommen"],
+    "extendedKeywords": ["Anmeldung dauert ewig", "nach Passwort dauert es lang", "Login hängt", "Benutzerprofil lädt langsam", "nach Anmeldung dauert es", "Windows Anmeldung langsam", "Willkommen dauert", "nach Login lange warten", "Profil laden dauert", "Anmeldevorgang langsam", "nach Passworteingabe warten", "Benutzer anmelden dauert", "Login-Bildschirm hängt", "Profil wird geladen langsam", "Windows Willkommen langsam", "Anmeldung braucht Zeit", "Benutzerprofil Problem", "Login dauert Minuten", "nach Anmeldung schwarzer Bildschirm", "Benutzer laden dauert"],
+    "typos": ["Loginn", "Anmeldugn", "Benuzerprofil", "Anmeldunh"],
+    "symptoms": ["Nach der Passworteingabe dauert es lange bis der Desktop erscheint", "Meldung 'Willkommen' oder 'Bitte warten' steht lange"],
+    "quickCheck": "Wie lange dauert es von der Passworteingabe bis zum Desktop?",
+    "solutions": ["Benutzerprofil prüfen: möglicherweise beschädigt", "Gruppenrichtlinien prüfen: gpresult /r", "Anmeldescripts und GPO-Verarbeitung optimieren", "Netzlaufwerk-Verbindungen beim Login reduzieren", "Temporäre Dateien und Profil-Cache leeren"],
+    "skillMapping": [
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_gpo_gpupdate", "label": "Gruppenrichtlinie aktualisieren", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Login dauert", "Anmeldung langsam", "Willkommen ewig"],
+    "followUpQuestions": [
+      {"question": "Ist das Problem nur bei einem Benutzer oder bei allen?", "options": ["Nur bei einem", "Bei allen"], "narrows": "Profil-spezifisch vs. systemweit"},
+      {"question": "Ist der PC im Firmennetzwerk oder extern?", "options": ["Im Firmennetzwerk", "Extern/VPN", "Standalone"], "narrows": "Netzwerk-Abhängigkeit"}
+    ],
+    "relatedProblems": ["PROB-PERF-026", "PROB-PERF-028"]
+  },
+  {
+    "id": "PROB-PERF-028",
+    "category": "Performance",
+    "title": "Desktop laden dauert",
+    "keywords": ["Desktop", "laden", "Icons", "Taskleiste", "Explorer", "Shell"],
+    "extendedKeywords": ["Desktop lädt langsam", "Icons erscheinen spät", "Taskleiste lädt nicht", "Desktop braucht ewig", "Symbole laden langsam", "Explorer lädt langsam", "Desktop hängt beim Laden", "Icons werden nicht angezeigt", "Taskleiste reagiert nicht", "Desktop aufbauen dauert", "Symbole erscheinen verzögert", "Explorer hängt", "Desktop Hintergrund erst nach Minuten", "Desktop Icons langsam", "Startmenü lädt nicht", "Taskleiste eingefroren beim Start", "Desktop wird nicht fertig geladen", "Shell lädt nicht", "Desktop unvollständig", "Taskleiste nach Minuten erst da"],
+    "typos": ["Dekstop", "Desktpo", "Taksleiste", "Exploerer"],
+    "symptoms": ["Desktop-Icons erscheinen verzögert", "Taskleiste reagiert nicht sofort", "Windows Explorer lädt langsam"],
+    "quickCheck": "Wie lange dauert es bis der Desktop vollständig geladen ist?",
+    "solutions": ["Autostart-Programme reduzieren", "Desktop-Icons aufräumen und reduzieren", "Icon-Cache löschen", "Shell-Erweiterungen prüfen und deaktivieren", "Schnellstart (Fast Boot) aktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_wincachefull", "label": "Windows-Cache leeren", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Desktop laden", "Icons erscheinen nicht", "Taskleiste hängt"],
+    "followUpQuestions": [
+      {"question": "Wie viele Icons sind auf dem Desktop?", "options": ["Wenige (unter 20)", "Viele (20-50)", "Sehr viele (50+)"], "narrows": "Desktop-Aufräumen als Lösung"},
+      {"question": "Hängt die Taskleiste oder fehlt sie ganz?", "options": ["Hängt", "Fehlt kurz", "Erscheint normal"], "narrows": "Explorer-Problem"}
+    ],
+    "relatedProblems": ["PROB-PERF-026", "PROB-PERF-027"]
+  },
+  {
+    "id": "PROB-PERF-029",
+    "category": "Performance",
+    "title": "Netzwerk langsam",
+    "keywords": ["Netzwerk", "langsam", "Internet", "Bandbreite", "Download", "Upload", "Geschwindigkeit"],
+    "extendedKeywords": ["Internet langsam", "Netzwerk langsam", "Download langsam", "Upload langsam", "Verbindung langsam", "WLAN langsam", "LAN langsam", "Bandbreite niedrig", "Internet Geschwindigkeit schlecht", "Webseiten laden langsam", "Downloads dauern ewig", "Netzwerk Geschwindigkeit", "Internet Tempo", "Verbindung träge", "Datenrate niedrig", "Internet lahmt", "Netzwerk lahm", "langsame Verbindung", "Netzwerkperformance schlecht", "Internet ruckelt"],
+    "typos": ["Netzwek", "langsma", "Internnet", "Bandbreie", "Geschwindgkeit"],
+    "symptoms": ["Langsame Netzwerk-/Internetverbindung", "Downloads dauern lange", "Webseiten laden verzögert"],
+    "quickCheck": "Ist das Problem auf einen PC beschränkt oder betrifft es mehrere?",
+    "solutions": ["Speedtest durchführen", "LAN-Kabel prüfen oder WLAN-Signal testen", "Netzwerktreiber aktualisieren", "DNS-Einstellungen prüfen", "Hintergrund-Downloads identifizieren und stoppen"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_net_nslookup", "label": "DNS-Auflösung testen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Internet langsam", "Netzwerk lahm", "Download langsam"],
+    "followUpQuestions": [
+      {"question": "WLAN oder LAN-Kabel?", "options": ["WLAN", "LAN", "Weiß nicht"], "narrows": "Verbindungsart"},
+      {"question": "Betrifft es alle Webseiten/Dienste oder nur bestimmte?", "options": ["Alle", "Nur bestimmte"], "narrows": "Allgemeines vs. spezifisches Problem"}
+    ],
+    "relatedProblems": ["PROB-PERF-030"]
+  },
+  {
+    "id": "PROB-PERF-030",
+    "category": "Performance",
+    "title": "Netzwerk-Bandbreite belegt",
+    "keywords": ["Bandbreite", "Netzwerk", "Auslastung", "Traffic", "Hintergrund-Downloads", "Datenverbrauch"],
+    "extendedKeywords": ["Bandbreite wird verbraucht", "irgendetwas nutzt Bandbreite", "Netzwerk ausgelastet", "Hintergrund-Downloads", "Traffic zu hoch", "etwas lädt im Hintergrund", "Netzwerk-Auslastung hoch", "wer verbraucht Bandbreite", "Netzwerkverkehr hoch", "Datenverbrauch zu hoch", "Bandbreite aufgebraucht", "Netzwerk Traffic identifizieren", "was verbraucht mein Internet", "Hintergrunddaten", "automatische Downloads stoppen", "Windows Update Bandbreite", "OneDrive Sync Bandbreite", "Teams Download Hintergrund", "Netzwerk wer nutzt alles", "Traffic Monitor"],
+    "typos": ["Bandbreie", "Bandbreite", "Bandbreit", "Hintergurnd"],
+    "symptoms": ["Netzwerk langsam obwohl keine aktive Nutzung", "Hintergrundprozesse verbrauchen Bandbreite"],
+    "quickCheck": "Lädt gerade etwas im Hintergrund herunter?",
+    "solutions": ["Ressourcenmonitor > Netzwerk: aktive Verbindungen prüfen", "Windows Update pausieren", "OneDrive-Sync pausieren", "Cloud-Sync-Dienste temporär anhalten", "Task-Manager > App-Verlauf für Netzwerknutzung prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_procs_topcpu", "label": "Top Prozesse anzeigen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["Bandbreite verbraucht", "Hintergrund-Download", "Traffic hoch"],
+    "followUpQuestions": [
+      {"question": "Wird gerade ein Windows Update heruntergeladen?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Update als Ursache"},
+      {"question": "Ist OneDrive oder ein anderer Cloud-Dienst aktiv?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Cloud-Sync als Ursache"}
+    ],
+    "relatedProblems": ["PROB-PERF-029"]
+  },
+  {
+    "id": "PROB-PERF-031",
+    "category": "Performance",
+    "title": "PC langsam nach Update",
+    "keywords": ["langsam", "Update", "nach Update", "Windows Update", "Performance", "Verschlechterung"],
+    "extendedKeywords": ["nach Update langsam", "seit Update PC langsam", "Windows Update macht langsam", "Performance nach Update schlecht", "Computer seit Update langsam", "nach Aktualisierung langsam", "Update hat PC langsam gemacht", "seit Patch langsam", "nach kumultativem Update Performance", "Feature Update langsam gemacht", "Windows Update Probleme Leistung", "seit letztem Update schlecht", "nach Neustart wegen Update langsam", "Performance Verschlechterung Update", "Update macht alles langsam", "nach monatlichem Patch langsam", "seit Windows Update träge", "nach Upgrade langsam", "Update Version langsam", "seit Patch Tuesday langsam"],
+    "typos": ["Updtae", "nach Updte", "Perforamce", "langsma"],
+    "symptoms": ["PC ist seit einem Windows Update merklich langsamer", "Performance hat sich nach Update verschlechtert"],
+    "quickCheck": "Wann genau wurde das letzte Update installiert?",
+    "solutions": ["Abwarten – nach Updates findet Hintergrundverarbeitung statt", "Neustart durchführen", "Update-Verlauf prüfen: Einstellungen > Update > Updateverlauf", "Fehlerhaftes Update deinstallieren", "SFC /scannow und DISM /Online /Cleanup-Image /RestoreHealth"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse anzeigen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse anzeigen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["nach Update langsam", "seit Update", "Update Performance"],
+    "followUpQuestions": [
+      {"question": "Wie lange ist das Update her?", "options": ["Wenige Stunden", "1-2 Tage", "Mehr als 3 Tage"], "narrows": "Nachbearbeitung vs. echtes Problem"},
+      {"question": "Wurde der PC seitdem neu gestartet?", "options": ["Ja", "Nein"], "narrows": "Neustart als erste Maßnahme"}
+    ],
+    "relatedProblems": ["PROB-PERF-004", "PROB-PERF-032"]
+  },
+  {
+    "id": "PROB-PERF-032",
+    "category": "Performance",
+    "title": "PC langsam nach Neustart",
+    "keywords": ["langsam", "Neustart", "nach Reboot", "Restart", "Boot", "nach Neustart"],
+    "extendedKeywords": ["nach Neustart langsam", "PC nach Neustart träge", "Neustart hat nicht geholfen", "nach Reboot langsam", "Computer nach Neustart langsam", "Neustart macht es nicht besser", "nach Restart immer noch langsam", "trotz Neustart langsam", "nach Neustart dauert alles", "Computer trotz Neustart träge", "Reboot hilft nicht", "nach Neustart weiterhin langsam", "Neustart ohne Verbesserung", "PC langsam nach Reboot", "nach dem Neustart Performance schlecht", "Restart bringt nichts", "immer noch langsam nach Neustart", "nach Neustart schlimmer", "Neustart keine Besserung", "nach Neustart gleich langsam"],
+    "typos": ["Neustrat", "Neusrat", "Rebbot", "Restartt"],
+    "symptoms": ["PC ist auch nach einem Neustart langsam", "Neustart bringt keine Verbesserung"],
+    "quickCheck": "War der PC vor dem Neustart schon langsam oder ist es erst danach aufgetreten?",
+    "solutions": ["Autostart-Programme prüfen und reduzieren", "Festplattenplatz prüfen", "Malware-Scan durchführen", "CHKDSK durchführen", "Systemdateien prüfen: SFC /scannow"],
+    "skillMapping": [
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_procs_diskfree", "label": "Festplattenspeicher prüfen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["nach Neustart langsam", "trotz Reboot", "Neustart hilft nicht"],
+    "followUpQuestions": [
+      {"question": "Seit wann ist der PC langsam?", "options": ["Seit heute", "Seit einigen Tagen", "Schon länger"], "narrows": "Zeitlicher Verlauf"},
+      {"question": "Wurde kürzlich Software installiert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Software als Ursache"}
+    ],
+    "relatedProblems": ["PROB-PERF-031", "PROB-PERF-033"]
+  },
+  {
+    "id": "PROB-PERF-033",
+    "category": "Performance",
+    "title": "PC immer langsam",
+    "keywords": ["immer langsam", "generell langsam", "dauerhaft", "grundsätzlich", "ständig langsam"],
+    "extendedKeywords": ["PC war schon immer langsam", "Computer grundsätzlich langsam", "PC dauerhaft träge", "generell schlechte Performance", "PC ist nie schnell", "Computer immer langsam gewesen", "dauerhaft schlechte Leistung", "ständig langsamer PC", "nie gut gelaufen", "PC von Anfang an langsam", "Computer immer träge", "Performance war nie gut", "immer schlechte Performance", "PC war noch nie schnell", "seit Kauf langsam", "grundsätzlich träge", "immer unzufrieden mit Geschwindigkeit", "PC zu langsam allgemein", "generell zu langsam", "nie richtig schnell"],
+    "typos": ["langsma", "daurhaft", "generell langsma", "ständg"],
+    "symptoms": ["PC ist grundsätzlich langsam", "Performance war nie zufriedenstellend"],
+    "quickCheck": "Ist der PC schon seit dem Kauf langsam oder hat sich das entwickelt?",
+    "solutions": ["Hardware-Spezifikationen prüfen (RAM, CPU, Festplattentyp)", "HDD gegen SSD tauschen als effektivste Maßnahme", "RAM aufrüsten wenn unter 8 GB", "Windows neu installieren", "Visuelle Effekte reduzieren"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_procs_diskfree", "label": "Festplattenspeicher prüfen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_procs_ramload", "label": "RAM-Auslastung prüfen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["immer langsam", "schon immer", "generell langsam"],
+    "followUpQuestions": [
+      {"question": "Welche Hardware hat der PC?", "options": ["Aktuell (< 3 Jahre)", "Älter (3-5 Jahre)", "Alt (> 5 Jahre)", "Weiß nicht"], "narrows": "Hardware-Alter"},
+      {"question": "SSD oder HDD?", "options": ["SSD", "HDD", "Weiß nicht"], "narrows": "SSD als effektivstes Upgrade"}
+    ],
+    "relatedProblems": ["PROB-PERF-031", "PROB-PERF-034"]
+  },
+  {
+    "id": "PROB-PERF-034",
+    "category": "Performance",
+    "title": "Nur bestimmte App langsam",
+    "keywords": ["Anwendung", "langsam", "bestimmte App", "Programm", "träge", "reagiert langsam"],
+    "extendedKeywords": ["ein Programm ist langsam", "bestimmte App lädt langsam", "nur eine Anwendung träge", "spezifisches Programm langsam", "eine App reagiert nicht", "Programm braucht lang zum Laden", "Software langsam", "nur Outlook langsam", "nur Teams langsam", "nur Excel langsam", "nur Browser langsam", "eine Anwendung hängt", "bestimmte Software Performance", "ein Programm dauert ewig", "App reagiert verzögert", "Programm stockt", "Anwendung ruckelt", "Software träge", "App lädt nicht richtig", "Programm startet langsam"],
+    "typos": ["Progamm", "Anwendunh", "langasm", "Applikaton"],
+    "symptoms": ["Nur eine bestimmte Anwendung ist langsam", "Andere Programme laufen normal"],
+    "quickCheck": "Welche Anwendung ist langsam?",
+    "solutions": ["Anwendung schließen und neu starten", "Anwendungs-Cache leeren", "Programm-Updates prüfen", "Reparatur-Installation der Anwendung", "Programm deinstallieren und neu installieren"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse anzeigen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_appcache_wincachefull", "label": "Windows-Cache leeren", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["nur ein Programm", "bestimmte App", "nur Outlook"],
+    "followUpQuestions": [
+      {"question": "Welche Anwendung ist betroffen?", "options": ["Office (Outlook/Excel/Word)", "Browser", "Teams", "Andere"], "narrows": "Programmspezifische Lösung"},
+      {"question": "Seit wann ist nur dieses Programm langsam?", "options": ["Seit heute", "Seit einem Update", "Schon immer"], "narrows": "Zeitliche Eingrenzung"}
+    ],
+    "relatedProblems": ["PROB-PERF-002", "PROB-PERF-007"]
+  },
+  {
+    "id": "PROB-PERF-035",
+    "category": "Performance",
+    "title": "Unnötige Windows-Dienste",
+    "keywords": ["Dienste", "Services", "unnötig", "deaktivieren", "Windows-Dienste", "Ressourcen"],
+    "extendedKeywords": ["unnötige Dienste deaktivieren", "Windows Dienste aufräumen", "welche Dienste brauche ich", "Dienste abschalten", "Services deaktivieren", "Windows Dienste optimieren", "überflüssige Dienste", "Dienste die man nicht braucht", "Services aufräumen", "Dienste entfernen", "nicht benötigte Dienste", "Dienste Windows stoppen", "welche Services kann ich deaktivieren", "Dienste Performance", "unnötige Services Windows", "Dienste bereinigen", "Windows Dienste reduzieren", "Dienste Ressourcen sparen", "Hintergrunddienste deaktivieren", "Dienste Systemleistung"],
+    "typos": ["Dinste", "Deinstee", "unnötig", "deaktiveren"],
+    "symptoms": ["Viele Dienste laufen im Hintergrund", "Benutzer möchte Ressourcen sparen durch Dienste-Optimierung"],
+    "quickCheck": "Möchten Sie bestimmte Dienste deaktivieren oder eine allgemeine Optimierung?",
+    "solutions": ["services.msc öffnen und Dienste-Liste prüfen", "Dienste identifizieren die nicht benötigt werden", "Starttyp von unnötigen Diensten auf 'Manuell' oder 'Deaktiviert' setzen", "Vorsicht: System-kritische Dienste nicht deaktivieren", "Liste sicherer Dienste zum Deaktivieren erstellen"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["Dienste deaktivieren", "Services aufräumen", "unnötige Dienste"],
+    "followUpQuestions": [
+      {"question": "Haben Sie bereits Dienste verändert?", "options": ["Ja", "Nein"], "narrows": "Bestehende Änderungen"},
+      {"question": "Ist es ein Firmen-PC mit speziellen Anforderungen?", "options": ["Ja", "Nein"], "narrows": "Firmen-Dienste beachten"}
+    ],
+    "relatedProblems": ["PROB-PERF-036", "PROB-PERF-037"]
+  },
+  {
+    "id": "PROB-PERF-036",
+    "category": "Performance",
+    "title": "Windows-Dienst stoppen",
+    "keywords": ["Dienst", "stoppen", "beenden", "Service", "anhalten", "net stop"],
+    "extendedKeywords": ["Dienst stoppen", "Service beenden", "Windows Dienst anhalten", "Dienst abschalten", "Service stoppen Windows", "wie stoppe ich einen Dienst", "Dienst beenden Windows", "Service anhalten", "Windows Service stoppen", "Dienst manuell stoppen", "net stop Befehl", "Dienst deaktivieren und stoppen", "Dienst reagiert nicht auf Stoppen", "Dienst lässt sich nicht stoppen", "Service stoppt nicht", "Dienst hängt beim Stoppen", "Service beenden erzwingen", "Dienst Stopp erzwingen", "sc stop Befehl", "Dienst manuell beenden"],
+    "typos": ["Dinst stoppen", "Sevice beenden", "stopen"],
+    "symptoms": ["Ein Windows-Dienst muss gestoppt werden", "Dienst lässt sich nicht normal stoppen"],
+    "quickCheck": "Welcher Dienst soll gestoppt werden?",
+    "solutions": ["services.msc öffnen > Dienst rechtsklick > Beenden", "CMD: net stop DienstName", "CMD: sc stop DienstName", "Bei hängendem Dienst: taskkill /f /pid PID", "PowerShell: Stop-Service -Name DienstName -Force"],
+    "skillMapping": [
+      {"skillId": "rd_procs_killname", "label": "Prozess beenden", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["Dienst stoppen", "Service beenden", "net stop"],
+    "followUpQuestions": [
+      {"question": "Welcher Dienst soll gestoppt werden?", "options": ["Freitext"], "narrows": "Dienstname"},
+      {"question": "Soll der Dienst nur gestoppt oder auch dauerhaft deaktiviert werden?", "options": ["Nur stoppen", "Auch deaktivieren"], "narrows": "Umfang der Aktion"}
+    ],
+    "relatedProblems": ["PROB-PERF-035", "PROB-PERF-037"]
+  },
+  {
+    "id": "PROB-PERF-037",
+    "category": "Performance",
+    "title": "Windows-Dienst Starttyp ändern",
+    "keywords": ["Dienst", "Starttyp", "automatisch", "manuell", "deaktiviert", "Service", "Startup Type"],
+    "extendedKeywords": ["Dienst Starttyp ändern", "Service Starttyp", "Dienst auf manuell setzen", "Dienst deaktivieren dauerhaft", "Service automatisch starten", "Dienst beim Start laden", "Starttyp deaktiviert", "Dienst soll nicht starten", "Service Startmodus", "Dienst automatisch manuell", "wie ändere ich Starttyp", "Dienst Starttyp Deaktiviert", "Service nicht automatisch starten", "Dienst Boot-Start", "Dienst Auto-Start", "Starttyp eines Dienstes", "Service Startup ändern", "Dienst Startverhalten", "sc config start", "Dienst dauerhaft deaktivieren"],
+    "typos": ["Starttypp", "Diesnst", "Startyp", "deaktivirt"],
+    "symptoms": ["Starttyp eines Windows-Dienstes muss geändert werden"],
+    "quickCheck": "Welcher Dienst und welcher Starttyp (Automatisch/Manuell/Deaktiviert)?",
+    "solutions": ["services.msc > Dienst > Eigenschaften > Starttyp", "CMD: sc config DienstName start=auto|demand|disabled", "PowerShell: Set-Service -Name DienstName -StartupType Automatic|Manual|Disabled", "Starttyp 'Automatisch (Verzögerter Start)' für nicht-kritische Dienste", "Vorsicht bei System-Diensten"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 1, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Starttyp ändern", "Dienst automatisch", "Dienst deaktivieren"],
+    "followUpQuestions": [
+      {"question": "Welchen Starttyp soll der Dienst bekommen?", "options": ["Automatisch", "Manuell", "Deaktiviert"], "narrows": "Ziel-Starttyp"}
+    ],
+    "relatedProblems": ["PROB-PERF-035", "PROB-PERF-036"]
+  },
+  {
+    "id": "PROB-PERF-038",
+    "category": "Performance",
+    "title": "Visuelle Effekte reduzieren",
+    "keywords": ["Visuelle Effekte", "Animationen", "Transparenz", "Aero", "Design", "Performance-Optionen"],
+    "extendedKeywords": ["Animationen ausschalten", "visuelle Effekte deaktivieren", "Windows Animationen aus", "Transparenz ausschalten", "Design vereinfachen", "Aero abschalten", "Windows schöner machen geht nicht", "Effekte reduzieren Performance", "Animationen machen langsam", "Fensterschatten deaktivieren", "Vorschaubilder aus", "Transparenzeffekte ausschalten", "Fensteranimation deaktivieren", "beste Leistung einstellen", "visuelle Effekte beste Leistung", "Windows schlicht einstellen", "Design-Effekte aus", "Performance Optionen Anzeige", "Effekte abschalten PC schneller", "Animationen PC langsam"],
+    "typos": ["Visuell Effekt", "Animatonen", "Transparens", "Aniamtionen"],
+    "symptoms": ["PC ruckelt bei Fenster-Animationen", "Visuelle Effekte bremsen den PC"],
+    "quickCheck": "Sollen alle visuellen Effekte deaktiviert oder nur bestimmte?",
+    "solutions": ["Systemsteuerung > System > Erweiterte Systemeinstellungen > Leistung > Einstellungen", "Option 'Für optimale Leistung anpassen' wählen", "Einzelne Effekte gezielt deaktivieren", "Transparenz: Einstellungen > Personalisierung > Farben > Transparenzeffekte aus", "Animationen: Einstellungen > Erleichterte Bedienung > Animationen aus"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Animationen aus", "Effekte deaktivieren", "beste Leistung"],
+    "followUpQuestions": [
+      {"question": "Soll das Aussehen komplett vereinfacht werden?", "options": ["Ja, für maximale Leistung", "Nein, nur bestimmte Effekte"], "narrows": "Umfang der Änderung"}
+    ],
+    "relatedProblems": ["PROB-PERF-033", "PROB-PERF-039"]
+  },
+  {
+    "id": "PROB-PERF-039",
+    "category": "Performance",
+    "title": "Virtuellen Speicher anpassen",
+    "keywords": ["virtueller Speicher", "Auslagerungsdatei", "Pagefile", "Swap", "Virtual Memory"],
+    "extendedKeywords": ["virtuellen Speicher vergrößern", "Auslagerungsdatei einstellen", "Pagefile anpassen", "virtueller Speicher Einstellungen", "Auslagerungsdatei Größe ändern", "Swap Größe", "virtuellen Speicher konfigurieren", "Auslagerungsdatei manuell", "Pagefile Größe", "virtueller Speicher Windows", "Auslagerungsdatei empfohlen", "Pagefile optimieren", "wie groß Auslagerungsdatei", "Virtual Memory einstellen", "Swap Space Windows", "Auslagerungsdatei optimal", "Pagefile bester Wert", "virtuellen Speicher erhöhen", "Auslagerungsdatei automatisch", "Pagefile verschieben"],
+    "typos": ["virteulller Speicher", "Auslageurngsdatei", "Pagefiel", "Virtuleer"],
+    "symptoms": ["Fehlermeldung zu niedrigem virtuellen Speicher", "System langsam durch zu kleine Auslagerungsdatei"],
+    "quickCheck": "Wird eine Warnung zum virtuellen Speicher angezeigt?",
+    "solutions": ["Systemsteuerung > System > Erweiterte Systemeinstellungen > Leistung > Erweitert > Ändern", "Automatische Verwaltung deaktivieren", "Manuelle Größe: Initial 1,5x RAM, Maximum 3x RAM", "Bei 16 GB RAM: 8-16 GB Auslagerungsdatei", "Auslagerungsdatei auf schnellste Festplatte legen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_ramload", "label": "RAM-Auslastung prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_procs_diskfree", "label": "Festplattenspeicher prüfen", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["virtueller Speicher", "Pagefile anpassen", "Auslagerung einstellen"],
+    "followUpQuestions": [
+      {"question": "Wie viel RAM ist verbaut?", "options": ["4 GB", "8 GB", "16 GB", "32 GB+"], "narrows": "Empfohlene Pagefile-Größe"},
+      {"question": "Ist genug freier Festplattenspeicher vorhanden?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Festplattenspeicher als Voraussetzung"}
+    ],
+    "relatedProblems": ["PROB-PERF-008", "PROB-PERF-005"]
+  },
+  {
+    "id": "PROB-PERF-040",
+    "category": "Performance",
+    "title": "ReadyBoost aktivieren",
+    "keywords": ["ReadyBoost", "USB", "Flash-Speicher", "Performance", "Beschleunigung", "Cache"],
+    "extendedKeywords": ["ReadyBoost USB", "USB-Stick als RAM", "ReadyBoost aktivieren", "PC mit USB beschleunigen", "Flash-Speicher als Cache", "ReadyBoost einrichten", "USB ReadyBoost Windows", "ReadyBoost nutzen", "PC schneller mit USB-Stick", "ReadyBoost sinnvoll", "ReadyBoost SD-Karte", "USB als Arbeitsspeicher", "ReadyBoost noch sinnvoll", "ReadyBoost Voraussetzungen", "ReadyBoost kompatibel", "USB-Stick Beschleunigung", "ReadyBoost für HDD", "USB Cache Windows", "ReadyBoost Performance", "ReadyBoost einsetzen"],
+    "typos": ["Readyboost", "RedyBoost", "ReadiBust", "Readyboast"],
+    "symptoms": ["Benutzer möchte ReadyBoost aktivieren", "PC hat wenig RAM und HDD"],
+    "quickCheck": "Hat der PC eine SSD oder HDD? Bei SSD ist ReadyBoost nicht sinnvoll.",
+    "solutions": ["USB-Stick (mind. USB 3.0) einstecken", "Autoplay > ReadyBoost konfigurieren oder Eigenschaften > ReadyBoost", "Gerät diesem Gerät zuweisen wählen", "Speichermenge festlegen", "Hinweis: Bei SSDs bringt ReadyBoost keinen Vorteil"],
+    "skillMapping": [
+      {"skillId": "rd_procs_diskfree", "label": "Festplattenspeicher prüfen", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-performance", "label": "Performance-Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["ReadyBoost", "USB als RAM", "USB Beschleunigung"],
+    "followUpQuestions": [
+      {"question": "Hat der PC eine SSD oder HDD?", "options": ["SSD", "HDD", "Weiß nicht"], "narrows": "ReadyBoost nur bei HDD sinnvoll"},
+      {"question": "Wie viel RAM ist verbaut?", "options": ["4 GB oder weniger", "8 GB", "16 GB+"], "narrows": "ReadyBoost nur bei wenig RAM sinnvoll"}
+    ],
+    "relatedProblems": ["PROB-PERF-033", "PROB-PERF-039"]
+  }
+]

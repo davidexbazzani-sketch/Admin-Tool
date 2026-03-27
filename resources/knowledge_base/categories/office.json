@@ -1,0 +1,700 @@
+[
+  {
+    "id": "PROB-OFFICE-001",
+    "category": "Office Aktivierung",
+    "title": "Office ist nicht aktiviert",
+    "keywords": ["Aktivierung", "Office", "Lizenz", "nicht aktiviert", "Produktaktivierung", "Testversion", "unlizenziert"],
+    "extendedKeywords": ["Office ist nicht aktiviert", "Office verlangt Aktivierung", "Mein Office ist nicht lizenziert", "Office zeigt nicht aktiviert an", "Gelber Balken Office nicht aktiviert", "Kann Office nicht aktivieren", "Office Aktivierung fehlgeschlagen", "Office sagt Produktaktivierung erforderlich", "Office funktioniert nur eingeschränkt", "Rote Leiste Office aktivieren", "Office Programme fragen nach Lizenz", "Word sagt nicht aktiviert", "Excel nicht aktiviert", "Muss Office aktivieren", "Office Testversion abgelaufen", "Office eingeschränkte Funktionalität", "Office verlangt Schlüssel", "Product Key eingeben Office", "Kann Office nicht mehr nutzen", "Office Funktionen gesperrt"],
+    "typos": ["Aktvierung", "Aktiveirung", "Lizens", "aktivirt"],
+    "symptoms": ["Gelber oder roter Balken 'Produkt nicht aktiviert'", "Eingeschränkte Funktionalität", "Regelmäßige Aufforderung zur Aktivierung", "Wasserzeichen 'Nicht lizenziertes Produkt'"],
+    "quickCheck": "Welche Meldung erscheint genau? Sehen Sie einen gelben oder roten Balken?",
+    "solutions": ["Konto-Anmeldung in Office prüfen (Datei > Konto)", "Mit dem richtigen Microsoft 365 Konto anmelden", "Anmeldedaten zurücksetzen", "Office Schnellreparatur durchführen", "IT-Abteilung wegen Lizenzzuweisung kontaktieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 3, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Sind Sie in Office mit Ihrem Firmenkonto angemeldet?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Oft ist die Anmeldung mit dem falschen Konto die Ursache"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-002", "PROB-OFFICE-003"]
+  },
+  {
+    "id": "PROB-OFFICE-002",
+    "category": "Office Aktivierung",
+    "title": "Office Lizenz abgelaufen",
+    "keywords": ["Lizenz", "abgelaufen", "Ablauf", "Office", "Abonnement", "Subscription", "erneuern"],
+    "extendedKeywords": ["Office Lizenz ist abgelaufen", "Office Abonnement abgelaufen", "Meine Office Lizenz gilt nicht mehr", "Office meldet Lizenz abgelaufen", "Microsoft 365 Abo abgelaufen", "Office geht nicht mehr wegen Lizenz", "Lizenz für Office erneuern", "Office Subscription abgelaufen", "Kann Office nicht mehr nutzen Lizenz", "Mein Office Abo ist zu Ende", "Office zeigt Lizenz abgelaufen", "Word Excel funktionieren nicht mehr Lizenz", "Office nur noch lesen möglich"],
+    "typos": ["abgelafen", "Lizens abgelaufen", "Abonement"],
+    "symptoms": ["Meldung 'Abonnement abgelaufen'", "Office-Apps im Nur-Lesen-Modus", "Funktionen sind eingeschränkt", "Regelmäßige Aufforderung zur Erneuerung"],
+    "quickCheck": "Welche genaue Meldung zeigt Office an?",
+    "solutions": ["Abonnement-Status unter Datei > Konto prüfen", "Mit Firmenkonto anmelden", "IT-Abteilung wegen Lizenzerneuerung kontaktieren", "Anmeldedaten zurücksetzen und neu anmelden", "Office Online als Zwischenlösung nutzen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Nutzen Sie Microsoft 365 (Abonnement) oder eine Einzellizenz?", "options": ["Microsoft 365", "Einzellizenz", "Weiß nicht"], "narrows": "Bei Microsoft 365 kann ein Anmeldeproblem vorliegen, bei Einzellizenzen muss ggf. neu gekauft werden"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-001", "PROB-OFFICE-003"]
+  },
+  {
+    "id": "PROB-OFFICE-003",
+    "category": "Office Aktivierung",
+    "title": "Office mit falscher Lizenz aktiviert",
+    "keywords": ["Lizenz", "falsch", "Konto", "Office", "wechseln", "Account", "Aktivierung"],
+    "extendedKeywords": ["Office ist mit dem falschen Konto aktiviert", "Falsche Lizenz in Office", "Office nutzt privates statt Firmenkonto", "Falscher Account in Office hinterlegt", "Office mit dem falschen Benutzer", "Muss Lizenz in Office wechseln", "Office zeigt falschen Benutzer", "Bin mit dem privaten Konto in Office angemeldet", "Firmenlizenz nicht in Office", "Office hat falsche Aktivierung", "Kann nicht zum richtigen Konto wechseln in Office"],
+    "typos": ["falche Lizenz", "Kontow wechseln", "Aktiveierung"],
+    "symptoms": ["Falscher Benutzername in Office angezeigt", "Zugriff auf falsche OneDrive/SharePoint Dateien", "Lizenz einer anderen Organisation wird verwendet"],
+    "quickCheck": "Welches Konto wird unter Datei > Konto in Office angezeigt?",
+    "solutions": ["In Office unter Datei > Konto abmelden", "Alle Microsoft-Anmeldedaten in Windows löschen", "Anmeldedaten zurücksetzen", "Office mit dem richtigen Konto neu anmelden", "Ggf. Office Schnellreparatur durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Haben Sie mehrere Microsoft-Konten (privat und geschäftlich)?", "options": ["Ja", "Nein"], "narrows": "Bei mehreren Konten muss sichergestellt werden, dass das richtige Konto aktiv ist"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-001", "PROB-OFFICE-002"]
+  },
+  {
+    "id": "PROB-OFFICE-004",
+    "category": "Office Reparatur",
+    "title": "Office Schnellreparatur nötig",
+    "keywords": ["Reparatur", "Schnellreparatur", "Quick Repair", "Office", "reparieren", "beheben"],
+    "extendedKeywords": ["Office reparieren", "Office Schnellreparatur durchführen", "Office funktioniert nicht richtig", "Office Programme starten nicht", "Office hat Fehler", "Muss Office reparieren", "Office ist kaputt", "Office Programme machen Probleme", "Wie repariere ich Office", "Office spinnt", "Office funktioniert nicht mehr richtig", "Office Programme haben Fehler", "Office zurücksetzen", "Office wiederherstellen"],
+    "typos": ["Reparture", "Schnellreperatur", "reperieren", "Repatur"],
+    "symptoms": ["Office-Programme starten nicht richtig", "Häufige Fehlermeldungen", "Funktionen fehlen oder funktionieren nicht", "Office reagiert langsam oder stürzt ab"],
+    "quickCheck": "Welche Office-Programme sind betroffen? Alle oder nur bestimmte?",
+    "solutions": ["Office Schnellreparatur über Einstellungen > Apps durchführen", "Wenn Schnellreparatur nicht hilft: Online-Reparatur durchführen", "Windows Neustart nach der Reparatur", "Ggf. Office komplett deinstallieren und neu installieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 95},
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 3, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Haben Sie bereits versucht Office zu reparieren?", "options": ["Ja, Schnellreparatur", "Ja, Online-Reparatur", "Nein"], "narrows": "Falls Schnellreparatur nicht geholfen hat, ist die Online-Reparatur der nächste Schritt"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-005"]
+  },
+  {
+    "id": "PROB-OFFICE-005",
+    "category": "Office Reparatur",
+    "title": "Office Online-Reparatur nötig",
+    "keywords": ["Online-Reparatur", "Reparatur", "Office", "vollständig", "komplett", "Neuinstallation"],
+    "extendedKeywords": ["Office Online Reparatur durchführen", "Schnellreparatur hat nicht geholfen", "Office komplett reparieren", "Office vollständig reparieren", "Office muss neu installiert werden", "Office tiefgreifend reparieren", "Brauche eine vollständige Office Reparatur", "Office ist komplett kaputt", "Schnellreparatur reicht nicht", "Office gründlich reparieren", "Office neu aufsetzen"],
+    "typos": ["Online Reperatur", "Onlien Reparatur", "vollständige Reperatur"],
+    "symptoms": ["Schnellreparatur hat Probleme nicht behoben", "Schwerwiegende Fehler in Office", "Office startet überhaupt nicht", "Mehrere Office-Programme gleichzeitig defekt"],
+    "quickCheck": "Haben Sie bereits eine Schnellreparatur versucht und war diese erfolglos?",
+    "solutions": ["Online-Reparatur über Einstellungen > Apps > Microsoft 365 > Ändern durchführen", "Internetverbindung sicherstellen (Online-Reparatur benötigt Download)", "Computer während der Reparatur nicht ausschalten", "Nach der Reparatur Windows neu starten", "Alle Office-Programme schließen vor der Reparatur"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 3, "effectiveness": 35}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Ist eine stabile Internetverbindung vorhanden? Die Online-Reparatur benötigt einen Download.", "options": ["Ja", "Nein", "Unsicher"], "narrows": "Ohne Internet ist nur eine Schnellreparatur möglich"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-004"]
+  },
+  {
+    "id": "PROB-OFFICE-006",
+    "category": "Word",
+    "title": "Word stürzt ab",
+    "keywords": ["Word", "Absturz", "crashed", "reagiert nicht", "einfrieren", "hängt", "beendet"],
+    "extendedKeywords": ["Word stürzt ständig ab", "Word reagiert nicht mehr", "Word hängt sich auf", "Word friert ein", "Word wird unerwartet beendet", "Word crasht beim Öffnen", "Word stürzt beim Speichern ab", "Word ist eingefroren", "Word macht einfach zu", "Word schließt sich von selbst", "Word startet nicht mehr", "Word bleibt hängen", "Word funktioniert nicht richtig", "Word hat aufgehört zu arbeiten", "Dokument in Word eingefroren"],
+    "typos": ["Wort", "Word stürtzt ab", "Absturtz"],
+    "symptoms": ["Word wird unerwartet beendet", "Meldung 'Word reagiert nicht'", "Bildschirm wird weiß/grau", "Word schließt sich ohne Warnung"],
+    "quickCheck": "Stürzt Word bei einem bestimmten Dokument ab oder bei allen?",
+    "solutions": ["Word im abgesicherten Modus starten (winword /safe)", "Add-Ins deaktivieren", "Normal.dotm Vorlage umbenennen", "Office Schnellreparatur durchführen", "AutoWiederherstellung prüfen für nicht gespeicherte Daten"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 90},
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 3, "effectiveness": 30}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Stürzt Word bei einem bestimmten Dokument oder bei allen Dokumenten ab?", "options": ["Bestimmtes Dokument", "Alle Dokumente", "Beim Starten ohne Dokument"], "narrows": "Bei einem bestimmten Dokument ist die Datei möglicherweise beschädigt"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-007", "PROB-OFFICE-008", "PROB-OFFICE-019"]
+  },
+  {
+    "id": "PROB-OFFICE-007",
+    "category": "Word",
+    "title": "Word Formatierung kaputt",
+    "keywords": ["Formatierung", "Word", "Layout", "Schriftart", "Absatz", "kaputt", "falsch", "verschoben"],
+    "extendedKeywords": ["Word Formatierung ist kaputt", "Formatierung in Word stimmt nicht", "Word Layout ist verschoben", "Schriftart in Word ändert sich", "Absätze in Word sind falsch", "Formatierung geht verloren in Word", "Word Dokument sieht anders aus", "Formatierung springt in Word", "Word Vorlage stimmt nicht", "Nummerierung in Word kaputt", "Aufzählung funktioniert nicht in Word", "Tabulatoren in Word falsch", "Seitenumbrüche falsch in Word", "Kopf und Fußzeile kaputt", "Word Formatierung durcheinander"],
+    "typos": ["Formattierung", "Formetierung", "Layuot", "Schriftahrt"],
+    "symptoms": ["Schriftarten ändern sich unerwartet", "Absatzformatierung springt", "Seitenumbrüche an falschen Stellen", "Nummerierung/Aufzählung ist durcheinander", "Layout unterscheidet sich zwischen Bildschirm und Druck"],
+    "quickCheck": "Betrifft es ein bestimmtes Dokument oder alle Word-Dokumente?",
+    "solutions": ["Alle Formatierungen zurücksetzen (Strg+A, dann Strg+Leertaste)", "Formatvorlagen prüfen und korrigieren", "Dokument in ein neues Dokument kopieren (nur Text einfügen)", "Fehlende Schriftarten installieren", "Normal.dotm Vorlage zurücksetzen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wurde das Dokument von jemand anderem erstellt oder von einem anderen Computer geöffnet?", "options": ["Von jemand anderem", "Eigenes Dokument", "Von anderem Computer"], "narrows": "Formatierungsprobleme treten häufig auf wenn Dokumente zwischen verschiedenen Systemen ausgetauscht werden"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-006", "PROB-OFFICE-009"]
+  },
+  {
+    "id": "PROB-OFFICE-008",
+    "category": "Word",
+    "title": "Word kann nicht speichern",
+    "keywords": ["speichern", "Word", "Fehler", "Speichern fehlgeschlagen", "nicht möglich", "Dokument"],
+    "extendedKeywords": ["Kann Word Dokument nicht speichern", "Speichern in Word funktioniert nicht", "Word Speichern Fehler", "Kann Datei nicht speichern in Word", "Speichern unter geht nicht in Word", "Word meldet Fehler beim Speichern", "Dokument lässt sich nicht speichern", "Word Speicherung fehlgeschlagen", "Kann Änderungen nicht speichern", "Word sagt Datei kann nicht gespeichert werden", "Speichern Button grau in Word", "Word Datei speichern Fehler", "Kann nicht auf Netzlaufwerk speichern"],
+    "typos": ["speichrn", "speichren", "Speichren"],
+    "symptoms": ["Fehlermeldung beim Speichern", "Speichern-Button reagiert nicht", "Datei wird als Kopie gespeichert", "Zugriff verweigert beim Speichern"],
+    "quickCheck": "Wo versuchen Sie zu speichern - lokal, auf einem Netzlaufwerk oder in OneDrive?",
+    "solutions": ["Unter einem anderen Namen speichern (Speichern unter)", "Dateiberechtigungen prüfen", "Dokument als neues Dokument speichern", "Netzlaufwerk-Verbindung prüfen", "Office Schnellreparatur durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Können Sie das Dokument an einem anderen Ort speichern (z.B. Desktop)?", "options": ["Ja", "Nein", "Nicht versucht"], "narrows": "Wenn es an einem anderen Ort funktioniert, liegt das Problem am Speicherort"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-006", "PROB-OFFICE-020"]
+  },
+  {
+    "id": "PROB-OFFICE-009",
+    "category": "Word",
+    "title": "Word Druckprobleme",
+    "keywords": ["Drucken", "Word", "Drucker", "Druck", "Ausdruck", "Seiteneinrichtung", "druckt nicht"],
+    "extendedKeywords": ["Word druckt nicht", "Kann aus Word nicht drucken", "Ausdruck aus Word sieht falsch aus", "Word Drucken funktioniert nicht", "Word druckt andere Seiten als angezeigt", "Formatierung beim Drucken in Word falsch", "Word Drucker wird nicht erkannt", "Seitenränder stimmen beim Drucken nicht", "Word druckt leere Seiten", "Druckvorschau stimmt nicht in Word", "Word Ausdruck abgeschnitten", "Kann von Word nicht drucken"],
+    "typos": ["Drukken", "Drücken statt Drucken", "Ausdrukk"],
+    "symptoms": ["Druckauftrag wird nicht ausgeführt", "Ausdruck weicht von Bildschirmansicht ab", "Leere Seiten werden gedruckt", "Druckvorschau zeigt Fehler"],
+    "quickCheck": "Können Sie aus anderen Programmen drucken oder betrifft es nur Word?",
+    "solutions": ["Drucker-Standard in Windows überprüfen", "Druckvorschau vor dem Drucken prüfen", "Seiteneinrichtung in Word prüfen (Ränder, Papiergröße)", "Als PDF drucken um Druckerprobleme auszuschließen", "Druckertreiber aktualisieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_devmgr_devclass", "label": "Geräte-Manager prüfen", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Funktioniert das Drucken aus anderen Programmen wie dem Browser?", "options": ["Ja", "Nein", "Nicht getestet"], "narrows": "Wenn auch andere Programme nicht drucken, ist es ein Druckerproblem und kein Word-Problem"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-007"]
+  },
+  {
+    "id": "PROB-OFFICE-010",
+    "category": "Excel",
+    "title": "Excel hängt bei großer Datei",
+    "keywords": ["Excel", "große Datei", "hängt", "langsam", "Performance", "Zeilen", "Daten"],
+    "extendedKeywords": ["Excel hängt bei großer Datei", "Excel ist langsam bei vielen Daten", "Große Excel Datei öffnet nicht", "Excel braucht ewig zum Laden", "Excel hängt sich auf bei großer Tabelle", "Excel langsam bei vielen Zeilen", "Excel friert ein bei großem Spreadsheet", "Excel reagiert nicht bei großer Datei", "Excel Performance bei großen Daten schlecht", "Kann große Excel Datei nicht öffnen", "Excel stürzt bei großer Datei ab", "Excel braucht zu lange zum Berechnen", "Excel arbeitet langsam"],
+    "typos": ["Excle", "Exel", "große Daeti"],
+    "symptoms": ["Excel reagiert nicht bei großer Datei", "Langer Ladevorgang", "Berechnungen dauern sehr lange", "Excel stürzt ab bei vielen Daten"],
+    "quickCheck": "Wie groß ist die Datei und wie viele Zeilen/Spalten enthält sie?",
+    "solutions": ["Nicht benötigte Daten und Formatierungen entfernen", "Volatile Funktionen reduzieren (INDIREKT, VERSCHIEBUNG)", "Automatische Berechnung auf manuell stellen", "Datei in mehrere Arbeitsblätter aufteilen", "Bedingte Formatierungen reduzieren"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Auslastung prüfen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Enthält die Datei viele Formeln, Pivot-Tabellen oder bedingte Formatierungen?", "options": ["Viele Formeln", "Pivot-Tabellen", "Bedingte Formatierungen", "Nur Daten"], "narrows": "Formeln und Formatierungen verlangsamen Excel deutlich"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-014", "PROB-OFFICE-012"]
+  },
+  {
+    "id": "PROB-OFFICE-011",
+    "category": "Excel",
+    "title": "Excel Makros deaktiviert",
+    "keywords": ["Makro", "deaktiviert", "Excel", "VBA", "Sicherheit", "aktivieren", "blockiert"],
+    "extendedKeywords": ["Excel Makros sind deaktiviert", "Makros funktionieren nicht in Excel", "Excel hat Makros blockiert", "Kann Makros nicht aktivieren", "Makro Sicherheitswarnung in Excel", "Excel lässt Makros nicht zu", "VBA Code wird nicht ausgeführt", "Makros aktivieren in Excel", "Gelbe Leiste Makros deaktiviert", "Excel blockiert Makro Ausführung", "Makro Button funktioniert nicht", "Sicherheitswarnung bei Makros", "Makros werden nicht geladen"],
+    "typos": ["Makross", "deaktivirt", "Mackros", "VBA Makro"],
+    "symptoms": ["Gelbe Sicherheitsleiste 'Makros wurden deaktiviert'", "Makro-Buttons funktionieren nicht", "VBA-Code wird nicht ausgeführt", "Fehlermeldung bei Makro-Ausführung"],
+    "quickCheck": "Erscheint eine gelbe Sicherheitsleiste am oberen Rand der Datei?",
+    "solutions": ["Auf 'Inhalt aktivieren' in der Sicherheitsleiste klicken", "Datei als vertrauenswürdiges Dokument markieren", "Vertrauenswürdigen Speicherort in Excel einrichten", "Makro-Sicherheitseinstellungen anpassen", "Datei entsperren (Rechtsklick > Eigenschaften > Zulassen)"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 40},
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 2, "effectiveness": 25}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wurde die Datei aus dem Internet heruntergeladen oder per E-Mail erhalten?", "options": ["Heruntergeladen", "Per E-Mail", "Von Netzlaufwerk", "Lokal erstellt"], "narrows": "Heruntergeladene Dateien werden von Windows blockiert und müssen erst entsperrt werden"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-027", "PROB-OFFICE-028"]
+  },
+  {
+    "id": "PROB-OFFICE-012",
+    "category": "Excel",
+    "title": "Excel Formeln funktionieren nicht",
+    "keywords": ["Formel", "Excel", "Fehler", "berechnen", "Funktion", "defekt", "Berechnung"],
+    "extendedKeywords": ["Excel Formeln funktionieren nicht", "Formel zeigt Fehler in Excel", "Excel berechnet falsch", "Formeln werden als Text angezeigt", "Excel Formel gibt Fehler aus", "SVERWEIS funktioniert nicht", "Excel Funktionen gehen nicht", "Formel wird nicht berechnet", "Excel zeigt Formeltext statt Ergebnis", "Berechnung in Excel stimmt nicht", "Excel rechnet nicht", "Formeln aktualisieren sich nicht", "Fehler in Excel Formel", "WENN Formel funktioniert nicht"],
+    "typos": ["Fromeln", "Formle", "berechen", "SVERWIES"],
+    "symptoms": ["Formeln zeigen #WERT!, #NV, #BEZUG! Fehler", "Formeln werden als Text angezeigt", "Berechnungsergebnisse sind falsch", "Formeln aktualisieren sich nicht automatisch"],
+    "quickCheck": "Welcher Fehler wird angezeigt (#WERT!, #NV, #BEZUG!, etc.)?",
+    "solutions": ["Berechnungsmodus auf Automatisch stellen (Formeln > Berechnungsoptionen)", "Zellenformat von Text auf Zahl ändern", "Formel auf Syntaxfehler prüfen", "Trennzeichen prüfen (Semikolon statt Komma in DE)", "Zellbezüge prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 35}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Werden die Formeln als Text angezeigt oder kommt ein Fehlerwert?", "options": ["Als Text angezeigt", "Fehlerwert (#WERT! etc.)", "Falsches Ergebnis", "Keine Berechnung"], "narrows": "Formeln als Text deuten auf ein Zellenformat-Problem hin, Fehlerwerte auf Syntaxprobleme"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-010", "PROB-OFFICE-013"]
+  },
+  {
+    "id": "PROB-OFFICE-013",
+    "category": "Excel",
+    "title": "Excel Pivot-Tabelle Probleme",
+    "keywords": ["Pivot", "Tabelle", "Excel", "Pivot-Tabelle", "aktualisieren", "erstellen", "Daten"],
+    "extendedKeywords": ["Pivot-Tabelle funktioniert nicht in Excel", "Kann keine Pivot-Tabelle erstellen", "Pivot-Tabelle aktualisiert sich nicht", "Pivot Daten stimmen nicht", "Excel Pivot-Tabelle Fehler", "Pivot-Tabelle zeigt falsche Werte", "Kann Pivot-Tabelle nicht aktualisieren", "Pivot-Tabelle ist leer", "Pivot-Tabelle in Excel kaputt", "Kann Felder nicht in Pivot ziehen", "Pivot-Tabelle berechnet falsch", "Pivot-Tabelle erstellen geht nicht"],
+    "typos": ["Piviot", "Pivot Tabele", "Pivott"],
+    "symptoms": ["Pivot-Tabelle zeigt keine oder falsche Daten", "Pivot-Tabelle lässt sich nicht aktualisieren", "Fehlermeldung bei Erstellung", "Felder können nicht zugeordnet werden"],
+    "quickCheck": "Was genau funktioniert nicht - Erstellung, Aktualisierung oder Anzeige der Pivot-Tabelle?",
+    "solutions": ["Datenquelle der Pivot-Tabelle überprüfen", "Pivot-Tabelle aktualisieren (Rechtsklick > Aktualisieren)", "Datenbereich erweitern falls neue Daten hinzugekommen sind", "Pivot-Cache leeren und neu erstellen", "Quelldaten auf leere Zeilen/Spalten prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 30}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Haben sich die Quelldaten der Pivot-Tabelle geändert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Bei geänderten Quelldaten muss die Pivot-Tabelle aktualisiert und ggf. der Datenbereich angepasst werden"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-010", "PROB-OFFICE-012"]
+  },
+  {
+    "id": "PROB-OFFICE-014",
+    "category": "Excel",
+    "title": "Excel ist generell langsam",
+    "keywords": ["Excel", "langsam", "Performance", "träge", "hängt", "Geschwindigkeit", "reagiert nicht"],
+    "extendedKeywords": ["Excel ist sehr langsam", "Excel reagiert träge", "Excel braucht lange zum Öffnen", "Excel Performance schlecht", "Excel hängt ständig", "Excel arbeitet zu langsam", "Excel rechnet zu lange", "Excel ist träge beim Scrollen", "Excel dauert ewig", "Warum ist Excel so langsam", "Excel Geschwindigkeit verbessern", "Excel optimieren"],
+    "typos": ["Excell langsam", "Exel langsam", "langsma"],
+    "symptoms": ["Lange Ladezeiten", "Verzögertes Scrollen", "Langsame Berechnungen", "Excel reagiert verzögert auf Eingaben"],
+    "quickCheck": "Betrifft die Langsamkeit alle Dateien oder nur bestimmte?",
+    "solutions": ["Bedingte Formatierungen reduzieren", "Nicht benötigte Add-Ins deaktivieren", "Hardwarebeschleunigung in Office prüfen", "Office Schnellreparatur durchführen", "Excel-Optionen: Multithread-Berechnung aktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Auslastung prüfen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Sind Add-Ins in Excel installiert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Add-Ins können Excel erheblich verlangsamen"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-010", "PROB-OFFICE-025"]
+  },
+  {
+    "id": "PROB-OFFICE-015",
+    "category": "PowerPoint",
+    "title": "Video oder Audio in PowerPoint funktioniert nicht",
+    "keywords": ["PowerPoint", "Video", "Audio", "Multimedia", "abspielen", "einbetten", "Ton"],
+    "extendedKeywords": ["Video in PowerPoint funktioniert nicht", "Kann Video in PowerPoint nicht abspielen", "Audio in PowerPoint geht nicht", "Eingebettetes Video in PowerPoint spielt nicht", "PowerPoint Video ohne Ton", "Multimedia in Präsentation funktioniert nicht", "Video in PowerPoint zeigt schwarzes Bild", "Kann keine Videos einfügen in PowerPoint", "Audio Clip in PowerPoint funktioniert nicht", "Video in Präsentation abspielt nicht", "PowerPoint spielt Video nicht ab"],
+    "typos": ["PowerPiont", "Power Point", "Vidoe", "Audoi"],
+    "symptoms": ["Videos werden nicht abgespielt", "Schwarzes Bild statt Video", "Kein Ton bei eingebetteten Medien", "Fehlermeldung bei Medienwiedergabe"],
+    "quickCheck": "Ist das Video eingebettet oder verlinkt? Funktioniert es außerhalb von PowerPoint?",
+    "solutions": ["Video-Codec prüfen und ggf. installieren", "Video als MP4 neu einbetten", "Medienkompatibilität optimieren (Datei > Info > Medienkompatibilität)", "Video in kompatibles Format konvertieren", "Office Schnellreparatur durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "In welchem Format ist das Video (MP4, AVI, WMV)?", "options": ["MP4", "AVI", "WMV", "Anderes", "Weiß nicht"], "narrows": "MP4 ist das am besten unterstützte Format in PowerPoint"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-016", "PROB-OFFICE-017"]
+  },
+  {
+    "id": "PROB-OFFICE-016",
+    "category": "PowerPoint",
+    "title": "Schriftarten fehlen in PowerPoint",
+    "keywords": ["Schriftart", "Font", "PowerPoint", "fehlt", "ersetzt", "Darstellung", "Präsentation"],
+    "extendedKeywords": ["Schriftarten in PowerPoint fehlen", "PowerPoint zeigt falsche Schriftart", "Schrift wird ersetzt in PowerPoint", "Präsentation sieht anders aus auf anderem PC", "Fonts fehlen in PowerPoint", "PowerPoint Schriftart nicht verfügbar", "Schrift in Präsentation stimmt nicht", "PowerPoint ersetzt Schriftarten", "Schriftart nicht installiert für PowerPoint", "Präsentation hat andere Schrift auf anderem Computer"],
+    "typos": ["Schriftahrt", "Schritfart", "Fontt", "Schrifart"],
+    "symptoms": ["Schriftarten werden durch Standardschrift ersetzt", "Warnung 'Schriftart nicht verfügbar'", "Layout verschiebt sich wegen falscher Schriftart", "Präsentation sieht auf verschiedenen Computern unterschiedlich aus"],
+    "quickCheck": "Welche Schriftart wird benötigt und wurde die Präsentation auf einem anderen Computer erstellt?",
+    "solutions": ["Fehlende Schriftart installieren", "Schriftarten in PowerPoint einbetten (Datei > Optionen > Speichern > Schriftarten einbetten)", "Standardschriftarten verwenden (Calibri, Arial)", "Schriftart als Datei vom Ersteller anfordern"],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 1, "effectiveness": 35},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 2, "effectiveness": 30}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wurde die Präsentation auf einem anderen Computer erstellt?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Auf anderen Computern installierte Schriftarten sind möglicherweise lokal nicht vorhanden"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-015", "PROB-OFFICE-017"]
+  },
+  {
+    "id": "PROB-OFFICE-017",
+    "category": "PowerPoint",
+    "title": "PowerPoint Export als PDF fehlerhaft",
+    "keywords": ["PowerPoint", "PDF", "Export", "speichern", "konvertieren", "Fehler", "Qualität"],
+    "extendedKeywords": ["PowerPoint als PDF speichern geht nicht", "PDF Export aus PowerPoint fehlerhaft", "PowerPoint PDF sieht falsch aus", "Kann PowerPoint nicht als PDF exportieren", "PDF von PowerPoint hat schlechte Qualität", "Bilder in PDF Export unscharf", "PowerPoint PDF Formatierung falsch", "Präsentation als PDF speichern Fehler", "PowerPoint PDF Schriftart fehlt", "Export als PDF klappt nicht in PowerPoint"],
+    "typos": ["PDF Expoert", "PowerPiont PDF", "konvertiern"],
+    "symptoms": ["PDF hat andere Formatierung als die Präsentation", "Bilder sind im PDF unscharf", "Schriftarten im PDF falsch", "PDF-Export schlägt fehl"],
+    "quickCheck": "Was genau ist am PDF-Export anders als in der Präsentation?",
+    "solutions": ["Über Datei > Speichern unter > PDF exportieren", "Druckqualität statt Internetqualität wählen", "Schriftarten einbetten vor dem Export", "Als XPS statt PDF testen", "Office Schnellreparatur durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 45},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Welche Qualitätsstufe haben Sie beim PDF-Export gewählt?", "options": ["Standard", "Minimum (Online)", "Weiß nicht"], "narrows": "Niedrige Qualitätsstufen können zu unscharfen Bildern führen"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-015", "PROB-OFFICE-016"]
+  },
+  {
+    "id": "PROB-OFFICE-018",
+    "category": "Dateien",
+    "title": "Office Datei ist beschädigt",
+    "keywords": ["Datei", "beschädigt", "korrupt", "kaputt", "defekt", "öffnen", "reparieren"],
+    "extendedKeywords": ["Office Datei ist beschädigt", "Kann Datei nicht öffnen beschädigt", "Word Dokument kaputt", "Excel Datei korrupt", "Datei lässt sich nicht öffnen", "Office meldet beschädigte Datei", "Dokument ist defekt", "Datei reparieren in Office", "Beschädigte Excel Datei wiederherstellen", "Word Datei ist kaputt", "PowerPoint Datei beschädigt", "Fehler beim Öffnen der Datei"],
+    "typos": ["beschädig", "beshädigt", "korruppt", "Daetei"],
+    "symptoms": ["Fehlermeldung 'Datei ist beschädigt'", "Datei öffnet sich nicht", "Inhalt wird nicht korrekt angezeigt", "Datei zeigt nur Zeichensalat"],
+    "quickCheck": "Welche Fehlermeldung erscheint beim Öffnen der Datei?",
+    "solutions": ["Öffnen und Reparieren verwenden (Datei > Öffnen > Pfeil neben Öffnen > Öffnen und Reparieren)", "Datei aus Vorgängerversion wiederherstellen (Rechtsklick > Vorgängerversionen)", "Datei aus Backup wiederherstellen", "AutoWiederherstellung prüfen", "Datei in einem anderen Format öffnen versuchen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 40},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Gibt es ein Backup oder eine Vorgängerversion der Datei?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Ein Backup ist oft die schnellste Lösung"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-019", "PROB-OFFICE-020"]
+  },
+  {
+    "id": "PROB-OFFICE-019",
+    "category": "Dateien",
+    "title": "Datei ist schreibgeschützt",
+    "keywords": ["schreibgeschützt", "nur lesen", "bearbeiten", "gesperrt", "Schreibschutz", "Office"],
+    "extendedKeywords": ["Datei ist schreibgeschützt", "Kann Datei nicht bearbeiten", "Office Datei nur lesen", "Dokument ist gesperrt", "Schreibschutz entfernen", "Kann nicht in Datei schreiben", "Word Dokument schreibgeschützt", "Excel Datei nur lesen", "Datei ist von anderem Benutzer gesperrt", "Kann Schreibschutz nicht aufheben", "Datei wird im Lesemodus geöffnet", "Bearbeitung nicht möglich", "Datei ist schreibgeschützt obwohl sie es nicht sein sollte"],
+    "typos": ["schreibgeschüzt", "nur lese", "Schreibshutz"],
+    "symptoms": ["Gelbe Leiste 'Schreibgeschützt'", "Bearbeitung ist nicht möglich", "Meldung 'Datei wird von anderem Benutzer bearbeitet'", "Speichern ist nicht möglich"],
+    "quickCheck": "Wird die Datei von einem anderen Benutzer bearbeitet oder ist sie aus dem Internet heruntergeladen?",
+    "solutions": ["Geschützte Ansicht verlassen (auf 'Bearbeitung aktivieren' klicken)", "Datei-Eigenschaften prüfen (Schreibschutz-Attribut)", "Prüfen ob ein anderer Benutzer die Datei geöffnet hat", "Datei lokal kopieren und die Kopie bearbeiten", "Datei entsperren über Rechtsklick > Eigenschaften > Zulassen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 30}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wo liegt die Datei - auf dem lokalen Computer, Netzlaufwerk oder OneDrive?", "options": ["Lokal", "Netzlaufwerk", "OneDrive/SharePoint", "Weiß nicht"], "narrows": "Bei Netzlaufwerken und OneDrive kann ein anderer Benutzer die Datei sperren"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-018", "PROB-OFFICE-021"]
+  },
+  {
+    "id": "PROB-OFFICE-020",
+    "category": "Dateien",
+    "title": "AutoWiederherstellung funktioniert nicht",
+    "keywords": ["AutoWiederherstellung", "Wiederherstellung", "Backup", "automatisch speichern", "verloren", "nicht gespeichert"],
+    "extendedKeywords": ["AutoWiederherstellung funktioniert nicht", "Nicht gespeicherte Datei wiederherstellen", "Office Dokument verloren", "Datei nicht gespeichert Absturz", "AutoWiederherstellung Dateien finden", "Wo sind die AutoWiederherstellungsdateien", "Kann verlorene Datei nicht wiederherstellen", "Office hat meine Datei nicht gespeichert", "Nach Absturz Daten verloren", "Word AutoWiederherstellung fehlt", "Excel automatisch gespeicherte Datei finden", "Dokument nach Absturz weg"],
+    "typos": ["AutoWiederherstelung", "Wiederherstelung", "Auto Wiederherstellung"],
+    "symptoms": ["Keine AutoWiederherstellung nach Absturz", "AutoWiederherstellungsdateien sind leer", "Datei wurde nicht automatisch gespeichert", "Wiederherstellungsbereich zeigt keine Dateien"],
+    "quickCheck": "Ist die AutoWiederherstellung in den Office-Optionen aktiviert?",
+    "solutions": ["AutoWiederherstellungsordner manuell durchsuchen (%appdata%\\Microsoft\\Word)", "AutoWiederherstellungsintervall in Optionen prüfen (Datei > Optionen > Speichern)", "Temporäre Dateien im Temp-Ordner prüfen", "Vorgängerversionen der Datei prüfen", "AutoWiederherstellung aktivieren falls deaktiviert"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 30}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wie ist das Dokument verloren gegangen?", "options": ["Absturz", "Vergessen zu speichern", "Datei gelöscht", "Sonstiges"], "narrows": "Bei Abstürzen gibt es meist AutoWiederherstellungsdateien, beim Vergessen zu speichern leider oft nicht"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-018", "PROB-OFFICE-008"]
+  },
+  {
+    "id": "PROB-OFFICE-021",
+    "category": "Co-Authoring",
+    "title": "Gleichzeitiges Bearbeiten funktioniert nicht",
+    "keywords": ["Co-Authoring", "gleichzeitig", "zusammen bearbeiten", "gemeinsam", "Echtzeit", "Kollaboration"],
+    "extendedKeywords": ["Gleichzeitiges Bearbeiten geht nicht in Office", "Co-Authoring funktioniert nicht", "Können nicht gleichzeitig an Datei arbeiten", "Zusammen bearbeiten in Word geht nicht", "Echtzeit Zusammenarbeit funktioniert nicht", "Kann nicht sehen was andere tippen", "Gleichzeitiges Bearbeiten in Excel nicht möglich", "Co-Authoring wird nicht angezeigt", "Gemeinsam an Dokument arbeiten geht nicht", "Andere sehen meine Änderungen nicht in Echtzeit"],
+    "typos": ["Co Authoring", "Coauthoring", "geleichzeitig"],
+    "symptoms": ["Datei wird als gesperrt angezeigt", "Änderungen anderer werden nicht in Echtzeit angezeigt", "Co-Authoring-Symbol fehlt", "Fehlermeldung beim gleichzeitigen Zugriff"],
+    "quickCheck": "Liegt die Datei auf OneDrive oder SharePoint? Co-Authoring funktioniert nur dort.",
+    "solutions": ["Datei auf OneDrive oder SharePoint speichern", "Prüfen ob alle Benutzer eine aktuelle Office-Version haben", "AutoSpeichern aktivieren", "Datei im aktuellen Format (.docx, .xlsx) speichern, nicht im alten Format", "Anmeldedaten zurücksetzen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wo ist die Datei gespeichert?", "options": ["OneDrive", "SharePoint", "Netzlaufwerk", "Lokal"], "narrows": "Co-Authoring funktioniert nur mit OneDrive oder SharePoint"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-022", "PROB-OFFICE-023"]
+  },
+  {
+    "id": "PROB-OFFICE-022",
+    "category": "Co-Authoring",
+    "title": "Konflikte bei gleichzeitiger Bearbeitung",
+    "keywords": ["Konflikt", "Co-Authoring", "Version", "Änderung", "überschrieben", "zusammenführen"],
+    "extendedKeywords": ["Konflikte bei gleichzeitiger Bearbeitung", "Änderungen wurden überschrieben", "Versionskonflikt in Office", "Meine Änderungen sind weg nach Co-Authoring", "Office zeigt Konflikt bei Bearbeitung", "Zusammenführen von Änderungen funktioniert nicht", "Wer hat meine Änderungen überschrieben", "Versionshistorie in Office", "Konflikt bei Teamarbeit an Dokument", "Änderungen gingen verloren bei gleichzeitiger Bearbeitung"],
+    "typos": ["Konfilkt", "übershrieben", "zusammenführn"],
+    "symptoms": ["Meldung über Versionskonflikte", "Änderungen werden überschrieben", "Zusammenführungsdialog erscheint", "Verschiedene Versionen der Datei existieren"],
+    "quickCheck": "Wurde die Datei gleichzeitig von mehreren Personen bearbeitet?",
+    "solutions": ["Versionsverlauf prüfen (Datei > Info > Versionsverlauf)", "Änderungen aus dem Versionsverlauf wiederherstellen", "AutoSpeichern für alle Benutzer aktivieren", "In verschiedenen Abschnitten arbeiten um Konflikte zu vermeiden", "Vor dem Bearbeiten Kommunikation im Team abstimmen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Können Sie die verlorenen Änderungen im Versionsverlauf finden?", "options": ["Ja", "Nein", "Wo finde ich den Versionsverlauf?"], "narrows": "Der Versionsverlauf erlaubt es, frühere Versionen wiederherzustellen"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-021", "PROB-OFFICE-023"]
+  },
+  {
+    "id": "PROB-OFFICE-023",
+    "category": "Co-Authoring",
+    "title": "OneDrive Synchronisation für Office Dateien",
+    "keywords": ["OneDrive", "Synchronisation", "Sync", "Cloud", "Upload", "Office", "hochladen"],
+    "extendedKeywords": ["OneDrive synchronisiert Office Dateien nicht", "Dateien werden nicht in OneDrive hochgeladen", "OneDrive Sync Problem mit Office", "Office Dateien nicht in der Cloud", "OneDrive zeigt Sync Fehler", "Kann Dateien nicht in OneDrive speichern", "OneDrive Symbol zeigt Fehler", "OneDrive synchronisiert nicht mehr", "Office AutoSpeichern in OneDrive geht nicht", "Dateien sind nicht aktuell in OneDrive", "OneDrive und Office nicht synchron"],
+    "typos": ["OnDrive", "One Drive", "Syncronisation"],
+    "symptoms": ["OneDrive-Symbol zeigt Sync-Fehler", "Dateien werden nicht hochgeladen", "Änderungen erscheinen nicht in der Cloud", "AutoSpeichern ist ausgegraut"],
+    "quickCheck": "Zeigt das OneDrive-Symbol in der Taskleiste einen Fehler oder ein Warnsymbol?",
+    "solutions": ["OneDrive-Synchronisation zurücksetzen", "OneDrive neu starten", "Speicherplatz in OneDrive prüfen", "Anmeldedaten zurücksetzen", "Datei lokal speichern und manuell in OneDrive hochladen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Ist OneDrive gestartet und zeigt es ein Symbol in der Taskleiste?", "options": ["Ja, mit grünem Haken", "Ja, mit Warnung/Fehler", "Nein, kein Symbol"], "narrows": "Ohne gestartetes OneDrive funktioniert die Synchronisation nicht"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-021", "PROB-OFFICE-022"]
+  },
+  {
+    "id": "PROB-OFFICE-024",
+    "category": "Add-Ins",
+    "title": "Office stürzt ab durch Add-Ins",
+    "keywords": ["Add-In", "Absturz", "Plugin", "Erweiterung", "Office", "deaktivieren", "inkompatibel"],
+    "extendedKeywords": ["Office stürzt ab wegen Add-In", "Add-In verursacht Absturz", "Office Plugin macht Probleme", "Office langsam wegen Add-Ins", "Add-In deaktivieren in Office", "Office startet nicht wegen Add-In", "Welches Add-In verursacht Probleme", "Office im abgesicherten Modus wegen Add-In", "Plugin Konflikt in Office", "Office Erweiterung funktioniert nicht richtig", "Add-In crasht Office"],
+    "typos": ["Add-Inn", "Add In", "Pluginn", "Addin"],
+    "symptoms": ["Office stürzt kurz nach dem Start ab", "Fehlermeldung bei bestimmten Aktionen", "Office-Programme sind sehr langsam", "Funktionen fehlen oder reagieren nicht"],
+    "quickCheck": "Funktioniert Office im abgesicherten Modus (winword /safe)?",
+    "solutions": ["Office im abgesicherten Modus starten um Add-In-Problem zu bestätigen", "Einzelne Add-Ins deaktivieren um das problematische zu finden", "Problematisches Add-In aktualisieren oder deinstallieren", "Office Schnellreparatur durchführen", "COM-Add-Ins über Datei > Optionen > Add-Ins verwalten"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 3, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wurde kürzlich ein neues Add-In installiert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Neu installierte Add-Ins sind häufig die Ursache von Abstürzen"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-025"]
+  },
+  {
+    "id": "PROB-OFFICE-025",
+    "category": "Add-Ins",
+    "title": "Office Add-In lädt nicht",
+    "keywords": ["Add-In", "laden", "funktioniert nicht", "Office", "Plugin", "deaktiviert", "fehlt"],
+    "extendedKeywords": ["Add-In lädt nicht in Office", "Office Add-In funktioniert nicht", "Add-In ist verschwunden", "Plugin wird nicht geladen", "Add-In wurde deaktiviert", "Office hat Add-In blockiert", "Add-In fehlt in Office", "Kann Add-In nicht aktivieren", "Add-In Schaltfläche fehlt", "Office Web Add-In lädt nicht", "Store Add-In funktioniert nicht in Office"],
+    "typos": ["Add-Inn", "ladet nicht", "funktoniert nicht"],
+    "symptoms": ["Add-In erscheint nicht im Menüband", "Add-In zeigt Fehler beim Laden", "Add-In wurde automatisch deaktiviert", "Add-In-Funktionen sind nicht verfügbar"],
+    "quickCheck": "Ist das Add-In unter Datei > Optionen > Add-Ins als deaktiviert gelistet?",
+    "solutions": ["Deaktiviertes Add-In reaktivieren (Datei > Optionen > Add-Ins > Verwalten)", "Add-In deinstallieren und neu installieren", "Office Schnellreparatur durchführen", "Prüfen ob das Add-In mit der Office-Version kompatibel ist", "Windows und Office aktualisieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wurde das Add-In automatisch deaktiviert oder war es nie sichtbar?", "options": ["Automatisch deaktiviert", "Nie sichtbar gewesen", "Weiß nicht"], "narrows": "Automatisch deaktivierte Add-Ins können in den Optionen reaktiviert werden"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-024"]
+  },
+  {
+    "id": "PROB-OFFICE-026",
+    "category": "Makros",
+    "title": "Makros global deaktiviert",
+    "keywords": ["Makro", "deaktiviert", "Sicherheit", "blockiert", "Gruppenrichtlinie", "gesperrt"],
+    "extendedKeywords": ["Alle Makros deaktiviert", "Kann keine Makros ausführen", "Makros global gesperrt", "IT hat Makros blockiert", "Makros durch Richtlinie deaktiviert", "Kann Makros nicht mehr nutzen", "Makro Sicherheitseinstellungen ändern", "Makros sind überall deaktiviert", "Kein Zugriff auf Makros", "Makros werden nie ausgeführt"],
+    "typos": ["Mackros", "deaktivirt", "gespertt"],
+    "symptoms": ["Keine Möglichkeit Makros zu aktivieren", "Sicherheitsleiste erscheint nicht", "Makro-Menü ist ausgegraut", "Trust Center Einstellungen können nicht geändert werden"],
+    "quickCheck": "Können Sie die Makro-Einstellungen im Trust Center ändern oder sind sie gesperrt?",
+    "solutions": ["Trust Center Einstellungen prüfen (Datei > Optionen > Trust Center)", "Vertrauenswürdige Speicherorte einrichten", "IT-Abteilung wegen Gruppenrichtlinien kontaktieren", "Datei an einen vertrauenswürdigen Speicherort verschieben", "Prüfen ob die Dateien eine MOTW-Markierung haben"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 30},
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 2, "effectiveness": 25}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Können Sie die Trust Center Einstellungen ändern oder sind sie ausgegraut?", "options": ["Kann ändern", "Ausgegraut/gesperrt"], "narrows": "Gesperrte Einstellungen deuten auf eine Gruppenrichtlinie hin, die nur die IT ändern kann"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-011", "PROB-OFFICE-027", "PROB-OFFICE-028"]
+  },
+  {
+    "id": "PROB-OFFICE-027",
+    "category": "Makros",
+    "title": "VBA Fehler in Office",
+    "keywords": ["VBA", "Fehler", "Makro", "Code", "Debug", "Laufzeitfehler", "Visual Basic"],
+    "extendedKeywords": ["VBA Fehler in Excel", "Makro zeigt Fehlermeldung", "VBA Code funktioniert nicht", "Laufzeitfehler in VBA", "Makro bricht mit Fehler ab", "VBA Debug Meldung", "Visual Basic Fehler in Office", "Makro Fehlermeldung beim Ausführen", "VBA Kompilierfehler", "Makro stoppt mit Fehler", "VBA Runtime Error", "Automatisierung Fehler VBA"],
+    "typos": ["VBA Felher", "Laufzeitfelher", "Visual Baisc"],
+    "symptoms": ["Fehlermeldungsfenster mit Fehlernummer", "Makro stoppt bei bestimmter Zeile", "Debug-Fenster öffnet sich", "Unerwartetes Verhalten des Makros"],
+    "quickCheck": "Welche Fehlernummer oder Fehlermeldung wird angezeigt?",
+    "solutions": ["Fehlermeldung und Zeilennummer notieren", "VBA-Referenzen prüfen (Extras > Verweise im VBA-Editor)", "Fehlende Verweise deaktivieren", "VBA-Code auf Kompatibilität prüfen", "Office Reparatur durchführen falls Objektbibliotheken fehlen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 45},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Welche Fehlernummer wird angezeigt?", "options": ["Laufzeitfehler (mit Nummer)", "Kompilierfehler", "Weiß nicht", "Keine Nummer"], "narrows": "Laufzeitfehler treten beim Ausführen auf, Kompilierfehler beim Laden des Makros"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-011", "PROB-OFFICE-026"]
+  },
+  {
+    "id": "PROB-OFFICE-028",
+    "category": "Makros",
+    "title": "Makro-Sicherheitseinstellungen anpassen",
+    "keywords": ["Makro-Sicherheit", "Trust Center", "Einstellungen", "Sicherheit", "Vertrauenswürdig", "Office"],
+    "extendedKeywords": ["Makro Sicherheit einstellen", "Trust Center Makros", "Makro Sicherheitseinstellungen ändern", "Makros erlauben in Office", "Wie aktiviere ich Makros", "Makro Sicherheitsstufe ändern", "Vertrauenswürdige Makros", "Makro Einstellungen in Office", "Trust Center öffnen", "Makros standardmäßig aktivieren", "Sicherheitseinstellungen für Makros"],
+    "typos": ["Trust Centr", "Sicherheitseinstellunegn", "Mackro Sicherheit"],
+    "symptoms": ["Makros werden immer blockiert", "Sicherheitsleiste erscheint bei jeder Datei", "Makro-Einstellungen unklar", "Unterschiedliche Makro-Behandlung bei verschiedenen Dateien"],
+    "quickCheck": "Welche Makro-Einstellung ist aktuell im Trust Center gesetzt?",
+    "solutions": ["Trust Center öffnen (Datei > Optionen > Trust Center > Einstellungen)", "Makro-Einstellung auf 'Alle Makros mit Benachrichtigung deaktivieren' setzen", "Vertrauenswürdige Speicherorte einrichten für regelmäßig genutzte Makro-Dateien", "Digital signierte Makros vertrauen", "Vertrauenswürdige Herausgeber einrichten"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 25}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Benötigen Sie Makros regelmäßig oder nur für bestimmte Dateien?", "options": ["Regelmäßig", "Nur bestimmte Dateien", "Selten"], "narrows": "Bei regelmäßiger Nutzung empfiehlt sich ein vertrauenswürdiger Speicherort"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-011", "PROB-OFFICE-026", "PROB-OFFICE-027"]
+  },
+  {
+    "id": "PROB-OFFICE-029",
+    "category": "Updates",
+    "title": "Office Update Fehler",
+    "keywords": ["Update", "Fehler", "Aktualisierung", "Office", "fehlgeschlagen", "installieren"],
+    "extendedKeywords": ["Office Update funktioniert nicht", "Office lässt sich nicht aktualisieren", "Update für Office fehlgeschlagen", "Office Update Fehlercode", "Kann Office nicht updaten", "Office Aktualisierung hängt", "Office Update bricht ab", "Fehler bei Office Update Installation", "Office Update wird nicht installiert", "Microsoft 365 Update Problem", "Office sagt Update verfügbar aber installiert nicht"],
+    "typos": ["Updaet", "Aktualiseirung", "fehlgeschalgen"],
+    "symptoms": ["Fehlermeldung bei Update-Installation", "Update bleibt hängen", "Update wird immer wieder angeboten aber nicht installiert", "Office zeigt veraltete Version"],
+    "quickCheck": "Welcher Fehlercode wird beim Update angezeigt?",
+    "solutions": ["Office über Datei > Konto > Updateoptionen > Jetzt aktualisieren", "Office Schnellreparatur durchführen", "Windows Update prüfen und aktualisieren", "Office Online-Reparatur durchführen", "Temporäre Update-Dateien löschen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 3, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wird ein Fehlercode angezeigt?", "options": ["Ja (bitte nennen)", "Nein", "Weiß nicht"], "narrows": "Fehlercodes helfen bei der gezielten Problemlösung"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-030"]
+  },
+  {
+    "id": "PROB-OFFICE-030",
+    "category": "Updates",
+    "title": "Office Version zu alt",
+    "keywords": ["Version", "alt", "veraltet", "Office", "aktualisieren", "Kompatibilität", "Upgrade"],
+    "extendedKeywords": ["Office Version ist zu alt", "Mein Office ist veraltet", "Brauche neuere Office Version", "Office Kompatibilitätsproblem wegen alter Version", "Office 2016 zu alt", "Kann Dateien nicht öffnen wegen alter Office Version", "Muss Office upgraden", "Office Version prüfen", "Welche Office Version habe ich", "Office auf neue Version bringen", "Brauche aktuelles Office"],
+    "typos": ["Verson", "veralted", "aktualiseren"],
+    "symptoms": ["Kompatibilitätswarnungen bei neueren Dateien", "Funktionen fehlen die Kollegen haben", "Office-Version wird nicht mehr unterstützt", "Sicherheitsupdates nicht mehr verfügbar"],
+    "quickCheck": "Welche Office-Version verwenden Sie? (Datei > Konto)",
+    "solutions": ["Office-Version prüfen unter Datei > Konto", "Office aktualisieren über Datei > Konto > Updateoptionen", "IT-Abteilung wegen Upgrade kontaktieren", "Office Online als Zwischenlösung nutzen", "Kompatibilitätsmodus für neue Dateien verwenden"],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 2, "effectiveness": 30}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Haben Sie Microsoft 365 (Abonnement) oder eine Einzellizenz (z.B. Office 2019)?", "options": ["Microsoft 365", "Office 2021", "Office 2019", "Office 2016 oder älter", "Weiß nicht"], "narrows": "Microsoft 365 sollte automatisch aktualisiert werden, Einzellizenzen benötigen ggf. ein Upgrade"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-029"]
+  },
+  {
+    "id": "PROB-OFFICE-031",
+    "category": "Sonstige",
+    "title": "Office ist nicht als Standardprogramm gesetzt",
+    "keywords": ["Standardprogramm", "Standard", "Zuordnung", "öffnen mit", "Office", "Dateityp"],
+    "extendedKeywords": ["Word ist nicht Standardprogramm", "Excel öffnet nicht automatisch", "Dateien öffnen sich im falschen Programm", "Office als Standard setzen", "Dokumente öffnen sich nicht in Office", "xlsx öffnet sich nicht in Excel", "docx öffnet sich nicht in Word", "Falsches Programm öffnet Office Dateien", "Standard Programm für Office Dateien ändern", "Office Dateizuordnung falsch", "Doppelklick öffnet falsches Programm"],
+    "typos": ["Standardporgamm", "Datietyp", "Zuordnugn"],
+    "symptoms": ["Office-Dateien öffnen sich in anderen Programmen", "Doppelklick auf Datei öffnet falsches Programm", "Dateisymbole zeigen anderes Programm"],
+    "quickCheck": "Welcher Dateityp öffnet sich im falschen Programm?",
+    "solutions": ["Windows Einstellungen > Standard-Apps > Office-Programme zuordnen", "Rechtsklick auf Datei > Öffnen mit > Andere App > Immer verwenden", "Office Schnellreparatur durchführen (setzt Dateizuordnungen zurück)", "Dateizuordnung über Standardprogramme in Windows setzen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Welches Programm öffnet die Dateien aktuell statt Office?", "options": ["Browser", "WordPad", "LibreOffice", "Anderes Programm", "Weiß nicht"], "narrows": "Das aktuell zugeordnete Programm gibt Aufschluss über die Ursache"}
+    ],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-OFFICE-032",
+    "category": "Sonstige",
+    "title": "Office Sprache ändern",
+    "keywords": ["Sprache", "Spracheinstellung", "Office", "Deutsch", "Englisch", "Benutzeroberfläche", "Korrektur"],
+    "extendedKeywords": ["Office Sprache ändern", "Office ist auf Englisch statt Deutsch", "Sprache in Word umstellen", "Excel Sprache falsch", "Office Benutzeroberfläche Sprache wechseln", "Korrektursprache in Office ändern", "Office auf Deutsch umstellen", "Menü in Office ist auf Englisch", "Sprache der Rechtschreibprüfung ändern", "Office Sprachpaket installieren", "Kann Office Sprache nicht ändern"],
+    "typos": ["Spache", "Spracheinstelung", "Dutsch"],
+    "symptoms": ["Menüs und Ribbons in falscher Sprache", "Rechtschreibprüfung prüft in falscher Sprache", "Standardtexte (Inhaltsverzeichnis etc.) in falscher Sprache", "Hilfe in falscher Sprache"],
+    "quickCheck": "Soll die Benutzeroberfläche oder die Korrektursprache geändert werden?",
+    "solutions": ["Datei > Optionen > Sprache > Anzeigesprache ändern", "Sprachpaket über Office herunterladen", "Korrektursprache im Dokument ändern (Überprüfen > Sprache)", "Office und Windows Spracheinstellungen synchronisieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 35}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Möchten Sie die Menüsprache oder die Rechtschreibprüfungssprache ändern?", "options": ["Menüsprache", "Rechtschreibprüfung", "Beides"], "narrows": "Menüsprache und Korrektursprache werden an verschiedenen Stellen eingestellt"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-033"]
+  },
+  {
+    "id": "PROB-OFFICE-033",
+    "category": "Sonstige",
+    "title": "Rechtschreibprüfung funktioniert nicht",
+    "keywords": ["Rechtschreibprüfung", "Rechtschreibung", "AutoKorrektur", "Korrektur", "rot unterstrichen", "Office"],
+    "extendedKeywords": ["Rechtschreibprüfung funktioniert nicht in Word", "Keine rote Wellenlinie bei Fehlern", "AutoKorrektur geht nicht", "Rechtschreibung wird nicht geprüft", "Word unterstreicht keine Fehler", "Rechtschreibprüfung deaktiviert", "Kann Rechtschreibprüfung nicht einschalten", "Word prüft Rechtschreibung nicht", "Keine Rechtschreibkorrekturen in Office", "Wörterbuch funktioniert nicht", "Rechtschreibprüfung in falscher Sprache"],
+    "typos": ["Rechtschreibprüfugn", "Rechtsschreibung", "AutoKorektur"],
+    "symptoms": ["Keine rote Wellenlinie unter Fehlern", "Rechtschreibprüfung findet keine Fehler", "Prüfung läuft in falscher Sprache", "AutoKorrektur korrigiert nicht"],
+    "quickCheck": "Ist die Rechtschreibprüfung in den Office-Optionen aktiviert?",
+    "solutions": ["Rechtschreibprüfung aktivieren (Datei > Optionen > Dokumentprüfung)", "Sprache des Dokuments prüfen und korrigieren", "Option 'Rechtschreibung in diesem Dokument nicht prüfen' deaktivieren", "Benutzerwörterbuch zurücksetzen", "Office Schnellreparatur durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Betrifft es alle Dokumente oder nur ein bestimmtes?", "options": ["Alle Dokumente", "Nur ein bestimmtes"], "narrows": "Bei einem einzelnen Dokument kann die Sprache oder eine dokumentspezifische Einstellung das Problem sein"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-032"]
+  },
+  {
+    "id": "PROB-OFFICE-034",
+    "category": "Sonstige",
+    "title": "Schriftarten fehlen in Office",
+    "keywords": ["Schriftart", "Font", "fehlt", "installieren", "Office", "Darstellung", "Ersetzung"],
+    "extendedKeywords": ["Schriftarten fehlen in Office", "Font nicht installiert", "Office zeigt falsche Schriftart", "Schrift wird ersetzt in Office", "Brauche bestimmte Schriftart", "Schriftart installieren für Office", "Dokument zeigt andere Schrift", "Schriftart nicht verfügbar in Office", "Fehlende Fonts in Word Excel", "Präsentation Schrift fehlt"],
+    "typos": ["Schriftahrt", "Fontt", "Schrifart fehlt"],
+    "symptoms": ["Dokument zeigt Ersatzschriftart", "Schriftart nicht in der Auswahlliste", "Layout verschiebt sich wegen falscher Schrift", "Warnung 'Schriftart nicht gefunden'"],
+    "quickCheck": "Welche Schriftart wird benötigt?",
+    "solutions": ["Schriftart herunterladen und installieren (Rechtsklick > Installieren)", "Schriftart über Einstellungen > Personalisierung > Schriftarten installieren", "Systemschriftarten verwenden für bessere Kompatibilität", "Schriftarten in Dokumenten einbetten", "IT-Abteilung wegen unternehmensweiter Schriftarten kontaktieren"],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Installierte Software prüfen", "priority": 1, "effectiveness": 30}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wissen Sie welche Schriftart benötigt wird?", "options": ["Ja (Name bekannt)", "Nein", "Steht im Dokument"], "narrows": "Mit dem Namen der Schriftart kann gezielt nach einer Installationsquelle gesucht werden"}
+    ],
+    "relatedProblems": ["PROB-OFFICE-016"]
+  },
+  {
+    "id": "PROB-OFFICE-035",
+    "category": "Sonstige",
+    "title": "Office Zwischenablage funktioniert nicht",
+    "keywords": ["Zwischenablage", "Kopieren", "Einfügen", "Clipboard", "Copy", "Paste", "Office"],
+    "extendedKeywords": ["Kopieren und Einfügen geht nicht in Office", "Zwischenablage funktioniert nicht", "Kann nichts einfügen in Word", "Strg C Strg V funktioniert nicht", "Clipboard leer in Office", "Kopieren geht nicht in Excel", "Einfügen funktioniert nicht in Office", "Zwischenablage ist leer", "Kann Text nicht kopieren", "Copy Paste geht nicht", "Zwischenablage Fehler in Office", "Inhalte einfügen funktioniert nicht", "Office Zwischenablage voll"],
+    "typos": ["Zwischenablge", "Kopiern", "Einfüegn", "Clipbord"],
+    "symptoms": ["Strg+C/Strg+V funktioniert nicht", "Eingefügte Inhalte sind leer", "Formatierung geht beim Einfügen verloren", "Office-Zwischenablage zeigt keine Einträge"],
+    "quickCheck": "Funktioniert Kopieren/Einfügen in anderen Programmen oder nur in Office nicht?",
+    "solutions": ["Windows Zwischenablage-Verlauf aktivieren (Win+V)", "Office Zwischenablage öffnen (Start > Zwischenablage in Office)", "Andere Programme schließen die die Zwischenablage blockieren könnten", "Office Schnellreparatur durchführen", "Computer neu starten"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Funktioniert Kopieren/Einfügen in anderen Programmen wie dem Browser?", "options": ["Ja", "Nein", "Nicht getestet"], "narrows": "Wenn es überall nicht funktioniert, ist es ein Windows-Problem, nicht nur Office"}
+    ],
+    "relatedProblems": []
+  }
+]

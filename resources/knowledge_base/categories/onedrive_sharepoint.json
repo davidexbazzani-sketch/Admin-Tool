@@ -1,0 +1,851 @@
+[
+  {
+    "id": "PROB-ODS-001",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Synchronisierung stoppt",
+    "keywords": ["OneDrive", "Sync", "Synchronisierung", "stoppt", "pausiert", "hängt", "steht", "stuck"],
+    "extendedKeywords": ["mein OneDrive synchronisiert nicht mehr", "OneDrive hat aufgehört zu synchronisieren", "die Wolke dreht sich nicht mehr", "Dateien werden nicht mehr hochgeladen", "OneDrive Symbol hat aufgehört", "meine Dateien sind nicht aktuell", "OneDrive macht nichts mehr", "Synchronisation steht still", "OneDrive ist eingefroren", "blauer Wolken-Icon bewegt sich nicht", "Dateien kommen nicht an", "OneDrive hängt seit Stunden", "Upload funktioniert nicht", "OneDrive arbeitet nicht", "Dateien bleiben lokal", "nichts wird mehr synchronisiert", "OneDrive reagiert nicht", "Sync-Symbol zeigt Pause", "meine Dokumente werden nicht gesichert", "OneDrive ist stehen geblieben", "Cloud-Sync funktioniert nicht", "Dateien kommen nicht in die Cloud", "OneDrive tut nichts", "blaues Symbol steht still", "Synchronisierung eingefroren"],
+    "typos": ["OnDrive", "One Drive", "Onedrive", "sinc", "synchroniesierung", "snyc", "synchro"],
+    "symptoms": ["OneDrive-Symbol zeigt Pausezeichen", "Dateien werden nicht hochgeladen", "Synchronisierungsstatus ändert sich nicht", "OneDrive-Overlay-Icons fehlen"],
+    "quickCheck": "Sehen Sie ein Pause-Symbol oder ein rotes X auf dem OneDrive-Icon in der Taskleiste?",
+    "solutions": [
+      "Rechtsklick auf OneDrive-Symbol in der Taskleiste > 'Synchronisierung fortsetzen' klicken",
+      "OneDrive beenden und neu starten: Rechtsklick > Einstellungen > OneDrive beenden, dann über Startmenü neu starten",
+      "OneDrive zurücksetzen: Windows+R > 'wsreset.exe' ausführen, dann OneDrive neu starten",
+      "Internetverbindung prüfen: Browser öffnen und eine Webseite laden",
+      "OneDrive-Cache zurücksetzen über das Admin Tool"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_ondrivereset", "label": "OneDrive zurücksetzen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["onedrive pause", "sync stopped", "onedrive frozen"],
+    "followUpQuestions": [
+      {
+        "question": "Sehen Sie ein bestimmtes Symbol auf dem OneDrive-Icon?",
+        "options": ["Pausezeichen", "Rotes X", "Kreisende Pfeile", "Kein Symbol sichtbar"],
+        "narrows": "Art des Sync-Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-002", "PROB-ODS-003", "PROB-ODS-005"]
+  },
+  {
+    "id": "PROB-ODS-002",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Synchronisierungskonflikt",
+    "keywords": ["OneDrive", "Konflikt", "Sync-Konflikt", "doppelte Dateien", "Namenskonflikt", "Versionierung"],
+    "extendedKeywords": ["zwei Versionen der gleichen Datei", "Datei hat Konflikt-Zusatz im Namen", "meine Datei wurde doppelt angelegt", "jemand anderes hat die gleiche Datei bearbeitet", "OneDrive zeigt Konflikt an", "Datei heißt plötzlich anders", "Name der Datei hat sich geändert", "Kopie von meiner Datei", "Dateiname hat Zusatz bekommen", "zwei gleiche Dateien", "Datei gibt es doppelt", "Kollege und ich haben gleichzeitig bearbeitet", "meine Änderungen sind weg", "falsche Version der Datei", "Datei wurde überschrieben", "wer hat meine Datei geändert", "Änderungen gehen verloren", "gleichzeitig bearbeitet Problem", "doppelter Dateiname", "OneDrive doppelte Kopie"],
+    "typos": ["Konfikt", "konfligt", "Synk-Konflikt", "Synch-Konflikt"],
+    "symptoms": ["Dateien mit Zusatz im Namen wie 'Konflikt'", "Doppelte Dateien im OneDrive-Ordner", "Warnung über Synchronisierungskonflikt"],
+    "quickCheck": "Sehen Sie Dateien mit einem Zusatz wie '(Konflikt)' oder '(Kopie)' im Dateinamen?",
+    "solutions": [
+      "Die Konflikt-Dateien vergleichen und die richtige Version behalten",
+      "In OneDrive online (onedrive.com) den Versionsverlauf der Datei prüfen: Rechtsklick > Versionsverlauf",
+      "Für gemeinsame Bearbeitung: Dateien direkt in SharePoint Online oder Teams bearbeiten statt lokal",
+      "Veraltete Konflikt-Kopien löschen, nachdem die korrekte Version identifiziert wurde",
+      "Bei häufigen Konflikten: Co-Authoring in Office aktivieren"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["file conflict", "duplicate file onedrive", "sync conflict"],
+    "followUpQuestions": [
+      {
+        "question": "Bearbeiten mehrere Personen dieselbe Datei?",
+        "options": ["Ja, wir arbeiten zusammen daran", "Nein, nur ich bearbeite die Datei"],
+        "narrows": "Ursache des Konflikts"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-001", "PROB-ODS-022"]
+  },
+  {
+    "id": "PROB-ODS-003",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Synchronisierung langsam",
+    "keywords": ["OneDrive", "langsam", "Sync", "Upload", "Download", "Geschwindigkeit", "Bandbreite", "throttle"],
+    "extendedKeywords": ["OneDrive lädt ewig", "Synchronisierung dauert zu lange", "OneDrive ist sehr langsam", "Upload braucht Stunden", "Dateien laden langsam hoch", "OneDrive kriecht", "Geschwindigkeit ist schlecht", "OneDrive braucht ewig", "große Dateien laden nicht", "Sync dauert Tage", "OneDrive Upload langsam", "es dauert ewig bis Dateien synchronisiert sind", "OneDrive Download langsam", "Fortschrittsbalken bewegt sich kaum", "wann ist OneDrive fertig", "OneDrive blockiert mein Internet", "mein Internet ist langsam wegen OneDrive", "Synchronisierung frisst Bandbreite", "OneDrive drosselt alles", "extrem langsame Synchronisierung"],
+    "typos": ["langsamm", "One Drive langsam", "OnDrive", "syncronisation"],
+    "symptoms": ["Upload/Download-Geschwindigkeit sehr niedrig", "Verbleibende Zeit zeigt Stunden oder Tage", "Andere Internetanwendungen auch langsam"],
+    "quickCheck": "Wie viele Dateien werden gerade synchronisiert und wie groß sind diese?",
+    "solutions": [
+      "OneDrive-Bandbreitenbegrenzung prüfen: Einstellungen > Netzwerk > Upload-/Download-Rate",
+      "Bandbreitenbegrenzung entfernen oder erhöhen",
+      "Große Dateien nachts oder außerhalb der Arbeitszeit synchronisieren",
+      "Netzwerkverbindung prüfen: WLAN vs. LAN-Kabel",
+      "Andere Downloads oder Uploads pausieren",
+      "OneDrive zurücksetzen, falls das Problem anhält"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_appcache_ondrivereset", "label": "OneDrive zurücksetzen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["onedrive slow upload", "slow sync", "bandwidth onedrive"],
+    "followUpQuestions": [
+      {
+        "question": "Ist nur OneDrive langsam oder auch andere Internetanwendungen?",
+        "options": ["Nur OneDrive", "Alles ist langsam"],
+        "narrows": "Ob Netzwerk- oder OneDrive-spezifisches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-001", "PROB-ODS-004"]
+  },
+  {
+    "id": "PROB-ODS-004",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Fehlercode beim Synchronisieren",
+    "keywords": ["OneDrive", "Fehlercode", "Error", "0x8004de40", "0x8004def7", "0x8004de85", "Sync-Fehler"],
+    "extendedKeywords": ["OneDrive zeigt einen Fehler an", "Fehlermeldung bei OneDrive", "OneDrive Error Nummer", "OneDrive gibt Fehlermeldung aus", "rote Meldung bei OneDrive", "Fehler beim Hochladen", "OneDrive meldet Problem", "Fehlercode bei der Synchronisierung", "Error Code OneDrive", "Meldung mit Zahlen und Buchstaben", "OneDrive Fehlerfenster", "Pop-up mit Fehler von OneDrive", "OneDrive kann nicht synchronisieren Fehler", "kryptische Fehlermeldung OneDrive", "Synchronisierungsfehler mit Code", "unbekannter Fehler OneDrive", "seltsame Nummer bei OneDrive Fehler", "0x-Fehler bei OneDrive", "OneDrive Warnmeldung", "Fehler beim Anmelden OneDrive"],
+    "typos": ["Fehlercode", "Fehler-Code", "Error-Code", "Felercode"],
+    "symptoms": ["Fehlermeldung mit Hex-Code", "OneDrive-Symbol zeigt Warnung", "Synchronisierung bricht mit Fehler ab"],
+    "quickCheck": "Welchen Fehlercode zeigt OneDrive an?",
+    "solutions": [
+      "Fehlercode notieren und in der Microsoft-Dokumentation nachschlagen",
+      "0x8004de40: Internetverbindung und Proxy-Einstellungen prüfen",
+      "0x8004def7: Speicherplatz auf OneDrive ist voll - Dateien löschen oder Speicher erweitern",
+      "0x8004de85: Konto erneut verknüpfen - OneDrive abmelden und neu anmelden",
+      "Bei unbekannten Fehlern: OneDrive zurücksetzen über das Admin Tool",
+      "Windows-Anmeldeinformationsverwaltung: gespeicherte OneDrive-Credentials löschen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_ondrivereset", "label": "OneDrive zurücksetzen", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["error code onedrive", "0x error", "hex error onedrive"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie den genauen Fehlercode nennen?",
+        "options": ["Ja, ich habe ihn notiert", "Nein, die Meldung ist schon weg"],
+        "narrows": "Spezifischer Fehler"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-001", "PROB-ODS-006"]
+  },
+  {
+    "id": "PROB-ODS-005",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive synchronisiert bestimmte Dateien nicht",
+    "keywords": ["OneDrive", "bestimmte Dateien", "Sync", "blockiert", "ausgeschlossen", "Dateityp", "Sonderzeichen"],
+    "extendedKeywords": ["einzelne Datei wird nicht synchronisiert", "manche Dateien fehlen", "eine bestimmte Datei geht nicht", "OneDrive ignoriert Dateien", "Datei wird übersprungen", "nicht alle Dateien sind da", "einige Dateien fehlen in OneDrive", "Datei erscheint nicht online", "bestimmte Ordner werden nicht synchronisiert", "warum fehlt meine Datei", "Datei wird nicht hochgeladen", "OneDrive überspringt Dateien", "Dateien mit Sonderzeichen gehen nicht", "zu große Datei für OneDrive", "Datei wird abgelehnt", "bestimmter Dateityp geht nicht", "Datei verschwindet aus Sync", "temp-Dateien werden nicht synchronisiert", "Datei mit langem Namen geht nicht", "OneDrive akzeptiert Datei nicht"],
+    "typos": ["bestimt", "Datein", "synchonisiert"],
+    "symptoms": ["Bestimmte Dateien fehlen in OneDrive online", "Fehlermeldung bei einzelnen Dateien", "Dateien mit Warndreieck-Symbol"],
+    "quickCheck": "Welche Art von Dateien werden nicht synchronisiert? Haben die Dateinamen Sonderzeichen?",
+    "solutions": [
+      "Dateinamen auf ungültige Zeichen prüfen: # % & * : < > ? / \\ | sind nicht erlaubt",
+      "Dateipfad-Länge prüfen: Gesamter Pfad darf maximal 400 Zeichen lang sein",
+      "Dateigröße prüfen: Maximale Dateigröße ist 250 GB",
+      "Datei umbenennen und Sonderzeichen entfernen",
+      "Temporäre Dateien (.tmp, ~-Dateien) werden standardmäßig nicht synchronisiert",
+      "Bei PST-Dateien: Diese werden von OneDrive absichtlich nicht synchronisiert"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_ondrivereset", "label": "OneDrive zurücksetzen", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["file not syncing", "specific file onedrive", "file skipped"],
+    "followUpQuestions": [
+      {
+        "question": "Enthält der Dateiname Sonderzeichen oder ist der Dateipfad sehr lang?",
+        "options": ["Ja, Sonderzeichen vorhanden", "Nein, normaler Dateiname", "Weiß ich nicht"],
+        "narrows": "Ursache der Sync-Blockierung"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-001", "PROB-ODS-028"]
+  },
+  {
+    "id": "PROB-ODS-006",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Speicherplatz voll",
+    "keywords": ["OneDrive", "Speicher", "voll", "Speicherplatz", "Quota", "Kontingent", "Kapazität"],
+    "extendedKeywords": ["OneDrive ist voll", "kein Speicher mehr auf OneDrive", "OneDrive Speicher aufgebraucht", "kann nichts mehr hochladen", "Speicherplatz reicht nicht", "OneDrive sagt Speicher voll", "wie viel Platz habe ich noch", "OneDrive Quota erreicht", "Warnung Speicherplatz OneDrive", "mein OneDrive ist übergelaufen", "OneDrive Speicher erweitern", "zu wenig Platz in OneDrive", "rot markierter Speicherbalken", "Speicher fast voll Meldung", "100% belegt", "Kontingent überschritten OneDrive", "wo ist mein Speicher hin", "OneDrive Speicher prüfen", "Platz freigeben OneDrive", "Speicher aufräumen OneDrive"],
+    "typos": ["Speicherplaz", "Speichr", "vool", "One Drive voll"],
+    "symptoms": ["Warnung 'Speicherplatz fast voll'", "Neue Dateien können nicht synchronisiert werden", "OneDrive zeigt roten Speicherbalken"],
+    "quickCheck": "Wie viel Speicherplatz ist aktuell belegt?",
+    "solutions": [
+      "OneDrive-Speicher prüfen: Rechtsklick auf OneDrive-Symbol > Einstellungen > Konto",
+      "Papierkorb in OneDrive online leeren (zählt zum Speicher!)",
+      "Große Dateien identifizieren und nicht benötigte löschen",
+      "Alte Versionen von Dateien bereinigen in OneDrive online",
+      "Bei Business: IT-Admin kann Speicherkontingent erhöhen",
+      "Files on Demand aktivieren, um lokalen Speicher zu sparen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["storage full onedrive", "quota exceeded", "onedrive capacity"],
+    "followUpQuestions": [
+      {
+        "question": "Handelt es sich um ein OneDrive Business- oder ein persönliches Konto?",
+        "options": ["Business/Firmenkonto", "Persönliches Konto"],
+        "narrows": "Speicherkontingent und Erweiterungsmöglichkeiten"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-007", "PROB-ODS-021"]
+  },
+  {
+    "id": "PROB-ODS-007",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Speicher freigeben",
+    "keywords": ["OneDrive", "Speicher freigeben", "aufräumen", "löschen", "Papierkorb", "alte Dateien"],
+    "extendedKeywords": ["wie kann ich Platz schaffen in OneDrive", "OneDrive aufräumen", "Dateien löschen in OneDrive", "was belegt den meisten Speicher", "große Dateien finden OneDrive", "Papierkorb leeren OneDrive", "Speicher zurückgewinnen", "OneDrive ausmisten", "alte Dateien entfernen", "OneDrive Frühjahrsputz", "wie bekomme ich wieder Platz", "Speicher freimachen", "OneDrive Ballast loswerden", "unnötige Dateien löschen", "welche Dateien kann ich löschen", "OneDrive sortieren", "Speicher optimieren OneDrive", "größte Dateien in OneDrive finden", "OneDrive entrümpeln", "Platz schaffen Cloud"],
+    "typos": ["freigben", "aufraeumen", "löchen", "Speiche"],
+    "symptoms": ["Speicherplatz fast oder ganz voll", "Warnmeldung über Speicher", "Synchronisierung pausiert wegen Speichermangel"],
+    "quickCheck": "Haben Sie bereits den Papierkorb in OneDrive online geleert?",
+    "solutions": [
+      "OneDrive online öffnen und Papierkorb leeren",
+      "Nach großen Dateien sortieren: OneDrive online > Meine Dateien > Sortieren nach Größe",
+      "Nicht mehr benötigte Dateien und Ordner löschen",
+      "Alte Versionsstände bereinigen",
+      "Dateien in ein Archiv verschieben, falls vorhanden",
+      "Files on Demand aktivieren: OneDrive Einstellungen > Dateien bei Bedarf"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["free up space onedrive", "clean onedrive", "delete old files"],
+    "followUpQuestions": [
+      {
+        "question": "Wissen Sie, welche Dateien den meisten Speicher belegen?",
+        "options": ["Ja", "Nein, ich muss erst nachschauen"],
+        "narrows": "Ob Anleitung zum Finden großer Dateien nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-006"]
+  },
+  {
+    "id": "PROB-ODS-008",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Zugriff verweigert",
+    "keywords": ["OneDrive", "Zugriff verweigert", "Berechtigung", "Access Denied", "gesperrt", "kein Zugriff"],
+    "extendedKeywords": ["ich komme nicht an meine OneDrive-Dateien", "OneDrive sagt Zugriff verweigert", "kann meine Dateien nicht öffnen", "Berechtigung fehlt OneDrive", "OneDrive blockiert mich", "kein Zugriff auf geteilte Dateien", "Access Denied Meldung OneDrive", "darf nicht auf OneDrive zugreifen", "OneDrive-Ordner ist gesperrt", "ich kann die Datei nicht bearbeiten", "Datei ist schreibgeschützt", "OneDrive lässt mich nicht rein", "Authentifizierung fehlgeschlagen", "OneDrive fragt ständig nach Passwort", "Zugriff auf freigegebenen Ordner verweigert", "geteilter Link funktioniert nicht", "kein Zugriff auf Team-OneDrive", "Berechtigung wurde entzogen", "kann Datei nicht herunterladen", "403 Fehler OneDrive"],
+    "typos": ["Zugrif", "verwiegert", "Berechtiung", "Acces Denied"],
+    "symptoms": ["Fehlermeldung 'Zugriff verweigert'", "403-Fehler beim Öffnen", "Datei kann nicht bearbeitet werden", "Anmeldefenster erscheint wiederholt"],
+    "quickCheck": "Ist es Ihr eigenes OneDrive oder eine freigegebene Datei/ein freigegebener Ordner?",
+    "solutions": [
+      "Bei eigenem OneDrive: Abmelden und erneut anmelden",
+      "Windows-Anmeldeinformationsverwaltung öffnen und OneDrive-Einträge entfernen",
+      "Bei freigegebenen Dateien: Eigentümer bitten, die Berechtigung erneut zu erteilen",
+      "Browser-Cache und Cookies löschen, wenn das Problem in OneDrive online auftritt",
+      "OneDrive über das Admin Tool zurücksetzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_ondrivereset", "label": "OneDrive zurücksetzen", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["access denied onedrive", "permission error", "onedrive locked"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft es Ihre eigenen Dateien oder freigegebene Dateien?",
+        "options": ["Meine eigenen Dateien", "Freigegebene Dateien von Kollegen"],
+        "narrows": "Berechtigungs- oder Authentifizierungsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-009", "PROB-ODS-017"]
+  },
+  {
+    "id": "PROB-ODS-009",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive freigegebener Ordner - Zugriff verweigert",
+    "keywords": ["OneDrive", "Freigabe", "geteilter Ordner", "Zugriff", "Berechtigung", "eingeladen", "Sharing"],
+    "extendedKeywords": ["kann freigegebenen Ordner nicht öffnen", "Einladung zu OneDrive bekommen aber geht nicht", "geteilter Ordner ist nicht sichtbar", "Kollege hat mir Ordner freigegeben aber ich kann nicht zugreifen", "Link zum geteilten Ordner funktioniert nicht", "freigegebene Dateien sehe ich nicht", "wo finde ich freigegebene Ordner", "geteilte Dateien sind verschwunden", "Freigabe-Link läuft nicht", "geteilter Ordner zeigt Fehler", "ich wurde eingeladen aber es geht nicht", "freigegebene Bibliothek nicht erreichbar", "OneDrive Sharing Problem", "geteilte Dateien nicht auffindbar", "Freigabe abgelaufen", "externer Zugriff auf OneDrive", "Gastzugang funktioniert nicht", "kann nicht auf Team-Dateien zugreifen", "geteilte Inhalte fehlen", "Sharing-Link kaputt"],
+    "typos": ["Freigabe", "freigegben", "geteilt", "Zugirff"],
+    "symptoms": ["Freigegebener Link zeigt Fehlermeldung", "Ordner ist nicht sichtbar", "Zugriffsverweigerung bei geteilten Inhalten"],
+    "quickCheck": "Haben Sie den Freigabe-Link direkt erhalten oder wurde der Ordner mit Ihrem Konto geteilt?",
+    "solutions": [
+      "Prüfen ob man mit dem richtigen Konto angemeldet ist (Business vs. Privat)",
+      "Freigabe-Link erneut vom Eigentümer anfordern",
+      "In OneDrive online unter 'Geteilt' nachschauen",
+      "Browser-Cache leeren und Link erneut öffnen",
+      "Den Eigentümer bitten, die Freigabe-Berechtigungen zu überprüfen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["shared folder access", "sharing link broken", "invited onedrive"],
+    "followUpQuestions": [
+      {
+        "question": "Konnten Sie vorher schon einmal auf den Ordner zugreifen?",
+        "options": ["Ja, es hat früher funktioniert", "Nein, es ist das erste Mal"],
+        "narrows": "Ob Berechtigung entzogen oder nie korrekt gesetzt"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-008", "PROB-ODS-018"]
+  },
+  {
+    "id": "PROB-ODS-010",
+    "category": "OneDrive & SharePoint",
+    "title": "OneNote synchronisiert nicht",
+    "keywords": ["OneNote", "Sync", "Synchronisierung", "Fehler", "offline", "Notizbuch"],
+    "extendedKeywords": ["OneNote synchronisiert nicht mehr", "meine Notizen sind nicht aktuell", "OneNote zeigt Sync-Fehler", "Notizbuch lädt nicht", "OneNote hängt beim Synchronisieren", "meine Änderungen in OneNote sind weg", "OneNote offline obwohl Internet da", "gelbe Warnmeldung in OneNote", "Abschnitte werden nicht synchronisiert", "OneNote-Seiten fehlen", "OneNote aktualisiert nicht", "Kollegen sehen meine Änderungen nicht", "OneNote synchronisiert nur teilweise", "Synchronisierungsstatus zeigt Fehler", "OneNote braucht ewig zum Laden", "Notizbuch ist nicht auf dem neuesten Stand", "OneNote dreht sich nur", "Sync-Symbol in OneNote", "OneNote macht keine Synchronisation", "meine OneNote-Notizen sind verschwunden"],
+    "typos": ["OneNot", "One Note", "Onenote", "synchonisiert", "Synk"],
+    "symptoms": ["Sync-Fehlermeldung in OneNote", "Änderungen erscheinen nicht auf anderen Geräten", "Gelbe/rote Warnung in der Statusleiste"],
+    "quickCheck": "Wird ein bestimmter Fehlercode in OneNote angezeigt?",
+    "solutions": [
+      "OneNote schließen und neu öffnen",
+      "Notizbuch schließen und über OneDrive/SharePoint erneut öffnen",
+      "OneNote-Cache leeren: Datei > Optionen > Speichern und Sichern > Cache löschen",
+      "Internetverbindung prüfen",
+      "OneNote-App aktualisieren über Microsoft Store oder Office Update",
+      "Bei hartnäckigen Problemen: OneDrive zurücksetzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_ondrivereset", "label": "OneDrive zurücksetzen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 3, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["onenote not syncing", "notebook sync error", "onenote offline"],
+    "followUpQuestions": [
+      {
+        "question": "Verwenden Sie OneNote Desktop-App oder OneNote für Windows?",
+        "options": ["OneNote Desktop (Office)", "OneNote für Windows (Store-App)", "Weiß ich nicht"],
+        "narrows": "Welche OneNote-Version betroffen"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-011", "PROB-ODS-012"]
+  },
+  {
+    "id": "PROB-ODS-011",
+    "category": "OneDrive & SharePoint",
+    "title": "OneNote Notizbuch fehlt oder verschwunden",
+    "keywords": ["OneNote", "Notizbuch", "fehlt", "verschwunden", "gelöscht", "nicht auffindbar", "weg"],
+    "extendedKeywords": ["mein Notizbuch ist weg", "OneNote Notizbuch verschwunden", "wo ist mein Notizbuch hin", "Notizbuch wurde gelöscht", "ich finde mein Notizbuch nicht mehr", "OneNote zeigt kein Notizbuch", "Notizbuch ist nicht mehr da", "OneNote ist leer", "alle meine Notizen sind weg", "Notizbuch aus der Liste verschwunden", "OneNote nach Neuinstallation leer", "Notizbuch wiederherstellen", "OneNote hat mein Notizbuch verloren", "wichtige Notizen verschwunden", "Notizbuch nicht in OneNote", "Notizbuch geschlossen und finde es nicht", "OneNote Notizbuch wiederfinden", "versehentlich Notizbuch gelöscht", "Notizbuch nicht mehr sichtbar", "OneNote zurücksetzen Notizbücher weg"],
+    "typos": ["Notitzbuch", "Notizuch", "OneNot", "verschwuden"],
+    "symptoms": ["Notizbuch nicht in der Notizbuch-Liste", "OneNote startet ohne vorherige Notizbücher", "Leere OneNote-Oberfläche"],
+    "quickCheck": "Haben Sie das Notizbuch möglicherweise nur geschlossen (nicht gelöscht)?",
+    "solutions": [
+      "In OneNote: Datei > Notizbuch öffnen > Zuletzt verwendet prüfen",
+      "In OneDrive online nach dem Notizbuch suchen und per Doppelklick öffnen",
+      "Papierkorb in OneDrive online prüfen - gelöschte Notizbücher können wiederhergestellt werden",
+      "SharePoint-Papierkorb prüfen, falls das Notizbuch dort gespeichert war",
+      "Notizbuch über die URL erneut öffnen (Link von Kollegen erfragen)"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["missing notebook", "onenote empty", "notebook disappeared"],
+    "followUpQuestions": [
+      {
+        "question": "Wo war das Notizbuch gespeichert?",
+        "options": ["In OneDrive", "In SharePoint/Teams", "Weiß ich nicht"],
+        "narrows": "Wo nach dem Notizbuch gesucht werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-010", "PROB-ODS-012"]
+  },
+  {
+    "id": "PROB-ODS-012",
+    "category": "OneDrive & SharePoint",
+    "title": "OneNote Synchronisierung langsam",
+    "keywords": ["OneNote", "langsam", "Sync", "Laden", "Performance", "hängt"],
+    "extendedKeywords": ["OneNote ist extrem langsam", "Notizbuch lädt ewig", "OneNote braucht lange zum Öffnen", "Seiten laden langsam in OneNote", "OneNote reagiert träge", "Synchronisierung dauert zu lange", "OneNote Performance schlecht", "OneNote hängt sich auf beim Laden", "Notizbuch öffnet sich nicht", "OneNote dreht und dreht", "Ladekreis in OneNote", "OneNote friert ein", "Seiten laden nicht fertig", "OneNote scrollt langsam", "großes Notizbuch ist langsam", "OneNote wird immer langsamer", "OneNote ruckelt", "Notizbuch zu groß", "OneNote frisst Speicher", "OneNote macht Computer langsam"],
+    "typos": ["langsamm", "OneNot", "Perfomance", "Synchroniesierung"],
+    "symptoms": ["Lange Ladezeiten beim Öffnen von Notizbüchern", "OneNote reagiert verzögert", "Ladeanimation dauert an"],
+    "quickCheck": "Wie groß ist das betroffene Notizbuch ungefähr?",
+    "solutions": [
+      "Große Notizbücher aufteilen in mehrere kleinere",
+      "Eingebettete Dateien und Bilder reduzieren",
+      "OneNote-Cache leeren",
+      "Nicht benötigte Notizbücher schließen",
+      "OneNote auf die neueste Version aktualisieren",
+      "Lokale Kopie des Notizbuchs löschen und neu synchronisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["onenote slow", "notebook loading slow", "onenote performance"],
+    "followUpQuestions": [
+      {
+        "question": "Sind alle Notizbücher langsam oder nur ein bestimmtes?",
+        "options": ["Alle Notizbücher", "Nur ein bestimmtes"],
+        "narrows": "Ob generelles oder notizbuchspezifisches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-010", "PROB-ODS-011"]
+  },
+  {
+    "id": "PROB-ODS-013",
+    "category": "OneDrive & SharePoint",
+    "title": "SharePoint Seite lädt nicht",
+    "keywords": ["SharePoint", "lädt nicht", "Seite", "Website", "Fehler", "nicht erreichbar", "503", "404"],
+    "extendedKeywords": ["SharePoint geht nicht", "unsere SharePoint-Seite lädt nicht", "SharePoint zeigt Fehler", "ich komme nicht auf SharePoint", "SharePoint ist down", "SharePoint-Seite nicht erreichbar", "Fehler beim Laden von SharePoint", "SharePoint hängt", "weiße Seite bei SharePoint", "SharePoint dreht sich nur", "Intranet geht nicht", "SharePoint-Portal nicht verfügbar", "Firmenseite lädt nicht", "SharePoint Timeout", "SharePoint antwortet nicht", "Firmen-Intranet nicht erreichbar", "SharePoint sehr langsam", "SharePoint spinnt", "kann SharePoint nicht öffnen", "SharePoint funktioniert nicht"],
+    "typos": ["Sharepoint", "Share Point", "SharPoint", "laed nicht"],
+    "symptoms": ["Leere oder weiße Seite", "Fehlermeldung 404 oder 503", "Ladeanimation dreht endlos", "Timeout-Fehlermeldung"],
+    "quickCheck": "Können Sie andere Webseiten normal aufrufen?",
+    "solutions": [
+      "Browser-Cache und Cookies löschen",
+      "Anderen Browser versuchen (Edge, Chrome, Firefox)",
+      "InPrivate-/Inkognito-Fenster testen",
+      "Internetverbindung und Proxy prüfen",
+      "SharePoint-Status auf admin.microsoft.com prüfen (für Admins)",
+      "DNS-Cache leeren über das Admin Tool"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["sharepoint not loading", "sharepoint down", "intranet error"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft es alle SharePoint-Seiten oder nur eine bestimmte?",
+        "options": ["Alle Seiten", "Nur eine bestimmte Seite"],
+        "narrows": "Ob generelles oder seitenspezifisches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-014", "PROB-ODS-015"]
+  },
+  {
+    "id": "PROB-ODS-014",
+    "category": "OneDrive & SharePoint",
+    "title": "SharePoint Berechtigungen fehlen",
+    "keywords": ["SharePoint", "Berechtigung", "Zugriff", "verweigert", "kein Zugriff", "Access Denied", "Rechte"],
+    "extendedKeywords": ["ich darf nicht auf SharePoint zugreifen", "SharePoint sagt Zugriff verweigert", "keine Berechtigung für SharePoint-Seite", "SharePoint blockiert mich", "ich kann die Seite nicht sehen", "mein Zugriff auf SharePoint fehlt", "Berechtigung anfordern SharePoint", "ich brauche Zugriff auf eine SharePoint-Seite", "kein Zugriff auf Dokumentenbibliothek", "SharePoint lässt mich nicht rein", "ich kann nichts bearbeiten auf SharePoint", "nur lesen statt bearbeiten", "Berechtigungsfehler SharePoint", "Zugriff auf Team-Seite fehlt", "SharePoint-Seite ist gesperrt für mich", "kann nicht auf Projektseite zugreifen", "brauche Schreibrechte SharePoint", "SharePoint Berechtigung beantragen", "wer gibt mir Zugriff auf SharePoint", "Access Request SharePoint"],
+    "typos": ["Berechtiung", "Zugrif", "verwiegert", "Sharepoint"],
+    "symptoms": ["Fehlermeldung 'Zugriff verweigert' oder 'Access Denied'", "Seite zeigt 'Zugriff anfordern'-Button", "Inhalt ist ausgegraut oder nicht sichtbar"],
+    "quickCheck": "Konnten Sie früher auf die Seite zugreifen oder ist es das erste Mal?",
+    "solutions": [
+      "Auf 'Zugriff anfordern' klicken - dies sendet eine Anfrage an den Websitebesitzer",
+      "Den Besitzer der SharePoint-Seite direkt kontaktieren",
+      "Prüfen ob man mit dem richtigen Konto angemeldet ist",
+      "In einem InPrivate-Fenster versuchen und sich gezielt anmelden",
+      "IT-Admin bitten, die Berechtigungen zu prüfen und zu erteilen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sharepoint access denied", "sharepoint permission", "no access sharepoint"],
+    "followUpQuestions": [
+      {
+        "question": "Gibt es einen 'Zugriff anfordern'-Button auf der Seite?",
+        "options": ["Ja", "Nein", "Ich sehe gar nichts"],
+        "narrows": "Art der Zugriffssperre"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-013", "PROB-ODS-018"]
+  },
+  {
+    "id": "PROB-ODS-015",
+    "category": "OneDrive & SharePoint",
+    "title": "SharePoint Dokumentenbibliothek Probleme",
+    "keywords": ["SharePoint", "Dokumentenbibliothek", "Bibliothek", "Dokumente", "hochladen", "herunterladen", "Ansicht"],
+    "extendedKeywords": ["Dateien in SharePoint-Bibliothek laden nicht", "kann keine Dateien in SharePoint hochladen", "SharePoint-Bibliothek zeigt Fehler", "Dokumente fehlen in SharePoint", "SharePoint Bibliothek ist leer", "kann Dateien nicht herunterladen aus SharePoint", "SharePoint Dokument lässt sich nicht öffnen", "Bibliothek synchronisiert nicht", "SharePoint Ansicht ist kaputt", "Dateien verschwunden aus Bibliothek", "Upload in SharePoint schlägt fehl", "SharePoint zeigt alte Dateien", "neue Dateien nicht sichtbar in SharePoint", "Bibliothek lädt langsam", "SharePoint Dokument gesperrt", "kann Datei nicht bearbeiten in SharePoint", "Bibliothek-Ansicht wiederherstellen", "SharePoint Filter funktioniert nicht", "Spalten fehlen in SharePoint", "Bibliothek Einstellungen"],
+    "typos": ["Dokumentenbibliothek", "Biblothek", "Bibliothk", "Sharepoint"],
+    "symptoms": ["Bibliothek zeigt keine Dateien", "Upload-Fehler", "Dateien lassen sich nicht öffnen"],
+    "quickCheck": "Welche Aktion versuchen Sie in der Dokumentenbibliothek durchzuführen?",
+    "solutions": [
+      "Seite im Browser aktualisieren (F5 oder Strg+Shift+R)",
+      "Browser-Cache leeren",
+      "Dateinamen auf ungültige Zeichen prüfen beim Upload",
+      "Maximale Dateigröße prüfen (250 GB)",
+      "Bibliothek in Explorer synchronisieren: Synchronisieren-Button in SharePoint nutzen",
+      "Ansicht zurücksetzen: Ansichtsoptionen > Ansicht bearbeiten > Standard wiederherstellen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["document library error", "sharepoint upload fail", "library not loading"],
+    "followUpQuestions": [
+      {
+        "question": "Was genau funktioniert nicht in der Bibliothek?",
+        "options": ["Hochladen schlägt fehl", "Dateien fehlen", "Dateien lassen sich nicht öffnen", "Ansicht ist falsch"],
+        "narrows": "Spezifisches Problem in der Bibliothek"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-013", "PROB-ODS-014"]
+  },
+  {
+    "id": "PROB-ODS-016",
+    "category": "OneDrive & SharePoint",
+    "title": "SharePoint Freigabe-Link funktioniert nicht",
+    "keywords": ["SharePoint", "Freigabe", "Link", "funktioniert nicht", "Sharing", "teilen", "kaputt"],
+    "extendedKeywords": ["geteilter SharePoint-Link geht nicht", "Freigabe-Link funktioniert nicht", "Link zu SharePoint-Datei ist kaputt", "kann Link nicht öffnen", "Sharing-Link abgelaufen", "geteilter Link zeigt Fehler", "Partner kann Link nicht öffnen", "Freigabelink wurde nicht akzeptiert", "Link öffnet sich nicht", "Fehlermeldung beim Öffnen des Links", "SharePoint-Link ungültig", "kann Datei nicht per Link teilen", "Freigabe-Link erstellen geht nicht", "geteilt aber Empfänger kommt nicht rein", "Link funktioniert nur bei mir", "Freigabelink kopieren geht nicht", "Externer Link SharePoint", "SharePoint Sharing funktioniert nicht", "Link zum Teilen erstellen Fehler", "geteilte Datei nicht erreichbar"],
+    "typos": ["Freigabe-Linke", "Shareing", "Sharepint", "funktionirt"],
+    "symptoms": ["Empfänger erhält Fehlermeldung", "Link zeigt 'Zugriff verweigert'", "Link führt zu einer 404-Seite"],
+    "quickCheck": "Welche Art von Freigabe-Link wurde erstellt (Personen mit vorhandenem Zugriff, Bestimmte Personen, Jeder)?",
+    "solutions": [
+      "Neuen Freigabe-Link erstellen mit korrekten Berechtigungen",
+      "Prüfen ob externe Freigabe in SharePoint aktiviert ist (Admin-Einstellung)",
+      "Link-Typ ändern: 'Bestimmte Personen' statt 'Personen in Ihrer Organisation'",
+      "Ablaufdatum des Links prüfen und ggf. verlängern",
+      "Empfänger bitten, sich mit dem richtigen Konto anzumelden"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sharing link broken", "sharepoint link error", "share link expired"],
+    "followUpQuestions": [
+      {
+        "question": "Ist der Empfänger intern (gleiche Firma) oder extern?",
+        "options": ["Intern (gleiche Firma)", "Extern (andere Firma oder privat)"],
+        "narrows": "Ob externe Freigabe-Richtlinien relevant sind"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-017", "PROB-ODS-018"]
+  },
+  {
+    "id": "PROB-ODS-017",
+    "category": "OneDrive & SharePoint",
+    "title": "SharePoint extern teilen funktioniert nicht",
+    "keywords": ["SharePoint", "extern", "teilen", "Freigabe", "Gastzugang", "externe Benutzer", "B2B"],
+    "extendedKeywords": ["kann Datei nicht mit externem Partner teilen", "externe Freigabe geht nicht", "Gastzugang zu SharePoint einrichten", "externe Person kann nicht auf SharePoint zugreifen", "Teilen mit Kunden funktioniert nicht", "SharePoint extern freigeben", "Einladung an externe Person fehlgeschlagen", "externer Benutzer kann Link nicht öffnen", "Gastkonto funktioniert nicht", "mit Lieferant teilen", "externe Freigabe blockiert", "Partner kommt nicht auf unsere Dateien", "Kunde kann Datei nicht sehen", "externes Teilen aktivieren", "Freigabe an externe E-Mail", "Gastzugriff SharePoint", "externen Link erstellen SharePoint", "B2B Zugriff SharePoint", "Dritte auf SharePoint einladen", "teilen außerhalb der Organisation"],
+    "typos": ["extrn", "Freigabe", "teiln", "Gastuzgang"],
+    "symptoms": ["Externe Person erhält keinen Zugriff", "Fehlermeldung beim externen Teilen", "Option zum externen Teilen ist ausgegraut"],
+    "quickCheck": "Ist die externe Freigabe in Ihrer Organisation grundsätzlich erlaubt?",
+    "solutions": [
+      "Prüfen ob externe Freigabe auf Organisationsebene aktiviert ist",
+      "SharePoint Admin Center: Externe Freigabe-Einstellungen prüfen",
+      "Empfänger bitten, die Einladungs-E-Mail zu prüfen (auch Spam-Ordner)",
+      "Link mit der Option 'Bestimmte Personen' erstellen und E-Mail-Adresse des Empfängers eingeben",
+      "IT-Admin bitten, die externe Freigabe für die spezifische Site zu aktivieren"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["external sharing sharepoint", "guest access", "share outside organization"],
+    "followUpQuestions": [
+      {
+        "question": "Ist die Option 'Extern teilen' in SharePoint sichtbar oder ausgegraut?",
+        "options": ["Sichtbar aber funktioniert nicht", "Ausgegraut/nicht verfügbar", "Weiß ich nicht"],
+        "narrows": "Ob Admin-Einstellung das Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-016", "PROB-ODS-018"]
+  },
+  {
+    "id": "PROB-ODS-018",
+    "category": "OneDrive & SharePoint",
+    "title": "SharePoint Berechtigungsfehler beim Teilen",
+    "keywords": ["SharePoint", "Berechtigung", "Fehler", "Teilen", "Freigabe", "Rechte", "Zugriffsstufe"],
+    "extendedKeywords": ["falsche Berechtigung vergeben", "zu viel Zugriff gegeben", "Berechtigung ändern SharePoint", "Zugriffsrechte korrigieren", "Person hat zu viele Rechte", "Berechtigung entziehen", "Berechtigungsstufe ändern", "von Bearbeiten auf Anzeigen ändern", "jemand kann bearbeiten soll aber nur lesen", "Berechtigungen sind durcheinander", "wer hat Zugriff auf diese Datei", "Berechtigungen verwalten SharePoint", "Freigabe widerrufen", "Zugriff entfernen", "geteilte Berechtigungen prüfen", "welche Rechte hat wer", "Zugriffsübersicht SharePoint", "Berechtigungsvererbung", "eindeutige Berechtigungen setzen", "Berechtigungshierarchie"],
+    "typos": ["Berechtiung", "Berechtgung", "Zugriffsstuffe", "Freigab"],
+    "symptoms": ["Person hat unerwünschten Zugriff", "Berechtigungen stimmen nicht mit den Erwartungen überein", "Fehlermeldung beim Ändern von Berechtigungen"],
+    "quickCheck": "Möchten Sie Berechtigungen vergeben, ändern oder entziehen?",
+    "solutions": [
+      "In SharePoint: Datei/Ordner auswählen > Teilen-Symbol > 'Zugriff verwalten' klicken",
+      "Unter 'Zugriff verwalten' können bestehende Berechtigungen geändert oder entfernt werden",
+      "Für Bibliotheken: Einstellungen > Berechtigungen für diese Dokumentenbibliothek",
+      "Berechtigungsvererbung aufheben für individuelle Berechtigungen",
+      "SharePoint-Gruppen verwenden statt individuelle Berechtigungen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sharepoint permissions wrong", "change access level", "revoke access"],
+    "followUpQuestions": [
+      {
+        "question": "Was möchten Sie genau tun?",
+        "options": ["Berechtigung vergeben", "Berechtigung ändern", "Berechtigung entziehen"],
+        "narrows": "Gewünschte Aktion"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-014", "PROB-ODS-016"]
+  },
+  {
+    "id": "PROB-ODS-019",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Files on Demand funktioniert nicht",
+    "keywords": ["OneDrive", "Files on Demand", "bei Bedarf", "Wolken-Symbol", "Platzhalter", "online-only"],
+    "extendedKeywords": ["Files on Demand aktivieren", "OneDrive Dateien bei Bedarf", "Wolken-Symbol bei Dateien", "Dateien sind nur online", "kann offline nicht auf Dateien zugreifen", "Files on Demand einschalten", "Dateien herunterladen für offline", "Platzhalter-Dateien OneDrive", "blaues Wolken-Symbol", "grüner Haken OneDrive", "Datei nicht verfügbar offline", "OneDrive offline nutzen", "Dateien immer verfügbar machen", "Files on Demand deaktivieren", "Speicher sparen mit OneDrive", "Dateien als lokal markieren", "Online-Dateien herunterladen", "OneDrive-Dateien für unterwegs", "Dateien immer auf dem PC behalten", "nur online Dateien verstehen"],
+    "typos": ["Files on Demand", "Fles on Demand", "Files on Deman", "On Demand"],
+    "symptoms": ["Dateien zeigen Wolken-Symbol und sind offline nicht verfügbar", "Files on Demand Option fehlt in den Einstellungen", "Dateien werden nicht lokal heruntergeladen"],
+    "quickCheck": "Ist Files on Demand in den OneDrive-Einstellungen aktiviert?",
+    "solutions": [
+      "Files on Demand aktivieren: OneDrive-Einstellungen > Dateien bei Bedarf > Speicherplatz sparen",
+      "Einzelne Dateien immer verfügbar machen: Rechtsklick > 'Immer auf diesem Gerät behalten'",
+      "Ordner offline verfügbar machen: Rechtsklick > 'Immer auf diesem Gerät behalten'",
+      "Speicherplatz freigeben: Rechtsklick > 'Speicherplatz freigeben'",
+      "Bei Fehler: OneDrive zurücksetzen und Files on Demand erneut aktivieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_ondrivereset", "label": "OneDrive zurücksetzen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["files on demand", "cloud icon onedrive", "offline files onedrive"],
+    "followUpQuestions": [
+      {
+        "question": "Möchten Sie Files on Demand aktivieren oder Dateien offline verfügbar machen?",
+        "options": ["Files on Demand aktivieren", "Bestimmte Dateien offline verfügbar machen"],
+        "narrows": "Gewünschte Aktion"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-020", "PROB-ODS-006"]
+  },
+  {
+    "id": "PROB-ODS-020",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Files on Demand - Dateien nicht offline verfügbar",
+    "keywords": ["OneDrive", "offline", "nicht verfügbar", "Files on Demand", "unterwegs", "kein Internet"],
+    "extendedKeywords": ["Datei offline nicht zugreifbar", "im Zug kann ich nicht auf Dateien zugreifen", "OneDrive-Dateien ohne Internet", "Dateien für Reise herunterladen", "offline arbeiten mit OneDrive", "Dateien nur mit Internet erreichbar", "kein Zugriff ohne Netzwerk", "Datei offline öffnen geht nicht", "OneDrive unterwegs nutzen", "Dateien vorher herunterladen", "Meeting-Unterlagen offline", "Präsentation ohne Internet öffnen", "OneDrive offline-Modus", "Dateien für Flugmodus vorbereiten", "unterwegs auf Dateien zugreifen", "offline Zugriff auf OneDrive", "Datei im Homeoffice nicht erreichbar", "ohne VPN auf OneDrive", "OneDrive im Flugzeug", "Dateien lokal speichern von OneDrive"],
+    "typos": ["offlin", "verfübar", "unterwgs"],
+    "symptoms": ["Dateien zeigen Wolken-Symbol und sind offline nicht öffenbar", "Fehlermeldung beim Öffnen ohne Internet"],
+    "quickCheck": "Haben Sie die benötigten Dateien vorher als 'Immer auf diesem Gerät behalten' markiert?",
+    "solutions": [
+      "Vor der Offline-Nutzung: Rechtsklick auf Dateien/Ordner > 'Immer auf diesem Gerät behalten'",
+      "Ganzen Ordner markieren für Offline-Zugriff",
+      "In OneDrive-Einstellungen: Dateien bei Bedarf > Alle Dateien herunterladen",
+      "Nach der Offline-Nutzung: Dateien werden automatisch synchronisiert wenn wieder online"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["offline access onedrive", "no internet files", "download for offline"],
+    "followUpQuestions": [
+      {
+        "question": "Brauchen Sie einzelne Dateien oder ganze Ordner offline?",
+        "options": ["Einzelne Dateien", "Ganze Ordner", "Alles"],
+        "narrows": "Umfang der Offline-Verfügbarkeit"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-019"]
+  },
+  {
+    "id": "PROB-ODS-021",
+    "category": "OneDrive & SharePoint",
+    "title": "SharePoint Versionsverlauf nutzen",
+    "keywords": ["SharePoint", "Version", "Versionsverlauf", "wiederherstellen", "frühere Version", "Änderungen rückgängig"],
+    "extendedKeywords": ["alte Version einer Datei wiederherstellen", "Änderungen rückgängig machen SharePoint", "Datei auf frühere Version zurücksetzen", "wer hat die Datei geändert", "vorherige Version anzeigen", "Versionsverlauf öffnen", "Datei wurde überschrieben zurückholen", "falsche Änderung rückgängig", "Datei von gestern wiederherstellen", "Versionshistorie anzeigen", "alte Dateiversion herunterladen", "Kollege hat meine Datei überschrieben", "Datei retten nach falscher Änderung", "Änderungshistorie SharePoint", "Versionen vergleichen", "welche Version ist die richtige", "letzte funktionierende Version", "Datei wurde versehentlich geändert", "Dokument zurücksetzen", "Änderungen nachverfolgen SharePoint"],
+    "typos": ["Versionsverlauf", "Versionensverlauf", "Versionshistorie", "wiederherstelen"],
+    "symptoms": ["Datei enthält unerwünschte Änderungen", "Falscher Inhalt nach Bearbeitung durch andere"],
+    "quickCheck": "Wissen Sie, von wann ungefähr die gewünschte Version ist?",
+    "solutions": [
+      "In SharePoint: Rechtsklick auf Datei > Versionsverlauf",
+      "In OneDrive online: Rechtsklick > Versionsverlauf",
+      "Gewünschte Version auswählen > 'Wiederherstellen' oder 'Herunterladen'",
+      "In Office-Anwendungen: Datei > Informationen > Versionsverlauf",
+      "Bei Bedarf alte Version herunterladen und mit aktueller vergleichen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["version history", "restore previous version", "file overwritten"],
+    "followUpQuestions": [
+      {
+        "question": "Möchten Sie eine bestimmte Version wiederherstellen oder erst die Versionen vergleichen?",
+        "options": ["Wiederherstellen", "Erst vergleichen"],
+        "narrows": "Gewünschte Aktion"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-022"]
+  },
+  {
+    "id": "PROB-ODS-022",
+    "category": "OneDrive & SharePoint",
+    "title": "SharePoint Versionen verwalten und bereinigen",
+    "keywords": ["SharePoint", "Versionen", "bereinigen", "löschen", "Versionslimit", "Speicher", "Versionseinstellungen"],
+    "extendedKeywords": ["zu viele Versionen in SharePoint", "Versionen löschen SharePoint", "Versionslimit einstellen", "Speicher belegt durch Versionen", "Versionsanzahl begrenzen", "alte Versionen entfernen", "Versionierung konfigurieren", "Hauptversionen und Nebenversionen", "Versionierung aktivieren", "Versionierung deaktivieren", "Versionen fressen Speicher", "zu viele alte Kopien", "Versionierungseinstellungen ändern", "maximale Anzahl Versionen", "Dokumentversionen reduzieren", "Bibliothek Versionseinstellungen", "Versionen automatisch löschen", "Versionsverlauf zu lang", "SharePoint Speicher durch Versionen voll", "Versionshistorie kürzen"],
+    "typos": ["Versionnen", "bereingen", "Versionslimmit"],
+    "symptoms": ["Speicherplatz durch viele Versionen belegt", "Langer Versionsverlauf"],
+    "quickCheck": "Haben Sie Administratorrechte für die SharePoint-Bibliothek?",
+    "solutions": [
+      "In Bibliothekseinstellungen: Versionierungseinstellungen aufrufen",
+      "Maximale Anzahl der Hauptversionen festlegen (z.B. 50)",
+      "Einzelne alte Versionen manuell löschen: Versionsverlauf > Version löschen",
+      "Nebenversionen aktivieren/deaktivieren je nach Bedarf",
+      "Bei großem Speicherbedarf: IT-Admin kontaktieren für Bulk-Bereinigung"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["version cleanup", "too many versions", "version settings sharepoint"],
+    "followUpQuestions": [
+      {
+        "question": "Möchten Sie das Versionslimit einstellen oder vorhandene Versionen löschen?",
+        "options": ["Versionslimit einstellen", "Alte Versionen löschen", "Beides"],
+        "narrows": "Gewünschte Verwaltungsaktion"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-021"]
+  },
+  {
+    "id": "PROB-ODS-023",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Business vs. persönliches Konto Verwechslung",
+    "keywords": ["OneDrive", "Business", "Personal", "persönlich", "Konto", "Firmenkonto", "privat", "Verwechslung"],
+    "extendedKeywords": ["welches OneDrive ist das richtige", "privates und geschäftliches OneDrive", "OneDrive Business und privat verwechselt", "Dateien im falschen OneDrive", "zwei OneDrive-Konten", "privates OneDrive auf Firmenrechner", "Business-OneDrive vs persönliches", "OneDrive-Konten unterscheiden", "Dateien sind im privaten statt Business OneDrive", "geschäftliches OneDrive einrichten", "welches OneDrive nutze ich", "OneDrive Konto wechseln", "falsches OneDrive synchronisiert", "OneDrive Business einloggen", "privates Konto entfernen", "zwei OneDrive Icons in Taskleiste", "OneDrive trennen falsch", "welcher Ordner gehört zu welchem OneDrive", "OneDrive for Business konfigurieren", "persönliches OneDrive abmelden"],
+    "typos": ["Buisness", "Busines", "persönliches", "Firmenonto"],
+    "symptoms": ["Zwei OneDrive-Symbole in der Taskleiste", "Dateien tauchen im falschen OneDrive auf", "Verwirrung über Speicherort"],
+    "quickCheck": "Sehen Sie ein blaues (Business) und ein weißes (Personal) OneDrive-Symbol in der Taskleiste?",
+    "solutions": [
+      "OneDrive Business erkennen: Blaues Symbol, verbunden mit Firmen-E-Mail",
+      "OneDrive Personal erkennen: Weißes Symbol, verbunden mit privatem Microsoft-Konto",
+      "Für die Arbeit nur OneDrive Business nutzen",
+      "Persönliches OneDrive auf dem Firmenrechner trennen: Einstellungen > Konto > Verknüpfung aufheben",
+      "Dateien vom persönlichen ins Business-OneDrive verschieben"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["which onedrive", "business vs personal", "two onedrive accounts"],
+    "followUpQuestions": [
+      {
+        "question": "Möchten Sie wissen, welches Konto Sie nutzen, oder ein Konto hinzufügen/entfernen?",
+        "options": ["Konto identifizieren", "Konto hinzufügen", "Konto entfernen"],
+        "narrows": "Gewünschte Aktion"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-024"]
+  },
+  {
+    "id": "PROB-ODS-024",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Business und Personal gleichzeitig nutzen",
+    "keywords": ["OneDrive", "Business", "Personal", "gleichzeitig", "beide", "parallel", "Konten"],
+    "extendedKeywords": ["kann ich beide OneDrive nutzen", "OneDrive Business und privat parallel", "zwei OneDrive-Konten einrichten", "geschäftlich und privat trennen", "OneDrive Personal auf Firmenrechner erlaubt", "beide OneDrive synchronisieren", "privates OneDrive zusätzlich nutzen", "OneDrive Business und persönlich verwalten", "kann man zwei OneDrive haben", "OneDrive Konten parallel betreiben", "beide Clouds nutzen", "privates und geschäftliches trennen", "zwei Synchronisierungen gleichzeitig", "OneDrive Multikonto", "verschiedene OneDrive-Ordner", "Privat-OneDrive auf Arbeits-PC", "Business neben Personal OneDrive", "beide OneDrive-Konten synchronisieren", "OneDrive zweites Konto hinzufügen", "persönliches OneDrive einrichten auf Firmengerät"],
+    "typos": ["gleichzeiitg", "parralel", "Buisness"],
+    "symptoms": ["Nur ein OneDrive-Konto aktiv", "Unsicherheit über parallele Nutzung"],
+    "quickCheck": "Ist es laut Firmenrichtlinie erlaubt, ein persönliches OneDrive auf dem Firmenrechner zu nutzen?",
+    "solutions": [
+      "OneDrive unterstützt ein Business- und ein persönliches Konto gleichzeitig",
+      "Zweites Konto hinzufügen: OneDrive Einstellungen > Konto > Konto hinzufügen",
+      "Firmenrichtlinien prüfen, ob persönliches OneDrive erlaubt ist",
+      "Dateien klar trennen: Business-Daten nur in Business-OneDrive",
+      "Achtung: Firmendaten niemals im persönlichen OneDrive speichern"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["two onedrive accounts", "add personal onedrive", "business and personal"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie bereits ein OneDrive-Konto eingerichtet?",
+        "options": ["Ja, Business ist eingerichtet", "Ja, Personal ist eingerichtet", "Noch keines"],
+        "narrows": "Welches Konto hinzugefügt werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-023"]
+  },
+  {
+    "id": "PROB-ODS-025",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Ersteinrichtung und Migration",
+    "keywords": ["OneDrive", "Einrichtung", "Setup", "Migration", "einrichten", "konfigurieren", "erstmalig"],
+    "extendedKeywords": ["OneDrive einrichten auf neuem PC", "OneDrive zum ersten Mal starten", "wie richte ich OneDrive ein", "OneDrive Setup Anleitung", "OneDrive konfigurieren", "OneDrive auf neuem Laptop", "OneDrive Ersteinrichtung", "OneDrive Willkommensbildschirm", "OneDrive Account verbinden", "OneDrive synchronisieren starten", "OneDrive nach Neuinstallation einrichten", "OneDrive Ordner auswählen", "welche Ordner synchronisieren", "OneDrive Schritt für Schritt", "neuer Computer OneDrive", "OneDrive Migration alter PC", "Daten zu OneDrive umziehen", "Dateien in OneDrive verschieben", "lokale Dateien zu OneDrive migrieren", "Desktop zu OneDrive umleiten"],
+    "typos": ["Einrchtung", "Konfiguration", "Migratin", "OnDrive"],
+    "symptoms": ["OneDrive-Willkommensbildschirm erscheint", "OneDrive ist noch nicht eingerichtet", "Keine Dateien werden synchronisiert"],
+    "quickCheck": "Ist OneDrive bereits auf dem PC installiert oder muss es erst installiert werden?",
+    "solutions": [
+      "OneDrive starten: Im Startmenü nach 'OneDrive' suchen und öffnen",
+      "Mit Firmen-E-Mail-Adresse anmelden",
+      "Standard-Ordner für OneDrive bestätigen oder anpassen",
+      "Ordner auswählen, die synchronisiert werden sollen",
+      "Known Folder Move aktivieren: Desktop, Dokumente, Bilder zu OneDrive umleiten",
+      "Warten bis die erste Synchronisierung abgeschlossen ist"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_ondrivereset", "label": "OneDrive zurücksetzen", "priority": 3, "effectiveness": 30}
+    ],
+    "hiddenTriggers": ["setup onedrive", "first time onedrive", "configure onedrive"],
+    "followUpQuestions": [
+      {
+        "question": "Ist dies ein neuer PC oder wird OneDrive auf einem bestehenden PC eingerichtet?",
+        "options": ["Neuer PC", "Bestehender PC", "PC-Wechsel/Migration"],
+        "narrows": "Art der Einrichtung"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-026", "PROB-ODS-027"]
+  },
+  {
+    "id": "PROB-ODS-026",
+    "category": "OneDrive & SharePoint",
+    "title": "SharePoint-Bibliothek mit OneDrive synchronisieren",
+    "keywords": ["SharePoint", "synchronisieren", "OneDrive", "Explorer", "Sync", "Bibliothek", "lokal"],
+    "extendedKeywords": ["SharePoint-Ordner auf PC synchronisieren", "SharePoint im Explorer sehen", "Bibliothek lokal synchronisieren", "SharePoint-Dateien auf dem PC", "SharePoint offline verfügbar machen", "Sync-Button in SharePoint", "SharePoint mit dem PC verbinden", "SharePoint Dateien im Datei-Explorer", "lokal auf SharePoint-Dateien zugreifen", "SharePoint-Sync einrichten", "SharePoint-Bibliothek auf dem Desktop", "Ordner aus SharePoint synchronisieren", "Teams-Dateien auf PC synchronisieren", "SharePoint-Ordner als Laufwerk", "SharePoint im Windows Explorer", "lokal arbeiten mit SharePoint", "SharePoint Offline-Kopie", "Dokumentenbibliothek synchronisieren", "SharePoint Ordner auf Festplatte", "SharePoint-Sync-Verknüpfung"],
+    "typos": ["syncronisieren", "synchonisieren", "Biblothek", "Sharepoint"],
+    "symptoms": ["SharePoint-Dateien nur im Browser verfügbar", "Kein Sync-Button sichtbar"],
+    "quickCheck": "Sehen Sie den 'Synchronisieren'-Button in der SharePoint-Bibliothek?",
+    "solutions": [
+      "In SharePoint die gewünschte Bibliothek öffnen",
+      "'Synchronisieren'-Button in der oberen Menüleiste klicken",
+      "OneDrive-Client öffnet sich und beginnt die Synchronisierung",
+      "Im Datei-Explorer erscheint die Bibliothek unter dem Firmennamen",
+      "Hinweis: Große Bibliotheken ggf. selektiv synchronisieren"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sync sharepoint library", "sharepoint to explorer", "local sync sharepoint"],
+    "followUpQuestions": [
+      {
+        "question": "Ist der OneDrive-Client bereits auf Ihrem PC eingerichtet?",
+        "options": ["Ja", "Nein", "Weiß ich nicht"],
+        "narrows": "Ob OneDrive-Setup Voraussetzung ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-025", "PROB-ODS-015"]
+  },
+  {
+    "id": "PROB-ODS-027",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Known Folder Move einrichten",
+    "keywords": ["OneDrive", "Known Folder Move", "KFM", "Desktop", "Dokumente", "Umleitung", "Backup"],
+    "extendedKeywords": ["Desktop in OneDrive sichern", "Dokumente-Ordner in OneDrive", "automatische Sicherung OneDrive", "Desktop umleiten zu OneDrive", "Ordner automatisch in OneDrive", "Backup meiner Dateien in OneDrive", "Desktop-Dateien in der Cloud", "Dokumente automatisch synchronisieren", "wichtige Ordner sichern OneDrive", "Known Folder Move aktivieren", "PC-Sicherung über OneDrive", "Ordnerumleitung OneDrive", "Desktop-Backup Cloud", "Sicherheitskopie meiner Dateien", "Dateien automatisch in OneDrive speichern", "OneDrive Backup-Funktion", "Ordner schützen OneDrive", "Bilder-Ordner in OneDrive", "automatisches Cloud-Backup", "Desktop synchronisieren Cloud"],
+    "typos": ["Known Folder Move", "Known Foldr", "Umlietung", "Bakup"],
+    "symptoms": ["Desktop/Dokumente werden nicht in OneDrive gesichert", "KFM ist nicht aktiviert"],
+    "quickCheck": "Werden Ihre Desktop- und Dokumente-Ordner bereits von OneDrive synchronisiert?",
+    "solutions": [
+      "OneDrive Einstellungen > Synchronisierung und Sicherung > Sicherung verwalten",
+      "Desktop, Dokumente und Bilder zur Sicherung auswählen",
+      "'Sicherung starten' klicken",
+      "Bestehende Dateien werden automatisch nach OneDrive verschoben",
+      "Hinweis: Dateipfade ändern sich zu OneDrive-Pfaden"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["known folder move", "backup desktop onedrive", "redirect folders"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Ordner möchten Sie in OneDrive sichern?",
+        "options": ["Desktop", "Dokumente", "Bilder", "Alle drei"],
+        "narrows": "Umfang der Ordnerumleitung"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-025"]
+  },
+  {
+    "id": "PROB-ODS-028",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive große Dateien synchronisieren",
+    "keywords": ["OneDrive", "große Dateien", "Upload", "Dateigröße", "Limit", "Gigabyte", "GB"],
+    "extendedKeywords": ["große Datei hochladen OneDrive", "Datei zu groß für OneDrive", "Upload bricht ab bei großer Datei", "wie groß dürfen Dateien sein in OneDrive", "Maximalgröße OneDrive", "Video hochladen OneDrive", "große ZIP-Datei synchronisieren", "OneDrive Größenlimit", "riesige Datei in OneDrive", "ISO-Datei in OneDrive", "Datei über 10 GB hochladen", "Upload bricht immer ab", "große Datei schlägt fehl", "OneDrive akzeptiert Datei nicht", "Dateigröße überschritten", "große Präsentation synchronisieren", "Datenbank in OneDrive", "PST-Datei in OneDrive", "Upload bei 99% abgebrochen", "große Datei dauert ewig"],
+    "typos": ["große Datein", "Datiegröße", "Uplod", "synchroniesieren"],
+    "symptoms": ["Upload bricht ab", "Fehlermeldung bei großen Dateien", "Synchronisierung dauert sehr lange"],
+    "quickCheck": "Wie groß ist die Datei, die Sie hochladen möchten?",
+    "solutions": [
+      "Maximale Dateigröße: 250 GB pro Datei",
+      "Bei Abbruch: Stabile Internetverbindung sicherstellen (LAN statt WLAN)",
+      "Große Dateien komprimieren vor dem Upload",
+      "Browser-Upload verwenden für einzelne große Dateien: onedrive.com > Hochladen",
+      "Bei wiederholtem Abbruch: Datei aufteilen oder ZIP-Archive erstellen",
+      "PST-Dateien werden von OneDrive nicht synchronisiert - Outlook-Daten anders sichern"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["large file upload", "file too big", "upload fails"],
+    "followUpQuestions": [
+      {
+        "question": "Bricht der Upload ab oder ist er nur sehr langsam?",
+        "options": ["Bricht ab mit Fehler", "Extrem langsam", "Beides"],
+        "narrows": "Art des Problems mit großen Dateien"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-003", "PROB-ODS-005"]
+  },
+  {
+    "id": "PROB-ODS-029",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive Dateipfad zu lang",
+    "keywords": ["OneDrive", "Pfad", "zu lang", "Pfadlänge", "Zeichenlimit", "MAX_PATH", "400 Zeichen"],
+    "extendedKeywords": ["Dateiname zu lang OneDrive", "Pfad überschreitet Maximum", "Fehler wegen zu langem Pfad", "Ordnerstruktur zu tief", "OneDrive Pfadlänge Problem", "zu viele Unterordner", "Fehlermeldung Pfad zu lang", "kann Datei nicht synchronisieren wegen Pfad", "Zeichenlimit überschritten", "verschachtelte Ordner Problem", "Pfad kürzen", "Dateiname kürzen für OneDrive", "Error Pfadlänge", "Datei lässt sich nicht verschieben wegen Pfad", "OneDrive Pfadbegrenzung", "zu tiefe Ordnerstruktur", "Fehler 0x80070000 Pfad", "lange Dateinamen Problem", "Ordner umbenennen wegen Pfad", "Pfadlänge reduzieren"],
+    "typos": ["Pfadlänge", "Pfadlaenge", "Zeichenlimmit", "Dateipfad"],
+    "symptoms": ["Fehlermeldung über zu langen Pfad", "Dateien können nicht synchronisiert werden", "Dateien können nicht verschoben oder umbenannt werden"],
+    "quickCheck": "Haben Sie eine sehr tiefe Ordnerstruktur oder besonders lange Dateinamen?",
+    "solutions": [
+      "Gesamter Pfad darf maximal 400 Zeichen lang sein (inkl. Dateiname)",
+      "Ordnernamen kürzen",
+      "Dateinamen kürzen",
+      "Ordnerstruktur flacher gestalten (weniger Verschachtelung)",
+      "OneDrive-Stammordner möglichst kurz halten (z.B. C:\\Users\\Name\\OneDrive)",
+      "Dateien/Ordner höher in der Struktur verschieben"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["path too long", "filename too long", "max path onedrive"],
+    "followUpQuestions": [
+      {
+        "question": "Ist der lange Pfad durch tiefe Ordnerstruktur oder lange Dateinamen verursacht?",
+        "options": ["Tiefe Ordnerstruktur", "Lange Dateinamen", "Beides", "Weiß ich nicht"],
+        "narrows": "Wo der Pfad gekürzt werden kann"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-005", "PROB-ODS-028"]
+  },
+  {
+    "id": "PROB-ODS-030",
+    "category": "OneDrive & SharePoint",
+    "title": "OneDrive gesperrte oder von anderem Benutzer geöffnete Dateien",
+    "keywords": ["OneDrive", "gesperrt", "in Benutzung", "locked", "geöffnet", "schreibgeschützt", "bearbeiten"],
+    "extendedKeywords": ["Datei ist von anderem Benutzer geöffnet", "Datei ist gesperrt", "kann Datei nicht bearbeiten", "jemand anderes hat die Datei offen", "Datei schreibgeschützt wegen anderer Person", "gesperrte Datei freigeben", "wer hat die Datei offen", "Lock-Datei in OneDrive", "Datei wird von jemand anderem bearbeitet", "Datei blockiert durch anderen Nutzer", "schreibgeschützt obwohl keiner dran arbeitet", "Sperre aufheben Datei", "Datei entsperren OneDrive", "Lock-Problem bei Datei", "Datei nicht bearbeitbar", "warten bis Datei frei ist", "Datei manuell entsperren", "gesperrt nach Absturz", "Datei hängt in gesperrtem Zustand", "Datei nach Crash gesperrt"],
+    "typos": ["gesprerrt", "gespert", "schreibgeschüzt", "Benutzer"],
+    "symptoms": ["Meldung 'Datei wird von anderem Benutzer bearbeitet'", "Datei öffnet sich nur schreibgeschützt", "Lock-Datei sichtbar im Ordner"],
+    "quickCheck": "Wird angezeigt, welcher Benutzer die Datei gerade verwendet?",
+    "solutions": [
+      "Warten bis der andere Benutzer die Datei schließt",
+      "Den anderen Benutzer kontaktieren und bitten, die Datei zu schließen",
+      "Bei verwaisten Sperren: Lock-Datei (.~lock) manuell löschen",
+      "In SharePoint Online: Datei auschecken/einchecken prüfen",
+      "OneDrive-Client neu starten um veraltete Sperren zu lösen",
+      "Co-Authoring nutzen: Office-Dateien können von mehreren gleichzeitig bearbeitet werden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_ondrivereset", "label": "OneDrive zurücksetzen", "priority": 3, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["file locked", "file in use", "someone editing file"],
+    "followUpQuestions": [
+      {
+        "question": "Ist die Datei tatsächlich von jemand anderem geöffnet oder scheint die Sperre veraltet?",
+        "options": ["Jemand arbeitet gerade daran", "Niemand hat die Datei offen, trotzdem gesperrt"],
+        "narrows": "Ob aktive Nutzung oder verwaiste Sperre"
+      }
+    ],
+    "relatedProblems": ["PROB-ODS-002", "PROB-ODS-008"]
+  }
+]

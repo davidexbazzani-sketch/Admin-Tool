@@ -50,8 +50,8 @@ export const FEATURES: FeatureDef[] = [
   { id: 'remote-doc.drives', label: 'Remote Doc: Netzlaufwerke', category: 'Remote Doc', userBlocked: true, description: 'Netzlaufwerke mappen/trennen' },
   { id: 'remote-doc.drivers', label: 'Remote Doc: Treiber', category: 'Remote Doc', userBlocked: true, description: 'Treiber prüfen und installieren' },
 
-  // ── Trickkiste ───────────────────────────────────────────────────────────
-  { id: 'trickkiste', label: 'Trickkiste', category: 'Grundfunktionen', description: 'Hilfreiche Tipps und Skripte' },
+  // ── Trickbox ────────────────────────────────────────────────────────────
+  { id: 'trickbox', label: 'Trickbox', category: 'Grundfunktionen', description: 'Hilfreiche Tipps und Skripte' },
 
   // ── Einstellungen ─────────────────────────────────────────────────────────
   { id: 'settings', label: 'Einstellungen', category: 'Grundfunktionen', description: 'Programmeinstellungen verwalten' },

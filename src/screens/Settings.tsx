@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle } from 'lucide-react'
+import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
-import { useAuthStore } from '../store/authStore'
+import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
 import { api } from '../electronAPI'
 import type { AppSettings } from '../types'
-import type { UserEmailConfig } from '../types/auth'
+import type { UserEmailConfig, AppConfig } from '../types/auth'
 import Card from '../components/Card'
+import { setKBPath, getKBPath } from '../utils/guruKnowledgeBase'
 
 const EMAIL_CONFIG_PATH = (username: string) => `email_config/${username}.json`
 
@@ -15,6 +16,7 @@ const DEFAULT_EMAIL_CONFIG: UserEmailConfig = {
   port: 587,
   useTls: true,
   notifyEmail: '',
+  emailMethod: 'outlook',  // Default: Outlook COM (kein Passwort nötig, wie SKF Protokoll Generator)
 }
 
 export default function Settings() {
@@ -22,10 +24,16 @@ export default function Settings() {
   const setSettings = useAppStore((s) => s.setSettings)
   const session = useAuthStore(s => s.session)
   const username = session?.user.username ?? ''
+  const isMaster = useIsMasterAdmin()
 
   const [local, setLocal] = useState<AppSettings>(settings)
   const [saved, setSaved] = useState(false)
   const [version, setVersion] = useState('')
+
+  // Master Admin: configurable paths
+  const [kbPath, setKbPathLocal] = useState(getKBPath())
+  const [netBasePath, setNetBasePath] = useState('')
+  const [pathsSaved, setPathsSaved] = useState(false)
 
   // Per-user email config (stored on network)
   const [emailCfg, setEmailCfg] = useState<UserEmailConfig>(DEFAULT_EMAIL_CONFIG)
@@ -40,6 +48,12 @@ export default function Settings() {
       const merged = { ...settings, ...s } as AppSettings
       setSettings(merged)
       setLocal(merged)
+    }).catch(() => {})
+
+    // Load network base path + KB path
+    api().netGetBasePath().then(p => setNetBasePath(p)).catch(() => {})
+    api().getAppConfig().then((cfg: AppConfig) => {
+      if (cfg?.knowledgeBasePath) { setKbPathLocal(cfg.knowledgeBasePath); setKBPath(cfg.knowledgeBasePath) }
     }).catch(() => {})
 
     // Load per-user email config from network
@@ -88,17 +102,25 @@ export default function Settings() {
     setTestState('sending')
     setTestError('')
     try {
-      await api().sendEmailRaw({
+      const res = await api().sendEmailRaw({
         to: emailCfg.email,
         subject: 'IT Admin Tool – Test-E-Mail',
-        body: `Diese Test-E-Mail wurde vom IT Admin Tool gesendet.\n\nKonfiguration:\nSMTP: ${emailCfg.smtp}:${emailCfg.port}\nAbsender: ${emailCfg.email}\nTLS: ${emailCfg.useTls ? 'STARTTLS (aktiv)' : 'Deaktiviert'}`,
+        body: `Diese Test-E-Mail wurde vom IT Admin Tool gesendet.\n\nKonfiguration:\nSMTP: ${emailCfg.smtp}:${emailCfg.port}\nAbsender: ${emailCfg.email}\nMethode: ${emailCfg.emailMethod ?? 'nodemailer'}`,
         smtp: emailCfg.smtp,
         port: emailCfg.port,
         useTls: emailCfg.useTls,
         from: emailCfg.email,
+        user: emailCfg.smtpUser || emailCfg.email,
+        pass: emailCfg.smtpPass || '',
+        method: emailCfg.emailMethod,
       })
-      setTestState('ok')
-      setTimeout(() => setTestState('idle'), 3000)
+      if (res.success) {
+        setTestState('ok')
+        setTimeout(() => setTestState('idle'), 3000)
+      } else {
+        setTestError(res.error ?? 'Unbekannter Fehler')
+        setTestState('error')
+      }
     } catch (e) {
       setTestError(String(e))
       setTestState('error')
@@ -158,6 +180,48 @@ export default function Settings() {
                 <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${emailCfg.useTls ? 'translate-x-4' : ''}`} />
               </button>
               <span className="text-xs text-muted-foreground">STARTTLS (empfohlen für Port 587)</span>
+            </div>
+            {/* SMTP Auth (required for Office 365) */}
+            <div className="grid grid-cols-2 gap-3 pt-1">
+              <div>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">SMTP Benutzer (Office 365: E-Mail)</label>
+                <input
+                  value={emailCfg.smtpUser ?? ''}
+                  placeholder={emailCfg.email || 'user@firma.de'}
+                  onChange={e => updateEmail('smtpUser', e.target.value)}
+                  className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">SMTP Passwort / App-Passwort</label>
+                <input
+                  type="password"
+                  value={emailCfg.smtpPass ?? ''}
+                  placeholder="••••••••"
+                  onChange={e => updateEmail('smtpPass', e.target.value)}
+                  className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+            <p className="text-[9px] text-muted-foreground">Office 365 erfordert Authentifizierung. Nutzen Sie ein App-Passwort wenn MFA aktiv ist.</p>
+            <div>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">Versandmethode</label>
+              <select
+                value={emailCfg.emailMethod ?? 'outlook'}
+                onChange={e => updateEmail('emailMethod', e.target.value as 'outlook' | 'nodemailer' | 'powershell')}
+                className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary"
+              >
+                <option value="outlook">Outlook (empfohlen) — kein Passwort nötig</option>
+                <option value="powershell">PowerShell SMTP (Windows-Auth)</option>
+                <option value="nodemailer">SMTP mit Anmeldedaten (manuell)</option>
+              </select>
+              <p className="text-[10px] text-muted-foreground mt-1">
+                {(emailCfg.emailMethod ?? 'outlook') === 'outlook'
+                  ? '✅ Nutzt Ihr eingeloggtes Outlook. Kein Passwort erforderlich. Funktioniert wie im SKF Protokoll Generator.'
+                  : (emailCfg.emailMethod) === 'powershell'
+                  ? 'Nutzt Windows-Anmeldedaten (Kerberos/NTLM). Kein Passwort erforderlich.'
+                  : 'Erfordert SMTP-Server und ggf. Anmeldedaten.'}
+              </p>
             </div>
             <div className="flex items-center gap-2 pt-1">
               <button
@@ -255,6 +319,121 @@ export default function Settings() {
       </div>
 
       {/* About */}
+      {/* ── Master Admin: Pfade ── */}
+      {isMaster && (
+        <Card title="Pfad-Konfiguration (Master Admin)" icon={<Database size={15} />} subtitle="Netzlaufwerk und Wissensdatenbank-Pfade">
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Netzwerk-Basispfad</label>
+              <input value={netBasePath} onChange={e => setNetBasePath(e.target.value)}
+                placeholder="\\w3172\skf Marine\..."
+                className="w-full px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground font-mono focus:outline-none focus:border-primary" />
+            </div>
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Wissensdatenbank-Pfad (relativ zum Basispfad)</label>
+              <input value={kbPath} onChange={e => setKbPathLocal(e.target.value)}
+                placeholder="knowledge_base"
+                className="w-full px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground font-mono focus:outline-none focus:border-primary" />
+              <p className="text-[9px] text-muted-foreground mt-0.5">Pfad zu guru_brain.json, skill_descriptions.json, wissensdatenbank.json etc.</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={async () => {
+                await api().netSetBasePath(netBasePath)
+                setKBPath(kbPath)
+                await api().saveAppConfig({ knowledgeBasePath: kbPath } as Record<string, unknown>)
+                setPathsSaved(true); setTimeout(() => setPathsSaved(false), 2000)
+              }}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+                <Save size={12} /> Pfade speichern
+              </button>
+              {pathsSaved && <span className="text-xs text-emerald-400 flex items-center gap-1"><CheckCircle size={12} /> Gespeichert</span>}
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* ── Remote-Verbindung Einstellungen ── */}
+      <Card title="Remote-Verbindung" icon={<Info size={15} />} subtitle="WinRM-Aktivierung und Fallback-Verhalten">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <input type="checkbox" defaultChecked className="w-3.5 h-3.5 accent-primary" id="auto-winrm" />
+            <label htmlFor="auto-winrm" className="text-xs text-foreground">WinRM automatisch aktivieren wenn nicht verfügbar</label>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Pfad zu PsExec.exe</label>
+            <div className="flex gap-2">
+              <input
+                defaultValue="\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools\\PsExec.exe"
+                placeholder="\\\\server\\share\\PsExec.exe"
+                className="flex-1 px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground font-mono focus:outline-none focus:border-primary"
+              />
+              <button
+                onClick={async () => {
+                  try {
+                    const res = await api().runPowerShell([
+                      `$toolsPath = '${netBasePath || '\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT'}\\tools'`,
+                      `if (-not (Test-Path $toolsPath)) { New-Item -Path $toolsPath -ItemType Directory -Force | Out-Null }`,
+                      `$zipPath = "$env:TEMP\\PSTools.zip"`,
+                      `$extractPath = "$env:TEMP\\PSTools"`,
+                      `Invoke-WebRequest -Uri 'https://download.sysinternals.com/files/PSTools.zip' -OutFile $zipPath -UseBasicParsing`,
+                      `Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force`,
+                      `Copy-Item "$extractPath\\PsExec.exe" "$toolsPath\\PsExec.exe" -Force`,
+                      `Copy-Item "$extractPath\\PsExec64.exe" "$toolsPath\\PsExec64.exe" -Force`,
+                      `Remove-Item $zipPath -Force -EA SilentlyContinue`,
+                      `Remove-Item $extractPath -Recurse -Force -EA SilentlyContinue`,
+                      `Write-Output "OK"`,
+                    ].join('; '), 60000)
+                    if (res.stdout?.includes('OK')) {
+                      alert('PsExec.exe erfolgreich heruntergeladen und abgelegt!')
+                    } else {
+                      alert('Fehler: ' + (res.stderr || res.stdout || 'Unbekannt'))
+                    }
+                  } catch (err) {
+                    alert('Download fehlgeschlagen: ' + String(err))
+                  }
+                }}
+                className="px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground whitespace-nowrap"
+              >
+                ⬇ PsExec herunterladen
+              </button>
+            </div>
+            <p className="text-[9px] text-muted-foreground mt-0.5">
+              PsExec ist ein Microsoft Sysinternals Tool für Remote-Verwaltung. Falls die Datei nicht vorhanden ist, klicken Sie auf "PsExec herunterladen". Ohne PsExec wird Methode 3 bei der WinRM-Aktivierung übersprungen.
+            </p>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Verbindungs-Timeout</label>
+            <select defaultValue="30" className="px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary">
+              <option value="15">15 Sekunden</option>
+              <option value="30">30 Sekunden</option>
+              <option value="45">45 Sekunden</option>
+              <option value="60">60 Sekunden</option>
+            </select>
+          </div>
+        </div>
+      </Card>
+
+      {/* ── Benutzer-Suche (Master Admin) ── */}
+      {isMaster && (
+        <Card title="Benutzer-Suche (Master Admin)" icon={<Info size={15} />} subtitle="AD-Suchbereich für Benutzer Info einschränken">
+          <div className="space-y-3">
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2 text-xs text-foreground cursor-pointer">
+                <input type="checkbox" defaultChecked className="w-3.5 h-3.5 accent-primary" />
+                Hamburg (Büro: "Hamburg - Hermann Blohm Strasse")
+              </label>
+              <label className="flex items-center gap-2 text-xs text-foreground cursor-pointer">
+                <input type="checkbox" className="w-3.5 h-3.5 accent-primary" />
+                Alle Standorte
+              </label>
+            </div>
+            <p className="text-[9px] text-muted-foreground">
+              Eingeschränkte Suche beschleunigt die AD-Abfrage erheblich. Bei "Beide": Hamburg wird zuerst durchsucht, bei keinem Ergebnis dann alle Standorte.
+            </p>
+          </div>
+        </Card>
+      )}
+
       <Card title="Über das Programm" icon={<Info size={15} />}>
         <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
           {[

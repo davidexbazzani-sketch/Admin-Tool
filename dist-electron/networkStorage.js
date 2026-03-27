@@ -13,12 +13,11 @@ exports.writeJson = writeJson;
 exports.listDir = listDir;
 exports.deleteFile = deleteFile;
 exports.fileExists = fileExists;
+exports.writeRawFile = writeRawFile;
+exports.readRawFile = readRawFile;
 const fs_1 = require("fs");
-const path_1 = require("path");
 const electron_store_1 = __importDefault(require("electron-store"));
 // ─── Network base path ────────────────────────────────────────────────────────
-// Default: SKF Marine network share where all tool data is stored centrally.
-// Configurable via electron-store key 'networkBasePath'.
 exports.DEFAULT_NETWORK_BASE = '\\\\w3172\\skf Marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT';
 const pathStore = new electron_store_1.default({ name: 'network-config' });
 function getBasePath() {
@@ -26,6 +25,16 @@ function getBasePath() {
 }
 function setBasePath(path) {
     pathStore.set('networkBasePath', path);
+}
+// ── Safe UNC path join (path.join can break UNC \\server\share prefix) ────────
+function safeJoin(base, relative) {
+    // Normalize separators
+    const b = base.replace(/\//g, '\\').replace(/\\+$/, '');
+    const r = relative.replace(/\//g, '\\').replace(/^\\+/, '');
+    const full = b + '\\' + r;
+    // Log for debugging
+    console.log(`[networkStorage] safeJoin: "${b}" + "${r}" = "${full}"`);
+    return full;
 }
 // Sub-directories the tool creates on first run
 const SUBDIRS = ['users', 'recovery', 'logs', 'config', 'templates', 'inventory', 'approvals', 'scheduled_tasks', 'bugs'];
@@ -42,38 +51,62 @@ function ensureDirs() {
     if (!(0, fs_1.existsSync)(base))
         return;
     for (const d of SUBDIRS) {
-        const full = (0, path_1.join)(base, d);
+        const full = safeJoin(base, d);
         if (!(0, fs_1.existsSync)(full))
             (0, fs_1.mkdirSync)(full, { recursive: true });
     }
 }
 function readJson(relativePath) {
     try {
-        const full = (0, path_1.join)(getBasePath(), relativePath);
-        if (!(0, fs_1.existsSync)(full))
+        const base = getBasePath();
+        let full = safeJoin(base, relativePath);
+        // Smart path resolution: if base already ends with a segment that matches the
+        // first segment of relativePath, avoid doubling (e.g. base=...\knowledge_base + rel=knowledge_base/file.json)
+        if (!(0, fs_1.existsSync)(full)) {
+            const relParts = relativePath.replace(/\//g, '\\').split('\\');
+            const baseLower = base.toLowerCase();
+            if (relParts.length > 1 && baseLower.endsWith(relParts[0].toLowerCase())) {
+                const shortRel = relParts.slice(1).join('\\');
+                const altFull = safeJoin(base, shortRel);
+                console.log(`[networkStorage] readJson: "${full}" not found, trying without prefix: "${altFull}"`);
+                if ((0, fs_1.existsSync)(altFull)) {
+                    full = altFull;
+                }
+            }
+        }
+        console.log(`[networkStorage] readJson: "${relativePath}" → "${full}" exists=${(0, fs_1.existsSync)(full)}`);
+        if (!(0, fs_1.existsSync)(full)) {
+            console.log(`[networkStorage] readJson: file NOT FOUND: ${full}`);
             return null;
-        return JSON.parse((0, fs_1.readFileSync)(full, 'utf8'));
+        }
+        const raw = (0, fs_1.readFileSync)(full, 'utf8');
+        console.log(`[networkStorage] readJson: read ${raw.length} chars (${Math.round(raw.length / 1024)} KB) from ${relativePath}`);
+        const parsed = JSON.parse(raw);
+        console.log(`[networkStorage] readJson: parsed OK, type=${typeof parsed}, isArray=${Array.isArray(parsed)}, keys=${typeof parsed === 'object' && parsed !== null ? Object.keys(parsed).slice(0, 5).join(',') : 'N/A'}`);
+        return parsed;
     }
-    catch {
+    catch (err) {
+        console.error(`[networkStorage] readJson ERROR for "${relativePath}":`, err);
         return null;
     }
 }
 function writeJson(relativePath, data) {
     try {
-        const full = (0, path_1.join)(getBasePath(), relativePath);
+        const full = safeJoin(getBasePath(), relativePath);
         const dir = full.substring(0, full.lastIndexOf('\\'));
         if (!(0, fs_1.existsSync)(dir))
             (0, fs_1.mkdirSync)(dir, { recursive: true });
         (0, fs_1.writeFileSync)(full, JSON.stringify(data, null, 2), 'utf8');
         return true;
     }
-    catch {
+    catch (err) {
+        console.error(`[networkStorage] writeJson ERROR for "${relativePath}":`, err);
         return false;
     }
 }
 function listDir(relativePath) {
     try {
-        const full = (0, path_1.join)(getBasePath(), relativePath);
+        const full = safeJoin(getBasePath(), relativePath);
         if (!(0, fs_1.existsSync)(full))
             return [];
         return (0, fs_1.readdirSync)(full);
@@ -84,7 +117,7 @@ function listDir(relativePath) {
 }
 function deleteFile(relativePath) {
     try {
-        const full = (0, path_1.join)(getBasePath(), relativePath);
+        const full = safeJoin(getBasePath(), relativePath);
         if ((0, fs_1.existsSync)(full))
             (0, fs_1.unlinkSync)(full);
     }
@@ -92,9 +125,33 @@ function deleteFile(relativePath) {
 }
 function fileExists(relativePath) {
     try {
-        return (0, fs_1.existsSync)((0, path_1.join)(getBasePath(), relativePath));
+        return (0, fs_1.existsSync)(safeJoin(getBasePath(), relativePath));
     }
     catch {
         return false;
+    }
+}
+function writeRawFile(relativePath, base64Data) {
+    try {
+        const full = safeJoin(getBasePath(), relativePath);
+        const dir = full.substring(0, full.lastIndexOf('\\'));
+        if (!(0, fs_1.existsSync)(dir))
+            (0, fs_1.mkdirSync)(dir, { recursive: true });
+        (0, fs_1.writeFileSync)(full, Buffer.from(base64Data, 'base64'));
+        return true;
+    }
+    catch {
+        return false;
+    }
+}
+function readRawFile(relativePath) {
+    try {
+        const full = safeJoin(getBasePath(), relativePath);
+        if (!(0, fs_1.existsSync)(full))
+            return null;
+        return (0, fs_1.readFileSync)(full).toString('base64');
+    }
+    catch {
+        return null;
     }
 }

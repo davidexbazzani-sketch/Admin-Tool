@@ -66,6 +66,14 @@ electron_1.contextBridge.exposeInMainWorld('electronAPI', {
     netIsAvailable: () => electron_1.ipcRenderer.invoke('net:isAvailable'),
     netGetBasePath: () => electron_1.ipcRenderer.invoke('net:getBasePath'),
     netSetBasePath: (path) => electron_1.ipcRenderer.invoke('net:setBasePath', path),
+    netWriteRawFile: (relativePath, base64Data) => electron_1.ipcRenderer.invoke('net:writeRawFile', relativePath, base64Data),
+    netReadRawFile: (relativePath) => electron_1.ipcRenderer.invoke('net:readRawFile', relativePath),
+    // ── Wissensdatenbank (dedicated IPC for performance) ──────────────────────
+    wbGetCategories: () => electron_1.ipcRenderer.invoke('wb:get-categories'),
+    wbGetArticles: (subcategoryId) => electron_1.ipcRenderer.invoke('wb:get-articles', subcategoryId),
+    wbGetArticle: (articleId) => electron_1.ipcRenderer.invoke('wb:get-article', articleId),
+    wbSearch: (query) => electron_1.ipcRenderer.invoke('wb:search', query),
+    wbEnsureGenerated: () => electron_1.ipcRenderer.invoke('wb:ensure-generated'),
     // ── System info ───────────────────────────────────────────────────────────
     getWindowsUsername: () => electron_1.ipcRenderer.invoke('sys:getWindowsUsername'),
     getHostname: () => electron_1.ipcRenderer.invoke('sys:getHostname'),

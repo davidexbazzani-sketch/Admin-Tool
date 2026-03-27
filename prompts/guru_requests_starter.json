@@ -1,0 +1,1832 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "type": "anforderungen",
+    "description": "IT Guru Anforderungs-Datenbank: Nicht Probleme sondern Wuensche/Auftraege die ein User stellt. Der Guru weiss wie er sie umsetzt.",
+    "totalRequests": "1000+",
+    "hinweis": "Diese Datei ergaenzt guru_brain.json (Probleme). Zusammen bilden sie das komplette Wissen des IT Guru."
+  },
+  "requests": [
+    {
+      "id": "REQ-ACC-001",
+      "category": "benutzer",
+      "title": "Passwort zuruecksetzen",
+      "userSays": [
+        "passwort zuruecksetzen",
+        "passwort reset",
+        "neues passwort",
+        "passwort vergessen",
+        "passwort aendern",
+        "ich habe mein passwort vergessen",
+        "kann mein passwort nicht aendern",
+        "passwort abgelaufen",
+        "brauche neues passwort",
+        "password reset",
+        "pw reset",
+        "mein passwort geht nicht mehr",
+        "ich komme nicht rein weil passwort",
+        "passwort erneuern",
+        "kennwort zuruecksetzen",
+        "kennwort vergessen",
+        "user braucht neues passwort",
+        "kollege hat passwort vergessen",
+        "passwort fuer user xyz zuruecksetzen",
+        "ad passwort reset"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ad_user_info",
+          "action": "User in AD finden und Status pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_ad_password_reset",
+          "action": "Passwort zuruecksetzen (temporaeres PW)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ad_unlock",
+          "action": "Konto entsperren falls gesperrt"
+        },
+        {
+          "step": 4,
+          "skill": "rd_ad_pw_must_change",
+          "action": "'Passwort bei naechster Anmeldung aendern' setzen"
+        }
+      ],
+      "erklaerung": "Passwort wird in Active Directory zurueckgesetzt. Der User bekommt ein temporaeres Passwort und muss es bei der naechsten Anmeldung aendern.",
+      "tags": [
+        "passwort",
+        "reset",
+        "vergessen",
+        "ad",
+        "konto",
+        "kennwort"
+      ],
+      "nachfragen": [
+        "Fuer welchen Benutzer? (Benutzername oder voller Name)"
+      ],
+      "berechtigungNoetig": "admin"
+    },
+    {
+      "id": "REQ-ACC-002",
+      "category": "benutzer",
+      "title": "Konto entsperren",
+      "userSays": [
+        "konto entsperren",
+        "account entsperren",
+        "benutzer entsperren",
+        "konto gesperrt",
+        "account locked",
+        "mein konto ist gesperrt",
+        "user ist gesperrt",
+        "kollege ist ausgesperrt",
+        "konto wieder freischalten",
+        "account freischalten",
+        "benutzer freigeben",
+        "gesperrten user entsperren"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ad_lockout_status",
+          "action": "Sperrstatus pruefen (wann, wo, warum gesperrt)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_ad_unlock",
+          "action": "Konto in AD entsperren"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ad_user_info",
+          "action": "Pruefen ob Konto jetzt aktiv ist"
+        }
+      ],
+      "erklaerung": "Konto wird in Active Directory entsperrt. Ursache der Sperre pruefen – oft alte gespeicherte Credentials auf anderen Geraeten.",
+      "tags": [
+        "konto",
+        "gesperrt",
+        "entsperren",
+        "unlock",
+        "account",
+        "sperre"
+      ],
+      "nachfragen": [
+        "Welcher Benutzer?"
+      ]
+    },
+    {
+      "id": "REQ-ACC-003",
+      "category": "benutzer",
+      "title": "Lokales Benutzerkonto erstellen",
+      "userSays": [
+        "lokalen benutzer erstellen",
+        "lokales konto anlegen",
+        "lokalen user erstellen",
+        "neuen benutzer anlegen",
+        "bitte einen lokalen benutzer auf dem pc erstellen",
+        "lokales benutzerkonto erstellen",
+        "lokaler account",
+        "neuen lokalen user auf dem rechner",
+        "lokalen admin erstellen",
+        "lokales konto auf dem pc einrichten"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_local_user_list",
+          "action": "Bestehende lokale User auflisten"
+        },
+        {
+          "step": 2,
+          "skill": "rd_local_user_create",
+          "action": "Neuen lokalen User erstellen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_local_user_set_password",
+          "action": "Passwort setzen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_local_group_add",
+          "action": "User zur gewuenschten Gruppe hinzufuegen (Users/Administrators)"
+        }
+      ],
+      "erklaerung": "Ein lokaler Benutzer wird auf dem Ziel-PC erstellt. Dieser existiert nur auf diesem PC, nicht in Active Directory.",
+      "tags": [
+        "lokal",
+        "benutzer",
+        "konto",
+        "erstellen",
+        "anlegen",
+        "user"
+      ],
+      "nachfragen": [
+        "Wie soll der Benutzername lauten?",
+        "Soll der User Admin-Rechte haben oder nur normaler Benutzer?",
+        "Auf welchem PC?"
+      ]
+    },
+    {
+      "id": "REQ-ACC-004",
+      "category": "benutzer",
+      "title": "User als lokalen Admin setzen",
+      "userSays": [
+        "user als admin",
+        "lokaler admin",
+        "admin rechte geben",
+        "benutzer zum admin machen",
+        "lokale adminrechte",
+        "user braucht admin rechte",
+        "als administrator hinzufuegen",
+        "bitte admin rechte fuer user xyz auf pc abc",
+        "lokaler administrator werden",
+        "admin rechte auf dem pc",
+        "local admin setzen",
+        "zum admin machen",
+        "brauche adminrechte auf meinem rechner",
+        "lokale admin berechtigung"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_local_admin_list",
+          "action": "Aktuelle lokale Admins anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_local_admin_add",
+          "action": "User zur lokalen Administratoren-Gruppe hinzufuegen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_local_admin_list",
+          "action": "Verifizieren: User ist jetzt Admin"
+        }
+      ],
+      "erklaerung": "Der Domain-User wird zur lokalen Administratoren-Gruppe auf dem Ziel-PC hinzugefuegt. Er hat dann Admin-Rechte NUR auf diesem PC.",
+      "tags": [
+        "admin",
+        "administrator",
+        "rechte",
+        "lokal",
+        "berechtigung",
+        "gruppe"
+      ],
+      "nachfragen": [
+        "Welcher Benutzer?",
+        "Auf welchem PC?"
+      ],
+      "berechtigungNoetig": "admin"
+    },
+    {
+      "id": "REQ-ACC-005",
+      "category": "benutzer",
+      "title": "User aus lokaler Admin-Gruppe entfernen",
+      "userSays": [
+        "admin rechte entziehen",
+        "admin entfernen",
+        "lokalen admin entfernen",
+        "adminrechte wegnehmen",
+        "user soll kein admin mehr sein",
+        "admin berechtigung entfernen",
+        "aus admin gruppe entfernen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_local_admin_list",
+          "action": "Aktuelle lokale Admins anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_local_admin_remove",
+          "action": "User aus Administratoren-Gruppe entfernen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_local_admin_list",
+          "action": "Verifizieren"
+        }
+      ],
+      "erklaerung": "Der User wird aus der lokalen Administratoren-Gruppe entfernt und hat danach nur noch normale Benutzerrechte.",
+      "tags": [
+        "admin",
+        "entfernen",
+        "rechte",
+        "entziehen",
+        "berechtigung"
+      ],
+      "nachfragen": [
+        "Welcher Benutzer?",
+        "Auf welchem PC?"
+      ]
+    },
+    {
+      "id": "REQ-MAIL-001",
+      "category": "email",
+      "title": "Gruppenpostfach / Shared Mailbox in Outlook einbinden",
+      "userSays": [
+        "gruppenpostfach einbinden",
+        "shared mailbox hinzufuegen",
+        "freigegebenes postfach",
+        "gruppenpostfach outlook",
+        "ich brauche das postfach xyz in outlook",
+        "shared mailbox outlook",
+        "gemeinsames postfach einrichten",
+        "gruppenpostfach bitte einbinden",
+        "funktionspostfach hinzufuegen",
+        "team postfach in outlook",
+        "bitte das postfach info@ in mein outlook",
+        "postfach xyz@skf.com einbinden",
+        "freigegebenes postfach hinzufuegen",
+        "additional mailbox outlook",
+        "zweites postfach outlook",
+        "weiteres postfach einrichten",
+        "gruppenpostfach als zusaetzliches postfach"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_outlook_profile",
+          "action": "Outlook-Profil pruefen (Exchange-Konto vorhanden?)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_outlook_add_shared_mailbox",
+          "action": "Shared Mailbox per Registry/PowerShell hinzufuegen (Automapping oder manuell)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_outlook_restart",
+          "action": "Outlook neustarten"
+        },
+        {
+          "step": 4,
+          "skill": "rd_outlook_mailbox_verify",
+          "action": "Pruefen ob Postfach sichtbar ist"
+        }
+      ],
+      "erklaerung": "Das Gruppenpostfach wird in Outlook als zusaetzliches Postfach eingebunden. Bei Exchange Online geht das per Automapping (wenn in M365 Admin Center zugewiesen) oder manuell ueber Kontoeinstellungen.",
+      "tags": [
+        "gruppenpostfach",
+        "shared mailbox",
+        "postfach",
+        "einbinden",
+        "outlook",
+        "exchange",
+        "freigegebenes"
+      ],
+      "nachfragen": [
+        "Wie lautet die E-Mail-Adresse des Gruppenpostfachs?",
+        "Soll es als separates Postfach oder als 'Senden als' eingebunden werden?"
+      ],
+      "hinweis": "SKF: Gruppenpostfach-Berechtigungen muessen ZUERST in M365 Admin Center gesetzt werden. Das IT Admin Tool kann nur die Outlook-Einbindung machen, nicht die Berechtigung vergeben."
+    },
+    {
+      "id": "REQ-MAIL-002",
+      "category": "email",
+      "title": "E-Mail Weiterleitung einrichten",
+      "userSays": [
+        "weiterleitung einrichten",
+        "mails weiterleiten",
+        "e-mail forwarding",
+        "postfach weiterleitung",
+        "meine mails sollen an xyz weitergeleitet werden",
+        "automatische weiterleitung",
+        "email forwarding einrichten",
+        "mail forwarding",
+        "umleitung einrichten",
+        "alle mails an kollege weiterleiten",
+        "weiterleitung waehrend urlaub"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_outlook_forwarding_check",
+          "action": "Aktuelle Weiterleitungsregeln pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_outlook_forwarding_set",
+          "action": "Weiterleitungsregel erstellen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_outlook_forwarding_verify",
+          "action": "Weiterleitung testen"
+        }
+      ],
+      "erklaerung": "E-Mail-Weiterleitung kann per Outlook-Regel (client-seitig) oder per Exchange-Transportregel (server-seitig) eingerichtet werden. Client-Regel funktioniert nur wenn Outlook laeuft.",
+      "tags": [
+        "weiterleitung",
+        "forwarding",
+        "umleitung",
+        "mail",
+        "regel"
+      ],
+      "nachfragen": [
+        "An welche Adresse sollen die Mails weitergeleitet werden?",
+        "Nur waehrend eines bestimmten Zeitraums oder dauerhaft?",
+        "Soll eine Kopie im Postfach bleiben?"
+      ]
+    },
+    {
+      "id": "REQ-MAIL-003",
+      "category": "email",
+      "title": "Abwesenheitsnotiz / Out-of-Office einrichten",
+      "userSays": [
+        "abwesenheitsnotiz",
+        "out of office",
+        "ooo einrichten",
+        "abwesenheit einrichten",
+        "automatische antwort",
+        "abwesenheitsassistent",
+        "bin im urlaub",
+        "abwesenheitsnachricht",
+        "automatische abwesenheitsantwort",
+        "out of office reply",
+        "urlaub meldung",
+        "urlaubsnotiz",
+        "bitte abwesenheitsnotiz einrichten fuer user xyz"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_outlook_ooo_check",
+          "action": "Aktuelle Abwesenheitsnotiz pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_outlook_ooo_set",
+          "action": "Abwesenheitsnotiz einrichten (Text, Zeitraum, intern/extern)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_outlook_ooo_verify",
+          "action": "Pruefen ob aktiv"
+        }
+      ],
+      "erklaerung": "Die Abwesenheitsnotiz wird in Outlook/Exchange konfiguriert. Es gibt separate Texte fuer interne und externe Absender.",
+      "tags": [
+        "abwesenheit",
+        "out of office",
+        "ooo",
+        "urlaub",
+        "automatische antwort"
+      ],
+      "nachfragen": [
+        "Fuer welchen Zeitraum?",
+        "Welcher Text soll angezeigt werden?",
+        "Unterschiedlicher Text fuer interne und externe Absender?"
+      ]
+    },
+    {
+      "id": "REQ-MAIL-004",
+      "category": "email",
+      "title": "Verteiler / Verteilerliste erstellen oder aendern",
+      "userSays": [
+        "verteilerliste",
+        "verteiler erstellen",
+        "distribution list",
+        "email verteiler",
+        "verteiler aendern",
+        "verteilergruppe",
+        "jemanden zum verteiler hinzufuegen",
+        "verteiler bearbeiten",
+        "neuen verteiler anlegen",
+        "distribution group",
+        "mail gruppe erstellen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ad_group_check",
+          "action": "Verteilergruppe in AD pruefen/finden"
+        },
+        {
+          "step": 2,
+          "skill": "rd_ad_group_members",
+          "action": "Aktuelle Mitglieder anzeigen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ad_group_add_member",
+          "action": "Mitglied hinzufuegen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_ad_group_remove_member",
+          "action": "Mitglied entfernen"
+        }
+      ],
+      "erklaerung": "Verteilerlisten werden in Active Directory als Gruppen (Distribution Groups) verwaltet. Aenderungen werden NICHT ueber das IT Admin Tool gemacht sondern muessen im M365 Admin Center oder Exchange Admin Center erfolgen.",
+      "tags": [
+        "verteiler",
+        "verteilerliste",
+        "distribution",
+        "gruppe",
+        "mitglieder"
+      ],
+      "nachfragen": [
+        "Wie heisst der Verteiler?",
+        "Wer soll hinzugefuegt/entfernt werden?"
+      ],
+      "hinweis": "SKF: Verteiler werden in M365 Admin Center verwaltet. Das Tool kann nur den Status pruefen."
+    },
+    {
+      "id": "REQ-MAIL-005",
+      "category": "email",
+      "title": "'Senden als' / 'Senden im Auftrag von' Berechtigung",
+      "userSays": [
+        "senden als",
+        "send as",
+        "senden im auftrag",
+        "send on behalf",
+        "im namen von senden",
+        "ich moechte als info@ senden",
+        "mit anderer adresse senden",
+        "als gruppenpostfach senden",
+        "ich brauche senden-als berechtigung",
+        "senden als berechtigung fuer postfach xyz"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_outlook_send_as_check",
+          "action": "Aktuelle Senden-Als Berechtigungen pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_outlook_add_shared_mailbox",
+          "action": "Postfach in Outlook einbinden"
+        },
+        {
+          "step": 3,
+          "skill": "rd_outlook_from_field",
+          "action": "Von-Feld in Outlook aktivieren"
+        }
+      ],
+      "erklaerung": "'Senden als' (Empfaenger sieht nur die Gruppen-Adresse) muss im M365 Admin Center vergeben werden. 'Senden im Auftrag von' (Empfaenger sieht 'User im Auftrag von Gruppe') kann der Postfach-Besitzer selbst vergeben.",
+      "tags": [
+        "senden als",
+        "send as",
+        "berechtigung",
+        "im auftrag",
+        "postfach"
+      ],
+      "nachfragen": [
+        "Welches Postfach?",
+        "Soll es 'Senden als' (Empfaenger sieht nur Gruppen-Adresse) oder 'Senden im Auftrag von' sein?"
+      ]
+    },
+    {
+      "id": "REQ-PRINT-001",
+      "category": "drucker",
+      "title": "Drucker hinzufuegen / installieren",
+      "userSays": [
+        "drucker installieren",
+        "drucker hinzufuegen",
+        "drucker einrichten",
+        "neuen drucker",
+        "drucker auf pc installieren",
+        "netzwerkdrucker einrichten",
+        "drucker verbinden",
+        "bitte drucker xyz auf meinem pc installieren",
+        "drucker aufsetzen",
+        "printer installieren",
+        "drucker anbinden",
+        "ich brauche den drucker in buero 123"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ping",
+          "action": "Drucker/Druckserver erreichbar?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_printer_add",
+          "action": "Drucker hinzufuegen (per IP oder Druckserver)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_printer_driver_install",
+          "action": "Treiber installieren falls noetig"
+        },
+        {
+          "step": 4,
+          "skill": "rd_printer_test_page",
+          "action": "Testseite drucken"
+        },
+        {
+          "step": 5,
+          "skill": "rd_printer_set_default",
+          "action": "Als Standarddrucker setzen (falls gewuenscht)"
+        }
+      ],
+      "erklaerung": "Der Netzwerkdrucker wird auf dem Ziel-PC hinzugefuegt. Dazu brauche ich die IP-Adresse oder den Druckserver-Pfad.",
+      "tags": [
+        "drucker",
+        "installieren",
+        "hinzufuegen",
+        "einrichten",
+        "printer"
+      ],
+      "nachfragen": [
+        "Welcher Drucker (Name/Standort/IP)?",
+        "Soll er als Standarddrucker gesetzt werden?"
+      ]
+    },
+    {
+      "id": "REQ-PRINT-002",
+      "category": "drucker",
+      "title": "Standarddrucker aendern",
+      "userSays": [
+        "standarddrucker aendern",
+        "standarddrucker setzen",
+        "default printer",
+        "standarddrucker umstellen",
+        "anderer standarddrucker",
+        "mein standarddrucker soll xyz sein",
+        "falscher standarddrucker"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_printer_list",
+          "action": "Installierte Drucker anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_printer_set_default",
+          "action": "Gewuenschten Drucker als Standard setzen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_printer_default_verify",
+          "action": "Verifizieren"
+        }
+      ],
+      "erklaerung": "Der Standarddrucker wird geaendert. Windows hat eine Option 'Windows verwaltet Standarddrucker' die dazu fuehrt dass der zuletzt benutzte Drucker automatisch Standard wird – diese Option wird deaktiviert.",
+      "tags": [
+        "standarddrucker",
+        "default",
+        "aendern",
+        "setzen"
+      ]
+    },
+    {
+      "id": "REQ-PRINT-003",
+      "category": "drucker",
+      "title": "Drucker entfernen / deinstallieren",
+      "userSays": [
+        "drucker entfernen",
+        "drucker loeschen",
+        "drucker deinstallieren",
+        "drucker wegnehmen",
+        "alten drucker entfernen",
+        "drucker vom pc entfernen",
+        "printer deinstallieren"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_printer_list",
+          "action": "Installierte Drucker anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_printer_remove",
+          "action": "Drucker entfernen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_printer_driver_remove",
+          "action": "Treiber entfernen (optional)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_printer_list",
+          "action": "Verifizieren: Drucker weg"
+        }
+      ],
+      "erklaerung": "Der Drucker und optional sein Treiber werden vom Ziel-PC entfernt.",
+      "tags": [
+        "drucker",
+        "entfernen",
+        "loeschen",
+        "deinstallieren"
+      ],
+      "nachfragen": [
+        "Welcher Drucker soll entfernt werden?",
+        "Soll auch der Treiber entfernt werden?"
+      ]
+    },
+    {
+      "id": "REQ-SW-001",
+      "category": "software",
+      "title": "Software installieren",
+      "userSays": [
+        "software installieren",
+        "programm installieren",
+        "app installieren",
+        "bitte xyz installieren",
+        "ich brauche programm xyz",
+        "software aufspielen",
+        "programm aufsetzen",
+        "bitte chrome installieren",
+        "bitte 7zip installieren",
+        "software deployen",
+        "ich brauche adobe reader auf meinem pc",
+        "programm auf pc installieren",
+        "kannst du mir xyz installieren",
+        "neue software brauche ich"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_software_check_installed",
+          "action": "Ist die Software schon installiert?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_winget_search",
+          "action": "Software in Winget suchen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_winget_install",
+          "action": "Software per Winget silent installieren"
+        },
+        {
+          "step": 4,
+          "skill": "rd_software_check_installed",
+          "action": "Verifizieren: Installation erfolgreich?"
+        }
+      ],
+      "erklaerung": "Software wird per Winget (Windows Paketmanager) remote installiert. Falls nicht in Winget verfuegbar: MSI/EXE vom Netzlaufwerk kopieren und silent installieren.",
+      "tags": [
+        "software",
+        "installieren",
+        "programm",
+        "app",
+        "deployen",
+        "aufspielen"
+      ],
+      "nachfragen": [
+        "Welche Software soll installiert werden?",
+        "Auf welchem PC?"
+      ]
+    },
+    {
+      "id": "REQ-SW-002",
+      "category": "software",
+      "title": "Software deinstallieren",
+      "userSays": [
+        "software deinstallieren",
+        "programm deinstallieren",
+        "software entfernen",
+        "programm entfernen",
+        "app loeschen",
+        "bitte xyz deinstallieren",
+        "programm vom pc entfernen",
+        "software runter machen",
+        "programm wegnehmen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_software_list",
+          "action": "Installierte Software anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_software_uninstall",
+          "action": "Software silent deinstallieren"
+        },
+        {
+          "step": 3,
+          "skill": "rd_software_check_installed",
+          "action": "Verifizieren: Software entfernt?"
+        }
+      ],
+      "erklaerung": "Die Software wird remote deinstalliert. Bei MSI-Paketen per msiexec /x, bei anderen per Uninstall-String aus der Registry.",
+      "tags": [
+        "deinstallieren",
+        "entfernen",
+        "loeschen",
+        "software",
+        "programm"
+      ]
+    },
+    {
+      "id": "REQ-SW-003",
+      "category": "software",
+      "title": "Software aktualisieren / updaten",
+      "userSays": [
+        "software updaten",
+        "programm aktualisieren",
+        "update installieren",
+        "neueste version",
+        "bitte chrome updaten",
+        "bitte xyz aktualisieren",
+        "neue version installieren",
+        "software update",
+        "programm update"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_software_version_check",
+          "action": "Aktuelle Version pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_winget_upgrade",
+          "action": "Per Winget auf neueste Version updaten"
+        },
+        {
+          "step": 3,
+          "skill": "rd_software_version_check",
+          "action": "Verifizieren: Neue Version installiert?"
+        }
+      ],
+      "erklaerung": "Software wird per Winget upgrade auf die neueste Version aktualisiert.",
+      "tags": [
+        "update",
+        "aktualisieren",
+        "version",
+        "upgrade"
+      ]
+    },
+    {
+      "id": "REQ-NET-001",
+      "category": "netzwerk",
+      "title": "Netzlaufwerk mappen / verbinden",
+      "userSays": [
+        "netzlaufwerk mappen",
+        "netzlaufwerk verbinden",
+        "netzlaufwerk einrichten",
+        "laufwerk mappen",
+        "netzlaufwerk hinzufuegen",
+        "share verbinden",
+        "netzwerk ordner anbinden",
+        "bitte laufwerk z: auf \\\\server\\share mappen",
+        "netzlaufwerk erstellen",
+        "freigegebenen ordner als laufwerk",
+        "neues netzlaufwerk",
+        "netzlaufwerk zuordnen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ping",
+          "action": "Server erreichbar?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_network_drive_map",
+          "action": "Netzlaufwerk mappen (Buchstabe + UNC-Pfad)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_network_drives",
+          "action": "Verifizieren: Laufwerk verbunden?"
+        }
+      ],
+      "erklaerung": "Ein Netzlaufwerk wird mit einem Laufwerksbuchstaben verbunden. Das Mapping kann persistent (ueberlebt Neustart) oder temporaer sein.",
+      "tags": [
+        "netzlaufwerk",
+        "mappen",
+        "verbinden",
+        "share",
+        "laufwerk",
+        "unc"
+      ],
+      "nachfragen": [
+        "Welcher Laufwerksbuchstabe?",
+        "Welcher UNC-Pfad (z.B. \\\\server\\freigabe)?",
+        "Soll das Laufwerk nach Neustart automatisch wieder verbunden werden?"
+      ]
+    },
+    {
+      "id": "REQ-NET-002",
+      "category": "netzwerk",
+      "title": "Netzlaufwerk trennen / entfernen",
+      "userSays": [
+        "netzlaufwerk trennen",
+        "netzlaufwerk entfernen",
+        "laufwerk trennen",
+        "netzlaufwerk loeschen",
+        "laufwerk z entfernen",
+        "netzlaufwerk abklemmen",
+        "share trennen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_network_drives",
+          "action": "Gemappte Laufwerke anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_network_drive_remove",
+          "action": "Laufwerk trennen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_network_drives",
+          "action": "Verifizieren: Laufwerk getrennt?"
+        }
+      ],
+      "erklaerung": "Das Netzlaufwerk wird getrennt und der Laufwerksbuchstabe freigegeben.",
+      "tags": [
+        "netzlaufwerk",
+        "trennen",
+        "entfernen",
+        "loeschen"
+      ],
+      "nachfragen": [
+        "Welches Laufwerk (Buchstabe)?"
+      ]
+    },
+    {
+      "id": "REQ-NET-003",
+      "category": "netzwerk",
+      "title": "WLAN-Profil einrichten / verbinden",
+      "userSays": [
+        "wlan einrichten",
+        "wifi verbinden",
+        "wlan profil",
+        "wlan konfigurieren",
+        "mit wlan verbinden",
+        "neues wlan einrichten",
+        "wlan netzwerk hinzufuegen",
+        "wifi setup",
+        "wlan profil erstellen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_wlan_profiles",
+          "action": "Vorhandene WLAN-Profile anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_wlan_profile_add",
+          "action": "Neues WLAN-Profil erstellen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_wlan_connect",
+          "action": "Mit WLAN verbinden"
+        },
+        {
+          "step": 4,
+          "skill": "rd_wlan_status",
+          "action": "Verbindungsstatus pruefen"
+        }
+      ],
+      "erklaerung": "Ein WLAN-Profil wird erstellt und der PC mit dem Netzwerk verbunden.",
+      "tags": [
+        "wlan",
+        "wifi",
+        "profil",
+        "verbinden",
+        "einrichten"
+      ],
+      "nachfragen": [
+        "Wie heisst das WLAN-Netzwerk (SSID)?",
+        "WPA2 oder WPA3?"
+      ]
+    },
+    {
+      "id": "REQ-SYS-001",
+      "category": "system",
+      "title": "Computername aendern",
+      "userSays": [
+        "computername aendern",
+        "pc umbenennen",
+        "hostname aendern",
+        "rechnername aendern",
+        "computer umbenennen",
+        "neuer computername",
+        "pc name aendern",
+        "hostname umbenennen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_hostname_check",
+          "action": "Aktuellen Computernamen anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_hostname_change",
+          "action": "Computernamen aendern (Rename-Computer)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_reboot_schedule",
+          "action": "Neustart planen (noetig fuer Namensaenderung)"
+        }
+      ],
+      "erklaerung": "Der Computername wird geaendert. WICHTIG: Ein Neustart ist zwingend erforderlich damit die Aenderung wirksam wird. Der PC wird automatisch in der Domain unter dem neuen Namen registriert.",
+      "tags": [
+        "computername",
+        "hostname",
+        "umbenennen",
+        "aendern",
+        "name"
+      ],
+      "nachfragen": [
+        "Wie soll der neue Name lauten?",
+        "Wann kann der PC neugestartet werden?"
+      ],
+      "hinweis": "Namenskonvention bei SKF: DEHAM + Seriennummer"
+    },
+    {
+      "id": "REQ-SYS-002",
+      "category": "system",
+      "title": "PC in Domain aufnehmen / joinen",
+      "userSays": [
+        "domain beitreten",
+        "domain join",
+        "pc in domain aufnehmen",
+        "domain joinen",
+        "computer in domain",
+        "ad beitreten",
+        "domaene beitreten"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_domain_check",
+          "action": "Aktuellen Domain-Status pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_domain_join",
+          "action": "PC in Domain aufnehmen (Add-Computer)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_reboot_schedule",
+          "action": "Neustart planen (noetig!)"
+        }
+      ],
+      "erklaerung": "Der PC wird in die Active Directory Domain aufgenommen. Ein Domain-Admin-Konto wird benoetigt. Nach dem Domain-Join ist ein Neustart zwingend erforderlich.",
+      "tags": [
+        "domain",
+        "joinen",
+        "beitreten",
+        "ad",
+        "active directory"
+      ],
+      "berechtigungNoetig": "admin"
+    },
+    {
+      "id": "REQ-SYS-003",
+      "category": "system",
+      "title": "Uhrzeit / Zeitzone aendern",
+      "userSays": [
+        "uhrzeit aendern",
+        "zeitzone aendern",
+        "uhrzeit falsch",
+        "zeit korrigieren",
+        "uhrzeit einstellen",
+        "zeitzone umstellen",
+        "systemzeit aendern",
+        "ntp einstellen",
+        "uhr geht falsch"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ntp_check",
+          "action": "Aktuelle Uhrzeit und NTP-Server pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_ntp_sync",
+          "action": "Uhrzeit mit NTP-Server synchronisieren"
+        },
+        {
+          "step": 3,
+          "skill": "rd_timezone_set",
+          "action": "Zeitzone setzen falls noetig"
+        },
+        {
+          "step": 4,
+          "skill": "rd_ntp_check",
+          "action": "Verifizieren: Uhrzeit korrekt?"
+        }
+      ],
+      "erklaerung": "Die Systemuhrzeit wird mit dem NTP-Server synchronisiert. Eine falsche Uhrzeit kann Kerberos-Authentifizierung und Zertifikate stoeren!",
+      "tags": [
+        "uhrzeit",
+        "zeitzone",
+        "ntp",
+        "synchronisieren",
+        "zeit"
+      ]
+    },
+    {
+      "id": "REQ-SYS-004",
+      "category": "system",
+      "title": "RDP aktivieren / Remote Desktop einschalten",
+      "userSays": [
+        "rdp aktivieren",
+        "remote desktop aktivieren",
+        "rdp einschalten",
+        "remote desktop erlauben",
+        "remotedesktop aktivieren",
+        "rdp freischalten",
+        "ich moechte mich per rdp verbinden",
+        "remote zugriff einrichten",
+        "remote desktop einrichten"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_rdp_status",
+          "action": "RDP-Status pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_rdp_enable",
+          "action": "RDP aktivieren (Registry + Firewall)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_rdp_user_add",
+          "action": "User zur Remote Desktop Benutzer-Gruppe hinzufuegen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_firewall_rdp_allow",
+          "action": "Firewall-Regel fuer RDP erstellen"
+        }
+      ],
+      "erklaerung": "Remote Desktop wird aktiviert, die Firewall-Regel wird erstellt und der User wird zur RDP-Berechtigungsgruppe hinzugefuegt.",
+      "tags": [
+        "rdp",
+        "remote desktop",
+        "fernzugriff",
+        "aktivieren",
+        "einschalten"
+      ]
+    },
+    {
+      "id": "REQ-SYS-005",
+      "category": "system",
+      "title": "Proxy-Einstellungen aendern",
+      "userSays": [
+        "proxy einstellen",
+        "proxy aendern",
+        "proxy konfigurieren",
+        "proxy einrichten",
+        "proxy server setzen",
+        "proxy deaktivieren",
+        "proxy entfernen",
+        "internet proxy"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_proxy_check",
+          "action": "Aktuelle Proxy-Einstellungen anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_proxy_set",
+          "action": "Proxy-Server setzen oder aendern"
+        },
+        {
+          "step": 3,
+          "skill": "rd_proxy_check",
+          "action": "Verifizieren"
+        }
+      ],
+      "erklaerung": "Die Proxy-Einstellungen werden per Registry oder netsh geaendert. Bei SKF wird Zscaler als Proxy verwendet.",
+      "tags": [
+        "proxy",
+        "einstellungen",
+        "konfigurieren",
+        "internet"
+      ]
+    },
+    {
+      "id": "REQ-SEC-001",
+      "category": "sicherheit",
+      "title": "BitLocker aktivieren / verschluesseln",
+      "userSays": [
+        "bitlocker aktivieren",
+        "festplatte verschluesseln",
+        "bitlocker einschalten",
+        "verschluesselung aktivieren",
+        "bitlocker auf laufwerk c",
+        "laufwerk verschluesseln",
+        "bitlocker einrichten"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_tpm_status",
+          "action": "TPM vorhanden und bereit?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_bitlocker_status",
+          "action": "Aktueller BitLocker-Status"
+        },
+        {
+          "step": 3,
+          "skill": "rd_bitlocker_enable",
+          "action": "BitLocker aktivieren"
+        },
+        {
+          "step": 4,
+          "skill": "rd_bitlocker_recovery_backup",
+          "action": "Recovery Key in AD sichern"
+        },
+        {
+          "step": 5,
+          "skill": "rd_bitlocker_status",
+          "action": "Verschluesselungsfortschritt pruefen"
+        }
+      ],
+      "erklaerung": "BitLocker wird auf dem Laufwerk aktiviert. Der Recovery Key wird automatisch in Active Directory gesichert. Voraussetzung: TPM-Chip muss vorhanden sein.",
+      "tags": [
+        "bitlocker",
+        "verschluesselung",
+        "aktivieren",
+        "tpm",
+        "recovery"
+      ],
+      "berechtigungNoetig": "admin"
+    },
+    {
+      "id": "REQ-SEC-002",
+      "category": "sicherheit",
+      "title": "Firewall-Regel erstellen / Port freigeben",
+      "userSays": [
+        "firewall regel",
+        "port freigeben",
+        "firewall oeffnen",
+        "port oeffnen",
+        "firewall regel erstellen",
+        "port in firewall oeffnen",
+        "eingehende regel",
+        "firewall port 8080 freigeben",
+        "firewall ausnahme erstellen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_firewall_rules_list",
+          "action": "Aktuelle Firewall-Regeln anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_firewall_rule_create",
+          "action": "Neue Regel erstellen (Port, Protokoll, Richtung)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_firewall_rules_list",
+          "action": "Verifizieren: Regel aktiv?"
+        }
+      ],
+      "erklaerung": "Eine Windows Firewall Regel wird erstellt um einen bestimmten Port oder ein Programm freizugeben.",
+      "tags": [
+        "firewall",
+        "port",
+        "regel",
+        "freigeben",
+        "oeffnen"
+      ],
+      "nachfragen": [
+        "Welcher Port?",
+        "TCP oder UDP?",
+        "Eingehend oder ausgehend?",
+        "Fuer ein bestimmtes Programm?"
+      ]
+    },
+    {
+      "id": "REQ-SEC-003",
+      "category": "sicherheit",
+      "title": "USB-Sticks sperren / freigeben",
+      "userSays": [
+        "usb sperren",
+        "usb blockieren",
+        "usb stick sperren",
+        "usb freigeben",
+        "usb storage deaktivieren",
+        "keine usb sticks erlauben",
+        "usb sticks blockieren",
+        "usb wieder freigeben"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_usb_storage_status",
+          "action": "Aktuellen USB-Storage Status pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_usb_storage_toggle",
+          "action": "USB-Storage sperren (4) oder freigeben (3)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_usb_storage_status",
+          "action": "Verifizieren"
+        }
+      ],
+      "erklaerung": "USB-Speichergeraete werden per Registry blockiert oder freigegeben. Betrifft nur Speichergeraete (Sticks, externe Festplatten), NICHT Maus/Tastatur/Drucker.",
+      "tags": [
+        "usb",
+        "sperren",
+        "blockieren",
+        "freigeben",
+        "stick"
+      ]
+    },
+    {
+      "id": "REQ-PERS-001",
+      "category": "personalisierung",
+      "title": "Dark Mode aktivieren",
+      "userSays": [
+        "dark mode",
+        "dunkler modus",
+        "dunkles design",
+        "dark theme",
+        "windows dunkel machen",
+        "dark mode einschalten",
+        "schwarzes design",
+        "nachtmodus aktivieren"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_theme_check",
+          "action": "Aktuelles Design pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_theme_set_dark",
+          "action": "Dark Mode aktivieren (Apps + System)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_theme_check",
+          "action": "Verifizieren"
+        }
+      ],
+      "erklaerung": "Windows wird auf Dark Mode umgestellt. Gilt fuer Apps und System-Oberflaeche.",
+      "tags": [
+        "dark",
+        "dunkel",
+        "design",
+        "theme",
+        "nacht"
+      ]
+    },
+    {
+      "id": "REQ-PERS-002",
+      "category": "personalisierung",
+      "title": "Hintergrundbild aendern",
+      "userSays": [
+        "hintergrund aendern",
+        "desktop hintergrund",
+        "wallpaper aendern",
+        "bildschirmhintergrund",
+        "hintergrundbild setzen",
+        "desktop bild aendern",
+        "neues hintergrundbild"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_wallpaper_set",
+          "action": "Hintergrundbild setzen (Pfad zum Bild)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_explorer_restart",
+          "action": "Explorer neustarten falls noetig"
+        }
+      ],
+      "erklaerung": "Das Desktop-Hintergrundbild wird geaendert. Das Bild muss auf dem Ziel-PC vorhanden sein oder vom Netzlaufwerk kopiert werden.",
+      "tags": [
+        "hintergrund",
+        "wallpaper",
+        "desktop",
+        "bild"
+      ]
+    },
+    {
+      "id": "REQ-PERS-003",
+      "category": "personalisierung",
+      "title": "Taskleiste anpassen (Icons ein/aus)",
+      "userSays": [
+        "taskleiste anpassen",
+        "taskleiste icons",
+        "chat entfernen",
+        "widgets entfernen",
+        "taskleiste aufraumen",
+        "suche in taskleiste",
+        "taskleiste konfigurieren",
+        "widgets aus taskleiste entfernen",
+        "copilot entfernen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_taskbar_check",
+          "action": "Aktuelle Taskleisten-Einstellungen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_taskbar_configure",
+          "action": "Icons ein-/ausschalten (Chat, Widgets, Suche, Copilot)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_taskbar_alignment",
+          "action": "Ausrichtung setzen (Links/Mitte)"
+        }
+      ],
+      "erklaerung": "Die Taskleisten-Icons (Chat, Widgets, Suche, Copilot) werden per Registry ein- oder ausgeschaltet.",
+      "tags": [
+        "taskleiste",
+        "taskbar",
+        "icons",
+        "widgets",
+        "chat",
+        "suche"
+      ]
+    },
+    {
+      "id": "REQ-LANG-001",
+      "category": "sprache",
+      "title": "Sprache auf Deutsch umstellen",
+      "userSays": [
+        "sprache umstellen",
+        "auf deutsch umstellen",
+        "sprache aendern",
+        "deutsch einstellen",
+        "windows auf deutsch",
+        "pc sprache aendern",
+        "system sprache deutsch",
+        "betriebssystem deutsch machen",
+        "alles auf deutsch stellen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_language_check",
+          "action": "Aktuelle Sprache pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_language_pack_install",
+          "action": "Deutsches Sprachpaket installieren"
+        },
+        {
+          "step": 3,
+          "skill": "rd_language_set",
+          "action": "Anzeigesprache auf Deutsch"
+        },
+        {
+          "step": 4,
+          "skill": "rd_keyboard_layout_set",
+          "action": "Tastatur auf QWERTZ (Deutsch)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_region_set",
+          "action": "Region auf Deutschland"
+        },
+        {
+          "step": 6,
+          "skill": "rd_office_language_set",
+          "action": "Office-Sprache auf Deutsch"
+        },
+        {
+          "step": 7,
+          "skill": "rd_welcome_screen_language",
+          "action": "Willkommensbildschirm Deutsch"
+        }
+      ],
+      "erklaerung": "Die komplette Sprache wird umgestellt: Windows, Tastatur, Region UND Office. Nach der Aenderung muss sich der User ab- und wieder anmelden.",
+      "tags": [
+        "sprache",
+        "deutsch",
+        "umstellen",
+        "aendern",
+        "language"
+      ],
+      "hinweis": "Abmeldung noetig nach Sprachaenderung!"
+    },
+    {
+      "id": "REQ-ASSOC-001",
+      "category": "standard_apps",
+      "title": "Standard-Browser aendern",
+      "userSays": [
+        "standard browser aendern",
+        "chrome als standard",
+        "edge als standard",
+        "browser aendern",
+        "standard browser setzen",
+        "default browser",
+        "standardbrowser umstellen"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_software_check_installed",
+          "action": "Gewuenschter Browser installiert?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_default_app_set",
+          "action": "SetUserFTA: http + https auf gewuenschten Browser"
+        },
+        {
+          "step": 3,
+          "skill": "rd_file_association_verify",
+          "action": "Verifizieren"
+        }
+      ],
+      "erklaerung": "Der Standard-Browser wird per SetUserFTA geaendert. Das Tool liegt auf dem Netzlaufwerk unter Tool IT/tools/.",
+      "tags": [
+        "browser",
+        "standard",
+        "default",
+        "chrome",
+        "edge"
+      ],
+      "nachfragen": [
+        "Welcher Browser soll Standard werden?"
+      ]
+    },
+    {
+      "id": "REQ-ASSOC-002",
+      "category": "standard_apps",
+      "title": "PDF-Reader aendern (Adobe statt Edge)",
+      "userSays": [
+        "pdf reader aendern",
+        "adobe standard",
+        "pdf mit adobe oeffnen",
+        "pdf nicht in edge",
+        "adobe reader als standard",
+        "pdf zuordnung aendern"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_software_check_installed",
+          "action": "Adobe Reader installiert?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_default_app_set",
+          "action": "SetUserFTA: .pdf auf AcroExch.Document.DC"
+        },
+        {
+          "step": 3,
+          "skill": "rd_file_association_verify",
+          "action": "Verifizieren"
+        }
+      ],
+      "erklaerung": "Die PDF-Zuordnung wird von Edge auf Adobe Reader geaendert.",
+      "tags": [
+        "pdf",
+        "adobe",
+        "reader",
+        "standard",
+        "edge",
+        "zuordnung"
+      ]
+    },
+    {
+      "id": "REQ-REM-001",
+      "category": "remote",
+      "title": "PC herunterfahren / neustarten",
+      "userSays": [
+        "pc herunterfahren",
+        "pc neustarten",
+        "remote shutdown",
+        "remote reboot",
+        "pc ausschalten",
+        "rechner neustarten",
+        "pc neustart",
+        "computer herunterfahren",
+        "shutdown remote",
+        "bitte den pc xyz neustarten"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_user_logged_in",
+          "action": "Ist ein User angemeldet? (Warnung!)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_message_send",
+          "action": "User benachrichtigen (falls angemeldet)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_reboot",
+          "action": "PC neustarten / herunterfahren"
+        }
+      ],
+      "erklaerung": "Der PC wird remote heruntergefahren oder neugestartet. Falls ein User angemeldet ist, wird er vorher benachrichtigt.",
+      "tags": [
+        "shutdown",
+        "herunterfahren",
+        "neustarten",
+        "reboot",
+        "ausschalten"
+      ],
+      "nachfragen": [
+        "Herunterfahren oder Neustarten?",
+        "Sofort oder zu einem bestimmten Zeitpunkt?"
+      ]
+    },
+    {
+      "id": "REQ-REM-002",
+      "category": "remote",
+      "title": "Nachricht an User senden / PopUp",
+      "userSays": [
+        "nachricht senden",
+        "popup senden",
+        "user benachrichtigen",
+        "nachricht auf bildschirm",
+        "meldung an user",
+        "bildschirm nachricht",
+        "message an pc",
+        "benachrichtigung senden"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_user_logged_in",
+          "action": "User angemeldet?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_message_send",
+          "action": "Nachricht als PopUp senden (msg.exe)"
+        }
+      ],
+      "erklaerung": "Eine Nachricht wird als PopUp auf dem Bildschirm des Users angezeigt.",
+      "tags": [
+        "nachricht",
+        "popup",
+        "meldung",
+        "benachrichtigen",
+        "senden"
+      ],
+      "nachfragen": [
+        "Welcher Text soll angezeigt werden?"
+      ]
+    },
+    {
+      "id": "REQ-TASK-001",
+      "category": "geplante_aufgaben",
+      "title": "Geplante Aufgabe erstellen",
+      "userSays": [
+        "geplante aufgabe erstellen",
+        "scheduled task",
+        "aufgabe planen",
+        "task planen",
+        "aufgabe erstellen die regelmaessig laeuft",
+        "cronjob erstellen",
+        "task scheduler",
+        "automatische aufgabe einrichten",
+        "zeitgesteuerte aufgabe"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_task_list",
+          "action": "Bestehende geplante Aufgaben anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_task_create",
+          "action": "Neue Aufgabe erstellen (Name, Trigger, Aktion)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_task_verify",
+          "action": "Aufgabe pruefen und manuell testen"
+        }
+      ],
+      "erklaerung": "Eine geplante Aufgabe (Scheduled Task) wird auf dem Ziel-PC erstellt.",
+      "tags": [
+        "geplante aufgabe",
+        "task",
+        "scheduled",
+        "planen",
+        "automatisch"
+      ],
+      "nachfragen": [
+        "Was soll die Aufgabe tun?",
+        "Wann/wie oft soll sie laufen?",
+        "Als welcher Benutzer?"
+      ]
+    },
+    {
+      "id": "REQ-SIG-001",
+      "category": "outlook",
+      "title": "Outlook-Signatur einrichten / aendern",
+      "userSays": [
+        "outlook signatur",
+        "email signatur",
+        "signatur einrichten",
+        "signatur aendern",
+        "neue signatur",
+        "outlook signatur setzen",
+        "e-mail signatur erstellen",
+        "meine signatur aendern",
+        "signatur aktualisieren"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_outlook_signature_check",
+          "action": "Aktuelle Signaturen anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_outlook_signature_deploy",
+          "action": "Signatur-Dateien auf Ziel-PC kopieren"
+        },
+        {
+          "step": 3,
+          "skill": "rd_outlook_signature_set_default",
+          "action": "Signatur als Standard setzen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_outlook_restart",
+          "action": "Outlook neustarten"
+        }
+      ],
+      "erklaerung": "Die Outlook-Signatur wird auf den Ziel-PC deployed. Die Signatur-Dateien (HTML/RTF/TXT) werden vom Netzlaufwerk in den Outlook-Signatur-Ordner kopiert.",
+      "tags": [
+        "signatur",
+        "outlook",
+        "email",
+        "einrichten",
+        "aendern"
+      ],
+      "nachfragen": [
+        "Gibt es eine Vorlage auf dem Netzlaufwerk?",
+        "Soll die Signatur fuer neue Mails, Antworten oder beides gelten?"
+      ]
+    },
+    {
+      "id": "REQ-CERT-001",
+      "category": "zertifikate",
+      "title": "Zertifikat installieren / importieren",
+      "userSays": [
+        "zertifikat installieren",
+        "zertifikat importieren",
+        "zertifikat hinzufuegen",
+        "cert installieren",
+        "root ca installieren",
+        "ssl zertifikat importieren",
+        "zertifikat auf pc installieren"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_cert_list",
+          "action": "Vorhandene Zertifikate anzeigen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_cert_import",
+          "action": "Zertifikat importieren (Store + Pfad)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_cert_list",
+          "action": "Verifizieren: Zertifikat importiert?"
+        }
+      ],
+      "erklaerung": "Ein Zertifikat wird in den gewuenschten Certificate Store importiert (Root, Personal, CA).",
+      "tags": [
+        "zertifikat",
+        "importieren",
+        "installieren",
+        "cert",
+        "root",
+        "ca"
+      ],
+      "nachfragen": [
+        "Wo liegt die Zertifikat-Datei (.cer/.pfx)?",
+        "In welchen Store (Root, Personal)?"
+      ]
+    },
+    {
+      "id": "REQ-KIOSK-001",
+      "category": "kiosk",
+      "title": "Kiosk-Modus einrichten (PC nur fuer eine App)",
+      "userSays": [
+        "kiosk modus",
+        "kiosk einrichten",
+        "assigned access",
+        "nur eine app",
+        "eingeschraenkter modus",
+        "pc als kiosk",
+        "nur browser",
+        "nur eine anwendung erlauben"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_kiosk_check",
+          "action": "Aktuellen Assigned Access Status pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_local_user_create",
+          "action": "Kiosk-Benutzer erstellen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_kiosk_set",
+          "action": "Assigned Access konfigurieren (User + App)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_kiosk_verify",
+          "action": "Kiosk-Modus testen"
+        }
+      ],
+      "erklaerung": "Der PC wird im Kiosk-Modus konfiguriert: Ein bestimmter Benutzer kann nur EINE App verwenden (z.B. Edge-Browser fuer ein Webportal).",
+      "tags": [
+        "kiosk",
+        "assigned access",
+        "eingeschraenkt",
+        "eine app"
+      ],
+      "nachfragen": [
+        "Welche App soll im Kiosk-Modus laufen?",
+        "Soll ein spezieller Kiosk-Benutzer erstellt werden?"
+      ],
+      "berechtigungNoetig": "admin"
+    }
+  ]
+}

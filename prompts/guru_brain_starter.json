@@ -1,0 +1,3632 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "IT Guru Gehirn-Datenbank: Probleme, Symptome, Loesungen, Skill-Ketten",
+    "totalProblems": "1000+",
+    "categories": 22,
+    "generatedBy": "Claude Opus 4.6 fuer SKF Marine Hamburg",
+    "hinweis": "Diese Datei wird vom IT Guru als Wissensbasis geladen. Der Guru durchsucht die userSays-Arrays um Probleme zu erkennen und wendet dann die skillChain in der angegebenen Reihenfolge an."
+  },
+  "problems": [
+    {
+      "id": "WIN-001",
+      "category": "windows",
+      "title": "Bluescreen IRQL_NOT_LESS_OR_EQUAL",
+      "userSays": [
+        "bluescreen irql",
+        "bluescreen",
+        "blaues bild",
+        "blauer bildschirm",
+        "pc stuerzt ab mit blauem bildschirm",
+        "pc zeigt blauen bildschirm",
+        "mein pc macht bluescreen",
+        "bluescreen of death",
+        "bsod",
+        "bildschirm wird blau und pc startet neu",
+        "irql not less or equal",
+        "irql fehler",
+        "pc stuerzt immer ab",
+        "pc crasht",
+        "windows absturz blau",
+        "blue screen",
+        "mein rechner zeigt ploetzlich einen blauen bildschirm",
+        "der pc hat einen blauen fehlerbildschirm",
+        "stop fehler",
+        "windows crash",
+        "mein laptop stuerzt staendig ab mit blauem bild"
+      ],
+      "diagnose": [
+        "rd_event_bsod",
+        "rd_driver_list",
+        "rd_ram_check",
+        "rd_sfc_dism"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_event_bsod",
+          "action": "BSOD-Events aus Event-Log auslesen (Stop-Code + Treiber)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_driver_list",
+          "action": "Kuerzlich aktualisierte Treiber pruefen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ram_check",
+          "action": "RAM-Diagnose starten (mdsched)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_sfc_dism",
+          "action": "Systemdateien reparieren (SFC + DISM)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_update_check",
+          "action": "Ausstehende Updates installieren"
+        }
+      ],
+      "erklaerung": "IRQL_NOT_LESS_OR_EQUAL bedeutet meist ein Treiber-Problem. Ein Treiber versucht auf Speicher zuzugreifen auf den er keinen Zugriff hat. Haeufigste Ursachen: Veralteter/defekter Netzwerk- oder Grafiktreiber, defekter RAM.",
+      "tags": [
+        "bluescreen",
+        "bsod",
+        "irql",
+        "absturz",
+        "crash",
+        "treiber",
+        "ram"
+      ],
+      "nachfragen": [
+        "Wann genau passiert der Bluescreen? (Beim Starten, bei bestimmten Programmen, zufaellig?)",
+        "Wurde kuerzlich etwas installiert oder aktualisiert?",
+        "Steht ein Fehlercode auf dem blauen Bildschirm?"
+      ],
+      "hinweis": "Wenn BSOD bei bestimmter Aktion: Treiber dieser Hardware pruefen. Wenn zufaellig: RAM-Test priorisieren."
+    },
+    {
+      "id": "WIN-002",
+      "category": "windows",
+      "title": "Bluescreen CRITICAL_PROCESS_DIED",
+      "userSays": [
+        "critical process died",
+        "kritischer prozess",
+        "pc stuerzt ab critical",
+        "bluescreen critical",
+        "windows startet nicht mehr critical process",
+        "critical process died fehler",
+        "mein pc zeigt critical process died",
+        "blauer bildschirm critical process",
+        "windows crasht mit critical process died",
+        "pc faehrt runter critical"
+      ],
+      "diagnose": [
+        "rd_event_bsod",
+        "rd_sfc_dism",
+        "rd_chkdsk"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_event_bsod",
+          "action": "Stop-Code und verursachenden Prozess identifizieren"
+        },
+        {
+          "step": 2,
+          "skill": "rd_sfc_dism",
+          "action": "Systemdateien pruefen und reparieren"
+        },
+        {
+          "step": 3,
+          "skill": "rd_chkdsk",
+          "action": "Festplatte auf Fehler pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_smart_status",
+          "action": "SMART-Status der Festplatte pruefen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_restore_point_list",
+          "action": "Wiederherstellungspunkt vorhanden? Ggf. zuruecksetzen"
+        }
+      ],
+      "erklaerung": "CRITICAL_PROCESS_DIED bedeutet ein wichtiger Windows-Prozess (csrss.exe, wininit.exe, etc.) ist abgestuerzt. Ursachen: Beschaedigte Systemdateien, defekte Festplatte, fehlerhafte Updates.",
+      "tags": [
+        "bluescreen",
+        "critical process",
+        "absturz",
+        "systemdateien",
+        "festplatte"
+      ],
+      "nachfragen": [
+        "Passiert es bei jedem Start oder nur manchmal?",
+        "Wurde kuerzlich ein Windows Update installiert?"
+      ]
+    },
+    {
+      "id": "WIN-003",
+      "category": "windows",
+      "title": "Bluescreen KERNEL_DATA_INPAGE_ERROR",
+      "userSays": [
+        "kernel data inpage error",
+        "kernel fehler",
+        "bluescreen kernel",
+        "festplatte bluescreen",
+        "pc stuerzt ab kernel data",
+        "inpage error",
+        "bluescreen festplatte",
+        "windows crasht kernel data inpage",
+        "mein pc zeigt kernel data inpage error"
+      ],
+      "diagnose": [
+        "rd_smart_status",
+        "rd_chkdsk",
+        "rd_event_bsod"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_smart_status",
+          "action": "SMART-Status: Festplatte defekt?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_chkdsk",
+          "action": "CHKDSK ausfuehren"
+        },
+        {
+          "step": 3,
+          "skill": "rd_event_bsod",
+          "action": "Event-Log: Welcher Datentraeger betroffen?"
+        },
+        {
+          "step": 4,
+          "skill": "rd_disk_space",
+          "action": "Freier Speicherplatz pruefen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_pagefile_check",
+          "action": "Pagefile-Konfiguration pruefen"
+        }
+      ],
+      "erklaerung": "KERNEL_DATA_INPAGE_ERROR: Windows konnte Daten nicht von der Festplatte lesen. Fast immer ein Festplatten-Problem – entweder defekte Sektoren oder eine sterbende SSD/HDD.",
+      "tags": [
+        "bluescreen",
+        "kernel",
+        "festplatte",
+        "ssd",
+        "hdd",
+        "smart",
+        "defekt"
+      ],
+      "hinweis": "Bei schlechtem SMART-Status: SOFORT Backup empfehlen! Festplatte stirbt."
+    },
+    {
+      "id": "WIN-004",
+      "category": "windows",
+      "title": "Bluescreen SYSTEM_THREAD_EXCEPTION_NOT_HANDLED",
+      "userSays": [
+        "system thread exception",
+        "bluescreen system thread",
+        "exception not handled",
+        "pc crasht system thread",
+        "bluescreen treiber",
+        "treiber bluescreen absturz",
+        "mein pc zeigt system thread exception not handled"
+      ],
+      "diagnose": [
+        "rd_event_bsod",
+        "rd_driver_list",
+        "rd_device_error"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_event_bsod",
+          "action": "Verursachenden Treiber identifizieren (steht meist im BSOD)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_driver_list",
+          "action": "Treiber-Version pruefen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_device_error",
+          "action": "Geraetemanager Fehlercodes pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_driver_update",
+          "action": "Betroffenen Treiber aktualisieren oder zuruecksetzen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_sfc_dism",
+          "action": "Systemdateien reparieren"
+        }
+      ],
+      "erklaerung": "SYSTEM_THREAD_EXCEPTION_NOT_HANDLED: Ein Treiber hat einen Fehler verursacht den Windows nicht abfangen konnte. Der Name des Treibers steht meist direkt auf dem Bluescreen (z.B. nvlddmkm.sys = NVIDIA, atikmdag.sys = AMD).",
+      "tags": [
+        "bluescreen",
+        "treiber",
+        "driver",
+        "exception",
+        "grafikkarte",
+        "nvidia",
+        "amd"
+      ],
+      "nachfragen": [
+        "Steht ein Dateiname auf dem Bluescreen? (z.B. etwas mit .sys am Ende)"
+      ]
+    },
+    {
+      "id": "WIN-005",
+      "category": "windows",
+      "title": "Bluescreen DPC_WATCHDOG_VIOLATION",
+      "userSays": [
+        "dpc watchdog",
+        "watchdog violation",
+        "bluescreen watchdog",
+        "pc haengt sich auf watchdog",
+        "dpc watchdog violation fehler",
+        "bluescreen dpc"
+      ],
+      "diagnose": [
+        "rd_event_bsod",
+        "rd_driver_list",
+        "rd_disk_type"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_event_bsod",
+          "action": "Event-Log pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_disk_type",
+          "action": "SSD oder HDD? (Bei HDD: AHCI-Modus pruefen)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_driver_list",
+          "action": "Storage-Controller Treiber pruefen (iaStorA/iaStorAC)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_driver_update",
+          "action": "Storage-Treiber aktualisieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_sfc_dism",
+          "action": "Systemdateien reparieren"
+        }
+      ],
+      "erklaerung": "DPC_WATCHDOG_VIOLATION: Ein Treiber hat zu lange gebraucht um eine Aufgabe abzuschliessen. Haeufigste Ursache: Veralteter Storage-Controller-Treiber (iaStorA.sys) oder SSD-Firmware.",
+      "tags": [
+        "bluescreen",
+        "watchdog",
+        "dpc",
+        "ssd",
+        "storage",
+        "controller",
+        "iastora"
+      ]
+    },
+    {
+      "id": "WIN-006",
+      "category": "windows",
+      "title": "Bluescreen MEMORY_MANAGEMENT",
+      "userSays": [
+        "memory management",
+        "bluescreen speicher",
+        "bluescreen memory",
+        "ram fehler bluescreen",
+        "speicherverwaltung fehler",
+        "bluescreen ram"
+      ],
+      "diagnose": [
+        "rd_ram_check",
+        "rd_event_bsod",
+        "rd_pagefile_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ram_check",
+          "action": "Windows Memory Diagnostic starten"
+        },
+        {
+          "step": 2,
+          "skill": "rd_event_bsod",
+          "action": "Fehlerdetails auslesen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_pagefile_check",
+          "action": "Pagefile-Einstellungen pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_sfc_dism",
+          "action": "Systemdateien reparieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_driver_list",
+          "action": "Kuerzlich aktualisierte Treiber pruefen"
+        }
+      ],
+      "erklaerung": "MEMORY_MANAGEMENT: Problem mit der Speicherverwaltung. Kann defekter RAM sein aber auch Software-/Treiberprobleme. RAM-Test ist der erste Schritt.",
+      "tags": [
+        "bluescreen",
+        "memory",
+        "ram",
+        "speicher",
+        "defekt"
+      ]
+    },
+    {
+      "id": "WIN-007",
+      "category": "windows",
+      "title": "Bluescreen PAGE_FAULT_IN_NONPAGED_AREA",
+      "userSays": [
+        "page fault",
+        "page fault in nonpaged area",
+        "bluescreen page fault",
+        "speicherfehler bluescreen",
+        "nonpaged area fehler"
+      ],
+      "diagnose": [
+        "rd_ram_check",
+        "rd_event_bsod",
+        "rd_driver_list"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_event_bsod",
+          "action": "Verursacher identifizieren"
+        },
+        {
+          "step": 2,
+          "skill": "rd_ram_check",
+          "action": "RAM-Test"
+        },
+        {
+          "step": 3,
+          "skill": "rd_driver_list",
+          "action": "Fehlerhaften Treiber finden"
+        },
+        {
+          "step": 4,
+          "skill": "rd_sfc_dism",
+          "action": "Systemdateien reparieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_pagefile_check",
+          "action": "Pagefile pruefen"
+        }
+      ],
+      "erklaerung": "PAGE_FAULT_IN_NONPAGED_AREA: Windows versucht auf Speicher zuzugreifen der nicht verfuegbar ist. Ursachen: Defekter RAM, fehlerhafter Treiber, beschaedigte Systemdateien.",
+      "tags": [
+        "bluescreen",
+        "page fault",
+        "ram",
+        "speicher",
+        "treiber"
+      ]
+    },
+    {
+      "id": "WIN-008",
+      "category": "windows",
+      "title": "Bluescreen WHEA_UNCORRECTABLE_ERROR",
+      "userSays": [
+        "whea uncorrectable",
+        "whea fehler",
+        "hardware fehler bluescreen",
+        "bluescreen hardware",
+        "whea uncorrectable error"
+      ],
+      "diagnose": [
+        "rd_event_bsod",
+        "rd_cpu_temp",
+        "rd_smart_status",
+        "rd_ram_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_event_bsod",
+          "action": "WHEA-Events lesen (Quelle: Hardware)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_cpu_temp",
+          "action": "CPU-Temperatur pruefen (Ueberhitzung?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_smart_status",
+          "action": "Festplatten-Gesundheit"
+        },
+        {
+          "step": 4,
+          "skill": "rd_ram_check",
+          "action": "RAM-Test"
+        },
+        {
+          "step": 5,
+          "skill": "rd_driver_list",
+          "action": "Treiber pruefen"
+        }
+      ],
+      "erklaerung": "WHEA_UNCORRECTABLE_ERROR: Ein Hardware-Fehler den Windows nicht korrigieren konnte. Meist CPU-Ueberhitzung, defekter RAM oder sterbende Festplatte. Kann auch durch Overclocking verursacht werden.",
+      "tags": [
+        "bluescreen",
+        "whea",
+        "hardware",
+        "cpu",
+        "ueberhitzung",
+        "ram"
+      ],
+      "hinweis": "Bei hoher CPU-Temp: PC physisch pruefen (Staub, Luefter)."
+    },
+    {
+      "id": "WIN-010",
+      "category": "windows",
+      "title": "Anmeldung schlaegt fehl / Konto gesperrt",
+      "userSays": [
+        "kann mich nicht anmelden",
+        "anmeldung geht nicht",
+        "passwort falsch",
+        "konto gesperrt",
+        "login funktioniert nicht",
+        "anmeldung fehlgeschlagen",
+        "ich komme nicht in meinen pc",
+        "windows laesst mich nicht rein",
+        "einloggen geht nicht",
+        "account gesperrt",
+        "konto ist gesperrt",
+        "mein passwort geht nicht",
+        "ich kann mich nicht einloggen",
+        "anmeldung verweigert",
+        "zugriff verweigert beim anmelden",
+        "falsches passwort obwohl richtig",
+        "mein account ist gesperrt",
+        "ich bin ausgesperrt",
+        "windows akzeptiert mein passwort nicht"
+      ],
+      "diagnose": [
+        "rd_ad_user_info",
+        "rd_ad_lockout_status",
+        "rd_ntp_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ad_lockout_status",
+          "action": "Ist das Konto gesperrt? Wann und wo gesperrt?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_ad_user_info",
+          "action": "Konto-Status pruefen (aktiv, abgelaufen, PW abgelaufen?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ntp_check",
+          "action": "Uhrzeit korrekt? (Kerberos braucht <5 Min Abweichung)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_ad_unlock",
+          "action": "Konto entsperren falls gesperrt"
+        },
+        {
+          "step": 5,
+          "skill": "rd_ad_password_reset",
+          "action": "Passwort zuruecksetzen falls noetig"
+        }
+      ],
+      "erklaerung": "Anmeldeprobleme haben 3 Hauptursachen: 1) Konto in AD gesperrt (zu viele Fehlversuche), 2) Passwort abgelaufen, 3) Uhrzeit falsch (Kerberos-Authentifizierung braucht max 5 Minuten Abweichung).",
+      "tags": [
+        "anmeldung",
+        "login",
+        "passwort",
+        "gesperrt",
+        "konto",
+        "kerberos",
+        "ad"
+      ],
+      "nachfragen": [
+        "Kommt eine bestimmte Fehlermeldung?",
+        "Ging es vorher noch? Wenn ja, seit wann nicht mehr?",
+        "Funktioniert die Anmeldung an einem anderen PC?"
+      ]
+    },
+    {
+      "id": "WIN-011",
+      "category": "windows",
+      "title": "Temporaeres Profil / Temp-Profil geladen",
+      "userSays": [
+        "temp profil",
+        "temporaeres profil",
+        "desktop leer beim anmelden",
+        "alle dateien weg nach anmeldung",
+        "einstellungen weg nach neustart",
+        "profil wird nicht geladen",
+        "mein desktop ist leer",
+        "alles weg nach dem anmelden",
+        "windows laedt falsches profil",
+        "temp profil wurde geladen",
+        "meldung temporaeres profil",
+        "alles ist zurueckgesetzt",
+        "meine dateien sind weg",
+        "outlook fragt nach einrichtung obwohl schon eingerichtet",
+        "alles wie neu nach anmeldung"
+      ],
+      "diagnose": [
+        "rd_profile_check",
+        "rd_profile_fix_temp",
+        "rd_registry_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_profile_check",
+          "action": "Benutzer-Profil Status pruefen (ProfileList in Registry)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_profile_fix_temp",
+          "action": "Temp-Profil reparieren (ProfileImagePath korrigieren, .bak Schluessel)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_registry_check",
+          "action": "Registry ProfileList auf doppelte SIDs pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_disk_space",
+          "action": "Genug Speicherplatz? (Profil braucht Platz)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_event_login",
+          "action": "Anmelde-Events pruefen (Fehler bei Profilladung)"
+        }
+      ],
+      "erklaerung": "Ein Temp-Profil entsteht wenn Windows das echte Profil nicht laden kann. Haeufigste Ursache: Registry-Eintrag unter ProfileList hat ein '.bak' Suffix. Loesung: .bak-Schluessel umbenennen und RefCount/State auf 0 setzen.",
+      "tags": [
+        "profil",
+        "temp",
+        "temporaer",
+        "desktop leer",
+        "dateien weg",
+        "profilelist",
+        "registry"
+      ],
+      "nachfragen": [
+        "Ist es beim ersten Login heute passiert?",
+        "Haben Sie kuerzlich Ihr Passwort geaendert?"
+      ],
+      "hinweis": "WICHTIG: Das echte Profil ist meist noch da unter C:\\Users\\<username>. Nur die Verknuepfung in der Registry ist kaputt."
+    },
+    {
+      "id": "WIN-020",
+      "category": "windows",
+      "title": "Explorer stuerzt ab / haengt sich auf",
+      "userSays": [
+        "explorer stuerzt ab",
+        "explorer haengt",
+        "taskleiste reagiert nicht",
+        "startmenue geht nicht auf",
+        "desktop eingefroren",
+        "explorer.exe fehler",
+        "windows explorer crash",
+        "explorer reagiert nicht",
+        "taskleiste verschwunden",
+        "startmenue funktioniert nicht",
+        "desktop reagiert nicht",
+        "explorer neu starten",
+        "explorer laesst sich nicht oeffnen"
+      ],
+      "diagnose": [
+        "rd_process_info",
+        "rd_event_errors",
+        "rd_shell_extension_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_process_restart",
+          "action": "Explorer-Prozess neustarten (Stop-Process explorer + Start)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_event_errors",
+          "action": "Explorer-Fehler im Event-Log pruefen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_shell_extension_check",
+          "action": "Fehlerhafte Shell-Extensions identifizieren"
+        },
+        {
+          "step": 4,
+          "skill": "rd_icon_cache_clear",
+          "action": "Icon-Cache neu bauen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_sfc_dism",
+          "action": "Systemdateien reparieren"
+        }
+      ],
+      "erklaerung": "Explorer-Crashes werden meist durch defekte Shell-Extensions (Rechtsklick-Menue Erweiterungen) oder beschaedigte Icon-/Thumbnail-Caches verursacht.",
+      "tags": [
+        "explorer",
+        "crash",
+        "absturz",
+        "taskleiste",
+        "startmenue",
+        "desktop",
+        "eingefroren"
+      ]
+    },
+    {
+      "id": "WIN-021",
+      "category": "windows",
+      "title": "Windows-Suche funktioniert nicht",
+      "userSays": [
+        "suche funktioniert nicht",
+        "windows suche kaputt",
+        "suche findet nichts",
+        "cortana geht nicht",
+        "suchfeld reagiert nicht",
+        "suche zeigt keine ergebnisse",
+        "kann nichts suchen",
+        "startmenue suche geht nicht",
+        "suche findet keine dateien",
+        "windows search defekt"
+      ],
+      "diagnose": [
+        "rd_service_status",
+        "rd_search_index_rebuild"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_service_status",
+          "action": "Windows Search Dienst (WSearch) pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_service_restart",
+          "action": "WSearch Dienst neustarten"
+        },
+        {
+          "step": 3,
+          "skill": "rd_search_index_rebuild",
+          "action": "Such-Index neu aufbauen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_search_web_disable",
+          "action": "Web-Ergebnisse in Suche deaktivieren (optional)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_process_kill",
+          "action": "SearchHost.exe beenden und neustarten lassen"
+        }
+      ],
+      "erklaerung": "Die Windows-Suche hat einen Index der beschaedigt sein kann. Neustart des WSearch-Dienstes behebt meist temporaere Probleme, ein Index-Neuaufbau behebt dauerhafte.",
+      "tags": [
+        "suche",
+        "search",
+        "index",
+        "cortana",
+        "finden",
+        "startmenue"
+      ]
+    },
+    {
+      "id": "WIN-030",
+      "category": "windows",
+      "title": "Windows Update Fehler 0x80070002 / 0x80070003",
+      "userSays": [
+        "windows update fehler",
+        "update geht nicht",
+        "updates funktionieren nicht",
+        "0x80070002",
+        "0x80070003",
+        "update fehler 80070002",
+        "windows update laesst sich nicht installieren",
+        "updates haengen",
+        "update wird nicht installiert"
+      ],
+      "diagnose": [
+        "rd_update_check",
+        "rd_update_cache_clean"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_update_check",
+          "action": "Update-Status pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_update_cache_clean",
+          "action": "Windows Update Cache loeschen (SoftwareDistribution)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_service_restart",
+          "action": "Windows Update Dienst neustarten"
+        },
+        {
+          "step": 4,
+          "skill": "rd_sfc_dism",
+          "action": "Systemdateien reparieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_update_force",
+          "action": "Update erneut anstoessen"
+        }
+      ],
+      "erklaerung": "Fehler 0x80070002/3 bedeutet 'Datei nicht gefunden' – der Update-Cache ist beschaedigt. Loesung: SoftwareDistribution-Ordner loeschen und Update-Dienst neustarten.",
+      "tags": [
+        "update",
+        "windows update",
+        "fehler",
+        "0x80070002",
+        "0x80070003",
+        "cache"
+      ]
+    },
+    {
+      "id": "WIN-031",
+      "category": "windows",
+      "title": "Windows Update Fehler 0x800705b4",
+      "userSays": [
+        "update fehler 800705b4",
+        "0x800705b4",
+        "update timeout",
+        "update bricht ab",
+        "windows update timeout fehler"
+      ],
+      "diagnose": [
+        "rd_update_check",
+        "rd_ntp_check",
+        "rd_proxy_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ntp_check",
+          "action": "Systemuhrzeit korrekt?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_proxy_check",
+          "action": "Proxy-Einstellungen pruefen (Zscaler?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_update_cache_clean",
+          "action": "Update-Cache loeschen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_service_restart",
+          "action": "Windows Update + BITS Dienste neustarten"
+        },
+        {
+          "step": 5,
+          "skill": "rd_sfc_dism",
+          "action": "DISM /RestoreHealth"
+        }
+      ],
+      "erklaerung": "0x800705b4 ist ein Timeout-Fehler. Ursachen: Falsche Uhrzeit, Proxy blockiert Microsoft-Server, oder beschaedigter Update-Cache.",
+      "tags": [
+        "update",
+        "timeout",
+        "800705b4",
+        "proxy",
+        "uhrzeit"
+      ]
+    },
+    {
+      "id": "OUT-001",
+      "category": "outlook",
+      "title": "Outlook startet nicht / haengt beim Laden",
+      "userSays": [
+        "outlook startet nicht",
+        "outlook oeffnet nicht",
+        "outlook haengt beim starten",
+        "outlook laedt nicht",
+        "outlook bleibt haengen",
+        "outlook profil wird geladen haengt",
+        "outlook dreht sich nur",
+        "outlook reagiert nicht",
+        "outlook eingefroren beim start",
+        "kann outlook nicht oeffnen",
+        "outlook geht nicht auf",
+        "outlook braucht ewig zum starten",
+        "outlook zeigt nur ladebalken",
+        "mein outlook laesst sich nicht starten"
+      ],
+      "diagnose": [
+        "rd_process_check",
+        "rd_outlook_addins",
+        "rd_outlook_profile",
+        "rd_outlook_ost"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_process_kill",
+          "action": "Outlook-Prozess beenden falls noch laeuft"
+        },
+        {
+          "step": 2,
+          "skill": "rd_outlook_safe_mode",
+          "action": "Outlook im Safe Mode starten (ohne Add-Ins)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_outlook_addins",
+          "action": "Deaktivierte/crashende Add-Ins pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_outlook_profile",
+          "action": "Profil-Status pruefen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_outlook_ost",
+          "action": "OST-Datei Groesse und Status pruefen"
+        },
+        {
+          "step": 6,
+          "skill": "rd_office_repair",
+          "action": "Office-Reparatur starten"
+        }
+      ],
+      "erklaerung": "Outlook startet nicht: 3 Hauptursachen: 1) Ein Add-In (oft enaio!) crasht beim Start, 2) Die OST-Datei ist zu gross oder beschaedigt, 3) Das Outlook-Profil ist defekt.",
+      "tags": [
+        "outlook",
+        "start",
+        "haengt",
+        "addins",
+        "ost",
+        "profil",
+        "laden"
+      ],
+      "nachfragen": [
+        "Gab es eine Fehlermeldung?",
+        "Funktioniert Outlook Web (outlook.office.com)?",
+        "Wurde kuerzlich ein Update installiert?"
+      ],
+      "hinweis": "SKF-spezifisch: enaio Add-In ist der haeufigste Verursacher. Zuerst in DisabledItems/CrashingAddinList pruefen."
+    },
+    {
+      "id": "OUT-002",
+      "category": "outlook",
+      "title": "Outlook Suche findet keine Mails",
+      "userSays": [
+        "outlook suche geht nicht",
+        "outlook findet keine mails",
+        "outlook suche kaputt",
+        "suche in outlook funktioniert nicht",
+        "kann keine mails finden",
+        "outlook suche leer",
+        "outlook suche zeigt keine ergebnisse",
+        "mails werden nicht gefunden in outlook",
+        "outlook suche findet nichts",
+        "suchfunktion outlook defekt"
+      ],
+      "diagnose": [
+        "rd_outlook_search_repair",
+        "rd_search_index_rebuild"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_outlook_search_repair",
+          "action": "Outlook-Suchindex reparieren"
+        },
+        {
+          "step": 2,
+          "skill": "rd_search_index_rebuild",
+          "action": "Windows Search Index komplett neu aufbauen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_outlook_ost",
+          "action": "OST-Datei Groesse pruefen (>50GB = Problem)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_outlook_cached_mode",
+          "action": "Cached Mode Einstellungen pruefen (Zeitraum)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_office_repair",
+          "action": "Office-Reparatur falls Index-Rebuild nicht hilft"
+        }
+      ],
+      "erklaerung": "Outlook-Suche basiert auf dem Windows Search Index. Wenn der Index beschaedigt ist, findet Outlook nichts. Bei grossen Postfaechern (>50GB) kann der Index auch zu lange brauchen.",
+      "tags": [
+        "outlook",
+        "suche",
+        "search",
+        "index",
+        "finden",
+        "mails"
+      ]
+    },
+    {
+      "id": "OUT-003",
+      "category": "outlook",
+      "title": "OST-Datei zu gross / Outlook langsam",
+      "userSays": [
+        "outlook langsam",
+        "outlook traege",
+        "ost datei zu gross",
+        "postfach voll",
+        "outlook braucht ewig",
+        "outlook haengt sich auf",
+        "outlook performance",
+        "outlook sehr langsam",
+        "outlook reagiert langsam",
+        "ost datei riesig",
+        "mails laden langsam",
+        "outlook friert ein"
+      ],
+      "diagnose": [
+        "rd_outlook_ost",
+        "rd_disk_space",
+        "rd_outlook_cached_mode"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_outlook_ost",
+          "action": "OST-Datei Groesse pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_disk_space",
+          "action": "Genug Festplattenspeicher?"
+        },
+        {
+          "step": 3,
+          "skill": "rd_outlook_cached_mode",
+          "action": "Cached Mode auf 12 oder 6 Monate reduzieren"
+        },
+        {
+          "step": 4,
+          "skill": "rd_outlook_compact",
+          "action": "OST-Datei komprimieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_outlook_addins",
+          "action": "Unnoetige Add-Ins deaktivieren"
+        }
+      ],
+      "erklaerung": "OST-Dateien ueber 50GB machen Outlook langsam. Loesung: Cached Mode Zeitraum reduzieren (z.B. nur letzte 12 Monate offline verfuegbar). Die OST wird dann automatisch kleiner.",
+      "tags": [
+        "outlook",
+        "langsam",
+        "ost",
+        "gross",
+        "performance",
+        "cached mode",
+        "postfach"
+      ]
+    },
+    {
+      "id": "OUT-004",
+      "category": "outlook",
+      "title": "Outlook fragt staendig nach Passwort",
+      "userSays": [
+        "outlook fragt nach passwort",
+        "outlook passwort eingeben",
+        "outlook authentifizierung",
+        "outlook passwort popup",
+        "anmeldung outlook immer wieder",
+        "outlook login immer wieder",
+        "outlook verbindet nicht mit exchange",
+        "passwort fenster outlook",
+        "credentials outlook",
+        "outlook fragt immer nach anmeldedaten"
+      ],
+      "diagnose": [
+        "rd_credential_check",
+        "rd_outlook_profile",
+        "rd_ntp_check",
+        "rd_ad_user_info"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_credential_clear_outlook",
+          "action": "Gespeicherte Outlook-Anmeldedaten loeschen (Credential Manager)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_ntp_check",
+          "action": "Uhrzeit korrekt? (Kerberos!)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ad_user_info",
+          "action": "Konto-Status in AD pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_outlook_profile",
+          "action": "Outlook-Profil Authentifizierungsmethode pruefen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_registry_modern_auth",
+          "action": "Modern Authentication Registry-Keys pruefen"
+        }
+      ],
+      "erklaerung": "Staendige Passwort-Abfragen: 1) Gespeicherte Credentials im Credential Manager sind veraltet, 2) Uhrzeit falsch (Kerberos/Token laufen ab), 3) Modern Auth nicht aktiviert, 4) Konto in AD gesperrt.",
+      "tags": [
+        "outlook",
+        "passwort",
+        "anmeldung",
+        "credentials",
+        "exchange",
+        "authentifizierung"
+      ],
+      "nachfragen": [
+        "Wurde kuerzlich das Passwort geaendert?",
+        "Funktioniert Outlook Web (outlook.office.com)?"
+      ]
+    },
+    {
+      "id": "TEAMS-001",
+      "category": "teams",
+      "title": "Teams startet nicht / weisser Bildschirm",
+      "userSays": [
+        "teams startet nicht",
+        "teams oeffnet nicht",
+        "teams weisser bildschirm",
+        "teams leer",
+        "teams zeigt nichts an",
+        "teams laesst sich nicht oeffnen",
+        "teams haengt",
+        "teams geht nicht auf",
+        "teams blank screen",
+        "teams funktioniert nicht",
+        "teams weiss",
+        "teams fenster leer",
+        "kann teams nicht starten"
+      ],
+      "diagnose": [
+        "rd_process_check",
+        "rd_teams_cache_clean",
+        "rd_teams_version"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_process_kill",
+          "action": "Alle Teams-Prozesse beenden"
+        },
+        {
+          "step": 2,
+          "skill": "rd_teams_cache_clean",
+          "action": "Teams-Cache komplett loeschen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_teams_version",
+          "action": "Teams-Version pruefen (New Teams vs Classic)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_appx_reset",
+          "action": "New Teams (MSIX) zuruecksetzen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_credential_clear_teams",
+          "action": "Teams-Credentials loeschen"
+        },
+        {
+          "step": 6,
+          "skill": "rd_teams_reinstall",
+          "action": "Teams komplett neu installieren"
+        }
+      ],
+      "erklaerung": "Teams-Startprobleme: Cache ist die haeufigste Ursache. Bei New Teams (MSIX): AppX-Reset. Bei Classic Teams: AppData/Roaming/Microsoft/Teams loeschen.",
+      "tags": [
+        "teams",
+        "start",
+        "weiss",
+        "blank",
+        "cache",
+        "msix"
+      ],
+      "nachfragen": [
+        "Ist es das neue Teams (lila Icon) oder das alte?"
+      ],
+      "hinweis": "SKF nutzt New Teams (MSIX). Pfad: AppData/Local/Packages/MSTeams_8wekyb3d8bbwe"
+    },
+    {
+      "id": "TEAMS-002",
+      "category": "teams",
+      "title": "Teams Audio / Mikrofon funktioniert nicht",
+      "userSays": [
+        "teams kein ton",
+        "teams mikrofon geht nicht",
+        "man hoert mich nicht in teams",
+        "ich hoere nichts in teams",
+        "teams audio problem",
+        "teams mikrofon stumm",
+        "teams sound funktioniert nicht",
+        "kein audio in teams",
+        "teams lautsprecher geht nicht",
+        "in der teams besprechung hoert man mich nicht",
+        "teams meeting kein ton",
+        "mikrofon funktioniert nicht in teams",
+        "teams audio einstellungen"
+      ],
+      "diagnose": [
+        "rd_audio_devices",
+        "rd_audio_volume",
+        "rd_teams_audio_settings"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_audio_devices",
+          "action": "Aktive Audio-Geraete pruefen (Lautsprecher + Mikrofon)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_audio_volume",
+          "action": "Lautstaerke pruefen (nicht stumm?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_teams_audio_settings",
+          "action": "Teams Audio-Einstellungen pruefen (richtiges Geraet ausgewaehlt?)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_privacy_microphone",
+          "action": "Mikrofon-Zugriff in Windows-Datenschutz erlaubt?"
+        },
+        {
+          "step": 5,
+          "skill": "rd_audio_service_restart",
+          "action": "Windows Audio Dienst neustarten"
+        },
+        {
+          "step": 6,
+          "skill": "rd_teams_cache_clean",
+          "action": "Teams-Cache loeschen und neustarten"
+        }
+      ],
+      "erklaerung": "Teams Audio: 1) Falsches Geraet ausgewaehlt (Headset vs Lautsprecher), 2) Windows Datenschutz blockiert Mikrofon-Zugriff, 3) Audio-Dienst haengt, 4) Stummschaltung aktiv.",
+      "tags": [
+        "teams",
+        "audio",
+        "mikrofon",
+        "lautsprecher",
+        "ton",
+        "sound",
+        "stumm",
+        "meeting"
+      ],
+      "nachfragen": [
+        "Funktioniert Audio in anderen Programmen (z.B. YouTube)?",
+        "Benutzen Sie ein Headset oder den eingebauten Lautsprecher?",
+        "Ist das Mikrofon-Symbol in Teams durchgestrichen?"
+      ]
+    },
+    {
+      "id": "PRINT-001",
+      "category": "drucker",
+      "title": "Drucker druckt nicht / Druckjob haengt",
+      "userSays": [
+        "drucker druckt nicht",
+        "druckjob haengt",
+        "drucker geht nicht",
+        "kann nicht drucken",
+        "druckauftrag bleibt haengen",
+        "drucker reagiert nicht",
+        "druckerwarteschlange voll",
+        "drucken funktioniert nicht",
+        "drucker offline",
+        "mein drucker druckt nicht",
+        "der drucker tut nichts",
+        "druckauftrag wird nicht gedruckt",
+        "drucker macht nichts"
+      ],
+      "diagnose": [
+        "rd_printer_status",
+        "rd_printer_queue",
+        "rd_spooler_status"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_printer_status",
+          "action": "Drucker-Status pruefen (online/offline?)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_printer_queue",
+          "action": "Warteschlange pruefen (haengt ein Job?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_printer_queue_clear",
+          "action": "Warteschlange loeschen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_spooler_restart",
+          "action": "Spooler-Dienst neustarten"
+        },
+        {
+          "step": 5,
+          "skill": "rd_printer_test_page",
+          "action": "Testseite drucken"
+        },
+        {
+          "step": 6,
+          "skill": "rd_printer_port_check",
+          "action": "Drucker-Port/IP-Adresse pruefen"
+        }
+      ],
+      "erklaerung": "Drucker druckt nicht: 1) Warteschlange haengt (loeschen + Spooler neustarten), 2) Drucker offline (IP-Adresse hat sich geaendert), 3) Treiber defekt.",
+      "tags": [
+        "drucker",
+        "drucken",
+        "warteschlange",
+        "spooler",
+        "offline",
+        "druckjob"
+      ],
+      "nachfragen": [
+        "Welcher Drucker? (Name oder Standort)",
+        "Konnten Sie vorher drucken?",
+        "Kommt eine Fehlermeldung?"
+      ]
+    },
+    {
+      "id": "PRINT-002",
+      "category": "drucker",
+      "title": "Drucker druckt Hieroglyphen / falsche Zeichen",
+      "userSays": [
+        "drucker druckt hieroglyphen",
+        "drucker druckt muell",
+        "drucker druckt komische zeichen",
+        "ausdruck unleserlich",
+        "drucker druckt symbole statt text",
+        "drucker druckt unsinn",
+        "drucker gibt nur zeichen aus",
+        "kryptische zeichen beim drucken"
+      ],
+      "diagnose": [
+        "rd_printer_driver_info",
+        "rd_printer_queue_clear",
+        "rd_spooler_restart"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_printer_queue_clear",
+          "action": "Warteschlange komplett loeschen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_spooler_restart",
+          "action": "Spooler neustarten"
+        },
+        {
+          "step": 3,
+          "skill": "rd_printer_driver_info",
+          "action": "Treiber-Typ pruefen (PCL vs PostScript)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_printer_driver_reinstall",
+          "action": "Treiber deinstallieren und neu installieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_printer_test_page",
+          "action": "Testseite drucken"
+        }
+      ],
+      "erklaerung": "Hieroglyphen beim Drucken: Fast immer ein Treiber-Problem. Falscher Treiber-Typ (PCL5 statt PCL6 oder PostScript) oder beschaedigter Treiber. Treiber komplett entfernen und passenden neu installieren.",
+      "tags": [
+        "drucker",
+        "hieroglyphen",
+        "zeichen",
+        "muell",
+        "treiber",
+        "pcl",
+        "postscript"
+      ]
+    },
+    {
+      "id": "NET-001",
+      "category": "netzwerk",
+      "title": "Kein Internet / Kein Netzwerk",
+      "userSays": [
+        "kein internet",
+        "internet geht nicht",
+        "kein netzwerk",
+        "netzwerk weg",
+        "kann nicht surfen",
+        "kein zugang zum internet",
+        "internet funktioniert nicht",
+        "keine verbindung",
+        "offline",
+        "netzwerk nicht verfuegbar",
+        "internet ausgefallen",
+        "kein netz",
+        "netzwerkverbindung verloren",
+        "ich habe kein internet",
+        "internet ist weg",
+        "webseiten laden nicht",
+        "browser sagt keine internetverbindung",
+        "internet laesst sich nicht verbinden"
+      ],
+      "diagnose": [
+        "rd_ping",
+        "rd_ip_config",
+        "rd_dns_check",
+        "rd_proxy_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ping",
+          "action": "Ping auf Gateway (lokales Netzwerk ok?)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_ip_config",
+          "action": "IP-Konfiguration pruefen (DHCP, IP, Gateway, DNS)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_dns_check",
+          "action": "DNS-Aufloesung testen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_proxy_check",
+          "action": "Proxy-Einstellungen pruefen (Zscaler?)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_zscaler_status",
+          "action": "Zscaler-Tunnel aktiv?"
+        },
+        {
+          "step": 6,
+          "skill": "rd_network_adapter_reset",
+          "action": "Netzwerkadapter zuruecksetzen"
+        },
+        {
+          "step": 7,
+          "skill": "rd_dns_flush",
+          "action": "DNS-Cache leeren"
+        },
+        {
+          "step": 8,
+          "skill": "rd_winsock_reset",
+          "action": "Winsock-Reset (letzter Ausweg)"
+        }
+      ],
+      "erklaerung": "Kein Internet: Systematisch pruefen: 1) Kabel/WLAN verbunden? 2) IP-Adresse erhalten? 3) Gateway erreichbar? 4) DNS funktioniert? 5) Proxy/Zscaler ok?",
+      "tags": [
+        "internet",
+        "netzwerk",
+        "verbindung",
+        "offline",
+        "dns",
+        "dhcp",
+        "proxy",
+        "zscaler"
+      ],
+      "nachfragen": [
+        "Sind Sie per WLAN oder Kabel verbunden?",
+        "Funktioniert es an anderen PCs im gleichen Raum?",
+        "Seit wann besteht das Problem?"
+      ]
+    },
+    {
+      "id": "NET-002",
+      "category": "netzwerk",
+      "title": "Netzlaufwerk nicht erreichbar / getrennt",
+      "userSays": [
+        "netzlaufwerk weg",
+        "netzlaufwerk nicht erreichbar",
+        "laufwerk getrennt",
+        "rotes x am laufwerk",
+        "netzlaufwerk verbindet nicht",
+        "kann nicht auf netzlaufwerk zugreifen",
+        "zugriff verweigert netzlaufwerk",
+        "netzlaufwerk offline",
+        "mapped drive weg",
+        "freigegebener ordner nicht erreichbar",
+        "auf den server komme ich nicht drauf",
+        "netzwerk ordner geht nicht"
+      ],
+      "diagnose": [
+        "rd_network_drives",
+        "rd_ping",
+        "rd_smb_session",
+        "rd_credential_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ping",
+          "action": "Ist der Server erreichbar?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_network_drives",
+          "action": "Gemappte Laufwerke anzeigen (Status?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_smb_session",
+          "action": "SMB-Verbindung zum Server pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_credential_check",
+          "action": "Gespeicherte Anmeldedaten fuer den Server pruefen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_network_drive_reconnect",
+          "action": "Laufwerk trennen und neu verbinden"
+        }
+      ],
+      "erklaerung": "Netzlaufwerke: 1) Server nicht erreichbar (Ping), 2) Credentials abgelaufen (nach Passwort-Aenderung), 3) SMB-Sitzung abgelaufen, 4) DNS-Problem (Server-Name nicht aufloesbar).",
+      "tags": [
+        "netzlaufwerk",
+        "laufwerk",
+        "server",
+        "freigabe",
+        "smb",
+        "zugriff"
+      ],
+      "nachfragen": [
+        "Welches Laufwerk (Buchstabe)?",
+        "Kommt eine Fehlermeldung (Zugriff verweigert, Pfad nicht gefunden)?"
+      ]
+    },
+    {
+      "id": "NET-003",
+      "category": "netzwerk",
+      "title": "WLAN verbindet nicht / bricht ab",
+      "userSays": [
+        "wlan geht nicht",
+        "wifi verbindet nicht",
+        "wlan bricht ab",
+        "kein wlan",
+        "wlan instabil",
+        "wlan trennt sich staendig",
+        "kann mich nicht mit wlan verbinden",
+        "wlan signal schwach",
+        "wifi funktioniert nicht",
+        "wlan passwort falsch obwohl richtig",
+        "wireless problem"
+      ],
+      "diagnose": [
+        "rd_wlan_status",
+        "rd_wlan_profiles",
+        "rd_wlan_signal"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_wlan_status",
+          "action": "WLAN-Adapter Status pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_wlan_profiles",
+          "action": "Gespeicherte WLAN-Profile anzeigen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_wlan_signal",
+          "action": "Signalstaerke pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_wlan_profile_delete",
+          "action": "Betroffenes Profil loeschen und neu verbinden"
+        },
+        {
+          "step": 5,
+          "skill": "rd_wlan_adapter_reset",
+          "action": "WLAN-Adapter deaktivieren und wieder aktivieren"
+        },
+        {
+          "step": 6,
+          "skill": "rd_driver_update",
+          "action": "WLAN-Treiber aktualisieren"
+        }
+      ],
+      "erklaerung": "WLAN-Probleme: 1) Gespeichertes Profil mit altem Passwort (loeschen + neu verbinden), 2) Treiber veraltet, 3) Energiesparmodus schaltet WLAN ab, 4) 5GHz vs 2.4GHz Problem.",
+      "tags": [
+        "wlan",
+        "wifi",
+        "wireless",
+        "verbindung",
+        "signal",
+        "adapter"
+      ]
+    },
+    {
+      "id": "PERF-001",
+      "category": "performance",
+      "title": "PC extrem langsam / CPU 100%",
+      "userSays": [
+        "pc langsam",
+        "computer langsam",
+        "pc ist langsam",
+        "alles dauert ewig",
+        "pc haengt",
+        "cpu 100%",
+        "prozessor voll ausgelastet",
+        "pc reagiert kaum",
+        "pc braucht ewig",
+        "laptop langsam",
+        "rechner traege",
+        "alles ist langsam",
+        "windows langsam",
+        "pc ruckelt",
+        "mein pc ist total langsam",
+        "pc ist seit heute langsam"
+      ],
+      "diagnose": [
+        "rd_cpu_load",
+        "rd_process_top",
+        "rd_autostart_list",
+        "rd_disk_usage"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_cpu_load",
+          "action": "CPU-Auslastung pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_process_top",
+          "action": "Top-Prozesse nach CPU sortiert"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ram_usage",
+          "action": "RAM-Auslastung pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_disk_usage",
+          "action": "Festplatten-Auslastung pruefen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_autostart_list",
+          "action": "Autostart-Programme pruefen (zu viele?)"
+        },
+        {
+          "step": 6,
+          "skill": "rd_update_pending",
+          "action": "Steht ein Update aus? (Updates im Hintergrund)"
+        },
+        {
+          "step": 7,
+          "skill": "rd_cpu_temp",
+          "action": "CPU-Temperatur (Ueberhitzung = Throttling)"
+        }
+      ],
+      "erklaerung": "PC langsam: Systematisch pruefen was die Ressource frisst: CPU, RAM oder Disk. Haeufig: Windows Update im Hintergrund, Virenscanner, zu viele Autostart-Programme, oder Festplatte fast voll.",
+      "tags": [
+        "langsam",
+        "performance",
+        "cpu",
+        "ram",
+        "disk",
+        "traege",
+        "haengt"
+      ],
+      "nachfragen": [
+        "Seit wann ist der PC langsam?",
+        "Wurde kuerzlich etwas installiert?",
+        "Ist es immer langsam oder nur manchmal?"
+      ]
+    },
+    {
+      "id": "PERF-002",
+      "category": "performance",
+      "title": "Festplatte 100% ausgelastet",
+      "userSays": [
+        "festplatte 100%",
+        "disk 100",
+        "datentraeger 100%",
+        "festplatte dauernd beschaeftigt",
+        "hdd 100%",
+        "ssd 100%",
+        "festplatte vollauslastung",
+        "disk usage 100",
+        "datentraegerauslastung 100 prozent"
+      ],
+      "diagnose": [
+        "rd_disk_usage",
+        "rd_process_top_disk",
+        "rd_superfetch_status"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_process_top_disk",
+          "action": "Welcher Prozess verursacht die Disk-Last?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_superfetch_status",
+          "action": "SysMain/Superfetch deaktivieren (bei HDD)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_search_index_rebuild",
+          "action": "Windows Search Index pruefen/deaktivieren"
+        },
+        {
+          "step": 4,
+          "skill": "rd_smart_status",
+          "action": "Festplatten-Gesundheit (sterbende HDD?)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_defrag_status",
+          "action": "SSD: TRIM pruefen / HDD: Defragmentierung"
+        },
+        {
+          "step": 6,
+          "skill": "rd_disk_space",
+          "action": "Freier Speicherplatz (unter 10% = Probleme)"
+        }
+      ],
+      "erklaerung": "Disk 100%: Bei HDDs normal wegen SysMain/Superfetch und Windows Search – am besten SSD einbauen. Bei SSDs: Entweder ein bestimmter Prozess (Windows Update, Antiivrus) oder die SSD stirbt (SMART pruefen!).",
+      "tags": [
+        "festplatte",
+        "disk",
+        "100",
+        "auslastung",
+        "hdd",
+        "ssd",
+        "langsam"
+      ]
+    },
+    {
+      "id": "SAP-001",
+      "category": "sap",
+      "title": "SAP GUI startet nicht / Verbindungsfehler",
+      "userSays": [
+        "sap geht nicht",
+        "sap startet nicht",
+        "sap verbindung fehlgeschlagen",
+        "sap gui fehler",
+        "sap logon funktioniert nicht",
+        "kann mich nicht bei sap anmelden",
+        "sap connection error",
+        "sap timeout",
+        "sap gui oeffnet nicht",
+        "sap gui haengt",
+        "sap fenster bleibt weiss"
+      ],
+      "diagnose": [
+        "rd_process_check",
+        "rd_sap_gui_version",
+        "rd_ping"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_process_kill",
+          "action": "SAP GUI Prozesse beenden"
+        },
+        {
+          "step": 2,
+          "skill": "rd_sap_gui_version",
+          "action": "SAP GUI Version pruefen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ping",
+          "action": "SAP-Server erreichbar?"
+        },
+        {
+          "step": 4,
+          "skill": "rd_port_check",
+          "action": "SAP-Port offen? (3200, 3300)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_sap_cache_clean",
+          "action": "SAP GUI Cache loeschen"
+        },
+        {
+          "step": 6,
+          "skill": "rd_sap_gui_repair",
+          "action": "SAP GUI Reparatur/Neuinstallation"
+        }
+      ],
+      "erklaerung": "SAP GUI startet nicht: 1) Prozess haengt noch im Hintergrund, 2) SAP-Server nicht erreichbar (Netzwerk/Firewall), 3) GUI-Version zu alt, 4) Cache beschaedigt.",
+      "tags": [
+        "sap",
+        "gui",
+        "verbindung",
+        "logon",
+        "start",
+        "server"
+      ],
+      "nachfragen": [
+        "Welches SAP-System (Produktion, Test)?",
+        "Kommt eine Fehlermeldung?",
+        "Funktioniert SAP bei Kollegen?"
+      ]
+    },
+    {
+      "id": "ZSC-001",
+      "category": "zscaler",
+      "title": "Webseite wird von Zscaler blockiert",
+      "userSays": [
+        "seite blockiert",
+        "zscaler blockiert",
+        "webseite geht nicht",
+        "zugriff verweigert webseite",
+        "seite wird blockiert",
+        "internet blockiert",
+        "zscaler sperrt seite",
+        "website blockiert",
+        "kann seite nicht oeffnen",
+        "this page has been blocked",
+        "access denied website"
+      ],
+      "diagnose": [
+        "rd_zscaler_status",
+        "rd_proxy_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_zscaler_status",
+          "action": "Zscaler-Tunnel Status pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_proxy_check",
+          "action": "Proxy-Konfiguration pruefen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_zscaler_category_check",
+          "action": "In welche Kategorie faellt die Seite?"
+        }
+      ],
+      "erklaerung": "Zscaler blockiert Webseiten basierend auf Kategorien (Gambling, Adult, etc.) und Security-Policies. Wenn eine legitime Seite blockiert wird: URL und Zscaler-Blockierungsmeldung notieren und an IT-Security/DXC weiterleiten.",
+      "tags": [
+        "zscaler",
+        "blockiert",
+        "webseite",
+        "proxy",
+        "zugriff",
+        "gesperrt"
+      ],
+      "nachfragen": [
+        "Welche Webseite wird blockiert?",
+        "Was steht in der Blockierungsmeldung?",
+        "Brauchen Sie die Seite fuer die Arbeit?"
+      ],
+      "hinweis": "WICHTIG: Zscaler-Policies koennen NUR ueber die Cloud-Console geaendert werden. Das IT Admin Tool kann hier nur diagnostizieren, nicht aendern."
+    },
+    {
+      "id": "ENAOI-001",
+      "category": "enaio",
+      "title": "enaio Outlook Add-In fehlt / deaktiviert",
+      "userSays": [
+        "enaio fehlt in outlook",
+        "enaio add-in weg",
+        "enaio plugin deaktiviert",
+        "enaio geht nicht in outlook",
+        "enaio archivierung geht nicht",
+        "enaio button fehlt",
+        "kann nicht archivieren in outlook",
+        "enaio toolbar verschwunden",
+        "enaio outlook integration fehlt"
+      ],
+      "diagnose": [
+        "rd_enaio_addin_status",
+        "rd_outlook_addins"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_enaio_addin_status",
+          "action": "enaio Add-In Status pruefen (DisabledItems, CrashingAddinList)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_enaio_addin_repair",
+          "action": "Add-In aus DisabledItems/CrashingAddinList entfernen + DoNotDisableAddinList setzen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_enaio_cache_clean",
+          "action": "enaio-Cache loeschen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_outlook_restart",
+          "action": "Outlook neustarten"
+        },
+        {
+          "step": 5,
+          "skill": "rd_enaio_reinstall",
+          "action": "enaio Client reparieren/neu installieren"
+        }
+      ],
+      "erklaerung": "enaio wird von Outlook oft automatisch deaktiviert weil es zu langsam laedt. Registry-Fix: Add-In aus DisabledItems UND CrashingAddinList entfernen, dann in DoNotDisableAddinList eintragen damit Outlook es nicht wieder deaktiviert.",
+      "tags": [
+        "enaio",
+        "dms",
+        "add-in",
+        "outlook",
+        "archivierung",
+        "deaktiviert"
+      ],
+      "hinweis": "SKF-spezifisch: Registry-Pfade: HKCU\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems + CrashingAddinList + DoNotDisableAddinList"
+    },
+    {
+      "id": "HW-001",
+      "category": "hardware",
+      "title": "Bildschirm bleibt schwarz / kein Bild",
+      "userSays": [
+        "bildschirm schwarz",
+        "kein bild",
+        "monitor bleibt schwarz",
+        "bildschirm geht nicht an",
+        "monitor kein signal",
+        "schwarzer bildschirm",
+        "display dunkel",
+        "bildschirm zeigt nichts",
+        "kein bild am monitor",
+        "monitor bleibt dunkel",
+        "bildschirm schwarz aber pc laeuft"
+      ],
+      "diagnose": [
+        "rd_display_info",
+        "rd_gpu_status"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_display_info",
+          "action": "Angeschlossene Displays pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_gpu_status",
+          "action": "Grafikkarte Status pruefen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_display_resolution_reset",
+          "action": "Aufloesung auf Standard zuruecksetzen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_driver_update",
+          "action": "Grafiktreiber aktualisieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_brightness_set",
+          "action": "Helligkeit pruefen (auf 0?)"
+        }
+      ],
+      "erklaerung": "Schwarzer Bildschirm: 1) Falscher Display-Ausgang (HDMI vs DisplayPort), 2) Aufloesung zu hoch fuer Monitor, 3) Grafiktreiber abgestuerzt, 4) Helligkeit auf 0, 5) Docking Station Problem.",
+      "tags": [
+        "bildschirm",
+        "monitor",
+        "schwarz",
+        "display",
+        "kein bild",
+        "dunkel"
+      ],
+      "nachfragen": [
+        "Ist der PC an (hoeren Sie Luefter/Festplatte)?",
+        "Benutzen Sie eine Docking Station?",
+        "Leuchtet am Monitor eine LED?"
+      ]
+    },
+    {
+      "id": "HW-002",
+      "category": "hardware",
+      "title": "USB-Geraet wird nicht erkannt",
+      "userSays": [
+        "usb geraet nicht erkannt",
+        "usb funktioniert nicht",
+        "usb stick wird nicht angezeigt",
+        "usb geraet fehler",
+        "usb nicht erkannt",
+        "usb anschluss geht nicht",
+        "usb geraet wurde nicht erkannt meldung",
+        "mein usb stick geht nicht",
+        "usb maus funktioniert nicht",
+        "usb tastatur wird nicht erkannt"
+      ],
+      "diagnose": [
+        "rd_usb_devices",
+        "rd_device_error",
+        "rd_usb_history"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_usb_devices",
+          "action": "Angeschlossene USB-Geraete auflisten"
+        },
+        {
+          "step": 2,
+          "skill": "rd_device_error",
+          "action": "Geraetemanager Fehlercodes pruefen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_usb_storage_status",
+          "action": "USB-Storage blockiert per Policy?"
+        },
+        {
+          "step": 4,
+          "skill": "rd_driver_update",
+          "action": "USB-Treiber aktualisieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_device_reinstall",
+          "action": "USB-Controller im Geraetemanager deinstallieren + neu erkennen"
+        }
+      ],
+      "erklaerung": "USB nicht erkannt: 1) USB-Storage per Policy blockiert (USBSTOR Registry), 2) Treiber-Problem, 3) USB-Port defekt (anderen Port testen), 4) Geraet selbst defekt.",
+      "tags": [
+        "usb",
+        "geraet",
+        "erkannt",
+        "stick",
+        "anschluss",
+        "port"
+      ],
+      "nachfragen": [
+        "Was fuer ein USB-Geraet (Stick, Maus, Tastatur, Drucker)?",
+        "An welchem USB-Port?",
+        "Funktioniert das Geraet an einem anderen PC?"
+      ]
+    },
+    {
+      "id": "SEC-001",
+      "category": "sicherheit",
+      "title": "BitLocker Recovery Key gebraucht",
+      "userSays": [
+        "bitlocker recovery",
+        "bitlocker key",
+        "bitlocker eingabe",
+        "bitlocker sperre",
+        "bitlocker wiederherstellungsschluessel",
+        "pc fragt nach bitlocker",
+        "bitlocker bildschirm",
+        "blauer bitlocker bildschirm beim starten",
+        "muss bitlocker key eingeben",
+        "pc startet nicht bitlocker",
+        "bitlocker recovery screen"
+      ],
+      "diagnose": [
+        "rd_bitlocker_status",
+        "rd_bitlocker_recovery_ad"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_bitlocker_recovery_ad",
+          "action": "Recovery Key aus Active Directory auslesen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_bitlocker_status",
+          "action": "BitLocker-Status aller Laufwerke"
+        },
+        {
+          "step": 3,
+          "skill": "rd_bitlocker_unlock",
+          "action": "Laufwerk mit Recovery Key entsperren"
+        }
+      ],
+      "erklaerung": "BitLocker Recovery: Der Recovery Key wird benoetigt wenn sich Hardware geaendert hat (BIOS-Update, TPM-Reset, neues Mainboard). Der Key ist im Active Directory gespeichert und kann von dort ausgelesen werden.",
+      "tags": [
+        "bitlocker",
+        "recovery",
+        "key",
+        "schluessel",
+        "verschluesselung",
+        "tpm"
+      ],
+      "nachfragen": [
+        "Steht eine Key-ID auf dem BitLocker-Bildschirm?",
+        "Wurde kuerzlich ein BIOS-Update gemacht?"
+      ]
+    },
+    {
+      "id": "OD-001",
+      "category": "onedrive",
+      "title": "OneDrive synchronisiert nicht",
+      "userSays": [
+        "onedrive sync geht nicht",
+        "onedrive synchronisiert nicht",
+        "onedrive haengt",
+        "onedrive upload geht nicht",
+        "dateien werden nicht synchronisiert",
+        "onedrive fehler",
+        "onedrive wolke mit x",
+        "onedrive status pending",
+        "onedrive sync stuck",
+        "onedrive dateien laden nicht hoch"
+      ],
+      "diagnose": [
+        "rd_onedrive_status",
+        "rd_onedrive_reset",
+        "rd_disk_space"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_onedrive_status",
+          "action": "OneDrive-Sync Status pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_disk_space",
+          "action": "Genug Speicherplatz lokal?"
+        },
+        {
+          "step": 3,
+          "skill": "rd_onedrive_reset",
+          "action": "OneDrive zuruecksetzen (onedrive /reset)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_credential_clear_onedrive",
+          "action": "OneDrive-Anmeldedaten loeschen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_onedrive_reinstall",
+          "action": "OneDrive neu installieren"
+        }
+      ],
+      "erklaerung": "OneDrive Sync-Probleme: 1) Zu wenig lokaler Speicher, 2) Dateiname zu lang oder ungueltige Zeichen, 3) Datei von anderem Programm gesperrt, 4) Credentials abgelaufen. Reset mit 'onedrive /reset' loest die meisten Probleme.",
+      "tags": [
+        "onedrive",
+        "sync",
+        "synchronisation",
+        "upload",
+        "cloud",
+        "sharepoint"
+      ],
+      "nachfragen": [
+        "Sehen Sie ein OneDrive-Icon im Systray (unten rechts)?",
+        "Zeigt es einen Fehler an (rotes X, gelbes Dreieck)?"
+      ]
+    },
+    {
+      "id": "LANG-001",
+      "category": "sprache",
+      "title": "PC ist auf Englisch / falsche Sprache",
+      "userSays": [
+        "pc auf englisch",
+        "windows auf englisch",
+        "alles auf englisch",
+        "sprache falsch",
+        "windows nicht deutsch",
+        "sprache aendern",
+        "pc sprache umstellen",
+        "betriebssystem englisch",
+        "system sprache falsch",
+        "mein pc ist auf englisch",
+        "wie aendere ich die sprache",
+        "windows anzeige auf englisch",
+        "einstellungen auf englisch",
+        "menues auf englisch"
+      ],
+      "diagnose": [
+        "rd_language_check",
+        "rd_language_set",
+        "rd_language_pack_install"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_language_check",
+          "action": "Aktuelle Anzeigesprache + installierte Sprachpakete pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_language_pack_install",
+          "action": "Deutsches Sprachpaket installieren (falls fehlend)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_language_set",
+          "action": "Anzeigesprache auf Deutsch setzen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_keyboard_layout_set",
+          "action": "Tastaturlayout auf Deutsch (QWERTZ)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_region_set",
+          "action": "Region/Format auf Deutschland setzen"
+        },
+        {
+          "step": 6,
+          "skill": "rd_office_language_set",
+          "action": "Office-Sprache auf Deutsch setzen"
+        },
+        {
+          "step": 7,
+          "skill": "rd_welcome_screen_language",
+          "action": "Willkommensbildschirm-Sprache aendern"
+        }
+      ],
+      "erklaerung": "Sprache komplett umstellen erfordert mehrere Schritte: Sprachpaket installieren, Anzeigesprache setzen, Tastatur, Region UND Office separat aendern. Nach Aenderung ist eine Abmeldung noetig.",
+      "tags": [
+        "sprache",
+        "englisch",
+        "deutsch",
+        "language",
+        "tastatur",
+        "region",
+        "office"
+      ],
+      "hinweis": "Nach Sprachaenderung MUSS sich der User ab- und wieder anmelden damit die Aenderung greift."
+    },
+    {
+      "id": "ASSOC-001",
+      "category": "standard_apps",
+      "title": "PDF oeffnet im falschen Programm / nicht in Adobe",
+      "userSays": [
+        "pdf oeffnet in edge",
+        "pdf oeffnet nicht in adobe",
+        "pdf falsches programm",
+        "adobe reader nicht standard",
+        "pdf oeffnet im browser",
+        "pdf oeffnet sich nicht richtig",
+        "beim oeffnen von pdf kommt edge",
+        "pdf soll in adobe oeffnen",
+        "pdf reader falsch"
+      ],
+      "diagnose": [
+        "rd_file_association_check",
+        "rd_software_check_installed",
+        "rd_default_app_set"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_file_association_check",
+          "action": "Aktuelle .pdf Zuordnung pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_software_check_installed",
+          "action": "Adobe Reader/Acrobat installiert?"
+        },
+        {
+          "step": 3,
+          "skill": "rd_default_app_set",
+          "action": "SetUserFTA: .pdf auf Adobe setzen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_file_association_verify",
+          "action": "Zuordnung verifizieren"
+        }
+      ],
+      "erklaerung": "Windows setzt nach Updates oft .pdf auf Edge zurueck. Fix: SetUserFTA.exe (liegt auf Netzlaufwerk unter Tool IT/tools/) auf den Ziel-PC kopieren und ausfuehren: SetUserFTA.exe .pdf AcroExch.Document.DC",
+      "tags": [
+        "pdf",
+        "adobe",
+        "edge",
+        "zuordnung",
+        "oeffnen",
+        "standard",
+        "reader"
+      ],
+      "hinweis": "SetUserFTA.exe muss auf dem Netzlaufwerk liegen unter: \\\\w3172\\...\\Tool IT\\tools\\SetUserFTA.exe"
+    },
+    {
+      "id": "WIN-012",
+      "category": "windows",
+      "title": "PC faehrt nicht hoch / bleibt beim Booten haengen",
+      "userSays": [
+        "pc startet nicht",
+        "pc faehrt nicht hoch",
+        "windows startet nicht",
+        "pc bleibt beim hochfahren haengen",
+        "bootloop",
+        "endlos neustart",
+        "pc startet immer neu",
+        "windows laedt nicht",
+        "kreis dreht sich ewig",
+        "pc bootet nicht",
+        "mein rechner geht nicht mehr an",
+        "windows bleibt beim laden haengen"
+      ],
+      "diagnose": [
+        "rd_event_bsod",
+        "rd_boot_config",
+        "rd_chkdsk"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ping",
+          "action": "PC ueberhaupt erreichbar? (Wenn ja: OS laeuft evtl. im Hintergrund)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_boot_config",
+          "action": "Boot-Konfiguration pruefen (BCDEdit)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_safe_mode_set",
+          "action": "Safe Mode fuer naechsten Boot aktivieren"
+        },
+        {
+          "step": 4,
+          "skill": "rd_sfc_dism",
+          "action": "Systemdateien reparieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_chkdsk",
+          "action": "Festplatte pruefen"
+        },
+        {
+          "step": 6,
+          "skill": "rd_driver_rollback",
+          "action": "Letzten Treiber zuruecksetzen"
+        },
+        {
+          "step": 7,
+          "skill": "rd_restore_point_restore",
+          "action": "Wiederherstellungspunkt verwenden"
+        }
+      ],
+      "erklaerung": "Boot-Probleme: Wenn der PC per WinRM erreichbar ist, laeuft Windows im Hintergrund (evtl. schwarzer Bildschirm). Wenn nicht erreichbar: Physischer Zugang noetig fuer Recovery-Modus.",
+      "tags": [
+        "boot",
+        "starten",
+        "hochfahren",
+        "loop",
+        "haengt"
+      ],
+      "nachfragen": [
+        "Sehen Sie ueberhaupt etwas auf dem Bildschirm?",
+        "Blinkt eine LED am PC?",
+        "War vorher ein Update?"
+      ]
+    },
+    {
+      "id": "WIN-013",
+      "category": "windows",
+      "title": "Schwarzer Bildschirm nach Anmeldung",
+      "userSays": [
+        "schwarzer bildschirm nach login",
+        "nach anmeldung schwarzer bildschirm",
+        "schwarzer screen",
+        "nur mauszeiger sichtbar",
+        "nach passwort eingabe schwarzer bildschirm",
+        "desktop laedt nicht",
+        "schwarzer bildschirm mit cursor"
+      ],
+      "diagnose": [
+        "rd_process_check",
+        "rd_shell_check",
+        "rd_explorer_restart"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_process_check",
+          "action": "Laeuft explorer.exe?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_process_start",
+          "action": "explorer.exe starten falls nicht laeuft"
+        },
+        {
+          "step": 3,
+          "skill": "rd_shell_check",
+          "action": "Shell-Registry pruefen (HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_gpu_driver_rollback",
+          "action": "Grafiktreiber zuruecksetzen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_profile_check",
+          "action": "Benutzerprofil defekt?"
+        }
+      ],
+      "erklaerung": "Schwarzer Bildschirm mit Cursor: Explorer.exe startet nicht. Ursachen: Shell-Registry beschaedigt, Grafiktreiber-Problem, RunOnce-Fehler, oder Profil defekt.",
+      "tags": [
+        "schwarz",
+        "cursor",
+        "mauszeiger",
+        "desktop",
+        "shell",
+        "explorer"
+      ]
+    },
+    {
+      "id": "WIN-014",
+      "category": "windows",
+      "title": "PC friert komplett ein / reagiert nicht mehr",
+      "userSays": [
+        "pc eingefroren",
+        "pc reagiert nicht",
+        "pc haengt sich auf",
+        "nichts geht mehr",
+        "maus bewegt sich nicht",
+        "bildschirm eingefroren",
+        "pc steht",
+        "alles eingefroren",
+        "strg alt entf geht nicht",
+        "pc komplett haengen"
+      ],
+      "diagnose": [
+        "rd_event_errors",
+        "rd_cpu_temp",
+        "rd_ram_usage",
+        "rd_driver_list"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_event_errors",
+          "action": "Letzte Fehler vor dem Freeze im Event-Log"
+        },
+        {
+          "step": 2,
+          "skill": "rd_cpu_temp",
+          "action": "CPU-Temperatur (Ueberhitzung?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ram_usage",
+          "action": "RAM-Auslastung (Speicherleck?)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_driver_list",
+          "action": "Kuerzlich aktualisierte Treiber"
+        },
+        {
+          "step": 5,
+          "skill": "rd_smart_status",
+          "action": "Festplatten-Status (I/O Freeze?)"
+        },
+        {
+          "step": 6,
+          "skill": "rd_power_plan",
+          "action": "Energiesparplan pruefen"
+        }
+      ],
+      "erklaerung": "Komplett-Freeze: 1) Ueberhitzung (CPU Throttling→Freeze), 2) Defekter RAM, 3) Festplatten-I/O haengt, 4) Treiber-Deadlock (oft Grafik). Event-Log VOR dem Freeze ist entscheidend.",
+      "tags": [
+        "eingefroren",
+        "freeze",
+        "haengt",
+        "reagiert nicht",
+        "einfrieren"
+      ]
+    },
+    {
+      "id": "OUT-005",
+      "category": "outlook",
+      "title": "Outlook stuerzt ab / crasht regelmaessig",
+      "userSays": [
+        "outlook stuerzt ab",
+        "outlook crasht",
+        "outlook schliesst sich",
+        "outlook absturz",
+        "outlook bricht ab",
+        "outlook macht einfach zu",
+        "outlook schliesst sich von alleine"
+      ],
+      "diagnose": [
+        "rd_event_errors",
+        "rd_outlook_addins",
+        "rd_outlook_ost",
+        "rd_office_version"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_event_errors",
+          "action": "Anwendungsfehler-Events fuer Outlook pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_outlook_addins",
+          "action": "Add-Ins pruefen (haeufigster Verursacher!)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_outlook_ost",
+          "action": "OST-Datei Status/Groesse"
+        },
+        {
+          "step": 4,
+          "skill": "rd_office_version",
+          "action": "Office-Version aktuell?"
+        },
+        {
+          "step": 5,
+          "skill": "rd_outlook_profile_new",
+          "action": "Neues Outlook-Profil erstellen"
+        },
+        {
+          "step": 6,
+          "skill": "rd_office_repair",
+          "action": "Office Online-Reparatur"
+        }
+      ],
+      "erklaerung": "Outlook-Abstuerze: 1) Add-In crasht (enaio!), 2) OST-Datei beschaedigt, 3) Office-Version veraltet, 4) Profil defekt. Safe Mode (outlook.exe /safe) isoliert Add-In Probleme.",
+      "tags": [
+        "outlook",
+        "absturz",
+        "crash",
+        "schliesst",
+        "addins",
+        "ost"
+      ]
+    },
+    {
+      "id": "OUT-006",
+      "category": "outlook",
+      "title": "Outlook 'Getrennt' / Verbindung zu Exchange verloren",
+      "userSays": [
+        "outlook getrennt",
+        "outlook offline",
+        "verbindung zu exchange getrennt",
+        "outlook zeigt getrennt",
+        "exchange verbindung verloren",
+        "outlook verbindet nicht mit server",
+        "outlook statusleiste getrennt"
+      ],
+      "diagnose": [
+        "rd_outlook_connection",
+        "rd_ping",
+        "rd_dns_check",
+        "rd_proxy_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ping",
+          "action": "Exchange-Server erreichbar?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_dns_check",
+          "action": "autodiscover DNS-Eintrag aufloesbar?"
+        },
+        {
+          "step": 3,
+          "skill": "rd_proxy_check",
+          "action": "Proxy/Zscaler blockiert Exchange?"
+        },
+        {
+          "step": 4,
+          "skill": "rd_ntp_check",
+          "action": "Uhrzeit korrekt? (Kerberos-Token!)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_outlook_cached_mode",
+          "action": "Cached Mode Einstellungen pruefen"
+        },
+        {
+          "step": 6,
+          "skill": "rd_credential_clear_outlook",
+          "action": "Exchange-Credentials neu eingeben"
+        }
+      ],
+      "erklaerung": "Outlook 'Getrennt': 1) Netzwerk-Problem (Server nicht erreichbar), 2) Autodiscover fehlerhaft, 3) Credentials abgelaufen, 4) Zscaler blockiert MAPI/HTTPS.",
+      "tags": [
+        "outlook",
+        "getrennt",
+        "offline",
+        "exchange",
+        "verbindung",
+        "server"
+      ]
+    },
+    {
+      "id": "OUT-007",
+      "category": "outlook",
+      "title": "Outlook Kalender-Freigabe funktioniert nicht",
+      "userSays": [
+        "kalender freigabe geht nicht",
+        "kann kalender nicht sehen",
+        "kalender berechtigungen",
+        "freigegebener kalender leer",
+        "kollegen kalender nicht sichtbar",
+        "kalender freigabe funktioniert nicht",
+        "geteilter kalender fehlt"
+      ],
+      "diagnose": [
+        "rd_outlook_calendar_perms",
+        "rd_ad_user_info"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_outlook_calendar_perms",
+          "action": "Kalender-Berechtigungen pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_outlook_cached_mode",
+          "action": "Cached Mode pruefen (shared mailbox?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_outlook_profile",
+          "action": "Exchange-Konto Typ pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_credential_clear_outlook",
+          "action": "Automapping-Probleme? Credentials pruefen"
+        }
+      ],
+      "erklaerung": "Kalender-Freigabe: 1) Berechtigungen nicht korrekt gesetzt, 2) Cached Mode Problem bei freigegebenen Postfaechern, 3) Automapping funktioniert nicht.",
+      "tags": [
+        "kalender",
+        "freigabe",
+        "berechtigungen",
+        "teilen",
+        "shared"
+      ]
+    },
+    {
+      "id": "TEAMS-003",
+      "category": "teams",
+      "title": "Teams Kamera funktioniert nicht",
+      "userSays": [
+        "teams kamera geht nicht",
+        "kamera schwarz in teams",
+        "video geht nicht in teams",
+        "webcam funktioniert nicht in teams",
+        "teams zeigt kein video",
+        "kamera wird nicht erkannt in teams",
+        "teams meeting kein bild"
+      ],
+      "diagnose": [
+        "rd_camera_status",
+        "rd_privacy_camera",
+        "rd_teams_audio_settings"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_camera_status",
+          "action": "Kamera-Geraet pruefen (angeschlossen? aktiv?)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_privacy_camera",
+          "action": "Windows Datenschutz: Kamera-Zugriff fuer Apps erlaubt?"
+        },
+        {
+          "step": 3,
+          "skill": "rd_process_check",
+          "action": "Nutzt ein anderes Programm die Kamera? (Zoom, Webex?)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_teams_cache_clean",
+          "action": "Teams-Cache loeschen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_driver_update",
+          "action": "Kamera-Treiber aktualisieren"
+        }
+      ],
+      "erklaerung": "Kamera in Teams: 1) Windows Datenschutz blockiert Kamera-Zugriff, 2) Andere App nutzt Kamera exklusiv, 3) Falsches Geraet in Teams ausgewaehlt, 4) Treiber-Problem.",
+      "tags": [
+        "teams",
+        "kamera",
+        "video",
+        "webcam",
+        "meeting",
+        "bild"
+      ]
+    },
+    {
+      "id": "TEAMS-004",
+      "category": "teams",
+      "title": "Teams Bildschirm teilen / Screen Sharing geht nicht",
+      "userSays": [
+        "bildschirm teilen geht nicht",
+        "screen sharing funktioniert nicht",
+        "teams praesentation teilen geht nicht",
+        "kann bildschirm nicht teilen in teams",
+        "teilen button grau",
+        "screen share teams fehler"
+      ],
+      "diagnose": [
+        "rd_teams_version",
+        "rd_gpu_status",
+        "rd_teams_policy"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_teams_version",
+          "action": "Teams-Version pruefen (New vs Classic)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_gpu_status",
+          "action": "GPU-Treiber (Hardware-Beschleunigung?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_teams_cache_clean",
+          "action": "Teams-Cache loeschen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_privacy_screen",
+          "action": "Bildschirmaufnahme-Berechtigung pruefen"
+        }
+      ],
+      "erklaerung": "Screen Sharing: 1) GPU-Treiber veraltet (Hardware-Beschleunigung fehlerhaft), 2) Policy blockiert Teilen, 3) Teams-Version Bug. Bei New Teams: GPU-Hardware-Beschleunigung in Teams-Settings deaktivieren.",
+      "tags": [
+        "teams",
+        "bildschirm",
+        "teilen",
+        "sharing",
+        "praesentation"
+      ]
+    },
+    {
+      "id": "PRINT-003",
+      "category": "drucker",
+      "title": "Netzwerkdrucker wird nicht gefunden / kann nicht hinzugefuegt werden",
+      "userSays": [
+        "drucker nicht gefunden",
+        "drucker hinzufuegen geht nicht",
+        "netzwerkdrucker fehlt",
+        "drucker wird nicht angezeigt",
+        "neuen drucker einrichten",
+        "drucker installieren",
+        "kann drucker nicht finden"
+      ],
+      "diagnose": [
+        "rd_printer_list",
+        "rd_ping",
+        "rd_port_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ping",
+          "action": "Drucker/Druckserver erreichbar?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_port_check",
+          "action": "Drucker-Port 9100/631 offen?"
+        },
+        {
+          "step": 3,
+          "skill": "rd_printer_add",
+          "action": "Drucker remote hinzufuegen (Add-Printer)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_printer_driver_install",
+          "action": "Passenden Treiber installieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_firewall_rule_check",
+          "action": "Firewall blockiert Drucker-Traffic?"
+        }
+      ],
+      "erklaerung": "Netzwerkdrucker: 1) IP-Adresse hat sich geaendert (DHCP statt fest), 2) Druckserver nicht erreichbar, 3) Firewall blockiert Port 9100/631, 4) Treiber fehlt.",
+      "tags": [
+        "drucker",
+        "netzwerk",
+        "hinzufuegen",
+        "finden",
+        "installieren"
+      ],
+      "nachfragen": [
+        "Kennen Sie die IP-Adresse des Druckers?",
+        "Ist es ein Netzwerkdrucker oder ueber einen Druckserver?"
+      ]
+    },
+    {
+      "id": "NET-004",
+      "category": "netzwerk",
+      "title": "VPN verbindet nicht",
+      "userSays": [
+        "vpn geht nicht",
+        "vpn verbindet nicht",
+        "vpn fehler",
+        "kann mich nicht per vpn verbinden",
+        "vpn timeout",
+        "vpn bricht ab",
+        "home office vpn geht nicht",
+        "vpn trennt sich",
+        "vpn connection failed"
+      ],
+      "diagnose": [
+        "rd_vpn_status",
+        "rd_ping",
+        "rd_zscaler_status",
+        "rd_cert_list"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_vpn_status",
+          "action": "VPN-Verbindungsstatus pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_ping",
+          "action": "VPN-Gateway erreichbar?"
+        },
+        {
+          "step": 3,
+          "skill": "rd_zscaler_status",
+          "action": "Zscaler-Konflikt mit VPN?"
+        },
+        {
+          "step": 4,
+          "skill": "rd_cert_list",
+          "action": "VPN-Zertifikat vorhanden und gueltig?"
+        },
+        {
+          "step": 5,
+          "skill": "rd_dns_check",
+          "action": "DNS-Aufloesung ueber VPN"
+        },
+        {
+          "step": 6,
+          "skill": "rd_vpn_reconnect",
+          "action": "VPN trennen und neu verbinden"
+        }
+      ],
+      "erklaerung": "VPN-Probleme: 1) Zscaler und VPN kollidieren (Split-Tunnel noetig), 2) VPN-Zertifikat abgelaufen, 3) Firewall am Heimnetzwerk blockiert VPN-Ports, 4) DNS-Problem nach VPN-Verbindung.",
+      "tags": [
+        "vpn",
+        "verbindung",
+        "home office",
+        "tunnel",
+        "gateway"
+      ],
+      "nachfragen": [
+        "Welchen VPN-Client benutzen Sie?",
+        "Sind Sie zu Hause oder im Buero?"
+      ]
+    },
+    {
+      "id": "NET-005",
+      "category": "netzwerk",
+      "title": "DNS-Probleme / Webseiten laden nicht trotz Internet",
+      "userSays": [
+        "seiten laden nicht",
+        "dns fehler",
+        "dns aufloesung fehlgeschlagen",
+        "webseite nicht erreichbar aber ping geht",
+        "err_name_not_resolved",
+        "dns_probe_finished_nxdomain",
+        "server nicht gefunden"
+      ],
+      "diagnose": [
+        "rd_dns_check",
+        "rd_dns_flush",
+        "rd_dns_config"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_dns_check",
+          "action": "DNS-Aufloesung testen (verschiedene Domains)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_dns_flush",
+          "action": "DNS-Cache leeren"
+        },
+        {
+          "step": 3,
+          "skill": "rd_dns_config",
+          "action": "DNS-Server Konfiguration pruefen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_dns_register",
+          "action": "DNS-Client neu registrieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_proxy_check",
+          "action": "Proxy/Zscaler DNS-Einstellungen pruefen"
+        }
+      ],
+      "erklaerung": "DNS-Probleme: Seiten laden nicht obwohl das Netzwerk funktioniert (Ping auf IP geht). Ursachen: DNS-Cache vergiftet, falscher DNS-Server, Zscaler DNS-Umleitung defekt.",
+      "tags": [
+        "dns",
+        "aufloesung",
+        "webseite",
+        "laden",
+        "name",
+        "nxdomain"
+      ]
+    },
+    {
+      "id": "PERF-003",
+      "category": "performance",
+      "title": "PC braucht ewig zum Hochfahren",
+      "userSays": [
+        "boot dauert lange",
+        "pc braucht ewig zum starten",
+        "windows startet langsam",
+        "hochfahren dauert",
+        "booten dauert ewig",
+        "pc start 5 minuten",
+        "langsamer start"
+      ],
+      "diagnose": [
+        "rd_boot_time",
+        "rd_autostart_list",
+        "rd_disk_type",
+        "rd_update_pending"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_boot_time",
+          "action": "Boot-Zeit messen (letzte Boot-Events)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_autostart_list",
+          "action": "Autostart-Programme (zu viele!)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_disk_type",
+          "action": "HDD oder SSD? (HDD = langsam normal)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_update_pending",
+          "action": "Ausstehende Updates (installieren beim Boot)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_service_startup_impact",
+          "action": "Dienste mit hohem Startup-Impact"
+        },
+        {
+          "step": 6,
+          "skill": "rd_superfetch_status",
+          "action": "SysMain-Dienst Status"
+        }
+      ],
+      "erklaerung": "Langsamer Boot: 1) Zu viele Autostart-Programme, 2) HDD statt SSD, 3) Updates werden beim Boot installiert, 4) Netzwerk-Timeouts (Netzlaufwerke, GPO), 5) Defekter Treiber.",
+      "tags": [
+        "boot",
+        "start",
+        "langsam",
+        "hochfahren",
+        "autostart"
+      ]
+    },
+    {
+      "id": "OFF-001",
+      "category": "office",
+      "title": "Office Aktivierung fehlgeschlagen / unlizenziert",
+      "userSays": [
+        "office nicht aktiviert",
+        "office lizenz",
+        "office unlizenziert",
+        "office aktivierung",
+        "produkt nicht aktiviert",
+        "word zeigt unlizenziert",
+        "excel nicht aktiviert",
+        "office lizenz abgelaufen"
+      ],
+      "diagnose": [
+        "rd_office_license",
+        "rd_office_version"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_office_license",
+          "action": "Office-Lizenzstatus pruefen (ospp.vbs /dstatus)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_office_activation_repair",
+          "action": "Office-Aktivierung reparieren"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ntp_check",
+          "action": "Systemuhrzeit korrekt?"
+        },
+        {
+          "step": 4,
+          "skill": "rd_office_repair",
+          "action": "Office Online-Reparatur"
+        }
+      ],
+      "erklaerung": "Office unlizenziert: 1) M365-Subscription abgelaufen, 2) Token abgelaufen (Uhrzeit falsch?), 3) Shared Computer Activation Problem, 4) Registry-Eintraege beschaedigt.",
+      "tags": [
+        "office",
+        "lizenz",
+        "aktivierung",
+        "unlizenziert",
+        "word",
+        "excel"
+      ]
+    },
+    {
+      "id": "OFF-002",
+      "category": "office",
+      "title": "Excel/Word Datei laesst sich nicht oeffnen / beschaedigt",
+      "userSays": [
+        "datei laesst sich nicht oeffnen",
+        "excel datei beschaedigt",
+        "word dokument defekt",
+        "datei kann nicht geoeffnet werden",
+        "datei ist beschaedigt",
+        "excel oeffnet nicht",
+        "word oeffnet nicht",
+        "datei reparieren"
+      ],
+      "diagnose": [
+        "rd_file_check",
+        "rd_office_repair"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_file_check",
+          "action": "Datei existiert und ist nicht leer?"
+        },
+        {
+          "step": 2,
+          "skill": "rd_file_unblock",
+          "action": "Datei entsperren (aus Internet heruntergeladen?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_office_safe_mode",
+          "action": "Office im Safe Mode oeffnen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_office_repair",
+          "action": "Office-Reparatur"
+        },
+        {
+          "step": 5,
+          "skill": "rd_shadow_copy_check",
+          "action": "Vorherige Version der Datei vorhanden?"
+        }
+      ],
+      "erklaerung": "Datei beschaedigt: 1) Datei aus Internet → Zone.Identifier blockiert (Unblock-File), 2) Datei wirklich beschaedigt → vorherige Version aus Schattenkopie, 3) Office-Installation defekt.",
+      "tags": [
+        "datei",
+        "beschaedigt",
+        "oeffnen",
+        "excel",
+        "word",
+        "reparieren"
+      ]
+    },
+    {
+      "id": "DISK-001",
+      "category": "festplatte",
+      "title": "Festplatte fast voll / Speicher voll",
+      "userSays": [
+        "festplatte voll",
+        "speicher voll",
+        "kein speicherplatz",
+        "c laufwerk voll",
+        "wenig speicher",
+        "platte voll",
+        "laufwerk c fast voll",
+        "festplatte hat keinen platz mehr",
+        "speicherplatz aufraumen"
+      ],
+      "diagnose": [
+        "rd_disk_space",
+        "rd_disk_largest_folders",
+        "rd_temp_clean"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_disk_space",
+          "action": "Freier Speicherplatz pro Laufwerk"
+        },
+        {
+          "step": 2,
+          "skill": "rd_disk_largest_folders",
+          "action": "Groesste Ordner finden"
+        },
+        {
+          "step": 3,
+          "skill": "rd_temp_clean",
+          "action": "Temp-Dateien loeschen (Windows Temp, User Temp)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_winsxs_cleanup",
+          "action": "WinSxS Component Store bereinigen (DISM)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_update_cache_clean",
+          "action": "Windows Update Cache loeschen"
+        },
+        {
+          "step": 6,
+          "skill": "rd_recycle_bin_clean",
+          "action": "Papierkorb leeren"
+        },
+        {
+          "step": 7,
+          "skill": "rd_ost_size_check",
+          "action": "OST-Datei Groesse pruefen (oft >20GB)"
+        },
+        {
+          "step": 8,
+          "skill": "rd_teams_cache_size",
+          "action": "Teams-Cache Groesse pruefen"
+        }
+      ],
+      "erklaerung": "Festplatte voll: Die groessten Platzfresser sind: 1) OST-Datei (Outlook Cache, oft 20-50GB), 2) Teams-Cache, 3) Windows Temp, 4) WinSxS, 5) Windows Update Cache, 6) Benutzer-Downloads.",
+      "tags": [
+        "festplatte",
+        "speicher",
+        "voll",
+        "platz",
+        "aufraumen",
+        "loeschen",
+        "bereinigen"
+      ]
+    },
+    {
+      "id": "INTUNE-001",
+      "category": "intune",
+      "title": "PC zeigt 'Nicht konform' in Intune / Conditional Access blockiert",
+      "userSays": [
+        "intune nicht konform",
+        "conditional access blockiert",
+        "intune compliance fehler",
+        "zugriff verweigert compliance",
+        "gerät nicht konform",
+        "intune sync fehlgeschlagen",
+        "teams login blockiert compliance"
+      ],
+      "diagnose": [
+        "rd_intune_status",
+        "rd_intune_sync",
+        "rd_update_pending"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_intune_status",
+          "action": "Intune Enrollment Status pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_intune_compliance",
+          "action": "Compliance-Policies pruefen (was fehlt?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_intune_sync",
+          "action": "Intune-Sync erzwingen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_update_pending",
+          "action": "Ausstehende Updates (haeufigste Compliance-Verletzung)"
+        },
+        {
+          "step": 5,
+          "skill": "rd_bitlocker_status",
+          "action": "BitLocker aktiv? (Compliance-Anforderung)"
+        },
+        {
+          "step": 6,
+          "skill": "rd_defender_status",
+          "action": "Defender aktiv und aktuell?"
+        }
+      ],
+      "erklaerung": "Intune 'Nicht konform': 1) Windows Updates fehlen, 2) BitLocker nicht aktiviert, 3) Defender nicht aktuell, 4) Intune-Sync ist veraltet. Sync erzwingen und fehlende Anforderungen erfuellen.",
+      "tags": [
+        "intune",
+        "compliance",
+        "konform",
+        "conditional access",
+        "blockiert",
+        "sync"
+      ]
+    },
+    {
+      "id": "BROWSER-001",
+      "category": "browser",
+      "title": "Chrome/Edge langsam oder crasht",
+      "userSays": [
+        "chrome langsam",
+        "edge langsam",
+        "browser langsam",
+        "chrome stuerzt ab",
+        "edge crasht",
+        "browser haengt",
+        "chrome frisst speicher",
+        "browser braucht ewig",
+        "chrome reagiert nicht",
+        "edge reagiert nicht"
+      ],
+      "diagnose": [
+        "rd_browser_extensions",
+        "rd_browser_cache_clean",
+        "rd_ram_usage"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_browser_extensions",
+          "action": "Browser-Erweiterungen pruefen (zu viele? verdaechtige?)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_browser_cache_clean",
+          "action": "Browser-Cache loeschen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ram_usage",
+          "action": "RAM-Verbrauch durch Browser"
+        },
+        {
+          "step": 4,
+          "skill": "rd_browser_reset",
+          "action": "Browser-Einstellungen zuruecksetzen"
+        },
+        {
+          "step": 5,
+          "skill": "rd_browser_reinstall",
+          "action": "Browser neu installieren"
+        }
+      ],
+      "erklaerung": "Browser langsam: 1) Zu viele Extensions (jede frisst RAM), 2) Cache zu gross, 3) Zu viele offene Tabs, 4) Hardware-Beschleunigung Problem mit GPU-Treiber.",
+      "tags": [
+        "browser",
+        "chrome",
+        "edge",
+        "langsam",
+        "crash",
+        "extensions",
+        "cache"
+      ]
+    },
+    {
+      "id": "ACC-001",
+      "category": "barrierefreiheit",
+      "title": "Alles zu klein / Schrift zu klein auf dem Bildschirm",
+      "userSays": [
+        "schrift zu klein",
+        "alles zu klein",
+        "kann nichts lesen",
+        "text zu klein",
+        "symbole zu klein",
+        "bildschirm zu klein",
+        "alles winzig",
+        "schriftgroesse aendern",
+        "zoomen",
+        "dpi aendern"
+      ],
+      "diagnose": [
+        "rd_dpi_check",
+        "rd_dpi_set",
+        "rd_display_resolution"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_dpi_check",
+          "action": "Aktuelle Skalierung/DPI pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_display_resolution",
+          "action": "Aufloesung pruefen (zu hoch fuer Bildschirmgroesse?)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_dpi_set",
+          "action": "Skalierung erhoehen (125%, 150%)"
+        },
+        {
+          "step": 4,
+          "skill": "rd_text_size_set",
+          "action": "Textgroesse anpassen"
+        }
+      ],
+      "erklaerung": "Zu kleine Schrift: 1) DPI-Skalierung zu niedrig (100% auf 4K-Monitor = winzig), 2) Aufloesung zu hoch. Skalierung auf 125% oder 150% setzen.",
+      "tags": [
+        "klein",
+        "schrift",
+        "dpi",
+        "skalierung",
+        "aufloesung",
+        "zoom",
+        "lesen"
+      ]
+    },
+    {
+      "id": "PERS-001",
+      "category": "personalisierung",
+      "title": "Windows Werbung / vorinstallierte Apps / Bloatware entfernen",
+      "userSays": [
+        "werbung in windows",
+        "bloatware entfernen",
+        "vorinstallierte apps",
+        "candy crush",
+        "werbung im startmenue",
+        "empfohlene apps entfernen",
+        "windows werbung deaktivieren",
+        "unnoetige apps"
+      ],
+      "diagnose": [
+        "rd_appx_provisioned_list",
+        "rd_appx_remove",
+        "rd_content_delivery_disable"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_appx_provisioned_list",
+          "action": "Vorinstallierte Bloatware-Apps auflisten"
+        },
+        {
+          "step": 2,
+          "skill": "rd_appx_remove",
+          "action": "Bloatware entfernen (BingWeather, GetStarted, etc.)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_content_delivery_disable",
+          "action": "ContentDeliveryManager deaktivieren"
+        },
+        {
+          "step": 4,
+          "skill": "rd_consumer_features_disable",
+          "action": "Windows Consumer Features deaktivieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_game_dvr_disable",
+          "action": "Game DVR/Bar deaktivieren"
+        },
+        {
+          "step": 6,
+          "skill": "rd_suggestions_disable",
+          "action": "Vorschlaege in Einstellungen deaktivieren"
+        }
+      ],
+      "erklaerung": "Windows-Werbung: Microsoft installiert ueber ContentDeliveryManager automatisch Apps wie Candy Crush. Deaktivierung ueber Registry + vorinstallierte Apps entfernen + Consumer Features aus.",
+      "tags": [
+        "werbung",
+        "bloatware",
+        "apps",
+        "candy crush",
+        "vorinstalliert",
+        "deaktivieren"
+      ]
+    },
+    {
+      "id": "PRIV-001",
+      "category": "privacy",
+      "title": "Datenschutz haerten / Telemetrie deaktivieren",
+      "userSays": [
+        "datenschutz",
+        "telemetrie",
+        "tracking",
+        "ueberwachung",
+        "windows spioniert",
+        "dsgvo",
+        "privacy",
+        "windows sendet daten",
+        "telemetrie abschalten"
+      ],
+      "diagnose": [
+        "rd_telemetry_check",
+        "rd_telemetry_disable",
+        "rd_privacy_configure"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_telemetry_check",
+          "action": "Aktuelles Telemetrie-Level pruefen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_telemetry_disable",
+          "action": "Telemetrie auf Minimum setzen"
+        },
+        {
+          "step": 3,
+          "skill": "rd_advertising_id_disable",
+          "action": "Advertising ID deaktivieren"
+        },
+        {
+          "step": 4,
+          "skill": "rd_activity_history_disable",
+          "action": "Activity History deaktivieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_background_apps_disable",
+          "action": "Hintergrund-Apps deaktivieren"
+        },
+        {
+          "step": 6,
+          "skill": "rd_location_disable",
+          "action": "Standort-Dienste deaktivieren"
+        },
+        {
+          "step": 7,
+          "skill": "rd_diagtrack_disable",
+          "action": "DiagTrack-Dienst deaktivieren"
+        }
+      ],
+      "erklaerung": "Datenschutz-Haertung: Telemetrie auf 0 (Security), Advertising ID aus, Activity History aus, Background Apps aus, Location aus, DiagTrack-Dienst deaktivieren.",
+      "tags": [
+        "datenschutz",
+        "telemetrie",
+        "privacy",
+        "tracking",
+        "dsgvo",
+        "deaktivieren"
+      ]
+    },
+    {
+      "id": "CERT-001",
+      "category": "zertifikate",
+      "title": "Zertifikatsfehler im Browser (SSL/HTTPS)",
+      "userSays": [
+        "zertifikat fehler",
+        "ssl fehler",
+        "https fehler",
+        "verbindung nicht sicher",
+        "zertifikat abgelaufen",
+        "ungultiges zertifikat",
+        "zertifikat nicht vertrauenswuerdig",
+        "err_cert",
+        "sicherheitswarnung browser",
+        "net::err_cert_authority_invalid"
+      ],
+      "diagnose": [
+        "rd_ntp_check",
+        "rd_cert_find_expired",
+        "rd_cert_zscaler_check"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_ntp_check",
+          "action": "Systemuhrzeit korrekt? (HAEUFIGSTE URSACHE!)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_cert_find_expired",
+          "action": "Abgelaufene Zertifikate im Store finden"
+        },
+        {
+          "step": 3,
+          "skill": "rd_cert_zscaler_check",
+          "action": "Zscaler Root-CA vorhanden und gueltig?"
+        },
+        {
+          "step": 4,
+          "skill": "rd_cert_validate_chain",
+          "action": "Zertifikatskette validieren"
+        },
+        {
+          "step": 5,
+          "skill": "rd_cert_import",
+          "action": "Fehlende Root-CAs importieren"
+        },
+        {
+          "step": 6,
+          "skill": "rd_crl_cache_clear",
+          "action": "CRL-Cache leeren (certutil -urlcache * delete)"
+        }
+      ],
+      "erklaerung": "Zertifikatsfehler: 1) Systemuhrzeit falsch (haeufigster Grund!), 2) Zscaler Root-CA fehlt, 3) Unternehmens-Root-CA abgelaufen, 4) CRL nicht erreichbar.",
+      "tags": [
+        "zertifikat",
+        "ssl",
+        "https",
+        "sicher",
+        "abgelaufen",
+        "root",
+        "zscaler"
+      ]
+    },
+    {
+      "id": "RESTORE-001",
+      "category": "wiederherstellung",
+      "title": "Versehentlich Datei geloescht / wiederherstellen",
+      "userSays": [
+        "datei geloescht",
+        "datei wiederherstellen",
+        "versehentlich geloescht",
+        "datei weg",
+        "ordner geloescht",
+        "dateien weg",
+        "kann datei nicht mehr finden",
+        "datei aus versehen geloescht",
+        "wo ist meine datei hin"
+      ],
+      "diagnose": [
+        "rd_recycle_bin_check",
+        "rd_shadow_copy_list",
+        "rd_onedrive_recycle"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_recycle_bin_check",
+          "action": "Papierkorb pruefen (Datei noch drin?)"
+        },
+        {
+          "step": 2,
+          "skill": "rd_shadow_copy_list",
+          "action": "Schattenkopien vorhanden? (vorherige Version)"
+        },
+        {
+          "step": 3,
+          "skill": "rd_shadow_copy_restore",
+          "action": "Datei aus Schattenkopie wiederherstellen"
+        },
+        {
+          "step": 4,
+          "skill": "rd_onedrive_recycle",
+          "action": "OneDrive-Papierkorb pruefen (falls Datei in OneDrive war)"
+        }
+      ],
+      "erklaerung": "Datei wiederherstellen: 1) Papierkorb, 2) Vorherige Version (Schattenkopie), 3) OneDrive Papierkorb (30 Tage), 4) Backup. WICHTIG: Je schneller man handelt desto besser!",
+      "tags": [
+        "datei",
+        "geloescht",
+        "wiederherstellen",
+        "papierkorb",
+        "schattenkopie",
+        "weg"
+      ]
+    },
+    {
+      "id": "REMOTE-001",
+      "category": "remote",
+      "title": "PC remote einschalten (Wake-on-LAN)",
+      "userSays": [
+        "pc einschalten remote",
+        "wake on lan",
+        "wol",
+        "pc starten ferngesteuert",
+        "pc ist aus und ich muss drauf",
+        "pc remote aufwecken",
+        "pc aus der ferne einschalten"
+      ],
+      "diagnose": [
+        "rd_wol_mac_resolve",
+        "rd_wol_send"
+      ],
+      "skillChain": [
+        {
+          "step": 1,
+          "skill": "rd_wol_mac_resolve",
+          "action": "MAC-Adresse des PCs aus AD oder letztem ARP-Cache holen"
+        },
+        {
+          "step": 2,
+          "skill": "rd_wol_send",
+          "action": "Magic Packet senden"
+        },
+        {
+          "step": 3,
+          "skill": "rd_ping",
+          "action": "30 Sekunden warten, dann Ping um zu pruefen ob PC hochgefahren ist"
+        }
+      ],
+      "erklaerung": "Wake-on-LAN: Ein Magic Packet an die MAC-Adresse des PCs senden. Voraussetzung: WOL muss im BIOS aktiviert sein und der PC muss per LAN-Kabel verbunden sein (nicht WLAN).",
+      "tags": [
+        "wol",
+        "wake",
+        "einschalten",
+        "aufwecken",
+        "magic packet",
+        "mac"
+      ]
+    }
+  ]
+}

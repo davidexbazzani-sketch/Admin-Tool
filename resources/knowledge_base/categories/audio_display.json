@@ -1,0 +1,931 @@
+[
+  {
+    "id": "PROB-AUD-001",
+    "category": "Audio & Display",
+    "title": "Kein Ton - Computer stumm",
+    "keywords": ["Ton", "Sound", "stumm", "kein Audio", "Lautsprecher", "Lautstärke", "mute", "Audiogerät"],
+    "extendedKeywords": ["kein Ton am PC", "Computer ist stumm", "kein Sound mehr", "Lautsprecher machen nichts", "höre nichts mehr", "PC gibt keinen Ton von sich", "Audio geht nicht", "seit heute kein Ton", "Sound ist weg", "kein Ton bei Videos", "YouTube kein Ton", "kein Ton in Teams", "Windows macht keine Geräusche", "Ton funktioniert nicht mehr", "warum ist mein PC stumm", "Sound plötzlich weg", "Lautsprecher tot", "kein Ton nach Update", "Ton ausgefallen", "Audio kaputt", "kein Pieps mehr", "nix zu hören", "Ton komplett aus", "PC lautlos obwohl nicht gemutet", "Audio stumm geschaltet"],
+    "typos": ["Ton", "Soud", "Soundd", "Lautspreche", "stumm", "Laudsprecher", "Laudstärke", "Audiogerät"],
+    "symptoms": ["Kein Ton bei Wiedergabe", "Lautstärkesymbol zeigt rotes X", "Kein Sound trotz eingeschalteter Lautsprecher"],
+    "quickCheck": "Ist das Lautstärkesymbol in der Taskleiste durchgestrichen oder zeigt ein X?",
+    "solutions": [
+      "Lautstärke über die Taskleiste prüfen und hochdrehen",
+      "Prüfen ob das richtige Ausgabegerät ausgewählt ist",
+      "Windows Audio-Dienst neu starten",
+      "Audiotreiber im Gerätemanager prüfen und ggf. aktualisieren",
+      "PC neu starten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_volshow", "label": "Lautstärke anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_audio_volset", "label": "Lautstärke setzen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 3, "effectiveness": 80},
+      {"skillId": "rd_audio_audiosvcrestart", "label": "Audio-Dienst neu starten", "priority": 4, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["no sound", "mute", "kein ton"],
+    "followUpQuestions": [
+      {
+        "question": "Ist das Problem bei allen Anwendungen oder nur bei einer bestimmten?",
+        "options": ["Überall kein Ton", "Nur in einer Anwendung", "Nur in Teams/Zoom"],
+        "narrows": "Ob systemweites oder anwendungsspezifisches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-002", "PROB-AUD-007"]
+  },
+  {
+    "id": "PROB-AUD-002",
+    "category": "Audio & Display",
+    "title": "Ton zu leise trotz voller Lautstärke",
+    "keywords": ["leise", "Lautstärke", "zu leise", "kaum hörbar", "Volume", "Pegel", "Sound leise"],
+    "extendedKeywords": ["Ton ist zu leise", "Lautsprecher zu leise", "kann nichts hören obwohl Lautstärke auf Maximum", "Volume auf 100 aber trotzdem leise", "Sound total leise", "Lautstärke voll aber kaum was zu hören", "muss ganz nah ran um was zu hören", "alles zu leise", "Meeting zu leise", "Teams Ton zu leise", "Kopfhörer zu leise", "warum ist der Ton so leise", "Audio sehr leise", "kaum hörbar bei voller Lautstärke", "Lautstärke geht nicht höher", "maximale Lautstärke zu leise", "Ton auf 100 Prozent aber leise", "Sound plötzlich leiser geworden", "Lautsprecher nur ganz leise", "PC flüstert nur"],
+    "typos": ["leise", "Lautstäke", "Laudstärke", "leiße", "volumen"],
+    "symptoms": ["Lautstärke auf 100% aber kaum hörbar", "Ton leiser als gewohnt", "Nur bei bestimmten Apps leise"],
+    "quickCheck": "Steht die Lautstärke in Windows UND in der Anwendung auf Maximum?",
+    "solutions": [
+      "Windows-Lautstärke und Anwendungslautstärke separat prüfen",
+      "Im Lautstärkemixer die einzelnen App-Lautstärken prüfen",
+      "Audiogerät-Eigenschaften > Verbesserungen > Lautstärkeausgleich aktivieren",
+      "Kommunikationsgeräte-Einstellung prüfen: Rechtsklick auf Lautsprecher > Sounds > Kommunikation > Nichts unternehmen",
+      "Audiotreiber aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_volshow", "label": "Lautstärke anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_audio_volset", "label": "Lautstärke setzen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["sound too quiet", "volume low", "zu leise"],
+    "followUpQuestions": [
+      {
+        "question": "War die Lautstärke früher normal und ist plötzlich leise geworden?",
+        "options": ["Ja, plötzlich leiser", "War schon immer so", "Nach einem Update"],
+        "narrows": "Ob Treiberänderung oder Einstellungsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-001", "PROB-AUD-003"]
+  },
+  {
+    "id": "PROB-AUD-003",
+    "category": "Audio & Display",
+    "title": "Ton nur auf einer Seite - ein Kanal fehlt",
+    "keywords": ["Balance", "Stereo", "Kanal", "links", "rechts", "Mono", "einseitig", "Audiokanal"],
+    "extendedKeywords": ["Ton nur links", "Ton nur rechts", "ein Lautsprecher geht nicht", "nur eine Seite Ton", "Sound einseitig", "nur ein Kanal funktioniert", "Kopfhörer nur links Ton", "Kopfhörer nur rechts Ton", "Stereo funktioniert nicht", "Balance falsch", "kein Ton auf der rechten Seite", "kein Ton auf der linken Seite", "Sound nur auf einem Ohr", "eine Box geht nicht", "ein Lautsprecher stumm", "Audio asymmetrisch", "nur Mono statt Stereo", "ein Kanal fehlt", "Lautsprecher ungleichmäßig", "Sound nur von einer Seite"],
+    "typos": ["Ballance", "Stero", "Kannal", "einseidig"],
+    "symptoms": ["Ton kommt nur aus einem Lautsprecher/Kopfhörer", "Balance steht nicht auf Mitte", "Mono statt Stereo"],
+    "quickCheck": "Kommt der Ton nur aus dem linken oder nur aus dem rechten Lautsprecher?",
+    "solutions": [
+      "Audio-Balance prüfen: Rechtsklick auf Lautstärkesymbol > Sounds > Wiedergabe > Pegel > Balance",
+      "Kabel/Stecker des Lautsprechers prüfen (richtig eingesteckt?)",
+      "In den Soundeinstellungen auf Stereo umschalten",
+      "Mit anderem Kopfhörer/Lautsprecher testen ob es am Gerät liegt",
+      "Audiotreiber neu installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_volshow", "label": "Lautstärke anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_devmgr_audioreset", "label": "Audiotreiber zurücksetzen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["one channel", "only left", "only right", "mono sound"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt das Problem auch mit einem anderen Kopfhörer/Lautsprecher auf?",
+        "options": ["Ja, auch mit anderen Geräten", "Nein, nur mit diesem Gerät", "Habe kein anderes zum Testen"],
+        "narrows": "Ob Hardwaredefekt oder Softwareproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-001", "PROB-AUD-002"]
+  },
+  {
+    "id": "PROB-AUD-004",
+    "category": "Audio & Display",
+    "title": "Bildschirmhelligkeit lässt sich nicht ändern",
+    "keywords": ["Helligkeit", "Brightness", "Display", "dunkel", "hell", "Fn-Taste", "Helligkeitsregler"],
+    "extendedKeywords": ["Helligkeit geht nicht", "kann Helligkeit nicht ändern", "Helligkeitsregler fehlt", "Fn Taste für Helligkeit funktioniert nicht", "Bildschirm lässt sich nicht heller machen", "Helligkeitseinstellung ausgegraut", "keine Helligkeitsänderung möglich", "Display Helligkeit blockiert", "Bildschirm bleibt dunkel", "Helligkeit verstellen geht nicht", "Helligkeitstaste reagiert nicht", "Windows Helligkeit einstellen geht nicht", "Brightness slider fehlt", "Helligkeitsbalken weg", "Bildschirm zu dunkel und kann nichts ändern", "Helligkeit lässt sich nicht regeln", "Helligkeitsregelung defekt", "Helligkeitsstufentasten ohne Funktion", "kann Display nicht heller machen", "Bildschirm dunkel und Helligkeit geht nicht"],
+    "typos": ["Helligkeit", "Heligkeit", "Bildschrimhelligkeit", "Brighness", "Helligket"],
+    "symptoms": ["Helligkeitsregler in Windows fehlt oder ist ausgegraut", "Fn-Tasten für Helligkeit reagieren nicht", "Helligkeit bleibt konstant"],
+    "quickCheck": "Ist der Helligkeitsregler in den Windows-Einstellungen sichtbar oder ausgegraut?",
+    "solutions": [
+      "Displaytreiber im Gerätemanager aktualisieren",
+      "Generischen PnP-Monitor-Treiber prüfen und ggf. neu installieren",
+      "In den Energieoptionen adaptive Helligkeit deaktivieren",
+      "Fn-Tasten-Treiber (Hotkey-Treiber) des Laptopherstellers installieren",
+      "PC neu starten und im BIOS Fn-Lock prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_brightshow", "label": "Helligkeit anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_audio_brightset", "label": "Helligkeit setzen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["brightness stuck", "cant change brightness", "helligkeit ausgegraut"],
+    "followUpQuestions": [
+      {
+        "question": "Handelt es sich um einen Laptop oder einen externen Monitor?",
+        "options": ["Laptop-Display", "Externer Monitor", "Beides"],
+        "narrows": "Ob Treiber- oder Monitorproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-005", "PROB-AUD-030"]
+  },
+  {
+    "id": "PROB-AUD-005",
+    "category": "Audio & Display",
+    "title": "Bildschirm zu dunkel trotz maximaler Helligkeit",
+    "keywords": ["dunkel", "Helligkeit", "Maximum", "Display", "dunkel", "Energiesparmodus", "dimmen"],
+    "extendedKeywords": ["Bildschirm zu dunkel", "Display sehr dunkel", "kann kaum was erkennen", "Bildschirm dimmt sich", "Bildschirm wird automatisch dunkler", "maximale Helligkeit reicht nicht", "Display dunkler als sonst", "Bildschirm verdunkelt sich", "Monitor zu dunkel", "Display abgedunkelt", "Bildschirm faded", "alles zu dunkel auf dem Bildschirm", "Bildschirm hell genug aber trotzdem dunkel", "automatisches Dimmen", "Bildschirm schaltet dunkel", "sehe fast nichts auf dem Bildschirm", "Display ganz duster", "Bildschirm flau", "Display nicht hell genug", "Laptop Bildschirm zu dunkel"],
+    "typos": ["Bilschirm", "Bildshirm", "Helligkiet", "Maximal", "dimm"],
+    "symptoms": ["Bildschirm dunkel trotz 100% Helligkeit", "Automatisches Dimmen aktiv", "Nachtmodus unbeabsichtigt aktiviert"],
+    "quickCheck": "Ist vielleicht der Nachtmodus oder ein Blaulichtfilter aktiviert?",
+    "solutions": [
+      "Nachtmodus deaktivieren: Einstellungen > System > Bildschirm > Nachtmodus aus",
+      "Adaptive Helligkeit in den Energieoptionen deaktivieren",
+      "Helligkeitseinstellung in der Grafikkarten-Software (Intel/NVIDIA/AMD) prüfen",
+      "Energieplan auf Höchstleistung umstellen",
+      "Bei externem Monitor: OSD-Menü am Monitor direkt prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_brightshow", "label": "Helligkeit anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_audio_brightset", "label": "Helligkeit setzen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_audio_nightmode", "label": "Nachtmodus prüfen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["screen too dark", "display dim", "bildschirm dunkel"],
+    "followUpQuestions": [
+      {
+        "question": "Wird der Bildschirm automatisch dunkler oder ist er dauerhaft dunkel?",
+        "options": ["Dimmt sich automatisch", "Immer dunkel", "Nur im Akkubetrieb"],
+        "narrows": "Ob Energiesparfunktion oder Displayproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-004", "PROB-AUD-009"]
+  },
+  {
+    "id": "PROB-AUD-006",
+    "category": "Audio & Display",
+    "title": "Falsche Bildschirmauflösung",
+    "keywords": ["Auflösung", "Resolution", "Pixel", "Bildschärfe", "Display", "Skalierung", "Bildschirmgröße"],
+    "extendedKeywords": ["Auflösung ist falsch", "Bildschirm sieht komisch aus", "alles ist zu groß", "alles ist zu klein", "Auflösung hat sich geändert", "Auflösung stimmt nicht", "Display sieht anders aus", "Bildschirm unscharf", "Auflösung niedrig", "Auflösung zu niedrig", "Bildschirm sieht gestreckt aus", "Icons riesig", "alles verpixelt", "niedrige Auflösung", "Bildschirmauflösung verstellt", "Auflösung kaputt", "Bildschirm sieht verwaschen aus", "falsche Bildschirmgröße", "Display Auflösung ändern", "native Auflösung nicht verfügbar"],
+    "typos": ["Auflösung", "Auflößung", "Resolusion", "Auflöhsung", "Bildschrimauflösung"],
+    "symptoms": ["Bildschirm zeigt falsche Auflösung", "Bild gestreckt oder gestaucht", "Native Auflösung nicht auswählbar"],
+    "quickCheck": "Welche Auflösung ist aktuell eingestellt und welche sollte es sein?",
+    "solutions": [
+      "Rechtsklick auf Desktop > Anzeigeeinstellungen > Auflösung auf empfohlen stellen",
+      "Grafiktreiber aktualisieren",
+      "Monitor-Kabel prüfen (HDMI/DisplayPort) und ggf. austauschen",
+      "Grafikkarten-Software öffnen und Auflösung dort einstellen",
+      "Bei Docking Station: Dock-Firmware aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_resshow", "label": "Auflösung anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_audio_scalingshow", "label": "Skalierung anzeigen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["wrong resolution", "display stretched", "auflösung verstellt"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie die gewünschte Auflösung in der Dropdown-Liste auswählen?",
+        "options": ["Ja, aber sie wird nicht übernommen", "Nein, sie fehlt in der Liste", "Weiß nicht welche die richtige ist"],
+        "narrows": "Ob Treiber- oder Kabelproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-007", "PROB-AUD-008"]
+  },
+  {
+    "id": "PROB-AUD-007",
+    "category": "Audio & Display",
+    "title": "Bildschirm unscharf - verschwommene Darstellung",
+    "keywords": ["unscharf", "verschwommen", "Blur", "DPI", "Skalierung", "ClearType", "Schrift"],
+    "extendedKeywords": ["Bildschirm unscharf", "alles verschwommen", "Schrift unscharf", "Text verschwommen", "Fenster unscharf", "Display nicht scharf", "Apps unscharf", "Programme sehen unscharf aus", "Text pixelig", "Buchstaben verschwommen", "Bildschirm wie durch Nebel", "alles verwaschen", "unscharfe Darstellung", "Schrift nicht klar", "unscharfes Bild", "Bildschirm verschwimmt", "alles leicht unscharf", "Schrift matschig", "Display unscharf nach Docking", "Bild nicht knackig"],
+    "typos": ["unsharf", "unschaf", "verschommen", "verschwomenn", "vershwommen"],
+    "symptoms": ["Text und Symbole erscheinen unscharf", "Nur bestimmte Apps sind unscharf", "Nach Wechsel auf externen Monitor unscharf"],
+    "quickCheck": "Ist alles unscharf oder nur bestimmte Anwendungen?",
+    "solutions": [
+      "Windows-Skalierung prüfen: Einstellungen > System > Bildschirm > Skalierung auf 100% oder 125%",
+      "ClearType aktivieren: Systemsteuerung > ClearType-Text anpassen",
+      "Für einzelne Apps: Rechtsklick > Eigenschaften > Kompatibilität > Hohe DPI-Einstellungen",
+      "Native Auflösung des Monitors einstellen",
+      "Grafiktreiber aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_resshow", "label": "Auflösung anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_audio_scalingshow", "label": "Skalierung anzeigen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["blurry screen", "fuzzy display", "text unscharf"],
+    "followUpQuestions": [
+      {
+        "question": "Sind alle Programme unscharf oder nur bestimmte?",
+        "options": ["Alles unscharf", "Nur bestimmte Programme", "Nur nach Docking"],
+        "narrows": "Ob Skalierungs- oder Auflösungsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-006", "PROB-AUD-027"]
+  },
+  {
+    "id": "PROB-AUD-008",
+    "category": "Audio & Display",
+    "title": "Auflösung nach Windows-Update geändert",
+    "keywords": ["Update", "Auflösung", "geändert", "Windows Update", "Grafiktreiber", "zurückgesetzt"],
+    "extendedKeywords": ["nach Update Auflösung anders", "Windows Update hat Auflösung geändert", "seit Update alles größer", "seit Update alles kleiner", "Update hat Display verstellt", "nach Aktualisierung Auflösung falsch", "Bildschirm sieht nach Update anders aus", "Grafiktreiber nach Update weg", "Auflösung nach Update niedrig", "seit dem Update ist alles verpixelt", "Windows hat Auflösung zurückgesetzt", "nach Neustart Auflösung geändert", "Update hat Grafiktreiber überschrieben", "seit heute Auflösung anders", "nach letztem Update Bildschirm anders", "Treiber nach Update nicht mehr da", "Display nach Patch anders", "Bildschirmeinstellungen nach Update weg", "generischer Treiber nach Update", "Auflösung springt nach Update"],
+    "typos": ["Windwos Update", "Auflöhsung", "Aktuallisierung", "Updaet"],
+    "symptoms": ["Auflösung nach Update auf Standardwert zurückgesetzt", "Grafiktreiber durch generischen ersetzt", "Bildschirm sieht anders aus als vorher"],
+    "quickCheck": "Wurde kürzlich ein Windows-Update installiert?",
+    "solutions": [
+      "Auflösung manuell wieder einstellen: Rechtsklick Desktop > Anzeigeeinstellungen",
+      "Grafiktreiber im Gerätemanager prüfen - wenn generischer Treiber, dann Herstellertreiber installieren",
+      "Windows Update rückgängig machen falls möglich",
+      "Grafikkartentreiber von der Herstellerseite herunterladen und installieren",
+      "Vorherigen Treiber wiederherstellen: Gerätemanager > Grafikkarte > Treiber > Vorheriger Treiber"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_resshow", "label": "Auflösung anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_devmgr_audioreset", "label": "Grafiktreiber zurücksetzen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["resolution changed after update", "update changed display", "auflösung nach update"],
+    "followUpQuestions": [
+      {
+        "question": "Wann genau hat sich die Auflösung geändert?",
+        "options": ["Nach einem Windows-Update", "Nach einem Neustart", "Weiß ich nicht genau"],
+        "narrows": "Ob Update-bedingtes oder anderes Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-006", "PROB-AUD-007"]
+  },
+  {
+    "id": "PROB-AUD-009",
+    "category": "Audio & Display",
+    "title": "Nachtmodus aktivieren - Blaulichtfilter",
+    "keywords": ["Nachtmodus", "Blaulichtfilter", "Night Light", "Farbtemperatur", "warm", "Augenschutz"],
+    "extendedKeywords": ["Nachtmodus einschalten", "Blaulichtfilter aktivieren", "Bildschirm wärmer machen", "Augen schonen am PC", "Night Light einschalten", "Bildschirm ist zu blau", "Nachtmodus in Windows", "Blaulicht reduzieren", "warme Farben einstellen", "gelbes Licht einstellen", "Augenschutz Display", "Nachtmodus einstellen", "wie aktiviere ich den Nachtmodus", "Blaufilter Windows", "Display Farbtemperatur ändern", "abends Bildschirm dunkler", "wo finde ich den Nachtmodus", "automatisch Nachtmodus", "Zeitplan Nachtmodus", "Bildschirm abends orangefarben"],
+    "typos": ["Nachtmodes", "Blaulichtfilte", "Nachtmoddus", "Blaulichtfilter"],
+    "symptoms": ["Bildschirm erscheint zu kalt/blau", "Nachtmodus-Option nicht sichtbar"],
+    "quickCheck": "Möchten Sie den Nachtmodus manuell oder nach Zeitplan aktivieren?",
+    "solutions": [
+      "Einstellungen > System > Bildschirm > Nachtmodus einschalten",
+      "Schnelleinstellungen (Win+A) > Nachtmodus",
+      "Zeitplan einrichten: Einstellungen > Nachtmodus > Zeitplan festlegen",
+      "Farbstärke des Nachtmodus anpassen",
+      "Falls Option fehlt: Grafiktreiber aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_nightmode", "label": "Nachtmodus umschalten", "priority": 1, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["blue light filter", "night mode", "nachtmodus einschalten"],
+    "followUpQuestions": [
+      {
+        "question": "Soll der Nachtmodus dauerhaft oder nur zu bestimmten Zeiten aktiv sein?",
+        "options": ["Dauerhaft", "Abends automatisch", "Nur jetzt kurz"],
+        "narrows": "Ob Zeitplan oder manuell"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-010", "PROB-AUD-005"]
+  },
+  {
+    "id": "PROB-AUD-010",
+    "category": "Audio & Display",
+    "title": "Nachtmodus funktioniert nicht",
+    "keywords": ["Nachtmodus", "funktioniert nicht", "Night Light", "Blaulichtfilter", "deaktiviert sich", "Fehler"],
+    "extendedKeywords": ["Nachtmodus geht nicht", "Blaulichtfilter funktioniert nicht", "Nachtmodus lässt sich nicht einschalten", "Night Light schaltet sich aus", "Nachtmodus ausgegraut", "Nachtmodus springt zurück", "Blaulichtfilter ohne Effekt", "Nachtmodus deaktiviert sich selbst", "Nachtmodus hat keinen Effekt", "Nachtmodus ist ausgegraut", "kann Nachtmodus nicht einschalten", "Nachtmodus weg", "Night Light broken", "Nachtmodus Option fehlt", "Blaufilter geht nicht an", "Nachtmodus startet nicht", "Nachtmodus kaputt", "Nachtmodus schaltet sich nicht ein", "kein Nachtmodus verfügbar", "Nachtmodus fehlt in den Einstellungen"],
+    "typos": ["Nachtmodes", "Nachhtmodus", "funktionirt", "Nachtmoddus"],
+    "symptoms": ["Nachtmodus-Toggle ist ausgegraut", "Nachtmodus aktiviert sich aber hat keinen sichtbaren Effekt", "Nachtmodus deaktiviert sich nach Neustart"],
+    "quickCheck": "Ist die Nachtmodus-Option in den Einstellungen ausgegraut oder fehlt sie komplett?",
+    "solutions": [
+      "Grafiktreiber aktualisieren (Nachtmodus benötigt WDDM 2.0 oder neuer)",
+      "Windows-Version prüfen (Nachtmodus ab Windows 10 Version 1703)",
+      "Registry-Eintrag prüfen: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CloudStore\\Store\\Cache löschen",
+      "PC neu starten und erneut versuchen",
+      "Alternativ: f.lux als Drittanbieter-Software verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_nightmode", "label": "Nachtmodus umschalten", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["night mode broken", "night light not working", "nachtmodus kaputt"],
+    "followUpQuestions": [
+      {
+        "question": "Ist die Option ausgegraut oder lässt sie sich zwar einschalten aber ohne Effekt?",
+        "options": ["Ausgegraut", "Kein Effekt trotz Aktivierung", "Deaktiviert sich von selbst"],
+        "narrows": "Ob Treiber- oder Einstellungsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-009", "PROB-AUD-004"]
+  },
+  {
+    "id": "PROB-AUD-011",
+    "category": "Audio & Display",
+    "title": "Externer Monitor wird nicht erkannt",
+    "keywords": ["Monitor", "nicht erkannt", "extern", "HDMI", "DisplayPort", "Docking", "kein Signal", "zweiter Bildschirm"],
+    "extendedKeywords": ["zweiter Monitor wird nicht erkannt", "externer Bildschirm kein Signal", "Monitor bleibt schwarz", "zweiter Bildschirm nicht gefunden", "Laptop erkennt Monitor nicht", "HDMI Monitor kein Bild", "DisplayPort kein Signal", "Docking Station Monitor geht nicht", "Monitor wird nicht angezeigt", "kein zweiter Bildschirm", "Monitor bekommt kein Signal", "zweiter Monitor schwarz", "externer Monitor bleibt dunkel", "Monitor nicht in Einstellungen", "dritter Monitor nicht erkannt", "USB-C Monitor kein Bild", "Bildschirm erkennen geht nicht", "Monitor zeigt kein Signal an", "zweiter Bildschirm fehlt", "neuer Monitor wird nicht erkannt"],
+    "typos": ["Monior", "Monitro", "erkant", "Bildshirm", "HDIM"],
+    "symptoms": ["Monitor zeigt 'Kein Signal'", "Monitor erscheint nicht in den Anzeigeeinstellungen", "Monitor bleibt schwarz"],
+    "quickCheck": "Welchen Anschluss verwenden Sie (HDMI, DisplayPort, USB-C)?",
+    "solutions": [
+      "Kabel prüfen und ggf. austauschen",
+      "Windows + P drücken und Modus wählen (Erweitern/Duplizieren)",
+      "In Anzeigeeinstellungen auf 'Erkennen' klicken",
+      "Grafiktreiber aktualisieren",
+      "Docking Station Firmware aktualisieren",
+      "Anderen Anschluss/Port am Laptop oder Dock testen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_audio_displayswitch", "label": "Anzeigemodus umschalten", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_audio_resshow", "label": "Auflösung anzeigen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["monitor not detected", "no signal", "externer monitor schwarz"],
+    "followUpQuestions": [
+      {
+        "question": "Ist der Monitor direkt am Laptop angeschlossen oder über eine Docking Station?",
+        "options": ["Direkt am Laptop", "Über Docking Station", "Über USB-C Adapter"],
+        "narrows": "Ob Dock- oder Kabelproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-012", "PROB-AUD-013", "PROB-AUD-014"]
+  },
+  {
+    "id": "PROB-AUD-012",
+    "category": "Audio & Display",
+    "title": "Multi-Monitor - falsche Anordnung der Bildschirme",
+    "keywords": ["Anordnung", "Multi-Monitor", "Position", "links", "rechts", "oben", "unten", "Mausübergang"],
+    "extendedKeywords": ["Monitore falsch angeordnet", "Maus geht zum falschen Bildschirm", "Bildschirme vertauscht", "Monitor links und rechts falsch", "Maus springt zum falschen Monitor", "Bildschirm-Reihenfolge falsch", "Fenster öffnen sich am falschen Monitor", "Mausübergang stimmt nicht", "Bildschirme richtig anordnen", "Monitor-Position ändern", "Bildschirme umstellen", "zweiter Monitor auf der falschen Seite", "Monitore tauschen", "Maus geht nicht zum richtigen Bildschirm", "Bildschirmposition stimmt nicht", "Anordnung der Monitore ändern", "Monitore spiegeln statt erweitern", "Hauptbildschirm ändern", "primärer Monitor falsch", "welcher Monitor ist Nummer 1"],
+    "typos": ["Anordung", "Multi-Monior", "Bilschirme", "Anorndung"],
+    "symptoms": ["Maus bewegt sich zum falschen Bildschirm", "Fenster öffnen sich am falschen Monitor", "Taskleiste auf falschem Bildschirm"],
+    "quickCheck": "Stehen die Monitore physisch anders als in den Windows-Einstellungen angeordnet?",
+    "solutions": [
+      "Einstellungen > System > Bildschirm > Monitore per Drag & Drop richtig anordnen",
+      "Auf 'Identifizieren' klicken um die Monitornummern anzuzeigen",
+      "Hauptbildschirm festlegen: Monitor auswählen > 'Dies ist mein Hauptbildschirm'",
+      "Bei 3 Monitoren: Auch vertikale Position anpassen",
+      "Taskleiste verschieben: Rechtsklick auf Taskleiste > Taskleisteneinstellungen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_audio_displayswitch", "label": "Anzeigemodus umschalten", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["monitor arrangement", "wrong screen order", "monitore falsch"],
+    "followUpQuestions": [
+      {
+        "question": "Wie viele Monitore sind angeschlossen?",
+        "options": ["2 Monitore", "3 Monitore", "Mehr als 3"],
+        "narrows": "Komplexität der Anordnung"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-011", "PROB-AUD-013"]
+  },
+  {
+    "id": "PROB-AUD-013",
+    "category": "Audio & Display",
+    "title": "Multi-Monitor - verschiedene DPI/Skalierung",
+    "keywords": ["DPI", "Skalierung", "Multi-Monitor", "verschiedene Größen", "HiDPI", "4K", "Mixed DPI"],
+    "extendedKeywords": ["Monitore haben verschiedene Skalierung", "ein Monitor scharf ein Monitor unscharf", "4K und Full HD Monitor gemischt", "Text auf einem Monitor zu klein", "Text auf einem Monitor zu groß", "verschiedene Auflösungen Multi-Monitor", "DPI unterschiedlich auf Monitoren", "ein Bildschirm scharf anderer unscharf", "Skalierung bei zwei Monitoren unterschiedlich", "Apps wandern unscharf zwischen Monitoren", "Fenster werden unscharf beim Verschieben", "unterschiedliche Bildschirmgrößen", "Skalierung pro Monitor einstellen", "4K Monitor mit HD Monitor", "ein Monitor verpixelt der andere nicht", "verschiedene Zoll bei Monitoren", "Apps auf zweitem Monitor unscharf", "DPI Probleme mit mehreren Monitoren", "Skalierung stimmt nicht auf beiden Monitoren", "Mixed-DPI Setup"],
+    "typos": ["Skallierung", "Skalirung", "verschiedne", "Multi-Monior"],
+    "symptoms": ["Apps werden beim Verschieben zwischen Monitoren unscharf", "Unterschiedliche Textgrößen auf verschiedenen Monitoren", "Fenster ändern Größe beim Verschieben"],
+    "quickCheck": "Haben die Monitore verschiedene Auflösungen oder Bildschirmgrößen?",
+    "solutions": [
+      "Skalierung pro Monitor einzeln einstellen: Einstellungen > Bildschirm > Monitor auswählen > Skalierung",
+      "Für ältere Apps: Rechtsklick > Eigenschaften > Kompatibilität > Hohe DPI-Einstellungen > Verhalten bei hoher DPI-Skalierung überschreiben",
+      "Windows-Anmeldung ab- und wieder anmelden damit Skalierung wirkt",
+      "Grafiktreiber aktualisieren für bessere DPI-Unterstützung",
+      "Wenn möglich Monitore mit gleicher Auflösung/Größe verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_scalingshow", "label": "Skalierung anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_audio_resshow", "label": "Auflösung anzeigen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["different dpi monitors", "scaling mixed", "skalierung verschieden"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Auflösungen haben die Monitore jeweils?",
+        "options": ["4K und Full HD", "Gleiche Auflösung aber verschiedene Größen", "Weiß ich nicht"],
+        "narrows": "Welche Skalierung passend ist"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-012", "PROB-AUD-027"]
+  },
+  {
+    "id": "PROB-AUD-014",
+    "category": "Audio & Display",
+    "title": "Monitor über Docking Station nicht erkannt",
+    "keywords": ["Docking", "Dock", "USB-C", "Thunderbolt", "Monitor", "nicht erkannt", "Hub"],
+    "extendedKeywords": ["Monitor über Dock kein Bild", "Docking Station Monitor geht nicht", "USB-C Dock kein Bildschirm", "Thunderbolt Dock Monitor fehlt", "nach Docking kein zweiter Monitor", "Dock Monitor schwarz", "Monitor über Hub nicht erkannt", "Docking Station Bildschirm fehlt", "Dock zeigt keinen Monitor", "Laptopständer Monitor geht nicht", "Dock erkennt Monitor nicht", "USB-C Hub kein Bild", "nach Dock-Wechsel Monitor weg", "Dockingstation Monitor Probleme", "neues Dock Monitor geht nicht", "Dock Firmware", "Monitor am Dock bleibt schwarz", "Thunderbolt Monitor nicht erkannt", "Dock hat keinen Monitorausgang", "Dock und Monitor Kompatibilität"],
+    "typos": ["Dockingstation", "Dockig", "Thunerbolt", "USB-C Dok"],
+    "symptoms": ["Monitor bleibt schwarz bei Docking", "Monitor wird nur sporadisch erkannt", "Nur ein Monitor funktioniert am Dock"],
+    "quickCheck": "Funktioniert der Monitor wenn er direkt am Laptop angeschlossen wird?",
+    "solutions": [
+      "Monitor direkt am Laptop testen um Dock als Ursache zu bestätigen",
+      "Dock-Treiber und Firmware aktualisieren",
+      "Anderes Kabel zwischen Dock und Monitor testen",
+      "USB-C/Thunderbolt-Treiber aktualisieren",
+      "Dock ab- und wieder anstecken (mit 10 Sekunden Wartezeit)",
+      "DisplayLink-Treiber installieren falls benötigt"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_audio_displayswitch", "label": "Anzeigemodus umschalten", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_audio_resshow", "label": "Auflösung anzeigen", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["dock monitor issue", "docking station display", "dock kein bild"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Art von Docking Station verwenden Sie?",
+        "options": ["USB-C/Thunderbolt Dock", "USB-A Dock (DisplayLink)", "Laptop-Herstellerdock"],
+        "narrows": "Welche Treiber benötigt werden"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-011", "PROB-AUD-013"]
+  },
+  {
+    "id": "PROB-AUD-015",
+    "category": "Audio & Display",
+    "title": "Kopfhörer werden nicht erkannt",
+    "keywords": ["Kopfhörer", "Headset", "Klinke", "USB", "nicht erkannt", "Audiogerät", "3.5mm"],
+    "extendedKeywords": ["Kopfhörer werden nicht erkannt", "Headset geht nicht", "Kopfhörer eingesteckt aber kein Ton", "Windows erkennt Kopfhörer nicht", "USB-Headset nicht erkannt", "Klinke Kopfhörer kein Ton", "Kopfhörer funktioniert nicht", "Kopfhörer eingestöpselt aber Sound über Lautsprecher", "neuer Kopfhörer geht nicht", "Headset wird nicht angezeigt", "Kopfhörer nicht in Audiogeräten", "Kopfhörer anschließen funktioniert nicht", "Kopfhörer ohne Ton", "nach Einstecken kein Gerät erkannt", "Kopfhörer nicht in Soundeinstellungen", "Kopfhörer-Buchse geht nicht", "USB Kopfhörer nicht gefunden", "Audio-Buchse kaputt", "Klinkenanschluss funktioniert nicht", "Kopfhörer werden ignoriert"],
+    "typos": ["Kophörer", "Kopfhöhre", "Headst", "Kopfhörer", "Hedset"],
+    "symptoms": ["Kopfhörer in Soundeinstellungen nicht sichtbar", "Ton kommt weiterhin aus Lautsprechern", "USB-Headset erscheint nicht"],
+    "quickCheck": "Handelt es sich um einen Klinken-Kopfhörer oder USB-Headset?",
+    "solutions": [
+      "Kopfhörer ab- und wieder anstecken",
+      "Prüfen ob Kopfhörer als deaktiviertes Gerät in den Soundeinstellungen auftaucht",
+      "Rechtsklick auf Lautsprecher-Symbol > Sounds > Deaktivierte Geräte anzeigen",
+      "USB-Headset an anderem USB-Port testen",
+      "Audiotreiber im Gerätemanager deinstallieren und neu erkennen lassen",
+      "Klinke: Prüfen ob Combo-Buchse oder separate Buchsen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_audio_volshow", "label": "Lautstärke anzeigen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_devmgr_audioreset", "label": "Audiotreiber zurücksetzen", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["headphones not detected", "headset not working", "kopfhörer nicht erkannt"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert der Kopfhörer an einem anderen Gerät (z.B. Handy)?",
+        "options": ["Ja, an anderen Geräten funktioniert er", "Nein, auch woanders nicht", "Habe nicht getestet"],
+        "narrows": "Ob Kopfhörer oder PC-Anschluss defekt"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-016", "PROB-AUD-017"]
+  },
+  {
+    "id": "PROB-AUD-016",
+    "category": "Audio & Display",
+    "title": "Kopfhörer erkannt aber kein Ton",
+    "keywords": ["Kopfhörer", "kein Ton", "Wiedergabegerät", "Standard", "Ausgabe", "Headset stumm"],
+    "extendedKeywords": ["Kopfhörer erkannt aber kein Ton", "Headset angeschlossen aber stumm", "Kopfhörer da aber kein Sound", "Kopfhörer in Einstellungen aber kein Ton", "Sound geht nicht über Kopfhörer", "Kopfhörer als Gerät da aber stumm", "Ton kommt nicht aus dem Kopfhörer", "Headset verbunden aber kein Audio", "Kopfhörer ausgewählt aber kein Ton", "neuer Kopfhörer kein Ton", "USB-Headset kein Sound", "Kopfhörer still", "kein Audio über Headset", "Kopfhörer werden erkannt aber es kommt nichts", "Sound über Lautsprecher statt Kopfhörer", "Kopfhörer verbunden kein Sound", "Ton auf Kopfhörer umleiten geht nicht", "Kopfhörer leise obwohl Lautstärke hoch", "Headset verbunden Audio fehlt", "Kopfhörer ohne Ausgabe"],
+    "typos": ["Kophörer", "Kopfhörrer", "Headst", "Ton", "kien"],
+    "symptoms": ["Kopfhörer in Wiedergabegeräten sichtbar aber kein Ton", "Standardgerät nicht auf Kopfhörer gesetzt", "Lautstärkepegel bei Kopfhörer zeigt nichts an"],
+    "quickCheck": "Ist der Kopfhörer als Standard-Wiedergabegerät eingestellt?",
+    "solutions": [
+      "Kopfhörer als Standard-Wiedergabegerät einstellen: Rechtsklick auf Lautsprecher > Sounds > Kopfhörer > Als Standard",
+      "Lautstärke des Kopfhörers im Lautstärkemixer prüfen",
+      "Bei USB: Geräte-Manager > Audiogerät deinstallieren > PC neu starten",
+      "Audiodienst neu starten",
+      "Kopfhörer-Firmware aktualisieren (bei USB/Wireless)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_audio_volshow", "label": "Lautstärke anzeigen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_audio_volset", "label": "Lautstärke setzen", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_audio_audiosvcrestart", "label": "Audio-Dienst neu starten", "priority": 4, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["headphones no sound", "kopfhörer stumm", "headset silent"],
+    "followUpQuestions": [
+      {
+        "question": "Wird der Lautstärkepegel neben dem Kopfhörer in den Soundeinstellungen animiert wenn Musik läuft?",
+        "options": ["Ja, Pegel bewegt sich", "Nein, bleibt still", "Wo finde ich das?"],
+        "narrows": "Ob Signal ankommt oder nicht"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-015", "PROB-AUD-001"]
+  },
+  {
+    "id": "PROB-AUD-017",
+    "category": "Audio & Display",
+    "title": "Headset-Mikrofon funktioniert nicht",
+    "keywords": ["Mikrofon", "Headset", "Mikro", "Aufnahme", "Teams", "Eingabegerät", "stumm"],
+    "extendedKeywords": ["Mikrofon funktioniert nicht", "keiner hört mich in Teams", "Mikro geht nicht", "Headset Mikrofon stumm", "kann nicht sprechen in Besprechung", "Mikrofon nicht erkannt", "keiner hört mich", "Mikrofon stumm", "Aufnahme funktioniert nicht", "Mikrofon in Teams geht nicht", "Headset Mikro kaputt", "Mikrofon-Einstellung", "Mikrofon wird nicht gefunden", "Mikro-Zugriff verweigert", "kein Mikrofon verfügbar", "Mikrofon blockiert", "Windows hat Mikrofon deaktiviert", "Datenschutzeinstellung Mikrofon", "Mikrofon-Berechtigung fehlt", "Mikrofon leise"],
+    "typos": ["Mikrofohn", "Mikrophon", "Mikro", "Mikrfon", "Hedset"],
+    "symptoms": ["Mikrofon in Teams/Zoom nicht verfügbar", "Gesprächspartner hören nichts", "Aufnahmepegel zeigt nichts an"],
+    "quickCheck": "Ist das Mikrofon in den Windows-Datenschutzeinstellungen erlaubt?",
+    "solutions": [
+      "Windows-Datenschutz prüfen: Einstellungen > Datenschutz > Mikrofon > Apps Zugriff erlauben",
+      "Mikrofon als Standard-Aufnahmegerät einstellen",
+      "Mikrofonpegel prüfen und erhöhen: Sounds > Aufnahme > Mikrofon > Pegel",
+      "In Teams/Zoom das richtige Mikrofon auswählen",
+      "Headset ab- und wieder anstecken",
+      "Audiotreiber neu installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_audio_audiosvcrestart", "label": "Audio-Dienst neu starten", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_devmgr_audioreset", "label": "Audiotreiber zurücksetzen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["microphone not working", "mic broken", "mikro geht nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert das Mikrofon in gar keiner Anwendung oder nur in einer bestimmten?",
+        "options": ["Nirgends", "Nur in Teams", "Nur in Zoom", "Nur in einer bestimmten App"],
+        "narrows": "Ob systemweites oder App-spezifisches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-015", "PROB-AUD-016"]
+  },
+  {
+    "id": "PROB-AUD-018",
+    "category": "Audio & Display",
+    "title": "Bluetooth-Audiogerät koppeln",
+    "keywords": ["Bluetooth", "koppeln", "Pairing", "verbinden", "BT", "drahtlos", "wireless"],
+    "extendedKeywords": ["Bluetooth Kopfhörer koppeln", "Bluetooth Lautsprecher verbinden", "wie verbinde ich Bluetooth Kopfhörer", "Bluetooth Gerät hinzufügen", "Bluetooth Pairing", "drahtlose Kopfhörer verbinden", "Bluetooth Headset einrichten", "Bluetooth Audio verbinden", "AirPods mit Windows verbinden", "Bluetooth Gerät wird nicht gefunden", "Bluetooth koppeln geht nicht", "wie geht Bluetooth Pairing", "Bluetooth Kopfhörer mit PC verbinden", "Bluetooth Kopfhörer suchen", "Bluetooth-Gerät hinzufügen Windows", "Bluetooth Lautsprecher einrichten", "kabellosen Kopfhörer verbinden", "Bluetooth Audio einrichten", "neue Bluetooth Kopfhörer koppeln", "Bluetooth in Windows aktivieren"],
+    "typos": ["Blutooth", "Bluetoth", "Bluethooth", "kopplen", "Blutetooth"],
+    "symptoms": ["Bluetooth-Gerät erscheint nicht in der Geräteliste", "Pairing schlägt fehl", "Gerät wird gefunden aber verbindet nicht"],
+    "quickCheck": "Ist Bluetooth am PC aktiviert und ist das Audiogerät im Pairing-Modus?",
+    "solutions": [
+      "Bluetooth aktivieren: Einstellungen > Geräte > Bluetooth > Ein",
+      "Audiogerät in den Pairing-Modus versetzen (Anleitung des Herstellers)",
+      "In Windows: Einstellungen > Geräte > Bluetooth > Gerät hinzufügen",
+      "Altes Pairing entfernen und neu koppeln",
+      "Bluetooth-Treiber aktualisieren",
+      "Bluetooth-Dienst neu starten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_audio_audiosvcrestart", "label": "Audio-Dienst neu starten", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["bluetooth pairing", "wireless headphones connect", "bluetooth verbinden"],
+    "followUpQuestions": [
+      {
+        "question": "Wird das Bluetooth-Gerät in der Liste der verfügbaren Geräte angezeigt?",
+        "options": ["Ja, aber verbindet nicht", "Nein, wird nicht angezeigt", "Bluetooth ist aus"],
+        "narrows": "Ob Bluetooth aktiv und Gerät sichtbar"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-019", "PROB-AUD-020"]
+  },
+  {
+    "id": "PROB-AUD-019",
+    "category": "Audio & Display",
+    "title": "Bluetooth-Audio Verzögerung (Latenz)",
+    "keywords": ["Bluetooth", "Verzögerung", "Latenz", "Delay", "asynchron", "versetzt", "Lip Sync"],
+    "extendedKeywords": ["Bluetooth Ton verzögert", "Bluetooth Audio hinkt hinterher", "Ton kommt zu spät über Bluetooth", "Lip Sync Problem Bluetooth", "Bluetooth Audio Delay", "Video und Ton nicht synchron Bluetooth", "Bluetooth Kopfhörer Verzögerung", "Audio Latenz Bluetooth", "Bluetooth Ton kommt nach", "Bluetooth Sound versetzt", "Ton und Bild nicht synchron", "Bluetooth Audio verspätet", "Verzögerung bei Bluetooth Kopfhörern", "Bluetooth Lautsprecher Delay", "Audio hinkt hinterher", "Bluetooth Ton Lag", "Video Ton asynchron kabellos", "Bluetooth Latenz reduzieren", "Bluetooth Audio langsam", "Bluetooth Ton nicht in Echtzeit"],
+    "typos": ["Verzögeung", "Latentz", "Bluetoth", "Dealy", "asycnhron"],
+    "symptoms": ["Ton kommt sichtbar nach dem Bild", "Bei Videos Lippenbewegung und Ton versetzt", "Gaming mit Bluetooth-Kopfhörern unspielbar"],
+    "quickCheck": "Tritt die Verzögerung bei Videos, Musik oder beidem auf?",
+    "solutions": [
+      "Bluetooth-Codec prüfen und auf aptX/AAC umstellen falls unterstützt",
+      "Andere Bluetooth-Geräte in der Nähe ausschalten (Interferenz reduzieren)",
+      "Bluetooth-Kopfhörer erneut koppeln",
+      "Bluetooth-Treiber aktualisieren",
+      "Für Gaming/Echtzeit: Kabelgebundenen Kopfhörer verwenden",
+      "Medienplayer-Synchronisierung anpassen (z.B. VLC: Audio > Audio-Verzögerung)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 1, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["bluetooth delay", "audio lag bluetooth", "bluetooth verzögerung"],
+    "followUpQuestions": [
+      {
+        "question": "Wofür verwenden Sie die Bluetooth-Kopfhörer hauptsächlich?",
+        "options": ["Videokonferenzen", "Videos/Filme", "Musik", "Gaming"],
+        "narrows": "Welche Lösung am besten passt"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-018", "PROB-AUD-020"]
+  },
+  {
+    "id": "PROB-AUD-020",
+    "category": "Audio & Display",
+    "title": "Bluetooth-Audio schlechte Qualität",
+    "keywords": ["Bluetooth", "Qualität", "Codec", "SCO", "HSP", "A2DP", "kratzen", "rauschen"],
+    "extendedKeywords": ["Bluetooth Ton schlecht", "Bluetooth Kopfhörer klingt blechern", "Bluetooth Audio Qualität miserabel", "Bluetooth Kopfhörer rauscht", "Ton über Bluetooth kratzt", "Bluetooth Sound wie Telefon", "schlechte Tonqualität Bluetooth", "Bluetooth Headset klingt schlecht", "Bluetooth Kopfhörer schlechter Sound", "Musik über Bluetooth klingt furchtbar", "Bluetooth Audio knackt", "Bluetooth klingt dumpf", "Bluetooth Qualität plötzlich schlecht", "Bluetooth Ton bricht ab", "Bluetooth Audio stottert", "Bluetooth wie durch Dose", "Bluetooth Headset Qualität sinkt bei Teams", "Bluetooth wechselt auf Headset-Profil", "Bluetooth SCO statt A2DP", "Bluetooth Mono statt Stereo"],
+    "typos": ["Qualität", "Bluetoth", "Qualtität", "Bluethooth", "blecherm"],
+    "symptoms": ["Tonqualität sinkt bei Nutzung des Mikrofons", "Bluetooth wechselt von A2DP auf HSP/SCO", "Ton klingt wie durch Telefon"],
+    "quickCheck": "Wird die Qualität schlechter sobald Sie das Mikrofon verwenden (z.B. in Teams)?",
+    "solutions": [
+      "In Teams/Zoom ein separates USB-Mikrofon verwenden und Bluetooth nur für Wiedergabe",
+      "In Soundeinstellungen prüfen ob Hands-Free-Profil aktiv ist (auf Stereo umstellen)",
+      "Bluetooth-Kopfhörer mit aptX-Unterstützung verwenden",
+      "Bluetooth-Gerät entfernen und neu koppeln",
+      "Bluetooth-Treiber aktualisieren",
+      "Auf 'Stereo' statt 'Hands-Free AG Audio' als Wiedergabegerät umschalten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_audio_volshow", "label": "Lautstärke anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["bluetooth bad quality", "bluetooth sounds terrible", "bluetooth qualität schlecht"],
+    "followUpQuestions": [
+      {
+        "question": "Wird die Qualität schlechter wenn Sie in einem Meeting sprechen?",
+        "options": ["Ja, bei Mikrofon-Nutzung", "Nein, immer schlecht", "Nur manchmal"],
+        "narrows": "Ob HSP/SCO-Profilwechsel das Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-018", "PROB-AUD-019"]
+  },
+  {
+    "id": "PROB-AUD-021",
+    "category": "Audio & Display",
+    "title": "Kein Sound-Icon in der Taskleiste",
+    "keywords": ["Sound-Icon", "Lautstärkesymbol", "Taskleiste", "fehlt", "verschwunden", "System-Tray"],
+    "extendedKeywords": ["Lautstärkesymbol fehlt", "Sound-Icon weg", "Lautsprecher-Symbol in Taskleiste fehlt", "Lautstärke-Icon verschwunden", "kann Lautstärke nicht finden in Taskleiste", "Sound-Symbol weg", "kein Lautsprecher in der Leiste", "Lautstärkeregler fehlt unten rechts", "Audio-Icon verschwunden", "wo ist das Lautsprecher-Symbol", "Sound-Icon nicht mehr da", "Lautstärke verstellen kann ich nicht mehr", "Taskleiste Lautstärke fehlt", "System Tray Sound-Icon weg", "Lautsprecher-Icon nicht sichtbar", "Lautstärke-Symbol ausgeblendet", "kein Audio-Symbol mehr", "Lautstärke-Icon in Taskleiste fehlt", "Sound-Button weg", "Lautstärkeregler nicht mehr sichtbar"],
+    "typos": ["Taskleist", "Lautstäreksymbol", "Tasklieste", "Symbol"],
+    "symptoms": ["Lautstärkesymbol in der Taskleiste nicht sichtbar", "Sound kann nur noch über Einstellungen geregelt werden"],
+    "quickCheck": "Ist das Symbol komplett verschwunden oder nur im Überlaufbereich versteckt?",
+    "solutions": [
+      "Prüfen ob Icon im Überlaufbereich (Pfeil nach oben in der Taskleiste) versteckt ist",
+      "Einstellungen > Personalisierung > Taskleiste > Systemsymbole aktivieren > Lautstärke einschalten",
+      "Windows Explorer neu starten: Task-Manager > Explorer > Neu starten",
+      "Audio-Dienst prüfen und ggf. starten",
+      "SFC-Scan ausführen: sfc /scannow"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_audiosvcrestart", "label": "Audio-Dienst neu starten", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["volume icon missing", "sound icon gone", "lautstärke-icon fehlt"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert der Ton trotzdem noch oder ist auch der Ton weg?",
+        "options": ["Ton funktioniert, nur Icon fehlt", "Ton und Icon sind weg", "Weiß ich nicht"],
+        "narrows": "Ob nur Icon-Problem oder Audio-Dienst-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-022", "PROB-AUD-001"]
+  },
+  {
+    "id": "PROB-AUD-022",
+    "category": "Audio & Display",
+    "title": "Windows Audio-Dienst gestoppt",
+    "keywords": ["Audio-Dienst", "Windows Audio", "Dienst", "gestoppt", "beendet", "Audiosrv", "Service"],
+    "extendedKeywords": ["Audio-Dienst nicht gestartet", "Windows Audio Dienst gestoppt", "Audiodienst beendet sich", "Audio-Dienst starten", "Audiodienst funktioniert nicht", "Windows Audio Service", "Audio-Dienst startet nicht", "Audiodienst deaktiviert", "Audio-Dienst crasht", "Windows Audio gestoppt", "Audiodienst reagiert nicht", "kein Ton weil Dienst gestoppt", "Audio-Dienste zurücksetzen", "Audiodienst automatisch starten", "Windows Audio beendet sich selbst", "Audiodienst Fehler", "Audiosrv starten", "Audio-Dienst Zugriff verweigert", "AudioEndpointBuilder gestoppt", "Audiodienst manuell starten"],
+    "typos": ["Audio-Dinst", "Audidienst", "Dienst", "gestopt"],
+    "symptoms": ["Rotes X am Lautsprecher-Symbol", "Fehlermeldung 'Audio-Dienst wird nicht ausgeführt'", "Kein Ton und Audio-Dienst gestoppt"],
+    "quickCheck": "Zeigt das Lautsprecher-Symbol ein rotes X an?",
+    "solutions": [
+      "Audio-Dienst über Admin Tool remote neu starten",
+      "In services.msc den Dienst 'Windows Audio' manuell starten",
+      "Starttyp auf 'Automatisch' setzen",
+      "Abhängige Dienste prüfen: Windows Audio Endpoint Builder, RPC",
+      "PC neu starten",
+      "SFC und DISM ausführen zur Systemreparatur"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_audiosvcrestart", "label": "Audio-Dienst neu starten", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_audio_audiodevall", "label": "Audiogeräte anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["audio service stopped", "audiosrv not running", "audiodienst gestoppt"],
+    "followUpQuestions": [
+      {
+        "question": "Passiert das Problem einmalig oder kommt es regelmäßig wieder?",
+        "options": ["Einmalig", "Kommt immer wieder", "Nach jedem Neustart"],
+        "narrows": "Ob einmaliges oder wiederkehrendes Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-021", "PROB-AUD-001"]
+  },
+  {
+    "id": "PROB-AUD-023",
+    "category": "Audio & Display",
+    "title": "Falsche Bildwiederholrate (Hz)",
+    "keywords": ["Bildwiederholrate", "Hz", "Hertz", "Refresh Rate", "60Hz", "144Hz", "Frame Rate"],
+    "extendedKeywords": ["Bildwiederholrate falsch", "nur 60Hz statt 144Hz", "Monitor zeigt nur 60Hz", "Bildwiederholrate einstellen", "Hz stimmt nicht", "Monitor nicht auf 144Hz", "Bildwiederholrate zu niedrig", "Monitor ruckelt obwohl 144Hz", "wie ändere ich die Hertz", "Monitor läuft nicht auf voller Hz-Zahl", "Refresh Rate einstellen", "Bildwiederholrate ändern geht nicht", "144Hz Monitor zeigt nur 60Hz", "Bildwiederholrate nicht verfügbar", "Hz Einstellung Windows", "Gaming Monitor falsche Hz", "Bildwiederholrate nicht auswählbar", "60Hz statt 144Hz nach Update", "wo stelle ich Hz ein", "Monitor Hz zu niedrig"],
+    "typos": ["Bildwiedeholrate", "Herz", "Hetrz", "Bidlwiederholrate", "Hz"],
+    "symptoms": ["Monitor läuft mit niedrigerer Hz-Zahl als unterstützt", "Bild ruckelt trotz leistungsfähigem Monitor", "Höhere Hz-Optionen nicht auswählbar"],
+    "quickCheck": "Welche Hz-Zahl unterstützt Ihr Monitor und welche ist aktuell eingestellt?",
+    "solutions": [
+      "Einstellungen > System > Bildschirm > Erweiterte Anzeigeeinstellungen > Bildwiederholfrequenz wählen",
+      "Kabel prüfen: HDMI 1.4 unterstützt max. 60Hz bei 4K, DisplayPort für höhere Hz nutzen",
+      "Grafiktreiber aktualisieren",
+      "In der Grafikkarten-Software (NVIDIA/AMD) Hz-Rate einstellen",
+      "Monitor-OSD prüfen ob Overdrive/Hochfrequenz-Modus aktiviert ist"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_refreshrate", "label": "Bildwiederholrate anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 2, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["refresh rate wrong", "only 60hz", "hz falsch"],
+    "followUpQuestions": [
+      {
+        "question": "Welches Kabel verwenden Sie für den Monitor?",
+        "options": ["HDMI", "DisplayPort", "USB-C", "Weiß ich nicht"],
+        "narrows": "Ob Kabel die maximale Hz-Rate begrenzt"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-024", "PROB-AUD-006"]
+  },
+  {
+    "id": "PROB-AUD-024",
+    "category": "Audio & Display",
+    "title": "60Hz statt 144Hz - höhere Bildwiederholrate nicht verfügbar",
+    "keywords": ["60Hz", "144Hz", "nicht verfügbar", "HDMI", "DisplayPort", "Kabel", "Refresh Rate"],
+    "extendedKeywords": ["144Hz nicht auswählbar", "höhere Hz nicht verfügbar", "kann nicht auf 144Hz umstellen", "Monitor hat 144Hz aber nur 60Hz möglich", "144Hz Option fehlt", "240Hz nicht verfügbar", "Monitor unterstützt 144Hz aber Windows zeigt nur 60Hz", "Bildwiederholrate auf Maximum setzen", "120Hz fehlt in den Einstellungen", "warum nur 60Hz", "Monitor kann mehr Hz aber geht nicht", "Hz-Option ausgegraut", "höhere Frequenz nicht möglich", "144Hz nicht in der Liste", "HDMI nur 60Hz", "DisplayPort 144Hz einstellen", "nach Kabeltausch nur 60Hz", "Gaming Monitor 60Hz statt 144Hz", "75Hz nicht verfügbar", "wo sind die 144Hz hin"],
+    "typos": ["144 Hz", "verfügabr", "60 Hz", "Bidlwiederhohlrate"],
+    "symptoms": ["Im Dropdown nur 60Hz auswählbar", "Höhere Hz-Optionen fehlen komplett", "144Hz-Monitor läuft nur mit 60Hz"],
+    "quickCheck": "Verwenden Sie ein HDMI- oder DisplayPort-Kabel?",
+    "solutions": [
+      "DisplayPort-Kabel verwenden statt HDMI (HDMI 1.4 unterstützt oft nur 60Hz bei höheren Auflösungen)",
+      "HDMI 2.0 oder 2.1 Kabel verwenden falls HDMI gewünscht",
+      "Grafiktreiber aktualisieren (neue Treiber schalten oft höhere Hz frei)",
+      "In NVIDIA/AMD Systemsteuerung die Hz-Rate einstellen",
+      "Monitor-OSD prüfen ob der richtige Modus aktiv ist",
+      "Benutzerdefinierte Auflösung mit gewünschter Hz-Rate erstellen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_refreshrate", "label": "Bildwiederholrate anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_audio_resshow", "label": "Auflösung anzeigen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["144hz not available", "only 60hz option", "144hz fehlt"],
+    "followUpQuestions": [
+      {
+        "question": "Welches Kabel und welchen Anschluss nutzen Sie?",
+        "options": ["HDMI", "DisplayPort", "USB-C/Thunderbolt", "Weiß nicht"],
+        "narrows": "Ob Kabel das Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-023", "PROB-AUD-006"]
+  },
+  {
+    "id": "PROB-AUD-025",
+    "category": "Audio & Display",
+    "title": "Bildschirm duplizieren - gleicher Inhalt auf beiden Monitoren",
+    "keywords": ["duplizieren", "spiegeln", "klonen", "Beamer", "Projektor", "gleich", "beide Bildschirme"],
+    "extendedKeywords": ["Bildschirm duplizieren", "gleicher Inhalt auf beiden Monitoren", "Bildschirm auf Beamer spiegeln", "Laptop auf Monitor klonen", "Bildschirm auf Projektor", "Bild auf beiden Monitoren gleich", "spiegeln aktivieren", "Bildschirm clonen", "Laptop Bildschirm auf externen Monitor", "Bildschirm doppelt", "wie dupliziere ich den Bildschirm", "spiegeln statt erweitern", "gleicher Desktop auf beiden", "Beamer anschließen und spiegeln", "Präsentation auf Beamer", "Laptop und Monitor gleicher Inhalt", "Bildschirminhalt spiegeln", "wie klone ich meinen Bildschirm", "zweiter Monitor gleicher Inhalt", "Bildschirm kopieren auf Monitor"],
+    "typos": ["duplizeren", "spieglen", "Bildshirm", "Beammer", "klohnen"],
+    "symptoms": ["Zweiter Monitor zeigt erweiterten Desktop statt Spiegelung", "Beamer zeigt schwarzes Bild"],
+    "quickCheck": "Drücken Sie Windows + P - welche Option ist aktuell ausgewählt?",
+    "solutions": [
+      "Windows + P drücken und 'Duplizieren' auswählen",
+      "Über Einstellungen: System > Bildschirm > Mehrere Bildschirme > Diese Anzeigen duplizieren",
+      "Bei Präsentation: PowerPoint starten und Präsentationsmodus wählen",
+      "Bei verschiedenen Auflösungen: Die niedrigere Auflösung wird für beide verwendet",
+      "Kabelverbindung zum Beamer/Monitor prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_displayswitch", "label": "Anzeigemodus umschalten", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["duplicate screen", "mirror display", "bildschirm spiegeln"],
+    "followUpQuestions": [
+      {
+        "question": "Möchten Sie den Bildschirm dauerhaft duplizieren oder nur für eine Präsentation?",
+        "options": ["Dauerhaft", "Nur für Präsentation", "Weiß nicht"],
+        "narrows": "Ob permanente Einstellung oder temporär"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-026", "PROB-AUD-011"]
+  },
+  {
+    "id": "PROB-AUD-026",
+    "category": "Audio & Display",
+    "title": "Bildschirm erweitern - Präsentationsmodus umschalten",
+    "keywords": ["erweitern", "Präsentation", "zweiter Desktop", "Anzeigemodus", "Projektor", "Erweiterung"],
+    "extendedKeywords": ["Bildschirm erweitern", "erweiterten Desktop einrichten", "zweiter Monitor als Erweiterung", "Präsentationsmodus", "Bildschirm auf zweiten Monitor erweitern", "wie erweitere ich den Bildschirm", "Desktop erweitern auf zweiten Monitor", "Bildschirm umschalten von spiegeln auf erweitern", "Extended Desktop", "zweiter Desktop einrichten", "Anzeigemodus wechseln", "von duplizieren auf erweitern", "Fenster auf zweiten Monitor verschieben", "Laptop als zweiten Bildschirm nutzen", "Desktop auf Beamer erweitern", "zweiter Monitor extra Arbeitsfläche", "mehr Platz durch zweiten Monitor", "Desktop vergrößern", "Bildschirmfläche erweitern", "zwei verschiedene Bildschirme"],
+    "typos": ["erwietern", "Präsentation", "Erweiterng", "Desktopt"],
+    "symptoms": ["Beide Monitore zeigen dasselbe (dupliziert statt erweitert)", "Fenster können nicht auf zweiten Monitor geschoben werden"],
+    "quickCheck": "Ist der Modus aktuell auf 'Duplizieren' statt 'Erweitern' eingestellt?",
+    "solutions": [
+      "Windows + P drücken und 'Erweitern' auswählen",
+      "Über Einstellungen: System > Bildschirm > Mehrere Bildschirme > Diese Anzeigen erweitern",
+      "Nach dem Erweitern die Bildschirmreihenfolge anpassen",
+      "Hauptbildschirm festlegen",
+      "Für Präsentationen: Referentenansicht in PowerPoint nutzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_displayswitch", "label": "Anzeigemodus umschalten", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["extend display", "second desktop", "bildschirm erweitern"],
+    "followUpQuestions": [
+      {
+        "question": "Soll der zweite Monitor als Erweiterung oder für Präsentationen genutzt werden?",
+        "options": ["Als Erweiterung zum Arbeiten", "Für Präsentationen", "Beides"],
+        "narrows": "Welche Konfiguration am besten passt"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-025", "PROB-AUD-012"]
+  },
+  {
+    "id": "PROB-AUD-027",
+    "category": "Audio & Display",
+    "title": "Apps unscharf bei verschiedener Skalierung",
+    "keywords": ["Skalierung", "unscharf", "DPI", "verschwommen", "High-DPI", "Apps", "Kompatibilität"],
+    "extendedKeywords": ["Apps sehen unscharf aus", "Programme unscharf bei Skalierung", "alte Programme unscharf", "App verschwommen nach DPI-Änderung", "Legacy-App unscharf", "Skalierung macht Apps unscharf", "bei 150% Skalierung Apps unscharf", "einige Programme unscharf andere nicht", "bestimmte App verschwommen", "DPI-Skalierung Kompatibilität", "alte Software unscharf auf neuem Monitor", "App-Skalierung anpassen", "High-DPI Probleme mit Apps", "Programm sieht matschig aus", "App nicht DPI-fähig", "Skalierungsproblem bei alter Software", "Text in App unscharf", "App-Fenster verpixelt", "Skalierung überschreiben für App", "einzelne App Skalierung ändern"],
+    "typos": ["Skallierung", "unshcarf", "vershwommen", "Skalirung"],
+    "symptoms": ["Nur bestimmte Apps erscheinen unscharf", "App wird bei höherer Skalierung verschwommen", "Text in Legacy-Apps unscharf"],
+    "quickCheck": "Sind nur bestimmte Programme unscharf oder alle?",
+    "solutions": [
+      "Rechtsklick auf die unscharfe App > Eigenschaften > Kompatibilität > Hohe DPI-Einstellungen ändern",
+      "Option 'Verhalten bei hoher DPI-Skalierung überschreiben' aktivieren > Skalierung durchgeführt von: System",
+      "Windows-Skalierung auf 100% setzen und Monitor-Größe anpassen",
+      "App aktualisieren (neuere Versionen sind oft DPI-fähig)",
+      "In den Einstellungen: System > Bildschirm > Erweiterte Skalierungseinstellungen > Korrektur aktivieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_scalingshow", "label": "Skalierung anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_audio_resshow", "label": "Auflösung anzeigen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["apps blurry scaling", "dpi blurry app", "skalierung app unscharf"],
+    "followUpQuestions": [
+      {
+        "question": "Welche App ist betroffen?",
+        "options": ["Ältere/Legacy-Software", "Browser", "Office-Programme", "Andere"],
+        "narrows": "Ob DPI-Kompatibilitätsproblem oder generelles Skalierungsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-028", "PROB-AUD-007"]
+  },
+  {
+    "id": "PROB-AUD-028",
+    "category": "Audio & Display",
+    "title": "Skalierung bei verschiedenen Monitoren unterschiedlich",
+    "keywords": ["Skalierung", "Multi-Monitor", "verschieden", "pro Monitor", "DPI", "individuell"],
+    "extendedKeywords": ["Skalierung pro Monitor einstellen", "verschiedene Skalierung auf Monitoren", "ein Monitor 100% anderer 150%", "Skalierung einzeln einstellen", "unterschiedliche Skalierung bei zwei Monitoren", "Monitor-individuelle Skalierung", "Skalierung für jeden Monitor separat", "verschiedene Monitore verschiedene Skalierung", "Hauptmonitor andere Skalierung als zweiter", "4K Monitor andere Skalierung als Full HD", "wie stelle ich Skalierung pro Monitor ein", "Skalierung auf externem Monitor anders", "individuelle DPI-Einstellung pro Monitor", "Laptop und Monitor verschiedene Skalierung", "Skalierung wechselt beim Monitorwechsel", "externe Monitor Skalierung anpassen", "Skalierung springt bei Monitorwechsel", "verschiedene Zollgrößen Skalierung", "Skalierung synchronisieren", "Skalierung stimmt nicht bei Multi-Monitor"],
+    "typos": ["Skallierung", "verschieden", "Monitore", "Skalirung"],
+    "symptoms": ["Text auf einem Monitor zu groß, auf dem anderen zu klein", "Skalierung springt beim Verschieben von Fenstern", "Apps ändern Größe beim Monitor-Wechsel"],
+    "quickCheck": "Haben Ihre Monitore verschiedene Auflösungen oder Bildschirmgrößen?",
+    "solutions": [
+      "Einstellungen > System > Bildschirm > Jeden Monitor einzeln auswählen > Skalierung individuell einstellen",
+      "Empfohlene Werte: 27 Zoll 4K = 150%, 24 Zoll Full HD = 100%",
+      "Ab- und wieder anmelden damit die Skalierung vollständig übernommen wird",
+      "Für problematische Apps: DPI-Kompatibilitätseinstellungen anpassen",
+      "Idealerweise Monitore mit gleicher PPI (Pixel per Inch) verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_scalingshow", "label": "Skalierung anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_audio_resshow", "label": "Auflösung anzeigen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["per monitor scaling", "different scaling monitors", "skalierung pro monitor"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Monitorgrößen und Auflösungen verwenden Sie?",
+        "options": ["4K und Full HD gemischt", "Gleiche Auflösung verschiedene Größen", "Weiß nicht genau"],
+        "narrows": "Welche Skalierungswerte empfohlen werden"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-027", "PROB-AUD-013"]
+  },
+  {
+    "id": "PROB-AUD-029",
+    "category": "Audio & Display",
+    "title": "Falsches Farbprofil - Farben stimmen nicht",
+    "keywords": ["Farbprofil", "ICC", "Farben", "Kalibrierung", "Farbmanagement", "sRGB", "falsche Farben"],
+    "extendedKeywords": ["Farben am Monitor stimmen nicht", "Farbprofil falsch", "Bildschirm zeigt falsche Farben", "Monitor hat Farbstich", "Farben zu warm", "Farben zu kalt", "Farbprofil ändern", "ICC-Profil installieren", "Monitor kalibrieren", "Farben zu gesättigt", "Farben ausgewaschen", "Farbdarstellung falsch", "Bildschirm hat Gelbstich", "Bildschirm hat Blaustich", "Farbprofil laden", "Windows Farbmanagement", "Display Farben korrigieren", "Farben sehen anders aus als auf anderem PC", "Farbkalibrierung Windows", "Farbprofil zurücksetzen"],
+    "typos": ["Farbprofiel", "Farbprofi", "Kalibrieurng", "ICC-Profiel"],
+    "symptoms": ["Farben wirken unnatürlich", "Monitor hat deutlichen Farbstich", "Farben weichen von anderen Geräten ab"],
+    "quickCheck": "Haben die Farben sich plötzlich geändert oder waren sie schon immer so?",
+    "solutions": [
+      "Windows Farbmanagement öffnen: Systemsteuerung > Farbmanagement",
+      "Richtiges ICC-Profil für den Monitor auswählen oder vom Hersteller herunterladen",
+      "Windows Farbkalibrierung nutzen: dccw.exe starten",
+      "Nachtmodus deaktivieren falls aktiviert",
+      "Monitor-OSD-Einstellungen auf Werkseinstellung zurücksetzen",
+      "Grafiktreiber-Farbeinstellungen auf Standard zurücksetzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_audio_nightmode", "label": "Nachtmodus prüfen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["color profile wrong", "monitor colors off", "farben stimmen nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Ist der Farbunterschied bei allem oder nur bei bestimmten Anwendungen sichtbar?",
+        "options": ["Überall", "Nur im Browser", "Nur in bestimmten Apps"],
+        "narrows": "Ob systemweites oder App-spezifisches Farbproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-030", "PROB-AUD-009"]
+  },
+  {
+    "id": "PROB-AUD-030",
+    "category": "Audio & Display",
+    "title": "HDR aktivieren oder Probleme mit HDR",
+    "keywords": ["HDR", "High Dynamic Range", "WCG", "Farbraum", "HDR10", "bleich", "ausgewaschen"],
+    "extendedKeywords": ["HDR aktivieren", "HDR funktioniert nicht", "HDR einschalten Windows", "HDR Bild ausgewaschen", "HDR sieht schlecht aus", "HDR zu dunkel", "HDR zu hell", "HDR Farben komisch", "HDR einrichten", "HDR-fähiger Monitor", "HDR deaktivieren", "Bild bleich mit HDR", "HDR in Windows einstellen", "HDR Streaming", "HDR Gaming", "HDR Inhalt abspielen", "nach HDR Farben falsch", "HDR kompatibel prüfen", "HDR wirkt verwaschen", "HDR Monitor Einstellungen"],
+    "typos": ["HRD", "HDr", "High Dynmic Range", "ausgewaschne"],
+    "symptoms": ["HDR-Inhalt wirkt ausgewaschen oder zu hell", "HDR-Option in Windows ausgegraut", "Farben ändern sich beim Aktivieren von HDR"],
+    "quickCheck": "Unterstützt Ihr Monitor HDR (steht in den Spezifikationen)?",
+    "solutions": [
+      "HDR aktivieren: Einstellungen > System > Bildschirm > HDR verwenden",
+      "SDR-Helligkeit in den HDR-Einstellungen anpassen für nicht-HDR-Inhalte",
+      "HDMI 2.0 oder DisplayPort 1.4 oder höher verwenden",
+      "Grafiktreiber aktualisieren",
+      "Im Monitor-OSD den HDR-Modus aktivieren",
+      "Falls Bild ausgewaschen: SDR-Inhalte-Helligkeit erhöhen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_audio_monitorinfo", "label": "Monitorinfos anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_audio_brightshow", "label": "Helligkeit anzeigen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_audio_brightset", "label": "Helligkeit setzen", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["hdr not working", "hdr washed out", "hdr aktivieren"],
+    "followUpQuestions": [
+      {
+        "question": "Ist Ihr Monitor als HDR-fähig spezifiziert?",
+        "options": ["Ja, HDR-Monitor", "Nein / Weiß nicht", "Ja aber HDR sieht schlecht aus"],
+        "narrows": "Ob Monitor HDR überhaupt unterstützt"
+      }
+    ],
+    "relatedProblems": ["PROB-AUD-029", "PROB-AUD-005"]
+  }
+]

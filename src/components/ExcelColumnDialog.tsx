@@ -2,25 +2,27 @@ import { useState } from 'react'
 import { X, Table } from 'lucide-react'
 import type { ExcelColumn } from '../utils/fileImport'
 
-type ColumnRole = 'hostname' | 'serial' | 'ignore'
+type ColumnRole = 'hostname' | 'serial' | 'assignedto' | 'ignore'
 
 interface Props {
   columns: ExcelColumn[]
   rows?: Record<string, unknown>[]
-  onConfirm: (hostnameColNames: string[], serialColNames: string[]) => void
+  onConfirm: (hostnameColNames: string[], serialColNames: string[], assignedToColNames: string[]) => void
   onCancel: () => void
 }
 
 const ROLE_LABELS: Record<ColumnRole, string> = {
-  hostname: 'Hostname',
-  serial:   'Seriennummer',
-  ignore:   'Ignorieren',
+  hostname:   'Hostname',
+  serial:     'Seriennummer',
+  assignedto: 'ServiceNow Zuweisung',
+  ignore:     'Ignorieren',
 }
 
 const ROLE_COLORS: Record<ColumnRole, string> = {
-  hostname: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
-  serial:   'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-  ignore:   'bg-muted text-muted-foreground border-border',
+  hostname:   'bg-blue-500/15 text-blue-300 border-blue-500/30',
+  serial:     'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+  assignedto: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+  ignore:     'bg-muted text-muted-foreground border-border',
 }
 
 export default function ExcelColumnDialog({ columns, rows, onConfirm, onCancel }: Props) {
@@ -33,9 +35,10 @@ export default function ExcelColumnDialog({ columns, rows, onConfirm, onCancel }
   }
 
   function handleConfirm() {
-    const hostnameColNames = columns.filter((c) => roles[c.name] === 'hostname').map((c) => c.name)
-    const serialColNames   = columns.filter((c) => roles[c.name] === 'serial').map((c) => c.name)
-    onConfirm(hostnameColNames, serialColNames)
+    const hostnameColNames    = columns.filter((c) => roles[c.name] === 'hostname').map((c) => c.name)
+    const serialColNames      = columns.filter((c) => roles[c.name] === 'serial').map((c) => c.name)
+    const assignedToColNames  = columns.filter((c) => roles[c.name] === 'assignedto').map((c) => c.name)
+    onConfirm(hostnameColNames, serialColNames, assignedToColNames)
   }
 
   const hasSelection =
@@ -120,7 +123,7 @@ export default function ExcelColumnDialog({ columns, rows, onConfirm, onCancel }
 
                 {/* Role selector */}
                 <div className="flex gap-1 shrink-0">
-                  {(['hostname', 'serial', 'ignore'] as ColumnRole[]).map((r) => (
+                  {(['hostname', 'serial', 'assignedto', 'ignore'] as ColumnRole[]).map((r) => (
                     <button
                       key={r}
                       onClick={() => setRole(col.name, r)}

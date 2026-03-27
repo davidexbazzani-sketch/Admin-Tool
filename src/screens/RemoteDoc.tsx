@@ -1,19 +1,25 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 import {
   ChevronDown, ChevronRight, Play, Copy, Check,
   Loader, CheckCircle, XCircle, AlertTriangle,
   ChevronsDownUp, ChevronsUpDown, Lock, Terminal,
-  Download, Trash2, PackageX, Search,
+  Download, Trash2, PackageX, Search, Info, X, Lightbulb,
 } from 'lucide-react'
 import {
   exportRemoteDocResultExcel,
   exportRemoteDocResultWord,
   exportRemoteDocResultPdf,
 } from '../utils/exportUtils'
+import { Star } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
+import { useAuthStore } from '../store/authStore'
 import { api } from '../electronAPI'
 import { ServicePanel } from '../components/ServicePanel'
 import { CATEGORIES, type ActionType, type CmdDef, type Category } from '../utils/remoteCommands'
+import { loadFavorites, saveFavorites, addSkill, removeSkill, isSkillFavorite } from '../utils/favorites'
+import type { FavoritesData } from '../types/favorites'
+import { buildSearchIndex, searchSkills, type SearchResult, type SkillDescription } from '../utils/remoteDocSearch'
+import WinRMActivationModal from '../components/WinRMActivationModal'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -26,6 +32,8 @@ interface ServiceCheck {
   detail?: string
 }
 
+type ConnectionMode = 'full' | 'restricted' | 'none'
+
 interface ConnInfo {
   user: string
   model: string
@@ -34,6 +42,7 @@ interface ConnInfo {
   lastBoot: string
   allOk: boolean
   winrmOk: boolean
+  connectionMode: ConnectionMode  // full = WinRM, restricted = CIM/DCOM fallback
   failedServices: string[]   // service ids that failed
 }
 
@@ -160,6 +169,39 @@ function SortableTable({ headers, rows }: { headers: string[]; rows: string[][] 
     if (col === sortCol) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
     else { setSortCol(col); setSortDir('asc') }
   }
+  // Determine if we should use card layout (many columns or long values)
+  const useCards = headers.length > 5 || rows.some(r => r.some(c => c.length > 60))
+  if (useCards && rows.length > 0) {
+    // Card layout: each row as a card with key-value pairs
+    return (
+      <div className="space-y-2 p-1">
+        <p className="text-[9px] text-muted-foreground px-1">{sorted.length} Einträge — Klicke auf Spaltenname zum Sortieren</p>
+        <div className="flex flex-wrap gap-1 px-1 mb-1">
+          {headers.map((h, i) => (
+            <button key={h} onClick={() => toggleSort(i)}
+              className={`px-2 py-0.5 text-[9px] rounded border transition-colors ${sortCol === i ? 'bg-primary/10 text-primary border-primary/30' : 'border-border text-muted-foreground hover:bg-accent'}`}>
+              {h}{sortCol === i && (sortDir === 'asc' ? ' ↑' : ' ↓')}
+            </button>
+          ))}
+        </div>
+        {sorted.map((row, i) => (
+          <div key={i} className={`rounded-lg border border-border p-2.5 space-y-1 ${i % 2 === 0 ? 'bg-muted/5' : ''}`}>
+            {headers.map((h, j) => {
+              const val = row[j]
+              if (!val || val === '—' || val === '' || val === 'null' || val === 'undefined') return null
+              return (
+                <div key={h} className="flex gap-2 text-[11px]">
+                  <span className="text-muted-foreground shrink-0 w-32 font-medium">{h}:</span>
+                  <span className="text-foreground break-words">{val}</span>
+                </div>
+              )
+            })}
+          </div>
+        ))}
+      </div>
+    )
+  }
+  // Standard table layout for compact data
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-[11px]">
@@ -174,9 +216,11 @@ function SortableTable({ headers, rows }: { headers: string[]; rows: string[][] 
         </thead>
         <tbody className="divide-y divide-border">
           {sorted.map((row, i) => (
-            <tr key={i} className={i % 2 === 0 ? 'bg-muted/5' : ''}>
+            <tr key={i} className={`hover:bg-accent/20 ${i % 2 === 0 ? 'bg-muted/5' : ''}`}>
               {row.map((cell, j) => (
-                <td key={j} className="px-2 py-1 text-foreground whitespace-nowrap max-w-[200px] truncate" title={cell}>{cell}</td>
+                <td key={j} className="px-2 py-1.5 text-foreground max-w-[300px] break-words" title={cell.length > 50 ? cell : undefined}>
+                  {cell.length > 80 ? cell.slice(0, 77) + '…' : cell}
+                </td>
               ))}
             </tr>
           ))}
@@ -186,14 +230,24 @@ function SortableTable({ headers, rows }: { headers: string[]; rows: string[][] 
   )
 }
 
-function SoftwareTable({ items, onUninstall }: {
-  items: { DisplayName: string; DisplayVersion?: string; Publisher?: string }[]
+type SoftwareItem = {
+  DisplayName: string
+  DisplayVersion?: string
+  Publisher?: string
+  PSChildName?: string      // product code if MSI, e.g. {GUID}
+  UninstallString?: string
+}
+
+function SoftwareTable({ items, onUninstall, onRepair }: {
+  items: SoftwareItem[]
   onUninstall?: (name: string) => void
+  onRepair?: (name: string, productCode: string) => void
 }) {
   const [query, setQuery] = useState('')
   const [sortCol, setSortCol] = useState(0)
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
   const cols = ['DisplayName', 'DisplayVersion', 'Publisher'] as const
+  const hasActions = !!(onUninstall || onRepair)
   const filtered = items
     .filter(it => !query || it.DisplayName.toLowerCase().includes(query.toLowerCase()) || (it.Publisher ?? '').toLowerCase().includes(query.toLowerCase()))
     .sort((a, b) => {
@@ -230,27 +284,44 @@ function SoftwareTable({ items, onUninstall }: {
                   {h}{sortCol === i && <span className="ml-1 opacity-60">{sortDir === 'asc' ? '↑' : '↓'}</span>}
                 </th>
               ))}
-              {onUninstall && <th className="px-2 py-1.5 w-24" />}
+              {hasActions && <th className="px-2 py-1.5 w-40" />}
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {filtered.map((it, i) => (
+            {filtered.map((it, i) => {
+              const isMsi = !!(it.PSChildName?.startsWith('{'))
+              return (
               <tr key={i} className={i % 2 === 0 ? 'bg-muted/5' : ''}>
                 <td className="px-2 py-1 text-foreground max-w-[240px] truncate" title={it.DisplayName}>{it.DisplayName}</td>
                 <td className="px-2 py-1 text-muted-foreground whitespace-nowrap">{it.DisplayVersion ?? '—'}</td>
                 <td className="px-2 py-1 text-muted-foreground max-w-[160px] truncate" title={it.Publisher ?? ''}>{it.Publisher ?? '—'}</td>
-                {onUninstall && (
+                {hasActions && (
                   <td className="px-2 py-1">
-                    <button
-                      onClick={() => onUninstall(it.DisplayName)}
-                      className="flex items-center gap-1 px-2 py-0.5 text-[10px] rounded border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
-                    >
-                      <PackageX size={10} /> Deinstallieren
-                    </button>
+                    <div className="flex items-center gap-1">
+                      {onUninstall && (
+                        <button
+                          onClick={() => onUninstall(it.DisplayName)}
+                          className="flex items-center gap-1 px-2 py-0.5 text-[10px] rounded border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+                        >
+                          <PackageX size={10} /> Deinstall.
+                        </button>
+                      )}
+                      {onRepair && (
+                        <button
+                          onClick={() => isMsi && onRepair(it.DisplayName, it.PSChildName!)}
+                          disabled={!isMsi}
+                          title={isMsi ? 'MSI-Reparatur ausführen' : 'Nur bei MSI-Programmen verfügbar'}
+                          className="flex items-center gap-1 px-2 py-0.5 text-[10px] rounded border border-blue-500/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          Reparieren
+                        </button>
+                      )}
+                    </div>
                   </td>
                 )}
               </tr>
-            ))}
+              )
+            })}
           </tbody>
         </table>
       </div>
@@ -260,9 +331,13 @@ function SoftwareTable({ items, onUninstall }: {
 
 // ── Main component ────────────────────────────────────────────────────────────
 export default function RemoteDoc() {
-  const isAdmin = useAppStore((s) => s.isAdmin)
+  const isAdmin  = useAppStore((s) => s.isAdmin)
+  const devices  = useAppStore((s) => s.devices)
 
-  const [hostname, setHostname]     = useState('')
+  // Pre-fill hostname when coming from LocationOverview (devices contains exactly one host)
+  const pendingHost = devices.length === 1 ? (devices[0].resolvedHostnames[0] ?? '') : ''
+
+  const [hostname, setHostname]     = useState(pendingHost)
   const [connecting, setConnecting] = useState(false)
   const [checks, setChecks]         = useState<ServiceCheck[]>([])
   const [connInfo, setConnInfo]     = useState<ConnInfo | null>(null)
@@ -283,8 +358,126 @@ export default function RemoteDoc() {
   const [confirm, setConfirm]       = useState<{ cmdKey: string; label: string; command: string; critical: boolean } | null>(null)
   // Privacy consent dialog (screenshot)
   const [consentPending, setConsentPending] = useState<{ cmdKey: string; label: string; command: string } | null>(null)
+  // Fallback dialog (when WinRM fails)
+  const [showFallbackDialog, setShowFallbackDialog] = useState(false)
+  const [fallbackActivating, setFallbackActivating] = useState(false)
+
+  // Event explanations database
+  const [eventExplanations, setEventExplanations] = useState<Record<string, { title: string; severity: string; explanation: string; solution: string }> | null>(null)
+  const [eventInfoPopup, setEventInfoPopup] = useState<{ id: string; title: string; severity: string; explanation: string; solution: string } | null>(null)
+  useEffect(() => {
+    async function loadExpl() {
+      let d = await api().netReadJson<{ events: Record<string, unknown> }>('knowledge_base/event_explanations.json')
+      if (!d) d = await api().netReadJson<{ events: Record<string, unknown> }>('event_explanations.json')
+      if (d?.events) setEventExplanations(d.events as typeof eventExplanations)
+    }
+    loadExpl()
+  }, [])
 
   const abortRef = useRef(false)
+
+  // ── Favorites ─────────────────────────────────────────────────────────────────
+  const favUser = useAuthStore(s => s.session?.user?.username)
+  const [favData, setFavData] = useState<FavoritesData>({ devices: [], skills: [] })
+  useEffect(() => {
+    if (favUser) loadFavorites(favUser).then(setFavData)
+  }, [favUser])
+
+  // ── Skill descriptions (lazy loaded) ──────────────────────────────────────
+  const [skillDescs, setSkillDescs] = useState<Record<string, { kurz: string; info: { wasPassiert: string; wannBenutzen: string[]; zuBeachten: string[]; kombiniertMit: string[]; neustartNoetig: boolean; risikoLevel: string; geschaetzteDauer: string } }> | null>(null)
+  const [infoPopup, setInfoPopup] = useState<{ catId: string; cmdId: string } | null>(null)
+  useEffect(() => {
+    async function loadDescs() {
+      // Try both paths (basePath might already include knowledge_base)
+      let d = await api().netReadJson<Record<string, unknown>>('knowledge_base/skill_descriptions.json')
+      if (!d) d = await api().netReadJson<Record<string, unknown>>('skill_descriptions.json')
+      if (d) {
+        console.log('[RemoteDoc] skill_descriptions loaded:', Object.keys(d).length, 'skills')
+        setSkillDescs(d as typeof skillDescs)
+        buildSearchIndex(CATEGORIES, d as Record<string, SkillDescription>)
+      } else {
+        console.log('[RemoteDoc] skill_descriptions not found — building index from CATEGORIES only')
+        buildSearchIndex(CATEGORIES, null)
+      }
+    }
+    loadDescs().catch(() => buildSearchIndex(CATEGORIES, null))
+  }, [])
+
+  // ── Search state ──────────────────────────────────────────────────────────
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([])
+  const [searchFocused, setSearchFocused] = useState(false)
+  const [selectedResultIdx, setSelectedResultIdx] = useState(-1)
+  const [recentSearches, setRecentSearches] = useState<string[]>([])
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Debounced search
+  useEffect(() => {
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
+    if (!searchQuery.trim()) {
+      setSearchResults([])
+      setSelectedResultIdx(-1)
+      return
+    }
+    searchDebounceRef.current = setTimeout(() => {
+      const results = searchSkills(searchQuery)
+      setSearchResults(results)
+      setSelectedResultIdx(-1)
+    }, 150)
+    return () => { if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current) }
+  }, [searchQuery])
+
+  // Ctrl+K global shortcut
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault()
+        searchInputRef.current?.focus()
+        setSearchFocused(true)
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
+
+  function handleSearchKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Escape') {
+      setSearchQuery('')
+      setSearchResults([])
+      setSearchFocused(false)
+      searchInputRef.current?.blur()
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setSelectedResultIdx(prev => Math.min(prev + 1, searchResults.length - 1))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setSelectedResultIdx(prev => Math.max(prev - 1, -1))
+    } else if (e.key === 'Enter' && selectedResultIdx >= 0 && searchResults[selectedResultIdx]) {
+      e.preventDefault()
+      const r = searchResults[selectedResultIdx]
+      const cat = CATEGORIES.find(c => c.id === r.catId)
+      if (cat) {
+        runCommand(cat, r.cmd)
+        setRecentSearches(prev => [searchQuery, ...prev.filter(s => s !== searchQuery)].slice(0, 5))
+        setSearchQuery('')
+        setSearchResults([])
+      }
+    }
+  }
+
+  async function toggleFavSkill(cat: Category, cmd: CmdDef) {
+    if (!favUser) return
+    const skillId = `rd::${cat.id}::${cmd.id}`
+    let updated: FavoritesData
+    if (isSkillFavorite(favData, skillId)) {
+      updated = removeSkill(favData, skillId)
+    } else {
+      updated = addSkill(favData, { skillId, label: cmd.func, category: cat.label, source: 'remote-doc' })
+    }
+    setFavData(updated)
+    await saveFavorites(favUser, updated)
+  }
 
   function setCheck(id: string, patch: Partial<ServiceCheck>) {
     setChecks(prev => prev.map(c => c.id === id ? { ...c, ...patch } : c))
@@ -366,15 +559,12 @@ export default function RemoteDoc() {
             })
             setCheck('info', { status: 'running' })
           } else {
-            // Final result: all methods failed
+            // Final result: all WinRM methods failed → show fallback dialog
             const errDetail = String(obj.error || '')
-            setCheck('winrm', { status: 'error', detail: 'Konnte nicht gestartet werden' })
-            setConnError(
-              'WinRM konnte nicht gestartet werden. Bitte starten Sie WinRM manuell ' +
-              'über die Computerverwaltung (compmgmt.msc → Dienste → Windows Remote Management → Starten).'
-            )
+            setCheck('winrm', { status: 'error', detail: 'Nicht verfügbar — Fallback möglich' })
             if (errDetail) setConnErrorDetail(errDetail)
-            hadError = true
+            // Don't return! Show fallback dialog instead
+            setShowFallbackDialog(true)
             setConnecting(false)
             return
           }
@@ -396,6 +586,7 @@ export default function RemoteDoc() {
             lastBoot: String(obj.lastBoot || '—'),
             allOk:    !allNa,
             winrmOk:  true,
+            connectionMode: 'full',
             failedServices: [],
           })
         }
@@ -418,6 +609,104 @@ export default function RemoteDoc() {
 
     setConnecting(false)
   }, [hostname])
+
+  // ── Fallback: Restricted connection via CIM/DCOM ───────────────────────────
+  async function connectRestricted() {
+    const h = hostname.trim()
+    setShowFallbackDialog(false)
+    setConnecting(true)
+    setConnError('')
+
+    try {
+      // Try CIM over DCOM to get basic info
+      const script = [
+        `$r = @{ user='N/A'; model='N/A'; ram='N/A'; os='N/A'; lastBoot='N/A' }`,
+        `try {`,
+        `  $so = New-CimSessionOption -Protocol Dcom`,
+        `  $cs = New-CimSession -ComputerName '${h}' -SessionOption $so -EA Stop`,
+        `  $sys = Get-CimInstance Win32_ComputerSystem -CimSession $cs -EA SilentlyContinue`,
+        `  $osI = Get-CimInstance Win32_OperatingSystem -CimSession $cs -EA SilentlyContinue`,
+        `  if($sys) { $r.user = $sys.UserName; $r.model = "$($sys.Manufacturer) $($sys.Model)"; $r.ram = "$([math]::Round($sys.TotalPhysicalMemory/1GB,1)) GB" }`,
+        `  if($osI) { $r.os = $osI.Caption; $r.lastBoot = $osI.LastBootUpTime.ToString('dd.MM.yyyy HH:mm') }`,
+        `  Remove-CimSession $cs`,
+        `} catch {`,
+        `  try {`,
+        `    $sys2 = Get-WmiObject Win32_ComputerSystem -ComputerName '${h}' -EA Stop`,
+        `    if($sys2) { $r.user = $sys2.UserName; $r.model = "$($sys2.Manufacturer) $($sys2.Model)"; $r.ram = "$([math]::Round($sys2.TotalPhysicalMemory/1GB,1)) GB" }`,
+        `  } catch {}`,
+        `}`,
+        `$r | ConvertTo-Json -Compress`,
+      ].join('\n')
+
+      const res = await api().runPowerShell(script, 15000)
+      const raw = JSON.parse(res.stdout?.trim() || '{}')
+
+      setCheck('winrm', { status: 'warn', detail: 'Eingeschränkter Modus (CIM/DCOM)' })
+      setCheck('info', { status: raw.user !== 'N/A' ? 'ok' : 'warn', detail: 'Via CIM/DCOM' })
+      setConnInfo({
+        user: raw.user || '—',
+        model: raw.model || '—',
+        ram: raw.ram || '—',
+        os: raw.os || '—',
+        lastBoot: raw.lastBoot || '—',
+        allOk: raw.user !== 'N/A',
+        winrmOk: false,
+        connectionMode: 'restricted',
+        failedServices: [],
+      })
+    } catch {
+      setCheck('winrm', { status: 'error', detail: 'Auch CIM/DCOM fehlgeschlagen' })
+      setConnError('Weder WinRM noch CIM/DCOM verfügbar. Nur lokale Befehle (Ping, DNS) möglich.')
+      setConnInfo({
+        user: '—', model: '—', ram: '—', os: '—', lastBoot: '—',
+        allOk: false, winrmOk: false, connectionMode: 'restricted',
+        failedServices: [],
+      })
+    }
+    setConnecting(false)
+  }
+
+  // ── Fallback: Try to activate WinRM remotely ─────────────────────────────
+  async function activateWinRM() {
+    const h = hostname.trim()
+    setFallbackActivating(true)
+    setShowFallbackDialog(false)
+
+    const methods = [
+      { name: 'CIM/DCOM', script: `$so=New-CimSessionOption -Protocol Dcom; $cs=New-CimSession -ComputerName '${h}' -SessionOption $so; Invoke-CimMethod -CimSession $cs -ClassName Win32_Service -MethodName StartService -Filter "Name='WinRM'"; Remove-CimSession $cs; Write-Output 'OK'` },
+      { name: 'sc.exe', script: `$r = sc.exe "\\\\${h}" start WinRM 2>&1; Write-Output $r` },
+      { name: 'schtasks', script: `schtasks /create /s ${h} /tn "EnableWinRM" /tr "powershell -Command Enable-PSRemoting -Force" /sc once /st 00:00 /ru SYSTEM /f 2>&1; schtasks /run /s ${h} /tn "EnableWinRM" 2>&1; Start-Sleep -Seconds 10; schtasks /delete /s ${h} /tn "EnableWinRM" /f 2>&1; Write-Output 'OK'` },
+    ]
+
+    for (const m of methods) {
+      setCheck('winrm', { status: 'running', detail: `WinRM aktivieren via ${m.name}...` })
+      try {
+        const res = await api().runPowerShell(m.script, 20000)
+        if (res.stdout?.includes('OK') || res.exitCode === 0) {
+          // Verify WinRM is now running
+          const verify = await api().runPowerShell(`Test-WSMan -ComputerName '${h}' -EA Stop | Out-Null; Write-Output 'OK'`, 5000)
+          if (verify.stdout?.includes('OK')) {
+            setCheck('winrm', { status: 'ok', detail: `Aktiviert via ${m.name}` })
+            setFallbackActivating(false)
+            // Re-run full connection
+            doConnect()
+            return
+          }
+        }
+      } catch { /* try next method */ }
+    }
+
+    setCheck('winrm', { status: 'error', detail: 'Aktivierung fehlgeschlagen' })
+    setFallbackActivating(false)
+    // Offer restricted mode
+    setShowFallbackDialog(true)
+  }
+
+  // Auto-connect when navigating from LocationOverview with a pre-filled hostname
+  useEffect(() => {
+    if (pendingHost) doConnect()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   async function runCommand(cat: Category, cmd: CmdDef) {
     const h = hostname.trim()
@@ -462,9 +751,18 @@ export default function RemoteDoc() {
     const entryLabel = label ?? key
     setOutputs(prev => ({ ...prev, [key]: { status: 'running', text: '', label: entryLabel, timestamp: new Date(), collapsed: false } }))
     setConfirm(null)
+    console.log('[RemoteDoc] executeCommand key=%s\n--- PS script ---\n%s\n-----------------', key, psCmd)
     const result = await api().runPowerShell(psCmd, 300000)
+    console.log('[RemoteDoc] result exitCode=%d stdout=%s stderr=%s', result.exitCode, result.stdout?.slice(0, 500), result.stderr?.slice(0, 200))
     const out = result.stdout || result.stderr || '(keine Ausgabe)'
-    const isError = result.exitCode !== 0 || out.startsWith('ERR:') || out.startsWith('"ERR:')
+    // For structured JSON results (e.g. drive mapping), check the success field too
+    let isError = result.exitCode !== 0 || out.startsWith('ERR:') || out.startsWith('"ERR:')
+    if (!isError) {
+      try {
+        const j = JSON.parse(out)
+        if (typeof j === 'object' && j !== null && 'success' in j && j.success === false) isError = true
+      } catch { /* not JSON, keep current isError */ }
+    }
     setOutputs(prev => ({ ...prev, [key]: { ...prev[key], status: isError ? 'error' : 'ok', text: out } }))
   }
 
@@ -473,8 +771,9 @@ export default function RemoteDoc() {
     catId?: string,
     cmdId?: string,
     onUninstall?: (name: string) => void,
+    onRepair?: (name: string, productCode: string) => void,
   ): React.ReactNode {
-    // Detect base64 image (screenshot result)
+    // Detect base64 image (legacy bare-base64 screenshot result)
     const b64clean = text.trim().replace(/^"(.*)"$/, '$1')
     if (/^[A-Za-z0-9+/]{100,}={0,2}$/.test(b64clean)) {
       return (
@@ -486,37 +785,130 @@ export default function RemoteDoc() {
         </div>
       )
     }
+    // Structured screenshot result {success, image, error}
+    if (catId === 'screenshot' && cmdId === 'screencap') {
+      try {
+        const ss = JSON.parse(text) as { success?: boolean; image?: string; error?: string }
+        if (ss.success && ss.image) {
+          return (
+            <div className="p-2">
+              <img src={`data:image/png;base64,${ss.image}`} alt="Screenshot"
+                className="max-w-full rounded border border-border cursor-pointer"
+                onClick={() => window.open(`data:image/png;base64,${ss.image}`, '_blank')} />
+              <p className="text-[10px] text-muted-foreground mt-1">Klick zum Vergrößern</p>
+            </div>
+          )
+        }
+        return <p className="text-xs text-red-400 px-2 py-2">Screenshot-Fehler: {ss.error || 'Unbekannter Fehler'}</p>
+      } catch { /* fall through to normal rendering */ }
+    }
     try {
-      const parsed = JSON.parse(text)
+      // Double-parse: some PS commands call ConvertTo-Json inside remote() ScriptBlock,
+      // causing the outer remote() wrapper to JSON-encode the already-encoded string.
+      let parsed = JSON.parse(text)
+      if (typeof parsed === 'string') {
+        try { parsed = JSON.parse(parsed) } catch { /* keep as string */ }
+      }
       if (Array.isArray(parsed)) {
         if (parsed.length === 0) return <span className="text-muted-foreground text-[11px]">(keine Einträge)</span>
         if (typeof parsed[0] === 'object' && parsed[0] !== null) {
-          // Software list: special table with search + uninstall button
+          // Software list: special table with search + uninstall + repair buttons
           const first = parsed[0] as Record<string, unknown>
           if (catId === 'software' && cmdId === 'swlist' && 'DisplayName' in first) {
             return (
               <SoftwareTable
-                items={parsed as { DisplayName: string; DisplayVersion?: string; Publisher?: string }[]}
+                items={parsed as SoftwareItem[]}
                 onUninstall={onUninstall}
+                onRepair={onRepair}
               />
             )
           }
           const headers = Object.keys(first)
+          // Detect if this is event log data (has ID or Ereignis-ID column)
+          const idCol = headers.findIndex(h => h === 'ID' || h === 'Ereignis-ID' || h === 'Id')
+          const isEventData = idCol >= 0 && catId === 'eventlogs' && eventExplanations
+
+          if (isEventData) {
+            // Event-Log table with [i] explanation buttons
+            const items = parsed as Record<string, unknown>[]
+            return (
+              <div className="space-y-0">
+                {items.map((item, idx) => {
+                  const eventId = String(item[headers[idCol]] ?? '')
+                  const expl = eventExplanations?.[eventId]
+                  const sevColors: Record<string, string> = { critical: 'border-l-red-400', error: 'border-l-red-400', warning: 'border-l-amber-400', info: 'border-l-blue-400' }
+                  const borderColor = expl ? (sevColors[expl.severity] ?? 'border-l-border') : 'border-l-border'
+                  return (
+                    <div key={idx} className={`border-l-2 ${borderColor} ${idx % 2 === 0 ? 'bg-muted/5' : ''} px-3 py-2`}>
+                      <div className="flex items-start gap-2">
+                        <div className="flex-1 space-y-0.5">
+                          {headers.map(h => {
+                            const val = String(item[h] ?? '—')
+                            if (!val || val === '—') return null
+                            return (
+                              <div key={h} className="flex gap-2 text-[11px]">
+                                <span className="text-muted-foreground w-28 shrink-0 font-medium">{h}:</span>
+                                <span className="text-foreground break-words flex-1">{val}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                        {expl && (
+                          <button onClick={() => setEventInfoPopup({ id: eventId, ...expl })}
+                            className="p-1 rounded hover:bg-accent shrink-0 mt-0.5" title={`Event ${eventId}: ${expl.title}`}>
+                            <Info size={13} className="text-blue-400" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          }
+
           const rows = (parsed as Record<string, unknown>[]).map(item => headers.map(h => String(item[h] ?? '—')))
           return <SortableTable headers={headers} rows={rows} />
         }
-        return <pre className="text-[11px] whitespace-pre-wrap text-foreground font-mono">{parsed.join('\n')}</pre>
+        // Array of simple strings — render as clean numbered list
+        return (
+          <div className="space-y-0">
+            {(parsed as string[]).map((item, i) => (
+              <div key={i} className={`px-3 py-1.5 text-[11px] text-foreground flex gap-2 ${i % 2 === 0 ? 'bg-muted/5' : ''}`}>
+                <span className="text-muted-foreground w-6 text-right shrink-0">{i + 1}.</span>
+                <span className="break-words">{String(item)}</span>
+              </div>
+            ))}
+          </div>
+        )
       }
       if (typeof parsed === 'object' && parsed !== null) {
         const pairs = Object.entries(parsed as Record<string, unknown>)
         return (
           <div className="divide-y divide-border">
-            {pairs.map(([k, v], i) => (
-              <div key={k} className={`flex gap-3 px-2 py-1.5 ${i % 2 === 0 ? 'bg-muted/10' : ''}`}>
-                <span className="text-[11px] font-medium text-muted-foreground w-40 shrink-0">{k}</span>
-                <span className="text-[11px] text-foreground break-all">{String(v ?? '—')}</span>
-              </div>
-            ))}
+            {pairs.map(([k, v], i) => {
+              // Format values nicely
+              let displayVal = ''
+              if (v === null || v === undefined) displayVal = '—'
+              else if (typeof v === 'boolean') displayVal = v ? '✅ Ja' : '❌ Nein'
+              else if (typeof v === 'number') displayVal = v.toLocaleString('de-DE')
+              else if (Array.isArray(v)) displayVal = v.map(String).join(', ')
+              else if (typeof v === 'object') displayVal = JSON.stringify(v, null, 2)
+              else displayVal = String(v)
+
+              // Color-code certain values
+              const valLower = displayVal.toLowerCase()
+              const isGood = valLower === 'true' || valLower === 'running' || valLower === 'ok' || valLower === 'healthy' || valLower === 'online' || valLower === 'enabled' || valLower.includes('✅')
+              const isBad = valLower === 'false' || valLower === 'stopped' || valLower === 'error' || valLower === 'disabled' || valLower === 'offline' || valLower.includes('❌')
+              const valColor = isGood ? 'text-emerald-400' : isBad ? 'text-red-400' : 'text-foreground'
+
+              return (
+                <div key={k} className={`flex gap-3 px-3 py-2 ${i % 2 === 0 ? 'bg-muted/5' : ''}`}>
+                  <span className="text-[11px] font-medium text-muted-foreground w-44 shrink-0 py-0.5">{k}</span>
+                  <span className={`text-[11px] ${valColor} break-words whitespace-pre-wrap flex-1`}>{displayVal}</span>
+                </div>
+              )
+            })}
           </div>
         )
       }
@@ -548,13 +940,50 @@ export default function RemoteDoc() {
       }
     }
 
-    // ── Simple list: each non-empty line as its own row ────────────────────
+    // ── Smart plain-text rendering ──────────────────────────────────────────
     const nonEmpty = lines.filter(l => l.trim())
     if (nonEmpty.length > 1) {
+      // Detect if it looks like a key:value listing (e.g. ipconfig, systeminfo)
+      const kvPattern = nonEmpty.filter(l => l.includes(':') && !l.startsWith('---')).length > nonEmpty.length * 0.4
+      if (kvPattern) {
+        // Render as structured key-value with visual grouping
+        return (
+          <div className="divide-y divide-border">
+            {nonEmpty.map((line, i) => {
+              const colonIdx = line.indexOf(':')
+              if (colonIdx > 0 && colonIdx < 40) {
+                const key = line.slice(0, colonIdx).trim()
+                const val = line.slice(colonIdx + 1).trim()
+                return (
+                  <div key={i} className={`flex gap-2 px-3 py-1.5 ${i % 2 === 0 ? 'bg-muted/5' : ''}`}>
+                    <span className="text-[11px] font-medium text-muted-foreground w-44 shrink-0">{key}</span>
+                    <span className="text-[11px] text-foreground break-words flex-1">{val || '—'}</span>
+                  </div>
+                )
+              }
+              // Section headers (lines without colon or empty-ish)
+              if (line.trim() && !line.includes(':')) {
+                return (
+                  <div key={i} className="px-3 py-2 bg-muted/15 font-semibold text-[11px] text-foreground">
+                    {line.trim()}
+                  </div>
+                )
+              }
+              return (
+                <div key={i} className={`px-3 py-1 text-[11px] font-mono text-foreground ${i % 2 === 0 ? 'bg-muted/5' : ''}`}>
+                  {line}
+                </div>
+              )
+            })}
+          </div>
+        )
+      }
+
+      // Regular list — each line in its own row with comfortable spacing
       return (
-        <div className="divide-y divide-border">
+        <div className="space-y-0">
           {nonEmpty.map((line, i) => (
-            <div key={i} className={`px-2 py-1.5 text-[11px] font-mono text-foreground ${i % 2 === 0 ? 'bg-muted/10' : ''}`}>
+            <div key={i} className={`px-3 py-1.5 text-[11px] font-mono text-foreground leading-relaxed ${i % 2 === 0 ? 'bg-muted/5' : ''} ${line.startsWith(' ') ? 'pl-6' : ''}`}>
               {line}
             </div>
           ))}
@@ -562,7 +991,7 @@ export default function RemoteDoc() {
       )
     }
 
-    return <pre className="text-[11px] whitespace-pre-wrap text-foreground font-mono leading-relaxed px-2 py-1">{text.trim()}</pre>
+    return <pre className="text-[11px] whitespace-pre-wrap text-foreground font-mono leading-relaxed px-3 py-2">{text.trim()}</pre>
   }
 
   function handleUninstall(appName: string) {
@@ -580,8 +1009,22 @@ export default function RemoteDoc() {
       `  Write-Output "Deinstallation abgeschlossen: ${safe}"`,
       `}`,
     ].join('\n')
-    const uninstKey = `software::uninstall-${Date.now()}`
-    setConfirm({ cmdKey: uninstKey, label: `Deinstallieren: ${appName}`, command: psCmd, critical: true })
+    // Use software::swlist as key so result appears in the software list output area
+    setConfirm({ cmdKey: 'software::swlist', label: `Deinstallieren: ${appName}`, command: psCmd, critical: true })
+  }
+
+  function handleRepair(appName: string, productCode: string) {
+    const h2 = hostname.trim()
+    if (!h2) return
+    const safePc = productCode.replace(/'/g, "''")
+    const safeApp = appName.replace(/'/g, "''")
+    const psCmd = [
+      `Invoke-Command -ComputerName '${h2}' -ScriptBlock {`,
+      `  $proc = Start-Process msiexec.exe -ArgumentList '/fa ${safePc} /quiet /norestart' -Wait -PassThru`,
+      `  Write-Output "Reparatur abgeschlossen: ${safeApp} (ExitCode: $($proc.ExitCode))"`,
+      `}`,
+    ].join('\n')
+    setConfirm({ cmdKey: 'software::swlist', label: `Reparieren: ${appName}`, command: psCmd, critical: false })
   }
 
   const connected = !!connInfo
@@ -624,6 +1067,128 @@ export default function RemoteDoc() {
               Verbinden
             </button>
           </div>
+        </div>
+
+        {/* ── Search bar ── */}
+        <div className="px-6 pb-3 relative">
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              placeholder="Skills durchsuchen... (Strg+K)"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
+              onKeyDown={handleSearchKeyDown}
+              className="w-full pl-9 pr-8 py-2 text-sm rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+            />
+            {searchQuery && (
+              <button onClick={() => { setSearchQuery(''); setSearchResults([]) }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-accent text-muted-foreground">
+                <X size={14} />
+              </button>
+            )}
+          </div>
+
+          {/* Recent searches (when empty + focused) */}
+          {searchFocused && !searchQuery && recentSearches.length > 0 && (
+            <div className="absolute left-6 right-6 top-full mt-1 z-30 bg-card border border-border rounded-lg shadow-xl p-2">
+              <p className="text-[9px] text-muted-foreground uppercase tracking-wider px-2 mb-1">Letzte Suchen</p>
+              <div className="flex flex-wrap gap-1">
+                {recentSearches.map((s, i) => (
+                  <button key={i} onClick={() => setSearchQuery(s)}
+                    className="px-2 py-0.5 text-[10px] rounded-full bg-muted/30 text-muted-foreground hover:bg-accent border border-border">
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Search results */}
+          {searchResults.length > 0 && searchQuery && (
+            <div className="absolute left-6 right-6 top-full mt-1 z-30 bg-card border border-border rounded-lg shadow-xl max-h-[50vh] overflow-y-auto">
+              <div className="px-3 py-2 border-b border-border flex items-center">
+                <p className="text-[10px] text-muted-foreground flex-1">
+                  {searchResults.length} Treffer für „{searchQuery}"
+                </p>
+              </div>
+              {searchResults.map((r, i) => {
+                const desc = skillDescs?.[`rd_${r.catId}_${r.cmdId}`]
+                const scoreColor = r.score >= 80 ? 'text-emerald-400' : r.score >= 50 ? 'text-amber-400' : 'text-muted-foreground'
+                return (
+                  <div key={`${r.catId}-${r.cmdId}`}
+                    className={`flex items-center gap-3 px-3 py-2.5 hover:bg-accent/30 cursor-pointer border-b border-border/50 transition-colors ${i === selectedResultIdx ? 'bg-primary/5' : ''}`}
+                    onClick={() => {
+                      const cat = CATEGORIES.find(c => c.id === r.catId)
+                      if (cat) {
+                        setExpanded(prev => { const n = new Set(prev); n.add(r.catId); return n })
+                        setRecentSearches(prev => [searchQuery, ...prev.filter(s => s !== searchQuery)].slice(0, 5))
+                        setSearchQuery('')
+                        setSearchResults([])
+                      }
+                    }}
+                  >
+                    <span className={`text-[10px] font-mono w-8 text-right shrink-0 ${scoreColor}`}>
+                      {r.score}%
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-foreground truncate">{r.cmd.func}</p>
+                      {desc?.kurz && (
+                        <p className="text-[10px] text-muted-foreground truncate">{desc.kurz}</p>
+                      )}
+                      <p className="text-[9px] text-muted-foreground/50">{r.catLabel}</p>
+                    </div>
+                    {hostname && connInfo && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          const cat = CATEGORIES.find(c => c.id === r.catId)
+                          if (cat) runCommand(cat, r.cmd)
+                          setRecentSearches(prev => [searchQuery, ...prev.filter(s => s !== searchQuery)].slice(0, 5))
+                          setSearchQuery('')
+                          setSearchResults([])
+                        }}
+                        className="p-1.5 rounded-md bg-primary/10 text-primary hover:bg-primary/20 shrink-0"
+                        title="Ausführen"
+                      >
+                        <Play size={11} />
+                      </button>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setInfoPopup({ catId: r.catId, cmdId: r.cmdId })
+                      }}
+                      className="p-1 rounded hover:bg-accent text-blue-400/60 shrink-0"
+                      title="Info"
+                    >
+                      <Info size={11} />
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* No results */}
+          {searchQuery && searchFocused && searchResults.length === 0 && searchQuery.length >= 2 && (
+            <div className="absolute left-6 right-6 top-full mt-1 z-30 bg-card border border-border rounded-lg shadow-xl p-4 text-center">
+              <Search size={20} className="mx-auto text-muted-foreground/30 mb-2" />
+              <p className="text-xs text-muted-foreground">Keine Treffer für „{searchQuery}"</p>
+              <p className="text-[10px] text-muted-foreground/50 mt-1">Überprüfen Sie die Schreibweise oder verwenden Sie allgemeinere Begriffe</p>
+              <button
+                onClick={() => {
+                  useAppStore.getState().setScreen('it-guru')
+                }}
+                className="mt-2 flex items-center gap-1 mx-auto px-3 py-1.5 text-[10px] rounded-md bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20"
+              >
+                <Lightbulb size={10} /> IT Guru fragen
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Connection status */}
@@ -681,6 +1246,16 @@ export default function RemoteDoc() {
           </div>
         )}
       </div>
+
+      {/* ── Restricted mode banner ── */}
+      {connInfo?.connectionMode === 'restricted' && (
+        <div className="mx-6 mb-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center gap-2">
+          <AlertTriangle size={14} className="text-amber-400 shrink-0" />
+          <span className="text-xs text-amber-400 flex-1">
+            Eingeschränkter Modus — WinRM nicht verfügbar. Befehle mit 🔒 sind deaktiviert. Verfügbar: Ping, DNS, CIM/WMI-Abfragen, Dateioperationen via SMB.
+          </span>
+        </div>
+      )}
 
       {/* ── Category accordion ────────────────────────────────────────────── */}
       <div className={`flex-1 overflow-y-auto ${!isAdmin ? 'opacity-50 pointer-events-none' : ''}`}>
@@ -760,7 +1335,11 @@ export default function RemoteDoc() {
                         const inputVal = inputs[key] ?? ''
                         const out = outputs[key]
                         const needsInput = !!cmd.input
-                        const inputOk = !needsInput || inputVal.trim() !== ''
+                        const inputOk = !needsInput || (
+                          cmd.input?.type === 'drivemap'
+                            ? (inputVal.split('|')[0]?.trim() !== '' && (inputVal.split('|')[1] ?? '').trim() !== '')
+                            : inputVal.trim() !== ''
+                        )
                         const inputVal2 = inputs[key] ?? ''
                         const psCmd = cmd.buildCmd(h, inputVal2 || undefined)
                         const displayCmd = cmd.local
@@ -771,8 +1350,18 @@ export default function RemoteDoc() {
                         const needsAdmin = cmd.action !== 'read' && !isAdmin
                         const svcFailed = connInfo?.failedServices.includes(cmd.id)
                         // Commands using Invoke-Command require WinRM
-                        const needsWinRM = !cmd.local && !psCmd.startsWith('ping') && !psCmd.startsWith('tracert')
-                        const winrmBlocked = needsWinRM && connInfo?.winrmOk === false
+                        // Commands that work without WinRM (local, ping, tracert, or CIM-based)
+                        const isFallbackCapable = cmd.local
+                          || psCmd.startsWith('ping') || psCmd.startsWith('tracert')
+                          || psCmd.includes('Test-Connection') || psCmd.includes('Test-NetConnection')
+                          || psCmd.includes('Resolve-DnsName') || psCmd.includes('nslookup')
+                          || psCmd.includes('Get-CimInstance') || psCmd.includes('Get-WmiObject')
+                          || psCmd.includes('Test-Path') || psCmd.includes('Get-ChildItem')
+                          || psCmd.includes('Get-WinEvent') || psCmd.includes('shutdown')
+                          || psCmd.includes('\\\\') // UNC path operations
+                          || cat.id === 'net' // network commands generally work locally
+                        const needsWinRM = !isFallbackCapable
+                        const winrmBlocked = needsWinRM && connInfo?.connectionMode === 'restricted'
 
                         const actionColor = cmd.action === 'critical'
                           ? 'bg-red-500/10 text-red-400 border-red-500/30 hover:bg-red-500/20'
@@ -785,8 +1374,29 @@ export default function RemoteDoc() {
                             <div className={`grid grid-cols-[1fr_1fr_auto_auto] gap-0 items-start py-2 hover:bg-accent/10 transition-colors ${svcFailed || winrmBlocked ? 'opacity-40' : ''}`}>
                               {/* Function + when */}
                               <div className="px-4">
-                                <p className="text-xs font-medium text-foreground">{cmd.func}</p>
-                                <p className="text-[11px] text-muted-foreground mt-0.5">{cat.commands.find(c => c.id === cmd.id)?.when}</p>
+                                <div className="flex items-center gap-1">
+                                  <p className="text-xs font-medium text-foreground">{cmd.func}</p>
+                                  <button
+                                    onClick={(e) => { e.stopPropagation(); toggleFavSkill(cat, cmd) }}
+                                    title={isSkillFavorite(favData, `rd::${cat.id}::${cmd.id}`) ? 'Aus Favoriten entfernen' : 'Zu Favoriten hinzufügen'}
+                                    className="p-0.5 rounded hover:bg-accent shrink-0"
+                                  >
+                                    <Star size={11} className={isSkillFavorite(favData, `rd::${cat.id}::${cmd.id}`) ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/40'} />
+                                  </button>
+                                  {skillDescs && (
+                                    <button
+                                      onClick={(e) => { e.stopPropagation(); setInfoPopup({ catId: cat.id, cmdId: cmd.id }) }}
+                                      title="Info anzeigen"
+                                      className="p-0.5 rounded hover:bg-accent shrink-0"
+                                    >
+                                      <Info size={11} className="text-blue-400/60 hover:text-blue-400" />
+                                    </button>
+                                  )}
+                                </div>
+                                {skillDescs?.[`rd_${cat.id}_${cmd.id}`]?.kurz
+                                  ? <p className="text-[10px] text-muted-foreground/70 mt-0.5">{skillDescs[`rd_${cat.id}_${cmd.id}`].kurz}</p>
+                                  : <p className="text-[11px] text-muted-foreground mt-0.5">{cat.commands.find(c => c.id === cmd.id)?.when}</p>
+                                }
                                 {cmd.local && <span className="text-[10px] text-blue-400 mt-0.5 block">Lokal (Admin-PC)</span>}
                                 {cmd.longRunning && <span className="text-[10px] text-amber-400 mt-0.5 block">⏳ Kann Minuten dauern</span>}
                               </div>
@@ -816,6 +1426,12 @@ export default function RemoteDoc() {
                                       onChange={e => setInputs(prev => ({ ...prev, [key]: e.target.value }))}
                                       className="w-full px-2 py-1 text-[11px] rounded border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
                                     />
+                                    {/* Spezielle Hilfe für Laufwerk-Trennen */}
+                                    {cmd.id === 'mapdriverem' && (
+                                      <div className="rounded-md bg-blue-500/5 border border-blue-500/20 p-1.5">
+                                        <p className="text-[8px] text-muted-foreground flex items-center gap-1"><Info size={8} className="text-blue-400" /> Klicken Sie auf einen Buchstaben oder tippen Sie den Buchstaben des Laufwerks das getrennt werden soll. Tipp: Nutzen Sie zuerst "Verbundene Laufwerke anzeigen" um zu sehen welche Laufwerke gemappt sind.</p>
+                                      </div>
+                                    )}
                                     {cmd.templates && cmd.templates.length > 0 && (
                                       <div className="flex flex-wrap gap-1">
                                         {cmd.templates.map(t => (
@@ -842,6 +1458,68 @@ export default function RemoteDoc() {
                                     {cmd.input.options?.map(o => <option key={o} value={o}>{o}</option>)}
                                   </select>
                                 )}
+                                {cmd.input?.type === 'drivemap' && (
+                                  <div className="space-y-2 w-56">
+                                    {/* Laufwerksbuchstabe */}
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Laufwerksbuchstabe</label>
+                                      <div className="flex gap-1 flex-wrap">
+                                        {['H','I','S','T','U','Z'].map(l => (
+                                          <button key={l} onClick={() => {
+                                            const path = inputVal.split('|')[1] ?? ''
+                                            setInputs(prev => ({ ...prev, [key]: `${l}|${path}` }))
+                                          }}
+                                            className={`w-7 h-7 text-[10px] font-bold rounded border transition-colors ${
+                                              (inputVal.split('|')[0] ?? '') === l
+                                                ? 'bg-primary text-primary-foreground border-primary'
+                                                : 'border-border text-muted-foreground hover:bg-accent'
+                                            }`}>{l}:</button>
+                                        ))}
+                                        <input
+                                          type="text" maxLength={1} placeholder="?"
+                                          value={!['H','I','S','T','U','Z'].includes(inputVal.split('|')[0] ?? '') ? (inputVal.split('|')[0] ?? '') : ''}
+                                          onChange={e => {
+                                            const letter = e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 1)
+                                            const path = inputVal.split('|')[1] ?? ''
+                                            setInputs(prev => ({ ...prev, [key]: `${letter}|${path}` }))
+                                          }}
+                                          className="w-7 h-7 text-[10px] font-bold rounded border border-dashed border-border bg-background text-foreground text-center uppercase focus:outline-none focus:border-primary"
+                                          title="Anderen Buchstaben eingeben"
+                                        />
+                                      </div>
+                                    </div>
+
+                                    {/* Netzwerkpfad */}
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Netzwerkpfad</label>
+                                      <input
+                                        type="text"
+                                        placeholder="z.B. w3172\Freigabe"
+                                        value={inputVal.split('|')[1] ?? ''}
+                                        onChange={e => {
+                                          const letter = inputVal.split('|')[0] ?? ''
+                                          setInputs(prev => ({ ...prev, [key]: `${letter}|${e.target.value}` }))
+                                        }}
+                                        className="w-full px-2 py-1.5 text-[11px] rounded border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                    </div>
+
+                                    {/* Hilfe-Infobox */}
+                                    <div className="rounded-md bg-blue-500/5 border border-blue-500/20 p-2 space-y-1">
+                                      <p className="text-[9px] font-semibold text-blue-400 flex items-center gap-1"><Info size={10} /> So funktioniert es:</p>
+                                      <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                        1. Wählen Sie einen <strong>Buchstaben</strong> (z.B. <span className="font-mono bg-muted/30 px-0.5 rounded">Z:</span>)<br />
+                                        2. Geben Sie den <strong>Serverpfad</strong> ein<br />
+                                        <span className="text-[8px]">
+                                        Beispiele:<br />
+                                        • <span className="font-mono">w3172\Abteilung</span><br />
+                                        • <span className="font-mono">server\freigabe\ordner</span><br />
+                                        </span>
+                                        Das <span className="font-mono">\\</span> wird automatisch ergänzt.
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               {/* Action button */}
                               <div className="px-4 w-28">
@@ -852,7 +1530,7 @@ export default function RemoteDoc() {
                                 ) : svcFailed ? (
                                   <span className="text-[10px] text-red-400">Dienst fehlt</span>
                                 ) : winrmBlocked ? (
-                                  <span className="text-[10px] text-red-400">WinRM fehlt</span>
+                                  <span className="text-[10px] text-amber-400" title="Dieser Befehl erfordert WinRM. Nutzen Sie 'WinRM remote aktivieren' für alle Funktionen.">🔒 WinRM nötig</span>
                                 ) : (
                                   <button
                                     onClick={() => runCommand(cat, cmd)}
@@ -909,7 +1587,7 @@ export default function RemoteDoc() {
                                     </div>
                                     {!out.collapsed && (
                                       <div className="px-3 py-2 max-h-72 overflow-y-auto">
-                                        {formatOutput(out.text, cat.id, cmd.id, handleUninstall)}
+                                        {formatOutput(out.text, cat.id, cmd.id, handleUninstall, handleRepair)}
                                       </div>
                                     )}
                                   </>
@@ -1047,6 +1725,111 @@ export default function RemoteDoc() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* ── Skill Info Popup ── */}
+      {infoPopup && skillDescs && (() => {
+        const key = `rd_${infoPopup.catId}_${infoPopup.cmdId}`
+        const desc = skillDescs[key]
+        const cat = CATEGORIES.find(c => c.id === infoPopup.catId)
+        const cmd = cat?.commands.find(c => c.id === infoPopup.cmdId)
+        if (!desc || !cmd) return null
+        const info = desc.info
+        const riskColors: Record<string, string> = {
+          niedrig: 'text-emerald-400 bg-emerald-500/10',
+          mittel: 'text-amber-400 bg-amber-500/10',
+          hoch: 'text-orange-400 bg-orange-500/10',
+          kritisch: 'text-red-400 bg-red-500/10',
+        }
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setInfoPopup(null)}>
+            <div className="bg-card border border-border rounded-xl w-[520px] max-h-[80vh] shadow-2xl flex flex-col" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center gap-2 px-5 py-3 border-b border-border shrink-0">
+                <Info size={15} className="text-blue-400" />
+                <span className="font-semibold text-sm text-foreground flex-1">{cmd.func}</span>
+                <button onClick={() => setInfoPopup(null)} className="p-1 rounded hover:bg-accent text-muted-foreground"><X size={14} /></button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
+                <div>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Was passiert</p>
+                  <p className="text-foreground">{info.wasPassiert}</p>
+                </div>
+                {info.wannBenutzen?.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Wann benutzen</p>
+                    <ul className="space-y-0.5">{info.wannBenutzen.map((w: string, i: number) => <li key={i} className="text-foreground">• {w}</li>)}</ul>
+                  </div>
+                )}
+                {info.zuBeachten?.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-semibold text-amber-400 uppercase tracking-wider mb-1">Zu beachten</p>
+                    <ul className="space-y-0.5">{info.zuBeachten.map((z: string, i: number) => <li key={i} className="text-foreground">• {z}</li>)}</ul>
+                  </div>
+                )}
+                {info.kombiniertMit?.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-1">Funktioniert gut mit</p>
+                    <div className="flex flex-wrap gap-1">{info.kombiniertMit.map((k: string, i: number) => (
+                      <span key={i} className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px]">{k}</span>
+                    ))}</div>
+                  </div>
+                )}
+                <div className="flex items-center gap-3 pt-2 border-t border-border">
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${riskColors[info.risikoLevel] ?? riskColors.niedrig}`}>
+                    Risiko: {info.risikoLevel}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground">Dauer: {info.geschaetzteDauer}</span>
+                  <span className="text-[10px] text-muted-foreground">Neustart: {info.neustartNoetig ? 'Ja' : 'Nein'}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* ── Event Explanation Popup ── */}
+      {eventInfoPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setEventInfoPopup(null)}>
+          <div className="bg-card border border-border rounded-xl w-[480px] max-h-[70vh] shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-2 px-5 py-3 border-b border-border">
+              <span className={`w-3 h-3 rounded-full shrink-0 ${
+                eventInfoPopup.severity === 'critical' ? 'bg-red-400' :
+                eventInfoPopup.severity === 'error' ? 'bg-red-400' :
+                eventInfoPopup.severity === 'warning' ? 'bg-amber-400' : 'bg-blue-400'
+              }`} />
+              <span className="font-semibold text-sm text-foreground flex-1">Event {eventInfoPopup.id}: {eventInfoPopup.title}</span>
+              <button onClick={() => setEventInfoPopup(null)} className="p-1 rounded hover:bg-accent text-muted-foreground"><X size={14} /></button>
+            </div>
+            <div className="p-5 space-y-4 overflow-y-auto max-h-[calc(70vh-50px)]">
+              <div>
+                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Was bedeutet das?</p>
+                <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{eventInfoPopup.explanation}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider mb-1">Lösung</p>
+                <div className="text-sm text-foreground leading-relaxed whitespace-pre-wrap bg-muted/10 rounded-lg p-3 border border-border">
+                  {eventInfoPopup.solution}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── WinRM Activation Modal (6-method live progress) ── */}
+      {showFallbackDialog && (
+        <WinRMActivationModal
+          hostname={hostname.trim()}
+          onSuccess={() => {
+            setShowFallbackDialog(false)
+            doConnect() // re-connect with full WinRM
+          }}
+          onRestricted={() => {
+            setShowFallbackDialog(false)
+            connectRestricted()
+          }}
+          onCancel={() => setShowFallbackDialog(false)}
+        />
       )}
     </div>
   )

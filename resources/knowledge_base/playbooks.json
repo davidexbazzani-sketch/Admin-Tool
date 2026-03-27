@@ -1,0 +1,1396 @@
+[
+  {
+    "id": "PLAY-TEAMS-001",
+    "name": "Teams Cache Reset",
+    "category": "Teams",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Teams-Prozesse prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'ms-teams','Teams' -ErrorAction SilentlyContinue | Select-Object Name, Id, CPU }"},
+      {"id": "s2", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Microsoft Teams wird kurz neu gestartet. Bitte speichern Sie laufende Chats."},
+      {"id": "s3", "type": "execute", "label": "Teams beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'ms-teams','Teams' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s4", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s5", "type": "execute", "label": "Teams Cache löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Packages\\MSTeams_8wekyb3d8bbwe\\LocalCache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Teams\\Cache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Teams\\blob_storage\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Teams\\databases\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Teams\\GPUCache\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s6", "type": "verify", "label": "Cache-Bereinigung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; $remaining = 0; foreach ($u in $users) { $remaining += (Get-ChildItem \"$($u.FullName)\\AppData\\Local\\Packages\\MSTeams_8wekyb3d8bbwe\\LocalCache\" -Recurse -ErrorAction SilentlyContinue | Measure-Object).Count }; if ($remaining -lt 5) { 'OK: Cache erfolgreich geleert' } else { 'WARNUNG: Noch Dateien im Cache vorhanden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-TEAMS-002",
+    "name": "Teams Audio Fix",
+    "category": "Teams",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Audio-Dienste prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Service -Name 'Audiosrv','AudioEndpointBuilder' | Select-Object Name, Status }"},
+      {"id": "s2", "type": "execute", "label": "Audio-Dienste neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Restart-Service -Name 'Audiosrv' -Force; Restart-Service -Name 'AudioEndpointBuilder' -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Dienst-Neustart...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "Audio-Gerät zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'AudioEndpoint' -Status OK | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Get-PnpDevice -Class 'AudioEndpoint' -Status Error | Enable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "verify", "label": "Audio-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $svc = Get-Service 'Audiosrv'; $devices = Get-PnpDevice -Class 'AudioEndpoint' -Status OK -ErrorAction SilentlyContinue; if ($svc.Status -eq 'Running' -and $devices) { 'OK: Audio-Dienste laufen und Geräte aktiv' } else { 'FEHLER: Audio-Problem besteht weiterhin' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-TEAMS-003",
+    "name": "Teams Camera Fix",
+    "category": "Teams",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Kamera-Geräte prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'Camera','Image' -ErrorAction SilentlyContinue | Select-Object FriendlyName, Status, InstanceId }"},
+      {"id": "s2", "type": "execute", "label": "Kamera-Gerät neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'Camera' -ErrorAction SilentlyContinue | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue }; Start-Sleep -Seconds 2; Get-PnpDevice -Class 'Camera' -ErrorAction SilentlyContinue | ForEach-Object { Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Kamera-Neustart...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "Teams Camera-Zugriff prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $camPrivacy = Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam' -Name 'Value' -ErrorAction SilentlyContinue; if ($camPrivacy.Value -ne 'Allow') { Set-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam' -Name 'Value' -Value 'Allow' } }"},
+      {"id": "s5", "type": "verify", "label": "Kamera-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $cams = Get-PnpDevice -Class 'Camera' -Status OK -ErrorAction SilentlyContinue; if ($cams) { 'OK: Kamera erkannt und aktiv - ' + ($cams | Select-Object -First 1).FriendlyName } else { 'FEHLER: Keine Kamera gefunden oder Kamera deaktiviert' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-TEAMS-004",
+    "name": "Teams Complete Reset",
+    "category": "Teams",
+    "estimatedDuration": "90 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Microsoft Teams wird komplett zurückgesetzt. Sie müssen sich danach neu anmelden."},
+      {"id": "s2", "type": "execute", "label": "Teams beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'ms-teams','Teams' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "Teams Cache komplett löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Packages\\MSTeams_8wekyb3d8bbwe\\LocalCache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Teams\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "execute", "label": "Teams-Credentials bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { cmdkey /list | Select-String 'MicrosoftTeams' | ForEach-Object { $target = ($_ -split '\\s+')[-1]; cmdkey /delete:$target 2>$null }; cmdkey /list | Select-String 'msteams' | ForEach-Object { $target = ($_ -split '\\s+')[-1]; cmdkey /delete:$target 2>$null } }"},
+      {"id": "s6", "type": "execute", "label": "Teams neu starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $teamsPath = Get-AppxPackage -Name 'MSTeams' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty InstallLocation; if ($teamsPath) { Start-Process \"$teamsPath\\ms-teams.exe\" } else { Start-Process 'C:\\Users\\*\\AppData\\Local\\Microsoft\\Teams\\Update.exe' -ArgumentList '--processStart','Teams.exe' -ErrorAction SilentlyContinue } }"},
+      {"id": "s7", "type": "verify", "label": "Teams-Neustart prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $proc = Get-Process -Name 'ms-teams','Teams' -ErrorAction SilentlyContinue; if ($proc) { 'OK: Teams läuft wieder' } else { 'WARNUNG: Teams muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-TEAMS-005",
+    "name": "Teams CPU Fix",
+    "category": "Teams",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Teams CPU-Nutzung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'ms-teams','Teams' -ErrorAction SilentlyContinue | Select-Object Name, Id, CPU, @{N='WorkingSetMB';E={[math]::Round($_.WorkingSet64/1MB,1)}} }"},
+      {"id": "s2", "type": "execute", "label": "Teams-Prozess beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'ms-teams','Teams' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "GPU-Cache und Temp löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Packages\\MSTeams_8wekyb3d8bbwe\\LocalCache\\Microsoft\\MSTeams\\EBWebView\\Default\\GPUCache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Teams\\GPUCache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Teams\\Cache\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "execute", "label": "Teams neu starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $teamsPath = Get-AppxPackage -Name 'MSTeams' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty InstallLocation; if ($teamsPath) { Start-Process \"$teamsPath\\ms-teams.exe\" } else { Start-Process 'C:\\Users\\*\\AppData\\Local\\Microsoft\\Teams\\Update.exe' -ArgumentList '--processStart','Teams.exe' -ErrorAction SilentlyContinue } }"},
+      {"id": "s6", "type": "verify", "label": "CPU-Nutzung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 8; $proc = Get-Process -Name 'ms-teams','Teams' -ErrorAction SilentlyContinue; if ($proc) { $cpu = ($proc | Measure-Object -Property CPU -Sum).Sum; 'OK: Teams läuft - CPU: ' + [math]::Round($cpu,1) + 's' } else { 'WARNUNG: Teams nicht gestartet' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-OL-001",
+    "name": "Outlook Cache/OST Reset",
+    "category": "Outlook",
+    "estimatedDuration": "90 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Outlook-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue | Select-Object Name, Id, StartTime }"},
+      {"id": "s2", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Outlook wird neu gestartet und die lokale Datendatei wird zurückgesetzt. Ihre Mails werden danach erneut synchronisiert."},
+      {"id": "s3", "type": "execute", "label": "Outlook beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s4", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s5", "type": "execute", "label": "OST-Dateien umbenennen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Get-ChildItem \"$($u.FullName)\\AppData\\Local\\Microsoft\\Outlook\\*.ost\" -ErrorAction SilentlyContinue | ForEach-Object { Rename-Item $_.FullName \"$($_.BaseName)_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss').ost\" -ErrorAction SilentlyContinue } } }"},
+      {"id": "s6", "type": "execute", "label": "Outlook starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ErrorAction SilentlyContinue }"},
+      {"id": "s7", "type": "verify", "label": "Outlook-Neustart prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $proc = Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue; if ($proc) { 'OK: Outlook läuft und synchronisiert neue OST' } else { 'WARNUNG: Outlook muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-OL-002",
+    "name": "Outlook Profile Repair",
+    "category": "Outlook",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Outlook beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s3", "type": "execute", "label": "Navigationsbereich zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ArgumentList '/resetnavpane' -Wait -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "execute", "label": "Ansichten bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ArgumentList '/cleanviews' -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "verify", "label": "Outlook-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $proc = Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue; if ($proc) { 'OK: Outlook Profil repariert und gestartet' } else { 'FEHLER: Outlook konnte nicht gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-OL-003",
+    "name": "Outlook Add-In Cleanup",
+    "category": "Outlook",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Deaktivierte Add-Ins prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { $regPath = \"Registry::HKEY_USERS\\*\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\"; Get-ChildItem $regPath -ErrorAction SilentlyContinue | ForEach-Object { Get-ItemProperty $_.PSPath -ErrorAction SilentlyContinue } } }"},
+      {"id": "s2", "type": "execute", "label": "Outlook beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "Disabled Items und CrashingAddinList bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $sids = (Get-ChildItem 'Registry::HKEY_USERS' -ErrorAction SilentlyContinue).PSChildName; foreach ($sid in $sids) { Remove-Item \"Registry::HKEY_USERS\\$sid\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"Registry::HKEY_USERS\\$sid\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"Registry::HKEY_USERS\\$sid\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DoNotDisableAddinList\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "execute", "label": "Outlook starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ErrorAction SilentlyContinue }"},
+      {"id": "s6", "type": "verify", "label": "Outlook Add-In Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $proc = Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue; if ($proc) { 'OK: Outlook gestartet, Add-In-Listen bereinigt' } else { 'WARNUNG: Outlook muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-OL-004",
+    "name": "Outlook Complete Reset",
+    "category": "Outlook",
+    "estimatedDuration": "120 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Outlook wird komplett zurückgesetzt. Cache, Profil und Anmeldedaten werden bereinigt. Sie müssen sich danach neu anmelden."},
+      {"id": "s2", "type": "execute", "label": "Outlook beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "OST und Cache löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Outlook\\*.ost\" -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Outlook\\RoamCache\\*\" -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "execute", "label": "Outlook-Profil zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ArgumentList '/resetnavpane' -Wait -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2 }"},
+      {"id": "s6", "type": "execute", "label": "Outlook-Credentials bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { cmdkey /list | Select-String 'Outlook|Office|MicrosoftOffice' | ForEach-Object { $line = $_.ToString().Trim(); if ($line -match 'Ziel:\\s*(.+)$' -or $line -match 'Target:\\s*(.+)$') { cmdkey /delete:$($Matches[1].Trim()) 2>$null } } }"},
+      {"id": "s7", "type": "execute", "label": "Outlook starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ErrorAction SilentlyContinue }"},
+      {"id": "s8", "type": "verify", "label": "Outlook-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $proc = Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue; if ($proc) { 'OK: Outlook komplett zurückgesetzt und gestartet' } else { 'WARNUNG: Outlook muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-OL-005",
+    "name": "Outlook Search Repair",
+    "category": "Outlook",
+    "estimatedDuration": "120 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Windows Search-Dienst prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Service -Name 'WSearch' | Select-Object Name, Status, StartType }"},
+      {"id": "s2", "type": "execute", "label": "Outlook beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s3", "type": "execute", "label": "Windows Search-Index zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service -Name 'WSearch' -Force; Remove-Item 'C:\\ProgramData\\Microsoft\\Search\\Data\\Applications\\Windows\\Windows.edb' -Force -ErrorAction SilentlyContinue; Start-Service -Name 'WSearch' }"},
+      {"id": "s4", "type": "wait", "label": "Warten auf Index-Neuaufbau...", "waitSeconds": 5},
+      {"id": "s5", "type": "execute", "label": "Outlook mit Suchindex-Reparatur starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ErrorAction SilentlyContinue }"},
+      {"id": "s6", "type": "verify", "label": "Such-Dienst prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $svc = Get-Service -Name 'WSearch'; if ($svc.Status -eq 'Running') { 'OK: Windows Search läuft, Index wird neu aufgebaut' } else { 'FEHLER: Windows Search-Dienst nicht gestartet' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-OL-006",
+    "name": "Outlook Exchange Reconnect",
+    "category": "Outlook",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Outlook beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s2", "type": "execute", "label": "Exchange-Credentials bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { cmdkey /list | Select-String 'Outlook|Office|exchange' | ForEach-Object { $line = $_.ToString().Trim(); if ($line -match 'Ziel:\\s*(.+)$' -or $line -match 'Target:\\s*(.+)$') { cmdkey /delete:$($Matches[1].Trim()) 2>$null } } }"},
+      {"id": "s3", "type": "execute", "label": "DNS-Cache leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ipconfig /flushdns }"},
+      {"id": "s4", "type": "wait", "label": "Warten...", "waitSeconds": 2},
+      {"id": "s5", "type": "execute", "label": "Outlook starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ErrorAction SilentlyContinue }"},
+      {"id": "s6", "type": "verify", "label": "Outlook-Verbindung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 8; $proc = Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue; if ($proc) { 'OK: Outlook gestartet - Benutzer muss sich ggf. neu anmelden' } else { 'WARNUNG: Outlook muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-ENA-001",
+    "name": "enaio Add-In Reactivate",
+    "category": "enaio",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "enaio Add-In Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $sids = (Get-ChildItem 'Registry::HKEY_USERS' -ErrorAction SilentlyContinue).PSChildName; foreach ($sid in $sids) { $disabled = Get-ItemProperty \"Registry::HKEY_USERS\\$sid\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems\" -ErrorAction SilentlyContinue; if ($disabled) { \"SID $sid - DisabledItems: $($disabled.PSObject.Properties.Name -join ', ')\" } } }"},
+      {"id": "s2", "type": "execute", "label": "Outlook beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "DisabledItems bereinigen und DoNotDisable setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $sids = (Get-ChildItem 'Registry::HKEY_USERS' -ErrorAction SilentlyContinue).PSChildName; foreach ($sid in $sids) { Remove-Item \"Registry::HKEY_USERS\\$sid\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems\" -Force -ErrorAction SilentlyContinue; $doNotDisable = \"Registry::HKEY_USERS\\$sid\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DoNotDisableAddinList\"; New-Item -Path $doNotDisable -Force -ErrorAction SilentlyContinue | Out-Null; New-ItemProperty -Path $doNotDisable -Name 'OsClientAddin.Connect' -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue | Out-Null } }"},
+      {"id": "s5", "type": "execute", "label": "Outlook starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ErrorAction SilentlyContinue }"},
+      {"id": "s6", "type": "verify", "label": "Add-In Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $proc = Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue; if ($proc) { 'OK: Outlook gestartet, enaio Add-In reaktiviert' } else { 'WARNUNG: Outlook muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-ENA-002",
+    "name": "enaio Cache Clear",
+    "category": "enaio",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Outlook beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s3", "type": "execute", "label": "enaio Cache löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\OPTIMAL SYSTEMS\\enaio\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\OPTIMAL SYSTEMS\\enaio\\cache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Temp\\enaio*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "execute", "label": "Outlook starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "verify", "label": "Ergebnis prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $proc = Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue; if ($proc) { 'OK: enaio Cache bereinigt, Outlook gestartet' } else { 'WARNUNG: Outlook muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-ENA-003",
+    "name": "enaio Complete Fix",
+    "category": "enaio",
+    "estimatedDuration": "90 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: enaio und Outlook werden komplett repariert. Bitte warten Sie bis der Vorgang abgeschlossen ist."},
+      {"id": "s2", "type": "execute", "label": "Outlook beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "enaio Add-In reaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $sids = (Get-ChildItem 'Registry::HKEY_USERS' -ErrorAction SilentlyContinue).PSChildName; foreach ($sid in $sids) { Remove-Item \"Registry::HKEY_USERS\\$sid\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems\" -Force -ErrorAction SilentlyContinue; Remove-Item \"Registry::HKEY_USERS\\$sid\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList\" -Force -ErrorAction SilentlyContinue; $doNotDisable = \"Registry::HKEY_USERS\\$sid\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DoNotDisableAddinList\"; New-Item -Path $doNotDisable -Force -ErrorAction SilentlyContinue | Out-Null; New-ItemProperty -Path $doNotDisable -Name 'OsClientAddin.Connect' -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue | Out-Null } }"},
+      {"id": "s5", "type": "execute", "label": "enaio Cache und Registry bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\OPTIMAL SYSTEMS\\enaio\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\OPTIMAL SYSTEMS\\enaio\\cache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Temp\\enaio*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s6", "type": "execute", "label": "Outlook starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'outlook.exe' -ErrorAction SilentlyContinue }"},
+      {"id": "s7", "type": "verify", "label": "enaio-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $proc = Get-Process -Name 'OUTLOOK' -ErrorAction SilentlyContinue; if ($proc) { 'OK: enaio komplett repariert, Outlook gestartet' } else { 'WARNUNG: Outlook muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-ZSC-001",
+    "name": "Zscaler Service Restart",
+    "category": "Zscaler",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Zscaler-Dienste prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Service -Name 'ZscalerService','ZSATunnel','ZSAService' -ErrorAction SilentlyContinue | Select-Object Name, Status, StartType }"},
+      {"id": "s2", "type": "execute", "label": "Zscaler-Dienste neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Restart-Service -Name 'ZscalerService' -Force -ErrorAction SilentlyContinue; Restart-Service -Name 'ZSATunnel' -Force -ErrorAction SilentlyContinue; Restart-Service -Name 'ZSAService' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Dienst-Neustart...", "waitSeconds": 5},
+      {"id": "s4", "type": "verify", "label": "Zscaler-Tunnel prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $svc = Get-Service -Name 'ZscalerService' -ErrorAction SilentlyContinue; $tunnel = Get-NetAdapter -Name '*Zscaler*' -ErrorAction SilentlyContinue; if ($svc.Status -eq 'Running') { 'OK: Zscaler-Dienst läuft' + $(if($tunnel){ ', Tunnel-Adapter aktiv' } else { '' }) } else { 'FEHLER: Zscaler-Dienst nicht gestartet' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-ZSC-002",
+    "name": "Zscaler Cache Reset",
+    "category": "Zscaler",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Zscaler-Dienste stoppen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service -Name 'ZscalerService','ZSATunnel','ZSAService' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Dienst-Stop...", "waitSeconds": 3},
+      {"id": "s3", "type": "execute", "label": "Zscaler Cache löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Remove-Item 'C:\\ProgramData\\Zscaler\\Cache\\*' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'C:\\ProgramData\\Zscaler\\ZSATunnel\\*.log' -Force -ErrorAction SilentlyContinue; $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Zscaler\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "execute", "label": "Zscaler-Dienste starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Service -Name 'ZscalerService' -ErrorAction SilentlyContinue; Start-Service -Name 'ZSATunnel' -ErrorAction SilentlyContinue; Start-Service -Name 'ZSAService' -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "verify", "label": "Zscaler prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 3; $svc = Get-Service -Name 'ZscalerService' -ErrorAction SilentlyContinue; if ($svc.Status -eq 'Running') { 'OK: Zscaler Cache bereinigt, Dienste laufen' } else { 'FEHLER: Zscaler-Dienst nicht gestartet' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-ZSC-003",
+    "name": "Zscaler Certificate Check + Fix",
+    "category": "Zscaler",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Zscaler-Zertifikat prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-ChildItem Cert:\\LocalMachine\\Root | Where-Object { $_.Subject -like '*Zscaler*' } | Select-Object Subject, NotAfter, Thumbprint }"},
+      {"id": "s2", "type": "conditional", "label": "Zertifikat vorhanden?", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $cert = Get-ChildItem Cert:\\LocalMachine\\Root | Where-Object { $_.Subject -like '*Zscaler*' }; if ($cert -and $cert.NotAfter -gt (Get-Date)) { 'VALID' } else { 'INVALID' } }", "successCondition": "result contains VALID"},
+      {"id": "s3", "type": "execute", "label": "Zscaler-Zertifikat neu installieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $zscalerPath = Get-ChildItem 'C:\\Program Files\\Zscaler' -Recurse -Filter '*.cer' -ErrorAction SilentlyContinue | Select-Object -First 1; if ($zscalerPath) { Import-Certificate -FilePath $zscalerPath.FullName -CertStoreLocation Cert:\\LocalMachine\\Root -ErrorAction SilentlyContinue; 'Zertifikat importiert' } else { 'Kein Zscaler-Zertifikat im Installationsverzeichnis gefunden' } }"},
+      {"id": "s4", "type": "execute", "label": "Zscaler-Dienste neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Restart-Service -Name 'ZscalerService' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "verify", "label": "Zertifikat-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $cert = Get-ChildItem Cert:\\LocalMachine\\Root | Where-Object { $_.Subject -like '*Zscaler*' -and $_.NotAfter -gt (Get-Date) }; if ($cert) { 'OK: Zscaler-Zertifikat gültig bis ' + $cert.NotAfter.ToString('dd.MM.yyyy') } else { 'FEHLER: Kein gültiges Zscaler-Zertifikat gefunden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PRN-001",
+    "name": "Spooler Quick Fix",
+    "category": "Drucker",
+    "estimatedDuration": "15 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Spooler-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Service -Name 'Spooler' | Select-Object Name, Status, StartType }"},
+      {"id": "s2", "type": "execute", "label": "Spooler neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Restart-Service -Name 'Spooler' -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Dienst-Neustart...", "waitSeconds": 3},
+      {"id": "s4", "type": "verify", "label": "Spooler-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $svc = Get-Service -Name 'Spooler'; if ($svc.Status -eq 'Running') { 'OK: Druckdienst läuft' } else { 'FEHLER: Druckdienst nicht gestartet' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PRN-002",
+    "name": "Spooler Deep Clean",
+    "category": "Drucker",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Spooler stoppen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service -Name 'Spooler' -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Dienst-Stop...", "waitSeconds": 2},
+      {"id": "s3", "type": "execute", "label": "Druckwarteschlange leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Remove-Item 'C:\\Windows\\System32\\spool\\PRINTERS\\*' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "execute", "label": "Spooler starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Service -Name 'Spooler' }"},
+      {"id": "s5", "type": "verify", "label": "Spooler-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $svc = Get-Service -Name 'Spooler'; $files = (Get-ChildItem 'C:\\Windows\\System32\\spool\\PRINTERS' -ErrorAction SilentlyContinue | Measure-Object).Count; if ($svc.Status -eq 'Running' -and $files -eq 0) { 'OK: Spooler läuft, Warteschlange leer' } else { 'FEHLER: Spooler-Status unklar' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PRN-003",
+    "name": "Printer Reinstall",
+    "category": "Drucker",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Installierte Drucker auflisten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Printer | Select-Object Name, DriverName, PortName, Shared }"},
+      {"id": "s2", "type": "execute", "label": "Spooler neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Restart-Service -Name 'Spooler' -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Dienst-Neustart...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "Netzwerkdrucker neu verbinden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $netPrinters = Get-Printer | Where-Object { $_.PortName -like '*\\\\*' }; foreach ($p in $netPrinters) { $port = $p.PortName; Remove-Printer -Name $p.Name -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1; Add-Printer -ConnectionName $port -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "verify", "label": "Drucker-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $printers = Get-Printer; if ($printers) { 'OK: ' + $printers.Count + ' Drucker installiert' } else { 'WARNUNG: Keine Drucker gefunden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PRN-004",
+    "name": "Print Queue Emergency Clear",
+    "category": "Drucker",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Druckaufträge prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PrintJob -PrinterName * -ErrorAction SilentlyContinue | Select-Object PrinterName, DocumentName, JobStatus, Size }"},
+      {"id": "s2", "type": "execute", "label": "Alle Druckaufträge löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Printer | ForEach-Object { Get-PrintJob -PrinterName $_.Name -ErrorAction SilentlyContinue | Remove-PrintJob -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "execute", "label": "Spooler bereinigen und neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service -Name 'Spooler' -Force; Start-Sleep -Seconds 2; Remove-Item 'C:\\Windows\\System32\\spool\\PRINTERS\\*' -Force -ErrorAction SilentlyContinue; Start-Service -Name 'Spooler' }"},
+      {"id": "s4", "type": "verify", "label": "Warteschlange prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $jobs = Get-PrintJob -PrinterName * -ErrorAction SilentlyContinue; $svc = Get-Service -Name 'Spooler'; if ($svc.Status -eq 'Running' -and -not $jobs) { 'OK: Druckwarteschlange komplett geleert' } else { 'WARNUNG: Noch Aufträge in der Warteschlange' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-NET-001",
+    "name": "DNS Reset",
+    "category": "Netzwerk",
+    "estimatedDuration": "15 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "DNS-Konfiguration prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses } | Select-Object InterfaceAlias, ServerAddresses }"},
+      {"id": "s2", "type": "execute", "label": "DNS-Cache leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ipconfig /flushdns }"},
+      {"id": "s3", "type": "execute", "label": "DNS neu registrieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ipconfig /registerdns }"},
+      {"id": "s4", "type": "verify", "label": "DNS-Auflösung testen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $result = Resolve-DnsName -Name 'google.com' -ErrorAction SilentlyContinue; if ($result) { 'OK: DNS-Auflösung funktioniert' } else { 'FEHLER: DNS-Auflösung fehlgeschlagen' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-NET-002",
+    "name": "Network Complete Reset",
+    "category": "Netzwerk",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Netzwerk wird komplett zurückgesetzt. Die Verbindung wird kurzzeitig unterbrochen."},
+      {"id": "s2", "type": "execute", "label": "DNS-Cache leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ipconfig /flushdns }"},
+      {"id": "s3", "type": "execute", "label": "Winsock zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { netsh winsock reset }"},
+      {"id": "s4", "type": "execute", "label": "TCP/IP zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { netsh int ip reset }"},
+      {"id": "s5", "type": "execute", "label": "ARP-Cache leeren und DHCP erneuern...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { arp -d *; ipconfig /release; Start-Sleep -Seconds 2; ipconfig /renew }"},
+      {"id": "s6", "type": "execute", "label": "DNS neu registrieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ipconfig /registerdns }"},
+      {"id": "s7", "type": "verify", "label": "Netzwerk-Konnektivität prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 3; $ping = Test-Connection -ComputerName '8.8.8.8' -Count 1 -Quiet; $dns = Resolve-DnsName 'google.com' -ErrorAction SilentlyContinue; if ($ping -and $dns) { 'OK: Netzwerk funktioniert (Ping + DNS)' } elseif ($ping) { 'WARNUNG: Ping OK aber DNS fehlgeschlagen' } else { 'FEHLER: Keine Netzwerkverbindung' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-NET-003",
+    "name": "WLAN Profile Reset",
+    "category": "Netzwerk",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "WLAN-Profile auflisten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { netsh wlan show profiles }"},
+      {"id": "s2", "type": "scan", "label": "Aktuelle WLAN-Verbindung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { netsh wlan show interfaces }"},
+      {"id": "s3", "type": "execute", "label": "WLAN-Verbindung trennen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { netsh wlan disconnect }"},
+      {"id": "s4", "type": "wait", "label": "Warten...", "waitSeconds": 2},
+      {"id": "s5", "type": "execute", "label": "WLAN-Profil neu verbinden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $profiles = netsh wlan show profiles | Select-String ':\\s+(.+)$' | ForEach-Object { $_.Matches.Groups[1].Value.Trim() }; if ($profiles) { netsh wlan connect name=\"$($profiles[0])\" } }"},
+      {"id": "s6", "type": "verify", "label": "WLAN-Verbindung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $iface = netsh wlan show interfaces; if ($iface -match 'Verbunden|connected') { 'OK: WLAN verbunden' } else { 'WARNUNG: WLAN nicht verbunden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-NET-004",
+    "name": "Network Adapter Reset",
+    "category": "Netzwerk",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Netzwerkadapter prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-NetAdapter | Select-Object Name, InterfaceDescription, Status, LinkSpeed }"},
+      {"id": "s2", "type": "execute", "label": "Netzwerkadapter deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-NetAdapter | Where-Object { $_.Status -eq 'Up' -and $_.InterfaceDescription -notlike '*Hyper-V*' -and $_.InterfaceDescription -notlike '*Zscaler*' } | Disable-NetAdapter -Confirm:$false }"},
+      {"id": "s3", "type": "wait", "label": "Warten...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "Netzwerkadapter aktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-NetAdapter | Where-Object { $_.Status -eq 'Disabled' -and $_.InterfaceDescription -notlike '*Hyper-V*' } | Enable-NetAdapter -Confirm:$false }"},
+      {"id": "s5", "type": "verify", "label": "Adapter-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $adapters = Get-NetAdapter | Where-Object { $_.Status -eq 'Up' }; if ($adapters) { 'OK: ' + $adapters.Count + ' Adapter aktiv' } else { 'FEHLER: Kein Adapter aktiv' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-NET-005",
+    "name": "Proxy Clear",
+    "category": "Netzwerk",
+    "estimatedDuration": "15 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Proxy-Einstellungen prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' | Select-Object ProxyEnable, ProxyServer, ProxyOverride, AutoConfigURL }"},
+      {"id": "s2", "type": "execute", "label": "Proxy-Einstellungen entfernen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $path = 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings'; Set-ItemProperty -Path $path -Name 'ProxyEnable' -Value 0 -ErrorAction SilentlyContinue; Remove-ItemProperty -Path $path -Name 'ProxyServer' -ErrorAction SilentlyContinue; Remove-ItemProperty -Path $path -Name 'ProxyOverride' -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "DNS-Cache leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ipconfig /flushdns }"},
+      {"id": "s4", "type": "verify", "label": "Proxy-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $proxy = Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name 'ProxyEnable' -ErrorAction SilentlyContinue; if ($proxy.ProxyEnable -eq 0) { 'OK: Proxy deaktiviert' } else { 'WARNUNG: Proxy noch aktiv' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-WIN-001",
+    "name": "SFC + DISM Combo",
+    "category": "Windows",
+    "estimatedDuration": "600 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Systemdateiprüfung wird ausgeführt. Dies kann einige Minuten dauern."},
+      {"id": "s2", "type": "execute", "label": "DISM RestoreHealth ausführen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { DISM /Online /Cleanup-Image /RestoreHealth }"},
+      {"id": "s3", "type": "execute", "label": "SFC Scan ausführen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { sfc /scannow }"},
+      {"id": "s4", "type": "verify", "label": "Ergebnis prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $cbsLog = Get-Content 'C:\\Windows\\Logs\\CBS\\CBS.log' -Tail 20 -ErrorAction SilentlyContinue; $violations = $cbsLog | Select-String 'Verification 100%|no integrity violations'; if ($violations) { 'OK: Systemdateiprüfung abgeschlossen - keine Fehler' } else { 'WARNUNG: Prüfung abgeschlossen - Log überprüfen' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-WIN-002",
+    "name": "Windows Update Reset",
+    "category": "Windows",
+    "estimatedDuration": "120 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Update-Dienste stoppen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service -Name 'wuauserv','cryptSvc','bits','msiserver' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Dienst-Stop...", "waitSeconds": 3},
+      {"id": "s3", "type": "execute", "label": "Update-Cache löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Rename-Item 'C:\\Windows\\SoftwareDistribution' 'C:\\Windows\\SoftwareDistribution.bak' -Force -ErrorAction SilentlyContinue; Rename-Item 'C:\\Windows\\System32\\catroot2' 'C:\\Windows\\System32\\catroot2.bak' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "execute", "label": "Update-Dienste starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Service -Name 'wuauserv','cryptSvc','bits','msiserver' -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "verify", "label": "Update-Dienste prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $svc = Get-Service -Name 'wuauserv'; if ($svc.Status -eq 'Running') { 'OK: Windows Update-Dienst läuft, Cache zurückgesetzt' } else { 'FEHLER: Windows Update-Dienst nicht gestartet' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-WIN-003",
+    "name": "Explorer Restart",
+    "category": "Windows",
+    "estimatedDuration": "15 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Explorer beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'explorer' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten...", "waitSeconds": 2},
+      {"id": "s3", "type": "execute", "label": "Explorer starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'explorer.exe' }"},
+      {"id": "s4", "type": "verify", "label": "Explorer-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 3; $proc = Get-Process -Name 'explorer' -ErrorAction SilentlyContinue; if ($proc) { 'OK: Explorer läuft wieder' } else { 'FEHLER: Explorer nicht gestartet' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-WIN-004",
+    "name": "Icon Cache Reset",
+    "category": "Windows",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Explorer beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'explorer' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten...", "waitSeconds": 2},
+      {"id": "s3", "type": "execute", "label": "Icon Cache löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\IconCache.db\" -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Windows\\Explorer\\iconcache*\" -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Windows\\Explorer\\thumbcache*\" -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "execute", "label": "Explorer starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Process 'explorer.exe' }"},
+      {"id": "s5", "type": "verify", "label": "Explorer-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 3; $proc = Get-Process -Name 'explorer' -ErrorAction SilentlyContinue; if ($proc) { 'OK: Icon Cache zurückgesetzt, Explorer läuft' } else { 'FEHLER: Explorer nicht gestartet' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-WIN-005",
+    "name": "Windows Search Reset",
+    "category": "Windows",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Windows Search stoppen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service -Name 'WSearch' -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Dienst-Stop...", "waitSeconds": 2},
+      {"id": "s3", "type": "execute", "label": "Such-Index löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Remove-Item 'C:\\ProgramData\\Microsoft\\Search\\Data\\Applications\\Windows\\Windows.edb' -Force -ErrorAction SilentlyContinue; Remove-Item 'C:\\ProgramData\\Microsoft\\Search\\Data\\Applications\\Windows\\*.log' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "execute", "label": "Windows Search starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Service -Name 'WSearch' }"},
+      {"id": "s5", "type": "verify", "label": "Such-Dienst prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $svc = Get-Service -Name 'WSearch'; if ($svc.Status -eq 'Running') { 'OK: Windows Search läuft, Index wird neu aufgebaut' } else { 'FEHLER: Windows Search nicht gestartet' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-WIN-006",
+    "name": "Temp Files Cleanup",
+    "category": "Windows",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Temp-Dateien zählen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $winTemp = (Get-ChildItem 'C:\\Windows\\Temp' -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum); $userTemp = 0; Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*' | ForEach-Object { $userTemp += (Get-ChildItem \"$($_.FullName)\\AppData\\Local\\Temp\" -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum }; \"Windows Temp: $([math]::Round($winTemp.Sum/1MB,1)) MB, User Temp: $([math]::Round($userTemp/1MB,1)) MB\" }"},
+      {"id": "s2", "type": "execute", "label": "Temp-Verzeichnisse bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Remove-Item 'C:\\Windows\\Temp\\*' -Recurse -Force -ErrorAction SilentlyContinue; $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Temp\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "execute", "label": "DNS-Cache und Thumbnails bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ipconfig /flushdns; $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Windows\\Explorer\\thumbcache*\" -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "verify", "label": "Bereinigung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $winTemp = (Get-ChildItem 'C:\\Windows\\Temp' -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum; if ($winTemp -lt 10MB) { 'OK: Temp-Dateien bereinigt' } else { 'WARNUNG: Einige Temp-Dateien konnten nicht gelöscht werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-WIN-007",
+    "name": "Autostart Cleanup",
+    "category": "Windows",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Autostart-Einträge auflisten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-CimInstance -ClassName Win32_StartupCommand | Select-Object Name, Command, Location, User }"},
+      {"id": "s2", "type": "scan", "label": "Registrierungs-Autostart prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $paths = @('HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run','HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce'); foreach ($p in $paths) { Get-ItemProperty $p -ErrorAction SilentlyContinue | Select-Object * -ExcludeProperty PS* } }"},
+      {"id": "s3", "type": "execute", "label": "Schwere Autostart-Programme deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $heavyApps = @('iTunesHelper','Spotify','Steam','Discord','AdobeAAMUpdater','AdobeGCInvoker'); $tasks = Get-ScheduledTask | Where-Object { $_.TaskName -in $heavyApps -and $_.State -eq 'Ready' }; $tasks | Disable-ScheduledTask -ErrorAction SilentlyContinue; 'Deaktiviert: ' + ($tasks.TaskName -join ', ') }"},
+      {"id": "s4", "type": "verify", "label": "Autostart-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $count = (Get-CimInstance -ClassName Win32_StartupCommand | Measure-Object).Count; 'OK: ' + $count + ' Autostart-Einträge aktiv' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-WIN-008",
+    "name": "Windows Complete Maintenance",
+    "category": "Windows",
+    "estimatedDuration": "900 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Komplette Systemwartung wird durchgeführt. Dies kann 10-15 Minuten dauern."},
+      {"id": "s2", "type": "execute", "label": "Temp-Dateien bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Remove-Item 'C:\\Windows\\Temp\\*' -Recurse -Force -ErrorAction SilentlyContinue; $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Temp\\*\" -Recurse -Force -ErrorAction SilentlyContinue }; ipconfig /flushdns }"},
+      {"id": "s3", "type": "execute", "label": "Windows Update-Check...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { if (Get-Module -ListAvailable -Name PSWindowsUpdate) { Install-WindowsUpdate -AcceptAll -AutoReboot:$false -ErrorAction SilentlyContinue } else { Start-Process 'UsoClient.exe' -ArgumentList 'ScanInstallWait' -Wait -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "execute", "label": "SFC Scan...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { sfc /scannow }"},
+      {"id": "s5", "type": "execute", "label": "Festplatte optimieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $disk = Get-PhysicalDisk | Select-Object -First 1; if ($disk.MediaType -eq 'SSD') { Optimize-Volume -DriveLetter C -ReTrim -ErrorAction SilentlyContinue; 'SSD TRIM ausgeführt' } else { Optimize-Volume -DriveLetter C -Defrag -ErrorAction SilentlyContinue; 'HDD Defragmentierung ausgeführt' } }"},
+      {"id": "s6", "type": "verify", "label": "Wartung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $freeSpace = [math]::Round((Get-PSDrive C).Free/1GB,1); 'OK: Wartung abgeschlossen, freier Speicher: ' + $freeSpace + ' GB' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PERF-001",
+    "name": "Performance Quick Fix",
+    "category": "Performance",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Top CPU-Prozesse prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process | Sort-Object CPU -Descending | Select-Object -First 10 Name, Id, CPU, @{N='MemMB';E={[math]::Round($_.WorkingSet64/1MB,1)}} }"},
+      {"id": "s2", "type": "execute", "label": "Ressourcenfresser beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $protected = @('System','smss','csrss','wininit','services','lsass','svchost','explorer','dwm','winlogon'); Get-Process | Where-Object { $_.CPU -gt 300 -and $_.Name -notin $protected } | Stop-Process -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "Temp-Dateien bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Remove-Item 'C:\\Windows\\Temp\\*' -Recurse -Force -ErrorAction SilentlyContinue; $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Temp\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "execute", "label": "Energieplan auf Höchstleistung setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c }"},
+      {"id": "s5", "type": "verify", "label": "Performance prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $cpu = (Get-CimInstance Win32_Processor).LoadPercentage; $mem = [math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory/1MB,1); 'OK: CPU-Auslastung: ' + $cpu + '%, Freier RAM: ' + $mem + ' GB' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PERF-002",
+    "name": "Disk 100% Fix",
+    "category": "Performance",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Datenträgerauslastung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Counter '\\PhysicalDisk(_Total)\\% Disk Time' -ErrorAction SilentlyContinue | ForEach-Object { $_.CounterSamples | Select-Object Path, CookedValue } }"},
+      {"id": "s2", "type": "execute", "label": "Superfetch/SysMain deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service -Name 'SysMain' -Force -ErrorAction SilentlyContinue; Set-Service -Name 'SysMain' -StartupType Disabled -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "Windows Search-Indexierung pausieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service -Name 'WSearch' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "execute", "label": "Connected User Experiences deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service -Name 'DiagTrack' -Force -ErrorAction SilentlyContinue; Set-Service -Name 'DiagTrack' -StartupType Disabled -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "verify", "label": "Datenträgerauslastung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $disk = Get-Counter '\\PhysicalDisk(_Total)\\% Disk Time' -ErrorAction SilentlyContinue; $val = [math]::Round($disk.CounterSamples[0].CookedValue,0); if ($val -lt 80) { 'OK: Datenträgerauslastung: ' + $val + '%' } else { 'WARNUNG: Datenträgerauslastung noch bei ' + $val + '%' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PERF-003",
+    "name": "RAM Cleanup",
+    "category": "Performance",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "RAM-Nutzung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $os = Get-CimInstance Win32_OperatingSystem; $total = [math]::Round($os.TotalVisibleMemorySize/1MB,1); $free = [math]::Round($os.FreePhysicalMemory/1MB,1); $used = $total - $free; \"RAM: $used / $total GB belegt ($([math]::Round(($used/$total)*100,0))%)\"; Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 10 Name, @{N='MemMB';E={[math]::Round($_.WorkingSet64/1MB,0)}} }"},
+      {"id": "s2", "type": "execute", "label": "Speicherfressende Prozesse beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $protected = @('System','smss','csrss','wininit','services','lsass','svchost','explorer','dwm','winlogon','OUTLOOK','ms-teams','Teams'); Get-Process | Where-Object { $_.WorkingSet64 -gt 500MB -and $_.Name -notin $protected } | Stop-Process -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "Standby-Liste leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { [System.GC]::Collect(); [System.GC]::WaitForPendingFinalizers() }"},
+      {"id": "s4", "type": "verify", "label": "RAM-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $os = Get-CimInstance Win32_OperatingSystem; $free = [math]::Round($os.FreePhysicalMemory/1MB,1); $pct = [math]::Round(($os.FreePhysicalMemory/$os.TotalVisibleMemorySize)*100,0); if ($pct -gt 20) { 'OK: Freier RAM: ' + $free + ' GB (' + $pct + '%)' } else { 'WARNUNG: Wenig freier RAM: ' + $free + ' GB (' + $pct + '%)' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PERF-004",
+    "name": "Boot Speed Fix",
+    "category": "Performance",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Boot-Zeit prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $boot = Get-CimInstance Win32_OperatingSystem; $uptime = (Get-Date) - $boot.LastBootUpTime; \"Letzer Boot: $($boot.LastBootUpTime), Uptime: $([math]::Round($uptime.TotalHours,1)) Stunden\"; Get-CimInstance -ClassName Win32_StartupCommand | Select-Object Name, Command }"},
+      {"id": "s2", "type": "execute", "label": "Schwere Autostart-Programme deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $heavyApps = @('iTunesHelper','Spotify','Steam','Discord','AdobeAAMUpdater','AdobeGCInvoker','OneDrive','Skype'); foreach ($app in $heavyApps) { $regPaths = @('HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run','HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run'); foreach ($rp in $regPaths) { $val = Get-ItemProperty $rp -Name $app -ErrorAction SilentlyContinue; if ($val) { Remove-ItemProperty $rp -Name $app -ErrorAction SilentlyContinue } } } }"},
+      {"id": "s3", "type": "execute", "label": "Temp-Dateien bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Remove-Item 'C:\\Windows\\Temp\\*' -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item 'C:\\Windows\\Prefetch\\*' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "execute", "label": "Schnellstart aktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { powercfg /hibernate on; Set-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power' -Name 'HiberbootEnabled' -Value 1 -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "verify", "label": "Boot-Optimierung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $startupCount = (Get-CimInstance -ClassName Win32_StartupCommand | Measure-Object).Count; 'OK: Boot-Optimierung abgeschlossen, ' + $startupCount + ' Autostart-Einträge verbleiben' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PERF-005",
+    "name": "Full Performance Tune",
+    "category": "Performance",
+    "estimatedDuration": "120 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Komplette Performance-Optimierung wird durchgeführt. Dies kann einige Minuten dauern."},
+      {"id": "s2", "type": "execute", "label": "Ressourcenfresser beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $protected = @('System','smss','csrss','wininit','services','lsass','svchost','explorer','dwm','winlogon','OUTLOOK','ms-teams','Teams'); Get-Process | Where-Object { ($_.CPU -gt 300 -or $_.WorkingSet64 -gt 500MB) -and $_.Name -notin $protected } | Stop-Process -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "Temp und Cache bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Remove-Item 'C:\\Windows\\Temp\\*' -Recurse -Force -ErrorAction SilentlyContinue; $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Temp\\*\" -Recurse -Force -ErrorAction SilentlyContinue }; ipconfig /flushdns }"},
+      {"id": "s4", "type": "execute", "label": "Unnötige Dienste deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service -Name 'SysMain' -Force -ErrorAction SilentlyContinue; Set-Service -Name 'SysMain' -StartupType Disabled -ErrorAction SilentlyContinue; Stop-Service -Name 'DiagTrack' -Force -ErrorAction SilentlyContinue; Set-Service -Name 'DiagTrack' -StartupType Disabled -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "execute", "label": "Energieplan optimieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c }"},
+      {"id": "s6", "type": "execute", "label": "Autostart optimieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $heavyApps = @('iTunesHelper','Spotify','Steam','Discord','AdobeAAMUpdater','AdobeGCInvoker'); foreach ($app in $heavyApps) { Remove-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' -Name $app -ErrorAction SilentlyContinue; Remove-ItemProperty 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' -Name $app -ErrorAction SilentlyContinue } }"},
+      {"id": "s7", "type": "verify", "label": "Performance prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $cpu = (Get-CimInstance Win32_Processor).LoadPercentage; $os = Get-CimInstance Win32_OperatingSystem; $freeMem = [math]::Round($os.FreePhysicalMemory/1MB,1); $freeSpace = [math]::Round((Get-PSDrive C).Free/1GB,1); 'OK: CPU: ' + $cpu + '%, Freier RAM: ' + $freeMem + ' GB, Freier Speicher: ' + $freeSpace + ' GB' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-OFF-001",
+    "name": "Office Quick Repair",
+    "category": "Office",
+    "estimatedDuration": "120 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Office Schnellreparatur wird ausgeführt. Bitte schließen Sie alle Office-Anwendungen."},
+      {"id": "s2", "type": "execute", "label": "Office-Anwendungen beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK','WINWORD','EXCEL','POWERPNT','ONENOTE','MSACCESS' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "Office Quick Repair ausführen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $c2r = Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Office\\ClickToRun\\Configuration' -ErrorAction SilentlyContinue; if ($c2r) { Start-Process 'C:\\Program Files\\Common Files\\Microsoft Shared\\ClickToRun\\OfficeC2RClient.exe' -ArgumentList 'scenario=Repair','platform=x64','culture=de-de','RepairType=QuickRepair','DisplayLevel=False' -Wait -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "verify", "label": "Office-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $office = Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Office\\ClickToRun\\Configuration' -ErrorAction SilentlyContinue; if ($office) { 'OK: Office Schnellreparatur abgeschlossen - Version: ' + $office.VersionToReport } else { 'WARNUNG: Office-Installation nicht gefunden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-OFF-002",
+    "name": "Office Online Repair",
+    "category": "Office",
+    "estimatedDuration": "600 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Office Online-Reparatur wird ausgeführt. Dies kann 10-15 Minuten dauern. Bitte schließen Sie alle Office-Anwendungen."},
+      {"id": "s2", "type": "execute", "label": "Office-Anwendungen beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK','WINWORD','EXCEL','POWERPNT','ONENOTE','MSACCESS' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "Office Online Repair ausführen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $c2r = Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Office\\ClickToRun\\Configuration' -ErrorAction SilentlyContinue; if ($c2r) { Start-Process 'C:\\Program Files\\Common Files\\Microsoft Shared\\ClickToRun\\OfficeC2RClient.exe' -ArgumentList 'scenario=Repair','platform=x64','culture=de-de','RepairType=FullRepair','DisplayLevel=False' -Wait -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "verify", "label": "Office-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $office = Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Office\\ClickToRun\\Configuration' -ErrorAction SilentlyContinue; if ($office) { 'OK: Office Online-Reparatur abgeschlossen - Version: ' + $office.VersionToReport } else { 'WARNUNG: Office-Installation prüfen' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-OFF-003",
+    "name": "Office Credential Reset",
+    "category": "Office",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Office-Anwendungen beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OUTLOOK','WINWORD','EXCEL','POWERPNT','ONENOTE','ms-teams','Teams' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s3", "type": "execute", "label": "Office-Credentials bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { cmdkey /list | Select-String 'MicrosoftOffice|Office16|OneDrive|MicrosoftTeams' | ForEach-Object { $line = $_.ToString().Trim(); if ($line -match 'Ziel:\\s*(.+)$' -or $line -match 'Target:\\s*(.+)$') { cmdkey /delete:$($Matches[1].Trim()) 2>$null } } }"},
+      {"id": "s4", "type": "execute", "label": "Office-Identity-Cache bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $sids = (Get-ChildItem 'Registry::HKEY_USERS' -ErrorAction SilentlyContinue).PSChildName; foreach ($sid in $sids) { Remove-Item \"Registry::HKEY_USERS\\$sid\\Software\\Microsoft\\Office\\16.0\\Common\\Identity\\Identities\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "verify", "label": "Credential-Bereinigung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $remaining = cmdkey /list | Select-String 'MicrosoftOffice|Office16' | Measure-Object; if ($remaining.Count -eq 0) { 'OK: Office-Credentials bereinigt - Neuanmeldung erforderlich' } else { 'WARNUNG: Einige Credentials konnten nicht entfernt werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-ODS-001",
+    "name": "OneDrive Reset",
+    "category": "OneDrive",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "OneDrive-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OneDrive' -ErrorAction SilentlyContinue | Select-Object Name, Id, StartTime }"},
+      {"id": "s2", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: OneDrive wird zurückgesetzt. Ihre Dateien bleiben erhalten, die Synchronisierung startet danach neu."},
+      {"id": "s3", "type": "execute", "label": "OneDrive zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $odPaths = @('C:\\Program Files\\Microsoft OneDrive\\onedrive.exe','C:\\Program Files (x86)\\Microsoft OneDrive\\onedrive.exe','$env:LOCALAPPDATA\\Microsoft\\OneDrive\\onedrive.exe'); foreach ($p in $odPaths) { $expanded = [Environment]::ExpandEnvironmentVariables($p); if (Test-Path $expanded) { Start-Process $expanded -ArgumentList '/reset' -ErrorAction SilentlyContinue; break } } }"},
+      {"id": "s4", "type": "wait", "label": "Warten auf Reset...", "waitSeconds": 10},
+      {"id": "s5", "type": "verify", "label": "OneDrive-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $proc = Get-Process -Name 'OneDrive' -ErrorAction SilentlyContinue; if ($proc) { 'OK: OneDrive zurückgesetzt und läuft' } else { 'WARNUNG: OneDrive muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-ODS-002",
+    "name": "OneDrive Sync Fix",
+    "category": "OneDrive",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "OneDrive stoppen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'OneDrive' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s3", "type": "execute", "label": "OneDrive Sync-Cache bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\OneDrive\\logs\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\OneDrive\\settings\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "execute", "label": "OneDrive starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $odPaths = @('C:\\Program Files\\Microsoft OneDrive\\onedrive.exe','C:\\Program Files (x86)\\Microsoft OneDrive\\onedrive.exe'); foreach ($p in $odPaths) { if (Test-Path $p) { Start-Process $p -ErrorAction SilentlyContinue; break } } }"},
+      {"id": "s5", "type": "verify", "label": "OneDrive-Sync prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 5; $proc = Get-Process -Name 'OneDrive' -ErrorAction SilentlyContinue; if ($proc) { 'OK: OneDrive gestartet, Synchronisierung läuft' } else { 'WARNUNG: OneDrive muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SAP-001",
+    "name": "SAP Cache Clear",
+    "category": "SAP",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "SAP-Prozesse beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'saplogon','sapgui' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 2},
+      {"id": "s3", "type": "execute", "label": "SAP Traces und Temp löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Roaming\\SAP\\Common\\*.trc\" -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\SAP\\Common\\*.log\" -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\SAP\\*\" -Recurse -Force -ErrorAction SilentlyContinue }; Remove-Item 'C:\\Windows\\Temp\\sap*' -Recurse -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "verify", "label": "SAP-Cache prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $sapFiles = Get-ChildItem 'C:\\Windows\\Temp\\sap*' -ErrorAction SilentlyContinue; if (-not $sapFiles) { 'OK: SAP Cache und Traces bereinigt' } else { 'WARNUNG: Einige SAP-Dateien konnten nicht gelöscht werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SAP-002",
+    "name": "SAP Connection Fix",
+    "category": "SAP",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "SAP-Verbindung testen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $sapPorts = @(3200,3300,3600,8000); foreach ($port in $sapPorts) { $result = Test-NetConnection -ComputerName 'sap-server' -Port $port -WarningAction SilentlyContinue -ErrorAction SilentlyContinue; \"Port ${port}: $($result.TcpTestSucceeded)\" } }"},
+      {"id": "s2", "type": "execute", "label": "SAP-Prozesse beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'saplogon','sapgui' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s3", "type": "execute", "label": "SAP Cache bereinigen und DNS flush...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\SAP\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\SAP\\Common\\*.trc\" -Force -ErrorAction SilentlyContinue }; ipconfig /flushdns }"},
+      {"id": "s4", "type": "execute", "label": "SAP GUI starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $sapPath = Get-ChildItem 'C:\\Program Files*\\SAP\\FrontEnd\\SAPgui' -Filter 'saplogon.exe' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1; if ($sapPath) { Start-Process $sapPath.FullName -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "verify", "label": "SAP-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Sleep -Seconds 3; $proc = Get-Process -Name 'saplogon' -ErrorAction SilentlyContinue; if ($proc) { 'OK: SAP GUI gestartet' } else { 'WARNUNG: SAP GUI muss manuell gestartet werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-AUTH-001",
+    "name": "Kerberos Reset",
+    "category": "Auth",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Kerberos-Tickets prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { klist }"},
+      {"id": "s2", "type": "execute", "label": "Kerberos-Tickets löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { klist purge }"},
+      {"id": "s3", "type": "execute", "label": "DNS-Cache leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ipconfig /flushdns }"},
+      {"id": "s4", "type": "execute", "label": "Gruppenrichtlinien aktualisieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { gpupdate /force }"},
+      {"id": "s5", "type": "verify", "label": "Kerberos-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $tickets = klist 2>&1; if ($tickets -match 'Ticket|krbtgt') { 'OK: Neue Kerberos-Tickets ausgestellt' } else { 'WARNUNG: Keine Kerberos-Tickets gefunden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-AUTH-002",
+    "name": "Domain Trust Repair",
+    "category": "Auth",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Domänen-Vertrauensstellung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Test-ComputerSecureChannel -Verbose 2>&1 }"},
+      {"id": "s2", "type": "execute", "label": "Vertrauensstellung reparieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Test-ComputerSecureChannel -Repair -Credential (Get-Credential) -Verbose 2>&1 }"},
+      {"id": "s3", "type": "execute", "label": "Gruppenrichtlinien aktualisieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { gpupdate /force }"},
+      {"id": "s4", "type": "verify", "label": "Vertrauensstellung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $result = Test-ComputerSecureChannel; if ($result) { 'OK: Domänen-Vertrauensstellung intakt' } else { 'FEHLER: Vertrauensstellung defekt - Neustart oder Rejoin erforderlich' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-AUTH-003",
+    "name": "NTP/Time Fix",
+    "category": "Auth",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Systemzeit prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { w32tm /query /status }"},
+      {"id": "s2", "type": "execute", "label": "Zeitdienst neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Restart-Service -Name 'w32time' -Force }"},
+      {"id": "s3", "type": "execute", "label": "Domänen-Zeitquelle konfigurieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { w32tm /config /syncfromflags:domhier /update }"},
+      {"id": "s4", "type": "execute", "label": "Zeit synchronisieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { w32tm /resync /force }"},
+      {"id": "s5", "type": "execute", "label": "Kerberos-Tickets erneuern...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { klist purge }"},
+      {"id": "s6", "type": "verify", "label": "Zeitsynchronisation prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $status = w32tm /query /status 2>&1; if ($status -match 'Leap Indicator:|Quelle:|Source:') { 'OK: Zeitsynchronisation aktiv' } else { 'WARNUNG: Zeitsynchronisation prüfen' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-AUTH-004",
+    "name": "Credential Manager Cleanup",
+    "category": "Auth",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Gespeicherte Credentials auflisten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { cmdkey /list }"},
+      {"id": "s2", "type": "execute", "label": "Office/Teams/VPN Credentials löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $patterns = @('MicrosoftOffice','Office','Teams','OneDrive','VPN','RAS'); cmdkey /list | Select-String 'Ziel:|Target:' | ForEach-Object { $target = ($_ -replace '.*(?:Ziel|Target):\\s*','').Trim(); foreach ($p in $patterns) { if ($target -like \"*$p*\") { cmdkey /delete:$target 2>$null; \"Gelöscht: $target\"; break } } } }"},
+      {"id": "s3", "type": "verify", "label": "Credential-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $remaining = cmdkey /list | Select-String 'Office|Teams|OneDrive|VPN'; if (-not $remaining) { 'OK: Office/Teams/VPN Credentials bereinigt' } else { 'WARNUNG: Einige Credentials verbleiben' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-AUTH-005",
+    "name": "Account Lockout Investigation",
+    "category": "Auth",
+    "estimatedDuration": "15 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": false,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Benutzer-Kontostatus prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $user = (Get-CimInstance Win32_ComputerSystem).UserName; if ($user) { $samName = $user.Split('\\')[-1]; $adUser = Get-ADUser -Identity $samName -Properties LockedOut, BadLogonCount, LastBadPasswordAttempt, LastLogonDate, PasswordExpired, PasswordLastSet -ErrorAction SilentlyContinue; $adUser | Select-Object Name, LockedOut, BadLogonCount, LastBadPasswordAttempt, LastLogonDate, PasswordExpired, PasswordLastSet } }"},
+      {"id": "s2", "type": "scan", "label": "Fehlgeschlagene Anmeldungen prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-WinEvent -FilterHashtable @{LogName='Security';Id=4625} -MaxEvents 10 -ErrorAction SilentlyContinue | Select-Object TimeCreated, @{N='User';E={$_.Properties[5].Value}}, @{N='Source';E={$_.Properties[19].Value}} }"},
+      {"id": "s3", "type": "verify", "label": "Ergebnis zusammenfassen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $user = (Get-CimInstance Win32_ComputerSystem).UserName; if ($user) { $samName = $user.Split('\\')[-1]; $adUser = Get-ADUser -Identity $samName -Properties LockedOut, BadLogonCount -ErrorAction SilentlyContinue; if ($adUser.LockedOut) { 'WARNUNG: Konto ist GESPERRT - BadLogonCount: ' + $adUser.BadLogonCount } else { 'OK: Konto ist aktiv - BadLogonCount: ' + $adUser.BadLogonCount } } else { 'WARNUNG: Kein Benutzer angemeldet' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-HW-001",
+    "name": "Audio Device Reset",
+    "category": "Hardware",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Audio-Geräte auflisten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'AudioEndpoint','MEDIA' -ErrorAction SilentlyContinue | Select-Object FriendlyName, Status, Class }"},
+      {"id": "s2", "type": "execute", "label": "Audio-Geräte deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'AudioEndpoint' -Status OK -ErrorAction SilentlyContinue | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "wait", "label": "Warten...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "Audio-Geräte aktivieren und Dienst neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'AudioEndpoint' -ErrorAction SilentlyContinue | ForEach-Object { Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue }; Restart-Service -Name 'Audiosrv' -Force }"},
+      {"id": "s5", "type": "verify", "label": "Audio-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $devices = Get-PnpDevice -Class 'AudioEndpoint' -Status OK -ErrorAction SilentlyContinue; $svc = Get-Service 'Audiosrv'; if ($devices -and $svc.Status -eq 'Running') { 'OK: ' + ($devices | Measure-Object).Count + ' Audio-Geräte aktiv, Dienst läuft' } else { 'FEHLER: Audio-Geräte oder Dienst nicht verfügbar' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-HW-002",
+    "name": "USB Reset",
+    "category": "Hardware",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "USB-Controller auflisten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'USB' -ErrorAction SilentlyContinue | Select-Object FriendlyName, Status, InstanceId }"},
+      {"id": "s2", "type": "execute", "label": "USB-Controller deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'USB' -Status OK -ErrorAction SilentlyContinue | Where-Object { $_.FriendlyName -like '*Host Controller*' -or $_.FriendlyName -like '*USB-Root*' } | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "wait", "label": "Warten...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "USB-Controller aktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'USB' -ErrorAction SilentlyContinue | Where-Object { $_.FriendlyName -like '*Host Controller*' -or $_.FriendlyName -like '*USB-Root*' } | ForEach-Object { Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "verify", "label": "USB-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $usb = Get-PnpDevice -Class 'USB' -Status OK -ErrorAction SilentlyContinue; if ($usb) { 'OK: ' + ($usb | Measure-Object).Count + ' USB-Geräte aktiv' } else { 'FEHLER: Keine USB-Geräte erkannt' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-HW-003",
+    "name": "Bluetooth Reset",
+    "category": "Hardware",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Bluetooth-Adapter prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'Bluetooth' -ErrorAction SilentlyContinue | Select-Object FriendlyName, Status, InstanceId }"},
+      {"id": "s2", "type": "execute", "label": "Bluetooth-Adapter deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'Bluetooth' -Status OK -ErrorAction SilentlyContinue | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "wait", "label": "Warten...", "waitSeconds": 3},
+      {"id": "s4", "type": "execute", "label": "Bluetooth-Adapter aktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'Bluetooth' -ErrorAction SilentlyContinue | ForEach-Object { Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue }; Restart-Service -Name 'bthserv' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "verify", "label": "Bluetooth-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $bt = Get-PnpDevice -Class 'Bluetooth' -Status OK -ErrorAction SilentlyContinue; if ($bt) { 'OK: Bluetooth aktiv - ' + ($bt | Measure-Object).Count + ' Geräte' } else { 'FEHLER: Kein Bluetooth-Adapter gefunden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-HW-004",
+    "name": "Display/Monitor Reset",
+    "category": "Hardware",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Display-Adapter prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'Display' -ErrorAction SilentlyContinue | Select-Object FriendlyName, Status, InstanceId; Get-PnpDevice -Class 'Monitor' -ErrorAction SilentlyContinue | Select-Object FriendlyName, Status }"},
+      {"id": "s2", "type": "execute", "label": "Display-Adapter neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice -Class 'Display' -Status OK -ErrorAction SilentlyContinue | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue }; Start-Sleep -Seconds 3; Get-PnpDevice -Class 'Display' -ErrorAction SilentlyContinue | ForEach-Object { Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "wait", "label": "Warten auf Display-Neustart...", "waitSeconds": 5},
+      {"id": "s4", "type": "verify", "label": "Display-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $display = Get-PnpDevice -Class 'Display' -Status OK -ErrorAction SilentlyContinue; $monitors = Get-PnpDevice -Class 'Monitor' -Status OK -ErrorAction SilentlyContinue; if ($display) { 'OK: Display-Adapter aktiv, ' + ($monitors | Measure-Object).Count + ' Monitor(e) erkannt' } else { 'FEHLER: Display-Adapter nicht verfügbar' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-HW-005",
+    "name": "Device Error Fix",
+    "category": "Hardware",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Geräte mit Fehlern suchen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice | Where-Object { $_.Status -ne 'OK' } | Select-Object FriendlyName, Status, Class, InstanceId }"},
+      {"id": "s2", "type": "execute", "label": "Hardware-Änderungen suchen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { pnputil /scan-devices }"},
+      {"id": "s3", "type": "execute", "label": "Problematische Geräte neu installieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PnpDevice | Where-Object { $_.Status -eq 'Error' -or $_.Status -eq 'Degraded' } | ForEach-Object { Disable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1; Enable-PnpDevice -InstanceId $_.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "verify", "label": "Geräte-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $errors = Get-PnpDevice | Where-Object { $_.Status -ne 'OK' -and $_.Status -ne 'Unknown' }; if (-not $errors) { 'OK: Keine Gerätefehler gefunden' } else { 'WARNUNG: ' + ($errors | Measure-Object).Count + ' Geräte mit Problemen' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-BRW-001",
+    "name": "Chrome Cache Clear",
+    "category": "Browser",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Chrome beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'chrome' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s3", "type": "execute", "label": "Chrome Cache löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Code Cache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\GPUCache\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "verify", "label": "Cache-Bereinigung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; $totalSize = 0; foreach ($u in $users) { $totalSize += (Get-ChildItem \"$($u.FullName)\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache\" -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum }; if ($totalSize -lt 10MB) { 'OK: Chrome Cache bereinigt' } else { 'WARNUNG: Cache nicht vollständig geleert' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-BRW-002",
+    "name": "Edge Cache Clear",
+    "category": "Browser",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Edge beenden...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Process -Name 'msedge' -ErrorAction SilentlyContinue | Stop-Process -Force }"},
+      {"id": "s2", "type": "wait", "label": "Warten auf Prozessende...", "waitSeconds": 3},
+      {"id": "s3", "type": "execute", "label": "Edge Cache löschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Code Cache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\GPUCache\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "verify", "label": "Cache-Bereinigung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; $totalSize = 0; foreach ($u in $users) { $totalSize += (Get-ChildItem \"$($u.FullName)\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache\" -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum }; if ($totalSize -lt 10MB) { 'OK: Edge Cache bereinigt' } else { 'WARNUNG: Cache nicht vollständig geleert' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SYS-001",
+    "name": "NTP Sync Fix",
+    "category": "Systemeinstellungen",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Zeitsynchronisation prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { w32tm /query /status; w32tm /query /source }"},
+      {"id": "s2", "type": "execute", "label": "Zeitdienst neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Restart-Service -Name 'w32time' -Force }"},
+      {"id": "s3", "type": "execute", "label": "Domänen-Zeitquelle konfigurieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { w32tm /config /syncfromflags:domhier /update }"},
+      {"id": "s4", "type": "execute", "label": "Zeit resynchronisieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { w32tm /resync /force }"},
+      {"id": "s5", "type": "verify", "label": "Zeitsync prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $source = w32tm /query /source 2>&1; if ($source -and $source -notmatch 'error|Fehler') { 'OK: Zeitsynchronisation aktiv - Quelle: ' + $source.Trim() } else { 'WARNUNG: Zeitsynchronisation prüfen' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SYS-002",
+    "name": "Proxy Reset",
+    "category": "Systemeinstellungen",
+    "estimatedDuration": "15 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Proxy-Einstellungen prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { netsh winhttp show proxy; Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' | Select-Object ProxyEnable, ProxyServer, AutoConfigURL }"},
+      {"id": "s2", "type": "execute", "label": "Proxy zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { netsh winhttp reset proxy; $path = 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings'; Set-ItemProperty -Path $path -Name 'ProxyEnable' -Value 0 -ErrorAction SilentlyContinue; Remove-ItemProperty -Path $path -Name 'ProxyServer' -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "DNS-Cache leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ipconfig /flushdns }"},
+      {"id": "s4", "type": "verify", "label": "Proxy-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $proxy = Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name 'ProxyEnable' -ErrorAction SilentlyContinue; if ($proxy.ProxyEnable -eq 0) { 'OK: Proxy deaktiviert' } else { 'WARNUNG: Proxy noch aktiv' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SYS-003",
+    "name": "RDP Enable",
+    "category": "Systemeinstellungen",
+    "estimatedDuration": "15 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "RDP-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server' -Name 'fDenyTSConnections' | Select-Object fDenyTSConnections }"},
+      {"id": "s2", "type": "execute", "label": "RDP aktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server' -Name 'fDenyTSConnections' -Value 0 }"},
+      {"id": "s3", "type": "execute", "label": "Firewall-Regel hinzufügen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Enable-NetFirewallRule -DisplayGroup 'Remotedesktop' -ErrorAction SilentlyContinue; Enable-NetFirewallRule -DisplayGroup 'Remote Desktop' -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "verify", "label": "RDP-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $rdp = Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server' -Name 'fDenyTSConnections'; if ($rdp.fDenyTSConnections -eq 0) { 'OK: RDP aktiviert' } else { 'FEHLER: RDP konnte nicht aktiviert werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SYS-004",
+    "name": "Firewall Reset",
+    "category": "Systemeinstellungen",
+    "estimatedDuration": "15 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Firewall-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-NetFirewallProfile | Select-Object Name, Enabled }"},
+      {"id": "s2", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Die Windows-Firewall wird auf Standardwerte zurückgesetzt."},
+      {"id": "s3", "type": "execute", "label": "Firewall auf Standard zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { netsh advfirewall reset }"},
+      {"id": "s4", "type": "verify", "label": "Firewall-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $profiles = Get-NetFirewallProfile; $allEnabled = ($profiles | Where-Object { $_.Enabled -eq $true } | Measure-Object).Count; if ($allEnabled -eq 3) { 'OK: Alle Firewall-Profile aktiv (Standard)' } else { 'WARNUNG: Nicht alle Profile aktiv' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SYS-005",
+    "name": "Defender Quick Scan + Update",
+    "category": "Systemeinstellungen",
+    "estimatedDuration": "180 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Defender-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-MpComputerStatus | Select-Object AntivirusEnabled, RealTimeProtectionEnabled, AntivirusSignatureLastUpdated, QuickScanEndTime }"},
+      {"id": "s2", "type": "execute", "label": "Defender-Signaturen aktualisieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Update-MpSignature -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "Quick Scan starten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-MpScan -ScanType QuickScan -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "verify", "label": "Scan-Ergebnis prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $status = Get-MpComputerStatus; $threats = Get-MpThreatDetection -ErrorAction SilentlyContinue; if ($status.AntivirusEnabled -and -not $threats) { 'OK: Defender aktiv, keine Bedrohungen gefunden' } elseif ($threats) { 'WARNUNG: ' + ($threats | Measure-Object).Count + ' Bedrohung(en) gefunden' } else { 'FEHLER: Defender nicht aktiv' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-DSK-001",
+    "name": "Disk Cleanup Full",
+    "category": "Festplatte",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Speicherplatz prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PSDrive C | Select-Object @{N='UsedGB';E={[math]::Round($_.Used/1GB,1)}}, @{N='FreeGB';E={[math]::Round($_.Free/1GB,1)}}, @{N='TotalGB';E={[math]::Round(($_.Used+$_.Free)/1GB,1)}} }"},
+      {"id": "s2", "type": "execute", "label": "Temp-Dateien bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Remove-Item 'C:\\Windows\\Temp\\*' -Recurse -Force -ErrorAction SilentlyContinue; $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Temp\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "execute", "label": "Papierkorb und Thumbnails leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Clear-RecycleBin -Force -ErrorAction SilentlyContinue; $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Windows\\Explorer\\thumbcache*\" -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "execute", "label": "Alte Downloads bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Get-ChildItem \"$($u.FullName)\\Downloads\" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-90) -and -not $_.PSIsContainer } | Remove-Item -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "verify", "label": "Speicherplatz prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $free = [math]::Round((Get-PSDrive C).Free/1GB,1); 'OK: Bereinigung abgeschlossen, freier Speicher: ' + $free + ' GB' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-DSK-002",
+    "name": "WinSxS Cleanup",
+    "category": "Festplatte",
+    "estimatedDuration": "300 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "WinSxS-Größe prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { DISM /Online /Cleanup-Image /AnalyzeComponentStore }"},
+      {"id": "s2", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Windows-Komponentenspeicher wird bereinigt. Dies kann einige Minuten dauern."},
+      {"id": "s3", "type": "execute", "label": "WinSxS bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase }"},
+      {"id": "s4", "type": "verify", "label": "Bereinigung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $free = [math]::Round((Get-PSDrive C).Free/1GB,1); 'OK: WinSxS Bereinigung abgeschlossen, freier Speicher: ' + $free + ' GB' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-DSK-003",
+    "name": "Disk Health Check",
+    "category": "Festplatte",
+    "estimatedDuration": "120 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "SMART-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PhysicalDisk | Select-Object FriendlyName, MediaType, HealthStatus, OperationalStatus, Size, @{N='SizeGB';E={[math]::Round($_.Size/1GB,1)}} }"},
+      {"id": "s2", "type": "scan", "label": "Disk-Fehler prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PhysicalDisk | Get-StorageReliabilityCounter -ErrorAction SilentlyContinue | Select-Object DeviceId, ReadErrorsTotal, WriteErrorsTotal, Temperature, Wear }"},
+      {"id": "s3", "type": "execute", "label": "Volume-Reparatur ausführen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Repair-Volume -DriveLetter C -Scan -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "verify", "label": "Disk-Gesundheit prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $disks = Get-PhysicalDisk; $healthy = $disks | Where-Object { $_.HealthStatus -eq 'Healthy' }; if ($healthy.Count -eq $disks.Count) { 'OK: Alle Datenträger gesund (' + $disks.Count + ' Disk(s))' } else { 'WARNUNG: ' + ($disks.Count - $healthy.Count) + ' Datenträger mit Problemen' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-DSK-004",
+    "name": "SSD Optimization",
+    "category": "Festplatte",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "SSD-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PhysicalDisk | Where-Object { $_.MediaType -eq 'SSD' } | Select-Object FriendlyName, HealthStatus, @{N='SizeGB';E={[math]::Round($_.Size/1GB,1)}}; Get-PhysicalDisk | Get-StorageReliabilityCounter -ErrorAction SilentlyContinue | Select-Object DeviceId, Wear, Temperature }"},
+      {"id": "s2", "type": "execute", "label": "TRIM ausführen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Optimize-Volume -DriveLetter C -ReTrim -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "Defragmentierung für SSD deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $task = Get-ScheduledTask -TaskName 'ScheduledDefrag' -ErrorAction SilentlyContinue; if ($task) { 'Defrag Task Status: ' + $task.State } }"},
+      {"id": "s4", "type": "scan", "label": "Partition-Alignment prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Partition -DriveLetter C | Select-Object DriveLetter, Offset, Size, @{N='AlignedKB';E={$_.Offset/1024}} }"},
+      {"id": "s5", "type": "verify", "label": "SSD-Optimierung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $ssd = Get-PhysicalDisk | Where-Object { $_.MediaType -eq 'SSD' }; if ($ssd -and $ssd.HealthStatus -eq 'Healthy') { 'OK: SSD optimiert und gesund' } elseif (-not $ssd) { 'INFO: Keine SSD gefunden (HDD-System)' } else { 'WARNUNG: SSD-Gesundheit prüfen' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-FIL-001",
+    "name": "hosts File Reset",
+    "category": "Datei-Ops",
+    "estimatedDuration": "15 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Aktuelle hosts-Datei prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-Content 'C:\\Windows\\System32\\drivers\\etc\\hosts' -ErrorAction SilentlyContinue }"},
+      {"id": "s2", "type": "execute", "label": "hosts-Datei sichern...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Copy-Item 'C:\\Windows\\System32\\drivers\\etc\\hosts' \"C:\\Windows\\System32\\drivers\\etc\\hosts.bak.$(Get-Date -Format 'yyyyMMdd_HHmmss')\" -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "hosts-Datei zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $defaultHosts = @('# Copyright (c) 1993-2009 Microsoft Corp.','#','# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.','#','# 127.0.0.1       localhost','# ::1             localhost'); $defaultHosts | Set-Content 'C:\\Windows\\System32\\drivers\\etc\\hosts' -Force }"},
+      {"id": "s4", "type": "execute", "label": "DNS-Cache leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ipconfig /flushdns }"},
+      {"id": "s5", "type": "verify", "label": "hosts-Datei prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $lines = Get-Content 'C:\\Windows\\System32\\drivers\\etc\\hosts' | Where-Object { $_ -notmatch '^#' -and $_.Trim() -ne '' }; if (-not $lines) { 'OK: hosts-Datei auf Standard zurückgesetzt' } else { 'WARNUNG: hosts-Datei enthält noch benutzerdefinierte Einträge' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-FIL-002",
+    "name": "Permission Fix",
+    "category": "Datei-Ops",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Aktuelle Berechtigungen prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $user = (Get-CimInstance Win32_ComputerSystem).UserName; $profilePath = \"C:\\Users\\$($user.Split('\\')[-1])\"; Get-Acl $profilePath -ErrorAction SilentlyContinue | Select-Object Owner, @{N='Access';E={$_.Access | Select-Object IdentityReference, FileSystemRights, AccessControlType}} }"},
+      {"id": "s2", "type": "execute", "label": "Ownership übernehmen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $user = (Get-CimInstance Win32_ComputerSystem).UserName; $profilePath = \"C:\\Users\\$($user.Split('\\')[-1])\"; takeown /f $profilePath /r /d y 2>$null }"},
+      {"id": "s3", "type": "execute", "label": "ACL zurücksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $user = (Get-CimInstance Win32_ComputerSystem).UserName; $profilePath = \"C:\\Users\\$($user.Split('\\')[-1])\"; icacls $profilePath /reset /t /c /q 2>$null; icacls $profilePath /grant \"$user`:(OI)(CI)F\" /t /c /q 2>$null }"},
+      {"id": "s4", "type": "verify", "label": "Berechtigungen prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $user = (Get-CimInstance Win32_ComputerSystem).UserName; $profilePath = \"C:\\Users\\$($user.Split('\\')[-1])\"; $acl = Get-Acl $profilePath -ErrorAction SilentlyContinue; if ($acl) { 'OK: Berechtigungen zurückgesetzt für ' + $profilePath } else { 'FEHLER: Berechtigungen konnten nicht geprüft werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-USR-001",
+    "name": "Temp Profile Fix",
+    "category": "Benutzer",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Temporäre Profile suchen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList' | ForEach-Object { $props = Get-ItemProperty $_.PSPath; [PSCustomObject]@{ SID = $_.PSChildName; ProfilePath = $props.ProfileImagePath; State = $props.State; RefCount = $props.RefCount; IsBak = $_.PSChildName.EndsWith('.bak') } } | Where-Object { $_.IsBak -or $_.ProfilePath -like '*TEMP*' } }"},
+      {"id": "s2", "type": "execute", "label": ".bak Registrierungsschlüssel umbenennen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $profileList = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList'; $bakKeys = Get-ChildItem $profileList | Where-Object { $_.PSChildName.EndsWith('.bak') }; foreach ($bak in $bakKeys) { $originalSid = $bak.PSChildName -replace '\\.bak$',''; $originalPath = Join-Path $profileList $originalSid; if (Test-Path $originalPath) { Rename-Item $originalPath \"$originalSid.tmp\" -Force -ErrorAction SilentlyContinue }; Rename-Item $bak.PSPath $originalSid -Force -ErrorAction SilentlyContinue; if (Test-Path (Join-Path $profileList \"$originalSid.tmp\")) { Remove-Item (Join-Path $profileList \"$originalSid.tmp\") -Force -ErrorAction SilentlyContinue } } }"},
+      {"id": "s3", "type": "notify", "label": "User benachrichtigen...", "message": "IT-Wartung: Temporäres Profil wurde repariert. Bitte starten Sie den PC neu, um sich mit Ihrem normalen Profil anzumelden."},
+      {"id": "s4", "type": "verify", "label": "Profil-Status prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $bakKeys = Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList' | Where-Object { $_.PSChildName.EndsWith('.bak') }; if (-not $bakKeys) { 'OK: Keine .bak Profile mehr vorhanden - Neustart erforderlich' } else { 'WARNUNG: Noch .bak Profile vorhanden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-USR-002",
+    "name": "Profile Cleanup",
+    "category": "Benutzer",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Benutzerprofile analysieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*' | ForEach-Object { $size = (Get-ChildItem $_.FullName -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum; [PSCustomObject]@{ Name = $_.Name; SizeMB = [math]::Round($size/1MB,0); LastAccess = $_.LastAccessTime } } | Sort-Object SizeMB -Descending }"},
+      {"id": "s2", "type": "execute", "label": "Temp-Dateien in Profilen bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Temp\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Windows\\Explorer\\thumbcache*\" -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\CrashDumps\\*\" -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "execute", "label": "Browser-Cache in Profilen bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach ($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache\\*\" -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s4", "type": "verify", "label": "Profil-Bereinigung prüfen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $totalFreed = 0; $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; $free = [math]::Round((Get-PSDrive C).Free/1GB,1); 'OK: Profile bereinigt, freier Speicher: ' + $free + ' GB' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-LANGUAGE-FIX",
+    "name": "Sprache auf Deutsch zuruecksetzen",
+    "category": "Sprache & Region",
+    "estimatedDuration": "120 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Aktuelle Spracheinstellungen pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-WinUILanguageOverride; Get-WinUserLanguageList | Select-Object LanguageTag; Get-Culture | Select-Object Name }"},
+      {"id": "s2", "type": "execute", "label": "Deutsches Sprachpaket installieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Install-Language de-DE -CopyToSettings -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "UI-Sprache auf Deutsch setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-WinUILanguageOverride -Language 'de-DE' }"},
+      {"id": "s4", "type": "execute", "label": "Tastaturlayout auf QWERTZ setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $langList = New-WinUserLanguageList de-DE; Set-WinUserLanguageList $langList -Force }"},
+      {"id": "s5", "type": "execute", "label": "Region und Kultur setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-WinHomeLocation -GeoId 94; Set-Culture de-DE; Set-WinSystemLocale de-DE }"},
+      {"id": "s6", "type": "execute", "label": "Office Sprache auf Deutsch setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Common\\LanguageResources' -Name UILanguage -Value 1031 -Type DWord -Force -ErrorAction SilentlyContinue; Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Common\\LanguageResources' -Name HelpLanguage -Value 1031 -Type DWord -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s7", "type": "notify", "label": "Benutzer informieren...", "message": "IT-Wartung: Die Spracheinstellungen wurden auf Deutsch zurueckgesetzt. Bitte melden Sie sich ab und wieder an, damit alle Aenderungen wirksam werden."},
+      {"id": "s8", "type": "verify", "label": "Spracheinstellungen verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $ui = Get-WinUILanguageOverride; $culture = Get-Culture; if($ui -match 'de-DE' -or $culture.Name -eq 'de-DE') { 'OK: Sprache auf Deutsch gesetzt (Neuanmeldung erforderlich)' } else { 'WARNUNG: Spracheinstellung konnte nicht verifiziert werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-DEFAULT-APPS",
+    "name": "Standard-Apps via SetUserFTA setzen",
+    "category": "Standard-Apps",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Aktuelle Dateizuordnungen pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { foreach ($ext in @('.pdf','.html','.htm','.mailto')) { $uc = Get-ItemProperty \"HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\$ext\\UserChoice\" -ErrorAction SilentlyContinue; [PSCustomObject]@{Extension=$ext; Handler=$uc.ProgId} } }"},
+      {"id": "s2", "type": "execute", "label": "SetUserFTA Tool bereitstellen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { if(!(Test-Path 'C:\\Tools\\SetUserFTA.exe')) { New-Item -Path 'C:\\Tools' -ItemType Directory -Force -ErrorAction SilentlyContinue; Copy-Item '\\\\fileserver\\Tools$\\SetUserFTA.exe' 'C:\\Tools\\SetUserFTA.exe' -Force } }"},
+      {"id": "s3", "type": "execute", "label": "PDF-Zuordnung auf Adobe setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { & 'C:\\Tools\\SetUserFTA.exe' .pdf AcroExch.Document.DC }"},
+      {"id": "s4", "type": "execute", "label": "HTML/HTTP-Zuordnung auf Chrome setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { & 'C:\\Tools\\SetUserFTA.exe' .html ChromeHTML; & 'C:\\Tools\\SetUserFTA.exe' .htm ChromeHTML; & 'C:\\Tools\\SetUserFTA.exe' http ChromeHTML; & 'C:\\Tools\\SetUserFTA.exe' https ChromeHTML }"},
+      {"id": "s5", "type": "execute", "label": "mailto-Zuordnung auf Outlook setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { & 'C:\\Tools\\SetUserFTA.exe' mailto Outlook.URL.mailto }"},
+      {"id": "s6", "type": "verify", "label": "Dateizuordnungen verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $ok = $true; foreach ($ext in @('.pdf','.html')) { $uc = Get-ItemProperty \"HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\$ext\\UserChoice\" -ErrorAction SilentlyContinue; if($uc.ProgId -match 'MSEdge|AppX') { $ok = $false } }; if($ok) { 'OK: Standard-Apps erfolgreich gesetzt' } else { 'WARNUNG: Einige Zuordnungen noch auf Edge/Standard-Apps' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-CERT-FIX",
+    "name": "Zertifikatsprobleme beheben",
+    "category": "Zertifikate",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Systemdatum pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $diff = [math]::Abs(((Get-Date) - (Invoke-RestMethod 'http://worldtimeapi.org/api/timezone/Europe/Berlin' -ErrorAction SilentlyContinue).datetime).TotalSeconds); if($diff -gt 120) { 'WARNUNG: Systemzeit weicht um ' + $diff + ' Sekunden ab' } else { 'Systemzeit OK' }; Get-Date }"},
+      {"id": "s2", "type": "scan", "label": "Abgelaufene Zertifikate suchen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-ChildItem Cert:\\LocalMachine\\Root, Cert:\\LocalMachine\\My -ErrorAction SilentlyContinue | Where-Object { $_.NotAfter -lt (Get-Date) } | Select-Object Subject, NotAfter, Thumbprint }"},
+      {"id": "s3", "type": "scan", "label": "Zscaler Root CA pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $zscaler = Get-ChildItem Cert:\\LocalMachine\\Root | Where-Object { $_.Subject -like '*Zscaler*' }; if($zscaler) { 'Zscaler CA vorhanden: ' + $zscaler.Subject + ' gueltig bis ' + $zscaler.NotAfter } else { 'WARNUNG: Zscaler Root CA fehlt' } }"},
+      {"id": "s4", "type": "execute", "label": "Fehlende Root-CAs importieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $certs = Get-ChildItem '\\\\fileserver\\Certificates$\\RootCA' -Filter '*.cer' -ErrorAction SilentlyContinue; foreach($cert in $certs) { Import-Certificate -FilePath $cert.FullName -CertStoreLocation Cert:\\LocalMachine\\Root -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "execute", "label": "CRL-Cache leeren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { certutil -urlcache * delete 2>$null; certutil -setreg chain\\ChainCacheResyncFiletime @now 2>$null }"},
+      {"id": "s6", "type": "verify", "label": "Zertifikate verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $expired = Get-ChildItem Cert:\\LocalMachine\\Root | Where-Object { $_.NotAfter -lt (Get-Date) } | Measure-Object; $zscaler = Get-ChildItem Cert:\\LocalMachine\\Root | Where-Object { $_.Subject -like '*Zscaler*' }; if($expired.Count -eq 0 -and $zscaler) { 'OK: Keine abgelaufenen Root-CAs, Zscaler CA vorhanden' } else { 'WARNUNG: ' + $expired.Count + ' abgelaufene Zertifikate, Zscaler: ' + [bool]$zscaler } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-WOL",
+    "name": "Wake-on-LAN PC einschalten",
+    "category": "Remote",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "MAC-Adresse ermitteln...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-NetAdapter | Where-Object { $_.Status -eq 'Up' } | Select-Object Name, MacAddress, LinkSpeed } -ErrorAction SilentlyContinue; if(!$?) { $arp = arp -a | Select-String '{hostname}'; if($arp) { $arp } else { try { (Get-ADComputer '{hostname}' -Properties * -ErrorAction SilentlyContinue).IPv4Address } catch { 'PC nicht erreichbar - versuche ARP/AD' } } }"},
+      {"id": "s2", "type": "execute", "label": "Magic Packet senden...", "command": "$mac = '{mac}'; $macBytes = $mac -replace '[:-]','' -split '(.{2})' | Where-Object { $_ } | ForEach-Object { [byte]('0x' + $_) }; $packet = [byte[]](,0xFF * 6) + ($macBytes * 16); $udpClient = New-Object System.Net.Sockets.UdpClient; $udpClient.Connect([System.Net.IPAddress]::Broadcast, 9); $udpClient.Send($packet, $packet.Length) | Out-Null; $udpClient.Close(); 'Magic Packet gesendet an MAC: ' + $mac"},
+      {"id": "s3", "type": "wait", "label": "Warten auf PC-Start (30 Sekunden)...", "waitSeconds": 30},
+      {"id": "s4", "type": "verify", "label": "PC-Erreichbarkeit pruefen...", "command": "$result = Test-Connection '{hostname}' -Count 3 -Quiet; if($result) { 'OK: PC {hostname} ist erreichbar' } else { 'WARNUNG: PC {hostname} antwortet noch nicht - ggf. laengere Bootzeit' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SECURITY-AUDIT",
+    "name": "Sicherheits-Audit durchfuehren",
+    "category": "Security",
+    "estimatedDuration": "90 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Windows Defender Status...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-MpComputerStatus | Select-Object AntivirusEnabled, RealTimeProtectionEnabled, AntivirusSignatureLastUpdated, QuickScanEndTime, AMServiceEnabled }"},
+      {"id": "s2", "type": "scan", "label": "Firewall Status...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-NetFirewallProfile | Select-Object Name, Enabled, DefaultInboundAction, DefaultOutboundAction | Format-Table }"},
+      {"id": "s3", "type": "scan", "label": "BitLocker Status...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-BitLockerVolume -ErrorAction SilentlyContinue | Select-Object MountPoint, VolumeStatus, ProtectionStatus, EncryptionPercentage, KeyProtector }"},
+      {"id": "s4", "type": "scan", "label": "Windows Update Status...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-HotFix | Sort-Object InstalledOn -Descending | Select-Object -First 5 HotFixID, InstalledOn; $pending = Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired'; 'Updates pending: ' + $pending }"},
+      {"id": "s5", "type": "scan", "label": "ASR-Regeln und SMB1...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $asr = (Get-MpPreference).AttackSurfaceReductionRules_Actions; $smb1 = (Get-SmbServerConfiguration).EnableSMB1Protocol; [PSCustomObject]@{ASR_Rules_Count=$asr.Count; SMB1_Enabled=$smb1} }"},
+      {"id": "s6", "type": "scan", "label": "TPM und Autostart...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $tpm = Get-Tpm -ErrorAction SilentlyContinue | Select-Object TpmPresent, TpmReady; $autostart = Get-CimInstance Win32_StartupCommand | Select-Object Name, Command; [PSCustomObject]@{TPM=$tpm; Autostart_Count=$autostart.Count}; $autostart | Format-Table }"},
+      {"id": "s7", "type": "scan", "label": "Offene Ports pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-NetTCPConnection -State Listen | Select-Object LocalPort, OwningProcess, @{N='Process';E={(Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue).Name}} | Sort-Object LocalPort | Format-Table }"},
+      {"id": "s8", "type": "verify", "label": "Sicherheitsbericht erstellen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $issues = @(); $mp = Get-MpComputerStatus; if(!$mp.RealTimeProtectionEnabled) { $issues += 'Defender Echtzeitschutz deaktiviert' }; $fw = Get-NetFirewallProfile | Where-Object { !$_.Enabled }; if($fw) { $issues += 'Firewall-Profil deaktiviert' }; $bl = Get-BitLockerVolume -MountPoint C: -ErrorAction SilentlyContinue; if($bl.ProtectionStatus -ne 'On') { $issues += 'BitLocker nicht aktiv' }; $smb1 = (Get-SmbServerConfiguration).EnableSMB1Protocol; if($smb1) { $issues += 'SMB1 aktiviert' }; if($issues.Count -eq 0) { 'OK: Sicherheitsaudit bestanden - keine Probleme gefunden' } else { 'WARNUNG: ' + $issues.Count + ' Sicherheitsprobleme: ' + ($issues -join '; ') } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SMB-HARDEN",
+    "name": "SMB-Haertung durchfuehren",
+    "category": "Security",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "SMB-Konfiguration pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-SmbServerConfiguration | Select-Object EnableSMB1Protocol, RequireSecuritySignature, EnableSecuritySignature, EncryptData, RejectUnencryptedAccess }"},
+      {"id": "s2", "type": "execute", "label": "SMB1 deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force; Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "SMB-Signierung erzwingen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-SmbServerConfiguration -RequireSecuritySignature $true -EnableSecuritySignature $true -Force }"},
+      {"id": "s4", "type": "execute", "label": "SMB-Verschluesselung aktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-SmbServerConfiguration -EncryptData $true -Force }"},
+      {"id": "s5", "type": "verify", "label": "SMB-Haertung verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $cfg = Get-SmbServerConfiguration; if(!$cfg.EnableSMB1Protocol -and $cfg.RequireSecuritySignature -and $cfg.EncryptData) { 'OK: SMB gehaertet - SMB1 deaktiviert, Signierung und Verschluesselung aktiv' } else { 'WARNUNG: SMB-Haertung unvollstaendig - SMB1:' + $cfg.EnableSMB1Protocol + ' Signing:' + $cfg.RequireSecuritySignature + ' Encrypt:' + $cfg.EncryptData } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PRIVACY-HARDEN",
+    "name": "Datenschutz-Haertung durchfuehren",
+    "category": "Privacy",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Aktuelle Datenschutz-Einstellungen pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $telemetry = (Get-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection' -Name AllowTelemetry -ErrorAction SilentlyContinue).AllowTelemetry; $adId = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo' -Name Enabled -ErrorAction SilentlyContinue).Enabled; [PSCustomObject]@{Telemetry=$telemetry; AdvertisingID=$adId} }"},
+      {"id": "s2", "type": "execute", "label": "Telemetrie auf Minimum setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { New-Item -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection' -Force -ErrorAction SilentlyContinue | Out-Null; Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection' -Name AllowTelemetry -Value 0 -Type DWord -Force }"},
+      {"id": "s3", "type": "execute", "label": "Werbe-ID deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo' -Name Enabled -Value 0 -Type DWord -Force }"},
+      {"id": "s4", "type": "execute", "label": "Aktivitaetsverlauf deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { New-Item -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\System' -Force -ErrorAction SilentlyContinue | Out-Null; Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\System' -Name EnableActivityFeed -Value 0 -Type DWord -Force; Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\System' -Name PublishUserActivities -Value 0 -Type DWord -Force }"},
+      {"id": "s5", "type": "execute", "label": "Hintergrund-Apps deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications' -Name GlobalUserDisabled -Value 1 -Type DWord -Force }"},
+      {"id": "s6", "type": "execute", "label": "Standort-Dienst deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location' -Name Value -Value 'Deny' -Force }"},
+      {"id": "s7", "type": "execute", "label": "DiagTrack-Dienst deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service DiagTrack -Force -ErrorAction SilentlyContinue; Set-Service DiagTrack -StartupType Disabled }"},
+      {"id": "s8", "type": "verify", "label": "Datenschutz-Einstellungen verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $telemetry = (Get-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection' -Name AllowTelemetry -ErrorAction SilentlyContinue).AllowTelemetry; $adId = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo' -Name Enabled -ErrorAction SilentlyContinue).Enabled; $diag = (Get-Service DiagTrack).Status; if($telemetry -eq 0 -and $adId -eq 0 -and $diag -eq 'Stopped') { 'OK: Datenschutz-Haertung erfolgreich' } else { 'WARNUNG: Nicht alle Einstellungen korrekt gesetzt' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-DEBLOAT",
+    "name": "Bloatware entfernen",
+    "category": "Personalisierung",
+    "estimatedDuration": "90 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Provisioned AppX-Pakete auflisten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-AppxProvisionedPackage -Online | Where-Object { $_.DisplayName -match 'BubbleWitch|CandyCrush|Disney|Facebook|Flipboard|Minecraft|Netflix|Spotify|Twitter|TikTok|Solitaire|MarchOf|Bing|Phone|Zune|3DBuilder|3DViewer|MixedReality|People|Print3D|SkypeApp|Xbox' } | Select-Object DisplayName }"},
+      {"id": "s2", "type": "execute", "label": "Bekannte Bloatware entfernen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $bloatApps = @('*BubbleWitch*','*CandyCrush*','*Disney*','*Facebook*','*Flipboard*','*Minecraft*','*Netflix*','*Spotify*','*Twitter*','*TikTok*','*Solitaire*','*MarchOf*','*3DBuilder*','*3DViewer*','*MixedReality*','*People*','*Print3D*','*SkypeApp*','*Phone*','*Zune*'); foreach($app in $bloatApps) { Get-AppxPackage -AllUsers $app -ErrorAction SilentlyContinue | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue; Get-AppxProvisionedPackage -Online | Where-Object { $_.DisplayName -like $app } | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "execute", "label": "ContentDeliveryManager deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $cdm = 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager'; Set-ItemProperty -Path $cdm -Name SilentInstalledAppsEnabled -Value 0 -Type DWord -Force; Set-ItemProperty -Path $cdm -Name PreInstalledAppsEnabled -Value 0 -Type DWord -Force; Set-ItemProperty -Path $cdm -Name OemPreInstalledAppsEnabled -Value 0 -Type DWord -Force; Set-ItemProperty -Path $cdm -Name ContentDeliveryAllowed -Value 0 -Type DWord -Force; Set-ItemProperty -Path $cdm -Name SubscribedContentEnabled -Value 0 -Type DWord -Force }"},
+      {"id": "s4", "type": "execute", "label": "Consumer Features deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { New-Item -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent' -Force -ErrorAction SilentlyContinue | Out-Null; Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent' -Name DisableWindowsConsumerFeatures -Value 1 -Type DWord -Force }"},
+      {"id": "s5", "type": "execute", "label": "Game DVR deaktivieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-ItemProperty -Path 'HKCU:\\System\\GameConfigStore' -Name GameDVR_Enabled -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue; New-Item -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR' -Force -ErrorAction SilentlyContinue | Out-Null; Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR' -Name AllowGameDVR -Value 0 -Type DWord -Force }"},
+      {"id": "s6", "type": "verify", "label": "Bloatware-Entfernung verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $remaining = Get-AppxPackage -AllUsers | Where-Object { $_.Name -match 'BubbleWitch|CandyCrush|Disney|Facebook|Flipboard|Minecraft|Netflix|Spotify|Twitter|TikTok' } | Measure-Object; $cdm = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager' -Name SilentInstalledAppsEnabled -ErrorAction SilentlyContinue).SilentInstalledAppsEnabled; if($remaining.Count -eq 0 -and $cdm -eq 0) { 'OK: Bloatware entfernt und automatische Installation deaktiviert' } else { 'WARNUNG: Noch ' + $remaining.Count + ' Bloatware-Apps vorhanden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PENDING-REBOOT",
+    "name": "Ausstehenden Neustart verwalten",
+    "category": "System",
+    "estimatedDuration": "5 Minuten",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Neustart-Ursachen ermitteln...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $reasons = @(); if(Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending') { $reasons += 'CBS (Component Based Servicing)' }; if(Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired') { $reasons += 'Windows Update' }; if(Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager' -Name PendingFileRenameOperations -ErrorAction SilentlyContinue) { $reasons += 'Pending File Rename' }; $uptime = (Get-Date) - (Get-CimInstance Win32_OperatingSystem).LastBootUpTime; [PSCustomObject]@{Reasons=$reasons -join ', '; UptimeDays=$uptime.Days; UptimeHours=$uptime.Hours} }"},
+      {"id": "s2", "type": "notify", "label": "Benutzer informieren...", "message": "IT-Wartung: Ihr PC muss in 5 Minuten neu gestartet werden. Bitte speichern Sie alle offenen Dokumente."},
+      {"id": "s3", "type": "scan", "label": "Ausstehende Updates pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { if(Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired') { Get-HotFix | Sort-Object InstalledOn -Descending | Select-Object -First 3 HotFixID, Description, InstalledOn } else { 'Kein Update-Neustart erforderlich' } }"},
+      {"id": "s4", "type": "notify", "label": "5-Minuten-Warnung senden...", "message": "IT-Wartung: Neustart in 5 Minuten. Bitte speichern Sie JETZT alle Arbeiten!"},
+      {"id": "s5", "type": "wait", "label": "Warten vor Neustart (5 Minuten)...", "waitSeconds": 300},
+      {"id": "s6", "type": "execute", "label": "PC neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Restart-Computer -Force }"},
+      {"id": "s7", "type": "wait", "label": "Warten auf Neustart...", "waitSeconds": 60},
+      {"id": "s8", "type": "verify", "label": "Neustart verifizieren...", "command": "$result = Test-Connection '{hostname}' -Count 3 -Quiet; if($result) { $uptime = Invoke-Command -ComputerName '{hostname}' -ScriptBlock { ((Get-Date) - (Get-CimInstance Win32_OperatingSystem).LastBootUpTime).TotalMinutes }; if($uptime -lt 5) { 'OK: PC erfolgreich neu gestartet (Uptime: ' + [math]::Round($uptime,1) + ' Minuten)' } else { 'WARNUNG: PC erreichbar aber Uptime hoch' } } else { 'WARNUNG: PC noch nicht erreichbar' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SOFTWARE-INSTALL",
+    "name": "Remote Software-Installation",
+    "category": "Software",
+    "estimatedDuration": "120 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Bereits installierte Software pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*' | Where-Object { $_.DisplayName } | Select-Object DisplayName, DisplayVersion | Sort-Object DisplayName }"},
+      {"id": "s2", "type": "scan", "label": "Winget Verfuegbarkeit pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { try { $ver = winget --version 2>$null; 'Winget Version: ' + $ver } catch { 'Winget nicht verfuegbar' } }"},
+      {"id": "s3", "type": "execute", "label": "Software via Winget installieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { winget install '{packageId}' --accept-package-agreements --accept-source-agreements --silent 2>&1 }"},
+      {"id": "s4", "type": "verify", "label": "Installation verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $installed = Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*' | Where-Object { $_.DisplayName -like '*{appName}*' }; if($installed) { 'OK: ' + $installed.DisplayName + ' v' + $installed.DisplayVersion + ' installiert' } else { 'WARNUNG: Software nicht in der Programmliste gefunden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-FONT-INSTALL",
+    "name": "Schriftart remote installieren",
+    "category": "Software",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Schriftart auf Ziel pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-ChildItem 'C:\\Windows\\Fonts' -Filter '{fontFile}' -ErrorAction SilentlyContinue }"},
+      {"id": "s2", "type": "execute", "label": "Schriftart von Share kopieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Copy-Item '\\\\fileserver\\Fonts$\\{fontFile}' 'C:\\Windows\\Fonts\\{fontFile}' -Force }"},
+      {"id": "s3", "type": "execute", "label": "Schriftart in Registry registrieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { New-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts' -Name '{fontName} (TrueType)' -Value '{fontFile}' -PropertyType String -Force }"},
+      {"id": "s4", "type": "verify", "label": "Schriftart-Installation verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $fontExists = Test-Path \"C:\\Windows\\Fonts\\{fontFile}\"; $regEntry = Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts' -Name '{fontName} (TrueType)' -ErrorAction SilentlyContinue; if($fontExists -and $regEntry) { 'OK: Schriftart {fontName} erfolgreich installiert' } else { 'WARNUNG: Schriftart-Installation unvollstaendig' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-SIGNATUR-DEPLOY",
+    "name": "Outlook-Signatur verteilen",
+    "category": "Outlook",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Signatur-Ordner suchen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach($u in $users) { $sigPath = \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Signatures\"; [PSCustomObject]@{User=$u.Name; SigPath=$sigPath; Exists=Test-Path $sigPath; Files=(Get-ChildItem $sigPath -ErrorAction SilentlyContinue | Measure-Object).Count} } }"},
+      {"id": "s2", "type": "execute", "label": "Signatur-Dateien kopieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach($u in $users) { $sigPath = \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Signatures\"; New-Item -Path $sigPath -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null; Copy-Item '\\\\fileserver\\Signatures$\\*' $sigPath -Recurse -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "execute", "label": "Standard-Signatur in Registry setzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $profiles = Get-ChildItem 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Profiles' -ErrorAction SilentlyContinue; foreach($p in $profiles) { $accts = Get-ChildItem \"$($p.PSPath)\\9375CFF0413111d3B88A00104B2A6676\" -ErrorAction SilentlyContinue; foreach($a in $accts) { Set-ItemProperty -Path $a.PSPath -Name 'New Signature' -Value '{signatureName}' -Type String -Force -ErrorAction SilentlyContinue; Set-ItemProperty -Path $a.PSPath -Name 'Reply-Forward Signature' -Value '{signatureName}' -Type String -Force -ErrorAction SilentlyContinue } } }"},
+      {"id": "s4", "type": "verify", "label": "Signatur-Verteilung verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; $ok = 0; $total = 0; foreach($u in $users) { $total++; $sigPath = \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Signatures\"; if((Get-ChildItem $sigPath -ErrorAction SilentlyContinue | Measure-Object).Count -gt 0) { $ok++ } }; if($ok -eq $total) { 'OK: Signatur bei ' + $ok + '/' + $total + ' Benutzern verteilt' } else { 'WARNUNG: Signatur nur bei ' + $ok + '/' + $total + ' Benutzern' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-RESTORE-POINT",
+    "name": "Wiederherstellungspunkt erstellen",
+    "category": "System",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Systemwiederherstellung pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $sr = Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore' -Name RPSessionInterval -ErrorAction SilentlyContinue; $enabled = (Get-ComputerRestorePoint -ErrorAction SilentlyContinue) -ne $null; [PSCustomObject]@{Enabled=$enabled; RPInterval=$sr.RPSessionInterval} }"},
+      {"id": "s2", "type": "execute", "label": "Systemwiederherstellung aktivieren (falls noetig)...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Enable-ComputerRestore -Drive 'C:\\' -ErrorAction SilentlyContinue; Set-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore' -Name RPSessionInterval -Value 1 -Type DWord -Force }"},
+      {"id": "s3", "type": "execute", "label": "Wiederherstellungspunkt erstellen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Checkpoint-Computer -Description 'IT Admin Tool - Manueller Wiederherstellungspunkt' -RestorePointType MODIFY_SETTINGS }"},
+      {"id": "s4", "type": "verify", "label": "Wiederherstellungspunkt verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $latest = Get-ComputerRestorePoint | Sort-Object CreationTime -Descending | Select-Object -First 1; if($latest -and $latest.Description -like '*IT Admin Tool*') { 'OK: Wiederherstellungspunkt erstellt am ' + $latest.CreationTime } else { 'WARNUNG: Wiederherstellungspunkt konnte nicht verifiziert werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-FILE-RECOVER",
+    "name": "Datei aus Schattenkopie wiederherstellen",
+    "category": "Wiederherstellung",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Verfuegbare Schattenkopien auflisten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { vssadmin list shadows | Select-String 'Shadow Copy Volume|Creation Time|Shadow Copy ID' }"},
+      {"id": "s2", "type": "execute", "label": "Schattenkopie mounten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $shadow = (Get-CimInstance Win32_ShadowCopy | Sort-Object InstallDate -Descending | Select-Object -First 1); $link = 'C:\\ShadowMount'; cmd /c mklink /d $link ($shadow.DeviceObject + '\\') 2>$null; 'Schattenkopie gemountet unter ' + $link }"},
+      {"id": "s3", "type": "execute", "label": "Datei aus Schattenkopie kopieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Copy-Item 'C:\\ShadowMount\\{filePath}' '{targetPath}' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "execute", "label": "Schattenkopie unmounten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { cmd /c rmdir 'C:\\ShadowMount' 2>$null }"},
+      {"id": "s5", "type": "verify", "label": "Wiederherstellung verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { if(Test-Path '{targetPath}') { $file = Get-Item '{targetPath}'; 'OK: Datei wiederhergestellt - ' + $file.Name + ' (' + [math]::Round($file.Length/1KB,1) + ' KB)' } else { 'WARNUNG: Datei konnte nicht wiederhergestellt werden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-WLAN-RESET",
+    "name": "WLAN vollstaendig zuruecksetzen",
+    "category": "Netzwerk",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "WLAN-Profile auflisten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { netsh wlan show profiles }"},
+      {"id": "s2", "type": "notify", "label": "Benutzer informieren...", "message": "IT-Wartung: WLAN wird zurueckgesetzt. Die WLAN-Verbindung wird kurzzeitig unterbrochen."},
+      {"id": "s3", "type": "execute", "label": "Alle WLAN-Profile loeschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { netsh wlan delete profile name=* }"},
+      {"id": "s4", "type": "execute", "label": "WLAN-Adapter zuruecksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-NetAdapter | Where-Object { $_.InterfaceDescription -like '*Wi-Fi*' -or $_.InterfaceDescription -like '*Wireless*' -or $_.Name -like '*WLAN*' } | Restart-NetAdapter -Confirm:$false }"},
+      {"id": "s5", "type": "notify", "label": "Benutzer ueber Abschluss informieren...", "message": "IT-Wartung: WLAN wurde zurueckgesetzt. Bitte verbinden Sie sich erneut mit dem gewuenschten Netzwerk."}
+    ]
+  },
+  {
+    "id": "PLAY-EXPLORER-FIX",
+    "name": "Explorer und Desktop reparieren",
+    "category": "Explorer",
+    "estimatedDuration": "30 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "execute", "label": "Icon-Cache loeschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\IconCache.db\" -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Windows\\Explorer\\iconcache*\" -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s2", "type": "execute", "label": "Thumbnail-Cache loeschen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Local\\Microsoft\\Windows\\Explorer\\thumbcache*\" -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s3", "type": "execute", "label": "Explorer neustarten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Process -Name explorer -Force; Start-Sleep -Seconds 2; Start-Process explorer }"},
+      {"id": "s4", "type": "execute", "label": "Schnellzugriff zuruecksetzen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $users = Get-ChildItem 'C:\\Users' -Directory -Exclude 'Public','Default*'; foreach($u in $users) { Remove-Item \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\*\" -Force -ErrorAction SilentlyContinue; Remove-Item \"$($u.FullName)\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\CustomDestinations\\*\" -Force -ErrorAction SilentlyContinue } }"},
+      {"id": "s5", "type": "verify", "label": "Explorer-Reparatur verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $explorer = Get-Process explorer -ErrorAction SilentlyContinue; if($explorer) { 'OK: Explorer laeuft (PID: ' + $explorer.Id + ', Icon/Thumbnail-Cache geleert)' } else { 'WARNUNG: Explorer-Prozess nicht gefunden' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-ACCESSIBILITY",
+    "name": "Barrierefreiheit anpassen",
+    "category": "Barrierefreiheit",
+    "estimatedDuration": "20 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Aktuelle Einstellungen pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $dpi = (Get-ItemProperty 'HKCU:\\Control Panel\\Desktop\\WindowMetrics' -Name AppliedDPI -ErrorAction SilentlyContinue).AppliedDPI; $cursor = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Accessibility' -Name CursorSize -ErrorAction SilentlyContinue).CursorSize; $textScale = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Accessibility' -Name TextScaleFactor -ErrorAction SilentlyContinue).TextScaleFactor; $contrast = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize' -Name AppsUseLightTheme -ErrorAction SilentlyContinue).AppsUseLightTheme; [PSCustomObject]@{DPI=$dpi; CursorSize=$cursor; TextScale=$textScale; LightTheme=$contrast} }"},
+      {"id": "s2", "type": "execute", "label": "DPI und Textgroesse anpassen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Accessibility' -Name TextScaleFactor -Value {textScale} -Type DWord -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "Cursorgroesse anpassen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Accessibility' -Name CursorSize -Value {cursorSize} -Type DWord -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "verify", "label": "Aenderungen verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $textScale = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Accessibility' -Name TextScaleFactor -ErrorAction SilentlyContinue).TextScaleFactor; $cursor = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Accessibility' -Name CursorSize -ErrorAction SilentlyContinue).CursorSize; 'OK: TextScale=' + $textScale + ', CursorSize=' + $cursor }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-BITLOCKER-RECOVERY",
+    "name": "BitLocker-Wiederherstellung",
+    "category": "Security",
+    "estimatedDuration": "45 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "BitLocker-Status pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-BitLockerVolume | Select-Object MountPoint, VolumeStatus, ProtectionStatus, LockStatus, EncryptionMethod, KeyProtector }"},
+      {"id": "s2", "type": "scan", "label": "Recovery-Key aus AD abrufen...", "command": "try { $computer = Get-ADComputer '{hostname}'; $keys = Get-ADObject -Filter { objectClass -eq 'msFVE-RecoveryInformation' } -SearchBase $computer.DistinguishedName -Properties 'msFVE-RecoveryPassword'; $keys | ForEach-Object { [PSCustomObject]@{Date=$_.Name.Split('{')[0].Trim(); RecoveryKey=$_.'msFVE-RecoveryPassword'} } } catch { 'AD-Abfrage fehlgeschlagen: ' + $_.Exception.Message }"},
+      {"id": "s3", "type": "execute", "label": "Laufwerk entsperren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Unlock-BitLocker -MountPoint '{drive}' -RecoveryPassword '{recoveryKey}' -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "verify", "label": "Entsperrung verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $vol = Get-BitLockerVolume -MountPoint '{drive}'; if($vol.LockStatus -eq 'Unlocked') { 'OK: Laufwerk {drive} erfolgreich entsperrt' } else { 'WARNUNG: Laufwerk {drive} noch gesperrt - Status: ' + $vol.LockStatus } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-USB-TOGGLE",
+    "name": "USB-Speicher Zugriff umschalten",
+    "category": "Security",
+    "estimatedDuration": "15 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "USBSTOR-Status pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $start = (Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\USBSTOR' -Name Start).Start; $status = if($start -eq 3) { 'Erlaubt' } elseif($start -eq 4) { 'Blockiert' } else { 'Unbekannt' }; [PSCustomObject]@{StartValue=$start; Status=$status} }"},
+      {"id": "s2", "type": "execute", "label": "USBSTOR Registry-Wert aendern...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $current = (Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\USBSTOR' -Name Start).Start; $new = if($current -eq 3) { 4 } else { 3 }; Set-ItemProperty -Path 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\USBSTOR' -Name Start -Value $new -Type DWord -Force; $status = if($new -eq 3) { 'Erlaubt' } else { 'Blockiert' }; 'USB-Speicher Status geaendert auf: ' + $status }"},
+      {"id": "s3", "type": "verify", "label": "USBSTOR-Aenderung verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $start = (Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\USBSTOR' -Name Start).Start; $status = if($start -eq 3) { 'Erlaubt' } elseif($start -eq 4) { 'Blockiert' } else { 'Unbekannt' }; 'OK: USB-Speicher ist jetzt ' + $status + ' (Start=' + $start + ')' }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-UPDATE-UNINSTALL",
+    "name": "Problematisches Update deinstallieren",
+    "category": "Updates",
+    "estimatedDuration": "120 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Kuerzliche Updates auflisten...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-HotFix | Sort-Object InstalledOn -Descending | Select-Object -First 10 HotFixID, Description, InstalledOn | Format-Table }"},
+      {"id": "s2", "type": "notify", "label": "Benutzer informieren...", "message": "IT-Wartung: Ein problematisches Windows Update wird deinstalliert. Bitte speichern Sie Ihre Arbeit."},
+      {"id": "s3", "type": "execute", "label": "Update deinstallieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { wusa /uninstall /kb:{kbNumber} /quiet /norestart 2>&1 }"},
+      {"id": "s4", "type": "verify", "label": "Deinstallation verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $still = Get-HotFix -Id 'KB{kbNumber}' -ErrorAction SilentlyContinue; if(!$still) { 'OK: Update KB{kbNumber} erfolgreich deinstalliert' } else { 'WARNUNG: Update KB{kbNumber} noch vorhanden' } }", "successCondition": "result contains OK"},
+      {"id": "s5", "type": "scan", "label": "Neustart erforderlich pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $pending = Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending'; if($pending) { 'Neustart erforderlich nach Update-Deinstallation' } else { 'Kein Neustart erforderlich' } }"}
+    ]
+  },
+  {
+    "id": "PLAY-KIOSK-SETUP",
+    "name": "Kiosk-Modus einrichten",
+    "category": "Kiosk",
+    "estimatedDuration": "60 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Assigned Access pruefen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-LocalUser | Where-Object { $_.Name -like '*kiosk*' } | Select-Object Name, Enabled; Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\AssignedAccessConfiguration' -ErrorAction SilentlyContinue }"},
+      {"id": "s2", "type": "execute", "label": "Kiosk-Benutzer erstellen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $password = ConvertTo-SecureString '{kioskPassword}' -AsPlainText -Force; New-LocalUser -Name 'KioskUser' -Password $password -Description 'Kiosk Modus Benutzer' -PasswordNeverExpires -UserMayNotChangePassword -ErrorAction SilentlyContinue; Add-LocalGroupMember -Group 'Users' -Member 'KioskUser' -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "Assigned Access konfigurieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Set-AssignedAccess -UserName 'KioskUser' -AppName '{kioskApp}' -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "verify", "label": "Kiosk-Einrichtung verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $user = Get-LocalUser 'KioskUser' -ErrorAction SilentlyContinue; $aa = Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\AssignedAccessConfiguration' -ErrorAction SilentlyContinue; if($user -and $user.Enabled) { 'OK: Kiosk-Benutzer erstellt und Assigned Access konfiguriert' } else { 'WARNUNG: Kiosk-Einrichtung unvollstaendig' } }", "successCondition": "result contains OK"}
+    ]
+  },
+  {
+    "id": "PLAY-PRINTER-DRIVER",
+    "name": "Druckertreiber reparieren",
+    "category": "Drucker",
+    "estimatedDuration": "90 Sekunden",
+    "requiresHostname": true,
+    "requiresAdmin": true,
+    "steps": [
+      {"id": "s1", "type": "scan", "label": "Druckertreiber analysieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Get-PrinterDriver | Select-Object Name, MajorVersion, PrinterEnvironment, Manufacturer | Format-Table; Get-Printer | Select-Object Name, DriverName, PortName, PrinterStatus | Format-Table }"},
+      {"id": "s2", "type": "execute", "label": "Druckspooler stoppen und bereinigen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Stop-Service Spooler -Force; Remove-Item 'C:\\Windows\\System32\\spool\\PRINTERS\\*' -Force -ErrorAction SilentlyContinue }"},
+      {"id": "s3", "type": "execute", "label": "Alten Treiber entfernen...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Remove-PrinterDriver -Name '{oldDriverName}' -ErrorAction SilentlyContinue }"},
+      {"id": "s4", "type": "execute", "label": "Korrekten Treiber installieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Add-PrinterDriver -Name '{newDriverName}' -ErrorAction SilentlyContinue; Set-Printer -Name '{printerName}' -DriverName '{newDriverName}' -ErrorAction SilentlyContinue }"},
+      {"id": "s5", "type": "execute", "label": "Druckspooler starten und Testseite...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { Start-Service Spooler; Start-Sleep -Seconds 2; $printer = Get-CimInstance Win32_Printer | Where-Object { $_.Name -eq '{printerName}' }; $printer | Invoke-CimMethod -MethodName PrintTestPage -ErrorAction SilentlyContinue }"},
+      {"id": "s6", "type": "verify", "label": "Treiber-Reparatur verifizieren...", "command": "Invoke-Command -ComputerName '{hostname}' -ScriptBlock { $spooler = Get-Service Spooler; $printer = Get-Printer -Name '{printerName}' -ErrorAction SilentlyContinue; $spoolFiles = (Get-ChildItem 'C:\\Windows\\System32\\spool\\PRINTERS' -ErrorAction SilentlyContinue | Measure-Object).Count; if($spooler.Status -eq 'Running' -and $printer -and $printer.PrinterStatus -ne 'Error') { 'OK: Druckertreiber repariert - Spooler laeuft, Drucker bereit' } else { 'WARNUNG: Drucker-Status: ' + $printer.PrinterStatus } }", "successCondition": "result contains OK"}
+    ]
+  }
+]

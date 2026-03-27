@@ -1,0 +1,530 @@
+[
+  {
+    "id": "PROB-INT-001",
+    "category": "Intune & Autopilot",
+    "title": "App kommt nicht auf Gerät",
+    "keywords": ["Intune", "App", "Deployment", "Installation", "Company Portal", "Win32", "LOB"],
+    "extendedKeywords": ["App wird nicht installiert", "Intune App kommt nicht", "Anwendung nicht deployed", "App fehlt auf Gerät", "Software nicht installiert Intune", "Company Portal App fehlt", "App Deployment fehlgeschlagen", "Intune Anwendung kommt nicht an", "Software wird nicht gepusht", "App nicht zugewiesen", "Zuweisung App Intune", "Gerät bekommt App nicht", "Required App nicht da", "Available App nicht sichtbar", "Intune App Status pending", "App wird nicht runtergeladen", "App hängt bei Installation", "Software Deployment Problem", "App kommt nicht automatisch", "Intune App ausstehend"],
+    "typos": ["Intun", "Deplyoment", "Instalation", "Compnay Portal"],
+    "symptoms": ["Zugewiesene App erscheint nicht auf dem Gerät", "App-Status in Intune zeigt 'Pending' oder 'Failed'", "Company Portal zeigt die App nicht"],
+    "quickCheck": "Ist die App dem Gerät/Benutzer zugewiesen und welchen Status zeigt sie in Intune?",
+    "solutions": ["Intune Sync erzwingen: Einstellungen > Konten > Auf Arbeit oder Schule zugreifen > Synchronisieren", "Company Portal öffnen und Sync durchführen", "App-Zuweisung in Intune prüfen (Required vs. Available)", "Intune Management Extension Logs prüfen: C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs", "Gerät in Intune prüfen: Geräte > Gerät > App-Installation"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["App fehlt", "Software nicht da", "Deployment", "App kommt nicht"],
+    "followUpQuestions": [
+      {"question": "Ist die App als 'Required' oder 'Available' zugewiesen?", "options": ["Required", "Available", "Weiß nicht"], "narrows": "Zuweisungstyp"},
+      {"question": "Welchen Status zeigt die App in Intune?", "options": ["Pending", "Failed", "Not applicable", "Weiß nicht"], "narrows": "Fehlerstatus"}
+    ],
+    "relatedProblems": ["PROB-INT-002", "PROB-INT-003", "PROB-INT-004"]
+  },
+  {
+    "id": "PROB-INT-002",
+    "category": "Intune & Autopilot",
+    "title": "App-Installation fehlgeschlagen",
+    "keywords": ["Installation", "fehlgeschlagen", "Error", "Fehlercode", "Intune", "Win32", "MSI"],
+    "extendedKeywords": ["App Installation schlägt fehl", "Intune App Fehler", "Installation fehlgeschlagen Fehlercode", "App lässt sich nicht installieren Intune", "Fehler bei App Deployment", "Intune Installationsfehler", "App Error Code Intune", "Win32 App Fehler", "MSI Installation fehlgeschlagen", "Error 0x87D", "Intune App Installation Error", "App Deployment Error", "Installation bricht ab Intune", "Fehlermeldung App Installation", "Installationsproblem Intune", "App kann nicht installiert werden", "Deployment Fehler", "Fehlercode Intune App", "App hängt bei Installation", "Installationsabbruch Intune"],
+    "typos": ["Instalation", "fehlgeschlagne", "Fehlercdoe", "Intun"],
+    "symptoms": ["App-Installation schlägt fehl mit Fehlercode", "Intune zeigt 'Installation Failed'", "Fehlercode 0x87D..."],
+    "quickCheck": "Welcher Fehlercode wird angezeigt?",
+    "solutions": ["Fehlercode in Microsoft Dokumentation nachschlagen", "IME Logs prüfen: C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs\\IntuneManagementExtension.log", "App manuell installieren zum Testen", "Erkennungsregel der App prüfen", "App als System vs. User Context prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Installation fehlgeschlagen", "Fehlercode App", "Deployment Error"],
+    "followUpQuestions": [
+      {"question": "Welchen Fehlercode zeigt Intune?", "options": ["Freitext"], "narrows": "Spezifischer Fehler"},
+      {"question": "Handelt es sich um eine Win32 oder LOB App?", "options": ["Win32", "LOB/MSI", "Store App", "Weiß nicht"], "narrows": "App-Typ spezifische Lösung"}
+    ],
+    "relatedProblems": ["PROB-INT-001", "PROB-INT-003"]
+  },
+  {
+    "id": "PROB-INT-003",
+    "category": "Intune & Autopilot",
+    "title": "Falsche App installiert",
+    "keywords": ["falsche App", "falsche Version", "Zuweisung", "Gruppe", "Targeting", "Intune"],
+    "extendedKeywords": ["falsche App installiert", "falsche Version deployed", "App soll nicht auf Gerät sein", "falsche Zuweisung Intune", "Gerät in falscher Gruppe", "falsche Software installiert", "ungewollte App installiert", "App Version falsch", "alte Version statt neue", "App auf falschem Gerät", "Zuweisung falsch Intune", "Gruppe falsch zugewiesen", "unerwünschte App", "falsche App auf PC", "Intune falsche Zuweisung", "App sollte nicht da sein", "Version stimmt nicht", "falsche App Gruppe", "Targeting Fehler Intune", "falsches Deployment"],
+    "typos": ["flache App", "Zuweisugn", "Grupp", "flasche Version"],
+    "symptoms": ["Eine falsche oder ungewollte App wurde installiert", "Falsche Version der App deployed"],
+    "quickCheck": "Welche App ist falsch und welche wird eigentlich benötigt?",
+    "solutions": ["Gruppenzugehörigkeit des Geräts/Benutzers in Azure AD prüfen", "App-Zuweisung in Intune prüfen", "App deinstallieren und richtige Version zuweisen", "Dynamische Gruppen-Regeln prüfen", "Konflikte zwischen User und Device Zuweisung prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["falsche App", "falsche Version", "soll nicht installiert sein"],
+    "followUpQuestions": [
+      {"question": "Welche App ist falsch installiert?", "options": ["Freitext"], "narrows": "Spezifische App"},
+      {"question": "Ist das Gerät in der richtigen Azure AD Gruppe?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Gruppenzugehörigkeit"}
+    ],
+    "relatedProblems": ["PROB-INT-001", "PROB-INT-004"]
+  },
+  {
+    "id": "PROB-INT-004",
+    "category": "Intune & Autopilot",
+    "title": "App Update über Intune",
+    "keywords": ["App Update", "Aktualisierung", "Version", "Supersedence", "Intune", "Upgrade"],
+    "extendedKeywords": ["App Update Intune", "Anwendung aktualisieren Intune", "neue Version deployen", "App Upgrade Intune", "Supersedence Intune", "alte Version ersetzen", "App aktualisieren über Intune", "Version Update Deployment", "neue App-Version", "Intune App Update", "Software aktualisieren Intune", "App Supersedence", "Vorgänger-App ersetzen", "App Version aktualisieren", "Update durch Intune pushen", "Intune neue Version", "App ersetzen Intune", "Version Upgrade Intune", "Intune App Aktualisierung", "Software Update Deployment"],
+    "typos": ["Updtae", "Akualisierung", "Supersedense", "Upgarde"],
+    "symptoms": ["App-Update wird nicht installiert", "Alte Version bleibt trotz neuem Deployment"],
+    "quickCheck": "Ist die neue App-Version bereits in Intune hochgeladen und zugewiesen?",
+    "solutions": ["Neue Version als Supersedence konfigurieren", "Erkennungsregel aktualisieren für neue Version", "Alte App-Version in Intune als veraltet markieren", "Intune Sync erzwingen nach Update-Deployment", "Installationsverhalten prüfen: Update vs. Neuinstallation"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_gpo_gpupdate", "label": "Richtlinie aktualisieren", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["App Update", "neue Version", "Supersedence"],
+    "followUpQuestions": [
+      {"question": "Ist Supersedence konfiguriert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Supersedence Setup"},
+      {"question": "Wird die alte Version vorher deinstalliert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Update vs. Deinstallation+Neuinstallation"}
+    ],
+    "relatedProblems": ["PROB-INT-001", "PROB-INT-002"]
+  },
+  {
+    "id": "PROB-INT-005",
+    "category": "Intune & Autopilot",
+    "title": "Gerät nicht konform",
+    "keywords": ["Compliance", "nicht konform", "Non-Compliant", "Richtlinie", "Konformität", "Intune"],
+    "extendedKeywords": ["Gerät nicht konform", "Non-Compliant Intune", "Compliance Policy verletzt", "Gerät nicht compliant", "Konformitätsrichtlinie nicht erfüllt", "Intune Gerät nicht konform", "Compliance Check fehlgeschlagen", "Gerät entspricht nicht Richtlinie", "nicht konforme Geräte", "Compliance Warnung", "Gerät blockiert wegen Compliance", "Compliance Status nicht konform", "Intune Compliance Problem", "Geräte-Konformität", "Compliance Richtlinie Fehler", "nicht konforme Richtlinien", "Gerät nicht regelkonform", "Compliance fehlgeschlagen Intune", "Device Compliance Problem", "Gerät gesperrt Compliance"],
+    "typos": ["Compliacne", "konfrm", "Compliance", "Non-Compliant"],
+    "symptoms": ["Intune zeigt Gerät als 'Nicht konform'", "Benutzer bekommt Warnungen zur Compliance", "Zugriff auf Ressourcen blockiert wegen Compliance"],
+    "quickCheck": "Welche Compliance-Richtlinie wird verletzt?",
+    "solutions": ["Intune Portal: Geräte > Gerät auswählen > Gerätekonformität prüfen", "Spezifische verletzte Richtlinie identifizieren", "Problem beheben (z.B. Passwort ändern, Update installieren, Verschlüsselung aktivieren)", "Compliance erneut prüfen lassen: Intune Sync", "Kulanzfrist (Grace Period) prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["nicht konform", "Non-Compliant", "Compliance verletzt"],
+    "followUpQuestions": [
+      {"question": "Welche Compliance-Richtlinie wird verletzt?", "options": ["Passwort", "Verschlüsselung", "Update", "Antivirus", "Weiß nicht"], "narrows": "Spezifische Richtlinie"},
+      {"question": "Ist der Zugriff auf Ressourcen blockiert?", "options": ["Ja", "Nein"], "narrows": "Dringlichkeit"}
+    ],
+    "relatedProblems": ["PROB-INT-006", "PROB-INT-007", "PROB-INT-008"]
+  },
+  {
+    "id": "PROB-INT-006",
+    "category": "Intune & Autopilot",
+    "title": "Compliance-Richtlinie wird nicht erkannt",
+    "keywords": ["Compliance", "Richtlinie", "Policy", "nicht erkannt", "Evaluation", "Intune"],
+    "extendedKeywords": ["Compliance Richtlinie wird nicht ausgewertet", "Policy nicht erkannt Intune", "Compliance Evaluation hängt", "Richtlinie nicht angewendet Compliance", "Compliance Status unknown", "Richtlinie nicht ausgewertet", "Intune Compliance Policy nicht erkannt", "Compliance Check startet nicht", "Richtlinie wird ignoriert", "Compliance nicht bewertet", "Evaluation Compliance fehlgeschlagen", "Policy Auswertung Intune", "Compliance Richtlinie hängt", "Gerät bewertet Richtlinie nicht", "Compliance Status unbekannt", "Richtlinie Evaluation Fehler", "Compliance Policy stuck", "Richtlinie wird nicht geprüft", "Compliance Bewertung Problem", "Richtlinie Status pending"],
+    "typos": ["Richltinie", "Compliacne", "Evaluaton", "Richtlnie"],
+    "symptoms": ["Compliance-Richtlinie wird nicht ausgewertet", "Status bleibt auf 'Unbekannt'"],
+    "quickCheck": "Zeigt die Richtlinie den Status 'Nicht ausgewertet' oder 'Unbekannt'?",
+    "solutions": ["Intune Sync erzwingen", "Richtlinien-Zuweisung prüfen (Gruppe korrekt?)", "Geräteregistrierung in Intune prüfen", "Intune Management Extension neu starten", "Compliance-Richtlinie Zuweisung und Bedingungen prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_gpo_gpupdate", "label": "Richtlinie aktualisieren", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Richtlinie nicht erkannt", "Compliance unknown", "Bewertung fehlt"],
+    "followUpQuestions": [
+      {"question": "Ist das Gerät korrekt in Intune registriert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Registrierungsproblem"},
+      {"question": "Wie lange zeigt die Richtlinie schon diesen Status?", "options": ["Wenige Stunden", "Über einen Tag", "Mehrere Tage"], "narrows": "Sync-Problem vs. Konfigurationsfehler"}
+    ],
+    "relatedProblems": ["PROB-INT-005", "PROB-INT-007"]
+  },
+  {
+    "id": "PROB-INT-007",
+    "category": "Intune & Autopilot",
+    "title": "Compliance-Frist abgelaufen",
+    "keywords": ["Compliance", "Frist", "Grace Period", "Ablauf", "Sperrung", "Zugriff"],
+    "extendedKeywords": ["Compliance Frist abgelaufen", "Grace Period vorbei", "Compliance Kulanzfrist", "Zugriff gesperrt Compliance", "Compliance Zeitraum abgelaufen", "Frist Compliance Intune", "Kulanzfrist Compliance", "nach Ablauf Compliance", "Gerät gesperrt Compliance Frist", "Grace Period Intune", "Compliance Deadline", "Frist vorbei Intune", "Compliance Warnung Frist", "Zugriffssperre Compliance", "Compliance Remediation Frist", "Frist verstrichen Compliance", "Compliance Grace Period abgelaufen", "Compliance Aktion nach Frist", "Intune Sperrung Compliance", "Compliance Eskalation"],
+    "typos": ["Gace Period", "Friste", "Compliacne Frist", "Kulanzfrsit"],
+    "symptoms": ["Compliance-Kulanzfrist ist abgelaufen", "Zugriff auf Ressourcen wird blockiert"],
+    "quickCheck": "Wann ist die Compliance-Frist abgelaufen und welche Richtlinie ist betroffen?",
+    "solutions": ["Compliance-Problem schnellstmöglich beheben", "IT-Admin kontaktieren für Fristverlängerung", "Gerät in konformen Zustand bringen", "Intune Sync erzwingen nach Behebung", "Conditional Access Ausnahme prüfen falls dringend"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Frist abgelaufen", "Grace Period", "Compliance Sperrung"],
+    "followUpQuestions": [
+      {"question": "Welche Compliance-Richtlinie ist betroffen?", "options": ["Freitext"], "narrows": "Spezifische Richtlinie"},
+      {"question": "Ist der Zugriff auf E-Mail/Teams/SharePoint blockiert?", "options": ["Ja", "Nein"], "narrows": "Auswirkung der Sperrung"}
+    ],
+    "relatedProblems": ["PROB-INT-005", "PROB-INT-008"]
+  },
+  {
+    "id": "PROB-INT-008",
+    "category": "Intune & Autopilot",
+    "title": "Compliance-Benachrichtigung erhalten",
+    "keywords": ["Compliance", "Benachrichtigung", "Warnung", "E-Mail", "Notification", "Push"],
+    "extendedKeywords": ["Compliance Warnung bekommen", "E-Mail Compliance nicht konform", "Benachrichtigung Gerät nicht konform", "Compliance Notification erhalten", "Intune Compliance E-Mail", "Push-Nachricht Compliance", "Warnung nicht konformes Gerät", "Compliance Mail bekommen", "was bedeutet Compliance Warnung", "Benachrichtigung Intune Compliance", "E-Mail Gerät nicht konform", "Compliance Push erhalten", "Warnung Compliance Policy", "Intune Benachrichtigung Compliance", "Compliance Warn-E-Mail", "was tun bei Compliance Warnung", "Compliance Alert erhalten", "Benachrichtigung Richtlinienverletzung", "E-Mail Compliance Intune", "Warnung Gerätekonformität"],
+    "typos": ["Benachrichitung", "Compliacne", "Notifcation", "Warnugn"],
+    "symptoms": ["Benutzer erhält E-Mail oder Push-Benachrichtigung über Compliance-Verletzung"],
+    "quickCheck": "Was steht in der Compliance-Benachrichtigung?",
+    "solutions": ["Benachrichtigung lesen und betroffene Richtlinie identifizieren", "Company Portal öffnen und Compliance-Status prüfen", "Angegebene Maßnahmen durchführen (z.B. Passwort ändern)", "Intune Sync durchführen nach Behebung", "IT-Support kontaktieren falls unklar"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Compliance Mail", "Warnung Compliance", "Benachrichtigung konform"],
+    "followUpQuestions": [
+      {"question": "Was steht in der Benachrichtigung?", "options": ["Freitext"], "narrows": "Art der Compliance-Verletzung"},
+      {"question": "Gibt es eine Frist in der Benachrichtigung?", "options": ["Ja", "Nein"], "narrows": "Dringlichkeit"}
+    ],
+    "relatedProblems": ["PROB-INT-005", "PROB-INT-007"]
+  },
+  {
+    "id": "PROB-INT-009",
+    "category": "Intune & Autopilot",
+    "title": "Autopilot-Registrierung fehlgeschlagen",
+    "keywords": ["Autopilot", "Registrierung", "Enrollment", "OOBE", "Provisioning", "Fehler"],
+    "extendedKeywords": ["Autopilot Registrierung fehlgeschlagen", "Autopilot funktioniert nicht", "OOBE Fehler Autopilot", "Autopilot Enrollment Problem", "Autopilot startet nicht", "Autopilot Registrierung hängt", "Gerät wird nicht per Autopilot eingerichtet", "Autopilot Provisioning Fehler", "Autopilot bleibt stehen", "neues Gerät Autopilot Problem", "Autopilot schlägt fehl", "Autopilot Error", "Autopilot Einrichtung Fehler", "Autopilot geht nicht", "Autopilot hängt bei Anmeldung", "Autopilot Status fehlt", "Autopilot Profil nicht zugewiesen", "Autopilot TPM Fehler", "Autopilot Netzwerk Fehler", "Autopilot Timeout"],
+    "typos": ["Autopilote", "Autpilot", "Registierung", "Enrollmnet"],
+    "symptoms": ["Autopilot-Registrierung bricht mit Fehler ab", "OOBE bleibt hängen", "Autopilot-Profil wird nicht angewendet"],
+    "quickCheck": "Welchen Fehler zeigt der Autopilot-Bildschirm?",
+    "solutions": ["Netzwerkverbindung prüfen (WLAN/LAN)", "Hardware-Hash des Geräts in Intune prüfen", "Autopilot-Profil-Zuweisung prüfen", "TPM-Status prüfen (tpm.msc)", "Autopilot-Diagnose: Shift+F10 > mdmdiagnosticstool.exe"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Autopilot Fehler", "OOBE hängt", "Autopilot geht nicht"],
+    "followUpQuestions": [
+      {"question": "Bei welchem Schritt bleibt Autopilot hängen?", "options": ["Netzwerk", "Anmeldung", "Profil-Download", "App-Installation", "Weiß nicht"], "narrows": "Fehler-Phase"},
+      {"question": "Ist das Gerät in Intune/Autopilot registriert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Registrierung prüfen"}
+    ],
+    "relatedProblems": ["PROB-INT-010", "PROB-INT-011", "PROB-INT-012"]
+  },
+  {
+    "id": "PROB-INT-010",
+    "category": "Intune & Autopilot",
+    "title": "Autopilot Reset",
+    "keywords": ["Autopilot", "Reset", "Zurücksetzen", "Wipe", "Fresh Start", "Re-Provisioning"],
+    "extendedKeywords": ["Autopilot Reset durchführen", "Gerät per Autopilot zurücksetzen", "Autopilot Wipe", "Fresh Start Autopilot", "Autopilot Re-Provisioning", "Windows Autopilot Reset", "Gerät neu einrichten Autopilot", "Autopilot zurücksetzen", "Remote Wipe Autopilot", "Autopilot Neustart", "Autopilot Wipe und Reset", "Gerät zurücksetzen und neu registrieren", "Autopilot Fresh Start", "Gerät komplett zurücksetzen Intune", "Autopilot Self-Deploying Reset", "Autopilot Neueinrichtung", "Windows Reset mit Autopilot", "Autopilot-Gerät neu aufsetzen", "Factory Reset Autopilot", "Zurücksetzen und Autopilot erneut"],
+    "typos": ["Autpilot Reset", "Zurücksetzn", "Wpe", "Re-Provisionig"],
+    "symptoms": ["Gerät muss per Autopilot zurückgesetzt werden", "Re-Provisioning erforderlich"],
+    "quickCheck": "Soll das Gerät remote oder lokal zurückgesetzt werden?",
+    "solutions": ["Intune Portal: Geräte > Gerät > Zurücksetzen (Wipe)", "Lokaler Autopilot Reset: Einstellungen > System > Wiederherstellung > PC zurücksetzen", "Windows Autopilot Reset über Intune auslösen", "Sicherstellen dass Autopilot-Profil weiterhin zugewiesen ist", "Nach Reset Netzwerkverbindung für OOBE bereitstellen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Autopilot Reset", "Gerät zurücksetzen", "Wipe Autopilot"],
+    "followUpQuestions": [
+      {"question": "Soll das Gerät remote oder lokal zurückgesetzt werden?", "options": ["Remote", "Lokal"], "narrows": "Methode"},
+      {"question": "Sollen Benutzerdaten erhalten bleiben?", "options": ["Ja", "Nein"], "narrows": "Reset vs. Fresh Start"}
+    ],
+    "relatedProblems": ["PROB-INT-009", "PROB-INT-011"]
+  },
+  {
+    "id": "PROB-INT-011",
+    "category": "Intune & Autopilot",
+    "title": "Autopilot OOBE-Fehler",
+    "keywords": ["OOBE", "Out-of-Box", "Ersteinrichtung", "Fehler", "Autopilot", "Setup"],
+    "extendedKeywords": ["OOBE Fehler", "Out-of-Box Experience Fehler", "Ersteinrichtung schlägt fehl", "OOBE hängt", "OOBE Bildschirm Fehler", "Windows Setup Fehler", "OOBE Problem", "Ersteinrichtung hängt", "OOBE geht nicht weiter", "Out-of-Box Fehler", "OOBE Autopilot Fehler", "Ersteinrichtung Problem", "OOBE bleibt stehen", "Setup Bildschirm Fehler", "OOBE Fehlermeldung", "Windows Ersteinrichtung Fehler", "OOBE Anmeldung Fehler", "Ersteinrichtung bricht ab", "OOBE Timeout", "OOBE Netzwerk Fehler"],
+    "typos": ["OBE", "OOBE", "Out-of-Bpx", "Ersteinrichrung"],
+    "symptoms": ["OOBE zeigt Fehlermeldung", "Ersteinrichtung bleibt hängen oder bricht ab"],
+    "quickCheck": "Welcher Fehler wird im OOBE-Bildschirm angezeigt?",
+    "solutions": ["Netzwerkverbindung prüfen", "Shift+F10 für Kommandozeile während OOBE", "Fehlerprotokoll prüfen: %windir%\\System32\\Winevt\\Logs", "TPM zurücksetzen wenn TPM-Fehler", "Hardware-Hash erneut in Intune importieren"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["OOBE Fehler", "Ersteinrichtung hängt", "Setup Fehler"],
+    "followUpQuestions": [
+      {"question": "Welche Fehlermeldung wird angezeigt?", "options": ["Freitext"], "narrows": "Spezifischer Fehler"},
+      {"question": "Ist eine Netzwerkverbindung vorhanden?", "options": ["Ja", "Nein"], "narrows": "Netzwerk als Ursache"}
+    ],
+    "relatedProblems": ["PROB-INT-009", "PROB-INT-012"]
+  },
+  {
+    "id": "PROB-INT-012",
+    "category": "Intune & Autopilot",
+    "title": "Autopilot-Profil nicht zugewiesen",
+    "keywords": ["Autopilot", "Profil", "Zuweisung", "Deployment Profile", "nicht zugewiesen"],
+    "extendedKeywords": ["Autopilot Profil fehlt", "Deployment Profile nicht zugewiesen", "Autopilot Profil nicht angewendet", "Gerät hat kein Autopilot Profil", "Profil Zuweisung Autopilot", "Autopilot Profile Status", "Deployment Profile fehlt", "Autopilot kein Profil", "Profil nicht zugeordnet", "Autopilot Profil ausstehend", "Gerät ohne Autopilot Profil", "Profil wird nicht angewendet", "Autopilot Profil Zuweisung prüfen", "Deployment Profile Assignment", "Profil nicht gefunden Autopilot", "Autopilot Profil zuweisen", "Gerät Profil fehlt", "Autopilot Profilzuweisung", "Profil assigned Autopilot", "Deployment Profile pending"],
+    "typos": ["Profiel", "Zuweisugn", "Autopilto", "Proifil"],
+    "symptoms": ["Autopilot-Profil ist dem Gerät nicht zugewiesen", "Gerät startet normal ohne Autopilot"],
+    "quickCheck": "Ist das Gerät in der Autopilot-Geräteliste in Intune?",
+    "solutions": ["Intune: Geräte > Windows > Windows Enrollment > Geräte prüfen", "Hardware-Hash des Geräts in Autopilot-Geräteliste prüfen", "Profil dem Gerät/Gruppe zuweisen", "Gerät ggf. neu importieren", "Profil-Zuweisung abwarten (kann bis zu 30 Min dauern)"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["Profil fehlt", "Autopilot Profil", "kein Autopilot"],
+    "followUpQuestions": [
+      {"question": "Ist das Gerät in der Autopilot-Geräteliste?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Geräteregistrierung"},
+      {"question": "Wurde das Gerät kürzlich hinzugefügt?", "options": ["Ja", "Nein"], "narrows": "Sync-Verzögerung"}
+    ],
+    "relatedProblems": ["PROB-INT-009", "PROB-INT-011"]
+  },
+  {
+    "id": "PROB-INT-013",
+    "category": "Intune & Autopilot",
+    "title": "Conditional Access blockiert Zugriff",
+    "keywords": ["Conditional Access", "blockiert", "Zugriff", "CA", "Bedingter Zugriff", "gesperrt"],
+    "extendedKeywords": ["Zugriff blockiert", "Conditional Access blockiert", "bedingter Zugriff sperrt", "CA Policy blockiert", "Zugriff verweigert Conditional Access", "kann nicht anmelden CA", "Conditional Access Fehler", "Zugriff gesperrt Richtlinie", "CA blockiert Anmeldung", "bedingter Zugriff Problem", "Zugriffssperre Conditional Access", "CA Regel blockiert", "Conditional Access Login blockiert", "Zugriff nicht möglich CA", "Conditional Access verweigert", "bedingter Zugriff Fehler", "CA blockiert Gerät", "Conditional Access Sperre", "Zugriff verwehrt CA", "CA Policy Blockade"],
+    "typos": ["Condtional Access", "Conditonal", "blockirt", "Zugrif"],
+    "symptoms": ["Zugriff auf M365-Dienste wird blockiert", "Fehlermeldung zu Conditional Access bei Anmeldung"],
+    "quickCheck": "Welche Fehlermeldung erscheint beim Zugriffsversuch?",
+    "solutions": ["Azure AD Sign-in Logs prüfen für genaue CA-Policy", "Gerät-Compliance prüfen", "Geräteregistrierung in Azure AD prüfen", "MFA-Status des Benutzers prüfen", "IT-Admin: CA-Policy Ausnahme prüfen falls berechtigt"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["Zugriff blockiert", "CA Policy", "bedingter Zugriff"],
+    "followUpQuestions": [
+      {"question": "Auf welchen Dienst kann nicht zugegriffen werden?", "options": ["Outlook/E-Mail", "Teams", "SharePoint", "Andere"], "narrows": "Betroffener Dienst"},
+      {"question": "Ist das Gerät in Intune als konform gemeldet?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Compliance als Ursache"}
+    ],
+    "relatedProblems": ["PROB-INT-014", "PROB-INT-015", "PROB-INT-005"]
+  },
+  {
+    "id": "PROB-INT-014",
+    "category": "Intune & Autopilot",
+    "title": "Conditional Access – Gerät nicht konform",
+    "keywords": ["Conditional Access", "Compliance", "nicht konform", "Gerät", "Zugriff", "blockiert"],
+    "extendedKeywords": ["CA blockiert wegen Compliance", "Gerät nicht konform CA", "Conditional Access Compliance Problem", "Zugriff gesperrt nicht konform", "CA verlangt konformes Gerät", "Conditional Access Geräte-Compliance", "nicht konformes Gerät CA", "Zugriff blockiert Geräte-Compliance", "CA Compliance Anforderung", "Gerät muss konform sein", "Conditional Access verlangt Compliance", "CA Gerät nicht compliant", "Zugriff nur mit konformem Gerät", "Compliance Anforderung CA", "CA Policy konformes Gerät", "Conditional Access Compliance Check", "Zugriff setzt Compliance voraus", "CA blockiert nicht konformes Gerät", "Compliance CA Fehler", "bedingter Zugriff Compliance"],
+    "typos": ["Compliacne", "konfrm", "Conditonal", "blokiert"],
+    "symptoms": ["CA blockiert Zugriff weil Gerät nicht konform ist"],
+    "quickCheck": "Welche Compliance-Richtlinie verletzt das Gerät?",
+    "solutions": ["Gerät konform machen (Compliance-Problem beheben)", "Intune Sync erzwingen nach Behebung", "CA-Fehlermeldung für spezifische Policy prüfen", "Sign-in Logs in Azure AD für Details", "Compliance-Status im Company Portal prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["CA Compliance", "nicht konform blockiert", "Gerät Compliance CA"],
+    "followUpQuestions": [
+      {"question": "Welcher Compliance-Verstoß liegt vor?", "options": ["Freitext"], "narrows": "Spezifische Compliance-Verletzung"}
+    ],
+    "relatedProblems": ["PROB-INT-013", "PROB-INT-005"]
+  },
+  {
+    "id": "PROB-INT-015",
+    "category": "Intune & Autopilot",
+    "title": "MFA-Problem bei Conditional Access",
+    "keywords": ["MFA", "Multi-Faktor", "Authentifizierung", "Conditional Access", "Zwei-Faktor", "2FA"],
+    "extendedKeywords": ["MFA funktioniert nicht", "Multi-Faktor Authentifizierung Problem", "MFA fehlgeschlagen", "MFA bei Anmeldung Problem", "Zwei-Faktor funktioniert nicht", "2FA fehlgeschlagen", "MFA Code kommt nicht", "Authenticator App Problem", "MFA Telefonnummer falsch", "MFA neu einrichten", "MFA blockiert Zugriff", "Authenticator funktioniert nicht", "MFA Setup", "MFA Token falsch", "Multi-Faktor Fehler", "MFA Anmeldung scheitert", "2FA Setup Problem", "MFA Code abgelaufen", "MFA neue Methode", "MFA Gerätewechsel"],
+    "typos": ["MFA", "Mulit-Faktor", "Authentifzierung", "Authentictor"],
+    "symptoms": ["MFA-Verifizierung schlägt fehl", "MFA-Code wird nicht akzeptiert", "Authenticator-App funktioniert nicht"],
+    "quickCheck": "Welche MFA-Methode wird verwendet und was genau funktioniert nicht?",
+    "solutions": ["Uhrzeit auf dem Handy prüfen (TOTP ist zeitbasiert)", "Authenticator-App neu einrichten: aka.ms/mysecurityinfo", "Alternative MFA-Methode verwenden", "IT-Admin: MFA zurücksetzen für den Benutzer", "Prüfen ob Telefonnummer korrekt ist"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["MFA Problem", "Authenticator", "Zwei-Faktor"],
+    "followUpQuestions": [
+      {"question": "Welche MFA-Methode nutzen Sie?", "options": ["Authenticator App", "SMS", "Telefonanruf", "FIDO2 Key"], "narrows": "Methode-spezifische Lösung"},
+      {"question": "Haben Sie das Handy gewechselt?", "options": ["Ja", "Nein"], "narrows": "Authenticator neu einrichten"}
+    ],
+    "relatedProblems": ["PROB-INT-013", "PROB-INT-014"]
+  },
+  {
+    "id": "PROB-INT-016",
+    "category": "Intune & Autopilot",
+    "title": "Enrollment fehlgeschlagen",
+    "keywords": ["Enrollment", "Registrierung", "fehlgeschlagen", "MDM", "Intune", "Geräteregistrierung"],
+    "extendedKeywords": ["Intune Registrierung fehlgeschlagen", "Enrollment Error", "Geräteregistrierung schlägt fehl", "MDM Enrollment Fehler", "Intune Enrollment Problem", "Gerät lässt sich nicht registrieren", "Enrollment Fehlercode", "MDM Registration Failed", "Intune Registration Problem", "Geräteregistrierung Fehler", "Enrollment bricht ab", "MDM Enrollment Error", "Intune anmelden fehlgeschlagen", "Registrierung bei Intune Fehler", "Enrollment hängt", "MDM Enrollment hängt", "Gerät registriert sich nicht", "Enrollment Timeout", "Geräteregistrierung geht nicht", "Intune Enrollment fehlgeschlagen"],
+    "typos": ["Enrollmnet", "Registierung", "fehlgeschlagne", "Regitrierung"],
+    "symptoms": ["Geräteregistrierung in Intune schlägt fehl", "Fehlercode bei MDM-Enrollment"],
+    "quickCheck": "Welcher Fehlercode wird bei der Registrierung angezeigt?",
+    "solutions": ["Fehlercode prüfen: 80180014 = Gerätelimit, 800704DC = DNS", "Gerätelimit in Intune prüfen (max. Geräte pro Benutzer)", "Azure AD Join Status prüfen", "Vorherige MDM-Registrierung entfernen falls vorhanden", "Netzwerkverbindung und erforderliche Endpoints prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Enrollment Fehler", "Registrierung fehlgeschlagen", "MDM Fehler"],
+    "followUpQuestions": [
+      {"question": "Welcher Fehlercode wird angezeigt?", "options": ["Freitext"], "narrows": "Spezifischer Fehler"},
+      {"question": "War das Gerät zuvor bei einem anderen MDM registriert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Vorherige Registrierung"}
+    ],
+    "relatedProblems": ["PROB-INT-017", "PROB-INT-018"]
+  },
+  {
+    "id": "PROB-INT-017",
+    "category": "Intune & Autopilot",
+    "title": "Hybrid Azure AD Join Probleme",
+    "keywords": ["Hybrid Join", "Azure AD", "Domain Join", "Hybrid Azure AD", "dsregcmd"],
+    "extendedKeywords": ["Hybrid Join fehlgeschlagen", "Azure AD Hybrid Join Problem", "Gerät nicht Hybrid Joined", "dsregcmd Status Fehler", "Hybrid Azure AD Join", "Domain und Azure AD", "Hybrid Join Status prüfen", "Gerät nicht in Azure AD", "Hybrid Join Registration", "dsregcmd /status", "Hybrid Join Connector", "Hybrid Join SCP", "Active Directory und Azure AD", "Hybrid Join synchronisiert nicht", "Gerät Join Status", "Hybrid Azure AD Registrierung", "Azure AD Connect Hybrid", "Hybrid Join Fehler beheben", "Device Registration Hybrid", "Hybrid Join Voraussetzungen"],
+    "typos": ["Hybrd Join", "Azrue AD", "Hybried", "dsregmd"],
+    "symptoms": ["Gerät ist nicht Hybrid Azure AD Joined", "dsregcmd /status zeigt Fehler"],
+    "quickCheck": "Was zeigt 'dsregcmd /status' unter AzureAdJoined und DomainJoined?",
+    "solutions": ["dsregcmd /status ausführen und Status prüfen", "SCP (Service Connection Point) in AD prüfen", "Azure AD Connect Synchronisation prüfen", "Netzwerkverbindung zu Azure AD Endpoints prüfen", "Gerät neu starten und erneut prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Hybrid Join", "dsregcmd", "Azure AD Join Fehler"],
+    "followUpQuestions": [
+      {"question": "Was zeigt dsregcmd /status?", "options": ["AzureAdJoined: NO", "DomainJoined: NO", "Beides YES aber Fehler", "Weiß nicht"], "narrows": "Join-Status"},
+      {"question": "Ist Azure AD Connect korrekt konfiguriert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Sync-Problem"}
+    ],
+    "relatedProblems": ["PROB-INT-016", "PROB-INT-018"]
+  },
+  {
+    "id": "PROB-INT-018",
+    "category": "Intune & Autopilot",
+    "title": "Re-Enrollment in Intune",
+    "keywords": ["Re-Enrollment", "erneut registrieren", "Neuregistrierung", "MDM", "Intune", "Re-Register"],
+    "extendedKeywords": ["Gerät erneut registrieren", "Intune Re-Enrollment", "Neuregistrierung Intune", "Gerät neu in Intune anmelden", "MDM neu registrieren", "erneutes Enrollment", "Intune Gerät neu registrieren", "Re-Register Intune", "Enrollment erneuern", "Gerät Intune Registrierung erneuern", "MDM Enrollment wiederholen", "Intune Re-Register", "Geräteregistrierung erneuern", "Intune Registrierung wiederholen", "Gerät aus Intune entfernen und neu registrieren", "MDM Re-Enrollment", "erneute Geräteregistrierung", "Intune Gerät Reset und Registrierung", "MDM Neuregistrierung", "Enrollment von vorne"],
+    "typos": ["Re-Enrollmnet", "Neuregistierung", "Re-Enrolment", "ernute Registierung"],
+    "symptoms": ["Gerät muss erneut in Intune registriert werden"],
+    "quickCheck": "Warum ist eine Neuregistrierung erforderlich?",
+    "solutions": ["Gerät aus Intune entfernen (Retire/Wipe)", "Lokale MDM-Registrierung entfernen: Einstellungen > Konten > Auf Arbeit oder Schule zugreifen > Trennen", "dsregcmd /leave ausführen", "PC neu starten und erneut registrieren", "Bei Autopilot: Gerät in Autopilot-Geräteliste prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["erneut registrieren", "Re-Enrollment", "Neuregistrierung"],
+    "followUpQuestions": [
+      {"question": "Warum muss neu registriert werden?", "options": ["Enrollment-Fehler", "Gerät-Wechsel", "Compliance-Problem", "Anderer Grund"], "narrows": "Grund für Re-Enrollment"}
+    ],
+    "relatedProblems": ["PROB-INT-016", "PROB-INT-017"]
+  },
+  {
+    "id": "PROB-INT-019",
+    "category": "Intune & Autopilot",
+    "title": "Konfigurationsprofil nicht angewendet",
+    "keywords": ["Konfigurationsprofil", "Device Configuration", "Profil", "Richtlinie", "nicht angewendet", "Intune"],
+    "extendedKeywords": ["Profil wird nicht angewendet", "Konfiguration kommt nicht an", "Device Configuration fehlt", "Intune Profil nicht aktiv", "Richtlinie wird nicht angewendet Intune", "Konfigurationsprofil fehlgeschlagen", "Gerätekonfiguration nicht angewendet", "Profil Status Fehler", "Configuration Profile not applied", "Intune Richtlinie kommt nicht", "Profil hängt bei pending", "Konfiguration nicht übernommen", "Device Configuration Error", "Intune Profil Fehler", "Konfiguration wird nicht gepusht", "Profil Zuweisung Fehler", "Gerätekonfiguration Intune Fehler", "Profil nicht aktiv Intune", "Richtlinie Gerätekonfiguration", "Configuration nicht applied"],
+    "typos": ["Konfigurtaionsprofil", "Profiel", "Richltinie", "angewendt"],
+    "symptoms": ["Konfigurationsprofil wird auf dem Gerät nicht angewendet", "Profil zeigt Fehler in Intune"],
+    "quickCheck": "Welches Konfigurationsprofil wird nicht angewendet?",
+    "solutions": ["Intune: Gerät > Gerätekonfiguration > Profilstatus prüfen", "Profilzuweisung prüfen (Gruppe korrekt?)", "Konflikte mit anderen Profilen prüfen", "Intune Sync erzwingen", "Profil-Einstellungen auf Kompatibilität prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_gpo_gpupdate", "label": "Richtlinie aktualisieren", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["Profil nicht angewendet", "Konfiguration fehlt", "Richtlinie kommt nicht"],
+    "followUpQuestions": [
+      {"question": "Welches Profil ist betroffen?", "options": ["Freitext"], "narrows": "Spezifisches Profil"},
+      {"question": "Gibt es Konflikte mit anderen Profilen?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Profilkonflikt"}
+    ],
+    "relatedProblems": ["PROB-INT-020", "PROB-INT-021"]
+  },
+  {
+    "id": "PROB-INT-020",
+    "category": "Intune & Autopilot",
+    "title": "Konfigurationsprofil-Konflikt",
+    "keywords": ["Konflikt", "Konfigurationsprofil", "Conflict", "Settings", "Intune", "widersprüchlich"],
+    "extendedKeywords": ["Profilkonflikt Intune", "Konfiguration Konflikt", "widersprüchliche Profile", "Intune Conflict", "Profile widersprechen sich", "Einstellungskonflikt", "Configuration Conflict", "mehrere Profile Konflikt", "Intune Settings Conflict", "Profil Konflikt lösen", "widersprüchliche Konfigurationen", "Intune Profil Widerspruch", "Conflict Resolution Intune", "Profile gleiche Einstellung", "doppelte Konfiguration", "Profil Conflict Status", "mehrere Richtlinien Konflikt", "Intune Policy Conflict", "Einstellungen überschreiben sich", "Konfiguration Widerspruch"],
+    "typos": ["Konfklit", "Konfiguraton", "Widersprch", "Konfligt"],
+    "symptoms": ["Intune zeigt Konfigurationskonflikt an", "Einstellungen werden nicht wie erwartet angewendet"],
+    "quickCheck": "Welche Profile stehen im Konflikt?",
+    "solutions": ["Intune: Gerät > Gerätekonfiguration > Konflikte prüfen", "Widersprüchliche Einstellungen in verschiedenen Profilen identifizieren", "Ein Profil hat Vorrang – prüfen welches", "Überflüssige Profile entfernen oder konsolidieren", "Setting Catalog vs. Administrative Templates Konflikte prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_gpo_gpupdate", "label": "Richtlinie aktualisieren", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["Profilkonflikt", "Conflict", "widersprüchlich"],
+    "followUpQuestions": [
+      {"question": "Welche Einstellung ist betroffen?", "options": ["Freitext"], "narrows": "Spezifische Einstellung"},
+      {"question": "Wie viele Profile sind dem Gerät zugewiesen?", "options": ["1-3", "4-10", "Mehr als 10"], "narrows": "Komplexität"}
+    ],
+    "relatedProblems": ["PROB-INT-019", "PROB-INT-021"]
+  },
+  {
+    "id": "PROB-INT-021",
+    "category": "Intune & Autopilot",
+    "title": "Konfigurationsprofil-Verzögerung",
+    "keywords": ["Verzögerung", "Delay", "Konfiguration", "Sync", "dauert", "wartet", "Intune"],
+    "extendedKeywords": ["Konfiguration dauert lange", "Profil wird langsam angewendet", "Intune Sync Verzögerung", "Profil kommt nicht sofort", "Konfiguration verzögert", "Intune Delay", "wie lange dauert Intune Sync", "Profil braucht Zeit", "Konfiguration dauert ewig", "Intune Push dauert", "Profil pending seit Stunden", "Konfiguration noch nicht da", "Intune langsam beim Pushen", "Profil noch ausstehend", "Konfiguration braucht wie lange", "wann kommt Profil Intune", "Profil Sync dauert", "Konfiguration Wartezeit", "Intune Deployment langsam", "wann wird Profil aktiv"],
+    "typos": ["Verzögerugn", "Konfiguraton", "daurt", "Synch"],
+    "symptoms": ["Konfigurationsprofil wird mit Verzögerung angewendet", "Profil zeigt 'Pending' seit längerer Zeit"],
+    "quickCheck": "Wie lange wartet die Konfiguration schon?",
+    "solutions": ["Intune Sync erzwingen: Einstellungen > Konten > Arbeit oder Schule > Synchronisieren", "Company Portal: Sync-Button drücken", "Normale Sync-Intervalle: ca. alle 8 Stunden für Konfiguration", "Gerät neu starten kann Sync beschleunigen", "Intune Management Extension Service neu starten"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_gpo_gpupdate", "label": "Richtlinie aktualisieren", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Profil dauert", "Konfiguration verzögert", "Sync langsam"],
+    "followUpQuestions": [
+      {"question": "Wie lange wartet die Konfiguration schon?", "options": ["Weniger als 1 Stunde", "1-8 Stunden", "Über 8 Stunden", "Über 24 Stunden"], "narrows": "Normale Verzögerung vs. Problem"}
+    ],
+    "relatedProblems": ["PROB-INT-019", "PROB-INT-022"]
+  },
+  {
+    "id": "PROB-INT-022",
+    "category": "Intune & Autopilot",
+    "title": "Intune Sync manuell auslösen",
+    "keywords": ["Sync", "Synchronisation", "manuell", "Intune", "Check-in", "erzwingen"],
+    "extendedKeywords": ["Intune Sync manuell", "Synchronisation erzwingen", "Intune Check-in", "Gerät synchronisieren Intune", "Sync erzwingen Intune", "manueller Sync", "Intune Synchronisation auslösen", "Gerät Sync", "wie synchronisiere ich Intune", "Intune Force Sync", "manuell synchronisieren", "Sync Button Intune", "Gerät einchecken Intune", "Intune manueller Check-in", "Sync Intune starten", "Synchronisation manuell starten", "Intune Sync erzwingen", "Gerät mit Intune synchronisieren", "Force Check-in Intune", "Intune Sync anstoßen"],
+    "typos": ["Synch", "Synchonisation", "mannuell", "erzwinegn"],
+    "symptoms": ["Benutzer möchte Intune-Sync manuell auslösen"],
+    "quickCheck": "Soll der Sync vom Gerät oder vom Intune Portal aus gestartet werden?",
+    "solutions": ["Vom Gerät: Einstellungen > Konten > Auf Arbeit oder Schule zugreifen > Info > Synchronisieren", "Company Portal: Einstellungen > Synchronisieren", "Intune Portal: Geräte > Gerät > Synchronisieren", "PowerShell: Get-ScheduledTask | ? {$_.TaskName -eq 'PushLaunch'} | Start-ScheduledTask", "IME Service neu starten: Restart-Service IntuneManagementExtension"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_gpo_gpupdate", "label": "Richtlinie aktualisieren", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Sync erzwingen", "manuell synchronisieren", "Intune Sync"],
+    "followUpQuestions": [
+      {"question": "Haben Sie Zugriff auf das Intune Portal?", "options": ["Ja", "Nein"], "narrows": "Remote vs. lokal"}
+    ],
+    "relatedProblems": ["PROB-INT-023", "PROB-INT-021"]
+  },
+  {
+    "id": "PROB-INT-023",
+    "category": "Intune & Autopilot",
+    "title": "Intune Sync fehlgeschlagen",
+    "keywords": ["Sync", "fehlgeschlagen", "Fehler", "Synchronisation", "Intune", "Check-in Fehler"],
+    "extendedKeywords": ["Intune Sync Fehler", "Synchronisation fehlgeschlagen", "Sync geht nicht Intune", "Intune Check-in Fehler", "Gerät synchronisiert nicht", "Sync Error Intune", "Synchronisation schlägt fehl", "Intune Sync funktioniert nicht", "Gerät kann nicht syncen", "Sync Fehlercode Intune", "Intune Sync Problem", "Synchronisation geht nicht", "Check-in fehlgeschlagen", "Intune Sync Error", "Gerät Sync Fehler", "Sync Fehler beheben", "Intune keine Synchronisation", "Sync bricht ab", "Intune Sync Timeout", "Gerät hat sich lange nicht synchronisiert"],
+    "typos": ["Synch", "fehlergeschlagen", "fehlgesschlagen", "Synchronistaion"],
+    "symptoms": ["Intune-Sync schlägt fehl", "Gerät hat sich lange nicht synchronisiert"],
+    "quickCheck": "Wann war der letzte erfolgreiche Sync?",
+    "solutions": ["Netzwerkverbindung prüfen", "Erforderliche Intune-Endpoints erreichbar? (manage.microsoft.com, login.microsoftonline.com)", "Intune Management Extension Service neu starten", "Proxy-Einstellungen prüfen", "Gerät aus Intune entfernen und neu registrieren als letzter Ausweg"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Sync Fehler", "Synchronisation fehlgeschlagen", "nicht synchronisiert"],
+    "followUpQuestions": [
+      {"question": "Wann war der letzte erfolgreiche Sync?", "options": ["Heute", "Gestern", "Vor mehreren Tagen", "Weiß nicht"], "narrows": "Dauer des Problems"},
+      {"question": "Ist das Internet erreichbar?", "options": ["Ja", "Nein"], "narrows": "Netzwerk als Ursache"}
+    ],
+    "relatedProblems": ["PROB-INT-022", "PROB-INT-016"]
+  },
+  {
+    "id": "PROB-INT-024",
+    "category": "Intune & Autopilot",
+    "title": "Company Portal Probleme",
+    "keywords": ["Company Portal", "Unternehmensportal", "CP", "Store", "App", "Intune"],
+    "extendedKeywords": ["Company Portal funktioniert nicht", "Unternehmensportal Problem", "Company Portal öffnet nicht", "CP App Fehler", "Company Portal hängt", "Unternehmensportal startet nicht", "Company Portal leer", "CP zeigt keine Apps", "Company Portal Anmeldung fehlgeschlagen", "Unternehmensportal Fehler", "Company Portal aktualisieren", "CP App laden", "Company Portal installieren", "Unternehmensportal leer", "Company Portal synchronisiert nicht", "CP App Problem", "Company Portal abstürzt", "Unternehmensportal nicht installiert", "Company Portal Login Problem", "CP Store Problem"],
+    "typos": ["Compnay Portal", "Company Protal", "Unternehmenportal", "Comapny"],
+    "symptoms": ["Company Portal funktioniert nicht oder zeigt Fehler", "Keine Apps im Company Portal sichtbar"],
+    "quickCheck": "Was genau ist das Problem mit dem Company Portal?",
+    "solutions": ["Company Portal aktualisieren (Microsoft Store)", "Company Portal Cache leeren", "Company Portal deinstallieren und neu installieren", "Mit korrektem Firmenkonto anmelden", "Intune Sync durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Company Portal", "Unternehmensportal", "CP App"],
+    "followUpQuestions": [
+      {"question": "Was genau funktioniert nicht?", "options": ["Öffnet nicht", "Zeigt keine Apps", "Login scheitert", "Absturz"], "narrows": "Spezifisches Problem"},
+      {"question": "Ist das Company Portal aktuell?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Update als Lösung"}
+    ],
+    "relatedProblems": ["PROB-INT-025", "PROB-INT-001"]
+  },
+  {
+    "id": "PROB-INT-025",
+    "category": "Intune & Autopilot",
+    "title": "Intune Management Extension Probleme",
+    "keywords": ["IME", "Intune Management Extension", "SideCar", "Win32", "PowerShell Scripts", "Remediation"],
+    "extendedKeywords": ["IME funktioniert nicht", "Intune Management Extension Fehler", "SideCar Agent Problem", "IME Service", "Intune Management Extension Service", "Win32 Apps IME", "IME Logs", "IME neu starten", "Intune Management Extension hängt", "SideCar Fehler", "IME Installation", "Intune Management Extension nicht installiert", "IME aktualisieren", "Win32 App kommt nicht IME", "IME Service gestoppt", "Intune Agent Problem", "IME PowerShell Scripts", "Intune Extension Fehler", "IME nicht reagierend", "Intune Management Extension Log prüfen"],
+    "typos": ["Intune Managemnet Extension", "IME", "SideCar", "Managment"],
+    "symptoms": ["Intune Management Extension funktioniert nicht", "Win32 Apps werden nicht installiert", "PowerShell Remediations laufen nicht"],
+    "quickCheck": "Läuft der Intune Management Extension Service?",
+    "solutions": ["IME Service Status prüfen: services.msc > Microsoft Intune Management Extension", "IME Service neu starten", "IME Logs prüfen: C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs", "IME Cache leeren: C:\\Program Files (x86)\\Microsoft Intune Management Extension\\Content", "IME deinstallieren und Intune-Sync für Neuinstallation"],
+    "skillMapping": [
+      {"skillId": "rd_domain_aadstatus", "label": "Azure AD Status prüfen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["IME", "Management Extension", "SideCar", "Win32 App Problem"],
+    "followUpQuestions": [
+      {"question": "Läuft der IME Service?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Service-Status"},
+      {"question": "Welche Funktionalität ist betroffen?", "options": ["Win32 Apps", "PowerShell Scripts", "Remediations", "Alles"], "narrows": "Spezifisches Feature"}
+    ],
+    "relatedProblems": ["PROB-INT-024", "PROB-INT-001", "PROB-INT-023"]
+  }
+]

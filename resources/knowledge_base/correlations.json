@@ -1,0 +1,152 @@
+[
+  {
+    "symptoms": ["langsam", "festplatte voll", "hohe cpu"],
+    "min": 2,
+    "cause": "Ressourcen-Engpass",
+    "message": "Das klingt nach einem Ressourcen-Problem. Festplatte voll + hohe CPU-Last = der Rechner erstickt. Lass uns mal aufräumen."
+  },
+  {
+    "symptoms": ["kein netzwerk", "kein internet", "kein vpn"],
+    "min": 2,
+    "cause": "Netzwerkausfall",
+    "message": "Mehrere Netzwerk-Symptome gleichzeitig – das deutet auf ein grundlegendes Netzwerkproblem hin."
+  },
+  {
+    "symptoms": ["outlook", "teams", "onedrive"],
+    "min": 2,
+    "cause": "Netzwerk/Zscaler",
+    "message": "Mehrere Microsoft-Dienste betroffen – Netzwerk oder Proxy (Zscaler) prüfen."
+  },
+  {
+    "symptoms": ["bluescreen", "neustart", "absturz"],
+    "min": 2,
+    "cause": "Hardware- oder Treiberproblem",
+    "message": "Bluescreens + spontane Neustarts – riecht nach Treiber- oder Hardware-Problem."
+  },
+  {
+    "symptoms": ["drucker offline", "druckjob hängt", "drucker fehler", "warteschlange"],
+    "min": 2,
+    "cause": "Drucker-Spooler-Problem",
+    "message": "Mehrere Drucker-Symptome – der Print-Spooler könnte klemmen."
+  },
+  {
+    "symptoms": ["anmeldung", "gesperrt", "passwort"],
+    "min": 2,
+    "cause": "Kontoproblem",
+    "message": "Das sieht nach einem Kontoproblem aus – Passwort abgelaufen oder Account gesperrt."
+  },
+  {
+    "symptoms": ["netzlaufwerk", "zugriff verweigert", "freigabe"],
+    "min": 2,
+    "cause": "Berechtigungs-/Netzwerkproblem",
+    "message": "Netzlaufwerke + Zugriffsprobleme – Berechtigung oder Fileserver prüfen."
+  },
+  {
+    "symptoms": ["langsam", "lüfter laut", "überhitzung", "heiß"],
+    "min": 2,
+    "cause": "Überhitzung",
+    "message": "Langsam + Lüfter auf Hochtouren = Überhitzung. Lüfter reinigen?"
+  },
+  {
+    "symptoms": ["kein bild", "monitor", "kein signal", "schwarz"],
+    "min": 2,
+    "cause": "Anzeigeproblem",
+    "message": "Kein Bild – kann am Kabel, Monitor oder Grafikkarte liegen."
+  },
+  {
+    "symptoms": ["update fehler", "update hängt", "neustart nach update"],
+    "min": 2,
+    "cause": "Windows Update Problem",
+    "message": "Verkorktes Windows Update. Lass uns den Update-Status prüfen."
+  },
+  {
+    "symptoms": ["vpn trennt", "vpn langsam", "vpn verbindet nicht"],
+    "min": 2,
+    "cause": "VPN-Problem",
+    "message": "Mehrere VPN-Symptome – Internetleitung, Einstellungen oder Server prüfen."
+  },
+  {
+    "symptoms": ["langsam", "disk 100", "hängt", "reagiert nicht"],
+    "min": 2,
+    "cause": "Disk I/O Überlastung",
+    "message": "Performance-Probleme – Festplatte überlastet. Lass uns mal schauen was die Disk so treibt."
+  },
+  {
+    "symptoms": ["anmeldung", "vpn", "netzlaufwerk", "zugriff"],
+    "min": 2,
+    "cause": "Kerberos/AD",
+    "message": "Mehrere Zugriffsprobleme gleichzeitig – Authentifizierung (Kerberos/AD) prüfen."
+  },
+  {
+    "symptoms": ["uhrzeit", "anmeldung", "zeit falsch", "datum"],
+    "min": 2,
+    "cause": "NTP/Kerberos",
+    "message": "Uhrzeit falsch = Kerberos-Fehler möglich! Kerberos toleriert max 5 Min Abweichung."
+  },
+  {
+    "symptoms": ["bildschirm", "sound", "usb", "tastatur", "maus"],
+    "min": 2,
+    "cause": "Docking Station",
+    "message": "Mehrere Peripherie-Probleme gleichzeitig – Docking Station prüfen! Einfach mal ab- und wieder anstecken."
+  },
+  {
+    "symptoms": ["outlook", "enaio", "add-in"],
+    "min": 2,
+    "cause": "enaio Add-In",
+    "message": "Outlook + enaio Probleme – das enaio Add-In verursacht wahrscheinlich Outlook-Probleme."
+  },
+  {
+    "symptoms": ["browser", "download", "teams media", "streaming"],
+    "min": 2,
+    "cause": "Zscaler/Proxy",
+    "message": "Zscaler filtert oder blockiert Traffic. Lass uns die Proxy-Einstellungen prüfen."
+  },
+  {
+    "symptoms": ["zscaler", "zertifikat", "ssl", "https"],
+    "min": 2,
+    "cause": "Zscaler SSL-Inspection",
+    "message": "SSL-Fehler bei Zscaler – wahrscheinlich fehlt das Zscaler Root-Zertifikat oder es ist abgelaufen."
+  },
+  {
+    "symptoms": ["ram", "cpu", "festplatte", "langsam"],
+    "min": 3,
+    "cause": "Allgemeine Performance-Krise",
+    "message": "CPU + RAM + Disk – der Rechner ist komplett überlastet. Lass uns den größten Verursacher finden."
+  },
+  {
+    "symptoms": ["profil", "temp", "einstellungen weg", "desktop leer"],
+    "min": 2,
+    "cause": "Temporäres Profil",
+    "message": "Desktop leer + Einstellungen weg = temporäres Profil! Das passiert wenn das eigentliche Profil beschädigt ist."
+  },
+  {
+    "symptoms": ["office", "lizenz", "aktivierung", "nicht aktiviert"],
+    "min": 2,
+    "cause": "Office-Lizenzproblem",
+    "message": "Office Lizenzprobleme – wahrscheinlich muss die Lizenz neu zugewiesen oder repariert werden."
+  },
+  {
+    "symptoms": ["sync", "onedrive", "sharepoint", "konflikt"],
+    "min": 2,
+    "cause": "Cloud-Sync Problem",
+    "message": "Sync-Probleme mit OneDrive/SharePoint – könnte an der Netzwerkverbindung oder Dateikonflikten liegen."
+  },
+  {
+    "symptoms": ["autostart", "langsam", "boot", "hochfahren"],
+    "min": 2,
+    "cause": "Zu viele Autostart-Programme",
+    "message": "Langsamer Start + viele Autostart-Programme – lass uns den Autostart mal aufräumen."
+  },
+  {
+    "symptoms": ["kamera", "mikrofon", "teams", "besprechung"],
+    "min": 2,
+    "cause": "Teams Meeting Hardware",
+    "message": "Kamera/Mikrofon-Probleme in Besprechungen – Geräte-Zuordnung in Teams und Treiber prüfen."
+  },
+  {
+    "symptoms": ["bitlocker", "recovery", "tpm", "verschlüsselung"],
+    "min": 2,
+    "cause": "BitLocker/TPM Problem",
+    "message": "BitLocker-Probleme – Recovery Key bereit? TPM-Status prüfen?"
+  }
+]

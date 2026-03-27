@@ -1,13 +1,16 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   ChevronDown, ChevronRight, Play, ArrowLeft,
-  CheckSquare, Square, MessageSquare, Volume2, XCircle, Search, CheckCircle, Loader,
+  CheckSquare, Square, MessageSquare, Volume2, XCircle, Search, CheckCircle, Loader, Star,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
+import { useAuthStore } from '../store/authStore'
 import { QUERY_DEFINITIONS, QUERY_CATEGORIES } from '../utils/queries'
 import type { QueryId, QueryResult } from '../types'
 import { api } from '../electronAPI'
 import Spinner from '../components/Spinner'
+import { loadFavorites, saveFavorites, addSkill, removeSkill, isSkillFavorite } from '../utils/favorites'
+import type { FavoritesData } from '../types/favorites'
 
 const MSG_CATEGORY = 'Nachrichten versenden'
 
@@ -37,6 +40,24 @@ export default function QueryMenu() {
   const [progress, setProgress] = useState<Record<string, string>>({})
   const [cancelled, setCancelled] = useState(false)
   const cancelledRef = useRef(false)
+
+  // ── Favorites ──────────────────────────────────────────────────────────────
+  const favUser = useAuthStore(s => s.session?.user?.username)
+  const [favData, setFavData] = useState<FavoritesData>({ devices: [], skills: [] })
+  useEffect(() => { if (favUser) loadFavorites(favUser).then(setFavData) }, [favUser])
+
+  async function toggleFavQuery(queryId: string, label: string, category: string) {
+    if (!favUser) return
+    const skillId = `qm::${queryId}`
+    let updated: FavoritesData
+    if (isSkillFavorite(favData, skillId)) {
+      updated = removeSkill(favData, skillId)
+    } else {
+      updated = addSkill(favData, { skillId, label, category, source: 'query-menu' })
+    }
+    setFavData(updated)
+    await saveFavorites(favUser, updated)
+  }
 
   // ── Nachrichten state ──────────────────────────────────────────────────────
   const [msgScreenText, setMsgScreenText] = useState('')
@@ -252,7 +273,7 @@ export default function QueryMenu() {
       )}
 
       {/* Device summary */}
-      <div className="px-6 py-3 border-b border-border bg-muted/30 shrink-0">
+      <div className="px-6 py-3 border-b border-border bg-muted/30 shrink-0 max-h-40 overflow-y-auto">
         <div className="flex flex-wrap gap-2">
           {devices.map((d) =>
             d.resolvedHostnames.map((h) => (
@@ -265,7 +286,7 @@ export default function QueryMenu() {
       </div>
 
       {/* Query list */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
+      <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4 space-y-3">
         {QUERY_CATEGORIES.map((cat) => {
           const queries    = QUERY_DEFINITIONS.filter((q) => q.category === cat.key)
           const available  = queries.filter((q) => !q.adminOnly || isAdmin)
@@ -322,7 +343,14 @@ export default function QueryMenu() {
                               {checked ? <CheckSquare size={15} /> : <Square size={15} />}
                             </span>
                             <input type="checkbox" className="sr-only" checked={checked} onChange={() => toggleQuery(q.id)} />
-                            <span className="text-sm text-foreground">{q.label}</span>
+                            <span className="text-sm text-foreground flex-1">{q.label}</span>
+                            <button
+                              onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavQuery(q.id, q.label, q.category) }}
+                              title={isSkillFavorite(favData, `qm::${q.id}`) ? 'Aus Favoriten entfernen' : 'Zu Favoriten hinzufügen'}
+                              className="p-0.5 rounded hover:bg-accent shrink-0"
+                            >
+                              <Star size={12} className={isSkillFavorite(favData, `qm::${q.id}`) ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30'} />
+                            </button>
                           </label>
                         )
                       })}

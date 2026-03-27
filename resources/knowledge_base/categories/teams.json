@@ -1,0 +1,716 @@
+[
+  {
+    "id": "PROB-TEAMS-001",
+    "category": "Teams Cache-Probleme",
+    "title": "Teams ist langsam",
+    "keywords": ["Teams", "langsam", "Cache", "Performance", "Verzögerung", "träge", "hängt"],
+    "extendedKeywords": ["Teams ist so langsam", "Teams braucht ewig", "Teams reagiert nicht mehr", "Teams lädt so lange", "Teams hängt sich auf", "Teams ist eingefroren", "Warum ist Teams so träge", "Teams ruckelt", "Teams dauert ewig zum Laden", "Alles in Teams ist langsam", "Teams braucht Minuten zum Öffnen", "Chat in Teams dauert ewig", "Teams stockt ständig", "Teams spinnt", "Teams macht Probleme", "Teams läuft nicht richtig", "Mein Teams geht nicht gescheit", "Teams ist total lahm", "Teams hat Aussetzer", "Nachrichten kommen verzögert an", "Teams Eingabe verzögert", "Teams funktioniert nicht flüssig", "Teams Performance schlecht", "Teams zu langsam zum Arbeiten", "Teams blockiert meinen PC"],
+    "typos": ["Tems", "Temas", "Teems", "Teamss", "Teasm"],
+    "symptoms": ["Nachrichten werden verzögert angezeigt", "Chats laden langsam", "Menüs reagieren träge", "Bilder und Dateien laden nicht", "Schreibverzögerung bei Eingabe"],
+    "quickCheck": "Seit wann ist Teams langsam? War es nach einem Update oder schon länger?",
+    "solutions": ["Teams Cache leeren über IT Admin Tool", "Teams komplett schließen und neu starten", "Windows Neustart durchführen", "Teams-App aktualisieren", "Internetverbindung prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Auslastung prüfen", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Ist nur Teams langsam oder auch andere Programme?", "options": ["Nur Teams", "Alles ist langsam"], "narrows": "Wenn alles langsam ist, liegt es möglicherweise an der Systemleistung und nicht nur an Teams"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-002", "PROB-TEAMS-003", "PROB-TEAMS-015"]
+  },
+  {
+    "id": "PROB-TEAMS-002",
+    "category": "Teams Cache-Probleme",
+    "title": "Teams startet nicht",
+    "keywords": ["Teams", "startet nicht", "öffnet nicht", "Cache", "Absturz", "Startfehler", "lädt nicht"],
+    "extendedKeywords": ["Teams geht nicht auf", "Teams öffnet sich nicht", "Teams startet nicht mehr", "Ich kann Teams nicht öffnen", "Teams kommt nicht hoch", "Wenn ich Teams anklicke passiert nichts", "Teams zeigt nur weißen Bildschirm", "Teams lässt sich nicht starten", "Teams bleibt beim Laden hängen", "Teams macht gar nichts wenn ich drauf klicke", "Teams Icon reagiert nicht", "Kann Teams nicht mehr öffnen", "Teams crashed beim Starten", "Teams stürzt sofort ab", "Teams Fenster bleibt leer", "Teams lädt ewig beim Start", "Teams geht einfach nicht", "Teams funktioniert gar nicht mehr", "Teams ist kaputt", "Teams macht keinen Mucks"],
+    "typos": ["Tems startet nicht", "Teams staret nicht", "Teems geht nicht"],
+    "symptoms": ["Klick auf Teams-Icon bewirkt nichts", "Teams zeigt kurz Ladebildschirm und schließt sich", "Weißer oder schwarzer Bildschirm beim Start", "Fehlermeldung beim Starten", "Teams-Prozess läuft im Hintergrund aber Fenster öffnet nicht"],
+    "quickCheck": "Was passiert genau wenn Sie Teams starten? Kommt eine Fehlermeldung?",
+    "solutions": ["Teams über Task-Manager komplett beenden", "Teams Cache leeren", "Teams deinstallieren und neu installieren", "Windows Neustart durchführen", "Antivirus-Ausnahme für Teams prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Haben Sie kürzlich ein Windows- oder Teams-Update erhalten?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Nach Updates kann ein Cache-Reset das Problem oft lösen"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-001", "PROB-TEAMS-003"]
+  },
+  {
+    "id": "PROB-TEAMS-003",
+    "category": "Teams Cache-Probleme",
+    "title": "Fehler nach Teams Update",
+    "keywords": ["Teams", "Update", "Fehler", "Cache", "neue Version", "Aktualisierung", "Update-Problem"],
+    "extendedKeywords": ["Teams funktioniert nach Update nicht mehr", "Seit dem Update geht Teams nicht", "Nach dem Update spinnt Teams", "Teams hat sich aktualisiert und geht nicht mehr", "Probleme nach Teams Update", "Teams ist nach Update kaputt", "Neues Teams Update macht Probleme", "Nach der Aktualisierung von Teams funktioniert nichts", "Teams Update hat alles zerstört", "Seit dem letzten Update ist Teams komisch", "Teams sieht nach Update anders aus und geht nicht", "Update von Teams hat Fehler verursacht", "Teams neu und funktioniert nicht", "Teams wurde aktualisiert jetzt Probleme", "Seit heute morgen geht Teams nicht mehr", "Nach automatischem Update Probleme", "Teams hat sich selbst aktualisiert", "Neues Teams macht nur Ärger", "Teams Version stimmt nicht"],
+    "typos": ["Teams Updaet", "Teams Updat", "Temas Update"],
+    "symptoms": ["Fehlermeldung nach Teams-Start", "Funktionen fehlen nach Update", "Teams sieht anders aus und reagiert nicht richtig", "Einstellungen wurden zurückgesetzt", "Add-Ins funktionieren nicht mehr"],
+    "quickCheck": "Wann war das Update? Welche Fehlermeldung erscheint?",
+    "solutions": ["Teams Cache leeren", "Anmeldedaten zurücksetzen", "Teams komplett deinstallieren und neu installieren", "Auf bekannte Update-Probleme bei Microsoft prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wurde Teams automatisch oder manuell aktualisiert?", "options": ["Automatisch", "Manuell", "Weiß nicht"], "narrows": "Bei automatischen Updates kann ein Rollback helfen"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-001", "PROB-TEAMS-002"]
+  },
+  {
+    "id": "PROB-TEAMS-004",
+    "category": "Kamera",
+    "title": "Kamera wird nicht erkannt",
+    "keywords": ["Kamera", "Teams", "Webcam", "nicht erkannt", "Gerät", "Treiber", "Video"],
+    "extendedKeywords": ["Teams findet meine Kamera nicht", "Keine Kamera in Teams", "Webcam geht nicht in Teams", "Teams sagt keine Kamera verfügbar", "Meine Kamera wird nicht angezeigt", "In Teams gibt es keine Kameraauswahl", "Teams erkennt die Webcam nicht", "Kamera fehlt in Teams", "Kann mein Video nicht einschalten", "Teams zeigt keine Kamera", "Videokamera funktioniert nicht", "Kamera in Teams ausgegraut", "Kein Video in Teams möglich", "Teams hat keinen Zugriff auf die Kamera", "Wo ist meine Kamera in Teams", "Kamera wird nicht gefunden", "Videoanruf geht nicht weil keine Kamera", "Teams Videokonferenz ohne Kamera", "Kamerasymbol durchgestrichen", "Kann Video nicht starten"],
+    "typos": ["Kamra", "Kammera", "Webkam", "Webcamm"],
+    "symptoms": ["Kamera-Dropdown in Teams ist leer", "Kamera-Symbol ist ausgegraut", "Fehlermeldung: Keine Kamera gefunden", "Video-Vorschau zeigt nichts"],
+    "quickCheck": "Funktioniert die Kamera in anderen Programmen wie z.B. der Windows Kamera-App?",
+    "solutions": ["Kamera-Zugriff in Windows Einstellungen prüfen (Datenschutz > Kamera)", "Teams-Geräteeinstellungen prüfen", "Kameratreiber aktualisieren", "USB-Kamera ab- und wieder anstecken", "Teams Cache leeren und neu starten"],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devclass", "label": "Geräte-Manager prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Handelt es sich um eine eingebaute oder externe USB-Kamera?", "options": ["Eingebaut (Laptop)", "Extern (USB)"], "narrows": "Bei externen Kameras kann ein USB-Problem vorliegen"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-005", "PROB-TEAMS-006"]
+  },
+  {
+    "id": "PROB-TEAMS-005",
+    "category": "Kamera",
+    "title": "Kamera zeigt schwarzes Bild",
+    "keywords": ["Kamera", "schwarz", "schwarzes Bild", "kein Bild", "Video dunkel", "Webcam schwarz"],
+    "extendedKeywords": ["Kamera ist schwarz in Teams", "Mein Video zeigt nur schwarz", "Andere sehen mich nicht in Teams", "Kamera geht aber Bild ist schwarz", "Schwarzer Bildschirm bei Kamera", "Video in Teams ist komplett dunkel", "Teams zeigt schwarzes Kamerabild", "Kamera an aber kein Bild", "Webcam Bild ist schwarz", "Meine Kollegen sehen nur schwarz", "Kameralicht geht an aber kein Bild", "Video ist dunkel in Besprechung", "Teams Kamera schwarz", "Bildschirm schwarz bei Videoanruf", "Kamera funktioniert aber zeigt nichts", "Bild bleibt schwarz bei Teams", "Video eingeschaltet aber nichts zu sehen", "Nur schwarzes Bild bei Videokonferenz"],
+    "typos": ["schwarzes bild", "schwarzer bildschirm", "schwarz Bild"],
+    "symptoms": ["Kamera-LED leuchtet aber Bild ist schwarz", "Vorschau in Teams ist schwarz", "Andere Teilnehmer sehen nur schwarzes Bild", "Kamera funktioniert in anderen Apps aber nicht in Teams"],
+    "quickCheck": "Leuchtet die Kamera-LED? Funktioniert die Kamera in der Windows Kamera-App?",
+    "solutions": ["Kamera in Teams-Einstellungen aus- und wieder einschalten", "Anderen Browser oder Desktop-App verwenden", "Kameratreiber neu installieren", "Datenschutzeinstellungen für Kamera prüfen", "Teams Cache leeren"],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devclass", "label": "Geräte-Manager prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wird ein anderes Programm die Kamera gerade verwenden?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Eine Kamera kann oft nur von einer Anwendung gleichzeitig genutzt werden"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-004", "PROB-TEAMS-006"]
+  },
+  {
+    "id": "PROB-TEAMS-006",
+    "category": "Kamera",
+    "title": "Kamera funktioniert nicht in Besprechung",
+    "keywords": ["Kamera", "Besprechung", "Meeting", "Video", "Konferenz", "Videokonferenz", "Videoanruf"],
+    "extendedKeywords": ["Im Meeting geht meine Kamera nicht", "Kann in der Besprechung mein Video nicht einschalten", "Kamera funktioniert nur außerhalb von Meetings", "Video geht nicht wenn ich in Besprechung bin", "Besprechung ohne Kamera", "Kein Video im Meeting möglich", "In der Konferenz geht die Kamera nicht an", "Kann mich nicht zeigen im Meeting", "Videoanruf ohne Bild", "Kamera geht nicht an in Teams Besprechung", "Meeting Kamera Problem", "Kamera streikt im Meeting", "Kann Video in Besprechung nicht aktivieren", "Videokonferenz Kamera ausgegraut", "Teams Meeting Kamera funktioniert nicht", "Kamera nur im Test möglich nicht im Meeting"],
+    "typos": ["Besprechugn", "Meetting", "Meting", "Konferennz"],
+    "symptoms": ["Kamera-Button ist im Meeting ausgegraut", "Kamera funktioniert in Vorschau aber nicht im Meeting", "Andere sehen kein Bild obwohl Kamera an", "Fehlermeldung beim Einschalten der Kamera im Meeting"],
+    "quickCheck": "Funktioniert die Kamera in den Teams-Einstellungen unter Geräte?",
+    "solutions": ["Meeting verlassen und erneut beitreten", "Kamera in Teams-Einstellungen vor dem Beitreten testen", "Andere Anwendungen schließen die die Kamera nutzen", "Teams Cache leeren", "Berechtigungen in Windows-Einstellungen prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_devmgr_devclass", "label": "Geräte-Manager prüfen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Haben Sie vor dem Meeting die Kamera in den Teams-Einstellungen getestet?", "options": ["Ja, da geht sie", "Ja, da geht sie auch nicht", "Nein"], "narrows": "Wenn die Kamera in den Einstellungen funktioniert, ist es ein Meeting-spezifisches Problem"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-004", "PROB-TEAMS-005"]
+  },
+  {
+    "id": "PROB-TEAMS-007",
+    "category": "Mikrofon/Audio",
+    "title": "Kein Ton in Teams",
+    "keywords": ["Ton", "Audio", "kein Sound", "Lautsprecher", "Teams", "hören", "Kopfhörer"],
+    "extendedKeywords": ["Ich höre nichts in Teams", "Kein Ton bei Teams Anruf", "Teams hat keinen Sound", "Kann die anderen nicht hören", "Lautsprecher geht nicht in Teams", "Audio funktioniert nicht in Teams", "Teams ist stumm", "Kein Ton bei Besprechung", "Teams Audio Problem", "Höre nichts im Meeting", "Sound geht nicht in Teams", "Anruf ohne Ton", "Teams Ton weg", "Kann nichts hören in der Konferenz", "Lautsprecher funktioniert nicht bei Teams", "Kopfhörer funktionieren nicht in Teams", "Audio ausgefallen in Teams", "Teams kein Audioausgang", "Alle sind stumm in Teams", "Headset geht nicht in Teams"],
+    "typos": ["kein Tohn", "kein Sount", "Laudsprecher", "Audeo"],
+    "symptoms": ["Kein Ton bei Teams-Anrufen oder Besprechungen", "Lautstärkeregler auf Maximum aber kein Ton", "Andere Audio-Apps funktionieren aber Teams nicht", "Benachrichtigungstöne fehlen"],
+    "quickCheck": "Funktioniert der Ton in anderen Programmen oder nur in Teams nicht?",
+    "solutions": ["Audiogerät in Teams-Einstellungen überprüfen", "Lautstärke in Windows und Teams prüfen", "Audiogerät in Windows als Standard setzen", "Teams Cache leeren und neu starten", "Audiotreiber aktualisieren"],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_audioreset", "label": "Audio-Gerät zurücksetzen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Verwenden Sie einen Lautsprecher, Kopfhörer oder ein Headset?", "options": ["Lautsprecher", "Kopfhörer", "Headset", "Laptop-Lautsprecher"], "narrows": "Verschiedene Audiogeräte erfordern unterschiedliche Lösungsansätze"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-008", "PROB-TEAMS-009", "PROB-TEAMS-010"]
+  },
+  {
+    "id": "PROB-TEAMS-008",
+    "category": "Mikrofon/Audio",
+    "title": "Mikrofon ist stumm geschaltet oder funktioniert nicht",
+    "keywords": ["Mikrofon", "stumm", "Mikro", "muten", "Aufnahme", "Teams", "Headset"],
+    "extendedKeywords": ["Andere hören mich nicht in Teams", "Mein Mikrofon geht nicht", "Teams Mikro funktioniert nicht", "Bin stumm geschaltet in Teams", "Kann nicht sprechen in Teams", "Mikrofon wird nicht erkannt", "Niemand hört mich im Meeting", "Mikro stumm in Teams", "Mein Headset-Mikro funktioniert nicht in Teams", "Teams nimmt meine Stimme nicht auf", "Kann mich nicht unmuten", "Stummschaltung geht nicht weg", "Mikrofon blockiert in Teams", "Teams greift nicht auf Mikrofon zu", "Mikrofon Symbol durchgestrichen", "Kann mich nicht einschalten", "Die anderen hören mich nicht"],
+    "typos": ["Mikrofohn", "Mikro", "Microfon", "Mirkofon", "Mikorphon"],
+    "symptoms": ["Mikrofon-Symbol zeigt stumm geschaltet an", "Pegel im Mikrofontest bewegt sich nicht", "Andere Teilnehmer hören keinen Ton", "Teams zeigt falsches Mikrofon an"],
+    "quickCheck": "Ist das Mikrofon-Symbol in Teams durchgestrichen oder gibt es eine Fehlermeldung?",
+    "solutions": ["Stummschaltung in Teams aufheben (Strg+Umschalt+M)", "Richtiges Mikrofon in Teams-Einstellungen auswählen", "Mikrofon-Zugriff in Windows-Datenschutzeinstellungen erlauben", "Mikrofon in Windows-Soundeinstellungen testen", "Audiotreiber zurücksetzen"],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_audioreset", "label": "Audio-Gerät zurücksetzen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_devmgr_devclass", "label": "Geräte-Manager prüfen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Funktioniert das Mikrofon in anderen Anwendungen wie der Windows Sprachaufnahme?", "options": ["Ja", "Nein", "Nicht getestet"], "narrows": "Wenn das Mikro generell nicht funktioniert, ist es ein Treiber- oder Hardwareproblem"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-007", "PROB-TEAMS-009"]
+  },
+  {
+    "id": "PROB-TEAMS-009",
+    "category": "Mikrofon/Audio",
+    "title": "Echo bei Teams Anrufen",
+    "keywords": ["Echo", "Hall", "Rückkopplung", "Audio", "Teams", "Feedback", "doppelt hören"],
+    "extendedKeywords": ["Echo in Teams", "Ich höre mich selbst in Teams", "Hall in der Besprechung", "Andere hören sich doppelt", "Rückkopplung im Meeting", "Echo bei Videoanruf", "Ton wird zurückgespielt", "Alles hallt in Teams", "Doppelter Ton in Teams", "Echo Problem bei Konferenz", "Sich selbst hören in Teams", "Akustisches Feedback in Teams", "Teams Anruf hallt", "Besprechung mit Echo", "Ton kommt doppelt", "Mikrofon gibt Echo", "Lautsprecher erzeugt Echo"],
+    "typos": ["Eccho", "Hahl", "Rückkoplung", "Rückkoppellung"],
+    "symptoms": ["Eigene Stimme kommt verzögert zurück", "Andere Teilnehmer berichten Echo", "Hall-Effekt bei Gesprächen", "Pfeifender Ton bei Rückkopplung"],
+    "quickCheck": "Verwenden Sie Lautsprecher und Mikrofon getrennt oder ein Headset?",
+    "solutions": ["Headset statt Lautsprecher und separatem Mikrofon verwenden", "Lautstärke des Lautsprechers reduzieren", "Abstand zwischen Mikrofon und Lautsprecher vergrößern", "In Teams-Einstellungen Geräuschunterdrückung aktivieren", "Audio-Gerät zurücksetzen"],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_audioreset", "label": "Audio-Gerät zurücksetzen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Befinden sich mehrere Personen im selben Raum mit eingeschaltetem Teams?", "options": ["Ja", "Nein"], "narrows": "Mehrere Geräte im selben Raum verursachen häufig Echo"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-007", "PROB-TEAMS-010"]
+  },
+  {
+    "id": "PROB-TEAMS-010",
+    "category": "Mikrofon/Audio",
+    "title": "Hintergrundgeräusche in Teams",
+    "keywords": ["Hintergrundgeräusche", "Rauschen", "Geräuschunterdrückung", "Noise", "Lärm", "Teams", "Störgeräusche"],
+    "extendedKeywords": ["Teams nimmt Hintergrundgeräusche auf", "Kollegen hören mein Tippen", "Rauschen im Mikrofon bei Teams", "Teams filtert Geräusche nicht", "Zu viel Lärm bei Teams Anruf", "Hintergrundgeräusche nerven in Teams", "Tastaturgeräusche in Teams hörbar", "Teams Geräuschfilter funktioniert nicht", "Störgeräusche im Meeting", "Ventilator ist in Teams zu hören", "Kollegen beschweren sich über Geräusche", "Umgebungsgeräusche in Teams", "Rauschen bei Teams Anruf", "Noise Cancelling in Teams geht nicht"],
+    "typos": ["Hintergrundgereusche", "Geräuschunterdrükung", "Rasuchen"],
+    "symptoms": ["Andere Teilnehmer hören Hintergrundgeräusche", "Tastaturklicken wird übertragen", "Mikrofon nimmt Umgebungsgeräusche auf", "Rauschen oder Brummen im Audio"],
+    "quickCheck": "Haben Sie die Geräuschunterdrückung in Teams aktiviert?",
+    "solutions": ["Geräuschunterdrückung in Teams auf Hoch setzen (Einstellungen > Geräte)", "Headset mit Noise Cancelling verwenden", "Mikrofon näher zum Mund positionieren", "Geräuschquellen im Raum minimieren", "Audio-Gerät zurücksetzen"],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_audioreset", "label": "Audio-Gerät zurücksetzen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Welche Art von Hintergrundgeräusch tritt auf?", "options": ["Tippen/Tastatur", "Rauschen/Brummen", "Umgebungslärm", "Sonstiges"], "narrows": "Die Art des Geräuschs bestimmt die beste Lösung"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-007", "PROB-TEAMS-009"]
+  },
+  {
+    "id": "PROB-TEAMS-011",
+    "category": "Bildschirmfreigabe",
+    "title": "Bildschirmfreigabe funktioniert nicht",
+    "keywords": ["Bildschirmfreigabe", "Screen Sharing", "teilen", "Bildschirm", "Freigabe", "Präsentation"],
+    "extendedKeywords": ["Kann meinen Bildschirm nicht teilen", "Bildschirmfreigabe geht nicht in Teams", "Screen Sharing funktioniert nicht", "Kann nicht präsentieren in Teams", "Bildschirm teilen Button ausgegraut", "Kann meinen Desktop nicht freigeben", "Teams Bildschirmfreigabe klappt nicht", "Freigabe startet nicht", "Kann nichts teilen im Meeting", "Bildschirmübertragung funktioniert nicht", "Andere sehen meinen Bildschirm nicht", "Kann nicht zeigen was auf meinem Bildschirm ist", "Teilen Button funktioniert nicht", "Präsentieren in Teams geht nicht"],
+    "typos": ["Bilschirmfreigabe", "Bildschirmfraigabe", "Screen Shaering"],
+    "symptoms": ["Teilen-Button ist ausgegraut", "Fehlermeldung bei Bildschirmfreigabe", "Bildschirmfreigabe wird sofort beendet", "Andere sehen den geteilten Bildschirm nicht"],
+    "quickCheck": "Ist der Teilen-Button in Teams ausgegraut oder kommt eine Fehlermeldung?",
+    "solutions": ["Berechtigungen für Bildschirmaufnahme in Windows prüfen", "Meeting verlassen und erneut beitreten", "Teams als Desktop-App statt Browser verwenden", "Teams Cache leeren", "Grafiktreiber aktualisieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Verwenden Sie Teams im Browser oder als Desktop-App?", "options": ["Desktop-App", "Browser"], "narrows": "Im Browser sind die Freigabefunktionen eingeschränkt"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-012", "PROB-TEAMS-013"]
+  },
+  {
+    "id": "PROB-TEAMS-012",
+    "category": "Bildschirmfreigabe",
+    "title": "Bildschirmfreigabe zeigt schwarzen Bildschirm",
+    "keywords": ["Bildschirmfreigabe", "schwarz", "schwarzer Bildschirm", "Screen Sharing", "kein Bild"],
+    "extendedKeywords": ["Andere sehen nur schwarz bei meiner Freigabe", "Bildschirmfreigabe ist schwarz", "Schwarzer Bildschirm beim Teilen", "Wenn ich teile sehen andere nur schwarz", "Bildschirmfreigabe zeigt nichts", "Geteilter Bildschirm ist schwarz in Teams", "Mein geteilter Bildschirm ist dunkel", "Screen Sharing schwarzes Bild", "Freigabe funktioniert aber Bild ist schwarz", "Teams teilt nur schwarzen Bildschirm"],
+    "typos": ["schwrzer Bildschirm", "schwarzer Bilschirm"],
+    "symptoms": ["Teilnehmer sehen schwarzen Bildschirm bei Freigabe", "Eigene Vorschau ist schwarz", "Freigabe scheint zu funktionieren aber zeigt nichts"],
+    "quickCheck": "Teilen Sie den gesamten Bildschirm oder nur ein Fenster?",
+    "solutions": ["Statt Bildschirm ein einzelnes Fenster teilen", "Hardwarebeschleunigung in Teams deaktivieren", "Grafiktreiber aktualisieren", "Teams Cache leeren und neu starten", "VPN-Verbindung prüfen (kann Bandbreite einschränken)"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Haben Sie eine dedizierte Grafikkarte (z.B. NVIDIA) oder nur die integrierte?", "options": ["Dedizierte GPU", "Integrierte", "Weiß nicht"], "narrows": "Bei dedizierten GPUs kann die Hardwarebeschleunigung Probleme verursachen"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-011", "PROB-TEAMS-013"]
+  },
+  {
+    "id": "PROB-TEAMS-013",
+    "category": "Bildschirmfreigabe",
+    "title": "Kein Ton bei Bildschirmfreigabe",
+    "keywords": ["Bildschirmfreigabe", "Ton", "Audio", "Sound", "System-Audio", "Freigabe"],
+    "extendedKeywords": ["Bei Bildschirmfreigabe kein Ton", "Andere hören keinen Sound bei meiner Freigabe", "Video abspielen bei Freigabe ohne Ton", "Systemton wird nicht geteilt", "Audio fehlt bei Screen Sharing", "Kann Ton nicht mitteilen bei Freigabe", "Sound geht nicht beim Teilen", "Video in Präsentation ohne Ton", "Audio bei Bildschirmfreigabe stumm", "Computer Sound wird nicht übertragen", "Wenn ich ein Video teile hören die anderen nichts"],
+    "typos": ["Bidlschirmfreigabe Ton", "Ton bei Freigabe"],
+    "symptoms": ["Video oder Audio vom Computer wird bei Freigabe nicht übertragen", "Teilnehmer hören nur die Stimme aber nicht den Computeraudio", "Systemsounds werden nicht geteilt"],
+    "quickCheck": "Haben Sie bei der Bildschirmfreigabe die Option 'Computersound einschließen' aktiviert?",
+    "solutions": ["Bei Freigabe 'Computersound einschließen' aktivieren", "Systemlautstärke überprüfen", "Desktop-App statt Browser verwenden", "Teams neu starten und erneut versuchen"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Was möchten Sie teilen - ein Video, eine Präsentation oder den gesamten Desktop?", "options": ["Video", "Präsentation", "Desktop", "Sonstiges"], "narrows": "Bei Videos ist die Option 'Computersound einschließen' essenziell"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-011", "PROB-TEAMS-012"]
+  },
+  {
+    "id": "PROB-TEAMS-014",
+    "category": "Status",
+    "title": "Status zeigt immer Abwesend",
+    "keywords": ["Status", "Abwesend", "Verfügbarkeit", "Anwesenheit", "Presence", "gelb", "Teams"],
+    "extendedKeywords": ["Teams zeigt mich als abwesend", "Mein Status ist immer gelb", "Status aktualisiert sich nicht", "Teams sagt ich bin abwesend obwohl ich da bin", "Immer als abwesend angezeigt", "Status stimmt nicht in Teams", "Falscher Status in Teams", "Teams zeigt falsche Verfügbarkeit", "Bin online aber Status zeigt abwesend", "Gelber Status obwohl ich arbeite", "Abwesend-Status geht nicht weg", "Status bleibt auf abwesend hängen", "Teams denkt ich bin weg"],
+    "typos": ["Abwesent", "Statuss", "Anwesenheits"],
+    "symptoms": ["Status zeigt dauerhaft Gelb/Abwesend", "Status wechselt nicht automatisch auf Verfügbar", "Manuell gesetzter Status wird überschrieben"],
+    "quickCheck": "Haben Sie versucht den Status manuell auf Verfügbar zu setzen?",
+    "solutions": ["Status manuell auf Verfügbar setzen", "Statusdauer auf 'Zurücksetzen nie' einstellen", "Teams Cache leeren", "Outlook-Kalender prüfen (Termine können Status beeinflussen)", "Teams ab- und wieder anmelden"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wechselt der Status manchmal oder ist er dauerhaft auf Abwesend?", "options": ["Dauerhaft abwesend", "Wechselt manchmal", "Nach einer bestimmten Zeit"], "narrows": "Bei dauerhaftem Status kann ein Cache-Problem oder Outlook-Integration vorliegen"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-015"]
+  },
+  {
+    "id": "PROB-TEAMS-015",
+    "category": "Status",
+    "title": "Status aktualisiert sich nicht",
+    "keywords": ["Status", "aktualisieren", "synchronisieren", "Presence", "Verfügbarkeit", "veraltet"],
+    "extendedKeywords": ["Status von Kollegen aktualisiert sich nicht", "Teams zeigt falschen Online-Status", "Kann Status nicht ändern", "Status bleibt hängen", "Teams Status ist eingefroren", "Kollegen sehen meinen Status nicht richtig", "Status stimmt nicht überein", "Teams zeigt alten Status", "Status Synchronisation funktioniert nicht", "Verfügbarkeit wird nicht aktualisiert", "Grüner Punkt obwohl Kollege offline", "Falscher Online Status"],
+    "typos": ["aktualisiert sich nciht", "Syncronisieren"],
+    "symptoms": ["Status bleibt auf altem Wert stehen", "Änderung des Status wird nicht übernommen", "Kollegen sehen veralteten Status", "Status springt nach Änderung wieder zurück"],
+    "quickCheck": "Haben Sie versucht Teams komplett zu schließen und neu zu starten?",
+    "solutions": ["Teams komplett beenden und neu starten", "Teams Cache leeren", "Status manuell zurücksetzen", "Anmeldedaten zurücksetzen", "Prüfen ob Outlook-Kalender den Status beeinflusst"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Betrifft es Ihren eigenen Status oder den Status anderer Personen?", "options": ["Meinen eigenen", "Status anderer", "Beides"], "narrows": "Wenn es andere betrifft, kann es ein serverseitiges Problem sein"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-014"]
+  },
+  {
+    "id": "PROB-TEAMS-016",
+    "category": "CPU-Auslastung",
+    "title": "Teams verursacht hohe CPU-Auslastung",
+    "keywords": ["CPU", "Auslastung", "Prozessor", "Teams", "langsam", "Last", "Performance", "Ressourcen"],
+    "extendedKeywords": ["Teams frisst meinen Prozessor", "Computer ist langsam wegen Teams", "Teams verbraucht zu viel CPU", "Lüfter dreht hoch wegen Teams", "Teams lastet den PC aus", "CPU auf 100% wegen Teams", "Teams macht den PC langsam", "Computer heiß wegen Teams", "Teams braucht zu viel Leistung", "Rechner wird langsam wenn Teams läuft", "Teams Ressourcenverbrauch zu hoch", "PC wird träge durch Teams", "Teams belastet den Computer", "Alles hängt wenn Teams offen ist"],
+    "typos": ["CPU Auslastugn", "Protzessor", "Leisutng"],
+    "symptoms": ["Hohe CPU-Auslastung im Task-Manager durch Teams", "Lüfter läuft auf Hochtouren", "Andere Programme werden langsam", "PC reagiert träge"],
+    "quickCheck": "Wie hoch ist die CPU-Auslastung durch Teams im Task-Manager?",
+    "solutions": ["Teams-Hardwarebeschleunigung deaktivieren (Einstellungen > Allgemein)", "Teams Cache leeren", "Nicht benötigte Teams-Features deaktivieren", "Teams neu starten", "Windows und Teams aktualisieren"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Auslastung prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Passiert die hohe Auslastung dauerhaft oder nur bei bestimmten Aktionen?", "options": ["Dauerhaft", "Nur in Meetings", "Nur bei Bildschirmfreigabe", "Nur beim Starten"], "narrows": "Bei Meetings kann die Hardwarebeschleunigung helfen, beim Start ist es oft der Cache"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-001", "PROB-TEAMS-017"]
+  },
+  {
+    "id": "PROB-TEAMS-017",
+    "category": "CPU-Auslastung",
+    "title": "Teams verbraucht zu viel Arbeitsspeicher",
+    "keywords": ["RAM", "Arbeitsspeicher", "Speicher", "Memory", "Teams", "Ressourcen", "Speicherverbrauch"],
+    "extendedKeywords": ["Teams braucht zu viel RAM", "Arbeitsspeicher voll wegen Teams", "Teams verbraucht den ganzen Speicher", "Speicher wird knapp durch Teams", "Teams Speicher Problem", "Computer hat keinen Speicher mehr wegen Teams", "RAM Auslastung durch Teams", "Teams frisst den Arbeitsspeicher", "Zu viele Teams Prozesse im Task-Manager", "8GB RAM reichen nicht für Teams"],
+    "typos": ["Arbeitsspeicher", "Speicherverbrauhc", "RAM Verbrauhc"],
+    "symptoms": ["Hoher Arbeitsspeicherverbrauch im Task-Manager", "Windows meldet wenig Arbeitsspeicher", "Andere Programme werden ausgelagert", "PC wird sehr langsam"],
+    "quickCheck": "Wie viel Arbeitsspeicher verwendet Teams im Task-Manager?",
+    "solutions": ["Teams Cache leeren", "Nicht benötigte Teams-Chats und Kanäle schließen", "Teams neu starten", "Hardwarebeschleunigung aktivieren oder deaktivieren", "Anzahl offener Teams-Tabs reduzieren"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "CPU/Speicher-Auslastung prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wie viel RAM hat Ihr Computer insgesamt?", "options": ["4 GB", "8 GB", "16 GB", "Mehr", "Weiß nicht"], "narrows": "Bei weniger als 8 GB RAM sind Speicherprobleme mit Teams häufig"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-016", "PROB-TEAMS-001"]
+  },
+  {
+    "id": "PROB-TEAMS-018",
+    "category": "Benachrichtigungen",
+    "title": "Benachrichtigungen kommen nicht an",
+    "keywords": ["Benachrichtigung", "Notification", "Hinweis", "Mitteilung", "Pop-up", "Teams", "Alarm"],
+    "extendedKeywords": ["Teams Benachrichtigungen kommen nicht", "Keine Popup-Benachrichtigungen in Teams", "Teams meldet neue Nachrichten nicht", "Verpass ständig Nachrichten in Teams", "Keine Tonbenachrichtigung bei Teams", "Teams zeigt keine Benachrichtigungen an", "Benachrichtigungen fehlen in Teams", "Teams informiert mich nicht über neue Nachrichten", "Kein Hinweiston bei Teams Nachricht", "Verpasse Anrufe weil keine Benachrichtigung", "Teams Desktop-Benachrichtigung fehlt", "Badge-Zähler in Teams zeigt nichts"],
+    "typos": ["Benachrichtigugn", "Notifikation", "Benachrichtung"],
+    "symptoms": ["Keine Pop-up-Benachrichtigungen", "Kein Ton bei neuen Nachrichten", "Badge-Zähler auf Teams-Icon aktualisiert nicht", "Verpasste Nachrichten und Anrufe"],
+    "quickCheck": "Sind die Benachrichtigungen in den Teams-Einstellungen aktiviert?",
+    "solutions": ["Teams-Benachrichtigungseinstellungen prüfen", "Windows-Benachrichtigungen für Teams aktivieren", "Fokus-Assistenten in Windows deaktivieren", "Teams Cache leeren", "Nicht-Stören-Modus in Teams deaktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Fehlen alle Benachrichtigungen oder nur bestimmte (z.B. nur Chats oder nur Kanäle)?", "options": ["Alle", "Nur Chats", "Nur Kanäle", "Nur Anrufe"], "narrows": "Bei einzelnen Kategorien können die kanalspezifischen Einstellungen das Problem sein"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-019"]
+  },
+  {
+    "id": "PROB-TEAMS-019",
+    "category": "Benachrichtigungen",
+    "title": "Zu viele Benachrichtigungen",
+    "keywords": ["Benachrichtigungen", "zu viele", "Spam", "Flut", "nervig", "stören", "Notification"],
+    "extendedKeywords": ["Teams schickt zu viele Benachrichtigungen", "Werde von Teams Benachrichtigungen überflutet", "Teams nervt mit Benachrichtigungen", "Ständig Pop-ups von Teams", "Teams unterbricht mich dauernd", "Zu viele Benachrichtigungstöne", "Teams Benachrichtigungen abstellen", "Will weniger Benachrichtigungen von Teams", "Teams stört mich bei der Arbeit", "Benachrichtigungsflut in Teams", "Kann nicht konzentriert arbeiten wegen Teams", "Teams piept ständig"],
+    "typos": ["Benachrichtigugnen", "zu vile", "Notificationen"],
+    "symptoms": ["Ständige Pop-up-Benachrichtigungen", "Dauerhafte Benachrichtigungstöne", "Ablenkung durch zu viele Hinweise", "Desktop wird von Benachrichtigungen überflutet"],
+    "quickCheck": "Möchten Sie bestimmte Benachrichtigungen deaktivieren oder alle reduzieren?",
+    "solutions": ["Benachrichtigungseinstellungen in Teams anpassen", "Einzelne Kanäle stummschalten", "Fokuszeit in Teams/Outlook einrichten", "Nicht-Stören-Modus aktivieren", "Nur Erwähnungen und Direktnachrichten benachrichtigen lassen"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Kommen die Benachrichtigungen von bestimmten Kanälen oder allgemein?", "options": ["Bestimmte Kanäle", "Allgemein alles"], "narrows": "Einzelne Kanäle können gezielt stummgeschaltet werden"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-018"]
+  },
+  {
+    "id": "PROB-TEAMS-020",
+    "category": "Anmeldung",
+    "title": "Anmeldefehler bei Teams",
+    "keywords": ["Anmeldung", "Login", "Fehler", "Passwort", "Authentifizierung", "Teams", "anmelden"],
+    "extendedKeywords": ["Kann mich nicht bei Teams anmelden", "Teams Login funktioniert nicht", "Anmeldung bei Teams fehlgeschlagen", "Teams akzeptiert mein Passwort nicht", "Fehler bei Teams Anmeldung", "Teams Anmeldeschleife", "Werde immer wieder nach dem Passwort gefragt", "Teams fragt ständig nach Anmeldung", "Anmeldefenster kommt immer wieder", "Kann nicht in Teams rein", "Teams Anmeldung hängt", "Login schlägt fehl", "Teams Authentifizierung geht nicht", "Teams meldet Anmeldefehler"],
+    "typos": ["Anmeldugn", "Loggin", "Authentifizeirung"],
+    "symptoms": ["Fehlermeldung bei Anmeldung", "Endlose Anmeldeschleife", "Teams fragt wiederholt nach Passwort", "Anmeldung hängt ohne Ergebnis"],
+    "quickCheck": "Welche Fehlermeldung erscheint bei der Anmeldung?",
+    "solutions": ["Anmeldedaten zurücksetzen", "Teams Cache leeren", "Passwort über Portal zurücksetzen", "Windows-Anmeldeinformationen löschen", "Teams deinstallieren und neu installieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Haben Sie kürzlich Ihr Passwort geändert?", "options": ["Ja", "Nein"], "narrows": "Nach Passwortänderung müssen oft die gespeicherten Anmeldedaten gelöscht werden"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-021"]
+  },
+  {
+    "id": "PROB-TEAMS-021",
+    "category": "Anmeldung",
+    "title": "Teams mit falschem Konto angemeldet",
+    "keywords": ["Konto", "Account", "falsch", "wechseln", "Benutzer", "Profil", "Teams"],
+    "extendedKeywords": ["Teams ist mit dem falschen Konto angemeldet", "Falscher Benutzer in Teams", "Wie wechsle ich das Konto in Teams", "Teams zeigt falsches Profil", "Bin mit privatem Konto in Teams", "Kann nicht zum richtigen Konto wechseln", "Teams nutzt das alte Konto", "Muss Konto in Teams ändern", "Falsches Firmen-Konto in Teams", "Teams hat sich mit dem falschen Account angemeldet", "Zwei Konten in Teams durcheinander"],
+    "typos": ["Kontow", "Accoutn", "Benutzer wechslen"],
+    "symptoms": ["Falscher Name oder Profilbild in Teams", "Zugriff auf falsche Organisation", "Chats und Kanäle einer anderen Organisation sichtbar", "Kann richtige Kontakte nicht finden"],
+    "quickCheck": "Mit welchem Konto sind Sie aktuell angemeldet und welches benötigen Sie?",
+    "solutions": ["In Teams abmelden und mit richtigem Konto anmelden", "Anmeldedaten zurücksetzen", "Windows-Anmeldeinformationen für Teams löschen", "Teams Cache leeren vor erneuter Anmeldung"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Haben Sie mehrere Microsoft-Konten (z.B. privat und geschäftlich)?", "options": ["Ja", "Nein"], "narrows": "Bei mehreren Konten muss sichergestellt werden, dass das richtige Konto ausgewählt wird"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-020"]
+  },
+  {
+    "id": "PROB-TEAMS-022",
+    "category": "Chat",
+    "title": "Nachrichten kommen nicht an",
+    "keywords": ["Chat", "Nachricht", "senden", "empfangen", "nicht zugestellt", "Teams", "Mitteilung"],
+    "extendedKeywords": ["Teams Chat Nachrichten kommen nicht an", "Nachricht wurde nicht zugestellt", "Kann keine Nachrichten senden", "Chat in Teams funktioniert nicht", "Nachrichten verschwinden in Teams", "Meine Nachrichten werden nicht gesendet", "Kollege hat meine Nachricht nicht bekommen", "Teams Chat fehlgeschlagen", "Rotes Ausrufezeichen bei Nachricht", "Nachricht konnte nicht gesendet werden", "Teams Chat hängt", "Gesendete Nachricht kommt nicht an", "Chat Zustellung fehlgeschlagen"],
+    "typos": ["Nachrichetn", "gesendet", "zugesetllt"],
+    "symptoms": ["Rotes Ausrufezeichen bei gesendeter Nachricht", "Nachricht bleibt als 'wird gesendet' hängen", "Empfänger erhält Nachricht nicht", "Fehlermeldung beim Senden"],
+    "quickCheck": "Erscheint ein rotes Ausrufezeichen oder eine Fehlermeldung bei der Nachricht?",
+    "solutions": ["Nachricht erneut senden (auf Ausrufezeichen klicken)", "Internetverbindung prüfen", "Teams neu starten", "Teams Cache leeren", "Prüfen ob Empfänger die Nachricht möglicherweise doch erhalten hat"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Betrifft es alle Chats oder nur einen bestimmten?", "options": ["Alle Chats", "Nur einen bestimmten"], "narrows": "Bei einem einzelnen Chat kann es ein Problem mit dem Empfänger sein"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-023"]
+  },
+  {
+    "id": "PROB-TEAMS-023",
+    "category": "Chat",
+    "title": "Chat lädt nicht",
+    "keywords": ["Chat", "laden", "Teams", "Verlauf", "Nachrichten", "Chatfenster", "leer"],
+    "extendedKeywords": ["Teams Chat lädt nicht", "Chatfenster bleibt leer", "Alte Nachrichten werden nicht geladen", "Chat Verlauf fehlt in Teams", "Teams zeigt keine Chats an", "Chat öffnet sich nicht", "Nachrichten im Chat laden nicht", "Teams Chat ist leer", "Kann Chat Verlauf nicht sehen", "Chat Fenster leer in Teams", "Teams zeigt Ladekreis im Chat", "Nachrichten werden nicht angezeigt"],
+    "typos": ["Chat ladet nicht", "Chaht", "Nachtichten"],
+    "symptoms": ["Chat-Fenster bleibt leer", "Ladeanimation im Chat dreht endlos", "Ältere Nachrichten werden nicht angezeigt", "Chat-Liste auf der linken Seite ist leer"],
+    "quickCheck": "Sind alle Chats betroffen oder nur ein bestimmter?",
+    "solutions": ["Teams neu starten", "Teams Cache leeren", "Internetverbindung prüfen", "Teams Web-Version testen um Clientproblem auszuschließen", "Anmeldedaten zurücksetzen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Funktioniert Teams im Webbrowser (teams.microsoft.com)?", "options": ["Ja", "Nein", "Nicht getestet"], "narrows": "Wenn der Webclient funktioniert, ist es ein Problem der Desktop-App"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-022"]
+  },
+  {
+    "id": "PROB-TEAMS-024",
+    "category": "Dateien/Freigabe",
+    "title": "Datei-Upload fehlgeschlagen",
+    "keywords": ["Upload", "Datei", "hochladen", "fehlgeschlagen", "Teams", "Fehler", "senden"],
+    "extendedKeywords": ["Kann keine Dateien in Teams hochladen", "Datei Upload funktioniert nicht", "Teams Upload fehlgeschlagen", "Datei lässt sich nicht senden in Teams", "Kann Anhang nicht hochladen", "Teams Datei senden geht nicht", "Upload bricht ab in Teams", "Datei wird nicht hochgeladen", "Fehler beim Hochladen einer Datei in Teams", "Kann Dokument nicht in Teams teilen", "Datei zu groß für Teams", "Upload hängt in Teams", "Datei anhängen funktioniert nicht"],
+    "typos": ["Uplod", "hochladne", "Daeti"],
+    "symptoms": ["Fehlermeldung beim Hochladen", "Upload-Fortschrittsbalken bleibt stehen", "Datei erscheint nicht nach Upload", "Teams meldet Größenbeschränkung"],
+    "quickCheck": "Wie groß ist die Datei und welches Format hat sie?",
+    "solutions": ["Dateigröße prüfen (Max. 250 GB in Teams)", "Internetverbindung prüfen", "Datei über OneDrive teilen statt direkt hochladen", "Teams Cache leeren", "Anderen Dateinamen ohne Sonderzeichen verwenden"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Welche Fehlermeldung erscheint beim Upload?", "options": ["Datei zu groß", "Zugriff verweigert", "Netzwerkfehler", "Sonstiges", "Keine Meldung"], "narrows": "Die Fehlermeldung gibt Aufschluss über die Ursache"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-025"]
+  },
+  {
+    "id": "PROB-TEAMS-025",
+    "category": "Dateien/Freigabe",
+    "title": "Datei nicht auffindbar in Teams",
+    "keywords": ["Datei", "finden", "suchen", "Teams", "verschwunden", "fehlt", "Dokument"],
+    "extendedKeywords": ["Kann Datei in Teams nicht finden", "Wo ist meine Datei in Teams", "Datei ist verschwunden in Teams", "Hochgeladene Datei fehlt", "Teams Datei nicht auffindbar", "Kann geteiltes Dokument nicht finden", "Datei aus Chat ist weg", "Wo werden Dateien in Teams gespeichert", "Datei im Kanal verschwunden", "Kann freigegebene Datei nicht öffnen", "Teams zeigt Datei nicht mehr an", "Gesendete Datei ist weg"],
+    "typos": ["Daeti", "auffindber", "verschwundne"],
+    "symptoms": ["Datei ist im Chat oder Kanal nicht sichtbar", "Suche findet die Datei nicht", "Datei-Tab im Kanal zeigt die Datei nicht", "Link zu Datei funktioniert nicht mehr"],
+    "quickCheck": "Wo wurde die Datei geteilt - in einem Chat oder in einem Kanal?",
+    "solutions": ["In Teams unter Dateien > Von mir geteilt suchen", "SharePoint oder OneDrive direkt durchsuchen", "Papierkorb in SharePoint prüfen", "Chat-Verlauf nach der Datei durchsuchen", "Teams Suchfunktion mit Dateinamen verwenden"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wurde die Datei im Chat oder in einem Kanal geteilt?", "options": ["Im Chat", "In einem Kanal", "Weiß nicht mehr"], "narrows": "Chat-Dateien werden in OneDrive gespeichert, Kanal-Dateien in SharePoint"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-024"]
+  },
+  {
+    "id": "PROB-TEAMS-026",
+    "category": "Besprechungen",
+    "title": "Kann Besprechung nicht beitreten",
+    "keywords": ["Besprechung", "beitreten", "Meeting", "teilnehmen", "Einladung", "Teams", "Konferenz"],
+    "extendedKeywords": ["Kann dem Meeting nicht beitreten", "Teams Meeting geht nicht", "Besprechung lässt mich nicht rein", "Kann nicht an Besprechung teilnehmen", "Meeting Link funktioniert nicht", "Teams Besprechung beitreten geht nicht", "Fehler beim Beitreten der Besprechung", "Komme nicht in die Besprechung rein", "Teams zeigt Fehler beim Meeting-Beitritt", "Besprechungslink öffnet nichts", "Meeting startet nicht", "Kann nicht ins Meeting", "Einladungslink funktioniert nicht"],
+    "typos": ["Besprechugn", "beitereten", "Meeing", "Konferennz"],
+    "symptoms": ["Fehlermeldung beim Klick auf Beitreten", "Ladebildschirm dreht endlos", "Teams öffnet sich aber Meeting startet nicht", "Beitritt wird abgelehnt"],
+    "quickCheck": "Kommt eine Fehlermeldung oder passiert gar nichts beim Beitreten?",
+    "solutions": ["Meeting-Link im Browser öffnen als Alternative", "Teams neu starten und erneut versuchen", "Meeting-Einladung erneut vom Organisator senden lassen", "Teams Cache leeren", "VPN-Verbindung prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wie versuchen Sie beizutreten - über den Kalender, einen Link oder die Teams-App?", "options": ["Kalender", "E-Mail Link", "Teams-App direkt"], "narrows": "Der Beitrittsweg kann die Ursache eingrenzen"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-027", "PROB-TEAMS-028"]
+  },
+  {
+    "id": "PROB-TEAMS-027",
+    "category": "Besprechungen",
+    "title": "Besprechung bricht ab",
+    "keywords": ["Besprechung", "Abbruch", "Verbindung", "getrennt", "Meeting", "abgestürzt", "rausgeflogen"],
+    "extendedKeywords": ["Teams Meeting bricht ständig ab", "Werde aus dem Meeting geworfen", "Verbindung in Besprechung bricht ab", "Teams Meeting stürzt ab", "Bin aus der Konferenz geflogen", "Besprechung wird unterbrochen", "Teams Verbindung instabil im Meeting", "Meeting friert ein", "Teams trennt mich vom Meeting", "Besprechung stürzt immer ab", "Verliere Verbindung in Teams Besprechung", "Meeting wird ständig unterbrochen", "Rausgeflogen aus Teams Meeting"],
+    "typos": ["abgebrochen", "rausgefolgen", "Besprechugn"],
+    "symptoms": ["Meeting wird plötzlich beendet", "Meldung 'Verbindung verloren'", "Audio und Video frieren ein", "Erneutes Beitreten nötig"],
+    "quickCheck": "Wie oft und wann bricht die Besprechung ab? Haben andere Teilnehmer das gleiche Problem?",
+    "solutions": ["Internetverbindung prüfen und stabilisieren", "WLAN statt LAN oder umgekehrt versuchen", "VPN deaktivieren falls aktiv", "Video ausschalten um Bandbreite zu sparen", "Teams Cache leeren und neu starten"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Auslastung prüfen", "priority": 3, "effectiveness": 45}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Sind Sie per WLAN oder LAN-Kabel verbunden?", "options": ["WLAN", "LAN-Kabel", "Weiß nicht"], "narrows": "WLAN-Verbindungen sind anfälliger für Unterbrechungen"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-026", "PROB-TEAMS-028"]
+  },
+  {
+    "id": "PROB-TEAMS-028",
+    "category": "Besprechungen",
+    "title": "Kalender zeigt keine Besprechungen",
+    "keywords": ["Kalender", "Besprechung", "Meeting", "Termin", "leer", "fehlt", "Outlook", "Synchronisation"],
+    "extendedKeywords": ["Teams Kalender ist leer", "Besprechungen werden nicht im Kalender angezeigt", "Keine Meetings im Teams Kalender", "Teams Kalender synchronisiert nicht", "Kalender in Teams zeigt nichts", "Termine fehlen in Teams", "Outlook Termine nicht in Teams", "Kalender stimmt nicht überein", "Teams zeigt keine Termine", "Besprechungen verschwunden aus Kalender", "Kalender wird nicht geladen", "Teams Kalender leer obwohl Termine vorhanden"],
+    "typos": ["Kaleder", "Besprechugnen", "Termien"],
+    "symptoms": ["Kalender-Tab in Teams ist leer", "Besprechungen aus Outlook erscheinen nicht", "Kalender zeigt Ladesymbol", "Falsche Termine werden angezeigt"],
+    "quickCheck": "Werden die Termine in Outlook korrekt angezeigt?",
+    "solutions": ["Teams Cache leeren", "Outlook und Teams neu starten", "Exchange-Konto-Verbindung prüfen", "Anmeldedaten zurücksetzen", "Teams Web-Version prüfen ob Kalender dort funktioniert"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Funktioniert der Kalender in Outlook korrekt?", "options": ["Ja", "Nein", "Nutze kein Outlook"], "narrows": "Wenn Outlook funktioniert, ist es ein Teams-Synchronisationsproblem"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-026", "PROB-TEAMS-029"]
+  },
+  {
+    "id": "PROB-TEAMS-029",
+    "category": "Integration",
+    "title": "Outlook-Integration funktioniert nicht",
+    "keywords": ["Outlook", "Integration", "Add-In", "Teams", "Kalender", "E-Mail", "Meeting-Button"],
+    "extendedKeywords": ["Teams Button fehlt in Outlook", "Kann kein Teams Meeting aus Outlook erstellen", "Outlook Teams Add-In funktioniert nicht", "Teams Meeting Option in Outlook fehlt", "Integration zwischen Teams und Outlook kaputt", "Kein Teams-Symbol in Outlook", "Kann nicht aus Outlook ein Meeting planen", "Outlook zeigt keine Teams Option", "Teams Add-In in Outlook verschwunden", "Teams Besprechung erstellen geht nicht in Outlook"],
+    "typos": ["Ouutlook", "Integartion", "Add-inn"],
+    "symptoms": ["Teams-Meeting-Button fehlt in Outlook", "Teams-Add-In ist deaktiviert", "Fehlermeldung bei Meeting-Erstellung aus Outlook", "Kalender synchronisiert nicht zwischen Outlook und Teams"],
+    "quickCheck": "Ist das Teams-Add-In in Outlook unter Datei > Optionen > Add-Ins sichtbar?",
+    "solutions": ["Teams-Add-In in Outlook aktivieren", "Outlook im abgesicherten Modus starten", "Microsoft Office Reparatur durchführen", "Teams und Outlook beide aktualisieren", "Anmeldedaten zurücksetzen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Ist das Teams-Add-In in Outlook deaktiviert oder komplett verschwunden?", "options": ["Deaktiviert", "Verschwunden", "Weiß nicht"], "narrows": "Deaktivierte Add-Ins können reaktiviert werden, fehlende müssen neu installiert werden"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-028", "PROB-TEAMS-030"]
+  },
+  {
+    "id": "PROB-TEAMS-030",
+    "category": "Integration",
+    "title": "OneNote-Integration in Teams funktioniert nicht",
+    "keywords": ["OneNote", "Integration", "Notizbuch", "Teams", "Tab", "Notizen", "Registerkarte"],
+    "extendedKeywords": ["OneNote Tab in Teams funktioniert nicht", "Kann OneNote in Teams nicht öffnen", "OneNote Notizbuch in Teams leer", "Teams OneNote Integration kaputt", "OneNote Tab lädt nicht in Teams", "Kann Notizbuch nicht in Teams hinzufügen", "OneNote in Teams zeigt Fehler", "Teams Notizen gehen nicht", "OneNote Registerkarte in Teams defekt", "Kann nicht auf OneNote in Teams zugreifen"],
+    "typos": ["One Note", "OneNot", "Notizubch"],
+    "symptoms": ["OneNote-Tab in Teams zeigt Fehler", "Notizbuch lädt nicht", "OneNote-Tab ist leer", "Fehlermeldung beim Öffnen von OneNote in Teams"],
+    "quickCheck": "Funktioniert OneNote außerhalb von Teams normal?",
+    "solutions": ["OneNote-Tab in Teams entfernen und neu hinzufügen", "Teams Cache leeren", "OneNote-App aktualisieren", "Im Browser testen ob OneNote dort funktioniert", "Berechtigungen für das Notizbuch prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_appcache_credclear", "label": "Anmeldedaten zurücksetzen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Handelt es sich um ein persönliches oder ein Team-Notizbuch?", "options": ["Persönliches Notizbuch", "Team-Notizbuch", "Weiß nicht"], "narrows": "Bei Team-Notizbüchern können Berechtigungsprobleme vorliegen"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-029"]
+  },
+  {
+    "id": "PROB-TEAMS-031",
+    "category": "Mobile",
+    "title": "Teams Mobile App funktioniert nicht",
+    "keywords": ["Mobile", "App", "Smartphone", "Handy", "Teams", "iOS", "Android"],
+    "extendedKeywords": ["Teams App auf dem Handy geht nicht", "Mobile Teams funktioniert nicht", "Teams auf dem Smartphone startet nicht", "Teams App stürzt ab auf dem Handy", "Kann Teams nicht auf dem Handy nutzen", "Teams App auf dem Telefon macht Probleme", "Mobile Teams langsam", "Teams App reagiert nicht auf dem Handy", "Teams auf iPhone geht nicht", "Teams auf Android funktioniert nicht", "Handy Teams kaputt", "Teams App crasht ständig"],
+    "typos": ["Mobil", "Smartfone", "Handey", "Andrroid"],
+    "symptoms": ["App stürzt beim Öffnen ab", "App bleibt beim Laden hängen", "Funktionen fehlen in der mobilen App", "Benachrichtigungen kommen nicht auf dem Handy"],
+    "quickCheck": "Ist die Teams-App auf dem neuesten Stand?",
+    "solutions": ["Teams-App im App Store/Play Store aktualisieren", "App-Cache auf dem Smartphone leeren", "Teams-App deinstallieren und neu installieren", "Smartphone neu starten", "Betriebssystem-Update prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Welches Smartphone verwenden Sie?", "options": ["iPhone", "Android", "Sonstiges"], "narrows": "iOS und Android haben unterschiedliche Lösungswege"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-032"]
+  },
+  {
+    "id": "PROB-TEAMS-032",
+    "category": "Mobile",
+    "title": "Teams Mobile synchronisiert nicht",
+    "keywords": ["Synchronisation", "Sync", "Mobile", "Smartphone", "Teams", "abgleichen", "aktualisieren"],
+    "extendedKeywords": ["Teams auf dem Handy zeigt alte Nachrichten", "Mobile Teams synchronisiert nicht mit Desktop", "Chats auf dem Handy nicht aktuell", "Teams Handy und PC nicht synchron", "Neue Nachrichten nur auf dem PC nicht auf dem Handy", "Teams Mobile Sync Problem", "Benachrichtigungen kommen nur am PC", "Handy Teams zeigt andere Sachen als am PC", "Teams App nicht synchron", "Mobile Teams aktualisiert sich nicht"],
+    "typos": ["Syncronisation", "Syncronisiert", "abgleichen"],
+    "symptoms": ["Nachrichten fehlen auf dem Smartphone", "Status unterschiedlich zwischen Handy und PC", "Gelesene Nachrichten werden als ungelesen angezeigt", "Kalender auf dem Handy nicht aktuell"],
+    "quickCheck": "Ist das Smartphone mit dem Internet verbunden und ist die App aktuell?",
+    "solutions": ["Teams-App aktualisieren", "Push-Benachrichtigungen für Teams aktivieren", "App-Cache auf dem Smartphone leeren", "Konto in der mobilen App ab- und wieder anmelden", "Hintergrund-App-Aktualisierung aktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 1, "effectiveness": 35}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Werden Push-Benachrichtigungen für Teams auf dem Handy empfangen?", "options": ["Ja", "Nein", "Manchmal"], "narrows": "Fehlende Push-Benachrichtigungen deuten auf ein Synchronisationsproblem hin"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-031"]
+  },
+  {
+    "id": "PROB-TEAMS-033",
+    "category": "Hintergrund/Effekte",
+    "title": "Hintergrund unscharf funktioniert nicht",
+    "keywords": ["Hintergrund", "unscharf", "Blur", "Weichzeichner", "Effekt", "Teams", "virtuell"],
+    "extendedKeywords": ["Teams Hintergrund unscharf geht nicht", "Kann Hintergrund nicht weichzeichnen", "Blur Effekt in Teams funktioniert nicht", "Hintergrund verwischen geht nicht", "Virtueller Hintergrund geht nicht in Teams", "Teams zeigt keine Hintergrundeffekte", "Kann keinen Hintergrund in Teams setzen", "Hintergrund unscharf ausgegraut", "Mein Hintergrund wird nicht verdeckt", "Teams Hintergrundeffekte fehlen", "Blur funktioniert nicht richtig in Teams", "Hintergrund wird nicht verschwommen"],
+    "typos": ["Hintergurnd", "unscharrf", "Blurr", "Weichziecher"],
+    "symptoms": ["Option Hintergrund unscharf ist ausgegraut", "Hintergrundeffekte fehlen komplett", "Hintergrund wird nur teilweise verwischt", "Teams stürzt ab bei Hintergrundeffekten"],
+    "quickCheck": "Ist die Option 'Hintergrund unscharf' ausgegraut oder fehlt sie komplett?",
+    "solutions": ["Grafiktreiber aktualisieren", "Prüfen ob die Hardware AVX2 unterstützt (Voraussetzung)", "Teams aktualisieren", "Teams Cache leeren", "Hardwarebeschleunigung in Teams aktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 45},
+      {"skillId": "rd_devmgr_devclass", "label": "Geräte-Manager prüfen", "priority": 3, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wie alt ist Ihr Computer ungefähr?", "options": ["Weniger als 3 Jahre", "3-5 Jahre", "Mehr als 5 Jahre", "Weiß nicht"], "narrows": "Ältere Computer unterstützen möglicherweise nicht die nötigen Prozessor-Funktionen (AVX2)"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-034"]
+  },
+  {
+    "id": "PROB-TEAMS-034",
+    "category": "Hintergrund/Effekte",
+    "title": "Together Mode funktioniert nicht",
+    "keywords": ["Together Mode", "Zusammen-Modus", "Effekt", "Meeting", "Ansicht", "Teams"],
+    "extendedKeywords": ["Together Mode geht nicht in Teams", "Zusammen-Modus funktioniert nicht", "Kann Together Mode nicht aktivieren", "Together Mode fehlt in Teams", "Together Modus ausgegraut", "Teams Together Mode nicht verfügbar", "Zusammen-Modus fehlt im Meeting", "Together Mode Option nicht da", "Kann den Together Modus nicht finden", "Teams Meeting ohne Together Mode"],
+    "typos": ["Togehter Mode", "Togeter", "Zusammen Modus"],
+    "symptoms": ["Together Mode Option fehlt in der Ansichtsauswahl", "Together Mode ist ausgegraut", "Together Mode wird angezeigt aber funktioniert nicht", "Fehlermeldung bei Aktivierung"],
+    "quickCheck": "Sind mindestens 5-49 Teilnehmer im Meeting? Together Mode funktioniert nur in diesem Bereich.",
+    "solutions": ["Mindestens 5 Teilnehmer im Meeting haben", "Teams aktualisieren auf die neueste Version", "Prüfen ob die IT-Abteilung Together Mode aktiviert hat", "Meeting-Ansicht auf Galerie wechseln und dann Together Mode wählen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 45},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Wie viele Teilnehmer sind im Meeting?", "options": ["Weniger als 5", "5-49", "Mehr als 49"], "narrows": "Together Mode funktioniert nur mit 5-49 Teilnehmern"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-033"]
+  },
+  {
+    "id": "PROB-TEAMS-035",
+    "category": "Performance",
+    "title": "Teams allgemeine Performance-Probleme",
+    "keywords": ["Performance", "Leistung", "langsam", "träge", "Teams", "Optimierung", "Geschwindigkeit"],
+    "extendedKeywords": ["Teams ist generell langsam", "Teams Performance verbessern", "Teams schneller machen", "Teams Leistung optimieren", "Teams ruckelt und ist träge", "Teams braucht für alles zu lange", "Wie kann ich Teams schneller machen", "Teams Performance Probleme", "Teams läuft nicht flüssig", "Teams reagiert verzögert auf alles", "Teams allgemein zu langsam", "Teams Geschwindigkeit verbessern", "Teams braucht zu viele Ressourcen", "Teams optimieren", "Computer langsam wegen Teams"],
+    "typos": ["Performence", "Perfomance", "Leisutng", "optimiren"],
+    "symptoms": ["Allgemeine Trägheit in Teams", "Lange Ladezeiten bei allen Aktionen", "Hoher Ressourcenverbrauch", "Verzögerungen bei Eingaben und Aktionen"],
+    "quickCheck": "Wann haben Sie das letzte Mal den Teams Cache geleert?",
+    "solutions": ["Teams Cache leeren", "Teams neu starten", "Hardwarebeschleunigung in Teams anpassen", "Nicht benötigte Teams-Kanäle und Chats archivieren", "Windows Neustart durchführen", "Autostart-Programme reduzieren", "Teams Diagnose durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_teamscache", "label": "Teams Cache leeren", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Auslastung prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-teams", "label": "Teams Diagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Ist nur Teams langsam oder der gesamte Computer?", "options": ["Nur Teams", "Gesamter Computer"], "narrows": "Bei allgemeiner Langsamkeit kann das Problem am System liegen, nicht an Teams"}
+    ],
+    "relatedProblems": ["PROB-TEAMS-001", "PROB-TEAMS-016", "PROB-TEAMS-017"]
+  }
+]

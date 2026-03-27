@@ -38,17 +38,23 @@ export default function LocationOverview() {
   const [selected, setSelected] = useState<Set<string>>(new Set())
 
   // Add item form
-  const [showAdd, setShowAdd]   = useState(false)
-  const [newName, setNewName]   = useState('')
-  const [newIp, setNewIp]       = useState('')
-  const [newDesc, setNewDesc]   = useState('')
-  const [adding, setAdding]     = useState(false)
+  const [showAdd, setShowAdd]         = useState(false)
+  const [newName, setNewName]         = useState('')
+  const [newIp, setNewIp]             = useState('')
+  const [newDesc, setNewDesc]         = useState('')
+  const [newAssigned, setNewAssigned] = useState('')
+  const [adding, setAdding]           = useState(false)
 
   // Edit item
-  const [editId, setEditId]     = useState<string | null>(null)
-  const [editName, setEditName] = useState('')
-  const [editIp, setEditIp]     = useState('')
-  const [editDesc, setEditDesc] = useState('')
+  const [editId, setEditId]         = useState<string | null>(null)
+  const [editName, setEditName]     = useState('')
+  const [editIp, setEditIp]         = useState('')
+  const [editDesc, setEditDesc]     = useState('')
+  const [editAssigned, setEditAssigned] = useState('')
+
+  // Inline assignedTo edit (click-to-edit, outside full edit mode)
+  const [assignedEditId, setAssignedEditId]   = useState<string | null>(null)
+  const [assignedEditVal, setAssignedEditVal] = useState('')
 
   // Delete confirm
   const [deleteIds, setDeleteIds] = useState<string[] | null>(null)
@@ -79,7 +85,8 @@ export default function LocationOverview() {
   const filteredItems = categoryItems.filter(i =>
     i.name.toLowerCase().includes(search.toLowerCase()) ||
     (i.ip ?? '').includes(search) ||
-    (i.description ?? '').toLowerCase().includes(search.toLowerCase())
+    (i.description ?? '').toLowerCase().includes(search.toLowerCase()) ||
+    (i.assignedTo ?? '').toLowerCase().includes(search.toLowerCase())
   )
 
   // ── Add item ────────────────────────────────────────────────────────────────
@@ -92,27 +99,42 @@ export default function LocationOverview() {
       name: newName.trim(),
       ip: newIp.trim() || undefined,
       description: newDesc.trim() || undefined,
+      assignedTo: newAssigned.trim() || undefined,
       category: activeCategory,
       addedAt: new Date().toISOString(),
       addedBy: session?.user.username ?? '',
     }
     await saveItems([...items, item])
     await log(`Objekt hinzugefügt: ${item.name} (${activeCategory})`, item.name)
-    setNewName(''); setNewIp(''); setNewDesc(''); setShowAdd(false)
+    setNewName(''); setNewIp(''); setNewDesc(''); setNewAssigned(''); setShowAdd(false)
     setAdding(false)
   }
 
   // ── Edit item ───────────────────────────────────────────────────────────────
   function startEdit(item: InventoryItem) {
-    setEditId(item.id); setEditName(item.name); setEditIp(item.ip ?? ''); setEditDesc(item.description ?? '')
+    setEditId(item.id)
+    setEditName(item.name)
+    setEditIp(item.ip ?? '')
+    setEditDesc(item.description ?? '')
+    setEditAssigned(item.assignedTo ?? '')
+    setAssignedEditId(null)
   }
   async function saveEdit(id: string) {
     const updated = items.map(i => i.id === id
-      ? { ...i, name: editName.trim(), ip: editIp.trim() || undefined, description: editDesc.trim() || undefined }
+      ? { ...i, name: editName.trim(), ip: editIp.trim() || undefined, description: editDesc.trim() || undefined, assignedTo: editAssigned.trim() || undefined }
       : i)
     await saveItems(updated)
     await log(`Objekt bearbeitet: ${editName}`, editName)
     setEditId(null)
+  }
+
+  async function saveAssignedTo(id: string) {
+    const updated = items.map(i => i.id === id
+      ? { ...i, assignedTo: assignedEditVal.trim() || undefined }
+      : i)
+    await saveItems(updated)
+    await log(`ServiceNow Zuweisung geändert`, assignedEditVal)
+    setAssignedEditId(null)
   }
 
   // ── Delete ──────────────────────────────────────────────────────────────────
@@ -166,7 +188,7 @@ export default function LocationOverview() {
     addImportedNames(names)
   }
 
-  async function addImportedNames(names: string[]) {
+  async function addImportedNames(names: string[], assignedToMap?: Record<string, string>) {
     const existing = new Set(items.filter(i => i.category === activeCategory).map(i => i.name.toLowerCase()))
     const toAdd: InventoryItem[] = names
       .filter(n => !existing.has(n.toLowerCase()))
@@ -176,6 +198,7 @@ export default function LocationOverview() {
         category: activeCategory,
         addedAt: new Date().toISOString(),
         addedBy: session?.user.username ?? '',
+        assignedTo: assignedToMap?.[name] || undefined,
       }))
     if (!toAdd.length) { setImportStatus('Alle Hostnamen bereits vorhanden'); return }
     await saveItems([...items, ...toAdd])
@@ -183,18 +206,26 @@ export default function LocationOverview() {
     setImportStatus(`${toAdd.length} Objekte importiert`)
   }
 
-  function handleExcelConfirm(hostnameColNames: string[], _serialColNames: string[]) {
+  function handleExcelConfirm(hostnameColNames: string[], _serialColNames: string[], assignedToColNames: string[]) {
     if (!pendingExcelData) return
-    const { hostnames } = extractFromExcel(pendingExcelData.rows, hostnameColNames, [])
+    const { hostnames, assignedToMap } = extractFromExcel(pendingExcelData.rows, hostnameColNames, [], assignedToColNames)
     setPendingExcelData(null)
-    addImportedNames(hostnames)
+    addImportedNames(hostnames, assignedToMap)
   }
 
   // ── Send to query/remote ────────────────────────────────────────────────────
+  const [remoteDocError, setRemoteDocError] = useState('')
+
   function sendToScreen(target: 'query-menu' | 'remote-doc') {
     const selectedItems = filteredItems.filter(i => selected.has(i.id))
     const names = selectedItems.map(i => i.name)
     if (!names.length) return
+    if (target === 'remote-doc' && names.length > 1) {
+      setRemoteDocError('Remote Doc unterstützt nur ein Gerät gleichzeitig. Bitte wählen Sie nur ein Objekt aus.')
+      setTimeout(() => setRemoteDocError(''), 4000)
+      return
+    }
+    setRemoteDocError('')
     setDevices(names.map((n, idx) => ({
       id: `inv-${idx}`,
       type: 'hostname' as const,
@@ -230,6 +261,7 @@ export default function LocationOverview() {
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-purple-500/40 bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 transition-colors">
                 <ChevronRight size={12} /> Zu Remote Doc
               </button>
+              <span className="text-[10px] text-muted-foreground">(maximal 1 Objekt)</span>
               {isMaster && (
                 <button onClick={() => setDeleteIds(Array.from(selected))}
                   className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-red-500/40 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors">
@@ -244,6 +276,11 @@ export default function LocationOverview() {
         </div>
       </div>
 
+      {remoteDocError && (
+        <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-red-500/10 border border-red-500/20 text-red-400">
+          {remoteDocError}
+        </div>
+      )}
       <div className="flex flex-1 overflow-hidden">
         {/* Category sidebar */}
         <div className="w-44 shrink-0 border-r border-border py-3 space-y-0.5 px-2">
@@ -310,6 +347,11 @@ export default function LocationOverview() {
                 <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="z.B. Buchhaltung EG"
                   className="w-full px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
               </div>
+              <div className="w-40">
+                <label className="text-[10px] text-muted-foreground block mb-1">ServiceNow Zuweisung (optional)</label>
+                <input value={newAssigned} onChange={e => setNewAssigned(e.target.value)} placeholder="Vorname Nachname"
+                  className="w-full px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+              </div>
               <button type="submit" disabled={adding}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md bg-primary text-primary-foreground font-semibold disabled:opacity-50">
                 {adding ? <Loader size={12} className="animate-spin" /> : <Check size={12} />} Hinzufügen
@@ -355,15 +397,17 @@ export default function LocationOverview() {
                         {isEditing && isMaster ? (
                           <>
                             <input value={editName} onChange={e => setEditName(e.target.value)}
-                              className="flex-1 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                              className="flex-1 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary min-w-0" />
                             <input value={editIp} onChange={e => setEditIp(e.target.value)} placeholder="IP"
-                              className="w-28 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                              className="w-28 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary shrink-0" />
                             <input value={editDesc} onChange={e => setEditDesc(e.target.value)} placeholder="Beschreibung"
-                              className="flex-1 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
-                            <button onClick={() => saveEdit(item.id)} className="p-1 text-emerald-400 hover:bg-emerald-500/10 rounded">
+                              className="flex-1 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary min-w-0" />
+                            <input value={editAssigned} onChange={e => setEditAssigned(e.target.value)} placeholder="ServiceNow Zuweisung"
+                              className="w-36 px-2 py-1 text-xs rounded border border-purple-500/40 bg-background text-foreground focus:outline-none focus:border-purple-400 shrink-0" />
+                            <button onClick={() => saveEdit(item.id)} className="p-1 text-emerald-400 hover:bg-emerald-500/10 rounded shrink-0">
                               <Check size={13} />
                             </button>
-                            <button onClick={() => setEditId(null)} className="p-1 text-muted-foreground hover:bg-accent rounded">
+                            <button onClick={() => setEditId(null)} className="p-1 text-muted-foreground hover:bg-accent rounded shrink-0">
                               <X size={13} />
                             </button>
                           </>
@@ -379,6 +423,51 @@ export default function LocationOverview() {
                                 </span>
                               </div>
                             </div>
+
+                            {/* ServiceNow Zuweisung — visible to all, editable by master admin */}
+                            <div className="shrink-0 flex items-center">
+                              {assignedEditId === item.id && isMaster ? (
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    value={assignedEditVal}
+                                    onChange={e => setAssignedEditVal(e.target.value)}
+                                    onKeyDown={e => {
+                                      if (e.key === 'Enter') saveAssignedTo(item.id)
+                                      if (e.key === 'Escape') setAssignedEditId(null)
+                                    }}
+                                    autoFocus
+                                    placeholder="Zugewiesen an…"
+                                    className="px-2 py-0.5 text-[11px] rounded border border-purple-500/40 bg-background text-foreground focus:outline-none w-36"
+                                  />
+                                  <button onClick={() => saveAssignedTo(item.id)} className="p-0.5 text-emerald-400 hover:bg-emerald-500/10 rounded">
+                                    <Check size={11} />
+                                  </button>
+                                  <button onClick={() => setAssignedEditId(null)} className="p-0.5 text-muted-foreground hover:bg-accent rounded">
+                                    <X size={11} />
+                                  </button>
+                                </div>
+                              ) : (
+                                <div
+                                  onClick={() => {
+                                    if (isMaster) {
+                                      setAssignedEditId(item.id)
+                                      setAssignedEditVal(item.assignedTo ?? '')
+                                    }
+                                  }}
+                                  className={isMaster ? 'cursor-pointer' : ''}
+                                  title={isMaster ? 'Klicken zum Bearbeiten' : undefined}
+                                >
+                                  {item.assignedTo ? (
+                                    <span className="px-2 py-0.5 text-[10px] rounded-full bg-muted/30 text-foreground border border-border whitespace-nowrap">
+                                      {item.assignedTo}
+                                    </span>
+                                  ) : isMaster ? (
+                                    <span className="text-[10px] text-muted-foreground/40 italic">+ Zuweisung</span>
+                                  ) : null}
+                                </div>
+                              )}
+                            </div>
+
                             {isMaster && (
                               <div className="flex items-center gap-1 shrink-0">
                                 <button onClick={() => startEdit(item)} className="p-1 text-muted-foreground hover:text-foreground hover:bg-accent rounded">

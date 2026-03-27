@@ -1,0 +1,795 @@
+[
+  {
+    "id": "PROB-OL-001",
+    "category": "Outlook",
+    "title": "Outlook startet nicht / hängt beim Start",
+    "keywords": ["outlook startet nicht", "outlook hängt", "outlook crash", "outlook öffnet nicht", "outlook loading"],
+    "extendedKeywords": ["outlook geht nicht auf", "outlook bleibt beim laden hängen", "outlook ladebildschirm bleibt stehen", "kann outlook nicht öffnen", "outlook reagiert nicht beim start", "outlook zeigt nur splash screen", "outlook startet nicht mehr", "outlook braucht ewig zum starten", "outlook startbildschirm hängt", "outlook öffnet sich nicht", "wenn ich outlook öffne passiert nichts", "outlook wird geladen aber kommt nicht", "outlook dreht sich beim start", "outlook processing hängt", "profil wird geladen outlook hängt"],
+    "typos": ["outllook startet nicht", "outook geht nicht", "outlok startet nciht", "oulook"],
+    "symptoms": ["Outlook-Splashscreen bleibt stehen", "Outlook hängt bei 'Profil wird geladen'", "Outlook startet und schließt sich sofort wieder", "Fehlermeldung beim Starten von Outlook"],
+    "quickCheck": "Startet Outlook im abgesicherten Modus? (outlook.exe /safe)",
+    "solutions": ["Outlook im abgesicherten Modus starten: outlook.exe /safe", "Navigationsbereich zurücksetzen: outlook.exe /resetnavpane", "Add-Ins deaktivieren im abgesicherten Modus", "Outlook-Profil reparieren oder neu erstellen", "Office Schnellreparatur durchführen", "OST-Datei umbenennen/löschen für neue Synchronisation"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook Profil reparieren", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Add-In Check", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_appcache_outlookcache", "label": "Outlook Cache/OST umbenennen", "priority": 3, "effectiveness": 80},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 4, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["outlook.exe /safe", "/resetnavpane", "MAPI"],
+    "followUpQuestions": [
+      {"question": "Startet Outlook im abgesicherten Modus (outlook.exe /safe)?", "options": ["Ja, im abgesicherten Modus geht es", "Nein, auch nicht im abgesicherten Modus", "Weiß nicht / nicht versucht"], "narrows": "Add-In vs. Profil-Problem"}
+    ],
+    "relatedProblems": ["PROB-OL-002", "PROB-OL-003"]
+  },
+  {
+    "id": "PROB-OL-002",
+    "category": "Outlook",
+    "title": "Outlook startet nicht nach Update",
+    "keywords": ["outlook update problem", "outlook nach update kaputt", "office update fehler", "outlook update crash"],
+    "extendedKeywords": ["seit office update geht outlook nicht", "nach update outlook kaputt", "outlook startet nicht mehr seit gestern", "microsoft update hat outlook zerstört", "nach automatischem update outlook weg", "office update hat outlook beschädigt", "seit update kann ich outlook nicht mehr öffnen", "outlook funktioniert nicht nach windows update"],
+    "typos": ["outllook nach udpate", "outlook nch update"],
+    "symptoms": ["Outlook startet nach Office/Windows-Update nicht mehr", "Fehlermeldung nach Update beim Start", "Outlook schließt sich sofort nach Update"],
+    "quickCheck": "Welches Update wurde zuletzt installiert? (Office oder Windows)",
+    "solutions": ["Office Schnellreparatur durchführen", "Letztes Office-Update zurücksetzen", "Office Online-Reparatur als Eskalation", "Outlook-Profil neu erstellen", "Office deinstallieren und neu installieren als letztes Mittel"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_officefull", "label": "Office Online-Reparatur", "priority": 2, "effectiveness": 90},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook Profil reparieren", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_gpo_hotfix", "label": "Installierte Updates prüfen", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["OfficeC2RClient", "Click-to-Run"],
+    "followUpQuestions": [
+      {"question": "War es ein Office- oder Windows-Update?", "options": ["Office-Update", "Windows-Update", "Weiß nicht"], "narrows": "Update-Typ"}
+    ],
+    "relatedProblems": ["PROB-OL-001", "PROB-OL-003"]
+  },
+  {
+    "id": "PROB-OL-003",
+    "category": "Outlook",
+    "title": "Outlook Fehlermeldung beim Start (MAPI, DLL)",
+    "keywords": ["outlook fehler mapi", "outlook dll fehler", "outlook fehlermeldung", "mapi32 fehler", "outlook kann nicht gestartet werden"],
+    "extendedKeywords": ["outlook mapi fehler", "outlook kann nicht gestartet werden fehler", "dll fehlt bei outlook", "mapi32.dll nicht gefunden", "outlook zeigt fehlermeldung und startet nicht", "set of folders cannot be opened", "ordner können nicht geöffnet werden outlook"],
+    "typos": ["outllook fehlermledung", "mapi fheler"],
+    "symptoms": ["Fehlermeldung: Microsoft Outlook kann nicht gestartet werden", "MAPI-Fehler beim Starten", "DLL-Fehler beim Start", "Meldung: Der Satz von Ordnern kann nicht geöffnet werden"],
+    "quickCheck": "Welche genaue Fehlermeldung wird angezeigt?",
+    "solutions": ["Neues Outlook-Profil erstellen über Systemsteuerung > Mail", "MAPI reparieren: Office Schnellreparatur", "SFC ausführen für fehlende DLLs", "OST-Datei umbenennen und Outlook neu starten", "Office neu installieren bei persistent fehlenden DLLs"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook Profil reparieren", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_repair_sfc", "label": "Systemdateien prüfen", "priority": 4, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["MAPI32.DLL", "OLMAPI32.DLL", "set of folders"],
+    "followUpQuestions": [
+      {"question": "Welche Fehlermeldung erscheint?", "options": ["MAPI-Fehler", "DLL nicht gefunden", "Ordner können nicht geöffnet werden", "Allgemeiner Startfehler"], "narrows": "Fehlertyp"}
+    ],
+    "relatedProblems": ["PROB-OL-001", "PROB-OL-002"]
+  },
+  {
+    "id": "PROB-OL-004",
+    "category": "Outlook",
+    "title": "Outlook ist langsam / hängt sich auf",
+    "keywords": ["outlook langsam", "outlook hängt", "outlook reagiert nicht", "outlook slow", "outlook einfrieren"],
+    "extendedKeywords": ["outlook ist total langsam", "outlook braucht ewig zum laden", "outlook reagiert nicht mehr", "outlook hängt sich ständig auf", "mails laden ewig", "outlook ist träge", "beim suchen in outlook hängt alles", "outlook ruckelt", "kalender in outlook lädt langsam", "outlook braucht lange für alles", "emails öffnen dauert ewig", "outlook wird immer langsamer", "mails werden nicht schnell angezeigt"],
+    "typos": ["outllook langsam", "outlook lagnsam", "outook hängt"],
+    "symptoms": ["Outlook reagiert verzögert auf Klicks", "E-Mails laden sehr langsam", "Outlook zeigt 'Keine Rückmeldung' in der Titelleiste", "Kalender und Kontakte laden lange"],
+    "quickCheck": "Wie groß ist die Mailbox? Wie viele Add-Ins sind aktiv?",
+    "solutions": ["Outlook-Cache (OST) umbenennen für frische Synchronisation", "Add-Ins deaktivieren und einzeln testen", "Suchindex für Outlook zurücksetzen", "Alte E-Mails archivieren (Postfachgröße reduzieren)", "Ansichten zurücksetzen: outlook.exe /cleanviews", "RSS-Feeds und Social Connectors deaktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookcache", "label": "Outlook Cache/OST umbenennen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Add-In Check", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_procs_topram", "label": "RAM-Verbrauch prüfen", "priority": 4, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["/cleanviews", "RSS", "Social Connector"],
+    "followUpQuestions": [
+      {"question": "Wann ist Outlook langsam?", "options": ["Beim Starten", "Beim Suchen", "Beim Öffnen von Mails", "Generell immer"], "narrows": "Bereich der Langsamkeit"}
+    ],
+    "relatedProblems": ["PROB-OL-005", "PROB-OL-006"]
+  },
+  {
+    "id": "PROB-OL-005",
+    "category": "Outlook",
+    "title": "Outlook friert ein bei bestimmten Aktionen",
+    "keywords": ["outlook friert ein", "outlook freeze", "outlook hängt bei mail", "outlook blockiert"],
+    "extendedKeywords": ["outlook friert ein beim öffnen von mail", "outlook hängt beim senden", "outlook blockiert beim kalender öffnen", "outlook hängt wenn ich anhang öffne", "outlook friert ein bei bestimmtem ordner", "outlook reagiert nicht beim drucken", "outlook hängt bei großem anhang", "outlook blockiert beim weiterleiten"],
+    "typos": ["outlook friert ien", "outlook freez"],
+    "symptoms": ["Outlook friert bei bestimmter E-Mail ein", "Outlook blockiert beim Öffnen eines Ordners", "Outlook hängt beim Senden/Empfangen"],
+    "quickCheck": "Bei welcher Aktion friert Outlook ein?",
+    "solutions": ["Defekte E-Mail identifizieren und löschen (über OWA)", "Betroffenen Ordner über OWA aufräumen", "Outlook im abgesicherten Modus testen", "OST-Datei neu aufbauen lassen", "Office Reparatur durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Add-In Check", "priority": 3, "effectiveness": 65},
+      {"skillId": "rd_procs_killname", "label": "Outlook beenden", "priority": 4, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["OWA", "Outlook Web App"],
+    "followUpQuestions": [
+      {"question": "Bei welcher Aktion friert Outlook ein?", "options": ["Beim Öffnen einer bestimmten Mail", "Beim Senden", "Beim Öffnen eines Ordners", "Beim Drucken"], "narrows": "Auslöser"}
+    ],
+    "relatedProblems": ["PROB-OL-004", "PROB-OL-006"]
+  },
+  {
+    "id": "PROB-OL-006",
+    "category": "Outlook",
+    "title": "Outlook verbraucht viel RAM / CPU",
+    "keywords": ["outlook ram", "outlook cpu", "outlook speicher", "outlook memory", "outlook ressourcen"],
+    "extendedKeywords": ["outlook frisst ganzen speicher", "outlook verbraucht zu viel ram", "outlook cpu auslastung hoch", "outlook braucht 2gb ram", "outlook process groß im taskmanager", "outlook bremst pc aus"],
+    "typos": ["outllook ram", "outlook speihcer"],
+    "symptoms": ["Outlook-Prozess belegt über 1 GB RAM", "Outlook verursacht hohe CPU-Last", "PC wird langsam wenn Outlook offen ist"],
+    "quickCheck": "Wie viel RAM verbraucht Outlook laut Task-Manager?",
+    "solutions": ["Große Mailbox: E-Mails archivieren und Postfach verkleinern", "Add-Ins reduzieren (jedes Add-In erhöht Speicherverbrauch)", "Cached-Mode Zeitraum reduzieren (z.B. nur 3 Monate statt alles)", "OST-Datei neu aufbauen", "Outlook neustarten (behebt Memory Leaks)", "Office aktualisieren auf neueste Version"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topram", "label": "RAM-Verbrauch prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Verbrauch prüfen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Add-In Check", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 4, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Cached Exchange Mode", "memory leak"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-004", "PROB-OL-005"]
+  },
+  {
+    "id": "PROB-OL-007",
+    "category": "Outlook",
+    "title": "Outlook-Profil defekt / neu erstellen",
+    "keywords": ["outlook profil defekt", "profil neu erstellen", "outlook profil kaputt", "mail profil reparieren"],
+    "extendedKeywords": ["outlook profil ist beschädigt", "muss outlook profil neu machen", "outlook profil reparieren", "neues mail profil anlegen", "outlook profil erstellen", "profil kann nicht geladen werden", "outlook profil korrupt", "wie erstelle ich ein neues outlook profil"],
+    "typos": ["outllook profil defket", "profil defket"],
+    "symptoms": ["Outlook meldet Profilfehler", "Profil kann nicht geladen werden", "Outlook funktioniert nur mit neuem Profil", "Einstellungen gehen bei jedem Start verloren"],
+    "quickCheck": "Funktioniert Outlook mit einem neuen Profil? (Systemsteuerung > Mail > Profile)",
+    "solutions": ["Systemsteuerung > Mail > Profile > Neues Profil erstellen", "Autodiscover für automatische Konfiguration nutzen", "Altes Profil als Standard beibehalten, neues zum Testen", "Nach Profilwechsel: Outlook neu starten", "OST-Datei wird automatisch neu erstellt bei neuem Profil"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook Profil reparieren", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Systemsteuerung Mail", "Control Panel Mail", "Autodiscover"],
+    "followUpQuestions": [
+      {"question": "Haben Sie bereits versucht ein neues Profil zu erstellen?", "options": ["Ja, neues Profil funktioniert", "Ja, neues Profil hat gleiches Problem", "Nein, noch nicht versucht"], "narrows": "Profil vs. tieferes Problem"}
+    ],
+    "relatedProblems": ["PROB-OL-001", "PROB-OL-008"]
+  },
+  {
+    "id": "PROB-OL-008",
+    "category": "Outlook",
+    "title": "Outlook-Profil nach Domänenwechsel / PC-Tausch defekt",
+    "keywords": ["outlook profil domäne", "outlook nach pc wechsel", "outlook neuer pc", "outlook migration profil"],
+    "extendedKeywords": ["nach pc tausch outlook geht nicht", "neuer computer outlook einrichten", "outlook profil auf neuem pc", "nach domänenwechsel outlook kaputt", "outlook auf neuem rechner einrichten", "outlook daten auf neuen pc übertragen", "nach hardware tausch outlook problem"],
+    "typos": ["outlook nach pc wechsl", "domänenwechesl"],
+    "symptoms": ["Outlook fragt nach Profil auf neuem PC", "Alte Einstellungen fehlen nach PC-Tausch", "Outlook kann sich nicht mit Exchange verbinden nach Domänenwechsel"],
+    "quickCheck": "Wurde das Profil bereits neu erstellt? Funktioniert OWA?",
+    "solutions": ["Neues Outlook-Profil erstellen (Autodiscover)", "Credentials löschen und neu eingeben", "Autodiscover prüfen: Strg + Rechtsklick auf Outlook-Icon > Outlook-Verbindung testen", "DNS-Einstellungen prüfen für Autodiscover", "OST wird automatisch neu erstellt"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_credclear", "label": "Credentials bereinigen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_appcache_authreset", "label": "Auth-Reset", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["Autodiscover", "Credential Manager"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-007", "PROB-OL-021"]
+  },
+  {
+    "id": "PROB-OL-009",
+    "category": "Outlook",
+    "title": "E-Mails kommen nicht an",
+    "keywords": ["mails kommen nicht an", "empfange keine mails", "posteingang leer", "emails fehlen", "keine neuen mails"],
+    "extendedKeywords": ["ich bekomme keine emails mehr", "mails kommen nicht an", "posteingang zeigt keine neuen mails", "emails fehlen", "mir werden keine mails zugestellt", "seit heute keine mails mehr", "bestimmte mails kommen nicht an", "mails bleiben aus", "posteingang aktualisiert nicht", "emails werden nicht empfangen", "kollege hat mail geschickt aber kommt nicht an", "postfach synchronisiert nicht"],
+    "typos": ["mails kommen nciht an", "emails kommen nciht", "mails feheln"],
+    "symptoms": ["Posteingang zeigt keine neuen E-Mails", "Bestimmte E-Mails werden nicht zugestellt", "Senden/Empfangen zeigt Fehler", "E-Mails kommen verzögert an"],
+    "quickCheck": "Kommen die E-Mails in OWA (Outlook Web) an? Ist Senden/Empfangen aktiv?",
+    "solutions": ["Senden/Empfangen manuell auslösen (F9)", "Prüfen ob Mails im Junk-Ordner landen", "OWA prüfen ob Mails dort ankommen", "Exchange-Verbindung prüfen (Strg+Rechtsklick Outlook-Icon)", "Outlook-Regeln prüfen (automatisches Verschieben?)", "OST-Datei neu aufbauen bei Sync-Problemen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen (Resync)", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_net_testport", "label": "Exchange-Port testen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Junk-Mail", "Spam-Filter", "Transport-Regel"],
+    "followUpQuestions": [
+      {"question": "Kommen die Mails in OWA (Webmail) an?", "options": ["Ja, in OWA sind sie da", "Nein, auch in OWA nicht", "Weiß nicht / kein Zugang zu OWA"], "narrows": "Outlook vs. Exchange Problem"}
+    ],
+    "relatedProblems": ["PROB-OL-010", "PROB-OL-011"]
+  },
+  {
+    "id": "PROB-OL-010",
+    "category": "Outlook",
+    "title": "E-Mails gehen nicht raus / Senden schlägt fehl",
+    "keywords": ["mail senden fehler", "email geht nicht raus", "senden fehlgeschlagen", "outbox hängt", "mail im postausgang"],
+    "extendedKeywords": ["mail bleibt im postausgang hängen", "kann keine emails senden", "senden funktioniert nicht", "mail geht nicht raus", "email senden fehler", "postausgang wird nicht geleert", "beim senden kommt fehlermeldung", "mail bleibt in outbox", "kann keine mails verschicken", "senden empfangen fehler", "anhang zu groß zum senden"],
+    "typos": ["mail sendn fehler", "emial geht nciht raus"],
+    "symptoms": ["E-Mails bleiben im Postausgang hängen", "Fehlermeldung beim Senden", "Senden/Empfangen zeigt Fehler an", "Mails werden als nicht zugestellt zurückgesendet"],
+    "quickCheck": "Hängt eine Mail im Postausgang? Funktioniert Empfangen?",
+    "solutions": ["Hängende Mail im Postausgang löschen (Outlook offline schalten zuerst)", "Postausgangszum Offlinemodus wechseln, Mail löschen, zurück online", "Anhangsgröße prüfen (Exchange-Limit meist 25-35 MB)", "Senden/Empfangen Fehlerprotokoll prüfen", "Exchange-Verbindung prüfen", "Outlook im Offlinemodus starten, Mail entfernen, wieder online gehen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_net_testport", "label": "Exchange-Port testen", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["Postausgang", "Outbox", "Nachrichtengröße"],
+    "followUpQuestions": [
+      {"question": "Bleibt eine bestimmte Mail im Postausgang hängen?", "options": ["Ja, eine Mail hängt", "Nein, generell kein Senden möglich", "Fehler nur bei großen Anhängen"], "narrows": "Einzelne Mail vs. generelles Problem"}
+    ],
+    "relatedProblems": ["PROB-OL-009", "PROB-OL-011"]
+  },
+  {
+    "id": "PROB-OL-011",
+    "category": "Outlook",
+    "title": "E-Mails kommen verzögert an / Synchronisation langsam",
+    "keywords": ["mails verzögert", "sync langsam", "outlook sync", "verzögerte zustellung", "cached mode"],
+    "extendedKeywords": ["mails kommen erst stunden später", "outlook synchronisiert nicht richtig", "postfach nicht aktuell", "neue mails erst nach minuten sichtbar", "outlook zeigt alte mails", "synchronisation hängt", "cached mode problem", "mails kommen erst nach f9", "outlook aktualisiert nicht automatisch"],
+    "typos": ["mails verzögret", "sychronisation langsam"],
+    "symptoms": ["E-Mails kommen mit Verzögerung an", "Postfach wird nicht automatisch aktualisiert", "Nur nach manuellem Senden/Empfangen kommen Mails"],
+    "quickCheck": "Ist der Cached Exchange Mode aktiviert? Welcher Zeitraum ist eingestellt?",
+    "solutions": ["Senden/Empfangen Intervall prüfen (Datei > Optionen > Erweitert)", "Cached Mode Zeitraum überprüfen", "OST-Datei neu aufbauen", "Exchange-Verbindung prüfen", "Senden/Empfangen Gruppen prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_net_testport", "label": "Exchange-Port testen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Send/Receive Group", "Cached Exchange Mode"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-009", "PROB-OL-019"]
+  },
+  {
+    "id": "PROB-OL-012",
+    "category": "Outlook",
+    "title": "Kalender-Termine fehlen / nicht synchronisiert",
+    "keywords": ["kalender sync fehler", "termine fehlen", "kalender leer", "calendar sync", "kalender nicht aktuell"],
+    "extendedKeywords": ["termine sind verschwunden", "kalender zeigt keine termine", "outlook kalender leer", "termine nicht synchronisiert", "kalender aktualisiert nicht", "besprechungen fehlen im kalender", "mein kalender ist plötzlich leer", "termine von gestern sind weg", "kalender synchronisation funktioniert nicht", "kalender zeigt falsche termine"],
+    "typos": ["kalender synch fehler", "termine fhelen", "kaledner"],
+    "symptoms": ["Kalender zeigt keine oder falsche Termine", "Termine fehlen im Outlook-Kalender aber sind in OWA vorhanden", "Besprechungsanfragen kommen nicht an"],
+    "quickCheck": "Sind die Termine in OWA (Webmail) sichtbar?",
+    "solutions": ["Kalenderansicht zurücksetzen: outlook.exe /cleanreminders", "OST-Datei umbenennen für frische Synchronisation", "Kalenderberechtigungen prüfen", "Freigegebene Kalender neu einbinden", "Outlook-Profil neu erstellen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren (/cleanreminders)", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Add-In Check", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["/cleanreminders", "Kalenderberechtigungen"],
+    "followUpQuestions": [
+      {"question": "Sind die Termine in OWA vorhanden?", "options": ["Ja, in OWA alles da", "Nein, auch in OWA fehlen sie", "Weiß nicht"], "narrows": "Outlook vs. Exchange Problem"}
+    ],
+    "relatedProblems": ["PROB-OL-013", "PROB-OL-014"]
+  },
+  {
+    "id": "PROB-OL-013",
+    "category": "Outlook",
+    "title": "Kalender-Einladungen kommen nicht an / können nicht angenommen werden",
+    "keywords": ["besprechung einladung fehlt", "meeting request fehler", "kalendereinladung", "termin annehmen fehler"],
+    "extendedKeywords": ["besprechungsanfrage kommt nicht an", "kann einladung nicht annehmen", "meeting einladung fehlt", "besprechung kann nicht zugesagt werden", "outlook zeigt keine besprechungsanfrage", "einladung verschwindet", "termin annehmen fehlermeldung", "kalendereinladung als mail statt termin"],
+    "typos": ["besprehcung einladung", "meeting einladugn"],
+    "symptoms": ["Besprechungseinladungen kommen nicht als Terminanfrage an", "Einladungen werden als normale Mail dargestellt", "Fehler beim Annehmen/Ablehnen von Terminen"],
+    "quickCheck": "Funktioniert die Einladung in OWA?",
+    "solutions": ["Outlook-Formularcache leeren: outlook.exe /cleanviews", "Besprechungsanfragen-Verarbeitung prüfen: Datei > Optionen > Mail > Nachverfolgung", "OST-Datei neu aufbauen", "Outlook-Regeln prüfen (werden Einladungen verschoben?)", "Kalender-Add-Ins prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren (/cleanviews)", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Add-In Check", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["/cleanviews", "iCalendar", "meeting request"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-012", "PROB-OL-014"]
+  },
+  {
+    "id": "PROB-OL-014",
+    "category": "Outlook",
+    "title": "Freigegebene Kalender / Raumkalender funktionieren nicht",
+    "keywords": ["freigegebener kalender", "raumkalender", "shared calendar", "kalender freigabe", "ressourcenkalender"],
+    "extendedKeywords": ["freigegebener kalender wird nicht angezeigt", "kann kalender nicht öffnen", "raumkalender zeigt nichts", "kalender des kollegen geht nicht", "freigegebener kalender lädt nicht", "kalenderberechtigungen funktionieren nicht", "kann keinen kalender freigeben", "kalender anderer person nicht sichtbar"],
+    "typos": ["freigegebener kaledner", "raumkaledner"],
+    "symptoms": ["Freigegebener Kalender zeigt keine Termine", "Raumkalender lässt sich nicht öffnen", "Fehlermeldung bei Zugriff auf freigegebenen Kalender"],
+    "quickCheck": "Hat der Benutzer die nötigen Berechtigungen auf den Kalender?",
+    "solutions": ["Kalender entfernen und neu hinzufügen", "Berechtigungen auf dem Kalender in Exchange prüfen", "Über OWA testen ob der Kalender dort funktioniert", "Outlook-Cache leeren (OST umbenennen)", "Cached Exchange Mode für freigegebene Ordner deaktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Kalenderberechtigungen", "Delegierung"],
+    "followUpQuestions": [
+      {"question": "Welche Art von Kalender?", "options": ["Kalender eines Kollegen", "Raumkalender / Ressource", "Gruppenkalender"], "narrows": "Kalendertyp"}
+    ],
+    "relatedProblems": ["PROB-OL-012", "PROB-OL-013"]
+  },
+  {
+    "id": "PROB-OL-015",
+    "category": "Outlook",
+    "title": "OST-Datei zu groß",
+    "keywords": ["ost datei groß", "ost too large", "outlook datendatei groß", "ost limite", "ost size"],
+    "extendedKeywords": ["ost datei ist riesig", "outlook datendatei zu groß", "ost datei ist über 50 gb", "outlook meldet datendatei zu groß", "outlook daten belegen zu viel platz", "ost datei wächst ständig", "festplatte voll wegen outlook", "outlook ost datei nimmt zu viel platz"],
+    "typos": ["ost datei grpß", "ost zu gro?"],
+    "symptoms": ["OST-Datei ist mehrere Gigabyte groß", "Outlook wird langsamer je größer die OST", "Festplatte voll wegen OST-Datei", "Meldung: Datendatei hat maximale Größe erreicht"],
+    "quickCheck": "Wie groß ist die OST-Datei? (AppData\\Local\\Microsoft\\Outlook)",
+    "solutions": ["Alte E-Mails archivieren (in PST oder Online-Archiv)", "Cached-Mode Zeitraum reduzieren (z.B. 6 Monate statt alles)", "Gelöschte Elemente und Junk endgültig löschen", "Große Anhänge identifizieren und löschen", "OST komprimieren (Datei > Kontoeinstellungen > Datendateien > Komprimieren)", "OST umbenennen für frischen Neuaufbau"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_procs_diskfree", "label": "Freier Speicherplatz", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Cached Exchange Mode", "OST Limit", "AutoArchive"],
+    "followUpQuestions": [
+      {"question": "Wie groß ist die OST-Datei?", "options": ["Unter 10 GB", "10-25 GB", "25-50 GB", "Über 50 GB"], "narrows": "Schweregrad"}
+    ],
+    "relatedProblems": ["PROB-OL-016"]
+  },
+  {
+    "id": "PROB-OL-016",
+    "category": "Outlook",
+    "title": "OST-Datei defekt / korrupt",
+    "keywords": ["ost defekt", "ost korrupt", "ost reparieren", "ost beschädigt", "scanpst"],
+    "extendedKeywords": ["ost datei ist kaputt", "outlook datendatei defekt", "outlook sagt datendatei beschädigt", "ost datei reparieren", "scanpst ausführen", "outlook reparatur tool für ost", "fehler in datendatei", "ost kann nicht geöffnet werden"],
+    "typos": ["ost defket", "ost korupt", "scanpst"],
+    "symptoms": ["Outlook meldet: Datendatei beschädigt", "Outlook kann OST-Datei nicht öffnen", "Fehler beim Zugriff auf bestimmte Ordner", "Outlook stürzt beim Zugriff auf Datendatei ab"],
+    "quickCheck": "Wird eine Fehlermeldung zur Datendatei angezeigt?",
+    "solutions": ["OST-Datei umbenennen (Outlook erstellt automatisch neue)", "ScanPST.exe ausführen (nur für PST, nicht OST)", "Für OST: Einfach umbenennen/löschen, wird vom Exchange neu synchronisiert", "Outlook-Profil neu erstellen", "OST liegt unter: %LOCALAPPDATA%\\Microsoft\\Outlook"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["ScanPST", "SCANPST.EXE", "%LOCALAPPDATA%\\Microsoft\\Outlook"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-015"]
+  },
+  {
+    "id": "PROB-OL-017",
+    "category": "Outlook",
+    "title": "Outlook Add-Ins deaktiviert / funktionieren nicht",
+    "keywords": ["add-in deaktiviert", "outlook add-in fehler", "add-in funktioniert nicht", "com add-in", "addin crashed"],
+    "extendedKeywords": ["outlook add-in wurde deaktiviert", "add-in ist inaktiv", "enaio add-in funktioniert nicht", "add-in wurde von outlook deaktiviert", "com add-in lädt nicht", "add-in fehlt in outlook", "add-in graues symbol", "outlook hat add-in deaktiviert wegen performance", "add-in verlangsamt outlook"],
+    "typos": ["add-in deaktiveirt", "addin funktionert nicht"],
+    "symptoms": ["Add-In ist in der Liste als deaktiviert markiert", "Add-In-Funktionen fehlen in der Ribbon-Leiste", "Meldung: Add-In wurde wegen Leistungsproblemen deaktiviert"],
+    "quickCheck": "Ist das Add-In unter Datei > Optionen > Add-Ins als deaktiviert gelistet?",
+    "solutions": ["Add-In unter Datei > Optionen > Add-Ins > COM-Add-Ins wieder aktivieren", "Deaktivierte Add-Ins prüfen: Datei > Optionen > Add-Ins > Deaktivierte Elemente verwalten", "Add-In deinstallieren und neu installieren", "Registry-Eintrag für Resiliency löschen", "Outlook im abgesicherten Modus starten und Add-In einzeln aktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Add-In Check", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Resiliency", "DisabledItems", "CrashingAddinList", "COM Add-In"],
+    "followUpQuestions": [
+      {"question": "Welches Add-In ist betroffen?", "options": ["enaio / DMS Add-In", "Teams Meeting Add-In", "Adobe-Add-In", "Anderes Add-In"], "narrows": "Betroffenes Add-In"}
+    ],
+    "relatedProblems": ["PROB-OL-018", "PROB-OL-019"]
+  },
+  {
+    "id": "PROB-OL-018",
+    "category": "Outlook",
+    "title": "enaio Add-In / DMS-Integration Problem",
+    "keywords": ["enaio", "dms add-in", "enaio outlook", "enaio funktioniert nicht", "dokumentenmanagement"],
+    "extendedKeywords": ["enaio add-in in outlook fehlt", "enaio button in outlook weg", "kann emails nicht in enaio ablegen", "enaio archivierung geht nicht", "enaio outlook integration defekt", "dms add-in deaktiviert", "enaio add-in wurde von outlook deaktiviert", "enaio add-in crasht outlook"],
+    "typos": ["enaoi", "enaio addin", "eanio"],
+    "symptoms": ["enaio-Button fehlt in Outlook-Ribbon", "E-Mails können nicht in enaio archiviert werden", "enaio Add-In wurde von Outlook deaktiviert", "Fehlermeldung beim Ablegen in enaio"],
+    "quickCheck": "Ist das enaio Add-In unter Datei > Optionen > Add-Ins sichtbar?",
+    "solutions": ["enaio Add-In über COM-Add-Ins reaktivieren", "Resiliency-Schlüssel in Registry löschen", "enaio Client reparieren/neu installieren", "Outlook im abgesicherten Modus starten und enaio aktivieren", "enaio-Version auf Kompatibilität mit aktueller Outlook-Version prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Add-In Check", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook im Safe Mode", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["Resiliency Registry", "optimal-systems", "enaio client"],
+    "followUpQuestions": [
+      {"question": "Was genau funktioniert nicht?", "options": ["enaio-Button fehlt komplett", "Button da aber Funktion fehlerhaft", "Outlook crashed wegen enaio"], "narrows": "Art des Problems"}
+    ],
+    "relatedProblems": ["PROB-OL-017", "PROB-OL-019"]
+  },
+  {
+    "id": "PROB-OL-019",
+    "category": "Outlook",
+    "title": "Outlook Add-In verlangsamt / crasht Outlook",
+    "keywords": ["add-in langsam", "add-in crash", "add-in performance", "outlook crash add-in", "add-in bremst"],
+    "extendedKeywords": ["add-in macht outlook langsam", "outlook crasht wegen add-in", "seitdem add-in installiert ist outlook langsam", "welches add-in bremst outlook", "add-in verursacht absturz", "outlook performance add-in"],
+    "typos": ["add-in langasm", "addin crash"],
+    "symptoms": ["Outlook ist deutlich langsamer seit Installation eines Add-Ins", "Outlook stürzt regelmäßig ab", "Fehlermeldung eines bestimmten Add-Ins beim Start"],
+    "quickCheck": "Ist Outlook im abgesicherten Modus (ohne Add-Ins) schneller?",
+    "solutions": ["Outlook im abgesicherten Modus starten: outlook.exe /safe", "Add-Ins einzeln deaktivieren um das problematische zu finden", "Add-In-Ladezeiten prüfen: Datei > Optionen > Add-Ins > COM-Add-Ins", "Problematisches Add-In deinstallieren und Alternativen prüfen", "Add-In aktualisieren auf neueste Version"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Add-In Check", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook Safe Mode", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_procs_topcpu", "label": "CPU prüfen", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["COM Add-In load time", "Resiliency"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-017", "PROB-OL-018"]
+  },
+  {
+    "id": "PROB-OL-020",
+    "category": "Outlook",
+    "title": "Outlook-Suche funktioniert nicht / findet nichts",
+    "keywords": ["outlook suche defekt", "suche findet nichts", "outlook search not working", "suchindex outlook", "instant search"],
+    "extendedKeywords": ["outlook suche funktioniert nicht", "suche in outlook findet keine mails", "outlook suche zeigt keine ergebnisse", "wenn ich in outlook suche kommt nichts", "outlook suche langsam", "suchindex wird gerade erstellt", "outlook suche findet alte mails nicht", "suche in outlook kaputt", "emails suchen geht nicht in outlook", "nach outlook update suche defekt"],
+    "typos": ["outlook shuce", "suche funktioneirt nicht", "outlook suhce"],
+    "symptoms": ["Outlook-Suche zeigt keine Ergebnisse", "Meldung: Suchindex wird erstellt", "Suche findet nur aktuelle E-Mails, nicht ältere", "Suche dauert extrem lange"],
+    "quickCheck": "Wird die Meldung 'Suchindex wird gerade erstellt' angezeigt?",
+    "solutions": ["Suchindex in Outlook reparieren: outlook.exe /resetsearchcriteria", "Windows-Suchindex zurücksetzen und Outlook-Datendatei einschließen", "Indexierungsoptionen prüfen: Systemsteuerung > Indexierungsoptionen > Outlook einschließen", "OST-Datei umbenennen für Neuindexierung", "Registry-Fix: EnableSearchIndex auf 1 setzen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook Suche zurücksetzen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_searchreset", "label": "Windows-Suche Reset", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["/resetsearchcriteria", "SearchIndex", "Indexierungsoptionen"],
+    "followUpQuestions": [
+      {"question": "Was genau passiert bei der Suche?", "options": ["Keine Ergebnisse", "Nur neuere Mails werden gefunden", "Suche dauert sehr lange", "Meldung Suchindex wird erstellt"], "narrows": "Art des Suchproblems"}
+    ],
+    "relatedProblems": ["PROB-OL-021"]
+  },
+  {
+    "id": "PROB-OL-021",
+    "category": "Outlook",
+    "title": "Outlook-Suche findet nur bestimmte Zeiträume",
+    "keywords": ["suche zeitraum", "suche cached mode", "suche nur aktuelle", "suche ältere mails", "search scope"],
+    "extendedKeywords": ["outlook suche findet nur letzte wochen", "ältere mails werden nicht gefunden", "suche findet nur cached zeitraum", "suche zeigt nicht alle ergebnisse", "outlook suche unvollständig", "mails von letztem jahr nicht in suche"],
+    "typos": ["suche zetitraum", "suche zeitruam"],
+    "symptoms": ["Suche findet nur E-Mails aus dem Cached-Mode Zeitraum", "Ältere E-Mails werden nicht in Suchergebnissen angezeigt", "Suchbereich ist auf aktuellen Ordner beschränkt"],
+    "quickCheck": "Ist der Suchbereich auf 'Aktueller Ordner' oder 'Alle Postfächer' eingestellt?",
+    "solutions": ["Suchbereich auf 'Alle Postfächer' erweitern", "Cached Mode Zeitraum erweitern oder auf 'Alle' stellen", "In der Suche 'Alle Outlook-Elemente' auswählen", "Über OWA suchen für vollständige Ergebnisse", "Index für alle Datendateien erstellen lassen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook Suche reparieren", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Cached Exchange Mode", "Search Scope"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-020"]
+  },
+  {
+    "id": "PROB-OL-022",
+    "category": "Outlook",
+    "title": "Exchange-Verbindung getrennt / Offline",
+    "keywords": ["exchange getrennt", "outlook offline", "verbindung getrennt", "exchange connection", "outlook disconnected"],
+    "extendedKeywords": ["outlook zeigt getrennt an", "verbindung zum exchange server getrennt", "outlook ist offline", "outlook kann sich nicht verbinden", "exchange nicht erreichbar", "outlook zeigt offline in der statusleiste", "outlook verbindungsproblem", "outlook grünes kabel fehlt", "outlook statusleiste zeigt offline", "kein zugriff auf exchange"],
+    "typos": ["exchange getrennt", "outlook offlnie", "excahnge verbindung"],
+    "symptoms": ["Outlook-Statusleiste zeigt 'Getrennt' oder 'Offline'", "Keine neuen E-Mails trotz Internetverbindung", "Meldung: Verbindung zum Microsoft Exchange nicht möglich"],
+    "quickCheck": "Ist der PC mit dem Netzwerk verbunden? Funktioniert OWA?",
+    "solutions": ["Prüfen ob Outlook auf Offlinemodus gesetzt ist (Senden/Empfangen > Offline arbeiten)", "Exchange-Server per Ping und Port testen", "Netzwerkverbindung prüfen (VPN, Zscaler, etc.)", "Outlook-Profil reparieren", "Credentials löschen und neu eingeben", "Outlook neu starten"],
+    "skillMapping": [
+      {"skillId": "rd_net_testport", "label": "Exchange-Port testen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_net_ping", "label": "Exchange-Server pingen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_appcache_credclear", "label": "Credentials bereinigen", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Work Offline", "Offline arbeiten", "Autodiscover"],
+    "followUpQuestions": [
+      {"question": "Funktioniert OWA (Webmail)?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Outlook vs. Exchange/Netzwerk"}
+    ],
+    "relatedProblems": ["PROB-OL-023", "PROB-OL-024"]
+  },
+  {
+    "id": "PROB-OL-023",
+    "category": "Outlook",
+    "title": "Exchange Autodiscover-Fehler",
+    "keywords": ["autodiscover fehler", "autodiscover", "outlook konfiguration", "exchange setup", "autodiscover xml"],
+    "extendedKeywords": ["autodiscover funktioniert nicht", "outlook kann exchange nicht finden", "outlook konfiguration schlägt fehl", "autodiscover dns fehler", "outlook findet exchange nicht", "konto automatisch einrichten fehlgeschlagen", "autodiscover umleitung", "exchange autodiscover fehlgeschlagen"],
+    "typos": ["autodiscovery", "autodiscvoer", "autoodiscover"],
+    "symptoms": ["Outlook kann sich nicht automatisch konfigurieren", "Fehlermeldung bei Konto-Einrichtung", "Autodiscover-Test schlägt fehl"],
+    "quickCheck": "Was zeigt der Autodiscover-Test? (Strg+Rechtsklick Outlook-Icon > E-Mail-AutoKonfiguration testen)",
+    "solutions": ["DNS-Eintrag für Autodiscover prüfen", "Autodiscover-Test durchführen: Strg+Rechtsklick Outlook-Icon in Systray", "Registry prüfen: ExcludeExplicitO365Endpoint", "Lokale Autodiscover-XML-Datei prüfen falls vorhanden", "Outlook-Profil neu erstellen mit manueller Konfiguration"],
+    "skillMapping": [
+      {"skillId": "rd_net_nslookup", "label": "DNS-Auflösung testen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_net_testport", "label": "Port-Test (443)", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["SRV Record", "autodiscover.xml", "ExcludeExplicitO365Endpoint"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-022", "PROB-OL-024"]
+  },
+  {
+    "id": "PROB-OL-024",
+    "category": "Outlook",
+    "title": "Exchange-Zertifikatfehler / SSL-Warnung",
+    "keywords": ["zertifikat fehler outlook", "ssl fehler outlook", "exchange zertifikat", "sicherheitswarnung outlook"],
+    "extendedKeywords": ["outlook zeigt zertifikatwarnung", "sicherheitswarnung bei outlook start", "exchange zertifikat abgelaufen", "outlook ssl fehler", "zertifikat nicht vertrauenswürdig outlook", "outlook fragt nach zertifikat akzeptieren", "Name auf dem Sicherheitszertifikat ist ungültig"],
+    "typos": ["zertifikats fehler", "ssl fheler", "zertifiakt"],
+    "symptoms": ["Sicherheitswarnung beim Verbinden mit Exchange", "Meldung: Zertifikat ist abgelaufen oder ungültig", "Outlook fragt wiederholt nach Zertifikat-Bestätigung"],
+    "quickCheck": "Was genau steht in der Zertifikatwarnung? Welcher Hostname wird angezeigt?",
+    "solutions": ["Zertifikat prüfen: Ist es abgelaufen?", "Exchange-Servernamen in Autodiscover prüfen", "Root-Zertifikat der CA importieren", "Zscaler Root-Zertifikat prüfen falls Zscaler aktiv", "Outlook-Profil mit korrektem Servernamen neu erstellen"],
+    "skillMapping": [
+      {"skillId": "rd_certs_compcerts", "label": "Computer-Zertifikate prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_certs_certexpiry", "label": "Ablaufende Zertifikate", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_zscaler_zsccert", "label": "Zscaler Root-Zertifikat", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Root CA", "Zscaler Root", "certificate name mismatch"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-022", "PROB-OL-023"]
+  },
+  {
+    "id": "PROB-OL-025",
+    "category": "Outlook",
+    "title": "Outlook fragt ständig nach Passwort",
+    "keywords": ["outlook passwort abfrage", "outlook fragt passwort", "credential prompt", "outlook kennwort", "passwort popup"],
+    "extendedKeywords": ["outlook fragt immer wieder nach passwort", "passwort popup kommt ständig", "muss passwort dauernd eingeben", "outlook akzeptiert passwort nicht", "anmeldung bei outlook ständig", "passwort abfrage verschwindet und kommt wieder", "outlook credentials funktionieren nicht", "muss mich immer wieder anmelden bei outlook", "windows security popup für outlook"],
+    "typos": ["passwort abfrgae", "passwrot popup", "outlook fragt psswort"],
+    "symptoms": ["Wiederholte Passwort-Abfrage in Outlook", "Passwort wird nicht gespeichert", "Windows-Sicherheitsdialog erscheint ständig", "Nach Passwort-Eingabe kommt sofort neue Abfrage"],
+    "quickCheck": "Wurde das Passwort kürzlich geändert? Funktioniert die Anmeldung in OWA?",
+    "solutions": ["Gespeicherte Credentials im Windows-Credential-Manager löschen und neu eingeben", "Outlook-Profil reparieren", "Modern Authentication prüfen (OAuth vs. Basic Auth)", "Kerberos-Tickets löschen: klist purge", "Registry: EnableADAL und Version auf 1 setzen für Modern Auth", "Outlook komplett schließen, Credentials löschen, neu starten"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Credential Manager bereinigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_appcache_authreset", "label": "Auth-Reset", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_domain_kpurge", "label": "Kerberos-Tickets löschen", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Modern Authentication", "OAuth", "EnableADAL", "Basic Auth"],
+    "followUpQuestions": [
+      {"question": "Wurde das Passwort kürzlich geändert?", "options": ["Ja, gerade geändert", "Nein, schon länger", "Weiß nicht"], "narrows": "Credential-Update nötig"}
+    ],
+    "relatedProblems": ["PROB-OL-026"]
+  },
+  {
+    "id": "PROB-OL-026",
+    "category": "Outlook",
+    "title": "Outlook Credentials nach Passwortänderung",
+    "keywords": ["passwort geändert outlook", "neues passwort outlook", "nach passwortänderung", "credentials update"],
+    "extendedKeywords": ["nach passwortänderung geht outlook nicht", "outlook nach passwort reset", "neues passwort in outlook eingeben", "wie aktualisiere ich passwort in outlook", "passwort in outlook ändern", "nach kennwort änderung outlook probleme", "outlook erkennt neues passwort nicht"],
+    "typos": ["passwort geändret", "passwortänderug"],
+    "symptoms": ["Outlook funktioniert nach Passwortänderung nicht mehr", "Wiederholte Passwort-Abfrage nach Änderung", "Outlook kann sich mit neuem Passwort nicht verbinden"],
+    "quickCheck": "Wurde das Passwort am PC oder nur im AD/Portal geändert?",
+    "solutions": ["PC sperren (Win+L) und mit neuem Passwort entsperren", "Alte Credentials im Credential Manager löschen", "Outlook schließen, Credentials löschen, Outlook neu starten", "Kerberos-Tickets löschen: klist purge", "PC neustarten nach Passwortänderung"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Credentials bereinigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_appcache_authreset", "label": "Auth-Reset", "priority": 2, "effectiveness": 90},
+      {"skillId": "rd_domain_kpurge", "label": "Kerberos-Tickets löschen", "priority": 3, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["klist purge", "Credential Manager"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-025"]
+  },
+  {
+    "id": "PROB-OL-027",
+    "category": "Outlook",
+    "title": "Outlook Signatur funktioniert nicht / fehlt",
+    "keywords": ["signatur fehlt", "outlook signatur", "signatur defekt", "email signatur", "signatur wird nicht angehängt"],
+    "extendedKeywords": ["outlook signatur wird nicht angezeigt", "signatur fehlt bei neuen mails", "signatur ist verschwunden", "signatur wird nicht automatisch eingefügt", "outlook signatur leer", "signatur formatierung kaputt", "logo in signatur fehlt", "signatur nur text keine bilder", "standardsignatur geht nicht", "signatur nach update weg"],
+    "typos": ["signatuhr", "signatur fhelt", "signatr"],
+    "symptoms": ["Signatur wird nicht automatisch eingefügt", "Signatur ist leer oder fehlerhaft formatiert", "Bilder/Logo in der Signatur fehlen", "Signatur-Einstellung lässt sich nicht speichern"],
+    "quickCheck": "Ist die Signatur unter Datei > Optionen > E-Mail > Signaturen konfiguriert?",
+    "solutions": ["Signatur-Einstellungen prüfen: Datei > Optionen > E-Mail > Signaturen", "Standard-Signatur für neue Mails und Antworten festlegen", "Signatur-Dateien prüfen: %APPDATA%\\Microsoft\\Signatures", "GPO für Signaturen prüfen", "Signatur neu erstellen", "Bei fehlendem Logo: Bild erneut einfügen (nicht verlinken)"],
+    "skillMapping": [
+      {"skillId": "rd_gpo_gpresult", "label": "GPO prüfen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["%APPDATA%\\Microsoft\\Signatures", "roaming signature"],
+    "followUpQuestions": [
+      {"question": "Was genau ist das Problem mit der Signatur?", "options": ["Signatur fehlt komplett", "Signatur da aber Logo/Bilder fehlen", "Signatur wird nicht automatisch eingefügt", "Signatur kann nicht bearbeitet werden"], "narrows": "Art des Signatur-Problems"}
+    ],
+    "relatedProblems": ["PROB-OL-028"]
+  },
+  {
+    "id": "PROB-OL-028",
+    "category": "Outlook",
+    "title": "Abwesenheitsnotiz / Automatische Antwort funktioniert nicht",
+    "keywords": ["abwesenheitsnotiz", "automatische antwort", "out of office", "ooo", "auto reply"],
+    "extendedKeywords": ["abwesenheitsnotiz geht nicht", "automatische antwort funktioniert nicht", "ooo wird nicht gesendet", "abwesenheit einrichten geht nicht", "out of office nachricht kommt nicht", "abwesenheitsnotiz wird nicht verschickt", "kann abwesenheit nicht einstellen", "automatische antwort wird nicht gesendet", "abwesenheitsnotiz deaktiviert sich selbst"],
+    "typos": ["abwesenheitsnoitz", "automtaische antwort", "abwesenheitsontiz"],
+    "symptoms": ["Abwesenheitsnotiz wird nicht an Absender gesendet", "Automatische Antwort lässt sich nicht aktivieren", "Abwesenheitsnotiz deaktiviert sich von selbst"],
+    "quickCheck": "Ist die Abwesenheitsnotiz in Outlook und/oder OWA korrekt eingestellt?",
+    "solutions": ["Abwesenheitsnotiz in Outlook prüfen: Datei > Automatische Antworten", "Alternativ über OWA (Webmail) einrichten", "Zeitraum korrekt einstellen", "Exchange-Verbindung prüfen (Funktion benötigt Exchange)", "Für IMAP/POP: Outlook-Regeln verwenden statt Auto-Reply"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_net_testport", "label": "Exchange-Verbindung prüfen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Automatic Replies", "OOF", "Transport Rule"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-027"]
+  },
+  {
+    "id": "PROB-OL-029",
+    "category": "Outlook",
+    "title": "Anhänge können nicht geöffnet werden",
+    "keywords": ["anhang öffnen fehler", "attachment error", "anhang blockiert", "outlook anhang", "datei kann nicht geöffnet werden"],
+    "extendedKeywords": ["kann anhang nicht öffnen in outlook", "anhang wird blockiert", "outlook blockiert anhang", "anhang lässt sich nicht öffnen", "fehlermeldung beim anhang öffnen", "anhang zeigt fehler an", "dateianlage kann nicht geöffnet werden", "outlook sagt anhang nicht sicher", "pdf anhang öffnet nicht", "excel anhang fehler beim öffnen"],
+    "typos": ["anhang öfnnen", "anhagn blockiert", "anhang"],
+    "symptoms": ["Fehlermeldung beim Öffnen von Anhängen", "Anhang wird als unsicher blockiert", "Anhang lässt sich nicht speichern", "Bestimmte Dateitypen werden blockiert"],
+    "quickCheck": "Welcher Dateityp wird blockiert? Tritt der Fehler bei allen Anhängen auf?",
+    "solutions": ["Blockierte Dateitypen in Outlook Registry anpassen (Level1Remove)", "Anhang zuerst speichern dann von Festplatte öffnen", "Temporären Outlook-Ordner leeren: %LOCALAPPDATA%\\Microsoft\\Windows\\INetCache\\Content.Outlook", "Betroffene Datei-Zuordnung prüfen", "GPO für blockierte Dateitypen prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_gpo_gpresult", "label": "GPO prüfen", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Level1Remove", "Content.Outlook", "OLK temp"],
+    "followUpQuestions": [
+      {"question": "Welche Art von Anhang ist betroffen?", "options": ["PDF", "Office-Datei (Word/Excel)", "ZIP/Archiv", "Alle Anhänge"], "narrows": "Dateityp"}
+    ],
+    "relatedProblems": ["PROB-OL-030"]
+  },
+  {
+    "id": "PROB-OL-030",
+    "category": "Outlook",
+    "title": "Anhänge können nicht gesendet werden / zu groß",
+    "keywords": ["anhang senden fehler", "anhang zu groß", "attachment size limit", "outlook anhang limit", "datei zu groß"],
+    "extendedKeywords": ["anhang ist zu groß zum senden", "kann datei nicht als anhang senden", "outlook meldet datei zu groß", "anhang größenlimit überschritten", "email mit großem anhang geht nicht raus", "wie groß darf anhang in outlook sein", "alternative zu großem anhang"],
+    "typos": ["anhang zu grpß", "anhagn senden fehler"],
+    "symptoms": ["Fehlermeldung: Anhang überschreitet Größenlimit", "E-Mail mit Anhang bleibt im Postausgang", "Outlook meldet: Datei zu groß zum Senden"],
+    "quickCheck": "Wie groß ist der Anhang? Exchange-Limit ist typisch 25-35 MB.",
+    "solutions": ["Datei komprimieren (ZIP) und erneut senden", "OneDrive/SharePoint-Link statt Anhang verwenden", "Große Dateien über Firmen-Fileshare teilen", "Exchange-Limit beim Admin erfragen", "Datei aufteilen bei sehr großen Dateien"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 30}
+    ],
+    "hiddenTriggers": ["MaxSendSize", "MaxReceiveSize"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-029"]
+  },
+  {
+    "id": "PROB-OL-031",
+    "category": "Outlook",
+    "title": "Ordner / Favoriten verschwunden",
+    "keywords": ["ordner verschwunden", "favoriten weg", "outlook ordner fehlt", "ordner gelöscht", "ordnerstruktur weg"],
+    "extendedKeywords": ["meine ordner sind weg in outlook", "ordnerleiste fehlt", "favoritenordner verschwunden", "persönliche ordner fehlen", "ordner in outlook gelöscht", "ordnerstruktur verändert", "archivordner fehlt", "gesendet ordner weg", "gelöschte elemente ordner fehlt"],
+    "typos": ["ordner vershcwunden", "favoriten weg", "ordner fhelt"],
+    "symptoms": ["Ordner fehlen in der Ordnerliste", "Favoritenbereich ist leer", "Ordnerstruktur hat sich verändert", "Bestimmte Standardordner fehlen (Gesendet, Gelöscht)"],
+    "quickCheck": "Fehlen die Ordner auch in OWA?",
+    "solutions": ["Navigationsbereich zurücksetzen: outlook.exe /resetnavpane", "Ordnerleiste maximieren (könnte minimiert sein)", "Prüfen ob Ordner in OWA vorhanden sind", "Favoriten: Rechtsklick in Favoritenbereich > Ordner zu Favoriten hinzufügen", "OST umbenennen für frische Synchronisation", "Gelöschte Ordner im Papierkorb suchen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Navigationsbereich zurücksetzen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 2, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["/resetnavpane", "Navigationsbereich"],
+    "followUpQuestions": [
+      {"question": "Welche Ordner fehlen?", "options": ["Selbst erstellte Ordner", "Standardordner (Posteingang, Gesendet)", "Favoriten-Bereich", "Alle Ordner"], "narrows": "Art der fehlenden Ordner"}
+    ],
+    "relatedProblems": ["PROB-OL-032"]
+  },
+  {
+    "id": "PROB-OL-032",
+    "category": "Outlook",
+    "title": "Outlook-Ordneranzahl/Ansicht zurücksetzen",
+    "keywords": ["ansicht zurücksetzen", "ordner ansicht", "outlook ansicht defekt", "view reset", "cleanviews"],
+    "extendedKeywords": ["outlook ansicht ist durcheinander", "ordner zeigt falsche ansicht", "mails werden falsch sortiert", "ansicht in outlook kaputt", "spalten in outlook fehlen", "outlook ansicht ändern geht nicht", "nach update ansicht anders", "standard ansicht wiederherstellen"],
+    "typos": ["ansicht zurücksetzten", "ordner ansciht"],
+    "symptoms": ["Outlook zeigt Ordner in falscher Ansicht", "Spalten fehlen oder sind falsch sortiert", "Ansicht lässt sich nicht ändern"],
+    "quickCheck": "Seit wann ist die Ansicht verändert?",
+    "solutions": ["Ansicht zurücksetzen: Ansicht > Ansicht zurücksetzen", "Alle Ansichten zurücksetzen: outlook.exe /cleanviews", "Spalten anpassen: Rechtsklick auf Spaltenüberschrift", "Standard-Ansicht wiederherstellen über Ribbon"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook /cleanviews", "priority": 1, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["/cleanviews", "outcmd.dat"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-031"]
+  },
+  {
+    "id": "PROB-OL-033",
+    "category": "Outlook",
+    "title": "Outlook-Regeln funktionieren nicht",
+    "keywords": ["outlook regeln", "mail regeln", "rules not working", "posteingangsregel", "email filter"],
+    "extendedKeywords": ["outlook regel funktioniert nicht", "mails werden nicht automatisch verschoben", "regeln greifen nicht", "regel wird nicht angewendet", "posteingangsregel wird ignoriert", "outlook filter funktioniert nicht", "regel funktioniert nur manchmal", "serverseitige regel fehler", "outlook regel deaktiviert sich"],
+    "typos": ["outlook reglen", "reglen funktioniren nicht"],
+    "symptoms": ["E-Mails werden nicht automatisch verschoben", "Regeln werden ignoriert", "Regeln deaktivieren sich selbst", "Fehlermeldung beim Anwenden von Regeln"],
+    "quickCheck": "Sind die Regeln als aktiv (Häkchen) markiert? Server- oder Client-seitig?",
+    "solutions": ["Regeln prüfen: Sind alle aktiviert (Häkchen)?", "Reihenfolge der Regeln prüfen (werden von oben nach unten abgearbeitet)", "Regel löschen und neu erstellen", "SRS-Datei löschen für Regel-Reset", "Regelgröße prüfen (Exchange-Limit für Regeln)", "Regeln über OWA testen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["SRS file", "Rules Quota", "Regelkontingent"],
+    "followUpQuestions": [
+      {"question": "Welche Art von Regel funktioniert nicht?", "options": ["Mail in Ordner verschieben", "Weiterleitung", "Benachrichtigung/Sound", "Automatisches Löschen"], "narrows": "Regeltyp"}
+    ],
+    "relatedProblems": ["PROB-OL-034"]
+  },
+  {
+    "id": "PROB-OL-034",
+    "category": "Outlook",
+    "title": "Outlook-Regeln Limit erreicht / zu viele Regeln",
+    "keywords": ["regeln limit", "zu viele regeln", "rules quota", "regel kontingent", "regeln voll"],
+    "extendedKeywords": ["outlook sagt zu viele regeln", "regelkontingent erreicht", "kann keine neuen regeln erstellen", "regeln limit überschritten", "outlook regeln quota", "server regeln limit erreicht"],
+    "typos": ["reglen limit", "regelkontinget"],
+    "symptoms": ["Fehlermeldung: Regelkontingent erreicht", "Neue Regeln können nicht erstellt werden", "Regeln werden beim Speichern gekürzt"],
+    "quickCheck": "Wie viele Regeln sind aktuell konfiguriert?",
+    "solutions": ["Alte/unnötige Regeln löschen", "Regeln konsolidieren (mehrere Absender in einer Regel)", "Client-seitige statt Server-seitige Regeln verwenden", "Exchange-Admin kann Regelkontingent erhöhen", "Regeln in OWA verwalten"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["Rules Quota", "256 KB limit"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-033"]
+  },
+  {
+    "id": "PROB-OL-035",
+    "category": "Outlook",
+    "title": "Shared Mailbox / Freigegebenes Postfach funktioniert nicht",
+    "keywords": ["shared mailbox", "freigegebenes postfach", "shared postfach", "gemeinsames postfach", "funktionspostfach"],
+    "extendedKeywords": ["freigegebenes postfach wird nicht angezeigt", "shared mailbox fehlt in outlook", "kann freigegebenes postfach nicht öffnen", "shared mailbox lädt nicht", "funktionspostfach ist weg", "zusätzliches postfach fehlt", "delegiertes postfach geht nicht", "shared mailbox nach profil-neuerstellen weg"],
+    "typos": ["shaerd mailbox", "freigebenes postfach", "shared maibox"],
+    "symptoms": ["Freigegebenes Postfach erscheint nicht in Outlook", "Zugriff auf Shared Mailbox wird verweigert", "Shared Mailbox lädt keine E-Mails"],
+    "quickCheck": "Hat der Benutzer die Berechtigung auf die Shared Mailbox? Funktioniert es in OWA?",
+    "solutions": ["Shared Mailbox manuell hinzufügen: Datei > Kontoeinstellungen > Weitere Postfächer", "Berechtigungen in Exchange prüfen (Full Access, Send As)", "Automapping prüfen (wenn nicht angezeigt)", "Outlook-Profil neu erstellen", "In OWA testen ob Zugriff funktioniert"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_appcache_outlookcache", "label": "OST umbenennen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_appcache_credclear", "label": "Credentials bereinigen", "priority": 3, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["Automapping", "Full Access", "Send As", "Send on Behalf"],
+    "followUpQuestions": [
+      {"question": "War die Shared Mailbox vorher sichtbar?", "options": ["Ja, war vorher da", "Nein, wurde gerade erst berechtigt", "Nach Profil-Neuerstellen weg"], "narrows": "Neue Berechtigung vs. Konfigurationsproblem"}
+    ],
+    "relatedProblems": ["PROB-OL-036"]
+  },
+  {
+    "id": "PROB-OL-036",
+    "category": "Outlook",
+    "title": "Shared Mailbox: Senden als / Im Auftrag geht nicht",
+    "keywords": ["senden als fehler", "send as", "send on behalf", "im auftrag senden", "shared mailbox senden"],
+    "extendedKeywords": ["kann nicht als shared mailbox senden", "senden als funktioniert nicht", "im auftrag von geht nicht", "mail wird mit meinem namen gesendet statt shared", "from feld zeigt falschen absender", "kann absender nicht ändern", "shared mailbox als absender auswählen geht nicht"],
+    "typos": ["senden als fheler", "send as funktioneirt nicht"],
+    "symptoms": ["E-Mails werden mit eigenem Namen statt Shared-Mailbox-Name gesendet", "Absender kann nicht auf Shared Mailbox geändert werden", "Fehlermeldung beim Senden als andere Mailbox"],
+    "quickCheck": "Ist die Berechtigung 'Send As' oder 'Send on Behalf' vergeben?",
+    "solutions": ["Prüfen ob 'Senden als' oder 'Im Auftrag von' Berechtigung vorhanden", "Von-Feld in Outlook einblenden: Optionen > Felder > Von anzeigen", "Shared Mailbox als separates Konto hinzufügen", "Exchange-Admin: Send As Berechtigung vergeben", "Outlook-Profil neu erstellen nach Berechtigungsänderung"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_appcache_credclear", "label": "Credentials bereinigen", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["SendAs", "SendOnBehalf", "From field"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-035"]
+  },
+  {
+    "id": "PROB-OL-037",
+    "category": "Outlook",
+    "title": "AutoVervollständigung / Namensvorschläge funktionieren nicht",
+    "keywords": ["autovervollständigung", "auto complete", "namensvorschläge", "adressbuch vorschläge", "nk2"],
+    "extendedKeywords": ["outlook schlägt keine namen mehr vor", "autovervollständigung geht nicht", "email adressen werden nicht mehr vorgeschlagen", "adressvorschläge fehlen", "muss immer ganze adresse tippen", "namensvorschläge sind verschwunden", "autocomplete in outlook funktioniert nicht", "nach profil wechsel keine vorschläge mehr"],
+    "typos": ["autovervollständigunh", "namensvorschläge funktionern nicht", "autcomplete"],
+    "symptoms": ["Beim Tippen von E-Mail-Adressen werden keine Vorschläge angezeigt", "AutoVervollständigung zeigt veraltete/falsche Adressen", "Vorschlagsliste ist komplett leer"],
+    "quickCheck": "Ist AutoVervollständigung unter Datei > Optionen > E-Mail aktiviert?",
+    "solutions": ["AutoVervollständigung aktivieren: Datei > Optionen > E-Mail > Beim Ausfüllen der An-/Cc-/Bcc-Zeile Namen vorschlagen", "AutoVervollständigungscache leeren: outlook.exe /CleanAutoCompleteCache (löscht alle Vorschläge)", "Stream_Autocomplete Datei prüfen", "Outlook-Profil reparieren", "Einzelne falsche Vorschläge: X neben dem Vorschlag klicken"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["/CleanAutoCompleteCache", "Stream_Autocomplete", "NK2"],
+    "followUpQuestions": [
+      {"question": "Was ist das Problem?", "options": ["Keine Vorschläge mehr", "Falsche/veraltete Vorschläge", "Vorschläge für bestimmte Personen fehlen"], "narrows": "Art des Problems"}
+    ],
+    "relatedProblems": ["PROB-OL-038"]
+  },
+  {
+    "id": "PROB-OL-038",
+    "category": "Outlook",
+    "title": "AutoVervollständigung zeigt falsche / doppelte Adressen",
+    "keywords": ["falsche adresse", "doppelte vorschläge", "veraltete adressen", "autocomplete falsch", "alter name"],
+    "extendedKeywords": ["outlook zeigt alte email adresse", "doppelte namen bei autovervollständigung", "veralteter name wird vorgeschlagen", "falsche adresse wird immer vorgeschlagen", "wie lösche ich falsche adresse in outlook", "ehemaliger mitarbeiter wird noch vorgeschlagen"],
+    "typos": ["falshce adresse", "dopplete vorschläge"],
+    "symptoms": ["Veraltete E-Mail-Adressen werden vorgeschlagen", "Doppelte Einträge in der Vorschlagsliste", "Name eines ehemaligen Mitarbeiters taucht auf"],
+    "quickCheck": "Taucht die falsche Adresse beim Tippen in der Vorschlagsliste auf?",
+    "solutions": ["Falschen Vorschlag markieren und X daneben klicken (oder Entf-Taste)", "Gesamten Cache leeren: outlook.exe /CleanAutoCompleteCache", "GAL-Cache prüfen und aktualisieren: outlook.exe /cleanreminders", "Offline-Adressbuch aktualisieren: Senden/Empfangen > Adressbuch herunterladen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["/CleanAutoCompleteCache", "OAB", "GAL"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-OL-037"]
+  },
+  {
+    "id": "PROB-OL-039",
+    "category": "Outlook",
+    "title": "Outlook Rechtschreibprüfung funktioniert nicht",
+    "keywords": ["rechtschreibprüfung", "spellcheck", "autokorrektur", "outlook sprache", "rechtschreibung"],
+    "extendedKeywords": ["rechtschreibprüfung in outlook geht nicht", "rote wellenlinien fehlen", "outlook korrigiert nicht mehr", "autokorrektur funktioniert nicht", "falsche sprache bei rechtschreibprüfung", "rechtschreibung wird nicht geprüft", "spell check in outlook defekt", "outlook zeigt keine fehler an"],
+    "typos": ["rechtschreibprüfugn", "rehctschreibprüfung"],
+    "symptoms": ["Keine roten Wellenlinien bei Tippfehlern", "Rechtschreibprüfung prüft in falscher Sprache", "AutoKorrektur funktioniert nicht"],
+    "quickCheck": "Ist die Rechtschreibprüfung unter Datei > Optionen > E-Mail aktiviert?",
+    "solutions": ["Rechtschreibprüfung aktivieren: Datei > Optionen > E-Mail > Rechtschreibung und Autokorrektur", "Sprache prüfen: Überprüfen > Sprache > Korrektursprache festlegen", "Office Sprach-Toolbox installieren falls Sprache fehlt", "Office Schnellreparatur durchführen", "Prüfen ob 'Rechtschreibung nicht prüfen' für Text markiert ist"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["Proofing", "Korrektursprache"],
+    "followUpQuestions": [],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-OL-040",
+    "category": "Outlook",
+    "title": "Drucken aus Outlook funktioniert nicht",
+    "keywords": ["outlook drucken", "drucken fehler", "print outlook", "outlook druck", "email drucken"],
+    "extendedKeywords": ["kann aus outlook nicht drucken", "drucken in outlook geht nicht", "email drucken fehler", "outlook druckt leere seite", "beim drucken aus outlook passiert nichts", "outlook druckvorschau leer", "kalender drucken geht nicht", "outlook druckt falsch formatiert", "drucken button in outlook reagiert nicht"],
+    "typos": ["outlook drcuken", "drukken aus outlook"],
+    "symptoms": ["Drucken aus Outlook erzeugt keine Ausgabe", "Druckvorschau ist leer", "Outlook friert beim Drucken ein", "Ausdruck ist falsch formatiert"],
+    "quickCheck": "Funktioniert Drucken aus anderen Programmen (z.B. Word)?",
+    "solutions": ["Druckspooler neustarten", "Standard-Drucker prüfen und ggf. ändern", "Outlook schließen, Datei outcmd.dat löschen, Outlook neu starten", "Office Schnellreparatur durchführen", "In Druckvorschau prüfen ob Inhalt angezeigt wird", "Anderen Drucker als Test auswählen"],
+    "skillMapping": [
+      {"skillId": "rd_printer_spooler", "label": "Spooler neustarten", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_printer_getprinter", "label": "Drucker prüfen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_appcache_officequick", "label": "Office Schnellreparatur", "priority": 3, "effectiveness": 55},
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 4, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["outcmd.dat", "Print Spooler"],
+    "followUpQuestions": [
+      {"question": "Funktioniert Drucken aus anderen Programmen?", "options": ["Ja, nur Outlook geht nicht", "Nein, Drucken geht generell nicht", "Nicht getestet"], "narrows": "Outlook vs. Drucker-Problem"}
+    ],
+    "relatedProblems": []
+  }
+]

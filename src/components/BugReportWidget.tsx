@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react'
-import { Bug, X, Send, Loader, ChevronDown, Paperclip, Trash2 } from 'lucide-react'
+import { useState, useRef, useCallback } from 'react'
+import { Bug, X, Send, Loader, ChevronDown, Paperclip, Trash2, Image } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
 import type { Screen } from '../types'
@@ -23,6 +23,15 @@ const PRIORITIES = [
   { id: 'critical', label: 'Kritisch',  color: 'text-red-400' },
 ]
 
+const MAX_SCREENSHOTS = 5
+const MAX_SIZE_BYTES = 5 * 1024 * 1024 // 5 MB
+
+/** A screenshot waiting to be saved — holds base64 for preview + later upload */
+interface PendingScreenshot {
+  id: string
+  base64: string // for preview
+}
+
 export default function BugReportWidget({ currentScreen }: Props) {
   const session = useAuthStore(s => s.session)
   const user    = session?.user
@@ -35,13 +44,15 @@ export default function BugReportWidget({ currentScreen }: Props) {
   const [description, setDescription] = useState('')
   const [category,    setCategory]    = useState<BugReport['category']>('bug')
   const [priority,    setPriority]    = useState<BugReport['priority']>('medium')
-  const [screenshots, setScreenshots] = useState<string[]>([])
+  const [screenshots, setScreenshots] = useState<PendingScreenshot[]>([])
+  const [previewImg,  setPreviewImg]  = useState<string | null>(null)
+  const [sizeError,   setSizeError]   = useState('')
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   function resetForm() {
-    setSubject(''); setDescription(''); setCategory('bug'); setPriority('medium'); setScreenshots([])
-    setSuccess(false)
+    setSubject(''); setDescription(''); setCategory('bug'); setPriority('medium')
+    setScreenshots([]); setSuccess(false); setSizeError(''); setPreviewImg(null)
   }
 
   function handleClose() {
@@ -49,30 +60,79 @@ export default function BugReportWidget({ currentScreen }: Props) {
     setTimeout(resetForm, 300)
   }
 
+  /** Add a base64 image to pending screenshots with size validation */
+  const addScreenshot = useCallback((base64: string) => {
+    setSizeError('')
+    if (screenshots.length >= MAX_SCREENSHOTS) {
+      setSizeError(`Maximal ${MAX_SCREENSHOTS} Screenshots erlaubt.`)
+      return
+    }
+    // Check size (~bytes = base64.length * 0.75)
+    const approxBytes = base64.length * 0.75
+    if (approxBytes > MAX_SIZE_BYTES) {
+      setSizeError('Bild zu groß (max. 5 MB).')
+      return
+    }
+    const id = `ss-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
+    setScreenshots(prev => [...prev, { id, base64 }])
+  }, [screenshots.length])
+
+  /** Handle Ctrl+V paste from clipboard */
+  function handlePaste(e: React.ClipboardEvent) {
+    const items = e.clipboardData?.items
+    if (!items) return
+    for (const item of Array.from(items)) {
+      if (item.type.startsWith('image/')) {
+        e.preventDefault()
+        const blob = item.getAsFile()
+        if (!blob) continue
+        const reader = new FileReader()
+        reader.onload = ev => {
+          const dataUrl = ev.target?.result as string
+          const b64 = dataUrl.split(',')[1]
+          if (b64) addScreenshot(b64)
+        }
+        reader.readAsDataURL(blob)
+      }
+    }
+  }
+
+  /** Handle file input change */
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files
     if (!files) return
-    const results: string[] = []
     for (const file of Array.from(files)) {
+      if (!file.type.startsWith('image/')) continue
       const reader = new FileReader()
       const b64: string = await new Promise(res => {
         reader.onload = ev => res((ev.target?.result as string).split(',')[1])
         reader.readAsDataURL(file)
       })
-      results.push(b64)
+      addScreenshot(b64)
     }
-    setScreenshots(prev => [...prev, ...results])
     e.target.value = ''
   }
 
+  /** Submit: save screenshots as files, then save report JSON */
   async function handleSubmit() {
     if (!subject.trim() || !description.trim()) return
     setSubmitting(true)
     try {
       const hostname = await api().getHostname().catch(() => 'unknown')
+      const bugId = `bug-${Date.now()}`
+
+      // Save each screenshot as a file
+      const savedFilenames: string[] = []
+      for (const ss of screenshots) {
+        const filename = `screenshot_${ss.id}.png`
+        const relativePath = `bugs/${bugId}/${filename}`
+        await api().netWriteRawFile(relativePath, ss.base64)
+        savedFilenames.push(filename)
+      }
+
       const existing = await api().netReadJson<BugReport[]>('bugs/reports.json') ?? []
       const report: BugReport = {
-        id: `bug-${Date.now()}`,
+        id: bugId,
         subject: subject.trim(),
         description: description.trim(),
         category,
@@ -83,7 +143,7 @@ export default function BugReportWidget({ currentScreen }: Props) {
         submittedAt: new Date().toISOString(),
         sourceHost: hostname,
         currentScreen,
-        screenshots,
+        screenshots: savedFilenames, // filenames only, not base64
         conversation: [],
         readByAdmin: false,
       }
@@ -136,7 +196,7 @@ export default function BugReportWidget({ currentScreen }: Props) {
               </div>
             ) : (
               /* Form */
-              <div className="flex-1 overflow-y-auto p-4 space-y-3">
+              <div className="flex-1 overflow-y-auto p-4 space-y-3" onPaste={handlePaste}>
                 {/* Category + Priority */}
                 <div className="flex gap-2">
                   <div className="flex-1">
@@ -180,19 +240,34 @@ export default function BugReportWidget({ currentScreen }: Props) {
 
                 {/* Screenshots */}
                 <div>
-                  <label className="block text-[10px] text-muted-foreground mb-1">Screenshots (optional)</label>
-                  <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleFileChange} className="hidden" />
-                  <button onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-1.5 px-2 py-1.5 text-xs rounded-md border border-dashed border-border hover:bg-accent text-muted-foreground w-full justify-center">
-                    <Paperclip size={11} /> Screenshot hinzufügen
-                  </button>
+                  <label className="block text-[10px] text-muted-foreground mb-1">
+                    Screenshots (optional, max {MAX_SCREENSHOTS})
+                  </label>
+                  <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/gif,image/bmp" multiple onChange={handleFileChange} className="hidden" />
+                  <div className="flex gap-2">
+                    <button onClick={() => fileInputRef.current?.click()}
+                      className="flex items-center gap-1.5 px-2 py-1.5 text-xs rounded-md border border-dashed border-border hover:bg-accent text-muted-foreground flex-1 justify-center">
+                      <Paperclip size={11} /> Datei wählen
+                    </button>
+                    <div className="flex items-center gap-1 px-2 py-1.5 text-[10px] text-muted-foreground/60 bg-muted/30 rounded-md border border-border">
+                      <Image size={10} /> Strg+V = Einfügen
+                    </div>
+                  </div>
+                  {sizeError && (
+                    <p className="text-[10px] text-red-400 mt-1">{sizeError}</p>
+                  )}
                   {screenshots.length > 0 && (
                     <div className="flex gap-2 mt-2 flex-wrap">
-                      {screenshots.map((s, i) => (
-                        <div key={i} className="relative">
-                          <img src={`data:image/png;base64,${s}`} alt="" className="w-16 h-16 object-cover rounded-md border border-border" />
-                          <button onClick={() => setScreenshots(prev => prev.filter((_, j) => j !== i))}
-                            className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center">
+                      {screenshots.map((ss, i) => (
+                        <div key={ss.id} className="relative group">
+                          <img
+                            src={`data:image/png;base64,${ss.base64}`}
+                            alt={`Screenshot ${i + 1}`}
+                            className="w-16 h-16 object-cover rounded-md border border-border cursor-pointer hover:opacity-80"
+                            onClick={() => setPreviewImg(ss.base64)}
+                          />
+                          <button onClick={() => setScreenshots(prev => prev.filter(x => x.id !== ss.id))}
+                            className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <Trash2 size={8} />
                           </button>
                         </div>
@@ -223,6 +298,18 @@ export default function BugReportWidget({ currentScreen }: Props) {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Full-size preview overlay */}
+      {previewImg && (
+        <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center p-8 cursor-pointer"
+          onClick={() => setPreviewImg(null)}>
+          <img src={`data:image/png;base64,${previewImg}`} alt="Vorschau"
+            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" />
+          <button className="absolute top-4 right-4 p-2 rounded-full bg-black/50 text-white hover:bg-black/70">
+            <X size={18} />
+          </button>
         </div>
       )}
     </>

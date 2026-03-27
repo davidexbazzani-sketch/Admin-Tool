@@ -1,8 +1,9 @@
 export type Screen =
   | 'home' | 'query-menu' | 'results' | 'user-info' | 'xelion'
-  | 'remote-doc' | 'trickkiste' | 'settings'
+  | 'remote-doc' | 'trickbox' | 'it-guru' | 'network-radar' | 'knowledge-base' | 'settings'
   | 'user-management' | 'user-logs' | 'location-overview'
   | 'scheduled-tasks' | 'bug-mailbox' | 'dashboards'
+  | 'pc-migration'
 
 export type Prefix = 'DE' | 'DEHAM' | 'DESCH' | 'Sonstige'
 

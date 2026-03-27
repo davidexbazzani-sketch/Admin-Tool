@@ -1,0 +1,1289 @@
+[
+  {
+    "id": "PROB-HW-001",
+    "category": "Hardware & Gerätemanager",
+    "title": "Bildschirm flackert",
+    "keywords": ["Bildschirm", "flackern", "Monitor", "Display", "Refresh", "Grafikkarte", "Kabel"],
+    "extendedKeywords": ["Bildschirm flackert ständig", "Monitor blinkt", "Display zuckt", "Bildschirm geht kurz aus und wieder an", "Bildschirm flimmert", "mein Monitor flackert", "Bildschirm macht komische Sachen", "Display flackert bei Mausbewegung", "Bildschirm blitzt", "Monitor wackelt das Bild", "Bildschirm flackert beim Scrollen", "Bildschirm flackert nach Windows Update", "Monitor blinkt schwarz", "Bildschirm springt", "Bildschirm geht kurz schwarz", "Bildschirm flackert nur bei bestimmten Programmen", "Bildschirm flackert beim Vollbild", "Monitor macht Streifen", "Bildschirm zittert", "Bildschirm hat Flimmern", "mein Bildschirm spinnt", "Monitor geht an und aus", "Bildschirm wackelt", "Display macht Probleme"],
+    "typos": ["Bilschirm", "Bildshirm", "flakert", "Monitior", "flickert", "Bildscirm"],
+    "symptoms": ["Bildschirm flimmert regelmäßig oder unregelmäßig", "Display geht kurz schwarz und kommt wieder", "Bildschirm zeigt horizontale/vertikale Streifen"],
+    "quickCheck": "Flackert der Bildschirm dauerhaft oder nur bei bestimmten Anwendungen?",
+    "solutions": [
+      "Kabelverbindung (HDMI/DP/USB-C) prüfen und neu einstecken",
+      "Anderes Kabel oder anderen Anschluss testen",
+      "Bildwiederholrate prüfen: Rechtsklick Desktop > Anzeigeeinstellungen > Erweiterte Anzeige > Bildwiederholrate anpassen",
+      "Grafiktreiber über den Gerätemanager aktualisieren oder neu installieren",
+      "Hardware-Beschleunigung in betroffener Anwendung deaktivieren",
+      "Monitor an einem anderen PC testen um Hardware-Defekt auszuschließen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_drivers_driverlist", "label": "Treiberliste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_devmgr_devrestart", "label": "Gerät neu starten", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["screen flickering", "monitor blinking", "display flicker"],
+    "followUpQuestions": [
+      {
+        "question": "Flackert der Bildschirm dauerhaft oder nur bei bestimmten Anwendungen?",
+        "options": ["Dauerhaft", "Nur bei bestimmten Programmen", "Unregelmäßig"],
+        "narrows": "Ob Treiber- oder Hardware-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-002", "PROB-HW-003", "PROB-HW-004"]
+  },
+  {
+    "id": "PROB-HW-002",
+    "category": "Hardware & Gerätemanager",
+    "title": "Monitor kein Signal",
+    "keywords": ["Monitor", "kein Signal", "no signal", "schwarz", "Bildschirm", "Display", "HDMI", "DisplayPort"],
+    "extendedKeywords": ["Monitor zeigt kein Signal", "Bildschirm bleibt schwarz", "Monitor kein Bild", "Bildschirm zeigt no signal", "PC fährt hoch aber Bildschirm bleibt schwarz", "Monitor findet kein Signal", "kein Bild auf dem Monitor", "Bildschirm schwarz obwohl PC läuft", "Monitor geht nicht an", "kein Bild am Bildschirm", "Display bleibt dunkel", "Monitor zeigt nichts an", "Bildschirm bekommt kein Signal", "Bildschirm erkennt PC nicht", "kein Signal am Monitor obwohl alles angeschlossen", "Bildschirm reagiert nicht", "Monitor ohne Bild", "Bildschirm dunkel", "Monitor zeigt Kein Eingang", "schwarzer Bildschirm beim Start", "Bildschirm leer", "Monitor findet keinen Eingang", "Display schwarz"],
+    "typos": ["Monitior", "Sigal", "Bilschirm", "Signla", "kien Signal"],
+    "symptoms": ["Monitor zeigt 'Kein Signal' oder 'No Signal'", "Bildschirm bleibt komplett schwarz", "Monitor-LED blinkt im Standby"],
+    "quickCheck": "Ist der Monitor eingeschaltet und das richtige Eingangssignal ausgewählt?",
+    "solutions": [
+      "Monitor ein-/ausschalten und korrekten Eingang (HDMI, DP, USB-C) auswählen",
+      "Kabel auf beiden Seiten fest einstecken oder anderes Kabel verwenden",
+      "Anderen Anschluss am PC oder Monitor testen",
+      "PC komplett herunterfahren, 30 Sekunden warten, neu starten",
+      "Bei Laptop: Windows+P drücken und Anzeigemodus wechseln",
+      "Monitor an anderem PC testen um Defekt auszuschließen",
+      "Grafikkarte im Gerätemanager prüfen und Treiber aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["no signal monitor", "black screen", "kein Bild"],
+    "followUpQuestions": [
+      {
+        "question": "Wird der PC gerade gestartet oder lief er bereits?",
+        "options": ["Beim Starten", "PC lief bereits", "Nach Standby/Ruhezustand"],
+        "narrows": "Ob Boot- oder Verbindungsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-001", "PROB-HW-003", "PROB-HW-004"]
+  },
+  {
+    "id": "PROB-HW-003",
+    "category": "Hardware & Gerätemanager",
+    "title": "Falsche Bildschirmauflösung",
+    "keywords": ["Auflösung", "Bildschirm", "Monitor", "Skalierung", "Display", "Pixelig", "unscharf"],
+    "extendedKeywords": ["Auflösung stimmt nicht", "Bildschirm ist unscharf", "Bildschirm zeigt falsche Auflösung", "Monitor Auflösung zu niedrig", "alles ist zu groß auf dem Bildschirm", "alles zu klein auf dem Monitor", "Bildschirm sieht pixelig aus", "Auflösung lässt sich nicht ändern", "Monitor zeigt nicht die richtige Auflösung", "Bildschirm verzerrt", "Skalierung stimmt nicht", "Darstellung zu groß", "Darstellung zu klein", "Auflösung zurücksetzen", "Bildschirm sieht komisch aus", "Anzeige unscharf", "verschwommene Darstellung", "Schrift unscharf am Bildschirm", "Bildschirmauflösung falsch nach Update", "maximale Auflösung nicht verfügbar", "native Auflösung nicht einstellbar", "Monitor zeigt nur 1024x768"],
+    "typos": ["Auflöusng", "Auflösug", "Bildshirm", "Skalirung", "pixlig"],
+    "symptoms": ["Bildschirmauflösung ist zu niedrig", "Native Auflösung steht nicht zur Auswahl", "Anzeige erscheint unscharf oder verzerrt"],
+    "quickCheck": "Welche Auflösung wird aktuell angezeigt und welche soll es sein?",
+    "solutions": [
+      "Rechtsklick auf Desktop > Anzeigeeinstellungen > Auflösung auf empfohlenen Wert stellen",
+      "Grafiktreiber aktualisieren oder neu installieren",
+      "Kabel prüfen - manche Kabel unterstützen nicht alle Auflösungen",
+      "Monitor-Treiber installieren falls verfügbar",
+      "Bei Skalierungsproblemen: Anzeigeeinstellungen > Skalierung auf 100% oder empfohlenen Wert stellen",
+      "Bei unscharfen Apps: Rechtsklick auf App > Eigenschaften > Kompatibilität > Hohe DPI-Einstellungen ändern"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_drivers_driverlist", "label": "Treiberliste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["wrong resolution", "blurry display", "falsche Auflösung"],
+    "followUpQuestions": [
+      {
+        "question": "Ist das Problem nach einem Windows-Update oder Treiber-Update aufgetreten?",
+        "options": ["Ja, nach Update", "Nein, war schon immer so", "Weiß ich nicht"],
+        "narrows": "Ob Treiber-Rollback helfen könnte"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-001", "PROB-HW-004"]
+  },
+  {
+    "id": "PROB-HW-004",
+    "category": "Hardware & Gerätemanager",
+    "title": "Monitor an Docking Station wird nicht erkannt",
+    "keywords": ["Docking Station", "Monitor", "Display", "extern", "USB-C", "Thunderbolt", "Bildschirm"],
+    "extendedKeywords": ["Monitor wird über Docking Station nicht erkannt", "externer Monitor funktioniert nicht an Dock", "zweiter Bildschirm wird nicht angezeigt an Docking", "Dock Monitor kein Bild", "Monitor an Docking Station kein Signal", "externer Bildschirm geht nicht über Dock", "Docking Station erkennt Monitor nicht", "zweiter Monitor fehlt über Docking", "Monitor an USB-C Dock funktioniert nicht", "Docking Station Bildschirm schwarz", "Display funktioniert nicht über Dock", "Monitor wird nicht gefunden Docking", "Dock kein zweiter Monitor", "Bildschirm an Dock kein Signal", "Docking Station nur ein Monitor", "Monitor über Dock flackert", "USB-C Dock Monitor Problem", "Thunderbolt Dock Monitor fehlt", "nach Dock Anschluss kein Bild", "Monitor an Dock bleibt schwarz"],
+    "typos": ["Dokking", "Dockingstation", "Bildshirm", "Monitior", "Dock Station"],
+    "symptoms": ["Externer Monitor wird nicht erkannt über Docking Station", "Zweiter Monitor fehlt in den Anzeigeeinstellungen", "Monitor an Dock bleibt schwarz"],
+    "quickCheck": "Funktioniert der Monitor direkt am Laptop (ohne Docking Station)?",
+    "solutions": [
+      "Laptop von Docking Station trennen und neu verbinden",
+      "Windows+P drücken und 'Erweitern' oder 'Duplizieren' wählen",
+      "Rechtsklick Desktop > Anzeigeeinstellungen > 'Erkennen' klicken",
+      "Docking Station Firmware-Update prüfen und installieren",
+      "Grafiktreiber und USB-C/Thunderbolt-Treiber aktualisieren",
+      "Anderes Kabel zwischen Dock und Monitor testen",
+      "Monitor direkt am Laptop testen um Dock als Fehlerquelle zu bestätigen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_drivers_driverlist", "label": "Treiberliste", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan durchführen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["dock monitor not detected", "docking display issue", "Dock Bildschirm"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert der Monitor direkt am Laptop ohne Docking Station?",
+        "options": ["Ja, direkt am Laptop geht es", "Nein, auch direkt kein Bild", "Nicht getestet"],
+        "narrows": "Ob Dock oder Monitor/Kabel das Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-002", "PROB-HW-008", "PROB-HW-009"]
+  },
+  {
+    "id": "PROB-HW-005",
+    "category": "Hardware & Gerätemanager",
+    "title": "Tastatur reagiert nicht",
+    "keywords": ["Tastatur", "reagiert nicht", "keine Eingabe", "Keyboard", "USB", "funktioniert nicht"],
+    "extendedKeywords": ["Tastatur reagiert nicht mehr", "Tastatur funktioniert nicht", "kann nicht tippen", "Tastatur macht nichts", "Tastatur tot", "keine Tastatureingabe möglich", "Tastatur wird nicht erkannt", "Tastatur geht nicht", "alle Tasten tot", "Tastatur schreibt nicht", "Tastatur ohne Funktion", "externe Tastatur funktioniert nicht", "USB Tastatur wird nicht erkannt", "Tastatur spinnt", "Tastatur hat aufgehört zu funktionieren", "Laptop Tastatur reagiert nicht", "Tastatur keine Reaktion", "Tasten funktionieren nicht", "nichts passiert beim Tippen", "Tastatur ausgefallen", "Tastatur plötzlich tot", "meine Tastatur geht nicht mehr"],
+    "typos": ["Tastaur", "Tatsatur", "Tastatu", "Keybord", "Tastatu reagirt"],
+    "symptoms": ["Keine Tastatureingabe möglich", "Tastatur-LED leuchtet nicht", "Gerät wird im Gerätemanager nicht angezeigt"],
+    "quickCheck": "Handelt es sich um eine USB- oder Bluetooth-Tastatur?",
+    "solutions": [
+      "USB-Tastatur an anderem USB-Port einstecken",
+      "PC komplett herunterfahren und neu starten",
+      "Andere Tastatur zum Testen anschließen",
+      "Gerätemanager öffnen und Tastatur-Treiber deinstallieren, dann Gerät scannen",
+      "Bei Laptop: Prüfen ob Fn-Lock aktiv ist",
+      "USB-Controller im Gerätemanager deinstallieren und neu scannen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devrestart", "label": "Gerät neu starten", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["keyboard not working", "can't type", "Tastatur tot"],
+    "followUpQuestions": [
+      {
+        "question": "Ist es eine USB-Tastatur, Bluetooth-Tastatur oder die Laptop-Tastatur?",
+        "options": ["USB-Tastatur", "Bluetooth-Tastatur", "Laptop-Tastatur"],
+        "narrows": "Ob Verbindungs- oder Treiberproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-006", "PROB-HW-007"]
+  },
+  {
+    "id": "PROB-HW-006",
+    "category": "Hardware & Gerätemanager",
+    "title": "Tastaturlayout falsch - falsche Zeichen",
+    "keywords": ["Tastaturlayout", "Layout", "Sprache", "falsche Zeichen", "Y statt Z", "Sonderzeichen", "QWERTZ", "QWERTY"],
+    "extendedKeywords": ["Tastatur tippt falsche Buchstaben", "Y und Z vertauscht", "Tastatur schreibt falsche Zeichen", "Tastaturlayout ist Englisch", "Sonderzeichen stimmen nicht", "Tastatur Layout umschalten", "Tastatur hat falsches Layout", "Tastatur schreibt andere Buchstaben", "ä ö ü funktionieren nicht", "Umlaute gehen nicht", "Tastatur auf Deutsch umstellen", "falsches Keyboard Layout", "Sonderzeichen falsch", "Tastatur vertauscht Zeichen", "Tastatur hat sich verstellt", "Tastatur plötzlich Englisch", "Tastenbelegung stimmt nicht", "Tastatur hat anderes Layout", "Alt Gr funktioniert nicht", "@ geht nicht auf Tastatur", "Shift+2 macht kein Anführungszeichen"],
+    "typos": ["Tatsaturlayout", "Layot", "Zeichn", "Zeicehn", "Tastatu"],
+    "symptoms": ["Y und Z sind vertauscht", "Sonderzeichen wie @, €, { } funktionieren nicht richtig", "Umlaute ä, ö, ü werden nicht geschrieben"],
+    "quickCheck": "Werden Y und Z vertauscht ausgegeben?",
+    "solutions": [
+      "Tastaturlayout umschalten: Windows+Leertaste oder Alt+Shift drücken",
+      "Einstellungen > Zeit und Sprache > Sprache > Tastatur > Layout auf Deutsch (QWERTZ) stellen",
+      "Nicht benötigte Tastaturlayouts entfernen",
+      "Falls Num-Lock das Problem verursacht: Num-Lock ausschalten",
+      "Überflüssige Eingabemethoden in den Spracheinstellungen entfernen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 3, "effectiveness": 30}
+    ],
+    "hiddenTriggers": ["wrong keyboard layout", "Y Z switched", "Layout falsch"],
+    "followUpQuestions": [
+      {
+        "question": "Ist das Problem dauerhaft oder tritt es nur manchmal auf?",
+        "options": ["Dauerhaft", "Wechselt manchmal", "Nur bei bestimmten Programmen"],
+        "narrows": "Ob globales oder anwendungsspezifisches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-005", "PROB-HW-007"]
+  },
+  {
+    "id": "PROB-HW-007",
+    "category": "Hardware & Gerätemanager",
+    "title": "Bluetooth-Tastatur verbindet nicht",
+    "keywords": ["Bluetooth", "Tastatur", "Kopplung", "Pairing", "verbinden", "drahtlos", "wireless"],
+    "extendedKeywords": ["Bluetooth Tastatur verbindet sich nicht", "kabellose Tastatur funktioniert nicht", "Bluetooth Tastatur koppeln geht nicht", "Tastatur wird über Bluetooth nicht gefunden", "Bluetooth Tastatur trennt sich ständig", "drahtlose Tastatur wird nicht erkannt", "Bluetooth Tastatur Pairing fehlgeschlagen", "kabellose Tastatur verliert Verbindung", "Bluetooth Tastatur nicht auffindbar", "wireless Tastatur verbindet nicht", "Bluetooth Keyboard funktioniert nicht", "Tastatur Bluetooth Verbindung bricht ab", "kann Bluetooth Tastatur nicht koppeln", "Bluetooth Tastatur reagiert verzögert", "Bluetooth Tastatur langsam", "kabellose Tastatur findet PC nicht", "Bluetooth Tastatur wird nicht angezeigt", "Bluetooth Tastatur immer wieder weg", "drahtlose Tastatur Probleme", "Funktion Bluetooth Tastatur"],
+    "typos": ["Blutooth", "Bluetoth", "Tastaur", "Bluethooth", "Bletooth"],
+    "symptoms": ["Bluetooth-Tastatur wird beim Koppeln nicht gefunden", "Tastatur trennt sich regelmäßig", "Eingabe kommt verzögert an"],
+    "quickCheck": "Ist Bluetooth am PC aktiviert und die Tastatur im Kopplungsmodus?",
+    "solutions": [
+      "Bluetooth am PC aktivieren: Einstellungen > Bluetooth & Geräte > Bluetooth einschalten",
+      "Tastatur in den Kopplungsmodus versetzen (Anleitung des Herstellers beachten)",
+      "Bestehende Kopplung entfernen und neu koppeln",
+      "Bluetooth-Treiber im Gerätemanager aktualisieren",
+      "Bluetooth-Adapter im Gerätemanager deaktivieren und wieder aktivieren",
+      "Batterie der Tastatur prüfen oder aufladen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_btreset", "label": "Bluetooth zurücksetzen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["bluetooth keyboard pairing", "wireless keyboard not connecting"],
+    "followUpQuestions": [
+      {
+        "question": "Hat die Tastatur jemals mit diesem PC funktioniert?",
+        "options": ["Ja, hat vorher funktioniert", "Nein, ist neu", "An anderem PC funktioniert sie"],
+        "narrows": "Ob Ersteinrichtung oder Verbindungsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-005", "PROB-HW-024"]
+  },
+  {
+    "id": "PROB-HW-008",
+    "category": "Hardware & Gerätemanager",
+    "title": "Docking Station wird nicht erkannt",
+    "keywords": ["Docking Station", "Dock", "USB-C", "Thunderbolt", "nicht erkannt", "Hub", "Anschluss"],
+    "extendedKeywords": ["Docking Station funktioniert nicht", "Dock wird nicht erkannt", "Laptop erkennt Docking Station nicht", "USB-C Dock keine Reaktion", "Thunderbolt Dock nicht erkannt", "Docking Station macht nichts", "Dock keine Verbindung", "Docking Station plötzlich nicht mehr erkannt", "nach Update Dock funktioniert nicht", "Dock wird nicht angezeigt", "Laptop reagiert nicht auf Dock", "Docking Station tot", "kein Gerät nach Dock Anschluss", "Docking Station Probleme", "Dock keine Funktion", "USB-C Docking funktioniert nicht mehr", "Thunderbolt Dock Probleme", "Dock angeschlossen aber nichts passiert", "Docking Station ohne Funktion", "Dock kein Strom"],
+    "typos": ["Dokking", "Dockin", "Dockingstation", "Thumderbolt", "Thunderbold"],
+    "symptoms": ["Keine Geräte werden über die Docking Station erkannt", "Docking Station-LED leuchtet nicht", "PC lädt nicht über die Docking Station"],
+    "quickCheck": "Leuchtet eine LED an der Docking Station wenn der Laptop angeschlossen wird?",
+    "solutions": [
+      "Docking Station vom Strom trennen, 30 Sekunden warten, wieder anschließen",
+      "USB-C/Thunderbolt-Kabel an anderem Port des Laptops testen",
+      "Anderes USB-C-Kabel verwenden",
+      "Thunderbolt/USB-C-Treiber im Gerätemanager aktualisieren",
+      "Docking Station Firmware-Update prüfen (Herstellerwebseite)",
+      "BIOS/UEFI: Thunderbolt-Einstellungen prüfen und ggf. aktivieren",
+      "Laptop neu starten während die Docking Station angeschlossen ist"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["dock not recognized", "docking station not working", "USB-C dock"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Art von Docking Station verwenden Sie?",
+        "options": ["USB-C Dock", "Thunderbolt Dock", "Proprietäres Dock (z.B. Lenovo/Dell)", "Weiß ich nicht"],
+        "narrows": "Ob spezifische Treiber benötigt werden"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-004", "PROB-HW-009", "PROB-HW-010"]
+  },
+  {
+    "id": "PROB-HW-009",
+    "category": "Hardware & Gerätemanager",
+    "title": "Docking Station - Monitor fehlt",
+    "keywords": ["Docking Station", "Monitor", "fehlt", "zweiter Bildschirm", "Display", "externer Monitor", "Dock"],
+    "extendedKeywords": ["über Dock nur ein Monitor", "zweiter Monitor an Dock fehlt", "Dock zeigt nur einen Monitor", "Monitor wird am Dock nicht erkannt", "Docking Station Monitor Problem", "zweiter Bildschirm über Dock geht nicht", "dritter Monitor an Dock", "Monitor am Dock kein Signal", "Dock nur ein Bildschirm statt zwei", "Monitor fehlt nach Dock Anschluss", "externer Monitor über Dock weg", "Docking Station zeigt nicht alle Monitore", "Monitor am Dock bleibt schwarz", "über Dock fehlt ein Bildschirm", "Dock zwei Monitore nur einer geht", "Multi-Monitor Dock Problem", "Display an Dock fehlt", "zweiter Bildschirm verschwunden Dock"],
+    "typos": ["Monitior", "Dokking", "Bildshirm", "Dock Station"],
+    "symptoms": ["Nur ein Monitor wird über Dock angezeigt statt zwei", "Zweiter Monitor bleibt schwarz am Dock", "Monitor fehlt in Anzeigeeinstellungen"],
+    "quickCheck": "Wie viele Monitore sind angeschlossen und wie viele werden erkannt?",
+    "solutions": [
+      "Windows+P drücken und 'Erweitern' wählen",
+      "Rechtsklick Desktop > Anzeigeeinstellungen > Erkennen klicken",
+      "Kabel zwischen Dock und Monitor tauschen/prüfen",
+      "Monitor an anderen Port der Docking Station anschließen",
+      "Dock Firmware und Grafiktreiber aktualisieren",
+      "DisplayLink-Treiber installieren falls USB-Dock",
+      "Prüfen ob Dock die Anzahl der Monitore unterstützt"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverlist", "label": "Treiberliste", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["dock missing monitor", "second screen dock", "Dock Monitor fehlt"],
+    "followUpQuestions": [
+      {
+        "question": "Hat diese Monitor-Konfiguration am Dock schon einmal funktioniert?",
+        "options": ["Ja, hat vorher funktioniert", "Nein, noch nie", "Geht manchmal"],
+        "narrows": "Ob Kompatibilitäts- oder Konfigurationsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-004", "PROB-HW-008", "PROB-HW-010"]
+  },
+  {
+    "id": "PROB-HW-010",
+    "category": "Hardware & Gerätemanager",
+    "title": "USB-Geräte an Docking Station funktionieren nicht",
+    "keywords": ["Docking Station", "USB", "Geräte", "Hub", "nicht erkannt", "Dock", "Peripherie"],
+    "extendedKeywords": ["USB Geräte am Dock funktionieren nicht", "Dock USB Ports tot", "Docking Station USB funktioniert nicht", "Maus geht nicht am Dock", "Tastatur am Dock nicht erkannt", "USB Stick am Dock nicht erkannt", "Dock USB Ports reagieren nicht", "USB Geräte über Dock nicht verfügbar", "Peripherie am Dock geht nicht", "Dock erkennt USB Geräte nicht", "USB Anschlüsse am Dock defekt", "kein USB am Dock", "Dock USB ohne Funktion", "USB Hub am Dock funktioniert nicht", "Dock USB Strom zu wenig", "Geräte am Dock werden nicht erkannt", "USB am Dock kein Strom", "Dock USB Ports alle tot"],
+    "typos": ["Dokking", "Geräte", "Perepherie", "Doking"],
+    "symptoms": ["USB-Geräte werden an Dock nicht erkannt", "USB-Ports am Dock liefern keinen Strom", "Geräte trennen sich immer wieder am Dock"],
+    "quickCheck": "Funktionieren die USB-Geräte direkt am Laptop?",
+    "solutions": [
+      "Dock vom Strom trennen, 30 Sekunden warten, neu verbinden",
+      "USB-Geräte direkt am Laptop testen",
+      "USB-Controller im Gerätemanager deinstallieren und neu scannen",
+      "Dock Firmware aktualisieren",
+      "Bei Stromproblemen: USB-Geräte mit eigenem Netzteil verwenden",
+      "Thunderbolt/USB-C-Treiber aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_devmgr_devrestart", "label": "Gerät neu starten", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["dock USB not working", "docking USB devices", "Dock USB Geräte"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert gar kein USB-Gerät am Dock oder nur bestimmte nicht?",
+        "options": ["Keines funktioniert", "Nur bestimmte Geräte", "Mal geht es, mal nicht"],
+        "narrows": "Ob Dock-Problem oder gerätespezifisch"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-008", "PROB-HW-009", "PROB-HW-011"]
+  },
+  {
+    "id": "PROB-HW-011",
+    "category": "Hardware & Gerätemanager",
+    "title": "Docking Station Thunderbolt-Genehmigung fehlt",
+    "keywords": ["Thunderbolt", "Genehmigung", "Autorisierung", "Sicherheit", "Dock", "Docking", "Zugriff"],
+    "extendedKeywords": ["Thunderbolt Genehmigung erforderlich", "Dock braucht Genehmigung", "Thunderbolt nicht autorisiert", "Thunderbolt Gerät blockiert", "Thunderbolt Sicherheitsabfrage", "Dock wird nicht genehmigt", "Thunderbolt Autorisierung fehlt", "Thunderbolt Pop-up", "Thunderbolt muss genehmigt werden", "Dock fordert Genehmigung", "Thunderbolt Zugriff verweigert", "Thunderbolt Sicherheitseinstellung", "Dock wird geblockt", "Thunderbolt nicht erlaubt", "Thunderbolt Gerät verbinden", "Dock autorisieren"],
+    "typos": ["Thumderbolt", "Thunderbold", "Genehmingung", "Autorisirung"],
+    "symptoms": ["Thunderbolt-Dock wird erkannt aber nicht aktiviert", "Pop-up fragt nach Thunderbolt-Genehmigung", "Dock funktioniert erst nach manueller Genehmigung"],
+    "quickCheck": "Erscheint ein Pop-up oder eine Benachrichtigung über Thunderbolt beim Anschließen des Docks?",
+    "solutions": [
+      "Thunderbolt-Pop-up bestätigen und Gerät genehmigen",
+      "Thunderbolt Software öffnen und Gerät dauerhaft genehmigen",
+      "BIOS: Thunderbolt-Sicherheitsstufe auf 'Keine Sicherheit' oder 'Benutzergenehmigung' setzen",
+      "Thunderbolt-Treiber/Firmware aktualisieren",
+      "IT-Admin kontaktieren falls Gruppenrichtlinie Thunderbolt blockiert"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["thunderbolt authorization", "dock approval", "Thunderbolt blockiert"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie Administrator-Rechte auf dem Gerät?",
+        "options": ["Ja", "Nein", "Weiß ich nicht"],
+        "narrows": "Ob Berechtigungsproblem oder technisches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-008", "PROB-HW-010"]
+  },
+  {
+    "id": "PROB-HW-012",
+    "category": "Hardware & Gerätemanager",
+    "title": "USB-Gerät wird nicht erkannt",
+    "keywords": ["USB", "nicht erkannt", "Gerät", "unbekannt", "Treiber", "Anschluss", "Port"],
+    "extendedKeywords": ["USB Gerät wird nicht erkannt", "USB Stick wird nicht angezeigt", "USB Gerät nicht gefunden", "USB funktioniert nicht", "USB wird nicht erkannt Windows", "USB Stick nicht sichtbar", "USB Gerät unbekannt", "USB angeschlossen aber nicht erkannt", "USB Port funktioniert nicht", "neues USB Gerät wird nicht erkannt", "USB Anschluss tot", "USB Gerät erscheint nicht", "USB nicht erkannt Fehlermeldung", "USB Stick wird nicht gelesen", "USB Gerät nicht verfügbar", "USB Gerät macht Ton aber wird nicht angezeigt", "USB angeschlossen kein Laufwerk", "USB wird nicht geladen", "USB Scanner nicht erkannt", "USB Drucker nicht erkannt", "USB Gerät blinkt aber wird nicht erkannt"],
+    "typos": ["UBS", "USB Gerat", "USB nciht erkannt", "USB erkennt nicht"],
+    "symptoms": ["USB-Gerät wird im Explorer nicht angezeigt", "Windows-Fehlermeldung 'USB-Gerät nicht erkannt'", "Gerät erscheint nicht im Gerätemanager"],
+    "quickCheck": "Wird das Gerät an einem anderen USB-Port oder PC erkannt?",
+    "solutions": [
+      "USB-Gerät an anderem USB-Port einstecken",
+      "Gerät an anderem PC testen",
+      "USB-Controller im Gerätemanager deinstallieren und neu scannen",
+      "Energieverwaltung der USB-Hubs deaktivieren: Gerätemanager > USB-Root-Hub > Eigenschaften > Energieverwaltung",
+      "Windows-Fehlerbehebung für Hardware ausführen",
+      "USB-Treiber aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devunknown", "label": "Unbekannte Geräte anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["USB device not recognized", "USB not detected", "USB unbekannt"],
+    "followUpQuestions": [
+      {
+        "question": "Kommt eine Fehlermeldung oder ein Ton beim Einstecken?",
+        "options": ["Fehlermeldung erscheint", "Ton aber keine Erkennung", "Gar keine Reaktion"],
+        "narrows": "Ob USB-Port, Treiber oder Gerät das Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-013", "PROB-HW-014", "PROB-HW-015"]
+  },
+  {
+    "id": "PROB-HW-013",
+    "category": "Hardware & Gerätemanager",
+    "title": "USB-Hub funktioniert nicht richtig",
+    "keywords": ["USB-Hub", "Hub", "Verteiler", "USB", "Ports", "Mehrfach", "nicht erkannt"],
+    "extendedKeywords": ["USB Hub funktioniert nicht", "USB Verteiler Geräte nicht erkannt", "USB Hub Strom reicht nicht", "USB Hub Geräte trennen sich", "USB Hub nur manche Ports gehen", "USB Hub wird nicht erkannt", "USB Hub Probleme", "USB Verteiler geht nicht", "Geräte am USB Hub instabil", "USB Hub blinkt", "USB Hub kein Strom", "USB Verteiler Geräte verschwinden", "USB Hub lädt nicht", "mehrere USB Geräte gleichzeitig Problem", "USB Hub Ports tot", "USB Hub Verbindung bricht ab"],
+    "typos": ["UBS Hub", "USB Hup", "USB Hab", "USB-Hab"],
+    "symptoms": ["Geräte am USB-Hub trennen sich intermittierend", "Nicht alle Ports am Hub funktionieren", "Hub wird selbst nicht erkannt"],
+    "quickCheck": "Ist der USB-Hub aktiv (mit eigenem Netzteil) oder passiv?",
+    "solutions": [
+      "USB-Hub mit eigenem Netzteil verwenden (aktiver Hub)",
+      "Hub an anderem USB-Port anschließen (idealerweise USB 3.0)",
+      "Weniger Geräte am Hub anschließen um Stromprobleme zu vermeiden",
+      "USB-Hub Treiber aktualisieren",
+      "Hub Firmware aktualisieren falls verfügbar",
+      "USB-Energieverwaltung deaktivieren im Gerätemanager"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["USB hub issues", "USB splitter not working"],
+    "followUpQuestions": [
+      {
+        "question": "Hat der USB-Hub ein eigenes Netzteil (aktiver Hub)?",
+        "options": ["Ja, hat eigenes Netzteil", "Nein, nur USB-Strom", "Weiß ich nicht"],
+        "narrows": "Ob Stromproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-012", "PROB-HW-014"]
+  },
+  {
+    "id": "PROB-HW-014",
+    "category": "Hardware & Gerätemanager",
+    "title": "USB-Gerät Stromproblem - zu wenig Strom",
+    "keywords": ["USB", "Strom", "Stromversorgung", "Überstrom", "Power", "Leistung", "Ladung"],
+    "extendedKeywords": ["USB Gerät zu wenig Strom", "USB Stromüberlastung", "USB Gerät wird nicht geladen", "USB Port liefert nicht genug Strom", "USB Überstromwarnung", "USB Gerät trennt sich wegen Strom", "USB Stromversorgung reicht nicht", "USB Gerät geht immer wieder aus", "externe Festplatte am USB geht nicht", "USB Meldung Überstrom", "USB Port deaktiviert wegen Strom", "USB Stromsparen Problem", "USB Gerät startet nicht", "USB liefert keinen Strom", "USB Ladung funktioniert nicht", "USB Port kein Strom"],
+    "typos": ["Stom", "Stromversorung", "Überstom", "UBS Strom"],
+    "symptoms": ["Windows meldet USB-Überstrom", "USB-Gerät trennt sich nach kurzer Zeit", "Externe Festplatte startet nicht über USB"],
+    "quickCheck": "Wird eine Fehlermeldung bezüglich Stromversorgung angezeigt?",
+    "solutions": [
+      "USB-Gerät an USB 3.0 Port anschließen (mehr Strom)",
+      "Aktiven USB-Hub mit eigenem Netzteil verwenden",
+      "Andere USB-Geräte temporär entfernen",
+      "USB-Energieverwaltung deaktivieren: Gerätemanager > USB-Root-Hub > Energieverwaltung",
+      "Bei externer Festplatte: Y-Kabel oder Kabel mit Netzteil verwenden",
+      "USB-Controller im Gerätemanager deinstallieren und neu scannen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devrestart", "label": "USB-Controller neu starten", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["USB power issue", "USB overcurrent", "USB Strom"],
+    "followUpQuestions": [
+      {
+        "question": "Um welches USB-Gerät handelt es sich?",
+        "options": ["Externe Festplatte/SSD", "USB-Stick", "Anderes Gerät"],
+        "narrows": "Ob Stromversorgung das eigentliche Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-012", "PROB-HW-013", "PROB-HW-015"]
+  },
+  {
+    "id": "PROB-HW-015",
+    "category": "Hardware & Gerätemanager",
+    "title": "USB-Gerät Fehlercode 43",
+    "keywords": ["USB", "Code 43", "Fehlercode", "Gerätemanager", "unbekannt", "Fehler", "angehalten"],
+    "extendedKeywords": ["USB Gerät Code 43", "Fehler 43 USB", "USB Gerät wurde angehalten", "Code 43 Fehlermeldung", "USB Fehlercode 43", "Gerät hat einen Fehler gemeldet Code 43", "USB Code 43 beheben", "USB Gerät angehalten wegen Fehler", "USB Gerät meldet Fehler", "Code 43 im Gerätemanager", "USB Device Error 43", "USB Ausrufezeichen Code 43", "Gerätemanager zeigt Code 43", "USB funktioniert nicht Code 43", "das Gerät wurde aufgrund eines Fehlers angehalten Code 43"],
+    "typos": ["Cod 43", "Fhlercode", "Code43", "Fehler43"],
+    "symptoms": ["Gerätemanager zeigt Fehlercode 43 beim USB-Gerät", "Gerät wird mit gelbem Ausrufezeichen angezeigt", "Fehlermeldung: Das Gerät wurde angehalten"],
+    "quickCheck": "Welches USB-Gerät zeigt den Fehlercode 43?",
+    "solutions": [
+      "USB-Gerät trennen und nach 10 Sekunden wieder anschließen",
+      "PC komplett herunterfahren (nicht Neustart) und neu starten",
+      "Gerät im Gerätemanager deinstallieren und Gerät neu scannen",
+      "USB-Treiber aktualisieren oder neu installieren",
+      "Gerät an anderem PC testen - kann auf Hardware-Defekt hindeuten",
+      "USB-Energieverwaltung deaktivieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_devmgr_devrestart", "label": "Gerät neu starten", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devunknown", "label": "Unbekannte Geräte", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["error code 43", "device stopped code 43", "USB Code 43"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt der Fehler bei jedem Anschließen auf oder nur manchmal?",
+        "options": ["Immer", "Manchmal", "Erst seit kurzem"],
+        "narrows": "Ob Hardware-Defekt oder Treiber-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-012", "PROB-HW-031", "PROB-HW-034"]
+  },
+  {
+    "id": "PROB-HW-016",
+    "category": "Hardware & Gerätemanager",
+    "title": "Webcam wird nicht erkannt",
+    "keywords": ["Webcam", "Kamera", "nicht erkannt", "Video", "Teams", "Zoom", "Skype"],
+    "extendedKeywords": ["Webcam funktioniert nicht", "Kamera wird nicht erkannt", "Webcam geht nicht in Teams", "Kamera nicht verfügbar", "Webcam kein Bild", "integrierte Kamera funktioniert nicht", "Webcam wird nicht angezeigt", "Laptop Kamera geht nicht", "Kamera blockiert", "Webcam nicht auffindbar", "Webcam taucht nicht auf", "Kamera kein Zugriff", "Webcam plötzlich weg", "Kamera funktioniert nicht mehr", "Webcam in Teams nicht verfügbar", "Kamera in Zoom nicht erkannt", "eingebaute Kamera tot", "Webcam gesperrt", "Kamera keine Funktion", "Webcam Treiber fehlt"],
+    "typos": ["Webam", "Webcma", "Kamra", "Webkam", "Kammera"],
+    "symptoms": ["Webcam wird in Apps nicht zur Auswahl angeboten", "Kamera-LED leuchtet nicht", "Gerätemanager zeigt keine Kamera"],
+    "quickCheck": "Funktioniert die Kamera in der Windows Kamera-App?",
+    "solutions": [
+      "Prüfen ob Kamera-Abdeckung (Slider) offen ist",
+      "Kamerazugriff in Windows aktivieren: Einstellungen > Datenschutz > Kamera",
+      "Fn+Kamerataste am Laptop drücken (Kamera könnte deaktiviert sein)",
+      "Webcam-Treiber im Gerätemanager aktualisieren",
+      "Webcam im Gerätemanager deinstallieren und neu scannen",
+      "Windows Kamera-App zum Testen verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devhidden", "label": "Versteckte Geräte anzeigen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_devmgr_devenable", "label": "Gerät aktivieren", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["webcam not found", "camera not working", "Kamera geht nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Ist es die eingebaute Laptop-Kamera oder eine externe USB-Webcam?",
+        "options": ["Eingebaute Laptop-Kamera", "Externe USB-Webcam", "Weiß ich nicht"],
+        "narrows": "Ob Treiber- oder USB-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-017", "PROB-HW-018"]
+  },
+  {
+    "id": "PROB-HW-017",
+    "category": "Hardware & Gerätemanager",
+    "title": "Webcam zeigt schwarzes Bild",
+    "keywords": ["Webcam", "schwarz", "kein Bild", "Kamera", "dunkel", "Video", "Stream"],
+    "extendedKeywords": ["Webcam zeigt nur schwarz", "Kamera schwarzes Bild", "Webcam Bild schwarz", "Webcam erkannt aber kein Bild", "Kamera zeigt nur schwarzen Bildschirm", "Webcam schwarz in Teams", "Kamera dunkel", "Webcam aktiviert aber schwarz", "Webcam LED leuchtet aber kein Bild", "Kamera schwarzer Bildschirm", "Webcam Bild ist dunkel", "Kamera zeigt nichts", "Webcam funktioniert aber kein Bild", "Webcam schwarz nach Update", "Kamera nur schwarzes Bild", "Webcam geht aber zeigt schwarz", "Kamera Bild schwarz in Zoom", "Webcam schwarzes Vorschaubild"],
+    "typos": ["Webam", "schwares Bild", "Kamra", "shwarzes Bild"],
+    "symptoms": ["Webcam wird erkannt aber zeigt nur schwarzes Bild", "LED leuchtet aber kein Videobild", "Vorschau in Apps ist schwarz"],
+    "quickCheck": "Leuchtet die Kamera-LED wenn die Kamera aktiv ist?",
+    "solutions": [
+      "Kamera-Abdeckung/Slider prüfen",
+      "Kamerazugriff für die App prüfen: Einstellungen > Datenschutz > Kamera",
+      "Andere App testen (Windows Kamera-App)",
+      "Webcam-Treiber deinstallieren und neu scannen",
+      "Prüfen ob andere App die Kamera bereits verwendet",
+      "Antivirensoftware prüfen - manche blockieren Kamerazugriff"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_devmgr_devrestart", "label": "Gerät neu starten", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["webcam black screen", "camera shows black", "Kamera schwarz"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt das Problem in allen Apps auf oder nur in einer bestimmten?",
+        "options": ["In allen Apps", "Nur in einer App", "Nicht getestet"],
+        "narrows": "Ob App- oder Treiberproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-016", "PROB-HW-018"]
+  },
+  {
+    "id": "PROB-HW-018",
+    "category": "Hardware & Gerätemanager",
+    "title": "Webcam Treiber Problem",
+    "keywords": ["Webcam", "Treiber", "Driver", "Kamera", "Installation", "Update", "inkompatibel"],
+    "extendedKeywords": ["Webcam Treiber funktioniert nicht", "Kamera Treiber fehlt", "Webcam Treiber installieren", "Kamera Treiber aktualisieren", "Webcam nach Update kaputt", "Webcam Treiber inkompatibel", "Kamera Treiber Problem", "Webcam Treiber neu installieren", "Webcam geht nicht nach Treiberupdate", "Kamera Treiber zurücksetzen", "Webcam braucht neuen Treiber", "Kamera Treiber Version", "Webcam Treiber fehlerhaft", "Kamera funktioniert nicht nach Update", "Webcam Treiberkonflikt"],
+    "typos": ["Treibr", "Traiber", "Webcam Trieber", "Draiber"],
+    "symptoms": ["Webcam im Gerätemanager mit gelbem Ausrufezeichen", "Webcam-Treiber verursacht Bluescreen", "Kamera funktioniert nach Windows-Update nicht mehr"],
+    "quickCheck": "Hat die Webcam bis vor kurzem noch funktioniert?",
+    "solutions": [
+      "Webcam-Treiber im Gerätemanager aktualisieren",
+      "Webcam-Treiber deinstallieren und Windows automatisch neu installieren lassen",
+      "Treiber vom Hersteller herunterladen und manuell installieren",
+      "Treiber zurücksetzen (Rollback) im Gerätemanager",
+      "Versteckte Geräte im Gerätemanager anzeigen und alte Webcam-Einträge entfernen",
+      "Windows Update ausführen für aktuelle Treiber"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_drivers_driverlist", "label": "Treiberliste anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_devmgr_devhidden", "label": "Versteckte Geräte", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["webcam driver issue", "camera driver update", "Kamera Treiber"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde kürzlich ein Windows-Update oder Treiber-Update durchgeführt?",
+        "options": ["Ja, Windows-Update", "Ja, Treiber-Update", "Nein", "Weiß ich nicht"],
+        "narrows": "Ob Rollback sinnvoll ist"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-016", "PROB-HW-017", "PROB-HW-029"]
+  },
+  {
+    "id": "PROB-HW-019",
+    "category": "Hardware & Gerätemanager",
+    "title": "Kein Ton - Audio funktioniert nicht",
+    "keywords": ["Ton", "Audio", "Sound", "Lautsprecher", "kein Ton", "stumm", "Ausgabe"],
+    "extendedKeywords": ["kein Ton am PC", "Audio funktioniert nicht", "Sound geht nicht", "Lautsprecher kein Ton", "kein Sound mehr", "PC macht keinen Ton", "Audio stumm", "kann nichts hören am PC", "Lautsprecher funktionieren nicht", "Sound ausgefallen", "Ton weg", "kein Ton mehr nach Update", "Audiowiedergabe funktioniert nicht", "Lautsprecher stumm", "Sound plötzlich weg", "kein Ton bei Videos", "Audio Problem", "Wiedergabegerät kein Ton", "Sound Ausgabe fehlt", "Lautsprecher kein Geräusch", "Ton ist aus", "kein Audio mehr", "Sound kaputt", "Audio macht keinen Mucks"],
+    "typos": ["Ton geht nciht", "Sond", "Auido", "Laudsprecher", "kien Ton"],
+    "symptoms": ["Kein Ton aus Lautsprechern/Kopfhörern", "Lautsprecher-Symbol zeigt X", "Kein Wiedergabegerät verfügbar"],
+    "quickCheck": "Ist die Lautstärke aufgedreht und das richtige Ausgabegerät ausgewählt?",
+    "solutions": [
+      "Lautstärke prüfen: Auf Lautsprecher-Symbol in der Taskleiste klicken",
+      "Richtiges Ausgabegerät auswählen: Rechtsklick auf Lautsprecher > Sound-Einstellungen",
+      "Audio-Problembehandlung ausführen: Rechtsklick Lautsprecher > Problembehandlung",
+      "Audio-Treiber im Gerätemanager aktualisieren oder neu installieren",
+      "Windows Audio-Dienst neu starten",
+      "Bei Laptop: Fn+Lautstärketaste prüfen",
+      "Kopfhörer anschließen um Lautsprecher-Defekt auszuschließen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_audioreset", "label": "Audio zurücksetzen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-hardware", "label": "Hardware-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["no sound", "audio not working", "kein Ton"],
+    "followUpQuestions": [
+      {
+        "question": "Wird ein Wiedergabegerät in den Sound-Einstellungen angezeigt?",
+        "options": ["Ja, aber kein Ton", "Nein, kein Gerät verfügbar", "Weiß ich nicht"],
+        "narrows": "Ob Treiber- oder Konfigurationsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-020", "PROB-HW-021"]
+  },
+  {
+    "id": "PROB-HW-020",
+    "category": "Hardware & Gerätemanager",
+    "title": "Headset wird nicht erkannt oder kein Ton",
+    "keywords": ["Headset", "Kopfhörer", "nicht erkannt", "kein Ton", "Mikrofon", "Audio", "Klinke"],
+    "extendedKeywords": ["Headset funktioniert nicht", "Kopfhörer kein Ton", "Headset wird nicht erkannt", "Kopfhörer am PC kein Sound", "Headset Mikrofon geht nicht", "Kopfhörer nicht erkannt Windows", "Headset angeschlossen aber kein Ton", "USB Headset funktioniert nicht", "Kopfhörer kein Ton in Teams", "Headset wird nicht angezeigt", "Klinken-Headset kein Ton", "Headset Mikrofon nicht erkannt", "Kopfhörer Sound fehlt", "Headset nur eine Seite", "Kopfhörer werden ignoriert", "Headset kein Mikrofon erkannt", "Bluetooth Headset verbindet nicht", "Headset knackt", "Kopfhörer rauschen"],
+    "typos": ["Hedaset", "Headest", "Kopfhöhre", "Hedset", "Mikrophon"],
+    "symptoms": ["Headset wird nicht als Wiedergabegerät angezeigt", "Ton kommt weiter aus Lautsprechern statt Kopfhörern", "Mikrofon am Headset wird nicht erkannt"],
+    "quickCheck": "Ist das Headset über USB, Klinke oder Bluetooth angeschlossen?",
+    "solutions": [
+      "Headset als Standard-Wiedergabegerät festlegen: Rechtsklick Lautsprecher > Sound-Einstellungen",
+      "Klinkenanschluss prüfen - Headset vs. Mikrofon-Buchse",
+      "Bei USB-Headset: Anderen USB-Port verwenden",
+      "Headset-Treiber/Software installieren",
+      "Audio-Dienst neu starten über Admin Tool",
+      "In Teams/Zoom: Audio-Gerät manuell auswählen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_audioreset", "label": "Audio zurücksetzen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["headset not working", "headphones no sound", "Headset kein Ton"],
+    "followUpQuestions": [
+      {
+        "question": "Wie ist das Headset angeschlossen?",
+        "options": ["USB", "Klinke (3.5mm)", "Bluetooth", "USB-C"],
+        "narrows": "Welche Lösungsschritte relevant sind"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-019", "PROB-HW-021"]
+  },
+  {
+    "id": "PROB-HW-021",
+    "category": "Hardware & Gerätemanager",
+    "title": "Bluetooth Audio Probleme",
+    "keywords": ["Bluetooth", "Audio", "Kopfhörer", "Lautsprecher", "verbinden", "Ton", "A2DP"],
+    "extendedKeywords": ["Bluetooth Kopfhörer kein Ton", "Bluetooth Audio funktioniert nicht", "Bluetooth Lautsprecher verbindet nicht", "Bluetooth Audio Qualität schlecht", "Bluetooth Kopfhörer gekoppelt aber kein Ton", "Bluetooth Audio bricht ab", "Bluetooth Kopfhörer schlechter Ton", "Bluetooth Audio stottert", "Bluetooth Headset Audio Problem", "Bluetooth Lautsprecher kein Sound", "Bluetooth Audio knackt", "Bluetooth Audio verzögert", "Bluetooth Audio rauscht", "Bluetooth Kopfhörer verbindet aber kein Sound", "Bluetooth Audio Qualität wechselt", "Hands-free statt Stereo", "Bluetooth Audio Modus falsch"],
+    "typos": ["Blutooth", "Bluetoth", "Auido", "Bluethooth", "Bletooth"],
+    "symptoms": ["Bluetooth-Kopfhörer gekoppelt aber kein Ton", "Audio-Qualität ist sehr schlecht über Bluetooth", "Bluetooth Audio bricht regelmäßig ab"],
+    "quickCheck": "Ist das Bluetooth-Gerät gekoppelt und als Audio-Ausgabe ausgewählt?",
+    "solutions": [
+      "Bluetooth-Gerät als Standard-Ausgabegerät festlegen",
+      "Bluetooth-Profil prüfen: Stereo (A2DP) statt Hands-Free verwenden",
+      "Bluetooth-Gerät entkoppeln und neu koppeln",
+      "Bluetooth-Treiber aktualisieren",
+      "Bluetooth-Adapter im Gerätemanager zurücksetzen",
+      "Andere Bluetooth-Geräte in der Nähe deaktivieren (Interferenz reduzieren)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_btreset", "label": "Bluetooth zurücksetzen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_devmgr_audioreset", "label": "Audio zurücksetzen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["bluetooth audio issue", "BT headphones no sound", "Bluetooth Sound"],
+    "followUpQuestions": [
+      {
+        "question": "Wird das Bluetooth-Gerät als 'Verbunden' in den Einstellungen angezeigt?",
+        "options": ["Ja, verbunden", "Ja, aber als 'Gekoppelt'", "Nein, nicht sichtbar"],
+        "narrows": "Ob Verbindungs- oder Audio-Konfigurationsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-019", "PROB-HW-020"]
+  },
+  {
+    "id": "PROB-HW-022",
+    "category": "Hardware & Gerätemanager",
+    "title": "Treiber fehlt - Gerät ohne Treiber",
+    "keywords": ["Treiber", "fehlt", "Driver", "nicht installiert", "unbekannt", "Ausrufezeichen", "Gerätemanager"],
+    "extendedKeywords": ["Treiber fehlt für Gerät", "Gerät ohne Treiber", "unbekanntes Gerät im Gerätemanager", "gelbes Ausrufezeichen Gerätemanager", "Treiber nicht installiert", "Treibersoftware fehlt", "Windows findet keinen Treiber", "Gerät funktioniert nicht Treiber fehlt", "kein Treiber für Gerät", "Treiber manuell installieren", "Treiber Download", "fehlender Treiber nach Neuinstallation", "Gerätemanager unbekanntes Gerät", "Treiber wird nicht gefunden", "Fragezeichen im Gerätemanager", "Gerät braucht Treiber", "Treiber muss installiert werden"],
+    "typos": ["Treibr", "Trieber", "Draiber", "Traiber", "feheld"],
+    "symptoms": ["Gelbes Ausrufezeichen im Gerätemanager", "Gerät als 'Unbekanntes Gerät' angezeigt", "Gerät funktioniert nicht ohne Treiber"],
+    "quickCheck": "Welches Gerät zeigt das Problem im Gerätemanager?",
+    "solutions": [
+      "Windows Update ausführen - oft findet Windows den Treiber automatisch",
+      "Rechtsklick auf Gerät im Gerätemanager > Treiber aktualisieren > Automatisch suchen",
+      "Hardware-ID des Geräts ermitteln und Treiber vom Hersteller herunterladen",
+      "Treiber von der Herstellerwebseite des PC/Laptops herunterladen",
+      "Windows-Treiberpaket über Admin Tool installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_devmgr_devunknown", "label": "Unbekannte Geräte", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["missing driver", "device without driver", "Treiber fehlt"],
+    "followUpQuestions": [
+      {
+        "question": "Um welche Art von Gerät handelt es sich?",
+        "options": ["Netzwerkkarte", "Grafikkarte", "USB-Gerät", "Anderes/Unbekannt"],
+        "narrows": "Wo der Treiber zu finden ist"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-023", "PROB-HW-024", "PROB-HW-025"]
+  },
+  {
+    "id": "PROB-HW-023",
+    "category": "Hardware & Gerätemanager",
+    "title": "Treiber veraltet",
+    "keywords": ["Treiber", "veraltet", "Update", "aktualisieren", "Version", "alt", "Driver Update"],
+    "extendedKeywords": ["Treiber veraltet", "Treiber aktualisieren", "alte Treiber", "Treiber Update nötig", "Treiber auf neueste Version bringen", "veraltete Treiber finden", "Treiber Version prüfen", "Treiberupdate durchführen", "alle Treiber aktualisieren", "Treiber sind nicht aktuell", "Gerätetreiber updaten", "neue Treiberversion verfügbar", "Treiber auf dem neuesten Stand bringen", "Treiber Update Windows", "Treiberaktualisierung", "wie Treiber updaten"],
+    "typos": ["Treibr", "veralted", "aktualisiren", "Trieber", "upaten"],
+    "symptoms": ["Gerät funktioniert nicht optimal", "Fehlermeldung über veralteten Treiber", "Performance-Probleme die auf Treiber hindeuten"],
+    "quickCheck": "Gibt es ein konkretes Problem oder sollen Treiber vorbeugend aktualisiert werden?",
+    "solutions": [
+      "Windows Update ausführen für optionale Treiberupdates",
+      "Gerätemanager: Rechtsklick auf Gerät > Treiber aktualisieren",
+      "Treiber vom Hersteller herunterladen (Dell, Lenovo, HP Support-Seite)",
+      "Nur Treiber aktualisieren die Probleme verursachen",
+      "Vor Treiberupdate: Wiederherstellungspunkt erstellen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_drivers_driverlist", "label": "Treiberliste anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["outdated driver", "driver update needed", "Treiber updaten"],
+    "followUpQuestions": [
+      {
+        "question": "Gibt es ein konkretes Problem oder möchten Sie vorbeugend aktualisieren?",
+        "options": ["Konkretes Problem", "Vorbeugend", "Nach Windows-Update Probleme"],
+        "narrows": "Ob gezielte oder allgemeine Aktualisierung nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-022", "PROB-HW-024"]
+  },
+  {
+    "id": "PROB-HW-024",
+    "category": "Hardware & Gerätemanager",
+    "title": "Treiber inkompatibel nach Update",
+    "keywords": ["Treiber", "inkompatibel", "Update", "Konflikt", "Bluescreen", "BSOD", "Absturz"],
+    "extendedKeywords": ["Treiber inkompatibel", "nach Update Treiber Problem", "Treiber verursacht Absturz", "Treiber Konflikt", "Bluescreen nach Treiberupdate", "Treiber inkompatibel mit Windows", "nach Update Gerät funktioniert nicht", "Treiberupdate hat Problem verursacht", "Gerät funktioniert nicht nach Update", "Treiber macht Probleme", "inkompatibler Treiber Windows", "Treiber verursacht Bluescreen", "Treiber zurücksetzen nach Update", "falscher Treiber installiert", "Treiber passt nicht"],
+    "typos": ["inkompatibel", "inkompatiebl", "Traiber", "Bluesreen", "Updat"],
+    "symptoms": ["Bluescreen nach Treiberinstallation", "Gerät funktioniert nach Update nicht mehr", "System instabil nach Treiberänderung"],
+    "quickCheck": "Wurde kürzlich ein Treiber aktualisiert oder ein Windows-Update durchgeführt?",
+    "solutions": [
+      "Treiber zurücksetzen: Gerätemanager > Gerät > Eigenschaften > Treiber > Vorheriger Treiber",
+      "Problematischen Treiber deinstallieren und älteren manuell installieren",
+      "Windows Update rückgängig machen falls dieses den Treiber gebracht hat",
+      "Im abgesicherten Modus starten und Treiber deinstallieren",
+      "Systemwiederherstellungspunkt verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_drivers_driverlist", "label": "Treiberliste", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["incompatible driver", "driver conflict after update", "Treiber Bluescreen"],
+    "followUpQuestions": [
+      {
+        "question": "Welches Gerät ist betroffen und wann hat das Problem angefangen?",
+        "options": ["Grafikkarte", "Netzwerkkarte", "Audio", "Anderes Gerät"],
+        "narrows": "Welcher Treiber zurückgesetzt werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-022", "PROB-HW-023", "PROB-HW-025"]
+  },
+  {
+    "id": "PROB-HW-025",
+    "category": "Hardware & Gerätemanager",
+    "title": "Treiber Rollback - vorherige Version wiederherstellen",
+    "keywords": ["Treiber", "Rollback", "zurücksetzen", "vorherige Version", "wiederherstellen", "Downgrade"],
+    "extendedKeywords": ["Treiber zurücksetzen", "alten Treiber wiederherstellen", "Treiber auf alte Version zurück", "Treiber Rollback machen", "vorherigen Treiber installieren", "Treiber Downgrade", "alter Treiber war besser", "Treiber zurückrollen", "Treiber vorherige Version", "wie Treiber zurücksetzen Windows", "Rollback Treiber Gerätemanager", "Treiber wiederherstellen nach Update", "alten Treiber zurückholen", "Treiberversion wechseln"],
+    "typos": ["Rolback", "zurücksetzten", "Trieber", "wiederherstelln"],
+    "symptoms": ["Gerät funktioniert nach Treiberupdate nicht mehr richtig", "Option 'Vorheriger Treiber' ist verfügbar im Gerätemanager"],
+    "quickCheck": "Ist die Option 'Vorheriger Treiber' im Gerätemanager verfügbar?",
+    "solutions": [
+      "Gerätemanager > Rechtsklick auf Gerät > Eigenschaften > Treiber > Vorheriger Treiber",
+      "Falls Rollback nicht verfügbar: Treiber deinstallieren und alte Version manuell installieren",
+      "Alten Treiber von Herstellerwebseite herunterladen",
+      "Systemwiederherstellung auf Punkt vor dem Update verwenden",
+      "Windows Update: Problematisches Update deinstallieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_drivers_driverlist", "label": "Treiberliste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["driver rollback", "restore previous driver", "Treiber zurück"],
+    "followUpQuestions": [
+      {
+        "question": "Ist die Option 'Vorheriger Treiber' im Gerätemanager ausgegraut?",
+        "options": ["Ja, ausgegraut", "Nein, klickbar", "Habe nicht nachgesehen"],
+        "narrows": "Ob Rollback möglich oder alternative Lösung nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-023", "PROB-HW-024"]
+  },
+  {
+    "id": "PROB-HW-026",
+    "category": "Hardware & Gerätemanager",
+    "title": "Gerätemanager Fehlercode 10 - Gerät kann nicht gestartet werden",
+    "keywords": ["Fehlercode 10", "Code 10", "Gerät kann nicht gestartet werden", "Gerätemanager", "Fehler", "Start"],
+    "extendedKeywords": ["Fehlercode 10 im Gerätemanager", "Code 10 Gerät startet nicht", "Gerät kann nicht gestartet werden Code 10", "Code 10 Fehler Windows", "Gerät Code 10 Gerätemanager", "Fehler 10 Gerät", "dieses Gerät kann nicht gestartet werden Code 10", "Code 10 beheben", "Fehlercode 10 lösen", "Gerätemanager Fehler 10", "Code 10 USB", "Code 10 Netzwerkadapter", "Code 10 Audio", "Fehlercode 10 Treiber"],
+    "typos": ["Cod 10", "Fhlercode", "Fehlerode 10", "Code10"],
+    "symptoms": ["Gerätemanager zeigt Fehlercode 10", "Gerät kann nicht gestartet werden", "Gelbes Ausrufezeichen mit Code 10"],
+    "quickCheck": "Welches Gerät zeigt den Fehlercode 10?",
+    "solutions": [
+      "PC neu starten",
+      "Gerät im Gerätemanager deinstallieren und PC neu starten",
+      "Treiber aktualisieren oder neu installieren",
+      "Gerät an anderem Port anschließen (bei USB)",
+      "Registry-Einträge des Geräts prüfen (UpperFilters/LowerFilters entfernen)",
+      "Windows-Fehlerbehebung für Hardware ausführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_devmgr_devrestart", "label": "Gerät neu starten", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["error code 10", "device cannot start", "Code 10 fix"],
+    "followUpQuestions": [
+      {
+        "question": "Um welchen Gerätetyp handelt es sich?",
+        "options": ["USB-Gerät", "Netzwerkadapter", "Audio-Gerät", "Anderes"],
+        "narrows": "Welche spezifischen Lösungsschritte relevant sind"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-027", "PROB-HW-028", "PROB-HW-029"]
+  },
+  {
+    "id": "PROB-HW-027",
+    "category": "Hardware & Gerätemanager",
+    "title": "Gerätemanager Fehlercode 28 - Treiber nicht installiert",
+    "keywords": ["Fehlercode 28", "Code 28", "Treiber nicht installiert", "Gerätemanager", "Fehler", "kein Treiber"],
+    "extendedKeywords": ["Fehlercode 28 Gerätemanager", "Code 28 Treiber fehlt", "Treiber für Gerät nicht installiert Code 28", "Code 28 Fehler", "Gerät Code 28", "Fehler 28 kein Treiber", "Code 28 beheben", "Treiber nicht installiert Fehlercode 28", "Code 28 lösen", "Gerätemanager Code 28", "Gerät unbekannt Code 28", "Windows Code 28", "Code 28 Treiber installieren"],
+    "typos": ["Cod 28", "Fhlercode 28", "Fehlerode 28", "Code28"],
+    "symptoms": ["Gerätemanager zeigt Fehlercode 28", "Meldung: Treiber für dieses Gerät sind nicht installiert", "Gerät mit Fragezeichen im Gerätemanager"],
+    "quickCheck": "Ist bekannt um welches Gerät es sich handelt?",
+    "solutions": [
+      "Windows Update ausführen - Treiber wird oft automatisch gefunden",
+      "Gerätemanager: Rechtsklick auf Gerät > Treiber aktualisieren > Automatisch suchen",
+      "Hardware-ID ermitteln: Eigenschaften > Details > Hardware-IDs und Treiber online suchen",
+      "Treiber von der PC-Herstellerwebseite herunterladen",
+      "Bei unbekanntem Gerät: Gerät deinstallieren, PC neu starten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_devmgr_devunknown", "label": "Unbekannte Geräte", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["error code 28", "driver not installed code 28", "Code 28 fix"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde Windows kürzlich neu installiert oder das Gerät zum ersten Mal angeschlossen?",
+        "options": ["Windows Neuinstallation", "Neues Gerät", "War vorher vorhanden"],
+        "narrows": "Ob Erstinstallation oder Treiber verschwunden"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-022", "PROB-HW-026", "PROB-HW-028"]
+  },
+  {
+    "id": "PROB-HW-028",
+    "category": "Hardware & Gerätemanager",
+    "title": "Gerätemanager Fehlercode 31 - Gerät funktioniert nicht einwandfrei",
+    "keywords": ["Fehlercode 31", "Code 31", "funktioniert nicht einwandfrei", "Gerätemanager", "Fehler", "Treiber laden"],
+    "extendedKeywords": ["Fehlercode 31 Gerätemanager", "Code 31 Gerät funktioniert nicht", "Code 31 Fehler Windows", "Gerät Code 31", "Fehler 31 Gerätemanager", "Code 31 beheben", "Code 31 Netzwerkadapter", "Code 31 lösen", "dieses Gerät funktioniert nicht einwandfrei Code 31", "Code 31 Windows kann Treiber nicht laden", "Gerätemanager Fehler 31", "Code 31 Treiber Problem"],
+    "typos": ["Cod 31", "Fhlercode 31", "Fehlerode 31", "Code31"],
+    "symptoms": ["Gerätemanager zeigt Fehlercode 31", "Windows kann benötigte Treiber nicht laden", "Gerät funktioniert nicht einwandfrei"],
+    "quickCheck": "Welches Gerät zeigt den Fehlercode 31?",
+    "solutions": [
+      "Gerät im Gerätemanager deinstallieren und Gerätescan durchführen",
+      "Treiber aktualisieren oder komplett neu installieren",
+      "Registry-Bereinigung: UpperFilters und LowerFilters für die Geräteklasse entfernen",
+      "Windows System File Checker ausführen: sfc /scannow",
+      "Gerät deinstallieren, PC neu starten, Treiber manuell installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_devmgr_devrestart", "label": "Gerät neu starten", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["error code 31", "device not working code 31", "Code 31 fix"],
+    "followUpQuestions": [
+      {
+        "question": "Um welchen Gerätetyp handelt es sich?",
+        "options": ["Netzwerkadapter", "Audio-Gerät", "USB-Controller", "Anderes"],
+        "narrows": "Welche Registry-Schlüssel relevant sind"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-026", "PROB-HW-027", "PROB-HW-029"]
+  },
+  {
+    "id": "PROB-HW-029",
+    "category": "Hardware & Gerätemanager",
+    "title": "Gerätemanager Fehlercode 43 - Gerät wurde angehalten",
+    "keywords": ["Fehlercode 43", "Code 43", "angehalten", "Gerätemanager", "Fehler", "gestoppt", "Grafikkarte"],
+    "extendedKeywords": ["Fehlercode 43 Gerätemanager", "Code 43 Gerät angehalten", "Code 43 Grafikkarte", "Fehler 43 Windows", "Code 43 USB", "Code 43 beheben", "das Gerät wurde aufgrund eines Fehlers angehalten Code 43", "Gerät Code 43", "Code 43 lösen", "Gerätemanager Fehler 43", "Code 43 Nvidia", "Code 43 AMD", "Code 43 Grafik", "Code 43 nach Update", "Fehlercode 43 Treiber"],
+    "typos": ["Cod 43", "Fhlercode 43", "Fehlerode 43", "Code43"],
+    "symptoms": ["Gerätemanager zeigt Fehlercode 43", "Gerät wurde angehalten wegen Fehlermeldung", "Grafikkarte oder USB-Gerät mit Code 43"],
+    "quickCheck": "Welches Gerät zeigt den Fehlercode 43 - Grafikkarte oder anderes Gerät?",
+    "solutions": [
+      "PC komplett herunterfahren (nicht Neustart) und neu starten",
+      "Treiber deinstallieren und neueste Version vom Hersteller installieren",
+      "Bei Grafikkarte: DDU (Display Driver Uninstaller) verwenden und Treiber sauber neu installieren",
+      "BIOS/UEFI aktualisieren",
+      "Gerät an anderem Steckplatz/Port versuchen",
+      "Hardware-Defekt ausschließen durch Test an anderem PC"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_devmgr_devrestart", "label": "Gerät neu starten", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["error code 43", "device stopped code 43", "GPU code 43"],
+    "followUpQuestions": [
+      {
+        "question": "Handelt es sich um eine Grafikkarte oder ein anderes Gerät?",
+        "options": ["Grafikkarte (Nvidia/AMD)", "USB-Gerät", "Anderes Gerät"],
+        "narrows": "Ob spezifische GPU-Lösung oder allgemeine Lösung"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-015", "PROB-HW-026", "PROB-HW-028"]
+  },
+  {
+    "id": "PROB-HW-030",
+    "category": "Hardware & Gerätemanager",
+    "title": "Laptop-Akku lädt nicht",
+    "keywords": ["Akku", "Batterie", "laden", "Netzteil", "Laptop", "Ladung", "Stromversorgung"],
+    "extendedKeywords": ["Laptop Akku lädt nicht", "Akku wird nicht geladen", "Laptop lädt nicht mehr", "Batterie lädt nicht", "Akku bleibt bei 0%", "Laptop Akku laden geht nicht", "Netzteil angeschlossen aber lädt nicht", "Akku Symbol mit X", "Laptop lädt nicht obwohl angeschlossen", "Akku lädt nicht über 80%", "Laptop Batterie wird nicht geladen", "Akku ladet nicht", "Laptop reagiert nicht auf Netzteil", "Akku Ladung funktioniert nicht", "Laptop lädt langsam", "Akku bleibt bei einem Prozentwert stehen", "Laptop schaltet sich aus obwohl Netzteil angeschlossen", "Netzteil funktioniert nicht", "Akku nur am Netzteil"],
+    "typos": ["Aku", "Baterrie", "Labtop", "ladet", "Netztiel"],
+    "symptoms": ["Akku-Symbol zeigt 'Wird nicht geladen'", "Laptop läuft nur mit Netzteil", "Akkuladung steigt nicht"],
+    "quickCheck": "Leuchtet die Lade-LED am Laptop wenn das Netzteil angeschlossen ist?",
+    "solutions": [
+      "Netzteil prüfen: LED am Netzteil leuchtet?",
+      "Anderes Netzteil testen (gleicher Typ)",
+      "Akku-Treiber im Gerätemanager deinstallieren: Microsoft ACPI-Compliant Control Method Battery > Deinstallieren > Neustart",
+      "BIOS-Einstellungen prüfen (Akku-Ladegrenze, Battery Conservation Mode)",
+      "Laptop komplett herunterfahren, Netzteil trennen, 30 Sek warten, wieder anschließen",
+      "Bei Lenovo: Vantage App > Akkueinstellungen prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_hw_hwbat", "label": "Akkustatus anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-hardware", "label": "Hardware-Diagnose", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["battery not charging", "laptop won't charge", "Akku Problem"],
+    "followUpQuestions": [
+      {
+        "question": "Was zeigt das Akku-Symbol in der Taskleiste an?",
+        "options": ["Wird nicht geladen", "Angeschlossen, wird geladen (aber geht nicht hoch)", "Kein Akku erkannt", "Normales Symbol"],
+        "narrows": "Ob Netzteil-, Akku- oder Treiberproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-031", "PROB-HW-032"]
+  },
+  {
+    "id": "PROB-HW-031",
+    "category": "Hardware & Gerätemanager",
+    "title": "Akku-Zustand prüfen - Akkugesundheit",
+    "keywords": ["Akku", "Zustand", "Gesundheit", "Kapazität", "Verschleiß", "Battery Report", "Lebensdauer"],
+    "extendedKeywords": ["Akku Zustand prüfen", "Akkugesundheit anzeigen", "Akku Kapazität prüfen", "wie gut ist mein Akku noch", "Akku Verschleiß prüfen", "Battery Health", "Akku Bericht erstellen", "Akkulaufzeit kürzer geworden", "Akku hält nicht mehr lange", "Akku schnell leer", "Akkukapazität gesunken", "Akku Test", "Laptop Akku Status", "Akku Lebensdauer prüfen", "Akku Wear Level", "wie alt ist mein Akku", "Akku muss getauscht werden", "Akku kaputt"],
+    "typos": ["Aku", "Zusatnd", "Gesundhet", "Kapazität", "Batterie Report"],
+    "symptoms": ["Akku hält deutlich kürzer als früher", "Laptop schaltet sich bei höherem Prozentsatz ab", "Akku zeigt falsche Prozentanzeige"],
+    "quickCheck": "Wie lange hält der Akku aktuell im Vergleich zu früher?",
+    "solutions": [
+      "Akku-Bericht erstellen: powercfg /batteryreport im Admin Tool",
+      "Akkustatus über Admin Tool prüfen",
+      "Design-Kapazität mit aktueller Vollladung vergleichen (unter 80% = Austausch empfohlen)",
+      "Energiespareinstellungen optimieren",
+      "Hersteller-Tool verwenden (z.B. Lenovo Vantage, Dell Power Manager)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_hw_hwbat", "label": "Akkustatus anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_hw_hwcs", "label": "Hardware-Info anzeigen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-hardware", "label": "Hardware-Diagnose", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["battery health", "battery report", "Akku Zustand"],
+    "followUpQuestions": [
+      {
+        "question": "Wie alt ist der Laptop ungefähr?",
+        "options": ["Unter 1 Jahr", "1-3 Jahre", "Über 3 Jahre"],
+        "narrows": "Ob Akkuverschleiß normal oder ungewöhnlich ist"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-030", "PROB-HW-032"]
+  },
+  {
+    "id": "PROB-HW-032",
+    "category": "Hardware & Gerätemanager",
+    "title": "Akku kalibrieren",
+    "keywords": ["Akku", "Kalibrierung", "kalibrieren", "Batterie", "Prozentanzeige", "falsch", "Reset"],
+    "extendedKeywords": ["Akku kalibrieren", "Akku Kalibrierung durchführen", "Akkuanzeige stimmt nicht", "Akku zeigt falsche Prozent", "Akku kalibrieren Windows", "Batterie kalibrieren", "Laptop Akku kalibrieren", "Akku Prozentanzeige falsch", "Akku springt in Prozent", "Akku zeigt 50% und geht aus", "Akku Anzeige reset", "Akku Kalibrierung nötig", "Akku Prozent stimmen nicht", "Akkuanzeige sprunghaft", "Akku zeigt mehr an als er hat"],
+    "typos": ["Aku", "kalibriern", "Kalibierung", "kalibriren"],
+    "symptoms": ["Akku zeigt falsche Prozentwerte an", "Laptop schaltet sich bei 30% oder höher ab", "Akku springt von einem Prozentwert zum anderen"],
+    "quickCheck": "Zeigt der Akku falsche Prozentwerte oder schaltet der Laptop unerwartet ab?",
+    "solutions": [
+      "Akku vollständig auf 100% laden",
+      "Laptop von Netzteil trennen und komplett entladen lassen (bis er sich ausschaltet)",
+      "Laptop mindestens 5 Stunden ausgeschaltet lassen",
+      "Laptop wieder ans Netzteil anschließen und auf 100% laden ohne ihn zu benutzen",
+      "Akku-Treiber im Gerätemanager deinstallieren und neu starten",
+      "Bei BIOS-Kalibrierung: Im BIOS nach Battery Calibration suchen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_hw_hwbat", "label": "Akkustatus anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-hardware", "label": "Hardware-Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["calibrate battery", "battery calibration", "Akku kalibrieren"],
+    "followUpQuestions": [
+      {
+        "question": "Was genau stimmt mit der Akkuanzeige nicht?",
+        "options": ["Zeigt falsche Prozent", "Springt in Prozent", "Schaltet sich bei höherem Wert ab"],
+        "narrows": "Ob Kalibrierung oder Akkudefekt"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-030", "PROB-HW-031"]
+  },
+  {
+    "id": "PROB-HW-033",
+    "category": "Hardware & Gerätemanager",
+    "title": "Maus reagiert nicht",
+    "keywords": ["Maus", "reagiert nicht", "Cursor", "Zeiger", "USB", "Bluetooth", "bewegt sich nicht"],
+    "extendedKeywords": ["Maus funktioniert nicht", "Maus reagiert nicht mehr", "Cursor bewegt sich nicht", "Maus tot", "Maus geht nicht", "Mauszeiger bewegt sich nicht", "Maus macht nichts", "Maus plötzlich ausgefallen", "keine Mausbewegung", "Maus klickt nicht", "USB Maus funktioniert nicht", "Bluetooth Maus funktioniert nicht", "kabellose Maus reagiert nicht", "Maus wird nicht erkannt", "Maus hat aufgehört zu funktionieren", "Maus spinnt", "Maus ohne Funktion", "Laptop Maus geht nicht", "Maus keine Reaktion", "Mauszeiger verschwunden"],
+    "typos": ["Maus", "Mauss", "Mauß", "Crusor", "Zeigr"],
+    "symptoms": ["Mauszeiger bewegt sich nicht", "Mausklick wird nicht erkannt", "Maus-LED leuchtet nicht"],
+    "quickCheck": "Handelt es sich um eine USB-, Bluetooth- oder Funkmaus?",
+    "solutions": [
+      "USB-Maus: An anderem USB-Port einstecken",
+      "Funkmaus: Batterien prüfen oder aufladen, USB-Empfänger umstecken",
+      "Bluetooth-Maus: Bluetooth-Verbindung prüfen, neu koppeln",
+      "PC neu starten",
+      "Maus-Treiber im Gerätemanager deinstallieren und neu scannen",
+      "Andere Maus zum Testen anschließen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["mouse not working", "cursor not moving", "Maus tot"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Art von Maus verwenden Sie?",
+        "options": ["USB-Maus (kabelgebunden)", "Funkmaus (mit USB-Empfänger)", "Bluetooth-Maus", "Touchpad"],
+        "narrows": "Ob Verbindungs- oder Treiberproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-034", "PROB-HW-035"]
+  },
+  {
+    "id": "PROB-HW-034",
+    "category": "Hardware & Gerätemanager",
+    "title": "Maus springt oder bewegt sich ungenau",
+    "keywords": ["Maus", "springt", "ungenau", "zittert", "Sensor", "Cursor", "erratisch"],
+    "extendedKeywords": ["Maus springt", "Mauszeiger springt", "Maus bewegt sich ungenau", "Cursor springt hin und her", "Maus zittert", "Maus ungenau", "Maus macht was sie will", "Mauszeiger hüpft", "Cursor erratisch", "Maus ruckelt", "Maus hat Aussetzer", "Cursor springt an andere Stelle", "Maus driftet", "Maus fährt in eine Ecke", "Mauszeiger wackelt", "Mausbewegung nicht flüssig", "Maus macht eigenständige Bewegungen"],
+    "typos": ["Maus sprint", "Cusor", "springd", "Mauszeigr"],
+    "symptoms": ["Mauszeiger springt unkontrolliert", "Cursor driftet in eine Richtung", "Mausbewegung ist nicht flüssig"],
+    "quickCheck": "Springt der Cursor auf bestimmten Oberflächen oder überall?",
+    "solutions": [
+      "Maus-Sensor/Unterseite reinigen",
+      "Mauspad verwenden oder andere Oberfläche testen",
+      "Maus-Einstellungen prüfen: Einstellungen > Bluetooth & Geräte > Maus > DPI/Zeigergeschwindigkeit anpassen",
+      "Bei Funkmaus: USB-Empfänger an anderen Port stecken, näher an Maus",
+      "Maus-Treiber aktualisieren",
+      "Andere Maus testen um Defekt auszuschließen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 45},
+      {"skillId": "rd_devmgr_devrestart", "label": "Gerät neu starten", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["mouse jumping", "cursor erratic", "Maus springt"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt das Problem auf allen Oberflächen auf?",
+        "options": ["Ja, überall", "Nur auf bestimmter Oberfläche", "Nur manchmal"],
+        "narrows": "Ob Sensor- oder Softwareproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-033", "PROB-HW-035"]
+  },
+  {
+    "id": "PROB-HW-035",
+    "category": "Hardware & Gerätemanager",
+    "title": "Touchpad Gesten funktionieren nicht",
+    "keywords": ["Touchpad", "Gesten", "Wischen", "Scrollen", "Pinch", "Zoom", "Precision"],
+    "extendedKeywords": ["Touchpad Gesten funktionieren nicht", "Touchpad scrollen geht nicht", "Touchpad Wischgesten", "Touchpad Zwei-Finger-Scrollen geht nicht", "Touchpad Gesten deaktiviert", "Touchpad Pinch-to-Zoom geht nicht", "Touchpad reagiert auf Gesten nicht", "Touchpad Drei-Finger-Geste geht nicht", "Touchpad wischen funktioniert nicht", "Touchpad Gesten einstellen", "Touchpad Gesten nach Update weg", "Touchpad Multitouch funktioniert nicht", "Touchpad Gesten Windows", "Precision Touchpad Gesten"],
+    "typos": ["Tochpad", "Touchpd", "Gestn", "Toupad", "Touchpad Geste"],
+    "symptoms": ["Touchpad-Gesten wie Zwei-Finger-Scrollen funktionieren nicht", "Nur einfache Mausbewegung/Klick geht", "Gesten-Einstellungen fehlen in Windows"],
+    "quickCheck": "Handelt es sich um ein Precision Touchpad oder ein herkömmliches Touchpad?",
+    "solutions": [
+      "Touchpad-Gesten aktivieren: Einstellungen > Bluetooth & Geräte > Touchpad",
+      "Touchpad-Treiber aktualisieren (Synaptics/ELAN/Precision)",
+      "Touchpad-Treiber deinstallieren und neu installieren",
+      "Prüfen ob Touchpad deaktiviert ist (Fn+Touchpad-Taste)",
+      "Precision Touchpad Treiber installieren für vollständige Gestenunterstützung",
+      "Windows Update für neueste Touchpad-Treiber ausführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_drivers_driverlist", "label": "Treiberliste", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devenable", "label": "Gerät aktivieren", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["touchpad gestures not working", "touchpad scroll", "Touchpad Gesten"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert das Touchpad grundsätzlich (Cursor bewegen, Klicken)?",
+        "options": ["Ja, nur Gesten fehlen", "Nein, Touchpad komplett tot", "Touchpad reagiert manchmal"],
+        "narrows": "Ob Treiber- oder Hardware-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-033", "PROB-HW-034"]
+  },
+  {
+    "id": "PROB-HW-036",
+    "category": "Hardware & Gerätemanager",
+    "title": "BIOS/UEFI Einstellungen prüfen und anpassen",
+    "keywords": ["BIOS", "UEFI", "Einstellungen", "Setup", "Firmware", "Boot", "Konfiguration"],
+    "extendedKeywords": ["BIOS aufrufen", "UEFI Einstellungen", "ins BIOS kommen", "BIOS öffnen", "BIOS Einstellungen ändern", "UEFI Firmware", "BIOS Setup", "wie komme ich ins BIOS", "BIOS Taste", "BIOS öffnen Windows", "UEFI aufrufen", "BIOS Konfiguration", "BIOS Boot Reihenfolge", "BIOS Secure Boot", "UEFI Einstellungen ändern", "BIOS Reset", "BIOS Standardwerte", "BIOS Einstellungen zurücksetzen", "UEFI Firmware Einstellungen"],
+    "typos": ["BOIS", "BISO", "UFEI", "Bios", "UIEF"],
+    "symptoms": ["Hardware-Einstellungen müssen im BIOS geändert werden", "Boot-Probleme die BIOS-Änderungen erfordern", "Feature im BIOS deaktiviert"],
+    "quickCheck": "Welche Einstellung soll im BIOS geändert werden?",
+    "solutions": [
+      "BIOS aufrufen: Beim Start F2/F12/DEL drücken (je nach Hersteller)",
+      "Alternativ über Windows: Einstellungen > Update > Wiederherstellung > Erweiterter Start > UEFI-Firmware",
+      "Secure Boot: Im BIOS unter Security oder Boot finden",
+      "Boot-Reihenfolge: Im BIOS unter Boot Order ändern",
+      "TPM aktivieren: Im BIOS unter Security > TPM",
+      "BIOS auf Standardwerte zurücksetzen: Load Setup Defaults"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_hw_hwcs", "label": "Hardware-Info anzeigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-hardware", "label": "Hardware-Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["BIOS settings", "UEFI firmware", "enter BIOS"],
+    "followUpQuestions": [
+      {
+        "question": "Welcher Laptop-/PC-Hersteller ist es?",
+        "options": ["Lenovo", "Dell", "HP", "Anderer"],
+        "narrows": "Welche Taste für BIOS-Zugang und spezifische Menüstruktur"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-037"]
+  },
+  {
+    "id": "PROB-HW-037",
+    "category": "Hardware & Gerätemanager",
+    "title": "BIOS/UEFI Update durchführen",
+    "keywords": ["BIOS", "UEFI", "Update", "Firmware", "Flash", "Aktualisierung", "Version"],
+    "extendedKeywords": ["BIOS Update", "UEFI Update", "BIOS aktualisieren", "Firmware Update", "BIOS flashen", "BIOS Version prüfen", "BIOS Update nötig", "UEFI Firmware aktualisieren", "wie BIOS updaten", "BIOS Update durchführen", "BIOS Update sicher", "BIOS Update Anleitung", "aktuelle BIOS Version", "BIOS Update Hersteller", "BIOS Update fehlgeschlagen", "BIOS Recovery", "BIOS Update notwendig"],
+    "typos": ["BOIS", "BISO", "Upate", "UFEI", "aktualisiren"],
+    "symptoms": ["BIOS-Version ist veraltet", "Hersteller empfiehlt BIOS-Update", "Hardware-Kompatibilitätsprobleme die BIOS-Update erfordern"],
+    "quickCheck": "Welche BIOS-Version ist aktuell installiert?",
+    "solutions": [
+      "Aktuelle BIOS-Version prüfen: msinfo32 > BIOS-Version",
+      "Neueste BIOS-Version auf Herstellerwebseite prüfen",
+      "BIOS-Update nur durchführen wenn es nötig ist (Sicherheit, Kompatibilität)",
+      "Laptop vollständig laden und am Netzteil lassen während des Updates",
+      "BIOS-Update von Herstellerseite herunterladen und Anleitung befolgen",
+      "Während des Updates PC NICHT ausschalten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_hw_hwcs", "label": "Hardware-Info anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-hardware", "label": "Hardware-Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["BIOS flash", "firmware update", "BIOS aktualisieren"],
+    "followUpQuestions": [
+      {
+        "question": "Warum soll das BIOS aktualisiert werden?",
+        "options": ["Sicherheitsupdate", "Hardware-Problem", "IT hat es empfohlen", "Weiß nicht"],
+        "narrows": "Ob Update wirklich nötig ist"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-036"]
+  },
+  {
+    "id": "PROB-HW-038",
+    "category": "Hardware & Gerätemanager",
+    "title": "Kartenleser funktioniert nicht",
+    "keywords": ["Kartenleser", "SD-Karte", "Card Reader", "nicht erkannt", "Speicherkarte", "microSD"],
+    "extendedKeywords": ["Kartenleser funktioniert nicht", "SD-Karte wird nicht erkannt", "Card Reader geht nicht", "Speicherkarte nicht erkannt", "microSD wird nicht gelesen", "SD-Karte eingesteckt aber nicht erkannt", "Kartenleser zeigt nichts an", "SD-Karte nicht im Explorer", "interner Kartenleser funktioniert nicht", "SD Slot funktioniert nicht", "Laptop Kartenleser tot", "Speicherkarte wird nicht angezeigt", "Kartenleser Treiber", "SD-Karte wird nicht gelesen"],
+    "typos": ["Kartenlesr", "SD Karte", "Cardreader", "Kartenleser", "micro SD"],
+    "symptoms": ["SD-Karte wird im Explorer nicht angezeigt", "Kartenleser-LED leuchtet nicht", "Kein Laufwerk erscheint nach Einlegen der Karte"],
+    "quickCheck": "Funktioniert die SD-Karte in einem anderen Gerät?",
+    "solutions": [
+      "SD-Karte richtig einlegen (Kontakte nach unten oder oben je nach Gerät)",
+      "Andere SD-Karte testen um Kartenleser vs. Karten-Defekt zu prüfen",
+      "Kartenleser-Treiber im Gerätemanager prüfen und aktualisieren",
+      "Versteckte Geräte im Gerätemanager anzeigen",
+      "Kartenleser im Gerätemanager deinstallieren und neu scannen",
+      "Datenträgerverwaltung prüfen ob Karte erkannt aber kein Laufwerksbuchstabe zugewiesen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devhidden", "label": "Versteckte Geräte", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_devmgr_devscan", "label": "Gerätescan", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["card reader not working", "SD card not detected", "Kartenleser"],
+    "followUpQuestions": [
+      {
+        "question": "Ist es der eingebaute Kartenleser oder ein externer USB-Kartenleser?",
+        "options": ["Eingebaut im Laptop", "Externer USB-Kartenleser"],
+        "narrows": "Ob Treiber- oder USB-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-012"]
+  },
+  {
+    "id": "PROB-HW-039",
+    "category": "Hardware & Gerätemanager",
+    "title": "Fingerabdrucksensor funktioniert nicht",
+    "keywords": ["Fingerabdruck", "Fingerprint", "Sensor", "Windows Hello", "biometrisch", "Anmeldung", "Finger"],
+    "extendedKeywords": ["Fingerabdrucksensor funktioniert nicht", "Fingerprint geht nicht", "Windows Hello Fingerabdruck", "Fingerabdruck wird nicht erkannt", "Fingerabdruck Sensor reagiert nicht", "Fingerabdruck einrichten geht nicht", "Fingerprint Reader funktioniert nicht", "biometrische Anmeldung geht nicht", "Fingerabdruck nach Update defekt", "Windows Hello Fingerabdruck einrichten", "Fingerabdruck Scanner tot", "Fingerabdruck Sensor nicht verfügbar", "Fingerprint wird nicht erkannt", "Fingerabdruck Anmeldung fehlgeschlagen", "Fingerabdruck löschen und neu einrichten"],
+    "typos": ["Fingerabdruk", "Fingerprint", "Fingrabdruck", "biometrish"],
+    "symptoms": ["Fingerabdrucksensor wird nicht als Option in Windows Hello angeboten", "Fingerabdruck wird beim Anmelden nicht erkannt", "Fehlermeldung beim Einrichten des Fingerabdrucks"],
+    "quickCheck": "Wird der Fingerabdrucksensor unter Windows Hello in den Einstellungen angezeigt?",
+    "solutions": [
+      "Finger reinigen und Sensor reinigen",
+      "Windows Hello Fingerabdruck neu einrichten: Einstellungen > Konten > Anmeldeoptionen",
+      "Biometrie-Treiber im Gerätemanager aktualisieren",
+      "Fingerabdruck-Daten löschen und neu registrieren",
+      "Windows Biometric Service (WbioSrvc) prüfen ob er läuft",
+      "Biometrisches Gerät im Gerätemanager deinstallieren und neu scannen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devenable", "label": "Gerät aktivieren", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["fingerprint not working", "Windows Hello fingerprint", "Fingerabdruck"],
+    "followUpQuestions": [
+      {
+        "question": "Hat der Fingerabdrucksensor schon einmal funktioniert?",
+        "options": ["Ja, funktionierte vorher", "Nein, noch nie eingerichtet", "Nach Update nicht mehr"],
+        "narrows": "Ob Treiber- oder Einrichtungsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-040"]
+  },
+  {
+    "id": "PROB-HW-040",
+    "category": "Hardware & Gerätemanager",
+    "title": "NFC-Leser funktioniert nicht",
+    "keywords": ["NFC", "Reader", "Leser", "kontaktlos", "Smartcard", "Badge", "Ausweis"],
+    "extendedKeywords": ["NFC funktioniert nicht", "NFC Reader geht nicht", "NFC Leser nicht erkannt", "kontaktlos funktioniert nicht", "NFC Ausweis wird nicht gelesen", "Smartcard Reader NFC", "NFC Badge funktioniert nicht", "NFC Leser am Laptop", "NFC nicht verfügbar", "NFC Gerät nicht erkannt", "kontaktloser Kartenleser geht nicht", "NFC Anmeldung funktioniert nicht", "NFC Reader Treiber", "NFC einschalten", "NFC am PC verwenden"],
+    "typos": ["NCF", "NFC Lasr", "NFC Leser", "NFC Readr"],
+    "symptoms": ["NFC-Karte wird beim Auflegen nicht erkannt", "NFC-Leser fehlt im Gerätemanager", "NFC-basierte Anmeldung schlägt fehl"],
+    "quickCheck": "Wird der NFC-Leser im Gerätemanager unter Proximity-Geräte angezeigt?",
+    "solutions": [
+      "NFC im BIOS/UEFI aktivieren falls dort konfigurierbar",
+      "NFC-Treiber im Gerätemanager prüfen und aktualisieren",
+      "NFC-Dienst prüfen: Proximity Service (SEMgrSvc) muss laufen",
+      "NFC-Gerät im Gerätemanager deinstallieren und neu scannen",
+      "NFC-Karte an anderem Lesegerät testen",
+      "Hersteller-Software für NFC installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_devmgr_devlist", "label": "Geräteliste anzeigen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_devmgr_deverror", "label": "Gerätefehler", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_devmgr_devhidden", "label": "Versteckte Geräte", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_devmgr_devenable", "label": "Gerät aktivieren", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["NFC reader not working", "contactless reader", "NFC Leser"],
+    "followUpQuestions": [
+      {
+        "question": "Wofür wird der NFC-Leser verwendet?",
+        "options": ["Anmeldung am PC", "Ausweisleser", "Sonstiges"],
+        "narrows": "Welche Software/Dienste konfiguriert sein müssen"
+      }
+    ],
+    "relatedProblems": ["PROB-HW-039", "PROB-HW-038"]
+  }
+]

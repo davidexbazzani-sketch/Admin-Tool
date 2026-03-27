@@ -1,0 +1,855 @@
+[
+  {
+    "id": "PROB-SAP-001",
+    "category": "SAP",
+    "title": "SAP GUI startet nicht - Fehlermeldung",
+    "keywords": ["SAP GUI", "Start", "Fehler", "saplogon.exe", "sapgui.exe", "Laufzeitfehler", "Exception", "Crash", "Runtime Error"],
+    "extendedKeywords": ["SAP geht nicht auf", "SAP startet nicht", "SAP öffnet sich nicht", "SAP zeigt Fehler", "SAP macht nichts", "SAP bleibt hängen beim Starten", "SAP Fenster kommt nicht", "SAP bringt Fehlermeldung", "SAP stürzt ab beim Starten", "SAP kaputt", "kann SAP nicht öffnen", "SAP reagiert nicht", "SAP lässt sich nicht starten", "SAP Icon geht nicht", "SAP Programm funktioniert nicht", "SAP lässt sich nicht aufrufen", "beim Start kommt ein Fehler", "SAP macht Probleme", "SAP hängt sich auf", "komme nicht in SAP rein", "SAP geht nicht mehr", "SAP spinnt", "SAP tut nichts", "SAP friert ein", "SAP abgestürzt"],
+    "typos": ["SAO", "SAB", "Sap Gui", "sap giu", "sapgui", "SAP GIU", "sap gui"],
+    "symptoms": ["SAP GUI zeigt Fehlermeldung beim Start", "Fenster öffnet sich kurz und schließt wieder", "Runtime Error beim Starten", "saplogon.exe reagiert nicht"],
+    "quickCheck": "Welche Fehlermeldung wird beim Starten von SAP GUI angezeigt?",
+    "solutions": [
+      "SAP GUI komplett schließen (auch im Task-Manager prüfen ob saplogon.exe noch läuft)",
+      "SAP GUI als Administrator starten (Rechtsklick > Als Administrator ausführen)",
+      "SAP GUI Cache leeren über den Remote-Befehl",
+      "Windows neu starten und erneut versuchen",
+      "SAP GUI Reparaturinstallation durchführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache leeren", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_procs_killname", "label": "SAP Prozess beenden", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["saplogon crash", "sap runtime error", "sap gui crash"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde SAP GUI kürzlich aktualisiert?",
+        "options": ["Ja", "Nein", "Weiß nicht"],
+        "narrows": "Ob das Problem durch ein Update verursacht wurde"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-002", "PROB-SAP-003"]
+  },
+  {
+    "id": "PROB-SAP-002",
+    "category": "SAP",
+    "title": "SAP GUI startet nicht nach Update",
+    "keywords": ["SAP GUI", "Update", "Patch", "Version", "Upgrade", "Installation", "sapgui.exe", "Kompatibilität"],
+    "extendedKeywords": ["SAP geht nach Update nicht mehr", "SAP funktioniert seit Update nicht", "nach SAP Update Probleme", "SAP aktualisiert jetzt kaputt", "SAP wurde aktualisiert geht nicht", "nach dem Update startet SAP nicht", "SAP Update hat alles kaputt gemacht", "seit gestern geht SAP nicht", "nach der Aktualisierung funktioniert SAP nicht", "SAP Update Fehler", "SAP neu installiert geht nicht", "SAP Patch Probleme", "nach Windows Update SAP kaputt", "SAP Version falsch", "SAP Update fehlgeschlagen", "SAP funktioniert nicht mehr nach Neuinstallation", "neues SAP geht nicht", "SAP Update lief schief", "SAP Upgrade Probleme", "nach Update Fehlermeldung"],
+    "typos": ["Updade", "Uppdate", "Updat", "SAP Gui update"],
+    "symptoms": ["SAP GUI startet nach Patch/Update nicht mehr", "Fehlermeldung nach SAP GUI Update", "Inkompatibilitätsmeldung nach Update", "DLL-Fehler nach Update"],
+    "quickCheck": "Wann wurde das SAP GUI Update durchgeführt und welche Version ist installiert?",
+    "solutions": [
+      "SAP GUI Version prüfen und mit der unterstützten Version abgleichen",
+      "SAP GUI Cache leeren",
+      "Verbindungseinstellungen in der saplogon.ini prüfen",
+      "SAP GUI deinstallieren und die korrekte Version neu installieren",
+      "Windows neu starten nach der Installation"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache leeren", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["sap gui update problem", "sap patch fehler"],
+    "followUpQuestions": [
+      {
+        "question": "Welche SAP GUI Version ist aktuell installiert?",
+        "options": ["770", "780", "800", "Weiß nicht"],
+        "narrows": "Kompatibilitätsprobleme mit bestimmten Versionen"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-001", "PROB-SAP-003"]
+  },
+  {
+    "id": "PROB-SAP-003",
+    "category": "SAP",
+    "title": "SAP GUI fehlt / nicht installiert",
+    "keywords": ["SAP GUI", "Installation", "fehlt", "nicht installiert", "Software", "Setup", "Deployment"],
+    "extendedKeywords": ["SAP ist nicht installiert", "SAP fehlt auf meinem PC", "wo ist SAP", "SAP finde ich nicht", "SAP Icon weg", "SAP nicht da", "brauche SAP auf meinem Rechner", "SAP wurde nicht installiert", "SAP muss installiert werden", "kein SAP auf dem PC", "SAP Verknüpfung fehlt", "SAP Symbol weg", "SAP nicht im Startmenü", "wo finde ich SAP", "SAP ist verschwunden", "SAP auf neuem Rechner", "neuer PC kein SAP", "SAP Desktop Icon fehlt", "brauche SAP Installation", "SAP einrichten"],
+    "typos": ["SAP Giu", "SAP fehld", "SAP isntallation"],
+    "symptoms": ["SAP GUI Icon nicht auf Desktop", "SAP nicht im Startmenü", "saplogon.exe nicht gefunden", "Kein SAP auf dem Rechner"],
+    "quickCheck": "Handelt es sich um einen neuen PC oder ist SAP plötzlich verschwunden?",
+    "solutions": [
+      "Im Startmenü nach 'SAP' oder 'SAP Logon' suchen",
+      "Prüfen ob SAP GUI unter C:\\Program Files (x86)\\SAP\\FrontEnd installiert ist",
+      "SAP GUI Installation über Software Center oder SCCM anstoßen",
+      "IT-Ticket für SAP GUI Installation erstellen",
+      "SAP GUI Verknüpfung auf dem Desktop neu erstellen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap installieren", "sap fehlt", "sap verknüpfung weg"],
+    "followUpQuestions": [
+      {
+        "question": "Ist dies ein neuer Rechner oder war SAP vorher vorhanden?",
+        "options": ["Neuer Rechner", "War vorher da", "Weiß nicht"],
+        "narrows": "Ob SAP neu installiert oder wiederhergestellt werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-001"]
+  },
+  {
+    "id": "PROB-SAP-004",
+    "category": "SAP",
+    "title": "SAP Server Timeout",
+    "keywords": ["SAP", "Timeout", "Verbindung", "Server", "Netzwerk", "Connection", "RFC", "Abbruch", "Zeitüberschreitung"],
+    "extendedKeywords": ["SAP Verbindung bricht ab", "SAP Timeout", "SAP Zeitüberschreitung", "SAP trennt sich", "SAP Verbindung verloren", "SAP hängt bei der Verbindung", "SAP braucht ewig zum Verbinden", "SAP Verbindung dauert zu lange", "SAP macht Timeout", "SAP verbindet sich nicht", "SAP trennt die Verbindung", "SAP verliert Verbindung", "SAP bricht Verbindung ab", "SAP Netzwerk Problem", "SAP Verbindungsabbruch", "SAP reagiert nicht mehr", "SAP Verbindung weg", "SAP wird getrennt", "SAP keine Verbindung möglich", "SAP Netzwerkfehler"],
+    "typos": ["Timout", "Tineout", "Verbindun", "Timeout SAP"],
+    "symptoms": ["Verbindungstimeout beim SAP Login", "RFC Verbindung fehlgeschlagen", "Netzwerk-Timeout", "Connection timed out Meldung"],
+    "quickCheck": "Tritt der Timeout bei allen SAP-Systemen auf oder nur bei einem bestimmten?",
+    "solutions": [
+      "Netzwerkverbindung prüfen (WLAN/LAN)",
+      "SAP Server Erreichbarkeit prüfen (Ping)",
+      "SAP Port-Verbindung testen",
+      "VPN-Verbindung prüfen falls im Homeoffice",
+      "SAP GUI Cache leeren und erneut verbinden",
+      "Router/Switch neu starten bei lokalen Netzwerkproblemen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Server anpingen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_net_testport", "label": "SAP Port testen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache leeren", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["sap timeout", "sap verbindung timeout", "rfc timeout"],
+    "followUpQuestions": [
+      {
+        "question": "Sind Sie per VPN verbunden oder im Büro?",
+        "options": ["VPN/Homeoffice", "Im Büro", "Weiß nicht"],
+        "narrows": "Ob das Problem netzwerkbedingt ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-005", "PROB-SAP-006", "PROB-SAP-007"]
+  },
+  {
+    "id": "PROB-SAP-005",
+    "category": "SAP",
+    "title": "SAP Login fehlgeschlagen",
+    "keywords": ["SAP", "Login", "Anmeldung", "Passwort", "Benutzer", "Authentifizierung", "Anmeldedaten", "Kennwort"],
+    "extendedKeywords": ["SAP Login geht nicht", "kann mich nicht bei SAP anmelden", "SAP Passwort falsch", "SAP nimmt mein Passwort nicht", "SAP Anmeldung funktioniert nicht", "SAP sagt falsches Passwort", "SAP Login Fehler", "komme nicht in SAP rein", "SAP meldet falsches Kennwort", "SAP Benutzer gesperrt", "SAP Zugang verweigert", "kann mich nicht einloggen SAP", "SAP Anmeldung fehlgeschlagen", "SAP Login abgelehnt", "SAP akzeptiert mein Passwort nicht", "SAP meldet ungültige Anmeldedaten", "SAP Benutzername falsch", "SAP Login klappt nicht", "SAP Mandant falsch", "SAP Anmeldung nicht möglich"],
+    "typos": ["Loggin", "Logon", "Passwort falch", "anmeldun", "Paswort"],
+    "symptoms": ["Fehlermeldung bei SAP Anmeldung", "Benutzer gesperrt", "Passwort abgelaufen", "Mandant nicht verfügbar"],
+    "quickCheck": "Welche Fehlermeldung erscheint beim SAP Login?",
+    "solutions": [
+      "Caps-Lock prüfen und Passwort erneut eingeben",
+      "Korrekten SAP Mandanten auswählen",
+      "SAP Passwort zurücksetzen lassen (über Basis-Admin)",
+      "Prüfen ob der SAP Benutzer gesperrt ist",
+      "Sprache bei der Anmeldung auf DE/EN setzen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap login fail", "sap anmeldung fehlgeschlagen", "sap benutzer gesperrt"],
+    "followUpQuestions": [
+      {
+        "question": "Wird eine bestimmte Fehlermeldung angezeigt?",
+        "options": ["Passwort falsch", "Benutzer gesperrt", "Mandant nicht verfügbar", "Andere Meldung"],
+        "narrows": "Die genaue Ursache des Login-Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-004", "PROB-SAP-007"]
+  },
+  {
+    "id": "PROB-SAP-006",
+    "category": "SAP",
+    "title": "SAP Server nicht erreichbar",
+    "keywords": ["SAP", "Server", "nicht erreichbar", "Verbindung", "Netzwerk", "Hostname", "IP", "DNS", "Firewall"],
+    "extendedKeywords": ["SAP Server nicht erreichbar", "SAP findet den Server nicht", "SAP Verbindung zum Server geht nicht", "SAP kann Server nicht finden", "SAP Server down", "SAP Server offline", "SAP Systemfehler", "SAP Verbindung abgelehnt", "kein Zugriff auf SAP Server", "SAP Server antwortet nicht", "SAP System nicht verfügbar", "SAP Partner nicht erreichbar", "SAP Verbindungsaufbau fehlgeschlagen", "SAP Server weg", "SAP System ausgefallen", "SAP geht nicht Server Problem", "SAP Netzwerk Server", "SAP Hostnamen nicht auflösbar", "SAP Connection refused", "SAP kein Server verfügbar"],
+    "typos": ["Sever", "Sevrer", "erreichba", "nicht errreichbar"],
+    "symptoms": ["Partner nicht erreichbar Meldung", "Hostname kann nicht aufgelöst werden", "Connection refused", "Kein SAP Server antwortet"],
+    "quickCheck": "Betrifft es alle Benutzer oder nur Sie?",
+    "solutions": [
+      "Netzwerkverbindung prüfen",
+      "SAP Server per Ping prüfen",
+      "SAP Ports prüfen (3200, 3300 etc.)",
+      "DNS-Auflösung prüfen",
+      "Firewall-Einstellungen prüfen",
+      "SAP Basis-Team kontaktieren bei Server-Ausfall"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Server anpingen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_net_testport", "label": "SAP Port testen", "priority": 2, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["sap server down", "sap nicht erreichbar", "sap partner nicht erreichbar"],
+    "followUpQuestions": [
+      {
+        "question": "Welches SAP-System ist betroffen (Produktion, Test, Entwicklung)?",
+        "options": ["Produktion", "Test/QAS", "Entwicklung/DEV", "Alle"],
+        "narrows": "Ob es ein systemweites Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-004", "PROB-SAP-005"]
+  },
+  {
+    "id": "PROB-SAP-007",
+    "category": "SAP",
+    "title": "SAP SSO funktioniert nicht",
+    "keywords": ["SAP", "SSO", "Single Sign-On", "SNC", "Kerberos", "Zertifikat", "automatische Anmeldung", "SAP Logon Ticket"],
+    "extendedKeywords": ["SAP fragt nach Passwort obwohl SSO", "SAP automatische Anmeldung geht nicht", "SAP Single Sign-On funktioniert nicht", "muss Passwort bei SAP eingeben", "SAP SSO kaputt", "SAP erkennt mich nicht automatisch", "SAP fragt immer nach Passwort", "SAP SSO Fehler", "SAP Anmeldung nicht automatisch", "SAP SSO Problem", "SAP Login trotz SSO", "SSO funktioniert nicht mehr bei SAP", "SAP will immer Passwort", "muss mich immer bei SAP anmelden", "SAP Kerberos funktioniert nicht", "SAP SNC Fehler", "SAP automatischer Login geht nicht", "SAP erkennt Windows-Anmeldung nicht", "SAP SSO nach Neustart weg", "SAP Single Sign-On Fehler"],
+    "typos": ["SSo", "Sinlge Sign On", "Single Signon", "SSO funkt. nicht"],
+    "symptoms": ["SAP fragt trotz SSO nach Passwort", "SNC-Fehler bei SAP Anmeldung", "SSO Token ungültig", "Kerberos-Ticket nicht erkannt"],
+    "quickCheck": "Hat SSO vorher funktioniert oder war es nie eingerichtet?",
+    "solutions": [
+      "Windows abmelden und neu anmelden (Kerberos-Ticket erneuern)",
+      "SAP SSO Client prüfen und ggf. neu starten",
+      "Kerberos-Tickets löschen und neu anfordern",
+      "SNC-Konfiguration in SAP GUI prüfen",
+      "SAP SSO Zertifikat prüfen",
+      "SAP Basis-Team kontaktieren bei serverseitigem SSO-Problem"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache leeren", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["sap sso fehler", "sap kerberos", "sap snc fehler"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde kürzlich das Windows-Passwort geändert?",
+        "options": ["Ja", "Nein"],
+        "narrows": "Ob Kerberos-Ticket erneuert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-005"]
+  },
+  {
+    "id": "PROB-SAP-008",
+    "category": "SAP",
+    "title": "Maximale SAP Sessions erreicht",
+    "keywords": ["SAP", "Session", "Maximum", "Modi", "Session-Limit", "Modus", "Fenster", "Sitzungen"],
+    "extendedKeywords": ["SAP zu viele Sessions", "SAP kann kein neues Fenster öffnen", "SAP maximale Anzahl erreicht", "SAP kein neuer Modus", "SAP zu viele Fenster offen", "SAP Session-Limit", "SAP Modus Limit erreicht", "kann kein weiteres SAP Fenster öffnen", "SAP sagt Maximum erreicht", "SAP 6 Modi offen", "SAP alle Sessions belegt", "SAP Fenster geht nicht auf", "SAP neuer Modus nicht möglich", "SAP zu viele Verbindungen", "SAP kann keinen neuen Modus erzeugen", "SAP Fenster voll", "SAP Maximum Modi", "SAP maximale Sessions", "SAP öffnet kein neues Fenster", "SAP Session-Beschränkung"],
+    "typos": ["Sesion", "Sesions", "maximale Sesions", "Sitzung"],
+    "symptoms": ["Meldung: Maximale Anzahl Sessions erreicht", "Kein neuer Modus möglich", "6 SAP Fenster bereits offen"],
+    "quickCheck": "Wie viele SAP-Fenster haben Sie aktuell geöffnet?",
+    "solutions": [
+      "Nicht benötigte SAP-Fenster/Modi schließen",
+      "SAP Transaktionen in bestehenden Fenstern aufrufen statt neue zu öffnen",
+      "Alle SAP-Fenster schließen und neu starten",
+      "Im Task-Manager prüfen ob alte SAP Sessions noch laufen",
+      "SAP Basis-Admin kontaktieren für Session-Limit-Erhöhung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_procs_killname", "label": "SAP Prozesse beenden", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["sap session limit", "sap zu viele fenster", "sap modi limit"],
+    "followUpQuestions": [
+      {
+        "question": "Sind alle angezeigten SAP-Fenster tatsächlich von Ihnen oder könnten verwaiste Sessions existieren?",
+        "options": ["Alle meine", "Vielleicht alte Sessions", "Weiß nicht"],
+        "narrows": "Ob verwaiste Sessions bereinigt werden müssen"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-009", "PROB-SAP-010"]
+  },
+  {
+    "id": "PROB-SAP-009",
+    "category": "SAP",
+    "title": "SAP Session hängt",
+    "keywords": ["SAP", "Session", "hängt", "eingefroren", "reagiert nicht", "Sanduhr", "blockiert", "frozen", "hung"],
+    "extendedKeywords": ["SAP hängt", "SAP reagiert nicht mehr", "SAP eingefroren", "SAP Sanduhr dreht sich", "SAP blockiert", "SAP friert ein", "SAP macht nichts mehr", "SAP ist eingefroren", "SAP antwortet nicht", "SAP steht", "SAP dreht sich", "SAP hängt in Transaktion", "SAP lässt sich nicht bedienen", "SAP ist hängen geblieben", "SAP Fenster reagiert nicht", "SAP Bildschirm eingefroren", "SAP steckt fest", "SAP dreht Sanduhr", "SAP Transaktion hängt sich auf", "SAP wird nicht fertig"],
+    "typos": ["hängt", "haengt", "hengt", "hänk", "eingefrohren"],
+    "symptoms": ["SAP Fenster reagiert nicht auf Eingaben", "Sanduhr dreht dauerhaft", "Transaktion wird nicht fertig", "Weißes SAP Fenster"],
+    "quickCheck": "Seit wann hängt die SAP Session und welche Transaktion wurde ausgeführt?",
+    "solutions": [
+      "Einige Minuten warten - manche Transaktionen brauchen länger",
+      "Anderen SAP Modus öffnen und dort weiterarbeiten",
+      "Hängende SAP Session über Task-Manager beenden",
+      "SAP komplett neu starten",
+      "Bei wiederkehrenden Problemen SAP Cache leeren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_procs_killname", "label": "SAP Prozess beenden", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Auslastung prüfen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache leeren", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["sap frozen", "sap eingefroren", "sap reagiert nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Hängt nur eine SAP Session oder alle?",
+        "options": ["Nur eine", "Alle", "Nur bestimmte Transaktion"],
+        "narrows": "Ob es ein lokales oder serverseitiges Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-008", "PROB-SAP-015"]
+  },
+  {
+    "id": "PROB-SAP-010",
+    "category": "SAP",
+    "title": "SAP Session abgelaufen",
+    "keywords": ["SAP", "Session", "abgelaufen", "Timeout", "automatisch abgemeldet", "Session expired", "Inaktivität"],
+    "extendedKeywords": ["SAP hat mich abgemeldet", "SAP Session weg", "SAP automatisch abgemeldet", "SAP Sitzung abgelaufen", "SAP hat mich rausgeworfen", "SAP Verbindung weg", "SAP wurde geschlossen", "SAP Sitzung beendet", "SAP muss mich immer neu anmelden", "SAP meldet mich ab", "SAP Login weg", "SAP Session verloren", "SAP beendet sich selbst", "SAP Inaktivität abgemeldet", "SAP wirft mich raus", "SAP Sitzung unterbrochen", "SAP hat sich geschlossen", "SAP Timeout Abmeldung", "SAP Arbeit verloren durch Abmeldung", "war zu lange weg SAP hat abgemeldet"],
+    "typos": ["abgelauffen", "sesion abgelaufen", "abgemelded"],
+    "symptoms": ["SAP meldet automatisch ab nach Inaktivität", "Session expired Meldung", "Daten gehen bei automatischer Abmeldung verloren"],
+    "quickCheck": "Werden Sie nach einer bestimmten Inaktivitätszeit abgemeldet?",
+    "solutions": [
+      "Regelmäßig in SAP arbeiten um Timeout zu vermeiden",
+      "Arbeit regelmäßig speichern/sichern",
+      "SAP Basis-Admin bitten, Session-Timeout zu verlängern",
+      "Erneut bei SAP anmelden",
+      "Bei häufigen Problemen: Parameter rdisp/gui_auto_logout prüfen lassen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap session timeout", "sap abgemeldet", "sap session expired"],
+    "followUpQuestions": [
+      {
+        "question": "Nach wie vielen Minuten werden Sie abgemeldet?",
+        "options": ["Nach 5-10 Minuten", "Nach 30 Minuten", "Nach 1 Stunde", "Unterschiedlich"],
+        "narrows": "Ob der Timeout-Wert angepasst werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-008", "PROB-SAP-009"]
+  },
+  {
+    "id": "PROB-SAP-011",
+    "category": "SAP",
+    "title": "SAP Druckausgabe fehlt",
+    "keywords": ["SAP", "Druck", "Drucker", "Spool", "Ausgabe", "Print", "Druckauftrag", "LOCL", "Druckausgabe"],
+    "extendedKeywords": ["SAP druckt nicht", "SAP Druckausgabe kommt nicht", "SAP Ausdruck fehlt", "SAP hat nicht gedruckt", "aus SAP gedruckt aber nichts kommt", "SAP Drucker funktioniert nicht", "SAP Druckauftrag verschwunden", "SAP Druck kommt nicht raus", "SAP druckt nichts", "habe in SAP gedruckt aber kein Ausdruck", "SAP Ausdruck leer", "SAP Druckvorschau geht aber Druck nicht", "SAP Drucker nicht gefunden", "SAP sendet nicht an Drucker", "SAP Druckfehler", "wo ist mein SAP Ausdruck", "SAP Druck geht nicht", "SAP druckt nicht auf richtigen Drucker", "SAP Druckjob hängt", "SAP Spool leer"],
+    "typos": ["Drukausgabe", "Druckausgab", "gedruckt", "Drukker"],
+    "symptoms": ["Druckauftrag wird in SAP erstellt aber nicht gedruckt", "Kein Ausdruck am Drucker", "Druckauftrag im Spool aber kein Output"],
+    "quickCheck": "Wird der Druckauftrag im SAP Spool (Transaktion SP01) angezeigt?",
+    "solutions": [
+      "Druckauftrag im Spool prüfen (Transaktion SP01/SP02)",
+      "Ausgabegerät/Drucker in SAP prüfen",
+      "Lokalen Drucker auf Funktionsfähigkeit testen",
+      "SAP Drucker LOCL für lokalen Druck verwenden",
+      "Druckauftrag erneut starten aus dem Spool"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap druckt nicht", "sap ausdruck fehlt", "sap spool druck"],
+    "followUpQuestions": [
+      {
+        "question": "Welchen Drucker haben Sie in SAP ausgewählt?",
+        "options": ["LOCL (lokal)", "Netzwerkdrucker", "Weiß nicht", "Kein Drucker ausgewählt"],
+        "narrows": "Ob der richtige Drucker konfiguriert ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-012", "PROB-SAP-013"]
+  },
+  {
+    "id": "PROB-SAP-012",
+    "category": "SAP",
+    "title": "SAP Spool voll",
+    "keywords": ["SAP", "Spool", "voll", "SP01", "SP02", "Druckaufträge", "Spool-Überlauf", "Spool bereinigen"],
+    "extendedKeywords": ["SAP Spool voll", "SAP zu viele Druckaufträge", "SAP Spool bereinigen", "SAP Druckaufträge löschen", "SAP Spool aufräumen", "SAP Spool Limit erreicht", "SAP kann nicht drucken Spool voll", "SAP Spool überlaufen", "SAP alte Druckaufträge löschen", "SAP Spool Fehlermeldung", "SAP Spool voll Meldung", "SAP zu viele Spool-Einträge", "SAP Druckwarteschlange voll", "SAP Spool-Aufträge löschen", "SAP Spool nicht mehr verfügbar", "SAP Druckerspool bereinigen", "SAP Warteschlange Druck voll", "alte SAP Druckjobs löschen", "SAP Spool Speicher voll", "SAP Druck Warteschlange bereinigen"],
+    "typos": ["Spoll", "Sppol", "Spul", "Spooll"],
+    "symptoms": ["Spool-Überlauf Meldung", "Keine neuen Druckaufträge möglich", "SP01 zeigt hunderte Einträge"],
+    "quickCheck": "Wie viele Einträge zeigt Transaktion SP01 an?",
+    "solutions": [
+      "Transaktion SP01 öffnen und alte Druckaufträge löschen",
+      "Druckaufträge älter als 7 Tage löschen",
+      "Alle eigenen fehlerhaften Spool-Aufträge entfernen",
+      "SAP Basis bitten den Spool zu bereinigen bei systemweitem Problem",
+      "Automatische Spool-Bereinigung einrichten lassen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap spool voll", "sap spool bereinigen", "sp01 zu viele einträge"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft das Problem nur Ihre Druckaufträge oder ist es ein systemweites Problem?",
+        "options": ["Nur meine", "Systemweit", "Weiß nicht"],
+        "narrows": "Ob individuelle oder systemweite Bereinigung nötig ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-011", "PROB-SAP-013"]
+  },
+  {
+    "id": "PROB-SAP-013",
+    "category": "SAP",
+    "title": "SAP druckt auf falschen Drucker",
+    "keywords": ["SAP", "Drucker", "falsch", "Ausgabegerät", "LOCL", "Druckerzuordnung", "Standarddrucker"],
+    "extendedKeywords": ["SAP druckt auf falschen Drucker", "SAP verwendet falschen Drucker", "SAP Drucker ändern", "SAP Standarddrucker falsch", "SAP druckt woanders", "SAP anderer Drucker gewünscht", "SAP Drucker umstellen", "SAP Ausdruck auf falschem Drucker", "SAP Drucker einstellen", "SAP Drucker zuweisen", "SAP Drucker wechseln", "SAP verwendet immer den gleichen Drucker", "SAP Drucker nicht der richtige", "SAP Druck geht an anderen Drucker", "wie ändere ich den SAP Drucker", "SAP Standarddrucker ändern", "SAP Druckereinstellungen", "SAP druckt immer auf alten Drucker", "SAP Ausgabegerät falsch", "SAP Drucker nicht richtig zugeordnet"],
+    "typos": ["Drukker", "falscher Drukcer", "Standarddruker"],
+    "symptoms": ["Ausdruck kommt auf anderem Drucker", "Falsches Ausgabegerät in SAP hinterlegt", "LOCL druckt auf falschem Windows-Drucker"],
+    "quickCheck": "Welcher Drucker ist in SAP als Ausgabegerät hinterlegt?",
+    "solutions": [
+      "Ausgabegerät in SAP ändern (beim Drucken auf Eigenschaften klicken)",
+      "Standarddrucker in Windows ändern (LOCL verwendet den Windows-Standarddrucker)",
+      "In SAP Benutzereinstellungen den Standarddrucker hinterlegen (SU3)",
+      "Druckerzuordnung mit SAP Basis-Admin klären",
+      "Beim Drucken immer das richtige Ausgabegerät auswählen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap falscher drucker", "sap drucker wechseln", "sap ausgabegerät"],
+    "followUpQuestions": [
+      {
+        "question": "Verwenden Sie LOCL (lokaler Drucker) oder einen SAP-Netzwerkdrucker?",
+        "options": ["LOCL", "Netzwerkdrucker", "Weiß nicht"],
+        "narrows": "Ob der Windows-Standarddrucker oder SAP-Druckerzuordnung geändert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-011", "PROB-SAP-012"]
+  },
+  {
+    "id": "PROB-SAP-014",
+    "category": "SAP",
+    "title": "SAP allgemein langsam",
+    "keywords": ["SAP", "langsam", "Performance", "Geschwindigkeit", "träge", "Ladezeit", "slow", "Latenz"],
+    "extendedKeywords": ["SAP ist langsam", "SAP dauert ewig", "SAP lädt langsam", "SAP braucht lange", "SAP reagiert langsam", "SAP träge", "SAP ist so lahm", "SAP Performance schlecht", "SAP braucht ewig zum Laden", "SAP Bildschirm baut langsam auf", "SAP ist sehr langsam heute", "SAP geht langsam", "SAP lahm", "SAP zäh", "alles dauert in SAP", "SAP braucht Minuten", "SAP langsam geworden", "SAP seit heute langsam", "SAP Geschwindigkeit schlecht", "SAP ruckelt"],
+    "typos": ["langsamm", "langsahm", "langsm", "performace"],
+    "symptoms": ["Transaktionen laden langsam", "Bildschirmaufbau verzögert", "Listen laden minutenlang", "Eingaben werden verzögert verarbeitet"],
+    "quickCheck": "Ist SAP bei allen Transaktionen langsam oder nur bei bestimmten?",
+    "solutions": [
+      "SAP GUI Cache leeren",
+      "Netzwerkverbindung prüfen (Geschwindigkeit, Latenz)",
+      "Andere Programme schließen um Arbeitsspeicher freizugeben",
+      "SAP GUI neu starten",
+      "CPU- und RAM-Auslastung des PCs prüfen",
+      "Bei allgemeiner Langsamkeit: SAP Basis informieren (Server-Problem)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache leeren", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Auslastung prüfen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Latenz prüfen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["sap slow", "sap performance", "sap lahm"],
+    "followUpQuestions": [
+      {
+        "question": "Seit wann ist SAP langsam?",
+        "options": ["Seit heute", "Seit ein paar Tagen", "Schon immer", "Nach einem Update"],
+        "narrows": "Ob es ein temporäres oder dauerhaftes Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-015", "PROB-SAP-016"]
+  },
+  {
+    "id": "PROB-SAP-015",
+    "category": "SAP",
+    "title": "SAP Transaktion hängt",
+    "keywords": ["SAP", "Transaktion", "hängt", "blockiert", "Abbruch", "SE38", "ABAP", "Langläufer", "Dump"],
+    "extendedKeywords": ["SAP Transaktion hängt", "SAP Transaktion wird nicht fertig", "SAP Transaktion dauert ewig", "SAP Transaktion blockiert", "SAP Bericht läuft ewig", "SAP Report hängt", "SAP Abfrage dauert zu lang", "SAP hängt bei Transaktion", "SAP Transaktion reagiert nicht", "SAP langer Lauf", "SAP Transaktion dreht sich", "SAP Auswertung dauert", "SAP Programm hängt", "SAP Job läuft ewig", "SAP Transaktion friert ein", "SAP Verarbeitung hängt", "SAP ABAP Dump", "SAP Transaktion bricht ab", "SAP Report kommt nicht", "bestimmte SAP Transaktion geht nicht"],
+    "typos": ["Transaktion hänkt", "Trasaktion", "Transatkion"],
+    "symptoms": ["Bestimmte Transaktion reagiert nicht", "Sanduhr bei bestimmtem Report", "ABAP Dump nach langem Warten", "Timeout bei Transaktion"],
+    "quickCheck": "Welche Transaktion hängt und welche Selektionskriterien wurden verwendet?",
+    "solutions": [
+      "Selektionskriterien einschränken (Zeitraum, Werk, etc.)",
+      "Transaktion im Hintergrund/als Job ausführen",
+      "SAP Session beenden und neu starten",
+      "SAP Basis informieren bei systemweiten Langläufern",
+      "Alternative Transaktionen für denselben Zweck nutzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_procs_killname", "label": "SAP Prozess beenden", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Auslastung prüfen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["sap transaktion hängt", "sap report hängt", "sap langläufer"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie die Selektion zeitlich oder nach Organisationseinheit eingeschränkt?",
+        "options": ["Ja, eingeschränkt", "Nein, alles selektiert", "Weiß nicht"],
+        "narrows": "Ob die Selektion zu groß ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-009", "PROB-SAP-014"]
+  },
+  {
+    "id": "PROB-SAP-016",
+    "category": "SAP",
+    "title": "SAP hoher RAM-Verbrauch",
+    "keywords": ["SAP", "RAM", "Arbeitsspeicher", "Speicher", "Memory", "saplogon.exe", "Speicherverbrauch", "Out of Memory"],
+    "extendedKeywords": ["SAP frisst Speicher", "SAP braucht zu viel RAM", "SAP belegt zu viel Arbeitsspeicher", "PC langsam wegen SAP", "SAP Speicherproblem", "SAP verbraucht zu viel Speicher", "SAP Memory Problem", "Rechner voll wegen SAP", "SAP Speicher läuft voll", "SAP out of memory", "SAP Arbeitsspeicher voll", "SAP Memory Fehler", "PC hängt wegen SAP Speicher", "SAP Speicherverbrauch hoch", "SAP RAM zu hoch", "SAP frisst ganzen Speicher", "wegen SAP ist PC langsam", "SAP belegt alles", "SAP Speicherauslastung", "SAP verbraucht RAM"],
+    "typos": ["Arbeitsspeicher", "Speicher", "RAM Ferbrauch"],
+    "symptoms": ["saplogon.exe verbraucht viel RAM", "PC wird langsam durch SAP Speicherverbrauch", "Out of Memory Fehler"],
+    "quickCheck": "Wie viel RAM verbraucht SAP laut Task-Manager?",
+    "solutions": [
+      "Nicht benötigte SAP-Fenster schließen",
+      "SAP komplett neu starten (alle Fenster schließen)",
+      "SAP GUI Cache leeren",
+      "Andere speicherintensive Programme schließen",
+      "PC neu starten um Speicher freizugeben"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "Prozesse mit hohem Verbrauch prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_procs_killname", "label": "SAP Prozess beenden", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache leeren", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["sap speicher", "sap ram", "sap memory leak"],
+    "followUpQuestions": [
+      {
+        "question": "Wie viele SAP-Fenster haben Sie gleichzeitig geöffnet?",
+        "options": ["1-2", "3-4", "5-6", "Mehr als 6"],
+        "narrows": "Ob zu viele Sessions das Problem verursachen"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-014", "PROB-SAP-008"]
+  },
+  {
+    "id": "PROB-SAP-017",
+    "category": "SAP",
+    "title": "SAP Traces löschen",
+    "keywords": ["SAP", "Trace", "Log", "Protokoll", "dev_w", "Traces", "Logdatei", "Debugging"],
+    "extendedKeywords": ["SAP Traces löschen", "SAP Logs aufräumen", "SAP Protokolle bereinigen", "SAP Trace-Dateien löschen", "SAP Debug-Dateien", "SAP Trace-Verzeichnis", "SAP Logdateien zu groß", "SAP Traces nehmen Platz", "SAP lokale Logs", "SAP Protokolle löschen", "SAP Tracing ausschalten", "SAP Debug-Log bereinigen", "SAP Trace deaktivieren", "SAP Logs werden groß", "SAP Trace-Dateien bereinigen", "SAP dev_w Dateien", "SAP Logfiles löschen", "SAP Trace abschalten", "SAP lokale Protokolle", "SAP Debug ausschalten"],
+    "typos": ["Traces löchen", "Trayces", "Protokole"],
+    "symptoms": ["SAP Trace-Verzeichnis belegt viel Speicherplatz", "Festplatte voll durch SAP Traces", "Performance-Probleme durch aktives Tracing"],
+    "quickCheck": "Wurde das SAP Tracing bewusst aktiviert oder läuft es unbeabsichtigt?",
+    "solutions": [
+      "SAP Cache und Traces über Remote-Befehl leeren",
+      "SAP GUI Trace deaktivieren (Extras > Trace > Trace ausschalten)",
+      "Manuell SAP Trace-Verzeichnis bereinigen",
+      "SAP GUI Optionen: Trace-Level auf 0 setzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache und Traces leeren", "priority": 1, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["sap traces", "sap logging", "sap trace dateien"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde Tracing absichtlich aktiviert oder ist es versehentlich an?",
+        "options": ["Absichtlich", "Versehentlich", "Weiß nicht"],
+        "narrows": "Ob Tracing deaktiviert werden sollte"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-018"]
+  },
+  {
+    "id": "PROB-SAP-018",
+    "category": "SAP",
+    "title": "SAP lokale Daten bereinigen",
+    "keywords": ["SAP", "Cache", "lokale Daten", "Temp", "temporär", "Bereinigung", "sapgui", "AppData"],
+    "extendedKeywords": ["SAP Cache leeren", "SAP temporäre Dateien löschen", "SAP lokale Daten löschen", "SAP aufräumen", "SAP Temp-Ordner", "SAP Cache bereinigen", "SAP lokale Dateien", "SAP AppData bereinigen", "SAP Zwischenspeicher leeren", "SAP Cache löschen", "SAP Daten bereinigen", "SAP Profil bereinigen", "SAP lokale Einstellungen löschen", "SAP temporäre Daten entfernen", "SAP bereinigen", "SAP aufräumen lokal", "SAP GUI Cache", "SAP lokaler Speicher", "SAP Temp löschen", "SAP Cache-Dateien"],
+    "typos": ["Cashe", "Chache", "lokale Daten löshen"],
+    "symptoms": ["SAP GUI läuft langsam", "Alte Einstellungen werden verwendet", "Verbindungsprobleme nach Serverumzug"],
+    "quickCheck": "Gibt es ein bestimmtes Problem oder soll präventiv bereinigt werden?",
+    "solutions": [
+      "SAP Cache über Remote-Befehl leeren",
+      "SAP GUI komplett schließen vor der Bereinigung",
+      "SAP GUI neu starten nach der Bereinigung",
+      "Bei Verbindungsproblemen auch saplogon.ini prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache leeren", "priority": 1, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["sap cache", "sap temp", "sap bereinigen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll nur der Cache geleert oder auch Benutzereinstellungen zurückgesetzt werden?",
+        "options": ["Nur Cache", "Alles zurücksetzen", "Weiß nicht"],
+        "narrows": "Umfang der Bereinigung"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-017"]
+  },
+  {
+    "id": "PROB-SAP-019",
+    "category": "SAP",
+    "title": "SAP keine Berechtigung",
+    "keywords": ["SAP", "Berechtigung", "Authorization", "Zugriff", "gesperrt", "nicht autorisiert", "SU53", "Berechtigungsobjekt"],
+    "extendedKeywords": ["SAP keine Berechtigung", "SAP Zugriff verweigert", "SAP nicht berechtigt", "SAP Transaktion nicht erlaubt", "SAP sagt keine Berechtigung", "darf das nicht in SAP", "SAP Berechtigungsfehler", "SAP Zugriff gesperrt", "SAP meldet fehlende Berechtigung", "kann Transaktion nicht ausführen", "SAP Autorisierungsfehler", "SAP Berechtigung fehlt", "SAP nicht autorisiert", "SAP Zugriffsverweigerung", "SAP kein Zugriff", "SAP Berechtigungsproblem", "SAP Authorization Error", "SAP fehlende Rechte", "SAP Transaktion gesperrt für mich", "SAP darf ich nicht nutzen"],
+    "typos": ["Berechtung", "Berechtigung fellt", "Berehctigung"],
+    "symptoms": ["Fehlermeldung: Keine Berechtigung", "Transaktion nicht ausführbar", "SU53 zeigt fehlende Berechtigungsobjekte"],
+    "quickCheck": "Welche Transaktion oder Aktion ist betroffen?",
+    "solutions": [
+      "Fehlermeldung genau notieren",
+      "Transaktion SU53 ausführen um fehlende Berechtigung zu identifizieren",
+      "Berechtigungsanfrage beim Vorgesetzten stellen",
+      "IT-Ticket für Berechtigungserweiterung erstellen",
+      "Prüfen ob die Berechtigung über eine bestimmte Rolle vergeben werden muss"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap berechtigung", "sap authorization error", "sap su53"],
+    "followUpQuestions": [
+      {
+        "question": "Hatten Sie die Berechtigung vorher oder ist es eine neue Anforderung?",
+        "options": ["Hatte ich vorher", "Neue Anforderung", "Weiß nicht"],
+        "narrows": "Ob Berechtigung entzogen wurde oder neu beantragt werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-020", "PROB-SAP-021"]
+  },
+  {
+    "id": "PROB-SAP-020",
+    "category": "SAP",
+    "title": "SAP Rolle fehlt",
+    "keywords": ["SAP", "Rolle", "Role", "Profil", "Zuordnung", "PFCG", "Benutzerstamm", "Rollenzuordnung"],
+    "extendedKeywords": ["SAP Rolle fehlt", "SAP Rolle nicht zugewiesen", "brauche neue SAP Rolle", "SAP Rolle abgelaufen", "SAP Rollenzuordnung fehlt", "SAP Profil fehlt", "SAP Rolle beantragen", "SAP Rolle nicht vorhanden", "SAP keine Rolle zugewiesen", "SAP Rolle weg", "SAP Benutzerrolle fehlt", "SAP Rolle nicht aktiv", "SAP neue Rolle benötigt", "SAP Rollenerweiterung", "SAP zusätzliche Rolle", "brauche Zugriff auf SAP Modul", "SAP Modul nicht freigeschaltet", "SAP FI/CO/MM Zugriff", "SAP Rolle beantragen wie", "SAP Rollenzuweisung"],
+    "typos": ["Rolee", "Role", "Profiel"],
+    "symptoms": ["Bestimmte Transaktionen nicht verfügbar", "Module nicht sichtbar", "Fehlermeldung bei Transaktion: Keine Rolle"],
+    "quickCheck": "Welche Transaktionen oder welches SAP-Modul benötigen Sie?",
+    "solutions": [
+      "Beim Vorgesetzten die benötigte SAP-Rolle beantragen",
+      "IT-Ticket für Rollenzuordnung erstellen",
+      "SU53 ausführen um fehlende Berechtigungsobjekte zu identifizieren",
+      "SAP Basis-Admin kontaktieren für Rollenzuordnung",
+      "Prüfen ob Rollenzuordnung zeitlich befristet war"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap rolle beantragen", "sap rolle zuweisen", "sap profil fehlt"],
+    "followUpQuestions": [
+      {
+        "question": "Wissen Sie welche SAP-Rolle Sie benötigen?",
+        "options": ["Ja, kenne den Namen", "Nein, weiß nur was ich machen will", "Rolle war vorher da"],
+        "narrows": "Ob die Rolle identifiziert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-019", "PROB-SAP-021"]
+  },
+  {
+    "id": "PROB-SAP-021",
+    "category": "SAP",
+    "title": "SAP Transaktion gesperrt",
+    "keywords": ["SAP", "Transaktion", "gesperrt", "locked", "SM01", "Sperre", "blockiert", "deaktiviert"],
+    "extendedKeywords": ["SAP Transaktion gesperrt", "SAP Transaktion blockiert", "SAP Transaktion nicht verfügbar", "SAP Transaktion deaktiviert", "SAP Transaktion kann nicht aufgerufen werden", "SAP Transaktion wird nicht ausgeführt", "SAP sagt Transaktion ist gesperrt", "SAP Transaktion SM01 gesperrt", "bestimmte SAP Transaktion geht nicht", "SAP Transaktion nicht erlaubt", "SAP Transaktionscode nicht möglich", "SAP TCode funktioniert nicht", "SAP Transaktion abgelehnt", "SAP Transaktion nicht aufrufbar", "SAP meldet Transaktion gesperrt", "SAP bestimmte Funktion gesperrt", "SAP Transaktion eingegeben geht nicht", "SAP TCode gesperrt", "SAP Funktion blockiert", "SAP Transaktion kann nicht gestartet werden"],
+    "typos": ["Transatkion", "gespert", "gesbperrt"],
+    "symptoms": ["Meldung: Transaktion XXX ist gesperrt", "Transaktion kann nicht ausgeführt werden", "TCode zeigt Sperrmeldung"],
+    "quickCheck": "Welche Transaktion ist gesperrt und welche Fehlermeldung erscheint?",
+    "solutions": [
+      "Prüfen ob die Transaktion systemweit gesperrt ist (SM01)",
+      "Alternative Transaktion für dieselbe Funktion nutzen",
+      "SAP Basis-Admin kontaktieren für Transaktionsfreischaltung",
+      "Berechtigungen prüfen (Unterschied zwischen gesperrt und nicht berechtigt)",
+      "IT-Ticket erstellen für Freischaltung der Transaktion"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap tcode gesperrt", "sap transaktion blockiert", "sm01 sperre"],
+    "followUpQuestions": [
+      {
+        "question": "Wird die Meldung 'Transaktion gesperrt' oder 'Keine Berechtigung' angezeigt?",
+        "options": ["Transaktion gesperrt", "Keine Berechtigung", "Andere Meldung"],
+        "narrows": "Ob es eine Transaktionssperre oder ein Berechtigungsproblem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-019", "PROB-SAP-020"]
+  },
+  {
+    "id": "PROB-SAP-022",
+    "category": "SAP",
+    "title": "SAP Schriftgröße ändern",
+    "keywords": ["SAP", "Schrift", "Schriftgröße", "Font", "Anzeige", "Darstellung", "GUI-Optionen", "Skalierung"],
+    "extendedKeywords": ["SAP Schrift zu klein", "SAP Schrift zu groß", "SAP Schriftgröße ändern", "SAP Schrift anpassen", "SAP Text zu klein", "SAP kann nichts lesen", "SAP Darstellung ändern", "SAP Schrift unleserlich", "SAP Font ändern", "SAP Anzeige zu klein", "SAP größere Schrift", "SAP kleinere Schrift", "SAP Schriftart ändern", "SAP Bildschirm zu klein", "SAP skalieren", "SAP Zoom", "SAP vergrößern", "SAP Ansicht ändern", "SAP GUI Schrift einstellen", "SAP Text vergrößern"],
+    "typos": ["Schriftgröse", "Shriftgröße", "Schrieftgröße"],
+    "symptoms": ["Schrift in SAP GUI zu klein oder zu groß", "Text schwer lesbar", "Darstellung nicht optimal"],
+    "quickCheck": "Ist die Schrift generell zu klein/groß oder nur in bestimmten Transaktionen?",
+    "solutions": [
+      "SAP GUI Optionen öffnen (Extras > Optionen > Design > Schriftart)",
+      "Schriftgröße in den SAP GUI Optionen anpassen",
+      "Windows-Skalierung prüfen (kann SAP Darstellung beeinflussen)",
+      "Strg + Mausrad zum Zoomen in ALV-Listen verwenden",
+      "SAP Design/Theme wechseln für bessere Lesbarkeit"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap schrift", "sap font size", "sap zu klein"],
+    "followUpQuestions": [
+      {
+        "question": "Ist das Problem auf allen Bildschirmen oder nur auf einem bestimmten Monitor?",
+        "options": ["Alle Monitore", "Nur ein Monitor", "Nur bestimmte Transaktionen"],
+        "narrows": "Ob es ein Monitor-Skalierungsproblem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-023", "PROB-SAP-024"]
+  },
+  {
+    "id": "PROB-SAP-023",
+    "category": "SAP",
+    "title": "SAP Design/Theme ändern",
+    "keywords": ["SAP", "Design", "Theme", "Farbschema", "Layout", "Visual Design", "Blue Crystal", "Belize", "GUI-Design"],
+    "extendedKeywords": ["SAP Design ändern", "SAP Theme wechseln", "SAP Farben ändern", "SAP sieht anders aus", "SAP Aussehen ändern", "SAP Oberfläche ändern", "SAP anderes Design", "SAP Design zurücksetzen", "SAP Farbschema", "SAP Layout ändern", "SAP Darstellung wechseln", "SAP Theme einstellen", "SAP Design anpassen", "SAP Aussehen komisch", "SAP Design plötzlich anders", "SAP Blue Crystal", "SAP Belize Theme", "SAP Corbu", "SAP altes Design", "SAP neues Design"],
+    "typos": ["Desing", "Desgn", "Thema", "Theme"],
+    "symptoms": ["SAP Design hat sich geändert", "Gewünschtes Design nicht verfügbar", "Darstellung nach Update verändert"],
+    "quickCheck": "Welches Design möchten Sie verwenden oder was hat sich geändert?",
+    "solutions": [
+      "SAP GUI Optionen öffnen (Extras > Optionen > Visual Design)",
+      "Gewünschtes Theme auswählen (Blue Crystal, Belize, etc.)",
+      "SAP GUI neu starten nach Design-Änderung",
+      "Bei fehlenden Themes: SAP GUI Update prüfen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap design", "sap theme", "sap farbschema"],
+    "followUpQuestions": [
+      {
+        "question": "Hat sich das Design von selbst geändert oder möchten Sie es bewusst ändern?",
+        "options": ["Hat sich geändert", "Möchte es ändern"],
+        "narrows": "Ob es ein Problem oder eine Konfigurationsanfrage ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-022", "PROB-SAP-024"]
+  },
+  {
+    "id": "PROB-SAP-024",
+    "category": "SAP",
+    "title": "SAP Favoriten verschwunden",
+    "keywords": ["SAP", "Favoriten", "Lesezeichen", "Bookmarks", "SAP Menü", "Transaktionsfavoriten", "Favoritenliste"],
+    "extendedKeywords": ["SAP Favoriten weg", "SAP Favoriten verschwunden", "SAP Favoriten leer", "SAP Lesezeichen fehlen", "SAP meine Favoriten sind weg", "SAP Favoritenliste leer", "SAP Favoriten gelöscht", "SAP Transaktionsliste weg", "SAP Favoriten wiederherstellen", "SAP Favoritenmenü leer", "SAP meine gespeicherten Transaktionen weg", "SAP Favoriten nach Update weg", "SAP Favoriten nicht mehr da", "SAP Favoritenordner leer", "SAP Schnellzugriff weg", "SAP Transaktionsfavoriten fehlen", "SAP Favoriten importieren", "wo sind meine SAP Favoriten", "SAP Favoritenliste wiederherstellen", "SAP Favoriten exportieren"],
+    "typos": ["Favouriten", "Favoriten", "Favorieten", "Favorriten"],
+    "symptoms": ["Favoritenliste in SAP ist leer", "Alle gespeicherten Transaktionen fehlen", "Favoriten nach Update verschwunden"],
+    "quickCheck": "Sind die Favoriten komplett leer oder nur teilweise verschwunden?",
+    "solutions": [
+      "Prüfen ob die Favoriten nur eingeklappt sind",
+      "SAP GUI Cache leeren und erneut starten",
+      "Favoriten aus gesicherter Datei importieren (falls Backup vorhanden)",
+      "Favoriten manuell neu anlegen",
+      "SAP Basis-Admin kontaktieren bei serverseitiger Speicherung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache leeren", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["sap favoriten weg", "sap bookmarks fehlen", "sap lesezeichen"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie vorher ein Backup der Favoriten erstellt?",
+        "options": ["Ja", "Nein", "Weiß nicht"],
+        "narrows": "Ob Favoriten aus Backup wiederhergestellt werden können"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-022", "PROB-SAP-023"]
+  },
+  {
+    "id": "PROB-SAP-025",
+    "category": "SAP",
+    "title": "SAP Shortcut funktioniert nicht",
+    "keywords": ["SAP", "Shortcut", "Verknüpfung", "Link", "Desktop-Verknüpfung", "sapshcut.exe", "SAP-Verknüpfung"],
+    "extendedKeywords": ["SAP Shortcut geht nicht", "SAP Verknüpfung funktioniert nicht", "SAP Shortcut Fehler", "SAP Desktop-Link geht nicht", "SAP Verknüpfung öffnet nichts", "SAP Shortcut reagiert nicht", "SAP Verknüpfung bringt Fehler", "SAP Shortcut auf dem Desktop", "SAP Verknüpfung kaputt", "SAP Schnellstart geht nicht", "SAP Shortcut macht nichts", "SAP Link funktioniert nicht", "SAP Shortcut startet nicht", "SAP Verknüpfung defekt", "SAP Shortcut Fehlermeldung", "SAP Direktverknüpfung", "SAP Shortcut veraltet", "SAP Verknüpfung nach Update kaputt", "SAP Shortcut zum System", "SAP Verknüpfung erstellen"],
+    "typos": ["Schortcut", "Shortcot", "Verknüfpung"],
+    "symptoms": ["SAP Shortcut zeigt Fehlermeldung", "Verknüpfung startet SAP nicht", "Shortcut öffnet falsches System"],
+    "quickCheck": "Was passiert wenn Sie den SAP Shortcut doppelklicken?",
+    "solutions": [
+      "SAP Shortcut-Eigenschaften prüfen (Rechtsklick > Eigenschaften)",
+      "Verbindungsdaten im Shortcut aktualisieren",
+      "SAP Shortcut neu erstellen",
+      "Prüfen ob sapshcut.exe noch im richtigen Pfad liegt",
+      "SAP GUI muss vor Shortcut-Nutzung laufen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap shortcut fehler", "sap verknüpfung defekt"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde der Shortcut vor kurzem erstellt oder funktionierte er früher?",
+        "options": ["Funktionierte früher", "Neu erstellt", "Weiß nicht"],
+        "narrows": "Ob der Shortcut aktualisiert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-026"]
+  },
+  {
+    "id": "PROB-SAP-026",
+    "category": "SAP",
+    "title": "SAP Shortcut erstellen",
+    "keywords": ["SAP", "Shortcut", "erstellen", "anlegen", "Desktop", "Verknüpfung", "sapshcut.exe", "Transaktion"],
+    "extendedKeywords": ["SAP Shortcut erstellen", "SAP Verknüpfung anlegen", "SAP Desktop-Verknüpfung erstellen", "SAP Shortcut für Transaktion", "SAP Direktverknüpfung erstellen", "SAP Link erstellen", "SAP Schnellzugriff einrichten", "SAP Shortcut auf Desktop", "SAP Verknüpfung auf Desktop legen", "SAP Transaktion als Shortcut", "wie erstelle ich SAP Shortcut", "SAP Verknüpfung machen", "SAP Shortcut konfigurieren", "SAP Shortcut mit Parametern", "SAP Shortcut einrichten", "SAP Verknüpfung mit Transaktion", "SAP Shortcut automatisch", "SAP Shortcut mit Mandant", "SAP Desktop Shortcut anlegen", "SAP Verknüpfung zu Transaktion"],
+    "typos": ["Shrotcut erstelen", "Verknüfung anlegen"],
+    "symptoms": ["Benutzer möchte SAP Shortcut erstellen", "Schnellzugriff auf bestimmte Transaktion gewünscht"],
+    "quickCheck": "Für welche SAP-Transaktion und welches System soll der Shortcut erstellt werden?",
+    "solutions": [
+      "In SAP: Transaktion aufrufen > Extras > Verknüpfung erstellen",
+      "SAP Shortcut über sapshcut.exe erstellen",
+      "Shortcut-Parameter: System, Mandant, Benutzer, Transaktion angeben",
+      "Desktop-Verknüpfung: Rechtsklick auf Desktop > Neu > Verknüpfung > sapshcut.exe Pfad",
+      "Shortcut testen nach Erstellung"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap shortcut anlegen", "sap verknüpfung erstellen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll der Shortcut direkt in eine bestimmte Transaktion springen?",
+        "options": ["Ja, bestimmte Transaktion", "Nein, nur SAP Login", "Weiß nicht"],
+        "narrows": "Welche Parameter der Shortcut benötigt"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-025"]
+  },
+  {
+    "id": "PROB-SAP-027",
+    "category": "SAP",
+    "title": "SAP Excel-Export funktioniert nicht",
+    "keywords": ["SAP", "Excel", "Export", "Download", "Tabelle", "XXL", "Dateiexport", "Listenexport", "Spreadsheet"],
+    "extendedKeywords": ["SAP Excel Export geht nicht", "SAP nach Excel exportieren", "SAP Daten in Excel", "SAP Excel Export Fehler", "SAP Export funktioniert nicht", "SAP Tabelle exportieren", "SAP Liste in Excel", "aus SAP in Excel kopieren", "SAP Daten herunterladen", "SAP Excel Export hängt", "SAP Export Fehlermeldung", "SAP Daten in Datei speichern", "SAP XXL Export", "SAP Spreadsheet Export", "SAP Daten exportieren nach Excel", "SAP ALV nach Excel", "SAP Report exportieren", "SAP Tabelle herunterladen", "SAP Excel Schnittstelle", "SAP Download nach Excel"],
+    "typos": ["Exel Export", "Excel Expoert", "Exort"],
+    "symptoms": ["Excel öffnet sich nicht bei Export", "Fehlermeldung beim Exportversuch", "Leere Excel-Datei nach Export", "Export-Button ausgegraut"],
+    "quickCheck": "Welche Fehlermeldung erscheint beim Excel-Export?",
+    "solutions": [
+      "Prüfen ob Microsoft Excel installiert ist",
+      "SAP GUI Optionen: Excel-Pfad prüfen",
+      "ALV-Grid: Über Menü > Export > Tabellenkalkulation exportieren",
+      "Alternativer Export: Liste > Speichern > Lokale Datei > Tabellenkalkulation",
+      "SAP GUI Cache leeren und erneut versuchen",
+      "OLE-Registrierung prüfen (Excel muss als COM-Objekt registriert sein)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_sapcache", "label": "SAP Cache leeren", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["sap excel export fehler", "sap daten export", "sap nach excel"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Excel-Version ist installiert?",
+        "options": ["Microsoft 365", "Excel 2019", "Excel 2016", "Kein Excel/LibreOffice"],
+        "narrows": "Ob Kompatibilitätsprobleme vorliegen"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-028"]
+  },
+  {
+    "id": "PROB-SAP-028",
+    "category": "SAP",
+    "title": "SAP ALV-Grid Probleme",
+    "keywords": ["SAP", "ALV", "Grid", "Liste", "Tabelle", "Layout", "Sortierung", "Filter", "Variante"],
+    "extendedKeywords": ["SAP ALV Problem", "SAP Tabelle zeigt nichts", "SAP Liste leer", "SAP ALV Layout weg", "SAP Grid zeigt falsche Spalten", "SAP Sortierung funktioniert nicht", "SAP Filter geht nicht", "SAP ALV Layout wiederherstellen", "SAP Tabelle nicht richtig", "SAP Liste falsche Reihenfolge", "SAP Anzeige stimmt nicht", "SAP ALV Variante laden", "SAP Grid Layout speichern", "SAP Tabelle Spalten fehlen", "SAP ALV formatiert falsch", "SAP Liste nicht sortierbar", "SAP Grid Einstellungen", "SAP ALV-Layout ändern", "SAP Tabelle Darstellung", "SAP ALV zurücksetzen"],
+    "typos": ["ALF Grid", "ALV Gird", "ALV Grit"],
+    "symptoms": ["ALV-Grid zeigt falsche Spalten", "Layout nicht gespeichert", "Sortierung/Filter nicht anwendbar", "ALV-Grid leer trotz Daten"],
+    "quickCheck": "Was genau funktioniert im ALV-Grid nicht?",
+    "solutions": [
+      "ALV-Layout zurücksetzen (Standardlayout laden)",
+      "Eigenes ALV-Layout speichern und laden",
+      "Spalten über Layout-Einstellungen ein-/ausblenden",
+      "Filter und Sortierung über ALV-Toolbar anpassen",
+      "Bei leerer Liste: Selektionskriterien prüfen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap alv grid", "sap layout problem", "sap liste leer"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie ein gespeichertes ALV-Layout ausgewählt oder wird das Standardlayout verwendet?",
+        "options": ["Eigenes Layout", "Standardlayout", "Weiß nicht"],
+        "narrows": "Ob das Layout-Problem durch gespeicherte Einstellungen verursacht wird"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-027"]
+  },
+  {
+    "id": "PROB-SAP-029",
+    "category": "SAP",
+    "title": "SAP Transaktionscodes finden",
+    "keywords": ["SAP", "Transaktion", "TCode", "Transaktionscode", "Suche", "Menü", "Befehl", "Navigation"],
+    "extendedKeywords": ["SAP Transaktion finden", "SAP TCode suchen", "SAP welcher Transaktionscode", "SAP wie finde ich die Transaktion", "SAP Menü finden", "SAP Befehl suchen", "SAP Funktion finden", "SAP wo ist die Transaktion", "SAP Navigation", "SAP TCode Liste", "SAP welche Transaktion für", "SAP Transaktionscode herausfinden", "SAP Menüpfad suchen", "SAP wie komme ich zu", "SAP Funktion suchen", "welchen TCode brauche ich", "SAP Transaktion nachschlagen", "SAP TCode Verzeichnis", "SAP Transaktionssuche", "SAP Menü durchsuchen"],
+    "typos": ["Transaktioncode", "TCod", "Transcaktionscode"],
+    "symptoms": ["Benutzer kennt den Transaktionscode nicht", "Sucht eine bestimmte Funktion in SAP", "Weiß nicht wo eine Funktion im Menü ist"],
+    "quickCheck": "Was möchten Sie in SAP tun? Beschreiben Sie die gewünschte Funktion.",
+    "solutions": [
+      "Im SAP Befehlsfeld /n gefolgt vom Transaktionscode eingeben",
+      "SAP Easy Access Menü durchsuchen",
+      "Transaktion SEARCH_SAP_MENU für Menüsuche verwenden",
+      "Häufige TCodes: SE80 (Entwicklung), MM03 (Material), VA01 (Auftrag), FB50 (Buchen)",
+      "SAP Hilfe (F1) in einer Transaktion zeigt den TCode an",
+      "Im Internet nach 'SAP TCode für [Funktion]' suchen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap tcode finden", "sap transaktion suchen", "welche sap transaktion"],
+    "followUpQuestions": [
+      {
+        "question": "In welchem SAP-Modul arbeiten Sie (FI, CO, MM, SD, HR, etc.)?",
+        "options": ["FI/CO (Finanzen)", "MM (Material)", "SD (Vertrieb)", "HR (Personal)", "Anderes/Weiß nicht"],
+        "narrows": "In welchem Bereich die Transaktion gesucht wird"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-030"]
+  },
+  {
+    "id": "PROB-SAP-030",
+    "category": "SAP",
+    "title": "SAP Hilfe und Dokumentation",
+    "keywords": ["SAP", "Hilfe", "Dokumentation", "F1", "F4", "Anleitung", "Handbuch", "Help", "Tutorial"],
+    "extendedKeywords": ["SAP Hilfe finden", "SAP Anleitung", "SAP wie funktioniert", "SAP Dokumentation", "SAP Tutorial", "SAP Hilfe aufrufen", "SAP F1 Hilfe", "SAP Eingabehilfe", "SAP Feld erklären", "SAP Handbuch", "SAP Schulung", "SAP lernen", "SAP Erklärung", "SAP Bedienungsanleitung", "SAP Einführung", "SAP wie geht das", "SAP Schritt-für-Schritt", "SAP Anleitung für Anfänger", "SAP Hilfetext", "SAP Felderhilfe"],
+    "typos": ["Dokumentazion", "Hilife", "Anlietung"],
+    "symptoms": ["Benutzer braucht Hilfe zur Bedienung von SAP", "Feld oder Funktion unklar", "Allgemeine SAP-Fragen"],
+    "quickCheck": "Zu welcher SAP-Funktion oder Transaktion benötigen Sie Hilfe?",
+    "solutions": [
+      "F1 drücken für Feldhilfe (erklärt das aktuelle Feld)",
+      "F4 drücken für Eingabehilfe (zeigt mögliche Werte)",
+      "SAP Online-Hilfe über Hilfe > SAP-Bibliothek aufrufen",
+      "Interne Dokumentation/Wiki durchsuchen",
+      "SAP Learning Hub oder SAP Help Portal besuchen",
+      "Schulungsunterlagen beim Vorgesetzten oder der Fachabteilung anfragen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["sap hilfe", "sap anleitung", "sap tutorial"],
+    "followUpQuestions": [
+      {
+        "question": "Sind Sie SAP-Anfänger oder haben Sie eine spezifische Frage?",
+        "options": ["Anfänger, brauche Grundlagen", "Spezifische Frage zu einer Funktion", "Brauche Schulung"],
+        "narrows": "Art und Umfang der benötigten Hilfe"
+      }
+    ],
+    "relatedProblems": ["PROB-SAP-029"]
+  }
+]

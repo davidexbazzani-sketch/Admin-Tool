@@ -1,125 +1,141 @@
+// ── Dashboard Storage (Complete Rewrite) ──────────────────────────────────────
 import { api } from '../electronAPI'
-import type { DashboardConfig } from '../types/dashboard'
+import type { DashboardsData, Dashboard, DashboardTile, DashboardTemplate, TileSize } from '../types/dashboard'
 
-const PRIVATE_BASE = (username: string) => `dashboards/private/${username}`
-const SHARED_BASE = 'dashboards/shared'
+function dashPath(username: string): string {
+  return `users/${username}/dashboards.json`
+}
 
-// ── Private dashboard CRUD ────────────────────────────────────────────────────
-export async function listPrivateDashboards(username: string): Promise<DashboardConfig[]> {
-  try {
-    const files = await api().netListDir(PRIVATE_BASE(username))
-    const jsonFiles = files.filter(f => f.endsWith('.json'))
-    const results = await Promise.all(
-      jsonFiles.map(f => api().netReadJson<DashboardConfig>(`${PRIVATE_BASE(username)}/${f}`))
-    )
-    return results.filter((d): d is DashboardConfig => d !== null)
-      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
-  } catch {
-    return []
+export async function loadDashboards(username: string): Promise<DashboardsData> {
+  const data = await api().netReadJson<DashboardsData>(dashPath(username))
+  return data ?? {
+    dashboards: [],
+    settings: { soundEnabled: false, notificationsEnabled: true, blinkEnabled: true },
   }
 }
 
-export async function savePrivateDashboard(username: string, config: DashboardConfig): Promise<boolean> {
-  const path = `${PRIVATE_BASE(username)}/${config.id}.json`
-  // Backup before overwrite
-  const existing = await api().netReadJson(`${path}`).catch(() => null)
-  if (existing) {
-    await api().netWriteJson(`${path}.bak`, existing).catch(() => {})
-  }
-  const updated = { ...config, updatedAt: new Date().toISOString() }
-  return api().netWriteJson(path, updated)
+export async function saveDashboards(username: string, data: DashboardsData): Promise<void> {
+  await api().netWriteJson(dashPath(username), data)
 }
 
-export async function deletePrivateDashboard(username: string, id: string): Promise<boolean> {
-  try {
-    await api().netDeleteFile(`${PRIVATE_BASE(username)}/${id}.json`)
-    await api().netDeleteFile(`${PRIVATE_BASE(username)}/${id}.json.bak`).catch(() => {})
-    return true
-  } catch {
-    return false
-  }
-}
-
-export async function loadPrivateDashboard(username: string, id: string): Promise<DashboardConfig | null> {
-  return api().netReadJson<DashboardConfig>(`${PRIVATE_BASE(username)}/${id}.json`)
-}
-
-// ── Shared dashboard operations ───────────────────────────────────────────────
-export async function listSharedDashboards(): Promise<DashboardConfig[]> {
-  try {
-    const files = await api().netListDir(SHARED_BASE)
-    const jsonFiles = files.filter(f => f.endsWith('.json'))
-    const results = await Promise.all(
-      jsonFiles.map(f => api().netReadJson<DashboardConfig>(`${SHARED_BASE}/${f}`))
-    )
-    return results.filter((d): d is DashboardConfig => d !== null)
-      .sort((a, b) => (b.sharedAt ?? b.updatedAt).localeCompare(a.sharedAt ?? a.updatedAt))
-  } catch {
-    return []
-  }
-}
-
-export async function shareDashboard(username: string, config: DashboardConfig): Promise<boolean> {
-  const shared: DashboardConfig = {
-    ...config,
-    isShared: true,
-    sharedAt: new Date().toISOString(),
-    sharedBy: username,
-  }
-  // Update private copy too
-  await savePrivateDashboard(username, shared)
-  // Write to shared
-  return api().netWriteJson(`${SHARED_BASE}/${config.id}.json`, shared)
-}
-
-export async function unshareDashboard(username: string, config: DashboardConfig): Promise<boolean> {
-  try {
-    await api().netDeleteFile(`${SHARED_BASE}/${config.id}.json`)
-    const unshared = { ...config, isShared: false, sharedAt: undefined }
-    await savePrivateDashboard(username, unshared)
-    return true
-  } catch {
-    return false
-  }
-}
-
-export async function cloneSharedDashboard(
-  username: string, displayName: string, shared: DashboardConfig
-): Promise<DashboardConfig> {
-  const now = new Date().toISOString()
-  const clone: DashboardConfig = {
-    ...shared,
-    id: `dash-${Date.now()}`,
-    name: `${shared.name} (Kopie)`,
-    createdBy: username,
-    createdByDisplay: displayName,
-    createdAt: now,
-    updatedAt: now,
-    isShared: false,
-    sharedAt: undefined,
-    sharedBy: undefined,
-  }
-  await savePrivateDashboard(username, clone)
-  return clone
-}
-
-// ── Factory: new empty dashboard ─────────────────────────────────────────────
-export function createEmptyDashboard(username: string, displayName: string, name: string): DashboardConfig {
-  const now = new Date().toISOString()
+export function createDashboard(name: string): Dashboard {
   return {
-    id: `dash-${Date.now()}`,
+    id: `dash-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     name,
-    description: '',
-    createdBy: username,
-    createdByDisplay: displayName,
-    createdAt: now,
-    updatedAt: now,
-    background: { color: '#0f0f1a' },
-    gridEnabled: true,
-    gridSize: 20,
-    defaultRefreshInterval: 60,
-    canvasWidth: 2400,
-    canvasHeight: 1600,
-    elements: [],
+    createdAt: new Date().toISOString(),
+    tiles: [],
   }
+}
+
+export function createTile(opts: {
+  name: string
+  hostnames: string[]
+  skillId: string
+  skillLabel: string
+  liveEnabled?: boolean
+  liveIntervalSeconds?: number
+  size?: TileSize
+  thresholds?: { green: string; yellow: string | null; red: string }
+  position?: number
+}): DashboardTile {
+  const { DEFAULT_THRESHOLDS } = require('../types/dashboard')
+  return {
+    id: `tile-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    name: opts.name,
+    hostnames: opts.hostnames,
+    skillId: opts.skillId,
+    skillLabel: opts.skillLabel,
+    liveEnabled: opts.liveEnabled ?? true,
+    liveIntervalSeconds: opts.liveIntervalSeconds ?? 30,
+    position: opts.position ?? 0,
+    size: opts.size ?? 'normal',
+    thresholds: opts.thresholds ?? DEFAULT_THRESHOLDS[opts.skillId] ?? DEFAULT_THRESHOLDS.default,
+    lastResults: {},
+    history: [],
+  }
+}
+
+// ── Dashboard Templates ───────────────────────────────────────────────────────
+
+export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
+  {
+    id: 'empty',
+    name: 'Leeres Dashboard',
+    icon: '📋',
+    description: 'Keine Kacheln, selbst aufbauen',
+    tiles: [],
+  },
+  {
+    id: 'server',
+    name: 'Server-Monitoring',
+    icon: '🖥️',
+    description: 'Ping, CPU, RAM, Disk, Uptime für einen Server',
+    tiles: [
+      { name: 'Ping', hostnames: [], skillId: 'rd_net_ping', skillLabel: 'Ping', liveEnabled: true, liveIntervalSeconds: 30, position: 0, size: 'small', thresholds: { green: '< 50ms', yellow: '50-200ms', red: 'Timeout' } },
+      { name: 'CPU', hostnames: [], skillId: 'rd_procs_cpuload', skillLabel: 'CPU-Auslastung', liveEnabled: true, liveIntervalSeconds: 30, position: 1, size: 'normal', thresholds: { green: '< 50%', yellow: '50-85%', red: '> 85%' } },
+      { name: 'RAM', hostnames: [], skillId: 'rd_procs_ramload', skillLabel: 'RAM-Auslastung', liveEnabled: true, liveIntervalSeconds: 30, position: 2, size: 'normal', thresholds: { green: '< 70%', yellow: '70-90%', red: '> 90%' } },
+      { name: 'Disk C:', hostnames: [], skillId: 'rd_procs_diskfree', skillLabel: 'Freier Speicher', liveEnabled: true, liveIntervalSeconds: 60, position: 3, size: 'normal', thresholds: { green: '> 20% frei', yellow: '10-20%', red: '< 10%' } },
+    ],
+  },
+  {
+    id: 'printer',
+    name: 'Drucker-Status',
+    icon: '🖨️',
+    description: 'Spooler-Status für wichtige Drucker',
+    tiles: [
+      { name: 'Spooler', hostnames: [], skillId: 'rd_printer_spooler', skillLabel: 'Spooler neustarten', liveEnabled: true, liveIntervalSeconds: 60, position: 0, size: 'small', thresholds: { green: 'Running', yellow: null, red: 'Stopped' } },
+    ],
+  },
+  {
+    id: 'security',
+    name: 'Sicherheits-Übersicht',
+    icon: '🛡️',
+    description: 'Defender, BitLocker, Updates, Firewall',
+    tiles: [
+      { name: 'Defender', hostnames: [], skillId: 'rd_security_defstatus', skillLabel: 'Defender-Status', liveEnabled: true, liveIntervalSeconds: 300, position: 0, size: 'normal', thresholds: { green: 'Aktiv', yellow: null, red: 'Inaktiv' } },
+      { name: 'BitLocker', hostnames: [], skillId: 'rd_security_bitlocker', skillLabel: 'BitLocker-Status', liveEnabled: true, liveIntervalSeconds: 300, position: 1, size: 'normal', thresholds: { green: 'On', yellow: null, red: 'Off' } },
+    ],
+  },
+]
+
+// ── Threshold evaluation ──────────────────────────────────────────────────────
+
+export function evaluateStatus(value: string, _thresholds: { green: string; yellow: string | null; red: string }): 'ok' | 'warning' | 'error' {
+  const v = value.toLowerCase().trim()
+  // Error patterns
+  if (v.startsWith('err:') || v.includes('timeout') || v.includes('fehler') || v.includes('error') || v.includes('stopped') || v.includes('offline') || v.includes('false') || v.includes('nicht erreichbar') || v.includes('fail')) {
+    return 'error'
+  }
+  // Warning patterns
+  if (v.includes('warning') || v.includes('caution') || v.includes('pending') || v.includes('startpending')) {
+    return 'warning'
+  }
+  // Parse percentage
+  const pctMatch = v.match(/(\d+(?:\.\d+)?)\s*%/)
+  if (pctMatch) {
+    const pct = parseFloat(pctMatch[1])
+    // For disk free: lower is worse
+    if (v.includes('frei') || v.includes('free')) {
+      if (pct < 10) return 'error'
+      if (pct < 20) return 'warning'
+      return 'ok'
+    }
+    // For CPU/RAM: higher is worse
+    if (pct > 85) return 'error'
+    if (pct > 50) return 'warning'
+    return 'ok'
+  }
+  // Parse ms (ping)
+  const msMatch = v.match(/(\d+)\s*ms/)
+  if (msMatch) {
+    const ms = parseInt(msMatch[1])
+    if (ms > 200) return 'error'
+    if (ms > 50) return 'warning'
+    return 'ok'
+  }
+  // Default: success
+  if (v.includes('ok') || v.includes('online') || v.includes('running') || v.includes('true') || v.includes('healthy') || v.includes('active') || v.includes('enabled')) {
+    return 'ok'
+  }
+  return 'ok'
 }

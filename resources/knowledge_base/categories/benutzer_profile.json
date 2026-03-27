@@ -1,0 +1,768 @@
+[
+  {
+    "id": "PROB-USR-001",
+    "category": "Benutzer & Profile",
+    "title": "Lokalen Benutzer anlegen",
+    "keywords": ["Benutzer", "anlegen", "erstellen", "lokales Konto", "Account", "Benutzerkonto", "neuer Benutzer"],
+    "extendedKeywords": ["neuen Benutzer anlegen", "lokales Konto erstellen", "Benutzer hinzufügen", "neues Benutzerkonto", "lokalen Benutzer erstellen", "Windows Benutzer anlegen", "neuen Account erstellen", "Benutzerkonto hinzufügen", "lokales Benutzerkonto anlegen", "Benutzer auf Remote-PC erstellen", "neuen Mitarbeiter anlegen", "Testbenutzer erstellen", "Servicekonto anlegen", "temporären Benutzer erstellen", "Benutzerkonto remote anlegen", "neues lokales Konto", "User erstellen", "wie lege ich einen Benutzer an", "neuen Benutzer auf dem PC", "Benutzerkonto einrichten"],
+    "typos": ["Benutzter", "anlgen", "erstelen", "Benutzkonto", "Beutzer"],
+    "symptoms": ["Ein neuer Benutzer wird auf dem PC benötigt", "Serviceaccount muss erstellt werden"],
+    "quickCheck": "Wie soll der Benutzername lauten und soll es ein Admin- oder Standardkonto sein?",
+    "solutions": [
+      "Benutzer über Admin Tool remote anlegen",
+      "Einstellungen > Konten > Familie und andere Benutzer > Konto hinzufügen",
+      "CMD: net user Benutzername Passwort /add",
+      "PowerShell: New-LocalUser -Name 'Benutzername' -Password (ConvertTo-SecureString 'Passwort' -AsPlainText -Force)",
+      "Bei Bedarf zur Administratorengruppe hinzufügen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_useradd", "label": "Benutzer anlegen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_userprofiles_usergroupadd", "label": "Benutzer zu Gruppe hinzufügen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["create user", "add account", "benutzer anlegen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll der Benutzer Administratorrechte erhalten?",
+        "options": ["Ja, als Administrator", "Nein, Standardbenutzer", "Weiß ich noch nicht"],
+        "narrows": "Ob Admin- oder Standard-Konto"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-002", "PROB-USR-004"]
+  },
+  {
+    "id": "PROB-USR-002",
+    "category": "Benutzer & Profile",
+    "title": "Lokalen Benutzer löschen",
+    "keywords": ["Benutzer", "löschen", "entfernen", "Konto", "Account", "deaktivieren", "User löschen"],
+    "extendedKeywords": ["Benutzer löschen", "Benutzerkonto löschen", "lokalen Benutzer entfernen", "Account löschen", "Benutzer vom PC entfernen", "Konto löschen", "alten Benutzer löschen", "nicht mehr benötigten Benutzer entfernen", "Benutzerkonto deaktivieren", "Benutzer remote löschen", "User entfernen", "Konto entfernen Windows", "Mitarbeiter Konto löschen", "wie lösche ich einen Benutzer", "Benutzerkonto vom PC entfernen", "lokales Konto löschen", "Benutzer und Profil löschen", "Account deaktivieren", "Benutzerkonto sperren", "Benutzer ausscheiden"],
+    "typos": ["löshen", "Benutzter", "entfernne", "Beutzer", "löchen"],
+    "symptoms": ["Benutzer wird nicht mehr benötigt", "Ehemaliger Mitarbeiter soll entfernt werden"],
+    "quickCheck": "Soll nur das Konto oder auch das Profil (Daten) gelöscht werden?",
+    "solutions": [
+      "Benutzer über Admin Tool remote löschen",
+      "Daten vorher sichern falls nötig",
+      "CMD: net user Benutzername /delete",
+      "PowerShell: Remove-LocalUser -Name 'Benutzername'",
+      "Profil separat löschen: Systemeigenschaften > Benutzerprofile",
+      "Alternative: Konto deaktivieren statt löschen: net user Benutzername /active:no"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_userdel", "label": "Benutzer löschen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_userprofiles_profiledel", "label": "Profil löschen", "priority": 3, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["delete user", "remove account", "benutzer löschen"],
+    "followUpQuestions": [
+      {
+        "question": "Sollen auch die Benutzerdaten (Profil, Dokumente, Desktop) gelöscht werden?",
+        "options": ["Ja, alles löschen", "Nein, nur das Konto", "Daten vorher sichern"],
+        "narrows": "Ob Profil auch entfernt werden soll"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-001", "PROB-USR-011"]
+  },
+  {
+    "id": "PROB-USR-003",
+    "category": "Benutzer & Profile",
+    "title": "Passwort eines lokalen Benutzers ändern",
+    "keywords": ["Passwort", "ändern", "zurücksetzen", "Reset", "Kennwort", "Password", "neu setzen"],
+    "extendedKeywords": ["Passwort ändern", "Kennwort zurücksetzen", "Passwort vergessen", "Benutzer Passwort neu setzen", "lokales Passwort ändern", "Password Reset", "Passwort zurücksetzen Windows", "Benutzerkennwort ändern", "Passwort remote ändern", "Passwort eines Benutzers zurücksetzen", "Passwort vergessen was tun", "neues Passwort setzen", "Kennwort neu setzen", "Benutzer kann sich nicht anmelden Passwort", "Passwort für lokales Konto", "wie ändere ich das Passwort", "Passwort abgelaufen", "Passwort erneuern", "Benutzer Passwort remote zurücksetzen", "Windows Passwort ändern"],
+    "typos": ["Passwort", "Passswort", "Passwrot", "Kennwort", "Pasword"],
+    "symptoms": ["Benutzer hat Passwort vergessen", "Passwort ist abgelaufen", "Benutzer kann sich nicht anmelden"],
+    "quickCheck": "Handelt es sich um ein lokales Konto oder ein Domänenkonto?",
+    "solutions": [
+      "Passwort über Admin Tool remote zurücksetzen",
+      "CMD als Admin: net user Benutzername NeuesPasswort",
+      "PowerShell: Set-LocalUser -Name 'Benutzername' -Password (ConvertTo-SecureString 'NeuesPasswort' -AsPlainText -Force)",
+      "Über Computerverwaltung: Lokale Benutzer und Gruppen > Benutzer > Rechtsklick > Kennwort festlegen",
+      "Bei Domänenkonten: Active Directory nutzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_userpwset", "label": "Passwort setzen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["reset password", "change password", "passwort zurücksetzen"],
+    "followUpQuestions": [
+      {
+        "question": "Handelt es sich um ein lokales Konto oder ein Active-Directory-Konto?",
+        "options": ["Lokales Konto", "Active Directory / Domäne", "Weiß ich nicht"],
+        "narrows": "Welches Tool verwendet werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-001", "PROB-USR-022"]
+  },
+  {
+    "id": "PROB-USR-004",
+    "category": "Benutzer & Profile",
+    "title": "Benutzer zu einer Gruppe hinzufügen",
+    "keywords": ["Gruppe", "hinzufügen", "Gruppenmitgliedschaft", "Administratoren", "Benutzergruppe", "Mitglied"],
+    "extendedKeywords": ["Benutzer zur Gruppe hinzufügen", "Benutzer in Administratorengruppe", "Gruppenmitgliedschaft ändern", "Benutzer zu lokalen Admins hinzufügen", "Benutzer in Gruppe aufnehmen", "Gruppe zuweisen", "Admin-Rechte geben", "Benutzer Administratorrechte geben", "Gruppenzugehörigkeit ändern", "Benutzer Remote-Desktop-Gruppe hinzufügen", "Benutzer zu Gruppe remote", "lokale Gruppe Mitglied hinzufügen", "Benutzer Gruppenmitgliedschaft", "wer ist in der Administratorengruppe", "Benutzer zu bestimmter Gruppe", "net localgroup hinzufügen", "Gruppenmitglied hinzufügen", "Benutzer erweiterte Rechte geben", "Benutzer Gruppenzuordnung", "Gruppe Mitglied zuweisen"],
+    "typos": ["Grupp", "hinzufüge", "Administartoren", "Gruppenmitgliedshaft"],
+    "symptoms": ["Benutzer hat nicht die benötigten Rechte", "Benutzer muss Administrator werden", "Zugriff wird verweigert weil Gruppenmitgliedschaft fehlt"],
+    "quickCheck": "Zu welcher Gruppe soll der Benutzer hinzugefügt werden?",
+    "solutions": [
+      "Benutzer über Admin Tool zur Gruppe hinzufügen",
+      "CMD: net localgroup Gruppenname Benutzername /add",
+      "PowerShell: Add-LocalGroupMember -Group 'Administratoren' -Member 'Benutzername'",
+      "Computerverwaltung > Lokale Benutzer und Gruppen > Gruppen > Doppelklick > Hinzufügen",
+      "Benutzer muss sich ab- und wieder anmelden damit Änderung wirkt"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_usergroupadd", "label": "Benutzer zu Gruppe hinzufügen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_sessions_localadmins", "label": "Lokale Admins anzeigen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["add to group", "make admin", "benutzer gruppe hinzufügen"],
+    "followUpQuestions": [
+      {
+        "question": "Zu welcher Gruppe soll der Benutzer hinzugefügt werden?",
+        "options": ["Administratoren", "Remote Desktop-Benutzer", "Andere Gruppe"],
+        "narrows": "Welche Gruppe"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-005", "PROB-USR-022"]
+  },
+  {
+    "id": "PROB-USR-005",
+    "category": "Benutzer & Profile",
+    "title": "Benutzer aus einer Gruppe entfernen",
+    "keywords": ["Gruppe", "entfernen", "Gruppenmitgliedschaft", "Rechte entziehen", "Mitglied entfernen"],
+    "extendedKeywords": ["Benutzer aus Gruppe entfernen", "Admin-Rechte entziehen", "Benutzer aus Administratorengruppe entfernen", "Gruppenmitgliedschaft entfernen", "Benutzer degradieren", "Administratorrechte wegnehmen", "Benutzer Rechte entziehen", "aus lokaler Gruppe entfernen", "Benutzer nicht mehr Admin", "Gruppenmitglied entfernen", "Benutzer Rechte reduzieren", "Admin-Zugehörigkeit entfernen", "Benutzer zum Standardbenutzer machen", "Benutzer Berechtigung entziehen", "Gruppenzugehörigkeit löschen", "Benutzer aus Gruppe löschen", "Mitgliedschaft in Gruppe entfernen", "Rechte herabsetzen", "Benutzer von Admin zu Standard", "lokale Gruppenmitgliedschaft entfernen"],
+    "typos": ["entfernne", "Grupp", "Gruppenmitliedschaft", "Rechte entzihen"],
+    "symptoms": ["Benutzer hat zu viele Rechte", "Adminrechte sollen entzogen werden"],
+    "quickCheck": "Aus welcher Gruppe soll der Benutzer entfernt werden?",
+    "solutions": [
+      "CMD: net localgroup Gruppenname Benutzername /delete",
+      "PowerShell: Remove-LocalGroupMember -Group 'Administratoren' -Member 'Benutzername'",
+      "Computerverwaltung > Lokale Benutzer und Gruppen > Gruppen > Doppelklick > Entfernen",
+      "Sicherstellen dass mindestens ein Admin-Konto verbleibt",
+      "Benutzer muss sich ab- und wieder anmelden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_usergroupadd", "label": "Gruppenmitgliedschaft verwalten", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_sessions_localadmins", "label": "Lokale Admins anzeigen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["remove from group", "revoke admin", "aus gruppe entfernen"],
+    "followUpQuestions": [
+      {
+        "question": "Sollen alle erhöhten Gruppenmitgliedschaften entfernt werden oder nur eine bestimmte?",
+        "options": ["Nur aus Administratoren entfernen", "Aus allen Gruppen außer Benutzer", "Nur aus einer bestimmten Gruppe"],
+        "narrows": "Umfang der Änderung"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-004", "PROB-USR-022"]
+  },
+  {
+    "id": "PROB-USR-006",
+    "category": "Benutzer & Profile",
+    "title": "Temporäres Profil - Benutzer bekommt Temp-Profil",
+    "keywords": ["temporäres Profil", "Temp-Profil", "TEMP", "Profil beschädigt", "Standardprofil", "Registry"],
+    "extendedKeywords": ["temporäres Profil", "Benutzer bekommt Temp-Profil", "jedes Mal temporäres Profil", "Profil wird als temporär geladen", "Einstellungen werden nicht gespeichert", "Desktop leer nach Anmeldung", "Meldung temporäres Profil", "Profil wird nicht richtig geladen", "Benutzer hat temporäres Profil", "TEMP-Profil nach Anmeldung", "Profil wird immer zurückgesetzt", "Benutzer kann nicht auf eigene Dateien zugreifen", "temporäres Konto", "Profil temporär zugewiesen", "temporäres Windows-Profil", "jedes Mal leerer Desktop", "Einstellungen gehen bei Neustart verloren", "Benutzer-Profil temporär", "temporäres Profil reparieren", "Temp-Profil Problem"],
+    "typos": ["temporäers", "Temp-Profiel", "Profiel", "temopräres"],
+    "symptoms": ["Meldung 'Sie wurden mit einem temporären Profil angemeldet'", "Desktop ist leer", "Einstellungen gehen nach Abmeldung verloren"],
+    "quickCheck": "Erscheint beim Anmelden die Meldung über ein temporäres Profil?",
+    "solutions": [
+      "Profil-Status über Admin Tool remote prüfen",
+      "Registry-Einträge bereinigen: HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList",
+      "Doppelten Profilordner (.bak) in der Registry identifizieren",
+      ".bak-Eintrag in der Registry umbenennen und .bak vom funktionierenden entfernen",
+      "Neues Profil erstellen und Daten migrieren falls nötig",
+      "PC neu starten und erneut anmelden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_tempprofile", "label": "Temp-Profil reparieren", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["temp profile", "temporary profile", "temporäres profil"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt das Problem bei jedem Anmelden auf oder nur gelegentlich?",
+        "options": ["Bei jeder Anmeldung", "Nur manchmal", "Seit einem bestimmten Zeitpunkt"],
+        "narrows": "Ob permanentes oder sporadisches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-007", "PROB-USR-008"]
+  },
+  {
+    "id": "PROB-USR-007",
+    "category": "Benutzer & Profile",
+    "title": "Benutzerprofil defekt - kann nicht geladen werden",
+    "keywords": ["Profil", "defekt", "beschädigt", "laden", "corrupt", "kaputt", "Fehler"],
+    "extendedKeywords": ["Profil defekt", "Profil kann nicht geladen werden", "Profil beschädigt", "Benutzer kann sich nicht anmelden", "Profil kaputt", "Windows-Profil Fehler", "Profilladung fehlgeschlagen", "Profil wird nicht geladen", "Profil corrupt", "Anmeldung schlägt fehl wegen Profil", "Profil zurücksetzen", "Profil reparieren", "Benutzerprofil fehlerhaft", "Profil kann nicht erstellt werden", "Profilfehler beim Anmelden", "defektes Benutzerprofil reparieren", "Profildienst fehlgeschlagen", "Profil nicht ladbar", "Benutzer kommt nicht auf Desktop", "Windows lädt Profil nicht"],
+    "typos": ["Profiel", "defeckt", "beschäditgt", "geladen", "kaputt"],
+    "symptoms": ["Fehlermeldung 'Der Benutzerprofildienst konnte nicht geladen werden'", "Anmeldung bleibt beim Profilladen hängen", "Schwarzer Bildschirm nach Anmeldung"],
+    "quickCheck": "Kann sich der Benutzer mit einem anderen Konto anmelden?",
+    "solutions": [
+      "Mit anderem Admin-Konto anmelden und Profil prüfen",
+      "Registry ProfileList prüfen und bereinigen",
+      "Neues Profil erstellen und Daten vom alten Profil kopieren",
+      "SFC-Scan: sfc /scannow",
+      "DISM: DISM /Online /Cleanup-Image /RestoreHealth",
+      "Im abgesicherten Modus anmelden und Profil reparieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_userprofiles_tempprofile", "label": "Temp-Profil reparieren", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["profile corrupt", "cant load profile", "profil defekt"],
+    "followUpQuestions": [
+      {
+        "question": "Seit wann tritt das Problem auf?",
+        "options": ["Seit heute/gestern", "Nach einem Update", "Schon länger", "Weiß ich nicht"],
+        "narrows": "Ob updatebedingt oder anderes Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-006", "PROB-USR-009"]
+  },
+  {
+    "id": "PROB-USR-008",
+    "category": "Benutzer & Profile",
+    "title": "Benutzerprofil zu groß",
+    "keywords": ["Profil", "groß", "Speicherplatz", "Größe", "voll", "Profilgröße", "Quota"],
+    "extendedKeywords": ["Profil zu groß", "Benutzerprofil nimmt viel Platz", "Profil Größe reduzieren", "Profil belegt zu viel Speicher", "Profilgröße ermitteln", "Benutzerprofil aufräumen", "Profil verkleinern", "wie groß ist das Profil", "Profil Speicherverbrauch", "Profil nimmt zu viel Platz weg", "Laufwerk C voll wegen Profilen", "Profilordner zu groß", "Profil bereinigen", "Profilgröße reduzieren", "Profil aufräumen", "Desktop zu groß", "Profil schrumpfen", "Profilquota überschritten", "Profilspeicher voll", "wie viel Platz braucht das Profil"],
+    "typos": ["Profiel", "Gröse", "Speicherplatz", "Größe", "Profilgöße"],
+    "symptoms": ["Laufwerk C ist voll wegen großer Profile", "Profilladung dauert sehr lange", "Fehlermeldung über Profilquota"],
+    "quickCheck": "Wie groß ist das betroffene Profil?",
+    "solutions": [
+      "Profilgrößen über Admin Tool remote prüfen",
+      "Downloads-Ordner aufräumen",
+      "Desktop aufräumen (große Dateien auf Netzlaufwerk verschieben)",
+      "Temp-Dateien löschen: %TEMP% und %LOCALAPPDATA%\\Temp",
+      "Browser-Cache leeren",
+      "Papierkorb leeren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilesizes", "label": "Profilgrößen anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 2, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["profile too large", "big profile", "profil zu groß"],
+    "followUpQuestions": [
+      {
+        "question": "Welcher Ordner im Profil ist am größten?",
+        "options": ["Downloads", "Desktop", "AppData", "Weiß ich nicht"],
+        "narrows": "Wo aufgeräumt werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-009", "PROB-USR-019"]
+  },
+  {
+    "id": "PROB-USR-009",
+    "category": "Benutzer & Profile",
+    "title": "Profilladung dauert sehr lange",
+    "keywords": ["Profil", "langsam", "laden", "dauert", "Anmeldung", "Login", "Wartezeit"],
+    "extendedKeywords": ["Profil lädt langsam", "Anmeldung dauert ewig", "Login braucht sehr lange", "Profil laden dauert Minuten", "Anmeldung extrem langsam", "warum dauert die Anmeldung so lange", "Profil wird langsam geladen", "Login hängt", "lange Wartezeit beim Anmelden", "Windows braucht lange zum Starten", "Desktop wird langsam aufgebaut", "Login-Vorgang dauert", "Profil dauert ewig", "Anmeldung braucht 5 Minuten", "langsame Anmeldung Windows", "Desktop erscheint langsam", "Profilladung hängt", "Benutzerprofil langsam", "Anmeldevorgang dauert zu lange", "Login Performance schlecht"],
+    "typos": ["langsamm", "Anmeldungt", "dauerrt", "Profiell"],
+    "symptoms": ["Anmeldung dauert mehrere Minuten", "Bildschirm bleibt lange auf 'Willkommen'", "Desktop wird langsam aufgebaut"],
+    "quickCheck": "Wie lange dauert die Anmeldung ungefähr?",
+    "solutions": [
+      "Profilgröße prüfen - große Profile laden langsamer",
+      "Autostart-Programme reduzieren",
+      "Gruppenrichtlinien prüfen (gpresult /r) - zu viele GPOs verlangsamen Login",
+      "Netzlaufwerk-Verbindungen beim Login prüfen",
+      "Login-Scripts optimieren",
+      "Festplattenleistung prüfen (SSD vs. HDD)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilesizes", "label": "Profilgrößen anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["slow login", "profile loading slow", "anmeldung langsam"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt das Problem bei allen Benutzern oder nur bei einem?",
+        "options": ["Nur bei einem Benutzer", "Bei allen Benutzern", "Weiß ich nicht"],
+        "narrows": "Ob profilspezifisch oder systemweit"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-008", "PROB-USR-007"]
+  },
+  {
+    "id": "PROB-USR-010",
+    "category": "Benutzer & Profile",
+    "title": "Benutzerprofil löschen",
+    "keywords": ["Profil", "löschen", "entfernen", "bereinigen", "Profilordner", "ProfileList"],
+    "extendedKeywords": ["Profil löschen", "Benutzerprofil löschen", "Profilordner löschen", "altes Profil entfernen", "Profil bereinigen", "Profil vom PC löschen", "Benutzerprofil entfernen", "Profil remote löschen", "nicht mehr benötigtes Profil löschen", "Profil eines ehemaligen Mitarbeiters löschen", "Profil sauber entfernen", "Profil und Daten löschen", "Profilordner unter C Users löschen", "wie lösche ich ein Profil richtig", "Profil korrekt entfernen", "Profil aus Registry und Ordner löschen", "Profil bereinigen Windows", "altes Benutzerprofil aufräumen", "Profil löschen und neu erstellen", "Profil Reset"],
+    "typos": ["Profiel", "löshen", "Profilordne", "entfernne"],
+    "symptoms": ["Alte/nicht mehr benötigte Profile belegen Speicherplatz", "Profil soll sauber gelöscht werden"],
+    "quickCheck": "Sind die Daten im Profil gesichert oder werden sie nicht mehr benötigt?",
+    "solutions": [
+      "Profil über Admin Tool remote löschen",
+      "Über Systemeigenschaften: Erweitert > Benutzerprofile > Einstellungen > Profil auswählen > Löschen",
+      "NICHT einfach den Ordner unter C:\\Users löschen (Registry-Einträge bleiben!)",
+      "Registry bereinigen: HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList",
+      "PowerShell: Get-CimInstance Win32_UserProfile | Where-Object { $_.LocalPath -eq 'C:\\Users\\Name' } | Remove-CimInstance"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profiledel", "label": "Profil löschen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_userprofiles_profilesizes", "label": "Profilgrößen anzeigen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["delete profile", "remove profile", "profil löschen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll das Profil komplett gelöscht oder nur die Daten gesichert werden?",
+        "options": ["Komplett löschen", "Erst Daten sichern dann löschen", "Nur Daten sichern"],
+        "narrows": "Ob Datensicherung nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-011", "PROB-USR-012"]
+  },
+  {
+    "id": "PROB-USR-011",
+    "category": "Benutzer & Profile",
+    "title": "Profilgrößen anzeigen - Speicherverbrauch der Profile",
+    "keywords": ["Profilgröße", "Speicherverbrauch", "Größe", "Profile", "Übersicht", "Speicher"],
+    "extendedKeywords": ["Profilgrößen anzeigen", "wie groß sind die Profile", "Speicherverbrauch Profile", "alle Profile Größe anzeigen", "welches Profil ist am größten", "Profilordner Größe", "Benutzer Speicherverbrauch", "Profile auflisten mit Größe", "C Users Ordner Größe", "Profilübersicht", "alle Benutzerprofile Größe", "Platzverbrauch Profile", "Profil Speicher anzeigen", "Festplatte voll Profile prüfen", "Profilgrößen remote prüfen", "Übersicht Profilgrößen", "Profile Speicheranalyse", "wie viel Platz brauchen die Profile", "alle Profile Speicherplatz", "Profilspeicher remote anzeigen"],
+    "typos": ["Profilgöße", "Speicheverbrauch", "Gröse", "Proiflgrößen"],
+    "symptoms": ["Festplatte voll, Verdacht auf große Profile", "Übersicht über alle Profilgrößen benötigt"],
+    "quickCheck": "Möchten Sie alle Profile oder nur ein bestimmtes Profil prüfen?",
+    "solutions": [
+      "Profilgrößen über Admin Tool remote anzeigen",
+      "PowerShell: Get-CimInstance Win32_UserProfile | Select-Object LocalPath, @{N='Size';E={(Get-ChildItem $_.LocalPath -Recurse -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum / 1MB}}",
+      "Im Explorer: C:\\Users öffnen und Ordnergrößen prüfen (Rechtsklick > Eigenschaften)",
+      "TreeSize für grafische Darstellung nutzen",
+      "Größte Ordner innerhalb der Profile identifizieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilesizes", "label": "Profilgrößen anzeigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 2, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["profile sizes", "profile space", "profilgrößen"],
+    "followUpQuestions": [
+      {
+        "question": "Möchten Sie auch die Aufteilung innerhalb der Profile sehen?",
+        "options": ["Nur Gesamtgrößen", "Auch Unterordner-Verteilung", "Nur das größte Profil"],
+        "narrows": "Detailtiefe der Analyse"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-008", "PROB-USR-012"]
+  },
+  {
+    "id": "PROB-USR-012",
+    "category": "Benutzer & Profile",
+    "title": "Alte Profile bereinigen und aufräumen",
+    "keywords": ["alte Profile", "bereinigen", "aufräumen", "inaktiv", "ungenutzt", "Cleanup"],
+    "extendedKeywords": ["alte Profile löschen", "inaktive Profile bereinigen", "ungenutzte Profile aufräumen", "Profile von ehemaligen Mitarbeitern", "alte Profile entfernen", "Profile bereinigen", "verwaiste Profile", "Profile aufräumen Windows", "nicht mehr verwendete Profile", "Profile Cleanup", "Profile älter als X Tage löschen", "alte Benutzerordner löschen", "inaktive Benutzer Profile", "Profilbereinigung durchführen", "C Users aufräumen", "Speicherplatz durch alte Profile", "obsolete Profile entfernen", "automatische Profilbereinigung", "alte Profile identifizieren", "Profile Wartung"],
+    "typos": ["bereinigen", "aufräumne", "inacktiv", "Profiel", "Cleanup"],
+    "symptoms": ["Viele alte Profile belegen Speicherplatz", "C:\\Users enthält viele nicht mehr genutzte Ordner"],
+    "quickCheck": "Wie viele Profile sollen bereinigt und wie alt sind sie?",
+    "solutions": [
+      "Profile über Admin Tool auflisten und Alter/letzte Nutzung prüfen",
+      "Alte Profile über Admin Tool remote löschen",
+      "Automatische Profilbereinigung per GPO konfigurieren",
+      "PowerShell: Profile nach letztem Änderungsdatum filtern und entfernen",
+      "Vor dem Löschen sicherstellen dass Daten gesichert sind",
+      "Registry-Einträge automatisch mitbereinigen (nicht nur Ordner löschen)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_userprofiles_profiledel", "label": "Profil löschen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_userprofiles_profilesizes", "label": "Profilgrößen anzeigen", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["cleanup old profiles", "remove old profiles", "alte profile löschen"],
+    "followUpQuestions": [
+      {
+        "question": "Wie alt müssen Profile sein um gelöscht zu werden?",
+        "options": ["Älter als 30 Tage", "Älter als 90 Tage", "Bestimmte Benutzer", "Alle außer aktive"],
+        "narrows": "Kriterien für die Bereinigung"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-010", "PROB-USR-011"]
+  },
+  {
+    "id": "PROB-USR-013",
+    "category": "Benutzer & Profile",
+    "title": "Automatische Anmeldung (AutoLogon) einrichten",
+    "keywords": ["AutoLogon", "automatische Anmeldung", "Auto-Login", "Autoanmeldung", "ohne Passwort", "Kiosk"],
+    "extendedKeywords": ["automatische Anmeldung einrichten", "AutoLogon konfigurieren", "ohne Passwort anmelden", "automatisch einloggen", "Benutzer automatisch anmelden", "Auto-Login Windows", "Kiosk-Modus Anmeldung", "PC startet direkt zum Desktop", "Passworteingabe überspringen", "AutoLogon einschalten", "automatisches Login einrichten", "wie richte ich AutoLogon ein", "Benutzer soll automatisch angemeldet werden", "Windows ohne Passwort starten", "Login Screen überspringen", "automatisch als Benutzer anmelden", "Autoanmeldung Windows", "netplwiz automatische Anmeldung", "Sysinternals AutoLogon", "autologon.exe verwenden"],
+    "typos": ["AutoLogn", "Autoanmeldung", "automatiche", "Autologin", "einrichten"],
+    "symptoms": ["Benutzer soll automatisch angemeldet werden (z.B. Kiosk, Infobildschirm)", "Passworteingabe beim Start vermeiden"],
+    "quickCheck": "Soll die automatische Anmeldung für ein lokales Konto oder Domänenkonto eingerichtet werden?",
+    "solutions": [
+      "AutoLogon über Admin Tool remote einrichten",
+      "Sysinternals AutoLogon.exe verwenden",
+      "Registry: HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon > AutoAdminLogon=1, DefaultUserName, DefaultPassword",
+      "netplwiz: 'Benutzer müssen Benutzernamen und Kennwort eingeben' deaktivieren",
+      "Achtung: Passwort wird in der Registry gespeichert (Sicherheitsrisiko)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_autologon", "label": "AutoLogon einrichten", "priority": 1, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["auto login", "automatic logon", "autologon einrichten"],
+    "followUpQuestions": [
+      {
+        "question": "Für welchen Einsatzzweck wird die automatische Anmeldung benötigt?",
+        "options": ["Kiosk/Infobildschirm", "Einzelbenutzer-PC", "Servicekonto"],
+        "narrows": "Sicherheitsanforderungen klären"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-014"]
+  },
+  {
+    "id": "PROB-USR-014",
+    "category": "Benutzer & Profile",
+    "title": "Automatische Anmeldung (AutoLogon) deaktivieren",
+    "keywords": ["AutoLogon", "deaktivieren", "abschalten", "ausschalten", "Passwort", "Sicherheit"],
+    "extendedKeywords": ["AutoLogon deaktivieren", "automatische Anmeldung abschalten", "Auto-Login ausschalten", "Passworteingabe wieder aktivieren", "AutoLogon entfernen", "automatisches Login deaktivieren", "Passwortabfrage wieder einschalten", "AutoLogon rückgängig machen", "Auto-Login abschalten", "Login-Screen wieder anzeigen", "Passwort beim Start wieder verlangen", "AutoLogon abschalten Windows", "wie deaktiviere ich AutoLogon", "automatische Anmeldung entfernen", "Login-Bildschirm wieder anzeigen", "Autoanmeldung ausschalten", "Passwortpflicht wieder aktivieren", "AutoLogon raus", "automatisches Einloggen stoppen", "Windows soll wieder nach Passwort fragen"],
+    "typos": ["deaktiviren", "abschaltn", "AutoLogn", "Autoanmeldung"],
+    "symptoms": ["PC meldet sich automatisch an und das soll unterbunden werden", "Sicherheitsbedenken wegen automatischer Anmeldung"],
+    "quickCheck": "Wurde AutoLogon per Registry, netplwiz oder Sysinternals-Tool eingerichtet?",
+    "solutions": [
+      "AutoLogon über Admin Tool remote deaktivieren",
+      "Registry bereinigen: HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon > AutoAdminLogon=0, DefaultPassword löschen",
+      "Sysinternals AutoLogon.exe > Disable",
+      "netplwiz: 'Benutzer müssen Benutzernamen und Kennwort eingeben' aktivieren",
+      "PC neu starten um Änderung zu überprüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_autologon", "label": "AutoLogon verwalten", "priority": 1, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["disable auto login", "turn off autologon", "autologon deaktivieren"],
+    "followUpQuestions": [
+      {
+        "question": "Wissen Sie wie die automatische Anmeldung ursprünglich eingerichtet wurde?",
+        "options": ["Per Registry", "Per netplwiz", "Per AutoLogon.exe", "Weiß ich nicht"],
+        "narrows": "Welche Methode zum Deaktivieren passt"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-013"]
+  },
+  {
+    "id": "PROB-USR-015",
+    "category": "Benutzer & Profile",
+    "title": "Letzte Anmeldungen eines Benutzers anzeigen",
+    "keywords": ["Anmeldung", "Login", "Historie", "letzte", "Verlauf", "Anmeldehistorie", "Logon"],
+    "extendedKeywords": ["letzte Anmeldungen anzeigen", "Login-Verlauf", "wann hat sich der Benutzer angemeldet", "Anmeldehistorie", "Login-Historie", "Anmeldungen prüfen", "letzte Logins", "wann wurde der PC zuletzt benutzt", "Anmeldungsverlauf", "wer hat sich am PC angemeldet", "Login-Zeiten", "Benutzer-Anmeldungen anzeigen", "Anmeldeprotokoll", "Login-Log", "wann war der letzte Login", "Anmeldezeitpunkt prüfen", "Login-Geschichte", "Anmeldezeit anzeigen", "wer war auf dem PC eingeloggt", "Anmeldungen der letzten Tage"],
+    "typos": ["Anmledung", "Hsitorie", "Verlauf", "Anmeldunge", "Loginn"],
+    "symptoms": ["Überprüfung nötig wann Benutzer sich zuletzt angemeldet hat", "Audit der Anmeldeaktivitäten"],
+    "quickCheck": "Möchten Sie die Anmeldungen eines bestimmten Benutzers oder aller Benutzer sehen?",
+    "solutions": [
+      "Letzte Anmeldungen über Admin Tool remote abfragen",
+      "Event Viewer: Windows-Protokolle > Sicherheit > Event-ID 4624 (Anmeldung)",
+      "PowerShell: Get-EventLog -LogName Security -InstanceId 4624 -Newest 20",
+      "net user Benutzername | findstr /i 'letzte'",
+      "Quser oder Query User für aktuell angemeldete Benutzer"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_lastlogins", "label": "Letzte Anmeldungen anzeigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["last login", "login history", "letzte anmeldung"],
+    "followUpQuestions": [
+      {
+        "question": "Für welchen Zeitraum möchten Sie die Anmeldungen sehen?",
+        "options": ["Letzte 24 Stunden", "Letzte 7 Tage", "Letzte 30 Tage", "Bestimmter Zeitraum"],
+        "narrows": "Zeitraum der Abfrage"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-016"]
+  },
+  {
+    "id": "PROB-USR-016",
+    "category": "Benutzer & Profile",
+    "title": "Fehlgeschlagene Anmeldeversuche prüfen",
+    "keywords": ["Fehlversuche", "fehlgeschlagen", "falsches Passwort", "Sperrung", "Brute Force", "Event 4625"],
+    "extendedKeywords": ["fehlgeschlagene Anmeldungen", "Fehlversuche prüfen", "falsches Passwort eingegeben", "Konto gesperrt wegen Fehlversuchen", "Login-Fehlversuche", "Anmeldeversuche fehlgeschlagen", "Brute Force prüfen", "wer hat falsches Passwort eingegeben", "Account-Sperrung wegen Fehlversuchen", "Anmeldefehler auswerten", "falsche Passwort-Eingaben", "Sicherheits-Audit Anmeldungen", "verdächtige Anmeldeversuche", "Kontosperrung prüfen", "wie viele Fehlversuche", "wer versucht sich anzumelden", "Konto wird immer gesperrt", "unbefugter Anmeldeversuch", "Fehlversuche Protokoll", "Account-Lockout Ursache finden"],
+    "typos": ["Fehlversuhce", "fehlgeschalgene", "Anmledeversuch", "Sperung"],
+    "symptoms": ["Konto wird regelmäßig gesperrt", "Verdacht auf unbefugte Anmeldeversuche", "Benutzer meldet häufige Passwortsperren"],
+    "quickCheck": "Wird das Konto nach einer bestimmten Anzahl von Fehlversuchen automatisch gesperrt?",
+    "solutions": [
+      "Event Viewer: Sicherheit > Event-ID 4625 (Fehlgeschlagene Anmeldung)",
+      "PowerShell: Get-EventLog -LogName Security -InstanceId 4625",
+      "Quelle der Fehlversuche identifizieren (lokale Anmeldung, Netzwerk, RDP)",
+      "Bei Domäne: Account-Lockout-Tools von Microsoft verwenden",
+      "Passwort zurücksetzen und Konto entsperren: net user Benutzername /active:yes"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_lastlogins", "label": "Anmeldungen anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["failed login", "account lockout", "fehlversuche anmeldung"],
+    "followUpQuestions": [
+      {
+        "question": "Wird das Konto tatsächlich gesperrt oder gibt es nur Fehlversuche?",
+        "options": ["Konto wird gesperrt", "Nur Fehlversuche, keine Sperrung", "Beides"],
+        "narrows": "Ob Lockout-Policy greift"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-015", "PROB-USR-003"]
+  },
+  {
+    "id": "PROB-USR-017",
+    "category": "Benutzer & Profile",
+    "title": "Desktop-Ordner im Profil zu groß",
+    "keywords": ["Desktop", "groß", "Speicherplatz", "Profil", "Dateien", "aufräumen"],
+    "extendedKeywords": ["Desktop zu groß", "zu viele Dateien auf dem Desktop", "Desktop nimmt viel Platz", "Desktop-Ordner groß", "Profil groß wegen Desktop", "Desktop aufräumen", "Desktop belegt Speicher", "Benutzer hat alles auf dem Desktop", "Desktop-Ordner Größe", "Desktop voll", "zu viele Dateien auf dem Schreibtisch", "Desktop Speicherplatz", "Desktop Dateien auf Netzlaufwerk verschieben", "Desktop bereinigen", "Desktop Größe reduzieren", "wie groß ist der Desktop", "Desktop remote prüfen", "Desktop Speicherverbrauch", "Desktop verschiebt zu Netzwerk", "Desktop belegt zu viel Platz"],
+    "typos": ["Destop", "Desktopp", "Speicheplatzt", "Desctop"],
+    "symptoms": ["Desktop-Ordner ist mehrere GB groß", "Profil zu groß wegen Desktop-Dateien"],
+    "quickCheck": "Wie groß ist der Desktop-Ordner des Benutzers?",
+    "solutions": [
+      "Desktop-Größe über Admin Tool remote prüfen",
+      "Große Dateien vom Desktop auf Netzlaufwerk verschieben",
+      "Desktop-Umleitung per Gruppenrichtlinie auf Netzlaufwerk",
+      "Benutzer schulen: Dateien nicht dauerhaft auf dem Desktop ablegen",
+      "Verknüpfungen statt Dateien auf dem Desktop nutzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilesizes", "label": "Profilgrößen anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["desktop too large", "desktop cleanup", "desktop zu groß"],
+    "followUpQuestions": [
+      {
+        "question": "Gibt es ein Netzlaufwerk wohin die Dateien verschoben werden können?",
+        "options": ["Ja, Netzlaufwerk vorhanden", "Nein, kein Netzlaufwerk", "Weiß ich nicht"],
+        "narrows": "Ob Dateien verschoben werden können"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-018", "PROB-USR-019"]
+  },
+  {
+    "id": "PROB-USR-018",
+    "category": "Benutzer & Profile",
+    "title": "Downloads-Ordner im Profil zu groß",
+    "keywords": ["Downloads", "groß", "Speicherplatz", "Profil", "heruntergeladen", "aufräumen"],
+    "extendedKeywords": ["Downloads zu groß", "Download-Ordner voll", "Downloads belegen viel Platz", "Downloads aufräumen", "alte Downloads löschen", "Download-Ordner Größe", "Profil groß wegen Downloads", "Downloads bereinigen", "Download-Ordner remote prüfen", "Downloads Speicherverbrauch", "wie groß ist der Downloads-Ordner", "Downloads remote löschen", "Downloads aufräumen lassen", "alte heruntergeladene Dateien", "Downloads Ordner leeren", "Downloads Speicher freigeben", "heruntergeladene Dateien löschen", "Downloads automatisch löschen", "Downloads-Ordner aufräumen", "Downloads Gigabyte"],
+    "typos": ["Downlaods", "Dowloads", "Downlaod", "Donwloads"],
+    "symptoms": ["Downloads-Ordner ist mehrere GB groß", "Profil zu groß wegen Download-Dateien"],
+    "quickCheck": "Wie groß ist der Downloads-Ordner des Benutzers?",
+    "solutions": [
+      "Downloads-Ordner über Admin Tool remote prüfen",
+      "Alte Downloads löschen (nach Rücksprache mit Benutzer)",
+      "Downloads-Ordner auf anderes Laufwerk umleiten",
+      "Storage Sense in Windows konfigurieren: Automatisches Löschen alter Downloads",
+      "Benutzer schulen: Downloads regelmäßig aufräumen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilesizes", "label": "Profilgrößen anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["downloads too large", "downloads cleanup", "downloads zu groß"],
+    "followUpQuestions": [
+      {
+        "question": "Sollen alle Downloads gelöscht oder nur bestimmte?",
+        "options": ["Alle löschen", "Nur ältere als 30 Tage", "Benutzer muss erst auswählen"],
+        "narrows": "Umfang der Bereinigung"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-017", "PROB-USR-019"]
+  },
+  {
+    "id": "PROB-USR-019",
+    "category": "Benutzer & Profile",
+    "title": "Dokumente-Ordner im Profil zu groß",
+    "keywords": ["Dokumente", "groß", "Speicherplatz", "Profil", "Documents", "aufräumen"],
+    "extendedKeywords": ["Dokumente zu groß", "Dokumente-Ordner belegt viel Platz", "Dokumente aufräumen", "Documents Ordner groß", "Profil groß wegen Dokumente", "Dokumente-Ordner Größe", "meine Dokumente voll", "Dokumente Speicherverbrauch", "Dokumente auf Netzlaufwerk", "Dokumente bereinigen", "Dokumente-Ordner remote prüfen", "wie groß ist Dokumente", "Dokumente verschieben", "Dokumente Speicher freigeben", "Dokumente umleiten", "Dokumente auf anderes Laufwerk", "eigene Dokumente zu groß", "Dokumente belegen zu viel Platz", "Dokumenten-Ordner aufräumen", "Dokumente Gigabyte"],
+    "typos": ["Dokumemte", "Dockumente", "Documetne", "Dokuemnte"],
+    "symptoms": ["Dokumente-Ordner ist mehrere GB groß", "Profil zu groß wegen Dokumenten"],
+    "quickCheck": "Wie groß ist der Dokumente-Ordner des Benutzers?",
+    "solutions": [
+      "Dokumente-Ordner über Admin Tool remote prüfen",
+      "Große Dateien identifizieren und auf Netzlaufwerk verschieben",
+      "Ordnerumleitung per Gruppenrichtlinie auf Netzlaufwerk konfigurieren",
+      "Alte Dokumente archivieren",
+      "Duplikate finden und entfernen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilesizes", "label": "Profilgrößen anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["documents too large", "documents folder big", "dokumente zu groß"],
+    "followUpQuestions": [
+      {
+        "question": "Ist eine Ordnerumleitung auf ein Netzlaufwerk gewünscht?",
+        "options": ["Ja, auf Netzlaufwerk umleiten", "Nein, nur aufräumen", "Weiß nicht"],
+        "narrows": "Ob langfristige Lösung per GPO"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-017", "PROB-USR-018"]
+  },
+  {
+    "id": "PROB-USR-020",
+    "category": "Benutzer & Profile",
+    "title": "Benutzer als lokaler Administrator - Rechte prüfen",
+    "keywords": ["Administrator", "Admin", "Rechte", "lokaler Admin", "Adminrechte", "Berechtigung"],
+    "extendedKeywords": ["ist Benutzer Admin", "Adminrechte prüfen", "lokale Administratoren anzeigen", "wer ist Administrator auf dem PC", "Benutzer Administratorrechte", "Admin-Gruppenmitglieder", "Benutzer hat keine Adminrechte", "lokale Admins auflisten", "Adminrechte vergeben", "Adminrechte entziehen", "wer hat Adminrechte", "lokale Administratoren Gruppe", "Benutzer Administrator machen", "Adminrechte benötigt", "Benutzer braucht Adminrechte", "Admin-Berechtigung prüfen", "lokale Admin-Gruppe anzeigen", "ist der Benutzer lokaler Admin", "Administratoren Gruppe Mitglieder", "Benutzer Rechte prüfen"],
+    "typos": ["Administartor", "Adminrechte", "Administator", "Rechte", "Berchtigungen"],
+    "symptoms": ["Benutzer kann bestimmte Aktionen nicht ausführen", "Unklar ob Benutzer Adminrechte hat"],
+    "quickCheck": "Sollen die Adminrechte geprüft oder geändert werden?",
+    "solutions": [
+      "Lokale Administratoren über Admin Tool remote anzeigen",
+      "CMD: net localgroup Administratoren",
+      "PowerShell: Get-LocalGroupMember -Group 'Administratoren'",
+      "Benutzer zur Admin-Gruppe hinzufügen falls nötig",
+      "Alternativ: RunAs verwenden statt permanente Adminrechte"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_sessions_localadmins", "label": "Lokale Admins anzeigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_userprofiles_usergroupadd", "label": "Benutzer zu Gruppe hinzufügen", "priority": 3, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["check admin rights", "is user admin", "admin rechte prüfen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll der Benutzer dauerhaft oder nur temporär Adminrechte erhalten?",
+        "options": ["Dauerhaft", "Nur temporär", "Nur prüfen, nicht ändern"],
+        "narrows": "Ob Rechte geändert werden sollen"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-021", "PROB-USR-004"]
+  },
+  {
+    "id": "PROB-USR-021",
+    "category": "Benutzer & Profile",
+    "title": "UAC-Abfrage und Benutzerkontensteuerung",
+    "keywords": ["UAC", "Benutzerkontensteuerung", "Elevation", "Erhöhte Rechte", "Zustimmung", "Adminabfrage"],
+    "extendedKeywords": ["UAC Abfrage", "Benutzerkontensteuerung", "ständig Admin-Abfrage", "UAC nervt", "Elevation Prompt", "UAC deaktivieren", "Adminabfrage bei jedem Programm", "Benutzerkontensteuerung einstellen", "UAC ausschalten", "warum kommt immer die Admin-Abfrage", "UAC zu streng", "Benutzerkontensteuerung anpassen", "erhöhte Rechte Abfrage", "UAC Level ändern", "Zustimmungsabfrage", "UAC Einstellung", "Benutzerkontensteuerung nervt", "UAC umgehen", "Administrator Zustimmung", "UAC Benachrichtigungen reduzieren"],
+    "typos": ["UCA", "Beutzerkontenstuerung", "Eleveation", "UAC"],
+    "symptoms": ["UAC-Abfrage erscheint zu häufig", "Benutzer kann Programme nicht starten wegen UAC", "UAC soll angepasst werden"],
+    "quickCheck": "Stört die UAC-Abfrage generell oder nur bei einem bestimmten Programm?",
+    "solutions": [
+      "UAC-Level anpassen: Systemsteuerung > Benutzerkontensteuerung ändern",
+      "Für einzelne Programme: Kompatibilitätseinstellungen > Als Administrator ausführen",
+      "Aufgabenplanung: Programme ohne UAC-Abfrage starten",
+      "UAC per Registry anpassen: HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System > EnableLUA",
+      "Achtung: UAC komplett deaktivieren wird aus Sicherheitsgründen nicht empfohlen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_sessions_localadmins", "label": "Lokale Admins anzeigen", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["uac prompt", "user account control", "uac abfrage"],
+    "followUpQuestions": [
+      {
+        "question": "Möchten Sie die UAC komplett deaktivieren oder nur anpassen?",
+        "options": ["Nur Level reduzieren", "Für ein bestimmtes Programm umgehen", "Komplett deaktivieren"],
+        "narrows": "Gewünschte Anpassung"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-020", "PROB-USR-022"]
+  },
+  {
+    "id": "PROB-USR-022",
+    "category": "Benutzer & Profile",
+    "title": "Programm als anderer Benutzer ausführen (RunAs)",
+    "keywords": ["RunAs", "als Administrator", "anderer Benutzer", "erhöhte Rechte", "Rechtsklick", "Kontext"],
+    "extendedKeywords": ["Programm als Administrator starten", "RunAs anderer Benutzer", "als anderer Benutzer ausführen", "Programm mit Adminrechten starten", "Rechtsklick als Administrator", "RunAs Befehl", "als Admin ausführen", "Programm unter anderem Konto starten", "mit erhöhten Rechten ausführen", "RunAs verwenden", "als Domänenbenutzer ausführen", "Programm mit anderen Anmeldedaten", "CMD als Administrator", "PowerShell als Administrator", "Programm als Admin starten Windows", "Servicekonto Programm ausführen", "anderer Benutzer Programm starten", "Rechtsklick andere Anmeldedaten", "Shift Rechtsklick als anderer Benutzer", "runas /user:"],
+    "typos": ["RunAss", "Administartor", "Rechtsklicl", "ausführne"],
+    "symptoms": ["Programm benötigt erhöhte Rechte", "Programm soll unter anderem Benutzerkonto ausgeführt werden"],
+    "quickCheck": "Soll das Programm als Administrator oder als ein anderer Benutzer gestartet werden?",
+    "solutions": [
+      "Rechtsklick auf Programm > Als Administrator ausführen",
+      "CMD: runas /user:Domäne\\Benutzername Programmname",
+      "Shift + Rechtsklick > Als anderer Benutzer ausführen",
+      "Verknüpfung erstellen mit dauerhafter Admin-Berechtigung",
+      "PowerShell: Start-Process -Verb RunAs Programmname",
+      "Aufgabenplanung für automatische Elevation nutzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_sessions_localadmins", "label": "Lokale Admins anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["run as admin", "runas command", "als administrator ausführen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll das Programm als Administrator oder als ein bestimmter anderer Benutzer gestartet werden?",
+        "options": ["Als Administrator", "Als bestimmter anderer Benutzer", "Als Servicekonto"],
+        "narrows": "Art der Benutzererhöhung"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-021", "PROB-USR-020"]
+  },
+  {
+    "id": "PROB-USR-023",
+    "category": "Benutzer & Profile",
+    "title": "Standardprofil anpassen - Default User",
+    "keywords": ["Standardprofil", "Default User", "Default Profile", "Vorlage", "neue Benutzer"],
+    "extendedKeywords": ["Standardprofil anpassen", "Default User Profil ändern", "Vorlage für neue Benutzer", "Standardprofil konfigurieren", "Default Profile bearbeiten", "wie ändere ich das Standardprofil", "Profil-Vorlage erstellen", "Default User anpassen", "Standardprofil für neue Benutzer", "Default Profile Template", "Standardprofil kopieren", "Default User Ordner", "Standardbenutzer Profil anpassen", "Profil als Vorlage", "Standardprofil konfigurieren Windows", "neues Benutzerprofil Vorlage", "C Users Default", "Standard-Desktop für neue Benutzer", "Standardeinstellungen neue Benutzer", "Default User Profile anpassen"],
+    "typos": ["Standarprofil", "Standradprofil", "Defualt", "Profiel"],
+    "symptoms": ["Neue Benutzer sollen vorkonfigurierte Einstellungen erhalten", "Standarddesktop für alle neuen Benutzer nötig"],
+    "quickCheck": "Welche Einstellungen sollen für neue Benutzer standardmäßig gesetzt werden?",
+    "solutions": [
+      "Musterprofil erstellen und als Default-Profil kopieren",
+      "Default User Ordner (C:\\Users\\Default) anpassen",
+      "CopyProfile in Unattend.xml für Sysprep nutzen",
+      "Gruppenrichtlinien für Standard-Einstellungen verwenden",
+      "Registry-Einstellungen im Default-Hive (NTUSER.DAT) anpassen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_userprofiles_userlist", "label": "Benutzerliste anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["default profile", "standard profile", "standardprofil anpassen"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Art von Anpassungen sollen im Standardprofil gemacht werden?",
+        "options": ["Desktop-Hintergrund/Layout", "Registry-Einstellungen", "Startmenü-Layout", "Mehrere Anpassungen"],
+        "narrows": "Art der Anpassung"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-024", "PROB-USR-025"]
+  },
+  {
+    "id": "PROB-USR-024",
+    "category": "Benutzer & Profile",
+    "title": "Benutzerprofil kopieren",
+    "keywords": ["Profil", "kopieren", "klonen", "Migration", "übertragen", "duplizieren"],
+    "extendedKeywords": ["Profil kopieren", "Benutzerprofil klonen", "Profil auf anderen PC übertragen", "Profil Migration", "Profil duplizieren", "Profil von einem PC auf anderen", "Benutzereinstellungen übertragen", "Profil kopieren Windows", "wie kopiere ich ein Profil", "Profil von altem auf neuen PC", "Profildaten kopieren", "Benutzerprofil migrieren", "Profil übertragen auf neuen Computer", "Einstellungen vom alten PC", "Benutzerdaten übertragen", "Profil sichern und wiederherstellen", "Profil-Backup erstellen", "Profil exportieren", "Benutzereinstellungen klonen", "Profilkopie erstellen"],
+    "typos": ["Profiel", "koppieren", "klohnen", "Mirgation"],
+    "symptoms": ["Benutzer bekommt neuen PC und braucht sein Profil", "Profil soll als Vorlage für andere dienen"],
+    "quickCheck": "Soll das Profil auf dem gleichen PC kopiert oder auf einen anderen PC übertragen werden?",
+    "solutions": [
+      "Profildaten manuell kopieren: Desktop, Dokumente, Downloads, Favoriten",
+      "Robocopy für Dateiübertragung: robocopy Quelle Ziel /E /COPYALL",
+      "USMT (User State Migration Tool) für vollständige Migration",
+      "AppData-Einstellungen selektiv kopieren",
+      "Registry-Einstellungen (NTUSER.DAT) exportieren und importieren",
+      "Achtung: Nicht einfach den kompletten Profilordner kopieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_userprofiles_profilesizes", "label": "Profilgrößen anzeigen", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["copy profile", "clone profile", "profil kopieren"],
+    "followUpQuestions": [
+      {
+        "question": "Was genau soll kopiert werden?",
+        "options": ["Nur Daten (Desktop, Dokumente)", "Auch Einstellungen und Apps", "Komplettes Profil"],
+        "narrows": "Umfang der Kopie"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-023", "PROB-USR-025"]
+  },
+  {
+    "id": "PROB-USR-025",
+    "category": "Benutzer & Profile",
+    "title": "Servergespeichertes Profil (Roaming Profile) Probleme",
+    "keywords": ["Roaming", "servergespeichert", "Profil", "Netzwerkprofil", "langsam", "Synchronisierung"],
+    "extendedKeywords": ["Roaming Profile Problem", "servergespeichertes Profil langsam", "Profil vom Server laden dauert", "Roaming Profile synchronisiert nicht", "Netzwerkprofil Fehler", "servergespeichertes Profil groß", "Roaming Profile Speicher voll", "Profil wird nicht vom Server geladen", "Roaming Profile deaktivieren", "Profil-Synchronisierung fehlgeschlagen", "Roaming Profile auf lokal umstellen", "servergespeichertes Profil funktioniert nicht", "Roaming Profile Wartezeit", "Profil kann nicht mit Server synchronisieren", "Roaming Profile Cache", "lokales Profil statt Roaming", "Roaming Profile abschalten", "servergespeichertes Profil kaputt", "Profil wird nicht zurückgeschrieben", "Roaming Profile Netzwerkfehler"],
+    "typos": ["Romaing", "servergespeichertes", "Proifle", "Netzwekprofil"],
+    "symptoms": ["An- und Abmeldung dauern sehr lange", "Profil wird nicht synchronisiert", "Fehlermeldung bei der Profilsynchronisierung"],
+    "quickCheck": "Handelt es sich um ein servergespeichertes (Roaming) Profil?",
+    "solutions": [
+      "Profilgröße prüfen und reduzieren (große Roaming-Profile sind langsam)",
+      "Ausschlussliste für Roaming Profile prüfen (AppData\\Local sollte ausgeschlossen sein)",
+      "Gruppenrichtlinie prüfen: Profil-Caching und Synchronisierung",
+      "Auf lokales Profil umstellen falls Roaming nicht nötig",
+      "Netzwerkverbindung zum Profilserver prüfen",
+      "Ordnerumleitung statt Roaming Profile verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_userprofiles_profilelist", "label": "Profile auflisten", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_userprofiles_profilesizes", "label": "Profilgrößen anzeigen", "priority": 2, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["roaming profile", "network profile", "servergespeichertes profil"],
+    "followUpQuestions": [
+      {
+        "question": "Wie lange dauert die An-/Abmeldung ungefähr?",
+        "options": ["1-2 Minuten", "3-5 Minuten", "Mehr als 5 Minuten", "Variable Zeiten"],
+        "narrows": "Schwere des Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-USR-008", "PROB-USR-009"]
+  }
+]

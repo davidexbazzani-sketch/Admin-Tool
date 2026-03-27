@@ -40,6 +40,9 @@ export interface ActivityLog {
 export interface AppConfig {
   betaMode: boolean
   networkBasePath: string
+  knowledgeBasePath: string   // relative path under networkBasePath, default "knowledge_base"
+  adSearchHamburg: boolean    // true = search only Hamburg office first
+  adSearchAll: boolean        // true = search all locations
 }
 
 export interface InventoryItem {
@@ -50,13 +53,28 @@ export interface InventoryItem {
   category: string
   addedAt: string
   addedBy: string
+  assignedTo?: string   // ServiceNow Zuweisung (Assigned to)
 }
 
 export interface ScheduledTask {
   id: string
   name: string
   devices: string[]
-  commands: Array<{ catId: string; cmdId: string; input?: string; notifyEmail?: string }>
+  commands: Array<{
+    catId: string
+    cmdId: string
+    input?: string
+    notifyEmail?: string
+    notifySubject?: string
+    notifyBody?: string
+    schedule?: {
+      type: 'once' | 'recurring'
+      time: string
+      date?: string
+      days?: number[]
+      repeat?: 'weekly' | 'biweekly' | 'monthly'
+    }
+  }>
   schedule: {
     type: 'once' | 'recurring'
     dates?: string[]             // ISO date strings for 'once'
@@ -67,8 +85,8 @@ export interface ScheduledTask {
     repeat?: 'weekly' | 'biweekly' | 'monthly'
   }
   rebootOptions?: {
-    preRebootEmail?: { enabled: boolean; recipients: string; minutesBefore: number }
-    onlineNotification?: { enabled: boolean; recipients: string; checkServices: string[] }
+    preRebootEmail?: { enabled: boolean; recipients: string; minutesBefore: number; subject?: string; body?: string }
+    onlineNotification?: { enabled: boolean; recipients: string; checkServices: string[]; subject?: string; body?: string }
   }
   status: 'active' | 'paused'
   createdAt: string
@@ -82,7 +100,10 @@ export interface UserEmailConfig {
   smtp: string
   port: number
   useTls: boolean      // STARTTLS (recommended for port 587)
+  smtpUser?: string    // SMTP username (usually same as email for O365)
+  smtpPass?: string    // SMTP password or App Password
   notifyEmail: string  // address to receive crash/notification emails
+  emailMethod?: 'outlook' | 'nodemailer' | 'powershell'  // sending method (default: outlook)
 }
 
 export interface BugReport {

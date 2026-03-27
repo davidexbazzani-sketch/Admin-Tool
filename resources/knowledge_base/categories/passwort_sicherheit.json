@@ -1,0 +1,1047 @@
+[
+  {
+    "id": "PROB-SEC-001",
+    "category": "Passwort & Sicherheit",
+    "title": "Windows-Passwort vergessen",
+    "keywords": ["Passwort", "vergessen", "Windows", "Anmeldung", "Login", "Kennwort", "Zugang", "gesperrt"],
+    "extendedKeywords": ["Windows Passwort vergessen", "kann mich nicht bei Windows anmelden", "Windows Kennwort vergessen", "Windows Login geht nicht", "Passwort für PC vergessen", "komme nicht in meinen PC", "Windows Anmeldung Passwort falsch", "habe mein Passwort vergessen", "Windows Passwort zurücksetzen", "kann mich nicht einloggen Windows", "Windows Kennwort zurücksetzen", "Passwort geht nicht Windows", "Computer Passwort vergessen", "Laptop Passwort vergessen", "Windows Zugang verloren", "Anmeldung funktioniert nicht Passwort", "Windows Login Passwort weg", "mein Passwort funktioniert nicht mehr", "Windows Passwort eingeben geht nicht", "komme nicht mehr in Windows rein"],
+    "typos": ["Paswort", "Passwort vergesen", "Kennwort vergesen", "Passwrt"],
+    "symptoms": ["Windows-Anmeldung schlägt fehl", "Passwort wird nicht akzeptiert", "Benutzer kann sich nicht einloggen"],
+    "quickCheck": "Haben Sie kürzlich Ihr Passwort geändert oder ist es abgelaufen?",
+    "solutions": [
+      "Caps-Lock und Num-Lock prüfen",
+      "Prüfen ob Tastaturlayout korrekt ist (DE/EN)",
+      "Prüfen ob das Passwort kürzlich geändert wurde",
+      "Passwort über Self-Service-Portal zurücksetzen (falls verfügbar)",
+      "IT-Helpdesk kontaktieren für Passwort-Reset",
+      "Prüfen ob das Konto gesperrt ist"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_resetpwd", "label": "Passwort zurücksetzen", "priority": 1, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["windows passwort vergessen", "passwort zurücksetzen", "login geht nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie sich an einem anderen Gerät anmelden?",
+        "options": ["Ja", "Nein", "Habe kein anderes Gerät"],
+        "narrows": "Ob das Passwort korrekt ist oder das Konto gesperrt ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-002", "PROB-SEC-003"]
+  },
+  {
+    "id": "PROB-SEC-002",
+    "category": "Passwort & Sicherheit",
+    "title": "AD-Passwort vergessen",
+    "keywords": ["Active Directory", "AD", "Passwort", "vergessen", "Domain", "Domäne", "Netzwerk-Passwort", "Firmenpasswort"],
+    "extendedKeywords": ["AD Passwort vergessen", "Active Directory Passwort", "Domänen-Passwort vergessen", "Firmenpasswort vergessen", "Netzwerk-Passwort vergessen", "Domänenkennwort vergessen", "AD Kennwort zurücksetzen", "Firmen-Login Passwort weg", "Active Directory Kennwort", "Domain Passwort reset", "AD Passwort zurücksetzen", "Firmenkonto Passwort vergessen", "Unternehmenspasswort vergessen", "Domäne Passwort falsch", "AD Login funktioniert nicht", "Netzwerkanmeldung Passwort", "AD Kennwort vergessen", "Domain Login Passwort", "Firmen-AD Passwort", "Active Directory Kennwort zurücksetzen"],
+    "typos": ["Active Directoy", "AD Paswort", "Domänen Passwort"],
+    "symptoms": ["AD-Anmeldung schlägt fehl", "Netzwerkressourcen nicht zugänglich", "E-Mail Login funktioniert nicht"],
+    "quickCheck": "Ist das Passwort möglicherweise abgelaufen?",
+    "solutions": [
+      "Passwort über Self-Service-Portal zurücksetzen",
+      "IT-Helpdesk anrufen für AD-Passwort-Reset",
+      "Prüfen ob das Passwort abgelaufen ist (Passwort-Richtlinie)",
+      "Neues Passwort muss Komplexitätsanforderungen erfüllen",
+      "Nach Passwort-Reset: Alle Geräte mit neuem Passwort anmelden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_resetpwd", "label": "Passwort zurücksetzen", "priority": 1, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["ad passwort vergessen", "domain passwort reset", "firmenpasswort"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie Zugriff auf das Self-Service-Passwort-Portal?",
+        "options": ["Ja", "Nein", "Weiß nicht wo"],
+        "narrows": "Ob der Benutzer das Passwort selbst zurücksetzen kann"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-001", "PROB-SEC-003"]
+  },
+  {
+    "id": "PROB-SEC-003",
+    "category": "Passwort & Sicherheit",
+    "title": "Passwort Self-Service",
+    "keywords": ["Passwort", "Self-Service", "SSPR", "zurücksetzen", "selbst", "Portal", "Passwort-Reset"],
+    "extendedKeywords": ["Passwort selbst zurücksetzen", "Self-Service Passwort", "Passwort-Portal", "Passwort Reset Portal", "Passwort selbst ändern", "SSPR", "Passwort-Self-Service", "wie ändere ich mein Passwort", "Passwort selbst erneuern", "Passwort Reset selbst", "wo kann ich Passwort ändern", "Self-Service Portal Passwort", "Passwort online zurücksetzen", "Passwort-Portal finden", "wie setze ich mein Passwort zurück", "Passwort selbst ändern Portal", "Passwort Reset Link", "Passwort Selbstbedienung", "Kennwort selbst zurücksetzen", "Passwort ändern Webseite"],
+    "typos": ["Self-Servce", "Self Serivce", "Paswort Portal"],
+    "symptoms": ["Benutzer muss Passwort selbst zurücksetzen", "Self-Service Portal nicht erreichbar oder unbekannt"],
+    "quickCheck": "Haben Sie sich bereits für den Passwort-Self-Service registriert?",
+    "solutions": [
+      "Self-Service-Passwort-Portal aufrufen (URL beim IT-Helpdesk erfragen)",
+      "Identität über Sicherheitsfragen oder Telefon verifizieren",
+      "Neues Passwort setzen (Komplexitätsanforderungen beachten)",
+      "Falls Self-Service nicht möglich: IT-Helpdesk kontaktieren",
+      "Nach Reset: Passwort auf allen Geräten aktualisieren"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["passwort self service", "passwort portal", "passwort selbst zurücksetzen"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie auf das Self-Service-Portal zugreifen?",
+        "options": ["Ja", "Portal nicht erreichbar", "Kenne die URL nicht", "Nicht registriert"],
+        "narrows": "Ob der Benutzer Hilfe mit dem Portal oder einer Alternative benötigt"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-001", "PROB-SEC-002"]
+  },
+  {
+    "id": "PROB-SEC-004",
+    "category": "Passwort & Sicherheit",
+    "title": "AD-Konto gesperrt (Lockout)",
+    "keywords": ["Active Directory", "Konto", "gesperrt", "Lockout", "Account", "Sperre", "locked", "Kontosperrung"],
+    "extendedKeywords": ["Konto gesperrt", "AD Konto Lockout", "Account gesperrt", "mein Konto ist gesperrt", "kann mich nicht anmelden Konto gesperrt", "Active Directory Sperre", "Windows Konto gesperrt", "Benutzer gesperrt", "Account Lockout", "AD Lockout", "Konto wurde gesperrt", "Konto automatisch gesperrt", "Kontosperre", "Benutzerkonto gesperrt", "Domänenkonto gesperrt", "Windows Account gesperrt", "mein Account ist gesperrt", "Konto gesperrt Fehlermeldung", "bin ausgesperrt", "Konto deaktiviert"],
+    "typos": ["Konto gesbperrt", "Account gespert", "Lockoud"],
+    "symptoms": ["Fehlermeldung: Konto ist gesperrt", "Anmeldung nicht möglich trotz korrektem Passwort", "Account Lockout Meldung"],
+    "quickCheck": "Haben Sie das Passwort mehrmals falsch eingegeben?",
+    "solutions": [
+      "Warten bis die automatische Entsperrung erfolgt (meist 15-30 Minuten)",
+      "IT-Helpdesk kontaktieren für manuelle Kontoentsperrung",
+      "Prüfen ob ein altes Passwort in einer App/Dienst gespeichert ist",
+      "Credential Manager bereinigen",
+      "Nach Entsperrung: Passwort auf allen Geräten aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Gespeicherte Anmeldedaten löschen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_domain_resetpwd", "label": "Passwort zurücksetzen", "priority": 2, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["konto gesperrt", "account lockout", "ad sperre"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde das Passwort kürzlich geändert?",
+        "options": ["Ja", "Nein", "Weiß nicht"],
+        "narrows": "Ob ein altes gespeichertes Passwort die Sperre verursacht"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-005", "PROB-SEC-006"]
+  },
+  {
+    "id": "PROB-SEC-005",
+    "category": "Passwort & Sicherheit",
+    "title": "Konto gesperrt nach falschen Versuchen",
+    "keywords": ["Konto", "gesperrt", "falsche Versuche", "Passwort", "Fehlversuche", "Threshold", "Schwellwert"],
+    "extendedKeywords": ["zu oft falsches Passwort", "Konto gesperrt nach Fehlversuchen", "zu viele Anmeldeversuche", "Passwort zu oft falsch", "Konto wegen falscher Eingaben gesperrt", "Account gesperrt Fehlversuche", "Passwort mehrmals falsch eingegeben", "Konto Sperre nach falschen Versuchen", "zu oft falsches Kennwort", "Account gesperrt zu viele Versuche", "Anmeldung fehlgeschlagen zu oft", "Konto temporär gesperrt", "falsche Passworteingabe gesperrt", "Login zu oft falsch Sperre", "Kontosperre wegen Fehlversuch", "Konto blockiert falsches Passwort", "zu viele falsche Logins", "Account temporär gesperrt", "Passwort falsch Konto gesperrt", "Konto Lockout Fehlversuche"],
+    "typos": ["Fehlversuche", "falsche Versuch", "gesbpert"],
+    "symptoms": ["Konto nach mehreren falschen Passwort-Eingaben gesperrt", "Temporäre Kontosperre aktiv"],
+    "quickCheck": "Wie oft wurde das falsche Passwort eingegeben?",
+    "solutions": [
+      "Wartezeit für automatische Entsperrung abwarten",
+      "IT-Helpdesk für sofortige Entsperrung kontaktieren",
+      "Korrektes Passwort vor dem nächsten Versuch sicherstellen",
+      "Caps-Lock und Tastaturlayout prüfen",
+      "Gespeicherte Passwörter im Credential Manager prüfen und aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Gespeicherte Anmeldedaten löschen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_domain_resetpwd", "label": "Passwort zurücksetzen", "priority": 2, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["zu oft falsches passwort", "fehlversuche sperre", "konto gesperrt versuche"],
+    "followUpQuestions": [
+      {
+        "question": "Kennen Sie Ihr aktuelles Passwort sicher?",
+        "options": ["Ja, sicher", "Nicht sicher", "Nein, vergessen"],
+        "narrows": "Ob nur entsperrt oder auch ein Passwort-Reset nötig ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-004", "PROB-SEC-006"]
+  },
+  {
+    "id": "PROB-SEC-006",
+    "category": "Passwort & Sicherheit",
+    "title": "Ursache für wiederholte Kontosperrung finden",
+    "keywords": ["Konto", "Lockout", "Ursache", "wiederholt", "Quelle", "Analyse", "Source", "gespeichertes Passwort"],
+    "extendedKeywords": ["Konto wird immer wieder gesperrt", "wiederholte Kontosperrung", "Konto sperrt sich immer", "warum wird mein Konto gesperrt", "Lockout Ursache finden", "Konto Lockout Quelle", "woher kommt die Kontosperrung", "Konto wird ständig gesperrt", "Account wird immer gesperrt", "wiederholte Sperre", "Lockout Source finden", "Konto Sperre wiederholt", "wo kommt Lockout her", "Quelle der Kontosperrung", "Konto wird nach Reset wieder gesperrt", "permanente Kontosperrung", "Account Lockout Source", "Konto Lockout woher", "gespeichertes Passwort Lockout", "altes Passwort sperrt Konto"],
+    "typos": ["Lockoud Ursache", "wiederhohlte Sperre"],
+    "symptoms": ["Konto wird wiederholt gesperrt trotz korrektem Passwort", "Lockout nach Passwort-Reset erneut"],
+    "quickCheck": "Wurde das Passwort kürzlich geändert und gibt es Geräte/Dienste mit dem alten Passwort?",
+    "solutions": [
+      "Gespeicherte Anmeldedaten im Credential Manager löschen",
+      "Alle Geräte mit dem neuen Passwort aktualisieren (PC, Handy, Tablet)",
+      "Geplante Aufgaben mit alten Credentials prüfen",
+      "Outlook/Exchange-Profil Passwort aktualisieren",
+      "WLAN-Profil mit Domain-Credentials prüfen",
+      "Dienste prüfen die unter dem Benutzerkonto laufen",
+      "VPN-Client Passwort aktualisieren",
+      "IT kontaktieren für AD-Lockout-Analyse (Eventlog)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Gespeicherte Anmeldedaten löschen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_authreset", "label": "Authentifizierungsdaten zurücksetzen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["konto immer gesperrt", "lockout ursache", "wiederholte sperre"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie kürzlich Ihr Passwort geändert?",
+        "options": ["Ja, vor kurzem", "Nein", "Weiß nicht mehr"],
+        "narrows": "Ob ein altes gespeichertes Passwort die Ursache ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-004", "PROB-SEC-005", "PROB-SEC-030"]
+  },
+  {
+    "id": "PROB-SEC-007",
+    "category": "Passwort & Sicherheit",
+    "title": "MFA Token fehlt",
+    "keywords": ["MFA", "Token", "fehlt", "Multi-Faktor", "2FA", "Authenticator", "zweiter Faktor", "Code"],
+    "extendedKeywords": ["MFA Token fehlt", "kein MFA Code", "Authenticator zeigt keinen Code", "MFA Token nicht vorhanden", "zweiter Faktor fehlt", "2FA Code fehlt", "MFA Token weg", "Authenticator Token fehlt", "kein Einmalpasswort", "MFA fehlt auf dem Handy", "Token für Anmeldung fehlt", "MFA Code nicht verfügbar", "kann MFA nicht eingeben kein Token", "MFA Authenticator leer", "Token für zweiten Faktor weg", "kein MFA Token mehr", "MFA Code kommt nicht", "zweiter Faktor nicht verfügbar", "MFA Token verloren", "Authenticator App Token fehlt"],
+    "typos": ["MFa Token", "Tokem", "Authentikator"],
+    "symptoms": ["Kein MFA-Token/Code verfügbar", "Authenticator-App zeigt keinen Eintrag", "MFA-Registrierung fehlt"],
+    "quickCheck": "Haben Sie den MFA-Token auf einem Authenticator-Gerät registriert?",
+    "solutions": [
+      "Authenticator-App prüfen ob der Eintrag vorhanden ist",
+      "IT-Helpdesk kontaktieren für MFA-Reset",
+      "MFA neu registrieren über das Self-Service-Portal",
+      "Backup-Codes verwenden (falls vorhanden)",
+      "IT-Admin kann temporären MFA-Bypass einrichten"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["mfa token fehlt", "authenticator code fehlt", "2fa token weg"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie Ihr Smartphone gewechselt oder die Authenticator-App gelöscht?",
+        "options": ["Neues Smartphone", "App gelöscht", "Token war nie da", "Weiß nicht"],
+        "narrows": "Ob MFA neu registriert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-008", "PROB-SEC-009", "PROB-SEC-010"]
+  },
+  {
+    "id": "PROB-SEC-008",
+    "category": "Passwort & Sicherheit",
+    "title": "App-Passwort für MFA",
+    "keywords": ["App-Passwort", "MFA", "Application Password", "Legacy", "Authentifizierung", "App Password"],
+    "extendedKeywords": ["App-Passwort erstellen", "App-Passwort für MFA", "Application Password", "App-Passwort benötigt", "App Passwort MFA", "App-Passwort generieren", "brauche App-Passwort", "App-Passwort für E-Mail", "App-Passwort für Outlook", "MFA App-Passwort", "App-spezifisches Passwort", "Legacy App Passwort", "App Passwort erstellen wie", "wo finde ich App-Passwort", "App-Passwort für alte Anwendung", "MFA App Password generieren", "App-Passwort einrichten", "App Passwort Anleitung", "App-Passwort funktioniert nicht", "App-Passwort erneuern"],
+    "typos": ["App-Paswort", "App Passwrt", "Application Paswort"],
+    "symptoms": ["Anwendung unterstützt kein MFA und braucht App-Passwort", "Legacy-App kann sich nicht mit MFA anmelden"],
+    "quickCheck": "Welche Anwendung benötigt ein App-Passwort?",
+    "solutions": [
+      "App-Passwort im Microsoft-Konto-Portal erstellen",
+      "App-Passwort in der betroffenen Anwendung eingeben",
+      "Prüfen ob die Anwendung moderne Authentifizierung unterstützt",
+      "IT-Helpdesk kontaktieren für Anleitung",
+      "App-Passwort sicher aufbewahren"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["app passwort mfa", "application password", "legacy app mfa"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Anwendung kann sich nicht mit MFA anmelden?",
+        "options": ["E-Mail-Client", "SAP", "Andere Desktop-App", "Weiß nicht"],
+        "narrows": "Ob ein App-Passwort oder eine andere Lösung benötigt wird"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-007", "PROB-SEC-009"]
+  },
+  {
+    "id": "PROB-SEC-009",
+    "category": "Passwort & Sicherheit",
+    "title": "Authenticator-App Probleme",
+    "keywords": ["Authenticator", "App", "Problem", "Microsoft Authenticator", "Google Authenticator", "TOTP", "Code"],
+    "extendedKeywords": ["Authenticator funktioniert nicht", "Authenticator Code falsch", "Authenticator App Problem", "Microsoft Authenticator geht nicht", "Google Authenticator funktioniert nicht", "Authenticator Code wird nicht akzeptiert", "Authenticator App Fehler", "Authenticator zeigt falschen Code", "Authenticator synchronisiert nicht", "Authenticator App kaputt", "Authenticator Code ungültig", "Authenticator Token falsch", "Authenticator App aktualisieren", "Authenticator reagiert nicht", "Authenticator Code läuft ab", "Authenticator Benachrichtigung kommt nicht", "Authenticator Push funktioniert nicht", "Authenticator App zurücksetzen", "Authenticator App neu einrichten", "Authenticator Code stimmt nicht"],
+    "typos": ["Authentikator", "Authenticater", "Authentictor"],
+    "symptoms": ["Authenticator-Code wird nicht akzeptiert", "Push-Benachrichtigung kommt nicht", "App zeigt falschen Code"],
+    "quickCheck": "Welche Authenticator-App verwenden Sie und was genau funktioniert nicht?",
+    "solutions": [
+      "Uhrzeit auf dem Smartphone prüfen und automatisch synchronisieren",
+      "Authenticator-App aktualisieren",
+      "Push-Benachrichtigungen prüfen ob aktiviert",
+      "Neuen Code abwarten und sofort eingeben",
+      "IT kontaktieren für MFA-Neuregistrierung",
+      "App-Cache der Authenticator-App leeren"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["authenticator problem", "authenticator code falsch", "authenticator funktioniert nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Wird der Code als ungültig abgelehnt oder kommt gar keine Benachrichtigung?",
+        "options": ["Code ungültig", "Keine Benachrichtigung", "App stürzt ab", "Anderes Problem"],
+        "narrows": "Art des Authenticator-Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-007", "PROB-SEC-010"]
+  },
+  {
+    "id": "PROB-SEC-010",
+    "category": "Passwort & Sicherheit",
+    "title": "MFA nach Gerätewechsel",
+    "keywords": ["MFA", "Gerätewechsel", "neues Handy", "Smartphone", "Migration", "übertragen", "Authenticator"],
+    "extendedKeywords": ["MFA neues Handy", "MFA Gerätewechsel", "Authenticator auf neues Handy", "MFA übertragen", "MFA Migration", "neues Smartphone MFA", "MFA auf neuem Gerät einrichten", "Authenticator wechseln", "MFA Token auf neues Handy", "MFA umziehen", "Authenticator Transfer", "neues Telefon MFA", "MFA neu einrichten neues Gerät", "Authenticator Backup neues Handy", "MFA nach Handywechsel", "Authenticator auf anderes Gerät", "MFA Gerät wechseln", "neues Handy Authenticator einrichten", "MFA verloren neues Gerät", "Authenticator Daten übertragen"],
+    "typos": ["Gerätewechsle", "Geretewechsel", "neues Hanyd"],
+    "symptoms": ["MFA nach Smartphone-Wechsel nicht verfügbar", "Authenticator-App auf neuem Gerät leer"],
+    "quickCheck": "Haben Sie noch Zugriff auf das alte Gerät?",
+    "solutions": [
+      "Falls altes Gerät verfügbar: Authenticator-Backup nutzen",
+      "Microsoft Authenticator: Cloud-Backup wiederherstellen",
+      "IT-Helpdesk kontaktieren für MFA-Reset und Neuregistrierung",
+      "MFA mit neuem Gerät über Self-Service-Portal neu registrieren",
+      "Backup-Codes verwenden um Zugang zu erhalten"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["mfa neues handy", "authenticator gerätewechsel", "mfa übertragen"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie noch Zugriff auf das alte Smartphone?",
+        "options": ["Ja, altes Gerät noch da", "Nein, kein Zugriff", "Gerät verloren/defekt"],
+        "narrows": "Ob ein Transfer oder ein kompletter MFA-Reset nötig ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-007", "PROB-SEC-009"]
+  },
+  {
+    "id": "PROB-SEC-011",
+    "category": "Passwort & Sicherheit",
+    "title": "Windows PIN funktioniert nicht",
+    "keywords": ["PIN", "Windows Hello", "funktioniert nicht", "Anmeldung", "Login", "Zahlencode", "TPM"],
+    "extendedKeywords": ["Windows PIN geht nicht", "PIN funktioniert nicht", "Windows Hello PIN falsch", "PIN wird nicht akzeptiert", "kann mich nicht mit PIN anmelden", "PIN Eingabe funktioniert nicht", "Windows PIN falsch", "PIN Login geht nicht", "Windows Hello funktioniert nicht", "PIN bei Windows Anmeldung", "meine PIN geht nicht", "PIN wird abgelehnt", "Windows PIN Problem", "PIN Anmeldung fehlgeschlagen", "PIN geht nicht mehr", "Windows PIN akzeptiert nicht", "Hello PIN Fehler", "PIN eingeben funktioniert nicht", "Windows Login PIN", "PIN stimmt nicht Windows"],
+    "typos": ["Pin", "PIN funtioniert nicht", "Windows Helo"],
+    "symptoms": ["Windows Hello PIN wird nicht akzeptiert", "PIN-Anmeldung fehlgeschlagen", "TPM-Fehler bei PIN-Nutzung"],
+    "quickCheck": "Wird ein bestimmter Fehlercode oder eine Meldung angezeigt?",
+    "solutions": [
+      "Windows-Passwort als Alternative zum Anmelden verwenden",
+      "PIN über Windows-Einstellungen zurücksetzen",
+      "TPM-Status prüfen",
+      "Windows Hello PIN löschen und neu einrichten",
+      "Gerät neu starten und erneut versuchen",
+      "IT kontaktieren bei TPM-Problemen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["windows pin", "hello pin", "pin funktioniert nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie sich mit dem Windows-Passwort statt der PIN anmelden?",
+        "options": ["Ja, Passwort geht", "Nein, Passwort geht auch nicht", "Nur PIN verfügbar"],
+        "narrows": "Ob nur die PIN oder die gesamte Anmeldung betroffen ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-012", "PROB-SEC-013"]
+  },
+  {
+    "id": "PROB-SEC-012",
+    "category": "Passwort & Sicherheit",
+    "title": "Windows PIN zurücksetzen",
+    "keywords": ["PIN", "zurücksetzen", "Windows Hello", "Reset", "löschen", "neu einrichten", "PIN-Reset"],
+    "extendedKeywords": ["Windows PIN zurücksetzen", "PIN löschen Windows", "PIN Reset Windows", "Windows Hello PIN neu", "PIN neu einrichten", "PIN zurücksetzen Windows", "Windows PIN löschen", "PIN Reset Windows Hello", "Windows PIN ändern", "PIN entfernen Windows", "neue PIN erstellen", "Windows PIN erneuern", "PIN zurücksetzen anleitung", "Windows Hello zurücksetzen", "PIN vergessen zurücksetzen", "PIN löschen und neu", "Windows PIN Reset", "PIN entfernen und neu einrichten", "Windows Hello PIN löschen", "PIN ändern Windows 11"],
+    "typos": ["PIN zurücksetze", "zurücksetzten", "zuücksetzen"],
+    "symptoms": ["PIN muss zurückgesetzt werden", "PIN vergessen", "PIN funktioniert nicht mehr"],
+    "quickCheck": "Können Sie sich mit dem Passwort anmelden um die PIN zurückzusetzen?",
+    "solutions": [
+      "Windows-Einstellungen > Konten > Anmeldeoptionen > Windows Hello PIN > Ich habe meine PIN vergessen",
+      "PIN über Einstellungen löschen und neu erstellen",
+      "Falls nicht möglich: Mit Passwort anmelden und PIN über Einstellungen zurücksetzen",
+      "TPM löschen und PIN neu einrichten (nur als letzter Ausweg)",
+      "IT kontaktieren falls kein Zugriff möglich"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["pin zurücksetzen", "windows pin reset", "pin löschen"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie Zugang zu den Windows-Einstellungen (sind Sie angemeldet)?",
+        "options": ["Ja, bin angemeldet", "Nein, kann mich nicht anmelden", "Über Passwort angemeldet"],
+        "narrows": "Welcher Weg zum PIN-Reset möglich ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-011", "PROB-SEC-013"]
+  },
+  {
+    "id": "PROB-SEC-013",
+    "category": "Passwort & Sicherheit",
+    "title": "Windows Hello einrichten",
+    "keywords": ["Windows Hello", "einrichten", "Setup", "PIN", "Fingerabdruck", "Gesichtserkennung", "biometrisch"],
+    "extendedKeywords": ["Windows Hello einrichten", "Windows Hello aktivieren", "PIN einrichten Windows", "Fingerabdruck einrichten", "Gesichtserkennung einrichten Windows", "Windows Hello Setup", "Windows Hello konfigurieren", "wie richte ich Windows Hello ein", "Windows Hello erstmalig einrichten", "PIN erstellen Windows", "biometrische Anmeldung einrichten", "Windows Hello Fingerprint", "Windows Hello Face", "Windows Hello aktivieren anleitung", "PIN zum ersten Mal erstellen", "Windows Hello starten", "Fingerabdruck Windows hinzufügen", "Gesichtserkennung Windows aktivieren", "Windows Hello Ersteinrichtung", "Windows Hello Anleitung"],
+    "typos": ["Windows Helo", "einrchten", "Fingerabduck"],
+    "symptoms": ["Windows Hello muss erstmalig eingerichtet werden", "Biometrische Anmeldung gewünscht"],
+    "quickCheck": "Welche Windows Hello Methode möchten Sie einrichten (PIN, Fingerabdruck, Gesichtserkennung)?",
+    "solutions": [
+      "Windows-Einstellungen > Konten > Anmeldeoptionen > Windows Hello",
+      "PIN einrichten: Windows Hello PIN > Hinzufügen",
+      "Fingerabdruck: Windows Hello Fingerabdruck > Einrichten (Fingerabdruckleser nötig)",
+      "Gesichtserkennung: Windows Hello Gesichtserkennung > Einrichten (IR-Kamera nötig)",
+      "Anweisungen auf dem Bildschirm folgen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["windows hello setup", "pin einrichten", "fingerabdruck einrichten"],
+    "followUpQuestions": [
+      {
+        "question": "Hat Ihr Gerät einen Fingerabdruckleser oder eine IR-Kamera?",
+        "options": ["Fingerabdruckleser", "IR-Kamera", "Beides", "Keines/Nur PIN"],
+        "narrows": "Welche Hello-Methoden verfügbar sind"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-011", "PROB-SEC-012"]
+  },
+  {
+    "id": "PROB-SEC-014",
+    "category": "Passwort & Sicherheit",
+    "title": "SSO funktioniert nicht",
+    "keywords": ["SSO", "Single Sign-On", "automatische Anmeldung", "SAML", "OAuth", "Kerberos", "Federation"],
+    "extendedKeywords": ["SSO funktioniert nicht", "Single Sign-On geht nicht", "automatische Anmeldung funktioniert nicht", "SSO Problem", "SSO Fehler", "muss mich trotz SSO anmelden", "SSO Login fehlgeschlagen", "Single Sign-On klappt nicht", "SSO meldet mich nicht an", "automatischer Login funktioniert nicht", "SSO fragt nach Passwort", "SSO nicht aktiv", "Single Sign-On Problem", "SSO kaputt", "kann mich nicht mit SSO anmelden", "SSO Anmeldung funktioniert nicht", "SSO leitet nicht weiter", "SSO Fehler beim Login", "Single Sign-On fehlgeschlagen", "SSO defekt"],
+    "typos": ["Sinlge Sign On", "SSo", "Single Signon"],
+    "symptoms": ["SSO-Anmeldung funktioniert nicht", "Applikation fragt trotz SSO nach Passwort", "SAML-Fehler bei SSO-Anmeldung"],
+    "quickCheck": "Bei welcher Anwendung funktioniert SSO nicht?",
+    "solutions": [
+      "Windows ab- und neu anmelden (Kerberos-Ticket erneuern)",
+      "Kerberos-Tickets löschen und erneuern",
+      "Browser-Cache und Cookies leeren",
+      "Prüfen ob die Anwendung SSO unterstützt",
+      "Credential Manager bereinigen",
+      "IT kontaktieren bei serverseitigem SSO-Problem"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_klist", "label": "Kerberos Tickets anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_domain_kpurge", "label": "Kerberos Tickets löschen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_appcache_authreset", "label": "Auth-Daten zurücksetzen", "priority": 3, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 4, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["sso fehler", "single sign on problem", "sso funktioniert nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde kürzlich das Passwort geändert?",
+        "options": ["Ja", "Nein", "Weiß nicht"],
+        "narrows": "Ob die SSO-Tokens erneuert werden müssen"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-015", "PROB-SEC-016"]
+  },
+  {
+    "id": "PROB-SEC-015",
+    "category": "Passwort & Sicherheit",
+    "title": "SSO Token-Problem",
+    "keywords": ["SSO", "Token", "ungültig", "abgelaufen", "Refresh", "Session", "Access Token", "ID Token"],
+    "extendedKeywords": ["SSO Token ungültig", "SSO Token abgelaufen", "SSO Session abgelaufen", "Token Fehler SSO", "SSO Access Token Problem", "SSO Token erneuern", "SSO Token Refresh", "SSO Session Timeout", "Token abgelaufen Anmeldung", "SSO Token invalid", "SSO Token expired", "Session Token ungültig", "SSO Token nicht akzeptiert", "SSO Sitzung abgelaufen", "Token Fehler Anmeldung", "SSO Token Neuanforderung", "SSO Token Problem", "SSO Session erneuern", "SSO Token muss erneuert werden", "SSO Access Token abgelaufen"],
+    "typos": ["Tokem", "Token ungülitg", "abgelauffen"],
+    "symptoms": ["SSO-Token abgelaufen oder ungültig", "Anmeldung trotz SSO nötig", "Token-Fehler bei Applikation"],
+    "quickCheck": "Wann ist das Problem zum ersten Mal aufgetreten?",
+    "solutions": [
+      "Kerberos-Tickets anzeigen und prüfen",
+      "Kerberos-Tickets purgen und erneuern",
+      "Windows ab- und neu anmelden",
+      "Browser-Cache und Cookies löschen",
+      "Authentifizierungsdaten zurücksetzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_klist", "label": "Kerberos Tickets anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_domain_kpurge", "label": "Kerberos Tickets löschen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_appcache_authreset", "label": "Auth-Daten zurücksetzen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["sso token fehler", "token abgelaufen", "sso session expired"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft es alle SSO-fähigen Anwendungen oder nur eine?",
+        "options": ["Alle", "Nur eine", "Einige"],
+        "narrows": "Ob es ein globales Token- oder anwendungsspezifisches Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-014", "PROB-SEC-016"]
+  },
+  {
+    "id": "PROB-SEC-016",
+    "category": "Passwort & Sicherheit",
+    "title": "SSO nach Passwort-Änderung defekt",
+    "keywords": ["SSO", "Passwort", "Änderung", "defekt", "Token", "Kerberos", "erneuern", "aktualisieren"],
+    "extendedKeywords": ["SSO nach Passwort-Änderung kaputt", "SSO funktioniert nicht nach Passwort wechsel", "nach Passwort-Änderung SSO Problem", "SSO defekt Passwort geändert", "Passwort geändert SSO geht nicht", "SSO Token nach Passwort-Änderung", "nach Passwortänderung Anmeldung Problem", "SSO aktualisieren nach Passwort", "Passwort gewechselt SSO fehlerhaft", "nach Passwortwechsel SSO Fehler", "SSO nach Kennwortänderung", "Passwort geändert Apps funktionieren nicht", "nach Passwort Reset SSO Problem", "SSO erneuern Passwort geändert", "Passwort neu SSO kaputt", "nach Passwortänderung Token ungültig", "SSO nach Password Change", "Anmeldung nach Passwortwechsel fehlerhaft", "SSO braucht neues Passwort", "nach Passwort Reset Anmeldung fehlschlägt"],
+    "typos": ["Passwort-Änderun", "Passwort Ändeerung", "defeckt"],
+    "symptoms": ["SSO funktioniert nicht nach Passwort-Änderung", "Anwendungen fragen trotz SSO nach Passwort"],
+    "quickCheck": "Wann haben Sie das Passwort geändert?",
+    "solutions": [
+      "Windows komplett abmelden und neu anmelden",
+      "Kerberos-Tickets purgen und neu anfordern",
+      "Gespeicherte Anmeldedaten im Credential Manager aktualisieren/löschen",
+      "Browser komplett schließen und neu öffnen",
+      "Authentifizierungsdaten zurücksetzen",
+      "PC neu starten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_kpurge", "label": "Kerberos Tickets löschen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_credclear", "label": "Gespeicherte Anmeldedaten löschen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_appcache_authreset", "label": "Auth-Daten zurücksetzen", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 4, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["sso nach passwort änderung", "sso passwort gewechselt", "sso defekt passwort"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie nach der Passwort-Änderung Ihren PC neu gestartet?",
+        "options": ["Ja", "Nein", "Nur ab-/angemeldet"],
+        "narrows": "Ob ein Neustart die Kerberos-Tickets erneuert"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-014", "PROB-SEC-015"]
+  },
+  {
+    "id": "PROB-SEC-017",
+    "category": "Passwort & Sicherheit",
+    "title": "BitLocker Recovery Key benötigt",
+    "keywords": ["BitLocker", "Recovery Key", "Wiederherstellungsschlüssel", "gesperrt", "Verschlüsselung", "48-stellig"],
+    "extendedKeywords": ["BitLocker Recovery Key", "BitLocker Wiederherstellungsschlüssel", "BitLocker fragt nach Key", "BitLocker Schlüssel eingeben", "BitLocker Recovery", "wo finde ich BitLocker Key", "BitLocker Wiederherstellung", "BitLocker blauer Bildschirm", "BitLocker fragt nach Wiederherstellungsschlüssel", "BitLocker Key eingeben", "BitLocker Recovery Screen", "BitLocker gesperrt", "brauche BitLocker Schlüssel", "BitLocker PIN vergessen", "BitLocker 48 Stellen", "BitLocker Recovery eingeben", "BitLocker Startbildschirm", "BitLocker verlangt Key", "BitLocker Wiederherstellungsmodus", "BitLocker kann nicht starten"],
+    "typos": ["Bitlocker", "Recovery Kex", "Wiederherstellungsschlüsse"],
+    "symptoms": ["BitLocker fordert Recovery Key beim Start", "Blauer Bildschirm mit BitLocker Recovery", "48-stelliger Key wird verlangt"],
+    "quickCheck": "Wird der BitLocker Recovery-Bildschirm beim Hochfahren angezeigt?",
+    "solutions": [
+      "BitLocker Recovery Key im Azure AD/Intune Portal suchen",
+      "BitLocker Recovery Key im Active Directory suchen lassen (IT-Admin)",
+      "BitLocker Key auf gedrucktem Ausdruck suchen (falls gespeichert)",
+      "IT-Helpdesk kontaktieren mit der Key-ID",
+      "Recovery Key über Microsoft-Konto abrufen (falls privates Gerät)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_security_bitlockerkey", "label": "BitLocker Key abrufen", "priority": 1, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["bitlocker recovery", "bitlocker schlüssel", "bitlocker wiederherstellung"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Key-ID wird auf dem BitLocker-Bildschirm angezeigt?",
+        "options": ["Kann ID ablesen", "Bildschirm ist zu schnell", "Kein Key-ID sichtbar"],
+        "narrows": "Ob der richtige Recovery Key gefunden werden kann"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-018", "PROB-SEC-019", "PROB-SEC-020"]
+  },
+  {
+    "id": "PROB-SEC-018",
+    "category": "Passwort & Sicherheit",
+    "title": "BitLocker gesperrt",
+    "keywords": ["BitLocker", "gesperrt", "locked", "Verschlüsselung", "Zugriff", "Laufwerk", "Festplatte"],
+    "extendedKeywords": ["BitLocker gesperrt", "BitLocker Laufwerk gesperrt", "BitLocker Festplatte gesperrt", "BitLocker blockiert Start", "BitLocker sperrt Computer", "kann nicht starten BitLocker", "BitLocker verhindert Zugriff", "BitLocker Sperre", "Festplatte durch BitLocker gesperrt", "Computer gesperrt BitLocker", "BitLocker lässt mich nicht rein", "Laufwerk verschlüsselt gesperrt", "BitLocker Laufwerk öffnen geht nicht", "BitLocker externe Festplatte gesperrt", "BitLocker USB gesperrt", "BitLocker Zugriff verweigert", "BitLocker Partition gesperrt", "BitLocker nach BIOS Update gesperrt", "BitLocker nach Hardware-Änderung gesperrt", "BitLocker Sperre aufheben"],
+    "typos": ["Bitlocker gespert", "Bitloker", "BitLicker"],
+    "symptoms": ["Computer startet nicht wegen BitLocker-Sperre", "Laufwerk durch BitLocker gesperrt", "BitLocker nach BIOS/Hardware-Änderung ausgelöst"],
+    "quickCheck": "Wurde kürzlich eine Hardware-Änderung oder ein BIOS-Update durchgeführt?",
+    "solutions": [
+      "BitLocker Recovery Key eingeben",
+      "Recovery Key über IT abrufen",
+      "BitLocker Status prüfen",
+      "Nach Entsperrung: BitLocker Schutz anhalten für geplante Änderungen",
+      "IT kontaktieren wenn kein Recovery Key verfügbar"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_security_bitlockerkey", "label": "BitLocker Key abrufen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_security_bitlocker", "label": "BitLocker Status prüfen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["bitlocker gesperrt", "bitlocker locked", "bitlocker sperre"],
+    "followUpQuestions": [
+      {
+        "question": "Was wurde vor der BitLocker-Sperre geändert?",
+        "options": ["BIOS Update", "Hardware-Änderung", "Windows Update", "Nichts bekannt"],
+        "narrows": "Ursache der BitLocker-Auslösung"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-017", "PROB-SEC-019"]
+  },
+  {
+    "id": "PROB-SEC-019",
+    "category": "Passwort & Sicherheit",
+    "title": "BitLocker aktivieren",
+    "keywords": ["BitLocker", "aktivieren", "einschalten", "verschlüsseln", "Festplatte", "Laufwerk", "einrichten"],
+    "extendedKeywords": ["BitLocker aktivieren", "BitLocker einschalten", "Festplatte verschlüsseln", "BitLocker einrichten", "Laufwerk verschlüsseln BitLocker", "BitLocker starten", "wie aktiviere ich BitLocker", "BitLocker Verschlüsselung starten", "BitLocker konfigurieren", "BitLocker auf Laufwerk aktivieren", "BitLocker Setup", "Festplattenverschlüsselung aktivieren", "BitLocker Laufwerk verschlüsseln", "BitLocker einrichten Anleitung", "BitLocker erstmalig aktivieren", "BitLocker Enable", "PC verschlüsseln BitLocker", "BitLocker Verschlüsselung einrichten", "USB Stick mit BitLocker verschlüsseln", "BitLocker To Go aktivieren"],
+    "typos": ["BitLocker aktiviren", "Bitlocker einscahlten", "verschlüsslen"],
+    "symptoms": ["BitLocker muss aktiviert werden", "Compliance-Anforderung für Verschlüsselung"],
+    "quickCheck": "Soll das Systemlaufwerk oder ein externes Laufwerk verschlüsselt werden?",
+    "solutions": [
+      "BitLocker Status prüfen",
+      "Systemsteuerung > BitLocker-Laufwerkverschlüsselung > BitLocker aktivieren",
+      "TPM-Status prüfen (TPM muss aktiviert sein)",
+      "Recovery Key sicher speichern (Azure AD, Ausdruck, USB)",
+      "Verschlüsselung starten und abwarten bis abgeschlossen",
+      "IT kontaktieren für Unternehmensrichtlinien zur Verschlüsselung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_security_bitlocker", "label": "BitLocker Status prüfen", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["bitlocker aktivieren", "bitlocker einschalten", "festplatte verschlüsseln"],
+    "followUpQuestions": [
+      {
+        "question": "Ist ein TPM-Chip im Gerät verfügbar?",
+        "options": ["Ja", "Nein", "Weiß nicht"],
+        "narrows": "Ob BitLocker mit TPM oder Passwort/USB konfiguriert wird"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-017", "PROB-SEC-020"]
+  },
+  {
+    "id": "PROB-SEC-020",
+    "category": "Passwort & Sicherheit",
+    "title": "BitLocker TPM-Fehler",
+    "keywords": ["BitLocker", "TPM", "Fehler", "Trusted Platform Module", "TPM-Chip", "Sicherheitschip", "Error"],
+    "extendedKeywords": ["BitLocker TPM Fehler", "TPM Problem BitLocker", "TPM nicht erkannt", "BitLocker TPM nicht kompatibel", "TPM Fehler beim Start", "BitLocker kann TPM nicht nutzen", "TPM Chip Problem", "BitLocker TPM Error", "Trusted Platform Module Fehler", "TPM nicht verfügbar BitLocker", "TPM Fehler Windows", "BitLocker TPM Initialisierung", "TPM nicht bereit", "BitLocker TPM aktivieren", "TPM Sicherheitschip Fehler", "BitLocker erfordert TPM", "TPM nicht gefunden", "BitLocker TPM Reset", "TPM Firmware Update nötig", "BitLocker TPM Kompatibilität"],
+    "typos": ["TMP", "TPm Fehler", "Trusted Plattform"],
+    "symptoms": ["TPM-Fehler bei BitLocker-Aktivierung", "BitLocker kann TPM nicht initialisieren", "TPM-Chip nicht erkannt"],
+    "quickCheck": "Welche Fehlermeldung zeigt BitLocker in Bezug auf TPM an?",
+    "solutions": [
+      "BitLocker Status prüfen",
+      "TPM-Status in der Geräteverwaltung prüfen (tpm.msc)",
+      "TPM im BIOS aktivieren",
+      "TPM-Firmware aktualisieren",
+      "TPM löschen und neu initialisieren (Achtung: BitLocker Recovery Key benötigt!)",
+      "IT kontaktieren bei Hardware-TPM-Problemen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_security_bitlocker", "label": "BitLocker Status prüfen", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["tpm fehler bitlocker", "tpm problem", "bitlocker tpm"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde kürzlich ein BIOS-Update oder Hardware-Änderung durchgeführt?",
+        "options": ["BIOS Update", "Hardware-Änderung", "Nein", "Weiß nicht"],
+        "narrows": "Ob TPM durch eine Änderung beeinträchtigt wurde"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-017", "PROB-SEC-018", "PROB-SEC-019"]
+  },
+  {
+    "id": "PROB-SEC-021",
+    "category": "Passwort & Sicherheit",
+    "title": "Vertrauensstellung zur Domäne defekt",
+    "keywords": ["Vertrauensstellung", "Domäne", "Domain Trust", "Computer", "Secure Channel", "Konto", "defekt"],
+    "extendedKeywords": ["Vertrauensstellung defekt", "Domäne Vertrauensstellung fehlgeschlagen", "Domain Trust broken", "Computer Vertrauensstellung", "Vertrauensstellung zur Domäne verloren", "Domain Trust Fehler", "Vertrauensstellung zwischen Computer und Domäne", "kann nicht anmelden Vertrauensstellung", "Trust Relationship fehlgeschlagen", "Vertrauensstellung unterbrochen", "Domäne erkennt Computer nicht", "Computerkonto Vertrauensstellung", "Domäne Trust Problem", "Secure Channel defekt", "Vertrauensstellung wiederherstellen", "Domain Trust repair", "Vertrauensstellung kaputt", "Computer nicht mehr in Domäne", "Trust Fehler Windows", "Vertrauensstellung fehlgeschlagen Meldung"],
+    "typos": ["Vertrauenstellung", "Vertrauensstelung", "Domäne Vertrauens"],
+    "symptoms": ["Fehlermeldung: Vertrauensstellung zwischen Computer und Domäne fehlgeschlagen", "Anmeldung an der Domäne nicht möglich"],
+    "quickCheck": "Wird die Meldung 'Die Vertrauensstellung zwischen dieser Arbeitsstation und der primären Domäne ist fehlgeschlagen' angezeigt?",
+    "solutions": [
+      "PC aus der Domäne entfernen und wieder hinzufügen (benötigt lokalen Admin)",
+      "Secure Channel mit PowerShell zurücksetzen: Test-ComputerSecureChannel -Repair",
+      "Computerkonto im AD zurücksetzen (IT-Admin)",
+      "PC mit lokalem Administrator-Konto anmelden",
+      "IT kontaktieren für Domänen-Rejoin"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_testsc", "label": "Secure Channel testen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_domain_scquery", "label": "Secure Channel abfragen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["vertrauensstellung defekt", "domain trust broken", "trust relationship failed"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie sich mit einem lokalen Administrator-Konto anmelden?",
+        "options": ["Ja", "Nein", "Kenne kein lokales Admin-Konto"],
+        "narrows": "Ob der Secure Channel lokal repariert werden kann"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-022", "PROB-SEC-023"]
+  },
+  {
+    "id": "PROB-SEC-022",
+    "category": "Passwort & Sicherheit",
+    "title": "Computerkonto-Problem in der Domäne",
+    "keywords": ["Computerkonto", "Domäne", "AD", "Active Directory", "Machine Account", "Computer Object", "deaktiviert"],
+    "extendedKeywords": ["Computerkonto Problem", "Computerkonto Domäne", "AD Computerkonto", "Machine Account Fehler", "Computerobjekt AD", "Computerkonto deaktiviert", "Computerkonto zurücksetzen", "Computerkonto nicht gefunden", "Computer in AD nicht vorhanden", "AD Computerkonto Fehler", "Domäne Computerkonto Problem", "Computerkonto gesperrt", "Computerkonto abgelaufen", "Machine Account Password", "Computerkonto Passwort", "Computer AD Objekt", "Computerkonto aktualisieren", "AD Computer deaktiviert", "Computerkonto erneuern", "PC nicht in Domäne gefunden"],
+    "typos": ["Computerkont", "Computerkonot", "Machien Account"],
+    "symptoms": ["Computerkonto in AD deaktiviert oder nicht vorhanden", "Computer kann sich nicht an Domäne authentifizieren"],
+    "quickCheck": "Ist der Computer im Active Directory als aktiv sichtbar?",
+    "solutions": [
+      "Secure Channel testen und ggf. reparieren",
+      "Computerkonto im AD zurücksetzen (IT-Admin)",
+      "PC aus Domäne entfernen und neu hinzufügen",
+      "Prüfen ob Computerkonto durch Inaktivität deaktiviert wurde",
+      "IT-Admin kontaktieren für Computerkonto-Verwaltung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_testsc", "label": "Secure Channel testen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_domain_scquery", "label": "Secure Channel abfragen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["computerkonto problem", "machine account", "computer ad"],
+    "followUpQuestions": [
+      {
+        "question": "War der Computer längere Zeit offline oder ausgeschaltet?",
+        "options": ["Ja, mehrere Wochen", "Nein, war aktiv", "Weiß nicht"],
+        "narrows": "Ob das Computerkonto durch Inaktivität deaktiviert wurde"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-021", "PROB-SEC-023"]
+  },
+  {
+    "id": "PROB-SEC-023",
+    "category": "Passwort & Sicherheit",
+    "title": "Secure Channel reparieren",
+    "keywords": ["Secure Channel", "reparieren", "netdom", "Reset", "Computerkonto", "Trust", "Kanal"],
+    "extendedKeywords": ["Secure Channel reparieren", "Secure Channel zurücksetzen", "Secure Channel defekt", "netdom resetpwd", "Secure Channel Reset", "sicherer Kanal reparieren", "Secure Channel wiederherstellen", "Secure Channel Fix", "Secure Channel Problem lösen", "Test-ComputerSecureChannel", "Secure Channel erneuern", "Secure Channel broken", "Domäne Secure Channel", "Secure Channel Repair", "Computerkonto Secure Channel", "netdom reset", "Secure Channel wiederherstellen Anleitung", "Secure Channel PowerShell", "Secure Channel kaputt reparieren", "Secure Channel Fehler beheben"],
+    "typos": ["Secure Chanel", "Secrue Channel", "Secure Chanell"],
+    "symptoms": ["Secure Channel zwischen Computer und DC ist defekt", "Vertrauensstellung fehlgeschlagen"],
+    "quickCheck": "Können Sie sich mit einem lokalen Administrator-Konto anmelden?",
+    "solutions": [
+      "Secure Channel Status prüfen",
+      "Secure Channel mit PowerShell reparieren: Test-ComputerSecureChannel -Repair -Credential (Get-Credential)",
+      "Alternativ: netdom resetpwd /server:DC /userd:admin /passwordd:*",
+      "Nach Reparatur: PC neu starten",
+      "Falls Reparatur fehlschlägt: PC aus Domäne entfernen und neu beitreten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_testsc", "label": "Secure Channel testen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_domain_scquery", "label": "Secure Channel abfragen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["secure channel repair", "secure channel fix", "netdom resetpwd"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie Domain-Admin-Rechte für die Reparatur?",
+        "options": ["Ja", "Nein", "IT-Admin ist verfügbar"],
+        "narrows": "Ob der Benutzer die Reparatur selbst durchführen kann"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-021", "PROB-SEC-022"]
+  },
+  {
+    "id": "PROB-SEC-024",
+    "category": "Passwort & Sicherheit",
+    "title": "Kerberos Ticket-Problem",
+    "keywords": ["Kerberos", "Ticket", "TGT", "TGS", "KDC", "Authentifizierung", "Service Ticket"],
+    "extendedKeywords": ["Kerberos Ticket Problem", "Kerberos Fehler", "KDC nicht erreichbar", "Kerberos TGT", "Kerberos Ticket ungültig", "Kerberos Authentifizierung fehlgeschlagen", "Kerberos Ticket abgelaufen", "Kerberos Service Ticket", "Kerberos KDC Fehler", "Kerberos Ticket erneuern", "Kerberos TGS Fehler", "Kerberos Key Distribution Center", "Kerberos Ticket nicht erhalten", "Kerberos Anmeldung Fehler", "Kerberos Token Problem", "Kerberos pre-authentication failed", "Kerberos Error Code", "KRB5KDC_ERR", "Kerberos Clock Skew", "Kerberos Ticket anzeigen"],
+    "typos": ["Kerbros", "Keberos", "Kerberous"],
+    "symptoms": ["Kerberos-Authentifizierung schlägt fehl", "KDC nicht erreichbar", "Ticket-Granting-Ticket nicht erhalten"],
+    "quickCheck": "Welchen Kerberos-Fehlercode oder welche Meldung sehen Sie?",
+    "solutions": [
+      "Kerberos-Tickets anzeigen und Status prüfen",
+      "Kerberos-Tickets löschen und erneuern",
+      "Zeitsynchronisation prüfen (max. 5 Minuten Abweichung)",
+      "DNS-Auflösung zum Domain Controller prüfen",
+      "Windows ab- und neu anmelden",
+      "IT kontaktieren bei KDC-Problemen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_klist", "label": "Kerberos Tickets anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_domain_kpurge", "label": "Kerberos Tickets löschen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_sysconfig_timeshow", "label": "Systemzeit prüfen", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 4, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["kerberos ticket", "kdc fehler", "kerberos authentifizierung"],
+    "followUpQuestions": [
+      {
+        "question": "Ist die Systemzeit korrekt synchronisiert?",
+        "options": ["Ja", "Nein", "Weiß nicht"],
+        "narrows": "Ob ein Clock-Skew-Problem vorliegt"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-025", "PROB-SEC-026"]
+  },
+  {
+    "id": "PROB-SEC-025",
+    "category": "Passwort & Sicherheit",
+    "title": "Kerberos Zeitsynchronisation",
+    "keywords": ["Kerberos", "Zeit", "Synchronisation", "NTP", "Clock Skew", "Systemzeit", "Uhr", "Zeitdienst"],
+    "extendedKeywords": ["Kerberos Zeitfehler", "Clock Skew Kerberos", "Systemzeit falsch Kerberos", "NTP Synchronisation Kerberos", "Uhrzeit falsch Kerberos", "Kerberos Zeitsynchronisation", "Zeitabweichung Kerberos", "Kerberos Clock", "Systemuhr falsch Kerberos", "NTP Fehler Kerberos", "Zeit nicht synchron Kerberos", "Kerberos 5 Minuten", "Zeitdienst Kerberos", "Clock Skew too great", "Kerberos Zeit Problem", "NTP Server Kerberos", "Zeitsync Kerberos", "Kerberos Uhr falsch", "Zeitabweichung Domain", "NTP Dienst Fehler"],
+    "typos": ["Zeitsynchronistation", "Clock Sckew", "NTP Syncronsiation"],
+    "symptoms": ["Kerberos schlägt wegen Zeitabweichung fehl", "Clock Skew too great Fehler", "Systemzeit weicht mehr als 5 Minuten ab"],
+    "quickCheck": "Wie groß ist die Zeitabweichung zum Domain Controller?",
+    "solutions": [
+      "Systemzeit prüfen und anzeigen",
+      "NTP-Dienst neu starten",
+      "Zeitsynchronisation manuell auslösen (w32tm /resync)",
+      "NTP-Server-Konfiguration prüfen",
+      "Kerberos-Tickets nach Zeitkorrektur erneuern"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_timeshow", "label": "Systemzeit prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_sysconfig_ntprestart", "label": "NTP-Dienst neu starten", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_domain_kpurge", "label": "Kerberos Tickets nach Zeitkorrektur erneuern", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["kerberos zeit", "clock skew", "ntp kerberos"],
+    "followUpQuestions": [
+      {
+        "question": "Zeigt die Windows-Uhr die korrekte Zeit an?",
+        "options": ["Ja, korrekt", "Nein, falsche Zeit", "Leichte Abweichung"],
+        "narrows": "Ob eine Zeitsynchronisation das Problem löst"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-024", "PROB-SEC-026"]
+  },
+  {
+    "id": "PROB-SEC-026",
+    "category": "Passwort & Sicherheit",
+    "title": "Kerberos Double-Hop Problem",
+    "keywords": ["Kerberos", "Double-Hop", "Delegation", "Constrained Delegation", "Impersonation", "Second Hop"],
+    "extendedKeywords": ["Kerberos Double Hop", "Kerberos Delegation Problem", "zweiter Server Kerberos", "Kerberos Weitergabe", "Kerberos Double Hop Fehler", "Delegation nicht möglich", "Kerberos Impersonation", "Second Hop Authentication", "Kerberos Credential Delegation", "Kerberos Weiterleitung", "Kerberos über zwei Server", "Constrained Delegation", "Unconstrained Delegation", "Kerberos Delegation einrichten", "Double Hop Authentifizierung", "Kerberos Delegation Fehler", "Kerberos Token Weiterleitung", "Kerberos zwei Hops", "Kerberos Delegation konfigurieren", "Double Hop Problem lösen"],
+    "typos": ["Double-Hopp", "Doble Hop", "Delegration"],
+    "symptoms": ["Authentifizierung an zweitem Server schlägt fehl", "Zugriff auf Netzwerkressource über Zwischenserver nicht möglich"],
+    "quickCheck": "Greifen Sie über einen Zwischenserver (z.B. Remotedesktop) auf eine weitere Ressource zu?",
+    "solutions": [
+      "Kerberos Delegation für den Zwischenserver konfigurieren lassen (IT-Admin)",
+      "Constrained Delegation im AD einrichten",
+      "CredSSP als Alternative prüfen",
+      "Direkte Verbindung zum Zielserver verwenden (Double-Hop umgehen)",
+      "IT-Admin für Delegationskonfiguration kontaktieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_klist", "label": "Kerberos Tickets anzeigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["kerberos double hop", "delegation problem", "second hop"],
+    "followUpQuestions": [
+      {
+        "question": "Wie sieht der Zugriffspfad aus (Ihr PC > Server A > Server B)?",
+        "options": ["Remotedesktop > Dateiserver", "Webserver > Datenbank", "Anderer Pfad", "Weiß nicht"],
+        "narrows": "Welche Delegation konfiguriert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-024", "PROB-SEC-025"]
+  },
+  {
+    "id": "PROB-SEC-027",
+    "category": "Passwort & Sicherheit",
+    "title": "Zertifikat abgelaufen",
+    "keywords": ["Zertifikat", "abgelaufen", "expired", "Certificate", "Gültigkeit", "SSL", "TLS", "Ablauf"],
+    "extendedKeywords": ["Zertifikat abgelaufen", "Certificate expired", "Zertifikat ungültig", "Zertifikat Ablauf", "abgelaufenes Zertifikat", "Zertifikat erneuern", "Zertifikat Gültigkeit", "SSL Zertifikat abgelaufen", "Zertifikat nicht mehr gültig", "Zertifikat Warnung", "Zertifikat verlängern", "Zertifikat Laufzeit", "Client Zertifikat abgelaufen", "Computer Zertifikat abgelaufen", "Benutzerzertifikat abgelaufen", "Zertifikat muss erneuert werden", "Zertifikat expired Meldung", "Zertifikat Ablaufdatum", "Windows Zertifikat abgelaufen", "Zertifikat renewal"],
+    "typos": ["Zertifkat abgelaufen", "Zertivikat", "abgelauffen"],
+    "symptoms": ["Zertifikatsfehler wegen Ablauf", "Anwendung verweigert Verbindung wegen abgelaufenem Zertifikat"],
+    "quickCheck": "Welches Zertifikat ist abgelaufen (Computer, Benutzer, Webseite)?",
+    "solutions": [
+      "Zertifikate auf dem Computer prüfen",
+      "Ablaufdatum der Zertifikate prüfen",
+      "Zertifikat erneuern über die Zertifizierungsstelle",
+      "Automatische Zertifikatserneuerung prüfen",
+      "IT kontaktieren für Zertifikatserneuerung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_certs_compcerts", "label": "Computer-Zertifikate prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_certs_certexpiry", "label": "Zertifikats-Ablauf prüfen", "priority": 2, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["zertifikat abgelaufen", "certificate expired", "zertifikat erneuern"],
+    "followUpQuestions": [
+      {
+        "question": "Um welches Zertifikat handelt es sich?",
+        "options": ["VPN/WLAN Zertifikat", "E-Mail Zertifikat", "Computer Zertifikat", "Weiß nicht"],
+        "narrows": "Welches Zertifikat erneuert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-028", "PROB-SEC-029"]
+  },
+  {
+    "id": "PROB-SEC-028",
+    "category": "Passwort & Sicherheit",
+    "title": "Zertifikat fehlt",
+    "keywords": ["Zertifikat", "fehlt", "nicht vorhanden", "Certificate", "installieren", "importieren", "Store"],
+    "extendedKeywords": ["Zertifikat fehlt", "Zertifikat nicht installiert", "Zertifikat nicht vorhanden", "Certificate missing", "Zertifikat muss installiert werden", "kein Zertifikat", "Zertifikat importieren", "Zertifikat fehlt auf Computer", "Benutzerzertifikat fehlt", "Computerzertifikat fehlt", "Zertifikat nicht im Speicher", "Zertifikat hinzufügen", "Zertifikat installieren", "Zertifikat nicht gefunden", "Root Zertifikat fehlt", "CA Zertifikat fehlt", "Zertifikat zum Speicher hinzufügen", "Zertifikat importieren Windows", "fehlendes Zertifikat installieren", "Zertifikat im Zertifikatspeicher fehlt"],
+    "typos": ["Zertifkat fehld", "Certificate mising", "Zerifikat"],
+    "symptoms": ["Zertifikat nicht im Windows Zertifikatspeicher", "Anwendung findet benötigtes Zertifikat nicht"],
+    "quickCheck": "Welches Zertifikat wird benötigt und für welchen Zweck?",
+    "solutions": [
+      "Computer-Zertifikate prüfen (certmgr.msc)",
+      "Zertifikat von der Zertifizierungsstelle anfordern",
+      "Zertifikat manuell importieren",
+      "Automatische Zertifikatsverteilung per GPO prüfen lassen",
+      "IT kontaktieren für Zertifikatsbereitstellung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_certs_compcerts", "label": "Computer-Zertifikate prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_certs_certexpiry", "label": "Zertifikats-Status prüfen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["zertifikat fehlt", "zertifikat installieren", "certificate missing"],
+    "followUpQuestions": [
+      {
+        "question": "Ist dies ein neuer PC oder fehlte das Zertifikat plötzlich?",
+        "options": ["Neuer PC", "War vorher da", "Weiß nicht"],
+        "narrows": "Ob das Zertifikat erstmalig installiert oder wiederhergestellt werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-027", "PROB-SEC-029"]
+  },
+  {
+    "id": "PROB-SEC-029",
+    "category": "Passwort & Sicherheit",
+    "title": "Zertifikat Enrollment/Registrierung",
+    "keywords": ["Zertifikat", "Enrollment", "Registrierung", "Anforderung", "Certificate Request", "CA", "PKI", "Auto-Enrollment"],
+    "extendedKeywords": ["Zertifikat Enrollment", "Zertifikat anfordern", "Zertifikat Registrierung", "Certificate Enrollment", "Zertifikat beantragen", "Auto-Enrollment Fehler", "Zertifikat automatisch anfordern", "Certificate Request", "PKI Enrollment", "Zertifikat Enrollment Fehler", "Zertifikat von CA anfordern", "Zertifikat registrieren", "Zertifikat Anforderung fehlgeschlagen", "Auto-Enrollment funktioniert nicht", "Zertifikat Enrollment konfigurieren", "Certificate Enrollment Error", "Zertifikat automatische Registrierung", "PKI Zertifikat anfordern", "Zertifikat Enrollment Web", "Zertifikat Enrollment Anleitung"],
+    "typos": ["Enrollement", "Registrierun", "Zertifkat Enrollment"],
+    "symptoms": ["Zertifikats-Enrollment schlägt fehl", "Auto-Enrollment funktioniert nicht", "Zertifikatsanforderung wird abgelehnt"],
+    "quickCheck": "Welches Zertifikat soll angefordert werden und über welche Methode?",
+    "solutions": [
+      "Zertifikats-Status prüfen",
+      "Auto-Enrollment über certlm.msc manuell auslösen",
+      "Zertifikat über Web-Enrollment anfordern",
+      "Zertifizierungsstelle (CA) Erreichbarkeit prüfen",
+      "IT kontaktieren für Zertifikatsanforderung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_certs_compcerts", "label": "Computer-Zertifikate prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_certs_certexpiry", "label": "Zertifikats-Status prüfen", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["zertifikat enrollment", "certificate request", "auto-enrollment"],
+    "followUpQuestions": [
+      {
+        "question": "Wird eine bestimmte Fehlermeldung beim Enrollment angezeigt?",
+        "options": ["Ja, bestimmter Fehler", "Enrollment startet nicht", "Zertifikat wird abgelehnt", "Weiß nicht"],
+        "narrows": "Art des Enrollment-Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-027", "PROB-SEC-028"]
+  },
+  {
+    "id": "PROB-SEC-030",
+    "category": "Passwort & Sicherheit",
+    "title": "Credential Manager alte Einträge",
+    "keywords": ["Credential Manager", "Anmeldeinformationsverwaltung", "gespeicherte Passwörter", "alte Einträge", "Vault", "Credentials"],
+    "extendedKeywords": ["Credential Manager bereinigen", "alte Passwörter im Credential Manager", "gespeicherte Anmeldedaten löschen", "Credential Manager aufräumen", "Windows Anmeldeinformationsverwaltung", "alte Credentials löschen", "Credential Manager Einträge", "gespeicherte Passwörter Windows", "Credential Manager veraltete Daten", "Windows Vault bereinigen", "Credential Manager altes Passwort", "gespeicherte Zugangsdaten löschen", "Credential Manager Windows", "alte gespeicherte Passwörter", "Anmeldedaten Windows löschen", "Credential Manager leeren", "veraltete Anmeldedaten", "Credential Manager Problem", "gespeicherte Kennwörter entfernen", "Credential Manager alte Einträge löschen"],
+    "typos": ["Credantial Manager", "Credential Maneger", "Anmeldeinformationsverwaltun"],
+    "symptoms": ["Altes gespeichertes Passwort verursacht Anmeldeprobleme", "Credential Manager enthält veraltete Einträge"],
+    "quickCheck": "Wurde kürzlich ein Passwort geändert und tritt ein Lockout auf?",
+    "solutions": [
+      "Gespeicherte Anmeldedaten über Remote-Befehl löschen",
+      "Credential Manager manuell öffnen: Systemsteuerung > Anmeldeinformationsverwaltung",
+      "Veraltete Windows- und Web-Anmeldeinformationen löschen",
+      "Authentifizierungsdaten zurücksetzen",
+      "Nach Bereinigung: Neues Passwort bei nächster Abfrage eingeben"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Gespeicherte Anmeldedaten löschen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_appcache_authreset", "label": "Auth-Daten zurücksetzen", "priority": 2, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["credential manager", "gespeicherte passwörter", "alte credentials"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt nach dem Bereinigen ein erneuter Lockout auf?",
+        "options": ["Ja, immer noch", "Nein, behoben", "Noch nicht getestet"],
+        "narrows": "Ob weitere Quellen für den Lockout existieren"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-006", "PROB-SEC-031"]
+  },
+  {
+    "id": "PROB-SEC-031",
+    "category": "Passwort & Sicherheit",
+    "title": "Passwort gespeichert und falsch",
+    "keywords": ["Passwort", "gespeichert", "falsch", "Credential", "automatisch", "alt", "cached", "zwischengespeichert"],
+    "extendedKeywords": ["gespeichertes Passwort falsch", "altes Passwort gespeichert", "automatisches Passwort falsch", "cached Passwort", "Windows merkt sich falsches Passwort", "gespeichertes Kennwort aktualisieren", "altes Passwort wird verwendet", "Passwort im Cache falsch", "Browser speichert falsches Passwort", "automatische Anmeldung falsches Passwort", "gespeichertes Passwort ändern", "Passwort automatisch falsch eingegeben", "altes Passwort in App gespeichert", "cached Credentials falsch", "Passwort wird nicht aktualisiert", "falsches gespeichertes Passwort", "altes Kennwort gespeichert", "Passwort im Schlüsselbund falsch", "gespeicherte Anmeldedaten aktualisieren", "App verwendet altes Passwort"],
+    "typos": ["gespeichertes Paswort", "gespeichrtes Passwort", "Passwort falch"],
+    "symptoms": ["Anwendung verwendet altes gespeichertes Passwort", "Automatische Anmeldung mit falschem Passwort", "Kontosperrung durch gespeichertes falsches Passwort"],
+    "quickCheck": "Wurde das Passwort kürzlich geändert?",
+    "solutions": [
+      "Credential Manager bereinigen",
+      "Gespeicherte Passwörter in Browser und Apps aktualisieren",
+      "Authentifizierungsdaten zurücksetzen",
+      "In betroffener App das Passwort manuell aktualisieren",
+      "Windows-Profil: Gespeicherte WLAN-Passwörter prüfen",
+      "VPN-Client Passwort aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Gespeicherte Anmeldedaten löschen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_authreset", "label": "Auth-Daten zurücksetzen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["falsches gespeichertes passwort", "altes passwort gespeichert", "cached credentials"],
+    "followUpQuestions": [
+      {
+        "question": "In welcher Anwendung wird das falsche Passwort verwendet?",
+        "options": ["Browser", "VPN", "E-Mail/Outlook", "WLAN", "Andere App"],
+        "narrows": "Wo das gespeicherte Passwort aktualisiert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-030", "PROB-SEC-006"]
+  },
+  {
+    "id": "PROB-SEC-032",
+    "category": "Passwort & Sicherheit",
+    "title": "Smartcard-Probleme",
+    "keywords": ["Smartcard", "Chipkarte", "PIV", "Kartenleser", "Smart Card", "Lesegerät", "Badge"],
+    "extendedKeywords": ["Smartcard funktioniert nicht", "Smartcard wird nicht erkannt", "Chipkarte Problem", "Kartenleser funktioniert nicht", "Smartcard Login geht nicht", "Smartcard Anmeldung Fehler", "Smart Card wird nicht gelesen", "Chipkarte nicht erkannt", "Kartenleser erkennt Karte nicht", "Smartcard Zertifikat Problem", "Smartcard PIN falsch", "Smartcard Lesegerät Fehler", "Smartcard Anmeldung Windows", "Chipkarte einlesen geht nicht", "Smart Card Error", "Smartcard Treiber Problem", "Kartenleser Treiber", "Smartcard nicht lesbar", "Chipkarte wird nicht akzeptiert", "Smartcard Service Fehler"],
+    "typos": ["Smarcard", "Smartcart", "Chipkart"],
+    "symptoms": ["Smartcard wird vom Kartenleser nicht erkannt", "Smartcard-Anmeldung schlägt fehl", "Smartcard-Zertifikat ungültig"],
+    "quickCheck": "Wird die Smartcard vom Kartenleser erkannt (LED-Anzeige)?",
+    "solutions": [
+      "Smartcard sauber einlegen und Kontakte prüfen",
+      "Kartenleser-Treiber prüfen",
+      "Smartcard-Dienst (SCardSvr) prüfen und starten",
+      "Smartcard-Zertifikat prüfen",
+      "Anderen Kartenleser testen",
+      "IT kontaktieren für Smartcard-Austausch bei Defekt"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_domain_scquery", "label": "Smartcard-Dienst prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_certs_compcerts", "label": "Zertifikate prüfen", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["smartcard fehler", "chipkarte problem", "kartenleser"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert die Smartcard an einem anderen Rechner/Leser?",
+        "options": ["Ja", "Nein", "Nicht getestet"],
+        "narrows": "Ob die Smartcard oder der Leser defekt ist"
+      }
+    ],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-SEC-033",
+    "category": "Passwort & Sicherheit",
+    "title": "Passwort-Richtlinie / Passwort abgelehnt",
+    "keywords": ["Passwort", "Richtlinie", "Policy", "Komplexität", "Anforderung", "abgelehnt", "Regel"],
+    "extendedKeywords": ["Passwort wird abgelehnt", "Passwort erfüllt nicht Anforderungen", "Passwort Richtlinie", "Passwort Policy", "Passwort nicht komplex genug", "Passwort zu kurz", "Passwort muss Sonderzeichen enthalten", "Passwort Anforderungen", "Passwort wird nicht akzeptiert", "welche Passwort Regeln", "Passwort Komplexitätsanforderung", "neues Passwort wird abgelehnt", "Passwort Policy Anforderungen", "Passwort-Regeln", "Passwort muss geändert werden erfüllt nicht", "Passwort-Richtlinie was muss ich beachten", "Passwort Mindestlänge", "Passwort Sonderzeichen Großbuchstabe", "Passwort History", "altes Passwort darf nicht wiederverwendet werden"],
+    "typos": ["Richtline", "Richltinie", "Passwort Polcy"],
+    "symptoms": ["Neues Passwort wird vom System abgelehnt", "Passwort erfüllt nicht die Komplexitätsanforderungen"],
+    "quickCheck": "Welche Meldung erscheint bei der Passwort-Änderung?",
+    "solutions": [
+      "Passwort-Richtlinie beachten: Mindestlänge (meist 8-12 Zeichen)",
+      "Großbuchstaben, Kleinbuchstaben, Zahlen und Sonderzeichen verwenden",
+      "Kein altes Passwort wiederverwenden (Passwort-Historie)",
+      "Benutzername oder Teile davon nicht im Passwort verwenden",
+      "IT-Helpdesk nach den genauen Passwort-Anforderungen fragen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["passwort richtlinie", "passwort abgelehnt", "passwort anforderungen"],
+    "followUpQuestions": [
+      {
+        "question": "Enthält Ihr gewünschtes Passwort Großbuchstaben, Kleinbuchstaben, Zahlen und Sonderzeichen?",
+        "options": ["Ja, alles enthalten", "Nicht sicher", "Was ist erforderlich?"],
+        "narrows": "Welche Komplexitätsanforderung nicht erfüllt ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-001", "PROB-SEC-002"]
+  },
+  {
+    "id": "PROB-SEC-034",
+    "category": "Passwort & Sicherheit",
+    "title": "VPN-Passwort Problem",
+    "keywords": ["VPN", "Passwort", "Verbindung", "Login", "Anmeldung", "VPN-Client", "Kennwort"],
+    "extendedKeywords": ["VPN Passwort funktioniert nicht", "VPN Login geht nicht", "VPN Passwort falsch", "VPN Anmeldung fehlgeschlagen", "VPN Passwort ändern", "VPN kann mich nicht anmelden", "VPN Kennwort Problem", "VPN nimmt Passwort nicht", "VPN Passwort abgelaufen", "VPN Login Fehler", "VPN Verbindung Passwort", "VPN Zugang Passwort", "VPN Authentifizierung fehlgeschlagen", "VPN Passwort zurücksetzen", "VPN Passwort aktualisieren", "VPN fragt nach Passwort", "VPN Client Passwort", "VPN Anmeldedaten", "VPN Credentials", "VPN Passwort gespeichert falsch"],
+    "typos": ["VPM Passwort", "VNP Passwort", "VPN Paswort"],
+    "symptoms": ["VPN-Verbindung schlägt wegen falschem Passwort fehl", "VPN-Client akzeptiert Passwort nicht"],
+    "quickCheck": "Wurde das AD/Windows-Passwort kürzlich geändert?",
+    "solutions": [
+      "AD-Passwort im VPN-Client aktualisieren",
+      "Gespeicherte VPN-Credentials löschen und neu eingeben",
+      "Credential Manager bereinigen",
+      "VPN-Client neu starten",
+      "Prüfen ob VPN MFA/2FA erfordert",
+      "IT kontaktieren bei VPN-spezifischen Passwort-Problemen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_credclear", "label": "Gespeicherte Anmeldedaten löschen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_appcache_authreset", "label": "Auth-Daten zurücksetzen", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["vpn passwort", "vpn login fehler", "vpn authentifizierung"],
+    "followUpQuestions": [
+      {
+        "question": "Welchen VPN-Client verwenden Sie?",
+        "options": ["Cisco AnyConnect", "GlobalProtect", "FortiClient", "Anderer"],
+        "narrows": "VPN-spezifische Passwort-Konfiguration"
+      }
+    ],
+    "relatedProblems": ["PROB-SEC-031", "PROB-SEC-030"]
+  },
+  {
+    "id": "PROB-SEC-035",
+    "category": "Passwort & Sicherheit",
+    "title": "LAPS - Lokales Admin-Passwort",
+    "keywords": ["LAPS", "Local Administrator Password", "lokaler Admin", "Administratorpasswort", "lokales Kennwort"],
+    "extendedKeywords": ["LAPS Passwort", "lokales Admin Passwort", "LAPS abfragen", "Local Administrator Password Solution", "lokaler Administrator Passwort", "LAPS Kennwort abrufen", "lokales Administratorkennwort", "LAPS lokales Passwort", "Admin Passwort lokal", "LAPS Password", "lokaler Admin Zugang", "LAPS Passwort abrufen", "lokales Admin Konto Passwort", "LAPS Active Directory", "LAPS Passwort wo finden", "lokaler Administrator Kennwort", "LAPS Passwort anzeigen", "LAPS lokaler Admin", "LAPS Windows", "lokales Administratorpasswort abrufen"],
+    "typos": ["LAPPS", "LAS", "Laps Passwort"],
+    "symptoms": ["Lokales Administrator-Passwort wird benötigt", "LAPS-Passwort muss abgerufen werden"],
+    "quickCheck": "Warum wird das lokale Administrator-Passwort benötigt?",
+    "solutions": [
+      "LAPS-Passwort im Active Directory nachschlagen (IT-Admin)",
+      "LAPS-UI-Tool verwenden (falls installiert)",
+      "LAPS-Passwort über PowerShell abrufen (Get-ADComputer -Properties ms-Mcs-AdmPwd)",
+      "IT-Helpdesk kontaktieren für LAPS-Passwort",
+      "LAPS-Passwort wird nach Verwendung automatisch rotiert"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["laps passwort", "lokaler admin passwort", "local administrator password"],
+    "followUpQuestions": [
+      {
+        "question": "Für welchen Computer wird das LAPS-Passwort benötigt?",
+        "options": ["Meinen PC", "Einen anderen PC", "Server"],
+        "narrows": "Welches LAPS-Passwort abgerufen werden muss"
+      }
+    ],
+    "relatedProblems": []
+  }
+]

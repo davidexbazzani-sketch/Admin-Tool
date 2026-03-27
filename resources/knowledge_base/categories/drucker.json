@@ -1,0 +1,1068 @@
+[
+  {
+    "id": "PROB-PRN-001",
+    "category": "Drucker",
+    "title": "Netzwerkdrucker offline - nicht erreichbar",
+    "keywords": ["Drucker", "offline", "Netzwerk", "nicht erreichbar", "Netzwerkdrucker", "Status", "ping"],
+    "extendedKeywords": ["Drucker zeigt offline an", "Netzwerkdrucker ist nicht erreichbar", "Drucker antwortet nicht", "Drucker offline obwohl eingeschaltet", "Drucker im Netzwerk nicht gefunden", "Drucker plötzlich offline", "Drucker wird als offline angezeigt", "kann nicht drucken Drucker offline", "Drucker grau hinterlegt", "Status offline beim Drucker", "Drucker ist ausgegraut", "Netzwerkdrucker reagiert nicht", "Drucker nicht verfügbar", "Drucker hat kein Netzwerk", "Drucker vom Netzwerk getrennt", "Drucker wurde nicht gefunden", "Drucker antwortet nicht mehr", "Drucker macht nichts", "Drucker ist tot", "Netzwerkverbindung zum Drucker fehlt", "mein Drucker geht nicht", "Drucker funktioniert nicht mehr", "Drucker druckt nicht", "warum ist mein Drucker offline"],
+    "typos": ["Druker", "offlin", "Netzwerkdruker", "Drukcer", "ofline"],
+    "symptoms": ["Drucker zeigt Status 'Offline'", "Druckaufträge werden nicht verarbeitet", "Drucker-Symbol ausgegraut"],
+    "quickCheck": "Ist der Drucker eingeschaltet und leuchtet die Netzwerk-LED?",
+    "solutions": [
+      "Drucker aus- und wieder einschalten (30 Sekunden warten)",
+      "Netzwerkkabel am Drucker prüfen (richtig eingesteckt?)",
+      "Drucker-IP per Ping prüfen über das Admin Tool",
+      "In Windows: Einstellungen > Drucker > Drucker auswählen > 'Offline verwenden' deaktivieren",
+      "Drucker aus der Liste entfernen und neu hinzufügen",
+      "Druckerspooler-Dienst neu starten über das Admin Tool"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_printer_spooler", "label": "Spooler neu starten", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["printer offline", "network printer unreachable", "drucker geht nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Ist der Drucker eingeschaltet und zeigt das Display etwas an?",
+        "options": ["Ja, Display zeigt normal an", "Ja, aber Display zeigt Fehler", "Nein, Drucker ist aus"],
+        "narrows": "Ob Hardware- oder Netzwerkproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-002", "PROB-PRN-003"]
+  },
+  {
+    "id": "PROB-PRN-002",
+    "category": "Drucker",
+    "title": "Netzwerkdrucker offline nach Standby/Neustart",
+    "keywords": ["Drucker", "offline", "Standby", "Neustart", "Ruhezustand", "Wake-up", "Energiesparmodus"],
+    "extendedKeywords": ["Drucker nach Neustart offline", "nach dem Hochfahren druckt er nicht", "Drucker geht nach Ruhezustand nicht mehr", "morgens ist der Drucker offline", "nach Standby Drucker weg", "Drucker braucht Neustart", "Drucker nach Standby nicht mehr da", "nach Neustart muss ich Drucker neu starten", "jeden Morgen Drucker offline", "nach dem Aufwachen Drucker weg", "PC-Neustart Drucker offline", "nach Windows-Update Drucker offline", "Drucker nach Abmelden offline", "nach Laptopstart Drucker weg", "Drucker verbindet sich nicht automatisch", "Drucker muss jeden Tag neu verbunden werden", "Drucker geht nach Sleep-Mode verloren", "morgens immer Drucker Problem", "Drucker täglich offline", "nach Energiesparen Drucker weg"],
+    "typos": ["Nuestart", "Stanby", "Ruhzustand"],
+    "symptoms": ["Drucker ist nach jedem Neustart offline", "Drucker erscheint erst nach manuellem Neustart des Spoolers"],
+    "quickCheck": "Passiert das Problem regelmäßig nach jedem Neustart?",
+    "solutions": [
+      "Druckerspooler-Dienst auf 'Automatisch (Verzögerter Start)' stellen",
+      "SNMP-Status für den Drucker deaktivieren: Drucker > Eigenschaften > Anschlüsse > SNMP deaktivieren",
+      "Spooler neu starten über das Admin Tool",
+      "Drucker-Anschluss prüfen und ggf. IP-Adresse aktualisieren",
+      "Feste IP-Adresse für den Drucker konfigurieren (statt DHCP)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_spooler", "label": "Spooler neu starten", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["printer offline after restart", "morning printer issue", "standby printer"],
+    "followUpQuestions": [
+      {
+        "question": "Hat der Drucker eine feste IP-Adresse oder bezieht er sie per DHCP?",
+        "options": ["Feste IP", "DHCP", "Weiß ich nicht"],
+        "narrows": "Ob IP-Wechsel das Problem verursacht"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-001", "PROB-PRN-003"]
+  },
+  {
+    "id": "PROB-PRN-003",
+    "category": "Drucker",
+    "title": "Netzwerkdrucker wechselt IP-Adresse",
+    "keywords": ["Drucker", "IP-Adresse", "DHCP", "wechselt", "neue IP", "Netzwerk", "Anschluss"],
+    "extendedKeywords": ["Drucker hat neue IP bekommen", "Drucker IP hat sich geändert", "Drucker nicht erreichbar nach IP-Wechsel", "Druckerport stimmt nicht mehr", "Drucker-IP aktualisieren", "falsche IP beim Drucker", "Drucker-Anschluss anpassen", "Drucker über IP ansprechen", "IP-Adresse vom Drucker herausfinden", "Drucker-IP ändern", "statische IP für Drucker", "Drucker bekommt jedes Mal neue IP", "DHCP-Problem beim Drucker", "Drucker-Port ändern", "TCP/IP-Port aktualisieren", "Drucker IP reservieren", "Drucker IP fixieren", "Drucker über andere IP erreichbar", "Netzwerkeinstellung Drucker", "IP-Konfiguration Drucker"],
+    "typos": ["IP-Adresse", "IP-Adrese", "Drukcer", "Netzwek"],
+    "symptoms": ["Drucker offline obwohl physisch erreichbar", "Ping auf alte IP schlägt fehl", "Druckaufträge bleiben in der Warteschlange"],
+    "quickCheck": "Kennen Sie die aktuelle IP-Adresse des Druckers?",
+    "solutions": [
+      "Aktuelle IP-Adresse am Drucker-Display ablesen oder Konfigurationsseite drucken",
+      "In Windows: Drucker > Eigenschaften > Anschlüsse > IP-Adresse aktualisieren",
+      "Im DHCP-Server eine IP-Reservierung für den Drucker einrichten",
+      "Am Drucker direkt eine feste IP-Adresse konfigurieren",
+      "Drucker entfernen und mit der neuen IP neu hinzufügen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_printer_addprinter", "label": "Drucker hinzufügen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_printer_removeprinter", "label": "Drucker entfernen", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["printer ip changed", "dhcp printer", "printer port wrong"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie die aktuelle IP-Adresse am Druckerdisplay ablesen?",
+        "options": ["Ja", "Nein, kein Display vorhanden", "Weiß nicht wie"],
+        "narrows": "Ob die aktuelle IP bekannt ist"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-001", "PROB-PRN-002"]
+  },
+  {
+    "id": "PROB-PRN-004",
+    "category": "Drucker",
+    "title": "USB-Drucker wird nicht erkannt",
+    "keywords": ["USB", "Drucker", "nicht erkannt", "Plug and Play", "Anschluss", "USB-Kabel"],
+    "extendedKeywords": ["USB-Drucker wird nicht gefunden", "Drucker am USB angeschlossen aber nicht erkannt", "Computer erkennt Drucker nicht", "Drucker nach USB-Anschluss nicht sichtbar", "neuer Drucker wird nicht erkannt", "USB-Drucker installiert sich nicht", "Drucker am Kabel aber wird nicht angezeigt", "USB-Drucker taucht nicht auf", "kein Drucker gefunden am USB", "Drucker nach Einstecken nicht da", "USB-Kabel angeschlossen aber nichts passiert", "Plug and Play Drucker geht nicht", "Windows erkennt Drucker am USB nicht", "USB-Gerät wurde nicht erkannt Drucker", "Drucker über USB funktioniert nicht", "Drucker am Kabel nicht sichtbar", "lokaler Drucker nicht erkannt", "USB-Port funktioniert nicht für Drucker", "Drucker wird nicht installiert nach Anschluss", "USB-Drucker keine Reaktion"],
+    "typos": ["USB-Druker", "erkant", "Plug and Paly", "angeschloßen"],
+    "symptoms": ["Drucker taucht nicht in der Geräteliste auf", "Kein 'Neues Gerät gefunden'-Hinweis", "USB-Gerät nicht erkannt Meldung"],
+    "quickCheck": "Leuchtet eine LED am Drucker wenn das USB-Kabel angeschlossen ist?",
+    "solutions": [
+      "USB-Kabel an beiden Enden prüfen und fest einstecken",
+      "Anderen USB-Port am PC versuchen (USB 2.0 statt 3.0 oder umgekehrt)",
+      "Anderes USB-Kabel testen",
+      "Drucker aus- und wieder einschalten nach dem Anschließen",
+      "Geräte-Manager öffnen und nach neuer Hardware suchen",
+      "Druckertreiber manuell vom Hersteller herunterladen und installieren",
+      "USB-Hub vermeiden - direkt am PC anschließen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 1, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["usb printer not found", "usb printer not detected", "printer cable"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert der USB-Port mit anderen Geräten (z.B. USB-Stick)?",
+        "options": ["Ja, andere Geräte funktionieren", "Nein, auch andere Geräte werden nicht erkannt", "Nicht getestet"],
+        "narrows": "Ob USB-Port oder Drucker das Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-005"]
+  },
+  {
+    "id": "PROB-PRN-005",
+    "category": "Drucker",
+    "title": "USB-Drucker verschwindet nach Neustart",
+    "keywords": ["USB", "Drucker", "verschwindet", "Neustart", "weg", "nicht mehr da", "Treiber"],
+    "extendedKeywords": ["USB-Drucker nach Neustart weg", "Drucker muss nach jedem Neustart neu installiert werden", "USB-Drucker wird nach Neustart nicht erkannt", "Drucker geht nach Neustart verloren", "lokaler Drucker verschwindet", "USB-Drucker muss neu angesteckt werden", "Drucker nach Herunterfahren weg", "USB-Drucker instabil", "Drucker fällt nach Neustart raus", "USB-Drucker Treiber nach Neustart fehlt", "Drucker täglich neu einrichten", "USB-Drucker verliert Verbindung", "nach dem Starten Drucker nicht da", "USB-Gerät muss jedes Mal neu erkannt werden", "Drucker nach Windows-Start weg", "USB-Drucker wird nicht gespeichert", "Treiber für Drucker geht nach Neustart verloren", "lokaler Drucker instabil", "USB-Drucker immer wieder einrichten", "Drucker fliegt nach Neustart raus"],
+    "typos": ["verschwindt", "Nuestart", "Drukcer"],
+    "symptoms": ["Drucker nach jedem Neustart nicht mehr in der Liste", "Treiber fehlt nach Neustart"],
+    "quickCheck": "Wird der Drucker nach dem Neustart noch im Geräte-Manager angezeigt?",
+    "solutions": [
+      "Druckertreiber aktualisieren: Geräte-Manager > Drucker > Treiber aktualisieren",
+      "Neuesten Treiber direkt vom Hersteller herunterladen",
+      "USB-Energieverwaltung deaktivieren: Geräte-Manager > USB-Controller > Eigenschaften > Energieverwaltung",
+      "USB-Hub-Selektives Energiesparen deaktivieren in den Energieoptionen",
+      "Drucker über das Admin Tool entfernen und neu hinzufügen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_removeprinter", "label": "Drucker entfernen", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_printer_addprinter", "label": "Drucker hinzufügen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["usb printer disappears", "printer gone after reboot", "usb printer unstable"],
+    "followUpQuestions": [
+      {
+        "question": "Gibt es im Geräte-Manager ein gelbes Warnsymbol bei USB-Einträgen?",
+        "options": ["Ja", "Nein", "Weiß nicht wo ich schauen soll"],
+        "narrows": "Ob Treiber- oder USB-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-004"]
+  },
+  {
+    "id": "PROB-PRN-006",
+    "category": "Drucker",
+    "title": "Druckerwarteschlange hängt",
+    "keywords": ["Warteschlange", "hängt", "Druckauftrag", "steckt fest", "löschen", "queue", "Stau"],
+    "extendedKeywords": ["Druckauftrag hängt in der Warteschlange", "Druckjob lässt sich nicht löschen", "Warteschlange leer machen", "Druckauftrag steckt fest", "Drucker druckt nicht obwohl Auftrag da ist", "Druckjob wird nicht verarbeitet", "Warteschlange räumt sich nicht", "Drucker hat Aufträge aber druckt nicht", "Druckauftrag löschen geht nicht", "hängende Druckaufträge", "Druckjob steckt", "Warteschlange voll", "alter Druckauftrag blockiert", "kann Druckjob nicht entfernen", "Druckauftrag abbrechen geht nicht", "Warteschlange reagiert nicht", "Druckaufträge stauen sich", "Print Queue hängt", "Drucker verarbeitet Aufträge nicht", "blockierter Druckauftrag"],
+    "typos": ["Warteschalnge", "Druckauftarg", "Wrateschlange", "Drukjob"],
+    "symptoms": ["Druckaufträge bleiben in der Warteschlange", "Status zeigt 'Wird gelöscht' aber verschwindet nicht", "Neue Aufträge werden nicht gedruckt"],
+    "quickCheck": "Sehen Sie Druckaufträge in der Warteschlange die sich nicht entfernen lassen?",
+    "solutions": [
+      "Druckauftrag löschen: Doppelklick auf Drucker > Auftrag auswählen > Löschen",
+      "Alle Druckaufträge löschen über das Admin Tool",
+      "Druckerspooler neu starten über das Admin Tool",
+      "Falls Löschen nicht funktioniert: Spooler stoppen, Aufträge bereinigen, Spooler starten",
+      "Drucker aus- und wieder einschalten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_clearjobs", "label": "Druckaufträge löschen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_printer_spooler", "label": "Spooler neu starten", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_printer_spoolerclean", "label": "Spooler bereinigen", "priority": 3, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["print queue stuck", "delete print job", "queue not clearing"],
+    "followUpQuestions": [
+      {
+        "question": "Lässt sich der Druckauftrag über Rechtsklick > Abbrechen löschen?",
+        "options": ["Nein, bleibt hängen", "Ja, aber kommt sofort wieder", "Habe es noch nicht versucht"],
+        "narrows": "Schwere des Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-007", "PROB-PRN-008"]
+  },
+  {
+    "id": "PROB-PRN-007",
+    "category": "Drucker",
+    "title": "Druckerwarteschlange - mehrere alte Aufträge",
+    "keywords": ["Warteschlange", "alte Aufträge", "aufgestaute", "viele", "Druckaufträge", "bereinigen"],
+    "extendedKeywords": ["viele alte Druckaufträge", "Warteschlange voller alter Jobs", "aufgestaute Druckaufträge", "hunderte Druckaufträge in der Warteschlange", "Druckerwarteschlange voll", "alte Druckjobs löschen", "Warteschlange komplett leeren", "zu viele Druckaufträge", "Druckaufträge von letzter Woche noch da", "alle Aufträge auf einmal löschen", "Warteschlange übergelaufen", "massenhaft Druckaufträge", "Drucker überflutet mit Aufträgen", "alle Jobs löschen in der Warteschlange", "Druckjob-Stau", "Warteschlange blockiert", "Queue mit alten Aufträgen", "aufgestauter Druck", "Druckwarteschlange aufräumen", "sämtliche Druckjobs entfernen"],
+    "typos": ["Warteschlange", "Druckaufträge", "berinigen"],
+    "symptoms": ["Viele alte Druckaufträge in der Warteschlange", "Neue Aufträge werden ans Ende der langen Liste angehängt"],
+    "quickCheck": "Wie viele Aufträge sind ungefähr in der Warteschlange?",
+    "solutions": [
+      "Alle Druckaufträge über das Admin Tool löschen",
+      "Spooler bereinigen über das Admin Tool (löscht alle Aufträge aus dem Spool-Ordner)",
+      "Manuell: Dienst 'Druckwarteschlange' stoppen > C:\\Windows\\System32\\spool\\PRINTERS löschen > Dienst starten",
+      "Nach dem Bereinigen den gewünschten Auftrag erneut drucken"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_spoolerclean", "label": "Spooler bereinigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_printer_clearjobs", "label": "Druckaufträge löschen", "priority": 2, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["many print jobs", "queue full", "clear all print jobs"],
+    "followUpQuestions": [
+      {
+        "question": "Sollen wirklich alle Druckaufträge gelöscht werden?",
+        "options": ["Ja, alle löschen", "Nein, nur bestimmte"],
+        "narrows": "Ob Komplett- oder Teilbereinigung"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-006", "PROB-PRN-008"]
+  },
+  {
+    "id": "PROB-PRN-008",
+    "category": "Drucker",
+    "title": "Druckauftrag wird als 'Fehler' angezeigt",
+    "keywords": ["Druckauftrag", "Fehler", "Error", "Status", "fehlgeschlagen", "Druck abgebrochen"],
+    "extendedKeywords": ["Druckauftrag zeigt Fehler", "Druck mit Fehlerstatus", "Druckjob fehlgeschlagen", "Druckauftrag rot markiert", "Fehler beim Drucken", "Druckauftrag wird abgebrochen", "Druckjob Error", "Druckauftrag schlägt fehl", "Druckstatus Fehler", "Druck bricht mit Fehler ab", "Auftrag wird nicht gedruckt Fehler", "Druckauftrag fehlerhaft", "Druckjob scheitert", "Fehler in der Druckwarteschlange", "Auftrag kann nicht gedruckt werden", "Druckfehler angezeigt", "Druckjob mit Error", "Fehler beim Senden an Drucker", "Druckauftrag Status Error", "Fehler beim Verarbeiten des Druckauftrags"],
+    "typos": ["Druckauftarg", "Feler", "fehlgeschalgen"],
+    "symptoms": ["Druckauftrag zeigt Status 'Fehler'", "Druck wird abgebrochen", "Fehlermeldung beim Drucken"],
+    "quickCheck": "Wird ein bestimmter Fehlertext angezeigt oder nur 'Fehler'?",
+    "solutions": [
+      "Fehlerhaften Druckauftrag löschen und erneut drucken",
+      "Drucker aus- und wieder einschalten",
+      "Druckertreiber prüfen - möglicherweise falscher oder veralteter Treiber",
+      "Dokument in PDF konvertieren und dann drucken",
+      "Spooler bereinigen und neu starten über das Admin Tool",
+      "Bei bestimmten Dokumenten: Datei in einer anderen Anwendung öffnen und drucken"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_clearjobs", "label": "Druckaufträge löschen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_printer_spooler", "label": "Spooler neu starten", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["print job error", "print failed", "print error status"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft der Fehler alle Druckaufträge oder nur bestimmte Dokumente?",
+        "options": ["Alle Aufträge", "Nur bestimmte Dokumente", "Nur aus einer bestimmten Anwendung"],
+        "narrows": "Ob allgemeines oder dokumentspezifisches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-006", "PROB-PRN-009"]
+  },
+  {
+    "id": "PROB-PRN-009",
+    "category": "Drucker",
+    "title": "Falscher Druckertreiber installiert",
+    "keywords": ["Treiber", "falsch", "Drucker", "Driver", "inkompatibel", "falsches Modell"],
+    "extendedKeywords": ["falscher Treiber beim Drucker", "Drucker hat falschen Treiber", "Druckertreiber stimmt nicht", "Treiber passt nicht zum Drucker", "falsches Druckermodell", "Drucker druckt Hieroglyphen wegen Treiber", "inkompatibler Treiber", "Druckertreiber tauschen", "richtigen Treiber installieren", "Treiber aktualisieren Drucker", "Druckertreiber wechseln", "Drucker hat falsches Modell eingestellt", "Treiber entspricht nicht dem Drucker", "Druckertreiber korrigieren", "Treiberkonflikt Drucker", "Treiber vom Hersteller installieren", "Druckertreiber manuell ändern", "Generic-Treiber statt richtiger", "Universaltreiber funktioniert nicht", "PCL statt PostScript"],
+    "typos": ["Trieber", "Treiber", "Drukertreiber", "Treibr"],
+    "symptoms": ["Druckausgabe ist fehlerhaft", "Funktionen des Druckers fehlen", "Zeichensalat beim Drucken"],
+    "quickCheck": "Stimmt der installierte Treibername mit dem Druckermodell überein?",
+    "solutions": [
+      "Druckermodell prüfen (Aufkleber am Drucker oder Konfigurationsseite drucken)",
+      "In Windows: Drucker > Eigenschaften > Erweitert > Treiber prüfen",
+      "Richtigen Treiber vom Hersteller herunterladen (HP, Canon, Brother, etc.)",
+      "Alten Treiber deinstallieren: Drucker entfernen, dann Treiber im Druckserver löschen",
+      "Neuen Treiber installieren und Drucker neu einrichten",
+      "Drucker über das Admin Tool entfernen und mit richtigem Treiber neu hinzufügen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_removeprinter", "label": "Drucker entfernen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_printer_addprinter", "label": "Drucker hinzufügen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["wrong driver", "driver mismatch", "incorrect printer driver"],
+    "followUpQuestions": [
+      {
+        "question": "Welches genaue Druckermodell haben Sie?",
+        "options": ["Ich kenne das Modell", "Ich bin mir nicht sicher"],
+        "narrows": "Ob der richtige Treiber identifiziert werden kann"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-010", "PROB-PRN-011"]
+  },
+  {
+    "id": "PROB-PRN-010",
+    "category": "Drucker",
+    "title": "Druckertreiber fehlt nach Windows-Installation",
+    "keywords": ["Treiber", "fehlt", "Drucker", "Windows", "Installation", "Update", "nicht vorhanden"],
+    "extendedKeywords": ["nach Windows-Installation kein Druckertreiber", "Druckertreiber nach Neuinstallation weg", "Windows findet keinen Treiber für Drucker", "Treiber nach Update verschwunden", "kein Treiber für meinen Drucker verfügbar", "Windows kann Druckertreiber nicht finden", "Drucker braucht Treiber", "wo bekomme ich den Treiber her", "Druckertreiber herunterladen", "Treiber nicht in Windows enthalten", "Druckertreiber manuell installieren", "Windows hat keinen passenden Treiber", "Drucker ohne Treiber", "Treiber-CD verloren", "Druckertreiber fehlt", "neuer PC Druckertreiber fehlt", "nach Upgrade Druckertreiber weg", "Windows 11 Treiber fehlt", "Drucker Treiber Setup", "Treiber für alten Drucker"],
+    "typos": ["Trieber", "Instalation", "Drukertreiber"],
+    "symptoms": ["Drucker wird ohne Treiber angezeigt", "Fehlermeldung 'Treiber nicht verfügbar'", "Drucker funktioniert nicht nach Neuinstallation"],
+    "quickCheck": "Welches Druckermodell und welche Windows-Version verwenden Sie?",
+    "solutions": [
+      "Auf der Hersteller-Webseite nach dem aktuellen Treiber suchen",
+      "Windows Update ausführen - oft werden Druckertreiber nachgeliefert",
+      "Bei HP: HP Smart App aus dem Microsoft Store installieren",
+      "Bei älteren Druckern: Kompatibilitätsmodus für den Treiber nutzen",
+      "Universal-Druckertreiber des Herstellers versuchen (z.B. HP Universal Print Driver)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_addprinter", "label": "Drucker hinzufügen", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["missing driver", "driver not found", "no driver available"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie bereits auf der Webseite des Druckerherstellers nach einem Treiber gesucht?",
+        "options": ["Ja, aber keinen gefunden", "Nein, noch nicht", "Ja, aber Installation schlägt fehl"],
+        "narrows": "Stand der Treibersuche"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-009", "PROB-PRN-011"]
+  },
+  {
+    "id": "PROB-PRN-011",
+    "category": "Drucker",
+    "title": "Druckertreiber funktioniert nach Windows-Update nicht mehr",
+    "keywords": ["Treiber", "Windows Update", "funktioniert nicht", "Drucker", "kompatibel", "kaputt"],
+    "extendedKeywords": ["nach Windows-Update druckt der Drucker nicht mehr", "Update hat Druckertreiber kaputt gemacht", "Drucker geht seit dem letzten Update nicht", "Windows-Update hat Drucker zerstört", "Drucker funktioniert nicht mehr nach Update", "Treiber inkompatibel nach Update", "nach Patch Drucker weg", "Windows-Aktualisierung Druckerproblem", "seit dem Update kein Drucken mehr möglich", "Drucker-Problem nach Update", "Druckertreiber durch Update beschädigt", "nach Sicherheitsupdate Drucker kaputt", "Drucker spinnt seit Update", "Windows 11 Update Druckerproblem", "kumulative Update Drucker", "Drucker reagiert nicht nach Update", "Treiber veraltet nach Update", "Druckfunktion nach Update verloren", "Update deinstallieren wegen Drucker", "Patch zerstört Druckerfunktion"],
+    "typos": ["Windwos Update", "funktionirt", "kompatibl"],
+    "symptoms": ["Drucker druckt nicht nach einem Windows-Update", "Druckertreiber zeigt Warnung", "Druckfunktionen eingeschränkt"],
+    "quickCheck": "Wann wurde das letzte Windows-Update installiert?",
+    "solutions": [
+      "Druckertreiber aktualisieren auf die neueste Version vom Hersteller",
+      "Drucker entfernen und neu installieren",
+      "Druckerspooler bereinigen und neu starten",
+      "Falls verfügbar: Problematisches Windows-Update deinstallieren",
+      "Drucker-Problembehandlung ausführen: Einstellungen > Problembehandlung > Drucker",
+      "Bei V4-Treiber-Problemen: V3-Treiber verwenden oder umgekehrt"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_spoolerclean", "label": "Spooler bereinigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_printer_removeprinter", "label": "Drucker entfernen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_printer_addprinter", "label": "Drucker hinzufügen", "priority": 3, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 4, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["windows update broke printer", "update printer issue", "patch printer problem"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde kürzlich ein großes Feature-Update oder nur ein Sicherheitsupdate installiert?",
+        "options": ["Feature-Update", "Sicherheitsupdate", "Weiß ich nicht"],
+        "narrows": "Art des problematischen Updates"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-009", "PROB-PRN-010"]
+  },
+  {
+    "id": "PROB-PRN-012",
+    "category": "Drucker",
+    "title": "Drucker druckt Hieroglyphen und Zeichensalat",
+    "keywords": ["Hieroglyphen", "Zeichensalat", "kryptisch", "unleserlich", "Sonderzeichen", "Druck", "Müll"],
+    "extendedKeywords": ["Drucker druckt nur Zeichen", "unleserlicher Ausdruck", "kryptische Zeichen auf dem Ausdruck", "Drucker druckt Müll", "Ausdruck voller komischer Zeichen", "statt Text nur Symbole", "Drucker druckt Hieroglyphen", "Ausdruck ist unleserlich", "seltsame Zeichen gedruckt", "Buchstabensalat auf dem Ausdruck", "Drucker druckt Code statt Text", "Ausdruck sieht aus wie Programmcode", "Zeichenmüll auf dem Papier", "Drucker druckt wirres Zeug", "Text ist durch Symbole ersetzt", "Drucker gibt Kauderwelsch aus", "komische Schrift auf dem Ausdruck", "Drucker druckt PostScript-Code", "Ausdruck voller Sonderzeichen", "Drucker druckt nur Striche und Punkte"],
+    "typos": ["Hierogylphen", "Zeichensallat", "Zeihensalat", "unleserlich"],
+    "symptoms": ["Ausdruck enthält unleserliche Zeichen", "PostScript-Code wird gedruckt", "Sonderzeichen statt normalem Text"],
+    "quickCheck": "Betrifft es alle Dokumente oder nur bestimmte?",
+    "solutions": [
+      "Druckertreiber prüfen - oft ist ein falscher Treiber die Ursache (PCL statt PostScript)",
+      "Richtigen Treiber vom Hersteller installieren",
+      "Drucksprache am Drucker prüfen (PCL vs. PostScript) und passenden Treiber verwenden",
+      "Dokument als PDF drucken und dann das PDF drucken",
+      "Schriftarten einbetten aktivieren in den Druckoptionen",
+      "Druckerspooler bereinigen über das Admin Tool"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_spoolerclean", "label": "Spooler bereinigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["garbled print", "hieroglyphs printing", "gibberish printer"],
+    "followUpQuestions": [
+      {
+        "question": "Wird Text oder PostScript-Code gedruckt?",
+        "options": ["Komische Symbole/Zeichen", "Sieht aus wie Programmcode", "Weiß ich nicht"],
+        "narrows": "Ob Treiber- oder Kodierungsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-013", "PROB-PRN-009"]
+  },
+  {
+    "id": "PROB-PRN-013",
+    "category": "Drucker",
+    "title": "Drucker druckt Zeichensalat bei bestimmten Schriftarten",
+    "keywords": ["Schriftart", "Font", "Zeichensalat", "Drucker", "einbetten", "fehlende Schrift"],
+    "extendedKeywords": ["bestimmte Schriftart wird nicht richtig gedruckt", "Font fehlt beim Drucken", "Schrift sieht auf Ausdruck anders aus", "Schriftart wird ersetzt beim Drucken", "Drucker kann Schrift nicht darstellen", "Sonderzeichen werden falsch gedruckt", "Umlaute fehlen auf Ausdruck", "spezielle Schrift druckt nicht richtig", "Fonts werden nicht korrekt gedruckt", "Schrift auf Ausdruck fehlerhaft", "nach Drucken andere Schrift als am Bildschirm", "Schriftart auf dem Drucker nicht vorhanden", "TrueType Fonts Druckproblem", "Schrift einbetten beim Drucken", "Zeichensatz beim Drucken falsch", "bestimmte Buchstaben fehlen auf Ausdruck", "Unicode druckt nicht richtig", "Schriftart-Rendering Drucker", "Font-Substitution Drucker", "Ersatzschrift auf dem Ausdruck"],
+    "typos": ["Schriftard", "Schritfart", "Zeichensallat"],
+    "symptoms": ["Bestimmte Schriftarten werden falsch dargestellt", "Umlaute oder Sonderzeichen fehlen", "Schrift wird durch Standardschrift ersetzt"],
+    "quickCheck": "Tritt das Problem nur bei einer bestimmten Schriftart auf?",
+    "solutions": [
+      "Dokument mit eingebetteten Schriftarten als PDF drucken",
+      "In den Druckereigenschaften: 'TrueType-Schriftarten als Bitmap drucken' aktivieren",
+      "Fehlende Schriftart auf dem PC installieren",
+      "In der Anwendung: Druckoptionen > Schriftarten einbetten",
+      "Alternativen Treiber versuchen (PostScript statt PCL oder umgekehrt)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["font print issue", "wrong font printing", "character encoding printer"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Schriftart verursacht das Problem?",
+        "options": ["Eine spezielle/exotische Schrift", "Standard-Schriften wie Arial/Times", "Weiß ich nicht"],
+        "narrows": "Ob Schriftart-Verfügbarkeitsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-012"]
+  },
+  {
+    "id": "PROB-PRN-014",
+    "category": "Drucker",
+    "title": "Drucker druckt nicht - allgemein",
+    "keywords": ["Drucker", "druckt nicht", "kein Ausdruck", "nichts passiert", "geht nicht", "funktioniert nicht"],
+    "extendedKeywords": ["Drucker tut nichts", "Drucker reagiert nicht auf Druckauftrag", "habe gedruckt aber nichts kommt raus", "Drucker macht keinen Ausdruck", "Druckbefehl geht ins Leere", "ich drücke Drucken aber nichts passiert", "mein Drucker druckt einfach nicht", "Drucker funktioniert überhaupt nicht", "kein Druck möglich", "Drucker verweigert den Druck", "Drucker nimmt keine Aufträge an", "Drucken geht nicht mehr", "seit heute kein Drucken mehr", "Drucker streikt", "Drucker macht nichts mehr", "warum druckt mein Drucker nicht", "Druck kommt nicht raus", "Drucker ignoriert Druckauftrag", "Ausdruck kommt nicht", "Drucker hat aufgehört zu drucken"],
+    "typos": ["drukt nicht", "Druker", "funkioniert", "drcukt"],
+    "symptoms": ["Kein Ausdruck trotz Druckbefehl", "Drucker scheint den Auftrag zu ignorieren", "Keine Fehlermeldung aber kein Druck"],
+    "quickCheck": "Ist der Drucker eingeschaltet, online und als Standarddrucker eingestellt?",
+    "solutions": [
+      "Drucker-Status prüfen: Online und nicht pausiert?",
+      "Richtiger Drucker ausgewählt? In der Anwendung den Drucker prüfen",
+      "Druckerwarteschlange prüfen auf hängende Aufträge",
+      "Druckerspooler neu starten über das Admin Tool",
+      "Drucker aus- und einschalten",
+      "Testseite drucken: Drucker > Eigenschaften > Testseite drucken",
+      "Netzwerkverbindung zum Drucker prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_printer_spooler", "label": "Spooler neu starten", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["printer not printing", "nothing happens when printing", "printer does nothing"],
+    "followUpQuestions": [
+      {
+        "question": "Gibt es eine Fehlermeldung oder passiert einfach gar nichts?",
+        "options": ["Fehlermeldung wird angezeigt", "Gar nichts passiert", "Auftrag verschwindet einfach"],
+        "narrows": "Art des Druckproblems"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-001", "PROB-PRN-006", "PROB-PRN-015"]
+  },
+  {
+    "id": "PROB-PRN-015",
+    "category": "Drucker",
+    "title": "Drucker druckt bestimmte Dokumente nicht",
+    "keywords": ["Drucker", "bestimmte Dokumente", "PDF", "Excel", "Word", "druckt nicht", "einzelne"],
+    "extendedKeywords": ["PDF druckt nicht", "Excel-Tabelle druckt nicht", "bestimmte Datei lässt sich nicht drucken", "Drucker druckt manche Dateien nicht", "ein Dokument druckt nicht die anderen schon", "Word-Dokument kommt nicht aus dem Drucker", "PowerPoint druckt nicht", "PDF-Druck schlägt fehl", "bestimmtes Dokument lässt sich nicht drucken", "Drucker druckt andere Sachen aber nicht dieses", "Druckproblem mit einzelner Datei", "ein Dokument verursacht Fehler beim Drucken", "bestimmtes PDF blockiert Drucker", "Tabelle druckt nicht vollständig", "Dokument zu komplex zum Drucken", "Druckvorschau funktioniert aber Druck nicht", "großes Dokument druckt nicht", "Datei mit Bildern druckt nicht", "verschlüsseltes PDF druckt nicht", "Dokument bricht beim Drucken ab"],
+    "typos": ["bestimte", "Dokumente", "drukt nicht"],
+    "symptoms": ["Bestimmte Dokumente werden nicht gedruckt", "Andere Dokumente drucken problemlos", "Fehlermeldung nur bei bestimmten Dateien"],
+    "quickCheck": "Druckt der Drucker eine Testseite und andere Dokumente problemlos?",
+    "solutions": [
+      "Dokument in einem anderen Format speichern und drucken (z.B. als PDF)",
+      "Dokument in einer anderen Anwendung öffnen und drucken",
+      "Bei PDFs: 'Als Bild drucken' aktivieren in den Adobe-Druckoptionen",
+      "Komplexe Grafiken vereinfachen oder Auflösung reduzieren",
+      "Bei geschützten PDFs: Druckberechtigung prüfen",
+      "Drucker-Speicher prüfen - komplexe Dokumente brauchen mehr Speicher"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["specific document not printing", "pdf print fail", "cant print this file"],
+    "followUpQuestions": [
+      {
+        "question": "Um welche Art von Dokument handelt es sich?",
+        "options": ["PDF", "Word/Excel/PowerPoint", "Webseite", "Bild", "Andere"],
+        "narrows": "Dokumenttyp-spezifische Lösung"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-014", "PROB-PRN-016"]
+  },
+  {
+    "id": "PROB-PRN-016",
+    "category": "Drucker",
+    "title": "Drucker druckt nicht aus bestimmter Anwendung",
+    "keywords": ["Drucker", "Anwendung", "Programm", "druckt nicht", "App", "Chrome", "Outlook"],
+    "extendedKeywords": ["aus Chrome kann ich nicht drucken", "Outlook druckt nicht", "aus SAP kann ich nicht drucken", "Drucker funktioniert nicht in dieser Anwendung", "aus dem Browser drucken geht nicht", "aus Word geht es aber aus Excel nicht", "Drucken aus Teams funktioniert nicht", "Programm kann nicht drucken", "aus einer bestimmten Software geht Drucken nicht", "Drucken aus ERP-System fehlerhaft", "Anwendung findet Drucker nicht", "Druckmenü fehlt in der App", "Druckoption ausgegraut im Programm", "bestimmtes Programm druckt nicht", "Citrix drucken geht nicht", "aus der Webanwendung drucken", "Drucker nicht sichtbar in der Anwendung", "Druckfunktion im Programm kaputt", "App zeigt Drucker nicht an", "Druckdialog öffnet sich nicht"],
+    "typos": ["Anwednung", "Progamm", "drukt nicht"],
+    "symptoms": ["Drucken aus einer bestimmten Anwendung schlägt fehl", "Drucker wird in der Anwendung nicht angezeigt", "Druckoption fehlt oder ist ausgegraut"],
+    "quickCheck": "Funktioniert der Druck aus anderen Anwendungen (z.B. Notepad)?",
+    "solutions": [
+      "Anwendung schließen und neu öffnen",
+      "In der Anwendung den richtigen Drucker manuell auswählen",
+      "Standarddrucker prüfen und ggf. setzen",
+      "Anwendung aktualisieren auf die neueste Version",
+      "Bei Browser-Druck: Strg+P verwenden statt Menü",
+      "Bei Citrix: Drucker-Umleitung prüfen",
+      "Anwendung als Administrator starten (Rechtsklick > Als Administrator ausführen)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["cant print from app", "application print issue", "browser print fail"],
+    "followUpQuestions": [
+      {
+        "question": "Aus welcher Anwendung können Sie nicht drucken?",
+        "options": ["Browser (Chrome/Edge)", "Office (Word/Excel)", "E-Mail (Outlook)", "Andere"],
+        "narrows": "Anwendungsspezifische Lösung"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-014", "PROB-PRN-015"]
+  },
+  {
+    "id": "PROB-PRN-017",
+    "category": "Drucker",
+    "title": "Scan-to-Mail funktioniert nicht",
+    "keywords": ["Scan", "E-Mail", "Scan-to-Mail", "Scanner", "senden", "SMTP", "scannen"],
+    "extendedKeywords": ["Scanner sendet keine E-Mail", "Scan an E-Mail geht nicht", "Scan-to-Mail funktioniert nicht mehr", "gescanntes Dokument kommt nicht per Mail", "Scan per E-Mail fehlgeschlagen", "Scanner kann keine Mail senden", "Scan-Funktion E-Mail kaputt", "Scanner zeigt SMTP-Fehler", "gescannte Datei wird nicht gesendet", "Scan an E-Mail-Adresse funktioniert nicht", "Drucker-Scanner sendet nicht", "Scan kommt nicht an", "E-Mail vom Scanner erhalten aber kein Anhang", "Scan-to-E-Mail Einstellungen", "SMTP-Authentifizierung Scanner", "Scanner E-Mail konfigurieren", "gescanntes Dokument per Mail versenden geht nicht", "Scanner findet keinen Mailserver", "Scan-to-Mail nach Update kaputt", "Multifunktionsgerät sendet keine Scans"],
+    "typos": ["Scan-to-Mail", "Scan to Mail", "Scan-to-Email", "SMPT"],
+    "symptoms": ["Scanner zeigt Fehler beim E-Mail-Versand", "Gescannte Dokumente kommen nicht per E-Mail an", "SMTP-Fehlermeldung am Drucker"],
+    "quickCheck": "Wird am Druckerdisplay eine Fehlermeldung zum E-Mail-Versand angezeigt?",
+    "solutions": [
+      "SMTP-Einstellungen am Drucker prüfen (Server, Port, Authentifizierung)",
+      "E-Mail-Relay-Einstellungen prüfen (oft Port 587 mit TLS)",
+      "Absender-E-Mail-Adresse am Drucker korrekt konfigurieren",
+      "Firewall prüfen: Port 25/587/465 muss vom Drucker zum Mailserver offen sein",
+      "Bei Microsoft 365: SMTP-Relay oder Direct Send konfigurieren",
+      "DNS-Einstellungen am Drucker prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["scan to email fail", "smtp scanner error", "scan mail broken"],
+    "followUpQuestions": [
+      {
+        "question": "Hat Scan-to-Mail früher funktioniert oder wird es erstmals eingerichtet?",
+        "options": ["Hat früher funktioniert", "Ersteinrichtung"],
+        "narrows": "Ob Konfigurationsänderung oder Ersteinrichtung"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-018"]
+  },
+  {
+    "id": "PROB-PRN-018",
+    "category": "Drucker",
+    "title": "Scan-to-Folder funktioniert nicht",
+    "keywords": ["Scan", "Ordner", "Scan-to-Folder", "Netzwerkfreigabe", "SMB", "scannen", "Zielordner"],
+    "extendedKeywords": ["Scanner speichert nicht im Ordner", "Scan in Netzwerkordner geht nicht", "gescanntes Dokument landet nicht im Ordner", "Scan-to-Folder Fehler", "Scanner findet Netzwerkordner nicht", "Scan in Freigabe funktioniert nicht", "Scanner zeigt Zugriffsfehler", "SMB-Scan geht nicht mehr", "Scanner kann nicht auf Ordner zugreifen", "Scan-Ziel nicht erreichbar", "gescannte Datei wird nicht gespeichert", "Netzwerkfreigabe für Scanner", "Scanner Ordner-Berechtigung", "SMB-Freigabe Scanner", "Scan in Verzeichnis fehlgeschlagen", "Scanner findet Pfad nicht", "Scan-Ordner einrichten", "Scan kommt nicht im Ordner an", "Scanner Authentifizierung Netzwerk", "Scanner SMB Protokoll"],
+    "typos": ["Scan-to-Folder", "Scan to Folder", "Netzwerkfreigbe"],
+    "symptoms": ["Scanner zeigt Fehler beim Speichern", "Gescannte Dateien tauchen nicht im Zielordner auf", "Authentifizierungsfehler am Scanner"],
+    "quickCheck": "Ist der Zielordner eine Netzwerkfreigabe und ist diese erreichbar?",
+    "solutions": [
+      "Netzwerkfreigabe-Pfad am Scanner prüfen (\\\\Server\\Freigabe)",
+      "Benutzername und Passwort für den Netzwerkzugriff am Scanner aktualisieren",
+      "SMB-Version prüfen: Neuere Drucker benötigen SMB2 oder höher",
+      "Freigabe-Berechtigungen prüfen (Lese- und Schreibrechte für den Scanner-Benutzer)",
+      "Windows-Firewall: Datei- und Druckerfreigabe aktivieren",
+      "Bei SMBv1-Problemen: SMBv1 auf dem Zielserver aktivieren oder Scanner-Firmware aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["scan to folder fail", "smb scan error", "network scan broken"],
+    "followUpQuestions": [
+      {
+        "question": "Wird am Scanner eine bestimmte Fehlermeldung angezeigt?",
+        "options": ["Zugriff verweigert", "Ziel nicht gefunden", "Timeout", "Andere Fehlermeldung"],
+        "narrows": "Art des Scan-Fehlers"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-017"]
+  },
+  {
+    "id": "PROB-PRN-019",
+    "category": "Drucker",
+    "title": "Druckerspooler-Dienst startet nicht",
+    "keywords": ["Spooler", "Dienst", "startet nicht", "Druckwarteschlange", "Service", "beendet sich"],
+    "extendedKeywords": ["Spooler-Dienst lässt sich nicht starten", "Druckwarteschlange-Dienst ist beendet", "Spooler stürzt ab", "Print Spooler startet nicht", "Dienst Druckwarteschlange stoppt sofort", "Spooler beendet sich automatisch", "Drucker-Dienst funktioniert nicht", "Spooler-Dienst ist deaktiviert", "Druckwarteschlange-Dienst reagiert nicht", "Spooler startet und stoppt sofort wieder", "Print Spooler crash", "Spooler-Fehler Windows", "Druckdienst nicht verfügbar", "Spooler-Service kaputt", "Druckwarteschlange nicht gestartet", "Spooler-Dienst hängt", "kein Druckdienst verfügbar", "Spooler reagiert nicht", "Windows Druckdienst ausgefallen", "Spooler beendet sich ständig"],
+    "typos": ["Spoler", "Spuler", "Druckwateschlange"],
+    "symptoms": ["Spooler-Dienst ist gestoppt", "Fehlermeldung beim Starten des Spooler-Dienstes", "Spooler startet und beendet sich sofort wieder"],
+    "quickCheck": "Wurde der Spooler-Dienst manuell gestoppt oder beendet er sich von selbst?",
+    "solutions": [
+      "Spooler-Dienst über das Admin Tool neu starten",
+      "Spooler bereinigen über das Admin Tool (löscht beschädigte Druckdateien)",
+      "Manuell: services.msc > Druckwarteschlange > Starten",
+      "Bei Absturz: Spool-Ordner leeren (C:\\Windows\\System32\\spool\\PRINTERS)",
+      "Beschädigte Druckertreiber entfernen",
+      "Spooler-Abhängigkeiten prüfen: RPC-Dienst muss laufen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_spoolerclean", "label": "Spooler bereinigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_printer_spooler", "label": "Spooler neu starten", "priority": 2, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["spooler wont start", "print spooler crash", "spooler service error"],
+    "followUpQuestions": [
+      {
+        "question": "Beendet sich der Spooler sofort wieder nach dem Starten?",
+        "options": ["Ja, sofort wieder gestoppt", "Nein, startet gar nicht erst", "Startet aber Drucker funktioniert trotzdem nicht"],
+        "narrows": "Art des Spooler-Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-020", "PROB-PRN-021"]
+  },
+  {
+    "id": "PROB-PRN-020",
+    "category": "Drucker",
+    "title": "Druckerspooler stürzt regelmäßig ab",
+    "keywords": ["Spooler", "Absturz", "regelmäßig", "crash", "instabil", "Druckwarteschlange"],
+    "extendedKeywords": ["Spooler stürzt immer wieder ab", "Druckwarteschlange beendet sich regelmäßig", "Spooler crasht", "alle paar Stunden geht der Spooler aus", "Drucker verschwindet immer wieder", "Spooler ist instabil", "Druckdienst fällt ständig aus", "Spooler muss mehrmals am Tag neu gestartet werden", "wiederkehrendes Spooler-Problem", "Spooler-Absturz Windows", "Druckwarteschlange stoppt sich selbst", "Spooler nach bestimmtem Drucker Absturz", "seit neuem Drucker Spooler instabil", "Spooler-Crash nach dem Drucken", "Druckdienst bricht zusammen", "Spooler-Fehler wiederholt sich", "Druckwarteschlange fällt alle paar Stunden aus", "Spooler braucht ständig Neustart", "Spooler-Dienst stirbt immer", "chronisches Spooler-Problem"],
+    "typos": ["Spoler", "Absturtz", "chrashed"],
+    "symptoms": ["Spooler beendet sich wiederholt", "Drucker verschwinden periodisch", "Drucken funktioniert nur kurz nach Spooler-Neustart"],
+    "quickCheck": "Wurde kürzlich ein neuer Drucker oder Treiber installiert?",
+    "solutions": [
+      "Kürzlich installierte Druckertreiber als Ursache prüfen",
+      "Alle nicht benötigten Drucker und Treiber entfernen",
+      "Spooler komplett bereinigen über das Admin Tool",
+      "Ereignisanzeige prüfen: Windows-Protokolle > Anwendung nach Spooler-Fehlern suchen",
+      "Windows-Druckertroubleshooting ausführen",
+      "Beschädigte Treiber im Druckserver-Manager entfernen: printmanagement.msc"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_spoolerclean", "label": "Spooler bereinigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_printer_removeprinter", "label": "Drucker entfernen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["spooler keeps crashing", "recurring spooler crash", "spooler unstable"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde kürzlich ein neuer Drucker oder Druckertreiber installiert?",
+        "options": ["Ja", "Nein", "Weiß ich nicht"],
+        "narrows": "Ob neuer Treiber den Absturz verursacht"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-019", "PROB-PRN-021"]
+  },
+  {
+    "id": "PROB-PRN-021",
+    "category": "Drucker",
+    "title": "Druckerspooler bereinigen und reparieren",
+    "keywords": ["Spooler", "bereinigen", "reparieren", "Reset", "zurücksetzen", "Druckwarteschlange", "aufräumen"],
+    "extendedKeywords": ["Spooler komplett zurücksetzen", "Druckwarteschlange reparieren", "Druckerspooler aufräumen", "alle Druckdaten löschen", "Spooler-Reset durchführen", "Druckersystem reparieren", "Druckwarteschlange komplett bereinigen", "Spooler von Grund auf neu", "alle Drucker und Aufträge löschen", "Drucksystem zurücksetzen", "sauberer Spooler-Neustart", "Spooler-Dateien löschen", "Print Subsystem zurücksetzen", "Drucker-Reset Windows", "Druckertreiber alle entfernen", "Drucksystem komplett neu aufsetzen", "Spooler von Null anfangen", "alle Druckereinstellungen zurücksetzen", "Druckumgebung bereinigen", "Spooler-Ordner leeren"],
+    "typos": ["bereinigen", "repariren", "zurüksezten"],
+    "symptoms": ["Anhaltende Druckprobleme", "Mehrere Drucker funktionieren nicht", "Spooler-Dienst ist instabil"],
+    "quickCheck": "Wurden bereits einfachere Maßnahmen wie Spooler-Neustart versucht?",
+    "solutions": [
+      "Spooler bereinigen über das Admin Tool (empfohlen)",
+      "Manuell: 1. Spooler-Dienst stoppen 2. C:\\Windows\\System32\\spool\\PRINTERS leeren 3. Spooler starten",
+      "Alle Drucker entfernen und neu hinzufügen",
+      "Druckertreiber im Druckserver entfernen: printmanagement.msc > Treiber",
+      "Windows-Druckertroubleshooting: ms-settings:troubleshoot",
+      "Nach Bereinigung: Drucker einzeln neu installieren und testen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_spoolerclean", "label": "Spooler bereinigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_printer_spooler", "label": "Spooler neu starten", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["spooler cleanup", "reset print system", "repair spooler"],
+    "followUpQuestions": [
+      {
+        "question": "Sollen alle Drucker und Druckaufträge bei der Bereinigung gelöscht werden?",
+        "options": ["Ja, alles bereinigen", "Nur die Aufträge, Drucker behalten"],
+        "narrows": "Umfang der Bereinigung"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-019", "PROB-PRN-020"]
+  },
+  {
+    "id": "PROB-PRN-022",
+    "category": "Drucker",
+    "title": "Drucker aus der Liste verschwunden",
+    "keywords": ["Drucker", "verschwunden", "fehlt", "weg", "nicht mehr da", "Liste", "entfernt"],
+    "extendedKeywords": ["mein Drucker ist weg", "Drucker aus der Liste verschwunden", "Drucker fehlt plötzlich", "Drucker nicht mehr sichtbar", "wo ist mein Drucker hin", "Drucker wurde automatisch entfernt", "installierter Drucker nicht mehr da", "Drucker ist aus Windows verschwunden", "Drucker aus den Einstellungen verschwunden", "kann meinen Drucker nicht mehr finden", "Drucker fehlt nach Update", "Druckerliste ist leer", "alle Drucker sind weg", "Drucker nach Neustart verschwunden", "Drucker muss neu installiert werden", "Drucker hat sich selbst entfernt", "Windows hat Drucker gelöscht", "Drucker in keiner Anwendung sichtbar", "Drucker nicht mehr wählbar", "Druckerliste zeigt Drucker nicht"],
+    "typos": ["verschwuden", "Druker", "Druckerliste"],
+    "symptoms": ["Drucker fehlt in der Geräteliste", "Drucker ist in keiner Anwendung wählbar", "Druckerliste ist leer"],
+    "quickCheck": "Ist nur ein Drucker oder sind alle Drucker verschwunden?",
+    "solutions": [
+      "Druckerliste prüfen über das Admin Tool",
+      "Drucker erneut hinzufügen über das Admin Tool",
+      "Spooler-Dienst neu starten (manchmal werden Drucker danach wieder angezeigt)",
+      "In Einstellungen > Drucker & Scanner prüfen",
+      "Drucker manuell hinzufügen: Einstellungen > Drucker > Drucker hinzufügen",
+      "Bei Netzwerkdruckern: Drucker über IP-Adresse manuell hinzufügen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_printer_addprinter", "label": "Drucker hinzufügen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_printer_spooler", "label": "Spooler neu starten", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["printer disappeared", "printer missing", "printer gone"],
+    "followUpQuestions": [
+      {
+        "question": "Ist nur ein Drucker oder sind alle Drucker verschwunden?",
+        "options": ["Nur einer", "Mehrere/Alle"],
+        "narrows": "Ob einzelner Drucker oder Systemproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-023"]
+  },
+  {
+    "id": "PROB-PRN-023",
+    "category": "Drucker",
+    "title": "Drucker nach Bürowechsel/Umzug nicht mehr da",
+    "keywords": ["Drucker", "Bürowechsel", "Umzug", "neuer Standort", "Etage", "Abteilung"],
+    "extendedKeywords": ["nach Bürowechsel Drucker nicht mehr da", "Drucker am neuen Arbeitsplatz einrichten", "Drucker nach Umzug weg", "am neuen Standort kein Drucker", "welcher Drucker ist in der Nähe", "Etagendrucker wechseln", "neuen Drucker nach Bürowechsel", "Drucker am neuen Platz verbinden", "Drucker für neues Büro einrichten", "nach Schreibtischwechsel Drucker fehlt", "Drucker am alten Standort noch installiert", "Nächstgelegenen Drucker finden", "Drucker für mein Stockwerk", "Drucker meiner Abteilung", "Hot-Desk Drucker wechseln", "Abteilungsdrucker einrichten", "Drucker im neuen Gebäude", "welcher Drucker gehört zu meinem Bereich", "Drucker nach Arbeitsplatzwechsel", "neuer Drucker am Arbeitsplatz"],
+    "typos": ["Bürowchsel", "Umtzug", "Standord"],
+    "symptoms": ["Alter Drucker funktioniert nicht mehr", "Kein passender Drucker am neuen Standort konfiguriert"],
+    "quickCheck": "Kennen Sie den Namen oder die IP-Adresse des Druckers am neuen Standort?",
+    "solutions": [
+      "Drucker am neuen Standort identifizieren (Name/Modell vom Geräte-Aufkleber ablesen)",
+      "IT fragen, welcher Drucker für den neuen Standort zuständig ist",
+      "Neuen Drucker über das Admin Tool hinzufügen",
+      "Alten Drucker entfernen, wenn er nicht mehr benötigt wird",
+      "Bei Netzwerkdruckern: Druckername oder IP in der Druckerinstallation eingeben"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_addprinter", "label": "Drucker hinzufügen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_printer_removeprinter", "label": "Drucker entfernen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["moved office printer", "new desk printer", "floor printer change"],
+    "followUpQuestions": [
+      {
+        "question": "Kennen Sie den Namen des Druckers an Ihrem neuen Standort?",
+        "options": ["Ja", "Nein, muss erst herausfinden"],
+        "narrows": "Ob Drucker identifiziert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-022", "PROB-PRN-031"]
+  },
+  {
+    "id": "PROB-PRN-024",
+    "category": "Drucker",
+    "title": "Standarddrucker wechselt ständig",
+    "keywords": ["Standarddrucker", "wechselt", "ändert sich", "Windows verwaltet", "Standard", "Default"],
+    "extendedKeywords": ["Standarddrucker ändert sich von alleine", "Windows wechselt meinen Standarddrucker", "Standarddrucker ist immer ein anderer", "Drucker verstellt sich", "jedes Mal anderen Drucker ausgewählt", "mein Standarddrucker wird nicht gespeichert", "Windows setzt Standarddrucker zurück", "Standarddrucker springt immer um", "falscher Drucker voreingestellt", "Standarddrucker bleibt nicht gesetzt", "ich muss jedes Mal den Drucker ändern", "Drucker wechselt nach Neustart", "Default Printer ändert sich", "Windows wählt immer den falschen Drucker", "Standarddrucker soll fest bleiben", "Drucker ist nie der richtige", "wechselnder Standarddrucker nervt", "Standarddrucker fixieren", "warum ändert sich mein Drucker", "Windows verwaltet Standarddrucker"],
+    "typos": ["Standartdrucker", "Standardrucker", "wechslet"],
+    "symptoms": ["Standarddrucker ändert sich ohne Zutun", "Falscher Drucker ist vorausgewählt beim Drucken"],
+    "quickCheck": "Ist 'Windows verwaltet Standarddrucker' in den Einstellungen aktiviert?",
+    "solutions": [
+      "Einstellungen > Drucker & Scanner > 'Windows verwaltet Standarddrucker' DEAKTIVIEREN",
+      "Gewünschten Drucker als Standard setzen: Rechtsklick > Als Standarddrucker festlegen",
+      "Nach dem Deaktivieren bleibt der gewählte Standarddrucker fest",
+      "Bei Gruppenrichtlinie: GPO 'Verwaltung des Standarddruckers durch Windows deaktivieren' prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["default printer changes", "standard printer keeps changing", "wrong default printer"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie in den Einstellungen geprüft, ob 'Windows verwaltet Standarddrucker' aktiviert ist?",
+        "options": ["Ja, ist aktiviert", "Ja, ist deaktiviert", "Nein, noch nicht geprüft"],
+        "narrows": "Ob Windows-Verwaltung die Ursache ist"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-025"]
+  },
+  {
+    "id": "PROB-PRN-025",
+    "category": "Drucker",
+    "title": "Standarddrucker festlegen",
+    "keywords": ["Standarddrucker", "festlegen", "setzen", "einstellen", "Standard", "Default Printer"],
+    "extendedKeywords": ["wie stelle ich den Standarddrucker ein", "Standarddrucker festlegen Windows", "Drucker als Standard einstellen", "Default Drucker wählen", "Standarddrucker konfigurieren", "welcher Drucker ist mein Standard", "Standarddrucker ändern", "Drucker als Hauptdrucker setzen", "einen bestimmten Drucker als Standard", "Standarddrucker einrichten", "wie mache ich einen Drucker zum Standard", "bevorzugten Drucker festlegen", "Hauptdrucker einstellen", "Standarddrucker für alle Anwendungen", "Drucker fest als Standard", "Standarddrucker in Windows 11", "Drucker als Default", "primären Drucker einstellen", "Drucker immer als ersten anzeigen", "Standarddrucker permanent setzen"],
+    "typos": ["Standartdrucker", "festlgen", "Standart"],
+    "symptoms": ["Kein Standarddrucker gesetzt", "Falscher Drucker ist Standard"],
+    "quickCheck": "Welchen Drucker möchten Sie als Standard festlegen?",
+    "solutions": [
+      "Einstellungen > Drucker & Scanner > 'Windows verwaltet Standarddrucker' DEAKTIVIEREN",
+      "Gewünschten Drucker in der Liste suchen und anklicken",
+      "'Als Standard festlegen' klicken",
+      "Alternativ: Systemsteuerung > Geräte und Drucker > Rechtsklick > Als Standarddrucker festlegen",
+      "Grüner Haken zeigt den aktuellen Standarddrucker an"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["set default printer", "change standard printer", "make printer default"],
+    "followUpQuestions": [
+      {
+        "question": "Kennen Sie den genauen Namen des gewünschten Standarddruckers?",
+        "options": ["Ja", "Nein, ich sehe ihn in der Liste"],
+        "narrows": "Ob der Drucker bekannt ist"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-024"]
+  },
+  {
+    "id": "PROB-PRN-026",
+    "category": "Drucker",
+    "title": "Farbdruck funktioniert nicht",
+    "keywords": ["Farbe", "Farbdruck", "schwarz-weiß", "Graustufen", "Color", "Farben fehlen"],
+    "extendedKeywords": ["Drucker druckt nur schwarz-weiß", "keine Farbe beim Drucken", "Farbdruck geht nicht", "Drucker druckt alles in Graustufen", "Farben kommen nicht raus", "Farbdruck aktivieren", "Drucker druckt ohne Farbe", "wie drucke ich in Farbe", "Farboption fehlt", "Ausdruck ist farblos", "Drucker macht nur Graustufen", "Farbpatrone leer", "bunte Seite wird schwarz-weiß gedruckt", "Farbe aktivieren beim Drucker", "Druckeinstellung Farbe ändern", "Farbdruck einstellen", "Color-Option beim Drucken", "Drucker kann nur schwarz-weiß", "Farbdrucker druckt nicht bunt", "Farbeinstellung Drucker"],
+    "typos": ["Farbdurck", "schwarz-weiss", "Graustuffen", "Farb-Druck"],
+    "symptoms": ["Ausdruck nur in Schwarz-Weiß obwohl Farbdrucker", "Farben fehlen oder sind falsch"],
+    "quickCheck": "Ist der Drucker grundsätzlich ein Farbdrucker?",
+    "solutions": [
+      "Druckeinstellungen prüfen: Druckdialog > Farbe statt Graustufen auswählen",
+      "Drucker-Standardeinstellungen ändern: Drucker > Druckeinstellungen > Farbe",
+      "Farbpatronen/-toner prüfen - möglicherweise leer",
+      "Gruppenrichtlinie prüfen: Farbdruck könnte per GPO eingeschränkt sein",
+      "Druckertreiber aktualisieren - Farboptionen könnten fehlen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["no color printing", "grayscale only", "color print missing"],
+    "followUpQuestions": [
+      {
+        "question": "Ist die Farboption in den Druckeinstellungen verfügbar oder ausgegraut?",
+        "options": ["Verfügbar, aber Druck kommt trotzdem SW", "Ausgegraut/nicht verfügbar", "Weiß nicht wo ich schauen soll"],
+        "narrows": "Ob Einstellungs- oder Hardwareproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-027"]
+  },
+  {
+    "id": "PROB-PRN-027",
+    "category": "Drucker",
+    "title": "Duplex-Druck (beidseitig) funktioniert nicht",
+    "keywords": ["Duplex", "beidseitig", "Doppelseitig", "zwei Seiten", "Rückseite", "Papierverbrauch"],
+    "extendedKeywords": ["beidseitig drucken geht nicht", "Duplex aktivieren", "Doppelseitendruck einschalten", "Drucker druckt nur einseitig", "wie drucke ich beidseitig", "Rückseite wird nicht bedruckt", "Duplex-Option fehlt", "doppelseitiger Druck einrichten", "beidseitiger Druck funktioniert nicht", "Papier sparen beidseitig", "Duplex-Einstellung finden", "automatisch beidseitig drucken", "Duplex-Einheit aktivieren", "Drucker kann nicht beidseitig", "wo stelle ich Duplex ein", "Duplex als Standard", "immer beidseitig drucken", "Duplexdruck einstellen", "beidseitig drucken Standard", "manueller Duplexdruck"],
+    "typos": ["Dublex", "Dupplex", "beidsetig", "doppelsetig"],
+    "symptoms": ["Drucker druckt nur einseitig", "Duplex-Option fehlt in den Druckeinstellungen"],
+    "quickCheck": "Unterstützt Ihr Drucker automatischen Duplex-Druck?",
+    "solutions": [
+      "Druckeinstellungen prüfen: Druckdialog > Beidseitig drucken aktivieren",
+      "Drucker-Standardeinstellungen ändern: Drucker > Druckeinstellungen > Duplex",
+      "Prüfen ob der Drucker eine Duplex-Einheit hat (nicht alle Modelle)",
+      "Bei fehlendem Duplex: Manuellen Duplexdruck verwenden",
+      "Druckertreiber aktualisieren - Duplex-Option könnte erst mit neuem Treiber erscheinen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["duplex not working", "two sided print", "double sided print"],
+    "followUpQuestions": [
+      {
+        "question": "Soll Duplex als Standardeinstellung für alle Druckaufträge gelten?",
+        "options": ["Ja, immer beidseitig", "Nein, nur manchmal"],
+        "narrows": "Ob Standardeinstellung oder einzelner Auftrag"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-026"]
+  },
+  {
+    "id": "PROB-PRN-028",
+    "category": "Drucker",
+    "title": "Netzwerk-Scanner funktioniert nicht",
+    "keywords": ["Scanner", "Netzwerk", "scannen", "funktioniert nicht", "TWAIN", "WIA", "Scan"],
+    "extendedKeywords": ["Netzwerkscanner funktioniert nicht", "kann nicht scannen über Netzwerk", "Scanner am Netzwerk nicht gefunden", "Scannen vom PC funktioniert nicht", "Netzwerk-Scanner einrichten", "Scanner wird nicht erkannt im Netzwerk", "WIA-Scanner nicht verfügbar", "TWAIN-Scanner nicht gefunden", "vom PC scannen geht nicht", "Scan-Software findet Scanner nicht", "Netzwerkscanner verbinden", "Scanner-Treiber installieren für Netzwerk", "Scanner über IP ansprechen", "Scan-Button am Drucker funktioniert nicht", "Netzwerk-Scan einrichten", "Scanner-Funktion am Multifunktionsdrucker", "vom Computer aus scannen", "Scanner-Software zeigt keinen Scanner", "Scan-Anwendung findet Gerät nicht", "Netzwerkscanner konfigurieren"],
+    "typos": ["Scaner", "Netzwek-Scanner", "funkioniert"],
+    "symptoms": ["Scanner wird von der Software nicht gefunden", "Scan-Funktion ist nicht verfügbar", "Fehlermeldung beim Scannen"],
+    "quickCheck": "Ist der Scanner/Multifunktionsdrucker im Netzwerk erreichbar (z.B. per Ping)?",
+    "solutions": [
+      "Scanner-Treiber vom Hersteller installieren (oft separate Software nötig)",
+      "Scanner-IP in der Scan-Software manuell eingeben",
+      "Windows-Scan-App aus dem Microsoft Store installieren",
+      "Bei HP: HP Smart App installieren für Scan-Funktion",
+      "Firewall prüfen: Scanner-Ports müssen offen sein",
+      "WSD-Scanner: In Windows unter 'Geräte hinzufügen' suchen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["network scanner not working", "cant scan over network", "scan software no device"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert der Druck über denselben Netzwerkdrucker?",
+        "options": ["Ja, nur Scan geht nicht", "Nein, beides geht nicht"],
+        "narrows": "Ob allgemeines Netzwerk- oder Scanner-spezifisches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-029"]
+  },
+  {
+    "id": "PROB-PRN-029",
+    "category": "Drucker",
+    "title": "Scan-Qualität schlecht oder Scan-Einstellungen",
+    "keywords": ["Scan", "Qualität", "Auflösung", "DPI", "unscharf", "Einstellungen", "Format"],
+    "extendedKeywords": ["Scan ist unscharf", "Scan-Qualität schlecht", "Auflösung beim Scannen einstellen", "Scan ist zu dunkel", "Scan ist zu hell", "DPI einstellen beim Scannen", "Scan als PDF", "Scan-Format ändern", "mehrseitiges PDF scannen", "OCR beim Scannen", "Scan ist zu groß", "Scan-Datei zu groß", "Scan komprimieren", "Scan-Farbe einstellen", "Scan schwarz-weiß", "Texterkennung beim Scan", "Scan-Auflösung erhöhen", "Scan ist pixelig", "bessere Scan-Qualität", "Scan-Einstellungen optimieren"],
+    "typos": ["Qualität", "Auflöusung", "Einstellngen"],
+    "symptoms": ["Gescannte Dokumente sind unscharf oder unleserlich", "Dateigröße der Scans ist zu groß oder zu klein"],
+    "quickCheck": "Welches Scan-Format und welche Auflösung verwenden Sie aktuell?",
+    "solutions": [
+      "Auflösung anpassen: 150 DPI für Bildschirmansicht, 300 DPI für Druck, 600 DPI für Details",
+      "Farbmodus wählen: Farbe, Graustufen oder Schwarz-Weiß je nach Bedarf",
+      "Dateiformat wählen: PDF für Dokumente, JPEG/TIFF für Bilder",
+      "Für mehrseitige Scans: PDF-Format mit mehrseitigem Modus verwenden",
+      "Bei zu großen Dateien: Komprimierung erhöhen oder Auflösung reduzieren",
+      "Glasfläche des Scanners reinigen für bessere Qualität"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["scan quality poor", "scan settings adjust", "scan resolution"],
+    "followUpQuestions": [
+      {
+        "question": "Was möchten Sie mit den gescannten Dokumenten machen?",
+        "options": ["Am Bildschirm lesen", "Ausdrucken", "Archivieren", "Per E-Mail versenden"],
+        "narrows": "Optimale Scan-Einstellungen"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-028"]
+  },
+  {
+    "id": "PROB-PRN-030",
+    "category": "Drucker",
+    "title": "Drucker installieren und einrichten",
+    "keywords": ["Drucker", "installieren", "einrichten", "hinzufügen", "Setup", "konfigurieren", "neu"],
+    "extendedKeywords": ["neuen Drucker installieren", "Drucker hinzufügen Windows", "Drucker einrichten", "wie installiere ich einen Drucker", "Netzwerkdrucker hinzufügen", "Drucker verbinden", "Drucker am PC einrichten", "neuer Drucker am Arbeitsplatz", "Drucker Setup-Anleitung", "Drucker über IP installieren", "Drucker per Name hinzufügen", "Drucker konfigurieren", "Netzwerkdrucker einrichten", "Drucker installieren Windows 11", "Druckertreiber installieren", "Drucker am Laptop einrichten", "wie füge ich einen Drucker hinzu", "Drucker manuell installieren", "Drucker mit dem PC verbinden", "Druckerinstallation Schritt für Schritt"],
+    "typos": ["installiren", "einrchten", "hinzufügen", "Drukcer"],
+    "symptoms": ["Kein Drucker installiert", "Benötigter Drucker fehlt in der Liste"],
+    "quickCheck": "Handelt es sich um einen Netzwerkdrucker oder einen USB-Drucker?",
+    "solutions": [
+      "Netzwerkdrucker hinzufügen über das Admin Tool (empfohlen)",
+      "Manuell: Einstellungen > Drucker & Scanner > Drucker oder Scanner hinzufügen",
+      "Bei Netzwerkdrucker: IP-Adresse oder Druckername eingeben",
+      "Treiber vom Hersteller herunterladen und installieren",
+      "Bei USB-Drucker: Einfach anschließen, Windows installiert meist automatisch",
+      "Testseite drucken nach der Installation"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_addprinter", "label": "Drucker hinzufügen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["install printer", "add printer", "setup printer", "new printer"],
+    "followUpQuestions": [
+      {
+        "question": "Ist es ein Netzwerkdrucker oder ein USB-Drucker?",
+        "options": ["Netzwerkdrucker", "USB-Drucker", "Weiß ich nicht"],
+        "narrows": "Installationsmethode"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-031"]
+  },
+  {
+    "id": "PROB-PRN-031",
+    "category": "Drucker",
+    "title": "Drucker deinstallieren und entfernen",
+    "keywords": ["Drucker", "deinstallieren", "entfernen", "löschen", "alten Drucker", "Remove"],
+    "extendedKeywords": ["Drucker entfernen Windows", "alten Drucker löschen", "Drucker deinstallieren", "wie entferne ich einen Drucker", "Drucker aus der Liste löschen", "Drucker komplett entfernen", "Druckertreiber deinstallieren", "alten Drucker loswerden", "unnötigen Drucker entfernen", "Drucker von PC löschen", "Drucker vollständig entfernen mit Treiber", "wie lösche ich einen Drucker", "Drucker bereinigen", "alte Drucker aufräumen", "nicht mehr benötigten Drucker entfernen", "Drucker endgültig löschen", "Druckertreiber vollständig entfernen", "veralteten Drucker deinstallieren", "Ghost-Drucker entfernen", "Drucker restlos löschen"],
+    "typos": ["desinstallieren", "entferen", "löchen"],
+    "symptoms": ["Zu viele Drucker in der Liste", "Alter Drucker stört oder verursacht Probleme"],
+    "quickCheck": "Welchen Drucker möchten Sie entfernen?",
+    "solutions": [
+      "Drucker über das Admin Tool entfernen (empfohlen)",
+      "Manuell: Einstellungen > Drucker & Scanner > Drucker auswählen > Entfernen",
+      "Treiber auch entfernen: printmanagement.msc > Treiber > Treiber löschen",
+      "Bei hartnäckigen Druckern: Spooler stoppen, Drucker entfernen, Spooler starten",
+      "Registry-Einträge prüfen falls Drucker sich nicht entfernen lässt"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_removeprinter", "label": "Drucker entfernen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["remove printer", "uninstall printer", "delete printer"],
+    "followUpQuestions": [
+      {
+        "question": "Soll auch der Druckertreiber entfernt werden?",
+        "options": ["Ja, alles entfernen", "Nein, nur den Drucker"],
+        "narrows": "Umfang der Deinstallation"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-030"]
+  },
+  {
+    "id": "PROB-PRN-032",
+    "category": "Drucker",
+    "title": "Papierstau am Drucker",
+    "keywords": ["Papierstau", "Stau", "Paper Jam", "eingeklemmt", "Papier", "verstopft"],
+    "extendedKeywords": ["Papierstau im Drucker", "Papier steckt fest im Drucker", "Drucker meldet Papierstau", "Papier eingeklemmt", "Paper Jam Meldung", "Drucker zieht Papier schief ein", "Papier reißt im Drucker", "Drucker hat Papierstau", "wie behebe ich einen Papierstau", "Papierstau entfernen", "Drucker zeigt Stau an", "Papier kommt nicht raus", "Papierstau obwohl kein Papier sichtbar", "Drucker-Klappe öffnen Papierstau", "Papierstau immer wieder", "ständiger Papierstau", "Papier knickt im Drucker", "Drucker verstopft", "Papier blockiert Drucker", "Papierstau hinten am Drucker"],
+    "typos": ["Papierstau", "Papirstau", "Paper Jam", "Stau"],
+    "symptoms": ["Fehlermeldung 'Papierstau'", "Drucker stoppt den Druck", "Papier steckt sichtbar fest"],
+    "quickCheck": "Zeigt das Druckerdisplay an, wo genau der Papierstau ist?",
+    "solutions": [
+      "Drucker ausschalten",
+      "Alle Klappen und Schubladen des Druckers öffnen",
+      "Eingeklemmtes Papier vorsichtig und gleichmäßig herausziehen (nicht reißen!)",
+      "Auf kleine Papierreste achten, die zurückbleiben könnten",
+      "Einzugsrollen auf Verschmutzung prüfen und ggf. reinigen",
+      "Papierqualität prüfen: Kein feuchtes, welliges oder zu dünnes Papier verwenden",
+      "Bei häufigen Papierstaus: Einzugsrollen reinigen oder austauschen lassen"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["paper jam", "paper stuck", "papierstau entfernen"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt der Papierstau regelmäßig oder nur einmalig auf?",
+        "options": ["Regelmäßig/häufig", "Zum ersten Mal", "Gelegentlich"],
+        "narrows": "Ob Hardware-Problem oder einmaliges Ereignis"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-033"]
+  },
+  {
+    "id": "PROB-PRN-033",
+    "category": "Drucker",
+    "title": "Drucker Hardware-Problem (Toner, Patrone, Display)",
+    "keywords": ["Toner", "Patrone", "leer", "Hardware", "Display", "Fehler", "Wartung", "Verbrauchsmaterial"],
+    "extendedKeywords": ["Toner leer", "Druckerpatrone leer", "Drucker meldet Toner ersetzen", "Druckqualität schlecht", "Streifen auf dem Ausdruck", "Drucker-Display zeigt Fehler", "Drucker braucht Wartung", "Toner nachbestellen", "welchen Toner brauche ich", "Druckerpatrone wechseln", "Drucker druckt blass", "Toner fast leer", "Druckkopf reinigen", "Drucker zeigt Wartung an", "Verbrauchsmaterial bestellen", "Drucker-LED blinkt rot", "Tonerwechsel Anleitung", "Drucker druckt mit Streifen", "Resttoner leeren", "Bildtrommel wechseln"],
+    "typos": ["Tonner", "Patone", "Hardwar", "Wartug"],
+    "symptoms": ["Drucker meldet leeren Toner/Patrone", "Ausdrucke sind blass oder streifig", "Drucker-Display zeigt Wartungsmeldung"],
+    "quickCheck": "Welche Meldung zeigt das Druckerdisplay an?",
+    "solutions": [
+      "Toner-/Patronenstand am Drucker oder in den Druckereigenschaften prüfen",
+      "Toner-/Patronenbezeichnung vom Drucker ablesen und bestellen",
+      "Toner herausnehmen, leicht schütteln und wieder einsetzen (kurzfristige Hilfe)",
+      "Bei Streifen: Druckkopfreinigung durchführen (in Druckereigenschaften oder am Gerät)",
+      "Drucker-Wartungskit bestellen wenn vom Display empfohlen",
+      "IT oder Facility Management für Verbrauchsmaterial-Bestellung kontaktieren"
+    ],
+    "skillMapping": [],
+    "hiddenTriggers": ["toner empty", "ink cartridge", "printer maintenance", "streaks on print"],
+    "followUpQuestions": [
+      {
+        "question": "Was genau meldet der Drucker?",
+        "options": ["Toner/Patrone leer", "Wartung erforderlich", "Streifiger Druck", "Andere Meldung"],
+        "narrows": "Art des Hardware-Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-032"]
+  },
+  {
+    "id": "PROB-PRN-034",
+    "category": "Drucker",
+    "title": "Drucker druckt langsam",
+    "keywords": ["Drucker", "langsam", "Geschwindigkeit", "träge", "Performance", "Druck dauert"],
+    "extendedKeywords": ["Drucker ist sehr langsam", "Druck dauert ewig", "Drucker braucht lange", "Druckgeschwindigkeit langsam", "Drucker rödelt ewig", "Druck wird immer langsamer", "erste Seite dauert lange", "Drucker braucht ewig zum Starten", "Druck kommt erst nach Minuten", "Drucker ist träge geworden", "Druckauftrag braucht sehr lange", "Drucker kriecht", "warum ist der Drucker so langsam", "Geschwindigkeit vom Drucker verbessern", "Drucker war mal schneller", "langsamer Netzwerkdruck", "Druck dauert Minuten", "Druckvorgang sehr langsam", "Wartezeit beim Drucken", "jede Seite dauert ewig"],
+    "typos": ["langsamm", "Geschwindikeit", "langsahm"],
+    "symptoms": ["Druck dauert ungewöhnlich lange", "Große Verzögerung zwischen Druckbefehl und Ausdruck"],
+    "quickCheck": "Betrifft die Langsamkeit alle Dokumente oder nur bestimmte (z.B. mit vielen Bildern)?",
+    "solutions": [
+      "Druckqualität reduzieren: Entwurf-Modus statt hohe Qualität",
+      "Bei Bildern: Auflösung reduzieren vor dem Drucken",
+      "Druckertreiber aktualisieren",
+      "Netzwerkverbindung prüfen bei Netzwerkdruckern",
+      "Druckerspooler bereinigen (alte Aufträge können Performance beeinträchtigen)",
+      "Bei PostScript-Druckern: PCL-Treiber versuchen (oft schneller)",
+      "Drucker-Firmware aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_spoolerclean", "label": "Spooler bereinigen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-printer", "label": "Druckerdiagnose", "priority": 3, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["slow printing", "printer slow", "print speed"],
+    "followUpQuestions": [
+      {
+        "question": "War der Drucker früher schneller oder war er schon immer langsam?",
+        "options": ["War früher schneller", "War schon immer langsam"],
+        "narrows": "Ob Verschlechterung oder Grundproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-014"]
+  },
+  {
+    "id": "PROB-PRN-035",
+    "category": "Drucker",
+    "title": "Drucker wählt falsches Papierfach",
+    "keywords": ["Papierfach", "Schacht", "Fach", "Papierformat", "A3", "A4", "Einzug", "Kassette"],
+    "extendedKeywords": ["Drucker nimmt falsches Papierfach", "Drucker zieht aus dem falschen Schacht", "falsches Papier eingelegt Meldung", "Drucker nimmt Briefpapier statt normales", "Papierfach einstellen", "aus welchem Fach druckt der Drucker", "Drucker will manuellen Einzug", "Drucker fragt nach Papier obwohl eingelegt", "falsches Papierformat gewählt", "Drucker nimmt A3 statt A4", "Papierformat in Druckeinstellungen ändern", "Drucker zieht aus Fach 2 statt Fach 1", "Papierschacht wechseln", "Universal-Schacht statt Kassette", "manueller Einzug Drucker", "Drucker stoppt wegen Papier", "falsches Format beim Drucken", "Papierquelle ändern", "Papierkassette einstellen", "Schacht-Auswahl beim Drucken"],
+    "typos": ["Papierfach", "Papirfach", "Schachd", "Kassete"],
+    "symptoms": ["Drucker zieht Papier aus dem falschen Fach", "Meldung 'Papier einlegen' obwohl Papier vorhanden", "Falsches Papierformat wird verwendet"],
+    "quickCheck": "Welches Papierfach soll verwendet werden und welches wird stattdessen genommen?",
+    "solutions": [
+      "In den Druckeinstellungen das richtige Papierfach/die richtige Papierquelle auswählen",
+      "Drucker-Standardeinstellungen ändern: Druckeinstellungen > Papier/Qualität > Papierquelle",
+      "Am Drucker selbst das Papierformat für jedes Fach korrekt einstellen",
+      "In der Anwendung: Seitenlayout prüfen - stimmt das Format (A4, A3, etc.)?",
+      "Druckertreiber-Einstellungen: Automatische Fachauswahl deaktivieren wenn problematisch"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_printer_getprinter", "label": "Druckerliste anzeigen", "priority": 2, "effectiveness": 35}
+    ],
+    "hiddenTriggers": ["wrong paper tray", "paper source wrong", "manual feed printer"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie am Drucker das Papierformat für die Fächer korrekt eingestellt?",
+        "options": ["Ja", "Nein", "Weiß nicht wie"],
+        "narrows": "Ob Drucker- oder PC-Einstellung das Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-PRN-034"]
+  }
+]

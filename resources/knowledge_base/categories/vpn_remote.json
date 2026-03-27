@@ -1,0 +1,637 @@
+[
+  {
+    "id": "PROB-VPN-001",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN verbindet nicht – allgemein",
+    "keywords": ["VPN", "Verbindung", "verbindet nicht", "Connection", "Tunnel", "Client"],
+    "extendedKeywords": ["VPN geht nicht", "VPN verbindet sich nicht", "VPN Verbindung fehlgeschlagen", "kann mich nicht per VPN verbinden", "VPN funktioniert nicht", "VPN Verbindung schlägt fehl", "VPN startet nicht", "kein VPN möglich", "VPN Client verbindet nicht", "VPN keine Verbindung", "VPN aufbauen geht nicht", "VPN Tunnel kommt nicht", "VPN Problem", "VPN Fehler Verbindung", "VPN nicht erreichbar", "VPN Verbindungsaufbau Fehler", "VPN Client Fehler", "VPN herstellen geht nicht", "VPN Einwahl fehlgeschlagen", "VPN anmelden geht nicht"],
+    "typos": ["VPn", "VNP", "Vpn", "verbindtet nicht", "Verbindugn"],
+    "symptoms": ["VPN-Verbindung kann nicht hergestellt werden", "VPN-Client zeigt Fehler beim Verbindungsaufbau"],
+    "quickCheck": "Welchen VPN-Client verwenden Sie und welche Fehlermeldung erscheint?",
+    "solutions": ["Internetverbindung prüfen – VPN benötigt aktives Internet", "VPN-Client neu starten", "Anmeldedaten prüfen", "VPN-Profil löschen und neu einrichten", "Firewall/Antivirus temporär deaktivieren zum Testen"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_net_nslookup", "label": "DNS-Auflösung testen", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 4, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["VPN geht nicht", "kein VPN", "VPN Fehler"],
+    "followUpQuestions": [
+      {"question": "Welchen VPN-Client verwenden Sie?", "options": ["Cisco AnyConnect", "GlobalProtect", "Windows VPN", "FortiClient", "Anderer"], "narrows": "Client-spezifische Lösung"},
+      {"question": "Haben Sie eine Fehlermeldung?", "options": ["Ja", "Nein"], "narrows": "Fehlercode-basierte Lösung"}
+    ],
+    "relatedProblems": ["PROB-VPN-002", "PROB-VPN-003", "PROB-VPN-004"]
+  },
+  {
+    "id": "PROB-VPN-002",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN verbindet nicht – Timeout",
+    "keywords": ["VPN", "Timeout", "Zeitüberschreitung", "keine Antwort", "Connection Timeout"],
+    "extendedKeywords": ["VPN Timeout", "VPN Zeitüberschreitung", "VPN keine Antwort vom Server", "VPN Verbindungsversuch läuft ewig", "VPN hängt beim Verbinden", "VPN wartet endlos", "VPN Verbindung bricht ab Timeout", "VPN Server antwortet nicht", "VPN Connection Timeout", "VPN Zeitlimit überschritten", "VPN dreht sich nur", "VPN Verbindungsversuch Timeout", "VPN Ladekreis", "VPN bleibt bei Verbindung hängen", "VPN kein Server-Kontakt", "VPN erreicht Server nicht", "VPN Anmeldung Timeout", "VPN Gateway nicht erreichbar", "VPN lädt endlos", "VPN Verbindungsabbruch Timeout"],
+    "typos": ["Timeotu", "Zeitüberschreitugn", "Timout", "Tiemout"],
+    "symptoms": ["VPN-Verbindungsversuch endet mit Timeout", "Client dreht sich endlos ohne Verbindung"],
+    "quickCheck": "Können Sie das VPN-Gateway per Ping oder Port-Test erreichen?",
+    "solutions": ["VPN-Gateway-Adresse per Ping prüfen", "Port-Erreichbarkeit testen (meist 443/TCP oder 500/UDP)", "DNS-Auflösung des VPN-Gateways prüfen", "Firewall des ISP könnte VPN blockieren", "Anderen Netzwerkzugang testen (Hotspot)"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 2, "effectiveness": 90},
+      {"skillId": "rd_net_nslookup", "label": "DNS-Auflösung testen", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["VPN Timeout", "VPN hängt", "keine Antwort VPN"],
+    "followUpQuestions": [
+      {"question": "Funktioniert das Internet ansonsten?", "options": ["Ja", "Nein"], "narrows": "Internet vs. VPN Problem"},
+      {"question": "Sind Sie in einem Hotel/öffentlichen WLAN?", "options": ["Ja", "Nein"], "narrows": "Netzwerk-Einschränkung"}
+    ],
+    "relatedProblems": ["PROB-VPN-001", "PROB-VPN-003"]
+  },
+  {
+    "id": "PROB-VPN-003",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN Fehlercode",
+    "keywords": ["VPN", "Fehlercode", "Error", "800", "809", "691", "812", "789"],
+    "extendedKeywords": ["VPN Fehlercode", "VPN Error Code", "VPN Fehler 800", "VPN Fehler 809", "VPN Error 691", "VPN Fehler 789", "VPN Error 812", "VPN Fehlernummer", "VPN Fehler Nummer", "Fehlercode bei VPN Verbindung", "VPN Error Message", "VPN spezifischer Fehler", "VPN Code Fehler", "Fehler beim VPN aufbauen Code", "VPN Error Bedeutung", "VPN Fehlercode Lösung", "VPN Error nachschlagen", "Fehlercode VPN Client", "VPN Fehlermeldung Code", "was bedeutet VPN Fehler"],
+    "typos": ["Fehlercdoe", "Errro", "Fehlercdoe", "Fehlrcode"],
+    "symptoms": ["VPN-Verbindung schlägt fehl mit spezifischem Fehlercode"],
+    "quickCheck": "Welcher Fehlercode wird angezeigt?",
+    "solutions": ["Fehler 800: VPN-Server nicht erreichbar – Netzwerk prüfen", "Fehler 691: Falsche Anmeldedaten – Benutzername/Passwort prüfen", "Fehler 809: Firewall blockiert – Ports 500/4500 UDP prüfen", "Fehler 789: L2TP-Problem – IPsec-Dienst prüfen", "Fehler 812: Authentifizierungsmethode nicht unterstützt – Profil prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Fehlercode VPN", "Error 800", "VPN Fehlernummer"],
+    "followUpQuestions": [
+      {"question": "Welcher Fehlercode wird angezeigt?", "options": ["800", "809", "691", "789", "812", "Anderer"], "narrows": "Code-spezifische Lösung"}
+    ],
+    "relatedProblems": ["PROB-VPN-001", "PROB-VPN-002"]
+  },
+  {
+    "id": "PROB-VPN-004",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN funktioniert nicht nach Windows Update",
+    "keywords": ["VPN", "Update", "Windows Update", "nach Update", "Treiber", "Adapter"],
+    "extendedKeywords": ["VPN geht nicht nach Update", "VPN kaputt nach Windows Update", "seit Update kein VPN", "VPN nach Patch kaputt", "Windows Update VPN Problem", "VPN Treiber nach Update", "VPN Adapter fehlt nach Update", "Update hat VPN zerstört", "VPN funktioniert nicht mehr nach Update", "seit Windows Update VPN Fehler", "VPN Client nach Update defekt", "Update VPN Kompatibilität", "nach kumultativem Update VPN kaputt", "VPN nach Neustart wegen Update", "VPN Verbindung nach Update unmöglich", "seit Patch kein VPN", "Windows Update VPN Treiber", "VPN nach Feature Update", "VPN Adapter nach Update weg", "VPN inkompatibel nach Update"],
+    "typos": ["Updtae", "nach Updte", "Widnows Update", "funtioniert nicht"],
+    "symptoms": ["VPN funktioniert nach einem Windows Update nicht mehr", "VPN-Adapter fehlt nach Update"],
+    "quickCheck": "Wurde kürzlich ein Windows Update installiert?",
+    "solutions": ["VPN-Client aktualisieren auf neueste Version", "VPN-Adapter deinstallieren und neu installieren", "Netzwerkadapter zurücksetzen: netsh winsock reset", "VPN-Client komplett deinstallieren und neu installieren", "Fehlerhaftes Update deinstallieren als Workaround"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["VPN nach Update", "seit Update kein VPN", "VPN kaputt Update"],
+    "followUpQuestions": [
+      {"question": "Welches Update wurde installiert?", "options": ["Kumulatives Update", "Feature Update", "Weiß nicht"], "narrows": "Update-Typ"},
+      {"question": "Ist der VPN-Adapter noch sichtbar?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Adapter-Problem"}
+    ],
+    "relatedProblems": ["PROB-VPN-001", "PROB-VPN-028"]
+  },
+  {
+    "id": "PROB-VPN-005",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN langsam – allgemein",
+    "keywords": ["VPN", "langsam", "Geschwindigkeit", "Performance", "Bandbreite", "träge"],
+    "extendedKeywords": ["VPN langsam", "VPN Geschwindigkeit schlecht", "über VPN alles langsam", "VPN Performance", "VPN Bandbreite niedrig", "VPN träge", "Internet langsam über VPN", "Downloads langsam VPN", "VPN Verbindung langsam", "über VPN lahm", "VPN verlangsamt alles", "VPN Speed", "VPN Tempo", "VPN bremst", "Netzwerk langsam VPN", "VPN Geschwindigkeit verbessern", "VPN Throughput", "VPN Durchsatz niedrig", "langsame VPN Verbindung", "VPN Geschwindigkeit optimieren"],
+    "typos": ["langsma", "Geschwindigketi", "Perforamce", "Bandbreie"],
+    "symptoms": ["VPN-Verbindung ist deutlich langsamer als ohne VPN", "Downloads/Uploads über VPN dauern lange"],
+    "quickCheck": "Wie ist die Geschwindigkeit ohne VPN im Vergleich?",
+    "solutions": ["Split-Tunnel aktivieren falls verfügbar", "VPN-Server wechseln (näher gelegener)", "MTU-Größe anpassen: netsh interface ipv4 set subinterface VPN mtu=1400", "VPN-Protokoll wechseln (IKEv2 ist oft schneller)", "Bandbreitenfresser identifizieren und stoppen"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["VPN langsam", "über VPN träge", "VPN Geschwindigkeit"],
+    "followUpQuestions": [
+      {"question": "Ist Split-Tunnel aktiviert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Split-Tunnel als Lösung"},
+      {"question": "Wie ist die Internet-Geschwindigkeit ohne VPN?", "options": ["Schnell", "Auch langsam", "Weiß nicht"], "narrows": "Internet vs. VPN Problem"}
+    ],
+    "relatedProblems": ["PROB-VPN-006", "PROB-VPN-007"]
+  },
+  {
+    "id": "PROB-VPN-006",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN langsam – Split-Tunnel",
+    "keywords": ["Split-Tunnel", "VPN", "Routing", "Full-Tunnel", "Traffic", "Split"],
+    "extendedKeywords": ["Split Tunnel VPN", "VPN Split Tunnel aktivieren", "VPN Full Tunnel langsam", "Split Tunnel einrichten", "VPN Traffic aufteilen", "Split Tunnel Konfiguration", "VPN Routing Split", "Internet über VPN oder direkt", "Split Tunnel vs Full Tunnel", "VPN Split Routing", "Split Tunnel deaktivieren", "VPN Traffic Split", "lokales Internet VPN", "Split Tunnel Einstellungen", "VPN nicht alles durch Tunnel", "Internet direkt VPN", "Split Tunnel Sicherheit", "VPN Routing aufteilen", "Split Tunnel konfigurieren", "VPN Direct Internet"],
+    "typos": ["Spilt Tunnel", "Splti Tunnel", "Split Tunne", "Tunell"],
+    "symptoms": ["Gesamter Datenverkehr geht über VPN (Full-Tunnel)", "Internet langsam weil alles über VPN geroutet wird"],
+    "quickCheck": "Wird der gesamte Datenverkehr über den VPN-Tunnel geleitet?",
+    "solutions": ["route print prüfen: Geht Default-Route über VPN?", "Split-Tunnel beim VPN-Administrator anfragen", "Bei Windows VPN: Erweiterte TCP/IP-Einstellungen > Standardgateway für das Remotenetzwerk verwenden deaktivieren", "VPN-Profil für Split-Tunnel konfigurieren", "Ausnahmen für Internet-Traffic definieren"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Split Tunnel", "Full Tunnel", "alles über VPN"],
+    "followUpQuestions": [
+      {"question": "Ist Split-Tunnel erlaubt/gewünscht?", "options": ["Ja", "Nein", "Muss Admin fragen"], "narrows": "Berechtigung"}
+    ],
+    "relatedProblems": ["PROB-VPN-005", "PROB-VPN-007"]
+  },
+  {
+    "id": "PROB-VPN-007",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN Bandbreite niedrig",
+    "keywords": ["VPN", "Bandbreite", "Throughput", "Geschwindigkeit", "Mbps", "Datenrate"],
+    "extendedKeywords": ["VPN Bandbreite niedrig", "VPN Throughput schlecht", "VPN Datenrate gering", "VPN Mbps niedrig", "VPN Download Geschwindigkeit", "VPN Upload langsam", "VPN Bandbreite messen", "VPN Speed Test", "VPN nur wenig Bandbreite", "VPN Durchsatz messen", "VPN Geschwindigkeitstest", "VPN Bandbreite verbessern", "VPN Bandbreite begrenzt", "VPN Traffic Limit", "wenig Bandbreite über VPN", "VPN Kapazität", "VPN Engpass", "VPN Bandbreite erhöhen", "VPN Geschwindigkeit testen", "VPN Bandbreite Flaschenhals"],
+    "typos": ["Bandbreie", "Throughpt", "Bandberite", "Geschwindigketi"],
+    "symptoms": ["VPN-Bandbreite deutlich niedriger als die lokale Internetanbindung"],
+    "quickCheck": "Wie hoch ist die Bandbreite mit und ohne VPN?",
+    "solutions": ["Speedtest ohne VPN durchführen als Baseline", "Speedtest über VPN durchführen", "VPN-Protokoll wechseln (IKEv2/WireGuard oft schneller)", "MTU anpassen", "VPN-Gateway-Auslastung prüfen (Admin)"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["VPN Bandbreite", "VPN Speed", "VPN Throughput"],
+    "followUpQuestions": [
+      {"question": "Wie hoch ist die Bandbreite ohne VPN?", "options": ["Über 50 Mbps", "10-50 Mbps", "Unter 10 Mbps"], "narrows": "Baseline prüfen"}
+    ],
+    "relatedProblems": ["PROB-VPN-005", "PROB-VPN-006"]
+  },
+  {
+    "id": "PROB-VPN-008",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN trennt ständig",
+    "keywords": ["VPN", "Trennung", "Disconnect", "abbricht", "instabil", "fällt raus"],
+    "extendedKeywords": ["VPN trennt ständig", "VPN Verbindung bricht ab", "VPN Disconnect", "VPN instabil", "VPN fällt raus", "VPN fliegt raus", "VPN unterbricht", "VPN Verbindungsabbruch", "VPN hält nicht", "VPN reconnect ständig", "VPN Verbindung bricht ständig ab", "VPN Abbruch", "VPN geht immer wieder aus", "VPN verbindet und trennt", "VPN dauerhaft instabil", "VPN Disconnect häufig", "VPN Verbindung nicht stabil", "VPN bricht regelmäßig ab", "VPN fällt aus", "VPN Unterbrechung"],
+    "typos": ["VPn trennt", "Disconncet", "trent ständig", "instabiel"],
+    "symptoms": ["VPN-Verbindung trennt sich regelmäßig", "Häufige Reconnects nötig"],
+    "quickCheck": "Wie oft trennt sich die VPN-Verbindung?",
+    "solutions": ["WLAN-Stabilität prüfen – instabiles WLAN trennt VPN", "VPN-Client aktualisieren", "Keep-Alive-Einstellungen im VPN-Client prüfen", "Energiesparmodus des WLAN-Adapters deaktivieren", "VPN-Protokoll wechseln"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["VPN trennt", "VPN fällt raus", "VPN instabil"],
+    "followUpQuestions": [
+      {"question": "WLAN oder LAN?", "options": ["WLAN", "LAN"], "narrows": "WLAN-Stabilität prüfen"},
+      {"question": "Wie häufig trennt sich das VPN?", "options": ["Alle paar Minuten", "Alle paar Stunden", "Unregelmäßig"], "narrows": "Häufigkeit"}
+    ],
+    "relatedProblems": ["PROB-VPN-009", "PROB-VPN-010"]
+  },
+  {
+    "id": "PROB-VPN-009",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN trennt nach bestimmter Zeit",
+    "keywords": ["VPN", "Timeout", "Session", "Idle", "Leerlauf", "automatische Trennung"],
+    "extendedKeywords": ["VPN trennt nach 30 Minuten", "VPN Idle Timeout", "VPN Session Timeout", "VPN automatische Trennung", "VPN trennt bei Inaktivität", "VPN Leerlauf Trennung", "VPN Session abgelaufen", "VPN fliegt nach Zeit raus", "VPN Verbindung läuft ab", "VPN zeitbasierte Trennung", "VPN max Session Time", "VPN Idle Disconnect", "VPN Timeout Einstellung", "VPN Session Length", "VPN nach Minuten getrennt", "VPN automatisch disconnected", "VPN Inaktivitäts-Timeout", "VPN Session Limit", "VPN Verbindungsdauer begrenzt", "VPN Zeitlimit"],
+    "typos": ["Tiemout", "Inaktivität", "Sesison", "Leerlauf"],
+    "symptoms": ["VPN trennt sich nach einer bestimmten Zeitspanne", "VPN trennt bei Inaktivität"],
+    "quickCheck": "Nach welcher Zeit trennt sich die VPN-Verbindung?",
+    "solutions": ["Idle-Timeout im VPN-Client/Profil prüfen und ggf. erhöhen", "VPN-Gateway Session-Timeout beim Admin anfragen", "Keep-Alive-Pakete aktivieren", "Automatische Wiederverbindung aktivieren", "Hintergrundaktivität sicherstellen (verhindert Idle-Disconnect)"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["VPN nach Zeit", "Idle Disconnect", "Session Timeout"],
+    "followUpQuestions": [
+      {"question": "Nach welcher Zeit trennt das VPN?", "options": ["Nach 15-30 Minuten", "Nach 1-2 Stunden", "Nach 8 Stunden", "Unregelmäßig"], "narrows": "Timeout-Einstellung"}
+    ],
+    "relatedProblems": ["PROB-VPN-008", "PROB-VPN-010"]
+  },
+  {
+    "id": "PROB-VPN-010",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN trennt bei bestimmter Aktion",
+    "keywords": ["VPN", "Trennung", "Aktion", "bestimmte Aktivität", "Netzwerkwechsel", "Standby"],
+    "extendedKeywords": ["VPN trennt bei Standby", "VPN weg nach Ruhezustand", "VPN trennt bei Netzwerkwechsel", "VPN geht aus bei WLAN-Wechsel", "VPN trennt wenn Laptop zuklappen", "VPN weg nach Sleep", "VPN trennt bei bestimmter Aktivität", "VPN disconnect bei Download", "VPN trennt bei Teams-Call", "VPN geht aus bei Netzwerkänderung", "VPN trennt bei IP-Wechsel", "VPN nach Standby weg", "VPN Ruhemodus Trennung", "VPN verliert nach Zuklappen", "VPN Netzwerkänderung Disconnect", "VPN Teams Call trennt", "VPN bei bestimmter Seite", "VPN Schlafmodus Trennung", "VPN Deckel zu Trennung", "VPN Suspend Disconnect"],
+    "typos": ["Standbye", "Ruhezustandd", "Netzwerkwechsl", "Akton"],
+    "symptoms": ["VPN trennt sich bei bestimmter Aktion (Standby, WLAN-Wechsel etc.)"],
+    "quickCheck": "Bei welcher Aktion genau trennt sich das VPN?",
+    "solutions": ["Energieoptionen: Netzwerkadapter im Standby aktiv lassen", "WLAN-Adapter Energiesparmodus deaktivieren: Geräte-Manager > Energieverwaltung", "VPN-Client Auto-Reconnect aktivieren", "Bei Netzwerkwechsel: VPN-Profil für automatische Wiederverbindung konfigurieren", "Modern Standby Einstellungen prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_powerplan", "label": "Energieplan anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["VPN nach Standby", "VPN Zuklappen", "VPN Netzwerkwechsel"],
+    "followUpQuestions": [
+      {"question": "Bei welcher Aktion trennt das VPN?", "options": ["Standby/Sleep", "WLAN-Wechsel", "Laptop zuklappen", "Andere"], "narrows": "Aktions-spezifische Lösung"}
+    ],
+    "relatedProblems": ["PROB-VPN-008", "PROB-VPN-009"]
+  },
+  {
+    "id": "PROB-VPN-011",
+    "category": "VPN & Remote-Zugriff",
+    "title": "DNS-Auflösung über VPN fehlgeschlagen",
+    "keywords": ["DNS", "VPN", "Auflösung", "Namensauflösung", "Hostname", "Domäne"],
+    "extendedKeywords": ["DNS über VPN geht nicht", "Name kann nicht aufgelöst werden VPN", "Hostname nicht erreichbar VPN", "DNS Auflösung VPN Fehler", "interne Seite VPN nicht erreichbar", "Server per Name nicht erreichbar VPN", "DNS VPN Problem", "Namensauflösung über VPN", "DNS Resolution VPN", "interner Hostname VPN", "DNS Tunnel VPN", "Namensauflösung fehlgeschlagen VPN", "Server Name VPN nicht auflösen", "Domain Name VPN", "interne DNS VPN", "kann Server nicht finden VPN", "DNS Query VPN", "Firmen-DNS VPN", "Hostname auflösen VPN", "Name Resolution VPN"],
+    "typos": ["DnS", "Nameauflösung", "Namensauflösugn", "Hostnme"],
+    "symptoms": ["Interne Hostnamen werden über VPN nicht aufgelöst", "Servername kann nicht gefunden werden"],
+    "quickCheck": "Funktioniert die DNS-Auflösung für interne Hostnamen?",
+    "solutions": ["nslookup hostname durchführen", "DNS-Server Einstellungen des VPN-Adapters prüfen", "Firmen-DNS-Server manuell eintragen", "ipconfig /flushdns ausführen", "DNS-Suffix der Firmendomain prüfen und eintragen"],
+    "skillMapping": [
+      {"skillId": "rd_net_nslookup", "label": "DNS-Auflösung testen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["DNS VPN", "Name auflösen VPN", "Hostname nicht gefunden VPN"],
+    "followUpQuestions": [
+      {"question": "Funktioniert der Zugriff per IP-Adresse?", "options": ["Ja", "Nein"], "narrows": "DNS vs. Routing Problem"},
+      {"question": "Welchen DNS-Server zeigt der VPN-Adapter?", "options": ["Firmen-DNS", "Provider-DNS", "Keinen", "Weiß nicht"], "narrows": "DNS-Konfiguration"}
+    ],
+    "relatedProblems": ["PROB-VPN-012", "PROB-VPN-013"]
+  },
+  {
+    "id": "PROB-VPN-012",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Split-DNS über VPN",
+    "keywords": ["Split-DNS", "DNS", "VPN", "NRPT", "Conditional Forwarding", "DNS-Routing"],
+    "extendedKeywords": ["Split DNS VPN", "DNS Aufteilung VPN", "NRPT Tabelle", "DNS Routing VPN", "interne DNS extern", "DNS Weiterleitung VPN", "Split DNS Konfiguration", "DNS Conditional Forwarding", "DNS Richtlinie VPN", "NRPT Policy", "DNS Split Configuration", "interne und externe DNS", "DNS Resolution Policy Table", "DNS VPN Split", "NRPT VPN", "DNS Forwarding VPN", "Split DNS einrichten", "DNS Policy VPN", "Conditional DNS VPN", "DNS Trennung intern extern"],
+    "typos": ["Spilt DNS", "NRTP", "Split-DnS", "Conditonal"],
+    "symptoms": ["Bestimmte DNS-Anfragen sollen über VPN, andere nicht", "Split-DNS-Konfiguration funktioniert nicht"],
+    "quickCheck": "Werden alle oder nur bestimmte DNS-Anfragen über VPN geleitet?",
+    "solutions": ["NRPT (Name Resolution Policy Table) prüfen: Get-DnsClientNrptPolicy", "Split-DNS in VPN-Profil konfigurieren", "DNS-Suffix für VPN-Tunnel konfigurieren", "VPN-DNS-Server nur für Firmendomain verwenden", "nslookup mit spezifischem DNS-Server testen"],
+    "skillMapping": [
+      {"skillId": "rd_net_nslookup", "label": "DNS-Auflösung testen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Split DNS", "NRPT", "DNS Routing"],
+    "followUpQuestions": [
+      {"question": "Sollen nur bestimmte Domains über VPN-DNS aufgelöst werden?", "options": ["Ja", "Nein, alle"], "narrows": "Split-DNS Anforderung"}
+    ],
+    "relatedProblems": ["PROB-VPN-011", "PROB-VPN-013"]
+  },
+  {
+    "id": "PROB-VPN-013",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Falscher DNS-Server über VPN",
+    "keywords": ["DNS", "VPN", "falscher Server", "DNS-Server", "DNS-Konfiguration", "DHCP"],
+    "extendedKeywords": ["falscher DNS Server VPN", "VPN nutzt falschen DNS", "DNS Server nicht vom VPN", "VPN DNS Einstellung falsch", "DNS Server VPN ändern", "VPN bekommt falschen DNS", "DNS Server über VPN falsch", "VPN DNS Konfiguration falsch", "DNS Server stimmt nicht VPN", "falscher DNS über Tunnel", "VPN DHCP DNS falsch", "DNS Server VPN nicht richtig", "VPN DNS überschrieben", "DNS Server nach VPN Verbindung falsch", "VPN DNS nicht korrekt", "DNS Einstellung VPN Adapter", "VPN DNS Server manuell", "falscher Nameserver VPN", "VPN DNS vom Provider statt Firma", "DNS VPN nicht Firmen-DNS"],
+    "typos": ["falshcer DNS", "DNS Sever", "Konfiguartion", "falcher"],
+    "symptoms": ["VPN-Adapter verwendet falschen DNS-Server", "Firmen-DNS wird nicht über VPN verwendet"],
+    "quickCheck": "Welchen DNS-Server zeigt ipconfig /all für den VPN-Adapter?",
+    "solutions": ["ipconfig /all prüfen und DNS-Server des VPN-Adapters identifizieren", "DNS-Server manuell im VPN-Adapter eintragen", "VPN-Profil DNS-Einstellungen anpassen", "DNS-Cache leeren: ipconfig /flushdns", "NRPT-Richtlinie prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_net_nslookup", "label": "DNS-Auflösung testen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["falscher DNS VPN", "DNS Server VPN", "Nameserver falsch"],
+    "followUpQuestions": [
+      {"question": "Welcher DNS-Server wird aktuell verwendet?", "options": ["Freitext"], "narrows": "Aktueller DNS-Server"}
+    ],
+    "relatedProblems": ["PROB-VPN-011", "PROB-VPN-012"]
+  },
+  {
+    "id": "PROB-VPN-014",
+    "category": "VPN & Remote-Zugriff",
+    "title": "RDP verbindet nicht",
+    "keywords": ["RDP", "Remote Desktop", "Remotedesktop", "verbindet nicht", "Fernzugriff", "3389"],
+    "extendedKeywords": ["RDP geht nicht", "Remote Desktop verbindet nicht", "Remotedesktop funktioniert nicht", "RDP Fehler", "RDP Verbindung fehlgeschlagen", "Remote Desktop startet nicht", "RDP keine Verbindung", "Remotedesktop Zugriff nicht möglich", "RDP kann nicht verbinden", "Remote Desktop Fehler", "Fernzugriff RDP fehlgeschlagen", "RDP Verbindung abgelehnt", "Remote Desktop Connection Error", "RDP geht nicht rein", "Remotedesktop Problem", "RDP Port 3389", "Remote Desktop nicht erreichbar", "RDP Zugriff verweigert", "RDP funktioniert nicht mehr", "Remotedesktop verbinden scheitert"],
+    "typos": ["RDP", "Remotedeskotp", "Remotedesktp", "Fernzugrif"],
+    "symptoms": ["RDP-Verbindung kann nicht hergestellt werden", "Remote Desktop zeigt Verbindungsfehler"],
+    "quickCheck": "Ist der Ziel-PC eingeschaltet und RDP aktiviert?",
+    "solutions": ["Prüfen ob RDP auf dem Ziel-PC aktiviert ist", "Port 3389 testen", "Firewall-Regeln für RDP prüfen", "Netzwerkverbindung zum Ziel-PC testen (Ping)", "Benutzerberechtigungen für RDP prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpopen", "label": "RDP-Verbindung öffnen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_rdp_rdpenable", "label": "RDP aktivieren", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_rdp_rdpfw", "label": "RDP-Firewall-Regel", "priority": 3, "effectiveness": 80},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 4, "effectiveness": 85},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 5, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["RDP geht nicht", "Remote Desktop Fehler", "Fernzugriff nicht möglich"],
+    "followUpQuestions": [
+      {"question": "Ist RDP auf dem Ziel-PC aktiviert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "RDP-Aktivierung prüfen"},
+      {"question": "Welche Fehlermeldung erscheint?", "options": ["Kann nicht verbinden", "Zugriff verweigert", "Zertifikatfehler", "Andere"], "narrows": "Fehler-spezifische Lösung"}
+    ],
+    "relatedProblems": ["PROB-VPN-015", "PROB-VPN-016", "PROB-VPN-017"]
+  },
+  {
+    "id": "PROB-VPN-015",
+    "category": "VPN & Remote-Zugriff",
+    "title": "RDP langsam",
+    "keywords": ["RDP", "langsam", "Remote Desktop", "Latenz", "Performance", "ruckelt"],
+    "extendedKeywords": ["RDP langsam", "Remote Desktop langsam", "RDP ruckelt", "Remotedesktop träge", "RDP verzögert", "Remote Desktop Latenz", "RDP Performance schlecht", "RDP Bildschirm hängt", "Remote Desktop Verzögerung", "RDP Eingabeverzögerung", "Remote Desktop ruckelt", "RDP laggt", "Remotedesktop langsam reagieren", "RDP Bildschirmaufbau langsam", "Remote Desktop Performance", "RDP Maus verzögert", "Remotedesktop Tastatur langsam", "RDP Grafik langsam", "Remote Desktop Experience schlecht", "RDP Screen Delay"],
+    "typos": ["RDP langsma", "Remotedeskotp", "Latezn", "rucklet"],
+    "symptoms": ["RDP-Sitzung ist verzögert oder ruckelt", "Eingabeverzögerung bei Remote Desktop"],
+    "quickCheck": "Wie hoch ist die Latenz zum Ziel-PC?",
+    "solutions": ["Verbindungsqualität testen: Ping zum Ziel prüfen", "RDP-Verbindungseinstellungen: Anzeige-Qualität reduzieren", "Desktop-Hintergrund und Animationen in RDP deaktivieren", "Bandbreite der Verbindung prüfen", "RDP-Sitzung: Erfahrung > Langsame Verbindung einstellen"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_rdp_rdpopen", "label": "RDP-Verbindung öffnen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["RDP langsam", "Remote Desktop ruckelt", "RDP Verzögerung"],
+    "followUpQuestions": [
+      {"question": "Verbinden Sie sich über VPN?", "options": ["Ja", "Nein"], "narrows": "VPN als Ursache"},
+      {"question": "Wie hoch ist die Ping-Latenz?", "options": ["Unter 50ms", "50-100ms", "Über 100ms", "Weiß nicht"], "narrows": "Latenz-basierte Lösung"}
+    ],
+    "relatedProblems": ["PROB-VPN-014", "PROB-VPN-016"]
+  },
+  {
+    "id": "PROB-VPN-016",
+    "category": "VPN & Remote-Zugriff",
+    "title": "RDP schwarzer Bildschirm",
+    "keywords": ["RDP", "schwarzer Bildschirm", "Black Screen", "Remote Desktop", "kein Bild", "Display"],
+    "extendedKeywords": ["RDP schwarzer Bildschirm", "Remote Desktop schwarz", "RDP kein Bild", "Remotedesktop zeigt nichts", "RDP Black Screen", "Remote Desktop Bildschirm schwarz", "RDP verbindet aber schwarz", "Remotedesktop schwarzes Fenster", "RDP Anzeige schwarz", "Remote Desktop kein Display", "RDP Fenster schwarz", "RDP verbunden aber kein Bild", "Remotedesktop schwarzer Screen", "RDP nach Verbindung schwarz", "Remote Desktop schwarzes Bild", "RDP Bildschirm bleibt schwarz", "RDP Session schwarz", "Remotedesktop kein Inhalt", "RDP nur schwarzes Fenster", "Remote Desktop nothing shows"],
+    "typos": ["schwarzzer Bildschirm", "Bildshirm", "Blakc Screen", "schwazer"],
+    "symptoms": ["RDP verbindet sich aber zeigt nur schwarzen Bildschirm", "Kein Desktop sichtbar nach RDP-Verbindung"],
+    "quickCheck": "Wird nach dem Verbinden ein schwarzer Bildschirm angezeigt?",
+    "solutions": ["Strg+Alt+Ende drücken in RDP-Sitzung", "Bildschirmauflösung in RDP-Einstellungen ändern", "GPU-beschleunigte Anzeige deaktivieren: mstsc > Erweitert", "Bitmap-Caching deaktivieren", "RDP-Sitzung trennen (nicht abmelden) und neu verbinden"],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpopen", "label": "RDP-Verbindung öffnen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["RDP schwarz", "schwarzer Bildschirm Remote", "kein Bild RDP"],
+    "followUpQuestions": [
+      {"question": "Können Sie Tastatureingaben machen (reagiert der PC auf Strg+Alt+Ende)?", "options": ["Ja", "Nein"], "narrows": "Sitzung aktiv vs. hängend"},
+      {"question": "War RDP vorher funktional?", "options": ["Ja", "Nein, erstes Mal"], "narrows": "Neues Problem vs. Konfiguration"}
+    ],
+    "relatedProblems": ["PROB-VPN-014", "PROB-VPN-017"]
+  },
+  {
+    "id": "PROB-VPN-017",
+    "category": "VPN & Remote-Zugriff",
+    "title": "RDP Authentifizierungsfehler",
+    "keywords": ["RDP", "Authentifizierung", "CredSSP", "NLA", "Zertifikat", "Anmeldedaten"],
+    "extendedKeywords": ["RDP Authentifizierungsfehler", "CredSSP Fehler RDP", "NLA Fehler Remote Desktop", "RDP Anmeldung fehlgeschlagen", "RDP Zertifikat Fehler", "Remote Desktop Anmeldedaten falsch", "RDP Authentication Error", "CredSSP Encryption Oracle", "RDP NLA Problem", "Remotedesktop Authentifizierung", "RDP Login Fehler", "Remote Desktop Zertifikat", "RDP Anmeldedaten abgelehnt", "CredSSP Error Remote", "NLA deaktivieren RDP", "RDP Benutzer nicht berechtigt", "Remote Desktop Login Problem", "RDP Credential Error", "Authentifizierungsfehler Remote", "RDP Sicherheitsfehler"],
+    "typos": ["Authentifzierung", "CredSPP", "NLA", "Zertifkat"],
+    "symptoms": ["RDP zeigt Authentifizierungsfehler", "CredSSP-Fehler bei RDP-Verbindung"],
+    "quickCheck": "Welche Fehlermeldung wird bei der RDP-Anmeldung angezeigt?",
+    "solutions": ["Anmeldedaten prüfen (Domain\\Benutzer Format)", "CredSSP-Patch auf beiden Seiten installieren", "NLA temporär deaktivieren zum Testen", "Benutzer zur Gruppe 'Remotedesktopbenutzer' hinzufügen", "Gruppenrichtlinie für CredSSP: Encryption Oracle Remediation auf 'Vulnerable'"],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpenable", "label": "RDP aktivieren", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_rdp_rdpfw", "label": "RDP-Firewall-Regel", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["RDP Anmeldung", "CredSSP", "NLA Fehler"],
+    "followUpQuestions": [
+      {"question": "Welche Fehlermeldung erscheint?", "options": ["CredSSP", "Benutzername/Passwort falsch", "Zertifikatfehler", "Keine Berechtigung"], "narrows": "Fehler-spezifische Lösung"}
+    ],
+    "relatedProblems": ["PROB-VPN-014", "PROB-VPN-016"]
+  },
+  {
+    "id": "PROB-VPN-018",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Zscaler und VPN Konflikt",
+    "keywords": ["Zscaler", "VPN", "Konflikt", "ZIA", "ZPA", "Tunnel"],
+    "extendedKeywords": ["Zscaler VPN Konflikt", "Zscaler blockiert VPN", "VPN geht nicht mit Zscaler", "Zscaler und VPN gleichzeitig", "ZIA VPN Problem", "ZPA VPN Konflikt", "Zscaler Tunnel VPN Konflikt", "VPN funktioniert nicht mit Zscaler", "Zscaler verhindert VPN", "Zscaler Internet Access VPN", "VPN Zscaler gleichzeitig", "Zscaler VPN Routing", "Zscaler blockiert VPN Tunnel", "VPN Zscaler Kompatibilität", "Zscaler und VPN Client", "VPN durch Zscaler gestört", "Zscaler VPN Koexistenz", "Zscaler verhindert VPN Verbindung", "VPN nicht möglich Zscaler", "Zscaler VPN Probleme"],
+    "typos": ["Zsclaer", "Zcaler", "Zscler", "Konfklit"],
+    "symptoms": ["VPN funktioniert nicht wenn Zscaler aktiv ist", "Zscaler und VPN stören sich gegenseitig"],
+    "quickCheck": "Ist Zscaler aktiv wenn das VPN-Problem auftritt?",
+    "solutions": ["Reihenfolge beachten: Meist erst VPN, dann Zscaler", "Zscaler temporär in Off-Trust setzen für VPN-Verbindung", "Zscaler Trusted Network Detection prüfen", "ZPA für internen Zugriff statt VPN nutzen", "IT-Admin: Zscaler App Profile für VPN-Koexistenz konfigurieren"],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler-Status prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Zscaler Netzwerktest", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Zscaler VPN", "VPN Zscaler Konflikt", "ZIA VPN"],
+    "followUpQuestions": [
+      {"question": "Welchen Zscaler-Dienst verwenden Sie?", "options": ["ZIA", "ZPA", "Beide", "Weiß nicht"], "narrows": "Dienst-spezifische Lösung"},
+      {"question": "In welcher Reihenfolge starten Sie VPN und Zscaler?", "options": ["Erst VPN", "Erst Zscaler", "Gleichzeitig"], "narrows": "Reihenfolge-Problem"}
+    ],
+    "relatedProblems": ["PROB-VPN-019", "PROB-VPN-020"]
+  },
+  {
+    "id": "PROB-VPN-019",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Zscaler und VPN Reihenfolge",
+    "keywords": ["Zscaler", "VPN", "Reihenfolge", "Start", "Priorität", "Adapter"],
+    "extendedKeywords": ["Zscaler VPN Reihenfolge", "was zuerst VPN oder Zscaler", "VPN dann Zscaler", "Zscaler dann VPN", "Adapter Reihenfolge VPN Zscaler", "Priorität VPN Zscaler", "richtige Reihenfolge VPN Zscaler", "VPN Zscaler Start Reihenfolge", "Netzwerkadapter Reihenfolge", "VPN vor Zscaler oder danach", "Zscaler VPN Adapter Priorität", "Reihenfolge Netzwerkverbindung VPN", "VPN Zscaler Startreihenfolge", "welcher Adapter zuerst", "Binding Order VPN Zscaler", "Netzwerk Priorität VPN Zscaler", "VPN Zscaler richtig konfigurieren", "Adapter Binding VPN Zscaler", "VPN Zscaler Reihenfolge lösen", "Adapter Metric VPN Zscaler"],
+    "typos": ["Reihenfoleg", "Reienfolge", "Zsclaer", "Prioritätt"],
+    "symptoms": ["VPN und Zscaler funktionieren nicht richtig zusammen wegen Startreihenfolge"],
+    "quickCheck": "In welcher Reihenfolge starten Sie VPN und Zscaler?",
+    "solutions": ["Empfohlene Reihenfolge: Erst VPN verbinden, dann Zscaler", "Adapter-Metrik anpassen: VPN-Adapter niedrigere Metrik geben", "Netzwerk-Binding-Reihenfolge anpassen", "Zscaler Forwarding Profile für VPN konfigurieren", "IT-Admin: Zscaler App Profile anpassen"],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler-Status prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Zscaler Netzwerktest", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Reihenfolge VPN Zscaler", "erst VPN oder Zscaler"],
+    "followUpQuestions": [
+      {"question": "Funktioniert VPN wenn Zscaler aus ist?", "options": ["Ja", "Nein"], "narrows": "Zscaler als Ursache bestätigen"}
+    ],
+    "relatedProblems": ["PROB-VPN-018", "PROB-VPN-020"]
+  },
+  {
+    "id": "PROB-VPN-020",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Zscaler Tunnel-Problem",
+    "keywords": ["Zscaler", "Tunnel", "ZPA", "Z-Tunnel", "App Connector", "Service Edge"],
+    "extendedKeywords": ["Zscaler Tunnel Problem", "ZPA Tunnel", "Z-Tunnel funktioniert nicht", "Zscaler Tunnel Fehler", "ZPA App Connector", "Zscaler Service Edge", "Zscaler Tunnel aufbauen", "ZPA Tunnel Fehler", "Zscaler Tunnel Status", "Z-Tunnel 1.0 2.0", "Zscaler Tunnel Mode", "ZPA Connector Problem", "Zscaler Tunnel verbindet nicht", "Zscaler Tunnel instabil", "ZPA Tunnel Setup", "Zscaler Forward Tunnel", "Zscaler Tunnel trennt", "ZPA Service Edge Problem", "Zscaler Tunnel Diagnose", "Zscaler Tunnel Logs"],
+    "typos": ["Zsclaer Tunnel", "Z-Tunne", "Tunell", "ZAP"],
+    "symptoms": ["Zscaler-Tunnel funktioniert nicht oder ist instabil"],
+    "quickCheck": "Welchen Tunnel-Modus verwendet Zscaler (Z-Tunnel 1.0 oder 2.0)?",
+    "solutions": ["Zscaler Client Connector Status prüfen", "Zscaler Dienst neu starten", "Zscaler Logs prüfen", "Netzwerktest in Zscaler durchführen", "IT-Admin: Zscaler Admin Portal für Tunnel-Status prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler-Status prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Zscaler Netzwerktest", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Zscaler Tunnel", "Z-Tunnel", "ZPA Tunnel"],
+    "followUpQuestions": [
+      {"question": "Was zeigt der Zscaler Client Connector Status?", "options": ["Connected", "Disconnected", "Error", "Weiß nicht"], "narrows": "Verbindungsstatus"}
+    ],
+    "relatedProblems": ["PROB-VPN-018", "PROB-VPN-019"]
+  },
+  {
+    "id": "PROB-VPN-021",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Netzlaufwerke über VPN nicht erreichbar",
+    "keywords": ["Netzlaufwerk", "VPN", "Laufwerk", "Share", "SMB", "Dateifreigabe", "UNC"],
+    "extendedKeywords": ["Netzlaufwerk über VPN nicht erreichbar", "Laufwerk über VPN nicht verfügbar", "Share nicht erreichbar VPN", "Dateiserver VPN nicht erreichbar", "Netzlaufwerk VPN Fehler", "UNC Pfad VPN geht nicht", "Netzlaufwerk VPN verbinden", "Share Zugriff VPN fehlgeschlagen", "Laufwerk kann nicht verbunden werden VPN", "SMB über VPN funktioniert nicht", "Netzlaufwerk zeigt rotes X VPN", "Dateifreigabe VPN Problem", "Netzlaufwerk über VPN langsam", "Share nicht verfügbar VPN", "Laufwerk über VPN getrennt", "Netzwerkfreigabe VPN Fehler", "NAS über VPN nicht erreichbar", "Dateiserver über VPN", "Netzlaufwerk Verbindung VPN", "Serverpfad VPN nicht erreichbar"],
+    "typos": ["Netzluafwerk", "Laufwek", "Netzlafwerk", "Dateifreigab"],
+    "symptoms": ["Netzlaufwerke sind über VPN nicht erreichbar", "Laufwerke zeigen rotes X über VPN"],
+    "quickCheck": "Sind die Netzlaufwerke im Firmennetzwerk (ohne VPN) erreichbar?",
+    "solutions": ["DNS-Auflösung des Fileservers prüfen", "Zugriff per IP-Adresse statt Hostname testen", "SMB-Ports (445/TCP) über VPN prüfen", "VPN Split-Tunnel: Routen zum Fileserver prüfen", "Laufwerk trennen und über VPN neu verbinden"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_net_nslookup", "label": "DNS-Auflösung testen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 3, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["Netzlaufwerk VPN", "Share nicht erreichbar", "Laufwerk rotes X"],
+    "followUpQuestions": [
+      {"question": "Funktioniert der Zugriff per IP-Adresse?", "options": ["Ja", "Nein", "Nicht getestet"], "narrows": "DNS vs. Routing Problem"},
+      {"question": "Ist Split-Tunnel aktiv?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Routing-Problem"}
+    ],
+    "relatedProblems": ["PROB-VPN-022", "PROB-VPN-023", "PROB-VPN-011"]
+  },
+  {
+    "id": "PROB-VPN-022",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Netzlaufwerke über VPN langsam",
+    "keywords": ["Netzlaufwerk", "langsam", "VPN", "SMB", "Performance", "Dateiübertragung"],
+    "extendedKeywords": ["Netzlaufwerk VPN langsam", "Dateien kopieren VPN langsam", "Dateiübertragung VPN träge", "SMB langsam VPN", "Netzlaufwerk über VPN lahm", "Dateien öffnen VPN dauert", "Dateiserver langsam VPN", "Laufwerk über VPN Performance", "Datei kopieren VPN ewig", "Netzwerkfreigabe VPN langsam", "Share langsam über VPN", "Dateitransfer VPN Geschwindigkeit", "Excel öffnen VPN langsam", "Dateien laden VPN dauert", "Netzlaufwerk Performance VPN", "SMB Performance VPN", "große Dateien VPN", "Kopiervorgang VPN langsam", "Netzlaufwerk VPN Geschwindigkeit", "Dateifreigabe VPN Performance"],
+    "typos": ["langsma", "Dateiübertragugn", "Netzlafwerk", "Geschwindigketi"],
+    "symptoms": ["Netzlaufwerke sind über VPN sehr langsam", "Dateiübertragungen dauern übermäßig lange"],
+    "quickCheck": "Wie ist die VPN-Bandbreite und Latenz?",
+    "solutions": ["Große Dateien lokal bearbeiten und dann synchronisieren", "SMB Signing deaktivieren (falls Sicherheitspolitik erlaubt)", "SMB Multichannel aktivieren", "Dateien in kleineren Batches kopieren", "Offline-Dateien/Sync-Center nutzen"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerk-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Laufwerk VPN langsam", "Dateien kopieren VPN", "SMB langsam"],
+    "followUpQuestions": [
+      {"question": "Wie groß sind die Dateien die übertragen werden?", "options": ["Klein (< 10 MB)", "Mittel (10-100 MB)", "Groß (> 100 MB)"], "narrows": "Dateigrößen-spezifische Lösung"},
+      {"question": "Wie hoch ist die VPN-Latenz?", "options": ["Niedrig (< 50ms)", "Mittel (50-100ms)", "Hoch (> 100ms)"], "narrows": "Latenz als Ursache"}
+    ],
+    "relatedProblems": ["PROB-VPN-021", "PROB-VPN-005"]
+  },
+  {
+    "id": "PROB-VPN-023",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Netzlaufwerke über VPN Trennung",
+    "keywords": ["Netzlaufwerk", "Trennung", "Disconnect", "VPN", "verloren", "getrennt"],
+    "extendedKeywords": ["Netzlaufwerk trennt VPN", "Laufwerk verliert Verbindung VPN", "Netzlaufwerk getrennt VPN", "Share Verbindung verloren VPN", "Netzlaufwerk Disconnect VPN", "Laufwerk wird getrennt VPN", "Netzlaufwerk rotes X nach VPN", "Laufwerk nicht mehr verfügbar VPN", "Netzlaufwerk Verbindung verliert VPN", "Share getrennt über VPN", "Netzlaufwerk automatisch getrennt", "Laufwerk fliegt raus VPN", "Netzlaufwerk instabil VPN", "Laufwerk Verbindung bricht ab VPN", "Netzlaufwerk Zugriff verloren", "Share Disconnect VPN", "Laufwerk wird abgetrennt", "Netzlaufwerk VPN Abbruch", "Dateiserver Verbindung verloren VPN", "Laufwerk weg nach VPN Reconnect"],
+    "typos": ["Netzlafwerk", "Trennugn", "Disconncet", "verlorne"],
+    "symptoms": ["Netzlaufwerke werden über VPN getrennt", "Verbindung zum Share geht verloren"],
+    "quickCheck": "Bleibt die VPN-Verbindung selbst stabil?",
+    "solutions": ["Prüfen ob VPN-Verbindung selbst stabil bleibt", "Offline-Dateien aktivieren für Netzlaufwerke", "GPO für Netzlaufwerk-Persistenz prüfen", "Netzlaufwerk mit /persistent:yes verbinden", "SMB-Timeout erhöhen"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Laufwerk trennt VPN", "Share verloren", "Netzlaufwerk rotes X"],
+    "followUpQuestions": [
+      {"question": "Bleibt die VPN-Verbindung stabil?", "options": ["Ja", "Nein, trennt auch"], "narrows": "VPN vs. SMB Problem"}
+    ],
+    "relatedProblems": ["PROB-VPN-021", "PROB-VPN-008"]
+  },
+  {
+    "id": "PROB-VPN-024",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN-Client installieren",
+    "keywords": ["VPN", "Client", "installieren", "Setup", "Download", "Einrichtung"],
+    "extendedKeywords": ["VPN Client installieren", "VPN einrichten", "VPN Setup", "VPN Client Download", "VPN Software installieren", "VPN auf PC einrichten", "VPN Client herunterladen", "VPN Installation Anleitung", "VPN Client Setup", "VPN Software Download", "neuer VPN Client", "VPN Client Erstinstallation", "VPN auf Laptop installieren", "VPN App installieren", "VPN Programm einrichten", "VPN Client neuinstallieren", "VPN Software Setup", "VPN erstmalig einrichten", "VPN Client konfigurieren", "VPN Ersteinrichtung"],
+    "typos": ["insatllieren", "VPN Cient", "Instalation", "einrchten"],
+    "symptoms": ["VPN-Client muss installiert oder eingerichtet werden"],
+    "quickCheck": "Welcher VPN-Client soll installiert werden?",
+    "solutions": ["VPN-Client von IT-Abteilung oder Intune Company Portal beziehen", "Client-spezifische Installationsanleitung befolgen", "Nach Installation: VPN-Profil konfigurieren", "Erforderliche Zertifikate installieren", "Testverbindung herstellen"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["VPN installieren", "VPN einrichten", "VPN Setup"],
+    "followUpQuestions": [
+      {"question": "Welcher VPN-Client wird benötigt?", "options": ["Cisco AnyConnect", "GlobalProtect", "FortiClient", "Windows VPN", "Weiß nicht"], "narrows": "Client-spezifische Anleitung"}
+    ],
+    "relatedProblems": ["PROB-VPN-025", "PROB-VPN-026"]
+  },
+  {
+    "id": "PROB-VPN-025",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN-Profil konfigurieren",
+    "keywords": ["VPN", "Profil", "Konfiguration", "Server", "Einstellungen", "Gateway"],
+    "extendedKeywords": ["VPN Profil einrichten", "VPN Konfiguration", "VPN Server eintragen", "VPN Gateway konfigurieren", "VPN Profil erstellen", "VPN Einstellungen", "VPN Profil Konfiguration", "VPN Server Adresse", "VPN Connection Profile", "VPN Profil hinzufügen", "VPN Profil ändern", "VPN Verbindung einrichten", "VPN Profil bearbeiten", "VPN Gateway Adresse", "VPN Serveradresse eingeben", "VPN Profil Einstellungen", "neues VPN Profil", "VPN Konfigurationsdaten", "VPN Profil anpassen", "VPN Verbindungsprofil"],
+    "typos": ["Profiel", "Konfiguraton", "Einstlelungen", "Sever"],
+    "symptoms": ["VPN-Profil muss konfiguriert oder angepasst werden"],
+    "quickCheck": "Haben Sie die VPN-Konfigurationsdaten (Server, Protokoll, Authentifizierung)?",
+    "solutions": ["VPN-Konfigurationsdaten von IT-Abteilung anfordern", "Windows VPN: Einstellungen > Netzwerk > VPN > VPN hinzufügen", "Server-Adresse, Protokoll und Authentifizierung eintragen", "DNS-Suffix konfigurieren", "Split-Tunnel-Einstellungen prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["VPN Profil", "VPN konfigurieren", "VPN einrichten"],
+    "followUpQuestions": [
+      {"question": "Haben Sie die VPN-Konfigurationsdaten?", "options": ["Ja", "Nein"], "narrows": "Daten beschaffen"}
+    ],
+    "relatedProblems": ["PROB-VPN-024", "PROB-VPN-026"]
+  },
+  {
+    "id": "PROB-VPN-026",
+    "category": "VPN & Remote-Zugriff",
+    "title": "VPN-Zertifikat Problem",
+    "keywords": ["VPN", "Zertifikat", "Certificate", "PKI", "abgelaufen", "ungültig"],
+    "extendedKeywords": ["VPN Zertifikat Fehler", "VPN Zertifikat abgelaufen", "VPN Certificate Error", "VPN Zertifikat ungültig", "VPN Zertifikat installieren", "VPN Zertifikat erneuern", "VPN PKI Problem", "VPN SSL Zertifikat", "VPN Client Zertifikat", "VPN Zertifikat wird nicht akzeptiert", "Zertifikatfehler VPN Verbindung", "VPN Certificate abgelaufen", "VPN Zertifikat importieren", "VPN Zertifikat Vertrauen", "Zertifikat nicht vertrauenswürdig VPN", "VPN Zertifikat prüfen", "VPN Zertifikatskette", "VPN Certificate Import", "VPN Zertifikat fehlt", "VPN Root-Zertifikat"],
+    "typos": ["Zertifkat", "Certifikat", "abgelauefn", "Zertifiakt"],
+    "symptoms": ["VPN-Verbindung scheitert wegen Zertifikatfehler", "Zertifikat abgelaufen oder nicht vertrauenswürdig"],
+    "quickCheck": "Welche Zertifikatfehlermeldung wird angezeigt?",
+    "solutions": ["Zertifikat-Gültigkeit prüfen: certmgr.msc", "Abgelaufenes Zertifikat erneuern", "Root-CA-Zertifikat installieren", "Zertifikat importieren: certmgr.msc > Eigene Zertifikate > Import", "Zertifikatskette prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["Zertifikat VPN", "Certificate Error", "VPN Zertifikat abgelaufen"],
+    "followUpQuestions": [
+      {"question": "Ist das Zertifikat abgelaufen?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Erneuerung vs. Installation"}
+    ],
+    "relatedProblems": ["PROB-VPN-024", "PROB-VPN-025"]
+  },
+  {
+    "id": "PROB-VPN-027",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Remote Desktop Gateway Zugriff",
+    "keywords": ["RD Gateway", "Remote Desktop Gateway", "RDG", "Terminal Server", "Gateway", "443"],
+    "extendedKeywords": ["Remote Desktop Gateway Zugriff", "RD Gateway funktioniert nicht", "RDG Verbindung", "RDP über Gateway", "Remote Desktop Gateway Fehler", "Gateway Server RDP", "RD Gateway Konfiguration", "Terminal Server Gateway", "RDP Gateway Zugriff Problem", "Remote Desktop über Gateway", "RD Gateway Authentifizierung", "Gateway Connection RDP", "RD Gateway Server", "RDP Gateway Einstellung", "Remote Desktop Gateway Problem", "RD Gateway verbindet nicht", "RDP über RD Gateway", "Gateway Zugriff Remote Desktop", "RD Gateway Setup", "RDP Gateway Fehler"],
+    "typos": ["RD Gatway", "Gatewya", "Gaeway", "Remtoe Desktop Gateway"],
+    "symptoms": ["Zugriff über Remote Desktop Gateway funktioniert nicht"],
+    "quickCheck": "Ist die Gateway-Adresse korrekt konfiguriert?",
+    "solutions": ["RDP-Verbindung > Erweitert > Verbindung über RD-Gateway", "Gateway-Adresse und Anmeldedaten prüfen", "Port 443 zum Gateway testen", "Gateway-Zertifikat prüfen", "CAP/RAP-Richtlinien auf dem Gateway prüfen (Admin)"],
+    "skillMapping": [
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_rdp_rdpopen", "label": "RDP-Verbindung öffnen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["RD Gateway", "Gateway RDP", "Remote Desktop Gateway"],
+    "followUpQuestions": [
+      {"question": "Ist die Gateway-Adresse korrekt?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Konfiguration prüfen"}
+    ],
+    "relatedProblems": ["PROB-VPN-028", "PROB-VPN-014"]
+  },
+  {
+    "id": "PROB-VPN-028",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Remote Desktop Gateway Konfiguration",
+    "keywords": ["RD Gateway", "Konfiguration", "Setup", "Einrichten", "Gateway Server"],
+    "extendedKeywords": ["RD Gateway einrichten", "Remote Desktop Gateway konfigurieren", "RDG Setup", "Gateway Server konfigurieren", "RD Gateway Installation", "Remote Desktop Gateway Setup", "RD Gateway Einstellungen", "Gateway konfigurieren RDP", "RD Gateway Rolle installieren", "Remote Desktop Gateway einrichten", "RD Gateway Zertifikat konfigurieren", "Gateway CAP RAP", "RD Gateway Richtlinien", "Remote Desktop Gateway Einrichtung", "RD Gateway Server Setup", "Gateway konfigurieren Remote Desktop", "RD Gateway Konfigurationsanleitung", "RD Gateway Netzwerk", "Remote Desktop Gateway Installation", "RD Gateway Voraussetzungen"],
+    "typos": ["Konfiguraton", "Einnrichten", "Gatway", "Konfiguartion"],
+    "symptoms": ["Remote Desktop Gateway muss konfiguriert werden"],
+    "quickCheck": "Ist der RD-Gateway-Server bereits installiert?",
+    "solutions": ["RD Gateway Rolle auf Windows Server installieren", "SSL-Zertifikat für Gateway konfigurieren", "Connection Authorization Policy (CAP) erstellen", "Resource Authorization Policy (RAP) erstellen", "Port 443 in Firewall freigeben"],
+    "skillMapping": [
+      {"skillId": "rd_net_testport", "label": "Port-Erreichbarkeit testen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_rdp_rdpfw", "label": "RDP-Firewall-Regel", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Gateway einrichten", "RD Gateway Setup", "Gateway konfigurieren"],
+    "followUpQuestions": [
+      {"question": "Ist der Gateway-Server bereits installiert?", "options": ["Ja", "Nein"], "narrows": "Installation vs. Konfiguration"}
+    ],
+    "relatedProblems": ["PROB-VPN-027", "PROB-VPN-014"]
+  },
+  {
+    "id": "PROB-VPN-029",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Wake-on-LAN",
+    "keywords": ["Wake-on-LAN", "WoL", "aufwecken", "Remote Power On", "Magic Packet", "einschalten"],
+    "extendedKeywords": ["Wake-on-LAN funktioniert nicht", "PC remote einschalten", "WoL geht nicht", "Computer aufwecken über Netzwerk", "Magic Packet senden", "Wake on LAN konfigurieren", "PC über Netzwerk starten", "WoL aktivieren", "Remote Power On", "PC aus der Ferne einschalten", "Wake-on-LAN einrichten", "WoL Problem", "PC wacht nicht auf WoL", "Magic Packet kommt nicht an", "Wake-on-LAN BIOS", "WoL Netzwerkkarte", "Wake-on-LAN Firewall", "WoL über VPN", "Wake-on-LAN konfigurieren", "PC remote booten"],
+    "typos": ["Wake-on-Lan", "Wakeo-on-LAN", "WOL", "Maigc Packet"],
+    "symptoms": ["Wake-on-LAN funktioniert nicht", "PC lässt sich nicht remote einschalten"],
+    "quickCheck": "Ist Wake-on-LAN im BIOS und in der Netzwerkkarte aktiviert?",
+    "solutions": ["BIOS: Wake-on-LAN aktivieren", "Netzwerkkarte: Geräte-Manager > Netzwerkadapter > Eigenschaften > Energieverwaltung > Magic Packet", "Netzwerkkarte: Erweitert > Wake on Magic Packet = Enabled", "MAC-Adresse des Ziel-PCs ermitteln", "Magic Packet an korrekte MAC-Adresse und Broadcast-Adresse senden"],
+    "skillMapping": [
+      {"skillId": "rd_power_wol", "label": "Wake-on-LAN senden", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Wake-on-LAN", "WoL", "PC aufwecken", "Remote einschalten"],
+    "followUpQuestions": [
+      {"question": "Ist WoL im BIOS aktiviert?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "BIOS-Konfiguration"},
+      {"question": "Kennen Sie die MAC-Adresse des Ziel-PCs?", "options": ["Ja", "Nein"], "narrows": "MAC-Adresse ermitteln"}
+    ],
+    "relatedProblems": ["PROB-VPN-030"]
+  },
+  {
+    "id": "PROB-VPN-030",
+    "category": "VPN & Remote-Zugriff",
+    "title": "Remote-Unterstützung",
+    "keywords": ["Remote-Unterstützung", "Fernhilfe", "Remote Assist", "Quick Assist", "Fernwartung", "TeamViewer"],
+    "extendedKeywords": ["Remote-Unterstützung einrichten", "Fernhilfe Windows", "Quick Assist verwenden", "Remote Assist starten", "Fernwartung einrichten", "Remote-Hilfe geben", "TeamViewer Alternative", "Windows Fernhilfe", "Remote Support", "Fernzugriff für Hilfe", "Quick Assist funktioniert nicht", "Remote Assistance", "Fernunterstützung", "PC Fernsteuerung", "Remote-Hilfe aktivieren", "Hilfe aus der Ferne", "Remote Support Tool", "Bildschirm teilen Fernhilfe", "Quick Assist Code", "Remote Assist Einladung"],
+    "typos": ["Remote-Unterstüzung", "Fernhlfe", "Quick Asist", "Fernwratung"],
+    "symptoms": ["Remote-Unterstützung wird benötigt oder funktioniert nicht"],
+    "quickCheck": "Welches Remote-Unterstützungstool soll verwendet werden?",
+    "solutions": ["Quick Assist: Start > Quick Assist (in Windows integriert)", "Quick Assist: Helfer generiert Code, Benutzer gibt Code ein", "Remote Desktop: Für unbeaufsichtigten Zugriff", "Windows-Remotehilfe: msra /offerra für Einladung", "Alternative: TeamViewer, AnyDesk für externen Support"],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpopen", "label": "RDP-Verbindung öffnen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_rdp_rdpenable", "label": "RDP aktivieren", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_net_ping", "label": "Netzwerk-Ping testen", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["Remote-Hilfe", "Fernunterstützung", "Quick Assist", "Fernwartung"],
+    "followUpQuestions": [
+      {"question": "Welches Tool soll verwendet werden?", "options": ["Quick Assist", "Remote Desktop", "TeamViewer", "Anderes"], "narrows": "Tool-spezifische Anleitung"},
+      {"question": "Ist der Benutzer anwesend am PC?", "options": ["Ja", "Nein"], "narrows": "Attended vs. unattended Support"}
+    ],
+    "relatedProblems": ["PROB-VPN-029", "PROB-VPN-014"]
+  }
+]

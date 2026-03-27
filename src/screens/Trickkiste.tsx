@@ -503,7 +503,7 @@ export default function Trickkiste() {
   return (
     <div className="flex flex-col h-full overflow-y-auto p-6 gap-5">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">🧰 Trickkiste</h1>
+        <h1 className="text-2xl font-bold text-foreground">🧰 Trickbox</h1>
         <p className="text-sm text-muted-foreground mt-1">IT-Problemlösungen und häufige Fehler</p>
       </div>
 

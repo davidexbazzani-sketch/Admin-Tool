@@ -1,0 +1,1054 @@
+[
+  {
+    "id": "PROB-WIN-001",
+    "category": "Windows Allgemein",
+    "title": "Bluescreen / BSOD allgemein",
+    "keywords": ["bluescreen", "bsod", "blue screen of death", "stop error", "absturz", "bugcheck", "minidump", "crash"],
+    "extendedKeywords": ["blauer bildschirm", "pc stürzt ab", "computer macht blau", "pc geht einfach aus", "blauer fehler", "windows stürzt ab", "bildschirm wird blau", "pc zeigt blauen bildschirm", "computer crashed", "windows crash", "fehlercode auf blauem hintergrund", "pc startet nach absturz neu", "automatischer neustart nach fehler", "bluescreen fehler", "computer zeigt nur blau", "traurigen smiley auf bildschirm", "qr code auf blauem bildschirm", "pc macht nichts mehr blauer bildschirm", "windows hängt sich auf blau", "blauer bildschirm kommt immer wieder", "system absturz", "bluescreen nach update", "bsod fehlercode", "kritischer fehler windows", "pc schaltet sich einfach ab"],
+    "typos": ["bluesreen", "bluscren", "bluscreen", "bluescrren", "bluescren", "bulescreen"],
+    "symptoms": ["Blauer Bildschirm mit Fehlercode und QR-Code", "PC startet nach Absturz automatisch neu", "Wiederholte Abstürze ohne erkennbares Muster", "Trauriger Smiley auf blauem Hintergrund"],
+    "quickCheck": "Wann tritt der Bluescreen auf? Bei bestimmten Aktionen oder zufällig?",
+    "solutions": ["Fehlercode vom Bluescreen notieren (z.B. IRQL_NOT_LESS_OR_EQUAL, PAGE_FAULT_IN_NONPAGED_AREA)", "Ereignisanzeige prüfen: eventvwr.msc > Windows-Protokolle > System > Kritisch", "Treiber aktualisieren, besonders Grafik- und Netzwerktreiber", "Windows Update durchführen", "RAM-Test durchführen mit mdsched.exe", "SFC und DISM ausführen zur Systemreparatur", "Zuletzt installierte Software oder Treiber deinstallieren"],
+    "skillMapping": [
+      {"skillId": "rd_repair_evtcrit", "label": "Kritische Fehler (24h)", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_repair_sfc", "label": "Systemdateien prüfen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_repair_dism", "label": "Windows-Image reparieren", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_repair_evtsys", "label": "System-Events prüfen", "priority": 4, "effectiveness": 85},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 5, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["IRQL_NOT_LESS_OR_EQUAL", "PAGE_FAULT", "SYSTEM_SERVICE_EXCEPTION", "KERNEL_DATA_INPAGE_ERROR", "CRITICAL_PROCESS_DIED"],
+    "followUpQuestions": [
+      {"question": "Wann genau tritt der Bluescreen auf?", "options": ["Beim Hochfahren", "Bei bestimmten Programmen", "Zufällig/unvorhersehbar", "Nach Windows Update"], "narrows": "Ursache eingrenzen"}
+    ],
+    "relatedProblems": ["PROB-WIN-002", "PROB-WIN-003", "PROB-WIN-039"]
+  },
+  {
+    "id": "PROB-WIN-002",
+    "category": "Windows Allgemein",
+    "title": "Bluescreen beim Hochfahren",
+    "keywords": ["bluescreen boot", "bsod startup", "absturz beim starten", "boot bluescreen", "startfehler", "bootloop"],
+    "extendedKeywords": ["bluescreen direkt beim hochfahren", "pc startet und zeigt sofort blau", "windows startet nicht mehr blau", "computer kommt nicht hoch blauer bildschirm", "bluescreen noch vor anmeldung", "pc hängt beim start mit blauem bildschirm", "endlosschleife neustart bluescreen", "windows startet immer wieder neu", "bootschleife", "pc startet sich immer wieder neu mit fehler", "komme nicht mehr an windows ran blauer bildschirm", "nach einschalten nur blauer bildschirm", "pc zeigt blau bevor desktop kommt", "beim booten stürzt ab"],
+    "typos": ["bluescren beim starten", "bluescreen bein starten", "bluescrenn boot"],
+    "symptoms": ["Bluescreen erscheint direkt nach dem Windows-Logo", "PC startet in einer Endlosschleife neu", "Windows-Anmeldung wird nie erreicht", "Automatische Reparatur startet"],
+    "quickCheck": "Kommt der PC in den abgesicherten Modus (F8 oder Shift+Neustart)?",
+    "solutions": ["Im abgesicherten Modus starten (F8 beim Booten oder Shift+Neustart)", "Automatische Reparatur versuchen", "Letzte installierte Updates deinstallieren", "Systemwiederherstellung auf früheren Zeitpunkt", "Startprotokolle aktivieren für Diagnose", "Falls Treiber-Problem: Im abgesicherten Modus Treiber deinstallieren"],
+    "skillMapping": [
+      {"skillId": "rd_repair_evtcrit", "label": "Kritische Fehler prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_repair_evtsys", "label": "System-Events", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_repair_sfc", "label": "Systemdateien prüfen", "priority": 4, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["boot loop", "endlosschleife", "automatische reparatur"],
+    "followUpQuestions": [
+      {"question": "Was wurde zuletzt am PC geändert?", "options": ["Windows Update installiert", "Neuer Treiber/Software", "Nichts bekannt", "Hardware getauscht"], "narrows": "Auslöser identifizieren"}
+    ],
+    "relatedProblems": ["PROB-WIN-001", "PROB-WIN-004"]
+  },
+  {
+    "id": "PROB-WIN-003",
+    "category": "Windows Allgemein",
+    "title": "Bluescreen bei bestimmten Aktionen",
+    "keywords": ["bluescreen bei aktion", "absturz bei programm", "bsod reproduzierbar", "crash bei anwendung"],
+    "extendedKeywords": ["bluescreen wenn ich drucke", "absturz beim öffnen von programm", "blauer bildschirm bei excel", "computer stürzt ab bei bestimmtem programm", "bluescreen sobald ich usb einstecke", "bluescreen bei spielen", "pc stürzt ab bei video", "bluescreen wenn outlook offen", "absturz bei bestimmter aktion immer wieder", "bsod beim drucken", "bluescreen bei vpn verbindung", "pc stürzt ab wenn ich am bildschirm arbeite", "bluescreen wenn mehrere programme offen"],
+    "typos": ["bluescreen bei bestimmtn aktionen", "absturtz bei programm"],
+    "symptoms": ["Bluescreen tritt zuverlässig bei einer bestimmten Aktion auf", "Bestimmtes Programm löst immer einen Absturz aus", "Bluescreen bei Nutzung bestimmter Hardware (USB, Drucker)"],
+    "quickCheck": "Welche Aktion löst den Bluescreen zuverlässig aus?",
+    "solutions": ["Betroffenes Programm aktualisieren oder neu installieren", "Treiber der beteiligten Hardware aktualisieren", "Im Ereignisprotokoll den genauen Fehlercode identifizieren", "Programm im Kompatibilitätsmodus starten", "Antivirensoftware temporär deaktivieren zum Testen", "Wenn USB-Gerät: anderen Port oder anderes Kabel testen"],
+    "skillMapping": [
+      {"skillId": "rd_repair_evtapp", "label": "App-Fehler prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_repair_evtcrit", "label": "Kritische Fehler", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Prozesse prüfen", "priority": 4, "effectiveness": 50}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Welches Programm oder welche Aktion löst den Bluescreen aus?", "options": ["Office-Anwendung", "Drucker/Scanner", "USB-Gerät", "Browser/Internet", "Anderes Programm"], "narrows": "Betroffene Komponente"}
+    ],
+    "relatedProblems": ["PROB-WIN-001", "PROB-WIN-002"]
+  },
+  {
+    "id": "PROB-WIN-004",
+    "category": "Windows Allgemein",
+    "title": "PC startet nicht / bootet nicht",
+    "keywords": ["startet nicht", "bootet nicht", "kein boot", "pc geht nicht an", "bootfehler", "startup failure", "no boot"],
+    "extendedKeywords": ["pc startet nicht mehr", "computer geht nicht mehr an", "pc bleibt schwarz", "windows lädt nicht", "pc macht nichts beim einschalten", "rechner fährt nicht hoch", "computer startet nicht", "pc reagiert nicht auf einschalten", "beim einschalten passiert nichts", "nur schwarzer bildschirm beim starten", "pc piept beim starten", "windows logo kommt nicht", "bildschirm bleibt dunkel nach einschalten", "pc brummt aber zeigt nichts", "monitor bleibt schwarz pc läuft", "kein bild beim hochfahren"],
+    "typos": ["pc startet nciht", "bootet nciht", "pc geth nicht an", "startet ncht"],
+    "symptoms": ["PC zeigt beim Einschalten kein Bild", "Windows-Logo erscheint nicht", "PC piept beim Starten", "Nur schwarzer Bildschirm nach Einschalten"],
+    "quickCheck": "Leuchtet die Power-LED? Laufen Lüfter? Gibt es Pieptöne?",
+    "solutions": ["Stromkabel und Monitorkabel prüfen", "Monitor an anderem Ausgang testen (HDMI/DP)", "RAM-Module neu einsetzen", "BIOS-Reset durchführen (CMOS-Batterie)", "Im BIOS die Boot-Reihenfolge prüfen", "Festplatte auf Fehler prüfen", "Windows-Reparatur über USB-Stick starten"],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Ping - PC erreichbar?", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_hw_hwos", "label": "OS-Version prüfen", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["no post", "kein POST", "bios piepen"],
+    "followUpQuestions": [
+      {"question": "Was passiert beim Einschalten?", "options": ["Gar nichts (kein Licht, kein Lüfter)", "Lüfter laufen aber kein Bild", "Windows-Logo erscheint kurz dann schwarz", "Pieptöne"], "narrows": "Hardware vs. Software Problem"}
+    ],
+    "relatedProblems": ["PROB-WIN-005", "PROB-WIN-006"]
+  },
+  {
+    "id": "PROB-WIN-005",
+    "category": "Windows Allgemein",
+    "title": "PC hängt beim Booten",
+    "keywords": ["hängt beim booten", "boot hängt", "windows lädt ewig", "stuck at boot", "spinning dots", "ladekreis", "boot freeze"],
+    "extendedKeywords": ["pc bleibt beim windows logo hängen", "ladekreis dreht sich ewig", "windows lädt und lädt", "pc braucht ewig zum hochfahren", "kreise drehen sich endlos beim start", "stuck bei windows logo", "booten dauert 10 minuten", "pc braucht 20 minuten zum hochfahren", "windows bleibt beim laden stehen", "punkte drehen sich beim start endlos", "hochfahren dauert sehr lange", "pc hängt sich beim start auf", "windows boot dauert ewig", "ladebalken beim start bewegt sich nicht"],
+    "typos": ["hängt bein booten", "boot hängt sich auf", "windwos lädt ewig"],
+    "symptoms": ["Windows-Logo mit drehendem Ladekreis bleibt stehen", "Boot dauert ungewöhnlich lange (>5 Minuten)", "PC friert beim Hochfahren ein"],
+    "quickCheck": "Wie lange dauert der Bootvorgang ungefähr?",
+    "solutions": ["Im abgesicherten Modus starten und Autostart aufräumen", "Schnellstart (Fast Startup) deaktivieren", "Festplatte auf Fehler prüfen (chkdsk)", "Windows Update im Hintergrund kann Boot verlangsamen - abwarten", "SFC und DISM ausführen", "Autostart-Programme reduzieren"],
+    "skillMapping": [
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_repair_chkdsk", "label": "Festplatte prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_repair_sfc", "label": "Systemdateien prüfen", "priority": 3, "effectiveness": 65},
+      {"skillId": "rd_appcache_sfcdism", "label": "SFC + DISM Kombi", "priority": 4, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["fast startup", "schnellstart"],
+    "followUpQuestions": [
+      {"question": "Seit wann besteht das Problem?", "options": ["Seit einem Update", "Seit kurzem ohne erkennbaren Grund", "Schon immer langsam", "Nach Hardware-Änderung"], "narrows": "Zeitpunkt des Problems"}
+    ],
+    "relatedProblems": ["PROB-WIN-004", "PROB-WIN-006", "PROB-WIN-038"]
+  },
+  {
+    "id": "PROB-WIN-006",
+    "category": "Windows Allgemein",
+    "title": "Schwarzer Bildschirm nach Login / beim Start",
+    "keywords": ["schwarzer bildschirm", "black screen", "kein desktop", "blank screen", "bildschirm schwarz"],
+    "extendedKeywords": ["nach anmeldung schwarzer bildschirm", "nur mauszeiger auf schwarzem hintergrund", "desktop kommt nicht", "nach login nur schwarz", "bildschirm bleibt schwarz nach anmeldung", "pc startet schwarzer bildschirm", "schwarzer bildschirm mit cursor", "nach passwort eingabe nur schwarz", "desktop lädt nicht", "icons verschwunden schwarzer bildschirm", "taskleiste weg schwarzer hintergrund", "nach windows update schwarzer bildschirm", "schwarzer bildschirm nach neustart"],
+    "typos": ["schwarzer bilschirm", "shwarzer bildschirm", "schwarze bildschirm"],
+    "symptoms": ["Nach der Anmeldung erscheint nur ein schwarzer Bildschirm", "Mauszeiger ist sichtbar aber sonst nichts", "Desktop und Taskleiste fehlen komplett"],
+    "quickCheck": "Ist der Mauszeiger sichtbar? Reagiert Strg+Alt+Entf?",
+    "solutions": ["Strg+Alt+Entf drücken und Task-Manager öffnen", "Im Task-Manager: Datei > Neuen Task ausführen > explorer.exe", "Strg+Shift+Esc für Task-Manager direkt", "Grafiktreiber neu installieren (im abgesicherten Modus)", "Windows-Taste + P drücken (Projektionsmodus wechseln)", "Schnellstart deaktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_explorer_explorerrestart", "label": "Explorer neustarten", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_hw_hwgpu", "label": "Grafikkarte prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 3, "effectiveness": 65},
+      {"skillId": "rd_repair_evtsys", "label": "System-Events", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["explorer.exe", "shell", "grafiktreiber"],
+    "followUpQuestions": [
+      {"question": "Was sehen Sie auf dem schwarzen Bildschirm?", "options": ["Nur Mauszeiger", "Komplett schwarz, kein Cursor", "Schwarzer Bildschirm mit Fehlermeldung"], "narrows": "Art des Problems"}
+    ],
+    "relatedProblems": ["PROB-WIN-004", "PROB-WIN-005"]
+  },
+  {
+    "id": "PROB-WIN-007",
+    "category": "Windows Allgemein",
+    "title": "Login-Problem: Falsches Passwort / Konto gesperrt",
+    "keywords": ["falsches passwort", "konto gesperrt", "login fehlgeschlagen", "anmeldung fehlgeschlagen", "account locked", "passwort falsch"],
+    "extendedKeywords": ["kann mich nicht mehr anmelden", "passwort geht nicht", "mein passwort funktioniert nicht mehr", "konto ist gesperrt", "account gesperrt", "anmeldung nicht möglich", "windows sagt passwort falsch", "nach passwortänderung geht nichts", "bin ausgesperrt", "komme nicht mehr an meinen pc", "login funktioniert nicht", "passwort wird nicht akzeptiert", "kennwort falsch", "benutzer gesperrt", "benutzerkonto gesperrt", "windows akzeptiert passwort nicht", "vertrauensstellung fehlgeschlagen"],
+    "typos": ["passwort falch", "psaswort", "anmledung", "logni"],
+    "symptoms": ["Fehlermeldung: Falsches Passwort", "Meldung: Konto ist gesperrt", "Vertrauensstellung zur Domäne fehlgeschlagen", "Anmeldung schlägt trotz richtigem Passwort fehl"],
+    "quickCheck": "Wurde das Passwort kürzlich geändert? Funktioniert es an anderen PCs?",
+    "solutions": ["Caps Lock und Num Lock prüfen", "Tastaturlayout prüfen (DE vs EN)", "Passwort im AD zurücksetzen lassen", "Konto im AD entsperren", "Vertrauensstellung reparieren: Computer-Konto zurücksetzen", "Domäne verlassen und neu beitreten (bei Vertrauensstellungsproblem)", "Cached Credentials prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_domain_testsc", "label": "Vertrauensstellung testen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_domain_resetpwd", "label": "Computer-Passwort Reset", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_domain_klist", "label": "Kerberos-Tickets prüfen", "priority": 3, "effectiveness": 60},
+      {"skillId": "rd_sessions_queryuser", "label": "Angemeldete Benutzer", "priority": 4, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["trust relationship", "vertrauensstellung", "cached credentials"],
+    "followUpQuestions": [
+      {"question": "Was genau passiert bei der Anmeldung?", "options": ["Passwort wird als falsch abgelehnt", "Konto ist gesperrt Meldung", "Vertrauensstellung fehlgeschlagen", "Temporäres Profil wird geladen"], "narrows": "Art des Login-Problems"}
+    ],
+    "relatedProblems": ["PROB-WIN-008", "PROB-WIN-009"]
+  },
+  {
+    "id": "PROB-WIN-008",
+    "category": "Windows Allgemein",
+    "title": "Temporäres Profil wird geladen",
+    "keywords": ["temporäres profil", "temp profil", "temp profile", "profil defekt", "benutzerprofil beschädigt"],
+    "extendedKeywords": ["bekomme temporäres profil", "meine dateien sind weg", "desktop ist leer nach anmeldung", "alle einstellungen sind weg", "outlook daten verschwunden nach anmeldung", "profil wird nicht richtig geladen", "windows sagt temporäres profil", "temp profil meldung beim login", "einstellungen werden nicht gespeichert", "jedes mal leerer desktop", "meine favoriten sind weg", "nach neustart alles weg", "profil wird nicht mehr geladen", "benutzerprofildienst fehler"],
+    "typos": ["temporäres profli", "temp profiel", "temproäres profil"],
+    "symptoms": ["Meldung: Sie wurden mit einem temporären Profil angemeldet", "Desktop ist leer, keine persönlichen Dateien", "Outlook-Daten und Einstellungen fehlen", "Gespeicherte Dateien verschwinden nach Neustart"],
+    "quickCheck": "Wird die Meldung 'temporäres Profil' direkt nach der Anmeldung angezeigt?",
+    "solutions": ["Registry-Schlüssel prüfen: HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList", "Profil mit .bak-Endung in Registry reparieren", "Profildienst neustarten", "Neues lokales Profil anlegen und Daten übertragen", "SID-Duplikate in der Registry entfernen"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_tempprofilefix", "label": "Temp-Profil Fix", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_repair_evtsys", "label": "System-Events prüfen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_reboot_rebootcount", "label": "Neustart nach Fix", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["ProfileList", ".bak", "SID", "Benutzerprofildienst"],
+    "followUpQuestions": [
+      {"question": "Seit wann tritt das Problem auf?", "options": ["Seit heute / gerade erst", "Seit ein paar Tagen", "Kommt immer wieder", "Nach Passwortänderung"], "narrows": "Zeitpunkt und Häufigkeit"}
+    ],
+    "relatedProblems": ["PROB-WIN-007", "PROB-WIN-009"]
+  },
+  {
+    "id": "PROB-WIN-009",
+    "category": "Windows Allgemein",
+    "title": "Langsamer Login / Login dauert ewig",
+    "keywords": ["langsamer login", "login dauert lange", "anmeldung langsam", "slow login", "login hängt"],
+    "extendedKeywords": ["anmeldung dauert 5 minuten", "login braucht ewig", "nach passwort eingabe dreht sich kreis lange", "willkommen bildschirm bleibt ewig", "anmeldung dauert sehr lange", "muss lange warten nach login", "profil wird ewig geladen", "nach eingabe passwort wartet man ewig", "desktop braucht lange zum laden", "gpo werden ewig angewendet", "gruppenrichtlinien dauern lang", "anmeldeskripte langsam"],
+    "typos": ["langasmer login", "logni dauert", "anmeldunh langsam"],
+    "symptoms": ["Anmeldung dauert mehrere Minuten", "Langer Kreis beim Willkommen-Bildschirm", "Desktop lädt sehr langsam nach der Anmeldung"],
+    "quickCheck": "Wie lange dauert die Anmeldung ungefähr? War das schon immer so?",
+    "solutions": ["GPO-Verarbeitung prüfen mit gpresult /r", "Anmeldeskripte analysieren", "Netzlaufwerk-Mappings prüfen (fehlerhafte UNC-Pfade verlangsamen)", "Drucker-Mappings prüfen", "Schnellstart deaktivieren und Neustart durchführen", "Netzwerkverbindung zum Domain Controller prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_gpo_gpresult", "label": "GPO-Report", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_shares_netuse", "label": "Netzlaufwerke prüfen", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_domain_dclist", "label": "Domain Controller prüfen", "priority": 4, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["login script", "anmeldeskript", "group policy"],
+    "followUpQuestions": [
+      {"question": "Betrifft es alle Benutzer an diesem PC?", "options": ["Nur mich", "Alle Benutzer", "Weiß ich nicht"], "narrows": "Benutzerspezifisch oder PC-Problem"}
+    ],
+    "relatedProblems": ["PROB-WIN-007", "PROB-WIN-008", "PROB-WIN-038"]
+  },
+  {
+    "id": "PROB-WIN-010",
+    "category": "Windows Allgemein",
+    "title": "Explorer hängt sich auf / reagiert nicht",
+    "keywords": ["explorer hängt", "explorer reagiert nicht", "explorer crashed", "explorer absturz", "datei-explorer eingefroren"],
+    "extendedKeywords": ["explorer reagiert nicht mehr", "ordner öffnen geht nicht", "datei explorer hängt", "kann keine ordner öffnen", "explorer stürzt immer ab", "wenn ich ordner öffne hängt alles", "windows explorer funktioniert nicht", "explorer wird geschlossen und neu gestartet", "ordner lässt sich nicht öffnen", "explorer eingefroren", "dateimanager hängt", "ordner bleiben weiß", "explorer zeigt nichts an", "ordnerinhalte laden nicht"],
+    "typos": ["exploer hängt", "exlorer reagiert nicht", "explorer hängt sich auf"],
+    "symptoms": ["Explorer-Fenster reagieren nicht auf Klicks", "Ordner bleiben weiß/laden nicht", "Explorer wird automatisch geschlossen und neu gestartet", "Fehlermeldung: Explorer funktioniert nicht mehr"],
+    "quickCheck": "Tritt das Problem bei bestimmten Ordnern oder generell auf?",
+    "solutions": ["Explorer über Task-Manager neustarten", "Explorer-Verlauf löschen", "Schnellzugriff deaktivieren (Ordneroptionen > Allgemein > Bei Explorer öffnen: Dieser PC)", "Icon-Cache löschen und erneuern", "Windows Store Apps reparieren", "SFC ausführen zur Systemreparatur"],
+    "skillMapping": [
+      {"skillId": "rd_explorer_explorerrestart", "label": "Explorer neustarten", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_explorer_iconcachedel", "label": "Icon-Cache löschen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_repair_sfc", "label": "Systemdateien prüfen", "priority": 3, "effectiveness": 60},
+      {"skillId": "rd_appcache_wincachefull", "label": "Windows Cache bereinigen", "priority": 4, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["shell:recent", "thumbnail", "miniaturansicht"],
+    "followUpQuestions": [
+      {"question": "Wann hängt sich der Explorer auf?", "options": ["Beim Öffnen bestimmter Ordner", "Beim Rechtsklick", "Einfach so nach einer Weile", "Sofort beim Öffnen"], "narrows": "Auslöser identifizieren"}
+    ],
+    "relatedProblems": ["PROB-WIN-011", "PROB-WIN-012"]
+  },
+  {
+    "id": "PROB-WIN-011",
+    "category": "Windows Allgemein",
+    "title": "Taskleiste reagiert nicht / eingefroren",
+    "keywords": ["taskleiste hängt", "taskleiste reagiert nicht", "taskbar frozen", "taskbar not responding", "startleiste eingefroren"],
+    "extendedKeywords": ["taskleiste lässt sich nicht klicken", "kann nichts in der taskleiste anklicken", "uhr in taskleiste eingefroren", "taskleiste komplett tot", "symbole in taskleiste reagieren nicht", "lautstärke symbol reagiert nicht", "wlan symbol reagiert nicht", "systemtray reagiert nicht", "benachrichtigungsbereich eingefroren", "taskleiste weg", "untere leiste reagiert nicht", "leiste unten am bildschirm geht nicht"],
+    "typos": ["taskleite", "taskleiste reagier nicht", "takleiste"],
+    "symptoms": ["Klicks auf Taskleiste werden ignoriert", "Uhr bleibt stehen", "System-Tray-Icons reagieren nicht", "Taskleiste ist komplett eingefroren"],
+    "quickCheck": "Funktioniert die Tastatur noch? Kann Task-Manager geöffnet werden (Strg+Shift+Esc)?",
+    "solutions": ["Explorer neustarten über Task-Manager", "Windows-Taste + R > cmd > taskkill /f /im explorer.exe && start explorer.exe", "Windows-Apps zurücksetzen: Get-AppxPackage | Foreach {Add-AppxPackage -register $_.InstallLocation -DisableDevelopmentMode}", "SFC und DISM ausführen", "Neues Benutzerkonto erstellen zum Testen"],
+    "skillMapping": [
+      {"skillId": "rd_explorer_explorerrestart", "label": "Explorer neustarten", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_repair_sfc", "label": "Systemdateien prüfen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_appcache_sfcdism", "label": "SFC + DISM Kombi", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["ShellExperienceHost", "StartMenuExperienceHost"],
+    "followUpQuestions": [
+      {"question": "Seit wann besteht das Problem?", "options": ["Seit heute", "Seit einem Update", "Kommt immer wieder", "Seit Neustart"], "narrows": "Zeitlicher Verlauf"}
+    ],
+    "relatedProblems": ["PROB-WIN-010", "PROB-WIN-012"]
+  },
+  {
+    "id": "PROB-WIN-012",
+    "category": "Windows Allgemein",
+    "title": "Startmenü defekt / öffnet nicht",
+    "keywords": ["startmenü defekt", "startmenü öffnet nicht", "start menu broken", "windows taste geht nicht", "startmenü fehler"],
+    "extendedKeywords": ["startmenü geht nicht auf", "wenn ich auf start klicke passiert nichts", "windows taste reagiert nicht", "startmenü öffnet sich nicht", "kann startmenü nicht öffnen", "startmenü zeigt nichts an", "start button funktioniert nicht", "startmenü leer", "kacheln im startmenü fehlen", "suche im startmenü geht nicht", "startmenü flackert", "startmenü schließt sich sofort wieder"],
+    "typos": ["startmenü", "start menü", "startmenue", "startmneü"],
+    "symptoms": ["Klick auf Start-Button zeigt keine Reaktion", "Windows-Taste reagiert nicht", "Startmenü öffnet kurz und schließt sofort wieder", "Startmenü ist leer"],
+    "quickCheck": "Funktioniert die Suche über Windows+S?",
+    "solutions": ["Explorer neustarten", "PowerShell als Admin: Get-AppXPackage -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register $_.InstallLocation\\AppXManifest.xml}", "Windows-Apps zurücksetzen", "Neues Benutzerprofil testen", "SFC und DISM ausführen", "Windows Store zurücksetzen"],
+    "skillMapping": [
+      {"skillId": "rd_explorer_explorerrestart", "label": "Explorer neustarten", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_appcache_storereset", "label": "Windows Store Reset", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_appcache_sfcdism", "label": "SFC + DISM Kombi", "priority": 3, "effectiveness": 65},
+      {"skillId": "rd_repair_sfc", "label": "Systemdateien prüfen", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["StartMenuExperienceHost", "cortana", "searchui"],
+    "followUpQuestions": [
+      {"question": "Was passiert genau beim Klick auf Start?", "options": ["Gar nichts", "Öffnet kurz und schließt wieder", "Startmenü ist leer", "Flackert"], "narrows": "Art des Defekts"}
+    ],
+    "relatedProblems": ["PROB-WIN-010", "PROB-WIN-011", "PROB-WIN-013"]
+  },
+  {
+    "id": "PROB-WIN-013",
+    "category": "Windows Allgemein",
+    "title": "Windows-Suche funktioniert nicht",
+    "keywords": ["suche funktioniert nicht", "windows suche defekt", "search not working", "suche findet nichts", "cortana suche kaputt"],
+    "extendedKeywords": ["suche findet keine programme", "wenn ich suche kommt nichts", "suchfeld reagiert nicht", "kann nicht mehr suchen in windows", "suche zeigt keine ergebnisse", "windows suche leer", "programme werden nicht gefunden bei suche", "dateien werden nicht gefunden", "suchindex defekt", "suche in taskleiste geht nicht", "suchleiste funktioniert nicht", "kann nichts mehr finden am pc", "suche zeigt nur web ergebnisse"],
+    "typos": ["suche funktioniert nciht", "windows shuce", "such funktion"],
+    "symptoms": ["Suchfeld zeigt keine Ergebnisse", "Suche findet installierte Programme nicht", "Suchfeld reagiert nicht auf Eingabe", "Nur Webergebnisse statt lokaler Ergebnisse"],
+    "quickCheck": "Funktioniert die Suche über Windows+S oder nur über das Suchfeld?",
+    "solutions": ["Windows-Suchdienst (WSearch) neustarten", "Suchindex zurücksetzen", "Indexierungsoptionen prüfen und Indexierung neu aufbauen", "PowerShell: Get-AppXPackage -Name Microsoft.Windows.Search | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register $_.InstallLocation\\AppXManifest.xml}"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_searchreset", "label": "Windows-Suche Reset", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_svc_svc-restart", "label": "WSearch Dienst neustarten", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_explorer_explorerrestart", "label": "Explorer neustarten", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["WSearch", "SearchIndexer", "Windows.edb"],
+    "followUpQuestions": [
+      {"question": "Was genau passiert bei der Suche?", "options": ["Keine Ergebnisse", "Nur Webergebnisse", "Suchfeld reagiert gar nicht", "Ergebnisse sind veraltet"], "narrows": "Art des Suchproblems"}
+    ],
+    "relatedProblems": ["PROB-WIN-012", "PROB-WIN-014"]
+  },
+  {
+    "id": "PROB-WIN-014",
+    "category": "Windows Allgemein",
+    "title": "Windows-Suche extrem langsam",
+    "keywords": ["suche langsam", "suchindex langsam", "search slow", "indexierung dauert", "suche braucht ewig"],
+    "extendedKeywords": ["suche dauert ewig", "suchergebnisse kommen erst nach minuten", "suche ist total langsam", "indexierung läuft ständig", "searchindexer hohe cpu", "suchindex wird ständig neu aufgebaut", "indexierung braucht ewig"],
+    "typos": ["suche langsma", "shuce langsam"],
+    "symptoms": ["Suchergebnisse dauern sehr lange", "SearchIndexer-Prozess belastet CPU", "Indexierung läuft ständig im Hintergrund"],
+    "quickCheck": "Wie lange dauert eine Suche ungefähr?",
+    "solutions": ["Suchindex löschen und neu aufbauen", "Indexierungsoptionen: Anzahl der indexierten Speicherorte reduzieren", "SearchIndexer-Dienst neustarten", "Festplatte auf Fehler prüfen (langsame Disk verlangsamt Index)"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_searchreset", "label": "Windows-Suche Reset", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_procs_topcpu", "label": "CPU-Prozesse prüfen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_svc_svc-restart", "label": "WSearch neustarten", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["SearchIndexer.exe", "indexierung"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-WIN-013", "PROB-WIN-035"]
+  },
+  {
+    "id": "PROB-WIN-015",
+    "category": "Windows Allgemein",
+    "title": "Kein Sound / kein Ton",
+    "keywords": ["kein ton", "kein sound", "audio geht nicht", "lautsprecher stumm", "no audio", "kein klang"],
+    "extendedKeywords": ["kann nichts hören", "lautsprecher geht nicht", "kein ton am pc", "sound funktioniert nicht", "höre nichts", "audio ausgabe fehlt", "pc macht keinen ton", "lautsprecher symbol mit x", "kein sound über kopfhörer", "kein ton bei videos", "audio geräte nicht gefunden", "kein audiogerät installiert", "lautstärke auf maximum aber kein ton", "ton geht nicht mehr", "sound auf einmal weg", "audio ausgang falsch"],
+    "typos": ["kein ton", "kein sond", "kein suond", "audio geth nicht"],
+    "symptoms": ["Kein Ton über Lautsprecher oder Kopfhörer", "Lautsprecher-Symbol in Taskleiste zeigt X", "Meldung: Kein Audioausgabegerät installiert", "Ton nur über bestimmte Anwendung nicht"],
+    "quickCheck": "Ist das richtige Audioausgabegerät ausgewählt? Ist die Lautstärke aufgedreht?",
+    "solutions": ["Lautstärke prüfen und Stummschaltung aufheben", "Richtiges Ausgabegerät in Soundeinstellungen auswählen", "Audio-Treiber aktualisieren oder neu installieren", "Windows Audio-Dienst neustarten", "Audioproblemlösung ausführen: Einstellungen > Sound > Problembehandlung", "Kabel und Anschlüsse prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_svc_svc-restart", "label": "Audio-Dienst neustarten", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte prüfen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverlist", "label": "Alle Treiber anzeigen", "priority": 4, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["Audiosrv", "AudioEndpointBuilder", "Realtek", "IDT"],
+    "followUpQuestions": [
+      {"question": "Über welches Gerät soll Sound kommen?", "options": ["Eingebaute Lautsprecher", "Kopfhörer/Headset", "Externer Lautsprecher", "Monitor-Lautsprecher (HDMI/DP)"], "narrows": "Betroffenes Audiogerät"}
+    ],
+    "relatedProblems": ["PROB-WIN-016", "PROB-WIN-017"]
+  },
+  {
+    "id": "PROB-WIN-016",
+    "category": "Windows Allgemein",
+    "title": "Mikrofon funktioniert nicht",
+    "keywords": ["mikrofon geht nicht", "mic funktioniert nicht", "kein mikrofon", "microphone not working", "headset mikro"],
+    "extendedKeywords": ["mich hört niemand in teams", "mikrofon wird nicht erkannt", "bei teams call hört mich keiner", "mikro geht nicht", "headset mikrofon funktioniert nicht", "kann nicht sprechen in meetings", "mikrofonzugriff verweigert", "mikrofon stumm geschaltet", "mikrofon in teams grau", "nach update mikrofon weg", "mikrofon pegel auf null", "privacy einstellung mikrofon"],
+    "typos": ["mikroofn", "mikrofon geht nciht", "mikro funktionirt nicht"],
+    "symptoms": ["Gesprächspartner hören nichts in Calls", "Mikrofon wird in Apps nicht angezeigt", "Mikrofon-Pegel bleibt auf Null", "Datenschutzeinstellungen blockieren Mikrofon"],
+    "quickCheck": "Ist das Mikrofon in den Windows-Soundeinstellungen sichtbar und aktiv?",
+    "solutions": ["Datenschutzeinstellungen prüfen: Einstellungen > Datenschutz > Mikrofon", "Richtiges Aufnahmegerät auswählen", "Mikrofon-Pegel in Soundeinstellungen hochsetzen", "In der betroffenen App das richtige Mikrofon auswählen", "Audio-Treiber aktualisieren", "USB-Headset: anderen Port versuchen"],
+    "skillMapping": [
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_svc_svc-restart", "label": "Audio-Dienst neustarten", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["privacy", "datenschutz", "app-berechtigung"],
+    "followUpQuestions": [
+      {"question": "In welcher App funktioniert das Mikrofon nicht?", "options": ["Microsoft Teams", "Alle Apps", "Nur bestimmte App", "Auch in Soundeinstellungen nicht sichtbar"], "narrows": "App-spezifisch oder systemweit"}
+    ],
+    "relatedProblems": ["PROB-WIN-015", "PROB-WIN-017"]
+  },
+  {
+    "id": "PROB-WIN-017",
+    "category": "Windows Allgemein",
+    "title": "Bluetooth-Audio Probleme",
+    "keywords": ["bluetooth audio", "bluetooth kopfhörer", "bt headset", "bluetooth lautsprecher", "bluetooth sound"],
+    "extendedKeywords": ["bluetooth kopfhörer verbunden aber kein ton", "bluetooth headset schlechte qualität", "bluetooth audio knackt", "bt kopfhörer nur als freisprechanlage", "bluetooth audio unterbricht", "bluetooth kopfhörer sound abgehackt", "bluetooth lautsprecher kein ton", "audio über bluetooth geht nicht", "bluetooth headset mono statt stereo", "bluetooth kopfhörer mikro geht nicht"],
+    "typos": ["bluetoth audio", "blutooth", "bluetooh"],
+    "symptoms": ["Bluetooth-Kopfhörer verbunden aber kein Ton", "Schlechte Audioqualität über Bluetooth", "Audio über Bluetooth unterbricht ständig", "Bluetooth-Gerät wird nur als Freisprechanlage erkannt"],
+    "quickCheck": "Wird das Bluetooth-Gerät in den Soundeinstellungen als Ausgabegerät angezeigt?",
+    "solutions": ["Bluetooth-Gerät entfernen und neu koppeln", "Audiogerät in Soundeinstellungen von Freisprechanlage auf Stereo umstellen", "Bluetooth-Treiber aktualisieren", "Bluetooth Support Service neustarten", "Andere Bluetooth-Geräte in der Nähe deaktivieren", "Bluetooth-Adapter Energieverwaltung deaktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_svc_svc-restart", "label": "Bluetooth-Dienst neustarten", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["bthserv", "Hands-Free", "A2DP"],
+    "followUpQuestions": [
+      {"question": "Was genau ist das Problem mit Bluetooth-Audio?", "options": ["Kein Ton trotz Verbindung", "Schlechte Qualität / Mono", "Unterbrechungen", "Kopfhörer verbindet nicht"], "narrows": "Art des Bluetooth-Audio-Problems"}
+    ],
+    "relatedProblems": ["PROB-WIN-015", "PROB-WIN-018"]
+  },
+  {
+    "id": "PROB-WIN-018",
+    "category": "Windows Allgemein",
+    "title": "Bluetooth-Gerät verbindet sich nicht",
+    "keywords": ["bluetooth verbindung", "bluetooth koppeln", "bluetooth pairing", "bt gerät", "bluetooth nicht verbunden"],
+    "extendedKeywords": ["bluetooth gerät wird nicht gefunden", "kann bluetooth gerät nicht koppeln", "bluetooth maus verbindet nicht", "bluetooth tastatur funktioniert nicht", "bluetooth verbindung bricht ab", "gerät koppeln geht nicht", "bluetooth suche findet nichts", "bluetooth verbindung fehlgeschlagen", "bluetooth gerät nicht sichtbar", "nach neustart bluetooth gerät weg", "bluetooth pairing fehler"],
+    "typos": ["bluetooth verbindett nicht", "blutooth", "bletooth"],
+    "symptoms": ["Bluetooth-Gerät wird bei der Suche nicht gefunden", "Kopplung schlägt fehl", "Verbindung bricht immer wieder ab", "Gerät war verbunden, jetzt nicht mehr"],
+    "quickCheck": "Ist Bluetooth am PC aktiviert? Ist das Gerät im Kopplungsmodus?",
+    "solutions": ["Bluetooth am PC aus- und wieder einschalten", "Gerät aus Bluetooth-Liste entfernen und neu koppeln", "Bluetooth-Treiber aktualisieren", "Bluetooth Support Service (bthserv) neustarten", "Andere Bluetooth-Geräte temporär deaktivieren", "Flugmodus kurz ein- und ausschalten"],
+    "skillMapping": [
+      {"skillId": "rd_svc_svc-restart", "label": "Bluetooth-Dienst neustarten", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_net_getadapter", "label": "Netzwerkadapter prüfen", "priority": 4, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["bthserv", "Bluetooth Support Service", "pairing mode"],
+    "followUpQuestions": [
+      {"question": "Um welches Bluetooth-Gerät handelt es sich?", "options": ["Maus", "Tastatur", "Kopfhörer/Headset", "Anderes Gerät"], "narrows": "Gerätetyp"}
+    ],
+    "relatedProblems": ["PROB-WIN-017", "PROB-WIN-019"]
+  },
+  {
+    "id": "PROB-WIN-019",
+    "category": "Windows Allgemein",
+    "title": "Bluetooth fehlt / nicht verfügbar",
+    "keywords": ["bluetooth fehlt", "kein bluetooth", "bluetooth verschwunden", "bluetooth nicht verfügbar", "bluetooth adapter weg"],
+    "extendedKeywords": ["bluetooth button fehlt in windows", "bluetooth einstellung nicht vorhanden", "kann bluetooth nicht finden in einstellungen", "bluetooth symbol in taskleiste fehlt", "bluetooth wurde entfernt", "nach update kein bluetooth mehr", "bluetooth treiber fehlt", "bluetooth adapter wird nicht erkannt", "gerätemanager zeigt kein bluetooth"],
+    "typos": ["bluetoth fehlt", "blutooth fehlt"],
+    "symptoms": ["Bluetooth-Option fehlt in den Einstellungen", "Kein Bluetooth-Symbol in der Taskleiste", "Im Geräte-Manager kein Bluetooth-Adapter sichtbar", "Meldung: Bluetooth ist nicht verfügbar"],
+    "quickCheck": "Wird im Geräte-Manager (devmgmt.msc) ein Bluetooth-Adapter angezeigt?",
+    "solutions": ["Geräte-Manager prüfen ob Bluetooth-Adapter deaktiviert ist", "Bluetooth-Treiber neu installieren", "BIOS prüfen ob Bluetooth aktiviert ist", "Flugmodus prüfen", "USB-Bluetooth-Adapter prüfen/neu einstecken", "Bluetooth Support Service aktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_svc_svc-restart", "label": "Bluetooth-Dienst starten", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["bthserv", "devmgmt", "Flugmodus"],
+    "followUpQuestions": [
+      {"question": "Hatte der PC vorher Bluetooth?", "options": ["Ja, hat plötzlich aufgehört", "Ja, nach einem Update weg", "Weiß nicht / neuer PC"], "narrows": "Treiber vs. Hardware"}
+    ],
+    "relatedProblems": ["PROB-WIN-018"]
+  },
+  {
+    "id": "PROB-WIN-020",
+    "category": "Windows Allgemein",
+    "title": "USB-Gerät wird nicht erkannt",
+    "keywords": ["usb nicht erkannt", "usb gerät unbekannt", "usb funktioniert nicht", "usb device not recognized", "usb stick nicht sichtbar"],
+    "extendedKeywords": ["usb stick wird nicht angezeigt", "usb gerät nicht erkannt meldung", "usb dran aber nichts passiert", "computer erkennt usb nicht", "usb maus geht nicht", "usb tastatur wird nicht erkannt", "usb anschluss geht nicht", "externe festplatte wird nicht erkannt", "usb gerät fehlerhaft", "wenn ich usb einstecke passiert nichts", "usb port tot", "unbekanntes gerät im gerätemanager", "usb laufwerk wird nicht angezeigt", "usb stick erscheint nicht im explorer"],
+    "typos": ["usb nicht erknant", "usb gerät nicht erakannt", "usb nciht erkannt"],
+    "symptoms": ["Meldung: USB-Gerät wurde nicht erkannt", "USB-Gerät taucht nicht im Explorer auf", "Gelbes Ausrufezeichen im Geräte-Manager", "USB-Port reagiert überhaupt nicht"],
+    "quickCheck": "Funktioniert das USB-Gerät an einem anderen Port oder PC?",
+    "solutions": ["USB-Gerät an anderem Port einstecken", "PC neustarten (behebt oft USB-Probleme)", "Geräte-Manager: USB-Controller deinstallieren und neustarten", "USB-Root-Hub Energieverwaltung deaktivieren", "USB-Treiber aktualisieren", "Bei USB-Stick: Datenträgerverwaltung prüfen (diskmgmt.msc)"],
+    "skillMapping": [
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_repair_evtsys", "label": "System-Events", "priority": 3, "effectiveness": 55},
+      {"skillId": "rd_reboot_rebootcount", "label": "Neustart planen", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["USB Root Hub", "Energieverwaltung", "diskmgmt"],
+    "followUpQuestions": [
+      {"question": "Welches USB-Gerät wird nicht erkannt?", "options": ["USB-Stick/Festplatte", "Maus/Tastatur", "Drucker/Scanner", "Headset/Audio", "Anderes Gerät"], "narrows": "Gerätetyp"}
+    ],
+    "relatedProblems": ["PROB-WIN-021", "PROB-WIN-022"]
+  },
+  {
+    "id": "PROB-WIN-021",
+    "category": "Windows Allgemein",
+    "title": "USB langsam / schlechte Übertragungsrate",
+    "keywords": ["usb langsam", "usb geschwindigkeit", "usb slow", "usb transfer langsam", "usb 2.0 statt 3.0"],
+    "extendedKeywords": ["usb stick kopiert sehr langsam", "dateien kopieren auf usb dauert ewig", "usb 3.0 nur usb 2.0 geschwindigkeit", "externe festplatte langsam", "usb übertragung bricht ab", "kopieren auf usb bleibt hängen", "usb stick ist plötzlich langsam geworden", "dateien kopieren auf externe platte dauert stunden"],
+    "typos": ["usb langasm", "usb langsma"],
+    "symptoms": ["USB-Übertragung deutlich langsamer als erwartet", "USB 3.0 Gerät an USB 3.0 Port aber nur USB 2.0 Geschwindigkeit", "Dateiübertragung bricht ab oder hängt"],
+    "quickCheck": "Ist das Gerät an einem USB 3.0 Port (blau) angeschlossen?",
+    "solutions": ["USB-Gerät an blauen USB 3.0 Port anschließen", "USB-Treiber aktualisieren", "USB-Hub entfernen, direkt am PC anschließen", "Quick Removal vs. Better Performance in Geräte-Manager einstellen", "USB-Controller-Treiber im Geräte-Manager aktualisieren", "Anderes USB-Kabel testen"],
+    "skillMapping": [
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverlist", "label": "Treiber anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["USB 3.0", "xHCI", "quick removal"],
+    "followUpQuestions": [
+      {"question": "Wie schnell ist die Übertragung ungefähr?", "options": ["Unter 5 MB/s", "5-30 MB/s", "Bricht komplett ab"], "narrows": "Schweregrad"}
+    ],
+    "relatedProblems": ["PROB-WIN-020", "PROB-WIN-022"]
+  },
+  {
+    "id": "PROB-WIN-022",
+    "category": "Windows Allgemein",
+    "title": "USB-Fehlermeldung / Stromversorgung",
+    "keywords": ["usb fehlermeldung", "usb strom", "usb power surge", "usb überstrom", "usb energiewarnung"],
+    "extendedKeywords": ["usb stromversorgung reicht nicht", "usb gerät braucht mehr strom", "usb anschluss abgeschaltet", "fehlermeldung usb überlastung", "usb port hat sich abgeschaltet", "energiewarnung usb", "usb hub überlastet"],
+    "typos": ["usb fehlermledung", "usb fehlermeldugn"],
+    "symptoms": ["Fehlermeldung: USB-Gerät hat Stromlimit überschritten", "USB-Port schaltet sich automatisch ab", "USB-Gerät funktioniert nur kurz dann Fehler"],
+    "quickCheck": "Verwenden Sie einen USB-Hub? Tritt der Fehler direkt am PC-Port auch auf?",
+    "solutions": ["USB-Gerät direkt am PC anschließen (nicht über Hub)", "USB-Hub mit eigener Stromversorgung verwenden", "Anderen USB-Port testen", "USB-Controller im Geräte-Manager deinstallieren und neu erkennen lassen", "PC neustarten"],
+    "skillMapping": [
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_repair_evtsys", "label": "System-Events", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["power surge", "overcurrent"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-WIN-020", "PROB-WIN-021"]
+  },
+  {
+    "id": "PROB-WIN-023",
+    "category": "Windows Allgemein",
+    "title": "Windows Update Fehler / Update schlägt fehl",
+    "keywords": ["update fehler", "windows update fehler", "update fehlgeschlagen", "update error", "kb fehler", "update installiert nicht"],
+    "extendedKeywords": ["windows update funktioniert nicht", "update kann nicht installiert werden", "fehlercode bei windows update", "update schlägt immer fehl", "update fehler 0x800", "windows update bringt fehler", "update wird heruntergeladen aber installiert nicht", "fehler bei kumulative update", "update wird zurückgesetzt", "änderungen konnten nicht abgeschlossen werden", "update rückgängig gemacht", "windows update dienst fehler"],
+    "typos": ["update fheler", "widnows update fehler", "update fhelgeschlagen"],
+    "symptoms": ["Fehlermeldung mit Fehlercode (0x800xxxxx) bei Windows Update", "Update wird heruntergeladen aber Installation schlägt fehl", "Meldung: Änderungen werden rückgängig gemacht", "Windows Update zeigt Fehler an"],
+    "quickCheck": "Welcher Fehlercode wird bei Windows Update angezeigt?",
+    "solutions": ["Windows Update Problembehandlung ausführen", "SoftwareDistribution-Ordner löschen und Update-Dienste neustarten", "SFC und DISM ausführen", "Windows Update Katalog: Update manuell herunterladen", "Update-Log prüfen für genaueren Fehlercode", "Drittanbieter-Antivirus temporär deaktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_wupdatereset", "label": "Windows Update Reset", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_appcache_sfcdism", "label": "SFC + DISM Kombi", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_gpo_winupdlog", "label": "Update-Log generieren", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_gpo_hotfix", "label": "Installierte Updates prüfen", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["0x80070002", "0x800F0922", "0x80073712", "SoftwareDistribution", "catroot2"],
+    "followUpQuestions": [
+      {"question": "Was genau passiert beim Update?", "options": ["Fehlercode wird angezeigt", "Update wird zurückgesetzt nach Neustart", "Download schlägt fehl", "Suche nach Updates hängt"], "narrows": "Phase des Update-Problems"}
+    ],
+    "relatedProblems": ["PROB-WIN-024", "PROB-WIN-025", "PROB-WIN-026"]
+  },
+  {
+    "id": "PROB-WIN-024",
+    "category": "Windows Allgemein",
+    "title": "Windows Update hängt / bleibt stehen",
+    "keywords": ["update hängt", "update stuck", "update bleibt stehen", "update dauert ewig", "update friert ein"],
+    "extendedKeywords": ["windows update hängt bei prozent", "update bleibt bei 0 prozent", "update hängt bei download", "update installation hängt", "update dauert schon stunden", "update bleibt bei 100 prozent stehen", "nach update neustart hängt", "update hängt beim neustart", "bitte warten beim update seit stunden", "update wird konfiguriert hängt", "update bei 30 prozent stecken geblieben"],
+    "typos": ["update hängt fest", "udpate hängt"],
+    "symptoms": ["Update-Fortschritt bewegt sich nicht", "Update hängt bei bestimmtem Prozentsatz", "PC hängt nach Update beim Neustart", "Meldung 'Updates werden konfiguriert' bleibt stehen"],
+    "quickCheck": "Bei welchem Prozentsatz hängt das Update? Wie lange schon?",
+    "solutions": ["Bis zu 2 Stunden warten - manchmal brauchen Updates lange", "PC hart herunterfahren und neu starten (letztes Mittel)", "Im abgesicherten Modus starten und Update manuell entfernen", "Windows Update Dienste zurücksetzen", "SoftwareDistribution und catroot2 löschen", "Offline-Update über Microsoft Update Katalog"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_wupdatereset", "label": "Windows Update Reset", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_gpo_usoscan", "label": "Update Scan starten", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_gpo_winupdlog", "label": "Update-Log", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["SoftwareDistribution", "stuck at percentage"],
+    "followUpQuestions": [
+      {"question": "Wie lange hängt das Update schon?", "options": ["Unter 1 Stunde", "1-3 Stunden", "Über 3 Stunden", "Über Nacht"], "narrows": "Abwarten oder eingreifen"}
+    ],
+    "relatedProblems": ["PROB-WIN-023", "PROB-WIN-025"]
+  },
+  {
+    "id": "PROB-WIN-025",
+    "category": "Windows Allgemein",
+    "title": "Bestimmtes KB-Update fehlt / wird nicht angeboten",
+    "keywords": ["kb fehlt", "update nicht angeboten", "update nicht verfügbar", "kb nicht installiert", "patch fehlt"],
+    "extendedKeywords": ["bestimmtes update wird nicht angezeigt", "kb nummer wird nicht angeboten", "brauche bestimmtes update aber wird nicht gefunden", "update wurde übersprungen", "sicherheitsupdate fehlt", "cve patch nicht installiert", "update nicht kompatibel angezeigt"],
+    "typos": ["kb fhelt", "update fhelt"],
+    "symptoms": ["Bestimmtes KB-Update wird nicht in Windows Update angeboten", "Manuelle Suche findet Update nicht", "Update wird als nicht kompatibel markiert"],
+    "quickCheck": "Welche KB-Nummer wird benötigt?",
+    "solutions": ["KB-Nummer im Microsoft Update Katalog suchen und manuell installieren", "Voraussetzungs-Updates prüfen (Servicing Stack Update)", "Windows Update Problembehandlung ausführen", "Update über WSUS/SCCM erzwingen", "GPO prüfen ob Updates blockiert werden"],
+    "skillMapping": [
+      {"skillId": "rd_gpo_hotfixid", "label": "Bestimmtes Update suchen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_gpo_hotfix", "label": "Installierte Updates", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_gpo_usoscan", "label": "Update Scan starten", "priority": 3, "effectiveness": 65},
+      {"skillId": "rd_gpo_gpresult", "label": "GPO prüfen", "priority": 4, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["Microsoft Update Catalog", "Servicing Stack"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-WIN-023", "PROB-WIN-026"]
+  },
+  {
+    "id": "PROB-WIN-026",
+    "category": "Windows Allgemein",
+    "title": "Automatische Updates deaktiviert / Updates kommen nicht",
+    "keywords": ["updates deaktiviert", "keine updates", "auto update aus", "update kommt nicht", "wsus probleme"],
+    "extendedKeywords": ["windows update deaktiviert", "updates kommen nicht automatisch", "pc bekommt keine updates", "updates sind seit monaten aus", "letzte update installation vor wochen", "update dienst deaktiviert", "gpo blockiert updates", "wsus liefert keine updates", "pc sucht nicht nach updates"],
+    "typos": ["updats deaktiviert", "udpates kommen nciht"],
+    "symptoms": ["Windows Update zeigt: Updates sind deaktiviert", "Seit Monaten keine Updates installiert", "Meldung: Organisation verwaltet Updates"],
+    "quickCheck": "Wann wurde das letzte Update installiert? Wird eine GPO-Meldung angezeigt?",
+    "solutions": ["Windows Update Dienst (wuauserv) prüfen und starten", "GPO prüfen: WSUS-Konfiguration validieren", "WSUS-Server-Erreichbarkeit testen", "Registry prüfen: HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate", "Windows Update Dienste zurücksetzen", "GPO aktualisieren mit gpupdate /force"],
+    "skillMapping": [
+      {"skillId": "rd_svc_svc-start", "label": "Update-Dienst starten", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_gpo_gpresult", "label": "GPO prüfen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_gpo_gpupdate", "label": "GPO neu anwenden", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_appcache_wupdatereset", "label": "Update-Dienste Reset", "priority": 4, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["wuauserv", "WSUS", "WindowsUpdate\\AU"],
+    "followUpQuestions": [
+      {"question": "Wird eine Meldung angezeigt warum Updates nicht kommen?", "options": ["Updates sind deaktiviert", "Ihre Organisation verwaltet Updates", "Fehler beim Suchen", "Keine Meldung, Updates kommen einfach nicht"], "narrows": "Ursache"}
+    ],
+    "relatedProblems": ["PROB-WIN-023", "PROB-WIN-025"]
+  },
+  {
+    "id": "PROB-WIN-027",
+    "category": "Windows Allgemein",
+    "title": "Systemdateien defekt / SFC findet Fehler",
+    "keywords": ["systemdateien defekt", "sfc fehler", "korrupte dateien", "system file corruption", "windows beschädigt"],
+    "extendedKeywords": ["sfc hat fehler gefunden", "systemdateien beschädigt", "windows ressourcenschutz hat beschädigte dateien gefunden", "sfc kann fehler nicht reparieren", "windows dateien kaputt", "system instabil", "dll fehler", "dll datei fehlt", "system32 fehler"],
+    "typos": ["systemdateien defket", "sfc fheler"],
+    "symptoms": ["SFC meldet: Windows-Ressourcenschutz hat beschädigte Dateien gefunden", "DLL-Fehler beim Starten von Programmen", "Unerwartete Systemfehler", "Programme stürzen zufällig ab"],
+    "quickCheck": "Wurde SFC bereits ausgeführt? Konnte es die Fehler reparieren?",
+    "solutions": ["SFC /scannow ausführen", "Wenn SFC Fehler nicht reparieren kann: DISM /Online /Cleanup-Image /RestoreHealth zuerst", "Danach erneut SFC /scannow ausführen", "CBS.log prüfen für Details", "Als letztes Mittel: In-Place Upgrade (Windows über sich selbst installieren)"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_sfcdism", "label": "SFC + DISM Kombi", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_repair_sfc", "label": "SFC einzeln", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_repair_dism", "label": "DISM einzeln", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_repair_dismcheck", "label": "Image-Schnellcheck", "priority": 4, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["CBS.log", "WinSxS", "component store"],
+    "followUpQuestions": [
+      {"question": "Wurde SFC schon ausgeführt?", "options": ["Ja, konnte reparieren", "Ja, konnte NICHT reparieren", "Nein, noch nicht versucht"], "narrows": "Nächster Schritt"}
+    ],
+    "relatedProblems": ["PROB-WIN-028"]
+  },
+  {
+    "id": "PROB-WIN-028",
+    "category": "Windows Allgemein",
+    "title": "Windows Image-Reparatur / DISM-Fehler",
+    "keywords": ["dism fehler", "image reparatur", "component store", "winsxs", "dism restorehealth"],
+    "extendedKeywords": ["dism funktioniert nicht", "dism restorehealth schlägt fehl", "windows image beschädigt", "komponentenspeicher defekt", "dism fehler 0x800", "dism kann image nicht reparieren", "winsxs ordner defekt"],
+    "typos": ["dism fheler", "image reperatur"],
+    "symptoms": ["DISM meldet Fehler bei RestoreHealth", "DISM kann Komponentenspeicher nicht reparieren", "SFC verweist auf DISM aber DISM schlägt auch fehl"],
+    "quickCheck": "Welchen Fehlercode gibt DISM aus?",
+    "solutions": ["DISM /Online /Cleanup-Image /CheckHealth für Schnelldiagnose", "DISM /Online /Cleanup-Image /RestoreHealth ausführen", "Bei DISM-Fehler: Windows ISO als Quelle verwenden: DISM /Online /Cleanup-Image /RestoreHealth /Source:D:\\sources\\install.wim", "DISM-Log prüfen: C:\\Windows\\Logs\\DISM\\dism.log", "In-Place Upgrade als letztes Mittel"],
+    "skillMapping": [
+      {"skillId": "rd_repair_dismcheck", "label": "Image-Schnellcheck", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_repair_dism", "label": "DISM RestoreHealth", "priority": 2, "effectiveness": 90},
+      {"skillId": "rd_appcache_sfcdism", "label": "SFC + DISM Kombi", "priority": 3, "effectiveness": 85},
+      {"skillId": "rd_repair_sfc", "label": "SFC nach DISM", "priority": 4, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["install.wim", "DISM log"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-WIN-027"]
+  },
+  {
+    "id": "PROB-WIN-029",
+    "category": "Windows Allgemein",
+    "title": "Festplatte ständig bei 100% Auslastung",
+    "keywords": ["disk 100", "festplatte 100 prozent", "disk usage 100", "datenträger 100", "hdd 100"],
+    "extendedKeywords": ["festplatte ständig auf 100 prozent", "datenträger 100 prozent im taskmanager", "pc langsam wegen festplatte", "disk 100 prozent", "alles hängt wegen festplatte", "festplatte ackert die ganze zeit", "hdd led leuchtet dauerhaft", "festplatte rattert ständig", "system reagiert nicht wegen festplatte", "festplatte auf anschlag", "nach dem hochfahren ist disk auf 100"],
+    "typos": ["fesptlatte 100", "disk 100 przoent", "festpaltte"],
+    "symptoms": ["Task-Manager zeigt Datenträger dauerhaft bei 100%", "PC reagiert extrem langsam", "Festplatten-LED leuchtet permanent", "Programme brauchen ewig zum Laden"],
+    "quickCheck": "Welcher Prozess belastet die Festplatte am meisten? (Task-Manager > Datenträger sortieren)",
+    "solutions": ["Windows Update im Hintergrund abwarten", "Windows-Suche-Dienst temporär deaktivieren (WSearch)", "Superfetch/SysMain-Dienst deaktivieren", "Geplante Tasks und Antivirus-Scans prüfen", "Bei HDD: Auf SSD upgraden empfohlen", "Festplatte auf Fehler prüfen mit chkdsk", "TRIM für SSD ausführen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_repair_physicaldisk", "label": "Disk-Zustand prüfen", "priority": 3, "effectiveness": 80},
+      {"skillId": "rd_procs_diskfree", "label": "Freier Speicherplatz", "priority": 4, "effectiveness": 60},
+      {"skillId": "rd_svc_svc-stop", "label": "Dienst stoppen (SysMain)", "priority": 5, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["SysMain", "Superfetch", "WSearch", "defrag"],
+    "followUpQuestions": [
+      {"question": "Welcher Prozess belastet die Disk am meisten?", "options": ["System", "Windows Search / SearchIndexer", "Antivirus", "Svchost", "Weiß nicht"], "narrows": "Ursache der Disk-Belastung"}
+    ],
+    "relatedProblems": ["PROB-WIN-030", "PROB-WIN-031", "PROB-WIN-038"]
+  },
+  {
+    "id": "PROB-WIN-030",
+    "category": "Windows Allgemein",
+    "title": "SSD langsam / Performance-Probleme",
+    "keywords": ["ssd langsam", "ssd performance", "ssd probleme", "nvme langsam", "ssd geschwindigkeit"],
+    "extendedKeywords": ["ssd ist plötzlich langsam geworden", "ssd wie festplatte", "ssd performance hat abgenommen", "nvme ssd langsam", "ssd hat nur noch wenig schreibzyklen", "ssd gesundheit schlecht", "ssd wear level hoch", "ssd verschleiss"],
+    "typos": ["ssd langsma", "ssd performacne"],
+    "symptoms": ["SSD fühlt sich wie eine alte HDD an", "Lese-/Schreibraten deutlich unter Erwartung", "SMART-Werte zeigen Verschleiß"],
+    "quickCheck": "Wie alt ist die SSD? Wie viel freier Speicherplatz?",
+    "solutions": ["TRIM ausführen: Optimize-Volume -DriveLetter C -ReTrim", "Mindestens 10-20% freien Speicherplatz sicherstellen", "SSD-Firmware aktualisieren", "AHCI-Modus im BIOS prüfen (nicht IDE)", "SSD-Gesundheit prüfen mit Hersteller-Tool", "Defragmentierung für SSDs deaktivieren (Windows macht automatisch TRIM)"],
+    "skillMapping": [
+      {"skillId": "rd_disk_trim", "label": "SSD TRIM", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_repair_physicaldisk", "label": "Disk-Zustand prüfen", "priority": 2, "effectiveness": 90},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz prüfen", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_disk_volumes", "label": "Volumes anzeigen", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["TRIM", "AHCI", "SMART", "wear level"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-WIN-029", "PROB-WIN-031"]
+  },
+  {
+    "id": "PROB-WIN-031",
+    "category": "Windows Allgemein",
+    "title": "Festplatte voll / kein Speicherplatz",
+    "keywords": ["festplatte voll", "kein speicherplatz", "disk full", "laufwerk voll", "c voll", "speicher voll"],
+    "extendedKeywords": ["festplatte hat keinen platz mehr", "c laufwerk voll", "laufwerk c ist rot", "kein speicherplatz mehr auf c", "pc sagt festplatte voll", "nicht genug speicherplatz", "wo ist mein speicherplatz hin", "was frisst den ganzen platz", "speicherplatz aufräumen", "meldung wenig speicherplatz", "laufwerk c fast voll", "warum ist meine festplatte so voll"],
+    "typos": ["festpaltte voll", "speicherpaltz", "kein speicherpaltzt"],
+    "symptoms": ["Laufwerk C: ist rot im Explorer", "Meldung: Wenig Speicherplatz", "Programme können nicht installiert werden", "Windows Update schlägt fehl wegen Platzmangel"],
+    "quickCheck": "Wie viel Platz ist auf C: noch frei?",
+    "solutions": ["Datenträgerbereinigung ausführen (cleanmgr)", "Papierkorb leeren", "Temp-Ordner leeren (Windows und Benutzer)", "WinSxS bereinigen: DISM /Online /Cleanup-Image /StartComponentCleanup", "Alte Windows-Versionen entfernen", "Große Dateien identifizieren und verschieben", "Download-Ordner aufräumen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_diskfree", "label": "Freier Speicherplatz", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_disk_diskspace", "label": "Laufwerke anzeigen", "priority": 2, "effectiveness": 90},
+      {"skillId": "rd_disk_wintemp", "label": "Windows Temp leeren", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_disk_usertemp", "label": "User Temp leeren", "priority": 4, "effectiveness": 70},
+      {"skillId": "rd_disk_recycle", "label": "Papierkorb leeren", "priority": 5, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["cleanmgr", "WinSxS", "StartComponentCleanup"],
+    "followUpQuestions": [
+      {"question": "Wie viel Platz ist noch frei auf C:?", "options": ["Unter 1 GB", "1-5 GB", "5-10 GB", "Weiß nicht"], "narrows": "Dringlichkeit"}
+    ],
+    "relatedProblems": ["PROB-WIN-029", "PROB-WIN-030"]
+  },
+  {
+    "id": "PROB-WIN-032",
+    "category": "Windows Allgemein",
+    "title": "Zweiter Monitor wird nicht erkannt",
+    "keywords": ["monitor nicht erkannt", "zweiter bildschirm", "externer monitor", "hdmi kein bild", "display not detected"],
+    "extendedKeywords": ["zweiter monitor wird nicht erkannt", "externer bildschirm funktioniert nicht", "monitor angeschlossen aber kein bild", "laptop erkennt externen monitor nicht", "docking station monitor geht nicht", "hdmi monitor wird nicht angezeigt", "displayport kein signal", "bildschirm anschließen geht nicht", "pc erkennt zweiten bildschirm nicht", "nach update monitor weg", "usb-c monitor wird nicht erkannt"],
+    "typos": ["mointor nicht erkannt", "monitor nciht erkannt", "zweitier monitor"],
+    "symptoms": ["Zweiter Monitor zeigt kein Bild", "Monitor wird in Anzeigeeinstellungen nicht angezeigt", "Meldung: Kein Signal am Monitor", "Nur ein Bildschirm funktioniert"],
+    "quickCheck": "Welcher Anschluss wird verwendet (HDMI, DP, USB-C)? Über Docking Station?",
+    "solutions": ["Kabel prüfen und neu einstecken", "Windows + P drücken und Erweitern wählen", "Monitor in Anzeigeeinstellungen erkennen lassen", "Grafiktreiber aktualisieren", "Anderen Anschluss testen (HDMI statt DP oder umgekehrt)", "Bei Docking Station: Treiber aktualisieren", "Monitor-Auflösung manuell einstellen"],
+    "skillMapping": [
+      {"skillId": "rd_hw_hwgpu", "label": "Grafikkarte prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["DisplayPort", "HDMI", "Docking Station", "Win+P"],
+    "followUpQuestions": [
+      {"question": "Wie ist der Monitor angeschlossen?", "options": ["HDMI", "DisplayPort", "USB-C / Thunderbolt", "Über Docking Station", "VGA"], "narrows": "Anschlussart"}
+    ],
+    "relatedProblems": ["PROB-WIN-033"]
+  },
+  {
+    "id": "PROB-WIN-033",
+    "category": "Windows Allgemein",
+    "title": "Falsche Auflösung / Skalierung am Monitor",
+    "keywords": ["auflösung falsch", "skalierung falsch", "bildschirm unscharf", "display resolution", "dpi skalierung"],
+    "extendedKeywords": ["bildschirm ist unscharf", "alles zu groß auf dem bildschirm", "alles zu klein auf dem bildschirm", "auflösung stimmt nicht", "bildschirm sieht komisch aus", "schrift ist unscharf", "programme sind unscharf", "bildschirm zeigt falsche auflösung", "native auflösung nicht verfügbar", "monitor zeigt nicht die richtige auflösung", "nach update auflösung falsch", "skalierung 150% aber unscharf"],
+    "typos": ["auflöusng falsch", "skaleirung"],
+    "symptoms": ["Bildschirm zeigt nicht die native Auflösung", "Text und Icons sind unscharf", "Alles auf dem Bildschirm ist zu groß oder zu klein", "Programme werden verschwommen dargestellt"],
+    "quickCheck": "Welche Auflösung ist aktuell eingestellt? Welche hat der Monitor nativ?",
+    "solutions": ["Rechtsklick Desktop > Anzeigeeinstellungen > Auflösung auf empfohlen stellen", "Skalierung auf 100% oder 125% setzen (Anzeigeeinstellungen)", "Grafiktreiber aktualisieren (ermöglicht oft höhere Auflösungen)", "Für unscharfe Apps: Rechtsklick > Eigenschaften > Kompatibilität > Hohe DPI-Einstellungen", "Bei mehreren Monitoren: Jeden Monitor einzeln konfigurieren"],
+    "skillMapping": [
+      {"skillId": "rd_hw_hwgpu", "label": "Grafikkarte prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_drivers_driverlist", "label": "Treiber anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["DPI", "High DPI", "native Auflösung"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-WIN-032"]
+  },
+  {
+    "id": "PROB-WIN-034",
+    "category": "Windows Allgemein",
+    "title": "Kein Internet nach Windows Update",
+    "keywords": ["kein internet nach update", "netzwerk nach update", "wlan nach update weg", "internet geht nicht nach update"],
+    "extendedKeywords": ["nach windows update kein internet mehr", "internet funktioniert nicht seit update", "netzwerk geht nicht nach update", "nach update kein wlan", "internet weg nach neustart", "netzwerk nach update kaputt", "wlan symbol fehlt nach update", "netzwerktreiber nach update defekt", "kein netzwerk seit gestern abend", "nach automatischem update internet weg"],
+    "typos": ["kein internet nach udpate", "netzwrek nach update"],
+    "symptoms": ["Nach Windows Update keine Internetverbindung", "WLAN-Symbol fehlt nach Update", "Netzwerkadapter wird nicht mehr erkannt", "Ethernet funktioniert nicht nach Update"],
+    "quickCheck": "Welches Update wurde zuletzt installiert? Funktioniert LAN und/oder WLAN?",
+    "solutions": ["Netzwerk-Problembehandlung ausführen", "TCP/IP und Winsock zurücksetzen", "DNS-Cache leeren", "Netzwerkadapter-Treiber zurücksetzen auf vorherige Version", "Letztes Update deinstallieren wenn es das Problem verursacht", "Netzwerkadapter deaktivieren und wieder aktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_appcache_netreset", "label": "Netzwerk Komplett-Reset", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_net_flushdns", "label": "DNS-Cache leeren", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_net_winsock", "label": "Winsock zurücksetzen", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_net_tcpreset", "label": "TCP/IP zurücksetzen", "priority": 4, "effectiveness": 70},
+      {"skillId": "rd_net_getadapter", "label": "Netzwerkadapter prüfen", "priority": 5, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["winsock reset", "netsh int ip reset"],
+    "followUpQuestions": [
+      {"question": "Funktioniert LAN oder WLAN?", "options": ["Beides geht nicht", "Nur WLAN geht nicht", "Nur LAN geht nicht"], "narrows": "Betroffener Adapter"}
+    ],
+    "relatedProblems": ["PROB-WIN-035"]
+  },
+  {
+    "id": "PROB-WIN-035",
+    "category": "Windows Allgemein",
+    "title": "WLAN fehlt / WLAN-Adapter nicht verfügbar",
+    "keywords": ["wlan fehlt", "wifi fehlt", "wlan adapter weg", "kein wlan", "wlan symbol fehlt"],
+    "extendedKeywords": ["wlan option fehlt in windows", "kann kein wlan mehr auswählen", "wlan schalter fehlt", "wlan adapter wird nicht erkannt", "wifi funktioniert nicht", "wlan netzwerke werden nicht angezeigt", "drahtlosnetzwerk nicht verfügbar", "wlan button fehlt", "kein wlan symbol in der taskleiste", "kann mich nicht mit wlan verbinden"],
+    "typos": ["wlan fhelt", "wlna fehlt", "wifi fhelt"],
+    "symptoms": ["WLAN-Symbol fehlt in der Taskleiste", "Keine WLAN-Netzwerke werden angezeigt", "WLAN-Adapter fehlt im Geräte-Manager", "Flugmodus lässt sich nicht deaktivieren"],
+    "quickCheck": "Wird im Geräte-Manager ein WLAN-Adapter angezeigt? Ist Flugmodus aktiv?",
+    "solutions": ["Flugmodus prüfen und deaktivieren", "WLAN-Adapter im Geräte-Manager aktivieren", "WLAN-Treiber neu installieren", "Hardware-Schalter am Laptop prüfen (Fn+F-Taste)", "WLAN-Adapter Energieverwaltung deaktivieren", "Netzwerk zurücksetzen: Einstellungen > Netzwerk > Netzwerk zurücksetzen"],
+    "skillMapping": [
+      {"skillId": "rd_net_getadapter", "label": "Netzwerkadapter prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_wlan_wlanstatus", "label": "WLAN-Status", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 4, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Fn+F-Taste", "Flugmodus", "802.11"],
+    "followUpQuestions": [
+      {"question": "Ist der Laptop ein neues Gerät oder hatte er vorher WLAN?", "options": ["Hatte vorher WLAN, jetzt weg", "Neues Gerät, hatte noch nie WLAN", "Nach Update verschwunden"], "narrows": "Treiber vs. Hardware"}
+    ],
+    "relatedProblems": ["PROB-WIN-034"]
+  },
+  {
+    "id": "PROB-WIN-036",
+    "category": "Windows Allgemein",
+    "title": "PC allgemein langsam / schlechte Performance",
+    "keywords": ["pc langsam", "computer lahm", "performance schlecht", "system träge", "windows langsam"],
+    "extendedKeywords": ["alles ist langsam", "pc braucht ewig für alles", "programme laden langsam", "pc ruckelt", "alles dauert", "pc ist total lahm", "computer reagiert verzögert", "seit neuem update langsam", "pc stockt ständig", "mauszeiger ruckelt", "windows träge", "pc ist nicht mehr so schnell wie früher", "arbeit dauert ewig weil pc so langsam"],
+    "typos": ["pc langsma", "pc lagnsam", "computer lahm"],
+    "symptoms": ["Programme starten langsam", "Mauszeiger ruckelt", "Multitasking nicht mehr möglich", "PC braucht Minuten für einfache Aufgaben"],
+    "quickCheck": "Task-Manager öffnen (Strg+Shift+Esc) und CPU, RAM, Disk-Auslastung prüfen",
+    "solutions": ["Neustart durchführen", "Task-Manager prüfen: Welcher Prozess frisst Ressourcen?", "Autostart-Programme reduzieren", "Festplattenplatz prüfen (mindestens 10% frei)", "Windows Updates prüfen und installieren", "Temporäre Dateien löschen", "Antivirus-Scan durchführen"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_procs_diskfree", "label": "Freier Speicherplatz", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme", "priority": 4, "effectiveness": 80},
+      {"skillId": "rd_procs_cpuload", "label": "CPU-Auslastung", "priority": 5, "effectiveness": 85},
+      {"skillId": "rd_procs_ramload", "label": "RAM-Auslastung", "priority": 6, "effectiveness": 80}
+    ],
+    "hiddenTriggers": [],
+    "followUpQuestions": [
+      {"question": "Was genau ist langsam?", "options": ["Alles generell", "Nur bestimmte Programme", "Nur beim Hochfahren", "Beim Öffnen von Dateien"], "narrows": "Bereich der Langsamkeit"}
+    ],
+    "relatedProblems": ["PROB-WIN-037", "PROB-WIN-038", "PROB-WIN-029"]
+  },
+  {
+    "id": "PROB-WIN-037",
+    "category": "Windows Allgemein",
+    "title": "Hohe CPU-Auslastung",
+    "keywords": ["hohe cpu", "cpu 100", "cpu auslastung", "prozessor voll", "cpu last"],
+    "extendedKeywords": ["cpu ist auf 100 prozent", "prozessor ständig voll ausgelastet", "lüfter dreht auf cpu ist hoch", "cpu auslastung geht nicht runter", "ein programm frisst die ganze cpu", "svchost cpu hoch", "system cpu hoch", "antivirus frisst cpu", "windows update cpu hoch", "cpu auslastung dauerhaft hoch", "lüfter läuft ständig auf hochtouren"],
+    "typos": ["hohe cpi", "cpu auslastugn", "cpu hocj"],
+    "symptoms": ["CPU-Auslastung dauerhaft über 90%", "Lüfter dreht permanent auf hoher Stufe", "PC reagiert langsam trotz wenig offener Programme"],
+    "quickCheck": "Welcher Prozess verursacht die hohe CPU-Last? (Task-Manager > CPU sortieren)",
+    "solutions": ["Verursachenden Prozess im Task-Manager identifizieren", "Bei svchost: Unterdienste prüfen (Rechtsklick > Zu Dienst(en) wechseln)", "Windows Update im Hintergrund abwarten", "Antivirenscan pausieren falls aktiv", "Problematischen Prozess beenden falls nicht essentiell", "PC neustarten als erster Schritt"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topcpu", "label": "Top CPU-Prozesse", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_procs_cpuload", "label": "CPU-Auslastung", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_procs_killname", "label": "Prozess beenden", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_procs_procuser", "label": "Prozesse mit Username", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["svchost", "WmiPrvSE", "SearchIndexer", "TiWorker"],
+    "followUpQuestions": [
+      {"question": "Welcher Prozess verursacht die CPU-Last?", "options": ["svchost.exe", "System/System Idle", "Antivirus", "Ein bestimmtes Programm", "Weiß nicht"], "narrows": "Verursacher"}
+    ],
+    "relatedProblems": ["PROB-WIN-036", "PROB-WIN-038"]
+  },
+  {
+    "id": "PROB-WIN-038",
+    "category": "Windows Allgemein",
+    "title": "Hoher RAM-Verbrauch / Speicher voll",
+    "keywords": ["hoher ram", "speicher voll", "ram auslastung", "arbeitsspeicher voll", "memory leak"],
+    "extendedKeywords": ["ram ist voll", "arbeitsspeicher auf 100 prozent", "speicher verbrauch zu hoch", "ram geht nicht runter", "programme fressen zu viel ram", "chrome frisst ganzen speicher", "teams braucht zu viel ram", "pc hat zu wenig ram", "auslagerungsdatei wird benutzt", "not genug speicher meldung", "speicher knapp meldung"],
+    "typos": ["hoher rma", "ram verbauch", "arbeitsspiehcer"],
+    "symptoms": ["RAM-Auslastung dauerhaft über 85%", "Meldung: Nicht genug Speicher", "Programme werden automatisch geschlossen", "PC wird langsam bei vielen offenen Programmen"],
+    "quickCheck": "Wie viel RAM ist installiert und wie viel wird aktuell verwendet?",
+    "solutions": ["RAM-hungrige Programme identifizieren und ggf. schließen", "Browser-Tabs reduzieren (Chrome verbraucht viel RAM pro Tab)", "PC neustarten (befreit RAM von Leaks)", "Auslagerungsdatei vergrößern", "RAM-Upgrade in Betracht ziehen wenn dauerhaft zu wenig", "Auf Memory Leaks prüfen (RAM steigt stetig ohne Grund)"],
+    "skillMapping": [
+      {"skillId": "rd_procs_topram", "label": "Top RAM-Prozesse", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_procs_ramload", "label": "RAM-Auslastung", "priority": 2, "effectiveness": 90},
+      {"skillId": "rd_hw_hwram", "label": "RAM-Module Details", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_procs_killname", "label": "Prozess beenden", "priority": 4, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["memory leak", "pagefile", "Auslagerungsdatei"],
+    "followUpQuestions": [
+      {"question": "Wie viel RAM hat der PC?", "options": ["4 GB", "8 GB", "16 GB", "Weiß nicht"], "narrows": "Hardware-Limit oder Software-Problem"}
+    ],
+    "relatedProblems": ["PROB-WIN-036", "PROB-WIN-037"]
+  },
+  {
+    "id": "PROB-WIN-039",
+    "category": "Windows Allgemein",
+    "title": "Bildschirm flackert",
+    "keywords": ["bildschirm flackert", "display flicker", "monitor flackert", "bildschirm blinkt", "screen flickering"],
+    "extendedKeywords": ["bildschirm flackert ständig", "monitor blinkt immer wieder", "display flackert und wird schwarz", "bildschirm flimmert", "bildschirm geht kurz aus und wieder an", "display wackelt", "bildschirm zittert", "nach update bildschirm flackert", "bildschirm flackert bei bestimmten programmen"],
+    "typos": ["bilschirm flackert", "bildschrim flackert", "bilschirm flickert"],
+    "symptoms": ["Bildschirm flackert in regelmäßigen Abständen", "Display wird kurz schwarz und kommt wieder", "Bildschirm flimmert nur bei bestimmten Programmen"],
+    "quickCheck": "Flackert der Task-Manager auch? (Ja = Treiber-Problem, Nein = App-Problem)",
+    "solutions": ["Grafiktreiber aktualisieren oder zurücksetzen", "Bildwiederholrate prüfen und anpassen", "Kabel überprüfen (locker, defekt)", "Inkompatible App identifizieren (flackert Task-Manager mit?)", "Hardware-Beschleunigung in betroffener App deaktivieren", "Monitor-Treiber aktualisieren"],
+    "skillMapping": [
+      {"skillId": "rd_hw_hwgpu", "label": "Grafikkarte prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_repair_evtapp", "label": "App-Fehler prüfen", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["refresh rate", "Bildwiederholrate", "hardware acceleration"],
+    "followUpQuestions": [
+      {"question": "Flackert der Task-Manager mit?", "options": ["Ja, alles flackert", "Nein, nur bestimmte Fenster", "Weiß nicht"], "narrows": "Treiber vs. App-Problem"}
+    ],
+    "relatedProblems": ["PROB-WIN-032", "PROB-WIN-033"]
+  },
+  {
+    "id": "PROB-WIN-040",
+    "category": "Windows Allgemein",
+    "title": "Maus oder Tastatur hängt / reagiert nicht",
+    "keywords": ["maus hängt", "tastatur reagiert nicht", "maus eingefroren", "keyboard stuck", "eingabegerät defekt"],
+    "extendedKeywords": ["maus bewegt sich nicht mehr", "tastatur reagiert nicht mehr", "maus springt", "maus hängt sich auf", "tasteneingabe verzögert", "tastatur schreibt nicht", "maus bleibt stehen", "bluetooth maus verbindung bricht ab", "funktatstatur reagiert nicht", "maus cursor eingefroren", "tastatur gibt falsche zeichen aus"],
+    "typos": ["maus hängt sich afu", "tastaur reagiert nicht"],
+    "symptoms": ["Maus bewegt sich nicht oder springt", "Tastatur reagiert nicht auf Eingaben", "Eingabegerät funktioniert zeitweise nicht", "Bluetooth-Maus verliert Verbindung"],
+    "quickCheck": "USB oder Bluetooth Gerät? Funktioniert ein anderes Eingabegerät?",
+    "solutions": ["USB-Gerät: anderen Port testen", "Bluetooth: Gerät neu koppeln", "Batterien bei kabellosen Geräten prüfen", "Treiber aktualisieren", "USB-Hub entfernen, direkt anschließen", "Filter-Tasten und Einrastfunktion deaktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_hw_baddev", "label": "Fehlerhafte Geräte", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_drivers_driverfail", "label": "Fehlerhafte Treiber", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_svc_svc-restart", "label": "HID-Dienst neustarten", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["HID", "Filter Keys", "Einrastfunktion"],
+    "followUpQuestions": [
+      {"question": "Welches Gerät ist betroffen?", "options": ["Maus (USB)", "Maus (Bluetooth)", "Tastatur (USB)", "Tastatur (Bluetooth)"], "narrows": "Verbindungsart"}
+    ],
+    "relatedProblems": ["PROB-WIN-018", "PROB-WIN-020"]
+  },
+  {
+    "id": "PROB-WIN-041",
+    "category": "Windows Allgemein",
+    "title": "Drucker verschwindet / wird nicht mehr angezeigt",
+    "keywords": ["drucker verschwunden", "drucker weg", "drucker fehlt", "drucker nicht mehr da", "printer disappeared"],
+    "extendedKeywords": ["drucker ist aus der liste verschwunden", "netzwerkdrucker weg", "drucker muss immer neu hinzugefügt werden", "nach neustart drucker weg", "drucker ist nicht mehr verfügbar", "drucker offline aber eingeschaltet", "druckerverbindung verloren", "drucker wird nicht angezeigt"],
+    "typos": ["durcker verschwunden", "druker fehlt", "drucker vershcwunden"],
+    "symptoms": ["Drucker ist aus der Druckerliste verschwunden", "Netzwerkdrucker muss nach jedem Neustart neu hinzugefügt werden", "Drucker wird als offline angezeigt obwohl er eingeschaltet ist"],
+    "quickCheck": "Ist der Drucker ein Netzwerkdrucker oder lokal per USB angeschlossen?",
+    "solutions": ["Druckspooler-Dienst neustarten", "Drucker neu hinzufügen", "GPO für Druckerzuordnung prüfen", "Druckertreiber neu installieren", "Netzwerkverbindung zum Druckserver prüfen", "Spooler bereinigen und Drucker neu installieren"],
+    "skillMapping": [
+      {"skillId": "rd_printer_getprinter", "label": "Drucker anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_printer_spooler", "label": "Spooler neustarten", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_printer_spoolerclean", "label": "Spooler bereinigen", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_printer_addprinter", "label": "Drucker hinzufügen", "priority": 4, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["Print Spooler", "Druckserver"],
+    "followUpQuestions": [
+      {"question": "Wie ist der Drucker angebunden?", "options": ["Netzwerk / Druckserver", "Direkt per USB", "WLAN-Drucker", "Weiß nicht"], "narrows": "Anschlussart"}
+    ],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-WIN-042",
+    "category": "Windows Allgemein",
+    "title": "Zwischenablage / Clipboard funktioniert nicht",
+    "keywords": ["clipboard", "zwischenablage", "kopieren einfügen", "copy paste", "strg c strg v"],
+    "extendedKeywords": ["kopieren und einfügen geht nicht", "strg c funktioniert nicht", "einfügen fügt nichts ein", "zwischenablage leer", "kann nichts mehr kopieren", "copy paste funktioniert nicht mehr", "clipboard manager problem", "zwischenablage blockiert", "kopierten text kann nicht einfügen"],
+    "typos": ["zwishcenablage", "clipboard", "kopieren eifügen"],
+    "symptoms": ["Strg+C und Strg+V funktionieren nicht", "Eingefügter Inhalt ist leer", "Kopieren zwischen Programmen funktioniert nicht"],
+    "quickCheck": "Funktioniert Kopieren/Einfügen in allen Programmen oder nur in bestimmten?",
+    "solutions": ["rdpclip.exe neustarten (bei Remote Desktop)", "Explorer neustarten", "Zwischenablageverlauf aktivieren: Windows + V", "Clipboard-Dienst (cbdhsvc) prüfen und neustarten", "PC neustarten", "RDP-Session: rdpclip.exe im Task-Manager beenden und neu starten"],
+    "skillMapping": [
+      {"skillId": "rd_explorer_explorerrestart", "label": "Explorer neustarten", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_procs_killname", "label": "rdpclip neustarten", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_reboot_rebootcount", "label": "Neustart", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["rdpclip", "cbdhsvc"],
+    "followUpQuestions": [
+      {"question": "Arbeiten Sie per Remote Desktop (RDP)?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "RDP-spezifisch oder generell"}
+    ],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-WIN-043",
+    "category": "Windows Allgemein",
+    "title": "Nachtmodus / Blaulichtfilter funktioniert nicht",
+    "keywords": ["nachtmodus", "blaulichtfilter", "night light", "nachtlicht", "f.lux"],
+    "extendedKeywords": ["nachtmodus lässt sich nicht einschalten", "blaulichtfilter funktioniert nicht", "bildschirm ist nachts zu hell", "nachtlicht einstellung fehlt", "nachtmodus aktiviert sich nicht automatisch"],
+    "typos": ["nachtmdous", "nachtmodsus", "blaulichfilter"],
+    "symptoms": ["Nachtmodus lässt sich nicht aktivieren", "Nachtmodus schaltet sich nicht automatisch ein/aus", "Option fehlt in den Einstellungen"],
+    "quickCheck": "Ist der Nachtmodus in Einstellungen > Anzeige verfügbar?",
+    "solutions": ["Einstellungen > Anzeige > Nachtmodus aktivieren", "Zeitplan für Nachtmodus prüfen", "Grafiktreiber aktualisieren (Feature benötigt WDDM 2.0)", "Standort-Dienst aktivieren für automatischen Zeitplan", "Alternative: f.lux installieren"],
+    "skillMapping": [
+      {"skillId": "rd_hw_hwgpu", "label": "Grafikkarte prüfen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_drivers_driverlist", "label": "Treiber prüfen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["WDDM", "Standortdienst"],
+    "followUpQuestions": [],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-WIN-044",
+    "category": "Windows Allgemein",
+    "title": "Falsche Zeitzone / Uhrzeit stimmt nicht",
+    "keywords": ["zeitzone falsch", "uhrzeit falsch", "uhr stimmt nicht", "zeit falsch", "time zone"],
+    "extendedKeywords": ["pc zeigt falsche uhrzeit", "windows uhr geht falsch", "uhrzeit stimmt nicht am computer", "zeit springt", "zeitzone auf englisch", "nach neustart uhrzeit falsch", "outlook termine um stunde verschoben", "zeitzonen problem", "sommerzeit nicht umgestellt"],
+    "typos": ["zeitzoen falsch", "uhrzeut falsch"],
+    "symptoms": ["Uhrzeit auf dem PC stimmt nicht", "Termine in Outlook sind verschoben", "Nach Neustart springt die Uhr zurück", "Zeitzone ist auf UTC statt lokaler Zeit"],
+    "quickCheck": "Welche Zeitzone ist eingestellt? Stimmt die Uhrzeit?",
+    "solutions": ["Einstellungen > Zeit und Sprache > Datum und Uhrzeit > Zeitzone prüfen", "Automatische Zeiteinstellung aktivieren", "W32Time-Dienst neustarten", "Zeitserver manuell synchronisieren: w32tm /resync", "GPO für Zeiteinstellung prüfen", "BIOS-Batterie (CMOS) prüfen bei wiederkehrendem Problem"],
+    "skillMapping": [
+      {"skillId": "rd_svc_svc-restart", "label": "W32Time neustarten", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_gpo_gpresult", "label": "GPO prüfen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["W32Time", "NTP", "CMOS-Batterie"],
+    "followUpQuestions": [],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-WIN-045",
+    "category": "Windows Allgemein",
+    "title": "Falsche Sprache / Tastaturlayout",
+    "keywords": ["sprache falsch", "tastaturlayout", "keyboard layout", "englische tastatur", "spracheinstellung"],
+    "extendedKeywords": ["tastatur schreibt englisch", "z und y vertauscht", "sonderzeichen stimmen nicht", "pc auf englisch", "windows sprache ändern", "sprachleiste fehlt", "tastatur layout wechselt automatisch", "kann sprache nicht ändern", "nach update alles auf englisch", "umlaute funktionieren nicht"],
+    "typos": ["sprahce falsch", "tastaturlayuot", "tastatulayout"],
+    "symptoms": ["Z und Y sind vertauscht (englisches Layout aktiv)", "Sonderzeichen stimmen nicht mit Tastenbeschriftung überein", "Windows-Oberfläche ist auf falscher Sprache"],
+    "quickCheck": "Welche Sprache und welches Layout ist aktuell eingestellt? (Win+Leertaste zum Wechseln)",
+    "solutions": ["Win+Leertaste drücken um Layout zu wechseln", "Einstellungen > Zeit und Sprache > Sprache > Bevorzugte Sprachen", "Unnötige Tastaturlayouts entfernen", "GPO für Spracheinstellungen prüfen", "Deutschen Sprachpack installieren falls nicht vorhanden"],
+    "skillMapping": [
+      {"skillId": "rd_gpo_gpresult", "label": "GPO prüfen", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["Win+Leertaste", "sprachpaket"],
+    "followUpQuestions": [],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-WIN-046",
+    "category": "Windows Allgemein",
+    "title": "UAC-Probleme / Benutzerkontensteuerung",
+    "keywords": ["uac", "benutzerkontensteuerung", "admin rechte", "administrator berechtigung", "erhöhte rechte"],
+    "extendedKeywords": ["brauche admin rechte für programm", "uac blockiert installation", "kann programm nicht als admin starten", "benutzerkontensteuerung nervt", "admin passwort wird abgefragt", "uac abfrage kommt ständig", "programm braucht erhöhte rechte", "kann nicht installieren ohne admin"],
+    "typos": ["uac probleme", "benutzerkonensteuerung"],
+    "symptoms": ["UAC-Abfrage erscheint ständig", "Programm startet nicht wegen fehlender Adminrechte", "Kann Software nicht installieren", "UAC-Abfrage kann nicht bestätigt werden (kein Admin-Passwort)"],
+    "quickCheck": "Ist der Benutzer lokaler Administrator?",
+    "solutions": ["Rechtsklick > Als Administrator ausführen", "Lokale Admin-Rechte prüfen", "UAC-Stufe anpassen (Systemsteuerung > Benutzerkontensteuerung)", "GPO für UAC-Einstellungen prüfen", "Programm-Kompatibilität als Administrator festlegen"],
+    "skillMapping": [
+      {"skillId": "rd_sessions_localadmins", "label": "Lokale Admins prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_sessions_whoami", "label": "Berechtigungen prüfen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_gpo_gpresult", "label": "GPO prüfen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["runas", "elevate"],
+    "followUpQuestions": [
+      {"question": "Was genau ist das Problem mit UAC?", "options": ["Kann Programm nicht starten/installieren", "UAC-Abfrage kommt ständig", "Kein Admin-Passwort vorhanden"], "narrows": "Art des UAC-Problems"}
+    ],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-WIN-047",
+    "category": "Windows Allgemein",
+    "title": "Firewall blockiert Programm / Verbindung",
+    "keywords": ["firewall blockiert", "firewall problem", "firewall regel", "geblockt", "verbindung blockiert"],
+    "extendedKeywords": ["programm wird von firewall blockiert", "firewall lässt verbindung nicht zu", "app kann nicht ins internet", "firewall blockiert zugriff", "windows firewall blockiert programm", "kann mich nicht verbinden firewall", "vpn wird von firewall blockiert", "port gesperrt durch firewall"],
+    "typos": ["firewall blokiert", "firwall blockiert"],
+    "symptoms": ["Programm kann keine Verbindung herstellen", "Fehlermeldung: Verbindung blockiert", "Bestimmte Ports sind nicht erreichbar", "Programm fragt nach Firewall-Ausnahme"],
+    "quickCheck": "Welches Programm wird blockiert? Ist die Windows-Firewall aktiv?",
+    "solutions": ["Firewall-Regel für das Programm erstellen", "Bestehende Regeln prüfen ob Programm blockiert wird", "Programm temporär durch Firewall erlauben testen", "Port-spezifische Regel erstellen falls nötig", "GPO für Firewall-Einstellungen prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_security_fwprofile", "label": "Firewall-Status", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_security_fwrules", "label": "Aktive Regeln", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_net_testport", "label": "Port-Konnektivität testen", "priority": 3, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["Windows Defender Firewall", "inbound", "outbound"],
+    "followUpQuestions": [
+      {"question": "Welches Programm wird blockiert?", "options": ["VPN-Client", "Browser / Webzugriff", "E-Mail / Outlook", "Anderes Programm"], "narrows": "Betroffenes Programm"}
+    ],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-WIN-048",
+    "category": "Windows Allgemein",
+    "title": "Autostart-Programme verwalten / zu viele Autostart",
+    "keywords": ["autostart", "startup programme", "hochfahren langsam", "boot programme", "autostart deaktivieren"],
+    "extendedKeywords": ["zu viele programme beim start", "pc startet langsam wegen programme", "autostart aufräumen", "welche programme starten automatisch", "unnötige programme beim hochfahren", "autostart programme deaktivieren", "was startet alles beim hochfahren", "startup ordner aufräumen"],
+    "typos": ["autosatrt", "autstart", "autostart programe"],
+    "symptoms": ["PC braucht lange zum Hochfahren", "Viele Programme starten automatisch", "Taskleiste ist voll mit Programm-Icons nach dem Start"],
+    "quickCheck": "Wie viele Autostart-Programme sind aktiv?",
+    "solutions": ["Task-Manager > Autostart Tab: Unnötige Programme deaktivieren", "Autostart-Ordner prüfen: shell:startup", "Geplante Aufgaben prüfen die beim Start laufen", "Registry Autostart-Einträge prüfen: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"],
+    "skillMapping": [
+      {"skillId": "rd_procs_autostart", "label": "Autostart-Programme anzeigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_tasks_tasksall", "label": "Geplante Aufgaben", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["shell:startup", "Run key", "Startup folder"],
+    "followUpQuestions": [],
+    "relatedProblems": ["PROB-WIN-005", "PROB-WIN-036"]
+  },
+  {
+    "id": "PROB-WIN-049",
+    "category": "Windows Allgemein",
+    "title": "Windows-Dienst startet nicht / Dienst fehlt",
+    "keywords": ["dienst startet nicht", "service fehler", "dienst fehlt", "service not starting", "dienst deaktiviert"],
+    "extendedKeywords": ["windows dienst startet nicht", "dienst ist deaktiviert", "fehler beim starten des dienstes", "dienst hängt beim starten", "service konnte nicht gestartet werden", "dienst beendet sich sofort wieder", "abhängiger dienst fehlt", "dienst mit fehler 1053", "dienst reagiert nicht auf start"],
+    "typos": ["deinst startet nicht", "dienst fhelt"],
+    "symptoms": ["Dienst bleibt auf Status 'Wird gestartet' hängen", "Fehlermeldung beim Starten eines Dienstes", "Dienst startet und beendet sich sofort wieder", "Abhängiger Dienst konnte nicht gefunden werden"],
+    "quickCheck": "Welcher Dienst startet nicht? Welche Fehlermeldung wird angezeigt?",
+    "solutions": ["Dienst manuell starten über services.msc", "Dienstabhängigkeiten prüfen", "Dienst-Starttyp auf Automatisch setzen", "Berechtigungen des Dienstkontos prüfen", "Ereignisprotokoll für Dienstfehler prüfen", "Dienst deinstallieren und neu registrieren"],
+    "skillMapping": [
+      {"skillId": "rd_svc_svc-start", "label": "Dienst starten", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_svc_svc-restart", "label": "Dienst neustarten", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_repair_evtsys", "label": "System-Events prüfen", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["services.msc", "sc query", "Fehler 1053", "Fehler 1067"],
+    "followUpQuestions": [
+      {"question": "Welcher Dienst ist betroffen?", "options": ["Windows Update (wuauserv)", "Druckspooler (Spooler)", "Audio (Audiosrv)", "Anderer Dienst"], "narrows": "Betroffener Dienst"}
+    ],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-WIN-050",
+    "category": "Windows Allgemein",
+    "title": "Windows Aktivierung fehlgeschlagen / nicht aktiviert",
+    "keywords": ["windows aktivierung", "not activated", "nicht aktiviert", "lizenz abgelaufen", "product key"],
+    "extendedKeywords": ["windows ist nicht aktiviert", "wasserzeichen windows aktivieren", "lizenzschlüssel funktioniert nicht", "windows aktivierung fehlgeschlagen", "aktivierungsfehler", "windows lizenz abgelaufen", "nach hardware tausch nicht mehr aktiviert", "product key ungültig", "digitale lizenz verloren", "windows aktivieren meldung"],
+    "typos": ["windwos aktivierung", "aktiveirung", "aktievierung"],
+    "symptoms": ["Wasserzeichen 'Windows aktivieren' auf dem Desktop", "Personalisierungseinstellungen ausgegraut", "Meldung: Windows ist nicht aktiviert", "Fehlercode bei der Aktivierung"],
+    "quickCheck": "Was zeigt slmgr /xpr an? Welcher Aktivierungsfehler wird angezeigt?",
+    "solutions": ["Einstellungen > System > Aktivierung > Problembehandlung", "Lizenzschlüssel erneut eingeben", "Digitale Lizenz an Microsoft-Konto binden", "KMS-Server Erreichbarkeit prüfen (bei Enterprise)", "Telefonische Aktivierung: slui 4", "Hardware-Änderung: Microsoft-Support kontaktieren"],
+    "skillMapping": [
+      {"skillId": "rd_hw_hwos", "label": "OS-Version prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_net_testport", "label": "KMS-Port testen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["slmgr", "KMS", "MAK", "digital license"],
+    "followUpQuestions": [
+      {"question": "Welche Art der Lizenzierung?", "options": ["Firmen-Lizenz (KMS/VLSC)", "OEM / vorinstalliert", "Retail-Lizenz", "Weiß nicht"], "narrows": "Aktivierungsmethode"}
+    ],
+    "relatedProblems": []
+  }
+]

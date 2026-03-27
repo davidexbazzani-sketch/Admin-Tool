@@ -88,6 +88,15 @@ declare global {
       netIsAvailable(): Promise<boolean>
       netGetBasePath(): Promise<string>
       netSetBasePath(path: string): Promise<boolean>
+      netWriteRawFile(relativePath: string, base64Data: string): Promise<boolean>
+      netReadRawFile(relativePath: string): Promise<string | null>
+
+      // ── Wissensdatenbank (dedicated IPC) ──────────────────────────────────
+      wbGetCategories(): Promise<Array<{ id: string; name: string; icon: string; articleCount: number; subcategories: Array<{ id: string; name: string; articleCount: number }> }>>
+      wbGetArticles(subcategoryId: string): Promise<Array<{ id: string; title: string; description: string; tags: string[] }>>
+      wbGetArticle(articleId: string): Promise<{ id: string; title: string; description: string; tags: string[]; steps: Array<{ title: string; content: string }>; relatedSkills: string[] } | null>
+      wbSearch(query: string): Promise<Array<{ id: string; title: string; description: string; categoryName: string; subcategoryName: string; tags: string[] }>>
+      wbEnsureGenerated(): Promise<{ exists: boolean; generated: boolean }>
 
       // ── System info ───────────────────────────────────────────────────────
       getWindowsUsername(): Promise<string>
@@ -96,12 +105,12 @@ declare global {
       // ── Context menu ──────────────────────────────────────────────────────
       showContextMenu(): Promise<void>
 
-      // ── E-Mail (nodemailer) ───────────────────────────────────────────────
+      // ── E-Mail (Outlook COM / PowerShell / Nodemailer) ─────────────────────
       sendEmailRaw(opts: {
         to: string; subject: string; body: string; html?: boolean
         smtp: string; port: number; user?: string; pass?: string; from?: string
-        useTls?: boolean
-      }): Promise<boolean>
+        useTls?: boolean; method?: 'outlook' | 'nodemailer' | 'powershell'
+      }): Promise<{ success: boolean; error?: string; method?: string }>
 
       // ── Heartbeat / crash detection ───────────────────────────────────────
       heartbeatSet(username: string): Promise<boolean>

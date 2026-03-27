@@ -1,12 +1,14 @@
 import {
   Home, Search, BarChart3, Smartphone, Wrench, Settings, ShieldCheck,
   ChevronRight, UserSearch, Terminal, Users, FileText, MapPin, Clock,
-  Bug, LogOut, Crown, LayoutDashboard,
+  Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
+import { useRadarStore } from '../store/radarStore'
 import { api } from '../electronAPI'
 import type { Screen } from '../types'
+import FavoritesPanel from './FavoritesPanel'
 
 interface NavItem {
   id: Screen
@@ -27,24 +29,38 @@ export default function Sidebar() {
   const user      = session?.user
 
   const NAV_ITEMS: NavItem[] = [
-    // ── Standard features ────────────────────────────────────────────────
+    // ── Gruppe 1: Start ─────────────────────────────────────────────────
     { id: 'home',              label: 'Startbildschirm',      icon: <Home size={18} /> },
-    { id: 'query-menu',        label: 'Abfrage-Menü',         icon: <Search size={18} /> },
-    { id: 'results',           label: 'Ergebnisse',           icon: <BarChart3 size={18} /> },
-    { id: 'user-info',         label: 'Benutzer Info',        icon: <UserSearch size={18} /> },
-    { id: 'xelion',            label: 'Diensthandy & Xelion', icon: <Smartphone size={18} /> },
-    { id: 'remote-doc',        label: 'Remote Doc',           icon: <Terminal size={18} /> },
     { id: 'location-overview', label: 'Standort-Übersicht',   icon: <MapPin size={18} /> },
-    { id: 'scheduled-tasks',   label: 'Geplante Aufgaben',    icon: <Clock size={18} />, adminOnly: true },
+
+    // ── Gruppe 2: Werkzeuge ─────────────────────────────────────────────
+    { id: 'query-menu',        label: 'Abfrage-Menü',         icon: <Search size={18} />, dividerBefore: true },
+    { id: 'remote-doc',        label: 'Remote Doc',           icon: <Terminal size={18} /> },
+    { id: 'it-guru',           label: 'IT Guru',              icon: <Lightbulb size={18} /> },
+
+    // ── Gruppe 3: Automation ────────────────────────────────────────────
+    { id: 'scheduled-tasks',   label: 'Geplante Aufgaben',    icon: <Clock size={18} />, adminOnly: true, dividerBefore: true },
     { id: 'dashboards',        label: 'Dashboards',           icon: <LayoutDashboard size={18} /> },
-    { id: 'trickkiste',        label: 'Trickkiste',           icon: <Wrench size={18} /> },
+    { id: 'network-radar',     label: 'Netzwerk-Radar',       icon: <Activity size={18} />, adminOnly: true },
+    { id: 'pc-migration',      label: 'PC-Migration',         icon: <ArrowRightLeft size={18} />, adminOnly: true },
+
+    // ── Gruppe 4: Info & Hilfe ──────────────────────────────────────────
+    { id: 'user-info',         label: 'Benutzer Info',        icon: <UserSearch size={18} />, dividerBefore: true },
+    { id: 'xelion',            label: 'Diensthandy & Xelion', icon: <Smartphone size={18} /> },
+    { id: 'trickbox',          label: 'Trickbox',             icon: <Wrench size={18} /> },
+
+    // ── Gruppe 5: Wissen & Ergebnisse ───────────────────────────────────
+    { id: 'knowledge-base',   label: 'Wissensdatenbank',     icon: <BookOpen size={18} />, dividerBefore: true },
+    { id: 'results',           label: 'Ergebnisse',           icon: <BarChart3 size={18} />, dividerBefore: true },
     { id: 'settings',          label: 'Einstellungen',        icon: <Settings size={18} /> },
 
-    // ── Admin only ───────────────────────────────────────────────────────
+    // ── Gruppe 6: Master Admin ──────────────────────────────────────────
     { id: 'user-management',   label: 'Benutzerverwaltung',   icon: <Users size={18} />, masterAdminOnly: true, dividerBefore: true },
     { id: 'user-logs',         label: 'Benutzer-Logs',        icon: <FileText size={18} />, masterAdminOnly: true },
     { id: 'bug-mailbox',       label: 'Bug-Meldungen',        icon: <Bug size={18} />, masterAdminOnly: true },
   ]
+
+  const radarScanning = useRadarStore(s => s.scanning)
 
   const visibleItems = NAV_ITEMS.filter(item => {
     if (item.masterAdminOnly) return isMaster
@@ -84,12 +100,16 @@ export default function Sidebar() {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 py-3 space-y-0.5 overflow-y-auto">
+        {/* Favorites panel — above all nav items */}
+        <FavoritesPanel />
+        <div className="my-1 mx-4 h-px bg-sidebar-border" />
+
         {visibleItems.map((item) => {
           const active = screen === item.id
           return (
-            <div key={item.id}>
-              {item.dividerBefore && <div className="my-2 mx-2 h-px bg-sidebar-border" />}
+            <div key={item.id} className="px-2">
+              {item.dividerBefore && <div className="my-2 h-px bg-sidebar-border" />}
               <button
                 onClick={() => setScreen(item.id)}
                 className={`
@@ -105,6 +125,9 @@ export default function Sidebar() {
                   {item.icon}
                 </span>
                 <span className="flex-1 text-left truncate">{item.label}</span>
+                {item.id === 'network-radar' && radarScanning && (
+                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse shrink-0" title="Scan läuft..." />
+                )}
                 {active && <ChevronRight size={14} />}
               </button>
             </div>

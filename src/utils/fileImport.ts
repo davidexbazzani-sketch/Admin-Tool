@@ -107,8 +107,22 @@ export function parseExcelSheet(bytes: Uint8Array): ExcelSheetData {
 export function extractFromExcel(
   rows: Record<string, unknown>[],
   hostnameColNames: string[],
-  serialColNames: string[]
-): { hostnames: string[]; serials: string[] } {
+  serialColNames: string[],
+  assignedToColNames?: string[]
+): { hostnames: string[]; serials: string[]; assignedToMap: Record<string, string> } {
+  const hostnameCol = hostnameColNames[0] ?? ''
+  const assignedCol = (assignedToColNames ?? [])[0] ?? ''
+
+  // Build map: hostname → assignedTo
+  const assignedToMap: Record<string, string> = {}
+  if (hostnameCol && assignedCol) {
+    for (const row of rows) {
+      const hn = String(row[hostnameCol] ?? '').trim()
+      const at = String(row[assignedCol] ?? '').trim()
+      if (hn && at) assignedToMap[hn] = at
+    }
+  }
+
   const hostnames = [
     ...new Set(
       hostnameColNames.flatMap((col) =>
@@ -123,7 +137,7 @@ export function extractFromExcel(
       )
     ),
   ]
-  return { hostnames, serials }
+  return { hostnames, serials, assignedToMap }
 }
 
 // ── Step 2c (PDF/DOCX): text extraction ──────────────────────────────────────

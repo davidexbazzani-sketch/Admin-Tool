@@ -10,7 +10,20 @@
       "Bash(node -e \"const r = require\\(''lucide-react''\\); const keys = Object.keys\\(r\\); console.log\\(keys.filter\\(k => /lock|unlock/i.test\\(k\\)\\).join\\(''\\\\n''\\)\\)\")",
       "Bash(node -e \"const r = require\\(''react-rnd''\\); console.log\\(''react-rnd ok:'', typeof r.Rnd\\)\")",
       "Bash(wc -l \"c:/Users/User/Projekte/Admin Tool/src/components/dashboard/\"*.tsx)",
-      "Bash(grep -n \"return\\\\|</div>$\\\\|deleteIds\" src/screens/LocationOverview.tsx)"
+      "Bash(grep -n \"return\\\\|</div>$\\\\|deleteIds\" src/screens/LocationOverview.tsx)",
+      "Bash(python3 -c \":*)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''''build'''',{}\\), indent=2\\)\\)\")",
+      "Bash(grep \"id: ''''.*'''', label:\" src/utils/remoteCommands.ts src/utils/remoteCommandsExtra.ts)",
+      "Bash(python3 tests/guru_test.py)",
+      "Bash(python3 tests/gen_skill_desc.py)",
+      "Bash(python3 tests/generate_brain.py)",
+      "Bash(python3 tests/expand_brain.py)",
+      "Bash(python3 tests/fill_remaining.py)",
+      "Bash(python3 tests/generate_requests.py)",
+      "Bash(python3 tests/expand_requests.py)",
+      "Bash(python3 tests/final_fill.py)",
+      "Bash(python3 tests/gen_search_terms.py)",
+      "Bash(ls prompts/*erform* prompts/*erfor* prompts/*PERFOR*)"
     ]
   }
 }

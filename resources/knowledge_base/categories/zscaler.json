@@ -1,0 +1,928 @@
+[
+  {
+    "id": "PROB-ZSC-001",
+    "category": "Zscaler",
+    "title": "Bestimmte Webseite blockiert",
+    "keywords": ["Zscaler", "blockiert", "Webseite", "gesperrt", "URL", "Filter", "Zugriff verweigert", "Policy", "Whitelist"],
+    "extendedKeywords": ["Webseite geht nicht", "Seite wird blockiert", "Zscaler sperrt Seite", "komme nicht auf die Seite", "Webseite nicht erreichbar", "Zscaler blockiert meine Seite", "Website gesperrt", "kann Seite nicht öffnen", "Zscaler verhindert Zugriff", "Internet Seite blockiert", "bestimmte Seite geht nicht", "Seite geblockt", "Zscaler Sperrung", "eine Seite funktioniert nicht", "URL blockiert", "Zscaler lässt Seite nicht zu", "Homepage blockiert", "Zscaler Webfilter", "komme nicht auf Website", "Zscaler sperrt URL"],
+    "typos": ["Zskaler", "Zscalr", "Zscaller", "Zsacler", "blockirt", "geblock"],
+    "symptoms": ["Browser zeigt Zscaler Blockseite", "Zugriff verweigert Meldung", "Seite lädt nicht und zeigt Filtermeldung"],
+    "quickCheck": "Welche Webseite wird blockiert und welche Meldung zeigt Zscaler an?",
+    "solutions": [
+      "URL der blockierten Seite notieren und die angezeigte Kategorie prüfen",
+      "Prüfen ob die Seite geschäftlich benötigt wird",
+      "IT-Ticket für URL-Freischaltung erstellen mit Begründung",
+      "Zscaler-Status prüfen ob der richtige Tunnel aktiv ist",
+      "Falls dringend: temporär Zscaler-Bypass anfragen (nur über IT-Sicherheit)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["webseite blockiert", "zscaler sperrt", "url gesperrt"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Kategorie zeigt Zscaler auf der Blockseite an?",
+        "options": ["Malware/Phishing", "Unterhaltung/Social Media", "Andere Kategorie", "Keine Blockseite sichtbar"],
+        "narrows": "Ob es eine berechtigte Sperre oder ein Fehlkategorisierung ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-002", "PROB-ZSC-003", "PROB-ZSC-004"]
+  },
+  {
+    "id": "PROB-ZSC-002",
+    "category": "Zscaler",
+    "title": "Webseite durch Kategorie blockiert",
+    "keywords": ["Zscaler", "Kategorie", "URL-Filter", "Webkategorie", "Content Filter", "Policy", "Kategorieblock"],
+    "extendedKeywords": ["Zscaler Kategorie falsch", "Webseite falsch eingestuft", "Zscaler Kategoriefilter", "Seite als falsche Kategorie", "Zscaler stuft Seite falsch ein", "Webkategorie falsch", "Zscaler Content Filter", "Seite falsch kategorisiert", "Zscaler Kategorie blockiert", "Zscaler Filterung falsch", "Webseite falsch klassifiziert", "Zscaler URL-Kategorie", "Seite in falscher Kategorie", "Zscaler Fehlkategorisierung", "Zscaler Policy blockiert Kategorie", "Zscaler kategorie-basierte Sperre", "Webfilter Kategorie", "Zscaler URL Klassifizierung", "Seite geschäftlich nötig aber blockiert", "Zscaler Kategorie prüfen"],
+    "typos": ["Kategorie", "Kathegorie", "Kategorei", "Katergorie"],
+    "symptoms": ["Zscaler zeigt Kategorie-basierte Blockierung", "Geschäftlich benötigte Seite als Social Media/Entertainment kategorisiert"],
+    "quickCheck": "Welche Kategorie wird auf der Zscaler-Blockseite angezeigt?",
+    "solutions": [
+      "Kategorie auf der Zscaler-Blockseite notieren",
+      "IT-Ticket erstellen mit URL und Begründung für Freischaltung",
+      "Zscaler-Admin kann URL-Kategorie umklassifizieren",
+      "Zscaler kann URL zur Whitelist hinzufügen",
+      "Bei Fehlkategorisierung: Zscaler Ticket für Re-Kategorisierung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["zscaler kategorie", "url falsch kategorisiert", "webfilter kategorie"],
+    "followUpQuestions": [
+      {
+        "question": "Wird die Seite für die tägliche Arbeit benötigt?",
+        "options": ["Ja, geschäftlich notwendig", "Nein, aber wäre praktisch", "Vorher hat es funktioniert"],
+        "narrows": "Priorität der Freischaltung"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-001", "PROB-ZSC-003"]
+  },
+  {
+    "id": "PROB-ZSC-003",
+    "category": "Zscaler",
+    "title": "SSL-Fehler durch Zscaler",
+    "keywords": ["Zscaler", "SSL", "Zertifikat", "HTTPS", "TLS", "SSL-Inspektion", "Certificate Error", "Verschlüsselung"],
+    "extendedKeywords": ["SSL Fehler Zscaler", "Zertifikatsfehler im Browser", "Webseite nicht sicher Zscaler", "HTTPS Fehler", "Browser zeigt unsicher", "Zscaler SSL Problem", "Verbindung nicht sicher", "Zertifikat ungültig wegen Zscaler", "Browser warnt vor Zertifikat", "SSL Warnung", "Zscaler bricht SSL", "Webseite zeigt Zertifikatsfehler", "HTTPS funktioniert nicht", "SSL Zertifikat Fehler", "Zscaler SSL Inspektion", "nicht sichere Verbindung", "Browser zeigt Schloss rot", "Zscaler TLS Fehler", "Zertifikat nicht vertrauenswürdig", "SSL Error wegen Zscaler"],
+    "typos": ["SSl", "SLL", "Zerifikat", "Zertifkat", "Zertiefikat"],
+    "symptoms": ["Browser zeigt SSL-Zertifikatsfehler", "Verbindung nicht sicher Warnung", "NET::ERR_CERT_AUTHORITY_INVALID"],
+    "quickCheck": "Welcher SSL-Fehler wird im Browser angezeigt?",
+    "solutions": [
+      "Zscaler Root-Zertifikat prüfen ob es installiert ist",
+      "Zscaler Zertifikat-Status prüfen",
+      "Browser-Cache und SSL-Cache leeren",
+      "Prüfen ob die Seite auf der SSL-Inspektions-Ausnahmeliste stehen muss",
+      "Zscaler Root-Zertifikat neu installieren",
+      "IT-Ticket für SSL-Inspektions-Ausnahme erstellen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zsccert", "label": "Zscaler Zertifikat prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_zscaler_zsccacheclear", "label": "Zscaler Cache leeren", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["ssl fehler zscaler", "zertifikat fehler browser", "https fehler"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt der SSL-Fehler bei allen HTTPS-Seiten oder nur bei bestimmten auf?",
+        "options": ["Alle Seiten", "Nur bestimmte Seiten", "Nur eine Seite"],
+        "narrows": "Ob das Zscaler Root-Zertifikat fehlt oder eine spezifische Seite betroffen ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-001", "PROB-ZSC-007"]
+  },
+  {
+    "id": "PROB-ZSC-004",
+    "category": "Zscaler",
+    "title": "Download durch Zscaler blockiert",
+    "keywords": ["Zscaler", "Download", "blockiert", "Datei", "Malware", "Sandbox", "Dateifilter", "Dateityp"],
+    "extendedKeywords": ["Zscaler blockiert Download", "kann Datei nicht herunterladen", "Download gesperrt", "Zscaler verhindert Download", "Datei wird nicht heruntergeladen", "Zscaler sperrt Datei", "Download funktioniert nicht Zscaler", "Datei blockiert", "kann nichts herunterladen", "Download wird gestoppt", "Zscaler blockiert Dateityp", "Download Fehler wegen Zscaler", "kann Datei nicht speichern", "Zscaler Dateifilter", "Download abgebrochen Zscaler", "exe Download blockiert", "zip Download gesperrt", "Zscaler verhindert Datei-Download", "Download Malware Warnung", "Zscaler sagt Datei gefährlich"],
+    "typos": ["Donwload", "Downlaod", "Download blockirt"],
+    "symptoms": ["Download wird von Zscaler unterbrochen", "Datei als Malware erkannt", "Download-Fortschritt stoppt", "Zscaler Sandbox-Warnung"],
+    "quickCheck": "Welche Datei versuchen Sie herunterzuladen und von welcher Webseite?",
+    "solutions": [
+      "Prüfen ob die Datei von einer vertrauenswürdigen Quelle stammt",
+      "IT-Ticket für Download-Freischaltung mit URL und Dateiname erstellen",
+      "Prüfen ob der Dateityp generell blockiert ist (z.B. .exe)",
+      "Zscaler-Admin kann Datei/URL auf Whitelist setzen",
+      "Alternative: Datei über sichere Kanäle bereitstellen lassen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["download blockiert", "datei download zscaler", "zscaler sperrt download"],
+    "followUpQuestions": [
+      {
+        "question": "Um welchen Dateityp handelt es sich?",
+        "options": [".exe/.msi (Programm)", ".zip/.rar (Archiv)", ".pdf/.docx (Dokument)", "Anderer Typ"],
+        "narrows": "Ob der Dateityp generell blockiert wird"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-001", "PROB-ZSC-002"]
+  },
+  {
+    "id": "PROB-ZSC-005",
+    "category": "Zscaler",
+    "title": "Zscaler und VPN Konflikt",
+    "keywords": ["Zscaler", "VPN", "Konflikt", "Tunnel", "Split-Tunnel", "Routing", "Gateway", "VPN-Client"],
+    "extendedKeywords": ["Zscaler und VPN gleichzeitig", "VPN funktioniert nicht mit Zscaler", "Zscaler stört VPN", "VPN und Zscaler Konflikt", "Internet geht nicht mit VPN und Zscaler", "Zscaler blockiert VPN", "VPN Verbindung mit Zscaler Problem", "Zscaler VPN gleichzeitig nutzen", "nach VPN kein Internet Zscaler", "VPN und Zscaler zusammen", "Zscaler VPN Routing Problem", "VPN Tunnel und Zscaler", "Zscaler deaktivieren für VPN", "VPN funktioniert Zscaler nicht", "Zscaler und VPN Client", "VPN Gateway und Zscaler", "Zscaler Split Tunnel VPN", "Netzwerk Problem VPN Zscaler", "nach VPN Verbindung Zscaler kaputt", "VPN bricht Zscaler ab"],
+    "typos": ["VPM", "VNP", "Zscaler VPn", "Konfilkt"],
+    "symptoms": ["Kein Internet nach VPN-Verbindung", "Zscaler Tunnel fällt aus bei VPN", "Routing-Konflikte zwischen VPN und Zscaler"],
+    "quickCheck": "Welchen VPN-Client verwenden Sie und tritt das Problem sofort nach VPN-Verbindung auf?",
+    "solutions": [
+      "Zscaler-Status prüfen nach VPN-Verbindung",
+      "VPN zuerst verbinden, dann Zscaler-Status prüfen",
+      "Zscaler-Dienst neu starten nach VPN-Verbindung",
+      "IT-Ticket erstellen für VPN/Zscaler-Koexistenz-Konfiguration",
+      "Split-Tunnel-Konfiguration prüfen lassen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["zscaler vpn konflikt", "vpn zscaler problem", "vpn internet zscaler"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert das Internet ohne VPN normal?",
+        "options": ["Ja, ohne VPN geht alles", "Nein, auch ohne VPN Probleme", "Weiß nicht"],
+        "narrows": "Ob das Problem nur in Kombination mit VPN auftritt"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-006", "PROB-ZSC-007"]
+  },
+  {
+    "id": "PROB-ZSC-006",
+    "category": "Zscaler",
+    "title": "Zscaler Tunnel fällt aus",
+    "keywords": ["Zscaler", "Tunnel", "Disconnect", "Verbindung", "Drop", "Reconnect", "Instabil", "Unterbrechung"],
+    "extendedKeywords": ["Zscaler Tunnel bricht ab", "Zscaler Verbindung fällt", "Zscaler trennt sich", "Zscaler Tunnel instabil", "Zscaler disconnected", "Zscaler Verbindung unterbrochen", "Zscaler fällt immer wieder aus", "Zscaler verbindet sich neu", "Zscaler Tunnel weg", "Zscaler Reconnect", "Zscaler Verbindung wackelt", "Zscaler Tunnel geht aus", "Zscaler nicht stabil", "Zscaler Verbindungsabbruch", "Zscaler Tunnel baut sich ab", "Zscaler verliert Tunnel", "Zscaler springt hin und her", "Zscaler Verbindung unzuverlässig", "Zscaler on/off", "Zscaler Tunnel startet neu"],
+    "typos": ["Tunel", "Tunnel fälld", "Trunnel"],
+    "symptoms": ["Zscaler Icon zeigt Disconnect", "Tunnel-Status wechselt zwischen On/Off", "Kurze Internet-Ausfälle durch Tunnel-Drops"],
+    "quickCheck": "Wie oft fällt der Zscaler-Tunnel aus und gibt es ein Muster?",
+    "solutions": [
+      "Zscaler-Status und Tunnel-Verbindung prüfen",
+      "Zscaler-Dienst neu starten",
+      "Netzwerkverbindung prüfen (WLAN-Stärke, LAN-Kabel)",
+      "Zscaler Cache leeren",
+      "Zscaler-Netzwerktest durchführen",
+      "Bei wiederkehrenden Problemen: Zscaler Log-Dateien sammeln und IT kontaktieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest durchführen", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_zscaler_zsccacheclear", "label": "Zscaler Cache leeren", "priority": 4, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["zscaler tunnel drop", "zscaler disconnect", "zscaler instabil"],
+    "followUpQuestions": [
+      {
+        "question": "Sind Sie per WLAN oder LAN-Kabel verbunden?",
+        "options": ["WLAN", "LAN-Kabel", "Wechsle zwischen beiden"],
+        "narrows": "Ob die Netzwerkverbindung das Problem verursacht"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-005", "PROB-ZSC-015"]
+  },
+  {
+    "id": "PROB-ZSC-007",
+    "category": "Zscaler",
+    "title": "Internet nach VPN-Verbindung gestört",
+    "keywords": ["Zscaler", "VPN", "Internet", "Routing", "DNS", "Gateway", "Netzwerk", "nach VPN"],
+    "extendedKeywords": ["nach VPN kein Internet", "VPN verbunden aber Internet geht nicht", "Zscaler nach VPN kaputt", "Internet weg nach VPN", "nach VPN Verbindung kein Netz", "VPN trennt Internet", "nach VPN Seiten laden nicht", "Internet langsam nach VPN", "VPN macht Internet kaputt", "nach VPN funktioniert nichts", "kein Internet trotz VPN", "VPN und Internet gleichzeitig geht nicht", "nach VPN Verbindung alles langsam", "VPN bricht Internet ab", "nach VPN DNS geht nicht", "VPN Gateway Problem", "VPN Routing falsch", "Internet nach VPN Trennung kaputt", "VPN disconnected Internet weg", "Netzwerk nach VPN gestört"],
+    "typos": ["nach VPn", "Interent", "VPN Verbinung"],
+    "symptoms": ["Kein Internetzugang nach VPN-Verbindung", "Webseiten laden nicht nach VPN", "DNS-Auflösung funktioniert nicht nach VPN"],
+    "quickCheck": "Funktioniert das Internet nach dem Trennen der VPN-Verbindung wieder?",
+    "solutions": [
+      "VPN trennen und Zscaler-Status prüfen",
+      "Zscaler-Dienst neu starten",
+      "DNS-Cache leeren (ipconfig /flushdns)",
+      "Netzwerkadapter zurücksetzen",
+      "PC neu starten wenn Problem persistiert",
+      "IT kontaktieren für VPN/Zscaler-Koexistenz-Lösung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["nach vpn kein internet", "vpn internet weg", "zscaler nach vpn"],
+    "followUpQuestions": [
+      {
+        "question": "Welchen VPN-Client verwenden Sie?",
+        "options": ["Cisco AnyConnect", "GlobalProtect", "FortiClient", "Anderer/Weiß nicht"],
+        "narrows": "VPN-spezifische Konfiguration"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-005", "PROB-ZSC-006"]
+  },
+  {
+    "id": "PROB-ZSC-008",
+    "category": "Zscaler",
+    "title": "Zscaler Zertifikat abgelaufen",
+    "keywords": ["Zscaler", "Zertifikat", "abgelaufen", "expired", "Certificate", "Root CA", "Gültigkeit"],
+    "extendedKeywords": ["Zscaler Zertifikat abgelaufen", "Zscaler Certificate expired", "Zscaler Zertifikat ungültig", "Zscaler Zertifikat Fehler", "Zscaler Zertifikat erneuern", "Zscaler Zertifikat Ablauf", "Zscaler cert expired", "Zscaler Zertifikat nicht mehr gültig", "SSL Fehler Zscaler Zertifikat", "Zscaler Zertifikat muss erneuert werden", "Zscaler Zertifikat Warnung", "Zscaler Zertifikat abgelaufene Gültigkeit", "Zscaler SSL Zertifikat expired", "Zscaler altes Zertifikat", "Zscaler Zertifikat Laufzeit", "Zscaler Zertifikatsproblem", "Zscaler Zertifikat ungültig seit", "Zscaler Zertifikat verlängern", "Zscaler Certificate Error", "Zscaler Root Zertifikat abgelaufen"],
+    "typos": ["Zertifkat abgelaufen", "Zertivikat", "expired Zertifkat"],
+    "symptoms": ["Browser zeigt Zertifikatsfehler mit Ablaufdatum", "Zscaler SSL-Inspektion fehlgeschlagen", "Alle HTTPS-Seiten zeigen Warnung"],
+    "quickCheck": "Zeigen alle Webseiten einen Zertifikatsfehler oder nur bestimmte?",
+    "solutions": [
+      "Zscaler Zertifikat-Status prüfen",
+      "Zscaler Root-Zertifikat erneuern",
+      "Zscaler Cache leeren und Dienst neu starten",
+      "Windows Zertifikatspeicher prüfen",
+      "IT kontaktieren für Zertifikatserneuerung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zsccert", "label": "Zscaler Zertifikat prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_zscaler_zsccacheclear", "label": "Zscaler Cache leeren", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["zscaler zertifikat abgelaufen", "zscaler cert expired", "zscaler ssl abgelaufen"],
+    "followUpQuestions": [
+      {
+        "question": "Seit wann tritt der Zertifikatsfehler auf?",
+        "options": ["Seit heute", "Seit ein paar Tagen", "Seit einem Update"],
+        "narrows": "Ob es mit einem kürzlichen Zertifikatsablauf zusammenhängt"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-009", "PROB-ZSC-003", "PROB-ZSC-010"]
+  },
+  {
+    "id": "PROB-ZSC-009",
+    "category": "Zscaler",
+    "title": "Zscaler Zertifikat fehlt",
+    "keywords": ["Zscaler", "Zertifikat", "fehlt", "nicht installiert", "Root CA", "Zertifikatspeicher", "Certificate missing"],
+    "extendedKeywords": ["Zscaler Zertifikat nicht installiert", "Zscaler Zertifikat fehlt", "Zscaler Root CA fehlt", "Zscaler Zertifikat nicht vorhanden", "Zscaler Zertifikat nicht im Speicher", "kein Zscaler Zertifikat", "Zscaler Certificate missing", "Zscaler Zertifikat muss installiert werden", "Zscaler Zertifikat nicht gefunden", "Zscaler Root Zertifikat fehlt", "Browser vertraut Zscaler nicht", "Zscaler Zertifikat importieren", "Zscaler Zertifikat hinzufügen", "Zscaler CA fehlt", "Zscaler Zertifikat nicht da", "Zscaler Trust fehlt", "Zscaler Zertifikat Windows", "neuer PC Zscaler Zertifikat", "Zscaler Zertifikat installieren", "Zscaler Root Certificate missing"],
+    "typos": ["Zertifkat fehld", "Zertifkat", "Zerfitikat"],
+    "symptoms": ["Zscaler Root-Zertifikat nicht im Windows Zertifikatspeicher", "SSL-Fehler bei allen Webseiten", "Browser vertraut Zscaler-Zertifikaten nicht"],
+    "quickCheck": "Handelt es sich um einen neuen PC oder trat das Problem plötzlich auf?",
+    "solutions": [
+      "Zscaler Zertifikat-Status prüfen",
+      "Zscaler Root-Zertifikat automatisch installieren lassen",
+      "Zscaler Dienst neu starten (kann Zertifikat neu ausrollen)",
+      "Windows Zertifikatspeicher prüfen und Zertifikat manuell importieren",
+      "IT kontaktieren für Zertifikatsverteilung per GPO"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zsccert", "label": "Zscaler Zertifikat prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["zscaler zertifikat fehlt", "zscaler root ca fehlt", "zscaler cert missing"],
+    "followUpQuestions": [
+      {
+        "question": "Ist dies ein neuer Rechner oder war Zscaler vorher installiert?",
+        "options": ["Neuer Rechner", "War vorher installiert", "Weiß nicht"],
+        "narrows": "Ob das Zertifikat erstmalig installiert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-008", "PROB-ZSC-010"]
+  },
+  {
+    "id": "PROB-ZSC-010",
+    "category": "Zscaler",
+    "title": "SSL-Fehler in Anwendungen durch Zscaler",
+    "keywords": ["Zscaler", "SSL", "Anwendung", "App", "Zertifikat", "Trust", "Java", "Python", "Git", "Certificate Pinning"],
+    "extendedKeywords": ["App SSL Fehler Zscaler", "Programm Zertifikatsfehler", "Anwendung vertraut Zscaler nicht", "Java SSL Fehler Zscaler", "Git SSL Fehler Zscaler", "Python SSL Zscaler", "Entwicklertool Zertifikat Zscaler", "App kann nicht verbinden SSL", "Programm SSL Certificate Error", "npm SSL Fehler", "Anwendung vertraut Zertifikat nicht", "Tool funktioniert nicht wegen Zscaler SSL", "Software Zertifikatsproblem Zscaler", "Desktop App SSL Error", "Anwendung Zscaler Zertifikat", "App verweigert Verbindung SSL", "Zscaler SSL Inspektion App Problem", "Programm Verbindungsfehler SSL", "Zscaler Certificate Pinning", "Software SSL Verification failed"],
+    "typos": ["Anwendun", "SSL Feler", "Zerifikat App"],
+    "symptoms": ["Desktop-Anwendungen zeigen SSL-Fehler", "Java-Apps können nicht verbinden", "Git/npm/pip SSL-Verifikation fehlgeschlagen"],
+    "quickCheck": "Welche Anwendung zeigt den SSL-Fehler an?",
+    "solutions": [
+      "Zscaler Root-Zertifikat in den Trust-Store der Anwendung importieren",
+      "Für Java: Zertifikat in Java Keystore importieren (keytool)",
+      "Für Git: git config --global http.sslCAInfo <path-to-cert>",
+      "Für Python: REQUESTS_CA_BUNDLE Umgebungsvariable setzen",
+      "SSL-Verifikation temporär deaktivieren (nur zum Testen)",
+      "IT-Ticket für SSL-Inspektions-Ausnahme erstellen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zsccert", "label": "Zscaler Zertifikat prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["app ssl fehler zscaler", "java ssl zscaler", "git ssl zscaler"],
+    "followUpQuestions": [
+      {
+        "question": "Um welche Art von Anwendung handelt es sich?",
+        "options": ["Java-Anwendung", "Git/npm/Entwicklertool", "Desktop-Programm", "Andere"],
+        "narrows": "Welcher Trust-Store aktualisiert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-003", "PROB-ZSC-008", "PROB-ZSC-011"]
+  },
+  {
+    "id": "PROB-ZSC-011",
+    "category": "Zscaler",
+    "title": "Zscaler Root-Zertifikat installieren",
+    "keywords": ["Zscaler", "Root", "Zertifikat", "CA", "Installation", "Trust", "Zertifikatspeicher", "Import"],
+    "extendedKeywords": ["Zscaler Root Zertifikat installieren", "Zscaler CA Zertifikat einrichten", "Zscaler Root CA importieren", "Zscaler Zertifikat zum Speicher hinzufügen", "Zscaler Trust einrichten", "Zscaler Root Certificate", "wie installiere ich Zscaler Zertifikat", "Zscaler CA Certificate", "Zscaler Stammzertifikat", "Zscaler Zertifikat manuell installieren", "Zscaler Root Zertifikat Windows", "Zscaler Zertifikat importieren", "Zscaler CA installieren", "Zscaler Trust Store", "Zscaler Root installieren", "Zscaler Zertifikat einrichten", "Zscaler Stammzertifizierungsstelle", "Zscaler Zertifikatsinstallation", "Zscaler Root CA hinzufügen", "Zscaler Zertifikat Setup"],
+    "typos": ["Root Zertifkat", "Root Zertifekat", "Stammzertifkat"],
+    "symptoms": ["Zscaler Root-Zertifikat muss installiert werden", "SSL-Fehler weil Root-CA fehlt"],
+    "quickCheck": "Wurde das Zscaler Root-Zertifikat bereits einmal installiert oder ist es ein neuer PC?",
+    "solutions": [
+      "Zscaler Zertifikat-Status prüfen",
+      "Zscaler Root-Zertifikat über IT-Portal herunterladen",
+      "Zertifikat in Windows Zertifikatspeicher importieren (certmgr.msc > Vertrauenswürdige Stammzertifizierungsstellen)",
+      "Zscaler-Dienst neu starten nach Installation",
+      "IT kontaktieren falls kein Zugriff auf Zertifikat"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zsccert", "label": "Zscaler Zertifikat prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["zscaler root cert", "zscaler ca installieren", "zscaler stammzertifikat"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie Administratorrechte auf dem PC?",
+        "options": ["Ja", "Nein", "Weiß nicht"],
+        "narrows": "Ob das Zertifikat selbst installiert werden kann"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-008", "PROB-ZSC-009", "PROB-ZSC-010"]
+  },
+  {
+    "id": "PROB-ZSC-012",
+    "category": "Zscaler",
+    "title": "Internet allgemein langsam durch Zscaler",
+    "keywords": ["Zscaler", "langsam", "Internet", "Performance", "Geschwindigkeit", "Bandbreite", "Latenz", "Throughput"],
+    "extendedKeywords": ["Internet langsam wegen Zscaler", "Zscaler macht Internet langsam", "langsames Internet Zscaler", "Zscaler verlangsamt Internet", "Internet seit Zscaler langsam", "Webseiten laden langsam Zscaler", "Zscaler bremst Internet", "Internet Geschwindigkeit Zscaler", "Zscaler Performance schlecht", "Internet träge Zscaler", "alles langsam wegen Zscaler", "Zscaler Bandbreite", "Internet lahm Zscaler", "Zscaler verlangsamt alles", "Zscaler Internet Geschwindigkeit", "langsames Surfen Zscaler", "Zscaler Latenz hoch", "Internet Durchsatz Zscaler", "Zscaler Internet Performance", "Zscaler bremst"],
+    "typos": ["langsahm", "Interent langsam", "Performace"],
+    "symptoms": ["Webseiten laden langsamer als erwartet", "Hohe Latenz bei Netzwerkverbindungen", "Download-Geschwindigkeit reduziert"],
+    "quickCheck": "Ist das Internet ohne Zscaler schneller (falls vergleichbar)?",
+    "solutions": [
+      "Zscaler-Status und verbundenes Datacenter prüfen",
+      "Zscaler Netzwerktest durchführen",
+      "Zscaler Cache leeren",
+      "Prüfen ob das nächstgelegene Zscaler-Datacenter verwendet wird",
+      "Netzwerkverbindung unabhängig von Zscaler testen",
+      "Zscaler-Dienst neu starten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 3, "effectiveness": 65},
+      {"skillId": "rd_zscaler_zsccacheclear", "label": "Zscaler Cache leeren", "priority": 4, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["zscaler langsam", "internet langsam zscaler", "zscaler performance"],
+    "followUpQuestions": [
+      {
+        "question": "Seit wann ist das Internet langsam?",
+        "options": ["Seit heute", "Seit ein paar Tagen", "Schon immer", "Nach Zscaler-Update"],
+        "narrows": "Ob es ein temporäres oder dauerhaftes Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-013", "PROB-ZSC-014"]
+  },
+  {
+    "id": "PROB-ZSC-013",
+    "category": "Zscaler",
+    "title": "Bestimmte Webseiten langsam durch Zscaler",
+    "keywords": ["Zscaler", "langsam", "bestimmte Seiten", "SSL-Inspektion", "Performance", "einzelne Seite", "Ladezeit"],
+    "extendedKeywords": ["bestimmte Seiten langsam Zscaler", "eine Seite lädt langsam", "Zscaler macht Seite langsam", "bestimmte Website langsam", "Seite braucht lange Zscaler", "einzelne Webseite langsam", "Zscaler verlangsamt bestimmte Seite", "Webseite lädt ewig Zscaler", "nur eine Seite langsam", "bestimmte URL langsam", "Zscaler bremst Seite", "Seite Performance Zscaler", "Webseite Ladezeit Zscaler", "bestimmte Seiten dauern lange", "Zscaler SSL Inspektion langsam", "Seite nur mit Zscaler langsam", "bestimmtes Portal langsam", "Webanwendung langsam Zscaler", "nur manche Seiten langsam", "Zscaler einzelne Seite langsam"],
+    "typos": ["bestimte Seiten", "langsahm", "Webseite langasm"],
+    "symptoms": ["Bestimmte Webseiten laden deutlich langsamer", "SSL-Inspektion verzögert bestimmte Seiten", "Timeout bei bestimmten URLs"],
+    "quickCheck": "Welche Webseiten sind langsam und laden andere Seiten normal?",
+    "solutions": [
+      "Betroffene URLs notieren",
+      "Zscaler Netzwerktest für die betroffene URL durchführen",
+      "IT-Ticket für SSL-Inspektions-Ausnahme erstellen (falls Inspektion die Ursache)",
+      "Zscaler Cache leeren",
+      "Browser-Cache für die betroffene Seite leeren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_zscaler_zsccacheclear", "label": "Zscaler Cache leeren", "priority": 3, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["bestimmte seite langsam zscaler", "url langsam zscaler"],
+    "followUpQuestions": [
+      {
+        "question": "Sind die langsamen Seiten HTTPS-Seiten?",
+        "options": ["Ja, HTTPS", "Nein, HTTP", "Gemischt", "Weiß nicht"],
+        "narrows": "Ob SSL-Inspektion die Ursache ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-012", "PROB-ZSC-014"]
+  },
+  {
+    "id": "PROB-ZSC-014",
+    "category": "Zscaler",
+    "title": "Downloads langsam durch Zscaler",
+    "keywords": ["Zscaler", "Download", "langsam", "Geschwindigkeit", "Bandbreite", "Throughput", "Datei", "Übertragung"],
+    "extendedKeywords": ["Downloads langsam Zscaler", "Datei download langsam", "Zscaler verlangsamt Downloads", "Download Geschwindigkeit Zscaler", "Datei herunterladen langsam", "Zscaler Download Performance", "Download dauert ewig Zscaler", "Zscaler bremst Downloads", "Download-Rate niedrig", "Zscaler Download Bandbreite", "Downloads brauchen lange", "Zscaler Datei-Download langsam", "Übertragungsgeschwindigkeit Zscaler", "Zscaler download speed", "Downloads crawlen Zscaler", "Dateien laden langsam herunter", "Zscaler Durchsatz niedrig", "große Dateien Download Zscaler", "Zscaler Download throttle", "Download-Geschwindigkeit gering"],
+    "typos": ["Donwloads", "Downlods", "Geschwindikeit"],
+    "symptoms": ["Download-Geschwindigkeit deutlich reduziert", "Große Dateien dauern unverhältnismäßig lang", "Download bricht bei großen Dateien ab"],
+    "quickCheck": "Wie groß ist die Datei und wie schnell sollte der Download normalerweise sein?",
+    "solutions": [
+      "Zscaler Netzwerktest durchführen",
+      "Zscaler-Status und Datacenter prüfen",
+      "Netzwerkverbindung allgemein prüfen (Speedtest)",
+      "Bei großen Dateien: Alternative Download-Methode nutzen",
+      "IT-Ticket für Bandbreiten-Ausnahme erstellen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["download langsam zscaler", "zscaler download speed", "zscaler bandbreite"],
+    "followUpQuestions": [
+      {
+        "question": "Wie groß ist die herunterzuladende Datei?",
+        "options": ["Unter 100 MB", "100 MB - 1 GB", "Über 1 GB"],
+        "narrows": "Ob die Dateigröße das Problem verursacht"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-012", "PROB-ZSC-013"]
+  },
+  {
+    "id": "PROB-ZSC-015",
+    "category": "Zscaler",
+    "title": "Zscaler Tunnel offline/nicht verbunden",
+    "keywords": ["Zscaler", "offline", "nicht verbunden", "Tunnel down", "disconnected", "kein Tunnel", "Verbindung fehlt"],
+    "extendedKeywords": ["Zscaler offline", "Zscaler nicht verbunden", "Zscaler Tunnel down", "Zscaler getrennt", "Zscaler Icon grau", "Zscaler sagt offline", "Zscaler nicht aktiv", "Zscaler disconnected", "Zscaler kein Tunnel", "kein Zscaler", "Zscaler aus", "Zscaler Verbindung fehlt", "Zscaler nicht verbunden Symbol", "Zscaler zeigt offline", "Zscaler kein Internet", "Zscaler ausgeschaltet", "Zscaler nicht gestartet", "Zscaler deaktiviert", "Zscaler Tunnel nicht aufgebaut", "Zscaler ohne Verbindung"],
+    "typos": ["offlin", "nicht verbunen", "disconected"],
+    "symptoms": ["Zscaler Icon zeigt Offline-Status", "Kein Tunnel aufgebaut", "Internet funktioniert nicht durch fehlenden Zscaler-Tunnel"],
+    "quickCheck": "Was zeigt das Zscaler-Icon im System Tray an?",
+    "solutions": [
+      "Zscaler-Status prüfen",
+      "Zscaler-Dienst neu starten",
+      "Netzwerkverbindung prüfen (WLAN/LAN)",
+      "Windows-Dienste prüfen ob Zscaler-Dienst läuft",
+      "PC neu starten",
+      "Zscaler deinstallieren und neu installieren bei persistierendem Problem"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["zscaler offline", "zscaler tunnel down", "zscaler nicht verbunden"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie eine Internetverbindung (WLAN/LAN)?",
+        "options": ["Ja", "Nein", "Weiß nicht"],
+        "narrows": "Ob das Problem an der Grundverbindung oder an Zscaler liegt"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-016", "PROB-ZSC-017"]
+  },
+  {
+    "id": "PROB-ZSC-016",
+    "category": "Zscaler",
+    "title": "Zscaler Dienst gestoppt",
+    "keywords": ["Zscaler", "Dienst", "Service", "gestoppt", "beendet", "ZSATunnel", "Windows-Dienst", "Services"],
+    "extendedKeywords": ["Zscaler Dienst gestoppt", "Zscaler Service nicht laufend", "Zscaler Dienst beendet", "Zscaler Service stopped", "Zscaler Windows Dienst aus", "Zscaler Dienst läuft nicht", "Zscaler Dienst startrt nicht", "Zscaler Hintergrunddienst", "Zscaler Service kaputt", "Zscaler Dienst weg", "Zscaler Dienst ausgefallen", "Zscaler Service Fehler", "Zscaler Dienst abgestürzt", "Zscaler Systemdienst", "Zscaler Background Service", "Zscaler Dienst manuell starten", "Zscaler Service nicht gestartet", "Zscaler ZSATunnel Service", "Zscaler Dienst crashed", "Zscaler Dienst funktioniert nicht"],
+    "typos": ["Diensd", "Sevice", "gestopt", "Deinst"],
+    "symptoms": ["Zscaler-Dienst in Windows-Diensten als gestoppt angezeigt", "Zscaler startet nicht automatisch", "Zscaler-Icon fehlt im System Tray"],
+    "quickCheck": "Läuft der Zscaler-Dienst in den Windows-Diensten (services.msc)?",
+    "solutions": [
+      "Zscaler-Dienst neu starten über Remote-Befehl",
+      "Windows-Dienste öffnen (services.msc) und Zscaler-Dienst manuell starten",
+      "PC neu starten",
+      "Zscaler-Dienst auf Automatisch stellen",
+      "Bei wiederkehrendem Problem: Zscaler neu installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["zscaler dienst gestoppt", "zscaler service stopped", "zscaler service fehler"],
+    "followUpQuestions": [
+      {
+        "question": "Startet der Zscaler-Dienst nach einem PC-Neustart automatisch?",
+        "options": ["Ja", "Nein", "Nicht geprüft"],
+        "narrows": "Ob der Dienst-Starttyp falsch konfiguriert ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-015", "PROB-ZSC-017"]
+  },
+  {
+    "id": "PROB-ZSC-017",
+    "category": "Zscaler",
+    "title": "Zscaler startet nicht nach Reboot",
+    "keywords": ["Zscaler", "Reboot", "Neustart", "Autostart", "Boot", "Systemstart", "Startproblem"],
+    "extendedKeywords": ["Zscaler startet nicht nach Neustart", "Zscaler nach Reboot weg", "Zscaler nicht gestartet nach Boot", "nach PC Neustart kein Zscaler", "Zscaler startet nicht automatisch", "Zscaler nach Reboot nicht da", "Zscaler fehlt nach Neustart", "nach Windows Start kein Zscaler", "Zscaler Autostart funktioniert nicht", "Zscaler nicht geladen nach Reboot", "Zscaler weg nach Neustart", "nach dem Hochfahren kein Zscaler", "Zscaler beim Starten nicht dabei", "PC neugestartet Zscaler fehlt", "Windows Neustart Zscaler Problem", "nach Reboot Zscaler offline", "Zscaler startet nicht beim Booten", "kein Zscaler nach Windows Start", "Zscaler Autostart kaputt", "Zscaler lädt nicht beim Systemstart"],
+    "typos": ["Rebbut", "Neustarr", "nach Rebot"],
+    "symptoms": ["Zscaler-Icon erscheint nicht nach PC-Neustart", "Zscaler-Dienst startet nicht automatisch", "Kein Internet nach Reboot wegen fehlendem Zscaler"],
+    "quickCheck": "Startet Zscaler wenn Sie es manuell öffnen?",
+    "solutions": [
+      "Zscaler-Dienst manuell starten",
+      "Zscaler-Status prüfen",
+      "Autostart-Einstellungen prüfen",
+      "Windows-Dienst Starttyp auf Automatisch setzen",
+      "PC erneut neu starten",
+      "Zscaler reparieren oder neu installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst starten", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 2, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["zscaler nach reboot", "zscaler autostart", "zscaler startet nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt das Problem bei jedem Neustart auf oder nur gelegentlich?",
+        "options": ["Jedes Mal", "Gelegentlich", "Einmalig"],
+        "narrows": "Ob es ein dauerhaftes Autostart-Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-015", "PROB-ZSC-016"]
+  },
+  {
+    "id": "PROB-ZSC-018",
+    "category": "Zscaler",
+    "title": "Teams Videoqualität schlecht mit Zscaler",
+    "keywords": ["Zscaler", "Teams", "Video", "Qualität", "Videokonferenz", "Streaming", "Bandbreite", "WebRTC"],
+    "extendedKeywords": ["Teams Video schlecht Zscaler", "Videokonferenz Qualität Zscaler", "Teams Bild schlecht", "Teams Video ruckelt Zscaler", "Videoqualität schlecht", "Teams Video unscharf", "Teams Kamera schlecht Zscaler", "Videokonferenz pixelig", "Teams Video stockt", "Teams Bild einfriert", "Videocall schlecht Zscaler", "Teams Video Aussetzer", "Teams Video wird pixelig", "Videokonferenz Zscaler Problem", "Teams Video friert ein", "Teams Videoanruf schlecht", "Teams Webcam Qualität", "Teams Meeting Video Problem", "Video Call Qualität Zscaler", "Teams Video verzögert"],
+    "typos": ["Temas", "Videoqualtät", "Videokonferens"],
+    "symptoms": ["Schlechte Videoqualität in Teams", "Video ruckelt oder friert ein", "Video wird pixelig oder unscharf"],
+    "quickCheck": "Tritt das Problem bei allen Videoanrufen oder nur bestimmten auf?",
+    "solutions": [
+      "Zscaler-Status und Bandbreite prüfen",
+      "Prüfen ob Teams über Zscaler oder direkt verbunden ist",
+      "Zscaler Netzwerktest durchführen",
+      "Teams Netzwerkqualitätstest durchführen",
+      "IT-Ticket für Teams/Zscaler-Bypass erstellen",
+      "WLAN-Stärke prüfen und ggf. LAN-Kabel verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-zscaler", "label": "Zscaler Diagnose", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["teams video zscaler", "videokonferenz qualität zscaler", "teams ruckelt zscaler"],
+    "followUpQuestions": [
+      {
+        "question": "Verwenden Sie WLAN oder LAN-Kabel?",
+        "options": ["WLAN", "LAN-Kabel", "Wechselnd"],
+        "narrows": "Ob die Netzwerkverbindung das Problem verursacht"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-019", "PROB-ZSC-020"]
+  },
+  {
+    "id": "PROB-ZSC-019",
+    "category": "Zscaler",
+    "title": "Teams Screenshare Probleme mit Zscaler",
+    "keywords": ["Zscaler", "Teams", "Screenshare", "Bildschirmfreigabe", "Sharing", "Screen", "Teilen", "Präsentation"],
+    "extendedKeywords": ["Teams Bildschirm teilen geht nicht Zscaler", "Screenshare funktioniert nicht", "Teams Bildschirmfreigabe Problem Zscaler", "kann Bildschirm nicht teilen", "Teams Screenshare schlecht", "Bildschirmfreigabe ruckelt Zscaler", "Teams Teilen geht nicht", "Screenshare hängt", "Teams Präsentation teilen Problem", "Bildschirmfreigabe langsam", "Teams Screen Sharing Zscaler", "kann nicht presentieren Teams", "Screenshare Qualität schlecht", "Teams Bildschirm schwarz", "Screenshare verzögert", "Teams Bildschirmfreigabe Zscaler Problem", "Teams Screenshare bricht ab", "Bildschirmfreigabe pixelig", "Teams Screenshare ruckelt", "Teams Teilen funktioniert nicht richtig"],
+    "typos": ["Screenshare", "Bildshirmfreigabe", "Bildschirmfregabe"],
+    "symptoms": ["Bildschirmfreigabe funktioniert nicht oder ruckelt", "Anderer Teilnehmer sieht schwarzen Bildschirm", "Screenshare hat starke Verzögerung"],
+    "quickCheck": "Funktioniert die Bildschirmfreigabe gar nicht oder ist sie nur langsam?",
+    "solutions": [
+      "Zscaler-Status und Bandbreite prüfen",
+      "Zscaler Netzwerktest durchführen",
+      "Teams Desktop-App statt Web-Version verwenden",
+      "Bildschirmfreigabe statt Fensterfreigabe verwenden oder umgekehrt",
+      "Andere Teilnehmer bitten die Bildschirmfreigabe zu übernehmen",
+      "IT kontaktieren für Zscaler-Konfiguration bei Teams"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["teams screenshare zscaler", "bildschirmfreigabe zscaler", "teams teilen problem"],
+    "followUpQuestions": [
+      {
+        "question": "Sehen die anderen Teilnehmer einen schwarzen Bildschirm oder nur schlechte Qualität?",
+        "options": ["Schwarzer Bildschirm", "Schlechte Qualität/Ruckeln", "Gar nicht möglich"],
+        "narrows": "Art des Screenshare-Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-018", "PROB-ZSC-020"]
+  },
+  {
+    "id": "PROB-ZSC-020",
+    "category": "Zscaler",
+    "title": "Teams Audio-Probleme mit Zscaler",
+    "keywords": ["Zscaler", "Teams", "Audio", "Ton", "Mikrofon", "Lautsprecher", "Sprachqualität", "VoIP"],
+    "extendedKeywords": ["Teams Audio Problem Zscaler", "Teams Ton geht nicht Zscaler", "Teams Audio schlecht", "Teams kein Ton Zscaler", "Teams Audio ruckelt", "Teams Mikrofon Problem Zscaler", "Teams Sprache abgehackt", "Teams Audio verzögert", "Teams Audio bricht ab", "Teams kein Sound Zscaler", "Sprachqualität Teams schlecht", "Teams Audio Aussetzer Zscaler", "Teams Ton stockt", "Teams Audio Echo Zscaler", "Teams Gesprächsqualität schlecht", "Teams Audio kratzt", "Teams Stimme abgehackt", "Teams Audio Unterbrechungen", "Teams Audio verzerrt Zscaler", "Teams VoIP Zscaler Problem"],
+    "typos": ["Auido", "Audeo", "Mikrofohn"],
+    "symptoms": ["Audio in Teams abgehackt oder verzögert", "Kein Ton in Teams-Anrufen", "Echo oder Verzerrungen bei Audio"],
+    "quickCheck": "Betrifft das Audio-Problem Ihr Mikrofon, die Lautsprecher oder beides?",
+    "solutions": [
+      "Zscaler Netzwerktest durchführen (Latenz prüfen)",
+      "Audio-Einstellungen in Teams prüfen",
+      "WLAN-Verbindung prüfen (LAN-Kabel bevorzugen)",
+      "Zscaler-Status prüfen",
+      "Teams Audio-Gerät wechseln",
+      "IT kontaktieren für Zscaler-QoS-Konfiguration"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["teams audio zscaler", "teams ton zscaler", "teams sprache zscaler"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt das Audio-Problem bei allen Anrufen oder nur bestimmten auf?",
+        "options": ["Alle Anrufe", "Nur bestimmte", "Nur große Meetings"],
+        "narrows": "Ob es ein Bandbreiten- oder Konfigurationsproblem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-018", "PROB-ZSC-019"]
+  },
+  {
+    "id": "PROB-ZSC-021",
+    "category": "Zscaler",
+    "title": "Zscaler Login-Fehler",
+    "keywords": ["Zscaler", "Login", "Authentifizierung", "Anmeldung", "SAML", "IdP", "Authentication", "Benutzername"],
+    "extendedKeywords": ["Zscaler Login geht nicht", "Zscaler Anmeldung fehlgeschlagen", "Zscaler kann mich nicht anmelden", "Zscaler Authentifizierung Fehler", "Zscaler fragt nach Login", "Zscaler Login Fehler", "Zscaler Benutzername falsch", "Zscaler Passwort funktioniert nicht", "Zscaler Login klappt nicht", "kann mich bei Zscaler nicht anmelden", "Zscaler Anmeldung nicht möglich", "Zscaler Login abgelehnt", "Zscaler Authentication Error", "Zscaler SAML Fehler", "Zscaler fragt immer nach Anmeldung", "Zscaler Anmeldefehler", "Zscaler Token ungültig", "Zscaler Single Sign-On Fehler", "Zscaler kann nicht authentifizieren", "Zscaler Login Loop"],
+    "typos": ["Loggin", "Anmledung", "Authentifzierung"],
+    "symptoms": ["Zscaler zeigt Login-Aufforderung", "Authentifizierung schlägt fehl", "SAML-Token ungültig"],
+    "quickCheck": "Welche Fehlermeldung zeigt Zscaler bei der Anmeldung?",
+    "solutions": [
+      "Windows ab- und neu anmelden",
+      "Zscaler-Dienst neu starten",
+      "Browser-Cache und Cookies leeren",
+      "Zscaler Cache leeren",
+      "Prüfen ob das Firmennetzwerk/Internet erreichbar ist",
+      "IT kontaktieren bei SAML/SSO-Problemen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_zscaler_zsccacheclear", "label": "Zscaler Cache leeren", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["zscaler login fehler", "zscaler authentifizierung", "zscaler anmeldung"],
+    "followUpQuestions": [
+      {
+        "question": "Verwendet Ihre Firma Single Sign-On (SSO) für Zscaler?",
+        "options": ["Ja, SSO", "Nein, manueller Login", "Weiß nicht"],
+        "narrows": "Ob es ein SSO- oder lokales Login-Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-022"]
+  },
+  {
+    "id": "PROB-ZSC-022",
+    "category": "Zscaler",
+    "title": "Zscaler MFA-Problem",
+    "keywords": ["Zscaler", "MFA", "2FA", "Multi-Faktor", "Authenticator", "Token", "Einmalpasswort", "OTP"],
+    "extendedKeywords": ["Zscaler MFA funktioniert nicht", "Zscaler 2FA Problem", "Zscaler Multi-Faktor Fehler", "Zscaler Authenticator geht nicht", "Zscaler Token funktioniert nicht", "Zscaler Einmalpasswort falsch", "Zscaler MFA Code falsch", "Zscaler zweiter Faktor", "Zscaler OTP geht nicht", "Zscaler MFA Fehler", "kann mich nicht bei Zscaler anmelden MFA", "Zscaler Authenticator App", "Zscaler MFA Code wird nicht akzeptiert", "Zscaler Zwei-Faktor Authentifizierung", "Zscaler MFA Token abgelaufen", "Zscaler MFA neues Gerät", "Zscaler MFA einrichten", "Zscaler MFA zurücksetzen", "Zscaler Authenticator Code", "Zscaler MFA Gerätewechsel"],
+    "typos": ["MFa", "2Fa", "Authentikator", "Authenticater"],
+    "symptoms": ["MFA-Code wird nicht akzeptiert", "Authenticator-App zeigt falschen Code", "MFA-Token abgelaufen"],
+    "quickCheck": "Welche MFA-Methode verwenden Sie (Authenticator-App, SMS, Hardware-Token)?",
+    "solutions": [
+      "Uhrzeit auf dem Authenticator-Gerät prüfen (muss synchron sein)",
+      "Zscaler-Dienst neu starten und erneut anmelden",
+      "Neuen MFA-Code abwarten und erneut eingeben",
+      "IT kontaktieren für MFA-Reset bei neuem Gerät",
+      "Zscaler Cache leeren vor erneutem Login-Versuch"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_zscaler_zsccacheclear", "label": "Zscaler Cache leeren", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["zscaler mfa", "zscaler 2fa", "zscaler authenticator"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie kürzlich Ihr Smartphone gewechselt?",
+        "options": ["Ja", "Nein"],
+        "narrows": "Ob die Authenticator-App neu eingerichtet werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-021"]
+  },
+  {
+    "id": "PROB-ZSC-023",
+    "category": "Zscaler",
+    "title": "Zscaler Proxy-Einstellungen überschrieben",
+    "keywords": ["Zscaler", "Proxy", "PAC", "Proxy-Einstellungen", "Internet-Optionen", "Proxyserver", "WPAD", "Proxy Auto-Config"],
+    "extendedKeywords": ["Zscaler Proxy überschrieben", "Proxy Einstellungen falsch Zscaler", "Zscaler PAC Datei", "Proxy von Zscaler geändert", "Internet Proxy Einstellungen", "Zscaler hat Proxy geändert", "Proxy Konfiguration Zscaler", "Proxy-Einstellungen werden überschrieben", "Zscaler Proxy Problem", "Proxy falsch nach Zscaler", "Internet Optionen Proxy Zscaler", "Zscaler ändert Proxy", "Proxy Einstellungen zurücksetzen Zscaler", "Proxy Auto-Config Zscaler", "WPAD Zscaler", "Zscaler Proxyserver", "Proxy Zscaler Konfiguration", "Zscaler Proxy Settings", "automatische Proxy Erkennung Zscaler", "Zscaler Proxy Einstellungen wiederherstellen"],
+    "typos": ["Proxxy", "Proxy Einstelungen", "Proxi"],
+    "symptoms": ["Proxy-Einstellungen in Windows wurden geändert", "PAC-Datei-URL verändert", "Manche Programme können nicht ins Internet"],
+    "quickCheck": "Wurden die Proxy-Einstellungen bewusst oder unbewusst geändert?",
+    "solutions": [
+      "Zscaler Proxy-Einstellungen prüfen",
+      "Proxy-Konfiguration in Windows Internet-Optionen prüfen",
+      "Zscaler PAC-Datei-URL prüfen und ggf. korrigieren",
+      "Zscaler-Dienst neu starten (setzt Proxy korrekt)",
+      "IT kontaktieren bei manuell gesetzten Proxy-Einstellungen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscproxy", "label": "Zscaler Proxy prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["zscaler proxy überschrieben", "proxy einstellungen zscaler", "pac datei zscaler"],
+    "followUpQuestions": [
+      {
+        "question": "Funktionieren Browser und andere Internet-Anwendungen noch?",
+        "options": ["Browser ja, Apps nein", "Nichts funktioniert", "Nur bestimmte Apps"],
+        "narrows": "Welche Anwendungen von den Proxy-Einstellungen betroffen sind"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-024"]
+  },
+  {
+    "id": "PROB-ZSC-024",
+    "category": "Zscaler",
+    "title": "Zscaler Proxy-Fehler",
+    "keywords": ["Zscaler", "Proxy", "Fehler", "502", "503", "Gateway", "Proxy Error", "Bad Gateway"],
+    "extendedKeywords": ["Zscaler Proxy Fehler", "Proxy Error Zscaler", "502 Bad Gateway Zscaler", "503 Service Unavailable Zscaler", "Proxy Fehlermeldung", "Zscaler Gateway Fehler", "Proxy Zugriff verweigert", "Proxy Verbindung fehlgeschlagen", "Zscaler Proxy nicht erreichbar", "Proxy Error im Browser", "Zscaler 502 Fehler", "Zscaler 503 Fehler", "Zscaler Gateway Error", "Proxy Server Fehler Zscaler", "Zscaler Proxy abgelehnt", "Browser Proxy Error", "Zscaler HTTP Proxy Fehler", "Proxy Authentication Failed", "Zscaler Proxy Timeout", "Zscaler Proxy Connection Error"],
+    "typos": ["Proxxy Fehler", "Proxy Feler", "Bad Gatway"],
+    "symptoms": ["502/503 Fehlermeldungen im Browser", "Proxy Error Seite", "Gateway Timeout"],
+    "quickCheck": "Welcher HTTP-Fehlercode wird angezeigt?",
+    "solutions": [
+      "Zscaler Proxy-Status prüfen",
+      "Zscaler-Dienst neu starten",
+      "Zscaler Cache leeren",
+      "Browser-Cache leeren",
+      "Seite nach einigen Minuten erneut aufrufen",
+      "IT kontaktieren bei persistierenden Proxy-Fehlern"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscproxy", "label": "Zscaler Proxy prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_zscaler_zsccacheclear", "label": "Zscaler Cache leeren", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["proxy error zscaler", "502 zscaler", "bad gateway zscaler"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft der Fehler alle Webseiten oder nur bestimmte?",
+        "options": ["Alle Seiten", "Nur bestimmte", "Wechselnd"],
+        "narrows": "Ob es ein generelles Proxy-Problem oder ein seitenspezifisches ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-023"]
+  },
+  {
+    "id": "PROB-ZSC-025",
+    "category": "Zscaler",
+    "title": "Bestimmte App funktioniert nicht mit Zscaler",
+    "keywords": ["Zscaler", "App", "Anwendung", "Programm", "blockiert", "Tunnel", "Bypass", "Split-Tunnel"],
+    "extendedKeywords": ["App geht nicht wegen Zscaler", "Programm funktioniert nicht Zscaler", "Anwendung blockiert Zscaler", "Software geht nicht mit Zscaler", "App kann nicht verbinden Zscaler", "bestimmtes Programm Zscaler Problem", "Desktop App Zscaler", "Anwendung verbindet nicht Zscaler", "Software Zscaler Konflikt", "App kein Internet Zscaler", "Programm Netzwerkfehler Zscaler", "Anwendung Zscaler blockiert", "Tool funktioniert nicht Zscaler", "App Verbindung Zscaler", "Programm geht nicht online Zscaler", "Software Verbindungsproblem Zscaler", "App startet nicht Zscaler", "Anwendung keine Verbindung Zscaler", "Desktop Programm Zscaler", "bestimmte Anwendung blockiert"],
+    "typos": ["Anwendug", "Programm funktionert nicht", "App funtioniert nicht"],
+    "symptoms": ["Desktop-Anwendung kann keine Verbindung herstellen", "App zeigt Verbindungsfehler", "Anwendung funktioniert ohne Zscaler"],
+    "quickCheck": "Welche Anwendung ist betroffen und welche Fehlermeldung zeigt sie?",
+    "solutions": [
+      "Zscaler-Status prüfen",
+      "Prüfen ob die App einen eigenen Proxy verwendet",
+      "Zscaler Netzwerktest für die App-Verbindung durchführen",
+      "IT-Ticket für App-spezifische Zscaler-Ausnahme erstellen",
+      "App-Proxy-Einstellungen auf Zscaler-Proxy konfigurieren",
+      "Zscaler-Diagnose durchführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-zscaler", "label": "Zscaler Diagnose", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["app zscaler problem", "programm zscaler blockiert", "anwendung zscaler"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert die App wenn Zscaler deaktiviert wird (falls testbar)?",
+        "options": ["Ja, ohne Zscaler geht es", "Nein, geht auch ohne nicht", "Kann Zscaler nicht deaktivieren"],
+        "narrows": "Ob Zscaler tatsächlich die Ursache ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-026", "PROB-ZSC-027"]
+  },
+  {
+    "id": "PROB-ZSC-026",
+    "category": "Zscaler",
+    "title": "Java-Anwendung funktioniert nicht mit Zscaler",
+    "keywords": ["Zscaler", "Java", "JVM", "Keystore", "cacerts", "SSL", "PKIX", "Trust"],
+    "extendedKeywords": ["Java App Zscaler Problem", "Java SSL Fehler Zscaler", "Java Zertifikat Zscaler", "Java PKIX Fehler", "Java Trust Fehler Zscaler", "Java Anwendung verbindet nicht Zscaler", "Java Keystore Zscaler", "Java cacerts Zscaler", "Java App kein Internet Zscaler", "Java SSL Certificate Zscaler", "Java Programm Zscaler", "Java Anwendung SSL", "Java Verbindungsfehler Zscaler", "Java PKIX path building failed", "JVM Zscaler Zertifikat", "Java Trust Store Zscaler", "Java App Zertifikatsfehler", "Java HTTPS Zscaler", "Java SSL Handshake Zscaler", "Java Netzwerk Zscaler Problem"],
+    "typos": ["Jawa", "Java Ap", "Keysore"],
+    "symptoms": ["Java-Anwendung zeigt PKIX path building failed", "Java SSL Handshake Fehler", "Java-App kann keine HTTPS-Verbindung aufbauen"],
+    "quickCheck": "Welche Java-Anwendung ist betroffen und welche Fehlermeldung erscheint?",
+    "solutions": [
+      "Zscaler Root-Zertifikat in Java Keystore importieren",
+      "Java keytool verwenden: keytool -import -trustcacerts -file zscaler.crt -keystore cacerts",
+      "JAVA_HOME und cacerts-Pfad prüfen",
+      "Zscaler Zertifikat-Status prüfen",
+      "Java-Anwendung nach Zertifikatsimport neu starten",
+      "IT-Ticket für Zscaler SSL-Inspektions-Ausnahme erstellen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zsccert", "label": "Zscaler Zertifikat prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_diag_diag-zscaler", "label": "Zscaler Diagnose", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["java ssl zscaler", "java pkix zscaler", "java keystore zscaler"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde das Zscaler Root-Zertifikat bereits in den Java Keystore importiert?",
+        "options": ["Ja", "Nein", "Weiß nicht"],
+        "narrows": "Ob das Zertifikat importiert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-010", "PROB-ZSC-025"]
+  },
+  {
+    "id": "PROB-ZSC-027",
+    "category": "Zscaler",
+    "title": "SAP funktioniert nicht mit Zscaler",
+    "keywords": ["Zscaler", "SAP", "SAP GUI", "RFC", "Verbindung", "Tunnel", "Bypass", "Port"],
+    "extendedKeywords": ["SAP Zscaler Problem", "SAP geht nicht mit Zscaler", "SAP Verbindung Zscaler", "SAP Timeout Zscaler", "SAP funktioniert nicht Zscaler", "SAP Zscaler blockiert", "SAP langsam wegen Zscaler", "SAP GUI Zscaler", "SAP Verbindung über Zscaler", "SAP Zscaler Konflikt", "SAP Server Zscaler", "SAP Port Zscaler", "SAP Netzwerk Zscaler Problem", "SAP RFC Zscaler", "SAP Zscaler Timeout", "SAP Zscaler Tunnel", "SAP GUI Zscaler Problem", "SAP 3200 Port Zscaler", "SAP Verbindung bricht ab Zscaler", "SAP Login Zscaler Problem"],
+    "typos": ["SAO Zscaler", "SAP Zscalr", "SAP Zskaler"],
+    "symptoms": ["SAP GUI kann nicht verbinden wenn Zscaler aktiv", "SAP Timeout mit Zscaler", "SAP RFC-Verbindung schlägt fehl mit Zscaler"],
+    "quickCheck": "Funktioniert SAP wenn Zscaler deaktiviert wird?",
+    "solutions": [
+      "Zscaler-Status prüfen",
+      "SAP-Port-Verbindung testen",
+      "Prüfen ob SAP-Ports in Zscaler-Bypass-Liste stehen",
+      "Zscaler Netzwerktest durchführen",
+      "IT-Ticket für SAP Zscaler-Bypass erstellen",
+      "Zscaler-Dienst neu starten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscstatus", "label": "Zscaler Status prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_zscaler_zscnettest", "label": "Netzwerktest", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-zscaler", "label": "Zscaler Diagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["sap zscaler", "sap zscaler problem", "sap verbindung zscaler"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt das Problem bei allen SAP-Systemen oder nur einem bestimmten auf?",
+        "options": ["Alle Systeme", "Nur ein System", "Weiß nicht"],
+        "narrows": "Ob es ein generelles Routing- oder ein spezifisches Portproblem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-025"]
+  },
+  {
+    "id": "PROB-ZSC-028",
+    "category": "Zscaler",
+    "title": "Zscaler Cache leeren",
+    "keywords": ["Zscaler", "Cache", "leeren", "bereinigen", "löschen", "Zwischenspeicher", "Clear Cache"],
+    "extendedKeywords": ["Zscaler Cache leeren", "Zscaler Cache löschen", "Zscaler Zwischenspeicher leeren", "Zscaler bereinigen", "Zscaler aufräumen", "Zscaler Cache bereinigen", "Zscaler temporäre Daten löschen", "Zscaler Cache Probleme", "Zscaler Daten leeren", "Zscaler Cache clear", "Zscaler Reset Cache", "Zscaler Cache zurücksetzen", "Zscaler alte Daten", "Zscaler Cache Fehler", "Zscaler lokale Daten", "Zscaler Cache erneuern", "Zscaler Cache aktualisieren", "wie leere ich Zscaler Cache", "Zscaler Zwischenspeicher löschen", "Zscaler aufräumen bereinigen"],
+    "typos": ["Cashe", "Chache", "Cache leerem"],
+    "symptoms": ["Zscaler verwendet veraltete Konfiguration", "Veraltete Zscaler-Daten verursachen Probleme"],
+    "quickCheck": "Welches Problem versuchen Sie durch Cache-Leeren zu beheben?",
+    "solutions": [
+      "Zscaler Cache über Remote-Befehl leeren",
+      "Zscaler-Dienst nach Cache-Leeren neu starten",
+      "Prüfen ob das ursprüngliche Problem behoben ist"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zsccacheclear", "label": "Zscaler Cache leeren", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 2, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["zscaler cache", "zscaler bereinigen", "zscaler aufräumen"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde ein bestimmtes Zscaler-Problem vor dem Cache-Leeren festgestellt?",
+        "options": ["Ja, bestimmtes Problem", "Nein, präventiv", "Wurde empfohlen"],
+        "narrows": "Ob weitere Schritte nach dem Cache-Leeren nötig sind"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-029"]
+  },
+  {
+    "id": "PROB-ZSC-029",
+    "category": "Zscaler",
+    "title": "Zscaler Neuinstallation",
+    "keywords": ["Zscaler", "Neuinstallation", "Reinstall", "Installation", "deinstallieren", "installieren", "Setup", "Reparatur"],
+    "extendedKeywords": ["Zscaler neu installieren", "Zscaler Neuinstallation", "Zscaler deinstallieren und installieren", "Zscaler reparieren", "Zscaler Installation", "Zscaler Setup", "Zscaler komplett neu", "Zscaler entfernen und installieren", "Zscaler Reparaturinstallation", "Zscaler reinstall", "Zscaler Installation kaputt", "Zscaler neu einrichten", "Zscaler zurücksetzen", "Zscaler fresh install", "Zscaler deinstallieren", "Zscaler installieren", "Zscaler Clean Install", "Zscaler Installation Fehler", "Zscaler Setup Probleme", "Zscaler Installation reparieren"],
+    "typos": ["Neuinstalation", "Reinstal", "Instalation"],
+    "symptoms": ["Zscaler hat persistierende Probleme die nicht anders lösbar sind", "Zscaler nach Update defekt"],
+    "quickCheck": "Welches Problem soll durch die Neuinstallation behoben werden?",
+    "solutions": [
+      "Zuerst: Zscaler Cache leeren und Dienst neu starten versuchen",
+      "Zscaler über Systemsteuerung > Programme deinstallieren",
+      "PC neu starten nach Deinstallation",
+      "Zscaler-Installationspaket vom IT-Portal herunterladen",
+      "Zscaler neu installieren und Enrollment durchführen",
+      "IT kontaktieren für Zscaler-Deployment über SCCM"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zsccacheclear", "label": "Zscaler Cache leeren", "priority": 1, "effectiveness": 40},
+      {"skillId": "rd_zscaler_zscsvcrestart", "label": "Zscaler Dienst neu starten", "priority": 2, "effectiveness": 35}
+    ],
+    "hiddenTriggers": ["zscaler reinstall", "zscaler neuinstallation", "zscaler reparieren"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie Administratorrechte für die Deinstallation/Installation?",
+        "options": ["Ja", "Nein", "Weiß nicht"],
+        "narrows": "Ob der Benutzer die Installation selbst durchführen kann"
+      }
+    ],
+    "relatedProblems": ["PROB-ZSC-028"]
+  },
+  {
+    "id": "PROB-ZSC-030",
+    "category": "Zscaler",
+    "title": "Zscaler Version prüfen",
+    "keywords": ["Zscaler", "Version", "Versionsnummer", "Update", "aktuell", "Build", "Release"],
+    "extendedKeywords": ["Zscaler Version prüfen", "welche Zscaler Version", "Zscaler Versionsnummer", "Zscaler aktuell", "Zscaler Version herausfinden", "Zscaler Version anzeigen", "Zscaler Update verfügbar", "welche Version hat Zscaler", "Zscaler Build Nummer", "Zscaler Version checken", "Zscaler auf dem neuesten Stand", "Zscaler Update prüfen", "Zscaler Version Information", "ist Zscaler aktuell", "Zscaler letzte Version", "Zscaler Release prüfen", "Zscaler Versionsinfo", "Zscaler Version ermitteln", "wie alt ist mein Zscaler", "Zscaler Update benötigt"],
+    "typos": ["Vresion", "Vesrion", "Versionsnumer"],
+    "symptoms": ["Benutzer muss Zscaler-Version für Support oder Update angeben"],
+    "quickCheck": "Benötigen Sie die Version für ein Support-Ticket oder möchten Sie auf Updates prüfen?",
+    "solutions": [
+      "Zscaler Version über Remote-Befehl prüfen",
+      "Rechtsklick auf Zscaler-Icon im System Tray > Über/About",
+      "In der Zscaler-App: Einstellungen > Über",
+      "IT kontaktieren falls ein Update erforderlich ist"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_zscaler_zscversion", "label": "Zscaler Version prüfen", "priority": 1, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["zscaler version", "zscaler versionsnummer", "zscaler update"],
+    "followUpQuestions": [
+      {
+        "question": "Warum benötigen Sie die Versionsinformation?",
+        "options": ["Für Support-Ticket", "Update prüfen", "Einfach wissen wollen"],
+        "narrows": "Ob weitere Aktionen nach der Versionsprüfung nötig sind"
+      }
+    ],
+    "relatedProblems": []
+  }
+]

@@ -1,0 +1,781 @@
+[
+  {
+    "id": "PROB-FIL-001",
+    "category": "Datei-Operationen",
+    "title": "Datei lokal kopieren",
+    "keywords": ["kopieren", "lokal", "Datei", "copy", "duplizieren", "Verzeichnis", "Pfad"],
+    "extendedKeywords": ["Datei kopieren", "Datei lokal kopieren", "Datei von einem Ordner in anderen kopieren", "Datei duplizieren", "Datei an anderen Ort kopieren", "lokale Kopie erstellen", "Datei verschieben", "Datei in anderen Ordner", "copy Befehl", "wie kopiere ich eine Datei", "Datei an anderen Pfad kopieren", "Datei Kopie machen", "Datei auf anderen Laufwerk kopieren", "Datei auf D: kopieren", "Datei auf C: kopieren", "Datei Backup erstellen", "lokale Datei duplizieren", "Datei mehrfach kopieren", "Datei in Unterordner kopieren", "Datei auf dem gleichen PC kopieren"],
+    "typos": ["koppieren", "Datei", "kopiren", "loakl", "koppie"],
+    "symptoms": ["Datei muss an einen anderen Ort kopiert werden", "Backup einer Datei benötigt"],
+    "quickCheck": "Kennen Sie den vollständigen Quell- und Zielpfad der Datei?",
+    "solutions": [
+      "Datei über das Admin Tool remote kopieren",
+      "Quellpfad und Zielpfad angeben",
+      "Bei Ordnern: Rekursives Kopieren verwenden",
+      "Berechtigungen des Zielordners prüfen",
+      "Ausreichend Speicherplatz am Ziel prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_filecopyto", "label": "Datei zum Remote-PC kopieren", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_fileops_filecopyfrom", "label": "Datei vom Remote-PC kopieren", "priority": 2, "effectiveness": 90},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["copy file local", "datei lokal kopieren", "datei duplizieren"],
+    "followUpQuestions": [
+      {
+        "question": "Wo soll die Datei hinkopiert werden?",
+        "options": ["Auf dem gleichen PC in anderen Ordner", "Auf ein anderes Laufwerk", "Auf einen Netzwerkpfad"],
+        "narrows": "Ob lokale oder Netzwerk-Kopie"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-002", "PROB-FIL-003"]
+  },
+  {
+    "id": "PROB-FIL-002",
+    "category": "Datei-Operationen",
+    "title": "Datei remote kopieren - auf/von entferntem PC",
+    "keywords": ["remote", "kopieren", "entfernt", "Netzwerk", "übertragen", "Transfer", "hochladen"],
+    "extendedKeywords": ["Datei auf anderen PC kopieren", "Datei von Remote-PC holen", "Datei übertragen remote", "Datei auf entfernten Computer kopieren", "Datei vom anderen PC kopieren", "Remote-Datei herunterladen", "Datei hochladen auf Remote-PC", "Datei von Arbeitsplatz auf Server kopieren", "Datei zwischen PCs übertragen", "Datei auf Remote-Rechner ablegen", "Datei remote bereitstellen", "Tool auf Remote-PC kopieren", "Datei übers Netzwerk kopieren", "Datei an anderen Rechner schicken", "Remote-Datei kopieren", "Datei zum anderen PC senden", "Datei auf entferntem PC ablegen", "Netzwerk Datei Transfer", "Datei remote hochladen", "Konfigurationsdatei auf Remote-PC ablegen"],
+    "typos": ["Remot", "koppieren", "entfernter", "Übertargen", "remoet"],
+    "symptoms": ["Datei muss auf einen entfernten PC übertragen werden", "Tool oder Script muss auf Remote-PC bereitgestellt werden"],
+    "quickCheck": "Möchten Sie eine Datei zum Remote-PC senden oder von dort abholen?",
+    "solutions": [
+      "Datei über Admin Tool zum Remote-PC kopieren (Push)",
+      "Datei über Admin Tool vom Remote-PC holen (Pull)",
+      "Administrative Freigabe (C$, D$) nutzen",
+      "Netzwerkverbindung und Berechtigungen prüfen",
+      "Bei großen Dateien: Fortschritt überwachen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_filecopyto", "label": "Datei zum Remote-PC kopieren", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_fileops_filecopyfrom", "label": "Datei vom Remote-PC kopieren", "priority": 2, "effectiveness": 95},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["remote file copy", "transfer file", "datei übertragen"],
+    "followUpQuestions": [
+      {
+        "question": "Möchten Sie die Datei zum Remote-PC senden oder von dort abholen?",
+        "options": ["Zum Remote-PC senden", "Vom Remote-PC holen", "In beide Richtungen"],
+        "narrows": "Richtung des Dateitransfers"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-001", "PROB-FIL-003"]
+  },
+  {
+    "id": "PROB-FIL-003",
+    "category": "Datei-Operationen",
+    "title": "Dateikopie fehlgeschlagen - Fehler beim Kopieren",
+    "keywords": ["Fehler", "kopieren", "fehlgeschlagen", "Zugriff", "Speicherplatz", "Netzwerk", "abgebrochen"],
+    "extendedKeywords": ["Kopieren fehlgeschlagen", "Fehler beim Kopieren", "Datei konnte nicht kopiert werden", "Kopiervorgang abgebrochen", "Fehler bei Dateiübertragung", "Zugriff verweigert beim Kopieren", "nicht genug Speicherplatz zum Kopieren", "Kopieren bricht ab", "Kopieren hängt", "Datei lässt sich nicht kopieren", "Kopierfehler", "Fehler 0x80070005 beim Kopieren", "Datei wird verwendet kann nicht kopieren", "Netzwerkfehler beim Kopieren", "Kopieren dauert ewig", "Dateitransfer Fehler", "Kopiervorgang unterbrochen", "kann Datei nicht kopieren", "Kopieren scheitert", "Kopierprozess abgebrochen"],
+    "typos": ["fehlgeschalgen", "Kopireen", "Fehle", "koppieren", "Zugrif"],
+    "symptoms": ["Fehlermeldung beim Kopiervorgang", "Kopiervorgang bricht ab", "Datei nach dem Kopieren beschädigt"],
+    "quickCheck": "Welche Fehlermeldung erscheint beim Kopieren?",
+    "solutions": [
+      "Fehlermeldung genau lesen und analysieren",
+      "Speicherplatz am Ziel prüfen",
+      "Berechtigungen für Quell- und Zielordner prüfen",
+      "Prüfen ob die Datei von einem anderen Prozess gesperrt ist",
+      "Netzwerkverbindung prüfen (bei Remote-Kopie)",
+      "Datei in kleineren Teilen kopieren bei sehr großen Dateien"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_filedetail", "label": "Dateidetails anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_fileops_aclshow", "label": "Berechtigungen anzeigen", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["copy failed", "file transfer error", "kopieren fehlgeschlagen"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Fehlermeldung wird angezeigt?",
+        "options": ["Zugriff verweigert", "Nicht genug Speicherplatz", "Datei wird verwendet", "Andere Fehlermeldung"],
+        "narrows": "Ursache des Kopierfehlers"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-001", "PROB-FIL-004"]
+  },
+  {
+    "id": "PROB-FIL-004",
+    "category": "Datei-Operationen",
+    "title": "Datei löschen - Zugriff verweigert",
+    "keywords": ["löschen", "Zugriff verweigert", "Berechtigung", "gesperrt", "Administratorrechte", "Delete"],
+    "extendedKeywords": ["Datei löschen Zugriff verweigert", "kann Datei nicht löschen", "Datei lässt sich nicht löschen", "Zugriff verweigert beim Löschen", "Datei löschen keine Berechtigung", "Ordner lässt sich nicht löschen", "Datei löschen geht nicht", "Zugriffsfehler beim Löschen", "Datei nicht löschbar", "Fehler beim Löschen", "Datei löschen Administratorrechte", "Ordner Zugriff verweigert beim Löschen", "Windows lässt mich nicht löschen", "Datei löschen als Admin", "gesperrte Datei löschen", "Datei löschen Fehler 0x80070005", "Systemdatei löschen", "Datei löschen trotz Fehlermeldung", "Ordner kann nicht gelöscht werden", "Datei in Benutzung kann nicht löschen"],
+    "typos": ["löshen", "Zugrif", "Berechitgung", "gespert", "löchen"],
+    "symptoms": ["Fehlermeldung 'Zugriff verweigert' beim Löschen", "Datei bleibt trotz Löschversuch bestehen", "Benötigt Administratorberechtigung"],
+    "quickCheck": "Erhalten Sie die Meldung 'Zugriff verweigert' oder 'Datei wird verwendet'?",
+    "solutions": [
+      "Als Administrator löschen: Rechtsklick > Als Administrator ausführen",
+      "Besitzer der Datei übernehmen",
+      "Datei-Berechtigungen anpassen: Rechtsklick > Eigenschaften > Sicherheit",
+      "Im abgesicherten Modus löschen",
+      "Kommandozeile als Admin nutzen: del /f /q Dateipfad",
+      "Über Admin Tool remote löschen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_filedelete", "label": "Datei remote löschen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_fileops_aclshow", "label": "Berechtigungen anzeigen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_fileops_filedetail", "label": "Dateidetails anzeigen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["delete access denied", "cant delete file", "löschen verweigert"],
+    "followUpQuestions": [
+      {
+        "question": "Welche genaue Fehlermeldung erhalten Sie?",
+        "options": ["Zugriff verweigert", "Administrator-Berechtigung erforderlich", "Andere Meldung"],
+        "narrows": "Ob Berechtigungs- oder Sperrproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-005", "PROB-FIL-013"]
+  },
+  {
+    "id": "PROB-FIL-005",
+    "category": "Datei-Operationen",
+    "title": "Datei in Verwendung - kann nicht gelöscht werden",
+    "keywords": ["in Verwendung", "gesperrt", "blockiert", "Prozess", "Handle", "in use", "belegt"],
+    "extendedKeywords": ["Datei wird verwendet kann nicht gelöscht werden", "Datei ist gesperrt", "Datei wird von anderem Programm benutzt", "Datei in Benutzung", "Datei blockiert", "welcher Prozess verwendet die Datei", "Datei gesperrt von Programm", "Datei wird gerade bearbeitet", "kann Datei nicht löschen weil in Verwendung", "Datei wird von einem anderen Benutzer verwendet", "Lock auf Datei", "Datei geöffnet von anderem Prozess", "Datei-Sperre aufheben", "Datei Handle freigeben", "gesperrte Datei freigeben", "Datei lässt sich nicht umbenennen weil in Verwendung", "wer hat die Datei offen", "Datei wird von System gesperrt", "Datei von Programm blockiert", "Datei locked"],
+    "typos": ["Verwendung", "gespert", "blokiert", "Prozzes", "Benutzung"],
+    "symptoms": ["Fehlermeldung 'Die Aktion kann nicht ausgeführt werden, da die Datei geöffnet ist'", "Datei kann nicht gelöscht/umbenannt/verschoben werden"],
+    "quickCheck": "Wissen Sie welches Programm die Datei verwendet?",
+    "solutions": [
+      "Programm das die Datei verwendet schließen",
+      "Im Task-Manager nach dem Prozess suchen und beenden",
+      "Resource Monitor > CPU > Zugeordnete Handles durchsuchen",
+      "PC neu starten um alle Sperren aufzuheben",
+      "Über Admin Tool remote die Datei löschen",
+      "Handle.exe von Sysinternals verwenden um die Sperre zu finden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_filedelete", "label": "Datei remote löschen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_fileops_filedetail", "label": "Dateidetails anzeigen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["file in use", "file locked", "datei gesperrt"],
+    "followUpQuestions": [
+      {
+        "question": "Kennen Sie das Programm das die Datei verwendet?",
+        "options": ["Ja, ich weiß welches", "Nein, keine Ahnung", "Es steht in der Fehlermeldung"],
+        "narrows": "Ob gezieltes Beenden oder Suche nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-004", "PROB-FIL-025"]
+  },
+  {
+    "id": "PROB-FIL-006",
+    "category": "Datei-Operationen",
+    "title": "BAT-Datei remote ausführen",
+    "keywords": ["BAT", "Batch", "Script", "ausführen", "remote", "cmd", "Skript"],
+    "extendedKeywords": ["BAT-Datei remote ausführen", "Batch-Skript auf entferntem PC starten", "Batch-Datei remote starten", "BAT auf anderem PC ausführen", "Skript remote ausführen", "CMD-Befehl remote ausführen", "Batch remote starten", "BAT-Datei auf Remote-PC laufen lassen", "automatisch BAT-Datei ausführen", "Batch-Script per Fernzugriff", "BAT-Datei per Remote starten", "CMD remote", "Batch-Datei entfernt ausführen", "Kommandozeile remote", "BAT auf entferntem Rechner", "Remote Batch ausführen", "Skript auf anderem PC", "BAT remote deployen", "Remote CMD-Befehl", "Batch-Datei auf Zielrechner ausführen"],
+    "typos": ["Bacht", "Skirpt", "BAT-Datei", "ausführn", "remoet"],
+    "symptoms": ["BAT-Datei muss auf einem entfernten PC ausgeführt werden", "Automatisierung per Batch-Script benötigt"],
+    "quickCheck": "Befindet sich die BAT-Datei bereits auf dem Remote-PC oder muss sie erst kopiert werden?",
+    "solutions": [
+      "BAT-Datei über Admin Tool remote ausführen",
+      "Falls nötig: BAT-Datei erst auf den Remote-PC kopieren",
+      "Admin-Rechte für die Ausführung sicherstellen",
+      "Ausgabe der BAT-Datei prüfen",
+      "Bei Fehlern: Pfade in der BAT-Datei prüfen (absolute Pfade verwenden)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_runbat", "label": "BAT-Datei remote ausführen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_fileops_filecopyto", "label": "Datei zum Remote-PC kopieren", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["run bat remote", "execute batch", "bat datei remote"],
+    "followUpQuestions": [
+      {
+        "question": "Liegt die BAT-Datei bereits auf dem Remote-PC?",
+        "options": ["Ja, auf dem Remote-PC", "Nein, muss erst kopiert werden", "Möchte einen Befehl direkt ausführen"],
+        "narrows": "Ob erst kopiert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-007", "PROB-FIL-008"]
+  },
+  {
+    "id": "PROB-FIL-007",
+    "category": "Datei-Operationen",
+    "title": "PowerShell-Script remote ausführen",
+    "keywords": ["PowerShell", "Script", "PS1", "remote", "Invoke-Command", "Remoting", "ausführen"],
+    "extendedKeywords": ["PowerShell remote ausführen", "PS1-Script auf anderem PC", "PowerShell-Befehl remote", "PowerShell Remoting", "PowerShell Script entfernt ausführen", "PS1 remote starten", "PowerShell auf Remote-PC", "PowerShell-Skript per Fernzugriff", "Invoke-Command remote", "PowerShell auf anderem Rechner", "PS1-Datei remote ausführen", "PowerShell remote deployen", "PowerShell-Befehl auf Zielrechner", "Remote PowerShell Session", "Enter-PSSession", "PowerShell Fernausführung", "PS-Befehl remote", "PowerShell entfernt starten", "PowerShell Script remote laufen lassen", "PowerShell per Netzwerk"],
+    "typos": ["Powershel", "Powershell", "PS1", "Skirpt", "Remoting"],
+    "symptoms": ["PowerShell-Script muss auf entferntem PC ausgeführt werden", "PowerShell-Remoting funktioniert nicht"],
+    "quickCheck": "Soll ein vorhandenes Script ausgeführt oder ein einzelner Befehl gesendet werden?",
+    "solutions": [
+      "PowerShell-Script über Admin Tool remote ausführen",
+      "Execution Policy auf dem Remote-PC prüfen (Get-ExecutionPolicy)",
+      "WinRM-Dienst auf dem Remote-PC sicherstellen",
+      "Script erst auf den Remote-PC kopieren falls nötig",
+      "Admin-Rechte für die Ausführung sicherstellen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_fileops_filecopyto", "label": "Datei zum Remote-PC kopieren", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["run powershell remote", "ps1 execute", "powershell remote"],
+    "followUpQuestions": [
+      {
+        "question": "Möchten Sie ein vorhandenes Script oder einen einzelnen Befehl ausführen?",
+        "options": ["Vorhandenes PS1-Script", "Einzelner PowerShell-Befehl", "Mehrere Befehle"],
+        "narrows": "Art der Ausführung"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-006", "PROB-FIL-008"]
+  },
+  {
+    "id": "PROB-FIL-008",
+    "category": "Datei-Operationen",
+    "title": "EXE remote ausführen - Programm remote starten",
+    "keywords": ["EXE", "ausführen", "Programm", "remote", "starten", "installieren", "Setup"],
+    "extendedKeywords": ["EXE remote ausführen", "Programm remote starten", "Setup remote ausführen", "Software remote installieren", "EXE auf anderem PC starten", "Programm auf Remote-PC starten", "Installer remote ausführen", "EXE entfernt starten", "Remote Programmstart", "Setup auf Remote-PC", "Software remote deployen", "EXE auf entferntem Rechner ausführen", "Programm per Fernzugriff starten", "Anwendung remote starten", "Remote-Installation durchführen", "Tool remote ausführen", "Programm auf Zielrechner starten", "EXE per Netzwerk ausführen", "Remote Softwareinstallation", "Silent Install remote"],
+    "typos": ["Prgramm", "ausführne", "Remot", "staren", "instalieren"],
+    "symptoms": ["Ein Programm muss auf einem entfernten PC gestartet werden", "Software muss remote installiert werden"],
+    "quickCheck": "Liegt die EXE bereits auf dem Remote-PC oder muss sie erst kopiert werden?",
+    "solutions": [
+      "EXE über Admin Tool remote ausführen (via BAT oder PowerShell)",
+      "Für Silent-Installation: /silent oder /quiet Parameter verwenden",
+      "EXE erst auf Remote-PC kopieren falls nötig",
+      "Admin-Rechte für die Ausführung sicherstellen",
+      "Für MSI-Pakete: msiexec /i Paket.msi /quiet verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_runbat", "label": "BAT-Datei remote ausführen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_fileops_filecopyto", "label": "Datei zum Remote-PC kopieren", "priority": 3, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["run exe remote", "install remote", "programm remote starten"],
+    "followUpQuestions": [
+      {
+        "question": "Handelt es sich um eine Installation oder soll ein bereits installiertes Programm gestartet werden?",
+        "options": ["Installation/Setup", "Bestehendes Programm starten", "Tool einmalig ausführen"],
+        "narrows": "Ob Installation oder Programmstart"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-006", "PROB-FIL-007"]
+  },
+  {
+    "id": "PROB-FIL-009",
+    "category": "Datei-Operationen",
+    "title": "hosts-Datei anzeigen",
+    "keywords": ["hosts", "DNS", "Auflösung", "Einträge", "C:\\Windows\\System32\\drivers\\etc", "Hostdatei"],
+    "extendedKeywords": ["hosts-Datei anzeigen", "hosts-Datei lesen", "hosts-Datei Inhalt", "was steht in der hosts-Datei", "hosts-Datei öffnen", "DNS-Einträge in hosts", "lokale DNS-Auflösung prüfen", "hosts Einträge anzeigen", "hosts-Datei prüfen", "Inhalt der hosts-Datei", "hosts-Datei kontrollieren", "welche Einträge hat die hosts-Datei", "hosts-Datei auslesen", "hosts remote anzeigen", "hosts-Datei auf Remote-PC prüfen", "DNS hosts Datei", "System32 hosts anzeigen", "lokale Hostdatei lesen", "Windows hosts-Datei", "hosts-Datei remote auslesen"],
+    "typos": ["Host-Datei", "Hosts Datei", "hosts Datei", "hots-Datei", "hosst"],
+    "symptoms": ["DNS-Auflösung funktioniert nicht korrekt", "Website zeigt falsche Seite", "Verdacht auf manipulierte hosts-Datei"],
+    "quickCheck": "Soll die hosts-Datei auf dem lokalen oder einem Remote-PC angezeigt werden?",
+    "solutions": [
+      "hosts-Datei über Admin Tool remote anzeigen",
+      "hosts-Datei manuell öffnen: C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "Einträge mit einem Texteditor als Administrator prüfen",
+      "Verdächtige Einträge identifizieren",
+      "DNS-Cache leeren: ipconfig /flushdns"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_hostsshow", "label": "hosts-Datei anzeigen", "priority": 1, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["show hosts file", "view hosts", "hosts datei anzeigen"],
+    "followUpQuestions": [
+      {
+        "question": "Warum möchten Sie die hosts-Datei prüfen?",
+        "options": ["DNS-Probleme", "Verdacht auf Manipulation", "Eintrag suchen", "Routine-Prüfung"],
+        "narrows": "Kontext der Überprüfung"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-010", "PROB-FIL-011"]
+  },
+  {
+    "id": "PROB-FIL-010",
+    "category": "Datei-Operationen",
+    "title": "hosts-Datei bearbeiten - Eintrag hinzufügen",
+    "keywords": ["hosts", "bearbeiten", "hinzufügen", "Eintrag", "DNS", "IP-Zuordnung", "editieren"],
+    "extendedKeywords": ["hosts-Datei bearbeiten", "Eintrag zur hosts-Datei hinzufügen", "hosts-Datei editieren", "IP-Zuordnung in hosts", "DNS-Eintrag lokal hinzufügen", "hosts-Datei ändern", "neuen Eintrag in hosts", "hosts bearbeiten als Administrator", "IP zu Hostname zuordnen", "lokale DNS-Umleitung", "hosts-Datei erweitern", "Website umleiten über hosts", "hosts-Eintrag erstellen", "IP-Adresse zu Hostname in hosts", "hosts-Datei modifizieren", "DNS lokal überschreiben", "hosts remote bearbeiten", "Eintrag in hosts-Datei einfügen", "hosts-Datei Zeile hinzufügen", "Website blockieren über hosts"],
+    "typos": ["Host-Datei", "bearbietn", "hinzufüge", "Eintarg", "hosst"],
+    "symptoms": ["Eine bestimmte IP-zu-Hostname-Zuordnung wird benötigt", "Lokale DNS-Umleitung erforderlich"],
+    "quickCheck": "Welche IP-Adresse soll welchem Hostnamen zugeordnet werden?",
+    "solutions": [
+      "Eintrag über Admin Tool remote zur hosts-Datei hinzufügen",
+      "Format: IP-Adresse [Tab] Hostname (z.B. 192.168.1.100 server.local)",
+      "hosts-Datei als Administrator bearbeiten",
+      "Nach Änderung DNS-Cache leeren: ipconfig /flushdns",
+      "Syntax prüfen: Keine Sonderzeichen im Hostnamen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_hostsadd", "label": "hosts-Eintrag hinzufügen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_fileops_hostsshow", "label": "hosts-Datei anzeigen", "priority": 2, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["edit hosts file", "add hosts entry", "hosts eintrag hinzufügen"],
+    "followUpQuestions": [
+      {
+        "question": "Welche IP-Adresse und welchen Hostnamen möchten Sie eintragen?",
+        "options": ["Ich habe beide Werte", "Ich brauche erst die IP-Adresse", "Ich möchte einen bestehenden Eintrag ändern"],
+        "narrows": "Ob alle Informationen vorhanden sind"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-009", "PROB-FIL-011"]
+  },
+  {
+    "id": "PROB-FIL-011",
+    "category": "Datei-Operationen",
+    "title": "hosts-Datei zurücksetzen",
+    "keywords": ["hosts", "zurücksetzen", "Reset", "Standard", "wiederherstellen", "Originalzustand"],
+    "extendedKeywords": ["hosts-Datei zurücksetzen", "hosts-Datei auf Standard zurücksetzen", "hosts-Datei wiederherstellen", "hosts-Datei leeren", "hosts-Datei original", "hosts-Datei Standardinhalt", "hosts-Datei Reset", "alle Einträge aus hosts löschen", "hosts-Datei bereinigen", "hosts-Datei auf Werkseinstellung", "manipulierte hosts-Datei reparieren", "hosts-Datei säubern", "hosts-Datei Standardwert", "hosts-Datei komplett zurücksetzen", "hosts-Datei aufräumen", "hosts zurück auf Standard", "hosts-Datei neu erstellen", "hosts-Datei Malware bereinigen", "hosts-Datei clean", "hosts-Datei von Malware bereinigen"],
+    "typos": ["zurüchsetzen", "Zuücksetzen", "Reset", "weiderherstellen", "hosst"],
+    "symptoms": ["hosts-Datei wurde durch Malware oder falsche Einträge verändert", "DNS-Auflösung gestört durch hosts-Einträge"],
+    "quickCheck": "Sollen alle benutzerdefinierten Einträge entfernt werden?",
+    "solutions": [
+      "hosts-Datei über Admin Tool remote zurücksetzen",
+      "Standard-Inhalt der hosts-Datei wiederherstellen (nur Kommentarzeilen und localhost)",
+      "DNS-Cache danach leeren: ipconfig /flushdns",
+      "Antivirus-Scan durchführen falls Malware-Verdacht",
+      "Nach Reset: Notwendige Einträge einzeln wieder hinzufügen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_hostsreset", "label": "hosts-Datei zurücksetzen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_fileops_hostsshow", "label": "hosts-Datei anzeigen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["reset hosts file", "restore hosts", "hosts zurücksetzen"],
+    "followUpQuestions": [
+      {
+        "question": "Warum soll die hosts-Datei zurückgesetzt werden?",
+        "options": ["Malware-Bereinigung", "Falsche Einträge", "DNS-Probleme", "Routine"],
+        "narrows": "Ob weitere Maßnahmen nötig sind"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-009", "PROB-FIL-010"]
+  },
+  {
+    "id": "PROB-FIL-012",
+    "category": "Datei-Operationen",
+    "title": "NTFS-Berechtigungen anzeigen und prüfen",
+    "keywords": ["NTFS", "Berechtigungen", "ACL", "Sicherheit", "Zugriffsrechte", "Permissions", "Rechte"],
+    "extendedKeywords": ["NTFS-Berechtigungen anzeigen", "Dateiberechtigungen prüfen", "wer hat Zugriff auf Ordner", "Zugriffsrechte anzeigen", "ACL anzeigen", "Berechtigungen einer Datei", "NTFS-Rechte prüfen", "Sicherheitseinstellungen einer Datei", "Ordnerberechtigungen anzeigen", "wer darf auf den Ordner zugreifen", "Dateizugriff prüfen", "Berechtigungen kontrollieren", "Ordnerrechte anzeigen", "ACL einer Datei lesen", "Zugriffssteuerung prüfen", "NTFS-Permissions anzeigen", "Berechtigungen remote prüfen", "wer hat welche Rechte", "Sicherheits-Tab Eigenschaften", "Ordner Berechtigungen remote"],
+    "typos": ["Berechitgungen", "NTFS", "Berechtigung", "Zugrifsrechte", "ACL"],
+    "symptoms": ["Unklare Berechtigungssituation", "Zugriff verweigert trotz erwarteter Berechtigung"],
+    "quickCheck": "Für welche Datei oder welchen Ordner möchten Sie die Berechtigungen prüfen?",
+    "solutions": [
+      "Berechtigungen über Admin Tool remote anzeigen",
+      "Rechtsklick > Eigenschaften > Sicherheit für lokale Prüfung",
+      "Effektive Berechtigungen prüfen: Sicherheit > Erweitert > Effektiver Zugriff",
+      "Vererbte vs. explizite Berechtigungen unterscheiden",
+      "icacls-Befehl für Kommandozeilen-Abfrage nutzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_aclshow", "label": "Berechtigungen anzeigen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_fileops_filedetail", "label": "Dateidetails anzeigen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["show permissions", "check acl", "berechtigungen anzeigen"],
+    "followUpQuestions": [
+      {
+        "question": "Für welchen Pfad möchten Sie die Berechtigungen prüfen?",
+        "options": ["Einen bestimmten Ordner", "Eine einzelne Datei", "Einen Netzwerkpfad"],
+        "narrows": "Welcher Pfad geprüft werden soll"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-013", "PROB-FIL-014"]
+  },
+  {
+    "id": "PROB-FIL-013",
+    "category": "Datei-Operationen",
+    "title": "Berechtigungsvererbung - Rechte werden nicht vererbt",
+    "keywords": ["Vererbung", "Inheritance", "NTFS", "Berechtigungen", "vererben", "blockiert", "weitergeben"],
+    "extendedKeywords": ["Berechtigungsvererbung funktioniert nicht", "Rechte werden nicht vererbt", "Vererbung blockiert", "Ordnerrechte werden nicht an Unterordner weitergegeben", "Vererbung aktivieren", "Vererbung deaktivieren", "warum erbt Unterordner die Rechte nicht", "NTFS-Vererbung prüfen", "Berechtigung vererben aktivieren", "Vererbung kaputt", "Berechtigungen an Unterordner weitergeben", "Ordner erbt keine Rechte", "Vererbung zurücksetzen", "explizite vs. vererbte Berechtigung", "Inheritance abschalten", "Rechte auf Unterordner anwenden", "Vererbung neu setzen", "Berechtigungen nach unten durchreichen", "Rechte propagieren", "alle Unterordner gleiche Rechte"],
+    "typos": ["Vererbung", "Berechitgung", "vererbet", "Verrebung", "weitergben"],
+    "symptoms": ["Unterordner haben andere Berechtigungen als erwartet", "Neue Dateien in Ordner haben falsche Rechte", "Vererbung ist deaktiviert"],
+    "quickCheck": "Ist die Vererbung für den betroffenen Ordner aktiviert oder deaktiviert?",
+    "solutions": [
+      "Berechtigungen prüfen: Rechtsklick > Eigenschaften > Sicherheit > Erweitert",
+      "Vererbung aktivieren: Erweitert > Vererbung aktivieren",
+      "Berechtigungen ersetzen: 'Alle Berechtigungseinträge untergeordneter Objekte ersetzen'",
+      "Über icacls Berechtigungen rekursiv setzen: icacls Pfad /reset /t",
+      "Explizite Berechtigungen vs. vererbte prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_aclshow", "label": "Berechtigungen anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 2, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["inheritance broken", "permissions not inherited", "vererbung kaputt"],
+    "followUpQuestions": [
+      {
+        "question": "Ist die Vererbung aktuell aktiviert oder deaktiviert?",
+        "options": ["Aktiviert aber funktioniert nicht", "Deaktiviert und soll aktiviert werden", "Weiß ich nicht"],
+        "narrows": "Ob Vererbung ein- oder ausgeschaltet werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-012", "PROB-FIL-014"]
+  },
+  {
+    "id": "PROB-FIL-014",
+    "category": "Datei-Operationen",
+    "title": "Besitzer einer Datei/Ordner ändern (Take Ownership)",
+    "keywords": ["Besitzer", "Owner", "Ownership", "übernehmen", "TakeOwn", "Eigentümer"],
+    "extendedKeywords": ["Datei Besitzer ändern", "Ordner Besitzer übernehmen", "Take Ownership", "Eigentümer wechseln", "Besitz übernehmen", "Datei gehört anderem Benutzer", "Ordner Eigentümer ändern", "Besitzer einer Datei herausfinden", "wem gehört die Datei", "Eigentümer der Datei", "Besitzrechte ändern", "Ordner Besitzer wechseln", "TakeOwn Befehl", "Ownership übernehmen", "Datei einem anderen Benutzer zuweisen", "Eigentümer zurücksetzen", "Besitzer-Tab in Eigenschaften", "Datei gehört System", "Datei gehört TrustedInstaller", "Besitz einer Systemdatei übernehmen"],
+    "typos": ["Besizter", "Eigentüme", "Ownership", "übernehemn", "Besizter"],
+    "symptoms": ["Zugriff verweigert trotz Adminrechte", "Datei gehört einem nicht mehr existierenden Benutzer", "TrustedInstaller blockiert Zugriff"],
+    "quickCheck": "Wer ist aktuell als Besitzer der Datei/des Ordners eingetragen?",
+    "solutions": [
+      "Besitzer ändern: Rechtsklick > Eigenschaften > Sicherheit > Erweitert > Besitzer ändern",
+      "Per Kommandozeile: takeown /f Pfad /r /d y",
+      "Bei TrustedInstaller-Dateien: Besitz erst übernehmen, dann Berechtigung anpassen",
+      "Per icacls: icacls Pfad /setowner Benutzername",
+      "Nach Besitzübernahme: Berechtigungen neu setzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_aclshow", "label": "Berechtigungen anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_fileops_runbat", "label": "BAT remote ausführen", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["take ownership", "change owner", "besitzer ändern"],
+    "followUpQuestions": [
+      {
+        "question": "Wer soll der neue Besitzer werden?",
+        "options": ["Mein eigener Benutzer", "Ein Administrator", "Eine Gruppe"],
+        "narrows": "Welcher Benutzer als Besitzer eingetragen werden soll"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-012", "PROB-FIL-004"]
+  },
+  {
+    "id": "PROB-FIL-015",
+    "category": "Datei-Operationen",
+    "title": "Zugriff auf Datei/Ordner verweigert",
+    "keywords": ["Zugriff verweigert", "Access Denied", "keine Berechtigung", "kein Zugriff", "gesperrt", "0x80070005"],
+    "extendedKeywords": ["Zugriff verweigert", "kein Zugriff auf Ordner", "Zugriff auf Datei nicht möglich", "Ordner kann nicht geöffnet werden", "keine Berechtigung auf Ordner", "Access Denied Fehler", "Ordner Zugriff verweigert", "kann Ordner nicht öffnen", "Fehler 0x80070005", "Berechtigung fehlt", "Datei zugriff verweigert öffnen", "Sie haben keine Berechtigung", "Ordner gesperrt", "kein Zugriff auf Netzlaufwerk", "Zugriff verweigert Windows", "Datei lässt sich nicht öffnen Berechtigung", "Ordner kein Zugang", "kein Zugriff obwohl Admin", "Zugriff verweigert trotz Berechtigung", "warum kann ich nicht auf den Ordner zugreifen"],
+    "typos": ["Zugrif", "verweigrt", "Berechitgung", "Zugrifff", "verweigert"],
+    "symptoms": ["Fehlermeldung 'Zugriff verweigert'", "Ordner lässt sich nicht öffnen", "Fehlercode 0x80070005"],
+    "quickCheck": "Handelt es sich um einen lokalen Ordner oder einen Netzwerkpfad?",
+    "solutions": [
+      "Berechtigungen der Datei/des Ordners über Admin Tool prüfen",
+      "Prüfen ob der Benutzer in der richtigen Gruppe ist",
+      "Besitzer der Datei übernehmen falls nötig",
+      "Vererbung prüfen und ggf. aktivieren",
+      "Bei Netzwerkpfad: Freigabeberechtigungen UND NTFS-Berechtigungen prüfen",
+      "Als Administrator versuchen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_aclshow", "label": "Berechtigungen anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_fileops_filedetail", "label": "Dateidetails anzeigen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["access denied", "permission denied", "zugriff verweigert"],
+    "followUpQuestions": [
+      {
+        "question": "Handelt es sich um einen lokalen Ordner oder einen Netzwerkpfad?",
+        "options": ["Lokaler Ordner", "Netzwerkpfad/Freigabe", "Weiß ich nicht"],
+        "narrows": "Ob lokale Berechtigungen oder Netzwerkfreigabe"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-012", "PROB-FIL-014"]
+  },
+  {
+    "id": "PROB-FIL-016",
+    "category": "Datei-Operationen",
+    "title": "Netzwerkfreigabe erstellen",
+    "keywords": ["Freigabe", "Share", "Netzwerk", "SMB", "Ordner freigeben", "Sharing"],
+    "extendedKeywords": ["Netzwerkfreigabe erstellen", "Ordner freigeben", "Share erstellen", "Ordner im Netzwerk freigeben", "SMB-Freigabe erstellen", "wie gebe ich einen Ordner frei", "Netzwerkfreigabe einrichten", "Ordner für andere Benutzer freigeben", "Freigabe anlegen", "Ordner teilen im Netzwerk", "neue Freigabe erstellen", "Ordner für Netzwerk freigeben", "Netzwerkordner erstellen", "Share anlegen Windows", "Freigabe konfigurieren", "Ordner als Netzlaufwerk freigeben", "wie erstelle ich eine Freigabe", "Ordner im Netzwerk bereitstellen", "Dateifreigabe erstellen", "Freigabe remote erstellen"],
+    "typos": ["Freigab", "Netzwekfreigabe", "Shrae", "friegeben", "Netzwerkfregabe"],
+    "symptoms": ["Ordner muss für andere Netzwerkbenutzer zugänglich gemacht werden"],
+    "quickCheck": "Welcher Ordner soll freigegeben werden und wer soll Zugriff haben?",
+    "solutions": [
+      "Freigabe über Admin Tool remote erstellen",
+      "Rechtsklick auf Ordner > Freigeben für > Bestimmte Personen",
+      "Erweiterte Freigabe: Rechtsklick > Eigenschaften > Freigabe > Erweiterte Freigabe",
+      "Freigabeberechtigungen UND NTFS-Berechtigungen setzen",
+      "Netzwerkerkennung und Dateifreigabe aktivieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_sharecreate", "label": "Freigabe erstellen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_fileops_aclshow", "label": "Berechtigungen anzeigen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["create share", "network share", "freigabe erstellen"],
+    "followUpQuestions": [
+      {
+        "question": "Wer soll auf die Freigabe zugreifen können?",
+        "options": ["Alle im Netzwerk", "Nur bestimmte Benutzer/Gruppen", "Nur Lesen"],
+        "narrows": "Welche Berechtigungen gesetzt werden sollen"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-017", "PROB-FIL-018"]
+  },
+  {
+    "id": "PROB-FIL-017",
+    "category": "Datei-Operationen",
+    "title": "Auf Netzwerkfreigabe zugreifen - Verbindungsprobleme",
+    "keywords": ["Freigabe", "Zugriff", "Netzlaufwerk", "verbinden", "SMB", "UNC-Pfad", "nicht erreichbar"],
+    "extendedKeywords": ["auf Netzwerkfreigabe zugreifen", "Netzlaufwerk verbinden", "Freigabe nicht erreichbar", "kann nicht auf Freigabe zugreifen", "Netzwerkfreigabe öffnen geht nicht", "UNC-Pfad funktioniert nicht", "Netzlaufwerk verbinden fehlgeschlagen", "Zugriff auf Serverfreigabe", "Netzwerkpfad nicht gefunden", "Freigabe Zugriff verweigert", "Netzlaufwerk erscheint nicht", "Freigabe nicht verfügbar", "kann mich nicht mit Freigabe verbinden", "Netzwerkordner öffnen geht nicht", "Servername kann nicht aufgelöst werden", "Netzwerkfreigabe offline", "Freigabe-Verbindung fehlgeschlagen", "Netzlaufwerk trennen und neu verbinden", "Anmeldeinformationen für Freigabe", "Netzwerkfreigabe Benutzername Passwort"],
+    "typos": ["Netzlaufwek", "Freigab", "Netzwekrfreigabe", "zugrefen"],
+    "symptoms": ["Fehlermeldung 'Netzwerkpfad nicht gefunden'", "Zugangsdaten werden nicht akzeptiert", "Freigabe erscheint nicht in der Netzwerkumgebung"],
+    "quickCheck": "Kennen Sie den UNC-Pfad der Freigabe (z.B. \\\\Server\\Freigabe)?",
+    "solutions": [
+      "Pfad prüfen: \\\\Servername\\Freigabename in Explorer eingeben",
+      "Netzwerkverbindung zum Server prüfen (Ping)",
+      "Anmeldeinformationen prüfen und ggf. in der Anmeldeinformationsverwaltung aktualisieren",
+      "SMB-Protokollversion prüfen (SMBv1 ist standardmäßig deaktiviert)",
+      "Netzlaufwerk verbinden: net use X: \\\\Server\\Freigabe",
+      "Gespeicherte Anmeldeinformationen löschen: net use \\\\Server\\Freigabe /delete"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_fileops_aclshow", "label": "Berechtigungen anzeigen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["network share access", "cant connect share", "freigabe zugriff"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Fehlermeldung erhalten Sie beim Zugriff?",
+        "options": ["Netzwerkpfad nicht gefunden", "Zugriff verweigert", "Anmeldeinformationen ungültig", "Andere"],
+        "narrows": "Ursache des Zugriffsproblems"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-016", "PROB-FIL-018"]
+  },
+  {
+    "id": "PROB-FIL-018",
+    "category": "Datei-Operationen",
+    "title": "Versteckte Netzwerkfreigaben (Admin-Shares)",
+    "keywords": ["versteckt", "Admin-Share", "C$", "D$", "ADMIN$", "IPC$", "hidden share"],
+    "extendedKeywords": ["versteckte Freigabe", "Admin-Share", "C$ Freigabe", "D$ Freigabe", "auf C Dollar zugreifen", "administrative Freigabe", "versteckte Netzwerkfreigabe", "ADMIN$ Freigabe", "IPC$ Freigabe", "Standard-Admin-Shares", "versteckte Shares anzeigen", "hidden Share zugreifen", "Dollar-Freigabe", "administrative Standardfreigaben", "C$ nicht erreichbar", "Admin-Freigaben aktivieren", "versteckte Freigabe erstellen", "Dollar-Zeichen Freigabe", "Zugriff auf C$ verweigert", "administrative Shares prüfen"],
+    "typos": ["versteckte", "Admin-Shre", "Admisn-Share", "C Dollar"],
+    "symptoms": ["Zugriff auf administrative Freigaben nicht möglich", "C$ nicht erreichbar", "Versteckte Freigabe wird benötigt"],
+    "quickCheck": "Versuchen Sie auf eine Standard-Admin-Freigabe (C$) oder eine benutzerdefinierte versteckte Freigabe zuzugreifen?",
+    "solutions": [
+      "Admin-Shares prüfen: net share auf dem Zielrechner",
+      "Zugriff auf C$: \\\\Computername\\C$ (erfordert Admin-Rechte)",
+      "Versteckte Freigabe erstellen: Freigabename mit $ am Ende",
+      "Bei Zugriffsproblemen: LocalAccountTokenFilterPolicy in der Registry prüfen",
+      "Firewall-Regeln für Datei- und Druckerfreigabe prüfen",
+      "Admin-Shares werden standardmäßig nicht in der Netzwerkumgebung angezeigt"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_sharecreate", "label": "Freigabe erstellen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["admin share", "c dollar", "hidden share"],
+    "followUpQuestions": [
+      {
+        "question": "Welche versteckte Freigabe benötigen Sie?",
+        "options": ["C$ (Laufwerk C)", "D$ (Laufwerk D)", "ADMIN$", "Eigene versteckte Freigabe erstellen"],
+        "narrows": "Welche Art von versteckter Freigabe"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-016", "PROB-FIL-017"]
+  },
+  {
+    "id": "PROB-FIL-019",
+    "category": "Datei-Operationen",
+    "title": "Große Dateien auf einem Laufwerk finden",
+    "keywords": ["große Dateien", "Speicherplatz", "finden", "suchen", "Plattenplatz", "Speicher voll"],
+    "extendedKeywords": ["große Dateien finden", "Speicherplatz freigeben", "was belegt den Speicher", "Festplatte voll große Dateien", "Laufwerk voll was tun", "größte Dateien auf C: finden", "Speicherplatz analyse", "welche Dateien brauchen am meisten Platz", "Festplatte aufräumen", "große Dateien suchen", "Speicherfresser finden", "Plattenspeicher freigeben", "was nimmt so viel Platz weg", "Laufwerk C fast voll", "Festplatte läuft voll", "Speicherplatzverbrauch analysieren", "wo ist der ganze Speicher", "größte Dateien anzeigen", "Platz freimachen auf Festplatte", "Speicherplatz ermitteln"],
+    "typos": ["Speicheplatz", "Fesplatte", "Speichefresser", "frehigeben"],
+    "symptoms": ["Laufwerk fast voll", "Windows warnt vor wenig Speicherplatz", "Programme melden keinen Speicherplatz"],
+    "quickCheck": "Auf welchem Laufwerk soll nach großen Dateien gesucht werden?",
+    "solutions": [
+      "Über Admin Tool Verzeichnisse remote auflisten und Größen prüfen",
+      "PowerShell: Get-ChildItem C:\\ -Recurse | Sort-Object Length -Descending | Select-Object -First 20",
+      "TreeSize oder WinDirStat für grafische Analyse",
+      "Datenträgerbereinigung starten: cleanmgr",
+      "Temp-Ordner leeren: %temp% und C:\\Windows\\Temp",
+      "Windows Update-Bereinigung durchführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_fileops_filedetail", "label": "Dateidetails anzeigen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 3, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["find large files", "disk space", "große dateien suchen"],
+    "followUpQuestions": [
+      {
+        "question": "Auf welchem Laufwerk soll gesucht werden?",
+        "options": ["C:", "D:", "Alle Laufwerke", "Ein bestimmter Ordner"],
+        "narrows": "Suchbereich eingrenzen"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-020"]
+  },
+  {
+    "id": "PROB-FIL-020",
+    "category": "Datei-Operationen",
+    "title": "Bestimmte Datei auf dem PC finden",
+    "keywords": ["suchen", "finden", "Datei", "Dateiname", "Suche", "lokalisieren", "where"],
+    "extendedKeywords": ["Datei suchen", "Datei finden auf dem PC", "wo ist eine bestimmte Datei", "Datei lokalisieren", "Datei auf dem Computer suchen", "bestimmte Datei finden", "Datei nach Name suchen", "Datei mit bestimmter Endung finden", "Datei auf Festplatte suchen", "wo wurde die Datei gespeichert", "Datei verschwunden", "kann Datei nicht finden", "Datei wiederfinden", "wo liegt die Datei", "heruntergeladene Datei finden", "Datei auf Remote-PC suchen", "Konfigurationsdatei finden", "Log-Datei finden", "Datei im System suchen", "gespeicherte Datei wiederfinden"],
+    "typos": ["suhen", "fiden", "Datei", "lokalisiren", "Datei"],
+    "symptoms": ["Datei kann nicht gefunden werden", "Speicherort einer Datei unbekannt"],
+    "quickCheck": "Kennen Sie den Dateinamen oder zumindest einen Teil davon?",
+    "solutions": [
+      "Verzeichnisse über Admin Tool remote durchsuchen",
+      "Windows-Suche: In Explorer den Dateinamen eingeben",
+      "PowerShell: Get-ChildItem -Path C:\\ -Recurse -Filter 'dateiname*' -ErrorAction SilentlyContinue",
+      "CMD: where /r C:\\ dateiname",
+      "Zuletzt verwendete Dateien prüfen: Shell:recent",
+      "Downloads-Ordner prüfen für heruntergeladene Dateien"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_fileops_filedetail", "label": "Dateidetails anzeigen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 3, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["search file", "find file", "datei suchen"],
+    "followUpQuestions": [
+      {
+        "question": "Kennen Sie den Dateinamen oder die Dateiendung?",
+        "options": ["Ja, den vollständigen Namen", "Nur einen Teil des Namens", "Nur die Dateiendung"],
+        "narrows": "Wie genau die Suche sein kann"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-019"]
+  },
+  {
+    "id": "PROB-FIL-021",
+    "category": "Datei-Operationen",
+    "title": "Ordner erstellen auf Remote-PC",
+    "keywords": ["Ordner", "erstellen", "Verzeichnis", "mkdir", "anlegen", "remote", "Pfad"],
+    "extendedKeywords": ["Ordner erstellen", "neuen Ordner anlegen", "Verzeichnis erstellen remote", "Ordner auf Remote-PC erstellen", "mkdir remote", "Ordnerstruktur anlegen", "Verzeichnis anlegen", "neuen Ordner remote", "Ordner für Benutzer erstellen", "Installationsordner erstellen", "Pfad erstellen", "Verzeichnis remote erstellen", "Ordner auf anderem PC anlegen", "neues Verzeichnis", "Ordnerstruktur remote erstellen", "Ordner mit Unterordnern erstellen", "Zielordner anlegen", "Verzeichnisbaum erstellen", "Ordner auf Laufwerk erstellen", "Installationspfad erstellen"],
+    "typos": ["Ordne", "erstelen", "Verzeihcnis", "anlgen", "mkdir"],
+    "symptoms": ["Ordner muss auf Remote-PC erstellt werden", "Installationspfad fehlt auf dem Zielrechner"],
+    "quickCheck": "Welcher vollständige Pfad soll erstellt werden?",
+    "solutions": [
+      "Ordner über Admin Tool remote erstellen",
+      "PowerShell: New-Item -Path 'C:\\Pfad' -ItemType Directory",
+      "CMD: mkdir C:\\Pfad",
+      "Bei verschachtelten Pfaden werden alle Unterordner automatisch erstellt",
+      "Berechtigungen nach Erstellung prüfen und ggf. anpassen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_fileops_runbat", "label": "BAT remote ausführen", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["create folder", "make directory", "ordner erstellen"],
+    "followUpQuestions": [
+      {
+        "question": "Sollen nach der Erstellung bestimmte Berechtigungen gesetzt werden?",
+        "options": ["Ja, spezielle Berechtigungen", "Nein, Standard ist OK", "Weiß nicht"],
+        "narrows": "Ob Berechtigungen angepasst werden müssen"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-022", "PROB-FIL-016"]
+  },
+  {
+    "id": "PROB-FIL-022",
+    "category": "Datei-Operationen",
+    "title": "Ordner löschen auf Remote-PC",
+    "keywords": ["Ordner", "löschen", "Verzeichnis", "rmdir", "entfernen", "remote", "rekursiv"],
+    "extendedKeywords": ["Ordner löschen", "Verzeichnis löschen remote", "Ordner auf Remote-PC löschen", "rmdir remote", "Ordner mit Inhalt löschen", "Verzeichnis entfernen", "Ordner rekursiv löschen", "ganzen Ordner löschen", "Ordner auf anderem PC löschen", "Verzeichnisbaum löschen", "Ordner zwangsweise löschen", "Ordner löschen geht nicht", "Ordner lässt sich nicht löschen", "Verzeichnis remote entfernen", "Ordner komplett löschen", "alten Ordner aufräumen", "Temp-Ordner leeren", "Cache-Ordner löschen", "Ordner Inhalt löschen", "Ordner bereinigen"],
+    "typos": ["Ordne", "löshen", "Verzeihcnis", "entfernne", "löshen"],
+    "symptoms": ["Ordner muss auf Remote-PC gelöscht werden", "Alter/nicht mehr benötigter Ordner vorhanden"],
+    "quickCheck": "Sind Sie sicher dass der Ordner und sein gesamter Inhalt gelöscht werden können?",
+    "solutions": [
+      "Ordner über Admin Tool remote löschen",
+      "PowerShell: Remove-Item -Path 'C:\\Pfad' -Recurse -Force",
+      "CMD: rmdir /s /q C:\\Pfad",
+      "Vorher Inhalt prüfen um versehentliches Löschen zu vermeiden",
+      "Bei gesperrten Dateien: Prozesse beenden die auf den Ordner zugreifen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_filedelete", "label": "Datei/Ordner remote löschen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 3, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["delete folder", "remove directory", "ordner löschen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll der Ordner mit seinem gesamten Inhalt gelöscht werden?",
+        "options": ["Ja, alles löschen", "Nur den Ordner, wenn er leer ist", "Nur bestimmte Inhalte"],
+        "narrows": "Umfang der Löschoperation"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-021", "PROB-FIL-004"]
+  },
+  {
+    "id": "PROB-FIL-023",
+    "category": "Datei-Operationen",
+    "title": "Datei umbenennen - remote",
+    "keywords": ["umbenennen", "rename", "Dateiname", "ändern", "ren", "remote"],
+    "extendedKeywords": ["Datei umbenennen", "Datei remote umbenennen", "Dateinamen ändern", "Datei anderen Namen geben", "rename remote", "Datei auf Remote-PC umbenennen", "Dateiname korrigieren", "Dateiendung ändern", "Datei neu benennen", "Dateinamen anpassen", "Datei remote rename", "Datei umtaufen", "Dateiname remote ändern", "Dateibezeichnung ändern", "Dateiname auf anderem PC ändern", "Dateinamen korrigieren remote", "Datei-Extension ändern", "Datei von A nach B umbenennen", "mehrere Dateien umbenennen", "Batch-Umbenennung"],
+    "typos": ["umbennenen", "renames", "Dateinme", "umbenenen", "Dateinam"],
+    "symptoms": ["Dateiname muss geändert werden", "Dateiendung ist falsch"],
+    "quickCheck": "Wie heißt die Datei aktuell und wie soll sie heißen?",
+    "solutions": [
+      "Über PowerShell remote umbenennen: Rename-Item -Path 'alter_name' -NewName 'neuer_name'",
+      "Über CMD: ren alter_name neuer_name",
+      "Bei Zugriffsproblemen: Als Administrator ausführen",
+      "Dateiendung ändern: Sicherstellen dass Dateiendungen im Explorer angezeigt werden",
+      "Bei Massenbenennung: PowerShell-Schleife verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_fileops_runbat", "label": "BAT remote ausführen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_fileops_filedetail", "label": "Dateidetails anzeigen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["rename file", "change filename", "datei umbenennen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll eine einzelne Datei oder mehrere Dateien umbenannt werden?",
+        "options": ["Eine einzelne Datei", "Mehrere Dateien", "Alle Dateien in einem Ordner"],
+        "narrows": "Ob Einzel- oder Massenumbenennung"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-001", "PROB-FIL-005"]
+  },
+  {
+    "id": "PROB-FIL-024",
+    "category": "Datei-Operationen",
+    "title": "Pfad zu lang - Dateiname überschreitet MAX_PATH",
+    "keywords": ["Pfad zu lang", "MAX_PATH", "260 Zeichen", "langer Pfad", "PathTooLong", "Zeichenlimit"],
+    "extendedKeywords": ["Pfad zu lang", "Dateiname zu lang", "260 Zeichen Limit", "Pfad überschreitet Maximum", "langer Pfad Windows", "MAX_PATH Limit", "Datei kann nicht geöffnet werden Pfad zu lang", "Ordnerpfad zu lang", "Windows Pfadlänge", "Fehler Pfad zu lang", "Datei nicht erreichbar weil Pfad zu lang", "Pfad zu lang zum Kopieren", "Pfad zu lang zum Löschen", "lange Pfade aktivieren", "LongPathsEnabled", "Pfadlänge überschritten", "zu viele verschachtelte Ordner", "Dateiname zu lang Windows", "Pfad zu lang Fehlermeldung", "Pfad über 260 Zeichen"],
+    "typos": ["Pfadt", "MAX_PAHT", "Dateinahme", "Zeichenlimiet"],
+    "symptoms": ["Fehlermeldung 'Der Dateiname oder die Erweiterung ist zu lang'", "Datei kann nicht kopiert/gelöscht/geöffnet werden wegen Pfadlänge"],
+    "quickCheck": "Erhalten Sie die Fehlermeldung beim Kopieren, Löschen oder Öffnen?",
+    "solutions": [
+      "Lange Pfade in Windows aktivieren: Registry HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem > LongPathsEnabled = 1",
+      "Per Gruppenrichtlinie: Computer > Administrative Vorlagen > System > Dateisystem > Lange Win32-Pfade aktivieren",
+      "Datei über den kurzen Pfad ansprechen: dir /x zeigt 8.3-Namen",
+      "Ordner umbenennen um Pfad zu verkürzen",
+      "Robocopy mit /MIR verwenden um Dateien trotz langem Pfad zu kopieren",
+      "Über UNC-Pfad zugreifen: \\\\?\\C:\\langer\\pfad"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_fileops_filedetail", "label": "Dateidetails anzeigen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_fileops_dirlist", "label": "Verzeichnis auflisten", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["path too long", "filename too long", "pfad zu lang"],
+    "followUpQuestions": [
+      {
+        "question": "Bei welcher Aktion tritt der Fehler auf?",
+        "options": ["Beim Kopieren", "Beim Löschen", "Beim Öffnen", "Beim Umbenennen"],
+        "narrows": "Welche Lösung am besten passt"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-023", "PROB-FIL-003"]
+  },
+  {
+    "id": "PROB-FIL-025",
+    "category": "Datei-Operationen",
+    "title": "Datei ist gesperrt - Handle freigeben",
+    "keywords": ["gesperrt", "Handle", "Lock", "Prozess", "blockiert", "freigeben", "Sperre"],
+    "extendedKeywords": ["Datei gesperrt", "Datei-Handle freigeben", "welcher Prozess sperrt die Datei", "Datei-Sperre aufheben", "Datei wird von Prozess blockiert", "File Lock entfernen", "gesperrte Datei freigeben", "Handle auf Datei finden", "Datei in Verwendung herausfinden", "wer sperrt die Datei", "Datei Handle schließen", "File Handle freigeben", "Datei Sperre lösen", "Datei blockiert von Prozess", "gesperrte Datei erkennen", "Handle.exe verwenden", "Resource Monitor Datei Handle", "Datei entsperren", "Datei-Lock aufheben", "wer hält die Datei offen"],
+    "typos": ["gesprrrt", "Hanlde", "friegeben", "Prozes", "blokiert"],
+    "symptoms": ["Datei kann nicht gelöscht/umbenannt/verschoben werden weil gesperrt", "Fehlermeldung 'Datei wird von einem anderen Prozess verwendet'"],
+    "quickCheck": "Wissen Sie welches Programm die Datei sperrt?",
+    "solutions": [
+      "Resource Monitor öffnen: resmon > CPU > Zugeordnete Handles > Dateiname eingeben",
+      "Handle.exe von Sysinternals: handle.exe Dateiname",
+      "Prozess im Task-Manager beenden der die Datei sperrt",
+      "PowerShell: Get-Process | Where-Object {$_.Modules.FileName -like '*dateiname*'}",
+      "PC neu starten als letzte Option",
+      "Über Admin Tool die Datei remote freigeben"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_runps", "label": "PowerShell remote ausführen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_fileops_filedetail", "label": "Dateidetails anzeigen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_fileops_filedelete", "label": "Datei remote löschen", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["file locked", "handle release", "datei gesperrt"],
+    "followUpQuestions": [
+      {
+        "question": "Möchten Sie den sperrenden Prozess beenden oder nur wissen welcher es ist?",
+        "options": ["Nur herausfinden welcher Prozess", "Prozess beenden und Datei freigeben", "Datei trotzdem löschen"],
+        "narrows": "Gewünschte Aktion"
+      }
+    ],
+    "relatedProblems": ["PROB-FIL-005", "PROB-FIL-004"]
+  }
+]

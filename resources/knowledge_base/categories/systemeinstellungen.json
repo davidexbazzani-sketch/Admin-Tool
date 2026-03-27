@@ -1,0 +1,796 @@
+[
+  {
+    "id": "PROB-SYS-001",
+    "category": "Systemeinstellungen",
+    "title": "UAC-Popup nervt",
+    "keywords": ["UAC", "Benutzerkontensteuerung", "Popup", "Abfrage", "Administrator", "Erhöhung"],
+    "extendedKeywords": ["UAC nervt", "Benutzerkontensteuerung Popup", "ständig Admin-Abfrage", "Administrator-Berechtigung Popup", "UAC Fenster kommt immer", "UAC abschalten", "Admin Popup bei jedem Programm", "Möchten Sie zulassen", "UAC Bestätigung nervig", "Admin-Abfrage deaktivieren", "UAC Meldung jedes Mal", "Berechtigung Popup", "Admin Popup loswerden", "Benutzerkontensteuerung ausschalten", "UAC Abfrage nervt", "Programmstart Admin-Popup", "UAC jedes Mal bestätigen", "Elevation Prompt", "UAC zu oft", "Admin Berechtigung jedes Mal"],
+    "typos": ["UAC", "Benuzterkontensteuerung", "Popop", "Admnistrator"],
+    "symptoms": ["UAC-Popup erscheint häufig und stört den Arbeitsfluss", "Ständige Abfrage nach Administrator-Berechtigung"],
+    "quickCheck": "Bei welchen Programmen erscheint die UAC-Abfrage?",
+    "solutions": ["UAC-Level anpassen: Systemsteuerung > Benutzerkonten > Einstellungen der Benutzerkontensteuerung ändern", "Stufe von oben auf zweite Stufe setzen (Standard)", "Nicht empfohlen: UAC komplett deaktivieren", "Programm als Administrator ausführen mit Aufgabenplanung automatisieren", "Programm-Kompatibilität prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_uacread", "label": "UAC-Level auslesen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_sysconfig_uacset", "label": "UAC-Level setzen", "priority": 2, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["UAC nervt", "Admin Popup", "Berechtigung abfrage"],
+    "followUpQuestions": [
+      {"question": "Erscheint die UAC-Abfrage bei bestimmten Programmen oder generell?", "options": ["Bestimmte Programme", "Generell"], "narrows": "Programmspezifisch vs. allgemein"},
+      {"question": "Auf welchem Level steht die UAC aktuell?", "options": ["Weiß nicht", "Höchste Stufe", "Standard"], "narrows": "Aktueller UAC-Level"}
+    ],
+    "relatedProblems": ["PROB-SYS-002", "PROB-SYS-003"]
+  },
+  {
+    "id": "PROB-SYS-002",
+    "category": "Systemeinstellungen",
+    "title": "UAC-Level ändern",
+    "keywords": ["UAC", "Level", "Stufe", "ändern", "anpassen", "Benutzerkontensteuerung"],
+    "extendedKeywords": ["UAC Level ändern", "UAC Stufe anpassen", "Benutzerkontensteuerung Level", "UAC Einstellung ändern", "UAC herunterstellen", "UAC hochstellen", "UAC Slider", "UAC Level konfigurieren", "UAC Stufe einstellen", "Benutzerkontensteuerung anpassen", "UAC Schieberegler", "UAC Sicherheitsstufe", "UAC Level setzen", "UAC Einstellungen", "Benutzerkontensteuerung Level ändern", "UAC Standard", "UAC auf Standard setzen", "UAC Level empfohlen", "UAC Level Registry", "UAC per GPO"],
+    "typos": ["UAC Levle", "Stufee", "Benuzterkontensteuerung", "anpasesn"],
+    "symptoms": ["UAC-Level soll geändert werden"],
+    "quickCheck": "Auf welches Level soll die UAC gesetzt werden?",
+    "solutions": ["Systemsteuerung > Benutzerkonten > Einstellungen der Benutzerkontensteuerung ändern", "4 Stufen: Immer benachrichtigen > Standard > Nur bei Änderungen > Nie", "Empfohlen: Zweite Stufe von oben (Standard)", "Registry: HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", "EnableLUA, ConsentPromptBehaviorAdmin, PromptOnSecureDesktop"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_uacread", "label": "UAC-Level auslesen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_sysconfig_uacset", "label": "UAC-Level setzen", "priority": 2, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["UAC Level", "UAC Stufe", "UAC ändern"],
+    "followUpQuestions": [
+      {"question": "Welche UAC-Stufe soll eingestellt werden?", "options": ["Immer benachrichtigen", "Standard", "Nur bei Änderungen (kein Dimmen)", "Nie benachrichtigen"], "narrows": "Gewünschte Stufe"}
+    ],
+    "relatedProblems": ["PROB-SYS-001", "PROB-SYS-003"]
+  },
+  {
+    "id": "PROB-SYS-003",
+    "category": "Systemeinstellungen",
+    "title": "UAC deaktiviert – Probleme",
+    "keywords": ["UAC", "deaktiviert", "ausgeschaltet", "Probleme", "Store", "Apps"],
+    "extendedKeywords": ["UAC deaktiviert Probleme", "UAC aus Store geht nicht", "UAC deaktiviert Apps starten nicht", "ohne UAC Probleme", "UAC komplett aus Fehler", "deaktivierte UAC Auswirkungen", "UAC ausgeschaltet Folgen", "UAC off Store Apps", "ohne UAC Microsoft Store", "UAC deaktiviert Edge Problem", "Windows Apps ohne UAC", "UAC aus Sicherheitsrisiko", "deaktivierte UAC reparieren", "UAC wieder aktivieren", "UAC deaktiviert was passiert", "ohne Benutzerkontensteuerung", "UAC off Folgen", "UAC ausgeschaltet reparieren", "UAC deaktiviert Sicherheit", "UAC wieder einschalten"],
+    "typos": ["deaktivert", "ausgeschlaten", "Probelme", "repariren"],
+    "symptoms": ["Probleme weil UAC deaktiviert ist", "Store-Apps funktionieren nicht ohne UAC"],
+    "quickCheck": "Ist die UAC aktuell komplett deaktiviert?",
+    "solutions": ["UAC wieder aktivieren: Systemsteuerung > Benutzerkonten > UAC-Einstellungen", "Mindestens auf Standard-Level setzen", "Registry: EnableLUA auf 1 setzen", "Neustart nach UAC-Änderung erforderlich", "Store-Apps und UWP-Apps benötigen aktive UAC"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_uacread", "label": "UAC-Level auslesen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_sysconfig_uacset", "label": "UAC-Level setzen", "priority": 2, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["UAC aus", "ohne UAC", "UAC deaktiviert"],
+    "followUpQuestions": [
+      {"question": "Warum wurde die UAC deaktiviert?", "options": ["Wegen nerviger Popups", "Admin hat es gemacht", "Weiß nicht"], "narrows": "Grund und Alternative"}
+    ],
+    "relatedProblems": ["PROB-SYS-001", "PROB-SYS-002"]
+  },
+  {
+    "id": "PROB-SYS-004",
+    "category": "Systemeinstellungen",
+    "title": "Uhrzeit falsch",
+    "keywords": ["Uhrzeit", "Zeit", "Datum", "falsch", "verstellt", "Systemzeit"],
+    "extendedKeywords": ["Uhrzeit falsch", "Zeit stimmt nicht", "Datum falsch", "Systemzeit verstellt", "Uhr geht falsch", "PC Uhrzeit falsch", "Computerdatum falsch", "Windows Uhrzeit stimmt nicht", "Zeit weicht ab", "Uhrzeit verstellt sich", "PC zeigt falsche Zeit", "Systemuhr falsch", "Uhrzeit springt", "Datum und Uhrzeit falsch", "Windows Zeit falsch", "Computer Uhr geht nach", "Computer Uhr geht vor", "Uhrzeit ständig falsch", "PC Datum verstellt", "Uhrzeit korrigieren"],
+    "typos": ["Uhrziet", "falsch", "Datumn", "Systmezeit"],
+    "symptoms": ["Windows zeigt falsche Uhrzeit oder falsches Datum", "Uhrzeit weicht ab"],
+    "quickCheck": "Um wie viel weicht die Uhrzeit ab?",
+    "solutions": ["Datum/Uhrzeit automatisch festlegen: Einstellungen > Zeit und Sprache > Datum/Uhrzeit", "Zeitzone prüfen und korrigieren", "Zeitsynchronisation erzwingen: w32tm /resync", "NTP-Server prüfen", "BIOS/CMOS-Batterie prüfen bei dauerhaftem Problem"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_timeshow", "label": "Systemzeit anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_sysconfig_ntpshow", "label": "NTP-Konfiguration anzeigen", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_sysconfig_ntprestart", "label": "NTP-Dienst neu starten", "priority": 3, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["Uhrzeit falsch", "Zeit stimmt nicht", "Datum falsch"],
+    "followUpQuestions": [
+      {"question": "Ist die Zeitzone korrekt eingestellt?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Zeitzone vs. Synchronisation"},
+      {"question": "Kommt die falsche Zeit nach Korrektur wieder?", "options": ["Ja", "Nein"], "narrows": "CMOS-Batterie Problem"}
+    ],
+    "relatedProblems": ["PROB-SYS-005", "PROB-SYS-006", "PROB-SYS-007"]
+  },
+  {
+    "id": "PROB-SYS-005",
+    "category": "Systemeinstellungen",
+    "title": "Zeitzone falsch",
+    "keywords": ["Zeitzone", "Timezone", "UTC", "GMT", "Zone", "Zeitverschiebung"],
+    "extendedKeywords": ["Zeitzone falsch eingestellt", "falsche Zeitzone Windows", "Zeitzone ändern", "Zeitzone stimmt nicht", "UTC statt Lokalzeit", "Zeitzone auf Englisch", "Zeitzone umstellen", "Zeitzone korrigieren", "falsche Zone eingestellt", "Zeitzone Windows ändern", "Zeitverschiebung falsch", "Zeitzone automatisch erkennen", "Zeitzone manuell setzen", "Zeitzone CET CEST", "Zeitzone Deutschland", "GMT statt CET", "Zeitzone Einstellung", "Windows Zeitzone Problem", "Zeitzone nach Reise", "Zeitzone Laptop verstellt"],
+    "typos": ["Zeitzoen", "Timzone", "Zeitsone", "Zeitzonee"],
+    "symptoms": ["Falsche Zeitzone eingestellt", "Uhrzeit um ganze Stunden verschoben"],
+    "quickCheck": "Welche Zeitzone ist aktuell eingestellt?",
+    "solutions": ["Einstellungen > Zeit und Sprache > Datum/Uhrzeit > Zeitzone", "Automatische Zeitzone aktivieren oder deaktivieren und manuell setzen", "Für Deutschland: (UTC+01:00) Amsterdam, Berlin, Bern, Rom, Stockholm, Wien", "PowerShell: Set-TimeZone -Name 'W. Europe Standard Time'", "Neustart nach Zeitzonenänderung empfohlen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_timeshow", "label": "Systemzeit anzeigen", "priority": 1, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["Zeitzone falsch", "UTC statt", "Stunden verschoben"],
+    "followUpQuestions": [
+      {"question": "Welche Zeitzone sollte es sein?", "options": ["Deutschland/Mitteleuropa", "Andere"], "narrows": "Korrekte Zeitzone"}
+    ],
+    "relatedProblems": ["PROB-SYS-004", "PROB-SYS-006"]
+  },
+  {
+    "id": "PROB-SYS-006",
+    "category": "Systemeinstellungen",
+    "title": "Zeitsynchronisation fehlgeschlagen",
+    "keywords": ["Zeitsynchronisation", "NTP", "w32time", "Sync", "Zeitserver", "Synchronisation"],
+    "extendedKeywords": ["Zeitsynchronisation funktioniert nicht", "NTP Sync fehlgeschlagen", "w32time Fehler", "Zeitserver nicht erreichbar", "Zeitsynchronisation Fehler", "NTP Server Problem", "Zeitdienst Fehler", "Synchronisation der Uhrzeit", "Windows Zeitdienst", "NTP Synchronisation", "w32tm Fehler", "Zeitserver Verbindung", "Zeitsync Problem", "NTP Konfiguration", "Zeit synchronisieren geht nicht", "Zeitserver antwortet nicht", "w32time Dienst", "NTP Port blockiert", "Zeitsynchronisation konfigurieren", "NTP Firewall"],
+    "typos": ["Synchonisation", "NTP", "w32tiem", "Zeitsynchonisation"],
+    "symptoms": ["Zeitsynchronisation funktioniert nicht", "NTP-Server nicht erreichbar"],
+    "quickCheck": "Welcher NTP-Server ist konfiguriert?",
+    "solutions": ["w32tm /query /status ausführen", "w32tm /resync erzwingen", "NTP-Server prüfen: w32tm /query /source", "Zeitdienst neu starten: net stop w32time && net start w32time", "NTP-Port 123/UDP in Firewall freigeben"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_ntpshow", "label": "NTP-Konfiguration anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_sysconfig_ntprestart", "label": "NTP-Dienst neu starten", "priority": 2, "effectiveness": 85},
+      {"skillId": "rd_sysconfig_timeshow", "label": "Systemzeit anzeigen", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["NTP Fehler", "Zeitsync", "w32time"],
+    "followUpQuestions": [
+      {"question": "Ist der NTP-Server erreichbar?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Netzwerk vs. Konfiguration"}
+    ],
+    "relatedProblems": ["PROB-SYS-004", "PROB-SYS-007"]
+  },
+  {
+    "id": "PROB-SYS-007",
+    "category": "Systemeinstellungen",
+    "title": "Kerberos-Fehler durch falsche Uhrzeit",
+    "keywords": ["Kerberos", "Uhrzeit", "Zeitabweichung", "Authentifizierung", "Skew", "5 Minuten"],
+    "extendedKeywords": ["Kerberos Fehler Uhrzeit", "Kerberos Zeitabweichung", "Kerberos Skew", "Authentifizierung fehlgeschlagen Zeit", "Kerberos 5 Minuten", "Domain Anmeldung Uhrzeit", "Kerberos Clock Skew", "Zeitproblem Domäne", "Kerberos Authentifizierung Fehler", "Active Directory Uhrzeit", "Domain Login Zeit Fehler", "Kerberos Token Zeit", "AD Zeitabweichung", "Domänenanmeldung Zeitfehler", "Kerberos Time Difference", "Zeitversatz Domäne", "Kerberos Ticket Fehler", "Uhrzeitdifferenz Domain", "Kerberos maximal 5 Minuten", "Domain Authentifizierung Uhrzeit Problem"],
+    "typos": ["Kereros", "Kreberos", "Urhzeit", "Zeitabwichung"],
+    "symptoms": ["Kerberos-Authentifizierung schlägt fehl wegen Zeitabweichung", "Domain-Anmeldung funktioniert nicht wegen falscher Uhrzeit"],
+    "quickCheck": "Weicht die Systemzeit mehr als 5 Minuten vom Domain Controller ab?",
+    "solutions": ["Uhrzeit mit Domain Controller synchronisieren: w32tm /resync", "Zeitabweichung prüfen: w32tm /stripchart /computer:DC-NAME", "NTP-Quelle auf Domain Controller setzen", "Kerberos toleriert maximal 5 Minuten Abweichung", "Windows-Zeitdienst-Konfiguration prüfen und korrigieren"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_timeshow", "label": "Systemzeit anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_sysconfig_ntprestart", "label": "NTP-Dienst neu starten", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_sysconfig_ntpshow", "label": "NTP-Konfiguration anzeigen", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 4, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Kerberos Fehler", "5 Minuten Abweichung", "Domain Login Zeit"],
+    "followUpQuestions": [
+      {"question": "Wie groß ist die Zeitabweichung?", "options": ["Wenige Sekunden", "Minuten", "Stunden"], "narrows": "Schwere der Abweichung"}
+    ],
+    "relatedProblems": ["PROB-SYS-004", "PROB-SYS-006"]
+  },
+  {
+    "id": "PROB-SYS-008",
+    "category": "Systemeinstellungen",
+    "title": "Proxy-Einstellungen falsch",
+    "keywords": ["Proxy", "Proxyserver", "Einstellungen", "falsch", "Internet", "Verbindung"],
+    "extendedKeywords": ["Proxy Einstellungen falsch", "Proxyserver falsch konfiguriert", "Proxy verhindert Internet", "falsche Proxy Einstellung", "Proxy blockiert Zugriff", "Internet geht nicht Proxy", "Proxy Konfiguration falsch", "Proxyserver Einstellung prüfen", "Proxy Problem Internet", "falscher Proxy eingestellt", "Proxy Einstellungen Windows", "Proxyserver blockiert", "Internet wegen Proxy nicht", "Proxy Settings falsch", "Proxyserver Verbindung", "Proxy Konfiguration prüfen", "Proxy Adresse falsch", "Proxy Port falsch", "Internet Proxy Problem", "Proxy verhindert Verbindung"],
+    "typos": ["Prxy", "Porxy", "Proxysverer", "Einstlelungen"],
+    "symptoms": ["Internet funktioniert nicht wegen falscher Proxy-Einstellungen", "Proxy blockiert Zugriff auf Webseiten"],
+    "quickCheck": "Ist ein Proxy konfiguriert und wenn ja, welcher?",
+    "solutions": ["Proxy-Einstellungen prüfen: Einstellungen > Netzwerk > Proxy", "Proxy-Einstellungen in Browser prüfen", "Automatische Proxy-Erkennung aktivieren/deaktivieren", "Proxy-Adresse und Port korrigieren", "PAC-Datei-URL prüfen falls konfiguriert"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_proxyshow", "label": "Proxy-Einstellungen anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_sysconfig_proxyclear", "label": "Proxy-Einstellungen löschen", "priority": 2, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["Proxy falsch", "kein Internet Proxy", "Proxy blockiert"],
+    "followUpQuestions": [
+      {"question": "Benötigen Sie einen Proxy für den Internetzugang?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Proxy benötigt oder nicht"},
+      {"question": "Welche Proxy-Adresse ist eingetragen?", "options": ["Freitext"], "narrows": "Proxy-Adresse prüfen"}
+    ],
+    "relatedProblems": ["PROB-SYS-009", "PROB-SYS-010", "PROB-SYS-011"]
+  },
+  {
+    "id": "PROB-SYS-009",
+    "category": "Systemeinstellungen",
+    "title": "Proxy automatisch gesetzt",
+    "keywords": ["Proxy", "automatisch", "WPAD", "PAC", "Auto-Konfiguration", "GPO"],
+    "extendedKeywords": ["Proxy wird automatisch gesetzt", "Proxy kommt immer wieder", "automatischer Proxy", "WPAD Proxy", "PAC Datei Proxy", "Proxy per GPO gesetzt", "Proxy automatisch konfiguriert", "Proxy setzt sich zurück", "automatische Proxy Erkennung", "Proxy wird immer wieder aktiviert", "WPAD Einstellung", "Proxy durch Gruppenrichtlinie", "automatische Proxy Konfiguration", "Proxy wird von alleine gesetzt", "Proxy GPO", "Proxy automatisch ändern sich", "Web Proxy Auto Discovery", "Proxy wird überschrieben", "Proxy kommt nach Löschen wieder", "Proxy zurückgesetzt automatisch"],
+    "typos": ["automatich", "WAPD", "PAc", "Konfiguraton"],
+    "symptoms": ["Proxy wird automatisch gesetzt oder kommt nach dem Löschen wieder"],
+    "quickCheck": "Wird der Proxy durch GPO, WPAD oder ein Programm gesetzt?",
+    "solutions": ["GPO-Proxy prüfen: gpresult /r", "WPAD deaktivieren: Proxy > Automatische Proxyerkennung aus", "Registry prüfen: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "Malware-Scan – Malware setzt oft Proxys", "Zscaler oder andere Sicherheitssoftware prüft"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_proxyshow", "label": "Proxy-Einstellungen anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_sysconfig_proxyclear", "label": "Proxy-Einstellungen löschen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Proxy kommt wieder", "automatischer Proxy", "WPAD"],
+    "followUpQuestions": [
+      {"question": "Kommt der Proxy nach dem Löschen wieder?", "options": ["Ja", "Nein"], "narrows": "GPO/Malware als Ursache"},
+      {"question": "Ist der PC in einer Domäne?", "options": ["Ja", "Nein"], "narrows": "GPO-Proxy"}
+    ],
+    "relatedProblems": ["PROB-SYS-008", "PROB-SYS-010"]
+  },
+  {
+    "id": "PROB-SYS-010",
+    "category": "Systemeinstellungen",
+    "title": "Proxy-Einstellungen löschen",
+    "keywords": ["Proxy", "löschen", "entfernen", "deaktivieren", "zurücksetzen", "kein Proxy"],
+    "extendedKeywords": ["Proxy löschen", "Proxy entfernen", "Proxy deaktivieren", "Proxy zurücksetzen", "kein Proxy mehr", "Proxy Einstellung löschen", "Proxy ausschalten", "Proxy komplett entfernen", "Proxy deaktivieren Windows", "Proxyserver entfernen", "Proxy Einstellung zurücksetzen", "Proxy abschalten", "Proxy rausnehmen", "Proxy Konfiguration löschen", "direkter Internetzugang ohne Proxy", "Proxy aus", "Proxy Settings löschen", "Proxy aufheben", "Proxy clearen", "Internet ohne Proxy"],
+    "typos": ["löschn", "enfternen", "deaktiviern", "zurücksetzn"],
+    "symptoms": ["Proxy-Einstellungen sollen entfernt werden"],
+    "quickCheck": "Sollen die Proxy-Einstellungen komplett entfernt werden?",
+    "solutions": ["Einstellungen > Netzwerk > Proxy > Proxyserver verwenden: Aus", "Automatische Proxyerkennung: Aus", "CMD: netsh winhttp reset proxy", "Registry: Internet Settings > ProxyEnable auf 0 setzen", "Browser-Proxy-Einstellungen ebenfalls prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_proxyclear", "label": "Proxy-Einstellungen löschen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_sysconfig_proxyshow", "label": "Proxy-Einstellungen anzeigen", "priority": 2, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["Proxy löschen", "Proxy entfernen", "kein Proxy"],
+    "followUpQuestions": [
+      {"question": "Wird ein Proxy für den Internetzugang benötigt?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Proxy benötigt oder nicht"}
+    ],
+    "relatedProblems": ["PROB-SYS-008", "PROB-SYS-009"]
+  },
+  {
+    "id": "PROB-SYS-011",
+    "category": "Systemeinstellungen",
+    "title": "Proxy und Zscaler",
+    "keywords": ["Proxy", "Zscaler", "ZIA", "PAC", "Cloud Proxy", "Zscaler Proxy"],
+    "extendedKeywords": ["Zscaler Proxy", "Zscaler PAC Datei", "Zscaler Proxy Problem", "ZIA Proxy", "Zscaler Internet Access Proxy", "Zscaler Proxy Einstellungen", "Proxy durch Zscaler", "Zscaler PAC URL", "Zscaler Proxy konfigurieren", "Zscaler Proxy funktioniert nicht", "Zscaler setzt Proxy", "Zscaler Proxy Fehler", "Zscaler Cloud Proxy", "Proxy Zscaler Konflikt", "Zscaler Proxy Ausnahme", "Zscaler PAC File", "Zscaler Proxy Bypass", "Zscaler Proxy deaktivieren", "Zscaler Direct Access", "Zscaler Proxy Einstellung"],
+    "typos": ["Zsclaer", "Zcaler", "Prxy", "ZAI"],
+    "symptoms": ["Proxy-Probleme im Zusammenhang mit Zscaler"],
+    "quickCheck": "Ist Zscaler als Proxy konfiguriert?",
+    "solutions": ["Zscaler Client Connector Status prüfen", "Zscaler PAC-Datei-URL prüfen", "Zscaler-Proxy-Ausnahmen konfigurieren", "Bei Problemen: Zscaler Support kontaktieren", "Proxy-Bypass für interne Seiten konfigurieren"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_proxyshow", "label": "Proxy-Einstellungen anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_sysconfig_proxyclear", "label": "Proxy-Einstellungen löschen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Zscaler Proxy", "PAC Zscaler", "Cloud Proxy"],
+    "followUpQuestions": [
+      {"question": "Ist der Zscaler Client Connector aktiv?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Zscaler Status"}
+    ],
+    "relatedProblems": ["PROB-SYS-008", "PROB-SYS-009"]
+  },
+  {
+    "id": "PROB-SYS-012",
+    "category": "Systemeinstellungen",
+    "title": "Standby-Einstellungen",
+    "keywords": ["Standby", "Sleep", "Ruhezustand", "Energiesparen", "S3", "Modern Standby"],
+    "extendedKeywords": ["Standby Einstellungen", "PC geht in Standby", "Standby deaktivieren", "Standby Zeit ändern", "PC soll nicht in Standby", "Ruhezustand Einstellung", "Sleep Modus Einstellung", "Standby nach Minuten", "PC wacht aus Standby auf", "Standby funktioniert nicht", "Standby-Timer ändern", "Standby verhindern", "PC geht zu schnell in Standby", "Standby-Zeit verlängern", "Standby-Modus konfigurieren", "PC soll an bleiben", "Standby ausschalten", "Energiesparmodus Standby", "Modern Standby Problem", "Standby beim Zuklappen"],
+    "typos": ["Stanbye", "Standbye", "Ruhezustandd", "Engergiesparen"],
+    "symptoms": ["Standby-Einstellungen müssen angepasst werden", "PC geht zu schnell/nicht in Standby"],
+    "quickCheck": "Was genau soll mit den Standby-Einstellungen geändert werden?",
+    "solutions": ["Einstellungen > System > Netzbetrieb und Energiesparen > Standby-Zeit festlegen", "powercfg.cpl > Energiesparplaneinstellungen ändern", "Standby deaktivieren: Auf 'Nie' setzen", "powercfg /change standby-timeout-ac MINUTEN", "Modern Standby: powercfg /a zeigt verfügbare Zustände"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_powerplan", "label": "Energieplan anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_sysconfig_powerhigh", "label": "Hochleistung aktivieren", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Standby", "Sleep Modus", "Ruhezustand"],
+    "followUpQuestions": [
+      {"question": "Soll der Standby deaktiviert oder die Zeit geändert werden?", "options": ["Deaktivieren", "Zeit ändern"], "narrows": "Art der Änderung"}
+    ],
+    "relatedProblems": ["PROB-SYS-013", "PROB-SYS-014", "PROB-SYS-015"]
+  },
+  {
+    "id": "PROB-SYS-013",
+    "category": "Systemeinstellungen",
+    "title": "Hibernate-Einstellungen",
+    "keywords": ["Hibernate", "Ruhezustand", "Hibernation", "hiberfil.sys", "S4", "Ruhemodus"],
+    "extendedKeywords": ["Hibernate aktivieren", "Ruhezustand aktivieren", "Hibernate deaktivieren", "hiberfil.sys löschen", "Ruhezustand einschalten", "Hibernate Windows", "Ruhezustand fehlt", "Hibernation aktivieren", "Ruhezustand Option fehlt", "Hibernate Speicherplatz", "hiberfil.sys zu groß", "Ruhezustand Option", "Hibernate Einstellung", "Ruhezustand Button fehlt", "Hibernate vs Sleep", "Ruhezustand nicht verfügbar", "Hibernate konfigurieren", "Ruhezustand Festplattenspeicher", "Hibernate deaktivieren Speicher", "Ruhezustand einrichten"],
+    "typos": ["Hiberate", "Ruhezustandd", "Hibernaton", "hiberfiel.sys"],
+    "symptoms": ["Hibernate muss aktiviert/deaktiviert werden", "hiberfil.sys belegt zu viel Speicher"],
+    "quickCheck": "Soll Hibernate aktiviert oder deaktiviert werden?",
+    "solutions": ["Hibernate aktivieren: powercfg /hibernate on", "Hibernate deaktivieren: powercfg /hibernate off (löscht hiberfil.sys)", "Hibernate-Größe reduzieren: powercfg /h /size 50", "Ruhezustand im Startmenü anzeigen: Energieoptionen > Auswählen, was beim Drücken von Netzschaltern geschehen soll", "powercfg /a zeigt verfügbare Energiezustände"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_powerplan", "label": "Energieplan anzeigen", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["Hibernate", "Ruhezustand", "hiberfil.sys"],
+    "followUpQuestions": [
+      {"question": "Soll Hibernate aktiviert oder deaktiviert werden?", "options": ["Aktivieren", "Deaktivieren"], "narrows": "Aktion"}
+    ],
+    "relatedProblems": ["PROB-SYS-012", "PROB-SYS-014"]
+  },
+  {
+    "id": "PROB-SYS-014",
+    "category": "Systemeinstellungen",
+    "title": "Monitor-Timeout Einstellung",
+    "keywords": ["Monitor", "Bildschirm", "Timeout", "ausschalten", "Display", "Energiesparen"],
+    "extendedKeywords": ["Monitor ausschalten Zeit", "Bildschirm Timeout", "Display schaltet sich aus", "Monitor geht aus", "Bildschirm ausschalten Einstellung", "Monitor Timeout ändern", "Bildschirm geht zu schnell aus", "Monitor abschalten Timer", "Display Timeout", "Bildschirm dunkel Einstellung", "Monitor schaltet ab", "Bildschirm Energiesparen", "Monitor Abschaltung", "Display ausschalten Zeit", "Monitor Timer ändern", "Bildschirm bleibt nicht an", "Monitor Timeout verlängern", "Bildschirm geht von alleine aus", "Monitor Abschaltzeit", "Display Energiesparmodus"],
+    "typos": ["Monitro", "Bildshirm", "Tiemout", "Dispaly"],
+    "symptoms": ["Monitor schaltet sich zu schnell/nicht ab"],
+    "quickCheck": "Nach wie vielen Minuten soll sich der Monitor abschalten?",
+    "solutions": ["Einstellungen > System > Netzbetrieb und Energiesparen > Bildschirm ausschalten nach", "powercfg.cpl > Energiesparplaneinstellungen ändern > Bildschirm ausschalten nach", "powercfg /change monitor-timeout-ac MINUTEN", "Auf 'Nie' setzen um Abschaltung zu verhindern", "Bildschirmschoner-Einstellungen separat prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_powerplan", "label": "Energieplan anzeigen", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["Monitor geht aus", "Bildschirm Timeout", "Display abschalten"],
+    "followUpQuestions": [
+      {"question": "Soll der Monitor nie ausgehen oder nach einer bestimmten Zeit?", "options": ["Nie", "Nach bestimmter Zeit"], "narrows": "Gewünschte Einstellung"}
+    ],
+    "relatedProblems": ["PROB-SYS-012", "PROB-SYS-015"]
+  },
+  {
+    "id": "PROB-SYS-015",
+    "category": "Systemeinstellungen",
+    "title": "Energiesparplan konfigurieren",
+    "keywords": ["Energiesparplan", "Power Plan", "Energieoptionen", "Akku", "Stromsparen", "Energieeinstellungen"],
+    "extendedKeywords": ["Energiesparplan einstellen", "Energieoptionen konfigurieren", "Energieeinstellungen Windows", "Power Plan ändern", "Stromsparen Einstellungen", "Energiesparplan anpassen", "Energieoptionen anpassen", "Energieplan konfigurieren", "Akkueinstellungen", "Stromverbrauch Einstellungen", "Energiesparplan erstellen", "Energieoptionen Übersicht", "Power Plan Einstellungen", "Energiesparplan Laptop", "Akku Einstellungen ändern", "Energieoptionen erweitert", "Stromsparen konfigurieren", "Energiesparplan Details", "Battery Saver Einstellungen", "Energiesparplan am besten"],
+    "typos": ["Energiespaprlan", "Enrgieoptionen", "Energieeinsteluungen", "Stromsparn"],
+    "symptoms": ["Energiesparplan muss konfiguriert oder angepasst werden"],
+    "quickCheck": "Welcher Energiesparplan ist aktuell aktiv und was soll geändert werden?",
+    "solutions": ["powercfg.cpl > Energiesparplan auswählen oder anpassen", "Erweiterte Einstellungen: Festplatte, Prozessor, USB, PCI Express", "powercfg /list zeigt alle verfügbaren Pläne", "powercfg /setactive GUID aktiviert einen Plan", "Für Laptops: Unterschiedliche Einstellungen für Akku/Netzbetrieb"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_powerplan", "label": "Energieplan anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_sysconfig_powerhigh", "label": "Hochleistung aktivieren", "priority": 2, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["Energiesparplan", "Energieoptionen", "Power Plan"],
+    "followUpQuestions": [
+      {"question": "Laptop oder Desktop?", "options": ["Laptop", "Desktop"], "narrows": "Akku-Einstellungen relevant"}
+    ],
+    "relatedProblems": ["PROB-SYS-012", "PROB-SYS-013", "PROB-SYS-014"]
+  },
+  {
+    "id": "PROB-SYS-016",
+    "category": "Systemeinstellungen",
+    "title": "RDP aktivieren",
+    "keywords": ["RDP", "aktivieren", "Remote Desktop", "Remotedesktop", "einschalten", "freischalten"],
+    "extendedKeywords": ["RDP aktivieren", "Remote Desktop einschalten", "Remotedesktop aktivieren", "RDP freischalten", "Remote Desktop aktivieren Windows", "RDP einschalten", "Remotedesktop freischalten", "Remote Desktop erlauben", "RDP zulassen", "Remote Desktop einrichten", "Remotedesktop einschalten", "RDP auf PC aktivieren", "Remote Desktop Fernzugriff aktivieren", "RDP Fernzugriff einschalten", "Remotedesktop ermöglichen", "RDP anschalten", "Remote Desktop Zugriff erlauben", "Remotedesktop Zugriff aktivieren", "RDP Remote aktivieren", "Remote Desktop freigeben"],
+    "typos": ["RDP aktiveren", "Remotedeskotp", "aktiveiren", "freischaltne"],
+    "symptoms": ["RDP ist deaktiviert und muss aktiviert werden"],
+    "quickCheck": "Ist RDP aktuell auf dem Ziel-PC deaktiviert?",
+    "solutions": ["Einstellungen > System > Remotedesktop > Remotedesktop aktivieren", "Systemsteuerung > System > Remoteeinstellungen > Remoteverbindungen zulassen", "Registry: HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server > fDenyTSConnections = 0", "PowerShell: Set-ItemProperty -Path 'HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server' -Name fDenyTSConnections -Value 0", "Firewall-Regel für RDP aktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_rdpon", "label": "RDP aktivieren", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_rdp_rdpenable", "label": "RDP aktivieren (Remote)", "priority": 2, "effectiveness": 90},
+      {"skillId": "rd_rdp_rdpfw", "label": "RDP-Firewall-Regel", "priority": 3, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["RDP aktivieren", "Remote Desktop einschalten", "Fernzugriff aktivieren"],
+    "followUpQuestions": [
+      {"question": "Haben Sie Zugriff auf den Ziel-PC?", "options": ["Ja, lokal", "Nein, nur remote"], "narrows": "Lokal vs. Remote Aktivierung"}
+    ],
+    "relatedProblems": ["PROB-SYS-017", "PROB-SYS-018"]
+  },
+  {
+    "id": "PROB-SYS-017",
+    "category": "Systemeinstellungen",
+    "title": "RDP-Firewall-Regeln",
+    "keywords": ["RDP", "Firewall", "Port", "3389", "Regel", "blockiert"],
+    "extendedKeywords": ["RDP Firewall", "RDP Port 3389", "Firewall blockiert RDP", "RDP Firewall Regel", "RDP Port freigeben", "Firewall RDP erlauben", "Port 3389 freigeben", "RDP Firewall Ausnahme", "Firewall RDP blockiert", "RDP Firewall öffnen", "Port 3389 Firewall", "RDP Firewall Rule", "Firewall Remote Desktop", "RDP Firewall deaktivieren", "Port 3389 blockiert", "RDP Firewall Einstellung", "Firewall Regel RDP hinzufügen", "RDP durch Firewall", "Windows Firewall RDP", "Firewall RDP Port"],
+    "typos": ["Firwall", "Fireawall", "Firewll", "blockirt"],
+    "symptoms": ["RDP wird durch die Windows-Firewall blockiert"],
+    "quickCheck": "Ist Port 3389 in der Firewall freigegeben?",
+    "solutions": ["Windows Firewall: Remotedesktop-Regel aktivieren", "netsh advfirewall firewall set rule group='Remote Desktop' new enable=yes", "Manuell: Port 3389/TCP in Firewall freigeben", "Domänenprofil, Privat und Öffentlich einzeln prüfen", "Drittanbieter-Firewall ebenfalls prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpfw", "label": "RDP-Firewall-Regel", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_sysconfig_rdpon", "label": "RDP aktivieren", "priority": 2, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["RDP Firewall", "Port 3389", "Firewall blockiert Remote"],
+    "followUpQuestions": [
+      {"question": "Welche Firewall ist aktiv?", "options": ["Windows Firewall", "Drittanbieter", "Weiß nicht"], "narrows": "Firewall-spezifische Lösung"}
+    ],
+    "relatedProblems": ["PROB-SYS-016", "PROB-SYS-018", "PROB-SYS-022"]
+  },
+  {
+    "id": "PROB-SYS-018",
+    "category": "Systemeinstellungen",
+    "title": "NLA für RDP",
+    "keywords": ["NLA", "Network Level Authentication", "RDP", "Authentifizierung", "Netzwerkebene"],
+    "extendedKeywords": ["NLA RDP", "Network Level Authentication RDP", "NLA deaktivieren", "NLA aktivieren", "RDP NLA Einstellung", "Authentifizierung auf Netzwerkebene", "NLA Problem RDP", "NLA Fehler Remote Desktop", "Network Level Auth RDP", "NLA Einstellung ändern", "RDP Vorauthentifizierung", "NLA ausschalten RDP", "NLA einschalten", "RDP NLA erforderlich", "Netzwerkauthentifizierung RDP", "NLA deaktivieren Registry", "RDP ohne NLA", "NLA Kompatibilität", "NLA CredSSP", "RDP NLA Sicherheit"],
+    "typos": ["NLA", "Authentifzierung", "Netzwerkeben", "Netzwkreauthentifizierung"],
+    "symptoms": ["NLA-Einstellung für RDP muss geändert werden", "RDP-Verbindung scheitert wegen NLA"],
+    "quickCheck": "Ist NLA aktuell aktiviert oder deaktiviert?",
+    "solutions": ["Systemsteuerung > System > Remoteeinstellungen > NLA-Checkbox", "NLA deaktivieren: Registry HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp > UserAuthentication = 0", "NLA aktivieren: UserAuthentication = 1", "NLA bietet mehr Sicherheit – nur deaktivieren wenn nötig", "Bei CredSSP-Problemen NLA temporär deaktivieren"],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpenable", "label": "RDP aktivieren", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_sysconfig_rdpon", "label": "RDP aktivieren", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["NLA", "Network Level Authentication", "Netzwerkauthentifizierung RDP"],
+    "followUpQuestions": [
+      {"question": "Soll NLA aktiviert oder deaktiviert werden?", "options": ["Aktivieren", "Deaktivieren"], "narrows": "Gewünschte Aktion"}
+    ],
+    "relatedProblems": ["PROB-SYS-016", "PROB-SYS-017"]
+  },
+  {
+    "id": "PROB-SYS-019",
+    "category": "Systemeinstellungen",
+    "title": "Firewall blockiert Anwendung",
+    "keywords": ["Firewall", "blockiert", "Anwendung", "App", "Programm", "Zugriff"],
+    "extendedKeywords": ["Firewall blockiert Programm", "Windows Firewall blockiert App", "Anwendung durch Firewall blockiert", "Firewall verhindert Programm", "App durch Firewall geblockt", "Programm Firewall Ausnahme", "Firewall lässt Programm nicht durch", "Software durch Firewall blockiert", "Firewall Programm freigeben", "Anwendung nicht durch Firewall", "Firewall blockiert Zugriff", "Programm Firewall Problem", "App Firewall Exception", "Firewall erlaubt Programm nicht", "Programm durch Firewall lassen", "Firewall Ausnahme hinzufügen", "Software Firewall blockiert", "Programm Firewall Freigabe", "Windows Defender Firewall blockiert", "Firewall App zulassen"],
+    "typos": ["Firwall", "blockirt", "Anwednugn", "Progamm"],
+    "symptoms": ["Eine Anwendung wird durch die Windows-Firewall blockiert"],
+    "quickCheck": "Welche Anwendung wird blockiert?",
+    "solutions": ["Windows-Sicherheit > Firewall > App durch Firewall zulassen", "Einstellung ändern > App hinzufügen", "netsh advfirewall firewall add rule name='AppName' dir=in action=allow program='Pfad'", "Firewall-Log prüfen: %systemroot%\\system32\\LogFiles\\Firewall\\pfirewall.log", "Gruppenrichtlinien-Firewall-Regeln prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpfw", "label": "Firewall-Regel konfigurieren", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["Firewall blockiert", "App Firewall", "Programm geblockt"],
+    "followUpQuestions": [
+      {"question": "Welche Anwendung wird blockiert?", "options": ["Freitext"], "narrows": "Anwendungs-spezifische Regel"},
+      {"question": "Eingehend oder ausgehend?", "options": ["Eingehend", "Ausgehend", "Weiß nicht"], "narrows": "Regelrichtung"}
+    ],
+    "relatedProblems": ["PROB-SYS-020", "PROB-SYS-021", "PROB-SYS-022"]
+  },
+  {
+    "id": "PROB-SYS-020",
+    "category": "Systemeinstellungen",
+    "title": "Firewall-Regel erstellen",
+    "keywords": ["Firewall", "Regel", "erstellen", "hinzufügen", "Port", "Ausnahme"],
+    "extendedKeywords": ["Firewall Regel erstellen", "Firewall Ausnahme hinzufügen", "Port in Firewall öffnen", "Firewall Regel hinzufügen", "Firewall Port freigeben", "neue Firewall Regel", "Firewall Eingehende Regel", "Firewall Ausgehende Regel", "Port freigeben Firewall", "Firewall Regel konfigurieren", "Firewall Rule erstellen", "Firewall Exception", "Firewall Port öffnen", "neue Regel Firewall", "Firewall Regel anlegen", "Windows Firewall Regel", "Firewall Regel definieren", "Firewall Port Rule", "Firewall Allow Rule", "Firewall Regel Anleitung"],
+    "typos": ["Firwall Regel", "erstlelen", "hinzufügne", "Ausnhame"],
+    "symptoms": ["Eine neue Firewall-Regel muss erstellt werden"],
+    "quickCheck": "Welcher Port oder welches Programm soll freigegeben werden?",
+    "solutions": ["Windows Defender Firewall > Erweiterte Einstellungen > Eingehende Regeln > Neue Regel", "Port-Regel: Port auswählen, TCP/UDP, Portnummer eingeben", "Programm-Regel: Programmpfad angeben", "netsh advfirewall firewall add rule name='Name' dir=in action=allow protocol=TCP localport=PORT", "Regel für spezifisches Profil (Domain/Privat/Öffentlich) erstellen"],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpfw", "label": "Firewall-Regel konfigurieren", "priority": 1, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["Firewall Regel", "Port freigeben", "Firewall Ausnahme"],
+    "followUpQuestions": [
+      {"question": "Port oder Programm freigeben?", "options": ["Port", "Programm", "Beides"], "narrows": "Regeltyp"},
+      {"question": "TCP oder UDP?", "options": ["TCP", "UDP", "Beide", "Weiß nicht"], "narrows": "Protokoll"}
+    ],
+    "relatedProblems": ["PROB-SYS-019", "PROB-SYS-021"]
+  },
+  {
+    "id": "PROB-SYS-021",
+    "category": "Systemeinstellungen",
+    "title": "Firewall deaktiviert",
+    "keywords": ["Firewall", "deaktiviert", "ausgeschaltet", "aus", "aktivieren", "Sicherheit"],
+    "extendedKeywords": ["Firewall deaktiviert", "Firewall ausgeschaltet", "Firewall aus", "Firewall aktivieren", "Windows Firewall deaktiviert", "Firewall einschalten", "Firewall ist aus", "Firewall wieder aktivieren", "Windows Defender Firewall aus", "Firewall anschalten", "Firewall deaktiviert Warnung", "Firewall nicht aktiv", "Firewall ein", "Firewall Sicherheitswarnung", "Windows Firewall einschalten", "Firewall Status prüfen", "Firewall wurde deaktiviert", "Firewall soll wieder an", "Firewall aktivieren Anleitung", "Firewall aus Sicherheitsproblem"],
+    "typos": ["deaktivirt", "Firwall", "ausgeschaltte", "aktiviren"],
+    "symptoms": ["Windows-Firewall ist deaktiviert", "Sicherheitswarnung wegen deaktivierter Firewall"],
+    "quickCheck": "Ist die Firewall absichtlich deaktiviert?",
+    "solutions": ["Windows-Sicherheit > Firewall & Netzwerkschutz > Firewall aktivieren", "netsh advfirewall set allprofiles state on", "Prüfen ob eine alternative Firewall aktiv ist", "GPO für Firewall-Status prüfen", "Firewall sollte aus Sicherheitsgründen immer aktiv sein"],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpfw", "label": "Firewall-Regel konfigurieren", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Firewall aus", "Firewall deaktiviert", "Firewall aktivieren"],
+    "followUpQuestions": [
+      {"question": "Gibt es eine alternative Firewall (z.B. Drittanbieter)?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Alternative Firewall"}
+    ],
+    "relatedProblems": ["PROB-SYS-019", "PROB-SYS-022"]
+  },
+  {
+    "id": "PROB-SYS-022",
+    "category": "Systemeinstellungen",
+    "title": "Firewall zurücksetzen",
+    "keywords": ["Firewall", "zurücksetzen", "Reset", "Standard", "Werkseinstellungen", "Firewall-Regeln"],
+    "extendedKeywords": ["Firewall zurücksetzen", "Firewall Reset", "Firewall Standardeinstellungen", "Firewall Werkseinstellungen", "alle Firewall Regeln löschen", "Firewall komplett zurücksetzen", "Firewall auf Standard", "Firewall Regeln Reset", "Windows Firewall zurücksetzen", "Firewall Default", "Firewall Grundzustand", "Firewall Original Einstellungen", "Firewall Standardregeln", "Firewall komplett neu", "Windows Firewall Werkseinstellungen", "Firewall bereinigen Reset", "Firewall alles löschen", "Firewall sauberer Zustand", "Firewall Regeln zurücksetzen", "Firewall auf Anfang"],
+    "typos": ["zurücksetzn", "Firwall Reset", "Standrad", "Werkseinstellugnen"],
+    "symptoms": ["Firewall-Regeln sollen auf Standard zurückgesetzt werden"],
+    "quickCheck": "Sollen wirklich alle benutzerdefinierten Firewall-Regeln gelöscht werden?",
+    "solutions": ["Windows-Sicherheit > Firewall > Firewalls auf Standardeinstellungen zurücksetzen", "netsh advfirewall reset", "Achtung: Alle benutzerdefinierten Regeln gehen verloren", "Vor Reset: netsh advfirewall export Pfad\\firewall.wfw für Backup", "Nach Reset: Notwendige Regeln neu erstellen"],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpfw", "label": "Firewall-Regel konfigurieren", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["Firewall Reset", "Firewall zurücksetzen", "Firewall Standard"],
+    "followUpQuestions": [
+      {"question": "Wurde ein Backup der Firewall-Regeln erstellt?", "options": ["Ja", "Nein"], "narrows": "Backup vor Reset"}
+    ],
+    "relatedProblems": ["PROB-SYS-019", "PROB-SYS-021"]
+  },
+  {
+    "id": "PROB-SYS-023",
+    "category": "Systemeinstellungen",
+    "title": "Defender Schnellscan",
+    "keywords": ["Defender", "Scan", "Schnellscan", "Antivirus", "Virenscan", "Quick Scan"],
+    "extendedKeywords": ["Defender Scan starten", "Virenscanning", "Schnellscan durchführen", "Windows Defender Scan", "Antivirus Scan", "Virenprüfung starten", "Defender Quick Scan", "Malware Scan", "Schnellscan Windows", "Virenscan durchführen", "Defender Scannen", "Antivirus prüfen", "Windows Defender prüfen", "Sicherheitsscan", "Bedrohungsscan", "Defender vollständiger Scan", "Offline Scan", "Defender Scan Ergebnis", "Malware prüfen", "PC auf Viren prüfen"],
+    "typos": ["Defneder", "Scna", "Schnelslcan", "Antvirus"],
+    "symptoms": ["Virenscan soll durchgeführt werden"],
+    "quickCheck": "Soll ein Schnellscan oder vollständiger Scan durchgeführt werden?",
+    "solutions": ["Windows-Sicherheit > Viren- und Bedrohungsschutz > Schnellüberprüfung", "PowerShell: Start-MpScan -ScanType QuickScan", "Vollständiger Scan: Start-MpScan -ScanType FullScan", "Defender Offline-Scan für hartnäckige Malware", "Scans regelmäßig planen in Defender-Einstellungen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_defquick", "label": "Defender Schnellscan starten", "priority": 1, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["Virenscan", "Defender Scan", "Malware prüfen"],
+    "followUpQuestions": [
+      {"question": "Schnellscan oder vollständiger Scan?", "options": ["Schnellscan", "Vollständiger Scan", "Offline-Scan"], "narrows": "Scan-Typ"}
+    ],
+    "relatedProblems": ["PROB-SYS-024", "PROB-SYS-025", "PROB-SYS-026"]
+  },
+  {
+    "id": "PROB-SYS-024",
+    "category": "Systemeinstellungen",
+    "title": "Defender Ausnahme hinzufügen",
+    "keywords": ["Defender", "Ausnahme", "Exclusion", "Whitelist", "Ordner", "Datei"],
+    "extendedKeywords": ["Defender Ausnahme", "Defender Exclusion", "Defender Whitelist", "Programm von Defender ausnehmen", "Ordner von Scan ausnehmen", "Defender Ausschluss", "Datei von Defender ausnehmen", "Antivirus Ausnahme", "Defender Ordner ausschließen", "Programm nicht scannen", "Defender Exception", "Scan-Ausnahme hinzufügen", "Defender Exclusion Pfad", "App von Defender ausnehmen", "Defender Ordner Whitelist", "Ausnahme Virenschutz", "Defender ignorieren Datei", "Scan-Ausschluss", "Defender Exclude Folder", "Defender nicht prüfen"],
+    "typos": ["Ausnhame", "Exclsuion", "Whtielist", "hinuzfügen"],
+    "symptoms": ["Eine Datei, ein Ordner oder ein Programm soll vom Defender-Scan ausgenommen werden"],
+    "quickCheck": "Was soll von der Defender-Prüfung ausgenommen werden?",
+    "solutions": ["Windows-Sicherheit > Viren- und Bedrohungsschutz > Einstellungen > Ausschlüsse hinzufügen", "Datei, Ordner, Dateityp oder Prozess ausschließen", "PowerShell: Add-MpPreference -ExclusionPath 'C:\\Pfad'", "PowerShell: Add-MpPreference -ExclusionProcess 'prozess.exe'", "Vorsicht: Ausnahmen nur bei vertrauenswürdigen Programmen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_defexcadd", "label": "Defender Ausnahme hinzufügen", "priority": 1, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["Defender Ausnahme", "Exclusion", "nicht scannen"],
+    "followUpQuestions": [
+      {"question": "Was soll ausgenommen werden?", "options": ["Datei", "Ordner", "Prozess", "Dateityp"], "narrows": "Ausnahme-Typ"},
+      {"question": "Ist das Programm/die Datei vertrauenswürdig?", "options": ["Ja", "Weiß nicht"], "narrows": "Sicherheitshinweis"}
+    ],
+    "relatedProblems": ["PROB-SYS-023", "PROB-SYS-026"]
+  },
+  {
+    "id": "PROB-SYS-025",
+    "category": "Systemeinstellungen",
+    "title": "Defender Definitionen veraltet",
+    "keywords": ["Defender", "Definitionen", "veraltet", "Update", "Signaturen", "Aktualisierung"],
+    "extendedKeywords": ["Defender Definitionen veraltet", "Defender Update", "Virensignaturen veraltet", "Defender nicht aktuell", "Antivirus Definitionen alt", "Defender Signaturen aktualisieren", "Defender Definitionen updaten", "Virenschutz veraltet", "Defender braucht Update", "Schutz nicht aktuell", "Defender Signaturen fehlen", "Virendefinitionen aktualisieren", "Defender manuell updaten", "Antivirus Signaturen Update", "Defender Protection veraltet", "Virendatenbank aktualisieren", "Defender Definitionen manuell", "Schutz-Definitionen alt", "Defender Update fehlgeschlagen", "Virenscanner nicht aktuell"],
+    "typos": ["Definitonen", "veralteet", "Signaturn", "Aktualiseirung"],
+    "symptoms": ["Defender-Definitionen sind veraltet", "Warnung über veralteten Virenschutz"],
+    "quickCheck": "Wie alt sind die aktuellen Definitionen?",
+    "solutions": ["Windows-Sicherheit > Viren- und Bedrohungsschutz > Schutzupdates > Nach Updates suchen", "PowerShell: Update-MpSignature", "Windows Update durchführen (enthält Defender-Updates)", "Manueller Download: https://www.microsoft.com/wdsi/defenderupdates", "Wenn Update fehlschlägt: Defender-Dienst neu starten"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_defquick", "label": "Defender Schnellscan starten", "priority": 1, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Defender veraltet", "Signaturen alt", "Definitionen Update"],
+    "followUpQuestions": [
+      {"question": "Funktioniert Windows Update?", "options": ["Ja", "Nein"], "narrows": "Update-Kanal"}
+    ],
+    "relatedProblems": ["PROB-SYS-023", "PROB-SYS-026"]
+  },
+  {
+    "id": "PROB-SYS-026",
+    "category": "Systemeinstellungen",
+    "title": "Defender Quarantäne",
+    "keywords": ["Defender", "Quarantäne", "Bedrohung", "Fund", "wiederherstellen", "entfernen"],
+    "extendedKeywords": ["Defender Quarantäne", "Datei in Quarantäne", "Defender Bedrohung gefunden", "Quarantäne Dateien", "Defender Fund", "Datei aus Quarantäne wiederherstellen", "Quarantäne löschen", "Defender blockiert Datei", "Quarantäne Wiederherstellung", "Defender Bedrohung entfernen", "falsch erkannte Datei", "Datei Quarantäne zurückholen", "Defender False Positive", "Quarantäne öffnen", "Datei aus Quarantäne holen", "Defender hat Datei gelöscht", "Quarantäne Inhalt", "Defender False Detection", "Quarantäne Dateien anzeigen", "Defender Datei wiederherstellen"],
+    "typos": ["Quarantäene", "Bedrohugn", "wiederherstellne", "Quarantänee"],
+    "symptoms": ["Datei wurde von Defender in Quarantäne verschoben", "False Positive bei Defender"],
+    "quickCheck": "Ist die Datei tatsächlich eine Bedrohung oder ein False Positive?",
+    "solutions": ["Windows-Sicherheit > Viren- und Bedrohungsschutz > Bedrohungsverlauf", "Quarantäne-Element auswählen > Wiederherstellen oder Entfernen", "PowerShell: Get-MpThreat zeigt erkannte Bedrohungen", "Bei False Positive: Ausnahme hinzufügen nach Wiederherstellung", "PowerShell: Restore-MpPreference für Wiederherstellung"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_defquick", "label": "Defender Schnellscan starten", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_sysconfig_defexcadd", "label": "Defender Ausnahme hinzufügen", "priority": 2, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["Quarantäne", "Datei gelöscht Defender", "False Positive"],
+    "followUpQuestions": [
+      {"question": "Ist die Datei vertrauenswürdig?", "options": ["Ja, sicher", "Nicht sicher", "Nein"], "narrows": "Wiederherstellen vs. Löschen"}
+    ],
+    "relatedProblems": ["PROB-SYS-023", "PROB-SYS-024"]
+  },
+  {
+    "id": "PROB-SYS-027",
+    "category": "Systemeinstellungen",
+    "title": "Falsche Systemsprache",
+    "keywords": ["Sprache", "Systemsprache", "Anzeigesprache", "Language", "Deutsch", "Englisch"],
+    "extendedKeywords": ["falsche Sprache Windows", "Systemsprache ändern", "Anzeigesprache ändern", "Windows auf Deutsch umstellen", "Sprache wechseln Windows", "Windows ist auf Englisch", "Sprache ändern", "Display Language ändern", "Systemsprache Deutsch", "Windows Sprache falsch", "Spracheinstellung Windows", "System auf andere Sprache", "Windows Sprache umstellen", "Sprache installieren Windows", "Windows Sprachpaket", "Anzeigesprache Deutsch", "System Language ändern", "Windows Sprache einstellen", "Sprachpaket installieren", "Windows Menüsprache ändern"],
+    "typos": ["Sprahce", "Systemsparche", "Anzeigesprche", "Deutshc"],
+    "symptoms": ["Windows zeigt falsche Systemsprache an"],
+    "quickCheck": "Welche Sprache ist aktuell eingestellt und welche wird benötigt?",
+    "solutions": ["Einstellungen > Zeit und Sprache > Sprache > Windows-Anzeigesprache", "Sprachpaket herunterladen falls nicht vorhanden", "Sprachpaket als Standard festlegen", "Abmelden und wieder anmelden für Änderung", "Für Willkommensbildschirm: Region > Verwaltung > Einstellungen kopieren"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_regioninfo", "label": "Region und Sprache anzeigen", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["falsche Sprache", "Windows Englisch", "Sprache umstellen"],
+    "followUpQuestions": [
+      {"question": "Welche Sprache wird benötigt?", "options": ["Deutsch", "Englisch", "Andere"], "narrows": "Zielsprache"}
+    ],
+    "relatedProblems": ["PROB-SYS-028", "PROB-SYS-029"]
+  },
+  {
+    "id": "PROB-SYS-028",
+    "category": "Systemeinstellungen",
+    "title": "Tastaturlayout falsch",
+    "keywords": ["Tastaturlayout", "Keyboard", "Layout", "QWERTZ", "QWERTY", "Tastatur"],
+    "extendedKeywords": ["Tastaturlayout falsch", "Tastatur tippt falsche Zeichen", "Keyboard Layout falsch", "Y und Z vertauscht", "QWERTY statt QWERTZ", "Tastaturlayout ändern", "Tastatur Layout wechseln", "falsche Tastatur Einstellung", "Tastaturlayout hinzufügen", "Tastatur Sprache ändern", "Zeichen falsch Tastatur", "Keyboard Layout wechseln", "Tastaturlayout Deutsch", "Tastatur tippt anders", "Sonderzeichen falsch Tastatur", "Tastaturlayout umschalten", "Alt Shift Tastaturlayout", "Tastatur Eingabe falsch", "Tastaturlayout entfernen", "Tastatur auf Deutsch stellen"],
+    "typos": ["Tastatuerlayout", "Keybord", "Layut", "QWRTZ"],
+    "symptoms": ["Tastatur tippt falsche Zeichen", "Y und Z sind vertauscht"],
+    "quickCheck": "Sind Y und Z vertauscht oder andere Zeichen falsch?",
+    "solutions": ["Einstellungen > Zeit und Sprache > Sprache > Tastatur", "Tastaturlayout wechseln: Win+Leertaste", "Ungewünschte Layouts entfernen", "Deutsches Layout: QWERTZ hinzufügen und als Standard setzen", "Alt+Shift wechselt zwischen Layouts"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_regioninfo", "label": "Region und Sprache anzeigen", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["Tastatur falsch", "Y Z vertauscht", "Layout wechseln"],
+    "followUpQuestions": [
+      {"question": "Welches Layout wird benötigt?", "options": ["Deutsch (QWERTZ)", "Englisch (QWERTY)", "Anderes"], "narrows": "Gewünschtes Layout"}
+    ],
+    "relatedProblems": ["PROB-SYS-027", "PROB-SYS-029"]
+  },
+  {
+    "id": "PROB-SYS-029",
+    "category": "Systemeinstellungen",
+    "title": "Dezimalzeichen falsch",
+    "keywords": ["Dezimalzeichen", "Komma", "Punkt", "Region", "Zahlenformat", "Trennzeichen"],
+    "extendedKeywords": ["Dezimalzeichen falsch", "Komma statt Punkt", "Punkt statt Komma", "Zahlenformat falsch", "Dezimaltrenner ändern", "Excel Dezimalzeichen", "Zahlen Format ändern", "Trennzeichen falsch", "Dezimalkomma", "Dezimalpunkt", "Zahlenformat Windows", "Regionaleinstellungen Zahlen", "Dezimaltrennzeichen ändern", "Tausendertrennzeichen falsch", "Format Zahlen ändern", "Punkt Komma Zahlen", "Dezimalzeichen Einstellung", "Zahlenformat Deutsch", "Zahlenformat umstellen", "regionaler Dezimaltrenner"],
+    "typos": ["Dezimalziechen", "Trennziechen", "Deziamlzeichen", "Zahlneformat"],
+    "symptoms": ["Dezimalzeichen ist Punkt statt Komma oder umgekehrt", "Zahlenformat stimmt nicht"],
+    "quickCheck": "Welches Dezimalzeichen wird aktuell verwendet und welches wird benötigt?",
+    "solutions": ["Systemsteuerung > Region > Formate > Weitere Einstellungen", "Dezimaltrennzeichen und Tausendertrennzeichen anpassen", "Für Deutsch: Komma als Dezimaltrennzeichen, Punkt als Tausendertrennzeichen", "Format auf 'Deutsch (Deutschland)' setzen", "Excel-spezifisch: Datei > Optionen > Erweitert > Trennzeichen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_regioninfo", "label": "Region und Sprache anzeigen", "priority": 1, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["Dezimalzeichen", "Komma Punkt", "Zahlenformat"],
+    "followUpQuestions": [
+      {"question": "Betrifft es alle Programme oder nur eines?", "options": ["Alle", "Nur Excel", "Nur ein Programm"], "narrows": "System vs. Programm-Einstellung"}
+    ],
+    "relatedProblems": ["PROB-SYS-027", "PROB-SYS-028"]
+  },
+  {
+    "id": "PROB-SYS-030",
+    "category": "Systemeinstellungen",
+    "title": "DPI-Skalierung zu groß oder zu klein",
+    "keywords": ["DPI", "Skalierung", "Auflösung", "Vergrößerung", "Anzeige", "Scaling"],
+    "extendedKeywords": ["DPI Skalierung ändern", "Anzeige zu groß", "Anzeige zu klein", "Skalierung ändern Windows", "Bildschirm Vergrößerung", "Text zu groß", "Text zu klein", "DPI anpassen", "Skalierung 125% 150%", "Bildschirm Skalierung", "Display Skalierung", "Anzeigegröße ändern", "Skalierung Monitor", "DPI Setting", "Bildschirmauflösung Skalierung", "Vergrößerungsstufe ändern", "Windows Skalierung", "Text und App Größe", "Skalierung anpassen", "Display Scaling Windows"],
+    "typos": ["Skaleirung", "DPl", "Vergörßerung", "Anziege"],
+    "symptoms": ["Anzeige ist zu groß oder zu klein", "Skalierung stimmt nicht"],
+    "quickCheck": "Welche Skalierung ist aktuell eingestellt?",
+    "solutions": ["Einstellungen > System > Anzeige > Skalierung und Anordnung", "Skalierung anpassen: 100%, 125%, 150%, 175%, 200%", "Benutzerdefinierte Skalierung für spezielle Werte", "Pro-Anwendung DPI-Einstellung: Rechtsklick > Eigenschaften > Kompatibilität > Hohe DPI", "Bei externem Monitor: Monitor-Auflösung und Skalierung separat anpassen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_dpiscale", "label": "DPI-Skalierung anzeigen", "priority": 1, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["zu groß", "zu klein", "Skalierung", "DPI"],
+    "followUpQuestions": [
+      {"question": "Was ist das Problem?", "options": ["Alles zu groß", "Alles zu klein", "Nur bestimmte Apps"], "narrows": "Art des Skalierungsproblems"}
+    ],
+    "relatedProblems": ["PROB-SYS-031"]
+  },
+  {
+    "id": "PROB-SYS-031",
+    "category": "Systemeinstellungen",
+    "title": "Unscharfe Anzeige bei DPI-Skalierung",
+    "keywords": ["unscharf", "DPI", "Skalierung", "verschwommen", "blurry", "ClearType"],
+    "extendedKeywords": ["Anzeige unscharf", "Text verschwommen", "Programm unscharf", "DPI Skalierung unscharf", "Blurry Text Windows", "unscharfe Darstellung", "verschwommener Text", "App unscharf nach Skalierung", "DPI unscharf Fix", "Text nicht scharf", "Schrift unscharf", "Programm verschwommen", "unscharfe Apps", "Skalierung macht unscharf", "ClearType unscharf", "Font Rendering Problem", "Text verschwommen Windows", "Anwendung Darstellung unscharf", "unscharfe Schrift", "DPI Scaling Blurry"],
+    "typos": ["unsharf", "verschwomme", "unscharfe", "ClearTyp"],
+    "symptoms": ["Texte oder Programme erscheinen unscharf nach DPI-Skalierung"],
+    "quickCheck": "Ist nur ein bestimmtes Programm unscharf oder alles?",
+    "solutions": ["Windows Fix: Einstellungen > System > Anzeige > Erweiterte Skalierungseinstellungen > Fix für unscharfe Apps aktivieren", "Pro-App: Rechtsklick > Eigenschaften > Kompatibilität > Hohe DPI-Einstellungen ändern", "Systemseitige DPI-Skalierung verwenden statt App-Skalierung", "ClearType aktivieren: cttune.exe", "Abmelden und wieder anmelden nach Änderungen"],
+    "skillMapping": [
+      {"skillId": "rd_sysconfig_dpiscale", "label": "DPI-Skalierung anzeigen", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["unscharf", "verschwommen", "blurry", "nicht scharf"],
+    "followUpQuestions": [
+      {"question": "Betrifft es alle Programme oder nur bestimmte?", "options": ["Alle", "Nur bestimmte", "Nur ältere Programme"], "narrows": "System vs. App-spezifisch"}
+    ],
+    "relatedProblems": ["PROB-SYS-030"]
+  },
+  {
+    "id": "PROB-SYS-032",
+    "category": "Systemeinstellungen",
+    "title": "Windows nicht aktiviert",
+    "keywords": ["Aktivierung", "Windows aktivieren", "Lizenz", "Wasserzeichen", "Product Key", "Aktivierungsfehler"],
+    "extendedKeywords": ["Windows nicht aktiviert", "Windows aktivieren", "Lizenz aktivieren", "Wasserzeichen Windows aktivieren", "Product Key eingeben", "Windows Aktivierungsfehler", "Windows Lizenz Problem", "Aktivierung fehlgeschlagen", "Windows Lizenz abgelaufen", "Windows nicht lizenziert", "Aktivierung Windows", "Windows Key eingeben", "Lizenzschlüssel Windows", "Windows Aktivierung Fehler", "Wasserzeichen entfernen", "Windows Lizenz eingeben", "Aktivierung funktioniert nicht", "Windows nicht genuine", "Product Key ändern", "Windows Lizenzstatus"],
+    "typos": ["Aktiveirung", "Lizens", "Wasserzeicehn", "Product Kex"],
+    "symptoms": ["Windows ist nicht aktiviert", "Wasserzeichen auf dem Desktop", "Aktivierungsfehler"],
+    "quickCheck": "Welcher Aktivierungsfehler wird angezeigt?",
+    "solutions": ["Einstellungen > System > Aktivierung > Problembehandlung", "Product Key eingeben: Einstellungen > Aktivierung > Product Key ändern", "slmgr /ato für Online-Aktivierung", "KMS-Aktivierung prüfen (Firmenumgebung)", "Bei Hardware-Wechsel: Microsoft-Konto Lizenz verknüpfen"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["nicht aktiviert", "Wasserzeichen", "Lizenz Problem"],
+    "followUpQuestions": [
+      {"question": "Ist es ein Firmen-PC?", "options": ["Ja", "Nein"], "narrows": "KMS vs. Retail-Lizenz"},
+      {"question": "Wurde kürzlich Hardware gewechselt?", "options": ["Ja", "Nein"], "narrows": "Hardware-Lizenz-Problem"}
+    ],
+    "relatedProblems": ["PROB-SYS-033"]
+  },
+  {
+    "id": "PROB-SYS-033",
+    "category": "Systemeinstellungen",
+    "title": "Windows Product Key ändern",
+    "keywords": ["Product Key", "Lizenzschlüssel", "Key", "ändern", "eingeben", "wechseln"],
+    "extendedKeywords": ["Product Key ändern", "Lizenzschlüssel eingeben", "Windows Key wechseln", "neuen Key eingeben", "Product Key eingeben", "Windows Lizenz wechseln", "Key ändern Windows", "Lizenz Key eingeben", "Windows Product Key", "neuer Lizenzschlüssel", "Product Key ersetzen", "Windows Key aktualisieren", "Lizenz ändern Windows", "Product Key neu", "Lizenzschlüssel wechseln", "Key eingeben Windows", "Product Key tauschen", "neuen Product Key", "Windows Lizenzschlüssel ändern", "Product Key Update"],
+    "typos": ["Prodcut Key", "Lizenzschlüsel", "Product Kex", "Lizenzschlüseel"],
+    "symptoms": ["Product Key muss geändert oder eingegeben werden"],
+    "quickCheck": "Haben Sie den neuen Product Key zur Hand?",
+    "solutions": ["Einstellungen > System > Aktivierung > Product Key ändern", "CMD (Admin): slmgr /ipk XXXXX-XXXXX-XXXXX-XXXXX-XXXXX", "Danach aktivieren: slmgr /ato", "Bei KMS: slmgr /skms KMS-Server und dann /ato", "Aktuellen Key anzeigen: slmgr /dli"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["Product Key", "Lizenzschlüssel eingeben", "Key ändern"],
+    "followUpQuestions": [
+      {"question": "Haben Sie den neuen Product Key?", "options": ["Ja", "Nein"], "narrows": "Key vorhanden"}
+    ],
+    "relatedProblems": ["PROB-SYS-032"]
+  },
+  {
+    "id": "PROB-SYS-034",
+    "category": "Systemeinstellungen",
+    "title": "Windows-Dienst starten",
+    "keywords": ["Dienst", "starten", "Service", "Start", "funktioniert nicht", "gestoppt"],
+    "extendedKeywords": ["Dienst starten", "Service starten", "Windows Dienst starten", "gestoppter Dienst", "Dienst läuft nicht", "Service funktioniert nicht", "Dienst manuell starten", "Windows Service starten", "Dienst wurde gestoppt", "Service starten Windows", "Dienst neu starten", "Windows Dienst läuft nicht", "Dienst starten Fehler", "Service Start Fehler", "Dienst startet nicht", "Windows Dienst geht nicht", "Dienst kann nicht gestartet werden", "Service Failed to Start", "Dienst Startfehler", "Dienst starten cmd"],
+    "typos": ["Dinst", "straten", "Sevice", "gestoptt"],
+    "symptoms": ["Ein Windows-Dienst ist gestoppt und muss gestartet werden"],
+    "quickCheck": "Welcher Dienst soll gestartet werden?",
+    "solutions": ["services.msc > Dienst rechtsklick > Starten", "CMD: net start DienstName", "PowerShell: Start-Service -Name DienstName", "Bei Fehler: Ereignisanzeige für Details prüfen", "Abhängige Dienste ebenfalls prüfen"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["Dienst starten", "Service läuft nicht", "Dienst gestoppt"],
+    "followUpQuestions": [
+      {"question": "Welcher Dienst soll gestartet werden?", "options": ["Freitext"], "narrows": "Spezifischer Dienst"},
+      {"question": "Welche Fehlermeldung erscheint beim Start?", "options": ["Freitext"], "narrows": "Fehler-spezifische Lösung"}
+    ],
+    "relatedProblems": ["PROB-SYS-035", "PROB-SYS-036"]
+  },
+  {
+    "id": "PROB-SYS-035",
+    "category": "Systemeinstellungen",
+    "title": "Windows-Dienst stoppen",
+    "keywords": ["Dienst", "stoppen", "beenden", "Service", "anhalten", "deaktivieren"],
+    "extendedKeywords": ["Dienst stoppen", "Service beenden", "Windows Dienst anhalten", "Dienst deaktivieren", "Service stoppen", "Windows Service beenden", "Dienst manuell stoppen", "Service anhalten", "Dienst beenden Windows", "Dienst abschalten", "Dienst lässt sich nicht stoppen", "Service stoppt nicht", "Dienst Stop erzwingen", "Service beenden erzwingen", "Dienst hängt beim Stoppen", "Dienst stoppen Fehler", "Windows Dienst beenden", "Dienst nicht stoppbar", "Service deaktivieren stoppen", "Dienst Force Stop"],
+    "typos": ["Dinst stoppen", "Sevice beendn", "stopen", "behenden"],
+    "symptoms": ["Ein Windows-Dienst muss gestoppt werden"],
+    "quickCheck": "Welcher Dienst soll gestoppt werden?",
+    "solutions": ["services.msc > Dienst rechtsklick > Beenden", "CMD: net stop DienstName", "PowerShell: Stop-Service -Name DienstName -Force", "Bei hängendem Dienst: PID ermitteln und taskkill /f /pid PID", "sc stop DienstName als Alternative"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["Dienst stoppen", "Service beenden", "Dienst anhalten"],
+    "followUpQuestions": [
+      {"question": "Welcher Dienst?", "options": ["Freitext"], "narrows": "Spezifischer Dienst"},
+      {"question": "Dauerhaft oder nur temporär?", "options": ["Nur jetzt stoppen", "Dauerhaft deaktivieren"], "narrows": "Temporär vs. permanent"}
+    ],
+    "relatedProblems": ["PROB-SYS-034", "PROB-SYS-036"]
+  },
+  {
+    "id": "PROB-SYS-036",
+    "category": "Systemeinstellungen",
+    "title": "Windows-Dienst Starttyp ändern",
+    "keywords": ["Dienst", "Starttyp", "automatisch", "manuell", "deaktiviert", "Startup"],
+    "extendedKeywords": ["Dienst Starttyp ändern", "Service Startup Type", "Dienst auf automatisch", "Dienst auf manuell", "Dienst deaktivieren", "Starttyp Dienst ändern", "Service automatisch starten", "Dienst beim Boot starten", "Starttyp konfigurieren", "Dienst Startverhalten", "Dienst Auto-Start", "Service Starttyp", "Dienst Startup ändern", "Dienst soll nicht starten", "Dienst automatisch oder manuell", "sc config Starttyp", "Dienst dauerhaft deaktivieren", "Service Start Mode", "Dienst Starttyp Deaktiviert", "Dienst beim Systemstart"],
+    "typos": ["Startyp", "automatsich", "Diensst", "Starttpy"],
+    "symptoms": ["Starttyp eines Windows-Dienstes muss geändert werden"],
+    "quickCheck": "Welcher Starttyp soll der Dienst haben?",
+    "solutions": ["services.msc > Dienst > Eigenschaften > Starttyp", "sc config DienstName start=auto (Automatisch)", "sc config DienstName start=demand (Manuell)", "sc config DienstName start=disabled (Deaktiviert)", "PowerShell: Set-Service -Name DienstName -StartupType Automatic|Manual|Disabled"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["Starttyp ändern", "Dienst automatisch", "Dienst deaktivieren dauerhaft"],
+    "followUpQuestions": [
+      {"question": "Welcher Starttyp?", "options": ["Automatisch", "Manuell", "Deaktiviert", "Automatisch (verzögerter Start)"], "narrows": "Gewünschter Starttyp"}
+    ],
+    "relatedProblems": ["PROB-SYS-034", "PROB-SYS-035"]
+  },
+  {
+    "id": "PROB-SYS-037",
+    "category": "Systemeinstellungen",
+    "title": "Registry bearbeiten",
+    "keywords": ["Registry", "Registrierung", "regedit", "Schlüssel", "Wert", "HKLM", "HKCU"],
+    "extendedKeywords": ["Registry bearbeiten", "Registry Editor öffnen", "regedit öffnen", "Registry Schlüssel ändern", "Registry Wert setzen", "Registrierungseditor", "Registry Key ändern", "Registry Eintrag ändern", "regedit Einstellung", "Registry bearbeiten Anleitung", "Registry Wert erstellen", "Registry Schlüssel finden", "HKLM Eintrag", "HKCU Eintrag", "Registry Schlüssel erstellen", "Registrierung bearbeiten", "Registry Pfad navigieren", "Registry Wert löschen", "regedit starten", "Registry manuell ändern"],
+    "typos": ["Registyr", "regeidt", "Regitry", "Registiereung"],
+    "symptoms": ["Registry muss bearbeitet werden"],
+    "quickCheck": "Welcher Registry-Schlüssel soll bearbeitet werden?",
+    "solutions": ["regedit.exe als Administrator starten", "Zum gewünschten Schlüssel navigieren", "Vor Änderungen: Schlüssel exportieren als Backup", "Wert ändern: Doppelklick auf Wert und neuen Wert eingeben", "Neuen Schlüssel/Wert: Rechtsklick > Neu"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["Registry", "regedit", "Registrierung"],
+    "followUpQuestions": [
+      {"question": "Welcher Registry-Pfad soll bearbeitet werden?", "options": ["Freitext"], "narrows": "Spezifischer Pfad"},
+      {"question": "Wurde ein Backup erstellt?", "options": ["Ja", "Nein"], "narrows": "Sicherheit"}
+    ],
+    "relatedProblems": ["PROB-SYS-038"]
+  },
+  {
+    "id": "PROB-SYS-038",
+    "category": "Systemeinstellungen",
+    "title": "Registry-Backup",
+    "keywords": ["Registry", "Backup", "Sicherung", "Export", "Wiederherstellung", "regedit"],
+    "extendedKeywords": ["Registry Backup erstellen", "Registry sichern", "Registry exportieren", "Registry Sicherung", "regedit Export", "Registry Backup vor Änderung", "Registry wiederherstellen", "Registry Import", "Registry Sicherungskopie", "regedit Backup", "Registry Backup Anleitung", "Registry Schlüssel sichern", "Registry Wiederherstellung", "Registry Backup importieren", "Registry Sicherung erstellen", "regedit Export Backup", "Registry Snapshot", "Registry vor Änderung sichern", "Registrierung Backup", "Registry Backup Methode"],
+    "typos": ["Bakup", "Registyr", "Sicherugn", "Exportt"],
+    "symptoms": ["Registry-Backup soll erstellt oder wiederhergestellt werden"],
+    "quickCheck": "Soll ein Backup erstellt oder ein bestehendes wiederhergestellt werden?",
+    "solutions": ["Backup erstellen: regedit > Datei > Exportieren (ganzen Schlüssel oder Registry)", "Einzelnen Schlüssel: Rechtsklick > Exportieren", "Wiederherstellen: regedit > Datei > Importieren oder Doppelklick auf .reg-Datei", "Systemwiederherstellungspunkt enthält Registry-Backup", "reg export HKLM\\Path backup.reg für CMD-Export"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 35}
+    ],
+    "hiddenTriggers": ["Registry Backup", "Registry sichern", "Registry exportieren"],
+    "followUpQuestions": [
+      {"question": "Backup erstellen oder wiederherstellen?", "options": ["Erstellen", "Wiederherstellen"], "narrows": "Aktion"}
+    ],
+    "relatedProblems": ["PROB-SYS-037"]
+  },
+  {
+    "id": "PROB-SYS-039",
+    "category": "Systemeinstellungen",
+    "title": "Umgebungsvariablen ändern",
+    "keywords": ["Umgebungsvariablen", "PATH", "Environment", "Variable", "System", "Benutzer"],
+    "extendedKeywords": ["Umgebungsvariablen ändern", "PATH Variable ändern", "Environment Variable setzen", "Systemvariable ändern", "Benutzervariable ändern", "PATH hinzufügen", "Umgebungsvariable erstellen", "PATH bearbeiten", "Environment Variable Windows", "Systemvariable erstellen", "PATH erweitern", "Umgebungsvariable setzen", "JAVA_HOME setzen", "PATH Variable bearbeiten", "Umgebungsvariablen öffnen", "Environment Variable hinzufügen", "PATH konfigurieren", "Systemvariable PATH", "Umgebungsvariable Pfad", "Umgebungsvariablen Windows"],
+    "typos": ["Umgebungsvariabeln", "Umgebungsvariablen", "PATH", "Enviornment"],
+    "symptoms": ["Umgebungsvariablen müssen geändert oder erstellt werden"],
+    "quickCheck": "Welche Umgebungsvariable soll geändert werden?",
+    "solutions": ["Systemsteuerung > System > Erweiterte Systemeinstellungen > Umgebungsvariablen", "System- vs. Benutzervariablen unterscheiden", "PATH bearbeiten: Variable auswählen > Bearbeiten > Neuen Pfad hinzufügen", "CMD temporär: set VARIABLE=Wert", "PowerShell permanent: [Environment]::SetEnvironmentVariable('Name','Wert','Machine')"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 35}
+    ],
+    "hiddenTriggers": ["Umgebungsvariablen", "PATH", "Environment Variable"],
+    "followUpQuestions": [
+      {"question": "System- oder Benutzervariable?", "options": ["System", "Benutzer", "Weiß nicht"], "narrows": "Variablen-Typ"},
+      {"question": "Welche Variable?", "options": ["PATH", "JAVA_HOME", "Andere"], "narrows": "Spezifische Variable"}
+    ],
+    "relatedProblems": ["PROB-SYS-037"]
+  },
+  {
+    "id": "PROB-SYS-040",
+    "category": "Systemeinstellungen",
+    "title": "Systemwiederherstellung",
+    "keywords": ["Systemwiederherstellung", "Wiederherstellungspunkt", "Restore Point", "System Restore", "Zurücksetzen"],
+    "extendedKeywords": ["Systemwiederherstellung durchführen", "Wiederherstellungspunkt erstellen", "System Restore", "PC auf früheren Zeitpunkt zurücksetzen", "Systemwiederherstellung starten", "Wiederherstellungspunkt nutzen", "System zurücksetzen auf Zeitpunkt", "Systemwiederherstellung Windows", "Restore Point erstellen", "Systemwiederherstellung aktivieren", "Wiederherstellungspunkt anlegen", "System Restore durchführen", "Systemwiederherstellung rückgängig", "Wiederherstellungspunkt fehlt", "Systemwiederherstellung geht nicht", "System Restore Point", "Systemschutz aktivieren", "Wiederherstellungspunkt manuell", "Systemwiederherstellung ausführen", "PC zurücksetzen Zeitpunkt"],
+    "typos": ["Sysemwiederherstellung", "Wiederherstellungspunkt", "Systemwiederhrestellung", "Restore Piont"],
+    "symptoms": ["Systemwiederherstellung soll durchgeführt oder Wiederherstellungspunkt erstellt werden"],
+    "quickCheck": "Soll ein Wiederherstellungspunkt erstellt oder das System zurückgesetzt werden?",
+    "solutions": ["Wiederherstellungspunkt erstellen: Systemsteuerung > System > Computerschutz > Erstellen", "System wiederherstellen: Systemsteuerung > System > Computerschutz > Systemwiederherstellung", "Systemschutz aktivieren: Konfigurieren > Computerschutz aktivieren", "rstrui.exe für direkten Start der Systemwiederherstellung", "Im abgesicherten Modus: Systemwiederherstellung ist auch verfügbar"],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-auth", "label": "Authentifizierungs-Diagnose", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["Systemwiederherstellung", "Wiederherstellungspunkt", "System zurücksetzen"],
+    "followUpQuestions": [
+      {"question": "Was möchten Sie tun?", "options": ["Wiederherstellungspunkt erstellen", "System wiederherstellen", "Systemschutz aktivieren"], "narrows": "Gewünschte Aktion"},
+      {"question": "Gibt es existierende Wiederherstellungspunkte?", "options": ["Ja", "Nein", "Weiß nicht"], "narrows": "Verfügbarkeit"}
+    ],
+    "relatedProblems": ["PROB-SYS-037", "PROB-SYS-038"]
+  }
+]

@@ -15,8 +15,31 @@ const WEEKDAYS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
 const EMAIL_CONFIG_PATH = (u: string) => `email_config/${u}.json`
 
 type View = 'list' | 'form'
-interface SelCmd { catId: string; cmdId: string; input?: string; notifyEmail?: string }
+
+interface CmdSchedule {
+  type: 'once' | 'recurring'
+  time: string
+  date?: string
+  days: number[]
+  repeat: 'weekly' | 'biweekly' | 'monthly'
+}
+
+interface SelCmd {
+  catId: string
+  cmdId: string
+  input?: string
+  notifyEnabled?: boolean
+  notifyEmail?: string
+  notifySubject?: string
+  notifyBody?: string
+  cmdSchedule?: CmdSchedule
+}
+
 interface SvcInfo { name: string; displayName: string; status: string }
+
+function defaultCmdSchedule(): CmdSchedule {
+  return { type: 'once', time: '08:00', date: '', days: [1], repeat: 'weekly' }
+}
 
 // ── Helper: load per-user email config ────────────────────────────────────────
 async function loadEmailCfg(username: string): Promise<UserEmailConfig | null> {
@@ -25,16 +48,13 @@ async function loadEmailCfg(username: string): Promise<UserEmailConfig | null> {
   } catch { return null }
 }
 
-// ── Helper: send email via nodemailer ─────────────────────────────────────────
+// ── Helper: send email ─────────────────────────────────────────────────────────
 async function sendMail(cfg: UserEmailConfig, to: string, subject: string, body: string) {
   if (!cfg.email || !cfg.smtp) return
-  await api().sendEmailRaw({
-    to, subject, body,
-    smtp: cfg.smtp, port: cfg.port, useTls: cfg.useTls, from: cfg.email,
-  })
+  await api().sendEmailRaw({ to, subject, body, smtp: cfg.smtp, port: cfg.port, useTls: cfg.useTls, from: cfg.email, method: cfg.emailMethod })
 }
 
-// ── Helper: check if a task should run now ────────────────────────────────────
+// ── Helper: check if a global schedule matches now ────────────────────────────
 function shouldRunNow(task: ScheduledTask, now: Date): boolean {
   if (task.status !== 'active') return false
   const s = task.schedule
@@ -42,26 +62,69 @@ function shouldRunNow(task: ScheduledTask, now: Date): boolean {
   if (s.time !== hhmm) return false
   const today = now.toISOString().slice(0, 10)
   const dow = now.getDay()
-  if (s.type === 'once') {
-    return (s.dates ?? []).includes(today)
-  }
-  // recurring
+  if (s.type === 'once') return (s.dates ?? []).includes(today)
   if (!(s.days ?? []).includes(dow)) return false
   if (s.repeat === 'biweekly') {
-    // count weeks since epoch monday
-    const ms = now.getTime()
-    const weekNum = Math.floor(ms / (7 * 24 * 60 * 60 * 1000))
+    const weekNum = Math.floor(now.getTime() / (7 * 24 * 60 * 60 * 1000))
     return weekNum % 2 === 0
   }
   if (s.repeat === 'monthly') {
-    // run on the first matching weekday of the month
     const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-    // find first occurrence of this dow in month
     let d = firstOfMonth
     while (d.getDay() !== dow) d = new Date(d.getTime() + 86400000)
     return d.getDate() === now.getDate()
   }
-  return true // weekly
+  return true
+}
+
+// ── Helper: check if a per-cmd schedule matches now ───────────────────────────
+function scheduleMatchesNow(
+  s: { type: 'once' | 'recurring'; time: string; date?: string; days?: number[]; repeat?: string },
+  now: Date,
+): boolean {
+  const hhmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+  if (s.time !== hhmm) return false
+  const today = now.toISOString().slice(0, 10)
+  const dow = now.getDay()
+  if (s.type === 'once') return s.date === today
+  if (!(s.days ?? []).includes(dow)) return false
+  if (s.repeat === 'biweekly') {
+    const weekNum = Math.floor(now.getTime() / (7 * 24 * 60 * 60 * 1000))
+    return weekNum % 2 === 0
+  }
+  if (s.repeat === 'monthly') {
+    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+    let d = firstOfMonth
+    while (d.getDay() !== dow) d = new Date(d.getTime() + 86400000)
+    return d.getDate() === now.getDate()
+  }
+  return true
+}
+
+// ── Helper: ensure WinRM is running on a device ───────────────────────────────
+async function ensureWinRM(device: string): Promise<void> {
+  const h = device.replace(/'/g, "''")
+  try {
+    const pingRes = await api().runPowerShell(`Test-Connection -ComputerName '${h}' -Count 1 -Quiet`, 10000)
+    if (pingRes.stdout.trim().toLowerCase() !== 'true') {
+      console.log(`[ScheduledTasks] WinRM pre-check: ${device} not reachable`)
+      return
+    }
+    const winrmScript = [
+      `try { Test-WSMan -ComputerName '${h}' -EA Stop | Out-Null; Write-Output 'ALREADY_OK' }`,
+      `catch {`,
+      `  try {`,
+      `    $svc = Get-Service -ComputerName '${h}' -Name WinRM -EA Stop`,
+      `    $svc.Start(); $svc.WaitForStatus('Running', [TimeSpan]::FromSeconds(15))`,
+      `    Write-Output 'STARTED'`,
+      `  } catch { Write-Output "FAIL:$($_.Exception.Message)" }`,
+      `}`,
+    ].join('\n')
+    const res = await api().runPowerShell(winrmScript, 30000)
+    console.log(`[ScheduledTasks] WinRM pre-check ${device}: ${res.stdout.trim()}`)
+  } catch (e) {
+    console.error(`[ScheduledTasks] WinRM pre-check error for ${device}:`, e)
+  }
 }
 
 export default function ScheduledTasks() {
@@ -76,6 +139,7 @@ export default function ScheduledTasks() {
   const [saving, setSaving]     = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null)
+  const [myEmail, setMyEmail]   = useState('')
 
   // Form state
   const [taskName,    setTaskName]    = useState('')
@@ -89,12 +153,16 @@ export default function ScheduledTasks() {
   const [schedDate,   setSchedDate]   = useState('')
   const [schedRepeat, setSchedRepeat] = useState<'weekly' | 'biweekly' | 'monthly'>('weekly')
   // Reboot options
-  const [rebootPre,       setRebootPre]       = useState(false)
-  const [rebootPreRecip,  setRebootPreRecip]  = useState('')
-  const [rebootPreMins,   setRebootPreMins]   = useState(30)
-  const [rebootOnline,    setRebootOnline]    = useState(false)
+  const [rebootPre,         setRebootPre]         = useState(false)
+  const [rebootPreRecip,    setRebootPreRecip]    = useState('')
+  const [rebootPreMins,     setRebootPreMins]     = useState(30)
+  const [rebootPreSubject,  setRebootPreSubject]  = useState('')
+  const [rebootPreBody,     setRebootPreBody]     = useState('')
+  const [rebootOnline,      setRebootOnline]      = useState(false)
   const [rebootOnlineRecip, setRebootOnlineRecip] = useState('')
-  const [rebootSvcCheck,  setRebootSvcCheck]  = useState('')
+  const [rebootOnlineSubject, setRebootOnlineSubject] = useState('')
+  const [rebootOnlineBody,  setRebootOnlineBody]  = useState('')
+  const [rebootSvcCheck,    setRebootSvcCheck]    = useState('')
 
   // Service query state (per service-command)
   const [svcQueryDevice, setSvcQueryDevice] = useState<Record<string, string>>({})
@@ -106,6 +174,13 @@ export default function ScheduledTasks() {
   const schedulerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const ranThisMinute = useRef<Set<string>>(new Set())
 
+  // Load own email address for "An mich" button
+  useEffect(() => {
+    if (username) {
+      loadEmailCfg(username).then(cfg => { if (cfg?.email) setMyEmail(cfg.email) }).catch(() => {})
+    }
+  }, [username])
+
   const loadTasks = useCallback(async () => {
     setLoading(true)
     try {
@@ -116,29 +191,97 @@ export default function ScheduledTasks() {
 
   useEffect(() => { loadTasks() }, [loadTasks])
 
-  // ── Scheduler: check every 30 seconds ────────────────────────────────────────
+  // ── Scheduler ─────────────────────────────────────────────────────────────────
   useEffect(() => {
     schedulerRef.current = setInterval(async () => {
       const now = new Date()
       const minuteKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}-${now.getMinutes()}`
-      // Get fresh tasks from state (closure issue: use ref)
       const currentTasks: ScheduledTask[] = await api().netReadJson('scheduled_tasks/tasks.json').catch(() => []) ?? []
+
+      // 6a: WinRM pre-check — 60 seconds before any scheduled command
+      const in60 = new Date(now.getTime() + 60000)
+      const in60hhmm = `${String(in60.getHours()).padStart(2, '0')}:${String(in60.getMinutes()).padStart(2, '0')}`
       for (const task of currentTasks) {
-        const taskKey = `${task.id}-${minuteKey}`
-        if (ranThisMinute.current.has(taskKey)) continue
-        if (!shouldRunNow(task, now)) continue
-        ranThisMinute.current.add(taskKey)
-        runTask(task)
+        if (task.status !== 'active') continue
+        const hasPerCmdSchedule = task.commands.some(c => c.schedule)
+        let willRunSoon = false
+        if (hasPerCmdSchedule) {
+          willRunSoon = task.commands.some(c => c.schedule && scheduleMatchesNow(c.schedule, in60))
+        } else {
+          willRunSoon = task.schedule.time === in60hhmm && shouldRunNow(
+            { ...task, schedule: { ...task.schedule, time: in60hhmm } }, in60
+          )
+        }
+        if (willRunSoon) {
+          const preKey = `pre-${task.id}-${in60hhmm}`
+          if (!ranThisMinute.current.has(preKey)) {
+            ranThisMinute.current.add(preKey)
+            task.devices.forEach(device => ensureWinRM(device).catch(() => {}))
+          }
+        }
       }
-      // Clean up old minute keys
+
+      // Run due tasks/commands
+      for (const task of currentTasks) {
+        if (task.status !== 'active') continue
+        const hasPerCmdSchedule = task.commands.some(c => c.schedule)
+
+        if (hasPerCmdSchedule) {
+          // 6b: per-cmd schedule — each command is triggered independently
+          for (const cmdDef of task.commands) {
+            if (!cmdDef.schedule) continue
+            if (!scheduleMatchesNow(cmdDef.schedule, now)) continue
+            const cmdKey = `${task.id}-${cmdDef.cmdId}-${minuteKey}`
+            if (ranThisMinute.current.has(cmdKey)) continue
+            ranThisMinute.current.add(cmdKey)
+            runSingleCommand(task, cmdDef)
+          }
+        } else {
+          const taskKey = `${task.id}-${minuteKey}`
+          if (ranThisMinute.current.has(taskKey)) continue
+          if (!shouldRunNow(task, now)) continue
+          ranThisMinute.current.add(taskKey)
+          runTask(task)
+        }
+      }
+
       if (ranThisMinute.current.size > 500) ranThisMinute.current.clear()
     }, 30000)
     return () => { if (schedulerRef.current) clearInterval(schedulerRef.current) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // ── Run a single command (for per-cmd schedule) ───────────────────────────────
+  async function runSingleCommand(task: ScheduledTask, cmdDef: ScheduledTask['commands'][0]) {
+    const emailCfg = await loadEmailCfg(username)
+    const cat = CATEGORIES.find(c => c.id === cmdDef.catId)
+    const cmd = cat?.commands.find(c => c.id === cmdDef.cmdId)
+    if (!cmd) return
+
+    for (const device of task.devices) {
+      let ok = false
+      let output = ''
+      try {
+        const psCmd = cmd.buildCmd(device, cmdDef.input)
+        const res = await api().runPowerShell(psCmd, 120000)
+        ok = res.exitCode === 0
+        output = res.stdout || res.stderr || ''
+      } catch (e) { output = String(e) }
+
+      if (cmdDef.notifyEmail && emailCfg) {
+        const subject = cmdDef.notifySubject || `IT Admin Tool – ${task.name}: ${cmd.func}`
+        const body = (cmdDef.notifyBody || `Aufgabe: ${task.name}\nBefehl: ${cmd.func}\nGerät: {device}\nErgebnis: {status}\nZeit: {time}`)
+          .replace(/\{device\}/g, device)
+          .replace(/\{status\}/g, ok ? 'Erfolgreich' : 'Fehler')
+          .replace(/\{time\}/g, new Date().toLocaleString('de-DE'))
+          .replace(/\{output\}/g, output.slice(0, 500))
+        try { await sendMail(emailCfg, cmdDef.notifyEmail, subject, body) } catch { /* ignore */ }
+      }
+    }
+  }
 
   async function runTask(task: ScheduledTask) {
     const emailCfg = await loadEmailCfg(username)
-    // Check if reboot task with pre-email
     const hasReboot = task.commands.some(c => c.catId === 'reboot')
     if (hasReboot && task.rebootOptions?.preRebootEmail?.enabled && emailCfg) {
       const mins = task.rebootOptions.preRebootEmail.minutesBefore
@@ -146,15 +289,14 @@ export default function ScheduledTasks() {
       if (recip && mins > 0) {
         setTimeout(async () => {
           try {
-            await sendMail(emailCfg, recip,
-              `IT Admin Tool – Reboot geplant: ${task.name}`,
-              `Geräte: ${task.devices.join(', ')}\nReboot startet in ${mins} Minuten.`)
+            const subject = task.rebootOptions?.preRebootEmail?.subject || `IT Admin Tool – Reboot geplant: ${task.name}`
+            const body = task.rebootOptions?.preRebootEmail?.body || `Geräte: ${task.devices.join(', ')}\nReboot startet in ${mins} Minuten.`
+            await sendMail(emailCfg, recip, subject, body)
           } catch { /* ignore */ }
         }, Math.max(0, (task.schedule.time ? 0 : mins * 60000) - mins * 60000))
       }
     }
 
-    // Execute commands on all devices
     const results: Record<string, 'success' | 'error'> = {}
     for (const device of task.devices) {
       for (const sc of task.commands) {
@@ -162,26 +304,29 @@ export default function ScheduledTasks() {
         const cmd = cat?.commands.find(c => c.id === sc.cmdId)
         if (!cmd) continue
         let ok = false
+        let output = ''
         try {
           const psCmd = cmd.buildCmd(device, sc.input)
           const res = await api().runPowerShell(psCmd, 120000)
           ok = res.exitCode === 0
+          output = res.stdout || res.stderr || ''
           results[`${device}/${sc.cmdId}`] = ok ? 'success' : 'error'
-        } catch {
+        } catch (e) {
+          output = String(e)
           results[`${device}/${sc.cmdId}`] = 'error'
         }
-        // Per-command email notification
         if (sc.notifyEmail && emailCfg) {
-          try {
-            await sendMail(emailCfg, sc.notifyEmail,
-              `IT Admin Tool – Aufgabe: ${task.name} (${cmd.func})`,
-              `Aufgabe: ${task.name}\nBefehl: ${cmd.func}\nGerät: ${device}\nErgebnis: ${ok ? 'Erfolgreich' : 'Fehler'}\nZeit: ${new Date().toLocaleString('de-DE')}`)
-          } catch { /* ignore */ }
+          const subject = sc.notifySubject || `IT Admin Tool – ${task.name}: ${cmd.func}`
+          const body = (sc.notifyBody || `Aufgabe: ${task.name}\nBefehl: ${cmd.func}\nGerät: {device}\nErgebnis: {status}\nZeit: {time}`)
+            .replace(/\{device\}/g, device)
+            .replace(/\{status\}/g, ok ? 'Erfolgreich' : 'Fehler')
+            .replace(/\{time\}/g, new Date().toLocaleString('de-DE'))
+            .replace(/\{output\}/g, output.slice(0, 500))
+          try { await sendMail(emailCfg, sc.notifyEmail, subject, body) } catch { /* ignore */ }
         }
       }
     }
 
-    // Update lastRun / lastResult
     const allOk = Object.values(results).every(r => r === 'success')
     const updated = tasks.map(t =>
       t.id === task.id ? { ...t, lastRun: new Date().toISOString(), lastResult: allOk ? 'success' : 'error' as const } : t
@@ -189,33 +334,44 @@ export default function ScheduledTasks() {
     await api().netWriteJson('scheduled_tasks/tasks.json', updated)
     setTasks(updated)
 
-    // After-reboot online notification
     if (hasReboot && task.rebootOptions?.onlineNotification?.enabled && emailCfg) {
       const recip = task.rebootOptions.onlineNotification.recipients || emailCfg.notifyEmail
       if (recip) {
         const services = task.rebootOptions.onlineNotification.checkServices ?? []
-        // Poll all devices until online
+        const onlineSubject = task.rebootOptions.onlineNotification.subject
+        const onlineBody = task.rebootOptions.onlineNotification.body
         for (const device of task.devices) {
-          pollUntilOnline(device, services, emailCfg, recip, task.name)
+          pollUntilOnline(device, services, emailCfg, recip, task.name, onlineSubject, onlineBody)
         }
       }
     }
   }
 
-  async function pollUntilOnline(device: string, services: string[], cfg: UserEmailConfig, recip: string, taskName: string) {
+  async function pollUntilOnline(device: string, services: string[], cfg: UserEmailConfig, recip: string, taskName: string, customSubject?: string, customBody?: string) {
     for (let i = 0; i < 120; i++) {
       await new Promise(r => setTimeout(r, 60000))
       try {
         const pingResult = await api().runPowerShell(`Test-Connection -ComputerName '${device}' -Count 1 -Quiet`, 10000)
         if (pingResult.stdout.trim().toLowerCase() === 'true') {
-          // Check services if needed
+          let svcStatus = ''
           if (services.length > 0) {
-            const svcScript = `Get-Service -ComputerName '${device}' -Name ${services.map(s => `'${s}'`).join(',')} -EA SilentlyContinue | Where-Object {$_.Status -ne 'Running'} | Measure-Object | Select-Object -ExpandProperty Count`
+            const svcScript = `Get-Service -ComputerName '${device}' -Name ${services.map(s => `'${s}'`).join(',')} -EA SilentlyContinue | Select-Object Name,Status | ConvertTo-Json -Compress`
             const svcRes = await api().runPowerShell(svcScript, 15000)
-            if (parseInt(svcRes.stdout.trim()) > 0) continue // services not yet running
+            try {
+              const svcArr = JSON.parse(svcRes.stdout.trim())
+              const arr = Array.isArray(svcArr) ? svcArr : [svcArr]
+              const notRunning = arr.filter((s: Record<string, unknown>) => String(s.Status ?? '') !== 'Running')
+              if (notRunning.length > 0) continue
+              svcStatus = arr.map((s: Record<string, unknown>) => `${s.Name}: ${s.Status}`).join(', ')
+            } catch { continue }
           }
-          await sendMail(cfg, recip, `IT Admin Tool – ${device} wieder online`,
-            `Aufgabe: ${taskName}\nGerät: ${device}\nStatus: Online und bereit\nZeit: ${new Date().toLocaleString('de-DE')}`)
+          const subject = customSubject || `IT Admin Tool – ${device} wieder online`
+          const body = (customBody || `Aufgabe: {task}\nGerät: {device}\nStatus: Online und bereit\nZeit: {time}\n{services}`)
+            .replace(/\{task\}/g, taskName)
+            .replace(/\{device\}/g, device)
+            .replace(/\{time\}/g, new Date().toLocaleString('de-DE'))
+            .replace(/\{services\}/g, svcStatus ? `Dienste: ${svcStatus}` : '')
+          await sendMail(cfg, recip, subject, body)
           return
         }
       } catch { /* ignore */ }
@@ -227,29 +383,42 @@ export default function ScheduledTasks() {
     setTasks(updated)
   }
 
-  function hasRebootCmd() {
-    return selCmds.some(sc => sc.catId === 'reboot')
-  }
+  function hasRebootCmd() { return selCmds.some(sc => sc.catId === 'reboot') }
+
+  // 6b: whether to use per-cmd schedule (2+ activities)
+  const usePerCmdSchedule = selCmds.length >= 2
 
   function buildTaskFromForm(id?: string): ScheduledTask {
     const devices = deviceInput.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean)
     const commands: ScheduledTask['commands'] = selCmds.map(sc => ({
       catId: sc.catId, cmdId: sc.cmdId,
       input: inputVals[sc.catId + sc.cmdId] || undefined,
-      notifyEmail: sc.notifyEmail || undefined,
+      notifyEmail: sc.notifyEnabled ? sc.notifyEmail || undefined : undefined,
+      notifySubject: sc.notifyEnabled ? sc.notifySubject || undefined : undefined,
+      notifyBody: sc.notifyEnabled ? sc.notifyBody || undefined : undefined,
+      schedule: usePerCmdSchedule && sc.cmdSchedule ? {
+        type: sc.cmdSchedule.type,
+        time: sc.cmdSchedule.time,
+        date: sc.cmdSchedule.date,
+        days: sc.cmdSchedule.days,
+        repeat: sc.cmdSchedule.repeat,
+      } : undefined,
     }))
     const rebootOptions: ScheduledTask['rebootOptions'] = hasRebootCmd() ? {
-      preRebootEmail: { enabled: rebootPre, recipients: rebootPreRecip, minutesBefore: rebootPreMins },
-      onlineNotification: { enabled: rebootOnline, recipients: rebootOnlineRecip, checkServices: rebootSvcCheck.split(',').map(s=>s.trim()).filter(Boolean) },
+      preRebootEmail: { enabled: rebootPre, recipients: rebootPreRecip, minutesBefore: rebootPreMins, subject: rebootPreSubject || undefined, body: rebootPreBody || undefined },
+      onlineNotification: { enabled: rebootOnline, recipients: rebootOnlineRecip, checkServices: rebootSvcCheck.split(',').map(s=>s.trim()).filter(Boolean), subject: rebootOnlineSubject || undefined, body: rebootOnlineBody || undefined },
     } : undefined
     return {
       id: id ?? `task-${Date.now()}`,
       name: taskName.trim(),
       devices,
       commands,
-      schedule: schedType === 'recurring'
-        ? { type: 'recurring', days: schedDays, time: schedTime, repeat: schedRepeat }
-        : { type: 'once', dates: [schedDate], time: schedTime },
+      // When using per-cmd schedule, task-level schedule is a sentinel (time='')
+      schedule: usePerCmdSchedule
+        ? { type: 'once', dates: [], time: '' }
+        : schedType === 'recurring'
+          ? { type: 'recurring', days: schedDays, time: schedTime, repeat: schedRepeat }
+          : { type: 'once', dates: [schedDate], time: schedTime },
       rebootOptions,
       status: editingTask?.status ?? 'active',
       createdAt: editingTask?.createdAt ?? new Date().toISOString(),
@@ -262,22 +431,42 @@ export default function ScheduledTasks() {
   function populateFormFromTask(task: ScheduledTask) {
     setTaskName(task.name)
     setDeviceInput(task.devices.join('\n'))
-    const cmds: SelCmd[] = task.commands.map(c => ({ catId: c.catId, cmdId: c.cmdId, input: c.input, notifyEmail: c.notifyEmail }))
+    const cmds: SelCmd[] = task.commands.map(c => ({
+      catId: c.catId, cmdId: c.cmdId, input: c.input,
+      notifyEnabled: !!(c.notifyEmail),
+      notifyEmail: c.notifyEmail,
+      notifySubject: c.notifySubject,
+      notifyBody: c.notifyBody,
+      cmdSchedule: c.schedule ? {
+        type: c.schedule.type,
+        time: c.schedule.time,
+        date: c.schedule.date,
+        days: c.schedule.days ?? [1],
+        repeat: (c.schedule.repeat ?? 'weekly') as 'weekly' | 'biweekly' | 'monthly',
+      } : defaultCmdSchedule(),
+    }))
     setSelCmds(cmds)
     const vals: Record<string, string> = {}
     task.commands.forEach(c => { if (c.input) vals[c.catId + c.cmdId] = c.input })
     setInputVals(vals)
-    setSchedType(task.schedule.type)
-    setSchedTime(task.schedule.time)
-    setSchedDays(task.schedule.days ?? [1])
-    setSchedDate(task.schedule.dates?.[0] ?? '')
-    setSchedRepeat(task.schedule.repeat ?? 'weekly')
+    // Only restore global schedule if not per-cmd
+    if (!task.commands.some(c => c.schedule)) {
+      setSchedType(task.schedule.type)
+      setSchedTime(task.schedule.time)
+      setSchedDays(task.schedule.days ?? [1])
+      setSchedDate(task.schedule.dates?.[0] ?? '')
+      setSchedRepeat(task.schedule.repeat ?? 'weekly')
+    }
     const ro = task.rebootOptions
     setRebootPre(ro?.preRebootEmail?.enabled ?? false)
     setRebootPreRecip(ro?.preRebootEmail?.recipients ?? '')
     setRebootPreMins(ro?.preRebootEmail?.minutesBefore ?? 30)
+    setRebootPreSubject(ro?.preRebootEmail?.subject ?? '')
+    setRebootPreBody(ro?.preRebootEmail?.body ?? '')
     setRebootOnline(ro?.onlineNotification?.enabled ?? false)
     setRebootOnlineRecip(ro?.onlineNotification?.recipients ?? '')
+    setRebootOnlineSubject(ro?.onlineNotification?.subject ?? '')
+    setRebootOnlineBody(ro?.onlineNotification?.body ?? '')
     setRebootSvcCheck((ro?.onlineNotification?.checkServices ?? []).join(', '))
   }
 
@@ -292,20 +481,27 @@ export default function ScheduledTasks() {
     setOpenCats(new Set())
     setSchedType('recurring'); setSchedTime('08:00'); setSchedDays([1])
     setSchedDate(''); setSchedRepeat('weekly')
-    setRebootPre(false); setRebootPreRecip(''); setRebootPreMins(30)
-    setRebootOnline(false); setRebootOnlineRecip(''); setRebootSvcCheck('')
+    setRebootPre(false); setRebootPreRecip(''); setRebootPreMins(30); setRebootPreSubject(''); setRebootPreBody('')
+    setRebootOnline(false); setRebootOnlineRecip(''); setRebootOnlineSubject(''); setRebootOnlineBody(''); setRebootSvcCheck('')
     setEditingTask(null)
     setSvcQueryDevice({}); setSvcList({}); setSvcLoading({}); setSvcError({}); setSvcSearch({})
   }
 
+  // 6d: load services with ping+WinRM check first
   async function loadServices(key: string, device: string) {
     if (!device.trim()) return
     setSvcLoading(p => ({ ...p, [key]: true }))
     setSvcError(p => ({ ...p, [key]: '' }))
     try {
-      const ps = `Get-Service -ComputerName '${device.trim()}' -EA Stop | Select-Object Name,DisplayName,Status | Sort-Object DisplayName | ConvertTo-Json -Compress`
+      // Check reachability first
+      const pingRes = await api().runPowerShell(`Test-Connection -ComputerName '${device.trim().replace(/'/g,"''")}' -Count 1 -Quiet`, 8000)
+      if (pingRes.stdout.trim().toLowerCase() !== 'true') {
+        throw new Error(`${device} ist nicht erreichbar (Ping fehlgeschlagen)`)
+      }
+      // Query services via WinRM
+      const ps = `Get-Service -ComputerName '${device.trim().replace(/'/g,"''")}' -EA Stop | Select-Object Name,DisplayName,Status | Sort-Object DisplayName | ConvertTo-Json -Compress`
       const res = await api().runPowerShell(ps, 30000)
-      if (res.exitCode !== 0) throw new Error(res.stderr || res.stdout)
+      if (res.exitCode !== 0) throw new Error(res.stderr || res.stdout || 'Unbekannter Fehler')
       const raw = res.stdout.trim()
       const parsed = JSON.parse(raw)
       const arr: SvcInfo[] = (Array.isArray(parsed) ? parsed : [parsed]).map((s: Record<string, unknown>) => ({
@@ -325,7 +521,6 @@ export default function ScheduledTasks() {
     const next = current.includes(name) ? current.filter(s => s !== name) : [...current, name]
     setInputVals(p => ({ ...p, [key]: next.join(', ') }))
   }
-
   function isSvcSelected(key: string, name: string) {
     return (inputVals[key] || '').split(',').map(s => s.trim()).includes(name)
   }
@@ -340,16 +535,26 @@ export default function ScheduledTasks() {
       const n = [...prev]; [n[idx], n[idx + 1]] = [n[idx + 1], n[idx]]; return n
     })
   }
-  function setCmdNotifyEmail(catId: string, cmdId: string, email: string) {
+
+  // Generic update for any SelCmd field
+  function updateSelCmd(catId: string, cmdId: string, patch: Partial<SelCmd>) {
     setSelCmds(prev => prev.map(sc =>
-      sc.catId === catId && sc.cmdId === cmdId ? { ...sc, notifyEmail: email } : sc
+      sc.catId === catId && sc.cmdId === cmdId ? { ...sc, ...patch } : sc
+    ))
+  }
+
+  function updateCmdSchedule(catId: string, cmdId: string, patch: Partial<CmdSchedule>) {
+    setSelCmds(prev => prev.map(sc =>
+      sc.catId === catId && sc.cmdId === cmdId
+        ? { ...sc, cmdSchedule: { ...(sc.cmdSchedule ?? defaultCmdSchedule()), ...patch } }
+        : sc
     ))
   }
 
   async function handleSave() {
     const devices = deviceInput.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean)
     if (!taskName.trim() || devices.length === 0 || selCmds.length === 0) return
-    if (schedType === 'once' && !schedDate) return
+    if (!usePerCmdSchedule && schedType === 'once' && !schedDate) return
     setSaving(true)
     try {
       const task = buildTaskFromForm(editingTask?.id)
@@ -398,13 +603,14 @@ export default function ScheduledTasks() {
       setSelCmds(prev => prev.filter(sc => !(sc.catId === catId && sc.cmdId === cmdId)))
       setInputVals(prev => { const n = { ...prev }; delete n[cmdKey(catId, cmdId)]; return n })
     } else {
-      setSelCmds(prev => [...prev, { catId, cmdId }])
+      setSelCmds(prev => [...prev, { catId, cmdId, cmdSchedule: defaultCmdSchedule() }])
     }
   }
   function setInput(catId: string, cmdId: string, val: string) {
     setInputVals(prev => ({ ...prev, [cmdKey(catId, cmdId)]: val }))
   }
   function formatSchedule(t: ScheduledTask) {
+    if (t.commands.some(c => c.schedule)) return `${t.commands.length} individuelle Zeitpläne`
     const s = t.schedule
     if (s.type === 'once') return `Einmalig · ${s.dates?.[0] ?? ''} um ${s.time}`
     const days = (s.days ?? []).map(d => WEEKDAYS[d]).join(', ')
@@ -414,7 +620,7 @@ export default function ScheduledTasks() {
 
   const devices = deviceInput.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean)
   const formValid = taskName.trim() && devices.length > 0 && selCmds.length > 0 &&
-    (schedType === 'recurring' ? schedDays.length > 0 : !!schedDate)
+    (usePerCmdSchedule || (schedType === 'recurring' ? schedDays.length > 0 : !!schedDate))
 
   return (
     <div className="flex flex-col h-full">
@@ -422,7 +628,7 @@ export default function ScheduledTasks() {
       <div className="shrink-0 flex items-center gap-2.5 px-5 py-2 bg-amber-500/10 border-b border-amber-500/30">
         <Info size={13} className="text-amber-400 shrink-0" />
         <p className="text-xs text-amber-400">
-          Hinweis: Geplante Aufgaben werden nur ausgeführt wenn das IT Admin Tool aktiv läuft.
+          Hinweis: Geplante Aufgaben werden nur ausgeführt wenn das IT Admin Tool aktiv läuft. WinRM wird automatisch 60 Sek. vor Ausführung aktiviert.
         </p>
       </div>
 
@@ -454,7 +660,7 @@ export default function ScheduledTasks() {
 
       {view === 'form' ? (
         /* ── Create / Edit Form ── */
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 min-h-0 overflow-y-auto p-6">
           <div className="max-w-2xl mx-auto space-y-6">
             {editingTask && (
               <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-blue-500/10 border border-blue-500/20 text-xs text-blue-400">
@@ -473,7 +679,7 @@ export default function ScheduledTasks() {
             {/* Devices */}
             <div>
               <label className="block text-xs font-medium text-foreground mb-1.5">
-                Geräte * <span className="text-muted-foreground font-normal">(Hostnames, einer pro Zeile oder mit Komma getrennt)</span>
+                Geräte * <span className="text-muted-foreground font-normal">(Hostnames, einer pro Zeile oder Komma getrennt)</span>
               </label>
               <textarea value={deviceInput} onChange={e => setDeviceInput(e.target.value)}
                 rows={4} placeholder="PC001&#10;PC002&#10;SRV-PROD01"
@@ -540,18 +746,18 @@ export default function ScheduledTasks() {
                                             {cmd.input.options?.map(o => <option key={o} value={o}>{o}</option>)}
                                           </select>
                                         ) : cmd.input.type === 'service' ? (
-                                          /* ── Service selector ── */
+                                          /* ── Service selector (6d) ── */
                                           <div className="space-y-1.5 p-2 rounded-md bg-muted/10 border border-border">
                                             <div className="flex items-center gap-1.5">
                                               <input
-                                                value={svcQueryDevice[key] ?? (deviceInput.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean)[0] ?? '')}
+                                                value={svcQueryDevice[key] ?? (devices[0] ?? '')}
                                                 onChange={e => setSvcQueryDevice(p => ({ ...p, [key]: e.target.value }))}
                                                 placeholder="Gerät für Dienst-Abfrage"
                                                 className="flex-1 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary"
                                               />
                                               <button
-                                                onClick={() => loadServices(key, svcQueryDevice[key] ?? deviceInput.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean)[0] ?? '')}
-                                                disabled={svcLoading[key] || !(svcQueryDevice[key] ?? deviceInput.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean)[0])}
+                                                onClick={() => loadServices(key, svcQueryDevice[key] ?? devices[0] ?? '')}
+                                                disabled={svcLoading[key] || !(svcQueryDevice[key] ?? devices[0])}
                                                 className="flex items-center gap-1 px-2 py-1 text-xs rounded border border-border hover:bg-accent text-muted-foreground hover:text-foreground disabled:opacity-40 transition-colors"
                                               >
                                                 {svcLoading[key] ? <Loader size={10} className="animate-spin" /> : <Wifi size={10} />}
@@ -590,9 +796,7 @@ export default function ScheduledTasks() {
                                               </>
                                             )}
                                             {inputVals[key] && (
-                                              <p className="text-[10px] text-primary">
-                                                Ausgewählt: {inputVals[key]}
-                                              </p>
+                                              <p className="text-[10px] text-primary">Ausgewählt: {inputVals[key]}</p>
                                             )}
                                             {!svcList[key]?.length && !svcLoading[key] && (
                                               <input value={inputVals[key] ?? ''}
@@ -622,63 +826,75 @@ export default function ScheduledTasks() {
               </div>
             </div>
 
-            {/* Schedule */}
-            <div>
-              <label className="block text-xs font-medium text-foreground mb-2">Zeitplan *</label>
-              <div className="flex gap-2 mb-3">
-                {(['recurring', 'once'] as const).map(t => (
-                  <button key={t} onClick={() => setSchedType(t)}
-                    className={`px-3 py-1.5 text-xs rounded-md border transition-colors ${schedType === t ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}>
-                    {t === 'recurring' ? 'Wiederkehrend' : 'Einmalig'}
-                  </button>
-                ))}
-              </div>
-              {schedType === 'recurring' && (
-                <div className="space-y-3 p-4 rounded-md border border-border bg-muted/5">
-                  <div>
-                    <p className="text-[11px] text-muted-foreground mb-2">Wochentage</p>
-                    <div className="flex gap-1.5">
-                      {WEEKDAYS.map((d, i) => (
-                        <button key={i} onClick={() => toggleDay(i)}
-                          className={`w-8 h-8 text-xs rounded-md border font-medium transition-colors ${schedDays.includes(i) ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}>
-                          {d}
-                        </button>
-                      ))}
+            {/* 6b: Global schedule — only when 1 activity */}
+            {!usePerCmdSchedule && (
+              <div>
+                <label className="block text-xs font-medium text-foreground mb-2">Zeitplan *</label>
+                <div className="flex gap-2 mb-3">
+                  {(['recurring', 'once'] as const).map(t => (
+                    <button key={t} onClick={() => setSchedType(t)}
+                      className={`px-3 py-1.5 text-xs rounded-md border transition-colors ${schedType === t ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}>
+                      {t === 'recurring' ? 'Wiederkehrend' : 'Einmalig'}
+                    </button>
+                  ))}
+                </div>
+                {schedType === 'recurring' && (
+                  <div className="space-y-3 p-4 rounded-md border border-border bg-muted/5">
+                    <div>
+                      <p className="text-[11px] text-muted-foreground mb-2">Wochentage</p>
+                      <div className="flex gap-1.5">
+                        {WEEKDAYS.map((d, i) => (
+                          <button key={i} onClick={() => toggleDay(i)}
+                            className={`w-8 h-8 text-xs rounded-md border font-medium transition-colors ${schedDays.includes(i) ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}>
+                            {d}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex gap-4 items-center">
+                      <div>
+                        <p className="text-[11px] text-muted-foreground mb-1">Uhrzeit</p>
+                        <input type="time" value={schedTime} onChange={e => setSchedTime(e.target.value)}
+                          className="px-2 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                      </div>
+                      <div>
+                        <p className="text-[11px] text-muted-foreground mb-1">Wiederholung</p>
+                        <select value={schedRepeat} onChange={e => setSchedRepeat(e.target.value as 'weekly' | 'biweekly' | 'monthly')}
+                          className="px-2 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary">
+                          <option value="weekly">Wöchentlich</option>
+                          <option value="biweekly">Zweiwöchentlich</option>
+                          <option value="monthly">Monatlich (1. Vorkommen)</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex gap-4 items-center">
+                )}
+                {schedType === 'once' && (
+                  <div className="flex gap-4 items-center p-4 rounded-md border border-border bg-muted/5">
+                    <div>
+                      <p className="text-[11px] text-muted-foreground mb-1">Datum *</p>
+                      <input type="date" value={schedDate} onChange={e => setSchedDate(e.target.value)}
+                        className="px-2 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                    </div>
                     <div>
                       <p className="text-[11px] text-muted-foreground mb-1">Uhrzeit</p>
                       <input type="time" value={schedTime} onChange={e => setSchedTime(e.target.value)}
                         className="px-2 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
                     </div>
-                    <div>
-                      <p className="text-[11px] text-muted-foreground mb-1">Wiederholung</p>
-                      <select value={schedRepeat} onChange={e => setSchedRepeat(e.target.value as 'weekly' | 'biweekly' | 'monthly')}
-                        className="px-2 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary">
-                        <option value="weekly">Wöchentlich</option>
-                        <option value="biweekly">Zweiwöchentlich</option>
-                        <option value="monthly">Monatlich (1. Vorkommen)</option>
-                      </select>
-                    </div>
                   </div>
-                </div>
-              )}
-              {schedType === 'once' && (
-                <div className="flex gap-4 items-center p-4 rounded-md border border-border bg-muted/5">
-                  <div>
-                    <p className="text-[11px] text-muted-foreground mb-1">Datum *</p>
-                    <input type="date" value={schedDate} onChange={e => setSchedDate(e.target.value)}
-                      className="px-2 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
-                  </div>
-                  <div>
-                    <p className="text-[11px] text-muted-foreground mb-1">Uhrzeit</p>
-                    <input type="time" value={schedTime} onChange={e => setSchedTime(e.target.value)}
-                      className="px-2 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
-                  </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
+
+            {/* Info when per-cmd schedule is active */}
+            {usePerCmdSchedule && (
+              <div className="flex items-center gap-2 px-3 py-2.5 rounded-md bg-blue-500/10 border border-blue-500/20">
+                <Clock size={13} className="text-blue-400 shrink-0" />
+                <p className="text-xs text-blue-400">
+                  Bei {selCmds.length} Aktivitäten hat jede Aktivität ihren eigenen Zeitplan — konfigurierbar in der Übersicht unten.
+                </p>
+              </div>
+            )}
 
             {/* Reboot special options */}
             {hasRebootCmd() && (
@@ -687,49 +903,69 @@ export default function ScheduledTasks() {
                   <Bell size={13} className="text-amber-400" />
                   <p className="text-xs font-semibold text-amber-400">Reboot-Optionen</p>
                 </div>
-
-                {/* Pre-reboot email */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" checked={rebootPre} onChange={e => setRebootPre(e.target.checked)}
-                      className="rounded accent-amber-500" />
+                    <input type="checkbox" checked={rebootPre} onChange={e => setRebootPre(e.target.checked)} className="rounded accent-amber-500" />
                     <span className="text-xs text-foreground">E-Mail X Minuten vor Reboot senden</span>
                   </label>
                   {rebootPre && (
-                    <div className="flex gap-3 pl-5">
-                      <div>
-                        <p className="text-[10px] text-muted-foreground mb-1">Minuten vorher</p>
-                        <input type="number" min={1} max={1440} value={rebootPreMins}
-                          onChange={e => setRebootPreMins(Number(e.target.value))}
-                          className="w-20 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                    <div className="pl-5 space-y-2">
+                      <div className="flex gap-3">
+                        <div>
+                          <p className="text-[10px] text-muted-foreground mb-1">Minuten vorher</p>
+                          <input type="number" min={1} max={1440} value={rebootPreMins}
+                            onChange={e => setRebootPreMins(Number(e.target.value))}
+                            className="w-20 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-[10px] text-muted-foreground mb-1">Empfänger</p>
+                          <input type="email" placeholder="empfaenger@firma.de" value={rebootPreRecip}
+                            onChange={e => setRebootPreRecip(e.target.value)}
+                            className="w-full px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-[10px] text-muted-foreground mb-1">Empfänger (leer = Benachrichtigungs-E-Mail)</p>
-                        <input type="email" placeholder="empfaenger@firma.de" value={rebootPreRecip}
-                          onChange={e => setRebootPreRecip(e.target.value)}
+                      <div>
+                        <p className="text-[10px] text-muted-foreground mb-1">Betreff (optional)</p>
+                        <input type="text" placeholder="Geplanter Neustart: {device}" value={rebootPreSubject}
+                          onChange={e => setRebootPreSubject(e.target.value)}
                           className="w-full px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-muted-foreground mb-1">Nachricht (optional)</p>
+                        <textarea rows={2} placeholder="Geräte werden in {mins} Min. neu gestartet..." value={rebootPreBody}
+                          onChange={e => setRebootPreBody(e.target.value)}
+                          className="w-full px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary resize-none" />
                       </div>
                     </div>
                   )}
                 </div>
-
-                {/* Online notification */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" checked={rebootOnline} onChange={e => setRebootOnline(e.target.checked)}
-                      className="rounded accent-amber-500" />
+                    <input type="checkbox" checked={rebootOnline} onChange={e => setRebootOnline(e.target.checked)} className="rounded accent-amber-500" />
                     <span className="text-xs text-foreground">E-Mail wenn Gerät wieder online</span>
                   </label>
                   {rebootOnline && (
-                    <div className="flex gap-3 pl-5 flex-wrap">
-                      <div className="flex-1 min-w-[180px]">
+                    <div className="pl-5 space-y-2">
+                      <div>
                         <p className="text-[10px] text-muted-foreground mb-1">Empfänger</p>
                         <input type="email" placeholder="empfaenger@firma.de" value={rebootOnlineRecip}
                           onChange={e => setRebootOnlineRecip(e.target.value)}
                           className="w-full px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
                       </div>
-                      <div className="flex-1 min-w-[180px]">
-                        <p className="text-[10px] text-muted-foreground mb-1">Dienste prüfen (optional, komma-getrennt)</p>
+                      <div>
+                        <p className="text-[10px] text-muted-foreground mb-1">Betreff (optional)</p>
+                        <input type="text" placeholder="{device} ist wieder online" value={rebootOnlineSubject}
+                          onChange={e => setRebootOnlineSubject(e.target.value)}
+                          className="w-full px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-muted-foreground mb-1">Nachricht (optional – Platzhalter: {'{device}'} {'{time}'} {'{services}'})</p>
+                        <textarea rows={2} placeholder="Gerät {device} ist wieder online. Zeit: {time}" value={rebootOnlineBody}
+                          onChange={e => setRebootOnlineBody(e.target.value)}
+                          className="w-full px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary resize-none" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-muted-foreground mb-1">Meldung erst wenn folgende Dienste laufen (komma-getrennt, optional)</p>
                         <input type="text" placeholder="WinRM, Spooler" value={rebootSvcCheck}
                           onChange={e => setRebootSvcCheck(e.target.value)}
                           className="w-full px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
@@ -754,11 +990,12 @@ export default function ScheduledTasks() {
                     const cmd = cat?.commands.find(c => c.id === sc.cmdId)
                     if (!cat || !cmd) return null
                     const inputSummary = inputVals[sc.catId + sc.cmdId]
+                    const cs = sc.cmdSchedule ?? defaultCmdSchedule()
                     return (
-                      <div key={sc.catId + sc.cmdId + idx} className="px-3 py-2 hover:bg-accent/10 transition-colors">
-                        <div className="flex items-center gap-2">
+                      <div key={sc.catId + sc.cmdId + idx} className="px-3 py-2.5 hover:bg-accent/10 transition-colors">
+                        <div className="flex items-start gap-2">
                           {/* Order controls */}
-                          <div className="flex flex-col gap-0.5 shrink-0">
+                          <div className="flex flex-col gap-0.5 shrink-0 mt-0.5">
                             <button onClick={() => moveCmdUp(idx)} disabled={idx === 0}
                               className="p-0.5 rounded hover:bg-accent disabled:opacity-20 text-muted-foreground">
                               <ArrowUp size={9} />
@@ -769,7 +1006,7 @@ export default function ScheduledTasks() {
                             </button>
                           </div>
                           {/* Position badge */}
-                          <span className="text-[9px] w-4 text-center font-mono text-muted-foreground shrink-0">{idx + 1}</span>
+                          <span className="text-[9px] w-4 text-center font-mono text-muted-foreground shrink-0 mt-1">{idx + 1}</span>
                           {/* Info */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5 flex-wrap">
@@ -787,20 +1024,91 @@ export default function ScheduledTasks() {
                                 {inputSummary}
                               </p>
                             )}
-                            {/* Per-command email notification */}
-                            <div className="flex items-center gap-1.5 mt-1">
-                              <Bell size={9} className={sc.notifyEmail ? 'text-amber-400' : 'text-muted-foreground'} />
-                              <input
-                                value={sc.notifyEmail ?? ''}
-                                onChange={e => setCmdNotifyEmail(sc.catId, sc.cmdId, e.target.value)}
-                                placeholder="E-Mail nach Ausführung (optional)"
-                                className="flex-1 px-1.5 py-0.5 text-[10px] rounded border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary"
-                              />
+
+                            {/* 6b: Per-activity schedule (only when 2+ activities) */}
+                            {usePerCmdSchedule && (
+                              <div className="mt-2 pl-2 border-l-2 border-primary/20 space-y-1.5">
+                                <div className="flex items-center gap-1 flex-wrap">
+                                  <Clock size={9} className="text-muted-foreground" />
+                                  <span className="text-[9px] text-muted-foreground">Eigener Zeitplan:</span>
+                                  {(['once', 'recurring'] as const).map(t => (
+                                    <button key={t}
+                                      onClick={() => updateCmdSchedule(sc.catId, sc.cmdId, { type: t })}
+                                      className={`px-1.5 py-0.5 text-[9px] rounded border transition-colors ${cs.type === t ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}>
+                                      {t === 'once' ? 'Einmalig' : 'Wiederkehrend'}
+                                    </button>
+                                  ))}
+                                </div>
+                                {cs.type === 'once' ? (
+                                  <div className="flex gap-1.5 flex-wrap">
+                                    <input type="date" value={cs.date ?? ''}
+                                      onChange={e => updateCmdSchedule(sc.catId, sc.cmdId, { date: e.target.value })}
+                                      className="px-1.5 py-0.5 text-[10px] rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                                    <input type="time" value={cs.time}
+                                      onChange={e => updateCmdSchedule(sc.catId, sc.cmdId, { time: e.target.value })}
+                                      className="px-1.5 py-0.5 text-[10px] rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                                  </div>
+                                ) : (
+                                  <div className="flex flex-wrap gap-1 items-center">
+                                    {WEEKDAYS.map((d, i) => (
+                                      <button key={i}
+                                        onClick={() => {
+                                          const days = cs.days ?? [1]
+                                          const next = days.includes(i) ? days.filter(x => x !== i) : [...days, i].sort()
+                                          updateCmdSchedule(sc.catId, sc.cmdId, { days: next })
+                                        }}
+                                        className={`w-6 h-6 text-[9px] rounded border font-medium transition-colors ${cs.days.includes(i) ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}>
+                                        {d}
+                                      </button>
+                                    ))}
+                                    <input type="time" value={cs.time}
+                                      onChange={e => updateCmdSchedule(sc.catId, sc.cmdId, { time: e.target.value })}
+                                      className="px-1.5 py-0.5 text-[10px] rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            {/* 6c: E-Mail notification with subject + body */}
+                            <div className="mt-1.5">
+                              <label className="flex items-center gap-1.5 cursor-pointer">
+                                <input type="checkbox" checked={sc.notifyEnabled ?? false}
+                                  onChange={e => updateSelCmd(sc.catId, sc.cmdId, { notifyEnabled: e.target.checked })}
+                                  className="rounded accent-primary shrink-0" />
+                                <Bell size={9} className={sc.notifyEnabled ? 'text-amber-400' : 'text-muted-foreground'} />
+                                <span className="text-[10px] text-muted-foreground">E-Mail nach Ausführung</span>
+                              </label>
+                              {sc.notifyEnabled && (
+                                <div className="mt-1.5 pl-4 space-y-1.5">
+                                  <div className="flex gap-1">
+                                    <input type="email" value={sc.notifyEmail ?? ''}
+                                      onChange={e => updateSelCmd(sc.catId, sc.cmdId, { notifyEmail: e.target.value })}
+                                      placeholder="empfaenger@firma.de"
+                                      className="flex-1 px-1.5 py-0.5 text-[10px] rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                                    {myEmail && (
+                                      <button onClick={() => updateSelCmd(sc.catId, sc.cmdId, { notifyEmail: myEmail })}
+                                        className="px-1.5 py-0.5 text-[9px] rounded border border-border hover:bg-accent text-muted-foreground whitespace-nowrap transition-colors">
+                                        An mich
+                                      </button>
+                                    )}
+                                  </div>
+                                  <input value={sc.notifySubject ?? ''}
+                                    onChange={e => updateSelCmd(sc.catId, sc.cmdId, { notifySubject: e.target.value })}
+                                    placeholder={`Betreff: ${cmd.func} auf {device}`}
+                                    className="w-full px-1.5 py-0.5 text-[10px] rounded border border-border bg-background text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary" />
+                                  <textarea value={sc.notifyBody ?? ''}
+                                    onChange={e => updateSelCmd(sc.catId, sc.cmdId, { notifyBody: e.target.value })}
+                                    placeholder={`Nachricht: {device} – {status} – {time}`}
+                                    rows={2}
+                                    className="w-full px-1.5 py-0.5 text-[10px] rounded border border-border bg-background text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary resize-none" />
+                                  <p className="text-[9px] text-muted-foreground">Platzhalter: {'{device}'} · {'{status}'} · {'{time}'} · {'{output}'}</p>
+                                </div>
+                              )}
                             </div>
                           </div>
                           {/* Delete */}
                           <button onClick={() => toggleCmd(sc.catId, sc.cmdId)}
-                            className="p-1 rounded hover:bg-red-500/10 text-muted-foreground hover:text-red-400 transition-colors shrink-0">
+                            className="p-1 rounded hover:bg-red-500/10 text-muted-foreground hover:text-red-400 transition-colors shrink-0 mt-0.5">
                             <Trash2 size={11} />
                           </button>
                         </div>
@@ -808,23 +1116,25 @@ export default function ScheduledTasks() {
                     )
                   })}
                 </div>
-                {/* Schedule summary row */}
-                <div className="px-3 py-2 bg-muted/5 border-t border-border flex items-center gap-2 text-[10px] text-muted-foreground">
-                  <Clock size={10} />
-                  <span>
-                    {schedType === 'once'
-                      ? `Einmalig am ${schedDate || '—'} um ${schedTime}`
-                      : `${schedRepeat === 'biweekly' ? 'Zweiwöchentlich' : schedRepeat === 'monthly' ? 'Monatlich' : 'Wöchentlich'} · ${schedDays.map(d => WEEKDAYS[d]).join(', ')} · ${schedTime}`
-                    }
-                  </span>
-                  {devices.length > 0 && (
-                    <>
-                      <span className="text-border">·</span>
-                      <Monitor size={10} />
-                      <span>{devices.length} Gerät(e)</span>
-                    </>
-                  )}
-                </div>
+                {/* Schedule summary footer */}
+                {!usePerCmdSchedule && (
+                  <div className="px-3 py-2 bg-muted/5 border-t border-border flex items-center gap-2 text-[10px] text-muted-foreground">
+                    <Clock size={10} />
+                    <span>
+                      {schedType === 'once'
+                        ? `Einmalig am ${schedDate || '—'} um ${schedTime}`
+                        : `${schedRepeat === 'biweekly' ? 'Zweiwöchentlich' : schedRepeat === 'monthly' ? 'Monatlich' : 'Wöchentlich'} · ${schedDays.map(d => WEEKDAYS[d]).join(', ')} · ${schedTime}`
+                      }
+                    </span>
+                    {devices.length > 0 && (
+                      <>
+                        <span className="text-border">·</span>
+                        <Monitor size={10} />
+                        <span>{devices.length} Gerät(e)</span>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
@@ -843,7 +1153,7 @@ export default function ScheduledTasks() {
         </div>
       ) : (
         /* ── Task List ── */
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 min-h-0 overflow-y-auto">
           {loading ? (
             <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground py-12">
               <Loader size={14} className="animate-spin" /> Aufgaben werden geladen…
@@ -888,7 +1198,14 @@ export default function ScheduledTasks() {
                         {task.devices.slice(0, 2).join(', ')}{task.devices.length > 2 ? ` +${task.devices.length - 2}` : ''}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{task.commands.length} Befehl(e)</td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {task.commands.length} Befehl(e)
+                      {task.commands.some(c => c.notifyEmail) && (
+                        <div className="flex items-center gap-0.5 text-[9px] text-amber-400 mt-0.5">
+                          <Bell size={8} /> Mail
+                        </div>
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{formatSchedule(task)}</td>
                     <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
                       <div>{task.lastRun ? new Date(task.lastRun).toLocaleString('de-DE') : '—'}</div>

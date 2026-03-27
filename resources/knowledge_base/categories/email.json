@@ -1,0 +1,613 @@
+[
+  {
+    "id": "PROB-MAIL-001",
+    "category": "E-Mail",
+    "title": "Legitime E-Mail landet im Spam/Junk-Ordner",
+    "keywords": ["Spam", "Junk", "Filter", "legitim", "falsch erkannt", "false positive", "Spamordner"],
+    "extendedKeywords": ["E-Mail im Spam gelandet", "wichtige Mail im Junk-Ordner", "E-Mail fälschlich als Spam erkannt", "legitime Mail als Spam markiert", "Kundenmail im Spam", "E-Mail nicht erhalten weil Spam", "warum landet die Mail im Spam", "Mail wird als Junk behandelt", "E-Mail im Junk statt Posteingang", "erwartete Mail nicht im Posteingang", "E-Mail verschwunden im Spam", "E-Mail im Spamfilter hängen geblieben", "Mail geht in Junk statt Inbox", "Spam-Filter zu streng", "Mail kommt nicht an geht in Spam", "false positive Spamfilter", "Absender wird als Spam erkannt", "geschäftliche Mail im Junk", "E-Mail immer wieder im Spam", "Spamfilter blockiert wichtige Mail"],
+    "typos": ["Spamm", "Junk", "Spma", "legtim", "Spamodner"],
+    "symptoms": ["Erwartete E-Mails nicht im Posteingang", "E-Mails von bestimmten Absendern landen regelmäßig im Junk", "Wichtige Geschäftsmails werden als Spam klassifiziert"],
+    "quickCheck": "Von welchem Absender kommt die E-Mail die im Spam landet?",
+    "solutions": [
+      "E-Mail im Junk-Ordner suchen und als 'Kein Junk' markieren",
+      "Absender zur Liste sicherer Absender hinzufügen: Outlook > Start > Junk > Junk-E-Mail-Optionen",
+      "Regel erstellen die E-Mails von diesem Absender direkt in den Posteingang verschiebt",
+      "IT-Admin bitten den Absender auf die Whitelist des E-Mail-Servers zu setzen",
+      "Prüfen ob die Absender-Domain korrekte SPF/DKIM-Einträge hat"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["email in spam", "mail goes to junk", "mail im spam"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft es E-Mails von einem bestimmten Absender oder verschiedene?",
+        "options": ["Immer der gleiche Absender", "Verschiedene Absender", "Externe Absender generell"],
+        "narrows": "Ob Absender-spezifisch oder allgemeines Filterproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-002", "PROB-MAIL-003"]
+  },
+  {
+    "id": "PROB-MAIL-002",
+    "category": "E-Mail",
+    "title": "Zu viel Spam kommt durch den Filter",
+    "keywords": ["Spam", "unerwünscht", "Werbung", "Filter", "Phishing", "Junk-Filter", "durchlässig"],
+    "extendedKeywords": ["zu viel Spam", "Spam kommt durch", "Spamfilter funktioniert nicht", "viele Werbemails", "Posteingang voller Spam", "Spamfilter greift nicht", "unerwünschte E-Mails", "Spam wird nicht erkannt", "Junk-Filter zu schwach", "warum bekomme ich so viel Spam", "Spamflut", "Spam blocken", "Werbemails stoppen", "Spam loswerden", "Spamfilter einstellen", "Spam-Schutz aktivieren", "unerwünschte Mails blockieren", "Spam reduzieren", "zu viele Spam-Mails", "Spam nicht gefiltert"],
+    "typos": ["Spamm", "Spma", "unerwüsncht", "Filtre", "Werbemials"],
+    "symptoms": ["Viele Spam-Mails im Posteingang", "Spamfilter erkennt offensichtlichen Spam nicht", "Tägliche Flut an Werbemails"],
+    "quickCheck": "Wie viele Spam-Mails erhalten Sie ungefähr pro Tag?",
+    "solutions": [
+      "Junk-Filter-Stufe in Outlook erhöhen: Start > Junk > Junk-E-Mail-Optionen > Hohes Filterniveau",
+      "Spam-Mails als Junk markieren (trainiert den Filter)",
+      "Absender und Domains blockieren: Start > Junk > Absender sperren",
+      "IT-Admin über Spamwelle informieren für serverseitige Maßnahmen",
+      "Nicht auf Abmelden-Links in Spam klicken (bestätigt aktive Adresse)",
+      "E-Mail-Adresse nicht auf öffentlichen Webseiten verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 45},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["too much spam", "spam getting through", "spam filter not working"],
+    "followUpQuestions": [
+      {
+        "question": "Sind die Spam-Mails von ähnlichen Absendern oder komplett unterschiedlich?",
+        "options": ["Ähnliche Absender/Themen", "Komplett unterschiedlich", "Sieht aus wie Phishing"],
+        "narrows": "Ob gezielter Spam oder breit gestreut"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-001", "PROB-MAIL-003"]
+  },
+  {
+    "id": "PROB-MAIL-003",
+    "category": "E-Mail",
+    "title": "Spam-/Junk-Filter konfigurieren",
+    "keywords": ["Spam-Filter", "Junk", "konfigurieren", "einstellen", "Whitelist", "Blacklist", "Regel"],
+    "extendedKeywords": ["Spamfilter einstellen", "Junk-Filter konfigurieren", "Spam-Einstellungen ändern", "Whitelist erstellen", "Blacklist pflegen", "sichere Absender hinzufügen", "Absender blockieren", "Spamfilter anpassen", "Junk-Mail-Optionen", "Spamschutz konfigurieren", "E-Mail-Regeln für Spam", "Spamfilter verschärfen", "Junk-Einstellungen", "wie konfiguriere ich den Spamfilter", "sichere Absenderliste", "blockierte Absenderliste", "Spamfilter Outlook einrichten", "Junk-E-Mail-Filter anpassen", "Spamfilter Stufe ändern", "E-Mail-Filter einrichten"],
+    "typos": ["Spamfiltre", "konfigurien", "Whiteliste", "Blackliste"],
+    "symptoms": ["Spamfilter ist zu streng oder zu schwach", "Bestimmte Absender sollen immer durchgelassen/blockiert werden"],
+    "quickCheck": "Soll der Filter strenger oder weniger streng werden?",
+    "solutions": [
+      "In Outlook: Start > Junk > Junk-E-Mail-Optionen > Schutzstufe wählen",
+      "Sichere Absender hinzufügen: Junk-E-Mail-Optionen > Sichere Absender",
+      "Blockierte Absender: Junk-E-Mail-Optionen > Blockierte Absender",
+      "Sichere Empfänger für Verteilerlisten konfigurieren",
+      "Bei Exchange: Admin muss serverseitige Transport-Regeln konfigurieren",
+      "E-Mail-Regeln für spezifische Filterung erstellen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["configure spam filter", "setup junk filter", "spamfilter einstellen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll der Filter auf dem Client (Outlook) oder auf dem Server angepasst werden?",
+        "options": ["In Outlook", "Auf dem Exchange-Server", "Beides"],
+        "narrows": "Wo die Änderung vorgenommen werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-001", "PROB-MAIL-002"]
+  },
+  {
+    "id": "PROB-MAIL-004",
+    "category": "E-Mail",
+    "title": "S/MIME E-Mail-Verschlüsselung einrichten",
+    "keywords": ["S/MIME", "Verschlüsselung", "Zertifikat", "signieren", "verschlüsseln", "digital", "Sicherheit"],
+    "extendedKeywords": ["E-Mail verschlüsseln", "S/MIME einrichten", "E-Mail-Zertifikat installieren", "digitale Signatur E-Mail", "E-Mail Verschlüsselung Outlook", "wie verschlüssle ich E-Mails", "S/MIME Zertifikat", "verschlüsselte E-Mail senden", "E-Mail digital signieren", "Zertifikat für E-Mail", "S/MIME konfigurieren", "sichere E-Mail", "E-Mail Verschlüsselung einrichten", "Zertifikat in Outlook importieren", "S/MIME aktivieren", "verschlüsselte Kommunikation", "Zertifikatsbasierte Verschlüsselung", "E-Mail mit Zertifikat senden", "S/MIME Outlook einrichten", "Public Key E-Mail"],
+    "typos": ["S/MIME", "Verschlüsselung", "Zertifkat", "Vershclüsselung", "S-MIME"],
+    "symptoms": ["E-Mails sollen verschlüsselt gesendet werden", "Verschlüsseltes Mail kann nicht geöffnet werden", "S/MIME-Zertifikat wird benötigt"],
+    "quickCheck": "Haben Sie bereits ein S/MIME-Zertifikat oder muss eines beantragt werden?",
+    "solutions": [
+      "S/MIME-Zertifikat bei der IT beantragen oder von Zertifizierungsstelle erhalten",
+      "Zertifikat in Windows importieren: Doppelklick auf .pfx-Datei",
+      "In Outlook konfigurieren: Datei > Optionen > Trust Center > E-Mail-Sicherheit",
+      "Standardmäßig signieren oder verschlüsseln aktivieren",
+      "Öffentlichen Schlüssel des Empfängers für Verschlüsselung benötigt",
+      "Bei Problemen: Outlook-Cache leeren und Zertifikat neu importieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["email encryption", "smime setup", "e-mail verschlüsseln"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie bereits ein S/MIME-Zertifikat?",
+        "options": ["Ja, als .pfx-Datei", "Nein, muss beantragt werden", "Weiß ich nicht"],
+        "narrows": "Ob Zertifikat erst beschafft werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-005"]
+  },
+  {
+    "id": "PROB-MAIL-005",
+    "category": "E-Mail",
+    "title": "E-Mail-Zertifikat Fehler oder abgelaufen",
+    "keywords": ["Zertifikat", "abgelaufen", "Fehler", "ungültig", "S/MIME", "Vertrauen", "Warnung"],
+    "extendedKeywords": ["Zertifikat abgelaufen", "E-Mail-Zertifikat Fehler", "Zertifikat ungültig", "digitale Signatur Fehler", "Zertifikat wird nicht vertraut", "S/MIME Zertifikat Warnung", "Zertifikat erneuern", "Zertifikat abgelaufen Outlook", "Sicherheitswarnung bei E-Mail", "Zertifikatswarnung", "rotes Symbol bei E-Mail Signatur", "Zertifikat nicht gültig", "Zertifikatsfehler Outlook", "Zertifikat verlängern", "altes Zertifikat ersetzen", "Zertifikat Gültigkeit prüfen", "verschlüsselte Mail kann nicht geöffnet werden Zertifikat", "Zertifikat Problem E-Mail", "Zertifikat importieren fehlgeschlagen", "Zertifikats-Fehlermeldung"],
+    "typos": ["Zertifkat", "abgelauefn", "Zertifiakt", "ungülig"],
+    "symptoms": ["Warnung 'Digitale Signatur ist ungültig'", "Verschlüsselte E-Mail kann nicht geöffnet werden", "Zertifikat-Fehlermeldung beim Senden"],
+    "quickCheck": "Ist das Zertifikat abgelaufen oder wird ein anderer Fehler angezeigt?",
+    "solutions": [
+      "Zertifikat erneuern: Neues Zertifikat bei der Zertifizierungsstelle beantragen",
+      "Altes Zertifikat in Outlook ersetzen: Datei > Optionen > Trust Center > E-Mail-Sicherheit > Neues Zertifikat auswählen",
+      "Zertifikatskette prüfen: Sind alle Zwischenzertifikate installiert?",
+      "Bei Vertrauensproblem: Stammzertifikat der CA installieren",
+      "Windows-Zertifikatsspeicher prüfen: certmgr.msc",
+      "Altes Zertifikat für entschlüsselung alter Mails behalten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["certificate expired", "cert error email", "zertifikat abgelaufen"],
+    "followUpQuestions": [
+      {
+        "question": "Was genau sagt die Fehlermeldung?",
+        "options": ["Zertifikat abgelaufen", "Zertifikat nicht vertrauenswürdig", "Kann verschlüsselte Mail nicht öffnen", "Andere Meldung"],
+        "narrows": "Art des Zertifikatsproblems"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-004"]
+  },
+  {
+    "id": "PROB-MAIL-006",
+    "category": "E-Mail",
+    "title": "E-Mail an Verteilergruppe senden",
+    "keywords": ["Verteiler", "Gruppe", "Verteilerliste", "DL", "Distribution List", "Gruppenmail"],
+    "extendedKeywords": ["E-Mail an Verteiler senden", "Mail an Gruppe schicken", "Verteilerliste verwenden", "E-Mail an Verteilerliste", "Gruppenmail senden", "Distribution List verwenden", "Mail an mehrere Personen", "Verteiler-E-Mail", "an Verteilerliste mailen", "wie sende ich an einen Verteiler", "Mail an Gruppe funktioniert nicht", "Verteiler nicht gefunden", "Verteilerliste in Outlook", "Gruppenmail schreiben", "E-Mail an Team senden", "Verteiler auflösen", "Verteilerliste Mitglieder", "Verteiler funktioniert nicht", "Mail an DL geht nicht", "wer ist im Verteiler"],
+    "typos": ["Verteiler", "Verteilerliste", "Grupp", "Distribtuion"],
+    "symptoms": ["E-Mail an Verteiler kommt nicht an", "Verteiler wird in Outlook nicht gefunden", "Fehlermeldung beim Senden an Verteiler"],
+    "quickCheck": "Kennen Sie den Namen oder die Adresse des Verteilers?",
+    "solutions": [
+      "Verteileradresse im Adressbuch suchen",
+      "Prüfen ob Sie Sendeberechtigung für den Verteiler haben",
+      "Bei Fehlermeldung: IT-Admin bitten die Sendeberechtigung zu erteilen",
+      "Verteiler kann auf interne Absender beschränkt sein (keine externen Mails)",
+      "Verteilermitglieder über GAL prüfen",
+      "Bei großen Verteilern: Moderierung kann Verzögerung verursachen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 1, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["email distribution list", "send to group", "verteiler mail"],
+    "followUpQuestions": [
+      {
+        "question": "Erhalten Sie eine Fehlermeldung oder kommt die Mail einfach nicht an?",
+        "options": ["Fehlermeldung/NDR", "Mail kommt nicht an, kein Fehler", "Verteiler wird nicht gefunden"],
+        "narrows": "Art des Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-007"]
+  },
+  {
+    "id": "PROB-MAIL-007",
+    "category": "E-Mail",
+    "title": "Verteilergruppe erstellen lassen",
+    "keywords": ["Verteiler", "erstellen", "anlegen", "Gruppe", "Distribution List", "neue Gruppe"],
+    "extendedKeywords": ["Verteiler erstellen", "neue Verteilerliste anlegen", "Verteilergruppe einrichten", "neuen Verteiler beantragen", "E-Mail-Verteiler erstellen", "Distribution List anlegen", "Gruppenmailbox erstellen", "wie erstelle ich einen Verteiler", "neuen E-Mail-Verteiler", "Verteiler für Abteilung", "Projektverteiler erstellen", "Teamverteiler anlegen", "Verteiler beantragen", "wer erstellt Verteiler", "Verteiler einrichten Exchange", "neue E-Mail-Gruppe", "Verteilerliste beantragen", "Verteiler für Projekt", "Gruppenadresse erstellen", "E-Mail-Gruppe anlegen"],
+    "typos": ["Verteiler", "erstelen", "anlgen", "Distribtuion"],
+    "symptoms": ["Ein neuer E-Mail-Verteiler wird benötigt", "Team benötigt eine gemeinsame E-Mail-Adresse"],
+    "quickCheck": "Wer soll Mitglied des Verteilers sein und wie soll die Adresse lauten?",
+    "solutions": [
+      "Antrag beim IT-Admin stellen mit: Name des Verteilers, gewünschte E-Mail-Adresse, Mitgliederliste",
+      "Art des Verteilers klären: Verteilergruppe, Sicherheitsgruppe oder Microsoft 365-Gruppe",
+      "Besitzer/Manager des Verteilers festlegen",
+      "Entscheiden ob externe E-Mails an den Verteiler erlaubt sein sollen",
+      "Nach Erstellung: Mitglieder prüfen und Testmail senden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["create distribution list", "new email group", "verteiler erstellen"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Art von Gruppe wird benötigt?",
+        "options": ["Einfacher E-Mail-Verteiler", "Microsoft 365-Gruppe (mit Teams/SharePoint)", "Shared Mailbox"],
+        "narrows": "Welche Art von Gruppe erstellt werden soll"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-006"]
+  },
+  {
+    "id": "PROB-MAIL-008",
+    "category": "E-Mail",
+    "title": "Automatische E-Mail-Weiterleitung einrichten",
+    "keywords": ["Weiterleitung", "automatisch", "Forward", "umleiten", "Redirect", "Postfach"],
+    "extendedKeywords": ["E-Mail-Weiterleitung einrichten", "Mail automatisch weiterleiten", "E-Mail umleiten", "Postfach weiterleiten", "alle Mails weiterleiten an", "automatische Weiterleitung", "E-Mail Forward einrichten", "Mails an andere Adresse weiterleiten", "Weiterleitung aktivieren Outlook", "wie richte ich Weiterleitung ein", "Mail-Umleitung", "automatisches Forwarding", "E-Mail-Weiterleitung an Kollegen", "Weiterleitung bei Abwesenheit", "Postfachweiterleitung", "E-Mails an extern weiterleiten", "Weiterleitung Exchange", "alle eingehenden Mails weiterleiten", "E-Mail-Redirect", "permanente Weiterleitung"],
+    "typos": ["Weiterlietung", "automatiche", "Forwrad", "umleiten", "Weiterletiung"],
+    "symptoms": ["E-Mails sollen an eine andere Adresse weitergeleitet werden", "Postfach soll umgeleitet werden"],
+    "quickCheck": "Soll die Weiterleitung dauerhaft oder nur temporär sein?",
+    "solutions": [
+      "In Outlook Web (OWA): Einstellungen > E-Mail > Weiterleitung > Weiterleitung aktivieren",
+      "Per Outlook-Regel: Start > Regeln > Regel erstellen > Alle eingehenden Mails weiterleiten",
+      "Option 'Kopie behalten' aktivieren um Mails auch im Originalpostfach zu behalten",
+      "Bei Exchange: Admin kann serverseitige Weiterleitung einrichten",
+      "Achtung: Externe Weiterleitung kann durch Richtlinien blockiert sein"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 40},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["email forward", "mail redirect", "weiterleitung einrichten"],
+    "followUpQuestions": [
+      {
+        "question": "Soll eine Kopie im Originalpostfach bleiben?",
+        "options": ["Ja, Kopie behalten", "Nein, nur weiterleiten", "Weiß ich nicht"],
+        "narrows": "Ob Kopie behalten werden soll"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-009"]
+  },
+  {
+    "id": "PROB-MAIL-009",
+    "category": "E-Mail",
+    "title": "E-Mail-Regel erstellen für automatische Sortierung",
+    "keywords": ["Regel", "Filter", "sortieren", "automatisch", "verschieben", "Posteingang", "Rule"],
+    "extendedKeywords": ["E-Mail-Regel erstellen", "Mails automatisch sortieren", "Regel für bestimmte Absender", "Mails automatisch in Ordner verschieben", "Outlook-Regel einrichten", "E-Mail-Filter erstellen", "automatische Sortierung", "wie erstelle ich eine Regel", "Mails nach Absender sortieren", "Mails nach Betreff filtern", "Posteingang organisieren", "automatisch in Unterordner", "Regel für Newsletter", "Mail-Regel Outlook", "Mails automatisch markieren", "automatische E-Mail-Verarbeitung", "Regel erstellen Outlook", "E-Mail automatisch weiterleiten per Regel", "Benachrichtigungsregel", "Regel für bestimmte Mails"],
+    "typos": ["Regeln", "sortiren", "automatiche", "Filtre", "vershieben"],
+    "symptoms": ["Posteingang unübersichtlich", "Bestimmte Mails sollen automatisch sortiert werden"],
+    "quickCheck": "Nach welchem Kriterium sollen die Mails sortiert werden (Absender, Betreff, etc.)?",
+    "solutions": [
+      "In Outlook: Start > Regeln > Regeln und Benachrichtigungen verwalten > Neue Regel",
+      "Beispielmail auswählen und Rechtsklick > Regeln > Regel erstellen",
+      "Kriterien festlegen: Absender, Betreff, Empfänger, etc.",
+      "Aktion festlegen: In Ordner verschieben, als gelesen markieren, weiterleiten, etc.",
+      "Regel auf vorhandene Nachrichten anwenden: Regeln > Regel ausführen",
+      "Serverseitige Regeln bevorzugen (funktionieren auch wenn Outlook geschlossen)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 40},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["email rule", "mail filter", "regel erstellen outlook"],
+    "followUpQuestions": [
+      {
+        "question": "Was soll mit den gefilterten E-Mails passieren?",
+        "options": ["In Ordner verschieben", "Weiterleiten", "Als gelesen markieren", "Löschen"],
+        "narrows": "Gewünschte Aktion der Regel"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-008", "PROB-MAIL-003"]
+  },
+  {
+    "id": "PROB-MAIL-010",
+    "category": "E-Mail",
+    "title": "Verdächtige E-Mail erhalten - Phishing erkennen",
+    "keywords": ["Phishing", "verdächtig", "Betrug", "Fake", "Scam", "Sicherheit", "Link"],
+    "extendedKeywords": ["verdächtige E-Mail erhalten", "Phishing-Mail", "ist die Mail echt", "Betrugsmail erhalten", "gefälschte E-Mail", "Fake-Mail erhalten", "Scam-Mail", "verdächtiger Link in E-Mail", "E-Mail sieht verdächtig aus", "Phishing erkennen", "ist das Spam oder Phishing", "unbekannter Absender verdächtige Mail", "E-Mail mit komischem Link", "Microsoft Phishing-Mail", "Bank Phishing-Mail", "Passwort-Phishing", "verdächtige Rechnung per Mail", "CEO-Fraud", "Business Email Compromise", "Mail fordert zum Klicken auf"],
+    "typos": ["Phising", "Phishing", "verdähctig", "Betrug", "vdächtig"],
+    "symptoms": ["E-Mail sieht verdächtig aus", "E-Mail fordert zum Klicken auf Links auf", "Absender sieht gefälscht aus"],
+    "quickCheck": "Haben Sie bereits auf einen Link geklickt oder Daten eingegeben?",
+    "solutions": [
+      "NICHT auf Links klicken und KEINE Anhänge öffnen",
+      "Absenderadresse genau prüfen (nicht nur den Anzeigenamen)",
+      "E-Mail als Phishing melden: In Outlook > Nachricht melden > Phishing",
+      "Verdächtige Mail an die IT-Sicherheit weiterleiten",
+      "Im Zweifel den vermeintlichen Absender über einen anderen Kanal kontaktieren",
+      "E-Mail löschen und Papierkorb leeren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 1, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["phishing email", "suspicious mail", "verdächtige mail"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie auf einen Link in der Mail geklickt oder einen Anhang geöffnet?",
+        "options": ["Nein, nichts angeklickt", "Ja, auf Link geklickt", "Ja, Anhang geöffnet", "Ja, Daten eingegeben"],
+        "narrows": "Ob Sofortmaßnahmen nötig sind"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-011"]
+  },
+  {
+    "id": "PROB-MAIL-011",
+    "category": "E-Mail",
+    "title": "Auf Phishing-Link geklickt - was tun",
+    "keywords": ["Phishing", "geklickt", "Link", "Kompromittierung", "Passwort", "Sofortmaßnahme", "Incident"],
+    "extendedKeywords": ["auf Phishing-Link geklickt", "habe auf verdächtigen Link geklickt", "Phishing-Link geöffnet", "was tun nach Phishing", "Passwort eingegeben auf Fake-Seite", "Phishing Daten eingegeben", "nach Phishing-Klick was machen", "bin auf Phishing reingefallen", "Fake-Seite Passwort eingegeben", "Link in Spam-Mail geklickt", "verdächtigen Anhang geöffnet", "Phishing-Angriff was jetzt", "Konto kompromittiert", "nach Phishing Passwort ändern", "Phishing-Vorfall melden", "was passiert wenn man auf Phishing klickt", "Sicherheitsvorfall Phishing", "Phishing Sofortmaßnahmen", "bin Opfer von Phishing", "Phishing-Link aus Versehen geöffnet"],
+    "typos": ["Phising", "geklickt", "Phishing", "geklikt", "Sofortmaßnahme"],
+    "symptoms": ["Benutzer hat auf einen Phishing-Link geklickt", "Zugangsdaten auf einer gefälschten Seite eingegeben", "Verdächtiger Anhang wurde geöffnet"],
+    "quickCheck": "Haben Sie Zugangsdaten (Passwort, Benutzername) auf der Seite eingegeben?",
+    "solutions": [
+      "SOFORT Passwort ändern (von einem anderen, sicheren Gerät)",
+      "IT-Sicherheit / Helpdesk informieren (Sicherheitsvorfall melden)",
+      "Wenn Firmendaten eingegeben: Alle verbundenen Konten prüfen",
+      "Virenscanner sofort einen vollständigen Scan durchführen lassen",
+      "Wenn Anhang geöffnet: PC vom Netzwerk trennen und IT informieren",
+      "Multi-Faktor-Authentifizierung aktivieren falls noch nicht geschehen",
+      "Anmeldeaktivitäten im Konto prüfen auf verdächtige Zugriffe"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["clicked phishing link", "phishing incident", "auf phishing geklickt"],
+    "followUpQuestions": [
+      {
+        "question": "Was haben Sie auf der Seite getan?",
+        "options": ["Nur Seite geöffnet, nichts eingegeben", "Benutzername/Passwort eingegeben", "Datei heruntergeladen/geöffnet", "Persönliche Daten eingegeben"],
+        "narrows": "Schwere des Vorfalls"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-010"]
+  },
+  {
+    "id": "PROB-MAIL-012",
+    "category": "E-Mail",
+    "title": "Abwesenheitsnotiz einrichten",
+    "keywords": ["Abwesenheit", "Out of Office", "OOF", "automatische Antwort", "Urlaub", "Abwesenheitsnotiz"],
+    "extendedKeywords": ["Abwesenheitsnotiz einrichten", "Out of Office aktivieren", "automatische Antwort einrichten", "Abwesenheitsnachricht", "Urlaubsantwort einrichten", "Abwesenheitsassistent", "OOF einschalten", "wie richte ich eine Abwesenheitsnotiz ein", "automatisch antworten bei Abwesenheit", "Abwesenheitsnotiz Outlook", "Out of Office einstellen", "Urlaub E-Mail einrichten", "automatische Abwesenheitsantwort", "Abwesenheitsnotiz mit Zeitraum", "Abwesenheitsnotiz intern und extern", "OOF konfigurieren", "Abwesenheitsmeldung erstellen", "automatische Antwort Outlook", "Abwesenheitsnotiz remote einrichten", "Abwesenheitsnotiz für Kollegen"],
+    "typos": ["Abwesenheitsnoitz", "Out of Offcie", "Abwesenheitsnotz", "einrihcten"],
+    "symptoms": ["Benutzer geht in den Urlaub und braucht Abwesenheitsnotiz", "Automatische Antwort soll konfiguriert werden"],
+    "quickCheck": "Für welchen Zeitraum soll die Abwesenheitsnotiz aktiv sein?",
+    "solutions": [
+      "In Outlook: Datei > Automatische Antworten > Automatische Antworten senden",
+      "Zeitraum festlegen: Start- und Enddatum eintragen",
+      "Unterschiedliche Nachrichten für interne und externe Empfänger",
+      "Vertreter/Kontaktperson in der Nachricht nennen",
+      "In OWA: Einstellungen > E-Mail > Automatische Antworten",
+      "Abwesenheitsnotiz vorab testen durch Senden an sich selbst"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 40},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["out of office", "vacation reply", "abwesenheitsnotiz"],
+    "followUpQuestions": [
+      {
+        "question": "Sollen interne und externe Absender unterschiedliche Antworten bekommen?",
+        "options": ["Gleiche Nachricht für alle", "Unterschiedliche Nachrichten", "Nur intern antworten"],
+        "narrows": "Konfiguration der Abwesenheitsnotiz"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-013"]
+  },
+  {
+    "id": "PROB-MAIL-013",
+    "category": "E-Mail",
+    "title": "Abwesenheitsnotiz funktioniert nicht",
+    "keywords": ["Abwesenheit", "funktioniert nicht", "Out of Office", "nicht aktiv", "keine Antwort", "OOF Fehler"],
+    "extendedKeywords": ["Abwesenheitsnotiz funktioniert nicht", "Out of Office geht nicht", "automatische Antwort kommt nicht", "Abwesenheitsnotiz wird nicht gesendet", "OOF funktioniert nicht", "Abwesenheitsantwort kommt nicht an", "Abwesenheitsnotiz kaputt", "automatische Antwort geht nicht", "Abwesenheitsnotiz aktiv aber keine Antwort", "Out of Office funktioniert nicht Outlook", "Abwesenheitsnotiz nicht aktiv", "OOF wird nicht ausgelöst", "warum funktioniert meine Abwesenheitsnotiz nicht", "Abwesenheitsnotiz sendet nicht", "Abwesenheitsantwort Fehler", "Out of Office Problem", "Abwesenheitsnotiz startet nicht", "automatische Antwort ohne Funktion", "OOF antwortet nicht", "Abwesenheitsnotiz nur einmal gesendet"],
+    "typos": ["Abwesenheitsnoitz", "funktioneirt", "Out of Offcie", "Abwesenheitsnotz"],
+    "symptoms": ["Abwesenheitsnotiz ist aktiviert aber wird nicht gesendet", "Externe Empfänger erhalten keine Abwesenheitsantwort", "Abwesenheitsnotiz wird nur einmal pro Absender gesendet"],
+    "quickCheck": "Ist die Abwesenheitsnotiz in Outlook oder OWA als aktiv angezeigt?",
+    "solutions": [
+      "Prüfen ob Abwesenheitsnotiz wirklich aktiviert ist (Datei > Automatische Antworten)",
+      "Zeitraum prüfen: Start- und Enddatum korrekt?",
+      "OOF wird standardmäßig nur einmal pro Absender gesendet (normal)",
+      "Externe Antworten prüfen: Ist der Tab 'Außerhalb meiner Organisation' konfiguriert?",
+      "Exchange-Verbindung prüfen (OOF wird serverseitig gesendet)",
+      "Outlook-Profil reparieren falls OOF nicht gespeichert wird"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_appcache_outlookcache", "label": "Outlook-Cache leeren", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["oof not working", "out of office broken", "abwesenheitsnotiz geht nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Wird die Abwesenheitsnotiz gar nicht oder nur an bestimmte Empfänger nicht gesendet?",
+        "options": ["Gar nicht gesendet", "Nur extern nicht", "Nur an bestimmte nicht", "Nur einmal gesendet"],
+        "narrows": "Art des OOF-Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-012"]
+  },
+  {
+    "id": "PROB-MAIL-014",
+    "category": "E-Mail",
+    "title": "E-Mail-Anhang zu groß zum Senden",
+    "keywords": ["Anhang", "zu groß", "Größenlimit", "Attachment", "Limit", "Megabyte", "senden"],
+    "extendedKeywords": ["Anhang zu groß", "E-Mail mit großem Anhang senden", "Mail zu groß zum Senden", "Datei zu groß für E-Mail", "Anhang Größenlimit", "wie sende ich große Dateien per Mail", "maximale Anhangsgröße", "E-Mail Anhang Limit", "Datei zu groß für Outlook", "große Datei per Mail senden", "Anhang wird abgelehnt", "Mail kommt nicht an wegen Größe", "Anhang über 25 MB senden", "große Datei verschicken", "Anhang komprimieren", "Datei zu groß E-Mail", "Attachment too large", "E-Mail Größenbeschränkung", "wie groß darf ein Anhang sein", "Anhang-Limit überschritten"],
+    "typos": ["Ahnang", "Anhagn", "zu groß", "Größenlimiet", "Megabite"],
+    "symptoms": ["Fehlermeldung 'Nachricht überschreitet die maximale Größe'", "Mail mit Anhang kann nicht gesendet werden", "Anhang wird vom Server abgelehnt"],
+    "quickCheck": "Wie groß ist die Datei die Sie senden möchten?",
+    "solutions": [
+      "Datei über OneDrive/SharePoint teilen statt als Anhang (Outlook: Anfügen > In Cloud speichern)",
+      "Datei komprimieren: Rechtsklick > Senden an > ZIP-komprimierter Ordner",
+      "Bei Bildern: Bilder verkleinern (Outlook bietet das beim Senden an)",
+      "Datei aufteilen falls möglich",
+      "Firmen-Fileserver oder Transferlösung nutzen",
+      "Standard-Limit: meist 25-35 MB pro Mail"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 1, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["attachment too large", "file too big email", "anhang zu groß"],
+    "followUpQuestions": [
+      {
+        "question": "Wie groß ist die Datei die Sie senden möchten?",
+        "options": ["25-50 MB", "50-100 MB", "Über 100 MB", "Weiß ich nicht genau"],
+        "narrows": "Welche Lösung am besten passt"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-015"]
+  },
+  {
+    "id": "PROB-MAIL-015",
+    "category": "E-Mail",
+    "title": "Große Dateien per E-Mail - Komprimierung und Alternativen",
+    "keywords": ["große Datei", "komprimieren", "ZIP", "OneDrive", "SharePoint", "Link", "teilen"],
+    "extendedKeywords": ["große Dateien senden", "Datei komprimieren für Mail", "ZIP erstellen", "Datei über OneDrive teilen", "SharePoint Link versenden", "Alternative zu E-Mail-Anhang", "Dateitransfer für große Dateien", "wie teile ich große Dateien", "Datei zu groß komprimieren", "ZIP-Datei erstellen", "Datei über Cloud senden", "Datei per Link teilen", "OneDrive Link senden statt Anhang", "große Datei über SharePoint", "Datei über Teams senden", "Komprimierung für E-Mail", "RAR oder ZIP für Anhang", "Datei verkleinern für Mail", "große Datei verschicken ohne E-Mail", "Fileserver für große Dateien"],
+    "typos": ["komprimiren", "ZPP", "OnDrive", "SharePiont", "grosse"],
+    "symptoms": ["Datei ist zu groß für den E-Mail-Anhang", "Alternative Übertragungswege gesucht"],
+    "quickCheck": "Ist der Empfänger intern (gleiche Firma) oder extern?",
+    "solutions": [
+      "OneDrive: Datei hochladen > Rechtsklick > Teilen > Link kopieren > In E-Mail einfügen",
+      "SharePoint: Datei in Dokumentbibliothek hochladen und Link teilen",
+      "Teams: Datei direkt im Chat/Kanal hochladen",
+      "ZIP-Komprimierung: Rechtsklick auf Datei > Senden an > ZIP-komprimierter Ordner",
+      "Bei Bildern: Auflösung vor dem Senden reduzieren",
+      "Für externe Empfänger: Gäste-Link in OneDrive erstellen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["share large file", "compress for email", "große datei teilen"],
+    "followUpQuestions": [
+      {
+        "question": "Ist der Empfänger innerhalb oder außerhalb Ihrer Organisation?",
+        "options": ["Intern", "Extern", "Beides"],
+        "narrows": "Welche Sharing-Methode möglich ist"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-014"]
+  },
+  {
+    "id": "PROB-MAIL-016",
+    "category": "E-Mail",
+    "title": "Postfach voll - Speicherlimit erreicht",
+    "keywords": ["Postfach", "voll", "Speicher", "Limit", "Quota", "kein Platz", "Kontingent"],
+    "extendedKeywords": ["Postfach voll", "Speicher voll Outlook", "E-Mail Speicherlimit erreicht", "kann keine Mails mehr senden", "Postfach Kontingent erreicht", "Quota überschritten", "Postfach aufräumen", "Speicherplatz Postfach", "E-Mail Speicher voll", "Postfach ist voll was tun", "kein Speicherplatz mehr für Mails", "Postfach Größenlimit", "Mail-Quota erreicht", "Postfach bereinigen", "wie räume ich mein Postfach auf", "Postfach Speicher freigeben", "Postfach zu groß", "Speicherkontingent E-Mail", "Postfach Warnung Speicher", "Speicher fast voll Outlook"],
+    "typos": ["Postfach", "Speichelimit", "Kontingnet", "Quota"],
+    "symptoms": ["Fehlermeldung 'Postfach ist voll'", "Kann keine neuen E-Mails mehr senden", "Warnung über Speicherlimit"],
+    "quickCheck": "Wie viel Speicherplatz ist noch frei im Postfach?",
+    "solutions": [
+      "Große E-Mails identifizieren und löschen: Suche in Outlook nach 'größe:>5MB'",
+      "Papierkorb und Junk-Ordner leeren",
+      "Gelöschte Elemente endgültig löschen",
+      "Alte E-Mails archivieren: Datei > Informationen > Postfach bereinigen",
+      "Anhänge von E-Mails speichern und aus der Mail entfernen",
+      "Online-Archiv aktivieren lassen (falls verfügbar)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 45},
+      {"skillId": "rd_appcache_outlookcache", "label": "Outlook-Cache leeren", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["mailbox full", "quota exceeded", "postfach voll"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie aktuell noch E-Mails empfangen oder ist auch das blockiert?",
+        "options": ["Senden blockiert, Empfang geht", "Beides blockiert", "Nur Warnung, noch nicht blockiert"],
+        "narrows": "Dringlichkeit des Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-017"]
+  },
+  {
+    "id": "PROB-MAIL-017",
+    "category": "E-Mail",
+    "title": "E-Mails archivieren - Postfach entlasten",
+    "keywords": ["Archiv", "archivieren", "PST", "Online-Archiv", "alt", "aufräumen", "auslagern"],
+    "extendedKeywords": ["E-Mails archivieren", "Postfach archivieren", "alte Mails archivieren", "PST-Datei erstellen", "Online-Archiv nutzen", "E-Mails auslagern", "Postfach entlasten", "wie archiviere ich E-Mails", "Outlook-Archiv einrichten", "automatische Archivierung", "Mails in Archiv verschieben", "E-Mail-Archiv erstellen", "alte Mails aufräumen", "PST-Archiv", "Online-Archiv aktivieren", "E-Mails exportieren", "Postfach verkleinern durch Archivierung", "archivierte Mails finden", "Archivordner in Outlook", "Auto-Archive Outlook"],
+    "typos": ["archiviren", "Archiev", "arcchivieren", "Postfach"],
+    "symptoms": ["Postfach ist zu groß", "Alte E-Mails sollen archiviert werden", "Postfach-Performance verbessern"],
+    "quickCheck": "Sollen die Mails lokal (PST) oder im Online-Archiv archiviert werden?",
+    "solutions": [
+      "Online-Archiv nutzen (empfohlen): Beim IT-Admin beantragen",
+      "Automatische Archivierung: Datei > Optionen > Erweitert > AutoArchivierung",
+      "Manuell archivieren: Datei > Informationen > Postfach bereinigen > AutoArchivieren",
+      "PST-Datei erstellen: Datei > Öffnen und Exportieren > Importieren/Exportieren > In Datei exportieren",
+      "Mails älter als X Monate automatisch archivieren lassen",
+      "Archivierte Mails sind weiterhin durchsuchbar"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 45},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["archive emails", "create pst", "mails archivieren"],
+    "followUpQuestions": [
+      {
+        "question": "Gibt es ein Online-Archiv in Ihrer Organisation?",
+        "options": ["Ja, Online-Archiv verfügbar", "Nein, nur lokal", "Weiß ich nicht"],
+        "narrows": "Welche Archivierungsmethode"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-016"]
+  },
+  {
+    "id": "PROB-MAIL-018",
+    "category": "E-Mail",
+    "title": "E-Mail-Disclaimer / Signatur unternehmensweit",
+    "keywords": ["Disclaimer", "Signatur", "Haftungsausschluss", "Footer", "automatisch", "Firmen-Signatur"],
+    "extendedKeywords": ["E-Mail-Disclaimer", "Firmen-Signatur einrichten", "Haftungsausschluss E-Mail", "automatischer Disclaimer", "Unternehmenssignatur", "E-Mail-Footer", "Disclaimer wird nicht angezeigt", "Firmen-Signatur fehlt", "E-Mail-Signatur unternehmensweit", "Disclaimer funktioniert nicht", "Haftungshinweis in E-Mail", "automatische Signatur", "Corporate Signatur", "Disclaimer konfigurieren", "E-Mail-Signatur zentral verwalten", "Signatur wird nicht angehängt", "Disclaimer in allen Mails", "Firmen-E-Mail-Signatur", "Transport-Regel Disclaimer", "Exchange-Disclaimer"],
+    "typos": ["Disclamier", "Singatur", "Disclamer", "Haftungsausschlus"],
+    "symptoms": ["Disclaimer/Signatur fehlt in ausgehenden Mails", "Disclaimer wird falsch dargestellt"],
+    "quickCheck": "Geht es um eine persönliche Signatur oder einen firmenweiten Disclaimer?",
+    "solutions": [
+      "Persönliche Signatur: Outlook > Datei > Optionen > E-Mail > Signaturen",
+      "Firmenweiter Disclaimer: Exchange Transport-Regel durch IT-Admin",
+      "Signatur-Vorlagen von der IT bereitstellen lassen",
+      "HTML-Signatur für einheitliches Design",
+      "Signatur für neue Mails und Antworten separat konfigurieren",
+      "Bei Problemen: Outlook im abgesicherten Modus starten und Signatur prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_outlookrepair", "label": "Outlook reparieren", "priority": 1, "effectiveness": 45},
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["email disclaimer", "company signature", "firmen signatur"],
+    "followUpQuestions": [
+      {
+        "question": "Geht es um Ihre persönliche Signatur oder den firmenweiten Disclaimer?",
+        "options": ["Persönliche Signatur", "Firmenweiter Disclaimer", "Beides"],
+        "narrows": "Ob Client- oder serverseitige Konfiguration"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-020"]
+  },
+  {
+    "id": "PROB-MAIL-019",
+    "category": "E-Mail",
+    "title": "Externe E-Mail wird blockiert - kann nicht senden/empfangen",
+    "keywords": ["blockiert", "extern", "senden", "empfangen", "Transport-Regel", "SPF", "DKIM", "abgelehnt"],
+    "extendedKeywords": ["externe Mail blockiert", "kann nicht an extern senden", "externe Mail kommt nicht an", "Mail an externe Adresse blockiert", "E-Mail wird abgelehnt", "Unzustellbarkeitsbericht", "NDR bei externer Mail", "Mail an extern geht nicht", "externe Mail wird geblockt", "E-Mail nach extern verweigert", "Fehlermeldung beim Senden nach extern", "extern Senden blockiert", "Transport-Regel blockiert Mail", "SPF-Fehler bei empfangener Mail", "DKIM-Fehler", "Mail zurückgeschickt", "Bounce-Nachricht", "E-Mail wird nicht zugestellt extern", "Mail an Kunde kommt nicht an", "externe Mail abgelehnt vom Server"],
+    "typos": ["blokiert", "extrne", "seden", "empfagen", "abgelehnnt"],
+    "symptoms": ["E-Mail an externe Empfänger wird mit NDR zurückgeschickt", "Externe E-Mails kommen nicht an", "Fehlermeldung beim Senden an externe Adresse"],
+    "quickCheck": "Erhalten Sie eine Fehlermeldung/Unzustellbarkeitsbericht (NDR)?",
+    "solutions": [
+      "NDR-Fehlermeldung analysieren (enthält den Grund)",
+      "Prüfen ob die externe Domain existiert und MX-Records hat",
+      "IT-Admin fragen ob Transport-Regeln den Versand einschränken",
+      "SPF/DKIM/DMARC-Einträge der eigenen Domain prüfen",
+      "Prüfen ob der Empfänger-Server die Mail ablehnt",
+      "Empfänger bitten den Absender auf die Whitelist zu setzen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["external mail blocked", "cant send external", "externe mail blockiert"],
+    "followUpQuestions": [
+      {
+        "question": "Was steht in der Fehlermeldung oder im Unzustellbarkeitsbericht?",
+        "options": ["550 User not found", "550 Rejected by policy", "Timeout/keine Antwort", "Andere Meldung"],
+        "narrows": "Ursache der Blockierung"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-002", "PROB-MAIL-014"]
+  },
+  {
+    "id": "PROB-MAIL-020",
+    "category": "E-Mail",
+    "title": "Empfangs-/Lesebestätigung anfordern",
+    "keywords": ["Lesebestätigung", "Empfangsbestätigung", "Zustellung", "Read Receipt", "Bestätigung", "Tracking"],
+    "extendedKeywords": ["Lesebestätigung anfordern", "Empfangsbestätigung einschalten", "hat der Empfänger meine Mail gelesen", "Lesebestätigung Outlook", "wie fordere ich eine Lesebestätigung an", "Mail-Tracking", "Zustellbestätigung anfordern", "Lesebestätigung automatisch", "Empfangsbestätigung aktivieren", "Read Receipt einschalten", "wann wurde meine Mail gelesen", "Bestätigung dass Mail angekommen", "Lesebestätigung für jede Mail", "Zustellungsbestätigung einrichten", "Mail wurde gelesen Bestätigung", "Lesebestätigung funktioniert nicht", "Empfangsbestätigung kommt nicht", "Lesebestätigung bei allen Mails", "Mail-Empfang bestätigen", "Lesebestätigung konfigurieren"],
+    "typos": ["Lesebestätgung", "Empfangsbestätgiung", "Zustelluing", "Leesebestätigung"],
+    "symptoms": ["Unsicherheit ob E-Mail beim Empfänger angekommen ist", "Lesebestätigung soll angefordert werden"],
+    "quickCheck": "Soll die Lesebestätigung für eine einzelne Mail oder standardmäßig für alle gelten?",
+    "solutions": [
+      "Einzelne Mail: Neue E-Mail > Optionen > Lesebestätigung anfordern / Zustellbestätigung anfordern",
+      "Für alle Mails: Datei > Optionen > E-Mail > Verlauf > Lesebestätigung aktivieren",
+      "Hinweis: Empfänger kann Lesebestätigung ablehnen",
+      "Zustellbestätigung bestätigt nur den Server-Empfang, nicht das Lesen",
+      "Alternative: Microsoft 365 Message Tracking durch IT-Admin"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-outlook", "label": "Outlook-Diagnose", "priority": 1, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["read receipt", "delivery confirmation", "lesebestätigung"],
+    "followUpQuestions": [
+      {
+        "question": "Benötigen Sie eine Lese- oder eine Zustellbestätigung?",
+        "options": ["Lesebestätigung (ob gelesen)", "Zustellbestätigung (ob angekommen)", "Beides"],
+        "narrows": "Art der gewünschten Bestätigung"
+      }
+    ],
+    "relatedProblems": ["PROB-MAIL-019"]
+  }
+]

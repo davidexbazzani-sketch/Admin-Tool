@@ -1,0 +1,1251 @@
+[
+  {
+    "id": "PROB-NET-001",
+    "category": "Netzwerk",
+    "title": "Kein Internet - komplett keine Verbindung",
+    "keywords": ["Internet", "kein Internet", "offline", "keine Verbindung", "Netzwerk", "getrennt", "Konnektivität"],
+    "extendedKeywords": ["ich habe kein Internet", "Internet geht nicht", "ich komme nicht ins Internet", "keine Internetverbindung", "Internet funktioniert nicht", "komplett offline", "gar kein Internet", "nichts geht mehr Internet", "Internet ist weg", "Verbindung zum Internet fehlt", "kein Netz", "Internet ausgefallen", "Internet tot", "seit heute kein Internet", "Internet abgestürzt", "PC hat kein Internet", "Laptop hat kein Internet", "kein Internetzugang", "Internet bricht komplett ab", "kein Netzwerkzugriff", "Internet plötzlich weg", "alle Seiten gehen nicht", "kein WLAN und kein LAN", "Internet Totalausfall"],
+    "typos": ["Interent", "Internett", "Intrnet", "Konnektivitaet", "Verbindug"],
+    "symptoms": ["Kein Zugang zu Webseiten", "E-Mail funktioniert nicht", "Netzwerk-Symbol zeigt 'Kein Internet'", "Gelbes Dreieck auf dem Netzwerk-Symbol"],
+    "quickCheck": "Ist das Netzwerkkabel eingesteckt bzw. WLAN verbunden?",
+    "solutions": [
+      "Netzwerkkabel prüfen oder WLAN-Verbindung überprüfen",
+      "Router/Switch prüfen - leuchten die LEDs?",
+      "Netzwerkadapter deaktivieren und wieder aktivieren",
+      "IP-Konfiguration zurücksetzen über das Admin Tool",
+      "DNS-Cache leeren über das Admin Tool",
+      "Netzwerk-Diagnose über das Admin Tool ausführen",
+      "Computer neu starten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_net_ipreset", "label": "IP zurücksetzen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_net_flushdns", "label": "DNS-Cache leeren", "priority": 3, "effectiveness": 60},
+      {"skillId": "rd_net_winsock", "label": "Winsock zurücksetzen", "priority": 4, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["no internet", "connection lost", "offline completely"],
+    "followUpQuestions": [
+      {
+        "question": "Sind Sie per WLAN oder LAN-Kabel verbunden?",
+        "options": ["WLAN", "LAN-Kabel", "Weiß ich nicht"],
+        "narrows": "Verbindungstyp"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-002", "PROB-NET-003", "PROB-NET-004"]
+  },
+  {
+    "id": "PROB-NET-002",
+    "category": "Netzwerk",
+    "title": "Kein Internet - nur Browser funktioniert nicht",
+    "keywords": ["Browser", "kein Internet", "Webseite", "lädt nicht", "Proxy", "DNS", "nur Browser"],
+    "extendedKeywords": ["Browser geht nicht aber andere Programme schon", "Webseiten laden nicht", "Chrome zeigt kein Internet", "kann keine Seiten aufrufen", "Browser hat kein Internet", "Teams geht aber Browser nicht", "E-Mail geht aber Browser nicht", "nur Webseiten funktionieren nicht", "Browser zeigt Fehler", "keine Webseite erreichbar", "Seite kann nicht geladen werden", "Browser offline", "Edge funktioniert nicht", "Chrome lädt keine Seiten", "Firefox hat kein Internet", "nur im Browser kein Internet", "Webseiten nicht erreichbar aber Ping geht", "Browser blockiert", "Seite kann nicht angezeigt werden", "ERR_CONNECTION im Browser"],
+    "typos": ["Broser", "Browseer", "Websiete", "Internett"],
+    "symptoms": ["Browser zeigt Fehlermeldung", "Andere Anwendungen haben Netzwerk", "Ping funktioniert aber Webseiten nicht"],
+    "quickCheck": "Funktionieren andere Netzwerkanwendungen wie E-Mail oder Teams?",
+    "solutions": [
+      "Proxy-Einstellungen prüfen: Einstellungen > Netzwerk > Proxy",
+      "DNS-Probleme prüfen: DNS-Cache leeren über das Admin Tool",
+      "Browser-Cache und Cookies löschen",
+      "Anderen Browser testen (Edge, Chrome, Firefox)",
+      "Browser-Erweiterungen deaktivieren",
+      "Proxy-Einstellungen zurücksetzen: Internet Explorer > Internetoptionen > Verbindungen > LAN-Einstellungen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_flushdns", "label": "DNS-Cache leeren", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_net_nslookup", "label": "DNS-Abfrage", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["browser no internet", "website not loading", "only browser offline"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft es alle Browser oder nur einen bestimmten?",
+        "options": ["Alle Browser", "Nur Chrome", "Nur Edge", "Nur Firefox"],
+        "narrows": "Ob browserspezifisch oder allgemein"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-001", "PROB-NET-011", "PROB-NET-013"]
+  },
+  {
+    "id": "PROB-NET-003",
+    "category": "Netzwerk",
+    "title": "Kein Internet nach VPN-Verbindung",
+    "keywords": ["VPN", "kein Internet", "nach VPN", "Tunnel", "Split-Tunnel", "Routing"],
+    "extendedKeywords": ["nach VPN-Verbindung kein Internet", "Internet weg nach VPN", "VPN blockiert Internet", "nach dem Einwählen ins VPN geht nichts mehr", "VPN trennt mein Internet", "kein Internet mehr seit VPN", "alles langsam nach VPN", "VPN-Verbindung nimmt Internet weg", "nachdem ich VPN anmache kein Browser", "VPN-Tunnel blockiert Webseiten", "Internet nur ohne VPN", "VPN bricht Internetverbindung", "nach VPN-Einwahl kein Zugriff auf Webseiten", "VPN und Internet gleichzeitig geht nicht", "Routing-Problem nach VPN", "VPN leitet alles um", "Split-Tunnel nicht aktiv", "nach VPN DNS funktioniert nicht", "Internet erst nach VPN-Trennung wieder da", "VPN kappt Internetverbindung"],
+    "typos": ["VPM", "VNP", "Internett", "Tunnle"],
+    "symptoms": ["Kein Internetzugang nach VPN-Verbindung", "Nur Firmennetzwerk erreichbar", "DNS-Auflösung schlägt fehl nach VPN"],
+    "quickCheck": "Funktioniert das Internet sofort wieder, wenn Sie die VPN-Verbindung trennen?",
+    "solutions": [
+      "Split-Tunnel beim VPN-Client prüfen/aktivieren (wenn erlaubt)",
+      "DNS-Cache leeren nach VPN-Verbindung",
+      "VPN-Client aktualisieren auf die neueste Version",
+      "VPN-Verbindung trennen und neu aufbauen",
+      "DNS-Server manuell konfigurieren für die VPN-Verbindung",
+      "IT kontaktieren falls Split-Tunnel-Richtlinie geändert werden muss"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_flushdns", "label": "DNS-Cache leeren", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["vpn breaks internet", "no internet after vpn", "vpn routing issue"],
+    "followUpQuestions": [
+      {
+        "question": "Welchen VPN-Client verwenden Sie?",
+        "options": ["Cisco AnyConnect", "GlobalProtect", "FortiClient", "Windows Built-in VPN", "Andere"],
+        "narrows": "VPN-Client-spezifische Lösung"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-001", "PROB-NET-015", "PROB-NET-016"]
+  },
+  {
+    "id": "PROB-NET-004",
+    "category": "Netzwerk",
+    "title": "Kein Internet nach Windows-Update",
+    "keywords": ["Internet", "Windows Update", "nach Update", "Netzwerk", "Treiber", "kaputt"],
+    "extendedKeywords": ["nach Windows-Update kein Internet", "Internet geht nicht mehr seit dem Update", "Update hat Netzwerk zerstört", "nach dem Patch kein Internet", "Windows-Update hat WLAN kaputt gemacht", "Netzwerkadapter fehlt nach Update", "seit dem letzten Update offline", "Internet weg nach Aktualisierung", "nach Sicherheitsupdate kein Netz", "Windows-Update Netzwerkproblem", "Netzwerktreiber nach Update fehlt", "WLAN verschwunden nach Update", "Netzwerkverbindung nach Update verloren", "Internet funktioniert nicht nach Neustart wegen Update", "kumulative Update bricht Netzwerk", "Feature-Update Netzwerk kaputt", "nach Upgrade kein Internet", "Windows 11 Update Netzwerkproblem", "Patch hat Netzwerk beschädigt", "nach Neustart wegen Update kein Internet"],
+    "typos": ["Windwos Update", "Updaet", "Internett"],
+    "symptoms": ["Netzwerkverbindung fehlt nach Update", "Netzwerkadapter nicht sichtbar", "WLAN-Option verschwunden"],
+    "quickCheck": "Wann wurde das letzte Windows-Update installiert?",
+    "solutions": [
+      "Netzwerkadapter im Geräte-Manager prüfen und ggf. Treiber aktualisieren",
+      "Netzwerk-Reset durchführen: Einstellungen > Netzwerk > Erweitert > Netzwerk zurücksetzen",
+      "IP-Konfiguration und Winsock zurücksetzen über das Admin Tool",
+      "Netzwerktreiber vom Hersteller neu installieren",
+      "Problematisches Update deinstallieren: Einstellungen > Update > Updateverlauf > Updates deinstallieren",
+      "Netzwerk-Troubleshooter ausführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_ipreset", "label": "IP zurücksetzen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_net_winsock", "label": "Winsock zurücksetzen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_appcache_netreset", "label": "Netzwerk zurücksetzen", "priority": 3, "effectiveness": 80},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 4, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["update broke network", "no internet after patch", "network gone after update"],
+    "followUpQuestions": [
+      {
+        "question": "Ist der Netzwerkadapter im Geräte-Manager noch sichtbar?",
+        "options": ["Ja, sichtbar", "Nein, fehlt", "Weiß nicht wie ich das prüfe"],
+        "narrows": "Ob Treiber- oder Konfigurationsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-001", "PROB-NET-035"]
+  },
+  {
+    "id": "PROB-NET-005",
+    "category": "Netzwerk",
+    "title": "WLAN verbindet sich nicht",
+    "keywords": ["WLAN", "verbindet nicht", "WiFi", "Wireless", "keine Verbindung", "Authentifizierung"],
+    "extendedKeywords": ["WLAN verbindet sich nicht", "kann mich nicht mit WLAN verbinden", "WiFi geht nicht", "WLAN-Verbindung schlägt fehl", "Passwort wird nicht akzeptiert", "WLAN authentifiziert nicht", "kann mich nicht einloggen ins WLAN", "WLAN-Netzwerk wird angezeigt aber verbindet nicht", "Verbindung zum WLAN nicht möglich", "WLAN lehnt mich ab", "WLAN verbindet und trennt sofort", "WLAN wird abgelehnt", "Wireless funktioniert nicht", "Firmen-WLAN verbindet nicht", "WLAN-Passwort funktioniert nicht", "WLAN zeigt Verbindungsfehler", "WiFi-Authentifizierung fehlgeschlagen", "WLAN Anmeldung klappt nicht", "kann kein WLAN nutzen", "WLAN-Zugang verweigert"],
+    "typos": ["WLAN", "W-LAN", "Wlan", "WiFi", "WFi", "Wify"],
+    "symptoms": ["WLAN-Verbindung schlägt fehl", "Fehlermeldung bei der Authentifizierung", "WLAN verbindet kurz und trennt wieder"],
+    "quickCheck": "Wird das WLAN-Netzwerk in der Liste angezeigt?",
+    "solutions": [
+      "WLAN ausschalten und wieder einschalten (Flugmodus kurz aktivieren/deaktivieren)",
+      "WLAN-Netzwerk vergessen und neu verbinden: Einstellungen > WLAN > Netzwerk > Vergessen",
+      "WLAN-Passwort erneut eingeben",
+      "WLAN-Adapter im Geräte-Manager deaktivieren und wieder aktivieren",
+      "WLAN-Profile prüfen über das Admin Tool",
+      "WLAN-Treiber aktualisieren",
+      "Computer neu starten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_wlan_wlanstatus", "label": "WLAN-Status anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_wlan_wlanprofiles", "label": "WLAN-Profile anzeigen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["wifi wont connect", "wlan authentication fail", "wireless not working"],
+    "followUpQuestions": [
+      {
+        "question": "Wird das WLAN-Netzwerk in der Netzwerkliste angezeigt?",
+        "options": ["Ja, aber verbindet nicht", "Nein, ist nicht sichtbar", "Kein WLAN-Symbol vorhanden"],
+        "narrows": "Art des WLAN-Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-006", "PROB-NET-007", "PROB-NET-008"]
+  },
+  {
+    "id": "PROB-NET-006",
+    "category": "Netzwerk",
+    "title": "WLAN langsam",
+    "keywords": ["WLAN", "langsam", "Geschwindigkeit", "WiFi", "Performance", "Bandbreite", "Signal"],
+    "extendedKeywords": ["WLAN ist sehr langsam", "WiFi-Geschwindigkeit schlecht", "Internet über WLAN langsam", "WLAN kriecht", "WLAN-Verbindung langsam", "Downloads über WLAN extrem langsam", "Streaming ruckelt über WLAN", "WLAN-Signal schwach", "langsames WLAN im Büro", "WLAN-Geschwindigkeit messen", "WiFi Performance schlecht", "WLAN war mal schneller", "langsames kabelloses Internet", "WLAN nur 1 Mbit", "WLAN zu langsam zum Arbeiten", "Videokonferenz ruckelt über WLAN", "WLAN-Bandbreite niedrig", "WLAN braucht ewig zum Laden", "schlechte WLAN-Geschwindigkeit", "WLAN am Arbeitsplatz langsam"],
+    "typos": ["langsamm", "WLAN", "Geschwindikeit", "Bandbreie"],
+    "symptoms": ["Niedrige Datenraten", "Hohe Latenz", "Unterbrechungen bei Video/Audio", "Langsame Downloads"],
+    "quickCheck": "Wie ist die Signalstärke des WLANs?",
+    "solutions": [
+      "WLAN-Signalstärke prüfen - näher an den Access Point gehen",
+      "5-GHz-Band statt 2,4-GHz verwenden wenn verfügbar",
+      "WLAN-Treiber aktualisieren",
+      "Andere WLAN-Geräte prüfen: Vielleicht belegen zu viele Geräte das WLAN",
+      "Per LAN-Kabel verbinden wenn möglich (deutlich schneller und stabiler)",
+      "WLAN-Status über das Admin Tool prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_wlan_wlanstatus", "label": "WLAN-Status anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_net_ping", "label": "Ping-Test", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["slow wifi", "wlan speed low", "wireless slow"],
+    "followUpQuestions": [
+      {
+        "question": "Ist das WLAN nur an Ihrem Platz langsam oder überall?",
+        "options": ["Nur an meinem Platz", "Überall im Büro", "Weiß ich nicht"],
+        "narrows": "Ob Standort-spezifisch oder allgemein"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-005", "PROB-NET-007", "PROB-NET-009"]
+  },
+  {
+    "id": "PROB-NET-007",
+    "category": "Netzwerk",
+    "title": "WLAN-Verbindung bricht ständig ab",
+    "keywords": ["WLAN", "bricht ab", "Abbruch", "instabil", "trennt", "Disconnect", "unterbrochen"],
+    "extendedKeywords": ["WLAN bricht immer wieder ab", "WLAN-Verbindung instabil", "WLAN trennt sich ständig", "WLAN fällt alle paar Minuten weg", "WiFi Disconnect", "WLAN unterbricht ständig", "Internet fällt über WLAN aus", "WLAN verbindet und trennt immer wieder", "WLAN-Aussetzer", "WiFi bricht regelmäßig ab", "WLAN-Verbindung geht immer verloren", "WLAN-Abbrüche im Meeting", "Teams-Anruf bricht ab wegen WLAN", "WiFi instabil", "WLAN hält nicht", "ständige WLAN-Unterbrechungen", "WLAN fliegt raus", "WLAN reconnect ständig", "WiFi Verbindungsabbruch", "WLAN geht rein und raus"],
+    "typos": ["bricht ap", "WLAN", "instabiel", "Disconect"],
+    "symptoms": ["Häufige Verbindungsabbrüche", "WLAN-Symbol wechselt zwischen verbunden und getrennt", "Kurzzeitige Internetausfälle"],
+    "quickCheck": "Wie häufig treten die Abbrüche auf und wie lange dauern sie?",
+    "solutions": [
+      "WLAN-Energiesparfunktion deaktivieren: Geräte-Manager > WLAN-Adapter > Eigenschaften > Energieverwaltung",
+      "WLAN-Profil löschen und neu verbinden",
+      "WLAN-Treiber aktualisieren oder zurücksetzen",
+      "Roaming-Aggressivität im WLAN-Treiber anpassen",
+      "Festen Access Point zuweisen wenn möglich",
+      "LAN-Kabel als Alternative verwenden",
+      "WLAN-Status über das Admin Tool prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_wlan_wlanstatus", "label": "WLAN-Status anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_wlan_wlanprofiles", "label": "WLAN-Profile anzeigen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["wifi drops", "wlan disconnect", "wireless unstable"],
+    "followUpQuestions": [
+      {
+        "question": "Passieren die Abbrüche an einem bestimmten Standort oder überall?",
+        "options": ["Nur an bestimmtem Platz", "Überall", "Nur im Homeoffice"],
+        "narrows": "Ob standortabhängig"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-005", "PROB-NET-006"]
+  },
+  {
+    "id": "PROB-NET-008",
+    "category": "Netzwerk",
+    "title": "WLAN-Profil falsch konfiguriert",
+    "keywords": ["WLAN", "Profil", "Konfiguration", "falsch", "802.1x", "Zertifikat", "EAP"],
+    "extendedKeywords": ["WLAN-Profil stimmt nicht", "falsches WLAN-Profil", "WLAN-Konfiguration fehlerhaft", "WLAN braucht Zertifikat", "802.1x WLAN Problem", "WLAN-Profil löschen und neu anlegen", "Firmen-WLAN Profil falsch", "WLAN-Einstellungen korrigieren", "EAP-Authentifizierung fehlgeschlagen", "WLAN-Zertifikat abgelaufen", "WLAN Profil neu konfigurieren", "gespeichertes WLAN funktioniert nicht mehr", "WLAN-Profil veraltet", "WLAN-Sicherheitseinstellungen falsch", "WLAN-Profil zurücksetzen", "WLAN Verbindungseinstellungen ändern", "WLAN automatische Verbindung funktioniert nicht", "WLAN-Profil exportieren importieren", "WLAN Konfiguration vom Admin", "Enterprise WLAN Profil Problem"],
+    "typos": ["Profiel", "Konfiguraion", "802.1X"],
+    "symptoms": ["WLAN verbindet nicht trotz korrektem Passwort", "Zertifikatsfehler beim WLAN", "Falsche Sicherheitseinstellungen"],
+    "quickCheck": "Verwenden Sie ein Firmen-WLAN mit Zertifikatsauthentifizierung?",
+    "solutions": [
+      "WLAN-Profile über das Admin Tool anzeigen lassen",
+      "Altes WLAN-Profil löschen: Einstellungen > WLAN > Netzwerk > Vergessen",
+      "WLAN-Netzwerk neu verbinden mit korrekten Einstellungen",
+      "Bei 802.1x: Zertifikat prüfen und ggf. erneuern",
+      "WLAN-Profil vom IT-Admin per GPO oder Intune bereitstellen lassen",
+      "Alle WLAN-Profile exportieren und sichern vor dem Löschen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_wlan_wlanprofiles", "label": "WLAN-Profile anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_wlan_wlanstatus", "label": "WLAN-Status anzeigen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["wlan profile wrong", "wifi configuration error", "802.1x fail"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde das WLAN-Profil manuell eingerichtet oder per Unternehmensrichtlinie?",
+        "options": ["Manuell eingerichtet", "Per Firmenrichtlinie/GPO", "Weiß ich nicht"],
+        "narrows": "Ob Profil manuell korrigiert werden kann"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-005"]
+  },
+  {
+    "id": "PROB-NET-009",
+    "category": "Netzwerk",
+    "title": "5-GHz-WLAN nicht sichtbar",
+    "keywords": ["5GHz", "5 GHz", "WLAN", "nicht sichtbar", "Band", "Frequenz", "WiFi 5"],
+    "extendedKeywords": ["5-GHz-Netzwerk wird nicht angezeigt", "nur 2,4 GHz sichtbar", "schnelles WLAN nicht sichtbar", "5G WiFi fehlt", "5-GHz-Band nicht gefunden", "WLAN zeigt nur langsames Netzwerk", "5-GHz-Netzwerk finden", "warum sehe ich das 5-GHz-WLAN nicht", "Laptop unterstützt kein 5 GHz", "5-GHz-Netzwerk aktivieren", "schnelleres WLAN-Band nicht verfügbar", "WLAN-Adapter unterstützt 5 GHz nicht", "5G-Netzwerk am Laptop", "schnelles WiFi-Band fehlt", "nur langsames WLAN verfügbar", "2,4 GHz statt 5 GHz", "Dual-Band WLAN Problem", "5-GHz-Kanal nicht sichtbar", "WLAN nur auf 2,4 GHz", "5-GHz-Frequenzband fehlt"],
+    "typos": ["5 Ghz", "5GHZ", "5 ghz", "5Ghz"],
+    "symptoms": ["5-GHz-Netzwerk erscheint nicht in der WLAN-Liste", "Nur 2,4-GHz-Netzwerke sichtbar"],
+    "quickCheck": "Unterstützt Ihr WLAN-Adapter 5 GHz? Prüfen Sie die Adaptereigenschaften.",
+    "solutions": [
+      "WLAN-Adapter prüfen ob 5 GHz unterstützt wird: Geräte-Manager > WLAN-Adapter > Eigenschaften",
+      "In den Adapter-Eigenschaften: 'Bevorzugtes Band' auf '5 GHz bevorzugt' setzen",
+      "WLAN-Treiber aktualisieren - ältere Treiber unterstützen manchmal nicht alle Kanäle",
+      "Prüfen ob der Access Point tatsächlich auf 5 GHz sendet",
+      "Näher an den Access Point gehen - 5 GHz hat geringere Reichweite",
+      "Geräte-Manager: Unter Erweitert > Band-Einstellungen prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_wlan_wlanstatus", "label": "WLAN-Status anzeigen", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["5ghz not showing", "no 5g wifi", "only 2.4ghz visible"],
+    "followUpQuestions": [
+      {
+        "question": "Welches WLAN-Adapter-Modell ist in Ihrem Gerät verbaut?",
+        "options": ["Intel", "Realtek", "Qualcomm", "Weiß ich nicht"],
+        "narrows": "Ob 5-GHz-Unterstützung vorhanden"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-005", "PROB-NET-006"]
+  },
+  {
+    "id": "PROB-NET-010",
+    "category": "Netzwerk",
+    "title": "DNS - Webseite nicht erreichbar",
+    "keywords": ["DNS", "Webseite", "nicht erreichbar", "Name Resolution", "Namensauflösung", "DNS_PROBE_FINISHED_NXDOMAIN"],
+    "extendedKeywords": ["Webseite nicht erreichbar", "Seite kann nicht gefunden werden", "DNS-Fehler im Browser", "DNS_PROBE_FINISHED_NXDOMAIN", "Server-IP-Adresse konnte nicht gefunden werden", "Name kann nicht aufgelöst werden", "bestimmte Seite geht nicht", "eine Webseite funktioniert nicht", "DNS-Auflösung fehlgeschlagen", "Seite nicht gefunden", "Domain nicht erreichbar", "Website nicht auffindbar", "Browser findet Seite nicht", "DNS Fehler Chrome", "Namensauflösung fehlgeschlagen", "Seite existiert nicht Meldung", "Server nicht gefunden", "die Webseite ist nicht erreichbar", "Adresse kann nicht aufgelöst werden", "NXDOMAIN Fehler"],
+    "typos": ["DNS", "Websiete", "erriechbar", "Namensaufloesung"],
+    "symptoms": ["Fehlermeldung DNS_PROBE_FINISHED_NXDOMAIN", "Browser meldet 'Server-IP konnte nicht gefunden werden'", "Nur bestimmte Seiten nicht erreichbar"],
+    "quickCheck": "Sind alle Webseiten betroffen oder nur eine bestimmte?",
+    "solutions": [
+      "DNS-Cache leeren über das Admin Tool",
+      "DNS-Abfrage über das Admin Tool durchführen (nslookup)",
+      "Andere DNS-Server testen (z.B. 8.8.8.8 oder 1.1.1.1)",
+      "Browser-Cache leeren",
+      "Hosts-Datei prüfen auf falsche Einträge",
+      "VPN-Verbindung prüfen - DNS könnte über VPN umgeleitet werden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_flushdns", "label": "DNS-Cache leeren", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_net_nslookup", "label": "DNS-Abfrage", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_fileops_hostsshow", "label": "Hosts-Datei anzeigen", "priority": 3, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["dns error", "site not found", "nxdomain"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft es alle Webseiten oder nur eine bestimmte?",
+        "options": ["Alle Seiten", "Nur eine bestimmte", "Nur interne Seiten"],
+        "narrows": "Ob DNS-Server oder einzelner Eintrag"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-011", "PROB-NET-012"]
+  },
+  {
+    "id": "PROB-NET-011",
+    "category": "Netzwerk",
+    "title": "DNS-Cache Probleme",
+    "keywords": ["DNS", "Cache", "veraltet", "Flush", "leeren", "alte Einträge", "DNS-Cache"],
+    "extendedKeywords": ["DNS-Cache leeren", "alte DNS-Einträge", "DNS-Cache veraltet", "nach Serverumzug alte IP", "Seite zeigt alten Inhalt", "DNS aktualisieren", "DNS-Cache erneuern", "gespeicherte DNS-Einträge löschen", "DNS Flush durchführen", "DNS-Auflösung zeigt falsche IP", "DNS-Cache aufräumen", "veraltete DNS-Daten", "DNS-Eintrag stimmt nicht mehr", "nach Domainwechsel alte Seite", "DNS-Cache löschen Windows", "ipconfig flushdns", "DNS-Einträge zurücksetzen", "lokaler DNS-Cache", "DNS-Cache bereinigen", "DNS-Resolver-Cache leeren"],
+    "typos": ["DNS-Cashe", "DNS Chache", "flushdns", "DNS-Cahce"],
+    "symptoms": ["Webseite zeigt veralteten Inhalt", "Falsche IP-Adresse wird aufgelöst", "Nach Serveränderung alte Seite erreichbar"],
+    "quickCheck": "Wurde kürzlich ein Server oder eine Domain umgezogen?",
+    "solutions": [
+      "DNS-Cache leeren über das Admin Tool",
+      "Manuell: Eingabeaufforderung als Admin > ipconfig /flushdns",
+      "Browser-Cache zusätzlich leeren",
+      "Chrome: chrome://net-internals/#dns > Clear host cache",
+      "Netzwerkadapter kurz deaktivieren und wieder aktivieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_flushdns", "label": "DNS-Cache leeren", "priority": 1, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["flush dns", "clear dns cache", "stale dns"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde kürzlich ein Server oder eine Webseite umgezogen?",
+        "options": ["Ja", "Nein", "Weiß ich nicht"],
+        "narrows": "Ursache der veralteten DNS-Einträge"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-010", "PROB-NET-012"]
+  },
+  {
+    "id": "PROB-NET-012",
+    "category": "Netzwerk",
+    "title": "Falscher DNS-Server konfiguriert",
+    "keywords": ["DNS", "Server", "falsch", "Konfiguration", "DNS-Server", "primär", "sekundär"],
+    "extendedKeywords": ["falscher DNS-Server eingestellt", "DNS-Server ändern", "DNS-Server konfigurieren", "welcher DNS-Server ist eingestellt", "DNS-Server manuell setzen", "DNS-Einstellungen prüfen", "interner DNS-Server nicht erreichbar", "DNS auf Google ändern", "DNS-Server umstellen", "8.8.8.8 als DNS", "öffentlichen DNS-Server verwenden", "DNS-Server-Adresse falsch", "DNS-Konfiguration korrigieren", "primärer DNS-Server fehlt", "DNS-Server automatisch beziehen", "DNS-Server in Windows ändern", "DNS-Server vom Provider", "Firmen-DNS nicht erreichbar", "DNS-Server zurücksetzen", "DNS-Server-Einstellungen"],
+    "typos": ["DNS-Serfer", "DNS-Sever", "Konfiguraion"],
+    "symptoms": ["Bestimmte Seiten nicht erreichbar", "Interne Seiten nicht auflösbar", "DNS-Auflösung dauert sehr lange"],
+    "quickCheck": "Welcher DNS-Server ist aktuell konfiguriert?",
+    "solutions": [
+      "DNS-Konfiguration prüfen: ipconfig /all in der Eingabeaufforderung",
+      "DNS-Server auf automatisch (DHCP) zurücksetzen",
+      "Für Tests: Alternativen DNS-Server verwenden (8.8.8.8, 1.1.1.1)",
+      "IP-Konfiguration zurücksetzen über das Admin Tool",
+      "Netzwerkdiagnose über das Admin Tool für DNS-Server-Prüfung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_nslookup", "label": "DNS-Abfrage", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_net_ipreset", "label": "IP zurücksetzen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["wrong dns server", "change dns", "dns configuration"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde der DNS-Server manuell konfiguriert oder automatisch per DHCP bezogen?",
+        "options": ["Manuell", "Automatisch/DHCP", "Weiß ich nicht"],
+        "narrows": "Ob manuelle Korrektur nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-010", "PROB-NET-011"]
+  },
+  {
+    "id": "PROB-NET-013",
+    "category": "Netzwerk",
+    "title": "VPN verbindet sich nicht",
+    "keywords": ["VPN", "verbindet nicht", "Fehler", "Verbindung", "Tunnel", "Authentifizierung"],
+    "extendedKeywords": ["VPN geht nicht", "kann mich nicht ins VPN einwählen", "VPN-Verbindung schlägt fehl", "VPN zeigt Fehler", "VPN-Client verbindet nicht", "kann mich nicht mit dem Firmennetzwerk verbinden", "VPN-Einwahl funktioniert nicht", "VPN-Authentifizierung fehlgeschlagen", "VPN-Tunnel baut sich nicht auf", "kein Zugang zum VPN", "VPN reagiert nicht", "VPN bricht beim Verbinden ab", "VPN-Passwort funktioniert nicht", "VPN-Server nicht erreichbar", "VPN-Verbindung timeout", "Remote-Zugang funktioniert nicht", "Homeoffice VPN geht nicht", "VPN meldet Fehler", "kann nicht arbeiten ohne VPN", "VPN-Einwahl vom Homeoffice schlägt fehl"],
+    "typos": ["VPM", "VNP", "verbindet", "Tunnle"],
+    "symptoms": ["VPN-Client zeigt Fehlermeldung", "Verbindungsversuch läuft ins Timeout", "Authentifizierung schlägt fehl"],
+    "quickCheck": "Welche Fehlermeldung zeigt der VPN-Client an?",
+    "solutions": [
+      "Internetverbindung prüfen (VPN braucht funktionierendes Internet)",
+      "VPN-Client neu starten",
+      "Benutzername und Passwort prüfen (nach Passwortänderung aktualisieren!)",
+      "VPN-Client aktualisieren auf die neueste Version",
+      "Firewall prüfen: VPN-Ports müssen offen sein",
+      "DNS-Cache leeren vor dem VPN-Verbindungsaufbau",
+      "Bei MFA: Token/Authenticator-App prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_net_flushdns", "label": "DNS-Cache leeren", "priority": 2, "effectiveness": 45},
+      {"skillId": "rd_net_testport", "label": "Port testen", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["vpn wont connect", "vpn fail", "remote access fail"],
+    "followUpQuestions": [
+      {
+        "question": "Welchen VPN-Client verwenden Sie?",
+        "options": ["Cisco AnyConnect", "GlobalProtect", "FortiClient", "Windows Built-in", "Andere"],
+        "narrows": "Client-spezifische Fehlerbehebung"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-003", "PROB-NET-014", "PROB-NET-015"]
+  },
+  {
+    "id": "PROB-NET-014",
+    "category": "Netzwerk",
+    "title": "VPN-Verbindung langsam",
+    "keywords": ["VPN", "langsam", "Performance", "Geschwindigkeit", "Bandbreite", "Latenz"],
+    "extendedKeywords": ["VPN ist extrem langsam", "über VPN ist alles langsam", "VPN-Geschwindigkeit schlecht", "Dateien laden langsam über VPN", "VPN-Performance miserabel", "Arbeiten über VPN ist unerträglich langsam", "VPN drosselt Geschwindigkeit", "Netzlaufwerke langsam über VPN", "Teams ruckelt über VPN", "VPN-Bandbreite niedrig", "alles dauert ewig über VPN", "VPN Latenz hoch", "Remotezugriff langsam", "VPN kriecht", "SharePoint langsam über VPN", "Firmennetzwerk über VPN langsam", "VPN-Tunnel langsam", "Homeoffice-Verbindung langsam", "VPN-Durchsatz niedrig", "langsame VPN-Performance"],
+    "typos": ["langsamm", "VPM", "Performace"],
+    "symptoms": ["Niedrige Übertragungsraten über VPN", "Hohe Latenz", "Anwendungen reagieren verzögert"],
+    "quickCheck": "Ist die Internetverbindung ohne VPN schnell genug?",
+    "solutions": [
+      "Grundsätzliche Internetgeschwindigkeit ohne VPN testen",
+      "Split-Tunnel aktivieren wenn verfügbar (lokaler Internetverkehr geht nicht über VPN)",
+      "Anderen VPN-Server/Gateway versuchen falls möglich",
+      "WLAN auf 5 GHz wechseln oder LAN-Kabel verwenden",
+      "VPN-Client aktualisieren",
+      "Nicht benötigte Anwendungen schließen die Bandbreite verbrauchen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Ping-Test", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["slow vpn", "vpn performance bad", "vpn speed low"],
+    "followUpQuestions": [
+      {
+        "question": "Ist Ihre lokale Internetverbindung schnell genug (ohne VPN)?",
+        "options": ["Ja, ohne VPN schnell", "Nein, auch ohne VPN langsam", "Nicht getestet"],
+        "narrows": "Ob VPN oder Internetverbindung das Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-013", "PROB-NET-015"]
+  },
+  {
+    "id": "PROB-NET-015",
+    "category": "Netzwerk",
+    "title": "VPN trennt sich ständig",
+    "keywords": ["VPN", "trennt", "Disconnect", "instabil", "Abbruch", "Reconnect"],
+    "extendedKeywords": ["VPN trennt sich immer wieder", "VPN-Verbindung instabil", "VPN fällt ständig aus", "VPN-Disconnect alle paar Minuten", "VPN verbindet und trennt", "VPN-Abbrüche", "VPN hält keine Verbindung", "VPN reconnected sich ständig", "VPN-Verbindung bricht ab", "VPN fliegt raus", "VPN-Tunnel bricht zusammen", "VPN muss ständig neu verbunden werden", "VPN-Session läuft ab", "VPN timeout immer wieder", "instabile VPN-Verbindung", "VPN geht immer wieder offline", "VPN zuckt", "VPN-Verbindung hält nur kurz", "VPN bricht bei Inaktivität ab", "VPN Idle-Timeout"],
+    "typos": ["VPM", "Disconect", "instabiel"],
+    "symptoms": ["VPN-Verbindung bricht regelmäßig ab", "Häufige Reconnects", "VPN-Client zeigt Disconnect-Meldungen"],
+    "quickCheck": "Wie häufig treten die Abbrüche auf und bei welcher Aktivität?",
+    "solutions": [
+      "Internetverbindung stabilisieren (LAN statt WLAN verwenden)",
+      "VPN-Client Timeout-Einstellungen prüfen",
+      "VPN-Client aktualisieren",
+      "Keep-Alive-Einstellungen im VPN-Client aktivieren",
+      "Energiesparoptionen des Netzwerkadapters deaktivieren",
+      "Bei WLAN: Roaming-Einstellungen anpassen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_wlan_wlanstatus", "label": "WLAN-Status anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["vpn keeps disconnecting", "vpn unstable", "vpn drops"],
+    "followUpQuestions": [
+      {
+        "question": "Sind Sie per WLAN oder LAN-Kabel verbunden?",
+        "options": ["WLAN", "LAN-Kabel"],
+        "narrows": "Ob instabiles WLAN die Ursache"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-013", "PROB-NET-014"]
+  },
+  {
+    "id": "PROB-NET-016",
+    "category": "Netzwerk",
+    "title": "VPN Split-Tunnel konfigurieren",
+    "keywords": ["VPN", "Split-Tunnel", "Split Tunnel", "Routing", "lokaler Zugriff", "direkter Zugang"],
+    "extendedKeywords": ["Split-Tunnel VPN aktivieren", "VPN nur für Firmennetzwerk nutzen", "lokales Internet trotz VPN", "VPN Split-Tunnel einrichten", "nicht alles über VPN leiten", "lokaler Drucker über VPN nicht erreichbar", "Internet direkt statt über VPN", "Split-Tunnel konfigurieren", "VPN nur für bestimmte Adressen", "lokale Geräte trotz VPN nutzen", "Drucker funktioniert nicht mit VPN", "Internet direkt statt über Firmennetzwerk", "selektives VPN-Routing", "VPN-Routing anpassen", "lokales Netzwerk trotz VPN", "Split-Tunneling aktivieren", "VPN Performance durch Split-Tunnel verbessern", "nicht alle Daten über VPN", "Heimnetzwerk trotz VPN erreichbar", "VPN Routing-Tabelle"],
+    "typos": ["Split-Tunnle", "Spit-Tunnel", "Split Tunnle"],
+    "symptoms": ["Lokale Geräte nicht erreichbar bei VPN", "Alles wird über VPN geleitet", "Internet langsam wegen Full-Tunnel"],
+    "quickCheck": "Verwenden Sie aktuell Full-Tunnel oder Split-Tunnel VPN?",
+    "solutions": [
+      "Prüfen ob Split-Tunnel im VPN-Client verfügbar ist",
+      "Bei Windows Built-in VPN: Erweiterte TCP/IP-Einstellungen > 'Standardgateway im Remotenetzwerk verwenden' deaktivieren",
+      "IT-Admin kontaktieren für Split-Tunnel-Konfiguration",
+      "Beachten: Split-Tunnel kann aus Sicherheitsgründen deaktiviert sein",
+      "Alternative: Nur bestimmte Routen über VPN konfigurieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["split tunnel vpn", "vpn routing", "local access vpn"],
+    "followUpQuestions": [
+      {
+        "question": "Welchen VPN-Client verwenden Sie?",
+        "options": ["Cisco AnyConnect", "GlobalProtect", "FortiClient", "Windows Built-in", "Andere"],
+        "narrows": "Client-spezifische Split-Tunnel-Konfiguration"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-003", "PROB-NET-013"]
+  },
+  {
+    "id": "PROB-NET-017",
+    "category": "Netzwerk",
+    "title": "Proxy-Einstellungen falsch",
+    "keywords": ["Proxy", "Einstellungen", "falsch", "PAC", "WPAD", "Proxy-Server", "kein Internet"],
+    "extendedKeywords": ["Proxy-Einstellungen stimmen nicht", "falscher Proxy eingestellt", "Proxy verhindert Internetzugang", "Proxy-Konfiguration fehlerhaft", "manueller Proxy blockiert", "Proxy-Einstellungen zurücksetzen", "Proxy entfernen", "Proxy-Adresse falsch", "PAC-URL nicht erreichbar", "WPAD funktioniert nicht", "automatische Proxy-Erkennung fehlgeschlagen", "Proxy muss deaktiviert werden", "Proxy-Server antwortet nicht", "Internet nur mit Proxy", "Proxy-Einstellungen ändern", "Proxy-Konfiguration löschen", "Proxy blockiert Webseiten", "Proxy-Authentifizierung fehlgeschlagen", "wo stelle ich den Proxy ein", "Proxy für Firmennetzwerk"],
+    "typos": ["Proxxy", "Proxi", "Proxy-Einstellugen", "WAPD"],
+    "symptoms": ["Browser zeigt Proxy-Fehlermeldung", "Automatische Proxy-Erkennung schlägt fehl", "Kein Internetzugang trotz Netzwerkverbindung"],
+    "quickCheck": "Ist ein Proxy-Server in den Windows-Einstellungen konfiguriert?",
+    "solutions": [
+      "Proxy-Einstellungen prüfen: Einstellungen > Netzwerk > Proxy",
+      "Manuellen Proxy deaktivieren wenn nicht benötigt",
+      "Automatische Proxy-Erkennung aktivieren/deaktivieren",
+      "PAC-URL prüfen wenn konfiguriert",
+      "Internet Explorer/Edge: Internetoptionen > Verbindungen > LAN-Einstellungen prüfen",
+      "Bei Firmennetzwerk: IT fragen welche Proxy-Einstellungen korrekt sind"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["proxy settings wrong", "proxy error", "pac url broken"],
+    "followUpQuestions": [
+      {
+        "question": "Ist in den Netzwerkeinstellungen ein Proxy-Server konfiguriert?",
+        "options": ["Ja, manueller Proxy", "Ja, automatische Konfiguration", "Nein, kein Proxy", "Weiß ich nicht"],
+        "narrows": "Art der Proxy-Konfiguration"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-002", "PROB-NET-018"]
+  },
+  {
+    "id": "PROB-NET-018",
+    "category": "Netzwerk",
+    "title": "Proxy blockiert Anwendung oder Webseite",
+    "keywords": ["Proxy", "blockiert", "gesperrt", "gefiltert", "Zugriff", "Webfilter", "Content Filter"],
+    "extendedKeywords": ["Proxy blockiert eine Webseite", "Seite vom Proxy gesperrt", "Webfilter blockiert", "kann bestimmte Seite nicht aufrufen", "Zugriff durch Proxy verweigert", "Firmen-Proxy blockiert", "Webseite wird gefiltert", "Proxy lässt mich nicht auf die Seite", "Content-Filter blockiert Zugriff", "Seite als unsicher eingestuft", "Proxy-Fehlermeldung beim Zugriff", "gesperrte Webseite freigeben", "Proxy-Ausnahme einrichten", "Webseite auf Whitelist setzen", "Proxy blockiert Downloads", "Proxy blockiert Anwendung", "App kann nicht über Proxy kommunizieren", "Cloud-Dienst durch Proxy blockiert", "Software-Update blockiert durch Proxy", "Proxy-Bypass für bestimmte Seite"],
+    "typos": ["Proxxy", "blockirt", "gefilltert"],
+    "symptoms": ["Fehlermeldung vom Proxy-Server", "Seite wird als blockiert angezeigt", "Anwendung kann keine Verbindung herstellen"],
+    "quickCheck": "Wird eine Meldung vom Proxy/Webfilter angezeigt?",
+    "solutions": [
+      "Proxy-Fehlermeldung notieren (Kategorie der Blockierung)",
+      "IT kontaktieren um die Webseite/Anwendung freigeben zu lassen",
+      "Proxy-Ausnahme-Liste prüfen",
+      "VPN-Verbindung trennen und direkt versuchen (wenn erlaubt)",
+      "Alternative URL der Webseite versuchen (http vs. https)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["proxy blocking site", "web filter block", "content filter"],
+    "followUpQuestions": [
+      {
+        "question": "Wird die Seite/Anwendung als bestimmte Kategorie blockiert?",
+        "options": ["Ja, Kategorie wird angezeigt", "Nein, nur allgemeiner Fehler", "Weiß ich nicht"],
+        "narrows": "Ob Kategoriefreigabe oder generelles Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-017", "PROB-NET-019"]
+  },
+  {
+    "id": "PROB-NET-019",
+    "category": "Netzwerk",
+    "title": "Zscaler-Probleme",
+    "keywords": ["Zscaler", "ZPA", "ZIA", "Cloud-Proxy", "Zscaler Client", "Tunnel"],
+    "extendedKeywords": ["Zscaler funktioniert nicht", "Zscaler blockiert", "Zscaler-Client läuft nicht", "Zscaler-Tunnel baut sich nicht auf", "Zscaler-Symbol rot", "Internet geht nicht wegen Zscaler", "Zscaler deaktivieren", "Zscaler-Verbindung fehlgeschlagen", "Zscaler sperrt Seite", "Zscaler-App startet nicht", "Zscaler nach Neustart weg", "Zscaler zeigt Fehler", "Zscaler-Client aktualisieren", "Zscaler-Einstellungen", "Zscaler blockiert Downloads", "Zscaler Cloud Connector Problem", "Zscaler-Authentifizierung fehlgeschlagen", "Zscaler-Icon in Taskleiste fehlt", "Zscaler Service Access", "Zscaler langsam"],
+    "typos": ["Zscaler", "Z-Scaler", "Zscalar", "ZScaler"],
+    "symptoms": ["Zscaler-Symbol zeigt Fehler", "Kein Internet durch Zscaler-Problem", "Anwendungen werden blockiert"],
+    "quickCheck": "Welche Farbe hat das Zscaler-Symbol in der Taskleiste?",
+    "solutions": [
+      "Zscaler-Client neu starten: Rechtsklick auf Zscaler-Symbol > Beenden > Neu starten",
+      "Zscaler-Status prüfen: Rechtsklick > Mehr > App-Details",
+      "Windows neu starten wenn Zscaler-Client hängt",
+      "Internetverbindung prüfen (Zscaler braucht Internet)",
+      "Bei blockierten Seiten: IT kontaktieren für Ausnahme",
+      "Zscaler-Client reparieren: Systemsteuerung > Programme > Zscaler > Reparieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["zscaler error", "zscaler not working", "zscaler blocking"],
+    "followUpQuestions": [
+      {
+        "question": "Ist das Zscaler-Symbol in der Taskleiste sichtbar und welche Farbe hat es?",
+        "options": ["Grün (verbunden)", "Rot (Fehler)", "Grau (nicht verbunden)", "Nicht sichtbar"],
+        "narrows": "Status der Zscaler-Verbindung"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-017", "PROB-NET-018"]
+  },
+  {
+    "id": "PROB-NET-020",
+    "category": "Netzwerk",
+    "title": "RDP-Verbindung fehlgeschlagen",
+    "keywords": ["RDP", "Remote Desktop", "Remotedesktop", "Verbindung", "fehlgeschlagen", "nicht möglich", "3389"],
+    "extendedKeywords": ["RDP geht nicht", "Remote Desktop verbindet nicht", "kann mich nicht per Remote Desktop verbinden", "Remotedesktopverbindung fehlgeschlagen", "RDP-Fehler", "Remote Desktop funktioniert nicht", "Verbindung zum Remote-PC nicht möglich", "RDP-Port blockiert", "Remote Desktop Fehlermeldung", "kann nicht auf anderen PC zugreifen per RDP", "Remotedesktop zeigt Fehler", "RDP-Verbindung timeout", "Remote Desktop Zugriff verweigert", "RDP Authentifizierung fehlgeschlagen", "fernsteuern geht nicht", "Remotedesktop ist deaktiviert", "RDP-Server nicht erreichbar", "Remote Desktop Connection Error", "kann nicht remote arbeiten", "Fernzugriff auf PC funktioniert nicht"],
+    "typos": ["RDP", "Remote Desktio", "Remotedestkop", "fehlgeschalgen"],
+    "symptoms": ["Fehlermeldung bei RDP-Verbindungsversuch", "Timeout beim Verbinden", "Zugriffsverweigerung"],
+    "quickCheck": "Ist der Ziel-PC eingeschaltet und im Netzwerk erreichbar?",
+    "solutions": [
+      "Ziel-PC per Ping prüfen über das Admin Tool",
+      "Remote Desktop auf dem Ziel-PC aktivieren über das Admin Tool",
+      "RDP-Port 3389 per Port-Test prüfen über das Admin Tool",
+      "Firewall auf dem Ziel-PC prüfen: RDP muss erlaubt sein",
+      "RDP-Einstellungen öffnen über das Admin Tool",
+      "Benutzername korrekt eingeben: DOMAIN\\Benutzer oder benutzer@domain.de",
+      "NLA (Network Level Authentication) prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpopen", "label": "RDP-Verbindung öffnen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_rdp_rdpenable", "label": "RDP aktivieren", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_net_ping", "label": "Ping-Test", "priority": 3, "effectiveness": 65},
+      {"skillId": "rd_net_testport", "label": "Port testen", "priority": 4, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["rdp fail", "remote desktop error", "cant connect remote"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Fehlermeldung wird beim RDP-Verbindungsversuch angezeigt?",
+        "options": ["PC nicht gefunden", "Zugriff verweigert", "Timeout", "Andere Fehlermeldung"],
+        "narrows": "Spezifisches RDP-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-021", "PROB-NET-022"]
+  },
+  {
+    "id": "PROB-NET-021",
+    "category": "Netzwerk",
+    "title": "RDP-Verbindung langsam",
+    "keywords": ["RDP", "langsam", "Remote Desktop", "Performance", "Latenz", "ruckelt", "verzögert"],
+    "extendedKeywords": ["Remote Desktop ist langsam", "RDP ruckelt", "Remote Desktop reagiert verzögert", "RDP-Performance schlecht", "Bildschirm baut sich langsam auf", "Remote Desktop hängt", "RDP braucht ewig", "Mauszeiger verzögert bei RDP", "Remote Desktop Verzögerung", "RDP-Sitzung langsam", "Tippen verzögert bei Remote Desktop", "Remote Desktop Bildqualität schlecht", "RDP über VPN langsam", "Remote Desktop kriecht", "RDP-Verbindung träge", "Remotedesktop unbrauchbar langsam", "Grafik ruckelt bei RDP", "Remote Desktop flackert", "RDP-Bandbreite niedrig", "langsame Remotedesktop-Sitzung"],
+    "typos": ["RDP", "langsamm", "Perfomance", "Remotedestkop"],
+    "symptoms": ["Verzögerte Maus- und Tastatureingaben", "Langsamer Bildaufbau", "Ruckelnde Darstellung"],
+    "quickCheck": "Ist die Netzwerkverbindung zwischen den beiden PCs schnell genug?",
+    "solutions": [
+      "RDP-Verbindungsqualität anpassen: Beim Verbinden > Optionen > Leistung",
+      "Visuelle Effekte reduzieren: Hintergrund, Schriftglättung, etc. deaktivieren",
+      "Bildschirmauflösung der RDP-Sitzung reduzieren",
+      "LAN-Kabel statt WLAN verwenden",
+      "Bei VPN: Split-Tunnel oder bessere Verbindung nutzen",
+      "Netzwerk-Latenz per Ping prüfen über das Admin Tool"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Ping-Test", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["slow rdp", "remote desktop lag", "rdp performance"],
+    "followUpQuestions": [
+      {
+        "question": "Verbinden Sie sich über VPN oder direkt im Firmennetzwerk?",
+        "options": ["Über VPN", "Direkt im Firmennetzwerk", "Über Internet ohne VPN"],
+        "narrows": "Ob VPN die Ursache der Langsamkeit"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-020", "PROB-NET-014"]
+  },
+  {
+    "id": "PROB-NET-022",
+    "category": "Netzwerk",
+    "title": "RDP - schwarzer Bildschirm",
+    "keywords": ["RDP", "schwarzer Bildschirm", "Black Screen", "Remote Desktop", "schwarz", "leer"],
+    "extendedKeywords": ["RDP zeigt schwarzen Bildschirm", "Remote Desktop schwarzer Bildschirm", "nach RDP-Verbindung alles schwarz", "RDP Bildschirm wird schwarz", "Remote Desktop Black Screen", "nichts sichtbar bei RDP", "schwarzes Fenster bei Remote Desktop", "RDP verbindet aber zeigt nichts", "Remote Desktop leer", "Bildschirm bleibt schwarz nach Verbindung", "RDP schwarz nach Anmeldung", "Remote Desktop Bildschirm dunkel", "nur schwarzer Bildschirm bei RDP", "RDP Fenster leer", "Cursor sichtbar aber schwarzer Hintergrund", "RDP Black Screen nach Login", "Remote Desktop zeigt nichts an", "schwarzes RDP-Fenster", "Bildschirm leer bei Remotedesktop", "RDP hängt auf schwarzem Bildschirm"],
+    "typos": ["schwartzer", "Bilschirm", "Black Sceen"],
+    "symptoms": ["Schwarzer Bildschirm nach erfolgreicher RDP-Verbindung", "Cursor sichtbar aber kein Desktop", "Bildschirm bleibt dauerhaft schwarz"],
+    "quickCheck": "Sehen Sie einen Mauszeiger auf dem schwarzen Bildschirm?",
+    "solutions": [
+      "Strg+Alt+Ende drücken in der RDP-Sitzung (statt Strg+Alt+Entf)",
+      "RDP-Sitzung trennen (nicht abmelden) und neu verbinden",
+      "Bitmap-Caching deaktivieren: RDP > Optionen > Leistung",
+      "Grafikhardwarebeschleunigung in der RDP-Verbindung deaktivieren",
+      "Auf dem Ziel-PC den Grafiktreiber aktualisieren",
+      "RDP-Sitzung komplett beenden und neu starten",
+      "Bei persistentem Problem: Grafikkomposition deaktivieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_rdp_rdpopen", "label": "RDP-Verbindung öffnen", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["rdp black screen", "remote desktop blank", "rdp shows nothing"],
+    "followUpQuestions": [
+      {
+        "question": "Passiert das Problem bei jeder RDP-Verbindung oder nur manchmal?",
+        "options": ["Immer", "Nur manchmal", "Zum ersten Mal"],
+        "narrows": "Ob systematisches oder gelegentliches Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-020", "PROB-NET-021"]
+  },
+  {
+    "id": "PROB-NET-023",
+    "category": "Netzwerk",
+    "title": "Netzlaufwerk getrennt / nicht verfügbar",
+    "keywords": ["Netzlaufwerk", "getrennt", "nicht verfügbar", "Laufwerk", "Freigabe", "Verbindung", "rotes X"],
+    "extendedKeywords": ["Netzlaufwerk ist getrennt", "rotes X am Netzlaufwerk", "Netzlaufwerk nicht verfügbar", "kann nicht auf Netzlaufwerk zugreifen", "Netzlaufwerk fehlt", "Laufwerksbuchstabe zeigt getrennt", "Netzwerkfreigabe getrennt", "gemapptes Laufwerk weg", "Netzlaufwerk verbindet sich nicht", "Server-Freigabe nicht erreichbar", "Netzlaufwerk nach Neustart getrennt", "Laufwerk Z ist nicht verfügbar", "kann Netzlaufwerk nicht öffnen", "Netzlaufwerk zeigt Fehler", "freigegebener Ordner nicht erreichbar", "Netzwerkpfad wurde nicht gefunden", "Verbindung zum Netzlaufwerk fehlgeschlagen", "Netzlaufwerk verschwunden", "alle Netzlaufwerke weg", "Server-Laufwerk getrennt"],
+    "typos": ["Netzlufwerk", "Netzlawfwerk", "Netzlaufwek", "getrent"],
+    "symptoms": ["Rotes X-Symbol am Netzlaufwerk", "Fehlermeldung 'Netzwerkpfad nicht gefunden'", "Laufwerk ist im Explorer ausgegraut"],
+    "quickCheck": "Sind alle Netzlaufwerke betroffen oder nur eines?",
+    "solutions": [
+      "Netzlaufwerk prüfen: Rechtsklick > Neu verbinden",
+      "Server-Erreichbarkeit per Ping prüfen über das Admin Tool",
+      "Netzlaufwerke anzeigen über das Admin Tool",
+      "Netzlaufwerk trennen und neu verbinden",
+      "Anmeldeinformationen in der Windows-Anmeldeinformationsverwaltung prüfen",
+      "DNS-Cache leeren und erneut versuchen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_drivemap_mapdrivelist", "label": "Netzlaufwerke anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_net_ping", "label": "Ping-Test", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_net_flushdns", "label": "DNS-Cache leeren", "priority": 3, "effectiveness": 45},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 4, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["mapped drive disconnected", "network drive red x", "share not available"],
+    "followUpQuestions": [
+      {
+        "question": "Sind alle Netzlaufwerke betroffen oder nur ein bestimmtes?",
+        "options": ["Alle Netzlaufwerke", "Nur ein bestimmtes"],
+        "narrows": "Ob Server- oder allgemeines Netzwerkproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-024", "PROB-NET-025", "PROB-NET-026"]
+  },
+  {
+    "id": "PROB-NET-024",
+    "category": "Netzwerk",
+    "title": "Netzlaufwerk Zugriff verweigert",
+    "keywords": ["Netzlaufwerk", "Zugriff verweigert", "Berechtigung", "Access Denied", "Rechte", "Freigabe"],
+    "extendedKeywords": ["Zugriff auf Netzlaufwerk verweigert", "keine Berechtigung für Netzlaufwerk", "Access Denied Netzlaufwerk", "Netzlaufwerk sagt Zugriff verweigert", "darf nicht auf Server-Freigabe zugreifen", "Netzlaufwerk Berechtigungsfehler", "Rechte fehlen für Netzlaufwerk", "kann Ordner auf Netzlaufwerk nicht öffnen", "Zugriff auf Freigabe abgelehnt", "Server-Ordner Zugriff verweigert", "Netzlaufwerk fragt nach Anmeldedaten", "Benutzername und Passwort für Netzlaufwerk", "Netzlaufwerk Authentifizierung fehlgeschlagen", "kein Zugriff auf bestimmten Ordner auf Netzlaufwerk", "Freigabe-Berechtigungen fehlen", "NTFS-Berechtigung fehlt", "Netzlaufwerk lässt mich nicht rein", "Ordner auf Server gesperrt", "fehlende Rechte Dateiserver", "Zugriffsproblem Netzwerkfreigabe"],
+    "typos": ["Zugrif verwiegert", "Berechtiung", "Acces Denied"],
+    "symptoms": ["Fehlermeldung 'Zugriff verweigert'", "Anmeldefenster erscheint bei Zugriff", "Ordner lassen sich nicht öffnen"],
+    "quickCheck": "Hat sich Ihr Passwort kürzlich geändert?",
+    "solutions": [
+      "Anmeldeinformationen in der Windows-Anmeldeinformationsverwaltung prüfen und aktualisieren",
+      "Netzlaufwerk trennen und mit aktuellen Anmeldedaten neu verbinden",
+      "Gespeicherte Anmeldeinformationen löschen: Windows-Anmeldeinformationsverwaltung",
+      "IT kontaktieren für Berechtigungsprüfung auf dem Server",
+      "PC neu starten nach Passwortänderung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_drivemap_mapdrivelist", "label": "Netzlaufwerke anzeigen", "priority": 1, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["share access denied", "network drive permission", "no access mapped drive"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie kürzlich Ihr Passwort geändert?",
+        "options": ["Ja", "Nein", "Weiß ich nicht"],
+        "narrows": "Ob veraltete Anmeldeinformationen das Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-023", "PROB-NET-026"]
+  },
+  {
+    "id": "PROB-NET-025",
+    "category": "Netzwerk",
+    "title": "Netzlaufwerk langsam",
+    "keywords": ["Netzlaufwerk", "langsam", "Performance", "Geschwindigkeit", "Dateiübertragung", "Server"],
+    "extendedKeywords": ["Netzlaufwerk ist sehr langsam", "Dateien kopieren auf Netzlaufwerk dauert ewig", "Server-Zugriff langsam", "Netzlaufwerk kriecht", "Dateien öffnen langsam vom Netzlaufwerk", "Netzlaufwerk Performance schlecht", "Dateiübertragung auf Server langsam", "Explorer hängt bei Netzlaufwerk", "Ordner öffnen dauert lange auf Netzlaufwerk", "Kopieren zum Server langsam", "Netzlaufwerk reagiert träge", "Dateien laden langsam von Server", "Netzlaufwerk braucht ewig zum Laden", "Zugriff auf Netzlaufwerk dauert", "Server-Freigabe extrem langsam", "Netzwerkübertragung langsam", "Datei speichern auf Server dauert", "Netzlaufwerk blockt Explorer", "langsame Dateifreigabe", "Netzlaufwerk wird immer langsamer"],
+    "typos": ["Netzlufwerk", "langsamm", "Geschwindikeit"],
+    "symptoms": ["Lange Ladezeiten bei Dateizugriff", "Explorer hängt beim Öffnen von Netzlaufwerken", "Langsame Dateiübertragung"],
+    "quickCheck": "Ist nur das Netzlaufwerk langsam oder die gesamte Netzwerkverbindung?",
+    "solutions": [
+      "Netzwerkgeschwindigkeit testen: Ping und Bandbreite zum Server prüfen",
+      "LAN-Kabel statt WLAN verwenden",
+      "Große Dateien komprimieren vor dem Kopieren",
+      "Offline-Dateien deaktivieren für das Netzlaufwerk",
+      "SMB-Version prüfen (SMB3 ist schneller als SMB1)",
+      "Server-Auslastung durch IT prüfen lassen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Ping-Test", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["slow network drive", "file transfer slow", "server slow"],
+    "followUpQuestions": [
+      {
+        "question": "Sind Sie per WLAN oder LAN-Kabel verbunden?",
+        "options": ["WLAN", "LAN-Kabel"],
+        "narrows": "Ob Netzwerkverbindung die Ursache"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-023", "PROB-NET-006"]
+  },
+  {
+    "id": "PROB-NET-026",
+    "category": "Netzwerk",
+    "title": "Netzlaufwerk nach Passwort-Änderung getrennt",
+    "keywords": ["Netzlaufwerk", "Passwort", "Änderung", "getrennt", "Anmeldeinformationen", "Credentials"],
+    "extendedKeywords": ["nach Passwortänderung Netzlaufwerk weg", "Netzlaufwerk getrennt nach Passwort-Wechsel", "Anmeldeinformationen veraltet Netzlaufwerk", "Passwort geändert Netzlaufwerk geht nicht", "altes Passwort bei Netzlaufwerk gespeichert", "Netzlaufwerk nach AD-Passwortänderung getrennt", "gespeichertes Passwort aktualisieren Netzlaufwerk", "Credentials für Netzlaufwerk erneuern", "nach Passwort-Reset Netzlaufwerk offline", "Windows speichert altes Passwort für Laufwerk", "Anmeldeinformationen-Manager aktualisieren", "Netzlaufwerk Passwort falsch", "nach erzwungener Passwortänderung kein Laufwerk", "gespeicherte Zugangsdaten Netzlaufwerk löschen", "Passwort-Cache für Netzlaufwerk leeren", "neues Passwort für Netzlaufwerk eingeben", "Netzlaufwerk fragt nicht nach Passwort", "Laufwerk nutzt altes Passwort", "Credential Manager Netzlaufwerk", "Netzlaufwerk Anmeldung fehlgeschlagen nach Passwortänderung"],
+    "typos": ["Passwort-Änderug", "Anmeldeinformatioenn", "Credentials"],
+    "symptoms": ["Netzlaufwerk getrennt nach Passwortänderung", "Fehlermeldung 'Anmeldung fehlgeschlagen'", "Netzlaufwerk fragt nach Anmeldedaten"],
+    "quickCheck": "Wann haben Sie Ihr Passwort zuletzt geändert?",
+    "solutions": [
+      "Windows-Anmeldeinformationsverwaltung öffnen: Systemsteuerung > Anmeldeinformationsverwaltung",
+      "Veraltete Einträge für den Server löschen",
+      "Netzlaufwerk trennen und mit neuem Passwort neu verbinden",
+      "PC abmelden und neu anmelden (aktualisiert Kerberos-Ticket)",
+      "PC neu starten nach Passwortänderung",
+      "Netzlaufwerk mit Option 'Anmeldedaten speichern' neu verbinden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_drivemap_mapdrivelist", "label": "Netzlaufwerke anzeigen", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["password change network drive", "credentials expired", "old password mapped drive"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie seit der Passwortänderung den PC bereits neu gestartet?",
+        "options": ["Ja", "Nein"],
+        "narrows": "Ob Neustart das Problem lösen könnte"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-023", "PROB-NET-024"]
+  },
+  {
+    "id": "PROB-NET-027",
+    "category": "Netzwerk",
+    "title": "Firewall blockiert Anwendung",
+    "keywords": ["Firewall", "blockiert", "Anwendung", "Programm", "Zugriff", "Windows Firewall", "Regel"],
+    "extendedKeywords": ["Firewall blockiert mein Programm", "Anwendung wird von Firewall blockiert", "Windows Firewall verhindert Zugriff", "Programm kann nicht ins Internet wegen Firewall", "Firewall-Ausnahme erstellen", "App durch Firewall zulassen", "Firewall blockiert Netzwerkzugriff", "Software funktioniert nicht wegen Firewall", "Firewall-Regel für Programm", "Windows Defender Firewall blockiert", "Anwendung braucht Firewall-Freigabe", "Firewall-Ausnahme hinzufügen", "Programm durch Firewall erlauben", "Firewall-Warnung bei Programm", "App bekommt keinen Netzwerkzugriff", "Firewall-Popup bei neuem Programm", "Firewall hat Programm gesperrt", "Netzwerkzugriff für App freigeben", "Firewall-Einstellungen ändern", "Defender Firewall Ausnahme"],
+    "typos": ["Firewal", "Firwall", "blockirt", "Anwednung"],
+    "symptoms": ["Anwendung kann keine Netzwerkverbindung herstellen", "Firewall-Warnmeldung erscheint", "Programm funktioniert nur ohne Firewall"],
+    "quickCheck": "Wird eine Firewall-Warnung angezeigt wenn die Anwendung startet?",
+    "solutions": [
+      "Windows Firewall: Einstellungen > Datenschutz & Sicherheit > Windows-Sicherheit > Firewall",
+      "'App durch Firewall zulassen' > Einstellungen ändern > App hinzufügen",
+      "Sowohl Privat als auch Öffentlich anhaken wenn nötig",
+      "Firewall-Regel manuell erstellen: Erweiterte Einstellungen > Eingehende Regeln > Neue Regel",
+      "Prüfen ob eine Drittanbieter-Firewall zusätzlich blockiert",
+      "Port-Test über das Admin Tool durchführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_testport", "label": "Port testen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["firewall block app", "allow through firewall", "firewall exception"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Anwendung wird blockiert?",
+        "options": ["Ein bestimmtes Programm", "Ein Spiel", "Eine Geschäftsanwendung", "Weiß ich nicht"],
+        "narrows": "Welche Firewall-Regel benötigt wird"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-028", "PROB-NET-029"]
+  },
+  {
+    "id": "PROB-NET-028",
+    "category": "Netzwerk",
+    "title": "Firewall-Regel fehlt oder falsch konfiguriert",
+    "keywords": ["Firewall", "Regel", "fehlt", "konfigurieren", "Port", "eingehend", "ausgehend"],
+    "extendedKeywords": ["Firewall-Regel erstellen", "Port in der Firewall öffnen", "Firewall-Regel fehlt", "Firewall-Regel hinzufügen", "eingehende Regel erstellen", "ausgehende Regel erstellen", "bestimmten Port freigeben", "Firewall-Regel für Port", "Firewall-Konfiguration anpassen", "Port öffnen Windows Firewall", "Firewall-Regel bearbeiten", "Firewall erlaubt Port nicht", "Port in Firewall freigeben", "Firewall-Ausnahme für Port", "TCP-Port öffnen", "UDP-Port freigeben", "Firewall-Regel testen", "Port blockiert durch Firewall", "Firewall-Regel prüfen", "welche Firewall-Regeln sind aktiv"],
+    "typos": ["Firwall-Regel", "Firewal", "Konfiguraion"],
+    "symptoms": ["Verbindung zu einem bestimmten Port schlägt fehl", "Anwendung kann keinen eingehenden Datenverkehr empfangen"],
+    "quickCheck": "Welcher Port oder welches Protokoll wird benötigt?",
+    "solutions": [
+      "Port-Test über das Admin Tool durchführen um Blockierung zu bestätigen",
+      "Windows Firewall: Erweiterte Einstellungen öffnen",
+      "Neue eingehende Regel erstellen: Eingehende Regeln > Neue Regel > Port",
+      "Port und Protokoll (TCP/UDP) eingeben",
+      "Verbindung zulassen auswählen",
+      "Profil auswählen (Domäne, Privat, Öffentlich)",
+      "Regel benennen und speichern"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_testport", "label": "Port testen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["firewall rule missing", "open port firewall", "configure firewall"],
+    "followUpQuestions": [
+      {
+        "question": "Benötigen Sie eine eingehende oder ausgehende Regel?",
+        "options": ["Eingehend", "Ausgehend", "Beides", "Weiß ich nicht"],
+        "narrows": "Art der Firewall-Regel"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-027", "PROB-NET-029"]
+  },
+  {
+    "id": "PROB-NET-029",
+    "category": "Netzwerk",
+    "title": "Windows Firewall deaktiviert oder fehlerhaft",
+    "keywords": ["Firewall", "deaktiviert", "aus", "fehlt", "defekt", "Windows Defender Firewall"],
+    "extendedKeywords": ["Firewall ist ausgeschaltet", "Windows Firewall deaktiviert", "Firewall einschalten", "Firewall funktioniert nicht", "Firewall wurde deaktiviert", "Sicherheitswarnung Firewall aus", "Windows Defender Firewall ist deaktiviert", "Firewall aktivieren", "Firewall-Dienst läuft nicht", "Firewall einschalten geht nicht", "Firewall wieder einschalten", "Firewall-Status prüfen", "Firewall anschalten", "Windows-Sicherheit zeigt Warnung wegen Firewall", "Firewall reparieren", "Firewall-Dienst starten", "Firewall manuell aktivieren", "gelbe Warnung bei Firewall", "Firewall-Problem Windows", "Windows Firewall Service"],
+    "typos": ["Firewal", "Firwall", "deaktivirt", "ausgeschalten"],
+    "symptoms": ["Windows-Sicherheitscenter zeigt Warnung", "Firewall-Symbol zeigt rotes X", "Firewall-Dienst ist gestoppt"],
+    "quickCheck": "Zeigt Windows-Sicherheit eine Warnung bezüglich der Firewall?",
+    "solutions": [
+      "Firewall aktivieren: Windows-Sicherheit > Firewall & Netzwerkschutz > Netzwerk auswählen > Aktivieren",
+      "Firewall-Dienst starten: services.msc > Windows Defender Firewall > Starten",
+      "Prüfen ob eine Drittanbieter-Firewall die Windows Firewall ersetzt hat",
+      "GPO prüfen: Gruppenrichtlinien können Firewall-Einstellungen erzwingen",
+      "Firewall über Eingabeaufforderung aktivieren: netsh advfirewall set allprofiles state on"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["firewall off", "firewall disabled", "enable firewall"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde die Firewall absichtlich deaktiviert oder ist sie von alleine ausgegangen?",
+        "options": ["Absichtlich deaktiviert", "Von alleine ausgegangen", "Weiß ich nicht"],
+        "narrows": "Ob bewusste Deaktivierung oder Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-027", "PROB-NET-028"]
+  },
+  {
+    "id": "PROB-NET-030",
+    "category": "Netzwerk",
+    "title": "DHCP - keine IP-Adresse erhalten",
+    "keywords": ["DHCP", "keine IP", "IP-Adresse", "automatisch", "Lease", "kein Netzwerk"],
+    "extendedKeywords": ["PC bekommt keine IP-Adresse", "DHCP funktioniert nicht", "keine automatische IP", "IP-Adresse wird nicht zugewiesen", "kein Netzwerk keine IP", "DHCP-Server nicht erreichbar", "IP-Lease fehlgeschlagen", "kann keine IP beziehen", "DHCP-Anfrage fehlgeschlagen", "Netzwerk ohne IP-Adresse", "DHCP-Server antwortet nicht", "automatische IP-Vergabe funktioniert nicht", "Netzwerkadapter hat keine IP", "DHCP-Client Fehler", "Netzwerk eingeschränkt wegen IP", "kein DHCP-Lease", "IP-Adresse erneuern geht nicht", "DHCP Release/Renew", "Netzwerkverbindung ohne IP", "DHCP-Dienst funktioniert nicht"],
+    "typos": ["DCHP", "IP-Adrese", "DHPC"],
+    "symptoms": ["PC hat keine gültige IP-Adresse", "Netzwerk-Symbol zeigt 'Eingeschränkt'", "ipconfig zeigt 0.0.0.0 oder keine IP"],
+    "quickCheck": "Welche IP-Adresse zeigt ipconfig an?",
+    "solutions": [
+      "IP-Adresse erneuern: Eingabeaufforderung > ipconfig /release && ipconfig /renew",
+      "IP-Konfiguration zurücksetzen über das Admin Tool",
+      "Netzwerkkabel prüfen oder WLAN neu verbinden",
+      "DHCP-Client-Dienst prüfen: services.msc > DHCP-Client > Starten",
+      "Netzwerkadapter deaktivieren und wieder aktivieren",
+      "Winsock zurücksetzen über das Admin Tool"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_ipreset", "label": "IP zurücksetzen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_net_winsock", "label": "Winsock zurücksetzen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["no ip address", "dhcp fail", "no lease"],
+    "followUpQuestions": [
+      {
+        "question": "Was zeigt 'ipconfig' als IP-Adresse an?",
+        "options": ["0.0.0.0 oder leer", "169.254.x.x", "Eine normale IP", "Weiß nicht wie ich das prüfe"],
+        "narrows": "Ob DHCP oder APIPA"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-031", "PROB-NET-001"]
+  },
+  {
+    "id": "PROB-NET-031",
+    "category": "Netzwerk",
+    "title": "APIPA-Adresse (169.254.x.x) statt richtiger IP",
+    "keywords": ["APIPA", "169.254", "selbstzugewiesene IP", "Link-Local", "DHCP", "IP-Adresse"],
+    "extendedKeywords": ["IP-Adresse beginnt mit 169", "169.254 IP-Adresse", "selbstzugewiesene IP-Adresse", "APIPA-Adresse erhalten", "Link-Local Adresse", "Netzwerk eingeschränkt 169.254", "falsche IP-Adresse 169", "PC hat 169er IP", "automatische private Adresse", "DHCP gibt keine richtige IP", "Internet geht nicht 169.254", "Netzwerk mit APIPA", "nach Neustart 169 IP", "kein Netzwerk 169.254", "169 Adresse statt richtiger", "LAN bekommt 169er IP", "WLAN hat 169 Adresse", "Link-Local Netzwerkproblem", "APIPA statt DHCP", "seltsame IP-Adresse 169"],
+    "typos": ["APIPA", "169.254", "Link-Lokal"],
+    "symptoms": ["IP-Adresse beginnt mit 169.254", "Netzwerk 'Eingeschränkt'", "Kein Zugriff auf andere Netzwerkressourcen"],
+    "quickCheck": "Zeigt ipconfig eine Adresse die mit 169.254 beginnt?",
+    "solutions": [
+      "DHCP-Server ist nicht erreichbar - Netzwerkverkabelung prüfen",
+      "IP-Adresse erneuern: ipconfig /release && ipconfig /renew",
+      "IP-Konfiguration zurücksetzen über das Admin Tool",
+      "Netzwerkkabel tauschen oder in anderen Port stecken",
+      "DHCP-Client-Dienst prüfen und ggf. neu starten",
+      "Am Switch/Router prüfen ob der Port aktiv ist",
+      "Winsock zurücksetzen über das Admin Tool"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_ipreset", "label": "IP zurücksetzen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_net_winsock", "label": "Winsock zurücksetzen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["apipa address", "169.254 ip", "self-assigned ip"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert das Netzwerk für andere Geräte am gleichen Anschluss?",
+        "options": ["Ja, andere Geräte funktionieren", "Nein, auch andere Geräte haben Probleme", "Nicht getestet"],
+        "narrows": "Ob PC- oder Switch/Router-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-030"]
+  },
+  {
+    "id": "PROB-NET-032",
+    "category": "Netzwerk",
+    "title": "Hosts-Datei manipuliert",
+    "keywords": ["hosts", "Datei", "manipuliert", "verändert", "Malware", "Umleitung", "DNS"],
+    "extendedKeywords": ["hosts-Datei wurde verändert", "hosts-Datei manipuliert", "Malware hat hosts-Datei geändert", "Webseite wird umgeleitet", "Seite zeigt falsche Inhalte", "hosts-Datei prüfen", "hosts-Datei bereinigen", "hosts-Datei zurücksetzen", "Einträge in hosts-Datei", "unbekannte Einträge in hosts", "hosts-Datei öffnen", "hosts-Datei bearbeiten", "verdächtige Einträge hosts", "DNS-Umleitung über hosts", "hosts-Datei Virus", "hosts-Datei reparieren", "Standardinhalt hosts-Datei", "hosts-Datei leer machen", "hosts-Datei Windows 11", "wo ist die hosts-Datei"],
+    "typos": ["host-Datei", "Hosts-Datei", "hosts Datei", "manipulirt"],
+    "symptoms": ["Webseiten werden auf falsche Seiten umgeleitet", "Bestimmte Seiten nicht erreichbar", "Unbekannte Einträge in der hosts-Datei"],
+    "quickCheck": "Werden bestimmte Webseiten auf unerwartete Seiten umgeleitet?",
+    "solutions": [
+      "Hosts-Datei anzeigen über das Admin Tool",
+      "Hosts-Datei prüfen: C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "Verdächtige Einträge (außer localhost) entfernen",
+      "Hosts-Datei auf Standard zurücksetzen (nur 127.0.0.1 localhost behalten)",
+      "Virenscan durchführen um Malware auszuschließen",
+      "Hosts-Datei als Admin bearbeiten: Notepad als Administrator > Datei öffnen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_hostsshow", "label": "Hosts-Datei anzeigen", "priority": 1, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["hosts file changed", "hosts file malware", "dns redirect hosts"],
+    "followUpQuestions": [
+      {
+        "question": "Werden bestimmte Webseiten auf falsche Seiten umgeleitet?",
+        "options": ["Ja", "Nein, Seiten sind nur nicht erreichbar", "Weiß ich nicht"],
+        "narrows": "Ob Umleitung oder Blockierung"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-033"]
+  },
+  {
+    "id": "PROB-NET-033",
+    "category": "Netzwerk",
+    "title": "Hosts-Datei Eintrag hinzufügen nötig",
+    "keywords": ["hosts", "Eintrag", "hinzufügen", "DNS", "lokal", "Zuordnung", "IP"],
+    "extendedKeywords": ["Eintrag in hosts-Datei hinzufügen", "hosts-Datei bearbeiten", "lokalen DNS-Eintrag setzen", "IP-Adresse zu Hostname zuordnen", "hosts-Datei ergänzen", "hosts-Datei editieren", "neuen Eintrag in hosts", "hosts-Datei ändern", "DNS lokal überschreiben", "Hostname auflösen über hosts", "hosts-Datei für Testserver", "lokale DNS-Umleitung", "hosts-Eintrag für Entwicklung", "IP und Hostname in hosts eintragen", "hosts-Datei Beispiel", "wie bearbeite ich die hosts-Datei", "hosts-Datei mit Notepad öffnen", "hosts-Datei Administratorrechte", "Eintrag in hosts speichern geht nicht", "hosts-Datei Zugriff verweigert"],
+    "typos": ["host-Datei", "Hosts-Datei", "hosts Datei", "Eintarg"],
+    "symptoms": ["Bestimmter Hostname wird nicht aufgelöst", "Testserver muss über lokalen Namen erreichbar sein"],
+    "quickCheck": "Welche IP-Adresse soll welchem Hostnamen zugeordnet werden?",
+    "solutions": [
+      "Hosts-Datei anzeigen über das Admin Tool",
+      "Notepad als Administrator öffnen: Rechtsklick > Als Administrator ausführen",
+      "Datei > Öffnen > C:\\Windows\\System32\\drivers\\etc\\hosts (Dateityp: Alle Dateien)",
+      "Neue Zeile hinzufügen im Format: IP-Adresse [Tab] Hostname (z.B. 192.168.1.100 testserver)",
+      "Datei speichern (benötigt Administratorrechte)",
+      "DNS-Cache leeren damit der neue Eintrag sofort wirkt"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_fileops_hostsshow", "label": "Hosts-Datei anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_net_flushdns", "label": "DNS-Cache leeren", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["add hosts entry", "edit hosts file", "local dns entry"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie Administratorrechte auf dem PC?",
+        "options": ["Ja", "Nein", "Weiß ich nicht"],
+        "narrows": "Ob Berechtigung zum Bearbeiten vorhanden"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-032"]
+  },
+  {
+    "id": "PROB-NET-034",
+    "category": "Netzwerk",
+    "title": "Netzwerkadapter deaktiviert",
+    "keywords": ["Netzwerkadapter", "deaktiviert", "aus", "Adapter", "Netzwerkkarte", "aktivieren"],
+    "extendedKeywords": ["Netzwerkadapter ist deaktiviert", "Netzwerkkarte ausgeschaltet", "Adapter ist deaktiviert", "kein Netzwerk Adapter deaktiviert", "Netzwerkadapter aktivieren", "LAN-Adapter deaktiviert", "WLAN-Adapter deaktiviert", "Netzwerkverbindung deaktiviert", "Adapter wieder einschalten", "Netzwerkkarte wurde deaktiviert", "Ethernet-Adapter deaktiviert", "Netzwerkadapter im Geräte-Manager deaktiviert", "Netzwerkadapter einschalten", "kein Netzwerk Adapter fehlt", "Netzwerkverbindung aktivieren", "Netzwerkkarte reaktivieren", "Adapter ist ausgegraut", "kein WLAN-Adapter sichtbar", "Netzwerk-Hardware deaktiviert", "Netzwerkkarte anschalten"],
+    "typos": ["Netzwerkadpater", "deaktivirt", "Netzwerkkrte"],
+    "symptoms": ["Kein Netzwerksymbol", "Netzwerkadapter ausgegraut im Geräte-Manager", "Keine WLAN- oder LAN-Option verfügbar"],
+    "quickCheck": "Ist der Netzwerkadapter im Geräte-Manager sichtbar?",
+    "solutions": [
+      "Netzwerkadapter aktivieren: Geräte-Manager > Netzwerkadapter > Rechtsklick > Aktivieren",
+      "Oder: Einstellungen > Netzwerk > Adapteroptionen > Rechtsklick > Aktivieren",
+      "Bei Laptop: Hardware-WLAN-Schalter oder Fn+Taste prüfen",
+      "Flugmodus deaktivieren",
+      "Netzwerkadapter-Treiber aktualisieren",
+      "Netzwerkdiagnose über das Admin Tool ausführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["adapter disabled", "network card off", "enable adapter"],
+    "followUpQuestions": [
+      {
+        "question": "Welcher Adapter ist betroffen?",
+        "options": ["WLAN-Adapter", "LAN/Ethernet-Adapter", "Beide", "Weiß ich nicht"],
+        "narrows": "Welcher Adapter aktiviert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-035", "PROB-NET-036"]
+  },
+  {
+    "id": "PROB-NET-035",
+    "category": "Netzwerk",
+    "title": "Netzwerkadapter-Treiber fehlt oder veraltet",
+    "keywords": ["Netzwerkadapter", "Treiber", "fehlt", "veraltet", "Driver", "Geräte-Manager", "gelbes Ausrufezeichen"],
+    "extendedKeywords": ["Netzwerktreiber fehlt", "Netzwerkadapter-Treiber nicht installiert", "gelbes Ausrufezeichen bei Netzwerkadapter", "Netzwerktreiber aktualisieren", "Netzwerk-Driver fehlt", "nach Neuinstallation kein Netzwerktreiber", "Netzwerkadapter mit Warnung im Geräte-Manager", "Treiber für WLAN-Adapter fehlt", "Ethernet-Treiber nicht gefunden", "Netzwerktreiber herunterladen", "Unbekanntes Netzwerkgerät Geräte-Manager", "Netzwerkkarten-Treiber installieren", "Treiber veraltet Netzwerkadapter", "Netzwerktreiber nach Windows-Update fehlt", "Netzwerkadapter Treiber zurücksetzen", "Intel Netzwerktreiber", "Realtek Netzwerktreiber", "Netzwerkadapter Code 28", "Treiber manuell installieren Netzwerk", "Netzwerktreiber-Problem"],
+    "typos": ["Netzwerktrieber", "Netzwekadapter", "Treiber", "Geräte-Manger"],
+    "symptoms": ["Gelbes Ausrufezeichen im Geräte-Manager", "Netzwerkadapter als 'Unbekanntes Gerät'", "Kein Netzwerk nach Neuinstallation"],
+    "quickCheck": "Zeigt der Geräte-Manager ein Warnsymbol beim Netzwerkadapter?",
+    "solutions": [
+      "Geräte-Manager: Netzwerkadapter > Rechtsklick > Treiber aktualisieren > Automatisch suchen",
+      "Treiber vom Hersteller herunterladen (Intel, Realtek, Broadcom, etc.)",
+      "Bei fehlendem Internet: Treiber auf anderem PC herunterladen und per USB-Stick übertragen",
+      "Alten Treiber deinstallieren und neuen installieren",
+      "Treiber zurücksetzen: Adapter > Eigenschaften > Treiber > Vorheriger Treiber",
+      "Windows Update kann fehlende Treiber nachliefern"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["network driver missing", "adapter driver outdated", "device manager network warning"],
+    "followUpQuestions": [
+      {
+        "question": "Welcher Netzwerkadapter ist betroffen (Intel, Realtek, etc.)?",
+        "options": ["Intel", "Realtek", "Broadcom/Qualcomm", "Weiß ich nicht"],
+        "narrows": "Welcher Treiber benötigt wird"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-034", "PROB-NET-004"]
+  },
+  {
+    "id": "PROB-NET-036",
+    "category": "Netzwerk",
+    "title": "Netzwerkadapter langsam - nur 100 Mbit statt 1 Gbit",
+    "keywords": ["Netzwerkadapter", "langsam", "100 Mbit", "1 Gbit", "Gigabit", "Geschwindigkeit", "Autonegotiation"],
+    "extendedKeywords": ["Netzwerkadapter nur 100 Mbit", "LAN-Verbindung langsam", "nur 100 Mbit statt Gigabit", "Netzwerkgeschwindigkeit zu niedrig", "Ethernet nur 100 Mbps", "LAN-Karte nicht auf Gigabit", "Netzwerkadapter Geschwindigkeit prüfen", "LAN-Verbindung nur 100 Mbit", "warum habe ich nur 100 Mbit", "Gigabit funktioniert nicht", "Netzwerk-Speed zu niedrig", "LAN langsam obwohl Gigabit", "Netzwerkadapter Bandbreite niedrig", "Geschwindigkeit des Netzwerkadapters", "LAN auf Gigabit einstellen", "Autonegotiation Problem Netzwerk", "Fast Ethernet statt Gigabit", "Netzwerkkarte Geschwindigkeit umstellen", "kein Gigabit obwohl Kabel gut", "Verbindungsgeschwindigkeit prüfen"],
+    "typos": ["100 Mbt", "Gigabite", "Geschwindikeit"],
+    "symptoms": ["Netzwerkverbindung zeigt nur 100 Mbps", "Dateiübertragung langsamer als erwartet"],
+    "quickCheck": "Welche Geschwindigkeit zeigt der Netzwerkadapter an? (Adapterstatus prüfen)",
+    "solutions": [
+      "Netzwerkkabel tauschen - Cat5 unterstützt nur 100 Mbit, Cat5e/6 für Gigabit nötig",
+      "Alle 8 Adern des Kabels müssen verbunden sein (4 Adern = nur 100 Mbit)",
+      "Netzwerkadapter-Geschwindigkeit prüfen: Adapter > Status > Geschwindigkeit",
+      "In Adaptereigenschaften: Speed & Duplex auf '1.0 Gbps Full Duplex' setzen oder Auto",
+      "Switch-Port prüfen - unterstützt der Port Gigabit?",
+      "Netzwerktreiber aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_net_ping", "label": "Ping-Test", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["only 100mbit", "not gigabit", "slow ethernet speed"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Art von Netzwerkkabel verwenden Sie?",
+        "options": ["Cat5e oder Cat6", "Cat5 oder älter", "Weiß ich nicht"],
+        "narrows": "Ob Kabel die Ursache"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-025", "PROB-NET-037"]
+  },
+  {
+    "id": "PROB-NET-037",
+    "category": "Netzwerk",
+    "title": "Internet-Bandbreite niedrig / Speedtest",
+    "keywords": ["Bandbreite", "Speedtest", "Geschwindigkeit", "langsam", "Download", "Upload", "Mbps"],
+    "extendedKeywords": ["Internet-Geschwindigkeit messen", "Speedtest durchführen", "Internet ist langsam", "Bandbreite testen", "wie schnell ist mein Internet", "Download-Geschwindigkeit niedrig", "Upload-Geschwindigkeit niedrig", "Internetgeschwindigkeit prüfen", "Speedtest Ergebnis schlecht", "Internet langsamer als bestellt", "Bandbreite zu niedrig", "Geschwindigkeitstest Internet", "Mbps messen", "Internet-Speed überprüfen", "warum ist mein Internet so langsam", "Bandbreiten-Test", "Netzwerk-Speedtest", "Internet Performance messen", "Geschwindigkeit testen Internet", "wie viel Bandbreite habe ich"],
+    "typos": ["Speedtets", "Bandbreie", "Geschwindikeit"],
+    "symptoms": ["Langsame Downloads", "Streaming ruckelt", "Webseiten laden langsam"],
+    "quickCheck": "Haben Sie bereits einen Speedtest durchgeführt?",
+    "solutions": [
+      "Speedtest durchführen: speedtest.net oder fast.com im Browser",
+      "LAN-Kabel statt WLAN für genaueren Test verwenden",
+      "Andere Anwendungen schließen die Bandbreite verbrauchen",
+      "Ping-Test über das Admin Tool für Latenz-Prüfung",
+      "Ergebnis mit dem gebuchten Tarif vergleichen",
+      "Bei zu niedrig: Router/Modem neu starten",
+      "Bei dauerhafter Abweichung: Provider kontaktieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Ping-Test", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["speed test", "bandwidth low", "internet speed slow"],
+    "followUpQuestions": [
+      {
+        "question": "Was zeigt ein Speedtest als Download-Geschwindigkeit an?",
+        "options": ["Unter 10 Mbps", "10-50 Mbps", "50-100 Mbps", "Über 100 Mbps", "Nicht getestet"],
+        "narrows": "Schwere des Bandbreiten-Problems"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-036", "PROB-NET-038"]
+  },
+  {
+    "id": "PROB-NET-038",
+    "category": "Netzwerk",
+    "title": "Internet generell langsam",
+    "keywords": ["Internet", "langsam", "Geschwindigkeit", "Performance", "träge", "lahm"],
+    "extendedKeywords": ["Internet ist langsam", "alles lädt langsam", "Internet kriecht", "langsames Internet am Arbeitsplatz", "Internet war mal schneller", "Webseiten brauchen ewig zum Laden", "Downloads dauern lange", "Internet ist unerträglich langsam", "Internet-Performance schlecht", "langsamer Internetzugang", "Internet stockt", "Internet hängt", "alles geht nur noch langsam", "Internet-Verbindung zu langsam", "Internet ruckelt", "lahmes Internet", "schleichendes Internet", "Internet-Geschwindigkeit miserabel", "Büro-Internet langsam", "Internet-Leitung zu langsam"],
+    "typos": ["langsamm", "Internett", "Geshwindigkeit"],
+    "symptoms": ["Alle Webseiten und Dienste laden langsam", "Hohe Latenz bei allen Verbindungen"],
+    "quickCheck": "Ist nur Ihr PC betroffen oder haben Kollegen das gleiche Problem?",
+    "solutions": [
+      "Speedtest durchführen um die aktuelle Geschwindigkeit zu messen",
+      "LAN-Kabel verwenden statt WLAN",
+      "Browser-Cache leeren",
+      "DNS-Cache leeren über das Admin Tool",
+      "Hintergrund-Downloads oder -Updates prüfen (OneDrive, Windows Update)",
+      "Malware-Scan durchführen",
+      "Router/Switch prüfen lassen bei generellem Problem"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_net_flushdns", "label": "DNS-Cache leeren", "priority": 2, "effectiveness": 45},
+      {"skillId": "rd_net_ping", "label": "Ping-Test", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["slow internet", "internet lag", "everything slow"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Kollegen das gleiche Problem oder nur Sie?",
+        "options": ["Nur ich", "Mehrere/Alle Kollegen", "Weiß ich nicht"],
+        "narrows": "Ob individuelles oder allgemeines Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-037", "PROB-NET-006"]
+  },
+  {
+    "id": "PROB-NET-039",
+    "category": "Netzwerk",
+    "title": "MAC-Adresse des PCs finden",
+    "keywords": ["MAC-Adresse", "physische Adresse", "Hardware-Adresse", "MAC", "Netzwerkadapter", "getmac"],
+    "extendedKeywords": ["MAC-Adresse herausfinden", "wo finde ich meine MAC-Adresse", "physische Adresse des PCs", "MAC-Adresse auslesen", "Hardware-Adresse anzeigen", "MAC-Adresse für WLAN-Registrierung", "MAC-Adresse für Netzwerkfreischaltung", "Ethernet MAC-Adresse", "WLAN MAC-Adresse", "MAC-Adresse in Windows finden", "wie lese ich die MAC-Adresse aus", "MAC-Adresse für IT bereitstellen", "MAC-Adresse vom Laptop", "physische Adresse im Netzwerk", "getmac Befehl", "MAC-Adresse im Geräte-Manager", "Hardware-Adresse des Netzwerkadapters", "MAC-Adresse für Zugangsfreigabe", "MAC-Adresse anzeigen Windows 11", "Netzwerk MAC-Adresse ermitteln"],
+    "typos": ["MAC-Adrese", "MAC-Adresse", "MAC Adresse", "phyische Adresse"],
+    "symptoms": ["MAC-Adresse wird für Netzwerkregistrierung benötigt", "IT fordert MAC-Adresse an"],
+    "quickCheck": "Benötigen Sie die MAC-Adresse des WLAN- oder des LAN-Adapters?",
+    "solutions": [
+      "Eingabeaufforderung: ipconfig /all > Physische Adresse ablesen",
+      "Oder: getmac in der Eingabeaufforderung",
+      "Einstellungen > Netzwerk > WLAN/Ethernet > Eigenschaften > Physische Adresse (MAC)",
+      "Geräte-Manager: Netzwerkadapter > Eigenschaften > Erweitert > Netzwerkadresse",
+      "Netzwerkdiagnose über das Admin Tool zeigt auch die MAC-Adresse"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["find mac address", "get mac address", "physical address"],
+    "followUpQuestions": [
+      {
+        "question": "Benötigen Sie die MAC-Adresse des WLAN- oder LAN-Adapters?",
+        "options": ["WLAN", "LAN/Ethernet", "Beide"],
+        "narrows": "Welcher Adapter relevant ist"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-040"]
+  },
+  {
+    "id": "PROB-NET-040",
+    "category": "Netzwerk",
+    "title": "Ping funktioniert nicht / ICMP blockiert",
+    "keywords": ["Ping", "ICMP", "blockiert", "Timeout", "nicht erreichbar", "Firewall", "Paketfilter"],
+    "extendedKeywords": ["Ping geht nicht", "Ping Timeout", "Ziel nicht erreichbar per Ping", "ICMP blockiert", "Ping wird von Firewall blockiert", "Anforderung Zeitüberschreitung Ping", "kann Server nicht anpingen", "Ping antwortet nicht", "Ping läuft in Timeout", "Firewall blockiert Ping", "ICMP-Echo blockiert", "Ping geht nicht aber Verbindung funktioniert", "Server nicht pingbar", "Ping Request timed out", "kann PC nicht anpingen", "Ping wird gefiltert", "Ping zeigt keine Antwort", "ICMP in Firewall freigeben", "Ping als Netzwerktest", "warum kann ich nicht pingen"],
+    "typos": ["Pinng", "Pign", "ICMP", "Timout"],
+    "symptoms": ["Ping-Anfragen laufen ins Timeout", "Meldung 'Zeitüberschreitung der Anforderung'", "Ping wird blockiert obwohl Verbindung besteht"],
+    "quickCheck": "Erreichen Sie das Ziel über andere Dienste (z.B. Browser, RDP)?",
+    "solutions": [
+      "Ping-Test über das Admin Tool durchführen",
+      "Prüfen ob das Ziel tatsächlich offline ist oder nur ICMP blockiert wird",
+      "Port-Test über das Admin Tool als Alternative zum Ping verwenden",
+      "Windows Firewall: ICMP-Echo aktivieren (Eingehende Regel für ICMPv4)",
+      "Bei Firmen-Firewall: ICMP kann aus Sicherheitsgründen blockiert sein",
+      "Tracert/Traceroute verwenden um den Netzwerkpfad zu prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_net_ping", "label": "Ping-Test", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_net_testport", "label": "Port testen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-network", "label": "Netzwerkdiagnose", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["ping fails", "icmp blocked", "ping timeout"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie das Ziel über andere Dienste (Browser, RDP) erreichen?",
+        "options": ["Ja, andere Dienste funktionieren", "Nein, nichts funktioniert"],
+        "narrows": "Ob ICMP blockiert oder wirklich nicht erreichbar"
+      }
+    ],
+    "relatedProblems": ["PROB-NET-027", "PROB-NET-039"]
+  }
+]

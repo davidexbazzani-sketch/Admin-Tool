@@ -93,6 +93,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
   netIsAvailable: () => ipcRenderer.invoke('net:isAvailable'),
   netGetBasePath: () => ipcRenderer.invoke('net:getBasePath'),
   netSetBasePath: (path: string) => ipcRenderer.invoke('net:setBasePath', path),
+  netWriteRawFile: (relativePath: string, base64Data: string) => ipcRenderer.invoke('net:writeRawFile', relativePath, base64Data),
+  netReadRawFile: (relativePath: string) => ipcRenderer.invoke('net:readRawFile', relativePath),
+
+  // ── Wissensdatenbank (dedicated IPC for performance) ──────────────────────
+  wbGetCategories: () => ipcRenderer.invoke('wb:get-categories'),
+  wbGetArticles: (subcategoryId: string) => ipcRenderer.invoke('wb:get-articles', subcategoryId),
+  wbGetArticle: (articleId: string) => ipcRenderer.invoke('wb:get-article', articleId),
+  wbSearch: (query: string) => ipcRenderer.invoke('wb:search', query),
+  wbEnsureGenerated: () => ipcRenderer.invoke('wb:ensure-generated'),
 
   // ── System info ───────────────────────────────────────────────────────────
   getWindowsUsername: () => ipcRenderer.invoke('sys:getWindowsUsername'),

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, lazy, Suspense } from 'react'
 import { useAppStore } from './store/appStore'
 import { useAuthStore } from './store/authStore'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -19,10 +19,16 @@ import LocationOverview from './screens/LocationOverview'
 import ScheduledTasks from './screens/ScheduledTasks'
 import BugMailbox from './screens/BugMailbox'
 import Dashboards from './screens/Dashboards'
+import PCMigration from './screens/PCMigration'
 import BugReportWidget from './components/BugReportWidget'
 import BetaBanner from './components/BetaBanner'
 import type { Screen } from './types'
 import { api } from './electronAPI'
+
+// Lazy-loaded screens (per Performance-Regeln: erst laden wenn geöffnet)
+const ITGuru = lazy(() => import('./screens/ITGuru'))
+const NetworkRadar = lazy(() => import('./screens/NetworkRadar'))
+const KnowledgeBase = lazy(() => import('./screens/KnowledgeBase'))
 
 function renderScreen(screen: Screen) {
   switch (screen) {
@@ -32,7 +38,8 @@ function renderScreen(screen: Screen) {
     case 'user-info':         return <UserInfo />
     case 'xelion':            return <XelionCheck />
     case 'remote-doc':        return <RemoteDoc />
-    case 'trickkiste':        return <Trickkiste />
+    case 'trickbox':          return <Trickkiste />
+    case 'it-guru':           return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ITGuru /></Suspense>
     case 'settings':          return <Settings />
     case 'user-management':   return <UserManagement />
     case 'user-logs':         return <UserLogs />
@@ -40,6 +47,9 @@ function renderScreen(screen: Screen) {
     case 'scheduled-tasks':   return <ScheduledTasks />
     case 'bug-mailbox':       return <BugMailbox />
     case 'dashboards':        return <Dashboards />
+    case 'network-radar':     return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><NetworkRadar /></Suspense>
+    case 'knowledge-base':   return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><KnowledgeBase /></Suspense>
+    case 'pc-migration':      return <PCMigration />
     default:                  return <Home />
   }
 }

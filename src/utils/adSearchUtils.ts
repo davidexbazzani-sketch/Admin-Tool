@@ -23,21 +23,21 @@ export function setCached(term: string, results: CandidateUser[]): void {
 
 // ── LDAP filter builder ───────────────────────────────────────────────────────
 // Pre-computed in JS so we can use a PS single-quoted literal (no PS expansion)
-function buildLdapFilter(esc: string): string {
+function buildLdapFilter(esc: string, officeFilter?: string): string {
+  const officePart = officeFilter ? `(physicalDeliveryOfficeName=${officeFilter})` : ''
   const words = esc.split(/\s+/).filter(Boolean)
   if (words.length >= 2) {
     const fn = words[0]
     const ln = words[words.length - 1]
-    // Match full display name OR (firstName sn) OR (firstName reversed)
     return (
-      `(&(objectCategory=person)(objectClass=user)` +
+      `(&(objectCategory=person)(objectClass=user)${officePart}` +
       `(|(displayName=*${esc}*)` +
       `(&(givenName=*${fn}*)(sn=*${ln}*))` +
       `(&(givenName=*${ln}*)(sn=*${fn}*))))`
     )
   }
   return (
-    `(&(objectCategory=person)(objectClass=user)` +
+    `(&(objectCategory=person)(objectClass=user)${officePart}` +
     `(|(displayName=*${esc}*)(sn=*${esc}*)(givenName=*${esc}*)` +
     `(sAMAccountName=*${esc}*)(employeeID=${esc})(mail=${esc}*)))`
   )
@@ -49,12 +49,21 @@ function buildLdapFilter(esc: string): string {
 //   Multiple results    → [{"Sam":...}, ...]  (JSON array)
 //   No results          → []
 //   Too many (>20)      → "TOO_MANY"
-export function buildLightSearchQuery(term: string, timeout = 10000): string {
+export function buildLightSearchQuery(term: string, timeout = 10000, options?: { hamburgFirst?: boolean; allLocations?: boolean }): string {
   const esc = term.trim().replace(/'/g, "''")
-  const ldapFilter = buildLdapFilter(esc)
+  const hamburgOffice = 'Hamburg - Hermann Blohm Strasse'
   // timeout param unused in PS but kept for caller convenience
   void timeout
-  return [
+
+  // Determine office filter
+  const searchHamburg = options?.hamburgFirst !== false // default true
+  const searchAll = options?.allLocations ?? false
+  const officeFilter = (searchHamburg && !searchAll) ? hamburgOffice : undefined
+  const ldapFilter = buildLdapFilter(esc, officeFilter)
+
+  const formatResult = `@($r | ForEach-Object { @{Sam=[string]$_.SamAccountName;Name=[string]$_.DisplayName;EmpID=[string]$_.EmployeeID;Dept=[string]$_.Department;Title=[string]$_.Title} }) | ConvertTo-Json -Compress`
+
+  const lines = [
     `try {`,
     `  $lp = @('DisplayName','EmployeeID','Department','Title')`,
     `  $u = $null`,
@@ -64,12 +73,22 @@ export function buildLightSearchQuery(term: string, timeout = 10000): string {
     `    @{Sam=[string]$u.SamAccountName;Name=[string]$u.DisplayName;EmpID=[string]$u.EmployeeID;Dept=[string]$u.Department;Title=[string]$u.Title} | ConvertTo-Json -Compress`,
     `  } else {`,
     `    $r = @(Get-ADUser -LDAPFilter '${ldapFilter}' -Properties $lp -ResultSetSize 21 -EA SilentlyContinue)`,
+  ]
+
+  // If Hamburg-first + both checked: fallback to all locations if no results
+  if (searchHamburg && searchAll) {
+    const allFilter = buildLdapFilter(esc) // no office filter
+    lines.push(`    if (!$r -or $r.Count -eq 0) { $r = @(Get-ADUser -LDAPFilter '${allFilter}' -Properties $lp -ResultSetSize 21 -EA SilentlyContinue) }`)
+  }
+
+  lines.push(
     `    if (!$r) { Write-Output '[]' }`,
     `    elseif ($r.Count -gt 20) { Write-Output '"TOO_MANY"' }`,
-    `    else { @($r | ForEach-Object { @{Sam=[string]$_.SamAccountName;Name=[string]$_.DisplayName;EmpID=[string]$_.EmployeeID;Dept=[string]$_.Department;Title=[string]$_.Title} }) | ConvertTo-Json -Compress }`,
+    `    else { ${formatResult} }`,
     `  }`,
     `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
-  ].join('\n')
+  )
+  return lines.join('\n')
 }
 
 // ── Parse result from buildLightSearchQuery ───────────────────────────────────

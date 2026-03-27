@@ -1,0 +1,1088 @@
+[
+  {
+    "id": "PROB-DSK-001",
+    "category": "Festplatte & Speicher",
+    "title": "Laufwerk C: voll - Systempartition voll",
+    "keywords": ["C:", "voll", "Systempartition", "Speicherplatz", "Festplatte", "kein Platz", "Speicher"],
+    "extendedKeywords": ["C Laufwerk voll", "kein Speicherplatz mehr auf C", "Festplatte C voll", "Systemlaufwerk voll", "C Partition voll", "kein Platz mehr auf C", "C: ist rot", "Laufwerk C rot angezeigt", "kaum noch Platz auf C", "Systemfestplatte voll", "C Laufwerk fast voll", "wenig Speicher auf C", "C Festplatte läuft voll", "nicht genug Platz auf Systemlaufwerk", "Windows Partition voll", "Betriebssystem Festplatte voll", "C: nur noch wenig Platz", "roter Balken bei C:", "Speicher auf C geht aus", "C Laufwerk Speicher freimachen"],
+    "typos": ["Laufwek", "Speicherplazt", "Fetplatte", "Systempartitoin", "vol"],
+    "symptoms": ["Laufwerk C: wird rot im Explorer angezeigt", "Windows meldet wenig Speicherplatz", "Programme können nicht mehr installiert werden"],
+    "quickCheck": "Wie viel freier Speicherplatz ist auf C: noch verfügbar?",
+    "solutions": [
+      "Datenträgerbereinigung ausführen (auch als Administrator für mehr Optionen)",
+      "Papierkorb leeren",
+      "Temporäre Dateien löschen: %TEMP% und C:\\Windows\\Temp",
+      "Downloads-Ordner aufräumen",
+      "Große Dateien identifizieren über Admin Tool",
+      "Nicht benötigte Programme deinstallieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diskmgmt_top10big", "label": "Top 10 große Dateien", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_disk_wintemp", "label": "Temp-Dateien anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diskmgmt_emptybin", "label": "Papierkorb leeren", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["disk full", "C drive full", "C: voll"],
+    "followUpQuestions": [
+      {
+        "question": "Wie viel freier Speicherplatz ist noch auf C: verfügbar?",
+        "options": ["Weniger als 1 GB", "1-5 GB", "5-10 GB", "Weiß ich nicht"],
+        "narrows": "Wie dringend Speicher freigegeben werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-002", "PROB-DSK-003", "PROB-DSK-004"]
+  },
+  {
+    "id": "PROB-DSK-002",
+    "category": "Festplatte & Speicher",
+    "title": "WinSxS-Ordner zu groß",
+    "keywords": ["WinSxS", "groß", "Speicher", "Component Store", "Bereinigung", "Windows", "Ordner"],
+    "extendedKeywords": ["WinSxS Ordner zu groß", "WinSxS belegt viel Platz", "WinSxS verkleinern", "WinSxS aufräumen", "Component Store bereinigen", "WinSxS Ordner löschen", "WinSxS mehrere GB", "Windows Component Store groß", "WinSxS Speicher freigeben", "WinSxS Ordner schrumpfen", "WinSxS bereinigen Windows", "was ist WinSxS", "darf man WinSxS löschen"],
+    "typos": ["WinSXS", "WinSxs", "WinSXs", "Winsxs", "WinxSx"],
+    "symptoms": ["WinSxS-Ordner belegt mehrere GB", "Speicherplatzanalyse zeigt WinSxS als größten Ordner", "C: voll obwohl wenig Software installiert"],
+    "quickCheck": "Wie groß ist der WinSxS-Ordner aktuell?",
+    "solutions": [
+      "DISM WinSxS Bereinigung: DISM /Online /Cleanup-Image /StartComponentCleanup",
+      "Datenträgerbereinigung als Administrator: Vorherige Windows-Installationen auswählen",
+      "DISM mit ResetBase: DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase",
+      "HINWEIS: WinSxS NIEMALS manuell löschen - nutzt Hard Links und ist kleiner als angezeigt",
+      "Windows Update Bereinigung über Datenträgerbereinigung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_winsxsclean", "label": "WinSxS bereinigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["WinSxS cleanup", "component store large", "WinSxS groß"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde kürzlich ein Windows-Upgrade durchgeführt (z.B. von Windows 10 auf 11)?",
+        "options": ["Ja", "Nein", "Weiß ich nicht"],
+        "narrows": "Ob auch Windows.old bereinigt werden kann"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-001", "PROB-DSK-003", "PROB-DSK-017"]
+  },
+  {
+    "id": "PROB-DSK-003",
+    "category": "Festplatte & Speicher",
+    "title": "Temp-Ordner zu groß - temporäre Dateien",
+    "keywords": ["Temp", "temporäre Dateien", "TEMP", "TMP", "AppData", "Cache", "Zwischenspeicher"],
+    "extendedKeywords": ["Temp Ordner zu groß", "temporäre Dateien löschen", "Temp Dateien aufräumen", "TEMP Ordner voll", "temporäre Dateien belegen Platz", "Temp Ordner leeren", "temporäre Dateien Windows", "AppData Temp groß", "Cache Dateien löschen", "Zwischenspeicher leeren", "Temp Dateien freigeben", "Windows Temp löschen", "wie temporäre Dateien löschen", "Temp Ordner bereinigen"],
+    "typos": ["Tempp", "temporäe", "Zwischenspeicher", "Temo Ordner"],
+    "symptoms": ["Temp-Ordner belegt mehrere GB", "Speicherplatzanalyse zeigt große temporäre Dateien", "Viele alte temporäre Dateien vorhanden"],
+    "quickCheck": "Wann wurden die temporären Dateien zuletzt bereinigt?",
+    "solutions": [
+      "Datenträgerbereinigung ausführen und temporäre Dateien auswählen",
+      "Windows Einstellungen > System > Speicher > Temporäre Dateien > Entfernen",
+      "%TEMP% im Explorer öffnen und alle Dateien löschen (geöffnete werden übersprungen)",
+      "C:\\Windows\\Temp bereinigen (als Administrator)",
+      "Storage Sense aktivieren für automatische Bereinigung",
+      "Browser-Cache separat leeren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_disk_wintemp", "label": "Temp-Dateien anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diskmgmt_storagesense", "label": "Storage Sense", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["temp files cleanup", "temporary files large", "Temp löschen"],
+    "followUpQuestions": [
+      {
+        "question": "Sollen auch Browser-Cache und App-Caches bereinigt werden?",
+        "options": ["Ja, alles bereinigen", "Nur Windows Temp", "Weiß ich nicht"],
+        "narrows": "Umfang der Bereinigung"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-001", "PROB-DSK-004"]
+  },
+  {
+    "id": "PROB-DSK-004",
+    "category": "Festplatte & Speicher",
+    "title": "Downloads-Ordner zu groß",
+    "keywords": ["Downloads", "Ordner", "groß", "Speicher", "herunterladen", "Dateien", "aufräumen"],
+    "extendedKeywords": ["Downloads Ordner zu groß", "Downloads aufräumen", "Downloads belegen viel Platz", "Downloads Ordner leeren", "alte Downloads löschen", "Downloads Ordner voll", "Downloads verbrauchen Speicher", "Downloads Ordner bereinigen", "wie Downloads aufräumen", "Downloads Ordner Speicher freigeben"],
+    "typos": ["Donwloads", "Downoads", "Downlaods", "Downloads Ordnr"],
+    "symptoms": ["Downloads-Ordner belegt mehrere GB", "Viele alte Installationsdateien im Downloads-Ordner", "Speicher durch angesammelte Downloads belegt"],
+    "quickCheck": "Wie groß ist der Downloads-Ordner?",
+    "solutions": [
+      "Downloads-Ordner öffnen und nicht mehr benötigte Dateien löschen",
+      "Nach Größe sortieren und große Dateien identifizieren",
+      "Alte Installationsdateien (.exe, .msi) entfernen",
+      "Storage Sense aktivieren für automatisches Löschen alter Downloads",
+      "Downloads auf anderes Laufwerk verschieben: Rechtsklick Downloads > Eigenschaften > Pfad"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_top10big", "label": "Top 10 große Dateien", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_diskmgmt_storagesense", "label": "Storage Sense", "priority": 2, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["downloads folder large", "downloads cleanup", "Downloads aufräumen"],
+    "followUpQuestions": [
+      {
+        "question": "Sollen alle Downloads gelöscht oder nur bestimmte?",
+        "options": ["Alles löschen", "Nur alte Dateien", "Erst prüfen was drin ist"],
+        "narrows": "Ob automatische oder manuelle Bereinigung"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-001", "PROB-DSK-003"]
+  },
+  {
+    "id": "PROB-DSK-005",
+    "category": "Festplatte & Speicher",
+    "title": "SMART-Warnung SSD - Verschleiß",
+    "keywords": ["SMART", "SSD", "Verschleiß", "Wear", "Lebensdauer", "Warnung", "Health"],
+    "extendedKeywords": ["SSD SMART Warnung", "SSD Verschleiß hoch", "SSD Wear Level", "SSD Lebensdauer", "SSD Gesundheit prüfen", "SSD SMART Status", "SSD kurz vor Ende", "SSD Health Check", "SSD wie lange hält sie noch", "SSD Zustand prüfen", "SSD TBW erreicht", "SSD Abnutzung", "SSD wird langsam", "SSD Wear Leveling", "SMART Werte SSD auslesen"],
+    "typos": ["SAMRT", "SDD", "Verschleiß", "Verschleis", "Lebensauer"],
+    "symptoms": ["Windows meldet SMART-Warnung für SSD", "SSD zeigt hohen Wear-Level", "Performance der SSD nimmt ab"],
+    "quickCheck": "Wird eine SMART-Warnung angezeigt oder soll der Zustand proaktiv geprüft werden?",
+    "solutions": [
+      "SMART-Status über Admin Tool auslesen",
+      "Wear Level prüfen (unter 10% Restlebensdauer = SSD bald tauschen)",
+      "Wichtige Daten sichern wenn Warnung kritisch",
+      "TRIM sicherstellen dass es aktiviert ist",
+      "Schreiblast reduzieren: Temp/Cache auf anderes Laufwerk",
+      "SSD-Hersteller-Tool für detaillierte Analyse verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_disksmart", "label": "SMART-Status anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diskmgmt_trimssd", "label": "TRIM prüfen/ausführen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["SSD SMART warning", "SSD wear level", "SSD Verschleiß"],
+    "followUpQuestions": [
+      {
+        "question": "Wie alt ist die SSD und wie groß ist sie?",
+        "options": ["Unter 2 Jahre", "2-4 Jahre", "Über 4 Jahre", "Weiß ich nicht"],
+        "narrows": "Ob Verschleiß normal oder ungewöhnlich hoch"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-006", "PROB-DSK-007", "PROB-DSK-020"]
+  },
+  {
+    "id": "PROB-DSK-006",
+    "category": "Festplatte & Speicher",
+    "title": "SMART-Warnung HDD - Festplattenfehler",
+    "keywords": ["SMART", "HDD", "Festplatte", "Fehler", "Bad Sectors", "Warnung", "defekt"],
+    "extendedKeywords": ["HDD SMART Warnung", "Festplatte Fehler SMART", "Festplatte defekt SMART", "HDD Bad Sectors", "Festplatte macht Geräusche", "Festplatte klickt", "HDD Fehler", "Festplatte stirbt", "HDD Gesundheit prüfen", "Festplatte SMART Status schlecht", "Festplatte kurz vor Ausfall", "HDD Health Check", "Festplatte Reallocated Sectors", "Festplatte Current Pending Sectors"],
+    "typos": ["SAMRT", "HHD", "Fetplatte", "Festplatte", "Bad Sektors"],
+    "symptoms": ["Windows meldet bevorstehenden Festplattenausfall", "SMART-Warnmeldung erscheint beim Start", "Festplatte macht ungewöhnliche Geräusche"],
+    "quickCheck": "Macht die Festplatte ungewöhnliche Geräusche (Klicken, Schleifen)?",
+    "solutions": [
+      "SMART-Status über Admin Tool auslesen",
+      "SOFORT Daten sichern wenn SMART-Warnung kritisch",
+      "CHKDSK ausführen um Dateisystemfehler zu reparieren",
+      "Festplatten-Diagnose über Admin Tool",
+      "Festplatte durch SSD ersetzen wenn SMART-Werte schlecht",
+      "Hersteller-Diagnosetool verwenden (SeaTools, WD Data Lifeguard)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_disksmart", "label": "SMART-Status anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diskmgmt_chkdskrun", "label": "CHKDSK ausführen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 1, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["HDD SMART warning", "hard drive failing", "Festplatte defekt"],
+    "followUpQuestions": [
+      {
+        "question": "Macht die Festplatte ungewöhnliche Geräusche?",
+        "options": ["Ja, Klicken/Schleifen", "Nein, nur SMART-Warnung", "Festplatte ist langsam"],
+        "narrows": "Wie dringend der Austausch ist"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-005", "PROB-DSK-007"]
+  },
+  {
+    "id": "PROB-DSK-007",
+    "category": "Festplatte & Speicher",
+    "title": "SMART-Vorhersage - Festplattenausfall vorhersagen",
+    "keywords": ["SMART", "Vorhersage", "Ausfall", "Prognose", "Zustand", "Health", "Prüfung"],
+    "extendedKeywords": ["Festplatte Zustand prüfen", "Festplatte Ausfall vorhersagen", "SMART Prüfung", "wie lange hält Festplatte noch", "Festplatte Health Check", "Festplattengesundheit prüfen", "SSD oder HDD Zustand prüfen", "Festplatte testen", "Festplatten Diagnose", "Festplatte Gesundheitsstatus", "Festplatten Lebensdauer prüfen"],
+    "typos": ["SAMRT", "Vorhersge", "Prognse", "Zustad"],
+    "symptoms": ["Sorge über Festplattenzustand", "Performance-Verschlechterung", "Präventive Prüfung gewünscht"],
+    "quickCheck": "Soll die Prüfung vorbeugend oder wegen konkreter Probleme durchgeführt werden?",
+    "solutions": [
+      "SMART-Status über Admin Tool auslesen",
+      "Festplatten-Diagnose über Admin Tool durchführen",
+      "Wichtige SMART-Werte prüfen: Reallocated Sectors, Pending Sectors, Temperature",
+      "Bei SSD: Wear Level und TBW prüfen",
+      "Regelmäßige Backups einrichten als Vorsorge",
+      "Bei kritischen Werten: Datensicherung und Austausch planen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_disksmart", "label": "SMART-Status anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["predict disk failure", "disk health check", "Festplatte prüfen"],
+    "followUpQuestions": [
+      {
+        "question": "Ist es eine SSD oder eine HDD?",
+        "options": ["SSD", "HDD", "Weiß ich nicht"],
+        "narrows": "Welche SMART-Werte besonders relevant sind"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-005", "PROB-DSK-006"]
+  },
+  {
+    "id": "PROB-DSK-008",
+    "category": "Festplatte & Speicher",
+    "title": "Partition verkleinern",
+    "keywords": ["Partition", "verkleinern", "shrink", "Volume", "Größe", "Festplatte", "Datenträgerverwaltung"],
+    "extendedKeywords": ["Partition verkleinern", "Laufwerk verkleinern", "Volume verkleinern", "Partition kleiner machen", "C Laufwerk verkleinern", "Festplatte aufteilen", "Partition shrink", "Partitionsgröße ändern", "Laufwerk teilen", "Partition verkleinern Windows", "wie Partition verkleinern", "C: verkleinern", "Speicher aufteilen"],
+    "typos": ["Partion", "verkleienern", "Partitoin", "verklienern"],
+    "symptoms": ["Partition soll verkleinert werden um Platz für neue Partition zu schaffen", "Verkleinern-Option ausgegraut", "Verkleinern nur um wenige MB möglich"],
+    "quickCheck": "Welche Partition soll verkleinert werden und um wie viel?",
+    "solutions": [
+      "Datenträgerverwaltung öffnen: diskmgmt.msc",
+      "Rechtsklick auf Partition > Volume verkleinern",
+      "Falls nur wenig verkleinerbar: Defragmentierung ausführen (nur HDD)",
+      "Nicht verschiebbare Dateien können Verkleinern einschränken (Ruhezustand, Pagefile deaktivieren)",
+      "Alternative: GParted Live-USB oder andere Partitionierungs-Software",
+      "Systemwiederherstellungspunkte temporär deaktivieren für mehr Verkleinern-Spielraum"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["shrink partition", "resize volume", "Partition verkleinern"],
+    "followUpQuestions": [
+      {
+        "question": "Warum soll die Partition verkleinert werden?",
+        "options": ["Neue Partition erstellen", "Andere Partition vergrößern", "Dual-Boot einrichten", "Sonstiges"],
+        "narrows": "Was mit dem freigewordenen Platz passieren soll"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-009", "PROB-DSK-010", "PROB-DSK-011"]
+  },
+  {
+    "id": "PROB-DSK-009",
+    "category": "Festplatte & Speicher",
+    "title": "Partition vergrößern",
+    "keywords": ["Partition", "vergrößern", "extend", "Volume", "erweitern", "Größe", "Festplatte"],
+    "extendedKeywords": ["Partition vergrößern", "Laufwerk vergrößern", "Volume erweitern", "Partition größer machen", "C Laufwerk vergrößern", "Partition extend", "Partitionsgröße erhöhen", "Laufwerk erweitern", "Partition vergrößern Windows", "C: vergrößern", "mehr Platz für Partition"],
+    "typos": ["Partion", "vergrößren", "Partitoin", "erwitern"],
+    "symptoms": ["Partition soll vergrößert werden", "Erweitern-Option ist ausgegraut", "Freier Speicher vorhanden aber Partition lässt sich nicht erweitern"],
+    "quickCheck": "Gibt es nicht zugewiesenen Speicherplatz direkt neben der Partition?",
+    "solutions": [
+      "Datenträgerverwaltung öffnen: diskmgmt.msc",
+      "Rechtsklick auf Partition > Volume erweitern",
+      "WICHTIG: Nicht zugewiesener Speicher muss direkt rechts neben der Partition liegen",
+      "Falls Speicher nicht angrenzend: Zwischenliegende Partition verschieben (mit GParted)",
+      "Bei MBR-Disk: Maximal 4 primäre Partitionen möglich",
+      "Alternative: diskpart Befehl 'extend' verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["extend partition", "enlarge volume", "Partition vergrößern"],
+    "followUpQuestions": [
+      {
+        "question": "Gibt es freien nicht zugewiesenen Speicherplatz auf der Festplatte?",
+        "options": ["Ja, direkt daneben", "Ja, aber nicht angrenzend", "Nein", "Weiß ich nicht"],
+        "narrows": "Ob direkte Erweiterung möglich oder Umwege nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-008", "PROB-DSK-010"]
+  },
+  {
+    "id": "PROB-DSK-010",
+    "category": "Festplatte & Speicher",
+    "title": "Neue Partition erstellen",
+    "keywords": ["Partition", "erstellen", "neu", "anlegen", "Volume", "Laufwerk", "formatieren"],
+    "extendedKeywords": ["neue Partition erstellen", "neues Laufwerk anlegen", "Partition anlegen Windows", "neues Volume erstellen", "Festplatte aufteilen", "neues Laufwerk erstellen", "Partition erstellen Datenträgerverwaltung", "wie neue Partition erstellen", "Partition formatieren", "neues Laufwerk D erstellen"],
+    "typos": ["Partion", "erstelln", "Partitoin", "anlegn"],
+    "symptoms": ["Nicht zugewiesener Speicherplatz vorhanden", "Neues Laufwerk benötigt", "Neue Festplatte eingebaut aber kein Laufwerksbuchstabe"],
+    "quickCheck": "Gibt es nicht zugewiesenen Speicherplatz auf einer Festplatte?",
+    "solutions": [
+      "Datenträgerverwaltung öffnen: diskmgmt.msc",
+      "Rechtsklick auf nicht zugewiesenen Bereich > Neues einfaches Volume",
+      "Assistent folgen: Größe, Laufwerksbuchstabe, Dateisystem (NTFS empfohlen) wählen",
+      "Bei neuer Festplatte: Zuerst Datenträger initialisieren (GPT empfohlen)",
+      "Bei MBR: Maximal 4 primäre Partitionen, erweiterte Partition für mehr",
+      "Alternative: diskpart Befehl verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["create partition", "new volume", "Partition erstellen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll die Partition auf einer bestehenden oder neuen Festplatte erstellt werden?",
+        "options": ["Bestehende Festplatte", "Neue Festplatte", "Weiß ich nicht"],
+        "narrows": "Ob zuerst Initialisierung nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-008", "PROB-DSK-009", "PROB-DSK-011"]
+  },
+  {
+    "id": "PROB-DSK-011",
+    "category": "Festplatte & Speicher",
+    "title": "Laufwerksbuchstabe ändern oder zuweisen",
+    "keywords": ["Laufwerksbuchstabe", "ändern", "zuweisen", "Buchstabe", "Laufwerk", "D:", "E:"],
+    "extendedKeywords": ["Laufwerksbuchstabe ändern", "Laufwerksbuchstabe zuweisen", "Laufwerk hat keinen Buchstaben", "Laufwerksbuchstabe fehlt", "Partition kein Buchstabe", "Laufwerk nicht sichtbar im Explorer", "Laufwerksbuchstabe D ändern", "neuen Buchstaben zuweisen", "Laufwerk erscheint nicht", "Laufwerk kein Buchstabe zugewiesen"],
+    "typos": ["Laufwerkbuchstabe", "Buchtabe", "zuweißen", "Laufwerksbuchstab"],
+    "symptoms": ["Partition hat keinen Laufwerksbuchstaben", "Laufwerk erscheint nicht im Explorer", "Laufwerksbuchstabe soll geändert werden"],
+    "quickCheck": "Ist die Partition in der Datenträgerverwaltung sichtbar?",
+    "solutions": [
+      "Datenträgerverwaltung öffnen: diskmgmt.msc",
+      "Rechtsklick auf Partition > Laufwerksbuchstaben und -pfade ändern",
+      "Hinzufügen oder Ändern wählen und gewünschten Buchstaben auswählen",
+      "WARNUNG: Buchstabenänderung für Systemlaufwerk C: nicht empfohlen",
+      "Bei Programmen auf dem Laufwerk: Nach Buchstabenänderung können Verknüpfungen brechen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["change drive letter", "assign drive letter", "Laufwerksbuchstabe"],
+    "followUpQuestions": [
+      {
+        "question": "Soll ein Buchstabe zugewiesen oder ein bestehender geändert werden?",
+        "options": ["Buchstabe zuweisen (fehlt)", "Buchstabe ändern", "Buchstabe entfernen"],
+        "narrows": "Welche Aktion in der Datenträgerverwaltung"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-010"]
+  },
+  {
+    "id": "PROB-DSK-012",
+    "category": "Festplatte & Speicher",
+    "title": "CHKDSK - Dateisystemfehler reparieren",
+    "keywords": ["CHKDSK", "Dateisystem", "reparieren", "Check Disk", "Fehler", "NTFS", "Prüfung"],
+    "extendedKeywords": ["CHKDSK ausführen", "Dateisystem reparieren", "Festplatte prüfen", "Check Disk ausführen", "CHKDSK Fehler gefunden", "Dateisystem beschädigt", "CHKDSK Windows", "Festplatte auf Fehler prüfen", "Dateisystemfehler beheben", "CHKDSK /f", "CHKDSK /r", "Dateisystem überprüfen", "NTFS Fehler reparieren"],
+    "typos": ["CKHDSK", "CHKDKS", "Dateisytem", "Chescdisk"],
+    "symptoms": ["Windows meldet Dateisystemfehler", "Dateien oder Ordner nicht zugreifbar", "Explorer zeigt Fehler beim Zugriff auf Laufwerk"],
+    "quickCheck": "Auf welchem Laufwerk sollen die Fehler geprüft werden?",
+    "solutions": [
+      "CHKDSK über Admin Tool ausführen",
+      "Eingabeaufforderung als Admin: chkdsk C: /f (Dateisystemfehler beheben)",
+      "Für tiefe Prüfung: chkdsk C: /r (findet auch Bad Sectors)",
+      "Bei Systemlaufwerk: CHKDSK wird beim nächsten Neustart ausgeführt",
+      "Alternativ: Rechtsklick auf Laufwerk im Explorer > Eigenschaften > Tools > Prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_chkdskrun", "label": "CHKDSK ausführen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diskmgmt_disksmart", "label": "SMART-Status", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["chkdsk run", "check disk", "Dateisystem prüfen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll nur das Dateisystem geprüft oder auch nach Bad Sectors gesucht werden?",
+        "options": ["Nur Dateisystem (/f)", "Auch Bad Sectors (/r)", "Weiß ich nicht"],
+        "narrows": "Welche CHKDSK-Parameter verwendet werden"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-013", "PROB-DSK-014"]
+  },
+  {
+    "id": "PROB-DSK-013",
+    "category": "Festplatte & Speicher",
+    "title": "Bad Sectors - fehlerhafte Sektoren auf Festplatte",
+    "keywords": ["Bad Sectors", "fehlerhafte Sektoren", "Sektoren", "Festplatte", "beschädigt", "Oberfläche", "CHKDSK"],
+    "extendedKeywords": ["Bad Sectors auf Festplatte", "fehlerhafte Sektoren", "Festplatte Bad Sectors", "Sektoren beschädigt", "CHKDSK findet Bad Sectors", "Festplatte hat Bad Sectors", "fehlerhafte Sektoren reparieren", "Bad Sectors beheben", "Festplatte Oberfläche beschädigt", "Sektoren defekt", "Bad Blocks Festplatte", "reallocated sectors"],
+    "typos": ["Bad Sektors", "Sektorn", "fehlerhafte Sektorn", "Bat Sectors"],
+    "symptoms": ["CHKDSK meldet fehlerhafte Sektoren", "SMART zeigt Reallocated Sectors", "Dateien können nicht gelesen werden"],
+    "quickCheck": "Hat CHKDSK fehlerhafte Sektoren gefunden?",
+    "solutions": [
+      "CHKDSK /r ausführen um Bad Sectors zu markieren und Daten zu retten",
+      "SMART-Status prüfen für Gesamtzustand der Festplatte",
+      "Wenn viele Bad Sectors: Daten sofort sichern",
+      "Bad Sectors nehmen bei HDD mit der Zeit zu - Austausch planen",
+      "Bei SSD: Bad Sectors sind seltener, deutet auf ernstes Problem hin",
+      "Festplatte durch neue ersetzen wenn Bad Sectors zunehmen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_chkdskrun", "label": "CHKDSK ausführen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diskmgmt_disksmart", "label": "SMART-Status", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["bad sectors found", "damaged sectors", "fehlerhafte Sektoren"],
+    "followUpQuestions": [
+      {
+        "question": "Wie viele Bad Sectors wurden gefunden?",
+        "options": ["Wenige (unter 10)", "Viele (über 10)", "Nimmt zu", "Weiß ich nicht"],
+        "narrows": "Wie dringend der Festplattenaustausch ist"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-006", "PROB-DSK-012"]
+  },
+  {
+    "id": "PROB-DSK-014",
+    "category": "Festplatte & Speicher",
+    "title": "CHKDSK läuft beim Systemstart",
+    "keywords": ["CHKDSK", "Systemstart", "Boot", "automatisch", "Prüfung", "beim Start", "dauert lange"],
+    "extendedKeywords": ["CHKDSK läuft beim Start", "CHKDSK bei jedem Start", "CHKDSK beim Hochfahren", "Festplattenprüfung beim Start", "CHKDSK automatisch beim Booten", "CHKDSK dauert beim Start ewig", "CHKDSK vor Windows Start", "CHKDSK abbrechen beim Start", "CHKDSK bei jedem Neustart", "warum CHKDSK beim Start", "CHKDSK deaktivieren beim Start"],
+    "typos": ["CKHDSK", "Systemstrat", "CHKDKS", "beim Strat"],
+    "symptoms": ["CHKDSK läuft automatisch bei jedem Systemstart", "Windows startet langsam wegen CHKDSK", "CHKDSK-Bildschirm vor Windows-Anmeldung"],
+    "quickCheck": "Läuft CHKDSK bei jedem Start oder nur einmalig?",
+    "solutions": [
+      "Einmalige CHKDSK-Prüfung ist normal nach unsauberem Herunterfahren",
+      "Bei wiederholter Prüfung: chkntfs /x C: um automatische Prüfung zu deaktivieren",
+      "Dirty Bit prüfen: fsutil dirty query C:",
+      "Dirty Bit zurücksetzen: chkdsk C: /f im Administratormodus",
+      "Festplattenzustand prüfen - regelmäßiges CHKDSK kann auf Probleme hindeuten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_chkdskrun", "label": "CHKDSK ausführen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diskmgmt_disksmart", "label": "SMART-Status", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["chkdsk at boot", "chkdsk every startup", "CHKDSK beim Start"],
+    "followUpQuestions": [
+      {
+        "question": "Läuft CHKDSK bei jedem Start oder war es einmalig?",
+        "options": ["Bei jedem Start", "Nur einmal", "Schon mehrmals aber nicht immer"],
+        "narrows": "Ob Dirty Bit Problem oder Festplattenproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-012", "PROB-DSK-013"]
+  },
+  {
+    "id": "PROB-DSK-015",
+    "category": "Festplatte & Speicher",
+    "title": "Datenträgerbereinigung durchführen",
+    "keywords": ["Datenträgerbereinigung", "Bereinigung", "Cleanup", "Speicher freigeben", "Windows", "aufräumen"],
+    "extendedKeywords": ["Datenträgerbereinigung ausführen", "Windows Bereinigung", "Festplatte aufräumen", "Disk Cleanup", "Datenträgerbereinigung Windows", "Speicher freigeben Windows", "Windows aufräumen", "Datenträgerbereinigung wie", "System bereinigen", "Disk Cleanup ausführen", "Bereinigung durchführen", "Windows Bereinigung Speicher"],
+    "typos": ["Datenträgerbereininung", "Bereinigug", "Cleanup", "Datentragerbereinigung"],
+    "symptoms": ["Wenig Speicherplatz auf Systemlaufwerk", "Windows meldet wenig Speicher", "Regelmäßige Bereinigung gewünscht"],
+    "quickCheck": "Soll die Standard- oder erweiterte Bereinigung (als Administrator) durchgeführt werden?",
+    "solutions": [
+      "Datenträgerbereinigung öffnen: cleanmgr.exe",
+      "Als Administrator ausführen für erweiterte Optionen (Windows Update Bereinigung, vorherige Installationen)",
+      "Alle relevanten Kategorien auswählen",
+      "Bei Windows Update Bereinigung: PC muss danach neu gestartet werden",
+      "Alternative: Einstellungen > System > Speicher > Temporäre Dateien"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_disk_wintemp", "label": "Temp-Dateien anzeigen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_diskmgmt_emptybin", "label": "Papierkorb leeren", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["disk cleanup", "cleanmgr", "Datenträgerbereinigung"],
+    "followUpQuestions": [
+      {
+        "question": "Soll die erweiterte Bereinigung (als Admin) durchgeführt werden?",
+        "options": ["Ja, erweitert", "Nein, Standard reicht", "Was ist der Unterschied?"],
+        "narrows": "Ob mehr Speicher freigegeben werden kann"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-001", "PROB-DSK-016", "PROB-DSK-017"]
+  },
+  {
+    "id": "PROB-DSK-016",
+    "category": "Festplatte & Speicher",
+    "title": "Storage Sense einrichten - automatische Bereinigung",
+    "keywords": ["Storage Sense", "Speicheroptimierung", "automatisch", "Bereinigung", "Einstellungen", "Windows"],
+    "extendedKeywords": ["Storage Sense einrichten", "Speicheroptimierung aktivieren", "automatische Bereinigung Windows", "Storage Sense aktivieren", "Storage Sense konfigurieren", "automatisch Speicher freigeben", "Windows automatisch aufräumen", "Storage Sense Einstellungen", "Speicheroptimierung einstellen", "automatische Temp Bereinigung"],
+    "typos": ["Stoarge Sense", "Storge Sense", "Speicheroptimirung", "Storage Sence"],
+    "symptoms": ["Speicher füllt sich regelmäßig", "Manuelle Bereinigung ist aufwändig", "Automatische Bereinigung gewünscht"],
+    "quickCheck": "Ist Storage Sense bereits aktiviert?",
+    "solutions": [
+      "Einstellungen > System > Speicher > Storage Sense aktivieren",
+      "Zeitplan konfigurieren: Täglich, wöchentlich oder bei wenig Speicherplatz",
+      "Temporäre Dateien automatisch löschen aktivieren",
+      "Downloads-Ordner automatisch bereinigen (Alter einstellen)",
+      "OneDrive-Dateien auf 'Nur online' setzen aktivieren",
+      "Papierkorb automatisch leeren konfigurieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_storagesense", "label": "Storage Sense", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["storage sense setup", "automatic cleanup", "automatisch aufräumen"],
+    "followUpQuestions": [
+      {
+        "question": "Soll Storage Sense regelmäßig oder nur bei wenig Speicherplatz laufen?",
+        "options": ["Regelmäßig (täglich/wöchentlich)", "Nur bei wenig Speicher", "Weiß ich nicht"],
+        "narrows": "Welche Konfiguration optimal ist"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-015", "PROB-DSK-003"]
+  },
+  {
+    "id": "PROB-DSK-017",
+    "category": "Festplatte & Speicher",
+    "title": "Papierkorb leeren - Speicher freigeben",
+    "keywords": ["Papierkorb", "leeren", "Speicher", "gelöschte Dateien", "Recycle Bin", "freigeben"],
+    "extendedKeywords": ["Papierkorb leeren", "Papierkorb voll", "Papierkorb belegt viel Platz", "gelöschte Dateien endgültig löschen", "Papierkorb Speicher freigeben", "Papierkorb aufräumen", "Recycle Bin leeren", "Papierkorb wie viel Platz", "Papierkorb Größe", "alle gelöschten Dateien entfernen"],
+    "typos": ["Papierkob", "Papierkorb leren", "Papirkorb", "Recicle Bin"],
+    "symptoms": ["Papierkorb belegt mehrere GB", "Speicherplatzanalyse zeigt großen Papierkorb", "Gelöschte Dateien belegen noch Speicher"],
+    "quickCheck": "Wie viel Speicher belegt der Papierkorb aktuell?",
+    "solutions": [
+      "Rechtsklick auf Papierkorb > Papierkorb leeren",
+      "Über Admin Tool Papierkorb leeren",
+      "Papierkorb-Größe begrenzen: Rechtsklick Papierkorb > Eigenschaften > Max. Größe",
+      "Storage Sense einrichten für automatisches Leeren",
+      "Dateien direkt löschen ohne Papierkorb: Shift+Entf"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_emptybin", "label": "Papierkorb leeren", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["empty recycle bin", "clear trash", "Papierkorb leeren"],
+    "followUpQuestions": [
+      {
+        "question": "Sind alle Dateien im Papierkorb sicher zu löschen?",
+        "options": ["Ja, alles löschen", "Muss erst prüfen", "Nur alte Dateien"],
+        "narrows": "Ob direkt geleert oder erst geprüft werden soll"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-015", "PROB-DSK-001"]
+  },
+  {
+    "id": "PROB-DSK-018",
+    "category": "Festplatte & Speicher",
+    "title": "Windows.old Ordner löschen",
+    "keywords": ["Windows.old", "Ordner", "löschen", "vorherige Installation", "Upgrade", "Speicher", "alt"],
+    "extendedKeywords": ["Windows.old löschen", "Windows.old Ordner entfernen", "vorherige Windows Installation löschen", "Windows.old belegt Platz", "Windows.old wie löschen", "Windows.old manuell löschen geht nicht", "nach Upgrade Windows.old", "Windows.old mehrere GB", "alte Windows Installation entfernen", "Windows.old Zugriff verweigert"],
+    "typos": ["Windows old", "Winows.old", "Windows.odl", "Windows.olld"],
+    "symptoms": ["Windows.old belegt 10-20+ GB auf C:", "Zugriff auf Windows.old wird verweigert", "Windows.old kann nicht manuell gelöscht werden"],
+    "quickCheck": "Wurde kürzlich ein Windows-Upgrade durchgeführt?",
+    "solutions": [
+      "Datenträgerbereinigung als Administrator starten",
+      "Vorherige Windows-Installation(en) auswählen und löschen",
+      "Über Admin Tool Windows.old löschen",
+      "WICHTIG: Nach dem Löschen kann nicht mehr zur vorherigen Windows-Version zurückgekehrt werden",
+      "Alternative: Einstellungen > System > Speicher > Temporäre Dateien > Vorherige Windows-Installation"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_delwinold", "label": "Windows.old löschen", "priority": 1, "effectiveness": 95},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["delete Windows.old", "remove old Windows", "Windows.old entfernen"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert die aktuelle Windows-Version einwandfrei (kein Zurückwechseln nötig)?",
+        "options": ["Ja, alles in Ordnung", "Nein, möchte evtl. zurück", "Weiß ich nicht"],
+        "narrows": "Ob Windows.old sicher gelöscht werden kann"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-001", "PROB-DSK-015"]
+  },
+  {
+    "id": "PROB-DSK-019",
+    "category": "Festplatte & Speicher",
+    "title": "SSD TRIM prüfen und aktivieren",
+    "keywords": ["TRIM", "SSD", "Optimierung", "Performance", "aktivieren", "prüfen", "Defragmentierung"],
+    "extendedKeywords": ["SSD TRIM aktivieren", "TRIM prüfen", "SSD TRIM Status", "ist TRIM aktiviert", "TRIM für SSD", "SSD Optimierung TRIM", "TRIM ausführen", "SSD TRIM Windows", "TRIM manuell ausführen", "SSD defragmentieren oder TRIM", "TRIM Befehl", "SSD Performance verbessern"],
+    "typos": ["TIRM", "TRIUM", "SDD TRIM", "Trim"],
+    "symptoms": ["SSD wird langsamer", "TRIM ist möglicherweise nicht aktiviert", "SSD Performance lässt nach"],
+    "quickCheck": "Ist TRIM für die SSD aktiviert?",
+    "solutions": [
+      "TRIM-Status prüfen: fsutil behavior query DisableDeleteNotify (0 = TRIM aktiv)",
+      "TRIM aktivieren falls deaktiviert: fsutil behavior set DisableDeleteNotify 0",
+      "Über Admin Tool TRIM Status prüfen und ausführen",
+      "Windows Optimierung prüfen: Laufwerke optimieren (defrag.exe)",
+      "AHCI-Modus im BIOS prüfen (nötig für TRIM)",
+      "SSD-Firmware auf aktuellem Stand prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_trimssd", "label": "TRIM prüfen/ausführen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diskmgmt_disksmart", "label": "SMART-Status", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["SSD TRIM check", "enable TRIM", "TRIM aktivieren"],
+    "followUpQuestions": [
+      {
+        "question": "Ist die SSD die System-/Boot-Festplatte?",
+        "options": ["Ja, System-SSD", "Nein, Daten-SSD", "Weiß ich nicht"],
+        "narrows": "Ob TRIM standardmäßig aktiv sein sollte"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-020", "PROB-DSK-021"]
+  },
+  {
+    "id": "PROB-DSK-020",
+    "category": "Festplatte & Speicher",
+    "title": "SSD Performance - langsame SSD",
+    "keywords": ["SSD", "langsam", "Performance", "Geschwindigkeit", "Benchmark", "IOPS", "Durchsatz"],
+    "extendedKeywords": ["SSD ist langsam", "SSD Performance schlecht", "SSD langsamer geworden", "SSD Geschwindigkeit messen", "SSD Benchmark", "SSD nicht so schnell wie erwartet", "SSD langsam geworden", "SSD schreibt langsam", "SSD liest langsam", "warum ist meine SSD langsam", "SSD Leistung nachlassen", "SSD Performance verbessern"],
+    "typos": ["SDD", "Perfomance", "langsma", "Geschwindgkeit"],
+    "symptoms": ["SSD arbeitet langsamer als erwartet", "Lese-/Schreibgeschwindigkeit deutlich reduziert", "System reagiert trotz SSD träge"],
+    "quickCheck": "War die SSD früher schneller oder war sie schon immer langsam?",
+    "solutions": [
+      "TRIM prüfen und sicherstellen dass es aktiviert ist",
+      "SSD-Firmware aktualisieren",
+      "Genügend freien Speicherplatz sicherstellen (mindestens 10-20% frei)",
+      "AHCI-Modus im BIOS prüfen (nicht IDE-Modus)",
+      "SMART-Werte prüfen für Wear Level",
+      "SSD-Hersteller-Tool für Optimierung verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_trimssd", "label": "TRIM prüfen/ausführen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diskmgmt_disksmart", "label": "SMART-Status", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diskmgmt_diskfreepct", "label": "Freier Speicher %", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["slow SSD", "SSD performance drop", "SSD langsam"],
+    "followUpQuestions": [
+      {
+        "question": "Wie viel freier Speicherplatz hat die SSD?",
+        "options": ["Weniger als 10%", "10-20%", "Mehr als 20%", "Weiß ich nicht"],
+        "narrows": "Ob Speichermangel die Performance beeinträchtigt"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-005", "PROB-DSK-019", "PROB-DSK-021"]
+  },
+  {
+    "id": "PROB-DSK-021",
+    "category": "Festplatte & Speicher",
+    "title": "SSD Lebensdauer prüfen",
+    "keywords": ["SSD", "Lebensdauer", "TBW", "Wear Level", "Verschleiß", "Alter", "Restlebensdauer"],
+    "extendedKeywords": ["SSD Lebensdauer prüfen", "wie lange hält meine SSD", "SSD Verschleiß prüfen", "SSD TBW prüfen", "SSD Wear Level anzeigen", "SSD Restlebensdauer", "SSD Gesundheit prüfen", "SSD wie alt", "SSD Abnutzung", "SSD noch gut genug", "SSD Lebensdauer berechnen", "wann SSD tauschen"],
+    "typos": ["SDD", "Lebensdaer", "Verschleiß", "Wear Levl"],
+    "symptoms": ["Sorge über SSD-Lebensdauer", "SSD mehrere Jahre alt", "Performance-Verschlechterung bemerkt"],
+    "quickCheck": "Wie alt ist die SSD und wie intensiv wird sie genutzt?",
+    "solutions": [
+      "SMART-Status über Admin Tool auslesen",
+      "Wear Level / Media Wearout Indicator prüfen",
+      "TBW (Total Bytes Written) mit Herstellerangabe vergleichen",
+      "SSD-Hersteller-Tool für detaillierte Analyse nutzen",
+      "Bei über 80% Verschleiß: Austausch planen und Daten sichern",
+      "Schreiblast reduzieren: Temp/Cache auf HDD verlagern"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_disksmart", "label": "SMART-Status anzeigen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 1, "effectiveness": 80}
+    ],
+    "hiddenTriggers": ["SSD lifespan", "SSD health", "SSD Lebensdauer"],
+    "followUpQuestions": [
+      {
+        "question": "Wie alt ist die SSD ungefähr?",
+        "options": ["Unter 2 Jahre", "2-4 Jahre", "Über 4 Jahre", "Weiß ich nicht"],
+        "narrows": "Ob Verschleiß normal oder ungewöhnlich"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-005", "PROB-DSK-020"]
+  },
+  {
+    "id": "PROB-DSK-022",
+    "category": "Festplatte & Speicher",
+    "title": "Große Dateien finden - Top 10",
+    "keywords": ["große Dateien", "Top 10", "finden", "Speicherverbrauch", "größte Dateien", "suchen"],
+    "extendedKeywords": ["große Dateien finden", "größte Dateien anzeigen", "Top 10 große Dateien", "was belegt den meisten Platz", "große Dateien suchen", "welche Dateien sind am größten", "Speicherfresser finden", "größte Dateien auf Festplatte", "große Dateien identifizieren", "Dateien nach Größe sortieren"],
+    "typos": ["große Datein", "groeße Dateien", "Datein finden", "Top10"],
+    "symptoms": ["Speicherplatz wird knapp", "Unbekannt was den meisten Platz belegt", "Speicherbereinigung nicht ausreichend"],
+    "quickCheck": "Auf welchem Laufwerk sollen große Dateien gesucht werden?",
+    "solutions": [
+      "Über Admin Tool die Top 10 größten Dateien anzeigen lassen",
+      "Windows Explorer: Laufwerk öffnen > Suche > Größe:Riesig",
+      "Einstellungen > System > Speicher für Übersicht nach Kategorien",
+      "TreeSize Free oder WinDirStat für visuelle Darstellung",
+      "Große Dateien prüfen und nicht benötigte löschen oder verschieben"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_top10big", "label": "Top 10 große Dateien", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["find large files", "biggest files", "größte Dateien"],
+    "followUpQuestions": [
+      {
+        "question": "Auf welchem Laufwerk soll gesucht werden?",
+        "options": ["C: (System)", "Alle Laufwerke", "Bestimmtes Laufwerk"],
+        "narrows": "Suchbereich eingrenzen"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-001", "PROB-DSK-023"]
+  },
+  {
+    "id": "PROB-DSK-023",
+    "category": "Festplatte & Speicher",
+    "title": "Ordnergrößen analysieren",
+    "keywords": ["Ordnergröße", "Analyse", "Verzeichnis", "Speicher", "Ordner", "Größe", "Übersicht"],
+    "extendedKeywords": ["Ordnergröße anzeigen", "welcher Ordner belegt am meisten Platz", "Ordnergrößen analysieren", "Verzeichnisgröße prüfen", "Ordner Speicherverbrauch", "welche Ordner sind groß", "Ordner nach Größe", "Speicheranalyse Ordner", "welche Ordner belegen Platz", "Ordnergrößen Windows anzeigen"],
+    "typos": ["Ordnergrösse", "Ordnergöße", "Analse", "Ordner Größe"],
+    "symptoms": ["Unklar welche Ordner den meisten Platz belegen", "Gezielte Bereinigung gewünscht", "Speicherverteilung unklar"],
+    "quickCheck": "Soll die Analyse für ein bestimmtes Laufwerk oder Ordner durchgeführt werden?",
+    "solutions": [
+      "Windows Explorer: Rechtsklick auf Ordner > Eigenschaften > Größe",
+      "Einstellungen > System > Speicher zeigt Kategorien",
+      "TreeSize Free installieren für detaillierte Ordneranalyse",
+      "Admin Tool für Speicheranalyse verwenden",
+      "Ordner nach Größe sortieren und größte identifizieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_top10big", "label": "Top 10 große Dateien", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["folder size analysis", "directory sizes", "Ordnergröße"],
+    "followUpQuestions": [
+      {
+        "question": "Welches Laufwerk oder welcher Ordner soll analysiert werden?",
+        "options": ["C: komplett", "Benutzerordner", "Bestimmter Ordner", "Alle Laufwerke"],
+        "narrows": "Wo die Analyse starten soll"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-022", "PROB-DSK-001"]
+  },
+  {
+    "id": "PROB-DSK-024",
+    "category": "Festplatte & Speicher",
+    "title": "Pagefile/Auslagerungsdatei zu groß",
+    "keywords": ["Pagefile", "Auslagerungsdatei", "pagefile.sys", "Größe", "Speicher", "virtueller Speicher"],
+    "extendedKeywords": ["Pagefile zu groß", "Auslagerungsdatei belegt viel Platz", "pagefile.sys verkleinern", "Auslagerungsdatei Größe ändern", "Pagefile anpassen", "virtueller Speicher Windows", "Auslagerungsdatei verschieben", "Pagefile auf anderes Laufwerk", "wie groß soll Pagefile sein", "Auslagerungsdatei konfigurieren", "Pagefile löschen", "Auslagerungsdatei zu groß Windows"],
+    "typos": ["Pageefile", "Auslagerungsdatai", "pagfile.sys", "Auslagerungsdatei"],
+    "symptoms": ["pagefile.sys belegt mehrere GB auf C:", "Speicherplatz auf C: knapp wegen Pagefile", "Pagefile nimmt über 10 GB ein"],
+    "quickCheck": "Wie viel RAM hat der PC und wie groß ist die Auslagerungsdatei?",
+    "solutions": [
+      "Auslagerungsdatei anpassen: Systemsteuerung > System > Erweiterte Systemeinstellungen > Leistung > Erweitert > Virtueller Arbeitsspeicher",
+      "Automatische Verwaltung deaktivieren und Größe manuell festlegen",
+      "Empfohlene Größe: 1-1.5x RAM bei wenig RAM, bei 16+ GB RAM kann sie kleiner sein",
+      "Auslagerungsdatei auf anderes Laufwerk verschieben (nicht löschen!)",
+      "Pagefile NICHT komplett deaktivieren - kann zu Abstürzen führen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_diskmgmt_top10big", "label": "Top 10 große Dateien", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["pagefile too large", "virtual memory size", "Auslagerungsdatei"],
+    "followUpQuestions": [
+      {
+        "question": "Wie viel RAM hat der PC?",
+        "options": ["4 GB oder weniger", "8 GB", "16 GB", "32 GB oder mehr"],
+        "narrows": "Welche Pagefile-Größe empfohlen wird"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-025", "PROB-DSK-001"]
+  },
+  {
+    "id": "PROB-DSK-025",
+    "category": "Festplatte & Speicher",
+    "title": "Hibernation-Datei (hiberfil.sys) deaktivieren",
+    "keywords": ["hiberfil.sys", "Hibernation", "Ruhezustand", "Speicher", "deaktivieren", "löschen"],
+    "extendedKeywords": ["hiberfil.sys löschen", "Hibernation deaktivieren", "Ruhezustand deaktivieren Speicher", "hiberfil.sys zu groß", "hiberfil.sys belegt Platz", "Ruhezustand abschalten", "hiberfil.sys entfernen", "Schnellstart deaktivieren", "hiberfil verkleinern", "Ruhezustand Datei löschen Windows", "hiberfil.sys Speicher freigeben"],
+    "typos": ["hiberfill.sys", "hibernaton", "Ruhezustandd", "hiberfil"],
+    "symptoms": ["hiberfil.sys belegt mehrere GB auf C:", "Speicherplatz auf C: knapp wegen Hibernation-Datei", "hiberfil.sys so groß wie RAM"],
+    "quickCheck": "Wird der Ruhezustand oder Schnellstart verwendet?",
+    "solutions": [
+      "Ruhezustand deaktivieren: powercfg /hibernate off (löscht hiberfil.sys)",
+      "ACHTUNG: Deaktiviert auch Windows Schnellstart",
+      "Hiberfil verkleinern statt löschen: powercfg /hibernate /size 50 (50% des RAM)",
+      "Bei Desktop-PCs kann Ruhezustand meist bedenkenlos deaktiviert werden",
+      "Bei Laptops: Abwägen ob Ruhezustand benötigt wird"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_diskmgmt_top10big", "label": "Top 10 große Dateien", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["hiberfil delete", "disable hibernation", "Ruhezustand deaktivieren"],
+    "followUpQuestions": [
+      {
+        "question": "Wird der Ruhezustand oder Schnellstart tatsächlich verwendet?",
+        "options": ["Ja, Ruhezustand wird genutzt", "Nein, wird nicht gebraucht", "Schnellstart nutze ich", "Weiß ich nicht"],
+        "narrows": "Ob Ruhezustand sicher deaktiviert werden kann"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-024", "PROB-DSK-001"]
+  },
+  {
+    "id": "PROB-DSK-026",
+    "category": "Festplatte & Speicher",
+    "title": "USB-Stick wird nicht erkannt",
+    "keywords": ["USB-Stick", "nicht erkannt", "Wechseldatenträger", "Flash Drive", "USB", "Laufwerk"],
+    "extendedKeywords": ["USB Stick wird nicht erkannt", "USB Stick nicht sichtbar", "USB Stick funktioniert nicht", "USB Stick wird nicht angezeigt", "USB Stick eingesteckt aber nicht sichtbar", "USB Stick kein Laufwerk", "USB Stick macht Ton aber kein Laufwerk", "USB Stick nicht erkannt Windows", "Flash Drive nicht erkannt", "USB Stick erscheint nicht im Explorer", "USB Stick reagiert nicht", "USB Stick nur Ton kein Laufwerk"],
+    "typos": ["USB Stik", "USB-Stik", "USB Stick", "USB Stck"],
+    "symptoms": ["USB-Stick wird im Explorer nicht angezeigt", "USB-Stick-LED blinkt aber kein Laufwerk erscheint", "USB-Stick wird nur in Datenträgerverwaltung angezeigt"],
+    "quickCheck": "Wird der USB-Stick an einem anderen PC erkannt?",
+    "solutions": [
+      "USB-Stick an anderem USB-Port einstecken",
+      "Datenträgerverwaltung prüfen: diskmgmt.msc - evtl. fehlt Laufwerksbuchstabe",
+      "USB-Stick an anderem PC testen",
+      "Gerätemanager > USB-Controller > Treiber deinstallieren und scannen",
+      "Datenträgerverwaltung: Laufwerksbuchstabe manuell zuweisen",
+      "USB-Stick muss ggf. formatiert werden (ACHTUNG: Datenverlust!)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["USB stick not recognized", "flash drive not detected", "USB Stick nicht erkannt"],
+    "followUpQuestions": [
+      {
+        "question": "Wird der USB-Stick in der Datenträgerverwaltung angezeigt?",
+        "options": ["Ja, ohne Laufwerksbuchstabe", "Ja, als nicht zugewiesen", "Nein, gar nicht sichtbar"],
+        "narrows": "Ob Buchstabenzuweisung oder tiefergehendes Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-027", "PROB-DSK-028"]
+  },
+  {
+    "id": "PROB-DSK-027",
+    "category": "Festplatte & Speicher",
+    "title": "Externe Festplatte wird nicht erkannt",
+    "keywords": ["externe Festplatte", "nicht erkannt", "USB", "extern", "HDD", "Laufwerk", "Datenträger"],
+    "extendedKeywords": ["externe Festplatte nicht erkannt", "externe HDD funktioniert nicht", "externe Festplatte wird nicht angezeigt", "USB Festplatte nicht erkannt", "externe Festplatte kein Zugriff", "externe Festplatte macht Geräusche aber wird nicht erkannt", "externe Festplatte nicht im Explorer", "portable Festplatte nicht erkannt", "externe SSD nicht erkannt", "USB Festplatte funktioniert nicht"],
+    "typos": ["externe Fetplatte", "extrene Festplatte", "USB Festplatte", "Festplatte extern"],
+    "symptoms": ["Externe Festplatte erscheint nicht im Explorer", "Festplatte macht Geräusche wird aber nicht erkannt", "Externe Festplatte nur in Datenträgerverwaltung sichtbar"],
+    "quickCheck": "Macht die externe Festplatte Geräusche beim Anschließen?",
+    "solutions": [
+      "USB-Kabel prüfen und ggf. tauschen",
+      "An anderem USB-Port anschließen (idealerweise USB 3.0 direkt am PC)",
+      "Datenträgerverwaltung prüfen: diskmgmt.msc",
+      "Bei USB-Stromproblemen: Y-Kabel oder Hub mit eigenem Netzteil verwenden",
+      "An anderem PC testen",
+      "Falls in Datenträgerverwaltung sichtbar: Laufwerksbuchstabe zuweisen oder initialisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diskmgmt_disksmart", "label": "SMART-Status", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["external drive not recognized", "external HDD not detected", "externe Festplatte"],
+    "followUpQuestions": [
+      {
+        "question": "Hat die externe Festplatte ein eigenes Netzteil?",
+        "options": ["Ja, eigenes Netzteil", "Nein, nur USB-Strom", "Weiß ich nicht"],
+        "narrows": "Ob Stromproblem vorliegen könnte"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-026", "PROB-DSK-028"]
+  },
+  {
+    "id": "PROB-DSK-028",
+    "category": "Festplatte & Speicher",
+    "title": "Externer Speicher wird nicht erkannt - allgemein",
+    "keywords": ["externer Speicher", "nicht erkannt", "Wechseldatenträger", "extern", "Speicherkarte", "Datenträger"],
+    "extendedKeywords": ["externer Speicher nicht erkannt", "Wechseldatenträger nicht erkannt", "externes Gerät nicht sichtbar", "Speichermedium nicht erkannt", "Datenträger nicht erkannt Windows", "externes Laufwerk nicht erkannt", "externer Datenträger Problem", "Speichergerät nicht erkannt", "Wechselmedium nicht erkannt"],
+    "typos": ["externer Speichr", "Wechseldatenträger", "nicht erkennt", "Datenträger"],
+    "symptoms": ["Externes Speichergerät wird nicht im Explorer angezeigt", "Kein Erkennungston beim Anschließen", "Gerät nur in Datenträgerverwaltung sichtbar"],
+    "quickCheck": "Um welche Art von externem Speicher handelt es sich?",
+    "solutions": [
+      "USB-Anschluss und Kabel prüfen",
+      "An anderem USB-Port und anderem PC testen",
+      "Datenträgerverwaltung prüfen: diskmgmt.msc",
+      "Gerätemanager auf unbekannte Geräte prüfen",
+      "USB-Treiber aktualisieren",
+      "Falls RAW-Dateisystem: Daten retten und dann formatieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["removable storage not detected", "external storage issue"],
+    "followUpQuestions": [
+      {
+        "question": "Um welches Speichermedium handelt es sich?",
+        "options": ["USB-Stick", "Externe Festplatte/SSD", "SD-Karte", "Anderes"],
+        "narrows": "Welche spezifische Lösung passend ist"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-026", "PROB-DSK-027"]
+  },
+  {
+    "id": "PROB-DSK-029",
+    "category": "Festplatte & Speicher",
+    "title": "BitLocker - Verschlüsselung Probleme",
+    "keywords": ["BitLocker", "Verschlüsselung", "verschlüsselt", "Laufwerk", "Schutz", "Encryption"],
+    "extendedKeywords": ["BitLocker Problem", "BitLocker Verschlüsselung", "BitLocker aktivieren", "BitLocker deaktivieren", "BitLocker Laufwerk verschlüsseln", "BitLocker gesperrt", "BitLocker Passwort vergessen", "BitLocker Verschlüsselung fehlgeschlagen", "BitLocker verwalten", "BitLocker Status prüfen", "BitLocker Schlüssel", "Laufwerk mit BitLocker verschlüsseln"],
+    "typos": ["Bitlocker", "Bitlockr", "BitLocekr", "Verschlüselung"],
+    "symptoms": ["BitLocker-Verschlüsselung schlägt fehl", "BitLocker-geschütztes Laufwerk nicht zugreifbar", "BitLocker fordert Wiederherstellungsschlüssel"],
+    "quickCheck": "Was genau ist das Problem mit BitLocker?",
+    "solutions": [
+      "BitLocker Status prüfen: manage-bde -status",
+      "BitLocker in Systemsteuerung verwalten: BitLocker-Laufwerkverschlüsselung",
+      "BitLocker-Wiederherstellungsschlüssel im Microsoft-Konto prüfen: account.microsoft.com/devices/recoverykey",
+      "IT-Admin kontaktieren für Wiederherstellungsschlüssel bei Firmen-PCs",
+      "BitLocker anhalten für Wartungsarbeiten: manage-bde -pause C:",
+      "TPM-Status prüfen: tpm.msc"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["BitLocker issue", "encryption problem", "BitLocker Problem"],
+    "followUpQuestions": [
+      {
+        "question": "Was genau ist das Problem mit BitLocker?",
+        "options": ["Wiederherstellungsschlüssel wird verlangt", "Verschlüsselung aktivieren", "Verschlüsselung deaktivieren", "Verschlüsselung fehlgeschlagen"],
+        "narrows": "Welche BitLocker-Aktion benötigt wird"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-030", "PROB-DSK-031"]
+  },
+  {
+    "id": "PROB-DSK-030",
+    "category": "Festplatte & Speicher",
+    "title": "BitLocker Recovery Key - Wiederherstellungsschlüssel",
+    "keywords": ["BitLocker", "Recovery Key", "Wiederherstellungsschlüssel", "gesperrt", "Schlüssel", "entsperren"],
+    "extendedKeywords": ["BitLocker Recovery Key", "BitLocker Wiederherstellungsschlüssel finden", "BitLocker Schlüssel verloren", "BitLocker Recovery", "wo ist mein BitLocker Schlüssel", "BitLocker Schlüssel eingeben", "BitLocker gesperrt Recovery Key", "BitLocker Wiederherstellung", "BitLocker Recovery Key finden", "BitLocker Schlüssel Microsoft Konto", "BitLocker Notfallschlüssel"],
+    "typos": ["Recovery Ky", "Wiederherstellungsschlüßel", "BitLocekr", "Recovory Key"],
+    "symptoms": ["BitLocker fordert Wiederherstellungsschlüssel beim Start", "Laufwerk ist BitLocker-gesperrt", "BitLocker-PIN vergessen"],
+    "quickCheck": "Wurde der Wiederherstellungsschlüssel beim Aktivieren von BitLocker gesichert?",
+    "solutions": [
+      "Microsoft-Konto prüfen: https://account.microsoft.com/devices/recoverykey",
+      "Azure AD/Entra ID prüfen bei Firmen-PC",
+      "IT-Admin kontaktieren für Firmen-verwalteten Schlüssel",
+      "Ausgedruckten Schlüssel suchen (wurde bei Aktivierung empfohlen)",
+      "USB-Stick prüfen auf dem der Schlüssel gespeichert wurde",
+      "OHNE Recovery Key: Daten auf dem Laufwerk sind nicht zugreifbar"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["BitLocker recovery", "find recovery key", "BitLocker Schlüssel"],
+    "followUpQuestions": [
+      {
+        "question": "Ist es ein Firmen-PC oder ein privater PC?",
+        "options": ["Firmen-PC (Azure AD/Intune)", "Privater PC (Microsoft-Konto)", "Weiß ich nicht"],
+        "narrows": "Wo der Recovery Key gespeichert sein könnte"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-029", "PROB-DSK-031"]
+  },
+  {
+    "id": "PROB-DSK-031",
+    "category": "Festplatte & Speicher",
+    "title": "TPM-Probleme für BitLocker",
+    "keywords": ["TPM", "BitLocker", "Trusted Platform Module", "Chip", "Sicherheit", "aktivieren"],
+    "extendedKeywords": ["TPM Problem BitLocker", "TPM nicht gefunden", "TPM aktivieren", "TPM für BitLocker nötig", "TPM Chip fehlt", "TPM Version prüfen", "TPM 2.0", "TPM nicht verfügbar", "BitLocker braucht TPM", "TPM im BIOS aktivieren", "TPM Status prüfen", "TPM Fehler BitLocker"],
+    "typos": ["TMP", "TPM Chip", "Trusted Platfrom", "TMP Problem"],
+    "symptoms": ["BitLocker meldet fehlenden TPM-Chip", "TPM wird nicht erkannt", "TPM-Version zu alt für BitLocker"],
+    "quickCheck": "Was zeigt tpm.msc als TPM-Status an?",
+    "solutions": [
+      "TPM-Status prüfen: tpm.msc ausführen",
+      "TPM im BIOS/UEFI aktivieren: Security > TPM > Enable",
+      "TPM-Version prüfen (BitLocker benötigt mindestens TPM 1.2, empfohlen 2.0)",
+      "TPM-Treiber aktualisieren",
+      "Bei Firmen-PC: IT-Admin kontaktieren",
+      "BitLocker ohne TPM: Per Gruppenrichtlinie erlauben (gpedit.msc)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 3, "effectiveness": 30}
+    ],
+    "hiddenTriggers": ["TPM missing", "TPM not found", "TPM Problem"],
+    "followUpQuestions": [
+      {
+        "question": "Was zeigt tpm.msc als Status?",
+        "options": ["TPM nicht gefunden", "TPM bereit", "TPM Version zu alt", "Habe nicht geprüft"],
+        "narrows": "Ob TPM aktiviert, aktualisiert oder konfiguriert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-029", "PROB-DSK-030"]
+  },
+  {
+    "id": "PROB-DSK-032",
+    "category": "Festplatte & Speicher",
+    "title": "Defragmentierung - HDD optimieren",
+    "keywords": ["Defragmentierung", "HDD", "Optimierung", "defragmentieren", "Festplatte", "Performance"],
+    "extendedKeywords": ["Festplatte defragmentieren", "HDD defragmentieren", "Defragmentierung Windows", "Festplatte optimieren", "HDD langsam defragmentieren", "Defragmentierung ausführen", "Laufwerk optimieren", "Festplatte aufräumen defragmentieren", "Defragmentierung planen", "wann defragmentieren", "Defragmentierung nötig"],
+    "typos": ["Defragmentirung", "defragmantieren", "Defragmentiereung", "defrgamentieren"],
+    "symptoms": ["HDD arbeitet langsam", "Dateizugriff dauert lang", "Defragmentierungsanalyse zeigt hohe Fragmentierung"],
+    "quickCheck": "Handelt es sich um eine HDD oder SSD?",
+    "solutions": [
+      "WICHTIG: SSDs NICHT defragmentieren - nur HDD defragmentieren",
+      "Laufwerke optimieren öffnen: dfrgui.exe",
+      "Laufwerk auswählen und Optimieren klicken",
+      "Automatische Optimierung aktivieren (wöchentlich empfohlen)",
+      "Für SSDs wird automatisch TRIM statt Defragmentierung ausgeführt",
+      "Vor Defragmentierung: Genügend freien Platz sicherstellen (15%+ empfohlen)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 2, "effectiveness": 50},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 2, "effectiveness": 45}
+    ],
+    "hiddenTriggers": ["defrag hard drive", "defragment disk", "defragmentieren"],
+    "followUpQuestions": [
+      {
+        "question": "Ist es eine HDD oder SSD?",
+        "options": ["HDD", "SSD", "Weiß ich nicht"],
+        "narrows": "Ob Defragmentierung oder TRIM angewendet werden soll"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-019"]
+  },
+  {
+    "id": "PROB-DSK-033",
+    "category": "Festplatte & Speicher",
+    "title": "Disk Quota - Speicherkontingent",
+    "keywords": ["Disk Quota", "Kontingent", "Speichergrenze", "Begrenzung", "Quota", "Benutzer"],
+    "extendedKeywords": ["Disk Quota überschritten", "Speicherkontingent voll", "Quota Fehler", "Speichergrenze erreicht", "Disk Quota Warnung", "Kontingent erhöhen", "Speicherkontingent anzeigen", "Quota Einstellung", "Disk Quota konfigurieren", "Speicherbegrenzung Windows", "Benutzer Speichergrenze"],
+    "typos": ["Disk Quaota", "Kontingnet", "Kvota", "Speicherkontingnet"],
+    "symptoms": ["Fehlermeldung über überschrittenes Speicherkontingent", "Dateien können nicht mehr gespeichert werden", "Warnung über Speichergrenze"],
+    "quickCheck": "Wird eine Quota-Warnung angezeigt?",
+    "solutions": [
+      "Quota-Status prüfen: Rechtsklick auf Laufwerk > Eigenschaften > Kontingent",
+      "Nicht benötigte Dateien löschen um unter die Grenze zu kommen",
+      "Administrator kontaktieren für Quota-Erhöhung",
+      "Quota-Einstellungen anzeigen: fsutil quota query C:",
+      "Bei Netzlaufwerken: Fileserver-Admin kontaktieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["disk quota exceeded", "storage quota", "Speicherkontingent"],
+    "followUpQuestions": [
+      {
+        "question": "Ist es ein lokales Laufwerk oder ein Netzlaufwerk?",
+        "options": ["Lokales Laufwerk", "Netzlaufwerk", "Weiß ich nicht"],
+        "narrows": "Ob lokale oder Server-seitige Quota"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-001"]
+  },
+  {
+    "id": "PROB-DSK-034",
+    "category": "Festplatte & Speicher",
+    "title": "Storage Spaces - Speicherplatz Probleme",
+    "keywords": ["Storage Spaces", "Speicherplatz", "Pool", "Spiegelung", "RAID", "Windows", "virtuell"],
+    "extendedKeywords": ["Storage Spaces Problem", "Speicherpool Fehler", "Storage Spaces funktioniert nicht", "Storage Spaces einrichten", "Storage Spaces Status", "Speicherpool voll", "Storage Spaces Laufwerk fehlt", "Storage Spaces reparieren", "Storage Spaces Warnung", "virtuelles Laufwerk Storage Spaces"],
+    "typos": ["Stoarge Spaces", "Storage Spacs", "Speicherpool", "Speicher Pool"],
+    "symptoms": ["Storage Spaces Pool zeigt Warnung", "Virtuelles Laufwerk ist nicht verfügbar", "Storage Spaces Pool ist voll"],
+    "quickCheck": "Wurde Storage Spaces bewusst eingerichtet oder ist es unbekannt?",
+    "solutions": [
+      "Storage Spaces Status prüfen: Systemsteuerung > Speicherplätze",
+      "Bei Warnung: Fehlerhaftes Laufwerk identifizieren und ersetzen",
+      "Pool-Kapazität erweitern durch Hinzufügen eines Laufwerks",
+      "Storage Spaces über PowerShell verwalten: Get-StoragePool",
+      "Bei Datenverlust-Risiko: Sofort Backup erstellen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diskmgmt_volumes", "label": "Volumes anzeigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["storage spaces issue", "storage pool error", "Storage Spaces"],
+    "followUpQuestions": [
+      {
+        "question": "Was zeigt der Storage Spaces Status an?",
+        "options": ["Warnung/Fehler", "Pool voll", "Laufwerk fehlt", "Weiß ich nicht"],
+        "narrows": "Welche Maßnahme erforderlich ist"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-001"]
+  },
+  {
+    "id": "PROB-DSK-035",
+    "category": "Festplatte & Speicher",
+    "title": "Speicherplatz-Analyse - Was belegt den Platz?",
+    "keywords": ["Speicheranalyse", "Speicherplatz", "Analyse", "belegt", "Übersicht", "Verteilung", "Nutzung"],
+    "extendedKeywords": ["was belegt meinen Speicherplatz", "Speicherplatz Analyse", "Speicherverbrauch anzeigen", "was verbraucht Platz auf C", "Speicher Übersicht", "welche Dateien belegen Platz", "Speicherverteilung anzeigen", "Speicher prüfen was voll ist", "Festplatte analysieren", "was nimmt den meisten Platz ein", "Speichernutzung anzeigen Windows"],
+    "typos": ["Speicheranalse", "Speicherplazt", "Analse", "belget"],
+    "symptoms": ["Unklar was den Speicherplatz belegt", "Speicher wird knapp ohne erkennbaren Grund", "Übersicht über Speicherverbrauch gewünscht"],
+    "quickCheck": "Auf welchem Laufwerk soll die Analyse durchgeführt werden?",
+    "solutions": [
+      "Einstellungen > System > Speicher für Kategorien-Übersicht",
+      "Admin Tool für detaillierte Speicheranalyse verwenden",
+      "Top 10 größte Dateien über Admin Tool anzeigen",
+      "TreeSize Free oder WinDirStat für visuelle Darstellung installieren",
+      "Temporäre Dateien, Downloads und Papierkorb prüfen",
+      "WinSxS, pagefile.sys und hiberfil.sys als häufige Speicherfresser prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diskmgmt_top10big", "label": "Top 10 große Dateien", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_disk_wintemp", "label": "Temp-Dateien anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_diskmgmt_diskfreepct", "label": "Freier Speicher %", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-disk", "label": "Festplatten-Diagnose", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["what takes space", "storage analysis", "Speicheranalyse"],
+    "followUpQuestions": [
+      {
+        "question": "Ist bekannt welche Kategorie den meisten Platz belegt?",
+        "options": ["Nein, keine Ahnung", "Programme", "Persönliche Dateien", "Systemdateien"],
+        "narrows": "Wo die Analyse beginnen sollte"
+      }
+    ],
+    "relatedProblems": ["PROB-DSK-001", "PROB-DSK-022", "PROB-DSK-023"]
+  }
+]

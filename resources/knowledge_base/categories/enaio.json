@@ -1,0 +1,782 @@
+[
+  {
+    "id": "PROB-ENA-001",
+    "category": "enaio/DMS",
+    "title": "enaio Add-In nicht sichtbar in Outlook",
+    "keywords": ["enaio", "Add-In", "Outlook", "nicht sichtbar", "fehlt", "COM-Add-In", "DMS", "Plugin"],
+    "extendedKeywords": ["enaio Add-In fehlt", "enaio in Outlook nicht sichtbar", "enaio Plugin fehlt", "enaio Button fehlt in Outlook", "enaio Menü fehlt", "enaio Symbolleiste weg", "enaio Add-In nicht vorhanden", "wo ist enaio in Outlook", "enaio Leiste fehlt", "enaio Registerkarte fehlt", "enaio nicht in Outlook", "enaio Tab fehlt", "enaio Button nicht da", "enaio Toolbar fehlt", "kein enaio in Outlook", "enaio Add-In nicht geladen", "enaio verschwunden aus Outlook", "enaio Erweiterung fehlt", "enaio COM Add-In nicht da", "enaio in Outlook nicht vorhanden"],
+    "typos": ["ennio", "enaoi", "enaio", "Add-in", "Ad-In", "Outllook"],
+    "symptoms": ["enaio-Registerkarte fehlt in Outlook", "enaio-Buttons nicht sichtbar", "enaio Add-In nicht in der COM-Add-In-Liste"],
+    "quickCheck": "Ist das enaio Add-In in den Outlook COM-Add-Ins als aktiv oder deaktiviert gelistet?",
+    "solutions": [
+      "Outlook COM-Add-Ins prüfen: Datei > Optionen > Add-Ins > COM-Add-Ins verwalten",
+      "enaio Add-In in COM-Add-Ins aktivieren",
+      "Outlook komplett schließen und neu starten",
+      "enaio Add-In über Remote-Befehl reaktivieren",
+      "Registry-Eintrag für enaio Add-In prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioreactivate", "label": "enaio Add-In reaktivieren", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Outlook Add-In Check", "priority": 3, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["enaio addin fehlt", "enaio outlook plugin", "enaio nicht sichtbar"],
+    "followUpQuestions": [
+      {
+        "question": "War das enaio Add-In vorher sichtbar oder ist es ein neuer PC?",
+        "options": ["War vorher da", "Neuer PC", "War nie da"],
+        "narrows": "Ob das Add-In reaktiviert oder erstmalig installiert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-002", "PROB-ENA-003"]
+  },
+  {
+    "id": "PROB-ENA-002",
+    "category": "enaio/DMS",
+    "title": "enaio Add-In deaktiviert",
+    "keywords": ["enaio", "Add-In", "deaktiviert", "disabled", "Outlook", "COM-Add-In", "inaktiv", "abgeschaltet"],
+    "extendedKeywords": ["enaio Add-In deaktiviert", "enaio wurde deaktiviert", "Outlook hat enaio deaktiviert", "enaio abgeschaltet", "enaio Add-In inaktiv", "enaio Add-In ausgeschaltet", "Outlook deaktiviert enaio", "enaio COM Add-In deaktiviert", "enaio wird nicht geladen", "enaio deaktiviert von Outlook", "enaio in deaktivierten Add-Ins", "enaio unter deaktivierte Elemente", "Outlook hat enaio abgeschaltet", "enaio deaktivierte Erweiterung", "enaio Plugin deaktiviert", "enaio Add-In wird nicht geladen", "enaio als deaktiviert angezeigt", "enaio Erweiterung inaktiv", "enaio wurde von Outlook abgeschaltet", "enaio automatisch deaktiviert"],
+    "typos": ["deaktivirt", "deaktivert", "deaktiveirt"],
+    "symptoms": ["enaio Add-In wird in Outlook als deaktiviert angezeigt", "enaio steht unter 'Deaktivierte Elemente'", "Outlook hat enaio wegen Langsamkeit deaktiviert"],
+    "quickCheck": "Steht enaio unter 'Deaktivierte Elemente' oder 'Inaktive Anwendungs-Add-Ins' in Outlook?",
+    "solutions": [
+      "enaio Add-In über Remote-Befehl reaktivieren",
+      "In Outlook: Datei > Optionen > Add-Ins > Deaktivierte Elemente verwalten > enaio aktivieren",
+      "Outlook als Administrator neu starten",
+      "enaio Registry-Einträge bereinigen und Add-In neu registrieren",
+      "Outlook-Profil reparieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioreactivate", "label": "enaio Add-In reaktivieren", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_enaio_enaiooutlookrestart", "label": "Outlook mit enaio neu starten", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Outlook Add-In Check", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["enaio deaktiviert", "enaio abgeschaltet", "outlook hat enaio deaktiviert"],
+    "followUpQuestions": [
+      {
+        "question": "Wurde enaio schon mehrmals von Outlook automatisch deaktiviert?",
+        "options": ["Ja, wiederholt", "Nein, erstmalig", "Weiß nicht"],
+        "narrows": "Ob ein Performance-Problem die wiederholte Deaktivierung verursacht"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-001", "PROB-ENA-003"]
+  },
+  {
+    "id": "PROB-ENA-003",
+    "category": "enaio/DMS",
+    "title": "enaio Add-In nach Update weg",
+    "keywords": ["enaio", "Add-In", "Update", "weg", "Outlook", "Office-Update", "verschwunden", "Windows-Update"],
+    "extendedKeywords": ["enaio nach Update weg", "enaio Add-In nach Office Update fehlt", "enaio verschwunden nach Update", "nach Update kein enaio", "enaio nach Outlook Update weg", "enaio nach Windows Update fehlt", "Update hat enaio entfernt", "enaio nach Aktualisierung weg", "enaio fehlt seit Update", "enaio Plugin nach Update verschwunden", "nach Office Update enaio fehlt", "enaio nach Patch weg", "enaio nicht mehr da nach Update", "Office Update enaio Problem", "Windows Update enaio kaputt", "enaio nach M365 Update weg", "seit Update kein enaio mehr", "enaio Erweiterung nach Update", "enaio nach Upgrade nicht mehr da", "nach dem Update fehlt enaio"],
+    "typos": ["Updade", "nach Updat", "nach Update wegg"],
+    "symptoms": ["enaio Add-In nach Office/Windows Update nicht mehr sichtbar", "enaio-Funktionalität fehlt nach Aktualisierung"],
+    "quickCheck": "Welches Update wurde kürzlich durchgeführt (Office, Windows, enaio)?",
+    "solutions": [
+      "enaio Add-In Versionkompatibilität mit Office-Version prüfen",
+      "enaio Add-In reaktivieren",
+      "Outlook und enaio Dienste neu starten",
+      "enaio Registry-Einträge bereinigen",
+      "enaio Add-In über enaio-Installer reparieren/neu installieren",
+      "IT kontaktieren für kompatible enaio-Version"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioreactivate", "label": "enaio Add-In reaktivieren", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_enaio_enaioversion", "label": "enaio Version prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_enaio_enaiocleanreg", "label": "enaio Registry bereinigen", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_enaio_enaiooutlookrestart", "label": "Outlook mit enaio neu starten", "priority": 4, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["enaio nach update", "enaio update verschwunden", "office update enaio"],
+    "followUpQuestions": [
+      {
+        "question": "Welches Update wurde durchgeführt?",
+        "options": ["Office/M365 Update", "Windows Update", "enaio Update", "Weiß nicht"],
+        "narrows": "Welche Kompatibilität geprüft werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-001", "PROB-ENA-002", "PROB-ENA-014"]
+  },
+  {
+    "id": "PROB-ENA-004",
+    "category": "enaio/DMS",
+    "title": "enaio crasht Outlook - Absturz",
+    "keywords": ["enaio", "Outlook", "Absturz", "Crash", "Fehler", "beendet", "Exception", "AppCrash"],
+    "extendedKeywords": ["enaio crasht Outlook", "Outlook stürzt ab wegen enaio", "enaio bringt Outlook zum Absturz", "Outlook Absturz enaio", "enaio verursacht Outlook Crash", "Outlook beendet sich wegen enaio", "enaio Outlook Fehler Absturz", "Outlook stürzt ab beim Archivieren", "enaio macht Outlook kaputt", "Outlook crasht mit enaio", "Outlook stürzt ab wenn enaio", "enaio Absturz Outlook", "Outlook schließt sich wegen enaio", "enaio verursacht Fehler Outlook", "Outlook fliegt raus enaio", "enaio macht Outlook instabil", "Outlook hängt und stürzt ab enaio", "enaio bringt Outlook zum Crash", "Outlook hat Probleme mit enaio", "enaio Outlook unbrauchbar"],
+    "typos": ["Absturtz", "chrash", "Outlok"],
+    "symptoms": ["Outlook stürzt bei enaio-Aktionen ab", "Outlook schließt sich beim Archivieren", "AppCrash-Meldung mit enaio-Bezug"],
+    "quickCheck": "Wann genau stürzt Outlook ab? Bei welcher enaio-Aktion?",
+    "solutions": [
+      "enaio Add-In temporär deaktivieren um Stabilität zu prüfen",
+      "enaio Version prüfen und auf Kompatibilität mit Outlook prüfen",
+      "enaio Registry-Einträge bereinigen",
+      "Outlook im abgesicherten Modus starten (outlook.exe /safe)",
+      "enaio Add-In neu installieren/reparieren",
+      "Outlook-Profil reparieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaiodisable", "label": "enaio Add-In deaktivieren", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_enaio_enaioversion", "label": "enaio Version prüfen", "priority": 2, "effectiveness": 60},
+      {"skillId": "rd_enaio_enaiocleanreg", "label": "enaio Registry bereinigen", "priority": 3, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-enaio", "label": "enaio Diagnose", "priority": 4, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["enaio outlook crash", "outlook absturz enaio", "enaio macht outlook kaputt"],
+    "followUpQuestions": [
+      {
+        "question": "Stürzt Outlook sofort beim Start ab oder erst bei einer bestimmten Aktion?",
+        "options": ["Sofort beim Start", "Bei enaio-Aktion", "Zufällig", "Nach einiger Zeit"],
+        "narrows": "Ob das Add-In generell oder bei bestimmter Funktion crasht"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-005", "PROB-ENA-006"]
+  },
+  {
+    "id": "PROB-ENA-005",
+    "category": "enaio/DMS",
+    "title": "enaio lässt Outlook hängen",
+    "keywords": ["enaio", "Outlook", "hängt", "eingefroren", "reagiert nicht", "Sanduhr", "blockiert", "Not Responding"],
+    "extendedKeywords": ["Outlook hängt wegen enaio", "enaio macht Outlook langsam", "Outlook reagiert nicht enaio", "Outlook eingefroren enaio", "enaio blockiert Outlook", "Outlook hängt bei enaio", "enaio lässt Outlook einfrieren", "Outlook Not Responding enaio", "Outlook antwortet nicht enaio", "enaio verlangsamt Outlook", "Outlook steht wegen enaio", "enaio bringt Outlook zum Hängen", "Outlook Sanduhr enaio", "Outlook friert ein wegen enaio", "enaio Outlook Stillstand", "Outlook reagiert nicht mehr enaio", "enaio Outlook hängt sich auf", "Outlook wird blockiert enaio", "enaio stört Outlook Betrieb", "Outlook stockt wegen enaio"],
+    "typos": ["hänkt", "eingefrohren", "reagiet nicht"],
+    "symptoms": ["Outlook zeigt 'Keine Rückmeldung' bei enaio-Aktionen", "Outlook friert bei Archivierung ein", "Sanduhr dreht bei enaio-Operationen"],
+    "quickCheck": "Bei welcher Aktion hängt Outlook? Wie lange dauert es bis es wieder reagiert?",
+    "solutions": [
+      "enaio-Vorgang abwarten (manche Archivierungen dauern länger)",
+      "enaio Add-In Version prüfen",
+      "enaio Server-Verbindung prüfen",
+      "Outlook mit enaio neu starten",
+      "enaio Cache bereinigen",
+      "Bei dauerhaftem Problem: enaio Add-In deaktivieren und IT kontaktieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_enaio_enaiooutlookrestart", "label": "Outlook mit enaio neu starten", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["outlook hängt enaio", "enaio outlook eingefroren", "outlook reagiert nicht enaio"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt das Problem bei jeder enaio-Aktion oder nur bestimmten auf?",
+        "options": ["Bei jeder Aktion", "Nur beim Archivieren", "Nur bei der Suche", "Nur beim Start"],
+        "narrows": "Welche enaio-Funktion das Problem verursacht"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-004", "PROB-ENA-006"]
+  },
+  {
+    "id": "PROB-ENA-006",
+    "category": "enaio/DMS",
+    "title": "Outlook langsam durch enaio",
+    "keywords": ["enaio", "Outlook", "langsam", "Performance", "träge", "Ladezeit", "verzögert", "slow"],
+    "extendedKeywords": ["Outlook langsam wegen enaio", "enaio verlangsamt Outlook", "Outlook träge mit enaio", "Outlook Performance enaio schlecht", "Outlook dauert lange mit enaio", "enaio macht Outlook langsam", "Outlook braucht ewig wegen enaio", "Outlook Start langsam enaio", "enaio bremst Outlook", "Outlook träge enaio Add-In", "Outlook lahm wegen enaio", "enaio Outlook Performance", "Outlook laden dauert wegen enaio", "enaio zieht Outlook runter", "seit enaio ist Outlook langsam", "Outlook mit enaio langsamer", "enaio verlangsamt alles", "Outlook Performance Problem enaio", "enaio Outlook Speed Problem", "Outlook startet langsam enaio"],
+    "typos": ["langsahm", "Performace", "Outllook langsam"],
+    "symptoms": ["Outlook startet deutlich langsamer mit enaio", "E-Mail-Aktionen werden verzögert", "Outlook reagiert träge bei aktivem enaio Add-In"],
+    "quickCheck": "Ist Outlook auch ohne enaio Add-In langsam (Test im abgesicherten Modus)?",
+    "solutions": [
+      "enaio-Version und Kompatibilität prüfen",
+      "enaio Cache bereinigen",
+      "Outlook im abgesicherten Modus testen (outlook.exe /safe)",
+      "enaio Server-Verbindung prüfen (langsamer Server = langsames Add-In)",
+      "Outlook-Profil reparieren",
+      "enaio Add-In aktualisieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_enaio_enaioversion", "label": "enaio Version prüfen", "priority": 3, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-enaio", "label": "enaio Diagnose", "priority": 4, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["outlook langsam enaio", "enaio performance outlook", "enaio bremst outlook"],
+    "followUpQuestions": [
+      {
+        "question": "Seit wann ist Outlook mit enaio langsam?",
+        "options": ["Seit immer", "Seit kurzem", "Nach einem Update", "Weiß nicht"],
+        "narrows": "Ob es ein neues oder dauerhaftes Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-004", "PROB-ENA-005"]
+  },
+  {
+    "id": "PROB-ENA-007",
+    "category": "enaio/DMS",
+    "title": "enaio Archivierung funktioniert nicht",
+    "keywords": ["enaio", "Archivierung", "Archiv", "funktioniert nicht", "Fehler", "E-Mail", "Dokument", "ablegen"],
+    "extendedKeywords": ["enaio Archivierung geht nicht", "kann nicht archivieren enaio", "enaio Archivierung Fehler", "E-Mail archivieren enaio Problem", "enaio Ablage funktioniert nicht", "Dokument archivieren enaio Fehler", "enaio speichern geht nicht", "enaio Archivierung Fehlermeldung", "enaio kann nicht ablegen", "Archivierung in enaio fehlgeschlagen", "enaio Archivieren Button funktioniert nicht", "enaio DMS Archivierung Problem", "enaio Dokument ablegen Fehler", "kann E-Mail nicht in enaio archivieren", "enaio Archivierung bricht ab", "enaio Ablage Fehler", "enaio speichert nicht", "enaio Archivierung geht nicht mehr", "enaio DMS Ablage Problem", "enaio Archivieren nicht möglich"],
+    "typos": ["Archivierug", "Archivierrung", "archiviren"],
+    "symptoms": ["Fehlermeldung beim Archivieren in enaio", "Archivierung bricht ab", "Dokument wird nicht im DMS gespeichert"],
+    "quickCheck": "Welche Fehlermeldung erscheint beim Archivierungsversuch?",
+    "solutions": [
+      "enaio Server-Verbindung prüfen",
+      "enaio Status prüfen",
+      "Berechtigungen im enaio-System prüfen",
+      "enaio-Client/Add-In neu starten",
+      "Outlook mit enaio neu starten",
+      "IT kontaktieren bei Berechtigungsproblemen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 2, "effectiveness": 75},
+      {"skillId": "rd_enaio_enaiooutlookrestart", "label": "Outlook mit enaio neu starten", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["enaio archivierung fehler", "enaio kann nicht archivieren", "enaio ablage problem"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Art von Dokument versuchen Sie zu archivieren?",
+        "options": ["E-Mail", "Datei/Dokument", "E-Mail mit Anhang", "Weiß nicht"],
+        "narrows": "Ob es ein dokumenttypspezifisches Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-008", "PROB-ENA-009"]
+  },
+  {
+    "id": "PROB-ENA-008",
+    "category": "enaio/DMS",
+    "title": "enaio Archivierung Fehlermeldung",
+    "keywords": ["enaio", "Archivierung", "Fehlermeldung", "Error", "Exception", "Serverantwort", "Ablage"],
+    "extendedKeywords": ["enaio Archivierung Fehlermeldung", "enaio Fehler beim Archivieren", "enaio zeigt Fehler bei Ablage", "enaio Archiv Error", "enaio Archivierung Exception", "enaio Serverantwort Fehler", "enaio Fehlermeldung beim Speichern", "enaio Archivierung Error Code", "enaio kann nicht ablegen Fehler", "enaio Fehlercode Archivierung", "enaio meldet Fehler beim Archivieren", "enaio Archivierung unbekannter Fehler", "enaio Ablage Fehlermeldung", "enaio Archivierung Fehler Code", "enaio Server Fehler Archivierung", "enaio Archivierung HTTP Error", "enaio Archivierung abgebrochen Fehler", "enaio Fehlermeldung DMS", "enaio Archivierung ungültig", "enaio Archivierung Validierungsfehler"],
+    "typos": ["Fehlermeldun", "Fhelermeldung", "Archivierun Fehler"],
+    "symptoms": ["Spezifische Fehlermeldung bei der Archivierung", "Error-Code bei der Dokumentablage", "Validierungsfehler bei Metadaten"],
+    "quickCheck": "Wie lautet die genaue Fehlermeldung?",
+    "solutions": [
+      "Fehlermeldung genau notieren und recherchieren",
+      "enaio Server-Verbindung prüfen",
+      "Pflichtfelder bei der Archivierung prüfen (Metadaten)",
+      "enaio-Client neu starten",
+      "IT kontaktieren mit genauer Fehlermeldung",
+      "enaio Diagnose durchführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-enaio", "label": "enaio Diagnose", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["enaio fehler archivierung", "enaio error ablage", "enaio fehlermeldung"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt der Fehler bei allen Dokumenten oder nur bestimmten auf?",
+        "options": ["Allen Dokumenten", "Nur bestimmten", "Nur E-Mails", "Nur Dateien"],
+        "narrows": "Ob es ein allgemeines oder dokumentspezifisches Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-007", "PROB-ENA-009"]
+  },
+  {
+    "id": "PROB-ENA-009",
+    "category": "enaio/DMS",
+    "title": "enaio Archivierung Berechtigungsfehler",
+    "keywords": ["enaio", "Berechtigung", "Archivierung", "Zugriff", "verweigert", "Rechte", "Permission", "Autorisierung"],
+    "extendedKeywords": ["enaio keine Berechtigung zum Archivieren", "enaio Zugriff verweigert Archivierung", "enaio Berechtigung fehlt", "darf nicht archivieren enaio", "enaio Archivierung Berechtigungsfehler", "enaio Rechte fehlen", "enaio Archivierung nicht erlaubt", "enaio Zugriff auf Ordner verweigert", "enaio keine Ablagerechte", "enaio Berechtigung Ablage", "enaio darf nicht in Ordner ablegen", "enaio Permission denied", "enaio Archivierung nicht berechtigt", "enaio Ordner keine Berechtigung", "enaio Zugriff auf Dokumententyp verweigert", "enaio Ablage Berechtigungsproblem", "enaio Rechte Archivierung", "kann nicht archivieren keine Rechte", "enaio Autorisierung fehlt", "enaio kein Zugriff auf Akte"],
+    "typos": ["Berechtung", "Berechtigun", "Zugrif verweigert"],
+    "symptoms": ["Fehlermeldung: Keine Berechtigung bei Archivierung", "Zugriff auf Dokumententyp/Ordner verweigert", "Archivierung ohne passende Rolle nicht möglich"],
+    "quickCheck": "In welchen enaio-Ordner oder Dokumententyp versuchen Sie zu archivieren?",
+    "solutions": [
+      "enaio-Berechtigungen beim Vorgesetzten beantragen",
+      "IT-Ticket für enaio-Berechtigungserweiterung erstellen",
+      "Prüfen ob der richtige Dokumententyp/Ordner ausgewählt ist",
+      "enaio-Administrator kontaktieren für Rollenzuordnung",
+      "Prüfen ob temporäre Rechte abgelaufen sind"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 1, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["enaio berechtigung archivierung", "enaio zugriff verweigert", "enaio keine rechte"],
+    "followUpQuestions": [
+      {
+        "question": "Hatten Sie die Berechtigung vorher oder ist es eine neue Anforderung?",
+        "options": ["Hatte ich vorher", "Neue Anforderung", "Weiß nicht"],
+        "narrows": "Ob Berechtigung entzogen oder neu beantragt werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-007", "PROB-ENA-008", "PROB-ENA-023"]
+  },
+  {
+    "id": "PROB-ENA-010",
+    "category": "enaio/DMS",
+    "title": "enaio Suche findet nichts",
+    "keywords": ["enaio", "Suche", "findet nichts", "Ergebnis", "leer", "Volltextsuche", "Index", "Suchergebnis"],
+    "extendedKeywords": ["enaio Suche findet nichts", "enaio Suchergebnis leer", "enaio kann Dokument nicht finden", "enaio Suche ohne Ergebnis", "enaio Volltextsuche geht nicht", "enaio Dokument nicht gefunden", "enaio Suche funktioniert nicht", "enaio findet mein Dokument nicht", "enaio Suche bringt kein Ergebnis", "enaio Suche leer", "enaio archiviertes Dokument finden", "enaio wo ist mein Dokument", "enaio Suche ergebnislos", "enaio kann nichts finden", "enaio Suchfunktion funktioniert nicht", "enaio Dokument suchen geht nicht", "enaio findet E-Mail nicht", "enaio Suche kaputt", "enaio Dokument verschwunden", "enaio Suche zeigt nichts"],
+    "typos": ["Suche findt nichts", "Volltextsuche", "Suchergebniss"],
+    "symptoms": ["enaio-Suche liefert keine Ergebnisse", "Bekannte Dokumente werden nicht gefunden", "Volltextsuche funktioniert nicht"],
+    "quickCheck": "Welche Suchkriterien verwenden Sie und in welchem Bereich suchen Sie?",
+    "solutions": [
+      "Suchkriterien erweitern (weniger Filter, größerer Zeitraum)",
+      "In anderem Dokumententyp/Ordner suchen",
+      "Exakte Schreibweise prüfen und Platzhalter (*) verwenden",
+      "enaio Server-Verbindung prüfen",
+      "enaio Volltextindex prüfen lassen (IT/Admin)",
+      "enaio neu starten und erneut suchen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["enaio suche leer", "enaio findet nicht", "enaio dokument nicht gefunden"],
+    "followUpQuestions": [
+      {
+        "question": "Suchen Sie nach einem bestimmten Dokument oder allgemein?",
+        "options": ["Bestimmtes Dokument", "Allgemeine Suche", "E-Mail suchen"],
+        "narrows": "Ob das Dokument existiert und die Suchkriterien angepasst werden müssen"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-011"]
+  },
+  {
+    "id": "PROB-ENA-011",
+    "category": "enaio/DMS",
+    "title": "enaio Suche langsam",
+    "keywords": ["enaio", "Suche", "langsam", "Performance", "Ladezeit", "Index", "Suchdauer", "träge"],
+    "extendedKeywords": ["enaio Suche langsam", "enaio Suche dauert ewig", "enaio Suche braucht lange", "enaio Suchergebnis verzögert", "enaio Suche Performance", "enaio langsame Suche", "enaio Suche träge", "enaio Suchfunktion langsam", "enaio Suche hängt", "enaio Suche lädt ewig", "enaio Suche Geschwindigkeit", "enaio Suche dauert zu lange", "enaio Dokument suchen langsam", "enaio Suche Timeout", "enaio Suche braucht Minuten", "enaio langsam bei Suche", "enaio Suche Performance Problem", "enaio Volltextsuche langsam", "enaio Suche stockt", "enaio Suchergebnis spät"],
+    "typos": ["langsahm", "Suche langasm", "Performace"],
+    "symptoms": ["enaio-Suche dauert ungewöhnlich lange", "Suchergebnisse werden erst nach Minuten angezeigt", "Timeout bei der Suche"],
+    "quickCheck": "Ist die Suche bei allen Suchanfragen langsam oder nur bei bestimmten?",
+    "solutions": [
+      "Suchkriterien eingrenzen (Zeitraum, Dokumententyp)",
+      "enaio Server-Verbindung prüfen",
+      "enaio-Client neu starten",
+      "Netzwerkverbindung prüfen",
+      "IT kontaktieren bei serverseitigen Performance-Problemen",
+      "enaio Diagnose durchführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_diag_diag-enaio", "label": "enaio Diagnose", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 3, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["enaio suche langsam", "enaio suche performance", "enaio suche dauert"],
+    "followUpQuestions": [
+      {
+        "question": "Verwenden Sie die Volltextsuche oder suchen nach Metadaten?",
+        "options": ["Volltext", "Metadaten", "Beides", "Weiß nicht"],
+        "narrows": "Ob der Volltextindex oder die Datenbankabfrage das Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-010"]
+  },
+  {
+    "id": "PROB-ENA-012",
+    "category": "enaio/DMS",
+    "title": "enaio Add-In nach Office-Update weg",
+    "keywords": ["enaio", "Office", "Update", "Add-In", "M365", "Microsoft 365", "Office-Update", "Kompatibilität"],
+    "extendedKeywords": ["enaio nach Office Update weg", "Office Update enaio fehlt", "M365 Update enaio Problem", "Microsoft 365 Update enaio", "enaio nach Office Aktualisierung weg", "Office Update hat enaio entfernt", "nach Office Update kein enaio", "enaio Add-In Office Update", "enaio fehlt nach Microsoft Update", "Office 365 Update enaio Problem", "nach Office Patch enaio weg", "enaio Office Kompatibilität", "Office Update enaio kaputt", "M365 enaio Problem", "nach Office Update enaio Add-In fehlt", "enaio verschwunden Office Update", "enaio nicht kompatibel Office", "Office aktualisiert enaio fehlt", "nach Office Update enaio deaktiviert", "M365 Update enaio verschwunden"],
+    "typos": ["Office Updade", "M356", "Micorsoft 365"],
+    "symptoms": ["enaio Add-In nach Office 365 Update nicht mehr vorhanden", "enaio-Tab fehlt nach Office-Aktualisierung"],
+    "quickCheck": "Welche Office-Version ist aktuell installiert?",
+    "solutions": [
+      "enaio Add-In reaktivieren",
+      "enaio Version prüfen und Kompatibilität mit Office-Version abgleichen",
+      "enaio Registry bereinigen und Add-In neu registrieren",
+      "Outlook mit enaio neu starten",
+      "enaio-Client aktualisieren auf kompatible Version",
+      "IT kontaktieren für kompatible enaio-Version"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioreactivate", "label": "enaio Add-In reaktivieren", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_enaio_enaioversion", "label": "enaio Version prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_enaio_enaiocleanreg", "label": "enaio Registry bereinigen", "priority": 3, "effectiveness": 75},
+      {"skillId": "rd_appcache_outlookaddincheck", "label": "Outlook Add-In Check", "priority": 4, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["office update enaio", "m365 update enaio", "enaio office kompatibilität"],
+    "followUpQuestions": [
+      {
+        "question": "Welcher Office-Kanal wird verwendet (Current, Monthly Enterprise, Semi-Annual)?",
+        "options": ["Current Channel", "Monthly Enterprise", "Semi-Annual", "Weiß nicht"],
+        "narrows": "Ob die Office-Version mit enaio kompatibel ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-003", "PROB-ENA-013"]
+  },
+  {
+    "id": "PROB-ENA-013",
+    "category": "enaio/DMS",
+    "title": "enaio Kompatibilitätsproblem mit Office",
+    "keywords": ["enaio", "Kompatibilität", "Office", "Version", "32-Bit", "64-Bit", "Inkompatibel", "unterstützt"],
+    "extendedKeywords": ["enaio nicht kompatibel mit Office", "enaio Office Kompatibilitätsproblem", "enaio Version passt nicht zu Office", "enaio inkompatibel", "enaio Office Version Problem", "enaio 32 64 Bit Problem", "enaio unterstützt Office nicht", "enaio passt nicht zur Office Version", "enaio Kompatibilität", "enaio und Office passen nicht", "enaio funktioniert nicht mit neuer Office Version", "enaio Office Inkompatibilität", "enaio falsche Office Version", "enaio braucht andere Office Version", "enaio unterstützt Office Version nicht", "enaio nicht kompatibel Office 365", "enaio Office 2021 Problem", "enaio Office Bit Problem", "enaio 32 Bit Office 64 Bit", "enaio Version Office Version"],
+    "typos": ["Kompatibilät", "kompatibel", "Inkompatibel"],
+    "symptoms": ["enaio Add-In wird nicht geladen wegen Versionskonflikt", "32/64-Bit Konflikt zwischen enaio und Office"],
+    "quickCheck": "Welche enaio-Version und welche Office-Version (inkl. 32/64-Bit) sind installiert?",
+    "solutions": [
+      "enaio-Version prüfen",
+      "Office-Version und Bit-Version prüfen (32 oder 64 Bit)",
+      "enaio Kompatibilitätsmatrix prüfen",
+      "enaio auf kompatible Version aktualisieren",
+      "IT kontaktieren für Versionsabgleich und ggf. Update",
+      "enaio Diagnose durchführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioversion", "label": "enaio Version prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-enaio", "label": "enaio Diagnose", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["enaio kompatibilität", "enaio office version", "enaio 32 64 bit"],
+    "followUpQuestions": [
+      {
+        "question": "Ist Office als 32-Bit oder 64-Bit installiert?",
+        "options": ["32-Bit", "64-Bit", "Weiß nicht"],
+        "narrows": "Ob ein Bit-Versionskonflikt vorliegt"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-012", "PROB-ENA-016"]
+  },
+  {
+    "id": "PROB-ENA-014",
+    "category": "enaio/DMS",
+    "title": "enaio Server Timeout",
+    "keywords": ["enaio", "Server", "Timeout", "Verbindung", "Netzwerk", "Zeitüberschreitung", "Connection"],
+    "extendedKeywords": ["enaio Server Timeout", "enaio Verbindung Timeout", "enaio Zeitüberschreitung", "enaio Server antwortet nicht", "enaio Verbindung abgebrochen", "enaio Server nicht erreichbar", "enaio Timeout Fehler", "enaio kann Server nicht erreichen", "enaio Verbindung zum Server verloren", "enaio Connection Timeout", "enaio Server Verbindungsproblem", "enaio Timeout bei Archivierung", "enaio Server reagiert nicht", "enaio Netzwerk Timeout", "enaio Server Zeitüberschreitung", "enaio Verbindung bricht ab", "enaio Server langsam", "enaio kann nicht verbinden Timeout", "enaio Server Verbindung fehlgeschlagen", "enaio Server down"],
+    "typos": ["Timout", "Tomeout", "Server Timeut"],
+    "symptoms": ["Timeout-Meldung bei enaio-Server-Verbindung", "enaio kann keine Verbindung zum Server herstellen", "Zeitüberschreitung bei enaio-Operationen"],
+    "quickCheck": "Tritt der Timeout bei allen enaio-Aktionen oder nur bestimmten auf?",
+    "solutions": [
+      "enaio Server-Verbindung prüfen",
+      "Netzwerkverbindung prüfen",
+      "enaio-Client neu starten",
+      "enaio Server-URL in der Konfiguration prüfen",
+      "IT kontaktieren bei Server-Ausfall",
+      "VPN-Verbindung prüfen falls im Homeoffice"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["enaio timeout", "enaio server timeout", "enaio verbindung timeout"],
+    "followUpQuestions": [
+      {
+        "question": "Sind Sie im Büro oder per VPN verbunden?",
+        "options": ["Im Büro", "VPN/Homeoffice", "Weiß nicht"],
+        "narrows": "Ob die Netzwerkverbindung das Problem verursacht"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-015"]
+  },
+  {
+    "id": "PROB-ENA-015",
+    "category": "enaio/DMS",
+    "title": "enaio Server Fehlermeldung",
+    "keywords": ["enaio", "Server", "Fehlermeldung", "Error", "HTTP", "Verbindungsfehler", "Serverfehler"],
+    "extendedKeywords": ["enaio Server Fehlermeldung", "enaio Server Error", "enaio Verbindungsfehler", "enaio Serverfehler", "enaio HTTP Fehler", "enaio Server meldet Fehler", "enaio Server Fehlercode", "enaio kann nicht mit Server verbinden", "enaio Server antwortet mit Fehler", "enaio Verbindung Fehlermeldung", "enaio Server Fehlermeldung beim Start", "enaio Server 500 Fehler", "enaio Server nicht verfügbar", "enaio Server Problem Meldung", "enaio zeigt Serverfehler", "enaio Server gibt Fehler zurück", "enaio Serverantwort Fehler", "enaio Server Connection Error", "enaio Server Kommunikationsfehler", "enaio Server Exception"],
+    "typos": ["Fehlermeldun", "Serverfeler", "Fehlermeldunh"],
+    "symptoms": ["enaio zeigt Serverfehler-Meldung", "HTTP-Fehlercode bei enaio-Verbindung", "enaio Server nicht verfügbar"],
+    "quickCheck": "Welche genaue Fehlermeldung oder welchen Fehlercode zeigt enaio an?",
+    "solutions": [
+      "Fehlermeldung notieren",
+      "enaio Server-Verbindung prüfen",
+      "enaio Diagnose durchführen",
+      "enaio-Client und Outlook neu starten",
+      "IT kontaktieren mit genauer Fehlermeldung",
+      "enaio-Logdateien sammeln für Fehleranalyse"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_diag_diag-enaio", "label": "enaio Diagnose", "priority": 2, "effectiveness": 80},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["enaio serverfehler", "enaio server error", "enaio verbindungsfehler"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt der Fehler bei allen Benutzern auf oder nur bei Ihnen?",
+        "options": ["Nur bei mir", "Auch bei Kollegen", "Weiß nicht"],
+        "narrows": "Ob es ein serverweites oder benutzerspezifisches Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-014"]
+  },
+  {
+    "id": "PROB-ENA-016",
+    "category": "enaio/DMS",
+    "title": "enaio Cache-Probleme - alte Daten",
+    "keywords": ["enaio", "Cache", "alte Daten", "veraltet", "Zwischenspeicher", "aktualisieren", "nicht aktuell"],
+    "extendedKeywords": ["enaio zeigt alte Daten", "enaio Cache Problem", "enaio nicht aktuell", "enaio veraltete Daten", "enaio zeigt falsches Dokument", "enaio aktualisiert nicht", "enaio Cache bereinigen", "enaio alte Version vom Dokument", "enaio Zwischenspeicher alt", "enaio Daten nicht aktuell", "enaio zeigt altes Dokument", "enaio Cache aufräumen", "enaio lädt alte Daten", "enaio aktualisiert Dokument nicht", "enaio Zwischenspeicher Problem", "enaio Cache leeren", "enaio veraltete Ansicht", "enaio Daten veraltet", "enaio altes Suchergebnis", "enaio Cache zurücksetzen"],
+    "typos": ["Cashe", "Cache Problehm", "alte Datem"],
+    "symptoms": ["enaio zeigt veraltete Dokumentversionen", "Suchergebnisse nicht aktuell", "Änderungen werden nicht angezeigt"],
+    "quickCheck": "Werden veraltete Dokumente angezeigt oder fehlen kürzlich archivierte Dokumente?",
+    "solutions": [
+      "enaio-Client neu starten",
+      "enaio Cache manuell bereinigen",
+      "Ansicht in enaio aktualisieren (F5)",
+      "enaio Outlook Add-In neu starten",
+      "Lokale enaio-Temp-Dateien löschen",
+      "enaio Diagnose durchführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaiooutlookrestart", "label": "Outlook mit enaio neu starten", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_diag_diag-enaio", "label": "enaio Diagnose", "priority": 3, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["enaio alte daten", "enaio cache", "enaio veraltet"],
+    "followUpQuestions": [
+      {
+        "question": "Sehen andere Benutzer die aktuellen Daten?",
+        "options": ["Ja, nur bei mir veraltet", "Nein, alle sehen alte Daten", "Weiß nicht"],
+        "narrows": "Ob es ein lokales Cache- oder serverseitiges Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-017"]
+  },
+  {
+    "id": "PROB-ENA-017",
+    "category": "enaio/DMS",
+    "title": "enaio langsam durch Cache",
+    "keywords": ["enaio", "langsam", "Cache", "Performance", "träge", "Ladezeit", "Geschwindigkeit"],
+    "extendedKeywords": ["enaio langsam", "enaio Performance schlecht", "enaio träge", "enaio braucht lange", "enaio lädt langsam", "enaio Geschwindigkeit schlecht", "enaio dauert ewig", "enaio Cache langsam", "enaio Performance Problem", "enaio lahm", "enaio reagiert langsam", "enaio Dokument öffnen langsam", "enaio Suche langsam Cache", "enaio Ladezeit lang", "enaio schleppend", "enaio Performance Cache", "enaio wird immer langsamer", "enaio zäh", "enaio Geschwindigkeit niedrig", "enaio Client langsam"],
+    "typos": ["langsahm", "Perforamce", "tröge"],
+    "symptoms": ["enaio-Client reagiert langsam", "Dokumente öffnen sich verzögert", "enaio-Suche dauert lange"],
+    "quickCheck": "Ist enaio allgemein langsam oder nur bei bestimmten Aktionen?",
+    "solutions": [
+      "enaio Cache bereinigen",
+      "enaio-Client neu starten",
+      "enaio Server-Verbindung prüfen",
+      "Lokale Temp-Dateien bereinigen",
+      "PC-Performance prüfen (RAM, CPU)",
+      "enaio Diagnose durchführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 2, "effectiveness": 70},
+      {"skillId": "rd_diag_diag-enaio", "label": "enaio Diagnose", "priority": 3, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["enaio langsam cache", "enaio performance cache", "enaio träge"],
+    "followUpQuestions": [
+      {
+        "question": "Seit wann ist enaio langsam?",
+        "options": ["Seit heute", "Seit einigen Tagen", "Schon immer", "Nach Update"],
+        "narrows": "Ob es ein neues oder dauerhaftes Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-016"]
+  },
+  {
+    "id": "PROB-ENA-018",
+    "category": "enaio/DMS",
+    "title": "enaio falsche Version installiert",
+    "keywords": ["enaio", "Version", "falsch", "veraltet", "Update", "Aktualisierung", "installiert", "Build"],
+    "extendedKeywords": ["enaio falsche Version", "enaio Version zu alt", "enaio Version prüfen", "enaio Update benötigt", "enaio veraltet", "enaio Version stimmt nicht", "enaio welche Version", "enaio Version herausfinden", "enaio aktualisieren", "enaio Update installieren", "enaio Version Information", "enaio aktuelle Version", "enaio Version checken", "enaio Versionsnummer", "enaio auf neueste Version", "enaio Version nicht aktuell", "enaio Upgrade nötig", "enaio Build prüfen", "enaio Version kompatibel", "enaio Version anzeigen"],
+    "typos": ["Vresion", "Vesrion", "Versionsnumer"],
+    "symptoms": ["Veraltete enaio-Version installiert", "Kompatibilitätsprobleme durch falsche Version"],
+    "quickCheck": "Welche enaio-Version ist installiert und welche wird benötigt?",
+    "solutions": [
+      "enaio Version prüfen",
+      "Aktuelle Soll-Version beim IT-Team erfragen",
+      "enaio über Software Center/SCCM aktualisieren",
+      "IT-Ticket für enaio-Update erstellen",
+      "Vor Update: Kompatibilität mit Office-Version prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioversion", "label": "enaio Version prüfen", "priority": 1, "effectiveness": 95}
+    ],
+    "hiddenTriggers": ["enaio version falsch", "enaio veraltet", "enaio update nötig"],
+    "followUpQuestions": [
+      {
+        "question": "Warum vermuten Sie eine falsche Version?",
+        "options": ["Fehlermeldung", "Funktionen fehlen", "IT hat gesagt", "Weiß nicht"],
+        "narrows": "Ob tatsächlich ein Versionsproblem vorliegt"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-019"]
+  },
+  {
+    "id": "PROB-ENA-019",
+    "category": "enaio/DMS",
+    "title": "enaio 32/64 Bit Konflikt",
+    "keywords": ["enaio", "32-Bit", "64-Bit", "Architektur", "x86", "x64", "Kompatibilität", "Bit-Version"],
+    "extendedKeywords": ["enaio 32 64 Bit Problem", "enaio Bit Konflikt", "enaio 32 Bit Outlook 64 Bit", "enaio 64 Bit Problem", "enaio Architektur Konflikt", "enaio x86 x64 Problem", "enaio passt nicht zu Office Bit", "enaio falsche Bit-Version", "enaio 32 Bit auf 64 Bit Office", "enaio Bit-Version falsch", "enaio Bitversion Konflikt", "enaio 32 Bit installiert brauche 64", "enaio Inkompatibilität Bit", "enaio x86 auf x64", "enaio 64 Bit auf 32 Bit Office", "enaio Architektur Problem", "enaio falsche Plattform", "enaio 32 vs 64 Bit", "enaio Bit-Kompatibilität", "enaio Platform Mismatch"],
+    "typos": ["32-Bid", "64-Bid", "Bit Fersion"],
+    "symptoms": ["enaio Add-In wird nicht geladen wegen Bit-Versionskonflikt", "Fehlermeldung über 32/64-Bit Inkompatibilität"],
+    "quickCheck": "Welche Bit-Version haben enaio und Office (jeweils 32 oder 64 Bit)?",
+    "solutions": [
+      "enaio Version und Bit-Version prüfen",
+      "Office Bit-Version prüfen (Datei > Konto > Über)",
+      "Passende enaio-Version für die Office-Architektur installieren",
+      "IT kontaktieren für korrekte Installationsversion",
+      "enaio deinstallieren und richtige Version installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioversion", "label": "enaio Version prüfen", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_diag_diag-enaio", "label": "enaio Diagnose", "priority": 2, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["enaio 32 64 bit", "enaio bit konflikt", "enaio architektur"],
+    "followUpQuestions": [
+      {
+        "question": "Wissen Sie ob Ihr Office als 32-Bit oder 64-Bit installiert ist?",
+        "options": ["32-Bit", "64-Bit", "Weiß nicht"],
+        "narrows": "Welche enaio-Version benötigt wird"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-013", "PROB-ENA-018"]
+  },
+  {
+    "id": "PROB-ENA-020",
+    "category": "enaio/DMS",
+    "title": "enaio Konfiguration/Einstellungen",
+    "keywords": ["enaio", "Konfiguration", "Einstellungen", "Setup", "Konfigurieren", "Optionen", "Preferences"],
+    "extendedKeywords": ["enaio Einstellungen", "enaio konfigurieren", "enaio Optionen", "enaio Einstellungen ändern", "enaio Setup", "enaio Konfiguration anpassen", "enaio Einstellungen wo", "enaio Optionen finden", "enaio Preferences", "enaio Einstellungen öffnen", "enaio Konfiguration prüfen", "enaio Einstellungen zurücksetzen", "enaio Konfigurationsdatei", "enaio Settings", "wie konfiguriere ich enaio", "enaio Einstellungen Outlook", "enaio Server Einstellungen", "enaio Verbindung konfigurieren", "enaio Profil Einstellungen", "enaio Grundeinstellungen"],
+    "typos": ["Konfiguraton", "Einstellunge", "Konfigurierung"],
+    "symptoms": ["enaio-Einstellungen müssen angepasst werden", "Konfiguration nach Neuinstallation erforderlich"],
+    "quickCheck": "Was möchten Sie in den enaio-Einstellungen ändern?",
+    "solutions": [
+      "enaio-Einstellungen im Client über Extras > Optionen öffnen",
+      "enaio Server-URL in der Konfiguration prüfen",
+      "enaio Profil-Einstellungen anpassen",
+      "Bei Problemen: enaio-Konfiguration zurücksetzen",
+      "IT kontaktieren für spezielle Konfigurationsänderungen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 1, "effectiveness": 55},
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["enaio einstellungen", "enaio konfiguration", "enaio optionen"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Einstellung möchten Sie ändern?",
+        "options": ["Server-Verbindung", "Profil/Benutzer", "Archivierungsoptionen", "Weiß nicht"],
+        "narrows": "Welcher Konfigurationsbereich betroffen ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-021"]
+  },
+  {
+    "id": "PROB-ENA-021",
+    "category": "enaio/DMS",
+    "title": "enaio Profil-Problem",
+    "keywords": ["enaio", "Profil", "Benutzer", "Benutzerprofil", "Anmeldung", "Account", "Konto"],
+    "extendedKeywords": ["enaio Profil Problem", "enaio Benutzer falsch", "enaio Profil kaputt", "enaio Benutzerprofil", "enaio Anmeldung Profil", "enaio Profil Fehler", "enaio falsches Profil", "enaio Profil laden geht nicht", "enaio Profil wechseln", "enaio Benutzerkonto Problem", "enaio Profil beschädigt", "enaio Anmeldeprofil", "enaio Profil nicht gefunden", "enaio Profil zurücksetzen", "enaio Benutzerprofil Fehler", "enaio Profil einrichten", "enaio Profil erstellen", "enaio neues Profil", "enaio Profil Konfiguration", "enaio Account Problem"],
+    "typos": ["Profiel", "Benutzerprofiel", "Profil Problehm"],
+    "symptoms": ["enaio-Profil lädt nicht", "Falsches Benutzerprofil wird verwendet", "Profileinstellungen gehen verloren"],
+    "quickCheck": "Was genau stimmt mit dem enaio-Profil nicht?",
+    "solutions": [
+      "enaio-Client abmelden und neu anmelden",
+      "enaio-Profil in den Einstellungen prüfen",
+      "enaio Cache bereinigen",
+      "enaio Registry bereinigen und Profil zurücksetzen",
+      "IT kontaktieren für Profilzurücksetzung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaiocleanreg", "label": "enaio Registry bereinigen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["enaio profil", "enaio benutzerprofil", "enaio konto problem"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie sich bei enaio anmelden?",
+        "options": ["Ja, aber falsches Profil", "Nein, Anmeldung geht nicht", "Profil ist beschädigt"],
+        "narrows": "Art des Profilproblems"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-020"]
+  },
+  {
+    "id": "PROB-ENA-022",
+    "category": "enaio/DMS",
+    "title": "E-Mail archivieren funktioniert nicht",
+    "keywords": ["enaio", "E-Mail", "archivieren", "Outlook", "Mail", "ablegen", "DMS", "Posteingang"],
+    "extendedKeywords": ["E-Mail archivieren enaio geht nicht", "enaio E-Mail ablegen funktioniert nicht", "kann E-Mail nicht in enaio archivieren", "E-Mail in DMS archivieren Fehler", "enaio Outlook E-Mail archivieren", "E-Mail Archivierung enaio Problem", "enaio Mail ablegen geht nicht", "E-Mail enaio speichern Fehler", "enaio E-Mail Archivierung Fehler", "enaio kann E-Mail nicht speichern", "E-Mail in enaio ablegen Problem", "enaio Mail Archivierung", "Outlook E-Mail enaio archivieren", "enaio E-Mail Ablage funktioniert nicht", "kann Mail nicht archivieren enaio", "enaio E-Mail Archiv Fehler", "enaio Mail speichern Problem", "E-Mail enaio DMS Fehler", "enaio E-Mail Archivierung bricht ab", "Outlook Mail in enaio geht nicht"],
+    "typos": ["E-Mai archivieren", "E-Mail archiviren", "archiveren"],
+    "symptoms": ["E-Mail-Archivierung in enaio schlägt fehl", "E-Mail wird nicht im DMS gespeichert", "Fehlermeldung beim E-Mail-Archivieren"],
+    "quickCheck": "Welche Fehlermeldung erscheint beim Archivieren der E-Mail?",
+    "solutions": [
+      "enaio Server-Verbindung prüfen",
+      "enaio Add-In Status prüfen",
+      "Berechtigungen für E-Mail-Archivierung prüfen",
+      "Outlook und enaio Add-In neu starten",
+      "E-Mail-Format prüfen (HTML/Text/RTF)",
+      "Einzelne E-Mail statt mehrere archivieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaioserver", "label": "enaio Server prüfen", "priority": 1, "effectiveness": 75},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 2, "effectiveness": 65},
+      {"skillId": "rd_enaio_enaiooutlookrestart", "label": "Outlook mit enaio neu starten", "priority": 3, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["email archivieren enaio", "mail archivierung enaio", "enaio mail ablegen"],
+    "followUpQuestions": [
+      {
+        "question": "Funktioniert die Archivierung bei allen E-Mails nicht oder nur bei bestimmten?",
+        "options": ["Alle E-Mails", "Nur bestimmte", "Nur mit Anhängen", "Nur große E-Mails"],
+        "narrows": "Ob es ein allgemeines oder e-mail-spezifisches Problem ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-023"]
+  },
+  {
+    "id": "PROB-ENA-023",
+    "category": "enaio/DMS",
+    "title": "enaio E-Mail Anhänge fehlen bei Archivierung",
+    "keywords": ["enaio", "Anhang", "Attachment", "fehlt", "E-Mail", "Archivierung", "Datei", "Anlage"],
+    "extendedKeywords": ["enaio Anhänge fehlen", "enaio E-Mail Anhang nicht archiviert", "enaio Attachment fehlt", "enaio archiviert ohne Anhang", "enaio Anlage fehlt bei Archivierung", "E-Mail Anhang nicht in enaio", "enaio speichert Anhang nicht", "enaio Anhang verloren", "enaio E-Mail ohne Anlage archiviert", "enaio Dateianhang fehlt", "enaio Attachment nicht übernommen", "enaio archiviert E-Mail ohne Anhänge", "enaio Anhang nicht mitarchiviert", "Anhänge fehlen nach enaio Archivierung", "enaio E-Mail Anlage weg", "enaio Anhang Archivierung Problem", "enaio speichert Anlage nicht", "wo sind meine Anhänge enaio", "enaio Attachment Archivierung", "E-Mail Anhang nicht im DMS"],
+    "typos": ["Anhäng", "Atachment", "Anhanng"],
+    "symptoms": ["E-Mail wird archiviert aber Anhänge fehlen", "Anhänge werden nicht mitübernommen", "Archivierte E-Mail zeigt keine Anlagen"],
+    "quickCheck": "Werden alle Anhänge oder nur bestimmte nicht mitarchiviert?",
+    "solutions": [
+      "enaio-Archivierungseinstellungen prüfen (Anhänge einschließen)",
+      "E-Mail einzeln archivieren statt in Masse",
+      "Anhangsgröße prüfen (gibt es ein Limit?)",
+      "enaio Version prüfen (bekanntes Problem in manchen Versionen)",
+      "IT kontaktieren für Archivierungskonfiguration"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 1, "effectiveness": 50},
+      {"skillId": "rd_enaio_enaioversion", "label": "enaio Version prüfen", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["enaio anhang fehlt", "enaio attachment fehlt", "enaio anlage archivierung"],
+    "followUpQuestions": [
+      {
+        "question": "Wie groß sind die fehlenden Anhänge ungefähr?",
+        "options": ["Unter 5 MB", "5-25 MB", "Über 25 MB", "Weiß nicht"],
+        "narrows": "Ob ein Größenlimit die Ursache ist"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-022"]
+  },
+  {
+    "id": "PROB-ENA-024",
+    "category": "enaio/DMS",
+    "title": "enaio Berechtigungsprobleme",
+    "keywords": ["enaio", "Berechtigung", "Rechte", "Zugriff", "Permission", "Rolle", "verweigert", "gesperrt"],
+    "extendedKeywords": ["enaio keine Berechtigung", "enaio Zugriff verweigert", "enaio Rechte fehlen", "enaio keine Rechte", "enaio Berechtigung fehlt", "enaio Zugriff gesperrt", "enaio Permission denied", "enaio Berechtigung beantragen", "enaio Rolle fehlt", "enaio nicht berechtigt", "enaio kann nicht zugreifen", "enaio Berechtigungsproblem", "enaio Rechte beantragen", "enaio Ordner Zugriff verweigert", "enaio Dokumententyp nicht berechtigt", "enaio Akte nicht zugreifbar", "enaio Berechtigungsfehler", "enaio Zugang verweigert", "enaio keine Leserechte", "enaio keine Schreibrechte"],
+    "typos": ["Berechtung", "Berehctigung", "Rechte felen"],
+    "symptoms": ["Zugriff auf Ordner/Dokumententyp verweigert", "Bestimmte Aktionen nicht möglich", "Fehlermeldung: Keine Berechtigung"],
+    "quickCheck": "Auf welchen enaio-Bereich haben Sie keinen Zugriff?",
+    "solutions": [
+      "Berechtigungsanfrage beim Vorgesetzten stellen",
+      "IT-Ticket für enaio-Berechtigungserweiterung erstellen",
+      "Prüfen ob der richtige enaio-Bereich ausgewählt ist",
+      "enaio-Administrator kontaktieren",
+      "Prüfen ob Berechtigung zeitlich befristet war"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 1, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["enaio berechtigung", "enaio zugriff verweigert", "enaio rechte fehlen"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Aktion möchten Sie in enaio durchführen?",
+        "options": ["Dokumente lesen", "Dokumente archivieren", "Dokumente bearbeiten", "Ordner zugreifen"],
+        "narrows": "Welche Berechtigung fehlt"
+      }
+    ],
+    "relatedProblems": ["PROB-ENA-009"]
+  },
+  {
+    "id": "PROB-ENA-025",
+    "category": "enaio/DMS",
+    "title": "enaio Log-Dateien für Fehleranalyse",
+    "keywords": ["enaio", "Log", "Logdatei", "Protokoll", "Debug", "Fehleranalyse", "Diagnose", "Trace"],
+    "extendedKeywords": ["enaio Log-Dateien", "enaio Logdatei finden", "enaio Protokoll", "enaio Fehleranalyse", "enaio Debug Log", "enaio Diagnose Log", "enaio Log aktivieren", "enaio Protokolldatei", "enaio Log sammeln", "enaio Trace-Datei", "wo sind enaio Logs", "enaio Log-Verzeichnis", "enaio Fehlerprotokoll", "enaio Log-Datei öffnen", "enaio Debug aktivieren", "enaio Logging einschalten", "enaio Fehler-Log", "enaio Diagnose Dateien", "enaio Support Log", "enaio Log-Dateien sammeln für IT"],
+    "typos": ["Logdatei", "Protokol", "Diagnose"],
+    "symptoms": ["IT benötigt enaio-Logs für Fehleranalyse", "Fehler muss dokumentiert werden"],
+    "quickCheck": "Benötigt die IT die Log-Dateien für ein bestimmtes Problem?",
+    "solutions": [
+      "enaio Diagnose durchführen und Logs sammeln",
+      "enaio-Logdateien im lokalen AppData-Verzeichnis finden",
+      "enaio Debug-Modus aktivieren für detailliertere Logs",
+      "Log-Dateien an IT per E-Mail oder Ticket senden",
+      "Zeitpunkt des Fehlers notieren für gezielte Log-Analyse"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_diag_diag-enaio", "label": "enaio Diagnose", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_enaio_enaiostatus", "label": "enaio Status prüfen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["enaio logs", "enaio protokoll", "enaio fehleranalyse"],
+    "followUpQuestions": [
+      {
+        "question": "Für welches Problem werden die Log-Dateien benötigt?",
+        "options": ["Absturz", "Verbindungsproblem", "Archivierungsfehler", "Allgemeine Diagnose"],
+        "narrows": "Welche Art von Logs am relevantesten sind"
+      }
+    ],
+    "relatedProblems": []
+  }
+]

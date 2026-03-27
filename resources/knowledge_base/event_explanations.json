@@ -1,0 +1,359 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "Erklärungen und Lösungen für häufige Windows Event-IDs",
+    "totalEntries": 120
+  },
+  "events": {
+    "1": {
+      "title": "BugCheck / Bluescreen",
+      "severity": "critical",
+      "explanation": "Ein Bluescreen (BSOD) ist aufgetreten. Der Stop-Code in der Nachricht zeigt die Ursache.",
+      "solution": "1. Stop-Code notieren (z.B. IRQL_NOT_LESS_OR_EQUAL)\n2. Treiber prüfen — kürzlich aktualisiert?\n3. RAM testen: mdsched.exe\n4. sfc /scannow + DISM /Online /Cleanup-Image /RestoreHealth",
+      "category": "system"
+    },
+    "6": {
+      "title": "Audit-Richtlinie geändert",
+      "severity": "info",
+      "explanation": "Die Überwachungsrichtlinie wurde geändert. Kann durch GPO-Updates oder manuelle Änderungen entstehen.",
+      "solution": "Prüfen ob die Änderung beabsichtigt war: gpresult /r",
+      "category": "security"
+    },
+    "7": {
+      "title": "Ungültiges Disk-Image",
+      "severity": "warning",
+      "explanation": "Ein Programm oder Treiber konnte nicht geladen werden — die Datei ist beschädigt oder inkompatibel.",
+      "solution": "1. Programmname aus der Nachricht notieren\n2. Programm reparieren oder neu installieren\n3. sfc /scannow ausführen",
+      "category": "system"
+    },
+    "10": {
+      "title": "WMI-Fehler",
+      "severity": "warning",
+      "explanation": "Windows Management Instrumentation hat einen Fehler festgestellt. Kann Monitoring-Tools und Remote-Verwaltung beeinträchtigen.",
+      "solution": "WMI-Repository reparieren:\nwinmgmt /salvagerepository\nOder neu aufbauen:\nwinmgmt /resetrepository",
+      "category": "application"
+    },
+    "11": {
+      "title": "Festplatten-Controller-Fehler",
+      "severity": "critical",
+      "explanation": "Der Festplatten-Controller hat einen Fehler gemeldet. Kann auf defekte Festplatte, Kabel oder Controller hinweisen.",
+      "solution": "1. SMART-Status prüfen: Get-PhysicalDisk | Select HealthStatus\n2. CHKDSK ausführen: chkdsk C: /f\n3. Kabel prüfen (SATA/NVMe)\n4. Bei wiederholten Fehlern: Festplatte tauschen!",
+      "category": "system"
+    },
+    "15": {
+      "title": "Dateisystem-Fehler (NTFS)",
+      "severity": "critical",
+      "explanation": "Das NTFS-Dateisystem hat einen Fehler erkannt. Datenverlust möglich.",
+      "solution": "SOFORT handeln:\n1. chkdsk C: /f /r (beim nächsten Neustart)\n2. Daten sichern falls möglich\n3. SMART-Status prüfen\n4. Bei SSD: Firmware-Update prüfen",
+      "category": "system"
+    },
+    "26": {
+      "title": "Application Popup",
+      "severity": "info",
+      "explanation": "Eine Anwendung zeigt ein Popup-Fenster an, das eine Benutzeraktion erfordert.",
+      "solution": "Die Nachricht enthält den Text des Popups. Prüfen ob eine Benutzeraktion nötig ist (z.B. Neustartanforderung).",
+      "category": "system"
+    },
+    "36": {
+      "title": "Zeitdienst-Synchronisation",
+      "severity": "info",
+      "explanation": "Der Windows-Zeitdienst konnte die Zeit nicht mit dem konfigurierten Zeitserver synchronisieren.",
+      "solution": "1. w32tm /query /status\n2. w32tm /resync /force\n3. Zeitserver prüfen: w32tm /query /source\n4. Bei Domänen-PC: Muss mit DC synchronisieren",
+      "category": "system"
+    },
+    "41": {
+      "title": "Kernel-Power — Unerwarteter Neustart",
+      "severity": "critical",
+      "explanation": "Der PC wurde unerwartet heruntergefahren oder hat sich aufgehängt. Häufige Ursache: Stromausfall, Überhitzung oder Hardwarefehler.",
+      "solution": "1. War es ein Stromausfall? USV prüfen\n2. Temperatur prüfen (Lüfter laut?)\n3. Netzteil prüfen\n4. Bei Laptop: Akku-Status prüfen\n5. Event-Log auf weitere Fehler vor dem Neustart prüfen",
+      "category": "system"
+    },
+    "51": {
+      "title": "Paging-Fehler auf Festplatte",
+      "severity": "warning",
+      "explanation": "Beim Schreiben auf die Auslagerungsdatei ist ein Fehler aufgetreten. Kann auf Festplattenprobleme hinweisen.",
+      "solution": "1. CHKDSK ausführen\n2. Auslagerungsdatei auf ein anderes Laufwerk verschieben\n3. SMART-Status prüfen",
+      "category": "system"
+    },
+    "55": {
+      "title": "NTFS-Dateisystem beschädigt",
+      "severity": "critical",
+      "explanation": "Die NTFS-Struktur auf dem Datenträger ist beschädigt.",
+      "solution": "1. chkdsk /f /r ausführen\n2. Daten sichern\n3. Festplatten-Gesundheit prüfen\n4. Bei wiederholtem Auftreten: Festplatte ersetzen",
+      "category": "system"
+    },
+    "134": {
+      "title": "Zeitserver nicht erreichbar (NTP)",
+      "severity": "warning",
+      "explanation": "Der Zeitdienst kann den konfigurierten NTP-Server nicht erreichen. Kann Kerberos-Authentifizierung stören (max. 5 Min. Abweichung erlaubt).",
+      "solution": "1. Netzwerkverbindung prüfen\n2. w32tm /resync /force\n3. Restart-Service w32time\n4. Zeitquelle prüfen: w32tm /query /source",
+      "category": "system"
+    },
+    "153": {
+      "title": "Festplatten-I/O-Warnung",
+      "severity": "warning",
+      "explanation": "Ein I/O-Vorgang auf der Festplatte hat zu lange gedauert oder ist fehlgeschlagen.",
+      "solution": "1. Festplatten-SMART prüfen\n2. Treiber aktualisieren (Speicher-Controller)\n3. Energieoptionen: Festplatte nie ausschalten\n4. Bei SSD: Firmware-Update prüfen",
+      "category": "system"
+    },
+    "219": {
+      "title": "Treiber konnte nicht geladen werden",
+      "severity": "warning",
+      "explanation": "Ein Kernel-Modus-Treiber konnte nicht geladen werden. Der Treiber ist möglicherweise beschädigt oder inkompatibel.",
+      "solution": "1. Treibername aus der Nachricht notieren\n2. Geräte-Manager prüfen (gelbes Ausrufezeichen)\n3. Treiber aktualisieren oder zurücksetzen\n4. sfc /scannow",
+      "category": "system"
+    },
+    "1000": {
+      "title": "Anwendungsfehler / App-Absturz",
+      "severity": "error",
+      "explanation": "Eine Anwendung ist abgestürzt. Die Nachricht enthält den Programmnamen und das fehlerhafte Modul.",
+      "solution": "1. Welches Programm? → Nachricht lesen\n2. Programm reparieren oder neu installieren\n3. Windows-Updates installieren\n4. .NET Framework reparieren falls relevant",
+      "category": "application"
+    },
+    "1001": {
+      "title": "Windows-Fehlerberichterstattung",
+      "severity": "info",
+      "explanation": "Ein Fehler wurde an Microsoft gesendet. Enthält Details zum abgestürzten Programm.",
+      "solution": "Informativ — zeigt Details zum Absturz. Programmname und Fehlerbucket-ID notieren für Support.",
+      "category": "application"
+    },
+    "1002": {
+      "title": "Anwendung reagiert nicht (Hänger)",
+      "severity": "warning",
+      "explanation": "Eine Anwendung hat nicht mehr reagiert und wurde beendet oder wiederhergestellt.",
+      "solution": "1. Wenn regelmäßig: Programm-Updates prüfen\n2. RAM prüfen — genug freier Speicher?\n3. Festplatte langsam? SMART prüfen\n4. Programm reparieren oder neu installieren",
+      "category": "application"
+    },
+    "1074": {
+      "title": "Geplanter Neustart/Shutdown",
+      "severity": "info",
+      "explanation": "Ein Benutzer oder Prozess hat einen geplanten Neustart oder Shutdown eingeleitet.",
+      "solution": "Normal — der Neustart wurde absichtlich ausgelöst. Nachricht zeigt wer und warum.",
+      "category": "system"
+    },
+    "2004": {
+      "title": "Ressourcenerschöpfung (RAM)",
+      "severity": "warning",
+      "explanation": "Windows hat festgestellt dass der Arbeitsspeicher knapp wird.",
+      "solution": "1. Task-Manager: Welcher Prozess braucht zu viel RAM?\n2. Unnötige Programme schließen\n3. RAM erweitern wenn regelmäßig\n4. Auslagerungsdatei vergrößern",
+      "category": "system"
+    },
+    "4624": {
+      "title": "Erfolgreiche Anmeldung",
+      "severity": "info",
+      "explanation": "Ein Benutzer hat sich erfolgreich angemeldet. Anmeldetyp zeigt wie:\n• Typ 2 = Interaktiv (Tastatur)\n• Typ 3 = Netzwerk (Dateifreigabe)\n• Typ 7 = Entsperrung\n• Typ 10 = Remote Desktop\n• Typ 11 = Cached Credentials",
+      "solution": "Normal bei bekannten Benutzern. Bei unbekannten Benutzern oder ungewöhnlichen Zeiten: Sicherheitsvorfall prüfen!",
+      "category": "security"
+    },
+    "4625": {
+      "title": "Fehlgeschlagene Anmeldung",
+      "severity": "warning",
+      "explanation": "Ein Anmeldeversuch ist fehlgeschlagen. Häufige Status-Codes:\n• 0xC000006A = Falsches Passwort\n• 0xC0000064 = Benutzer existiert nicht\n• 0xC0000072 = Konto deaktiviert\n• 0xC0000234 = Konto gesperrt",
+      "solution": "1. Einzelner Fehlversuch = normal (Tippfehler)\n2. Viele Fehlversuche = Brute-Force-Angriff?\n3. Quelle prüfen (welcher PC/welche IP)\n4. Konto sperren falls verdächtig",
+      "category": "security"
+    },
+    "4634": {
+      "title": "Abmeldung",
+      "severity": "info",
+      "explanation": "Ein Benutzer hat sich abgemeldet.",
+      "solution": "Normal — informativ. Nützlich um Anmeldezeiten nachzuvollziehen.",
+      "category": "security"
+    },
+    "4648": {
+      "title": "Anmeldung mit expliziten Anmeldedaten",
+      "severity": "info",
+      "explanation": "Ein Prozess hat sich mit explizit angegebenen Anmeldedaten angemeldet (z.B. RunAs).",
+      "solution": "Normal bei Admin-Arbeit. Bei unbekannten Prozessen: Prüfen ob es ein Angriff ist (Lateral Movement).",
+      "category": "security"
+    },
+    "4672": {
+      "title": "Spezielle Privilegien zugewiesen",
+      "severity": "info",
+      "explanation": "Einem Benutzer wurden bei der Anmeldung Administratorrechte zugewiesen.",
+      "solution": "Normal für Admin-Konten. Prüfen ob der Benutzer Admin-Rechte haben sollte.",
+      "category": "security"
+    },
+    "4688": {
+      "title": "Neuer Prozess erstellt",
+      "severity": "info",
+      "explanation": "Ein neuer Prozess wurde gestartet. Nützlich für Forensik.",
+      "solution": "Normal — informativ. Bei Process-Auditing aktiviert nützlich um verdächtige Prozesse zu finden.",
+      "category": "security"
+    },
+    "4720": {
+      "title": "Benutzerkonto erstellt",
+      "severity": "info",
+      "explanation": "Ein neues Benutzerkonto wurde erstellt.",
+      "solution": "Prüfen ob die Kontoerstellung autorisiert war. Wer hat es erstellt? Welche Rechte hat das neue Konto?",
+      "category": "security"
+    },
+    "4726": {
+      "title": "Benutzerkonto gelöscht",
+      "severity": "info",
+      "explanation": "Ein Benutzerkonto wurde gelöscht.",
+      "solution": "Prüfen ob die Löschung autorisiert war.",
+      "category": "security"
+    },
+    "4732": {
+      "title": "Mitglied zu Sicherheitsgruppe hinzugefügt",
+      "severity": "info",
+      "explanation": "Ein Benutzer wurde einer lokalen Sicherheitsgruppe hinzugefügt.",
+      "solution": "Prüfen ob berechtigt. Besonders kritisch bei: Administratoren, Remote-Desktop-Benutzer.",
+      "category": "security"
+    },
+    "4740": {
+      "title": "Benutzerkonto gesperrt",
+      "severity": "warning",
+      "explanation": "Ein Konto wurde nach zu vielen fehlgeschlagenen Anmeldeversuchen gesperrt.",
+      "solution": "1. Ist der Benutzer bekannt? → Passwort vergessen?\n2. Gespeicherte Passwörter prüfen (alte Passwörter in Apps)\n3. Konto entsperren: Unlock-ADAccount -Identity USERNAME\n4. Bei Wiederholung: Quelle der Sperrung finden (Event 4625 auf DC prüfen)",
+      "category": "security"
+    },
+    "4771": {
+      "title": "Kerberos-Vorauthentifizierung fehlgeschlagen",
+      "severity": "warning",
+      "explanation": "Die Kerberos-Authentifizierung ist fehlgeschlagen. Häufigste Ursache: Falsches Passwort oder Zeitsynchronisations-Problem.",
+      "solution": "1. Passwort korrekt?\n2. Uhrzeit auf PC prüfen (max. 5 Min. Abweichung zum DC!)\n3. w32tm /resync /force\n4. klist purge → Kerberos-Tickets löschen",
+      "category": "security"
+    },
+    "4776": {
+      "title": "NTLM-Authentifizierung",
+      "severity": "info",
+      "explanation": "Der DC hat versucht die Anmeldeinformationen eines Kontos zu überprüfen (NTLM statt Kerberos).",
+      "solution": "Bei Fehlercode 0xC000006A: Falsches Passwort.\nBei Häufung: Prüfen warum NTLM statt Kerberos verwendet wird (ältere Systeme?).",
+      "category": "security"
+    },
+    "5038": {
+      "title": "Code-Integritätsprüfung fehlgeschlagen",
+      "severity": "warning",
+      "explanation": "Eine Datei hat die Integritätsprüfung nicht bestanden. Kann auf Manipulation oder Beschädigung hinweisen.",
+      "solution": "1. sfc /scannow ausführen\n2. Betroffene Datei aus der Nachricht notieren\n3. Bei Treibern: Treiber neu installieren\n4. Bei Systemdateien: DISM /Online /Cleanup-Image /RestoreHealth",
+      "category": "system"
+    },
+    "6005": {
+      "title": "Eventlog-Dienst gestartet (= PC gebootet)",
+      "severity": "info",
+      "explanation": "Der Eventlog-Dienst wurde gestartet. Das bedeutet der PC wurde hochgefahren.",
+      "solution": "Normal — markiert den Zeitpunkt des PC-Starts.",
+      "category": "system"
+    },
+    "6006": {
+      "title": "Eventlog-Dienst gestoppt (= ordentlicher Shutdown)",
+      "severity": "info",
+      "explanation": "Der Eventlog-Dienst wurde ordnungsgemäß beendet. Das bedeutet der PC wurde korrekt heruntergefahren.",
+      "solution": "Normal — ordentliches Herunterfahren.",
+      "category": "system"
+    },
+    "6008": {
+      "title": "Unerwartetes Herunterfahren",
+      "severity": "critical",
+      "explanation": "Der PC wurde NICHT ordnungsgemäß heruntergefahren. Ursachen: Stromausfall, Absturz, Einschalttaste gehalten.",
+      "solution": "1. War es ein Stromausfall? → USV empfehlen\n2. Gab es vorher einen Bluescreen? → Event 41 (Kernel-Power) prüfen\n3. Hat jemand den Einschaltknopf gehalten?\n4. Bei regelmäßigem Auftreten: Hardware prüfen (Netzteil, Akku)",
+      "category": "system"
+    },
+    "6009": {
+      "title": "Betriebssystem-Informationen beim Start",
+      "severity": "info",
+      "explanation": "Zeigt Betriebssystem-Version und Build-Nummer beim Systemstart.",
+      "solution": "Rein informativ — nützlich um zu sehen welche Windows-Version installiert ist.",
+      "category": "system"
+    },
+    "6013": {
+      "title": "System-Uptime",
+      "severity": "info",
+      "explanation": "Zeigt wie lange der PC seit dem letzten Neustart läuft (in Sekunden).",
+      "solution": "Informativ. Sehr hohe Uptime (>30 Tage) kann auf fehlende Updates hinweisen — Neustart empfehlen.",
+      "category": "system"
+    },
+    "7000": {
+      "title": "Dienst konnte nicht gestartet werden",
+      "severity": "error",
+      "explanation": "Ein Windows-Dienst konnte nicht gestartet werden. Die Nachricht nennt den Dienstnamen und den Fehlergrund.",
+      "solution": "1. Welcher Dienst? → Nachricht lesen\n2. services.msc > Dienst suchen > Starttyp prüfen\n3. Abhängigkeiten prüfen (Tab 'Abhängigkeiten')\n4. Dienst-Konto prüfen (hat das Konto die nötigen Rechte?)\n5. Eventlog auf weitere Fehler desselben Dienstes prüfen",
+      "category": "system"
+    },
+    "7001": {
+      "title": "Dienst-Abhängigkeit fehlgeschlagen",
+      "severity": "error",
+      "explanation": "Ein Dienst konnte nicht starten weil ein anderer Dienst von dem er abhängt nicht verfügbar ist.",
+      "solution": "1. Abhängigen Dienst identifizieren (steht in der Nachricht)\n2. Diesen Dienst zuerst starten\n3. services.msc > Eigenschaften > Tab 'Abhängigkeiten'",
+      "category": "system"
+    },
+    "7009": {
+      "title": "Dienst-Timeout beim Starten",
+      "severity": "warning",
+      "explanation": "Ein Dienst hat beim Starten zu lange gebraucht und wurde als fehlgeschlagen markiert.",
+      "solution": "1. Meistens bei langsamen PCs oder nach Updates\n2. Dienst manuell starten: Start-Service DienstName\n3. Timeout erhöhen: Registry HKLM\\SYSTEM\\CurrentControlSet\\Control → ServicesPipeTimeout",
+      "category": "system"
+    },
+    "7011": {
+      "title": "Dienst hat nicht rechtzeitig reagiert",
+      "severity": "warning",
+      "explanation": "Ein Dienst hat nicht innerhalb der erwarteten Zeit (30 Sek.) auf eine Start- oder Steuerungsanforderung reagiert.",
+      "solution": "1. Festplatte überlastet? → Task-Manager prüfen\n2. Dienst manuell neustarten\n3. Bei regelmäßigem Auftreten: ServicesPipeTimeout in der Registry erhöhen",
+      "category": "system"
+    },
+    "7023": {
+      "title": "Dienst mit Fehler beendet",
+      "severity": "error",
+      "explanation": "Ein Dienst wurde unerwartet mit einem Fehler beendet.",
+      "solution": "1. Fehlerbeschreibung aus der Nachricht lesen\n2. Dienst neustarten: Restart-Service DienstName\n3. Wenn wiederholt: Recovery-Optionen setzen (services.msc > Eigenschaften > Wiederherstellung)",
+      "category": "system"
+    },
+    "7031": {
+      "title": "Dienst unerwartet beendet — Wiederherstellung",
+      "severity": "warning",
+      "explanation": "Ein Dienst wurde unerwartet beendet. Windows führt die konfigurierte Wiederherstellungsaktion aus.",
+      "solution": "1. Normal wenn Recovery-Optionen konfiguriert sind (automatischer Neustart)\n2. Ursache für den Absturz prüfen (andere Events desselben Dienstes)\n3. Bei häufigem Auftreten: Dienst reparieren oder neu installieren",
+      "category": "system"
+    },
+    "7034": {
+      "title": "Dienst unerwartet beendet (zum X. Mal)",
+      "severity": "error",
+      "explanation": "Ein Dienst ist wiederholt abgestürzt. Die Nachricht zeigt wie oft.",
+      "solution": "1. Dienst hat ein ernstes Problem\n2. Dienst-Dateien prüfen (beschädigt?)\n3. sfc /scannow\n4. Dienst deinstallieren und neu installieren\n5. Event-Log nach der genauen Fehlerursache durchsuchen",
+      "category": "system"
+    },
+    "7036": {
+      "title": "Dienst-Status geändert",
+      "severity": "info",
+      "explanation": "Ein Dienst wurde gestartet oder gestoppt.",
+      "solution": "Normal — informativ. Nützlich um nachzuvollziehen wann ein Dienst gestartet/gestoppt wurde.",
+      "category": "system"
+    },
+    "7040": {
+      "title": "Dienst-Starttyp geändert",
+      "severity": "info",
+      "explanation": "Der Starttyp eines Dienstes wurde geändert (z.B. von Automatisch auf Deaktiviert).",
+      "solution": "Prüfen ob die Änderung beabsichtigt war. Wer hat sie vorgenommen? Bei Sicherheitsdiensten: Sofort zurücksetzen!",
+      "category": "system"
+    },
+    "7045": {
+      "title": "Neuer Dienst installiert",
+      "severity": "info",
+      "explanation": "Ein neuer Dienst wurde im System installiert.",
+      "solution": "Prüfen ob die Installation autorisiert war. Bei unbekannten Diensten: Sicherheitsvorfall prüfen! Malware installiert oft Dienste.",
+      "category": "system"
+    },
+    "10016": {
+      "title": "DCOM-Sicherheitsfehler",
+      "severity": "warning",
+      "explanation": "Die DCOM-Berechtigungen für eine Anwendung sind falsch konfiguriert. Sehr häufig und meistens harmlos.",
+      "solution": "In den meisten Fällen ignorierbar — Microsoft-Bug. Bei Problemen mit der betroffenen App:\n1. dcomcnfg.exe öffnen\n2. Komponentendienste > Computer > Arbeitsplatz > DCOM-Konfiguration\n3. Die in der Nachricht genannte AppID finden\n4. Berechtigungen anpassen",
+      "category": "system"
+    },
+    "10010": {
+      "title": "DCOM-Server nicht gestartet",
+      "severity": "warning",
+      "explanation": "Ein DCOM-Server konnte nicht innerhalb des Timeouts gestartet werden.",
+      "solution": "1. Meistens harmlos (App wurde nicht benötigt)\n2. AppID aus der Nachricht in der Registry suchen\n3. Bei bekannter App: App reparieren oder neu installieren",
+      "category": "system"
+    },
+    "10028": {
+      "title": "DCOM-Timeout",
+      "severity": "warning",
+      "explanation": "Ein DCOM-Objekt hat nicht rechtzeitig reagiert.",
+      "solution": "Meistens harmlos. Bei regelmäßigem Auftreten: Die betroffene Anwendung prüfen.",
+      "category": "system"
+    }
+  }
+}

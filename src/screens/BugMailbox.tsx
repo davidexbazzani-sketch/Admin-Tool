@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Bug, Loader, RefreshCw, Send, X, ChevronRight } from 'lucide-react'
+import { Bug, Loader, RefreshCw, Send, X, ChevronRight, ImageOff } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
 import type { BugReport } from '../types/auth'
@@ -226,16 +226,7 @@ export default function BugMailbox() {
 
             {/* Screenshots */}
             {selected.screenshots.length > 0 && (
-              <div>
-                <p className="text-[10px] font-medium text-muted-foreground mb-2">Screenshots ({selected.screenshots.length})</p>
-                <div className="flex gap-2 flex-wrap">
-                  {selected.screenshots.map((s, i) => (
-                    <img key={i} src={`data:image/png;base64,${s}`} alt={`Screenshot ${i + 1}`}
-                      className="h-28 rounded-md border border-border object-cover cursor-pointer hover:opacity-80"
-                      onClick={() => window.open(`data:image/png;base64,${s}`, '_blank')} />
-                  ))}
-                </div>
-              </div>
+              <ScreenshotGallery bugId={selected.id} filenames={selected.screenshots} />
             )}
 
             {/* Conversation thread */}
@@ -286,6 +277,82 @@ export default function BugMailbox() {
             <ChevronRight size={24} />
             <p className="text-sm">Meldung auswählen</p>
           </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ── Screenshot gallery: loads images from network files ──────────────── */
+function ScreenshotGallery({ bugId, filenames }: { bugId: string; filenames: string[] }) {
+  const [images, setImages] = useState<Record<string, string | null>>({})
+  const [preview, setPreview] = useState<string | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    async function load() {
+      const result: Record<string, string | null> = {}
+      await Promise.all(
+        filenames.map(async (f) => {
+          // Try file-based path first (new format)
+          const b64 = await api().netReadRawFile(`bugs/${bugId}/${f}`)
+          result[f] = b64
+        })
+      )
+      if (!cancelled) setImages(result)
+    }
+    load()
+    return () => { cancelled = true }
+  }, [bugId, filenames])
+
+  // Check if filenames look like base64 data (old format, for backwards compat)
+  const isLegacyBase64 = filenames.length > 0 && filenames[0].length > 200
+
+  return (
+    <div>
+      <p className="text-[10px] font-medium text-muted-foreground mb-2">Screenshots ({filenames.length})</p>
+      <div className="flex gap-2 flex-wrap">
+        {isLegacyBase64
+          ? filenames.map((s, i) => (
+              <img key={i} src={`data:image/png;base64,${s}`} alt={`Screenshot ${i + 1}`}
+                className="h-28 rounded-md border border-border object-cover cursor-pointer hover:opacity-80"
+                onClick={() => setPreview(s)} />
+            ))
+          : filenames.map((f, i) => {
+              const b64 = images[f]
+              if (b64 === undefined) {
+                return (
+                  <div key={i} className="h-28 w-28 rounded-md border border-border bg-muted/20 flex items-center justify-center">
+                    <Loader size={14} className="animate-spin text-muted-foreground" />
+                  </div>
+                )
+              }
+              if (b64 === null) {
+                return (
+                  <div key={i} className="h-28 w-28 rounded-md border border-border bg-muted/20 flex flex-col items-center justify-center gap-1 text-muted-foreground">
+                    <ImageOff size={16} />
+                    <span className="text-[9px]">Nicht ladbar</span>
+                  </div>
+                )
+              }
+              return (
+                <img key={i} src={`data:image/png;base64,${b64}`} alt={`Screenshot ${i + 1}`}
+                  className="h-28 rounded-md border border-border object-cover cursor-pointer hover:opacity-80"
+                  onClick={() => setPreview(b64)} />
+              )
+            })
+        }
+      </div>
+
+      {/* Full-size preview overlay */}
+      {preview && (
+        <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center p-8 cursor-pointer"
+          onClick={() => setPreview(null)}>
+          <img src={`data:image/png;base64,${preview}`} alt="Vorschau"
+            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" />
+          <button className="absolute top-4 right-4 p-2 rounded-full bg-black/50 text-white hover:bg-black/70">
+            <X size={18} />
+          </button>
         </div>
       )}
     </div>

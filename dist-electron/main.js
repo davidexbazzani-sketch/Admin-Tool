@@ -44,6 +44,65 @@ const electron_store_1 = __importDefault(require("electron-store"));
 const powerShellRunner_1 = require("./powerShellRunner");
 const auth = __importStar(require("./authManager"));
 const ns = __importStar(require("./networkStorage"));
+// ========= WISSENSDATENBANK + GURU DEBUG =========
+try {
+    const _dbgBase = ns.getBasePath();
+    console.log('=== NETZWERK-DEBUG START ===');
+    console.log('BasePath:', _dbgBase);
+    console.log('BasePath exists:', (0, fs_1.existsSync)(_dbgBase));
+    // Test knowledge_base subdir
+    const _kbDir = _dbgBase + '\\knowledge_base';
+    console.log('KB dir:', _kbDir, 'exists:', (0, fs_1.existsSync)(_kbDir));
+    // Try listing files
+    if ((0, fs_1.existsSync)(_kbDir)) {
+        const { readdirSync, statSync } = require('fs');
+        const files = readdirSync(_kbDir);
+        console.log('Files in knowledge_base:', files);
+        for (const f of files) {
+            try {
+                const st = statSync(_kbDir + '\\' + f);
+                console.log(`  ${f}: ${st.size} bytes (${Math.round(st.size / 1024)} KB)`);
+            }
+            catch { }
+        }
+    }
+    // Try reading wissensdatenbank.json directly
+    const _wPath = _kbDir + '\\wissensdatenbank.json';
+    if ((0, fs_1.existsSync)(_wPath)) {
+        const raw = (0, fs_1.readFileSync)(_wPath, 'utf-8');
+        console.log('wissensdatenbank.json: read OK,', raw.length, 'chars');
+        const data = JSON.parse(raw);
+        console.log('  Type:', typeof data, 'IsArray:', Array.isArray(data));
+        if (Array.isArray(data)) {
+            console.log('  Array length:', data.length);
+            if (data[0])
+                console.log('  First item keys:', Object.keys(data[0]));
+        }
+        else if (typeof data === 'object' && data !== null) {
+            const keys = Object.keys(data);
+            console.log('  Object keys:', keys);
+            for (const k of keys.slice(0, 5)) {
+                const v = data[k];
+                console.log(`    "${k}": type=${typeof v}, isArray=${Array.isArray(v)}, length=${Array.isArray(v) ? v.length : 'n/a'}`);
+                if (Array.isArray(v) && v[0])
+                    console.log(`      first item keys: ${Object.keys(v[0])}`);
+            }
+        }
+    }
+    else {
+        console.log('wissensdatenbank.json NOT FOUND at', _wPath);
+    }
+    // Try guru_brain files
+    for (const gf of ['guru_brain.json', 'guru_brain_starter.json', 'guru_requests.json', 'guru_requests_starter.json']) {
+        const gp = _kbDir + '\\' + gf;
+        console.log(`${gf}: exists=${(0, fs_1.existsSync)(gp)}${(0, fs_1.existsSync)(gp) ? ', size=' + (0, fs_1.statSync)(gp).size : ''}`);
+    }
+}
+catch (e) {
+    console.error('DEBUG ERROR:', e.message);
+}
+console.log('=== NETZWERK-DEBUG ENDE ===');
+// ========= ENDE DEBUG =========
 // NOTE: Hardware acceleration intentionally ENABLED.
 // Disabling it (disableHardwareAcceleration) forces CPU-only software rendering.
 // With all query categories open as admin (~40 DOM nodes), every checkbox re-render
@@ -319,8 +378,18 @@ electron_1.ipcMain.handle('auth:saveConfig', (_e, config) => {
     return true;
 });
 // Network storage: read/write JSON
-electron_1.ipcMain.handle('net:readJson', (_e, relativePath) => {
-    return ns.readJson(relativePath);
+electron_1.ipcMain.handle('net:readJson', async (_e, relativePath) => {
+    console.log(`[IPC net:readJson] request for: "${relativePath}"`);
+    const result = ns.readJson(relativePath);
+    if (result === null) {
+        console.log(`[IPC net:readJson] "${relativePath}" returned null`);
+    }
+    else {
+        const type = typeof result;
+        const isArr = Array.isArray(result);
+        console.log(`[IPC net:readJson] "${relativePath}" OK — type=${type} isArray=${isArr}`);
+    }
+    return result;
 });
 electron_1.ipcMain.handle('net:writeJson', (_e, relativePath, data) => {
     return ns.writeJson(relativePath, data);
@@ -338,6 +407,110 @@ electron_1.ipcMain.handle('net:deleteFile', (_e, relativePath) => {
 electron_1.ipcMain.handle('net:isAvailable', () => ns.isNetworkAvailable());
 electron_1.ipcMain.handle('net:getBasePath', () => ns.getBasePath());
 electron_1.ipcMain.handle('net:setBasePath', (_e, path) => { ns.setBasePath(path); return true; });
+electron_1.ipcMain.handle('net:writeRawFile', (_e, relativePath, base64Data) => {
+    return ns.writeRawFile(relativePath, base64Data);
+});
+electron_1.ipcMain.handle('net:readRawFile', (_e, relativePath) => {
+    return ns.readRawFile(relativePath);
+});
+// ── Wissensdatenbank IPC (dedicated handlers for performance) ─────────────────
+let _wbCache = null;
+function loadWB() {
+    if (_wbCache)
+        return _wbCache;
+    // Try both paths
+    const data = ns.readJson('knowledge_base/wissensdatenbank.json')
+        ?? ns.readJson('wissensdatenbank.json');
+    if (data) {
+        _wbCache = data;
+        console.log('[WB] Loaded wissensdatenbank.json into cache');
+    }
+    return data;
+}
+electron_1.ipcMain.handle('wb:get-categories', async () => {
+    const data = loadWB();
+    if (!data?.categories)
+        return [];
+    const cats = data.categories;
+    return cats.map(c => ({
+        id: c.id, name: c.name, icon: c.icon,
+        articleCount: c.subcategories.reduce((s, sc) => s + (sc.articles?.length ?? 0), 0),
+        subcategories: c.subcategories.map(sc => ({ id: sc.id, name: sc.name, articleCount: sc.articles?.length ?? 0 })),
+    }));
+});
+electron_1.ipcMain.handle('wb:get-articles', async (_e, subcategoryId) => {
+    const data = loadWB();
+    if (!data?.categories)
+        return [];
+    for (const cat of data.categories) {
+        for (const sc of cat.subcategories) {
+            if (sc.id === subcategoryId)
+                return sc.articles.map(a => ({ id: a.id, title: a.title, description: a.description, tags: a.tags }));
+        }
+    }
+    return [];
+});
+electron_1.ipcMain.handle('wb:get-article', async (_e, articleId) => {
+    const data = loadWB();
+    if (!data?.categories)
+        return null;
+    for (const cat of data.categories) {
+        for (const sc of cat.subcategories) {
+            for (const a of sc.articles) {
+                if (a.id === articleId)
+                    return a;
+            }
+        }
+    }
+    return null;
+});
+electron_1.ipcMain.handle('wb:search', async (_e, query) => {
+    const data = loadWB();
+    if (!data?.categories || !query || query.length < 2)
+        return [];
+    const q = query.toLowerCase();
+    const results = [];
+    for (const cat of data.categories) {
+        for (const sc of cat.subcategories) {
+            for (const a of sc.articles) {
+                const match = a.title.toLowerCase().includes(q)
+                    || a.description.toLowerCase().includes(q)
+                    || a.tags.some(t => t.toLowerCase().includes(q))
+                    || a.steps?.some(s => s.content.toLowerCase().includes(q));
+                if (match) {
+                    results.push({ id: a.id, title: a.title, description: a.description, categoryName: cat.name, subcategoryName: sc.name, tags: a.tags });
+                    if (results.length >= 50)
+                        return results;
+                }
+            }
+        }
+    }
+    return results;
+});
+electron_1.ipcMain.handle('wb:ensure-generated', async () => {
+    // Check if wissensdatenbank.json exists and is large enough
+    const exists1 = ns.fileExists('knowledge_base/wissensdatenbank.json');
+    const exists2 = ns.fileExists('wissensdatenbank.json');
+    if (exists1 || exists2) {
+        console.log('[WB] wissensdatenbank.json already exists');
+        return { exists: true, generated: false };
+    }
+    // Generate it
+    try {
+        const { generateWissensdatenbank } = require('./wissensdatenbankGenerator');
+        const wb = generateWissensdatenbank();
+        const wrote = ns.writeJson('knowledge_base/wissensdatenbank.json', wb);
+        if (wrote) {
+            _wbCache = wb;
+            console.log('[WB] Generated and saved wissensdatenbank.json');
+            return { exists: true, generated: true };
+        }
+    }
+    catch (err) {
+        console.error('[WB] Generation failed:', err);
+    }
+    return { exists: false, generated: false };
+});
 // System info
 electron_1.ipcMain.handle('sys:getWindowsUsername', () => (0, os_1.userInfo)().username);
 electron_1.ipcMain.handle('sys:getHostname', () => (0, os_1.hostname)());
@@ -371,29 +544,146 @@ electron_1.ipcMain.on('window:maximize', () => {
         mainWindow?.maximize();
 });
 electron_1.ipcMain.on('window:close', () => mainWindow?.close());
-// ── E-Mail via nodemailer ─────────────────────────────────────────────────────
+// ── E-Mail via Outlook COM / PowerShell / Nodemailer ──────────────────────────
 electron_1.ipcMain.handle('mail:sendRaw', async (_e, opts) => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const nodemailer = require('nodemailer');
-    const transportOpts = {
-        host: opts.smtp,
-        port: opts.port,
-        secure: opts.port === 465, // true only for implicit TLS (port 465)
-        requireTLS: opts.useTls !== false && opts.port !== 465, // STARTTLS on 587
-        tls: { rejectUnauthorized: false },
-    };
-    // Only add auth when credentials are provided (relay mode = no auth needed)
-    if (opts.user && opts.pass) {
-        transportOpts.auth = { user: opts.user, pass: opts.pass };
+    const method = opts.method ?? 'outlook';
+    console.log(`[mail:sendRaw] method=${method} to=${opts.to} subject="${opts.subject?.slice(0, 40)}"`);
+    // ── Outlook COM via VBScript (like SKF Protokoll Generator — no password needed) ──
+    if (method === 'outlook') {
+        try {
+            const { writeFileSync, unlinkSync } = require('fs');
+            const { tmpdir } = require('os');
+            const { join: pjoin } = require('path');
+            const { execSync } = require('child_process');
+            const safeTo = opts.to.replace(/"/g, '');
+            const safeSubject = opts.subject.replace(/"/g, '');
+            const safeBody = opts.body
+                .replace(/"/g, '')
+                .replace(/\r\n/g, '\n')
+                .replace(/\n/g, '" & Chr(10) & "')
+                .replace(/\r/g, '');
+            const vbsLines = [
+                'Set objOutlook = CreateObject("Outlook.Application")',
+                'Set objMail = objOutlook.CreateItem(0)',
+                'With objMail',
+                `    .To = "${safeTo}"`,
+                `    .Subject = "${safeSubject}"`,
+                `    .Body = "${safeBody}"`,
+                '    .Send',
+                'End With',
+            ];
+            const vbsContent = vbsLines.join('\r\n');
+            const vbsPath = pjoin(tmpdir(), `it_admin_mail_${Date.now()}.vbs`);
+            console.log(`[mail:sendRaw][outlook] Writing VBS to: ${vbsPath}`);
+            writeFileSync(vbsPath, vbsContent, 'utf-8');
+            try {
+                const output = execSync(`cscript //nologo "${vbsPath}"`, { timeout: 30000, encoding: 'utf-8', windowsHide: true });
+                console.log(`[mail:sendRaw][outlook] cscript output: ${output.trim()}`);
+                return { success: true, method: 'outlook' };
+            }
+            catch (execErr) {
+                const e = execErr;
+                const errMsg = e.stderr || e.stdout || e.message || 'Outlook-Fehler';
+                console.error(`[mail:sendRaw][outlook] cscript error:`, errMsg);
+                // Don't return error yet — fall through to SMTP fallback below
+                console.log('[mail:sendRaw][outlook] Outlook failed, falling back to SMTP...');
+            }
+            finally {
+                try {
+                    unlinkSync(vbsPath);
+                }
+                catch { /* ignore */ }
+            }
+        }
+        catch (err) {
+            console.error('[mail:sendRaw][outlook] exception:', err);
+        }
+        // Fall through to PowerShell/Nodemailer as fallback
     }
-    const transporter = nodemailer.createTransport(transportOpts);
-    await transporter.sendMail({
-        from: opts.from || opts.user || opts.to,
-        to: opts.to,
-        subject: opts.subject,
-        [opts.html ? 'html' : 'text']: opts.body,
-    });
-    return true;
+    // ── PowerShell .NET SmtpClient (uses Windows credentials automatically) ─────
+    if (method === 'powershell') {
+        try {
+            const safeFrom = (opts.from || opts.to).replace(/'/g, "''");
+            const safeTo = opts.to.replace(/'/g, "''");
+            const safeSubject = opts.subject.replace(/'/g, "''");
+            const safeBody = opts.body.replace(/'/g, "''");
+            const safeSmtp = opts.smtp.replace(/'/g, "''");
+            const enableSsl = opts.useTls !== false ? '$true' : '$false';
+            const ps = [
+                `$ErrorActionPreference = 'Stop'`,
+                `try {`,
+                `  $smtp = New-Object System.Net.Mail.SmtpClient('${safeSmtp}', ${opts.port})`,
+                `  $smtp.EnableSsl = ${enableSsl}`,
+                `  $smtp.UseDefaultCredentials = $true`,
+                `  $mail = New-Object System.Net.Mail.MailMessage`,
+                `  $mail.From = '${safeFrom}'`,
+                `  $mail.To.Add('${safeTo}')`,
+                `  $mail.Subject = '${safeSubject}'`,
+                `  $mail.Body = '${safeBody}'`,
+                `  $mail.IsBodyHtml = $${opts.html ? 'true' : 'false'}`,
+                `  $mail.SubjectEncoding = [System.Text.Encoding]::UTF8`,
+                `  $mail.BodyEncoding = [System.Text.Encoding]::UTF8`,
+                `  $smtp.Send($mail)`,
+                `  $smtp.Dispose()`,
+                `  Write-Output 'OK'`,
+                `} catch {`,
+                `  Write-Output "ERR:$($_.Exception.Message)"`,
+                `}`,
+            ].join('\n');
+            console.log('[mail:sendRaw][ps] sending via .NET SmtpClient (UseDefaultCredentials=true)');
+            const res = await (0, powerShellRunner_1.runPowerShell)(ps, 30000);
+            console.log('[mail:sendRaw][ps] stdout=%s stderr=%s exit=%d', res.stdout.trim(), res.stderr.trim(), res.exitCode);
+            if (res.stdout.trim() === 'OK')
+                return { success: true };
+            const errMsg = res.stdout.trim().replace(/^ERR:/, '') || res.stderr.trim() || 'Unbekannter Fehler';
+            return { success: false, error: `PowerShell SMTP: ${errMsg}` };
+        }
+        catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            console.error('[mail:sendRaw][ps] exception:', msg);
+            return { success: false, error: `PowerShell SMTP Exception: ${msg}` };
+        }
+    }
+    // ── Nodemailer ────────────────────────────────────────────────────────────────
+    try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const nodemailer = require('nodemailer');
+        const transportOpts = {
+            host: opts.smtp,
+            port: opts.port,
+            secure: opts.port === 465, // implicit TLS only on port 465
+            requireTLS: opts.useTls !== false,
+            tls: {
+                rejectUnauthorized: false, // accept self-signed / internal certs
+            },
+        };
+        // No auth object = anonymous relay (internal Exchange / Office365 with IP whitelist)
+        if (opts.user && opts.pass) {
+            transportOpts.auth = { user: opts.user, pass: opts.pass };
+        }
+        console.log('[mail:sendRaw][nodemailer] config:', JSON.stringify({ ...transportOpts, auth: transportOpts.auth ? '***' : undefined }));
+        const transporter = nodemailer.createTransport(transportOpts);
+        const info = await transporter.sendMail({
+            from: opts.from || opts.user || opts.to,
+            to: opts.to,
+            subject: opts.subject,
+            [opts.html ? 'html' : 'text']: opts.body,
+        });
+        console.log('[mail:sendRaw][nodemailer] OK messageId=%s response=%s', info.messageId, info.response);
+        return { success: true };
+    }
+    catch (err) {
+        const e = err;
+        const detail = [
+            e.message,
+            e.response ? `SMTP-Response: ${e.response}` : '',
+            e.responseCode ? `Code: ${e.responseCode}` : '',
+            e.code ? `Fehlercode: ${e.code}` : '',
+            e.command ? `Befehl: ${e.command}` : '',
+        ].filter(Boolean).join(' | ');
+        console.error('[mail:sendRaw][nodemailer] ERROR:', detail);
+        return { success: false, error: detail };
+    }
 });
 // ── Heartbeat (crash detection) ───────────────────────────────────────────────
 let _heartbeatUser = null;

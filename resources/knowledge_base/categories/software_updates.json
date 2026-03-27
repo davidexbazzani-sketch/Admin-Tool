@@ -1,0 +1,1063 @@
+[
+  {
+    "id": "PROB-SW-001",
+    "category": "Software & Updates",
+    "title": "MSI-Installation fehlgeschlagen - allgemeiner Fehler",
+    "keywords": ["MSI", "Installation", "fehlgeschlagen", "Fehler", "Windows Installer", "Setup", "Paket"],
+    "extendedKeywords": ["MSI Installation fehlgeschlagen", "MSI Fehler beim Installieren", "Windows Installer Fehler", "Setup bricht ab", "Programm lässt sich nicht installieren MSI", "MSI Paket fehlerhaft", "Installation bricht ab MSI", "MSI Installer Fehler", "kann Programm nicht installieren MSI Fehler", "MSI Setup schlägt fehl", "Windows Installer funktioniert nicht", "MSI Datei lässt sich nicht ausführen", "Installationsfehler MSI Paket", "MSI Error", "Setup Wizard bricht ab", "Installation abgebrochen", "MSI Datei funktioniert nicht", "Installer macht Fehler", "kann Software nicht installieren", "Programm Installation bricht ab", "Setup Error"],
+    "typos": ["MSI Instalation", "Instalation", "fehlgeschlagn", "Instlation", "MSI Fehler"],
+    "symptoms": ["MSI-Installation bricht mit Fehlermeldung ab", "Windows Installer zeigt Fehlerdialog", "Setup startet aber beendet sich mit Fehler"],
+    "quickCheck": "Welcher Fehlercode wird bei der fehlgeschlagenen Installation angezeigt?",
+    "solutions": [
+      "Installation als Administrator ausführen (Rechtsklick > Als Administrator ausführen)",
+      "Windows Installer Dienst neu starten: services.msc > Windows Installer > Neu starten",
+      "Alle anderen Programme schließen vor der Installation",
+      "MSI-Datei in lokalen Ordner kopieren (nicht von Netzlaufwerk installieren)",
+      "Temporäre Dateien löschen: %TEMP% leeren",
+      "Windows Installer reparieren: msiexec /unregserver dann msiexec /regserver"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_msirepair", "label": "MSI reparieren", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["MSI install failed", "Windows Installer error", "MSI Fehler"],
+    "followUpQuestions": [
+      {
+        "question": "Wird ein bestimmter Fehlercode angezeigt (z.B. 1603, 1618, 2502)?",
+        "options": ["Ja, Fehlercode sichtbar", "Nein, nur allgemeine Fehlermeldung", "Installation bricht ohne Meldung ab"],
+        "narrows": "Ob spezifische Lösung für den Fehlercode möglich"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-002", "PROB-SW-004", "PROB-SW-009"]
+  },
+  {
+    "id": "PROB-SW-002",
+    "category": "Software & Updates",
+    "title": "Installation fehlgeschlagen - Zugriff verweigert",
+    "keywords": ["Installation", "Zugriff verweigert", "Berechtigung", "Administrator", "UAC", "Rechte", "blockiert"],
+    "extendedKeywords": ["Installation Zugriff verweigert", "kann nicht installieren Zugriff verweigert", "keine Berechtigung zum Installieren", "Installation als Admin", "Administratorrechte für Installation", "Zugriff verweigert bei Setup", "darf nicht installieren", "Installation blockiert", "keine Rechte zum Installieren", "UAC blockiert Installation", "Benutzer darf keine Software installieren", "Zugriff auf Installationsordner verweigert", "Setup Zugriff verweigert", "Installation fehlgeschlagen Berechtigung", "Admin Rechte fehlen für Installation", "Installation verweigert", "nicht genug Rechte"],
+    "typos": ["Zugrif", "verweigrt", "Berehctigung", "Adminstartor", "Instalation"],
+    "symptoms": ["Fehlermeldung 'Zugriff verweigert' bei Installation", "Setup fordert Administratorrechte", "Installation wird durch Gruppenrichtlinie blockiert"],
+    "quickCheck": "Haben Sie Administratorrechte auf dem Computer?",
+    "solutions": [
+      "Rechtsklick auf Installer > 'Als Administrator ausführen'",
+      "Prüfen ob Benutzer lokale Adminrechte hat",
+      "Installation in einem Ordner versuchen auf den Schreibrechte bestehen",
+      "Antivirensoftware temporär deaktivieren",
+      "Bei Firmen-PC: IT-Admin kontaktieren für Berechtigung",
+      "UAC-Einstellungen prüfen: Systemsteuerung > Benutzerkontensteuerung"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 2, "effectiveness": 40},
+      {"skillId": "rd_appcache_msirepair", "label": "MSI reparieren", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["access denied installation", "permission denied install", "Berechtigung Installation"],
+    "followUpQuestions": [
+      {
+        "question": "Ist es ein Firmen-PC mit verwalteten Richtlinien?",
+        "options": ["Ja, Firmen-PC", "Nein, privater PC", "Weiß ich nicht"],
+        "narrows": "Ob Gruppenrichtlinie oder fehlende Rechte"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-001", "PROB-SW-003"]
+  },
+  {
+    "id": "PROB-SW-003",
+    "category": "Software & Updates",
+    "title": "Installation fehlgeschlagen - fehlende Abhängigkeiten",
+    "keywords": ["Abhängigkeit", "Dependency", "fehlt", "DLL", "Framework", "Voraussetzung", "Prerequisite"],
+    "extendedKeywords": ["fehlende Abhängigkeit Installation", "DLL fehlt bei Installation", "Framework fehlt für Programm", "Voraussetzung nicht erfüllt", "Software braucht .NET", "VC++ Runtime fehlt", "Prerequisite nicht installiert", "abhängige Software fehlt", "Installation benötigt Komponente", "Programm braucht Java", "fehlende Komponente Installation", "DLL nicht gefunden Installation", "Voraussetzung für Installation", "Runtime fehlt für Programm", "benötigte Software nicht installiert", "Dependency fehlt"],
+    "typos": ["Abhängigkiet", "Dependecy", "Vorraussetzung", "DLL feheld"],
+    "symptoms": ["Installation bricht ab mit Hinweis auf fehlende Komponente", "Fehlermeldung nennt fehlende DLL oder Framework", "Setup fordert Installation einer Voraussetzung"],
+    "quickCheck": "Welche Komponente oder DLL wird als fehlend gemeldet?",
+    "solutions": [
+      "Fehlende Komponente zuerst installieren (.NET, VC++, Java etc.)",
+      "Visual C++ Redistributable Pakete installieren (alle Versionen)",
+      ".NET Framework in der benötigten Version installieren",
+      "Java in der geforderten Version installieren",
+      "DirectX-Laufzeitumgebung aktualisieren",
+      "Windows Update ausführen für fehlende Systemkomponenten"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_software_wingetlist", "label": "Winget-Liste", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_swinstall_wingetinstall", "label": "Software installieren", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["missing dependency", "DLL missing install", "Abhängigkeit Installation"],
+    "followUpQuestions": [
+      {
+        "question": "Welche Komponente wird als fehlend angezeigt?",
+        "options": [".NET Framework", "Visual C++ Runtime", "Java", "Andere/Unbekannt"],
+        "narrows": "Welche Voraussetzung installiert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-001", "PROB-SW-014", "PROB-SW-016"]
+  },
+  {
+    "id": "PROB-SW-004",
+    "category": "Software & Updates",
+    "title": "Installation fehlgeschlagen - nicht genug Speicherplatz",
+    "keywords": ["Speicherplatz", "Installation", "Platz", "voll", "Festplatte", "Disk", "kein Platz"],
+    "extendedKeywords": ["nicht genug Speicherplatz für Installation", "Festplatte voll Installation", "kein Platz für Programm", "Installation braucht mehr Platz", "Disk full Installation", "Speicher reicht nicht für Installation", "kann nicht installieren Platz voll", "zu wenig Platz auf C", "Laufwerk voll kann nicht installieren", "nicht genügend Speicher für Setup", "Installation Platzproblem", "Programm braucht mehr Speicher", "Festplatte zu voll zum Installieren", "Speicherplatz freimachen für Installation"],
+    "typos": ["Speicherplaz", "Instalation", "Festplatte vol", "Speicherplazt"],
+    "symptoms": ["Installation bricht ab mit Hinweis auf zu wenig Speicherplatz", "Fehlermeldung: Nicht genügend Speicherplatz", "Setup zeigt 0 Bytes frei"],
+    "quickCheck": "Wie viel freier Speicherplatz ist auf dem Ziellaufwerk verfügbar?",
+    "solutions": [
+      "Datenträgerbereinigung ausführen",
+      "Temporäre Dateien löschen: %TEMP% leeren",
+      "Papierkorb leeren",
+      "Nicht benötigte Programme deinstallieren",
+      "Installation auf anderes Laufwerk mit mehr Platz umleiten",
+      "Windows.old Ordner löschen falls vorhanden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz anzeigen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["disk full install", "not enough space", "Platz Installation"],
+    "followUpQuestions": [
+      {
+        "question": "Auf welchem Laufwerk soll installiert werden?",
+        "options": ["C: (Systemlaufwerk)", "Anderes Laufwerk", "Weiß ich nicht"],
+        "narrows": "Ob Speicherbereinigung oder Installationspfad anpassen"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-001"]
+  },
+  {
+    "id": "PROB-SW-005",
+    "category": "Software & Updates",
+    "title": "Windows Update fehlgeschlagen",
+    "keywords": ["Windows Update", "fehlgeschlagen", "Fehler", "Update", "KB", "Patch", "Aktualisierung"],
+    "extendedKeywords": ["Windows Update funktioniert nicht", "Windows Update fehlgeschlagen", "Update lässt sich nicht installieren", "Windows Update Fehler", "Windows Update bleibt hängen", "Windows Update bricht ab", "Windows Updates laden nicht", "Fehler bei Windows Update", "Windows Update geht nicht", "kann Windows nicht aktualisieren", "Windows Update Probleme", "Update Fehlercode", "Windows Update dauert ewig", "Windows Update startet nicht", "Windows Update hängt fest", "Windows Update Error", "kumulative Update fehlgeschlagen", "Sicherheitsupdate schlägt fehl", "Windows Update Endlosschleife", "Windows Update bricht bei Prozent ab"],
+    "typos": ["Windwos Update", "Windwos Upate", "Updte", "fehlgeschlagn", "Windows Uptade"],
+    "symptoms": ["Windows Update zeigt Fehlercode", "Update bleibt bei bestimmtem Prozentsatz stehen", "Update wird heruntergeladen aber Installation schlägt fehl"],
+    "quickCheck": "Welcher Fehlercode wird beim Windows Update angezeigt?",
+    "solutions": [
+      "Windows Update Problembehandlung ausführen: Einstellungen > System > Problembehandlung",
+      "Windows Update Cache leeren: net stop wuauserv, SoftwareDistribution umbenennen, net start wuauserv",
+      "DISM /Online /Cleanup-Image /RestoreHealth ausführen",
+      "sfc /scannow ausführen",
+      "Update manuell vom Microsoft Update Catalog herunterladen",
+      "Genügend Speicherplatz auf C: sicherstellen (mindestens 10 GB frei)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste", "priority": 3, "effectiveness": 35},
+      {"skillId": "rd_disk_diskspace", "label": "Speicherplatz prüfen", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["Windows Update failed", "update error code", "Windows Update Fehler"],
+    "followUpQuestions": [
+      {
+        "question": "Wird ein spezifischer Fehlercode angezeigt (z.B. 0x80070005, 0x800F0922)?",
+        "options": ["Ja, Fehlercode vorhanden", "Nein, nur allgemeine Meldung", "Update hängt fest"],
+        "narrows": "Ob spezifische Lösung für den Fehlercode verfügbar"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-006", "PROB-SW-007", "PROB-SW-008"]
+  },
+  {
+    "id": "PROB-SW-006",
+    "category": "Software & Updates",
+    "title": "Office Update fehlgeschlagen",
+    "keywords": ["Office", "Update", "fehlgeschlagen", "Microsoft 365", "Word", "Excel", "Outlook", "Aktualisierung"],
+    "extendedKeywords": ["Office Update funktioniert nicht", "Office Update fehlgeschlagen", "Microsoft 365 Update Fehler", "Office lässt sich nicht aktualisieren", "Office Update hängt", "Office Update Fehler", "Word Update fehlgeschlagen", "Excel Update Problem", "Office aktualisieren geht nicht", "Microsoft 365 Update Problem", "Office Update bricht ab", "Office Version veraltet", "Office Click-to-Run Update Fehler", "Office Update dauert ewig", "Office Update startet nicht", "Office Update Fehlercode"],
+    "typos": ["Ofice", "Updtae", "Microsoft365", "fehlgeschlagn", "Uptade"],
+    "symptoms": ["Office-Update schlägt mit Fehlermeldung fehl", "Office-Apps zeigen veraltete Version", "Click-to-Run Update stoppt bei Prozent"],
+    "quickCheck": "Welche Office-Version ist installiert (Click-to-Run oder MSI)?",
+    "solutions": [
+      "Office-Update manuell starten: Beliebige Office-App > Datei > Konto > Updateoptionen > Jetzt aktualisieren",
+      "Office Online-Reparatur durchführen: Einstellungen > Apps > Microsoft 365 > Ändern > Online-Reparatur",
+      "Office Click-to-Run Dienst neu starten",
+      "Internetverbindung prüfen und Proxy-Einstellungen",
+      "Office Cache leeren: %localappdata%\\Microsoft\\Office\\16.0\\OfficeFileCache",
+      "Office deinstallieren und neu installieren mit dem Microsoft Support Tool"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_appcache_msirepair", "label": "MSI reparieren", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["Office update failed", "Microsoft 365 update error", "Office Update"],
+    "followUpQuestions": [
+      {
+        "question": "Ist es eine Click-to-Run oder MSI-basierte Office-Installation?",
+        "options": ["Click-to-Run (Microsoft 365)", "MSI-Installation", "Weiß ich nicht"],
+        "narrows": "Welche Update-Methode verwendet wird"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-005", "PROB-SW-007"]
+  },
+  {
+    "id": "PROB-SW-007",
+    "category": "Software & Updates",
+    "title": "Store App Update fehlgeschlagen",
+    "keywords": ["Store", "App", "Update", "Microsoft Store", "fehlgeschlagen", "Aktualisierung", "Download"],
+    "extendedKeywords": ["Store App Update geht nicht", "Microsoft Store Update Fehler", "App Update fehlgeschlagen", "Store App aktualisieren funktioniert nicht", "Store Update hängt", "App im Store updaten geht nicht", "Microsoft Store Update Problem", "Store App Download fehlgeschlagen", "App Update bricht ab", "Store Downloads funktionieren nicht", "App lässt sich nicht updaten", "Store Update Fehlercode", "Store App veraltet"],
+    "typos": ["Stor", "Apo", "Updtae", "Microsoft Stor", "fehlgeschlagn"],
+    "symptoms": ["Store-App Updates schlagen mit Fehlercode fehl", "Downloads im Store bleiben bei 0% stehen", "Store zeigt 'Fehler beim Update'"],
+    "quickCheck": "Funktioniert der Microsoft Store grundsätzlich?",
+    "solutions": [
+      "Microsoft Store Cache zurücksetzen: wsreset.exe ausführen",
+      "Store App zurücksetzen: Einstellungen > Apps > Microsoft Store > Erweiterte Optionen > Zurücksetzen",
+      "Windows Store Apps Problembehandlung ausführen",
+      "Microsoft-Konto ab- und wieder anmelden im Store",
+      "Internet-/Proxy-Einstellungen prüfen",
+      "Store neu registrieren über PowerShell"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_storereset", "label": "Store zurücksetzen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_software_storeapps", "label": "Store-Apps anzeigen", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["Store app update failed", "Microsoft Store error", "Store Update"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft das Problem alle Apps oder nur eine bestimmte?",
+        "options": ["Alle Apps", "Nur eine bestimmte App", "Mehrere aber nicht alle"],
+        "narrows": "Ob Store-Problem oder app-spezifisch"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-005", "PROB-SW-020", "PROB-SW-021"]
+  },
+  {
+    "id": "PROB-SW-008",
+    "category": "Software & Updates",
+    "title": "Windows Update Fehlercodes - häufige Codes",
+    "keywords": ["Windows Update", "Fehlercode", "Error Code", "0x80070005", "0x800F0922", "0x80073712", "0x80240034"],
+    "extendedKeywords": ["Windows Update Fehlercode nachschlagen", "Windows Update Error Code", "Update Fehlercode bedeutung", "Windows Update Fehlercode beheben", "Fehlercode bei Windows Update", "was bedeutet Fehlercode Windows Update", "Update Error Code lösen", "Windows Update bestimmter Fehlercode", "Fehlercode 0x bei Update", "Windows Update Fehlercode Lösung", "Update fehlgeschlagen mit Code"],
+    "typos": ["Fehlercod", "Error Cod", "Windwos Update", "Fehlerode"],
+    "symptoms": ["Windows Update zeigt hexadezimalen Fehlercode", "Update fehlgeschlagen mit Fehler 0x...", "Wiederholter Fehlercode bei verschiedenen Updates"],
+    "quickCheck": "Welcher Fehlercode wird genau angezeigt?",
+    "solutions": [
+      "0x80070005: Zugriff verweigert - Als Admin ausführen, SFC und DISM ausführen",
+      "0x800F0922: VPN trennen, Systempartition prüfen, .NET Framework reparieren",
+      "0x80073712: Systemdateien beschädigt - DISM /RestoreHealth dann SFC /scannow",
+      "0x80240034: Update manuell aus dem Microsoft Update Catalog herunterladen",
+      "Allgemein: Windows Update Problembehandlung ausführen",
+      "Windows Update Komponenten zurücksetzen (SoftwareDistribution und catroot2)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste", "priority": 3, "effectiveness": 30}
+    ],
+    "hiddenTriggers": ["update error code 0x", "Windows Update error number"],
+    "followUpQuestions": [
+      {
+        "question": "Können Sie den exakten Fehlercode nennen (beginnt meist mit 0x)?",
+        "options": ["Ja, Code ist bekannt", "Nein, nur allgemeine Meldung", "Fehler ist verschwunden"],
+        "narrows": "Ob spezifische Lösung anwendbar"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-005", "PROB-SW-006"]
+  },
+  {
+    "id": "PROB-SW-009",
+    "category": "Software & Updates",
+    "title": "MSI-Paket reparieren",
+    "keywords": ["MSI", "reparieren", "Repair", "Windows Installer", "Wiederherstellung", "Fix"],
+    "extendedKeywords": ["MSI reparieren", "Windows Installer reparieren", "MSI Paket reparieren", "Installation reparieren", "MSI Repair", "Programm reparieren MSI", "MSI Installation wiederherstellen", "Windows Installer Service reparieren", "MSI Reparatur", "beschädigtes MSI Paket", "MSI Installer reparieren", "Programm reparieren über Installer", "Software reparieren Windows"],
+    "typos": ["MSI repariren", "Repartur", "Repeir", "MSI reperieren"],
+    "symptoms": ["Programm startet nicht mehr richtig", "Fehlermeldung beim Start einer MSI-installierten Software", "Programm-Features fehlen nach Update"],
+    "quickCheck": "Kann das Programm über Programme und Features > Ändern repariert werden?",
+    "solutions": [
+      "Programme und Features > Programm auswählen > Ändern > Reparieren",
+      "MSI-Datei mit /repair Schalter ausführen: msiexec /fa {ProductCode}",
+      "Windows Installer Dienst neu starten",
+      "MSI über Admin Tool reparieren",
+      "Programm deinstallieren und sauber neu installieren",
+      "Microsoft Program Install and Uninstall Troubleshooter verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_msirepair", "label": "MSI reparieren", "priority": 1, "effectiveness": 90},
+      {"skillId": "rd_software_swlist", "label": "Software-Liste", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["repair MSI", "fix MSI package", "MSI reparieren"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie die Original-MSI-Datei noch?",
+        "options": ["Ja", "Nein", "Weiß nicht wo"],
+        "narrows": "Ob MSI-Reparatur oder Neuinstallation nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-001", "PROB-SW-010"]
+  },
+  {
+    "id": "PROB-SW-010",
+    "category": "Software & Updates",
+    "title": "Deinstallation hängt - Programm lässt sich nicht entfernen",
+    "keywords": ["Deinstallation", "hängt", "entfernen", "löschen", "Programm", "steckengeblieben", "Uninstall"],
+    "extendedKeywords": ["Programm lässt sich nicht deinstallieren", "Deinstallation hängt", "Software lässt sich nicht entfernen", "Deinstallation bricht ab", "Programm kann nicht deinstalliert werden", "Uninstaller funktioniert nicht", "Deinstallation friert ein", "Programm entfernen geht nicht", "Software deinstallieren hängt", "Deinstallation Fehler", "Programm deinstallieren geht nicht", "Uninstall schlägt fehl", "Deinstallation steckt fest", "kann Programm nicht löschen", "Deinstallation ohne Reaktion"],
+    "typos": ["Deinstalation", "Deinstallaton", "deinstalieren", "Uninstal"],
+    "symptoms": ["Deinstallation bleibt bei Prozentsatz stehen", "Deinstallation bricht mit Fehler ab", "Programm erscheint nach Deinstallation immer noch in der Liste"],
+    "quickCheck": "Friert die Deinstallation ein oder kommt eine Fehlermeldung?",
+    "solutions": [
+      "PC neu starten und Deinstallation erneut versuchen",
+      "Microsoft Program Install and Uninstall Troubleshooter verwenden",
+      "Über Einstellungen > Apps deinstallieren statt über Systemsteuerung",
+      "Im abgesicherten Modus deinstallieren",
+      "MSI über msiexec /x {ProductCode} erzwingen",
+      "Revo Uninstaller oder ähnliches Tool für erzwungene Deinstallation verwenden"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_appcache_msirepair", "label": "MSI reparieren", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["uninstall stuck", "cannot remove program", "Deinstallation hängt"],
+    "followUpQuestions": [
+      {
+        "question": "Was passiert beim Versuch der Deinstallation?",
+        "options": ["Hängt/Friert ein", "Fehlermeldung", "Programm taucht nach Deinstallation wieder auf"],
+        "narrows": "Ob Prozess-Problem oder Registry-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-011", "PROB-SW-027", "PROB-SW-028"]
+  },
+  {
+    "id": "PROB-SW-011",
+    "category": "Software & Updates",
+    "title": "Windows Installer Dienst Problem",
+    "keywords": ["Windows Installer", "Dienst", "Service", "msiexec", "MSI", "Fehler", "nicht verfügbar"],
+    "extendedKeywords": ["Windows Installer Dienst funktioniert nicht", "Windows Installer Service Fehler", "msiexec funktioniert nicht", "Windows Installer Dienst nicht verfügbar", "Windows Installer gestartet und gestoppt", "Windows Installer Dienst neu starten", "Windows Installer reparieren", "Windows Installer nicht erreichbar", "MSI Dienst Problem", "Windows Installer Dienst startet nicht", "Fehler beim Zugriff auf Windows Installer", "Windows Installer konnte nicht gestartet werden"],
+    "typos": ["Windwos Installer", "Dienst", "Servcie", "msiexce"],
+    "symptoms": ["Meldung: Windows Installer Dienst konnte nicht erreicht werden", "MSI-Installationen schlagen generell fehl", "Dienst startet und stoppt sofort wieder"],
+    "quickCheck": "Läuft der Windows Installer Dienst in services.msc?",
+    "solutions": [
+      "Windows Installer Dienst neu starten: services.msc > Windows Installer",
+      "Windows Installer neu registrieren: msiexec /unregserver dann msiexec /regserver",
+      "SFC /scannow ausführen um beschädigte Systemdateien zu reparieren",
+      "Windows Installer Dienst auf 'Manuell' setzen (Standardeinstellung)",
+      "DISM /Online /Cleanup-Image /RestoreHealth ausführen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_msirepair", "label": "MSI reparieren", "priority": 1, "effectiveness": 85}
+    ],
+    "hiddenTriggers": ["Windows Installer service error", "msiexec not working"],
+    "followUpQuestions": [
+      {
+        "question": "Betrifft das Problem alle MSI-Installationen oder nur eine bestimmte?",
+        "options": ["Alle MSI-Installationen", "Nur eine bestimmte", "Weiß ich nicht"],
+        "narrows": "Ob allgemeines Dienst-Problem oder spezifisches MSI-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-001", "PROB-SW-009"]
+  },
+  {
+    "id": "PROB-SW-012",
+    "category": "Software & Updates",
+    "title": ".NET Framework fehlt",
+    "keywords": [".NET", "Framework", "fehlt", "Runtime", "Installation", "Version", "Microsoft"],
+    "extendedKeywords": [".NET Framework fehlt", ".NET nicht installiert", "Programm braucht .NET", ".NET Framework installieren", ".NET Fehler", "benötigt .NET Framework", ".NET Runtime fehlt", ".NET Version fehlt", "Programm startet nicht .NET fehlt", ".NET Framework herunterladen", ".NET nicht gefunden", "dotnet fehlt", ".NET Core fehlt", "Anwendung benötigt .NET", ".NET Framework muss installiert werden"],
+    "typos": [".Net", "dotnet", ".NET Framwork", ".NET Framewok", ".NET Fraimwork"],
+    "symptoms": ["Fehlermeldung: .NET Framework ist nicht installiert", "Programm startet nicht wegen fehlender .NET Version", "Installation fordert .NET Framework"],
+    "quickCheck": "Welche .NET Framework Version wird benötigt?",
+    "solutions": [
+      ".NET Framework über Windows Features aktivieren: optionalfeatures.exe",
+      ".NET Framework vom Microsoft Download Center herunterladen",
+      ".NET Framework 3.5 aktivieren für ältere Programme",
+      "Aktuelle .NET Runtime installieren",
+      "DISM zum Installieren von .NET 3.5: DISM /Online /Enable-Feature /FeatureName:NetFx3"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_swinstall_wingetinstall", "label": "Software installieren", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": [".NET missing", "dotnet framework", ".NET fehlt"],
+    "followUpQuestions": [
+      {
+        "question": "Welche .NET Version wird benötigt?",
+        "options": [".NET Framework 3.5", ".NET Framework 4.x", ".NET 6/7/8 (Core)", "Weiß ich nicht"],
+        "narrows": "Welche Version installiert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-013", "PROB-SW-014"]
+  },
+  {
+    "id": "PROB-SW-013",
+    "category": "Software & Updates",
+    "title": ".NET Framework falsche Version",
+    "keywords": [".NET", "Version", "falsch", "inkompatibel", "Konflikt", "Framework", "Kompatibilität"],
+    "extendedKeywords": [".NET Version stimmt nicht", ".NET falsche Version installiert", ".NET Version inkompatibel", "Programm braucht andere .NET Version", ".NET Versionskonflikt", "falsche .NET Framework Version", ".NET Version wechseln", ".NET Versionen nebeneinander", "mehrere .NET Versionen", "Programm funktioniert nicht wegen .NET Version", ".NET Version Kompatibilität", "brauche andere .NET Version"],
+    "typos": [".Net", "Verion", "inkompatibl", ".NET Framwork"],
+    "symptoms": ["Programm meldet falsche .NET Version", "Fehlermeldung bei Start über Framework-Version", "Programm startet nicht obwohl .NET installiert ist"],
+    "quickCheck": "Welche .NET Version ist installiert und welche wird benötigt?",
+    "solutions": [
+      "Benötigte .NET Version zusätzlich installieren (Versionen können koexistieren)",
+      "Installierte .NET Versionen prüfen: reg query 'HKLM\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP'",
+      ".NET Framework 3.5 Feature aktivieren falls benötigt",
+      "App.config der Anwendung anpassen falls möglich",
+      "Neueste .NET Runtime installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": [".NET version mismatch", "wrong .NET version", ".NET Version falsch"],
+    "followUpQuestions": [
+      {
+        "question": "Welche .NET Versionen sind bereits installiert?",
+        "options": ["Weiß ich nicht", "Nur 4.x", "Nur 3.5", "Mehrere"],
+        "narrows": "Welche Version zusätzlich installiert werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-012", "PROB-SW-014"]
+  },
+  {
+    "id": "PROB-SW-014",
+    "category": "Software & Updates",
+    "title": ".NET Framework Reparatur",
+    "keywords": [".NET", "Reparatur", "reparieren", "beschädigt", "Framework", "Repair Tool", "Fix"],
+    "extendedKeywords": [".NET reparieren", ".NET Framework beschädigt", ".NET Framework Reparatur", ".NET Fehler reparieren", ".NET Framework neu installieren", ".NET Repair Tool", ".NET Framework funktioniert nicht", ".NET reparieren Windows", "beschädigtes .NET Framework", ".NET Framework Probleme beheben", ".NET Framework zurücksetzen"],
+    "typos": [".Net", "repariren", "Reperatur", "beshedigt", ".NET Framwork"],
+    "symptoms": [".NET-abhängige Programme starten nicht", "Fehlermeldungen über beschädigte .NET Installation", ".NET Framework Updates schlagen fehl"],
+    "quickCheck": "Funktionieren alle .NET-Programme nicht oder nur bestimmte?",
+    "solutions": [
+      "Microsoft .NET Framework Repair Tool herunterladen und ausführen",
+      "SFC /scannow und DISM /RestoreHealth ausführen",
+      ".NET Framework über Windows Features deaktivieren, neu starten, wieder aktivieren",
+      ".NET Framework manuell deinstallieren und neu installieren",
+      "Windows Update ausführen für .NET Patches"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste", "priority": 2, "effectiveness": 55}
+    ],
+    "hiddenTriggers": [".NET repair", "fix .NET framework", ".NET reparieren"],
+    "followUpQuestions": [
+      {
+        "question": "Seit wann tritt das Problem auf?",
+        "options": ["Nach einem Update", "Nach einer Installation", "Plötzlich", "War schon immer so"],
+        "narrows": "Ob kürzliche Änderung das Problem verursacht hat"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-012", "PROB-SW-013"]
+  },
+  {
+    "id": "PROB-SW-015",
+    "category": "Software & Updates",
+    "title": "Java Version Problem",
+    "keywords": ["Java", "Version", "JRE", "JDK", "Runtime", "veraltet", "fehlt"],
+    "extendedKeywords": ["Java Version stimmt nicht", "Java veraltet", "Java fehlt", "Java installieren", "welche Java Version habe ich", "Java Update nötig", "Java Version prüfen", "Java Runtime fehlt", "JRE fehlt", "Programm braucht Java", "Java nicht installiert", "Java Version herausfinden", "Java funktioniert nicht", "Java aktualisieren"],
+    "typos": ["Jva", "Jawa", "Java Verion", "JRE feheld"],
+    "symptoms": ["Programm meldet fehlende oder falsche Java-Version", "Java-Anwendung startet nicht", "Veraltete Java-Version installiert"],
+    "quickCheck": "Welche Java-Version ist installiert (java -version)?",
+    "solutions": [
+      "Java Version prüfen: java -version in der Eingabeaufforderung",
+      "Aktuelle Java-Version von java.com herunterladen und installieren",
+      "Alte Java-Versionen deinstallieren vor Neuinstallation",
+      "Java Umgebungsvariable JAVA_HOME prüfen und setzen",
+      "Bei 32/64-Bit Problemen: Richtige Java-Architektur installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_software_wingetlist", "label": "Winget-Liste", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_swinstall_wingetinstall", "label": "Software installieren", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["Java version issue", "Java missing", "Java Problem"],
+    "followUpQuestions": [
+      {
+        "question": "Welches Programm benötigt Java?",
+        "options": ["Webanwendung", "Desktop-Anwendung", "Entwicklungstool", "Weiß ich nicht"],
+        "narrows": "Ob JRE oder JDK benötigt wird"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-016", "PROB-SW-017"]
+  },
+  {
+    "id": "PROB-SW-016",
+    "category": "Software & Updates",
+    "title": "Java Update Probleme",
+    "keywords": ["Java", "Update", "Aktualisierung", "fehlgeschlagen", "automatisch", "manuell"],
+    "extendedKeywords": ["Java Update funktioniert nicht", "Java Update fehlgeschlagen", "Java aktualisieren geht nicht", "Java Update Fehler", "Java lässt sich nicht updaten", "Java Update manuell", "Java Update blockiert", "Java automatisches Update deaktivieren", "Java Update hängt", "Java Update bricht ab", "Java manuell aktualisieren"],
+    "typos": ["Jva Update", "Jawa", "Updtae", "Java Uptade"],
+    "symptoms": ["Java Update schlägt fehl", "Java zeigt Update-Benachrichtigung aber Update funktioniert nicht", "Java Update bleibt hängen"],
+    "quickCheck": "Schlägt das automatische oder manuelle Java Update fehl?",
+    "solutions": [
+      "Alte Java-Version komplett deinstallieren",
+      "Neueste Java-Version manuell von java.com herunterladen und installieren",
+      "Java Cache leeren: Java Systemsteuerung > Allgemein > Temporäre Internetdateien > Einstellungen > Dateien löschen",
+      "Java offline Installer verwenden statt Online-Installer",
+      "Antivirensoftware temporär deaktivieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_swinstall_wingetinstall", "label": "Software installieren", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["Java update failed", "Java update error", "Java Update"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie Administratorrechte auf dem PC?",
+        "options": ["Ja", "Nein", "Weiß ich nicht"],
+        "narrows": "Ob Berechtigungsproblem"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-015", "PROB-SW-017"]
+  },
+  {
+    "id": "PROB-SW-017",
+    "category": "Software & Updates",
+    "title": "Java Versionskonflikte",
+    "keywords": ["Java", "Konflikt", "mehrere Versionen", "32-Bit", "64-Bit", "inkompatibel", "Architektur"],
+    "extendedKeywords": ["mehrere Java Versionen", "Java Versionskonflikt", "Java 32 und 64 Bit", "Java Konflikte", "welches Java wird verwendet", "Java Architektur Problem", "Java 32-Bit statt 64-Bit", "zwei Java Versionen installiert", "Java Versionen aufräumen", "Java Konflikt beheben", "verschiedene Java Versionen nebeneinander"],
+    "typos": ["Jva Konflikt", "Verionskonflikte", "Java Conflikt"],
+    "symptoms": ["Programm verwendet falsche Java-Version", "Fehler bei Java-Anwendung trotz installierter Java", "Konflikte zwischen verschiedenen Java-Versionen"],
+    "quickCheck": "Sind mehrere Java-Versionen installiert?",
+    "solutions": [
+      "Alle Java-Versionen in Software-Liste prüfen",
+      "Nicht benötigte Java-Versionen deinstallieren",
+      "JAVA_HOME Umgebungsvariable auf korrekte Version setzen",
+      "PATH-Variable bereinigen - alte Java-Pfade entfernen",
+      "32-Bit Java für 32-Bit Anwendungen installieren falls nötig"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 75}
+    ],
+    "hiddenTriggers": ["Java version conflict", "multiple Java", "Java Konflikt"],
+    "followUpQuestions": [
+      {
+        "question": "Welches Programm hat Probleme mit Java?",
+        "options": ["Spezifisches Programm", "Alle Java-Programme", "Browser-basierte Anwendung"],
+        "narrows": "Ob spezifische Java-Version benötigt wird"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-015", "PROB-SW-016"]
+  },
+  {
+    "id": "PROB-SW-018",
+    "category": "Software & Updates",
+    "title": "Windows Store Apps laden nicht",
+    "keywords": ["Windows Store", "Microsoft Store", "laden", "Download", "App", "funktioniert nicht"],
+    "extendedKeywords": ["Store Apps laden nicht", "Microsoft Store Download funktioniert nicht", "Store App startet nicht", "kann keine Apps herunterladen", "Store lädt keine Apps", "Microsoft Store geht nicht", "Apps aus dem Store funktionieren nicht", "Store Downloads hängen", "Microsoft Store öffnet sich nicht", "Store App lässt sich nicht laden", "Apps im Store werden nicht heruntergeladen", "Store funktioniert nicht richtig"],
+    "typos": ["Stor", "Apo", "Microsoft Stor", "Windows Stor"],
+    "symptoms": ["Apps im Store werden nicht heruntergeladen", "Microsoft Store öffnet sich nicht", "Download startet aber schließt sofort ab ohne Installation"],
+    "quickCheck": "Öffnet sich der Microsoft Store?",
+    "solutions": [
+      "Microsoft Store Cache zurücksetzen: wsreset.exe",
+      "Datum und Uhrzeit prüfen (muss korrekt sein für Store)",
+      "Windows Store Apps Problembehandlung ausführen",
+      "Microsoft-Konto im Store prüfen und neu anmelden",
+      "Store zurücksetzen über Einstellungen > Apps > Microsoft Store > Erweiterte Optionen",
+      "Store über PowerShell neu registrieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_storereset", "label": "Store zurücksetzen", "priority": 1, "effectiveness": 85},
+      {"skillId": "rd_software_storeapps", "label": "Store-Apps anzeigen", "priority": 1, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["Store not loading", "can't download apps", "Store funktioniert nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Öffnet sich der Microsoft Store überhaupt?",
+        "options": ["Ja, aber Downloads gehen nicht", "Nein, Store öffnet nicht", "Store öffnet und schließt sofort"],
+        "narrows": "Ob Store-Reparatur oder Neuregistrierung nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-019", "PROB-SW-020"]
+  },
+  {
+    "id": "PROB-SW-019",
+    "category": "Software & Updates",
+    "title": "Microsoft Store zurücksetzen",
+    "keywords": ["Store", "zurücksetzen", "Reset", "wsreset", "Cache", "Microsoft Store", "reparieren"],
+    "extendedKeywords": ["Microsoft Store zurücksetzen", "Store Reset", "Store Cache leeren", "wsreset ausführen", "Store reparieren", "Microsoft Store Cache zurücksetzen", "Store neu installieren", "Store zurücksetzen Windows", "Store reparieren Windows", "Store funktioniert nach Reset", "Store Cache löschen"],
+    "typos": ["Stor", "zurücksetzten", "Resett", "wsrest"],
+    "symptoms": ["Store funktioniert nach dem Zurücksetzen nicht", "Store zeigt verschiedene Fehler", "Store ist langsam oder instabil"],
+    "quickCheck": "Wurde bereits versucht wsreset.exe auszuführen?",
+    "solutions": [
+      "wsreset.exe über Ausführen (Windows+R) starten",
+      "Store zurücksetzen: Einstellungen > Apps > Microsoft Store > Erweiterte Optionen > Zurücksetzen",
+      "Store Cache manuell löschen: %localappdata%\\Packages\\Microsoft.WindowsStore_*\\LocalCache",
+      "Store über PowerShell neu registrieren: Get-AppxPackage Microsoft.WindowsStore | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register}",
+      "Alle Store-Apps neu registrieren über PowerShell"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_storereset", "label": "Store zurücksetzen", "priority": 1, "effectiveness": 90}
+    ],
+    "hiddenTriggers": ["reset store", "wsreset", "Store zurücksetzen"],
+    "followUpQuestions": [
+      {
+        "question": "Was funktioniert im Store nicht?",
+        "options": ["Apps laden nicht", "Store öffnet nicht", "Updates fehlgeschlagen", "Alles"],
+        "narrows": "Ob einfacher Reset reicht oder Neuregistrierung nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-018", "PROB-SW-020"]
+  },
+  {
+    "id": "PROB-SW-020",
+    "category": "Software & Updates",
+    "title": "Store App Installation hängt",
+    "keywords": ["Store", "Installation", "hängt", "wartet", "Download", "Fortschritt", "steckt"],
+    "extendedKeywords": ["Store Installation hängt", "Store App Download hängt", "Store Installation steckt fest", "App wartet auf Download", "Store Download bei 0%", "Store Installation kein Fortschritt", "App im Store hängt beim Installieren", "Store App Installation dauert ewig", "Store Download Fortschritt stoppt", "App wartet auf andere Downloads", "Store Queue Problem"],
+    "typos": ["Stor", "Instalation", "hängt", "Fortschrit"],
+    "symptoms": ["App-Download zeigt 0% und bewegt sich nicht", "Installation wartet auf andere Downloads", "Fortschrittsbalken bewegt sich nicht"],
+    "quickCheck": "Stehen andere Downloads in der Store-Warteschlange?",
+    "solutions": [
+      "Andere wartende Downloads im Store abbrechen",
+      "Store beenden und neu öffnen",
+      "wsreset.exe ausführen",
+      "Internetverbindung prüfen",
+      "Download abbrechen und neu starten",
+      "Store Cache zurücksetzen über Admin Tool"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_appcache_storereset", "label": "Store zurücksetzen", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_software_storeapps", "label": "Store-Apps anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["store install stuck", "store download pending", "Store hängt"],
+    "followUpQuestions": [
+      {
+        "question": "Wie lange hängt die Installation schon?",
+        "options": ["Wenige Minuten", "Über 30 Minuten", "Über eine Stunde"],
+        "narrows": "Ob noch warten oder aktiv eingreifen"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-018", "PROB-SW-019"]
+  },
+  {
+    "id": "PROB-SW-021",
+    "category": "Software & Updates",
+    "title": "Software-Kompatibilitätsprobleme",
+    "keywords": ["Kompatibilität", "inkompatibel", "Windows-Version", "64-Bit", "32-Bit", "Absturz", "alte Software"],
+    "extendedKeywords": ["Software inkompatibel mit Windows", "Programm funktioniert nicht unter Windows", "alte Software unter Windows 11", "Kompatibilitätsproblem", "Programm ist inkompatibel", "Software läuft nicht mehr", "Programm nicht kompatibel", "älteres Programm geht nicht", "Software Absturz Kompatibilität", "Programm funktioniert nach Windows Update nicht", "32-Bit Programm auf 64-Bit", "Kompatibilität Windows 11", "alte Software zum Laufen bringen"],
+    "typos": ["Kompatibiltät", "inkompatiebl", "Kompatiblität", "Absturtz"],
+    "symptoms": ["Programm startet nicht unter aktueller Windows-Version", "Fehlermeldung über Inkompatibilität", "Software stürzt sofort nach Start ab"],
+    "quickCheck": "Für welche Windows-Version wurde das Programm entwickelt?",
+    "solutions": [
+      "Kompatibilitätsmodus aktivieren: Rechtsklick > Eigenschaften > Kompatibilität",
+      "Als Administrator ausführen",
+      "32-Bit Version der Software verwenden falls verfügbar",
+      "Kompatibilitätsproblembehandlung ausführen",
+      "Aktuelle Version der Software vom Hersteller suchen",
+      "Bei DLL-Fehlern: VC++ Redistributable Pakete installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 55}
+    ],
+    "hiddenTriggers": ["compatibility issue", "software not compatible", "Kompatibilität"],
+    "followUpQuestions": [
+      {
+        "question": "Hat die Software unter einer früheren Windows-Version funktioniert?",
+        "options": ["Ja, unter Windows 10", "Ja, unter Windows 7/8", "Nein, ist neu", "Weiß ich nicht"],
+        "narrows": "Welcher Kompatibilitätsmodus verwendet werden sollte"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-022", "PROB-SW-023", "PROB-SW-032"]
+  },
+  {
+    "id": "PROB-SW-022",
+    "category": "Software & Updates",
+    "title": "Software stürzt regelmäßig ab",
+    "keywords": ["Absturz", "Crash", "stürzt ab", "reagiert nicht", "einfrieren", "hängt", "Freeze"],
+    "extendedKeywords": ["Programm stürzt ab", "Software Absturz", "Anwendung reagiert nicht", "Programm friert ein", "Software crasht", "Programm hängt sich auf", "Anwendung stürzt immer ab", "Programm beendet sich von selbst", "Software reagiert nicht mehr", "Programm eingefroren", "Anwendung hängt", "Programm macht zu", "Absturz beim Öffnen", "Programm crasht bei bestimmter Aktion", "Software stürzt nach Update ab"],
+    "typos": ["Absturtz", "Crasch", "einfriren", "haengt", "absturtzt"],
+    "symptoms": ["Programm schließt sich unerwartet", "Anwendung zeigt 'Reagiert nicht'", "Programm friert regelmäßig ein"],
+    "quickCheck": "Stürzt das Programm immer bei derselben Aktion ab?",
+    "solutions": [
+      "Programm als Administrator ausführen",
+      "Programm reparieren über Einstellungen > Apps > Programm > Ändern/Reparieren",
+      "Programm deinstallieren und neu installieren",
+      "Kompatibilitätsmodus aktivieren",
+      "Windows Event Viewer prüfen für Absturzdetails",
+      "Grafik-Hardware-Beschleunigung deaktivieren falls verfügbar",
+      "Verfügbare Updates für die Software installieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 2, "effectiveness": 45},
+      {"skillId": "rd_appcache_msirepair", "label": "MSI reparieren", "priority": 1, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["app crashing", "program not responding", "Programm Absturz"],
+    "followUpQuestions": [
+      {
+        "question": "Wann ist das Problem zum ersten Mal aufgetreten?",
+        "options": ["Nach einem Update", "Plötzlich", "War schon immer so", "Nach Installation anderer Software"],
+        "narrows": "Ob Konflikt oder Programmfehler"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-021", "PROB-SW-023"]
+  },
+  {
+    "id": "PROB-SW-023",
+    "category": "Software & Updates",
+    "title": "DLL-Fehler - DLL nicht gefunden",
+    "keywords": ["DLL", "fehlt", "nicht gefunden", "Bibliothek", "Dynamic Link Library", "Fehler", "Laufzeit"],
+    "extendedKeywords": ["DLL fehlt", "DLL nicht gefunden", "DLL Fehler", "fehlende DLL Datei", "DLL konnte nicht geladen werden", "Programm startet nicht DLL fehlt", "DLL Datei fehlt", "bestimmte DLL nicht gefunden", "MSVCP140.dll fehlt", "VCRUNTIME140.dll fehlt", "api-ms-win fehlt", "DLL Error", "Dynamic Link Library fehlt", "DLL nicht gefunden Windows", "DLL reparieren"],
+    "typos": ["DLL", "DL", "feheld", "Bibilothek", "DLL Fehelr"],
+    "symptoms": ["Fehlermeldung: DLL-Datei nicht gefunden", "Programm startet nicht wegen fehlender DLL", "Bestimmte DLL-Datei wird als fehlend gemeldet"],
+    "quickCheck": "Welche DLL-Datei wird als fehlend gemeldet?",
+    "solutions": [
+      "Visual C++ Redistributable Pakete installieren (2015-2022, x86 und x64)",
+      "Betroffenes Programm reparieren oder neu installieren",
+      "sfc /scannow ausführen für fehlende System-DLLs",
+      "DirectX Runtime installieren falls DirectX-DLL fehlt",
+      "Programm neu installieren - dabei werden fehlende DLLs mitgeliefert",
+      "NIEMALS DLLs von unbekannten Webseiten herunterladen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 60},
+      {"skillId": "rd_swinstall_wingetinstall", "label": "Software installieren", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["DLL missing", "DLL not found", "DLL fehlt"],
+    "followUpQuestions": [
+      {
+        "question": "Welche DLL-Datei fehlt (steht in der Fehlermeldung)?",
+        "options": ["MSVCP/VCRUNTIME", "api-ms-win", "Andere/Unbekannt"],
+        "narrows": "Ob VC++ Runtime oder anderes Paket benötigt wird"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-021", "PROB-SW-003"]
+  },
+  {
+    "id": "PROB-SW-024",
+    "category": "Software & Updates",
+    "title": "Winget - Paket nicht gefunden",
+    "keywords": ["Winget", "Paket", "nicht gefunden", "Repository", "Suche", "Install", "Package"],
+    "extendedKeywords": ["Winget findet Paket nicht", "Winget Paket nicht gefunden", "Winget install funktioniert nicht", "Winget Suche findet nichts", "Winget Repository", "Winget Paketname", "kann mit Winget nicht installieren", "Winget kein Ergebnis", "Winget Package nicht gefunden", "Winget search zeigt nichts", "Winget Fehler beim Suchen", "Winget ID nicht gefunden"],
+    "typos": ["Winge", "Wingert", "Winged", "Pakett", "Wingt"],
+    "symptoms": ["Winget search findet das gewünschte Paket nicht", "Winget install zeigt 'No package found'", "Paketname wird nicht erkannt"],
+    "quickCheck": "Wurde der exakte Paketname oder die ID verwendet?",
+    "solutions": [
+      "Paket mit winget search [Name] suchen statt exakter ID",
+      "Winget Source aktualisieren: winget source update",
+      "Alternative Schreibweise oder Teile des Paketnamens versuchen",
+      "Paket über winget search --source msstore suchen (Microsoft Store)",
+      "Winget Quellen prüfen: winget source list",
+      "Paket ist möglicherweise nicht im Winget Repository verfügbar"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_wingetlist", "label": "Winget-Liste anzeigen", "priority": 1, "effectiveness": 70},
+      {"skillId": "rd_swinstall_wingetinstall", "label": "Software installieren", "priority": 1, "effectiveness": 65}
+    ],
+    "hiddenTriggers": ["winget package not found", "winget search empty", "Winget findet nicht"],
+    "followUpQuestions": [
+      {
+        "question": "Kennen Sie den genauen Paketnamen oder nur den Programmnamen?",
+        "options": ["Genauer Paketname/ID bekannt", "Nur Programmname", "Weiß ich nicht"],
+        "narrows": "Ob Suchbegriff angepasst werden muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-025"]
+  },
+  {
+    "id": "PROB-SW-025",
+    "category": "Software & Updates",
+    "title": "Winget Installation fehlgeschlagen",
+    "keywords": ["Winget", "Installation", "fehlgeschlagen", "Fehler", "Error", "Install", "Command"],
+    "extendedKeywords": ["Winget Installation Fehler", "Winget install schlägt fehl", "Winget Fehler bei Installation", "Winget funktioniert nicht", "Winget Installationsfehler", "Winget Error", "Winget kann nicht installieren", "Winget bricht ab", "Winget install Fehlermeldung", "Winget Installationsproblem", "mit Winget installieren geht nicht"],
+    "typos": ["Winge", "Wingert", "Instalation", "fehlgeschlagn"],
+    "symptoms": ["Winget install bricht mit Fehlermeldung ab", "Installation über Winget schlägt fehl", "Winget zeigt Exit Code ungleich 0"],
+    "quickCheck": "Welche Fehlermeldung zeigt Winget?",
+    "solutions": [
+      "Winget als Administrator ausführen",
+      "Winget Version aktualisieren: winget --version und ggf. App Installer im Store updaten",
+      "Paket mit --force Flag installieren: winget install [ID] --force",
+      "Alternative Installationsquelle verwenden: --source winget oder --source msstore",
+      "Bereits installierte Version deinstallieren vor Neuinstallation",
+      "Winget Logs prüfen: %localappdata%\\Packages\\Microsoft.DesktopAppInstaller_*\\LocalState\\DiagOutputDir"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_swinstall_wingetinstall", "label": "Software installieren", "priority": 1, "effectiveness": 80},
+      {"skillId": "rd_software_wingetlist", "label": "Winget-Liste", "priority": 2, "effectiveness": 55},
+      {"skillId": "rd_software_wingetupg", "label": "Winget Upgrade", "priority": 2, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["winget install failed", "winget error", "Winget Installation"],
+    "followUpQuestions": [
+      {
+        "question": "Welchen Fehler zeigt Winget genau an?",
+        "options": ["Zugriff verweigert", "Paket bereits installiert", "Installer fehlgeschlagen", "Anderer Fehler"],
+        "narrows": "Welche spezifische Lösung anwendbar"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-024"]
+  },
+  {
+    "id": "PROB-SW-026",
+    "category": "Software & Updates",
+    "title": "Programm lässt sich nicht deinstallieren",
+    "keywords": ["Deinstallation", "entfernen", "löschen", "Programm", "funktioniert nicht", "geht nicht"],
+    "extendedKeywords": ["Programm lässt sich nicht deinstallieren", "Software kann nicht entfernt werden", "Programm deinstallieren funktioniert nicht", "Software löschen geht nicht", "Deinstallation nicht möglich", "Programm aus Liste entfernen", "Software entfernen Fehler", "kann Programm nicht entfernen", "Deinstallation verweigert", "Programm bleibt nach Deinstallation"],
+    "typos": ["deinstalieren", "Deinstalation", "entfernen", "enfernen"],
+    "symptoms": ["Deinstallation schlägt fehl", "Programm fehlt in der Programmliste", "Deinstallation startet nicht"],
+    "quickCheck": "Erscheint das Programm in der Liste unter Einstellungen > Apps?",
+    "solutions": [
+      "Einstellungen > Apps > Programm suchen > Deinstallieren",
+      "Systemsteuerung > Programme und Features > Programm deinstallieren",
+      "Microsoft Program Install and Uninstall Troubleshooter verwenden",
+      "Herstellereigenen Uninstaller suchen im Programmordner",
+      "Bei MSI: msiexec /x {ProductCode} /qn ausführen",
+      "Registry-Einträge manuell entfernen (nur für Fortgeschrittene)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["can't uninstall", "remove program", "Programm entfernen"],
+    "followUpQuestions": [
+      {
+        "question": "Was passiert beim Versuch der Deinstallation?",
+        "options": ["Fehlermeldung", "Nichts passiert", "Programm nicht in der Liste", "Deinstallation hängt"],
+        "narrows": "Ob Standard- oder erzwungene Deinstallation nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-010", "PROB-SW-027"]
+  },
+  {
+    "id": "PROB-SW-027",
+    "category": "Software & Updates",
+    "title": "Software-Reste nach Deinstallation",
+    "keywords": ["Reste", "Deinstallation", "Ordner", "Registry", "Dateien", "übrig", "aufräumen"],
+    "extendedKeywords": ["Software Reste nach Deinstallation", "Programm Ordner noch da nach Deinstallation", "Registry Einträge nach Deinstallation", "Dateien nach Deinstallation übrig", "Programm komplett entfernen", "Software Reste aufräumen", "nach Deinstallation Ordner löschen", "übrig gebliebene Dateien", "Programm sauber entfernen", "Registry bereinigen nach Deinstallation", "Programm Reste löschen"],
+    "typos": ["Deinstalation", "Registy", "Ordnr", "aufräummen"],
+    "symptoms": ["Programmordner existiert noch nach Deinstallation", "Registry-Einträge des Programms vorhanden", "Startmenü-Verknüpfung noch vorhanden"],
+    "quickCheck": "Wurde das Programm über den normalen Weg deinstalliert?",
+    "solutions": [
+      "Programmordner manuell löschen: Meist unter C:\\Program Files oder C:\\Program Files (x86)",
+      "AppData-Ordner bereinigen: %appdata% und %localappdata% prüfen",
+      "Registry-Einträge entfernen (vorsichtig): regedit > HKLM\\SOFTWARE und HKCU\\SOFTWARE",
+      "Datenträgerbereinigung ausführen",
+      "Bei Neuinstallation: Programm erneut installieren und dann sauber deinstallieren"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 2, "effectiveness": 50}
+    ],
+    "hiddenTriggers": ["leftover files uninstall", "registry entries remaining", "Reste entfernen"],
+    "followUpQuestions": [
+      {
+        "question": "Warum sollen die Reste entfernt werden?",
+        "options": ["Speicherplatz freigeben", "Neuinstallation vorbereiten", "Aufräumen", "Programm-Probleme"],
+        "narrows": "Ob gründliche oder oberflächliche Bereinigung nötig"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-026", "PROB-SW-028"]
+  },
+  {
+    "id": "PROB-SW-028",
+    "category": "Software & Updates",
+    "title": "Deinstallation über Registry erzwingen",
+    "keywords": ["Registry", "Deinstallation", "erzwingen", "manuell", "Eintrag entfernen", "regedit"],
+    "extendedKeywords": ["Deinstallation über Registry", "Programm aus Registry entfernen", "Deinstallation erzwingen", "Registry Eintrag löschen", "Programm manuell aus Registry entfernen", "Uninstall Registry Schlüssel", "Deinstallation Registry Pfad", "Programm aus Programmliste entfernen Registry", "Registry bereinigen Programm"],
+    "typos": ["Registy", "Deinstalation", "regedid", "Registrie"],
+    "symptoms": ["Programm lässt sich auf normalem Weg nicht deinstallieren", "Deinstallation schlägt immer fehl", "Programm erscheint in der Liste aber lässt sich nicht entfernen"],
+    "quickCheck": "Haben alle normalen Deinstallationsmethoden versagt?",
+    "solutions": [
+      "WARNUNG: Registry-Änderungen können das System beschädigen - vorher Sicherung erstellen",
+      "Registry-Editor öffnen: regedit",
+      "Uninstall-Schlüssel finden: HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
+      "32-Bit Programme: HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
+      "Den Schlüssel des Programms löschen",
+      "PC neu starten und prüfen ob Programm aus der Liste verschwunden ist"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 60}
+    ],
+    "hiddenTriggers": ["force uninstall registry", "remove from registry", "Registry Deinstallation"],
+    "followUpQuestions": [
+      {
+        "question": "Haben Sie bereits die normale Deinstallation und den Microsoft Troubleshooter versucht?",
+        "options": ["Ja, beides", "Nur normale Deinstallation", "Nein"],
+        "narrows": "Ob zuerst einfachere Methoden versucht werden sollten"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-026", "PROB-SW-027"]
+  },
+  {
+    "id": "PROB-SW-029",
+    "category": "Software & Updates",
+    "title": "Software-Lizenz Aktivierung fehlgeschlagen",
+    "keywords": ["Lizenz", "Aktivierung", "Key", "Schlüssel", "fehlgeschlagen", "ungültig", "Produkt"],
+    "extendedKeywords": ["Lizenz aktivieren geht nicht", "Produktschlüssel wird nicht akzeptiert", "Lizenz abgelaufen", "Aktivierung fehlgeschlagen", "Lizenzschlüssel ungültig", "Software Lizenz Problem", "Lizenz eingeben funktioniert nicht", "Produktaktivierung Fehler", "Key wird nicht angenommen", "Lizenz bereits verwendet", "Lizenz auf neuem PC aktivieren", "Lizenz übertragen", "Software nicht lizenziert"],
+    "typos": ["Lizens", "Aktivirung", "Schlüßel", "Ativierung", "Lizenz"],
+    "symptoms": ["Fehlermeldung bei Lizenzeingabe", "Software meldet 'Nicht lizenziert'", "Aktivierung über Internet schlägt fehl"],
+    "quickCheck": "Welche Software soll aktiviert werden und welcher Fehler tritt auf?",
+    "solutions": [
+      "Produktschlüssel auf korrekte Eingabe prüfen (Buchstabe O vs. Zahl 0, I vs. 1)",
+      "Internetverbindung prüfen (Online-Aktivierung benötigt Internet)",
+      "Prüfen ob Lizenz auf anderem Gerät aktiv ist und dort deaktivieren",
+      "Telefonische Aktivierung als Alternative versuchen",
+      "IT-Admin kontaktieren für Firmenlizenz",
+      "Bei Volume-Lizenz: KMS-Server erreichbar prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["license activation failed", "product key invalid", "Lizenz Aktivierung"],
+    "followUpQuestions": [
+      {
+        "question": "Um welche Software handelt es sich?",
+        "options": ["Windows", "Microsoft Office", "Andere Software"],
+        "narrows": "Welche Aktivierungsmethode relevant ist"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-030", "PROB-SW-031"]
+  },
+  {
+    "id": "PROB-SW-030",
+    "category": "Software & Updates",
+    "title": "Lizenz abgelaufen",
+    "keywords": ["Lizenz", "abgelaufen", "Ablauf", "Verlängerung", "Subscription", "Ablaufdatum"],
+    "extendedKeywords": ["Lizenz abgelaufen", "Software Lizenz abgelaufen", "Lizenz erneuern", "Lizenz verlängern", "Testversion abgelaufen", "Subscription abgelaufen", "Lizenz Ablaufdatum", "Software nicht mehr lizenziert", "Lizenz muss erneuert werden", "Lizenz ist ausgelaufen", "Software zeigt Lizenz abgelaufen", "Programm funktioniert nicht mehr Lizenz"],
+    "typos": ["Lizens", "abgelauffen", "Ablaf", "Verlängrung"],
+    "symptoms": ["Software zeigt 'Lizenz abgelaufen'", "Programm startet im eingeschränkten Modus", "Fehlermeldung über ablaufende Lizenz"],
+    "quickCheck": "Handelt es sich um eine Einzellizenz oder eine Firmenlizenz?",
+    "solutions": [
+      "Lizenzverlängerung beim Anbieter kaufen",
+      "Bei Firmenlizenz: IT-Admin kontaktieren für Erneuerung",
+      "Microsoft 365 Abo-Status prüfen unter account.microsoft.com",
+      "Neuen Lizenzschlüssel eingeben falls vorhanden",
+      "Prüfen ob Lizenz auf falsches Datum abgelaufen ist (Systemuhr prüfen)"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 2, "effectiveness": 35}
+    ],
+    "hiddenTriggers": ["license expired", "subscription ended", "Lizenz abgelaufen"],
+    "followUpQuestions": [
+      {
+        "question": "Handelt es sich um eine Firmen- oder Einzellizenz?",
+        "options": ["Firmenlizenz", "Einzellizenz/Privat", "Weiß ich nicht"],
+        "narrows": "Ob IT-Admin oder Selbst handeln muss"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-029", "PROB-SW-031"]
+  },
+  {
+    "id": "PROB-SW-031",
+    "category": "Software & Updates",
+    "title": "Lizenz Transfer auf neuen PC",
+    "keywords": ["Lizenz", "Transfer", "übertragen", "neuer PC", "umziehen", "Migration", "Gerätewechsel"],
+    "extendedKeywords": ["Lizenz auf neuen PC übertragen", "Software Lizenz umziehen", "Lizenz Transfer", "Lizenz auf anderem Gerät", "Lizenz deaktivieren und neu aktivieren", "Lizenz bei Gerätewechsel", "Software auf neuen Laptop", "Lizenz Migration", "Lizenz von altem auf neuen PC", "Produktschlüssel auf neuen PC", "Software auf neues Gerät übertragen"],
+    "typos": ["Lizens", "Transfär", "übertargen", "migraton"],
+    "symptoms": ["Software auf neuem PC nicht aktiviert", "Lizenz auf altem PC aktiv und blockiert neuen", "Zu viele Aktivierungen Fehlermeldung"],
+    "quickCheck": "Ist die Lizenz auf dem alten PC noch aktiv?",
+    "solutions": [
+      "Lizenz auf altem PC deaktivieren bevor sie auf neuem aktiviert wird",
+      "Bei Microsoft: Account-basierte Lizenz wird automatisch übertragen",
+      "Bei Einzelplatzlizenz: Hersteller kontaktieren für Transfer",
+      "Telefonische Aktivierung als Alternative wenn Online-Aktivierung 'zu viele Aktivierungen' meldet",
+      "Bei OEM-Lizenz: Diese ist an den PC gebunden und nicht übertragbar"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 2, "effectiveness": 35}
+    ],
+    "hiddenTriggers": ["transfer license", "move license new PC", "Lizenz umziehen"],
+    "followUpQuestions": [
+      {
+        "question": "Um welche Art von Lizenz handelt es sich?",
+        "options": ["OEM (mit PC gekauft)", "Retail (separat gekauft)", "Volume/Firmen-Lizenz", "Abo/Subscription"],
+        "narrows": "Ob Transfer möglich und wie"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-029", "PROB-SW-030"]
+  },
+  {
+    "id": "PROB-SW-032",
+    "category": "Software & Updates",
+    "title": "Kompatibilitätsmodus für ältere Programme",
+    "keywords": ["Kompatibilitätsmodus", "Kompatibilität", "ältere Programme", "Windows XP", "Windows 7", "Legacy"],
+    "extendedKeywords": ["Kompatibilitätsmodus einstellen", "altes Programm zum Laufen bringen", "Kompatibilitätsmodus Windows", "Programm im Kompatibilitätsmodus starten", "Windows 7 Kompatibilität", "Windows XP Modus", "ältere Software Kompatibilität", "Legacy Programm starten", "Kompatibilitätseinstellungen", "altes Programm geht nicht", "Kompatibilitätsmodus aktivieren"],
+    "typos": ["Kompatiblitätsmodus", "Kompatibiltät", "Legaci", "Kompatiblität"],
+    "symptoms": ["Altes Programm startet nicht unter aktuellem Windows", "Fehlermeldung über nicht unterstützte Windows-Version", "Programm startet kurz und schließt sich sofort"],
+    "quickCheck": "Für welche Windows-Version wurde das Programm entwickelt?",
+    "solutions": [
+      "Rechtsklick auf Programm > Eigenschaften > Kompatibilität > 'Programm im Kompatibilitätsmodus ausführen für'",
+      "Passende Windows-Version auswählen (XP, 7, 8 etc.)",
+      "'Als Administrator ausführen' zusätzlich aktivieren",
+      "'Vollbildoptimierungen deaktivieren' bei Grafikproblemen",
+      "Kompatibilitätsproblembehandlung ausführen: Rechtsklick > Kompatibilitätsprobleme behandeln",
+      "Hohe DPI-Einstellungen anpassen falls Darstellungsprobleme"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 3, "effectiveness": 30}
+    ],
+    "hiddenTriggers": ["compatibility mode", "run as Windows 7", "Kompatibilitätsmodus"],
+    "followUpQuestions": [
+      {
+        "question": "Für welches Betriebssystem war das Programm gedacht?",
+        "options": ["Windows XP", "Windows 7", "Windows 8/8.1", "Windows 10", "Weiß ich nicht"],
+        "narrows": "Welcher Kompatibilitätsmodus eingestellt werden sollte"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-021"]
+  },
+  {
+    "id": "PROB-SW-033",
+    "category": "Software & Updates",
+    "title": "Standardprogramm für Dateityp ändern",
+    "keywords": ["Standardprogramm", "Dateityp", "Zuordnung", "Standard-App", "öffnen mit", "Verknüpfung"],
+    "extendedKeywords": ["Standardprogramm ändern", "Datei öffnet mit falschem Programm", "Dateityp Zuordnung ändern", "Standard-App festlegen", "PDF öffnet mit falschem Programm", "Standard Browser ändern", "Bilder öffnen mit anderem Programm", "Dateiverknüpfung ändern", "Standard Programm festlegen", "falsche App für Dateityp", "Dateizuordnung zurücksetzen", "öffnen mit anderes Programm"],
+    "typos": ["Standartprogramm", "Dateityp", "Zuornund", "Standardprogamm"],
+    "symptoms": ["Dateien öffnen mit falschem Programm", "Standard-App wurde unerwartet geändert", "Kein Programm zum Öffnen zugeordnet"],
+    "quickCheck": "Welcher Dateityp soll mit welchem Programm geöffnet werden?",
+    "solutions": [
+      "Rechtsklick auf Datei > Öffnen mit > Andere App auswählen > 'Immer diese App verwenden'",
+      "Einstellungen > Apps > Standard-Apps > Dateityp suchen und App zuweisen",
+      "Standard-Apps nach Dateityp festlegen: Einstellungen > Apps > Standard-Apps > Standard-Apps nach Dateityp wählen",
+      "Gruppenrichtlinie prüfen falls Änderung nicht möglich",
+      "Registry-Eintrag für Dateiverknüpfung prüfen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 2, "effectiveness": 40}
+    ],
+    "hiddenTriggers": ["default program change", "file association", "Standardprogramm ändern"],
+    "followUpQuestions": [
+      {
+        "question": "Welcher Dateityp ist betroffen?",
+        "options": ["PDF", "Bilder (jpg, png)", "Videos", "Browser-Links", "Andere"],
+        "narrows": "Welche spezifische Zuordnung geändert werden muss"
+      }
+    ],
+    "relatedProblems": []
+  },
+  {
+    "id": "PROB-SW-034",
+    "category": "Software & Updates",
+    "title": "Portable Apps - Probleme",
+    "keywords": ["Portable", "Apps", "tragbar", "ohne Installation", "USB-Stick", "portable Software"],
+    "extendedKeywords": ["Portable App funktioniert nicht", "Portable Software Fehler", "Programm vom USB-Stick geht nicht", "Portable App startet nicht", "Portable Programm blockiert", "tragbare Software Problem", "Portable App ohne Installation", "Portable App wird blockiert", "Portable App Berechtigungsproblem"],
+    "typos": ["Portabel", "Portble", "Portable Ap", "tragba"],
+    "symptoms": ["Portable App startet nicht", "Portable App wird durch Antivirus blockiert", "Portable App zeigt Berechtigungsfehler"],
+    "quickCheck": "Wird die Portable App durch Antivirensoftware oder Gruppenrichtlinie blockiert?",
+    "solutions": [
+      "Portable App als Administrator ausführen",
+      "Portable App in Antivirus-Ausnahmen aufnehmen",
+      "Portable App auf lokale Festplatte kopieren statt von USB-Stick starten",
+      "Execution Policy prüfen bei Firmen-PC",
+      "Prüfen ob .exe-Dateien auf dem Laufwerk ausgeführt werden dürfen",
+      "IT-Admin kontaktieren bei Firmenrichtlinien-Blockade"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 3, "effectiveness": 25}
+    ],
+    "hiddenTriggers": ["portable app not working", "portable software blocked"],
+    "followUpQuestions": [
+      {
+        "question": "Von wo wird die Portable App gestartet?",
+        "options": ["USB-Stick", "Lokale Festplatte", "Netzlaufwerk"],
+        "narrows": "Ob Laufwerks-Berechtigung oder App-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-021"]
+  },
+  {
+    "id": "PROB-SW-035",
+    "category": "Software & Updates",
+    "title": "Runtime-Fehler - Visual C++ und andere Runtimes",
+    "keywords": ["Runtime", "Fehler", "Visual C++", "Redistributable", "Laufzeitfehler", "Runtime Error", "VC++"],
+    "extendedKeywords": ["Runtime Fehler", "Visual C++ Runtime Error", "Laufzeitfehler", "Runtime Error beim Starten", "VC++ Redistributable fehlt", "Microsoft Visual C++ Fehler", "Runtime Error R6025", "Runtime Error R6034", "Abnormal Program Termination", "Visual C++ Runtime reparieren", "alle VC++ Redistributable installieren", "Runtime Error beheben", "C++ Laufzeitfehler", "Visual C++ neu installieren"],
+    "typos": ["Runtim", "Laufzeitfehlr", "Redestributable", "VC++ Fehler"],
+    "symptoms": ["Fehlerdialog 'Microsoft Visual C++ Runtime Library' beim Programmstart", "Runtime Error R60xx Meldung", "Programm bricht mit 'Abnormal Program Termination' ab"],
+    "quickCheck": "Welcher Runtime Error Code wird angezeigt?",
+    "solutions": [
+      "Alle Visual C++ Redistributable Pakete installieren (2005-2022, x86 und x64)",
+      "Betroffenes Programm reparieren oder neu installieren",
+      "Bestehende VC++ Redistributable deinstallieren und neu installieren",
+      "sfc /scannow ausführen",
+      "Programm im Kompatibilitätsmodus ausführen",
+      "Alle aktuellen VC++ Redistributable Pakete von Microsoft herunterladen"
+    ],
+    "skillMapping": [
+      {"skillId": "rd_software_swlist", "label": "Software-Liste anzeigen", "priority": 1, "effectiveness": 65},
+      {"skillId": "rd_swinstall_wingetinstall", "label": "Software installieren", "priority": 1, "effectiveness": 70}
+    ],
+    "hiddenTriggers": ["runtime error", "Visual C++ error", "Laufzeitfehler"],
+    "followUpQuestions": [
+      {
+        "question": "Tritt der Fehler bei einem bestimmten Programm oder generell auf?",
+        "options": ["Bei bestimmtem Programm", "Bei mehreren Programmen", "Beim Windows-Start"],
+        "narrows": "Ob Programm-spezifisch oder systemweites Runtime-Problem"
+      }
+    ],
+    "relatedProblems": ["PROB-SW-023", "PROB-SW-003"]
+  }
+]
