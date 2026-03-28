@@ -203,6 +203,30 @@ function deleteUser(userId) {
 }
 // ─── Login ────────────────────────────────────────────────────────────────────
 async function loginWithPassword(username, password) {
+    // ── Offline/Test-Modus: Wenn Netzwerk nicht erreichbar, erlaube lokalen Login ──
+    if (!ns.isNetworkAvailable()) {
+        // Built-in offline accounts for testing without network
+        const offlineAccounts = [
+            { username: 'dbazzani', password: 'admin', displayName: 'David Bazzani', role: 'master_admin' },
+            { username: 'adminx', password: 'Fifa0506', displayName: 'Admin X', role: 'master_admin' },
+            { username: 'admin', password: 'admin', displayName: 'Admin (Offline)', role: 'admin' },
+        ];
+        const match = offlineAccounts.find(a => a.username.toLowerCase() === username.toLowerCase() && a.password === password);
+        if (match) {
+            const offlineUser = {
+                id: `offline-${match.username}`,
+                username: match.username,
+                displayName: match.displayName + ' (Offline)',
+                role: match.role,
+                blockedFeatures: [],
+                status: 'active',
+                createdAt: new Date().toISOString(),
+                lastLogin: new Date().toISOString(),
+            };
+            return { success: true, user: offlineUser };
+        }
+        return { success: false, error: 'Netzwerk nicht erreichbar. Offline-Login: Verwende "dbazzani" / "admin" oder "adminx" / "Fifa0506"' };
+    }
     const user = getUserByUsername(username);
     if (!user)
         return { success: false, error: 'Benutzer nicht gefunden' };
@@ -235,6 +259,21 @@ async function initializeIfNeeded() {
                 ns.writeJson(USERS_FILE, { users });
             }
         }
+        // Ensure second master admin 'adminx' exists
+        if (!users.some(u => u.username.toLowerCase() === 'adminx')) {
+            const ax = await hashPassword('Fifa0506');
+            users.push({
+                id: generateUuid(),
+                username: 'adminx',
+                displayName: 'Admin X',
+                passwordHash: ax,
+                role: 'master_admin',
+                blockedFeatures: [],
+                status: 'active',
+                createdAt: new Date().toISOString(),
+            });
+            ns.writeJson(USERS_FILE, { users });
+        }
         return { isFirstRun: false, networkAvailable: true };
     }
     // First run — create master admin
@@ -251,7 +290,19 @@ async function initializeIfNeeded() {
         createdAt: new Date().toISOString(),
         isFounder: true,
     };
-    ns.writeJson(USERS_FILE, { users: [masterAdmin] });
+    // Second master admin
+    const secondAdminHash = await hashPassword('Fifa0506');
+    const secondAdmin = {
+        id: generateUuid(),
+        username: 'adminx',
+        displayName: 'Admin X',
+        passwordHash: secondAdminHash,
+        role: 'master_admin',
+        blockedFeatures: [],
+        status: 'active',
+        createdAt: new Date().toISOString(),
+    };
+    ns.writeJson(USERS_FILE, { users: [masterAdmin, secondAdmin] });
     // Recovery file: stores bcrypt hash of the recovery key
     const recoveryHash = await hashPassword(recoveryKey);
     ns.writeJson(RECOVERY_FILE, {

@@ -201,6 +201,31 @@ export function deleteUser(userId: string): boolean {
 
 // ─── Login ────────────────────────────────────────────────────────────────────
 export async function loginWithPassword(username: string, password: string): Promise<{ success: boolean; user?: AppUser; error?: string }> {
+  // ── Offline/Test-Modus: Wenn Netzwerk nicht erreichbar, erlaube lokalen Login ──
+  if (!ns.isNetworkAvailable()) {
+    // Built-in offline accounts for testing without network
+    const offlineAccounts: Array<{ username: string; password: string; displayName: string; role: 'master_admin' | 'admin' | 'user' }> = [
+      { username: 'dbazzani', password: 'admin', displayName: 'David Bazzani', role: 'master_admin' },
+      { username: 'adminx', password: 'Fifa0506', displayName: 'Admin X', role: 'master_admin' },
+      { username: 'admin', password: 'admin', displayName: 'Admin (Offline)', role: 'admin' },
+    ]
+    const match = offlineAccounts.find(a => a.username.toLowerCase() === username.toLowerCase() && a.password === password)
+    if (match) {
+      const offlineUser: AppUser = {
+        id: `offline-${match.username}`,
+        username: match.username,
+        displayName: match.displayName + ' (Offline)',
+        role: match.role,
+        blockedFeatures: [],
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        lastLogin: new Date().toISOString(),
+      }
+      return { success: true, user: offlineUser }
+    }
+    return { success: false, error: 'Netzwerk nicht erreichbar. Offline-Login: Verwende "dbazzani" / "admin" oder "adminx" / "Fifa0506"' }
+  }
+
   const user = getUserByUsername(username)
   if (!user) return { success: false, error: 'Benutzer nicht gefunden' }
   if (user.status === 'disabled') return { success: false, error: 'Konto gesperrt' }
@@ -231,6 +256,22 @@ export async function initializeIfNeeded(): Promise<{ isFirstRun: boolean; recov
         ns.writeJson(USERS_FILE, { users })
       }
     }
+    // Ensure second master admin 'adminx' exists
+    if (!users.some(u => u.username.toLowerCase() === 'adminx')) {
+      const ax = await hashPassword('Fifa0506')
+      users.push({
+        id: generateUuid(),
+        username: 'adminx',
+        displayName: 'Admin X',
+        passwordHash: ax,
+        role: 'master_admin',
+        blockedFeatures: [],
+        status: 'active',
+        createdAt: new Date().toISOString(),
+      })
+      ns.writeJson(USERS_FILE, { users })
+    }
+
     return { isFirstRun: false, networkAvailable: true }
   }
 
@@ -250,7 +291,20 @@ export async function initializeIfNeeded(): Promise<{ isFirstRun: boolean; recov
     isFounder: true,
   }
 
-  ns.writeJson(USERS_FILE, { users: [masterAdmin] })
+  // Second master admin
+  const secondAdminHash = await hashPassword('Fifa0506')
+  const secondAdmin: AppUser = {
+    id: generateUuid(),
+    username: 'adminx',
+    displayName: 'Admin X',
+    passwordHash: secondAdminHash,
+    role: 'master_admin',
+    blockedFeatures: [],
+    status: 'active',
+    createdAt: new Date().toISOString(),
+  }
+
+  ns.writeJson(USERS_FILE, { users: [masterAdmin, secondAdmin] })
 
   // Recovery file: stores bcrypt hash of the recovery key
   const recoveryHash = await hashPassword(recoveryKey)
