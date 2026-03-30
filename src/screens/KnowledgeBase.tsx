@@ -117,7 +117,7 @@ export default function KnowledgeBase() {
 
   async function copyArticle() {
     if (!article) return
-    const text = `${article.title}\n\n${article.steps.map((s, i) => `Schritt ${i + 1}: ${s.title}\n${s.content}`).join('\n\n')}`
+    const text = `${article.title}\n\n${(article.steps ?? []).map((s: {title:string;content:string}, i: number) => `Schritt ${i + 1}: ${s.title}\n${s.content}`).join('\n\n')}`
     await navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -257,9 +257,9 @@ export default function KnowledgeBase() {
                   className="w-full text-left px-4 py-3 rounded-lg border border-border hover:bg-accent/30 hover:border-primary/30 transition-colors">
                   <p className="text-sm font-medium text-foreground">{a.title}</p>
                   <p className="text-[10px] text-muted-foreground mt-0.5">{a.description}</p>
-                  {a.tags.length > 0 && (
+                  {(a.tags ?? []).length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-1.5">
-                      {a.tags.slice(0, 5).map(t => (
+                      {(a.tags ?? []).slice(0, 5).map(t => (
                         <span key={t} className="px-1.5 py-0.5 text-[8px] rounded bg-muted/30 text-muted-foreground">{t}</span>
                       ))}
                     </div>
@@ -291,9 +291,9 @@ export default function KnowledgeBase() {
                     </button>
                   </div>
                   <p className="text-sm text-muted-foreground">{article.description}</p>
-                  {article.tags.length > 0 && (
+                  {(article.tags ?? []).length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
-                      {article.tags.map(t => (
+                      {(article.tags ?? []).map(t => (
                         <span key={t} className="px-2 py-0.5 text-[9px] rounded-full bg-primary/10 text-primary border border-primary/20">{t}</span>
                       ))}
                     </div>
@@ -302,17 +302,22 @@ export default function KnowledgeBase() {
 
                 {/* Steps */}
                 <div className="space-y-4">
-                  {article.steps.map((step, i) => (
+                  {(article.steps ?? []).length === 0 && article.description && (
+                    <div className="rounded-xl border border-border p-4">
+                      <p className="text-sm text-foreground whitespace-pre-wrap">{article.description}</p>
+                    </div>
+                  )}
+                  {(article.steps ?? []).map((step: { title?: string; content?: string }, i: number) => (
                     <div key={i} className="rounded-xl border border-border overflow-hidden">
                       <div className="flex items-center gap-2 px-4 py-2.5 bg-muted/10 border-b border-border">
                         <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">
                           {i + 1}
                         </span>
-                        <h3 className="text-sm font-semibold text-foreground">{step.title}</h3>
+                        <h3 className="text-sm font-semibold text-foreground">{step.title ?? `Schritt ${i + 1}`}</h3>
                       </div>
                       <div className="px-4 py-3">
                         {/* Render content with basic formatting */}
-                        {step.content.split('\n\n').map((para, pi) => {
+                        {(step.content ?? '').split('\n\n').map((para, pi) => {
                           // Detect PowerShell/command blocks
                           if (para.match(/^(Get-|Set-|Remove-|New-|Invoke-|Start-|Stop-|Restart-|Test-|Clear-|Resolve-|sfc |DISM |powershell|cmd |reg |sc\.exe|Optimize-|Repair-)/m)) {
                             return (
@@ -351,7 +356,7 @@ export default function KnowledgeBase() {
                   <div className="mt-6 pt-4 border-t border-border">
                     <p className="text-[10px] text-muted-foreground mb-2">Verwandte Remote-Doc Skills:</p>
                     <div className="flex flex-wrap gap-1">
-                      {article.relatedSkills.map(s => (
+                      {(article.relatedSkills ?? []).map(s => (
                         <span key={s} className="px-2 py-0.5 text-[9px] rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">{s}</span>
                       ))}
                     </div>

@@ -10,7 +10,7 @@ export interface CmdDef {
   when: string
   buildCmd: (hostname: string, input?: string) => string
   action: ActionType
-  input?: { type: 'text' | 'dropdown' | 'service' | 'drivemap'; placeholder?: string; options?: string[] }
+  input?: { type: 'text' | 'dropdown' | 'service' | 'drivemap' | 'envvar'; placeholder?: string; options?: string[] }
   templates?: { label: string; value: string }[]  // quick-fill buttons shown below input
   local?: boolean        // runs on admin PC, not remote
   longRunning?: boolean
@@ -26,10 +26,28 @@ export interface Category {
 
 // ── Helper to wrap a PS script block for remote execution ────────────────────
 export function remote(hostname: string, script: string): string {
+  // Detect if the script already calls ConvertTo-Json internally
+  const alreadyJson = script.includes('ConvertTo-Json')
+  if (alreadyJson) {
+    // Script already produces JSON — DON'T wrap with another ConvertTo-Json
+    // Just pass through the raw string output from Invoke-Command
+    return [
+      `try {`,
+      `  $r = Invoke-Command -ComputerName '${hostname}' -ScriptBlock { ${script} } -EA Stop`,
+      `  if ($r -ne $null) {`,
+      `    if ($r -is [string]) { $r }`,
+      `    elseif ($r -is [array]) { $r | ForEach-Object { if ($_ -is [string]) { $_ } else { $_ | ConvertTo-Json -Depth 4 -Compress } } }`,
+      `    else { $r | ConvertTo-Json -Depth 4 -Compress }`,
+      `  } else { Write-Output '"OK"' }`,
+      `} catch { Write-Output """ERR:$($_.Exception.Message)""" }`,
+    ].join('\n')
+  }
+  // Script does NOT produce JSON — wrap result with ConvertTo-Json
+  // Use Select-Object to strip PS remoting metadata
   return [
     `try {`,
     `  $r = Invoke-Command -ComputerName '${hostname}' -ScriptBlock { ${script} } -EA Stop`,
-    `  if ($r -ne $null) { $r | ConvertTo-Json -Depth 4 -Compress } else { Write-Output '"OK"' }`,
+    `  if ($r -ne $null) { $r | Select-Object * -ExcludeProperty PSComputerName,RunspaceId,PSShowComputerName | ConvertTo-Json -Depth 4 -Compress } else { Write-Output '"OK"' }`,
     `} catch { Write-Output """ERR:$($_.Exception.Message)""" }`,
   ].join('\n')
 }
@@ -47,12 +65,12 @@ function buildCategories(): Category[] {
       id: 'net', label: 'Netzwerk & Konnektivität',
       commands: [
         { id: 'ping', func: 'Ping', when: 'Erste Diagnose ob PC an ist',
-          buildCmd: (h) => local(`ping ${h}`), action: 'read' },
+          buildCmd: (h) => `ping.exe -n 4 ${h}`, action: 'read' },
         { id: 'ping10', func: 'Erweiterter Ping (10x)', when: 'Paketverluste erkennen',
-          buildCmd: (h) => remote(h, `Test-Connection -ComputerName $env:COMPUTERNAME -Count 10 | Select-Object Address,ResponseTime,StatusCode | ConvertTo-Json -Compress`),
+          buildCmd: (h) => local(`Test-Connection -ComputerName '${h}' -Count 10 | Select-Object @{N='Adresse';E={$_.Address}},@{N='Antwortzeit (ms)';E={$_.ResponseTime}},@{N='Status';E={if($_.StatusCode -eq 0){'OK'}else{'Fehler'}}} | ConvertTo-Json -Compress`),
           action: 'read' },
         { id: 'tracert', func: 'Netzwerkpfad verfolgen', when: 'Routing-Probleme',
-          buildCmd: (h) => local(`tracert ${h}`), action: 'read', longRunning: true },
+          buildCmd: (h) => `tracert.exe ${h}`, action: 'read', longRunning: true },
         { id: 'ipconfig', func: 'Komplette Netzwerkkonfiguration', when: 'IP, Gateway, DNS, DHCP',
           buildCmd: (h) => remote(h, `Get-NetIPConfiguration -Detailed | Select-Object InterfaceAlias,InterfaceDescription,@{N='IPv4';E={$_.IPv4Address.IPAddress -join ', '}},@{N='IPv6';E={$_.IPv6Address.IPAddress -join ', '}},@{N='Gateway';E={$_.IPv4DefaultGateway.NextHop -join ', '}},@{N='DNS';E={$_.DNSServer.ServerAddresses -join ', '}} | ConvertTo-Json -Compress`), action: 'read' },
         { id: 'flushdns', func: 'DNS-Cache leeren', when: 'Webseiten nicht erreichbar',
@@ -405,13 +423,13 @@ function buildCategories(): Category[] {
       id: 'rdp', label: 'Remote Desktop & Fernzugriff',
       commands: [
         { id: 'rdpopen', func: 'RDP-Verbindung öffnen', when: 'Remote aufschalten',
-          buildCmd: (h) => local(`mstsc /v:${h}`), action: 'read', local: true },
+          buildCmd: (h) => `Start-Process mstsc.exe -ArgumentList '/v:${h}'; Write-Output 'RDP-Verbindung zu ${h} wird geoeffnet...'`, action: 'read', local: true },
         { id: 'rdpenable', func: 'RDP aktivieren', when: 'Remote Desktop einschalten',
           buildCmd: (h) => remote(h, `Set-ItemProperty -Path 'HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server' -Name fDenyTSConnections -Value 0 -EA Stop; Enable-NetFirewallRule -DisplayGroup 'Remote Desktop' -EA SilentlyContinue; Write-Output "RDP aktiviert"`), action: 'write' },
         { id: 'rdpfw', func: 'RDP Firewall freigeben', when: 'RDP erlauben',
           buildCmd: (h) => remote(h, `Enable-NetFirewallRule -DisplayGroup 'Remote Desktop' -EA Stop; Write-Output "RDP-Firewall-Regeln aktiviert"`), action: 'write' },
         { id: 'msra', func: 'Remote-Unterstützung', when: 'Helfen ohne Abmeldung',
-          buildCmd: (h) => local(`msra /offerRA ${h}`), action: 'read', local: true },
+          buildCmd: (h) => `Start-Process msra.exe -ArgumentList '/offerRA','${h}'; Write-Output 'Remote-Unterstuetzung fuer ${h} wird geoeffnet...'`, action: 'read', local: true },
       ],
     },
     // ── 16: Zertifikate ──────────────────────────────────────────────────────
@@ -929,6 +947,288 @@ function buildCategories(): Category[] {
           buildCmd: (h) => remote(h, `Remove-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems' -Name * -EA SilentlyContinue; Remove-Item 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList' -EA SilentlyContinue; Remove-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DoNotDisableAddinList' -Name * -EA SilentlyContinue; Write-Output 'enaio Resiliency-Registry bereinigt (DisabledItems, CrashingAddinList, DoNotDisableAddinList)'`), action: 'write' },
       ],
     },
+    // ── Standard-Apps / Dateizuordnungen ────────────────────────────────────────
+    {
+      id: 'fileassoc', label: 'Standard-Apps / Dateizuordnungen',
+      commands: [
+        // ── Anzeigen ─────────────────────────────────────────────────────────
+        { id: 'assoc-show', func: 'Standard-App für Dateityp anzeigen', when: 'Welche App öffnet PDF, HTML, JPG etc.?',
+          buildCmd: (h, i) => {
+            const ext = (i || '.pdf').trim().replace(/^\.?/, '.')
+            return remote(h, [
+              `$ext='${ext}'`,
+              `$uc = Get-ItemProperty "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\$ext\\UserChoice" -EA SilentlyContinue`,
+              `$progId = if($uc){$uc.ProgId}else{'(nicht gesetzt)'}`,
+              `$appName = '(unbekannt)'`,
+              `if($progId -and $progId -ne '(nicht gesetzt)') {`,
+              `  $shell = Get-ItemProperty "HKLM:\\SOFTWARE\\Classes\\$progId\\shell\\open\\command" -EA SilentlyContinue`,
+              `  if(-not $shell){ $shell = Get-ItemProperty "HKCU:\\Software\\Classes\\$progId\\shell\\open\\command" -EA SilentlyContinue }`,
+              `  if($shell) {`,
+              `    $exe = $shell.'(default)' -replace '"',''; $exe = ($exe -split '\\s+/| -%| --')[0].Trim()`,
+              `    if(Test-Path $exe -EA SilentlyContinue){ $appName = (Get-ItemProperty $exe).VersionInfo.ProductName }`,
+              `    if(-not $appName -or $appName -eq '(unbekannt)'){ $appName = [System.IO.Path]::GetFileNameWithoutExtension($exe) }`,
+              `  }`,
+              `  $friendly = Get-ItemProperty "HKLM:\\SOFTWARE\\Classes\\$progId" -EA SilentlyContinue`,
+              `  if($friendly -and $friendly.'(default)'){ $appName = $friendly.'(default)' }`,
+              `}`,
+              `@{Endung=$ext;'Aktuelle App'=$appName;ProgID=$progId} | ConvertTo-Json -Compress`,
+            ].join('; '))
+          },
+          action: 'read',
+          input: { type: 'dropdown', options: ['.pdf', '.html', '.htm', '.txt', '.jpg', '.png', '.docx', '.xlsx', '.pptx', '.mp4', '.mp3', '.zip', '.csv'] },
+        },
+        { id: 'assoc-overview', func: 'Übersicht: Alle wichtigen Dateitypen', when: 'Standard-Apps für alle gängigen Formate',
+          buildCmd: (h) => remote(h, [
+            `$results = @()`,
+            `$exts = @('.pdf','.html','.txt','.jpg','.png','.docx','.xlsx','.pptx','.mp4','.zip','.csv','.xml')`,
+            `foreach($ext in $exts) {`,
+            `  $uc = Get-ItemProperty "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\$ext\\UserChoice" -EA SilentlyContinue`,
+            `  $progId = if($uc){$uc.ProgId}else{'—'}`,
+            `  $name = $progId`,
+            `  $known = @{ChromeHTML='Google Chrome';MSEdgeHTM='Microsoft Edge';MSEdgePDF='Microsoft Edge';FirefoxHTML='Firefox';FirefoxURL='Firefox';'AcroExch.Document.DC'='Adobe Acrobat Reader';'Applications\\notepad.exe'='Notepad';'txtfile'='Notepad';'Notepad++_file'='Notepad++';'WMP11.AssocFile.MP4'='Windows Media Player';'AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs'='Fotos App';'AppX43xyktxkfjwvhkj508hkz7v6ne8jpmh0'='Fotos App';'CompressedFolder'='Windows Explorer';'Excel.Sheet.12'='Microsoft Excel';'Word.Document.12'='Microsoft Word';'PowerPoint.Show.12'='Microsoft PowerPoint';'VLC.mp4'='VLC Media Player'}`,
+            `  if($known.ContainsKey($progId)){$name=$known[$progId]}`,
+            `  $results += @{Endung=$ext;'Standard-App'=$name;ProgID=$progId}`,
+            `}`,
+            `$results | ConvertTo-Json -Compress`,
+          ].join(' ')), action: 'read' },
+        { id: 'assoc-browser', func: 'Standard-Browser anzeigen', when: 'Welcher Browser ist als Standard eingestellt?',
+          buildCmd: (h) => remote(h, [
+            `$http = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice' -EA SilentlyContinue).ProgId`,
+            `$https = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\https\\UserChoice' -EA SilentlyContinue).ProgId`,
+            `$known = @{ChromeHTML='Google Chrome';MSEdgeHTM='Microsoft Edge';FirefoxURL='Mozilla Firefox';BraveHTML='Brave Browser';OperaStable='Opera'}`,
+            `$name = if($known.ContainsKey($http)){$known[$http]}else{$http}`,
+            `@{'Standard-Browser'=$name;'HTTP ProgID'=$http;'HTTPS ProgID'=$https} | ConvertTo-Json -Compress`,
+          ].join('; ')), action: 'read' },
+        { id: 'assoc-mail', func: 'Standard-Mail-App anzeigen', when: 'Welche App öffnet E-Mail-Links?',
+          buildCmd: (h) => remote(h, [
+            `$mailto = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\mailto\\UserChoice' -EA SilentlyContinue).ProgId`,
+            `$known = @{'Outlook.URL.mailto.15'='Microsoft Outlook';'ChromeHTML'='Gmail (Chrome)';'MSEdgeHTM'='Outlook Web (Edge)';'thunderbird.url.mailto'='Mozilla Thunderbird'}`,
+            `$name = if($known.ContainsKey($mailto)){$known[$mailto]}else{$mailto}`,
+            `@{'Standard-Mail-App'=$name;'Mailto ProgID'=$mailto} | ConvertTo-Json -Compress`,
+          ].join('; ')), action: 'read' },
+
+        // ── Verfügbare Apps auslesen ─────────────────────────────────────────
+        { id: 'assoc-apps', func: 'Verfügbare Apps für einen Dateityp', when: 'Welche Programme sind auf dem PC installiert die diesen Typ öffnen können?',
+          buildCmd: (h, i) => {
+            const ext = (i || '.pdf').trim().replace(/^\.?/, '.')
+            return remote(h, [
+              `$ext='${ext}'; $apps = @()`,
+              `$known = @{ChromeHTML='Google Chrome';MSEdgeHTM='Microsoft Edge';MSEdgePDF='Microsoft Edge (PDF)';FirefoxHTML='Mozilla Firefox';'AcroExch.Document.DC'='Adobe Acrobat Reader';'AcroExch.Document'='Adobe Acrobat';'FoxitPhantomPDF.Document'='Foxit PDF';'Applications\\notepad.exe'='Notepad';'txtfile'='Editor (Notepad)';'Notepad++_file'='Notepad++';'VSCode.txt'='Visual Studio Code';'Applications\\wordpad.exe'='WordPad';'Word.Document.12'='Microsoft Word';'Excel.Sheet.12'='Microsoft Excel';'CompressedFolder'='Windows Explorer (ZIP)';'WinRAR'='WinRAR';'7-Zip.zip'='7-Zip';'VLC.mp4'='VLC Media Player';'WMP11.AssocFile.MP4'='Windows Media Player'}`,
+              `# OpenWithProgids`,
+              `$k1="HKLM:\\SOFTWARE\\Classes\\$ext\\OpenWithProgids"`,
+              `if(Test-Path $k1){(Get-ItemProperty $k1 -EA SilentlyContinue).PSObject.Properties | Where-Object {$_.Name -notmatch '^PS'} | ForEach-Object { $pid=$_.Name; $name=if($known.ContainsKey($pid)){$known[$pid]}else{$pid}; $apps += @{App=$name;ProgID=$pid;Quelle='System'} }}`,
+              `# OpenWithList (user)`,
+              `$k2="HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\$ext\\OpenWithList"`,
+              `if(Test-Path $k2){$p=Get-ItemProperty $k2 -EA SilentlyContinue; $p.PSObject.Properties | Where-Object {$_.Name -match '^[a-z]$'} | ForEach-Object { $apps += @{App=$_.Value;ProgID='—';Quelle='Benutzer'} }}`,
+              `if($apps.Count -eq 0){@{Info="Keine registrierten Apps fuer $ext gefunden"} | ConvertTo-Json -Compress}else{$apps | ConvertTo-Json -Compress}`,
+            ].join('; '))
+          },
+          action: 'read',
+          input: { type: 'dropdown', options: ['.pdf', '.html', '.txt', '.jpg', '.png', '.docx', '.xlsx', '.mp4', '.zip'] },
+        },
+
+        // ── Ändern per Klick ─────────────────────────────────────────────────
+        { id: 'assoc-set-pdf-adobe', func: 'PDF → Adobe Acrobat Reader', when: 'PDF-Dateien mit Adobe öffnen',
+          buildCmd: (h) => remote(h, `cmd /c "assoc .pdf=AcroExch.Document.DC" 2>&1; cmd /c "ftype AcroExch.Document.DC" 2>&1; @{Aktion='PDF-Zuordnung geaendert';Programm='Adobe Acrobat Reader';ProgID='AcroExch.Document.DC';Hinweis='Die Systemzuordnung wurde geaendert. Fuer die Benutzer-Auswahl muss der User einmalig bei Doppelklick auf eine PDF-Datei Adobe waehlen und Immer verwenden anklicken.'} | ConvertTo-Json -Compress`),
+          action: 'write' },
+        { id: 'assoc-set-pdf-edge', func: 'PDF → Microsoft Edge', when: 'PDF-Dateien mit Edge öffnen',
+          buildCmd: (h) => remote(h, `cmd /c "assoc .pdf=MSEdgePDF" 2>&1; @{Aktion='PDF-Zuordnung geaendert';Programm='Microsoft Edge';ProgID='MSEdgePDF';Hinweis='Die Systemzuordnung wurde geaendert.'} | ConvertTo-Json -Compress`),
+          action: 'write' },
+        { id: 'assoc-set-html-chrome', func: 'HTML → Google Chrome', when: 'Webseiten-Dateien mit Chrome öffnen',
+          buildCmd: (h) => remote(h, `cmd /c "assoc .html=ChromeHTML" 2>&1; cmd /c "assoc .htm=ChromeHTML" 2>&1; @{Aktion='HTML-Zuordnung geaendert';Programm='Google Chrome';ProgID='ChromeHTML'} | ConvertTo-Json -Compress`),
+          action: 'write' },
+        { id: 'assoc-set-html-edge', func: 'HTML → Microsoft Edge', when: 'Webseiten-Dateien mit Edge öffnen',
+          buildCmd: (h) => remote(h, `cmd /c "assoc .html=MSEdgeHTM" 2>&1; cmd /c "assoc .htm=MSEdgeHTM" 2>&1; @{Aktion='HTML-Zuordnung geaendert';Programm='Microsoft Edge';ProgID='MSEdgeHTM'} | ConvertTo-Json -Compress`),
+          action: 'write' },
+        { id: 'assoc-set-html-firefox', func: 'HTML → Mozilla Firefox', when: 'Webseiten-Dateien mit Firefox öffnen',
+          buildCmd: (h) => remote(h, `cmd /c "assoc .html=FirefoxHTML" 2>&1; cmd /c "assoc .htm=FirefoxHTML" 2>&1; @{Aktion='HTML-Zuordnung geaendert';Programm='Mozilla Firefox';ProgID='FirefoxHTML'} | ConvertTo-Json -Compress`),
+          action: 'write' },
+        { id: 'assoc-set-txt-notepadpp', func: 'TXT → Notepad++', when: 'Textdateien mit Notepad++ öffnen',
+          buildCmd: (h) => remote(h, `cmd /c "assoc .txt=Notepad++_file" 2>&1; @{Aktion='TXT-Zuordnung geaendert';Programm='Notepad++';ProgID='Notepad++_file'} | ConvertTo-Json -Compress`),
+          action: 'write' },
+        { id: 'assoc-set-txt-notepad', func: 'TXT → Editor (Notepad)', when: 'Textdateien mit Windows-Editor öffnen',
+          buildCmd: (h) => remote(h, `cmd /c "assoc .txt=txtfile" 2>&1; @{Aktion='TXT-Zuordnung geaendert';Programm='Windows Editor (Notepad)';ProgID='txtfile'} | ConvertTo-Json -Compress`),
+          action: 'write' },
+
+        // ── Einstellungen-App öffnen (Fallback) ──────────────────────────────
+        { id: 'assoc-open-settings', func: 'Standard-Apps Einstellungen öffnen', when: 'Windows-Einstellungen für Standard-Apps auf dem Ziel-PC öffnen',
+          buildCmd: (h) => remote(h, `Start-Process 'ms-settings:defaultapps'; @{Aktion='Einstellungen geoeffnet';Hinweis='Die Windows Standard-Apps Einstellungen wurden auf dem Ziel-PC geoeffnet. Der angemeldete Benutzer kann dort seine Standard-Apps aendern.'} | ConvertTo-Json -Compress`),
+          action: 'write' },
+      ],
+    },
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // UMGEBUNGSVARIABLEN — System- und Benutzervariablen anzeigen/setzen
+    // ══════════════════════════════════════════════════════════════════════════
+    {
+      id: 'envvars', label: 'Umgebungsvariablen',
+      commands: [
+        // ── Anzeigen ─────────────────────────────────────────────────────────
+        { id: 'env-system', func: 'System-Umgebungsvariablen anzeigen', when: 'PATH, TEMP, ComSpec und andere Systemvariablen',
+          buildCmd: (h) => remote(h, `[System.Environment]::GetEnvironmentVariables('Machine').GetEnumerator() | Sort-Object Name | ForEach-Object { @{Variable=$_.Name;Wert=$_.Value;Bereich='System'} } | ConvertTo-Json -Compress`),
+          action: 'read' },
+        { id: 'env-user', func: 'Benutzer-Umgebungsvariablen anzeigen', when: 'Variablen des angemeldeten Benutzers',
+          buildCmd: (h) => remote(h, `[System.Environment]::GetEnvironmentVariables('User').GetEnumerator() | Sort-Object Name | ForEach-Object { @{Variable=$_.Name;Wert=$_.Value;Bereich='Benutzer'} } | ConvertTo-Json -Compress`),
+          action: 'read' },
+        { id: 'env-path', func: 'PATH-Variable anzeigen (übersichtlich)', when: 'Alle Einträge im System-PATH einzeln auflisten',
+          buildCmd: (h) => remote(h, [
+            `$sysPath = [System.Environment]::GetEnvironmentVariable('PATH','Machine') -split ';' | Where-Object {$_}`,
+            `$usrPath = [System.Environment]::GetEnvironmentVariable('PATH','User') -split ';' | Where-Object {$_}`,
+            `$results = @()`,
+            `$i=1; foreach($p in $sysPath){ $results += @{Nr=$i;Pfad=$p;Bereich='System';Existiert=if(Test-Path $p -EA SilentlyContinue){'Ja'}else{'Nein'}}; $i++ }`,
+            `foreach($p in $usrPath){ $results += @{Nr=$i;Pfad=$p;Bereich='Benutzer';Existiert=if(Test-Path $p -EA SilentlyContinue){'Ja'}else{'Nein'}}; $i++ }`,
+            `$results | ConvertTo-Json -Compress`,
+          ].join('; ')),
+          action: 'read' },
+        { id: 'env-single', func: 'Einzelne Variable abfragen', when: 'Wert einer bestimmten Variable anzeigen',
+          buildCmd: (h, i) => {
+            const name = (i || 'PATH').trim()
+            return remote(h, [
+              `$name='${name}'`,
+              `$sys = [System.Environment]::GetEnvironmentVariable($name,'Machine')`,
+              `$usr = [System.Environment]::GetEnvironmentVariable($name,'User')`,
+              `$proc = [System.Environment]::GetEnvironmentVariable($name,'Process')`,
+              `@{Variable=$name;'System-Wert'=if($sys){$sys}else{'(nicht gesetzt)'}; 'Benutzer-Wert'=if($usr){$usr}else{'(nicht gesetzt)'}; 'Aktuell (Prozess)'=if($proc){$proc}else{'(nicht gesetzt)'}} | ConvertTo-Json -Compress`,
+            ].join('; '))
+          },
+          action: 'read',
+          input: { type: 'text', placeholder: 'Variablenname z.B. JAVA_HOME' },
+          templates: [
+            { label: 'PATH', value: 'PATH' },
+            { label: 'TEMP', value: 'TEMP' },
+            { label: 'JAVA_HOME', value: 'JAVA_HOME' },
+            { label: 'COMPUTERNAME', value: 'COMPUTERNAME' },
+            { label: 'USERNAME', value: 'USERNAME' },
+            { label: 'USERPROFILE', value: 'USERPROFILE' },
+            { label: 'APPDATA', value: 'APPDATA' },
+            { label: 'ProgramFiles', value: 'ProgramFiles' },
+          ],
+        },
+
+        // ── Setzen / Ändern ──────────────────────────────────────────────────
+        { id: 'env-set-system', func: 'System-Variable setzen/ändern', when: 'Neue Systemvariable erstellen oder vorhandene ändern',
+          buildCmd: (h, i) => {
+            const parts = (i || '').split('=')
+            const name = (parts[0] || '').trim()
+            const value = parts.slice(1).join('=').trim()
+            if (!name) return remote(h, `@{Fehler='Bitte Variable eingeben'} | ConvertTo-Json -Compress`)
+            return remote(h, [
+              `$name='${name.replace(/'/g, "''")}'`,
+              `$value='${value.replace(/'/g, "''")}'`,
+              `$old = [System.Environment]::GetEnvironmentVariable($name,'Machine')`,
+              `[System.Environment]::SetEnvironmentVariable($name,$value,'Machine')`,
+              `$new = [System.Environment]::GetEnvironmentVariable($name,'Machine')`,
+              `@{Variable=$name;'Alter Wert'=if($old){$old}else{'(neu erstellt)'}; 'Neuer Wert'=$new; Bereich='System'; Hinweis='Aenderung gilt nach Neustart der Programme oder Abmeldung/Anmeldung.'} | ConvertTo-Json -Compress`,
+            ].join('; '))
+          },
+          action: 'write',
+          input: { type: 'envvar', placeholder: 'VARIABLENNAME=Wert' },
+          templates: [
+            { label: 'JAVA_HOME', value: 'JAVA_HOME=C:\\Program Files\\Java\\jdk-17' },
+            { label: 'NODE_ENV', value: 'NODE_ENV=production' },
+            { label: 'PYTHONPATH', value: 'PYTHONPATH=C:\\Python312' },
+          ],
+        },
+        { id: 'env-set-user', func: 'Benutzer-Variable setzen/ändern', when: 'Variable nur für den angemeldeten Benutzer setzen',
+          buildCmd: (h, i) => {
+            const parts = (i || '').split('=')
+            const name = (parts[0] || '').trim()
+            const value = parts.slice(1).join('=').trim()
+            if (!name) return remote(h, `@{Fehler='Bitte Variable eingeben'} | ConvertTo-Json -Compress`)
+            return remote(h, [
+              `$name='${name.replace(/'/g, "''")}'`,
+              `$value='${value.replace(/'/g, "''")}'`,
+              `$old = [System.Environment]::GetEnvironmentVariable($name,'User')`,
+              `[System.Environment]::SetEnvironmentVariable($name,$value,'User')`,
+              `$new = [System.Environment]::GetEnvironmentVariable($name,'User')`,
+              `@{Variable=$name;'Alter Wert'=if($old){$old}else{'(neu erstellt)'}; 'Neuer Wert'=$new; Bereich='Benutzer'} | ConvertTo-Json -Compress`,
+            ].join('; '))
+          },
+          action: 'write',
+          input: { type: 'envvar', placeholder: 'VARIABLENNAME=Wert' },
+        },
+
+        // ── PATH erweitern ───────────────────────────────────────────────────
+        { id: 'env-path-add', func: 'Pfad zum System-PATH hinzufügen', when: 'Neuen Ordner zum PATH hinzufügen (z.B. für ein Tool)',
+          buildCmd: (h, i) => {
+            const newPath = (i || '').trim()
+            if (!newPath) return remote(h, `@{Fehler='Bitte den Pfad eingeben der zum PATH hinzugefuegt werden soll'} | ConvertTo-Json -Compress`)
+            return remote(h, [
+              `$add='${newPath.replace(/'/g, "''")}'`,
+              `$current = [System.Environment]::GetEnvironmentVariable('PATH','Machine')`,
+              `if($current -split ';' -contains $add){ @{Info='Pfad ist bereits im PATH enthalten';Pfad=$add} | ConvertTo-Json -Compress }`,
+              `else {`,
+              `  $new = $current.TrimEnd(';') + ';' + $add`,
+              `  [System.Environment]::SetEnvironmentVariable('PATH',$new,'Machine')`,
+              `  @{Aktion='Pfad hinzugefuegt';Pfad=$add;Hinweis='Aenderung wird nach Neustart der Programme wirksam.'} | ConvertTo-Json -Compress`,
+              `}`,
+            ].join(' '))
+          },
+          action: 'write',
+          input: { type: 'text', placeholder: 'z.B. C:\\Tools\\bin' },
+          templates: [
+            { label: 'Python', value: 'C:\\Python312' },
+            { label: 'Python Scripts', value: 'C:\\Python312\\Scripts' },
+            { label: 'Node.js', value: 'C:\\Program Files\\nodejs' },
+            { label: 'Git', value: 'C:\\Program Files\\Git\\cmd' },
+            { label: 'Java bin', value: 'C:\\Program Files\\Java\\jdk-17\\bin' },
+          ],
+        },
+        { id: 'env-path-remove', func: 'Pfad aus System-PATH entfernen', when: 'Einen Ordner aus dem PATH löschen',
+          buildCmd: (h, i) => {
+            const rmPath = (i || '').trim()
+            if (!rmPath) return remote(h, `@{Fehler='Bitte den Pfad eingeben der entfernt werden soll'} | ConvertTo-Json -Compress`)
+            return remote(h, [
+              `$rem='${rmPath.replace(/'/g, "''")}'`,
+              `$current = [System.Environment]::GetEnvironmentVariable('PATH','Machine')`,
+              `$parts = $current -split ';' | Where-Object {$_ -and $_.TrimEnd('\\') -ne $rem.TrimEnd('\\')}`,
+              `$new = $parts -join ';'`,
+              `[System.Environment]::SetEnvironmentVariable('PATH',$new,'Machine')`,
+              `@{Aktion='Pfad entfernt';Pfad=$rem;'Eintraege vorher'=($current -split ';').Count; 'Eintraege nachher'=$parts.Count} | ConvertTo-Json -Compress`,
+            ].join('; '))
+          },
+          action: 'critical',
+          input: { type: 'text', placeholder: 'Exakter Pfad z.B. C:\\Tools\\bin' },
+        },
+
+        // ── Löschen ──────────────────────────────────────────────────────────
+        { id: 'env-delete-system', func: 'System-Variable löschen', when: 'Eine Systemvariable komplett entfernen',
+          buildCmd: (h, i) => {
+            const name = (i || '').trim()
+            if (!name) return remote(h, `@{Fehler='Bitte den Namen der Variable eingeben'} | ConvertTo-Json -Compress`)
+            return remote(h, [
+              `$name='${name.replace(/'/g, "''")}'`,
+              `$old = [System.Environment]::GetEnvironmentVariable($name,'Machine')`,
+              `if(-not $old){ @{Info="Variable '$name' existiert nicht im System-Bereich"} | ConvertTo-Json -Compress }`,
+              `else {`,
+              `  [System.Environment]::SetEnvironmentVariable($name,$null,'Machine')`,
+              `  @{Aktion='Variable geloescht';Variable=$name;'Alter Wert'=$old;Bereich='System'} | ConvertTo-Json -Compress`,
+              `}`,
+            ].join(' '))
+          },
+          action: 'critical',
+          input: { type: 'text', placeholder: 'VARIABLENNAME' },
+        },
+        { id: 'env-delete-user', func: 'Benutzer-Variable löschen', when: 'Eine Benutzervariable komplett entfernen',
+          buildCmd: (h, i) => {
+            const name = (i || '').trim()
+            if (!name) return remote(h, `@{Fehler='Bitte den Namen der Variable eingeben'} | ConvertTo-Json -Compress`)
+            return remote(h, [
+              `$name='${name.replace(/'/g, "''")}'`,
+              `$old = [System.Environment]::GetEnvironmentVariable($name,'User')`,
+              `if(-not $old){ @{Info="Variable '$name' existiert nicht im Benutzer-Bereich"} | ConvertTo-Json -Compress }`,
+              `else {`,
+              `  [System.Environment]::SetEnvironmentVariable($name,$null,'User')`,
+              `  @{Aktion='Variable geloescht';Variable=$name;'Alter Wert'=$old;Bereich='Benutzer'} | ConvertTo-Json -Compress`,
+              `}`,
+            ].join(' '))
+          },
+          action: 'critical',
+          input: { type: 'text', placeholder: 'VARIABLENNAME' },
+        },
+      ],
+    },
+
     // ── 24: Gerätemanager & Treiber ───────────────────────────────────────────
     {
       id: 'devmgr', label: 'Gerätemanager & Treiber',

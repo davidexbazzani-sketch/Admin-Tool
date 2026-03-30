@@ -424,34 +424,81 @@ ipcMain.handle('net:readRawFile', (_e, relativePath: string) => {
 let _wbCache: Record<string, unknown> | null = null
 
 function loadWB(): Record<string, unknown> | null {
-  if (_wbCache) return _wbCache
-  // Try both paths
-  const data = ns.readJson<Record<string, unknown>>('knowledge_base/wissensdatenbank.json')
+  if (_wbCache && Array.isArray(_wbCache.categories)) return _wbCache
+
+  let data = ns.readJson<Record<string, unknown>>('knowledge_base/wissensdatenbank.json')
     ?? ns.readJson<Record<string, unknown>>('wissensdatenbank.json')
+
   if (data) {
-    _wbCache = data
-    console.log('[WB] Loaded wissensdatenbank.json into cache')
+    console.log(`[WB] Raw JSON loaded. Type: ${typeof data}, isArray: ${Array.isArray(data)}, keys: ${Object.keys(data).slice(0,10).join(',')}`)
+
+    // Check if data has our expected structure
+    if (Array.isArray(data.categories)) {
+      const cats = data.categories as Array<Record<string, unknown>>
+      const hasSubs = cats.length > 0 && Array.isArray(cats[0].subcategories)
+      if (hasSubs) {
+        const subs = cats[0].subcategories as Array<Record<string, unknown>>
+        const hasArticles = subs.length > 0 && Array.isArray(subs[0].articles)
+        if (hasArticles) {
+          console.log(`[WB] Structure OK: ${cats.length} categories with subcategories+articles`)
+          _wbCache = data
+          return data
+        }
+      }
+      console.log('[WB] Has categories but missing subcategories/articles structure')
+    }
+
+    // The server JSON has a DIFFERENT structure — use generator instead
+    console.log('[WB] Server JSON does not match expected format — falling back to generator')
+  } else {
+    console.log('[WB] wissensdatenbank.json NOT FOUND on network')
   }
-  return data
+
+  // Fallback: use generator (always works, produces correct structure)
+  try {
+    const { generateWissensdatenbank } = require('./wissensdatenbankGenerator')
+    const wb = generateWissensdatenbank()
+    _wbCache = wb as unknown as Record<string, unknown>
+    const cats = wb.categories as unknown[]
+    console.log(`[WB] Using generated data: ${cats.length} categories`)
+    // Try to save to network for next time (may fail offline)
+    try { ns.writeJson('knowledge_base/wissensdatenbank_generated.json', wb) } catch { /* offline */ }
+    return _wbCache
+  } catch (err) {
+    console.error('[WB] Generator failed:', err)
+    return null
+  }
 }
 
 ipcMain.handle('wb:get-categories', async () => {
   const data = loadWB()
-  if (!data?.categories) return []
-  const cats = data.categories as Array<{ id: string; name: string; icon: string; subcategories: Array<{ id: string; name: string; articles: unknown[] }> }>
-  return cats.map(c => ({
-    id: c.id, name: c.name, icon: c.icon,
-    articleCount: c.subcategories.reduce((s, sc) => s + (sc.articles?.length ?? 0), 0),
-    subcategories: c.subcategories.map(sc => ({ id: sc.id, name: sc.name, articleCount: sc.articles?.length ?? 0 })),
-  }))
+  if (!data || !Array.isArray(data.categories)) return []
+  return (data.categories as Array<Record<string, unknown>>).map(c => {
+    const subs = Array.isArray(c.subcategories) ? c.subcategories as Array<Record<string, unknown>> : []
+    return {
+      id: c.id ?? '', name: c.name ?? '', icon: c.icon ?? 'folder',
+      articleCount: subs.reduce((s, sc) => s + (Array.isArray(sc.articles) ? sc.articles.length : 0), 0),
+      subcategories: subs.map(sc => ({
+        id: sc.id ?? '', name: sc.name ?? '',
+        articleCount: Array.isArray(sc.articles) ? sc.articles.length : 0,
+      })),
+    }
+  })
 })
 
 ipcMain.handle('wb:get-articles', async (_e, subcategoryId: string) => {
   const data = loadWB()
-  if (!data?.categories) return []
-  for (const cat of data.categories as Array<{ subcategories: Array<{ id: string; articles: Array<{ id: string; title: string; description: string; tags: string[] }> }> }>) {
-    for (const sc of cat.subcategories) {
-      if (sc.id === subcategoryId) return sc.articles.map(a => ({ id: a.id, title: a.title, description: a.description, tags: a.tags }))
+  if (!data || !Array.isArray(data.categories)) return []
+  for (const cat of data.categories as Array<Record<string, unknown>>) {
+    const subs = Array.isArray(cat.subcategories) ? cat.subcategories as Array<Record<string, unknown>> : []
+    for (const sc of subs) {
+      if (sc.id === subcategoryId) {
+        const articles = Array.isArray(sc.articles) ? sc.articles as Array<Record<string, unknown>> : []
+        return articles.map(a => ({
+          id: a.id ?? '', title: a.title ?? '', description: a.description ?? '',
+          tags: Array.isArray(a.tags) ? a.tags : [],
+        }))
+      }
     }
   }
   return []
@@ -459,11 +506,16 @@ ipcMain.handle('wb:get-articles', async (_e, subcategoryId: string) => {
 
 ipcMain.handle('wb:get-article', async (_e, articleId: string) => {
   const data = loadWB()
-  if (!data?.categories) return null
-  for (const cat of data.categories as Array<{ subcategories: Array<{ id: string; articles: Array<{ id: string }> }> }>) {
-    for (const sc of cat.subcategories) {
-      for (const a of sc.articles) {
-        if (a.id === articleId) return a
+  if (!data || !Array.isArray(data.categories)) return null
+  for (const cat of data.categories as Array<Record<string, unknown>>) {
+    const subs = Array.isArray(cat.subcategories) ? cat.subcategories as Array<Record<string, unknown>> : []
+    for (const sc of subs) {
+      const articles = Array.isArray(sc.articles) ? sc.articles as Array<Record<string, unknown>> : []
+      for (const a of articles) {
+        if (a.id === articleId) {
+          // Ensure steps and tags are arrays
+          return { ...a, steps: Array.isArray(a.steps) ? a.steps : [], tags: Array.isArray(a.tags) ? a.tags : [], relatedSkills: Array.isArray(a.relatedSkills) ? a.relatedSkills : [] }
+        }
       }
     }
   }
@@ -472,18 +524,26 @@ ipcMain.handle('wb:get-article', async (_e, articleId: string) => {
 
 ipcMain.handle('wb:search', async (_e, query: string) => {
   const data = loadWB()
-  if (!data?.categories || !query || query.length < 2) return []
+  if (!data || !Array.isArray(data.categories) || !query || query.length < 2) return []
   const q = query.toLowerCase()
   const results: unknown[] = []
-  for (const cat of data.categories as Array<{ name: string; subcategories: Array<{ name: string; articles: Array<{ id: string; title: string; description: string; tags: string[]; steps: Array<{ content: string }> }> }> }>) {
-    for (const sc of cat.subcategories) {
-      for (const a of sc.articles) {
-        const match = a.title.toLowerCase().includes(q)
-          || a.description.toLowerCase().includes(q)
-          || a.tags.some(t => t.toLowerCase().includes(q))
-          || a.steps?.some(s => s.content.toLowerCase().includes(q))
+  for (const cat of data.categories as Array<Record<string, unknown>>) {
+    const catName = String(cat.name ?? '')
+    const subs = Array.isArray(cat.subcategories) ? cat.subcategories as Array<Record<string, unknown>> : []
+    for (const sc of subs) {
+      const scName = String(sc.name ?? '')
+      const articles = Array.isArray(sc.articles) ? sc.articles as Array<Record<string, unknown>> : []
+      for (const a of articles) {
+        const title = String(a.title ?? '')
+        const desc = String(a.description ?? '')
+        const tags = Array.isArray(a.tags) ? a.tags as string[] : []
+        const steps = Array.isArray(a.steps) ? a.steps as Array<Record<string, unknown>> : []
+        const match = title.toLowerCase().includes(q)
+          || desc.toLowerCase().includes(q)
+          || tags.some(t => String(t).toLowerCase().includes(q))
+          || steps.some(s => String(s.content ?? '').toLowerCase().includes(q))
         if (match) {
-          results.push({ id: a.id, title: a.title, description: a.description, categoryName: cat.name, subcategoryName: sc.name, tags: a.tags })
+          results.push({ id: a.id, title, description: desc, categoryName: catName, subcategoryName: scName, tags })
           if (results.length >= 50) return results
         }
       }
@@ -493,23 +553,27 @@ ipcMain.handle('wb:search', async (_e, query: string) => {
 })
 
 ipcMain.handle('wb:ensure-generated', async () => {
-  // Check if wissensdatenbank.json exists and is large enough
-  const exists1 = ns.fileExists('knowledge_base/wissensdatenbank.json')
-  const exists2 = ns.fileExists('wissensdatenbank.json')
-  if (exists1 || exists2) {
-    console.log('[WB] wissensdatenbank.json already exists')
+  // If already cached in RAM, skip
+  if (_wbCache && Array.isArray(_wbCache.categories) && (_wbCache.categories as unknown[]).length > 0) {
+    console.log('[WB] Already in RAM cache')
     return { exists: true, generated: false }
   }
-  // Generate it
+  // Try loading from network
+  const loaded = loadWB()
+  if (loaded && Array.isArray(loaded.categories) && (loaded.categories as unknown[]).length > 0) {
+    console.log('[WB] Loaded from network')
+    return { exists: true, generated: false }
+  }
+  // Not found — generate it and keep in RAM (also try to save to network)
   try {
+    console.log('[WB] Not found — generating...')
     const { generateWissensdatenbank } = require('./wissensdatenbankGenerator')
     const wb = generateWissensdatenbank()
-    const wrote = ns.writeJson('knowledge_base/wissensdatenbank.json', wb)
-    if (wrote) {
-      _wbCache = wb as unknown as Record<string, unknown>
-      console.log('[WB] Generated and saved wissensdatenbank.json')
-      return { exists: true, generated: true }
-    }
+    _wbCache = wb as unknown as Record<string, unknown>
+    console.log(`[WB] Generated: ${(wb.categories as unknown[]).length} categories`)
+    // Try to save to network (may fail in offline mode — that's OK)
+    try { ns.writeJson('knowledge_base/wissensdatenbank.json', wb) } catch { /* offline */ }
+    return { exists: true, generated: true }
   } catch (err) {
     console.error('[WB] Generation failed:', err)
   }
@@ -588,23 +652,77 @@ ipcMain.handle('mail:sendRaw', async (_e, opts: {
       ]
 
       const vbsContent = vbsLines.join('\r\n')
+      // Save VBS to a shared temp location accessible by the desktop user
       const vbsPath = pjoin(tmpdir(), `it_admin_mail_${Date.now()}.vbs`)
+      const resultPath = vbsPath + '.result'
 
       console.log(`[mail:sendRaw][outlook] Writing VBS to: ${vbsPath}`)
       writeFileSync(vbsPath, vbsContent, 'utf-8')
 
       try {
-        const output = execSync(`cscript //nologo "${vbsPath}"`, { timeout: 30000, encoding: 'utf-8', windowsHide: true })
-        console.log(`[mail:sendRaw][outlook] cscript output: ${output.trim()}`)
-        return { success: true, method: 'outlook' }
+        // Detect current desktop user (may differ from process owner when running as admin)
+        const desktopUser = (() => {
+          try {
+            const { execSync: es } = require('child_process') as typeof import('child_process')
+            // query the interactive session user
+            const whoOut = es('query user 2>nul || quser 2>nul || echo UNKNOWN', { encoding: 'utf-8', windowsHide: true, timeout: 5000 })
+            const lines = whoOut.split('\n').filter(l => l.includes('Active') || l.includes('Aktiv'))
+            if (lines.length > 0) {
+              const parts = lines[0].trim().split(/\s+/)
+              const u = parts[0].replace(/^>/, '')
+              if (u && u !== 'UNKNOWN') return u
+            }
+          } catch {}
+          return ''
+        })()
+
+        const processUser = userInfo().username
+        console.log(`[mail:sendRaw][outlook] Process user: ${processUser}, Desktop user: ${desktopUser || '(same)'}`)
+
+        // If running as different user (admin elevation), use schtasks to run VBS as the desktop user
+        if (desktopUser && desktopUser.toLowerCase() !== processUser.toLowerCase()) {
+          console.log(`[mail:sendRaw][outlook] Running as elevated admin — using schtasks for desktop user: ${desktopUser}`)
+          const { execSync: es } = require('child_process') as typeof import('child_process')
+          const taskName = 'IT_Admin_SendMail'
+          // Create a wrapper VBS that writes result to file
+          const wrapperVbs = vbsLines.join('\r\n') + '\r\nDim fso : Set fso = CreateObject("Scripting.FileSystemObject")\r\nDim f : Set f = fso.CreateTextFile("' + resultPath.replace(/\\/g, '\\\\') + '", True)\r\nf.Write "OK"\r\nf.Close'
+          writeFileSync(vbsPath, wrapperVbs, 'utf-8')
+          try {
+            es(`schtasks /create /tn "${taskName}" /tr "cscript //nologo \\"${vbsPath}\\"" /sc once /st 00:00 /ru "${desktopUser}" /f`, { encoding: 'utf-8', windowsHide: true, timeout: 10000 })
+            es(`schtasks /run /tn "${taskName}"`, { encoding: 'utf-8', windowsHide: true, timeout: 10000 })
+            // Wait for result
+            const maxWait = 15000
+            const start = Date.now()
+            while (Date.now() - start < maxWait) {
+              if (existsSync(resultPath)) {
+                const res = readFileSync(resultPath, 'utf-8').trim()
+                console.log(`[mail:sendRaw][outlook] schtasks result: ${res}`)
+                try { unlinkSync(resultPath) } catch {}
+                try { es(`schtasks /delete /tn "${taskName}" /f`, { windowsHide: true, timeout: 5000 }) } catch {}
+                if (res === 'OK') return { success: true, method: 'outlook' }
+                break
+              }
+              // eslint-disable-next-line no-await-in-loop
+              await new Promise(r => setTimeout(r, 500))
+            }
+            try { es(`schtasks /delete /tn "${taskName}" /f`, { windowsHide: true, timeout: 5000 }) } catch {}
+          } catch (taskErr: unknown) {
+            console.error('[mail:sendRaw][outlook] schtasks error:', taskErr)
+          }
+        } else {
+          // Same user — run directly
+          const { execSync: es } = require('child_process') as typeof import('child_process')
+          const output = es(`cscript //nologo "${vbsPath}"`, { timeout: 30000, encoding: 'utf-8', windowsHide: true })
+          console.log(`[mail:sendRaw][outlook] cscript output: ${output.trim()}`)
+          return { success: true, method: 'outlook' }
+        }
       } catch (execErr: unknown) {
         const e = execErr as { stderr?: string; stdout?: string; message?: string }
         const errMsg = e.stderr || e.stdout || e.message || 'Outlook-Fehler'
-        console.error(`[mail:sendRaw][outlook] cscript error:`, errMsg)
-        // Don't return error yet — fall through to SMTP fallback below
-        console.log('[mail:sendRaw][outlook] Outlook failed, falling back to SMTP...')
+        console.error(`[mail:sendRaw][outlook] error:`, errMsg)
       } finally {
         try { unlinkSync(vbsPath) } catch { /* ignore */ }
+        try { unlinkSync(resultPath) } catch { /* ignore */ }
       }
     } catch (err) {
       console.error('[mail:sendRaw][outlook] exception:', err)

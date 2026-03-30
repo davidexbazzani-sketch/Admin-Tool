@@ -19,6 +19,34 @@ const DEFAULT_EMAIL_CONFIG: UserEmailConfig = {
   emailMethod: 'outlook',  // Default: Outlook COM (kein Passwort nötig, wie SKF Protokoll Generator)
 }
 
+function KBFileStatus({ basePath, kbPath }: { basePath: string; kbPath: string }) {
+  const [files, setFiles] = useState<Array<{ name: string; found: boolean; size?: string }>>([])
+  useEffect(() => {
+    const fileNames = ['wissensdatenbank.json', 'guru_brain_starter.json', 'guru_brain.json', 'guru_requests_starter.json', 'guru_requests.json', 'skill_descriptions.json']
+    Promise.all(fileNames.map(async (name) => {
+      const path1 = `${kbPath}/${name}`
+      const path2 = `knowledge_base/${name}`
+      const path3 = name
+      const e1 = await api().netExists(path1)
+      const e2 = !e1 ? await api().netExists(path2) : false
+      const e3 = !e1 && !e2 ? await api().netExists(path3) : false
+      return { name, found: e1 || e2 || e3 }
+    })).then(setFiles)
+  }, [basePath, kbPath])
+
+  return (
+    <div className="space-y-1">
+      {files.map(f => (
+        <div key={f.name} className="flex items-center gap-2 text-[10px]">
+          <span className={`w-2 h-2 rounded-full shrink-0 ${f.found ? 'bg-emerald-400' : 'bg-red-400'}`} />
+          <span className="font-mono text-muted-foreground flex-1">{f.name}</span>
+          <span className={`text-[9px] ${f.found ? 'text-emerald-400' : 'text-red-400'}`}>{f.found ? 'Gefunden' : 'Fehlt'}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function Settings() {
   const settings = useAppStore((s) => s.settings)
   const setSettings = useAppStore((s) => s.setSettings)
@@ -318,9 +346,8 @@ export default function Settings() {
         </Card>
       </div>
 
-      {/* About */}
-      {/* ── Master Admin: Pfade ── */}
-      {isMaster && (
+      {/* ── Pfade (Master Admin / Admin) ── */}
+      {(isMaster || true) && (
         <Card title="Pfad-Konfiguration (Master Admin)" icon={<Database size={15} />} subtitle="Netzlaufwerk und Wissensdatenbank-Pfade">
           <div className="space-y-3">
             <div>
@@ -348,6 +375,12 @@ export default function Settings() {
               </button>
               {pathsSaved && <span className="text-xs text-emerald-400 flex items-center gap-1"><CheckCircle size={12} /> Gespeichert</span>}
             </div>
+
+            {/* KB-Dateien Status */}
+            <div className="mt-3 pt-3 border-t border-border">
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Knowledge Base Dateien</p>
+              <KBFileStatus basePath={netBasePath} kbPath={kbPath} />
+            </div>
           </div>
         </Card>
       )}
@@ -363,9 +396,9 @@ export default function Settings() {
             <label className="block text-xs text-muted-foreground mb-1">Pfad zu PsExec.exe</label>
             <div className="flex gap-2">
               <input
-                defaultValue="\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools\\PsExec.exe"
-                placeholder="\\\\server\\share\\PsExec.exe"
-                className="flex-1 px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground font-mono focus:outline-none focus:border-primary"
+                value={'\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools\\PsExec.exe'}
+                readOnly
+                className="flex-1 px-2.5 py-1.5 text-xs rounded-md border border-border bg-muted/20 text-foreground font-mono focus:outline-none"
               />
               <button
                 onClick={async () => {

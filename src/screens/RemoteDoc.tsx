@@ -809,6 +809,44 @@ export default function RemoteDoc() {
       if (typeof parsed === 'string') {
         try { parsed = JSON.parse(parsed) } catch { /* keep as string */ }
       }
+
+      // ── Strip PS remoting metadata and unwrap "value" field ────────────
+      function stripPSMetadata(obj: unknown): unknown {
+        if (Array.isArray(obj)) {
+          return obj.map(item => stripPSMetadata(item))
+        }
+        if (typeof obj === 'object' && obj !== null) {
+          const o = obj as Record<string, unknown>
+          // Remove PS remoting fields
+          const hasPSMeta = 'PSComputerName' in o || 'RunspaceId' in o || 'PSShowComputerName' in o
+          if (hasPSMeta) {
+            const cleaned: Record<string, unknown> = {}
+            for (const [k, v] of Object.entries(o)) {
+              if (k !== 'PSComputerName' && k !== 'RunspaceId' && k !== 'PSShowComputerName') {
+                cleaned[k] = v
+              }
+            }
+            // If only "value" remains, unwrap it
+            const keys = Object.keys(cleaned)
+            if (keys.length === 1 && keys[0] === 'value') {
+              const val = cleaned.value
+              if (typeof val === 'string') {
+                try { return JSON.parse(val) } catch { return val }
+              }
+              return val
+            }
+            return cleaned
+          }
+        }
+        return obj
+      }
+      parsed = stripPSMetadata(parsed)
+
+      // Double-parse again after stripping (value field might be a JSON string)
+      if (typeof parsed === 'string') {
+        try { parsed = JSON.parse(parsed) } catch { /* keep as string */ }
+      }
+
       if (Array.isArray(parsed)) {
         if (parsed.length === 0) return <span className="text-muted-foreground text-[11px]">(keine Einträge)</span>
         if (typeof parsed[0] === 'object' && parsed[0] !== null) {
@@ -1338,6 +1376,8 @@ export default function RemoteDoc() {
                         const inputOk = !needsInput || (
                           cmd.input?.type === 'drivemap'
                             ? (inputVal.split('|')[0]?.trim() !== '' && (inputVal.split('|')[1] ?? '').trim() !== '')
+                            : cmd.input?.type === 'envvar'
+                            ? (inputVal.includes('=') && inputVal.split('=')[0]?.trim() !== '')
                             : inputVal.trim() !== ''
                         )
                         const inputVal2 = inputs[key] ?? ''
@@ -1516,6 +1556,61 @@ export default function RemoteDoc() {
                                         • <span className="font-mono">server\freigabe\ordner</span><br />
                                         </span>
                                         Das <span className="font-mono">\\</span> wird automatisch ergänzt.
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* ── Envvar: Zwei-Feld-Eingabe für Umgebungsvariablen ── */}
+                                {cmd.input?.type === 'envvar' && (
+                                  <div className="space-y-2 w-56">
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Variablenname</label>
+                                      <input
+                                        type="text"
+                                        placeholder="z.B. JAVA_HOME"
+                                        value={(inputVal.split('=')[0] ?? '')}
+                                        onChange={e => {
+                                          const val = inputVal.includes('=') ? inputVal.split('=').slice(1).join('=') : ''
+                                          setInputs(prev => ({ ...prev, [key]: `${e.target.value}=${val}` }))
+                                        }}
+                                        className="w-full px-2 py-1.5 text-[11px] rounded border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary uppercase"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Wert</label>
+                                      <input
+                                        type="text"
+                                        placeholder="z.B. C:\Program Files\Java\jdk-17"
+                                        value={inputVal.includes('=') ? inputVal.split('=').slice(1).join('=') : ''}
+                                        onChange={e => {
+                                          const name = inputVal.split('=')[0] ?? ''
+                                          setInputs(prev => ({ ...prev, [key]: `${name}=${e.target.value}` }))
+                                        }}
+                                        className="w-full px-2 py-1.5 text-[11px] rounded border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                    </div>
+                                    {cmd.templates && cmd.templates.length > 0 && (
+                                      <div className="flex flex-wrap gap-1">
+                                        {cmd.templates.map(t => (
+                                          <button key={t.label} type="button"
+                                            onClick={() => setInputs(prev => ({ ...prev, [key]: t.value }))}
+                                            className="px-1.5 py-0.5 text-[9px] rounded border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                                            {t.label}
+                                          </button>
+                                        ))}
+                                      </div>
+                                    )}
+                                    <div className="rounded-md bg-blue-500/5 border border-blue-500/20 p-2">
+                                      <p className="text-[9px] font-semibold text-blue-400 flex items-center gap-1"><Info size={10} /> So funktioniert es:</p>
+                                      <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                        1. Geben Sie den <strong>Variablennamen</strong> ein (z.B. JAVA_HOME)<br />
+                                        2. Geben Sie den <strong>Wert</strong> ein (z.B. einen Pfad)<br />
+                                        <span className="text-[8px]">
+                                        Oder klicken Sie auf eine Vorlage oben.<br />
+                                        System-Variablen gelten für alle Benutzer.<br />
+                                        Benutzer-Variablen nur für den angemeldeten User.
+                                        </span>
                                       </p>
                                     </div>
                                   </div>
