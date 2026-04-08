@@ -316,14 +316,17 @@ export default function Dashboards() {
     if (d.dashboards.length > 0 && !activeId) setActiveId(d.dashboards[0].id)
     setLoading(false)
 
-    // Build search index for add-tile dialog (try both paths)
-    async function loadDescs() {
-      let descs = await api().netReadJson<Record<string, SkillDescription>>('knowledge_base/skill_descriptions.json')
-      if (!descs) descs = await api().netReadJson<Record<string, SkillDescription>>('skill_descriptions.json')
-      if (descs) buildSearchIndex(CATEGORIES, descs)
-      else buildSearchIndex(CATEGORIES, null)
-    }
-    loadDescs()
+    // Build search index immediately so skill search works right away
+    buildSearchIndex(CATEGORIES, null)
+
+    // Then try to enhance with descriptions from network (non-blocking)
+    ;(async () => {
+      try {
+        let descs = await api().netReadJson<Record<string, SkillDescription>>('knowledge_base/skill_descriptions.json')
+        if (!descs) descs = await api().netReadJson<Record<string, SkillDescription>>('skill_descriptions.json')
+        if (descs) buildSearchIndex(CATEGORIES, descs)
+      } catch { /* offline — index already built without descriptions */ }
+    })()
   }, [username]) // eslint-disable-line
 
   useEffect(() => { load() }, [load])
@@ -427,12 +430,38 @@ export default function Dashboards() {
 
   // ── Tile CRUD ───────────────────────────────────────────────────────────────
   function handleAddTile(tile: DashboardTile) {
-    if (!activeId) return
-    tile.position = activeDash?.tiles.length ?? 0
+    let targetId = activeId
+
+    // If no dashboard exists, auto-create one
+    if (!targetId || !data.dashboards.find(d => d.id === targetId)) {
+      if (data.dashboards.length > 0) {
+        // Dashboards exist but none active — activate the first one
+        targetId = data.dashboards[0].id
+        setActiveId(targetId)
+      } else {
+        // No dashboards at all — create one automatically
+        const dash = createDashboard('Mein Dashboard')
+        const newData = { ...data, dashboards: [...data.dashboards, dash] }
+        targetId = dash.id
+        setActiveId(targetId)
+        tile.position = 0
+        const withTile = {
+          ...newData,
+          dashboards: newData.dashboards.map(d =>
+            d.id === targetId ? { ...d, tiles: [tile] } : d
+          ),
+        }
+        save(withTile)
+        setShowAddTile(false)
+        return
+      }
+    }
+
+    tile.position = data.dashboards.find(d => d.id === targetId)?.tiles.length ?? 0
     const newData = {
       ...data,
       dashboards: data.dashboards.map(d =>
-        d.id === activeId ? { ...d, tiles: [...d.tiles, tile] } : d
+        d.id === targetId ? { ...d, tiles: [...d.tiles, tile] } : d
       ),
     }
     save(newData)

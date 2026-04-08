@@ -15,7 +15,7 @@ import { useAppStore } from '../store/appStore'
 import { useAuthStore } from '../store/authStore'
 import { api } from '../electronAPI'
 import { ServicePanel } from '../components/ServicePanel'
-import { CATEGORIES, type ActionType, type CmdDef, type Category } from '../utils/remoteCommands'
+import { CATEGORIES, type ActionType, type CmdDef, type Category, setExecMethod, setPsExecDir, getPsExecDir, type ExecMethod } from '../utils/remoteCommands'
 import { loadFavorites, saveFavorites, addSkill, removeSkill, isSkillFavorite } from '../utils/favorites'
 import type { FavoritesData } from '../types/favorites'
 import { buildSearchIndex, searchSkills, type SearchResult, type SkillDescription } from '../utils/remoteDocSearch'
@@ -32,7 +32,7 @@ interface ServiceCheck {
   detail?: string
 }
 
-type ConnectionMode = 'full' | 'restricted' | 'none'
+type ConnectionMode = 'full' | 'wmi' | 'psexec' | 'schtasks' | 'none'
 
 interface ConnInfo {
   user: string
@@ -504,6 +504,39 @@ export default function RemoteDoc() {
     setConnInfo(null)
     setConnError('')
     setConnErrorDetail('')
+
+    // ── LOCAL MODE: Skip ping/WinRM, connect directly ──────────────────
+    const { getLocalMode } = await import('../utils/remoteCommands')
+    if (getLocalMode()) {
+      setChecks([
+        { id: 'ping', label: 'Erreichbarkeit', status: 'ok', detail: 'Lokaler Modus' },
+        { id: 'winrm', label: 'WinRM', status: 'ok', detail: 'Lokaler Modus — nicht benötigt' },
+        { id: 'info', label: 'Geräteinformationen', status: 'running' },
+      ])
+      try {
+        const infoRes = await api().runPowerShell([
+          `$cs = Get-CimInstance Win32_ComputerSystem`,
+          `$os = Get-CimInstance Win32_OperatingSystem`,
+          `@{user=$cs.UserName;model="$($cs.Manufacturer) $($cs.Model)";ram="$([math]::Round($cs.TotalPhysicalMemory/1GB,1)) GB";os=$os.Caption;lastBoot=$os.LastBootUpTime.ToString('dd.MM.yyyy HH:mm')} | ConvertTo-Json -Compress`,
+        ].join('; '), 10000)
+        const info = JSON.parse(infoRes.stdout?.trim() || '{}')
+        setCheck('info', { status: 'ok', detail: 'Lokaler Modus' })
+        setConnInfo({
+          user: info.user || '—', model: info.model || '—', ram: info.ram || '—',
+          os: info.os || '—', lastBoot: info.lastBoot || '—',
+          allOk: true, winrmOk: true, connectionMode: 'full', failedServices: [],
+        })
+      } catch {
+        setCheck('info', { status: 'ok', detail: 'Lokaler Modus' })
+        setConnInfo({
+          user: 'Lokaler Modus', model: '—', ram: '—', os: '—', lastBoot: '—',
+          allOk: true, winrmOk: true, connectionMode: 'full', failedServices: [],
+        })
+      }
+      setConnecting(false)
+      return
+    }
+    // ── END LOCAL MODE ──────────────────────────────────────────────────
     setShowErrorDetail(false)
     setSvcCount(null)
     setOutputs({})
@@ -589,6 +622,7 @@ export default function RemoteDoc() {
             connectionMode: 'full',
             failedServices: [],
           })
+          setExecMethod('winrm')
         }
 
         if (stage === 'error') {
@@ -611,55 +645,157 @@ export default function RemoteDoc() {
   }, [hostname])
 
   // ── Fallback: Restricted connection via CIM/DCOM ───────────────────────────
-  async function connectRestricted() {
+  async function connectWithFallback() {
     const h = hostname.trim()
     setShowFallbackDialog(false)
     setConnecting(true)
     setConnError('')
 
-    try {
-      // Try CIM over DCOM to get basic info
-      const script = [
-        `$r = @{ user='N/A'; model='N/A'; ram='N/A'; os='N/A'; lastBoot='N/A' }`,
-        `try {`,
-        `  $so = New-CimSessionOption -Protocol Dcom`,
-        `  $cs = New-CimSession -ComputerName '${h}' -SessionOption $so -EA Stop`,
-        `  $sys = Get-CimInstance Win32_ComputerSystem -CimSession $cs -EA SilentlyContinue`,
-        `  $osI = Get-CimInstance Win32_OperatingSystem -CimSession $cs -EA SilentlyContinue`,
-        `  if($sys) { $r.user = $sys.UserName; $r.model = "$($sys.Manufacturer) $($sys.Model)"; $r.ram = "$([math]::Round($sys.TotalPhysicalMemory/1GB,1)) GB" }`,
-        `  if($osI) { $r.os = $osI.Caption; $r.lastBoot = $osI.LastBootUpTime.ToString('dd.MM.yyyy HH:mm') }`,
-        `  Remove-CimSession $cs`,
-        `} catch {`,
-        `  try {`,
-        `    $sys2 = Get-WmiObject Win32_ComputerSystem -ComputerName '${h}' -EA Stop`,
-        `    if($sys2) { $r.user = $sys2.UserName; $r.model = "$($sys2.Manufacturer) $($sys2.Model)"; $r.ram = "$([math]::Round($sys2.TotalPhysicalMemory/1GB,1)) GB" }`,
-        `  } catch {}`,
-        `}`,
-        `$r | ConvertTo-Json -Compress`,
-      ].join('\n')
+    // Device info script (runs locally on target via any method)
+    const infoScript = [
+      `$r = @{ user='N/A'; model='N/A'; ram='N/A'; os='N/A'; lastBoot='N/A' }`,
+      `try {`,
+      `  $cs = Get-CimInstance Win32_ComputerSystem -EA Stop`,
+      `  $r.user = $cs.UserName; $r.model = "$($cs.Manufacturer) $($cs.Model)"; $r.ram = "$([math]::Round($cs.TotalPhysicalMemory/1GB,1)) GB"`,
+      `} catch {}`,
+      `try {`,
+      `  $osI = Get-CimInstance Win32_OperatingSystem -EA Stop`,
+      `  $r.os = $osI.Caption; $r.lastBoot = $osI.LastBootUpTime.ToString('dd.MM.yyyy HH:mm')`,
+      `} catch {}`,
+      `$r | ConvertTo-Json -Compress`,
+    ].join('\n')
 
-      const res = await api().runPowerShell(script, 15000)
-      const raw = JSON.parse(res.stdout?.trim() || '{}')
+    type ProbeResult = { method: ExecMethod; mode: ConnectionMode; label: string }
+    const probes: { method: ExecMethod; mode: ConnectionMode; label: string; test: () => Promise<boolean> }[] = [
+      // Probe 1: WMI Process Create
+      {
+        method: 'wmi', mode: 'wmi', label: 'WMI Process Create',
+        test: async () => {
+          setCheck('winrm', { status: 'running', detail: 'Teste WMI Process Create...' })
+          const guid = Math.random().toString(36).slice(2)
+          const share = '\\\\\\\\' + h + '\\\\C$\\\\Temp'
+          const r = await api().runPowerShell([
+            '$unc = "' + share + '"',
+            `if (-not (Test-Path $unc)) { New-Item -Path $unc -ItemType Directory -Force | Out-Null }`,
+            `$wmi = Invoke-WmiMethod -ComputerName '${h}' -Class Win32_Process -Name Create -ArgumentList "cmd /c echo WMI_OK > C:\\Temp\\wmiprobe_${guid}.txt" -EA Stop`,
+            `Start-Sleep -Seconds 3`,
+            `$result = if (Test-Path "$unc\\wmiprobe_${guid}.txt") { Get-Content "$unc\\wmiprobe_${guid}.txt" -Raw } else { 'FAIL' }`,
+            `Remove-Item "$unc\\wmiprobe_${guid}.txt" -Force -EA SilentlyContinue`,
+            `if ($result -match 'WMI_OK') { Write-Output 'PROBE_OK' } else { Write-Output 'PROBE_FAIL' }`,
+          ].join('\n'), 15000)
+          return r.stdout?.includes('PROBE_OK') ?? false
+        },
+      },
+      // Probe 2: PsExec
+      {
+        method: 'psexec', mode: 'psexec', label: 'PsExec',
+        test: async () => {
+          setCheck('winrm', { status: 'running', detail: 'Teste PsExec...' })
+          const dir = getPsExecDir().replace(/\\+$/, '')
+          const r = await api().runPowerShell([
+            `$p64 = '${dir}\\PsExec64.exe'; $p32 = '${dir}\\PsExec.exe'`,
+            `$psExe = if (Test-Path $p64) { $p64 } elseif (Test-Path $p32) { $p32 } else { $null }`,
+            `if (-not $psExe) { Write-Output 'NO_PSEXEC'; exit }`,
+            `$r = & $psExe "\\\\${h}" -s -accepteula cmd /c "echo PSEXEC_OK" 2>&1`,
+            `if (($r -join ' ') -match 'PSEXEC_OK') { Write-Output 'PROBE_OK' } else { Write-Output 'PROBE_FAIL' }`,
+          ].join('\n'), 20000)
+          return r.stdout?.includes('PROBE_OK') ?? false
+        },
+      },
+      // Probe 3: schtasks
+      {
+        method: 'schtasks', mode: 'schtasks', label: 'Geplante Aufgabe (schtasks)',
+        test: async () => {
+          setCheck('winrm', { status: 'running', detail: 'Teste schtasks...' })
+          const guid = Math.random().toString(36).slice(2)
+          const share = '\\\\\\\\' + h + '\\\\C$\\\\Temp'
+          const r = await api().runPowerShell([
+            '$unc = "' + share + '"',
+            `if (-not (Test-Path $unc)) { New-Item -Path $unc -ItemType Directory -Force | Out-Null }`,
+            `schtasks /create /s ${h} /tn "ITProbe_${guid}" /tr "cmd /c echo SCHTASK_OK > C:\\Temp\\schprobe_${guid}.txt" /sc once /st 00:00 /ru SYSTEM /rl HIGHEST /f 2>&1 | Out-Null`,
+            `schtasks /run /s ${h} /tn "ITProbe_${guid}" 2>&1 | Out-Null`,
+            `Start-Sleep -Seconds 4`,
+            `$result = if (Test-Path "$unc\\schprobe_${guid}.txt") { Get-Content "$unc\\schprobe_${guid}.txt" -Raw } else { 'FAIL' }`,
+            `schtasks /delete /s ${h} /tn "ITProbe_${guid}" /f 2>&1 | Out-Null`,
+            `Remove-Item "$unc\\schprobe_${guid}.txt" -Force -EA SilentlyContinue`,
+            `if ($result -match 'SCHTASK_OK') { Write-Output 'PROBE_OK' } else { Write-Output 'PROBE_FAIL' }`,
+          ].join('\n'), 20000)
+          return r.stdout?.includes('PROBE_OK') ?? false
+        },
+      },
+    ]
 
-      setCheck('winrm', { status: 'warn', detail: 'Eingeschränkter Modus (CIM/DCOM)' })
-      setCheck('info', { status: raw.user !== 'N/A' ? 'ok' : 'warn', detail: 'Via CIM/DCOM' })
-      setConnInfo({
-        user: raw.user || '—',
-        model: raw.model || '—',
-        ram: raw.ram || '—',
-        os: raw.os || '—',
-        lastBoot: raw.lastBoot || '—',
-        allOk: raw.user !== 'N/A',
-        winrmOk: false,
-        connectionMode: 'restricted',
-        failedServices: [],
-      })
-    } catch {
-      setCheck('winrm', { status: 'error', detail: 'Auch CIM/DCOM fehlgeschlagen' })
-      setConnError('Weder WinRM noch CIM/DCOM verfügbar. Nur lokale Befehle (Ping, DNS) möglich.')
+    let foundMethod: ProbeResult | null = null
+    for (const probe of probes) {
+      try {
+        if (await probe.test()) {
+          foundMethod = { method: probe.method, mode: probe.mode, label: probe.label }
+          break
+        }
+      } catch { /* try next */ }
+    }
+
+    if (foundMethod) {
+      setExecMethod(foundMethod.method)
+      setCheck('winrm', { status: 'warn', detail: `Verbunden via ${foundMethod.label}` })
+
+      // Get device info using the found method
+      try {
+        let infoJson = '{}'
+        if (foundMethod.method === 'wmi') {
+          // Use CIM/DCOM for info (faster than WMI Process Create)
+          const infoRes = await api().runPowerShell([
+            `try {`,
+            `  $so = New-CimSessionOption -Protocol Dcom`,
+            `  $cs = New-CimSession -ComputerName '${h}' -SessionOption $so -EA Stop`,
+            `  $sys = Get-CimInstance Win32_ComputerSystem -CimSession $cs -EA SilentlyContinue`,
+            `  $osI = Get-CimInstance Win32_OperatingSystem -CimSession $cs -EA SilentlyContinue`,
+            `  $r = @{ user='N/A'; model='N/A'; ram='N/A'; os='N/A'; lastBoot='N/A' }`,
+            `  if($sys) { $r.user = $sys.UserName; $r.model = "$($sys.Manufacturer) $($sys.Model)"; $r.ram = "$([math]::Round($sys.TotalPhysicalMemory/1GB,1)) GB" }`,
+            `  if($osI) { $r.os = $osI.Caption; $r.lastBoot = $osI.LastBootUpTime.ToString('dd.MM.yyyy HH:mm') }`,
+            `  Remove-CimSession $cs`,
+            `  $r | ConvertTo-Json -Compress`,
+            `} catch { @{user='N/A';model='N/A';ram='N/A';os='N/A';lastBoot='N/A'} | ConvertTo-Json -Compress }`,
+          ].join('\n'), 15000)
+          infoJson = infoRes.stdout?.trim() || '{}'
+        } else {
+          // Use WMI for basic info
+          const infoRes = await api().runPowerShell([
+            `try {`,
+            `  $sys = Get-WmiObject Win32_ComputerSystem -ComputerName '${h}' -EA Stop`,
+            `  $osI = Get-WmiObject Win32_OperatingSystem -ComputerName '${h}' -EA Stop`,
+            `  $r = @{ user='N/A'; model='N/A'; ram='N/A'; os='N/A'; lastBoot='N/A' }`,
+            `  if($sys) { $r.user = $sys.UserName; $r.model = "$($sys.Manufacturer) $($sys.Model)"; $r.ram = "$([math]::Round($sys.TotalPhysicalMemory/1GB,1)) GB" }`,
+            `  if($osI) { $r.os = $osI.Caption; $r.lastBoot = $osI.LastBootUpTime }`,
+            `  $r | ConvertTo-Json -Compress`,
+            `} catch { @{user='N/A';model='N/A';ram='N/A';os='N/A';lastBoot='N/A'} | ConvertTo-Json -Compress }`,
+          ].join('\n'), 15000)
+          infoJson = infoRes.stdout?.trim() || '{}'
+        }
+        const raw = JSON.parse(infoJson)
+        setCheck('info', { status: raw.user !== 'N/A' ? 'ok' : 'warn', detail: `Via ${foundMethod.label}` })
+        setConnInfo({
+          user: raw.user || '—', model: raw.model || '—', ram: raw.ram || '—',
+          os: raw.os || '—', lastBoot: raw.lastBoot || '—',
+          allOk: true, winrmOk: false,
+          connectionMode: foundMethod.mode,
+          failedServices: [],
+        })
+      } catch {
+        setCheck('info', { status: 'warn', detail: 'Info nicht abrufbar' })
+        setConnInfo({
+          user: '—', model: '—', ram: '—', os: '—', lastBoot: '—',
+          allOk: true, winrmOk: false,
+          connectionMode: foundMethod.mode,
+          failedServices: [],
+        })
+      }
+    } else {
+      setCheck('winrm', { status: 'error', detail: 'Keine Verbindungsmethode verfügbar' })
+      setConnError('Weder WinRM, WMI, PsExec noch schtasks verfügbar. Nur lokale Befehle (Ping, DNS) möglich.')
       setConnInfo({
         user: '—', model: '—', ram: '—', os: '—', lastBoot: '—',
-        allOk: false, winrmOk: false, connectionMode: 'restricted',
+        allOk: false, winrmOk: false, connectionMode: 'none',
         failedServices: [],
       })
     }
@@ -1285,12 +1421,22 @@ export default function RemoteDoc() {
         )}
       </div>
 
+      {/* ── Local mode banner ── */}
+      {(() => { try { return require('../utils/remoteCommands').getLocalMode() } catch { return false } })() && connInfo && (
+        <div className="mx-6 mb-2 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse shrink-0" />
+          <span className="text-xs text-blue-400 flex-1">
+            Lokaler Modus — Alle Befehle werden auf DEINEM PC ausgeführt (nicht remote). Der Hostname wird ignoriert.
+          </span>
+        </div>
+      )}
+
       {/* ── Restricted mode banner ── */}
-      {connInfo?.connectionMode === 'restricted' && (
+      {connInfo && connInfo.connectionMode !== 'full' && connInfo.connectionMode !== 'none' && (
         <div className="mx-6 mb-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center gap-2">
           <AlertTriangle size={14} className="text-amber-400 shrink-0" />
           <span className="text-xs text-amber-400 flex-1">
-            Eingeschränkter Modus — WinRM nicht verfügbar. Befehle mit 🔒 sind deaktiviert. Verfügbar: Ping, DNS, CIM/WMI-Abfragen, Dateioperationen via SMB.
+            Verbunden via <strong>{connInfo.connectionMode === 'wmi' ? 'WMI Process Create' : connInfo.connectionMode === 'psexec' ? 'PsExec' : 'schtasks'}</strong> — WinRM nicht verfügbar. Alle Befehle funktionieren, aber etwas langsamer.
           </span>
         </div>
       )}
@@ -1378,6 +1524,22 @@ export default function RemoteDoc() {
                             ? (inputVal.split('|')[0]?.trim() !== '' && (inputVal.split('|')[1] ?? '').trim() !== '')
                             : cmd.input?.type === 'envvar'
                             ? (inputVal.includes('=') && inputVal.split('=')[0]?.trim() !== '')
+                            : cmd.input?.type === 'driveletter'
+                            ? inputVal.trim() !== ''
+                            : cmd.input?.type === 'diskpart'
+                            ? (inputVal.split('|')[0]?.trim() !== '' && (inputVal.split('|')[1] ?? '').trim() !== '')
+                            : cmd.input?.type === 'diskvol'
+                            ? (inputVal.split('|')[0]?.trim() !== '' && (inputVal.split('|')[1] ?? '').trim() !== '')
+                            : cmd.input?.type === 'diskletter'
+                            ? (inputVal.split('|')[0]?.trim() !== '' && (inputVal.split('|')[1] ?? '').trim() !== '')
+                            : cmd.input?.type === 'userpass'
+                            ? (inputVal.split('|')[0]?.trim() !== '' && (inputVal.split('|')[1] ?? '').trim() !== '')
+                            : cmd.input?.type === 'usergroup'
+                            ? (inputVal.split('|')[0]?.trim() !== '' && (inputVal.split('|')[1] ?? '').trim() !== '')
+                            : cmd.input?.type === 'useradd'
+                            ? (inputVal.split('|')[0]?.trim() !== '')
+                            : cmd.input?.type === 'filepipe'
+                            ? (inputVal.split('|')[0]?.trim() !== '' && (inputVal.split('|')[1] ?? '').trim() !== '')
                             : inputVal.trim() !== ''
                         )
                         const inputVal2 = inputs[key] ?? ''
@@ -1401,7 +1563,7 @@ export default function RemoteDoc() {
                           || psCmd.includes('\\\\') // UNC path operations
                           || cat.id === 'net' // network commands generally work locally
                         const needsWinRM = !isFallbackCapable
-                        const winrmBlocked = needsWinRM && connInfo?.connectionMode === 'restricted'
+                        const winrmBlocked = false // All commands work via fallback methods
 
                         const actionColor = cmd.action === 'critical'
                           ? 'bg-red-500/10 text-red-400 border-red-500/30 hover:bg-red-500/20'
@@ -1610,6 +1772,372 @@ export default function RemoteDoc() {
                                         Oder klicken Sie auf eine Vorlage oben.<br />
                                         System-Variablen gelten für alle Benutzer.<br />
                                         Benutzer-Variablen nur für den angemeldeten User.
+                                        </span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* ── Driveletter: Nur Laufwerksbuchstabe mit Buttons ── */}
+                                {cmd.input?.type === 'driveletter' && (
+                                  <div className="space-y-2 w-56">
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Laufwerksbuchstabe</label>
+                                      <div className="flex gap-1 flex-wrap">
+                                        {['C','D','E','F','G'].map(l => (
+                                          <button key={l} onClick={() => setInputs(prev => ({ ...prev, [key]: l }))}
+                                            className={`w-7 h-7 text-[10px] font-bold rounded border transition-colors ${
+                                              inputVal === l
+                                                ? 'bg-primary text-primary-foreground border-primary'
+                                                : 'border-border text-muted-foreground hover:bg-accent'
+                                            }`}>{l}:</button>
+                                        ))}
+                                        <input
+                                          type="text" maxLength={1} placeholder="?"
+                                          value={!['C','D','E','F','G'].includes(inputVal) ? inputVal : ''}
+                                          onChange={e => {
+                                            const letter = e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 1)
+                                            setInputs(prev => ({ ...prev, [key]: letter }))
+                                          }}
+                                          className="w-7 h-7 text-[10px] font-bold rounded border border-dashed border-border bg-background text-foreground text-center uppercase focus:outline-none focus:border-primary"
+                                          title="Anderen Buchstaben eingeben"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="rounded-md bg-blue-500/5 border border-blue-500/20 p-2">
+                                      <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                        Klicken Sie auf den Buchstaben des Laufwerks oder tippen Sie einen anderen ein.<br/>
+                                        <span className="text-[8px]">Tipp: Nutzen Sie zuerst &quot;Volumes/Partitionen&quot; um die vorhandenen Laufwerke zu sehen.</span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* ── Diskpart: Laufwerk + MB Eingabe ── */}
+                                {cmd.input?.type === 'diskpart' && (
+                                  <div className="space-y-2 w-56">
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Laufwerksbuchstabe</label>
+                                      <div className="flex gap-1 flex-wrap">
+                                        {['C','D','E','F'].map(l => (
+                                          <button key={l} onClick={() => {
+                                            const mb = inputVal.split('|')[1] ?? ''
+                                            setInputs(prev => ({ ...prev, [key]: `${l}|${mb}` }))
+                                          }}
+                                            className={`w-7 h-7 text-[10px] font-bold rounded border transition-colors ${
+                                              (inputVal.split('|')[0] ?? '') === l
+                                                ? 'bg-primary text-primary-foreground border-primary'
+                                                : 'border-border text-muted-foreground hover:bg-accent'
+                                            }`}>{l}:</button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Größe in MB</label>
+                                      <input
+                                        type="text"
+                                        placeholder="z.B. 2048"
+                                        value={inputVal.split('|')[1] ?? ''}
+                                        onChange={e => {
+                                          const dl = inputVal.split('|')[0] ?? ''
+                                          setInputs(prev => ({ ...prev, [key]: `${dl}|${e.target.value}` }))
+                                        }}
+                                        className="w-full px-2 py-1.5 text-[11px] rounded border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                      <div className="flex gap-1 mt-1 flex-wrap">
+                                        {[{l:'1 GB',v:'1024'},{l:'5 GB',v:'5120'},{l:'10 GB',v:'10240'},{l:'20 GB',v:'20480'}].map(t => (
+                                          <button key={t.v} onClick={() => {
+                                            const dl = inputVal.split('|')[0] ?? ''
+                                            setInputs(prev => ({ ...prev, [key]: `${dl}|${t.v}` }))
+                                          }}
+                                            className="px-1.5 py-0.5 text-[9px] rounded border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                                            {t.l}
+                                          </button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <div className="rounded-md bg-amber-500/5 border border-amber-500/20 p-2">
+                                      <p className="text-[9px] text-amber-400 font-semibold flex items-center gap-1"><AlertTriangle size={10} /> Achtung</p>
+                                      <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                        Die Partition wird um die angegebene Größe verkleinert. Stellen Sie sicher, dass genügend freier Speicher vorhanden ist.
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* ── Diskvol: DiskNr + Buchstabe (für neues Volume & Init) ── */}
+                                {cmd.input?.type === 'diskvol' && (
+                                  <div className="space-y-2 w-56">
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">
+                                        {cmd.id === 'diskinit' ? 'Datenträger-Nummer' : 'Disk-Nummer'}
+                                      </label>
+                                      <div className="flex gap-1 flex-wrap">
+                                        {['0','1','2','3'].map(n => (
+                                          <button key={n} onClick={() => {
+                                            const second = inputVal.split('|')[1] ?? ''
+                                            setInputs(prev => ({ ...prev, [key]: `${n}|${second}` }))
+                                          }}
+                                            className={`w-7 h-7 text-[10px] font-bold rounded border transition-colors ${
+                                              (inputVal.split('|')[0] ?? '') === n
+                                                ? 'bg-primary text-primary-foreground border-primary'
+                                                : 'border-border text-muted-foreground hover:bg-accent'
+                                            }`}>{n}</button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">
+                                        {cmd.id === 'diskinit' ? 'Partitionsstil' : 'Laufwerksbuchstabe'}
+                                      </label>
+                                      {cmd.id === 'diskinit' ? (
+                                        <div className="flex gap-1">
+                                          {['GPT','MBR'].map(s => (
+                                            <button key={s} onClick={() => {
+                                              const dn = inputVal.split('|')[0] ?? ''
+                                              setInputs(prev => ({ ...prev, [key]: `${dn}|${s}` }))
+                                            }}
+                                              className={`px-3 py-1.5 text-[10px] font-bold rounded border transition-colors ${
+                                                (inputVal.split('|')[1] ?? '') === s
+                                                  ? 'bg-primary text-primary-foreground border-primary'
+                                                  : 'border-border text-muted-foreground hover:bg-accent'
+                                              }`}>{s}</button>
+                                          ))}
+                                        </div>
+                                      ) : (
+                                        <div className="flex gap-1 flex-wrap">
+                                          {['D','E','F','G','H'].map(l => (
+                                            <button key={l} onClick={() => {
+                                              const dn = inputVal.split('|')[0] ?? ''
+                                              setInputs(prev => ({ ...prev, [key]: `${dn}|${l}` }))
+                                            }}
+                                              className={`w-7 h-7 text-[10px] font-bold rounded border transition-colors ${
+                                                (inputVal.split('|')[1] ?? '') === l
+                                                  ? 'bg-primary text-primary-foreground border-primary'
+                                                  : 'border-border text-muted-foreground hover:bg-accent'
+                                              }`}>{l}:</button>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                    <div className="rounded-md bg-blue-500/5 border border-blue-500/20 p-2">
+                                      <p className="text-[9px] font-semibold text-blue-400 flex items-center gap-1"><Info size={10} /> Hinweis</p>
+                                      <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                        {cmd.id === 'diskinit'
+                                          ? <>Wählen Sie <strong>GPT</strong> für moderne Systeme (UEFI) oder <strong>MBR</strong> für ältere BIOS-Systeme.<br/><span className="text-[8px]">Tipp: Nutzen Sie zuerst &quot;Alle Disks Status&quot; für die Disk-Nummer.</span></>
+                                          : <>Wählen Sie die Disk-Nummer und den gewünschten Buchstaben.<br/><span className="text-[8px]">Tipp: Nutzen Sie zuerst &quot;Festplatten-Gesundheit SMART&quot; für eine Übersicht.</span></>
+                                        }
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* ── Diskletter: Alt + Neu Buchstabe ── */}
+                                {cmd.input?.type === 'diskletter' && (
+                                  <div className="space-y-2 w-56">
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Aktueller Buchstabe</label>
+                                      <div className="flex gap-1 flex-wrap">
+                                        {['C','D','E','F','G','H'].map(l => (
+                                          <button key={l} onClick={() => {
+                                            const nw = inputVal.split('|')[1] ?? ''
+                                            setInputs(prev => ({ ...prev, [key]: `${l}|${nw}` }))
+                                          }}
+                                            className={`w-7 h-7 text-[10px] font-bold rounded border transition-colors ${
+                                              (inputVal.split('|')[0] ?? '') === l
+                                                ? 'bg-primary text-primary-foreground border-primary'
+                                                : 'border-border text-muted-foreground hover:bg-accent'
+                                            }`}>{l}:</button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Neuer Buchstabe</label>
+                                      <div className="flex gap-1 flex-wrap">
+                                        {['D','E','F','G','H','X','Y','Z'].map(l => (
+                                          <button key={l} onClick={() => {
+                                            const old = inputVal.split('|')[0] ?? ''
+                                            setInputs(prev => ({ ...prev, [key]: `${old}|${l}` }))
+                                          }}
+                                            className={`w-7 h-7 text-[10px] font-bold rounded border transition-colors ${
+                                              (inputVal.split('|')[1] ?? '') === l
+                                                ? 'bg-green-500 text-white border-green-500'
+                                                : 'border-border text-muted-foreground hover:bg-accent'
+                                            }`}>{l}:</button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <div className="rounded-md bg-blue-500/5 border border-blue-500/20 p-2">
+                                      <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                        Wählen Sie oben den aktuellen Buchstaben und unten den gewünschten neuen Buchstaben.
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* ── Userpass: Benutzername + Passwort ── */}
+                                {cmd.input?.type === 'userpass' && (
+                                  <div className="space-y-2 w-56">
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Benutzername</label>
+                                      <input
+                                        type="text"
+                                        placeholder="z.B. adminlocal"
+                                        value={inputVal.split('|')[0] ?? ''}
+                                        onChange={e => {
+                                          const pw = inputVal.split('|')[1] ?? ''
+                                          setInputs(prev => ({ ...prev, [key]: `${e.target.value}|${pw}` }))
+                                        }}
+                                        className="w-full px-2 py-1.5 text-[11px] rounded border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Passwort</label>
+                                      <input
+                                        type="text"
+                                        placeholder="Neues Passwort"
+                                        value={inputVal.split('|')[1] ?? ''}
+                                        onChange={e => {
+                                          const user = inputVal.split('|')[0] ?? ''
+                                          setInputs(prev => ({ ...prev, [key]: `${user}|${e.target.value}` }))
+                                        }}
+                                        className="w-full px-2 py-1.5 text-[11px] rounded border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                    </div>
+                                    <div className="rounded-md bg-blue-500/5 border border-blue-500/20 p-2">
+                                      <p className="text-[9px] font-semibold text-blue-400 flex items-center gap-1"><Info size={10} /> Hinweis</p>
+                                      <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                        Geben Sie den <strong>lokalen</strong> Benutzernamen und das gewünschte Passwort ein.<br />
+                                        <span className="text-[8px]">
+                                          Passwort-Anforderungen je nach PC-Policy (Mindestlänge, Komplexität).
+                                        </span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* ── Usergroup: Benutzername + Gruppe (mit Schnellwahl) ── */}
+                                {cmd.input?.type === 'usergroup' && (
+                                  <div className="space-y-2 w-56">
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Benutzername oder DOMAIN\User</label>
+                                      <input
+                                        type="text"
+                                        placeholder="z.B. SKF\dbazzani"
+                                        value={inputVal.split('|')[0] ?? ''}
+                                        onChange={e => {
+                                          const group = inputVal.split('|')[1] ?? ''
+                                          setInputs(prev => ({ ...prev, [key]: `${e.target.value}|${group}` }))
+                                        }}
+                                        className="w-full px-2 py-1.5 text-[11px] rounded border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Gruppe</label>
+                                      <div className="flex gap-1 flex-wrap mb-1">
+                                        {['Administrators','Remote Desktop Users','Users','Power Users'].map(g => (
+                                          <button key={g} onClick={() => {
+                                            const user = inputVal.split('|')[0] ?? ''
+                                            setInputs(prev => ({ ...prev, [key]: `${user}|${g}` }))
+                                          }}
+                                            className={`px-1.5 py-0.5 text-[9px] rounded border transition-colors ${
+                                              (inputVal.split('|')[1] ?? '') === g
+                                                ? 'bg-primary text-primary-foreground border-primary'
+                                                : 'border-primary/30 bg-primary/10 text-primary hover:bg-primary/20'
+                                            }`}>{g === 'Administrators' ? 'Admin' : g === 'Remote Desktop Users' ? 'RDP' : g === 'Power Users' ? 'Power' : g}</button>
+                                        ))}
+                                      </div>
+                                      <input
+                                        type="text"
+                                        placeholder="Oder andere Gruppe eingeben"
+                                        value={!['Administrators','Remote Desktop Users','Users','Power Users'].includes(inputVal.split('|')[1] ?? '') ? (inputVal.split('|')[1] ?? '') : ''}
+                                        onChange={e => {
+                                          const user = inputVal.split('|')[0] ?? ''
+                                          setInputs(prev => ({ ...prev, [key]: `${user}|${e.target.value}` }))
+                                        }}
+                                        className="w-full px-2 py-1 text-[10px] rounded border border-dashed border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                    </div>
+                                    <div className="rounded-md bg-blue-500/5 border border-blue-500/20 p-2">
+                                      <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                        <strong>Tipp:</strong> Für Domain-User das Format <span className="font-mono bg-muted/30 px-0.5 rounded">DOMAIN\username</span> nutzen.<br />
+                                        <span className="text-[8px]">Lokale Benutzer einfach mit dem Namen eingeben.</span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* ── Useradd: Corp-ID / Name + Gruppe (mit AD-Lookup) ── */}
+                                {/* ── Filepipe: Two labeled fields separated by | ── */}
+                                {cmd.input?.type === 'filepipe' && (
+                                  <div className="space-y-2 w-64">
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">{cmd.input.labels?.[0] ?? 'Feld 1'}</label>
+                                      <input
+                                        type="text"
+                                        placeholder={cmd.input.examples?.[0] ?? ''}
+                                        value={inputVal.split('|')[0] ?? ''}
+                                        onChange={e => {
+                                          const part2 = inputVal.split('|')[1] ?? ''
+                                          setInputs(prev => ({ ...prev, [key]: `${e.target.value}|${part2}` }))
+                                        }}
+                                        className="w-full px-2 py-1.5 text-[11px] rounded border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">{cmd.input.labels?.[1] ?? 'Feld 2'}</label>
+                                      <input
+                                        type="text"
+                                        placeholder={cmd.input.examples?.[1] ?? ''}
+                                        value={inputVal.split('|')[1] ?? ''}
+                                        onChange={e => {
+                                          const part1 = inputVal.split('|')[0] ?? ''
+                                          setInputs(prev => ({ ...prev, [key]: `${part1}|${e.target.value}` }))
+                                        }}
+                                        className="w-full px-2 py-1.5 text-[11px] rounded border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                    </div>
+                                  </div>
+                                )}
+
+                                {cmd.input?.type === 'useradd' && (
+                                  <div className="space-y-2 w-56">
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Corp-ID oder Name</label>
+                                      <input
+                                        type="text"
+                                        placeholder="z.B. dbazzani oder Bazzani"
+                                        value={inputVal.split('|')[0] ?? ''}
+                                        onChange={e => {
+                                          const group = inputVal.split('|')[1] ?? ''
+                                          setInputs(prev => ({ ...prev, [key]: `${e.target.value}|${group}` }))
+                                        }}
+                                        className="w-full px-2 py-1.5 text-[11px] rounded border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="text-[9px] text-muted-foreground block mb-0.5">Zielgruppe</label>
+                                      <div className="flex gap-1 flex-wrap">
+                                        {['Administrators','Remote Desktop Users','Users'].map(g => (
+                                          <button key={g} onClick={() => {
+                                            const user = inputVal.split('|')[0] ?? ''
+                                            setInputs(prev => ({ ...prev, [key]: `${user}|${g}` }))
+                                          }}
+                                            className={`px-1.5 py-0.5 text-[9px] rounded border transition-colors ${
+                                              (inputVal.split('|')[1] ?? '') === g
+                                                ? 'bg-primary text-primary-foreground border-primary'
+                                                : 'border-primary/30 bg-primary/10 text-primary hover:bg-primary/20'
+                                            }`}>{g === 'Administrators' ? 'Admin' : g === 'Remote Desktop Users' ? 'RDP' : g}</button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <div className="rounded-md bg-green-500/5 border border-green-500/20 p-2 space-y-1">
+                                      <p className="text-[9px] font-semibold text-green-400 flex items-center gap-1"><Info size={10} /> AD-Lookup</p>
+                                      <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                        Geben Sie die <strong>Corp-ID</strong> (z.B. <span className="font-mono bg-muted/30 px-0.5 rounded">dbazzani</span>) oder den <strong>Namen</strong> (z.B. <span className="font-mono bg-muted/30 px-0.5 rounded">Bazzani</span>) ein.<br />
+                                        <span className="text-[8px]">
+                                          Das Active Directory wird automatisch nach dem Benutzer durchsucht. Bei Namenssuche wird der erste Treffer verwendet.<br />
+                                          Der Benutzer wird als <strong>Domain-Account</strong> zur gewählten Gruppe hinzugefügt.
                                         </span>
                                       </p>
                                     </div>
@@ -1921,7 +2449,7 @@ export default function RemoteDoc() {
           }}
           onRestricted={() => {
             setShowFallbackDialog(false)
-            connectRestricted()
+            connectWithFallback()
           }}
           onCancel={() => setShowFallbackDialog(false)}
         />

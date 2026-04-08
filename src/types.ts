@@ -4,6 +4,8 @@ export type Screen =
   | 'user-management' | 'user-logs' | 'location-overview'
   | 'scheduled-tasks' | 'bug-mailbox' | 'dashboards'
   | 'pc-migration'
+  | 'software-inventory'
+  | 'pc-diagnosis'
 
 export type Prefix = 'DE' | 'DEHAM' | 'DESCH' | 'Sonstige'
 

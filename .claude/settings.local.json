@@ -24,7 +24,10 @@
       "Bash(python3 tests/final_fill.py)",
       "Bash(python3 tests/gen_search_terms.py)",
       "Bash(ls prompts/*erform* prompts/*erfor* prompts/*PERFOR*)",
-      "Bash(grep -n \"id: ''ping''\" src/utils/remoteCommands.ts)"
+      "Bash(grep -n \"id: ''ping''\" src/utils/remoteCommands.ts)",
+      "Bash(powershell -Command \"Get-ChildItem ''\\\\\\\\w3172\\\\skf marine\\\\700 Application\\\\711 IT Allgemein\\\\SW_INSTA\\\\Tool IT\\\\knowledge_base\\\\'' -ErrorAction SilentlyContinue | Select Name,Length\")",
+      "Bash(powershell -Command \"& { $content = Get-Content ''c:\\\\Users\\\\User\\\\Projekte\\\\Admin Tool\\\\electron\\\\wissensdatenbankGenerator.ts'' -Raw; $count = \\([regex]::Matches\\($content, ''id:''''[a-z]+-[a-z]+-\\\\d{3}''\\)\\).Count; Write-Output \"\"Generator contains approximately $count articles\"\" }\")",
+      "Bash(grep \"id: ''diag-\" \"c:\\\\Users\\\\User\\\\Projekte\\\\Admin Tool\\\\src\\\\utils\\\\remoteCommands.ts\")"
     ]
   }
 }

@@ -10,7 +10,7 @@ export interface CmdDef {
   when: string
   buildCmd: (hostname: string, input?: string) => string
   action: ActionType
-  input?: { type: 'text' | 'dropdown' | 'service' | 'drivemap' | 'envvar'; placeholder?: string; options?: string[] }
+  input?: { type: 'text' | 'dropdown' | 'service' | 'drivemap' | 'envvar' | 'driveletter' | 'diskpart' | 'diskvol' | 'diskletter' | 'userpass' | 'usergroup' | 'useradd' | 'filepipe'; placeholder?: string; options?: string[]; labels?: string[]; examples?: string[] }
   templates?: { label: string; value: string }[]  // quick-fill buttons shown below input
   local?: boolean        // runs on admin PC, not remote
   longRunning?: boolean
@@ -24,32 +24,237 @@ export interface Category {
   commands: CmdDef[]
 }
 
+// ── Local/Test Mode ───────────────────────────────────────────────────────────
+// When enabled, ALL remote commands run LOCALLY (no Invoke-Command, no WinRM needed)
+let _localMode = false
+export function setLocalMode(enabled: boolean) { _localMode = enabled }
+export function getLocalMode(): boolean { return _localMode }
+
+// ── Execution Method ─────────────────────────────────────────────────────────
+// Determines HOW remote commands are delivered to the target PC.
+// Set during connection probe in RemoteDoc.tsx.
+export type ExecMethod = 'winrm' | 'wmi' | 'psexec' | 'schtasks'
+let _execMethod: ExecMethod = 'winrm'
+let _psExecDir = '\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools'
+export function setExecMethod(m: ExecMethod) { _execMethod = m }
+export function getExecMethod(): ExecMethod { return _execMethod }
+export function setPsExecDir(dir: string) { _psExecDir = dir }
+export function getPsExecDir(): string { return _psExecDir }
+
+/** Resolve the best PsExec exe (prefer 64-bit) */
+export function getPsExecCmd(): string {
+  const dir = _psExecDir.replace(/\\+$/, '')
+  return [
+    `$p64 = '${dir}\\PsExec64.exe'`,
+    `$p32 = '${dir}\\PsExec.exe'`,
+    `$psExe = if (Test-Path $p64) { $p64 } elseif (Test-Path $p32) { $p32 } else { $null }`,
+  ].join('; ')
+}
+
+// ── Helper: robust 3-method user detection on remote PC ──────────────────────
+// Runs ALL detection methods LOCALLY on the target PC via a single Invoke-Command
+// (avoids CIM/DCOM remoting issues — only needs WinRM).
+// Returns PowerShell lines that set $user to DOMAIN\username or exit with error.
+// Param varName: the PS variable name to store the result (default '$user')
+export function getUserDetectionPS(hSafe: string, varName = '$user'): string[] {
+  return [
+    `$__detectResult = Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
+    `  $dbg = @()`,
+    `  # Methode 1: Win32_ComputerSystem`,
+    `  try {`,
+    `    $cs = Get-CimInstance Win32_ComputerSystem -EA Stop`,
+    `    $u = $cs.UserName`,
+    `    $dbg += "M1=$u"`,
+    `    if ($u) { return @{user=$u; debug=($dbg -join '|')} }`,
+    `  } catch { $dbg += "M1-ERR:$($_.Exception.Message)" }`,
+    `  # Methode 2: quser`,
+    `  try {`,
+    `    $qRaw = quser 2>&1`,
+    `    $dbg += "M2-raw=$($qRaw -join ' /// ')"`,
+    `    $lines = @($qRaw | Where-Object { "$_" -and "$_" -notmatch '^\\s*USERNAME|^\\s*BENUTZERNAME' })`,
+    `    $active = $lines | Where-Object { "$_" -match 'Active|Aktiv' } | Select-Object -First 1`,
+    `    if (-not $active -and $lines.Count -gt 0) { $active = $lines[0] }`,
+    `    if ($active) {`,
+    `      $parts = ("$active" -replace '^[> ]+','') -split '\\s{2,}'`,
+    `      $u = $parts[0]`,
+    `      if ($u -and $u -notmatch '\\\\') { $u = "$env:USERDOMAIN\\$u" }`,
+    `      $dbg += "M2-parsed=$u"`,
+    `      if ($u) { return @{user=$u; debug=($dbg -join '|')} }`,
+    `    } else { $dbg += "M2-noActive" }`,
+    `  } catch { $dbg += "M2-ERR:$($_.Exception.Message)" }`,
+    `  # Methode 3: explorer.exe Owner`,
+    `  try {`,
+    `    $procs = @(Get-CimInstance Win32_Process -Filter "Name='explorer.exe'" -EA Stop)`,
+    `    $dbg += "M3-count=$($procs.Count)"`,
+    `    if ($procs.Count -gt 0) {`,
+    `      $ow = Invoke-CimMethod -InputObject $procs[0] -MethodName GetOwner -EA Stop`,
+    `      $u = "$($ow.Domain)\\$($ow.User)"`,
+    `      $dbg += "M3=$u"`,
+    `      return @{user=$u; debug=($dbg -join '|')}`,
+    `    }`,
+    `  } catch { $dbg += "M3-ERR:$($_.Exception.Message)" }`,
+    `  return @{user=$null; debug=($dbg -join '|')}`,
+    `} -EA Stop`,
+    `${varName} = $__detectResult.user`,
+    `if (-not ${varName}) { Write-Output "ERR:Kein Benutzer angemeldet auf ${hSafe}. Debug: $($__detectResult.debug)"; exit }`,
+  ]
+}
+
 // ── Helper to wrap a PS script block for remote execution ────────────────────
+// Supports 4 execution methods: winrm, wmi, psexec, schtasks
+// Method is determined by module-level _execMethod (set during connection probe)
 export function remote(hostname: string, script: string): string {
-  // Detect if the script already calls ConvertTo-Json internally
+  const h = hostname.replace(/'/g, "''")
   const alreadyJson = script.includes('ConvertTo-Json')
-  if (alreadyJson) {
-    // Script already produces JSON — DON'T wrap with another ConvertTo-Json
-    // Just pass through the raw string output from Invoke-Command
+
+  // ── LOCAL MODE: Run script directly on this PC ──────────────────────────
+  if (_localMode) {
+    if (alreadyJson) {
+      return [
+        `try {`,
+        `  ${script}`,
+        `} catch { Write-Output """ERR:$($_.Exception.Message)""" }`,
+      ].join('\n')
+    }
     return [
       `try {`,
-      `  $r = Invoke-Command -ComputerName '${hostname}' -ScriptBlock { ${script} } -EA Stop`,
-      `  if ($r -ne $null) {`,
-      `    if ($r -is [string]) { $r }`,
-      `    elseif ($r -is [array]) { $r | ForEach-Object { if ($_ -is [string]) { $_ } else { $_ | ConvertTo-Json -Depth 4 -Compress } } }`,
-      `    else { $r | ConvertTo-Json -Depth 4 -Compress }`,
-      `  } else { Write-Output '"OK"' }`,
+      `  $r = & { ${script} }`,
+      `  if ($r -ne $null) { $r | ConvertTo-Json -Depth 4 -Compress } else { Write-Output '"OK"' }`,
       `} catch { Write-Output """ERR:$($_.Exception.Message)""" }`,
     ].join('\n')
   }
-  // Script does NOT produce JSON — wrap result with ConvertTo-Json
-  // Use Select-Object to strip PS remoting metadata
-  return [
-    `try {`,
-    `  $r = Invoke-Command -ComputerName '${hostname}' -ScriptBlock { ${script} } -EA Stop`,
-    `  if ($r -ne $null) { $r | Select-Object * -ExcludeProperty PSComputerName,RunspaceId,PSShowComputerName | ConvertTo-Json -Depth 4 -Compress } else { Write-Output '"OK"' }`,
-    `} catch { Write-Output """ERR:$($_.Exception.Message)""" }`,
-  ].join('\n')
+
+  // ── WINRM: Invoke-Command (default, fastest) ───────────────────────────
+  if (_execMethod === 'winrm') {
+    if (alreadyJson) {
+      return [
+        `try {`,
+        `  $r = Invoke-Command -ComputerName '${h}' -ScriptBlock { ${script} } -EA Stop`,
+        `  if ($r -ne $null) {`,
+        `    if ($r -is [string]) { $r }`,
+        `    elseif ($r -is [array]) { $r | ForEach-Object { if ($_ -is [string]) { $_ } else { $_ | ConvertTo-Json -Depth 4 -Compress } } }`,
+        `    else { $r | ConvertTo-Json -Depth 4 -Compress }`,
+        `  } else { Write-Output '"OK"' }`,
+        `} catch { Write-Output """ERR:$($_.Exception.Message)""" }`,
+      ].join('\n')
+    }
+    return [
+      `try {`,
+      `  $r = Invoke-Command -ComputerName '${h}' -ScriptBlock { ${script} } -EA Stop`,
+      `  if ($r -ne $null) { $r | Select-Object * -ExcludeProperty PSComputerName,RunspaceId,PSShowComputerName | ConvertTo-Json -Depth 4 -Compress } else { Write-Output '"OK"' }`,
+      `} catch { Write-Output """ERR:$($_.Exception.Message)""" }`,
+    ].join('\n')
+  }
+
+  // ── For file-based methods (WMI, PsExec, schtasks): ────────────────────
+  // Strategy: Write inner script to \\HOST\C$\Temp via UNC admin share,
+  // execute it on the target, read result back from a temp file.
+  // A unique GUID prevents collisions between parallel commands.
+
+  // Helper: build UNC path (avoid C$ in template literals)
+  const unc = '\\\\\\\\' + h + '\\\\C$\\\\Temp'
+  const uncPS = `$unc = "${unc}"`
+
+  // ── WMI Process Create ─────────────────────────────────────────────────
+  if (_execMethod === 'wmi') {
+    // WMI Process Create runs a command on the target; script file + result file approach
+    const lines: string[] = [
+      'try {',
+      '  $guid = [guid]::NewGuid().ToString("N")',
+      '  ' + uncPS,
+      '  $sf = "$unc\\ittool_$guid.ps1"',
+      '  $rf = "$unc\\ittool_$guid.txt"',
+      '  if (-not (Test-Path $unc)) { New-Item -Path $unc -ItemType Directory -Force | Out-Null }',
+    ]
+    // Build wrapper script that runs the inner script and writes output to result file
+    lines.push('  $inner = @"')
+    lines.push('try {')
+    lines.push('  $r = & {')
+    lines.push('    ' + script)
+    lines.push('  }')
+    if (alreadyJson) {
+      lines.push('  if ($r -ne $null) { $r | Out-File "C:\\Temp\\ittool_YOURG.txt" -Encoding UTF8 }')
+    } else {
+      lines.push('  if ($r -ne $null) { $r | ConvertTo-Json -Depth 4 -Compress | Out-File "C:\\Temp\\ittool_YOURG.txt" -Encoding UTF8 }')
+    }
+    lines.push('  else { \'"OK"\' | Out-File "C:\\Temp\\ittool_YOURG.txt" -Encoding UTF8 }')
+    lines.push('} catch { "ERR:$($_.Exception.Message)" | Out-File "C:\\Temp\\ittool_YOURG.txt" -Encoding UTF8 }')
+    lines.push('"@')
+    lines.push('  $inner = $inner -replace "YOURG", $guid')
+    lines.push('  Set-Content -Path $sf -Value $inner -Encoding UTF8 -Force')
+    lines.push(`  Invoke-WmiMethod -ComputerName '${h}' -Class Win32_Process -Name Create -ArgumentList "powershell.exe -ExecutionPolicy Bypass -File C:\\Temp\\ittool_$($guid).ps1" -EA Stop | Out-Null`)
+    lines.push('  $w = 0; while (!(Test-Path $rf) -and $w -lt 60) { Start-Sleep -Seconds 2; $w += 2 }')
+    lines.push('  if (Test-Path $rf) { Get-Content $rf -Raw -Encoding UTF8 } else { Write-Output "ERR:Timeout" }')
+    lines.push('  Remove-Item $sf -Force -EA SilentlyContinue')
+    lines.push('  Remove-Item $rf -Force -EA SilentlyContinue')
+    lines.push('} catch { Write-Output "ERR:$($_.Exception.Message)" }')
+    return lines.join('\n')
+  }
+
+  // ── PsExec (stdout directly, no result file needed) ────────────────────
+  if (_execMethod === 'psexec') {
+    const dir = _psExecDir.replace(/\\+$/, '').replace(/'/g, "''")
+    const lines: string[] = [
+      'try {',
+      '  $guid = [guid]::NewGuid().ToString("N")',
+      '  ' + uncPS,
+      '  $sf = "$unc\\ittool_$guid.ps1"',
+      '  if (-not (Test-Path $unc)) { New-Item -Path $unc -ItemType Directory -Force | Out-Null }',
+      '  $inner = @"',
+      script,
+      '"@',
+      '  Set-Content -Path $sf -Value $inner -Encoding UTF8 -Force',
+      `  $p64 = '${dir}\\PsExec64.exe'; $p32 = '${dir}\\PsExec.exe'`,
+      '  $psExe = if (Test-Path $p64) { $p64 } elseif (Test-Path $p32) { $p32 } else { $null }',
+      "  if (-not $psExe) { Write-Output 'ERR:PsExec nicht gefunden'; exit }",
+      `  $r = & $psExe "\\\\${h}" -s -accepteula powershell.exe -ExecutionPolicy Bypass -File "C:\\Temp\\ittool_$($guid).ps1" 2>&1`,
+      '  $lines = ($r | Out-String) -split "`n" | Where-Object { $_ -and $_ -notmatch "^PsExec|^Copyright|^Sysinternals|^Connecting|^Starting|^\\s*$" }',
+      '  $lines -join "`n"',
+      '  Remove-Item $sf -Force -EA SilentlyContinue',
+      '} catch { Write-Output "ERR:$($_.Exception.Message)" }',
+    ]
+    return lines.join('\n')
+  }
+
+  // ── schtasks ───────────────────────────────────────────────────────────
+  if (_execMethod === 'schtasks') {
+    const lines: string[] = [
+      'try {',
+      '  $guid = [guid]::NewGuid().ToString("N")',
+      '  ' + uncPS,
+      '  $sf = "$unc\\ittool_$guid.ps1"',
+      '  $rf = "$unc\\ittool_$guid.txt"',
+      '  if (-not (Test-Path $unc)) { New-Item -Path $unc -ItemType Directory -Force | Out-Null }',
+    ]
+    lines.push('  $inner = @"')
+    lines.push('try {')
+    lines.push('  $r = & {')
+    lines.push('    ' + script)
+    lines.push('  }')
+    if (alreadyJson) {
+      lines.push('  if ($r -ne $null) { $r | Out-File "C:\\Temp\\ittool_YOURG.txt" -Encoding UTF8 }')
+    } else {
+      lines.push('  if ($r -ne $null) { $r | ConvertTo-Json -Depth 4 -Compress | Out-File "C:\\Temp\\ittool_YOURG.txt" -Encoding UTF8 }')
+    }
+    lines.push('  else { \'"OK"\' | Out-File "C:\\Temp\\ittool_YOURG.txt" -Encoding UTF8 }')
+    lines.push('} catch { "ERR:$($_.Exception.Message)" | Out-File "C:\\Temp\\ittool_YOURG.txt" -Encoding UTF8 }')
+    lines.push('"@')
+    lines.push('  $inner = $inner -replace "YOURG", $guid')
+    lines.push('  Set-Content -Path $sf -Value $inner -Encoding UTF8 -Force')
+    lines.push(`  $tn = "ITTool_$guid"`)
+    lines.push(`  schtasks /create /s ${h} /tn $tn /tr "powershell.exe -ExecutionPolicy Bypass -File C:\\Temp\\ittool_$($guid).ps1" /sc once /st 00:00 /ru SYSTEM /rl HIGHEST /f 2>&1 | Out-Null`)
+    lines.push(`  schtasks /run /s ${h} /tn $tn 2>&1 | Out-Null`)
+    lines.push('  $w = 0; while (!(Test-Path $rf) -and $w -lt 60) { Start-Sleep -Seconds 2; $w += 2 }')
+    lines.push('  if (Test-Path $rf) { Get-Content $rf -Raw -Encoding UTF8 } else { Write-Output "ERR:Timeout" }')
+    lines.push(`  schtasks /delete /s ${h} /tn $tn /f 2>&1 | Out-Null`)
+    lines.push('  Remove-Item $sf -Force -EA SilentlyContinue')
+    lines.push('  Remove-Item $rf -Force -EA SilentlyContinue')
+    lines.push('} catch { Write-Output "ERR:$($_.Exception.Message)" }')
+    return lines.join('\n')
+  }
+
+  // Fallback (should not reach here)
+  return 'Write-Output "ERR:Unbekannte Ausfuehrungsmethode"'
 }
 
 // ── PS to run a cmd line locally (admin PC) ───────────────────────────────────
@@ -460,6 +665,17 @@ function buildCategories(): Category[] {
           buildCmd: (h) => remote(h, `Reset-ComputerMachinePassword -EA Stop; Write-Output "Computer-Passwort zurückgesetzt"`), action: 'critical' },
         { id: 'aadstatus', func: 'Azure AD Status', when: 'AAD-Join prüfen',
           buildCmd: (h) => remote(h, `dsregcmd /status 2>&1`), action: 'read' },
+        { id: 'aadleave', func: 'Azure AD / Hybrid Join trennen (dsregcmd /leave)', when: 'Registrierungsfehler beheben — PC aus Azure AD abmelden. WICHTIG: Danach Neustart erforderlich!',
+          buildCmd: (h) => remote(h, [
+            `$status = dsregcmd /status 2>&1`,
+            `$joined = ($status | Select-String 'AzureAdJoined\\s*:\\s*YES') -ne $null`,
+            `if (-not $joined) {`,
+            `  @{Info='PC ist nicht Azure AD joined — kein /leave noetig';Hinweis='Falls weiterhin Registrierungsfehler: Computer-Passwort reset oder Domaene neu beitreten'} | ConvertTo-Json -Compress`,
+            `} else {`,
+            `  $r = dsregcmd /leave 2>&1`,
+            `  @{Ergebnis='dsregcmd /leave ausgefuehrt';Ausgabe=($r -join ' | ');Wichtig='PC muss jetzt NEU GESTARTET werden damit die Aenderung wirksam wird!';Hinweis='Nach dem Neustart tritt der PC automatisch wieder dem Azure AD bei (Hybrid Join)'} | ConvertTo-Json -Compress`,
+            `}`,
+          ].join('\n')), action: 'critical' },
         { id: 'klist', func: 'Kerberos-Tickets anzeigen', when: 'Auth-Probleme',
           buildCmd: (h) => remote(h, `klist 2>&1`), action: 'read' },
         { id: 'kpurge', func: 'Kerberos-Tickets löschen', when: 'Nach Gruppenänderung',
@@ -511,9 +727,7 @@ function buildCategories(): Category[] {
               `try {`,
               `  $tempPath = "\\\\$hostname\\C$\\Temp"`,
               `  if (-not (Test-Path $tempPath)) { New-Item -Path $tempPath -ItemType Directory -Force | Out-Null }`,
-              `  $cs = Get-CimInstance -ComputerName $hostname -ClassName Win32_ComputerSystem -OperationTimeoutSec 10`,
-              `  $loggedOnUser = $cs.UserName`,
-              `  if (-not $loggedOnUser) { $result.error = 'Kein User angemeldet'; $result | ConvertTo-Json -Compress; exit }`,
+              ...getUserDetectionPS(hSafe, '$loggedOnUser').map(l => `  ${l}`),
               `  $script = @'`,
               `Add-Type -AssemblyName System.Windows.Forms`,
               `Add-Type -AssemblyName System.Drawing`,
@@ -627,23 +841,30 @@ function buildCategories(): Category[] {
             // Use ScheduledTask trick to run in the logged-on user's session
             return [
               `try {`,
-              `  $cs = Get-CimInstance Win32_ComputerSystem -ComputerName '${hSafe}' -EA Stop`,
-              `  $user = $cs.UserName`,
-              `  if (-not $user) { Write-Output 'ERR:Kein Benutzer angemeldet auf ${hSafe}'; exit }`,
+              ...getUserDetectionPS(hSafe).map(l => `  ${l}`),
               `  $cmd = "net use ${letter}: ""${unc}"" /persistent:yes"`,
               `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
               `    param($drv, $path, $usr)`,
-              `    $action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument "/c net use $($drv): ""$path"" /persistent:yes"`,
+              `    # Ergebnis-Datei für Verifizierung im User-Kontext`,
+              `    $resultFile = "C:\\Temp\\it_map_result.txt"`,
+              `    if (-not (Test-Path 'C:\\Temp')) { New-Item -Path 'C:\\Temp' -ItemType Directory -Force | Out-Null }`,
+              `    Remove-Item $resultFile -Force -EA SilentlyContinue`,
+              `    $script = "net use $($drv): ""$path"" /persistent:yes > C:\\Temp\\it_map_result.txt 2>&1"`,
+              `    $action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument "/c $script"`,
               `    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(2)`,
               `    Register-ScheduledTask -TaskName 'IT_MapDrive' -Action $action -Trigger $trigger -User $usr -Force | Out-Null`,
               `    Start-ScheduledTask -TaskName 'IT_MapDrive'`,
-              `    Start-Sleep -Seconds 3`,
+              `    Start-Sleep -Seconds 4`,
               `    Unregister-ScheduledTask -TaskName 'IT_MapDrive' -Confirm:$false -EA SilentlyContinue`,
-              `    $check = Get-SmbMapping -EA SilentlyContinue | Where-Object { $_.LocalPath -eq "$($drv):" }`,
-              `    if ($check) {`,
-              `      @{Ergebnis='Erfolgreich';Laufwerk="$($drv):";Pfad=$path;Status=$check.Status} | ConvertTo-Json -Compress`,
+              `    # Ergebnis aus der Datei lesen (wurde im User-Kontext geschrieben)`,
+              `    $output = if (Test-Path $resultFile) { (Get-Content $resultFile -Raw -EA SilentlyContinue).Trim() } else { '' }`,
+              `    Remove-Item $resultFile -Force -EA SilentlyContinue`,
+              `    if ($output -match 'erfolgreich|successfully|command completed') {`,
+              `      @{Ergebnis='Erfolgreich';Laufwerk="$($drv):";Pfad=$path;Details=$output} | ConvertTo-Json -Compress`,
+              `    } elseif ($output -match 'Systemfehler|error|Fehler') {`,
+              `      Write-Output "ERR:Laufwerk $($drv): konnte nicht verbunden werden. $output"`,
               `    } else {`,
-              `      Write-Output "ERR:Laufwerk $($drv): konnte nicht verbunden werden. Bitte Pfad pruefen: $path"`,
+              `      @{Ergebnis='Befehl ausgefuehrt';Laufwerk="$($drv):";Pfad=$path;Details=if($output){$output}else{'Keine Rueckmeldung - bitte manuell pruefen'}} | ConvertTo-Json -Compress`,
               `    }`,
               `  } -ArgumentList '${letter}','${unc}',$user -EA Stop`,
               `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
@@ -658,22 +879,29 @@ function buildCategories(): Category[] {
             const hSafe  = h.replace(/'/g, "''")
             return [
               `try {`,
-              `  $cs = Get-CimInstance Win32_ComputerSystem -ComputerName '${hSafe}' -EA Stop`,
-              `  $user = $cs.UserName`,
-              `  if (-not $user) { Write-Output 'ERR:Kein Benutzer angemeldet auf ${hSafe}'; exit }`,
+              ...getUserDetectionPS(hSafe).map(l => `  ${l}`),
               `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
               `    param($drv, $usr)`,
-              `    $action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument "/c net use $($drv): /delete /yes"`,
+              `    # Ergebnis-Datei für Verifizierung im User-Kontext`,
+              `    $resultFile = "C:\\Temp\\it_unmap_result.txt"`,
+              `    if (-not (Test-Path 'C:\\Temp')) { New-Item -Path 'C:\\Temp' -ItemType Directory -Force | Out-Null }`,
+              `    Remove-Item $resultFile -Force -EA SilentlyContinue`,
+              `    $script = "net use $($drv): /delete /yes > C:\\Temp\\it_unmap_result.txt 2>&1"`,
+              `    $action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument "/c $script"`,
               `    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(2)`,
               `    Register-ScheduledTask -TaskName 'IT_UnmapDrive' -Action $action -Trigger $trigger -User $usr -Force | Out-Null`,
               `    Start-ScheduledTask -TaskName 'IT_UnmapDrive'`,
-              `    Start-Sleep -Seconds 3`,
+              `    Start-Sleep -Seconds 4`,
               `    Unregister-ScheduledTask -TaskName 'IT_UnmapDrive' -Confirm:$false -EA SilentlyContinue`,
-              `    $check = Get-SmbMapping -EA SilentlyContinue | Where-Object { $_.LocalPath -eq "$($drv):" }`,
-              `    if (-not $check) {`,
-              `      @{Ergebnis='Erfolgreich';Laufwerk="$($drv):";Aktion='Getrennt'} | ConvertTo-Json -Compress`,
+              `    # Ergebnis aus der Datei lesen (wurde im User-Kontext geschrieben)`,
+              `    $output = if (Test-Path $resultFile) { (Get-Content $resultFile -Raw -EA SilentlyContinue).Trim() } else { '' }`,
+              `    Remove-Item $resultFile -Force -EA SilentlyContinue`,
+              `    if ($output -match 'erfolgreich|successfully|command completed') {`,
+              `      @{Ergebnis='Erfolgreich';Laufwerk="$($drv):";Aktion='Getrennt';Details=$output} | ConvertTo-Json -Compress`,
+              `    } elseif ($output -match 'Netzwerkverbindung wurde nicht gefunden|not found|could not be found') {`,
+              `      @{Ergebnis='Laufwerk war nicht verbunden';Laufwerk="$($drv):";Details=$output} | ConvertTo-Json -Compress`,
               `    } else {`,
-              `      Write-Output "ERR:Laufwerk $($drv): konnte nicht getrennt werden"`,
+              `      @{Ergebnis='Befehl ausgefuehrt';Laufwerk="$($drv):";Details=if($output){$output}else{'Keine Rueckmeldung - bitte manuell pruefen'}} | ConvertTo-Json -Compress`,
               `    }`,
               `  } -ArgumentList '${letter}',$user -EA Stop`,
               `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
@@ -692,12 +920,32 @@ function buildCategories(): Category[] {
             const hSafe = h.replace(/'/g, "''")
             return [
               `try {`,
-              `  $maps = Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
-              `    Get-SmbMapping -EA SilentlyContinue | Select-Object @{N='Laufwerk';E={$_.LocalPath}},@{N='Netzwerkpfad';E={$_.RemotePath}},@{N='Status';E={$_.Status}}`,
-              `  } -EA Stop`,
-              `  if (-not $maps) { Write-Output '"Keine Netzlaufwerke verbunden"'; exit }`,
-              `  $maps | ConvertTo-Json -Compress`,
-              `} catch { Write-Output """ERR:$($_.Exception.Message)""" }`,
+              ...getUserDetectionPS(hSafe).map(l => `  ${l}`),
+              `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
+              `    param($usr)`,
+              `    $resultFile = 'C:\\Temp\\it_drivelist.txt'`,
+              `    if (-not (Test-Path 'C:\\Temp')) { New-Item -Path 'C:\\Temp' -ItemType Directory -Force | Out-Null }`,
+              `    Remove-Item $resultFile -Force -EA SilentlyContinue`,
+              `    $script = 'net use > C:\\Temp\\it_drivelist.txt 2>&1'`,
+              `    $action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument "/c $script"`,
+              `    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(2)`,
+              `    Register-ScheduledTask -TaskName 'IT_DriveList' -Action $action -Trigger $trigger -User $usr -Force | Out-Null`,
+              `    Start-ScheduledTask -TaskName 'IT_DriveList'`,
+              `    Start-Sleep -Seconds 3`,
+              `    Unregister-ScheduledTask -TaskName 'IT_DriveList' -Confirm:$false -EA SilentlyContinue`,
+              `    if (-not (Test-Path $resultFile)) { Write-Output '"Keine Netzlaufwerke verbunden"'; return }`,
+              `    $raw = Get-Content $resultFile -Encoding Default -EA SilentlyContinue`,
+              `    Remove-Item $resultFile -Force -EA SilentlyContinue`,
+              `    $results = @()`,
+              `    foreach ($line in $raw) {`,
+              `      if ($line -match '^\\s*(OK|Nicht\\s+verf|Unavailable|Disconnected|Getrennt)?\\s+([A-Z]:)\\s+(\\\\\\\\\\S+)') {`,
+              `        $results += @{Laufwerk=$Matches[2];Netzwerkpfad=$Matches[3];Status=if($Matches[1]){"$($Matches[1])".Trim()}else{'OK'};Benutzer=$usr}`,
+              `      }`,
+              `    }`,
+              `    if ($results.Count -eq 0) { Write-Output '"Keine Netzlaufwerke verbunden"'; return }`,
+              `    $results | ConvertTo-Json -Compress`,
+              `  } -ArgumentList $user -EA Stop`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
             ].join('\n')
           },
           action: 'read' },
@@ -716,6 +964,49 @@ function buildCategories(): Category[] {
         { id: 'driverupdate', func: 'Treiber über Windows Update suchen', when: 'Treiber-Updates',
           buildCmd: (h) => remote(h, `$s=New-Object -ComObject Microsoft.Update.Session; $sc=$s.CreateUpdateSearcher(); $r=$sc.Search("IsInstalled=0 and Type='Driver'"); $r.Updates | ForEach-Object { "$($_.Title): $($_.Description)" } | ConvertTo-Json -Compress`),
           action: 'read', longRunning: true },
+        { id: 'driverupdateall', func: 'Alle Treiber-Updates installieren', when: 'Verfügbare Treiber-Updates suchen und automatisch installieren',
+          buildCmd: (h) => {
+            const hSafe = h.replace(/'/g, "''")
+            return [
+              `try {`,
+              `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
+              `    $session = New-Object -ComObject Microsoft.Update.Session`,
+              `    $searcher = $session.CreateUpdateSearcher()`,
+              `    Write-Host 'Suche nach Treiber-Updates...'`,
+              `    $result = $searcher.Search("IsInstalled=0 and Type='Driver'")`,
+              `    if ($result.Updates.Count -eq 0) {`,
+              `      @{Ergebnis='Keine Treiber-Updates verfuegbar';Info='Alle Treiber sind aktuell.'} | ConvertTo-Json -Compress`,
+              `      return`,
+              `    }`,
+              `    $updates = New-Object -ComObject Microsoft.Update.UpdateColl`,
+              `    $list = @()`,
+              `    foreach ($u in $result.Updates) {`,
+              `      $updates.Add($u) | Out-Null`,
+              `      $list += @{Treiber=$u.Title;Groesse="$([math]::Round($u.MaxDownloadSize/1MB,1)) MB"}`,
+              `    }`,
+              `    # Download`,
+              `    $dl = $session.CreateUpdateDownloader()`,
+              `    $dl.Updates = $updates`,
+              `    Write-Host "Lade $($updates.Count) Treiber-Update(s) herunter..."`,
+              `    $dlResult = $dl.Download()`,
+              `    # Install`,
+              `    $inst = $session.CreateUpdateInstaller()`,
+              `    $inst.Updates = $updates`,
+              `    Write-Host "Installiere $($updates.Count) Treiber-Update(s)..."`,
+              `    $instResult = $inst.Install()`,
+              `    $details = @()`,
+              `    for ($i = 0; $i -lt $updates.Count; $i++) {`,
+              `      $code = $instResult.GetUpdateResult($i).ResultCode`,
+              `      $status = switch($code) { 2{'Erfolgreich'} 3{'Erfolgreich (Neustart noetig)'} 4{'Fehlgeschlagen'} 5{'Abgebrochen'} default{"Code: $code"} }`,
+              `      $details += @{Treiber=$updates.Item($i).Title;Status=$status}`,
+              `    }`,
+              `    $reboot = if($instResult.RebootRequired){'Ja - bitte PC neustarten'}else{'Nein'}`,
+              `    @{Ergebnis='Treiber-Update abgeschlossen';'Anzahl Updates'=$updates.Count;'Neustart erforderlich'=$reboot;Details=$details} | ConvertTo-Json -Compress -Depth 3`,
+              `  } -EA Stop`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
+            ].join('\n')
+          },
+          action: 'write', longRunning: true },
         { id: 'driverinf', func: 'Treiber-INF remote installieren', when: 'Manueller Treiber-Import',
           buildCmd: (h, i) => {
             if (!i) return `Write-Output "ERR:Keine INF-Datei ausgewählt"`
@@ -1068,28 +1359,65 @@ function buildCategories(): Category[] {
           buildCmd: (h) => remote(h, `[System.Environment]::GetEnvironmentVariables('Machine').GetEnumerator() | Sort-Object Name | ForEach-Object { @{Variable=$_.Name;Wert=$_.Value;Bereich='System'} } | ConvertTo-Json -Compress`),
           action: 'read' },
         { id: 'env-user', func: 'Benutzer-Umgebungsvariablen anzeigen', when: 'Variablen des angemeldeten Benutzers',
-          buildCmd: (h) => remote(h, `[System.Environment]::GetEnvironmentVariables('User').GetEnumerator() | Sort-Object Name | ForEach-Object { @{Variable=$_.Name;Wert=$_.Value;Bereich='Benutzer'} } | ConvertTo-Json -Compress`),
+          buildCmd: (h) => {
+            const hSafe = h.replace(/'/g, "''")
+            return [
+              `try {`,
+              ...getUserDetectionPS(hSafe).map(l => `  ${l}`),
+              `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
+              `    param($targetUser)`,
+              `    $sid = (New-Object System.Security.Principal.NTAccount($targetUser)).Translate([System.Security.Principal.SecurityIdentifier]).Value`,
+              `    $regPath = "Registry::HKEY_USERS\\$sid\\Environment"`,
+              `    if (-not (Test-Path $regPath)) { Write-Output '"Keine Benutzer-Variablen gefunden"'; return }`,
+              `    $item = Get-Item $regPath`,
+              `    $item.Property | Sort-Object | ForEach-Object {`,
+              `      @{Variable=$_;Wert=(Get-ItemPropertyValue $regPath $_ -EA SilentlyContinue);Bereich='Benutzer';Benutzer=$targetUser}`,
+              `    } | ConvertTo-Json -Compress`,
+              `  } -ArgumentList $user -EA Stop`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
+            ].join('\n')
+          },
           action: 'read' },
         { id: 'env-path', func: 'PATH-Variable anzeigen (übersichtlich)', when: 'Alle Einträge im System-PATH einzeln auflisten',
-          buildCmd: (h) => remote(h, [
-            `$sysPath = [System.Environment]::GetEnvironmentVariable('PATH','Machine') -split ';' | Where-Object {$_}`,
-            `$usrPath = [System.Environment]::GetEnvironmentVariable('PATH','User') -split ';' | Where-Object {$_}`,
-            `$results = @()`,
-            `$i=1; foreach($p in $sysPath){ $results += @{Nr=$i;Pfad=$p;Bereich='System';Existiert=if(Test-Path $p -EA SilentlyContinue){'Ja'}else{'Nein'}}; $i++ }`,
-            `foreach($p in $usrPath){ $results += @{Nr=$i;Pfad=$p;Bereich='Benutzer';Existiert=if(Test-Path $p -EA SilentlyContinue){'Ja'}else{'Nein'}}; $i++ }`,
-            `$results | ConvertTo-Json -Compress`,
-          ].join('; ')),
+          buildCmd: (h) => {
+            const hSafe = h.replace(/'/g, "''")
+            return [
+              `try {`,
+              ...getUserDetectionPS(hSafe).map(l => `  ${l}`),
+              `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
+              `    param($targetUser)`,
+              `    $sysPath = [System.Environment]::GetEnvironmentVariable('PATH','Machine') -split ';' | Where-Object {$_}`,
+              `    $sid = (New-Object System.Security.Principal.NTAccount($targetUser)).Translate([System.Security.Principal.SecurityIdentifier]).Value`,
+              `    $regPath = "Registry::HKEY_USERS\\$sid\\Environment"`,
+              `    $usrPathStr = try { (Get-ItemPropertyValue $regPath 'PATH' -EA Stop) } catch { '' }`,
+              `    $usrPath = $usrPathStr -split ';' | Where-Object {$_}`,
+              `    $results = @()`,
+              `    $i=1; foreach($p in $sysPath){ $results += @{Nr=$i;Pfad=$p;Bereich='System';Existiert=if(Test-Path $p -EA SilentlyContinue){'Ja'}else{'Nein'}}; $i++ }`,
+              `    foreach($p in $usrPath){ $results += @{Nr=$i;Pfad=$p;Bereich='Benutzer';Existiert=if(Test-Path $p -EA SilentlyContinue){'Ja'}else{'Nein'}}; $i++ }`,
+              `    $results | ConvertTo-Json -Compress`,
+              `  } -ArgumentList $user -EA Stop`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
+            ].join('\n')
+          },
           action: 'read' },
         { id: 'env-single', func: 'Einzelne Variable abfragen', when: 'Wert einer bestimmten Variable anzeigen',
           buildCmd: (h, i) => {
             const name = (i || 'PATH').trim()
-            return remote(h, [
-              `$name='${name}'`,
-              `$sys = [System.Environment]::GetEnvironmentVariable($name,'Machine')`,
-              `$usr = [System.Environment]::GetEnvironmentVariable($name,'User')`,
-              `$proc = [System.Environment]::GetEnvironmentVariable($name,'Process')`,
-              `@{Variable=$name;'System-Wert'=if($sys){$sys}else{'(nicht gesetzt)'}; 'Benutzer-Wert'=if($usr){$usr}else{'(nicht gesetzt)'}; 'Aktuell (Prozess)'=if($proc){$proc}else{'(nicht gesetzt)'}} | ConvertTo-Json -Compress`,
-            ].join('; '))
+            const hSafe = h.replace(/'/g, "''")
+            return [
+              `try {`,
+              ...getUserDetectionPS(hSafe).map(l => `  ${l}`),
+              `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
+              `    param($targetUser, $varName)`,
+              `    $sys = [System.Environment]::GetEnvironmentVariable($varName,'Machine')`,
+              `    $sid = (New-Object System.Security.Principal.NTAccount($targetUser)).Translate([System.Security.Principal.SecurityIdentifier]).Value`,
+              `    $regPath = "Registry::HKEY_USERS\\$sid\\Environment"`,
+              `    $usr = try { (Get-ItemPropertyValue $regPath $varName -EA Stop) } catch { $null }`,
+              `    $proc = [System.Environment]::GetEnvironmentVariable($varName,'Process')`,
+              `    @{Variable=$varName;'System-Wert'=if($sys){$sys}else{'(nicht gesetzt)'}; 'Benutzer-Wert'=if($usr){$usr}else{'(nicht gesetzt)'}; 'Aktuell (Prozess)'=if($proc){$proc}else{'(nicht gesetzt)'}; Benutzer=$targetUser} | ConvertTo-Json -Compress`,
+              `  } -ArgumentList $user,'${name.replace(/'/g, "''")}' -EA Stop`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
+            ].join('\n')
           },
           action: 'read',
           input: { type: 'text', placeholder: 'Variablenname z.B. JAVA_HOME' },
@@ -1135,14 +1463,24 @@ function buildCategories(): Category[] {
             const name = (parts[0] || '').trim()
             const value = parts.slice(1).join('=').trim()
             if (!name) return remote(h, `@{Fehler='Bitte Variable eingeben'} | ConvertTo-Json -Compress`)
-            return remote(h, [
-              `$name='${name.replace(/'/g, "''")}'`,
-              `$value='${value.replace(/'/g, "''")}'`,
-              `$old = [System.Environment]::GetEnvironmentVariable($name,'User')`,
-              `[System.Environment]::SetEnvironmentVariable($name,$value,'User')`,
-              `$new = [System.Environment]::GetEnvironmentVariable($name,'User')`,
-              `@{Variable=$name;'Alter Wert'=if($old){$old}else{'(neu erstellt)'}; 'Neuer Wert'=$new; Bereich='Benutzer'} | ConvertTo-Json -Compress`,
-            ].join('; '))
+            const hSafe = h.replace(/'/g, "''")
+            const nameEsc = name.replace(/'/g, "''")
+            const valueEsc = value.replace(/'/g, "''")
+            return [
+              `try {`,
+              ...getUserDetectionPS(hSafe).map(l => `  ${l}`),
+              `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
+              `    param($targetUser, $n, $v)`,
+              `    $sid = (New-Object System.Security.Principal.NTAccount($targetUser)).Translate([System.Security.Principal.SecurityIdentifier]).Value`,
+              `    $regPath = "Registry::HKEY_USERS\\$sid\\Environment"`,
+              `    if (-not (Test-Path $regPath)) { New-Item -Path $regPath -Force | Out-Null }`,
+              `    $old = try { (Get-ItemPropertyValue $regPath $n -EA Stop) } catch { $null }`,
+              `    Set-ItemProperty -Path $regPath -Name $n -Value $v -Type String -Force`,
+              `    $new = (Get-ItemPropertyValue $regPath $n -EA SilentlyContinue)`,
+              `    @{Variable=$n;'Alter Wert'=if($old){$old}else{'(neu erstellt)'}; 'Neuer Wert'=$new; Bereich='Benutzer'; Benutzer=$targetUser} | ConvertTo-Json -Compress`,
+              `  } -ArgumentList $user,'${nameEsc}','${valueEsc}' -EA Stop`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
+            ].join('\n')
           },
           action: 'write',
           input: { type: 'envvar', placeholder: 'VARIABLENNAME=Wert' },
@@ -1213,15 +1551,24 @@ function buildCategories(): Category[] {
           buildCmd: (h, i) => {
             const name = (i || '').trim()
             if (!name) return remote(h, `@{Fehler='Bitte den Namen der Variable eingeben'} | ConvertTo-Json -Compress`)
-            return remote(h, [
-              `$name='${name.replace(/'/g, "''")}'`,
-              `$old = [System.Environment]::GetEnvironmentVariable($name,'User')`,
-              `if(-not $old){ @{Info="Variable '$name' existiert nicht im Benutzer-Bereich"} | ConvertTo-Json -Compress }`,
-              `else {`,
-              `  [System.Environment]::SetEnvironmentVariable($name,$null,'User')`,
-              `  @{Aktion='Variable geloescht';Variable=$name;'Alter Wert'=$old;Bereich='Benutzer'} | ConvertTo-Json -Compress`,
-              `}`,
-            ].join(' '))
+            const hSafe = h.replace(/'/g, "''")
+            const nameEsc = name.replace(/'/g, "''")
+            return [
+              `try {`,
+              ...getUserDetectionPS(hSafe).map(l => `  ${l}`),
+              `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
+              `    param($targetUser, $n)`,
+              `    $sid = (New-Object System.Security.Principal.NTAccount($targetUser)).Translate([System.Security.Principal.SecurityIdentifier]).Value`,
+              `    $regPath = "Registry::HKEY_USERS\\$sid\\Environment"`,
+              `    $old = try { (Get-ItemPropertyValue $regPath $n -EA Stop) } catch { $null }`,
+              `    if (-not $old) { @{Info="Variable '$n' existiert nicht im Benutzer-Bereich"} | ConvertTo-Json -Compress }`,
+              `    else {`,
+              `      Remove-ItemProperty -Path $regPath -Name $n -Force`,
+              `      @{Aktion='Variable geloescht';Variable=$n;'Alter Wert'=$old;Bereich='Benutzer';Benutzer=$targetUser} | ConvertTo-Json -Compress`,
+              `    }`,
+              `  } -ArgumentList $user,'${nameEsc}' -EA Stop`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
+            ].join('\n')
           },
           action: 'critical',
           input: { type: 'text', placeholder: 'VARIABLENNAME' },
@@ -1236,7 +1583,7 @@ function buildCategories(): Category[] {
         { id: 'devlist', func: 'Alle Geräte auflisten', when: 'Geräte-Überblick',
           buildCmd: (h) => remote(h, `Get-PnpDevice | Select-Object @{N='Status';E={$_.Status}},@{N='Klasse';E={$_.Class}},@{N='Gerät';E={$_.FriendlyName}} | ConvertTo-Json -Compress`), action: 'read' },
         { id: 'deverror', func: 'Geräte mit Fehler', when: 'Treiberprobleme finden',
-          buildCmd: (h) => remote(h, `$devs = Get-PnpDevice | Where-Object { $_.Status -ne 'OK' }; foreach ($d in $devs) { $prop = Get-PnpDeviceProperty -InstanceId $d.InstanceId -KeyName 'DEVPKEY_Device_ProblemCode' -EA SilentlyContinue; [PSCustomObject]@{Status=$d.Status;Class=$d.Class;Name=$d.FriendlyName;InstanceId=$d.InstanceId;ErrorCode=$prop.Data} }; if (-not $devs) { Write-Output '"Keine Geräte mit Fehler"' } | ConvertTo-Json -Compress`), action: 'read' },
+          buildCmd: (h) => remote(h, `$devs = Get-PnpDevice | Where-Object { $_.Status -ne 'OK' }; if (-not $devs) { Write-Output 'Keine Geräte mit Fehler' } else { $result = foreach ($d in $devs) { $prop = Get-PnpDeviceProperty -InstanceId $d.InstanceId -KeyName 'DEVPKEY_Device_ProblemCode' -EA SilentlyContinue; [PSCustomObject]@{Status=$d.Status;Class=$d.Class;Name=$d.FriendlyName;InstanceId=$d.InstanceId;ErrorCode=$prop.Data} }; $result | ConvertTo-Json -Compress }`), action: 'read' },
         { id: 'devhidden', func: 'Versteckte Geräte', when: 'Ghost Devices finden',
           buildCmd: (h) => remote(h, `Get-PnpDevice -PresentOnly:$false | Where-Object { $_.Status -eq 'Unknown' } | Select-Object @{N='Status';E={$_.Status}},@{N='Klasse';E={$_.Class}},@{N='Gerät';E={$_.FriendlyName}} | ConvertTo-Json -Compress`), action: 'read' },
         { id: 'devdisable', func: 'Gerät deaktivieren', when: 'Gerät temporär abschalten',
@@ -1345,6 +1692,200 @@ function buildCategories(): Category[] {
           buildCmd: (h) => remote(h, `Start-MpScan -ScanType QuickScan; Write-Output 'Defender Schnellscan gestartet'`), action: 'write', longRunning: true },
         { id: 'deffull', func: 'Defender Vollscan', when: 'Gründliche Malware-Prüfung',
           buildCmd: (h) => remote(h, `Start-MpScan -ScanType FullScan; Write-Output 'Defender Vollscan gestartet'`), action: 'write', longRunning: true },
+      ],
+    },
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // 🎵 SPASS & TOOLS
+    // ══════════════════════════════════════════════════════════════════════════
+    {
+      id: 'fun', label: '🎵 Spaß & Tools',
+      commands: [
+        // ── Melodie: REMOTE (ScheduledTask + Script-Datei) ──────────────────
+        { id: 'melodie-remote', func: '🎶 Melodie auf Ziel-PC abspielen', when: 'Eine lustige Melodie auf dem Remote-PC hoerbar abspielen',
+          buildCmd: (h, i) => {
+            const melodies: Record<string, string> = {
+              tod: [
+                '[Console]::Beep(440,1200); Start-Sleep -Milliseconds 100; [Console]::Beep(523,400); [Console]::Beep(587,1200)',
+                'Start-Sleep -Milliseconds 300',
+                '[Console]::Beep(440,1200); Start-Sleep -Milliseconds 100; [Console]::Beep(523,400); [Console]::Beep(587,800); [Console]::Beep(659,1000)',
+                'Start-Sleep -Milliseconds 200',
+                '[Console]::Beep(587,600); [Console]::Beep(523,600); [Console]::Beep(440,1400)',
+                'Start-Sleep -Milliseconds 400',
+                '[Console]::Beep(392,1200); Start-Sleep -Milliseconds 100; [Console]::Beep(440,400); [Console]::Beep(523,1200)',
+                '[Console]::Beep(523,600); [Console]::Beep(440,600); [Console]::Beep(392,1800)',
+              ].join('\r\n'),
+              march: [
+                '[Console]::Beep(440,500)', '[Console]::Beep(440,500)', '[Console]::Beep(440,500)',
+                '[Console]::Beep(349,375)', '[Console]::Beep(523,125)',
+                '[Console]::Beep(440,500)', '[Console]::Beep(349,375)', '[Console]::Beep(523,125)',
+                '[Console]::Beep(440,1000)', 'Start-Sleep -Milliseconds 200',
+                '[Console]::Beep(659,500)', '[Console]::Beep(659,500)', '[Console]::Beep(659,500)',
+                '[Console]::Beep(698,375)', '[Console]::Beep(523,125)',
+                '[Console]::Beep(415,500)', '[Console]::Beep(349,375)', '[Console]::Beep(523,125)',
+                '[Console]::Beep(440,1000)',
+              ].join('\r\n'),
+              mario: [
+                '[Console]::Beep(660,150)', 'Start-Sleep -Milliseconds 30',
+                '[Console]::Beep(660,150)', 'Start-Sleep -Milliseconds 150',
+                '[Console]::Beep(660,150)', 'Start-Sleep -Milliseconds 150',
+                '[Console]::Beep(510,150)', 'Start-Sleep -Milliseconds 30',
+                '[Console]::Beep(660,150)', 'Start-Sleep -Milliseconds 150',
+                '[Console]::Beep(770,300)', 'Start-Sleep -Milliseconds 300',
+                '[Console]::Beep(380,300)',
+              ].join('\r\n'),
+              nokia: [
+                '[Console]::Beep(659,125)', '[Console]::Beep(587,125)', '[Console]::Beep(370,250)', '[Console]::Beep(415,250)',
+                '[Console]::Beep(554,125)', '[Console]::Beep(494,125)', '[Console]::Beep(330,250)', '[Console]::Beep(370,250)',
+                '[Console]::Beep(494,125)', '[Console]::Beep(440,125)', '[Console]::Beep(277,250)', '[Console]::Beep(330,250)',
+                '[Console]::Beep(440,500)',
+              ].join('\r\n'),
+            }
+            const choice = i || 'tod'
+            const script = melodies[choice] ?? melodies.tod
+            const hSafe = h.replace(/'/g, "''")
+            // Escape single quotes for PS here-string embedding
+            const scriptEscaped = script.replace(/'/g, "''")
+            return [
+              `try {`,
+              ...getUserDetectionPS(hSafe).map(l => `  ${l}`),
+              `  $scriptContent = @'`,
+              `${script}`,
+              `'@`,
+              `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
+              `    param($usr, $sc)`,
+              `    $path = 'C:\\Temp\\it_melodie.ps1'`,
+              `    if (-not (Test-Path 'C:\\Temp')) { New-Item -Path 'C:\\Temp' -ItemType Directory -Force | Out-Null }`,
+              `    Set-Content -Path $path -Value $sc -Force -Encoding UTF8`,
+              `    $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-WindowStyle Hidden -ExecutionPolicy Bypass -File C:\\Temp\\it_melodie.ps1'`,
+              `    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(2)`,
+              `    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries`,
+              `    Register-ScheduledTask -TaskName 'IT_Melodie' -Action $action -Trigger $trigger -User $usr -Settings $settings -Force | Out-Null`,
+              `    Start-ScheduledTask -TaskName 'IT_Melodie'`,
+              `    Start-Sleep -Seconds 15`,
+              `    Unregister-ScheduledTask -TaskName 'IT_Melodie' -Confirm:$false -EA SilentlyContinue`,
+              `    Remove-Item $path -Force -EA SilentlyContinue`,
+              `  } -ArgumentList $user,$scriptContent -EA Stop`,
+              `  @{Ergebnis='Melodie abgespielt!';Melodie='${choice}';Ziel='${hSafe}'} | ConvertTo-Json -Compress`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
+            ].join('\n')
+          },
+          action: 'write', longRunning: true,
+          input: { type: 'dropdown', options: ['tod', 'march', 'mario', 'nokia'] },
+          templates: [
+            { label: '🎶 Spiel mir das Lied vom Tod', value: 'tod' },
+            { label: '⚔️ Imperial March', value: 'march' },
+            { label: '🍄 Super Mario', value: 'mario' },
+            { label: '📱 Nokia Klingelton', value: 'nokia' },
+          ],
+        },
+        // ── Melodie: LOKAL (direkt, kein ScheduledTask noetig) ────────────
+        { id: 'melodie-lokal', func: '🎶 Melodie abspielen (lokal)', when: 'Eine lustige Melodie auf DEINEM PC abspielen — zum Testen',
+          buildCmd: (_h, i) => {
+            const melodies: Record<string, string> = {
+              tod: [
+                '[Console]::Beep(440,1200); Start-Sleep -Milliseconds 100; [Console]::Beep(523,400); [Console]::Beep(587,1200)',
+                'Start-Sleep -Milliseconds 300',
+                '[Console]::Beep(440,1200); Start-Sleep -Milliseconds 100; [Console]::Beep(523,400); [Console]::Beep(587,800); [Console]::Beep(659,1000)',
+                'Start-Sleep -Milliseconds 200',
+                '[Console]::Beep(587,600); [Console]::Beep(523,600); [Console]::Beep(440,1400)',
+                'Start-Sleep -Milliseconds 400',
+                '[Console]::Beep(392,1200); Start-Sleep -Milliseconds 100; [Console]::Beep(440,400); [Console]::Beep(523,1200)',
+                '[Console]::Beep(523,600); [Console]::Beep(440,600); [Console]::Beep(392,1800)',
+              ].join('; '),
+              march: [
+                '[Console]::Beep(440,500)', '[Console]::Beep(440,500)', '[Console]::Beep(440,500)',
+                '[Console]::Beep(349,375)', '[Console]::Beep(523,125)',
+                '[Console]::Beep(440,500)', '[Console]::Beep(349,375)', '[Console]::Beep(523,125)',
+                '[Console]::Beep(440,1000)', 'Start-Sleep -Milliseconds 200',
+                '[Console]::Beep(659,500)', '[Console]::Beep(659,500)', '[Console]::Beep(659,500)',
+                '[Console]::Beep(698,375)', '[Console]::Beep(523,125)',
+                '[Console]::Beep(415,500)', '[Console]::Beep(349,375)', '[Console]::Beep(523,125)',
+                '[Console]::Beep(440,1000)',
+              ].join('; '),
+              mario: [
+                '[Console]::Beep(660,150)', 'Start-Sleep -Milliseconds 30',
+                '[Console]::Beep(660,150)', 'Start-Sleep -Milliseconds 150',
+                '[Console]::Beep(660,150)', 'Start-Sleep -Milliseconds 150',
+                '[Console]::Beep(510,150)', 'Start-Sleep -Milliseconds 30',
+                '[Console]::Beep(660,150)', 'Start-Sleep -Milliseconds 150',
+                '[Console]::Beep(770,300)', 'Start-Sleep -Milliseconds 300',
+                '[Console]::Beep(380,300)',
+              ].join('; '),
+              nokia: [
+                '[Console]::Beep(659,125)', '[Console]::Beep(587,125)', '[Console]::Beep(370,250)', '[Console]::Beep(415,250)',
+                '[Console]::Beep(554,125)', '[Console]::Beep(494,125)', '[Console]::Beep(330,250)', '[Console]::Beep(370,250)',
+                '[Console]::Beep(494,125)', '[Console]::Beep(440,125)', '[Console]::Beep(277,250)', '[Console]::Beep(330,250)',
+                '[Console]::Beep(440,500)',
+              ].join('; '),
+            }
+            const choice = i || 'tod'
+            const script = melodies[choice] ?? melodies.tod
+            return `${script}; Write-Output "Melodie fertig!"`
+          },
+          action: 'read', local: true, longRunning: true,
+          input: { type: 'dropdown', options: ['tod', 'march', 'mario', 'nokia'] },
+          templates: [
+            { label: '🎶 Spiel mir das Lied vom Tod', value: 'tod' },
+            { label: '⚔️ Imperial March', value: 'march' },
+            { label: '🍄 Super Mario', value: 'mario' },
+            { label: '📱 Nokia Klingelton', value: 'nokia' },
+          ],
+        },
+        // ── Beep: REMOTE (ScheduledTask + Script-Datei) ───────────────────
+        { id: 'beep-remote', func: '🔔 Beep-Ton auf Ziel-PC abspielen', when: 'Einen einzelnen Ton auf dem Remote-PC hoerbar abspielen',
+          buildCmd: (h, i) => {
+            const parts = (i || '800|500').split('|')
+            const freq = parseInt(parts[0]) || 800
+            const dur = parseInt(parts[1]) || 500
+            const hSafe = h.replace(/'/g, "''")
+            return [
+              `try {`,
+              ...getUserDetectionPS(hSafe).map(l => `  ${l}`),
+              `  Invoke-Command -ComputerName '${hSafe}' -ScriptBlock {`,
+              `    param($usr, $f, $d)`,
+              `    $path = 'C:\\Temp\\it_beep.ps1'`,
+              `    if (-not (Test-Path 'C:\\Temp')) { New-Item -Path 'C:\\Temp' -ItemType Directory -Force | Out-Null }`,
+              `    Set-Content -Path $path -Value "[Console]::Beep($f,$d)" -Force -Encoding UTF8`,
+              `    $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-WindowStyle Hidden -ExecutionPolicy Bypass -File C:\\Temp\\it_beep.ps1'`,
+              `    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(2)`,
+              `    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries`,
+              `    Register-ScheduledTask -TaskName 'IT_Beep' -Action $action -Trigger $trigger -User $usr -Settings $settings -Force | Out-Null`,
+              `    Start-ScheduledTask -TaskName 'IT_Beep'`,
+              `    Start-Sleep -Seconds 3`,
+              `    Unregister-ScheduledTask -TaskName 'IT_Beep' -Confirm:$false -EA SilentlyContinue`,
+              `    Remove-Item $path -Force -EA SilentlyContinue`,
+              `  } -ArgumentList $user,${freq},${dur} -EA Stop`,
+              `  @{Ergebnis='Ton abgespielt!';Frequenz='${freq} Hz';Dauer='${dur} ms';Ziel='${hSafe}'} | ConvertTo-Json -Compress`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
+            ].join('\n')
+          },
+          action: 'write',
+          input: { type: 'text', placeholder: 'Frequenz|Dauer z.B. 800|500' },
+          templates: [
+            { label: 'Tief (300 Hz)', value: '300|400' },
+            { label: 'Normal (800 Hz)', value: '800|500' },
+            { label: 'Hoch (1500 Hz)', value: '1500|300' },
+            { label: 'Alarm! (2000 Hz)', value: '2000|1000' },
+          ],
+        },
+        // ── Beep: LOKAL (direkt, kein ScheduledTask noetig) ───────────────
+        { id: 'beep-lokal', func: '🔔 Beep-Ton abspielen (lokal)', when: 'Einen einzelnen Ton auf DEINEM PC abspielen',
+          buildCmd: (_h, i) => {
+            const parts = (i || '800|500').split('|')
+            const freq = parseInt(parts[0]) || 800
+            const dur = parseInt(parts[1]) || 500
+            return `[Console]::Beep(${freq},${dur}); Write-Output (@{Ergebnis='Ton abgespielt!';Frequenz='${freq} Hz';Dauer='${dur} ms'} | ConvertTo-Json -Compress)`
+          },
+          action: 'read', local: true,
+          input: { type: 'text', placeholder: 'Frequenz|Dauer z.B. 800|500' },
+          templates: [
+            { label: 'Tief (300 Hz)', value: '300|400' },
+            { label: 'Normal (800 Hz)', value: '800|500' },
+            { label: 'Hoch (1500 Hz)', value: '1500|300' },
+            { label: 'Alarm! (2000 Hz)', value: '2000|1000' },
+          ],
+        },
       ],
     },
   ]

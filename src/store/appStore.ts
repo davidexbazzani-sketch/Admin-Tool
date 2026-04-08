@@ -39,6 +39,10 @@ interface AppState {
   xelionEntries: XelionEntry[]
   setXelionEntries: (e: XelionEntry[]) => void
 
+  // IT Guru hostname (passed from Home screen)
+  guruHostname: string
+  setGuruHostname: (h: string) => void
+
   // Loading
   isQuerying: boolean
   setIsQuerying: (v: boolean) => void
@@ -101,6 +105,9 @@ export const useAppStore = create<AppState>((set) => ({
 
   xelionEntries: [],
   setXelionEntries: (xelionEntries) => set({ xelionEntries }),
+
+  guruHostname: '',
+  setGuruHostname: (guruHostname) => set({ guruHostname }),
 
   isQuerying: false,
   setIsQuerying: (isQuerying) => set({ isQuerying }),

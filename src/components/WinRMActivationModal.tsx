@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { Loader, CheckCircle, XCircle, AlertTriangle, X, Wifi, WifiOff, Shield } from 'lucide-react'
+import { Loader, CheckCircle, XCircle, AlertTriangle, X, Wifi, WifiOff, Shield, HelpCircle } from 'lucide-react'
 import { api } from '../electronAPI'
+import WinRMHelpModal from './WinRMHelpModal'
 
 type StepStatus = 'pending' | 'running' | 'success' | 'error' | 'skipped'
 
@@ -35,6 +36,7 @@ export default function WinRMActivationModal({ hostname, onSuccess, onRestricted
     { id: 'm6',      label: 'Methode 6: WMI Process Create',  status: 'pending' },
   ])
   const [phase, setPhase] = useState<'activating' | 'done-success' | 'done-fail'>('activating')
+  const [showManualHelp, setShowManualHelp] = useState(false)
   const [progress, setProgress] = useState(0)
   const abortRef = useRef(false)
 
@@ -145,11 +147,13 @@ export default function WinRMActivationModal({ hostname, onSuccess, onRestricted
       if (cancelled) return
 
       // ── Method 3: PsExec ──
-      const psPath = psExecPath || '\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools\\PsExec.exe'
+      const psDir = (psExecPath || '\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools').replace(/\\+$/, '').replace(/\\PsExec(64)?\.exe$/i, '')
       updateStep('m3', 'running', 'PsExec wird gesucht...')
-      const psCheck = await runPS(`if (Test-Path '${psPath}') { Write-Output 'FOUND' } else { Write-Output 'NOTFOUND' }`, 5000)
+      const psCheck = await runPS(`$p64='${psDir}\\PsExec64.exe'; $p32='${psDir}\\PsExec.exe'; if (Test-Path $p64) { Write-Output "FOUND:$p64" } elseif (Test-Path $p32) { Write-Output "FOUND:$p32" } else { Write-Output 'NOTFOUND' }`, 5000)
       if (cancelled) return
-      if (psCheck.out.includes('FOUND')) {
+      const psPathMatch = psCheck.out.match(/FOUND:(.+)/)
+      if (psPathMatch) {
+        const psPath = psPathMatch[1].trim()
         const m3 = await runPS(
           `& '${psPath}' "\\\\${h}" -s -accepteula powershell -Command "Enable-PSRemoting -Force -SkipNetworkProfileCheck" 2>&1; Start-Sleep -Seconds 5; Write-Output 'DONE'`,
           45000
@@ -166,7 +170,7 @@ export default function WinRMActivationModal({ hostname, onSuccess, onRestricted
         await log(`${hostname}: Methode 3 (PsExec) fehlgeschlagen — ${m3.out.slice(0, 100)}`)
       } else {
         updateStep('m3', 'skipped', 'PsExec nicht gefunden')
-        await log(`${hostname}: Methode 3 übersprungen — PsExec nicht gefunden unter ${psPath}`)
+        await log(`${hostname}: Methode 3 übersprungen — PsExec nicht gefunden unter ${psDir}`)
       }
       setProgress(54)
       if (cancelled) return
@@ -312,9 +316,13 @@ export default function WinRMActivationModal({ hostname, onSuccess, onRestricted
             <>
               <AlertTriangle size={14} className="text-amber-400" />
               <span className="text-xs text-muted-foreground flex-1">Alle Methoden fehlgeschlagen</span>
+              <button onClick={() => setShowManualHelp(true)}
+                className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/30 hover:bg-blue-500/20">
+                <HelpCircle size={11} /> Anleitung vor Ort
+              </button>
               <button onClick={onRestricted}
                 className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20">
-                <WifiOff size={11} /> Eingeschränkt verbinden
+                <WifiOff size={11} /> Alternative Methoden testen
               </button>
               <button onClick={onCancel}
                 className="px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground">
@@ -322,6 +330,7 @@ export default function WinRMActivationModal({ hostname, onSuccess, onRestricted
               </button>
             </>
           )}
+          {showManualHelp && <WinRMHelpModal onClose={() => setShowManualHelp(false)} />}
         </div>
       </div>
     </div>

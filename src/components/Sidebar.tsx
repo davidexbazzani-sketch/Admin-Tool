@@ -1,7 +1,7 @@
 import {
   Home, Search, BarChart3, Smartphone, Wrench, Settings, ShieldCheck,
   ChevronRight, UserSearch, Terminal, Users, FileText, MapPin, Clock,
-  Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen,
+  Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen, Package, Stethoscope,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
@@ -37,12 +37,14 @@ export default function Sidebar() {
     { id: 'query-menu',        label: 'Abfrage-Menü',         icon: <Search size={18} />, dividerBefore: true },
     { id: 'remote-doc',        label: 'Remote Doc',           icon: <Terminal size={18} /> },
     { id: 'it-guru',           label: 'IT Guru',              icon: <Lightbulb size={18} /> },
+    { id: 'pc-diagnosis',       label: 'PC-Diagnose',         icon: <Stethoscope size={18} /> },
 
     // ── Gruppe 3: Automation ────────────────────────────────────────────
     { id: 'scheduled-tasks',   label: 'Geplante Aufgaben',    icon: <Clock size={18} />, adminOnly: true, dividerBefore: true },
     { id: 'dashboards',        label: 'Dashboards',           icon: <LayoutDashboard size={18} /> },
     { id: 'network-radar',     label: 'Netzwerk-Radar',       icon: <Activity size={18} />, adminOnly: true },
     { id: 'pc-migration',      label: 'PC-Migration',         icon: <ArrowRightLeft size={18} />, adminOnly: true },
+    { id: 'software-inventory', label: 'Software-Inventar',   icon: <Package size={18} />, adminOnly: true },
 
     // ── Gruppe 4: Info & Hilfe ──────────────────────────────────────────
     { id: 'user-info',         label: 'Benutzer Info',        icon: <UserSearch size={18} />, dividerBefore: true },

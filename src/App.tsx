@@ -20,6 +20,7 @@ import ScheduledTasks from './screens/ScheduledTasks'
 import BugMailbox from './screens/BugMailbox'
 import Dashboards from './screens/Dashboards'
 import PCMigration from './screens/PCMigration'
+import SoftwareInventory from './screens/SoftwareInventory'
 import BugReportWidget from './components/BugReportWidget'
 import BetaBanner from './components/BetaBanner'
 import type { Screen } from './types'
@@ -27,6 +28,7 @@ import { api } from './electronAPI'
 
 // Lazy-loaded screens (per Performance-Regeln: erst laden wenn geöffnet)
 const ITGuru = lazy(() => import('./screens/ITGuru'))
+const PCDiagnosis = lazy(() => import('./screens/PCDiagnosis'))
 const NetworkRadar = lazy(() => import('./screens/NetworkRadar'))
 const KnowledgeBase = lazy(() => import('./screens/KnowledgeBase'))
 
@@ -50,6 +52,8 @@ function renderScreen(screen: Screen) {
     case 'network-radar':     return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><NetworkRadar /></Suspense>
     case 'knowledge-base':   return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><KnowledgeBase /></Suspense>
     case 'pc-migration':      return <PCMigration />
+    case 'software-inventory': return <SoftwareInventory />
+    case 'pc-diagnosis':      return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><PCDiagnosis /></Suspense>
     default:                  return <Home />
   }
 }

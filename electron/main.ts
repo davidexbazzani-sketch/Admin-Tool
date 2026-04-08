@@ -423,45 +423,73 @@ ipcMain.handle('net:readRawFile', (_e, relativePath: string) => {
 // ── Wissensdatenbank IPC (dedicated handlers for performance) ─────────────────
 let _wbCache: Record<string, unknown> | null = null
 
+// ─── WISSENSDATENBANK DATA FORMAT NOTES ──────────────────────────────────────
+// The network has TWO different formats in knowledge_base/:
+// 1. categories/*.json — IT Guru format: flat array of problems with solutions/keywords/skillMapping
+// 2. wissensdatenbank_generated.json — WB format: categories > subcategories > articles > steps
+// The Wissensdatenbank UI expects format #2. If only #1 exists, we use the built-in generator.
+// The generator creates ~47 articles with detailed step-by-step instructions.
+// ─────────────────────────────────────────────────────────────────────────────
+
 function loadWB(): Record<string, unknown> | null {
   if (_wbCache && Array.isArray(_wbCache.categories)) return _wbCache
 
-  let data = ns.readJson<Record<string, unknown>>('knowledge_base/wissensdatenbank.json')
-    ?? ns.readJson<Record<string, unknown>>('wissensdatenbank.json')
-
-  if (data) {
-    console.log(`[WB] Raw JSON loaded. Type: ${typeof data}, isArray: ${Array.isArray(data)}, keys: ${Object.keys(data).slice(0,10).join(',')}`)
-
-    // Check if data has our expected structure
-    if (Array.isArray(data.categories)) {
-      const cats = data.categories as Array<Record<string, unknown>>
-      const hasSubs = cats.length > 0 && Array.isArray(cats[0].subcategories)
-      if (hasSubs) {
-        const subs = cats[0].subcategories as Array<Record<string, unknown>>
-        const hasArticles = subs.length > 0 && Array.isArray(subs[0].articles)
-        if (hasArticles) {
-          console.log(`[WB] Structure OK: ${cats.length} categories with subcategories+articles`)
-          _wbCache = data
-          return data
-        }
-      }
-      console.log('[WB] Has categories but missing subcategories/articles structure')
+  // Helper: check if data has the correct WB structure AND articles have steps with content
+  function isValidWB(d: Record<string, unknown>): boolean {
+    if (!Array.isArray(d.categories)) return false
+    const cats = d.categories as Array<Record<string, unknown>>
+    if (cats.length === 0) return false
+    const hasSubs = Array.isArray(cats[0].subcategories)
+    if (!hasSubs) return false
+    const subs = cats[0].subcategories as Array<Record<string, unknown>>
+    if (subs.length === 0 || !Array.isArray(subs[0].articles)) return false
+    // CRITICAL: Also check that articles have actual steps with content
+    // An older wissensdatenbank.json might have the right structure but empty steps
+    const firstArticles = subs[0].articles as Array<Record<string, unknown>>
+    if (firstArticles.length === 0) return false
+    const firstArt = firstArticles[0]
+    if (!Array.isArray(firstArt.steps) || firstArt.steps.length === 0) {
+      console.log('[WB] isValidWB: Articles found but NO steps — rejecting this file (needs regeneration)')
+      return false
     }
-
-    // The server JSON has a DIFFERENT structure — use generator instead
-    console.log('[WB] Server JSON does not match expected format — falling back to generator')
-  } else {
-    console.log('[WB] wissensdatenbank.json NOT FOUND on network')
+    const firstStep = (firstArt.steps as Array<Record<string, unknown>>)[0]
+    if (!firstStep.content || String(firstStep.content).length < 10) {
+      console.log('[WB] isValidWB: Steps found but no/empty content — rejecting')
+      return false
+    }
+    return true
   }
 
-  // Fallback: use generator (always works, produces correct structure)
+  // Try 1: Read the generated WB file (saved by previous generator run)
+  const generated = ns.readJson<Record<string, unknown>>('knowledge_base/wissensdatenbank_generated.json')
+  if (generated && isValidWB(generated)) {
+    console.log('[WB] Loaded wissensdatenbank_generated.json from network')
+    _wbCache = generated
+    return generated
+  }
+
+  // Try 2: Read wissensdatenbank.json (in case it was manually placed)
+  const manual = ns.readJson<Record<string, unknown>>('knowledge_base/wissensdatenbank.json')
+    ?? ns.readJson<Record<string, unknown>>('wissensdatenbank.json')
+  if (manual && isValidWB(manual)) {
+    console.log('[WB] Loaded wissensdatenbank.json from network')
+    _wbCache = manual
+    return manual
+  }
+
+  if (manual) {
+    console.log(`[WB] wissensdatenbank.json found but wrong format (keys: ${Object.keys(manual).slice(0,5).join(',')})`)
+  }
+
+  // Try 3: Use built-in generator (always works, produces correct structure with ~47 articles)
   try {
+    console.log('[WB] Using built-in generator...')
     const { generateWissensdatenbank } = require('./wissensdatenbankGenerator')
     const wb = generateWissensdatenbank()
     _wbCache = wb as unknown as Record<string, unknown>
     const cats = wb.categories as unknown[]
-    console.log(`[WB] Using generated data: ${cats.length} categories`)
-    // Try to save to network for next time (may fail offline)
+    console.log(`[WB] Generated: ${cats.length} categories`)
+    // Save to network for faster loading next time (may fail if offline)
     try { ns.writeJson('knowledge_base/wissensdatenbank_generated.json', wb) } catch { /* offline */ }
     return _wbCache
   } catch (err) {
@@ -513,8 +541,11 @@ ipcMain.handle('wb:get-article', async (_e, articleId: string) => {
       const articles = Array.isArray(sc.articles) ? sc.articles as Array<Record<string, unknown>> : []
       for (const a of articles) {
         if (a.id === articleId) {
-          // Ensure steps and tags are arrays
-          return { ...a, steps: Array.isArray(a.steps) ? a.steps : [], tags: Array.isArray(a.tags) ? a.tags : [], relatedSkills: Array.isArray(a.relatedSkills) ? a.relatedSkills : [] }
+          const steps = Array.isArray(a.steps) ? a.steps : []
+          console.log(`[WB-DEBUG] Article "${a.id}" found — keys: ${Object.keys(a).join(',')}`)
+          console.log(`[WB-DEBUG] steps: isArray=${Array.isArray(a.steps)}, length=${(steps as unknown[]).length}`)
+          if ((steps as unknown[]).length > 0) console.log(`[WB-DEBUG] first step keys: ${Object.keys((steps as Array<Record<string, unknown>>)[0]).join(',')}`)
+          return { ...a, steps, tags: Array.isArray(a.tags) ? a.tags : [], relatedSkills: Array.isArray(a.relatedSkills) ? a.relatedSkills : [] }
         }
       }
     }
@@ -553,10 +584,18 @@ ipcMain.handle('wb:search', async (_e, query: string) => {
 })
 
 ipcMain.handle('wb:ensure-generated', async () => {
-  // If already cached in RAM, skip
+  // If already cached in RAM, verify it has steps (not a stale cache from an old version)
   if (_wbCache && Array.isArray(_wbCache.categories) && (_wbCache.categories as unknown[]).length > 0) {
-    console.log('[WB] Already in RAM cache')
-    return { exists: true, generated: false }
+    const cats = _wbCache.categories as Array<Record<string, unknown>>
+    const subs = Array.isArray(cats[0]?.subcategories) ? cats[0].subcategories as Array<Record<string, unknown>> : []
+    const arts = Array.isArray(subs[0]?.articles) ? subs[0].articles as Array<Record<string, unknown>> : []
+    const hasSteps = arts.length > 0 && Array.isArray(arts[0].steps) && (arts[0].steps as unknown[]).length > 0
+    if (hasSteps) {
+      console.log('[WB] Already in RAM cache (with steps)')
+      return { exists: true, generated: false }
+    }
+    console.log('[WB] RAM cache exists but articles have NO steps — regenerating')
+    _wbCache = null
   }
   // Try loading from network
   const loaded = loadWB()
@@ -572,7 +611,7 @@ ipcMain.handle('wb:ensure-generated', async () => {
     _wbCache = wb as unknown as Record<string, unknown>
     console.log(`[WB] Generated: ${(wb.categories as unknown[]).length} categories`)
     // Try to save to network (may fail in offline mode — that's OK)
-    try { ns.writeJson('knowledge_base/wissensdatenbank.json', wb) } catch { /* offline */ }
+    try { ns.writeJson('knowledge_base/wissensdatenbank_generated.json', wb) } catch { /* offline */ }
     return { exists: true, generated: true }
   } catch (err) {
     console.error('[WB] Generation failed:', err)

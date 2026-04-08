@@ -20,29 +20,118 @@ const DEFAULT_EMAIL_CONFIG: UserEmailConfig = {
 }
 
 function KBFileStatus({ basePath, kbPath }: { basePath: string; kbPath: string }) {
-  const [files, setFiles] = useState<Array<{ name: string; found: boolean; size?: string }>>([])
+  const [files, setFiles] = useState<Array<{ name: string; found: boolean; important: boolean; description: string }>>([])
+  const [allFiles, setAllFiles] = useState<string[]>([])
+  const [catFiles, setCatFiles] = useState<string[]>([])
+
   useEffect(() => {
-    const fileNames = ['wissensdatenbank.json', 'guru_brain_starter.json', 'guru_brain.json', 'guru_requests_starter.json', 'guru_requests.json', 'skill_descriptions.json']
-    Promise.all(fileNames.map(async (name) => {
-      const path1 = `${kbPath}/${name}`
-      const path2 = `knowledge_base/${name}`
-      const path3 = name
-      const e1 = await api().netExists(path1)
-      const e2 = !e1 ? await api().netExists(path2) : false
-      const e3 = !e1 && !e2 ? await api().netExists(path3) : false
-      return { name, found: e1 || e2 || e3 }
+    const required: Array<{ name: string; description: string; important: boolean }> = [
+      { name: 'guru_brain.json', description: 'IT Guru Problemdatenbank', important: true },
+      { name: 'guru_brain_starter.json', description: 'IT Guru Problemdatenbank (Starter)', important: false },
+      { name: 'guru_requests.json', description: 'IT Guru Anforderungen', important: true },
+      { name: 'guru_requests_starter.json', description: 'IT Guru Anforderungen (Starter)', important: false },
+      { name: 'skill_descriptions.json', description: 'Remote Doc Skill-Beschreibungen', important: true },
+      { name: 'wissensdatenbank_generated.json', description: 'Wissensdatenbank Artikel (generiert)', important: false },
+      { name: 'event_explanations.json', description: 'Event-ID Erklärungen', important: true },
+      { name: 'synonyms.json', description: 'Synonym-Wörterbuch', important: false },
+      { name: 'typo_map.json', description: 'Tippfehler-Korrektur', important: false },
+      { name: 'diagnostic_chains.json', description: 'Diagnose-Ketten', important: false },
+      { name: 'playbooks.json', description: 'Automatische Reparatur-Playbooks', important: false },
+      { name: 'correlations.json', description: 'Symptom-Korrelationen', important: false },
+      { name: 'index.json', description: 'Kategorien-Index (IT Guru)', important: false },
+    ]
+    // Try multiple path combinations to find files
+    const paths = [
+      kbPath ? `${kbPath}` : null,
+      'knowledge_base',
+      '',
+      kbPath ? `${kbPath}/knowledge_base` : null,
+    ].filter(Boolean) as string[]
+
+    Promise.all(required.map(async (r) => {
+      for (const p of paths) {
+        const fullPath = p ? `${p}/${r.name}` : r.name
+        if (await api().netExists(fullPath)) return { ...r, found: true }
+      }
+      return { ...r, found: false }
     })).then(setFiles)
+
+    // List actual files — try multiple dirs
+    ;(async () => {
+      for (const p of paths) {
+        const files = await api().netListDir(p)
+        const jsonFiles = files.filter(f => f.endsWith('.json'))
+        if (jsonFiles.length > 0) { setAllFiles(jsonFiles); break }
+      }
+      // List categories subfolder
+      for (const p of paths) {
+        const catPath = p ? `${p}/categories` : 'categories'
+        const cf = await api().netListDir(catPath)
+        const jsonCats = cf.filter(f => f.endsWith('.json'))
+        if (jsonCats.length > 0) { setCatFiles(jsonCats); break }
+      }
+    })()
   }, [basePath, kbPath])
 
+  const importantOk = files.filter(f => f.important).every(f => f.found)
+  const foundCount = files.filter(f => f.found).length
+
   return (
-    <div className="space-y-1">
-      {files.map(f => (
+    <div className="space-y-2">
+      <div className="flex items-center gap-2 text-[10px] mb-1">
+        <span className={`w-2.5 h-2.5 rounded-full ${importantOk ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+        <span className={importantOk ? 'text-emerald-400' : 'text-amber-400'}>{foundCount}/{files.length} Dateien gefunden</span>
+      </div>
+      {files.filter(f => f.important).map(f => (
         <div key={f.name} className="flex items-center gap-2 text-[10px]">
           <span className={`w-2 h-2 rounded-full shrink-0 ${f.found ? 'bg-emerald-400' : 'bg-red-400'}`} />
-          <span className="font-mono text-muted-foreground flex-1">{f.name}</span>
-          <span className={`text-[9px] ${f.found ? 'text-emerald-400' : 'text-red-400'}`}>{f.found ? 'Gefunden' : 'Fehlt'}</span>
+          <span className="font-mono text-foreground">{f.name}</span>
+          <span className="text-muted-foreground flex-1">— {f.description}</span>
+          <span className={`text-[9px] font-medium ${f.found ? 'text-emerald-400' : 'text-red-400'}`}>{f.found ? '✓' : '✗ Fehlt!'}</span>
         </div>
       ))}
+      <details className="text-[9px]">
+        <summary className="text-muted-foreground cursor-pointer hover:text-foreground">Weitere Dateien anzeigen ({files.filter(f => !f.important).length} optional)</summary>
+        <div className="mt-1 space-y-0.5 pl-2">
+          {files.filter(f => !f.important).map(f => (
+            <div key={f.name} className="flex items-center gap-2">
+              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${f.found ? 'bg-emerald-400/60' : 'bg-muted-foreground/30'}`} />
+              <span className="font-mono text-muted-foreground">{f.name}</span>
+              <span className="text-muted-foreground/50">— {f.description}</span>
+            </div>
+          ))}
+        </div>
+      </details>
+      {allFiles.length > 0 && (
+        <details className="text-[9px]">
+          <summary className="text-muted-foreground cursor-pointer hover:text-foreground">Dateien im Ordner anzeigen ({allFiles.length} Dateien)</summary>
+          <div className="mt-1 pl-2 font-mono text-muted-foreground/70 space-y-0">
+            {allFiles.map(f => <div key={f}>{f}</div>)}
+          </div>
+        </details>
+      )}
+      {/* Categories subfolder */}
+      <div className="flex items-center gap-2 text-[10px] mt-1">
+        <span className={`w-2 h-2 rounded-full shrink-0 ${catFiles.length > 0 ? 'bg-emerald-400' : 'bg-muted-foreground/30'}`} />
+        <span className="font-mono text-foreground">categories/</span>
+        <span className="text-muted-foreground">— {catFiles.length > 0 ? `${catFiles.length} Kategorie-Dateien (IT Guru Probleme)` : 'Nicht gefunden'}</span>
+      </div>
+      {catFiles.length > 0 && (
+        <details className="text-[9px]">
+          <summary className="text-muted-foreground cursor-pointer hover:text-foreground pl-4">Kategorie-Dateien anzeigen ({catFiles.length})</summary>
+          <div className="mt-1 pl-6 font-mono text-muted-foreground/70 space-y-0">
+            {catFiles.map(f => <div key={f}>{f}</div>)}
+          </div>
+        </details>
+      )}
+      {/* Wissensdatenbank info */}
+      <div className="mt-1 rounded-md bg-blue-500/5 border border-blue-500/20 p-2">
+        <p className="text-[9px] text-muted-foreground leading-relaxed">
+          <strong>Wissensdatenbank:</strong> Wird beim ersten Start automatisch generiert (~47 Artikel mit Schritt-für-Schritt-Anleitungen).
+          Die generierten Daten werden in <span className="font-mono">wissensdatenbank_generated.json</span> gespeichert.
+          <br/><strong>categories/</strong> Dateien werden vom IT Guru genutzt (730+ Problemlösungen).
+        </p>
+      </div>
     </div>
   )
 }
@@ -62,6 +151,11 @@ export default function Settings() {
   const [kbPath, setKbPathLocal] = useState(getKBPath())
   const [netBasePath, setNetBasePath] = useState('')
   const [pathsSaved, setPathsSaved] = useState(false)
+
+  // Local mode toggle
+  const [localModeOn, setLocalModeOn] = useState(() => {
+    try { return require('../utils/remoteCommands').getLocalMode() } catch { return false }
+  })
 
   // Per-user email config (stored on network)
   const [emailCfg, setEmailCfg] = useState<UserEmailConfig>(DEFAULT_EMAIL_CONFIG)
@@ -348,21 +442,64 @@ export default function Settings() {
 
       {/* ── Pfade (Master Admin / Admin) ── */}
       {(isMaster || true) && (
-        <Card title="Pfad-Konfiguration (Master Admin)" icon={<Database size={15} />} subtitle="Netzlaufwerk und Wissensdatenbank-Pfade">
-          <div className="space-y-3">
-            <div>
-              <label className="block text-xs text-muted-foreground mb-1">Netzwerk-Basispfad</label>
-              <input value={netBasePath} onChange={e => setNetBasePath(e.target.value)}
-                placeholder="\\w3172\skf Marine\..."
-                className="w-full px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground font-mono focus:outline-none focus:border-primary" />
+        <Card title="Pfad-Konfiguration" icon={<Database size={15} />} subtitle="Hier werden die Ordner eingestellt in denen das Tool seine Daten speichert und liest">
+          <div className="space-y-4">
+
+            {/* ── 1. Netzwerk-Basispfad ── */}
+            <div className="rounded-lg border border-border p-3 space-y-2">
+              <label className="block text-xs font-medium text-foreground">Netzwerk-Basispfad (Hauptordner)</label>
+              <p className="text-[9px] text-muted-foreground leading-relaxed">
+                Der Hauptordner auf dem Netzlaufwerk in dem ALLE Daten des IT Admin Tools liegen:
+                Benutzerverwaltung, Einstellungen, Inventar, Favoriten, Bug-Meldungen, Dashboards etc.
+              </p>
+              <div className="flex gap-2">
+                <input value={netBasePath} onChange={e => setNetBasePath(e.target.value)}
+                  placeholder="\\\\server\\freigabe\\Tool IT"
+                  className="flex-1 px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground font-mono focus:outline-none focus:border-primary" />
+                <button onClick={async () => {
+                  const path = await api().selectDirectory()
+                  if (path) setNetBasePath(path)
+                }} className="px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground flex items-center gap-1" title="Ordner im Explorer auswählen">
+                  <FolderOpen size={12} /> Durchsuchen
+                </button>
+              </div>
             </div>
-            <div>
-              <label className="block text-xs text-muted-foreground mb-1">Wissensdatenbank-Pfad (relativ zum Basispfad)</label>
-              <input value={kbPath} onChange={e => setKbPathLocal(e.target.value)}
-                placeholder="knowledge_base"
-                className="w-full px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground font-mono focus:outline-none focus:border-primary" />
-              <p className="text-[9px] text-muted-foreground mt-0.5">Pfad zu guru_brain.json, skill_descriptions.json, wissensdatenbank.json etc.</p>
+
+            {/* ── 2. Knowledge Base Pfad ── */}
+            <div className="rounded-lg border border-border p-3 space-y-2">
+              <label className="block text-xs font-medium text-foreground">Knowledge Base Pfad</label>
+              <p className="text-[9px] text-muted-foreground leading-relaxed">
+                Unterordner (relativ zum Basispfad) in dem die Wissensdatenbanken liegen. Hier müssen folgende Dateien abgelegt sein:
+              </p>
+              <div className="rounded-md bg-muted/10 p-2 text-[9px] font-mono text-muted-foreground space-y-0.5">
+                <div><strong className="text-foreground">guru_brain.json</strong> — Problemdatenbank für den IT Guru (800+ IT-Probleme)</div>
+                <div><strong className="text-foreground">guru_requests.json</strong> — Anforderungsdatenbank für den IT Guru (760+ Anforderungen)</div>
+                <div><strong className="text-foreground">skill_descriptions.json</strong> — Beschreibungen für alle Remote Doc Skills (311 Skills)</div>
+                <div><strong className="text-foreground">wissensdatenbank.json</strong> — Artikel/Anleitungen für die Wissensdatenbank-Seite</div>
+                <div><strong className="text-foreground">event_explanations.json</strong> — Erklärungen für Windows Event-IDs</div>
+                <div className="text-muted-foreground/50 pt-1">Weitere: synonyms.json, typo_map.json, correlations.json, diagnostic_chains.json, playbooks.json</div>
+              </div>
+              <div className="flex gap-2">
+                <input value={kbPath} onChange={e => setKbPathLocal(e.target.value)}
+                  placeholder="knowledge_base"
+                  className="flex-1 px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground font-mono focus:outline-none focus:border-primary" />
+                <button onClick={async () => {
+                  const path = await api().selectDirectory()
+                  if (path) {
+                    // Try to make it relative to basePath
+                    if (path.toLowerCase().startsWith(netBasePath.toLowerCase())) {
+                      setKbPathLocal(path.slice(netBasePath.length).replace(/^[\\/]+/, ''))
+                    } else {
+                      setKbPathLocal(path)
+                    }
+                  }
+                }} className="px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground flex items-center gap-1" title="Ordner im Explorer auswählen">
+                  <FolderOpen size={12} /> Durchsuchen
+                </button>
+              </div>
             </div>
+
+            {/* Speichern-Button */}
             <div className="flex items-center gap-2">
               <button onClick={async () => {
                 await api().netSetBasePath(netBasePath)
@@ -377,8 +514,8 @@ export default function Settings() {
             </div>
 
             {/* KB-Dateien Status */}
-            <div className="mt-3 pt-3 border-t border-border">
-              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Knowledge Base Dateien</p>
+            <div className="pt-3 border-t border-border">
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Status der Knowledge Base Dateien</p>
               <KBFileStatus basePath={netBasePath} kbPath={kbPath} />
             </div>
           </div>
@@ -386,17 +523,48 @@ export default function Settings() {
       )}
 
       {/* ── Remote-Verbindung Einstellungen ── */}
-      <Card title="Remote-Verbindung" icon={<Info size={15} />} subtitle="WinRM-Aktivierung und Fallback-Verhalten">
+      <Card title="Remote-Verbindung" icon={<Info size={15} />} subtitle="WinRM, Lokaler Modus und Fallback">
         <div className="space-y-3">
+          {/* Lokaler Modus Toggle */}
+          <div className={`rounded-lg border p-3 space-y-2 ${localModeOn ? 'border-amber-500/50 bg-amber-500/10' : 'border-amber-500/30 bg-amber-500/5'}`}>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  const newVal = !localModeOn
+                  setLocalModeOn(newVal)
+                  try { require('../utils/remoteCommands').setLocalMode(newVal) } catch { /* ignore */ }
+                }}
+                className={`relative w-10 h-5 rounded-full transition-colors shrink-0 ${localModeOn ? 'bg-amber-500' : 'bg-border'}`}
+              >
+                <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${localModeOn ? 'translate-x-5' : ''}`} />
+              </button>
+              <div>
+                <label className="text-xs font-medium text-foreground">Lokaler Modus (Testmodus)</label>
+                <p className="text-[9px] text-muted-foreground">Alle Befehle werden auf DEINEM PC ausgeführt statt remote. Perfekt zum Testen außerhalb des Firmennetzwerks.</p>
+              </div>
+            </div>
+            {localModeOn && (
+              <div className="flex items-center gap-1 text-[10px] text-amber-400 font-medium">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                LOKALER MODUS AKTIV — Befehle laufen auf diesem PC
+              </div>
+            )}
+          </div>
+
           <div className="flex items-center gap-3">
             <input type="checkbox" defaultChecked className="w-3.5 h-3.5 accent-primary" id="auto-winrm" />
             <label htmlFor="auto-winrm" className="text-xs text-foreground">WinRM automatisch aktivieren wenn nicht verfügbar</label>
           </div>
-          <div>
-            <label className="block text-xs text-muted-foreground mb-1">Pfad zu PsExec.exe</label>
+          <div className="rounded-lg border border-border p-3 space-y-2">
+            <label className="block text-xs font-medium text-foreground">PsExec-Ordner (PsExec64.exe wird bevorzugt)</label>
+            <p className="text-[9px] text-muted-foreground leading-relaxed">
+              PsExec ist ein Microsoft Sysinternals Tool für die Remote-Verwaltung.
+              Es wird bei der WinRM-Aktivierung und als Fallback-Methode verwendet.
+              Das Tool sucht automatisch nach PsExec64.exe (bevorzugt) oder PsExec.exe.
+            </p>
             <div className="flex gap-2">
               <input
-                value={'\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools\\PsExec.exe'}
+                value={'\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools'}
                 readOnly
                 className="flex-1 px-2.5 py-1.5 text-xs rounded-md border border-border bg-muted/20 text-foreground font-mono focus:outline-none"
               />
@@ -431,7 +599,8 @@ export default function Settings() {
               </button>
             </div>
             <p className="text-[9px] text-muted-foreground mt-0.5">
-              PsExec ist ein Microsoft Sysinternals Tool für Remote-Verwaltung. Falls die Datei nicht vorhanden ist, klicken Sie auf "PsExec herunterladen". Ohne PsExec wird Methode 3 bei der WinRM-Aktivierung übersprungen.
+              PsExec64.exe wird bevorzugt (64-bit). Falls nicht vorhanden, wird PsExec.exe (32-bit) als Fallback genutzt.
+              Klicken Sie auf &quot;PsExec herunterladen&quot; um beide Versionen automatisch abzulegen.
             </p>
           </div>
           <div>

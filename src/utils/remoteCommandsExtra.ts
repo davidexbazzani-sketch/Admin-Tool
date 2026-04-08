@@ -55,58 +55,89 @@ export function buildExtraCategories(): Category[] {
     {
       id: 'fileops', label: 'Datei-Operationen auf Ziel-PC',
       commands: [
-        { id: 'dirlist', func: 'Ordner-Inhalt anzeigen', when: 'Remote File Browser',
+        // ── Explorer / Direktzugriff ──────────────────────────────────────
+        { id: 'openexplorer', func: 'Explorer auf Ziel-PC öffnen (C$)', when: 'Direktzugriff auf Dateisystem des Ziel-PCs über Admin-Share',
+          buildCmd: (h) => local(`Start-Process explorer.exe "\\\\${h}\\C$"; Write-Output "Explorer geöffnet: \\\\${h}\\C$"`), action: 'read' },
+        { id: 'openexplorerpath', func: 'Explorer auf Ziel-PC öffnen (Pfad)', when: 'Bestimmten Ordner des Ziel-PCs im Explorer öffnen',
+          buildCmd: (h, i) => {
+            const p = (i || 'C$').replace(/^([A-Za-z]):\\/, '$1$\\').replace(/^([A-Za-z]):/,'$1$\\')
+            return local(`Start-Process explorer.exe "\\\\${h}\\${p}"; Write-Output "Explorer geöffnet: \\\\${h}\\${p}"`)
+          }, action: 'read',
+          input: { type: 'text', placeholder: 'z.B. C:\\Users oder D:\\Daten' } },
+
+        // ── Ordner durchsuchen ────────────────────────────────────────────
+        { id: 'dirlist', func: 'Ordner-Inhalt anzeigen', when: 'Dateien und Ordner auf dem Ziel-PC auflisten',
           buildCmd: (h, i) => remote(h, `Get-ChildItem -Path '${i || 'C:\\'}' -Force | Select Mode,Length,LastWriteTime,Name | ConvertTo-Json`), action: 'read',
-          input: { type: 'text', placeholder: 'Pfad z.B. C:\\Users' } },
-        { id: 'filedetail', func: 'Datei-Details', when: 'Größe/Datum/Rechte',
+          input: { type: 'text', placeholder: 'z.B. C:\\Users oder C:\\Temp' } },
+        { id: 'filedetail', func: 'Datei-Details anzeigen', when: 'Größe, Datum und Attribute einer Datei prüfen',
           buildCmd: (h, i) => remote(h, `$f=Get-Item '${i}' -Force; @{Name=$f.Name;FullName=$f.FullName;Length=$f.Length;Created=$f.CreationTime;Modified=$f.LastWriteTime;Attributes=$f.Attributes.ToString()} | ConvertTo-Json`), action: 'read',
-          input: { type: 'text', placeholder: 'Dateipfad' } },
-        { id: 'filedelete', func: 'Datei löschen', when: 'Datei entfernen',
-          buildCmd: (h, i) => remote(h, `Remove-Item '${i}' -Force -Confirm:$false; Write-Output 'Gelöscht: ${i}'`), action: 'critical',
-          input: { type: 'text', placeholder: 'Dateipfad' } },
-        { id: 'filerename', func: 'Datei umbenennen', when: 'Datei umbenennen',
-          buildCmd: (h, i) => { const [src, dst] = (i || '|').split('|'); return remote(h, `Rename-Item '${src}' -NewName '${dst}'; Write-Output 'Umbenannt'`) }, action: 'write',
-          input: { type: 'text', placeholder: 'AltPfad|NeuerName' } },
-        { id: 'filemove', func: 'Datei verschieben', when: 'Datei bewegen',
-          buildCmd: (h, i) => { const [src, dst] = (i || '|').split('|'); return remote(h, `Move-Item '${src}' -Destination '${dst}' -Force; Write-Output 'Verschoben'`) }, action: 'write',
-          input: { type: 'text', placeholder: 'Quellpfad|Zielpfad' } },
-        { id: 'mkdir', func: 'Ordner erstellen', when: 'Neuen Ordner',
-          buildCmd: (h, i) => remote(h, `New-Item -Path '${i}' -ItemType Directory -Force | Select FullName | ConvertTo-Json`), action: 'write',
-          input: { type: 'text', placeholder: 'Ordnerpfad' } },
-        { id: 'rmdir', func: 'Ordner löschen', when: 'Ordner entfernen',
-          buildCmd: (h, i) => remote(h, `Remove-Item '${i}' -Recurse -Force -Confirm:$false; Write-Output 'Gelöscht: ${i}'`), action: 'critical',
-          input: { type: 'text', placeholder: 'Ordnerpfad' } },
-        { id: 'filecopyto', func: 'Datei zum Ziel-PC kopieren', when: 'Datei per Admin-Share',
+          input: { type: 'text', placeholder: 'z.B. C:\\Windows\\System32\\config.sys' } },
+
+        // ── Dateien kopieren / übertragen ─────────────────────────────────
+        { id: 'filecopyto', func: 'Datei zum Ziel-PC kopieren', when: 'Eine Datei von deinem Admin-PC zum Ziel-PC übertragen',
           buildCmd: (h, i) => local(`Copy-Item -Path '${i}' -Destination '\\\\${h}\\C$\\Temp\\' -Force; Write-Output "Kopiert nach \\\\${h}\\C$\\Temp\\"`), action: 'write',
-          input: { type: 'text', placeholder: 'Lokaler Pfad der Datei' }, fileAction: 'transfer' },
-        { id: 'filecopyfrom', func: 'Datei vom Ziel-PC holen', when: 'Datei herunterladen',
+          input: { type: 'text', placeholder: 'z.B. C:\\Setup\\installer.exe' }, fileAction: 'transfer' },
+        { id: 'filecopyfrom', func: 'Datei vom Ziel-PC holen', when: 'Eine Datei vom Ziel-PC auf deinen Desktop kopieren',
           buildCmd: (h, i) => local(`$dest=[Environment]::GetFolderPath('Desktop'); Copy-Item "\\\\${h}\\C$\\${i?.replace('C:\\','')}" -Destination $dest -Force; Write-Output "Kopiert nach $dest"`), action: 'read',
-          input: { type: 'text', placeholder: 'Remote-Pfad z.B. C:\\Temp\\file.txt' } },
-        { id: 'runbat', func: 'BAT-Datei ausführen', when: 'Batch remote starten',
-          buildCmd: (h, i) => remote(h, `cmd.exe /c '${i}' 2>&1`), action: 'critical',
-          input: { type: 'text', placeholder: 'Pfad zur .bat-Datei' } },
-        { id: 'runps', func: 'PowerShell-Script ausführen', when: 'PS1 remote starten',
-          buildCmd: (h, i) => remote(h, `& '${i}' 2>&1`), action: 'critical',
-          input: { type: 'text', placeholder: 'Pfad zur .ps1-Datei' } },
-        { id: 'runexeuser', func: 'EXE im User-Kontext starten', when: 'App als User starten',
-          buildCmd: (h, i) => remote(h, `$cs=Get-CimInstance Win32_ComputerSystem; $user=$cs.UserName; $a=New-ScheduledTaskAction -Execute '${i}'; $t=New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(3); Register-ScheduledTask -TaskName 'TempRun' -Action $a -Trigger $t -User $user -Force | Out-Null; Start-Sleep 5; Unregister-ScheduledTask -TaskName 'TempRun' -Confirm:$false; Write-Output 'Gestartet als '+$user`), action: 'write',
-          input: { type: 'text', placeholder: 'EXE-Pfad' } },
-        { id: 'runexesystem', func: 'EXE als SYSTEM starten', when: 'SYSTEM-Kontext',
+          input: { type: 'text', placeholder: 'z.B. C:\\Temp\\logfile.txt' } },
+
+        // ── Dateien verwalten ─────────────────────────────────────────────
+        { id: 'mkdir', func: 'Ordner erstellen', when: 'Neuen Ordner auf dem Ziel-PC anlegen',
+          buildCmd: (h, i) => remote(h, `New-Item -Path '${i}' -ItemType Directory -Force | Select FullName | ConvertTo-Json`), action: 'write',
+          input: { type: 'text', placeholder: 'z.B. C:\\Temp\\MeinOrdner' } },
+        { id: 'filerename', func: 'Datei umbenennen', when: 'Eine Datei auf dem Ziel-PC umbenennen',
+          buildCmd: (h, i) => { const [src, dst] = (i || '|').split('|'); return remote(h, `Rename-Item '${src}' -NewName '${dst}'; Write-Output 'Umbenannt: ${dst}'`) }, action: 'write',
+          input: { type: 'filepipe', placeholder: 'Alter Pfad|Neuer Name', labels: ['Aktueller Dateipfad', 'Neuer Dateiname'], examples: ['C:\\Temp\\alt.txt', 'neu.txt'] } },
+        { id: 'filemove', func: 'Datei verschieben', when: 'Eine Datei auf dem Ziel-PC in einen anderen Ordner verschieben',
+          buildCmd: (h, i) => { const [src, dst] = (i || '|').split('|'); return remote(h, `Move-Item '${src}' -Destination '${dst}' -Force; Write-Output 'Verschoben nach: ${dst}'`) }, action: 'write',
+          input: { type: 'filepipe', placeholder: 'Quellpfad|Zielpfad', labels: ['Quellpfad (Datei)', 'Zielpfad (Ordner)'], examples: ['C:\\Temp\\datei.txt', 'C:\\Users\\Public\\'] } },
+        { id: 'filedelete', func: 'Datei löschen', when: 'Eine Datei auf dem Ziel-PC unwiderruflich löschen',
+          buildCmd: (h, i) => remote(h, `Remove-Item '${i}' -Force -Confirm:$false; Write-Output 'Gelöscht: ${i}'`), action: 'critical',
+          input: { type: 'text', placeholder: 'z.B. C:\\Temp\\alte_datei.log' } },
+        { id: 'rmdir', func: 'Ordner löschen (inkl. Inhalt)', when: 'Ordner mit allem Inhalt unwiderruflich löschen',
+          buildCmd: (h, i) => remote(h, `Remove-Item '${i}' -Recurse -Force -Confirm:$false; Write-Output 'Gelöscht: ${i}'`), action: 'critical',
+          input: { type: 'text', placeholder: 'z.B. C:\\Temp\\AlterOrdner' } },
+
+        // ── Programme starten ─────────────────────────────────────────────
+        { id: 'runexeuser', func: 'EXE im Benutzerkontext starten', when: 'Ein Programm als der angemeldete Benutzer auf dem Ziel-PC starten',
+          buildCmd: (h, i) => remote(h, [
+            `$user=$null`,
+            `try { $user=(Get-CimInstance Win32_ComputerSystem).UserName } catch {}`,
+            `if (-not $user) { try { $q=quser 2>$null; $al=@($q|Where-Object{$_ -and $_ -notmatch '^\\s*USERNAME'}); $ln=$al|Where-Object{$_ -match 'Active|Aktiv'}|Select-Object -First 1; if(-not $ln -and $al.Count -gt 0){$ln=$al[0]}; if($ln){$p=($ln -replace '^[> ]+','') -split '\\s{2,}'; $u=$p[0]; if($u -and $u -notmatch '\\\\'){$u="$env:USERDOMAIN\\$u"}; $user=$u} } catch {} }`,
+            `if (-not $user) { try { $pr=Get-CimInstance Win32_Process -Filter "Name='explorer.exe'" -EA Stop|Select-Object -First 1; if($pr){$ow=Invoke-CimMethod -InputObject $pr -MethodName GetOwner -EA Stop; $user="$($ow.Domain)\\$($ow.User)"} } catch {} }`,
+            `if (-not $user) { Write-Output 'ERR:Kein Benutzer angemeldet'; exit }`,
+            `$a=New-ScheduledTaskAction -Execute '${i}'`,
+            `$t=New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(3)`,
+            `Register-ScheduledTask -TaskName 'TempRun' -Action $a -Trigger $t -User $user -Force | Out-Null`,
+            `Start-Sleep 5`,
+            `Unregister-ScheduledTask -TaskName 'TempRun' -Confirm:$false`,
+            `Write-Output "Gestartet als $user"`,
+          ].join('; ')), action: 'write',
+          input: { type: 'text', placeholder: 'z.B. C:\\Program Files\\App\\app.exe' } },
+        { id: 'runexesystem', func: 'EXE als SYSTEM starten', when: 'Ein Programm mit SYSTEM-Rechten auf dem Ziel-PC starten (für Installationen)',
           buildCmd: (h, i) => remote(h, `$a=New-ScheduledTaskAction -Execute '${i}'; $p=New-ScheduledTaskPrincipal -UserId 'SYSTEM' -LogonType ServiceAccount; Register-ScheduledTask -TaskName 'TempSys' -Action $a -Principal $p -Force | Out-Null; Start-ScheduledTask -TaskName 'TempSys'; Start-Sleep 3; Unregister-ScheduledTask -TaskName 'TempSys' -Confirm:$false; Write-Output 'Gestartet als SYSTEM'`), action: 'critical',
-          input: { type: 'text', placeholder: 'EXE-Pfad' } },
-        { id: 'hostsshow', func: 'hosts-Datei anzeigen', when: 'DNS-Overrides',
-          buildCmd: (h) => remote(h, `Get-Content "$env:SystemRoot\\System32\\drivers\\etc\\hosts" | Where-Object {$_ -and $_ -notmatch '^\\s*#'}`), action: 'read' },
-        { id: 'hostsadd', func: 'hosts-Eintrag hinzufügen', when: 'DNS-Override setzen',
-          buildCmd: (h, i) => remote(h, `Add-Content "$env:SystemRoot\\System32\\drivers\\etc\\hosts" -Value '${i}'; Write-Output 'Eintrag hinzugefügt: ${i}'`), action: 'write',
-          input: { type: 'text', placeholder: '192.168.1.1 hostname.local' } },
-        { id: 'hostsreset', func: 'hosts-Datei zurücksetzen', when: 'hosts bereinigen',
-          buildCmd: (h) => remote(h, `$default="# Copyright (c) 1993-2009 Microsoft Corp.\`r\`n#\`r\`n# This file maps host names to IP addresses.\`r\`n# 127.0.0.1 localhost"; Set-Content "$env:SystemRoot\\System32\\drivers\\etc\\hosts" -Value $default; Write-Output 'hosts-Datei zurückgesetzt'`), action: 'critical' },
-        { id: 'aclshow', func: 'NTFS-Berechtigungen anzeigen', when: 'Dateirechte',
+          input: { type: 'text', placeholder: 'z.B. C:\\Temp\\setup.exe /quiet' } },
+        { id: 'runbat', func: 'BAT/CMD-Datei ausführen', when: 'Ein Batch-Script auf dem Ziel-PC ausführen',
+          buildCmd: (h, i) => remote(h, `cmd.exe /c '${i}' 2>&1`), action: 'critical',
+          input: { type: 'text', placeholder: 'z.B. C:\\Scripts\\cleanup.bat' } },
+        { id: 'runps', func: 'PowerShell-Script ausführen', when: 'Ein PS1-Script auf dem Ziel-PC ausführen',
+          buildCmd: (h, i) => remote(h, `& '${i}' 2>&1`), action: 'critical',
+          input: { type: 'text', placeholder: 'z.B. C:\\Scripts\\fix.ps1' } },
+
+        // ── Berechtigungen / hosts / Freigaben ───────────────────────────
+        { id: 'aclshow', func: 'NTFS-Berechtigungen anzeigen', when: 'Datei- oder Ordnerrechte auf dem Ziel-PC prüfen',
           buildCmd: (h, i) => remote(h, `(Get-Acl '${i}').Access | Select IdentityReference,FileSystemRights,AccessControlType | ConvertTo-Json`), action: 'read',
-          input: { type: 'text', placeholder: 'Pfad' } },
-        { id: 'sharecreate', func: 'Netzwerkfreigabe erstellen', when: 'Ordner freigeben',
+          input: { type: 'text', placeholder: 'z.B. C:\\Users\\Public' } },
+        { id: 'hostsshow', func: 'hosts-Datei anzeigen', when: 'Lokale DNS-Overrides auf dem Ziel-PC anzeigen',
+          buildCmd: (h) => remote(h, `Get-Content "$env:SystemRoot\\System32\\drivers\\etc\\hosts" | Where-Object {$_ -and $_ -notmatch '^\\s*#'}`), action: 'read' },
+        { id: 'hostsadd', func: 'hosts-Eintrag hinzufügen', when: 'Einen lokalen DNS-Override auf dem Ziel-PC setzen',
+          buildCmd: (h, i) => remote(h, `Add-Content "$env:SystemRoot\\System32\\drivers\\etc\\hosts" -Value '${i}'; Write-Output 'Eintrag hinzugefügt: ${i}'`), action: 'write',
+          input: { type: 'text', placeholder: 'z.B. 192.168.1.100 server.local' } },
+        { id: 'hostsreset', func: 'hosts-Datei zurücksetzen', when: 'Alle lokalen DNS-Overrides entfernen',
+          buildCmd: (h) => remote(h, `$default="# Copyright (c) 1993-2009 Microsoft Corp.\`r\`n#\`r\`n# This file maps host names to IP addresses.\`r\`n# 127.0.0.1 localhost"; Set-Content "$env:SystemRoot\\System32\\drivers\\etc\\hosts" -Value $default; Write-Output 'hosts-Datei zurückgesetzt'`), action: 'critical' },
+        { id: 'sharecreate', func: 'Netzwerkfreigabe erstellen', when: 'Einen Ordner auf dem Ziel-PC als Netzwerkfreigabe freigeben',
           buildCmd: (h, i) => { const [name, path] = (i || '|').split('|'); return remote(h, `New-SmbShare -Name '${name}' -Path '${path}' -FullAccess 'Everyone' | ConvertTo-Json`) }, action: 'write',
-          input: { type: 'text', placeholder: 'Freigabename|Ordnerpfad' } },
+          input: { type: 'filepipe', placeholder: 'Freigabename|Ordnerpfad', labels: ['Freigabename', 'Ordnerpfad'], examples: ['MeineFreigabe', 'C:\\Daten\\Shared'] } },
       ],
     },
 
@@ -114,37 +145,135 @@ export function buildExtraCategories(): Category[] {
     {
       id: 'userprofiles', label: 'Benutzer & Profile',
       commands: [
-        { id: 'useradd', func: 'Lokalen User anlegen', when: 'Neues Konto',
-          buildCmd: (h, i) => { const [name, pw] = (i || '|').split('|'); return remote(h, `$pw = ConvertTo-SecureString '${pw || 'P@ssw0rd!'}' -AsPlainText -Force; New-LocalUser -Name '${name}' -Password $pw -FullName '${name}'; Write-Output 'User ${name} erstellt'`) }, action: 'write',
-          input: { type: 'text', placeholder: 'Username|Passwort' } },
-        { id: 'userdel', func: 'Lokalen User löschen', when: 'Konto entfernen',
-          buildCmd: (h, i) => remote(h, `Remove-LocalUser -Name '${i}' -Confirm:$false; Write-Output 'User ${i} gelöscht'`), action: 'critical',
-          input: { type: 'text', placeholder: 'Username' } },
-        { id: 'userpwset', func: 'Lokales Passwort ändern', when: 'Passwort zurücksetzen',
-          buildCmd: (h, i) => { const [name, pw] = (i || '|').split('|'); return remote(h, `$pw=ConvertTo-SecureString '${pw}' -AsPlainText -Force; Set-LocalUser -Name '${name}' -Password $pw; Write-Output 'Passwort geändert für ${name}'`) }, action: 'write',
-          input: { type: 'text', placeholder: 'Username|NeuesPasswort' } },
-        { id: 'usergroupadd', func: 'User zu Gruppe hinzufügen', when: 'Rechte vergeben',
-          buildCmd: (h, i) => { const [user, group] = (i || '|').split('|'); return remote(h, `Add-LocalGroupMember -Group '${group}' -Member '${user}'; Write-Output '${user} → ${group}'`) }, action: 'write',
-          input: { type: 'text', placeholder: 'Username|Gruppenname' } },
-        { id: 'usergrouprem', func: 'User aus Gruppe entfernen', when: 'Rechte entziehen',
-          buildCmd: (h, i) => { const [user, group] = (i || '|').split('|'); return remote(h, `Remove-LocalGroupMember -Group '${group}' -Member '${user}'; Write-Output '${user} entfernt aus ${group}'`) }, action: 'write',
-          input: { type: 'text', placeholder: 'Username|Gruppenname' } },
-        { id: 'userlist', func: 'Alle lokalen Benutzer', when: 'Konten-Inventar',
-          buildCmd: (h) => remote(h, `Get-LocalUser | Select @{N='Benutzer';E={$_.Name}},@{N='Aktiviert';E={$_.Enabled}},@{N='Letzte Anmeldung';E={if($_.LastLogon){$_.LastLogon.ToString('dd.MM.yyyy HH:mm')}else{'Nie'}}},@{N='Passwort gesetzt';E={if($_.PasswordLastSet){$_.PasswordLastSet.ToString('dd.MM.yyyy')}else{'—'}}} | ConvertTo-Json`), action: 'read' },
-        { id: 'profilelist', func: 'Benutzerprofile mit Größe', when: 'Profil-Inventar',
-          buildCmd: (h) => remote(h, `Get-CimInstance Win32_UserProfile | Where {!$_.Special} | ForEach-Object { $size=0; try{$size=[math]::Round((Get-ChildItem $_.LocalPath -Recurse -Force -EA SilentlyContinue | Measure-Object Length -Sum).Sum/1MB,1)}catch{}; @{Profil=$_.LocalPath;'Größe (MB)'=$size;'Letzte Nutzung'=if($_.LastUseTime){$_.LastUseTime.ToString('dd.MM.yyyy')}else{'—'};Geladen=$_.Loaded} } | ConvertTo-Json`), action: 'read', longRunning: true },
-        { id: 'profiledel', func: 'Benutzerprofil löschen', when: 'Profil bereinigen',
-          buildCmd: (h, i) => remote(h, `$p=Get-CimInstance Win32_UserProfile | Where LocalPath -like '*${i}*'; if($p){Remove-CimInstance $p; Write-Output 'Profil gelöscht: ${i}'}else{Write-Output 'Profil nicht gefunden'}`), action: 'critical',
-          input: { type: 'text', placeholder: 'Username (Teil des Pfads)' } },
-        { id: 'tempprofile', func: 'Temp-Profil erkennen + reparieren', when: 'Temp-Profil Fix',
-          buildCmd: (h) => remote(h, `$bak=Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList' | Where {$_.PSChildName -match '\\.bak$'}; if($bak){$bak | ForEach-Object { $orig=$_.PSChildName -replace '\\.bak$',''; Rename-Item $_.PSPath -NewName ($_.PSChildName+'.old') -Force; Write-Output "Gefunden+repariert: $($_.PSChildName)" }}else{Write-Output 'Kein Temp-Profil gefunden'}`), action: 'write' },
-        { id: 'profilesizes', func: 'Profil-Größe pro User', when: 'Wer braucht Platz?',
-          buildCmd: (h) => remote(h, `Get-ChildItem C:\\Users -Directory | ForEach-Object { $size=[math]::Round((Get-ChildItem $_.FullName -Recurse -Force -EA SilentlyContinue | Measure-Object Length -Sum).Sum/1MB,1); @{Benutzer=$_.Name;'Größe (MB)'=$size} } | Sort-Object 'Größe (MB)' -Descending | ConvertTo-Json`), action: 'read', longRunning: true },
-        { id: 'autologon', func: 'AutoAnmeldung konfigurieren', when: 'Auto-Login setzen',
-          buildCmd: (h, i) => { const [user, pw] = (i || '|').split('|'); return remote(h, `$rp='HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'; Set-ItemProperty $rp -Name AutoAdminLogon -Value 1; Set-ItemProperty $rp -Name DefaultUserName -Value '${user}'; Set-ItemProperty $rp -Name DefaultPassword -Value '${pw}'; Write-Output 'AutoLogon gesetzt für ${user}'`) }, action: 'critical',
-          input: { type: 'text', placeholder: 'Username|Passwort' } },
-        { id: 'lastlogins', func: 'Zuletzt angemeldete User', when: 'Login-Historie',
+        // ── Übersicht ─────────────────────────────────────────────────────
+        { id: 'userlist', func: 'Alle lokalen Benutzer', when: 'Konten-Inventar — wer hat ein lokales Konto?',
+          buildCmd: (h) => remote(h, `Get-LocalUser | Select @{N='Benutzer';E={$_.Name}},@{N='Aktiviert';E={$_.Enabled}},@{N='Beschreibung';E={$_.Description}},@{N='Letzte Anmeldung';E={if($_.LastLogon){$_.LastLogon.ToString('dd.MM.yyyy HH:mm')}else{'Nie'}}},@{N='Passwort gesetzt';E={if($_.PasswordLastSet){$_.PasswordLastSet.ToString('dd.MM.yyyy')}else{'—'}}} | ConvertTo-Json`), action: 'read' },
+        { id: 'groupmembers', func: 'Gruppen-Mitglieder anzeigen', when: 'Wer ist in welcher Gruppe?',
+          buildCmd: (h, i) => remote(h, `$group='${(i || 'Administrators').replace(/'/g, "''")}'; try { $members = Get-LocalGroupMember -Group $group -EA Stop | Select @{N='Name';E={$_.Name}},@{N='Typ';E={$_.ObjectClass}},@{N='Quelle';E={$_.PrincipalSource}}; if($members){$members | ConvertTo-Json -Compress}else{Write-Output '"Keine Mitglieder"'} } catch { Write-Output "ERR:$($_.Exception.Message)" }`), action: 'read',
+          input: { type: 'text', placeholder: 'Gruppenname' },
+          templates: [
+            { label: 'Administratoren', value: 'Administrators' },
+            { label: 'Remote Desktop', value: 'Remote Desktop Users' },
+            { label: 'Benutzer', value: 'Users' },
+            { label: 'Netzwerk', value: 'Network Configuration Operators' },
+          ] },
+        { id: 'grouplist', func: 'Alle lokalen Gruppen', when: 'Gruppen-Übersicht',
+          buildCmd: (h) => remote(h, `Get-LocalGroup | Select @{N='Gruppe';E={$_.Name}},@{N='Beschreibung';E={$_.Description}} | ConvertTo-Json -Compress`), action: 'read' },
+        { id: 'lastlogins', func: 'Zuletzt angemeldete User', when: 'Login-Historie — wer hat sich wann angemeldet?',
           buildCmd: (h) => remote(h, `Get-WinEvent -FilterHashtable @{LogName='Security';Id=4624} -MaxEvents 20 -EA SilentlyContinue | ForEach-Object { $xml=[xml]$_.ToXml(); @{Zeitpunkt=$_.TimeCreated.ToString('dd.MM.yyyy HH:mm');Benutzer=$xml.Event.EventData.Data[5].'#text';'Anmeldetyp'=$xml.Event.EventData.Data[8].'#text'} } | ConvertTo-Json`), action: 'read' },
+
+        // ── Domain-User hinzufügen (AD-Lookup) ────────────────────────────
+        { id: 'adduserbyid', func: 'Domain-User zur Gruppe hinzufügen', when: 'Corp-ID oder Name eingeben — AD wird automatisch geprüft',
+          buildCmd: (h, i) => {
+            const parts = (i || '').split('|')
+            const corpIdOrName = (parts[0] || '').trim()
+            const group = (parts[1] || 'Administrators').trim()
+            if (!corpIdOrName) return remote(h, `@{Fehler='Bitte Corp-ID oder Name eingeben'} | ConvertTo-Json -Compress`)
+            const safe = corpIdOrName.replace(/'/g, "''")
+            const gSafe = group.replace(/'/g, "''")
+            return remote(h, [
+              `$input = '${safe}'`,
+              `$group = '${gSafe}'`,
+              `$adUser = $null`,
+              `# Versuch 1: Exakter SamAccountName (Corp-ID)`,
+              `try { $adUser = Get-ADUser -Identity $input -Properties DisplayName,SamAccountName,Enabled -EA Stop } catch {}`,
+              `# Versuch 2: Suche nach Name (Vor- oder Nachname)`,
+              `if (-not $adUser) { try { $found = Get-ADUser -Filter "Name -like '*$input*' -or DisplayName -like '*$input*' -or Surname -like '*$input*' -or GivenName -like '*$input*'" -Properties DisplayName,SamAccountName,Enabled -EA Stop; if($found -is [array]){$adUser=$found[0]}else{$adUser=$found} } catch {} }`,
+              `if (-not $adUser) { @{Fehler="Benutzer '$input' nicht im AD gefunden. Bitte Corp-ID oder exakten Namen prüfen."} | ConvertTo-Json -Compress; exit }`,
+              `if (-not $adUser.Enabled) { @{Warnung="Benutzer $($adUser.SamAccountName) ($($adUser.DisplayName)) ist im AD deaktiviert!"} | ConvertTo-Json -Compress; exit }`,
+              `$sam = $adUser.SamAccountName`,
+              `$domain = (Get-ADDomain -EA SilentlyContinue).NetBIOSName`,
+              `if (-not $domain) { $domain = $env:USERDOMAIN }`,
+              `$fullName = "$domain\\$sam"`,
+              `# Zur Gruppe hinzufügen`,
+              `try { Add-LocalGroupMember -Group $group -Member $fullName -EA Stop } catch {`,
+              `  if ($_.Exception.Message -match 'already a member') { @{Info="$fullName ist bereits Mitglied von '$group'";Benutzer=$adUser.DisplayName;'Corp-ID'=$sam} | ConvertTo-Json -Compress; exit }`,
+              `  else { Write-Output "ERR:$($_.Exception.Message)"; exit }`,
+              `}`,
+              `@{Ergebnis='Erfolgreich hinzugefügt';Benutzer=$adUser.DisplayName;'Corp-ID'=$sam;Konto=$fullName;Gruppe=$group;'AD-Status'='Aktiv'} | ConvertTo-Json -Compress`,
+            ].join('\n'))
+          }, action: 'write',
+          input: { type: 'useradd' } },
+
+        // ── Gruppen bearbeiten ────────────────────────────────────────────
+        { id: 'usergroupadd', func: 'User zu Gruppe hinzufügen', when: 'Lokalen oder Domain-User einer Gruppe zuweisen',
+          buildCmd: (h, i) => {
+            const parts = (i || '').split('|')
+            const user = (parts[0] || '').trim()
+            const group = (parts[1] || 'Administrators').trim()
+            if (!user) return remote(h, `@{Fehler='Bitte Benutzername eingeben'} | ConvertTo-Json -Compress`)
+            return remote(h, [
+              `try {`,
+              `  Add-LocalGroupMember -Group '${group.replace(/'/g, "''")}' -Member '${user.replace(/'/g, "''")}' -EA Stop`,
+              `  $members = Get-LocalGroupMember -Group '${group.replace(/'/g, "''")}' | Select @{N='Name';E={$_.Name}},@{N='Typ';E={$_.ObjectClass}}`,
+              `  @{Ergebnis='${user} hinzugefügt zu ${group}';'Aktuelle Mitglieder'=$members} | ConvertTo-Json -Compress -Depth 3`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
+            ].join('\n'))
+          }, action: 'write',
+          input: { type: 'usergroup' } },
+        { id: 'usergrouprem', func: 'User aus Gruppe entfernen', when: 'Rechte entziehen — z.B. Admin-Rechte wegnehmen',
+          buildCmd: (h, i) => {
+            const parts = (i || '').split('|')
+            const user = (parts[0] || '').trim()
+            const group = (parts[1] || 'Administrators').trim()
+            if (!user) return remote(h, `@{Fehler='Bitte Benutzername eingeben'} | ConvertTo-Json -Compress`)
+            return remote(h, [
+              `try {`,
+              `  Remove-LocalGroupMember -Group '${group.replace(/'/g, "''")}' -Member '${user.replace(/'/g, "''")}' -EA Stop`,
+              `  $members = Get-LocalGroupMember -Group '${group.replace(/'/g, "''")}' | Select @{N='Name';E={$_.Name}},@{N='Typ';E={$_.ObjectClass}}`,
+              `  @{Ergebnis='${user} entfernt aus ${group}';'Verbleibende Mitglieder'=$members} | ConvertTo-Json -Compress -Depth 3`,
+              `} catch { Write-Output "ERR:$($_.Exception.Message)" }`,
+            ].join('\n'))
+          }, action: 'write',
+          input: { type: 'usergroup' } },
+
+        // ── Lokale User verwalten ─────────────────────────────────────────
+        { id: 'useradd', func: 'Lokalen User anlegen', when: 'Neues lokales Konto erstellen (kein Domain-Account)',
+          buildCmd: (h, i) => {
+            const parts = (i || '').split('|')
+            const name = (parts[0] || '').trim()
+            const pw = (parts[1] || '').trim()
+            if (!name || !pw) return remote(h, `@{Fehler='Bitte Username und Passwort eingeben'} | ConvertTo-Json -Compress`)
+            return remote(h, [
+              `$pw = ConvertTo-SecureString '${pw.replace(/'/g, "''")}' -AsPlainText -Force`,
+              `New-LocalUser -Name '${name.replace(/'/g, "''")}' -Password $pw -FullName '${name.replace(/'/g, "''")}'`,
+              `$u = Get-LocalUser '${name.replace(/'/g, "''")}'`,
+              `@{Ergebnis='Benutzer erstellt';Benutzer=$u.Name;Aktiviert=$u.Enabled;SID=$u.SID.Value} | ConvertTo-Json -Compress`,
+            ].join('; '))
+          }, action: 'write',
+          input: { type: 'userpass' } },
+        { id: 'userdel', func: 'Lokalen User löschen', when: 'Konto entfernen',
+          buildCmd: (h, i) => remote(h, `Remove-LocalUser -Name '${(i || '').replace(/'/g, "''")}' -Confirm:$false; Write-Output 'User ${i} gelöscht'`), action: 'critical',
+          input: { type: 'text', placeholder: 'Username' },
+          templates: [
+            { label: 'Alle Benutzer zuerst anzeigen', value: '' },
+          ] },
+        { id: 'userpwset', func: 'Lokales Passwort ändern', when: 'Passwort zurücksetzen',
+          buildCmd: (h, i) => {
+            const parts = (i || '').split('|')
+            const name = (parts[0] || '').trim()
+            const pw = (parts[1] || '').trim()
+            if (!name || !pw) return remote(h, `@{Fehler='Bitte Username und Passwort eingeben'} | ConvertTo-Json -Compress`)
+            return remote(h, `$pw=ConvertTo-SecureString '${pw.replace(/'/g, "''")}' -AsPlainText -Force; Set-LocalUser -Name '${name.replace(/'/g, "''")}' -Password $pw; @{Ergebnis='Passwort geändert';Benutzer='${name}'} | ConvertTo-Json -Compress`)
+          }, action: 'write',
+          input: { type: 'userpass' } },
+        { id: 'autologon', func: 'AutoAnmeldung konfigurieren', when: 'Auto-Login setzen — PC meldet sich automatisch an',
+          buildCmd: (h, i) => { const [user, pw] = (i || '|').split('|'); return remote(h, `$rp='HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'; Set-ItemProperty $rp -Name AutoAdminLogon -Value 1; Set-ItemProperty $rp -Name DefaultUserName -Value '${user}'; Set-ItemProperty $rp -Name DefaultPassword -Value '${pw}'; @{Ergebnis='AutoLogon aktiviert';Benutzer='${user}';Hinweis='Wird beim nächsten Neustart wirksam'} | ConvertTo-Json -Compress`) }, action: 'critical',
+          input: { type: 'userpass' } },
+
+        // ── Profile ───────────────────────────────────────────────────────
+        { id: 'profilelist', func: 'Benutzerprofile mit Größe', when: 'Profil-Inventar — welche Profile existieren?',
+          buildCmd: (h) => remote(h, `Get-CimInstance Win32_UserProfile | Where {!$_.Special} | ForEach-Object { $size=0; try{$size=[math]::Round((Get-ChildItem $_.LocalPath -Recurse -Force -EA SilentlyContinue | Measure-Object Length -Sum).Sum/1MB,1)}catch{}; @{Profil=$_.LocalPath;'Größe (MB)'=$size;'Letzte Nutzung'=if($_.LastUseTime){$_.LastUseTime.ToString('dd.MM.yyyy')}else{'—'};Geladen=$_.Loaded} } | ConvertTo-Json`), action: 'read', longRunning: true },
+        { id: 'profilesizes', func: 'Profil-Größe pro User', when: 'Wer braucht am meisten Platz?',
+          buildCmd: (h) => remote(h, `Get-ChildItem C:\\Users -Directory | ForEach-Object { $size=[math]::Round((Get-ChildItem $_.FullName -Recurse -Force -EA SilentlyContinue | Measure-Object Length -Sum).Sum/1MB,1); @{Benutzer=$_.Name;'Größe (MB)'=$size} } | Sort-Object 'Größe (MB)' -Descending | ConvertTo-Json`), action: 'read', longRunning: true },
+        { id: 'profiledel', func: 'Benutzerprofil löschen', when: 'Profil-Ordner und Registry-Eintrag bereinigen',
+          buildCmd: (h, i) => remote(h, `$p=Get-CimInstance Win32_UserProfile | Where LocalPath -like '*${(i || '').replace(/'/g, "''").replace(/\\/g, '\\\\')}*'; if($p){Remove-CimInstance $p; Write-Output 'Profil gelöscht: ${i}'}else{Write-Output 'Profil nicht gefunden'}`), action: 'critical',
+          input: { type: 'text', placeholder: 'Username (Teil des Profilpfads)' },
+          templates: [
+            { label: 'Profile zuerst anzeigen', value: '' },
+          ] },
+        { id: 'tempprofile', func: 'Temp-Profil erkennen + reparieren', when: 'Benutzer hat ein temporäres Profil — .bak in Registry fixen',
+          buildCmd: (h) => remote(h, `$bak=Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList' | Where {$_.PSChildName -match '\\.bak$'}; if($bak){$bak | ForEach-Object { $orig=$_.PSChildName -replace '\\.bak$',''; Rename-Item $_.PSPath -NewName ($_.PSChildName+'.old') -Force; Write-Output "Gefunden+repariert: $($_.PSChildName)" }}else{Write-Output 'Kein Temp-Profil gefunden'}`), action: 'write' },
       ],
     },
 
@@ -160,28 +289,28 @@ export function buildExtraCategories(): Category[] {
           buildCmd: (h) => remote(h, `Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" | Select @{N='Laufwerk';E={$_.DeviceID}},@{N='Größe (GB)';E={[math]::Round($_.Size/1GB,1)}},@{N='Frei (GB)';E={[math]::Round($_.FreeSpace/1GB,1)}},@{N='Frei (%)';E={[math]::Round($_.FreeSpace/$_.Size*100,1)}} | ConvertTo-Json`), action: 'read' },
         { id: 'partshrink', func: 'Partition verkleinern', when: 'Platz freigeben',
           buildCmd: (h, i) => { const [dl, mb] = (i || 'C|1024').split('|'); return remote(h, `$p=Get-Partition -DriveLetter '${dl}'; $sup=Get-PartitionSupportedSize -DiskNumber $p.DiskNumber -PartitionNumber $p.PartitionNumber; $newSize=$p.Size-(${mb}*1MB); Resize-Partition -DiskNumber $p.DiskNumber -PartitionNumber $p.PartitionNumber -Size $newSize; Write-Output 'Verkleinert um ${mb} MB'`) }, action: 'critical',
-          input: { type: 'text', placeholder: 'Laufwerk|MB (z.B. C|2048)' } },
-        { id: 'partgrow', func: 'Partition vergrößern', when: 'Maximum nutzen',
+          input: { type: 'diskpart' } },
+        { id: 'partgrow', func: 'Partition vergrößern', when: 'Maximum nutzen — freien Platz nutzen',
           buildCmd: (h, i) => remote(h, `$p=Get-Partition -DriveLetter '${i || 'C'}'; $max=(Get-PartitionSupportedSize -DiskNumber $p.DiskNumber -PartitionNumber $p.PartitionNumber).SizeMax; Resize-Partition -DiskNumber $p.DiskNumber -PartitionNumber $p.PartitionNumber -Size $max; Write-Output 'Partition ${i || 'C'}: auf Maximum vergrößert'`), action: 'critical',
-          input: { type: 'text', placeholder: 'Laufwerksbuchstabe (z.B. C)' } },
-        { id: 'newvol', func: 'Neues Volume erstellen', when: 'Neue Partition',
+          input: { type: 'driveletter' } },
+        { id: 'newvol', func: 'Neues Volume erstellen', when: 'Neue Partition auf freiem Speicher',
           buildCmd: (h, i) => { const [dn, dl] = (i || '0|E').split('|'); return remote(h, `$p=New-Partition -DiskNumber ${dn} -UseMaximumSize -DriveLetter '${dl}'; Format-Volume -DriveLetter '${dl}' -FileSystem NTFS -Confirm:$false; Write-Output 'Volume ${dl}: erstellt'`) }, action: 'critical',
-          input: { type: 'text', placeholder: 'DiskNr|Buchstabe (z.B. 1|E)' } },
+          input: { type: 'diskvol' } },
         { id: 'changeletter', func: 'Laufwerksbuchstabe ändern', when: 'Buchstabe tauschen',
           buildCmd: (h, i) => { const [old, nw] = (i || 'D|E').split('|'); return remote(h, `$p=Get-Partition -DriveLetter '${old}'; Set-Partition -InputObject $p -NewDriveLetter '${nw}'; Write-Output '${old}: → ${nw}:'`) }, action: 'write',
-          input: { type: 'text', placeholder: 'Alt|Neu (z.B. D|E)' } },
-        { id: 'diskinit', func: 'Datenträger initialisieren', when: 'Neue Festplatte',
+          input: { type: 'diskletter' } },
+        { id: 'diskinit', func: 'Datenträger initialisieren', when: 'Neue Festplatte einrichten (GPT/MBR)',
           buildCmd: (h, i) => { const [dn, style] = (i || '1|GPT').split('|'); return remote(h, `Initialize-Disk -Number ${dn} -PartitionStyle ${style} -Confirm:$false; Write-Output 'Disk ${dn} als ${style} initialisiert'`) }, action: 'critical',
-          input: { type: 'text', placeholder: 'DiskNr|GPT oder MBR' } },
-        { id: 'chkdskrun', func: 'CHKDSK ausführen', when: 'Dateisystem reparieren',
+          input: { type: 'diskvol' } },
+        { id: 'chkdskrun', func: 'CHKDSK ausführen', when: 'Dateisystem prüfen/reparieren',
           buildCmd: (h, i) => remote(h, `Repair-Volume -DriveLetter '${i || 'C'}' -Scan | ConvertTo-Json`), action: 'write', longRunning: true,
-          input: { type: 'text', placeholder: 'Laufwerksbuchstabe (z.B. C)' } },
-        { id: 'trimssd', func: 'TRIM (SSD)', when: 'SSD optimieren',
+          input: { type: 'driveletter' } },
+        { id: 'trimssd', func: 'TRIM (SSD)', when: 'SSD optimieren — freie Blöcke zurückgeben',
           buildCmd: (h, i) => remote(h, `Optimize-Volume -DriveLetter '${i || 'C'}' -ReTrim -Verbose 2>&1`), action: 'write', longRunning: true,
-          input: { type: 'text', placeholder: 'Laufwerksbuchstabe' } },
-        { id: 'defraghdd', func: 'Defragmentierung (HDD)', when: 'HDD optimieren',
+          input: { type: 'driveletter' } },
+        { id: 'defraghdd', func: 'Defragmentierung (HDD)', when: 'HDD defragmentieren — nur für mechanische Festplatten',
           buildCmd: (h, i) => remote(h, `Optimize-Volume -DriveLetter '${i || 'C'}' -Defrag -Verbose 2>&1`), action: 'write', longRunning: true,
-          input: { type: 'text', placeholder: 'Laufwerksbuchstabe' } },
+          input: { type: 'driveletter' } },
         { id: 'emptybin', func: 'Papierkorb leeren', when: 'Papierkorb leer',
           buildCmd: (h) => remote(h, `Clear-RecycleBin -Force -Confirm:$false; Write-Output 'Papierkorb geleert'`), action: 'write' },
         { id: 'delwinold', func: 'Windows.old löschen', when: 'Altes Windows entfernen',
@@ -190,7 +319,13 @@ export function buildExtraCategories(): Category[] {
           buildCmd: (h) => remote(h, `DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase 2>&1`), action: 'write', longRunning: true },
         { id: 'top10big', func: 'Top 10 größte Dateien', when: 'Platzfresser finden',
           buildCmd: (h, i) => remote(h, `Get-ChildItem '${i || 'C:\\'}' -Recurse -File -Force -EA SilentlyContinue | Sort Length -Descending | Select -First 10 FullName,@{N='SizeMB';E={[math]::Round($_.Length/1MB,1)}},LastWriteTime | ConvertTo-Json`), action: 'read', longRunning: true,
-          input: { type: 'text', placeholder: 'Startpfad (z.B. C:\\Users)' } },
+          input: { type: 'text', placeholder: 'Startpfad z.B. C:\\Users' },
+          templates: [
+            { label: 'C:\\', value: 'C:\\' },
+            { label: 'C:\\Users', value: 'C:\\Users' },
+            { label: 'C:\\Temp', value: 'C:\\Temp' },
+            { label: 'D:\\', value: 'D:\\' },
+          ] },
         { id: 'storagesense', func: 'Storage Sense aktivieren', when: 'Auto-Bereinigung',
           buildCmd: (h) => remote(h, `$rp='HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy'; if(!(Test-Path $rp)){New-Item $rp -Force|Out-Null}; Set-ItemProperty $rp -Name '01' -Value 1 -Type DWord; Set-ItemProperty $rp -Name '04' -Value 1 -Type DWord; Write-Output 'Storage Sense aktiviert'`), action: 'write' },
       ],

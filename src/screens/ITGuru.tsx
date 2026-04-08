@@ -4,6 +4,7 @@ import {
   AlertTriangle, Play, X, Download, ChevronDown,
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
+import { useAppStore } from '../store/appStore'
 import { api } from '../electronAPI'
 import { CATEGORIES } from '../utils/remoteCommands'
 import { loadKnowledgeBase, getCachedKB } from '../utils/guruKnowledgeBase'
@@ -230,15 +231,27 @@ export default function ITGuru() {
   )
   const [kb, setKb] = useState<KnowledgeBaseData | null>(getCachedKB())
 
+  // Pick up hostname from Home screen (if set)
+  const guruHostname = useAppStore((s) => s.guruHostname)
+  const setGuruHostname = useAppStore((s) => s.setGuruHostname)
+
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
-  const [hostname, setHostname] = useState('')
+  const [hostname, setHostname] = useState(guruHostname || '')
   const [session, setSession] = useState<SessionMemory[]>([])
   const [thinking, setThinking] = useState(false)
 
   const chatEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Pick up hostname from store when navigating from Home
+  useEffect(() => {
+    if (guruHostname) {
+      setHostname(guruHostname)
+      setGuruHostname('') // reset so it doesn't persist
+    }
+  }, [guruHostname]) // eslint-disable-line
 
   // Scroll to bottom on new messages
   useEffect(() => {

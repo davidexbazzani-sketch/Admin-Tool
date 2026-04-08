@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Minus, Upload, ArrowRight, Monitor, Hash, FileText, ChevronsRight } from 'lucide-react'
+import { Plus, Minus, Upload, ArrowRight, Monitor, Hash, FileText, ChevronsRight, Terminal } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import type { DeviceEntry, Prefix } from '../types'
 import Card from '../components/Card'
@@ -45,6 +45,7 @@ const GLOBAL_PREFIX_BTNS: Prefix[] = ['DE', 'DEHAM', 'DESCH']
 export default function Home() {
   const setScreen = useAppStore((s) => s.setScreen)
   const setDevices = useAppStore((s) => s.setDevices)
+  // setGuruHostname removed — Home now links to Remote Doc instead of IT Guru
 
   // Single query
   const [singleHostname, setSingleHostname] = useState('')
@@ -230,6 +231,29 @@ export default function Home() {
 
     setDevices(all)
     setScreen('query-menu')
+  }
+
+  function getFirstHostname(): string {
+    if (singleHostname.trim()) return singleHostname.trim()
+    if (singleSerial.trim() && singlePrefixes.length > 0) {
+      return resolveHostnames({
+        id: '', type: 'serial', value: singleSerial.trim(),
+        prefixes: singlePrefixes, customPrefix: singleCustom, resolvedHostnames: [],
+      })[0] || ''
+    }
+    const hr = hostnameRows.find((r) => r.value.trim())
+    if (hr) return hr.value.trim()
+    const sr = serialRows.find((r) => r.value.trim())
+    if (sr) return resolveHostnames(sr)[0] || ''
+    return ''
+  }
+
+  function handleProceedRemoteDoc() {
+    const h = getFirstHostname()
+    if (h) {
+      setDevices([{ id: makeId(), type: 'hostname', value: h, resolvedHostnames: [h] }])
+    }
+    setScreen('remote-doc')
   }
 
   const hasInput =
@@ -451,7 +475,20 @@ export default function Home() {
       </Card>
 
       {/* CTA */}
-      <div className="flex justify-end pb-2">
+      <div className="flex justify-end gap-3 pb-2">
+        <button
+          onClick={handleProceedRemoteDoc}
+          className={`
+            flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all
+            ${hasInput
+              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 shadow-lg shadow-emerald-500/10'
+              : 'bg-emerald-500/10 text-emerald-400/60 border border-emerald-500/20 hover:bg-emerald-500/15'
+            }
+          `}
+        >
+          <Terminal size={16} />
+          Remote Doc{hasInput ? ` (${getFirstHostname()})` : ''}
+        </button>
         <button
           onClick={handleProceed}
           disabled={!hasInput}
