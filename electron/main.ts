@@ -260,41 +260,17 @@ ipcMain.handle('app:log', (_e, message: string) => {
   } catch { /* swallow logging errors */ }
 })
 
-// Compose email: tries Outlook COM (with attachment support), falls back to mailto:
+// Compose email: Outlook via ScheduledTask (UIPI bypass), falls back to mailto:
 ipcMain.handle('mail:compose', async (_e, opts: {
   to: string; cc: string; subject: string; body: string; attachmentPath?: string
 }) => {
-  // Encode text values as base64 to avoid PowerShell escaping issues with
-  // special characters, quotes, and multi-line bodies
-  const b64 = (s: string) => Buffer.from(s ?? '', 'utf8').toString('base64')
+  const { composeViaOutlookScheduledTask } = require('./outlookMailer') as typeof import('./outlookMailer')
+  const result = await composeViaOutlookScheduledTask({
+    to: opts.to, cc: opts.cc, subject: opts.subject, body: opts.body, attachmentPath: opts.attachmentPath,
+  })
+  if (result.success) return { success: true }
 
-  const psLines = [
-    `try {`,
-    `  $to   = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${b64(opts.to)}'))`,
-    `  $cc   = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${b64(opts.cc)}'))`,
-    `  $subj = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${b64(opts.subject)}'))`,
-    `  $body = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${b64(opts.body)}'))`,
-    `  $o = New-Object -ComObject Outlook.Application -ErrorAction Stop`,
-    `  $mail = $o.CreateItem(0)`,
-    `  $mail.To = $to`,
-    `  $mail.CC = $cc`,
-    `  $mail.Subject = $subj`,
-    `  $mail.Body = $body`,
-  ]
-  if (opts.attachmentPath) {
-    // Escape single quotes in path for PS single-quoted string
-    psLines.push(`  $mail.Attachments.Add('${opts.attachmentPath.replace(/'/g, "''")}')`)
-  }
-  psLines.push(
-    `  $mail.Display()`,
-    `  Write-Output 'ok'`,
-    `} catch { Write-Output "err: $($_.Exception.Message)" }`
-  )
-
-  const result = await runPowerShell(psLines.join('\n'), 12000)
-  if (result.stdout.trim() === 'ok') return { success: true }
-
-  // Outlook not available or failed → fall back to mailto: (no attachment)
+  // Fallback to mailto: (no attachment support)
   const url = `mailto:${encodeURIComponent(opts.to ?? '')}?cc=${encodeURIComponent(opts.cc ?? '')}&subject=${encodeURIComponent(opts.subject ?? '')}&body=${encodeURIComponent(opts.body ?? '')}`
   shell.openExternal(url)
   return { success: false, fallback: true }
@@ -663,106 +639,15 @@ ipcMain.handle('mail:sendRaw', async (_e, opts: {
   const method = opts.method ?? 'outlook'
   console.log(`[mail:sendRaw] method=${method} to=${opts.to} subject="${opts.subject?.slice(0, 40)}"`)
 
-  // ── Outlook COM via VBScript (like SKF Protokoll Generator — no password needed) ──
+  // ── Outlook COM via Scheduled Task (UIPI bypass — works when app runs as admin) ──
   if (method === 'outlook') {
     try {
-      const { writeFileSync, unlinkSync } = require('fs') as typeof import('fs')
-      const { tmpdir } = require('os') as typeof import('os')
-      const { join: pjoin } = require('path') as typeof import('path')
-      const { execSync } = require('child_process') as typeof import('child_process')
-
-      const safeTo = opts.to.replace(/"/g, '')
-      const safeSubject = opts.subject.replace(/"/g, '')
-      const safeBody = opts.body
-        .replace(/"/g, '')
-        .replace(/\r\n/g, '\n')
-        .replace(/\n/g, '" & Chr(10) & "')
-        .replace(/\r/g, '')
-
-      const vbsLines = [
-        'Set objOutlook = CreateObject("Outlook.Application")',
-        'Set objMail = objOutlook.CreateItem(0)',
-        'With objMail',
-        `    .To = "${safeTo}"`,
-        `    .Subject = "${safeSubject}"`,
-        `    .Body = "${safeBody}"`,
-        '    .Send',
-        'End With',
-      ]
-
-      const vbsContent = vbsLines.join('\r\n')
-      // Save VBS to a shared temp location accessible by the desktop user
-      const vbsPath = pjoin(tmpdir(), `it_admin_mail_${Date.now()}.vbs`)
-      const resultPath = vbsPath + '.result'
-
-      console.log(`[mail:sendRaw][outlook] Writing VBS to: ${vbsPath}`)
-      writeFileSync(vbsPath, vbsContent, 'utf-8')
-
-      try {
-        // Detect current desktop user (may differ from process owner when running as admin)
-        const desktopUser = (() => {
-          try {
-            const { execSync: es } = require('child_process') as typeof import('child_process')
-            // query the interactive session user
-            const whoOut = es('query user 2>nul || quser 2>nul || echo UNKNOWN', { encoding: 'utf-8', windowsHide: true, timeout: 5000 })
-            const lines = whoOut.split('\n').filter(l => l.includes('Active') || l.includes('Aktiv'))
-            if (lines.length > 0) {
-              const parts = lines[0].trim().split(/\s+/)
-              const u = parts[0].replace(/^>/, '')
-              if (u && u !== 'UNKNOWN') return u
-            }
-          } catch {}
-          return ''
-        })()
-
-        const processUser = userInfo().username
-        console.log(`[mail:sendRaw][outlook] Process user: ${processUser}, Desktop user: ${desktopUser || '(same)'}`)
-
-        // If running as different user (admin elevation), use schtasks to run VBS as the desktop user
-        if (desktopUser && desktopUser.toLowerCase() !== processUser.toLowerCase()) {
-          console.log(`[mail:sendRaw][outlook] Running as elevated admin — using schtasks for desktop user: ${desktopUser}`)
-          const { execSync: es } = require('child_process') as typeof import('child_process')
-          const taskName = 'IT_Admin_SendMail'
-          // Create a wrapper VBS that writes result to file
-          const wrapperVbs = vbsLines.join('\r\n') + '\r\nDim fso : Set fso = CreateObject("Scripting.FileSystemObject")\r\nDim f : Set f = fso.CreateTextFile("' + resultPath.replace(/\\/g, '\\\\') + '", True)\r\nf.Write "OK"\r\nf.Close'
-          writeFileSync(vbsPath, wrapperVbs, 'utf-8')
-          try {
-            es(`schtasks /create /tn "${taskName}" /tr "cscript //nologo \\"${vbsPath}\\"" /sc once /st 00:00 /ru "${desktopUser}" /f`, { encoding: 'utf-8', windowsHide: true, timeout: 10000 })
-            es(`schtasks /run /tn "${taskName}"`, { encoding: 'utf-8', windowsHide: true, timeout: 10000 })
-            // Wait for result
-            const maxWait = 15000
-            const start = Date.now()
-            while (Date.now() - start < maxWait) {
-              if (existsSync(resultPath)) {
-                const res = readFileSync(resultPath, 'utf-8').trim()
-                console.log(`[mail:sendRaw][outlook] schtasks result: ${res}`)
-                try { unlinkSync(resultPath) } catch {}
-                try { es(`schtasks /delete /tn "${taskName}" /f`, { windowsHide: true, timeout: 5000 }) } catch {}
-                if (res === 'OK') return { success: true, method: 'outlook' }
-                break
-              }
-              // eslint-disable-next-line no-await-in-loop
-              await new Promise(r => setTimeout(r, 500))
-            }
-            try { es(`schtasks /delete /tn "${taskName}" /f`, { windowsHide: true, timeout: 5000 }) } catch {}
-          } catch (taskErr: unknown) {
-            console.error('[mail:sendRaw][outlook] schtasks error:', taskErr)
-          }
-        } else {
-          // Same user — run directly
-          const { execSync: es } = require('child_process') as typeof import('child_process')
-          const output = es(`cscript //nologo "${vbsPath}"`, { timeout: 30000, encoding: 'utf-8', windowsHide: true })
-          console.log(`[mail:sendRaw][outlook] cscript output: ${output.trim()}`)
-          return { success: true, method: 'outlook' }
-        }
-      } catch (execErr: unknown) {
-        const e = execErr as { stderr?: string; stdout?: string; message?: string }
-        const errMsg = e.stderr || e.stdout || e.message || 'Outlook-Fehler'
-        console.error(`[mail:sendRaw][outlook] error:`, errMsg)
-      } finally {
-        try { unlinkSync(vbsPath) } catch { /* ignore */ }
-        try { unlinkSync(resultPath) } catch { /* ignore */ }
-      }
+      const { sendViaOutlookScheduledTask } = require('./outlookMailer') as typeof import('./outlookMailer')
+      const result = await sendViaOutlookScheduledTask({
+        to: opts.to, subject: opts.subject, body: opts.body, html: opts.html,
+      })
+      if (result.success) return { success: true, method: 'outlook' }
+      console.log(`[mail:sendRaw][outlook] schtask failed: ${result.error} — trying fallback`)
     } catch (err) {
       console.error('[mail:sendRaw][outlook] exception:', err)
     }

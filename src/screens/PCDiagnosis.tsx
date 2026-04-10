@@ -138,51 +138,75 @@ export default function PCDiagnosis() {
       switch (areaId) {
 
         case 'event-logs': {
-          // Comprehensive event log analysis across ALL major log channels
+          // Helper function to extract event details (embedded in the PS script)
+          const detailFn = [
+            'function Evt($e,$max=5) {',
+            '  @($e | Select-Object -First $max | ForEach-Object {',
+            '    $msg = ($_.Message -split "\\n")[0]',
+            '    if ($msg.Length -gt 200) { $msg = $msg.Substring(0,200) + "..." }',
+            '    [PSCustomObject]@{',
+            '      Time = $_.TimeCreated.ToString("dd.MM.yyyy HH:mm:ss")',
+            '      Id = $_.Id',
+            '      Level = switch($_.Level){ 1{"Kritisch"} 2{"Fehler"} 3{"Warnung"} default{"Info"} }',
+            '      Source = $_.ProviderName',
+            '      Message = $msg',
+            '    }',
+            '  })',
+            '}',
+          ].join('\n')
+
           const r = await runRemote(h, [
             `$d = ${days}`,
             `$start = (Get-Date).AddDays(-$d)`,
             `$r = @{}`,
+            detailFn,
             ``,
             `# ── System-Log ──`,
             `$sys = @(Get-WinEvent -FilterHashtable @{LogName='System';Level=1,2,3;StartTime=$start} -MaxEvents 500 -EA SilentlyContinue)`,
             `$r.sysErrors = @($sys | Where-Object Level -le 2).Count`,
             `$r.sysWarnings = @($sys | Where-Object Level -eq 3).Count`,
             ``,
-            `# Bluescreens / BugChecks`,
+            `# Bluescreens`,
             `$bsod = @($sys | Where-Object { $_.Id -eq 1001 -and $_.Message -match 'BugCheck' })`,
             `$r.bsodCount = $bsod.Count`,
             `$r.lastBsod = if($bsod.Count -gt 0){$bsod[0].TimeCreated.ToString('dd.MM.yyyy HH:mm')}else{''}`,
+            `$r.bsodDetails = @(Evt $bsod 3)`,
             ``,
-            `# Unerwartete Shutdowns / Kernel-Power`,
+            `# Unerwartete Shutdowns`,
             `$shut = @($sys | Where-Object { $_.Id -in @(6008,41) })`,
             `$r.shutdownCount = $shut.Count`,
             `$r.lastShutdown = if($shut.Count -gt 0){$shut[0].TimeCreated.ToString('dd.MM.yyyy HH:mm')}else{''}`,
+            `$r.shutdownDetails = @(Evt $shut 5)`,
             ``,
             `# Dienst-Abstuerze`,
             `$svcCrash = @($sys | Where-Object { $_.Id -in @(7031,7034,7023,7024) })`,
             `$r.svcCrashCount = $svcCrash.Count`,
-            '$r.svcCrashNames = @($svcCrash | ForEach-Object { try { ($_.Message -split "\'|\'")[1] } catch { "" } } | Where-Object { $_ } | Select-Object -Unique -First 5) -join ", "',
+            `$r.svcCrashDetails = @(Evt $svcCrash 5)`,
             ``,
-            `# Festplatten-E/A-Fehler`,
+            `# Festplatten-E/A`,
             `$diskErr = @($sys | Where-Object { $_.Id -in @(7,9,11,15,51,52,55,98,129,140,153,157) })`,
             `$r.diskErrCount = $diskErr.Count`,
+            `$r.diskErrDetails = @(Evt $diskErr 5)`,
             ``,
-            `# Netzwerk-Fehler (Adapter, DNS, DHCP)`,
+            `# Netzwerk-Fehler`,
             `$netErr = @($sys | Where-Object { $_.ProviderName -match 'Tcpip|NDIS|Dhcp|DNS|NetBT|e1[a-z]express|igb|vmxnet' -and $_.Level -le 2 })`,
             `$r.netErrCount = $netErr.Count`,
+            `$r.netErrDetails = @(Evt $netErr 5)`,
             ``,
             `# Treiber-Fehler`,
             `$drvErr = @($sys | Where-Object { $_.ProviderName -match 'DriverFrameworks|Kernel-PnP' -and $_.Level -le 2 })`,
             `$r.driverErrCount = $drvErr.Count`,
+            `$r.driverErrDetails = @(Evt $drvErr 5)`,
             ``,
-            `# Speicher/RAM-Fehler`,
+            `# Speicher/RAM`,
             `$memErr = @(Get-WinEvent -FilterHashtable @{LogName='System';ProviderName='Microsoft-Windows-MemoryDiagnostics-Results';StartTime=$start} -MaxEvents 10 -EA SilentlyContinue | Where-Object Level -le 3)`,
             `$r.memErrCount = @($memErr).Count`,
+            `$r.memErrDetails = @(Evt $memErr 3)`,
             ``,
-            `# Windows Update Fehler`,
+            `# Windows Update`,
             `$wuErr = @(Get-WinEvent -FilterHashtable @{LogName='System';ProviderName='Microsoft-Windows-WindowsUpdateClient';Level=1,2;StartTime=$start} -MaxEvents 20 -EA SilentlyContinue)`,
             `$r.wuErrCount = @($wuErr).Count`,
+            `$r.wuErrDetails = @(Evt $wuErr 5)`,
             ``,
             `# ── Application-Log ──`,
             `$app = @(Get-WinEvent -FilterHashtable @{LogName='Application';Level=1,2;StartTime=$start} -MaxEvents 500 -EA SilentlyContinue)`,
@@ -191,61 +215,88 @@ export default function PCDiagnosis() {
             `# App-Abstuerze (WER)`,
             `$appCrash = @($app | Where-Object { $_.Id -in @(1000,1002) })`,
             `$r.appCrashCount = $appCrash.Count`,
-            `$r.crashedApps = @($appCrash | ForEach-Object { try { ($_.Message -split '\\n')[0] -replace 'Name der fehlerhaften Anwendung:|Faulting application name:','' } catch { '' } } | ForEach-Object { $_.Trim().Split(',')[0].Split('\\\\')[-1] } | Where-Object { $_ } | Group-Object | Sort-Object Count -Desc | Select-Object -First 5 Name,Count)`,
+            `$r.appCrashDetails = @(Evt $appCrash 5)`,
             ``,
-            `# App-Installationsfehler`,
+            `# MSI-Fehler`,
             `$msiErr = @($app | Where-Object { $_.ProviderName -eq 'MsiInstaller' -and $_.Level -le 2 })`,
             `$r.msiErrCount = @($msiErr).Count`,
+            `$r.msiErrDetails = @(Evt $msiErr 3)`,
             ``,
-            `# .NET / CLR Runtime Fehler`,
+            `# .NET / CLR`,
             `$clrErr = @($app | Where-Object { $_.ProviderName -match 'CLR|.NET Runtime' -and $_.Level -le 2 })`,
             `$r.clrErrCount = @($clrErr).Count`,
+            `$r.clrErrDetails = @(Evt $clrErr 3)`,
             ``,
             `# ── Security-Log ──`,
             `$secFail = @(Get-WinEvent -FilterHashtable @{LogName='Security';Id=4625;StartTime=$start} -MaxEvents 100 -EA SilentlyContinue)`,
             `$r.loginFailCount = $secFail.Count`,
+            `$r.loginFailDetails = @(Evt $secFail 5)`,
             ``,
-            `# Kontosperrungen`,
             `$lockout = @(Get-WinEvent -FilterHashtable @{LogName='Security';Id=4740;StartTime=$start} -MaxEvents 20 -EA SilentlyContinue)`,
             `$r.lockoutCount = @($lockout).Count`,
+            `$r.lockoutDetails = @(Evt $lockout 3)`,
             ``,
-            `# Audit Policy Aenderungen`,
-            `$auditChg = @(Get-WinEvent -FilterHashtable @{LogName='Security';Id=@(4719,4907);StartTime=$start} -MaxEvents 10 -EA SilentlyContinue)`,
-            `$r.auditChangeCount = @($auditChg).Count`,
-            ``,
-            `# ── Setup-Log ──`,
-            `$setup = @(Get-WinEvent -FilterHashtable @{LogName='Setup';Level=1,2,3;StartTime=$start} -MaxEvents 50 -EA SilentlyContinue)`,
-            `$r.setupErrCount = @($setup | Where-Object Level -le 2).Count`,
-            `$r.setupWarnCount = @($setup | Where-Object Level -eq 3).Count`,
-            ``,
-            `# ── PowerShell Operational (Script-Fehler, verdaechtige Ausfuehrungen) ──`,
-            `$psErr = @(Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operational';Level=1,2;StartTime=$start} -MaxEvents 30 -EA SilentlyContinue)`,
-            `$r.psErrCount = @($psErr).Count`,
-            ``,
-            `# ── Task Scheduler Fehler ──`,
-            `$taskErr = @(Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-TaskScheduler/Operational';Level=1,2;StartTime=$start} -MaxEvents 30 -EA SilentlyContinue)`,
-            `$r.taskErrCount = @($taskErr).Count`,
-            ``,
-            `# ── NTFS Dateisystem-Fehler ──`,
+            `# ── NTFS ──`,
             `$ntfs = @(Get-WinEvent -FilterHashtable @{LogName='System';ProviderName='Ntfs','Microsoft-Windows-Ntfs';Level=1,2;StartTime=$start} -MaxEvents 20 -EA SilentlyContinue)`,
             `$r.ntfsErrCount = @($ntfs).Count`,
+            `$r.ntfsErrDetails = @(Evt $ntfs 3)`,
             ``,
-            `# ── Top 5 haeufigste Fehlerquellen (Provider) ──`,
+            `# ── Task Scheduler ──`,
+            `$taskErr = @(Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-TaskScheduler/Operational';Level=1,2;StartTime=$start} -MaxEvents 30 -EA SilentlyContinue)`,
+            `$r.taskErrCount = @($taskErr).Count`,
+            `$r.taskErrDetails = @(Evt $taskErr 3)`,
+            ``,
+            `# ── Top Sources + IDs ──`,
             `$allErr = @($sys | Where-Object Level -le 2) + @($app | Where-Object Level -le 2)`,
             `$r.topSources = @($allErr | Group-Object ProviderName | Sort-Object Count -Desc | Select-Object -First 5 Name,Count)`,
-            ``,
-            `# ── Top 10 haeufigste Event-IDs ──`,
             `$r.topEventIds = @($allErr | Group-Object Id | Sort-Object Count -Desc | Select-Object -First 10 Name,Count)`,
             ``,
             `$r.days = $d`,
             `$r`,
-          ].join('\n'), 45000)
+          ].join('\n'), 60000)
 
           base.checksRun = 15
           if (r.ok) {
             const d = safeParseJson(r.data) as Record<string, unknown> | null
             if (d) {
-              base.rawOutput = JSON.stringify(d, null, 2)
+              // Format detailed rawOutput with event details per category
+              const fmtEvents = (label: string, count: unknown, details: unknown) => {
+                const c = Number(count)
+                if (c === 0) return `${label}: 0\n`
+                const arr = Array.isArray(details) ? details as Array<Record<string, unknown>> : []
+                let out = `${label}: ${c}\n`
+                for (const e of arr) {
+                  out += `  [${e.Time}] Event ${e.Id} (${e.Level}) — ${e.Source}\n`
+                  out += `    ${e.Message}\n`
+                }
+                return out
+              }
+              base.rawOutput = [
+                `═══ Event-Log Analyse (letzte ${d.days} Tage) ═══`,
+                `System-Fehler: ${d.sysErrors} | System-Warnungen: ${d.sysWarnings} | App-Fehler: ${d.appErrors}`,
+                '',
+                fmtEvents('Bluescreens (BugCheck)', d.bsodCount, d.bsodDetails),
+                fmtEvents('Unerwartete Shutdowns', d.shutdownCount, d.shutdownDetails),
+                fmtEvents('Dienst-Abstürze', d.svcCrashCount, d.svcCrashDetails),
+                fmtEvents('Festplatten-E/A-Fehler', d.diskErrCount, d.diskErrDetails),
+                fmtEvents('Netzwerk-Fehler', d.netErrCount, d.netErrDetails),
+                fmtEvents('Treiber-Fehler', d.driverErrCount, d.driverErrDetails),
+                fmtEvents('RAM/Speicher-Fehler', d.memErrCount, d.memErrDetails),
+                fmtEvents('Windows Update-Fehler', d.wuErrCount, d.wuErrDetails),
+                fmtEvents('App-Abstürze (WER)', d.appCrashCount, d.appCrashDetails),
+                fmtEvents('MSI/Installations-Fehler', d.msiErrCount, d.msiErrDetails),
+                fmtEvents('.NET/CLR-Fehler', d.clrErrCount, d.clrErrDetails),
+                fmtEvents('Fehlgeschlagene Anmeldungen', d.loginFailCount, d.loginFailDetails),
+                fmtEvents('Kontosperrungen', d.lockoutCount, d.lockoutDetails),
+                fmtEvents('NTFS-Dateisystem-Fehler', d.ntfsErrCount, d.ntfsErrDetails),
+                fmtEvents('Aufgabenplaner-Fehler', d.taskErrCount, d.taskErrDetails),
+                '── Top 5 Fehlerquellen ──',
+                ...(Array.isArray(d.topSources) ? (d.topSources as Array<Record<string, unknown>>).map(s => `  ${s.Name}: ${s.Count}x`) : []),
+                '',
+                '── Top 10 Event-IDs ──',
+                ...(Array.isArray(d.topEventIds) ? (d.topEventIds as Array<Record<string, unknown>>).map(s => `  Event ${s.Name}: ${s.Count}x`) : []),
+              ].join('\n')
+
               // Bluescreens
               if (Number(d.bsodCount) > 0) addFinding('evt-1001', String(d.lastBsod))
               else base.checksOk++
@@ -253,13 +304,19 @@ export default function PCDiagnosis() {
               if (Number(d.shutdownCount) > 0) addFinding('evt-6008', String(d.lastShutdown))
               else base.checksOk++
               // Dienst-Abstürze
-              if (Number(d.svcCrashCount) > 0) addCustom('warning', `${d.svcCrashCount} Dienst-Abstürze${d.svcCrashNames ? ': ' + d.svcCrashNames : ''}`, 'Dienste sind unerwartet abgestürzt und wurden ggf. automatisch neu gestartet.', 'svc-restart', 'svc')
-              else base.checksOk++
+              if (Number(d.svcCrashCount) > 0) {
+                const svcDetails = Array.isArray(d.svcCrashDetails) ? (d.svcCrashDetails as Array<Record<string, unknown>>).map(e => String(e.Message || '')).slice(0, 3).join(' | ') : ''
+                addCustom('warning', `${d.svcCrashCount} Dienst-Abstürze`, svcDetails || 'Dienste sind unerwartet abgestürzt.', 'svc-restart', 'svc')
+              } else base.checksOk++
               // App-Abstürze
               const crashCount = Number(d.appCrashCount)
-              if (crashCount > 5) addCustom('warning', `${crashCount} Anwendungs-Abstürze`, `Programme sind ${crashCount}x abgestürzt.`, 'sfc', 'repair')
-              else if (crashCount > 0) addCustom('info', `${crashCount} Anwendungs-Absturz(e)`, `Programme sind ${crashCount}x abgestürzt.`)
-              else base.checksOk++
+              if (crashCount > 5) {
+                const crashDetails = Array.isArray(d.appCrashDetails) ? (d.appCrashDetails as Array<Record<string, unknown>>).map(e => String(e.Message || '')).slice(0, 3).join(' | ') : ''
+                addCustom('warning', `${crashCount} Anwendungs-Abstürze`, crashDetails || `Programme sind ${crashCount}x abgestürzt.`, 'sfc', 'repair')
+              } else if (crashCount > 0) {
+                const crashDetails = Array.isArray(d.appCrashDetails) ? (d.appCrashDetails as Array<Record<string, unknown>>).map(e => `${e.Time}: ${e.Message}`).slice(0, 2).join(' | ') : ''
+                addCustom('info', `${crashCount} Anwendungs-Absturz(e)`, crashDetails || `Programme sind ${crashCount}x abgestürzt.`)
+              } else base.checksOk++
               // Festplatten-E/A
               if (Number(d.diskErrCount) > 0) addFinding('evt-11')
               else base.checksOk++

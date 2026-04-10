@@ -339,8 +339,14 @@ export default function Settings() {
   }
 
   async function sendTestEmail() {
-    if (!emailCfg.email || !emailCfg.smtp) {
+    const method = emailCfg.emailMethod ?? 'outlook'
+    if (method !== 'outlook' && (!emailCfg.email || !emailCfg.smtp)) {
       setTestError('Bitte E-Mail-Adresse und SMTP-Server ausfüllen.')
+      setTestState('error')
+      return
+    }
+    if (method === 'outlook' && !emailCfg.email) {
+      setTestError('Bitte E-Mail-Adresse ausfüllen (wird als Empfänger für den Test verwendet).')
       setTestState('error')
       return
     }
@@ -350,18 +356,19 @@ export default function Settings() {
       const res = await api().sendEmailRaw({
         to: emailCfg.email,
         subject: 'IT Admin Tool – Test-E-Mail',
-        body: `Diese Test-E-Mail wurde vom IT Admin Tool gesendet.\n\nKonfiguration:\nSMTP: ${emailCfg.smtp}:${emailCfg.port}\nAbsender: ${emailCfg.email}\nMethode: ${emailCfg.emailMethod ?? 'nodemailer'}`,
-        smtp: emailCfg.smtp,
-        port: emailCfg.port,
+        body: `Diese Test-E-Mail wurde vom IT Admin Tool gesendet.\n\nKonfiguration:\nMethode: ${method}\nAbsender: ${emailCfg.email}\n${method !== 'outlook' ? `SMTP: ${emailCfg.smtp}:${emailCfg.port}` : '(Outlook COM — kein SMTP nötig)'}`,
+        smtp: emailCfg.smtp || 'smtp.office365.com',
+        port: emailCfg.port || 587,
         useTls: emailCfg.useTls,
         from: emailCfg.email,
         user: emailCfg.smtpUser || emailCfg.email,
         pass: emailCfg.smtpPass || '',
-        method: emailCfg.emailMethod,
+        method,
       })
       if (res.success) {
         setTestState('ok')
-        setTimeout(() => setTestState('idle'), 3000)
+        setTestError(`Erfolgreich via ${res.method || method}`)
+        setTimeout(() => setTestState('idle'), 4000)
       } else {
         setTestError(res.error ?? 'Unbekannter Fehler')
         setTestState('error')
@@ -417,38 +424,34 @@ export default function Settings() {
                 />
               </div>
             ))}
-            <div className="flex items-center gap-2 pt-1">
-              <button
-                onClick={() => updateEmail('useTls', !emailCfg.useTls)}
-                className={`relative w-9 h-5 rounded-full transition-colors ${emailCfg.useTls ? 'bg-primary' : 'bg-border'}`}
-              >
-                <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${emailCfg.useTls ? 'translate-x-4' : ''}`} />
-              </button>
-              <span className="text-xs text-muted-foreground">STARTTLS (empfohlen für Port 587)</span>
-            </div>
-            {/* SMTP Auth (required for Office 365) */}
-            <div className="grid grid-cols-2 gap-3 pt-1">
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">SMTP Benutzer (Office 365: E-Mail)</label>
-                <input
-                  value={emailCfg.smtpUser ?? ''}
-                  placeholder={emailCfg.email || 'user@firma.de'}
-                  onChange={e => updateEmail('smtpUser', e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">SMTP Passwort / App-Passwort</label>
-                <input
-                  type="password"
-                  value={emailCfg.smtpPass ?? ''}
-                  placeholder="••••••••"
-                  onChange={e => updateEmail('smtpPass', e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
-                />
-              </div>
-            </div>
-            <p className="text-[9px] text-muted-foreground">Office 365 erfordert Authentifizierung. Nutzen Sie ein App-Passwort wenn MFA aktiv ist.</p>
+            {/* SMTP fields — only for non-Outlook methods */}
+            {(emailCfg.emailMethod ?? 'outlook') !== 'outlook' && (
+              <>
+                <div className="flex items-center gap-2 pt-1">
+                  <button onClick={() => updateEmail('useTls', !emailCfg.useTls)}
+                    className={`relative w-9 h-5 rounded-full transition-colors ${emailCfg.useTls ? 'bg-primary' : 'bg-border'}`}>
+                    <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${emailCfg.useTls ? 'translate-x-4' : ''}`} />
+                  </button>
+                  <span className="text-xs text-muted-foreground">STARTTLS (empfohlen für Port 587)</span>
+                </div>
+                {(emailCfg.emailMethod) === 'nodemailer' && (
+                  <div className="grid grid-cols-2 gap-3 pt-1">
+                    <div>
+                      <label className="block text-xs font-medium text-muted-foreground mb-1">SMTP Benutzer</label>
+                      <input value={emailCfg.smtpUser ?? ''} placeholder={emailCfg.email || 'user@firma.de'}
+                        onChange={e => updateEmail('smtpUser', e.target.value)}
+                        className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-muted-foreground mb-1">SMTP Passwort / App-Passwort</label>
+                      <input type="password" value={emailCfg.smtpPass ?? ''} placeholder="••••••••"
+                        onChange={e => updateEmail('smtpPass', e.target.value)}
+                        className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary" />
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
             <div>
               <label className="block text-xs font-medium text-muted-foreground mb-1">Versandmethode</label>
               <select
