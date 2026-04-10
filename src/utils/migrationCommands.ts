@@ -63,7 +63,14 @@ export function isSystemComponent(name: string): boolean {
 // ── Connectivity ───────────────────────────────────────────────────────────
 
 export function psCheckOnline(hostname: string): string {
-  return `(Test-Connection -ComputerName '${esc(hostname)}' -Count 2 -Quiet).ToString()`
+  const h = esc(hostname)
+  return [
+    '$o=$false',
+    "try{if(Test-Connection -ComputerName '" + h + "' -Count 1 -Quiet -EA SilentlyContinue){$o=$true}}catch{}",
+    "if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync('" + h + "',445).Wait(2000)){$o=$true};$t.Close()}catch{}}",
+    "if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync('" + h + "',135).Wait(2000)){$o=$true};$t.Close()}catch{}}",
+    '$o.ToString()',
+  ].join('; ')
 }
 
 export function psEnsureWinRM(hostname: string): string {

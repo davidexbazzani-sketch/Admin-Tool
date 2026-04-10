@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   Home, Search, BarChart3, Smartphone, Wrench, Settings, ShieldCheck,
   ChevronRight, UserSearch, Terminal, Users, FileText, MapPin, Clock,
@@ -9,6 +10,8 @@ import { useRadarStore } from '../store/radarStore'
 import { api } from '../electronAPI'
 import type { Screen } from '../types'
 import FavoritesPanel from './FavoritesPanel'
+
+const MENU_VISIBILITY_PATH = 'settings/menu_visibility.json'
 
 interface NavItem {
   id: Screen
@@ -22,11 +25,26 @@ interface NavItem {
 export default function Sidebar() {
   const screen    = useAppStore(s => s.screen)
   const setScreen = useAppStore(s => s.setScreen)
+  const hiddenMenuIds = useAppStore(s => s.hiddenMenuIds)
+  const setHiddenMenuIds = useAppStore(s => s.setHiddenMenuIds)
+  const masterOnlyIds = useAppStore(s => s.masterOnlyIds)
+  const setMasterOnlyIds = useAppStore(s => s.setMasterOnlyIds)
   const setSession = useAuthStore(s => s.setSession)
   const session   = useAuthStore(s => s.session)
   const isMaster  = useIsMasterAdmin()
   const isAdmin   = useIsAdmin()
   const user      = session?.user
+
+  // Load menu visibility from server on mount
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const data = await api().netReadJson<{ hidden: string[]; masterOnly?: string[] }>(MENU_VISIBILITY_PATH)
+        if (data && Array.isArray(data.hidden)) setHiddenMenuIds(new Set(data.hidden))
+        if (data && Array.isArray(data.masterOnly)) setMasterOnlyIds(new Set(data.masterOnly))
+      } catch { /* offline or not found — all visible */ }
+    })()
+  }, [setHiddenMenuIds, setMasterOnlyIds])
 
   const NAV_ITEMS: NavItem[] = [
     // ── Gruppe 1: Start ─────────────────────────────────────────────────
@@ -64,9 +82,20 @@ export default function Sidebar() {
 
   const radarScanning = useRadarStore(s => s.scanning)
 
+  // Items that should never be hidden
+  const ALWAYS_VISIBLE = new Set<string>(['home', 'settings', 'user-management', 'user-logs', 'bug-mailbox'])
+
   const visibleItems = NAV_ITEMS.filter(item => {
     if (item.masterAdminOnly) return isMaster
-    if (item.adminOnly) return isAdmin
+    if (item.adminOnly && !isAdmin) return false
+    // Never-hide items
+    if (ALWAYS_VISIBLE.has(item.id)) return true
+    // Check if globally hidden
+    if (hiddenMenuIds.has(item.id)) {
+      // Master admin can still see it if it's in their "master only" list
+      if (isMaster && masterOnlyIds.has(item.id)) return true
+      return false
+    }
     return true
   })
 

@@ -46,6 +46,13 @@ interface AppState {
   // Loading
   isQuerying: boolean
   setIsQuerying: (v: boolean) => void
+
+  // Menu visibility (master admin controls which items are visible for all users)
+  hiddenMenuIds: Set<string>
+  setHiddenMenuIds: (ids: Set<string>) => void
+  // Items the master admin has enabled just for themselves
+  masterOnlyIds: Set<string>
+  setMasterOnlyIds: (ids: Set<string>) => void
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -111,4 +118,9 @@ export const useAppStore = create<AppState>((set) => ({
 
   isQuerying: false,
   setIsQuerying: (isQuerying) => set({ isQuerying }),
+
+  hiddenMenuIds: new Set(),
+  setHiddenMenuIds: (hiddenMenuIds) => set({ hiddenMenuIds }),
+  masterOnlyIds: new Set(),
+  setMasterOnlyIds: (masterOnlyIds) => set({ masterOnlyIds }),
 }))

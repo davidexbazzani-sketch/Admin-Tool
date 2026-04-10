@@ -501,7 +501,15 @@ export default function NetworkRadar() {
         batch.map(async (item) => {
           const host = item.name
           try {
-            const pingRes = await api().runPowerShell(`Test-Connection -ComputerName '${host}' -Count 1 -Quiet`, 3000)
+            const h = host.replace(/'/g, "''")
+            const onlineScript = [
+              '$o=$false',
+              "try{if(Test-Connection -ComputerName '" + h + "' -Count 1 -Quiet -EA SilentlyContinue){$o=$true}}catch{}",
+              "if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync('" + h + "',445).Wait(2000)){$o=$true};$t.Close()}catch{}}",
+              "if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync('" + h + "',135).Wait(2000)){$o=$true};$t.Close()}catch{}}",
+              'if($o){"True"}else{"False"}',
+            ].join(';')
+            const pingRes = await api().runPowerShell(onlineScript, 8000)
             const online = pingRes.stdout?.trim() === 'True'
             if (!online) {
               return { hostname: host, label: item.description, online: false, total: 0, hardware: 0, security: 0, performance: 0, prediction: 0, details: {}, recommendations: [], timestamp: new Date().toISOString() } as HealthScore

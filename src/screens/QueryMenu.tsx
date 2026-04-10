@@ -555,7 +555,7 @@ function NachrichtItem({ id, label, icon, checked, onToggle, hint, children, isA
 
     for (const h of hostnames) {
       try {
-        const cmd = `$ping=Test-Connection -ComputerName "${h}" -Count 1 -Quiet -EA SilentlyContinue; if(!$ping){"offline"; exit}; $rpc=Test-NetConnection -ComputerName "${h}" -Port 135 -WarningAction SilentlyContinue -InformationLevel Quiet -EA SilentlyContinue; if(!$rpc){"norpc"; exit}; $ses=cmd /c "query session /server:${h} 2>&1"; $cnt=($ses | Where-Object{$_ -match 'Active'}).Count; "ok:$cnt"`
+        const cmd = `$o=$false; try{if(Test-Connection -ComputerName "${h}" -Count 1 -Quiet -EA SilentlyContinue){$o=$true}}catch{}; if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync("${h}",445).Wait(2000)){$o=$true};$t.Close()}catch{}}; if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync("${h}",135).Wait(2000)){$o=$true};$t.Close()}catch{}}; if(-not $o){"offline"; exit}; $rpc=Test-NetConnection -ComputerName "${h}" -Port 135 -WarningAction SilentlyContinue -InformationLevel Quiet -EA SilentlyContinue; if(!$rpc){"norpc"; exit}; $ses=cmd /c "query session /server:${h} 2>&1"; $cnt=($ses | Where-Object{$_ -match 'Active'}).Count; "ok:$cnt"`
         const result = await api().runPowerShell(cmd, 15000)
         const out = result.stdout.trim()
         if (out === 'offline') {

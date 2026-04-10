@@ -68,17 +68,25 @@ export default function WinRMActivationModal({ hostname, onSuccess, onRestricted
     ;(async () => {
       await log(`Verbindungsversuch zu ${hostname} gestartet`)
 
-      // ── Step 1: Ping ──
+      // ── Step 1: Online check (Ping → SMB 445 → RPC 135) ──
       updateStep('ping', 'running')
-      const pingRes = await runPS(`Test-Connection -ComputerName '${h}' -Count 1 -Quiet`, 5000)
+      const onlineScript = [
+        '$online = $false; $m = "none"',
+        "try { if (Test-Connection -ComputerName '" + h + "' -Count 1 -Quiet -EA SilentlyContinue) { $online = $true; $m = 'Ping' } } catch {}",
+        "if (-not $online) { try { $t = New-Object System.Net.Sockets.TcpClient; if ($t.ConnectAsync('" + h + "', 445).Wait(2000)) { $online = $true; $m = 'SMB' }; $t.Close() } catch {} }",
+        "if (-not $online) { try { $t = New-Object System.Net.Sockets.TcpClient; if ($t.ConnectAsync('" + h + "', 135).Wait(2000)) { $online = $true; $m = 'RPC' }; $t.Close() } catch {} }",
+        'if ($online) { Write-Output "OK:$m" } else { Write-Output "OFFLINE" }',
+      ].join('\n')
+      const pingRes = await runPS(onlineScript, 10000)
       if (cancelled) return
-      if (!pingRes.ok || pingRes.out.includes('False')) {
-        updateStep('ping', 'error', 'Nicht erreichbar')
-        await log(`${hostname}: Ping fehlgeschlagen`)
+      if (!pingRes.ok || pingRes.out.startsWith('OFFLINE')) {
+        updateStep('ping', 'error', 'Nicht erreichbar (Ping, SMB, RPC)')
+        await log(`${hostname}: Nicht erreichbar (alle Methoden)`)
         setPhase('done-fail')
         return
       }
-      updateStep('ping', 'success', 'Erreichbar')
+      const connMethod = pingRes.out.replace('OK:', '').trim()
+      updateStep('ping', 'success', connMethod === 'Ping' ? 'Erreichbar' : `Erreichbar (${connMethod} — Ping blockiert)`)
       setProgress(10)
 
       // ── Step 2: WinRM test ──

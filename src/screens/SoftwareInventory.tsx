@@ -9,6 +9,7 @@ import { api } from '../electronAPI'
 import type { PSResult } from '../electronAPI'
 import { useIsMasterAdmin } from '../store/authStore'
 import WinRMHelpModal from '../components/WinRMHelpModal'
+import { buildBulkOnlineCheck, parseOnlineCheckLine } from '../utils/connectivityCheck'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -50,24 +51,6 @@ const SW_PS_LOCAL = `$paths=@('HKLM:\\Software\\Microsoft\\Windows\\CurrentVersi
 const PSEXEC_DIR = '\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools'
 
 // ── Per-method simple commands (each is a standalone PS script) ──────────────
-
-/** Bulk ping up to 50 hostnames in a single PS call — returns "HOST:OK" or "HOST:OFFLINE" per line */
-function buildBulkPingCmd(hostnames: string[]): string {
-  const list = hostnames.map(h => "'" + h.replace(/'/g, "''") + "'").join(',')
-  return '@(' + list + ') | ForEach-Object -Parallel { if (Test-Connection $_ -Count 1 -Quiet -TimeoutSeconds 2 -EA SilentlyContinue) { ($_ + ":OK") } else { ($_ + ":OFFLINE") } } -ThrottleLimit 30'
-}
-
-/** Fallback ping for PS 5.1 (no -Parallel) */
-function buildBulkPingCmdV5(hostnames: string[]): string {
-  const list = hostnames.map(h => "'" + h.replace(/'/g, "''") + "'").join(',')
-  return [
-    '$pinger = New-Object System.Net.NetworkInformation.Ping',
-    'foreach ($h in @(' + list + ')) {',
-    '  try { $r = $pinger.Send($h, 1500); if ($r.Status -eq "Success") { Write-Output ($h + ":OK") } else { Write-Output ($h + ":OFFLINE") } }',
-    '  catch { Write-Output ($h + ":OFFLINE") }',
-    '}',
-  ].join('\n')
-}
 
 /** WinRM scan: check WinRM, auto-activate if needed (3 methods like RemoteDoc), then query software */
 function buildWinRMCmd(hostname: string): string {
@@ -258,6 +241,7 @@ export default function SoftwareInventory() {
 
   // ── Scan mode & state ──────────────────────────────────────────────────────
   const [scanMode, setScanMode] = useState<'fast' | 'full'>('fast')
+  const [deepCheck, setDeepCheck] = useState(false) // true = Ping+SMB+RPC, false = Ping only
   const [scan, setScan] = useState<ScanState>({ phase: 'idle', total: 0, done: 0, current: '', results: [] })
   const cancelRef = useRef(false)
   const [skippedCount, setSkippedCount] = useState(0)
@@ -310,28 +294,56 @@ export default function SoftwareInventory() {
     return results
   }
 
-  // ── Bulk Ping helper ────────────────────────────────────────────────────────
-  async function bulkPing(toScan: string[], allResults: PCResult[], now: string): Promise<string[]> {
+  // ── Bulk online check ────────────────────────────────────────────────────────
+  async function bulkOnlineCheck(toScan: string[], allResults: PCResult[], now: string, useDeepCheck: boolean): Promise<string[]> {
     const onlinePCs: string[] = []
-    const PING_BATCH = 50
-    for (let i = 0; i < toScan.length; i += PING_BATCH) {
+    const CHECK_BATCH = useDeepCheck ? 40 : 50
+
+    for (let i = 0; i < toScan.length; i += CHECK_BATCH) {
       if (cancelRef.current) break
-      const batch = toScan.slice(i, i + PING_BATCH)
-      setScan(prev => ({ ...prev, done: i, current: `Ping ${i + 1}-${Math.min(i + PING_BATCH, toScan.length)} von ${toScan.length}...` }))
+      const batch = toScan.slice(i, i + CHECK_BATCH)
+      setScan(prev => ({ ...prev, done: i, current: `${useDeepCheck ? 'Erreichbarkeit (Ping+SMB+RPC)' : 'Ping'} ${i + 1}-${Math.min(i + CHECK_BATCH, toScan.length)} von ${toScan.length}...` }))
+
       try {
-        const res = await api().runPowerShell(buildBulkPingCmdV5(batch), 90000)
-        const lines = (res.stdout ?? '').split('\n').map(l => l.trim()).filter(Boolean)
-        for (const line of lines) {
-          const sep = line.lastIndexOf(':')
-          if (sep < 0) continue
-          const host = line.slice(0, sep)
-          const status = line.slice(sep + 1)
-          if (status === 'OK') onlinePCs.push(host)
-          else allResults.push({ hostname: host, software: [], error: 'Offline (Ping fehlgeschlagen)', scannedAt: now, offline: true })
-        }
-        const responded = new Set(lines.map(l => l.slice(0, l.lastIndexOf(':')).toUpperCase()))
-        for (const h of batch) {
-          if (!responded.has(h.toUpperCase())) allResults.push({ hostname: h, software: [], error: 'Offline (Ping timeout)', scannedAt: now, offline: true })
+        if (useDeepCheck) {
+          // Deep check: Ping → SMB 445 → RPC 135
+          const res = await api().runPowerShell(buildBulkOnlineCheck(batch), 120000)
+          const lines = (res.stdout ?? '').split('\n').map(l => l.trim()).filter(Boolean)
+          const responded = new Set<string>()
+          for (const line of lines) {
+            const parsed = parseOnlineCheckLine(line)
+            responded.add(parsed.hostname.toUpperCase())
+            if (parsed.online) onlinePCs.push(parsed.hostname)
+            else allResults.push({ hostname: parsed.hostname, software: [], error: 'Nicht erreichbar (Ping, SMB, RPC)', scannedAt: now, offline: true })
+          }
+          for (const hh of batch) {
+            if (!responded.has(hh.toUpperCase())) allResults.push({ hostname: hh, software: [], error: 'Nicht erreichbar (Timeout)', scannedAt: now, offline: true })
+          }
+        } else {
+          // Fast ping only: .NET Ping with 1.5s timeout
+          const list = batch.map(hh => "'" + hh.replace(/'/g, "''") + "'").join(',')
+          const pingScript = [
+            '$pinger = New-Object System.Net.NetworkInformation.Ping',
+            'foreach ($h in @(' + list + ')) {',
+            '  try { $r = $pinger.Send($h, 1500); if ($r.Status -eq "Success") { Write-Output ($h + ":OK") } else { Write-Output ($h + ":OFFLINE") } }',
+            '  catch { Write-Output ($h + ":OFFLINE") }',
+            '}',
+          ].join('\n')
+          const res = await api().runPowerShell(pingScript, 90000)
+          const lines = (res.stdout ?? '').split('\n').map(l => l.trim()).filter(Boolean)
+          const responded = new Set<string>()
+          for (const line of lines) {
+            const sep = line.lastIndexOf(':')
+            if (sep < 0) continue
+            const host = line.slice(0, sep)
+            const status = line.slice(sep + 1)
+            responded.add(host.toUpperCase())
+            if (status === 'OK') onlinePCs.push(host)
+            else allResults.push({ hostname: host, software: [], error: 'Offline (Ping)', scannedAt: now, offline: true })
+          }
+          for (const hh of batch) {
+            if (!responded.has(hh.toUpperCase())) allResults.push({ hostname: hh, software: [], error: 'Offline (Ping Timeout)', scannedAt: now, offline: true })
+          }
         }
       } catch { onlinePCs.push(...batch) }
     }
@@ -385,10 +397,10 @@ export default function SoftwareInventory() {
     const allResults: PCResult[] = []
     const isFast = scanMode === 'fast'
 
-    setScan({ phase: 'scanning', total: toScan.length, done: 0, current: `Pinge ${toScan.length} PCs...`, results: [] })
+    setScan({ phase: 'scanning', total: toScan.length, done: 0, current: `${deepCheck ? 'Erreichbarkeit (Ping+SMB+RPC)' : 'Ping'} für ${toScan.length} PCs...`, results: [] })
 
-    // ── PHASE 1: Bulk Ping ──
-    const onlinePCs = await bulkPing(toScan, allResults, now)
+    // ── PHASE 1: Online check ──
+    const onlinePCs = await bulkOnlineCheck(toScan, allResults, now, deepCheck)
     setScan(prev => ({ ...prev, done: toScan.length, current: `${onlinePCs.length} online — starte ${isFast ? 'Schnell' : 'Komplett'}-Scan...` }))
 
     if (cancelRef.current || onlinePCs.length === 0) {
@@ -721,7 +733,8 @@ export default function SoftwareInventory() {
               <p className="text-[9px] text-muted-foreground leading-relaxed">
                 {scanMode === 'fast'
                   ? 'Schnell-Scan: 10 PCs parallel, 25s Timeout. WinRM wird bei Bedarf automatisch aktiviert.'
-                  : 'Komplett-Scan: 5 PCs parallel, 35s Timeout. WinRM + Remote Registry + PsExec.'
+                  : 'Komplett-Scan: 5 PCs parallel, 35s Timeout. WinRM + Remote Registry + PsExec.'}{' '}
+                {deepCheck ? 'Erreichbarkeit: Ping + SMB + RPC (gründlich).' : 'Erreichbarkeit: Nur Ping (schnell).'
                 }<br/>
                 Bereits erfasste PCs werden übersprungen — nur neue PCs werden gescannt.
                 {alreadyScanned > 0 && <><br/><strong className="text-green-400">{alreadyScanned} von {validHosts} PCs bereits erfasst</strong> — nur {newToScan} neue PCs werden gescannt.</>}
@@ -754,6 +767,15 @@ export default function SoftwareInventory() {
               </p>
             </button>
           </div>
+
+          {/* Deep check option */}
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input type="checkbox" checked={deepCheck} onChange={e => setDeepCheck(e.target.checked)}
+              className="w-3.5 h-3.5 rounded border-border accent-primary" />
+            <span className="text-xs text-muted-foreground">
+              Erweiterte Erreichbarkeitsprüfung (Ping + SMB + RPC) — <span className="text-foreground">langsamer, findet mehr PCs</span>
+            </span>
+          </label>
 
           {/* Start button */}
           <div className="flex justify-end gap-3">

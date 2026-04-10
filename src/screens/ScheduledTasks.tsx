@@ -105,7 +105,8 @@ function scheduleMatchesNow(
 async function ensureWinRM(device: string): Promise<void> {
   const h = device.replace(/'/g, "''")
   try {
-    const pingRes = await api().runPowerShell(`Test-Connection -ComputerName '${h}' -Count 1 -Quiet`, 10000)
+    const onlineScript = '$o=$false; try{if(Test-Connection ' + "'" + h + "'" + ' -Count 1 -Quiet -EA SilentlyContinue){$o=$true}}catch{}; if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync(' + "'" + h + "'" + ',445).Wait(2000)){$o=$true};$t.Close()}catch{}}; if($o){"True"}else{"False"}'
+    const pingRes = await api().runPowerShell(onlineScript, 10000)
     if (pingRes.stdout.trim().toLowerCase() !== 'true') {
       console.log(`[ScheduledTasks] WinRM pre-check: ${device} not reachable`)
       return
@@ -351,7 +352,9 @@ export default function ScheduledTasks() {
     for (let i = 0; i < 120; i++) {
       await new Promise(r => setTimeout(r, 60000))
       try {
-        const pingResult = await api().runPowerShell(`Test-Connection -ComputerName '${device}' -Count 1 -Quiet`, 10000)
+        const hd = device.replace(/'/g, "''")
+        const pollScript = '$o=$false; try{if(Test-Connection ' + "'" + 'hd' + "'" + ' -Count 1 -Quiet -EA SilentlyContinue){$o=$true}}catch{}; if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync(' + "'" + 'hd' + "'" + ',445).Wait(2000)){$o=$true};$t.Close()}catch{}}; if($o){"True"}else{"False"}'
+        const pingResult = await api().runPowerShell(pollScript.replace(/hd/g, hd), 10000)
         if (pingResult.stdout.trim().toLowerCase() === 'true') {
           let svcStatus = ''
           if (services.length > 0) {
@@ -493,8 +496,10 @@ export default function ScheduledTasks() {
     setSvcLoading(p => ({ ...p, [key]: true }))
     setSvcError(p => ({ ...p, [key]: '' }))
     try {
-      // Check reachability first
-      const pingRes = await api().runPowerShell(`Test-Connection -ComputerName '${device.trim().replace(/'/g,"''")}' -Count 1 -Quiet`, 8000)
+      // Check reachability (Ping + SMB fallback)
+      const hh = device.trim().replace(/'/g, "''")
+      const reachScript = '$o=$false; try{if(Test-Connection ' + "'" + hh + "'" + ' -Count 1 -Quiet -EA SilentlyContinue){$o=$true}}catch{}; if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync(' + "'" + hh + "'" + ',445).Wait(2000)){$o=$true};$t.Close()}catch{}}; if($o){"True"}else{"False"}'
+      const pingRes = await api().runPowerShell(reachScript, 8000)
       if (pingRes.stdout.trim().toLowerCase() !== 'true') {
         throw new Error(`${device} ist nicht erreichbar (Ping fehlgeschlagen)`)
       }

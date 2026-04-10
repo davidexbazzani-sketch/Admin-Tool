@@ -11,8 +11,15 @@ import type {
 
 // ── PS command builders ─────────────────────────────────────────────────────
 
-const psOnline = (h: string) =>
-  `try { $r=Test-Connection -ComputerName '${h}' -Count 1 -Quiet -EA Stop; if($r){'online'}else{'offline'} } catch { 'offline' }`
+const psOnline = (h: string) => {
+  const he = h.replace(/'/g, "''")
+  return [
+    '$o=$false',
+    "try{if(Test-Connection -ComputerName '" + he + "' -Count 1 -Quiet -EA SilentlyContinue){$o=$true}}catch{}",
+    "if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync('" + he + "',445).Wait(2000)){$o=$true};$t.Close()}catch{}}",
+    "if($o){'online'}else{'offline'}",
+  ].join('; ')
+}
 
 const psCpu = (h: string) =>
   `try { $r=Invoke-Command -ComputerName '${h}' -ScriptBlock { (Get-CimInstance Win32_Processor).LoadPercentage } -EA Stop; "$r" } catch { 'ERR' }`

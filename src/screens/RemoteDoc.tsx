@@ -52,10 +52,13 @@ function buildConnectScript(hostname: string): string {
   const h = hostname.replace(/'/g, "''")
   return [
     `try {`,
-    // Step 1: Ping
-    `  $ping = Test-Connection -ComputerName '${h}' -Count 2 -Quiet -EA SilentlyContinue`,
-    `  if (-not $ping) { @{stage='ping';ok=$false} | ConvertTo-Json -Compress; exit }`,
-    `  @{stage='ping';ok=$true} | ConvertTo-Json -Compress`,
+    // Step 1: Multi-method online check (Ping → SMB 445 → RPC 135)
+    '  $online = $false; $connMethod = "none"',
+    "  try { if (Test-Connection -ComputerName '" + h + "' -Count 1 -Quiet -EA SilentlyContinue) { $online = $true; $connMethod = 'Ping' } } catch {}",
+    '  if (-not $online) { try { $t = New-Object System.Net.Sockets.TcpClient; if ($t.ConnectAsync(' + "'" + h + "'" + ', 445).Wait(2000)) { $online = $true; $connMethod = ' + "'SMB'" + ' }; $t.Close() } catch {} }',
+    '  if (-not $online) { try { $t = New-Object System.Net.Sockets.TcpClient; if ($t.ConnectAsync(' + "'" + h + "'" + ', 135).Wait(2000)) { $online = $true; $connMethod = ' + "'RPC'" + ' }; $t.Close() } catch {} }',
+    `  if (-not $online) { @{stage='ping';ok=$false} | ConvertTo-Json -Compress; exit }`,
+    '  @{stage=' + "'ping'" + ';ok=$true;method=$connMethod} | ConvertTo-Json -Compress',
     // Step 2: WinRM check + start (3 methods, same channels as compmgmt.msc)
     `  $winrm = $false`,
     `  $winrmLog = ''`,

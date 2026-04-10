@@ -80,10 +80,14 @@ export default function FavoritesPanel() {
     await Promise.all(
       data.devices.map(async (d) => {
         try {
-          const res = await api().runPowerShell(
-            `Test-Connection -ComputerName '${d.hostname}' -Count 1 -Quiet`,
-            2000
-          )
+          const h = d.hostname.replace(/'/g, "''")
+          const script = [
+            '$o=$false',
+            "try{if(Test-Connection -ComputerName '" + h + "' -Count 1 -Quiet -EA SilentlyContinue){$o=$true}}catch{}",
+            "if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync('" + h + "',445).Wait(2000)){$o=$true};$t.Close()}catch{}}",
+            'if($o){"True"}else{"False"}',
+          ].join(';')
+          const res = await api().runPowerShell(script, 5000)
           results[d.hostname] = res.stdout?.trim() === 'True'
         } catch {
           results[d.hostname] = null

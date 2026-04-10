@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database } from 'lucide-react'
+import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database, Eye, EyeOff } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
 import { api } from '../electronAPI'
@@ -133,6 +133,129 @@ function KBFileStatus({ basePath, kbPath }: { basePath: string; kbPath: string }
         </p>
       </div>
     </div>
+  )
+}
+
+// ── Menu visibility management (Master Admin) ─────────────────────────────────
+const MENU_VISIBILITY_PATH = 'settings/menu_visibility.json'
+const CONFIGURABLE_MENUS: { id: string; label: string; group: string }[] = [
+  { id: 'location-overview', label: 'Standort-Übersicht', group: 'Start' },
+  { id: 'query-menu', label: 'Abfrage-Menü', group: 'Werkzeuge' },
+  { id: 'remote-doc', label: 'Remote Doc', group: 'Werkzeuge' },
+  { id: 'it-guru', label: 'IT Guru', group: 'Werkzeuge' },
+  { id: 'pc-diagnosis', label: 'PC-Diagnose', group: 'Werkzeuge' },
+  { id: 'scheduled-tasks', label: 'Geplante Aufgaben', group: 'Automation' },
+  { id: 'dashboards', label: 'Dashboards', group: 'Automation' },
+  { id: 'network-radar', label: 'Netzwerk-Radar', group: 'Automation' },
+  { id: 'pc-migration', label: 'PC-Migration', group: 'Automation' },
+  { id: 'software-inventory', label: 'Software-Inventar', group: 'Automation' },
+  { id: 'user-info', label: 'Benutzer Info', group: 'Info & Hilfe' },
+  { id: 'xelion', label: 'Diensthandy & Xelion', group: 'Info & Hilfe' },
+  { id: 'trickbox', label: 'Trickbox', group: 'Info & Hilfe' },
+  { id: 'knowledge-base', label: 'Wissensdatenbank', group: 'Wissen' },
+  { id: 'results', label: 'Ergebnisse', group: 'Wissen' },
+]
+
+type MenuState = 'visible' | 'hidden' | 'master-only'
+
+function MenuVisibilityCard() {
+  const hiddenMenuIds = useAppStore(s => s.hiddenMenuIds)
+  const setHiddenMenuIds = useAppStore(s => s.setHiddenMenuIds)
+  const masterOnlyIds = useAppStore(s => s.masterOnlyIds)
+  const setMasterOnlyIds = useAppStore(s => s.setMasterOnlyIds)
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+
+  const getState = (id: string): MenuState => {
+    if (!hiddenMenuIds.has(id)) return 'visible'
+    if (masterOnlyIds.has(id)) return 'master-only'
+    return 'hidden'
+  }
+
+  const cycle = (id: string) => {
+    const current = getState(id)
+    const nextHidden = new Set(hiddenMenuIds)
+    const nextMaster = new Set(masterOnlyIds)
+    if (current === 'visible') {
+      // visible → master-only
+      nextHidden.add(id)
+      nextMaster.add(id)
+    } else if (current === 'master-only') {
+      // master-only → hidden
+      nextMaster.delete(id)
+    } else {
+      // hidden → visible
+      nextHidden.delete(id)
+      nextMaster.delete(id)
+    }
+    setHiddenMenuIds(nextHidden)
+    setMasterOnlyIds(nextMaster)
+  }
+
+  const save = async () => {
+    setSaving(true)
+    try {
+      await api().netWriteJson(MENU_VISIBILITY_PATH, { hidden: [...hiddenMenuIds], masterOnly: [...masterOnlyIds] })
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    } catch { /* offline */ }
+    setSaving(false)
+  }
+
+  const groups = [...new Set(CONFIGURABLE_MENUS.map(m => m.group))]
+  const countVisible = CONFIGURABLE_MENUS.filter(m => getState(m.id) === 'visible').length
+  const countMasterOnly = CONFIGURABLE_MENUS.filter(m => getState(m.id) === 'master-only').length
+  const countHidden = CONFIGURABLE_MENUS.filter(m => getState(m.id) === 'hidden').length
+
+  return (
+    <Card title="Menüpunkte ein-/ausblenden (Master Admin)" icon={<Eye size={15} />} subtitle="Klicken Sie auf einen Eintrag um den Status zu wechseln. Startbildschirm und Einstellungen sind immer sichtbar.">
+      <div className="space-y-4">
+        {/* Legend */}
+        <div className="flex gap-4 text-[9px]">
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400" /> Für alle sichtbar</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" /> Nur für mich sichtbar</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400" /> Für alle ausgeblendet</span>
+        </div>
+
+        {groups.map(group => (
+          <div key={group}>
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">{group}</p>
+            <div className="space-y-1">
+              {CONFIGURABLE_MENUS.filter(m => m.group === group).map(item => {
+                const state = getState(item.id)
+                const bg = state === 'visible' ? 'hover:bg-accent/30' : state === 'master-only' ? 'bg-amber-500/5 hover:bg-amber-500/10' : 'bg-red-500/5 hover:bg-red-500/10'
+                const dotColor = state === 'visible' ? 'bg-emerald-400' : state === 'master-only' ? 'bg-amber-400' : 'bg-red-400'
+                const textColor = state === 'visible' ? 'text-foreground' : state === 'master-only' ? 'text-amber-300' : 'text-muted-foreground line-through'
+                const badgeText = state === 'visible' ? 'Alle' : state === 'master-only' ? 'Nur ich' : 'Aus'
+                const badgeColor = state === 'visible' ? 'text-emerald-400' : state === 'master-only' ? 'text-amber-400' : 'text-red-400'
+                return (
+                  <button key={item.id} onClick={() => cycle(item.id)}
+                    className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md transition-colors text-left ${bg}`}>
+                    <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${dotColor}`} />
+                    <span className={`text-xs flex-1 ${textColor}`}>{item.label}</span>
+                    <span className={`text-[9px] font-medium w-12 text-right ${badgeColor}`}>{badgeText}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ))}
+
+        <div className="flex items-center gap-3 pt-2">
+          <button onClick={save} disabled={saving}
+            className="flex items-center gap-1.5 px-4 py-2 text-xs rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
+            {saving ? <Loader size={12} className="animate-spin" /> : <Save size={12} />}
+            Speichern
+          </button>
+          {saved && <span className="text-xs text-emerald-400 flex items-center gap-1"><CheckCircle size={12} /> Gespeichert</span>}
+          <p className="text-[9px] text-muted-foreground ml-auto">
+            <span className="text-emerald-400">{countVisible} alle</span>
+            {' · '}<span className="text-amber-400">{countMasterOnly} nur ich</span>
+            {' · '}<span className="text-red-400">{countHidden} aus</span>
+          </p>
+        </div>
+      </div>
+    </Card>
   )
 }
 
@@ -635,6 +758,9 @@ export default function Settings() {
           </div>
         </Card>
       )}
+
+      {/* ── Menu Visibility (Master Admin only) ── */}
+      {isMaster && <MenuVisibilityCard />}
 
       <Card title="Über das Programm" icon={<Info size={15} />}>
         <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
