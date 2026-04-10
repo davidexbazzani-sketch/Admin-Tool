@@ -24,12 +24,16 @@ export interface DashboardTile {
   skillLabel: string           // display name of the skill
   skillParams?: Record<string, string>
   liveEnabled: boolean
-  liveIntervalSeconds: number  // 15, 30, 60, 120, 300
+  liveIntervalSeconds: number  // 15, 30, 60, 120, 300, 600, 900, 1200, 1800
   position: number
   size: TileSize
   thresholds: TileThresholds
   lastResults: Record<string, TileResult>  // hostname -> result
   history: Array<{ value: string; timestamp: string }>  // last 20 values (first hostname)
+  // ── Monitoring / Alarm fields ──
+  failThreshold?: number       // consecutive failures before alarm (default 2)
+  alarmEmail?: string          // per-tile override for alarm email recipient
+  isMonitoringTile?: boolean   // true = compact ping tile from inventory import
 }
 
 export interface Dashboard {
@@ -48,6 +52,10 @@ export interface DashboardSettings {
   soundEnabled: boolean
   notificationsEnabled: boolean
   blinkEnabled: boolean
+  // ── Monitoring alarm settings ──
+  emailAlarmsEnabled?: boolean
+  alarmEmail?: string          // default alarm recipient
+  recoveryEmailEnabled?: boolean
 }
 
 export interface DashboardTemplate {
@@ -56,6 +64,21 @@ export interface DashboardTemplate {
   icon: string
   description: string
   tiles: Omit<DashboardTile, 'id' | 'lastResults' | 'history'>[]
+}
+
+export interface ActiveAlarm {
+  id: string
+  tileId: string
+  dashboardId: string
+  tileName: string
+  hostname: string
+  status: 'active' | 'resolved'
+  consecutiveFailures: number
+  failThreshold: number
+  triggeredAt: string
+  resolvedAt?: string
+  emailSent: boolean
+  recoveryEmailSent?: boolean
 }
 
 // Default thresholds per skill type

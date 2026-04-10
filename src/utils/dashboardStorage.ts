@@ -37,6 +37,9 @@ export function createTile(opts: {
   size?: TileSize
   thresholds?: { green: string; yellow: string | null; red: string }
   position?: number
+  failThreshold?: number
+  alarmEmail?: string
+  isMonitoringTile?: boolean
 }): DashboardTile {
   const { DEFAULT_THRESHOLDS } = require('../types/dashboard')
   return {
@@ -52,7 +55,26 @@ export function createTile(opts: {
     thresholds: opts.thresholds ?? DEFAULT_THRESHOLDS[opts.skillId] ?? DEFAULT_THRESHOLDS.default,
     lastResults: {},
     history: [],
+    failThreshold: opts.failThreshold ?? 2,
+    alarmEmail: opts.alarmEmail,
+    isMonitoringTile: opts.isMonitoringTile,
   }
+}
+
+/** Create a monitoring ping tile for an inventory device */
+export function createMonitoringTile(hostname: string, description: string, intervalSec: number, failThreshold: number, position: number): DashboardTile {
+  return createTile({
+    name: description || hostname,
+    hostnames: [hostname],
+    skillId: 'rd_net_ping',
+    skillLabel: 'Ping',
+    liveEnabled: true,
+    liveIntervalSeconds: intervalSec,
+    size: 'small',
+    failThreshold,
+    isMonitoringTile: true,
+    position,
+  })
 }
 
 // ── Dashboard Templates ───────────────────────────────────────────────────────
@@ -95,6 +117,13 @@ export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
       { name: 'Defender', hostnames: [], skillId: 'rd_security_defstatus', skillLabel: 'Defender-Status', liveEnabled: true, liveIntervalSeconds: 300, position: 0, size: 'normal', thresholds: { green: 'Aktiv', yellow: null, red: 'Inaktiv' } },
       { name: 'BitLocker', hostnames: [], skillId: 'rd_security_bitlocker', skillLabel: 'BitLocker-Status', liveEnabled: true, liveIntervalSeconds: 300, position: 1, size: 'normal', thresholds: { green: 'On', yellow: null, red: 'Off' } },
     ],
+  },
+  {
+    id: 'monitoring',
+    name: 'Geräte-Monitoring',
+    icon: '📡',
+    description: 'Ping-Überwachung mit E-Mail-Alarmen aus der Standort-Übersicht',
+    tiles: [],  // Tiles are created dynamically from inventory selection
   },
 ]
 

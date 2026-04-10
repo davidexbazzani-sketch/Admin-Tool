@@ -1,18 +1,23 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   LayoutDashboard, Plus, Edit2, Trash2, RefreshCw, Loader, X, AlertTriangle,
-  Pause, Play, MoreVertical, GripVertical, Settings,
-  ArrowUp, ArrowDown, Check, Search, BarChart3,
+  Pause, Play, MoreVertical, GripVertical, Settings, Monitor,
+  ArrowUp, ArrowDown, Check, Search, BarChart3, Mail, Bell,
+  CheckCircle, XCircle, Wifi,
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { api } from '../electronAPI'
 import { CATEGORIES } from '../utils/remoteCommands'
 import { searchSkills, buildSearchIndex, type SkillDescription } from '../utils/remoteDocSearch'
 import {
-  loadDashboards, saveDashboards, createDashboard, createTile,
+  loadDashboards, saveDashboards, createDashboard, createTile, createMonitoringTile,
   DASHBOARD_TEMPLATES, evaluateStatus,
 } from '../utils/dashboardStorage'
-import type { DashboardsData, Dashboard, DashboardTile, TileStatus, TileSize } from '../types/dashboard'
+import type { DashboardsData, Dashboard, DashboardTile, TileStatus, TileSize, ActiveAlarm } from '../types/dashboard'
+import type { UserEmailConfig } from '../types/auth'
+
+interface InventoryItem { id: string; name: string; ip?: string; description?: string; category: string }
+const EMAIL_CFG_PATH = (u: string) => 'email_config/' + u + '.json'
 
 // ── Status colors ─────────────────────────────────────────────────────────────
 const STATUS_COLORS: Record<TileStatus, string> = {
@@ -253,8 +258,14 @@ function AddTileDialog({
                   <option value={15}>15s</option>
                   <option value={30}>30s</option>
                   <option value={60}>60s</option>
+                  <option value={90}>90s</option>
                   <option value={120}>2 Min</option>
+                  <option value={180}>3 Min</option>
                   <option value={300}>5 Min</option>
+                  <option value={600}>10 Min</option>
+                  <option value={900}>15 Min</option>
+                  <option value={1200}>20 Min</option>
+                  <option value={1800}>30 Min</option>
                 </select>
               )}
             </div>
@@ -303,6 +314,18 @@ export default function Dashboards() {
   const [editName, setEditName] = useState('')
   const [dragId, setDragId] = useState<string | null>(null)
   const [deletingDash, setDeletingDash] = useState(false)
+
+  // ── Monitoring state ──────────────────────────────────────────────────────
+  const [showMonitoringSetup, setShowMonitoringSetup] = useState(false)
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([])
+  const [inventorySelected, setInventorySelected] = useState<Set<string>>(new Set())
+  const [inventoryFilter, setInventoryFilter] = useState('')
+  const [monitorInterval, setMonitorInterval] = useState(60)
+  const [monitorThreshold, setMonitorThreshold] = useState(3)
+  const [monitorAlarmEmail, setMonitorAlarmEmail] = useState('')
+  const failCounters = useRef<Record<string, number>>({})        // tileId:hostname → consecutive failures
+  const alarmSentRef = useRef<Set<string>>(new Set())             // tileId:hostname → email already sent for this episode
+  const [activeAlarms, setActiveAlarms] = useState<ActiveAlarm[]>([])
 
   // Live intervals
   const intervalsRef = useRef<Map<string, ReturnType<typeof setInterval>>>(new Map())
@@ -364,38 +387,95 @@ export default function Dashboards() {
   }, [activeId, activeDash?.tiles.length, paused]) // eslint-disable-line
 
   async function executeTile(tile: DashboardTile) {
-    // Find the skill command
     for (const cat of CATEGORIES) {
       const cmd = cat.commands.find(c => `rd_${cat.id}_${c.id}` === tile.skillId)
       if (!cmd) continue
 
       for (const host of tile.hostnames) {
+        const key = `${tile.id}:${host}`
+        let status: TileStatus = 'unknown'
+        let output = ''
         try {
           const psCmd = cmd.buildCmd(host, tile.skillParams?.input)
           const res = await api().runPowerShell(psCmd, 15000)
-          const output = res.stdout?.trim() || res.stderr?.trim() || 'OK'
-          const status = evaluateStatus(output, tile.thresholds)
-
-          setData(prev => {
-            const updated = { ...prev }
-            const dash = updated.dashboards.find(d => d.id === activeId)
-            if (!dash) return prev
-            const t = dash.tiles.find(tt => tt.id === tile.id)
-            if (!t) return prev
-            t.lastResults[host] = { status, value: output.slice(0, 100), timestamp: new Date().toISOString() }
-            if (host === tile.hostnames[0]) {
-              t.history = [...(t.history || []).slice(-19), { value: output.slice(0, 50), timestamp: new Date().toISOString() }]
-            }
-            return { ...updated }
-          })
+          output = res.stdout?.trim() || res.stderr?.trim() || 'OK'
+          status = evaluateStatus(output, tile.thresholds)
         } catch (err) {
-          setData(prev => {
-            const updated = { ...prev }
-            const dash = updated.dashboards.find(d => d.id === activeId)
-            const t = dash?.tiles.find(tt => tt.id === tile.id)
-            if (t) t.lastResults[host] = { status: 'error', value: String(err), timestamp: new Date().toISOString() }
-            return { ...updated }
-          })
+          output = String(err)
+          status = 'error'
+        }
+
+        // Update tile data
+        setData(prev => {
+          const updated = { ...prev }
+          const dash = updated.dashboards.find(d => d.id === activeId)
+          if (!dash) return prev
+          const t = dash.tiles.find(tt => tt.id === tile.id)
+          if (!t) return prev
+          t.lastResults[host] = { status, value: output.slice(0, 100), timestamp: new Date().toISOString() }
+          if (host === tile.hostnames[0]) {
+            t.history = [...(t.history || []).slice(-19), { value: output.slice(0, 50), timestamp: new Date().toISOString() }]
+          }
+          return { ...updated }
+        })
+
+        // ── Alarm logic (fail counter + email) ──
+        const threshold = tile.failThreshold ?? 2
+        if (status === 'error') {
+          failCounters.current[key] = (failCounters.current[key] ?? 0) + 1
+          if (failCounters.current[key] >= threshold && !alarmSentRef.current.has(key)) {
+            alarmSentRef.current.add(key)
+            const alarm: ActiveAlarm = {
+              id: `alarm-${Date.now()}-${Math.random().toString(36).slice(2,6)}`,
+              tileId: tile.id, dashboardId: activeId || '', tileName: tile.name,
+              hostname: host, status: 'active', consecutiveFailures: failCounters.current[key],
+              failThreshold: threshold, triggeredAt: new Date().toISOString(), emailSent: false,
+            }
+            setActiveAlarms(prev => [...prev, alarm])
+            // Send alarm email
+            const emailTo = tile.alarmEmail || data.settings.alarmEmail
+            if (data.settings.emailAlarmsEnabled && emailTo && username) {
+              ;(async () => {
+                try {
+                  const cfg = await api().netReadJson<UserEmailConfig>(EMAIL_CFG_PATH(username))
+                  if (cfg?.email) {
+                    await api().sendEmailRaw({
+                      to: emailTo, subject: `IT Admin Tool Alarm: ${host} nicht erreichbar`,
+                      body: `Gerät: ${host}\nKachel: ${tile.name}\nDashboard: ${activeDash?.name || ''}\nFehlgeschlagene Pings: ${failCounters.current[key]} (Schwelle: ${threshold})\nZeitpunkt: ${new Date().toLocaleString('de-DE')}\nLetzter Output: ${output.slice(0, 200)}`,
+                      smtp: cfg.smtp || 'smtp.office365.com', port: cfg.port || 587,
+                      useTls: cfg.useTls, from: cfg.email, method: cfg.emailMethod,
+                    })
+                    setActiveAlarms(prev => prev.map(a => a.id === alarm.id ? { ...a, emailSent: true } : a))
+                  }
+                } catch { /* email failed silently */ }
+              })()
+            }
+          }
+        } else if (status === 'ok') {
+          const wasAlarming = (failCounters.current[key] ?? 0) >= threshold
+          failCounters.current[key] = 0
+          if (wasAlarming) {
+            alarmSentRef.current.delete(key)
+            setActiveAlarms(prev => prev.map(a => a.tileId === tile.id && a.hostname === host && a.status === 'active'
+              ? { ...a, status: 'resolved', resolvedAt: new Date().toISOString() } : a))
+            // Recovery email
+            const emailTo = tile.alarmEmail || data.settings.alarmEmail
+            if (data.settings.emailAlarmsEnabled && data.settings.recoveryEmailEnabled && emailTo && username) {
+              ;(async () => {
+                try {
+                  const cfg = await api().netReadJson<UserEmailConfig>(EMAIL_CFG_PATH(username))
+                  if (cfg?.email) {
+                    await api().sendEmailRaw({
+                      to: emailTo, subject: `IT Admin Tool: ${host} wieder erreichbar`,
+                      body: `Gerät: ${host}\nKachel: ${tile.name}\nStatus: Wieder erreichbar\nZeitpunkt: ${new Date().toLocaleString('de-DE')}`,
+                      smtp: cfg.smtp || 'smtp.office365.com', port: cfg.port || 587,
+                      useTls: cfg.useTls, from: cfg.email, method: cfg.emailMethod,
+                    })
+                  }
+                } catch { /* ignore */ }
+              })()
+            }
+          }
         }
       }
       break
@@ -405,12 +485,41 @@ export default function Dashboards() {
   // ── Dashboard CRUD ──────────────────────────────────────────────────────────
   function handleNewDash() {
     if (!newDashName.trim()) return
+    // If monitoring template selected → open inventory import
+    const tmpl = DASHBOARD_TEMPLATES.find(t => t.name === newDashName.trim())
+    if (tmpl?.id === 'monitoring') {
+      setShowNewDash(false)
+      loadInventory()
+      return
+    }
     const dash = createDashboard(newDashName.trim())
     const newData = { ...data, dashboards: [...data.dashboards, dash] }
     save(newData)
     setActiveId(dash.id)
     setShowNewDash(false)
     setNewDashName('')
+  }
+
+  async function loadInventory() {
+    try {
+      const items = await api().netReadJson<InventoryItem[]>('inventory/inventory.json')
+      setInventoryItems(items ?? [])
+    } catch { setInventoryItems([]) }
+    setInventorySelected(new Set())
+    setInventoryFilter('')
+    setShowMonitoringSetup(true)
+  }
+
+  function createMonitoringDashboard() {
+    const selected = inventoryItems.filter(i => inventorySelected.has(i.id))
+    if (selected.length === 0) return
+    const dash = createDashboard('Geräte-Monitoring')
+    dash.tiles = selected.map((item, idx) => createMonitoringTile(item.name, item.description || item.name, monitorInterval, monitorThreshold, idx))
+    const newSettings = { ...data.settings, emailAlarmsEnabled: !!monitorAlarmEmail, alarmEmail: monitorAlarmEmail, recoveryEmailEnabled: true }
+    const newData = { ...data, dashboards: [...data.dashboards, dash], settings: newSettings }
+    save(newData)
+    setActiveId(dash.id)
+    setShowMonitoringSetup(false)
   }
 
   function handleDeleteDash() {
@@ -586,6 +695,25 @@ export default function Dashboards() {
             <span className="text-[10px] text-muted-foreground ml-auto">{activeDash.tiles.length} Kacheln</span>
           </div>
 
+          {/* Monitoring summary bar */}
+          {activeDash.tiles.some(t => t.isMonitoringTile) && (() => {
+            const monTiles = activeDash.tiles.filter(t => t.isMonitoringTile)
+            const online = monTiles.filter(t => { const r = Object.values(t.lastResults)[0]; return r?.status === 'ok' }).length
+            const offline = monTiles.filter(t => { const r = Object.values(t.lastResults)[0]; return r?.status === 'error' }).length
+            const unknown = monTiles.length - online - offline
+            const activeAlarmCount = activeAlarms.filter(a => a.status === 'active' && a.dashboardId === activeId).length
+            return (
+              <div className="flex items-center gap-4 mb-3 px-3 py-2 rounded-lg bg-muted/20 border border-border">
+                <span className="text-xs font-semibold text-foreground flex items-center gap-1"><Wifi size={12} /> Monitoring</span>
+                <span className="text-xs text-emerald-400 flex items-center gap-1"><CheckCircle size={11} /> {online} online</span>
+                <span className="text-xs text-red-400 flex items-center gap-1"><XCircle size={11} /> {offline} offline</span>
+                {unknown > 0 && <span className="text-xs text-muted-foreground">{unknown} unbekannt</span>}
+                {activeAlarmCount > 0 && <span className="text-xs text-red-400 flex items-center gap-1 animate-pulse"><Bell size={11} /> {activeAlarmCount} Alarm(e)</span>}
+                <span className="text-[9px] text-muted-foreground ml-auto">{monTiles.length} Geräte überwacht</span>
+              </div>
+            )
+          })()}
+
           {/* Tiles grid */}
           {activeDash.tiles.length > 0 ? (
             <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-3">
@@ -699,6 +827,94 @@ export default function Dashboards() {
 
       {/* Add tile dialog */}
       {showAddTile && <AddTileDialog onAdd={handleAddTile} onClose={() => setShowAddTile(false)} />}
+
+      {/* Monitoring setup dialog (inventory import) */}
+      {showMonitoringSetup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-card border border-border rounded-xl p-5 w-[550px] max-h-[80vh] flex flex-col shadow-2xl">
+            <div className="flex items-center gap-2 mb-4">
+              <Monitor size={16} className="text-primary" />
+              <h3 className="text-sm font-semibold text-foreground flex-1">Geräte-Monitoring einrichten</h3>
+              <button onClick={() => setShowMonitoringSetup(false)} className="p-1 rounded hover:bg-accent text-muted-foreground"><X size={14} /></button>
+            </div>
+
+            {/* Settings row */}
+            <div className="flex gap-3 mb-3">
+              <div className="flex-1">
+                <label className="text-[9px] text-muted-foreground block mb-0.5">Ping-Intervall</label>
+                <select value={monitorInterval} onChange={e => setMonitorInterval(Number(e.target.value))}
+                  className="w-full px-2 py-1 text-[10px] rounded border border-border bg-background text-foreground">
+                  <option value={30}>30 Sek</option><option value={60}>1 Min</option><option value={120}>2 Min</option>
+                  <option value={300}>5 Min</option><option value={600}>10 Min</option><option value={900}>15 Min</option><option value={1800}>30 Min</option>
+                </select>
+              </div>
+              <div className="flex-1">
+                <label className="text-[9px] text-muted-foreground block mb-0.5">Alarm nach X Fehlschlägen</label>
+                <select value={monitorThreshold} onChange={e => setMonitorThreshold(Number(e.target.value))}
+                  className="w-full px-2 py-1 text-[10px] rounded border border-border bg-background text-foreground">
+                  {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
+                </select>
+              </div>
+              <div className="flex-1">
+                <label className="text-[9px] text-muted-foreground block mb-0.5">Alarm-E-Mail (optional)</label>
+                <input value={monitorAlarmEmail} onChange={e => setMonitorAlarmEmail(e.target.value)}
+                  placeholder="admin@firma.de"
+                  className="w-full px-2 py-1 text-[10px] rounded border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary" />
+              </div>
+            </div>
+
+            {/* Filter + bulk buttons */}
+            <div className="flex items-center gap-2 mb-2">
+              <input value={inventoryFilter} onChange={e => setInventoryFilter(e.target.value)} placeholder="Geräte filtern..."
+                className="flex-1 px-2 py-1 text-[10px] rounded border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary" />
+              <span className="text-[9px] text-muted-foreground">{inventorySelected.size}/{inventoryItems.length}</span>
+            </div>
+
+            {/* Category groups with checkboxes */}
+            <div className="flex-1 overflow-y-auto border border-border rounded-md p-2 space-y-3 mb-3">
+              {['Server', 'Computer', 'Drucker', 'Sonstige'].map(cat => {
+                const items = inventoryItems.filter(i => i.category === cat && (!inventoryFilter || i.name.toLowerCase().includes(inventoryFilter.toLowerCase()) || (i.description || '').toLowerCase().includes(inventoryFilter.toLowerCase())))
+                if (items.length === 0) return null
+                const allSelected = items.every(i => inventorySelected.has(i.id))
+                return (
+                  <div key={cat}>
+                    <div className="flex items-center gap-2 mb-1">
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input type="checkbox" checked={allSelected}
+                          onChange={() => { setInventorySelected(prev => { const n = new Set(prev); if (allSelected) items.forEach(i => n.delete(i.id)); else items.forEach(i => n.add(i.id)); return n }) }}
+                          className="w-3 h-3 accent-primary" />
+                        <span className="text-[10px] font-semibold text-foreground">{cat} ({items.length})</span>
+                      </label>
+                    </div>
+                    <div className="space-y-0.5 ml-4">
+                      {items.map(item => (
+                        <label key={item.id} className={`flex items-center gap-2 px-1.5 py-0.5 rounded cursor-pointer hover:bg-accent/30 ${inventorySelected.has(item.id) ? 'bg-primary/5' : ''}`}>
+                          <input type="checkbox" checked={inventorySelected.has(item.id)}
+                            onChange={() => setInventorySelected(prev => { const n = new Set(prev); n.has(item.id) ? n.delete(item.id) : n.add(item.id); return n })}
+                            className="w-3 h-3 accent-primary shrink-0" />
+                          <span className="text-[10px] text-foreground flex-1 truncate">{item.name}</span>
+                          {item.ip && <span className="text-[8px] text-muted-foreground font-mono shrink-0">{item.ip}</span>}
+                          {item.description && <span className="text-[8px] text-muted-foreground truncate max-w-[120px]">{item.description}</span>}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-2">
+              <button onClick={() => setShowMonitoringSetup(false)}
+                className="flex-1 py-2 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground">Abbrechen</button>
+              <button onClick={createMonitoringDashboard} disabled={inventorySelected.size === 0}
+                className="flex-1 py-2 text-xs rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
+                Monitoring starten ({inventorySelected.size} Geräte)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
