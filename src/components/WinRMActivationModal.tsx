@@ -155,7 +155,8 @@ export default function WinRMActivationModal({ hostname, onSuccess, onRestricted
       if (cancelled) return
 
       // ── Method 3: PsExec ──
-      const psDir = (psExecPath || '\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools').replace(/\\+$/, '').replace(/\\PsExec(64)?\.exe$/i, '')
+      const { pathService } = await import('../services/pathService')
+      const psDir = (psExecPath || pathService.getToolsDir()).replace(/\\+$/, '').replace(/\\PsExec(64)?\.exe$/i, '')
       updateStep('m3', 'running', 'PsExec wird gesucht...')
       const psCheck = await runPS(`$p64='${psDir}\\PsExec64.exe'; $p32='${psDir}\\PsExec.exe'; if (Test-Path $p64) { Write-Output "FOUND:$p64" } elseif (Test-Path $p32) { Write-Output "FOUND:$p32" } else { Write-Output 'NOTFOUND' }`, 5000)
       if (cancelled) return

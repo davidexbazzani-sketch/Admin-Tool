@@ -2,6 +2,29 @@ import { randomBytes, createCipheriv, createDecipheriv } from 'crypto'
 import bcrypt from 'bcryptjs'
 import * as ns from './networkStorage'
 import { hostname } from 'os'
+import { execSync } from 'child_process'
+
+/** Look up AD display name for a Windows username */
+function getAdDisplayName(username: string): string {
+  try {
+    const ps = `(Get-ADUser -Identity '${username.replace(/'/g, "''")}' -Properties DisplayName -EA Stop).DisplayName`
+    const out = execSync(
+      `powershell.exe -NoProfile -Command "${ps.replace(/"/g, '\\"')}"`,
+      { encoding: 'utf-8', windowsHide: true, timeout: 8000 }
+    ).trim()
+    if (out && out !== username) return out
+  } catch { /* AD not available */ }
+  // Fallback: try via WMI/Net User
+  try {
+    const out = execSync(`net user "${username}" /domain 2>nul`, { encoding: 'utf-8', windowsHide: true, timeout: 5000 })
+    const match = out.match(/Full Name\s+(.+)/i) || out.match(/Vollst.*Name\s+(.+)/i)
+    if (match) {
+      const name = match[1].trim()
+      if (name && name !== username) return name
+    }
+  } catch { /* fallback */ }
+  return username
+}
 
 // ──────────────────────────────────────────────────────────────────────────────
 // EMERGENCY AES-256 RECOVERY KEY
@@ -126,17 +149,25 @@ export async function createOrGetSsoUser(windowsUsername: string): Promise<AppUs
   if (existing) {
     const idx = users.findIndex(u => u.id === existing!.id)
     if (idx >= 0) {
-      users[idx] = { ...existing, lastLogin: now, windowsUsername }
+      // Update displayName from AD if it's still the raw username
+      let dn = existing.displayName
+      if (!dn || dn === existing.username || dn === windowsUsername) {
+        dn = getAdDisplayName(windowsUsername)
+      }
+      users[idx] = { ...existing, displayName: dn, lastLogin: now, windowsUsername }
       saveUsers(users)
       return users[idx]
     }
     return existing
   }
 
+  // New SSO user: look up real name from AD
+  const adName = getAdDisplayName(windowsUsername)
+
   const newUser: AppUser = {
     id: generateUuid(),
     username: windowsUsername,
-    displayName: windowsUsername,
+    displayName: adName,
     role: 'user',
     blockedFeatures: [],
     status: 'active',
@@ -232,8 +263,13 @@ export async function loginWithPassword(username: string, password: string): Pro
   if (!user.passwordHash) return { success: false, error: 'Kein Passwort hinterlegt' }
   const ok = await comparePassword(password, user.passwordHash)
   if (!ok) return { success: false, error: 'Falsches Passwort' }
-  updateUser(user.id, { lastLogin: new Date().toISOString() })
-  return { success: true, user: { ...user, lastLogin: new Date().toISOString() } }
+  // Update displayName from AD if still the raw username
+  let dn = user.displayName
+  if (!dn || dn === user.username) {
+    dn = getAdDisplayName(user.username)
+  }
+  updateUser(user.id, { lastLogin: new Date().toISOString(), displayName: dn })
+  return { success: true, user: { ...user, displayName: dn, lastLogin: new Date().toISOString() } }
 }
 
 // ─── First-run initialization ────────────────────────────────────────────────

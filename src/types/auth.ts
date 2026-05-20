@@ -54,6 +54,11 @@ export interface InventoryItem {
   addedAt: string
   addedBy: string
   assignedTo?: string   // ServiceNow Zuweisung (Assigned to)
+  // AD-aufgeloeste Daten zum Benutzer in `assignedTo` (befuellt via Button
+  // "AD-Daten aktualisieren" in der Standort-Uebersicht)
+  department?: string   // AD: Department / Abteilung
+  jobTitle?: string     // AD: Title / Stellenbezeichnung
+  adLookupAt?: string   // ISO timestamp des letzten erfolgreichen Lookups
 }
 
 export interface ScheduledTask {

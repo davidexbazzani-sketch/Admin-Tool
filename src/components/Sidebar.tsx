@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
-  Home, Search, BarChart3, Smartphone, Wrench, Settings, ShieldCheck,
+  Home, Search, BarChart3, Smartphone, Wrench, Settings, ShieldCheck, Shield,
   ChevronRight, UserSearch, Terminal, Users, FileText, MapPin, Clock,
-  Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen, Package, Stethoscope,
+  Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen, Package, Stethoscope, PackagePlus, MonitorPlay,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
@@ -10,6 +10,7 @@ import { useRadarStore } from '../store/radarStore'
 import { api } from '../electronAPI'
 import type { Screen } from '../types'
 import FavoritesPanel from './FavoritesPanel'
+import { loadUserMenuOverrides, getHiddenForUser } from '../services/userMenuVisibility'
 
 const MENU_VISIBILITY_PATH = 'settings/menu_visibility.json'
 
@@ -35,16 +36,29 @@ export default function Sidebar() {
   const isAdmin   = useIsAdmin()
   const user      = session?.user
 
-  // Load menu visibility from server on mount
+  // Per-user override: when present, replaces global hiddenMenuIds for this user.
+  const [userOverride, setUserOverride] = useState<Set<string> | null>(null)
+
+  // Load menu visibility (global + per-user override) from server on mount
   useEffect(() => {
+    let cancelled = false
     ;(async () => {
       try {
         const data = await api().netReadJson<{ hidden: string[]; masterOnly?: string[] }>(MENU_VISIBILITY_PATH)
-        if (data && Array.isArray(data.hidden)) setHiddenMenuIds(new Set(data.hidden))
-        if (data && Array.isArray(data.masterOnly)) setMasterOnlyIds(new Set(data.masterOnly))
+        if (!cancelled && data && Array.isArray(data.hidden)) setHiddenMenuIds(new Set(data.hidden))
+        if (!cancelled && data && Array.isArray(data.masterOnly)) setMasterOnlyIds(new Set(data.masterOnly))
       } catch { /* offline or not found — all visible */ }
+
+      // Per-user overrides
+      if (user?.id) {
+        try {
+          const overrides = await loadUserMenuOverrides()
+          if (!cancelled) setUserOverride(getHiddenForUser(overrides, user.id))
+        } catch { /* ignore */ }
+      }
     })()
-  }, [setHiddenMenuIds, setMasterOnlyIds])
+    return () => { cancelled = true }
+  }, [setHiddenMenuIds, setMasterOnlyIds, user?.id])
 
   const NAV_ITEMS: NavItem[] = [
     // ── Gruppe 1: Start ─────────────────────────────────────────────────
@@ -63,11 +77,14 @@ export default function Sidebar() {
     { id: 'network-radar',     label: 'Netzwerk-Radar',       icon: <Activity size={18} />, adminOnly: true },
     { id: 'pc-migration',      label: 'PC-Migration',         icon: <ArrowRightLeft size={18} />, adminOnly: true },
     { id: 'software-inventory', label: 'Software-Inventar',   icon: <Package size={18} />, adminOnly: true },
+    { id: 'software-installations', label: 'Software Installationen', icon: <PackagePlus size={18} />, adminOnly: true },
+    { id: 'presentation-mode',    label: 'Präsentationsmodus',   icon: <MonitorPlay size={18} />, adminOnly: true },
 
     // ── Gruppe 4: Info & Hilfe ──────────────────────────────────────────
     { id: 'user-info',         label: 'Benutzer Info',        icon: <UserSearch size={18} />, dividerBefore: true },
     { id: 'xelion',            label: 'Diensthandy & Xelion', icon: <Smartphone size={18} /> },
     { id: 'trickbox',          label: 'Trickbox',             icon: <Wrench size={18} /> },
+    { id: 'infra-marine',      label: 'Infrastruktur Marine', icon: <Shield size={18} /> },
 
     // ── Gruppe 5: Wissen & Ergebnisse ───────────────────────────────────
     { id: 'knowledge-base',   label: 'Wissensdatenbank',     icon: <BookOpen size={18} />, dividerBefore: true },
@@ -82,14 +99,23 @@ export default function Sidebar() {
 
   const radarScanning = useRadarStore(s => s.scanning)
 
-  // Items that should never be hidden
-  const ALWAYS_VISIBLE = new Set<string>(['home', 'settings', 'user-management', 'user-logs', 'bug-mailbox'])
+  // Global never-hide list (so master admin can never lock themself out).
+  // Per-user overrides take precedence over this and can hide everything —
+  // useful for kiosk-style accounts (e.g. "presentation only").
+  const ALWAYS_VISIBLE_GLOBAL = new Set<string>(['home', 'settings', 'user-management', 'user-logs', 'bug-mailbox'])
 
   const visibleItems = NAV_ITEMS.filter(item => {
     if (item.masterAdminOnly) return isMaster
     if (item.adminOnly && !isAdmin) return false
-    // Never-hide items
-    if (ALWAYS_VISIBLE.has(item.id)) return true
+
+    if (userOverride && !isMaster) {
+      // Per-user override is authoritative for non-master users — anything
+      // listed in `hidden` is removed from the sidebar, including Home/Settings.
+      return !userOverride.has(item.id)
+    }
+
+    // Never-hide items (global rules)
+    if (ALWAYS_VISIBLE_GLOBAL.has(item.id)) return true
     // Check if globally hidden
     if (hiddenMenuIds.has(item.id)) {
       // Master admin can still see it if it's in their "master only" list
@@ -98,6 +124,17 @@ export default function Sidebar() {
     }
     return true
   })
+
+  // Kiosk fallback: if the user landed on a screen that's hidden for them
+  // (e.g. default 'home' is hidden), jump to the first visible item once.
+  useEffect(() => {
+    if (!userOverride || isMaster) return
+    if (visibleItems.length === 0) return
+    if (!visibleItems.some(i => i.id === screen)) {
+      setScreen(visibleItems[0].id)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userOverride, screen])
 
   // Role display
   const roleLabel = user?.role === 'master_admin'

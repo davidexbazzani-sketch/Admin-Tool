@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, shell, Menu } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, shell, Menu, screen as electronScreen, session as electronSession } from 'electron'
 import { join } from 'path'
 import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync, statSync } from 'fs'
 import { userInfo, hostname } from 'os'
@@ -153,6 +153,87 @@ function createWindow() {
   })
 }
 
+// ── Presentation window (Hall display) ──────────────────────────────────────
+// Separate fullscreen BrowserWindow that hosts <webview> tags pre-loaded with
+// the configured slides. The renderer code in PresentationPlayer.tsx handles
+// cycling, timer, hotkeys etc. We open this as a child window of the main app.
+let presentationWindow: BrowserWindow | null = null
+let presentationHeadersStripped = false
+
+function stripFramingHeadersOnce() {
+  // ServiceNow & many internal dashboards set X-Frame-Options: SAMEORIGIN or
+  // Content-Security-Policy: frame-ancestors. Without removing these headers
+  // the embedded <webview> refuses to render the page. We strip them on the
+  // default session — the presentation window also uses the default session.
+  if (presentationHeadersStripped) return
+  presentationHeadersStripped = true
+  electronSession.defaultSession.webRequest.onHeadersReceived((details, cb) => {
+    const headers = details.responseHeaders || {}
+    for (const key of Object.keys(headers)) {
+      const lk = key.toLowerCase()
+      if (lk === 'x-frame-options') delete headers[key]
+      if (lk === 'content-security-policy') {
+        const vals = headers[key] as string[]
+        headers[key] = vals.map(v =>
+          v.replace(/frame-ancestors[^;]*;?/gi, '').replace(/;\s*$/, '')
+        )
+      }
+    }
+    cb({ responseHeaders: headers })
+  })
+}
+
+function openPresentationWindow(opts?: { displayId?: number }) {
+  if (presentationWindow && !presentationWindow.isDestroyed()) {
+    presentationWindow.focus()
+    return
+  }
+  stripFramingHeadersOnce()
+
+  // Pick display: requested id, otherwise external monitor, otherwise primary
+  const displays = electronScreen.getAllDisplays()
+  const primary = electronScreen.getPrimaryDisplay()
+  const requested = opts?.displayId != null ? displays.find(d => d.id === opts.displayId) : null
+  const external = displays.find(d => d.id !== primary.id)
+  const target = requested ?? external ?? primary
+  const { x, y, width, height } = target.bounds
+
+  presentationWindow = new BrowserWindow({
+    x, y, width, height,
+    fullscreen: true,
+    frame: false,
+    backgroundColor: '#000000',
+    autoHideMenuBar: true,
+    webPreferences: {
+      preload: join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: false,
+      webviewTag: true, // enables <webview> in the player route
+    },
+    show: false,
+  })
+
+  const url = isDev
+    ? 'http://localhost:5173/#presentation'
+    : `file://${join(__dirname, '../dist/index.html')}#presentation`
+
+  if (isDev) {
+    presentationWindow.loadURL(url)
+  } else {
+    presentationWindow.loadFile(join(__dirname, '../dist/index.html'), { hash: 'presentation' })
+  }
+
+  presentationWindow.once('ready-to-show', () => {
+    presentationWindow?.show()
+    presentationWindow?.setFullScreen(true)
+  })
+
+  presentationWindow.on('closed', () => {
+    presentationWindow = null
+  })
+}
+
 app.whenReady().then(createWindow)
 
 app.on('window-all-closed', () => {
@@ -278,6 +359,48 @@ ipcMain.handle('mail:compose', async (_e, opts: {
 
 // App version
 ipcMain.handle('app:version', () => app.getVersion())
+
+// ─── Presentation Mode IPC ──────────────────────────────────────────────────
+ipcMain.handle('presentation:open', (_e, opts?: { displayId?: number }) => {
+  openPresentationWindow(opts)
+  return { success: true }
+})
+ipcMain.handle('presentation:close', () => {
+  if (presentationWindow && !presentationWindow.isDestroyed()) {
+    presentationWindow.close()
+  }
+  return { success: true }
+})
+ipcMain.handle('presentation:listDisplays', () => {
+  const all = electronScreen.getAllDisplays()
+  const primaryId = electronScreen.getPrimaryDisplay().id
+  return all.map(d => ({
+    id: d.id,
+    label: d.label || `Display ${d.id}`,
+    bounds: d.bounds,
+    primary: d.id === primaryId,
+    scaleFactor: d.scaleFactor,
+  }))
+})
+
+// ─── Path Configuration IPC ─────────────────────────────────────────────────
+ipcMain.handle('paths:load', async () => {
+  try {
+    const data = ns.readJson('config/paths.json')
+    return { success: true, data }
+  } catch {
+    return { success: false, data: null }
+  }
+})
+
+ipcMain.handle('paths:save', async (_e, config: unknown) => {
+  try {
+    ns.writeJson('config/paths.json', config)
+    return { success: true }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : String(err) }
+  }
+})
 
 // ─── Auth / Network Storage IPC ──────────────────────────────────────────────
 
@@ -629,112 +752,26 @@ ipcMain.on('window:maximize', () => {
 })
 ipcMain.on('window:close', () => mainWindow?.close())
 
-// ── E-Mail via Outlook COM / PowerShell / Nodemailer ──────────────────────────
+// ── E-Mail via Outlook COM ───────────────────────────────────────────────────
 ipcMain.handle('mail:sendRaw', async (_e, opts: {
   to: string; subject: string; body: string; html?: boolean
   smtp: string; port: number; user?: string; pass?: string; from?: string
   useTls?: boolean; method?: 'outlook' | 'nodemailer' | 'powershell'
 }): Promise<{ success: boolean; error?: string; method?: string }> => {
 
-  const method = opts.method ?? 'outlook'
-  console.log(`[mail:sendRaw] method=${method} to=${opts.to} subject="${opts.subject?.slice(0, 40)}"`)
+  console.log(`[mail:sendRaw] to=${opts.to} subject="${opts.subject?.slice(0, 40)}"`)
 
-  // ── Outlook COM via Scheduled Task (UIPI bypass — works when app runs as admin) ──
-  if (method === 'outlook') {
-    try {
-      const { sendViaOutlookScheduledTask } = require('./outlookMailer') as typeof import('./outlookMailer')
-      const result = await sendViaOutlookScheduledTask({
-        to: opts.to, subject: opts.subject, body: opts.body, html: opts.html,
-      })
-      if (result.success) return { success: true, method: 'outlook' }
-      console.log(`[mail:sendRaw][outlook] schtask failed: ${result.error} — trying fallback`)
-    } catch (err) {
-      console.error('[mail:sendRaw][outlook] exception:', err)
-    }
-    // Fall through to PowerShell/Nodemailer as fallback
-  }
-
-  // ── PowerShell .NET SmtpClient (uses Windows credentials automatically) ─────
-  if (method === 'powershell') {
-    try {
-      const safeFrom    = (opts.from || opts.to).replace(/'/g, "''")
-      const safeTo      = opts.to.replace(/'/g, "''")
-      const safeSubject = opts.subject.replace(/'/g, "''")
-      const safeBody    = opts.body.replace(/'/g, "''")
-      const safeSmtp    = opts.smtp.replace(/'/g, "''")
-      const enableSsl   = opts.useTls !== false ? '$true' : '$false'
-      const ps = [
-        `$ErrorActionPreference = 'Stop'`,
-        `try {`,
-        `  $smtp = New-Object System.Net.Mail.SmtpClient('${safeSmtp}', ${opts.port})`,
-        `  $smtp.EnableSsl = ${enableSsl}`,
-        `  $smtp.UseDefaultCredentials = $true`,
-        `  $mail = New-Object System.Net.Mail.MailMessage`,
-        `  $mail.From = '${safeFrom}'`,
-        `  $mail.To.Add('${safeTo}')`,
-        `  $mail.Subject = '${safeSubject}'`,
-        `  $mail.Body = '${safeBody}'`,
-        `  $mail.IsBodyHtml = $${opts.html ? 'true' : 'false'}`,
-        `  $mail.SubjectEncoding = [System.Text.Encoding]::UTF8`,
-        `  $mail.BodyEncoding = [System.Text.Encoding]::UTF8`,
-        `  $smtp.Send($mail)`,
-        `  $smtp.Dispose()`,
-        `  Write-Output 'OK'`,
-        `} catch {`,
-        `  Write-Output "ERR:$($_.Exception.Message)"`,
-        `}`,
-      ].join('\n')
-      console.log('[mail:sendRaw][ps] sending via .NET SmtpClient (UseDefaultCredentials=true)')
-      const res = await runPowerShell(ps, 30000)
-      console.log('[mail:sendRaw][ps] stdout=%s stderr=%s exit=%d', res.stdout.trim(), res.stderr.trim(), res.exitCode)
-      if (res.stdout.trim() === 'OK') return { success: true }
-      const errMsg = res.stdout.trim().replace(/^ERR:/, '') || res.stderr.trim() || 'Unbekannter Fehler'
-      return { success: false, error: `PowerShell SMTP: ${errMsg}` }
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err)
-      console.error('[mail:sendRaw][ps] exception:', msg)
-      return { success: false, error: `PowerShell SMTP Exception: ${msg}` }
-    }
-  }
-
-  // ── Nodemailer ────────────────────────────────────────────────────────────────
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const nodemailer = require('nodemailer') as typeof import('nodemailer')
-    const transportOpts: Record<string, unknown> = {
-      host: opts.smtp,
-      port: opts.port,
-      secure: opts.port === 465,   // implicit TLS only on port 465
-      requireTLS: opts.useTls !== false,
-      tls: {
-        rejectUnauthorized: false, // accept self-signed / internal certs
-      },
-    }
-    // No auth object = anonymous relay (internal Exchange / Office365 with IP whitelist)
-    if (opts.user && opts.pass) {
-      transportOpts.auth = { user: opts.user, pass: opts.pass }
-    }
-    console.log('[mail:sendRaw][nodemailer] config:', JSON.stringify({ ...transportOpts, auth: transportOpts.auth ? '***' : undefined }))
-    const transporter = nodemailer.createTransport(transportOpts)
-    const info = await transporter.sendMail({
-      from: opts.from || opts.user || opts.to,
-      to: opts.to,
-      subject: opts.subject,
-      [opts.html ? 'html' : 'text']: opts.body,
+    const { sendViaOutlookScheduledTask } = require('./outlookMailer') as typeof import('./outlookMailer')
+    const result = await sendViaOutlookScheduledTask({
+      to: opts.to, subject: opts.subject, body: opts.body, html: opts.html,
     })
-    console.log('[mail:sendRaw][nodemailer] OK messageId=%s response=%s', info.messageId, info.response)
-    return { success: true }
-  } catch (err: unknown) {
-    const e = err as { message?: string; code?: string; response?: string; responseCode?: number; command?: string }
-    const detail = [
-      e.message,
-      e.response      ? `SMTP-Response: ${e.response}` : '',
-      e.responseCode  ? `Code: ${e.responseCode}` : '',
-      e.code          ? `Fehlercode: ${e.code}` : '',
-      e.command       ? `Befehl: ${e.command}` : '',
-    ].filter(Boolean).join(' | ')
-    console.error('[mail:sendRaw][nodemailer] ERROR:', detail)
-    return { success: false, error: detail }
+    console.log('[mail:sendRaw] result:', JSON.stringify(result))
+    return result
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error('[mail:sendRaw] exception:', msg)
+    return { success: false, error: msg, method: 'outlook' }
   }
 })
 

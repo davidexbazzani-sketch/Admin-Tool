@@ -63,6 +63,25 @@ export const FEATURES: FeatureDef[] = [
   // ── Geplante Aufgaben ─────────────────────────────────────────────────────
   { id: 'scheduled-tasks', label: 'Geplante Aufgaben', category: 'Grundfunktionen', userBlocked: true, description: 'Wiederkehrende Aufgaben einrichten' },
 
+  // ── Infrastruktur Marine ──────────────────────────────────────────────────
+  { id: 'infra-marine', label: 'Infrastruktur Marine', category: 'Infrastruktur', description: 'Infrastruktur-Uebersicht: Incident Response, Berechtigungen, etc.' },
+  { id: 'infra-marine.send-email', label: 'Infrastruktur Marine: E-Mail senden', category: 'Infrastruktur', userBlocked: true, description: 'Incident-E-Mails an Kontakte versenden' },
+  { id: 'infra-marine.permissions', label: 'Infrastruktur Marine: Berechtigungen', category: 'Infrastruktur', description: 'Berechtigungs-Uebersicht und SNOW-Links fuer neue Mitarbeiter' },
+  { id: 'infra-marine.permissions.check', label: 'Infrastruktur Marine: Berechtigungs-Check', category: 'Infrastruktur', userBlocked: true, description: 'AD-Gruppenmitgliedschaft eines Users pruefen' },
+  { id: 'infra-marine.toner', label: 'Infrastruktur Marine: Tonerbestellung', category: 'Infrastruktur', description: 'Druckerpatronen ueber Hilker & Pahl bestellen' },
+  { id: 'infra-marine.visitor', label: 'Infrastruktur Marine: Externe Besucher', category: 'Infrastruktur', description: 'Externe Besucher beim Empfang anmelden' },
+  { id: 'infra-marine.server-perf', label: 'Infrastruktur Marine: Server Performance Check', category: 'Infrastruktur', userBlocked: true, description: 'Server-Performance analysieren und DXC-Aufruest-Mail senden' },
+  { id: 'infra-marine.edit-contacts', label: 'Infrastruktur Marine: Kontakte verwalten', category: 'Infrastruktur', masterAdminOnly: true, description: 'Incident Response Kontaktverzeichnisse bearbeiten' },
+  { id: 'infra-marine.edit-permissions', label: 'Infrastruktur Marine: Berechtigungs-Katalog verwalten', category: 'Infrastruktur', masterAdminOnly: true, description: 'Berechtigungen-Katalog bearbeiten' },
+
+  // ── Software Installationen ──────────────────────────────────────────────
+  { id: 'software-installations', label: 'Software Installationen', category: 'Software', userBlocked: true, description: 'Software remote auf Zielrechner installieren' },
+  { id: 'software-installations.solidworks', label: 'SolidWorks 2024 SP5', category: 'Software', userBlocked: true, description: 'SolidWorks-Installation Schritte 1-9 automatisiert' },
+
+  // ── Praesentationsmodus ──────────────────────────────────────────────────
+  { id: 'presentation-mode', label: 'Praesentationsmodus', category: 'Praesentation', userBlocked: true, description: 'Webseiten in Endlosschleife im Vollbild anzeigen (Hallen-Display)' },
+  { id: 'presentation-mode.edit', label: 'Praesentationsmodus: Slides verwalten', category: 'Praesentation', userBlocked: true, description: 'Slides hinzufuegen, bearbeiten, loeschen' },
+
   // ── Benutzerverwaltung (Master Admin only) ────────────────────────────────
   { id: 'user-management', label: 'Benutzerverwaltung', category: 'Administration', masterAdminOnly: true, description: 'Benutzer anlegen, bearbeiten, Berechtigungen vergeben' },
   { id: 'user-logs', label: 'Benutzer-Logs', category: 'Administration', masterAdminOnly: true, description: 'Aktivitätsprotokolle aller Benutzer einsehen' },

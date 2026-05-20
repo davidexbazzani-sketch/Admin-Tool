@@ -35,7 +35,8 @@ export function getLocalMode(): boolean { return _localMode }
 // Set during connection probe in RemoteDoc.tsx.
 export type ExecMethod = 'winrm' | 'wmi' | 'psexec' | 'schtasks'
 let _execMethod: ExecMethod = 'winrm'
-let _psExecDir = '\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools'
+import { pathService } from '../services/pathService'
+let _psExecDir = pathService.getToolsDir()
 export function setExecMethod(m: ExecMethod) { _execMethod = m }
 export function getExecMethod(): ExecMethod { return _execMethod }
 export function setPsExecDir(dir: string) { _psExecDir = dir }
@@ -862,15 +863,19 @@ function buildCategories(): Category[] {
             const src = i.replace(/'/g, "''")
             const fname = src.split('\\').pop() ?? 'setup'
             const ext   = fname.split('.').pop()?.toLowerCase() ?? ''
-            const dst   = `C:\\Temp\\${fname}`.replace(/'/g, "''")
-            const run   = ext === 'msi'
-              ? `Start-Process msiexec -ArgumentList '/i','${dst}','/quiet','/norestart' -Wait`
-              : `Start-Process '${dst}' -ArgumentList '/S','/silent','/quiet' -Wait`
+            const host  = h.replace(/'/g, "''")
+            const remoteFile = `C:\\Temp\\${fname}`
             return local([
-              `$src='${src}'; $h='${h.replace(/'/g,"''")}'; $dst="\\\\$h\\C$\\Temp"`,
-              `New-Item -ItemType Directory -Path $dst -EA SilentlyContinue | Out-Null`,
-              `Copy-Item $src "$dst\\${fname}"`,
-              `Invoke-Command -ComputerName $h -ScriptBlock { ${run}; Write-Output 'Fertig' } -EA Stop`,
+              `$uncTemp = '\\\\${host}\\C$\\Temp'`,
+              `New-Item -ItemType Directory -Path $uncTemp -EA SilentlyContinue | Out-Null`,
+              `Copy-Item -Path '${src}' -Destination "$uncTemp\\${fname}" -Force`,
+              `if (-not (Test-Path "$uncTemp\\${fname}")) { Write-Output 'ERR:Datei konnte nicht auf Ziel-PC kopiert werden'; exit 1 }`,
+              `$size = (Get-Item "$uncTemp\\${fname}").Length`,
+              `Write-Output "Datei kopiert: ${fname} ($size Bytes)"`,
+              `Write-Output 'Starte Installation auf ${host}...'`,
+              ext === 'msi'
+                ? `Invoke-Command -ComputerName '${host}' -ScriptBlock { $r = Start-Process msiexec -ArgumentList '/i','${remoteFile}','/quiet','/norestart' -Wait -PassThru; Write-Output "ExitCode: $($r.ExitCode)" } -EA Stop`
+                : `Invoke-Command -ComputerName '${host}' -ScriptBlock { $r = Start-Process -FilePath '${remoteFile}' -ArgumentList '/S' -Wait -PassThru; Write-Output "ExitCode: $($r.ExitCode)"; if (Test-Path '${remoteFile}') { Write-Output 'Installer-Datei vorhanden' } } -EA Stop`,
             ].join('; '))
           },
           action: 'critical', fileAction: 'install' },

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   MapPin, Plus, Trash2, Edit2, Check, X, Upload, Monitor, Server,
   Printer, Package, Loader, Search, RefreshCw, AlertTriangle, ChevronRight,
+  UserSearch, Briefcase, Building2,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
@@ -10,6 +11,7 @@ import { createLogger } from '../utils/activityLogger'
 import type { InventoryItem } from '../types/auth'
 import ExcelColumnDialog from '../components/ExcelColumnDialog'
 import { parseExcelSheet, extractFromExcel, type ExcelSheetData } from '../utils/fileImport'
+import { batchAdLookup } from '../services/adUserLookup'
 
 const log = createLogger('location-overview')
 
@@ -63,6 +65,17 @@ export default function LocationOverview() {
   const [importing, setImporting] = useState(false)
   const [importStatus, setImportStatus] = useState('')
   const [pendingExcelData, setPendingExcelData] = useState<ExcelSheetData | null>(null)
+  // After parsing the source file, hold the prepared name list here until the
+  // user explicitly confirms a destructive replace of the current category.
+  const [pendingReplace, setPendingReplace] = useState<{
+    names: string[]
+    assignedToMap?: Record<string, string>
+    previousCount: number
+  } | null>(null)
+
+  // AD enrichment (Title + Department for assigned users)
+  const [adEnriching, setAdEnriching] = useState(false)
+  const [adEnrichStatus, setAdEnrichStatus] = useState('')
 
   const loadItems = useCallback(async () => {
     setLoading(true)
@@ -82,12 +95,18 @@ export default function LocationOverview() {
   }
 
   const categoryItems = items.filter(i => i.category === activeCategory)
-  const filteredItems = categoryItems.filter(i =>
-    i.name.toLowerCase().includes(search.toLowerCase()) ||
-    (i.ip ?? '').includes(search) ||
-    (i.description ?? '').toLowerCase().includes(search.toLowerCase()) ||
-    (i.assignedTo ?? '').toLowerCase().includes(search.toLowerCase())
-  )
+  const filteredItems = (() => {
+    const q = search.trim().toLowerCase()
+    if (!q) return categoryItems
+    return categoryItems.filter(i =>
+      i.name.toLowerCase().includes(q) ||
+      (i.ip ?? '').includes(search) ||
+      (i.description ?? '').toLowerCase().includes(q) ||
+      (i.assignedTo ?? '').toLowerCase().includes(q) ||
+      (i.department ?? '').toLowerCase().includes(q) ||
+      (i.jobTitle ?? '').toLowerCase().includes(q)
+    )
+  })()
 
   // ── Add item ────────────────────────────────────────────────────────────────
   async function handleAdd(e: React.FormEvent) {
@@ -188,22 +207,92 @@ export default function LocationOverview() {
     addImportedNames(names)
   }
 
-  async function addImportedNames(names: string[], assignedToMap?: Record<string, string>) {
-    const existing = new Set(items.filter(i => i.category === activeCategory).map(i => i.name.toLowerCase()))
-    const toAdd: InventoryItem[] = names
-      .filter(n => !existing.has(n.toLowerCase()))
-      .map(name => ({
-        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        name,
-        category: activeCategory,
-        addedAt: new Date().toISOString(),
-        addedBy: session?.user.username ?? '',
-        assignedTo: assignedToMap?.[name] || undefined,
-      }))
-    if (!toAdd.length) { setImportStatus('Alle Hostnamen bereits vorhanden'); return }
-    await saveItems([...items, ...toAdd])
-    await log(`Import: ${toAdd.length} Objekte importiert (${activeCategory})`)
-    setImportStatus(`${toAdd.length} Objekte importiert`)
+  // Stage an import — show a confirm modal so the user can see exactly how many
+  // existing entries will be replaced. The actual replace happens in
+  // confirmReplaceImport() below.
+  function addImportedNames(names: string[], assignedToMap?: Record<string, string>) {
+    // De-duplicate the incoming list (case-insensitive)
+    const seen = new Set<string>()
+    const cleaned: string[] = []
+    for (const n of names) {
+      const key = n.toLowerCase()
+      if (seen.has(key)) continue
+      seen.add(key)
+      cleaned.push(n)
+    }
+    if (!cleaned.length) { setImportStatus('Keine gueltigen Hostnamen in der Datei gefunden'); return }
+    const previousCount = items.filter(i => i.category === activeCategory).length
+    setPendingReplace({ names: cleaned, assignedToMap, previousCount })
+  }
+
+  async function confirmReplaceImport() {
+    if (!pendingReplace) return
+    const { names, assignedToMap, previousCount } = pendingReplace
+    setPendingReplace(null)
+    // Build new items for the active category, then keep all items from other
+    // categories untouched.
+    const otherCategoryItems = items.filter(i => i.category !== activeCategory)
+    const baseTime = Date.now()
+    const newItems: InventoryItem[] = names.map((name, idx) => ({
+      id: `${baseTime}-${idx}-${Math.random().toString(36).slice(2, 8)}`,
+      name,
+      category: activeCategory,
+      addedAt: new Date().toISOString(),
+      addedBy: session?.user.username ?? '',
+      assignedTo: assignedToMap?.[name] || undefined,
+    }))
+    await saveItems([...otherCategoryItems, ...newItems])
+    await log(`Import (ersetzt): ${previousCount} alte Eintraege durch ${newItems.length} neue ersetzt (${activeCategory})`)
+    setImportStatus(`${previousCount} alte Eintraege ersetzt durch ${newItems.length} neue Hostnamen`)
+  }
+
+  // ── AD enrichment for assigned users ────────────────────────────────────────
+  // Resolves Active Directory data (Department + Title) for the items the user
+  // has SELECTED via checkbox. Only items that also have a ServiceNow assignment
+  // are queried. Items that are not selected stay untouched.
+  async function handleAdEnrich() {
+    const selectedItems = items.filter(i => i.category === activeCategory && selected.has(i.id))
+    if (selectedItems.length === 0) {
+      setAdEnrichStatus('Bitte erst Geraete in der Liste auswaehlen (Checkbox links).')
+      return
+    }
+    const withAssignment = selectedItems.filter(i => i.assignedTo && i.assignedTo.trim())
+    if (withAssignment.length === 0) {
+      setAdEnrichStatus('Die ausgewaehlten Geraete haben keine ServiceNow-Zuweisung.')
+      return
+    }
+    setAdEnriching(true)
+    setAdEnrichStatus(`AD-Abfrage fuer ${withAssignment.length} ausgewaehlte${withAssignment.length === 1 ? 's' : ''} Geraet${withAssignment.length === 1 ? '' : 'e'} laeuft...`)
+    try {
+      const identities = withAssignment.map(i => i.assignedTo!.trim())
+      const lookup = await batchAdLookup(identities)
+      const now = new Date().toISOString()
+      let resolved = 0
+      let notFound = 0
+      const updated = items.map(i => {
+        // Only touch selected items in the active category that have an assignment
+        if (!selected.has(i.id) || i.category !== activeCategory || !i.assignedTo) return i
+        const res = lookup.get(i.assignedTo.trim())
+        if (!res || !res.found) {
+          if (res && !res.found) notFound++
+          return i
+        }
+        resolved++
+        return {
+          ...i,
+          department: res.department || undefined,
+          jobTitle: res.title || undefined,
+          adLookupAt: now,
+        }
+      })
+      await saveItems(updated)
+      await log(`AD-Daten aktualisiert (Auswahl): ${resolved} aufgeloest, ${notFound} nicht gefunden (${activeCategory})`)
+      setAdEnrichStatus(`${resolved} Benutzer aufgeloest${notFound > 0 ? `, ${notFound} nicht in AD gefunden` : ''}.`)
+    } catch (e) {
+      setAdEnrichStatus(`Fehler: ${e instanceof Error ? e.message : String(e)}`)
+    } finally {
+      setAdEnriching(false)
+    }
   }
 
   function handleExcelConfirm(hostnameColNames: string[], _serialColNames: string[], assignedToColNames: string[]) {
@@ -318,6 +407,14 @@ export default function LocationOverview() {
                   className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground transition-colors disabled:opacity-50">
                   {importing ? <Loader size={12} className="animate-spin" /> : <Upload size={12} />} Import
                 </button>
+                <button onClick={handleAdEnrich} disabled={adEnriching || selected.size === 0}
+                  title={selected.size === 0
+                    ? 'Erst Geraete per Checkbox auswaehlen, dann AD-Daten holen'
+                    : `AD-Daten fuer ${selected.size} ausgewaehlte${selected.size === 1 ? 's Geraet' : ' Geraete'} aktualisieren`}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-purple-500/40 bg-purple-500/10 text-purple-300 hover:bg-purple-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                  {adEnriching ? <Loader size={12} className="animate-spin" /> : <UserSearch size={12} />}
+                  AD-Daten aktualisieren{selected.size > 0 ? ` (${selected.size})` : ''}
+                </button>
               </>
             )}
           </div>
@@ -325,6 +422,15 @@ export default function LocationOverview() {
           {importStatus && (
             <div className="mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400">
               {importStatus}
+            </div>
+          )}
+
+          {adEnrichStatus && (
+            <div className="mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-purple-500/10 border border-purple-500/20 text-purple-300 flex items-center justify-between gap-2">
+              <span>{adEnrichStatus}</span>
+              <button onClick={() => setAdEnrichStatus('')} className="text-purple-300/60 hover:text-purple-300">
+                <X size={12} />
+              </button>
             </div>
           )}
 
@@ -415,9 +521,19 @@ export default function LocationOverview() {
                           <>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium text-foreground font-mono truncate">{item.name}</p>
-                              <div className="flex items-center gap-3 mt-0.5">
+                              <div className="flex items-center gap-3 mt-0.5 flex-wrap">
                                 {item.ip && <span className="text-[10px] text-muted-foreground">{item.ip}</span>}
                                 {item.description && <span className="text-[10px] text-muted-foreground">{item.description}</span>}
+                                {item.department && (
+                                  <span className="inline-flex items-center gap-1 text-[10px] text-foreground" title="Abteilung (aus AD)">
+                                    <Building2 size={10} className="text-blue-400" />{item.department}
+                                  </span>
+                                )}
+                                {item.jobTitle && (
+                                  <span className="inline-flex items-center gap-1 text-[10px] text-foreground" title="Stellenbezeichnung (aus AD)">
+                                    <Briefcase size={10} className="text-purple-400" />{item.jobTitle}
+                                  </span>
+                                )}
                                 <span className="text-[10px] text-muted-foreground/50">
                                   {new Date(item.addedAt).toLocaleDateString('de-DE')}
                                 </span>
@@ -521,6 +637,37 @@ export default function LocationOverview() {
           onConfirm={handleExcelConfirm}
           onCancel={() => setPendingExcelData(null)}
         />
+      )}
+
+      {/* Import replace confirm */}
+      {pendingReplace && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-card border border-amber-500/40 rounded-xl p-5 w-[440px] shadow-2xl space-y-4">
+            <div className="flex items-center gap-2">
+              <AlertTriangle size={15} className="text-amber-400" />
+              <h3 className="text-sm font-semibold text-foreground">Liste ersetzen?</h3>
+            </div>
+            <div className="text-xs text-muted-foreground space-y-2">
+              <p>
+                Die Datei enthält <strong className="text-foreground">{pendingReplace.names.length}</strong> Hostnamen.
+              </p>
+              <p>
+                Die aktuelle Liste in <strong className="text-foreground">{activeCategory}</strong> enthält{' '}
+                <strong className="text-foreground">{pendingReplace.previousCount}</strong> Einträge — diese werden{' '}
+                <strong className="text-red-400">komplett ersetzt</strong>.
+              </p>
+              <p className="text-[11px] text-muted-foreground/80">
+                Andere Kategorien bleiben unangetastet.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setPendingReplace(null)}
+                className="flex-1 py-2 text-sm rounded-lg border border-border hover:bg-accent text-muted-foreground">Abbrechen</button>
+              <button onClick={confirmReplaceImport}
+                className="flex-1 py-2 text-sm rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-semibold">Ersetzen</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

@@ -51,6 +51,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // App info
   getAppVersion: () => ipcRenderer.invoke('app:version'),
 
+  // Path configuration
+  loadPathsConfig: () => ipcRenderer.invoke('paths:load') as Promise<{ success: boolean; data: unknown }>,
+  savePathsConfig: (config: unknown) => ipcRenderer.invoke('paths:save', config) as Promise<{ success: boolean; error?: string }>,
+
   // Progress events from main
   onQueryProgress: (cb: (data: { deviceId: string; queryId: string; status: string }) => void) => {
     ipcRenderer.on('query:progress', (_e, data) => cb(data))
@@ -120,21 +124,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
   heartbeatSet: (username: string) => ipcRenderer.invoke('heartbeat:set', username),
   heartbeatClear: (username: string) => ipcRenderer.invoke('heartbeat:clear', username),
   heartbeatCheck: (username: string) => ipcRenderer.invoke('heartbeat:check', username),
+
+  // ── Presentation mode (hall display) ──────────────────────────────────────
+  presentationOpen: (opts?: { displayId?: number }) => ipcRenderer.invoke('presentation:open', opts),
+  presentationClose: () => ipcRenderer.invoke('presentation:close'),
+  presentationListDisplays: () => ipcRenderer.invoke('presentation:listDisplays'),
 })
 
-// Global right-click context menu for all input/textarea/contenteditable elements
+// Global right-click context menu for ALL elements (copy, paste, select all)
 ;(globalThis as unknown as { addEventListener: (event: string, cb: (e: { preventDefault(): void; target: unknown }) => void) => void })
   .addEventListener('contextmenu', (e) => {
-    const target = e.target as { tagName?: string; isContentEditable?: boolean; closest?: (sel: string) => unknown }
-    const tag = (target.tagName ?? '').toUpperCase()
-    const isEditable =
-      tag === 'INPUT' || tag === 'TEXTAREA' ||
-      target.isContentEditable === true ||
-      (typeof target.closest === 'function' && target.closest('[contenteditable="true"]') !== null)
-    if (isEditable) {
-      e.preventDefault()
-      ipcRenderer.invoke('context-menu:show')
-    }
+    e.preventDefault()
+    ipcRenderer.invoke('context-menu:show')
   })
 
 // Drag & Drop file path resolution (Electron 28+)

@@ -36,6 +36,10 @@ declare global {
       getSettings(): Promise<Record<string, unknown>>
       setSetting(key: string, value: unknown): Promise<boolean>
 
+      // Path configuration
+      loadPathsConfig(): Promise<{ success: boolean; data: unknown }>
+      savePathsConfig(config: unknown): Promise<{ success: boolean; error?: string }>
+
       // Shell
       openExternal(url: string): Promise<void>
       openPath(filePath: string): Promise<{ success: boolean; error?: string }>
@@ -116,6 +120,17 @@ declare global {
       heartbeatSet(username: string): Promise<boolean>
       heartbeatClear(username: string): Promise<boolean>
       heartbeatCheck(username: string): Promise<{ username: string; timestamp: string } | null>
+
+      // ── Presentation mode (hall display) ──────────────────────────────────
+      presentationOpen(opts?: { displayId?: number }): Promise<{ success: boolean }>
+      presentationClose(): Promise<{ success: boolean }>
+      presentationListDisplays(): Promise<Array<{
+        id: number
+        label: string
+        bounds: { x: number; y: number; width: number; height: number }
+        primary: boolean
+        scaleFactor: number
+      }>>
     }
     electronSend(channel: string): void
     electronDrop: { getPath(file: File): string }

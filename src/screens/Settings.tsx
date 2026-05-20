@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database, Eye, EyeOff } from 'lucide-react'
+import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database, Eye, EyeOff, Users, RotateCcw, AlertTriangle } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
 import { api } from '../electronAPI'
@@ -7,6 +7,12 @@ import type { AppSettings } from '../types'
 import type { UserEmailConfig, AppConfig } from '../types/auth'
 import Card from '../components/Card'
 import { setKBPath, getKBPath } from '../utils/guruKnowledgeBase'
+import { pathService } from '../services/pathService'
+import {
+  loadUserMenuOverrides, saveUserMenuOverrides,
+  type UserMenuOverrides,
+} from '../services/userMenuVisibility'
+import type { AppUser } from '../types/auth'
 
 const EMAIL_CONFIG_PATH = (username: string) => `email_config/${username}.json`
 
@@ -259,6 +265,461 @@ function MenuVisibilityCard() {
   )
 }
 
+// ── Per-User Menu Visibility (Master Admin) ──────────────────────────────────
+// Master admin selects a user and configures exactly which menu items are
+// visible for that user. Override is authoritative — can even hide Home and
+// Settings (useful for kiosk-style accounts that only see one menu point).
+
+interface MenuItemDef {
+  id: string
+  label: string
+  group: string
+  adminFeature?: boolean      // requires admin/master role
+  masterOnlyFeature?: boolean // requires master role only
+}
+
+const ALL_MENU_ITEMS: MenuItemDef[] = [
+  // Start
+  { id: 'home',                   label: 'Startbildschirm',         group: 'Start' },
+  { id: 'location-overview',      label: 'Standort-Übersicht',      group: 'Start' },
+  // Werkzeuge
+  { id: 'query-menu',             label: 'Abfrage-Menü',            group: 'Werkzeuge' },
+  { id: 'remote-doc',             label: 'Remote Doc',              group: 'Werkzeuge' },
+  { id: 'it-guru',                label: 'IT Guru',                 group: 'Werkzeuge' },
+  { id: 'pc-diagnosis',           label: 'PC-Diagnose',             group: 'Werkzeuge' },
+  // Automation
+  { id: 'scheduled-tasks',        label: 'Geplante Aufgaben',       group: 'Automation', adminFeature: true },
+  { id: 'dashboards',             label: 'Dashboards',              group: 'Automation' },
+  { id: 'network-radar',          label: 'Netzwerk-Radar',          group: 'Automation', adminFeature: true },
+  { id: 'pc-migration',           label: 'PC-Migration',            group: 'Automation', adminFeature: true },
+  { id: 'software-inventory',     label: 'Software-Inventar',       group: 'Automation', adminFeature: true },
+  { id: 'software-installations', label: 'Software Installationen', group: 'Automation', adminFeature: true },
+  { id: 'presentation-mode',      label: 'Präsentationsmodus',      group: 'Automation', adminFeature: true },
+  // Info & Hilfe
+  { id: 'user-info',              label: 'Benutzer Info',           group: 'Info & Hilfe' },
+  { id: 'xelion',                 label: 'Diensthandy & Xelion',    group: 'Info & Hilfe' },
+  { id: 'trickbox',               label: 'Trickbox',                group: 'Info & Hilfe' },
+  { id: 'infra-marine',           label: 'Infrastruktur Marine',    group: 'Info & Hilfe' },
+  // Wissen
+  { id: 'knowledge-base',         label: 'Wissensdatenbank',        group: 'Wissen' },
+  { id: 'results',                label: 'Ergebnisse',              group: 'Wissen' },
+  { id: 'settings',               label: 'Einstellungen',           group: 'Wissen' },
+  // Master Admin
+  { id: 'user-management',        label: 'Benutzerverwaltung',      group: 'Master Admin', masterOnlyFeature: true },
+  { id: 'user-logs',              label: 'Benutzer-Logs',           group: 'Master Admin', masterOnlyFeature: true },
+  { id: 'bug-mailbox',            label: 'Bug-Meldungen',           group: 'Master Admin', masterOnlyFeature: true },
+]
+
+function applicableItemsForRole(role: 'master_admin' | 'admin' | 'user'): MenuItemDef[] {
+  return ALL_MENU_ITEMS.filter(item => {
+    if (item.masterOnlyFeature) return role === 'master_admin'
+    if (item.adminFeature) return role === 'master_admin' || role === 'admin'
+    return true
+  })
+}
+
+function UserMenuVisibilityCard() {
+  const [users, setUsers] = useState<AppUser[]>([])
+  const [overrides, setOverrides] = useState<UserMenuOverrides>({})
+  const [selectedUserId, setSelectedUserId] = useState<string>('')
+  // Working hidden set for the selected user (null = no override / "default mode")
+  const [hiddenForSelected, setHiddenForSelected] = useState<Set<string> | null>(null)
+  const [dirty, setDirty] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [feedback, setFeedback] = useState<{ kind: 'success' | 'error'; text: string } | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  // Initial load
+  useEffect(() => {
+    (async () => {
+      try {
+        const [u, o] = await Promise.all([api().authGetUsers(), loadUserMenuOverrides()])
+        // Exclude master admins by default from the dropdown (they always see everything)
+        // — but keep them in the list so the master can also override themself if they want.
+        setUsers(u)
+        setOverrides(o)
+      } catch { /* ignore */ }
+      setLoading(false)
+    })()
+  }, [])
+
+  // When user selection changes, load that user's override
+  useEffect(() => {
+    if (!selectedUserId) { setHiddenForSelected(null); setDirty(false); return }
+    const entry = overrides[selectedUserId]
+    setHiddenForSelected(entry ? new Set(entry.hidden) : null)
+    setDirty(false)
+  }, [selectedUserId, overrides])
+
+  const selectedUser = users.find(u => u.id === selectedUserId)
+  const applicableItems = selectedUser ? applicableItemsForRole(selectedUser.role) : []
+  const groups = [...new Set(applicableItems.map(i => i.group))]
+
+  function toggleItem(id: string) {
+    setHiddenForSelected(prev => {
+      const next = new Set(prev ?? [])
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+    setDirty(true)
+  }
+
+  function hideAll() {
+    setHiddenForSelected(new Set(applicableItems.map(i => i.id)))
+    setDirty(true)
+  }
+  function showAll() {
+    setHiddenForSelected(new Set())
+    setDirty(true)
+  }
+  function showOnly(id: string) {
+    const others = applicableItems.filter(i => i.id !== id).map(i => i.id)
+    setHiddenForSelected(new Set(others))
+    setDirty(true)
+  }
+
+  async function handleSave() {
+    if (!selectedUserId) return
+    setSaving(true)
+    try {
+      const next: UserMenuOverrides = { ...overrides }
+      if (hiddenForSelected === null) {
+        delete next[selectedUserId]
+      } else {
+        next[selectedUserId] = { hidden: [...hiddenForSelected] }
+      }
+      const res = await saveUserMenuOverrides(next)
+      if (res.ok) {
+        setOverrides(next)
+        setDirty(false)
+        setFeedback({ kind: 'success', text: 'Konfiguration gespeichert. Nutzer sieht die Änderung beim nächsten Öffnen der App.' })
+        setTimeout(() => setFeedback(null), 4000)
+      } else {
+        setFeedback({ kind: 'error', text: res.error || 'Speichern fehlgeschlagen.' })
+      }
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function handleRemoveOverride() {
+    if (!selectedUserId) return
+    setSaving(true)
+    try {
+      const next: UserMenuOverrides = { ...overrides }
+      delete next[selectedUserId]
+      const res = await saveUserMenuOverrides(next)
+      if (res.ok) {
+        setOverrides(next)
+        setHiddenForSelected(null)
+        setDirty(false)
+        setFeedback({ kind: 'success', text: 'Override entfernt — Nutzer sieht jetzt wieder die Standard-Sidebar.' })
+        setTimeout(() => setFeedback(null), 4000)
+      } else {
+        setFeedback({ kind: 'error', text: res.error || 'Entfernen fehlgeschlagen.' })
+      }
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const hiddenCount = hiddenForSelected?.size ?? 0
+  const visibleCount = applicableItems.length - hiddenCount
+  const hasOverride = selectedUserId !== '' && overrides[selectedUserId] !== undefined
+
+  if (loading) {
+    return (
+      <Card title="Menüpunkte pro Benutzer (Master Admin)" icon={<Users size={15} />}>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground py-2">
+          <Loader size={14} className="animate-spin" />Lade Benutzer...
+        </div>
+      </Card>
+    )
+  }
+
+  return (
+    <Card
+      title="Menüpunkte pro Benutzer (Master Admin)"
+      icon={<Users size={15} />}
+      subtitle="Für einzelne Nutzer individuell festlegen, welche Menüpunkte sichtbar sind"
+    >
+      <div className="space-y-4 text-xs">
+        <div className="flex items-start gap-2 bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2">
+          <Info size={12} className="text-blue-400 mt-0.5 shrink-0" />
+          <p className="text-blue-300">
+            Diese Einstellung <strong>überschreibt</strong> die globale Sichtbarkeit oben für den gewählten Nutzer.
+            Beispiel: einen Nutzer anlegen, der nur "Präsentationsmodus" sieht — alle anderen Punkte (auch Startbildschirm/Einstellungen) abwählen.
+          </p>
+        </div>
+
+        {/* User picker */}
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="text-muted-foreground">Benutzer:</label>
+          <select
+            value={selectedUserId}
+            onChange={e => setSelectedUserId(e.target.value)}
+            className="flex-1 min-w-[200px] px-2 py-1.5 rounded-md bg-background border border-border text-foreground"
+          >
+            <option value="">— Benutzer auswählen —</option>
+            {users.map(u => {
+              const has = overrides[u.id] !== undefined
+              const roleLabel = u.role === 'master_admin' ? 'Master' : u.role === 'admin' ? 'Admin' : 'User'
+              return (
+                <option key={u.id} value={u.id}>
+                  {u.displayName || u.username} · {roleLabel}{has ? '  •  Override aktiv' : ''}
+                </option>
+              )
+            })}
+          </select>
+        </div>
+
+        {selectedUser && (
+          <>
+            {selectedUser.role === 'master_admin' && (
+              <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
+                <AlertTriangle size={12} className="text-amber-400 mt-0.5 shrink-0" />
+                <p className="text-amber-200">
+                  Master Admins sehen <strong>immer</strong> alle Menüpunkte — Overrides werden für sie ignoriert.
+                  Die Konfiguration kann gespeichert, hat für diesen Nutzer aber keine Wirkung.
+                </p>
+              </div>
+            )}
+
+            {/* Helper actions */}
+            <div className="flex flex-wrap items-center gap-2">
+              <button onClick={showAll} className="text-[11px] px-2 py-1 rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-muted/30">
+                Alles anzeigen
+              </button>
+              <button onClick={hideAll} className="text-[11px] px-2 py-1 rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-muted/30">
+                Alles ausblenden
+              </button>
+              <div className="flex items-center gap-1">
+                <span className="text-[11px] text-muted-foreground">Nur anzeigen:</span>
+                <select
+                  onChange={e => e.target.value && showOnly(e.target.value)}
+                  value=""
+                  className="text-[11px] px-2 py-1 rounded-md bg-background border border-border text-foreground"
+                >
+                  <option value="">— Schnellauswahl —</option>
+                  {applicableItems.map(i => (
+                    <option key={i.id} value={i.id}>{i.label}</option>
+                  ))}
+                </select>
+              </div>
+              <span className="ml-auto text-[10px] text-muted-foreground">
+                {hiddenForSelected === null
+                  ? 'Kein Override aktiv (Standard greift)'
+                  : `${visibleCount} sichtbar · ${hiddenCount} ausgeblendet`}
+              </span>
+            </div>
+
+            {/* Items grid */}
+            <div className="space-y-3">
+              {groups.map(group => (
+                <div key={group}>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">{group}</p>
+                  <div className="space-y-1">
+                    {applicableItems.filter(i => i.group === group).map(item => {
+                      const isHidden = hiddenForSelected?.has(item.id) ?? false
+                      return (
+                        <label
+                          key={item.id}
+                          className={`flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
+                            isHidden ? 'bg-red-500/5 hover:bg-red-500/10' : 'hover:bg-accent/30'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={!isHidden}
+                            onChange={() => toggleItem(item.id)}
+                            className="rounded accent-primary"
+                          />
+                          <span className={isHidden ? 'text-muted-foreground line-through' : 'text-foreground'}>
+                            {item.label}
+                          </span>
+                          {isHidden && <span className="ml-auto text-[9px] text-red-400">ausgeblendet</span>}
+                        </label>
+                      )
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Save / remove override */}
+            <div className="flex items-center gap-3 pt-2 border-t border-border">
+              <button
+                onClick={handleSave}
+                disabled={!dirty || saving}
+                className={`flex items-center gap-1.5 px-4 py-2 text-xs rounded-md font-medium ${
+                  dirty && !saving ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-muted text-muted-foreground cursor-not-allowed'
+                }`}
+              >
+                {saving ? <Loader size={12} className="animate-spin" /> : <Save size={12} />}
+                Speichern
+              </button>
+              {hasOverride && (
+                <button
+                  onClick={handleRemoveOverride}
+                  disabled={saving}
+                  className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-muted/30"
+                >
+                  <RotateCcw size={12} />Override entfernen
+                </button>
+              )}
+              {feedback && (
+                <span
+                  className={`text-xs flex items-center gap-1 ${
+                    feedback.kind === 'success' ? 'text-emerald-400' : 'text-red-400'
+                  }`}
+                >
+                  {feedback.kind === 'success' ? <CheckCircle size={12} /> : <XCircle size={12} />}
+                  {feedback.text}
+                </span>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    </Card>
+  )
+}
+
+function PathConfigSection() {
+  const [cfg, setCfg] = useState(pathService.getConfig())
+  const [saved, setSaved] = useState(false)
+  const [error, setError] = useState('')
+  const [testing, setTesting] = useState<Record<string, 'ok' | 'fail' | 'loading'>>({})
+
+  async function loadFromServer() {
+    try {
+      const res = await api().loadPathsConfig()
+      if (res.success && res.data) {
+        const data = res.data as typeof cfg
+        setCfg(data)
+        pathService.updateConfig(data)
+      }
+    } catch { /* use current */ }
+  }
+
+  useEffect(() => { loadFromServer() }, [])
+
+  async function handleSave() {
+    setError('')
+    try {
+      const toSave = { ...cfg, lastModified: new Date().toISOString(), modifiedBy: useAuthStore.getState().session?.user.username || 'unknown' }
+      const res = await api().savePathsConfig(toSave)
+      if (res.success) {
+        pathService.updateConfig(toSave)
+        setCfg(toSave)
+        setSaved(true)
+        setTimeout(() => setSaved(false), 3000)
+      } else {
+        setError(res.error || 'Speichern fehlgeschlagen')
+      }
+    } catch (e) { setError(String(e)) }
+  }
+
+  async function testPath(label: string, path: string) {
+    setTesting(t => ({ ...t, [label]: 'loading' }))
+    try {
+      const res = await api().runPowerShell(`if (Test-Path '${path.replace(/'/g, "''")}') { Write-Output 'OK' } else { Write-Output 'FAIL' }`, 5000)
+      setTesting(t => ({ ...t, [label]: res.stdout.trim() === 'OK' ? 'ok' : 'fail' }))
+    } catch {
+      setTesting(t => ({ ...t, [label]: 'fail' }))
+    }
+  }
+
+  function updateBase(key: keyof typeof cfg.base, val: string) {
+    setCfg(c => ({ ...c, base: { ...c.base, [key]: val } }))
+  }
+
+  return (
+    <div className="space-y-4 text-xs">
+      <div className="flex items-start gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg px-3 py-2">
+        <Info size={12} className="text-yellow-400 mt-0.5 shrink-0" />
+        <p className="text-yellow-300">Aenderungen wirken sich auf das gesamte Tool aus und betreffen alle Admins.</p>
+      </div>
+
+      <div className="flex items-center gap-3 mb-2">
+        <label className="text-muted-foreground text-[11px] font-medium">Bevorzugter Zugriffsmodus:</label>
+        <select value={cfg.preferredAccessMode} onChange={e => setCfg(c => ({ ...c, preferredAccessMode: e.target.value as 'unc' | 'drive' }))}
+          className="px-2 py-1 rounded bg-background border border-border text-xs text-foreground">
+          <option value="unc">UNC-Pfade (\\\\server\\...)</option>
+          <option value="drive">Laufwerksbuchstaben (I:\\, G:\\)</option>
+        </select>
+      </div>
+
+      <details>
+        <summary className="text-sm font-semibold text-foreground cursor-pointer hover:text-primary">Basis-Pfade</summary>
+        <div className="mt-2 space-y-2 pl-2">
+          {(['toolRoot', 'publicRoot', 'marineRoot'] as const).map(key => (
+            <div key={key} className="grid grid-cols-[120px_1fr_1fr_60px] gap-2 items-center">
+              <span className="text-muted-foreground font-medium">{key}</span>
+              <input value={cfg.base[`${key}_unc`]} onChange={e => updateBase(`${key}_unc`, e.target.value)} placeholder="UNC" className="px-2 py-1 rounded bg-background border border-border text-xs font-mono text-foreground" />
+              <input value={cfg.base[`${key}_drive`]} onChange={e => updateBase(`${key}_drive`, e.target.value)} placeholder="Drive" className="px-2 py-1 rounded bg-background border border-border text-xs font-mono text-foreground" />
+              <button onClick={() => testPath(key, cfg.base[`${key}_unc`])} className="px-2 py-1 rounded border border-border text-[10px] text-muted-foreground hover:text-foreground">
+                {testing[key] === 'loading' ? '...' : testing[key] === 'ok' ? 'OK' : testing[key] === 'fail' ? 'FAIL' : 'Test'}
+              </button>
+            </div>
+          ))}
+        </div>
+      </details>
+
+      <details>
+        <summary className="text-sm font-semibold text-foreground cursor-pointer hover:text-primary">Tool-Unterordner</summary>
+        <div className="mt-2 space-y-1 pl-2">
+          {Object.entries(cfg.toolSubfolders).map(([key, val]) => (
+            <div key={key} className="grid grid-cols-[140px_1fr] gap-2 items-center">
+              <span className="text-muted-foreground font-medium">{key}</span>
+              <input value={val} onChange={e => setCfg(c => ({ ...c, toolSubfolders: { ...c.toolSubfolders, [key]: e.target.value } }))} className="px-2 py-1 rounded bg-background border border-border text-xs font-mono text-foreground" />
+            </div>
+          ))}
+        </div>
+      </details>
+
+      <details>
+        <summary className="text-sm font-semibold text-foreground cursor-pointer hover:text-primary">Software-Pfade (SolidWorks)</summary>
+        <div className="mt-2 space-y-1 pl-2">
+          {Object.entries(cfg.softwareInstall.solidworks).map(([key, val]) => (
+            <div key={key} className="grid grid-cols-[200px_1fr] gap-2 items-center">
+              <span className="text-muted-foreground font-medium text-[10px]">{key}</span>
+              <input value={val} onChange={e => setCfg(c => ({ ...c, softwareInstall: { ...c.softwareInstall, solidworks: { ...c.softwareInstall.solidworks, [key]: e.target.value } } }))} className="px-2 py-1 rounded bg-background border border-border text-xs font-mono text-foreground" />
+            </div>
+          ))}
+        </div>
+      </details>
+
+      <details>
+        <summary className="text-sm font-semibold text-foreground cursor-pointer hover:text-primary">Domains und Hostnamen</summary>
+        <div className="mt-2 space-y-1 pl-2">
+          {Object.entries(cfg.domains).map(([key, val]) => (
+            <div key={key} className="grid grid-cols-[160px_1fr] gap-2 items-center">
+              <span className="text-muted-foreground font-medium">{key}</span>
+              <input value={val} onChange={e => setCfg(c => ({ ...c, domains: { ...c.domains, [key]: e.target.value } }))} className="px-2 py-1 rounded bg-background border border-border text-xs font-mono text-foreground" />
+            </div>
+          ))}
+        </div>
+      </details>
+
+      <div className="flex items-center gap-2 pt-2 border-t border-border">
+        <button onClick={handleSave} className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90">
+          {saved ? 'Gespeichert' : 'Speichern'}
+        </button>
+        <button onClick={() => { pathService.resetToDefaults(); setCfg(pathService.getConfig()) }} className="px-3 py-1.5 rounded-lg text-xs text-muted-foreground border border-border hover:text-foreground">
+          Standardwerte
+        </button>
+        {error && <span className="text-xs text-red-400">{error}</span>}
+      </div>
+
+      <div className="text-[10px] text-muted-foreground">
+        Letzte Aenderung: {cfg.lastModified ? new Date(cfg.lastModified).toLocaleString('de-DE') : 'nie'} von {cfg.modifiedBy || '-'}
+      </div>
+    </div>
+  )
+}
+
 export default function Settings() {
   const settings = useAppStore((s) => s.settings)
   const setSettings = useAppStore((s) => s.setSettings)
@@ -495,7 +956,11 @@ export default function Settings() {
                 Test-Mail senden
               </button>
               {testState === 'ok' && <span className="text-xs text-emerald-400">Mail gesendet!</span>}
-              {testState === 'error' && <span className="text-xs text-red-400 truncate max-w-[200px]" title={testError}>{testError}</span>}
+              {testState === 'error' && (
+                <div className="mt-2 p-2 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-400 whitespace-pre-wrap break-all max-h-40 overflow-y-auto w-full">
+                  {testError}
+                </div>
+              )}
             </div>
           </div>
         </Card>
@@ -690,7 +1155,7 @@ export default function Settings() {
             </p>
             <div className="flex gap-2">
               <input
-                value={'\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools'}
+                value={pathService.getToolsDir()}
                 readOnly
                 className="flex-1 px-2.5 py-1.5 text-xs rounded-md border border-border bg-muted/20 text-foreground font-mono focus:outline-none"
               />
@@ -698,7 +1163,7 @@ export default function Settings() {
                 onClick={async () => {
                   try {
                     const res = await api().runPowerShell([
-                      `$toolsPath = '${netBasePath || '\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT'}\\tools'`,
+                      `$toolsPath = '${netBasePath || pathService.getToolRoot()}\\tools'`,
                       `if (-not (Test-Path $toolsPath)) { New-Item -Path $toolsPath -ItemType Directory -Force | Out-Null }`,
                       `$zipPath = "$env:TEMP\\PSTools.zip"`,
                       `$extractPath = "$env:TEMP\\PSTools"`,
@@ -764,6 +1229,16 @@ export default function Settings() {
 
       {/* ── Menu Visibility (Master Admin only) ── */}
       {isMaster && <MenuVisibilityCard />}
+
+      {/* ── Per-User Menu Visibility (Master Admin only) ── */}
+      {isMaster && <UserMenuVisibilityCard />}
+
+      {/* ── Path Configuration (Master Admin only) ── */}
+      {isMaster && (
+        <Card title="Pfad-Konfiguration" icon={<Database size={15} />} subtitle="Zentrale Verwaltung aller Netzwerk- und Laufwerkspfade">
+          <PathConfigSection />
+        </Card>
+      )}
 
       <Card title="Über das Programm" icon={<Info size={15} />}>
         <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">

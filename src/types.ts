@@ -6,6 +6,9 @@ export type Screen =
   | 'pc-migration'
   | 'software-inventory'
   | 'pc-diagnosis'
+  | 'infra-marine'
+  | 'software-installations'
+  | 'presentation-mode'
 
 export type Prefix = 'DE' | 'DEHAM' | 'DESCH' | 'Sonstige'
 

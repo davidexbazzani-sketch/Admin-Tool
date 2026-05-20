@@ -1,14 +1,12 @@
-// ── Outlook COM via Scheduled Task ─────────────────────────────────────────
-// Solves the UIPI problem: when the app runs as admin (elevated), direct COM
-// calls to Outlook (which runs in the normal user session) are blocked.
-// By running the VBScript as a Scheduled Task under the logged-in user,
-// the script executes in the non-elevated session and can access Outlook.
-
-import { writeFileSync, readFileSync, unlinkSync, existsSync } from 'fs'
-import { tmpdir } from 'os'
+import { writeFileSync, readFileSync, unlinkSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { execSync } from 'child_process'
 import { userInfo } from 'os'
+
+// VOLLE PFADE — damit es auch im elevated Kontext funktioniert
+const SCHTASKS = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'schtasks.exe')
+const CSCRIPT = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'cscript.exe')
+const WORK_DIR = 'C:\\Temp\\ITAdminMail'
 
 interface MailOpts {
   to: string
@@ -26,187 +24,223 @@ interface MailResult {
   method?: string
 }
 
-/** Detect the interactive desktop user (may differ from process owner when elevated) */
 function getDesktopUser(): string {
+  // Methode 1: query user
   try {
-    const out = execSync('query user 2>nul || quser 2>nul', { encoding: 'utf-8', windowsHide: true, timeout: 5000 })
+    const quser = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'query.exe')
+    const out = execSync(`"${quser}" user`, { encoding: 'utf-8', windowsHide: true, timeout: 5000, stdio: ['pipe', 'pipe', 'pipe'] })
     const lines = out.split('\n').filter(l => l.includes('Active') || l.includes('Aktiv'))
     if (lines.length > 0) {
       const u = lines[0].trim().split(/\s+/)[0].replace(/^>/, '')
       if (u) return u
     }
-  } catch { /* fallback below */ }
+  } catch { /* next */ }
+
+  // Methode 2: WMI
+  try {
+    const wmic = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'Wbem', 'WMIC.exe')
+    const out = execSync(`"${wmic}" ComputerSystem Get UserName /Format:Value`, { encoding: 'utf-8', windowsHide: true, timeout: 5000, stdio: ['pipe', 'pipe', 'pipe'] })
+    const match = out.match(/UserName=(.+)/i)
+    if (match) {
+      const parts = match[1].trim().split('\\')
+      return parts[parts.length - 1]
+    }
+  } catch { /* next */ }
+
   return userInfo().username
 }
 
-/** Generate a unique task/file name to avoid collisions */
 function uid(): string {
-  return `itmail_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+  return Math.random().toString(36).slice(2, 10)
 }
 
-/**
- * Send an email via Outlook COM, executed as a Scheduled Task in the user's session.
- * Works even when the app is running elevated (as admin).
- */
+function ensureWorkDir(): void {
+  try {
+    if (!existsSync(WORK_DIR)) mkdirSync(WORK_DIR, { recursive: true })
+  } catch { /* ok */ }
+}
+
 export async function sendViaOutlookScheduledTask(opts: MailOpts): Promise<MailResult> {
   const id = uid()
-  const bodyPath = join(tmpdir(), `${id}_body.txt`)
-  const vbsPath = join(tmpdir(), `${id}.vbs`)
-  const resultPath = join(tmpdir(), `${id}_result.txt`)
-  const taskName = `ITAdminMail_${id}`
+  ensureWorkDir()
+
+  const bodyPath   = join(WORK_DIR, `body_${id}.txt`)
+  const vbsPath    = join(WORK_DIR, `send_${id}.vbs`)
+  const resultPath = join(WORK_DIR, `result_${id}.txt`)
+  const taskName   = `ITMailSend_${id}`
 
   try {
-    // Write body as UTF-8 file (avoids all VBS escaping issues with umlauts, quotes, newlines)
+    // Body als UTF-8 Datei schreiben (vermeidet VBS-Encoding-Probleme)
     writeFileSync(bodyPath, opts.body, 'utf-8')
 
-    // Build VBScript
+    // VBScript zusammenbauen
     const vbs = [
       'On Error Resume Next',
+      'Dim objStream',
+      'Set objStream = CreateObject("ADODB.Stream")',
+      'objStream.Type = 2',
+      'objStream.Charset = "UTF-8"',
+      'objStream.Open',
+      'objStream.LoadFromFile "' + bodyPath.replace(/\\/g, '\\\\') + '"',
+      'Dim bodyText',
+      'bodyText = objStream.ReadText',
+      'objStream.Close',
+      'Set objStream = Nothing',
       '',
-      '\'  Read body from UTF-8 file via ADODB.Stream',
-      'Dim stream : Set stream = CreateObject("ADODB.Stream")',
-      'stream.Type = 2', // adTypeText
-      'stream.Charset = "UTF-8"',
-      `stream.Open`,
-      `stream.LoadFromFile "${bodyPath.replace(/\\/g, '\\\\')}"`,
-      'Dim bodyText : bodyText = stream.ReadText',
-      'stream.Close',
-      '',
-      'Dim objOutlook : Set objOutlook = CreateObject("Outlook.Application")',
       'If Err.Number <> 0 Then',
-      `  WriteResult "ERR:Outlook nicht verfuegbar - " & Err.Description`,
+      '  Call WriteResult("ERR:Body-Datei nicht lesbar - " & Err.Description)',
       '  WScript.Quit 1',
       'End If',
       '',
-      'Dim objMail : Set objMail = objOutlook.CreateItem(0)',
-      `objMail.To = "${(opts.to || '').replace(/"/g, '')}"`,
-      opts.cc ? `objMail.CC = "${opts.cc.replace(/"/g, '')}"` : '',
-      opts.bcc ? `objMail.BCC = "${opts.bcc.replace(/"/g, '')}"` : '',
-      `objMail.Subject = "${(opts.subject || '').replace(/"/g, "'")}"`,
+      'Dim objOutlook',
+      'Set objOutlook = CreateObject("Outlook.Application")',
+      'If Err.Number <> 0 Then',
+      '  Call WriteResult("ERR:Outlook nicht erreichbar - " & Err.Description)',
+      '  WScript.Quit 1',
+      'End If',
+      '',
+      'Dim objMail',
+      'Set objMail = objOutlook.CreateItem(0)',
+      'objMail.To = "' + (opts.to || '').replace(/"/g, '') + '"',
+      opts.cc ? 'objMail.CC = "' + opts.cc.replace(/"/g, '') + '"' : '',
+      opts.bcc ? 'objMail.BCC = "' + opts.bcc.replace(/"/g, '') + '"' : '',
+      'objMail.Subject = "' + (opts.subject || '').replace(/"/g, "'") + '"',
       opts.html ? 'objMail.HTMLBody = bodyText' : 'objMail.Body = bodyText',
-      opts.attachmentPath ? `objMail.Attachments.Add "${opts.attachmentPath.replace(/"/g, '')}"` : '',
+      opts.attachmentPath ? 'objMail.Attachments.Add "' + opts.attachmentPath.replace(/"/g, '') + '"' : '',
       '',
       'objMail.Send',
       '',
       'If Err.Number <> 0 Then',
-      `  WriteResult "ERR:" & Err.Description`,
+      '  Call WriteResult("ERR:" & Err.Description)',
       'Else',
-      '  WriteResult "OK"',
+      '  Call WriteResult("OK")',
       'End If',
+      '',
+      'Set objMail = Nothing',
+      'Set objOutlook = Nothing',
       '',
       'Sub WriteResult(msg)',
       '  Dim fso : Set fso = CreateObject("Scripting.FileSystemObject")',
-      `  Dim f : Set f = fso.CreateTextFile("${resultPath.replace(/\\/g, '\\\\')}", True)`,
+      '  Dim f : Set f = fso.CreateTextFile("' + resultPath.replace(/\\/g, '\\\\') + '", True)',
       '  f.Write msg',
       '  f.Close',
+      '  Set f = Nothing : Set fso = Nothing',
       'End Sub',
     ].filter(l => l !== '').join('\r\n')
 
     writeFileSync(vbsPath, vbs, 'utf-8')
 
     const desktopUser = getDesktopUser()
-    console.log(`[outlookMailer] send: to=${opts.to}, user=${desktopUser}, task=${taskName}`)
+    console.log('[outlookMailer] send: to=' + opts.to + ' user=' + desktopUser + ' task=' + taskName)
 
-    // Create and run scheduled task as the desktop user
-    execSync(
-      `schtasks /create /tn "${taskName}" /tr "cscript //nologo \\"${vbsPath}\\"" /sc once /st 00:00 /ru "${desktopUser}" /rl HIGHEST /f`,
-      { encoding: 'utf-8', windowsHide: true, timeout: 10000 }
-    )
-    execSync(
-      `schtasks /run /tn "${taskName}"`,
-      { encoding: 'utf-8', windowsHide: true, timeout: 10000 }
-    )
+    // Task erstellen — /rl LIMITED damit es in der normalen User-Session laeuft
+    const createCmd = '"' + SCHTASKS + '" /create /tn "' + taskName + '" /tr "\\"' + CSCRIPT + '\\" //nologo //B \\"' + vbsPath + '\\"" /sc once /st 00:00 /ru "' + desktopUser + '" /rl LIMITED /f'
+    console.log('[outlookMailer] create:', createCmd)
+    execSync(createCmd, { encoding: 'utf-8', windowsHide: true, timeout: 15000 })
 
-    // Poll for result (max 30 seconds)
+    // Task starten
+    const runCmd = '"' + SCHTASKS + '" /run /tn "' + taskName + '"'
+    console.log('[outlookMailer] run:', runCmd)
+    execSync(runCmd, { encoding: 'utf-8', windowsHide: true, timeout: 15000 })
+
+    // Auf Ergebnis warten (max 30 Sekunden)
     const start = Date.now()
     while (Date.now() - start < 30000) {
       if (existsSync(resultPath)) {
         const res = readFileSync(resultPath, 'utf-8').trim()
-        console.log(`[outlookMailer] result: ${res}`)
+        console.log('[outlookMailer] result:', res)
         if (res === 'OK') return { success: true, method: 'outlook-schtask' }
         return { success: false, error: res.replace(/^ERR:/, ''), method: 'outlook-schtask' }
       }
       await new Promise(r => setTimeout(r, 500))
     }
-    return { success: false, error: 'Timeout — Outlook hat nicht geantwortet (30s)', method: 'outlook-schtask' }
+
+    return { success: false, error: 'Timeout (30s) — keine Antwort von Outlook', method: 'outlook-schtask' }
 
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     console.error('[outlookMailer] error:', msg)
     return { success: false, error: msg, method: 'outlook-schtask' }
   } finally {
-    // Cleanup
-    try { execSync(`schtasks /delete /tn "${taskName}" /f`, { windowsHide: true, timeout: 5000 }) } catch { /* ok */ }
-    try { unlinkSync(vbsPath) } catch { /* ok */ }
-    try { unlinkSync(bodyPath) } catch { /* ok */ }
-    try { unlinkSync(resultPath) } catch { /* ok */ }
+    // Task loeschen
+    try { execSync('"' + SCHTASKS + '" /delete /tn "' + taskName + '" /f', { windowsHide: true, timeout: 5000, stdio: ['pipe', 'pipe', 'pipe'] }) } catch { /* ok */ }
+    // Dateien nach 5 Sekunden loeschen (Task braucht Zeit zum Lesen)
+    setTimeout(() => {
+      try { if (existsSync(vbsPath)) unlinkSync(vbsPath) } catch { /* ok */ }
+      try { if (existsSync(bodyPath)) unlinkSync(bodyPath) } catch { /* ok */ }
+      try { if (existsSync(resultPath)) unlinkSync(resultPath) } catch { /* ok */ }
+    }, 5000)
   }
 }
 
-/**
- * Open Outlook compose window with pre-filled fields.
- * Same Scheduled Task approach for UIPI bypass.
- */
 export async function composeViaOutlookScheduledTask(opts: MailOpts): Promise<MailResult> {
   const id = uid()
-  const bodyPath = join(tmpdir(), `${id}_body.txt`)
-  const vbsPath = join(tmpdir(), `${id}.vbs`)
-  const resultPath = join(tmpdir(), `${id}_result.txt`)
-  const taskName = `ITAdminCompose_${id}`
+  ensureWorkDir()
+
+  const bodyPath   = join(WORK_DIR, `body_${id}.txt`)
+  const vbsPath    = join(WORK_DIR, `compose_${id}.vbs`)
+  const resultPath = join(WORK_DIR, `result_${id}.txt`)
+  const taskName   = `ITMailCompose_${id}`
 
   try {
     writeFileSync(bodyPath, opts.body, 'utf-8')
 
     const vbs = [
       'On Error Resume Next',
+      'Dim objStream',
+      'Set objStream = CreateObject("ADODB.Stream")',
+      'objStream.Type = 2',
+      'objStream.Charset = "UTF-8"',
+      'objStream.Open',
+      'objStream.LoadFromFile "' + bodyPath.replace(/\\/g, '\\\\') + '"',
+      'Dim bodyText',
+      'bodyText = objStream.ReadText',
+      'objStream.Close',
+      'Set objStream = Nothing',
       '',
-      'Dim stream : Set stream = CreateObject("ADODB.Stream")',
-      'stream.Type = 2',
-      'stream.Charset = "UTF-8"',
-      'stream.Open',
-      `stream.LoadFromFile "${bodyPath.replace(/\\/g, '\\\\')}"`,
-      'Dim bodyText : bodyText = stream.ReadText',
-      'stream.Close',
-      '',
-      'Dim objOutlook : Set objOutlook = CreateObject("Outlook.Application")',
+      'Dim objOutlook',
+      'Set objOutlook = CreateObject("Outlook.Application")',
       'If Err.Number <> 0 Then',
-      `  WriteResult "ERR:Outlook nicht verfuegbar - " & Err.Description`,
+      '  Call WriteResult("ERR:Outlook nicht erreichbar - " & Err.Description)',
       '  WScript.Quit 1',
       'End If',
       '',
-      'Dim objMail : Set objMail = objOutlook.CreateItem(0)',
-      `objMail.To = "${(opts.to || '').replace(/"/g, '')}"`,
-      opts.cc ? `objMail.CC = "${opts.cc.replace(/"/g, '')}"` : '',
-      `objMail.Subject = "${(opts.subject || '').replace(/"/g, "'")}"`,
+      'Dim objMail',
+      'Set objMail = objOutlook.CreateItem(0)',
+      'objMail.To = "' + (opts.to || '').replace(/"/g, '') + '"',
+      opts.cc ? 'objMail.CC = "' + opts.cc.replace(/"/g, '') + '"' : '',
+      'objMail.Subject = "' + (opts.subject || '').replace(/"/g, "'") + '"',
       opts.html ? 'objMail.HTMLBody = bodyText' : 'objMail.Body = bodyText',
-      opts.attachmentPath ? `objMail.Attachments.Add "${opts.attachmentPath.replace(/"/g, '')}"` : '',
+      opts.attachmentPath ? 'objMail.Attachments.Add "' + opts.attachmentPath.replace(/"/g, '') + '"' : '',
       '',
       'objMail.Display 0',
-      'WriteResult "OK"',
+      '',
+      'If Err.Number <> 0 Then',
+      '  Call WriteResult("ERR:" & Err.Description)',
+      'Else',
+      '  Call WriteResult("OK")',
+      'End If',
       '',
       'Sub WriteResult(msg)',
       '  Dim fso : Set fso = CreateObject("Scripting.FileSystemObject")',
-      `  Dim f : Set f = fso.CreateTextFile("${resultPath.replace(/\\/g, '\\\\')}", True)`,
+      '  Dim f : Set f = fso.CreateTextFile("' + resultPath.replace(/\\/g, '\\\\') + '", True)',
       '  f.Write msg',
       '  f.Close',
+      '  Set f = Nothing : Set fso = Nothing',
       'End Sub',
     ].filter(l => l !== '').join('\r\n')
 
     writeFileSync(vbsPath, vbs, 'utf-8')
     const desktopUser = getDesktopUser()
 
-    execSync(
-      `schtasks /create /tn "${taskName}" /tr "cscript //nologo \\"${vbsPath}\\"" /sc once /st 00:00 /ru "${desktopUser}" /rl HIGHEST /f`,
-      { encoding: 'utf-8', windowsHide: true, timeout: 10000 }
-    )
-    execSync(
-      `schtasks /run /tn "${taskName}"`,
-      { encoding: 'utf-8', windowsHide: true, timeout: 10000 }
-    )
+    const createCmd = '"' + SCHTASKS + '" /create /tn "' + taskName + '" /tr "\\"' + CSCRIPT + '\\" //nologo //B \\"' + vbsPath + '\\"" /sc once /st 00:00 /ru "' + desktopUser + '" /rl LIMITED /f'
+    execSync(createCmd, { encoding: 'utf-8', windowsHide: true, timeout: 15000 })
 
-    // Shorter timeout for compose (just needs to open the window)
+    const runCmd = '"' + SCHTASKS + '" /run /tn "' + taskName + '"'
+    execSync(runCmd, { encoding: 'utf-8', windowsHide: true, timeout: 15000 })
+
     const start = Date.now()
-    while (Date.now() - start < 10000) {
+    while (Date.now() - start < 15000) {
       if (existsSync(resultPath)) {
         const res = readFileSync(resultPath, 'utf-8').trim()
         if (res === 'OK') return { success: true, method: 'outlook-compose' }
@@ -219,9 +253,11 @@ export async function composeViaOutlookScheduledTask(opts: MailOpts): Promise<Ma
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : String(err), method: 'outlook-compose' }
   } finally {
-    try { execSync(`schtasks /delete /tn "${taskName}" /f`, { windowsHide: true, timeout: 5000 }) } catch { /* ok */ }
-    try { unlinkSync(vbsPath) } catch { /* ok */ }
-    try { unlinkSync(bodyPath) } catch { /* ok */ }
-    try { unlinkSync(resultPath) } catch { /* ok */ }
+    try { execSync('"' + SCHTASKS + '" /delete /tn "' + taskName + '" /f', { windowsHide: true, timeout: 5000, stdio: ['pipe', 'pipe', 'pipe'] }) } catch { /* ok */ }
+    setTimeout(() => {
+      try { if (existsSync(vbsPath)) unlinkSync(vbsPath) } catch { /* ok */ }
+      try { if (existsSync(bodyPath)) unlinkSync(bodyPath) } catch { /* ok */ }
+      try { if (existsSync(resultPath)) unlinkSync(resultPath) } catch { /* ok */ }
+    }, 5000)
   }
 }

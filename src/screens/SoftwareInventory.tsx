@@ -48,7 +48,8 @@ const SCAN_DATA_PATH = 'software_inventar/scan_data.json'
 
 const SW_PS_LOCAL = `$paths=@('HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKLM:\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*'); Get-ItemProperty $paths -EA SilentlyContinue | Where-Object {$_.DisplayName} | Select-Object DisplayName,DisplayVersion,Publisher | Group-Object DisplayName | ForEach-Object { $_.Group | Sort-Object DisplayVersion -Descending | Select-Object -First 1 } | Sort-Object DisplayName | ConvertTo-Json -Compress`
 
-const PSEXEC_DIR = '\\\\w3172\\skf marine\\700 Application\\711 IT Allgemein\\SW_INSTA\\Tool IT\\tools'
+import { pathService } from '../services/pathService'
+const PSEXEC_DIR = pathService.getToolsDir()
 
 // ── Per-method simple commands (each is a standalone PS script) ──────────────
 
@@ -233,6 +234,10 @@ export default function SoftwareInventory() {
   const [hosts, setHosts] = useState<string[]>([''])
   const [inventoryLoading, setInventoryLoading] = useState(false)
   const [inventoryCount, setInventoryCount] = useState<number | null>(null)
+  // Sync summary from the last inventory load: how many PCs were removed from
+  // the persistent scan database because they are no longer in the location
+  // overview, plus how many are new (not yet scanned).
+  const [inventorySync, setInventorySync] = useState<{ removed: number; newOnes: number } | null>(null)
 
   // ── Persistent data from server ────────────────────────────────────────────
   const [persistent, setPersistent] = useState<PersistentScanData | null>(null)
@@ -272,14 +277,37 @@ export default function SoftwareInventory() {
   }, [])
 
   // ── Load from inventory ────────────────────────────────────────────────────
+  // Reads the current location overview and reconciles it with the persistent
+  // scan database:
+  //   - PCs still in the overview keep their scan data untouched
+  //   - PCs no longer in the overview are removed (scan data deleted)
+  //   - New PCs appear in the host list as unscanned
   const loadFromInventory = useCallback(async () => {
     setInventoryLoading(true)
     const names = await loadInventoryHostnames()
+
+    const newSet = new Set(names.map(n => n.trim().toUpperCase()).filter(Boolean))
+    let removed = 0
+    let newOnes = 0
+
+    if (persistent && Array.isArray(persistent.scannedPCs)) {
+      const existing = new Set(persistent.scannedPCs.map(p => p.hostname.toUpperCase()))
+      const filteredScans = persistent.scannedPCs.filter(p => newSet.has(p.hostname.toUpperCase()))
+      removed = persistent.scannedPCs.length - filteredScans.length
+      newOnes = [...newSet].filter(h => !existing.has(h)).length
+      if (removed > 0) {
+        await savePersistent({ ...persistent, scannedPCs: filteredScans })
+      }
+    } else {
+      newOnes = newSet.size
+    }
+
     setHosts(names.length > 0 ? names : [''])
     setInventoryCount(names.length)
+    setInventorySync({ removed, newOnes })
     setInventoryLoading(false)
     setSource('inventory')
-  }, [])
+  }, [persistent, savePersistent])
 
   // ── Helper: run batched PS commands ─────────────────────────────────────────
   async function runBatch<T>(items: string[], batchSize: number, fn: (item: string) => Promise<T>, onProgress?: (done: number, current: string) => void): Promise<Map<string, T>> {
@@ -682,6 +710,14 @@ export default function SoftwareInventory() {
               <p className="text-xs text-muted-foreground">
                 {inventoryLoading ? 'Lade...' : inventoryCount !== null ? `${inventoryCount} Computer geladen` : 'Klicken um Computer aus dem Inventar zu laden'}
               </p>
+              {inventorySync && source === 'inventory' && (inventorySync.removed > 0 || inventorySync.newOnes > 0) && (
+                <p className="text-[10px] text-muted-foreground mt-1.5">
+                  Sync:{' '}
+                  {inventorySync.newOnes > 0 && <span className="text-blue-400">+{inventorySync.newOnes} neu</span>}
+                  {inventorySync.newOnes > 0 && inventorySync.removed > 0 && ' · '}
+                  {inventorySync.removed > 0 && <span className="text-red-400">−{inventorySync.removed} entfernt (Scan-Daten gelöscht)</span>}
+                </p>
+              )}
             </button>
             <button onClick={() => { setSource('manual'); setInventoryCount(null) }}
               className={`p-4 rounded-lg border-2 text-left transition-all ${source === 'manual' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/40'}`}>

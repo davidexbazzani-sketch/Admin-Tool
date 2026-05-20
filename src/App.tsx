@@ -21,6 +21,10 @@ import BugMailbox from './screens/BugMailbox'
 import Dashboards from './screens/Dashboards'
 import PCMigration from './screens/PCMigration'
 import SoftwareInventory from './screens/SoftwareInventory'
+import InfrastructureMarine from './screens/InfrastructureMarine'
+import SoftwareInstallations from './screens/SoftwareInstallations'
+import PresentationMode from './screens/PresentationMode'
+import PresentationPlayer from './screens/PresentationPlayer'
 import BugReportWidget from './components/BugReportWidget'
 import BetaBanner from './components/BetaBanner'
 import type { Screen } from './types'
@@ -54,11 +58,20 @@ function renderScreen(screen: Screen) {
     case 'pc-migration':      return <PCMigration />
     case 'software-inventory': return <SoftwareInventory />
     case 'pc-diagnosis':      return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><PCDiagnosis /></Suspense>
+    case 'infra-marine':      return <InfrastructureMarine />
+    case 'software-installations': return <SoftwareInstallations />
+    case 'presentation-mode': return <PresentationMode />
     default:                  return <Home />
   }
 }
 
 export default function App() {
+  // Presentation player runs in a separate Electron window using the same
+  // bundle but with hash "#presentation". Bypass all auth/init logic.
+  if (typeof window !== 'undefined' && window.location.hash === '#presentation') {
+    return <PresentationPlayer />
+  }
+
   const screen       = useAppStore(s => s.screen)
   const setIsAdmin   = useAppStore(s => s.setIsAdmin)
   const setAdminChecked = useAppStore(s => s.setAdminChecked)

@@ -3,6 +3,16 @@
 @tailwind utilities;
 
 @layer base {
+  /* Allow text selection everywhere + cursor for copy */
+  *, *::before, *::after {
+    user-select: text;
+    -webkit-user-select: text;
+  }
+  button, [role="button"], input[type="checkbox"], input[type="radio"], label {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
   :root {
     /* Dark navy/slate theme */
     --background: 222 47% 7%;
