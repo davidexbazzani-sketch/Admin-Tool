@@ -16,6 +16,10 @@ export interface AdLookupResult {
   title?: string
   displayName?: string
   sam?: string
+  email?: string            // EmailAddress (fuer Direktversand)
+  reportsCount?: number     // Anzahl direkt unterstellter Mitarbeiter (Abteilungsleiter, wenn > 0)
+  manager?: string          // Vorgesetzter (DisplayName)
+  managerSam?: string       // Vorgesetzter (SamAccountName)
   error?: string
 }
 
@@ -25,57 +29,34 @@ function psQuote(s: string): string {
   return "'" + s.replace(/'/g, "''") + "'"
 }
 
-export async function batchAdLookup(identities: string[]): Promise<Map<string, AdLookupResult>> {
-  const results = new Map<string, AdLookupResult>()
-  const unique = [...new Set(identities.map(s => s.trim()).filter(Boolean))]
-  if (unique.length === 0) return results
-
-  // We emit one tab-separated line per identity. This is much more robust than
-  // ConvertTo-Json which silently changes shape between 1-element and N-element
-  // outputs and breaks on PowerShell pipeline unwrapping. The line format is:
-  //   identity<TAB>found(0|1)<TAB>department<TAB>title<TAB>displayName<TAB>sam
-  // Tabs in fields are not expected — we still escape them to be safe.
-  const idsList = unique.map(psQuote).join(',')
-
-  // Resolution strategies, applied in order until one returns exactly one user:
-  //   1) SamAccountName -eq
-  //   2) EmployeeID    -eq
-  //   3) DisplayName   -eq
-  //   4) DisplayName   -like '*input*'  (only accepted if it resolves to exactly one user)
-  //   5) EmailAddress  -eq
-  //
-  // We deliberately avoid `Get-ADUser -Identity` (validation-heavy, throws on
-  // non-SAM/DN/GUID inputs) and `-LDAPFilter` (escaping pitfalls). The native
-  // `-Filter` syntax with -eq / -like is reliable across PowerShell versions.
-  const script = [
+// Build the PowerShell script for a single batch of identities.
+// Each identity goes through these strategies (first match wins):
+//   1) SamAccountName -eq      (exact SAM)
+//   2) EmployeeID    -eq       (exact employee/corp ID)
+//   3) DisplayName   -eq       (exact display name)
+//   4) EmailAddress  -eq       (exact mail)
+// Wildcard search is intentionally NOT used here — it's slow on large AD trees
+// and the user explicitly corrects names manually when AD lookup fails.
+//
+// Output: one tab-separated line per identity, prefixed with "ADRES\t".
+function buildScript(batch: string[]): string {
+  const idsList = batch.map(psQuote).join(',')
+  return [
     `$ErrorActionPreference = 'SilentlyContinue'`,
-    `$props = @('SamAccountName','DisplayName','Title','Department','EmployeeID','EmailAddress')`,
+    `$props = @('SamAccountName','DisplayName','Title','Department','EmployeeID','EmailAddress','UserPrincipalName','Manager','DirectReports')`,
     `$tab = [char]9`,
     `foreach ($id in @(${idsList})) {`,
     `  $u = $null`,
     `  try {`,
     `    $idStr = ($id -as [string])`,
     `    $esc = $idStr -replace "'", "''"`,
-    // 1) SamAccountName exact
     `    $u = Get-ADUser -Filter "SamAccountName -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1`,
-    // 2) EmployeeID exact
     `    if (-not $u) {`,
     `      $u = Get-ADUser -Filter "EmployeeID -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1`,
     `    }`,
-    // 3) DisplayName exact
     `    if (-not $u) {`,
     `      $u = Get-ADUser -Filter "DisplayName -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1`,
     `    }`,
-    // 4) DisplayName wildcard (only accept if uniquely resolves)
-    `    if (-not $u) {`,
-    `      $cands = @(Get-ADUser -Filter "DisplayName -like '*$esc*'" -Properties $props -ResultSetSize 5 -EA SilentlyContinue)`,
-    `      if ($cands.Count -eq 1) { $u = $cands[0] }`,
-    `      elseif ($cands.Count -gt 1) {`,
-    `        $exact = $cands | Where-Object { $_.DisplayName -eq $idStr } | Select-Object -First 1`,
-    `        if ($exact) { $u = $exact }`,
-    `      }`,
-    `    }`,
-    // 5) EmailAddress exact
     `    if (-not $u) {`,
     `      $u = Get-ADUser -Filter "EmailAddress -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1`,
     `    }`,
@@ -85,33 +66,46 @@ export async function batchAdLookup(identities: string[]): Promise<Map<string, A
     `    $title = ([string]$u.Title) -replace "[$([char]9)$([char]10)$([char]13)]", ' '`,
     `    $disp = ([string]$u.DisplayName) -replace "[$([char]9)$([char]10)$([char]13)]", ' '`,
     `    $sam = [string]$u.SamAccountName`,
-    `    Write-Output ("ADRES$tab" + $id + $tab + '1' + $tab + $dept + $tab + $title + $tab + $disp + $tab + $sam)`,
+    `    $mail = ([string]$u.EmailAddress) -replace "[$([char]9)$([char]10)$([char]13)]", ' '`,
+    `    $upn = ([string]$u.UserPrincipalName) -replace "[$([char]9)$([char]10)$([char]13)]", ' '`,
+    `    $rc = 0; if ($u.DirectReports) { $rc = @($u.DirectReports).Count }`,
+    `    $mgrName = ''; $mgrSam = ''`,
+    `    if ($u.Manager) {`,
+    `      try {`,
+    `        $mgr = Get-ADUser -Identity $u.Manager -Properties DisplayName -EA SilentlyContinue`,
+    `        if ($mgr) {`,
+    `          $mgrName = ([string]$mgr.DisplayName) -replace "[$([char]9)$([char]10)$([char]13)]", ' '`,
+    `          $mgrSam = [string]$mgr.SamAccountName`,
+    `        }`,
+    `      } catch { $mgrName = ''; $mgrSam = '' }`,
+    `    }`,
+    `    Write-Output ("ADRES$tab" + $id + $tab + '1' + $tab + $dept + $tab + $title + $tab + $disp + $tab + $sam + $tab + $mgrName + $tab + $mgrSam + $tab + $mail + $tab + [string]$rc + $tab + $upn)`,
     `  } else {`,
-    `    Write-Output ("ADRES$tab" + $id + $tab + '0' + $tab + '' + $tab + '' + $tab + '' + $tab + '')`,
+    `    Write-Output ("ADRES$tab" + $id + $tab + '0' + $tab + '' + $tab + '' + $tab + '' + $tab + '' + $tab + '' + $tab + '' + $tab + '' + $tab + '' + $tab + '')`,
     `  }`,
     `}`,
   ].join('\n')
+}
 
-  // 1.5 s per identity is generous; 30 s floor.
-  const timeoutMs = Math.max(30000, unique.length * 1500)
+// Per-batch tuning.
+//   - BATCH_SIZE: a single PowerShell process handles this many identities
+//   - PARALLEL_BATCHES: how many PS processes run in parallel
+//   - TIMEOUT_MS: hard cap per batch — keep generous so batches with many
+//     not-found entries (each goes through all 4 resolution strategies) still
+//     finish. With 25 identities and ~3s worst-case per lookup, 120s is safe.
+const BATCH_SIZE = 25
+const PARALLEL_BATCHES = 3
+const TIMEOUT_MS = 120000
 
+async function runBatch(batch: string[], results: Map<string, AdLookupResult>): Promise<void> {
   try {
-    console.log('[batchAdLookup] identities:', unique)
-    const res = await api().runPowerShell(script, timeoutMs)
+    const res = await api().runPowerShell(buildScript(batch), TIMEOUT_MS)
     const raw = res.stdout ?? ''
-    console.log('[batchAdLookup] PS stdout (first 500):', raw.slice(0, 500))
-    if (res.stderr) console.log('[batchAdLookup] PS stderr:', res.stderr.slice(0, 500))
+    if (res.stderr) console.log('[batchAdLookup] batch stderr:', res.stderr.slice(0, 300))
 
     const lines = raw.split(/\r?\n/).filter(l => l.startsWith('ADRES\t'))
     for (const line of lines) {
       const parts = line.split('\t')
-      // parts[0] = 'ADRES'
-      // parts[1] = identity
-      // parts[2] = found (0|1)
-      // parts[3] = department
-      // parts[4] = title
-      // parts[5] = displayName
-      // parts[6] = sam
       if (parts.length < 3) continue
       const identity = parts[1]
       const found = parts[2] === '1'
@@ -122,19 +116,75 @@ export async function batchAdLookup(identities: string[]): Promise<Map<string, A
         title: found && parts[4] ? parts[4] : undefined,
         displayName: found && parts[5] ? parts[5] : undefined,
         sam: found && parts[6] ? parts[6] : undefined,
+        manager: found && parts[7] ? parts[7] : undefined,
+        managerSam: found && parts[8] ? parts[8] : undefined,
+        // E-Mail: bevorzugt EmailAddress, sonst der UPN (oft = Mailadresse, falls
+        // das mail-Attribut leer ist).
+        email: (() => {
+          const mail = found && parts[9] ? parts[9].trim() : ''
+          if (mail) return mail
+          const upn = found && parts[11] ? parts[11].trim() : ''
+          return upn.includes('@') ? upn : undefined
+        })(),
+        reportsCount: found && parts[10] !== undefined && parts[10] !== '' ? Number(parts[10]) : undefined,
       })
     }
-
-    // Fill in any identity that didn't come back
-    for (const id of unique) {
-      if (!results.has(id)) results.set(id, { identity: id, found: false, error: 'Keine Antwort' })
+    // For identities in this batch that didn't come back in stdout (e.g. batch
+    // hit the timeout before processing them), explicitly mark as "no answer"
+    // so the UI can distinguish them from "found = false".
+    for (const id of batch) {
+      if (!results.has(id)) {
+        results.set(id, {
+          identity: id,
+          found: false,
+          error: res.timedOut ? 'Batch-Timeout (zu viele unaufloesbare Identitaeten?)' : 'Keine Antwort',
+        })
+      }
     }
-    console.log('[batchAdLookup] results:', results)
-    return results
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e)
-    console.error('[batchAdLookup] exception:', msg)
-    for (const id of unique) results.set(id, { identity: id, found: false, error: msg })
-    return results
+    console.error('[batchAdLookup] batch exception:', msg)
+    for (const id of batch) {
+      if (!results.has(id)) results.set(id, { identity: id, found: false, error: msg })
+    }
   }
+}
+
+export async function batchAdLookup(
+  identities: string[],
+  onProgress?: (done: number, total: number) => void,
+): Promise<Map<string, AdLookupResult>> {
+  const results = new Map<string, AdLookupResult>()
+  const unique = [...new Set(identities.map(s => s.trim()).filter(Boolean))]
+  if (unique.length === 0) return results
+
+  // Split into batches of BATCH_SIZE
+  const batches: string[][] = []
+  for (let i = 0; i < unique.length; i += BATCH_SIZE) {
+    batches.push(unique.slice(i, i + BATCH_SIZE))
+  }
+  console.log(`[batchAdLookup] ${unique.length} identities -> ${batches.length} batches of up to ${BATCH_SIZE}`)
+
+  let done = 0
+  onProgress?.(0, unique.length)
+
+  // Process with bounded parallelism. Each "wave" runs PARALLEL_BATCHES
+  // batches concurrently, then we await the wave before starting the next.
+  for (let i = 0; i < batches.length; i += PARALLEL_BATCHES) {
+    const wave = batches.slice(i, i + PARALLEL_BATCHES)
+    await Promise.all(
+      wave.map(async batch => {
+        await runBatch(batch, results)
+        done += batch.length
+        onProgress?.(done, unique.length)
+      }),
+    )
+  }
+
+  // Safety net — fill in anything that somehow slipped through
+  for (const id of unique) {
+    if (!results.has(id)) results.set(id, { identity: id, found: false, error: 'Keine Antwort' })
+  }
+  console.log('[batchAdLookup] complete:', { total: unique.length, batches: batches.length })
+  return results
 }

@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Star, Plus, RefreshCw, ChevronDown, ChevronRight, ChevronUp,
   MoreVertical, Trash2, Edit2, Check, X, Loader, Play,
-  Monitor, Wrench, ArrowUp, ArrowDown, Terminal, Search as SearchIcon,
+  Monitor, Wrench, ArrowUp, ArrowDown, Terminal, Search as SearchIcon, Zap,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore, useIsAdmin } from '../store/authStore'
 import { useAppStore } from '../store/appStore'
+import { DaylisModal, type UserRow } from '../screens/UserOverview'
 import { CATEGORIES, type Category as RdCategory } from '../utils/remoteCommands'
 import type { FavoritesData, FavoriteDevice, FavoriteSkill } from '../types/favorites'
 import {
@@ -31,6 +32,9 @@ export default function FavoritesPanel() {
   // Selection
   const [selDevices, setSelDevices] = useState<Set<string>>(new Set())
   const [selSkill, setSelSkill]     = useState<string | null>(null)
+
+  // Daylis-Dialog (wie in der Benutzer-Uebersicht) fuer die ausgewaehlten Geraete
+  const [daylisOpen, setDaylisOpen] = useState(false)
 
   // Inline edit
   const [editHost, setEditHost]     = useState<string | null>(null)
@@ -229,6 +233,9 @@ export default function FavoritesPanel() {
     setScreen('remote-doc')
   }
 
+  // Synthetische Benutzer-Zeilen aus den ausgewaehlten Favoriten-Hosts
+  const daylisRows: UserRow[] = Array.from(selDevices).map(h => ({ sam: '', displayName: h, enabled: true, hostnames: [h] }))
+
   // ── Sorted lists ──────────────────────────────────────────────────────────────
   const sortedDevices = [...data.devices].sort((a, b) => a.position - b.position)
   const sortedSkills  = [...data.skills].sort((a, b) => a.position - b.position)
@@ -409,7 +416,7 @@ export default function FavoritesPanel() {
                 <div className="px-2 py-2 border-t border-sidebar-border flex flex-wrap gap-1">
                   {canExecute && isAdmin && (
                     <button onClick={executeSkill} disabled={executing}
-                      className="flex items-center gap-1 px-2 py-1 text-[10px] rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 disabled:opacity-50">
+                      className="flex items-center gap-1 px-2 py-1 text-[10px] rounded-md bg-emerald-500 text-black border border-emerald-500/30 hover:bg-emerald-500/20 disabled:opacity-50">
                       {executing ? <Loader size={10} className="animate-spin" /> : <Play size={10} />}
                       Ausführen
                     </button>
@@ -426,6 +433,10 @@ export default function FavoritesPanel() {
                           <Terminal size={10} /> Remote Doc
                         </button>
                       )}
+                      <button onClick={() => setDaylisOpen(true)}
+                        className="flex items-center gap-1 px-2 py-1 text-[10px] rounded-md bg-neutral-900 text-white border border-neutral-700 hover:bg-neutral-800">
+                        <Zap size={10} /> Daylis
+                      </button>
                     </>
                   )}
                 </div>
@@ -452,6 +463,11 @@ export default function FavoritesPanel() {
             </div>
           )}
         </div>
+      )}
+
+      {/* ── Daylis-Dialog fuer die ausgewaehlten Geraete ── */}
+      {daylisOpen && daylisRows.length > 0 && (
+        <DaylisModal selectedRows={daylisRows} chosenHostBySam={new Map()} onClose={() => setDaylisOpen(false)} />
       )}
 
       {/* ── Add dialog ── */}

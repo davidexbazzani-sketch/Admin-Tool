@@ -56,8 +56,11 @@ export interface InventoryItem {
   assignedTo?: string   // ServiceNow Zuweisung (Assigned to)
   // AD-aufgeloeste Daten zum Benutzer in `assignedTo` (befuellt via Button
   // "AD-Daten aktualisieren" in der Standort-Uebersicht)
+  corpId?: string       // AD: SamAccountName / Windows-Anmeldung (Corp ID)
   department?: string   // AD: Department / Abteilung
   jobTitle?: string     // AD: Title / Stellenbezeichnung
+  manager?: string      // AD: Manager DisplayName (Vorgesetzter des Benutzers)
+  managerSam?: string   // AD: Manager SamAccountName
   adLookupAt?: string   // ISO timestamp des letzten erfolgreichen Lookups
 }
 

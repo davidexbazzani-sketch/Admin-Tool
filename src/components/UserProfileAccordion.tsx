@@ -353,7 +353,7 @@ export default function UserProfileAccordion({ data, deviceLoading, onQueryDevic
           <div className="flex flex-wrap gap-1.5 max-h-52 overflow-y-auto py-1">
             {/* Primary group first */}
             {data.PrimaryGroup && (!groupSearch || data.PrimaryGroup.toLowerCase().includes(groupSearch.toLowerCase())) && (
-              <span className="group flex items-center gap-1 px-2 py-0.5 text-[11px] rounded border font-mono bg-emerald-500/10 text-emerald-300 border-emerald-500/30" title={data.PrimaryGroup}>
+              <span className="group flex items-center gap-1 px-2 py-0.5 text-[11px] rounded border font-mono bg-emerald-500 text-black border-emerald-500/30" title={data.PrimaryGroup}>
                 {data.PrimaryGroup}
                 <span className="text-[9px] bg-emerald-500/30 px-1 rounded ml-0.5">Primär</span>
                 <button onClick={() => copy('pg', data.PrimaryGroup)} className="opacity-0 group-hover:opacity-100 transition-opacity ml-0.5">
@@ -579,7 +579,7 @@ export default function UserProfileAccordion({ data, deviceLoading, onQueryDevic
                   </button>
                 </div>
                 {actionResult && (
-                  <div className={`mb-3 p-2.5 rounded-md text-xs ${actionResult.ok ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                  <div className={`mb-3 p-2.5 rounded-md text-xs ${actionResult.ok ? 'bg-emerald-500 text-black' : 'bg-red-500/10 text-red-400'}`}>
                     {actionResult.msg}
                   </div>
                 )}
@@ -605,7 +605,7 @@ export default function UserProfileAccordion({ data, deviceLoading, onQueryDevic
                   Der Benutzer kann sich danach wieder anmelden.
                 </p>
                 {actionResult && (
-                  <div className={`mb-3 p-2.5 rounded-md text-xs ${actionResult.ok ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                  <div className={`mb-3 p-2.5 rounded-md text-xs ${actionResult.ok ? 'bg-emerald-500 text-black' : 'bg-red-500/10 text-red-400'}`}>
                     {actionResult.msg}
                   </div>
                 )}

@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Plus, Minus, Upload, ArrowRight, Monitor, Hash, FileText, ChevronsRight, Terminal } from 'lucide-react'
+import { Plus, Minus, Upload, ArrowRight, Monitor, Hash, FileText, ChevronsRight, Terminal, Zap } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import type { DeviceEntry, Prefix } from '../types'
+import { DaylisModal, type UserRow } from './UserOverview'
 import Card from '../components/Card'
 import PrefixPopup from '../components/PrefixPopup'
 import ExcelColumnDialog from '../components/ExcelColumnDialog'
@@ -46,6 +47,10 @@ export default function Home() {
   const setScreen = useAppStore((s) => s.setScreen)
   const setDevices = useAppStore((s) => s.setDevices)
   // setGuruHostname removed — Home now links to Remote Doc instead of IT Guru
+
+  // Daylis-Dialog (wie in der Benutzer-Uebersicht, hier fuer den eingegebenen Host)
+  const [daylisOpen, setDaylisOpen] = useState(false)
+  const [daylisHost, setDaylisHost] = useState('')
 
   // Single query
   const [singleHostname, setSingleHostname] = useState('')
@@ -254,6 +259,13 @@ export default function Home() {
       setDevices([{ id: makeId(), type: 'hostname', value: h, resolvedHostnames: [h] }])
     }
     setScreen('remote-doc')
+  }
+
+  function handleProceedDaylis() {
+    const h = getFirstHostname()
+    if (!h) return
+    setDaylisHost(h)
+    setDaylisOpen(true)
   }
 
   const hasInput =
@@ -478,16 +490,18 @@ export default function Home() {
       <div className="flex justify-end gap-3 pb-2">
         <button
           onClick={handleProceedRemoteDoc}
-          className={`
-            flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all
-            ${hasInput
-              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 shadow-lg shadow-emerald-500/10'
-              : 'bg-emerald-500/10 text-emerald-400/60 border border-emerald-500/20 hover:bg-emerald-500/15'
-            }
-          `}
+          className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all bg-neutral-900 text-white border border-neutral-700 hover:bg-neutral-800 shadow-lg shadow-black/20"
         >
           <Terminal size={16} />
           Remote Doc{hasInput ? ` (${getFirstHostname()})` : ''}
+        </button>
+        <button
+          onClick={handleProceedDaylis}
+          disabled={!hasInput}
+          className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all bg-neutral-900 text-white border border-neutral-700 hover:bg-neutral-800 shadow-lg shadow-black/20 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <Zap size={16} />
+          Daylis{hasInput ? ` (${getFirstHostname()})` : ''}
         </button>
         <button
           onClick={handleProceed}
@@ -512,6 +526,15 @@ export default function Home() {
           rows={pendingExcelData.rows}
           onConfirm={handleColumnDialogConfirm}
           onCancel={() => setPendingExcelData(null)}
+        />
+      )}
+
+      {/* Daylis-Dialog fuer den eingegebenen Host (wie in der Benutzer-Uebersicht) */}
+      {daylisOpen && (
+        <DaylisModal
+          selectedRows={[{ sam: '', displayName: daylisHost, enabled: true, hostnames: [daylisHost] } as UserRow]}
+          chosenHostBySam={new Map()}
+          onClose={() => setDaylisOpen(false)}
         />
       )}
     </div>

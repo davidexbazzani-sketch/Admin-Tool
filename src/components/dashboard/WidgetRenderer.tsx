@@ -973,7 +973,7 @@ const ACTION_COLOR_MAP: Record<string, string> = {
   red:   'bg-red-500/20 text-red-300 hover:bg-red-500/40 border-red-500/30',
   blue:  'bg-blue-500/20 text-blue-300 hover:bg-blue-500/40 border-blue-500/30',
   amber: 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/40 border-amber-500/30',
-  green: 'bg-green-500/20 text-green-300 hover:bg-green-500/40 border-green-500/30',
+  green: 'bg-green-500 text-black hover:bg-green-500/40 border-green-500/30',
 }
 
 function QuickActionsWidget({ element }: { element: DashboardElement }) {

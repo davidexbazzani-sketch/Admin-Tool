@@ -172,7 +172,7 @@ function ChatBubble({
             {msg.type === 'playbookCard' && msg.playbookId && (
               <div className="mt-2">
                 <button onClick={() => onPlaybookStart?.(msg.playbookId!)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20">
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-emerald-500 border border-emerald-600 text-black hover:bg-emerald-500/20">
                   <Play size={11} /> {msg.playbookName ?? 'Playbook starten'}
                 </button>
               </div>

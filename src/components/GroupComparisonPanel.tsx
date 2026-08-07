@@ -419,7 +419,7 @@ ${adminName}`
             </div>
             <div className="p-2 flex flex-wrap gap-1.5 max-h-32 overflow-y-auto">
               {filteredShared().map((g, i) => (
-                <span key={i} className="px-2 py-0.5 text-[11px] rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 font-mono">{g}</span>
+                <span key={i} className="px-2 py-0.5 text-[11px] rounded border border-emerald-500/30 bg-emerald-500 text-black font-mono">{g}</span>
               ))}
               {filteredShared().length === 0 && <p className="text-[11px] text-muted-foreground italic">{filterQuery ? 'Keine Treffer.' : 'Keine gemeinsamen Gruppen.'}</p>}
             </div>

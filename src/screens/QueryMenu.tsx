@@ -849,7 +849,7 @@ function ServiceCheckPanel({ hostnames }: ServiceCheckPanelProps) {
                     <td className="px-3 py-2 text-foreground">{r.displayName || r.serviceName}</td>
                     <td className="px-3 py-2">
                       {r.status === 'Running' || r.status === '4' ? (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] bg-emerald-500 text-black border border-emerald-500/20">
                           <CheckCircle size={9} /> Läuft
                         </span>
                       ) : r.status === 'Stopped' || r.status === '1' ? (

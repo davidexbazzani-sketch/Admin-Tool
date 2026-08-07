@@ -31,6 +31,8 @@ declare global {
       // File I/O
       readFile(filePath: string): Promise<FileReadResult>
       writeFile(filePath: string, dataBase64: string): Promise<{ success: boolean; error?: string }>
+      /** Gebuendeltes App-Asset (public/ bzw. dist/) als Base64 — fetch() ist im file://-Build blockiert. */
+      readAsset(rel: string): Promise<{ success: boolean; data?: string; error?: string }>
 
       // Settings
       getSettings(): Promise<Record<string, unknown>>
@@ -43,6 +45,20 @@ declare global {
       // Shell
       openExternal(url: string): Promise<void>
       openPath(filePath: string): Promise<{ success: boolean; error?: string }>
+
+      // ServiceNow Table-API (REST via Main-Prozess) — Auth via SSO-Sitzung
+      serviceNowRequest(opts: {
+        instanceUrl: string
+        method?: 'GET' | 'PATCH'; table: string; sysId?: string
+        query?: string; fields?: string; limit?: number; body?: unknown
+        auth?: { user: string; pass: string }   // Integrationskonto (Basic Auth); ohne = SSO-Sitzung
+      }): Promise<{ success: boolean; status?: number; data?: unknown; error?: string; needsLogin?: boolean }>
+      serviceNowCertDiag(): Promise<{
+        at: string; url: string; count: number
+        certs: { subjectName: string; issuerName: string; validExpiry: number }[]
+      } | null>
+      serviceNowLogin(instanceUrl: string): Promise<{ success: boolean; user?: string; error?: string }>
+      serviceNowLogout(): Promise<{ success: boolean }>
 
       // Cancel all PS processes
       cancelAll(): Promise<boolean>
@@ -78,6 +94,9 @@ declare global {
         action: string; target?: string; screen: string; timestamp: string
       }): Promise<boolean>
       getLogs(monthKey?: string): Promise<ActivityLog[]>
+
+      // ── Silent printing ───────────────────────────────────────────────────
+      printHtml(html: string): Promise<{ success: boolean; error?: string }>
 
       // ── App config ────────────────────────────────────────────────────────
       getAppConfig(): Promise<AppConfig>
@@ -122,7 +141,7 @@ declare global {
       heartbeatCheck(username: string): Promise<{ username: string; timestamp: string } | null>
 
       // ── Presentation mode (hall display) ──────────────────────────────────
-      presentationOpen(opts?: { displayId?: number }): Promise<{ success: boolean }>
+      presentationOpen(opts?: { displayId?: number; previewPlaylistId?: string }): Promise<{ success: boolean }>
       presentationClose(): Promise<{ success: boolean }>
       presentationListDisplays(): Promise<Array<{
         id: number
@@ -131,6 +150,13 @@ declare global {
         primary: boolean
         scaleFactor: number
       }>>
+      // ── Edge-Anzeige (SSO): echte msedge.exe-Fenster im App-Modus ─────────
+      edgeLaunch(opts: { url: string; displayId?: number; fullscreen?: boolean; ownProfile?: boolean }): Promise<{ success: boolean; displayId?: number; ownProfile?: boolean; error?: string }>
+      edgeClose(displayId?: number): Promise<{ success: boolean; error?: string }>
+      edgeStatus(displayId?: number): Promise<{ running: boolean; displayId?: number }>
+      // USV: URL in Edge/Chrome öffnen + Notfallplan (DOCX)
+      openInEdgeOrChrome(url: string): Promise<{ success: boolean; fallback?: boolean; error?: string }>
+      usvOpenDoc(): Promise<{ success: boolean; error?: string }>
     }
     electronSend(channel: string): void
     electronDrop: { getPath(file: File): string }

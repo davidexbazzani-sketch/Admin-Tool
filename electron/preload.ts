@@ -28,6 +28,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   readFile: (filePath: string) => ipcRenderer.invoke('file:read', filePath),
   writeFile: (filePath: string, data: Buffer | string) =>
     ipcRenderer.invoke('file:write', filePath, data),
+  readAsset: (rel: string) => ipcRenderer.invoke('asset:read', rel),
 
   // Settings (electron-store)
   getSettings: () => ipcRenderer.invoke('store:get'),
@@ -37,6 +38,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Shell open
   openExternal: (url: string) => ipcRenderer.invoke('shell:openExternal', url),
   openPath: (filePath: string) => ipcRenderer.invoke('shell:openPath', filePath),
+
+  // ServiceNow Table-API (REST, im Main-Prozess) — Auth via SSO-Sitzung
+  serviceNowRequest: (opts: unknown) => ipcRenderer.invoke('servicenow:request', opts),
+  serviceNowCertDiag: () => ipcRenderer.invoke('servicenow:certDiag'),
+  serviceNowLogin: (instanceUrl: string) => ipcRenderer.invoke('servicenow:login', instanceUrl),
+  serviceNowLogout: () => ipcRenderer.invoke('servicenow:logout'),
 
   // Cancel all running processes
   cancelAll: () => ipcRenderer.invoke('ps:cancelAll'),
@@ -50,6 +57,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // App info
   getAppVersion: () => ipcRenderer.invoke('app:version'),
+
+  // Silent-Print: HTML ohne Dialog auf dem Standarddrucker ausgeben
+  printHtml: (html: string) =>
+    ipcRenderer.invoke('print:html', html) as Promise<{ success: boolean; error?: string }>,
 
   // Path configuration
   loadPathsConfig: () => ipcRenderer.invoke('paths:load') as Promise<{ success: boolean; data: unknown }>,
@@ -126,9 +137,16 @@ contextBridge.exposeInMainWorld('electronAPI', {
   heartbeatCheck: (username: string) => ipcRenderer.invoke('heartbeat:check', username),
 
   // ── Presentation mode (hall display) ──────────────────────────────────────
-  presentationOpen: (opts?: { displayId?: number }) => ipcRenderer.invoke('presentation:open', opts),
+  presentationOpen: (opts?: { displayId?: number; previewPlaylistId?: string }) => ipcRenderer.invoke('presentation:open', opts),
   presentationClose: () => ipcRenderer.invoke('presentation:close'),
   presentationListDisplays: () => ipcRenderer.invoke('presentation:listDisplays'),
+  // Edge-Anzeige (SSO): echte msedge.exe-Fenster im App-Modus
+  edgeLaunch: (opts: { url: string; displayId?: number; fullscreen?: boolean; ownProfile?: boolean }) => ipcRenderer.invoke('edge:launch', opts),
+  edgeClose: (displayId?: number) => ipcRenderer.invoke('edge:close', displayId),
+  edgeStatus: (displayId?: number) => ipcRenderer.invoke('edge:status', displayId),
+  // USV: URL in Edge/Chrome öffnen + Notfallplan (DOCX) anzeigen
+  openInEdgeOrChrome: (url: string) => ipcRenderer.invoke('browser:openInEdgeOrChrome', url),
+  usvOpenDoc: () => ipcRenderer.invoke('usv:openDoc'),
 })
 
 // Global right-click context menu for ALL elements (copy, paste, select all)

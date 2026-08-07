@@ -946,7 +946,7 @@ export default function SoftwareInventory() {
                       <td className="px-4 py-1.5 text-muted-foreground">{sw.publisher}</td>
                       <td className="px-4 py-1.5 text-center text-foreground font-mono">{sw.totalInstalls}</td>
                       <td className="px-4 py-1.5 text-center">
-                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${sw.versionCount > 1 ? 'bg-amber-500/20 text-amber-400' : 'bg-green-500/20 text-green-400'}`}>{sw.versionCount}</span>
+                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${sw.versionCount > 1 ? 'bg-amber-500/20 text-amber-400' : 'bg-green-500 text-black'}`}>{sw.versionCount}</span>
                       </td>
                       <td className="px-4 py-1.5 text-muted-foreground font-mono text-xs">{sw.mostCommon}</td>
                     </tr>

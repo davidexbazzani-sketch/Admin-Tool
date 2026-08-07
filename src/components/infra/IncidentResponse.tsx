@@ -487,7 +487,7 @@ export default function IncidentResponse() {
                 <Edit3 size={12} />Kontakte verwalten
               </button>
             )}
-            <span className="px-3 py-1 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-xs font-bold">{DOC_META.status}</span>
+            <span className="px-3 py-1 rounded-full bg-green-500 border border-green-600 text-black text-xs font-bold">{DOC_META.status}</span>
           </div>
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-1 mt-3 text-[11px] text-muted-foreground">

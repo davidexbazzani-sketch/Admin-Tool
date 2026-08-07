@@ -1387,7 +1387,7 @@ export default function PCDiagnosis() {
                           className="w-3 h-3 rounded accent-primary shrink-0" />
                         <span className={`w-2 h-2 rounded-full shrink-0 ${isRunning ? 'bg-emerald-400' : isStopped ? 'bg-red-400' : 'bg-amber-400'}`} />
                         <span className="text-[11px] text-foreground flex-1 truncate" title={svc.Name}>{svc.DisplayName || svc.Name}</span>
-                        <span className={`text-[8px] px-1 py-0.5 rounded shrink-0 ${isRunning ? 'text-emerald-400 bg-emerald-500/10' : isStopped ? 'text-red-400 bg-red-500/10' : 'text-amber-400 bg-amber-500/10'}`}>
+                        <span className={`text-[8px] px-1 py-0.5 rounded shrink-0 ${isRunning ? 'text-black bg-emerald-500' : isStopped ? 'text-red-400 bg-red-500/10' : 'text-amber-400 bg-amber-500/10'}`}>
                           {svc.Status}
                         </span>
                         <span className="text-[8px] text-muted-foreground shrink-0">{svc.StartType === 'Automatic' ? 'Auto' : svc.StartType === 'Automatic (Delayed Start)' ? 'Auto (V)' : svc.StartType === 'Manual' ? 'Manuell' : svc.StartType}</span>
@@ -1470,7 +1470,7 @@ export default function PCDiagnosis() {
                 </button>
                 {lastPdfPath && (
                   <button onClick={openLastPdf}
-                    className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20">
+                    className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-md bg-emerald-500 text-black border border-emerald-500/30 hover:bg-emerald-500/20">
                     <FileText size={12} /> PDF öffnen
                   </button>
                 )}

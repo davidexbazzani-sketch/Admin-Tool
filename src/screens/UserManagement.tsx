@@ -398,7 +398,7 @@ export default function UserManagement() {
                 </div>
               )}
               {createSuccess && (
-                <div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-500/10 px-3 py-2 rounded-lg">
+                <div className="flex items-center gap-2 text-xs text-black bg-emerald-500 px-3 py-2 rounded-lg">
                   <CheckCircle size={12} />{createSuccess}
                 </div>
               )}

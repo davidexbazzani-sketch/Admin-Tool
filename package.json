@@ -23,11 +23,16 @@
     "jspdf-autotable": "^3.8.2",
     "lucide-react": "^0.344.0",
     "nodemailer": "^6.9.9",
+    "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^4.7.76",
+    "pptxgenjs": "^4.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^10.1.0",
     "react-rnd": "^10.5.3",
+    "tesseract.js": "^5.1.1",
+    "three": "^0.169.0",
     "xlsx": "^0.18.5",
     "zustand": "^4.5.2"
   },
@@ -37,6 +42,7 @@
     "@types/pdf-parse": "^1.1.4",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
+    "@types/three": "^0.169.0",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.17",
     "concurrently": "^8.2.2",
@@ -56,13 +62,18 @@
     "directories": {
       "output": "release"
     },
+    "extraResources": [
+      { "from": "resources/USV", "to": "USV" }
+    ],
     "win": {
       "target": "nsis",
       "icon": "public/icon.ico"
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "include": "build/installer.nsh"
     }
   }
 }

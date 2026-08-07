@@ -19,7 +19,7 @@ const PRIORITY_LABELS: Record<string, string> = {
 const STATUS_OPTS = [
   { id: 'new',         label: 'Neu',           color: 'bg-blue-500/10 text-blue-400' },
   { id: 'in_progress', label: 'In Bearbeitung', color: 'bg-amber-500/10 text-amber-400' },
-  { id: 'resolved',    label: 'Erledigt',       color: 'bg-emerald-500/10 text-emerald-400' },
+  { id: 'resolved',    label: 'Erledigt',       color: 'bg-emerald-500 text-black' },
 ]
 
 export default function BugMailbox() {

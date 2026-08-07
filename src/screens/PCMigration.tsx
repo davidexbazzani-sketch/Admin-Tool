@@ -1208,7 +1208,7 @@ export default function PCMigration() {
                       <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">{fmtMs(e.durationMs)}</td>
                       <td className="px-3 py-2">
                         <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                          e.overallStatus === 'success' ? 'bg-emerald-500/10 text-emerald-400'
+                          e.overallStatus === 'success' ? 'bg-emerald-500 text-black'
                           : e.overallStatus === 'partial' ? 'bg-amber-500/10 text-amber-400'
                           : 'bg-red-500/10 text-red-400'
                         }`}>

@@ -1222,7 +1222,7 @@ export default function ScheduledTasks() {
                     </td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${
-                        task.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-muted text-muted-foreground'
+                        task.status === 'active' ? 'bg-emerald-500 text-black' : 'bg-muted text-muted-foreground'
                       }`}>
                         {task.status === 'active' ? 'Aktiv' : 'Pausiert'}
                       </span>

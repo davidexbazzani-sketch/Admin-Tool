@@ -27,7 +27,7 @@ function safeJoin(base: string, relative: string): string {
 }
 
 // Sub-directories the tool creates on first run
-const SUBDIRS = ['users', 'recovery', 'logs', 'config', 'templates', 'inventory', 'approvals', 'scheduled_tasks', 'bugs']
+const SUBDIRS = ['users', 'recovery', 'logs', 'config', 'templates', 'inventory', 'approvals', 'scheduled_tasks', 'bugs', 'backups']
 
 export function isNetworkAvailable(): boolean {
   try { return existsSync(getBasePath()) } catch { return false }

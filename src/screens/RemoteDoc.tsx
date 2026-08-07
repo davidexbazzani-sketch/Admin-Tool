@@ -15,6 +15,7 @@ import { useAppStore } from '../store/appStore'
 import { useAuthStore } from '../store/authStore'
 import { api } from '../electronAPI'
 import { ServicePanel } from '../components/ServicePanel'
+import { ProcessPanel } from '../components/ProcessPanel'
 import { CATEGORIES, type ActionType, type CmdDef, type Category, setExecMethod, setPsExecDir, getPsExecDir, type ExecMethod } from '../utils/remoteCommands'
 import { loadFavorites, saveFavorites, addSkill, removeSkill, isSkillFavorite } from '../utils/favorites'
 import type { FavoritesData } from '../types/favorites'
@@ -348,6 +349,7 @@ export default function RemoteDoc() {
   const [connErrorDetail, setConnErrorDetail] = useState('')
   const [showErrorDetail, setShowErrorDetail] = useState(false)
   const [svcCount, setSvcCount]         = useState<number | null>(null)
+  const [procCount, setProcCount]       = useState<number | null>(null)
 
   // Accordion state
   const [expanded, setExpanded]     = useState<Set<string>>(new Set())
@@ -542,6 +544,7 @@ export default function RemoteDoc() {
     // ── END LOCAL MODE ──────────────────────────────────────────────────
     setShowErrorDetail(false)
     setSvcCount(null)
+    setProcCount(null)
     setOutputs({})
 
     const initialChecks: ServiceCheck[] = [
@@ -1398,7 +1401,7 @@ export default function RemoteDoc() {
                 <div className="flex-1 p-3 rounded-lg bg-card border border-border space-y-0.5">
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-sm font-bold text-primary">{h}</span>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full border font-medium ${connInfo.allOk ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'}`}>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full border font-medium ${connInfo.allOk ? 'bg-emerald-500 text-black border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'}`}>
                       {connInfo.allOk ? 'Alle Dienste aktiv' : 'Teilweise aktiv'}
                     </span>
                   </div>
@@ -1483,9 +1486,12 @@ export default function RemoteDoc() {
             {CATEGORIES.map(cat => {
               const isOpen = expanded.has(cat.id)
               const isSvcCat = cat.id === 'svc'
-              // Dynamic label: show service count once loaded
+              const isProcCat = cat.id === 'proc'
+              // Dynamic label: show service/process count once loaded
               const catLabel = isSvcCat && svcCount !== null
                 ? `${cat.label} (${svcCount})`
+                : isProcCat && procCount !== null
+                ? `${cat.label} (${procCount})`
                 : cat.label
               return (
                 <div key={cat.id} className="border border-border rounded-lg overflow-hidden">
@@ -1496,7 +1502,7 @@ export default function RemoteDoc() {
                   >
                     {isOpen ? <ChevronDown size={14} className="text-muted-foreground shrink-0" /> : <ChevronRight size={14} className="text-muted-foreground shrink-0" />}
                     <span className="text-sm font-medium text-foreground flex-1 text-left">{catLabel}</span>
-                    {!isSvcCat && <span className="text-[11px] text-muted-foreground">{cat.commands.length} Befehle</span>}
+                    {!isSvcCat && !isProcCat && <span className="text-[11px] text-muted-foreground">{cat.commands.length} Befehle</span>}
                   </button>
 
                   {/* Services category: render ServicePanel instead of command table */}
@@ -1508,8 +1514,17 @@ export default function RemoteDoc() {
                     />
                   )}
 
+                  {/* Processes category: render ProcessPanel */}
+                  {isOpen && isProcCat && (
+                    <ProcessPanel
+                      hostname={h}
+                      isAdmin={isAdmin}
+                      onCountLoaded={setProcCount}
+                    />
+                  )}
+
                   {/* Commands table (for all other categories) */}
-                  {isOpen && !isSvcCat && (
+                  {isOpen && !isSvcCat && !isProcCat && (
                     <div className="divide-y divide-border">
                       <div className="grid grid-cols-[1fr_1fr_auto_auto] gap-0 bg-muted/20 border-b border-border">
                         <div className="px-4 py-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Funktion / Wann sinnvoll</div>
@@ -2362,7 +2377,7 @@ export default function RemoteDoc() {
         if (!desc || !cmd) return null
         const info = desc.info
         const riskColors: Record<string, string> = {
-          niedrig: 'text-emerald-400 bg-emerald-500/10',
+          niedrig: 'text-black bg-emerald-500',
           mittel: 'text-amber-400 bg-amber-500/10',
           hoch: 'text-orange-400 bg-orange-500/10',
           kritisch: 'text-red-400 bg-red-500/10',

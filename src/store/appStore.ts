@@ -43,6 +43,10 @@ interface AppState {
   guruHostname: string
   setGuruHostname: (h: string) => void
 
+  // Onboarding: Mitarbeiter-Vorauswahl (aus der Mitarbeiterverwaltung)
+  onboardingPreselectId: string | null
+  setOnboardingPreselectId: (id: string | null) => void
+
   // Loading
   isQuerying: boolean
   setIsQuerying: (v: boolean) => void
@@ -50,9 +54,23 @@ interface AppState {
   // Menu visibility (master admin controls which items are visible for all users)
   hiddenMenuIds: Set<string>
   setHiddenMenuIds: (ids: Set<string>) => void
-  // Items the master admin has enabled just for themselves
-  masterOnlyIds: Set<string>
-  setMasterOnlyIds: (ids: Set<string>) => void
+  // Per-Menüpunkt konfigurierte Mindest-Rolle ('admin' = erst ab Admin,
+  // 'master_admin' = nur Master). Fehlt ein Eintrag → für alle sichtbar.
+  menuMinRole: Record<string, 'admin' | 'master_admin'>
+  setMenuMinRole: (m: Record<string, 'admin' | 'master_admin'>) => void
+
+  // Lizenzen-Alarm: > 0 = Menüpunkt blinkt rot (so viele aktive Alarme)
+  licensesAlarmCount: number
+  setLicensesAlarmCount: (n: number) => void
+
+  // Mitarbeiter-Erinnerung: > 0 = so viele neue Mitarbeiter beginnen bald
+  employeeReminderCount: number
+  setEmployeeReminderCount: (n: number) => void
+
+  // Globaler Rot-Blink (z. B. Hardware-Inventur: Falsch-Scan)
+  errorFlashActive: boolean
+  errorFlashMessage: string
+  setErrorFlash: (active: boolean, message?: string) => void
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -116,11 +134,24 @@ export const useAppStore = create<AppState>((set) => ({
   guruHostname: '',
   setGuruHostname: (guruHostname) => set({ guruHostname }),
 
+  onboardingPreselectId: null,
+  setOnboardingPreselectId: (onboardingPreselectId) => set({ onboardingPreselectId }),
+
   isQuerying: false,
   setIsQuerying: (isQuerying) => set({ isQuerying }),
 
   hiddenMenuIds: new Set(),
   setHiddenMenuIds: (hiddenMenuIds) => set({ hiddenMenuIds }),
-  masterOnlyIds: new Set(),
-  setMasterOnlyIds: (masterOnlyIds) => set({ masterOnlyIds }),
+  menuMinRole: {},
+  setMenuMinRole: (menuMinRole) => set({ menuMinRole }),
+
+  licensesAlarmCount: 0,
+  setLicensesAlarmCount: (licensesAlarmCount) => set({ licensesAlarmCount }),
+
+  employeeReminderCount: 0,
+  setEmployeeReminderCount: (employeeReminderCount) => set({ employeeReminderCount }),
+
+  errorFlashActive: false,
+  errorFlashMessage: '',
+  setErrorFlash: (active, message = '') => set({ errorFlashActive: active, errorFlashMessage: active ? message : '' }),
 }))

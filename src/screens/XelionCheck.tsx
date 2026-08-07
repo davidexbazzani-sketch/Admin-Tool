@@ -358,7 +358,7 @@ export default function XelionCheck() {
                             📱 Kein Xelion
                           </span>
                         ) : r.hasXelion ? (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500 text-black border border-emerald-500/20">
                             ✓ Xelion aktiv
                           </span>
                         ) : (
@@ -389,7 +389,7 @@ export default function XelionCheck() {
                   <span className="text-emerald-400 flex-1 truncate font-mono text-xs">{lastSavedPath}</span>
                   <button
                     onClick={() => api().openPath(lastSavedPath!)}
-                    className="flex items-center gap-1.5 px-3 py-1 text-xs rounded-md bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-colors shrink-0 font-medium"
+                    className="flex items-center gap-1.5 px-3 py-1 text-xs rounded-md bg-emerald-500 text-black hover:bg-emerald-500/30 transition-colors shrink-0 font-medium"
                   >
                     <FolderOpen size={12} /> Datei öffnen
                   </button>

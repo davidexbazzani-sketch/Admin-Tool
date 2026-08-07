@@ -37,6 +37,7 @@ export const FEATURES: FeatureDef[] = [
 
   // ── Diensthandy & Xelion ─────────────────────────────────────────────────
   { id: 'xelion', label: 'Diensthandy & Xelion', category: 'Grundfunktionen', description: 'Xelion-Telefonnummern prüfen' },
+  { id: 'rufnummer-vergabe', label: 'Rufnummer Vergabe', category: 'Grundfunktionen', userBlocked: true, description: 'Nächste freie Xelion-Durchwahl aus der Durchwahlliste vergeben, Datenbank-Übersicht mit Freigabe, automatische HR-Mail' },
 
   // ── Remote Doc ───────────────────────────────────────────────────────────
   { id: 'remote-doc', label: 'Remote Doc', category: 'Remote Doc', description: 'Remote-PC-Verwaltung', userBlocked: true },
@@ -59,6 +60,14 @@ export const FEATURES: FeatureDef[] = [
   // ── Standort-Übersicht ───────────────────────────────────────────────────
   { id: 'location-overview', label: 'Standort-Übersicht', category: 'Grundfunktionen', description: 'Geräte nach Kategorie anzeigen und verwalten' },
   { id: 'location-overview.manage', label: 'Standort-Übersicht: Objekte verwalten', category: 'Standort-Übersicht', masterAdminOnly: true, description: 'Geräte hinzufügen, bearbeiten, importieren' },
+  { id: 'departments-overview', label: 'Abteilungs-Übersicht', category: 'Grundfunktionen', description: 'Geräte nach Abteilung gruppiert anzeigen, inkl. Abteilungsleiter' },
+  { id: 'organization-structure', label: 'Organisationsstruktur', category: 'Grundfunktionen', description: 'Stammbaum aller Mitarbeiter ausgehend vom Geschäftsführer' },
+  { id: 'user-overview', label: 'Benutzer-Übersicht', category: 'Grundfunktionen', userBlocked: true, description: 'Alle AD-Benutzer mit Daylis-Befehlen (Abfragen + Eingriffe)' },
+  { id: 'user-presence', label: 'Wo angemeldet?', category: 'Grundfunktionen', userBlocked: true, description: 'Benutzer suchen und finden, an welchen PCs er aktuell angemeldet ist — mit Zur Abfrage / Remote Doc / Daylis' },
+  { id: 'employee-management', label: 'Mitarbeiterverwaltung', category: 'Grundfunktionen', userBlocked: true, description: 'Onboarding neuer Mitarbeiter & Austritte: HR-PDFs und Access-Pass-Mails per Drag & Drop einlesen, zentrale Liste pflegen, 5/3/1-Tage-Erinnerung an Eintritte' },
+  { id: 'checklists', label: 'Checklisten', category: 'Grundfunktionen', userBlocked: true, description: 'Geräteübergabe-Dokumente erstellen, unterschreiben und als PDF exportieren' },
+  { id: 'gruppen-suche', label: 'Gruppen-Suche', category: 'Grundfunktionen', userBlocked: true, description: 'Benutzer/Computer anhand ihrer AD-Gruppen-Mitgliedschaften finden und exportieren' },
+  { id: 'access-points', label: 'Access Points Übersicht', category: 'Grundfunktionen', description: 'WLAN-Access-Points auf Lageplänen verorten, Inventar importieren, hochauflösender PDF-Export' },
 
   // ── Geplante Aufgaben ─────────────────────────────────────────────────────
   { id: 'scheduled-tasks', label: 'Geplante Aufgaben', category: 'Grundfunktionen', userBlocked: true, description: 'Wiederkehrende Aufgaben einrichten' },
@@ -74,9 +83,19 @@ export const FEATURES: FeatureDef[] = [
   { id: 'infra-marine.edit-contacts', label: 'Infrastruktur Marine: Kontakte verwalten', category: 'Infrastruktur', masterAdminOnly: true, description: 'Incident Response Kontaktverzeichnisse bearbeiten' },
   { id: 'infra-marine.edit-permissions', label: 'Infrastruktur Marine: Berechtigungs-Katalog verwalten', category: 'Infrastruktur', masterAdminOnly: true, description: 'Berechtigungen-Katalog bearbeiten' },
 
+  // ── Infrastruktur Projekte ────────────────────────────────────────────────
+  { id: 'endpoint-devices', label: 'Endgeräte-Übersicht', category: 'Infrastruktur', description: 'Grosse Uebersicht aller Endarbeitsgeraete (PCs/Laptops) am Standort per Excel-Import: Seriennummer, PC-Name, zugewiesen an, Model Type (mit Monatskosten), Status, Verwendung, Kommentar, Leasingende, Unternehmen, Wer bezahlt?' },
+  { id: 'servicenow', label: 'ServiceNow / Tickets', category: 'IT Support', userBlocked: true, description: 'ServiceNow-Tickets (Incidents/Tasks) ueber die Table-API ansehen und filtern; spaeter Zuweisung an Bearbeiter' },
+  { id: 'infra-projects', label: 'Infrastruktur Projekte', category: 'Infrastruktur', description: 'Laufende Infrastruktur-Projekte auf einem Whiteboard dokumentieren, mit Status, Einträgen, Anhängen und Export' },
+  { id: 'licenses', label: 'Lizenzen-Kalender', category: 'Infrastruktur', userBlocked: true, description: 'Lizenzen mit Ablaufdatum, automatische 30-Tage-Mail + In-App-Warnung bei 30/20/10 Tagen vor Ablauf' },
+  { id: 'hardware-inventory', label: 'Hardware-Inventur', category: 'Infrastruktur', userBlocked: true, description: 'Lagerbestand-Inventur per Handscanner mit Falsch-Scan-Erkennung, AD-Lookup fehlender Geräte und Berichts-Archiv' },
+  { id: 'accessory-inventory', label: 'Zubehör Inventur', category: 'Infrastruktur', userBlocked: true, description: 'Kleinteile-Bestand (IST/SOLL) mit Amazon-Links, gefuehrter Inventur-Wizard und automatischer Bestellliste' },
+  { id: 'pdf-tools', label: 'PDF-Werkzeuge', category: 'Grundfunktionen', description: 'Eigenstaendiges PDF-Modul: Ansehen, Kommentieren, Ausfuellen/Unterschreiben, Seiten organisieren, Umwandeln, OCR, Schuetzen — mit anpassbarem Schnellzugriff' },
+
   // ── Software Installationen ──────────────────────────────────────────────
   { id: 'software-installations', label: 'Software Installationen', category: 'Software', userBlocked: true, description: 'Software remote auf Zielrechner installieren' },
   { id: 'software-installations.solidworks', label: 'SolidWorks 2024 SP5', category: 'Software', userBlocked: true, description: 'SolidWorks-Installation Schritte 1-9 automatisiert' },
+  { id: 'software-installations.xelion', label: 'Xelion Desktop', category: 'Software', userBlocked: true, description: 'Xelion (MSIX) silent remote installieren, Installer austauschbar' },
 
   // ── Praesentationsmodus ──────────────────────────────────────────────────
   { id: 'presentation-mode', label: 'Praesentationsmodus', category: 'Praesentation', userBlocked: true, description: 'Webseiten in Endlosschleife im Vollbild anzeigen (Hallen-Display)' },

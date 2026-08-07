@@ -12,8 +12,8 @@ function CopyBlock({ code, large }: { code: string; large?: boolean }) {
         onClick={() => { navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 2000) }}
         className={`mt-1.5 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-semibold transition-all ${
           large
-            ? copied ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20'
-            : copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-muted/30 text-muted-foreground hover:bg-muted/50'
+            ? copied ? 'bg-emerald-500 text-black border border-emerald-500/30' : 'bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20'
+            : copied ? 'bg-emerald-500 text-black' : 'bg-muted/30 text-muted-foreground hover:bg-muted/50'
         }`}>
         {copied ? <><Check size={10} /> Kopiert!</> : <><Copy size={10} /> {large ? 'Befehl kopieren' : 'Kopieren'}</>}
       </button>

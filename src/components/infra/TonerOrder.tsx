@@ -380,7 +380,7 @@ export default function TonerOrder() {
                       <td className="px-3 py-2 font-medium text-foreground">{h.toner}</td>
                       <td className="px-3 py-2">{h.quantity}</td>
                       <td className="px-3 py-2">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${h.status === 'gesendet' ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>{h.status}</span>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${h.status === 'gesendet' ? 'bg-green-500 text-black' : 'bg-red-500/20 text-red-300'}`}>{h.status}</span>
                       </td>
                       <td className="px-3 py-2">
                         <button onClick={() => { setToner(h.toner); setQuantity(h.quantity) }}

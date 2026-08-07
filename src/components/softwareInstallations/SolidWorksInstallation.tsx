@@ -7,6 +7,7 @@ import { api } from '../../electronAPI'
 import { createLogger } from '../../utils/activityLogger'
 import { pathService } from '../../services/pathService'
 import { useSwInstallStore } from '../../store/swInstallStore'
+import { isValidRemoteTarget, isIpv4, ensureWinRmTrustedHost } from '../../utils/remoteTarget'
 import Card from '../Card'
 
 const log = createLogger('software-installations')
@@ -348,7 +349,8 @@ export default function SolidWorksInstallation() {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
   }, [logLines])
 
-  const hostnameValid = /^DE/i.test(hostname.trim())
+  const targetValid = isValidRemoteTarget(hostname)
+  const targetIsIp = isIpv4(hostname)
   const groupsSelected = selectedGroups.size > 0
   const allPreChecksOk = Object.values(preChecks).every(v => v === 'ok')
 
@@ -369,9 +371,13 @@ export default function SolidWorksInstallation() {
     }
     setPreChecks({ ...checks })
 
-    // Hostname
-    checks.hostname = hostnameValid ? 'ok' : 'fail'
+    // Ziel (Hostname DE… oder IP)
+    checks.hostname = targetValid ? 'ok' : 'fail'
     setPreChecks({ ...checks })
+
+    // Bei IP: sicherstellen, dass sie in den WinRM-TrustedHosts steht (NTLM),
+    // damit Invoke-Command per IP funktioniert. Best-Effort.
+    if (targetIsIp) { try { await ensureWinRmTrustedHost(h) } catch { /* Remote-Check meldet es */ } }
 
     // Ping
     try {
@@ -440,12 +446,13 @@ export default function SolidWorksInstallation() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <Card title="Konfiguration" icon={<Wrench size={15} />}>
             <div className="space-y-4">
-              {/* Hostname */}
+              {/* Hostname oder IP */}
               <div>
-                <label className="text-[11px] text-muted-foreground font-medium mb-1 block">Hostname des Zielrechners *</label>
-                <input value={hostname} onChange={e => setHostname(e.target.value)} placeholder="z.B. DEHAM12345678"
-                  className={`w-full px-3 py-2 rounded-lg bg-background border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50 ${hostname && !hostnameValid ? 'border-red-500/50' : 'border-border'}`} />
-                {hostname && !hostnameValid && <p className="text-[10px] text-red-400 mt-1">Hostname muss mit DE beginnen</p>}
+                <label className="text-[11px] text-muted-foreground font-medium mb-1 block">Hostname oder IP-Adresse des Zielrechners *</label>
+                <input value={hostname} onChange={e => setHostname(e.target.value)} placeholder="z.B. DEHAM12345678 oder 10.20.30.40"
+                  className={`w-full px-3 py-2 rounded-lg bg-background border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50 ${hostname && !targetValid ? 'border-red-500/50' : 'border-border'}`} />
+                {hostname && !targetValid && <p className="text-[10px] text-red-400 mt-1">Bitte einen Hostnamen (beginnt mit DE) oder eine gültige IP-Adresse eingeben</p>}
+                {targetIsIp && <p className="text-[10px] text-amber-400 mt-1">Verbindung per IP nutzt WinRM/NTLM — die IP wird bei der Prüfung automatisch zu den TrustedHosts hinzugefügt (lokale Admin-Rechte nötig).</p>}
               </div>
 
               {/* Path mode */}
@@ -497,8 +504,8 @@ export default function SolidWorksInstallation() {
 
               {/* Actions */}
               <div className="flex gap-2 pt-2 border-t border-border">
-                <button onClick={runPreChecks} disabled={!hostnameValid || !groupsSelected}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold ${hostnameValid && groupsSelected ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-muted text-muted-foreground cursor-not-allowed'}`}>
+                <button onClick={runPreChecks} disabled={!targetValid || !groupsSelected}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold ${targetValid && groupsSelected ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-muted text-muted-foreground cursor-not-allowed'}`}>
                   <Play size={14} />Verbindung pruefen
                 </button>
               </div>
@@ -522,7 +529,7 @@ export default function SolidWorksInstallation() {
         <Card title="Vorab-Checks" icon={<CheckCircle size={15} />}>
           <div className="space-y-2">
             {[
-              { key: 'hostname', label: 'Hostname beginnt mit DE' },
+              { key: 'hostname', label: 'Gültiges Ziel (Hostname DE… oder IP)' },
               { key: 'ping', label: 'Zielrechner online (Ping)' },
               { key: 'remote', label: 'Remote-Verbindung moeglich (WinRM)' },
               { key: 'disk', label: 'Mindestens 30 GB frei auf C:' },

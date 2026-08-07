@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, dialog, shell, Menu, screen as electronScreen, session as electronSession } from 'electron'
 import { join } from 'path'
+import { spawn, execFileSync, execFile, type ChildProcess } from 'child_process'
 import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync, statSync } from 'fs'
 import { userInfo, hostname } from 'os'
 import Store from 'electron-store'
@@ -91,6 +92,12 @@ const store = new Store({
 
 let mainWindow: BrowserWindow | null = null
 
+// Sicherheitsnetz: ein einzelner Fehler im Main-Prozess soll NIE das ganze
+// Admin-Tool beenden — nur protokollieren (sonst wuerde z. B. ein Fehler rund um
+// das ServiceNow-Anmeldefenster die komplette App schliessen).
+process.on('uncaughtException', (err) => { try { console.error('[main] uncaughtException:', err) } catch { /* egal */ } })
+process.on('unhandledRejection', (reason) => { try { console.error('[main] unhandledRejection:', reason) } catch { /* egal */ } })
+
 // PROBLEM 1 (UIPI): When the app runs elevated (HIGH integrity), Windows blocks
 // WM_DROPFILES drag messages from Explorer (MEDIUM integrity). Fix: call
 // ChangeWindowMessageFilterEx to allow those messages per-window.
@@ -98,6 +105,11 @@ async function fixAdminDragDrop(win: BrowserWindow): Promise<void> {
   if (process.platform !== 'win32') return
   try {
     const hwnd = win.getNativeWindowHandle().readUInt32LE(0)
+    // WM_DROPFILES=0x0233, WM_COPYDATA=0x004A, WM_COPYGLOBALDATA=0x0049.
+    // ChangeWindowMessageFilterEx betrifft nur das uebergebene (Top-Level-)Fenster;
+    // Chromiums OLE-Drag-Drop laeuft jedoch ueber CHILD-Fenster (RenderWidgetHost).
+    // Darum zusaetzlich das PROZESSWEITE ChangeWindowMessageFilter setzen, das die
+    // Nachrichten fuer alle Fenster des Prozesses (inkl. Kind-Fenster) freigibt.
     const ps = [
       `Add-Type -TypeDefinition @'`,
       `using System;`,
@@ -105,12 +117,15 @@ async function fixAdminDragDrop(win: BrowserWindow): Promise<void> {
       `public class WinUipi {`,
       `    [DllImport("user32.dll", SetLastError=true)]`,
       `    public static extern bool ChangeWindowMessageFilterEx(IntPtr hWnd, uint msg, uint action, IntPtr pChangeInfo);`,
+      `    [DllImport("user32.dll", SetLastError=true)]`,
+      `    public static extern bool ChangeWindowMessageFilter(uint msg, uint flag);`,
       `}`,
       `'@`,
       `$h = [IntPtr][uint]${hwnd}`,
-      `[WinUipi]::ChangeWindowMessageFilterEx($h, 0x0233u, 1u, [IntPtr]::Zero) | Out-Null`,
-      `[WinUipi]::ChangeWindowMessageFilterEx($h, 0x004Au, 1u, [IntPtr]::Zero) | Out-Null`,
-      `[WinUipi]::ChangeWindowMessageFilterEx($h, 0x0049u, 1u, [IntPtr]::Zero) | Out-Null`,
+      `foreach ($m in 0x0233,0x004A,0x0049) {`,
+      `    [WinUipi]::ChangeWindowMessageFilterEx($h, [uint]$m, 1u, [IntPtr]::Zero) | Out-Null`,
+      `    [WinUipi]::ChangeWindowMessageFilter([uint]$m, 1u) | Out-Null`,
+      `}`,
       `Write-Output 'ok'`,
     ].join('\n')
     await runPowerShell(ps, 15000)
@@ -150,6 +165,12 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     mainWindow = null
+    // Versteckte Hilfsfenster (ServiceNow-Transport/-Anmeldung) schliessen, damit
+    // KEIN unsichtbarer Prozess zurueckbleibt. Sonst feuert window-all-closed nicht,
+    // die App laeuft im Hintergrund weiter — und der Installer meldet spaeter
+    // "IT Admin Tool kann nicht geschlossen werden".
+    try { if (snWindow && !snWindow.isDestroyed()) { snWindow.destroy(); snWindow = null } } catch { /* egal */ }
+    try { if (snLoginWindow && !snLoginWindow.isDestroyed()) { snLoginWindow.destroy(); snLoginWindow = null } } catch { /* egal */ }
   })
 }
 
@@ -183,8 +204,19 @@ function stripFramingHeadersOnce() {
   })
 }
 
-function openPresentationWindow(opts?: { displayId?: number }) {
+function openPresentationWindow(opts?: { displayId?: number; previewPlaylistId?: string }) {
+  const preview = opts?.previewPlaylistId
+  // Vorschau-Playlist als Query mitgeben (Hash bleibt exakt "#presentation").
+  const devUrl = preview
+    ? `http://localhost:5173/?preview=${encodeURIComponent(preview)}#presentation`
+    : 'http://localhost:5173/#presentation'
+  const prodQuery = preview ? { preview } : undefined
+
   if (presentationWindow && !presentationWindow.isDestroyed()) {
+    // Bereits offen: mit (ggf. neuer) Vorschau neu laden, damit "Start" immer
+    // die aktuelle Auswahl zeigt — nicht die zuletzt geladene.
+    if (isDev) presentationWindow.loadURL(devUrl)
+    else presentationWindow.loadFile(join(__dirname, '../dist/index.html'), { hash: 'presentation', query: prodQuery })
     presentationWindow.focus()
     return
   }
@@ -214,14 +246,10 @@ function openPresentationWindow(opts?: { displayId?: number }) {
     show: false,
   })
 
-  const url = isDev
-    ? 'http://localhost:5173/#presentation'
-    : `file://${join(__dirname, '../dist/index.html')}#presentation`
-
   if (isDev) {
-    presentationWindow.loadURL(url)
+    presentationWindow.loadURL(devUrl)
   } else {
-    presentationWindow.loadFile(join(__dirname, '../dist/index.html'), { hash: 'presentation' })
+    presentationWindow.loadFile(join(__dirname, '../dist/index.html'), { hash: 'presentation', query: prodQuery })
   }
 
   presentationWindow.once('ready-to-show', () => {
@@ -235,6 +263,38 @@ function openPresentationWindow(opts?: { displayId?: number }) {
 }
 
 app.whenReady().then(createWindow)
+
+// Mutual-TLS: Firmen-Proxy (Zscaler) / SSL-Inspection oder ServiceNow selbst
+// verlangt beim TLS-Handshake ein CLIENT-Zertifikat. Fuer webContents (Fenster/
+// Webview) feuert dieses Event und wir waehlen automatisch ein gueltiges
+// Zertifikat aus dem Windows-Zertifikatspeicher. Die letzte Anfrage wird zur
+// Diagnose festgehalten (siehe servicenow:certDiag).
+let lastClientCertInfo: {
+  at: string; url: string; count: number
+  certs: { subjectName: string; issuerName: string; validExpiry: number }[]
+} | null = null
+app.on('select-client-certificate', (event, _webContents, url, list, callback) => {
+  const arr = list || []
+  lastClientCertInfo = {
+    at: new Date().toISOString(),
+    url,
+    count: arr.length,
+    certs: arr.map(c => ({
+      subjectName: c.subjectName || c.subject?.commonName || '',
+      issuerName: c.issuerName || c.issuer?.commonName || '',
+      validExpiry: c.validExpiry || 0,
+    })),
+  }
+  if (arr.length > 0) {
+    event.preventDefault()
+    // Bevorzugt ein NICHT abgelaufenes Zertifikat, sonst das erste.
+    const nowSec = Date.now() / 1000
+    const valid = arr.find(c => (c.validExpiry || 0) > nowSec)
+    callback(valid || arr[0])
+  }
+  // Keine passenden Zertifikate -> Default (Abbruch): dann sieht das Tool kein
+  // Client-Zertifikat auf diesem Rechner.
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
@@ -298,6 +358,20 @@ ipcMain.handle('file:read', async (_e, filePath: string) => {
   }
 })
 
+// Gebuendeltes App-Asset (public/ bzw. dist/) als Base64 lesen.
+// Noetig, weil fetch() im Production-Build (file:// + webSecurity) blockiert ist.
+// rel wird gegen Pfad-Ausbrueche bereinigt und bleibt unterhalb des App-Ordners.
+ipcMain.handle('asset:read', async (_e, rel: string) => {
+  try {
+    const safeRel = String(rel).replace(/\\/g, '/').split('/').filter(s => s && s !== '.' && s !== '..').join('/')
+    const base = isDev ? join(__dirname, '../public') : join(__dirname, '../dist')
+    const buf = readFileSync(join(base, safeRel))
+    return { success: true, data: buf.toString('base64') }
+  } catch (err) {
+    return { success: false, error: String(err) }
+  }
+})
+
 // Write file from base64
 ipcMain.handle('file:write', async (_e, filePath: string, dataBase64: string) => {
   try {
@@ -325,6 +399,251 @@ ipcMain.handle('shell:openPath', async (_e, filePath: string) => {
   const error = await shell.openPath(filePath)
   // openPath returns '' on success, or an error string on failure
   return error === '' ? { success: true } : { success: false, error }
+})
+
+// ── ServiceNow Table-API über die SSO-Sitzung (Session-Cookie) ──────────────
+// Das SKF-Konto ist SSO-basiert -> es gibt KEIN lokales ServiceNow-Passwort,
+// Basic Auth scheitert daher immer (401). Stattdessen meldet sich der Nutzer
+// einmal per SSO an (wie im Browser); die Anmeldung liegt in einer eigenen,
+// persistenten Partition 'persist:servicenow'. Alle API-Aufrufe laufen im
+// versteckten Fenster derselben Partition OHNE Authorization-Header -> der
+// Session-Cookie authentifiziert. mTLS (select-client-certificate) bleibt.
+const SN_PARTITION = 'persist:servicenow'
+let snWindow: BrowserWindow | null = null
+let snIntegratedAuthConfigured = false
+
+function snOriginOf(u: string): string { try { return new URL(u).origin } catch { return '' } }
+
+// Integrated Auth (Negotiate/NTLM) fuer moeglichst klickfreies SSO erlauben —
+// deckt Windows-Integrated-Login beim IdP ab. Einmalig, best-effort.
+function configureSnIntegratedAuth(): void {
+  if (snIntegratedAuthConfigured) return
+  try {
+    const ses = electronSession.fromPartition(SN_PARTITION)
+    ses.allowNTLMCredentialsForDomains('*')
+    snIntegratedAuthConfigured = true
+  } catch { /* best effort */ }
+}
+
+// Basic-Auth entfaellt. Negotiate/NTLM-Challenges NICHT abfangen -> Electrons
+// Integrated Auth beantwortet sie automatisch (siehe configureSnIntegratedAuth).
+// Proxy-Auth (Zscaler) ebenfalls den Defaults ueberlassen.
+
+function ensureSnWindow(): BrowserWindow {
+  if (snWindow && !snWindow.isDestroyed()) return snWindow
+  configureSnIntegratedAuth()
+  const win = new BrowserWindow({ show: false, webPreferences: { partition: SN_PARTITION, contextIsolation: true, nodeIntegration: false, sandbox: false } })
+  win.on('closed', () => { if (snWindow === win) snWindow = null })
+  snWindow = win
+  return win
+}
+
+// Sieht der Antworttext nach einer (SSO-)Anmeldeseite statt nach JSON aus?
+function snLooksLikeLogin(body: string): boolean {
+  const t = (body || '').slice(0, 4000).toLowerCase()
+  if (!t) return false
+  return t.includes('<html') || t.includes('<!doctype')
+    || t.includes('login') || t.includes('sign in') || t.includes('anmeld')
+    || t.includes('saml') || t.includes('sso')
+}
+
+// GET per direkter Navigation: setzt den Authorization-Header, liest den Status
+// (did-navigate) und den Antworttext (nach did-finish-load).
+function snNavGet(win: BrowserWindow, url: string, extraHeaders: string): Promise<{ ok: boolean; status?: number; body?: string; error?: string }> {
+  return new Promise((resolve) => {
+    let settled = false
+    let status = 0
+    const wc = win.webContents
+    const onNav = (_e: unknown, _u: string, code: number) => { if (typeof code === 'number' && code > 0) status = code }
+    const onFinish = () => {
+      wc.executeJavaScript('(document.body&&document.body.innerText)||document.documentElement.innerText||""', true)
+        .then((body: unknown) => finish({ ok: true, status, body: String(body || '') }))
+        .catch((e: unknown) => finish({ ok: false, error: e instanceof Error ? e.message : String(e) }))
+    }
+    const onFail = (_e: unknown, code: number, desc: string, _u: string, isMain: boolean) => {
+      if (!isMain || code === -3) return // ERR_ABORTED ignorieren
+      let m = desc || ('Fehler ' + code)
+      if (/ERR_SSL_CLIENT_AUTH_CERT_NEEDED/i.test(m)) m = 'Client-Zertifikat (mutual TLS) nicht auswählbar (siehe Diagnose).'
+      else if (/ERR_PROXY|ERR_TUNNEL/i.test(m)) m = 'Proxy-Fehler beim Verbindungsaufbau: ' + m
+      finish({ ok: false, error: m })
+    }
+    const timer = setTimeout(() => finish({ ok: false, error: 'Zeitüberschreitung bei der API-Anfrage.' }), 30000)
+    function finish(r: { ok: boolean; status?: number; body?: string; error?: string }) {
+      if (settled) return; settled = true
+      clearTimeout(timer)
+      wc.removeListener('did-navigate', onNav as never)
+      wc.removeListener('did-finish-load', onFinish)
+      wc.removeListener('did-fail-load', onFail as never)
+      resolve(r)
+    }
+    wc.on('did-navigate', onNav as never)
+    wc.on('did-finish-load', onFinish)
+    wc.on('did-fail-load', onFail as never)
+    win.loadURL(url, { extraHeaders }).catch(() => { /* Ablauf via Events */ })
+  })
+}
+
+ipcMain.handle('servicenow:certDiag', () => lastClientCertInfo)
+
+ipcMain.handle('servicenow:request', async (_e, opts: {
+  instanceUrl: string
+  method?: 'GET' | 'PATCH'; table: string; sysId?: string
+  query?: string; fields?: string; limit?: number; body?: unknown
+  auth?: { user: string; pass: string }
+}): Promise<{ success: boolean; status?: number; data?: unknown; error?: string; needsLogin?: boolean }> => {
+  try {
+    const method = opts.method === 'PATCH' ? 'PATCH' : 'GET'
+    const base = (opts.instanceUrl || '').trim().replace(/\/+$/, '')
+    if (!base) return { success: false, error: 'Keine Instanz-URL konfiguriert.' }
+    if (!/^https?:\/\//i.test(base)) return { success: false, error: 'Instanz-URL muss mit https:// beginnen.' }
+    if (!opts.table) return { success: false, error: 'Keine Tabelle angegeben.' }
+    const origin = snOriginOf(base)
+    if (!origin) return { success: false, error: 'Instanz-URL ungültig.' }
+
+    let path = `/api/now/table/${encodeURIComponent(opts.table)}`
+    if (opts.sysId) path += `/${encodeURIComponent(opts.sysId)}`
+    const params = new URLSearchParams()
+    if (opts.query) params.set('sysparm_query', opts.query)
+    if (opts.fields) params.set('sysparm_fields', opts.fields)
+    if (opts.limit) params.set('sysparm_limit', String(opts.limit))
+    params.set('sysparm_display_value', 'all')
+    params.set('sysparm_exclude_reference_link', 'true')
+    const url = origin + path + '?' + params.toString()
+
+    // Integrationskonto (Basic Auth) hat Vorrang; ohne Konto authentifiziert die
+    // SSO-Sitzung (Cookie). Transport IMMER ueber das versteckte Fenster —
+    // net.request scheitert am Firmenrechner an der Client-Zertifikat-Auswahl
+    // (Zscaler/mTLS, select-client-certificate feuert nur fuer webContents).
+    const usedBasic = !!(opts.auth && opts.auth.user && opts.auth.pass)
+    const authHeader = usedBasic
+      ? 'Authorization: Basic ' + Buffer.from(`${opts.auth!.user}:${opts.auth!.pass}`, 'utf8').toString('base64')
+      : ''
+    const extraHeaders = 'Accept: application/json' + (authHeader ? '\n' + authHeader : '')
+
+    const win = ensureSnWindow()
+
+    let raw: { ok: boolean; status?: number; body?: string; error?: string }
+    if (method === 'GET') {
+      raw = await snNavGet(win, url, extraHeaders)
+    } else {
+      // PATCH (Phase 2): erst API-Origin per Navigation etablieren, dann same-origin fetch
+      // (Basic- bzw. Cookie-authentifiziert; das CSRF-Token g_ck/X-UserToken folgt separat).
+      await snNavGet(win, origin + '/api/now/table/sys_user?sysparm_limit=1', extraHeaders)
+      const headers: Record<string, string> = { Accept: 'application/json', 'Content-Type': 'application/json' }
+      if (usedBasic) headers.Authorization = authHeader.replace(/^Authorization: /, '')
+      const init = { method, headers, body: opts.body ? JSON.stringify(opts.body) : undefined, cache: 'no-store', credentials: 'include' }
+      const js = `(async()=>{try{const r=await fetch(${JSON.stringify(url)},${JSON.stringify(init)});const t=await r.text();return{ok:true,status:r.status,body:t}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
+      raw = await win.webContents.executeJavaScript(js, true) as { ok: boolean; status?: number; body?: string; error?: string }
+    }
+
+    if (!raw || !raw.ok) {
+      let m = raw?.error || 'Anfrage fehlgeschlagen'
+      if (/Failed to fetch|NetworkError|ERR_/i.test(m)) m = 'Verbindungsfehler bei der API-Anfrage: ' + m
+      return { success: false, error: m }
+    }
+    let data: unknown
+    try { data = raw.body ? JSON.parse(raw.body) : undefined } catch { data = raw.body }
+    const status = raw.status || 0
+    const hasResult = !!(data && typeof data === 'object' && 'result' in (data as Record<string, unknown>))
+    if ((status >= 200 && status < 300) || (status === 0 && hasResult)) return { success: true, status: status || 200, data }
+
+    // Nicht angemeldet: 401 ODER es kam eine (SSO-)Anmeldeseite/HTML statt JSON zurueck.
+    if (status === 401 || (!hasResult && snLooksLikeLogin(typeof raw.body === 'string' ? raw.body : ''))) {
+      if (usedBasic) {
+        // Integrationskonto abgelehnt -> KEIN SSO-Prompt, sondern klare Meldung.
+        return { success: false, status: status || 401, error: 'Integrationskonto abgelehnt (401) — Benutzername/Passwort im Zugang-Panel prüfen.' }
+      }
+      return { success: false, status: status || 401, needsLogin: true, error: 'ServiceNow-SSO-Anmeldung erforderlich. Bitte im Zugang-Panel anmelden.' }
+    }
+    let msg = `HTTP ${status}`
+    if (status === 403) msg = 'Kein Zugriff (403) — ServiceNow-Rolle/Rechte für die Tabelle prüfen.'
+    else if (status === 404) msg = 'Nicht gefunden (404) — Tabelle oder Instanz-URL prüfen.'
+    const em = (data as { error?: { message?: string } } | undefined)?.error?.message
+    if (em) msg += ` — ${em}`
+    return { success: false, status, data, error: msg }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : String(err) }
+  }
+})
+
+// ── ServiceNow SSO-Anmeldung (sichtbares Fenster) ───────────────────────────
+// Öffnet die Instanz in einem echten Fenster (persist:servicenow). Der Nutzer
+// meldet sich per SSO an (oft automatisch). Sobald die Table-API JSON liefert,
+// gilt die Anmeldung als erfolgreich und das Fenster schließt sich.
+let snLoginWindow: BrowserWindow | null = null
+
+ipcMain.handle('servicenow:login', async (_e, instanceUrl: string): Promise<{ success: boolean; user?: string; error?: string }> => {
+  const base = (instanceUrl || '').trim().replace(/\/+$/, '')
+  const origin = snOriginOf(base)
+  if (!origin) return { success: false, error: 'Instanz-URL ungültig.' }
+  if (snLoginWindow && !snLoginWindow.isDestroyed()) { snLoginWindow.focus(); return { success: false, error: 'Anmeldefenster ist bereits geöffnet.' } }
+  configureSnIntegratedAuth()
+
+  return await new Promise((resolve) => {
+    let settled = false
+    let poll: ReturnType<typeof setInterval> | null = null
+    const win = new BrowserWindow({
+      show: true, width: 1000, height: 800, title: 'ServiceNow – Anmeldung',
+      autoHideMenuBar: true,
+      webPreferences: { partition: SN_PARTITION, contextIsolation: true, nodeIntegration: false, sandbox: false },
+    })
+    snLoginWindow = win
+    const wc = win.webContents
+
+    const onNav = () => { void probe() }
+
+    function cleanup() {
+      if (poll) { clearInterval(poll); poll = null }
+      try { wc.removeListener('did-navigate', onNav) } catch { /* egal */ }
+    }
+    // Aufloesen + Fenster GESCHUETZT und VERZOEGERT schliessen (nicht synchron aus
+    // einem webContents-Event heraus — das kann den Main-Prozess crashen).
+    function settle(r: { success: boolean; user?: string; error?: string }) {
+      if (settled) return
+      settled = true
+      cleanup()
+      if (snLoginWindow === win) snLoginWindow = null
+      resolve(r)
+      setTimeout(() => { try { if (!win.isDestroyed()) win.destroy() } catch { /* egal */ } }, 300)
+    }
+
+    // Anmeldung ueber SESSION-COOKIES erkennen — reine Main-Prozess-API, KEIN
+    // executeJavaScript im Fenster (das konnte den Prozess nativ crashen).
+    // ServiceNow setzt nach erfolgreichem Login Benutzer-/Session-Cookies auf der
+    // Instanz-Origin. Erkennung ist bewusst tolerant: schlaegt sie fehl, bleibt das
+    // Fenster offen und der Nutzer schliesst es selbst (win 'closed' → Ticketliste
+    // testet dann erneut). So kann hier NICHTS mehr abstuerzen.
+    async function probe(): Promise<void> {
+      if (settled) return
+      let cur = ''
+      try { if (win.isDestroyed() || wc.isDestroyed()) return; cur = wc.getURL() } catch { return }
+      if (!cur.startsWith(origin)) return  // noch beim IdP / Anmeldeseite
+      if (/login\.do|navpage\.do|\/sso|saml|logout|oauth/i.test(cur)) return  // noch Login/SSO
+      try {
+        const ses = electronSession.fromPartition(SN_PARTITION)
+        const cookies = await ses.cookies.get({ url: origin })
+        if (settled) return
+        const loggedIn = cookies.some(c => /^glide_(session_store|user_activity|user_session)/i.test(c.name))
+        if (loggedIn) settle({ success: true })
+      } catch { /* noch nicht bereit */ }
+    }
+
+    win.on('closed', () => {
+      if (!settled) { settled = true; cleanup(); if (snLoginWindow === win) snLoginWindow = null; resolve({ success: false, error: 'Anmeldung abgebrochen.' }) }
+    })
+    wc.on('did-navigate', onNav)
+
+    poll = setInterval(() => { void probe() }, 3000)
+    win.loadURL(origin + '/nav_to.do').catch(() => { try { win.loadURL(origin).catch(() => { /* egal */ }) } catch { /* egal */ } })
+  })
+})
+
+ipcMain.handle('servicenow:logout', async (): Promise<{ success: boolean }> => {
+  try {
+    if (snWindow && !snWindow.isDestroyed()) { snWindow.destroy(); snWindow = null }
+    await electronSession.fromPartition(SN_PARTITION).clearStorageData()
+    return { success: true }
+  } catch { return { success: false } }
 })
 
 // Cancel all running PowerShell/CMD processes
@@ -360,8 +679,95 @@ ipcMain.handle('mail:compose', async (_e, opts: {
 // App version
 ipcMain.handle('app:version', () => app.getVersion())
 
+// ── Silent printing ──────────────────────────────────────────────────────────
+// Laedt das uebergebene HTML in ein unsichtbares Fenster und druckt es OHNE
+// Dialog auf dem Windows-Standarddrucker (silent: true). Wird u. a. von den
+// Checklisten ("Drucken"-Button) genutzt.
+//
+// Wichtig: Ohne expliziten deviceName faellt Chromium teils auf "Als PDF
+// speichern" bzw. "Microsoft Print to PDF" zurueck — dann erscheint ein
+// "Druckausgabe speichern unter"-Dialog. Darum wird der echte (physische)
+// Standarddrucker vorab ermittelt und explizit uebergeben.
+
+const VIRTUAL_PRINTER_RE = /print to pdf|save as pdf|xps|onenote|fax/i
+
+async function resolveDefaultPrinter(wc: Electron.WebContents): Promise<{ name?: string; error?: string }> {
+  let printers: Electron.PrinterInfo[] = []
+  try { printers = await wc.getPrintersAsync() } catch { /* leer */ }
+  if (printers.length === 0) return { error: 'Kein Drucker auf diesem System gefunden.' }
+
+  // 1) Windows-Standarddrucker laut Chromium
+  let candidate = printers.find(p => p.isDefault)?.name
+
+  // 2) Falls unbekannt oder virtuell: Standarddrucker per WMI nachschlagen
+  //    (im elevated Kontext zuverlaessiger als die Chromium-Aufloesung)
+  if (!candidate || VIRTUAL_PRINTER_RE.test(candidate)) {
+    try {
+      const res = await runPowerShell('(Get-CimInstance -ClassName Win32_Printer -Filter "Default=TRUE").Name', 10000)
+      const name = (res.stdout || '').trim().split(/\r?\n/)[0]?.trim()
+      if (name && printers.some(p => p.name === name)) candidate = name
+    } catch { /* weiter mit Fallback */ }
+  }
+
+  // 3) Immer noch virtuell? Dann den ersten physischen Drucker nehmen.
+  if (!candidate || VIRTUAL_PRINTER_RE.test(candidate)) {
+    const physical = printers.filter(p => !VIRTUAL_PRINTER_RE.test(p.name))
+    if (physical.length > 0) {
+      candidate = (physical.find(p => p.isDefault) ?? physical[0]).name
+    }
+  }
+
+  if (!candidate) return { error: 'Kein physischer Drucker gefunden — bitte einen Standarddrucker einrichten.' }
+  return { name: candidate }
+}
+
+ipcMain.handle('print:html', async (_e, html: string) => {
+  return new Promise<{ success: boolean; error?: string }>((resolve) => {
+    const win = new BrowserWindow({
+      show: false,
+      webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true },
+    })
+    let settled = false
+    const finish = (r: { success: boolean; error?: string }) => {
+      if (settled) return
+      settled = true
+      try { if (!win.isDestroyed()) win.destroy() } catch { /* ok */ }
+      resolve(r)
+    }
+    // Sicherheitsnetz: nie ewig haengen bleiben
+    const timeout = setTimeout(() => finish({ success: false, error: 'Zeitueberschreitung beim Drucken.' }), 60_000)
+
+    win.webContents.once('did-finish-load', () => {
+      // Kurz warten, bis Bilder (Logo/Unterschrift, Data-URLs) gerendert sind
+      setTimeout(async () => {
+        const printer = await resolveDefaultPrinter(win.webContents)
+        if (!printer.name) {
+          clearTimeout(timeout)
+          finish({ success: false, error: printer.error || 'Kein Drucker gefunden.' })
+          return
+        }
+        win.webContents.print(
+          { silent: true, printBackground: true, deviceName: printer.name, margins: { marginType: 'none' } },
+          (ok, failureReason) => {
+            clearTimeout(timeout)
+            finish(ok ? { success: true } : { success: false, error: failureReason || 'Drucken fehlgeschlagen.' })
+          },
+        )
+      }, 250)
+    })
+    win.webContents.once('did-fail-load', (_ev, _code, desc) => {
+      clearTimeout(timeout)
+      finish({ success: false, error: `Inhalt konnte nicht geladen werden: ${desc}` })
+    })
+    win.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(html)).catch(err => {
+      clearTimeout(timeout)
+      finish({ success: false, error: String(err) })
+    })
+  })
+})
+
 // ─── Presentation Mode IPC ──────────────────────────────────────────────────
-ipcMain.handle('presentation:open', (_e, opts?: { displayId?: number }) => {
+ipcMain.handle('presentation:open', (_e, opts?: { displayId?: number; previewPlaylistId?: string }) => {
   openPresentationWindow(opts)
   return { success: true }
 })
@@ -381,6 +787,150 @@ ipcMain.handle('presentation:listDisplays', () => {
     primary: d.id === primaryId,
     scaleFactor: d.scaleFactor,
   }))
+})
+
+// ─── Edge-Anzeige (SSO): URL in echtem Microsoft-Edge-Fenster (App-Modus) ─────
+// Der interne Chromium hat keinen Zugriff auf den Windows-/Entra-SSO-Kontext.
+// Fuer SSO-Seiten (eMaint/Auth0/Microsoft-SAML) starten wir daher echte
+// msedge.exe-Fenster im App-Modus auf dem gewaehlten Monitor.
+
+// msedge.exe robust finden: Standardpfade → Registry (App Paths) → "where msedge".
+function findEdgePath(): string | null {
+  const candidates = [
+    'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+    'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+  ]
+  for (const c of candidates) { try { if (existsSync(c)) return c } catch { /* egal */ } }
+  try {
+    const out = execFileSync('reg', ['query', 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\msedge.exe', '/ve'], { encoding: 'utf8' })
+    const m = out.match(/REG_SZ\s+(.+msedge\.exe)/i)
+    if (m && existsSync(m[1].trim())) return m[1].trim()
+  } catch { /* egal */ }
+  try {
+    const out = execFileSync('where', ['msedge'], { encoding: 'utf8' })
+    const first = out.split(/\r?\n/).map(s => s.trim()).find(Boolean)
+    if (first && existsSync(first)) return first
+  } catch { /* egal */ }
+  return null
+}
+
+// Laufende Edge-Prozesse pro Monitor-ID (fuer zuverlaessiges Schliessen).
+const edgeProcs = new Map<number, { proc: ChildProcess; pid?: number }>()
+
+function killEdgeTree(pid?: number) {
+  if (!pid) return
+  try { execFile('taskkill', ['/PID', String(pid), '/T', '/F'], () => { /* best effort */ }) } catch { /* egal */ }
+}
+
+ipcMain.handle('edge:launch', (_e, opts: { url: string; displayId?: number; fullscreen?: boolean; ownProfile?: boolean }) => {
+  const url = (opts?.url || '').trim()
+  if (!/^https?:\/\//i.test(url)) return { success: false, error: 'Ungültige URL — nur http/https erlaubt.' }
+  const edge = findEdgePath()
+  if (!edge) return { success: false, error: 'Microsoft Edge (msedge.exe) wurde nicht gefunden. Bitte Edge installieren oder Pfad prüfen.' }
+
+  const displays = electronScreen.getAllDisplays()
+  const primary = electronScreen.getPrimaryDisplay()
+  const disp = (opts.displayId != null ? displays.find(d => d.id === opts.displayId) : null) ?? primary
+  const b = disp.bounds
+
+  const args = [
+    `--app=${url}`,
+    `--window-position=${b.x},${b.y}`,
+    `--window-size=${b.width},${b.height}`,
+    '--no-first-run',
+    '--no-default-browser-check',
+  ]
+  if (opts.fullscreen) args.push('--start-fullscreen')
+  // Eigenes Profil (Standard AN): eigenstaendiger Prozess → PID-basiertes Schliessen
+  // funktioniert; Login-Session bleibt im Profilordner ueber Neustarts erhalten.
+  if (opts.ownProfile !== false) {
+    const dir = join(app.getPath('userData'), 'edge-profiles', String(disp.id))
+    try { mkdirSync(dir, { recursive: true }) } catch { /* egal */ }
+    args.push(`--user-data-dir=${dir}`)
+  } else {
+    // Normales Edge-Profil → sofortige SSO-Uebernahme (Fenster ggf. manuell schliessen).
+    args.push('--profile-directory=Default')
+  }
+
+  // Evtl. altes Fenster fuer diesen Monitor zuerst schliessen.
+  const existing = edgeProcs.get(disp.id)
+  if (existing) { killEdgeTree(existing.pid); edgeProcs.delete(disp.id) }
+
+  try {
+    const proc = spawn(edge, args, { detached: true, stdio: 'ignore' })
+    const pid = proc.pid
+    proc.on('exit', () => { if (edgeProcs.get(disp.id)?.proc === proc) edgeProcs.delete(disp.id) })
+    proc.on('error', () => { if (edgeProcs.get(disp.id)?.proc === proc) edgeProcs.delete(disp.id) })
+    edgeProcs.set(disp.id, { proc, pid })
+    proc.unref()
+    return { success: true, displayId: disp.id, ownProfile: opts.ownProfile !== false }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : String(err) }
+  }
+})
+
+ipcMain.handle('edge:close', (_e, displayId?: number) => {
+  if (displayId != null) {
+    const e = edgeProcs.get(displayId)
+    if (!e) return { success: false, error: 'Kein laufendes Edge-Fenster für diesen Monitor.' }
+    killEdgeTree(e.pid); edgeProcs.delete(displayId)
+    return { success: true }
+  }
+  for (const [id, e] of edgeProcs) { killEdgeTree(e.pid); edgeProcs.delete(id) }
+  return { success: true }
+})
+
+ipcMain.handle('edge:status', (_e, displayId?: number) => {
+  if (displayId != null) return { running: edgeProcs.has(displayId), displayId }
+  return { running: edgeProcs.size > 0 }
+})
+
+// ─── USV: URL in Edge (Fallback Chrome, sonst Standardbrowser) öffnen ─────────
+function findChromePath(): string | null {
+  const candidates = [
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+  ]
+  for (const c of candidates) { try { if (existsSync(c)) return c } catch { /* egal */ } }
+  try {
+    const out = execFileSync('reg', ['query', 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe', '/ve'], { encoding: 'utf8' })
+    const m = out.match(/REG_SZ\s+(.+chrome\.exe)/i)
+    if (m && existsSync(m[1].trim())) return m[1].trim()
+  } catch { /* egal */ }
+  try {
+    const out = execFileSync('where', ['chrome'], { encoding: 'utf8' })
+    const first = out.split(/\r?\n/).map(s => s.trim()).find(Boolean)
+    if (first && existsSync(first)) return first
+  } catch { /* egal */ }
+  return null
+}
+
+ipcMain.handle('browser:openInEdgeOrChrome', (_e, url: string) => {
+  const u = (url || '').trim()
+  if (!/^https?:\/\//i.test(u)) return { success: false, error: 'Ungültige URL — nur http/https erlaubt.' }
+  const exe = findEdgePath() || findChromePath()
+  if (exe) {
+    try {
+      const p = spawn(exe, ['--new-window', u], { detached: true, stdio: 'ignore' })
+      p.on('error', () => { /* Fallback greift unten nicht mehr — spawn hat bereits gestartet */ })
+      p.unref()
+      return { success: true }
+    } catch { /* auf Standardbrowser zurueckfallen */ }
+  }
+  // Fallback: Standardbrowser
+  try { void shell.openExternal(u); return { success: true, fallback: true } }
+  catch (err) { return { success: false, error: err instanceof Error ? err.message : String(err) } }
+})
+
+// USV-Notfallplan (DOCX) im Standard-Programm (Word) oeffnen.
+ipcMain.handle('usv:openDoc', async () => {
+  const rel = join('USV', 'SKF_SIAM_Marine_Hamburg_UPS_Emergency_SOP_V1-4.docx')
+  const p = app.isPackaged ? join(process.resourcesPath, rel) : join(app.getAppPath(), 'resources', rel)
+  if (!existsSync(p)) return { success: false, error: 'Dokument nicht gefunden.' }
+  try {
+    const err = await shell.openPath(p)
+    return err ? { success: false, error: err } : { success: true }
+  } catch (e) { return { success: false, error: e instanceof Error ? e.message : String(e) } }
 })
 
 // ─── Path Configuration IPC ─────────────────────────────────────────────────
@@ -795,4 +1345,5 @@ app.on('before-quit', () => {
     try { ns.deleteFile(`heartbeat/${_heartbeatUser}.json`) } catch { /* ignore */ }
     _heartbeatUser = null
   }
+  if (snWindow && !snWindow.isDestroyed()) { try { snWindow.destroy() } catch { /* ignore */ } snWindow = null }
 })

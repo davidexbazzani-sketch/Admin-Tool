@@ -249,7 +249,7 @@ function AddTileDialog({
             <label className="text-[10px] text-muted-foreground block mb-1">Live-Funktion</label>
             <div className="flex items-center gap-2">
               <button onClick={() => setLiveEnabled(!liveEnabled)}
-                className={`px-2 py-1 text-[10px] rounded-md border ${liveEnabled ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'text-muted-foreground border-border'}`}>
+                className={`px-2 py-1 text-[10px] rounded-md border ${liveEnabled ? 'bg-emerald-500 text-black border-emerald-500/30' : 'text-muted-foreground border-border'}`}>
                 {liveEnabled ? 'An' : 'Aus'}
               </button>
               {liveEnabled && (

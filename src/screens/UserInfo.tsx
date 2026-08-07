@@ -9,6 +9,7 @@ import type { DeviceEntry, UserProfileData } from '../types'
 import Card from '../components/Card'
 import ExcelColumnDialog from '../components/ExcelColumnDialog'
 import UserProfileAccordion from '../components/UserProfileAccordion'
+import { PersonInfoButton } from '../components/person/PersonDossier'
 import {
   openFileForImport, parseExcelSheet, extractFromExcel, extractFromTextBytes,
   type ExcelSheetData, type FileOpenResult,
@@ -163,7 +164,7 @@ export function buildFullUserQuery(input: string): string {
     // ── Output ─────────────────────────────────────────────────────────────
     `    @{`,
     `      Sam=$u.SamAccountName; UPN=$u.UserPrincipalName; GivenName=$u.GivenName; Surname=$u.Surname; Name=$u.DisplayName; EmpID=$u.EmployeeID`,
-    `      Mail=$u.EmailAddress; Desc=$u.Description; Title=$u.Title; Dept=$u.Department; Company=$u.Company`,
+    `      Mail=$(if ($u.EmailAddress) { $u.EmailAddress } elseif ($u.UserPrincipalName -like '*@*') { $u.UserPrincipalName } else { '' }); Desc=$u.Description; Title=$u.Title; Dept=$u.Department; Company=$u.Company`,
     `      MgrName=$mN; MgrSam=$mS`,
     `      Office=$u.Office; Street=$u.StreetAddress; PostalCode=$u.PostalCode; City=$u.City; Country=$u.Country`,
     `      Phone=$u.TelephoneNumber; Mobile=$u.Mobile; Fax=$u.Fax; IPPhone=$u.IPPhone`,
@@ -599,7 +600,10 @@ function ResultCard({ result, expanded, onToggleExpand, deviceSelected, onToggle
           <Users size={14} className="text-primary" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-foreground truncate">{displayName}</p>
+          <p className="text-sm font-semibold text-foreground truncate flex items-center gap-1">
+            <span className="truncate">{displayName}</span>
+            {status === 'done' && displayName && <PersonInfoButton name={displayName} sam={data?.Sam} />}
+          </p>
           {status === 'done' && data?.Sam && (
             <p className="text-[11px] text-muted-foreground font-mono">{data.Sam}{data.EmpID ? ` · ${data.EmpID}` : ''}</p>
           )}
@@ -608,7 +612,7 @@ function ResultCard({ result, expanded, onToggleExpand, deviceSelected, onToggle
         {/* Quick status badges */}
         {status === 'done' && data && (
           <div className="flex items-center gap-2 shrink-0">
-            <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${data.Enabled ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'}`}>
+            <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${data.Enabled ? 'bg-emerald-500 text-black' : 'bg-red-500/15 text-red-400'}`}>
               {data.Enabled ? 'Aktiv' : 'Deaktiviert'}
             </span>
             {data.Locked && <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 font-medium">Gesperrt</span>}

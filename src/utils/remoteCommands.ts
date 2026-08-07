@@ -428,6 +428,11 @@ function buildCategories(): Category[] {
           }, action: 'write', input: { type: 'service', placeholder: 'Dienstname' } },
       ],
     },
+    // ── 5b: Prozesse — rendered as ProcessPanel, no command rows ────────────
+    {
+      id: 'proc', label: 'Prozesse',
+      commands: [],
+    },
     // ── 6: Benutzer & Sitzungen ──────────────────────────────────────────────
     {
       id: 'sessions', label: 'Benutzer & Sitzungen',

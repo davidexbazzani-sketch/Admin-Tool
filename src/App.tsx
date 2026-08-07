@@ -16,6 +16,10 @@ import Settings from './screens/Settings'
 import UserManagement from './screens/UserManagement'
 import UserLogs from './screens/UserLogs'
 import LocationOverview from './screens/LocationOverview'
+import DepartmentsOverview from './screens/DepartmentsOverview'
+import OrganizationStructure from './screens/OrganizationStructure'
+import UserOverview from './screens/UserOverview'
+import Checklists from './screens/Checklists'
 import ScheduledTasks from './screens/ScheduledTasks'
 import BugMailbox from './screens/BugMailbox'
 import Dashboards from './screens/Dashboards'
@@ -27,14 +31,35 @@ import PresentationMode from './screens/PresentationMode'
 import PresentationPlayer from './screens/PresentationPlayer'
 import BugReportWidget from './components/BugReportWidget'
 import BetaBanner from './components/BetaBanner'
+import LicenseAlarmController from './components/licenses/LicenseAlarmController'
+import EmployeeReminderController from './components/employees/EmployeeReminderController'
+import BackupSchedulerController from './components/backups/BackupSchedulerController'
+import ErrorFlashOverlay from './components/ErrorFlashOverlay'
+import { DossierProvider } from './components/person/PersonDossier'
 import type { Screen } from './types'
 import { api } from './electronAPI'
+import { ensureDailyAdUsers } from './services/adUserDirectory'
 
 // Lazy-loaded screens (per Performance-Regeln: erst laden wenn geöffnet)
 const ITGuru = lazy(() => import('./screens/ITGuru'))
 const PCDiagnosis = lazy(() => import('./screens/PCDiagnosis'))
 const NetworkRadar = lazy(() => import('./screens/NetworkRadar'))
 const KnowledgeBase = lazy(() => import('./screens/KnowledgeBase'))
+const InfrastructureProjects = lazy(() => import('./screens/InfrastructureProjects'))
+const GroupSearch = lazy(() => import('./screens/GroupSearch'))
+const AccessPoints = lazy(() => import('./screens/AccessPoints'))
+const Onboarding = lazy(() => import('./screens/Onboarding'))
+const Licenses = lazy(() => import('./screens/Licenses'))
+const HardwareInventory = lazy(() => import('./screens/HardwareInventory'))
+const AccessoryInventory = lazy(() => import('./screens/AccessoryInventory'))
+const UserPresence = lazy(() => import('./screens/UserPresence'))
+const EmployeeManagement = lazy(() => import('./screens/EmployeeManagement'))
+const EndpointDevices = lazy(() => import('./screens/EndpointDevices'))
+const ServiceNow = lazy(() => import('./screens/ServiceNow'))
+const PdfTools = lazy(() => import('./pdftools'))
+const PhoneAssignment = lazy(() => import('./screens/PhoneAssignment'))
+const Backups = lazy(() => import('./screens/Backups'))
+const USV = lazy(() => import('./screens/USV'))
 
 function renderScreen(screen: Screen) {
   switch (screen) {
@@ -43,6 +68,7 @@ function renderScreen(screen: Screen) {
     case 'results':           return <Results />
     case 'user-info':         return <UserInfo />
     case 'xelion':            return <XelionCheck />
+    case 'rufnummer-vergabe': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><PhoneAssignment /></Suspense>
     case 'remote-doc':        return <RemoteDoc />
     case 'trickbox':          return <Trickkiste />
     case 'it-guru':           return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ITGuru /></Suspense>
@@ -50,6 +76,21 @@ function renderScreen(screen: Screen) {
     case 'user-management':   return <UserManagement />
     case 'user-logs':         return <UserLogs />
     case 'location-overview': return <LocationOverview />
+    case 'departments-overview': return <DepartmentsOverview />
+    case 'organization-structure': return <OrganizationStructure />
+    case 'user-overview': return <UserOverview />
+    case 'user-presence': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><UserPresence /></Suspense>
+    case 'employee-management': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><EmployeeManagement /></Suspense>
+    case 'onboarding': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Onboarding /></Suspense>
+    case 'endpoint-devices': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><EndpointDevices /></Suspense>
+    case 'servicenow': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ServiceNow /></Suspense>
+    case 'gruppen-suche': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><GroupSearch /></Suspense>
+    case 'access-points': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><AccessPoints /></Suspense>
+    case 'licenses': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Licenses /></Suspense>
+    case 'hardware-inventory': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><HardwareInventory /></Suspense>
+    case 'accessory-inventory': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><AccessoryInventory /></Suspense>
+    case 'pdf-tools': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><PdfTools /></Suspense>
+    case 'checklists': return <Checklists />
     case 'scheduled-tasks':   return <ScheduledTasks />
     case 'bug-mailbox':       return <BugMailbox />
     case 'dashboards':        return <Dashboards />
@@ -59,8 +100,11 @@ function renderScreen(screen: Screen) {
     case 'software-inventory': return <SoftwareInventory />
     case 'pc-diagnosis':      return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><PCDiagnosis /></Suspense>
     case 'infra-marine':      return <InfrastructureMarine />
+    case 'infra-projects':    return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><InfrastructureProjects /></Suspense>
     case 'software-installations': return <SoftwareInstallations />
     case 'presentation-mode': return <PresentationMode />
+    case 'backups': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Backups /></Suspense>
+    case 'usv': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><USV /></Suspense>
     default:                  return <Home />
   }
 }
@@ -174,6 +218,15 @@ export default function App() {
       })
   }, [])
 
+  // Benutzerverzeichnis: einmal pro Tag automatisch frisch aus AD laden, sobald
+  // ein Benutzer angemeldet ist. Laeuft im Hintergrund (blockiert die UI nicht)
+  // und legt den Stand zentral ab, damit alle Clients dieselben Daten sehen
+  // (u. a. E-Mail-Adressen fuer die Endgeraete-Uebersicht).
+  useEffect(() => {
+    if (!session) return
+    void ensureDailyAdUsers().catch(() => {})
+  }, [session?.user.username])
+
   // Apply theme
   useEffect(() => {
     if (settings.theme === 'light') document.documentElement.classList.add('light')
@@ -208,18 +261,24 @@ export default function App() {
 
   // Main app — authenticated
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-background">
-      <TitleBar />
-      <BetaBanner betaMode={betaMode} />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-hidden relative">
-          <ErrorBoundary key={screen}>
-            {renderScreen(screen)}
-          </ErrorBoundary>
-          <BugReportWidget currentScreen={screen} />
-        </main>
+    <DossierProvider>
+      <div className="flex flex-col h-screen w-screen overflow-hidden bg-background">
+        <TitleBar />
+        <BetaBanner betaMode={betaMode} />
+        <div className="flex flex-1 overflow-hidden">
+          <Sidebar />
+          <main className="flex-1 overflow-hidden relative">
+            <ErrorBoundary key={screen}>
+              {renderScreen(screen)}
+            </ErrorBoundary>
+            <BugReportWidget currentScreen={screen} />
+            <LicenseAlarmController />
+            <EmployeeReminderController />
+            <BackupSchedulerController />
+            <ErrorFlashOverlay />
+          </main>
+        </div>
       </div>
-    </div>
+    </DossierProvider>
   )
 }

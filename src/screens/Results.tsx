@@ -12,7 +12,7 @@ type SvcSortCol = 'DisplayName' | 'Status' | 'StartType'
 
 function StatusBadge({ status }: { status: QueryStatus }) {
   const map = {
-    done:    { cls: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', icon: <CheckCircle size={11} />, label: 'OK' },
+    done:    { cls: 'bg-emerald-500 text-black border-emerald-500/20', icon: <CheckCircle size={11} />, label: 'OK' },
     error:   { cls: 'bg-red-500/10 text-red-400 border-red-500/20',             icon: <XCircle size={11} />,    label: 'Fehler' },
     timeout: { cls: 'bg-amber-500/10 text-amber-400 border-amber-500/20',       icon: <Clock size={11} />,      label: 'Timeout' },
     running: { cls: 'bg-blue-500/10 text-blue-400 border-blue-500/20',          icon: <Loader size={11} className="animate-spin" />, label: 'Läuft' },
@@ -179,7 +179,7 @@ export default function Results() {
               <span className="text-emerald-400 flex-1 truncate font-mono text-xs">{lastSavedPath}</span>
               <button
                 onClick={() => api().openPath(lastSavedPath!)}
-                className="flex items-center gap-1.5 px-3 py-1 text-xs rounded-md bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition-colors shrink-0 font-medium"
+                className="flex items-center gap-1.5 px-3 py-1 text-xs rounded-md bg-emerald-500 text-black hover:bg-emerald-500/30 transition-colors shrink-0 font-medium"
               >
                 <FolderOpen size={12} /> Datei öffnen
               </button>

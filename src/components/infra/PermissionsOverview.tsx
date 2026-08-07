@@ -235,7 +235,7 @@ export default function PermissionsOverview() {
               <button onClick={addPermission} className="flex items-center gap-1 px-2 py-1 rounded text-[11px] text-primary border border-primary/30 hover:bg-primary/10"><Plus size={12} />Berechtigung hinzufuegen</button>
               <button onClick={handleSaveCatalog} disabled={savingCatalog} className="flex items-center gap-1 px-2 py-1 rounded text-[11px] font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"><Save size={12} />{savingCatalog ? 'Speichere...' : 'Speichern'}</button>
             </div>
-            {catalogToast && <div className={`text-xs rounded px-2 py-1 ${catalogToast.type === 'ok' ? 'text-green-300 bg-green-500/10' : 'text-red-300 bg-red-500/10'}`}>{catalogToast.msg}</div>}
+            {catalogToast && <div className={`text-xs rounded px-2 py-1 ${catalogToast.type === 'ok' ? 'text-black bg-green-500' : 'text-red-300 bg-red-500/10'}`}>{catalogToast.msg}</div>}
             <div className="rounded-lg border border-border overflow-hidden">
               <table className="w-full text-xs">
                 <thead><tr className="bg-muted/30 text-muted-foreground">

@@ -1,14 +1,15 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import {
   MapPin, Plus, Trash2, Edit2, Check, X, Upload, Monitor, Server,
   Printer, Package, Loader, Search, RefreshCw, AlertTriangle, ChevronRight,
-  UserSearch, Briefcase, Building2,
+  UserSearch, Briefcase, Building2, Filter, ChevronDown,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
 import { useAppStore } from '../store/appStore'
 import { createLogger } from '../utils/activityLogger'
 import type { InventoryItem } from '../types/auth'
+import { PersonInfoButton } from '../components/person/PersonDossier'
 import ExcelColumnDialog from '../components/ExcelColumnDialog'
 import { parseExcelSheet, extractFromExcel, type ExcelSheetData } from '../utils/fileImport'
 import { batchAdLookup } from '../services/adUserLookup'
@@ -65,17 +66,29 @@ export default function LocationOverview() {
   const [importing, setImporting] = useState(false)
   const [importStatus, setImportStatus] = useState('')
   const [pendingExcelData, setPendingExcelData] = useState<ExcelSheetData | null>(null)
-  // After parsing the source file, hold the prepared name list here until the
-  // user explicitly confirms a destructive replace of the current category.
+  // After parsing the source file, hold the prepared name list + a preview of
+  // what the smart-sync will do (added / kept / removed).
   const [pendingReplace, setPendingReplace] = useState<{
     names: string[]
     assignedToMap?: Record<string, string>
     previousCount: number
+    addedCount: number
+    keptCount: number
+    removedCount: number
   } | null>(null)
 
   // AD enrichment (Title + Department for assigned users)
   const [adEnriching, setAdEnriching] = useState(false)
   const [adEnrichStatus, setAdEnrichStatus] = useState('')
+
+  // Excel-style column filters. Each set contains the values the user wants to
+  // INCLUDE — empty set = no filter on that column. Empty string in the set
+  // matches items where that field is empty/missing.
+  const [filterHost, setFilterHost] = useState<Set<string>>(new Set())
+  const [filterCorpId, setFilterCorpId] = useState<Set<string>>(new Set())
+  const [filterAssigned, setFilterAssigned] = useState<Set<string>>(new Set())
+  const [filterDept, setFilterDept] = useState<Set<string>>(new Set())
+  const [filterTitle, setFilterTitle] = useState<Set<string>>(new Set())
 
   const loadItems = useCallback(async () => {
     setLoading(true)
@@ -95,18 +108,65 @@ export default function LocationOverview() {
   }
 
   const categoryItems = items.filter(i => i.category === activeCategory)
-  const filteredItems = (() => {
+
+  // Distinct values per filterable column (with counts) — used to populate the
+  // Excel-style filter dropdowns. Computed from the unfiltered category list so
+  // the user always sees all options regardless of the current filter state.
+  const distinctValues = useMemo(() => {
+    const host = new Map<string, number>()
+    const corpId = new Map<string, number>()
+    const assigned = new Map<string, number>()
+    const dept = new Map<string, number>()
+    const title = new Map<string, number>()
+    for (const i of categoryItems) {
+      host.set(i.name, (host.get(i.name) ?? 0) + 1)
+      const c = (i.corpId ?? '').trim()
+      corpId.set(c, (corpId.get(c) ?? 0) + 1)
+      const a = (i.assignedTo ?? '').trim()
+      assigned.set(a, (assigned.get(a) ?? 0) + 1)
+      const d = (i.department ?? '').trim()
+      dept.set(d, (dept.get(d) ?? 0) + 1)
+      const t = (i.jobTitle ?? '').trim()
+      title.set(t, (title.get(t) ?? 0) + 1)
+    }
+    return { host, corpId, assigned, dept, title }
+  }, [categoryItems])
+
+  const anyColumnFilterActive =
+    filterHost.size > 0 || filterCorpId.size > 0 || filterAssigned.size > 0 || filterDept.size > 0 || filterTitle.size > 0
+
+  function resetAllColumnFilters() {
+    setFilterHost(new Set())
+    setFilterCorpId(new Set())
+    setFilterAssigned(new Set())
+    setFilterDept(new Set())
+    setFilterTitle(new Set())
+  }
+
+  const filteredItems = useMemo(() => {
     const q = search.trim().toLowerCase()
-    if (!q) return categoryItems
-    return categoryItems.filter(i =>
-      i.name.toLowerCase().includes(q) ||
-      (i.ip ?? '').includes(search) ||
-      (i.description ?? '').toLowerCase().includes(q) ||
-      (i.assignedTo ?? '').toLowerCase().includes(q) ||
-      (i.department ?? '').toLowerCase().includes(q) ||
-      (i.jobTitle ?? '').toLowerCase().includes(q)
-    )
-  })()
+    return categoryItems.filter(i => {
+      // Search bar (matches across all relevant fields)
+      if (q) {
+        const matchesSearch =
+          i.name.toLowerCase().includes(q) ||
+          (i.ip ?? '').includes(search) ||
+          (i.description ?? '').toLowerCase().includes(q) ||
+          (i.corpId ?? '').toLowerCase().includes(q) ||
+          (i.assignedTo ?? '').toLowerCase().includes(q) ||
+          (i.department ?? '').toLowerCase().includes(q) ||
+          (i.jobTitle ?? '').toLowerCase().includes(q)
+        if (!matchesSearch) return false
+      }
+      // Column filters (empty set = no filter on that column)
+      if (filterHost.size > 0 && !filterHost.has(i.name)) return false
+      if (filterCorpId.size > 0 && !filterCorpId.has((i.corpId ?? '').trim())) return false
+      if (filterAssigned.size > 0 && !filterAssigned.has((i.assignedTo ?? '').trim())) return false
+      if (filterDept.size > 0 && !filterDept.has((i.department ?? '').trim())) return false
+      if (filterTitle.size > 0 && !filterTitle.has((i.jobTitle ?? '').trim())) return false
+      return true
+    })
+  }, [categoryItems, search, filterHost, filterCorpId, filterAssigned, filterDept, filterTitle])
 
   // ── Add item ────────────────────────────────────────────────────────────────
   async function handleAdd(e: React.FormEvent) {
@@ -207,9 +267,16 @@ export default function LocationOverview() {
     addImportedNames(names)
   }
 
-  // Stage an import — show a confirm modal so the user can see exactly how many
-  // existing entries will be replaced. The actual replace happens in
-  // confirmReplaceImport() below.
+  // Stage an import — compute a preview of the smart sync (what would change)
+  // and show a confirm modal so the user can see exactly what will happen
+  // before any data is touched.
+  //
+  // Smart sync rules (matching by hostname, case-insensitive):
+  //   - Hostname exists in current category   → KEEP existing item unchanged
+  //                                              (preserves manual edits,
+  //                                              ServiceNow assignment, AD data)
+  //   - Hostname is new in the import         → ADD as new (AD data empty)
+  //   - Hostname exists but not in the import → REMOVE
   function addImportedNames(names: string[], assignedToMap?: Record<string, string>) {
     // De-duplicate the incoming list (case-insensitive)
     const seen = new Set<string>()
@@ -221,35 +288,85 @@ export default function LocationOverview() {
       cleaned.push(n)
     }
     if (!cleaned.length) { setImportStatus('Keine gueltigen Hostnamen in der Datei gefunden'); return }
-    const previousCount = items.filter(i => i.category === activeCategory).length
-    setPendingReplace({ names: cleaned, assignedToMap, previousCount })
+
+    const existingInCategory = items.filter(i => i.category === activeCategory)
+    const existingByName = new Map(existingInCategory.map(i => [i.name.toLowerCase(), i]))
+    const importedSet = new Set(cleaned.map(n => n.toLowerCase()))
+
+    let added = 0, kept = 0
+    for (const n of cleaned) {
+      if (existingByName.has(n.toLowerCase())) kept++
+      else added++
+    }
+    let removed = 0
+    for (const i of existingInCategory) {
+      if (!importedSet.has(i.name.toLowerCase())) removed++
+    }
+
+    setPendingReplace({
+      names: cleaned,
+      assignedToMap,
+      previousCount: existingInCategory.length,
+      addedCount: added,
+      keptCount: kept,
+      removedCount: removed,
+    })
   }
 
   async function confirmReplaceImport() {
     if (!pendingReplace) return
-    const { names, assignedToMap, previousCount } = pendingReplace
+    const { names, assignedToMap } = pendingReplace
     setPendingReplace(null)
-    // Build new items for the active category, then keep all items from other
-    // categories untouched.
+
+    // Map existing items in active category by lower-case hostname for lookup
+    const existingInCategory = items.filter(i => i.category === activeCategory)
+    const existingByName = new Map(existingInCategory.map(i => [i.name.toLowerCase(), i]))
+
     const otherCategoryItems = items.filter(i => i.category !== activeCategory)
     const baseTime = Date.now()
-    const newItems: InventoryItem[] = names.map((name, idx) => ({
-      id: `${baseTime}-${idx}-${Math.random().toString(36).slice(2, 8)}`,
-      name,
-      category: activeCategory,
-      addedAt: new Date().toISOString(),
-      addedBy: session?.user.username ?? '',
-      assignedTo: assignedToMap?.[name] || undefined,
-    }))
-    await saveItems([...otherCategoryItems, ...newItems])
-    await log(`Import (ersetzt): ${previousCount} alte Eintraege durch ${newItems.length} neue ersetzt (${activeCategory})`)
-    setImportStatus(`${previousCount} alte Eintraege ersetzt durch ${newItems.length} neue Hostnamen`)
+    let kept = 0
+    let added = 0
+
+    const nextCategoryItems: InventoryItem[] = []
+    for (let idx = 0; idx < names.length; idx++) {
+      const name = names[idx]
+      const existing = existingByName.get(name.toLowerCase())
+      if (existing) {
+        // Keep existing item unchanged — preserves manual edits + AD lookup data
+        nextCategoryItems.push(existing)
+        kept++
+      } else {
+        // New host — add with imported data (AD fields stay empty until next
+        // "AD-Daten aktualisieren" run in Standort-Übersicht)
+        nextCategoryItems.push({
+          id: `${baseTime}-${idx}-${Math.random().toString(36).slice(2, 8)}`,
+          name,
+          category: activeCategory,
+          addedAt: new Date().toISOString(),
+          addedBy: session?.user.username ?? '',
+          assignedTo: assignedToMap?.[name] || undefined,
+        })
+        added++
+      }
+    }
+
+    const removed = existingInCategory.length - kept
+    await saveItems([...otherCategoryItems, ...nextCategoryItems])
+    await log(`Import (Smart-Sync): ${added} neu, ${kept} unveraendert, ${removed} entfernt (${activeCategory})`)
+    setImportStatus(`${added} neu hinzugefuegt, ${kept} bestehende unveraendert (AD-Daten erhalten), ${removed} entfernt`)
   }
 
   // ── AD enrichment for assigned users ────────────────────────────────────────
-  // Resolves Active Directory data (Department + Title) for the items the user
-  // has SELECTED via checkbox. Only items that also have a ServiceNow assignment
-  // are queried. Items that are not selected stay untouched.
+  // Resolves Active Directory data (CorpID + Department + Title + Manager) for
+  // the items the user has SELECTED via checkbox. Items that already have all
+  // three core fields (corpId + department + jobTitle) are SKIPPED — only items
+  // missing at least one of those are queried against AD.
+  function isAdComplete(i: InventoryItem): boolean {
+    return !!(i.corpId && i.corpId.trim()
+      && i.department && i.department.trim()
+      && i.jobTitle && i.jobTitle.trim())
+  }
+
   async function handleAdEnrich() {
     const selectedItems = items.filter(i => i.category === activeCategory && selected.has(i.id))
     if (selectedItems.length === 0) {
@@ -261,17 +378,27 @@ export default function LocationOverview() {
       setAdEnrichStatus('Die ausgewaehlten Geraete haben keine ServiceNow-Zuweisung.')
       return
     }
+    // Skip items where all three core AD fields are already filled
+    const needsLookup = withAssignment.filter(i => !isAdComplete(i))
+    const skippedComplete = withAssignment.length - needsLookup.length
+    if (needsLookup.length === 0) {
+      setAdEnrichStatus(`Alle ${withAssignment.length} ausgewaehlten Geraete haben bereits vollstaendige AD-Daten. Nichts zu tun.`)
+      return
+    }
     setAdEnriching(true)
-    setAdEnrichStatus(`AD-Abfrage fuer ${withAssignment.length} ausgewaehlte${withAssignment.length === 1 ? 's' : ''} Geraet${withAssignment.length === 1 ? '' : 'e'} laeuft...`)
+    setAdEnrichStatus(`AD-Abfrage fuer ${needsLookup.length} Geraet${needsLookup.length === 1 ? '' : 'e'} laeuft${skippedComplete > 0 ? ` (${skippedComplete} bereits vollstaendig, werden uebersprungen)` : ''}...`)
     try {
-      const identities = withAssignment.map(i => i.assignedTo!.trim())
-      const lookup = await batchAdLookup(identities)
+      const identities = needsLookup.map(i => i.assignedTo!.trim())
+      const lookup = await batchAdLookup(identities, (done, total) => {
+        setAdEnrichStatus(`AD-Abfrage laeuft: ${done} von ${total} verarbeitet${skippedComplete > 0 ? ` (+ ${skippedComplete} uebersprungen)` : ''}...`)
+      })
       const now = new Date().toISOString()
+      const needsLookupIds = new Set(needsLookup.map(i => i.id))
       let resolved = 0
       let notFound = 0
       const updated = items.map(i => {
-        // Only touch selected items in the active category that have an assignment
-        if (!selected.has(i.id) || i.category !== activeCategory || !i.assignedTo) return i
+        // Only touch items we actually queried — already-complete items stay untouched
+        if (!needsLookupIds.has(i.id) || !i.assignedTo) return i
         const res = lookup.get(i.assignedTo.trim())
         if (!res || !res.found) {
           if (res && !res.found) notFound++
@@ -280,14 +407,20 @@ export default function LocationOverview() {
         resolved++
         return {
           ...i,
-          department: res.department || undefined,
-          jobTitle: res.title || undefined,
+          corpId: res.sam || i.corpId || undefined,
+          department: res.department || i.department || undefined,
+          jobTitle: res.title || i.jobTitle || undefined,
+          manager: res.manager || i.manager || undefined,
+          managerSam: res.managerSam || i.managerSam || undefined,
           adLookupAt: now,
         }
       })
       await saveItems(updated)
-      await log(`AD-Daten aktualisiert (Auswahl): ${resolved} aufgeloest, ${notFound} nicht gefunden (${activeCategory})`)
-      setAdEnrichStatus(`${resolved} Benutzer aufgeloest${notFound > 0 ? `, ${notFound} nicht in AD gefunden` : ''}.`)
+      await log(`AD-Daten aktualisiert (Auswahl): ${resolved} aufgeloest, ${notFound} nicht gefunden, ${skippedComplete} uebersprungen (${activeCategory})`)
+      const parts: string[] = [`${resolved} aufgeloest`]
+      if (notFound > 0) parts.push(`${notFound} nicht in AD gefunden`)
+      if (skippedComplete > 0) parts.push(`${skippedComplete} bereits vollstaendig (uebersprungen)`)
+      setAdEnrichStatus(parts.join(', ') + '.')
     } catch (e) {
       setAdEnrichStatus(`Fehler: ${e instanceof Error ? e.message : String(e)}`)
     } finally {
@@ -400,7 +533,7 @@ export default function LocationOverview() {
             {isMaster && (
               <>
                 <button onClick={() => setShowAdd(v => !v)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500 text-black hover:bg-emerald-500/20 transition-colors">
                   <Plus size={12} /> Hinzufügen
                 </button>
                 <button onClick={handleImport} disabled={importing}
@@ -416,6 +549,56 @@ export default function LocationOverview() {
                   AD-Daten aktualisieren{selected.size > 0 ? ` (${selected.size})` : ''}
                 </button>
               </>
+            )}
+          </div>
+
+          {/* ── Excel-style column filters ── */}
+          <div className="shrink-0 px-4 py-2 border-b border-border flex items-center gap-2 flex-wrap bg-muted/5">
+            <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mr-1">
+              <Filter size={11} />Filter
+            </span>
+            <ColumnFilter
+              label="Hostname"
+              icon={<Monitor size={11} />}
+              values={distinctValues.host}
+              selected={filterHost}
+              onChange={setFilterHost}
+            />
+            <ColumnFilter
+              label="Corp ID"
+              icon={<UserSearch size={11} />}
+              values={distinctValues.corpId}
+              selected={filterCorpId}
+              onChange={setFilterCorpId}
+            />
+            <ColumnFilter
+              label="Name"
+              icon={<UserSearch size={11} />}
+              values={distinctValues.assigned}
+              selected={filterAssigned}
+              onChange={setFilterAssigned}
+            />
+            <ColumnFilter
+              label="Abteilung"
+              icon={<Building2 size={11} />}
+              values={distinctValues.dept}
+              selected={filterDept}
+              onChange={setFilterDept}
+            />
+            <ColumnFilter
+              label="Stellenbezeichnung"
+              icon={<Briefcase size={11} />}
+              values={distinctValues.title}
+              selected={filterTitle}
+              onChange={setFilterTitle}
+            />
+            {anyColumnFilterActive && (
+              <button
+                onClick={resetAllColumnFilters}
+                className="flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border border-amber-500/40 text-amber-300 hover:bg-amber-500/10 ml-auto"
+              >
+                <X size={11} />Alle Filter zurücksetzen
+              </button>
             )}
           </div>
 
@@ -540,6 +723,15 @@ export default function LocationOverview() {
                               </div>
                             </div>
 
+                            {/* CorpID (Windows-Anmeldung, aus AD-Lookup befuellt) */}
+                            {item.corpId && (
+                              <div className="shrink-0 flex items-center" title="Corp ID / Windows-Anmeldung (aus AD)">
+                                <span className="px-2 py-0.5 text-[10px] rounded-full bg-indigo-500/15 text-foreground border border-indigo-500/30 font-mono whitespace-nowrap">
+                                  {item.corpId}
+                                </span>
+                              </div>
+                            )}
+
                             {/* ServiceNow Zuweisung — visible to all, editable by master admin */}
                             <div className="shrink-0 flex items-center">
                               {assignedEditId === item.id && isMaster ? (
@@ -574,8 +766,11 @@ export default function LocationOverview() {
                                   title={isMaster ? 'Klicken zum Bearbeiten' : undefined}
                                 >
                                   {item.assignedTo ? (
-                                    <span className="px-2 py-0.5 text-[10px] rounded-full bg-muted/30 text-foreground border border-border whitespace-nowrap">
-                                      {item.assignedTo}
+                                    <span className="inline-flex items-center gap-1">
+                                      <span className="px-2 py-0.5 text-[10px] rounded-full bg-muted/30 text-foreground border border-border whitespace-nowrap">
+                                        {item.assignedTo}
+                                      </span>
+                                      <PersonInfoButton name={item.assignedTo} sam={item.corpId} />
                                     </span>
                                   ) : isMaster ? (
                                     <span className="text-[10px] text-muted-foreground/40 italic">+ Zuweisung</span>
@@ -639,33 +834,207 @@ export default function LocationOverview() {
         />
       )}
 
-      {/* Import replace confirm */}
+      {/* Import smart-sync confirm */}
       {pendingReplace && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-card border border-amber-500/40 rounded-xl p-5 w-[440px] shadow-2xl space-y-4">
+          <div className="bg-card border border-blue-500/40 rounded-xl p-5 w-[480px] shadow-2xl space-y-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle size={15} className="text-amber-400" />
-              <h3 className="text-sm font-semibold text-foreground">Liste ersetzen?</h3>
+              <RefreshCw size={15} className="text-blue-400" />
+              <h3 className="text-sm font-semibold text-foreground">Mit Standort-Übersicht synchronisieren?</h3>
             </div>
             <div className="text-xs text-muted-foreground space-y-2">
               <p>
                 Die Datei enthält <strong className="text-foreground">{pendingReplace.names.length}</strong> Hostnamen.
+                Die aktuelle Liste in <strong className="text-foreground">{activeCategory}</strong> hat{' '}
+                <strong className="text-foreground">{pendingReplace.previousCount}</strong> Einträge.
               </p>
-              <p>
-                Die aktuelle Liste in <strong className="text-foreground">{activeCategory}</strong> enthält{' '}
-                <strong className="text-foreground">{pendingReplace.previousCount}</strong> Einträge — diese werden{' '}
-                <strong className="text-red-400">komplett ersetzt</strong>.
-              </p>
+
+              <div className="bg-muted/20 rounded-lg p-3 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  <span className="text-foreground">
+                    <strong>{pendingReplace.addedCount}</strong> neu hinzugefügt
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-blue-400" />
+                  <span className="text-foreground">
+                    <strong>{pendingReplace.keptCount}</strong> bestehende bleiben unverändert
+                  </span>
+                  <span className="text-[10px] text-muted-foreground/80">(AD-Daten + manuelle Edits werden behalten)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-red-400" />
+                  <span className="text-foreground">
+                    <strong>{pendingReplace.removedCount}</strong> entfernt
+                  </span>
+                  <span className="text-[10px] text-muted-foreground/80">(nicht mehr in der neuen Liste)</span>
+                </div>
+              </div>
+
               <p className="text-[11px] text-muted-foreground/80">
-                Andere Kategorien bleiben unangetastet.
+                Match per Hostname (Groß-/Kleinschreibung egal). Andere Kategorien bleiben unangetastet.
               </p>
             </div>
             <div className="flex gap-2">
               <button onClick={() => setPendingReplace(null)}
                 className="flex-1 py-2 text-sm rounded-lg border border-border hover:bg-accent text-muted-foreground">Abbrechen</button>
               <button onClick={confirmReplaceImport}
-                className="flex-1 py-2 text-sm rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-semibold">Ersetzen</button>
+                className="flex-1 py-2 text-sm rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold">Synchronisieren</button>
             </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Excel-style column filter ────────────────────────────────────────────────
+// Multi-select dropdown with a search box and counts per value.
+// Empty input value (= field not set) is shown as "(leer)".
+
+interface ColumnFilterProps {
+  label: string
+  values: Map<string, number>     // value -> occurrence count
+  selected: Set<string>           // currently included values (empty = no filter)
+  onChange: (next: Set<string>) => void
+  icon?: React.ReactNode
+}
+
+function ColumnFilter({ label, values, selected, onChange, icon }: ColumnFilterProps) {
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const rootRef = useRef<HTMLDivElement>(null)
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return
+    function onDocClick(e: MouseEvent) {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onDocClick)
+    return () => document.removeEventListener('mousedown', onDocClick)
+  }, [open])
+
+  const entries = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    const list = [...values.entries()]
+      .filter(([v]) => !q || v.toLowerCase().includes(q) || (v === '' && '(leer)'.includes(q)))
+    list.sort((a, b) => {
+      // Empty values last, then alphabetical
+      if (a[0] === '' && b[0] !== '') return 1
+      if (a[0] !== '' && b[0] === '') return -1
+      return a[0].localeCompare(b[0], 'de', { sensitivity: 'base' })
+    })
+    return list
+  }, [values, query])
+
+  function toggle(v: string) {
+    const next = new Set(selected)
+    if (next.has(v)) next.delete(v)
+    else next.add(v)
+    onChange(next)
+  }
+
+  function selectAllVisible() {
+    const next = new Set(selected)
+    for (const [v] of entries) next.add(v)
+    onChange(next)
+  }
+  function clearAllVisible() {
+    const next = new Set(selected)
+    for (const [v] of entries) next.delete(v)
+    onChange(next)
+  }
+
+  const total = values.size
+  const filterActive = selected.size > 0
+
+  return (
+    <div ref={rootRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        title={filterActive ? `${selected.size} von ${total} ausgewaehlt` : `Nach ${label} filtern`}
+        className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md border transition-colors ${
+          filterActive
+            ? 'border-blue-500/60 bg-blue-500/10 text-blue-300'
+            : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent/30'
+        }`}
+      >
+        {icon}
+        <span>{label}</span>
+        {filterActive && (
+          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-200">
+            {selected.size}
+          </span>
+        )}
+        <ChevronDown size={11} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <div className="absolute z-30 left-0 top-full mt-1 w-72 rounded-lg border border-border bg-card shadow-2xl">
+          {/* Header: search + bulk */}
+          <div className="p-2 border-b border-border space-y-2">
+            <div className="relative">
+              <Search size={11} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <input
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder={`In ${label.toLowerCase()} suchen…`}
+                className="w-full pl-7 pr-2 py-1 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary"
+              />
+            </div>
+            <div className="flex items-center gap-1 text-[10px]">
+              <button
+                onClick={selectAllVisible}
+                className="px-2 py-0.5 rounded border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30"
+              >
+                Alle
+              </button>
+              <button
+                onClick={clearAllVisible}
+                className="px-2 py-0.5 rounded border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30"
+              >
+                Keine
+              </button>
+              {selected.size > 0 && (
+                <button
+                  onClick={() => onChange(new Set())}
+                  className="px-2 py-0.5 rounded border border-amber-500/40 text-amber-300 hover:bg-amber-500/10 ml-auto"
+                >
+                  Filter aufheben
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* List */}
+          <div className="max-h-72 overflow-y-auto py-1">
+            {entries.length === 0 ? (
+              <p className="text-xs text-muted-foreground text-center py-3">Keine Werte</p>
+            ) : (
+              entries.map(([v, count]) => {
+                const checked = selected.has(v)
+                return (
+                  <label
+                    key={v || '__empty__'}
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs hover:bg-accent/20 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggle(v)}
+                      className="rounded accent-primary"
+                    />
+                    <span className={`flex-1 truncate ${v === '' ? 'italic text-muted-foreground' : 'text-foreground'}`}>
+                      {v || '(leer)'}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground/70">{count}</span>
+                  </label>
+                )
+              })
+            )}
           </div>
         </div>
       )}

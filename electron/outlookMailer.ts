@@ -54,6 +54,14 @@ function uid(): string {
   return Math.random().toString(36).slice(2, 10)
 }
 
+// VBS-Datei als UTF-16 LE mit BOM schreiben. cscript.exe liest .vbs sonst als
+// ANSI — Umlaute/Gedankenstriche im INLINE-Text (z. B. Subject) wuerden zu
+// Mojibake ("fÃ¼r", "â€“"). Der Body ist davon unabhaengig (eigene UTF-8-Datei
+// via ADODB.Stream), aber der Betreff steht direkt im Skript.
+function writeVbs(path: string, content: string): void {
+  writeFileSync(path, '\uFEFF' + content, 'utf16le')
+}
+
 function ensureWorkDir(): void {
   try {
     if (!existsSync(WORK_DIR)) mkdirSync(WORK_DIR, { recursive: true })
@@ -128,7 +136,7 @@ export async function sendViaOutlookScheduledTask(opts: MailOpts): Promise<MailR
       'End Sub',
     ].filter(l => l !== '').join('\r\n')
 
-    writeFileSync(vbsPath, vbs, 'utf-8')
+    writeVbs(vbsPath, vbs)
 
     const desktopUser = getDesktopUser()
     console.log('[outlookMailer] send: to=' + opts.to + ' user=' + desktopUser + ' task=' + taskName)
@@ -230,7 +238,7 @@ export async function composeViaOutlookScheduledTask(opts: MailOpts): Promise<Ma
       'End Sub',
     ].filter(l => l !== '').join('\r\n')
 
-    writeFileSync(vbsPath, vbs, 'utf-8')
+    writeVbs(vbsPath, vbs)
     const desktopUser = getDesktopUser()
 
     const createCmd = '"' + SCHTASKS + '" /create /tn "' + taskName + '" /tr "\\"' + CSCRIPT + '\\" //nologo //B \\"' + vbsPath + '\\"" /sc once /st 00:00 /ru "' + desktopUser + '" /rl LIMITED /f'

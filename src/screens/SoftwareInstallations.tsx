@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { PackagePlus, Wrench } from 'lucide-react'
+import { PackagePlus, Wrench, Phone } from 'lucide-react'
 import SolidWorksInstallation from '../components/softwareInstallations/SolidWorksInstallation'
+import XelionInstallation from '../components/softwareInstallations/XelionInstallation'
 
-type Section = 'overview' | 'solidworks'
+type Section = 'overview' | 'solidworks' | 'xelion'
 
 export default function SoftwareInstallations() {
   const [section, setSection] = useState<Section>('overview')
@@ -30,6 +31,18 @@ export default function SoftwareInstallations() {
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
           </button>
+
+          <button onClick={() => setSection('xelion')}
+            className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
+            <div className="w-10 h-10 rounded-lg bg-teal-500/20 flex items-center justify-center">
+              <Phone size={20} className="text-teal-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">Xelion Desktop</h3>
+              <p className="text-xs text-muted-foreground mt-1">Silent-Remote-Installation der Xelion-App (MSIX). Installer austauschbar bei neuer Version.</p>
+            </div>
+            <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
+          </button>
         </div>
       )}
 
@@ -37,6 +50,13 @@ export default function SoftwareInstallations() {
         <>
           <button onClick={() => setSection('overview')} className="text-xs text-muted-foreground hover:text-foreground mb-3 self-start">&larr; Zurueck zur Uebersicht</button>
           <SolidWorksInstallation />
+        </>
+      )}
+
+      {section === 'xelion' && (
+        <>
+          <button onClick={() => setSection('overview')} className="text-xs text-muted-foreground hover:text-foreground mb-3 self-start">&larr; Zurueck zur Uebersicht</button>
+          <XelionInstallation />
         </>
       )}
     </div>

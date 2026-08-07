@@ -225,7 +225,7 @@ export function ServicePanel({ hostname, isAdmin, initialItems, onCountLoaded }:
                             onClick={() => doAction(item.Name, 'start')}
                             disabled={actionSt === 'loading' || winrmChecking}
                             title="Starten"
-                            className="flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                            className="flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border border-emerald-500/30 bg-emerald-500 text-black hover:bg-emerald-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                           >
                             <Play size={10} /> Start
                           </button>

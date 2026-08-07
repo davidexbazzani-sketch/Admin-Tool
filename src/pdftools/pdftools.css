@@ -1,0 +1,179 @@
+/* ── PDF-Werkzeuge: gescopte Design-Tokens ───────────────────────────────────
+   Alles haengt unter .pdfx, damit dieses Modul ein eigenes, Apple-artiges
+   Erscheinungsbild bekommt OHNE das uebrige App-Theme zu beeinflussen (und
+   umgekehrt). Keine globalen Selektoren ausserhalb von .pdfx.
+*/
+
+.pdfx {
+  /* Flaechen */
+  --px-bg: #f5f5f7;
+  --px-surface: #ffffff;
+  --px-surface-2: #fbfbfd;
+  --px-elevated: #ffffff;
+  --px-border: #e3e3e8;
+  --px-border-strong: #d0d0d6;
+
+  /* Text */
+  --px-text: #1d1d1f;
+  --px-text-2: #6e6e73;
+  --px-text-3: #8e8e93;
+
+  /* Akzent (eine Primaerfarbe) */
+  --px-accent: #0071e3;
+  --px-accent-hover: #0077ed;
+  --px-accent-soft: #e8f1fd;
+
+  /* Semantisch (sparsam) */
+  --px-danger: #d70015;
+  --px-danger-soft: #fdecec;
+  --px-safe: #1d7a44;
+  --px-safe-soft: #e5f4ec;
+  --px-pro: #8a5cf6;
+
+  /* Form */
+  --px-radius: 14px;
+  --px-radius-sm: 9px;
+  --px-radius-lg: 20px;
+  --px-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06);
+  --px-shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --px-ring: 0 0 0 4px rgba(0,113,227,0.25);
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+               "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--px-text);
+  background: var(--px-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  height: 100%;
+  width: 100%;
+}
+
+/* Optionaler Dark Mode (vorbereitet) */
+.pdfx.pdfx-dark {
+  --px-bg: #1c1c1e;
+  --px-surface: #2c2c2e;
+  --px-surface-2: #242426;
+  --px-elevated: #2c2c2e;
+  --px-border: #3a3a3c;
+  --px-border-strong: #48484a;
+  --px-text: #f5f5f7;
+  --px-text-2: #aeaeb2;
+  --px-text-3: #8e8e93;
+  --px-accent-soft: #15314f;
+  --px-danger-soft: #3a1417;
+  --px-safe-soft: #11301f;
+}
+
+/* Sanfte, zweckmaessige Bewegung */
+.pdfx * { transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1); }
+
+/* Fokus immer sichtbar (Tastaturbedienung) */
+.pdfx :focus-visible {
+  outline: none;
+  box-shadow: var(--px-ring);
+  border-radius: var(--px-radius-sm);
+}
+
+/* Reusable Bausteine (nur innerhalb .pdfx) */
+.pdfx-card {
+  background: var(--px-surface);
+  border: 1px solid var(--px-border);
+  border-radius: var(--px-radius);
+  box-shadow: var(--px-shadow-sm);
+}
+
+.pdfx-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--px-radius-sm);
+  border: 1px solid var(--px-border);
+  background: var(--px-surface);
+  color: var(--px-text);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  transition: background 180ms, border-color 180ms, transform 120ms, box-shadow 180ms;
+}
+.pdfx-btn:hover { background: var(--px-surface-2); border-color: var(--px-border-strong); }
+.pdfx-btn:active { transform: scale(0.98); }
+.pdfx-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.pdfx-btn-primary {
+  background: var(--px-accent); border-color: var(--px-accent); color: #fff;
+}
+.pdfx-btn-primary:hover { background: var(--px-accent-hover); border-color: var(--px-accent-hover); }
+
+.pdfx-btn-danger { color: var(--px-danger); border-color: var(--px-danger-soft); background: var(--px-danger-soft); }
+
+.pdfx-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border-radius: 999px;
+  border: 1.5px solid var(--px-border-strong);
+  background: var(--px-surface); color: var(--px-text);
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: all 160ms;
+}
+.pdfx-chip:hover { border-color: var(--px-accent); background: var(--px-accent-soft); }
+.pdfx-chip[data-selected="true"] {
+  border-color: var(--px-accent); background: var(--px-accent); color: #fff;
+}
+
+.pdfx-tool {
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  width: 100%;
+  padding: 12px 8px;
+  border-radius: var(--px-radius);
+  border: 1px solid transparent;
+  background: transparent; color: var(--px-text);
+  cursor: pointer; text-align: center;
+  transition: background 160ms, border-color 160ms, transform 120ms;
+}
+.pdfx-tool:hover { background: var(--px-surface-2); border-color: var(--px-border); }
+.pdfx-tool:active { transform: scale(0.97); }
+.pdfx-tool[data-active="true"] { background: var(--px-accent-soft); border-color: var(--px-accent); }
+.pdfx-tool-icon {
+  display: grid; place-items: center;
+  width: 42px; height: 42px; border-radius: 12px;
+  background: var(--px-surface); border: 1px solid var(--px-border);
+  color: var(--px-accent);
+}
+.pdfx-tool[data-destructive="true"] .pdfx-tool-icon { color: var(--px-danger); }
+.pdfx-tool-label { font-size: 11.5px; font-weight: 500; line-height: 1.2; color: var(--px-text-2); }
+
+.pdfx-pro-badge {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
+  padding: 1px 5px; border-radius: 5px;
+  background: color-mix(in srgb, var(--px-pro) 14%, transparent);
+  color: var(--px-pro);
+}
+
+.pdfx-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+.pdfx-scroll::-webkit-scrollbar-thumb { background: var(--px-border-strong); border-radius: 999px; border: 3px solid transparent; background-clip: padding-box; }
+.pdfx-scroll::-webkit-scrollbar-thumb:hover { background: var(--px-text-3); background-clip: padding-box; }
+
+/* Tooltip (einzeilig, Alltagssprache) */
+.pdfx-tip { position: relative; }
+.pdfx-tip > .pdfx-tip-bubble {
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(4px);
+  background: #1d1d1f; color: #fff; font-size: 11.5px; font-weight: 500;
+  padding: 6px 10px; border-radius: 8px; white-space: nowrap; max-width: 280px;
+  opacity: 0; pointer-events: none; transition: opacity 150ms, transform 150ms; z-index: 60;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+.pdfx-tip:hover > .pdfx-tip-bubble, .pdfx-tip:focus-within > .pdfx-tip-bubble {
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+
+/* Auswaehlbare Textebene ueber dem Seiten-Canvas */
+.pdfx .px-textlayer {
+  position: absolute; inset: 0; overflow: hidden; line-height: 1;
+  user-select: text; -webkit-user-select: text; cursor: text;
+}
+.pdfx .px-textlayer span { color: transparent; white-space: pre; cursor: text; }
+.pdfx .px-textlayer ::selection { background: rgba(0,113,227,0.32); }
+.pdfx .px-textlayer span::selection { background: rgba(0,113,227,0.32); }
+
+@keyframes pdfx-spin { to { transform: rotate(360deg); } }
+.pdfx-spin { animation: pdfx-spin 0.8s linear infinite; }
+
+@keyframes pdfx-fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.pdfx-fade-in { animation: pdfx-fade-in 220ms both; }
