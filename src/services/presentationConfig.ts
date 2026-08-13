@@ -224,6 +224,7 @@ export interface PresentationConfig {
   transitionType?: TransitionType   // default 'fade'
   statusBar?: StatusBarPosition     // default 'none'
   serviceNowAutoLogin?: boolean     // periodisch den ServiceNow "Sitzung abgelaufen"-Dialog wegklicken
+  autoClick?: boolean               // alle 20s einen OS-Klick an der aktuellen Mausposition (Anzeige/App aktiv halten)
 }
 
 export type StorageMode = 'central' | 'local' | 'user'
@@ -253,6 +254,7 @@ export function makeEmptyConfig(): PresentationConfig {
     transitionType: 'fade',
     statusBar: 'none',
     serviceNowAutoLogin: false,
+    autoClick: false,
   }
 }
 
@@ -319,6 +321,7 @@ function normalize(raw: unknown): PresentationConfig {
     transitionType: normalizeTransitionType(data.transitionType),
     statusBar: normalizeStatusBar(data.statusBar),
     serviceNowAutoLogin: data.serviceNowAutoLogin === true,
+    autoClick: data.autoClick === true,
   }
 }
 
@@ -340,6 +343,7 @@ export interface Playlist {
   transitionType?: TransitionType
   statusBar?: StatusBarPosition
   serviceNowAutoLogin?: boolean
+  autoClick?: boolean
 }
 
 export interface PlaylistsContainer {
@@ -368,6 +372,7 @@ export function playlistToConfig(p: Playlist): PresentationConfig {
     transitionType: p.transitionType,
     statusBar: p.statusBar,
     serviceNowAutoLogin: p.serviceNowAutoLogin,
+    autoClick: p.autoClick,
   }
 }
 

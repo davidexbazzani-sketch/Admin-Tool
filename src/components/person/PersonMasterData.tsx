@@ -6,7 +6,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import {
   ChevronDown, ChevronRight, Loader2, Building2, Phone, Laptop, Mail,
-  Info as InfoIcon, UserCircle2, AlertTriangle, Pencil, Check, X, Plus, Circle,
+  Info as InfoIcon, UserCircle2, AlertTriangle, Pencil, Check, X, Plus, Circle, Printer,
 } from 'lucide-react'
 import {
   fetchAdPersonInfo, findEmployeeRecords, findAssignedHardware, findPhoneEntries,
@@ -16,6 +16,7 @@ import {
 import { formatGermanDate } from '../../services/employees'
 import { modelTypeDisplay } from '../../services/endpointDevices'
 import type { PhoneEntry } from '../../services/phoneAssignment'
+import { loadConnData, forUser, type ConnScanData } from '../../services/printerConnections'
 
 /** Relative Zeit + Datum, z. B. "vor 2 Tagen (12.08.2026)". */
 function fmtLastSeen(iso?: string): string {
@@ -101,6 +102,8 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
   const [hwLoading, setHwLoading] = useState(true)
   const [phones, setPhones] = useState<PhoneEntry[] | null>(null)
   const [phLoading, setPhLoading] = useState(true)
+  const [connData, setConnData] = useState<ConnScanData | null>(null)
+  const [connLoading, setConnLoading] = useState(true)
   const [groupsOpen, setGroupsOpen] = useState(false)
   // Online-Status (live-Check auf den zugewiesenen Rechnern)
   const [online, setOnline] = useState<PersonOnline | null>(null)
@@ -140,6 +143,7 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
         }
       })
       findPhoneEntries(name).then(r => { if (!cancelled) { setPhones(r); setPhLoading(false) } })
+      loadConnData().then(d => { if (!cancelled) { setConnData(d); setConnLoading(false) } })
     })()
 
     return () => { cancelled = true }
@@ -331,6 +335,30 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
           return rows.length > 0 ? rows : <Empty text="Keine zugewiesene Hardware gefunden." />
         })()}
       </TreeSection>
+
+      {/* Verbundene Drucker (aus dem Verbindungs-Scan, per angemeldetem Benutzer) */}
+      {(() => {
+        const rows = forUser(connData, resolvedSam)
+        const seen = new Set<string>()
+        const uniq = rows.filter(r => { const k = `${r.printerName}|${r.hostname}`.toUpperCase(); if (seen.has(k)) return false; seen.add(k); return true })
+        return (
+          <TreeSection icon={<Printer size={14} />} title="Verbundene Drucker" loading={connLoading}
+            badge={uniq.length > 0 ? String(uniq.length) : undefined}>
+            {connLoading && !connData
+              ? <Empty text="Wird geladen…" />
+              : uniq.length === 0
+                ? <Empty text="Keine verbundenen Drucker im letzten Scan (Benutzer muss beim Scan angemeldet gewesen sein)." />
+                : uniq.map((r, i) => (
+                  <div key={i} className="flex items-center gap-2 py-1 pl-1">
+                    <Printer size={12} className="text-muted-foreground shrink-0" />
+                    <span className="text-sm text-foreground">{r.printerName}</span>
+                    {r.isDefault && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">Standard</span>}
+                    <span className="text-xs text-muted-foreground font-mono ml-auto shrink-0">{r.hostname}</span>
+                  </div>
+                ))}
+          </TreeSection>
+        )
+      })()}
 
       {/* Postfaecher & Gruppen */}
       <TreeSection icon={<Mail size={14} />} title="Postfächer & Gruppen" loading={adLoading || recLoading}

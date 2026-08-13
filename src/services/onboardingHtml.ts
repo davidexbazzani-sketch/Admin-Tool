@@ -10,13 +10,14 @@
 
 import type { OnboardingSettings, OnboardingMarkers, PlanId, FolderLink } from './onboarding'
 import { MULTI_FLOOR_PLANS, PLAN_LABELS, floorFromRoomNumber } from './onboarding'
-import { BAT_FILENAME, FOLDER_PROTOCOL } from './onboardingDeploy'
+import { FOLDER_PROTOCOL } from './onboardingDeploy'
 
 export interface OnboardingEmployeeData {
   vorname: string
   nachname: string
   startDate: string     // YYYY-MM-DD
   roomNumber: string
+  department?: string   // Abteilung des Mitarbeiters (für abteilungsspezifische Ansprechpartner)
 }
 
 export interface OnboardingContactData {
@@ -32,7 +33,11 @@ export type GreetingMode = 'new' | 'existing'
 
 export interface OnboardingHtmlInput {
   employee: OnboardingEmployeeData
-  contact: OnboardingContactData          // Ansprechpartner (Default: Manager)
+  contact: OnboardingContactData          // Ansprechpartner (Default: Manager) — Fallback, wenn `contacts` fehlt
+  /** Fertig zusammengestellte, sortierte Ansprechpartner-Liste (Vorgesetzter →
+   *  weitere Ansprechpartner → IT). Wenn gesetzt, ersetzt sie die interne
+   *  Zusammenstellung (der Verteilen-Dialog stellt sie interaktiv zusammen). */
+  contacts?: OnboardingContactData[]
   settings: OnboardingSettings
   markers: OnboardingMarkers
   logoDataUri: string
@@ -198,16 +203,15 @@ export function buildOnboardingHtml(input: OnboardingHtmlInput): string {
   const itFolderRows = folderLinks.map((f, i) => ({ f, i })).filter(x => x.f.section === 'it').map(x => folderRow(x.f, x.i))
   const generalFolderRows = folderLinks.map((f, i) => ({ f, i })).filter(x => x.f.section === 'general').map(x => folderRow(x.f, x.i))
 
-  const batUrl = uncToFileUrl(settings.driveMapping.batPath)
-  const driveBlock = `
-    <div class="card">
-      <h3>Laufwerk I: selbst verbinden</h3>
-      <p>Am einfachsten: Auf deinem <strong>Desktop</strong> liegt die Datei <strong>„${esc(BAT_FILENAME)}“</strong> –
-      Doppelklick darauf und ggf. mit „Ausführen“ bestätigen. Danach findest du das Laufwerk <strong>I:</strong> im Explorer.</p>
-      ${batUrl ? `<a class="lrow" href="${esc(batUrl)}" download><span class="lrow-txt"><strong>Datei fehlt auf dem Desktop? Hier herunterladen</strong><small>${esc(settings.driveMapping.batPath)} — nach dem Download per Doppelklick ausführen (der Browser zeigt .bat-Dateien sonst nur an)</small></span><span class="lrow-ic">${icon('link')}</span></a>` : ''}
-      <p class="mut">Alternativ: <kbd>Windows-Taste</kbd> drücken, „cmd“ eingeben und diesen Befehl ausführen:</p>
-      <div class="cmd"><code id="mapCmd">${esc(settings.driveMapping.manualCommand)}</code><button type="button" onclick="copyCmd()" id="copyBtn">Kopieren</button></div>
-    </div>`
+  // Laufwerk I als fester Eintrag in "Ordner & Laufwerke" (statt separater Karte).
+  const driveRow = settings.driveMapping.manualCommand ? `
+      <div class="lrow lrow--folder" style="flex-direction:column;align-items:stretch;gap:8px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="lrow-ic lrow-ic--folder">${icon('folder')}</span>
+          <span class="lrow-txt"><strong>Laufwerk I verbinden</strong><small>Laufwerk I: ist normalerweise schon im Explorer verfügbar. Falls nicht, folgenden Befehl in der Eingabeaufforderung (cmd) ausführen:</small></span>
+        </div>
+        <div class="cmd"><code id="mapCmd">${esc(settings.driveMapping.manualCommand)}</code><button type="button" onclick="copyCmd()" id="copyBtn">Kopieren</button></div>
+      </div>` : ''
 
   // ── Konferenzraum-Karten ────────────────────────────────────────────────────
   const roomCards = settings.rooms.map(r => {
@@ -233,16 +237,52 @@ export function buildOnboardingHtml(input: OnboardingHtmlInput): string {
       <span class="lrow-txt"><strong>Kantinenplan</strong><small>Essenswochenplan – was gibt es diese Woche?</small></span>
       <span class="lrow-ic">${icon('link')}</span></a>`)
   }
-  for (const c of settings.generalInfo.contacts) {
-    if (!c.name && !c.role) continue
-    generalRows.push(`<div class="lrow lrow--static"><span class="lrow-txt"><strong>${esc(c.name)}</strong><small>${esc(c.role)}${c.phone ? ' · ' + esc(c.phone) : ''}</small></span>${c.email ? `<a class="mini" href="mailto:${esc(c.email)}">E-Mail</a>` : ''}</div>`)
-  }
+  // Ansprechpartner NICHT mehr unter "Allgemeines" — sie stehen jetzt in der
+  // eigenen Kachel "Ihr(e) Ansprechpartner" (siehe unten).
 
-  // ── Ansprechpartner ─────────────────────────────────────────────────────────
-  const cName = contact.name || settings.itContact.name || 'Deine IT'
-  const cRole = contact.role || (contact.name ? '' : 'IT-Support')
-  const cMail = contact.email || settings.itContact.email
-  const cPhone = contact.phone || settings.itContact.phone
+  // ── Ansprechpartner (eigene Kachel) ─────────────────────────────────────────
+  // Zusammengesetzt aus: (1) dem beim Verteilen gewählten Kontakt (Default
+  // Manager) und (2) den in den Einstellungen gepflegten Ansprechpartnern —
+  // abteilungsgefiltert: ohne Abteilung = für alle; mit Abteilung nur, wenn sie
+  // der Abteilung des Mitarbeiters entspricht.
+  interface ContactCard { name: string; role: string; email: string; phone: string }
+  const empDept = (employee.department || '').trim().toLowerCase()
+  let contactList: ContactCard[] = []
+  if (Array.isArray(input.contacts) && input.contacts.length > 0) {
+    // Vom Verteilen-Dialog fertig zusammengestellt & sortiert — direkt übernehmen.
+    contactList = input.contacts
+      .map(c => ({ name: (c.name || '').trim(), role: (c.role || '').trim(), email: (c.email || '').trim(), phone: (c.phone || '').trim() }))
+      .filter(c => c.name || c.email || c.phone)
+  } else {
+    // Fallback: (1) Vorgesetzter, (2) abteilungsgefilterte Ansprechpartner aus den
+    // Einstellungen, (3) IT IMMER ganz am Ende.
+    const primary: ContactCard = { name: contact.name.trim(), role: contact.role.trim(), email: contact.email.trim(), phone: contact.phone.trim() }
+    if (primary.name || primary.email || primary.phone) contactList.push(primary)
+    for (const c of settings.generalInfo.contacts) {
+      if (!c.name && !c.email && !c.phone && !c.role) continue
+      const d = (c.department || '').trim().toLowerCase()
+      if (d && d !== empDept) continue          // abteilungsspezifisch, passt nicht → überspringen
+      const key = `${(c.name || '').toLowerCase()}|${(c.email || '').toLowerCase()}`
+      if (contactList.some(x => `${x.name.toLowerCase()}|${x.email.toLowerCase()}` === key)) continue
+      contactList.push({ name: c.name, role: c.role, email: c.email, phone: c.phone })
+    }
+    const it = settings.itContact
+    if (it.name || it.email || it.phone) {
+      const itKey = `${(it.name || '').toLowerCase()}|${(it.email || '').toLowerCase()}`
+      if (!contactList.some(x => `${x.name.toLowerCase()}|${x.email.toLowerCase()}` === itKey)) {
+        contactList.push({ name: it.name || 'Deine IT', role: 'IT-Support', email: it.email, phone: it.phone })
+      }
+    }
+  }
+  const contactTitle = contactList.length > 1 ? 'Ihre Ansprechpartner' : 'Ihr Ansprechpartner'
+  const contactCards = contactList.map(c => `
+      <div class="card">
+        <h3>${esc(c.name || 'Ansprechpartner')}</h3>
+        ${c.role ? `<p>${esc(c.role)}</p>` : ''}
+        ${c.email ? `<a class="lrow" href="mailto:${esc(c.email)}"><span class="lrow-txt"><strong>E-Mail schreiben</strong><small>${esc(c.email)}</small></span><span class="lrow-ic">${icon('link')}</span></a>` : ''}
+        ${c.phone ? `<div class="lrow lrow--static"><span class="lrow-txt"><strong>Telefon</strong><small>${esc(c.phone)}</small></span></div>` : ''}
+        ${!c.email && !c.phone ? '<p class="mut">Kontaktdaten folgen.</p>' : ''}
+      </div>`).join('\n')
 
   // ── Schnellzugriff-Pills (nur mit Ziel) ─────────────────────────────────────
   const pills: string[] = []
@@ -396,7 +436,7 @@ kbd{background:#fff;border:1px solid var(--hairline);border-radius:6px;padding:1
 }
 a.room:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(20,24,40,.14)}
 .room:focus-visible{outline:2px solid var(--skf-blue);outline-offset:3px}
-.room-img{height:130px;background-size:cover;background-position:center}
+.room-img{aspect-ratio:16/10;min-height:130px;background-size:cover;background-position:center}
 .room-img--ph{display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#dbe4ff,#d5e8dd)}
 .room-img--ph span{font-size:34px;font-weight:800;color:rgba(27,29,35,.35);letter-spacing:.04em}
 .room-body{display:flex;flex-direction:column;gap:3px;padding:16px 18px}
@@ -453,8 +493,25 @@ ol.howto{margin:10px 0 0 20px;font-size:15px;line-height:1.7}
 }
 .map-pin.pin--ent svg{color:#0a8754}
 .map-pin.pulse svg{animation:pulse 1.1s ease-in-out infinite}
+/* Zielpin: deutlich sichtbar – grün aufblinken + etwas größer */
+.map-pin.pulse--dest svg{animation:pulseDest 1s ease-in-out infinite}
+.map-pin.pulse--dest small{animation:pulseDestLabel 1s ease-in-out infinite}
 .map-connect{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+@keyframes pulseDest{0%,100%{transform:scale(1);color:#d0342c}50%{transform:scale(1.55);color:#10a04e;filter:drop-shadow(0 2px 6px rgba(16,160,78,.55))}}
+@keyframes pulseDestLabel{0%,100%{border-color:var(--hairline);box-shadow:none}50%{border-color:#10a04e;box-shadow:0 0 0 3px rgba(16,160,78,.18)}}
+/* Hinweis-Blinken am „Standpunkt anzeigen“-Button, sobald ein Ziel gewählt ist */
+.fpill.hint{animation:btnHint 1.15s ease-in-out infinite}
+@keyframes btnHint{0%,100%{background:rgba(255,255,255,.9);border-color:var(--hairline);color:var(--ink)}50%{background:rgba(16,160,78,.14);border-color:#10a04e;color:#0a7a3d}}
+/* Button „Zurück zur Gesamtübersicht“ – unten mittig auf der Karte */
+.map-home{
+  position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:6;
+  font:inherit;font-size:14px;font-weight:800;padding:10px 20px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--skf-blue);background:var(--skf-blue);color:#fff;
+  box-shadow:0 6px 18px rgba(29,43,216,.32);transition:transform 160ms,box-shadow 160ms,background 160ms;
+}
+.map-home:hover{background:#1626c0;box-shadow:0 10px 26px rgba(29,43,216,.42);transform:translateX(-50%) translateY(-2px)}
+.map-home:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .map-note{font-size:14px;color:var(--muted);margin-top:12px}
 .route-box{margin-top:16px}
 select.dest{
@@ -464,7 +521,8 @@ select.dest{
 .route-steps{margin:14px 0 0 20px;font-size:15px;line-height:1.75}
 @media (prefers-reduced-motion:reduce){
   .tile:hover,.pill:hover,a.lrow:hover,a.room:hover{transform:none}
-  .map-pin.pulse svg{animation:none}
+  .map-pin.pulse svg,.map-pin.pulse--dest svg,.map-pin.pulse--dest small,.fpill.hint{animation:none}
+  .map-pin.pulse--dest svg{color:#10a04e;transform:scale(1.35)}
   html{scroll-behavior:auto}
 }
 @media (max-width:1199px){.grid,.rooms-grid{grid-template-columns:repeat(2,1fr)}}
@@ -507,7 +565,7 @@ select.dest{
         <a class="tile tile--general" href="#general"><span class="ic">${icon('general')}</span><span><h2>Allgemeines</h2><p>Intranet, Ansprechpartner und Wissenswertes rund um deinen Arbeitsalltag.</p><span class="cta">Öffnen →</span></span></a>
         <a class="tile tile--orient" href="#map"><span class="ic">${icon('map')}</span><span><h2>Orientierung</h2><p>Interaktiver Lageplan: Gebäude, Etagen und der Weg zu Kantine, Personalbüro &amp; Co.</p><span class="cta">Öffnen →</span></span></a>
         <a class="tile tile--time" ${links.timeTracking ? `href="${esc(links.timeTracking)}" target="_blank" rel="noopener"` : 'href="#time"'}><span class="ic">${icon('time')}</span><span><h2>Zeiterfassung</h2><p>Kommen &amp; Gehen, Urlaub und Gleitzeit.</p><span class="cta">${links.timeTracking ? 'Öffnen ↗' : 'Öffnen →'}</span></span></a>
-        <a class="tile tile--contact" href="#contact"><span class="ic">${icon('contact')}</span><span><h2>Ihr Ansprechpartner</h2><p>Deine erste Anlaufstelle für alle Fragen in den ersten Wochen.</p><span class="cta">Kontakt →</span></span></a>
+        <a class="tile tile--contact" href="#contact"><span class="ic">${icon('contact')}</span><span><h2>${contactTitle}</h2><p>Deine erste Anlaufstelle für alle Fragen in den ersten Wochen.</p><span class="cta">Kontakt →</span></span></a>
       </div>
       <div class="quick">
         <div class="qlabel">Schnellzugriff</div>
@@ -525,8 +583,7 @@ select.dest{
     <h2 class="vtitle">IT</h2>
     <p class="vsub">Bestellungen, Tickets und Selbsthilfe – die wichtigsten IT-Anlaufstellen für deinen Start.</p>
     ${itRows.length > 0 ? `<div class="card"><h3>Portale &amp; Anträge</h3>${itRows.join('\n')}</div>` : ''}
-    ${itFolderRows.length > 0 ? `<div class="card"><h3>Ordner &amp; Laufwerke</h3>${itFolderRows.join('\n')}</div>` : ''}
-    ${driveBlock}
+    ${(driveRow || itFolderRows.length > 0) ? `<div class="card"><h3>Ordner &amp; Laufwerke</h3>${driveRow}${itFolderRows.join('\n')}</div>` : ''}
   </section>
 
   <!-- ── Konferenzräume ── -->
@@ -565,11 +622,12 @@ ${roomCards}
       <div class="spacer" style="flex:1"></div>
       <div class="map-tools">
         <select class="dest" id="destSelect"></select>
-        <button type="button" class="fpill" id="routeBtn">Weg anzeigen</button>
+        <button type="button" class="fpill" id="routeBtn">Standpunkt anzeigen</button>
       </div>
     </div>
     <div class="map-stage" id="mapStage">
       <div class="map-world" id="mapWorld"></div>
+      <button type="button" class="map-home" id="mapHomeBtn" onclick="__mapHome()" style="display:none">↩ Zurück zur Gesamtübersicht</button>
       <div class="map-zoom">
         <button type="button" id="zoomIn" title="Vergrößern" aria-label="Vergrößern">+</button>
         <button type="button" id="zoomOut" title="Verkleinern" aria-label="Verkleinern">−</button>
@@ -599,15 +657,9 @@ ${roomCards}
 
   <!-- ── Ansprechpartner ── -->
   <section class="view" id="contact">
-    <h2 class="vtitle">Ihr Ansprechpartner</h2>
+    <h2 class="vtitle">${contactTitle}</h2>
     <p class="vsub">Deine erste Anlaufstelle, wenn du Fragen hast oder etwas nicht weiterweißt.</p>
-    <div class="card">
-      <h3>${esc(cName)}</h3>
-      ${cRole ? `<p>${esc(cRole)}</p>` : ''}
-      ${cMail ? `<a class="lrow" href="mailto:${esc(cMail)}"><span class="lrow-txt"><strong>E-Mail schreiben</strong><small>${esc(cMail)}</small></span><span class="lrow-ic">${icon('link')}</span></a>` : ''}
-      ${cPhone ? `<div class="lrow lrow--static"><span class="lrow-txt"><strong>Telefon</strong><small>${esc(cPhone)}</small></span></div>` : ''}
-      ${!cMail && !cPhone ? '<p class="mut">Kontaktdaten folgen.</p>' : ''}
-    </div>
+    ${contactList.length > 0 ? contactCards : '<div class="card"><p class="mut">Kontaktdaten folgen.</p></div>'}
   </section>
 </div>
 
@@ -860,6 +912,10 @@ window.__DATA__ = ${dataJson};
       ? '<b>Gesamtübersicht</b>'
       : '<a href="javascript:void(0)" onclick="__mapHome()" style="color:var(--skf-blue);text-decoration:none;font-weight:700">Gesamtübersicht</a> › <b>' + label + (state.floor ? ' · ' + (state.floor === 'EG' ? 'Erdgeschoss' : state.floor + '. Stock') : '') + '</b>';
 
+    // „Zurück zur Gesamtübersicht“-Button nur zeigen, wenn man in einem Gebäude ist
+    var homeBtn = document.getElementById('mapHomeBtn');
+    if (homeBtn) homeBtn.style.display = state.planId === 'komplett' ? 'none' : '';
+
     if (state.planId === 'komplett') {
       // Gebaeude-Buttons: oeffnen die Detailplaene IMMER (auch ohne gepflegte
       // Klickflaechen auf der Karte)
@@ -936,7 +992,9 @@ window.__DATA__ = ${dataJson};
       var el = document.createElement('div');
       var isYou = (p.id === M.employeePinId);
       var isEnt = (p.kind === 'entrance') || /^eingang/i.test(p.label || '');
-      el.className = 'map-pin' + (isYou ? ' pin--you' : (isEnt ? ' pin--ent' : '')) + (state.highlight.indexOf(p.id) >= 0 ? ' pulse' : '');
+      var isHi = state.highlight.indexOf(p.id) >= 0;
+      // Zielpin (nicht der eigene „Dein Büro“-Pin) blinkt auffällig grün.
+      el.className = 'map-pin' + (isYou ? ' pin--you' : (isEnt ? ' pin--ent' : '')) + (isHi ? (isYou ? ' pulse' : ' pulse--dest') : '');
       el.style.left = (p.x*100) + '%'; el.style.top = (p.y*100) + '%';
       var txt = isYou ? ('Dein Büro' + (p.roomNumber ? ' (' + p.roomNumber + ')' : '')) : p.label;
       el.innerHTML = pinSvg + '<small>' + txt + '</small>';
@@ -1025,7 +1083,11 @@ window.__DATA__ = ${dataJson};
         o.value = p.id; o.textContent = p.label;
         sel.appendChild(o);
       });
-      document.getElementById('routeBtn').onclick = showRoute;
+      var rbtn = document.getElementById('routeBtn');
+      rbtn.onclick = showRoute;
+      // Sobald ein Ziel gewählt ist, blinkt der Button dezent grün als Hinweis,
+      // ihn jetzt anzuklicken. Auswahl zurückgesetzt → Hinweis aus.
+      sel.onchange = function(){ if (sel.value) rbtn.classList.add('hint'); else rbtn.classList.remove('hint'); };
     }
 
     // Start: Uebersicht; wenn Mitarbeiter-Pin existiert, direkt dessen Plan/Etage
@@ -1059,6 +1121,8 @@ window.__DATA__ = ${dataJson};
   function showRoute(){
     var sel = document.getElementById('destSelect');
     var destId = sel.value;
+    var rbtn = document.getElementById('routeBtn');
+    if (rbtn) rbtn.classList.remove('hint');   // Hinweis-Blinken beenden
     if (!destId) return;
     var dest = null, mine = null;
     M.pins.forEach(function(p){

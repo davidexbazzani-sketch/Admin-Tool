@@ -22,6 +22,7 @@
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
     "lucide-react": "^0.344.0",
+    "net-snmp": "^3.26.3",
     "nodemailer": "^6.9.9",
     "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
@@ -63,7 +64,10 @@
       "output": "release"
     },
     "extraResources": [
-      { "from": "resources/USV", "to": "USV" }
+      {
+        "from": "resources/USV",
+        "to": "USV"
+      }
     ],
     "win": {
       "target": "nsis",

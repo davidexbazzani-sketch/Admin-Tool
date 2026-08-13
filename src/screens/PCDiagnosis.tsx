@@ -246,6 +246,31 @@ export default function PCDiagnosis() {
             `$r.taskErrCount = @($taskErr).Count`,
             `$r.taskErrDetails = @(Evt $taskErr 3)`,
             ``,
+            `# ── WHEA: Hardware-Fehler (CPU/RAM/PCIe, korrigiert & unkorrigiert) ──`,
+            `$whea = @(Get-WinEvent -FilterHashtable @{LogName='System';ProviderName='Microsoft-Windows-WHEA-Logger';StartTime=$start} -MaxEvents 50 -EA SilentlyContinue)`,
+            `$r.wheaCount = @($whea).Count`,
+            `$r.wheaCritCount = @($whea | Where-Object Level -le 2).Count`,
+            `$r.wheaDetails = @(Evt $whea 5)`,
+            ``,
+            `# ── Windows Defender: erkannte Bedrohungen ──`,
+            `$def = @(Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Defender/Operational';Id=1006,1015,1116,1117;StartTime=$start} -MaxEvents 50 -EA SilentlyContinue)`,
+            `$r.defenderCount = @($def).Count`,
+            `$r.defenderDetails = @(Evt $def 5)`,
+            ``,
+            `# ── Boot-/Shutdown-Performance (langsamer Start/Herunterfahren) ──`,
+            `$perf = @(Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Diagnostics-Performance/Operational';Level=1,2,3;Id=100,101,102,103,200,203;StartTime=$start} -MaxEvents 40 -EA SilentlyContinue)`,
+            `$r.perfCount = @($perf).Count`,
+            `$r.perfDetails = @(Evt $perf 5)`,
+            ``,
+            `# ── Setup-/Servicing-Log (Update-/Komponenten-Fehler) ──`,
+            `$setup = @(Get-WinEvent -FilterHashtable @{LogName='Setup';Level=1,2;StartTime=$start} -MaxEvents 40 -EA SilentlyContinue)`,
+            `$r.setupErrCount = @($setup).Count`,
+            `$r.setupErrDetails = @(Evt $setup 5)`,
+            ``,
+            `# ── Application-Warnungen (Level 3) fuer die Gesamtsumme ──`,
+            `$appWarn = @(Get-WinEvent -FilterHashtable @{LogName='Application';Level=3;StartTime=$start} -MaxEvents 300 -EA SilentlyContinue)`,
+            `$r.appWarnings = @($appWarn).Count`,
+            ``,
             `# ── Top Sources + IDs ──`,
             `$allErr = @($sys | Where-Object Level -le 2) + @($app | Where-Object Level -le 2)`,
             `$r.topSources = @($allErr | Group-Object ProviderName | Sort-Object Count -Desc | Select-Object -First 5 Name,Count)`,
@@ -255,7 +280,7 @@ export default function PCDiagnosis() {
             `$r`,
           ].join('\n'), 60000)
 
-          base.checksRun = 15
+          base.checksRun = 19
           if (r.ok) {
             const d = safeParseJson(r.data) as Record<string, unknown> | null
             if (d) {
@@ -273,16 +298,20 @@ export default function PCDiagnosis() {
               }
               base.rawOutput = [
                 `═══ Event-Log Analyse (letzte ${d.days} Tage) ═══`,
-                `System-Fehler: ${d.sysErrors} | System-Warnungen: ${d.sysWarnings} | App-Fehler: ${d.appErrors}`,
+                `System-Fehler: ${d.sysErrors} | System-Warnungen: ${d.sysWarnings} | App-Fehler: ${d.appErrors} | App-Warnungen: ${d.appWarnings ?? 0}`,
                 '',
                 fmtEvents('Bluescreens (BugCheck)', d.bsodCount, d.bsodDetails),
                 fmtEvents('Unerwartete Shutdowns', d.shutdownCount, d.shutdownDetails),
+                fmtEvents('Hardware-Fehler (WHEA)', d.wheaCount, d.wheaDetails),
+                fmtEvents('Erkannte Bedrohungen (Defender)', d.defenderCount, d.defenderDetails),
                 fmtEvents('Dienst-Abstürze', d.svcCrashCount, d.svcCrashDetails),
                 fmtEvents('Festplatten-E/A-Fehler', d.diskErrCount, d.diskErrDetails),
                 fmtEvents('Netzwerk-Fehler', d.netErrCount, d.netErrDetails),
                 fmtEvents('Treiber-Fehler', d.driverErrCount, d.driverErrDetails),
                 fmtEvents('RAM/Speicher-Fehler', d.memErrCount, d.memErrDetails),
                 fmtEvents('Windows Update-Fehler', d.wuErrCount, d.wuErrDetails),
+                fmtEvents('Setup/Servicing-Fehler', d.setupErrCount, d.setupErrDetails),
+                fmtEvents('Boot-/Shutdown-Performance', d.perfCount, d.perfDetails),
                 fmtEvents('App-Abstürze (WER)', d.appCrashCount, d.appCrashDetails),
                 fmtEvents('MSI/Installations-Fehler', d.msiErrCount, d.msiErrDetails),
                 fmtEvents('.NET/CLR-Fehler', d.clrErrCount, d.clrErrDetails),
@@ -303,6 +332,19 @@ export default function PCDiagnosis() {
               // Unerwartete Shutdowns
               if (Number(d.shutdownCount) > 0) addFinding('evt-6008', String(d.lastShutdown))
               else base.checksOk++
+              // WHEA Hardware-Fehler (kritisch, wenn unkorrigiert)
+              if (Number(d.wheaCritCount) > 0) {
+                const wheaDet = Array.isArray(d.wheaDetails) ? (d.wheaDetails as Array<Record<string, unknown>>).map(e => String(e.Message || '')).slice(0, 3).join(' | ') : ''
+                addCustom('critical', `${d.wheaCritCount} unkorrigierte Hardware-Fehler (WHEA)`, wheaDet || 'CPU/RAM/PCIe meldet Hardwarefehler — Hardware prüfen.', 'topram', 'procs')
+              } else if (Number(d.wheaCount) > 0) {
+                const wheaDet = Array.isArray(d.wheaDetails) ? (d.wheaDetails as Array<Record<string, unknown>>).map(e => String(e.Message || '')).slice(0, 2).join(' | ') : ''
+                addCustom('warning', `${d.wheaCount} korrigierte Hardware-Fehler (WHEA)`, wheaDet || 'Hardware meldet korrigierte Fehler — kann auf beginnenden Defekt hindeuten.')
+              } else base.checksOk++
+              // Windows Defender: erkannte Bedrohungen
+              if (Number(d.defenderCount) > 0) {
+                const defDet = Array.isArray(d.defenderDetails) ? (d.defenderDetails as Array<Record<string, unknown>>).map(e => String(e.Message || '')).slice(0, 3).join(' | ') : ''
+                addCustom('critical', `${d.defenderCount} erkannte Bedrohung(en) (Defender)`, defDet || 'Windows Defender hat Schadsoftware erkannt/blockiert.')
+              } else base.checksOk++
               // Dienst-Abstürze
               if (Number(d.svcCrashCount) > 0) {
                 const svcDetails = Array.isArray(d.svcCrashDetails) ? (d.svcCrashDetails as Array<Record<string, unknown>>).map(e => String(e.Message || '')).slice(0, 3).join(' | ') : ''
@@ -331,6 +373,13 @@ export default function PCDiagnosis() {
               else base.checksOk++
               // Windows Update Fehler
               if (Number(d.wuErrCount) > 0) addCustom('warning', `${d.wuErrCount} Windows Update-Fehler`, 'Updates konnten nicht installiert werden.', 'usoscan', 'gpo')
+              else base.checksOk++
+              // Setup/Servicing-Fehler
+              if (Number(d.setupErrCount) > 0) addCustom('info', `${d.setupErrCount} Setup-/Servicing-Fehler`, 'Windows-Komponenten oder -Updates hatten beim Einspielen Probleme (Setup-Log).')
+              else base.checksOk++
+              // Boot-/Shutdown-Performance
+              if (Number(d.perfCount) > 3) addCustom('warning', `${d.perfCount} Ereignisse zu langsamem Start/Herunterfahren`, 'Windows meldet verzögerten Boot- oder Shutdown-Vorgang — Autostarts/Dienste prüfen.', undefined, 'procs')
+              else if (Number(d.perfCount) > 0) addCustom('info', `${d.perfCount} Hinweis(e) auf langsamen Start`, 'Vereinzelte Boot-/Shutdown-Verzögerungen protokolliert.')
               else base.checksOk++
               // Login-Fehlversuche
               if (Number(d.loginFailCount) > 10) addCustom('warning', `${d.loginFailCount} fehlgeschlagene Anmeldeversuche`, 'Möglicherweise falsches Passwort gespeichert oder Brute-Force.', 'log-sec-failed', 'eventlogs')
@@ -1275,14 +1324,18 @@ export default function PCDiagnosis() {
               ))}
             </div>
           </div>
-          {/* Optional pre-scan checks */}
+          {/* Optionale Zusatzprüfungen (die vollständige Log-Diagnose läuft IMMER) */}
           <div className="space-y-2">
+            <div>
+              <p className="text-xs font-semibold text-foreground uppercase tracking-wider">Zusätzlich testen <span className="font-normal normal-case text-muted-foreground">(optional)</span></p>
+              <p className="text-[11px] text-muted-foreground">Die vollständige Ereignis-Log-Diagnose läuft immer. Diese Haken schalten zusätzliche, tiefergehende Prüfungen dazu — sie schränken die Diagnose nicht ein.</p>
+            </div>
             <label className="flex items-center gap-2 cursor-pointer select-none">
               <input type="checkbox" checked={checkSoftware} onChange={e => setCheckSoftware(e.target.checked)}
                 className="w-3.5 h-3.5 rounded border-border accent-primary" />
               <span className="text-xs text-muted-foreground">
                 <Monitor size={11} className="inline mr-1" />
-                Software-Probleme prüfen — <span className="text-foreground">Programme gezielt auf Fehler in den Logs prüfen</span>
+                Zusätzlich: Software gezielt prüfen — <span className="text-foreground">installierte Programme auswählen und einzeln auf Fehler in den Logs prüfen</span>
               </span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer select-none">
@@ -1290,7 +1343,7 @@ export default function PCDiagnosis() {
                 className="w-3.5 h-3.5 rounded border-border accent-primary" />
               <span className="text-xs text-muted-foreground">
                 <RefreshCw size={11} className="inline mr-1" />
-                Dienste-Check erweitert — <span className="text-foreground">Alle Dienste laden, Status prüfen, Fehler-Historie analysieren</span>
+                Zusätzlich: Dienste erweitert prüfen — <span className="text-foreground">alle Dienste laden, Status &amp; Fehler-Historie einzelner Dienste analysieren</span>
               </span>
             </label>
           </div>

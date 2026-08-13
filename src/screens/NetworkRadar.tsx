@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import {
   Activity, RefreshCw, Loader, AlertTriangle, CheckCircle, XCircle,
   ChevronRight, Terminal, Lightbulb, BarChart3, Shield, Cpu, HardDrive,
@@ -103,7 +104,7 @@ function PCRow({ hs, onDetail, onRemoteDoc }: {
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-foreground font-mono">{hs.hostname}</span>
+          <span className="text-xs font-medium text-foreground font-mono inline-flex items-center gap-1">{hs.hostname}{hs.hostname && <DeviceInfoButton hostname={hs.hostname} />}</span>
           {hs.label && <span className="text-[10px] text-muted-foreground">"{hs.label}"</span>}
           {!hs.online && <span className="text-[9px] text-muted-foreground bg-muted/30 px-1 rounded">Offline</span>}
         </div>

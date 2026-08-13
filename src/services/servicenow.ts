@@ -19,10 +19,14 @@ import { api } from '../electronAPI'
 export interface SnIntegrationAccount {
   user: string
   pass: string
-  instanceUrl?: string   // zentral: alle App-Nutzer arbeiten auf DERSELBEN Instanz
+  instanceUrl?: string        // zentral: alle App-Nutzer arbeiten auf DERSELBEN Instanz
+  assignmentGroups?: string[] // zentral: nur Tickets dieser Gruppen laden (leer = alle)
   updatedBy?: string
   updatedAt?: string
 }
+
+/** Standard-Assignment-Groups (Hamburg) — nur diese Tickets werden geladen (serverseitig). */
+export const DEFAULT_ASSIGNMENT_GROUPS = ['FS DE Hamburg', 'Marine infrastructure support']
 
 const INTEGRATION_FILE = 'config/servicenow/integration.json'
 let integrationCache: SnIntegrationAccount | null | undefined   // undefined = noch nicht geladen
@@ -36,16 +40,18 @@ export async function loadIntegrationAccount(force = false): Promise<SnIntegrati
   return integrationCache
 }
 
-export async function saveIntegrationAccount(user: string, pass: string, by: string, instanceUrl?: string): Promise<boolean> {
+export async function saveIntegrationAccount(user: string, pass: string, by: string, instanceUrl?: string, assignmentGroups?: string[]): Promise<boolean> {
   const u = user.trim()
+  const groups = (assignmentGroups ?? []).map(g => g.trim()).filter(Boolean)
   try {
     if (!u || !pass) {
-      // Leeren = Konto entfernen -> zurueck zum SSO-Fallback
+      // Leeren = Konto entfernen -> zurueck zum SSO-Fallback (Gruppen ebenfalls entfernt)
       await api().netWriteJson(INTEGRATION_FILE, {})
       integrationCache = null
       return true
     }
-    const payload: SnIntegrationAccount = { user: u, pass, instanceUrl: instanceUrl?.trim() || undefined, updatedBy: by, updatedAt: new Date().toISOString() }
+    // Array IMMER speichern (auch leer) — leeres Array = bewusst „alle Gruppen".
+    const payload: SnIntegrationAccount = { user: u, pass, instanceUrl: instanceUrl?.trim() || undefined, assignmentGroups: groups, updatedBy: by, updatedAt: new Date().toISOString() }
     const ok = await api().netWriteJson(INTEGRATION_FILE, payload)
     if (ok) integrationCache = payload
     return ok
@@ -58,23 +64,32 @@ function authOf(acc: SnIntegrationAccount | null): { user: string; pass: string 
 
 export interface ServiceNowConfig {
   instanceUrl: string
+  assignmentGroups?: string[]   // nur Tickets dieser Gruppen laden (leer = alle)
 }
 
 export const DEFAULT_INSTANCE = 'https://skfdev.service-now.com'
 const STORE_KEY = 'servicenowConfig'
 
 export async function loadConfig(): Promise<ServiceNowConfig> {
-  // Zentral gespeicherte Instanz (beim Integrationskonto) hat Vorrang — sonst
-  // arbeiten Nutzer versehentlich auf unterschiedlichen Instanzen (dev/prod).
+  // Zentral gespeicherte Instanz + Gruppen (beim Integrationskonto) haben Vorrang —
+  // sonst arbeiten Nutzer versehentlich auf unterschiedlichen Instanzen/Filtern.
+  let assignmentGroups: string[] | undefined
   try {
     const acc = await loadIntegrationAccount()
-    if (acc?.instanceUrl?.trim()) return { instanceUrl: acc.instanceUrl.trim() }
+    // Feld vorhanden (auch leeres Array) = explizit gesetzt; leer bedeutet „alle Gruppen".
+    if (acc && Array.isArray(acc.assignmentGroups)) assignmentGroups = acc.assignmentGroups
+    if (acc?.instanceUrl?.trim()) return { instanceUrl: acc.instanceUrl.trim(), assignmentGroups: assignmentGroups ?? [] }
   } catch { /* weiter mit lokaler Config */ }
   try {
     const s = await api().getSettings()
     const c = (s?.[STORE_KEY] ?? {}) as Partial<ServiceNowConfig>
-    return { instanceUrl: c.instanceUrl || DEFAULT_INSTANCE }
-  } catch { return { instanceUrl: DEFAULT_INSTANCE } }
+    return {
+      // Standard: KEIN Gruppenfilter (alle Tickets) — der Filter ist opt-in, weil
+      // die richtigen Gruppennamen je Instanz (dev/prod) unterschiedlich sein können.
+      instanceUrl: c.instanceUrl || DEFAULT_INSTANCE,
+      assignmentGroups: assignmentGroups ?? (Array.isArray(c.assignmentGroups) ? c.assignmentGroups : []),
+    }
+  } catch { return { instanceUrl: DEFAULT_INSTANCE, assignmentGroups: assignmentGroups ?? [] } }
 }
 
 /** Hostname der Instanz fuer die Anzeige ("skfdev.service-now.com"). */
@@ -87,8 +102,8 @@ export function isDevInstance(cfg: ServiceNowConfig | null | undefined): boolean
   return /dev|test|sandbox/i.test(instanceHost(cfg))
 }
 export async function saveConfig(c: ServiceNowConfig): Promise<void> {
-  // Nur die Instanz-URL speichern — kein Passwort mehr (SSO).
-  try { await api().setSetting(STORE_KEY, { instanceUrl: c.instanceUrl }) } catch { /* best effort */ }
+  // Nur Instanz-URL + Gruppenfilter lokal speichern — kein Passwort (SSO).
+  try { await api().setSetting(STORE_KEY, { instanceUrl: c.instanceUrl, assignmentGroups: c.assignmentGroups }) } catch { /* best effort */ }
 }
 export function isConfigured(c: ServiceNowConfig | null | undefined): boolean {
   return !!(c && c.instanceUrl.trim())
@@ -159,6 +174,10 @@ export async function listTickets(
   table: SnTable, cfg: ServiceNowConfig, opts: ListOptions = {},
 ): Promise<{ ok: boolean; tickets: SnTicket[]; error?: string; needsLogin?: boolean }> {
   const parts: string[] = []
+  // Serverseitiger Filter auf die konfigurierten Assignment Groups (leer = alle).
+  // Dot-Walk auf den Referenz-Anzeigenamen, IN kommasepariert (Namen dürfen Leerzeichen enthalten).
+  const groups = (cfg.assignmentGroups ?? []).map(g => g.trim()).filter(Boolean)
+  if (groups.length) parts.push('assignment_group.nameIN' + groups.join(','))
   if (opts.onlyActive !== false) parts.push('active=true')
   if (opts.query && opts.query.trim()) parts.push(opts.query.trim())
   parts.push('ORDERBYDESCsys_updated_on')

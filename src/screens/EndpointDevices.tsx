@@ -28,6 +28,7 @@ import { ensureDailyAdUsers, buildNameIndex, lookupUserByName, reverseCommaName 
 import type { AdUserListItem } from '../services/adUsersList'
 import { ColumnFilter } from './UserOverview'
 import { PersonInfoButton } from '../components/person/PersonDossier'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 
 // Benutzer aus der zentralen Benutzer-Uebersicht in das AD-Lookup-Format bringen.
 function userToLookup(name: string, u?: AdUserListItem): AdLookupResult {
@@ -1041,7 +1042,7 @@ IT Support Marine`
                     return (
                       <tr key={d.id} className={`border-b border-border/40 hover:bg-accent/10 ${sel ? 'bg-primary/5' : ''}`}>
                         <td className="px-3 py-2"><input type="checkbox" checked={sel} onChange={() => toggleOfflineDevice(d.id)} className="accent-primary" /></td>
-                        <td className="px-3 py-2 font-mono text-foreground">{d.hostname || '—'}</td>
+                        <td className="px-3 py-2 font-mono text-foreground"><span className="inline-flex items-center gap-1">{d.hostname || '—'}{d.hostname && <DeviceInfoButton hostname={d.hostname} serial={d.serial} />}</span></td>
                         <td className="px-3 py-2 text-foreground">{d.assignedTo || '—'}</td>
                         <td className="px-3 py-2 text-muted-foreground max-w-[16rem] truncate" title={d.model || undefined}>{d.model || '—'}</td>
                         <td className="px-3 py-2 text-muted-foreground">{d.state || '—'}</td>
@@ -1177,7 +1178,7 @@ IT Support Marine`
                             return (
                               <tr key={d.id} className={`border-t border-border/40 ${lap ? 'bg-amber-500/[0.05]' : ''}`}>
                                 <td className="px-3 py-1.5"><input type="checkbox" checked={selDeviceIds.has(d.id)} onChange={() => toggleDevice(d.id)} className="accent-amber-500" title="Für die Mail auswählen" /></td>
-                                <td className="px-3 py-1.5 font-mono text-foreground">{d.hostname || '—'}</td>
+                                <td className="px-3 py-1.5 font-mono text-foreground"><span className="inline-flex items-center gap-1">{d.hostname || '—'}{d.hostname && <DeviceInfoButton hostname={d.hostname} serial={d.serial} />}</span></td>
                                 <td className="px-3 py-1.5 font-mono text-muted-foreground">{d.serial || '—'}</td>
                                 <td className="px-3 py-1.5 text-muted-foreground">{d.model || '—'}</td>
                                 <td className="px-3 py-1.5 text-foreground">{classifyModel(d.model) || '—'}{lap && <span className="ml-1 text-[9px] text-amber-300">Laptop</span>}</td>
@@ -1223,7 +1224,7 @@ IT Support Marine`
                 return (
                   <tr key={d.id} className="border-b border-border/40 hover:bg-accent/10">
                     <td className="px-3 py-2 font-mono text-foreground">{d.serial || '—'}</td>
-                    <td className="px-3 py-2 font-mono text-foreground">{d.hostname || '—'}</td>
+                    <td className="px-3 py-2 font-mono text-foreground"><span className="inline-flex items-center gap-1">{d.hostname || '—'}{d.hostname && <DeviceInfoButton hostname={d.hostname} serial={d.serial} />}</span></td>
                     <td className="px-3 py-2 text-foreground">{d.assignedTo || '—'}</td>
                     <td className="px-3 py-2 text-muted-foreground max-w-[18rem] truncate" title={d.model || undefined}>{d.model || '—'}</td>
                     <td className="px-3 py-2 text-foreground">

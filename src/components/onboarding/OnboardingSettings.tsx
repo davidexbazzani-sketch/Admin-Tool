@@ -11,6 +11,7 @@ import {
   loadOnboardingSettings, saveOnboardingSettings, storeRoomPhotoFromFile, normalizeRoomKey,
   type OnboardingSettings as Settings, type OnboardingLinks,
 } from '../../services/onboarding'
+import { readCentralAdUsers } from '../../services/adUserDirectory'
 
 const IMG_FILTERS = [{ name: 'Bilder', extensions: ['jpg', 'jpeg', 'png', 'webp', 'gif'] }]
 
@@ -36,6 +37,19 @@ export default function OnboardingSettingsPanel() {
   const [dirty, setDirty] = useState(false)
   const [msg, setMsg] = useState('')
   const [photoBusy, setPhotoBusy] = useState('')   // roomId oder 'bulk'
+  const [departments, setDepartments] = useState<string[]>([])   // Vorschläge fürs Abteilungsfeld
+
+  // Bekannte Abteilungen aus dem zentralen AD-Verzeichnis (nur Cache lesen).
+  useEffect(() => {
+    let cancelled = false
+    readCentralAdUsers().then(dir => {
+      if (cancelled || !dir) return
+      const set = new Set<string>()
+      for (const u of dir.users) { const d = (u.department || '').trim(); if (d) set.add(d) }
+      setDepartments([...set].sort((a, b) => a.localeCompare(b, 'de')))
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -217,20 +231,30 @@ export default function OnboardingSettingsPanel() {
         </div>
       </section>
 
-      {/* Allgemeine Ansprechpartner */}
+      {/* Ansprechpartner */}
       <section className="rounded-lg border border-border bg-card p-4 space-y-2.5">
-        <h3 className="text-sm font-bold text-foreground flex items-center gap-2"><Users size={14} className="text-blue-400" />Ansprechpartner für „Allgemeines"</h3>
+        <h3 className="text-sm font-bold text-foreground flex items-center gap-2"><Users size={14} className="text-blue-400" />Ansprechpartner</h3>
+        <p className="text-[11px] text-muted-foreground">
+          Erscheinen im Dashboard in der Kachel <strong>„Ihr(e) Ansprechpartner"</strong>. Mit gesetzter <strong>Abteilung</strong> ist der Ansprechpartner nur für Mitarbeiter dieser Abteilung sichtbar; ohne Abteilung für alle.
+        </p>
+        <div className="grid grid-cols-[1fr_1fr_1.2fr_1fr_1fr_28px] gap-1.5 text-[10px] font-semibold text-muted-foreground px-1">
+          <span>Rolle</span><span>Name</span><span>E-Mail</span><span>Telefon</span><span>Abteilung (leer = alle)</span><span></span>
+        </div>
         {cfg.generalInfo.contacts.map((c, i) => (
-          <div key={i} className="grid grid-cols-[1fr_1fr_1.2fr_1fr_28px] gap-1.5 items-center">
-            <input value={c.role} onChange={e => update(s => { s.generalInfo.contacts[i].role = e.target.value; return s })} placeholder="Rolle (z. B. Empfang)" className={inputCls} />
+          <div key={i} className="grid grid-cols-[1fr_1fr_1.2fr_1fr_1fr_28px] gap-1.5 items-center">
+            <input value={c.role} onChange={e => update(s => { s.generalInfo.contacts[i].role = e.target.value; return s })} placeholder="Rolle (z. B. Pate)" className={inputCls} />
             <input value={c.name} onChange={e => update(s => { s.generalInfo.contacts[i].name = e.target.value; return s })} placeholder="Name" className={inputCls} />
             <input value={c.email} onChange={e => update(s => { s.generalInfo.contacts[i].email = e.target.value; return s })} placeholder="E-Mail" className={inputCls} />
             <input value={c.phone} onChange={e => update(s => { s.generalInfo.contacts[i].phone = e.target.value; return s })} placeholder="Telefon" className={inputCls} />
+            <input value={c.department ?? ''} onChange={e => update(s => { s.generalInfo.contacts[i].department = e.target.value; return s })} placeholder="Abteilung" className={inputCls} list="onb-departments" />
             <button onClick={() => update(s => { s.generalInfo.contacts = s.generalInfo.contacts.filter((_, j) => j !== i); return s })}
               className="p-1 rounded text-muted-foreground hover:text-red-400"><Trash2 size={13} /></button>
           </div>
         ))}
-        <button onClick={() => update(s => { s.generalInfo.contacts.push({ role: '', name: '', email: '', phone: '' }); return s })}
+        {departments.length > 0 && (
+          <datalist id="onb-departments">{departments.map(d => <option key={d} value={d} />)}</datalist>
+        )}
+        <button onClick={() => update(s => { s.generalInfo.contacts.push({ role: '', name: '', email: '', phone: '', department: '' }); return s })}
           className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground"><Plus size={11} />Ansprechpartner hinzufügen</button>
       </section>
 

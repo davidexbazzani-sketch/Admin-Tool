@@ -17,12 +17,18 @@ import {
 
 const TABLE_LABEL: Record<SnTable, string> = { incident: 'Incidents', task: 'Tasks' }
 
+/** Assignment-Group-Eingabe (Komma/Semikolon/Zeilenumbruch getrennt) → Liste. */
+function parseGroups(s: string): string[] {
+  return s.split(/[,;\n]/).map(g => g.trim()).filter(Boolean)
+}
+
 export default function ServiceNow() {
   const authUser = useAuthStore(s => s.session?.user)
   const currentUser = authUser?.displayName || authUser?.username || 'unbekannt'
   const [cfg, setCfg] = useState<ServiceNowConfig | null>(null)
   const [showConfig, setShowConfig] = useState(false)
   const [form, setForm] = useState<ServiceNowConfig>({ instanceUrl: DEFAULT_INSTANCE })
+  const [groupsText, setGroupsText] = useState('')   // Assignment Groups (kommagetrennt, leer = alle)
   const [testing, setTesting] = useState(false)
   const [testResult, setTestResult] = useState<{ ok: boolean; msg: string } | null>(null)
   const [diag, setDiag] = useState<CertDiag | null>(null)
@@ -54,7 +60,7 @@ export default function ServiceNow() {
   useEffect(() => {
     void (async () => {
       const [c, acc] = await Promise.all([loadConfig(), loadIntegrationAccount(true)])
-      setCfg(c); setForm(c)
+      setCfg(c); setForm(c); setGroupsText((c.assignmentGroups ?? []).join(', '))
       if (acc) { setIntUser(acc.user); setIntPass(acc.pass); setIntActive(true) }
     })()
   }, [])
@@ -67,9 +73,11 @@ export default function ServiceNow() {
       if (!u || !intPass) { setTestResult({ ok: false, msg: 'Benutzername und Passwort des Integrationskontos eingeben.' }); return }
       const test = await testConnection(form, { user: u, pass: intPass })
       if (!test.ok) { setTestResult({ ok: false, msg: 'Test fehlgeschlagen: ' + (test.error || 'unbekannt') + ' — Hinweis: Das Konto muss auf GENAU dieser Instanz existieren (dev/prod sind getrennte Konten!).' }); return }
-      const ok = await saveIntegrationAccount(u, intPass, currentUser, form.instanceUrl)
+      const groups = parseGroups(groupsText)
+      const next = { ...form, assignmentGroups: groups }
+      const ok = await saveIntegrationAccount(u, intPass, currentUser, form.instanceUrl, groups)
       if (!ok) { setTestResult({ ok: false, msg: 'Test OK, aber Speichern auf dem Netzlaufwerk fehlgeschlagen.' }); return }
-      await saveConfig(form); setCfg(form)
+      await saveConfig(next); setForm(next); setCfg(next)
       setIntActive(true); setNeedsLogin(false)
       setTestResult({ ok: true, msg: `Integrationskonto „${u}“ getestet & zentral gespeichert (Instanz ${instanceHost(form)}) — gilt ab jetzt für alle App-Nutzer.` })
       void load()
@@ -104,9 +112,10 @@ export default function ServiceNow() {
   // Instanz-URL speichern (kein Passwort — Anmeldung erfolgt per SSO).
   async function saveInstance() {
     setTesting(true); setTestResult(null); setDiag(null)
-    await saveConfig(form)
-    setCfg(form)
-    setTestResult({ ok: true, msg: 'Instanz-URL gespeichert. Jetzt bei ServiceNow anmelden.' })
+    const next = { ...form, assignmentGroups: parseGroups(groupsText) }
+    await saveConfig(next)
+    setForm(next); setCfg(next)
+    setTestResult({ ok: true, msg: 'Instanz-URL & Gruppenfilter gespeichert. Jetzt bei ServiceNow anmelden.' })
     setTesting(false)
   }
 
@@ -177,8 +186,8 @@ export default function ServiceNow() {
           <h1 className="text-lg font-semibold text-foreground flex items-center gap-2">
             ServiceNow / Tickets
             {cfg && (
-              <span className={`text-[10px] font-mono font-normal px-1.5 py-0.5 rounded-full border ${isDevInstance(cfg) ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-muted/30 text-muted-foreground border-border'}`}
-                title={isDevInstance(cfg) ? 'Achtung: Dev-/Test-Instanz — hier liegen NICHT die echten Tickets!' : 'Aktive ServiceNow-Instanz'}>
+              <span className="text-[10px] font-mono font-normal px-1.5 py-0.5 rounded-full border bg-muted/30 text-muted-foreground border-border"
+                title={isDevInstance(cfg) ? 'Dev-/Test-Instanz (von HCL für die Anbindung bereitgestellt)' : 'Aktive ServiceNow-Instanz'}>
                 {instanceHost(cfg)}{isDevInstance(cfg) ? ' · DEV' : ''}
               </span>
             )}
@@ -216,6 +225,11 @@ export default function ServiceNow() {
                     {testing ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}Speichern
                   </button>
                 </div>
+              </label>
+              <label className="text-[11px] text-muted-foreground">Assignment Groups (nur diese Tickets laden — kommagetrennt, leer = alle)
+                <input value={groupsText} onChange={e => setGroupsText(e.target.value)} placeholder="FS DE Hamburg, Marine infrastructure support"
+                  className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary" />
+                <span className="block mt-0.5 text-[10px] text-muted-foreground/80">Serverseitiger Filter: es werden gezielt die Tickets dieser Gruppen geladen (behebt „falsche/leere" Liste). Über „Speichern" (Instanz) oder „Testen &amp; speichern" (Konto) übernehmen.</span>
               </label>
             </div>
 
@@ -400,7 +414,7 @@ export default function ServiceNow() {
               ))}
               {filtered.length === 0 && (
                 <tr><td colSpan={9} className="px-3 py-12 text-center text-muted-foreground">
-                  Keine Tickets{anyFilter ? ` für die aktuellen Filter (durchsucht werden nur die ${tickets.length} geladenen Tickets)` : ''} — Instanz: <span className="font-mono">{instanceHost(cfg)}</span>{isDevInstance(cfg) ? ' (DEV — die echten Tickets liegen auf der Prod-Instanz!)' : ''}.
+                  Keine Tickets{anyFilter ? ` für die aktuellen Filter (durchsucht werden nur die ${tickets.length} geladenen Tickets)` : ''} — Instanz: <span className="font-mono">{instanceHost(cfg)}</span>{isDevInstance(cfg) ? ' (Dev-Instanz)' : ''}. Tipp: bei leerer Liste das Feld „Assignment Groups" (Zugang) leeren = alle Gruppen.
                 </td></tr>
               )}
             </tbody>

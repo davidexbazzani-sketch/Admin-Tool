@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import { ArrowLeft, Download, FileSpreadsheet, FileText, Printer, Mail, CheckCircle, XCircle, Clock, Loader, FolderOpen, ChevronDown, ChevronRight, Paperclip, Settings2 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { QUERY_DEFINITIONS } from '../utils/queries'
@@ -202,7 +203,7 @@ export default function Results() {
           return (
             <div key={hostname} className="border border-border rounded-xl overflow-hidden">
               <div className="flex items-center gap-3 px-4 py-3 bg-card border-b border-border">
-                <span className="font-mono text-sm font-semibold text-primary">{hostname}</span>
+                <span className="font-mono text-sm font-semibold text-primary inline-flex items-center gap-1">{hostname}{hostname && <DeviceInfoButton hostname={hostname} />}</span>
                 <span className="text-xs text-muted-foreground">
                   {hostResults.filter((r) => r.status === 'done').length}/{hostResults.length} OK
                 </span>

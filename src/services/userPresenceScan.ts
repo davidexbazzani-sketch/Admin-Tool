@@ -494,8 +494,22 @@ export function expandCidr(cidr: string): string[] {
 export function expandSubnets(cidrs: string[], maxTotal = 8192): { ips: string[]; capped: boolean } {
   const seen = new Set<string>()
   const ips: string[] = []
+  // WICHTIG: NICHT expandCidr(c) aufrufen — das würde ein sehr kleines Präfix
+  // (z. B. /8 = 16 Mio. Hosts) komplett im Speicher materialisieren und den
+  // Renderer einfrieren/OOM, BEVOR die Kappung greift. Stattdessen je Subnetz
+  // lazy generieren und beim Erreichen von maxTotal sofort abbrechen.
   for (const c of cidrs) {
-    for (const ip of expandCidr(c)) {
+    const [base, bitsStr] = (c || '').split('/')
+    const bits = parseInt(bitsStr, 10)
+    if (!base || base.includes(':') || isNaN(bits) || bits < 0 || bits > 32) continue
+    const baseInt = ipToInt(base)
+    const mask = bits === 0 ? 0 : (0xFFFFFFFF << (32 - bits)) >>> 0
+    const network = (baseInt & mask) >>> 0
+    const size = Math.pow(2, 32 - bits)
+    const start = bits >= 31 ? 0 : 1
+    const end = bits >= 31 ? size : size - 1
+    for (let i = start; i < end; i++) {
+      const ip = intToIp((network + i) >>> 0)
       if (seen.has(ip)) continue
       seen.add(ip); ips.push(ip)
       if (ips.length >= maxTotal) return { ips, capped: true }

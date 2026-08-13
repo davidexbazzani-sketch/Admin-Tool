@@ -4,7 +4,7 @@ import {
   ChevronRight, UserSearch, Users, FileText, MapPin, Clock,
   Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen, Package, Stethoscope, PackagePlus, MonitorPlay, PhoneCall,
   Building2, Network, ClipboardList, FolderKanban, ScanSearch, Wifi, CalendarClock, Boxes, Cable, UserPlus, ChevronDown, MonitorSmartphone, Ticket,
-  DatabaseBackup, BatteryCharging, Rocket,
+  DatabaseBackup, BatteryCharging, Rocket, Radar,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
@@ -43,8 +43,10 @@ const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'presentation-mode': <MonitorPlay size={18} />,
   'user-presence': <MapPin size={18} />,
   'licenses': <CalendarClock size={18} />,
+  'proactive-radar': <Radar size={18} />,
   'software-inventory': <Package size={18} />,
   'network-radar': <Activity size={18} />,
+  'vlan-overview': <Cable size={18} />,
   'backups': <DatabaseBackup size={18} />,
   'usv': <BatteryCharging size={18} />,
   'dashboards': <LayoutDashboard size={18} />,

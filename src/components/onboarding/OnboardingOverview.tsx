@@ -8,7 +8,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Loader2, RefreshCw, Rocket, CheckCircle2, XCircle, WifiOff, HelpCircle,
-  Calendar, MonitorSmartphone, Users,
+  Calendar, MonitorSmartphone, Users, Search,
 } from 'lucide-react'
 import { api } from '../../electronAPI'
 import { listEmployees, daysUntil, formatGermanDate, type Employee } from '../../services/employees'
@@ -38,6 +38,10 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
   const [loading, setLoading] = useState(true)
   const [status, setStatus] = useState<Record<string, LiveStatus>>({})   // hostname -> Status
   const [checking, setChecking] = useState(false)
+  // Filter
+  const [search, setSearch] = useState('')
+  const [startFrom, setStartFrom] = useState('')   // YYYY-MM-DD (Start ab)
+  const [startTo, setStartTo] = useState('')       // YYYY-MM-DD (Start bis)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -48,12 +52,8 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
         api().netReadJson<InventoryItem[]>('inventory/inventory.json').catch(() => null),
         loadDevices().catch(() => [] as EndpointDevice[]),
       ])
-      const upcoming = emps.filter(e => {
-        const d = daysUntil(e.startDate)
-        return isNaN(d) || d >= -SHOW_STARTED_DAYS
-      })
       const inv = Array.isArray(inventory) ? inventory : []
-      const out: Row[] = upcoming.map(emp => {
+      const out: Row[] = emps.map(emp => {
         const fullName = `${emp.vorname} ${emp.name}`.trim()
         const gid = (emp.globalId || '').trim().toLowerCase()
         const hosts = new Set<string>()
@@ -79,8 +79,31 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
 
   useEffect(() => { void load() }, [load])
 
+  // ── Filter ──────────────────────────────────────────────────────────────────
+  // Ohne aktiven Filter: nur anstehende / kürzlich gestartete (wie bisher).
+  // Sobald Suche oder ein Start-Datum gesetzt ist, wird diese Begrenzung
+  // aufgehoben → man sieht ALLE passenden Mitarbeiter (z. B. „Start ab 01.09.2026").
+  const hasFilter = !!(search.trim() || startFrom || startTo)
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    const res = rows.filter(({ emp, hosts }) => {
+      if (!hasFilter) {
+        const d = daysUntil(emp.startDate)
+        if (!(isNaN(d) || d >= -SHOW_STARTED_DAYS)) return false
+      }
+      if (startFrom && !(emp.startDate && emp.startDate >= startFrom)) return false
+      if (startTo && !(emp.startDate && emp.startDate <= startTo)) return false
+      if (q) {
+        const hay = `${emp.vorname} ${emp.name} ${emp.globalId || ''} ${hosts.join(' ')}`.toLowerCase()
+        if (!hay.includes(q)) return false
+      }
+      return true
+    })
+    return res.slice().sort((a, b) => (a.emp.startDate || '9999-99-99').localeCompare(b.emp.startDate || '9999-99-99'))
+  }, [rows, search, startFrom, startTo, hasFilter])
+
   // ── Live-Check (max. 3 parallel) ────────────────────────────────────────────
-  const allHosts = useMemo(() => [...new Set(rows.flatMap(r => r.hosts))], [rows])
+  const allHosts = useMemo(() => [...new Set(filtered.flatMap(r => r.hosts))], [filtered])
 
   const runChecks = useCallback(async (hosts: string[]) => {
     if (hosts.length === 0 || checking) return
@@ -132,8 +155,8 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
     <div className="max-w-5xl space-y-3 pb-8">
       <div className="flex items-center gap-2">
         <p className="text-sm text-muted-foreground">
-          <span className="font-semibold text-foreground">{rows.length}</span> Mitarbeiter mit anstehendem oder kürzlichem Start
-          (Quelle: Mitarbeiterverwaltung).
+          <span className="font-semibold text-foreground">{filtered.length}</span>{hasFilter ? ` von ${rows.length}` : ''} Mitarbeiter
+          {hasFilter ? ' (gefiltert)' : ' mit anstehendem oder kürzlichem Start'} (Quelle: Mitarbeiterverwaltung).
         </p>
         <button onClick={onDeployExisting}
           className="ml-auto inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground"
@@ -146,9 +169,32 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
         </button>
       </div>
 
-      {rows.length === 0 ? (
+      {/* Filter */}
+      <div className="flex items-end gap-2 flex-wrap rounded-lg border border-border bg-card px-3 py-2">
+        <div className="relative flex-1 min-w-[180px]">
+          <Search size={13} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Name, Global-ID oder Rechner…"
+            className="w-full pl-7 pr-2 py-1.5 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+        </div>
+        <label className="flex flex-col gap-0.5 text-[10px] text-muted-foreground uppercase tracking-wide">Start ab
+          <input type="date" value={startFrom} onChange={e => setStartFrom(e.target.value)}
+            className="px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+        </label>
+        <label className="flex flex-col gap-0.5 text-[10px] text-muted-foreground uppercase tracking-wide">Start bis
+          <input type="date" value={startTo} onChange={e => setStartTo(e.target.value)}
+            className="px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+        </label>
+        {hasFilter && (
+          <button onClick={() => { setSearch(''); setStartFrom(''); setStartTo('') }}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground">
+            <XCircle size={12} />Filter zurücksetzen
+          </button>
+        )}
+      </div>
+
+      {filtered.length === 0 ? (
         <div className="text-center py-16 text-sm text-muted-foreground rounded-lg border border-border bg-card">
-          Keine anstehenden Starts. Neue Mitarbeiter werden in der Mitarbeiterverwaltung gepflegt.
+          {hasFilter ? 'Keine Mitarbeiter für diesen Filter.' : 'Keine anstehenden Starts. Neue Mitarbeiter werden in der Mitarbeiterverwaltung gepflegt.'}
         </div>
       ) : (
         <div className="rounded-lg border border-border overflow-hidden">
@@ -163,7 +209,7 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
               </tr>
             </thead>
             <tbody>
-              {rows.map(({ emp, hosts, lastDeploy }) => {
+              {filtered.map(({ emp, hosts, lastDeploy }) => {
                 const days = daysUntil(emp.startDate)
                 const fullName = `${emp.vorname} ${emp.name}`.trim()
                 return (

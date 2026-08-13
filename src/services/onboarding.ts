@@ -68,6 +68,7 @@ export interface OnboardingContact {
   name: string
   email: string
   phone: string
+  department?: string   // leer = für alle sichtbar; sonst nur für Mitarbeiter dieser Abteilung
 }
 
 /** Ordner, der aus dem Dashboard heraus im Explorer geoeffnet werden kann.

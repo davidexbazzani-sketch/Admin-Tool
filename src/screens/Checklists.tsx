@@ -14,6 +14,7 @@ import { listEmployees, formatGermanDate, type Employee } from '../services/empl
 import { ensureSkfLogo } from '../services/skfLogo'
 import SignaturePad from '../components/SignaturePad'
 import { useAuthStore } from '../store/authStore'
+import { PersonInfoButton } from '../components/person/PersonDossier'
 
 type View = 'list' | 'edit' | 'preview'
 
@@ -408,7 +409,7 @@ export default function Checklists() {
                       <td className="px-3 py-2 font-mono text-foreground">{c.taskNumber || '—'}</td>
                       <td className="px-3 py-2 text-foreground">
                         <span className="inline-flex items-center gap-2 flex-wrap">
-                          {c.name}
+                          <span className="inline-flex items-center gap-1">{c.name}{c.name && <PersonInfoButton name={c.name} sam={c.corpId} />}</span>
                           {emp && (
                             <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-sky-300 text-black border border-sky-400 font-medium">
                               Neuer Mitarbeiter{emp.startDate ? ` · ${formatGermanDate(emp.startDate)}` : ''}

@@ -10,6 +10,7 @@ import Card from '../components/Card'
 import ExcelColumnDialog from '../components/ExcelColumnDialog'
 import UserProfileAccordion from '../components/UserProfileAccordion'
 import { PersonInfoButton } from '../components/person/PersonDossier'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import {
   openFileForImport, parseExcelSheet, extractFromExcel, extractFromTextBytes,
   type ExcelSheetData, type FileOpenResult,
@@ -689,7 +690,7 @@ function ResultCard({ result, expanded, onToggleExpand, deviceSelected, onToggle
                 </p>
                 <div className="flex items-center gap-1.5">
                   {data.CurrentlyOn && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />}
-                  <span className="font-mono text-xs font-medium text-foreground">{data.Device}</span>
+                  <span className="font-mono text-xs font-medium text-foreground inline-flex items-center gap-1">{data.Device}{data.Device && <DeviceInfoButton hostname={data.Device} />}</span>
                   <button onClick={() => onQueryDevice(data.Device)} className="flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary hover:bg-primary/20 transition-colors shrink-0">
                     Abfragen
                   </button>

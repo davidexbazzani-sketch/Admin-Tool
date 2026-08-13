@@ -46,6 +46,20 @@ declare global {
       openExternal(url: string): Promise<void>
       openPath(filePath: string): Promise<{ success: boolean; error?: string }>
 
+      // SNMP (Drucker-Status/Neustart) — im Main-Prozess (UDP 161)
+      snmpQuery(opts: {
+        host: string
+        op: 'get' | 'walk' | 'set'
+        oids?: string[]           // get
+        oid?: string              // walk / set
+        version?: 'v1' | 'v2c'
+        community?: string
+        timeoutMs?: number
+        retries?: number
+        setType?: 'Integer' | 'OctetString'
+        setValue?: string | number
+      }): Promise<{ success: boolean; error?: string; varbinds?: { oid: string; type: string; value: string | number }[] }>
+
       // ServiceNow Table-API (REST via Main-Prozess) — Auth via SSO-Sitzung
       serviceNowRequest(opts: {
         instanceUrl: string
@@ -141,7 +155,7 @@ declare global {
       heartbeatCheck(username: string): Promise<{ username: string; timestamp: string } | null>
 
       // ── Presentation mode (hall display) ──────────────────────────────────
-      presentationOpen(opts?: { displayId?: number; previewPlaylistId?: string }): Promise<{ success: boolean }>
+      presentationOpen(opts?: { displayId?: number; previewPlaylistId?: string; autoClick?: boolean }): Promise<{ success: boolean }>
       presentationClose(): Promise<{ success: boolean }>
       presentationListDisplays(): Promise<Array<{
         id: number
@@ -157,6 +171,10 @@ declare global {
       // USV: URL in Edge/Chrome öffnen + Notfallplan (DOCX)
       openInEdgeOrChrome(url: string): Promise<{ success: boolean; fallback?: boolean; error?: string }>
       usvOpenDoc(): Promise<{ success: boolean; error?: string }>
+
+      // Task-Manager als eigenständiges Fenster (je Ziel-Host)
+      taskmgrOpen(opts: { host: string; displayId?: number; admin?: boolean }): Promise<{ success: boolean }>
+      taskmgrClose(host?: string): Promise<{ success: boolean }>
     }
     electronSend(channel: string): void
     electronDrop: { getPath(file: File): string }

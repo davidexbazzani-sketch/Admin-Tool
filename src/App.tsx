@@ -29,13 +29,18 @@ import InfrastructureMarine from './screens/InfrastructureMarine'
 import SoftwareInstallations from './screens/SoftwareInstallations'
 import PresentationMode from './screens/PresentationMode'
 import PresentationPlayer from './screens/PresentationPlayer'
+import TaskManagerWindow from './components/device/TaskManagerWindow'
 import BugReportWidget from './components/BugReportWidget'
 import BetaBanner from './components/BetaBanner'
 import LicenseAlarmController from './components/licenses/LicenseAlarmController'
 import EmployeeReminderController from './components/employees/EmployeeReminderController'
 import BackupSchedulerController from './components/backups/BackupSchedulerController'
+import SoftwareScanController from './components/softwareInventory/SoftwareScanController'
+import PrinterConnectionScanController from './components/printer/PrinterConnectionScanController'
 import ErrorFlashOverlay from './components/ErrorFlashOverlay'
 import { DossierProvider } from './components/person/PersonDossier'
+import { DeviceDossierProvider } from './components/device/DeviceDossier'
+import { PrinterDossierProvider } from './components/printer/PrinterDossier'
 import type { Screen } from './types'
 import { api } from './electronAPI'
 import { ensureDailyAdUsers } from './services/adUserDirectory'
@@ -44,6 +49,7 @@ import { ensureDailyAdUsers } from './services/adUserDirectory'
 const ITGuru = lazy(() => import('./screens/ITGuru'))
 const PCDiagnosis = lazy(() => import('./screens/PCDiagnosis'))
 const NetworkRadar = lazy(() => import('./screens/NetworkRadar'))
+const VlanOverview = lazy(() => import('./screens/VlanOverview'))
 const KnowledgeBase = lazy(() => import('./screens/KnowledgeBase'))
 const InfrastructureProjects = lazy(() => import('./screens/InfrastructureProjects'))
 const GroupSearch = lazy(() => import('./screens/GroupSearch'))
@@ -60,6 +66,7 @@ const PdfTools = lazy(() => import('./pdftools'))
 const PhoneAssignment = lazy(() => import('./screens/PhoneAssignment'))
 const Backups = lazy(() => import('./screens/Backups'))
 const USV = lazy(() => import('./screens/USV'))
+const ProactiveRadar = lazy(() => import('./screens/ProactiveRadar'))
 
 function renderScreen(screen: Screen) {
   switch (screen) {
@@ -95,6 +102,7 @@ function renderScreen(screen: Screen) {
     case 'bug-mailbox':       return <BugMailbox />
     case 'dashboards':        return <Dashboards />
     case 'network-radar':     return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><NetworkRadar /></Suspense>
+    case 'vlan-overview':     return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><VlanOverview /></Suspense>
     case 'knowledge-base':   return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><KnowledgeBase /></Suspense>
     case 'pc-migration':      return <PCMigration />
     case 'software-inventory': return <SoftwareInventory />
@@ -105,6 +113,7 @@ function renderScreen(screen: Screen) {
     case 'presentation-mode': return <PresentationMode />
     case 'backups': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Backups /></Suspense>
     case 'usv': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><USV /></Suspense>
+    case 'proactive-radar': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ProactiveRadar /></Suspense>
     default:                  return <Home />
   }
 }
@@ -114,6 +123,11 @@ export default function App() {
   // bundle but with hash "#presentation". Bypass all auth/init logic.
   if (typeof window !== 'undefined' && window.location.hash === '#presentation') {
     return <PresentationPlayer />
+  }
+  // Remote-Task-Manager läuft in einem eigenständigen Fenster (#taskmgr, ?host=…) —
+  // gleiches Bundle, aber ohne Auth/Sidebar, nur die Task-Manager-Ansicht.
+  if (typeof window !== 'undefined' && window.location.hash === '#taskmgr') {
+    return <TaskManagerWindow />
   }
 
   const screen       = useAppStore(s => s.screen)
@@ -262,6 +276,8 @@ export default function App() {
   // Main app — authenticated
   return (
     <DossierProvider>
+     <DeviceDossierProvider>
+      <PrinterDossierProvider>
       <div className="flex flex-col h-screen w-screen overflow-hidden bg-background">
         <TitleBar />
         <BetaBanner betaMode={betaMode} />
@@ -275,10 +291,14 @@ export default function App() {
             <LicenseAlarmController />
             <EmployeeReminderController />
             <BackupSchedulerController />
+            <SoftwareScanController />
+            <PrinterConnectionScanController />
             <ErrorFlashOverlay />
           </main>
         </div>
       </div>
+      </PrinterDossierProvider>
+     </DeviceDossierProvider>
     </DossierProvider>
   )
 }

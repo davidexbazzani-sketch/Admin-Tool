@@ -600,6 +600,7 @@ export default function PresentationMode() {
     await api().presentationOpen({
       ...(selectedDisplay != null ? { displayId: selectedDisplay } : {}),
       previewPlaylistId: PREVIEW_SESSION_SENTINEL,
+      autoClick: config.autoClick === true,
     })
   }
 
@@ -1307,6 +1308,26 @@ export default function PresentationMode() {
                   „Your session has expired". Bei aktivierter Option klickt das Tool den „Log In"-Button alle
                   paar Sekunden automatisch weg — aber <strong>nur</strong> wenn dieser Dialog wirklich sichtbar ist.
                   Andere Folien werden dadurch nicht beeinflusst.
+                </span>
+              </span>
+            </label>
+          </div>
+
+          {/* Auto-Klick alle 20s (Anzeige/App aktiv halten) */}
+          <div className="mt-3 pt-3 border-t border-border">
+            <label className="flex items-start gap-2.5 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={config.autoClick === true}
+                onChange={e => { setConfig(c => ({ ...c, autoClick: e.target.checked })); setDirty(true) }}
+                className="mt-0.5 w-4 h-4 accent-blue-500 shrink-0"
+              />
+              <span>
+                <span className="text-sm text-foreground font-medium">Alle 20 Sekunden automatisch klicken (Anzeige/Anwendung aktiv halten)</span>
+                <span className="block text-[11px] text-muted-foreground mt-0.5 leading-relaxed">
+                  Löst während der Präsentation alle 20 Sekunden einen echten Mausklick <strong>an der aktuellen
+                  Cursor-Position</strong> aus — verhindert Bildschirmschoner/Abmelden bei eingebetteten Web-Apps.
+                  Tipp: den Mauszeiger an eine unkritische Stelle des Bildschirms legen.
                 </span>
               </span>
             </label>

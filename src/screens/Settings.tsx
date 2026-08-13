@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database, Eye, EyeOff, Users, RotateCcw, AlertTriangle } from 'lucide-react'
+import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database, Eye, EyeOff, Users, RotateCcw, AlertTriangle, RefreshCw, Radar } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
-import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
+import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
+import { SCAN_REGISTRY, type ScanStatus } from '../services/scanRegistry'
+import { useScanStore } from '../store/scanStore'
 import { api } from '../electronAPI'
 import type { AppSettings } from '../types'
 import type { UserEmailConfig, AppConfig } from '../types/auth'
@@ -162,6 +164,75 @@ const MENU_STATE_OPTIONS: { value: MenuVisibilityState; label: string; hint: str
   { value: 'master', label: 'Nur Master-Admin', hint: 'nur Master-Admin' },
   { value: 'hidden', label: 'Ausgeblendet',    hint: 'für niemanden sichtbar' },
 ]
+
+// ── Automatische Scans: Übersicht + manueller Sofort-Lauf (im Hintergrund) ────
+function AutoScansCard() {
+  const username = useAuthStore(s => s.session?.user?.username) || ''
+  const running = useScanStore(s => s.running)
+  const results = useScanStore(s => s.results)
+  const start = useScanStore(s => s.start)
+  const [statuses, setStatuses] = useState<Record<string, ScanStatus | null>>({})
+
+  // Status (letzter Lauf) laden — initial und nach jedem abgeschlossenen Lauf.
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      for (const def of SCAN_REGISTRY) {
+        const st = await def.loadStatus().catch(() => null)
+        if (!cancelled) setStatuses(prev => ({ ...prev, [def.id]: st }))
+      }
+    })()
+    return () => { cancelled = true }
+  }, [results])
+
+  const fmt = (iso?: string | null) => {
+    if (!iso) return 'noch nie'
+    const d = new Date(iso); return isNaN(d.getTime()) ? 'noch nie' : d.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+  }
+
+  return (
+    <Card title="Automatische Scans" icon={<Radar size={15} />} subtitle="Alle Hintergrund-Scans des Tools — jeder kann hier auch sofort manuell gestartet werden (läuft im Hintergrund weiter).">
+      <div className="space-y-2.5">
+        {SCAN_REGISTRY.map(def => {
+          const st = statuses[def.id]
+          const isRunning = !!running[def.id]
+          const res = results[def.id]
+          return (
+            <div key={def.id} className="rounded-lg border border-border bg-background p-3">
+              <div className="flex items-start gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-foreground">{def.label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{def.description}</p>
+                  <p className="text-[11px] text-muted-foreground mt-1">{def.cadence}</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    Zuletzt: <span className="text-foreground">{fmt(st?.lastRunAt)}</span>
+                    {st?.lastResult && <span className={st.lastResult === 'success' ? 'text-green-400' : 'text-red-400'}> · {st.lastResult === 'success' ? 'OK' : 'Fehler'}</span>}
+                    {st?.lastSummary && <span> · {st.lastSummary}</span>}
+                  </p>
+                  {st?.runningElsewhere && !isRunning && (
+                    <p className="text-[11px] text-amber-400 mt-0.5 inline-flex items-center gap-1"><Loader size={10} className="animate-spin" />Läuft gerade auf einer anderen Instanz…</p>
+                  )}
+                  {isRunning && (
+                    <p className="text-[11px] text-blue-400 mt-0.5 inline-flex items-center gap-1"><Loader size={10} className="animate-spin" />Läuft im Hintergrund — du kannst weiterarbeiten.</p>
+                  )}
+                  {!isRunning && res && (
+                    <p className={`text-[11px] mt-0.5 inline-flex items-center gap-1 ${res.ok ? 'text-green-400' : 'text-red-400'}`}>
+                      {res.ok ? <CheckCircle size={10} /> : <XCircle size={10} />}{res.ok ? 'Fertig' : 'Fehler'}: {res.summary}
+                    </p>
+                  )}
+                </div>
+                <button onClick={() => start(def, username)} disabled={isRunning}
+                  className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
+                  {isRunning ? <Loader size={13} className="animate-spin" /> : <RefreshCw size={13} />}Jetzt ausführen
+                </button>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </Card>
+  )
+}
 
 function MenuVisibilityCard() {
   const hiddenMenuIds = useAppStore(s => s.hiddenMenuIds)
@@ -696,6 +767,7 @@ export default function Settings() {
   const session = useAuthStore(s => s.session)
   const username = session?.user.username ?? ''
   const isMaster = useIsMasterAdmin()
+  const isAdmin = useIsAdmin()
 
   const [local, setLocal] = useState<AppSettings>(settings)
   const [saved, setSaved] = useState(false)
@@ -1196,6 +1268,9 @@ export default function Settings() {
           </div>
         </Card>
       )}
+
+      {/* ── Automatische Scans (Admin) ── */}
+      {isAdmin && <AutoScansCard />}
 
       {/* ── Menu Visibility (Master Admin only) ── */}
       {isMaster && <MenuVisibilityCard />}

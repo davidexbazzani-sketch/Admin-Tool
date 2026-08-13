@@ -21,6 +21,8 @@ export type Screen =
   | 'servicenow'
   | 'backups'
   | 'usv'
+  | 'vlan-overview'
+  | 'proactive-radar'
 
 export type Prefix = 'DE' | 'DEHAM' | 'DESCH' | 'Sonstige'
 

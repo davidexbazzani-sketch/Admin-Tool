@@ -11,13 +11,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Loader2, Rocket, Download, CheckCircle2, XCircle, AlertTriangle, Circle,
   Monitor, User, RefreshCw, FileCode2, Search, Plus, UserPlus, Users,
+  ChevronUp, ChevronDown, Trash2, Contact as ContactIcon,
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { useAppStore } from '../../store/appStore'
 import { api } from '../../electronAPI'
 import { listEmployees, formatGermanDate, type Employee } from '../../services/employees'
-import { resolveSamByName, findAssignedHardware } from '../../services/personMasterData'
-import { readCentralAdUsers, buildNameIndex, lookupUserByName } from '../../services/adUserDirectory'
+import { resolveSamByName, findAssignedHardware, fetchAdPersonInfo } from '../../services/personMasterData'
+import { readCentralAdUsers } from '../../services/adUserDirectory'
 import type { AdUserListItem } from '../../services/adUsersList'
 import { loadOnboardingSettings, loadOnboardingMarkers, addDeployment } from '../../services/onboarding'
 import { buildOnboardingHtml, collectNeededPages, type OnboardingContactData, type GreetingMode } from '../../services/onboardingHtml'
@@ -25,9 +26,9 @@ import { renderPlanPages, getLogoDataUri, getRoomPhotoDataUri, findRoomOnPlans, 
 import type { PlanId } from '../../services/onboarding'
 import {
   checkDns, checkReachability, enableWinRM, writeTempHtml, writeTempFile, writeTempFileUtf16, writeTempBinary,
-  copyToPublicDesktop, copyDashboardFiles, verifyDeployed, cleanupTemp,
-  buildDriveMappingBat, buildShortcutUrlFile, buildOpenFolderVbs, registerFolderProtocol, targetDirPath,
-  DESKTOP_FILENAME, BAT_FILENAME, SHORTCUT_FILENAME,
+  copyDashboardFiles, verifyDeployed, cleanupTemp,
+  buildShortcutUrlFile, buildOpenFolderVbs, registerFolderProtocol, targetDirPath,
+  DESKTOP_FILENAME, SHORTCUT_FILENAME,
 } from '../../services/onboardingDeploy'
 import type { FolderLink } from '../../services/onboarding'
 import { isValidRemoteTarget } from '../../utils/remoteTarget'
@@ -65,6 +66,7 @@ interface PersonSel {
   startDate: string
   roomNumber: string
   manager: string
+  department: string
   employeeId?: string
 }
 
@@ -74,9 +76,24 @@ function personFromEmployee(e: Employee): PersonSel {
     displayName: `${e.vorname} ${e.name}`.trim(),
     sam: (e.globalId || '').trim() || undefined,
     startDate: e.startDate, roomNumber: e.roomNumber, manager: e.manager,
+    department: e.department || '',
     employeeId: e.id,
   }
 }
+
+/** Ein Ansprechpartner in der bearbeitbaren Liste (Kachel 4). */
+type ContactKind = 'manager' | 'extra' | 'it'
+interface ContactRow {
+  id: string
+  kind: ContactKind
+  name: string
+  role: string
+  email: string
+  phone: string
+}
+const KIND_BADGE: Record<ContactKind, string> = { manager: 'Direkter Vorgesetzter', extra: 'Ansprechpartner', it: 'IT-Support' }
+let contactSeq = 0
+const nextContactId = () => `c${++contactSeq}`
 
 function personFromAd(u: AdUserListItem): PersonSel {
   const parts = (u.displayName || '').trim().split(/\s+/)
@@ -84,6 +101,7 @@ function personFromAd(u: AdUserListItem): PersonSel {
     vorname: parts[0] ?? '', nachname: parts.slice(1).join(' '),
     displayName: u.displayName || u.sam, sam: u.sam,
     startDate: '', roomNumber: '', manager: u.managerName || '',
+    department: u.department || '',
   }
 }
 
@@ -110,11 +128,11 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
   const [suggesting, setSuggesting] = useState(false)
   const [manualHost, setManualHost] = useState('')
 
-  // Ansprechpartner
-  const [cName, setCName] = useState('')
-  const [cRole, setCRole] = useState('')
-  const [cMail, setCMail] = useState('')
-  const [cPhone, setCPhone] = useState('')
+  // Ansprechpartner-Liste (Vorgesetzter → weitere → IT). Wird beim Personen-
+  // Wechsel automatisch aus dem Tool befüllt und kann hier bearbeitet,
+  // umsortiert und einzeln entfernt werden.
+  const [contacts, setContacts] = useState<ContactRow[]>([])
+  const [contactsLoading, setContactsLoading] = useState(false)
 
   // Lauf-Status pro Host
   const [runState, setRunState] = useState<Record<string, Record<StepId, StepState>>>({})
@@ -122,8 +140,6 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
   const [exporting, setExporting] = useState(false)
   const [genProgress, setGenProgress] = useState('')
   const [resultMsg, setResultMsg] = useState<{ ok: boolean; text: string } | null>(null)
-  // Laufwerk-I-Befehl aus den zuletzt geladenen Einstellungen (fuer die Desktop-Bat)
-  const driveCmdRef = useRef('')
   // Ordner-Links aus den zuletzt geladenen Einstellungen (fuer den skf-ordner:-Handler)
   const folderLinksRef = useRef<FolderLink[]>([])
 
@@ -188,20 +204,56 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
     }
   }, [])
 
+  // Ansprechpartner-Liste automatisch zusammenstellen:
+  //   1. Direkter Vorgesetzter (Telefon + E-Mail live aus dem AD)
+  //   2. Weitere Ansprechpartner aus den Einstellungen (abteilungsgefiltert)
+  //   3. IT-Kontakt ganz am Ende
+  const buildDefaultContacts = useCallback(async (p: PersonSel) => {
+    setContactsLoading(true)
+    try {
+      const settings = await loadOnboardingSettings()
+      const empDept = (p.department || '').trim().toLowerCase()
+      const list: ContactRow[] = []
+
+      if (p.manager && p.manager.trim()) {
+        // „Dein Manager“ als Rolle entfällt bewusst — nur Name + Kontaktdaten.
+        const row: ContactRow = { id: nextContactId(), kind: 'manager', name: p.manager.trim(), role: '', email: '', phone: '' }
+        try {
+          const mgr = await fetchAdPersonInfo(p.manager.trim())
+          if (mgr.found) {
+            if (mgr.displayName) row.name = mgr.displayName
+            row.email = mgr.email || ''
+            row.phone = mgr.telephone || mgr.ipPhone || ''
+          }
+        } catch { /* AD-Abfrage optional — Name bleibt, Daten ggf. manuell */ }
+        list.push(row)
+      }
+
+      for (const c of settings.generalInfo.contacts) {
+        if (!c.name && !c.email && !c.phone && !c.role) continue
+        const d = (c.department || '').trim().toLowerCase()
+        if (d && d !== empDept) continue        // abteilungsspezifisch, passt nicht
+        list.push({ id: nextContactId(), kind: 'extra', name: c.name || '', role: c.role || '', email: c.email || '', phone: c.phone || '' })
+      }
+
+      const it = settings.itContact
+      if (it.name || it.email || it.phone) {
+        list.push({ id: nextContactId(), kind: 'it', name: it.name || 'Deine IT', role: 'IT-Support', email: it.email || '', phone: it.phone || '' })
+      }
+
+      setContacts(list)
+    } finally {
+      setContactsLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     setRunState({}); setResultMsg(null); setManualHost('')
-    setCName(person?.manager || ''); setCRole(person?.manager ? 'Dein Manager' : ''); setCMail(''); setCPhone('')
     if (person) {
       loadSuggestions(person)
-      if (person.manager) {
-        try {
-          const idx = buildNameIndex(adUsers)
-          const hit = lookupUserByName(idx, person.manager)
-          if (hit?.email) setCMail(hit.email)
-        } catch { /* optional */ }
-      }
+      buildDefaultContacts(person)
     } else {
-      setHosts([])
+      setHosts([]); setContacts([])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [person?.displayName])
@@ -227,13 +279,33 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
     setRunState(prev => ({ ...prev, [host]: { ...(prev[host] ?? freshSteps()), [id]: st } }))
   }
 
+  // ── Ansprechpartner-Liste bearbeiten ────────────────────────────────────────
+  function updateContact(id: string, patch: Partial<ContactRow>) {
+    setContacts(prev => prev.map(c => c.id === id ? { ...c, ...patch } : c))
+  }
+  function removeContact(id: string) {
+    setContacts(prev => prev.filter(c => c.id !== id))
+  }
+  function moveContact(id: string, dir: -1 | 1) {
+    setContacts(prev => {
+      const i = prev.findIndex(c => c.id === id)
+      const j = i + dir
+      if (i < 0 || j < 0 || j >= prev.length) return prev
+      const next = prev.slice()
+      ;[next[i], next[j]] = [next[j], next[i]]
+      return next
+    })
+  }
+  function addContact() {
+    setContacts(prev => [...prev, { id: nextContactId(), kind: 'extra', name: '', role: '', email: '', phone: '' }])
+  }
+
   // ── HTML generieren ─────────────────────────────────────────────────────────
   async function generateHtml(p: PersonSel): Promise<string> {
     setGenProgress('Lade Konfiguration…')
     const [settings, markers, logo] = await Promise.all([
       loadOnboardingSettings(), loadOnboardingMarkers(), getLogoDataUri(),
     ])
-    driveCmdRef.current = settings.driveMapping.manualCommand
     folderLinksRef.current = settings.folderLinks
 
     // Raum des Mitarbeiters automatisch in der Plan-Textebene suchen ("Dein Büro")
@@ -259,10 +331,14 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
     const roomPhotos: Record<string, string> = {}
     for (const r of settings.rooms) roomPhotos[r.id] = await getRoomPhotoDataUri(r.photo)
     setGenProgress('Baue HTML…')
-    const contact: OnboardingContactData = { name: cName.trim(), role: cRole.trim(), email: cMail.trim(), phone: cPhone.trim() }
+    const contactList: OnboardingContactData[] = contacts
+      .map(c => ({ name: c.name.trim(), role: c.role.trim(), email: c.email.trim(), phone: c.phone.trim() }))
+      .filter(c => c.name || c.email || c.phone)
     const html = buildOnboardingHtml({
-      employee: { vorname: p.vorname, nachname: p.nachname, startDate: p.startDate, roomNumber: p.roomNumber },
-      contact, settings, markers,
+      employee: { vorname: p.vorname, nachname: p.nachname, startDate: p.startDate, roomNumber: p.roomNumber, department: p.department },
+      contact: contactList[0] ?? { name: '', role: '', email: '', phone: '' },
+      contacts: contactList,
+      settings, markers,
       logoDataUri: logo,
       planImages: Object.fromEntries(images),
       roomPhotos,
@@ -312,11 +388,6 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
         }
       } catch { /* ohne Icon weiter — Verknuepfung zeigt dann Standard-Symbol */ }
 
-      // Laufwerk-I-Bat kommt MIT auf den Desktop (Browser fuehren .bat nicht aus)
-      let batTempPath = ''
-      const tmpBat = await writeTempFile(buildDriveMappingBat(driveCmdRef.current), 'laufwerk_i', 'bat')
-      if (tmpBat.ok && tmpBat.path) { batTempPath = tmpBat.path; temps.push(tmpBat.path) }
-
       // Handler-VBS fuer "Ordner im Explorer oeffnen" (nur wenn Links gepflegt)
       let vbsTempPath = ''
       if (folderLinksRef.current.length > 0) {
@@ -327,7 +398,7 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
       for (const host of selectedHosts) {
         const failed = await deployToHost(host, {
           html: tmp.path, url: tmpUrl.path,
-          ico: icoTempPath || undefined, bat: batTempPath || undefined, vbs: vbsTempPath || undefined,
+          ico: icoTempPath || undefined, vbs: vbsTempPath || undefined,
         })
         if (failed) failHosts.push(host)
         else okHosts.push(host)
@@ -350,7 +421,7 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
   }
 
   /** Liefert true bei Fehlschlag. */
-  async function deployToHost(host: string, temps: { html: string; url: string; ico?: string; bat?: string; vbs?: string }): Promise<boolean> {
+  async function deployToHost(host: string, temps: { html: string; url: string; ico?: string; vbs?: string }): Promise<boolean> {
     // 1) DNS
     setStep(host, 'dns', { status: 'running' })
     const dns = await checkDns(host)
@@ -372,18 +443,11 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
       ? { status: 'ok', message: 'aktiv' }
       : { status: 'warn', message: (winrm.message || 'nicht aktivierbar') + ' — Kopie läuft über SMB' })
 
-    // 4) Kopieren: HTML+Icon+Handler in den Ordner, Verknuepfung (SKF-Icon) + Bat auf den Desktop
+    // 4) Kopieren: HTML+Icon+Handler in den Ordner, Verknuepfung (SKF-Icon) auf den Desktop
     setStep(host, 'copy', { status: 'running' })
     const copy = await copyDashboardFiles(host, { html: temps.html, ico: temps.ico, url: temps.url, vbs: temps.vbs })
     if (!copy.ok) { setStep(host, 'copy', { status: 'fail', message: copy.error }); return true }
-    if (temps.bat) {
-      const batCopy = await copyToPublicDesktop(host, temps.bat, BAT_FILENAME)
-      setStep(host, 'copy', batCopy.ok
-        ? { status: 'ok', message: `Verknüpfung „${SHORTCUT_FILENAME}“ + „${BAT_FILENAME}“ auf dem Desktop · HTML in ${targetDirPath(host)}` }
-        : { status: 'warn', message: `Dashboard kopiert, aber Bat fehlgeschlagen: ${batCopy.error || ''}` })
-    } else {
-      setStep(host, 'copy', { status: 'ok', message: `Verknüpfung auf dem Desktop · HTML in ${targetDirPath(host)}` })
-    }
+    setStep(host, 'copy', { status: 'ok', message: `Verknüpfung „${SHORTCUT_FILENAME}“ auf dem Desktop · HTML in ${targetDirPath(host)}` })
 
     // 5) Explorer-Handler registrieren (skf-ordner:) — nicht fatal
     if (temps.vbs) {
@@ -556,14 +620,54 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
       </section>
 
       {/* 4. Ansprechpartner */}
-      <section className="rounded-lg border border-border bg-card p-4 space-y-2">
-        <h3 className="text-sm font-bold text-foreground">4. Kachel „Ihr Ansprechpartner“ <span className="font-normal text-muted-foreground">(leer = IT-Kontakt aus den Einstellungen)</span></h3>
-        <div className="grid grid-cols-2 gap-2">
-          <input value={cName} onChange={e => setCName(e.target.value)} placeholder="Name" className={inputCls} />
-          <input value={cRole} onChange={e => setCRole(e.target.value)} placeholder="Rolle (z. B. Dein Manager)" className={inputCls} />
-          <input value={cMail} onChange={e => setCMail(e.target.value)} placeholder="E-Mail" className={inputCls} />
-          <input value={cPhone} onChange={e => setCPhone(e.target.value)} placeholder="Telefon" className={inputCls} />
-        </div>
+      <section className="rounded-lg border border-border bg-card p-4 space-y-3">
+        <h3 className="text-sm font-bold text-foreground flex items-center gap-2"><ContactIcon size={14} className="text-blue-400" />4. Kachel „Ihre Ansprechpartner“</h3>
+        <p className="text-[11px] text-muted-foreground">
+          So werden sie im Dashboard angezeigt (Reihenfolge = Anzeigereihenfolge). Vorgesetzter mit Telefon &amp; E-Mail automatisch aus dem AD,
+          weitere aus den Einstellungen, die IT am Ende. Einzelne entfernen (✕) oder verschieben (▲▼).
+        </p>
+
+        {!person && <p className="text-[11px] text-muted-foreground">Zuerst eine Person wählen.</p>}
+        {person && contactsLoading && (
+          <span className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground"><Loader2 size={11} className="animate-spin" />Ansprechpartner werden ermittelt…</span>
+        )}
+        {person && !contactsLoading && contacts.length === 0 && (
+          <p className="text-[11px] text-amber-300">Keine Ansprechpartner ermittelt — unten manuell hinzufügen (kein Vorgesetzter im AD, keine Kontakte in den Einstellungen).</p>
+        )}
+
+        {person && contacts.map((c, i) => (
+          <div key={c.id} className="rounded-md border border-border bg-background p-2.5 space-y-2">
+            <div className="flex items-center gap-2">
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-full border ${c.kind === 'manager' ? 'bg-blue-500/10 text-blue-300 border-blue-500/30' : c.kind === 'it' ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30' : 'bg-muted/30 text-muted-foreground border-border'}`}>
+                {KIND_BADGE[c.kind]}
+              </span>
+              {c.kind === 'manager' && <span className="text-[10px] text-muted-foreground">wird immer angezeigt</span>}
+              <div className="ml-auto flex items-center gap-1">
+                <button onClick={() => moveContact(c.id, -1)} disabled={i === 0} title="Nach oben"
+                  className="p-1 rounded text-muted-foreground hover:text-foreground disabled:opacity-30"><ChevronUp size={13} /></button>
+                <button onClick={() => moveContact(c.id, 1)} disabled={i === contacts.length - 1} title="Nach unten"
+                  className="p-1 rounded text-muted-foreground hover:text-foreground disabled:opacity-30"><ChevronDown size={13} /></button>
+                {c.kind !== 'manager' && (
+                  <button onClick={() => removeContact(c.id)} title="Entfernen"
+                    className="p-1 rounded text-muted-foreground hover:text-red-400"><Trash2 size={13} /></button>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <input value={c.name} onChange={e => updateContact(c.id, { name: e.target.value })} placeholder="Name" className={inputCls} />
+              <input value={c.role} onChange={e => updateContact(c.id, { role: e.target.value })} placeholder="Rolle (optional)" className={inputCls} />
+              <input value={c.email} onChange={e => updateContact(c.id, { email: e.target.value })} placeholder="E-Mail" className={inputCls} />
+              <input value={c.phone} onChange={e => updateContact(c.id, { phone: e.target.value })} placeholder="Telefon" className={inputCls} />
+            </div>
+          </div>
+        ))}
+
+        {person && (
+          <button onClick={addContact}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground">
+            <Plus size={12} />Ansprechpartner hinzufügen
+          </button>
+        )}
       </section>
 
       {/* Aktionen */}

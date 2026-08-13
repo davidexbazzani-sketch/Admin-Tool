@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import {
   Plus, X, Play, Download, Monitor, List, Loader,
   CheckCircle, XCircle, AlertTriangle, Package, Info,
@@ -10,6 +11,7 @@ import type { PSResult } from '../electronAPI'
 import { useIsMasterAdmin } from '../store/authStore'
 import WinRMHelpModal from '../components/WinRMHelpModal'
 import { buildBulkOnlineCheck, parseOnlineCheckLine } from '../utils/connectivityCheck'
+import { isFresh, FRESH_DAYS } from '../services/softwareInventoryScan'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -268,7 +270,12 @@ export default function SoftwareInventory() {
     })()
   }, [])
 
-  const scannedHostnames = new Set((persistent?.scannedPCs ?? []).map(p => p.hostname.toUpperCase()))
+  // Nur FRISCH erfasste PCs (< FRESH_DAYS) gelten als "erfasst". Ältere Scans
+  // sind veraltet → sie landen wieder in der Scan-Liste und werden neu gescannt.
+  const scannedHostnames = new Set(
+    (persistent?.scannedPCs ?? []).filter(p => isFresh(p.scannedAt)).map(p => p.hostname.trim().toUpperCase()),
+  )
+  const staleCount = (persistent?.scannedPCs ?? []).filter(p => !isFresh(p.scannedAt)).length
 
   // ── Save persistent data to server ─────────────────────────────────────────
   const savePersistent = useCallback(async (data: PersistentScanData) => {
@@ -489,9 +496,14 @@ export default function SoftwareInventory() {
     const stillFailed = winrmFailedList.filter(h => !retryResults.some(r => r.hostname.toUpperCase() === h.toUpperCase() && r.software.length > 0))
     setWinrmFailedList(stillFailed)
 
-    // Merge with persistent
+    // Merge with persistent — Basis frisch lesen (s. finishScan), damit ein
+    // parallel gelaufener Auto-Scan nicht überschrieben wird.
     const newSuccessful = retryResults.filter(r => r.software.length > 0)
-    const existingPCs = persistent?.scannedPCs ?? []
+    let existingPCs = persistent?.scannedPCs ?? []
+    try {
+      const latest = await api().netReadJson<PersistentScanData>(SCAN_DATA_PATH)
+      if (latest && Array.isArray(latest.scannedPCs)) existingPCs = latest.scannedPCs
+    } catch { /* offline → Mount-Snapshot als Fallback */ }
     const mergedPCs = [...existingPCs]
     for (const r of newSuccessful) {
       const idx = mergedPCs.findIndex(p => p.hostname.toUpperCase() === r.hostname.toUpperCase())
@@ -506,8 +518,14 @@ export default function SoftwareInventory() {
   // ── Finish scan: merge & save ─────────────────────────────────────────────
   const finishScan = useCallback(async (allResults: PCResult[], now: string) => {
     const newSuccessful = allResults.filter(r => r.software.length > 0)
-    const existingPCs = persistent?.scannedPCs ?? []
-    const mergedPCs = [...existingPCs]
+    // Basis frisch von der Freigabe lesen (nicht den Mount-Snapshot nehmen), damit
+    // ein parallel gelaufener Auto-Scan/andere Instanz nicht überschrieben wird.
+    let base = persistent?.scannedPCs ?? []
+    try {
+      const latest = await api().netReadJson<PersistentScanData>(SCAN_DATA_PATH)
+      if (latest && Array.isArray(latest.scannedPCs)) base = latest.scannedPCs
+    } catch { /* offline → Mount-Snapshot als Fallback */ }
+    const mergedPCs = [...base]
     for (const r of newSuccessful) {
       const idx = mergedPCs.findIndex(p => p.hostname.toUpperCase() === r.hostname.toUpperCase())
       if (idx >= 0) mergedPCs[idx] = r
@@ -647,7 +665,7 @@ export default function SoftwareInventory() {
     // Also save to server
     try {
       const serverPath = `software_inventar/Software_Inventar_${ts}.xlsx`
-      await api().netWriteFile?.(serverPath, arrayBufferToBase64(arrayBuffer))
+      await api().netWriteRawFile(serverPath, arrayBufferToBase64(arrayBuffer))
     } catch { /* offline — local save worked */ }
   }, [swList, successResults, newFailedResults])
 
@@ -677,9 +695,10 @@ export default function SoftwareInventory() {
             <div className="text-right">
               <p className="text-xs text-muted-foreground flex items-center gap-1 justify-end">
                 <Database size={10} /> <strong>{persistent.scannedPCs.length}</strong> PCs bereits erfasst
+                {staleCount > 0 && <span className="text-amber-400" title={`Diese Scans sind älter als ${FRESH_DAYS} Tage und werden beim nächsten Scan erneuert.`}>· {staleCount} veraltet</span>}
               </p>
               <p className="text-[9px] text-muted-foreground">
-                Letztes Update: {formatDate(persistent.lastUpdated)}
+                Letztes Update: {formatDate(persistent.lastUpdated)} · Auto-Scan alle 72 h · veraltet nach {FRESH_DAYS} Tagen
               </p>
             </div>
             <button onClick={() => { setScan(prev => ({ ...prev, phase: 'done', results: [] })); setSkippedCount(0) }}
@@ -772,8 +791,8 @@ export default function SoftwareInventory() {
                   : 'Komplett-Scan: 5 PCs parallel, 35s Timeout. WinRM + Remote Registry + PsExec.'}{' '}
                 {deepCheck ? 'Erreichbarkeit: Ping + SMB + RPC (gründlich).' : 'Erreichbarkeit: Nur Ping (schnell).'
                 }<br/>
-                Bereits erfasste PCs werden übersprungen — nur neue PCs werden gescannt.
-                {alreadyScanned > 0 && <><br/><strong className="text-green-400">{alreadyScanned} von {validHosts} PCs bereits erfasst</strong> — nur {newToScan} neue PCs werden gescannt.</>}
+                Aktuell erfasste PCs werden übersprungen — gescannt werden neue{staleCount > 0 ? ' und veraltete' : ''} PCs.
+                {alreadyScanned > 0 && <><br/><strong className="text-green-400">{alreadyScanned} von {validHosts} PCs aktuell erfasst</strong> — {newToScan} PCs werden gescannt{staleCount > 0 ? ` (inkl. ${staleCount} veraltet)` : ''}.</>}
               </p>
             </div>
           </div>
@@ -826,7 +845,7 @@ export default function SoftwareInventory() {
                 validHosts > 0 ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25' : 'bg-muted text-muted-foreground cursor-not-allowed'
               }`}>
               {scanMode === 'fast' ? <Zap size={16} /> : <Layers size={16} />}
-              {newToScan > 0 ? `${scanMode === 'fast' ? 'Schnell' : 'Komplett'}-Scan (${newToScan} neue PCs)` : alreadyScanned > 0 ? 'Alle bereits erfasst' : `${scanMode === 'fast' ? 'Schnell' : 'Komplett'}-Scan (${validHosts} PCs)`}
+              {newToScan > 0 ? `${scanMode === 'fast' ? 'Schnell' : 'Komplett'}-Scan (${newToScan} PCs zu scannen)` : alreadyScanned > 0 ? 'Alle aktuell erfasst' : `${scanMode === 'fast' ? 'Schnell' : 'Komplett'}-Scan (${validHosts} PCs)`}
             </button>
           </div>
         </>
@@ -1003,7 +1022,7 @@ export default function SoftwareInventory() {
               <div className="divide-y divide-border/50 max-h-40 overflow-y-auto">
                 {unreachableResults.map((r, idx) => (
                   <div key={idx} className="px-4 py-1.5 flex justify-between text-xs">
-                    <span className="font-mono text-foreground">{r.hostname}</span>
+                    <span className="font-mono text-foreground inline-flex items-center gap-1">{r.hostname}{r.hostname && <DeviceInfoButton hostname={r.hostname} />}</span>
                     <span className="text-muted-foreground truncate ml-4">{r.error}</span>
                   </div>
                 ))}

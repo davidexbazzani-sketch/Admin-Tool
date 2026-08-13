@@ -19,9 +19,11 @@ import {
   type DnsRow, type DnsProtocol, type DnsProtocolMeta, type DnsStatus,
   type WinrmDnsRow, type WinrmDnsProtocol, type WinrmDnsProtocolMeta, type WinrmDnsStatus,
 } from '../services/userPresenceScan'
+import { loadVlanConfig, normalizeCidr, labelFor, type VlanConfig } from '../services/vlans'
 import { exportPresenceScan, exportPresenceDns, exportPresenceWinrm, type ExportFormat } from '../services/userPresenceExport'
 import { DaylisModal, ColumnFilter, type UserRow } from './UserOverview'
 import { PersonInfoButton } from '../components/person/PersonDossier'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import { loadDevices as loadEndpointDevices, classifyModel } from '../services/endpointDevices'
 import { api } from '../electronAPI'
 import type { InventoryItem } from '../types/auth'
@@ -78,6 +80,7 @@ export default function UserPresence() {
 
   // Standort / Subnetze (gemeinsam fuer beide Modi)
   const [siteInfo, setSiteInfo] = useState<SiteSubnets | null>(null)
+  const [vlanConfig, setVlanConfig] = useState<VlanConfig | null>(null)
   const [detecting, setDetecting] = useState(false)
   const [manualSubnets, setManualSubnets] = useState<string[]>([])
   const [selected, setSelected] = useState<Set<string>>(new Set())
@@ -140,6 +143,7 @@ export default function UserPresence() {
   useEffect(() => {
     const cached = loadCache(); if (cached) setUsers(cached.users); else void refreshUsers()
     void detectSubnets()
+    void loadVlanConfig().then(setVlanConfig).catch(() => {})
     void refreshProtocols()
     void refreshDnsProtocols()
     void refreshWinrmProtocols()
@@ -309,10 +313,19 @@ export default function UserPresence() {
     setDetecting(false)
   }
 
+  // Auswählbare Subnetze: AD (Sites & Services) ∪ manuell ∪ VLAN-Liste (aus der
+  // VLAN-Übersicht). So sind „Wo angemeldet?" und VLAN-Übersicht konsistent —
+  // dieselben benannten Subnetze stehen zur Auswahl. Dedup über die kanonische
+  // CIDR-Form (AD-Schreibweise gewinnt, wenn ein Subnetz doppelt vorkommt).
   const allSubnets = useMemo(() => {
-    const s = new Set<string>([...(siteInfo?.subnets ?? []), ...manualSubnets])
-    return [...s]
-  }, [siteInfo, manualSubnets])
+    const out: string[] = []
+    const seen = new Set<string>()
+    const add = (c: string) => { const n = normalizeCidr(c) || c; if (!seen.has(n)) { seen.add(n); out.push(c) } }
+    for (const c of siteInfo?.subnets ?? []) add(c)
+    for (const c of manualSubnets) add(c)
+    for (const v of vlanConfig?.vlans ?? []) { const n = normalizeCidr(v.cidr); if (n) add(n) }
+    return out
+  }, [siteInfo, manualSubnets, vlanConfig])
   const effectiveCidrs = useMemo(() => allSubnets.filter(c => selected.has(c)), [allSubnets, selected])
   const ipCount = useMemo(() => expandSubnets(effectiveCidrs).ips.length, [effectiveCidrs])
 
@@ -654,7 +667,14 @@ export default function UserPresence() {
             {allSubnets.length === 0 && <span className="text-[11px] text-amber-300">keine Subnetze erkannt — bitte manuell ergänzen</span>}
             {allSubnets.map(c => {
               const on = selected.has(c)
-              return <button key={c} onClick={() => toggleSubnet(c)} className={`text-[11px] font-mono px-2 py-0.5 rounded-md border ${on ? 'border-blue-500/50 bg-blue-500/10 text-blue-300' : 'border-border text-muted-foreground hover:text-foreground'}`}>{c}</button>
+              const def = vlanConfig?.vlans.find(v => normalizeCidr(v.cidr) === normalizeCidr(c))
+              const lbl = def?.name || (def?.vlanId ? `VLAN ${def.vlanId}` : '')
+              return (
+                <button key={c} onClick={() => toggleSubnet(c)} title={vlanConfig ? labelFor(c, vlanConfig) : c}
+                  className={`text-[11px] font-mono px-2 py-0.5 rounded-md border ${on ? 'border-blue-500/50 bg-blue-500/10 text-blue-300' : 'border-border text-muted-foreground hover:text-foreground'}`}>
+                  {c}{lbl ? <span className="ml-1 opacity-70 not-italic">· {lbl}</span> : ''}
+                </button>
+              )
             })}
             <span className="text-[11px] text-muted-foreground">· {ipCount} IPs</span>
             <input value={manualInput} onChange={e => setManualInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') addManualSubnet() }} placeholder="z.B. 10.20.30.0/24"
@@ -1288,7 +1308,7 @@ function MassView(p: MassViewProps) {
                   <td className="px-3 py-2 font-mono text-foreground">{r.sam}</td>
                   <td className="px-3 py-2 text-foreground"><span className="inline-flex items-center gap-1">{r.displayName}<PersonInfoButton name={r.displayName} sam={r.sam} /></span></td>
                   <td className="px-3 py-2 font-mono">{r.loggedIn && r.ip ? <span className="text-foreground font-semibold">{r.ip}</span> : r.loggedIn ? <span className="text-muted-foreground/60">IP?</span> : <span className="text-muted-foreground/40 italic">nicht angemeldet</span>}</td>
-                  <td className="px-3 py-2 font-mono text-muted-foreground">{r.hostname || <span className="text-muted-foreground/40">—</span>}</td>
+                  <td className="px-3 py-2 font-mono text-muted-foreground">{r.hostname ? <span className="inline-flex items-center gap-1 text-foreground">{r.hostname}<DeviceInfoButton hostname={r.hostname} /></span> : <span className="text-muted-foreground/40">—</span>}</td>
                   <td className="px-3 py-2">{r.loggedIn ? <AssignmentBadge status={r.assignmentStatus} assignedTo={r.assignedTo} deviceType={r.deviceType} leaderMatch={r.leaderMatch} /> : <span className="text-muted-foreground/40">—</span>}</td>
                   <td className="px-3 py-2">{r.loggedIn ? <DnsBadge dnsProblem={r.dnsProblem} ip={r.ip} dnsIp={r.dnsIp} /> : <span className="text-muted-foreground/40">—</span>}</td>
                   <td className="px-3 py-2">{r.loggedIn ? <ActionButtons ip={r.ip} hostname={r.hostname} onQuery={p.goQuery} onRemote={p.goRemoteDoc} onDaylis={(ip, h) => p.goDaylis(ip, h, r)} /> : <span className="text-muted-foreground/30 text-[11px] block text-right">—</span>}</td>

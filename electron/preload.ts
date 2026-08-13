@@ -39,6 +39,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openExternal: (url: string) => ipcRenderer.invoke('shell:openExternal', url),
   openPath: (filePath: string) => ipcRenderer.invoke('shell:openPath', filePath),
 
+  // SNMP (Drucker-Status/Neustart) — läuft im Main-Prozess (UDP 161)
+  snmpQuery: (opts: unknown) => ipcRenderer.invoke('snmp:query', opts),
+
   // ServiceNow Table-API (REST, im Main-Prozess) — Auth via SSO-Sitzung
   serviceNowRequest: (opts: unknown) => ipcRenderer.invoke('servicenow:request', opts),
   serviceNowCertDiag: () => ipcRenderer.invoke('servicenow:certDiag'),
@@ -137,9 +140,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
   heartbeatCheck: (username: string) => ipcRenderer.invoke('heartbeat:check', username),
 
   // ── Presentation mode (hall display) ──────────────────────────────────────
-  presentationOpen: (opts?: { displayId?: number; previewPlaylistId?: string }) => ipcRenderer.invoke('presentation:open', opts),
+  presentationOpen: (opts?: { displayId?: number; previewPlaylistId?: string; autoClick?: boolean }) => ipcRenderer.invoke('presentation:open', opts),
   presentationClose: () => ipcRenderer.invoke('presentation:close'),
   presentationListDisplays: () => ipcRenderer.invoke('presentation:listDisplays'),
+  // Task-Manager als eigenständiges Fenster (je Ziel-Host)
+  taskmgrOpen: (opts: { host: string; displayId?: number; admin?: boolean }) => ipcRenderer.invoke('taskmgr:open', opts),
+  taskmgrClose: (host?: string) => ipcRenderer.invoke('taskmgr:close', host),
   // Edge-Anzeige (SSO): echte msedge.exe-Fenster im App-Modus
   edgeLaunch: (opts: { url: string; displayId?: number; fullscreen?: boolean; ownProfile?: boolean }) => ipcRenderer.invoke('edge:launch', opts),
   edgeClose: (displayId?: number) => ipcRenderer.invoke('edge:close', displayId),

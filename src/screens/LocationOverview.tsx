@@ -5,11 +5,14 @@ import {
   UserSearch, Briefcase, Building2, Filter, ChevronDown,
 } from 'lucide-react'
 import { api } from '../electronAPI'
-import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
+import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
 import { useAppStore } from '../store/appStore'
 import { createLogger } from '../utils/activityLogger'
 import type { InventoryItem } from '../types/auth'
 import { PersonInfoButton } from '../components/person/PersonDossier'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
+import { PrinterInfoButton } from '../components/printer/PrinterDossier'
+import { PRINTER_SEED } from '../data/printerSeed'
 import ExcelColumnDialog from '../components/ExcelColumnDialog'
 import { parseExcelSheet, extractFromExcel, type ExcelSheetData } from '../utils/fileImport'
 import { batchAdLookup } from '../services/adUserLookup'
@@ -28,11 +31,20 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 
 const INVENTORY_FILE = 'inventory/inventory.json'
 
+// Einmaliges, idempotentes Befüllen der Kategorie "Drucker" aus dem SEAL-Wizard-
+// Seed. Der zentrale Marker verhindert Wiederholung (auch instanzübergreifend) —
+// insbesondere kein "Wiederauferstehen" gelöschter Drucker. Version erhöhen, um
+// neu hinzugekommene Seed-Drucker nachzuziehen (fügt nur fehlende hinzu).
+const PRINTER_SEED_VERSION = 1
+const PRINTER_SEED_MARKER = 'drucker/seed_state.json'
+
 export default function LocationOverview() {
   const isMaster   = useIsMasterAdmin()
+  const isAdmin    = useIsAdmin()
   const session    = useAuthStore(s => s.session)
   const setScreen  = useAppStore(s => s.setScreen)
   const setDevices = useAppStore(s => s.setDevices)
+  const seededRef  = useRef(false)
 
   const [activeCategory, setActiveCategory] = useState<string>('Computer')
   const [items, setItems]     = useState<InventoryItem[]>([])
@@ -101,6 +113,58 @@ export default function LocationOverview() {
   }, [])
 
   useEffect(() => { loadItems() }, [loadItems])
+
+  // ── Einmaliges Drucker-Seeding (Kategorie "Drucker" aus dem SEAL-Wizard) ────
+  // Legt fehlende Drucker als Inventar-Objekte an, damit sie in der Standort-
+  // Übersicht erscheinen. Nur für Admins, nur wenn das Netzlaufwerk verfügbar
+  // ist, und nur einmal (zentraler Marker verhindert Wiederholung/Resurrection).
+  useEffect(() => {
+    if (!isAdmin || seededRef.current) return
+    seededRef.current = true
+    let cancelled = false
+    ;(async () => {
+      try {
+        if (!(await api().netIsAvailable())) { seededRef.current = false; return }
+        const marker = await api().netReadJson<{ version?: number }>(PRINTER_SEED_MARKER).catch(() => null)
+        if (marker && (marker.version ?? 0) >= PRINTER_SEED_VERSION) return
+
+        // WICHTIG (Datenverlust-Schutz): netReadJson liefert bei einem LESEFEHLER
+        // (beschädigte/teilgeschriebene Datei, Netz-Hänger) ebenfalls null —
+        // ununterscheidbar von "Datei existiert nicht". Würden wir null als []
+        // behandeln und schreiben, überschrieben wir das GESAMTE Inventar (alle
+        // Computer/Server) mit nur den Seed-Druckern. Daher: existiert die Datei,
+        // ließ sie sich aber nicht lesen → Seeding ABBRECHEN (nicht überschreiben).
+        const current = await api().netReadJson<InventoryItem[]>(INVENTORY_FILE)
+        if (current === null) {
+          const exists = await api().netExists(INVENTORY_FILE).catch(() => false)
+          if (exists) { seededRef.current = false; return }   // vorhanden, aber unlesbar → Abbruch
+        }
+        const base = Array.isArray(current) ? current : []      // wirklich absent/leer → mit [] starten
+        const existing = new Set(base.filter(i => i.category === 'Drucker').map(i => (i.name || '').trim().toUpperCase()))
+        const now = new Date().toISOString()
+        const by = session?.user.username ?? 'seed'
+        const toAdd: InventoryItem[] = []
+        for (const p of PRINTER_SEED) {
+          const key = p.name.trim().toUpperCase()
+          if (existing.has(key)) continue
+          existing.add(key)
+          toAdd.push({
+            id: `seed-${p.name}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            name: p.name, description: p.location, category: 'Drucker', addedAt: now, addedBy: by,
+          })
+        }
+        if (toAdd.length > 0) {
+          const merged = [...base, ...toAdd]
+          const ok = await api().netWriteJson(INVENTORY_FILE, merged)
+          if (!ok) { seededRef.current = false; return }        // Schreibfehler → Marker NICHT setzen, später erneut
+          if (!cancelled) await loadItems()                     // autoritativen Stand nachladen (kein Race mit initialem Load)
+        }
+        // Marker nur setzen, wenn nichts hinzuzufügen war ODER das Inventar erfolgreich geschrieben wurde.
+        await api().netWriteJson(PRINTER_SEED_MARKER, { version: PRINTER_SEED_VERSION, seededAt: now, seededBy: by, added: toAdd.length })
+      } catch { seededRef.current = false /* nächster Versuch beim nächsten Öffnen */ }
+    })()
+    return () => { cancelled = true }
+  }, [isAdmin, session, loadItems])
 
   async function saveItems(updated: InventoryItem[]) {
     await api().netWriteJson(INVENTORY_FILE, updated)
@@ -703,7 +767,7 @@ export default function LocationOverview() {
                         ) : (
                           <>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-foreground font-mono truncate">{item.name}</p>
+                              <p className="text-sm font-medium text-foreground font-mono truncate inline-flex items-center gap-1">{item.name}{item.name && (item.category === 'Drucker' ? <PrinterInfoButton printerName={item.name} /> : <DeviceInfoButton hostname={item.name} />)}</p>
                               <div className="flex items-center gap-3 mt-0.5 flex-wrap">
                                 {item.ip && <span className="text-[10px] text-muted-foreground">{item.ip}</span>}
                                 {item.description && <span className="text-[10px] text-muted-foreground">{item.description}</span>}

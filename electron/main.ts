@@ -181,6 +181,20 @@ function createWindow() {
 let presentationWindow: BrowserWindow | null = null
 let presentationHeadersStripped = false
 
+// ─── Präsentations-Auto-Klick (Anzeige/App aktiv halten) ────────────────────
+// Optional: alle 20 s ein echter OS-Linksklick an der AKTUELLEN Cursor-Position
+// (mouse_event, dx=dy=0 → keine Bewegung). Nur während das Präsentationsfenster
+// offen ist; an dessen Lebenszyklus gekoppelt (Start ready-to-show, Stop closed).
+let presentationAutoClick: ReturnType<typeof setInterval> | null = null
+const AUTOCLICK_PS =
+  `Add-Type -Name AC -Namespace WinAC -MemberDefinition '[DllImport("user32.dll")]public static extern void mouse_event(uint f,uint dx,uint dy,uint d,int e);'; ` +
+  `[WinAC.AC]::mouse_event(0x02,0,0,0,0); Start-Sleep -Milliseconds 40; [WinAC.AC]::mouse_event(0x04,0,0,0,0)`
+function doPresentationAutoClick() { void runPowerShell(AUTOCLICK_PS, 5000).catch(() => {}) }
+function applyPresentationAutoClick(enabled: boolean) {
+  if (presentationAutoClick) { clearInterval(presentationAutoClick); presentationAutoClick = null }
+  if (enabled) presentationAutoClick = setInterval(doPresentationAutoClick, 20000)
+}
+
 function stripFramingHeadersOnce() {
   // ServiceNow & many internal dashboards set X-Frame-Options: SAMEORIGIN or
   // Content-Security-Policy: frame-ancestors. Without removing these headers
@@ -204,8 +218,9 @@ function stripFramingHeadersOnce() {
   })
 }
 
-function openPresentationWindow(opts?: { displayId?: number; previewPlaylistId?: string }) {
+function openPresentationWindow(opts?: { displayId?: number; previewPlaylistId?: string; autoClick?: boolean }) {
   const preview = opts?.previewPlaylistId
+  const autoClick = !!opts?.autoClick
   // Vorschau-Playlist als Query mitgeben (Hash bleibt exakt "#presentation").
   const devUrl = preview
     ? `http://localhost:5173/?preview=${encodeURIComponent(preview)}#presentation`
@@ -218,6 +233,7 @@ function openPresentationWindow(opts?: { displayId?: number; previewPlaylistId?:
     if (isDev) presentationWindow.loadURL(devUrl)
     else presentationWindow.loadFile(join(__dirname, '../dist/index.html'), { hash: 'presentation', query: prodQuery })
     presentationWindow.focus()
+    applyPresentationAutoClick(autoClick)   // Option ggf. für den Neustart aktualisieren
     return
   }
   stripFramingHeadersOnce()
@@ -255,10 +271,12 @@ function openPresentationWindow(opts?: { displayId?: number; previewPlaylistId?:
   presentationWindow.once('ready-to-show', () => {
     presentationWindow?.show()
     presentationWindow?.setFullScreen(true)
+    applyPresentationAutoClick(autoClick)   // Klicker erst starten, wenn Fenster sichtbar
   })
 
   presentationWindow.on('closed', () => {
     presentationWindow = null
+    applyPresentationAutoClick(false)       // deckt presentation:close UND manuelles Schließen ab
   })
 }
 
@@ -399,6 +417,117 @@ ipcMain.handle('shell:openPath', async (_e, filePath: string) => {
   const error = await shell.openPath(filePath)
   // openPath returns '' on success, or an error string on failure
   return error === '' ? { success: true } : { success: false, error }
+})
+
+// ── SNMP (Drucker-Statusabfrage & Geräte-Neustart) ──────────────────────────
+// Läuft im Main-Prozess (Renderer/Browser können kein UDP 161). Nutzt das
+// pure-JS-Modul "net-snmp". get/walk sind lesend (Community "public" i. d. R.
+// offen); set ist schreibend (Write-Community, meist deaktiviert) und wird für
+// den physischen Geräte-Neustart (prtGeneralReset = 4) verwendet.
+// Werte werden serialisierbar zurückgegeben (Buffer → String, sonst Zahl).
+ipcMain.handle('snmp:query', async (_e, opts: {
+  host: string
+  op: 'get' | 'walk' | 'set'
+  oids?: string[]           // get
+  oid?: string              // walk / set
+  version?: 'v1' | 'v2c'
+  community?: string
+  timeoutMs?: number
+  retries?: number
+  setType?: 'Integer' | 'OctetString'   // set
+  setValue?: string | number            // set
+}): Promise<{ success: boolean; error?: string; varbinds?: { oid: string; type: string; value: string | number }[] }> => {
+  const host = (opts?.host || '').trim()
+  if (!host) return { success: false, error: 'Keine IP/Host angegeben.' }
+  let snmp: typeof import('net-snmp')
+  try { snmp = require('net-snmp') as typeof import('net-snmp') } catch (e) {
+    return { success: false, error: 'SNMP-Modul nicht verfügbar: ' + (e instanceof Error ? e.message : String(e)) }
+  }
+  const community = (opts.community || 'public').trim() || 'public'
+  const version = opts.version === 'v2c' ? snmp.Version2c : snmp.Version1
+  const timeout = Math.min(Math.max(opts.timeoutMs ?? 3000, 500), 15000)
+  const retries = Math.min(Math.max(opts.retries ?? 1, 0), 3)
+
+  const typeName = (t: number): string => {
+    const map = snmp.ObjectType as unknown as Record<string, number>
+    for (const k of Object.keys(map)) if (map[k] === t) return k
+    return String(t)
+  }
+  const vbVal = (vb: { type: number; value: unknown }): string | number => {
+    const v = vb.value
+    if (Buffer.isBuffer(v)) { const s = v.toString('utf8'); return /�/.test(s) ? v.toString('latin1') : s }
+    if (typeof v === 'number' || typeof v === 'string') return v
+    if (v == null) return ''
+    return String(v)
+  }
+
+  return await new Promise((resolve) => {
+    let session: import('net-snmp').Session | null = null
+    let done = false
+    const finish = (r: { success: boolean; error?: string; varbinds?: { oid: string; type: string; value: string | number }[] }) => {
+      if (done) return
+      done = true
+      try { session?.close() } catch { /* ignore */ }
+      resolve(r)
+    }
+    // Sicherheitsnetz: falls die Library nie zurückruft.
+    const guard = setTimeout(() => finish({ success: false, error: 'SNMP-Zeitüberschreitung' }), timeout * (retries + 2) + 2000)
+    const clearGuard = () => clearTimeout(guard)
+    try {
+      session = snmp.createSession(host, community, { version, timeout, retries })
+      session.on('error', (err: Error) => { clearGuard(); finish({ success: false, error: 'SNMP-Sitzungsfehler: ' + err.message }) })
+
+      if (opts.op === 'get') {
+        const oids = (opts.oids || []).filter(Boolean)
+        if (oids.length === 0) { clearGuard(); return finish({ success: false, error: 'Keine OID(s) für get.' }) }
+        session.get(oids, (error: Error | null, varbinds: Array<{ oid: string; type: number; value: unknown }>) => {
+          clearGuard()
+          if (error) return finish({ success: false, error: error.message })
+          const out = (varbinds || []).map(vb => ({
+            oid: vb.oid,
+            type: snmp.isVarbindError(vb) ? 'error' : typeName(vb.type),
+            value: snmp.isVarbindError(vb) ? snmp.varbindError(vb) : vbVal(vb),
+          }))
+          finish({ success: true, varbinds: out })
+        })
+      } else if (opts.op === 'walk') {
+        const base = (opts.oid || '').trim()
+        if (!base) { clearGuard(); return finish({ success: false, error: 'Keine Basis-OID für walk.' }) }
+        const collected: { oid: string; type: string; value: string | number }[] = []
+        const feed = (varbinds: Array<{ oid: string; type: number; value: unknown }>) => {
+          for (const vb of varbinds) {
+            if (snmp.isVarbindError(vb)) continue
+            collected.push({ oid: vb.oid, type: typeName(vb.type), value: vbVal(vb) })
+          }
+        }
+        session.subtree(base, 20, feed, (error?: Error | null) => {
+          clearGuard()
+          if (error && collected.length === 0) return finish({ success: false, error: error.message })
+          // Fehler NACH Teilergebnissen: Daten zurückgeben, aber unvollständigen Walk signalisieren.
+          finish({ success: true, varbinds: collected, error: error ? `Unvollständiger Walk: ${error.message}` : undefined })
+        })
+      } else if (opts.op === 'set') {
+        const oid = (opts.oid || '').trim()
+        if (!oid) { clearGuard(); return finish({ success: false, error: 'Keine OID für set.' }) }
+        const type = opts.setType === 'OctetString' ? snmp.ObjectType.OctetString : snmp.ObjectType.Integer
+        const value = type === snmp.ObjectType.Integer ? Number(opts.setValue) : String(opts.setValue ?? '')
+        session.set([{ oid, type, value } as unknown as import('net-snmp').Varbind], (error: Error | null, varbinds: Array<{ oid: string; type: number; value: unknown }>) => {
+          clearGuard()
+          if (error) return finish({ success: false, error: error.message })
+          const out = (varbinds || []).map(vb => ({
+            oid: vb.oid,
+            type: snmp.isVarbindError(vb) ? 'error' : typeName(vb.type),
+            value: snmp.isVarbindError(vb) ? snmp.varbindError(vb) : vbVal(vb),
+          }))
+          finish({ success: true, varbinds: out })
+        })
+      } else {
+        clearGuard(); finish({ success: false, error: 'Unbekannte SNMP-Operation.' })
+      }
+    } catch (e) {
+      clearGuard(); finish({ success: false, error: e instanceof Error ? e.message : String(e) })
+    }
+  })
 })
 
 // ── ServiceNow Table-API über die SSO-Sitzung (Session-Cookie) ──────────────
@@ -767,7 +896,7 @@ ipcMain.handle('print:html', async (_e, html: string) => {
 })
 
 // ─── Presentation Mode IPC ──────────────────────────────────────────────────
-ipcMain.handle('presentation:open', (_e, opts?: { displayId?: number; previewPlaylistId?: string }) => {
+ipcMain.handle('presentation:open', (_e, opts?: { displayId?: number; previewPlaylistId?: string; autoClick?: boolean }) => {
   openPresentationWindow(opts)
   return { success: true }
 })
@@ -787,6 +916,53 @@ ipcMain.handle('presentation:listDisplays', () => {
     primary: d.id === primaryId,
     scaleFactor: d.scaleFactor,
   }))
+})
+
+// ─── Task-Manager als eigenständiges Fenster (je Ziel-Host) ─────────────────
+// Klon des Präsentationsfenster-Musters: gleiches Bundle, aber Hash "#taskmgr"
+// + Query "?host=<host>". Normales (framed, resizable) Fenster, damit das
+// Hauptfenster voll bedienbar bleibt. Ein Fenster pro Host (Map).
+const taskmgrWindows = new Map<string, BrowserWindow>()
+function openTaskManagerWindow(opts: { host: string; displayId?: number; admin?: boolean }) {
+  const host = (opts?.host || '').trim()
+  if (!host) return
+  const admin = opts?.admin ? '1' : '0'   // reale Admin-Rolle ins Fenster durchreichen (UI-Gate für Beenden/Neustart)
+  const key = host.toLowerCase()
+  const existing = taskmgrWindows.get(key)
+  if (existing && !existing.isDestroyed()) { existing.focus(); return }
+
+  const displays = electronScreen.getAllDisplays()
+  const primary = electronScreen.getPrimaryDisplay()
+  const requested = opts?.displayId != null ? displays.find(d => d.id === opts.displayId) : null
+  const target = requested ?? primary
+  const w = 1120, h = 760
+  const bx = target.bounds.x + Math.max(0, Math.floor((target.bounds.width - w) / 2))
+  const by = target.bounds.y + Math.max(0, Math.floor((target.bounds.height - h) / 2))
+
+  const win = new BrowserWindow({
+    x: bx, y: by, width: w, height: h, minWidth: 760, minHeight: 500,
+    title: `Task-Manager — ${host}`,
+    frame: true, autoHideMenuBar: true, backgroundColor: '#0b0f17',
+    webPreferences: {
+      preload: join(__dirname, 'preload.js'),
+      contextIsolation: true, nodeIntegration: false, sandbox: false,
+    },
+    show: false,
+  })
+  if (isDev) win.loadURL(`http://localhost:5173/?host=${encodeURIComponent(host)}&admin=${admin}#taskmgr`)
+  else win.loadFile(join(__dirname, '../dist/index.html'), { hash: 'taskmgr', query: { host, admin } })
+  win.once('ready-to-show', () => win.show())
+  win.on('closed', () => { taskmgrWindows.delete(key) })
+  taskmgrWindows.set(key, win)
+}
+
+ipcMain.handle('taskmgr:open', (_e, opts: { host: string; displayId?: number; admin?: boolean }) => {
+  openTaskManagerWindow(opts)
+  return { success: true }
+})
+ipcMain.handle('taskmgr:close', (_e, host?: string) => {
+  if (host) { const wnd = taskmgrWindows.get(host.toLowerCase()); if (wnd && !wnd.isDestroyed()) wnd.close() }
+  return { success: true }
 })
 
 // ─── Edge-Anzeige (SSO): URL in echtem Microsoft-Edge-Fenster (App-Modus) ─────
