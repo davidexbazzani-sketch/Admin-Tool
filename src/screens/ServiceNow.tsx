@@ -1,18 +1,21 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import {
   Ticket, RefreshCw, Loader2, Search, ExternalLink, Settings as SettingsIcon,
   CheckCircle2, AlertTriangle, Filter, ListFilter, Flag, Users2, X, Save,
-  LogIn, LogOut, ShieldCheck, KeyRound, Trash2, Eye, EyeOff,
+  LogIn, LogOut, ShieldCheck, KeyRound, Trash2, Eye, EyeOff, Plus,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
 import { ColumnFilter } from './UserOverview'
 import { PersonInfoButton } from '../components/person/PersonDossier'
+import { logDossierAction } from '../services/personDossier'
 import {
   loadConfig, saveConfig, isConfigured, listTickets, recordUrl, certDiag,
   login, logout, loadIntegrationAccount, saveIntegrationAccount, testConnection,
   instanceHost, isDevInstance,
-  DEFAULT_INSTANCE, type ServiceNowConfig, type SnTable, type SnTicket, type CertDiag,
+  createIncident, closeIncident, resolveSysUserSysId, resolveGroupSysId,
+  CLOSE_CODES, DEFAULT_ASSIGNMENT_GROUPS,
+  DEFAULT_INSTANCE, type ServiceNowConfig, type SnTable, type SnTicket, type CertDiag, type CloseState,
 } from '../services/servicenow'
 
 const TABLE_LABEL: Record<SnTable, string> = { incident: 'Incidents', task: 'Tasks' }
@@ -53,6 +56,7 @@ export default function ServiceNow() {
   const [search, setSearch] = useState('')
   const [limit, setLimit] = useState(100)
   const [onlyActive, setOnlyActive] = useState(true)
+  const [showCreate, setShowCreate] = useState(false)
   const [fState, setFState] = useState<Set<string>>(new Set())
   const [fPrio, setFPrio] = useState<Set<string>>(new Set())
   const [fGroup, setFGroup] = useState<Set<string>>(new Set())
@@ -328,6 +332,10 @@ export default function ServiceNow() {
             </button>
           ))}
         </div>
+        <button onClick={() => setShowCreate(v => !v)}
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold border ${showCreate ? 'border-primary bg-primary/10 text-foreground' : 'bg-primary text-primary-foreground border-primary hover:bg-primary/90'}`}>
+          <Plus size={13} />Neues Ticket
+        </button>
         <div className="relative w-64">
           <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Nummer, Beschreibung, Bearbeiter…"
@@ -351,6 +359,16 @@ export default function ServiceNow() {
         </label>
         <span className="ml-auto text-xs text-muted-foreground">{filtered.length} von {tickets.length}</span>
       </div>
+
+      {/* Ticket erstellen (& schließen) */}
+      {showCreate && cfg && (
+        <CreateTicketPanel
+          cfg={cfg} currentUser={currentUser}
+          groups={cfg.assignmentGroups?.length ? cfg.assignmentGroups : [...DEFAULT_ASSIGNMENT_GROUPS]}
+          onClose={() => setShowCreate(false)}
+          onDone={() => { void load() }}
+        />
+      )}
 
       {/* Inhalt */}
       {needsLogin && !loading ? (
@@ -421,6 +439,127 @@ export default function ServiceNow() {
           </table>
         </div>
       )}
+    </div>
+  )
+}
+
+// ── Panel: Incident erstellen (& schließen) ───────────────────────────────────
+function CreateTicketPanel({ cfg, currentUser, groups, onClose, onDone }: {
+  cfg: ServiceNowConfig; currentUser: string; groups: string[]; onClose: () => void; onDone: () => void
+}) {
+  const [caller, setCaller] = useState('')
+  const [shortDesc, setShortDesc] = useState('')
+  const [description, setDescription] = useState('')
+  const [group, setGroup] = useState(groups[0] ?? '')
+  const [assignee, setAssignee] = useState(currentUser)
+  const [closeState, setCloseState] = useState<CloseState>('Resolved')
+  const [closeCode, setCloseCode] = useState<string>(CLOSE_CODES[0])
+  const [busy, setBusy] = useState(false)
+  const [result, setResult] = useState<{ ok: boolean; text: ReactNode } | null>(null)
+
+  async function submit(close: boolean) {
+    if (!shortDesc.trim()) { setResult({ ok: false, text: 'Bitte eine Kurzbeschreibung eingeben.' }); return }
+    setBusy(true); setResult(null)
+    try {
+      const warn: string[] = []
+      let callerSysId: string | undefined
+      if (caller.trim()) {
+        const r = await resolveSysUserSysId(cfg, caller)
+        if (r.error) { setResult({ ok: false, text: r.error }); return }
+        callerSysId = r.sysId
+      }
+      let assignmentGroupSysId: string | undefined
+      if (group.trim()) {
+        const r = await resolveGroupSysId(cfg, group)
+        if (r.error) warn.push(r.error); else assignmentGroupSysId = r.sysId
+      }
+      let assignedToSysId: string | undefined
+      if (assignee.trim()) {
+        const r = await resolveSysUserSysId(cfg, assignee)
+        if (r.error) warn.push(`Bearbeiter: ${r.error}`); else assignedToSysId = r.sysId
+      }
+      const created = await createIncident(cfg, { shortDescription: shortDesc, description, callerSysId, assignmentGroupSysId, assignedToSysId })
+      if (!created.ok) { setResult({ ok: false, text: created.error || 'Erstellen fehlgeschlagen.' }); return }
+      let closedNote = ''
+      if (close && created.sysId) {
+        const c = await closeIncident(cfg, created.sysId, { state: closeState, closeCode, closeNotes: description || shortDesc })
+        closedNote = c.ok ? ` · ${closeState === 'Closed' ? 'geschlossen' : 'gelöst'}` : ` · Schließen fehlgeschlagen: ${c.error}`
+      }
+      if (caller.trim() && !caller.includes('@')) {
+        void logDossierAction(caller.trim(), undefined, `ServiceNow-Ticket ${created.number ?? ''} erstellt${close ? ' & geschlossen' : ''} — ${shortDesc.trim()}`, currentUser, 'ServiceNow')
+      }
+      const link = created.sysId ? recordUrl(cfg, 'incident', created.sysId) : ''
+      setResult({
+        ok: true,
+        text: (
+          <span className="inline-flex items-center gap-2 flex-wrap">
+            <span>Ticket <strong>{created.number ?? '(ohne Nr.)'}</strong> erstellt{closedNote}.</span>
+            {link && <button onClick={() => api().openExternal(link)} className="inline-flex items-center gap-1 text-blue-400 hover:underline"><ExternalLink size={12} />in ServiceNow öffnen</button>}
+            {warn.length > 0 && <span className="text-amber-300">· {warn.join(' · ')}</span>}
+          </span>
+        ),
+      })
+      setShortDesc(''); setDescription('')
+      onDone()
+    } catch (e) {
+      setResult({ ok: false, text: e instanceof Error ? e.message : String(e) })
+    } finally { setBusy(false) }
+  }
+
+  const inputCls = 'w-full px-2.5 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary'
+
+  return (
+    <div className="shrink-0 px-6 py-3 border-b border-border bg-muted/5">
+      <div className="flex items-center gap-2 mb-2">
+        <Ticket size={14} className="text-primary" />
+        <h3 className="text-sm font-semibold text-foreground">Neues Incident (im Namen des Users)</h3>
+        <button onClick={onClose} className="ml-auto p-1 rounded text-muted-foreground hover:text-foreground"><X size={15} /></button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <label className="text-[11px] text-muted-foreground">Betroffener Benutzer (Name oder E-Mail)
+          <input value={caller} onChange={e => setCaller(e.target.value)} placeholder="z. B. Max Mustermann / max@…" className={inputCls} />
+        </label>
+        <label className="text-[11px] text-muted-foreground">Bearbeiter (assigned_to)
+          <input value={assignee} onChange={e => setAssignee(e.target.value)} className={inputCls} />
+        </label>
+        <label className="text-[11px] text-muted-foreground md:col-span-2">Kurzbeschreibung *
+          <input value={shortDesc} onChange={e => setShortDesc(e.target.value)} placeholder="Kurz, was das Problem war" className={inputCls} />
+        </label>
+        <label className="text-[11px] text-muted-foreground md:col-span-2">Beschreibung / Arbeitsnotiz (auch Abschlussnotiz)
+          <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2} placeholder="Was wurde gemacht?" className={inputCls} />
+        </label>
+        <label className="text-[11px] text-muted-foreground">Assignment Group
+          <select value={group} onChange={e => setGroup(e.target.value)} className={inputCls}>
+            <option value="">— keine —</option>
+            {groups.map(g => <option key={g} value={g}>{g}</option>)}
+          </select>
+        </label>
+        <div className="grid grid-cols-2 gap-2">
+          <label className="text-[11px] text-muted-foreground">Abschluss
+            <select value={closeState} onChange={e => setCloseState(e.target.value as CloseState)} className={inputCls}>
+              <option value="Resolved">Resolved (gelöst)</option>
+              <option value="Closed">Closed (geschlossen)</option>
+            </select>
+          </label>
+          <label className="text-[11px] text-muted-foreground">Close Code
+            <select value={closeCode} onChange={e => setCloseCode(e.target.value)} className={inputCls}>
+              {CLOSE_CODES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </label>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 mt-3 flex-wrap">
+        <button onClick={() => submit(true)} disabled={busy}
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
+          {busy ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}Erstellen &amp; schließen
+        </button>
+        <button onClick={() => submit(false)} disabled={busy}
+          className="inline-flex items-center gap-1.5 px-3 py-2 text-sm rounded-md border border-border text-muted-foreground hover:text-foreground disabled:opacity-50">
+          <Plus size={14} />Nur erstellen
+        </button>
+        {result && <span className={`text-xs ${result.ok ? 'text-emerald-300' : 'text-red-300'}`}>{result.text}</span>}
+      </div>
+      <p className="text-[10px] text-muted-foreground mt-2">Läuft gegen die konfigurierte Instanz ({instanceHost(cfg) || cfg.instanceUrl}). Bei <strong>403</strong> fehlen dem Integrationskonto die Create/Update-Rechte auf incident (→ HCL).</p>
     </div>
   )
 }

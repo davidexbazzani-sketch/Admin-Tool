@@ -28,16 +28,17 @@ import {
   checkDns, checkReachability, enableWinRM, writeTempHtml, writeTempFile, writeTempFileUtf16, writeTempBinary,
   copyDashboardFiles, verifyDeployed, cleanupTemp,
   buildShortcutUrlFile, buildOpenFolderVbs, registerFolderProtocol, targetDirPath,
+  buildSelfServiceVbs, registerSelfServiceProtocol,
   DESKTOP_FILENAME, SHORTCUT_FILENAME,
 } from '../../services/onboardingDeploy'
-import type { FolderLink } from '../../services/onboarding'
+import type { FolderLink, SelfHelpTile } from '../../services/onboarding'
 import { isValidRemoteTarget } from '../../utils/remoteTarget'
 import { createLogger } from '../../utils/activityLogger'
 import { logDossierAction } from '../../services/personDossier'
 
 const log = createLogger('onboarding')
 
-type StepId = 'dns' | 'reach' | 'winrm' | 'copy' | 'handler' | 'verify'
+type StepId = 'dns' | 'reach' | 'winrm' | 'copy' | 'handler' | 'selfhelp' | 'verify'
 type StepStatus = 'pending' | 'running' | 'ok' | 'warn' | 'fail'
 interface StepState { status: StepStatus; message?: string }
 
@@ -47,12 +48,13 @@ const STEP_LABELS: Record<StepId, string> = {
   winrm: 'WinRM',
   copy: 'Kopieren',
   handler: 'Explorer-Handler',
+  selfhelp: 'Selbsthilfe',
   verify: 'Verifizieren',
 }
-const STEP_ORDER: StepId[] = ['dns', 'reach', 'winrm', 'copy', 'handler', 'verify']
+const STEP_ORDER: StepId[] = ['dns', 'reach', 'winrm', 'copy', 'handler', 'selfhelp', 'verify']
 
 function freshSteps(): Record<StepId, StepState> {
-  return { dns: { status: 'pending' }, reach: { status: 'pending' }, winrm: { status: 'pending' }, copy: { status: 'pending' }, handler: { status: 'pending' }, verify: { status: 'pending' } }
+  return { dns: { status: 'pending' }, reach: { status: 'pending' }, winrm: { status: 'pending' }, copy: { status: 'pending' }, handler: { status: 'pending' }, selfhelp: { status: 'pending' }, verify: { status: 'pending' } }
 }
 
 type PersonSource = 'employee' | 'ad'
@@ -142,6 +144,8 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
   const [resultMsg, setResultMsg] = useState<{ ok: boolean; text: string } | null>(null)
   // Ordner-Links aus den zuletzt geladenen Einstellungen (fuer den skf-ordner:-Handler)
   const folderLinksRef = useRef<FolderLink[]>([])
+  const selfHelpRef = useRef<SelfHelpTile[]>([])
+  const filmPathRef = useRef<string>('')
 
   // ── Daten laden ─────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -307,6 +311,9 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
       loadOnboardingSettings(), loadOnboardingMarkers(), getLogoDataUri(),
     ])
     folderLinksRef.current = settings.folderLinks
+    selfHelpRef.current = settings.selfHelpTiles ?? []
+    // Umgebende Anführungszeichen entfernen (Windows „Als Pfad kopieren" fügt sie an).
+    filmPathRef.current = (settings.filmPath || '').trim().replace(/^"+|"+$/g, '').trim()
 
     // Raum des Mitarbeiters automatisch in der Plan-Textebene suchen ("Dein Büro")
     let autoRoomPin: RoomHit | null = null
@@ -395,10 +402,20 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
         if (tmpVbs.ok && tmpVbs.path) { vbsTempPath = tmpVbs.path; temps.push(tmpVbs.path) }
       }
 
+      // Starter-VBS fuer die IT-Selbsthilfe (nur wenn Skript-/Passwort-Kacheln existieren)
+      let ssVbsTempPath = ''
+      const runnableTiles = selfHelpRef.current.filter(t => (t.type === 'skript' || t.type === 'programm') && (t.path || '').trim())
+      if (runnableTiles.length > 0) {
+        const tmpSsVbs = await writeTempFileUtf16(buildSelfServiceVbs(selfHelpRef.current), 'selfhelp', 'vbs')
+        if (tmpSsVbs.ok && tmpSsVbs.path) { ssVbsTempPath = tmpSsVbs.path; temps.push(tmpSsVbs.path) }
+      }
+
       for (const host of selectedHosts) {
         const failed = await deployToHost(host, {
           html: tmp.path, url: tmpUrl.path,
           ico: icoTempPath || undefined, vbs: vbsTempPath || undefined,
+          ssvbs: ssVbsTempPath || undefined,
+          filmSrc: filmPathRef.current || undefined,
         })
         if (failed) failHosts.push(host)
         else okHosts.push(host)
@@ -421,7 +438,7 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
   }
 
   /** Liefert true bei Fehlschlag. */
-  async function deployToHost(host: string, temps: { html: string; url: string; ico?: string; vbs?: string }): Promise<boolean> {
+  async function deployToHost(host: string, temps: { html: string; url: string; ico?: string; vbs?: string; ssvbs?: string; filmSrc?: string }): Promise<boolean> {
     // 1) DNS
     setStep(host, 'dns', { status: 'running' })
     const dns = await checkDns(host)
@@ -445,7 +462,7 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
 
     // 4) Kopieren: HTML+Icon+Handler in den Ordner, Verknuepfung (SKF-Icon) auf den Desktop
     setStep(host, 'copy', { status: 'running' })
-    const copy = await copyDashboardFiles(host, { html: temps.html, ico: temps.ico, url: temps.url, vbs: temps.vbs })
+    const copy = await copyDashboardFiles(host, { html: temps.html, ico: temps.ico, url: temps.url, vbs: temps.vbs, ssvbs: temps.ssvbs, filmSrc: temps.filmSrc })
     if (!copy.ok) { setStep(host, 'copy', { status: 'fail', message: copy.error }); return true }
     setStep(host, 'copy', { status: 'ok', message: `Verknüpfung „${SHORTCUT_FILENAME}“ auf dem Desktop · HTML in ${targetDirPath(host)}` })
 
@@ -458,6 +475,18 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
         : { status: 'warn', message: (reg.message || 'Registrierung fehlgeschlagen') + ' — Ordner-Links öffnen im Browser statt im Explorer.' })
     } else {
       setStep(host, 'handler', { status: 'ok', message: 'Keine Ordner-Links konfiguriert — übersprungen.' })
+    }
+
+    // 5b) IT-Selbsthilfe: Protokoll skf-fix: registrieren — nicht fatal
+    if (temps.ssvbs) {
+      setStep(host, 'selfhelp', { status: 'running' })
+      const reg = await registerSelfServiceProtocol(host)
+      const aktionen = selfHelpRef.current.filter(t => (t.type === 'skript' || t.type === 'programm') && (t.path || '').trim()).length
+      setStep(host, 'selfhelp', reg.ok
+        ? { status: 'ok', message: `Protokoll skf-fix: registriert (${aktionen} Aktionen)` }
+        : { status: 'warn', message: (reg.message || 'Registrierung fehlgeschlagen') + ' — Selbsthilfe-Kacheln reagieren nicht auf Klick.' })
+    } else {
+      setStep(host, 'selfhelp', { status: 'ok', message: 'Keine Skript-/Programm-Kacheln konfiguriert — übersprungen.' })
     }
 
     // 6) Verifizieren
@@ -641,16 +670,14 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
               <span className={`text-[10px] px-1.5 py-0.5 rounded-full border ${c.kind === 'manager' ? 'bg-blue-500/10 text-blue-300 border-blue-500/30' : c.kind === 'it' ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30' : 'bg-muted/30 text-muted-foreground border-border'}`}>
                 {KIND_BADGE[c.kind]}
               </span>
-              {c.kind === 'manager' && <span className="text-[10px] text-muted-foreground">wird immer angezeigt</span>}
+              {c.kind === 'manager' && <span className="text-[10px] text-muted-foreground">aus dem AD · optional</span>}
               <div className="ml-auto flex items-center gap-1">
                 <button onClick={() => moveContact(c.id, -1)} disabled={i === 0} title="Nach oben"
                   className="p-1 rounded text-muted-foreground hover:text-foreground disabled:opacity-30"><ChevronUp size={13} /></button>
                 <button onClick={() => moveContact(c.id, 1)} disabled={i === contacts.length - 1} title="Nach unten"
                   className="p-1 rounded text-muted-foreground hover:text-foreground disabled:opacity-30"><ChevronDown size={13} /></button>
-                {c.kind !== 'manager' && (
-                  <button onClick={() => removeContact(c.id)} title="Entfernen"
-                    className="p-1 rounded text-muted-foreground hover:text-red-400"><Trash2 size={13} /></button>
-                )}
+                <button onClick={() => removeContact(c.id)} title="Entfernen"
+                  className="p-1 rounded text-muted-foreground hover:text-red-400"><Trash2 size={13} /></button>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2">

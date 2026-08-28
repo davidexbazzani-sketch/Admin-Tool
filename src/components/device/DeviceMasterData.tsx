@@ -309,6 +309,8 @@ export function DeviceMasterData({ hostname, serial, onOpenPerson }: {
             <span className="inline-flex items-center gap-1">{assignedUser}{onOpenPerson && <PersonInfoButton name={assignedUser} sam={inv?.corpId} />}</span>
           </Row>)
           if (inv?.ip) rows.push(<Row key="iip" label="IP-Adresse" value={<span className="font-mono">{inv.ip}</span>} source="Inventar" />)
+          if (inv?.mac) rows.push(<Row key="imac" label="MAC-Adresse" value={<span className="font-mono">{inv.mac}</span>} source="Inventar (Scan)" />)
+          if (inv?.serial) rows.push(<Row key="isn" label="Seriennummer" value={<span className="font-mono">{inv.serial}</span>} source="Inventar (Scan)" />)
           if (inv?.category) rows.push(<Row key="cat" label="Kategorie" value={inv.category} source="Inventar" />)
           if (inv?.description) rows.push(<Row key="idesc" label="Standort/Notiz" value={inv.description} source="Inventar" />)
           if (inv?.department) rows.push(<Row key="dep" label="Abteilung (Nutzer)" value={inv.department} source="Inventar/AD" />)

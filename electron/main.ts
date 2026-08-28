@@ -7,6 +7,10 @@ import Store from 'electron-store'
 import { runPowerShell, killAllProcesses } from './powerShellRunner'
 import * as auth from './authManager'
 import * as ns from './networkStorage'
+import { registerKnowledgeSearchIpc } from './knowledgeSearchIpc'
+
+// Wissenssuche-IPC (knowledge:load / knowledge:status) einmalig registrieren.
+registerKnowledgeSearchIpc()
 
 // ========= WISSENSDATENBANK + GURU DEBUG =========
 try {
@@ -436,7 +440,7 @@ ipcMain.handle('snmp:query', async (_e, opts: {
   retries?: number
   setType?: 'Integer' | 'OctetString'   // set
   setValue?: string | number            // set
-}): Promise<{ success: boolean; error?: string; varbinds?: { oid: string; type: string; value: string | number }[] }> => {
+}): Promise<{ success: boolean; error?: string; varbinds?: { oid: string; type: string; value: string | number; hex?: string }[] }> => {
   const host = (opts?.host || '').trim()
   if (!host) return { success: false, error: 'Keine IP/Host angegeben.' }
   let snmp: typeof import('net-snmp')
@@ -460,6 +464,9 @@ ipcMain.handle('snmp:query', async (_e, opts: {
     if (v == null) return ''
     return String(v)
   }
+  // Rohbytes als Hex (z. B. ifPhysAddress = MAC) — der String-Wert wäre unbrauchbar.
+  const vbHex = (vb: { value: unknown }): string | undefined =>
+    Buffer.isBuffer(vb.value) ? (vb.value as Buffer).toString('hex') : undefined
 
   return await new Promise((resolve) => {
     let session: import('net-snmp').Session | null = null
@@ -487,17 +494,18 @@ ipcMain.handle('snmp:query', async (_e, opts: {
             oid: vb.oid,
             type: snmp.isVarbindError(vb) ? 'error' : typeName(vb.type),
             value: snmp.isVarbindError(vb) ? snmp.varbindError(vb) : vbVal(vb),
+            hex: snmp.isVarbindError(vb) ? undefined : vbHex(vb),
           }))
           finish({ success: true, varbinds: out })
         })
       } else if (opts.op === 'walk') {
         const base = (opts.oid || '').trim()
         if (!base) { clearGuard(); return finish({ success: false, error: 'Keine Basis-OID für walk.' }) }
-        const collected: { oid: string; type: string; value: string | number }[] = []
+        const collected: { oid: string; type: string; value: string | number; hex?: string }[] = []
         const feed = (varbinds: Array<{ oid: string; type: number; value: unknown }>) => {
           for (const vb of varbinds) {
             if (snmp.isVarbindError(vb)) continue
-            collected.push({ oid: vb.oid, type: typeName(vb.type), value: vbVal(vb) })
+            collected.push({ oid: vb.oid, type: typeName(vb.type), value: vbVal(vb), hex: vbHex(vb) })
           }
         }
         session.subtree(base, 20, feed, (error?: Error | null) => {
@@ -518,6 +526,7 @@ ipcMain.handle('snmp:query', async (_e, opts: {
             oid: vb.oid,
             type: snmp.isVarbindError(vb) ? 'error' : typeName(vb.type),
             value: snmp.isVarbindError(vb) ? snmp.varbindError(vb) : vbVal(vb),
+            hex: snmp.isVarbindError(vb) ? undefined : vbHex(vb),
           }))
           finish({ success: true, varbinds: out })
         })
@@ -616,12 +625,12 @@ ipcMain.handle('servicenow:certDiag', () => lastClientCertInfo)
 
 ipcMain.handle('servicenow:request', async (_e, opts: {
   instanceUrl: string
-  method?: 'GET' | 'PATCH'; table: string; sysId?: string
+  method?: 'GET' | 'POST' | 'PATCH'; table: string; sysId?: string
   query?: string; fields?: string; limit?: number; body?: unknown
   auth?: { user: string; pass: string }
 }): Promise<{ success: boolean; status?: number; data?: unknown; error?: string; needsLogin?: boolean }> => {
   try {
-    const method = opts.method === 'PATCH' ? 'PATCH' : 'GET'
+    const method = opts.method === 'PATCH' ? 'PATCH' : opts.method === 'POST' ? 'POST' : 'GET'
     const base = (opts.instanceUrl || '').trim().replace(/\/+$/, '')
     if (!base) return { success: false, error: 'Keine Instanz-URL konfiguriert.' }
     if (!/^https?:\/\//i.test(base)) return { success: false, error: 'Instanz-URL muss mit https:// beginnen.' }
@@ -791,16 +800,24 @@ ipcMain.handle('app:log', (_e, message: string) => {
 
 // Compose email: Outlook via ScheduledTask (UIPI bypass), falls back to mailto:
 ipcMain.handle('mail:compose', async (_e, opts: {
-  to: string; cc: string; subject: string; body: string; attachmentPath?: string
+  to: string; cc: string; subject: string; body: string; html?: boolean; attachmentPath?: string
 }) => {
   const { composeViaOutlookScheduledTask } = require('./outlookMailer') as typeof import('./outlookMailer')
   const result = await composeViaOutlookScheduledTask({
-    to: opts.to, cc: opts.cc, subject: opts.subject, body: opts.body, attachmentPath: opts.attachmentPath,
+    to: opts.to, cc: opts.cc, subject: opts.subject, body: opts.body, html: opts.html, attachmentPath: opts.attachmentPath,
   })
   if (result.success) return { success: true }
 
-  // Fallback to mailto: (no attachment support)
-  const url = `mailto:${encodeURIComponent(opts.to ?? '')}?cc=${encodeURIComponent(opts.cc ?? '')}&subject=${encodeURIComponent(opts.subject ?? '')}&body=${encodeURIComponent(opts.body ?? '')}`
+  // Fallback to mailto: (no attachment/HTML support -> HTML-Body auf Text reduzieren)
+  const plainBody = opts.html
+    ? (opts.body ?? '')
+        .replace(/<\s*(br|\/li|\/p|\/div|\/tr)\s*\/?>/gi, '\n')
+        .replace(/<a\b[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '$2: $1')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ')
+        .replace(/\n{3,}/g, '\n\n').trim()
+    : (opts.body ?? '')
+  const url = `mailto:${encodeURIComponent(opts.to ?? '')}?cc=${encodeURIComponent(opts.cc ?? '')}&subject=${encodeURIComponent(opts.subject ?? '')}&body=${encodeURIComponent(plainBody)}`
   shell.openExternal(url)
   return { success: false, fallback: true }
 })

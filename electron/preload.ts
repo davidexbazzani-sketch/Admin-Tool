@@ -55,7 +55,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   log: (message: string) => ipcRenderer.invoke('app:log', message),
 
   // Compose email via Outlook COM or mailto: fallback
-  composeEmail: (opts: { to: string; cc: string; subject: string; body: string; attachmentPath?: string }) =>
+  composeEmail: (opts: { to: string; cc: string; subject: string; body: string; html?: boolean; attachmentPath?: string }) =>
     ipcRenderer.invoke('mail:compose', opts),
 
   // App info
@@ -120,6 +120,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   wbGetArticle: (articleId: string) => ipcRenderer.invoke('wb:get-article', articleId),
   wbSearch: (query: string) => ipcRenderer.invoke('wb:search', query),
   wbEnsureGenerated: () => ipcRenderer.invoke('wb:ensure-generated'),
+
+  // ── Wissenssuche (MiniSearch-Volltextindex, Netzlaufwerk/lokal) ───────────
+  knowledgeLoad: (loadSensitive?: boolean) => ipcRenderer.invoke('knowledge:load', loadSensitive !== false),
+  knowledgeStatus: () => ipcRenderer.invoke('knowledge:status'),
 
   // ── System info ───────────────────────────────────────────────────────────
   getWindowsUsername: () => ipcRenderer.invoke('sys:getWindowsUsername'),

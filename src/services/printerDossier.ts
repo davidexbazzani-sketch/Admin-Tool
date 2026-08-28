@@ -47,6 +47,7 @@ export interface PrinterMasterData {
   location?: string
   // Netzwerk / Verwaltung
   ip?: string
+  mac?: string               // ausgelesene MAC-Adresse (Geräte-Scan, ARP im eigenen Subnetz)
   model?: string
   serial?: string
   assetTag?: string
@@ -116,6 +117,24 @@ export async function loadPrinterDossier(name: string): Promise<PrinterDossier |
 export async function savePrinterDossier(d: PrinterDossier, updatedBy: string): Promise<boolean> {
   const payload: PrinterDossier = { ...d, updatedBy, updatedAt: new Date().toISOString() }
   try { return await api().netWriteJson(`${DATA}/${fileSafe(d.key)}.json`, payload) } catch { return false }
+}
+
+/** IP → Druckername aus allen Dossiers (master.ip). Für die Zuordnung in der
+ *  VLAN-Übersicht (Drucker per IP mit dem Standort-Namen beschriften). */
+export async function loadAllPrinterIps(): Promise<Record<string, string>> {
+  const out: Record<string, string> = {}
+  try {
+    const files = await api().netListDir(DATA)
+    for (const f of files || []) {
+      if (!/\.json$/i.test(f)) continue
+      try {
+        const d = await api().netReadJson<PrinterDossier>(`${DATA}/${f}`)
+        const ip = (d?.master?.ip || '').trim()
+        if (ip && d?.printerName) out[ip] = d.printerName
+      } catch { /* nächstes */ }
+    }
+  } catch { /* kein Ordner */ }
+  return out
 }
 
 // ── Serialisierung je Drucker ────────────────────────────────────────────────

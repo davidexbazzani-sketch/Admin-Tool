@@ -67,6 +67,10 @@ interface AppState {
   employeeReminderCount: number
   setEmployeeReminderCount: (n: number) => void
 
+  // Server-Monitor: > 0 = so viele Server aktuell offline (Menüpunkt blinkt rot)
+  serverAlarmCount: number
+  setServerAlarmCount: (n: number) => void
+
   // Globaler Rot-Blink (z. B. Hardware-Inventur: Falsch-Scan)
   errorFlashActive: boolean
   errorFlashMessage: string
@@ -150,6 +154,9 @@ export const useAppStore = create<AppState>((set) => ({
 
   employeeReminderCount: 0,
   setEmployeeReminderCount: (employeeReminderCount) => set({ employeeReminderCount }),
+
+  serverAlarmCount: 0,
+  setServerAlarmCount: (serverAlarmCount) => set({ serverAlarmCount }),
 
   errorFlashActive: false,
   errorFlashMessage: '',

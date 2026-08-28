@@ -2,13 +2,16 @@ import { useState, useCallback, useRef } from 'react'
 import {
   Stethoscope, Play, ChevronDown, ChevronRight, Loader,
   CheckCircle, XCircle, AlertTriangle, Info, Zap, Download,
-  Shield, Wifi, HardDrive, Activity, Monitor, RefreshCw, Users, Clock, FileText,
+  Shield, Wifi, HardDrive, Activity, Monitor, RefreshCw, Users, Clock, FileText, Puzzle, Boxes, Wrench,
 } from 'lucide-react'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { api, type PSResult } from '../electronAPI'
 import { CATEGORIES } from '../utils/remoteCommands'
 import { DIAG_RULES, createFinding, type DiagFinding, type Severity } from '../utils/diagnosisMapping'
+import { exceptionText, interpretModule, buildRootCause, type DiagMarker } from '../utils/diagnosisAnalysis'
+import SapFehlersuche from '../sapCheck/SapFehlersuche'
+import SolidWorksDiagnose from '../swCheck/SolidWorksDiagnose'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -74,6 +77,7 @@ const AREAS = [
   { id: 'security', label: 'Sicherheit', icon: <Shield size={16} /> },
   { id: 'updates', label: 'Updates & Patches', icon: <Download size={16} /> },
   { id: 'software', label: 'Software-Probleme', icon: <Monitor size={16} /> },
+  { id: 'shell-ext', label: 'Shell-Erweiterungen', icon: <Puzzle size={16} /> },
   { id: 'performance', label: 'Performance', icon: <Zap size={16} /> },
   { id: 'profile', label: 'Benutzerprofil', icon: <Users size={16} /> },
 ]
@@ -91,6 +95,8 @@ const TIME_RANGES: { value: TimeRange; label: string }[] = [
 
 export default function PCDiagnosis() {
   const [hostname, setHostname] = useState('')
+  const [sapMode, setSapMode] = useState(false)
+  const [swMode, setSwMode] = useState(false)
   const [timeRange, setTimeRange] = useState<TimeRange>('7')
   const [phase, setPhase] = useState<Phase>('idle')
   const [areas, setAreas] = useState<AreaResult[]>([])
@@ -131,6 +137,16 @@ export default function PCDiagnosis() {
         severity, category: areaId, title, description: desc,
         causes: [], solution: '',
         skillId, skillCategory: skillCat, skillInput,
+      })
+    }
+
+    // Reicher Befund inkl. Ursachen/Lösung/rawData (rawData trägt Root-Cause-Marker).
+    const pushFinding = (f: { severity: Severity; title: string; description: string; causes?: string[]; solution?: string; skillId?: string; skillCategory?: string; skillInput?: string; rawData?: unknown }) => {
+      base.findings.push({
+        id: `dyn-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        severity: f.severity, category: areaId, title: f.title, description: f.description,
+        causes: f.causes ?? [], solution: f.solution ?? '',
+        skillId: f.skillId, skillCategory: f.skillCategory, skillInput: f.skillInput, rawData: f.rawData,
       })
     }
 
@@ -183,10 +199,15 @@ export default function PCDiagnosis() {
             `$r.svcCrashCount = $svcCrash.Count`,
             `$r.svcCrashDetails = @(Evt $svcCrash 5)`,
             ``,
-            `# Festplatten-E/A`,
-            `$diskErr = @($sys | Where-Object { $_.Id -in @(7,9,11,15,51,52,55,98,129,140,153,157) })`,
+            `# Festplatten-E/A — IMMER Provider + Event-ID (sonst False Positives, z.B. Event 129 vom Time-Service)`,
+            `$diskErr = @($sys | Where-Object { (($_.Id -in @(129,153)) -and ($_.ProviderName -match 'storahci|stornvme|iaStorA|iaStor|nvme')) -or (($_.Id -in @(7,11,51,98,153)) -and ($_.ProviderName -match '^disk$|Ntfs|volmgr|volsnap|Microsoft-Windows-Disk')) })`,
             `$r.diskErrCount = $diskErr.Count`,
             `$r.diskErrDetails = @(Evt $diskErr 5)`,
+            ``,
+            `# Zeitsynchronisation (Event 129 vom Time-Service ist KEIN Disk-Fehler)`,
+            `$timeErr = @($sys | Where-Object { ($_.ProviderName -match 'Time-Service|W32Time') -and ($_.Id -in @(129,131,134,144,50)) })`,
+            `$r.timeErrCount = $timeErr.Count`,
+            `$r.timeErrDetails = @(Evt $timeErr 3)`,
             ``,
             `# Netzwerk-Fehler`,
             `$netErr = @($sys | Where-Object { $_.ProviderName -match 'Tcpip|NDIS|Dhcp|DNS|NetBT|e1[a-z]express|igb|vmxnet' -and $_.Level -le 2 })`,
@@ -217,6 +238,35 @@ export default function PCDiagnosis() {
             `$r.appCrashCount = $appCrash.Count`,
             `$r.appCrashDetails = @(Evt $appCrash 5)`,
             ``,
+            `# App-Crash-Details (Event 1000, Provider 'Application Error') — Faulting Module parsen`,
+            `$crash1000 = @(Get-WinEvent -FilterHashtable @{LogName='Application';ProviderName='Application Error';Id=1000;StartTime=$start} -MaxEvents 1000 -EA SilentlyContinue)`,
+            `$r.crashDetails = @($crash1000 | ForEach-Object {`,
+            `  $p = $_.Properties`,
+            `  $code = ''`,
+            `  if ($p.Count -gt 6) { try { $code = ('0x{0:x8}' -f [uint32]$p[6].Value) } catch { $code = [string]$p[6].Value } }`,
+            `  [pscustomobject]@{`,
+            `    App = $(if($p.Count -gt 0){[string]$p[0].Value}else{''})`,
+            `    AppVer = $(if($p.Count -gt 1){[string]$p[1].Value}else{''})`,
+            `    Module = $(if($p.Count -gt 3){[string]$p[3].Value}else{''})`,
+            `    ModVer = $(if($p.Count -gt 4){[string]$p[4].Value}else{''})`,
+            `    Code = $code`,
+            `    ModPath = $(if($p.Count -gt 11){[string]$p[11].Value}else{''})`,
+            `    Time = $_.TimeCreated.ToString('o')`,
+            `  }`,
+            `})`,
+            ``,
+            `# WER ReportArchive/Queue — Faulting Module auch bei unvollstaendigem Event 1000`,
+            `$werDirs = @('C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportArchive','C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportQueue')`,
+            `$r.werReports = @(foreach ($wd in $werDirs) { if (Test-Path $wd) { Get-ChildItem $wd -Directory -EA SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 25 | ForEach-Object {`,
+            `  $wf = Join-Path $_.FullName 'Report.wer'`,
+            `  if (Test-Path $wf) {`,
+            `    $wc = Get-Content $wf -EA SilentlyContinue`,
+            `    $wapp=''; $wmod=''; $wcode=''`,
+            `    foreach ($wl in $wc) { if ($wl -match '^Sig\\[0\\]\\.Value=(.+)') { $wapp=$Matches[1] } elseif ($wl -match '^Sig\\[3\\]\\.Value=(.+)') { $wmod=$Matches[1] } elseif ($wl -match '^Sig\\[6\\]\\.Value=(.+)') { $wcode=$Matches[1] } }`,
+            `    if ($wapp) { [pscustomobject]@{ App=$wapp; Module=$wmod; Code=$wcode; Time=$_.LastWriteTime.ToString('o') } }`,
+            `  }`,
+            `} } })`,
+            ``,
             `# MSI-Fehler`,
             `$msiErr = @($app | Where-Object { $_.ProviderName -eq 'MsiInstaller' -and $_.Level -le 2 })`,
             `$r.msiErrCount = @($msiErr).Count`,
@@ -245,6 +295,14 @@ export default function PCDiagnosis() {
             `$taskErr = @(Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-TaskScheduler/Operational';Level=1,2;StartTime=$start} -MaxEvents 30 -EA SilentlyContinue)`,
             `$r.taskErrCount = @($taskErr).Count`,
             `$r.taskErrDetails = @(Evt $taskErr 3)`,
+            ``,
+            `# Aufgabenplaner: konkret fehlgeschlagene Tasks (Name + Ergebniscode, MS-Standard getrennt)`,
+            `$r.failedTasks = @(Get-ScheduledTask -EA SilentlyContinue | ForEach-Object {`,
+            `  $ti = $_ | Get-ScheduledTaskInfo -EA SilentlyContinue`,
+            `  if ($ti -and $ti.LastTaskResult -ne 0 -and $ti.LastTaskResult -ne 267009 -and $ti.LastTaskResult -ne 267011 -and $ti.LastTaskResult -ne 267014) {`,
+            `    [pscustomobject]@{ Name=$_.TaskName; Path=$_.TaskPath; Result=('0x{0:x8}' -f [uint32]$ti.LastTaskResult); IsMs=([bool]($_.TaskPath -like '\\Microsoft\\*')) }`,
+            `  }`,
+            `})`,
             ``,
             `# ── WHEA: Hardware-Fehler (CPU/RAM/PCIe, korrigiert & unkorrigiert) ──`,
             `$whea = @(Get-WinEvent -FilterHashtable @{LogName='System';ProviderName='Microsoft-Windows-WHEA-Logger';StartTime=$start} -MaxEvents 50 -EA SilentlyContinue)`,
@@ -278,9 +336,9 @@ export default function PCDiagnosis() {
             ``,
             `$r.days = $d`,
             `$r`,
-          ].join('\n'), 60000)
+          ].join('\n'), 90000)
 
-          base.checksRun = 19
+          base.checksRun = 22
           if (r.ok) {
             const d = safeParseJson(r.data) as Record<string, unknown> | null
             if (d) {
@@ -350,18 +408,88 @@ export default function PCDiagnosis() {
                 const svcDetails = Array.isArray(d.svcCrashDetails) ? (d.svcCrashDetails as Array<Record<string, unknown>>).map(e => String(e.Message || '')).slice(0, 3).join(' | ') : ''
                 addCustom('warning', `${d.svcCrashCount} Dienst-Abstürze`, svcDetails || 'Dienste sind unerwartet abgestürzt.', 'svc-restart', 'svc')
               } else base.checksOk++
-              // App-Abstürze
-              const crashCount = Number(d.appCrashCount)
-              if (crashCount > 5) {
-                const crashDetails = Array.isArray(d.appCrashDetails) ? (d.appCrashDetails as Array<Record<string, unknown>>).map(e => String(e.Message || '')).slice(0, 3).join(' | ') : ''
-                addCustom('warning', `${crashCount} Anwendungs-Abstürze`, crashDetails || `Programme sind ${crashCount}x abgestürzt.`, 'sfc', 'repair')
-              } else if (crashCount > 0) {
-                const crashDetails = Array.isArray(d.appCrashDetails) ? (d.appCrashDetails as Array<Record<string, unknown>>).map(e => `${e.Time}: ${e.Message}`).slice(0, 2).join(' | ') : ''
-                addCustom('info', `${crashCount} Anwendungs-Absturz(e)`, crashDetails || `Programme sind ${crashCount}x abgestürzt.`)
+              // App-Abstürze — gruppiert nach App → Modul → Ausnahmecode (aus Event 1000, sonst WER)
+              const crashRows = ((Array.isArray(d.crashDetails) && (d.crashDetails as unknown[]).length
+                ? d.crashDetails : (Array.isArray(d.werReports) ? d.werReports : [])) as Array<Record<string, unknown>>)
+              if (crashRows.length > 0) {
+                const appTotals = new Map<string, number>()
+                const groups = new Map<string, { app: string; module: string; code: string; path: string; count: number }>()
+                for (const c of crashRows) {
+                  const app = (String(c.App || '').trim()) || '(unbekannt)'
+                  const mod = (String(c.Module || '').trim()) || '(unbekannt)'
+                  const code = String(c.Code || '').trim().toLowerCase()
+                  const path = String(c.ModPath || '')
+                  appTotals.set(app.toLowerCase(), (appTotals.get(app.toLowerCase()) || 0) + 1)
+                  const key = `${app.toLowerCase()}|${mod.toLowerCase()}|${code}`
+                  const g = groups.get(key) ?? { app, module: mod, code, path, count: 0 }
+                  g.count++
+                  if (!g.path && path) g.path = path
+                  groups.set(key, g)
+                }
+                const sorted = [...groups.values()].sort((a, b) => b.count - a.count)
+                const TOP = 8
+                for (const g of sorted.slice(0, TOP)) {
+                  const appTotal = appTotals.get(g.app.toLowerCase()) || g.count
+                  const sev: Severity = appTotal >= 10 ? 'critical' : 'warning'   // 10+ derselben App in 7 Tagen = FEHLER
+                  const codeTxt = exceptionText(g.code)
+                  const mi = interpretModule(g.module, g.path)
+                  const isExplorer = /explorer\.exe/i.test(g.app)
+                  const desc = [
+                    mi.hint,
+                    isExplorer ? 'Jeder Explorer-Crash startet Taskleiste/Desktop neu → Nutzer-Symptom: Flackern / kurzes Verschwinden der Taskleiste.' : '',
+                  ].filter(Boolean).join(' ')
+                  pushFinding({
+                    severity: sev,
+                    title: `${g.app} → ${g.module}${g.code ? ` (${g.code}${codeTxt ? ' ' + codeTxt : ''})` : ''} — ${g.count}×`,
+                    description: desc || `${g.app} ist ${g.count}× abgestürzt (Modul ${g.module}).`,
+                    causes: mi.hint ? [mi.hint] : [],
+                    solution: mi.solution || 'Betroffene App/Treiber aktualisieren; bei generischem Modul Heap/RAM/Disk prüfen.',
+                    skillId: mi.kind === 'generic' ? 'sfc' : undefined, skillCategory: mi.kind === 'generic' ? 'repair' : undefined,
+                    rawData: { kind: 'crash', app: g.app, module: g.module, code: g.code, count: g.count, moduleKind: mi.kind },
+                  })
+                }
+                if (sorted.length > TOP) addCustom('info', `… und ${sorted.length - TOP} weitere Crash-Gruppen`, 'Weitere App/Modul-Kombinationen mit weniger Abstürzen (siehe Rohdaten).')
+                // Zeitliche Verteilung (Muster erkennen: nur nach Boot? nur nach Docking?)
+                const perDay = new Map<string, number>()
+                const perHour = new Array(24).fill(0)
+                for (const c of crashRows) {
+                  const t = new Date(String(c.Time || ''))
+                  if (!isNaN(t.getTime())) { const day = t.toLocaleDateString('de-DE'); perDay.set(day, (perDay.get(day) || 0) + 1); perHour[t.getHours()]++ }
+                }
+                const dayLines = [...perDay.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([day, n]) => `${day}: ${n}`).join('  ·  ')
+                const maxH = Math.max(1, ...perHour)
+                const hourBars = perHour.map((n, hh) => n > 0 ? `${String(hh).padStart(2, '0')}h ${'█'.repeat(Math.max(1, Math.round(n / maxH * 12)))} ${n}` : '').filter(Boolean).join('\n')
+                pushFinding({
+                  severity: 'info',
+                  title: `Crash-Zeitverteilung (${crashRows.length} Crashes in ${d.days} Tagen)`,
+                  description: `Pro Tag:\n${dayLines}\n\nNach Tageszeit:\n${hourBars}`,
+                  causes: [], solution: 'Muster erkennen: nur nach Boot? nur nach Docking? nur zu bestimmten Zeiten? → gezielt weiter eingrenzen.',
+                })
+              } else if (Number(d.appCrashCount) > 0) {
+                addCustom(Number(d.appCrashCount) > 5 ? 'warning' : 'info', `${d.appCrashCount} Anwendungs-Absturz/-Abstürze`, 'Keine Event-1000-Detaildaten (Faulting Module) verfügbar.', 'sfc', 'repair')
               } else base.checksOk++
-              // Festplatten-E/A
-              if (Number(d.diskErrCount) > 0) addFinding('evt-11')
-              else base.checksOk++
+              // Festplatten-E/A (jetzt Provider-gefiltert → echte Disk-Fehler)
+              if (Number(d.diskErrCount) > 0) {
+                pushFinding({
+                  severity: 'critical',
+                  title: `${d.diskErrCount} echte Festplatten-E/A-Fehler (Controller/NTFS)`,
+                  description: 'Der Datenträger-Controller oder das Dateisystem meldet I/O-Fehler (storahci/stornvme/disk/Ntfs/volmgr). Deutet auf einen defekten Datenträger, ein loses Kabel/Dock oder Dateisystem-Beschädigung.',
+                  causes: ['Defekte SSD/HDD', 'Loses/defektes Kabel oder Dock-Port', 'Dateisystem-Beschädigung'],
+                  solution: 'SMART prüfen (siehe Hardware), CHKDSK ausführen, ggf. Datenträger tauschen.',
+                  skillId: 'chkdskrun', skillCategory: 'disk',
+                  rawData: { kind: 'disk-event', count: Number(d.diskErrCount) },
+                })
+              } else base.checksOk++
+              // Zeitsynchronisation (NTP/Domänen-Peer) — vorher fälschlich als Disk-Fehler gezählt
+              if (Number(d.timeErrCount) > 0) {
+                pushFinding({
+                  severity: 'warning',
+                  title: `${d.timeErrCount} Zeitsynchronisations-Fehler (W32Time/NTP)`,
+                  description: 'Der Zeitdienst konnte den NTP-/Domänen-Peer nicht erreichen. Kann Kerberos-Anmeldung und Zertifikatsprüfungen stören.',
+                  causes: ['NTP-/Domänencontroller nicht erreichbar', 'Firewall blockt UDP 123', 'Zeitquelle falsch konfiguriert'],
+                  solution: 'w32tm /query /status prüfen; Zeitquelle/DC-Erreichbarkeit prüfen, dann w32tm /resync.',
+                })
+              } else base.checksOk++
               // Netzwerk-Fehler
               if (Number(d.netErrCount) > 3) addCustom('warning', `${d.netErrCount} Netzwerk-Fehler in der Ereignisanzeige`, 'Netzwerkadapter oder TCP/IP-Stack Probleme erkannt.', 'flushdns', 'net')
               else base.checksOk++
@@ -391,11 +519,24 @@ export default function PCDiagnosis() {
               if (Number(d.msiErrCount) > 0) addCustom('info', `${d.msiErrCount} Installations-/MSI-Fehler`, 'Software-Installationen oder Updates hatten Probleme.')
               else base.checksOk++
               // NTFS-Fehler
-              if (Number(d.ntfsErrCount) > 0) addCustom('critical', `${d.ntfsErrCount} NTFS-Dateisystem-Fehler`, 'Dateisystem-Beschädigung erkannt — CHKDSK empfohlen.', 'chkdskrun', 'diskmgmt')
+              if (Number(d.ntfsErrCount) > 0) addCustom('critical', `${d.ntfsErrCount} NTFS-Dateisystem-Fehler`, 'Dateisystem-Beschädigung erkannt — CHKDSK empfohlen.', 'chkdskrun', 'disk')
               else base.checksOk++
-              // Task-Scheduler Fehler
-              if (Number(d.taskErrCount) > 3) addCustom('info', `${d.taskErrCount} Aufgabenplaner-Fehler`, 'Geplante Aufgaben sind fehlgeschlagen.')
-              else base.checksOk++
+              // Aufgabenplaner: konkrete fehlgeschlagene Tasks (Name + Code), MS-Standard getrennt
+              const failedTasks = Array.isArray(d.failedTasks) ? (d.failedTasks as Array<Record<string, unknown>>) : []
+              if (failedTasks.length > 0) {
+                const relevant = failedTasks.filter(t => !t.IsMs)
+                const msTasks = failedTasks.filter(t => t.IsMs)
+                const listOf = (arr: Array<Record<string, unknown>>) => arr.slice(0, 15).map(t => `${String(t.Path || '')}${String(t.Name || '')} → ${String(t.Result || '')}`).join('\n')
+                pushFinding({
+                  severity: relevant.length > 0 ? 'warning' : 'info',
+                  title: `${failedTasks.length} Aufgabenplaner-Task(s) mit Fehler${relevant.length ? ` (${relevant.length} relevant, ${msTasks.length} MS-Standard)` : ''}`,
+                  description: `${relevant.length ? `Relevant:\n${listOf(relevant)}\n\n` : ''}${msTasks.length ? `Microsoft-Standard (meist unkritisch, z. B. NGEN/CEIP):\n${listOf(msTasks)}` : ''}`.trim(),
+                  causes: ['Fehlkonfigurierte/veraltete geplante Aufgabe', 'Fehlender Pfad oder fehlende Rechte'],
+                  solution: 'Ergebniscode je Task prüfen (schtasks /query /v). Relevante Tasks reparieren; MS-Standard-Tasks sind meist ignorierbar.',
+                })
+              } else if (Number(d.taskErrCount) > 3) {
+                addCustom('info', `${d.taskErrCount} Aufgabenplaner-Ereignisse (Log)`, 'Ereignisse im TaskScheduler-Log — keine Tasks mit hartem Fehlercode gefunden.')
+              } else base.checksOk++
               // Gesamt System+App Fehler als Info
               const totalErr = Number(d.sysErrors) + Number(d.appErrors)
               if (totalErr > 50) addCustom('info', `${totalErr} Fehler-Einträge gesamt (System: ${d.sysErrors}, Apps: ${d.appErrors})`, `In den letzten ${d.days} Tagen.`)
@@ -406,16 +547,20 @@ export default function PCDiagnosis() {
 
         case 'hardware': {
           const r = await runRemote(h, [
-            `$disk = Get-PhysicalDisk | Select FriendlyName,HealthStatus,Size`,
+            `# SMART direkt erheben (PhysicalDisk + Reliability-Counter)`,
+            `$smart = @(Get-PhysicalDisk -EA SilentlyContinue | ForEach-Object {`,
+            `  $rc = $_ | Get-StorageReliabilityCounter -EA SilentlyContinue`,
+            `  [pscustomobject]@{ Name=[string]$_.FriendlyName; Media=[string]$_.MediaType; Health=[string]$_.HealthStatus; Op=(@($_.OperationalStatus) -join ','); Wear=$rc.Wear; ReadErr=$rc.ReadErrorsUncorrected; WriteErr=$rc.WriteErrorsUncorrected; Temp=$rc.Temperature }`,
+            `})`,
             `$vol = Get-Volume | Where DriveLetter | Select DriveLetter,Size,SizeRemaining`,
-            `$devErr = Get-PnpDevice | Where ConfigManagerErrorCode -ne 0 | Select FriendlyName,ConfigManagerErrorCode`,
+            `$devErr = Get-PnpDevice -EA SilentlyContinue | Where ConfigManagerErrorCode -ne 0 | Select FriendlyName,ConfigManagerErrorCode,Status,Class`,
             `$os = Get-CimInstance Win32_OperatingSystem`,
             `$cpu = (Get-CimInstance Win32_Processor).LoadPercentage`,
             `$ramTotal = [math]::Round($os.TotalVisibleMemorySize/1MB,1)`,
             `$ramFree = [math]::Round($os.FreePhysicalMemory/1MB,1)`,
             `$ramPct = [math]::Round(($ramTotal-$ramFree)/$ramTotal*100,0)`,
             `@{`,
-            `  disks = @($disk)`,
+            `  smart = @($smart)`,
             `  volumes = @($vol | ForEach-Object { @{Letter=$_.DriveLetter;SizeGB=[math]::Round($_.Size/1GB,1);FreeGB=[math]::Round($_.SizeRemaining/1GB,1);FreePct=if($_.Size -gt 0){[math]::Round($_.SizeRemaining/$_.Size*100,1)}else{0}} })`,
             `  deviceErrors = @($devErr)`,
             `  cpuPct = $cpu`,
@@ -423,27 +568,65 @@ export default function PCDiagnosis() {
             `  ramTotal = $ramTotal`,
             `  ramFree = $ramFree`,
             `}`,
-          ].join('\n'))
-          base.checksRun = 5
+          ].join('\n'), 45000)
+          base.checksRun = 6
           if (r.ok) {
             const d = safeParseJson(r.data) as Record<string, unknown> | null
             if (d) {
               base.rawOutput = JSON.stringify(d, null, 2)
-              const disks = d.disks as Array<Record<string, unknown>> ?? []
-              for (const dk of disks) {
-                if (dk.HealthStatus && String(dk.HealthStatus) !== 'Healthy') addFinding('hw-disk-unhealthy', String(dk.FriendlyName), dk)
+              // ── SMART-Bewertung ──
+              const smart = (d.smart as Array<Record<string, unknown>>) ?? []
+              for (const s of smart) {
+                const name = String(s.Name || 'Datenträger')
+                const health = String(s.Health || '')
+                const readErr = Number(s.ReadErr) || 0
+                const writeErr = Number(s.WriteErr) || 0
+                const wear = s.Wear != null ? Number(s.Wear) : NaN
+                const temp = s.Temp != null ? Number(s.Temp) : NaN
+                if ((health && health !== 'Healthy') || readErr > 0 || writeErr > 0) {
+                  pushFinding({
+                    severity: 'critical',
+                    title: `Datenträger tauschen: ${name}`,
+                    description: `SMART: HealthStatus=${health || '?'}, unkorrigierte Lesefehler=${readErr}, Schreibfehler=${writeErr}${!isNaN(wear) ? `, Wear=${wear}%` : ''}${!isNaN(temp) ? `, Temp=${temp}°C` : ''}.`,
+                    causes: ['Defekte Sektoren / Controller-Fehler', 'SSD am Lebensende (Wear)', 'Überhitzung'],
+                    solution: 'Daten sichern und Datenträger tauschen. (Uncorrected-Errors bzw. Health≠Healthy sind ein klares Austausch-Signal.)',
+                    rawData: { kind: 'smart-bad', name },
+                  })
+                } else if (!isNaN(wear) && wear >= 80) {
+                  pushFinding({ severity: 'warning', title: `SSD-Verschleiß hoch: ${name} (${wear}%)`, description: 'Die SSD nähert sich dem Lebensende (Wear-Level). Austausch mittelfristig einplanen.', causes: ['Hohe Schreiblast über die Lebensdauer'], solution: 'Austausch planen, wichtige Daten sichern.' })
+                } else if (!isNaN(temp) && temp >= 60) {
+                  pushFinding({ severity: 'info', title: `Datenträger-Temperatur hoch: ${name} (${temp}°C)`, description: 'Erhöhte Temperatur — Belüftung/Kühlung prüfen.', causes: ['Schlechte Belüftung'], solution: 'Lüftung/Kühlung prüfen.' })
+                } else base.checksOk++
               }
+              if (smart.length === 0) base.checksOk++
+              // ── Volumes (Speicherplatz) ──
               const vols = d.volumes as Array<Record<string, unknown>> ?? []
               for (const v of vols) {
                 const pct = Number(v.FreePct)
                 if (pct < 5) addCustom('critical', `Festplatte ${v.Letter}: kritisch voll (${pct}% frei)`, 'Weniger als 5% freier Speicher!', 'wintemp', 'disk')
                 else if (pct < 10) addCustom('warning', `Festplatte ${v.Letter}: fast voll (${pct}% frei)`, 'Weniger als 10% freier Speicher.', 'wintemp', 'disk')
               }
-              const devErrs = d.deviceErrors as Array<Record<string, unknown>> ?? []
-              if (devErrs.length > 0) addCustom('warning', `${devErrs.length} Gerät(e) mit Treiber-Fehler`, devErrs.map(e => String(e.FriendlyName)).join(', '), 'deverror', 'devmgr')
+              // ── Geräte-Fehler: Phantom (Code 45) ausblenden, echte Codes priorisiert, Unknown USB separat ──
+              const CM_TEXT: Record<number, string> = { 10: 'startet nicht', 28: 'kein Treiber installiert', 31: 'Treiber-Fehler', 37: 'Treiber-Init fehlgeschlagen', 39: 'Treiber beschädigt/fehlt', 43: 'Gerät gestoppt (Fehler gemeldet)', 52: 'Treibersignatur-Problem' }
+              const devErrs = (d.deviceErrors as Array<Record<string, unknown>>) ?? []
+              const phantom = devErrs.filter(e => Number(e.ConfigManagerErrorCode) === 45)
+              const unknownUsb = devErrs.filter(e => /unknown usb device|device descriptor request failed|port reset failed/i.test(String(e.FriendlyName || '')) && Number(e.ConfigManagerErrorCode) !== 45)
+              const realErrs = devErrs.filter(e => Number(e.ConfigManagerErrorCode) !== 45 && !unknownUsb.includes(e))
+              if (realErrs.length > 0) {
+                const list = realErrs.slice(0, 20).map(e => { const c = Number(e.ConfigManagerErrorCode); return `${String(e.FriendlyName || '?')} (Code ${c}${CM_TEXT[c] ? ': ' + CM_TEXT[c] : ''})` }).join('\n')
+                const hasHard = realErrs.some(e => [10, 28, 39, 43].includes(Number(e.ConfigManagerErrorCode)))
+                pushFinding({ severity: hasHard ? 'critical' : 'warning', title: `${realErrs.length} Gerät(e) mit echtem Treiber-Fehler`, description: list, causes: ['Fehlender/beschädigter Treiber', 'Gerät vom System gestoppt'], solution: 'Im Geräte-Manager Treiber aktualisieren/neu installieren; Code 43 → Gerät aus-/einstecken oder ersetzen.', skillId: 'deverror', skillCategory: 'devmgr' })
+              } else base.checksOk++
+              if (unknownUsb.length > 0) {
+                pushFinding({ severity: 'warning', title: `${unknownUsb.length}× „Unknown USB Device" (Descriptor/Port-Reset fehlgeschlagen)`, description: unknownUsb.slice(0, 10).map(e => String(e.FriendlyName || '')).join('\n'), causes: ['Defektes USB-Gerät', 'Defektes Kabel', 'Defekter Dock-/USB-Port'], solution: 'Gerät an anderem Port/Kabel testen; Dock-Port prüfen; defektes Gerät ersetzen.' })
+              }
+              if (phantom.length > 0) {
+                addCustom('info', `${phantom.length} Phantom-Geräte ausgeblendet (aktuell nicht angeschlossen)`, `ConfigManagerErrorCode 45 = nicht verbundene Geräte (bei Dock-Nutzern normal). Ausgeblendet:\n${phantom.slice(0, 30).map(e => String(e.FriendlyName || '')).join('\n')}${phantom.length > 30 ? `\n… und ${phantom.length - 30} weitere` : ''}`)
+              }
               if (Number(d.ramPct) > 85) addFinding('hw-ram-high')
+              else base.checksOk++
               if (Number(d.cpuPct) > 80) addFinding('hw-cpu-high')
-              base.checksOk = base.checksRun - base.findings.length
+              else base.checksOk++
             }
           }
           break
@@ -581,7 +764,7 @@ export default function PCDiagnosis() {
             `  lastScan = if($def.LastFullScanEndTime -and $def.LastFullScanEndTime.Year -gt 2000){$def.LastFullScanEndTime.ToString('dd.MM.yyyy')}else{'Nie'}`,
             `}`,
           ].join('\n'))
-          base.checksRun = 4
+          base.checksRun = 5
           if (r.ok) {
             const d = safeParseJson(r.data) as Record<string, unknown> | null
             if (d) {
@@ -594,6 +777,10 @@ export default function PCDiagnosis() {
               else base.checksOk++
               if (d.blStatus !== 'On' && d.blStatus !== 'NotFound') addFinding('sec-bitlocker-off')
               else base.checksOk++
+              // „Nie gescannt" ist KEIN OK-Zustand
+              if (String(d.lastScan) === 'Nie') {
+                pushFinding({ severity: 'warning', title: 'Windows Defender: noch nie ein vollständiger Scan', description: 'Es ist kein vollständiger Antiviren-Scan protokolliert (LastFullScanEndTime leer). Der Schutzstatus ist damit unklar.', causes: ['Gerät neu / Defender nie voll gescannt', 'Scans deaktiviert oder durch Drittanbieter-AV ersetzt'], solution: 'Vollständigen Scan starten (Start-MpScan -ScanType FullScan) bzw. prüfen, ob ein Drittanbieter-AV aktiv ist.' })
+              } else base.checksOk++
             }
           }
           break
@@ -760,6 +947,65 @@ export default function PCDiagnosis() {
               const sizeMB = Number(d.profileSizeMB)
               if (sizeMB > 5000) { base.findings.push(createFinding(DIAG_RULES.find(r2 => r2.id === 'prof-large')!, `${Math.round(sizeMB / 1024)} GB`)) }
               else base.checksOk++
+            }
+          }
+          break
+        }
+
+        case 'shell-ext': {
+          const r = await runRemote(h, [
+            `$results = New-Object System.Collections.ArrayList`,
+            `$seen = @{}`,
+            `function AddClsid($clsid, $src) {`,
+            `  if (-not $clsid -or $seen.ContainsKey($clsid)) { return }`,
+            `  $seen[$clsid] = $true`,
+            `  $dll = ''`,
+            `  foreach ($root in @('HKLM:\\SOFTWARE\\Classes\\CLSID','HKLM:\\SOFTWARE\\WOW6432Node\\Classes\\CLSID','HKCU:\\SOFTWARE\\Classes\\CLSID')) {`,
+            `    $ip = Join-Path $root ($clsid + '\\InprocServer32')`,
+            `    if (Test-Path $ip) { $dll = (Get-ItemProperty $ip -EA SilentlyContinue).'(default)'; if ($dll) { break } }`,
+            `  }`,
+            `  $name = ''`,
+            `  foreach ($root in @('HKLM:\\SOFTWARE\\Classes\\CLSID','HKLM:\\SOFTWARE\\WOW6432Node\\Classes\\CLSID')) {`,
+            `    $np = Join-Path $root $clsid`,
+            `    if (Test-Path $np) { $name = (Get-ItemProperty $np -EA SilentlyContinue).'(default)'; if ($name) { break } }`,
+            `  }`,
+            `  $pub = ''`,
+            `  if ($dll) { $dllExp = [Environment]::ExpandEnvironmentVariables(($dll -replace '^"|"$','')); if (Test-Path $dllExp) { try { $sig = Get-AuthenticodeSignature $dllExp -EA SilentlyContinue; if ($sig.SignerCertificate) { $pub = $sig.SignerCertificate.Subject } } catch {} } }`,
+            `  $isMs = ($pub -match 'Microsoft Corporation|Microsoft Windows')`,
+            `  [void]$results.Add([pscustomobject]@{ Clsid=$clsid; Name=[string]$name; Dll=[string]$dll; Publisher=[string]$pub; IsMs=[bool]$isMs; Src=$src })`,
+            `}`,
+            `try { (Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved' -EA Stop).PSObject.Properties | Where-Object { $_.Name -match '^\\{' } | Select-Object -First 120 | ForEach-Object { AddClsid $_.Name 'Approved' } } catch {}`,
+            `$cmRoots = @('HKLM:\\SOFTWARE\\Classes\\*\\shellex\\ContextMenuHandlers','HKLM:\\SOFTWARE\\Classes\\AllFilesystemObjects\\shellex\\ContextMenuHandlers','HKLM:\\SOFTWARE\\Classes\\Directory\\shellex\\ContextMenuHandlers','HKLM:\\SOFTWARE\\Classes\\Directory\\Background\\shellex\\ContextMenuHandlers','HKLM:\\SOFTWARE\\Classes\\Folder\\shellex\\ContextMenuHandlers')`,
+            `foreach ($cr in $cmRoots) { try { Get-ChildItem $cr -EA SilentlyContinue | ForEach-Object { $v = (Get-ItemProperty $_.PSPath -EA SilentlyContinue).'(default)'; if ($v -match '^\\{') { AddClsid $v 'ContextMenu' } else { $sub = $_.PSChildName; if ($sub -match '^\\{') { AddClsid $sub 'ContextMenu' } } } } catch {} }`,
+            `@{ extensions = @($results); total = $results.Count; nonMs = @($results | Where-Object { -not $_.IsMs }).Count }`,
+          ].join('\n'), 60000)
+          base.checksRun = 1
+          if (r.ok) {
+            const d = safeParseJson(r.data) as Record<string, unknown> | null
+            if (d) {
+              const exts = (d.extensions as Array<Record<string, unknown>>) ?? []
+              const nonMs = exts.filter(e => !e.IsMs)
+              const ms = exts.filter(e => e.IsMs)
+              const fmtExt = (e: Record<string, unknown>) => `${String(e.Name || e.Clsid || '?')}  —  ${String(e.Publisher || 'unsigniert/unbekannt')}  [${String(e.Dll || '')}]`
+              base.rawOutput = [
+                `Shell-Erweiterungen: ${exts.length} gesamt, ${nonMs.length} Nicht-Microsoft`,
+                '',
+                '── Nicht-Microsoft (zuerst) ──',
+                ...nonMs.map(fmtExt),
+                '',
+                '── Microsoft ──',
+                ...ms.map(fmtExt),
+              ].join('\n')
+              if (nonMs.length > 0) {
+                pushFinding({
+                  severity: 'warning',
+                  title: `${nonMs.length} Nicht-Microsoft Shell-Erweiterung(en)`,
+                  description: `Dritt-Shell-Extensions sind bei Explorer-Abstürzen der häufigste Verursacher.\n\n${nonMs.slice(0, 25).map(fmtExt).join('\n')}${nonMs.length > 25 ? `\n… und ${nonMs.length - 25} weitere` : ''}`,
+                  causes: ['Fehlerhafte/veraltete Drittanbieter-Explorer-Erweiterung'],
+                  solution: 'Mit ShellExView die Nicht-Microsoft-Erweiterungen deaktivieren und einzeln wieder aktivieren, um den Verursacher zu finden.',
+                  rawData: { kind: 'shellext', name: String(nonMs[0].Name || nonMs[0].Clsid || ''), publisher: String(nonMs[0].Publisher || '') },
+                })
+              } else base.checksOk++
             }
           }
           break
@@ -1006,6 +1252,29 @@ export default function PCDiagnosis() {
     doc.text(`${ok} von ${total} Checks bestanden`, margin + 4, y + 11)
     doc.setTextColor(0, 0, 0)
     y += 20
+
+    // ── Wahrscheinliche Ursache (Root-Cause) ────────────────────────────
+    const pdfRoot = buildRootCause(
+      allF.map(f => f.rawData).filter((x): x is DiagMarker => !!x && typeof x === 'object' && 'kind' in (x as object)),
+    )
+    if (pdfRoot.length > 0) {
+      checkSpace(20)
+      doc.setFontSize(12)
+      doc.setFont('helvetica', 'bold')
+      doc.text('Wahrscheinliche Ursache', margin, y)
+      y += 5
+      autoTable(doc, {
+        startY: y,
+        margin: { left: margin, right: margin },
+        head: [['#', 'Hypothese', 'Nächste Schritte']],
+        body: pdfRoot.map((hyp, i) => [String(i + 1), hyp.title, hyp.steps.map(s => `• ${s}`).join('\n')]),
+        theme: 'grid',
+        headStyles: { fillColor: [30, 64, 175], textColor: 255, fontStyle: 'bold', fontSize: 8 },
+        bodyStyles: { fontSize: 8, valign: 'top' },
+        columnStyles: { 0: { cellWidth: 8 }, 1: { cellWidth: 65, fontStyle: 'bold' }, 2: { cellWidth: 'auto' } },
+      })
+      y = (doc as unknown as Record<string, unknown>).lastAutoTable ? ((doc as unknown as Record<string, { finalY: number }>).lastAutoTable.finalY + 8) : y + 40
+    }
 
     // ── Bereiche-Übersicht ──────────────────────────────────────────────
     doc.setFontSize(12)
@@ -1267,6 +1536,11 @@ export default function PCDiagnosis() {
   const doneAreas = areas.filter(a => a.status !== 'pending' && a.status !== 'running').length
   const sortedFindings = [...criticals, ...warnings, ...infos]
 
+  // Root-Cause-Korrelation aus den strukturierten Markern (rawData) der Befunde
+  const rootCause = buildRootCause(
+    allFindings.map(f => f.rawData).filter((x): x is DiagMarker => !!x && typeof x === 'object' && 'kind' in (x as object)),
+  )
+
   const overallColor = criticals.length > 0 ? 'text-red-400' : warnings.length > 0 ? 'text-amber-400' : 'text-emerald-400'
   const overallBg = criticals.length > 0 ? 'bg-red-500/10 border-red-500/30' : warnings.length > 0 ? 'bg-amber-500/10 border-amber-500/30' : 'bg-emerald-500/10 border-emerald-500/30'
 
@@ -1283,6 +1557,11 @@ export default function PCDiagnosis() {
   // Render
   // ══════════════════════════════════════════════════════════════════════
 
+  // Eigene, fokussierte SAP-Fehlersuche (Kachel) — überlagert die PC-Diagnose.
+  if (sapMode) return <SapFehlersuche onBack={() => setSapMode(false)} />
+  // SolidWorks-Diagnose (Kachel) — überlagert die PC-Diagnose.
+  if (swMode) return <SolidWorksDiagnose onBack={() => setSwMode(false)} />
+
   return (
     <div className="flex flex-col gap-5 h-full overflow-y-auto p-6">
       {/* Header */}
@@ -1294,6 +1573,24 @@ export default function PCDiagnosis() {
           Automatische Fehleranalyse — 9 Bereiche, 30+ Checks
         </p>
       </div>
+
+      {/* ── Fokus-Kacheln (nur in der Startphase) ─────────────────────────── */}
+      {phase === 'idle' && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl">
+          <div className="rounded-lg border border-primary/40 bg-primary/5 p-4">
+            <div className="flex items-center gap-2"><Stethoscope size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">Voll-Diagnose</span></div>
+            <p className="text-[11px] text-muted-foreground mt-1">Alle Bereiche &amp; Checks — unten Hostname eingeben und starten.</p>
+          </div>
+          <button onClick={() => setSapMode(true)} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
+            <div className="flex items-center gap-2"><Boxes size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">SAP Fehlersuche</span></div>
+            <p className="text-[11px] text-muted-foreground mt-1">Fokussiert auf SAP: Installation, Konfiguration, Netz/Kerberos, Logs, Edge — mit Vergleich &amp; Baseline.</p>
+          </button>
+          <button onClick={() => setSwMode(true)} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
+            <div className="flex items-center gap-2"><Wrench size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">SolidWorks Diagnose</span></div>
+            <p className="text-[11px] text-muted-foreground mt-1">Mehrere Workstations auf einmal (Typ/Status) oder Einzel-PC — Bestandsaufnahme + Lizenzserver, mit Sammel-Export.</p>
+          </button>
+        </div>
+      )}
 
       {/* ── Input + Start ──────────────────────────────────────────── */}
       {phase === 'idle' && (
@@ -1535,6 +1832,25 @@ export default function PCDiagnosis() {
             </div>
           </div>
 
+          {/* Wahrscheinliche Ursache (Root-Cause-Korrelation) */}
+          {rootCause.length > 0 && (
+            <div className="rounded-lg border border-primary/40 bg-primary/5 p-5">
+              <p className="text-sm font-bold text-foreground flex items-center gap-2 mb-2">
+                <Activity size={16} className="text-primary" />Wahrscheinliche Ursache
+              </p>
+              <ol className="space-y-2 list-decimal ml-5">
+                {rootCause.map((hyp, i) => (
+                  <li key={i} className="text-sm">
+                    <span className="font-semibold text-foreground">{hyp.title}</span>
+                    <ul className="list-disc ml-5 mt-0.5 text-xs text-muted-foreground space-y-0.5">
+                      {hyp.steps.map((s, j) => <li key={j}>{s}</li>)}
+                    </ul>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
           {/* Findings list */}
           {sortedFindings.length > 0 && (
             <div className="bg-card rounded-lg border border-border overflow-hidden">
@@ -1565,7 +1881,7 @@ export default function PCDiagnosis() {
                       </div>
                       {expanded && (
                         <div className="mt-2 ml-6 space-y-1.5 text-xs">
-                          <p className="text-muted-foreground">{f.description}</p>
+                          <p className="text-muted-foreground whitespace-pre-wrap">{f.description}</p>
                           {f.causes.length > 0 && (
                             <div>
                               <p className="font-semibold text-foreground">Mögliche Ursachen:</p>

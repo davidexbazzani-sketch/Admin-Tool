@@ -4,7 +4,7 @@ import {
   ChevronRight, UserSearch, Users, FileText, MapPin, Clock,
   Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen, Package, Stethoscope, PackagePlus, MonitorPlay, PhoneCall,
   Building2, Network, ClipboardList, FolderKanban, ScanSearch, Wifi, CalendarClock, Boxes, Cable, UserPlus, ChevronDown, MonitorSmartphone, Ticket,
-  DatabaseBackup, BatteryCharging, Rocket, Radar,
+  DatabaseBackup, BatteryCharging, Rocket, Radar, Cpu, Server, HardDriveDownload,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
@@ -20,6 +20,7 @@ import { parseMenuVisibility, computeMenuVisible } from '../utils/menuVisibility
 // Icons je Menüpunkt (Datenliste kommt aus dem zentralen menuCatalog).
 const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'home': <Home size={18} />,
+  'gpu-driver-mgmt': <Cpu size={18} />,
   'location-overview': <MapPin size={18} />,
   'access-points': <Wifi size={18} />,
   'departments-overview': <Building2 size={18} />,
@@ -35,6 +36,7 @@ const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'pc-diagnosis': <Stethoscope size={18} />,
   'employee-management': <UserPlus size={18} />,
   'onboarding': <Rocket size={18} />,
+  'treiber-installation': <HardDriveDownload size={18} />,
   'servicenow': <Ticket size={18} />,
   'endpoint-devices': <MonitorSmartphone size={18} />,
   'infra-marine': <Shield size={18} />,
@@ -55,6 +57,8 @@ const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'trickbox': <Wrench size={18} />,
   'pdf-tools': <FileText size={18} />,
   'knowledge-base': <BookOpen size={18} />,
+  'knowledge-search': <ScanSearch size={18} />,
+  'server': <Server size={18} />,
   'it-guru': <Lightbulb size={18} />,
   'results': <BarChart3 size={18} />,
   'settings': <Settings size={18} />,
@@ -98,6 +102,8 @@ export default function Sidebar() {
   const isMaster  = useIsMasterAdmin()
   const isAdmin   = useIsAdmin()
   const user      = session?.user
+  // Geschützter Gründer-Master (Davidxe): ihm kann nichts ausgeblendet werden.
+  const isFounder = !!user?.isFounder || (user?.username?.toLowerCase() === 'davidxe')
 
   // Per-user override: when present, replaces global hiddenMenuIds for this user.
   const [userOverride, setUserOverride] = useState<Set<string> | null>(null)
@@ -158,6 +164,7 @@ export default function Sidebar() {
   const radarScanning = useRadarStore(s => s.scanning)
   const licensesAlarmCount = useAppStore(s => s.licensesAlarmCount)
   const employeeReminderCount = useAppStore(s => s.employeeReminderCount)
+  const serverAlarmCount = useAppStore(s => s.serverAlarmCount)
 
   // Global never-hide list (so master admin can never lock themself out).
   // Per-user overrides take precedence over this and can hide everything —
@@ -172,6 +179,7 @@ export default function Sidebar() {
     return computeMenuVisible(item.id, {
       isAdmin,
       isMaster,
+      isFounder,
       userOverride,
       hidden: hiddenMenuIds,
       minRole: menuMinRole,
@@ -197,13 +205,15 @@ export default function Sidebar() {
     let n = 0
     if (items.some(i => i.id === 'licenses')) n += licensesAlarmCount
     if (items.some(i => i.id === 'employee-management')) n += employeeReminderCount
+    if (items.some(i => i.id === 'server')) n += serverAlarmCount
     return n
   }
 
   // Eine einzelne Menue-Schaltflaeche (oben/unten oder innerhalb einer Kategorie)
   function renderItem(item: NavItem, indented: boolean) {
     const active = screen === item.id
-    const alarmActive = item.id === 'licenses' && licensesAlarmCount > 0
+    const alarmCount = item.id === 'licenses' ? licensesAlarmCount : item.id === 'server' ? serverAlarmCount : 0
+    const alarmActive = alarmCount > 0
     return (
       <button
         key={item.id}
@@ -224,8 +234,8 @@ export default function Sidebar() {
         </span>
         <span className="flex-1 text-left truncate">{item.label}</span>
         {alarmActive && (
-          <span className="shrink-0 px-1.5 py-0.5 rounded-full bg-red-100 text-red-700 text-[10px] font-bold" title={`${licensesAlarmCount} Lizenz(en) laufen bald aus`}>
-            {licensesAlarmCount}
+          <span className="shrink-0 px-1.5 py-0.5 rounded-full bg-red-100 text-red-700 text-[10px] font-bold" title={item.id === 'server' ? `${serverAlarmCount} Server offline` : `${licensesAlarmCount} Lizenz(en) laufen bald aus`}>
+            {alarmCount}
           </span>
         )}
         {item.id === 'employee-management' && employeeReminderCount > 0 && !active && (

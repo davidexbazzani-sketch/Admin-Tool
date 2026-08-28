@@ -16,7 +16,8 @@
 import { api } from '../electronAPI'
 import { ensureWinRM } from '../utils/winrmUtils'
 import { ensureWinRmTrustedHost, isIpv4 } from '../utils/remoteTarget'
-import type { FolderLink } from './onboarding'
+import type { FolderLink, SelfHelpTile } from './onboarding'
+import { filmAssetName } from './onboarding'
 
 export const DESKTOP_FILENAME = 'Willkommen bei SKF Marine.html'
 export const BAT_FILENAME = 'Laufwerk I verbinden.bat'
@@ -39,6 +40,11 @@ export const ICON_FILENAME = 'skf.ico'
 
 export const FOLDER_VBS_FILENAME = 'open-folder.vbs'
 export const FOLDER_PROTOCOL = 'skf-ordner'
+
+// ── IT-Selbsthilfe: Starter (Protokoll skf-fix:) ──────────────────────────────
+export const SELFHELP_VBS_FILENAME = 'run-selfservice.vbs'
+export const SELFHELP_PROTOCOL = 'skf-fix'
+export const PW_STATUS_TASK = 'SKF\\Dashboard_PwStatus'
 
 /** Handler-VBS mit fest einkompilierter Ordnerliste. Wird als UTF-16 LE + BOM
  *  geschrieben (wscript liest .vbs sonst als ANSI — Umlaute in Pfaden!). */
@@ -94,6 +100,108 @@ export async function registerFolderProtocol(hostname: string): Promise<{ ok: bo
     return p.ok ? { ok: true } : { ok: false, message: p.error || 'reg add fehlgeschlagen' }
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : 'Registrierung fehlgeschlagen' }
+  }
+}
+
+/**
+ * Handler-VBS fuer die IT-Selbsthilfe-Kacheln. Whitelist id→Skriptpfad (nur
+ * ausfuehrbare Kacheln: Typ 'skript'/'passwort'); startet die .ps1 ueber
+ * powershell.exe. Der Link (skf-fix:<id>) traegt NUR die ID — die Pfade stehen
+ * ausschliesslich hier (Index-/ID-Whitelist, wie open-folder.vbs). Als UTF-16
+ * LE + BOM schreiben (Umlaute in Pfaden).
+ */
+export function buildSelfServiceVbs(tiles: SelfHelpTile[]): string {
+  const runnable = (tiles || []).filter(t => (t.type === 'skript' || t.type === 'programm') && (t.path || '').trim())
+  const cases = runnable.map(t => {
+    const id = (t.id || '').replace(/"/g, '').toLowerCase()
+    const path = (t.path || '').trim().replace(/"/g, '')
+    const mode = t.type === 'programm' ? 'exe' : 'ps'   // exe = Programm via ShellExecute, ps = .ps1 via PowerShell
+    return `  Case "${id}" : target = "${path}" : mode = "${mode}"`
+  }).join('\r\n')
+  return [
+    `' SKF Selbsthilfe — startet Aktions-Skripte/Programme (Protokoll ${SELFHELP_PROTOCOL}:)`,
+    `' Es sind NUR die unten einkompilierten Aktions-IDs erlaubt (Whitelist).`,
+    'Option Explicit',
+    'On Error Resume Next',
+    'If WScript.Arguments.Count < 1 Then WScript.Quit 0',
+    'Dim arg : arg = WScript.Arguments(0)',
+    `If InStr(LCase(arg), "${SELFHELP_PROTOCOL}:") = 1 Then arg = Mid(arg, ${SELFHELP_PROTOCOL.length + 2})`,
+    'arg = Replace(Replace(arg, "/", ""), "\\", "")',
+    'arg = LCase(Trim(arg))',
+    'Dim target : target = ""',
+    'Dim mode : mode = ""',
+    'Select Case arg',
+    cases,
+    'End Select',
+    'If target = "" Then WScript.Quit 0',
+    'Dim sh : Set sh = CreateObject("WScript.Shell")',
+    'If mode = "ps" Then',
+    '  sh.Run "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File """ & target & """", 1, False',
+    'Else',
+    '  CreateObject("Shell.Application").ShellExecute target, "", "", "open", 1',
+    'End If',
+    '',
+  ].join('\r\n')
+}
+
+/**
+ * Registriert das Protokoll skf-fix: auf dem Ziel-PC (HKLM, alle Benutzer) —
+ * spiegelt registerFolderProtocol. Idempotent. Laeuft ueber WinRM.
+ */
+export async function registerSelfServiceProtocol(hostname: string): Promise<{ ok: boolean; message?: string }> {
+  const h = psq(hostname.trim())
+  const key = `HKLM:\\Software\\Classes\\${SELFHELP_PROTOCOL}`
+  const cmdValue = `wscript.exe //B "C:\\Users\\Public\\${TARGET_SUBDIR}\\${SELFHELP_VBS_FILENAME}" "%1"`
+  const script = [
+    `try {`,
+    `  Invoke-Command -ComputerName '${h}' -ErrorAction Stop -ScriptBlock {`,
+    `    New-Item -Path '${key}\\shell\\open\\command' -Force | Out-Null`,
+    `    Set-Item -Path '${key}' -Value 'URL:SKF Selbsthilfe'`,
+    `    Set-ItemProperty -Path '${key}' -Name 'URL Protocol' -Value ''`,
+    `    Set-Item -Path '${key}\\shell\\open\\command' -Value '${cmdValue}'`,
+    `  }`,
+    `  @{ ok = $true } | ConvertTo-Json -Compress`,
+    `} catch { @{ ok = $false; error = $_.Exception.Message } | ConvertTo-Json -Compress }`,
+  ].join('\n')
+  try {
+    const res = await api().runPowerShell(script, 45000)
+    const p = parseJson<{ ok: boolean; error?: string }>(res.stdout)
+    if (!p) return { ok: false, message: res.stderr?.trim() || 'Keine Antwort bei der Registrierung' }
+    return p.ok ? { ok: true } : { ok: false, message: p.error || 'reg add fehlgeschlagen' }
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : 'Registrierung fehlgeschlagen' }
+  }
+}
+
+/**
+ * Legt (idempotent) den Anmelde-Task an, der pw-expiry.ps1 ausfuehrt und
+ * pw-status.js neben die Dashboard-HTML schreibt → Passwort-Countdown im
+ * Dashboard. Laeuft im Kontext des jeweils angemeldeten Benutzers (Gruppe
+ * BUILTIN\Users, RunLevel Limited). Nicht fatal — bei Fehler kann der Task per
+ * GPO/schtasks nachgezogen werden (siehe docs/required-scheduled-tasks.md).
+ */
+export async function registerPwStatusTask(hostname: string, pwScriptUnc: string): Promise<{ ok: boolean; message?: string }> {
+  const h = psq(hostname.trim())
+  const outDir = `C:\\Users\\Public\\${TARGET_SUBDIR}`
+  const argStr = `-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File "${pwScriptUnc.trim()}" -OutDir "${outDir}"`
+  const script = [
+    `try {`,
+    `  Invoke-Command -ComputerName '${h}' -ErrorAction Stop -ScriptBlock {`,
+    `    $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '${psq(argStr)}'`,
+    `    $trigger = New-ScheduledTaskTrigger -AtLogOn`,
+    `    $principal = New-ScheduledTaskPrincipal -GroupId 'BUILTIN\\Users' -RunLevel Limited`,
+    `    Register-ScheduledTask -TaskName '${psq(PW_STATUS_TASK)}' -Action $action -Trigger $trigger -Principal $principal -Force | Out-Null`,
+    `  }`,
+    `  @{ ok = $true } | ConvertTo-Json -Compress`,
+    `} catch { @{ ok = $false; error = $_.Exception.Message } | ConvertTo-Json -Compress }`,
+  ].join('\n')
+  try {
+    const res = await api().runPowerShell(script, 45000)
+    const p = parseJson<{ ok: boolean; error?: string }>(res.stdout)
+    if (!p) return { ok: false, message: res.stderr?.trim() || 'Keine Antwort beim Anlegen des Passwort-Tasks' }
+    return p.ok ? { ok: true } : { ok: false, message: p.error || 'Task konnte nicht angelegt werden' }
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : 'Passwort-Task fehlgeschlagen' }
   }
 }
 
@@ -339,7 +447,7 @@ export function targetDirPath(hostname: string): string {
 
 export async function copyDashboardFiles(
   hostname: string,
-  temps: { html: string; ico?: string; url: string; vbs?: string },
+  temps: { html: string; ico?: string; url: string; vbs?: string; ssvbs?: string; filmSrc?: string },
 ): Promise<{ ok: boolean; error?: string }> {
   const dir = psq(targetDirPath(hostname))
   const desktop = psq(`\\\\${hostname.trim()}\\c$\\Users\\Public\\Desktop`)
@@ -349,6 +457,11 @@ export async function copyDashboardFiles(
     `  Copy-Item -LiteralPath '${psq(temps.html)}' -Destination '${dir}\\${psq(DESKTOP_FILENAME)}' -Force -ErrorAction Stop`,
     temps.ico ? `  Copy-Item -LiteralPath '${psq(temps.ico)}' -Destination '${dir}\\${ICON_FILENAME}' -Force -ErrorAction Stop` : '',
     temps.vbs ? `  Copy-Item -LiteralPath '${psq(temps.vbs)}' -Destination '${dir}\\${FOLDER_VBS_FILENAME}' -Force -ErrorAction Stop` : '',
+    temps.ssvbs ? `  Copy-Item -LiteralPath '${psq(temps.ssvbs)}' -Destination '${dir}\\${SELFHELP_VBS_FILENAME}' -Force -ErrorAction Stop` : '',
+    // Film (von der Freigabe) — best effort, blockiert das Deployment nicht.
+    // Zielname aus der Endung ableiten (skf-film.mp4 bei Video, skf-film.html bei
+    // Legacy-TTS), damit er zum <video>/<iframe>-src im Dashboard passt.
+    temps.filmSrc ? `  Copy-Item -LiteralPath '${psq(temps.filmSrc)}' -Destination '${dir}\\${filmAssetName(temps.filmSrc)}' -Force -ErrorAction SilentlyContinue` : '',
     `  Copy-Item -LiteralPath '${psq(temps.url)}' -Destination '${desktop}\\${psq(SHORTCUT_FILENAME)}' -Force -ErrorAction Stop`,
     // Alt-Deployment aufraeumen: HTML direkt auf dem Desktop (hatte Edge-Symbol)
     `  Remove-Item -LiteralPath '${desktop}\\${psq(DESKTOP_FILENAME)}' -Force -ErrorAction SilentlyContinue`,

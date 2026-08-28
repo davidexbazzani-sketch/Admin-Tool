@@ -8,8 +8,8 @@
 // Personalisierung: Begruessung nutzt Vorname + Startdatum; ab Startdatum + 10
 // Tage zeigt die Seite automatisch eine allgemeine Begruessung.
 
-import type { OnboardingSettings, OnboardingMarkers, PlanId, FolderLink } from './onboarding'
-import { MULTI_FLOOR_PLANS, PLAN_LABELS, floorFromRoomNumber } from './onboarding'
+import type { OnboardingSettings, OnboardingMarkers, PlanId, FolderLink, SelfHelpTile, SelfHelpCategory } from './onboarding'
+import { MULTI_FLOOR_PLANS, PLAN_LABELS, floorFromRoomNumber, filmAssetName, isFilmVideo } from './onboarding'
 import { FOLDER_PROTOCOL } from './onboardingDeploy'
 
 export interface OnboardingEmployeeData {
@@ -182,36 +182,62 @@ export function buildOnboardingHtml(input: OnboardingHtmlInput): string {
     : null
   const pdfJson = JSON.stringify(pdfPayload)
 
-  // ── IT-Links (leere URLs -> Zeile ausblenden) ───────────────────────────────
-  const itRows: string[] = []
-  const linkRow = (url: string, title: string, desc: string) => {
-    if (!url) return
-    itRows.push(`<a class="lrow" href="${esc(url)}" target="_blank" rel="noopener">
-      <span class="lrow-txt"><strong>${esc(title)}</strong><small>${esc(desc)}</small></span>
-      <span class="lrow-ic">${icon('link')}</span></a>`)
-  }
-  linkRow(links.orderHardwareSoftware, 'Software & Hardware bestellen', 'ServiceNow Portal – Service Portal')
-  linkRow(links.createTicket, 'Ticket erstellen', 'Submit a Support Case (Incident)')
-  linkRow(links.fileshareAccess, 'Laufwerk I: Abteilungsordner-Zugriff beantragen', 'Fileshare Access Request')
-  linkRow(links.passwordReset, 'Windows-Kennung aktivieren / Passwort im Homeoffice zurücksetzen', 'Microsoft Online-Kennwortzurücksetzung')
-  linkRow(links.mySignIns, 'Windows-Kennwort ändern / Authenticator verwalten', 'My Sign-Ins | Security Info')
-  linkRow(links.itWiki, 'IT-Tipps', 'FAQ – unser IT-Wiki')
-
   // Ordner-Links (Index = Position in settings.folderLinks; Reihenfolge muss
   // exakt zur Handler-VBS passen). Aufgeteilt nach Kachel (IT / Allgemeines).
   const folderLinks = settings.folderLinks ?? []
-  const itFolderRows = folderLinks.map((f, i) => ({ f, i })).filter(x => x.f.section === 'it').map(x => folderRow(x.f, x.i))
   const generalFolderRows = folderLinks.map((f, i) => ({ f, i })).filter(x => x.f.section === 'general').map(x => folderRow(x.f, x.i))
 
-  // Laufwerk I als fester Eintrag in "Ordner & Laufwerke" (statt separater Karte).
-  const driveRow = settings.driveMapping.manualCommand ? `
-      <div class="lrow lrow--folder" style="flex-direction:column;align-items:stretch;gap:8px">
-        <div style="display:flex;align-items:center;gap:12px">
-          <span class="lrow-ic lrow-ic--folder">${icon('folder')}</span>
-          <span class="lrow-txt"><strong>Laufwerk I verbinden</strong><small>Laufwerk I: ist normalerweise schon im Explorer verfügbar. Falls nicht, folgenden Befehl in der Eingabeaufforderung (cmd) ausführen:</small></span>
-        </div>
-        <div class="cmd"><code id="mapCmd">${esc(settings.driveMapping.manualCommand)}</code><button type="button" onclick="copyCmd()" id="copyBtn">Kopieren</button></div>
-      </div>` : ''
+  // ── IT-Selbsthilfe (1a-Design): Aktions-Kacheln ─────────────────────────────
+  // Skript-Aktionen laufen über den Protokoll-Handler skf-fix:<id> (siehe
+  // resources/selfservice). Link-Kacheln öffnen Web-/Protokoll-Ziele. Kacheln
+  // ohne Ziel werden ausgeblendet.
+  const ssAction = (id: string, title: string, o?: { status?: string; info?: string }) =>
+    `<a class="sstile" href="skf-fix:${id}"${o?.info ? ` title="${esc(o.info)}"` : ''}>${o?.info ? '<span class="sstile-i" aria-hidden="true">i</span>' : ''}<span class="sstile-t">${esc(title)}</span><span class="sstile-s">${o?.status ?? ''}</span></a>`
+  const ssLink = (url: string, title: string) => url
+    ? `<a class="sstile" href="${esc(url)}" target="_blank" rel="noopener"><span class="sstile-t">${esc(title)}</span><span class="sstile-s"></span></a>` : ''
+  const ssCat = (cls: string, title: string, sub: string, tiles: string[]) => {
+    const inner = tiles.filter(Boolean).join('\n')
+    return inner ? `<div class="sscat ${cls}"><div class="sscat-h"><h3>${title}</h3><small>${sub}</small></div><div class="ssgrid">${inner}</div></div>` : ''
+  }
+
+  const folderTiles = (settings.folderLinks ?? [])
+    .map((f, i) => ({ f, i }))
+    .filter(x => x.f.section === 'it')
+    .map(x => `<a class="sstile" href="${FOLDER_PROTOCOL}:${x.i}"><span class="sstile-t">${esc(x.f.label || 'Ordner')}</span><span class="sstile-s"></span></a>`)
+
+  // Kacheln datengetrieben aus den Einstellungen (Typ/Kategorie/Reihenfolge/Pfad).
+  const ssTile = (t: SelfHelpTile): string => {
+    if (t.type === 'link') return ssLink(t.path, t.label)
+    if (t.type === 'kontakt') {
+      // IT-Kontakt-Kachel: Telefon + E-Mail aus den Einstellungen; Klick = mailto.
+      const email = (settings.itContact?.email || '').trim()
+      const phone = (settings.itContact?.phone || '').trim()
+      const lines = [phone ? `Tel.: ${esc(phone)}` : '', email ? esc(email) : ''].filter(Boolean).join('<br>')
+      const inner = `<span class="sstile-t">${esc(t.label)}</span><span class="sstile-s">${lines || 'Kontakt folgt'}</span>`
+      return email
+        ? `<a class="sstile" href="mailto:${esc(email)}">${inner}</a>`
+        : `<div class="sstile sstile--static">${inner}</div>`
+    }
+    // skript ODER programm → klickbare Kachel skf-fix:<id> (die VBS entscheidet dann,
+    // ob eine .ps1 via PowerShell oder ein Programm via ShellExecute startet).
+    return ssAction(t.id, t.label, { info: t.info })
+  }
+
+  const SS_CATS: { key: SelfHelpCategory; cls: string; title: string; sub: string }[] = [
+    { key: 'bestellung', cls: 'sscat--prt', title: 'Bestellen &amp; Melden', sub: 'öffnet im Browser' },
+    { key: 'konto',      cls: 'sscat--acc', title: 'Konto &amp; Sicherheit', sub: 'Passwörter &amp; Konto' },
+    { key: 'geraete',    cls: 'sscat--fix', title: 'Geräte &amp; Reparieren', sub: 'läuft auf deinem PC' },
+    { key: 'ordner',     cls: 'sscat--drv', title: 'Ordner &amp; Laufwerke', sub: 'wird verbunden' },
+  ]
+  const sortedTiles = (settings.selfHelpTiles ?? []).slice().sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+  const selfServiceHtml = SS_CATS.map(cat => {
+    let catTiles = sortedTiles.filter(t => t.category === cat.key).map(ssTile)
+    // In "Ordner & Laufwerke" die Ordner-Verknüpfungen (Explorer, z. B. "Laufwerk I
+    // verbinden") VOR die Link-/Skript-Kacheln (z. B. "Abteilungsordner Zugriff
+    // beantragen") stellen.
+    if (cat.key === 'ordner') catTiles = [...folderTiles, ...catTiles]
+    return ssCat(cat.cls, cat.title, cat.sub, catTiles)
+  }).filter(Boolean).join('\n')
 
   // ── Konferenzraum-Karten ────────────────────────────────────────────────────
   const roomCards = settings.rooms.map(r => {
@@ -237,6 +263,35 @@ export function buildOnboardingHtml(input: OnboardingHtmlInput): string {
       <span class="lrow-txt"><strong>Kantinenplan</strong><small>Essenswochenplan – was gibt es diese Woche?</small></span>
       <span class="lrow-ic">${icon('link')}</span></a>`)
   }
+  // Mail-Shortcuts (Klick öffnet Outlook mit vorbelegtem Empfänger)
+  for (const m of (settings.generalMails ?? [])) {
+    if (!m.email) continue
+    generalRows.push(`<a class="lrow" href="mailto:${esc(m.email)}">
+      <span class="lrow-txt"><strong>${esc(m.label || 'Kontakt')}</strong><small>${esc(m.email)}</small></span>
+      <span class="lrow-ic">${icon('contact')}</span></a>`)
+  }
+  // Film-Karte für die Allgemeines-Kachel. Der Film liegt als separate Datei
+  // NEBEN der HTML — nur Verweis, nichts inline (Dashboard bleibt klein). Karte
+  // nur, wenn ein Film-Pfad konfiguriert ist.
+  //
+  // Zwei Wege je nach Endung von settings.filmPath (siehe filmAssetName):
+  //  • MP4/WebM/OGG → nativer <video>-Player (empfohlen): sofort sauberes
+  //    Abspielen, echter Zeitstrahl, Vollbild. preload="metadata" zeigt das
+  //    erste Bild als Poster, KEIN Autoplay. Zusätzlich: Klick aufs Video =
+  //    Pause/Weiter (wie YouTube, per JS unten). Native controls liefern
+  //    Zeitstrahl/Lautstärke/Vollbild.
+  //  • sonst (HTML) → Legacy-TTS-Film im <iframe> (Fallback, spielt unsauber).
+  const hasFilm = !!(settings.filmPath || '').trim()
+  const filmAsset = filmAssetName(settings.filmPath)
+  const filmIsVid = isFilmVideo(settings.filmPath)
+  const filmInner = filmIsVid
+    ? `<video class="film-vid" src="${filmAsset}" controls preload="auto" playsinline title="SKF Marine Film"></video>`
+    : `<iframe src="${filmAsset}" allowfullscreen title="SKF Marine Film"></iframe>`
+  const filmCard = hasFilm ? `<div class="card">
+      <h3>Lerne uns besser kennen</h3>
+      <div class="film${filmIsVid ? ' film--vid' : ''}">${filmInner}</div>
+    </div>` : ''
+
   // Ansprechpartner NICHT mehr unter "Allgemeines" — sie stehen jetzt in der
   // eigenen Kachel "Ihr(e) Ansprechpartner" (siehe unten).
 
@@ -274,7 +329,7 @@ export function buildOnboardingHtml(input: OnboardingHtmlInput): string {
       }
     }
   }
-  const contactTitle = contactList.length > 1 ? 'Ihre Ansprechpartner' : 'Ihr Ansprechpartner'
+  const contactTitle = contactList.length > 1 ? 'Deine Ansprechpartner' : 'Dein Ansprechpartner'
   const contactCards = contactList.map(c => `
       <div class="card">
         <h3>${esc(c.name || 'Ansprechpartner')}</h3>
@@ -365,7 +420,7 @@ h1{font-size:68px; line-height:1.04; font-weight:800; letter-spacing:-.035em; te
 }
 .tile .ic svg{width:24px;height:24px}
 .tile h2{font-size:30px;font-weight:800;letter-spacing:-.028em;margin-top:18px}
-.tile p{font-size:15px;line-height:1.5;margin-top:8px}
+.tile p{font-size:15px;line-height:1.5;margin-top:8px;min-height:3em}
 .tile .cta{font-size:14px;font-weight:700;margin-top:16px}
 .tile--it{background:linear-gradient(155deg,#dbe4ff,#cdd8fb)} .tile--it .ic,.tile--it .cta{color:#1d2bd8} .tile--it p{color:#3c4470}
 .tile--rooms{background:linear-gradient(155deg,#e3f0e6,#d5e8dd)} .tile--rooms .ic,.tile--rooms .cta{color:#2f6b4f} .tile--rooms p{color:#3f5c4e}
@@ -383,6 +438,48 @@ h1{font-size:68px; line-height:1.04; font-weight:800; letter-spacing:-.035em; te
 }
 .pill:hover{transform:translateY(-2px)}
 .pill:focus-visible{outline:2px solid var(--skf-blue);outline-offset:3px}
+/* ── IT-Selbsthilfe (1a-Design: Pastell-Kategorien, ein Klick = Aktion) ── */
+.ssbanner{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
+.ssbanner:empty{display:none}
+.ssnote{display:flex;gap:10px;align-items:flex-start;padding:13px 16px;border-radius:14px;border:1px solid;font-size:14px;line-height:1.45}
+.ssnote--info{background:#eef3ff;border-color:#d5deff;color:#28407a}
+.ssnote--warn{background:#fff6e6;border-color:#f3e0b8;color:#7a5a12}
+.ssnote--crit{background:#fdecec;border-color:#f6c9c9;color:#8a2020}
+.ssnote b{font-weight:800}
+.sscat{margin-top:26px}
+.sscat-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.sscat-h h3{font-size:19px;font-weight:800;letter-spacing:-.01em}
+.sscat-h small{font-size:14px;color:var(--muted-2)}
+.ssgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.sstile{
+  position:relative;appearance:none;cursor:pointer;text-align:center;text-decoration:none;color:inherit;
+  border:1px solid var(--hairline);border-radius:16px;padding:22px 16px;min-height:104px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+.sstile:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(20,24,40,.14)}
+.sstile:focus-visible{outline:2px solid var(--skf-blue);outline-offset:3px}
+.sstile--static{cursor:default}
+.sstile--static:hover{transform:none;box-shadow:0 1px 2px rgba(20,24,40,.06)}
+.sstile-t{font-size:16px;font-weight:800;line-height:1.25;letter-spacing:-.01em;color:var(--ink);text-wrap:pretty}
+.sstile-s{font-size:12px;font-weight:700;letter-spacing:.02em;min-height:14px}
+.sstile-i{position:absolute;top:8px;right:9px;width:18px;height:18px;border-radius:50%;border:1px solid currentColor;font-size:11px;font-weight:800;line-height:16px;text-align:center;opacity:.55}
+.sscat--acc .sstile{background:#f8eee3;border-color:#e7dccf}.sscat--acc .sstile-s,.sscat--acc .sstile-i{color:#8a5a1e}
+.sscat--fix .sstile{background:#e7f2ea;border-color:#d3e3d8}.sscat--fix .sstile-s,.sscat--fix .sstile-i{color:#1f6e42}
+.sscat--drv .sstile{background:#e9eefc;border-color:#dce3f7}.sscat--drv .sstile-s,.sscat--drv .sstile-i{color:#1b4bd8}
+.sscat--prt .sstile{background:#f2ecf8;border-color:#e4dcec}.sscat--prt .sstile-s,.sscat--prt .sstile-i{color:#5e3d8a}
+.ssdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.ssdot--ok{background:#2fa36b}.ssdot--bad{background:#d0342c}.ssdot--off{background:#9aa1ae}
+.sstoast{
+  position:fixed;right:24px;bottom:24px;z-index:60;display:none;align-items:center;gap:10px;
+  background:var(--ink);color:#fff;border-radius:12px;padding:13px 18px;box-shadow:0 16px 34px rgba(20,24,40,.28);
+  font-size:14px;font-weight:600;
+}
+.sstoast.show{display:flex;animation:ssToastIn .2s ease}
+.sstoast .sspulse{width:8px;height:8px;border-radius:50%;background:#4ade80}
+@keyframes ssToastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media (max-width:1199px){.ssgrid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:767px){.ssgrid{grid-template-columns:repeat(2,1fr)}}
 footer{
   display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
   padding:22px 48px;border-top:1px solid var(--hairline);
@@ -427,6 +524,13 @@ a.lrow:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(20,24,40,.10
   border:0;border-radius:999px;padding:7px 16px;cursor:pointer;
 }
 kbd{background:#fff;border:1px solid var(--hairline);border-radius:6px;padding:1px 7px;font-size:12.5px;font-family:inherit}
+/* Film-Player (Allgemeines) */
+.film{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--hairline);margin-top:6px}
+.film iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* Video: natürliche Höhe (kein doppeltes Letterboxing) — Klick=Pause/Weiter ist
+   in Chromium bei <video controls> nativ. */
+.film--vid{aspect-ratio:auto}
+.film--vid video{display:block;width:100%;height:auto;background:#000;cursor:pointer}
 /* Konferenzraeume */
 .rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:22px}
 .room{
@@ -578,12 +682,12 @@ select.dest{
     </footer>
   </section>
 
-  <!-- ── IT ── -->
+  <!-- ── IT-Selbsthilfe (1a-Design) ── -->
   <section class="view" id="it">
-    <h2 class="vtitle">IT</h2>
-    <p class="vsub">Bestellungen, Tickets und Selbsthilfe – die wichtigsten IT-Anlaufstellen für deinen Start.</p>
-    ${itRows.length > 0 ? `<div class="card"><h3>Portale &amp; Anträge</h3>${itRows.join('\n')}</div>` : ''}
-    ${(driveRow || itFolderRows.length > 0) ? `<div class="card"><h3>Ordner &amp; Laufwerke</h3>${driveRow}${itFolderRows.join('\n')}</div>` : ''}
+    <h2 class="vtitle">IT-Selbsthilfe</h2>
+    <p class="vsub">Eine Kachel, ein Klick – die Aktion startet direkt auf deinem Rechner. Für alles andere findest du die Anlaufstellen unter „Portale &amp; Anträge“.</p>
+    <div class="ssbanner" id="ssBanner"></div>
+    ${selfServiceHtml}
   </section>
 
   <!-- ── Konferenzräume ── -->
@@ -608,6 +712,7 @@ ${roomCards}
   <section class="view" id="general">
     <h2 class="vtitle">Allgemeines</h2>
     <p class="vsub">Intranet und Ansprechpartner rund um deinen Arbeitsalltag.</p>
+    ${filmCard}
     ${generalRows.length > 0 ? `<div class="card">${generalRows.join('\n')}</div>` : (generalFolderRows.length === 0 ? '<div class="card"><p class="mut">Inhalte folgen in Kürze – schau bald wieder rein.</p></div>' : '')}
     ${generalFolderRows.length > 0 ? `<div class="card"><h3>Ordner &amp; Laufwerke</h3>${generalFolderRows.join('\n')}</div>` : ''}
   </section>
@@ -696,6 +801,12 @@ window.__DATA__ = ${dataJson};
   var VIEWS = ['home','it','rooms','general','map','time','contact'];
   function show(id){
     if (VIEWS.indexOf(id) < 0) id = 'home';
+    // Beim Verlassen einer Kachel (z. B. "Zur Übersicht") laufende Videos anhalten,
+    // sonst spielt der Film-Ton im Hintergrund weiter. Pausiert auch beim Wechsel
+    // zu einer anderen Kachel. Beim erneuten Öffnen startet der Film nicht von
+    // selbst (kein Autoplay) — der Nutzer drückt wieder Play.
+    var vids = document.querySelectorAll('video');
+    for (var i = 0; i < vids.length; i++) { try { vids[i].pause(); } catch (e) {} }
     VIEWS.forEach(function(v){
       var el = document.getElementById(v);
       if (el) el.classList.toggle('active', v === id);
@@ -1190,6 +1301,58 @@ window.__DATA__ = ${dataJson};
 
   // Initiale Ansicht — ganz am Ende, wenn alle Funktionen/Variablen stehen.
   show(location.hash.replace('#',''));
+})();
+</script>
+<!-- IT-Selbsthilfe: Status-Feeds (best-effort; fehlen sie, bleibt alles leer) -->
+<script src="pw-status.js"></script>
+<script src="zscaler-status.js"></script>
+<script src="known-issues.js"></script>
+<div class="sstoast" id="ssToast"><span class="sspulse"></span><span class="sslabel"></span></div>
+<script>
+(function(){
+  function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // Passwort-Ablauf-Countdown (aus pw-status.js). Ab <=7 Tagen warnen, <=3 kritisch.
+  var pw = window.__PW_STATUS__, pwEl = document.getElementById('ssPwStatus');
+  if (pwEl && pw && !pw.error && !pw.neverExpires && typeof pw.daysLeft === 'number') {
+    pwEl.textContent = 'Passwort läuft in ' + pw.daysLeft + (pw.daysLeft === 1 ? ' Tag ab' : ' Tagen ab');
+    if (pw.daysLeft <= 3) pwEl.style.color = '#c02626';
+    else if (pw.daysLeft <= 7) pwEl.style.color = '#b26a00';
+  }
+
+  // Zscaler-Ampel (aus zscaler-status.js).
+  var zs = window.__ZSCALER_STATUS__, zEl = document.getElementById('ssZscaler');
+  if (zEl && zs && zs.state) {
+    var cls = zs.state === 'verbunden' ? 'ok' : (zs.state === 'nicht-installiert' ? 'off' : 'bad');
+    var lbl = zs.state === 'verbunden' ? 'verbunden' : (zs.state === 'nicht-installiert' ? 'nicht installiert' : 'getrennt');
+    zEl.innerHTML = '<span class="ssdot ssdot--' + cls + '"></span>' + lbl;
+  }
+
+  // Bekannte Störungen als Banner (aus known-issues.js).
+  var ki = window.__KNOWN_ISSUES__, ban = document.getElementById('ssBanner');
+  if (ban && ki && ki.issues && ki.issues.length) {
+    var html = '';
+    for (var i = 0; i < ki.issues.length && i < 4; i++) {
+      var it = ki.issues[i] || {};
+      var sev = String(it.schweregrad || it.severity || 'info').toLowerCase();
+      var cl = (sev === 'crit' || sev === 'kritisch' || sev === 'hoch') ? 'crit' : ((sev === 'warn' || sev === 'mittel') ? 'warn' : 'info');
+      html += '<div class="ssnote ssnote--' + cl + '"><span><b>' + esc(it.titel || it.title || 'Störung') + '</b>' +
+              (it.text ? ' — ' + esc(it.text) : '') + (it.seit ? ' (seit ' + esc(it.seit) + ')' : '') + '</span></div>';
+    }
+    ban.innerHTML = html;
+  }
+
+  // Toast beim Klick auf eine Aktion (der eigentliche Erfolg kommt als Popup vom Skript).
+  var toast = document.getElementById('ssToast');
+  document.addEventListener('click', function(e){
+    var a = (e.target && e.target.closest) ? e.target.closest('a.sstile[href^="skf-fix:"]') : null;
+    if (!a || !toast) return;
+    var t = a.querySelector('.sstile-t');
+    toast.querySelector('.sslabel').textContent = (t ? t.textContent : 'Aktion') + ' wird gestartet …';
+    toast.classList.add('show');
+    clearTimeout(window.__ssTid);
+    window.__ssTid = setTimeout(function(){ toast.classList.remove('show'); }, 3200);
+  });
 })();
 </script>
 </body>

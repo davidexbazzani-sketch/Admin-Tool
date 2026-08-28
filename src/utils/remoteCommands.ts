@@ -1977,4 +1977,219 @@ function buildCategories(): Category[] {
 
 import { buildExtraCategories } from './remoteCommandsExtra'
 
-export const CATEGORIES = [...buildCategories(), ...buildExtraCategories()]
+// ══════════════════════════════════════════════════════════════════════════════
+// Remote-Doc-Aufräumung: neue Kategorien + Merges + Umsortierung
+// (siehe remoteDocGroups.ts – die Kachel-Gruppen bauen auf diesen finalen IDs auf)
+// ══════════════════════════════════════════════════════════════════════════════
+
+// Startet einen Browser in der interaktiven Sitzung des angemeldeten Nutzers.
+// WinRM läuft in Session 0 (kein Desktop) -> deshalb per Scheduled Task, der als
+// angemeldeter User registriert, sofort gestartet und danach wieder entfernt wird.
+// Läuft komplett auf dem Ziel-PC (ein Invoke-Command via remote()).
+function browserTestCmd(h: string, exeName: string, args: string, taskSuffix: string): string {
+  return remote(h, [
+    `$user = (Get-CimInstance Win32_ComputerSystem).UserName`,
+    `if (-not $user) { try { $ex = Get-CimInstance Win32_Process -Filter "Name='explorer.exe'" -EA Stop | Select-Object -First 1; if ($ex) { $o = Invoke-CimMethod -InputObject $ex -MethodName GetOwner; $user = "$($o.Domain)\\$($o.User)" } } catch {} }`,
+    `if (-not $user) { Write-Output 'ERR:Kein interaktiv angemeldeter Benutzer auf dem Ziel-PC gefunden'; return }`,
+    `$exe = ''`,
+    `try { $exe = (Get-ItemProperty "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\${exeName}" -EA Stop).'(default)' } catch {}`,
+    `if (-not $exe -or -not (Test-Path $exe)) {`,
+    `  $pf=[Environment]::GetEnvironmentVariable('ProgramFiles'); $pfx=[Environment]::GetEnvironmentVariable('ProgramFiles(x86)')`,
+    `  $cands = @((Join-Path $pf 'Google\\Chrome\\Application\\chrome.exe'),(Join-Path $pfx 'Google\\Chrome\\Application\\chrome.exe'),(Join-Path $pfx 'Microsoft\\Edge\\Application\\msedge.exe'),(Join-Path $pf 'Microsoft\\Edge\\Application\\msedge.exe'))`,
+    `  $exe = $cands | Where-Object { $_ -and (Test-Path $_) -and ($_ -match '${exeName}') } | Select-Object -First 1`,
+    `}`,
+    `if (-not $exe) { Write-Output 'ERR:${exeName} wurde auf dem Ziel-PC nicht gefunden'; return }`,
+    `$tn = 'ITAdminBrowserTest_${taskSuffix}'`,
+    `Unregister-ScheduledTask -TaskName $tn -Confirm:$false -EA SilentlyContinue`,
+    `$act = New-ScheduledTaskAction -Execute $exe -Argument '${args}'`,
+    `$prin = New-ScheduledTaskPrincipal -UserId $user -LogonType Interactive -RunLevel Highest`,
+    `Register-ScheduledTask -TaskName $tn -Action $act -Principal $prin -Force | Out-Null`,
+    `Start-ScheduledTask -TaskName $tn`,
+    `Start-Sleep -Seconds 3`,
+    `Unregister-ScheduledTask -TaskName $tn -Confirm:$false -EA SilentlyContinue`,
+    `Write-Output "OK: ${exeName} in der Sitzung von $user gestartet (Argumente: ${args})"`,
+  ].join('\n'))
+}
+
+// NEUE Kategorien: Windows-Aktivierung, Systemwiederherstellung, Registry, Browser-Troubleshooting.
+function buildNewCategories(): Category[] {
+  return [
+    {
+      id: 'activation', label: 'Windows-Aktivierung & Lizenz',
+      commands: [
+        { id: 'actstatus', func: 'Aktivierungsstatus anzeigen', when: 'Ist Windows aktiviert?',
+          buildCmd: (h) => remote(h, `$p = Get-CimInstance SoftwareLicensingProduct -Filter "ApplicationID='55c92734-d682-4d71-983e-d6ec3f16059f' AND PartialProductKey IS NOT NULL" -EA SilentlyContinue | Select-Object -First 1; if(-not $p){Write-Output '"Kein Lizenzobjekt gefunden"'; return}; $stat = switch([int]$p.LicenseStatus){0{'Unlizenziert'}1{'Aktiviert'}2{'Testzeitraum (OOB)'}3{'Testzeitraum (OOT)'}4{'Non-Genuine Grace'}5{'Benachrichtigungsmodus'}6{'Erweiterter Testzeitraum'}default{'Unbekannt'}}; [PSCustomObject]@{Name=$p.Name;Beschreibung=$p.Description;Teilschluessel=$p.PartialProductKey;Status=$stat} | ConvertTo-Json -Compress`),
+          action: 'read' },
+        { id: 'actxpr', func: 'Ablauf / Gültigkeit', when: 'Läuft die Aktivierung ab?',
+          buildCmd: (h) => remote(h, `cscript //nologo "$env:SystemRoot\\System32\\slmgr.vbs" /xpr 2>&1`), action: 'read', longRunning: true },
+        { id: 'actkey', func: 'OEM/BIOS-Schlüssel anzeigen', when: 'Im BIOS hinterlegten Windows-Key auslesen',
+          buildCmd: (h) => remote(h, `$k=(Get-CimInstance SoftwareLicensingService -EA SilentlyContinue).OA3xOriginalProductKey; if([string]::IsNullOrEmpty($k)){Write-Output '"Kein OEM/BIOS-Schluessel hinterlegt"'}else{Write-Output $k}`), action: 'read' },
+      ],
+    },
+    {
+      id: 'restore', label: 'Systemwiederherstellung',
+      commands: [
+        { id: 'restlist', func: 'Wiederherstellungspunkte anzeigen', when: 'Welche Punkte gibt es?',
+          buildCmd: (h) => remote(h, `$rp=@(Get-ComputerRestorePoint -EA SilentlyContinue); if(-not $rp){Write-Output '"Keine Punkte (Systemschutz evtl. deaktiviert)"'}else{$rp | Select-Object SequenceNumber,@{N='Erstellt';E={$_.ConvertToDateTime($_.CreationTime)}},Description,@{N='Typ';E={$_.RestorePointType}} | ConvertTo-Json -Compress}`),
+          action: 'read' },
+        { id: 'restcreate', func: 'Wiederherstellungspunkt erstellen', when: 'Vor riskanten Änderungen sichern',
+          buildCmd: (h, i) => remote(h, `Checkpoint-Computer -Description '${(i || 'Manuell (IT-Tool)').replace(/'/g, "''")}' -RestorePointType MODIFY_SETTINGS; Write-Output 'Wiederherstellungspunkt erstellt'`),
+          action: 'write', longRunning: true, input: { type: 'text', placeholder: 'Beschreibung (optional)' } },
+        { id: 'restenable', func: 'Systemschutz aktivieren (C:)', when: 'Wiederherstellung war deaktiviert',
+          buildCmd: (h) => remote(h, `Enable-ComputerRestore -Drive 'C:\\'; Write-Output 'Systemschutz für C: aktiviert'`), action: 'write' },
+      ],
+    },
+    {
+      id: 'registry', label: 'Registry',
+      commands: [
+        { id: 'regread', func: 'Registry-Wert lesen', when: 'Schlüssel/Wert prüfen',
+          buildCmd: (h, i) => {
+            const parts = (i || '').split('|')
+            const path = (parts[0] || '').trim().replace(/'/g, "''")
+            const name = (parts[1] || '').trim().replace(/'/g, "''")
+            if (!path) return `Write-Output "ERR:Kein Registry-Pfad angegeben"`
+            return name
+              ? remote(h, `$v=(Get-ItemProperty -Path '${path}' -Name '${name}' -EA Stop).'${name}'; [PSCustomObject]@{Pfad='${path}';Wert='${name}';Inhalt=[string]$v} | ConvertTo-Json -Compress`)
+              : remote(h, `Get-ItemProperty -Path '${path}' -EA Stop | Select-Object * -ExcludeProperty PSPath,PSParentPath,PSChildName,PSDrive,PSProvider | ConvertTo-Json -Compress`)
+          },
+          action: 'read', input: { type: 'text', placeholder: `HKLM:\\SOFTWARE\\... | Wertname (optional)` } },
+        { id: 'regwrite', func: 'Registry-Wert setzen', when: 'Wert ändern/anlegen (Vorsicht!)',
+          buildCmd: (h, i) => {
+            const parts = (i || '').split('|')
+            const path = (parts[0] || '').trim().replace(/'/g, "''")
+            const name = (parts[1] || '').trim().replace(/'/g, "''")
+            const val = (parts[2] ?? '').trim().replace(/'/g, "''")
+            if (!path || !name) return `Write-Output "ERR:Pfad und Wertname erforderlich (Pfad|Name|Wert)"`
+            return remote(h, `if(-not (Test-Path '${path}')){New-Item -Path '${path}' -Force | Out-Null}; Set-ItemProperty -Path '${path}' -Name '${name}' -Value '${val}'; Write-Output "Gesetzt: ${name} = ${val}"`)
+          },
+          action: 'critical', input: { type: 'text', placeholder: `HKLM:\\SOFTWARE\\... | Wertname | Wert` } },
+        { id: 'regeditlocal', func: 'regedit lokal öffnen', when: 'Editor auf dem Admin-PC (dort Netzwerkregistrierung verbinden)',
+          buildCmd: () => local(`Start-Process regedit.exe`), action: 'read', local: true },
+      ],
+    },
+    {
+      id: 'browser', label: 'Browser-Troubleshooting',
+      commands: [
+        { id: 'chrometest', func: 'Test: Frisches Chrome-Profil', when: 'Chrome mit sauberem Profil in der Nutzer-Sitzung starten (Profil-Probleme eingrenzen)',
+          buildCmd: (h) => browserTestCmd(h, 'chrome.exe', '--user-data-dir=C:\\Temp\\ChromeTest', 'Chrome'), action: 'write', longRunning: true },
+        { id: 'edgetest', func: 'Test: Frisches Edge-Profil', when: 'Edge mit sauberem Profil in der Nutzer-Sitzung starten',
+          buildCmd: (h) => browserTestCmd(h, 'msedge.exe', '--user-data-dir=C:\\Temp\\EdgeTest', 'Edge'), action: 'write', longRunning: true },
+        { id: 'chromenogpu', func: 'Test: Chrome ohne GPU', when: 'Chrome mit --disable-gpu testen (Grafik-/Rendering-Probleme eingrenzen)',
+          buildCmd: (h) => browserTestCmd(h, 'chrome.exe', '--user-data-dir=C:\\Temp\\ChromeTest --disable-gpu', 'ChromeNoGpu'), action: 'write', longRunning: true },
+        { id: 'browserpolicies', func: 'Policies auslesen', when: 'Chrome/Edge-Richtlinien aus der Registry lesen (statt chrome://policy) – auffällige Keys markiert',
+          buildCmd: (h) => remote(h, [
+            `function Get-Pol($scope,$browser,$path) {`,
+            `  if (-not (Test-Path $path)) { return }`,
+            `  $out = @()`,
+            `  $keys = @(Get-Item -LiteralPath $path -EA SilentlyContinue) + @(Get-ChildItem -LiteralPath $path -Recurse -EA SilentlyContinue)`,
+            `  foreach ($k in $keys) {`,
+            `    if (-not $k) { continue }`,
+            `    $grp = $k.PSChildName`,
+            `    foreach ($n in $k.GetValueNames()) {`,
+            `      $vn = if ($n) { $n } else { '(Standard)' }`,
+            `      $name = if ($grp -eq 'Chrome' -or $grp -eq 'Edge') { $vn } else { "$grp\\$vn" }`,
+            `      $v = $k.GetValue($n)`,
+            `      $val = if ($v -is [System.Array]) { ($v -join '; ') } else { [string]$v }`,
+            `      $flag = if ($name -match 'ProxySettings|ExtensionInstallForcelist|AutoSelectCertificateForUrls') { 'JA' } else { '' }`,
+            `      $out += [PSCustomObject]@{ Bereich=$scope; Browser=$browser; Richtlinie=$name; Wert=$val; Auffaellig=$flag }`,
+            `    }`,
+            `  }`,
+            `  $out`,
+            `}`,
+            `$rows = @()`,
+            `$rows += Get-Pol 'HKLM' 'Chrome' 'HKLM:\\SOFTWARE\\Policies\\Google\\Chrome'`,
+            `$rows += Get-Pol 'HKLM' 'Edge'   'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Edge'`,
+            `try {`,
+            `  $ex = Get-CimInstance Win32_Process -Filter "Name='explorer.exe'" -EA Stop | Select-Object -First 1`,
+            `  if ($ex) {`,
+            `    $sid = (Invoke-CimMethod -InputObject $ex -MethodName GetOwnerSid).Sid`,
+            `    if (-not (Get-PSDrive -Name HKU -EA SilentlyContinue)) { New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS -EA SilentlyContinue | Out-Null }`,
+            `    $rows += Get-Pol 'HKCU' 'Chrome' "HKU:\\$sid\\SOFTWARE\\Policies\\Google\\Chrome"`,
+            `    $rows += Get-Pol 'HKCU' 'Edge'   "HKU:\\$sid\\SOFTWARE\\Policies\\Microsoft\\Edge"`,
+            `  }`,
+            `} catch {}`,
+            `if (@($rows).Count -eq 0) { Write-Output 'Keine Browser-Policies gesetzt (HKLM/HKCU leer).' } else { $rows | ConvertTo-Json -Compress }`,
+          ].join('\n')), action: 'read' },
+        { id: 'profilebackup', func: 'Browser-Profil sichern/umbenennen', when: 'Chrome/Edge-Profil des angemeldeten Nutzers als .bak sichern (Reset bei Profil-Korruption)',
+          buildCmd: (h) => remote(h, [
+            `$date = Get-Date -Format 'yyyyMMdd_HHmmss'`,
+            `$prof = $null`,
+            `try { $ex = Get-CimInstance Win32_Process -Filter "Name='explorer.exe'" -EA Stop | Select-Object -First 1; if ($ex) { $sid = (Invoke-CimMethod -InputObject $ex -MethodName GetOwnerSid).Sid; $prof = (Get-ItemProperty "HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\$sid" -EA SilentlyContinue).ProfileImagePath } } catch {}`,
+            `if (-not $prof) { Write-Output 'ERR:Kein aktiver Benutzer / Profil gefunden'; return }`,
+            `if (-not (Test-Path $prof)) { Write-Output "ERR:Profilpfad nicht gefunden: $prof"; return }`,
+            `$localApp = Join-Path $prof 'AppData\\Local'`,
+            `Get-Process chrome,msedge -EA SilentlyContinue | Stop-Process -Force -EA SilentlyContinue`,
+            `Start-Sleep -Seconds 2`,
+            `if (@(Get-Process chrome,msedge -EA SilentlyContinue).Count -gt 0) { Write-Output 'ERR:Browser-Prozesse laufen noch – Sicherung abgebrochen'; return }`,
+            `$res = @()`,
+            `$targets = @([PSCustomObject]@{ N='Chrome'; P=(Join-Path $localApp 'Google\\Chrome\\User Data') }, [PSCustomObject]@{ N='Edge'; P=(Join-Path $localApp 'Microsoft\\Edge\\User Data') })`,
+            `foreach ($t in $targets) {`,
+            `  if (Test-Path $t.P) {`,
+            `    $newName = 'User Data.bak_' + $date`,
+            `    try { Rename-Item -LiteralPath $t.P -NewName $newName -EA Stop; $res += [PSCustomObject]@{ Browser=$t.N; Status='gesichert'; Ziel=$newName } }`,
+            `    catch { $res += [PSCustomObject]@{ Browser=$t.N; Status='FEHLER'; Ziel=$_.Exception.Message } }`,
+            `  } else { $res += [PSCustomObject]@{ Browser=$t.N; Status='kein Profil vorhanden'; Ziel='-' } }`,
+            `}`,
+            `$res | ConvertTo-Json -Compress`,
+          ].join('\n')), action: 'critical' },
+        { id: 'netreset', func: 'Netzwerk-Stack Reset', when: 'Winsock/IP/DNS/WinHTTP-Proxy zuruecksetzen – behebt hartnäckige Netzwerk-/Proxy-Probleme (Neustart nötig)',
+          buildCmd: (h) => remote(h, `Write-Output '=== netsh winsock reset ==='; netsh winsock reset; Write-Output '=== netsh int ip reset ==='; netsh int ip reset; Write-Output '=== ipconfig /flushdns ==='; ipconfig /flushdns; Write-Output '=== netsh winhttp reset proxy ==='; netsh winhttp reset proxy; Write-Output ''; Write-Output '>>> NEUSTART ERFORDERLICH - bitte die Aktion Jetzt neu starten ausfuehren, damit die Aenderungen aktiv werden.'`),
+          action: 'write', longRunning: true },
+        { id: 'netreset-restart', func: 'Jetzt neu starten (nach Netzwerk-Reset)', when: 'Neustart aktiviert die Netzwerk-Reset-Aenderungen',
+          buildCmd: (h) => remote(h, `shutdown /r /t 5 /c 'Neustart nach Netzwerk-Reset (IT-Tool)'; 'Neustart in 5 Sekunden wird ausgeloest'`),
+          action: 'critical' },
+      ],
+    },
+  ]
+}
+
+// NEUE Einzelbefehle, die in eine bestehende Kategorie einsortiert werden.
+const EXTRA_CMDS: Record<string, CmdDef[]> = {
+  repair: [
+    { id: 'pendingreboot', func: 'Ausstehender Neustart prüfen', when: 'Steht nach Updates/Installationen ein Neustart aus?',
+      buildCmd: (h) => remote(h, `$r=@(); if(Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending' -EA SilentlyContinue){$r+='Component Based Servicing'}; if(Get-Item 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired' -EA SilentlyContinue){$r+='Windows Update'}; if(Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager' -Name PendingFileRenameOperations -EA SilentlyContinue){$r+='Ausstehende Dateiumbenennungen'}; [PSCustomObject]@{NeustartAusstehend=($r.Count -gt 0);Gruende=$(if($r){$r -join ', '}else{'Keine'})} | ConvertTo-Json -Compress`),
+      action: 'read' },
+  ],
+}
+
+// Befehle, die in eine passendere Kategorie umziehen (cmdId -> Ziel-Kategorie).
+const CMD_REHOME: Record<string, string> = {
+  powerplan: 'power', powerhigh: 'power', powerbal: 'power', monitortime: 'power', standbytime: 'power', hibernate: 'power', locktime: 'power',
+  defexcadd: 'security', defexcrem: 'security', defquick: 'security', deffull: 'security',
+  rdpon: 'rdp', rdpoff: 'rdp',
+}
+
+// Doppelte Kategorien zusammenführen (Quelle -> Ziel; Dedupe per Befehls-ID).
+const CAT_MERGE: Record<string, string> = { remotetasks: 'tasks', diskmgmt: 'disk', drivers: 'devmgr' }
+
+function buildAllCategories(): Category[] {
+  const cats: Category[] = [...buildCategories(), ...buildExtraCategories(), ...buildNewCategories()]
+    .map(c => ({ ...c, commands: [...c.commands] }))
+  const byId = new Map(cats.map(c => [c.id, c]))
+  const push = (cat: Category | undefined, cmd: CmdDef) => { if (cat && !cat.commands.some(x => x.id === cmd.id)) cat.commands.push(cmd) }
+
+  // 1) Einzelbefehle in passendere Kategorie verschieben
+  const moved: { cmd: CmdDef; target: string }[] = []
+  for (const c of cats) {
+    c.commands = c.commands.filter(cmd => {
+      const target = CMD_REHOME[cmd.id]
+      if (target && target !== c.id) { moved.push({ cmd, target }); return false }
+      return true
+    })
+  }
+  for (const { cmd, target } of moved) push(byId.get(target), cmd)
+
+  // 2) Neue Einzelbefehle anhängen
+  for (const [catId, cmds] of Object.entries(EXTRA_CMDS)) for (const cmd of cmds) push(byId.get(catId), cmd)
+
+  // 3) Doppelte Kategorien mergen (Quelle entfernen)
+  const result: Category[] = []
+  for (const c of cats) {
+    const target = CAT_MERGE[c.id]
+    if (target) { for (const cmd of c.commands) push(byId.get(target), cmd); continue }
+    result.push(c)
+  }
+  return result
+}
+
+export const CATEGORIES = buildAllCategories()

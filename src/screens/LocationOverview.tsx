@@ -2,10 +2,12 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import {
   MapPin, Plus, Trash2, Edit2, Check, X, Upload, Monitor, Server,
   Printer, Package, Loader, Search, RefreshCw, AlertTriangle, ChevronRight,
-  UserSearch, Briefcase, Building2, Filter, ChevronDown,
+  UserSearch, Briefcase, Building2, Filter, ChevronDown, ScanLine,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
+import { runPrinterIpScan } from '../services/printerIpScan'
+import { useDeviceScanStore } from '../store/deviceScanStore'
 import { useAppStore } from '../store/appStore'
 import { createLogger } from '../utils/activityLogger'
 import type { InventoryItem } from '../types/auth'
@@ -49,6 +51,16 @@ export default function LocationOverview() {
   const [activeCategory, setActiveCategory] = useState<string>('Computer')
   const [items, setItems]     = useState<InventoryItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [ipScanBusy, setIpScanBusy] = useState(false)
+  const [ipScanMsg, setIpScanMsg] = useState('')
+  // Geräte-Scan läuft über einen globalen Store → überlebt Menüwechsel/Unmount.
+  const deviceScanRunning = useDeviceScanStore(s => s.running)
+  const deviceScanDone = useDeviceScanStore(s => s.done)
+  const deviceScanTotal = useDeviceScanStore(s => s.total)
+  const deviceScanMsg = useDeviceScanStore(s => s.message)
+  const deviceScanFinishedAt = useDeviceScanStore(s => s.finishedAt)
+  const startDeviceScan = useDeviceScanStore(s => s.start)
+  const clearDeviceScanMsg = useDeviceScanStore(s => s.clearMessage)
   const [search, setSearch]   = useState('')
   const [selected, setSelected] = useState<Set<string>>(new Set())
 
@@ -529,6 +541,30 @@ export default function LocationOverview() {
     else setSelected(prev => { const n = new Set(prev); filteredItems.forEach(i => n.add(i.id)); return n })
   }
 
+  // Drucker-IPs sofort ermitteln (statt bis 15:00 zu warten); schreibt master.ip in die Dossiers.
+  async function scanPrinterIpsNow() {
+    if (ipScanBusy) return
+    setIpScanBusy(true); setIpScanMsg('')
+    try {
+      const r = await runPrinterIpScan(session?.user.displayName || session?.user.username || 'manuell')
+      setIpScanMsg(`Drucker-IP-Scan fertig: ${r.updated}/${r.scanned} IP-Adressen aktualisiert.`)
+    } catch (e) {
+      setIpScanMsg('Drucker-IP-Scan fehlgeschlagen: ' + (e instanceof Error ? e.message : String(e)))
+    } finally { setIpScanBusy(false) }
+  }
+
+  // Geräte-Scan (IP/MAC/Seriennummer) für Server, Computer und Drucker starten.
+  // Läuft im Store (Hintergrund) weiter, auch wenn dieser Screen verlassen wird.
+  function scanDevicesNow() {
+    startDeviceScan(session?.user.displayName || session?.user.username || 'manuell')
+  }
+
+  // Nach Abschluss eines (auch im Hintergrund gelaufenen) Geräte-Scans neu laden.
+  useEffect(() => {
+    if (deviceScanFinishedAt) void loadItems()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deviceScanFinishedAt])
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -556,11 +592,40 @@ export default function LocationOverview() {
               )}
             </>
           )}
+          {activeCategory === 'Drucker' && (
+            <button onClick={scanPrinterIpsNow} disabled={ipScanBusy}
+              title="IP-Adressen aller Drucker jetzt ermitteln und in den Dossiers hinterlegen (läuft sonst automatisch täglich um 15:00)"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-blue-500/40 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 disabled:opacity-40">
+              {ipScanBusy ? <Loader size={12} className="animate-spin" /> : <Printer size={12} />}Drucker-IPs scannen
+            </button>
+          )}
+          <button onClick={scanDevicesNow} disabled={deviceScanRunning}
+            title="IP, MAC und Seriennummer aller Geräte (Server/Computer/Drucker) jetzt auslesen und in den Stammdaten hinterlegen. Läuft im Hintergrund weiter (auch bei Menüwechsel) und sonst automatisch alle 3 Tage um 15:00 Uhr."
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40">
+            {deviceScanRunning ? <Loader size={12} className="animate-spin" /> : <ScanLine size={12} />}Geräte scannen (IP/MAC/Serial)
+          </button>
           <button onClick={loadItems} className="p-1.5 rounded-md border border-border hover:bg-accent text-muted-foreground">
             <RefreshCw size={13} />
           </button>
         </div>
       </div>
+      {ipScanMsg && (
+        <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-300 flex items-center gap-2">
+          <span className="flex-1">{ipScanMsg}</span>
+          <button onClick={() => setIpScanMsg('')} className="text-blue-300/70 hover:text-blue-200 text-sm leading-none">×</button>
+        </div>
+      )}
+      {(deviceScanRunning || deviceScanMsg) && (
+        <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 flex items-center gap-2">
+          {deviceScanRunning && <Loader size={12} className="animate-spin shrink-0" />}
+          <span className="flex-1">
+            {deviceScanRunning
+              ? `Geräte werden gescannt (IP/MAC/Seriennummer)…${deviceScanTotal ? ` ${deviceScanDone}/${deviceScanTotal}` : ''} — läuft im Hintergrund weiter`
+              : deviceScanMsg}
+          </span>
+          {!deviceScanRunning && <button onClick={clearDeviceScanMsg} className="text-emerald-300/70 hover:text-emerald-200 text-sm leading-none">×</button>}
+        </div>
+      )}
 
       {remoteDocError && (
         <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-red-500/10 border border-red-500/20 text-red-400">
@@ -770,6 +835,8 @@ export default function LocationOverview() {
                               <p className="text-sm font-medium text-foreground font-mono truncate inline-flex items-center gap-1">{item.name}{item.name && (item.category === 'Drucker' ? <PrinterInfoButton printerName={item.name} /> : <DeviceInfoButton hostname={item.name} />)}</p>
                               <div className="flex items-center gap-3 mt-0.5 flex-wrap">
                                 {item.ip && <span className="text-[10px] text-muted-foreground">{item.ip}</span>}
+                                {item.mac && <span className="text-[10px] text-muted-foreground font-mono" title="MAC-Adresse (Geräte-Scan)">{item.mac}</span>}
+                                {item.serial && <span className="text-[10px] text-muted-foreground font-mono" title="Seriennummer (Geräte-Scan)">SN: {item.serial}</span>}
                                 {item.description && <span className="text-[10px] text-muted-foreground">{item.description}</span>}
                                 {item.department && (
                                   <span className="inline-flex items-center gap-1 text-[10px] text-foreground" title="Abteilung (aus AD)">

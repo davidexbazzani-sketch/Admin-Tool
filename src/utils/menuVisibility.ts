@@ -80,6 +80,7 @@ export function withMenuState(id: string, state: MenuVisibilityState, v: MenuVis
 export interface VisibilityContext {
   isAdmin: boolean                    // Admin ODER Master
   isMaster: boolean
+  isFounder?: boolean                 // geschützter Gründer-Master (Davidxe) — sieht IMMER alles
   userOverride: Set<string> | null    // per-Benutzer-Override (hidden-Set) oder null
   hidden: Set<string>
   minRole: Record<string, MenuRole>
@@ -89,12 +90,19 @@ export interface VisibilityContext {
 }
 
 export function computeMenuVisible(id: string, ctx: VisibilityContext): boolean {
-  // 1. Fest im Katalog verankerte Rollen-Anforderung (immer bindend)
-  if (ctx.builtinMasterOnly) return ctx.isMaster
+  // 0. Geschützter Gründer-Master-Admin (Davidxe): sieht IMMER alles, ihm kann
+  //    nichts ausgeblendet werden — weder global noch per Benutzer-Override.
+  if (ctx.isFounder) return true
+
+  // 1. Fest im Katalog verankerte Rollen-Untergrenze: unterprivilegierte Rollen
+  //    sehen den Punkt nie. (Höhere Rollen fallen durch → Override kann greifen.)
+  if (ctx.builtinMasterOnly && !ctx.isMaster) return false
   if (ctx.builtinAdminOnly && !ctx.isAdmin) return false
 
-  // 2. Per-Benutzer-Override ist für Nicht-Master maßgeblich (kann alles ausblenden)
-  if (ctx.userOverride && !ctx.isMaster) {
+  // 2. Per-Benutzer-Override gilt für JEDE Rolle (Admin, Master, User) außer dem
+  //    Gründer (oben abgefangen) und ersetzt die globale Sichtbarkeit für diesen
+  //    Nutzer — kann jeden Punkt ausblenden (z. B. Kiosk-Konten).
+  if (ctx.userOverride) {
     return !ctx.userOverride.has(id)
   }
 

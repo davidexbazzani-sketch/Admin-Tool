@@ -42,12 +42,15 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'pc-diagnosis',           label: 'PC-Diagnose',             category: 'IT Support' },
   { id: 'employee-management',    label: 'Mitarbeiterverwaltung',   category: 'IT Support', adminOnly: true },
   { id: 'onboarding',             label: 'Onboarding',              category: 'IT Support', adminOnly: true },
+  { id: 'treiber-installation',   label: 'Treiber-Installation',    category: 'IT Support', adminOnly: true },
   { id: 'servicenow',             label: 'ServiceNow / Tickets',    category: 'IT Support', adminOnly: true },
 
   // Infrastruktur
   { id: 'endpoint-devices',   label: 'Endgeräte-Übersicht',    category: 'Infrastruktur' },
+  { id: 'gpu-driver-mgmt',    label: 'Grafik-/Treiber-Verwaltung', category: 'Infrastruktur', adminOnly: true },
   { id: 'infra-marine',       label: 'Infrastruktur Marine',   category: 'Infrastruktur' },
   { id: 'infra-projects',     label: 'Infrastruktur Projekte', category: 'Infrastruktur' },
+  { id: 'server',             label: 'Server',                 category: 'Infrastruktur', adminOnly: true },
   { id: 'scheduled-tasks',    label: 'Geplante Aufgaben',      category: 'Infrastruktur', adminOnly: true },
   { id: 'presentation-mode',  label: 'Präsentationsmodus',     category: 'Infrastruktur', adminOnly: true },
   { id: 'user-presence',      label: 'Wo angemeldet?',         category: 'Infrastruktur' },
@@ -68,6 +71,7 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'trickbox',       label: 'Trickbox',         category: 'Sonstiges' },
   { id: 'pdf-tools',      label: 'PDF-Werkzeuge',    category: 'Sonstiges' },
   { id: 'knowledge-base', label: 'Wissensdatenbank', category: 'Sonstiges' },
+  { id: 'knowledge-search', label: 'Wissenssuche', category: 'Sonstiges' },
   { id: 'it-guru',        label: 'IT Guru',          category: 'Sonstiges' },
 
   { id: 'results', label: 'Ergebnisse', category: 'Ergebnisse', topLevel: true },

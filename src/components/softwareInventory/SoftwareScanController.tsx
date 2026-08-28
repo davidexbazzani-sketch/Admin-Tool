@@ -11,8 +11,9 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import {
-  loadSchedule, saveSchedule, isScanDue, isClaimed, runAutoScanOnce,
+  loadSchedule, saveSchedule, isClaimed, runAutoScanOnce,
 } from '../../services/softwareInventoryScan'
+import { getScanSchedule, isConfiguredDue } from '../../services/scanSchedules'
 
 const POLL_MS = 20 * 60 * 1000       // alle 20 min prüfen, ob ein Lauf fällig ist
 const HEARTBEAT_MS = 5 * 60 * 1000   // Claim höchstens alle 5 min auffrischen
@@ -27,7 +28,8 @@ export default function SoftwareScanController() {
     let s
     try { s = await loadSchedule() } catch { return }
     const now = Date.now()
-    if (!isScanDue(s, now)) return
+    const cfg = await getScanSchedule('software-inventory')
+    if (!isConfiguredDue(cfg, s.lastRunAt, now)) return
     if (isClaimed(s, now)) return   // andere Instanz scannt gerade
 
     busy.current = true

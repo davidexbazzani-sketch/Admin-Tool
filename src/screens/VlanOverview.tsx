@@ -7,19 +7,24 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Network, RefreshCw, Loader2, Square, Search, Save, Plus, Trash2, Edit2, Check, X,
-  Wifi, WifiOff, Boxes, AlertTriangle, HelpCircle, Upload, GitCompareArrows, ScanLine, Download,
+  Wifi, WifiOff, Boxes, AlertTriangle, HelpCircle, Upload, GitCompareArrows, ScanLine, Download, Info,
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
+import { loadAllPrinterIps } from '../services/printerDossier'
 import { getSiteSubnets } from '../services/userPresenceScan'
 import {
   loadVlanConfig, saveVlanConfig, loadScanCache, saveScanCache, discoverDevices,
   labelFor, normalizeCidr, ipToInt, DEFAULT_SITE, mergeVlanSeed, computeVlanDrift,
-  classifyDevicesPassive, probeDeviceTypes, isTypeMismatch, findVlanDef,
-  loadDeviceTypes, saveDeviceTypes, DEVICE_TYPE_LABEL,
-  type VlanConfig, type VlanDef, type VlanDrift, type DriftStatus, type DeviceType, type VlanDevice,
+  classifyDevicesPassive, probeDeviceTypes, isTypeMismatch, findVlanDef, refineDeviceType,
+  loadDeviceTypes, saveDeviceTypes, DEVICE_TYPE_LABEL, canonicalIp, suggestExpectedType,
+  loadOverrides, saveOverrides, snmpEnrich, readArpTable, vendorFromMac,
+  type VlanConfig, type VlanDef, type VlanDrift, type DriftStatus, type DeviceType, type VlanDevice, type DeviceTypeResult, type DeviceOverride,
 } from '../services/vlans'
-import { VLAN_SEED, VLAN_SEED_NOTE, VLAN_SEED_SITE } from '../data/vlanSeed'
+import { VLAN_SEED, VLAN_SEED_NOTE, VLAN_SEED_SITE, VLAN_CATALOG_2026, type VlanCatalogEntry } from '../data/vlanSeed'
+import { exportVlanNetwork, type VlanExportFormat, type VlanExportDeviceInfo, type ExportLang } from '../services/vlanExport'
+import { importVlanTopology } from '../services/vlanExcelImport'
+import { loadDevices as loadEndpointDevices, classifyModel } from '../services/endpointDevices'
 import type { InventoryItem } from '../types/auth'
 import { api } from '../electronAPI'
 import { useVlanStore, beginScanToken, currentScanToken, abortScan, isScanAborted, wasAborted } from '../store/vlanStore'
@@ -32,6 +37,16 @@ const TYPE_CLS: Record<DeviceType, string> = {
   pc: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
   server: 'bg-orange-500/15 text-orange-300 border-orange-500/30',
   other: 'bg-muted/30 text-muted-foreground border-border',
+}
+
+/** Badge-Farbe: Endnutzer-PC (grün) vs. PC/Server–RDP (türkis) unterscheidbar machen. */
+function typeBadgeCls(type: DeviceType, kind?: string): string {
+  if (type === 'pc') {
+    return /endnutzer/i.test(kind || '')
+      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'   // PC (Endnutzer)
+      : 'bg-teal-500/15 text-teal-300 border-teal-500/30'            // PC/Server (RDP), Windows
+  }
+  return TYPE_CLS[type]
 }
 
 function driftBadge(s: DriftStatus): { label: string; cls: string } {
@@ -55,6 +70,7 @@ export default function VlanOverview() {
   const [selectedCidr, setSelectedCidr] = useState<string>('')
   const [search, setSearch] = useState('')
   const [editMode, setEditMode] = useState(false)
+  const [showInfo, setShowInfo] = useState(false)
   const [newCidr, setNewCidr] = useState('')
   const [savingCfg, setSavingCfg] = useState(false)
   const [importMsg, setImportMsg] = useState('')
@@ -64,11 +80,22 @@ export default function VlanOverview() {
   const [driftMsg, setDriftMsg] = useState('')
   // Gerätetyp-Check
   const [inventory, setInventory] = useState<InventoryItem[]>([])
-  const [activeTypes, setActiveTypes] = useState<Record<string, { type: DeviceType; detail: string }>>({})
+  const [activeTypes, setActiveTypes] = useState<Record<string, DeviceTypeResult>>({})
   const [probing, setProbing] = useState(false)
   const [probeProg, setProbeProg] = useState({ done: 0, total: 0 })
+  const [probePhase, setProbePhase] = useState<'ports' | 'snmp' | ''>('')
   const [onlyForeign, setOnlyForeign] = useState(false)
   const probeAbort = useRef(false)
+  // Manuelle Typ-Overrides pro IP (dauerhaft) + Inline-Editor
+  const [overrides, setOverrides] = useState<Record<string, DeviceOverride>>({})
+  const [editIp, setEditIp] = useState<string | null>(null)
+  // IP → Druckername aus den Drucker-Dossiers (Standort-Übersicht)
+  const [dossierPrinterIps, setDossierPrinterIps] = useState<Record<string, string>>({})
+  // Bauform/Modelltyp je Hostname UND Seriennummer (aus der Endgeräte-Übersicht)
+  const [ffByHost, setFfByHost] = useState<Map<string, string>>(new Map())
+  const [ffSerials, setFfSerials] = useState<Array<[string, string]>>([])
+  // Export-Sprache (Deutsch / Englisch)
+  const [exportLang, setExportLang] = useState<ExportLang>('de')
 
   // Config + Cache beim Öffnen laden
   useEffect(() => {
@@ -96,9 +123,36 @@ export default function VlanOverview() {
       if (!cancelled && dt && dt.scanDate && dt.scanDate === useVlanStore.getState().scanDate) {
         setActiveTypes(dt.types)
       }
+      // Manuelle Overrides laden (dauerhaft, unabhängig vom Scan-Datum).
+      try { const ov = await loadOverrides(); if (!cancelled) setOverrides(ov) } catch { /* keine */ }
+      // Drucker-IPs aus den Dossiers (für die Namens-Zuordnung in der VLAN-Übersicht).
+      try { const pip = await loadAllPrinterIps(); if (!cancelled) setDossierPrinterIps(pip) } catch { /* keine */ }
     })()
     return () => { cancelled = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Endgeräte-Übersicht laden → Bauform/Modelltyp je Hostname UND Seriennummer.
+  // (Vorbild: UserPresence.tsx – exakter Hostname-Treffer, sonst Seriennummer-Suffix.)
+  useEffect(() => {
+    let cancelled = false
+    void (async () => {
+      try {
+        const devs = await loadEndpointDevices()
+        const byHost = new Map<string, string>()
+        const serials: Array<[string, string]> = []
+        for (const d of devs) {
+          const cat = classifyModel(d.model)
+          if (!cat) continue
+          const host = (d.hostname || '').split('.')[0].trim().toUpperCase()
+          if (host) byHost.set(host, cat)
+          const ser = (d.serial || '').trim().toUpperCase()
+          if (ser.length >= 5) serials.push([ser, cat])
+        }
+        if (!cancelled) { setFfByHost(byHost); setFfSerials(serials) }
+      } catch { /* Endgeräte-Übersicht evtl. noch leer */ }
+    })()
+    return () => { cancelled = true }
   }, [])
 
   // ── Scan ────────────────────────────────────────────────────────────────────
@@ -164,6 +218,20 @@ export default function VlanOverview() {
     return { arr, unknownCount }
   }, [devices, config, store.subnets])
 
+  // Abdeckung: welche der aktuellen VLANs (Katalog 2026) haben ein Subnetz im Tool?
+  const catalogCoverage = useMemo(() => {
+    const cfgVlanIds = new Set(
+      config.vlans.filter(v => v.vlanId && normalizeCidr(v.cidr)).map(v => String(v.vlanId).trim()),
+    )
+    const covered: VlanCatalogEntry[] = []
+    const missing: VlanCatalogEntry[] = []
+    for (const c of VLAN_CATALOG_2026) {
+      if (c.cidr || cfgVlanIds.has(c.vlanId)) covered.push(c)
+      else missing.push(c)
+    }
+    return { covered, missing }
+  }, [config])
+
   // Auswahl gültig halten
   useEffect(() => {
     const valid = groups.arr.some(g => g.cidr === selectedCidr) || (selectedCidr === UNKNOWN && groups.unknownCount > 0)
@@ -180,13 +248,52 @@ export default function VlanOverview() {
   const selectedDef = useMemo(() => findVlanDef(selectedCidr, config), [config, selectedCidr])
   const expectedType = (selectedDef?.expectedType || '') as DeviceType | ''
 
-  const typeOf = useCallback((d: VlanDevice): { type?: DeviceType; source?: 'inventory' | 'hostname' | 'ports'; detail?: string } => {
+  // Server aus der Standort-Übersicht (Inventar, Kategorie 'Server') — per IP oder Hostname.
+  const serverMatch = useMemo(() => {
+    const ips = new Set<string>(), names = new Set<string>()
+    for (const it of inventory) {
+      if ((it.category || '').toLowerCase() !== 'server') continue
+      const ip = (it.ip || '').trim(); if (ip) ips.add(canonicalIp(ip) || ip)
+      const nm = (it.name || '').split('.')[0].trim().toLowerCase(); if (nm) names.add(nm)
+    }
+    return { ips, names }
+  }, [inventory])
+
+  // IP → Druckername (Dossiers aus Prompt 1 + Inventar-Drucker mit IP).
+  const printerByIp = useMemo(() => {
+    const out: Record<string, string> = {}
+    for (const [ip, nm] of Object.entries(dossierPrinterIps)) { const c = canonicalIp(ip) || ip; if (c && nm) out[c] = nm }
+    for (const it of inventory) {
+      if ((it.category || '').toLowerCase() !== 'drucker') continue
+      const ip = (it.ip || '').trim(); if (ip && it.name) { const c = canonicalIp(ip) || ip; if (!out[c]) out[c] = it.name }
+    }
+    return out
+  }, [inventory, dossierPrinterIps])
+
+  // Ist das Gerät ein Server? (a) Standort-Übersicht (Inventar 'Server') per IP/Name,
+  // ODER (b) Namenskonvention: Server heißen w + 4 Ziffern (Arbeitsplätze nie mit w).
+  const isKnownServer = useCallback((ip: string, hostname?: string) => {
+    if (serverMatch.ips.has(ip)) return true
+    const base = (hostname || '').split('.')[0].trim().toLowerCase()
+    if (!base) return false
+    if (/^w\d{4}(?!\d)/.test(base)) return true
+    return serverMatch.names.has(base)
+  }, [serverMatch])
+
+  const typeOf = useCallback((d: VlanDevice): { type?: DeviceType; source?: 'inventory' | 'hostname' | 'ports' | 'manual'; detail?: string } => {
+    const ov = overrides[d.ip]
+    if (ov?.type) return { type: ov.type, source: 'manual', detail: ov.note }
     const act = activeTypes[d.ip]
-    if (act) return { type: act.type, source: 'ports', detail: act.detail }
+    const name = d.hostname || act?.ptr || act?.netbios || ''
+    // Bekannter Server (Standort-Übersicht) hat Vorrang vor dem Portprofil.
+    if (isKnownServer(d.ip, name)) return { type: 'server', source: 'inventory', detail: 'Standort-Übersicht' }
     const p = passiveTypes.get(d.ip)
-    if (p) return { type: p.type, source: p.source }
-    return {}
-  }, [activeTypes, passiveTypes])
+    const r = refineDeviceType(name, act, p?.type)
+    if (!r.type) return {}
+    // Quelle: Endnutzer-Name schlägt Portprofil; sonst Ports; sonst passiv.
+    const source: 'inventory' | 'hostname' | 'ports' = act?.type ? 'ports' : (p?.source ?? 'hostname')
+    return { type: r.type, source, detail: act?.detail }
+  }, [overrides, activeTypes, passiveTypes, isKnownServer])
 
   const typeStatus = useCallback((d: VlanDevice): 'ok' | 'foreign' | 'unknown' | 'none' => {
     if (!expectedType) return 'none'
@@ -210,25 +317,112 @@ export default function VlanOverview() {
     })
   }, [vlanDeviceList, search, onlyForeign, typeStatus])
 
-  // Port-Typ-Check über eine IP-Menge; Ergebnis wird bis zum nächsten Scan gespeichert.
+  // Geräte identifizieren: Portprofil + SNMP (sysDescr/sysName) + MAC/Hersteller (ARP).
+  // Ergebnis wird bis zum nächsten Scan gespeichert.
   async function runProbeOver(ips: string[]) {
     const targets = [...new Set(ips)]
     if (targets.length === 0 || probing) return
     probeAbort.current = false
-    setProbing(true); setProbeProg({ done: 0, total: targets.length })
+    setProbing(true); setProbePhase('ports'); setProbeProg({ done: 0, total: targets.length })
     try {
-      const map = await probeDeviceTypes(targets, (done, total) => setProbeProg({ done, total }), () => probeAbort.current)
+      // 1) Portprofil
+      const portMap = await probeDeviceTypes(targets, (done, total) => setProbeProg({ done, total }), () => probeAbort.current)
+      // 2) ARP-Tabelle des Admin-PCs (MAC im eigenen Subnetz)
+      const arp = await readArpTable().catch(() => new Map<string, string>())
+      // 3) SNMP-Tiefenerkennung
+      setProbePhase('snmp'); setProbeProg({ done: 0, total: targets.length })
+      const community = config.snmpCommunity?.trim() || 'public'
+      const snmpMap = await snmpEnrich(targets, community, (done, total) => setProbeProg({ done, total }), () => probeAbort.current)
+
       setActiveTypes(prev => {
         const next = { ...prev }
-        map.forEach((v, ip) => { next[ip] = v })
+        for (const ip of targets) {
+          const merged: DeviceTypeResult = { ...(portMap.get(ip) || next[ip] || { type: '', detail: '' }) }
+          const s = snmpMap.get(ip)
+          if (s) {
+            merged.snmpName = s.snmpName; merged.snmpDescr = s.snmpDescr
+            if (s.type) { merged.type = s.type; merged.kind = s.kind }   // sichere SNMP-Klasse schlägt schwaches Portprofil
+          }
+          const mac = arp.get(ip)
+          if (mac) merged.mac = mac
+          merged.vendor = vendorFromMac(mac) || s?.vendor || merged.vendor
+          const hasSignal = merged.type || merged.kind || merged.ptr || merged.netbios || merged.ports || merged.snmpName || merged.mac
+          if (hasSignal) next[ip] = merged
+        }
         void saveDeviceTypes(scanDate || '', next)   // persistiert bis zum nächsten Scan
         return next
       })
-    } finally { setProbing(false) }
+    } finally { setProbing(false); setProbePhase('') }
+  }
+
+  // Override setzen/entfernen (dauerhaft je IP)
+  function setOverride(ip: string, patch: DeviceOverride | null) {
+    setOverrides(prev => {
+      const next = { ...prev }
+      if (patch === null) delete next[ip]
+      else next[ip] = { ...patch, by: user?.displayName || user?.username || '', at: new Date().toISOString() }
+      void saveOverrides(next)
+      return next
+    })
   }
   const runTypeProbe = () => runProbeOver(vlanDeviceList.filter(d => d.online).map(d => d.ip))
   const runAllProbe = () => runProbeOver(devices.filter(d => d.online).map(d => d.ip))
   const stopProbe = () => { probeAbort.current = true }
+
+  const devByIp = useMemo(() => { const m = new Map<string, VlanDevice>(); for (const d of devices) m.set(d.ip, d); return m }, [devices])
+
+  // Angereicherte Info je IP (für Anzeige + Export): Typ, Geräteart, PTR, NetBIOS, Ports.
+  // Namenskonvention (de/deham/desch = Endnutzer-PC) hat Vorrang vor schwachem Portprofil.
+  // Bauform/Modelltyp zu einem Hostnamen: erst exakt per PC-Name, sonst per
+  // Seriennummer als Suffix (AD-Konvention: Hostname = Präfix DE/DEHAM/DESCH + Serial).
+  const formFactorForHost = useCallback((host: string): string => {
+    const short = (host || '').split('.')[0].trim().toUpperCase()
+    if (!short) return ''
+    const exact = ffByHost.get(short)
+    if (exact) return exact
+    let best = '', bestLen = 0
+    for (const [serial, cat] of ffSerials) {
+      if (serial.length > bestLen && short.endsWith(serial)) { best = cat; bestLen = serial.length }
+    }
+    return best
+  }, [ffByHost, ffSerials])
+
+  const infoOf = useCallback((ip: string): VlanExportDeviceInfo => {
+    const act = activeTypes[ip]
+    const d = devByIp.get(ip)
+    const name = d?.hostname || act?.ptr || act?.netbios || ''
+    const ov = overrides[ip]
+    const r: { type: DeviceType | ''; kind: string } = ov?.type
+      ? { type: ov.type, kind: ov.kind || DEVICE_TYPE_LABEL[ov.type] }
+      : isKnownServer(ip, name)
+        ? { type: 'server', kind: 'Server' }
+        : refineDeviceType(name, act, passiveTypes.get(ip)?.type)
+    // Drucker per IP mit dem Standort-Namen beschriften.
+    const printerName = r.type === 'printer' ? printerByIp[ip] : undefined
+    return {
+      type: r.type ? DEVICE_TYPE_LABEL[r.type] : '',
+      kind: r.kind,
+      formFactor: formFactorForHost(name),
+      ptr: act?.ptr || '',
+      netbios: act?.netbios || '',
+      ports: act?.ports || '',
+      mac: act?.mac || '',
+      vendor: act?.vendor || '',
+      snmpName: act?.snmpName || '',
+      printerName,
+    }
+  }, [overrides, activeTypes, passiveTypes, devByIp, isKnownServer, printerByIp, formFactorForHost])
+
+  const [exporting, setExporting] = useState<VlanExportFormat | null>(null)
+  async function runNetworkExport(format: VlanExportFormat) {
+    if (exporting) return
+    setExporting(format)
+    try {
+      const res = await exportVlanNetwork(format, config, devices, infoOf, exportLang)
+      if (res.ok && res.path) setImportMsg(`Netzwerk-Übersicht exportiert: ${res.path}`)
+      else if (res.error) window.alert('Export fehlgeschlagen: ' + res.error)
+    } finally { setExporting(null) }
+  }
 
   async function exportForeign() {
     const flagged = vlanDeviceList.filter(d => { const s = typeStatus(d); return s === 'foreign' || s === 'unknown' })
@@ -293,6 +487,37 @@ export default function VlanOverview() {
     } finally { setSavingCfg(false) }
   }
 
+  // Netzdoku-Excel (DEHAM.xlsx) importieren: autoritativ für Subnetz/Gateway/Name je VLAN.
+  async function importNetdoc() {
+    setSavingCfg(true); setImportMsg('')
+    try {
+      const res = await importVlanTopology()
+      if (!res.ok) { window.alert(res.error || 'Import fehlgeschlagen.'); return }
+      const vlans = config.vlans.map(v => ({ ...v }))
+      const byCidr = new Map<string, number>()
+      vlans.forEach((v, i) => { const n = normalizeCidr(v.cidr); if (n) byCidr.set(n, i) })
+      let added = 0, updated = 0
+      for (const e of res.entries) {
+        const n = normalizeCidr(e.cidr); if (!n) continue
+        const i = byCidr.get(n)
+        if (i === undefined) {
+          vlans.push({ cidr: n, vlanId: e.vlanId, name: e.name, gateway: e.gateway || undefined, expectedType: suggestExpectedType(e.name) || undefined, description: 'Netzdoku (DEHAM.xlsx)' })
+          byCidr.set(n, vlans.length - 1); added++
+        } else {
+          // Netzdoku ist autoritativ: Name/Gateway/VLAN-ID überschreiben.
+          vlans[i] = { ...vlans[i], vlanId: e.vlanId || vlans[i].vlanId, name: e.name || vlans[i].name, gateway: e.gateway || vlans[i].gateway }
+          updated++
+        }
+      }
+      const withSite: VlanConfig = { ...config, vlans, site: site.trim() || DEFAULT_SITE }
+      setConfig(withSite); setSite(withSite.site)
+      const ok = await saveVlanConfig(withSite, currentUser)
+      setImportMsg(ok
+        ? `Netzdoku importiert: ${added} neu, ${updated} aktualisiert (${res.entries.length} VLANs mit Subnetz).${res.note ? ' ' + res.note : ''}`
+        : 'Übernommen, aber Speichern fehlgeschlagen (Netzlaufwerk erreichbar?).')
+    } finally { setSavingCfg(false) }
+  }
+
   // Drift-Check: VLAN-Liste vs. AD-Subnetze vs. letzter Scan.
   async function runDrift() {
     setShowDrift(true); setDriftLoading(true); setDriftMsg('')
@@ -352,17 +577,66 @@ export default function VlanOverview() {
             {probing ? (
               <button onClick={stopProbe}
                 className="inline-flex items-center gap-1.5 px-3 py-2 text-sm rounded-md border border-red-500/50 text-red-300 hover:bg-red-500/10">
-                <Loader2 size={14} className="animate-spin" />Typen {probeProg.done}/{probeProg.total} · Stoppen
+                <Loader2 size={14} className="animate-spin" />{probePhase === 'snmp' ? 'SNMP' : 'Ports'} {probeProg.done}/{probeProg.total} · Stoppen
               </button>
             ) : (
               <button onClick={runAllProbe} disabled={scanning || devices.filter(d => d.online).length === 0}
-                title="Port-Typ-Check über ALLE online-Geräte aller Subnetze — Ergebnis wird bis zum nächsten Scan gespeichert"
+                title="Alle online-Geräte aller VLANs identifizieren: Ports → Geräteart, SNMP (Modell/Name), MAC/Hersteller, Reverse-DNS, NetBIOS. Ergebnis gilt bis zum nächsten Scan."
                 className="inline-flex items-center gap-1.5 px-3 py-2 text-sm rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30 disabled:opacity-40">
-                <ScanLine size={14} />Alle Typen prüfen
+                <ScanLine size={14} />Alle VLANs: Geräte identifizieren
               </button>
             )}
+            <div className="flex items-center rounded-md border border-border overflow-hidden text-xs" title="Sprache des Excel-/PDF-Exports">
+              {(['de', 'en'] as ExportLang[]).map(l => (
+                <button key={l} onClick={() => setExportLang(l)}
+                  className={`px-2.5 py-2 font-semibold ${exportLang === l ? 'bg-accent text-foreground' : 'text-muted-foreground hover:text-foreground'} ${l === 'en' ? 'border-l border-border' : ''}`}>
+                  {l.toUpperCase()}
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center rounded-md border border-border overflow-hidden">
+              <button onClick={() => runNetworkExport('excel')} disabled={!!exporting}
+                title="Gesamte Netzwerk-Übersicht (gruppiert nach VLAN) als Excel exportieren"
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm text-emerald-300 hover:bg-emerald-500/10 disabled:opacity-40">
+                {exporting === 'excel' ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}Excel
+              </button>
+              <button onClick={() => runNetworkExport('pdf')} disabled={!!exporting}
+                title="Gesamte Netzwerk-Übersicht (gruppiert nach VLAN) als PDF exportieren"
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm text-red-300 hover:bg-red-500/10 disabled:opacity-40 border-l border-border">
+                {exporting === 'pdf' ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}PDF
+              </button>
+            </div>
+            <button onClick={() => setShowInfo(true)} title="Was ist ein VLAN? Unterschied zum Subnetz"
+              className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30 shrink-0">
+              <Info size={15} />
+            </button>
           </div>
         </div>
+
+        {/* Erklärung VLAN vs. Subnetz */}
+        {showInfo && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-6" onClick={() => setShowInfo(false)}>
+            <div onClick={e => e.stopPropagation()} className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto">
+              <div className="flex items-center justify-between px-5 py-3 border-b border-border sticky top-0 bg-card">
+                <h2 className="text-base font-bold text-foreground flex items-center gap-2"><Info size={16} className="text-blue-400" />VLAN &amp; Subnetz – kurz erklärt</h2>
+                <button onClick={() => setShowInfo(false)} className="text-muted-foreground hover:text-foreground"><X size={18} /></button>
+              </div>
+              <div className="px-5 py-4 space-y-3 text-sm text-muted-foreground leading-relaxed">
+                <p><strong className="text-foreground">VLAN</strong> (Schicht 2 / Switch): eine <strong className="text-foreground">logische Gruppe von Geräten</strong>, die zusammen ein eigenes Netz-Segment bilden — unabhängig davon, wo die Geräte physisch stehen. Kennung ist die <strong className="text-foreground">VLAN-ID</strong> (z. B. 1202). Regelt: wer darf direkt miteinander reden.</p>
+                <p><strong className="text-foreground">Subnetz</strong> (Schicht 3 / IP): ein <strong className="text-foreground">IP-Adressbereich</strong> (CIDR, z. B. 10.170.32.0/23). Regelt: welche IP-Adressen es gibt und wie geroutet wird.</p>
+                <p><strong className="text-foreground">Zusammenhang:</strong> Jedem VLAN wird üblicherweise <strong className="text-foreground">genau ein Subnetz</strong> zugewiesen. Ein Gerät in VLAN 1202 bekommt eine IP aus 10.170.32.0/23. In ein anderes VLAN gelangt der Verkehr nur über den Router (Gateway).</p>
+                <div className="rounded-md border border-blue-500/20 bg-blue-500/5 p-3 text-[13px]">
+                  <p className="text-foreground font-medium mb-1">Merksatz</p>
+                  <p>VLAN = das Segment (logische Trennung auf dem Switch). Subnetz = die Adressen/das Routing dafür. „VLAN 1202" und „10.170.32.0/23" meinen praktisch dasselbe Netz — nur aus zwei Blickwinkeln.</p>
+                </div>
+                <div className="rounded-md border border-border bg-muted/10 p-3 text-[13px]">
+                  <p className="text-foreground font-medium mb-1">Warum dieses Tool Subnetze braucht</p>
+                  <p>Das Tool erreicht Geräte nur über ihre <strong className="text-foreground">IP</strong>, arbeitet also auf Subnetz-Ebene. Die VLAN-ID ist nur das Etikett. Ohne CIDR weiß es nicht, welche Adressen es abklopfen soll — deshalb die Zuordnung VLAN-ID → Subnetz.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {importMsg && (
           <div className="mt-2 rounded-md border border-green-500/40 bg-green-500/10 px-3 py-2 text-xs text-green-300 flex items-start gap-2">
@@ -401,9 +675,14 @@ export default function VlanOverview() {
             <p className="text-sm font-semibold text-foreground">VLAN-Zuordnung (je Subnetz VLAN-ID + Name vergeben)</p>
             <div className="flex items-center gap-2">
               <button onClick={importSeed} disabled={savingCfg}
-                title="Gefundene VLAN-Liste (Stand ~2022) übernehmen — bestehende Labels bleiben erhalten"
+                title="Aktuelle VLAN-Liste (Stand 2026) übernehmen — bestehende Labels bleiben erhalten"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground disabled:opacity-40">
                 <Upload size={13} />Liste importieren ({VLAN_SEED.length})
+              </button>
+              <button onClick={importNetdoc} disabled={savingCfg}
+                title="Netzdoku-Excel (network/DEHAM.xlsx) von der Freigabe einlesen — Subnetze/Gateways/Namen autoritativ übernehmen"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-blue-500/40 text-blue-300 hover:bg-blue-500/10 disabled:opacity-40">
+                <Upload size={13} />Netzdoku importieren (DEHAM.xlsx)
               </button>
               <button onClick={saveConfig} disabled={savingCfg}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
@@ -411,9 +690,27 @@ export default function VlanOverview() {
               </button>
             </div>
           </div>
+          {/* Abdeckung: aktuelle VLAN-Liste (Stand 2026) vs. bekannte Subnetze */}
+          <div className="mb-3 rounded-md border border-border bg-background/40 p-2.5">
+            <div className="flex items-center gap-2 text-xs flex-wrap">
+              <span className="font-semibold text-foreground">Aktuelle VLAN-Liste (Stand 2026): {VLAN_CATALOG_2026.length} VLANs</span>
+              <span className="text-emerald-400">{catalogCoverage.covered.length} mit Subnetz</span>
+              <span className="text-muted-foreground">·</span>
+              <span className={catalogCoverage.missing.length ? 'text-amber-400' : 'text-muted-foreground'}>
+                {catalogCoverage.missing.length} ohne Subnetz
+              </span>
+            </div>
+            {catalogCoverage.missing.length > 0 && (
+              <p className="mt-1.5 text-[11px] text-muted-foreground leading-relaxed">
+                <AlertTriangle size={11} className="inline text-amber-400 mr-1 -mt-0.5" />
+                Diese VLANs haben noch kein Subnetz — CIDR ergänzen (aus AD-Scan oder manuell unten), damit sie gescannt werden:{' '}
+                {catalogCoverage.missing.map(m => `VLAN ${m.vlanId} (${m.name})`).join(' · ')}
+              </p>
+            )}
+          </div>
           <div className="space-y-1.5">
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground px-1">
-              <span className="w-40 shrink-0">Subnetz (CIDR)</span><span className="w-20 shrink-0">VLAN-ID</span><span className="w-44 shrink-0">Name</span><span className="w-28 shrink-0">Soll-Typ</span><span className="flex-1">Beschreibung</span>
+              <span className="w-40 shrink-0">Subnetz (CIDR)</span><span className="w-20 shrink-0">VLAN-ID</span><span className="w-44 shrink-0">Name</span><span className="w-32 shrink-0">Gateway</span><span className="w-28 shrink-0">Soll-Typ</span><span className="flex-1">Beschreibung</span>
             </div>
             {editorCidrs.map(cidr => {
               const def = config.vlans.find(v => normalizeCidr(v.cidr) === cidr)
@@ -425,6 +722,8 @@ export default function VlanOverview() {
                     className="w-20 shrink-0 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
                   <input value={def?.name ?? ''} onChange={e => updateDef(cidr, { name: e.target.value })} placeholder="z.B. Drucker-VLAN"
                     className="w-44 shrink-0 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                  <input value={def?.gateway ?? ''} onChange={e => updateDef(cidr, { gateway: e.target.value })} placeholder="Gateway"
+                    className="w-32 shrink-0 px-2 py-1 text-xs rounded border border-border bg-background text-foreground font-mono focus:outline-none focus:border-primary" />
                   <select value={def?.expectedType ?? ''} onChange={e => updateDef(cidr, { expectedType: e.target.value as DeviceType | '' })}
                     title="Erwarteter Gerätetyp – Basis für die Fremdgerät-Prüfung"
                     className="w-28 shrink-0 px-1.5 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary">
@@ -447,6 +746,13 @@ export default function VlanOverview() {
               onKeyDown={e => { if (e.key === 'Enter') addManualCidr() }}
               className="w-64 px-2 py-1 text-xs rounded border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
             <button onClick={addManualCidr} className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30"><Plus size={12} />Hinzufügen</button>
+          </div>
+          <div className="flex items-center gap-2 mt-2">
+            <label className="text-[11px] text-muted-foreground">SNMP-Community (read-only)</label>
+            <input value={config.snmpCommunity ?? ''} onChange={e => setConfig(prev => ({ ...prev, snmpCommunity: e.target.value }))}
+              onBlur={() => saveConfig()} placeholder="public"
+              className="w-40 px-2 py-1 text-xs rounded border border-border bg-background text-foreground font-mono focus:outline-none focus:border-primary" />
+            <span className="text-[10px] text-muted-foreground/70">für „Geräte identifizieren" (Drucker/Switch/USV/AP). Leer = public.</span>
           </div>
         </div>
       )}
@@ -567,6 +873,7 @@ export default function VlanOverview() {
               <span className="text-muted-foreground">Soll-Typ: {expectedType
                 ? <span className="text-foreground font-medium">{DEVICE_TYPE_LABEL[expectedType]}</span>
                 : <span className="text-amber-400">nicht gesetzt (in „VLAN-Zuordnung" wählen)</span>}</span>
+              {selectedDef?.gateway && <span className="text-muted-foreground">· Gateway <span className="font-mono text-foreground">{selectedDef.gateway}</span></span>}
               {expectedType && (foreignStats.foreign > 0 || foreignStats.unknown > 0) && (
                 <>
                   {foreignStats.foreign > 0 && <span className="inline-flex items-center gap-1 text-red-300"><AlertTriangle size={11} />{foreignStats.foreign} Fremdgerät(e)</span>}
@@ -596,13 +903,14 @@ export default function VlanOverview() {
                     <th className="text-left font-semibold px-2 py-2">IP-Adresse</th>
                     <th className="text-left font-semibold px-2 py-2">Hostname</th>
                     <th className="text-left font-semibold px-2 py-2">Typ</th>
+                    <th className="text-left font-semibold px-2 py-2">Bauform</th>
                     <th className="text-left font-semibold px-2 py-2">Angemeldet</th>
                     <th className="text-left font-semibold px-2 py-2">Quelle</th>
                   </tr>
                 </thead>
                 <tbody>
                   {selectedDevices.map(d => {
-                    const t = typeOf(d); const st = typeStatus(d)
+                    const t = typeOf(d); const st = typeStatus(d); const info = infoOf(d.ip)
                     return (
                     <tr key={d.ip} className={`border-b border-border/40 hover:bg-accent/10 ${st === 'foreign' ? 'bg-red-500/5' : ''}`}>
                       <td className="px-4 py-1.5">
@@ -616,16 +924,61 @@ export default function VlanOverview() {
                       </td>
                       <td className="px-2 py-1.5 font-mono text-foreground">{d.ip}</td>
                       <td className="px-2 py-1.5 text-foreground">
-                        <span className="inline-flex items-center gap-1">{d.hostname || <span className="text-muted-foreground">—</span>}{d.hostname && <DeviceInfoButton hostname={d.hostname} />}</span>
+                        <span className="inline-flex items-center gap-1">
+                          {d.hostname
+                            ? <>{d.hostname}<DeviceInfoButton hostname={d.hostname} /></>
+                            : info.printerName
+                              ? <span className="text-foreground" title="Drucker aus der Standort-Übersicht (per IP zugeordnet)">{info.printerName}</span>
+                              : (info.ptr || info.netbios)
+                                ? <span className="text-muted-foreground" title="aus Reverse-DNS / NetBIOS">{info.ptr || info.netbios}</span>
+                                : <span className="text-muted-foreground">—</span>}
+                        </span>
+                        {(info.ptr || info.netbios) && (
+                          <div className="text-[10px] text-muted-foreground/70 mt-0.5 truncate max-w-[240px]">
+                            {info.ptr ? `DNS: ${info.ptr}` : ''}{info.ptr && info.netbios ? ' · ' : ''}{info.netbios ? `NetBIOS: ${info.netbios}` : ''}
+                          </div>
+                        )}
+                        {(info.mac || info.vendor || info.snmpName) && (
+                          <div className="text-[10px] text-muted-foreground/70 mt-0.5 truncate max-w-[260px]">
+                            {info.mac ? `MAC: ${info.mac}` : ''}{info.vendor ? `${info.mac ? ' · ' : ''}${info.vendor}` : ''}{info.snmpName ? `${(info.mac || info.vendor) ? ' · ' : ''}SNMP: ${info.snmpName}` : ''}
+                          </div>
+                        )}
                       </td>
                       <td className="px-2 py-1.5">
                         <span className="inline-flex items-center gap-1 flex-wrap">
                           {t.type
-                            ? <span title={[t.source, t.detail].filter(Boolean).join(' · ')} className={`text-[10px] px-1.5 py-0.5 rounded-full border ${TYPE_CLS[t.type]}`}>{DEVICE_TYPE_LABEL[t.type]}</span>
-                            : <span className="text-[10px] text-muted-foreground/60">unbekannt</span>}
+                            ? <span title={[t.source, t.detail, info.ports ? 'Ports ' + info.ports : ''].filter(Boolean).join(' · ')} className={`text-[10px] px-1.5 py-0.5 rounded-full border ${typeBadgeCls(t.type, info.kind)}`}>{info.kind || DEVICE_TYPE_LABEL[t.type]}</span>
+                            : info.kind
+                              ? <span title={info.ports ? 'Offene Ports: ' + info.ports : ''} className="text-[10px] px-1.5 py-0.5 rounded-full border bg-muted/30 text-muted-foreground border-border">{info.kind}</span>
+                              : <span className="text-[10px] text-muted-foreground/60">unbekannt</span>}
+                          {overrides[d.ip]?.type && <span title={`Manuell gesetzt${overrides[d.ip]?.by ? ' von ' + overrides[d.ip]?.by : ''}`} className="text-[9px] px-1 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">manuell</span>}
                           {st === 'foreign' && <span title={`Erwartet: ${expectedType ? DEVICE_TYPE_LABEL[expectedType] : ''}`} className="text-[10px] px-1.5 py-0.5 rounded-full border bg-red-500/15 text-red-300 border-red-500/30 inline-flex items-center gap-0.5"><AlertTriangle size={9} />passt nicht</span>}
-                          {st === 'unknown' && <span className="text-[10px] text-amber-400">prüfen</span>}
+                          {st === 'unknown' && !info.kind && <span className="text-[10px] text-amber-400">prüfen</span>}
+                          <button onClick={() => setEditIp(editIp === d.ip ? null : d.ip)} title="Typ manuell setzen/korrigieren" className="p-0.5 rounded text-muted-foreground/50 hover:text-foreground"><Edit2 size={11} /></button>
                         </span>
+                        {editIp === d.ip && (
+                          <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                            <select value={overrides[d.ip]?.type || ''}
+                              onChange={e => setOverride(d.ip, e.target.value ? { type: e.target.value as DeviceType, kind: overrides[d.ip]?.kind } : null)}
+                              className="text-[11px] rounded border border-border bg-background text-foreground px-1.5 py-0.5 focus:outline-none focus:border-primary">
+                              <option value="">— (automatisch)</option>
+                              <option value="printer">Drucker</option>
+                              <option value="phone">Telefon (VoIP)</option>
+                              <option value="pc">PC/Laptop</option>
+                              <option value="server">Server</option>
+                              <option value="other">Sonstiges</option>
+                            </select>
+                            <input value={overrides[d.ip]?.kind || ''} placeholder="Geräteart (optional)"
+                              onChange={e => setOverrides(prev => ({ ...prev, [d.ip]: { ...(prev[d.ip] || {}), kind: e.target.value } }))}
+                              onBlur={() => { const ov = overrides[d.ip]; if (ov?.type) void saveOverrides({ ...overrides }) }}
+                              className="text-[11px] rounded border border-border bg-background text-foreground px-1.5 py-0.5 w-40 focus:outline-none focus:border-primary" />
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-2 py-1.5">
+                        {info.formFactor
+                          ? <span className="text-[10px] px-1.5 py-0.5 rounded-full border bg-indigo-500/15 text-indigo-300 border-indigo-500/30" title="Modelltyp aus der Endgeräte-Übersicht">{info.formFactor}</span>
+                          : <span className="text-[11px] text-muted-foreground/60">—</span>}
                       </td>
                       <td className="px-2 py-1.5 text-muted-foreground">{d.user || '—'}</td>
                       <td className="px-2 py-1.5">

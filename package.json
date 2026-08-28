@@ -11,7 +11,9 @@
     "build": "tsc -p tsconfig.electron.json && vite build",
     "build:electron": "tsc -p tsconfig.electron.json",
     "dist": "npm run build && electron-builder",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "knowledge:build": "node scripts/build-knowledge-index.mjs --config config/knowledge.config.json",
+    "knowledge:watch": "node scripts/build-knowledge-index.mjs --config config/knowledge.config.json --watch"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -22,6 +24,7 @@
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
     "lucide-react": "^0.344.0",
+    "minisearch": "^7.2.0",
     "net-snmp": "^3.26.3",
     "nodemailer": "^6.9.9",
     "pdf-lib": "^1.17.1",
@@ -63,6 +66,16 @@
     "directories": {
       "output": "release"
     },
+    "files": [
+      "**/*",
+      "!Extras/**",
+      "!IT Tool Wissen/**",
+      "!**/*.mp4",
+      "!**/*.mov",
+      "!**/*.mkv",
+      "!resources/*.exe",
+      "!resources/*.msi"
+    ],
     "extraResources": [
       {
         "from": "resources/USV",

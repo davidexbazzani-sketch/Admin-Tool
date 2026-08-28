@@ -98,7 +98,14 @@
       "Bash(grep -o 'window.__DATA__ = .\\\\{0,120\\\\}' dashboard.html)",
       "Bash(cd \"/c/Users/User/AppData/Local/Temp/claude/c--Users-User-Projekte-Admin-Tool/3019c821-22c6-402c-b9eb-800a8c8c19ba/scratchpad/pdfLiveTest\" && grep -oE '[A-Za-z_.]+\\\\.pins' dashboard.html | sort | uniq -c)",
       "PowerShell($scratch = \"C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-User-Projekte-Admin-Tool\\\\3019c821-22c6-402c-b9eb-800a8c8c19ba\\\\scratchpad\"; npx esbuild \"src/services/onboardingHtml.ts\" --bundle --format=cjs --platform=node --outfile=\"$scratch\\\\onboardingHtml.cjs\" | Out-Null; node \"$scratch\\\\domStub.cjs\")",
-      "PowerShell(& \"C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-User-Projekte-Admin-Tool\\\\3019c821-22c6-402c-b9eb-800a8c8c19ba\\\\scratchpad\\\\scan.ps1\")"
+      "PowerShell(& \"C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-User-Projekte-Admin-Tool\\\\3019c821-22c6-402c-b9eb-800a8c8c19ba\\\\scratchpad\\\\scan.ps1\")",
+      "PowerShell(cd \"c:\\\\Users\\\\User\\\\Projekte\\\\Admin Tool\"; npm run dist 2>&1 | Select-Object -Last 8; \"===== TSC \\(nur geaenderte Dateien\\) =====\"; $out = npx tsc --noEmit 2>&1 | Out-String; $mine = \\($out -split \"`n\"\\) | Where-Object { $_ -match \"onboarding\\\\.ts|onboardingHtml|OnboardingSettings|onboardingDeploy|DeployPanel\" }; \"Neue Fehler in geaenderten Dateien: \" + $mine.Count; $mine | Select-Object -First 20)",
+      "PowerShell(cd \"c:\\\\Users\\\\User\\\\Projekte\\\\Admin Tool\"; npm run dist 2>&1 | Select-Object -Last 8; \"===== TSC \\(geaenderte Dateien\\) =====\"; $out = npx tsc --noEmit 2>&1 | Out-String; $mine = \\($out -split \"`n\"\\) | Where-Object { $_ -match \"onboarding\\\\.ts|onboardingHtml|OnboardingSettings|onboardingDeploy|DeployPanel\" }; \"Neue Fehler in geaenderten Dateien: \" + $mine.Count; $mine | Select-Object -First 25)",
+      "PowerShell(cd \"c:\\\\Users\\\\User\\\\Projekte\\\\Admin Tool\"; npm run dist 2>&1 | Select-Object -Last 6; \"===== TSC \\(geaenderte Dateien\\) =====\"; $out = npx tsc --noEmit 2>&1 | Out-String; $mine = \\($out -split \"`n\"\\) | Where-Object { $_ -match \"onboarding\\\\.ts|onboardingHtml|OnboardingSettings|onboardingDeploy|DeployPanel\" }; \"Neue Fehler in geaenderten Dateien: \" + $mine.Count; $mine | Select-Object -First 25)",
+      "Bash(awk '{print $5\"\\\\t\"$9}')",
+      "Bash(node -e \"console.log\\(require\\('c:/Users/User/Projekte/Admin Tool/node_modules/pdfjs-dist/package.json'\\).main\\)\")",
+      "Bash(NODE_PATH=\"c:/Users/User/Projekte/Admin Tool/node_modules\" node \"C:/Users/User/AppData/Local/Temp/claude/c--Users-User-Projekte-Admin-Tool/3019c821-22c6-402c-b9eb-800a8c8c19ba/scratchpad/make_pdf.js\")",
+      "Bash(node --input-type=module -e ' *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\User\\.claude\\projects\\c--Users-User-Projekte-Admin-Tool\\memory"

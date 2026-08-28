@@ -81,6 +81,32 @@ export interface FolderLink {
   section: 'it' | 'general'     // in welcher Kachel der Link erscheint
 }
 
+export type SelfHelpCategory = 'bestellung' | 'konto' | 'geraete' | 'ordner'
+export type SelfHelpType = 'skript' | 'programm' | 'link' | 'kontakt'
+
+/** Kachel im IT-Selbsthilfe-Bereich des Dashboards.
+ *  - 'skript'   → Klick startet die .ps1 unter `path` (via Protokoll skf-fix:<id>)
+ *  - 'programm' → Klick startet das Programm (.exe/.lnk) unter `path` direkt
+ *  - 'link'     → Klick öffnet die URL in `path`
+ *  - 'kontakt'  → zeigt Telefon + E-Mail der IT (aus settings.itContact); Klick = mailto
+ *  `id` ist zugleich der Whitelist-Schlüssel im Starter (run-selfservice.vbs). */
+export interface SelfHelpTile {
+  id: string
+  label: string
+  category: SelfHelpCategory
+  type: SelfHelpType
+  path: string        // UNC-Pfad zur .ps1 (skript/passwort) ODER URL (link)
+  info?: string       // optionaler Hinweis (kleines „i" auf der Kachel)
+  order: number
+}
+
+/** Mail-Shortcut in der „Allgemeines"-Kachel — Klick öffnet Outlook via mailto:. */
+export interface GeneralMail {
+  id: string
+  label: string    // z. B. „Kontaktiere HR"
+  email: string    // Empfänger
+}
+
 export interface OnboardingSettings {
   version: number
   links: OnboardingLinks
@@ -92,26 +118,114 @@ export interface OnboardingSettings {
   itContact: { name: string; email: string; phone: string }
   generalInfo: { contacts: OnboardingContact[] }
   folderLinks: FolderLink[]
+  selfHelpTiles: SelfHelpTile[]
+  generalMails: GeneralMail[]
+  filmPath: string   // UNC-Pfad zum Film (MP4 empfohlen, HTML möglich) — '' = kein Film
   updatedBy?: string
   updatedAt?: string
+}
+
+/**
+ * Zielname, unter dem der Film neben das Dashboard kopiert wird — abgeleitet aus
+ * der Endung des Quellpfads. Hält den Deploy-Kopiernamen (onboardingDeploy) und
+ * den `<video>`/`<iframe>`-src (onboardingHtml) synchron.
+ *   .mp4 → skf-film.mp4 · .webm → skf-film.webm · .ogg/.ogv → skf-film.ogg
+ *   alles andere (inkl. .html) → skf-film.html (Legacy-TTS-Film)
+ */
+export function filmAssetName(path: string): string {
+  const ext = (path || '').trim().toLowerCase().match(/\.([a-z0-9]+)$/)?.[1] || ''
+  if (ext === 'mp4' || ext === 'm4v') return 'skf-film.mp4'
+  if (ext === 'webm') return 'skf-film.webm'
+  if (ext === 'ogg' || ext === 'ogv') return 'skf-film.ogg'
+  return 'skf-film.html'
+}
+
+/** True, wenn der Film-Pfad ein echtes Video ist (nativer <video>-Player). */
+export function isFilmVideo(path: string): boolean {
+  return filmAssetName(path) !== 'skf-film.html'
 }
 
 const SETTINGS_FILE = 'onboarding/settings.json'
 const MARKERS_FILE = 'onboarding/markers.json'
 
+// Ablageort der Selbsthilfe-Skripte auf dem Netzlaufwerk (in den Einstellungen
+// pro Kachel anpassbar).
+const SELFHELP_SCRIPT_BASE = '\\\\W3172\\SKF Marine\\IT\\SelfService\\scripts'
+const shScript = (name: string) => `${SELFHELP_SCRIPT_BASE}\\${name}`
+
+// Link-Defaults zentral (genutzt von den IT-Link-Kacheln UND den Einstellungen).
+const DEFAULT_LINKS: OnboardingLinks = {
+  orderHardwareSoftware: '',
+  createTicket: '',
+  fileshareAccess: '',
+  passwordReset: 'https://passwordreset.microsoftonline.com',
+  mySignIns: 'https://mysignins.microsoft.com/security-info',
+  itWiki: '',
+  sharepoint: '',
+  canteenMenu: '',
+  timeTracking: '',
+}
+
+// 3 Standard-Mail-Shortcuts der „Allgemeines"-Kachel (Klick = Outlook via mailto:).
+const DEFAULT_GENERAL_MAILS: GeneralMail[] = [
+  { id: 'gm-hr',    label: 'Kontaktiere HR',          email: 'hrservice.marine@skf.com' },
+  { id: 'gm-br',    label: 'Kontaktiere Betriebsrat', email: 'betriebsrat.marine.de@skf.com' },
+  { id: 'gm-krank', label: 'Krankmeldung',            email: 'krankmeldung.marine@skf.com' },
+]
+
+// IT-Link-Kacheln, deren URL aus dem alten `links`-Feld übernommen wird (Migration).
+const IT_LINK_TILE_MAP: Partial<Record<string, keyof OnboardingLinks>> = {
+  'sh-hardware': 'orderHardwareSoftware',
+  'sh-software': 'orderHardwareSoftware',
+  'sh-ticket': 'createTicket',
+  'sh-wiki': 'itWiki',
+  'sh-authenticator': 'mySignIns',
+  'sh-sspr': 'passwordReset',
+  'sh-driveaccess': 'fileshareAccess',
+}
+
+/** Übernimmt bestehende Link-URLs in die IT-Link-Kacheln — nur wenn die Kachel-URL
+ *  leer ist (übernimmt Altbestand, überschreibt keine Anpassungen). Idempotent. */
+export function fillTileUrlsFromLinks(tiles: SelfHelpTile[], links: OnboardingLinks): void {
+  for (const t of tiles) {
+    const key = IT_LINK_TILE_MAP[t.id]
+    if (key && t.type === 'link' && !(t.path || '').trim() && (links[key] || '').trim()) {
+      t.path = links[key]
+    }
+  }
+}
+
+/** Standard-Kacheln der IT-Selbsthilfe (Vorbelegung; in den Einstellungen frei
+ *  anpassbar). Link-Kacheln beziehen ihre URL aus `links`. */
+export function buildDefaultSelfHelpTiles(links: OnboardingLinks): SelfHelpTile[] {
+  return [
+    // Bestellen & Melden
+    { id: 'sh-hardware',      label: 'Hardware bestellen',                  category: 'bestellung', type: 'link',     path: links.orderHardwareSoftware || '', order: 10 },
+    { id: 'sh-software',      label: 'Software bestellen',                  category: 'bestellung', type: 'link',     path: links.orderHardwareSoftware || '', order: 20 },
+    { id: 'sh-ticket',        label: 'Ticket erstellen',                    category: 'bestellung', type: 'link',     path: links.createTicket || '', order: 30 },
+    { id: 'sh-wiki',          label: 'IT-Tipps / FAQ',                      category: 'bestellung', type: 'link',     path: links.itWiki || '', order: 40 },
+    { id: 'it-info',          label: 'IT Informieren',                      category: 'bestellung', type: 'kontakt',  path: '', order: 50 },
+    // Konto & Sicherheit
+    { id: 'pw-expiry',        label: 'Wann läuft mein Passwort aus?',       category: 'konto',      type: 'skript',   path: shScript('pw-expiry.ps1'), order: 10 },
+    { id: 'pw-change',        label: 'Passwort ändern',                     category: 'konto',      type: 'skript',   path: shScript('pw-change.ps1'), order: 20 },
+    { id: 'sh-authenticator', label: 'Authenticator verwalten',             category: 'konto',      type: 'link',     path: links.mySignIns || '', order: 30 },
+    { id: 'sh-sspr',          label: 'Passwort im Homeoffice zurücksetzen', category: 'konto',      type: 'link',     path: links.passwordReset || '', order: 40 },
+    // Geräte & Reparieren
+    { id: 'printer-connect',  label: 'Drucker verbinden',                   category: 'geraete',    type: 'programm', path: 'C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\SEAL Systems\\SEAL Add Printer Wizard.lnk', order: 10 },
+    { id: 'printer-spooler',  label: 'Druckaufträge hängen',                category: 'geraete',    type: 'skript',   path: shScript('printer-spooler.ps1'), order: 20 },
+    { id: 'teams-repair',     label: 'Teams Reparatur',                     category: 'geraete',    type: 'skript',   path: shScript('teams-cache.ps1'), order: 30 },
+    { id: 'outlook-repair',   label: 'Outlook Reparatur',                   category: 'geraete',    type: 'skript',   path: shScript('outlook-repair.ps1'), order: 40 },
+    // Ordner & Laufwerke
+    { id: 'map-drive-i',      label: 'Mapping Laufwerk I',                  category: 'ordner',     type: 'skript',   path: shScript('map-drive-i.ps1'), order: 10 },
+    { id: 'sh-driveaccess',   label: 'Laufwerkzugriffe beantragen',         category: 'ordner',     type: 'link',     path: links.fileshareAccess || '', order: 20 },
+  ]
+}
+
+export const DEFAULT_SELF_HELP_TILES: SelfHelpTile[] = buildDefaultSelfHelpTiles(DEFAULT_LINKS)
+
 export const DEFAULT_ONBOARDING_SETTINGS: OnboardingSettings = {
   version: 1,
-  links: {
-    orderHardwareSoftware: '',   // ServiceNow-URL wird nachgereicht
-    createTicket: '',
-    fileshareAccess: '',
-    passwordReset: 'https://passwordreset.microsoftonline.com',
-    mySignIns: 'https://mysignins.microsoft.com/security-info',
-    itWiki: '',
-    sharepoint: '',
-    canteenMenu: '',   // Link wird nachgepflegt
-    timeTracking: '',  // Zeiterfassungs-Portal — Link wird nachgepflegt
-  },
+  links: { ...DEFAULT_LINKS },
   driveMapping: {
     batPath: '\\\\w3172\\skf marine\\Public\\Public\\Davide\\Extras\\Dashboard\\Bat Dateien\\Laufwerk I Mapping.bat',
     manualCommand: 'net use I: "\\\\W3172\\SKF Marine" /persistent:no',
@@ -127,22 +241,32 @@ export const DEFAULT_ONBOARDING_SETTINGS: OnboardingSettings = {
   itContact: { name: 'Deine IT', email: '', phone: '' },
   generalInfo: { contacts: [] },
   folderLinks: [],
+  selfHelpTiles: DEFAULT_SELF_HELP_TILES,
+  generalMails: DEFAULT_GENERAL_MAILS,
+  filmPath: '',
 }
 
 export async function loadOnboardingSettings(): Promise<OnboardingSettings> {
   try {
     const s = await api().netReadJson<Partial<OnboardingSettings>>(SETTINGS_FILE)
     if (s && typeof s === 'object') {
-      return {
+      const mergedLinks = { ...DEFAULT_ONBOARDING_SETTINGS.links, ...(s.links ?? {}) }
+      const merged: OnboardingSettings = {
         ...DEFAULT_ONBOARDING_SETTINGS,
         ...s,
-        links: { ...DEFAULT_ONBOARDING_SETTINGS.links, ...(s.links ?? {}) },
+        links: mergedLinks,
         driveMapping: { ...DEFAULT_ONBOARDING_SETTINGS.driveMapping, ...(s.driveMapping ?? {}) },
         rooms: Array.isArray(s.rooms) && s.rooms.length > 0 ? s.rooms : DEFAULT_ONBOARDING_SETTINGS.rooms,
         itContact: { ...DEFAULT_ONBOARDING_SETTINGS.itContact, ...(s.itContact ?? {}) },
         generalInfo: { contacts: Array.isArray(s.generalInfo?.contacts) ? s.generalInfo!.contacts : [] },
         folderLinks: Array.isArray(s.folderLinks) ? s.folderLinks : [],
+        selfHelpTiles: Array.isArray(s.selfHelpTiles) ? structuredClone(s.selfHelpTiles) : buildDefaultSelfHelpTiles(mergedLinks),
+        generalMails: Array.isArray(s.generalMails) ? s.generalMails : DEFAULT_GENERAL_MAILS,
+        filmPath: typeof s.filmPath === 'string' ? s.filmPath : '',
       }
+      // Alte IT-Link-URLs in die Kacheln übernehmen (nur leere Kachel-URLs).
+      fillTileUrlsFromLinks(merged.selfHelpTiles, mergedLinks)
+      return merged
     }
   } catch { /* noch keine Datei */ }
   return structuredClone(DEFAULT_ONBOARDING_SETTINGS)

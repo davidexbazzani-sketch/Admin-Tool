@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ClipboardList, Plus, Trash2, Download, Eye, RefreshCw, Search, Loader,
   FileText, Edit3, X, Save, CheckCircle, XCircle, AlertTriangle, ArrowLeft, Printer,
-  PackageCheck, RotateCcw,
+  PackageCheck, RotateCcw, Check, ChevronDown, Mail, Flame,
 } from 'lucide-react'
 import {
   listChecklists, createChecklist, updateChecklist, deleteChecklist,
@@ -10,10 +10,12 @@ import {
 } from '../services/checklists'
 import { downloadChecklistPdf, printChecklist } from '../services/checklistPdf'
 import { batchAdLookup } from '../services/adUserLookup'
-import { listEmployees, formatGermanDate, type Employee } from '../services/employees'
+import { listEmployees, formatGermanDate, HARDWARE_OPTIONS, hardwareLabel, type Employee, type HardwareType } from '../services/employees'
+import { readCentralAdUsers, buildNameIndex, lookupUserByName } from '../services/adUserDirectory'
 import { ensureSkfLogo } from '../services/skfLogo'
 import SignaturePad from '../components/SignaturePad'
 import { useAuthStore } from '../store/authStore'
+import { api } from '../electronAPI'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 
 type View = 'list' | 'edit' | 'preview'
@@ -28,6 +30,7 @@ function emptyDraft(currentUser: string): Omit<Checklist, 'id' | 'createdAt'> {
     newDeviceSerial: '',
     oldDeviceId: '',
     comment: '',
+    priority: false,
     signatureDataUrl: undefined,
     signatureDate: undefined,
     createdBy: currentUser,
@@ -80,6 +83,21 @@ export default function Checklists() {
     setLoading(true)
     try { setItems(await listChecklists()) }
     finally { setLoading(false) }
+  }
+
+  // Abhol-Mail-Dialog (nur Bestandsmitarbeiter)
+  const [pickupMail, setPickupMail] = useState<Checklist | null>(null)
+
+  // "Hardware fertig" für Bestandsmitarbeiter setzen (Gerät + Abhol-Ort + Bearbeiter).
+  async function setChecklistHardware(c: Checklist, key: HardwareType | null, location?: string) {
+    const now = new Date().toISOString()
+    const patch: Partial<Checklist> =
+      key === null ? { hardwareReady: false, hardwareType: '', hardwareLocation: '', hardwareBy: '', hardwareAt: '' }
+      : key === 'none' ? { hardwareReady: true, hardwareType: 'none', hardwareLocation: '', hardwareBy: currentUserName, hardwareAt: now }
+      : key === 'inprogress' ? { hardwareReady: false, hardwareType: 'inprogress', hardwareLocation: (location || '').trim(), hardwareBy: currentUserName, hardwareAt: now }
+      : { hardwareReady: true, hardwareType: key, hardwareLocation: (location || '').trim(), hardwareBy: currentUserName, hardwareAt: now }
+    setItems(prev => prev.map(x => x.id === c.id ? { ...x, ...patch } : x))
+    await updateChecklist(c.id, patch)
   }
 
   useEffect(() => { reload() }, [])
@@ -172,6 +190,7 @@ export default function Checklists() {
       newDeviceSerial: c.newDeviceSerial,
       oldDeviceId: c.oldDeviceId,
       comment: c.comment,
+      priority: c.priority,
       signatureDataUrl: c.signatureDataUrl,
       signatureDate: c.signatureDate,
       createdBy: c.createdBy,
@@ -405,15 +424,31 @@ export default function Checklists() {
                   {filteredItems.map(c => {
                     const emp = empByName.get(canonName(c.name))
                     return (
-                    <tr key={c.id} className="border-b border-border/40 hover:bg-accent/10">
-                      <td className="px-3 py-2 font-mono text-foreground">{c.taskNumber || '—'}</td>
+                    <tr key={c.id} className={`border-b border-border/40 hover:bg-accent/10 ${c.priority ? 'bg-orange-500/5' : ''}`}>
+                      <td className={`px-3 py-2 font-mono text-foreground ${c.priority ? 'border-l-4 border-l-orange-500' : ''}`}>{c.taskNumber || '—'}</td>
                       <td className="px-3 py-2 text-foreground">
                         <span className="inline-flex items-center gap-2 flex-wrap">
                           <span className="inline-flex items-center gap-1">{c.name}{c.name && <PersonInfoButton name={c.name} sam={c.corpId} />}</span>
+                          {c.priority && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-orange-500 text-black border border-orange-600 font-semibold inline-flex items-center gap-1">
+                              <Flame size={10} />Hohe Priorität
+                            </span>
+                          )}
                           {emp && (
                             <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-sky-300 text-black border border-sky-400 font-medium">
                               Neuer Mitarbeiter{emp.startDate ? ` · ${formatGermanDate(emp.startDate)}` : ''}
                             </span>
+                          )}
+                          {!emp && (
+                            <>
+                              <ChecklistHardwarePill c={c} onPick={(key, loc) => setChecklistHardware(c, key, loc)} />
+                              {c.hardwareReady && (
+                                <button onClick={() => setPickupMail(c)} title="Abhol-Mail an den Mitarbeiter vorbereiten"
+                                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] border bg-card border-blue-500/40 text-blue-300 hover:bg-blue-500/10">
+                                  <Mail size={11} />Abhol-Mail
+                                </button>
+                              )}
+                            </>
                           )}
                         </span>
                       </td>
@@ -493,10 +528,21 @@ export default function Checklists() {
       {view === 'edit' && (
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-2xl mx-auto bg-card border border-border rounded-xl p-5 space-y-4">
-            <h3 className="text-base font-semibold text-foreground flex items-center gap-2">
-              <FileText size={15} className="text-blue-400" />
-              {editingId ? 'Checkliste bearbeiten' : 'Neue Checkliste anlegen'}
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-base font-semibold text-foreground flex items-center gap-2 flex-1">
+                <FileText size={15} className="text-blue-400" />
+                {editingId ? 'Checkliste bearbeiten' : 'Neue Checkliste anlegen'}
+              </h3>
+              <button type="button" onClick={() => setDraft(d => ({ ...d, priority: !d.priority }))}
+                title="Als hohe Priorität markieren – orange in der Übersicht"
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold border transition-colors ${
+                  draft.priority
+                    ? 'bg-orange-500 text-black border-orange-600 hover:bg-orange-500/90'
+                    : 'border-orange-500/40 text-orange-300 hover:bg-orange-500/10'
+                }`}>
+                <Flame size={13} />Hohe Priorität{draft.priority ? ' ✓' : ''}
+              </button>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Field label="TASK-Nummer *">
@@ -775,6 +821,142 @@ export default function Checklists() {
           </div>
         </div>
       )}
+
+      {pickupMail && <PickupMailDialog checklist={pickupMail} bearbeiter={currentUserName} onClose={() => setPickupMail(null)} />}
+    </div>
+  )
+}
+
+// ── "Hardware fertig"-Dropdown für Bestandsmitarbeiter (Gerät + Abhol-Ort) ─────
+function ChecklistHardwarePill({ c, onPick }: { c: Checklist; onPick: (key: HardwareType | null, location?: string) => void }) {
+  const [open, setOpen] = useState(false)
+  const [pending, setPending] = useState<HardwareType | null>(null)
+  const [loc, setLoc] = useState('')
+  const ready = c.hardwareReady === true
+  const inprogress = c.hardwareType === 'inprogress'
+  const label = ready ? hardwareLabel(c.hardwareType || '') : inprogress ? 'In Bearbeitung' : 'Hardware fertig'
+  const btnCls = ready ? 'bg-green-500/90 border-green-600 text-black'
+    : inprogress ? 'bg-orange-500/90 border-orange-600 text-black'
+      : 'bg-card border-border text-muted-foreground hover:text-foreground hover:border-foreground/30'
+  const boxCls = ready ? 'bg-green-500 border-green-500' : inprogress ? 'bg-orange-500 border-orange-500' : 'border-muted-foreground'
+  function closeAll() { setOpen(false); setPending(null) }
+  function pick(key: HardwareType) {
+    if (key === 'none') { onPick('none'); closeAll(); return }
+    setLoc(c.hardwareLocation || ''); setPending(key)
+  }
+  function confirmPending() { if (!pending || !loc.trim()) return; onPick(pending, loc.trim()); closeAll() }
+  return (
+    <span className="relative inline-block">
+      <button onClick={() => setOpen(o => !o)}
+        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] border transition-colors ${btnCls}`}>
+        <span className={`w-3 h-3 rounded-sm border flex items-center justify-center ${boxCls}`}>{ready && <Check size={9} className="text-white" />}</span>
+        {label}
+        {(ready || inprogress) && c.hardwareLocation ? <span className="font-normal">· {c.hardwareLocation}</span> : null}
+        {(ready || inprogress) && c.hardwareBy ? <span className="opacity-70 text-[9px]">({c.hardwareBy})</span> : null}
+        <ChevronDown size={10} className="opacity-70" />
+      </button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={closeAll} />
+          <div className="absolute z-20 mt-1 left-0 min-w-[210px] rounded-md border border-border bg-card shadow-xl py-1 text-left">
+            {!pending ? (
+              <>
+                {HARDWARE_OPTIONS.filter(o => o.key !== 'inprogress').map(o => (
+                  <button key={o.key} onClick={() => pick(o.key)}
+                    className="w-full text-left px-3 py-1.5 text-[11px] text-foreground hover:bg-accent flex items-center gap-2">
+                    <span className="w-3 flex justify-center shrink-0">{ready && c.hardwareType === o.key && <Check size={11} className="text-green-400" />}</span>{o.label}
+                  </button>
+                ))}
+                <div className="my-1 border-t border-border" />
+                <button onClick={() => pick('inprogress')}
+                  className="w-full text-left px-3 py-1.5 text-[11px] text-orange-300 hover:bg-orange-500/10 flex items-center gap-2">
+                  <span className="w-3 flex justify-center shrink-0">{inprogress && <Check size={11} className="text-orange-400" />}</span>In Bearbeitung…
+                </button>
+                {(ready || inprogress) && (
+                  <>
+                    <div className="my-1 border-t border-border" />
+                    <button onClick={() => { onPick(null); closeAll() }}
+                      className="w-full text-left px-3 py-1.5 text-[11px] text-red-300 hover:bg-red-500/10 flex items-center gap-2"><span className="w-3 shrink-0" />Zurücksetzen</button>
+                  </>
+                )}
+              </>
+            ) : (
+              <div className="px-3 py-2 space-y-1.5">
+                <p className="text-[10px] text-muted-foreground">{pending === 'inprogress' ? 'In Bearbeitung – Ort/Raum:' : `${hardwareLabel(pending)} – Abhol-Ort/Raum:`}</p>
+                <input autoFocus value={loc} onChange={e => setLoc(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') confirmPending() }}
+                  placeholder="z. B. Raum 123" className="w-full rounded border border-border bg-background px-2 py-1 text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-blue-500/40" />
+                <div className="flex items-center gap-1.5">
+                  <button onClick={confirmPending} disabled={!loc.trim()}
+                    className={`px-2 py-1 text-[11px] rounded text-black disabled:opacity-40 ${pending === 'inprogress' ? 'bg-orange-500 hover:bg-orange-400' : 'bg-green-500 hover:bg-green-400'}`}>Setzen</button>
+                  <button onClick={() => setPending(null)} className="px-2 py-1 text-[11px] rounded border border-border text-muted-foreground hover:text-foreground">Zurück</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </span>
+  )
+}
+
+function firstName(full: string): string { return (full || '').trim().split(/\s+/)[0] || '' }
+
+// ── Abhol-Mail an den (Bestands-)Mitarbeiter: vorausgefüllte Outlook-Mail ──────
+function PickupMailDialog({ checklist, bearbeiter, onClose }: { checklist: Checklist; bearbeiter: string; onClose: () => void }) {
+  const [room, setRoom] = useState(checklist.hardwareLocation || '')
+  const [busy, setBusy] = useState(false)
+  const [hint, setHint] = useState('')
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === 'Escape' && !busy) onClose() }
+    window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey)
+  }, [busy, onClose])
+  async function openMail() {
+    setBusy(true)
+    try {
+      let to = ''
+      try {
+        const dir = await readCentralAdUsers()
+        if (dir) { const hit = lookupUserByName(buildNameIndex(dir.users), checklist.name); if (hit?.email) to = hit.email }
+      } catch { /* ohne Empfaenger oeffnen */ }
+      const vorname = firstName(checklist.name)
+      // Text je nach Gerätetyp: Refresh -> Altgerät mitbringen + "Viele Grüße",
+      // Neu -> nur Handy + "Gruß".
+      const isRefresh = checklist.deviceType === 'refresh'
+      const bringLine = isRefresh
+        ? 'Bitte bringe dein Altgerät sowie dein Handy (zwecks Authentifizierung) mit.'
+        : 'Bitte bringe dein Handy (zwecks Authentifizierung) mit.'
+      const gruss = isRefresh ? 'Viele Grüße' : 'Gruß'
+      const body =
+        `Hallo ${vorname},\n\n` +
+        `dein neuer Rechner liegt im Raum ${room.trim()} abholbereit.\n` +
+        `${bringLine}\n\n` +
+        `${gruss}\n${firstName(bearbeiter)}\n`
+      await api().composeEmail({ to, cc: 'support.marine@SKF.com', subject: 'Dein neuer Rechner ist abholbereit', body })
+      if (to) onClose(); else setHint('E-Mail-Adresse nicht automatisch gefunden – bitte im Outlook-Fenster ergänzen.')
+    } finally { setBusy(false) }
+  }
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-6" onClick={() => !busy && onClose()}>
+      <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
+        <div className="px-5 py-4 border-b border-border flex items-center gap-2">
+          <Mail size={16} className="text-blue-400" />
+          <h3 className="text-sm font-semibold text-foreground flex-1">Abhol-Mail an {checklist.name}</h3>
+          <button onClick={onClose} disabled={busy} className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground disabled:opacity-40"><X size={15} /></button>
+        </div>
+        <div className="px-5 py-4 space-y-3">
+          <div>
+            <label className="text-[11px] text-muted-foreground">Abhol-Ort / Raum (kommt in die Mail):</label>
+            <input autoFocus value={room} onChange={e => setRoom(e.target.value)} placeholder="z. B. Raum 123"
+              className="w-full mt-1 rounded-md border border-border bg-background px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-blue-500/40" />
+          </div>
+          <p className="text-[11px] text-muted-foreground">Die Mail wird nur vorbereitet (nicht automatisch versendet). CC: support.marine@SKF.com</p>
+          {hint && <p className="text-xs text-amber-300">{hint}</p>}
+          <div className="flex items-center justify-end gap-2">
+            <button onClick={onClose} disabled={busy} className="px-4 py-1.5 text-sm rounded-md border border-border text-muted-foreground hover:text-foreground disabled:opacity-40">Abbrechen</button>
+            <button onClick={openMail} disabled={busy || !room.trim()} className="inline-flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">{busy ? <Loader size={13} className="animate-spin" /> : <Mail size={13} />}E-Mail öffnen</button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Users, UploadCloud, FileText, FileSpreadsheet, Download, Plus, RefreshCw,
   ChevronDown, ChevronRight, Pencil, Trash2, X, Check, Loader, CheckCircle2,
-  AlertTriangle, KeyRound, Calendar, Search, UserMinus, Mail, MessageCircle, Rocket,
+  AlertTriangle, KeyRound, Calendar, Search, UserMinus, Mail, MessageCircle, Rocket, ClipboardCheck,
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { useAppStore } from '../store/appStore'
@@ -12,10 +12,11 @@ import {
   listEmployees, listDepartures, createEmployee, updateEmployee, deleteEmployee,
   createDeparture, updateDeparture, deleteDeparture, applyAccessPass,
   replaceAllEmployees, replaceAllDepartures, daysUntil, formatGermanDate,
-  isFullyChecked, isOnboarded, toIsoDate,
+  isFullyChecked, isOnboarded, toIsoDate, missingPreparationSteps,
   HARDWARE_OPTIONS, hardwareLabel,
   type Employee, type Departure, type HardwareType,
 } from '../services/employees'
+import { listChecklists, createChecklist } from '../services/checklists'
 import {
   parsePersonnelPdf, parseAccessPassMsg, parseAccessPassEml, parseExistingExcel,
   exportEmployeesExcel, classifyFile,
@@ -65,6 +66,8 @@ export default function EmployeeManagement() {
   const [editEmp, setEditEmp] = useState<Employee | null>(null)
   const [editDep, setEditDep] = useState<Departure | null>(null)
   const [mailEmp, setMailEmp] = useState<Employee | null>(null)
+  // Corp-/Global-IDs, für die es einen Checklisten-Eintrag gibt (Gating "Alles Vorbereitet").
+  const [checklistCorpIds, setChecklistCorpIds] = useState<Set<string>>(new Set())
   const setScreen = useAppStore(s => s.setScreen)
   const setOnboardingPreselectId = useAppStore(s => s.setOnboardingPreselectId)
   const openOnboarding = useCallback((e: Employee) => {
@@ -78,9 +81,10 @@ export default function EmployeeManagement() {
 
   const refresh = useCallback(async () => {
     try {
-      const [emps, deps] = await Promise.all([listEmployees(), listDepartures()])
+      const [emps, deps, cls] = await Promise.all([listEmployees(), listDepartures(), listChecklists()])
       setEmployees(emps)
       setDepartures(deps)
+      setChecklistCorpIds(new Set(cls.map(c => (c.corpId || '').trim().toUpperCase()).filter(Boolean)))
       setError('')
     } catch {
       setError('Liste konnte nicht geladen werden (Netzlaufwerk?).')
@@ -261,14 +265,56 @@ export default function EmployeeManagement() {
     refresh()
   }
 
-  // Hardware-Auswahl setzen: key = Geräteart → "fertig", null = zurücksetzen.
-  async function setHardware(emp: Employee, key: HardwareType | null) {
-    const patch: Partial<Employee> = key === null
-      ? { laptopReady: false, hardwareType: '' }
-      : { laptopReady: true, hardwareType: key }
+  // Hardware-Auswahl setzen: Geräteart → "fertig" (grün), 'inprogress' → "In
+  // Bearbeitung" (orange, mit Ort + Bearbeiter), null = zurücksetzen.
+  async function setHardware(emp: Employee, key: HardwareType | null, location?: string) {
+    const patch: Partial<Employee> =
+      key === null ? { laptopReady: false, hardwareType: '', hardwareLocation: '', hardwareBy: '' }
+      : key === 'none' ? { laptopReady: true, hardwareType: 'none', hardwareLocation: '', hardwareBy: '' }
+      : key === 'inprogress' ? { laptopReady: false, hardwareType: 'inprogress', hardwareLocation: (location || '').trim(), hardwareBy: username }
+      : { laptopReady: true, hardwareType: key, hardwareLocation: (location || '').trim(), hardwareBy: username }
     setEmployees(prev => prev.map(e => e.id === emp.id ? { ...e, ...patch } : e))
     await updateEmployee(emp.id, patch)
     refresh()
+  }
+
+  // "Gerät übergeben" -> Eintrag wandert zu "Bereits onboardet".
+  async function handover(emp: Employee) {
+    const patch: Partial<Employee> = { deviceHandedOver: true, handedOverAt: new Date().toISOString(), handedOverBy: username }
+    setEmployees(prev => prev.map(e => e.id === emp.id ? { ...e, ...patch } : e))
+    await updateEmployee(emp.id, patch)
+    refresh()
+  }
+
+  // "Access Pass Reminder" -> vorbefuellte Outlook-Mail an den Manager (CC fest
+  // support.marine@SKF.com), die den noch fehlenden Access Pass Code anfordert.
+  async function accessPassReminder(emp: Employee) {
+    const firstName = (n: string) => (n || '').trim().split(/\s+/)[0] || ''
+    const fullName = `${emp.vorname} ${emp.name}`.trim() || 'der neue Mitarbeiter'
+    const vorname = emp.vorname.trim() || fullName
+    const mgrFirst = firstName(emp.manager) || emp.manager.trim()
+    const by = firstName(user?.displayName || '') || (user?.displayName || '').trim() || 'Deine IT'
+    const start = emp.startDate ? ` (${formatGermanDate(emp.startDate)})` : ''
+    const corp = (emp.globalId || '').trim()
+
+    // Manager-Mailadresse aus dem zentralen AD-Cache aufloesen (kein Live-AD).
+    let to = ''
+    try {
+      const dir = await readCentralAdUsers()
+      if (dir) {
+        const hit = lookupUserByName(buildNameIndex(dir.users), emp.manager)
+        if (hit?.email) to = hit.email
+      }
+    } catch { /* dann ohne Empfaenger oeffnen */ }
+
+    const subject = `Access Pass Code benötigt – ${fullName}${corp ? ` (${corp})` : ''}`
+    const body =
+      `Hallo ${mgrFirst},\n\n` +
+      `für ${fullName}${corp ? ` (Corp ID ${corp})` : ''} fehlt uns noch der Access Pass Code ` +
+      `(Temporary Access Pass). Bitte lass ihn uns zukommen, damit sich ${vorname} an seinem ` +
+      `ersten Arbeitstag${start} anmelden kann.\n\n` +
+      `Vielen Dank und viele Grüße\n${by}\n`
+    await api().composeEmail({ to, cc: 'support.marine@SKF.com', subject, body })
   }
 
   // ── Aufteilung in offene / onboardete / gefiltert ───────────────────────────
@@ -281,7 +327,7 @@ export default function EmployeeManagement() {
 
   const newEmptyEmployee = (): Employee => ({
     id: '', startDate: '', name: '', vorname: '', globalId: '', manager: '', jobTitle: '', department: '', costCenter: '',
-    managerContacted: false, laptopReady: false, hardwareType: '', workplaceReady: false, allDone: false, request: '', ritmLaptop: '', laptopType: '',
+    managerContacted: false, laptopReady: false, hardwareType: '', hardwareLocation: '', hardwareBy: '', workplaceReady: false, allDone: false, deviceHandedOver: false, request: '', ritmLaptop: '', deploymentTask: '', hardwareSerial: '', laptopType: '',
     accessPass: '', accessPassUpn: '', accessPassValid: '', extraSoftware: '', groupMailbox: '', roomNumber: '',
     standardEquipment: '', extraEquipment: '', handoverDate: '', phoneExtension: '', notes: '', createdBy: username, createdAt: '',
   })
@@ -370,7 +416,7 @@ export default function EmployeeManagement() {
               ) : (
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
                   {activeEmps.map(e => (
-                    <EmployeeCard key={e.id} emp={e} onToggle={toggleCheck} onSetHardware={setHardware} onEdit={() => setEditEmp(e)} onMail={() => setMailEmp(e)} onOnboarding={() => openOnboarding(e)} />
+                    <EmployeeCard key={e.id} emp={e} onToggle={toggleCheck} onSetHardware={setHardware} onHandover={handover} hasChecklist={checklistCorpIds.has((e.globalId || '').trim().toUpperCase())} onEdit={() => setEditEmp(e)} onMail={() => setMailEmp(e)} onOnboarding={() => openOnboarding(e)} onAccessPassReminder={accessPassReminder} />
                   ))}
                 </div>
               )}
@@ -386,7 +432,7 @@ export default function EmployeeManagement() {
                 {showOnboarded && (
                   <div className="mt-2 grid grid-cols-1 xl:grid-cols-2 gap-3">
                     {onboardedEmps.map(e => (
-                      <EmployeeCard key={e.id} emp={e} onToggle={toggleCheck} onSetHardware={setHardware} onEdit={() => setEditEmp(e)} onMail={() => setMailEmp(e)} onOnboarding={() => openOnboarding(e)} compact />
+                      <EmployeeCard key={e.id} emp={e} onToggle={toggleCheck} onSetHardware={setHardware} onHandover={handover} hasChecklist={checklistCorpIds.has((e.globalId || '').trim().toUpperCase())} onEdit={() => setEditEmp(e)} onMail={() => setMailEmp(e)} onOnboarding={() => openOnboarding(e)} onAccessPassReminder={accessPassReminder} compact />
                     ))}
                   </div>
                 )}
@@ -474,15 +520,20 @@ export default function EmployeeManagement() {
 }
 
 // ── Mitarbeiter-Karte ───────────────────────────────────────────────────────
-function EmployeeCard({ emp, onToggle, onSetHardware, onEdit, onMail, onOnboarding, compact }: {
+function EmployeeCard({ emp, onToggle, onSetHardware, onHandover, hasChecklist, onEdit, onMail, onOnboarding, onAccessPassReminder, compact }: {
   emp: Employee
   onToggle: (e: Employee, f: 'managerContacted' | 'laptopReady' | 'workplaceReady' | 'allDone') => void
-  onSetHardware: (e: Employee, key: HardwareType | null) => void
+  onSetHardware: (e: Employee, key: HardwareType | null, location?: string) => void
+  onHandover: (e: Employee) => void
+  hasChecklist: boolean
   onEdit: () => void
   onMail: () => void
   onOnboarding: () => void
+  onAccessPassReminder: (e: Employee) => void
   compact?: boolean
 }) {
+  const [prepHint, setPrepHint] = useState('')
+  const missing = missingPreparationSteps(emp, hasChecklist)
   const done = isFullyChecked(emp)
   const days = daysUntil(emp.startDate)
   const tone = done ? 'border-green-500/40 bg-green-500/5' : 'border-red-500/40 bg-red-500/5'
@@ -522,9 +573,37 @@ function EmployeeCard({ emp, onToggle, onSetHardware, onEdit, onMail, onOnboardi
           {/* 3 Checkboxen */}
           <div className="flex items-center gap-3 mt-2 flex-wrap">
             <CheckPill label="Manager kontaktiert" on={emp.managerContacted} onClick={() => onToggle(emp, 'managerContacted')} />
-            <HardwarePill laptopReady={emp.laptopReady} hardwareType={emp.hardwareType} onPick={key => onSetHardware(emp, key)} />
+            <HardwarePill laptopReady={emp.laptopReady} hardwareType={emp.hardwareType} hardwareLocation={emp.hardwareLocation} hardwareBy={emp.hardwareBy} onPick={(key, loc) => onSetHardware(emp, key, loc)} />
             <CheckPill label="Arbeitsplatz steht" on={emp.workplaceReady} onClick={() => onToggle(emp, 'workplaceReady')} />
-            <CheckPill label="Alles erledigt" on={emp.allDone} onClick={() => onToggle(emp, 'allDone')} final />
+            <button
+              onClick={() => {
+                if (emp.allDone) { setPrepHint(''); onToggle(emp, 'allDone'); return }
+                if (missing.length) { setPrepHint('Noch offen: ' + missing.join(' · ')); return }
+                setPrepHint(''); onToggle(emp, 'allDone')
+              }}
+              title={emp.allDone ? 'Vorbereitung zurücksetzen' : missing.length ? 'Noch nicht vollständig – siehe Hinweis' : 'Als vorbereitet markieren'}
+              className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] border transition-colors ${
+                emp.allDone ? 'bg-green-600 border-green-700 text-white'
+                  : missing.length ? 'bg-card border-border text-muted-foreground/70 hover:text-foreground'
+                    : 'bg-card border-green-500/40 text-green-300 hover:bg-green-500/10'
+              }`}>
+              <span className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center ${emp.allDone ? 'bg-green-500 border-green-500' : 'border-muted-foreground'}`}>
+                {emp.allDone && <Check size={10} className="text-white" />}
+              </span>
+              Alles Vorbereitet
+            </button>
+            {emp.allDone && !emp.deviceHandedOver && (
+              <button onClick={() => onHandover(emp)}
+                title="Gerät wurde an den Mitarbeiter übergeben – Eintrag wandert zu Bereits onboardet"
+                className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] border bg-blue-600 border-blue-700 text-white hover:bg-blue-500">
+                <CheckCircle2 size={12} />Gerät übergeben
+              </button>
+            )}
+            {emp.deviceHandedOver && (
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border border-green-600/40 text-green-300">
+                <CheckCircle2 size={12} />Übergeben{emp.handedOverAt ? ` · ${formatGermanDate(emp.handedOverAt.slice(0, 10))}` : ''}
+              </span>
+            )}
             <button
               onClick={onMail}
               disabled={!emp.manager.trim()}
@@ -533,6 +612,25 @@ function EmployeeCard({ emp, onToggle, onSetHardware, onEdit, onMail, onOnboardi
             >
               <Mail size={12} className="text-blue-400" />E-Mail an Manager
             </button>
+            {!(emp.accessPass || '').trim() && (() => {
+              const urgent = !isNaN(days) && days <= 5   // ab 5 Tagen vor Start bis überfällig
+              return (
+                <button
+                  onClick={() => onAccessPassReminder(emp)}
+                  disabled={!emp.manager.trim()}
+                  title={emp.manager.trim()
+                    ? `Access-Pass-Erinnerung an ${emp.manager} (CC support.marine@SKF.com) vorbereiten`
+                    : 'Kein Manager hinterlegt'}
+                  className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
+                    urgent
+                      ? 'bg-red-600 border-red-700 text-white hover:bg-red-500 animate-pulse'
+                      : 'bg-card border-amber-500/40 text-amber-300 hover:bg-amber-500/10'
+                  }`}
+                >
+                  <KeyRound size={12} />Access Pass Reminder
+                </button>
+              )
+            })()}
             <button
               onClick={onOnboarding}
               title="Onboarding-Dashboard für diesen Mitarbeiter erstellen und verteilen"
@@ -541,6 +639,11 @@ function EmployeeCard({ emp, onToggle, onSetHardware, onEdit, onMail, onOnboardi
               <Rocket size={12} className="text-purple-400" />Onboarding-Dashboard
             </button>
           </div>
+          {prepHint && (
+            <p className="text-[11px] text-red-700 font-medium mt-1.5">
+              {prepHint} <button onClick={() => setPrepHint('')} className="underline opacity-70 hover:opacity-100">ok</button>
+            </p>
+          )}
         </div>
         <button onClick={onEdit} className="shrink-0 p-1.5 rounded hover:bg-accent text-muted-foreground hover:text-foreground"><Pencil size={14} /></button>
       </div>
@@ -560,25 +663,36 @@ function buildManagerMailSubject(emp: Employee): string {
   return `Neuer Mitarbeiter ${fullName}${start ? ` (Start ${start})` : ''} – Infos für die IT-Vorbereitung`
 }
 
+// ServiceNow-Bestellkatalog: Rufnummer/Durchwahl für einen Mitarbeiter.
+const PHONE_ORDER_URL = 'https://skfprod.service-now.com/sp?id=sc_cat_item&table=sc_cat_item&sys_id=b7ab5f9c874e1190c85f43b90cbb35d3&recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&sysparm_id=b7ab5f9c874e1190c85f43b90cbb35d3'
+
+// HTML-Body, damit der ServiceNow-Bestelllink als klickbarer Text („jetzt
+// bestellen") erscheint. Wird via composeEmail({ html: true }) an Outlook übergeben.
 function buildManagerMailBody(emp: Employee): string {
+  const esc = (s: string) => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   const fullName = `${emp.vorname} ${emp.name}`.trim() || 'der neue Mitarbeiter'
   const vorname = emp.vorname.trim() || fullName
   const start = emp.startDate ? `am ${formatGermanDate(emp.startDate)}` : 'in Kürze'
+  const fn = esc(fullName), vn = esc(vorname)
+  const href = PHONE_ORDER_URL.replace(/&/g, '&amp;')
   return (
-    `Moin,\n\n` +
-    `${start} startet ${fullName} bei uns – wir möchten von IT-Seite alles perfekt vorbereiten.\n\n` +
-    `Dafür benötigen wir bitte folgende Informationen:\n\n` +
-    `1. Erhält ${vorname} ein Arbeitsgerät (PC oder Laptop)?\n` +
-    `   Falls ja: Bitte gib uns die Bestellnummer aus ServiceNow (REQ...) mit.\n\n` +
-    `2. Welche Raumnummer / welcher Arbeitsplatz ist vorgesehen?\n\n` +
-    `3. Wird zusätzliche Software benötigt, die noch nicht über ServiceNow bestellt wurde?\n\n` +
-    `4. Ist der Arbeitsplatz bereits komplett ausgestattet?\n\n` +
-    `5. Liegt der Temporary Access Pass bereits vor?\n\n` +
-    `6. Sollen Gruppenpostfächer in Outlook eingebunden werden? Falls ja, welche?\n\n` +
-    `7. Gibt es sonst noch Dinge, die wir beachten sollten?\n\n` +
-    `8. Wann kommt ${vorname} zur Geräteübergabe? (sofern Hardware von uns bereitgestellt wird)\n\n` +
-    `Vielen Dank und viele Grüße\n` +
-    `Deine IT\n`
+    `<div style="font-family:Segoe UI,Arial,sans-serif;font-size:11pt;color:#111;">` +
+    `<p>Moin,</p>` +
+    `<p>${esc(start)} startet ${fn} bei uns – wir möchten von IT-Seite alles perfekt vorbereiten.</p>` +
+    `<p>Dafür benötigen wir bitte folgende Informationen:</p>` +
+    `<ol>` +
+    `<li>Erhält ${vn} ein Arbeitsgerät (PC oder Laptop)?<br>Falls ja: Bitte gib uns die Bestellnummer aus ServiceNow (REQ...) mit.</li>` +
+    `<li>Welche Raumnummer / welcher Arbeitsplatz ist vorgesehen?</li>` +
+    `<li>Wird zusätzliche Software benötigt, die noch nicht über ServiceNow bestellt wurde?</li>` +
+    `<li>Ist der Arbeitsplatz bereits komplett ausgestattet?</li>` +
+    `<li>Liegt der Temporary Access Pass bereits vor?</li>` +
+    `<li>Sollen Gruppenpostfächer in Outlook eingebunden werden? Falls ja, welche?</li>` +
+    `<li>Soll ${fn} eine Rufnummer/Durchwahl erhalten? Bitte hier bestellen: <a href="${href}">jetzt bestellen</a></li>` +
+    `<li>Gibt es sonst noch Dinge, die wir beachten sollten?</li>` +
+    `<li>Wann kommt ${vn} zur Geräteübergabe? (sofern Hardware von uns bereitgestellt wird)</li>` +
+    `</ol>` +
+    `<p>Vielen Dank und viele Grüße<br>Deine IT</p>` +
+    `</div>`
   )
 }
 
@@ -607,7 +721,7 @@ function ManagerMailDialog({ emp, onClose }: { emp: Employee; onClose: () => voi
           if (hit?.email) to = hit.email
         }
       } catch { /* dann ohne Empfaenger oeffnen */ }
-      await api().composeEmail({ to, cc: '', subject: buildManagerMailSubject(emp), body: buildManagerMailBody(emp) })
+      await api().composeEmail({ to, cc: 'support.marine@skf.com', subject: buildManagerMailSubject(emp), body: buildManagerMailBody(emp), html: true })
       if (to) onClose()
       else setHint('E-Mail-Adresse des Managers wurde nicht automatisch gefunden – bitte im geöffneten Outlook-Fenster ergänzen.')
     } finally {
@@ -691,44 +805,87 @@ function CheckPill({ label, on, onClick, final }: { label: string; on: boolean; 
 
 // "Hardware fertig"-Dropdown: statt eines festen "Laptop fertig"-Hakens waehlt
 // man die tatsaechlich bereitgestellte Geraeteart. Gruener Haken = erledigt.
-function HardwarePill({ laptopReady, hardwareType, onPick }: {
+function HardwarePill({ laptopReady, hardwareType, hardwareLocation, hardwareBy, onPick }: {
   laptopReady: boolean
   hardwareType: string
-  onPick: (key: HardwareType | null) => void
+  hardwareLocation?: string
+  hardwareBy?: string
+  onPick: (key: HardwareType | null, location?: string) => void
 }) {
   const [open, setOpen] = useState(false)
-  const on = laptopReady
-  const label = on ? hardwareLabel(hardwareType) : 'Hardware fertig'
+  const [pending, setPending] = useState<HardwareType | null>(null)   // Gerät, das auf die Ort-Eingabe wartet
+  const [loc, setLoc] = useState('')
+  const done = laptopReady
+  const inprogress = hardwareType === 'inprogress'
+  const label = done ? hardwareLabel(hardwareType) : inprogress ? 'In Bearbeitung' : 'Hardware fertig'
+  const btnCls = done
+    ? 'bg-green-500/90 border-green-600 text-black'
+    : inprogress
+      ? 'bg-orange-500/90 border-orange-600 text-black'
+      : 'bg-card border-border text-muted-foreground hover:text-foreground hover:border-foreground/30'
+  const boxCls = done ? 'bg-green-500 border-green-500' : inprogress ? 'bg-orange-500 border-orange-500' : 'border-muted-foreground'
+  function closeAll() { setOpen(false); setPending(null) }
+  function pick(key: HardwareType) {
+    if (key === 'none') { onPick('none'); closeAll(); return }        // "Keine Hardware" -> keine Ortsabfrage
+    setLoc(hardwareLocation || ''); setPending(key)                    // Laptop/Z-Book/Tower/Mini-PC/In Bearbeitung -> Ort abfragen
+  }
+  function confirmPending() { if (!pending || !loc.trim()) return; onPick(pending, loc.trim()); closeAll() }
   return (
     <div className="relative">
       <button onClick={() => setOpen(o => !o)}
-        className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] border transition-colors ${on ? 'bg-green-500/90 border-green-600 text-black' : 'bg-card border-border text-muted-foreground hover:text-foreground hover:border-foreground/30'}`}>
-        <span className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center ${on ? 'bg-green-500 border-green-500' : 'border-muted-foreground'}`}>
-          {on && <Check size={10} className="text-white" />}
+        className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] border transition-colors ${btnCls}`}>
+        <span className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center ${boxCls}`}>
+          {done && <Check size={10} className="text-white" />}
         </span>
         {label}
+        {(done || inprogress) && hardwareLocation ? <span className="font-normal">· {hardwareLocation}</span> : null}
+        {(done || inprogress) && hardwareBy ? <span className="opacity-70 text-[9px]">({hardwareBy})</span> : null}
         <ChevronDown size={12} className="opacity-70" />
       </button>
       {open && (
         <>
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute z-20 mt-1 left-0 min-w-[160px] rounded-md border border-border bg-card shadow-xl py-1">
-            {HARDWARE_OPTIONS.map(o => (
-              <button key={o.key}
-                onClick={() => { onPick(o.key); setOpen(false) }}
-                className="w-full text-left px-3 py-1.5 text-[11px] text-foreground hover:bg-accent flex items-center gap-2">
-                <span className="w-3 flex justify-center shrink-0">{on && hardwareType === o.key && <Check size={11} className="text-green-400" />}</span>
-                {o.label}
-              </button>
-            ))}
-            {on && (
+          <div className="fixed inset-0 z-10" onClick={closeAll} />
+          <div className="absolute z-20 mt-1 left-0 min-w-[220px] rounded-md border border-border bg-card shadow-xl py-1">
+            {!pending ? (
               <>
+                {HARDWARE_OPTIONS.filter(o => o.key !== 'inprogress').map(o => (
+                  <button key={o.key} onClick={() => pick(o.key)}
+                    className="w-full text-left px-3 py-1.5 text-[11px] text-foreground hover:bg-accent flex items-center gap-2">
+                    <span className="w-3 flex justify-center shrink-0">{done && hardwareType === o.key && <Check size={11} className="text-green-400" />}</span>
+                    {o.label}
+                  </button>
+                ))}
                 <div className="my-1 border-t border-border" />
-                <button onClick={() => { onPick(null); setOpen(false) }}
-                  className="w-full text-left px-3 py-1.5 text-[11px] text-red-300 hover:bg-red-500/10 flex items-center gap-2">
-                  <span className="w-3 shrink-0" />Zurücksetzen
+                <button onClick={() => pick('inprogress')}
+                  className="w-full text-left px-3 py-1.5 text-[11px] text-orange-300 hover:bg-orange-500/10 flex items-center gap-2">
+                  <span className="w-3 flex justify-center shrink-0">{inprogress && <Check size={11} className="text-orange-400" />}</span>
+                  In Bearbeitung…
                 </button>
+                {(done || inprogress) && (
+                  <>
+                    <div className="my-1 border-t border-border" />
+                    <button onClick={() => { onPick(null); closeAll() }}
+                      className="w-full text-left px-3 py-1.5 text-[11px] text-red-300 hover:bg-red-500/10 flex items-center gap-2">
+                      <span className="w-3 shrink-0" />Zurücksetzen
+                    </button>
+                  </>
+                )}
               </>
+            ) : (
+              <div className="px-3 py-2 space-y-1.5">
+                <p className="text-[10px] text-muted-foreground">
+                  {pending === 'inprogress' ? 'In Bearbeitung – Ort/Raum, wo das Gerät gerade ist:' : `${hardwareLabel(pending)} – Ort/Raum, wo das Gerät liegt:`}
+                </p>
+                <input autoFocus value={loc} onChange={e => setLoc(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') confirmPending() }}
+                  placeholder="z. B. Werkstatt / Raum 123"
+                  className="w-full rounded border border-border bg-background px-2 py-1 text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-blue-500/40" />
+                <div className="flex items-center gap-1.5">
+                  <button onClick={confirmPending} disabled={!loc.trim()}
+                    className={`px-2 py-1 text-[11px] rounded text-black disabled:opacity-40 ${pending === 'inprogress' ? 'bg-orange-500 hover:bg-orange-400' : 'bg-green-500 hover:bg-green-400'}`}>Setzen</button>
+                  <button onClick={() => setPending(null)} className="px-2 py-1 text-[11px] rounded border border-border text-muted-foreground hover:text-foreground">Zurück</button>
+                </div>
+              </div>
             )}
           </div>
         </>
@@ -762,6 +919,49 @@ function EmployeeEditModal({ emp, username, onClose, onSaved }: { emp: Employee;
     setSaving(false); onSaved()
   }
 
+  // Alle Pflichtangaben für eine Checkliste vorhanden?
+  const canCreateChecklist =
+    f.vorname.trim() !== '' && f.name.trim() !== '' && f.globalId.trim() !== '' &&
+    f.deploymentTask.trim() !== '' && f.hardwareSerial.trim() !== ''
+
+  async function createChecklistFromEmp() {
+    const missing: string[] = []
+    if (!f.vorname.trim()) missing.push('Vorname')
+    if (!f.name.trim()) missing.push('Nachname')
+    if (!f.globalId.trim()) missing.push('Global ID')
+    if (!f.deploymentTask.trim()) missing.push('Deployment-TASK')
+    if (!f.hardwareSerial.trim()) missing.push('Seriennummer Hardware')
+    if (missing.length) { setErr('Für die Checkliste fehlen noch: ' + missing.join(', ')); return }
+    setSaving(true); setErr('')
+    // 1. Mitarbeiter zuerst speichern, damit Deployment-TASK/Seriennummer persistiert sind.
+    const payload: Partial<Employee> = { ...f, startDate: toIsoDate(f.startDate) }
+    const rSave = isNew
+      ? await createEmployee({ ...payload, createdBy: username })
+      : await updateEmployee(emp.id, payload)
+    if (!rSave.ok) { setSaving(false); setErr(rSave.error || 'Speichern fehlgeschlagen.'); return }
+    // 2. Duplikat-Check über die Global ID.
+    try {
+      const existing = await listChecklists()
+      const dupe = existing.find(c => (c.corpId || '').toUpperCase() === f.globalId.toUpperCase().trim())
+      if (dupe && !window.confirm(`Für Global ID ${f.globalId.toUpperCase().trim()} gibt es bereits eine Checkliste${dupe.taskNumber ? ` (${dupe.taskNumber})` : ''}. Trotzdem eine weitere anlegen?`)) {
+        setSaving(false); onSaved(); return
+      }
+    } catch { /* Liste nicht ladbar -> trotzdem anlegen */ }
+    // 3. Checkliste anlegen (Pflichtfelder aus dem Mitarbeiter übernommen).
+    const cr = await createChecklist({
+      taskNumber: f.deploymentTask.trim(),
+      name: `${f.vorname.trim()} ${f.name.trim()}`,
+      corpId: f.globalId.toUpperCase().trim(),
+      technician: username,
+      deviceType: 'new',
+      newDeviceSerial: f.hardwareSerial.trim(),
+      createdBy: username,
+    })
+    setSaving(false)
+    if (!cr.ok) { setErr(cr.error || 'Checkliste konnte nicht erstellt werden.'); return }
+    onSaved()
+  }
+
   return (
     <ModalShell title={isNew ? 'Neuer Mitarbeiter' : `${emp.vorname} ${emp.name} bearbeiten`} onClose={onClose}>
       <div className="grid grid-cols-2 gap-3">
@@ -775,6 +975,8 @@ function EmployeeEditModal({ emp, username, onClose, onSaved }: { emp: Employee;
         <Field label="Kostenstelle"><Inp v={f.costCenter} on={v => set('costCenter', v)} /></Field>
         <Field label="SNOW Request"><Inp v={f.request} on={v => set('request', v)} /></Field>
         <Field label="RITM Laptop"><Inp v={f.ritmLaptop} on={v => set('ritmLaptop', v)} /></Field>
+        <Field label="Deployment-TASK"><Inp v={f.deploymentTask} on={v => set('deploymentTask', v)} mono /></Field>
+        <Field label="Seriennummer Hardware"><Inp v={f.hardwareSerial} on={v => set('hardwareSerial', v)} mono /></Field>
         <Field label="Laptop Typ"><Inp v={f.laptopType} on={v => set('laptopType', v)} /></Field>
         <Field label="Durchwahl"><Inp v={f.phoneExtension} on={v => set('phoneExtension', v)} /></Field>
         <Field label="Einmal-Passwort / Access Pass"><Inp v={f.accessPass} on={v => set('accessPass', v)} mono /></Field>
@@ -791,12 +993,14 @@ function EmployeeEditModal({ emp, username, onClose, onSaved }: { emp: Employee;
       {/* Checkboxen */}
       <div className="flex items-center gap-3 mt-1 flex-wrap">
         <CheckPill label="Manager kontaktiert" on={f.managerContacted} onClick={() => set('managerContacted', !f.managerContacted)} />
-        <HardwarePill laptopReady={f.laptopReady} hardwareType={f.hardwareType}
-          onPick={key => setF(prev => key === null
-            ? { ...prev, laptopReady: false, hardwareType: '' }
-            : { ...prev, laptopReady: true, hardwareType: key })} />
+        <HardwarePill laptopReady={f.laptopReady} hardwareType={f.hardwareType} hardwareLocation={f.hardwareLocation} hardwareBy={f.hardwareBy}
+          onPick={(key, loc) => setF(prev =>
+            key === null ? { ...prev, laptopReady: false, hardwareType: '', hardwareLocation: '', hardwareBy: '' }
+            : key === 'none' ? { ...prev, laptopReady: true, hardwareType: 'none', hardwareLocation: '', hardwareBy: '' }
+            : key === 'inprogress' ? { ...prev, laptopReady: false, hardwareType: 'inprogress', hardwareLocation: (loc || '').trim(), hardwareBy: username }
+            : { ...prev, laptopReady: true, hardwareType: key, hardwareLocation: (loc || '').trim(), hardwareBy: username })} />
         <CheckPill label="Arbeitsplatz steht" on={f.workplaceReady} onClick={() => set('workplaceReady', !f.workplaceReady)} />
-        <CheckPill label="Alles erledigt" on={f.allDone} onClick={() => set('allDone', !f.allDone)} final />
+        <CheckPill label="Alles Vorbereitet" on={f.allDone} onClick={() => set('allDone', !f.allDone)} final />
       </div>
 
       {err && <p className="text-xs text-red-300 mt-2">{err}</p>}
@@ -805,6 +1009,11 @@ function EmployeeEditModal({ emp, username, onClose, onSaved }: { emp: Employee;
         <div className="ml-auto flex items-center gap-2">
           <button onClick={onClose} className="px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:bg-accent">Abbrechen</button>
           <button onClick={save} disabled={saving} className="flex items-center gap-1.5 px-4 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50">{saving ? <Loader size={13} className="animate-spin" /> : <Check size={13} />}Speichern</button>
+          <button onClick={createChecklistFromEmp} disabled={saving || !canCreateChecklist}
+            title={canCreateChecklist ? 'Checkliste unter „Checklisten" anlegen (speichert den Mitarbeiter mit)' : 'Benötigt: Vorname, Nachname, Global ID, Deployment-TASK und Seriennummer Hardware'}
+            className="flex items-center gap-1.5 px-4 py-1.5 text-xs rounded-md font-semibold border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 disabled:opacity-40 disabled:cursor-not-allowed">
+            <ClipboardCheck size={13} />Checkliste erstellen
+          </button>
         </div>
       </div>
     </ModalShell>
@@ -860,8 +1069,15 @@ function DepartureEditModal({ dep, username, onClose, onSaved }: { dep: Departur
 
 // ── kleine UI-Helfer ──────────────────────────────────────────────────────────
 function ModalShell({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
+  // Nur schließen, wenn Maus-DRUCK und -LOSLASSEN beide auf dem Backdrop selbst
+  // passieren. Verhindert das versehentliche Schließen, wenn man Text in einem
+  // Feld markiert und dabei mit der Maus aus dem Fenster/über den Rand zieht
+  // (dabei würde ein Klick auf den Backdrop ausgelöst).
+  const downOnBackdrop = useRef(false)
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-6" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-6"
+      onMouseDown={(e) => { downOnBackdrop.current = e.target === e.currentTarget }}
+      onClick={(e) => { if (downOnBackdrop.current && e.target === e.currentTarget) onClose() }}>
       <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
         <div className="px-5 py-3 border-b border-border flex items-center gap-2">
           <FileText size={16} className="text-primary" />

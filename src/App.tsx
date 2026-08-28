@@ -37,6 +37,11 @@ import EmployeeReminderController from './components/employees/EmployeeReminderC
 import BackupSchedulerController from './components/backups/BackupSchedulerController'
 import SoftwareScanController from './components/softwareInventory/SoftwareScanController'
 import PrinterConnectionScanController from './components/printer/PrinterConnectionScanController'
+import PrinterIpScanController from './components/printer/PrinterIpScanController'
+import DeviceScanController from './components/device/DeviceScanController'
+import RadarScanController from './components/scans/RadarScanController'
+import VlanScanController from './components/scans/VlanScanController'
+import ServerMonitorController from './components/server/ServerMonitorController'
 import ErrorFlashOverlay from './components/ErrorFlashOverlay'
 import { DossierProvider } from './components/person/PersonDossier'
 import { DeviceDossierProvider } from './components/device/DeviceDossier'
@@ -51,6 +56,7 @@ const PCDiagnosis = lazy(() => import('./screens/PCDiagnosis'))
 const NetworkRadar = lazy(() => import('./screens/NetworkRadar'))
 const VlanOverview = lazy(() => import('./screens/VlanOverview'))
 const KnowledgeBase = lazy(() => import('./screens/KnowledgeBase'))
+const KnowledgeSearch = lazy(() => import('./knowledge/KnowledgeSearch'))
 const InfrastructureProjects = lazy(() => import('./screens/InfrastructureProjects'))
 const GroupSearch = lazy(() => import('./screens/GroupSearch'))
 const AccessPoints = lazy(() => import('./screens/AccessPoints'))
@@ -61,12 +67,15 @@ const AccessoryInventory = lazy(() => import('./screens/AccessoryInventory'))
 const UserPresence = lazy(() => import('./screens/UserPresence'))
 const EmployeeManagement = lazy(() => import('./screens/EmployeeManagement'))
 const EndpointDevices = lazy(() => import('./screens/EndpointDevices'))
+const GpuDriverMgmt = lazy(() => import('./screens/GpuDriverMgmt'))
+const TreiberInstallation = lazy(() => import('./screens/TreiberInstallation'))
 const ServiceNow = lazy(() => import('./screens/ServiceNow'))
 const PdfTools = lazy(() => import('./pdftools'))
 const PhoneAssignment = lazy(() => import('./screens/PhoneAssignment'))
 const Backups = lazy(() => import('./screens/Backups'))
 const USV = lazy(() => import('./screens/USV'))
 const ProactiveRadar = lazy(() => import('./screens/ProactiveRadar'))
+const ServerMonitor = lazy(() => import('./screens/ServerMonitor'))
 
 function renderScreen(screen: Screen) {
   switch (screen) {
@@ -90,6 +99,8 @@ function renderScreen(screen: Screen) {
     case 'employee-management': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><EmployeeManagement /></Suspense>
     case 'onboarding': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Onboarding /></Suspense>
     case 'endpoint-devices': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><EndpointDevices /></Suspense>
+    case 'gpu-driver-mgmt': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><GpuDriverMgmt /></Suspense>
+    case 'treiber-installation': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><TreiberInstallation /></Suspense>
     case 'servicenow': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ServiceNow /></Suspense>
     case 'gruppen-suche': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><GroupSearch /></Suspense>
     case 'access-points': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><AccessPoints /></Suspense>
@@ -104,6 +115,7 @@ function renderScreen(screen: Screen) {
     case 'network-radar':     return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><NetworkRadar /></Suspense>
     case 'vlan-overview':     return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><VlanOverview /></Suspense>
     case 'knowledge-base':   return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><KnowledgeBase /></Suspense>
+    case 'knowledge-search': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><KnowledgeSearch /></Suspense>
     case 'pc-migration':      return <PCMigration />
     case 'software-inventory': return <SoftwareInventory />
     case 'pc-diagnosis':      return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><PCDiagnosis /></Suspense>
@@ -114,6 +126,7 @@ function renderScreen(screen: Screen) {
     case 'backups': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Backups /></Suspense>
     case 'usv': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><USV /></Suspense>
     case 'proactive-radar': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ProactiveRadar /></Suspense>
+    case 'server': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ServerMonitor /></Suspense>
     default:                  return <Home />
   }
 }
@@ -293,6 +306,11 @@ export default function App() {
             <BackupSchedulerController />
             <SoftwareScanController />
             <PrinterConnectionScanController />
+            <PrinterIpScanController />
+            <DeviceScanController />
+            <RadarScanController />
+            <VlanScanController />
+            <ServerMonitorController />
             <ErrorFlashOverlay />
           </main>
         </div>

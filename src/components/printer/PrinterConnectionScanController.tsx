@@ -9,8 +9,9 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import {
-  loadConnSchedule, saveConnSchedule, isConnScanDue, isConnClaimed, runConnectionScanOnce,
+  loadConnSchedule, saveConnSchedule, isConnClaimed, runConnectionScanOnce,
 } from '../../services/printerConnections'
+import { getScanSchedule, isConfiguredDue } from '../../services/scanSchedules'
 
 const POLL_MS = 20 * 60 * 1000       // alle 20 min prüfen, ob ein Lauf fällig ist
 const HEARTBEAT_MS = 5 * 60 * 1000   // Claim höchstens alle 5 min auffrischen
@@ -25,7 +26,8 @@ export default function PrinterConnectionScanController() {
     let s
     try { s = await loadConnSchedule() } catch { return }
     const now = Date.now()
-    if (!isConnScanDue(s, now)) return
+    const cfg = await getScanSchedule('printer-connections')
+    if (!isConfiguredDue(cfg, s.lastRunAt, now)) return
     if (isConnClaimed(s, now)) return   // andere Instanz scannt gerade
 
     busy.current = true

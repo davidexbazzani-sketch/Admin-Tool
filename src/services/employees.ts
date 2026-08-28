@@ -27,12 +27,19 @@ export interface Employee {
   // ── Onboarding-Checkboxen (gruen wenn die ersten drei gesetzt) ─────────────
   managerContacted: boolean  // Manager kontaktiert
   laptopReady: boolean       // Hardware fertig (Gerät bereitgestellt)
-  hardwareType: string       // gewählte Geräteart: '' | 'laptop' | 'zbook' | 'tower' | 'minipc' | 'none'
+  hardwareType: string       // Geräteart: '' | 'laptop' | 'zbook' | 'tower' | 'minipc' | 'none' | 'inprogress'
+  hardwareLocation: string   // bei 'inprogress': Ort/Raum, wo das Gerät gerade ist
+  hardwareBy: string         // Bearbeiter, der den Hardware-Status zuletzt gesetzt hat
   workplaceReady: boolean    // Arbeitsplatz steht
-  allDone: boolean           // "Alles erledigt" -> verschiebt zu "Bereits onboardet"
+  allDone: boolean           // "Alles Vorbereitet" -> alle Vorbereitungsschritte + Checklisten-Eintrag
+  deviceHandedOver: boolean  // "Gerät übergeben" -> verschiebt erst DANN zu "Bereits onboardet"
+  handedOverAt?: string       // ISO — wann übergeben
+  handedOverBy?: string       // wer die Übergabe bestätigt hat
   // ── Pflegefelder (entsprechen den Excel-Spalten) ───────────────────────────
   request: string            // SNOW Request (REQ...)
   ritmLaptop: string         // RITM Laptop
+  deploymentTask: string     // Deployment-TASK (TASK-Nummer – wird als Checklisten-TASK übernommen)
+  hardwareSerial: string     // Seriennummer der Hardware (wird als Checklisten-Seriennummer übernommen)
   laptopType: string         // Laptop Typ
   accessPass: string         // Einmal-Passwort / Temporary Access Pass
   accessPassUpn: string      // zugehoeriger UPN aus der Mail
@@ -125,7 +132,7 @@ export function isFullyChecked(e: Employee): boolean {
 // Neue Mitarbeiter bekommen nicht immer einen Laptop — im Team gebräuchliche
 // Bezeichnungen der jeweiligen Geräte. "Keine Hardware" = kein Gerät nötig
 // (Schritt gilt damit ebenfalls als erledigt).
-export type HardwareType = 'laptop' | 'zbook' | 'tower' | 'minipc' | 'none'
+export type HardwareType = 'laptop' | 'zbook' | 'tower' | 'minipc' | 'none' | 'inprogress'
 
 export const HARDWARE_OPTIONS: { key: HardwareType; label: string }[] = [
   { key: 'laptop', label: 'Laptop fertig' },
@@ -133,6 +140,7 @@ export const HARDWARE_OPTIONS: { key: HardwareType; label: string }[] = [
   { key: 'tower',  label: 'Tower fertig' },
   { key: 'minipc', label: 'Mini-PC fertig' },
   { key: 'none',   label: 'Keine Hardware' },
+  { key: 'inprogress', label: 'In Bearbeitung' },
 ]
 
 /** Anzeige-Label einer Geräteart. Fallback "Laptop fertig" für Alt-Datensätze
@@ -146,7 +154,21 @@ export function hardwareLabel(key: string): string {
  * verschoben, wenn der vierte Haken "Alles erledigt" manuell gesetzt wurde.
  */
 export function isOnboarded(e: Employee): boolean {
-  return e.allDone === true
+  return e.deviceHandedOver === true
+}
+
+/**
+ * Was fehlt noch, bevor "Alles Vorbereitet" gesetzt werden darf: die drei
+ * Vorbereitungsschritte UND ein Checklisten-Eintrag mit gleicher Corp-/Global-ID.
+ */
+export function missingPreparationSteps(e: Employee, hasChecklist: boolean): string[] {
+  const m: string[] = []
+  if (!e.managerContacted) m.push('Manager kontaktieren')
+  if (!e.laptopReady) m.push('Gerät auswählen ("Hardware fertig")')
+  if (!e.workplaceReady) m.push('Arbeitsplatz steht')
+  if (!(e.accessPass || '').trim()) m.push('Access Pass Code eintragen')
+  if (!hasChecklist) m.push('Checklisten-Eintrag anlegen (unter „Checklisten")')
+  return m
 }
 
 // ── Mitarbeiter (Eintritte) ─────────────────────────────────────────────────
@@ -165,6 +187,8 @@ function normalizeEmployee(e: Partial<Employee>): Employee {
     managerContacted: e.managerContacted === true,
     laptopReady: e.laptopReady === true,
     hardwareType: e.hardwareType ?? '',
+    hardwareLocation: e.hardwareLocation ?? '',
+    hardwareBy: e.hardwareBy ?? '',
     workplaceReady: e.workplaceReady === true,
     // Rueckwaerts-Kompatibilitaet: aeltere Datensaetze kannten das Feld "allDone"
     // (Umzug nach "Bereits onboardet") noch nicht. War dort bereits alles
@@ -174,8 +198,15 @@ function normalizeEmployee(e: Partial<Employee>): Employee {
     allDone: e.allDone === undefined
       ? (e.managerContacted === true && e.laptopReady === true && e.workplaceReady === true)
       : e.allDone === true,
+    // Frueher galt allDone=true als "onboardet". Jetzt zaehlt erst die Geraete-
+    // Uebergabe. Alt-Datensaetze mit allDone=true bleiben daher onboardet.
+    deviceHandedOver: e.deviceHandedOver === undefined ? (e.allDone === true) : e.deviceHandedOver === true,
+    handedOverAt: e.handedOverAt,
+    handedOverBy: e.handedOverBy,
     request: e.request ?? '',
     ritmLaptop: e.ritmLaptop ?? '',
+    deploymentTask: e.deploymentTask ?? '',
+    hardwareSerial: e.hardwareSerial ?? '',
     laptopType: e.laptopType ?? '',
     accessPass: e.accessPass ?? '',
     accessPassUpn: e.accessPassUpn ?? '',

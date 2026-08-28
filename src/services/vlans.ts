@@ -17,6 +17,7 @@ import { VLAN_SEED } from '../data/vlanSeed'
 export const VLAN_CONFIG_PATH = 'network/vlans.json'
 export const VLAN_SCAN_PATH = 'network/vlan_scan.json'
 export const VLAN_TYPES_PATH = 'network/vlan_device_types.json'
+export const VLAN_OVERRIDES_PATH = 'network/vlan_overrides.json'
 export const DEFAULT_SITE = 'DEHAM'
 const INVENTORY_FILE = 'inventory/inventory.json'
 
@@ -28,12 +29,14 @@ export interface VlanDef {
   cidr: string
   vlanId?: string
   name?: string
+  gateway?: string                 // Standard-Gateway des Subnetzes (aus der VLAN-Liste)
   description?: string
   expectedType?: DeviceType | ''   // erwarteter Gerätetyp (leer = keine Prüfung)
 }
 export interface VlanConfig {
   site: string
   vlans: VlanDef[]
+  snmpCommunity?: string     // read-only Community für die SNMP-Erkennung (Default 'public')
   updatedAt?: string
   updatedBy?: string
 }
@@ -69,7 +72,7 @@ export async function loadVlanConfig(): Promise<VlanConfig> {
     if (c && Array.isArray(c.vlans)) {
       // Nur wohlgeformte Einträge übernehmen (schützt labelFor/Editor vor kaputten Datensätzen).
       const vlans = c.vlans.filter(v => v && typeof v === 'object' && typeof (v as VlanDef).cidr === 'string')
-      return { site: c.site || DEFAULT_SITE, vlans, updatedAt: c.updatedAt, updatedBy: c.updatedBy }
+      return { site: c.site || DEFAULT_SITE, vlans, snmpCommunity: c.snmpCommunity, updatedAt: c.updatedAt, updatedBy: c.updatedBy }
     }
   } catch { /* noch keine */ }
   return { site: DEFAULT_SITE, vlans: [] }
@@ -179,7 +182,7 @@ function mostSpecificContaining(baseIp: string, defs: VlanDef[]): VlanDef | unde
 // die Namen auch OHNE Import angezeigt werden. Nur einmal aufbauen.
 let SEED_DEFS: VlanDef[] | null = null
 function seedDefs(): VlanDef[] {
-  if (!SEED_DEFS) SEED_DEFS = VLAN_SEED.map(s => ({ cidr: normalizeCidr(s.cidr) || s.cidr, vlanId: s.vlanId, name: s.name, expectedType: suggestExpectedType(s.name) || undefined }))
+  if (!SEED_DEFS) SEED_DEFS = VLAN_SEED.map(s => ({ cidr: normalizeCidr(s.cidr) || s.cidr, vlanId: s.vlanId, name: s.name, gateway: s.gateway, expectedType: suggestExpectedType(s.name) || undefined }))
   return SEED_DEFS
 }
 
@@ -217,7 +220,7 @@ export function labelFor(cidr: string, config: VlanConfig): string {
  *  fehlende Subnetze ergänzt). `note` landet als Beschreibung bei neuen/ergänzten. */
 export function mergeVlanSeed(
   config: VlanConfig,
-  seed: { cidr: string; vlanId: string; name: string }[],
+  seed: { cidr: string; vlanId: string; name: string; gateway?: string }[],
   note: string,
 ): { merged: VlanConfig; added: number; updated: number } {
   const vlans: VlanDef[] = config.vlans.map(v => ({ ...v }))
@@ -229,7 +232,7 @@ export function mergeVlanSeed(
     if (!n) continue
     const i = idxByCidr.get(n)
     if (i === undefined) {
-      vlans.push({ cidr: n, vlanId: s.vlanId, name: s.name, description: note, expectedType: suggestExpectedType(s.name) || undefined })
+      vlans.push({ cidr: n, vlanId: s.vlanId, name: s.name, gateway: s.gateway || undefined, description: note, expectedType: suggestExpectedType(s.name) || undefined })
       idxByCidr.set(n, vlans.length - 1)
       added++
     } else {
@@ -237,6 +240,7 @@ export function mergeVlanSeed(
       let changed = false
       if (!v.vlanId && s.vlanId) { v.vlanId = s.vlanId; changed = true }
       if (!v.name && s.name) { v.name = s.name; changed = true }
+      if (!v.gateway && s.gateway) { v.gateway = s.gateway; changed = true }
       if (!v.expectedType) { const et = suggestExpectedType(s.name || v.name); if (et) { v.expectedType = et; changed = true } }
       if (changed && !v.description) v.description = note
       if (changed) updated++
@@ -264,8 +268,13 @@ const DRIFT_RANK: Record<DriftStatus, number> = { 'not-in-ad': 0, 'new-in-ad': 1
  *  Abweichungen (veraltet / neu / leer / bestätigt). */
 export function computeVlanDrift(config: VlanConfig, adCidrs: string[], devices: VlanDevice[]): VlanDrift[] {
   const adSet = new Set(adCidrs.map(normalizeCidr).filter(Boolean))
+  // „Liste" = gepflegte Config VEREINIGT mit dem eingebauten VLAN-Seed — konsistent
+  // mit der Anzeige (labelFor/findVlanDef nutzen denselben Seed-Fallback). Sonst
+  // würden Subnetze, die nur über den Seed benannt sind (Config noch leer/nicht
+  // importiert), fälschlich als „neu in AD" markiert, obwohl sie längst bekannt sind.
   const listMap = new Map<string, VlanDef>()
-  for (const v of config.vlans) { const n = normalizeCidr(v.cidr); if (n) listMap.set(n, v) }
+  for (const v of seedDefs()) { const n = normalizeCidr(v.cidr); if (n && !listMap.has(n)) listMap.set(n, v) }
+  for (const v of config.vlans) { const n = normalizeCidr(v.cidr); if (n) listMap.set(n, v) }   // Config gewinnt (Labels)
   const counts = new Map<string, { t: number; o: number }>()
   for (const d of devices) {
     if (!d.cidr) continue
@@ -356,11 +365,49 @@ export function classifyDevicesPassive(
   return out
 }
 
-export interface DeviceTypeResult { type: DeviceType; detail: string }
+export interface DeviceTypeResult {
+  type: DeviceType | ''      // grober Typ (leer = per Ports nicht bestimmbar)
+  detail: string             // z. B. "Port 9100"
+  kind?: string              // sprechende Geräteart, z. B. "Drucker", "Windows-Geraet", "Kamera (RTSP)"
+  ptr?: string               // Reverse-DNS (PTR) Hostname
+  netbios?: string           // NetBIOS-Name (nbtstat)
+  ports?: string             // offene Ports, kommagetrennt
+  snmpName?: string          // SNMP sysName
+  snmpDescr?: string         // SNMP sysDescr (Modell/Beschreibung)
+  mac?: string               // MAC-Adresse (nur eigenes Subnetz, aus ARP)
+  vendor?: string            // Hersteller (aus MAC-OUI oder SNMP)
+}
 
-/** Aktiver Port-Check: 9100/515/631 ⇒ Drucker, 5060/5061 (TCP) ⇒ Telefon-Hinweis,
- *  3389/445 ⇒ PC/Server. Zuverlässig quer über Subnetze (geroutetes TCP).
- *  Chunks laufen parallel (Pool), damit auch „alle Subnetze auf einmal" zügig geht. */
+/** Manuelle Typ-Korrektur pro IP (überschreibt die Auto-Erkennung, bleibt dauerhaft). */
+export interface DeviceOverride { type?: DeviceType; kind?: string; note?: string; by?: string; at?: string }
+
+/** Endnutzer-PC an der AD-Namenskonvention erkennen (Präfix de/deham/desch + Serial). */
+export function isEndpointHostname(name: string): boolean {
+  const n = (name || '').split('.')[0].trim().toLowerCase()
+  return /^(deham|desch|de)[a-z0-9]/.test(n)
+}
+
+/**
+ * Finaler Gerätetyp + sprechende Geräteart aus Name (Konvention) + Portprofil.
+ * Priorität: Drucker/Telefon (per Port) → eindeutiger PC/Server (RDP/SMB) →
+ * Endnutzer-PC per Name (de/deham/desch) → sonstiges Portprofil (Web/Linux) →
+ * passiver Typ (Inventar/Hostname). So bleibt z. B. DEHAMKSA… als PC/Server (RDP),
+ * während DE…-Geräte mit nur 80/443 korrekt als Endnutzer-PC erscheinen.
+ */
+export function refineDeviceType(name: string, act?: DeviceTypeResult, passiveType?: DeviceType): { type: DeviceType | ''; kind: string } {
+  if (act?.type === 'printer') return { type: 'printer', kind: act.kind || 'Drucker' }
+  if (act?.type === 'phone') return { type: 'phone', kind: act.kind || 'Telefon (VoIP)' }
+  if (act?.type === 'pc') return { type: 'pc', kind: act.kind || 'PC/Laptop' }
+  if (isEndpointHostname(name)) return { type: 'pc', kind: 'PC (Endnutzer)' }
+  if (act?.type) return { type: act.type, kind: act.kind || '' }
+  if (passiveType) return { type: passiveType, kind: '' }
+  return { type: '', kind: act?.kind || '' }
+}
+
+/** Aktiver Tiefen-Check pro IP: offene Ports → Geräteart, plus Reverse-DNS (PTR)
+ *  und NetBIOS-Name. Zieht so viel wie möglich über geroutetes TCP heraus, damit
+ *  auch „unbekannte" IPs identifizierbar werden. Läuft chunked im Pool (auch für
+ *  „alle Subnetze auf einmal"). Wird auf die ONLINE-Geräte angewandt. */
 export async function probeDeviceTypes(
   ips: string[],
   onProgress?: (done: number, total: number) => void,
@@ -381,27 +428,47 @@ export async function probeDeviceTypes(
       const chunk = chunks[idx++]
       if (!chunk) return
       const arr = chunk.map(ip => `'${ip}'`).join(',')
-      // Pro IP: früh-abbrechende Portprüfung; gibt "ip|type|detail" aus.
+      // Pro IP: Portprofil + Geräteart + Reverse-DNS + NetBIOS.
+      // Ausgabe: ip|type|detail|kind|ptr|netbios|ports
       const script = [
         `$ips=@(${arr})`,
-        `function TP($ip,$p){ try { $c=New-Object System.Net.Sockets.TcpClient; $ok=$c.ConnectAsync($ip,$p).Wait(500); $c.Close(); return $ok } catch { return $false } }`,
+        `function TP($ip,$p){ try { $c=New-Object System.Net.Sockets.TcpClient; $ok=$c.ConnectAsync($ip,$p).Wait(400); $c.Close(); return $ok } catch { return $false } }`,
         `foreach($ip in $ips){`,
-        `  $t=''; $d=''`,
-        `  if(TP $ip 9100){$t='printer';$d='9100'} elseif(TP $ip 515){$t='printer';$d='515'} elseif(TP $ip 631){$t='printer';$d='631'}`,
-        `  elseif(TP $ip 5060){$t='phone';$d='5060'} elseif(TP $ip 5061){$t='phone';$d='5061'}`,
-        `  elseif(TP $ip 3389){$t='pc';$d='3389'} elseif(TP $ip 445){$t='pc';$d='445'}`,
-        `  Write-Output ($ip+'|'+$t+'|'+$d)`,
+        `  $open=@()`,
+        `  foreach($p in 9100,515,631,5060,5061,3389,445,139,22,80,443,554,23){ if(TP $ip $p){ $open+=$p } }`,
+        `  $t=''; $kind=''`,
+        `  if($open -contains 9100 -or $open -contains 515 -or $open -contains 631){ $t='printer'; $kind='Drucker' }`,
+        `  elseif($open -contains 5060 -or $open -contains 5061){ $t='phone'; $kind='Telefon (VoIP)' }`,
+        `  elseif($open -contains 554){ $t='other'; $kind='Kamera (RTSP)' }`,
+        `  elseif($open -contains 3389){ $t='pc'; $kind='PC/Server (RDP)' }`,
+        `  elseif($open -contains 445 -or $open -contains 139){ $t='pc'; $kind='Windows-Geraet' }`,
+        `  elseif($open -contains 22){ $t='other'; $kind='Linux/Netzwerkgeraet (SSH)' }`,
+        `  elseif($open -contains 23){ $t='other'; $kind='Netzwerkgeraet (Telnet)' }`,
+        `  elseif($open -contains 80 -or $open -contains 443){ $t='other'; $kind='Web-verwaltetes Geraet' }`,
+        `  $ptr=''`,
+        `  try { $r=Resolve-DnsName -Name $ip -Type PTR -QuickTimeout -EA SilentlyContinue; if($r){ $h=($r | Where-Object { $_.NameHost } | Select-Object -First 1).NameHost; if($h){ $ptr=$h } } } catch {}`,
+        `  $nb=''`,
+        `  try { $o=nbtstat -A $ip 2>$null; $mm=$o | Select-String '<00>\\s+UNIQUE'; if($mm){ $nb=(($mm[0].ToString().Trim()) -split '\\s+')[0] } } catch {}`,
+        `  $detail=''; if($open.Count -gt 0){ $detail='Port '+$open[0] }`,
+        `  Write-Output ($ip+'|'+$t+'|'+$detail+'|'+$kind+'|'+$ptr+'|'+$nb+'|'+($open -join ','))`,
         `}`,
       ].join('\n')
-      const res = await api().runPowerShell(script, 60000).catch(() => ({ stdout: '', stderr: '', exitCode: -1, timedOut: true }))
+      const res = await api().runPowerShell(script, 120000).catch(() => ({ stdout: '', stderr: '', exitCode: -1, timedOut: true }))
       for (const line of (res.stdout ?? '').split(/\r?\n/)) {
         const m = line.trim().split('|')
-        if (m.length < 2 || !m[1]) continue
+        if (m.length < 2) continue
         const ip = canonicalIp(m[0]) || m[0]
-        const type = m[1] as DeviceType
-        if (['printer', 'phone', 'pc', 'server', 'other'].includes(type)) {
-          result.set(ip, { type, detail: m[2] ? `Port ${m[2]}` : '' })
-        }
+        if (!ip) continue
+        const rawType = (m[1] || '') as DeviceType | ''
+        const type: DeviceType | '' = ['printer', 'phone', 'pc', 'server', 'other'].includes(rawType) ? rawType : ''
+        const detail = m[2] || ''
+        const kind = m[3] || ''
+        const ptr = m[4] || ''
+        const netbios = m[5] || ''
+        const ports = m[6] || ''
+        // Auch ohne Typ speichern, wenn es Zusatzinfos gibt (macht "unbekannt" identifizierbar).
+        if (!type && !kind && !ptr && !netbios && !ports) continue
+        result.set(ip, { type, detail, kind: kind || undefined, ptr: ptr || undefined, netbios: netbios || undefined, ports: ports || undefined })
       }
       done += chunk.length
       onProgress?.(Math.min(done, list.length), list.length)
@@ -427,6 +494,135 @@ export async function loadDeviceTypes(): Promise<DeviceTypeCache | null> {
 }
 export async function saveDeviceTypes(scanDate: string, types: Record<string, DeviceTypeResult>): Promise<void> {
   try { await api().netWriteJson(VLAN_TYPES_PATH, { scanDate, types } satisfies DeviceTypeCache) } catch { /* offline — egal */ }
+}
+
+// ── Manuelle Typ-Overrides (pro IP, dauerhaft) ────────────────────────────────
+
+export async function loadOverrides(): Promise<Record<string, DeviceOverride>> {
+  try {
+    const c = await api().netReadJson<Record<string, DeviceOverride>>(VLAN_OVERRIDES_PATH)
+    if (c && typeof c === 'object') return c
+  } catch { /* keine */ }
+  return {}
+}
+export async function saveOverrides(map: Record<string, DeviceOverride>): Promise<boolean> {
+  try { return await api().netWriteJson(VLAN_OVERRIDES_PATH, map) } catch { return false }
+}
+
+// ── SNMP-Tiefenerkennung (sysDescr/sysName -> Geräteart) ──────────────────────
+// Läuft über die SNMP-IPC (Main-Prozess, net-snmp). Identifiziert v. a. Infra-
+// Geräte (Drucker/Switch/USV/Kamera/AP), die per TCP-Port nur „Sonstiges" wären.
+
+const SNMP_SYSDESCR = '1.3.6.1.2.1.1.1.0'
+const SNMP_SYSNAME = '1.3.6.1.2.1.1.5.0'
+
+/** sysDescr-Text -> {type, kind}. Nur sichere Nicht-PC-Klassen setzen einen Typ. */
+function snmpClassify(descr: string): { type?: DeviceType; kind?: string } {
+  const d = (descr || '').toLowerCase()
+  if (/jetdirect|laserjet|officejet|designjet|lexmark|kyocera|ricoh|brother|\bcanon\b|\bepson\b|zebra|utax|sharp mfp|printer|drucker/.test(d)) return { type: 'printer', kind: 'Drucker (SNMP)' }
+  if (/cisco|catalyst|\bios\b|aruba|procurve|\bhpe?\b.*switch|switch|juniper|junos|extreme|mikrotik|netgear|zyxel/.test(d)) return { type: 'other', kind: 'Switch/Netzwerk (SNMP)' }
+  if (/\bapc\b|smart-ups|\bups\b|eaton|riello|usv/.test(d)) return { type: 'other', kind: 'USV (SNMP)' }
+  if (/\baxis\b|hikvision|dahua|mobotix|camera|kamera|network camera/.test(d)) return { type: 'other', kind: 'Kamera (SNMP)' }
+  if (/access point|aironet|\binstant\b|\bwlan\b|\bwifi\b|wireless ap/.test(d)) return { type: 'other', kind: 'Access Point (SNMP)' }
+  return {}
+}
+
+export interface SnmpResult { snmpName?: string; snmpDescr?: string; type?: DeviceType; kind?: string; vendor?: string }
+
+export async function snmpEnrich(
+  ips: string[],
+  community = 'public',
+  onProgress?: (done: number, total: number) => void,
+  isAborted?: () => boolean,
+  concurrency = 10,
+): Promise<Map<string, SnmpResult>> {
+  const result = new Map<string, SnmpResult>()
+  const list = [...new Set(ips.map(ip => canonicalIp(ip) || ip).filter(Boolean))]
+  let done = 0, idx = 0
+  async function worker() {
+    for (;;) {
+      if (isAborted?.()) return
+      const ip = list[idx++]
+      if (!ip) return
+      try {
+        const r = await api().snmpQuery({ host: ip, op: 'get', oids: [SNMP_SYSDESCR, SNMP_SYSNAME], version: 'v2c', community, timeoutMs: 2500, retries: 1 })
+        if (r.success && r.varbinds && r.varbinds.length) {
+          const descr = String(r.varbinds.find(v => v.oid === SNMP_SYSDESCR && v.type !== 'error')?.value ?? '').trim()
+          const name = String(r.varbinds.find(v => v.oid === SNMP_SYSNAME && v.type !== 'error')?.value ?? '').trim()
+          if (descr || name) {
+            const cls = snmpClassify(descr)
+            result.set(ip, { snmpName: name || undefined, snmpDescr: descr || undefined, type: cls.type, kind: cls.kind, vendor: vendorFromSysDescr(descr) })
+          }
+        }
+      } catch { /* Gerät ohne SNMP -> ignorieren */ }
+      done++
+      onProgress?.(Math.min(done, list.length), list.length)
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(concurrency, list.length) }, () => worker()))
+  return result
+}
+
+/** Hersteller grob aus sysDescr ableiten (ergänzt/ersetzt die MAC-OUI-Angabe). */
+function vendorFromSysDescr(descr: string): string | undefined {
+  const d = (descr || '').toLowerCase()
+  const map: [RegExp, string][] = [
+    [/hewlett|hp |hpe |jetdirect|laserjet|procurve/, 'HP/HPE'], [/lexmark/, 'Lexmark'], [/kyocera/, 'Kyocera'],
+    [/ricoh/, 'Ricoh'], [/brother/, 'Brother'], [/canon/, 'Canon'], [/epson/, 'Epson'], [/zebra/, 'Zebra'],
+    [/cisco/, 'Cisco'], [/aruba/, 'Aruba'], [/juniper|junos/, 'Juniper'], [/mikrotik/, 'MikroTik'],
+    [/\bapc\b|schneider/, 'APC/Schneider'], [/eaton/, 'Eaton'], [/axis/, 'Axis'], [/hikvision/, 'Hikvision'],
+    [/dell/, 'Dell'], [/fujitsu/, 'Fujitsu'], [/lenovo/, 'Lenovo'], [/synology/, 'Synology'], [/qnap/, 'QNAP'],
+  ]
+  for (const [re, v] of map) if (re.test(d)) return v
+  return undefined
+}
+
+// ── MAC-Adresse + Hersteller (nur eigenes Subnetz, aus ARP-Tabelle) ───────────
+// Cross-Subnet-Hosts erscheinen NICHT in der ARP-Tabelle (routen übers Gateway).
+// Der vorherige Ping-Sweep (pingBatch) hat den ARP-Cache des Admin-PCs gefüllt.
+
+/** Liest die lokale ARP/Neighbor-Tabelle des Admin-PCs -> Map<IP, MAC>. */
+export async function readArpTable(): Promise<Map<string, string>> {
+  const out = new Map<string, string>()
+  const script = [
+    `try {`,
+    `  $n = Get-NetNeighbor -AddressFamily IPv4 -EA Stop | Where-Object { $_.State -in 'Reachable','Stale','Permanent' -and $_.LinkLayerAddress -and $_.LinkLayerAddress -ne '00-00-00-00-00-00' }`,
+    `  $n | ForEach-Object { "$($_.IPAddress)|$($_.LinkLayerAddress)" }`,
+    `} catch {`,
+    `  (arp -a) -split "\\r?\\n" | Where-Object { $_ -match '(\\d+\\.\\d+\\.\\d+\\.\\d+)\\s+([0-9a-fA-F-]{17})' } | ForEach-Object { $m=[regex]::Match($_,'(\\d+\\.\\d+\\.\\d+\\.\\d+)\\s+([0-9a-fA-F-]{17})'); "$($m.Groups[1].Value)|$($m.Groups[2].Value)" }`,
+    `}`,
+  ].join('\n')
+  try {
+    const res = await api().runPowerShell(script, 20000)
+    for (const line of (res.stdout ?? '').split(/\r?\n/)) {
+      const [ip, mac] = line.trim().split('|')
+      if (!ip || !mac) continue
+      const cip = canonicalIp(ip) || ip
+      const m = mac.replace(/-/g, ':').toUpperCase()
+      if (/^([0-9A-F]{2}:){5}[0-9A-F]{2}$/.test(m)) out.set(cip, m)
+    }
+  } catch { /* ARP nicht lesbar */ }
+  return out
+}
+
+// Kleine, erweiterbare OUI-Tabelle (Präfix ohne Trenner, GROSS) -> Hersteller.
+// Best-effort; unbekannt -> leer. Zuverlässiger ist bei SNMP-Geräten die sysDescr.
+const OUI_VENDORS: Record<string, string> = {
+  '005056': 'VMware', '000C29': 'VMware', '000569': 'VMware',
+  '00155D': 'Microsoft (Hyper-V)', '00509F': 'Cisco',
+  '3C0754': 'Apple', 'F01898': 'Apple', 'ACBC32': 'Apple',
+  '000BDB': 'Dell', 'F8BC12': 'Dell', 'B8CA3A': 'Dell', '18DBF2': 'Dell',
+  '3CD92B': 'HP/HPE', '9457A5': 'HP/HPE', '001560': 'HP/HPE', '80CE62': 'HP/HPE',
+  '00074D': 'Zebra', 'AC3FA4': 'Zebra',
+  '00206B': 'Konica Minolta', '00C0EE': 'Kyocera', '002673': 'Ricoh', '30055C': 'Brother',
+  '00408C': 'Axis', 'ACCC8E': 'Axis', '00C0B7': 'APC',
+}
+
+/** Hersteller aus MAC-OUI (erste 3 Oktette). */
+export function vendorFromMac(mac?: string): string | undefined {
+  if (!mac) return undefined
+  const p = mac.replace(/[:-]/g, '').toUpperCase().slice(0, 6)
+  return OUI_VENDORS[p]
 }
 
 // ── Discovery (Ping-Sweep + IP→Gerät + Inventar-Merge) ────────────────────────

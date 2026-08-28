@@ -1,0 +1,195 @@
+/* KnowledgeSearch.css — Stile der Wissenssuche.
+   Nutzt CSS-Variablen mit Fallbacks: wenn dein Tool bereits ein Theme
+   definiert (--bg, --fg, --accent …), übernimmt die Komponente es automatisch.
+   Hell- und Dunkelmodus werden beide unterstützt. */
+
+.ks {
+  --ks-bg:        var(--bg, #ffffff);
+  --ks-surface:   var(--surface, #f6f7f9);
+  --ks-border:    var(--border, #e2e5ea);
+  --ks-fg:        var(--fg, #1c2024);
+  --ks-muted:     var(--muted, #6b7280);
+  --ks-accent:    var(--accent, #0b6bcb);
+  --ks-mark:      var(--mark, #fde68a);
+  --ks-radius:    8px;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  color: var(--ks-fg);
+  background: var(--ks-bg);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  .ks {
+    --ks-bg:      var(--bg, #16181c);
+    --ks-surface: var(--surface, #1e2126);
+    --ks-border:  var(--border, #2c3037);
+    --ks-fg:      var(--fg, #e6e8eb);
+    --ks-muted:   var(--muted, #9aa2ad);
+    --ks-accent:  var(--accent, #5aa9ff);
+    --ks-mark:    var(--mark, #7c6414);
+  }
+}
+
+/* ── Zustände ── */
+.ks--state { align-items: center; justify-content: center; gap: 12px; padding: 48px; text-align: center; }
+.ks--error pre { max-width: 640px; white-space: pre-wrap; text-align: left; background: var(--ks-surface);
+  padding: 12px; border-radius: var(--ks-radius); font-size: 12px; }
+.ks-spinner { width: 28px; height: 28px; border: 3px solid var(--ks-border);
+  border-top-color: var(--ks-accent); border-radius: 50%; animation: ks-spin .8s linear infinite; }
+@keyframes ks-spin { to { transform: rotate(360deg); } }
+
+/* ── Suchleiste ── */
+.ks-bar { padding: 12px 16px 8px; border-bottom: 1px solid var(--ks-border); background: var(--ks-bg); }
+.ks-input { position: relative; display: flex; align-items: center; }
+.ks-input__icon { position: absolute; left: 10px; width: 18px; height: 18px; fill: var(--ks-muted); pointer-events: none; }
+.ks-input input {
+  width: 100%; padding: 10px 34px 10px 34px; font-size: 15px;
+  color: var(--ks-fg); background: var(--ks-surface);
+  border: 1px solid var(--ks-border); border-radius: var(--ks-radius); outline: none;
+}
+.ks-input input:focus { border-color: var(--ks-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ks-accent) 20%, transparent); }
+.ks-input input::-webkit-search-cancel-button { display: none; }
+.ks-input__clear { position: absolute; right: 8px; width: 22px; height: 22px; border: 0; cursor: pointer;
+  background: transparent; color: var(--ks-muted); font-size: 18px; line-height: 1; border-radius: 4px; }
+.ks-input__clear:hover { background: var(--ks-border); }
+
+.ks-suggest { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 20;
+  margin: 0; padding: 4px; list-style: none; background: var(--ks-bg);
+  border: 1px solid var(--ks-border); border-radius: var(--ks-radius); box-shadow: 0 8px 24px rgb(0 0 0 / .12); }
+.ks-suggest li { padding: 7px 10px; border-radius: 5px; cursor: pointer; }
+.ks-suggest li:hover { background: var(--ks-surface); }
+
+/* ── Filter-Chips ── */
+.ks-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.ks-chip { padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--ks-muted);
+  background: transparent; border: 1px solid var(--ks-border); border-radius: 999px; }
+.ks-chip:hover { color: var(--ks-fg); border-color: var(--ks-muted); }
+.ks-chip.is-on { color: #fff; background: var(--ks-accent); border-color: var(--ks-accent); }
+.ks-chip__lock { margin-left: 5px; color: #e0a020; }
+.ks-chip--reset { font-style: italic; }
+
+/* ── Statuszeile ── */
+.ks-status { display: flex; align-items: center; gap: 10px; padding: 6px 16px;
+  font-size: 12px; color: var(--ks-muted); border-bottom: 1px solid var(--ks-border); }
+.ks-status__dir { margin-left: auto; padding: 1px 7px; background: var(--ks-surface); border-radius: 4px; }
+
+/* ── Layout ── */
+.ks-body { display: flex; flex: 1; min-height: 0; }
+.ks-results { flex: 1; min-width: 0; overflow-y: auto; padding: 12px 16px 32px; }
+.ks-detail { width: min(46%, 620px); border-left: 1px solid var(--ks-border);
+  overflow-y: auto; background: var(--ks-surface); }
+
+/* ── Entitätskarten ── */
+.ks-entities { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.ks-entity { display: flex; align-items: center; gap: 8px; max-width: 100%;
+  padding: 7px 12px; cursor: pointer; text-align: left; color: var(--ks-fg);
+  background: var(--ks-surface); border: 1px solid var(--ks-border); border-radius: var(--ks-radius); }
+.ks-entity:hover { border-color: var(--ks-accent); }
+.ks-entity__type { padding: 1px 6px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .03em;
+  color: #fff; background: var(--ks-muted); border-radius: 3px; white-space: nowrap; }
+.ks-entity__name { font-weight: 600; }
+.ks-entity__hint { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 12px; color: var(--ks-muted); }
+.ks-entity__count { font-size: 12px; color: var(--ks-muted); }
+
+/* Entitätstypen farblich unterscheiden */
+.ks-type--ticket  { background: #7c3aed; }
+.ks-type--host    { background: #0891b2; }
+.ks-type--network { background: #0d9488; }
+.ks-type--person  { background: #c2410c; }
+.ks-type--email   { background: #64748b; }
+.ks-type--ip      { background: #1d4ed8; }
+.ks-type--serial  { background: #78716c; }
+.ks-type--printer { background: #a16207; }
+.ks-type--cve     { background: #b91c1c; }
+.ks-type--phone   { background: #4d7c0f; }
+
+/* ── Treffer ── */
+.ks-hits { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.ks-hit { padding: 10px 12px; cursor: pointer; border: 1px solid transparent;
+  border-radius: var(--ks-radius); background: var(--ks-surface); }
+.ks-hit:hover { border-color: var(--ks-border); }
+.ks-hit.is-active { border-color: var(--ks-accent); background: color-mix(in srgb, var(--ks-accent) 8%, var(--ks-surface)); }
+.ks-hit.is-synonym { opacity: .82; }
+.ks-hit__head { display: flex; align-items: baseline; gap: 8px; }
+.ks-hit__type { padding: 1px 6px; font-size: 10.5px; color: #fff; background: var(--ks-muted); border-radius: 3px; white-space: nowrap; }
+.ks-type--knowledge { background: #0b6bcb; }
+.ks-type--contact   { background: #c2410c; }
+.ks-type--open      { background: #b45309; }
+.ks-type--overview  { background: #4338ca; }
+.ks-type--thread    { background: #52525b; }
+.ks-type--row       { background: #71717a; }
+.ks-hit__title { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ks-hit__source { margin-left: auto; font-size: 11.5px; color: var(--ks-muted); white-space: nowrap; }
+.ks-hit__crumbs { margin-top: 2px; font-size: 11.5px; color: var(--ks-muted); }
+.ks-hit__snippet { margin-top: 5px; font-size: 13px; color: var(--ks-fg); }
+.ks-hit__snippet mark { padding: 0 1px; background: var(--ks-mark); color: inherit; border-radius: 2px; }
+.ks-hit__note { margin-top: 4px; font-size: 11px; font-style: italic; color: var(--ks-muted); }
+
+/* ── Entitätsansicht ── */
+.ks-entityview { margin-bottom: 14px; padding: 10px; border: 1px solid var(--ks-accent); border-radius: var(--ks-radius); }
+.ks-entityview__head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.ks-entityview__head span { font-size: 12px; color: var(--ks-muted); }
+.ks-entityview__head button { margin-left: auto; border: 0; background: transparent; cursor: pointer;
+  font-size: 18px; color: var(--ks-muted); }
+
+/* ── Leerzustände ── */
+.ks-empty, .ks-hint { padding: 24px 4px; color: var(--ks-muted); }
+.ks-empty__sugg button, .ks-hint__examples button {
+  margin: 0 4px 4px 0; padding: 4px 10px; cursor: pointer; font-size: 13px;
+  color: var(--ks-accent); background: var(--ks-surface);
+  border: 1px solid var(--ks-border); border-radius: 999px; }
+.ks-hint__examples { display: flex; flex-wrap: wrap; margin: 6px 0 14px; }
+.ks-hint__tips { margin: 0; padding-left: 18px; font-size: 12.5px; }
+.ks-hint__tips li { margin-bottom: 3px; }
+
+/* ── Detailansicht ── */
+.ks-detail__head { position: sticky; top: 0; z-index: 2; display: flex; gap: 12px;
+  padding: 12px 16px; background: var(--ks-surface); border-bottom: 1px solid var(--ks-border); }
+.ks-detail__crumbs { font-size: 12px; font-weight: 600; }
+.ks-detail__meta { margin-top: 2px; font-size: 11.5px; color: var(--ks-muted); }
+.ks-detail__close { margin-left: auto; width: 26px; height: 26px; border: 0; cursor: pointer;
+  background: transparent; color: var(--ks-muted); font-size: 20px; line-height: 1; border-radius: 4px; }
+.ks-detail__close:hover { background: var(--ks-border); }
+.ks-detail__body { padding: 14px 16px; font-size: 13.5px; }
+.ks-detail__body h3, .ks-detail__body h4, .ks-detail__body h5 { margin: 14px 0 6px; font-size: 14px; }
+.ks-detail__body p { margin: 0 0 8px; }
+.ks-detail__body ul { margin: 0 0 10px; padding-left: 20px; }
+.ks-detail__body li { margin-bottom: 3px; }
+.ks-detail__body code { padding: 1px 4px; font-size: 12px; background: var(--ks-bg); border-radius: 3px; }
+.ks-detail__body blockquote { margin: 8px 0; padding: 6px 12px; border-left: 3px solid var(--ks-accent);
+  background: var(--ks-bg); color: var(--ks-muted); }
+.ks-detail__body table { width: 100%; margin: 8px 0 12px; border-collapse: collapse; font-size: 12.5px; }
+.ks-detail__body th, .ks-detail__body td { padding: 5px 8px; text-align: left;
+  border: 1px solid var(--ks-border); vertical-align: top; }
+.ks-detail__body th { background: var(--ks-bg); font-weight: 600; }
+.ks-detail__ents { display: flex; flex-wrap: wrap; align-items: center; gap: 5px;
+  padding: 10px 16px 20px; font-size: 11.5px; color: var(--ks-muted); border-top: 1px solid var(--ks-border); }
+.ks-detail__ents code { padding: 1px 6px; background: var(--ks-bg); border-radius: 3px; }
+
+/* ── Schmale Fenster: Detail unter die Treffer ── */
+@media (max-width: 980px) {
+  .ks-body { flex-direction: column; }
+  .ks-detail { width: auto; max-height: 55%; border-left: 0; border-top: 1px solid var(--ks-border); }
+}
+
+/* ── Projekt-Theme-Mapping (überschreibt die Paket-Standardfarben) ────────────
+   Bindet die Wissenssuche an die zentralen Tool-Tokens (index.css, shadcn-HSL).
+   Steht bewusst am Dateiende → gewinnt über die eingebauten :root/dark-Regeln
+   und folgt automatisch dem Hell-/Dunkel-Umschalter des Tools. */
+.ks {
+  --ks-bg:      hsl(var(--background));
+  --ks-surface: hsl(var(--card));
+  --ks-border:  hsl(var(--border));
+  --ks-fg:      hsl(var(--foreground));
+  --ks-muted:   hsl(var(--muted-foreground));
+  --ks-accent:  hsl(var(--primary));
+}
+
+/* Umschalter „Sensible Daten laden" in der Statuszeile */
+.ks-status__sens { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+.ks-status__sens input { cursor: pointer; }

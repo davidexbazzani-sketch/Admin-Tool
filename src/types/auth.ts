@@ -49,6 +49,9 @@ export interface InventoryItem {
   id: string
   name: string
   ip?: string
+  mac?: string          // ausgelesene MAC-Adresse (Geräte-Scan IP/MAC/Serial)
+  serial?: string       // ausgelesene Seriennummer (WMI Win32_BIOS oder aus Hostname)
+  deviceScanAt?: string // ISO-Zeitstempel des letzten Geräte-Scans
   description?: string
   category: string
   addedAt: string

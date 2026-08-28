@@ -4,7 +4,10 @@ import {
   Loader, CheckCircle, XCircle, AlertTriangle,
   ChevronsDownUp, ChevronsUpDown, Lock, Terminal,
   Download, Trash2, PackageX, Search, Info, X, Lightbulb,
+  ArrowLeft, Network, Activity, Wrench, RefreshCw, Package,
+  FolderOpen, CircuitBoard, HardDrive, Users, ShieldCheck, Power, Puzzle,
 } from 'lucide-react'
+import type { ReactNode } from 'react'
 import {
   exportRemoteDocResultExcel,
   exportRemoteDocResultWord,
@@ -17,10 +20,19 @@ import { api } from '../electronAPI'
 import { ServicePanel } from '../components/ServicePanel'
 import { ProcessPanel } from '../components/ProcessPanel'
 import { CATEGORIES, type ActionType, type CmdDef, type Category, setExecMethod, setPsExecDir, getPsExecDir, type ExecMethod } from '../utils/remoteCommands'
+import { CATEGORY_GROUPS, groupForCategory } from '../utils/remoteDocGroups'
 import { loadFavorites, saveFavorites, addSkill, removeSkill, isSkillFavorite } from '../utils/favorites'
 import type { FavoritesData } from '../types/favorites'
 import { buildSearchIndex, searchSkills, type SearchResult, type SkillDescription } from '../utils/remoteDocSearch'
 import WinRMActivationModal from '../components/WinRMActivationModal'
+
+// Icons für die Themen-Kacheln (Schlüssel = CategoryGroup.icon aus remoteDocGroups.ts)
+const GROUP_ICONS: Record<string, ReactNode> = {
+  Network: <Network size={20} />, Activity: <Activity size={20} />, Wrench: <Wrench size={20} />,
+  RefreshCw: <RefreshCw size={20} />, Package: <Package size={20} />, FolderOpen: <FolderOpen size={20} />,
+  CircuitBoard: <CircuitBoard size={20} />, HardDrive: <HardDrive size={20} />, Users: <Users size={20} />,
+  ShieldCheck: <ShieldCheck size={20} />, Power: <Power size={20} />, Puzzle: <Puzzle size={20} />,
+}
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -353,6 +365,8 @@ export default function RemoteDoc() {
 
   // Accordion state
   const [expanded, setExpanded]     = useState<Set<string>>(new Set())
+  // Aktive Themen-Kachel (null = Kachel-Raster). Siehe remoteDocGroups.ts
+  const [activeGroup, setActiveGroup] = useState<string | null>(null)
   // Per-command input values
   const [inputs, setInputs]         = useState<Record<string, string>>({})
   // Per-command output
@@ -463,6 +477,7 @@ export default function RemoteDoc() {
       const r = searchResults[selectedResultIdx]
       const cat = CATEGORIES.find(c => c.id === r.catId)
       if (cat) {
+        goToSkill(r.catId)
         runCommand(cat, r.cmd)
         setRecentSearches(prev => [searchQuery, ...prev.filter(s => s !== searchQuery)].slice(0, 5))
         setSearchQuery('')
@@ -496,14 +511,32 @@ export default function RemoteDoc() {
     })
   }
 
+  // Aktive Gruppe + sichtbare Kategorien (Drill-in). null = Kachel-Raster.
+  const activeGroupObj = activeGroup ? (CATEGORY_GROUPS.find(g => g.id === activeGroup) ?? null) : null
+  const visibleCategories = activeGroupObj ? CATEGORIES.filter(c => activeGroupObj.categoryIds.includes(c.id)) : []
+
+  // Aus der Suche in die richtige Kachel springen + Kategorie aufklappen.
+  function goToSkill(catId: string) {
+    const g = groupForCategory(catId)
+    if (g) setActiveGroup(g.id)
+    setExpanded(prev => { const n = new Set(prev); n.add(catId); return n })
+  }
+
   function toggleAll() {
-    if (expanded.size === CATEGORIES.length) setExpanded(new Set())
-    else setExpanded(new Set(CATEGORIES.map(c => c.id)))
+    const ids = activeGroupObj ? visibleCategories.map(c => c.id) : CATEGORIES.map(c => c.id)
+    const allOpen = ids.length > 0 && ids.every(id => expanded.has(id))
+    setExpanded(prev => {
+      const n = new Set(prev)
+      if (allOpen) ids.forEach(id => n.delete(id))
+      else ids.forEach(id => n.add(id))
+      return n
+    })
   }
 
   const doConnect = useCallback(async () => {
     const h = hostname.trim()
     if (!h) return
+    setActiveGroup(null)   // frische Verbindung -> Kachel-Raster als Landing
     abortRef.current = false
     setConnecting(true)
     setConnInfo(null)
@@ -1304,7 +1337,7 @@ export default function RemoteDoc() {
                     onClick={() => {
                       const cat = CATEGORIES.find(c => c.id === r.catId)
                       if (cat) {
-                        setExpanded(prev => { const n = new Set(prev); n.add(r.catId); return n })
+                        goToSkill(r.catId)
                         setRecentSearches(prev => [searchQuery, ...prev.filter(s => s !== searchQuery)].slice(0, 5))
                         setSearchQuery('')
                         setSearchResults([])
@@ -1326,7 +1359,7 @@ export default function RemoteDoc() {
                         onClick={(e) => {
                           e.stopPropagation()
                           const cat = CATEGORIES.find(c => c.id === r.catId)
-                          if (cat) runCommand(cat, r.cmd)
+                          if (cat) { goToSkill(r.catId); runCommand(cat, r.cmd) }
                           setRecentSearches(prev => [searchQuery, ...prev.filter(s => s !== searchQuery)].slice(0, 5))
                           setSearchQuery('')
                           setSearchResults([])
@@ -1451,7 +1484,11 @@ export default function RemoteDoc() {
       <div className={`flex-1 overflow-y-auto ${!isAdmin ? 'opacity-50 pointer-events-none' : ''}`}>
         {connected && (
           <div className="px-6 pt-3 pb-1 flex items-center justify-between">
-            <p className="text-xs text-muted-foreground">{CATEGORIES.length} Kategorien · {CATEGORIES.reduce((s, c) => s + c.commands.length, 0)} Befehle</p>
+            <p className="text-xs text-muted-foreground">
+              {activeGroupObj
+                ? `${activeGroupObj.label} · ${visibleCategories.length} Kategorien · ${visibleCategories.reduce((s, c) => s + c.commands.length, 0)} Befehle`
+                : `${CATEGORY_GROUPS.length} Bereiche · ${CATEGORIES.reduce((s, c) => s + c.commands.length, 0)} Befehle gesamt`}
+            </p>
             <div className="flex items-center gap-3">
               {Object.values(outputs).some(o => o.status !== 'running' && !o.collapsed) && (
                 <button
@@ -1465,10 +1502,12 @@ export default function RemoteDoc() {
                   <ChevronsDownUp size={13} /> Alle Ergebnisse schließen
                 </button>
               )}
-              <button onClick={toggleAll} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                {expanded.size === CATEGORIES.length ? <ChevronsDownUp size={13} /> : <ChevronsUpDown size={13} />}
-                {expanded.size === CATEGORIES.length ? 'Alle zuklappen' : 'Alle aufklappen'}
-              </button>
+              {activeGroupObj && (
+                <button onClick={toggleAll} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                  {visibleCategories.every(c => expanded.has(c.id)) ? <ChevronsDownUp size={13} /> : <ChevronsUpDown size={13} />}
+                  {visibleCategories.every(c => expanded.has(c.id)) ? 'Alle zuklappen' : 'Alle aufklappen'}
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -1481,9 +1520,36 @@ export default function RemoteDoc() {
           </div>
         )}
 
-        {connected && (
+        {/* Kachel-Raster der Themen-Bereiche */}
+        {connected && activeGroup === null && (
+          <div className="px-6 pb-6 pt-2 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+            {CATEGORY_GROUPS.map(g => {
+              const cmdCount = CATEGORIES.filter(c => g.categoryIds.includes(c.id)).reduce((s, c) => s + c.commands.length, 0)
+              return (
+                <button key={g.id} onClick={() => setActiveGroup(g.id)}
+                  className="group flex flex-col items-start gap-2 text-left rounded-xl border border-border bg-card hover:bg-accent/20 hover:border-primary/40 transition-colors p-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+                    {GROUP_ICONS[g.icon] ?? <Terminal size={20} />}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground">{g.label}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">{g.hint}</p>
+                  </div>
+                  <span className="mt-auto text-[10px] text-muted-foreground/70">{cmdCount} Befehle</span>
+                </button>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Drill-in: Aktionen der gewählten Kachel */}
+        {connected && activeGroupObj && (
           <div className="px-6 pb-6 space-y-2 pt-2">
-            {CATEGORIES.map(cat => {
+            <button onClick={() => setActiveGroup(null)}
+              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mb-1">
+              <ArrowLeft size={14} /> Alle Bereiche
+            </button>
+            {visibleCategories.map(cat => {
               const isOpen = expanded.has(cat.id)
               const isSvcCat = cat.id === 'svc'
               const isProcCat = cat.id === 'proc'

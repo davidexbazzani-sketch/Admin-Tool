@@ -7,6 +7,7 @@
 import { create } from 'zustand'
 import { api } from '../electronAPI'
 import { pathService } from '../services/pathService'
+import { ensureWinRM, clearWinRMCache } from '../utils/winrmUtils'
 
 type StepStatus = 'pending' | 'running' | 'success' | 'warning' | 'error' | 'skipped'
 type Phase = 'idle' | 'running' | 'done' | 'error'
@@ -25,6 +26,7 @@ interface SwInstallState {
 
 // Polling state lives OUTSIDE React and Zustand — at the window level
 let _pollTimer: ReturnType<typeof setInterval> | null = null
+let _winrmTimer: ReturnType<typeof setInterval> | null = null
 let _remoteLogPath = ''
 let _hostname = ''
 let _lastLineCount = 0
@@ -32,6 +34,22 @@ let _pollStartTime = 0
 
 function stopPolling() {
   if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null }
+  if (_winrmTimer) { clearInterval(_winrmTimer); _winrmTimer = null }
+}
+
+// WinRM schaltet sich auf den Ziel-PCs immer wieder automatisch ab. Da der
+// Scheduled-Task über Invoke-Command (WinRM) erstellt wird und die Installation
+// lange dauert (Robocopy + Install), halten wir WinRM alle 5 Minuten aktiv
+// (Cache leeren -> erneut aktivieren/prüfen).
+function startWinrmKeepAlive(hostname: string) {
+  if (_winrmTimer) { clearInterval(_winrmTimer); _winrmTimer = null }
+  _winrmTimer = setInterval(async () => {
+    try {
+      clearWinRMCache(hostname)
+      const ok = await ensureWinRM(hostname)
+      if (!ok) addLogLine('Hinweis: WinRM-Reaktivierung fehlgeschlagen — Ziel evtl. kurz offline.')
+    } catch { /* nächster Versuch in 5 Min. */ }
+  }, 5 * 60 * 1000)
 }
 
 function addLogLine(msg: string) {
@@ -92,6 +110,12 @@ async function pollOnce() {
             } catch { /* ok */ }
             return
           }
+          else if (status === 'failed') {
+            useSwInstallStore.setState({ phase: 'error', errorMsg: msg || 'Installation fehlgeschlagen' })
+            addLogLine(`FEHLER: ${msg}`)
+            stopPolling()
+            return
+          }
 
           addLogLine(`[Step ${step}] ${status}: ${msg}`)
         } catch { addLogLine(line.trim()) }
@@ -131,6 +155,27 @@ export const useSwInstallStore = create<SwInstallState>((set, get) => ({
     const taskName = `ITAdminSW_${ts}`
 
     try {
+      // WinRM aktivieren (wie in Remote Doc) — der Scheduled-Task wird per
+      // Invoke-Command erstellt; ohne WinRM schlägt das fehl und nichts läuft.
+      // Mehrere Versuche: die Kaltaktivierung (WinRM-Dienst per RPC/SMB starten)
+      // kann beim ersten Mal etwas dauern. Cache je Versuch leeren, damit wirklich
+      // neu aktiviert und nicht nur ein altes Ergebnis zurückgegeben wird.
+      addLogLine('WinRM wird auf dem Zielrechner aktiviert...')
+      let winrmOk = false
+      for (let attempt = 1; attempt <= 3 && !winrmOk; attempt++) {
+        clearWinRMCache(hostname)
+        winrmOk = await ensureWinRM(hostname)
+        if (!winrmOk) addLogLine(`WinRM-Aktivierung Versuch ${attempt}/3 nicht erfolgreich${attempt < 3 ? ' — neuer Versuch…' : ''}`)
+      }
+      if (!winrmOk) {
+        set({ phase: 'error', errorMsg: `WinRM konnte auf ${hostname} nach 3 Versuchen nicht aktiviert werden — Zielrechner nicht erreichbar oder Remoteverwaltung blockiert. Installation abgebrochen.` })
+        addLogLine('FEHLER: WinRM-Aktivierung fehlgeschlagen.')
+        stopPolling()
+        return
+      }
+      addLogLine('WinRM aktiv. Verbindung wird alle 5 Minuten aufrechterhalten.')
+      startWinrmKeepAlive(hostname)
+
       // Copy script to target via Base64 encoding (avoids all escaping issues)
       const uncPath = `\\\\${hostname}\\C$\\Windows\\Temp`
 
@@ -409,11 +454,29 @@ export const useSwInstallStore = create<SwInstallState>((set, get) => ({
           addLogLine(`ABBRUCH: Verzeichnis konnte nach ${attempt} Versuch${attempt > 1 ? 'en' : ''} nicht vollstaendig kopiert werden.`)
           addLogLine('Bitte Quellpfad und Netzwerkverbindung pruefen, dann erneut versuchen.')
           set({ phase: 'error', errorMsg: `Robocopy fehlgeschlagen nach ${attempt} Versuch(en) — SolidWorks-Verzeichnis unvollstaendig` })
+          stopPolling()
           return
         }
       }
 
       const wrapperPath = remotePath.replace('.ps1', '_run.ps1')
+
+      // WinRM direkt vor der Task-Erstellung auffrischen — nach dem langen
+      // Robocopy hat es sich womöglich abgeschaltet, und die Task-Erstellung
+      // läuft über Invoke-Command (WinRM).
+      addLogLine('WinRM wird vor der Task-Erstellung aufgefrischt...')
+      let winrmReady = false
+      for (let attempt = 1; attempt <= 3 && !winrmReady; attempt++) {
+        clearWinRMCache(hostname)
+        winrmReady = await ensureWinRM(hostname)
+        if (!winrmReady) addLogLine(`WinRM-Auffrischung Versuch ${attempt}/3 nicht erfolgreich${attempt < 3 ? ' — neuer Versuch…' : ''}`)
+      }
+      if (!winrmReady) {
+        set({ phase: 'error', errorMsg: `WinRM auf ${hostname} vor der Task-Erstellung nicht erreichbar — Installation abgebrochen. Bitte erneut versuchen.` })
+        addLogLine('FEHLER: WinRM vor Task-Erstellung nicht aktiv.')
+        stopPolling()
+        return
+      }
 
       // Create and run scheduled task for remaining steps
       addLogLine('Scheduled Task wird erstellt fuer restliche Schritte...')
@@ -421,20 +484,47 @@ export const useSwInstallStore = create<SwInstallState>((set, get) => ({
         `Invoke-Command -ComputerName '${hostname}' -ScriptBlock {`,
         `  param($tn, $wp)`,
         `  $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-ExecutionPolicy Bypass -NoProfile -File $wp"`,
+        // WICHTIG: Ohne diese Settings erbt der Task die Standardwerte
+        // DisallowStartIfOnBatteries/StopIfGoingOnBatteries=$true -> auf einem
+        // Laptop/ZBook im Akkubetrieb startet der Task NICHT (Verzeichnis kopiert,
+        // Installation laeuft nie). StartWhenAvailable + 4h-Limit fuer den langen Lauf.
+        `  $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Hours 4)`,
         `  $loggedOnUser = (Get-CimInstance Win32_ComputerSystem).UserName`,
         `  if ($loggedOnUser) {`,
         `    $principal = New-ScheduledTaskPrincipal -UserId $loggedOnUser -RunLevel Highest -LogonType Interactive`,
         `  } else {`,
         `    $principal = New-ScheduledTaskPrincipal -UserId 'SYSTEM' -RunLevel Highest`,
         `  }`,
-        `  Register-ScheduledTask -TaskName $tn -Action $action -Principal $principal -Force | Out-Null`,
+        `  Register-ScheduledTask -TaskName $tn -Action $action -Principal $principal -Settings $settings -Force | Out-Null`,
         `  Start-ScheduledTask -TaskName $tn`,
-        `  Write-Output "STARTED:$loggedOnUser"`,
+        `  Start-Sleep -Seconds 3`,
+        `  $st = (Get-ScheduledTask -TaskName $tn -EA SilentlyContinue).State`,
+        `  $ltr = (Get-ScheduledTaskInfo -TaskName $tn -EA SilentlyContinue).LastTaskResult`,
+        `  if ($loggedOnUser) { Write-Output "STARTED:$loggedOnUser|STATE:$st|LTR:$ltr" }`,
+        `  else { Write-Output "NOUSER|STATE:$st|LTR:$ltr" }`,
         `} -ArgumentList '${taskName}','${wrapperPath}' -EA Stop`,
       ].join('\n')
-      const taskRes = await api().runPowerShell(createTaskCmd, 30000)
-      if (!taskRes.stdout.includes('STARTED')) {
-        addLogLine(`Task-Output: ${taskRes.stdout.trim()} | ${taskRes.stderr.trim()}`)
+      const taskRes = await api().runPowerShell(createTaskCmd, 45000)
+      const taskOut = (taskRes.stdout || '').trim()
+      addLogLine(`Task-Rueckmeldung: ${taskOut || taskRes.stderr.trim() || '(keine)'}`)
+
+      // Kein angemeldeter Benutzer -> GUI/Installations-Manager kann nicht laufen.
+      if (taskOut.includes('NOUSER')) {
+        addLogLine('ABBRUCH: Kein interaktiver Benutzer am Ziel-PC angemeldet.')
+        set({ phase: 'error', errorMsg: 'Kein Benutzer am Ziel-PC angemeldet — die SolidWorks-Installation (Installations-Manager mit Oberflaeche) kann ohne interaktive Sitzung nicht durchlaufen. Bitte einen Benutzer am Ziel-PC anmelden lassen und erneut starten.' })
+        stopPolling()
+        return
+      }
+      // Task-Start fehlgeschlagen (Registrierung/Principal/Rechte) -> nicht stumm in den Timeout laufen.
+      if (!taskOut.includes('STARTED')) {
+        addLogLine('ABBRUCH: Scheduled Task konnte nicht gestartet werden.')
+        set({ phase: 'error', errorMsg: `Scheduled Task konnte nicht gestartet werden: ${taskOut || taskRes.stderr.trim() || 'unbekannt'}` })
+        stopPolling()
+        return
+      }
+      const taskState = taskOut.match(/STATE:(\w+)/)?.[1] || ''
+      if (taskState && taskState !== 'Running') {
+        addLogLine(`WARNUNG: Task-Status ist '${taskState}' statt 'Running' — Start evtl. verzoegert (Energie-/Richtlinieneinstellung). Fortschritt wird weiter geprueft.`)
       }
 
       addLogLine('Installation laeuft auf Zielrechner. Polling gestartet (bleibt auch bei Menuewechsel aktiv).')
@@ -446,6 +536,7 @@ export const useSwInstallStore = create<SwInstallState>((set, get) => ({
       const msg = err instanceof Error ? err.message : String(err)
       set({ phase: 'error', errorMsg: msg })
       addLogLine(`FEHLER: ${msg}`)
+      stopPolling()
     }
   },
 }))

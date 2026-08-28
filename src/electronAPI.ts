@@ -1,5 +1,6 @@
 // Type-safe wrapper around window.electronAPI exposed by preload
 import type { AppUser, ActivityLog, AppConfig } from './types/auth'
+import type { KnowledgeBundle } from './knowledge/knowledge.types'
 
 export interface PSResult {
   stdout: string
@@ -58,12 +59,12 @@ declare global {
         retries?: number
         setType?: 'Integer' | 'OctetString'
         setValue?: string | number
-      }): Promise<{ success: boolean; error?: string; varbinds?: { oid: string; type: string; value: string | number }[] }>
+      }): Promise<{ success: boolean; error?: string; varbinds?: { oid: string; type: string; value: string | number; hex?: string }[] }>
 
       // ServiceNow Table-API (REST via Main-Prozess) — Auth via SSO-Sitzung
       serviceNowRequest(opts: {
         instanceUrl: string
-        method?: 'GET' | 'PATCH'; table: string; sysId?: string
+        method?: 'GET' | 'POST' | 'PATCH'; table: string; sysId?: string
         query?: string; fields?: string; limit?: number; body?: unknown
         auth?: { user: string; pass: string }   // Integrationskonto (Basic Auth); ohne = SSO-Sitzung
       }): Promise<{ success: boolean; status?: number; data?: unknown; error?: string; needsLogin?: boolean }>
@@ -81,7 +82,7 @@ declare global {
       log(message: string): Promise<void>
 
       // Email
-      composeEmail(opts: { to: string; cc: string; subject: string; body: string; attachmentPath?: string }): Promise<{ success: boolean; fallback?: boolean }>
+      composeEmail(opts: { to: string; cc: string; subject: string; body: string; html?: boolean; attachmentPath?: string }): Promise<{ success: boolean; fallback?: boolean }>
 
       // App version
       getAppVersion(): Promise<string>
@@ -134,6 +135,10 @@ declare global {
       wbGetArticle(articleId: string): Promise<{ id: string; title: string; description: string; tags: string[]; steps: Array<{ title: string; content: string }>; relatedSkills: string[] } | null>
       wbSearch(query: string): Promise<Array<{ id: string; title: string; description: string; categoryName: string; subcategoryName: string; tags: string[] }>>
       wbEnsureGenerated(): Promise<{ exists: boolean; generated: boolean }>
+
+      // ── Wissenssuche (MiniSearch-Volltextindex) ───────────────────────────
+      knowledgeLoad(loadSensitive?: boolean): Promise<{ ok: boolean; dir: string | null; core: KnowledgeBundle | null; sensitive: KnowledgeBundle | null; builtAt: string | null; source: 'net' | 'local' | null; error?: string }>
+      knowledgeStatus(): Promise<{ ok: boolean; dir: string | null; builtAt: string | null; source: 'net' | 'local' | null }>
 
       // ── System info ───────────────────────────────────────────────────────
       getWindowsUsername(): Promise<string>

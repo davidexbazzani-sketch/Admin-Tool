@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database, Eye, EyeOff, Users, RotateCcw, AlertTriangle, RefreshCw, Radar } from 'lucide-react'
+import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database, Eye, EyeOff, Users, RotateCcw, AlertTriangle, RefreshCw, Radar, Archive, Download, Lock, KeyRound } from 'lucide-react'
+import { buildKnowledgeSnapshot } from '../services/knowledgeSnapshot'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
 import { SCAN_REGISTRY, type ScanStatus } from '../services/scanRegistry'
 import { useScanStore } from '../store/scanStore'
+import { loadScanSchedules, saveScanSchedules, describeSchedule, WEEKDAY_LABELS, SCAN_SCHEDULE_DEFAULTS, type ScanScheduleConfig } from '../services/scanSchedules'
 import { api } from '../electronAPI'
 import type { AppSettings } from '../types'
 import type { UserEmailConfig, AppConfig } from '../types/auth'
@@ -166,12 +168,17 @@ const MENU_STATE_OPTIONS: { value: MenuVisibilityState; label: string; hint: str
 ]
 
 // ── Automatische Scans: Übersicht + manueller Sofort-Lauf (im Hintergrund) ────
+// Anzeige-Reihenfolge der Wochentage: Mo … So (Index = Date.getDay()).
+const WEEKDAY_ORDER = [1, 2, 3, 4, 5, 6, 0]
+
 function AutoScansCard() {
   const username = useAuthStore(s => s.session?.user?.username) || ''
   const running = useScanStore(s => s.running)
   const results = useScanStore(s => s.results)
   const start = useScanStore(s => s.start)
   const [statuses, setStatuses] = useState<Record<string, ScanStatus | null>>({})
+  const [schedules, setSchedules] = useState<Record<string, ScanScheduleConfig>>(() => ({ ...SCAN_SCHEDULE_DEFAULTS }))
+  const [saved, setSaved] = useState(false)
 
   // Status (letzter Lauf) laden — initial und nach jedem abgeschlossenen Lauf.
   useEffect(() => {
@@ -185,25 +192,51 @@ function AutoScansCard() {
     return () => { cancelled = true }
   }, [results])
 
+  // Zeitpläne (Wochentage/Uhrzeit/Ein-Aus) einmalig laden.
+  useEffect(() => {
+    let cancelled = false
+    void loadScanSchedules().then(s => { if (!cancelled) setSchedules(s) })
+    return () => { cancelled = true }
+  }, [])
+
+  const cfgOf = (id: string): ScanScheduleConfig =>
+    schedules[id] ?? SCAN_SCHEDULE_DEFAULTS[id] ?? { enabled: true, days: [], time: '12:00' }
+
+  function patchSchedule(id: string, patch: Partial<ScanScheduleConfig>) {
+    setSchedules(prev => {
+      const base = prev[id] ?? SCAN_SCHEDULE_DEFAULTS[id] ?? { enabled: true, days: [], time: '12:00' }
+      const next = { ...prev, [id]: { ...base, ...patch } }
+      void saveScanSchedules(next).then(ok => { if (ok) { setSaved(true); setTimeout(() => setSaved(false), 1500) } })
+      return next
+    })
+  }
+  function toggleDay(id: string, day: number) {
+    const cur = cfgOf(id).days
+    patchSchedule(id, { days: cur.includes(day) ? cur.filter(d => d !== day) : [...cur, day].sort((a, b) => a - b) })
+  }
+
   const fmt = (iso?: string | null) => {
     if (!iso) return 'noch nie'
     const d = new Date(iso); return isNaN(d.getTime()) ? 'noch nie' : d.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
   }
 
   return (
-    <Card title="Automatische Scans" icon={<Radar size={15} />} subtitle="Alle Hintergrund-Scans des Tools — jeder kann hier auch sofort manuell gestartet werden (läuft im Hintergrund weiter).">
+    <Card title="Automatische Scans" icon={<Radar size={15} />}
+      subtitle="Alle Hintergrund-Scans des Tools — pro Scan Wochentage + Uhrzeit einstellen, ein-/ausschalten oder sofort manuell starten (läuft im Hintergrund weiter)."
+      actions={saved ? <span className="text-[11px] text-green-400 inline-flex items-center gap-1"><CheckCircle size={11} />Gespeichert</span> : undefined}>
       <div className="space-y-2.5">
         {SCAN_REGISTRY.map(def => {
           const st = statuses[def.id]
           const isRunning = !!running[def.id]
           const res = results[def.id]
+          const cfg = cfgOf(def.id)
           return (
             <div key={def.id} className="rounded-lg border border-border bg-background p-3">
               <div className="flex items-start gap-3">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-foreground">{def.label}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{def.description}</p>
-                  <p className="text-[11px] text-muted-foreground mt-1">{def.cadence}</p>
+                  <p className="text-[11px] text-muted-foreground mt-1">Turnus: <span className="text-foreground">{describeSchedule(cfg)}</span></p>
                   <p className="text-[11px] text-muted-foreground mt-0.5">
                     Zuletzt: <span className="text-foreground">{fmt(st?.lastRunAt)}</span>
                     {st?.lastResult && <span className={st.lastResult === 'success' ? 'text-green-400' : 'text-red-400'}> · {st.lastResult === 'success' ? 'OK' : 'Fehler'}</span>}
@@ -221,10 +254,34 @@ function AutoScansCard() {
                     </p>
                   )}
                 </div>
-                <button onClick={() => start(def, username)} disabled={isRunning}
-                  className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
-                  {isRunning ? <Loader size={13} className="animate-spin" /> : <RefreshCw size={13} />}Jetzt ausführen
-                </button>
+                <div className="shrink-0 flex flex-col items-end gap-2">
+                  {/* Ein/Aus */}
+                  <button onClick={() => patchSchedule(def.id, { enabled: !cfg.enabled })} title={cfg.enabled ? 'Automatik aktiv — klicken zum Deaktivieren' : 'Automatik deaktiviert — klicken zum Aktivieren'}
+                    className={`inline-flex items-center gap-1.5 text-[11px] px-2 py-1 rounded-md border ${cfg.enabled ? 'border-green-500/40 bg-green-500/10 text-green-300' : 'border-border bg-background text-muted-foreground'}`}>
+                    <span className={`w-7 h-4 rounded-full relative transition-colors ${cfg.enabled ? 'bg-green-500' : 'bg-border'}`}>
+                      <span className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white transition-transform ${cfg.enabled ? 'translate-x-3' : ''}`} />
+                    </span>
+                    {cfg.enabled ? 'Automatik an' : 'Automatik aus'}
+                  </button>
+                  <button onClick={() => start(def, username)} disabled={isRunning}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
+                    {isRunning ? <Loader size={13} className="animate-spin" /> : <RefreshCw size={13} />}Jetzt ausführen
+                  </button>
+                </div>
+              </div>
+              {/* Zeitplan-Editor */}
+              <div className={`flex items-center gap-2 flex-wrap mt-2.5 pt-2.5 border-t border-border ${cfg.enabled ? '' : 'opacity-50'}`}>
+                <span className="text-[11px] text-muted-foreground">Tage:</span>
+                {WEEKDAY_ORDER.map(d => (
+                  <button key={d} onClick={() => toggleDay(def.id, d)} disabled={!cfg.enabled}
+                    className={`w-8 h-8 text-[11px] rounded-md border transition-colors disabled:cursor-not-allowed ${cfg.days.includes(d) ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:text-foreground hover:border-foreground/30'}`}>
+                    {WEEKDAY_LABELS[d]}
+                  </button>
+                ))}
+                <span className="text-[11px] text-muted-foreground ml-1">um</span>
+                <input type="time" value={cfg.time} disabled={!cfg.enabled}
+                  onChange={e => patchSchedule(def.id, { time: e.target.value })}
+                  className="px-2 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:border-primary disabled:opacity-60" />
               </div>
             </div>
           )
@@ -375,9 +432,11 @@ function UserMenuVisibilityCard() {
     (async () => {
       try {
         const [u, o] = await Promise.all([api().authGetUsers(), loadUserMenuOverrides()])
-        // Exclude master admins by default from the dropdown (they always see everything)
-        // — but keep them in the list so the master can also override themself if they want.
-        setUsers(u)
+        // ALLE registrierten Konten anzeigen (jede Rolle ist konfigurierbar außer
+        // dem Gründer). SSO-Nutzer erscheinen ab ihrer ersten Anmeldung. Nach
+        // Anzeigename sortiert, damit die Liste vollständig und auffindbar ist.
+        const sorted = [...u].sort((a, b) => (a.displayName || a.username).localeCompare(b.displayName || b.username, 'de'))
+        setUsers(sorted)
         setOverrides(o)
       } catch { /* ignore */ }
       setLoading(false)
@@ -393,6 +452,8 @@ function UserMenuVisibilityCard() {
   }, [selectedUserId, overrides])
 
   const selectedUser = users.find(u => u.id === selectedUserId)
+  // Geschützter Gründer-Master (Davidxe): ihm kann nichts ausgeblendet werden.
+  const selectedIsFounder = !!selectedUser?.isFounder || selectedUser?.username?.toLowerCase() === 'davidxe'
   const applicableItems = selectedUser ? applicableItemsForRole(selectedUser.role) : []
   const groups = [...new Set(applicableItems.map(i => i.group))]
 
@@ -505,7 +566,8 @@ function UserMenuVisibilityCard() {
             <option value="">— Benutzer auswählen —</option>
             {users.map(u => {
               const has = overrides[u.id] !== undefined
-              const roleLabel = u.role === 'master_admin' ? 'Master' : u.role === 'admin' ? 'Admin' : 'User'
+              const founder = !!u.isFounder || u.username?.toLowerCase() === 'davidxe'
+              const roleLabel = founder ? 'Master (Gründer)' : u.role === 'master_admin' ? 'Master' : u.role === 'admin' ? 'Admin' : 'User'
               return (
                 <option key={u.id} value={u.id}>
                   {u.displayName || u.username} · {roleLabel}{has ? '  •  Override aktiv' : ''}
@@ -513,20 +575,21 @@ function UserMenuVisibilityCard() {
               )
             })}
           </select>
+          <span className="text-[10px] text-muted-foreground">{users.length} Konten</span>
         </div>
 
-        {selectedUser && (
-          <>
-            {selectedUser.role === 'master_admin' && (
-              <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
-                <AlertTriangle size={12} className="text-amber-400 mt-0.5 shrink-0" />
-                <p className="text-amber-200">
-                  Master Admins sehen <strong>immer</strong> alle Menüpunkte — Overrides werden für sie ignoriert.
-                  Die Konfiguration kann gespeichert, hat für diesen Nutzer aber keine Wirkung.
-                </p>
-              </div>
-            )}
+        {selectedUser && selectedIsFounder && (
+          <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
+            <AlertTriangle size={12} className="text-amber-400 mt-0.5 shrink-0" />
+            <p className="text-amber-200">
+              Dieser Nutzer ist der geschützte <strong>Master-Admin (Gründer „Davidxe")</strong>. Ihm können
+              <strong> keine</strong> Menüpunkte ausgeblendet werden — er sieht immer alles.
+            </p>
+          </div>
+        )}
 
+        {selectedUser && !selectedIsFounder && (
+          <>
             {/* Helper actions */}
             <div className="flex flex-wrap items-center gap-2">
               <button onClick={showAll} className="text-[11px] px-2 py-1 rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-muted/30">
@@ -758,6 +821,92 @@ function PathConfigSection() {
         Letzte Aenderung: {cfg.lastModified ? new Date(cfg.lastModified).toLocaleString('de-DE') : 'nie'} von {cfg.modifiedBy || '-'}
       </div>
     </div>
+  )
+}
+
+// ── Backup: Wissens-Snapshot (PIN-geschützt) ──────────────────────────────────
+const BACKUP_PIN = '101818'
+
+function BackupCard() {
+  const [pin, setPin] = useState('')
+  const [unlocked, setUnlocked] = useState(false)
+  const [pinErr, setPinErr] = useState(false)
+  const [pseudo, setPseudo] = useState(false)
+  const [generating, setGenerating] = useState(false)
+  const [result, setResult] = useState<{ ok: boolean; path?: string; error?: string; count?: number } | null>(null)
+
+  function tryUnlock() {
+    if (pin.trim() === BACKUP_PIN) { setUnlocked(true); setPinErr(false) }
+    else { setPinErr(true) }
+  }
+
+  async function generate() {
+    setGenerating(true); setResult(null)
+    try {
+      const { md, stats } = await buildKnowledgeSnapshot({ pseudonymize: pseudo })
+      const fname = `Wissens-Snapshot_${new Date().toISOString().slice(0, 10)}${pseudo ? '_pseudonym' : ''}.md`
+      const path = await api().saveFileDialog(fname, [{ name: 'Markdown', extensions: ['md'] }])
+      if (!path) return
+      const bytes = new TextEncoder().encode(md)
+      let bin = ''
+      for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
+      const r = await api().writeFile(path, btoa(bin))
+      setResult(r.success
+        ? { ok: true, path, count: stats.reduce((a, s) => a + (Number.isFinite(s.count) ? s.count : 0), 0) }
+        : { ok: false, error: r.error || 'Schreiben fehlgeschlagen.' })
+    } catch (e) {
+      setResult({ ok: false, error: e instanceof Error ? e.message : String(e) })
+    } finally { setGenerating(false) }
+  }
+
+  return (
+    <Card title="Backup – Wissens-Snapshot" icon={<Archive size={15} />} subtitle="Alle vom Tool gesammelten Informationen als Markdown exportieren (PIN-geschützt).">
+      {!unlocked ? (
+        <div className="space-y-3 max-w-sm">
+          <p className="text-xs text-muted-foreground inline-flex items-center gap-1.5"><Lock size={13} />Dieser Bereich ist mit einer PIN geschützt.</p>
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <KeyRound size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <input value={pin} onChange={e => { setPin(e.target.value); setPinErr(false) }} onKeyDown={e => { if (e.key === 'Enter') tryUnlock() }}
+                type="password" inputMode="numeric" placeholder="PIN"
+                className={`w-full pl-8 pr-3 py-2 text-sm rounded-md border bg-background text-foreground focus:outline-none ${pinErr ? 'border-red-500' : 'border-border focus:border-primary'}`} />
+            </div>
+            <button onClick={tryUnlock} className="px-4 py-2 text-sm rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90">Entsperren</button>
+          </div>
+          {pinErr && <p className="text-xs text-red-400">Falsche PIN.</p>}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          <div className="text-[12px] text-amber-300 bg-amber-500/10 border border-amber-500/25 rounded-md px-3 py-2 flex items-start gap-2">
+            <AlertTriangle size={14} className="shrink-0 mt-px" />
+            <span>Der Snapshot enthält <strong>echte personenbezogene Daten</strong> (Mitarbeiter, AD, Gerätezuordnungen, Durchwahlen, Dossier-Notizen). Passwörter/Zugangsdaten werden <strong>nicht</strong> exportiert. Nicht unkontrolliert weitergeben.</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Erzeugt eine einzige Markdown-Datei mit allen Datenbeständen (Mitarbeiter/AD, Geräte-Inventar &amp; Endgeräte, Telefonie, Drucker-Verbindungen, Software-Inventar, Netzwerk/VLANs, Lizenzen, Dossiers, …) — als Kontext für künftige Aufgaben und als Überblick, was das Tool weiß.
+          </p>
+          <label className="inline-flex items-center gap-2 text-xs text-foreground cursor-pointer">
+            <input type="checkbox" checked={pseudo} onChange={e => setPseudo(e.target.checked)} className="accent-primary" />
+            Pseudonymisiert (Namen/IDs/Mails/Telefon maskiert — „verschickbare" Variante)
+          </label>
+          <div className="flex items-center gap-2">
+            <button onClick={generate} disabled={generating}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
+              {generating ? <Loader size={14} className="animate-spin" /> : <Download size={14} />}
+              Snapshot erstellen &amp; herunterladen
+            </button>
+            <button onClick={() => { setUnlocked(false); setPin(''); setResult(null) }}
+              className="px-3 py-2 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground">Sperren</button>
+          </div>
+          {result && (
+            <div className={`text-xs rounded-md px-3 py-2 border ${result.ok ? 'border-green-500/40 bg-green-500/10 text-green-300' : 'border-red-500/40 bg-red-500/10 text-red-300'}`}>
+              {result.ok
+                ? <>Snapshot gespeichert{typeof result.count === 'number' ? ` (~${result.count} Datensätze)` : ''}: <span className="font-mono break-all">{result.path}</span></>
+                : <>Fehler: {result.error}</>}
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
   )
 }
 
@@ -1284,6 +1433,9 @@ export default function Settings() {
           <PathConfigSection />
         </Card>
       )}
+
+      {/* ── Backup: Wissens-Snapshot (PIN-geschützt) ── */}
+      <BackupCard />
 
       <Card title="Über das Programm" icon={<Info size={15} />}>
         <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">

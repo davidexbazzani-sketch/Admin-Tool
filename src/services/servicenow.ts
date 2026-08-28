@@ -205,6 +205,102 @@ export async function testConnection(
   return res.success ? { ok: true } : { ok: false, error: res.error, needsLogin: res.needsLogin }
 }
 
+// ── Phase 2: Schreiben (Ticket erstellen / schließen / zuweisen) ──────────────
+// Standard-Table-API-Writes über den Main-Handler (POST/PATCH, Basic Auth).
+// Referenzfelder (caller_id, assignment_group, assigned_to) werden als sys_id
+// gesendet → zuerst per resolve* auflösen.
+
+export const CLOSE_CODES = [
+  'Solved (Permanently)',
+  'Solved (Work Around)',
+  'Solved (Knowledge Article)',
+  'Not Solved (Not Reproducible)',
+  'Not Solved (Too Costly)',
+  'Closed/Resolved by Caller',
+] as const
+
+export type CloseState = 'Resolved' | 'Closed'
+const STATE_VALUE: Record<CloseState, string> = { Resolved: '6', Closed: '7' }
+
+/** Erstes Ergebnis aus einer Table-API-Antwort — POST liefert ein Objekt, GET ein Array. */
+function firstResult(data: unknown): Record<string, unknown> | undefined {
+  const r = (data as { result?: unknown } | undefined)?.result
+  if (Array.isArray(r)) return r[0] as Record<string, unknown> | undefined
+  return r && typeof r === 'object' ? (r as Record<string, unknown>) : undefined
+}
+
+/** sys_id eines Benutzers auf der Instanz auflösen (E-Mail bevorzugt, sonst Name/User-Name). */
+export async function resolveSysUserSysId(cfg: ServiceNowConfig, q: string): Promise<{ sysId?: string; error?: string }> {
+  const term = (q || '').trim()
+  if (!term) return {}
+  const auth = authOf(await loadIntegrationAccount())
+  const query = term.includes('@') ? `email=${term}` : `name=${term}^ORuser_name=${term}`
+  const res = await api().serviceNowRequest({ instanceUrl: cfg.instanceUrl, method: 'GET', table: 'sys_user', query, fields: 'sys_id', limit: 1, auth })
+  if (!res.success) return { error: res.error }
+  const sysId = rawVal(firstResult(res.data)?.sys_id)
+  return sysId ? { sysId } : { error: `Benutzer „${term}" nicht auf der Instanz gefunden.` }
+}
+
+/** sys_id einer Assignment Group auf der Instanz auflösen. */
+export async function resolveGroupSysId(cfg: ServiceNowConfig, name: string): Promise<{ sysId?: string; error?: string }> {
+  const n = (name || '').trim()
+  if (!n) return {}
+  const auth = authOf(await loadIntegrationAccount())
+  const res = await api().serviceNowRequest({ instanceUrl: cfg.instanceUrl, method: 'GET', table: 'sys_user_group', query: `name=${n}`, fields: 'sys_id', limit: 1, auth })
+  if (!res.success) return { error: res.error }
+  const sysId = rawVal(firstResult(res.data)?.sys_id)
+  return sysId ? { sysId } : { error: `Gruppe „${n}" nicht auf der Instanz gefunden.` }
+}
+
+export interface NewIncident {
+  shortDescription: string
+  description?: string
+  callerSysId?: string
+  assignmentGroupSysId?: string
+  assignedToSysId?: string
+}
+
+/** Incident anlegen (POST). Rückgabe inkl. sys_id + Nummer. */
+export async function createIncident(
+  cfg: ServiceNowConfig, f: NewIncident,
+): Promise<{ ok: boolean; sysId?: string; number?: string; error?: string; needsLogin?: boolean }> {
+  if (!f.shortDescription.trim()) return { ok: false, error: 'Kurzbeschreibung fehlt.' }
+  const body: Record<string, string> = { short_description: f.shortDescription.trim() }
+  if (f.description?.trim()) body.description = f.description.trim()
+  if (f.callerSysId) body.caller_id = f.callerSysId
+  if (f.assignmentGroupSysId) body.assignment_group = f.assignmentGroupSysId
+  if (f.assignedToSysId) body.assigned_to = f.assignedToSysId
+  const auth = authOf(await loadIntegrationAccount())
+  const res = await api().serviceNowRequest({ instanceUrl: cfg.instanceUrl, method: 'POST', table: 'incident', body, fields: 'sys_id,number', auth })
+  if (!res.success) return { ok: false, error: res.error, needsLogin: res.needsLogin }
+  const r = firstResult(res.data)
+  return { ok: true, sysId: rawVal(r?.sys_id) || undefined, number: dv(r?.number) || undefined }
+}
+
+/** Incident schließen (PATCH): state + close_code + close_notes. */
+export async function closeIncident(
+  cfg: ServiceNowConfig, sysId: string, opts: { state?: CloseState; closeCode: string; closeNotes: string },
+): Promise<{ ok: boolean; error?: string }> {
+  if (!sysId) return { ok: false, error: 'Kein sys_id.' }
+  const body = { state: STATE_VALUE[opts.state ?? 'Resolved'], close_code: opts.closeCode, close_notes: opts.closeNotes || opts.closeCode }
+  const auth = authOf(await loadIntegrationAccount())
+  const res = await api().serviceNowRequest({ instanceUrl: cfg.instanceUrl, method: 'PATCH', table: 'incident', sysId, body, fields: 'sys_id,state', auth })
+  return res.success ? { ok: true } : { ok: false, error: res.error }
+}
+
+/** Bestehendes Incident (um-)zuweisen (PATCH). */
+export async function updateAssignment(
+  cfg: ServiceNowConfig, sysId: string, a: { groupSysId?: string; assignedToSysId?: string },
+): Promise<{ ok: boolean; error?: string }> {
+  const body: Record<string, string> = {}
+  if (a.groupSysId) body.assignment_group = a.groupSysId
+  if (a.assignedToSysId) body.assigned_to = a.assignedToSysId
+  if (Object.keys(body).length === 0) return { ok: true }
+  const auth = authOf(await loadIntegrationAccount())
+  const res = await api().serviceNowRequest({ instanceUrl: cfg.instanceUrl, method: 'PATCH', table: 'incident', sysId, body, fields: 'sys_id', auth })
+  return res.success ? { ok: true } : { ok: false, error: res.error }
+}
+
 /** Direktlink auf den Datensatz in ServiceNow (Standardbrowser). */
 export function recordUrl(cfg: ServiceNowConfig, table: SnTable, sysId: string): string {
   const base = cfg.instanceUrl.trim().replace(/\/+$/, '')

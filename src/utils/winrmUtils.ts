@@ -57,7 +57,10 @@ export async function ensureWinRM(hostname: string): Promise<boolean> {
   if (winrmCache.has(key)) return winrmCache.get(key)!
 
   const script = buildEnsureWinRMScript(hostname)
-  const result = await api().runPowerShell(script, 30000)
+  // 60s wie beim Remote-Doc-Connect: die Kaltaktivierung (WinRM-Dienst per RPC/SMB
+  // starten) durchläuft im schlechtesten Fall 3 Methoden mit je bis zu 15s Wartezeit
+  // (≈33s). 30s waren zu knapp -> Timeout -> fälschlich "WinRM nicht aktiv".
+  const result = await api().runPowerShell(script, 60000)
   let ok = false
   try {
     const parsed = JSON.parse(result.stdout.trim())

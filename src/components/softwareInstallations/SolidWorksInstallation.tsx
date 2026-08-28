@@ -294,11 +294,11 @@ if (Test-Path $swExe) {
   } else {
     Write-StepLog -Step "11" -Status "success" -Message "SolidWorks-Installation beendet (Laufzeit: $totalMin min)"
   }
+  Write-StepLog -Step "0" -Status "complete" -Message "Setup komplett auf $env:COMPUTERNAME"
 } else {
   Write-StepLog -Step "11" -Status "error" -Message "StartSWInstall.exe nicht gefunden in $imgDir"
+  Write-StepLog -Step "0" -Status "failed" -Message "Abbruch: StartSWInstall.exe fehlt in $imgDir - Installation nicht ausgefuehrt"
 }
-
-Write-StepLog -Step "0" -Status "complete" -Message "Setup komplett auf $env:COMPUTERNAME"
 `
 }
 

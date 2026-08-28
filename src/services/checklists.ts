@@ -21,10 +21,18 @@ export interface Checklist {
   createdAt: string          // ISO
   createdBy: string          // tool user id / username
   updatedAt?: string         // ISO — touched on every save
+  priority?: boolean         // "Hohe Priorität" — orange markiert in der Übersicht
   // ── Abschluss (Geraet uebergeben + Checkliste unterschrieben) ─────────────
   completed?: boolean        // true = in "Alle erledigten Checklisten" verschoben
   completedAt?: string       // ISO — wann die Uebergabe bestaetigt wurde
   completedBy?: string       // wer die Uebergabe bestaetigt hat
+  // ── Hardware-Status (nur Bestandsmitarbeiter; neue laufen ueber die
+  //    Mitarbeiterverwaltung). "ready" schaltet die Abhol-Mail frei. ────────────
+  hardwareReady?: boolean
+  hardwareType?: string      // laptop | zbook | tower | minipc | none | inprogress
+  hardwareLocation?: string  // Abhol-Ort / Raum (kommt in die Abhol-Mail)
+  hardwareBy?: string        // Bearbeiter
+  hardwareAt?: string        // ISO
 }
 
 const STORE_FILE = 'checklists/checklists.json'
