@@ -5,6 +5,7 @@ import {
   Minus, Hash, ServerCrash, CheckCircle2, XCircle, Activity,
 } from 'lucide-react'
 import { api } from '../../electronAPI'
+import { DeviceInfoButton } from '../device/DeviceDossier'
 import type {
   DashboardElement, ActiveAlarm, Threshold, QuickAction,
 } from '../../types/dashboard'
@@ -270,9 +271,9 @@ function OnlineStatusWidget({ element, onAlarmTrigger, refreshKey }: {
                   : undefined,
               }}
             />
-            <span className="text-xs font-mono truncate max-w-[96px]" title={r.hostname}>
+            <span className="inline-flex items-center gap-1"><span className="text-xs font-mono truncate max-w-[96px]" title={r.hostname}>
               {r.hostname}
-            </span>
+            </span>{r.hostname && <DeviceInfoButton hostname={r.hostname} />}</span>
             {r.status === 'loading'
               ? <Loader2 size={10} className="animate-spin text-muted-foreground" />
               : <span className="text-[10px]" style={{ color: dotColor(r.status, r.hostname) }}>
@@ -296,7 +297,7 @@ function OnlineStatusWidget({ element, onAlarmTrigger, refreshKey }: {
               boxShadow: r.status === 'online' ? `0 0 5px ${dotColor(r.status, r.hostname)}` : undefined,
             }}
           />
-          <span className="text-xs font-mono flex-1 truncate">{r.hostname}</span>
+          <span className="inline-flex items-center gap-1"><span className="text-xs font-mono flex-1 truncate">{r.hostname}</span>{r.hostname && <DeviceInfoButton hostname={r.hostname} />}</span>
           {r.status === 'loading'
             ? <Loader2 size={12} className="animate-spin text-muted-foreground" />
             : <span className="text-xs shrink-0" style={{ color: dotColor(r.status, r.hostname) }}>
@@ -389,7 +390,7 @@ function ServiceStatusWidget({ element, refreshKey }: {
           <div className="flex flex-col flex-1 min-w-0">
             <span className="text-xs font-medium truncate">{r.service}</span>
             {targets.length > 1 && (
-              <span className="text-[10px] text-muted-foreground font-mono">{r.hostname}</span>
+              <span className="inline-flex items-center gap-1"><span className="text-[10px] text-muted-foreground font-mono">{r.hostname}</span>{r.hostname && <DeviceInfoButton hostname={r.hostname} />}</span>
             )}
           </div>
           {r.loading
@@ -452,7 +453,7 @@ function MetricDisplay({
       <div className="flex flex-col items-center justify-center gap-1 py-2">
         <Clock size={18} className="text-blue-400" />
         <span className="text-lg font-bold text-white">{data.text}</span>
-        <span className="text-xs text-muted-foreground">{hostname}</span>
+        <span className="inline-flex items-center gap-1"><span className="text-xs text-muted-foreground">{hostname}</span>{hostname && <DeviceInfoButton hostname={hostname} />}</span>
       </div>
     )
   }
@@ -469,7 +470,7 @@ function MetricDisplay({
       <span className="text-2xl font-bold" style={{ color: colorBase }}>
         {data.type === 'cpu' ? `${pct}%` : displayText}
       </span>
-      <span className="text-xs text-muted-foreground">{hostname}</span>
+      <span className="inline-flex items-center gap-1"><span className="text-xs text-muted-foreground">{hostname}</span>{hostname && <DeviceInfoButton hostname={hostname} />}</span>
     </div>
   )
 }

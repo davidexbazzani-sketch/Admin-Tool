@@ -15,6 +15,7 @@ import {
 } from '../utils/dashboardStorage'
 import type { DashboardsData, Dashboard, DashboardTile, TileStatus, TileSize, ActiveAlarm } from '../types/dashboard'
 import type { UserEmailConfig } from '../types/auth'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 
 interface InventoryItem { id: string; name: string; ip?: string; description?: string; category: string }
 const EMAIL_CFG_PATH = (u: string) => 'email_config/' + u + '.json'
@@ -105,7 +106,7 @@ function TileCard({
             return (
               <div key={h} className="flex items-center gap-2 text-[10px]">
                 <span className={`w-2 h-2 rounded-full shrink-0 ${STATUS_COLORS[s]}`} />
-                <span className="font-mono text-foreground flex-1 truncate">{h}</span>
+                <span className="inline-flex items-center gap-1 flex-1 min-w-0"><span className="font-mono text-foreground flex-1 truncate">{h}</span>{h && <DeviceInfoButton hostname={h} />}</span>
                 <span className="text-muted-foreground">{r?.value ?? '—'}</span>
               </div>
             )

@@ -8,6 +8,8 @@ import {
   type LostDevice, type RecoveredDevice,
 } from '../../services/lostDevices'
 import LostImportDialog from './LostImportDialog'
+import { DeviceInfoButton } from '../device/DeviceDossier'
+import { hostFromSerial } from '../../services/deviceMasterData'
 
 interface Props {
   currentUser: string
@@ -121,7 +123,7 @@ export default function LostDevicesView({ currentUser, onBack }: Props) {
               <tbody>
                 {filteredLost.map(d => (
                   <tr key={d.serial} className="border-b border-border/40 hover:bg-accent/10">
-                    <td className="px-2 py-1.5 font-mono text-foreground">{d.serial}</td>
+                    <td className="px-2 py-1.5 font-mono text-foreground"><span className="inline-flex items-center gap-1">{d.serial}<DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} /></span></td>
                     <td className="px-2 py-1.5 text-muted-foreground">{d.deviceType || '—'}</td>
                     <td className="px-2 py-1.5 text-muted-foreground max-w-[16rem] truncate" title={d.comment || undefined}>{d.comment || '—'}</td>
                     <td className="px-2 py-1.5 text-muted-foreground truncate max-w-[12rem]" title={d.source}>{d.source || '—'}</td>
@@ -155,7 +157,7 @@ export default function LostDevicesView({ currentUser, onBack }: Props) {
               <tbody>
                 {filteredRecovered.map(d => (
                   <tr key={d.serial + d.foundAt} className="border-b border-border/40 hover:bg-accent/10">
-                    <td className="px-2 py-1.5 font-mono text-foreground">{d.serial}</td>
+                    <td className="px-2 py-1.5 font-mono text-foreground"><span className="inline-flex items-center gap-1">{d.serial}<DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} /></span></td>
                     <td className="px-2 py-1.5 text-muted-foreground">{fmtDate(d.foundAt)}</td>
                     <td className="px-2 py-1.5 text-muted-foreground">{d.foundBy || '—'}</td>
                     <td className="px-2 py-1.5 text-foreground max-w-[22rem] truncate" title={d.foundLocation}>{d.foundLocation || '—'}</td>
@@ -261,7 +263,7 @@ function RecoverDialog({ device, currentUser, onClose, onDone }: { device: LostD
         <div className="flex items-center gap-2 px-5 py-3 border-b border-border"><PackageCheck size={16} className="text-emerald-400" /><h2 className="text-sm font-semibold text-foreground flex-1">Gerät wieder aufgefunden</h2><button onClick={onClose} className="p-1 rounded hover:bg-accent/40 text-muted-foreground"><X size={16} /></button></div>
         <div className="px-5 py-4 space-y-3">
           {error && <div className="px-3 py-2 rounded-md bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex items-center gap-2"><AlertTriangle size={13} />{error}</div>}
-          <p className="text-xs text-muted-foreground">Seriennummer: <span className="font-mono text-foreground">{device.serial}</span></p>
+          <p className="text-xs text-muted-foreground">Seriennummer: <span className="inline-flex items-center gap-1"><span className="font-mono text-foreground">{device.serial}</span><DeviceInfoButton hostname={hostFromSerial(device.serial)} serial={device.serial} /></span></p>
           <div>
             <label className="block text-[11px] font-medium text-muted-foreground mb-1 flex items-center gap-1"><MapPin size={11} />Wo wurde das Gerät gefunden? <span className="text-red-300">*</span></label>
             <textarea autoFocus value={location} onChange={e => setLocation(e.target.value)} rows={3} placeholder="z. B. im Lager Regal 3 / bei Mitarbeiter XY / im Serverraum …" className="w-full px-3 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary leading-relaxed" />

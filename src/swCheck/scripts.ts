@@ -44,6 +44,17 @@ export const SW_SKRIPTE: SwSkript[] = [
     // Wrapper liest nur die Datei (vermeidet WinRM-Shell-Speicher/Serialisierungslast).
     fileBased: true,
   },
+  {
+    id: 'herkunft', titel: 'Herkunft der Einstellungen (Modul 5)',
+    datei: 'SOLIDWORKS_Herkunft.ps1', ziel: 'client',
+    // Rein lesend: WER verwaltet eine Einstellung (lokal / GPO / Intune-CSP / HKCU) und
+    // ueber welchen Weg ist sie aenderbar. Liefert die Tabelle „Einstellung → Eigentuemer
+    // → Weg" als Vorlage fuer Schritt 2. Bewusst NICHT vorausgewaehlt: gezielt anhaken.
+    ausgaben: ['txt', 'json'], standard: false,
+    // Leichtgewichtig (Registry/CIM + gpresult) → in-shell wie die Bestandsaufnahme,
+    // kein -Ausgabeordner noetig. gpresult kann etwas dauern → grosszuegiger Timeout.
+    timeoutMs: 300000,
+  },
   // Neues Skript = ein Eintrag hier + die .ps1 unter public/diagnose/solidworks/ ablegen.
 ]
 

@@ -11,6 +11,8 @@ import {
 } from '../../services/hardwareInventory'
 import { lookupMany, type AdLookupResult } from '../../services/hardwareInventoryAD'
 import { exportInventoryRun, type InventoryExportFormat } from '../../services/hardwareInventoryExport'
+import { DeviceInfoButton } from '../device/DeviceDossier'
+import { hostFromSerial } from '../../services/deviceMasterData'
 
 interface Props {
   runId: string
@@ -285,6 +287,7 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
                 <div key={x.serial} className="rounded-md border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-[11px]">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-mono font-medium text-foreground">{x.serial}</span>
+                    <DeviceInfoButton hostname={hostFromSerial(x.serial)} serial={x.serial} />
                     <span className="text-muted-foreground">gescannt {fmtDate(x.scannedAt)} von {x.scannedBy}</span>
                   </div>
                   <div className="mt-1">
@@ -322,6 +325,7 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
                   <div className="flex items-center gap-1.5">
                     <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
                     <span className="font-mono text-foreground truncate">{d.serial}</span>
+                    <DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} />
                     {d.lateFound && <span className="text-[9px] px-1 rounded-full bg-emerald-500 text-black">nachträglich</span>}
                   </div>
                   <div className="text-[10px] text-muted-foreground truncate">{[d.deviceType, d.company].filter(Boolean).join(' · ') || '—'}</div>
@@ -341,7 +345,7 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
               <div key={d.serial} className="flex items-start gap-2 px-2 py-1.5 rounded-md border border-emerald-500/30 bg-emerald-500/5 text-[11px]">
                 <CheckCircle2 size={12} className="text-emerald-400 mt-0.5 shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <div className="font-mono text-foreground">{d.serial}</div>
+                  <div className="font-mono text-foreground inline-flex items-center gap-1">{d.serial}<DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} /></div>
                   <div className="text-muted-foreground">am {fmtDate(d.lateFoundAt)} von {d.lateFoundBy}{d.lateNote && <> · {d.lateNote}</>}</div>
                 </div>
                 <button onClick={() => onUndoLate(d.serial)} className="text-[10px] text-muted-foreground hover:text-red-300 inline-flex items-center gap-1"><RotateCcw size={11} />zurücknehmen</button>
@@ -411,6 +415,7 @@ function MissingRow({ d, onLateFound, onLookupOne }: { d: InventoryDevice; onLat
       <div className="flex items-center gap-2 flex-wrap">
         <XCircle size={12} className="text-red-400 shrink-0" />
         <span className="font-mono font-medium text-foreground">{d.serial}</span>
+        <DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} />
         {d.deviceType && <span className="text-muted-foreground">{d.deviceType}</span>}
         {d.company && <span className="text-muted-foreground">· {d.company}</span>}
         {d.substate && <span className="text-muted-foreground">· {d.substate}</span>}

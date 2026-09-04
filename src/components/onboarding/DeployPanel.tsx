@@ -19,6 +19,7 @@ import { api } from '../../electronAPI'
 import { listEmployees, formatGermanDate, type Employee } from '../../services/employees'
 import { resolveSamByName, findAssignedHardware, fetchAdPersonInfo } from '../../services/personMasterData'
 import { readCentralAdUsers } from '../../services/adUserDirectory'
+import { DeviceInfoButton } from '../device/DeviceDossier'
 import type { AdUserListItem } from '../../services/adUsersList'
 import { loadOnboardingSettings, loadOnboardingMarkers, addDeployment } from '../../services/onboarding'
 import { buildOnboardingHtml, collectNeededPages, type OnboardingContactData, type GreetingMode } from '../../services/onboardingHtml'
@@ -313,7 +314,8 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
     folderLinksRef.current = settings.folderLinks
     selfHelpRef.current = settings.selfHelpTiles ?? []
     // Umgebende Anführungszeichen entfernen (Windows „Als Pfad kopieren" fügt sie an).
-    filmPathRef.current = (settings.filmPath || '').trim().replace(/^"+|"+$/g, '').trim()
+    // Ausgeblendet (Einstellungen → Auge)? Dann NICHT mitkopieren.
+    filmPathRef.current = settings.hidden?.film ? '' : (settings.filmPath || '').trim().replace(/^"+|"+$/g, '').trim()
 
     // Raum des Mitarbeiters automatisch in der Plan-Textebene suchen ("Dein Büro")
     let autoRoomPin: RoomHit | null = null
@@ -608,7 +610,7 @@ export default function DeployPanel({ initialSource }: { initialSource?: PersonS
                 <input type="checkbox" checked={h.checked}
                   onChange={() => setHosts(prev => prev.map(x => x.name === h.name ? { ...x, checked: !x.checked } : x))}
                   className="accent-primary" />
-                <span className="font-mono">{h.name}</span>
+                <span className="inline-flex items-center gap-1"><span className="font-mono">{h.name}</span>{h.name && <DeviceInfoButton hostname={h.name} />}</span>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted/30 text-muted-foreground border border-border">{h.source}</span>
               </label>
             ))}

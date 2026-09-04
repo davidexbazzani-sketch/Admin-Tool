@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Bell, X, Check, CheckCheck, AlertTriangle } from 'lucide-react'
 import { useDashboardStore, playAlarmSound } from '../../store/dashboardStore'
+import { DeviceInfoButton } from '../device/DeviceDossier'
 import type { ActiveAlarm } from '../../types/dashboard'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -53,7 +54,7 @@ function AlarmCard({ alarm, onAcknowledge }: AlarmCardProps) {
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <div className="text-xs font-medium text-foreground truncate">{alarm.widgetTitle}</div>
-          <div className="text-[10px] text-muted-foreground font-mono">{alarm.hostname}</div>
+          <div className="text-[10px] text-muted-foreground font-mono"><span className="inline-flex items-center gap-1">{alarm.hostname}{alarm.hostname && <DeviceInfoButton hostname={alarm.hostname} />}</span></div>
         </div>
         {!alarm.acknowledged && (
           <button
@@ -124,7 +125,7 @@ function AlarmModal({ alarms, onAcknowledge, onAcknowledgeAll }: AlarmModalProps
           <div className="space-y-1">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold text-foreground">{alarm.widgetTitle}</span>
-              <span className="text-[11px] text-muted-foreground font-mono">{alarm.hostname}</span>
+              <span className="inline-flex items-center gap-1"><span className="text-[11px] text-muted-foreground font-mono">{alarm.hostname}</span>{alarm.hostname && <DeviceInfoButton hostname={alarm.hostname} />}</span>
             </div>
 
             <div className="text-xs text-muted-foreground">{alarm.conditionText}</div>
@@ -149,7 +150,7 @@ function AlarmModal({ alarms, onAcknowledge, onAcknowledgeAll }: AlarmModalProps
                   <div key={a.id} className="text-[10px] text-foreground flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-red-500 shrink-0 animate-pulse" />
                     <span className="font-medium">{a.widgetTitle}</span>
-                    <span className="text-muted-foreground">({a.hostname})</span>
+                    <span className="inline-flex items-center gap-1"><span className="text-muted-foreground">({a.hostname})</span>{a.hostname && <DeviceInfoButton hostname={a.hostname} />}</span>
                   </div>
                 ))}
               </div>

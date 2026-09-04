@@ -10,6 +10,7 @@ import { useIsAdmin } from '../store/authStore'
 import { useAuthStore } from '../store/authStore'
 import { logDossierAction } from '../services/personDossier'
 import { PersonInfoButton } from '../components/person/PersonDossier'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import { ProcessPanel } from '../components/ProcessPanel'
 import { type AdUserListItem } from '../services/adUsersList'
 import { ensureDailyAdUsers } from '../services/adUserDirectory'
@@ -508,7 +509,7 @@ export default function UserOverview() {
                     <td className="px-3 py-2 font-mono text-foreground">
                       {r.hostnames.length === 0
                         ? <span className="text-muted-foreground/50 italic">—</span>
-                        : r.hostnames.join(', ')}
+                        : r.hostnames.map(h => <span key={h} className="inline-flex items-center gap-1 mr-2">{h}<DeviceInfoButton hostname={h} /></span>)}
                     </td>
                   </tr>
                 )

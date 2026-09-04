@@ -8,6 +8,7 @@ import { useAuthStore } from '../store/authStore'
 import { useAppStore } from '../store/appStore'
 import { api } from '../electronAPI'
 import { PersonInfoButton } from '../components/person/PersonDossier'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import {
   listEmployees, listDepartures, createEmployee, updateEmployee, deleteEmployee,
   createDeparture, updateDeparture, deleteDeparture, applyAccessPass,
@@ -478,7 +479,7 @@ export default function EmployeeManagement() {
                               <td className="px-3 py-2 text-foreground"><span className="inline-flex items-center gap-1">{d.name}<PersonInfoButton name={d.name} /></span></td>
                               <td className="px-3 py-2 text-muted-foreground font-mono text-xs">{d.globalId}</td>
                               <td className="px-3 py-2 text-muted-foreground">{d.manager}</td>
-                              <td className="px-3 py-2 text-muted-foreground">{d.deviceName}</td>
+                              <td className="px-3 py-2 text-muted-foreground"><span className="inline-flex items-center gap-1">{d.deviceName}{d.deviceName && <DeviceInfoButton hostname={d.deviceName} />}</span></td>
                               <td className="px-3 py-2 text-center">
                                 <input type="checkbox" checked={d.deviceReturned} onChange={async () => { await updateDeparture(d.id, { deviceReturned: !d.deviceReturned }); refresh() }} className="accent-primary" />
                               </td>

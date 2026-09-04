@@ -4,7 +4,7 @@
 // Ansprechpartner. Ein Bereich pro Kachel.
 
 import { useEffect, useState } from 'react'
-import { Loader2, Save, Plus, Trash2, Link2, DoorOpen, Headset, Users, Upload, ImagePlus, X, FolderOpen, Wrench, ChevronUp, ChevronDown, Map as MapIcon, Clock, Mail } from 'lucide-react'
+import { Loader2, Save, Plus, Trash2, Link2, DoorOpen, Headset, Users, Upload, ImagePlus, X, FolderOpen, Wrench, ChevronUp, ChevronDown, Map as MapIcon, Clock, Mail, Eye, EyeOff } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { api } from '../../electronAPI'
 import {
@@ -128,6 +128,19 @@ export default function OnboardingSettingsPanel() {
 
   const inputCls = 'w-full px-2.5 py-1.5 text-xs rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary'
 
+  // „Ausblenden"-Schalter (Auge) hinter einem Feld: ausgeblendete Inhalte werden bei
+  // ALLEN künftigen Verteilungen NICHT mehr mitgegeben (der Wert bleibt gespeichert).
+  const hideBtn = (k: string) => {
+    const off = !!cfg.hidden?.[k]
+    return (
+      <button type="button" onClick={() => update(s => { s.hidden = { ...(s.hidden ?? {}), [k]: !s.hidden?.[k] }; return s })}
+        title={off ? 'Ausgeblendet — wird beim Verteilen NICHT mitgegeben. Klick = wieder einblenden.' : 'Sichtbar — wird verteilt. Klick = ausblenden (Wert bleibt gespeichert).'}
+        className={`shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border ${off ? 'border-amber-500/40 bg-amber-500/10 text-amber-400' : 'border-border text-muted-foreground hover:text-foreground'}`}>
+        {off ? <EyeOff size={13} /> : <Eye size={13} />}
+      </button>
+    )
+  }
+
   return (
     <div className="max-w-4xl space-y-4 pb-8">
       <div className="flex items-center gap-3">
@@ -137,7 +150,7 @@ export default function OnboardingSettingsPanel() {
           {dirty ? 'Einstellungen speichern' : 'Gespeichert'}
         </button>
         {msg && <span className={`text-xs ${msg.includes('✓') ? 'text-green-400' : 'text-red-400'}`}>{msg}</span>}
-        <span className="text-[11px] text-muted-foreground ml-auto">Geordnet nach den 6 Dashboard-Kacheln. Leere Felder werden in der HTML ausgeblendet.</span>
+        <span className="text-[11px] text-muted-foreground ml-auto flex items-center gap-1">Leere Felder werden ausgeblendet · <Eye size={11} className="inline" />/<EyeOff size={11} className="inline text-amber-400" /> = Feld verteilen / nicht verteilen (Wert bleibt gespeichert).</span>
       </div>
 
       {/* ══════════ 1. IT ══════════ */}
@@ -283,15 +296,15 @@ export default function OnboardingSettingsPanel() {
         <p className="text-[11px] text-muted-foreground">Inhalte der großen „Allgemeines"-Kachel auf der Startseite.</p>
         <div className="grid grid-cols-[240px_1fr] gap-3 items-center">
           <div><p className="text-xs font-semibold text-foreground">SKF Marine Intranet</p><p className="text-[10px] text-muted-foreground">SharePoint – News, Dokumente</p></div>
-          <input value={cfg.links.sharepoint} onChange={e => update(s => { s.links.sharepoint = e.target.value; return s })} placeholder="https://…" className={inputCls} />
+          <div className="flex items-center gap-1.5"><input value={cfg.links.sharepoint} onChange={e => update(s => { s.links.sharepoint = e.target.value; return s })} placeholder="https://…" className={inputCls} />{hideBtn('sharepoint')}</div>
         </div>
         <div className="grid grid-cols-[240px_1fr] gap-3 items-center">
           <div><p className="text-xs font-semibold text-foreground">Kantinenplan</p><p className="text-[10px] text-muted-foreground">Essenswochenplan</p></div>
-          <input value={cfg.links.canteenMenu} onChange={e => update(s => { s.links.canteenMenu = e.target.value; return s })} placeholder="https://…" className={inputCls} />
+          <div className="flex items-center gap-1.5"><input value={cfg.links.canteenMenu} onChange={e => update(s => { s.links.canteenMenu = e.target.value; return s })} placeholder="https://…" className={inputCls} />{hideBtn('canteen')}</div>
         </div>
         <div className="grid grid-cols-[240px_1fr] gap-3 items-center">
-          <div><p className="text-xs font-semibold text-foreground">Film (MP4 – empfohlen – oder HTML)</p><p className="text-[10px] text-muted-foreground">Pfad auf dem Netzlaufwerk – wird beim Verteilen mitkopiert und ist in „Allgemeines" abspielbar. <strong>MP4</strong> spielt am saubersten (nativer Player, Klick = Pause/Weiter); HTML nur als Rückfall. Leer = kein Film.</p></div>
-          <input value={cfg.filmPath} onChange={e => update(s => { s.filmPath = e.target.value; return s })} placeholder="\\W3172\SKF Marine\...\skf-marine-film.mp4" className={`${inputCls} font-mono`} />
+          <div><p className="text-xs font-semibold text-foreground">Film (MP4 – empfohlen – oder HTML)</p><p className="text-[10px] text-muted-foreground">Pfad auf dem Netzlaufwerk – wird beim Verteilen mitkopiert und ist in „Allgemeines" abspielbar. <strong>MP4</strong> spielt am saubersten (nativer Player, Klick = Pause/Weiter); HTML nur als Rückfall. Leer = kein Film. Mit dem Auge rechts ausblendbar (Pfad bleibt, wird aber nicht verteilt).</p></div>
+          <div className="flex items-center gap-1.5"><input value={cfg.filmPath} onChange={e => update(s => { s.filmPath = e.target.value; return s })} placeholder="\\W3172\SKF Marine\...\skf-marine-film.mp4" className={`${inputCls} font-mono`} />{hideBtn('film')}</div>
         </div>
         <div className="pt-2 border-t border-border/50 space-y-1.5">
           <div className="flex items-baseline gap-2">
@@ -327,7 +340,7 @@ export default function OnboardingSettingsPanel() {
         <h3 className="text-sm font-bold text-foreground flex items-center gap-2"><Clock size={15} className="text-blue-400" />5 · Zeiterfassung</h3>
         <div className="grid grid-cols-[240px_1fr] gap-3 items-center">
           <div><p className="text-xs font-semibold text-foreground">Zeiterfassungs-Portal</p><p className="text-[10px] text-muted-foreground">Öffnet über die Kachel „Zeiterfassung"</p></div>
-          <input value={cfg.links.timeTracking} onChange={e => update(s => { s.links.timeTracking = e.target.value; return s })} placeholder="https://…" className={inputCls} />
+          <div className="flex items-center gap-1.5"><input value={cfg.links.timeTracking} onChange={e => update(s => { s.links.timeTracking = e.target.value; return s })} placeholder="https://…" className={inputCls} />{hideBtn('timeTracking')}</div>
         </div>
       </section>
 

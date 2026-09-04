@@ -22,6 +22,8 @@ export interface Checklist {
   createdBy: string          // tool user id / username
   updatedAt?: string         // ISO — touched on every save
   priority?: boolean         // "Hohe Priorität" — orange markiert in der Übersicht
+  notiz?: string             // freie Notiz je Eintrag, direkt aus der Übersicht bearbeitbar
+  manualSoftware?: string[]  // manuell in der Übersicht ergänzte Software (zusätzlich zur Auto-Erkennung)
   // ── Abschluss (Geraet uebergeben + Checkliste unterschrieben) ─────────────
   completed?: boolean        // true = in "Alle erledigten Checklisten" verschoben
   completedAt?: string       // ISO — wann die Uebergabe bestaetigt wurde

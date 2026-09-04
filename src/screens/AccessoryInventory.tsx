@@ -66,6 +66,11 @@ export default function AccessoryInventory() {
   // Wizard-State
   const [wizardIndex, setWizardIndex] = useState(0)
   const [wizardValues, setWizardValues] = useState<Record<string, string>>({})
+  // Feste Reihenfolge für den laufenden Durchgang (Snapshot bei Start); wächst,
+  // wenn man während der Inventur einen neuen Artikel hinzufügt.
+  const [wizardOrder, setWizardOrder] = useState<AccessoryItem[]>([])
+  // Kleiner Dialog: Artikel WÄHREND der Inventur hinzufügen (z. B. neue TVs im Lager)
+  const [wizardAdd, setWizardAdd] = useState<EditorState | null>(null)
   const wizardInputRef = useRef<HTMLInputElement>(null)
   const [orderLines, setOrderLines] = useState<OrderLine[]>([])
 
@@ -163,11 +168,28 @@ export default function AccessoryInventory() {
     const init: Record<string, string> = {}
     for (const it of items) init[it.id] = String(it.current)
     setWizardValues(init)
+    setWizardOrder(sortItems(items))
     setWizardIndex(0)
     setMode('wizard')
   }
 
-  const orderedItems = useMemo(() => sortItems(items), [items])
+  // Artikel WÄHREND der laufenden Inventur hinzufügen (inkl. Bestelllink) — der
+  // neue Artikel wird ans Ende des Durchgangs gehängt und mitgezählt.
+  function openWizardAdd() { setWizardAdd({ id: null, name: '', current: '0', target: '0', amazonLink: '' }) }
+  async function saveWizardAdd() {
+    if (!wizardAdd) return
+    const name = wizardAdd.name.trim()
+    if (!name) return
+    const current = Math.max(0, Math.round(Number(wizardAdd.current) || 0))
+    const target = Math.max(0, Math.round(Number(wizardAdd.target) || 0))
+    const link = wizardAdd.amazonLink.trim()
+    const maxOrder = items.reduce((m, it) => Math.max(m, it.order), 0)
+    const neu = createItem(name, current, target, link, maxOrder + 1)
+    await persist([...items, neu])
+    setWizardOrder(prev => [...prev, neu])
+    setWizardValues(prev => ({ ...prev, [neu.id]: String(current) }))
+    setWizardAdd(null)
+  }
 
   useEffect(() => {
     if (mode === 'wizard') {
@@ -202,7 +224,7 @@ export default function AccessoryInventory() {
   }
 
   function wizardNext() {
-    if (wizardIndex < orderedItems.length - 1) setWizardIndex(i => i + 1)
+    if (wizardIndex < wizardOrder.length - 1) setWizardIndex(i => i + 1)
     else void finishInventory(wizardValues)
   }
   function wizardBack() {
@@ -390,8 +412,8 @@ export default function AccessoryInventory() {
 
   // ── Render: Wizard ────────────────────────────────────────────────────────
   if (mode === 'wizard') {
-    const total = orderedItems.length
-    const cur = orderedItems[wizardIndex]
+    const total = wizardOrder.length
+    const cur = wizardOrder[wizardIndex]
     if (!cur) { setMode('table'); return null }
     const isLast = wizardIndex === total - 1
     const progress = Math.round(((wizardIndex + 1) / total) * 100)
@@ -403,10 +425,17 @@ export default function AccessoryInventory() {
             <h1 className="text-base font-semibold text-foreground leading-tight">Inventur läuft</h1>
             <p className="text-[11px] text-muted-foreground">Teil {wizardIndex + 1} von {total}</p>
           </div>
-          <button
-            onClick={() => setMode('table')}
-            className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent/40 border border-border"
-          ><X size={13} />Abbrechen</button>
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={openWizardAdd}
+              title="Neuen Artikel hinzufügen (wird sofort mitgezählt)"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-600 text-white hover:bg-emerald-500"
+            ><Plus size={13} />Artikel hinzufügen</button>
+            <button
+              onClick={() => setMode('table')}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent/40 border border-border"
+            ><X size={13} />Abbrechen</button>
+          </div>
         </div>
 
         <div className="h-1 bg-border shrink-0">
@@ -449,6 +478,67 @@ export default function AccessoryInventory() {
             </div>
           </div>
         </div>
+
+        {/* Artikel während der Inventur hinzufügen (z. B. neue TVs im Lager) */}
+        {wizardAdd && (
+          <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-6" onClick={() => setWizardAdd(null)}>
+            <div className="bg-card border border-border rounded-xl shadow-2xl p-5 max-w-md w-full" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center gap-2 mb-1">
+                <Plus size={18} className="text-emerald-400" />
+                <h3 className="text-base font-semibold text-foreground">Artikel hinzufügen</h3>
+              </div>
+              <p className="text-[11px] text-muted-foreground mb-4">Wird der Liste hinzugefügt und in dieser Inventur direkt mitgezählt.</p>
+              <div className="space-y-3">
+                <div>
+                  <label className="text-[11px] text-muted-foreground font-medium block mb-1">Name</label>
+                  <input
+                    autoFocus
+                    value={wizardAdd.name}
+                    onChange={e => setWizardAdd(s => s ? { ...s, name: e.target.value } : s)}
+                    onKeyDown={e => { if (e.key === 'Enter') saveWizardAdd() }}
+                    placeholder="z. B. TV 55 Zoll"
+                    className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-[11px] text-muted-foreground font-medium block mb-1">Aktueller Bestand (IST)</label>
+                    <input
+                      type="number" min={0}
+                      value={wizardAdd.current}
+                      onChange={e => setWizardAdd(s => s ? { ...s, current: e.target.value } : s)}
+                      className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] text-muted-foreground font-medium block mb-1">SOLL-Zustand</label>
+                    <input
+                      type="number" min={0}
+                      value={wizardAdd.target}
+                      onChange={e => setWizardAdd(s => s ? { ...s, target: e.target.value } : s)}
+                      className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[11px] text-muted-foreground font-medium block mb-1 inline-flex items-center gap-1.5"><ShoppingCart size={12} className="text-amber-400" />Bestelllink (Amazon, optional)</label>
+                  <input
+                    value={wizardAdd.amazonLink}
+                    onChange={e => setWizardAdd(s => s ? { ...s, amazonLink: e.target.value } : s)}
+                    placeholder="https://www.amazon.de/..."
+                    className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 mt-5">
+                <button onClick={() => setWizardAdd(null)} className="px-3 py-2 rounded-md text-sm text-muted-foreground border border-border hover:bg-muted/30">Abbrechen</button>
+                <button onClick={saveWizardAdd} disabled={!wizardAdd.name.trim()} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <Check size={14} />Hinzufügen &amp; mitzählen
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
@@ -669,9 +759,9 @@ export default function AccessoryInventory() {
         </div>
         <button
           onClick={openAdd}
-          title="Hinzufügen"
-          className="inline-flex items-center justify-center w-9 h-9 rounded-md bg-primary text-primary-foreground hover:opacity-90 shrink-0"
-        ><Plus size={18} /></button>
+          title="Neuen Artikel/Gegenstand manuell anlegen"
+          className="inline-flex items-center gap-1.5 px-3 h-9 rounded-md bg-primary text-primary-foreground hover:opacity-90 shrink-0 text-xs font-medium"
+        ><Plus size={16} />Artikel hinzufügen</button>
       </div>
 
       {/* Inhalt */}

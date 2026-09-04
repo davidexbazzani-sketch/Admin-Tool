@@ -11,6 +11,7 @@ import { loadXelionInstaller, replaceXelionInstaller, type XelionInstaller } fro
 import { ensureWinRM, clearWinRMCache } from '../../utils/winrmUtils'
 import { isValidRemoteTarget, isIpv4, ensureWinRmTrustedHost } from '../../utils/remoteTarget'
 import Card from '../Card'
+import { DeviceInfoButton } from '../device/DeviceDossier'
 
 const log = createLogger('software-installations')
 
@@ -272,7 +273,7 @@ export default function XelionInstallation() {
             <div className="flex items-center gap-3 bg-blue-500/10 border border-blue-500/20 rounded-lg px-4 py-3">
               <Loader size={18} className="animate-spin text-blue-400" />
               <div>
-                <p className="text-sm font-semibold text-foreground">Installation laeuft auf {store.hostname}...</p>
+                <p className="text-sm font-semibold text-foreground">Installation laeuft auf <span className="inline-flex items-center gap-1">{store.hostname}{store.hostname && <DeviceInfoButton hostname={store.hostname} />}</span>...</p>
                 <p className="text-xs text-muted-foreground">Laufzeit: {fmtElapsed(elapsed)}</p>
               </div>
             </div>
@@ -280,7 +281,7 @@ export default function XelionInstallation() {
           {phase === 'done' && (
             <div className="flex items-center gap-3 bg-green-500/10 border border-green-500/20 rounded-lg px-4 py-3">
               <CheckCircle size={18} className="text-green-400" />
-              <p className="text-sm font-semibold text-foreground">Xelion-Installation auf {store.hostname} abgeschlossen ({fmtElapsed(elapsed)})</p>
+              <p className="text-sm font-semibold text-foreground">Xelion-Installation auf <span className="inline-flex items-center gap-1">{store.hostname}{store.hostname && <DeviceInfoButton hostname={store.hostname} />}</span> abgeschlossen ({fmtElapsed(elapsed)})</p>
             </div>
           )}
           {phase === 'error' && (

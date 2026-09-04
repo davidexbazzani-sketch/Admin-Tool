@@ -4,7 +4,7 @@
 // sofort gespeichert (saveLauf), sodass nichts verloren geht.
 
 import { create } from 'zustand'
-import { runSwScan } from '../swCheck/runScan'
+import { runSwScan, runServerSkripte } from '../swCheck/runScan'
 import { saveLauf, pushRecentHost } from '../swCheck/store'
 import type { SwLauf, SwFortschritt } from '../swCheck/swCheck.types'
 
@@ -48,12 +48,20 @@ export const useSwScanStore = create<SwScanState>((set, get) => ({
     const results: SwLauf[] = []
     const log: SwRunLogEntry[] = []
     try {
+      // Server-Skripte EINMAL für den ganzen Sammellauf ausführen (nicht je PC — sonst
+      // liefen sie z. B. bei 10 PCs 10× gegen denselben Server und erzeugten 10 identische
+      // Serverberichte). Das Ergebnis wird jedem PC-Lauf über vorabServer nur noch zugeordnet.
+      const serverHost = opts.server.trim() || 'w3143'
+      const vorabServer = await runServerSkripte(serverHost, opts.skripte, {
+        onProgress: p => set(st => (st.prog ? { prog: { ...st.prog, pc: st.prog.pc || `${serverHost} (einmalig)`, skripte: { ...st.prog.skripte, [p.id]: p } } } : {})),
+        isAborted: () => abort,
+      })
       for (let i = 0; i < hosts.length; i++) {
         if (abort) break
         const pc = hosts[i]
         set({ prog: { done: i, total: hosts.length, pc, skripte: {} } })
         const r = await runSwScan(pc, by, {
-          skripte: opts.skripte, server: opts.server.trim() || 'w3143',
+          skripte: opts.skripte, server: serverHost, vorabServer,
           onProgress: p => set(st => (st.prog ? { prog: { ...st.prog, skripte: { ...st.prog.skripte, [p.id]: p } } } : {})),
           isAborted: () => abort,
         })

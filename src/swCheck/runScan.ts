@@ -17,6 +17,11 @@ export interface RunSwOptions {
   server: string                          // Zielserver für Server-Skripte (z. B. w3143)
   onProgress?: (p: SwFortschritt) => void
   isAborted?: () => boolean
+  // Vorab EINMAL berechnete Server-Skript-Ergebnisse (je Skript-id). Bei einem
+  // Sammellauf läuft das Server-Skript sonst gegen denselben Server einmal PRO PC
+  // (10 PCs = 10 identische Serverberichte). Der Aufrufer führt es einmal aus
+  // (runServerSkripte) und übergibt es hier; runSwScan ordnet es nur noch zu.
+  vorabServer?: Map<string, SwSkriptResult>
 }
 
 function utf8ToBase64(text: string): string {
@@ -157,6 +162,37 @@ async function runSkript(sk: SwSkript, invokeHost: string, serverArg: string): P
   }
 }
 
+/**
+ * Server-Skripte EINMAL ausführen (für Sammelläufe). Läuft gegen genau einen
+ * Zielserver und liefert die Ergebnisse je Skript-id zurück. Der Aufrufer reicht
+ * die Map über RunSwOptions.vorabServer in jeden PC-Lauf weiter, sodass das
+ * Server-Skript nicht je PC wiederholt wird (war vorher 10× identisch).
+ */
+export async function runServerSkripte(
+  serverHost: string,
+  skriptIds: string[],
+  cb?: { onProgress?: (p: SwFortschritt) => void; isAborted?: () => boolean },
+): Promise<Map<string, SwSkriptResult>> {
+  const out = new Map<string, SwSkriptResult>()
+  const host = (serverHost || '').trim() || 'w3143'
+  const serverSkripte = SW_SKRIPTE.filter(s => s.ziel === 'server' && skriptIds.includes(s.id))
+  let winrmOk: boolean | null = null
+  for (const sk of serverSkripte) {
+    if (cb?.isAborted?.()) break
+    cb?.onProgress?.({ id: sk.id, titel: sk.titel, status: 'läuft' })
+    if (winrmOk === null) { try { winrmOk = await ensureWinRM(host) } catch { winrmOk = false } }
+    let result: SwSkriptResult
+    if (!winrmOk) {
+      result = { id: sk.id, titel: sk.titel, ziel: 'server', ok: false, textBericht: '', dauerMs: 0, fehler: `„${host}" nicht per WinRM erreichbar.` }
+    } else {
+      result = await runSkript(sk, host, host)
+    }
+    out.set(sk.id, result)
+    cb?.onProgress?.({ id: sk.id, titel: sk.titel, status: result.ok ? 'fertig' : 'fehler' })
+  }
+  return out
+}
+
 /** Vorprüfung: WinRM erreichbar/aktivierbar? Deutscher Klartext bei Fehler. */
 export async function precheckSw(host: string): Promise<{ ok: boolean; message?: string }> {
   const h = host.trim()
@@ -205,7 +241,11 @@ export async function runSwScan(pc: string, by: string, opts: RunSwOptions): Pro
     const serverArg = (sk.parameter?.Server ? opts.server : opts.server) || sk.parameter?.Server || h
     const invokeHost = sk.ziel === 'server' ? (opts.server || sk.parameter?.Server || h) : h
     let result: SwSkriptResult
-    if (!(await ensure(invokeHost))) {
+    const vorab = sk.ziel === 'server' ? opts.vorabServer?.get(sk.id) : undefined
+    if (vorab) {
+      // Server-Skript wurde für den ganzen Sammellauf EINMAL ausgeführt → nur zuordnen.
+      result = vorab
+    } else if (!(await ensure(invokeHost))) {
       result = { id: sk.id, titel: sk.titel, ziel: sk.ziel, ok: false, textBericht: '', dauerMs: 0, fehler: `„${invokeHost}" nicht per WinRM erreichbar.` }
     } else {
       result = await runSkript(sk, invokeHost, serverArg)

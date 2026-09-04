@@ -9,6 +9,7 @@ import { pathService } from '../../services/pathService'
 import { useSwInstallStore } from '../../store/swInstallStore'
 import { isValidRemoteTarget, isIpv4, ensureWinRmTrustedHost } from '../../utils/remoteTarget'
 import Card from '../Card'
+import { DeviceInfoButton } from '../device/DeviceDossier'
 
 const log = createLogger('software-installations')
 
@@ -562,7 +563,7 @@ export default function SolidWorksInstallation() {
             <div className="flex items-center gap-3 bg-blue-500/10 border border-blue-500/20 rounded-lg px-4 py-3">
               <Loader size={18} className="animate-spin text-blue-400" />
               <div>
-                <p className="text-sm font-semibold text-foreground">Installation laeuft auf {storeHostname || hostname}...</p>
+                <p className="text-sm font-semibold text-foreground">Installation laeuft auf <span className="inline-flex items-center gap-1">{storeHostname || hostname}{(storeHostname || hostname) && <DeviceInfoButton hostname={storeHostname || hostname} />}</span>...</p>
                 <p className="text-xs text-muted-foreground">Laufzeit: {fmtElapsed(elapsed)}</p>
               </div>
             </div>
@@ -570,7 +571,7 @@ export default function SolidWorksInstallation() {
           {phase === 'done' && (
             <div className="flex items-center gap-3 bg-green-500/10 border border-green-500/20 rounded-lg px-4 py-3">
               <CheckCircle size={18} className="text-green-400" />
-              <p className="text-sm font-semibold text-foreground">SolidWorks-Installation auf {storeHostname || hostname} abgeschlossen ({fmtElapsed(elapsed)})</p>
+              <p className="text-sm font-semibold text-foreground">SolidWorks-Installation auf <span className="inline-flex items-center gap-1">{storeHostname || hostname}{(storeHostname || hostname) && <DeviceInfoButton hostname={storeHostname || hostname} />}</span> abgeschlossen ({fmtElapsed(elapsed)})</p>
             </div>
           )}
           {phase === 'error' && (
@@ -673,7 +674,8 @@ function PostInstallChecklist({ hostname }: { hostname: string }) {
   const allDone = checked.size === items.length
 
   return (
-    <Card title="Manuelle Schritte (Schritt 10+)" icon={<CheckCircle size={15} />} subtitle={`${hostname} — ${checked.size}/${items.length} erledigt`}>
+    <Card title="Manuelle Schritte (Schritt 10+)" icon={<CheckCircle size={15} />} subtitle={`${checked.size}/${items.length} erledigt`}>
+      <div className="inline-flex items-center gap-1 text-xs font-mono text-foreground">{hostname}{hostname && <DeviceInfoButton hostname={hostname} />}</div>
       {allDone && (
         <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2 mb-3">
           <CheckCircle size={14} className="text-green-400" />

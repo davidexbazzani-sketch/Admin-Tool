@@ -133,6 +133,10 @@ function icon(name: keyof typeof ICONS): string { return ICONS[name] || '' }
 export function buildOnboardingHtml(input: OnboardingHtmlInput): string {
   const { employee, contact, settings, markers, logoDataUri, planImages, roomPhotos, mode, autoRoomPin, pdfJs, planPdfs } = input
   const links = settings.links
+  // Pro Feld ausblendbar (Einstellungen → Auge-Schalter): ausgeblendete Inhalte kommen
+  // NICHT ins verteilte Dashboard. z. B. hidden.film / hidden.sharepoint / hidden.canteen / hidden.timeTracking.
+  const hidden = settings.hidden ?? {}
+  const zeiterfassungLink = hidden.timeTracking ? '' : (links.timeTracking || '')
   const isNew = mode === 'new'
 
   // Raum-Pin des Mitarbeiters: manuell gepflegter Pin hat Vorrang, sonst die
@@ -253,12 +257,12 @@ export function buildOnboardingHtml(input: OnboardingHtmlInput): string {
 
   // ── Allgemeines ─────────────────────────────────────────────────────────────
   const generalRows: string[] = []
-  if (links.sharepoint) {
+  if (links.sharepoint && !hidden.sharepoint) {
     generalRows.push(`<a class="lrow" href="${esc(links.sharepoint)}" target="_blank" rel="noopener">
       <span class="lrow-txt"><strong>SKF Marine Intranet</strong><small>SharePoint – News, Dokumente, Abteilungen</small></span>
       <span class="lrow-ic">${icon('link')}</span></a>`)
   }
-  if (links.canteenMenu) {
+  if (links.canteenMenu && !hidden.canteen) {
     generalRows.push(`<a class="lrow" href="${esc(links.canteenMenu)}" target="_blank" rel="noopener">
       <span class="lrow-txt"><strong>Kantinenplan</strong><small>Essenswochenplan – was gibt es diese Woche?</small></span>
       <span class="lrow-ic">${icon('link')}</span></a>`)
@@ -281,7 +285,7 @@ export function buildOnboardingHtml(input: OnboardingHtmlInput): string {
   //    Pause/Weiter (wie YouTube, per JS unten). Native controls liefern
   //    Zeitstrahl/Lautstärke/Vollbild.
   //  • sonst (HTML) → Legacy-TTS-Film im <iframe> (Fallback, spielt unsauber).
-  const hasFilm = !!(settings.filmPath || '').trim()
+  const hasFilm = !!(settings.filmPath || '').trim() && !hidden.film
   const filmAsset = filmAssetName(settings.filmPath)
   const filmIsVid = isFilmVideo(settings.filmPath)
   const filmInner = filmIsVid
@@ -346,7 +350,7 @@ export function buildOnboardingHtml(input: OnboardingHtmlInput): string {
   pills.push('<a class="pill" href="#map">Lageplan</a>')
   if (links.passwordReset) pills.push(`<a class="pill" href="${esc(links.passwordReset)}" target="_blank" rel="noopener">Passwort zurücksetzen</a>`)
   if (links.sharepoint) pills.push(`<a class="pill" href="${esc(links.sharepoint)}" target="_blank" rel="noopener">Intranet</a>`)
-  if (links.canteenMenu) pills.push(`<a class="pill" href="${esc(links.canteenMenu)}" target="_blank" rel="noopener">Kantinenplan</a>`)
+  if (links.canteenMenu && !hidden.canteen) pills.push(`<a class="pill" href="${esc(links.canteenMenu)}" target="_blank" rel="noopener">Kantinenplan</a>`)
 
   const fullName = `${employee.vorname} ${employee.nachname}`.trim()
 
@@ -668,7 +672,7 @@ select.dest{
         <a class="tile tile--rooms" href="#rooms"><span class="ic">${icon('rooms')}</span><span><h2>Konferenzräume</h2><p>Alle sechs Besprechungsräume im Überblick – direkt aus Outlook buchen.</p><span class="cta">Öffnen →</span></span></a>
         <a class="tile tile--general" href="#general"><span class="ic">${icon('general')}</span><span><h2>Allgemeines</h2><p>Intranet, Ansprechpartner und Wissenswertes rund um deinen Arbeitsalltag.</p><span class="cta">Öffnen →</span></span></a>
         <a class="tile tile--orient" href="#map"><span class="ic">${icon('map')}</span><span><h2>Orientierung</h2><p>Interaktiver Lageplan: Gebäude, Etagen und der Weg zu Kantine, Personalbüro &amp; Co.</p><span class="cta">Öffnen →</span></span></a>
-        <a class="tile tile--time" ${links.timeTracking ? `href="${esc(links.timeTracking)}" target="_blank" rel="noopener"` : 'href="#time"'}><span class="ic">${icon('time')}</span><span><h2>Zeiterfassung</h2><p>Kommen &amp; Gehen, Urlaub und Gleitzeit.</p><span class="cta">${links.timeTracking ? 'Öffnen ↗' : 'Öffnen →'}</span></span></a>
+        <a class="tile tile--time" ${zeiterfassungLink ? `href="${esc(zeiterfassungLink)}" target="_blank" rel="noopener"` : 'href="#time"'}><span class="ic">${icon('time')}</span><span><h2>Zeiterfassung</h2><p>Kommen &amp; Gehen, Urlaub und Gleitzeit.</p><span class="cta">${zeiterfassungLink ? 'Öffnen ↗' : 'Öffnen →'}</span></span></a>
         <a class="tile tile--contact" href="#contact"><span class="ic">${icon('contact')}</span><span><h2>${contactTitle}</h2><p>Deine erste Anlaufstelle für alle Fragen in den ersten Wochen.</p><span class="cta">Kontakt →</span></span></a>
       </div>
       <div class="quick">
@@ -751,11 +755,11 @@ ${roomCards}
   <section class="view" id="time">
     <h2 class="vtitle">Zeiterfassung</h2>
     <p class="vsub">Kommen &amp; Gehen, Urlaub und Gleitzeit.</p>
-    ${links.timeTracking
+    ${zeiterfassungLink
       ? `<div class="card">
           <h3>Zeiterfassungs-Portal</h3>
           <p>Hier erfasst du deine Arbeitszeit und verwaltest Urlaub &amp; Gleitzeit.</p>
-          <a class="lrow" href="${esc(links.timeTracking)}" target="_blank" rel="noopener"><span class="lrow-txt"><strong>Zeiterfassung öffnen</strong><small>${esc(links.timeTracking)}</small></span><span class="lrow-ic">${icon('link')}</span></a>
+          <a class="lrow" href="${esc(zeiterfassungLink)}" target="_blank" rel="noopener"><span class="lrow-txt"><strong>Zeiterfassung öffnen</strong><small>${esc(zeiterfassungLink)}</small></span><span class="lrow-ic">${icon('link')}</span></a>
         </div>`
       : '<div class="card"><p class="mut">Die Informationen zur Zeiterfassung folgen in Kürze – deine IT ergänzt diesen Bereich gerade.</p></div>'}
   </section>

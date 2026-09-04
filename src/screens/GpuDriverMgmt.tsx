@@ -23,6 +23,7 @@ import {
 } from '../services/gpuDrivers'
 import { exportGpuDrivers, type GpuExportFormat, type GpuDeviceInfo } from '../services/gpuDriversExport'
 import { useGpuDeployStore } from '../store/gpuDeployStore'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 
 const inputCls = 'w-full rounded-md border border-border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-blue-500/40'
 
@@ -397,7 +398,7 @@ export default function GpuDriverMgmt() {
                   <label key={d.id} className="flex items-center gap-2 px-3 py-1.5 text-[12.5px] hover:bg-muted/20 cursor-pointer">
                     <input type="checkbox" checked={selected.has(d.hostname)} onChange={() => toggle(d.hostname)} className="accent-blue-500" />
                     <Server size={12} className="text-muted-foreground shrink-0" />
-                    <span className="font-mono text-foreground">{d.hostname}</span>
+                    <span className="font-mono text-foreground"><span className="inline-flex items-center gap-1">{d.hostname}{d.hostname && <DeviceInfoButton hostname={d.hostname} serial={d.serial} />}</span></span>
                     <span className="text-muted-foreground truncate">· {d.assignedTo || 'nicht zugewiesen'}</span>
                     <span className="ml-auto text-[10px] text-muted-foreground shrink-0">{classifyModel(d.model) || '—'}</span>
                   </label>
@@ -500,7 +501,7 @@ export default function GpuDriverMgmt() {
                     </td>
                     <td className="px-2.5 py-1.5 font-mono text-foreground whitespace-nowrap">
                       <div className="flex items-center">
-                        {r.hostname}
+                        <span className="inline-flex items-center gap-1">{r.hostname}{r.hostname && <DeviceInfoButton hostname={r.hostname} />}</span>
                         {r.installedViaTool && <span className="ml-1.5 text-[9px] px-1 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30" title={`Über das Tool installiert von ${r.installedBy || '?'}`}>Tool</span>}
                         {deployResults[r.hostname.toLowerCase()] && (
                           <span className={`ml-1.5 text-[9px] px-1 py-0.5 rounded border ${

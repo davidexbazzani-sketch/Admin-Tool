@@ -12,6 +12,8 @@ import { DIAG_RULES, createFinding, type DiagFinding, type Severity } from '../u
 import { exceptionText, interpretModule, buildRootCause, type DiagMarker } from '../utils/diagnosisAnalysis'
 import SapFehlersuche from '../sapCheck/SapFehlersuche'
 import SolidWorksDiagnose from '../swCheck/SolidWorksDiagnose'
+import NetzwerkDiagnose from '../netCheck/NetzwerkDiagnose'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -97,6 +99,7 @@ export default function PCDiagnosis() {
   const [hostname, setHostname] = useState('')
   const [sapMode, setSapMode] = useState(false)
   const [swMode, setSwMode] = useState(false)
+  const [netMode, setNetMode] = useState(false)
   const [timeRange, setTimeRange] = useState<TimeRange>('7')
   const [phase, setPhase] = useState<Phase>('idle')
   const [areas, setAreas] = useState<AreaResult[]>([])
@@ -1561,6 +1564,7 @@ export default function PCDiagnosis() {
   if (sapMode) return <SapFehlersuche onBack={() => setSapMode(false)} />
   // SolidWorks-Diagnose (Kachel) — überlagert die PC-Diagnose.
   if (swMode) return <SolidWorksDiagnose onBack={() => setSwMode(false)} />
+  if (netMode) return <NetzwerkDiagnose onBack={() => setNetMode(false)} />
 
   return (
     <div className="flex flex-col gap-5 h-full overflow-y-auto p-6">
@@ -1576,7 +1580,7 @@ export default function PCDiagnosis() {
 
       {/* ── Fokus-Kacheln (nur in der Startphase) ─────────────────────────── */}
       {phase === 'idle' && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-5xl">
           <div className="rounded-lg border border-primary/40 bg-primary/5 p-4">
             <div className="flex items-center gap-2"><Stethoscope size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">Voll-Diagnose</span></div>
             <p className="text-[11px] text-muted-foreground mt-1">Alle Bereiche &amp; Checks — unten Hostname eingeben und starten.</p>
@@ -1588,6 +1592,10 @@ export default function PCDiagnosis() {
           <button onClick={() => setSwMode(true)} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
             <div className="flex items-center gap-2"><Wrench size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">SolidWorks Diagnose</span></div>
             <p className="text-[11px] text-muted-foreground mt-1">Mehrere Workstations auf einmal (Typ/Status) oder Einzel-PC — Bestandsaufnahme + Lizenzserver, mit Sammel-Export.</p>
+          </button>
+          <button onClick={() => setNetMode(true)} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
+            <div className="flex items-center gap-2"><Wifi size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">Netzwerk Probleme</span></div>
+            <p className="text-[11px] text-muted-foreground mt-1">WLAN-Aussetzer analysieren: mehrere PCs + Referenz-PCs vergleichen, Fehl-Einstellungen erkennen und direkt beheben.</p>
           </button>
         </div>
       )}
@@ -1811,7 +1819,7 @@ export default function PCDiagnosis() {
                   {criticals.length === 0 && warnings.length === 0 ? 'Alles OK' : `${criticals.length} Fehler, ${warnings.length} Warnungen`}
                   {infos.length > 0 && `, ${infos.length} Hinweise`}
                 </p>
-                <p className="text-sm text-muted-foreground">{okChecks} von {totalChecks} Checks bestanden — {hostname.trim()}</p>
+                <p className="text-sm text-muted-foreground">{okChecks} von {totalChecks} Checks bestanden — <span className="inline-flex items-center gap-1">{hostname.trim()}{hostname.trim() && <DeviceInfoButton hostname={hostname.trim()} />}</span></p>
               </div>
               <div className="ml-auto flex items-center gap-2">
                 <button onClick={exportPdf}
@@ -1910,7 +1918,7 @@ export default function PCDiagnosis() {
                   <h3 className="text-sm font-semibold text-foreground">Fehlerbehebung ausführen?</h3>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  <strong>{getSkillLabel(confirmSkill.skillId, confirmSkill.skillCategory)}</strong> auf <strong className="font-mono">{hostname.trim()}</strong> ausführen?
+                  <strong>{getSkillLabel(confirmSkill.skillId, confirmSkill.skillCategory)}</strong> auf <strong className="font-mono"><span className="inline-flex items-center gap-1">{hostname.trim()}{hostname.trim() && <DeviceInfoButton hostname={hostname.trim()} />}</span></strong> ausführen?
                 </p>
                 {confirmSkill.skillInput && (
                   <p className="text-[10px] text-muted-foreground">Parameter: <code className="bg-muted/30 px-1 rounded">{confirmSkill.skillInput}</code></p>

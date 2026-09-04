@@ -18,6 +18,7 @@ import {
   loadHistoryFor, addHistoryEntry, deleteHistoryEntry, ensureSteckbriefeSeeded,
   type ServerHistoryEntry,
 } from '../services/serverHistory'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 
 // ── Historie-Dialog je Server (frei beschreibbar, automatischer Zeitstempel) ──
 function fmtStamp(iso: string, dateOnly?: boolean): string {
@@ -49,7 +50,7 @@ function HistoryDialog({ tile, by, onClose }: { tile: ServerTile; by: string; on
       <div className="bg-card border border-border rounded-xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-xl" onClick={e => e.stopPropagation()}>
         <div className="shrink-0 px-4 py-3 border-b border-border flex items-center gap-2">
           <History size={16} className="text-primary" />
-          <h3 className="text-sm font-bold text-foreground">Historie <span className="font-mono">{tile.hostname}</span>{tile.description && <span className="text-muted-foreground font-normal"> · {tile.description}</span>}</h3>
+          <h3 className="text-sm font-bold text-foreground">Historie <span className="inline-flex items-center gap-1"><span className="font-mono">{tile.hostname}</span>{tile.hostname && <DeviceInfoButton hostname={tile.hostname} />}</span>{tile.description && <span className="text-muted-foreground font-normal"> · {tile.description}</span>}</h3>
           <button onClick={onClose} className="ml-auto p-1 rounded text-muted-foreground hover:text-foreground hover:bg-accent"><X size={16} /></button>
         </div>
 
@@ -266,7 +267,7 @@ export default function ServerMonitor() {
                   <div className="flex items-center gap-2">
                     <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${state === 'online' ? 'bg-emerald-400' : state === 'offline' ? 'bg-red-500' : 'bg-muted-foreground/40'}`} />
                     <span className="text-sm font-semibold text-foreground truncate flex-1" title={`${tile.hostname}${tile.description ? ' · ' + tile.description : ''}`}>
-                      <span className="font-mono">{tile.hostname}</span>
+                      <span className="inline-flex items-center gap-1"><span className="font-mono">{tile.hostname}</span>{tile.hostname && <DeviceInfoButton hostname={tile.hostname} />}</span>
                       {tile.description && <span className="text-muted-foreground font-normal"> · {tile.description}</span>}
                     </span>
                     {state === 'offline' ? <ServerOff size={14} className="text-red-400 shrink-0" /> : <ServerCog size={14} className="text-muted-foreground shrink-0" />}

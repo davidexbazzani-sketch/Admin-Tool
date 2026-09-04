@@ -177,7 +177,7 @@ function DetailModal({ hs, onClose, onRunSkill }: {
         {/* Header */}
         <div className="px-5 py-3 border-b border-border flex items-center gap-2 sticky top-0 bg-card z-10">
           <span className={`w-4 h-4 rounded-full ${scoreBg(hs.total)}`} />
-          <span className="font-semibold text-sm text-foreground font-mono">{hs.hostname}</span>
+          <span className="inline-flex items-center gap-1"><span className="font-semibold text-sm text-foreground font-mono">{hs.hostname}</span>{hs.hostname && <DeviceInfoButton hostname={hs.hostname} />}</span>
           {hs.label && <span className="text-xs text-muted-foreground">— {hs.label}</span>}
           <span className={`ml-auto text-lg font-bold ${scoreColor(hs.total)}`}>{hs.total}/100</span>
           <button onClick={onClose} className="p-1 rounded hover:bg-accent text-muted-foreground ml-2">

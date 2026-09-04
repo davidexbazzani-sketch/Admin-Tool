@@ -15,6 +15,7 @@ import {
   addDevice, removeDevice, updateDeviceLabel, moveDevice, isDeviceFavorite,
   addSkill, removeSkill, moveSkill,
 } from '../utils/favorites'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 
 export default function FavoritesPanel() {
   const session   = useAuthStore(s => s.session)
@@ -319,7 +320,7 @@ export default function FavoritesPanel() {
                         ) : (
                           <>
                             <div className="flex-1 min-w-0">
-                              <span className="font-mono text-foreground truncate block text-[11px]">{d.hostname}</span>
+                              <span className="font-mono text-foreground truncate block text-[11px]"><span className="inline-flex items-center gap-1">{d.hostname}{d.hostname && <DeviceInfoButton hostname={d.hostname} />}</span></span>
                               {d.label && <span className="text-[9px] text-muted-foreground truncate block">{d.label}</span>}
                             </div>
                             <button onClick={() => { setMenuHost(menuHost === d.hostname ? null : d.hostname); setMenuSkill(null) }}
@@ -449,7 +450,7 @@ export default function FavoritesPanel() {
                   <div className="max-h-32 overflow-y-auto space-y-1">
                     {execResults.map((r, i) => (
                       <div key={i} className="text-[10px] p-1 rounded bg-muted/20">
-                        <span className="font-mono text-foreground">{r.hostname}</span>
+                        <span className="font-mono text-foreground"><span className="inline-flex items-center gap-1">{r.hostname}{r.hostname && <DeviceInfoButton hostname={r.hostname} />}</span></span>
                         <span className="text-muted-foreground ml-1">— {r.output.slice(0, 200)}</span>
                       </div>
                     ))}

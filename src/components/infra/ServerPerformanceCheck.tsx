@@ -7,6 +7,7 @@ import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../../store/authStor
 import { api } from '../../electronAPI'
 import { createLogger } from '../../utils/activityLogger'
 import Card from '../Card'
+import { DeviceInfoButton } from '../device/DeviceDossier'
 import type { InventoryItem } from '../../types/auth'
 
 const log = createLogger('infra-marine')
@@ -494,7 +495,7 @@ export default function ServerPerformanceCheck() {
             {results.map(r => (
               <div key={r.hostname} className="flex items-center gap-2 text-xs">
                 {r.reachable ? <CheckCircle size={12} className="text-green-400" /> : <XCircle size={12} className="text-red-400" />}
-                <span className="text-foreground font-medium">{r.hostname}</span>
+                <span className="inline-flex items-center gap-1"><span className="text-foreground font-medium">{r.hostname}</span>{r.hostname && <DeviceInfoButton hostname={r.hostname} />}</span>
                 {r.reachable && r.ram && <span className="text-muted-foreground">RAM {r.ram.pct}% | CPU {r.cpu?.avgUsage ?? '-'}%</span>}
                 {!r.reachable && <span className="text-red-400">Nicht erreichbar</span>}
               </div>
@@ -534,7 +535,7 @@ export default function ServerPerformanceCheck() {
                           setMailServers(prev => { const n = new Set(prev); n.has(r.hostname) ? n.delete(r.hostname) : n.add(r.hostname); return n })
                         }} className="rounded accent-primary cursor-pointer" />}
                       </td>
-                      <td className="px-3 py-2 font-medium text-foreground">{r.hostname}</td>
+                      <td className="px-3 py-2 font-medium text-foreground"><span className="inline-flex items-center gap-1">{r.hostname}{r.hostname && <DeviceInfoButton hostname={r.hostname} />}</span></td>
                       <td className="px-3 py-2">
                         {r.reachable && r.ram ? <span className={statusColor(r.assessment.ram)}>{r.ram.pct}% ({r.ram.usedGB}/{r.ram.totalGB} GB)</span> : <span className="text-muted-foreground">-</span>}
                       </td>

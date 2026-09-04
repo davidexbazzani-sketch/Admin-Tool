@@ -15,6 +15,7 @@ import { compareScans } from './compare'
 import { aktiveWartungsfenster } from './rules'
 import { saveScan, listScans, loadScan, loadBaseline, setBaseline, loadRecentHosts, pushRecentHost } from './store'
 import { ampelOf, sortBefunde, istKernursache, type SapScan, type SapBefund, type SapBewertung, type SapScanIndexItem, type SapVergleich } from './sapCheck.types'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 
 const SEV_ICON: Record<SapBewertung, ReactNode> = {
   fehler: <XCircle size={14} className="text-red-400" />,
@@ -76,7 +77,7 @@ function ScanErgebnis({ scan }: { scan: SapScan }) {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-3 flex-wrap bg-card border border-border rounded-lg p-3">
-        <span className="text-sm font-semibold text-foreground">{scan.pc}</span>
+        <span className="inline-flex items-center gap-1"><span className="text-sm font-semibold text-foreground">{scan.pc}</span>{scan.pc && <DeviceInfoButton hostname={scan.pc} />}</span>
         <span className="text-[11px] text-muted-foreground">{fmt(scan.ranAt)} · {(scan.meta.dauerMs / 1000).toFixed(0)}s</span>
         <span className="ml-auto flex items-center gap-2 text-xs">
           <span className="text-red-400">{a.fehler} Fehler</span>·<span className="text-amber-400">{a.warnung} Warn.</span>·
@@ -147,7 +148,7 @@ function VergleichsAnsicht({ v }: { v: SapVergleich }) {
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead><tr className="text-[10px] uppercase text-muted-foreground border-b border-border">
-            <th className="text-left py-1.5 pr-2">Prüfpunkt</th><th className="text-left px-2">{v.a.pc}</th><th className="text-left px-2">{v.b.pc}</th>
+            <th className="text-left py-1.5 pr-2">Prüfpunkt</th><th className="text-left px-2"><span className="inline-flex items-center gap-1">{v.a.pc}{v.a.pc && <DeviceInfoButton hostname={v.a.pc} />}</span></th><th className="text-left px-2"><span className="inline-flex items-center gap-1">{v.b.pc}{v.b.pc && <DeviceInfoButton hostname={v.b.pc} />}</span></th>
           </tr></thead>
           <tbody>
             {rows.map(z => (

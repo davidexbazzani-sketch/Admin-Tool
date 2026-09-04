@@ -8,15 +8,21 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Loader2, RefreshCw, Rocket, CheckCircle2, XCircle, WifiOff, HelpCircle,
-  Calendar, MonitorSmartphone, Users, Search,
+  Calendar, MonitorSmartphone, Users, Search, Zap, Wifi,
 } from 'lucide-react'
 import { api } from '../../electronAPI'
+import { useAuthStore } from '../../store/authStore'
 import { listEmployees, daysUntil, formatGermanDate, type Employee } from '../../services/employees'
 import { loadDevices, type EndpointDevice } from '../../services/endpointDevices'
 import { samePerson } from '../../services/personMasterData'
 import { loadDeployments, type OnboardingDeployment } from '../../services/onboarding'
 import { checkDesktopStatus, type DesktopStatus } from '../../services/onboardingDeploy'
+import { deployOnboardingDashboard } from '../../services/onboardingOrchestrator'
+import { clearWinRMCache } from '../../utils/winrmUtils'
+import { getPsExecDir } from '../../utils/remoteCommands'
+import WinRMActivationModal from '../WinRMActivationModal'
 import { PersonInfoButton } from '../person/PersonDossier'
+import { DeviceInfoButton } from '../device/DeviceDossier'
 import type { InventoryItem } from '../../types/auth'
 
 interface Row {
@@ -30,14 +36,32 @@ type LiveStatus = DesktopStatus | 'checking' | 'unknown'
 /** Wie weit zurueck gestartete Mitarbeiter noch angezeigt werden (Tage). */
 const SHOW_STARTED_DAYS = 14
 
+/**
+ * Hostname aus der „Seriennummer Hardware" der Mitarbeiterverwaltung ableiten.
+ * Konvention: Hostname = „DE" + Seriennummer. Steht dort bereits ein vollständiger
+ * Hostname (beginnt mit DE/DEHAM/DESCH), wird er unverändert übernommen (kein zweites DE).
+ */
+export function hostFromSerial(serial: string | undefined): string | null {
+  const s = (serial || '').trim().toUpperCase().replace(/\s+/g, '')
+  if (!s) return null
+  if (/^DE[A-Z0-9]/.test(s)) return s   // schon ein Hostname (DE…/DEHAM…/DESCH…)
+  return 'DE' + s
+}
+
 export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
   onDeploy: (employeeId: string) => void
   onDeployExisting: () => void
 }) {
+  const by = useAuthStore(s => s.session?.user.displayName || s.session?.user.username || 'unbekannt')
   const [rows, setRows] = useState<Row[]>([])
   const [loading, setLoading] = useState(true)
   const [status, setStatus] = useState<Record<string, LiveStatus>>({})   // hostname -> Status
   const [checking, setChecking] = useState(false)
+  // Direkt-Verteilen je Rechner (aus der Übersicht)
+  const [deployBusy, setDeployBusy] = useState<Record<string, boolean>>({})
+  const [deployPhase, setDeployPhase] = useState<Record<string, string>>({})
+  const [deployRes, setDeployRes] = useState<Record<string, { ok: boolean; text: string }>>({})
+  const [activateHost, setActivateHost] = useState<string | null>(null)
   // Filter
   const [search, setSearch] = useState('')
   const [startFrom, setStartFrom] = useState('')   // YYYY-MM-DD (Start ab)
@@ -57,6 +81,9 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
         const fullName = `${emp.vorname} ${emp.name}`.trim()
         const gid = (emp.globalId || '').trim().toLowerCase()
         const hosts = new Set<string>()
+        // Primärquelle: „Seriennummer Hardware" aus der Mitarbeiterverwaltung → DE + Seriennummer.
+        const serialHost = hostFromSerial(emp.hardwareSerial)
+        if (serialHost) hosts.add(serialHost)
         for (const it of inv) {
           const match = (it.assignedTo && samePerson(it.assignedTo, fullName)) ||
             (gid && ((it.corpId && it.corpId.trim().toLowerCase() === gid) || (it.assignedTo && it.assignedTo.trim().toLowerCase() === gid)))
@@ -128,6 +155,44 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
       setChecking(false)
     }
   }, [checking])
+
+  // Dashboard direkt aus der Übersicht auf EINEN Rechner verteilen (gleiche Pipeline
+  // wie der Verteilen-Tab: HTML personalisieren → DNS/Erreichbarkeit → WinRM (wie Remote
+  // Doc) → Kopieren → Verifizieren → Protokoll). Danach Status frisch prüfen.
+  async function directDeploy(emp: Employee, host: string) {
+    if (deployBusy[host]) return
+    setDeployBusy(p => ({ ...p, [host]: true }))
+    setDeployRes(p => { const n = { ...p }; delete n[host]; return n })
+    setDeployPhase(p => ({ ...p, [host]: 'Start …' }))
+    try {
+      const person = {
+        vorname: emp.vorname, nachname: emp.name, startDate: emp.startDate,
+        roomNumber: emp.roomNumber, department: emp.department || '',
+        displayName: `${emp.vorname} ${emp.name}`.trim(),
+        sam: (emp.globalId || '').trim() || undefined, employeeId: emp.id,
+      }
+      const r = await deployOnboardingDashboard(person, host, 'new', by,
+        (stepName, st) => setDeployPhase(p => ({ ...p, [host]: `${stepName}${st === 'running' ? ' …' : st === 'fail' ? ' ✗' : ''}` })),
+        (msg) => setDeployPhase(p => ({ ...p, [host]: msg })),
+      )
+      setDeployRes(p => ({ ...p, [host]: { ok: r.ok, text: r.message } }))
+      const st = await checkDesktopStatus(host)
+      setStatus(p => ({ ...p, [host]: st }))
+      if (r.ok) void load()   // „Zuletzt verteilt" neu laden
+    } catch (e) {
+      setDeployRes(p => ({ ...p, [host]: { ok: false, text: e instanceof Error ? e.message : String(e) } }))
+    } finally {
+      setDeployBusy(p => ({ ...p, [host]: false }))
+      setDeployPhase(p => { const n = { ...p }; delete n[host]; return n })
+    }
+  }
+
+  // Nach WinRM-Aktivierung (Remote-Doc-Leiter) Cache leeren + Status neu prüfen.
+  async function afterWinRM(host: string) {
+    clearWinRMCache(host)
+    const st = await checkDesktopStatus(host)
+    setStatus(p => ({ ...p, [host]: st }))
+  }
 
   // Automatischer Check nach dem Laden (im Hintergrund, blockiert nichts)
   useEffect(() => {
@@ -230,21 +295,37 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
                       {hosts.length === 0 ? (
                         <span className="text-xs text-muted-foreground">Kein Rechner zugeordnet</span>
                       ) : (
-                        <div className="space-y-0.5">
-                          {hosts.map(h => (
-                            <div key={h} className="flex items-center gap-2">
-                              <MonitorSmartphone size={11} className="text-muted-foreground shrink-0" />
-                              <span className="text-xs font-mono text-foreground">{h}</span>
-                              {statusBadge(h)}
-                            </div>
-                          ))}
+                        <div className="space-y-1">
+                          {hosts.map(h => {
+                            const busy = deployBusy[h]
+                            const res = deployRes[h]
+                            return (
+                              <div key={h} className="flex items-center gap-2 flex-wrap">
+                                <MonitorSmartphone size={11} className="text-muted-foreground shrink-0" />
+                                <span className="text-xs font-mono text-foreground">{h}</span>
+                                {statusBadge(h)}
+                                <button onClick={() => directDeploy(emp, h)} disabled={busy}
+                                  title="Onboarding-Dashboard direkt auf diesen Rechner verteilen (personalisiert, wie im Verteilen-Tab)"
+                                  className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] rounded border border-blue-500/40 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 disabled:opacity-50">
+                                  {busy ? <Loader2 size={9} className="animate-spin" /> : <Zap size={9} />}{busy ? (deployPhase[h] || 'verteile …') : 'Direkt verteilen'}
+                                </button>
+                                {status[h] === 'offline' && !busy && (
+                                  <button onClick={() => setActivateHost(h)} title="WinRM auf diesem PC aktivieren (6-Methoden-Leiter wie Remote Doc)"
+                                    className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] rounded border border-border text-muted-foreground hover:text-foreground">
+                                    <Wifi size={9} />WinRM
+                                  </button>
+                                )}
+                                {res && <span className={`text-[10px] ${res.ok ? 'text-green-400' : 'text-red-400'}`} title={res.text}>{res.ok ? '✓ verteilt' : '✗ ' + res.text}</span>}
+                              </div>
+                            )
+                          })}
                         </div>
                       )}
                     </td>
                     <td className="px-3 py-2">
                       {lastDeploy ? (
                         <span className="text-[11px] text-muted-foreground">
-                          {new Date(lastDeploy.deployedAt).toLocaleDateString('de-DE')} auf <span className="font-mono text-foreground">{lastDeploy.hostname}</span>
+                          {new Date(lastDeploy.deployedAt).toLocaleDateString('de-DE')} auf <span className="inline-flex items-center gap-1"><span className="font-mono text-foreground">{lastDeploy.hostname}</span>{lastDeploy.hostname && <DeviceInfoButton hostname={lastDeploy.hostname} />}</span>
                           <span className="block">von {lastDeploy.deployedBy}</span>
                         </span>
                       ) : (
@@ -263,6 +344,17 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
             </tbody>
           </table>
         </div>
+      )}
+
+      {/* WinRM-Aktivierung – dieselbe 6-Methoden-Leiter wie in Remote Doc */}
+      {activateHost && (
+        <WinRMActivationModal
+          hostname={activateHost}
+          psExecPath={getPsExecDir()}
+          onSuccess={() => { const h = activateHost; setActivateHost(null); if (h) void afterWinRM(h) }}
+          onRestricted={() => setActivateHost(null)}
+          onCancel={() => setActivateHost(null)}
+        />
       )}
     </div>
   )

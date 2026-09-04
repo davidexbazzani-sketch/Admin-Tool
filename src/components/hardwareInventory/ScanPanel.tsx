@@ -12,6 +12,8 @@ import {
 import { loadLostSerialSet, markRecovered } from '../../services/lostDevices'
 import { loadDevices as loadEndpointDevices } from '../../services/endpointDevices'
 import { playShrillAlert } from '../../services/scanAlert'
+import { DeviceInfoButton } from '../device/DeviceDossier'
+import { hostFromSerial } from '../../services/deviceMasterData'
 
 interface Props {
   runId: string
@@ -355,6 +357,7 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
                   ? <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
                   : <span className="w-3 h-3 rounded-full border border-border shrink-0" />}
                 <span className="font-mono text-foreground truncate">{d.serial}</span>
+                <DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} />
               </div>
               <div className="text-[10px] text-muted-foreground truncate">{[d.deviceType, d.company].filter(Boolean).join(' · ') || '—'}</div>
             </div>
@@ -374,8 +377,8 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
                   key={x.serial}
                   onContextMenu={(e) => openCtxMenu(e, 'extra', x.serial)}
                   title="Rechtsklick: Eintrag entfernen"
-                  className="px-2 py-0.5 rounded bg-amber-300 text-black text-[10px] font-mono cursor-context-menu"
-                >{x.serial}</span>
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-300 text-black text-[10px] font-mono cursor-context-menu"
+                >{x.serial}<DeviceInfoButton hostname={hostFromSerial(x.serial)} serial={x.serial} /></span>
               ))}
             </div>
           </div>
@@ -426,6 +429,7 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
                   <div key={ex.serial} className={`rounded-md border p-2.5 ${isSkf ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-border bg-card/60'}`}>
                     <div className="flex items-center gap-2 mb-1.5">
                       <span className="font-mono text-sm text-foreground">{ex.serial}</span>
+                      <DeviceInfoButton hostname={hostFromSerial(ex.serial)} serial={ex.serial} />
                       {isSkf && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500 text-black border border-emerald-500/40 inline-flex items-center gap-1"><CheckCircle2 size={10} />SKF Eigentum (aus Endgeräte-Übersicht)</span>}
                     </div>
                     {isSkf ? (

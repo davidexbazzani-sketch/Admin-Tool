@@ -17,6 +17,8 @@ import { formatGermanDate } from '../../services/employees'
 import { modelTypeDisplay } from '../../services/endpointDevices'
 import type { PhoneEntry } from '../../services/phoneAssignment'
 import { loadConnData, forUser, type ConnScanData } from '../../services/printerConnections'
+import { DeviceInfoButton } from '../device/DeviceDossier'
+import { hostFromSerial } from '../../services/deviceMasterData'
 
 /** Relative Zeit + Datum, z. B. "vor 2 Tagen (12.08.2026)". */
 function fmtLastSeen(iso?: string): string {
@@ -312,7 +314,7 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
             rows.push(
               <div key={`inv_${it.id}`} className="flex items-center gap-2 py-1 pl-1">
                 <Laptop size={12} className="text-muted-foreground shrink-0" />
-                <span className="text-sm font-mono text-foreground">{it.name}</span>
+                <span className="inline-flex items-center gap-1"><span className="text-sm font-mono text-foreground">{it.name}</span>{it.name && <DeviceInfoButton hostname={it.name} />}</span>
                 {it.category && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted/30 text-muted-foreground border border-border">{it.category}</span>}
                 {it.description && <span className="text-xs text-muted-foreground truncate" title={it.description}>{it.description}</span>}
                 <span className="text-[10px] text-muted-foreground/60 ml-auto shrink-0">Inventar</span>
@@ -322,7 +324,7 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
             rows.push(
               <div key={`ep_${d.id}`} className="flex items-center gap-2 py-1 pl-1">
                 <Laptop size={12} className="text-muted-foreground shrink-0" />
-                <span className="text-sm font-mono text-foreground">{d.hostname || d.serial}</span>
+                <span className="inline-flex items-center gap-1"><span className="text-sm font-mono text-foreground">{d.hostname || d.serial}</span><DeviceInfoButton hostname={d.hostname || hostFromSerial(d.serial)} serial={d.serial} /></span>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted/30 text-muted-foreground border border-border">{modelTypeDisplay(d.model)}</span>
                 {d.serial && d.hostname && <span className="text-xs text-muted-foreground font-mono">SN {d.serial}</span>}
                 {d.retiredDate && <span className="text-xs text-muted-foreground">Leasing bis {d.retiredDate}</span>}
@@ -330,7 +332,7 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
               </div>)
           }
           if (dep?.deviceName) {
-            rows.push(<Row key="depdev" label="Gerät (Austritt)" value={<span className="font-mono">{dep.deviceName}{dep.deviceReturned ? ' · abgegeben' : ' · noch nicht abgegeben'}</span>} source="Mitarbeiterverwaltung" />)
+            rows.push(<Row key="depdev" label="Gerät (Austritt)" value={<span className="inline-flex items-center gap-1"><span className="font-mono">{dep.deviceName}{dep.deviceReturned ? ' · abgegeben' : ' · noch nicht abgegeben'}</span>{dep.deviceName && <DeviceInfoButton hostname={dep.deviceName} />}</span>} source="Mitarbeiterverwaltung" />)
           }
           return rows.length > 0 ? rows : <Empty text="Keine zugewiesene Hardware gefunden." />
         })()}

@@ -756,7 +756,7 @@ export default function UserPresence() {
                               <DnsBadge dnsProblem={d.dnsProblem} ip={d.ip} dnsIp={d.dnsIp} />
                               <span className="inline-flex items-center gap-1 text-[11px] text-emerald-300"><Wifi size={10} />aktiv angemeldet</span>
                             </div>
-                            <p className="text-[11px] mt-0.5 flex items-center gap-1.5 flex-wrap"><Monitor size={10} className="text-muted-foreground" /><span className="font-mono text-muted-foreground">{d.hostname}</span>{d.dnsProblem && d.dnsIp && <span className="text-red-300">· DNS zeigt auf {d.dnsIp}</span>}</p>
+                            <p className="text-[11px] mt-0.5 flex items-center gap-1.5 flex-wrap"><Monitor size={10} className="text-muted-foreground" /><span className="inline-flex items-center gap-1"><span className="font-mono text-muted-foreground">{d.hostname}</span>{d.hostname && <DeviceInfoButton hostname={d.hostname} />}</span>{d.dnsProblem && d.dnsIp && <span className="text-red-300">· DNS zeigt auf {d.dnsIp}</span>}</p>
                           </div>
                           <ActionButtons ip={d.ip} hostname={d.hostname} onQuery={goQuery} onRemote={goRemoteDoc} onDaylis={(ip, h) => goDaylis(ip, h, pickedUser)} />
                         </div>
@@ -848,7 +848,7 @@ export default function UserPresence() {
                         <td className="px-3 py-2 font-mono text-foreground">{f.sam}</td>
                         <td className="px-3 py-2 text-foreground">{f.displayName}{f.department && <span className="text-muted-foreground"> · {f.department}</span>}</td>
                         <td className="px-3 py-2 font-mono text-muted-foreground">
-                          {f.hostname}
+                          <span className="inline-flex items-center gap-1">{f.hostname}{f.hostname && <DeviceInfoButton hostname={f.hostname} />}</span>
                           {f.deviceType && <span title="Model-Typ aus der Endgeräte-Übersicht" className="ml-1.5 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/30 font-sans"><MonitorSmartphone size={9} />{f.deviceType}</span>}
                         </td>
                         <td className="px-3 py-2 text-center"><span className="text-[11px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-500/40 font-semibold">{f.count}×</span></td>
@@ -1161,7 +1161,7 @@ function WinrmView(p: WinrmViewProps) {
               {p.rows.map(r => (
                 <tr key={r.hostname} className={`border-b border-border/40 hover:bg-accent/10 ${r.status !== 'OK' ? 'bg-red-500/[0.03]' : ''}`}>
                   <td className="px-3 py-2">{statusBadge(r.status)}</td>
-                  <td className="px-3 py-2 font-mono text-foreground font-semibold">{r.hostname}</td>
+                  <td className="px-3 py-2 font-mono text-foreground font-semibold"><span className="inline-flex items-center gap-1">{r.hostname}{r.hostname && <DeviceInfoButton hostname={r.hostname} />}</span></td>
                   <td className="px-3 py-2 font-mono text-muted-foreground">{r.ip || <span className="text-muted-foreground/40 italic">—</span>}</td>
                   <td className="px-3 py-2 font-mono">{r.ptr ? <span className={r.status === 'MISMATCH' ? 'text-red-300' : 'text-muted-foreground'}>{r.ptr}</span> : <span className="text-muted-foreground/40 italic">kein PTR</span>}</td>
                   <td className="px-3 py-2">

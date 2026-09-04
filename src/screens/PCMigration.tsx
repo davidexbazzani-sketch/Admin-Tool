@@ -9,6 +9,7 @@ import {
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
 import { createLogger } from '../utils/activityLogger'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import type {
   MigrationPhase, MainTab, PcInfo, FolderEntry, SoftwareEntry,
   DriveEntry, PrinterEntry, SettingEntry, MigrationAnalysis,
@@ -989,7 +990,7 @@ export default function PCMigration() {
                 <div className="text-center pb-2 border-b border-border">
                   <p className="text-xs font-bold text-foreground tracking-wider">MIGRATIONS-ÜBERSICHT</p>
                   <p className="text-[10px] text-muted-foreground mt-1">
-                    {srcInfo.hostname} ({srcInfo.model}) → {dstInfo.hostname} ({dstInfo.model})
+                    <span className="inline-flex items-center gap-1">{srcInfo.hostname}{srcInfo.hostname && <DeviceInfoButton hostname={srcInfo.hostname} />}</span> ({srcInfo.model}) → <span className="inline-flex items-center gap-1">{dstInfo.hostname}{dstInfo.hostname && <DeviceInfoButton hostname={dstInfo.hostname} />}</span> ({dstInfo.model})
                   </p>
                   <p className="text-[10px] text-muted-foreground">User: {analysis.sourceUser}</p>
                 </div>

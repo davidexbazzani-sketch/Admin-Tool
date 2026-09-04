@@ -11,6 +11,7 @@ import { api } from '../electronAPI'
 import Spinner from '../components/Spinner'
 import { loadFavorites, saveFavorites, addSkill, removeSkill, isSkillFavorite } from '../utils/favorites'
 import type { FavoritesData } from '../types/favorites'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 
 const MSG_CATEGORY = 'Nachrichten versenden'
 
@@ -845,7 +846,7 @@ function ServiceCheckPanel({ hostnames }: ServiceCheckPanelProps) {
               <tbody className="divide-y divide-border">
                 {serviceResults.map((r, i) => (
                   <tr key={i} className="hover:bg-accent/20">
-                    <td className="px-3 py-2 font-mono text-foreground">{r.hostname}</td>
+                    <td className="px-3 py-2 font-mono text-foreground"><span className="inline-flex items-center gap-1">{r.hostname}{r.hostname && <DeviceInfoButton hostname={r.hostname} />}</span></td>
                     <td className="px-3 py-2 text-foreground">{r.displayName || r.serviceName}</td>
                     <td className="px-3 py-2">
                       {r.status === 'Running' || r.status === '4' ? (

@@ -52,6 +52,34 @@ export function buildBulkOnlineCheck(hostnames: string[]): string {
   ].join('\n')
 }
 
+/**
+ * Like buildBulkOnlineCheck, but checks all hosts IN PARALLEL via a runspace pool
+ * (≤10 concurrent — matches the tool's WinRM/parallel limits). Same output format
+ * ("HOST:OK:METHOD" / "HOST:OFFLINE"), so parseOnlineCheckLine works unchanged.
+ * Use this when the host list can be large (e.g. a whole department).
+ */
+export function buildParallelOnlineCheck(hostnames: string[]): string {
+  const list = hostnames.map(h => "'" + h.replace(/'/g, "''") + "'").join(',')
+  return [
+    "$ErrorActionPreference='SilentlyContinue'",
+    '$hosts=@(' + list + ')',
+    'if ($hosts.Count -eq 0) { return }',
+    '$sb={ param($h)',
+    '  $online=$false; $method="none"',
+    '  try { if ((New-Object System.Net.NetworkInformation.Ping).Send($h,1500).Status -eq "Success") { $online=$true; $method="Ping" } } catch {}',
+    '  if (-not $online) { try { $t=New-Object System.Net.Sockets.TcpClient; if ($t.ConnectAsync($h,445).Wait(2000)) { $online=$true; $method="SMB" }; $t.Close() } catch {} }',
+    '  if (-not $online) { try { $t=New-Object System.Net.Sockets.TcpClient; if ($t.ConnectAsync($h,135).Wait(2000)) { $online=$true; $method="RPC" }; $t.Close() } catch {} }',
+    '  if ($online) { return ($h + ":OK:" + $method) } else { return ($h + ":OFFLINE") }',
+    '}',
+    '$max=[Math]::Min(10,$hosts.Count); if ($max -lt 1) { $max=1 }',
+    '$pool=[runspacefactory]::CreateRunspacePool(1,$max); $pool.Open()',
+    '$hs=@(); $sbText=[string]$sb',
+    'foreach ($h in $hosts) { $ps=[powershell]::Create(); $ps.RunspacePool=$pool; [void]$ps.AddScript($sbText); [void]$ps.AddArgument($h); $hs += [pscustomobject]@{ P=$ps; H=$ps.BeginInvoke() } }',
+    'foreach ($x in $hs) { try { foreach ($o in $x.P.EndInvoke($x.H)) { if ($o) { Write-Output $o } } } catch {}; $x.P.Dispose() }',
+    '$pool.Close()',
+  ].join('\n')
+}
+
 /** Parse a single line from the bulk check output */
 export function parseOnlineCheckLine(line: string): { hostname: string; online: boolean; method: string } {
   const trimmed = line.trim()

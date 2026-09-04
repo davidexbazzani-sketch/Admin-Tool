@@ -121,6 +121,9 @@ export interface OnboardingSettings {
   selfHelpTiles: SelfHelpTile[]
   generalMails: GeneralMail[]
   filmPath: string   // UNC-Pfad zum Film (MP4 empfohlen, HTML möglich) — '' = kein Film
+  // Pro Feld ausblendbar: Schlüssel → true = dieser Inhalt wird beim Verteilen NICHT
+  // mitgegeben (Wert bleibt gespeichert). Schlüssel z. B. 'film','sharepoint','canteen','timeTracking'.
+  hidden: Record<string, boolean>
   updatedBy?: string
   updatedAt?: string
 }
@@ -244,6 +247,7 @@ export const DEFAULT_ONBOARDING_SETTINGS: OnboardingSettings = {
   selfHelpTiles: DEFAULT_SELF_HELP_TILES,
   generalMails: DEFAULT_GENERAL_MAILS,
   filmPath: '',
+  hidden: {},
 }
 
 export async function loadOnboardingSettings(): Promise<OnboardingSettings> {
@@ -263,6 +267,7 @@ export async function loadOnboardingSettings(): Promise<OnboardingSettings> {
         selfHelpTiles: Array.isArray(s.selfHelpTiles) ? structuredClone(s.selfHelpTiles) : buildDefaultSelfHelpTiles(mergedLinks),
         generalMails: Array.isArray(s.generalMails) ? s.generalMails : DEFAULT_GENERAL_MAILS,
         filmPath: typeof s.filmPath === 'string' ? s.filmPath : '',
+        hidden: (s.hidden && typeof s.hidden === 'object') ? s.hidden as Record<string, boolean> : {},
       }
       // Alte IT-Link-URLs in die Kacheln übernehmen (nur leere Kachel-URLs).
       fillTileUrlsFromLinks(merged.selfHelpTiles, mergedLinks)

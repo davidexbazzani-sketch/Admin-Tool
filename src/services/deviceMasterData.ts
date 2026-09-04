@@ -13,6 +13,7 @@
 import { api } from '../electronAPI'
 import { canonicalHost, isIpAddress } from './deviceDossier'
 import { loadDevices, type EndpointDevice } from './endpointDevices'
+import { normalizeSerial } from './hardwareInventory'
 import { loadConfig, loadIntegrationAccount } from './servicenow'
 import type { InventoryItem } from '../types/auth'
 
@@ -169,6 +170,161 @@ export async function findInstalledSoftware(hostname: string): Promise<SoftwareR
   return { software: [], found: false }
 }
 
+/**
+ * Liest das Software-Inventar EINMAL und liefert eine Map canonicalHost(host) -> Software[].
+ * Für Massen-Abgleiche (z.B. Übersichten) gedacht, damit die Netz-JSON nicht je Zeile
+ * neu gelesen wird (findInstalledSoftware liest sie je Aufruf).
+ */
+export async function loadSoftwareScanMap(): Promise<Map<string, InstalledSoftware[]>> {
+  const map = new Map<string, InstalledSoftware[]>()
+  try {
+    const data = await api().netReadJson<ScanFile>(SCAN_DATA_PATH)
+    for (const pc of data?.scannedPCs ?? []) {
+      if (pc?.hostname) map.set(canonicalHost(pc.hostname), Array.isArray(pc.software) ? pc.software : [])
+    }
+  } catch { /* Quelle optional */ }
+  return map
+}
+
+// ── Checklisten-Geräteinfos (für die Übersicht) ───────────────────────────────
+// Pro Checkliste:
+//   • newModel     = Modell des NEUEN Geräts (per newDeviceSerial aus der Endgeräte-Übersicht)
+//   • oldComments  = Asset-Kommentar des ALTGERÄTS (aus der Endgeräte-Übersicht)
+//   • software     = relevante Programme (SolidWorks/COSCOM/MATLAB), die auf dem ALTGERÄT
+//                    erkannt wurden — über den per Namenskonvention gebildeten Hostnamen
+//                    (DE/DEHAM + Serial) im Software-Inventar nachgeschlagen.
+// Rein cache-basiert (zwei netzgecachte JSON), kein WinRM.
+
+export interface ChecklistDeviceInfo {
+  newModel?: string         // Modell des neuen Geräts
+  newHostname?: string      // aufgelöster Hostname des NEUEN Geräts (für das Geräte-Dossier)
+  newSerial?: string        // Seriennummer des NEUEN Geräts
+  oldComments?: string      // Kommentar zum Altgerät
+  oldHostname?: string      // aufgelöster Hostname des Altgeräts (für das Geräte-Dossier)
+  oldSerial?: string        // Seriennummer des Altgeräts
+  software: string[]        // gematchte Labels aus RELEVANTE_SW (z.B. ['SolidWorks','MATLAB'])
+  inSwInventar: boolean     // Altgerät war (frisch) im Software-Inventar → software-Liste ist belastbar
+}
+
+export interface ChecklistDeviceQuery {
+  key: string               // eindeutiger Schlüssel (Checklisten-ID)
+  newSerial?: string        // Seriennummer/Hostname des neuen Geräts
+  oldId?: string            // Seriennummer/Hostname des Altgeräts (nur bei Refresh)
+}
+
+// Relevante Programme, die in der Checklisten-Übersicht angezeigt werden.
+const RELEVANTE_SW: { label: string; rx: RegExp }[] = [
+  { label: 'SolidWorks', rx: /solidworks/i },
+  { label: 'COSCOM', rx: /coscom/i },
+  { label: 'MATLAB', rx: /matlab|mathworks/i },
+  { label: 'EPLAN', rx: /eplan/i },
+  { label: 'MATRIX', rx: /\bmatrix\b/i },
+  { label: 'FSPP', rx: /\bfspp\b/i },
+  { label: 'CorelDRAW', rx: /coreldraw/i },
+]
+
+// Vereinfachte Labels der bekannten Programme — auch für die manuelle Auswahl in der UI.
+export const BEKANNTE_SOFTWARE: string[] = RELEVANTE_SW.map(w => w.label)
+
+function istHostname(s: string): boolean {
+  return /^(DEHAM|DESCH|DE)[A-Z0-9]/.test(s.trim().toUpperCase().replace(/\s+/g, ''))
+}
+
+/** Hostname-Kandidaten (DE/DEHAM + Serial) bzw. der Wert selbst, falls schon ein Hostname. */
+function hostKandidaten(id: string): string[] {
+  const s = id.trim().toUpperCase().replace(/\s+/g, '')
+  if (!s) return []
+  if (istHostname(s)) return [s]
+  return ['DE' + s, 'DEHAM' + s]
+}
+
+export async function loadChecklistDeviceInfos(rows: ChecklistDeviceQuery[]): Promise<Map<string, ChecklistDeviceInfo>> {
+  const out = new Map<string, ChecklistDeviceInfo>()
+  const clean = (rows || []).filter(r => r && r.key)
+  if (!clean.length) return out
+
+  // Beide Quellen je EINMAL laden.
+  const [devices, swMap] = await Promise.all([
+    loadDevices().catch(() => [] as EndpointDevice[]),
+    loadSoftwareScanMap(),
+  ])
+
+  // Lookup-Maps über die Endgeräte-Übersicht.
+  const bySerial = new Map<string, EndpointDevice>()
+  const byHost = new Map<string, EndpointDevice>()
+  for (const d of devices) {
+    const s = normalizeSerial(d.serial)
+    if (s && !bySerial.has(s)) bySerial.set(s, d)
+    const h = canonicalHost(d.hostname)
+    if (h && !byHost.has(h)) byHost.set(h, d)
+  }
+
+  // Gerät zu einer Serial/Hostname-Kennung finden (Serial zuerst, dann Hostname-Kandidaten).
+  const findDev = (id: string | undefined): EndpointDevice | null => {
+    const s = (id || '').trim()
+    if (!s) return null
+    const serial = istHostname(s) ? serialFromHostname(s) : normalizeSerial(s)
+    if (serial) { const m = bySerial.get(serial); if (m) return m }
+    for (const h of hostKandidaten(s)) { const m = byHost.get(canonicalHost(h)); if (m) return m }
+    return null
+  }
+
+  const hostAus = (id: string | undefined, dev: EndpointDevice | null): string | undefined => {
+    const s = (id || '').trim()
+    if (dev?.hostname) return dev.hostname
+    if (!s) return undefined
+    return istHostname(s) ? s.toUpperCase().replace(/\s+/g, '') : 'DE' + normalizeSerial(s)
+  }
+  const serialAus = (id: string | undefined, dev: EndpointDevice | null): string | undefined => {
+    const s = (id || '').trim()
+    if (dev?.serial) return dev.serial
+    if (!s) return undefined
+    return (istHostname(s) ? serialFromHostname(s) : normalizeSerial(s)) || undefined
+  }
+
+  for (const r of clean) {
+    // Neues Gerät: Modell + aufgelöster Hostname/Serial (für das „i"-Dossier).
+    const newDev = findDev(r.newSerial)
+
+    // Altgerät: Hostname/Serial + Kommentar + installierte relevante Software.
+    let inSwInventar = false
+    let software: string[] = []
+    let oldComments: string | undefined
+    let oldHostname: string | undefined
+    let oldSerial: string | undefined
+    if (r.oldId && r.oldId.trim()) {
+      const oldDev = findDev(r.oldId)
+      oldComments = oldDev?.comments || undefined
+      // Hostname für das Geräte-Dossier: bevorzugt aus der Endgeräte-Übersicht,
+      // sonst der Wert selbst (falls Hostname) bzw. per Konvention DE+Serial.
+      oldHostname = hostAus(r.oldId, oldDev)
+      oldSerial = serialAus(r.oldId, oldDev)
+      for (const h of hostKandidaten(r.oldId)) {
+        const list = swMap.get(canonicalHost(h))
+        if (list) {
+          inSwInventar = true
+          software = RELEVANTE_SW
+            .filter(w => list.some(s => w.rx.test(s.DisplayName || '') || w.rx.test(s.Publisher || '')))
+            .map(w => w.label)
+          break
+        }
+      }
+    }
+
+    out.set(r.key, {
+      newModel: newDev?.model || undefined,
+      newHostname: hostAus(r.newSerial, newDev),
+      newSerial: serialAus(r.newSerial, newDev),
+      oldComments,
+      oldHostname,
+      oldSerial,
+      software,
+      inSwInventar,
+    })
+  }
+  return out
+}
+
 // ── 5) ServiceNow (CMDB-CI + Tickets) ─────────────────────────────────────────
 
 /** ServiceNow liefert bei sysparm_display_value=all pro Feld { display_value, value }. */
@@ -323,4 +479,14 @@ export function serialFromHostname(hostname: string): string {
     : h.startsWith('DE') ? h.slice(2)
     : ''
   return /^[A-Z0-9]{5,}$/.test(rest) ? rest : ''
+}
+
+// ── Hostname aus einer Seriennummer bilden (Namenskonvention DE + Serial) ─────
+// Ist der Wert bereits ein Hostname (beginnt mit DE/DEHAM/DESCH), bleibt er
+// unverändert. Leerer/ungültiger Wert → '' (DeviceInfoButton rendert dann nichts).
+// Für das „i"-Dossier hinter reinen Seriennummern im ganzen Tool.
+export function hostFromSerial(serial: string): string {
+  const s = (serial || '').trim().toUpperCase().replace(/\s+/g, '')
+  if (!s) return ''
+  return /^(DEHAM|DESCH|DE)[A-Z0-9]/.test(s) ? s : 'DE' + s
 }

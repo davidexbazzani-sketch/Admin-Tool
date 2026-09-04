@@ -97,7 +97,14 @@ function footer(doc: jsPDF, label: string) {
   }
 }
 
-function laufBody(w: ReturnType<typeof makeWriter>, lauf: SwLauf, mitText: boolean, onScriptPage?: (scriptIndex: number, seite: number) => void) {
+function laufBody(
+  w: ReturnType<typeof makeWriter>, lauf: SwLauf, mitText: boolean,
+  onScriptPage?: (scriptIndex: number, seite: number) => void,
+  // Server-Skripte laufen bei einem Sammellauf einmal für alle PCs (identischer
+  // Bericht). Nur EIN PC druckt den vollständigen Serverbericht; die übrigen bekommen
+  // hier einen kurzen Verweis (spart bei 10 PCs neun Kopien desselben Berichts).
+  serverBody: { voll: boolean; refPc?: string } = { voll: true },
+) {
   if (lauf.auffaelligkeiten.length) {
     w.heading('Auffälligkeiten', 11)
     for (const a of lauf.auffaelligkeiten) w.text('• ' + a, { size: 9, color: [155, 55, 20], indent: 2 })
@@ -120,6 +127,11 @@ function laufBody(w: ReturnType<typeof makeWriter>, lauf: SwLauf, mitText: boole
     const len = (s.textBericht || '').length
     w.heading(`${s.titel} (${s.ziel})${s.ok ? '' : ' — FEHLER'}${s.ok && len ? ` — ${len.toLocaleString('de-DE')} Zeichen` : ''}`, 11)
     onScriptPage?.(si, w.pageNo())   // Startseite dieses Skripts (fürs Inhaltsverzeichnis)
+    // Server-Bericht nur beim Referenz-PC vollständig; sonst kurzer Verweis.
+    if (s.ziel === 'server' && !serverBody.voll) {
+      w.text(`Serverbericht ist für alle PCs identisch (einmal ausgeführt).${serverBody.refPc ? ` Vollständig unter „${serverBody.refPc}" (Abschnitt 1).` : ''}`, { size: 8.5, color: [110, 110, 110], indent: 2 })
+      return
+    }
     if (!s.ok) { w.text(s.fehler || 'Fehler', { color: [180, 40, 40] }); return }
     if (!len) { w.text('(kein Textbericht vorhanden)', { color: [150, 100, 40] }); return }
     try { w.text(s.textBericht, { size: 7.2, font: 'courier', color: [60, 60, 60] }) }
@@ -250,11 +262,16 @@ function renderBody(
   w: ReturnType<typeof makeWriter>, sorted: SwLauf[], mitEinzel: boolean,
   record?: (key: string, seite: number) => void, besitzer?: BesitzerMap,
 ) {
+  // Referenz-PC für den (identischen) Serverbericht = erster PC, der ein Server-Skript
+  // hat. Nur dieser druckt ihn vollständig; die übrigen verweisen darauf.
+  const serverRef = sorted.findIndex(l => l.skripte.some(s => s.ziel === 'server'))
+  const refPc = serverRef >= 0 ? sorted[serverRef].pc : undefined
   sorted.forEach((l, i) => {
     if (i > 0) w.newPage()
     record?.(String(i), w.pageNo())
     pcKopf(w, l, i, besitzer)
-    laufBody(w, l, mitEinzel, record ? (si, page) => record(`${i}:${si}`, page) : undefined)
+    laufBody(w, l, mitEinzel, record ? (si, page) => record(`${i}:${si}`, page) : undefined,
+      { voll: i === serverRef, refPc })
   })
   w.newPage()
   record?.('sammel', w.pageNo())
@@ -317,4 +334,63 @@ export async function savePdf(doc: jsPDF, defaultName: string): Promise<boolean>
   if (!path) return false
   const r = await api().writeFile(path, pdfBase64(doc))
   return !!r.success
+}
+
+// ── Änderungsbericht (SolidWorks-Analyse „Ausgewählte beseitigen") ─────────────
+export interface AenderungsBerichtEintrag {
+  titel: string
+  kategorie: string          // z. B. „lokal setzbar (Anwenderprofil)", „Energieplan", „SMB-Client"
+  fundort?: string
+  alt: string                // Wert VORHER
+  neu: string                // Wert NACHHER
+  ok: boolean
+  fehler?: string
+}
+export interface AenderungsBericht {
+  host: string
+  benutzer?: string
+  swVersion?: string
+  at: string                 // ISO
+  by: string                 // Bearbeiter (Tool-Nutzer)
+  gesamt: number             // gewählte Änderungen
+  ok: number                 // erfolgreich gesetzt
+  gesichert?: boolean        // Altwerte gesichert/wiederherstellbar
+  eintraege: AenderungsBerichtEintrag[]
+}
+
+/** Änderungsbericht der SolidWorks-Analyse als PDF: welche Einstellungen (alt → neu) gesetzt wurden. */
+export function buildAenderungsPdf(r: AenderungsBericht): jsPDF {
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+  const w = makeWriter(doc)
+  w.heading('SolidWorks-Analyse — Änderungsbericht', 15)
+  w.text(`PC: ${r.host}${r.benutzer ? '    ·    Anwender: ' + r.benutzer : ''}${r.swVersion ? '    ·    SOLIDWORKS: ' + r.swVersion : ''}`, { size: 9, color: [110, 110, 110] })
+  w.text(`${fmt(r.at)}    ·    Bearbeiter: ${r.by}`, { size: 8.5, color: [130, 130, 130] })
+  w.gap(2)
+  w.text(`${r.ok} von ${r.gesamt} Einstellung(en) erfolgreich geändert.${r.gesichert ? ' Die ursprünglichen Werte wurden gesichert und lassen sich jederzeit wiederherstellen.' : ''}`,
+    { size: 9.5, style: 'bold', color: r.ok === r.gesamt ? [40, 130, 60] : [155, 100, 20] })
+
+  const okE = r.eintraege.filter(e => e.ok)
+  const feE = r.eintraege.filter(e => !e.ok)
+
+  w.heading(`Vorgenommene Änderungen (${okE.length})`, 12)
+  if (!okE.length) w.text('Keine.', { size: 9, color: [120, 120, 120], indent: 2 })
+  okE.forEach((e, i) => {
+    w.text(`${i + 1}.  ${e.titel}`, { size: 9, style: 'bold', color: [30, 30, 30] })
+    w.text(`Bereich: ${e.kategorie}`, { size: 8, color: [110, 110, 110], indent: 4 })
+    w.text(`Alt: ${e.alt || '(nicht gesetzt)'}   →   Neu: ${e.neu}`, { size: 8.5, font: 'courier', color: [40, 90, 50], indent: 4 })
+    if (e.fundort) w.text(`Fundort: ${e.fundort}`, { size: 7, font: 'courier', color: [140, 140, 140], indent: 4 })
+    w.gap(1)
+  })
+
+  if (feE.length) {
+    w.heading(`Nicht geändert / fehlgeschlagen (${feE.length})`, 12)
+    feE.forEach((e, i) => {
+      w.text(`${i + 1}.  ${e.titel}`, { size: 9, style: 'bold', color: [150, 40, 40] })
+      w.text(`Bereich: ${e.kategorie}${e.fehler ? '    ·    Grund: ' + e.fehler : ''}`, { size: 8, color: [150, 80, 80], indent: 4 })
+      w.gap(1)
+    })
+  }
+
+  footer(doc, `SolidWorks-Analyse · Änderungsbericht · ${r.host} · ${fmt(r.at)}`)
+  return doc
 }

@@ -17,6 +17,9 @@ import { listLaeufe, loadLauf, setReferenz, deleteLauf, loadForExport, loadRecen
 import { buildExport } from './export'
 import { buildLaufPdf, buildSammelPdf, savePdf, pdfBase64, laufDateiStamm, type BesitzerMap } from './pdf'
 import { probeHosts, type HostStatus } from './statusProbe'
+import SwAnalyse from './SwAnalyse'
+import { analysiere } from './analyse'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import type { SwLauf, SwLaufIndexItem, SwKennwerte } from './swCheck.types'
 
 function utf8ToBase64(text: string): string {
@@ -37,6 +40,8 @@ function SwBadge({ state }: { state: HostStatus['sw'] }) {
 // ── Einzelergebnis eines Laufs ────────────────────────────────────────────────
 function LaufErgebnis({ lauf, besitzerMap }: { lauf: SwLauf; besitzerMap?: BesitzerMap }) {
   const [copied, setCopied] = useState('')
+  const [analyseOffen, setAnalyseOffen] = useState(false)
+  const befundZahl = useMemo(() => analysiere(lauf).length, [lauf])
   const copy = (id: string, text: string) => { navigator.clipboard.writeText(text).then(() => { setCopied(id); setTimeout(() => setCopied(''), 1500) }) }
   const stem = laufDateiStamm(lauf, besitzerMap)   // SWDiagnose_<PC>_<Anwender>_<Zeit>
   async function exportTxt() {
@@ -50,10 +55,16 @@ function LaufErgebnis({ lauf, besitzerMap }: { lauf: SwLauf; besitzerMap?: Besit
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-3 flex-wrap bg-card border border-border rounded-lg p-3">
-        <span className="text-sm font-semibold text-foreground font-mono">{lauf.pc}</span>
+        <span className="inline-flex items-center gap-1"><span className="text-sm font-semibold text-foreground font-mono">{lauf.pc}</span>{lauf.pc && <DeviceInfoButton hostname={lauf.pc} />}</span>
         <span className="text-[11px] text-muted-foreground">{fmt(lauf.ranAt)} · {(lauf.dauerMs / 1000).toFixed(0)}s</span>
         <span className={`text-xs ${lauf.auffaelligkeiten.length ? 'text-amber-400' : 'text-emerald-400'}`}>{lauf.auffaelligkeiten.length} Auffälligkeiten</span>
-        <button onClick={() => copy('all', alleText)} className="ml-auto flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border border-border hover:bg-accent text-muted-foreground">{copied === 'all' ? <Check size={11} /> : <Copy size={11} />}Bericht kopieren</button>
+        {befundZahl > 0 && (
+          <button onClick={() => setAnalyseOffen(true)} title="Befunde auflisten und direkt auf dem Ziel-PC beheben (mit Backup)"
+            className="ml-auto flex items-center gap-1 px-2.5 py-1 text-[11px] rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90">
+            <Wrench size={11} />Analyse öffnen ({befundZahl})
+          </button>
+        )}
+        <button onClick={() => copy('all', alleText)} className={`${befundZahl > 0 ? '' : 'ml-auto'} flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border border-border hover:bg-accent text-muted-foreground`}>{copied === 'all' ? <Check size={11} /> : <Copy size={11} />}Bericht kopieren</button>
         <button onClick={exportPdf} className="flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border border-border hover:bg-accent text-muted-foreground"><FileDown size={11} />PDF</button>
         <button onClick={exportTxt} className="flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border border-border hover:bg-accent text-muted-foreground"><FileDown size={11} />TXT</button>
       </div>
@@ -86,6 +97,8 @@ function LaufErgebnis({ lauf, besitzerMap }: { lauf: SwLauf; besitzerMap?: Besit
           )}
         </div>
       ))}
+
+      {analyseOffen && <SwAnalyse lauf={lauf} onClose={() => setAnalyseOffen(false)} />}
     </div>
   )
 }
@@ -105,7 +118,7 @@ function VergleichAnsicht({ a, b }: { a: SwLauf; b: SwLauf }) {
   return (
     <div className="space-y-3">
       <div className="rounded-lg border border-border bg-card p-3 text-xs text-muted-foreground">
-        Vergleich <span className="font-mono text-foreground">{a.pc}</span> {fmt(a.ranAt)} ↔ {fmt(b.ranAt)}
+        Vergleich <span className="inline-flex items-center gap-1"><span className="font-mono text-foreground">{a.pc}</span>{a.pc && <DeviceInfoButton hostname={a.pc} />}</span> {fmt(a.ranAt)} ↔ {fmt(b.ranAt)}
       </div>
       {(nurNeu.length > 0 || behoben.length > 0) && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -374,7 +387,7 @@ export default function SolidWorksDiagnose({ onBack }: { onBack: () => void }) {
                     <input type="checkbox" checked={selected.has(d.hostname)} onChange={() => toggle(d.hostname)} className="accent-primary" />
                     <span title={st ? (st.online ? 'Online' : 'Offline') : 'nicht geprüft'} className={`w-2.5 h-2.5 rounded-full shrink-0 ${st ? (st.online ? 'bg-emerald-400' : 'bg-red-500') : 'bg-muted-foreground/40'}`} />
                     <Server size={12} className="text-muted-foreground shrink-0" />
-                    <span className="font-mono text-foreground">{d.hostname}</span>
+                    <span className="inline-flex items-center gap-1"><span className="font-mono text-foreground">{d.hostname}</span>{d.hostname && <DeviceInfoButton hostname={d.hostname} />}</span>
                     <span className="text-muted-foreground truncate">· {d.assignedTo || 'nicht zugewiesen'}</span>
                     {st?.online && <SwBadge state={st.sw} />}
                     <span className="ml-auto text-[10px] text-muted-foreground shrink-0">{d.state || '—'}{d.substate ? ` / ${d.substate}` : ''}</span>
@@ -456,7 +469,7 @@ export default function SolidWorksDiagnose({ onBack }: { onBack: () => void }) {
                 <button key={i} onClick={() => { const l = ergebnisse.find(e => e.pc === r.pc); if (l) { setHistoryLauf(null); setOffenPc(r.pc); void refreshHistory(r.pc) } }}
                   className={`w-full text-left flex items-center gap-2 text-[11px] px-2 py-1 rounded ${offenPc === r.pc ? 'bg-accent/40' : 'hover:bg-accent/20'}`}>
                   {r.ok ? <CheckCircle size={11} className="text-emerald-400" /> : <XCircle size={11} className="text-red-400" />}
-                  <span className="font-mono text-foreground">{r.pc}</span>
+                  <span className="inline-flex items-center gap-1"><span className="font-mono text-foreground">{r.pc}</span>{r.pc && <DeviceInfoButton hostname={r.pc} />}</span>
                   <span className={r.ok ? 'text-muted-foreground' : 'text-red-300'}>· {r.text}</span>
                 </button>
               ))}
