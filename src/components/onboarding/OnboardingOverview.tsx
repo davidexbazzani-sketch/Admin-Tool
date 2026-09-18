@@ -12,7 +12,8 @@ import {
 } from 'lucide-react'
 import { api } from '../../electronAPI'
 import { useAuthStore } from '../../store/authStore'
-import { listEmployees, daysUntil, formatGermanDate, type Employee } from '../../services/employees'
+import { listEmployees, updateEmployee, daysUntil, formatGermanDate, type Employee } from '../../services/employees'
+import { listChecklists, type Checklist } from '../../services/checklists'
 import { loadDevices, type EndpointDevice } from '../../services/endpointDevices'
 import { samePerson } from '../../services/personMasterData'
 import { loadDeployments, type OnboardingDeployment } from '../../services/onboarding'
@@ -70,13 +71,15 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const [emps, deployments, inventory, endpoint] = await Promise.all([
+      const [emps, deployments, inventory, endpoint, checklists] = await Promise.all([
         listEmployees(),
         loadDeployments(),
         api().netReadJson<InventoryItem[]>('inventory/inventory.json').catch(() => null),
         loadDevices().catch(() => [] as EndpointDevice[]),
+        listChecklists().catch(() => [] as Checklist[]),
       ])
       const inv = Array.isArray(inventory) ? inventory : []
+      const pendingWrites: { id: string; serial: string }[] = []   // „hinterlegen": Serial aus Neu-Checkliste ins Mitarbeiter-Feld
       const out: Row[] = emps.map(emp => {
         const fullName = `${emp.vorname} ${emp.name}`.trim()
         const gid = (emp.globalId || '').trim().toLowerCase()
@@ -94,11 +97,23 @@ export default function OnboardingOverview({ onDeploy, onDeployExisting }: {
             (gid && d.assignedTo.trim().toLowerCase() === gid)
           if (match && (d.hostname || d.serial)) hosts.add((d.hostname || d.serial).trim().toUpperCase())
         }
+        // Neu-Gerät aus der passenden Checkliste (deviceType 'new') → DE + Seriennummer.
+        const cl = checklists.find(c => c.deviceType === 'new' && (c.newDeviceSerial || '').trim() &&
+          ((c.corpId && gid && c.corpId.trim().toLowerCase() === gid) || samePerson(c.name || '', fullName)))
+        if (cl) {
+          const clSerial = (cl.newDeviceSerial || '').trim()
+          const h = hostFromSerial(clSerial)
+          if (h) hosts.add(h)
+          // „hinterlegen": Serial dauerhaft am Mitarbeiter speichern, falls dort noch keine steht.
+          if (clSerial && !(emp.hardwareSerial || '').trim()) pendingWrites.push({ id: emp.id, serial: clSerial })
+        }
         const lastDeploy = deployments.find(x =>
           (x.employeeId && x.employeeId === emp.id) || samePerson(x.personName, fullName))
         return { emp, hosts: [...hosts], lastDeploy }
       })
       setRows(out)
+      // Serials aus den Neu-Checklisten idempotent hinterlegen (nur wenn Feld leer war).
+      if (pendingWrites.length) void Promise.all(pendingWrites.map(w => updateEmployee(w.id, { hardwareSerial: w.serial }).catch(() => ({ ok: false }))))
     } finally {
       setLoading(false)
     }

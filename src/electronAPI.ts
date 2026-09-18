@@ -34,6 +34,8 @@ declare global {
       writeFile(filePath: string, dataBase64: string): Promise<{ success: boolean; error?: string }>
       /** Gebuendeltes App-Asset (public/ bzw. dist/) als Base64 — fetch() ist im file://-Build blockiert. */
       readAsset(rel: string): Promise<{ success: boolean; data?: string; error?: string }>
+      /** OCR eines Screenshots (Base64-PNG) offline via Windows.Media.Ocr — für „Zuweisung Tickets". */
+      ocrImage(base64Png: string): Promise<{ ok: boolean; text?: string; error?: string }>
 
       // Settings
       getSettings(): Promise<Record<string, unknown>>
@@ -68,6 +70,11 @@ declare global {
         query?: string; fields?: string; limit?: number; body?: unknown
         auth?: { user: string; pass: string }   // Integrationskonto (Basic Auth); ohne = SSO-Sitzung
       }): Promise<{ success: boolean; status?: number; data?: unknown; error?: string; needsLogin?: boolean }>
+      /** Datei-Anhang an einen ServiceNow-Datensatz hochladen (Attachment-API, binär). */
+      serviceNowAttach(opts: {
+        instanceUrl: string; table: string; sysId: string; fileName: string; contentType?: string; dataBase64: string
+        auth?: { user: string; pass: string }
+      }): Promise<{ success: boolean; status?: number; sysId?: string; error?: string; needsLogin?: boolean }>
       serviceNowCertDiag(): Promise<{
         at: string; url: string; count: number
         certs: { subjectName: string; issuerName: string; validExpiry: number }[]

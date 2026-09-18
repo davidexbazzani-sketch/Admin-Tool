@@ -8,8 +8,9 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   HardDriveDownload, Play, Loader, Server, CheckCircle, XCircle,
   AlertTriangle, Cpu, ShieldAlert, Info, Download, Wifi, FileDown, ClipboardCheck, Search, User, RefreshCw,
-  ChevronDown, Building2,
+  ChevronDown, Building2, ArrowLeft, Rocket, ListChecks,
 } from 'lucide-react'
+import RolloutView from '../components/driverRollout/RolloutView'
 import { useAuthStore } from '../store/authStore'
 import { api } from '../electronAPI'
 import { loadDevices, classifyModel, MODEL_CATEGORIES, type EndpointDevice } from '../services/endpointDevices'
@@ -61,7 +62,7 @@ function statusBadge(it: DriverItem): { badge: string; label: string } {
   return STATUS_STYLE[it.status]
 }
 
-export default function TreiberInstallation() {
+function PcAuswahlView({ onBack }: { onBack: () => void }) {
   const session = useAuthStore(s => s.session)
   const by = session?.user.displayName || session?.user.username || 'unbekannt'
 
@@ -211,6 +212,7 @@ export default function TreiberInstallation() {
   const [firmwareAckd, setFirmwareAckd] = useState(false)
   const [biosDialog, setBiosDialog] = useState<{ host: string; item: DriverItem } | null>(null)
   const [rebootMode, setRebootMode] = useState<'notify' | 'reboot'>('notify')
+  const [notifyUser, setNotifyUser] = useState(true)   // Benutzer am Ziel-PC vorher/nachher benachrichtigen
   const [activateHost, setActivateHost] = useState<string | null>(null)   // WinRM-Aktivierung (wie Remote Doc)
   // Je PC: nicht-anwendbare Treiber trotzdem anhakbar machen (Sonderfälle).
   const [forceHosts, setForceHosts] = useState<Set<string>>(new Set())
@@ -317,7 +319,7 @@ export default function TreiberInstallation() {
       items: r.items.filter(it => checked.has(keyOf(r.hostname, it.softpaqId))),
     })).filter(p => p.items.length)
     if (!plan.length) return
-    void startDeploy(plan, { rebootMode, by })
+    void startDeploy(plan, { rebootMode, by, notifyUser })
   }
 
   // Abschluss-Übersicht (nach Installation + Nachprüfung).
@@ -336,12 +338,16 @@ export default function TreiberInstallation() {
   return (
     <div className="flex flex-col h-full">
       <div className="shrink-0 px-6 py-3 border-b border-border flex items-center gap-3">
+        <button onClick={onBack} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30"><ArrowLeft size={12} />Zurück</button>
         <HardDriveDownload size={18} className="text-primary" />
-        <h2 className="text-base font-bold text-foreground">Treiber-Installation</h2>
+        <h2 className="text-base font-bold text-foreground">Treiber-Installation · PC Auswahl</h2>
         <span className="text-[11px] text-muted-foreground">HP-Flotte · Live-Katalog von HP (HPCMSL)</span>
         <div className="ml-auto flex items-center gap-2">
           <label className="flex items-center gap-1 text-[11px] text-muted-foreground"><input type="radio" checked={rebootMode === 'notify'} onChange={() => setRebootMode('notify')} className="accent-primary" />Nur Hinweis</label>
           <label className="flex items-center gap-1 text-[11px] text-muted-foreground"><input type="radio" checked={rebootMode === 'reboot'} onChange={() => setRebootMode('reboot')} className="accent-primary" />Neustart (2 Min.)</label>
+          <label className="flex items-center gap-1 text-[11px] text-muted-foreground border-l border-border pl-2" title="Dem am Ziel-PC angemeldeten Benutzer vor und nach der Installation eine Nachricht senden. Aus = still im Hintergrund.">
+            <input type="checkbox" checked={notifyUser} onChange={e => setNotifyUser(e.target.checked)} className="accent-primary" />Benutzer benachrichtigen
+          </label>
           <button onClick={install} disabled={selectedCount === 0} title="Gewählte Treiber auf den Ziel-PCs installieren (weitere PCs können auch während laufender Installation gestartet werden)" className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-blue-500/40 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 disabled:opacity-40">
             {busy ? <Loader size={12} className="animate-spin" /> : <Download size={12} />}Installieren ({selectedCount})
           </button>
@@ -765,6 +771,40 @@ export default function TreiberInstallation() {
           onCancel={() => setActivateHost(null)}
         />
       )}
+    </div>
+  )
+}
+
+// ── Landing mit zwei Kacheln: „PC Auswahl" (bisher) + „Rollout" (neu) ─────────
+export default function TreiberInstallation() {
+  const session = useAuthStore(s => s.session)
+  const by = session?.user.displayName || session?.user.username || 'unbekannt'
+  const [view, setView] = useState<'landing' | 'auswahl' | 'rollout'>('landing')
+
+  if (view === 'auswahl') return <PcAuswahlView onBack={() => setView('landing')} />
+  if (view === 'rollout') return <RolloutView by={by} onBack={() => setView('landing')} />
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="shrink-0 px-6 py-3 border-b border-border flex items-center gap-3">
+        <HardDriveDownload size={18} className="text-primary" />
+        <h2 className="text-base font-bold text-foreground">Treiber-Installation</h2>
+        <span className="text-[11px] text-muted-foreground">HP-Flotte · Live-Katalog von HP (HPCMSL)</span>
+      </div>
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
+          <button onClick={() => setView('auswahl')}
+            className="text-left rounded-xl border border-border bg-card p-5 hover:border-primary/50 hover:bg-accent/10 transition-colors">
+            <div className="flex items-center gap-2 mb-2"><ListChecks size={20} className="text-primary" /><h3 className="text-base font-semibold text-foreground">PC Auswahl</h3></div>
+            <p className="text-sm text-muted-foreground">PCs auswählen, auf veraltete Treiber scannen und gewählte Treiber sofort installieren — wie bisher (inkl. BIOS/Firmware opt-in).</p>
+          </button>
+          <button onClick={() => setView('rollout')}
+            className="text-left rounded-xl border border-border bg-card p-5 hover:border-primary/50 hover:bg-accent/10 transition-colors">
+            <div className="flex items-center gap-2 mb-2"><Rocket size={20} className="text-primary" /><h3 className="text-base font-semibold text-foreground">Rollout</h3></div>
+            <p className="text-sm text-muted-foreground">PCs bequem auswählen (Hostname · Benutzer · Abteilung · Vorgesetzter) und veraltete Treiber geplant, unbeaufsichtigt und wiederholbar verteilen — <b>ohne BIOS/Firmware</b>. Nicht erreichte PCs werden bis zum Erfolg erneut versucht.</p>
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

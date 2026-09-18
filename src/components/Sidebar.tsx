@@ -4,7 +4,8 @@ import {
   ChevronRight, UserSearch, Users, FileText, MapPin, Clock,
   Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen, Package, Stethoscope, PackagePlus, MonitorPlay, PhoneCall,
   Building2, Network, ClipboardList, FolderKanban, ScanSearch, Wifi, CalendarClock, Boxes, Cable, UserPlus, ChevronDown, MonitorSmartphone, Ticket,
-  DatabaseBackup, BatteryCharging, Rocket, Radar, Cpu, Server, HardDriveDownload,
+  DatabaseBackup, BatteryCharging, Rocket, Radar, Cpu, Server, HardDriveDownload, Factory, Gamepad2, ClipboardCheck, Building,
+  GripVertical, RotateCcw, Check as CheckIcon, LifeBuoy,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
@@ -13,8 +14,9 @@ import { api } from '../electronAPI'
 import type { Screen } from '../types'
 import FavoritesPanel from './FavoritesPanel'
 import { loadUserMenuOverrides, getHiddenForUser } from '../services/userMenuVisibility'
+import { loadUserMenuOrders, getOrderForUser, saveUserMenuOrder, clearUserMenuOrder, type MenuOrderEntry } from '../services/userMenuOrder'
 import { PDF_TOOLS_ENABLED } from '../pdftools/config'
-import { MENU_CATALOG } from '../utils/menuCatalog'
+import { MENU_CATALOG, type MenuCatalogItem } from '../utils/menuCatalog'
 import { parseMenuVisibility, computeMenuVisible } from '../utils/menuVisibility'
 
 // Icons je Menüpunkt (Datenliste kommt aus dem zentralen menuCatalog).
@@ -23,12 +25,16 @@ const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'gpu-driver-mgmt': <Cpu size={18} />,
   'location-overview': <MapPin size={18} />,
   'access-points': <Wifi size={18} />,
+  'ot-devices': <Factory size={18} />,
+  'pruffeld-zoll': <ClipboardCheck size={18} />,
+  'verwaltungsgebaeude': <Building size={18} />,
   'departments-overview': <Building2 size={18} />,
   'organization-structure': <Network size={18} />,
   'user-overview': <Users size={18} />,
   'user-info': <UserSearch size={18} />,
   'gruppen-suche': <ScanSearch size={18} />,
   'checklists': <ClipboardList size={18} />,
+  'device-setup': <Rocket size={18} />,
   'hardware-inventory': <Boxes size={18} />,
   'accessory-inventory': <Cable size={18} />,
   'software-installations': <PackagePlus size={18} />,
@@ -38,6 +44,8 @@ const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'onboarding': <Rocket size={18} />,
   'treiber-installation': <HardDriveDownload size={18} />,
   'servicenow': <Ticket size={18} />,
+  'ticket-assignment': <ArrowRightLeft size={18} />,
+  'support-tools': <LifeBuoy size={18} />,
   'endpoint-devices': <MonitorSmartphone size={18} />,
   'infra-marine': <Shield size={18} />,
   'infra-projects': <FolderKanban size={18} />,
@@ -46,6 +54,7 @@ const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'user-presence': <MapPin size={18} />,
   'licenses': <CalendarClock size={18} />,
   'proactive-radar': <Radar size={18} />,
+  'nis2': <ShieldCheck size={18} />,
   'software-inventory': <Package size={18} />,
   'network-radar': <Activity size={18} />,
   'vlan-overview': <Cable size={18} />,
@@ -60,6 +69,7 @@ const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'knowledge-search': <ScanSearch size={18} />,
   'server': <Server size={18} />,
   'it-guru': <Lightbulb size={18} />,
+  'games': <Gamepad2 size={18} />,
   'results': <BarChart3 size={18} />,
   'settings': <Settings size={18} />,
   'user-management': <Users size={18} />,
@@ -111,6 +121,12 @@ export default function Sidebar() {
   // Aufgeklappte Kategorien (Standard: alle zu)
   const [openCats, setOpenCats] = useState<Set<string>>(new Set())
 
+  // Per-Benutzer-Menü-Reihenfolge (Drag & Drop)
+  const [userOrder, setUserOrder] = useState<MenuOrderEntry[] | null>(null)
+  const [arranging, setArranging] = useState(false)
+  const [dragId, setDragId] = useState<string | null>(null)
+  const [dragOverId, setDragOverId] = useState<string | null>(null)
+
   // Load menu visibility (global + per-user override) from server on mount
   useEffect(() => {
     let cancelled = false
@@ -124,11 +140,15 @@ export default function Sidebar() {
         }
       } catch { /* offline or not found — all visible */ }
 
-      // Per-user overrides
+      // Per-user overrides + persönliche Menü-Reihenfolge
       if (user?.id) {
         try {
           const overrides = await loadUserMenuOverrides()
           if (!cancelled) setUserOverride(getHiddenForUser(overrides, user.id))
+        } catch { /* ignore */ }
+        try {
+          const orders = await loadUserMenuOrders()
+          if (!cancelled) setUserOrder(getOrderForUser(orders, user.id))
         } catch { /* ignore */ }
       }
     })()
@@ -144,9 +164,49 @@ export default function Sidebar() {
   // mit den Einstellungen). Icons kommen aus ITEM_ICONS/CATEGORY_ICONS. topLevel-
   // Eintraege werden eigenstaendig gerendert, sonst zusammenhaengende gleiche
   // Kategorien zu einer aufklappbaren Gruppe zusammengefasst.
+  // Verschiebbare Menüpunkte = alles außer Startbildschirm/Ergebnisse (topLevel)
+  // und der fixen Kategorie „Einstellungen".
+  const REORDERABLE = useMemo(() => MENU_CATALOG.filter(c => !c.topLevel && c.category !== 'Einstellungen'), [])
+  const isReorderable = (id: Screen) => REORDERABLE.some(c => c.id === id)
+
+  // Verschiebbare Punkte in der persönlichen Reihenfolge (fehlende hinten im Katalog-Standard).
+  const effectiveReorderable = useMemo(() => {
+    const byId = new Map(MENU_CATALOG.map(c => [c.id, c]))
+    const seen = new Set<string>()
+    const result: MenuCatalogItem[] = []
+    if (userOrder) {
+      for (const o of userOrder) {
+        const c = byId.get(o.id as Screen)
+        if (!c || c.topLevel || c.category === 'Einstellungen' || seen.has(c.id)) continue
+        seen.add(c.id)
+        result.push({ ...c, category: o.category || c.category })
+      }
+    }
+    // Neue (noch nicht angeordnete) Katalog-Punkte an ihrer natürlichen Nachbar-
+    // Position einfügen statt hinten anhängen — sonst landet ein neu ergänzter
+    // Menüpunkt bei Nutzern mit eigener Reihenfolge ganz unten (eigene Gruppe).
+    for (let i = 0; i < REORDERABLE.length; i++) {
+      const c = REORDERABLE[i]
+      if (seen.has(c.id)) continue
+      let insertAt = 0
+      let category = c.category
+      for (let j = i - 1; j >= 0; j--) {
+        const idx = result.findIndex(r => r.id === REORDERABLE[j].id)
+        if (idx >= 0) { insertAt = idx + 1; category = result[idx].category; break }
+      }
+      result.splice(insertAt, 0, { ...c, category })
+      seen.add(c.id)
+    }
+    return result
+  }, [userOrder, REORDERABLE])
+
   const MENU: Section[] = useMemo(() => {
+    const home = MENU_CATALOG.filter(c => c.id === 'home')
+    const results = MENU_CATALOG.filter(c => c.id === 'results')
+    const einst = MENU_CATALOG.filter(c => c.category === 'Einstellungen')
+    const effectiveCatalog: MenuCatalogItem[] = [...home, ...effectiveReorderable, ...results, ...einst]
     const out: Section[] = []
-    for (const c of MENU_CATALOG) {
+    for (const c of effectiveCatalog) {
       const nav: NavItem = { id: c.id, label: c.label, icon: ITEM_ICONS[c.id] }
       if (c.adminOnly) nav.adminOnly = true
       if (c.masterAdminOnly) nav.masterAdminOnly = true
@@ -159,7 +219,25 @@ export default function Sidebar() {
       }
     }
     return out
-  }, [])
+  }, [effectiveReorderable])
+
+  // Drag & Drop: verschobenen Punkt VOR das Ziel setzen (übernimmt dessen Kategorie).
+  async function applyReorder(dId: string, overId: string) {
+    if (dId === overId) return
+    const arr: MenuOrderEntry[] = effectiveReorderable.map(c => ({ id: c.id, category: c.category }))
+    const from = arr.findIndex(x => x.id === dId)
+    if (from < 0) return
+    const [moved] = arr.splice(from, 1)
+    const insertIdx = arr.findIndex(x => x.id === overId)
+    if (insertIdx < 0) arr.push(moved)
+    else { moved.category = arr[insertIdx].category; arr.splice(insertIdx, 0, moved) }
+    setUserOrder(arr)
+    if (user?.id) await saveUserMenuOrder(user.id, arr)
+  }
+  async function resetOrder() {
+    setUserOrder(null); setArranging(false); setDragId(null); setDragOverId(null)
+    if (user?.id) await clearUserMenuOrder(user.id)
+  }
 
   const radarScanning = useRadarStore(s => s.scanning)
   const licensesAlarmCount = useAppStore(s => s.licensesAlarmCount)
@@ -214,14 +292,23 @@ export default function Sidebar() {
     const active = screen === item.id
     const alarmCount = item.id === 'licenses' ? licensesAlarmCount : item.id === 'server' ? serverAlarmCount : 0
     const alarmActive = alarmCount > 0
+    const canDrag = arranging && isReorderable(item.id)
+    const isDropTarget = canDrag && dragOverId === item.id && !!dragId && dragId !== item.id
     return (
       <button
         key={item.id}
-        onClick={() => setScreen(item.id)}
+        draggable={canDrag}
+        onDragStart={canDrag ? (e) => { setDragId(item.id); e.dataTransfer.effectAllowed = 'move' } : undefined}
+        onDragOver={canDrag ? (e) => { e.preventDefault(); if (dragOverId !== item.id) setDragOverId(item.id) } : undefined}
+        onDragLeave={canDrag ? () => { if (dragOverId === item.id) setDragOverId(null) } : undefined}
+        onDrop={canDrag ? (e) => { e.preventDefault(); if (dragId) void applyReorder(dragId, item.id); setDragId(null); setDragOverId(null) } : undefined}
+        onDragEnd={canDrag ? () => { setDragId(null); setDragOverId(null) } : undefined}
+        onClick={() => { if (arranging) return; setScreen(item.id) }}
         className={`
-          w-full flex items-center gap-3 ${indented ? 'pl-9 pr-3' : 'px-3'} py-2 rounded-md text-sm
-          transition-colors duration-150 group
-          ${active
+          w-full flex items-center gap-3 ${indented ? (canDrag ? 'pl-3 pr-3' : 'pl-9 pr-3') : 'px-3'} py-2 rounded-md text-sm
+          transition-colors duration-150 group ${canDrag ? 'cursor-grab active:cursor-grabbing' : ''}
+          ${isDropTarget ? 'border-t-2 border-primary' : ''} ${dragId === item.id ? 'opacity-40' : ''}
+          ${active && !arranging
             ? 'bg-primary text-primary-foreground font-medium'
             : alarmActive
               ? 'licenses-alarm-blink font-medium'
@@ -229,7 +316,8 @@ export default function Sidebar() {
           }
         `}
       >
-        <span className={active ? 'text-primary-foreground' : (alarmActive ? '' : 'text-muted-foreground group-hover:text-foreground')}>
+        {canDrag && <GripVertical size={14} className="text-muted-foreground shrink-0" />}
+        <span className={active && !arranging ? 'text-primary-foreground' : (alarmActive ? '' : 'text-muted-foreground group-hover:text-foreground')}>
           {item.icon}
         </span>
         <span className="flex-1 text-left truncate">{item.label}</span>
@@ -246,7 +334,7 @@ export default function Sidebar() {
         {item.id === 'network-radar' && radarScanning && (
           <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse shrink-0" title="Scan läuft..." />
         )}
-        {active && <ChevronRight size={14} />}
+        {active && !arranging && <ChevronRight size={14} />}
       </button>
     )
   }
@@ -310,6 +398,28 @@ export default function Sidebar() {
         <FavoritesPanel />
         <div className="my-1 mx-4 h-px bg-sidebar-border" />
 
+        {/* Menü selbst anordnen (Drag & Drop, pro Benutzer gespeichert) */}
+        <div className="px-2 pb-1 flex items-center gap-1.5">
+          {!arranging ? (
+            <button onClick={() => setArranging(true)}
+              className="inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-md text-muted-foreground hover:bg-sidebar-accent hover:text-foreground">
+              <GripVertical size={12} />Menü anordnen
+            </button>
+          ) : (
+            <>
+              <button onClick={() => { setArranging(false); setDragId(null); setDragOverId(null) }}
+                className="inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90">
+                <CheckIcon size={12} />Fertig
+              </button>
+              <button onClick={() => void resetOrder()} title="Standard-Reihenfolge wiederherstellen"
+                className="inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-md border border-sidebar-border text-muted-foreground hover:text-foreground">
+                <RotateCcw size={12} />Zurücksetzen
+              </button>
+            </>
+          )}
+        </div>
+        {arranging && <p className="px-3 pb-1 text-[10px] text-muted-foreground">Menüpunkte per Ziehen (Griff) neu anordnen — auch zwischen Kategorien.</p>}
+
         {MENU.map((section) => {
           // Einzelner, immer sichtbarer Eintrag (Startbildschirm / Ergebnisse)
           if (section.kind === 'item') {
@@ -321,7 +431,7 @@ export default function Sidebar() {
           const items = section.items.filter(isVisible)
           if (items.length === 0) return null
           const hasActive = items.some(i => i.id === screen)
-          const open = openCats.has(section.name)
+          const open = arranging || openCats.has(section.name)
           const alerts = catAlertCount(items)
 
           return (

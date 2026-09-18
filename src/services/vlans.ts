@@ -412,7 +412,7 @@ export async function probeDeviceTypes(
   ips: string[],
   onProgress?: (done: number, total: number) => void,
   isAborted?: () => boolean,
-  concurrency = 8,
+  concurrency = 4,   // netz-/IDS-schonend: aktiver 13-Port-Scan bewusst nur 4 parallel (langsamer, gleiche Abdeckung)
 ): Promise<Map<string, DeviceTypeResult>> {
   const result = new Map<string, DeviceTypeResult>()
   const list = [...new Set(ips.map(ip => canonicalIp(ip) || ip).filter(Boolean))]
@@ -629,8 +629,10 @@ export function vendorFromMac(mac?: string): string | undefined {
 
 export interface DiscoverProgress { phase: 'ping' | 'resolve'; done: number; total: number; up: number }
 
-const PING_CHUNK = 512
-const RESOLVE_CHUNK = 64
+// Netz-/IDS-schonend: kleinere gleichzeitige Ping-/Resolve-Batches aus einer
+// Quelle. Deckt weiterhin ALLE IPs des Subnetzes ab, dauert nur länger.
+const PING_CHUNK = 128
+const RESOLVE_CHUNK = 20
 
 /**
  * Ermittelt alle Geräte in den angegebenen Subnetzen: Ping-Sweep → IP→Gerät-
@@ -664,7 +666,7 @@ export async function discoverDevices(
   for (let i = 0; i < up.length; i += RESOLVE_CHUNK) {
     if (isAborted?.()) break
     const chunk = up.slice(i, i + RESOLVE_CHUNK)
-    const recs = await scanIpsBatch(chunk, false)
+    const recs = await scanIpsBatch(chunk, false, RESOLVE_CHUNK)   // ≤20 gleichzeitige DCOM aus einer Quelle
     records.push(...recs)
     onProgress?.({ phase: 'resolve', done: Math.min(i + RESOLVE_CHUNK, up.length), total: up.length, up: up.length })
   }

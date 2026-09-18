@@ -28,6 +28,7 @@ export default function MarkerDetailDialog({ marker, currentUser, onClose, onCha
   const [name, setName] = useState(marker.name)
   const [mac, setMac] = useState(marker.mac)
   const [serial, setSerial] = useState(marker.serial)
+  const [ip, setIp] = useState(marker.ip ?? '')
   const [model, setModel] = useState(marker.model)
   const [notes, setNotes] = useState(marker.notes)
   const [busy, setBusy] = useState(false)
@@ -41,7 +42,7 @@ export default function MarkerDetailDialog({ marker, currentUser, onClose, onCha
 
   // Re-seeden bei Marker-Wechsel
   useEffect(() => {
-    setName(marker.name); setMac(marker.mac); setSerial(marker.serial)
+    setName(marker.name); setMac(marker.mac); setSerial(marker.serial); setIp(marker.ip ?? '')
     setModel(marker.model); setNotes(marker.notes); setError(''); setHint('')
     setConfirmDelete(false)
   }, [marker.id])
@@ -105,7 +106,7 @@ export default function MarkerDetailDialog({ marker, currentUser, onClose, onCha
 
   async function save() {
     setBusy(true); setError('')
-    const r = await updateMarker(marker.id, { name: name.trim(), mac: mac.trim(), serial: serial.trim(), model: model.trim(), notes: notes.trim() })
+    const r = await updateMarker(marker.id, { name: name.trim(), mac: mac.trim(), serial: serial.trim(), ip: ip.trim(), model: model.trim(), notes: notes.trim() })
     setBusy(false)
     if (!r.ok) { setError(r.error || 'Speichern fehlgeschlagen.'); return }
     onChanged()
@@ -174,6 +175,7 @@ export default function MarkerDetailDialog({ marker, currentUser, onClose, onCha
           <Field label="Name" value={name} onChange={setName} placeholder="z. B. AP-DEHAM-08" />
           <Field label="MAC-Adresse" value={mac} onChange={setMac} placeholder="00:11:22:33:44:55" />
           <Field label="Seriennummer" value={serial} onChange={setSerial} placeholder="FCW1234ABCD" />
+          <Field label="IP-Adresse" value={ip} onChange={setIp} placeholder="z. B. 10.170.42.40" />
           <Field label="Modell" value={model} onChange={setModel} placeholder="z. B. Cisco Aironet 2802I" />
           <div>
             <label className="block text-[11px] font-medium text-muted-foreground mb-1">Notizen</label>

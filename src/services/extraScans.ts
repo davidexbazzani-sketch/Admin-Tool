@@ -3,7 +3,8 @@
 // Hintergrund-Controllern. Der Aufrufer setzt/gibt den Claim frei (siehe
 // scanSchedules.loadRunStatus/isStatusClaimed).
 
-import { refreshAdHygiene } from './proactiveRadar'
+import { refreshAdHygiene, loadHygieneUsers } from './proactiveRadar'
+import { loadReminderConfig, sendReminders, targetsFromUsers } from './pwdReminder'
 import { loadVlanConfig, discoverDevices, saveScanCache, normalizeCidr, DEFAULT_SITE, type VlanScanCache } from './vlans'
 import { getSiteSubnets } from './userPresenceScan'
 
@@ -13,7 +14,21 @@ export const VLAN_SCAN_SCHEDULE = 'network/vlan_scan_schedule.json'
 /** Proaktives Radar (AD-Hygiene) einmal aktualisieren. refreshAdHygiene cached selbst. */
 export async function runRadarScanOnce(): Promise<{ ok: boolean; summary: string }> {
   const r = await refreshAdHygiene()
-  return { ok: r.ok, summary: r.ok ? `${r.count} AD-Konten geprüft` : (r.error || 'Fehler') }
+  let mailInfo = ''
+  // Passwort-Ablauf-Erinnerungen: nur wenn aktiviert, nach frischem Hygiene-Scan.
+  // Läuft dadurch werktags 07:00 (RadarScanController, claim-lock) — Dedup je Tag
+  // in sendReminders verhindert Mehrfachversand über mehrere offene Admin-Instanzen.
+  if (r.ok) {
+    try {
+      const cfg = await loadReminderConfig()
+      if (cfg.enabled) {
+        const { users } = await loadHygieneUsers()
+        const sr = await sendReminders(targetsFromUsers(users), new Date())
+        if (sr.sent > 0 || sr.failed > 0) mailInfo = ` · ${sr.sent} Erinnerung(en) gesendet${sr.failed ? `, ${sr.failed} fehlgeschlagen` : ''}`
+      }
+    } catch { /* Versand best-effort */ }
+  }
+  return { ok: r.ok, summary: r.ok ? `${r.count} AD-Konten geprüft${mailInfo}` : (r.error || 'Fehler') }
 }
 
 /** VLAN-/Netzwerk-Scan einmal ausführen: Subnetze (AD ∪ Config) → discoverDevices → Cache.

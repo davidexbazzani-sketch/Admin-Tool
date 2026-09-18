@@ -677,7 +677,7 @@ export async function scanHosts(
 // Admin-PC lädt den SoftPaq (Get-Softpaq), kopiert ihn nach \\host\c$\Temp und
 // startet ihn still am Ziel per Invoke-Command (Start-Process, wie GPU-Verteilung).
 export type RebootMode = 'notify' | 'reboot'
-export interface HpDeployOptions { rebootMode: RebootMode; by: string }
+export interface HpDeployOptions { rebootMode: RebootMode; by: string; notifyUser?: boolean }
 export interface HpDeployStep { host: string; phase: string; status: 'running' | 'ok' | 'error' }
 
 // Ein je Treiber nachgeprüftes Ergebnis (nach Installation + Nachscan + ggf. Wiederholung).
@@ -967,9 +967,10 @@ async function deployToHost(
       return { host, status: 'fehler', message: 'Nicht erreichbar (WinRM/offline).', perItem: [], ergebnisse: [], verifyMoeglich: false, ranAt: jetzt() }
     }
 
-    // Warnung an angemeldeten Nutzer, wenn kritische Treiber dabei sind.
+    // Warnung an angemeldeten Nutzer, wenn kritische Treiber dabei sind — NUR wenn
+    // „Benutzer benachrichtigen" aktiv ist (sonst komplett stille Installation).
     const hatKritisch = items.some(i => i.klasse === 'kritisch' || i.klasse === 'firmware' || i.klasse === 'bios')
-    if (hatKritisch) {
+    if (opts.notifyUser && hatKritisch) {
       step('Warnung senden', 'running')
       const warn = q('Achtung: In den naechsten Minuten werden Geraetetreiber aktualisiert. Bild/Ton/Netzwerk koennen kurz aussetzen. Bitte offene Arbeit speichern.')
       await api().runPowerShell(`Invoke-Command -ComputerName '${h}' -ErrorAction SilentlyContinue -ScriptBlock { msg * '${warn}' }`, 20000)
@@ -1003,7 +1004,8 @@ async function deployToHost(
     step('Abschluss', 'running')
     if (opts.rebootMode === 'reboot' && okCount > 0) {
       await api().runPowerShell(`Invoke-Command -ComputerName '${h}' -ErrorAction SilentlyContinue -ScriptBlock { shutdown /r /t 120 /c 'Treiber aktualisiert - der PC startet in 2 Minuten neu. Bitte Arbeit speichern.' }`, 20000)
-    } else if (okCount > 0) {
+    } else if (opts.notifyUser && okCount > 0) {
+      // Abschluss-Popup nur bei aktiver Benutzer-Benachrichtigung (sonst still).
       const msg = anyReboot
         ? 'Treiber wurden aktualisiert. Bitte den PC bei Gelegenheit neu starten, damit alle neuen Treiber aktiv werden.'
         : 'Treiber wurden aktualisiert.'
@@ -1038,13 +1040,26 @@ async function schreibeDossierNotiz(r: HpDeployResult, by: string): Promise<void
 
 /** Einen EINZELNEN PC installieren (inkl. Nachprüfung/Wiederholung + Dossier-Notiz).
  *  Basis für den parallelen Pro-PC-Betrieb (mehrere PCs gleichzeitig, verwaltet im Store). */
+/** Optionale Nachricht an den am Ziel-PC angemeldeten Benutzer (per `msg *`). Best-effort;
+ *  wenn deaktiviert oder msg nicht verfügbar, läuft die Installation still weiter. */
+async function notifyLoggedInUser(host: string, message: string): Promise<void> {
+  const h = host.replace(/'/g, "''")
+  const m = message.replace(/"/g, "'")   // Doppelquotes vermeiden (msg-Argument ist doppelt-gequotet)
+  const script = `try { Invoke-Command -ComputerName '${h}' -ScriptBlock { msg * /TIME:300 "${m}" } -ErrorAction SilentlyContinue } catch {}`
+  try { await api().runPowerShell(script, 30000) } catch { /* egal */ }
+}
+
 export async function deployOneHost(
   host: string, items: DriverItem[], opts: HpDeployOptions, onStep?: (s: HpDeployStep) => void,
   isAborted?: () => boolean,
 ): Promise<HpDeployResult> {
+  if (opts.notifyUser) await notifyLoggedInUser(host, 'Die IT aktualisiert jetzt automatisch die Treiber auf diesem PC. Bitte speichern Sie Ihre Arbeit - es kann zu kurzen Unterbrechungen kommen.')
   const r = await deployToHost(host, items, opts, onStep, isAborted)
   await schreibeDossierNotiz(r, opts.by)   // Eintrag „Treiber installiert am …" ins PC-Dossier
   await recordInstalledSoftpaqs(r)         // Zustand für den verlässlichen Nachscan merken
+  if (opts.notifyUser) await notifyLoggedInUser(host, r.needsReboot
+    ? 'Die Treiber-Aktualisierung ist abgeschlossen. Bitte starten Sie den PC bei Gelegenheit neu. Vielen Dank.'
+    : 'Die Treiber-Aktualisierung ist abgeschlossen. Vielen Dank.')
   return r
 }
 

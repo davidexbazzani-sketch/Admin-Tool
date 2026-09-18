@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Wifi, FileUp, FileDown, Plus, Search, RefreshCw, Loader2, AlertTriangle,
   ChevronLeft, ChevronRight, MapPin, Layers, Pencil, Trash2,
-  Upload, Package, Map as MapIcon, X,
+  Upload, Package, Map as MapIcon, X, FileSpreadsheet,
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import { useIsAdmin } from '../store/authStore'
@@ -13,6 +13,7 @@ import {
   type FloorPlan, type Marker, type InventoryStore, type InventoryItem,
 } from '../services/accessPoints'
 import { exportAccessPointsPdf, type ExportProgress } from '../services/accessPointsExport'
+import { syncSerialIpFromExcel } from '../services/accessPointsSync'
 import PdfViewer from '../components/accessPoints/PdfViewer'
 import MarkerDetailDialog from '../components/accessPoints/MarkerDetailDialog'
 import InventoryImportDialog from '../components/accessPoints/InventoryImportDialog'
@@ -44,6 +45,9 @@ export default function AccessPoints() {
   const [importOpen, setImportOpen] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [exportProgress, setExportProgress] = useState<ExportProgress | null>(null)
+  const [syncing, setSyncing] = useState(false)
+  const [syncResult, setSyncResult] = useState<string | null>(null)
+  const [syncUnmatched, setSyncUnmatched] = useState<string[]>([])
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -164,7 +168,7 @@ export default function AccessPoints() {
     if (!selectedPlanId) return
     const r = await createMarker({
       floorplanId: selectedPlanId, page: pageIndex + 1, x, y,
-      name: 'Neuer AP', mac: '', serial: '', model: '', notes: '', extra: {},
+      name: 'Neuer AP', mac: '', serial: '', ip: '', model: '', notes: '', extra: {},
       createdBy: currentUserName,
     })
     if (r.ok && r.marker) {
@@ -193,6 +197,7 @@ export default function AccessPoints() {
       name: get(fm.name) || 'Neuer AP',
       mac: get(fm.mac),
       serial: get(fm.serial),
+      ip: '',
       model: get(fm.model),
       notes: get(fm.location),
       extra,
@@ -209,6 +214,20 @@ export default function AccessPoints() {
     // Lokal optimistisch
     setMarkers(prev => prev.map(m => m.id === id ? { ...m, x, y } : m))
     await moveMarker(id, x, y)
+  }
+
+  // ── Seriennummer + IP aus Netzwerk-Inventar-Excel übernehmen ────────────────
+  async function doSyncExcel() {
+    if (syncing) return
+    setSyncing(true); setError(''); setSyncResult(null); setSyncUnmatched([])
+    try {
+      const r = await syncSerialIpFromExcel()
+      if (r.cancelled) return
+      if (!r.ok) { setError('Excel-Abgleich fehlgeschlagen: ' + (r.error || 'unbekannt')); return }
+      await reload(false)
+      setSyncResult(`Aus „${r.filename}": ${r.updated} von ${r.matched} zugeordneten AP(s) mit Seriennummer/IP aktualisiert (${r.totalRows} Zeilen gelesen).`)
+      setSyncUnmatched(r.unmatchedMarkers ?? [])
+    } finally { setSyncing(false) }
   }
 
   // ── Export ────────────────────────────────────────────────────────────────
@@ -269,6 +288,15 @@ export default function AccessPoints() {
             <MapPin size={13} />AP platzieren
           </button>
           <button
+            onClick={doSyncExcel}
+            disabled={syncing}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-card text-foreground border border-border hover:bg-accent/40 disabled:opacity-50"
+            title="Seriennummer & IP-Adresse aus einer Netzwerk-Inventar-Excel (Abgleich über den AP-Namen) übernehmen"
+          >
+            {syncing ? <Loader2 size={13} className="animate-spin" /> : <FileSpreadsheet size={13} />}
+            Seriennr./IP aus Excel
+          </button>
+          <button
             onClick={doExport}
             disabled={exporting || floorplans.length === 0}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50"
@@ -288,6 +316,26 @@ export default function AccessPoints() {
       {exporting && exportProgress && (
         <div className="mx-5 mt-3 px-3 py-2 rounded-md bg-primary/10 border border-primary/30 text-xs text-foreground shrink-0">
           Export: {exportProgress.phase} ({exportProgress.current}/{exportProgress.total})
+        </div>
+      )}
+
+      {syncResult && (
+        <div className="mx-5 mt-3 px-3 py-2 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-200 shrink-0">
+          <div className="flex items-start gap-2">
+            <FileSpreadsheet size={14} className="mt-0.5 shrink-0" />
+            <div className="flex-1">
+              <p>{syncResult}</p>
+              {syncUnmatched.length > 0 && (
+                <details className="mt-1">
+                  <summary className="cursor-pointer text-emerald-300/80 hover:text-emerald-200">{syncUnmatched.length} AP(s) ohne Excel-Zeile (nicht aktualisiert)</summary>
+                  <div className="mt-1 max-h-28 overflow-y-auto font-mono text-[11px] text-emerald-200/70 grid grid-cols-2 gap-x-4">
+                    {syncUnmatched.map((n, i) => <div key={i} className="truncate">{n}</div>)}
+                  </div>
+                </details>
+              )}
+            </div>
+            <button onClick={() => { setSyncResult(null); setSyncUnmatched([]) }} className="text-emerald-300/70 hover:text-emerald-200"><X size={13} /></button>
+          </div>
         </div>
       )}
 

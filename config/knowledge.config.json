@@ -1,0 +1,47 @@
+{
+  "$comment": "Quellen der Wissensdatenbank. baseDir = Ordner mit den .md-Dateien (relativ zu dieser Datei). Neue .md hier eintragen -> beim naechsten Build automatisch im Index.",
+  "baseDir": "../IT Tool Wissen",
+  "outDir": "../knowledge",
+  "sources": [
+    {
+      "id": "brain",
+      "label": "Master-Brain",
+      "file": "SKF_Marine_BRAIN.md",
+      "kind": "curated",
+      "sensitive": false,
+      "description": "Startdatei: Unternehmen, Organisation, IT, Prozesse, Konventionen"
+    },
+    {
+      "id": "mails",
+      "label": "IT-Betrieb (Mails)",
+      "file": "SKF_Marine_IT_Wissensbasis.md",
+      "kind": "curated",
+      "sensitive": false,
+      "description": "Vorgangswissen aus 4.154 Mails, 17 Themenbereiche"
+    },
+    {
+      "id": "governance",
+      "label": "IT-Governance",
+      "file": "IT_SKF_Marine_Wissensdatenbank_v2.md",
+      "kind": "curated",
+      "sensitive": false,
+      "description": "Applikationsportfolio, APM-Prozess, Dienstleister, Datenplattform"
+    },
+    {
+      "id": "unternehmen",
+      "label": "Unternehmen",
+      "file": "SKF_Marine_Wissensbasis_v3.md",
+      "kind": "curated",
+      "sensitive": false,
+      "description": "Organisation, HR, EHS, Finanzen, Export Control, Betriebsrat"
+    },
+    {
+      "id": "snapshot",
+      "label": "IT-Admin-Tool-Daten",
+      "file": "Wissens-Snapshot_2026-08-14.md",
+      "kind": "raw",
+      "sensitive": true,
+      "description": "AD-Benutzer, Endgeraete, Durchwahlen, Software-Inventar (personenbezogen)"
+    }
+  ]
+}

@@ -7,6 +7,7 @@
 
 import { api } from '../electronAPI'
 import { normalizeSerial } from './hardwareInventory'
+import { lookupMany } from './hardwareInventoryAD'
 
 export interface LostDevice {
   serial: string          // normalisiert UPPERCASE
@@ -16,6 +17,13 @@ export interface LostDevice {
   note?: string
   addedAt: string
   addedBy: string
+  // Online-Check (automatischer Scan Mi + Do 11:00, oder manuell „Jetzt prüfen")
+  online?: boolean        // beim letzten Check erreichbar?
+  lastOnline?: string     // ISO – LastLogonDate aus AD (zuletzt online)
+  adHostname?: string     // aufgelöster Hostname
+  adCurrentUser?: string  // aktuell/zuletzt angemeldeter Benutzer
+  lastCheckedAt?: string  // ISO – wann zuletzt geprüft
+  checkError?: string     // z. B. „nicht in AD gefunden"
 }
 
 export interface RecoveredDevice extends LostDevice {
@@ -123,4 +131,43 @@ export async function removeRecovered(serial: string): Promise<boolean> {
   d.recovered = d.recovered.filter(x => x.serial !== norm)
   if (d.recovered.length === before) return false
   return save(d)
+}
+
+// ── Online-Check der verlorenen Geräte (auto Mi+Do 11:00 / manuell) ──────────
+export const LOST_SCAN_SCHEDULE = 'hardware-inventory/lost_scan_status.json'
+const LOST_PREFIXES = ['DE', 'DEHAM', 'DESCH']   // AD-Computername = Präfix + Seriennummer
+
+/** Ergebnisse des AD/Online-Checks in die Verlust-Liste zurückschreiben (ein Speichervorgang). */
+export async function updateLostScanResults(
+  results: { serial: string; hostname?: string; online?: boolean; lastOnline?: string; currentUser?: string; error?: string }[],
+): Promise<boolean> {
+  const d = await load()
+  const now = new Date().toISOString()
+  const bySerial = new Map(results.map(r => [normalizeSerial(r.serial), r]))
+  for (const dev of d.lost) {
+    const r = bySerial.get(dev.serial)
+    if (!r) continue
+    dev.online = r.error ? undefined : !!r.online
+    dev.lastOnline = r.lastOnline || undefined
+    dev.adHostname = r.hostname || undefined
+    dev.adCurrentUser = r.currentUser || undefined
+    dev.checkError = r.error || undefined
+    dev.lastCheckedAt = now
+  }
+  return save(d)
+}
+
+/** Alle verlorenen Geräte per AD/Ping prüfen (online + zuletzt online) und speichern. */
+export async function runLostDevicesScanOnce(by: string, onTick?: () => void): Promise<{ ok: boolean; summary: string }> {
+  void by
+  const d = await load()
+  const serials = d.lost.map(x => x.serial).filter(Boolean)
+  if (serials.length === 0) return { ok: true, summary: 'Keine verlorenen Geräte zu prüfen.' }
+  const results = await lookupMany(serials, LOST_PREFIXES, () => onTick?.())
+  await updateLostScanResults(results.map(r => ({
+    serial: r.serial, hostname: r.hostname, online: r.online, lastOnline: r.lastOnline, currentUser: r.currentUser, error: r.error,
+  })))
+  const online = results.filter(r => r.online).length
+  const found = results.filter(r => !r.error).length
+  return { ok: true, summary: `${serials.length} geprüft · ${found} in AD gefunden · ${online} online` }
 }

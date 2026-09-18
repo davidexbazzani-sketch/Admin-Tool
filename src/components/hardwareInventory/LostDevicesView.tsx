@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   ChevronLeft, PackageX, PackageCheck, RefreshCw, Plus, FileSpreadsheet, Search,
-  Loader2, X, Check, MapPin, Trash2, AlertTriangle,
+  Loader2, X, Check, MapPin, Trash2, AlertTriangle, Radar,
 } from 'lucide-react'
 import {
-  loadLostData, addLostSerials, markRecovered, removeLost, removeRecovered,
+  loadLostData, addLostSerials, markRecovered, removeLost, removeRecovered, runLostDevicesScanOnce,
   type LostDevice, type RecoveredDevice,
 } from '../../services/lostDevices'
 import LostImportDialog from './LostImportDialog'
@@ -36,6 +36,19 @@ export default function LostDevicesView({ currentUser, onBack }: Props) {
   const [addOpen, setAddOpen] = useState(false)
   const [recoverFor, setRecoverFor] = useState<LostDevice | null>(null)
   const [flash, setFlash] = useState('')
+  const [scanning, setScanning] = useState(false)
+
+  async function doScan() {
+    if (scanning) return
+    setScanning(true); setError('')
+    try {
+      const r = await runLostDevicesScanOnce(currentUser)
+      await reload(false)
+      setFlash(`Online-Check fertig: ${r.summary}`)
+    } catch (e) {
+      setError('Online-Check fehlgeschlagen: ' + (e instanceof Error ? e.message : String(e)))
+    } finally { setScanning(false) }
+  }
 
   const reload = useCallback(async (spinner = false) => {
     if (spinner) setLoading(true)
@@ -81,6 +94,11 @@ export default function LostDevicesView({ currentUser, onBack }: Props) {
           <button onClick={() => reload(true)} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/40 border border-border" title="Aktualisieren"><RefreshCw size={13} className={loading ? 'animate-spin' : ''} /></button>
           {tab === 'lost' && (
             <>
+              <button onClick={doScan} disabled={scanning || lost.length === 0}
+                title="Alle verlorenen Geräte jetzt per AD/Ping prüfen: online? / zuletzt online? (läuft sonst automatisch Mi + Do 11:00)"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-blue-500/40 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 disabled:opacity-50">
+                {scanning ? <Loader2 size={14} className="animate-spin" /> : <Radar size={14} />}Online prüfen
+              </button>
               <button onClick={() => setAddOpen(true)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-border text-foreground hover:bg-accent/40"><Plus size={14} />Gerät hinzufügen</button>
               <button onClick={() => setImportOpen(true)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:opacity-90"><FileSpreadsheet size={14} />Liste importieren</button>
             </>
@@ -117,6 +135,8 @@ export default function LostDevicesView({ currentUser, onBack }: Props) {
                   <th className="px-2 py-2">Kommentar</th>
                   <th className="px-2 py-2">Quelle</th>
                   <th className="px-2 py-2">Gemeldet</th>
+                  <th className="px-2 py-2">Online</th>
+                  <th className="px-2 py-2">Zuletzt online</th>
                   <th className="px-2 py-2 text-right">Aktionen</th>
                 </tr>
               </thead>
@@ -128,6 +148,18 @@ export default function LostDevicesView({ currentUser, onBack }: Props) {
                     <td className="px-2 py-1.5 text-muted-foreground max-w-[16rem] truncate" title={d.comment || undefined}>{d.comment || '—'}</td>
                     <td className="px-2 py-1.5 text-muted-foreground truncate max-w-[12rem]" title={d.source}>{d.source || '—'}</td>
                     <td className="px-2 py-1.5 text-muted-foreground">{fmtDate(d.addedAt)}<span className="opacity-70"> · {d.addedBy}</span></td>
+                    <td className="px-2 py-1.5" title={d.lastCheckedAt ? `Zuletzt geprüft: ${fmtDate(d.lastCheckedAt)}${d.adHostname ? ` · ${d.adHostname}` : ''}${d.adCurrentUser ? ` · ${d.adCurrentUser}` : ''}` : 'Noch nicht geprüft'}>
+                      {d.online === true ? (
+                        <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />online</span>
+                      ) : d.online === false ? (
+                        <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-full bg-muted/40 text-muted-foreground border border-border"><span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50" />offline</span>
+                      ) : d.checkError ? (
+                        <span className="text-[11px] text-amber-400" title={d.checkError}>nicht in AD</span>
+                      ) : (
+                        <span className="text-muted-foreground/60">—</span>
+                      )}
+                    </td>
+                    <td className="px-2 py-1.5 text-muted-foreground">{d.lastOnline ? fmtDate(d.lastOnline) : (d.lastCheckedAt ? '—' : 'nie geprüft')}</td>
                     <td className="px-2 py-1.5">
                       <div className="flex items-center gap-1.5 justify-end">
                         <button onClick={() => setRecoverFor(d)} className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] bg-emerald-500 text-black border border-emerald-600 hover:bg-emerald-500/25"><PackageCheck size={12} />Aufgefunden</button>

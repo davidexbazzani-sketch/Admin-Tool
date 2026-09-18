@@ -1,12 +1,13 @@
 // ── Drucker↔Computer/Person-Verbindungen ──────────────────────────────────────
-// Ermittelt je Computer, welche (Netzwerk-)Drucker der/die angemeldete(n)
-// Benutzer verbunden haben + welcher der Standarddrucker ist. Netzwerkdrucker-
-// Verbindungen liegen PRO BENUTZER in HKCU — über WinRM (Admin-Kontext) NICHT
-// sichtbar. Deshalb werden die geladenen Benutzer-Hives direkt gelesen:
-//   registry::HKEY_USERS\<SID>\Printers\Connections\*   (Netzwerkverbindungen)
-//   registry::HKU\<SID>\...\Windows  Wert 'Device'      (Standarddrucker)
-// Hives sind geladen, solange der Benutzer angemeldet ist → daher läuft der
-// Auto-Scan freitags 14:00 (Benutzer i. d. R. angemeldet).
+// Ermittelt je Computer, welche Drucker INSTALLIERT sind + welcher der Standard ist.
+// WICHTIG: Die realen Drucker sind SEAL/PLOSSYS (lokale PLS-Ports), die stehen NICHT
+// in HKU\...\Printers\Connections (dort nur \\Server\Freigabe-Verbindungen). Deshalb:
+//   Get-Printer (Fallback Win32_Printer, da StandardCimv2 auf Clients fehlen kann)
+//   → installierte Drucker (Name/Port/Treiber)
+//   registry::HKU\<SID>\...\Windows  Wert 'Device'  → Standarddrucker (pro Benutzer)
+// Läuft der Auto-Scan, wenn der Benutzer angemeldet ist (Get-Printer sieht die
+// per-User installierten SEAL-Drucker) → Turnus Mo/Mi/Fr 14:00. Offline-Rechner
+// behalten ihren letzten bekannten Stand (Merge in runConnectionScanOnce).
 //
 // Verbinden/Standard/Entfernen müssen ebenfalls im BENUTZERKONTEXT laufen
 // (per-Session) → Einmal-Scheduled-Task als der angemeldete User (Muster:
@@ -31,9 +32,11 @@ const STALE_LOCK_MS = 2 * 60 * 60 * 1000   // Claim älter als 2h = abgestürzt 
 // ── Datenmodell ───────────────────────────────────────────────────────────────
 
 export interface ConnPrinter {
-  name: string          // Druckername (Share, z. B. "PMD634")
-  connection: string    // UNC, z. B. "\\w3172\PMD634"
-  user?: string         // Besitzer der Verbindung (DOMAIN\user)
+  name: string          // Druckername (z. B. "PMD624")
+  connection: string    // UNC (\\server\share) — bei SEAL/PLOSSYS-Druckern leer
+  port?: string         // lokaler Port (z. B. "PLS_PMD624:") — SEAL/PLOSSYS
+  driver?: string       // Treibername (z. B. "SEAL Systems PS OMS Generic")
+  user?: string         // am PC angemeldeter Benutzer (DOMAIN\user)
   isDefault: boolean
   isNetwork: boolean
 }
@@ -62,6 +65,7 @@ export interface ConnFlat {
   display?: string      // Anzeigename (aus data.users, best effort) — sonst sam
   printerName: string
   connection: string
+  port?: string
   isDefault: boolean
   scannedAt: string
 }
@@ -107,7 +111,7 @@ export function flatten(data: ConnScanData | null): ConnFlat[] {
         hostname: c.hostname, online: c.online, user: p.user || c.loggedIn,
         sam, display: (sam && users[sam.toLowerCase()]) || undefined,
         printerName: p.name || shareOf(p.connection),
-        connection: p.connection, isDefault: p.isDefault, scannedAt: c.scannedAt,
+        connection: p.connection, port: p.port, isDefault: p.isDefault, scannedAt: c.scannedAt,
       })
     }
   }
@@ -142,33 +146,39 @@ const USER_DETECTION = [
 
 function psq(s: string): string { return (s || '').replace(/'/g, "''") }
 
-/** Baut das WinRM-Skript, das die pro-Benutzer-Druckerverbindungen eines Hosts liest. */
+// Virtuelle / lokale „Drucker", die keine echten Drucker sind (identisch zum Live-Filter).
+const SCAN_VIRTUAL_NAME = /(microsoft print to pdf|microsoft xps|xps document|onenote|send to onenote|\bfax\b|snagit|pdf-?xchange|cutepdf|custpdf|movicon|phoenix contact|adobe pdf|foxit|primopdf|bullzip|pdfcreator|print to pdf|pdf writer|text only|onedrive|remote desktop|webex|zoom)/i
+const SCAN_VIRTUAL_PORT = /^(portprompt|nul|file:|shrfax|ts\d|cpwpv|pdf|onenote|xps|microsoft\.office)/i
+function isRealScanPrinter(name: string, driver: string, port: string): boolean {
+  if (!name) return false
+  if (SCAN_VIRTUAL_NAME.test(name) || SCAN_VIRTUAL_NAME.test(driver)) return false
+  if (SCAN_VIRTUAL_PORT.test(port.toLowerCase())) return false
+  return true
+}
+
+/** Baut das WinRM-Skript, das die INSTALLIERTEN Drucker eines Hosts liest.
+ *  Wichtig: SEAL/PLOSSYS-Drucker (PLS-Ports) stehen NICHT in HKU\...\Printers\Connections
+ *  (das sind nur \\Server\Freigabe-Verbindungen). Deshalb die real installierten Drucker
+ *  via Get-Printer (Fallback Win32_Printer, da StandardCimv2 auf Clients fehlen kann)
+ *  auslesen + Standarddrucker aus dem Benutzer-Hive (HKCU\...\Windows 'Device'). */
 function buildConnScanCmd(hostname: string): string {
   const sb = [
     `$ErrorActionPreference='SilentlyContinue'`,
     USER_DETECTION,
-    `$arr = @()`,
-    `$loaded = @(Get-ChildItem 'registry::HKEY_USERS' -EA SilentlyContinue | Where-Object { $_.PSChildName -like 'S-1-5-21-*' -and $_.PSChildName -notlike '*_Classes' })`,
-    `foreach ($hive in $loaded) {`,
-    `  $sid = $hive.PSChildName`,
-    `  $uname = ''`,
-    `  try { $uname = (New-Object System.Security.Principal.SecurityIdentifier($sid)).Translate([System.Security.Principal.NTAccount]).Value } catch {}`,
-    `  $def = ''`,
-    `  try { $dev = (Get-ItemProperty "registry::HKU\\$sid\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows" -Name Device -EA Stop).Device; if ($dev) { $def = ($dev -split ',')[0] } } catch {}`,
-    `  $conns = @(Get-ChildItem "registry::HKU\\$sid\\Printers\\Connections" -EA SilentlyContinue)`,
-    `  foreach ($c in $conns) {`,
-    `    $nm = $c.PSChildName`,
-    `    $unc = '\\\\' + (($nm -replace '^,+','') -replace ',','\\')`,
-    `    $arr += [pscustomobject]@{ user=$uname; connection=$unc; isDefault=($unc -ieq $def) }`,
-    `  }`,
-    `}`,
-    `$o = [ordered]@{ loggedIn=[string]$user; printers=@($arr) }`,
+    `$def = ''; $sid = ''`,
+    `try { if ($user) { $sid = (New-Object System.Security.Principal.NTAccount($user)).Translate([System.Security.Principal.SecurityIdentifier]).Value } } catch {}`,
+    `try { if ($sid) { $dev = (Get-ItemProperty "registry::HKU\\$sid\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows" -Name Device -EA Stop).Device; if ($dev) { $def = ($dev -split ',')[0] } } } catch {}`,
+    `if (-not $def) { try { foreach ($hv in @(Get-ChildItem 'registry::HKEY_USERS' -EA SilentlyContinue | Where-Object { $_.PSChildName -like 'S-1-5-21-*' -and $_.PSChildName -notlike '*_Classes' })) { try { $dv = (Get-ItemProperty "registry::HKU\\$($hv.PSChildName)\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows" -Name Device -EA Stop).Device; if ($dv) { $def = ($dv -split ',')[0]; break } } catch {} } } catch {} }`,
+    `$prs = $null`,
+    `try { $prs = @(Get-Printer -EA Stop | Select-Object @{N='Name';E={"$($_.Name)"}}, @{N='Port';E={"$($_.PortName)"}}, @{N='Driver';E={"$($_.DriverName)"}}) } catch { $prs = $null }`,
+    `if ($null -eq $prs) { try { $prs = @(Get-WmiObject Win32_Printer -EA Stop | Select-Object @{N='Name';E={"$($_.Name)"}}, @{N='Port';E={"$($_.PortName)"}}, @{N='Driver';E={"$($_.DriverName)"}}) } catch { $prs = @() } }`,
+    `$o = [ordered]@{ loggedIn=[string]$user; def=[string]$def; printers=@($prs) }`,
     `$o | ConvertTo-Json -Compress -Depth 4`,
   ].join('\n')
   return `try { Invoke-Command -ComputerName '${psq(hostname)}' -ScriptBlock { ${sb} } -EA Stop } catch { Write-Output ('ERR:' + $_.Exception.Message) }`
 }
 
-interface RemoteConn { user?: string; connection?: string; isDefault?: boolean }
+interface RemotePrinter { Name?: string; Port?: string; Driver?: string }
 function parseConnResult(hostname: string, res: PSResult | undefined, now: string): ConnComputer {
   const out: ConnComputer = { hostname, online: true, printers: [], scannedAt: now }
   const stdout = (res?.stdout ?? '').trim()
@@ -176,13 +186,19 @@ function parseConnResult(hostname: string, res: PSResult | undefined, now: strin
   const m = stdout.match(/\{[\s\S]*\}/)
   if (!m) { out.error = 'Ungültige Antwort'; return out }
   try {
-    const p = JSON.parse(m[0]) as { loggedIn?: string; printers?: RemoteConn | RemoteConn[] }
+    const p = JSON.parse(m[0]) as { loggedIn?: string; def?: string; printers?: RemotePrinter | RemotePrinter[] }
     out.loggedIn = (p.loggedIn as string) || undefined
+    const def = String(p.def ?? '').trim()
+    const defKey = def ? canonPrinterName(shareOf(def)) : ''
     const raw = Array.isArray(p.printers) ? p.printers : (p.printers ? [p.printers] : [])
     for (const r of raw) {
-      const connection = (r.connection || '').trim()
-      if (!connection) continue
-      out.printers.push({ name: shareOf(connection), connection, user: r.user || undefined, isDefault: r.isDefault === true, isNetwork: true })
+      const name = String(r.Name ?? '').trim()
+      const port = String(r.Port ?? '').trim()
+      const driver = String(r.Driver ?? '').trim()
+      if (!isRealScanPrinter(name, driver, port)) continue
+      const isDefault = !!def && (name === def || (!!defKey && canonPrinterName(shareOf(name)) === defKey))
+      const connection = /^\\\\/.test(name) ? name : ''   // UNC nur bei echten Netzwerkdruckern
+      out.printers.push({ name, connection, port, driver, user: out.loggedIn, isDefault, isNetwork: /^\\\\/.test(port) || /^PLS_/i.test(port) })
     }
   } catch { out.error = 'Antwort nicht lesbar' }
   return out
@@ -230,8 +246,13 @@ export async function runConnectionScanOnce(by?: string, onHeartbeat?: () => voi
     await onHeartbeat?.()
   }
 
-  // Phase 2: WinRM je Online-Host (Batch 10), pro-Benutzer-Drucker lesen
-  const winrmRes = await runBatch(onlineHosts, 10, h => psSafe(buildConnScanCmd(h), 40000), onHeartbeat)
+  // Phase 2: WinRM je Online-Host (Batch 10), installierte Drucker lesen.
+  // WICHTIG: WinRM vorher pro Host aktivieren (wie die Live-Abfrage) — sonst schlägt
+  // Invoke-Command auf PCs mit inaktivem WinRM fehl und es werden 0 Drucker gefunden.
+  const winrmRes = await runBatch(onlineHosts, 10, async h => {
+    try { await ensureWinRM(h) } catch { /* trotzdem versuchen */ }
+    return psSafe(buildConnScanCmd(h), 40000)
+  }, onHeartbeat)
   const scanned: ConnComputer[] = onlineHosts.map(h => parseConnResult(h, winrmRes.get(h), now))
 
   // Merge mit vorigem Stand: offline/nicht gescannte (aber weiter im Inventar
@@ -363,7 +384,7 @@ function toEncodedCommand(ps: string): string {
   return btoa(bin)
 }
 
-async function runInUserContext(hostname: string, opPs: string, timeoutMs = 75000): Promise<ClientActionResult> {
+export async function runInUserContext(hostname: string, opPs: string, timeoutMs = 75000): Promise<ClientActionResult> {
   try {
     const okRm = await ensureWinRM(hostname)
     if (!okRm) return { ok: false, text: `WinRM konnte auf ${hostname} nicht aktiviert werden.` }
@@ -424,10 +445,59 @@ export async function connectPrinter(hostname: string, unc: string): Promise<Cli
   if (!unc) return { ok: false, text: 'Kein Druckserver in den Stammdaten hinterlegt (\\\\server\\name nötig).' }
   return runInUserContext(hostname, `Add-Printer -ConnectionName '${psq(unc)}' -EA Stop`)
 }
-/** Drucker auf dem Ziel-PC als Standarddrucker des angemeldeten Benutzers setzen. */
+// Findet die SEAL Add Printer Wizard GUI (64-bit oder x86) → PowerShell-Variable $apw.
+const SEAL_APW_LOCATE = [
+  `$apw = 'C:\\Program Files\\SEAL Systems\\SEAL Add Printer Wizard\\sealapw.exe'`,
+  `if (-not (Test-Path $apw)) { $apw = 'C:\\Program Files (x86)\\SEAL Systems\\SEAL Add Printer Wizard\\sealapw.exe' }`,
+].join('\n')
+
+/** Drucker auf dem Ziel-PC als Standarddrucker des angemeldeten Benutzers setzen (per UNC). */
 export async function setDefaultPrinter(hostname: string, unc: string): Promise<ClientActionResult> {
   if (!unc) return { ok: false, text: 'Kein Druckserver in den Stammdaten hinterlegt.' }
   return runInUserContext(hostname, `(New-Object -ComObject WScript.Network).SetDefaultPrinter('${psq(unc)}')`)
+}
+/** Bereits INSTALLIERTEN Drucker über seinen EXAKTEN Anzeigenamen (KEIN UNC) als Standard
+ *  des angemeldeten Benutzers setzen. Nötig für SEAL/PrinterLogic-Drucker mit PLS-Port, die
+ *  NICHT über \\Server\Freigabe verbunden sind — dort ist der installierte Name der lokale
+ *  Warteschlangenname (z. B. „PMD624"), nicht eine UNC. Win32_Printer.SetDefaultPrinter,
+ *  Fallback WScript.Network. */
+export async function setDefaultPrinterLocal(hostname: string, printerName: string): Promise<ClientActionResult> {
+  const n = (printerName || '').trim()
+  if (!n) return { ok: false, text: 'Kein Druckername angegeben.' }
+  const esc = psq(n)
+  // Get-WmiObject (DCOM/root\cimv2) statt Get-Printer/CIM — auf den Clients fehlt der
+  // StandardCimv2-Anbieter („Klasse nicht vorhanden"), Win32_Printer über WMI klappt aber.
+  // Reihenfolge: WMI SetDefaultPrinter → WScript.Network → SEAL (`sealapw -default -queue`).
+  const op = [
+    `$done = $false`,
+    `try { $prn = @(Get-WmiObject -Class Win32_Printer -Filter "Name='${esc}'" -EA Stop) | Select-Object -First 1; if ($prn -and ($prn.SetDefaultPrinter().ReturnValue -eq 0)) { $done = $true } } catch {}`,
+    `if (-not $done) { try { (New-Object -ComObject WScript.Network).SetDefaultPrinter('${esc}'); $done = $true } catch {} }`,
+    `if (-not $done) {`,
+    SEAL_APW_LOCATE,
+    `  if (Test-Path $apw) { & $apw -default -queue '${esc}' | Out-Null; $done = $true }`,
+    `}`,
+    `if (-not $done) { throw "Standarddrucker '${esc}' konnte nicht gesetzt werden (auf diesem PC nicht installiert?)." }`,
+  ].join('\n')
+  return runInUserContext(hostname, op)
+}
+/** SEAL/PLOSSYS-Drucker über die SEAL Add Printer Wizard CLI installieren
+ *  (`sealapw -queue <name> -retry 3`) — entspricht „Rechtsklick → Einrichten" im
+ *  SEAL-Assistenten. Läuft im Benutzerkontext des Ziel-PCs; danach wird per WMI geprüft,
+ *  ob der Drucker tatsächlich installiert wurde. Klassische \\Server\Freigabe-Wege
+ *  funktionieren hier NICHT (proprietärer PLOSSYS-Port-Monitor „SEAL Systems PS OMS"). */
+export async function connectPrinterViaSeal(hostname: string, printerName: string): Promise<ClientActionResult> {
+  const n = (printerName || '').trim()
+  if (!n) return { ok: false, text: 'Kein Druckername angegeben.' }
+  const esc = psq(n)
+  const op = [
+    SEAL_APW_LOCATE,
+    `if (-not (Test-Path $apw)) { throw 'SEAL Add Printer Wizard (sealapw.exe) auf diesem PC nicht gefunden.' }`,
+    `& $apw -queue '${esc}' -retry 3 | Out-Null`,
+    `$deadline = (Get-Date).AddSeconds(25)`,
+    `do { Start-Sleep -Milliseconds 1000; $ok = @(Get-WmiObject Win32_Printer -EA SilentlyContinue | Where-Object { $_.Name -eq '${esc}' }).Count -gt 0 } until ($ok -or ((Get-Date) -gt $deadline))`,
+    `if (-not $ok) { throw "Drucker '${esc}' wurde nicht installiert — im SEAL/PLOSSYS fuer diesen Benutzer nicht verfuegbar oder Name falsch?" }`,
+  ].join('\n')
+  return runInUserContext(hostname, op, 90000)
 }
 /** Drucker-Verbindung auf dem Ziel-PC für den angemeldeten Benutzer entfernen. */
 export async function removePrinterConnection(hostname: string, unc: string): Promise<ClientActionResult> {
@@ -525,11 +595,17 @@ export async function listServerPrinters(server: string): Promise<EnumResult> {
   const srv = (server || '').trim()
   if (!srv) return { ok: false, printers: [], error: 'Kein Druckserver angegeben.' }
   const errors: string[] = []
+  let emptyOk: EnumResult | null = null   // erreichbar, aber 0 Freigaben (Fallback)
   for (const m of ENUM_METHODS) {
     const r = await m.fn(srv)
-    if (r.ok) return r
+    // WICHTIG: NICHT bei der ersten ok-Methode mit 0 Treffern abbrechen — der Spooler
+    // (Methode 1) meldet für manche Server „erreichbar, 0 Freigaben", obwohl WMI(DCOM)/
+    // Get-Printer die Freigaben sehr wohl liefern. Erst die erste Methode MIT Treffern gewinnt.
+    if (r.ok && r.printers.length > 0) return r
+    if (r.ok) { if (!emptyOk) emptyOk = r; continue }
     errors.push(`${m.label}: ${r.error}`)
   }
+  if (emptyOk) return emptyOk   // keine Methode fand Drucker, aber der Server war erreichbar
   return { ok: false, printers: [], error: `${srv} nicht abrufbar (${errors.join(' · ')})` }
 }
 

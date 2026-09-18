@@ -1,7 +1,7 @@
 export type Screen =
   | 'home' | 'query-menu' | 'results' | 'user-info' | 'xelion'
   | 'remote-doc' | 'trickbox' | 'it-guru' | 'network-radar' | 'knowledge-base' | 'knowledge-search' | 'settings'
-  | 'user-management' | 'user-logs' | 'location-overview' | 'departments-overview' | 'organization-structure' | 'user-overview' | 'user-presence' | 'checklists' | 'gruppen-suche' | 'access-points'
+  | 'user-management' | 'user-logs' | 'location-overview' | 'departments-overview' | 'organization-structure' | 'user-overview' | 'user-presence' | 'checklists' | 'device-setup' | 'gruppen-suche' | 'access-points'
   | 'scheduled-tasks' | 'bug-mailbox' | 'dashboards'
   | 'pc-migration'
   | 'software-inventory'
@@ -22,10 +22,17 @@ export type Screen =
   | 'gpu-driver-mgmt'
   | 'treiber-installation'
   | 'servicenow'
+  | 'ticket-assignment'
+  | 'support-tools'
   | 'backups'
   | 'usv'
   | 'vlan-overview'
   | 'proactive-radar'
+  | 'nis2'
+  | 'ot-devices'
+  | 'pruffeld-zoll'
+  | 'verwaltungsgebaeude'
+  | 'games'
 
 export type Prefix = 'DE' | 'DEHAM' | 'DESCH' | 'Sonstige'
 

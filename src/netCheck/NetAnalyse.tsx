@@ -35,6 +35,7 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
   const [report, setReport] = useState<AenderungsBericht | null>(null)
   const [backup, setBackup] = useState<NetFixBackup | null>(null)
   const [msg, setMsg] = useState('')
+  const [zeitenOffen, setZeitenOffen] = useState(false)
 
   useEffect(() => { loadFixBackup(lauf.pc).then(setBackup) }, [lauf.pc])
 
@@ -77,6 +78,10 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
 
   const d = lauf.daten
   const invasivGewaehlt = fixbar.some(b => b.standardAus && selected.has(b.id))
+  // ConvertTo-Json macht aus 1-Element-Listen evtl. ein Objekt → defensiv normalisieren.
+  const asArr = <T,>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : v ? [v as T] : [])
+  const wlanEv = asArr<{ zeit?: string; grund?: string; bssid?: string }>(d.ereignisse?.letzte)
+  const lanEv = asArr<{ zeit?: string; grund?: string }>(d.lanEreignisse?.letzte)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
@@ -85,9 +90,15 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
         <div className="flex items-center gap-2 px-5 py-3 border-b border-border shrink-0">
           <Wifi size={18} className="text-primary" />
           <div className="min-w-0">
-            <div className="text-sm font-semibold text-foreground font-mono"><span className="inline-flex items-center gap-1">{lauf.pc}{lauf.pc && <DeviceInfoButton hostname={lauf.pc} />}</span></div>
+            <div className="text-sm font-semibold text-foreground font-mono flex items-center gap-1.5 flex-wrap">
+              <span className="inline-flex items-center gap-1">{lauf.pc}{lauf.pc && <DeviceInfoButton hostname={lauf.pc} />}</span>
+              {d.aktiv?.wlan && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/40 font-sans">WLAN aktiv</span>}
+              {d.aktiv?.lan && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 font-sans">LAN aktiv</span>}
+              {!d.aktiv?.wlan && !d.aktiv?.lan && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-muted/40 text-muted-foreground border border-border font-sans">keine aktive Verbindung</span>}
+            </div>
             <div className="text-[11px] text-muted-foreground truncate">
-              {lauf.rolle === 'problem' ? 'Problem-PC' : 'Referenz-PC (OK)'} · {d.adapter?.ifDesc || 'kein Adapter'} · Treiber {d.adapter?.driverVersion || '—'}
+              {lauf.rolle === 'problem' ? 'Problem-PC' : 'Referenz-PC (OK)'}
+              {d.system?.benutzer ? ` · ${d.system.benutzer}` : ''} · WLAN: {d.adapter?.ifDesc || '—'} · LAN: {d.lan?.ifDesc || '—'}
             </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
@@ -109,7 +120,55 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
           <Kv label="Signal / Funktyp" value={`${d.verbindung?.signal || '—'} / ${d.verbindung?.radio || '—'}`} />
           <Kv label="Modern Standby" value={d.powercfg?.modernStandby == null ? '—' : (d.powercfg.modernStandby ? 'ja' : 'nein')} />
           <Kv label="Adapter abschaltbar" value={d.powerMgmt?.allowTurnOff == null ? '—' : (d.powerMgmt.allowTurnOff ? 'ja' : 'nein')} />
+          {d.lan && <Kv label="LAN Link" value={d.lanVerbindung?.linkSpeed || d.lan.linkSpeed} />}
+          {d.lan && <Kv label="LAN Fehler (Rx/Tx)" value={d.lanStatistik ? `${d.lanStatistik.rxErr ?? 0} / ${d.lanStatistik.txErr ?? 0}` : '—'} />}
+          {d.lan && <Kv label="LAN Trennungen (14 T.)" value={d.lanEreignisse ? String(d.lanEreignisse.disconnects) : '—'} />}
+          {d.lan && <Kv label="LAN abschaltbar" value={d.lanPowerMgmt?.allowTurnOff == null ? '—' : (d.lanPowerMgmt.allowTurnOff ? 'ja' : 'nein')} />}
+          {!!d.pingTests?.length && <Kv label="Ping-Verlust (Gateway)" value={`${Math.max(...d.pingTests.map(p => p.verlust))} %`} />}
+          {!!d.pingTests?.length && <Kv label="Ping-Latenz Ø" value={(() => { const a = d.pingTests.map(p => p.avg).filter((x): x is number => x != null); return a.length ? `${Math.round(a.reduce((s, x) => s + x, 0) / a.length)} ms` : '—' })()} />}
         </div>
+
+        {/* Aussetzer-Zeitpunkte (ausklappbar) */}
+        {(wlanEv.length > 0 || lanEv.length > 0) && (
+          <div className="px-5 py-1.5 border-b border-border shrink-0">
+            <button onClick={() => setZeitenOffen(o => !o)}
+              className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground">
+              <ChevronDown size={13} className={zeitenOffen ? 'rotate-180 transition-transform' : 'transition-transform'} />
+              Genaue Zeitpunkte der Aussetzer{wlanEv.length > 0 ? ` · WLAN: ${wlanEv.length}` : ''}{lanEv.length > 0 ? ` · LAN: ${lanEv.length}` : ''}
+            </button>
+            {zeitenOffen && (
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                {wlanEv.length > 0 && (
+                  <div className="rounded border border-sky-500/30 bg-sky-500/5 p-2">
+                    <div className="text-[10px] font-semibold text-sky-300 uppercase tracking-wide mb-1">WLAN-Trennungen (14 T.)</div>
+                    <div className="max-h-44 overflow-auto space-y-0.5">
+                      {wlanEv.map((e, i) => (
+                        <div key={i} className="text-[11px] text-foreground/90">
+                          <span className="font-mono text-foreground">{e.zeit || '—'}</span>
+                          {e.bssid && <span className="text-muted-foreground"> · {e.bssid}</span>}
+                          {e.grund && <span className="text-muted-foreground truncate"> — {e.grund}</span>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {lanEv.length > 0 && (
+                  <div className="rounded border border-emerald-500/30 bg-emerald-500/5 p-2">
+                    <div className="text-[10px] font-semibold text-emerald-300 uppercase tracking-wide mb-1">LAN-Trennungen (14 T.)</div>
+                    <div className="max-h-44 overflow-auto space-y-0.5">
+                      {lanEv.map((e, i) => (
+                        <div key={i} className="text-[11px] text-foreground/90">
+                          <span className="font-mono text-foreground">{e.zeit || '—'}</span>
+                          {e.grund && <span className="text-muted-foreground"> — {e.grund}</span>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Befunde */}
         <div className="flex-1 overflow-auto px-5 py-3 space-y-2">
@@ -189,6 +248,7 @@ function BefundKarte({ b, checked, onCheck, infoOn, onInfo, ausfOn, onAusf }: {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
             <span className={`text-[10px] px-1.5 py-0.5 rounded-full border font-semibold ${GEWICHT_BADGE[b.gewicht]}`}>{b.gewicht}</span>
+            {b.verbindung && <span className={`text-[10px] px-1.5 py-0.5 rounded-full border font-semibold ${b.verbindung === 'LAN' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40' : 'bg-sky-500/15 text-sky-300 border-sky-500/40'}`}>{b.verbindung}</span>}
             <span className="text-sm font-semibold text-foreground">{b.titel}</span>
             <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted/40 text-muted-foreground border border-border">{KAT_LABEL[b.kategorie] || b.kategorie}</span>
             {b.fixbar && b.fix && <span className="text-[10px] text-emerald-400">im Tool behebbar</span>}

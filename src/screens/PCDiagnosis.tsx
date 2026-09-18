@@ -14,6 +14,7 @@ import SapFehlersuche from '../sapCheck/SapFehlersuche'
 import SolidWorksDiagnose from '../swCheck/SolidWorksDiagnose'
 import NetzwerkDiagnose from '../netCheck/NetzwerkDiagnose'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
+import SolidWorksHelp from '../components/solidworks/SolidWorksHelp'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -1590,7 +1591,7 @@ export default function PCDiagnosis() {
             <p className="text-[11px] text-muted-foreground mt-1">Fokussiert auf SAP: Installation, Konfiguration, Netz/Kerberos, Logs, Edge — mit Vergleich &amp; Baseline.</p>
           </button>
           <button onClick={() => setSwMode(true)} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
-            <div className="flex items-center gap-2"><Wrench size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">SolidWorks Diagnose</span></div>
+            <div className="flex items-center gap-2"><Wrench size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground"><SolidWorksHelp>SolidWorks</SolidWorksHelp> Diagnose</span></div>
             <p className="text-[11px] text-muted-foreground mt-1">Mehrere Workstations auf einmal (Typ/Status) oder Einzel-PC — Bestandsaufnahme + Lizenzserver, mit Sammel-Export.</p>
           </button>
           <button onClick={() => setNetMode(true)} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">

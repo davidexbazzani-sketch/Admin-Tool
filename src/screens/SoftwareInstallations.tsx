@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { PackagePlus, Wrench, Phone } from 'lucide-react'
 import SolidWorksInstallation from '../components/softwareInstallations/SolidWorksInstallation'
+import SolidWorksHelp from '../components/solidworks/SolidWorksHelp'
 import XelionInstallation from '../components/softwareInstallations/XelionInstallation'
 
 type Section = 'overview' | 'solidworks' | 'xelion'
@@ -26,7 +27,7 @@ export default function SoftwareInstallations() {
               <Wrench size={20} className="text-blue-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-foreground">SolidWorks 2024 SP5</h3>
+              <h3 className="font-semibold text-foreground"><SolidWorksHelp>SolidWorks</SolidWorksHelp> 2024 SP5</h3>
               <p className="text-xs text-muted-foreground mt-1">Automatisierte Installation (Schritte 1-9). Robocopy + Setup + Konfiguration in einem Durchlauf.</p>
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>

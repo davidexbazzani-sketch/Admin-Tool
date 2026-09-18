@@ -38,7 +38,9 @@ function psQuote(s: string): string {
 }
 
 const BATCH_SIZE = 15
-const PARALLEL_BATCHES = 6
+// Netz-/DC-schonend: max. 4 gleichzeitige PS-Prozesse (jeder arbeitet seine 15
+// Hosts SEQUENZIELL ab → höchstens 4 gleichzeitige LDAP/Ping aus einer Quelle).
+const PARALLEL_BATCHES = 4
 const TIMEOUT_MS = 150000
 
 function buildScript(items: HostQuery[]): string {

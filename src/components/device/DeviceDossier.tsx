@@ -12,7 +12,8 @@ import {
 } from 'lucide-react'
 import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { useAppStore } from '../../store/appStore'
-import type { DeviceEntry } from '../../types'
+import { useMapIntentStore } from '../../store/mapIntentStore'
+import type { DeviceEntry, Screen } from '../../types'
 import {
   loadDeviceDossier, emptyDeviceDossier, deviceKey, canonicalHost,
   pickAndStoreDeviceFiles, openDeviceFile, deleteDeviceFile, formatFileSize, logDeviceAction,
@@ -158,6 +159,11 @@ function DeviceDossierModal({ hostname, serial, onClose }: { hostname: string; s
     setScreen('query-menu')
     onClose()
   }
+  function goLocation(screen: Screen, host: string) {
+    useMapIntentStore.getState().setIntent({ screen, hostname: host, mode: 'focus' })
+    setScreen(screen)
+    onClose()
+  }
 
   const entryCount = dossier?.entries.length ?? 0
 
@@ -219,7 +225,7 @@ function DeviceDossierModal({ hostname, serial, onClose }: { hostname: string; s
         {/* Stammdaten */}
         {tab === 'info' && (
           <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4">
-            <DeviceMasterData hostname={display} serial={dossier?.serial || serial} onOpenPerson={() => { /* PersonInfoButton nutzt eigenen Provider */ }} />
+            <DeviceMasterData hostname={display} serial={dossier?.serial || serial} onOpenPerson={() => { /* PersonInfoButton nutzt eigenen Provider */ }} onShowLocation={goLocation} />
           </div>
         )}
 

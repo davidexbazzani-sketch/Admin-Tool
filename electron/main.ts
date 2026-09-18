@@ -1,8 +1,8 @@
 import { app, BrowserWindow, ipcMain, dialog, shell, Menu, screen as electronScreen, session as electronSession } from 'electron'
 import { join } from 'path'
 import { spawn, execFileSync, execFile, type ChildProcess } from 'child_process'
-import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync, statSync } from 'fs'
-import { userInfo, hostname } from 'os'
+import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync, statSync, unlinkSync } from 'fs'
+import { userInfo, hostname, tmpdir } from 'os'
 import Store from 'electron-store'
 import { runPowerShell, killAllProcesses } from './powerShellRunner'
 import * as auth from './authManager'
@@ -404,6 +404,50 @@ ipcMain.handle('file:write', async (_e, filePath: string, dataBase64: string) =>
   }
 })
 
+// OCR eines eingefügten Screenshots — OFFLINE über die in Windows eingebaute
+// Texterkennung (Windows.Media.Ocr, WinRT). Für den Menüpunkt „Zuweisung Tickets".
+// Bild wird flüchtig in %TEMP% geschrieben, erkannt und sofort wieder gelöscht.
+function buildOcrPowerShell(pngPath: string): string {
+  const p = pngPath.replace(/'/g, "''")
+  return [
+    "$ErrorActionPreference='Stop'",
+    'try {',
+    '  Add-Type -AssemblyName System.Runtime.WindowsRuntime | Out-Null',
+    "  $asTaskGeneric = ([System.WindowsRuntimeSystemExtensions].GetMethods() | Where-Object { $_.Name -eq 'AsTask' -and $_.GetParameters().Count -eq 1 -and $_.GetParameters()[0].ParameterType.Name -eq 'IAsyncOperation`1' })[0]",
+    '  function Await($op, $t) { $m = $asTaskGeneric.MakeGenericMethod($t); $task = $m.Invoke($null, @($op)); $task.Wait(-1) | Out-Null; $task.Result }',
+    '  [Windows.Storage.StorageFile,Windows.Storage,ContentType=WindowsRuntime] | Out-Null',
+    '  [Windows.Media.Ocr.OcrEngine,Windows.Foundation,ContentType=WindowsRuntime] | Out-Null',
+    '  [Windows.Graphics.Imaging.BitmapDecoder,Windows.Graphics.Imaging,ContentType=WindowsRuntime] | Out-Null',
+    `  $sf = Await ([Windows.Storage.StorageFile]::GetFileFromPathAsync('${p}')) ([Windows.Storage.StorageFile])`,
+    '  $stream = Await ($sf.OpenAsync([Windows.Storage.FileAccessMode]::Read)) ([Windows.Storage.Streams.IRandomAccessStream])',
+    '  $decoder = Await ([Windows.Graphics.Imaging.BitmapDecoder]::CreateAsync($stream)) ([Windows.Graphics.Imaging.BitmapDecoder])',
+    '  $bitmap = Await ($decoder.GetSoftwareBitmapAsync()) ([Windows.Graphics.Imaging.SoftwareBitmap])',
+    '  $engine = [Windows.Media.Ocr.OcrEngine]::TryCreateFromUserProfileLanguages()',
+    "  if (-not $engine) { try { $engine = [Windows.Media.Ocr.OcrEngine]::TryCreateFromLanguage([Windows.Globalization.Language]::new('en-US')) } catch {} }",
+    "  if (-not $engine) { Write-Output 'OCR_ERR:Kein Windows-OCR-Sprachpaket installiert (Einstellungen > Zeit und Sprache > Sprache > Optionale Features > Texterkennung).'; return }",
+    '  $result = Await ($engine.RecognizeAsync($bitmap)) ([Windows.Media.Ocr.OcrResult])',
+    '  $lines = @(); foreach ($ln in $result.Lines) { $lines += $ln.Text }',
+    '  Write-Output ($lines -join [char]10)',
+    '} catch { Write-Output ("OCR_ERR:" + $_.Exception.Message) }',
+  ].join('\n')
+}
+
+ipcMain.handle('ocr:image', async (_e, dataBase64: string) => {
+  const tmpPng = join(tmpdir(), `zuw_ocr_${Date.now()}_${Math.floor(Math.random() * 1e6)}.png`)
+  try {
+    writeFileSync(tmpPng, Buffer.from(String(dataBase64).replace(/^data:image\/\w+;base64,/, ''), 'base64'))
+    const res = await runPowerShell(buildOcrPowerShell(tmpPng), 60000)
+    const txt = (res.stdout || '').replace(/\r/g, '').trim()
+    if (txt.startsWith('OCR_ERR:')) return { ok: false, error: txt.slice('OCR_ERR:'.length).trim() || 'OCR fehlgeschlagen' }
+    if (!txt) return { ok: false, error: 'Kein Text erkannt.' }
+    return { ok: true, text: txt }
+  } catch (err) {
+    return { ok: false, error: String(err) }
+  } finally {
+    try { unlinkSync(tmpPng) } catch { /* egal */ }
+  }
+})
+
 // Store
 ipcMain.handle('store:get', () => store.store)
 ipcMain.handle('store:set', (_e, key: string, value: unknown) => {
@@ -652,27 +696,43 @@ ipcMain.handle('servicenow:request', async (_e, opts: {
     // SSO-Sitzung (Cookie). Transport IMMER ueber das versteckte Fenster —
     // net.request scheitert am Firmenrechner an der Client-Zertifikat-Auswahl
     // (Zscaler/mTLS, select-client-certificate feuert nur fuer webContents).
-    const usedBasic = !!(opts.auth && opts.auth.user && opts.auth.pass)
-    const authHeader = usedBasic
-      ? 'Authorization: Basic ' + Buffer.from(`${opts.auth!.user}:${opts.auth!.pass}`, 'utf8').toString('base64')
-      : ''
-    const extraHeaders = 'Accept: application/json' + (authHeader ? '\n' + authHeader : '')
+    // Zugangsdaten von Copy&Paste-Artefakten befreien (Zeilenumbrüche/Tabs aus dem
+    // Support-Chat) — häufige Ursache für ein fälschliches 401. Normale Leerzeichen
+    // bleiben erhalten. Beim Benutzernamen zusätzlich außen trimmen.
+    const stripCtrl = (s: string) => (s || '').replace(/[\r\n\t]/g, '')
+    const cleanUser = stripCtrl(opts.auth?.user || '').trim()
+    const cleanPass = stripCtrl(opts.auth?.pass || '')
+    const usedBasic = !!(cleanUser && cleanPass)
+    const basicB64 = usedBasic ? Buffer.from(`${cleanUser}:${cleanPass}`, 'utf8').toString('base64') : ''
+    const extraHeaders = 'Accept: application/json' + (usedBasic ? '\nAuthorization: Basic ' + basicB64 : '')
 
     const win = ensureSnWindow()
 
-    let raw: { ok: boolean; status?: number; body?: string; error?: string }
-    if (method === 'GET') {
-      raw = await snNavGet(win, url, extraHeaders)
-    } else {
-      // PATCH (Phase 2): erst API-Origin per Navigation etablieren, dann same-origin fetch
-      // (Basic- bzw. Cookie-authentifiziert; das CSRF-Token g_ck/X-UserToken folgt separat).
-      await snNavGet(win, origin + '/api/now/table/sys_user?sysparm_limit=1', extraHeaders)
-      const headers: Record<string, string> = { Accept: 'application/json', 'Content-Type': 'application/json' }
-      if (usedBasic) headers.Authorization = authHeader.replace(/^Authorization: /, '')
-      const init = { method, headers, body: opts.body ? JSON.stringify(opts.body) : undefined, cache: 'no-store', credentials: 'include' }
-      const js = `(async()=>{try{const r=await fetch(${JSON.stringify(url)},${JSON.stringify(init)});const t=await r.text();return{ok:true,status:r.status,body:t}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
-      raw = await win.webContents.executeJavaScript(js, true) as { ok: boolean; status?: number; body?: string; error?: string }
+    // Bootstrap: Navigation auf die Instanz-Origin (etabliert den same-origin-
+    // Kontext für das anschließende fetch UND löst die mTLS-Client-Zertifikat-
+    // Auswahl aus, die nur für webContents feuert). Nur nötig, wenn das versteckte
+    // Fenster noch NICHT auf dieser Origin steht — spätere Anfragen fetchen direkt.
+    let onOrigin = false
+    try { onOrigin = snOriginOf(win.webContents.getURL()) === origin } catch { onOrigin = false }
+    if (!onOrigin) await snNavGet(win, origin + '/api/now/table/sys_user?sysparm_limit=1', extraHeaders)
+
+    // Eigentliche Anfrage IMMER per same-origin fetch (GET wie POST/PATCH). Der
+    // Authorization-Header wird hier zuverlässig als Request-Header gesendet.
+    // WICHTIG bei Basic Auth: Cookies WEGLASSEN (credentials:'omit') — sonst kann
+    // eine veraltete/ungültige SSO-Sitzung in derselben Partition das Integrations-
+    // konto überstimmen und ein falsches 401 liefern. Ohne Basic Auth (SSO)
+    // authentifiziert dagegen der Session-Cookie -> credentials:'include'.
+    const headers: Record<string, string> = { Accept: 'application/json' }
+    if (opts.body) headers['Content-Type'] = 'application/json'
+    if (usedBasic) headers.Authorization = 'Basic ' + basicB64
+    const init = {
+      method, headers,
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
+      cache: 'no-store',
+      credentials: usedBasic ? 'omit' : 'include',
     }
+    const js = `(async()=>{try{const r=await fetch(${JSON.stringify(url)},${JSON.stringify(init)});const t=await r.text();return{ok:true,status:r.status,body:t}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
+    const raw = await win.webContents.executeJavaScript(js, true) as { ok: boolean; status?: number; body?: string; error?: string }
 
     if (!raw || !raw.ok) {
       let m = raw?.error || 'Anfrage fehlgeschlagen'
@@ -689,7 +749,11 @@ ipcMain.handle('servicenow:request', async (_e, opts: {
     if (status === 401 || (!hasResult && snLooksLikeLogin(typeof raw.body === 'string' ? raw.body : ''))) {
       if (usedBasic) {
         // Integrationskonto abgelehnt -> KEIN SSO-Prompt, sondern klare Meldung.
-        return { success: false, status: status || 401, error: 'Integrationskonto abgelehnt (401) — Benutzername/Passwort im Zugang-Panel prüfen.' }
+        // ServiceNows eigene Fehlermeldung (z. B. „User Not Authenticated") mit anzeigen —
+        // hilft zu unterscheiden: falsches Passwort vs. Basic Auth für das Konto gesperrt.
+        const snMsg = (data as { error?: { message?: string; detail?: string } } | undefined)?.error
+        const detail = snMsg ? (snMsg.detail || snMsg.message || '') : ''
+        return { success: false, status: status || 401, error: 'Integrationskonto abgelehnt (401)' + (detail ? ` — ${detail}` : '') + ' — Benutzername/Passwort prüfen; das Konto muss auf DIESER Instanz existieren und Basic-Auth für die REST-API erlaubt sein.' }
       }
       return { success: false, status: status || 401, needsLogin: true, error: 'ServiceNow-SSO-Anmeldung erforderlich. Bitte im Zugang-Panel anmelden.' }
     }
@@ -699,6 +763,61 @@ ipcMain.handle('servicenow:request', async (_e, opts: {
     const em = (data as { error?: { message?: string } } | undefined)?.error?.message
     if (em) msg += ` — ${em}`
     return { success: false, status, data, error: msg }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : String(err) }
+  }
+})
+
+// ── ServiceNow: Datei-Anhang hochladen (Attachment-API) ─────────────────────
+// Wie servicenow:request, aber POST an /api/now/attachment/file mit binärem Body
+// (Checkliste als PDF an einen sc_task). Basic-Auth ODER SSO-Session, Transport
+// über das versteckte Fenster (mTLS). dataBase64 = das PDF Base64-kodiert.
+ipcMain.handle('servicenow:attach', async (_e, opts: {
+  instanceUrl: string; table: string; sysId: string; fileName: string; contentType?: string; dataBase64: string
+  auth?: { user: string; pass: string }
+}): Promise<{ success: boolean; status?: number; sysId?: string; error?: string; needsLogin?: boolean }> => {
+  try {
+    const base = (opts.instanceUrl || '').trim().replace(/\/+$/, '')
+    if (!base) return { success: false, error: 'Keine Instanz-URL konfiguriert.' }
+    if (!/^https?:\/\//i.test(base)) return { success: false, error: 'Instanz-URL muss mit https:// beginnen.' }
+    const origin = snOriginOf(base)
+    if (!origin) return { success: false, error: 'Instanz-URL ungültig.' }
+    if (!opts.table || !opts.sysId) return { success: false, error: 'Tabelle/sys_id fehlt.' }
+    const params = new URLSearchParams()
+    params.set('table_name', opts.table)
+    params.set('table_sys_id', opts.sysId)
+    params.set('file_name', opts.fileName || 'checkliste.pdf')
+    const url = origin + '/api/now/attachment/file?' + params.toString()
+    const ct = opts.contentType || 'application/pdf'
+
+    const stripCtrl = (s: string) => (s || '').replace(/[\r\n\t]/g, '')
+    const cleanUser = stripCtrl(opts.auth?.user || '').trim()
+    const cleanPass = stripCtrl(opts.auth?.pass || '')
+    const usedBasic = !!(cleanUser && cleanPass)
+    const basicB64 = usedBasic ? Buffer.from(`${cleanUser}:${cleanPass}`, 'utf8').toString('base64') : ''
+    const extraHeaders = 'Accept: application/json' + (usedBasic ? '\nAuthorization: Basic ' + basicB64 : '')
+
+    const win = ensureSnWindow()
+    let onOrigin = false
+    try { onOrigin = snOriginOf(win.webContents.getURL()) === origin } catch { onOrigin = false }
+    if (!onOrigin) await snNavGet(win, origin + '/api/now/table/sys_user?sysparm_limit=1', extraHeaders)
+
+    const b64 = (opts.dataBase64 || '').replace(/^data:[^,]*,/, '')
+    const authHeaderJs = usedBasic ? `,'Authorization':${JSON.stringify('Basic ' + basicB64)}` : ''
+    const credentials = usedBasic ? 'omit' : 'include'
+    const js = `(async()=>{try{const b64=${JSON.stringify(b64)};const bin=atob(b64);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);const r=await fetch(${JSON.stringify(url)},{method:'POST',headers:{'Accept':'application/json','Content-Type':${JSON.stringify(ct)}${authHeaderJs}},body:arr,cache:'no-store',credentials:${JSON.stringify(credentials)}});const t=await r.text();return{ok:true,status:r.status,body:t}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
+    const raw = await win.webContents.executeJavaScript(js, true) as { ok: boolean; status?: number; body?: string; error?: string }
+    if (!raw || !raw.ok) return { success: false, error: 'Upload fehlgeschlagen: ' + (raw?.error || 'unbekannt') }
+    let data: unknown
+    try { data = raw.body ? JSON.parse(raw.body) : undefined } catch { data = raw.body }
+    const status = raw.status || 0
+    if (status >= 200 && status < 300) {
+      const r = (data as { result?: { sys_id?: string } } | undefined)?.result
+      return { success: true, status, sysId: r?.sys_id }
+    }
+    if (status === 401) return { success: false, status, needsLogin: !usedBasic, error: usedBasic ? 'Integrationskonto abgelehnt (401) beim Upload.' : 'ServiceNow-Anmeldung erforderlich.' }
+    const em = (data as { error?: { message?: string } } | undefined)?.error?.message
+    return { success: false, status, error: `Upload HTTP ${status}` + (em ? ` — ${em}` : '') }
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : String(err) }
   }

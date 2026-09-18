@@ -24,6 +24,7 @@ export interface Erklaerung {
 // Ein konkreter, anwendbarer Fix.
 export interface NetFix {
   art: 'advanced' | 'powercfg' | 'powermgmt'
+  adapter?: 'wlan' | 'lan'   // welcher Adapter (Default: wlan)
   keyword?: string        // advanced: RegistryKeyword (z. B. "RoamAggressiveness")
   displayName?: string    // advanced: DisplayName (Fallback-Match)
   zielRegValue?: string   // advanced: Ziel-RegistryValue
@@ -35,6 +36,7 @@ export interface NetFix {
 export interface NetBefund {
   id: string
   titel: string
+  verbindung?: 'WLAN' | 'LAN'   // welcher Verbindungsart der Befund zugeordnet ist
   gewicht: Gewicht
   ist: string
   soll: string
@@ -69,6 +71,8 @@ export interface NetEreignisse {
   disconnects: number      // Event 8003
   connects: number         // Event 8001
   securityStops: number    // Event 11004/11010
+  authFehler?: number      // Event 11006 — WLAN-Sicherheit/802.1X-Authentifizierung fehlgeschlagen
+  connectFehler?: number   // Event 8002 — Verbindungsaufbau fehlgeschlagen
   gruende: { grund: string; anzahl: number }[]
   bssidCluster: { bssid: string; anzahl: number }[]
   letzte: WlanEreignis[]
@@ -99,18 +103,40 @@ export interface NetPowercfg {
   modernStandby?: boolean | null  // S0 Low Power Idle vorhanden
 }
 
+// ── LAN-spezifisch ───────────────────────────────────────────────────────────
+export interface LanStatistik { rxBytes?: number; txBytes?: number; rxErr?: number; txErr?: number; rxDisc?: number; txDisc?: number }
+export interface LanVerbindung { linkSpeed?: string; mediaState?: string }
+export interface LanEreignis { id: number; zeit: string; grund?: string }
+export interface LanEreignisse { tage: number; disconnects: number; connects: number; letzte: LanEreignis[] }
+export interface IpConfig { ip?: string; gateway?: string; dns?: string; profil?: string }
+export interface PingTest { ziel: string; verlust: number; min?: number | null; avg?: number | null; max?: number | null; jitter?: number | null }
+export interface TcpGlobal { autotuning?: string; rss?: string; rsc?: string }
+
 export interface NetDaten {
   ok: boolean
   fehler?: string
   hostname?: string
+  aktiv?: { wlan: boolean; lan: boolean }   // welche Verbindungsart(en) sind AKTIV (Up + verbunden)
   mehrereAdapter?: number
+  // WLAN
   adapter?: NetAdapterInfo
   advanced: AdvProp[]
   powerMgmt: NetPowerMgmt
   powercfg: NetPowercfg
   verbindung?: NetVerbindung
   ereignisse?: NetEreignisse
-  system?: { modell?: string; bios?: string; os?: string }
+  // LAN
+  lan?: NetAdapterInfo
+  lanAdvanced?: AdvProp[]
+  lanPowerMgmt?: NetPowerMgmt
+  lanStatistik?: LanStatistik
+  lanVerbindung?: LanVerbindung
+  lanEreignisse?: LanEreignisse
+  // gemeinsam
+  ipconfig?: IpConfig
+  pingTests?: PingTest[]
+  tcpGlobal?: TcpGlobal
+  system?: { modell?: string; bios?: string; os?: string; benutzer?: string }
   textBericht?: string
 }
 

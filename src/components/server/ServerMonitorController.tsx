@@ -10,7 +10,7 @@ import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { useAppStore } from '../../store/appStore'
 import {
   loadServerStatus, saveServerStatus, isStatusClaimed, offlineHostsForTiles,
-  loadServerConfig, runPingCycle, runRebootCheck,
+  loadServerConfig, runPingCycle, runRebootCheck, runServerMetricsIfDue,
 } from '../../services/serverMonitor'
 
 const POLL_MS = 2 * 60 * 1000            // Status alle 2 min lesen (Popup/Blink)
@@ -63,6 +63,9 @@ export default function ServerMonitorController() {
       if (sig && sig !== lastSignature.current) setPopupOpen(true)
       if (off.length === 0) setPopupOpen(false)
       lastSignature.current = sig
+
+      // 4) Auslastungs-Scan (RAM/Festplatte) – 1×/Tag laut Zeitplan (11:00), self-gated + eigener Claim.
+      await runServerMetricsIfDue(user?.displayName || username)
     } catch { /* still */ } finally {
       busy.current = false
     }

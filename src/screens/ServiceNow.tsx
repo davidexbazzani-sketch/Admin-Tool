@@ -15,7 +15,8 @@ import {
   instanceHost, isDevInstance,
   createIncident, closeIncident, resolveSysUserSysId, resolveGroupSysId,
   CLOSE_CODES, DEFAULT_ASSIGNMENT_GROUPS,
-  DEFAULT_INSTANCE, type ServiceNowConfig, type SnTable, type SnTicket, type CertDiag, type CloseState,
+  loadHandoverConfig, saveHandoverConfig, DEFAULT_TEMPLATE_SYS_ID,
+  DEFAULT_INSTANCE, type ServiceNowConfig, type SnTable, type SnTicket, type CertDiag, type CloseState, type HandoverConfig,
 } from '../services/servicenow'
 
 const TABLE_LABEL: Record<SnTable, string> = { incident: 'Incidents', task: 'Tasks' }
@@ -41,6 +42,10 @@ export default function ServiceNow() {
   const [intShowPass, setIntShowPass] = useState(false)
   const [intActive, setIntActive] = useState(false)
   const [intBusy, setIntBusy] = useState(false)
+  // Checklisten-Übergabe-Automatik (Task schließen + Primary-User-Incident)
+  const [ho, setHo] = useState<HandoverConfig>({ enabled: false, templateSysId: DEFAULT_TEMPLATE_SYS_ID, closeState: '3' })
+  const [hoBusy, setHoBusy] = useState(false)
+  const [hoMsg, setHoMsg] = useState('')
   // SSO-Anmeldestatus (Fallback ohne Integrationskonto)
   const [signedIn, setSignedIn] = useState(false)
   const [snUser, setSnUser] = useState<string | null>(null)
@@ -66,8 +71,17 @@ export default function ServiceNow() {
       const [c, acc] = await Promise.all([loadConfig(), loadIntegrationAccount(true)])
       setCfg(c); setForm(c); setGroupsText((c.assignmentGroups ?? []).join(', '))
       if (acc) { setIntUser(acc.user); setIntPass(acc.pass); setIntActive(true) }
+      try { setHo(await loadHandoverConfig()) } catch { /* Default */ }
     })()
   }, [])
+
+  async function saveHo() {
+    setHoBusy(true); setHoMsg('')
+    try {
+      const ok = await saveHandoverConfig({ enabled: ho.enabled, templateSysId: (ho.templateSysId || '').trim() || DEFAULT_TEMPLATE_SYS_ID, closeState: (ho.closeState || '').trim() || '3' }, currentUser)
+      setHoMsg(ok ? 'Gespeichert (gilt zentral für alle App-Nutzer).' : 'Speichern fehlgeschlagen.')
+    } finally { setHoBusy(false) }
+  }
 
   // Integrationskonto speichern (zentral) + sofort testen
   async function saveIntegration() {
@@ -271,6 +285,36 @@ export default function ServiceNow() {
               <p className="text-[11px] text-muted-foreground">
                 Wird beim Speichern getestet und zentral auf dem IT-Netzlaufwerk abgelegt (nur für die IT erreichbar). Passwort einfach per Copy&nbsp;&amp;&nbsp;Paste aus dem Support-Chat einfügen — Sonderzeichen sind kein Problem.
               </p>
+            </div>
+
+            {/* Checklisten-Übergabe → ServiceNow-Automatik */}
+            <div className="rounded-md border border-border bg-background/60 p-3 space-y-2">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-semibold text-foreground">Automatik bei Geräteübergabe (Checklisten)</span>
+                <label className="ml-auto inline-flex items-center gap-2 text-xs text-foreground cursor-pointer">
+                  <input type="checkbox" checked={ho.enabled} onChange={e => setHo(h => ({ ...h, enabled: e.target.checked }))} className="accent-primary" />
+                  aktiv
+                </label>
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                Wenn eine Checkliste als „übergeben" bestätigt wird, laufen automatisch (im Hintergrund, ohne Browser): Deployment-<strong className="text-foreground">Task schließen</strong> + Checkliste als PDF anhängen und ein <strong className="text-foreground">Primary-User-Incident</strong> anlegen. Nutzt das oben konfigurierte Konto/die Instanz.
+              </p>
+              <div className="flex gap-2 flex-wrap items-end">
+                <label className="text-[11px] text-muted-foreground flex-1 min-w-[260px]">Vorlage-Incident (sys_id, „copy incident")
+                  <input value={ho.templateSysId} onChange={e => setHo(h => ({ ...h, templateSysId: e.target.value }))} placeholder={DEFAULT_TEMPLATE_SYS_ID}
+                    className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground font-mono focus:outline-none focus:border-primary" />
+                </label>
+                <label className="text-[11px] text-muted-foreground w-28">Task-Schließ-Status
+                  <input value={ho.closeState} onChange={e => setHo(h => ({ ...h, closeState: e.target.value }))} placeholder="3"
+                    className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground font-mono focus:outline-none focus:border-primary" />
+                </label>
+                <button onClick={saveHo} disabled={hoBusy}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
+                  {hoBusy ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}Speichern
+                </button>
+              </div>
+              {hoMsg && <p className="text-[11px] text-emerald-300">{hoMsg}</p>}
+              <p className="text-[10px] text-muted-foreground/80">Status 3 = „Closed Complete". Vorlage-sys_id ist instanz-spezifisch (prod) — an eurer Instanz prüfen. Bei Problemen erscheint je Schritt eine Fehlermeldung; die Checkliste wird trotzdem als erledigt gespeichert.</p>
             </div>
 
             {/* Anmeldestatus + SSO-Buttons (Fallback ohne Integrationskonto) */}

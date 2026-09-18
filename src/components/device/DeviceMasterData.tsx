@@ -3,10 +3,11 @@
 // AD-Computer, Inventar/Endgeräte, installierte Software, ServiceNow.
 // Jede Datenquelle laedt unabhaengig — die UI blockiert nie.
 
-import { useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   ChevronDown, ChevronRight, Loader2, MonitorSmartphone, Boxes, Package, Ticket,
-  AlertTriangle, ExternalLink, Printer, Plus, Search, Link2, CheckCircle2, XCircle,
+  AlertTriangle, ExternalLink, Printer, Plus, Link2, CheckCircle2, XCircle, MapPin, Star, RefreshCw,
+  HardDrive, Trash2,
 } from 'lucide-react'
 import { api } from '../../electronAPI'
 import {
@@ -15,14 +16,20 @@ import {
   type AdComputerInfo, type SoftwareResult, type DeviceServiceNow,
 } from '../../services/deviceMasterData'
 import { modelTypeDisplay, type EndpointDevice } from '../../services/endpointDevices'
+import { findDeviceLocation, type FoundLocation } from '../../services/deviceMaps'
+import type { Screen } from '../../types'
 import type { InventoryItem } from '../../types/auth'
 import { PersonInfoButton } from '../person/PersonDossier'
 import {
-  loadConnData, forComputer, listServerPrinters, serverConnection, connectPrinter,
-  type ConnFlat, type ServerPrinter,
+  loadConnData, forComputer, connectPrinterViaSeal, setDefaultPrinterLocal, setDefaultPrinter,
+  type ConnFlat,
 } from '../../services/printerConnections'
-import { DEFAULT_PRINT_SERVER, logPrinterAction } from '../../services/printerDossier'
-import { PrintServerCheck } from '../printer/PrintServerCheck'
+import { queryLivePrinters, type LivePrintersResult } from '../../services/livePrinters'
+import {
+  loadStoredNetworkDrives, refreshNetworkDrivesLive, connectNetworkDrive, disconnectNetworkDrive,
+  type StoredNetworkDrives,
+} from '../../services/deviceNetworkDrives'
+import { logPrinterAction } from '../../services/printerDossier'
 import { useCurrentUser } from '../../store/authStore'
 
 // ── kleine Bausteine (analog PersonMasterData) ────────────────────────────────
@@ -68,107 +75,241 @@ function Empty({ text }: { text: string }) {
 // ── Drucker mit diesem PC verbinden ───────────────────────────────────────────
 // Zeigt die Freigaben des Druckservers und verbindet den gewählten Drucker mit
 // EINEM Klick für den am Ziel-PC angemeldeten Benutzer (User-Kontext, kein WinRM).
-function ConnectPrinterPicker({ hostname, onConnected }: { hostname: string; onConnected?: () => void }) {
+export function ConnectPrinterPicker({ hostname, onConnected }: { hostname: string; onConnected?: () => void }) {
   const currentUser = useCurrentUser()?.username || ''
-  const server = DEFAULT_PRINT_SERVER
   const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [printers, setPrinters] = useState<ServerPrinter[] | null>(null)
-  const [loadError, setLoadError] = useState<string | null>(null)
-  const [filter, setFilter] = useState('')
-  const [busy, setBusy] = useState<string | null>(null)   // shareName des laufenden Verbindens
+  const [name, setName] = useState('')                    // SEAL/PLOSSYS-Druckername (Queue)
+  const [busy, setBusy] = useState(false)
   const [result, setResult] = useState<{ name: string; ok: boolean; text?: string } | null>(null)
 
-  async function loadList() {
-    setLoading(true); setLoadError(null)
-    const r = await listServerPrinters(server)
-    setLoading(false)
-    if (!r.ok) { setLoadError(r.error || 'Druckerliste konnte nicht geladen werden.'); return }
-    setPrinters(r.printers)
-  }
-
-  function toggle() {
-    const next = !open
-    setOpen(next)
-    if (next && printers === null && !loading) void loadList()
-  }
-
-  async function connect(sp: ServerPrinter) {
-    setBusy(sp.shareName || sp.name); setResult(null)
+  // Verbindet einen SEAL/PLOSSYS-Drucker über die SEAL Add Printer Wizard CLI
+  // (`sealapw -queue <name>`) im Kontext des am Ziel-PC angemeldeten Benutzers —
+  // exakt wie „Rechtsklick → Einrichten" im SEAL-Assistenten.
+  async function connectByName() {
+    const nm = name.trim()
+    if (!nm || busy) return
+    setBusy(true); setResult(null)
     try {
-      const r = await connectPrinter(hostname, serverConnection(server, sp))
-      setResult({ name: sp.name, ok: r.ok, text: r.text })
-      void logPrinterAction(sp.name, `Verbinden → ${r.ok ? 'OK' : 'Fehler'} auf ${hostname}${r.text ? ' — ' + r.text.slice(0, 200) : ''}`, currentUser, 'Client-Verbindung')
-      if (r.ok) onConnected?.()
+      const r = await connectPrinterViaSeal(hostname, nm)
+      setResult({ name: nm, ok: r.ok, text: r.text })
+      void logPrinterAction(nm, `SEAL-Verbinden → ${r.ok ? 'OK' : 'Fehler'} auf ${hostname}${r.text ? ' — ' + r.text.slice(0, 200) : ''}`, currentUser, 'Client-Verbindung')
+      if (r.ok) { setName(''); onConnected?.() }
     } catch (e) {
-      setResult({ name: sp.name, ok: false, text: e instanceof Error ? e.message : String(e) })
-    } finally { setBusy(null) }
+      setResult({ name: nm, ok: false, text: e instanceof Error ? e.message : String(e) })
+    } finally { setBusy(false) }
   }
-
-  const list = (printers ?? []).filter(p => {
-    const q = filter.trim().toLowerCase()
-    if (!q) return true
-    return p.name.toLowerCase().includes(q) || (p.shareName || '').toLowerCase().includes(q) || (p.location || '').toLowerCase().includes(q)
-  })
 
   return (
     <div className="mt-2 pt-2 border-t border-border">
-      <button type="button" onClick={toggle}
+      <button type="button" onClick={() => setOpen(o => !o)}
         className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90">
         <Plus size={13} />Drucker verbinden
       </button>
       {open && (
         <div className="mt-2 rounded-md border border-border bg-background p-2 space-y-2">
           <p className="text-[11px] text-muted-foreground">
-            Freigaben von <span className="font-mono text-foreground">{server}</span> — verbindet für den am PC{' '}
-            <span className="font-mono text-foreground">{hostname}</span> angemeldeten Benutzer.
+            Installiert den SEAL-Drucker (PLOSSYS) über <span className="font-mono text-foreground">sealapw&nbsp;-queue</span> für den am PC{' '}
+            <span className="font-mono text-foreground">{hostname}</span> angemeldeten Benutzer — wie „Rechtsklick → Einrichten" im SEAL-Assistenten.
           </p>
-          {loading ? (
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground py-2"><Loader2 size={12} className="animate-spin" />Druckerliste wird geladen…</div>
-          ) : loadError ? (
-            <div className="flex items-start gap-1.5 text-[11px] text-red-300 bg-red-500/10 border border-red-500/25 rounded px-2 py-1.5">
-              <XCircle size={12} className="shrink-0 mt-px" />
-              <span className="flex-1">{loadError}</span>
-              <button onClick={() => void loadList()} className="shrink-0 underline hover:no-underline">Erneut</button>
-            </div>
-          ) : (
-            <>
-              <div className="flex items-center gap-2">
-                <Search size={13} className="text-muted-foreground shrink-0" />
-                <input value={filter} onChange={e => setFilter(e.target.value)} placeholder="Drucker suchen…" autoFocus
-                  className="flex-1 min-w-0 px-2 py-1 text-sm rounded border border-border bg-card text-foreground focus:outline-none focus:border-primary" />
-                <span className="text-[10px] text-muted-foreground shrink-0">{list.length}</span>
-              </div>
-              <div className="max-h-56 overflow-y-auto rounded border border-border divide-y divide-border">
-                {list.length === 0 ? (
-                  <p className="text-xs text-muted-foreground italic px-2 py-2">Keine passende Freigabe.</p>
-                ) : list.map(sp => {
-                  const key = sp.shareName || sp.name
-                  return (
-                    <button key={key} type="button" onClick={() => connect(sp)} disabled={!!busy}
-                      className="w-full flex items-center gap-2 px-2 py-1.5 text-left hover:bg-accent/20 disabled:opacity-50">
-                      <Printer size={13} className="text-blue-400 shrink-0" />
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm text-foreground truncate">{sp.name}</span>
-                        {sp.location && <span className="block text-[10px] text-muted-foreground truncate">{sp.location}</span>}
-                      </span>
-                      {busy === key ? <Loader2 size={13} className="animate-spin text-muted-foreground shrink-0" /> : <Link2 size={13} className="text-muted-foreground shrink-0" />}
-                    </button>
-                  )
-                })}
-              </div>
-            </>
-          )}
+          <div className="flex items-center gap-2">
+            <input value={name} onChange={e => setName(e.target.value)} autoFocus
+              onKeyDown={e => { if (e.key === 'Enter') void connectByName() }}
+              placeholder="Druckername (z. B. PMD583)"
+              className="flex-1 min-w-0 px-2 py-1 text-sm rounded border border-border bg-card text-foreground focus:outline-none focus:border-primary font-mono" />
+            <button type="button" onClick={() => void connectByName()} disabled={busy || !name.trim()}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40 shrink-0">
+              {busy ? <Loader2 size={12} className="animate-spin" /> : <Link2 size={12} />}Verbinden
+            </button>
+          </div>
+          <p className="text-[10px] text-muted-foreground">
+            Den genauen Druckernamen findest du im SEAL-Assistenten (Liste der einrichtbaren Drucker). Das Verbinden kann einige Sekunden dauern.
+          </p>
           {result && (
             <div className={`flex items-start gap-1.5 text-[11px] rounded px-2 py-1.5 ${result.ok ? 'bg-green-500/10 text-green-300 border border-green-500/25' : 'bg-red-500/10 text-red-300 border border-red-500/25'}`}>
               {result.ok ? <CheckCircle2 size={12} className="shrink-0 mt-px" /> : <XCircle size={12} className="shrink-0 mt-px" />}
               <span>{result.name}: {result.text || (result.ok ? 'verbunden' : 'Fehler')}</span>
             </div>
           )}
-          <PrintServerCheck />
         </div>
       )}
     </div>
+  )
+}
+
+// ── Verbundene Netzlaufwerke (LIVE nur auf Klick; Ergebnis zentral gespeichert) ──
+// Zeigt den zuletzt gespeicherten Stand sofort (für alle Nutzer), aktualisiert live
+// nur per „Live aktualisieren". Verbinden/Trennen läuft im Benutzerkontext des PCs.
+function ConnectedNetworkDrives({ hostname }: { hostname: string }) {
+  const currentUser = useCurrentUser()?.username || ''
+  const [data, setData] = useState<StoredNetworkDrives | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [letter, setLetter] = useState('')
+  const [unc, setUnc] = useState('')
+  const [busy, setBusy] = useState('')                    // '' | 'connect' | '<Letter>'
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null)
+  const hostRef = useRef(hostname)
+
+  useEffect(() => {
+    hostRef.current = hostname
+    setLoading(true); setData(null); setMsg(null); setOpen(false); setLetter(''); setUnc('')
+    loadStoredNetworkDrives(hostname)
+      .then(d => { if (hostRef.current === hostname) { setData(d); setLoading(false) } })
+      .catch(() => { if (hostRef.current === hostname) setLoading(false) })
+  }, [hostname])
+
+  const refreshLive = useCallback(() => {
+    const h = hostname
+    setRefreshing(true); setMsg(null)
+    refreshNetworkDrivesLive(h, currentUser)
+      .then(r => { if (hostRef.current === h) setData(r) })
+      .finally(() => { if (hostRef.current === h) setRefreshing(false) })
+  }, [hostname, currentUser])
+
+  async function doConnect() {
+    const l = letter.trim(); const u = unc.trim()
+    if (!l || !u || busy) return
+    setBusy('connect'); setMsg(null)
+    try {
+      const r = await connectNetworkDrive(hostname, l, u)
+      setMsg({ ok: r.ok, text: r.ok ? `${l.toUpperCase()}: verbunden` : (r.text || 'Verbinden fehlgeschlagen') })
+      if (r.ok) { setUnc(''); setLetter(''); setOpen(false); refreshLive() }
+    } catch (e) { setMsg({ ok: false, text: e instanceof Error ? e.message : String(e) }) }
+    finally { setBusy('') }
+  }
+
+  async function doDisconnect(l: string) {
+    if (busy) return
+    setBusy(l); setMsg(null)
+    try {
+      const r = await disconnectNetworkDrive(hostname, l)
+      if (r.ok) {
+        // Deterministisch aus der Anzeige entfernen (kein Live-Rescan → taucht nicht wieder auf).
+        if (r.stored) setData(r.stored)
+        else setData(prev => prev ? { ...prev, drives: prev.drives.filter(d => d.letter !== l) } : prev)
+        setMsg({ ok: true, text: `${l}: getrennt` })
+      } else {
+        setMsg({ ok: false, text: r.text || 'Trennen fehlgeschlagen' })
+      }
+    } catch (e) { setMsg({ ok: false, text: e instanceof Error ? e.message : String(e) }) }
+    finally { setBusy('') }
+  }
+
+  const drives = data?.drives || []
+  return (
+    <div>
+      {/* Kopf: Quelle/Datum + „Live aktualisieren" */}
+      <div className="flex items-center gap-2 flex-wrap pb-1.5 mb-1 border-b border-border/50">
+        {refreshing ? (
+          <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground"><Loader2 size={11} className="animate-spin" />live wird abgefragt…</span>
+        ) : data?.ok ? (
+          <span className="text-[11px] text-green-500 font-medium">● live (WinRM){data.scannedAt ? ' · ' + fmtLastSeen(data.scannedAt) : ''}</span>
+        ) : data ? (
+          <span className="text-[11px] text-muted-foreground">gespeichert{data.scannedAt ? ' · ' + fmtLastSeen(data.scannedAt) : ''}{data.reason ? ' · live: ' + data.reason : ''}</span>
+        ) : loading ? (
+          <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground"><Loader2 size={11} className="animate-spin" />lädt…</span>
+        ) : (
+          <span className="text-[11px] text-muted-foreground">noch nicht abgefragt</span>
+        )}
+        <button type="button" onClick={() => refreshLive()} disabled={refreshing}
+          className="ml-auto inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md border border-border hover:bg-accent/20 disabled:opacity-50">
+          <RefreshCw size={11} className={refreshing ? 'animate-spin' : ''} />Live aktualisieren
+        </button>
+      </div>
+
+      {/* Liste */}
+      {drives.length > 0 ? drives.map(d => (
+        <Row key={d.letter} label={`${d.letter}:`} source={data?.scannedBy || undefined}>
+          <span className="inline-flex items-center gap-2 flex-wrap">
+            <span className="font-mono text-xs text-muted-foreground break-all">{d.unc}</span>
+            <button type="button" onClick={() => void doDisconnect(d.letter)} disabled={!!busy}
+              title="Netzlaufwerk trennen (net use /delete)"
+              className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full border border-red-500/40 text-foreground hover:bg-red-500/10 disabled:opacity-50">
+              {busy === d.letter ? <Loader2 size={11} className="animate-spin" /> : <Trash2 size={11} className="text-red-400" />}trennen
+            </button>
+          </span>
+        </Row>
+      )) : (
+        <Empty text={loading ? 'lädt…' : (data && !data.ok ? `Nicht erreichbar (${data.reason || 'WinRM'}) und kein gespeicherter Stand.` : 'Noch keine Netzlaufwerke geladen — auf „Live aktualisieren" klicken.')} />
+      )}
+
+      {msg && (
+        <div className={`mt-1.5 flex items-start gap-1.5 text-[11px] rounded px-2 py-1.5 ${msg.ok ? 'bg-green-500/10 text-green-300 border border-green-500/25' : 'bg-red-500/10 text-red-300 border border-red-500/25'}`}>
+          {msg.ok ? <CheckCircle2 size={12} className="shrink-0 mt-px" /> : <XCircle size={12} className="shrink-0 mt-px" />}
+          <span>{msg.text}</span>
+        </div>
+      )}
+
+      {/* Neues Netzlaufwerk verbinden */}
+      <div className="mt-2 pt-2 border-t border-border">
+        <button type="button" onClick={() => setOpen(o => !o)}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90">
+          <Plus size={13} />Netzlaufwerk verbinden
+        </button>
+        {open && (
+          <div className="mt-2 rounded-md border border-border bg-background p-2 space-y-2">
+            <p className="text-[11px] text-muted-foreground">
+              Verbindet ein Netzlaufwerk für den am PC <span className="font-mono text-foreground">{hostname}</span> angemeldeten Benutzer (persistent, Benutzerkontext).
+            </p>
+            <div className="flex items-center gap-2">
+              <select value={letter} onChange={e => setLetter(e.target.value)}
+                className="px-2 py-1 text-sm rounded border border-border bg-card text-foreground focus:outline-none focus:border-primary font-mono">
+                <option value="">Buchst.</option>
+                {'GHIJKLMNOPQRSTUVWXYZ'.split('').map(L => <option key={L} value={L}>{L}:</option>)}
+              </select>
+              <input value={unc} onChange={e => setUnc(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') void doConnect() }}
+                placeholder="\\Server\Freigabe" spellCheck={false}
+                className="flex-1 min-w-0 px-2 py-1 text-sm rounded border border-border bg-card text-foreground focus:outline-none focus:border-primary font-mono" />
+              <button type="button" onClick={() => void doConnect()} disabled={busy === 'connect' || !letter.trim() || !unc.trim()}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40 shrink-0">
+                {busy === 'connect' ? <Loader2 size={12} className="animate-spin" /> : <Link2 size={12} />}Verbinden
+              </button>
+            </div>
+            <p className="text-[10px] text-muted-foreground">Läuft im Benutzerkontext (Scheduled-Task) und aktualisiert danach automatisch den Stand.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── „Als Standard setzen" für einen verbundenen Drucker (User-Kontext) ────────
+// Setzt den Drucker für den am Ziel-PC angemeldeten Benutzer als Standard. Nutzt bei
+// vorhandener UNC den Direktweg, sonst die selbstheilende Namensauflösung.
+export function SetDefaultButton({ hostname, printerName, unc, onDone }: {
+  hostname: string; printerName: string; unc?: string; onDone?: () => void
+}) {
+  const currentUser = useCurrentUser()?.username || ''
+  const [busy, setBusy] = useState(false)
+  const [res, setRes] = useState<{ ok: boolean; text?: string } | null>(null)
+  async function run() {
+    setBusy(true); setRes(null)
+    try {
+      // Live-Zeilen liefern den EXAKTEN installierten Namen (p.name) → per Name setzen
+      // (funktioniert für SEAL/PrinterLogic-PLS-Drucker). Scan-Zeilen haben eine UNC.
+      const r = unc
+        ? await setDefaultPrinter(hostname, unc)
+        : await setDefaultPrinterLocal(hostname, printerName)
+      setRes({ ok: r.ok, text: r.text })
+      void logPrinterAction(printerName, `Als Standard setzen → ${r.ok ? 'OK' : 'Fehler'} auf ${hostname}${r.text ? ' — ' + r.text.slice(0, 200) : ''}`, currentUser, 'Client-Verbindung')
+      if (r.ok) onDone?.()
+    } catch (e) {
+      setRes({ ok: false, text: e instanceof Error ? e.message : String(e) })
+    } finally { setBusy(false) }
+  }
+  return (
+    <span className="inline-flex items-center gap-1">
+      <button type="button" onClick={() => void run()} disabled={busy}
+        title="Für den am PC angemeldeten Benutzer als Standarddrucker setzen"
+        className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full border border-amber-500/40 text-foreground hover:bg-amber-500/10 disabled:opacity-50">
+        {busy ? <Loader2 size={11} className="animate-spin" /> : <Star size={11} className="text-amber-500" />}Als Standard
+      </button>
+      {res && (res.ok
+        ? <CheckCircle2 size={11} className="text-green-500" />
+        : <XCircle size={11} className="text-red-400" />)}
+    </span>
   )
 }
 
@@ -195,10 +336,11 @@ function bareUser(u?: string): string {
 
 // ── Hauptkomponente ──────────────────────────────────────────────────────────
 
-export function DeviceMasterData({ hostname, serial, onOpenPerson }: {
+export function DeviceMasterData({ hostname, serial, onOpenPerson, onShowLocation }: {
   hostname: string
   serial?: string
   onOpenPerson?: (name: string, sam?: string) => void
+  onShowLocation?: (screen: Screen, hostname: string) => void
 }) {
   const [ad, setAd] = useState<AdComputerInfo | null>(null)
   const [adLoading, setAdLoading] = useState(true)
@@ -212,7 +354,19 @@ export function DeviceMasterData({ hostname, serial, onOpenPerson }: {
   const [snLoading, setSnLoading] = useState(true)
   const [conn, setConn] = useState<ConnFlat[] | null>(null)
   const [connLoading, setConnLoading] = useState(true)
-  const [connReload, setConnReload] = useState(0)
+  const [livePr, setLivePr] = useState<LivePrintersResult | null>(null)
+  const [livePrLoading, setLivePrLoading] = useState(false)          // Live NUR auf Klick — nicht automatisch
+  const [mapLoc, setMapLoc] = useState<FoundLocation | null>(null)   // Standort auf einer der 3 Karten (falls verortet)
+  const curHostRef = useRef(hostname)
+  useEffect(() => { curHostRef.current = hostname; setLivePr(null); setLivePrLoading(false) }, [hostname])
+  // Live-Abfrage (WinRM) — wird NUR durch „Live aktualisieren" bzw. nach Verbinden/Standard ausgelöst.
+  const refreshLive = useCallback(() => {
+    const h = hostname
+    setLivePrLoading(true); setLivePr(null)
+    queryLivePrinters(h, { force: true })
+      .then(r => { if (curHostRef.current === h) setLivePr(r) })
+      .finally(() => { if (curHostRef.current === h) setLivePrLoading(false) })
+  }, [hostname])
 
   useEffect(() => {
     let cancelled = false
@@ -220,21 +374,25 @@ export function DeviceMasterData({ hostname, serial, onOpenPerson }: {
     setAdLoading(true); setInvLoading(true); setEpLoading(true); setSwLoading(true); setSnLoading(true)
     fetchAdComputerInfo(hostname).then(r => { if (!cancelled) { setAd(r); setAdLoading(false) } })
     findInventoryItem(hostname).then(r => { if (!cancelled) { setInv(r); setInvLoading(false) } })
-    findEndpointDevice(hostname).then(r => { if (!cancelled) { setEp(r); setEpLoading(false) } })
+    findEndpointDevice(hostname, serial).then(r => { if (!cancelled) { setEp(r); setEpLoading(false) } })
     findInstalledSoftware(hostname).then(r => { if (!cancelled) { setSw(r); setSwLoading(false) } })
     const effSerial = serial || serialFromHostname(hostname) || undefined
     fetchDeviceServiceNow(hostname, effSerial).then(r => { if (!cancelled) { setSn(r); setSnLoading(false) } })
+    // OT-Geräte: ist dieses Gerät auf dem Hallenplan verortet?
+    setMapLoc(null)
+    findDeviceLocation(hostname, serial).then(loc => { if (!cancelled) setMapLoc(loc) }).catch(() => {})
     return () => { cancelled = true }
   }, [hostname, serial])
 
-  // Verbundene Drucker separat laden — damit ein manuelles Neuladen (nach dem
-  // Verbinden) nicht alle anderen Blöcke zurück in den Ladezustand versetzt.
+  // Verbundene Drucker aus dem GESPEICHERTEN Verbindungs-Scan laden — erscheinen sofort.
+  // Die Live-Abfrage (WinRM) läuft NICHT automatisch, sondern nur über „Live aktualisieren"
+  // (refreshLive) bzw. nach Verbinden/Standard-Setzen.
   useEffect(() => {
     let cancelled = false
     setConnLoading(true)
     loadConnData().then(d => { if (!cancelled) { setConn(forComputer(d, hostname)); setConnLoading(false) } })
     return () => { cancelled = true }
-  }, [hostname, connReload])
+  }, [hostname])
 
   const effSerial = serial || ep?.serial || serialFromHostname(hostname) || sn?.ci?.serial
   const assignedUser = inv?.assignedTo || ep?.assignedTo || ad?.managedBy || sn?.ci?.assignedTo
@@ -320,28 +478,92 @@ export function DeviceMasterData({ hostname, serial, onOpenPerson }: {
           if (ep?.retiredDate) rows.push(<Row key="rd" label="Leasingende" value={ep.retiredDate} source="Endgeräte" />)
           if (ep?.company) rows.push(<Row key="co" label="Unternehmen" value={ep.company} source="Endgeräte" />)
           if (ep?.comments) rows.push(<Row key="cm" label="Kommentar" value={ep.comments} source="Endgeräte" />)
+          // „Standort" nur, wenn das Gerät auf einer der drei Karten verortet ist.
+          if (mapLoc) rows.push(<Row key="ot" label="Standort" source={mapLoc.label}>
+            <span className="inline-flex items-center gap-2 flex-wrap">
+              <span>{mapLoc.device.arbeitsplatz ? `${mapLoc.roomLabel}: ${mapLoc.device.arbeitsplatz}` : 'auf der Karte verortet'}</span>
+              <button onClick={() => onShowLocation?.(mapLoc.mapId, hostname)}
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-primary/40 text-primary hover:bg-primary/10 text-xs">
+                <MapPin size={12} />Standort anzeigen
+              </button>
+            </span>
+          </Row>)
           return rows.length > 0 ? rows : <Empty text="Kein Eintrag im Inventar oder in der Endgeräte-Übersicht." />
         })()}
       </TreeSection>
 
-      {/* Verbundene Drucker (aus dem Verbindungs-Scan) */}
-      <TreeSection icon={<Printer size={14} />} title="Verbundene Drucker" loading={connLoading}
-        badge={conn && conn.length > 0 ? `${new Set(conn.map(c => c.printerName.toUpperCase())).size}` : undefined}>
+      {/* Verbundene Netzlaufwerke – LIVE nur auf Klick, Ergebnis zentral gespeichert */}
+      <TreeSection icon={<HardDrive size={14} />} title="Verbundene Netzlaufwerke">
+        <ConnectedNetworkDrives hostname={hostname} />
+      </TreeSection>
+
+      {/* Verbundene Drucker – LIVE (WinRM), Verbindungs-Scan als Fallback */}
+      <TreeSection icon={<Printer size={14} />} title="Verbundene Drucker" loading={livePrLoading && !livePr}
+        badge={livePr?.ok && livePr.printers.length > 0
+          ? String(livePr.printers.length)
+          : (conn && conn.length > 0 ? `${new Set(conn.map(c => c.printerName.toUpperCase())).size}` : undefined)}>
         {(() => {
-          if (connLoading && !conn) return <Empty text="Wird geladen…" />
-          if (!conn || conn.length === 0) return <Empty text="Keine verbundenen Drucker im letzten Scan (oder Rechner war beim Scan offline / kein Benutzer angemeldet)." />
-          const seen = new Set<string>()
-          const uniq = conn.filter(c => { const k = c.printerName.toUpperCase(); if (seen.has(k)) return false; seen.add(k); return true })
-          return uniq.map((c, i) => (
-            <Row key={i} label={c.printerName} source="Verbindungs-Scan">
-              <span className="inline-flex items-center gap-2 flex-wrap">
-                <span className="font-mono text-xs">{c.connection}</span>
-                {c.isDefault && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">Standard</span>}
-              </span>
-            </Row>
-          ))
+          const showLive = !!(livePr?.ok && livePr.printers.length > 0)
+          const stored: ConnFlat[] = (() => {
+            if (!conn || conn.length === 0) return []
+            const seen = new Set<string>()
+            return conn.filter(c => { const k = c.printerName.toUpperCase(); if (seen.has(k)) return false; seen.add(k); return true })
+          })()
+          const DEFBADGE = <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500 text-black border border-amber-600 font-semibold inline-flex items-center gap-1">★ Standarddrucker</span>
+          const rows: ReactNode[] = []
+
+          // Kopf: Quelle/Datum + „Live aktualisieren". Gespeicherte Drucker werden SOFORT
+          // gezeigt (auch offline), Live-Abfrage aktualisiert sie, sobald der PC erreichbar ist.
+          rows.push(
+            <div key="hdr" className="flex items-center gap-2 flex-wrap pb-1.5 mb-1 border-b border-border/50">
+              {livePrLoading ? (
+                <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground"><Loader2 size={11} className="animate-spin" />live wird abgefragt…</span>
+              ) : showLive ? (
+                <span className="text-[11px] text-green-500 font-medium">● live (WinRM)</span>
+              ) : (
+                <span className="text-[11px] text-muted-foreground">
+                  {stored.length > 0
+                    ? `gespeichert${stored[0].scannedAt ? ' · Scan ' + fmtLastSeen(stored[0].scannedAt) : ''}${livePr && !livePr.ok ? ' · live nicht erreichbar' : ''}`
+                    : (livePr && !livePr.ok ? `offline (${livePr.reason || 'WinRM'})` : '')}
+                </span>
+              )}
+              <button type="button" onClick={() => refreshLive()} disabled={livePrLoading}
+                className="ml-auto inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md border border-border hover:bg-accent/20 disabled:opacity-50">
+                <RefreshCw size={11} className={livePrLoading ? 'animate-spin' : ''} />Live aktualisieren
+              </button>
+            </div>
+          )
+
+          if (showLive) {
+            const sorted = [...livePr!.printers].sort((a, b) => (b.isDefault ? 1 : 0) - (a.isDefault ? 1 : 0) || a.name.localeCompare(b.name, 'de'))
+            sorted.forEach((p, i) => rows.push(
+              <Row key={`lp${i}`} label={p.name} source="Live (WinRM)">
+                <span className="inline-flex items-center gap-2 flex-wrap">
+                  {p.port && <span className="font-mono text-xs text-muted-foreground">{p.port}</span>}
+                  {p.isDefault ? DEFBADGE : <SetDefaultButton hostname={hostname} printerName={p.name} onDone={refreshLive} />}
+                </span>
+              </Row>
+            ))
+          } else if (stored.length > 0) {
+            const sorted = [...stored].sort((a, b) => (b.isDefault ? 1 : 0) - (a.isDefault ? 1 : 0) || a.printerName.localeCompare(b.printerName, 'de'))
+            sorted.forEach((c, i) => rows.push(
+              <Row key={`st${i}`} label={c.printerName} source="gespeichert">
+                <span className="inline-flex items-center gap-2 flex-wrap">
+                  {(c.connection || c.port) && <span className="font-mono text-xs text-muted-foreground">{c.connection || c.port}</span>}
+                  {c.isDefault ? DEFBADGE : <SetDefaultButton hostname={hostname} printerName={c.printerName} unc={c.connection || undefined} onDone={refreshLive} />}
+                </span>
+              </Row>
+            ))
+          } else if (livePrLoading) {
+            rows.push(<Empty key="ld" text="Drucker werden live abgefragt (WinRM)…" />)
+          } else {
+            rows.push(<Empty key="e" text={livePr && !livePr.ok
+              ? `Offline/WinRM (${livePr.reason || '—'}) und kein gespeicherter Scan vorhanden.`
+              : 'Kein gespeicherter Drucker-Scan für dieses Gerät — für den aktuellen Stand auf „Live aktualisieren" klicken.'} />)
+          }
+          return rows
         })()}
-        <ConnectPrinterPicker hostname={hostname} onConnected={() => setConnReload(n => n + 1)} />
+        <ConnectPrinterPicker hostname={hostname} onConnected={refreshLive} />
       </TreeSection>
 
       {/* Software-Inventar */}

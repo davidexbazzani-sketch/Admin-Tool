@@ -157,6 +157,7 @@ export interface HygieneUser {
   lastLogon?: string          // ISO
   pwdNeverExpires?: boolean
   pwdDaysLeft?: number | null  // Tage bis Passwort-Ablauf
+  pwdExpiry?: string           // ISO — exaktes Ablaufdatum (für die Erinnerungs-/Wochenend-Logik)
   acctExpiry?: string          // ISO
 }
 interface HygieneCache { users: HygieneUser[]; loadedAt: string }
@@ -178,12 +179,12 @@ export async function refreshAdHygiene(): Promise<{ ok: boolean; count: number; 
     `  $maxAge = 0`,
     `  try { $maxAge = (Get-ADDefaultDomainPasswordPolicy -EA Stop).MaxPasswordAge.TotalDays } catch {}`,
     `  $now = Get-Date`,
-    `  $users = Get-ADUser -Filter "Company -eq 'SKF MARINE GMBH'" -Properties SamAccountName,DisplayName,Department,EmailAddress,Enabled,LastLogonDate,PasswordLastSet,PasswordNeverExpires,AccountExpirationDate,EmployeeID -EA Stop | ForEach-Object {`,
+    `  $users = Get-ADUser -Filter "Company -eq 'SKF MARINE GMBH'" -Properties SamAccountName,DisplayName,Department,EmailAddress,UserPrincipalName,Enabled,LastLogonDate,PasswordLastSet,PasswordNeverExpires,AccountExpirationDate,EmployeeID -EA Stop | ForEach-Object {`,
     `    $ll = ''; if ($_.LastLogonDate) { $ll = $_.LastLogonDate.ToString('o') }`,
     `    $ae = ''; if ($_.AccountExpirationDate) { $ae = $_.AccountExpirationDate.ToString('o') }`,
-    `    $pdl = $null`,
-    `    if (-not $_.PasswordNeverExpires -and $_.PasswordLastSet -and $maxAge -gt 0) { $pdl = [int][math]::Floor((($_.PasswordLastSet.AddDays($maxAge)) - $now).TotalDays) }`,
-    `    [pscustomobject]@{ sam=[string]$_.SamAccountName; name=[string]$_.DisplayName; dept=[string]$_.Department; email=[string]$_.EmailAddress; enabled=[bool]$_.Enabled; empId=[string]$_.EmployeeID; lastLogon=$ll; pwdNeverExpires=[bool]$_.PasswordNeverExpires; pwdDaysLeft=$pdl; acctExpiry=$ae }`,
+    `    $pdl = $null; $pex = ''`,
+    `    if (-not $_.PasswordNeverExpires -and $_.PasswordLastSet -and $maxAge -gt 0) { $exp = $_.PasswordLastSet.AddDays($maxAge); $pdl = [int](($exp.Date - $now.Date).TotalDays); $pex = $exp.ToString('o') }`,
+    `    [pscustomobject]@{ sam=[string]$_.SamAccountName; name=[string]$_.DisplayName; dept=[string]$_.Department; email=[string]$_.EmailAddress; upn=[string]$_.UserPrincipalName; enabled=[bool]$_.Enabled; empId=[string]$_.EmployeeID; lastLogon=$ll; pwdNeverExpires=[bool]$_.PasswordNeverExpires; pwdDaysLeft=$pdl; pwdExpiry=$pex; acctExpiry=$ae }`,
     `  }`,
     `  $arr = @($users)`,
     `  Write-Output ('JSON:' + ($arr | ConvertTo-Json -Compress))`,
@@ -198,13 +199,19 @@ export async function refreshAdHygiene(): Promise<{ ok: boolean; count: number; 
   try {
     const parsed = JSON.parse(line.slice(5))
     const arr = Array.isArray(parsed) ? parsed : [parsed]
-    const users: HygieneUser[] = arr.filter((u: { sam?: string }) => u && u.sam).map((u: HygieneUser) => ({
-      sam: String(u.sam), name: String(u.name || ''), dept: String(u.dept || ''), email: String(u.email || ''),
-      enabled: u.enabled === true, empId: u.empId ? String(u.empId) : undefined,
-      lastLogon: u.lastLogon || undefined, pwdNeverExpires: u.pwdNeverExpires === true,
-      pwdDaysLeft: (u.pwdDaysLeft === null || u.pwdDaysLeft === undefined) ? null : Number(u.pwdDaysLeft),
-      acctExpiry: u.acctExpiry || undefined,
-    }))
+    const users: HygieneUser[] = arr.filter((u: { sam?: string }) => u && u.sam).map((u: HygieneUser & { upn?: string }) => {
+      // E-Mail: EmailAddress bevorzugt, sonst UPN-Fallback (Muster adUsersList).
+      const upn = String(u.upn || '')
+      const email = String(u.email || '') || (upn.includes('@') ? upn : '')
+      return {
+        sam: String(u.sam), name: String(u.name || ''), dept: String(u.dept || ''), email,
+        enabled: u.enabled === true, empId: u.empId ? String(u.empId) : undefined,
+        lastLogon: u.lastLogon || undefined, pwdNeverExpires: u.pwdNeverExpires === true,
+        pwdDaysLeft: (u.pwdDaysLeft === null || u.pwdDaysLeft === undefined) ? null : Number(u.pwdDaysLeft),
+        pwdExpiry: u.pwdExpiry || undefined,
+        acctExpiry: u.acctExpiry || undefined,
+      }
+    })
     await api().netWriteJson(HYGIENE_CACHE, { users, loadedAt: new Date().toISOString() } satisfies HygieneCache)
     return { ok: true, count: users.length }
   } catch { return { ok: false, count: 0, error: 'AD-Antwort nicht lesbar.' } }
@@ -262,7 +269,7 @@ export async function computeHygieneItems(
     if (u.pwdDaysLeft > pwdCeil) continue
     items.push({
       id: `pwd_${u.sam}`, tab: 'hygiene', category: 'pwdExpiring', kind: 'future',
-      title: u.name || u.sam, subtitle: u.dept, refDateIso: '', days: u.pwdDaysLeft,
+      title: u.name || u.sam, subtitle: u.dept, refDateIso: u.pwdExpiry || '', days: u.pwdDaysLeft,
       fields: {
         Benutzer: u.name, 'Corp-ID': u.sam, Abteilung: u.dept, 'E-Mail': u.email,
         'Passwort in': u.pwdDaysLeft < 0 ? `${Math.abs(u.pwdDaysLeft)} T. abgelaufen` : `${u.pwdDaysLeft} Tagen`,

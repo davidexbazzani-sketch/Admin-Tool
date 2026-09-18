@@ -43,6 +43,7 @@ export interface Marker {
   name: string
   mac: string
   serial: string
+  ip: string                  // IP-Adresse (manuell oder aus Netzwerk-Inventar-Excel)
   model: string
   notes: string
   /** Weitere freie Felder aus dem Inventar-Import. */
@@ -237,6 +238,7 @@ function normalizeMarker(m: Partial<Marker>): Marker {
     name: m.name ?? '',
     mac: m.mac ?? '',
     serial: m.serial ?? '',
+    ip: m.ip ?? '',
     model: m.model ?? '',
     notes: m.notes ?? '',
     extra: m.extra ?? {},
@@ -285,6 +287,28 @@ export async function updateMarker(id: string, patch: Partial<Marker>): Promise<
   const ok = await saveMarkers(s)
   if (!ok) return { ok: false, error: ERR_NET }
   return { ok: true, marker: next }
+}
+
+/** Setzt Seriennummer/IP (und optional Modell) für viele Marker in EINEM Speichervorgang.
+ *  Wird vom Netzwerk-Inventar-Abgleich (Excel) genutzt. Nur gesetzte Felder werden geschrieben. */
+export async function bulkUpdateMarkers(patches: { id: string; serial?: string; ip?: string; model?: string }[]): Promise<{ ok: boolean; updated: number; error?: string }> {
+  const s = await loadMarkers()
+  const idxById = new Map(s.markers.map((m, i) => [m.id, i]))
+  const now = new Date().toISOString()
+  let updated = 0
+  for (const p of patches) {
+    const idx = idxById.get(p.id)
+    if (idx == null) continue
+    const m = s.markers[idx]
+    let changed = false
+    if (p.serial != null && p.serial !== m.serial) { m.serial = p.serial; changed = true }
+    if (p.ip != null && p.ip !== m.ip) { m.ip = p.ip; changed = true }
+    if (p.model != null && p.model !== m.model) { m.model = p.model; changed = true }
+    if (changed) { m.updatedAt = now; updated++ }
+  }
+  const ok = await saveMarkers(s)
+  if (!ok) return { ok: false, updated: 0, error: ERR_NET }
+  return { ok: true, updated }
 }
 
 export async function moveMarker(id: string, x: number, y: number, page?: number, floorplanId?: string): Promise<boolean> {
@@ -441,6 +465,7 @@ export function searchMarkers(markers: Marker[], q: string): Marker[] {
     m.name.toLowerCase().includes(t) ||
     m.mac.toLowerCase().includes(t) ||
     m.serial.toLowerCase().includes(t) ||
+    (m.ip || '').toLowerCase().includes(t) ||
     m.model.toLowerCase().includes(t) ||
     m.notes.toLowerCase().includes(t) ||
     Object.values(m.extra).some(v => String(v).toLowerCase().includes(t)),

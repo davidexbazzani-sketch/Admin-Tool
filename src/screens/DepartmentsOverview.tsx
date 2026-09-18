@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { PersonInfoButton } from '../components/person/PersonDossier'
+import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import { ensureDailyAdUsers } from '../services/adUserDirectory'
 import type { AdUserListItem } from '../services/adUsersList'
 import type { InventoryItem } from '../types/auth'
@@ -375,8 +376,13 @@ export default function DepartmentsOverview() {
                           </span>
                           <span className="text-foreground truncate flex items-center gap-1" title={devs.map(d => d.name).join(', ')}>
                             {devs.length > 0 ? (
-                              <><Monitor size={11} className="text-muted-foreground shrink-0" />
-                                {devs.length === 1 ? devs[0].name : `${devs.length} Geräte`}</>
+                              devs.length === 1 ? (
+                                <><Monitor size={11} className="text-muted-foreground shrink-0" />
+                                  <span className="truncate">{devs[0].name}</span>
+                                  {devs[0].name && <DeviceInfoButton hostname={devs[0].name} serial={devs[0].serial} />}</>
+                              ) : (
+                                <><Monitor size={11} className="text-muted-foreground shrink-0" />{`${devs.length} Geräte`}</>
+                              )
                             ) : <span className="text-muted-foreground italic">—</span>}
                           </span>
                         </div>

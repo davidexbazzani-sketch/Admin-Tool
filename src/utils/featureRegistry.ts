@@ -54,6 +54,9 @@ export const FEATURES: FeatureDef[] = [
   // ── Trickbox ────────────────────────────────────────────────────────────
   { id: 'trickbox', label: 'Trickbox', category: 'Grundfunktionen', description: 'Hilfreiche Tipps und Skripte' },
 
+  // ── Pausenraum ────────────────────────────────────────────────────────────
+  { id: 'games', label: 'Pausenraum', category: 'Grundfunktionen', description: '4 gewinnt live gegen andere Tool-Nutzer' },
+
   // ── Einstellungen ─────────────────────────────────────────────────────────
   { id: 'settings', label: 'Einstellungen', category: 'Grundfunktionen', description: 'Programmeinstellungen verwalten' },
 
@@ -68,6 +71,9 @@ export const FEATURES: FeatureDef[] = [
   { id: 'checklists', label: 'Checklisten', category: 'Grundfunktionen', userBlocked: true, description: 'Geräteübergabe-Dokumente erstellen, unterschreiben und als PDF exportieren' },
   { id: 'gruppen-suche', label: 'Gruppen-Suche', category: 'Grundfunktionen', userBlocked: true, description: 'Benutzer/Computer anhand ihrer AD-Gruppen-Mitgliedschaften finden und exportieren' },
   { id: 'access-points', label: 'Access Points Übersicht', category: 'Grundfunktionen', description: 'WLAN-Access-Points auf Lageplänen verorten, Inventar importieren, hochauflösender PDF-Export' },
+  { id: 'ot-devices', label: 'OT-Geräte', category: 'Grundfunktionen', description: 'PCs auf dem Hallenplan verorten (Hostname/Arbeitsplatz), Liste + Aufleuchten im Plan, verlustfreies Zoomen' },
+  { id: 'pruffeld-zoll', label: 'Prüffeld & Zoll', category: 'Grundfunktionen', description: 'Geräte auf dem Lageplan „Halle 1–11, Gesamtübersicht" verorten (wie OT-Geräte, eigene Liste)' },
+  { id: 'verwaltungsgebaeude', label: 'Verwaltungsgebäude', category: 'Grundfunktionen', description: 'Geräte auf dem Grundriss „KG-Staffelgeschoss" verorten (wie OT-Geräte, Feld Raumnummer, eigene Liste)' },
 
   // ── Geplante Aufgaben ─────────────────────────────────────────────────────
   { id: 'scheduled-tasks', label: 'Geplante Aufgaben', category: 'Grundfunktionen', userBlocked: true, description: 'Wiederkehrende Aufgaben einrichten' },
@@ -86,9 +92,11 @@ export const FEATURES: FeatureDef[] = [
   // ── Infrastruktur Projekte ────────────────────────────────────────────────
   { id: 'endpoint-devices', label: 'Endgeräte-Übersicht', category: 'Infrastruktur', description: 'Grosse Uebersicht aller Endarbeitsgeraete (PCs/Laptops) am Standort per Excel-Import: Seriennummer, PC-Name, zugewiesen an, Model Type (mit Monatskosten), Status, Verwendung, Kommentar, Leasingende, Unternehmen, Wer bezahlt?' },
   { id: 'servicenow', label: 'ServiceNow / Tickets', category: 'IT Support', userBlocked: true, description: 'ServiceNow-Tickets (Incidents/Tasks) ueber die Table-API ansehen und filtern; spaeter Zuweisung an Bearbeiter' },
+  { id: 'ticket-assignment', label: 'Zuweisung Tickets', category: 'IT Support', userBlocked: true, description: 'Schlaegt aus den ServiceNow-Feldern (Queue, CI, Subcategory, Caller, Short) sofort und ohne KI den richtigen Bearbeiter + Vertretung vor, mit Begruendung, Stammbaum, Team-Uebersicht, Team-Kalender/Abwesenheiten und Hilfe. Regelwerk aus ZUWEISUNG_Regeln.json (303/303 Paritaet zur Referenz-Engine)' },
   { id: 'infra-projects', label: 'Infrastruktur Projekte', category: 'Infrastruktur', description: 'Laufende Infrastruktur-Projekte auf einem Whiteboard dokumentieren, mit Status, Einträgen, Anhängen und Export' },
   { id: 'licenses', label: 'Lizenzen-Kalender', category: 'Infrastruktur', userBlocked: true, description: 'Lizenzen mit Ablaufdatum, automatische 30-Tage-Mail + In-App-Warnung bei 30/20/10 Tagen vor Ablauf' },
   { id: 'proactive-radar', label: 'Proaktives Radar', category: 'Infrastruktur', userBlocked: true, description: 'Frühwarnung aus vorhandenen Daten: Geräte-Leasing-Ablauf und AD-Hygiene (inaktive Konten, Passwort-Ablauf, ausgetretene Mitarbeiter mit aktivem Konto) mit flexiblen Filtern, Auto-Mail und In-App-Warnung' },
+  { id: 'nis2', label: 'NIS2', category: 'Infrastruktur', userBlocked: true, description: 'NIS2-Prüfungen. Erste Kachel „Zugänge-Check": scannt alle PCs per WinRM auf lokale Adminrechte, listet alle Nutzer mit lokalem Admin (inkl. PCs) und markiert anhand einer importierten Genehmigten-Liste, wer seine Rechte behalten darf' },
   { id: 'hardware-inventory', label: 'Hardware-Inventur', category: 'Infrastruktur', userBlocked: true, description: 'Lagerbestand-Inventur per Handscanner mit Falsch-Scan-Erkennung, AD-Lookup fehlender Geräte und Berichts-Archiv' },
   { id: 'accessory-inventory', label: 'Zubehör Inventur', category: 'Infrastruktur', userBlocked: true, description: 'Kleinteile-Bestand (IST/SOLL) mit Amazon-Links, gefuehrter Inventur-Wizard und automatischer Bestellliste' },
   { id: 'pdf-tools', label: 'PDF-Werkzeuge', category: 'Grundfunktionen', description: 'Eigenstaendiges PDF-Modul: Ansehen, Kommentieren, Ausfuellen/Unterschreiben, Seiten organisieren, Umwandeln, OCR, Schuetzen — mit anpassbarem Schnellzugriff' },

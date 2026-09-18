@@ -25,6 +25,9 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   // Standort
   { id: 'location-overview',      label: 'Standort-Übersicht',     category: 'Standort' },
   { id: 'access-points',          label: 'Access Points',          category: 'Standort' },
+  { id: 'ot-devices',             label: 'OT-Geräte',              category: 'Standort' },
+  { id: 'pruffeld-zoll',          label: 'Prüffeld & Zoll',        category: 'Standort' },
+  { id: 'verwaltungsgebaeude',    label: 'Verwaltungsgebäude',     category: 'Standort' },
   { id: 'departments-overview',   label: 'Abteilungs-Übersicht',   category: 'Standort' },
   { id: 'organization-structure', label: 'Organisationsstruktur',  category: 'Standort' },
 
@@ -35,6 +38,7 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
 
   // IT Support
   { id: 'checklists',             label: 'Checklisten',             category: 'IT Support', adminOnly: true },
+  { id: 'device-setup',           label: 'Geräte-Einrichtung',      category: 'IT Support', adminOnly: true },
   { id: 'hardware-inventory',     label: 'Hardware-Inventur',       category: 'IT Support', adminOnly: true },
   { id: 'accessory-inventory',    label: 'Zubehör Inventur',        category: 'IT Support', adminOnly: true },
   { id: 'software-installations', label: 'Software Installationen', category: 'IT Support', adminOnly: true },
@@ -43,7 +47,9 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'employee-management',    label: 'Mitarbeiterverwaltung',   category: 'IT Support', adminOnly: true },
   { id: 'onboarding',             label: 'Onboarding',              category: 'IT Support', adminOnly: true },
   { id: 'treiber-installation',   label: 'Treiber-Installation',    category: 'IT Support', adminOnly: true },
+  { id: 'support-tools',          label: 'Support Tools',           category: 'IT Support', adminOnly: true },
   { id: 'servicenow',             label: 'ServiceNow / Tickets',    category: 'IT Support', adminOnly: true },
+  { id: 'ticket-assignment',      label: 'Zuweisung Tickets',       category: 'IT Support', adminOnly: true },
 
   // Infrastruktur
   { id: 'endpoint-devices',   label: 'Endgeräte-Übersicht',    category: 'Infrastruktur' },
@@ -56,6 +62,7 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'user-presence',      label: 'Wo angemeldet?',         category: 'Infrastruktur' },
   { id: 'licenses',           label: 'Lizenzen-Kalender',      category: 'Infrastruktur', adminOnly: true },
   { id: 'proactive-radar',    label: 'Proaktives Radar',       category: 'Infrastruktur', adminOnly: true },
+  { id: 'nis2',               label: 'NIS2',                   category: 'Infrastruktur', adminOnly: true },
   { id: 'software-inventory', label: 'Software-Inventar',      category: 'Infrastruktur', adminOnly: true },
   { id: 'network-radar',      label: 'Netzwerk-Radar',         category: 'Infrastruktur', adminOnly: true },
   { id: 'vlan-overview',      label: 'VLAN-Übersicht',         category: 'Infrastruktur', adminOnly: true },
@@ -73,6 +80,7 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'knowledge-base', label: 'Wissensdatenbank', category: 'Sonstiges' },
   { id: 'knowledge-search', label: 'Wissenssuche', category: 'Sonstiges' },
   { id: 'it-guru',        label: 'IT Guru',          category: 'Sonstiges' },
+  { id: 'games',          label: 'Pausenraum',       category: 'Sonstiges' },
 
   { id: 'results', label: 'Ergebnisse', category: 'Ergebnisse', topLevel: true },
 

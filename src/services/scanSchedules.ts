@@ -23,6 +23,9 @@ export const SCAN_SCHEDULE_DEFAULTS: Record<string, ScanScheduleConfig> = {
   'device-scan':         { enabled: true, days: [1, 4], time: '15:00' },        // Mo, Do (vorher „alle 3 Tage")
   'proactive-radar':     { enabled: true, days: [1, 2, 3, 4, 5], time: '07:00' }, // Werktags früh
   'vlan-scan':           { enabled: true, days: [6], time: '03:00' },            // Sa nachts (schwerer Scan)
+  'server-metrics':      { enabled: true, days: [0, 1, 2, 3, 4, 5, 6], time: '11:00' }, // täglich 11:00 (RAM/Festplatte)
+  'lost-devices':        { enabled: true, days: [3, 4], time: '11:00' },                // Mi + Do 11:00 (verlorene Geräte Online-Check)
+  'nis2-access':         { enabled: true, days: [0, 1, 2, 3, 4, 5, 6], time: '11:00' }, // täglich 11:00 (NIS2 lokale Adminrechte)
 }
 
 export const WEEKDAY_LABELS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
@@ -115,4 +118,21 @@ export function isStatusClaimed(s: ScanRunStatus, now = Date.now()): boolean {
   const t = new Date(s.running.at).getTime()
   if (isNaN(t)) return false
   return (now - t) < STALE_LOCK_MS
+}
+
+/**
+ * Robuste Einmal-Wahl über mehrere gleichzeitig offene Tools: Claim mit unserem Token
+ * schreiben, einen kleinen ZUFÄLLIGEN Jitter warten (damit ein fast gleichzeitiger
+ * Schreiber „nachsetzen" kann) und danach zurücklesen — nur wenn der Token dann noch
+ * uns gehört, haben WIR gewonnen. So verhindert man den TOCTOU-Fall, in dem zwei
+ * Instanzen beide „frei" sehen und beide loslaufen. Bei Netz-/Lesefehler im Zweifel
+ * `true` (lieber ein seltener Doppellauf als gar keiner). `prev` = zuvor gelesener Status.
+ */
+export async function claimExclusive(path: string, token: string, prev: ScanRunStatus): Promise<boolean> {
+  try { await saveRunStatus(path, { ...prev, running: { by: token, at: new Date().toISOString() } }) } catch { return false }
+  await new Promise(r => setTimeout(r, 300 + Math.floor(Math.random() * 700)))
+  try {
+    const chk = await loadRunStatus(path)
+    return !!chk.running && chk.running.by === token
+  } catch { return true }
 }

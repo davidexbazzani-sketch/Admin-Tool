@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Plus, Minus, Upload, ArrowRight, Monitor, Hash, FileText, ChevronsRight, Terminal, Zap } from 'lucide-react'
+import { Plus, Minus, Upload, ArrowRight, Monitor, Hash, FileText, ChevronsRight, Terminal, Zap, UserSearch } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import type { DeviceEntry, Prefix } from '../types'
 import { DaylisModal, type UserRow } from './UserOverview'
 import Card from '../components/Card'
+import UserPcSearch from '../components/UserPcSearch'
 import PrefixPopup from '../components/PrefixPopup'
 import ExcelColumnDialog from '../components/ExcelColumnDialog'
 import {
@@ -367,6 +368,11 @@ export default function Home() {
           </div>
         </Card>
       </div>
+
+      {/* Benutzer-Suche → zugewiesene PCs */}
+      <Card title="Benutzer-Suche" icon={<UserSearch size={16} />} subtitle="Nach Name suchen → zugewiesene PCs (mit Modell) auswählen">
+        <UserPcSearch onPick={(host) => { setSingleHostname(host); setSingleSerial(''); setSinglePrefixes([]); setSingleCustom('') }} />
+      </Card>
 
       {/* Card 3: Liste erstellen */}
       <Card title="Liste erstellen" icon={<Hash size={16} />} subtitle="Mehrere Geräte auf einmal">

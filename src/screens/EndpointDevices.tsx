@@ -844,7 +844,7 @@ IT Support Marine`
       )}
 
       {/* Filterleiste */}
-      <div className="shrink-0 px-6 py-2 border-b border-border flex items-center gap-2 flex-wrap bg-muted/5">
+      <div className="relative z-20 shrink-0 px-6 py-2 border-b border-border flex items-center gap-2 flex-wrap bg-muted/5">
         <div className="relative w-64">
           <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Seriennummer, PC-Name, Benutzer…"

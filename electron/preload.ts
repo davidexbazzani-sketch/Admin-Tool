@@ -29,6 +29,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   writeFile: (filePath: string, data: Buffer | string) =>
     ipcRenderer.invoke('file:write', filePath, data),
   readAsset: (rel: string) => ipcRenderer.invoke('asset:read', rel),
+  ocrImage: (base64Png: string) => ipcRenderer.invoke('ocr:image', base64Png),
+  serviceNowAttach: (opts: unknown) => ipcRenderer.invoke('servicenow:attach', opts),
 
   // Settings (electron-store)
   getSettings: () => ipcRenderer.invoke('store:get'),

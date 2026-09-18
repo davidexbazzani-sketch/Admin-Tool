@@ -7,12 +7,20 @@
 import { api } from '../electronAPI'
 import type { InventoryItem } from '../types/auth'
 import { pingBatch } from './userPresenceScan'
+import {
+  getScanSchedule, isConfiguredDue, loadRunStatus, saveRunStatus,
+  isStatusClaimed as isRunStatusClaimed,
+} from './scanSchedules'
 
 const CONFIG_PATH = 'server_monitor/config.json'
 const STATUS_PATH = 'server_monitor/status.json'
 const NOTIFIED_PATH = 'server_monitor/notified.json'
 const INVENTORY_FILE = 'inventory/inventory.json'
 const STALE_CLAIM_MS = 15 * 60 * 1000
+
+// Auslastungs-Scan (RAM/Festplatte): 1×/Tag, Zeitplan-ID + eigene Lauf-Status-Datei.
+export const SERVER_METRICS_SCAN_ID = 'server-metrics'
+export const SERVER_METRICS_STATUS = 'server_monitor/metrics_schedule.json'
 
 export interface ServerTile {
   id: string
@@ -26,6 +34,17 @@ export interface ServerTile {
 }
 export interface ServerConfig { tiles: ServerTile[] }
 
+/** Festplatte (lokales Laufwerk, DriveType=3) — Kapazität + Belegung. */
+export interface ServerDisk { drive: string; sizeGB: number; freeGB: number; usedPct: number }
+/** Auslastungs-Momentaufnahme aus dem täglichen Metrik-Scan. */
+export interface ServerMetrics {
+  ramUsedPct: number
+  ramUsedGB: number
+  ramTotalGB: number
+  disks: ServerDisk[]
+  at: string                   // ISO – Zeitpunkt der Messung
+}
+
 export interface ServerStatus {
   online: boolean
   consecutiveFailures: number
@@ -33,10 +52,12 @@ export interface ServerStatus {
   lastCheckAt?: string
   lastReboot?: string          // Anzeige-String (yyyy-MM-dd HH:mm)
   lastRebootCheckAt?: string
+  metrics?: ServerMetrics      // RAM-/Festplatten-Auslastung (täglicher Scan)
 }
 export interface ServerMonitorStatus {
   pingRunAt: string | null
   rebootRunAt: string | null
+  metricsRunAt?: string | null
   running?: { by: string; at: string }
   servers: Record<string, ServerStatus>
 }
@@ -94,9 +115,9 @@ export function mergeInventoryServers(tiles: ServerTile[], inv: InventoryServer[
 export async function loadServerStatus(): Promise<ServerMonitorStatus> {
   try {
     const s = await api().netReadJson<ServerMonitorStatus>(STATUS_PATH)
-    if (s && typeof s === 'object') return { pingRunAt: s.pingRunAt ?? null, rebootRunAt: s.rebootRunAt ?? null, running: s.running, servers: s.servers || {} }
+    if (s && typeof s === 'object') return { pingRunAt: s.pingRunAt ?? null, rebootRunAt: s.rebootRunAt ?? null, metricsRunAt: s.metricsRunAt ?? null, running: s.running, servers: s.servers || {} }
   } catch { /* noch keiner */ }
-  return { pingRunAt: null, rebootRunAt: null, servers: {} }
+  return { pingRunAt: null, rebootRunAt: null, metricsRunAt: null, servers: {} }
 }
 export async function saveServerStatus(s: ServerMonitorStatus): Promise<boolean> {
   try { return await api().netWriteJson(STATUS_PATH, s) } catch { return false }
@@ -245,4 +266,97 @@ export async function runRebootCheck(by: string): Promise<{ updated: number }> {
   }
   await saveServerStatus({ ...status, rebootRunAt: now, servers })
   return { updated }
+}
+
+// ── Auslastungs-Scan: RAM + Festplatten-Kapazität (1×/Tag, 11:00) ─────────────
+/**
+ * Fragt je Server per WinRM RAM-Belegung (Win32_OperatingSystem) und lokale
+ * Festplatten (Win32_LogicalDisk, DriveType=3) ab und schreibt die Werte in
+ * status.servers[*].metrics. Offline-Server liefern nichts → ihr letzter Stand
+ * bleibt erhalten. Chunked mit ThrottleLimit 10 (max. 10 parallele WinRM-Sessions).
+ */
+export async function runServerMetricsScan(by: string): Promise<{ ok: boolean; summary: string; scanned: number; updated: number }> {
+  const cfg = await loadServerConfig()
+  const status = await loadServerStatus()
+  const now = new Date().toISOString()
+  const hosts = [...new Set(cfg.tiles.map(t => t.hostname.trim()).filter(Boolean))]
+  const servers: Record<string, ServerStatus> = { ...status.servers }
+  let updated = 0
+  const CHUNK = 40
+  for (let i = 0; i < hosts.length; i += CHUNK) {
+    const chunk = hosts.slice(i, i + CHUNK)
+    const list = chunk.map(h => `'${h.replace(/'/g, "''")}'`).join(',')
+    const script = [
+      `$ErrorActionPreference='SilentlyContinue'`,
+      `$h=@(${list})`,
+      `$r = Invoke-Command -ComputerName $h -ThrottleLimit 10 -ErrorAction SilentlyContinue -ScriptBlock {`,
+      `  $os = Get-CimInstance Win32_OperatingSystem -ErrorAction SilentlyContinue`,
+      `  $disks = @(Get-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' -ErrorAction SilentlyContinue | ForEach-Object {`,
+      `    [pscustomobject]@{ Drive = $_.DeviceID; SizeGB = [math]::Round(($_.Size/1GB),1); FreeGB = [math]::Round(($_.FreeSpace/1GB),1) }`,
+      `  })`,
+      `  [pscustomobject]@{ TotalKB = [double]$os.TotalVisibleMemorySize; FreeKB = [double]$os.FreePhysicalMemory; Disks = $disks }`,
+      `}`,
+      `$r | Select-Object PSComputerName, TotalKB, FreeKB, Disks | ConvertTo-Json -Depth 5 -Compress`,
+    ].join('\n')
+    try {
+      const res = await api().runPowerShell(script, 180000)
+      const txt = (res.stdout ?? '').trim()
+      if (txt && !txt.startsWith('ERR:')) {
+        const parsed = JSON.parse(txt)
+        const arr = Array.isArray(parsed) ? parsed : [parsed]
+        for (const o of arr) {
+          const host = String(o?.PSComputerName ?? '').trim()
+          const totalKB = Number(o?.TotalKB) || 0
+          if (!host || totalKB <= 0) continue
+          const freeKB = Number(o?.FreeKB) || 0
+          const usedKB = Math.max(0, totalKB - freeKB)
+          const ramTotalGB = Math.round((totalKB / 1048576) * 10) / 10
+          const ramUsedGB = Math.round((usedKB / 1048576) * 10) / 10
+          const ramUsedPct = Math.min(100, Math.round((usedKB / totalKB) * 100))
+          const rawDisks = o?.Disks == null ? [] : (Array.isArray(o.Disks) ? o.Disks : [o.Disks])
+          const disks: ServerDisk[] = rawDisks
+            .map((d: unknown) => {
+              const dd = d as { Drive?: unknown; SizeGB?: unknown; FreeGB?: unknown }
+              const sizeGB = Number(dd?.SizeGB) || 0
+              const freeGB = Number(dd?.FreeGB) || 0
+              const usedPct = sizeGB > 0 ? Math.min(100, Math.round(((sizeGB - freeGB) / sizeGB) * 100)) : 0
+              return { drive: String(dd?.Drive ?? '').trim(), sizeGB, freeGB, usedPct }
+            })
+            .filter((d: ServerDisk) => d.drive)
+          const key = hostKey(host)
+          servers[key] = {
+            ...(servers[key] || { online: true, consecutiveFailures: 0 }),
+            metrics: { ramUsedPct, ramUsedGB, ramTotalGB, disks, at: now },
+          }
+          updated++
+        }
+      }
+    } catch { /* Block fehlgeschlagen – nächster Lauf versucht es erneut */ }
+  }
+  await saveServerStatus({ ...status, metricsRunAt: now, servers })
+  return { ok: true, summary: `${updated}/${hosts.length} Server (RAM/Festplatte) aktualisiert`, scanned: hosts.length, updated }
+}
+
+/**
+ * Führt den Auslastungs-Scan aus, wenn er laut Zeitplan fällig ist (Einstellungen →
+ * „Automatische Scans" → server-metrics, Standard: täglich 11:00). Single-Runner via
+ * eigenem Claim in SERVER_METRICS_STATUS. Wird vom ServerMonitorController getickt.
+ */
+export async function runServerMetricsIfDue(by: string, now = Date.now()): Promise<boolean> {
+  const sched = await getScanSchedule(SERVER_METRICS_SCAN_ID)
+  const st = await loadRunStatus(SERVER_METRICS_STATUS)
+  if (!isConfiguredDue(sched, st.lastRunAt, now)) return false
+  if (isRunStatusClaimed(st, now)) return false
+  const token = `${by}#${Math.random().toString(36).slice(2, 10)}`
+  await saveRunStatus(SERVER_METRICS_STATUS, { ...st, running: { by: token, at: new Date().toISOString() } })
+  const check = await loadRunStatus(SERVER_METRICS_STATUS)
+  if (check.running?.by !== token) return false   // andere Instanz war schneller
+  try {
+    const r = await runServerMetricsScan(by)
+    await saveRunStatus(SERVER_METRICS_STATUS, { lastRunAt: new Date().toISOString(), lastResult: r.ok ? 'success' : 'error', lastSummary: r.summary, running: undefined })
+    return true
+  } catch {
+    await saveRunStatus(SERVER_METRICS_STATUS, { ...st, running: undefined })
+    return false
+  }
 }

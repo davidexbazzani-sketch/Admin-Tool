@@ -27,12 +27,15 @@ export function analysiere(lauf: NetLauf): NetBefund[] {
   const out: NetBefund[] = []
   const push = (b: NetBefund) => out.push(withErkl(b))
 
-  if (!d || d.ok === false || !d.adapter) {
-    push({ id: 'kein-adapter', titel: 'Kein WLAN-Adapter gefunden', gewicht: 'INFO', ist: d?.fehler || '—', soll: '—',
-      wirkung: 'Auf dem Ziel-PC wurde kein WLAN-Adapter erkannt (Gerät kabelgebunden, Adapter deaktiviert oder Scan unvollständig).',
+  if (!d || d.ok === false) {
+    push({ id: 'scan-fehler', titel: 'Netzwerk-Scan fehlgeschlagen', gewicht: 'INFO', ist: d?.fehler || '—', soll: '—',
+      wirkung: 'Der Ziel-PC konnte nicht vollständig ausgelesen werden (offline, WinRM oder Rechte).',
       fundort: 'Get-NetAdapter', kategorie: 'info', fixbar: false })
     return out
   }
+
+  // ══════════ WLAN-Analyse (nur wenn WLAN-Adapter vorhanden) ══════════
+  if (d.adapter) {
   const ad = d.adapter
 
   // 1) Energieplan: WLAN-Energiesparmodus (AC/DC) ≠ Höchstleistung
@@ -131,14 +134,114 @@ export function analysiere(lauf: NetLauf): NetBefund[] {
         fundort: `WLAN-AutoConfig Event 8003 · BSSID ${top.bssid}`,
         kategorie: 'netzwerk', fixbar: false })
     }
+    // 802.1X-/Sicherheits-Authentifizierung schlägt fehl (Event 11006 / 8002)
+    const authFehler = ev.authFehler || 0
+    if (authFehler >= 3) {
+      push({ id: 'auth-8021x', titel: '802.1X-Authentifizierung schlägt fehl', gewicht: authFehler >= 8 ? 'HOCH' : 'MITTEL',
+        ist: `${authFehler} Auth-Fehler${ev.connectFehler ? `, ${ev.connectFehler} Verbindungsfehler` : ''} in ${ev.tage} Tagen`, soll: 'möglichst 0',
+        wirkung: 'Die WLAN-Sicherheits-/802.1X-Authentifizierung ist mehrfach fehlgeschlagen (Event 11006). Bei zertifikatsbasiertem Firmen-WLAN deutet das auf ein abgelaufenes/fehlendes Client-Zertifikat, RADIUS/NPS-Probleme oder eine fehlgeschlagene periodische Neu-Authentifizierung hin — der Client fliegt raus und verbindet oft NICHT automatisch neu (manuelles Neuverbinden nötig).',
+        fundort: 'Microsoft-Windows-WLAN-AutoConfig/Operational (Event 11006/8002)',
+        kategorie: 'netzwerk', fixbar: false, hinweis: 'Nicht im Tool behebbar — Client-Zertifikat (Gültigkeit/Auto-Enrollment), RADIUS/NPS-Logs und die WLAN-802.1X-Profileinstellungen prüfen.' })
+    }
   }
 
-  // 9) Nichts Auffälliges?
+  // 9) WLAN: nichts Auffälliges?
   if (!out.some(b => b.fixbar)) {
-    push({ id: 'unauffaellig', titel: 'Keine offensichtliche Fehlkonfiguration', gewicht: 'INFO',
+    push({ id: 'unauffaellig', titel: 'WLAN: keine offensichtliche Fehlkonfiguration', gewicht: 'INFO',
       ist: '—', soll: '—',
-      wirkung: 'Die typischen WLAN-Fehleinstellungen sind hier nicht gesetzt. Zur Ursachenfindung mehrere Problem-PCs mit fehlerfreien Referenz-PCs vergleichen (Reiter „Vergleich") — Abweichungen bei Treiber/Advanced-Settings werden dort hervorgehoben.',
+      wirkung: 'Die typischen WLAN-Fehleinstellungen sind hier nicht gesetzt. Zur Ursachenfindung Problem-PCs mit fehlerfreien Referenz-PCs vergleichen (Reiter „Vergleich"); der Roh-Daten-Anhang im PDF enthält alle Werte.',
       fundort: '—', kategorie: 'info', fixbar: false })
+  }
+  } // ══════════ Ende WLAN-Analyse ══════════
+  for (const b of out) if (!b.verbindung) b.verbindung = 'WLAN'
+
+  // ══════════ LAN-Analyse (nur wenn LAN-Adapter vorhanden) ══════════
+  if (d.lan) {
+    const lan = d.lan
+    const lanBefore = out.length
+    const lanAdv = (rx: RegExp): AdvProp | undefined => (d.lanAdvanced || []).find(p => rx.test(p.name || '') || rx.test(p.keyword || ''))
+    const pushLan = (b: NetBefund) => out.push(withErkl({ ...b, verbindung: 'LAN' }))
+
+    // Link-Speed unter 1 Gbit/s
+    const speed = d.lanVerbindung?.linkSpeed || lan.linkSpeed || ''
+    if (speed && /\b(10|100)\s*Mbps\b/i.test(speed) && !/Gbps/i.test(speed)) {
+      pushLan({ id: 'lan-speed', titel: `LAN läuft nur mit ${speed}`, gewicht: 'HOCH', ist: speed, soll: '1 Gbit/s',
+        wirkung: 'Ein Link mit 10/100 Mbit/s statt 1 Gbit/s deutet fast immer auf ein Kabel-/Port-/Duplex-Problem (defektes/zu langes Kabel, schlechte Dose, Duplex-Mismatch) hin — häufige Ursache für Aussetzer und Einbrüche.',
+        fundort: 'Get-NetAdapter → LinkSpeed', kategorie: 'netzwerk', fixbar: false })
+    }
+    // Speed & Duplex fest (nicht Auto)
+    const sd = lanAdv(/speed.*duplex|duplex/i)
+    if (sd && sd.value && !/auto/i.test(sd.value)) {
+      pushLan({ id: 'lan-duplex', titel: 'Speed & Duplex fest eingestellt (nicht Auto)', gewicht: 'HOCH', ist: sd.value, soll: 'Auto Negotiation',
+        wirkung: 'Eine feste Speed/Duplex-Einstellung führt bei nicht exakt passendem Switch-Port zu Duplex-Mismatch → Kollisionen, Paketverlust, Abbrüche. Auto-Negotiation ist Standard.',
+        fundort: `Adapter-Advanced → ${sd.name} (${sd.keyword})`, kategorie: 'netadv', fixbar: true, fix: { art: 'advanced', adapter: 'lan', keyword: sd.keyword, displayName: sd.name, zielDisplay: 'Auto Negotiation' } })
+    }
+    // Energy-Efficient / Green Ethernet
+    const eee = lanAdv(/energy.?efficient|green.?ethernet|\beee\b/i)
+    if (eee && (/enab|on|^1$/i.test(eee.value || '') || (eee.regValue || '').trim() === '1')) {
+      pushLan({ id: 'lan-eee', titel: 'Energy-Efficient Ethernet (EEE / Green Ethernet) aktiv', gewicht: 'HOCH', ist: eee.value || 'aktiviert', soll: 'deaktiviert',
+        wirkung: 'EEE/Green Ethernet senkt den Stromverbrauch, verursacht aber mit manchen Switches sporadische kurze LAN-Aussetzer (Link-Flapping). Eine der häufigsten Ursachen für LAN-Verbindungsabbrüche.',
+        fundort: `Adapter-Advanced → ${eee.name} (${eee.keyword})`, kategorie: 'netadv', fixbar: true, fix: { art: 'advanced', adapter: 'lan', keyword: eee.keyword, displayName: eee.name, zielRegValue: '0', zielDisplay: 'Disabled' } })
+    }
+    // Geräte-Abschaltung (Energie)
+    const lt = d.lanPowerMgmt?.allowTurnOff, lpnp = d.lanPowerMgmt?.pnpCapabilities
+    if (lt === true || (lt == null && lpnp === 0)) {
+      pushLan({ id: 'lan-turnoff', titel: 'LAN-Adapter darf zum Energiesparen abgeschaltet werden', gewicht: 'HOCH', ist: 'aktiviert', soll: 'deaktiviert',
+        wirkung: '„Computer kann das Gerät ausschalten, um Energie zu sparen" ist gesetzt → Windows schaltet den Netzwerkadapter in Ruhephasen ab → LAN-Aussetzer.',
+        fundort: 'Geräte-Manager → LAN-Adapter → Energieverwaltung (PnPCapabilities)', kategorie: 'netpower', fixbar: true, fix: { art: 'powermgmt', adapter: 'lan', powermgmt: 'disable-turnoff' } })
+    }
+    // Flow Control aus
+    const fc = lanAdv(/flow.?control/i)
+    if (fc && /disab|off|^0$/i.test(fc.value || '')) {
+      pushLan({ id: 'lan-flow', titel: 'Flow Control deaktiviert', gewicht: 'GERING', standardAus: true, ist: fc.value || 'deaktiviert', soll: 'Rx & Tx aktiviert',
+        wirkung: 'Ohne Flow Control kann es bei Lastspitzen zu Paketverlust kommen. Meist unkritisch, bei Abbrüchen aber einen Versuch wert.',
+        fundort: `Adapter-Advanced → ${fc.name} (${fc.keyword})`, kategorie: 'netadv', fixbar: true, fix: { art: 'advanced', adapter: 'lan', keyword: fc.keyword, displayName: fc.name, zielDisplay: 'Rx & Tx Enabled' } })
+    }
+    // Fehler-/Discard-Zähler
+    const st = d.lanStatistik
+    if (st) {
+      const errs = (st.rxErr || 0) + (st.txErr || 0), disc = (st.rxDisc || 0) + (st.txDisc || 0)
+      if (errs > 0 || disc > 100) {
+        pushLan({ id: 'lan-errors', titel: 'Paketfehler/Verwürfe auf dem LAN-Adapter', gewicht: errs > 0 ? 'HOCH' : 'MITTEL', ist: `Fehler: ${errs} · Verworfen: ${disc}`, soll: '0 Fehler',
+          wirkung: 'Empfangs-/Sende-Fehler oder viele verworfene Pakete deuten auf ein physisches Problem (Kabel, Dose, Switch-Port, Duplex) — starke Abbruch-Ursache. Kabel/Port tauschen und erneut messen.',
+          fundort: 'Get-NetAdapterStatistics', kategorie: 'netzwerk', fixbar: false })
+      }
+    }
+    // Link-Down-Ereignisse
+    const le = d.lanEreignisse
+    if (le && le.disconnects > 0) {
+      pushLan({ id: 'lan-events', titel: `LAN-Verbindung getrennt in ${le.tage} Tagen: ${le.disconnects}`, gewicht: le.disconnects >= 4 ? 'HOCH' : 'MITTEL', ist: `${le.disconnects} Trennungen, ${le.connects} Neuverbindungen`, soll: 'möglichst 0',
+        wirkung: 'Das Netzwerkprofil-Protokoll belegt tatsächliche LAN-Trennungen. Zusammen mit EEE/Fehlerzählern/Kabel eingrenzen.',
+        fundort: 'Microsoft-Windows-NetworkProfile/Operational (Event 10001)', kategorie: 'info', fixbar: false })
+    }
+    if (out.length === lanBefore) {
+      pushLan({ id: 'lan-unauffaellig', titel: 'LAN: keine offensichtliche Fehlkonfiguration', gewicht: 'INFO', ist: '—', soll: '—',
+        wirkung: 'Die typischen LAN-Fehleinstellungen (EEE, Duplex, Energie-Abschaltung) sind unauffällig. Bei Abbrüchen: Kabel/Dose/Switch-Port prüfen; Ping-Test & Fehlerzähler im Roh-Anhang ansehen.',
+        fundort: '—', kategorie: 'info', fixbar: false })
+    }
+  }
+
+  // ── Live-Ping-Test (Verlust/Latenz) je Verbindungsart ──
+  for (const pt of (d.pingTests || [])) {
+    const verb: 'WLAN' | 'LAN' = /wlan/i.test(pt.ziel) ? 'WLAN' : 'LAN'
+    if (pt.verlust > 0) {
+      out.push(withErkl({ id: `ping-loss-${verb}`, verbindung: verb, titel: `Paketverlust zum Gateway (${pt.ziel})`, gewicht: pt.verlust >= 20 ? 'HOCH' : 'MITTEL', ist: `Verlust: ${pt.verlust}%${pt.avg != null ? ` · Latenz ${pt.avg} ms` : ''}`, soll: '0 % Verlust',
+        wirkung: 'Beim Live-Ping zum Standard-Gateway gingen Pakete verloren — konkreter Beleg für eine instabile Verbindung (Kabel/AP/Port/Treiber).',
+        fundort: 'Test-Connection → Gateway', kategorie: 'netzwerk', fixbar: false }))
+    } else if (pt.avg != null && pt.avg > 30) {
+      out.push(withErkl({ id: `ping-lat-${verb}`, verbindung: verb, titel: `Hohe Latenz zum Gateway (${pt.ziel})`, gewicht: 'GERING', ist: `Latenz ${pt.avg} ms · Jitter ${pt.jitter ?? '—'} ms`, soll: '< 5 ms (LAN) / < 20 ms (WLAN)',
+        wirkung: 'Erhöhte Latenz/Jitter zum eigenen Gateway deutet auf Last, Duplex- oder Funkprobleme.', fundort: 'Test-Connection → Gateway', kategorie: 'info', fixbar: false }))
+    }
+  }
+
+  // Kein Adapter überhaupt?
+  if (!d.adapter && !d.lan) {
+    push({ id: 'kein-adapter', titel: 'Kein Netzwerkadapter erkannt', gewicht: 'INFO', ist: d?.fehler || '—', soll: '—',
+      wirkung: 'Weder WLAN- noch LAN-Adapter aktiv/gefunden (deaktiviert oder Scan unvollständig).', fundort: 'Get-NetAdapter', kategorie: 'info', fixbar: false })
+  }
+  if (out.length === 0) {
+    push({ id: 'unauffaellig', titel: 'Keine offensichtliche Fehlkonfiguration', gewicht: 'INFO', ist: '—', soll: '—',
+      wirkung: 'Die typischen Fehleinstellungen sind nicht gesetzt. Der Roh-Daten-Anhang im PDF enthält alle Werte für die Tiefensuche.', fundort: '—', kategorie: 'info', fixbar: false })
   }
 
   const rank = { HOCH: 0, MITTEL: 1, GERING: 2, INFO: 3 }

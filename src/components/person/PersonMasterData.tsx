@@ -11,14 +11,36 @@ import {
 import {
   fetchAdPersonInfo, findEmployeeRecords, findAssignedHardware, findPhoneEntries,
   resolveSamByName, extractExtension, checkPersonOnline,
-  type AdPersonInfo, type EmployeeRecords, type AssignedHardware, type PersonOnline,
+  type AdPersonInfo, type EmployeeRecords, type AssignedHardware, type PersonOnline, type MailboxRef,
 } from '../../services/personMasterData'
+import { queryLiveMailboxes } from '../../services/outlookMailboxes'
 import { formatGermanDate } from '../../services/employees'
 import { modelTypeDisplay } from '../../services/endpointDevices'
 import type { PhoneEntry } from '../../services/phoneAssignment'
 import { loadConnData, forUser, type ConnScanData } from '../../services/printerConnections'
+import { queryLivePrinters, type LivePrintersResult } from '../../services/livePrinters'
 import { DeviceInfoButton } from '../device/DeviceDossier'
+import { ConnectPrinterPicker, SetDefaultButton } from '../device/DeviceMasterData'
 import { hostFromSerial } from '../../services/deviceMasterData'
+
+/** AD-Postfächer (AutoMapping) + live eingebundene Postfächer zusammenführen (dedupe,
+ *  eigenes Primärpostfach ausschließen). `live=true` = tatsächlich in Outlook gemountet. */
+function mergeMailboxes(adList: MailboxRef[] | undefined, live: Record<string, MailboxRef[]>, ownEmail?: string): (MailboxRef & { live: boolean })[] {
+  const own = (ownEmail || '').trim().toLowerCase()
+  const map = new Map<string, MailboxRef & { live: boolean }>()
+  const add = (m: MailboxRef, isLive: boolean) => {
+    const email = (m.email || '').trim(); const name = (m.name || '').trim()
+    if (!email && !name) return
+    if (own && email && email.toLowerCase() === own) return
+    const key = (email || name).toLowerCase()
+    const existing = map.get(key)
+    if (existing) { if (isLive) existing.live = true; if (!existing.email && email) existing.email = email }
+    else map.set(key, { name: name || email, email, live: isLive })
+  }
+  for (const m of (adList || [])) add(m, false)
+  for (const list of Object.values(live || {})) for (const m of list) add(m, true)
+  return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, 'de'))
+}
 
 /** Relative Zeit + Datum, z. B. "vor 2 Tagen (12.08.2026)". */
 function fmtLastSeen(iso?: string): string {
@@ -106,6 +128,10 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
   const [phLoading, setPhLoading] = useState(true)
   const [connData, setConnData] = useState<ConnScanData | null>(null)
   const [connLoading, setConnLoading] = useState(true)
+  const [livePrinters, setLivePrinters] = useState<Record<string, LivePrintersResult>>({})
+  const [livePrLoading, setLivePrLoading] = useState(false)
+  const [liveMbx, setLiveMbx] = useState<Record<string, MailboxRef[]>>({})   // tatsächlich eingebundene Postfächer je Rechner
+  const [liveMbxLoading, setLiveMbxLoading] = useState(false)
   const [groupsOpen, setGroupsOpen] = useState(false)
   // Online-Status (live-Check auf den zugewiesenen Rechnern)
   const [online, setOnline] = useState<PersonOnline | null>(null)
@@ -142,6 +168,35 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
         if (effSam && hosts.length > 0) {
           setOnlineLoading(true)
           checkPersonOnline(effSam, hosts).then(o => { if (!cancelled) { setOnline(o); setOnlineLoading(false) } })
+        }
+        // Verbundene Drucker je zugewiesenem Gerät LIVE abfragen (WinRM).
+        const prHosts = [
+          ...r.inventory.map(i => i.name),
+          ...r.endpoint.map(d => d.hostname || hostFromSerial(d.serial)),
+        ].map(h => (h || '').trim()).filter(Boolean)
+        const uniqPrHosts = [...new Set(prHosts)]
+        setLivePrinters({})
+        setLiveMbx({})
+        if (uniqPrHosts.length > 0) {
+          setLivePrLoading(true)
+          ;(async () => {
+            for (const h of uniqPrHosts) {
+              if (cancelled) return
+              const res = await queryLivePrinters(h)
+              if (!cancelled) setLivePrinters(prev => ({ ...prev, [h]: res }))
+            }
+            if (!cancelled) setLivePrLoading(false)
+          })()
+          // Tatsächlich eingebundene (Zusatz-)Postfächer je Rechner LIVE aus der Registry lesen.
+          setLiveMbxLoading(true)
+          ;(async () => {
+            for (const h of uniqPrHosts) {
+              if (cancelled) return
+              const res = await queryLiveMailboxes(h)
+              if (!cancelled && res.ok && res.mailboxes.length > 0) setLiveMbx(prev => ({ ...prev, [h]: res.mailboxes }))
+            }
+            if (!cancelled) setLiveMbxLoading(false)
+          })()
         }
       })
       findPhoneEntries(name).then(r => { if (!cancelled) { setPhones(r); setPhLoading(false) } })
@@ -338,29 +393,84 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
         })()}
       </TreeSection>
 
-      {/* Verbundene Drucker (aus dem Verbindungs-Scan, per angemeldetem Benutzer) */}
+      {/* Verbundene Drucker – LIVE je zugewiesenem Gerät (WinRM) */}
       {(() => {
-        const rows = forUser(connData, resolvedSam)
-        const seen = new Set<string>()
-        const uniq = rows.filter(r => { const k = `${r.printerName}|${r.hostname}`.toUpperCase(); if (seen.has(k)) return false; seen.add(k); return true })
+        const devHosts = [
+          ...(hw?.inventory ?? []).map(i => ({ host: (i.name || '').trim(), label: i.name })),
+          ...(hw?.endpoint ?? []).map(d => ({ host: (d.hostname || hostFromSerial(d.serial) || '').trim(), label: d.hostname || d.serial })),
+        ].filter(x => x.host)
+        const seenH = new Set<string>()
+        const uniqDev = devHosts.filter(x => { const k = x.host.toUpperCase(); if (seenH.has(k)) return false; seenH.add(k); return true })
+        const totalLive = uniqDev.reduce((n, x) => n + (livePrinters[x.host]?.ok ? livePrinters[x.host].printers.length : 0), 0)
+        const scanRows = forUser(connData, resolvedSam)
         return (
-          <TreeSection icon={<Printer size={14} />} title="Verbundene Drucker" loading={connLoading}
-            badge={uniq.length > 0 ? String(uniq.length) : undefined}>
-            {connLoading && !connData
-              ? <Empty text="Wird geladen…" />
-              : uniq.length === 0
-                ? <Empty text="Keine verbundenen Drucker im letzten Scan (Benutzer muss beim Scan angemeldet gewesen sein)." />
-                : uniq.map((r, i) => (
-                  <div key={i} className="flex items-center gap-2 py-1 pl-1">
-                    <Printer size={12} className="text-muted-foreground shrink-0" />
-                    <span className="text-sm text-foreground">{r.printerName}</span>
-                    {r.isDefault && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">Standard</span>}
-                    <span className="text-xs text-muted-foreground font-mono ml-auto shrink-0">{r.hostname}</span>
+          <TreeSection icon={<Printer size={14} />} title="Verbundene Drucker" loading={livePrLoading && totalLive === 0}
+            badge={totalLive > 0 ? String(totalLive) : (scanRows.length > 0 ? String(scanRows.length) : undefined)}>
+            {uniqDev.length === 0 ? (
+              <Empty text="Keine zugewiesenen Geräte." />
+            ) : uniqDev.map(x => {
+              const r = livePrinters[x.host]
+              return (
+                <div key={x.host} className="py-1">
+                  <div className="flex items-center gap-1.5 pl-1 mb-0.5">
+                    <span className="text-xs font-mono text-foreground">{x.label}</span>
+                    <DeviceInfoButton hostname={x.host} />
+                    {r?.ok && <span className="text-[10px] text-muted-foreground">· {r.printers.length} Drucker</span>}
                   </div>
-                ))}
+                  <div className="pl-5 space-y-0.5">
+                    {!r ? (
+                      <p className="text-[11px] text-muted-foreground italic">wird abgefragt…</p>
+                    ) : !r.ok ? (
+                      <p className="text-[11px] text-muted-foreground italic">nicht erreichbar ({r.reason || 'offline/WinRM'})</p>
+                    ) : r.printers.length === 0 ? (
+                      <p className="text-[11px] text-muted-foreground italic">keine (Netzwerk-)Drucker</p>
+                    ) : [...r.printers].sort((a, b) => (b.isDefault ? 1 : 0) - (a.isDefault ? 1 : 0) || a.name.localeCompare(b.name, 'de')).map((p, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <Printer size={11} className={`shrink-0 ${p.isDefault ? 'text-amber-400' : 'text-muted-foreground'}`} />
+                        <span className={`text-xs ${p.isDefault ? 'font-semibold text-foreground' : 'text-foreground'}`}>{p.name}</span>
+                        {p.isDefault && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500 text-black border border-amber-600 font-semibold">★ Standard</span>}
+                        <span className="ml-auto flex items-center gap-2 shrink-0">
+                          {p.port && <span className="text-[10px] font-mono text-muted-foreground/70">{p.port}</span>}
+                          {!p.isDefault && <SetDefaultButton hostname={x.host} printerName={p.name}
+                            onDone={() => { void queryLivePrinters(x.host, { force: true }).then(res => setLivePrinters(prev => ({ ...prev, [x.host]: res }))) }} />}
+                        </span>
+                      </div>
+                    ))}
+                    <ConnectPrinterPicker hostname={x.host}
+                      onConnected={() => { void queryLivePrinters(x.host, { force: true }).then(res => setLivePrinters(prev => ({ ...prev, [x.host]: res }))) }} />
+                  </div>
+                </div>
+              )
+            })}
           </TreeSection>
         )
       })()}
+
+      {/* Gruppenpostfaecher (Outlook): AD (AutoMapping) + LIVE tatsaechlich eingebundene (Registry) */}
+      <TreeSection icon={<Mail size={14} />} title="Gruppenpostfächer (Outlook)"
+        loading={(adLoading && !ad) || liveMbxLoading}
+        badge={(() => { const n = mergeMailboxes(ad?.mailboxes, liveMbx, ad?.email).length; return n > 0 ? String(n) : undefined })()}>
+        {(() => {
+          const merged = mergeMailboxes(ad?.mailboxes, liveMbx, ad?.email)
+          if (merged.length === 0) {
+            if ((adLoading && !ad) || liveMbxLoading) return <Empty text="Wird geladen…" />
+            return <Empty text="Keine Gruppenpostfächer gefunden (weder in AD noch live eingebunden)." />
+          }
+          return merged.map((m, i) => (
+            <div key={i} className="flex items-center gap-2 py-0.5 pl-1">
+              <Mail size={11} className="shrink-0 text-blue-400" />
+              <span className="text-xs text-foreground min-w-0 flex-1 break-words">{m.name}</span>
+              {m.email && <span className="text-[10px] font-mono text-muted-foreground shrink-0">{m.email}</span>}
+              <span className={`text-[9px] px-1 py-0.5 rounded shrink-0 ${m.live
+                ? 'bg-green-500/15 text-green-400 border border-green-500/25'
+                : 'bg-muted/30 text-muted-foreground border border-border'}`}
+                title={m.live ? 'Tatsächlich in Outlook eingebunden (live)' : 'Vollzugriff/AutoMapping laut AD'}>
+                {m.live ? 'eingebunden' : 'AD'}
+              </span>
+            </div>
+          ))
+        })()}
+      </TreeSection>
 
       {/* Postfaecher & Gruppen */}
       <TreeSection icon={<Mail size={14} />} title="Postfächer & Gruppen" loading={adLoading || recLoading}

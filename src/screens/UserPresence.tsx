@@ -14,7 +14,7 @@ import {
   listProtocols, loadProtocol, deleteProtocol, makeProtocolId, resolveHostsToIps,
   dnsCheckBatch, listDnsProtocols, loadDnsProtocol, saveDnsProtocol, deleteDnsProtocol, makeDnsProtocolId,
   winrmDnsCheckBatch, listWinrmProtocols, loadWinrmProtocol, saveWinrmProtocol, deleteWinrmProtocol, makeWinrmProtocolId,
-  PING_BATCH_SIZE, IP_PROBE_BATCH_SIZE_SINGLE, DNS_BATCH_SIZE, WINRM_DNS_BATCH_SIZE,
+  PING_BATCH_SIZE, IP_PROBE_BATCH_SIZE_SINGLE, MASS_PROBE_PARALLEL, DNS_BATCH_SIZE, WINRM_DNS_BATCH_SIZE,
   type ScanRow, type ScanProtocol, type ScanProtocolMeta, type ComputerRecord, type SiteSubnets,
   type DnsRow, type DnsProtocol, type DnsProtocolMeta, type DnsStatus,
   type WinrmDnsRow, type WinrmDnsProtocol, type WinrmDnsProtocolMeta, type WinrmDnsStatus,
@@ -31,9 +31,10 @@ import type { InventoryItem } from '../types/auth'
 const CACHE_KEY = 'userOverview.cache.v1'
 const ONLINE_CACHE_MS = 5 * 60 * 1000
 const INVENTORY_FILE = 'inventory/inventory.json'
-// Ping-Sweep: so viele 256er-Batches laufen gleichzeitig (ICMP ist billig,
-// der Gewinn kommt v. a. durch das Einsparen serieller PowerShell-Starts)
-const PING_PARALLEL = 4
+// Ping-Sweep: so viele Ping-Batches laufen gleichzeitig. Bewusst niedrig gehalten
+// (netz-/IDS-schonend): PING_BATCH_SIZE * PING_PARALLEL = gleichzeitige ICMP aus
+// einer Quelle. Abdeckung bleibt gleich, nur mehr Wellen → etwas langsamer.
+const PING_PARALLEL = 2
 
 interface CacheData { users: AdUserListItem[]; loadedAt: string }
 function loadCache(): CacheData | null {
@@ -570,26 +571,29 @@ export default function UserPresence() {
     // Pass 1 — Schnell-Pass: 50 parallel, OHNE WinRM-Aktivierung. Liefert die
     // grosse Mehrheit (WinRM laeuft schon) schnell; Geraete ohne laufendes
     // WinRM kommen als OFFLINE zurueck und werden in Pass 2 nachgezogen.
+    // Massen-Scan bewusst netzschonender als die Einzel-Suche (MASS_PROBE_PARALLEL
+    // statt 50 gleichzeitige DCOM/WinRM aus einer Quelle) — gleiche Abdeckung, nur
+    // mehr Teilbatches → langsamer, aber IDS-/netzfreundlich.
     const needsActivation: string[] = []
-    for (let i = 0; i < online.length; i += IP_PROBE_BATCH_SIZE_SINGLE) {
+    for (let i = 0; i < online.length; i += MASS_PROBE_PARALLEL) {
       if (massCancel.current) break
-      const recs = await scanIpsBatch(online.slice(i, i + IP_PROBE_BATCH_SIZE_SINGLE), false)
+      const recs = await scanIpsBatch(online.slice(i, i + MASS_PROBE_PARALLEL), false, MASS_PROBE_PARALLEL)
       for (const r of recs) {
         if (r.status === 'OFFLINE') needsActivation.push(r.ip)
         else records.push(r)
       }
-      setMassProgress({ done: Math.min(i + IP_PROBE_BATCH_SIZE_SINGLE, online.length), total: online.length })
+      setMassProgress({ done: Math.min(i + MASS_PROBE_PARALLEL, online.length), total: online.length })
       setMassRows(enrichAssignment(buildScanRows(records, userList)))
     }
 
     // Pass 2 — WinRM aktivieren und die restlichen Geraete nachziehen.
     if (!massCancel.current && needsActivation.length > 0) {
       setMassPhase('activate'); setMassProgress({ done: 0, total: needsActivation.length })
-      for (let i = 0; i < needsActivation.length; i += IP_PROBE_BATCH_SIZE_SINGLE) {
+      for (let i = 0; i < needsActivation.length; i += MASS_PROBE_PARALLEL) {
         if (massCancel.current) break
-        const recs = await scanIpsBatch(needsActivation.slice(i, i + IP_PROBE_BATCH_SIZE_SINGLE), true)
+        const recs = await scanIpsBatch(needsActivation.slice(i, i + MASS_PROBE_PARALLEL), true, MASS_PROBE_PARALLEL)
         records.push(...recs)
-        setMassProgress({ done: Math.min(i + IP_PROBE_BATCH_SIZE_SINGLE, needsActivation.length), total: needsActivation.length })
+        setMassProgress({ done: Math.min(i + MASS_PROBE_PARALLEL, needsActivation.length), total: needsActivation.length })
         setMassRows(enrichAssignment(buildScanRows(records, userList)))
       }
     }
@@ -1016,7 +1020,7 @@ function DnsView(p: DnsViewProps) {
                 <tr key={r.ip} className={`border-b border-border/40 hover:bg-accent/10 ${r.status !== 'OK' ? 'bg-red-500/[0.03]' : ''}`}>
                   <td className="px-3 py-2">{statusBadge(r.status)}</td>
                   <td className="px-3 py-2 font-mono text-foreground font-semibold">{r.ip}</td>
-                  <td className="px-3 py-2 font-mono text-muted-foreground">{r.host || <span className="text-muted-foreground/40 italic">keine PTR</span>}</td>
+                  <td className="px-3 py-2 font-mono text-muted-foreground">{r.host ? <span className="inline-flex items-center gap-1">{r.host}<DeviceInfoButton hostname={r.host} /></span> : <span className="text-muted-foreground/40 italic">keine PTR</span>}</td>
                   <td className="px-3 py-2 font-mono">{r.fwdIp ? <span className={r.status === 'MISMATCH' ? 'text-red-300' : 'text-muted-foreground'}>{r.fwdIp}</span> : <span className="text-muted-foreground/40">—</span>}</td>
                   <td className="px-3 py-2">
                     <div className="flex items-center gap-1.5 justify-end">

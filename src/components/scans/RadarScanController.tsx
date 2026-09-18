@@ -4,7 +4,7 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import { useAuthStore, useIsAdmin } from '../../store/authStore'
-import { getScanSchedule, isConfiguredDue, loadRunStatus, saveRunStatus, isStatusClaimed } from '../../services/scanSchedules'
+import { getScanSchedule, isConfiguredDue, loadRunStatus, saveRunStatus, isStatusClaimed, claimExclusive } from '../../services/scanSchedules'
 import { RADAR_SCAN_SCHEDULE, runRadarScanOnce } from '../../services/extraScans'
 
 const POLL_MS = 20 * 60 * 1000
@@ -26,8 +26,9 @@ export default function RadarScanController() {
 
     busy.current = true
     const claimToken = `${username}#${Math.random().toString(36).slice(2, 10)}`
-    try { await saveRunStatus(RADAR_SCAN_SCHEDULE, { ...s, running: { by: claimToken, at: new Date().toISOString() } }) } catch { busy.current = false; return }
-    try { const check = await loadRunStatus(RADAR_SCAN_SCHEDULE); if (check.running && check.running.by !== claimToken) { busy.current = false; return } } catch { /* im Zweifel scannen */ }
+    // Robuste Einmal-Wahl: nur die Instanz, die den Claim gewinnt, versendet die Auto-Mail.
+    const won = await claimExclusive(RADAR_SCAN_SCHEDULE, claimToken, s)
+    if (!won) { busy.current = false; return }
 
     try {
       const res = await runRadarScanOnce()

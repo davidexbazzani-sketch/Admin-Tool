@@ -4,11 +4,15 @@ import {
   ClipboardList, Plus, Trash2, Download, Eye, RefreshCw, Search, Loader,
   FileText, Edit3, X, Save, CheckCircle, XCircle, AlertTriangle, ArrowLeft, Printer,
   PackageCheck, RotateCcw, Check, ChevronDown, Mail, Flame, Maximize2, Minimize2, Filter, Info, Columns3, Move,
+  FileSpreadsheet, ChevronRight, MapPin,
 } from 'lucide-react'
 import {
   listChecklists, createChecklist, updateChecklist, deleteChecklist,
   type Checklist, type DeviceType,
 } from '../services/checklists'
+import { importTasks, type ImportResult } from '../services/checklistImport'
+import { openFileForImport, parseExcelSheet, type ExcelSheetData } from '../utils/fileImport'
+import TaskColumnDialog, { detectTaskCol } from '../components/TaskColumnDialog'
 import { downloadChecklistPdf, printChecklist } from '../services/checklistPdf'
 import { batchAdLookup } from '../services/adUserLookup'
 import { listEmployees, formatGermanDate, HARDWARE_OPTIONS, hardwareLabel, type Employee, type HardwareType } from '../services/employees'
@@ -20,6 +24,12 @@ import { api } from '../electronAPI'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import { loadChecklistDeviceInfos, BEKANNTE_SOFTWARE, type ChecklistDeviceInfo } from '../services/deviceMasterData'
+import { moveDeviceOnAllMaps, DEVICE_MAPS } from '../services/deviceMaps'
+import { useAppStore } from '../store/appStore'
+import { useMapIntentStore } from '../store/mapIntentStore'
+import { runHandoverAutomation, handoverSummary } from '../services/checklistServiceNow'
+import SolidWorksHelp from '../components/solidworks/SolidWorksHelp'
+import CoscomHelp from '../components/coscom/CoscomHelp'
 
 type View = 'list' | 'edit' | 'preview'
 
@@ -126,6 +136,11 @@ function emptyDraft(currentUser: string): Omit<Checklist, 'id' | 'createdAt'> {
   }
 }
 
+/** Import-Platzhalter (nur TASK gesetzt, Kerndaten fehlen) → in der Übersicht rot markiert. */
+function isPlaceholder(c: Checklist): boolean {
+  return !c.completed && (!(c.name || '').trim() || !(c.newDeviceSerial || '').trim())
+}
+
 type Toast = { kind: 'success' | 'error'; text: string }
 
 // Kanonischer Name fuer den Abgleich: klein, Leerzeichen normiert; "Nachname,
@@ -143,6 +158,9 @@ export default function Checklists() {
   const [view, setView] = useState<View>('list')
   const [items, setItems] = useState<Checklist[]>([])
   const [loading, setLoading] = useState(true)
+  const [importBusy, setImportBusy] = useState(false)
+  const [pendingExcel, setPendingExcel] = useState<ExcelSheetData | null>(null)
+  const [importResult, setImportResult] = useState<ImportResult | null>(null)
   const [search, setSearch] = useState('')
   const [colFilters, setColFilters] = useState<Record<string, Set<string>>>({})   // Excel-Spaltenfilter: erlaubte Werte je Spalte
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -156,6 +174,8 @@ export default function Checklists() {
   const [employees, setEmployees] = useState<Employee[]>([])
   // Checkliste, deren Geraeteuebergabe gerade bestaetigt werden soll
   const [pendingComplete, setPendingComplete] = useState<Checklist | null>(null)
+  const [placeOnMap, setPlaceOnMap] = useState<Checklist | null>(null)   // Neu-Gerät: Standort einzeichnen?
+  const setScreen = useAppStore(s => s.setScreen)
   // Geräteinfos je Checklisten-ID (Modell des neuen Geräts, Kommentar + relevante
   // Software des Altgeräts). Live aus zwei netzgecachten JSON.
   const [deviceInfos, setDeviceInfos] = useState<Map<string, ChecklistDeviceInfo>>(new Map())
@@ -308,6 +328,42 @@ export default function Checklists() {
     setLoading(true)
     try { setItems(await listChecklists()) }
     finally { setLoading(false) }
+  }
+
+  // ── Checklisten importieren: fehlende TASK-Nummern aus Excel anlegen ─────────
+  async function runImportFromExcel(sheet: ExcelSheetData, taskCols: string[]) {
+    const tasks = sheet.rows.flatMap(r => taskCols.map(c => String(r[c] ?? '').trim())).filter(Boolean)
+    if (tasks.length === 0) { showToast({ kind: 'error', text: 'In der gewählten Spalte wurden keine TASK-Nummern gefunden.' }); return }
+    setImportBusy(true)
+    try {
+      const res = await importTasks(tasks, currentUserName)
+      setImportResult(res)
+      if (res.ok) { await reload(); setListTab('open') }
+      else showToast({ kind: 'error', text: res.error || 'Import fehlgeschlagen.' })
+    } finally { setImportBusy(false) }
+  }
+
+  async function handleImportClick() {
+    if (importBusy) return
+    setImportBusy(true)
+    try {
+      const file = await openFileForImport()
+      if (!file) return
+      if (!['xlsx', 'xls', 'csv'].includes(file.ext)) { showToast({ kind: 'error', text: 'Bitte eine Excel-/CSV-Datei wählen.' }); return }
+      const sheet = parseExcelSheet(file.bytes)
+      if (sheet.columns.length === 0) { showToast({ kind: 'error', text: 'Keine Spalten in der Datei gefunden.' }); return }
+      const auto = sheet.columns.filter(c => detectTaskCol(c) === 'task')
+      if (auto.length === 1) { await runImportFromExcel(sheet, [auto[0].name]) }
+      else setPendingExcel(sheet)   // nicht eindeutig → Spalten-Wähler
+    } catch (e) {
+      showToast({ kind: 'error', text: 'Import fehlgeschlagen: ' + (e instanceof Error ? e.message : String(e)) })
+    } finally { setImportBusy(false) }
+  }
+
+  function onTaskColConfirm(taskColNames: string[]) {
+    const sheet = pendingExcel
+    setPendingExcel(null)
+    if (sheet && taskColNames.length > 0) void runImportFromExcel(sheet, taskColNames)
   }
 
   // Abhol-Mail-Dialog (nur Bestandsmitarbeiter)
@@ -495,7 +551,14 @@ export default function Checklists() {
   // Zellinhalt einer Spalte.
   function cellInner(id: string, c: Checklist, info: ChecklistDeviceInfo | undefined, emp: Employee | undefined): ReactNode {
     switch (id) {
-      case 'task': return c.taskNumber || '—'
+      case 'task': return (
+        <span className="inline-flex items-center gap-1.5">
+          {c.taskNumber || '—'}
+          {isPlaceholder(c) && (
+            <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-red-500 text-white font-semibold animate-pulse whitespace-nowrap" title="Importiert, aber noch nicht befüllt">nicht befüllt</span>
+          )}
+        </span>
+      )
       case 'name': return (
         <span className="inline-flex items-center gap-2 flex-wrap">
           <span className="inline-flex items-center gap-1">{c.name}{c.name && <PersonInfoButton name={c.name} sam={c.corpId} />}</span>
@@ -537,11 +600,13 @@ export default function Checklists() {
             {laedt && detected.length === 0 && <span className="text-muted-foreground/50">…</span>}
             {detected.map(sw => (
               <span key={`d-${sw}`} title="Auf dem Altgerät erkannt — muss installiert werden"
-                className="px-1.5 py-0.5 text-[10px] rounded-full bg-violet-400 text-black border border-violet-500">{sw}</span>
+                className="px-1.5 py-0.5 text-[10px] rounded-full bg-violet-400 text-black border border-violet-500">
+                {/solidworks/i.test(sw) ? <SolidWorksHelp>{sw}</SolidWorksHelp> : /coscom/i.test(sw) ? <CoscomHelp>{sw}</CoscomHelp> : sw}</span>
             ))}
             {manual.map(sw => (
               <span key={`m-${sw}`} title="Manuell ergänzt"
-                className="px-1.5 py-0.5 text-[10px] rounded-full bg-sky-300 text-black border border-sky-400">{sw}</span>
+                className="px-1.5 py-0.5 text-[10px] rounded-full bg-sky-300 text-black border border-sky-400">
+                {/solidworks/i.test(sw) ? <SolidWorksHelp>{sw}</SolidWorksHelp> : /coscom/i.test(sw) ? <CoscomHelp>{sw}</CoscomHelp> : sw}</span>
             ))}
             {leer && !laedt && (
               <span className="text-muted-foreground/50"
@@ -703,9 +768,41 @@ export default function Checklists() {
     })
     if (res.ok) {
       showToast({ kind: 'success', text: `Checkliste für "${c.name}" als erledigt verschoben` })
+      // OT-Geräte-Inventar aktuell halten: wird ein verortetes Gerät getauscht,
+      // wandert der Marker (Position + Arbeitsplatz) auf das neue Gerät.
+      let refreshMarkerGesetzt = false
+      if (c.deviceType === 'refresh' && (c.oldDeviceId || '').trim() && (c.newDeviceSerial || '').trim()) {
+        try {
+          const moved = await moveDeviceOnAllMaps(c.oldDeviceId!, c.newDeviceSerial)
+          for (const m of moved) {
+            const t = m.entries.map(e => `${e.alt} → ${e.neu}`).join(', ')
+            showToast({ kind: 'success', text: `${m.label} aktualisiert: ${t}` })
+          }
+          refreshMarkerGesetzt = moved.length > 0
+        } catch { /* best effort – Checkliste bleibt erledigt */ }
+      }
       await reload()
+      void runServiceNowHandover(c)   // Hintergrund: Task schließen + Checkliste anhängen + Primary-User-Incident
+      // Neugerät → zum Einzeichnen auffordern (überspringbar). Auch bei Refresh, wenn das
+      // Altgerät auf KEINER Karte verortet war (sonst wurde der Marker bereits umgeschrieben).
+      if ((c.newDeviceSerial || '').trim() && (c.deviceType === 'new' || (c.deviceType === 'refresh' && !refreshMarkerGesetzt))) setPlaceOnMap(c)
     } else {
       showToast({ kind: 'error', text: res.error || 'Speichern fehlgeschlagen.' })
+    }
+  }
+
+  // ServiceNow-Automatik im Hintergrund (blockiert die Oberfläche nicht; Ergebnis als Toast).
+  async function runServiceNowHandover(c: Checklist) {
+    try {
+      const r = await runHandoverAutomation(c, currentUserName)
+      if (r.skipped) {
+        if (r.reason !== 'Automatik deaktiviert') showToast({ kind: 'error', text: `ServiceNow-Automatik übersprungen: ${r.reason} — Task/Incident nicht automatisch erledigt.` })
+        return
+      }
+      const s = handoverSummary(r)
+      showToast({ kind: s.allOk ? 'success' : 'error', text: s.text })
+    } catch (e) {
+      showToast({ kind: 'error', text: 'ServiceNow-Automatik fehlgeschlagen: ' + (e instanceof Error ? e.message : String(e)) })
     }
   }
 
@@ -745,10 +842,17 @@ export default function Checklists() {
           </p>
         </div>
         {view === 'list' ? (
-          <button onClick={startNew}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500 text-black hover:bg-emerald-500/20">
-            <Plus size={12} />Neue Checkliste
-          </button>
+          <>
+            <button onClick={startNew}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500 text-black hover:bg-emerald-500/20">
+              <Plus size={12} />Neue Checkliste
+            </button>
+            <button onClick={handleImportClick} disabled={importBusy}
+              title="Excel importieren: für jede TASK-Nummer, die es noch nicht gibt, wird ein leerer Eintrag angelegt. Bestehende bleiben unberührt."
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 disabled:opacity-50">
+              {importBusy ? <Loader size={12} className="animate-spin" /> : <FileSpreadsheet size={12} />}Importieren
+            </button>
+          </>
         ) : (
           <button onClick={backToList}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30">
@@ -848,10 +952,10 @@ export default function Checklists() {
                     <tr key={c.id} data-rowid={c.id}
                       onPointerDown={e => dragStart(e, 'row', c.id)}
                       style={dropStyle('row', c.id)}
-                      className={`border-b border-border/40 hover:bg-accent/10 ${c.priority ? 'bg-orange-500/5' : ''} ${isDragging('row', c.id) ? 'opacity-40' : ''} ${dropInfo?.type === 'row' && dropInfo.id === c.id ? 'bg-blue-500/10' : ''}`}>
+                      className={`border-b border-border/40 hover:bg-accent/10 ${isPlaceholder(c) ? 'bg-red-500/10' : c.priority ? 'bg-orange-500/5' : ''} ${isDragging('row', c.id) ? 'opacity-40' : ''} ${dropInfo?.type === 'row' && dropInfo.id === c.id ? 'bg-blue-500/10' : ''}`}>
                       {orderedCols.map(id => (
                         <td key={id} data-colid={id} title={cellTitle(id, c)}
-                          className={`px-3 py-2 ${COLS[id].td} ${id === 'task' && c.priority ? 'border-l-4 border-l-orange-500' : ''}`}>
+                          className={`px-3 py-2 ${COLS[id].td} ${id === 'task' && isPlaceholder(c) ? 'border-l-4 border-l-red-500' : id === 'task' && c.priority ? 'border-l-4 border-l-orange-500' : ''}`}>
                           {cellInner(id, c, info, emp)}
                         </td>
                       ))}
@@ -1179,6 +1283,39 @@ export default function Checklists() {
         </div>
       )}
 
+      {/* Neu-Gerät: Standort auf einer Karte einzeichnen? */}
+      {placeOnMap && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6" onClick={() => setPlaceOnMap(null)}>
+          <div className="bg-card border border-primary/30 rounded-xl p-5 max-w-md w-full space-y-3" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-2">
+              <MapPin size={16} className="text-primary" />
+              <h3 className="text-base font-semibold text-foreground">Standort einzeichnen?</h3>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Neues Gerät <span className="font-mono text-foreground">DE{(placeOnMap.newDeviceSerial || '').trim().toUpperCase()}</span> für <strong className="text-foreground">{placeOnMap.name || '—'}</strong> auf einer Karte verorten? Du landest dann im Platzieren-Modus — einfach die Position anklicken.
+            </p>
+            <div className="grid grid-cols-1 gap-2">
+              {DEVICE_MAPS.map(m => (
+                <button key={m.id} onClick={() => {
+                  const host = 'DE' + (placeOnMap.newDeviceSerial || '').trim().toUpperCase().replace(/\s+/g, '')
+                  useMapIntentStore.getState().setIntent({ screen: m.id, hostname: host, mode: 'place' })
+                  setScreen(m.id); setPlaceOnMap(null)
+                }}
+                  className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-md border border-border hover:border-primary/40 hover:bg-accent/20 text-foreground text-left">
+                  <MapPin size={14} className="text-primary shrink-0" />{m.label}
+                </button>
+              ))}
+            </div>
+            <div className="flex justify-end">
+              <button onClick={() => setPlaceOnMap(null)}
+                className="px-3 py-1.5 text-sm rounded-md border border-border text-muted-foreground hover:bg-accent/30">
+                Später / kein Kartenstandort
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Delete confirm */}
       {pendingDelete && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6" onClick={() => setPendingDelete(null)}>
@@ -1205,6 +1342,11 @@ export default function Checklists() {
       )}
 
       {pickupMail && <PickupMailDialog checklist={pickupMail} bearbeiter={currentUserName} onClose={() => setPickupMail(null)} />}
+      {pendingExcel && (
+        <TaskColumnDialog columns={pendingExcel.columns} rows={pendingExcel.rows}
+          onConfirm={onTaskColConfirm} onCancel={() => setPendingExcel(null)} />
+      )}
+      {importResult && <ChecklistImportResultModal result={importResult} onClose={() => setImportResult(null)} />}
     </div>
   )
 }
@@ -1525,6 +1667,72 @@ function ChecklistHardwarePill({ c, onPick }: { c: Checklist; onPick: (key: Hard
 }
 
 function firstName(full: string): string { return (full || '').trim().split(/\s+/)[0] || '' }
+
+// ── Ergebnis des Checklisten-Imports ──────────────────────────────────────────
+function ChecklistImportResultModal({ result, onClose }: { result: ImportResult; onClose: () => void }) {
+  const [open, setOpen] = useState<Record<string, boolean>>({})
+  const toggle = (k: string) => setOpen(p => ({ ...p, [k]: !p[k] }))
+
+  const Section = ({ id, label, tasks, tone }: { id: string; label: string; tasks: string[]; tone: 'red' | 'muted' | 'amber' }) => {
+    if (tasks.length === 0) return null
+    const toneCls = tone === 'red' ? 'text-red-300' : tone === 'amber' ? 'text-amber-300' : 'text-muted-foreground'
+    const isOpen = !!open[id]
+    return (
+      <div className="rounded-md border border-border">
+        <button onClick={() => toggle(id)} className={`w-full flex items-center gap-1.5 px-3 py-2 text-xs ${toneCls} hover:brightness-125`}>
+          {isOpen ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+          <span className="font-semibold">{tasks.length}</span> {label}
+        </button>
+        {isOpen && (
+          <div className="max-h-48 overflow-y-auto px-3 pb-2 text-[11px] font-mono text-muted-foreground grid grid-cols-2 sm:grid-cols-3 gap-x-4">
+            {tasks.map((t, i) => <div key={i} className="truncate">{t}</div>)}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+      <div className="bg-card border border-border rounded-xl w-full max-w-lg shadow-xl" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center gap-2 px-5 py-3 border-b border-border">
+          <FileSpreadsheet size={16} className="text-primary" />
+          <h3 className="text-sm font-bold text-foreground flex-1">Checklisten-Import</h3>
+          <button onClick={onClose} className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-accent"><X size={16} /></button>
+        </div>
+        <div className="p-4 space-y-3">
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="rounded-md border border-red-500/30 bg-red-500/10 px-2 py-2">
+              <div className="text-lg font-bold text-red-300 tabular-nums">{result.created.length}</div>
+              <div className="text-[10px] text-muted-foreground leading-tight">neu angelegt (rot)</div>
+            </div>
+            <div className="rounded-md border border-border bg-background px-2 py-2">
+              <div className="text-lg font-bold text-foreground tabular-nums">{result.alreadyPresent.length}</div>
+              <div className="text-[10px] text-muted-foreground leading-tight">bereits vorhanden</div>
+            </div>
+            <div className="rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-2">
+              <div className="text-lg font-bold text-amber-300 tabular-nums">{result.missing.length}</div>
+              <div className="text-[10px] text-muted-foreground leading-tight">nicht in der Excel</div>
+            </div>
+          </div>
+
+          <p className="text-[11px] text-emerald-300 bg-emerald-500/10 border border-emerald-500/25 rounded-md px-3 py-2">
+            Es wurde <strong>nichts überschrieben oder gelöscht</strong> — nur fehlende TASK-Nummern wurden als leere Einträge angelegt.
+          </p>
+
+          <div className="space-y-2">
+            <Section id="created" label="neue TASKs (in der Übersicht rot, bis befüllt)" tasks={result.created} tone="red" />
+            <Section id="present" label="bereits im Tool (unberührt)" tasks={result.alreadyPresent} tone="muted" />
+            <Section id="missing" label="im Tool, aber nicht (mehr) in der Excel — nur Hinweis" tasks={result.missing} tone="amber" />
+          </div>
+        </div>
+        <div className="px-5 py-3 border-t border-border flex justify-end">
+          <button onClick={onClose} className="px-4 py-1.5 text-xs rounded-md bg-primary text-primary-foreground hover:opacity-90">Schließen</button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // ── Abhol-Mail an den (Bestands-)Mitarbeiter: vorausgefüllte Outlook-Mail ──────
 function PickupMailDialog({ checklist, bearbeiter, onClose }: { checklist: Checklist; bearbeiter: string; onClose: () => void }) {

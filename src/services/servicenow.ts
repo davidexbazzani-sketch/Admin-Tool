@@ -42,6 +42,8 @@ export async function loadIntegrationAccount(force = false): Promise<SnIntegrati
 
 export async function saveIntegrationAccount(user: string, pass: string, by: string, instanceUrl?: string, assignmentGroups?: string[]): Promise<boolean> {
   const u = user.trim()
+  // Copy&Paste-Artefakte (Zeilenumbrüche/Tabs) entfernen — normale Leerzeichen bleiben.
+  pass = (pass || '').replace(/[\r\n\t]/g, '')
   const groups = (assignmentGroups ?? []).map(g => g.trim()).filter(Boolean)
   try {
     if (!u || !pass) {
@@ -299,6 +301,81 @@ export async function updateAssignment(
   const auth = authOf(await loadIntegrationAccount())
   const res = await api().serviceNowRequest({ instanceUrl: cfg.instanceUrl, method: 'PATCH', table: 'incident', sysId, body, fields: 'sys_id', auth })
   return res.success ? { ok: true } : { ok: false, error: res.error }
+}
+
+// ── Checklisten-Übergabe-Automatik: sc_task schließen + Anhang + Incident ─────
+export interface HandoverConfig {
+  enabled: boolean
+  templateSysId: string   // Vorlage-Incident („copy incident") — instanz-spezifisch
+  closeState: string      // sc_task Schließ-Status (Closed Complete = 3)
+}
+const HANDOVER_FILE = 'config/servicenow/handover.json'
+export const DEFAULT_TEMPLATE_SYS_ID = 'dbb606b12b03cf948742fd03fc91bf27'
+
+export async function loadHandoverConfig(): Promise<HandoverConfig> {
+  try {
+    const h = await api().netReadJson<Partial<HandoverConfig>>(HANDOVER_FILE)
+    if (h && typeof h === 'object') return {
+      enabled: h.enabled === true,   // Standard AUS — bewusst in den Einstellungen aktivieren
+      templateSysId: (h.templateSysId || '').trim() || DEFAULT_TEMPLATE_SYS_ID,
+      closeState: (h.closeState || '').trim() || '3',
+    }
+  } catch { /* Default */ }
+  return { enabled: false, templateSysId: DEFAULT_TEMPLATE_SYS_ID, closeState: '3' }
+}
+export async function saveHandoverConfig(c: HandoverConfig, by: string): Promise<boolean> {
+  try { return await api().netWriteJson(HANDOVER_FILE, { ...c, updatedBy: by, updatedAt: new Date().toISOString() }) } catch { return false }
+}
+
+/** sc_task per Nummer finden → sys_id + Status. */
+export async function findTaskByNumber(cfg: ServiceNowConfig, number: string): Promise<{ ok: boolean; sysId?: string; state?: string; error?: string; needsLogin?: boolean }> {
+  const num = (number || '').trim()
+  if (!num) return { ok: false, error: 'Keine Task-Nummer.' }
+  const auth = authOf(await loadIntegrationAccount())
+  const res = await api().serviceNowRequest({ instanceUrl: cfg.instanceUrl, method: 'GET', table: 'sc_task', query: 'number=' + num, fields: 'sys_id,state,short_description', limit: 1, auth })
+  if (!res.success) return { ok: false, error: res.error, needsLogin: res.needsLogin }
+  const r = firstResult(res.data)
+  const sysId = rawVal(r?.sys_id)
+  return sysId ? { ok: true, sysId, state: dv(r?.state) } : { ok: false, error: `Task „${num}" nicht auf der Instanz gefunden.` }
+}
+
+/** sc_task schließen (PATCH state; Standard Closed Complete = 3). */
+export async function closeCatalogTask(cfg: ServiceNowConfig, sysId: string, closeState = '3', notes?: string): Promise<{ ok: boolean; error?: string }> {
+  if (!sysId) return { ok: false, error: 'Kein sys_id.' }
+  const body: Record<string, string> = { state: closeState || '3' }
+  if (notes) body.work_notes = notes
+  const auth = authOf(await loadIntegrationAccount())
+  const res = await api().serviceNowRequest({ instanceUrl: cfg.instanceUrl, method: 'PATCH', table: 'sc_task', sysId, body, fields: 'sys_id,state', auth })
+  return res.success ? { ok: true } : { ok: false, error: res.error }
+}
+
+/** Incident als „Kopie" einer Vorlage anlegen: relevante Vorlage-Felder als Rohwerte übernehmen + Short description/Caller setzen. */
+export async function createIncidentFromTemplate(
+  cfg: ServiceNowConfig, templateSysId: string, f: { callerSysId?: string; shortDescription: string },
+): Promise<{ ok: boolean; sysId?: string; number?: string; error?: string; needsLogin?: boolean }> {
+  if (!f.shortDescription.trim()) return { ok: false, error: 'Kurzbeschreibung fehlt.' }
+  const auth = authOf(await loadIntegrationAccount())
+  const body: Record<string, string> = { short_description: f.shortDescription.trim() }
+  if (templateSysId?.trim()) {
+    const tplFields = 'category,subcategory,cmdb_ci,contact_type,impact,urgency,company,location'
+    const tpl = await api().serviceNowRequest({ instanceUrl: cfg.instanceUrl, method: 'GET', table: 'incident', sysId: templateSysId.trim(), fields: tplFields, auth })
+    if (tpl.success) {
+      const t = firstResult(tpl.data)
+      for (const k of tplFields.split(',')) { const v = rawVal(t?.[k]); if (v) body[k] = v }
+    }
+  }
+  if (f.callerSysId) body.caller_id = f.callerSysId
+  const res = await api().serviceNowRequest({ instanceUrl: cfg.instanceUrl, method: 'POST', table: 'incident', body, fields: 'sys_id,number', auth })
+  if (!res.success) return { ok: false, error: res.error, needsLogin: res.needsLogin }
+  const r = firstResult(res.data)
+  return { ok: true, sysId: rawVal(r?.sys_id) || undefined, number: dv(r?.number) || undefined }
+}
+
+/** Datei (Base64) als Anhang an einen Datensatz hängen. */
+export async function attachFile(cfg: ServiceNowConfig, table: string, sysId: string, filename: string, dataBase64: string, contentType = 'application/pdf'): Promise<{ ok: boolean; error?: string; needsLogin?: boolean }> {
+  const auth = authOf(await loadIntegrationAccount())
+  const res = await api().serviceNowAttach({ instanceUrl: cfg.instanceUrl, table, sysId, fileName: filename, contentType, dataBase64, auth })
+  return res.success ? { ok: true } : { ok: false, error: res.error, needsLogin: res.needsLogin }
 }
 
 /** Direktlink auf den Datensatz in ServiceNow (Standardbrowser). */

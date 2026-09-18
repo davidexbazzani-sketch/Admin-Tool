@@ -423,12 +423,19 @@ export function makeWinrmProtocolId(): string { return `wrm_${Date.now()}_${Math
 
 // ── IP-basierter Standort-Scan (DNS-unabhaengig) ─────────────────────────────
 
-export const PING_BATCH_SIZE = 256
+// Netzschonung: kleinere Ping-Batches → weniger gleichzeitige ICMP pro Quelle
+// (mit PING_PARALLEL kombiniert). Abdeckung bleibt identisch, nur mehr Teilbatches.
+export const PING_BATCH_SIZE = 128
 export const IP_PROBE_BATCH_SIZE = 10
 // Ausnahme (vom Nutzer freigegeben): Die EINZEL-Suche darf 50 Geraete parallel
 // abfragen — die Last liegt fast komplett auf dem Admin-PC (1 WinRM-Verbindung
-// pro Zielgeraet, ~50 lokale PowerShell-Jobs), nicht auf Netz/Servern.
+// pro Zielgeraet, ~50 lokale PowerShell-Jobs), nicht auf Netz/Servern. Bricht beim
+// ersten Treffer ab → wenige Pakete. Bleibt bei 50.
 export const IP_PROBE_BATCH_SIZE_SINGLE = 50
+// Massen-Scan (ganzer Standort): bewusst netzschonender als die Einzel-Suche —
+// weniger gleichzeitige DCOM/WinRM-Verbindungen aus einer Quelle (IDS-freundlich).
+// Deckt trotzdem alle Online-IPs ab, dauert nur länger.
+export const MASS_PROBE_PARALLEL = 15
 export const IP_PROBE_WAIT_SEC = 35
 
 export interface SiteSubnets { ok: boolean; site: string; subnets: string[]; error?: string }
@@ -593,8 +600,9 @@ export async function resolveHostsToIps(hostnames: string[]): Promise<string[]> 
 // Status:  OK + sam  = Benutzer gefunden ·  OK ohne sam = erreichbar, niemand
 // angemeldet ·  OFFLINE = per DCOM/quser nicht erreichbar (Kandidat fuer den
 // WinRM-Pass).  activate=false laesst Schritt 3 (WinRM) weg.
-export async function scanIpsBatch(ips: string[], activate = true): Promise<ComputerRecord[]> {
+export async function scanIpsBatch(ips: string[], activate = true, maxParallel = IP_PROBE_BATCH_SIZE_SINGLE): Promise<ComputerRecord[]> {
   if (ips.length === 0) return []
+  const poolMax = Math.max(1, Math.min(maxParallel, IP_PROBE_BATCH_SIZE_SINGLE))
   const list = ips.map(ip => `'${ip}'`).join(',')
   const waitSec = activate ? IP_PROBE_WAIT_SEC : 20
   const winrmStep = activate
@@ -626,7 +634,7 @@ export async function scanIpsBatch(ips: string[], activate = true): Promise<Comp
     `  elseif ($reach) { return ($ip + '|OK||' + $cn + '|' + $dnsIp + '|' + $dp) }`,
     `  else { return ($ip + '|OFFLINE||||0') }`,
     `}`,
-    `$max=[Math]::Min(50,$ips.Count); if ($max -lt 1) { $max=1 }`,
+    `$max=[Math]::Min(${poolMax},$ips.Count); if ($max -lt 1) { $max=1 }`,
     `$pool=[runspacefactory]::CreateRunspacePool(1,$max); $pool.Open()`,
     `$hs=@()`,
     `$sbText=[string]$sb`,

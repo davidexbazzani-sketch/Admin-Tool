@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import {
   MapPin, Plus, Trash2, Edit2, Check, X, Upload, Monitor, Server,
   Printer, Package, Loader, Search, RefreshCw, AlertTriangle, ChevronRight,
-  UserSearch, Briefcase, Building2, Filter, ChevronDown, ScanLine,
+  UserSearch, Briefcase, Building2, Filter, ChevronDown, ScanLine, FileSpreadsheet,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
@@ -89,6 +89,8 @@ export default function LocationOverview() {
   // Import
   const [importing, setImporting] = useState(false)
   const [importStatus, setImportStatus] = useState('')
+  const [printerImporting, setPrinterImporting] = useState(false)
+  const [printerImportMsg, setPrinterImportMsg] = useState('')
   const [pendingExcelData, setPendingExcelData] = useState<ExcelSheetData | null>(null)
   // After parsing the source file, hold the prepared name list + a preview of
   // what the smart-sync will do (added / kept / removed).
@@ -227,6 +229,8 @@ export default function LocationOverview() {
         const matchesSearch =
           i.name.toLowerCase().includes(q) ||
           (i.ip ?? '').includes(search) ||
+          (i.serial ?? '').toLowerCase().includes(q) ||
+          (i.model ?? '').toLowerCase().includes(q) ||
           (i.description ?? '').toLowerCase().includes(q) ||
           (i.corpId ?? '').toLowerCase().includes(q) ||
           (i.assignedTo ?? '').toLowerCase().includes(q) ||
@@ -553,6 +557,61 @@ export default function LocationOverview() {
     } finally { setIpScanBusy(false) }
   }
 
+  // ── Drucker-Infos (Seriennummer/Modell) aus Geräte-Excel übernehmen ─────────
+  // Abgleich über den DRUCKERNAMEN = Spalte „ERP-ID" (z. B. PMD519 / DEHAM003).
+  // Setzt Seriennummer + „Hersteller Modell" bei den bereits vorhandenen Druckern.
+  async function importPrinterInfoFromExcel() {
+    if (printerImporting) return
+    setPrinterImporting(true); setPrinterImportMsg('')
+    try {
+      const path = await api().openFileDialog([{ name: 'Excel / CSV', extensions: ['xlsx', 'xls', 'csv'] }])
+      if (!path) return
+      const res = await api().readFile(path)
+      if (!res.success || !res.data) throw new Error(res.error ?? 'Datei konnte nicht gelesen werden.')
+      const bin = atob(res.data)
+      const bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+      const sheet = parseExcelSheet(bytes)
+      if (sheet.rows.length === 0) throw new Error('Datei enthält keine Zeilen.')
+      const keys = sheet.columns.map(c => c.name)
+      const find = (pats: RegExp[]) => { for (const re of pats) { const k = keys.find(k => re.test(k.trim())); if (k) return k } return '' }
+      const nameKey = find([/^erp[-\s]?id$/i, /erp/i, /^name$/i, /drucker|printer/i])
+      const serialKey = find([/serien\s*nummer/i, /seriennr/i, /serial/i])
+      const modelKey = find([/^modell$/i, /model/i])
+      const herstKey = find([/hersteller/i, /manufacturer/i])
+      if (!nameKey) throw new Error('Keine „ERP-ID"/Name-Spalte gefunden.')
+      if (!serialKey && !modelKey) throw new Error('Weder „Seriennummer" noch „Modell" gefunden.')
+
+      const val = (row: Record<string, unknown>, k: string) => k ? String(row[k] ?? '').trim() : ''
+      const map = new Map<string, { serial: string; model: string }>()
+      for (const row of sheet.rows) {
+        const nm = val(row, nameKey).toUpperCase()
+        if (!nm) continue
+        const serial = val(row, serialKey)
+        const model = [val(row, herstKey), val(row, modelKey)].filter(Boolean).join(' ').trim()
+        map.set(nm, { serial, model })
+      }
+
+      let updated = 0, matched = 0
+      const next = items.map(i => {
+        if (i.category !== 'Drucker') return i
+        const hit = map.get((i.name || '').trim().toUpperCase())
+        if (!hit) return i
+        matched++
+        const patch: Partial<InventoryItem> = {}
+        if (hit.serial && hit.serial !== i.serial) patch.serial = hit.serial
+        if (hit.model && hit.model !== i.model) patch.model = hit.model
+        if (Object.keys(patch).length === 0) return i
+        updated++
+        return { ...i, ...patch }
+      })
+      await saveItems(next)
+      const druckerTotal = next.filter(i => i.category === 'Drucker').length
+      setPrinterImportMsg(`Aus „${path.split(/[\\/]/).pop()}": ${updated} von ${matched} gefundenen Druckern aktualisiert (${druckerTotal} Drucker gesamt, ${sheet.rows.length} Zeilen gelesen).`)
+    } catch (e) {
+      setPrinterImportMsg('Import fehlgeschlagen: ' + (e instanceof Error ? e.message : String(e)))
+    } finally { setPrinterImporting(false) }
+  }
+
   // Geräte-Scan (IP/MAC/Seriennummer) für Server, Computer und Drucker starten.
   // Läuft im Store (Hintergrund) weiter, auch wenn dieser Screen verlassen wird.
   function scanDevicesNow() {
@@ -599,6 +658,13 @@ export default function LocationOverview() {
               {ipScanBusy ? <Loader size={12} className="animate-spin" /> : <Printer size={12} />}Drucker-IPs scannen
             </button>
           )}
+          {activeCategory === 'Drucker' && (
+            <button onClick={importPrinterInfoFromExcel} disabled={printerImporting}
+              title="Seriennummer und Modell aus einer Geräte-Excel übernehmen (Abgleich über den Druckernamen = Spalte ERP-ID)"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 disabled:opacity-40">
+              {printerImporting ? <Loader size={12} className="animate-spin" /> : <FileSpreadsheet size={12} />}Serien-Nr./Modell aus Excel
+            </button>
+          )}
           <button onClick={scanDevicesNow} disabled={deviceScanRunning}
             title="IP, MAC und Seriennummer aller Geräte (Server/Computer/Drucker) jetzt auslesen und in den Stammdaten hinterlegen. Läuft im Hintergrund weiter (auch bei Menüwechsel) und sonst automatisch alle 3 Tage um 15:00 Uhr."
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40">
@@ -613,6 +679,13 @@ export default function LocationOverview() {
         <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-300 flex items-center gap-2">
           <span className="flex-1">{ipScanMsg}</span>
           <button onClick={() => setIpScanMsg('')} className="text-blue-300/70 hover:text-blue-200 text-sm leading-none">×</button>
+        </div>
+      )}
+      {printerImportMsg && (
+        <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-violet-500/10 border border-violet-500/20 text-violet-200 flex items-center gap-2">
+          <FileSpreadsheet size={13} className="shrink-0" />
+          <span className="flex-1">{printerImportMsg}</span>
+          <button onClick={() => setPrinterImportMsg('')} className="text-violet-300/70 hover:text-violet-200 text-sm leading-none">×</button>
         </div>
       )}
       {(deviceScanRunning || deviceScanMsg) && (
@@ -836,7 +909,8 @@ export default function LocationOverview() {
                               <div className="flex items-center gap-3 mt-0.5 flex-wrap">
                                 {item.ip && <span className="text-[10px] text-muted-foreground">{item.ip}</span>}
                                 {item.mac && <span className="text-[10px] text-muted-foreground font-mono" title="MAC-Adresse (Geräte-Scan)">{item.mac}</span>}
-                                {item.serial && <span className="text-[10px] text-muted-foreground font-mono" title="Seriennummer (Geräte-Scan)">SN: {item.serial}</span>}
+                                {item.serial && <span className="text-[10px] text-muted-foreground font-mono" title="Seriennummer">SN: {item.serial}</span>}
+                                {item.model && <span className="text-[10px] text-muted-foreground" title="Hersteller/Modell">{item.model}</span>}
                                 {item.description && <span className="text-[10px] text-muted-foreground">{item.description}</span>}
                                 {item.department && (
                                   <span className="inline-flex items-center gap-1 text-[10px] text-foreground" title="Abteilung (aus AD)">

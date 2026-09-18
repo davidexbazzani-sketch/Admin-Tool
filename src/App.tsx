@@ -42,6 +42,10 @@ import DeviceScanController from './components/device/DeviceScanController'
 import RadarScanController from './components/scans/RadarScanController'
 import VlanScanController from './components/scans/VlanScanController'
 import ServerMonitorController from './components/server/ServerMonitorController'
+import GameInviteController from './components/games/GameInviteController'
+import LostDeviceScanController from './components/scans/LostDeviceScanController'
+import Nis2AccessScanController from './components/scans/Nis2AccessScanController'
+import DriverRolloutController from './components/scans/DriverRolloutController'
 import ErrorFlashOverlay from './components/ErrorFlashOverlay'
 import { DossierProvider } from './components/person/PersonDossier'
 import { DeviceDossierProvider } from './components/device/DeviceDossier'
@@ -60,6 +64,10 @@ const KnowledgeSearch = lazy(() => import('./knowledge/KnowledgeSearch'))
 const InfrastructureProjects = lazy(() => import('./screens/InfrastructureProjects'))
 const GroupSearch = lazy(() => import('./screens/GroupSearch'))
 const AccessPoints = lazy(() => import('./screens/AccessPoints'))
+const OtDevices = lazy(() => import('./screens/OtDevices'))
+const PruffeldZoll = lazy(() => import('./screens/PruffeldZoll'))
+const Verwaltungsgebaeude = lazy(() => import('./screens/Verwaltungsgebaeude'))
+const Games = lazy(() => import('./screens/Games'))
 const Onboarding = lazy(() => import('./screens/Onboarding'))
 const Licenses = lazy(() => import('./screens/Licenses'))
 const HardwareInventory = lazy(() => import('./screens/HardwareInventory'))
@@ -69,13 +77,17 @@ const EmployeeManagement = lazy(() => import('./screens/EmployeeManagement'))
 const EndpointDevices = lazy(() => import('./screens/EndpointDevices'))
 const GpuDriverMgmt = lazy(() => import('./screens/GpuDriverMgmt'))
 const TreiberInstallation = lazy(() => import('./screens/TreiberInstallation'))
+const DeviceSetup = lazy(() => import('./screens/DeviceSetup'))
 const ServiceNow = lazy(() => import('./screens/ServiceNow'))
+const TicketAssignment = lazy(() => import('./screens/TicketAssignment'))
 const PdfTools = lazy(() => import('./pdftools'))
 const PhoneAssignment = lazy(() => import('./screens/PhoneAssignment'))
 const Backups = lazy(() => import('./screens/Backups'))
 const USV = lazy(() => import('./screens/USV'))
 const ProactiveRadar = lazy(() => import('./screens/ProactiveRadar'))
 const ServerMonitor = lazy(() => import('./screens/ServerMonitor'))
+const Nis2 = lazy(() => import('./screens/Nis2'))
+const SupportTools = lazy(() => import('./screens/SupportTools'))
 
 function renderScreen(screen: Screen) {
   switch (screen) {
@@ -102,18 +114,26 @@ function renderScreen(screen: Screen) {
     case 'gpu-driver-mgmt': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><GpuDriverMgmt /></Suspense>
     case 'treiber-installation': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><TreiberInstallation /></Suspense>
     case 'servicenow': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ServiceNow /></Suspense>
+    case 'ticket-assignment': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><TicketAssignment /></Suspense>
+    case 'support-tools': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><SupportTools /></Suspense>
     case 'gruppen-suche': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><GroupSearch /></Suspense>
     case 'access-points': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><AccessPoints /></Suspense>
+    case 'ot-devices': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><OtDevices /></Suspense>
+    case 'pruffeld-zoll': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><PruffeldZoll /></Suspense>
+    case 'verwaltungsgebaeude': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Verwaltungsgebaeude /></Suspense>
+    case 'games': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Games /></Suspense>
     case 'licenses': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Licenses /></Suspense>
     case 'hardware-inventory': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><HardwareInventory /></Suspense>
     case 'accessory-inventory': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><AccessoryInventory /></Suspense>
     case 'pdf-tools': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><PdfTools /></Suspense>
     case 'checklists': return <Checklists />
+    case 'device-setup': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><DeviceSetup /></Suspense>
     case 'scheduled-tasks':   return <ScheduledTasks />
     case 'bug-mailbox':       return <BugMailbox />
     case 'dashboards':        return <Dashboards />
     case 'network-radar':     return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><NetworkRadar /></Suspense>
     case 'vlan-overview':     return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><VlanOverview /></Suspense>
+    case 'nis2':              return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Nis2 /></Suspense>
     case 'knowledge-base':   return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><KnowledgeBase /></Suspense>
     case 'knowledge-search': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><KnowledgeSearch /></Suspense>
     case 'pc-migration':      return <PCMigration />
@@ -310,7 +330,11 @@ export default function App() {
             <DeviceScanController />
             <RadarScanController />
             <VlanScanController />
+            <LostDeviceScanController />
+            <Nis2AccessScanController />
+            <DriverRolloutController />
             <ServerMonitorController />
+            <GameInviteController />
             <ErrorFlashOverlay />
           </main>
         </div>

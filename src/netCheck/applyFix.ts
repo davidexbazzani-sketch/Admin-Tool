@@ -20,11 +20,12 @@ function extractJson(stdout: string): string {
 
 export interface NetFixWire {
   id: string; titel: string; art: 'advanced' | 'powercfg' | 'powermgmt'
+  adapter?: 'wlan' | 'lan'
   keyword?: string; displayName?: string; zielRegValue?: string; zielDisplay?: string
   powercfg?: string; powermgmt?: string
 }
 export interface NetApplied {
-  id: string; titel: string; art: string; keyword?: string
+  id: string; titel: string; art: string; adapter?: 'wlan' | 'lan'; keyword?: string
   alt: string; neu: string; ok: boolean; fehler?: string
   oldRegValue?: string | null; oldAc?: number | null; oldDc?: number | null; oldTurnOff?: boolean | null
 }
@@ -38,6 +39,9 @@ const HEAD = [
   `if (-not $wifis -or $wifis.Count -eq 0) { $wifis = @(Get-NetAdapter -ErrorAction SilentlyContinue | Where-Object { $_.InterfaceDescription -match 'Wi-Fi|Wireless|WLAN|802.11' }) }`,
   `$up = @($wifis | Where-Object { $_.Status -eq 'Up' }) | Select-Object -First 1`,
   `$wifi = if ($up) { $up } else { $wifis | Select-Object -First 1 }`,
+  `$eths = @(Get-NetAdapter -Physical -ErrorAction SilentlyContinue | Where-Object { ($_.PhysicalMediaType -match '802.3' -or $_.PhysicalMediaType -eq 'Ethernet') -and $_.InterfaceDescription -notmatch 'Virtual|Hyper-V|VPN|TAP|Loopback|Bluetooth|Kernel|WAN Miniport' })`,
+  `$ethUp = @($eths | Where-Object { $_.Status -eq 'Up' }) | Select-Object -First 1`,
+  `$eth = if ($ethUp) { $ethUp } else { $eths | Select-Object -First 1 }`,
   `$sub='19cbb8fa-5279-450e-9fac-8a3d5fedd0c1'; $set='12bbebe6-58d6-4636-95bb-3217ef867c1a'`,
   `$pnames=@('Höchstleistung','Geringe Energieeinsparung','Mittlere Energieeinsparung','Maximale Energieeinsparung')`,
   `function Read-WlanIdx { $t=(powercfg /q SCHEME_CURRENT $sub $set 2>$null | Out-String); @([regex]::Matches($t,'0x[0-9a-fA-F]{1,8}') | ForEach-Object { [Convert]::ToInt32($_.Value,16) }) }`,
@@ -50,7 +54,8 @@ const APPLY_BODY = [
   `$parsed = $fj | ConvertFrom-Json; $fixes = @($parsed)`,
   `$results=@(); $needRestart=$false`,
   `foreach ($f in $fixes) {`,
-  `  $r=[ordered]@{ id=[string]$f.id; titel=[string]$f.titel; art=[string]$f.art; keyword=[string]$f.keyword; alt=''; neu=''; ok=$false; fehler=$null; oldRegValue=$null; oldAc=$null; oldDc=$null; oldTurnOff=$null }`,
+  `  $r=[ordered]@{ id=[string]$f.id; titel=[string]$f.titel; art=[string]$f.art; adapter=[string]$f.adapter; keyword=[string]$f.keyword; alt=''; neu=''; ok=$false; fehler=$null; oldRegValue=$null; oldAc=$null; oldDc=$null; oldTurnOff=$null }`,
+  `  $dev = if ([string]$f.adapter -eq 'lan') { $eth } else { $wifi }`,
   `  try {`,
   `    if ($f.art -eq 'powercfg') {`,
   `      $o=Read-WlanIdx; $r.oldAc = $(if($o.Count -ge 1){$o[0]}else{$null}); $r.oldDc = $(if($o.Count -ge 2){$o[1]}else{$null})`,
@@ -60,26 +65,26 @@ const APPLY_BODY = [
   `      $r.neu = "Netz: $(PName $na) / Akku: $(PName $nd)"; $r.ok = ($na -eq 0 -and $nd -eq 0)`,
   `    }`,
   `    elseif ($f.art -eq 'powermgmt') {`,
-  `      if ($wifi) {`,
-  `        $pm = Get-NetAdapterPowerManagement -Name $wifi.Name -ErrorAction SilentlyContinue`,
+  `      if ($dev) {`,
+  `        $pm = Get-NetAdapterPowerManagement -Name $dev.Name -ErrorAction SilentlyContinue`,
   `        if ($pm) { $r.oldTurnOff = ([string]$pm.AllowComputerToTurnOffDevice -eq 'Enabled'); $r.alt = $(if($r.oldTurnOff){'aktiviert'}else{'deaktiviert'}); try { $pm.AllowComputerToTurnOffDevice='Disabled'; $pm | Set-NetAdapterPowerManagement -ErrorAction SilentlyContinue } catch {} }`,
-  `        $guid=[string]$wifi.InterfaceGuid`,
+  `        $guid=[string]$dev.InterfaceGuid`,
   `        foreach($k in (Get-ChildItem $cr -ErrorAction SilentlyContinue)){ $p=Get-ItemProperty $k.PSPath -ErrorAction SilentlyContinue; if($p.NetCfgInstanceId -and ([string]$p.NetCfgInstanceId).ToUpper() -eq $guid.ToUpper()){ if($r.oldTurnOff -eq $null -and ($p.PSObject.Properties.Name -contains 'PnPCapabilities')){ $r.oldTurnOff = (([int]$p.PnPCapabilities -band 24) -ne 24) }; New-ItemProperty -Path $k.PSPath -Name PnPCapabilities -Value 24 -PropertyType DWord -Force | Out-Null; break } }`,
   `        if ($r.alt -eq '') { $r.alt = 'aktiviert' }; $r.neu='deaktiviert'`,
-  `        $pm2 = Get-NetAdapterPowerManagement -Name $wifi.Name -ErrorAction SilentlyContinue; $now = $(if($pm2){[string]$pm2.AllowComputerToTurnOffDevice -eq 'Enabled'}else{$false}); $r.ok = (-not $now)`,
-  `      } else { $r.fehler='Kein WLAN-Adapter' }`,
+  `        $pm2 = Get-NetAdapterPowerManagement -Name $dev.Name -ErrorAction SilentlyContinue; $now = $(if($pm2){[string]$pm2.AllowComputerToTurnOffDevice -eq 'Enabled'}else{$false}); $r.ok = (-not $now)`,
+  `      } else { $r.fehler='Kein Adapter' }`,
   `    }`,
   `    elseif ($f.art -eq 'advanced') {`,
-  `      if ($wifi -and $f.keyword) {`,
-  `        $cur = Get-NetAdapterAdvancedProperty -Name $wifi.Name -RegistryKeyword $f.keyword -ErrorAction SilentlyContinue`,
-  `        if (-not $cur -and $f.displayName) { $cur = Get-NetAdapterAdvancedProperty -Name $wifi.Name -DisplayName $f.displayName -ErrorAction SilentlyContinue }`,
+  `      if ($dev -and $f.keyword) {`,
+  `        $cur = Get-NetAdapterAdvancedProperty -Name $dev.Name -RegistryKeyword $f.keyword -ErrorAction SilentlyContinue`,
+  `        if (-not $cur -and $f.displayName) { $cur = Get-NetAdapterAdvancedProperty -Name $dev.Name -DisplayName $f.displayName -ErrorAction SilentlyContinue }`,
   `        if ($cur) { $r.oldRegValue = [string](@($cur.RegistryValue) -join ','); $r.alt = [string]$cur.DisplayValue + ' (' + $r.oldRegValue + ')' }`,
   `        $done=$false`,
-  `        if ($f.zielRegValue -ne $null -and $f.zielRegValue -ne '') { try { Set-NetAdapterAdvancedProperty -Name $wifi.Name -RegistryKeyword $f.keyword -RegistryValue $f.zielRegValue -NoRestart -ErrorAction Stop; $done=$true } catch { $r.fehler="$_" } }`,
-  `        if (-not $done -and $f.zielDisplay) { try { Set-NetAdapterAdvancedProperty -Name $wifi.Name -RegistryKeyword $f.keyword -DisplayValue $f.zielDisplay -NoRestart -ErrorAction Stop; $done=$true; $r.fehler=$null } catch { $r.fehler="$_" } }`,
-  `        $chk = Get-NetAdapterAdvancedProperty -Name $wifi.Name -RegistryKeyword $f.keyword -ErrorAction SilentlyContinue; if ($chk) { $r.neu = [string]$chk.DisplayValue + ' (' + [string](@($chk.RegistryValue) -join ',') + ')' }`,
+  `        if ($f.zielRegValue -ne $null -and $f.zielRegValue -ne '') { try { Set-NetAdapterAdvancedProperty -Name $dev.Name -RegistryKeyword $f.keyword -RegistryValue $f.zielRegValue -NoRestart -ErrorAction Stop; $done=$true } catch { $r.fehler="$_" } }`,
+  `        if (-not $done -and $f.zielDisplay) { try { Set-NetAdapterAdvancedProperty -Name $dev.Name -RegistryKeyword $f.keyword -DisplayValue $f.zielDisplay -NoRestart -ErrorAction Stop; $done=$true; $r.fehler=$null } catch { $r.fehler="$_" } }`,
+  `        $chk = Get-NetAdapterAdvancedProperty -Name $dev.Name -RegistryKeyword $f.keyword -ErrorAction SilentlyContinue; if ($chk) { $r.neu = [string]$chk.DisplayValue + ' (' + [string](@($chk.RegistryValue) -join ',') + ')' }`,
   `        $r.ok = $done; if ($done) { $needRestart=$true }`,
-  `      } else { $r.fehler='Kein WLAN-Adapter/Keyword' }`,
+  `      } else { $r.fehler='Kein Adapter/Keyword' }`,
   `    }`,
   `  } catch { $r.fehler = "$_" }`,
   `  $results += $r`,
@@ -93,6 +98,7 @@ const RESTORE_BODY = [
   `$results=@(); $needRestart=$false`,
   `foreach ($f in $fixes) {`,
   `  $r=[ordered]@{ id=[string]$f.id; titel=[string]$f.titel; art=[string]$f.art; keyword=[string]$f.keyword; alt=''; neu=''; ok=$false; fehler=$null }`,
+  `  $dev = if ([string]$f.adapter -eq 'lan') { $eth } else { $wifi }`,
   `  try {`,
   `    if ($f.art -eq 'powercfg') {`,
   `      $ac=[int]$f.oldAc; $dc=[int]$f.oldDc`,
@@ -100,17 +106,17 @@ const RESTORE_BODY = [
   `      $r.neu = "Netz: $(PName $ac) / Akku: $(PName $dc)"; $r.ok=$true`,
   `    }`,
   `    elseif ($f.art -eq 'powermgmt') {`,
-  `      if ($wifi) {`,
+  `      if ($dev) {`,
   `        $ziel = $(if($f.oldTurnOff -eq $true){'Enabled'}else{'Disabled'})`,
-  `        $pm = Get-NetAdapterPowerManagement -Name $wifi.Name -ErrorAction SilentlyContinue; if ($pm) { try { $pm.AllowComputerToTurnOffDevice=$ziel; $pm | Set-NetAdapterPowerManagement -ErrorAction SilentlyContinue } catch {} }`,
-  `        $guid=[string]$wifi.InterfaceGuid; $val = $(if($f.oldTurnOff -eq $true){0}else{24})`,
+  `        $pm = Get-NetAdapterPowerManagement -Name $dev.Name -ErrorAction SilentlyContinue; if ($pm) { try { $pm.AllowComputerToTurnOffDevice=$ziel; $pm | Set-NetAdapterPowerManagement -ErrorAction SilentlyContinue } catch {} }`,
+  `        $guid=[string]$dev.InterfaceGuid; $val = $(if($f.oldTurnOff -eq $true){0}else{24})`,
   `        foreach($k in (Get-ChildItem $cr -ErrorAction SilentlyContinue)){ $p=Get-ItemProperty $k.PSPath -ErrorAction SilentlyContinue; if($p.NetCfgInstanceId -and ([string]$p.NetCfgInstanceId).ToUpper() -eq $guid.ToUpper()){ New-ItemProperty -Path $k.PSPath -Name PnPCapabilities -Value $val -PropertyType DWord -Force | Out-Null; break } }`,
   `        $r.neu=$ziel; $r.ok=$true`,
-  `      } else { $r.fehler='Kein WLAN-Adapter' }`,
+  `      } else { $r.fehler='Kein Adapter' }`,
   `    }`,
   `    elseif ($f.art -eq 'advanced') {`,
-  `      if ($wifi -and $f.keyword -and $f.oldRegValue -ne $null -and $f.oldRegValue -ne '') {`,
-  `        try { Set-NetAdapterAdvancedProperty -Name $wifi.Name -RegistryKeyword $f.keyword -RegistryValue $f.oldRegValue -NoRestart -ErrorAction Stop; $r.ok=$true; $needRestart=$true; $r.neu=[string]$f.oldRegValue } catch { $r.fehler="$_" }`,
+  `      if ($dev -and $f.keyword -and $f.oldRegValue -ne $null -and $f.oldRegValue -ne '') {`,
+  `        try { Set-NetAdapterAdvancedProperty -Name $dev.Name -RegistryKeyword $f.keyword -RegistryValue $f.oldRegValue -NoRestart -ErrorAction Stop; $r.ok=$true; $needRestart=$true; $r.neu=[string]$f.oldRegValue } catch { $r.fehler="$_" }`,
   `      } else { $r.fehler='Kein Altwert' }`,
   `    }`,
   `  } catch { $r.fehler = "$_" }`,
@@ -149,7 +155,7 @@ export async function restoreNetFixes(host: string, backup: NetApplied[]): Promi
 /** NetBefund.fix → Wire-Objekt fürs Remote-Skript. */
 export function fixToWire(id: string, titel: string, fix: NetFix): NetFixWire {
   return {
-    id, titel, art: fix.art, keyword: fix.keyword, displayName: fix.displayName,
+    id, titel, art: fix.art, adapter: fix.adapter, keyword: fix.keyword, displayName: fix.displayName,
     zielRegValue: fix.zielRegValue, zielDisplay: fix.zielDisplay,
     powercfg: fix.powercfg, powermgmt: fix.powermgmt,
   }

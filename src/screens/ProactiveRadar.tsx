@@ -7,7 +7,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Radar, RefreshCw, Loader2, Download, Search, Settings2, ChevronUp, ChevronDown,
-  AlertTriangle, ShieldAlert, CalendarClock, X,
+  AlertTriangle, ShieldAlert, CalendarClock, X, Mail, Send, Eye,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
@@ -18,6 +18,10 @@ import {
   CATEGORY_LABEL, DEFAULT_RADAR_SETTINGS,
   type RadarItem, type RadarCategory, type RadarSettings,
 } from '../services/proactiveRadar'
+import {
+  loadReminderConfig, saveReminderConfig, recipientsToday, sendReminders, sendTestReminder, targetsFromItems, buildPreviews, sentStatusToday,
+  type PwdReminderConfig, type ReminderPreview,
+} from '../services/pwdReminder'
 
 type Tab = 'leasing' | 'hygiene'
 type Unit = 'days' | 'weeks' | 'months'
@@ -365,6 +369,7 @@ function HygieneTab({ items, loadedAt, hasPwd, refreshing, onRefresh }: {
 
   return (
     <div className="space-y-3">
+      <PwdReminderPanel items={items} />
       {!hasPwd && (
         <div className="flex items-start gap-2 rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-[11px] text-amber-300">
           <AlertTriangle size={13} className="shrink-0 mt-px" />
@@ -416,6 +421,127 @@ function HygieneTab({ items, loadedAt, hasPwd, refreshing, onRefresh }: {
       </p>
       <RadarTable items={filtered} cols={cols} kind="mixed"
         drill={it => it.person ? <PersonInfoButton name={it.person.name} sam={it.person.sam || undefined} /> : null} />
+    </div>
+  )
+}
+
+// ── Passwort-Erinnerungen (Panel im AD-Hygiene-Tab) ─────────────────────────────
+function PwdReminderPanel({ items }: { items: RadarItem[] }) {
+  const [cfg, setCfg] = useState<PwdReminderConfig>({ enabled: false, testRecipient: '' })
+  const [testTo, setTestTo] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [preview, setPreview] = useState<ReminderPreview[] | null>(null)
+
+  useEffect(() => {
+    loadReminderConfig().then(c => { setCfg(c); setTestTo(c.testRecipient || '') }).catch(() => {})
+  }, [])
+
+  // Ziele direkt aus den (immer aktuellen) „Passwort läuft ab"-Items ableiten.
+  const targets = useMemo(() => targetsFromItems(items), [items])
+  const count = useMemo(() => recipientsToday(targets, new Date()).length, [targets])
+
+  async function toggleEnabled(v: boolean) {
+    const next = { ...cfg, enabled: v }
+    setCfg(next); await saveReminderConfig(next)
+    setMsg(v ? 'Automatischer Versand aktiviert (werktags 07:00).' : 'Automatischer Versand deaktiviert.')
+  }
+  async function jetztSenden() {
+    if (count === 0) { setMsg('Heute gibt es niemanden zu benachrichtigen.'); return }
+    const now = new Date()
+    // Prüfen, ob heute schon jemand benachrichtigt wurde → dann Extra-Bestätigung + erneuter Versand (force).
+    let force = false
+    try {
+      const st = await sentStatusToday(targets, now)
+      if (st.alreadySent > 0) {
+        if (!window.confirm(`Die Erinnerung wurde heute bereits an ${st.alreadySent} von ${count} Mitarbeiter(n) verschickt. Wollen Sie sie wirklich noch einmal verschicken? Die betroffenen Mitarbeiter erhalten die Mail dann erneut.`)) return
+        force = true
+      } else {
+        if (!window.confirm(`${count} Mitarbeiter erhalten jetzt eine Erinnerungs-E-Mail an ihre eigene Adresse. Fortfahren?`)) return
+      }
+    } catch {
+      // Status nicht lesbar → wie bisher normal bestätigen (ohne force).
+      if (!window.confirm(`${count} Mitarbeiter erhalten jetzt eine Erinnerungs-E-Mail an ihre eigene Adresse. Fortfahren?`)) return
+    }
+    setBusy(true); setMsg('')
+    try {
+      const r = await sendReminders(targets, now, { force })
+      setMsg(`${r.sent} gesendet` + (r.skipped ? `, ${r.skipped} heute bereits benachrichtigt` : '') + (r.failed ? `, ${r.failed} fehlgeschlagen` : '') + (r.ohneMail ? `, ${r.ohneMail} ohne E-Mail` : '') + '.')
+    } finally { setBusy(false) }
+  }
+  async function testSenden() {
+    const to = testTo.trim()
+    if (!to) { setMsg('Bitte eine Test-Empfängeradresse eintragen.'); return }
+    setBusy(true); setMsg('')
+    await saveReminderConfig({ ...cfg, testRecipient: to })
+    try {
+      const r = await sendTestReminder(to, targets, new Date())
+      setMsg(r.success ? `Test-Mail an ${to} verschickt.` : `Test-Mail fehlgeschlagen: ${r.error || 'unbekannt'}`)
+    } finally { setBusy(false) }
+  }
+
+  return (
+    <div className="rounded-lg border border-border bg-card p-3 space-y-2">
+      <div className="flex items-center gap-2 flex-wrap">
+        <Mail size={15} className="text-primary" />
+        <span className="text-sm font-semibold text-foreground">Passwort-Erinnerungen</span>
+        <span className="text-[11px] text-muted-foreground">— Mitarbeiter, deren Passwort am nächsten Werktag abläuft, per E-Mail erinnern (Wochenende → freitags).</span>
+        <label className="ml-auto inline-flex items-center gap-2 text-xs text-foreground cursor-pointer">
+          <input type="checkbox" checked={cfg.enabled} onChange={e => toggleEnabled(e.target.checked)} className="accent-primary" />
+          Automatisch werktags 07:00 senden
+        </label>
+      </div>
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="text-xs text-muted-foreground">Heute würden <b className="text-foreground">{count}</b> Mitarbeiter benachrichtigt.</span>
+        <button onClick={() => setPreview(buildPreviews(targets, new Date()))} disabled={count === 0}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground disabled:opacity-50">
+          <Eye size={13} />Vorschau ({count})
+        </button>
+        <button onClick={jetztSenden} disabled={busy}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md border border-primary/40 text-primary hover:bg-primary/10 disabled:opacity-50">
+          {busy ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}Erinnerungs-Mails jetzt senden
+        </button>
+        <span className="mx-1 h-4 w-px bg-border" />
+        <input value={testTo} onChange={e => setTestTo(e.target.value)} placeholder="test@firma.de"
+          className="px-2 py-1.5 text-xs rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary w-48" />
+        <button onClick={testSenden} disabled={busy}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground disabled:opacity-50">
+          <Mail size={13} />Test-Mail verschicken
+        </button>
+      </div>
+      {msg && <div className="text-[11px] text-foreground bg-muted/30 border border-border rounded px-2 py-1">{msg}</div>}
+      {preview && <PwdPreviewModal previews={preview} onClose={() => setPreview(null)} />}
+    </div>
+  )
+}
+
+// Vorschau der Mails, die heute automatisch verschickt würden (Empfänger prüfen).
+function PwdPreviewModal({ previews, onClose }: { previews: ReminderPreview[]; onClose: () => void }) {
+  const fmt = (iso: string) => { const d = new Date(iso); return isNaN(d.getTime()) ? '—' : d.toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }) }
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+      <div className="bg-background border border-border rounded-xl shadow-2xl w-full max-w-3xl max-h-[92vh] flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center gap-2 px-5 py-3 border-b border-border shrink-0">
+          <Eye size={18} className="text-primary" />
+          <div className="text-sm font-semibold text-foreground">Vorschau — {previews.length} Empfänger</div>
+          <span className="text-[11px] text-muted-foreground">So prüfst du, wer die Mail bekäme.</span>
+          <button onClick={onClose} className="ml-auto p-1.5 rounded-md hover:bg-accent text-muted-foreground"><X size={16} /></button>
+        </div>
+        <div className="flex-1 overflow-auto p-4 space-y-3">
+          {previews.length === 0 && <div className="text-sm text-muted-foreground">Heute niemand.</div>}
+          {previews.map((p, i) => (
+            <div key={i} className="rounded-lg border border-border overflow-hidden">
+              <div className="flex items-center gap-2 flex-wrap px-3 py-2 bg-muted/20 text-xs">
+                <span className="font-semibold text-foreground">{i + 1}. {p.name || '—'}</span>
+                <span className="font-mono text-muted-foreground">{p.email}</span>
+                <span className="ml-auto text-amber-300">Passwort läuft ab: {fmt(p.expiry)}</span>
+              </div>
+              <div className="px-3 py-2 text-[11px] text-muted-foreground border-b border-border/60">Betreff: <span className="text-foreground">{p.subject}</span></div>
+              <div className="bg-white p-3 max-h-64 overflow-auto" dangerouslySetInnerHTML={{ __html: p.body }} />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

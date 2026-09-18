@@ -12,7 +12,10 @@ import {
 import { runPrinterIpScan, loadIpScanSchedule, saveIpScanSchedule } from './printerIpScan'
 import { runDeviceScan, loadDeviceScanSchedule, saveDeviceScanSchedule, isDeviceScanClaimed } from './deviceScan'
 import { runRadarScanOnce, runVlanScanOnce, RADAR_SCAN_SCHEDULE, VLAN_SCAN_SCHEDULE } from './extraScans'
-import { loadRunStatus, saveRunStatus, isStatusClaimed } from './scanSchedules'
+import { runServerMetricsScan, SERVER_METRICS_STATUS } from './serverMonitor'
+import { runLostDevicesScanOnce, LOST_SCAN_SCHEDULE } from './lostDevices'
+import { runAccessCheckScanOnce, NIS2_ACCESS_STATUS } from './nis2Access'
+import { loadRunStatus, saveRunStatus, isStatusClaimed, claimExclusive } from './scanSchedules'
 
 export interface ScanStatus {
   lastRunAt: string | null
@@ -64,7 +67,7 @@ const softwareScan: ScanDef = {
 const printerConnScan: ScanDef = {
   id: 'printer-connections',
   label: 'Drucker-Verbindungen',
-  description: 'Ermittelt je Computer, welche (Netzwerk-)Drucker der angemeldete Benutzer verbunden hat + den Standarddrucker.',
+  description: 'Ermittelt je Computer die installierten Drucker (inkl. SEAL/PLOSSYS) + den Standarddrucker. Offline-Rechner behalten ihren letzten bekannten Stand.',
   cadence: 'automatisch alle 2 Wochen · freitags 14:00',
   async loadStatus() {
     const s = await loadConnSchedule()
@@ -132,7 +135,9 @@ async function runWithClaim(path: string, fn: () => Promise<{ ok: boolean; summa
   const s = await loadRunStatus(path)
   if (isStatusClaimed(s)) return { ok: false, summary: 'Läuft bereits (Hintergrund oder andere Instanz).' }
   const token = `manual#${Math.random().toString(36).slice(2, 10)}`
-  try { await saveRunStatus(path, { ...s, running: { by: token, at: new Date().toISOString() } }) } catch { /* egal */ }
+  // Robuste Einmal-Wahl (Claim + Rücklese-Prüfung): verhindert, dass zwei Instanzen gleichzeitig loslaufen.
+  const won = await claimExclusive(path, token, s)
+  if (!won) return { ok: false, summary: 'Läuft bereits (andere Instanz war schneller).' }
   try {
     const res = await fn()
     try { await saveRunStatus(path, { lastRunAt: res.ok ? new Date().toISOString() : s.lastRunAt, lastResult: res.ok ? 'success' : 'error', lastSummary: res.summary, running: undefined }) } catch { /* egal */ }
@@ -169,4 +174,43 @@ const vlanScan: ScanDef = {
   run(by) { return runWithClaim(VLAN_SCAN_SCHEDULE, () => runVlanScanOnce(by)) },
 }
 
-export const SCAN_REGISTRY: ScanDef[] = [softwareScan, printerConnScan, printerIpScan, deviceScan, radarScan, vlanScan]
+// ── Server-Auslastung (RAM/Festplatte) ────────────────────────────────────────
+const serverMetricsScan: ScanDef = {
+  id: 'server-metrics',
+  label: 'Server-Auslastung (RAM/Festplatte)',
+  description: 'Liest je Server-Kachel die Arbeitsspeicher-Auslastung und die Festplatten-Kapazität (WinRM) und zeigt sie in der jeweiligen Kachel im Server-Monitor an.',
+  cadence: '',
+  async loadStatus() {
+    const s = await loadRunStatus(SERVER_METRICS_STATUS)
+    return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
+  },
+  run(by) { return runWithClaim(SERVER_METRICS_STATUS, () => runServerMetricsScan(by)) },
+}
+
+// ── Verlorene Geräte – Online-Check (Mi + Do 11:00) ───────────────────────────
+const lostDevicesScan: ScanDef = {
+  id: 'lost-devices',
+  label: 'Verlorene Geräte – Online-Check',
+  description: 'Prüft für alle als verloren gemeldeten Geräte per AD/Ping, ob sie online sind und wann sie zuletzt online waren. Ergebnis erscheint in der Liste „Verlorene Geräte".',
+  cadence: '',
+  async loadStatus() {
+    const s = await loadRunStatus(LOST_SCAN_SCHEDULE)
+    return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
+  },
+  run(by) { return runWithClaim(LOST_SCAN_SCHEDULE, () => runLostDevicesScanOnce(by)) },
+}
+
+// ── NIS2 · Zugänge-Check (lokale Adminrechte, täglich 11:00) ──────────────────
+const nis2AccessScan: ScanDef = {
+  id: 'nis2-access',
+  label: 'NIS2 · Zugänge-Check (lokale Admins)',
+  description: 'Scannt alle Computer per WinRM auf lokale Adminrechte und listet alle Nutzer mit lokalem Admin (inkl. PCs). Abgleich mit der genehmigten Liste in NIS2 → Zugänge-Check.',
+  cadence: '',
+  async loadStatus() {
+    const s = await loadRunStatus(NIS2_ACCESS_STATUS)
+    return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
+  },
+  run(by) { return runWithClaim(NIS2_ACCESS_STATUS, () => runAccessCheckScanOnce(by)) },
+}
+
+export const SCAN_REGISTRY: ScanDef[] = [softwareScan, printerConnScan, printerIpScan, deviceScan, radarScan, vlanScan, serverMetricsScan, lostDevicesScan, nis2AccessScan]

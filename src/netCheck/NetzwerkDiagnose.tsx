@@ -3,18 +3,31 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   Wifi, ArrowLeft, Search, Loader2, X, FileDown, Layers, Trash2, Clock, AlertTriangle, ShieldCheck,
+  UserSearch, Plus, Laptop, ChevronRight,
 } from 'lucide-react'
 import { useNetScanStore, type NetScanEntry } from '../store/netScanStore'
 import { analysiere, vergleiche } from './analyse'
 import { buildVergleichPdf, savePdf } from './pdf'
 import { listLaeufe, loadLauf, deleteLauf, loadRecentHosts, type NetIndexEintrag } from './store'
+import { ladeBenutzerPCs, type UserPc } from './userPcs'
+import UserPicker from '../components/UserPicker'
+import type { AdUserListItem } from '../services/adUsersList'
 import { useAuthStore } from '../store/authStore'
 import type { NetLauf } from './types'
 import NetAnalyse from './NetAnalyse'
+import NetFleet from './NetFleetView'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
 
 function parseHosts(s: string): string[] {
   return [...new Set((s || '').split(/[\s,;]+/).map(t => t.trim()).filter(Boolean))]
+}
+
+/** Hostnamen eindeutig an ein Textfeld anhängen (bestehende bleiben erhalten). */
+function appendHosts(current: string, hosts: string[]): string {
+  const have = new Set(parseHosts(current).map(h => h.toLowerCase()))
+  const neu = hosts.map(h => h.trim()).filter(h => h && !have.has(h.toLowerCase()))
+  if (!neu.length) return current
+  return (current.trim() ? current.trim() + '\n' : '') + neu.join('\n')
 }
 
 export default function NetzwerkDiagnose({ onBack }: { onBack: () => void }) {
@@ -30,7 +43,22 @@ export default function NetzwerkDiagnose({ onBack }: { onBack: () => void }) {
   const [verlauf, setVerlauf] = useState<NetIndexEintrag[]>([])
   const [verlaufOffen, setVerlaufOffen] = useState(false)
 
+  // Benutzer-Suche → zugewiesene PCs (Sofortsuche über UserPicker)
+  const [userLoading, setUserLoading] = useState(false)
+  const [userMsg, setUserMsg] = useState('')
+  const [gewaehlt, setGewaehlt] = useState<AdUserListItem | null>(null)
+  const [userPCs, setUserPCs] = useState<UserPc[]>([])
+  const [view, setView] = useState<'single' | 'fleet'>('single')
+
   useEffect(() => { listLaeufe().then(setVerlauf) }, [finishedTick])
+
+  async function benutzerWaehlen(u: AdUserListItem) {
+    setGewaehlt(u); setUserLoading(true); setUserMsg(''); setUserPCs([])
+    const pcs = await ladeBenutzerPCs(u.sam, u.displayName)
+    setUserPCs(pcs)
+    setUserMsg(pcs.length ? '' : `Keine zugewiesenen PCs für ${u.displayName} gefunden (weder in AD noch im Inventar).`)
+    setUserLoading(false)
+  }
 
   const problemHosts = parseHosts(problemInput)
   const referenzHosts = parseHosts(referenzInput).filter(h => !problemHosts.some(p => p.toLowerCase() === h.toLowerCase()))
@@ -65,16 +93,71 @@ export default function NetzwerkDiagnose({ onBack }: { onBack: () => void }) {
         <Wifi size={18} className="text-primary" />
         <div>
           <div className="text-sm font-semibold text-foreground">Netzwerk Probleme (WLAN-Diagnose)</div>
-          <div className="text-[11px] text-muted-foreground">Mehrere PCs analysieren, Problem- mit Referenz-PCs vergleichen, Fehl-Einstellungen direkt beheben.</div>
+          <div className="text-[11px] text-muted-foreground">Einzeln/Vergleich beheben — oder die ganze Laptop-Flotte auf WLAN-Probleme analysieren.</div>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <button onClick={() => setVerlaufOffen(o => !o)} className="inline-flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-md border border-border text-muted-foreground hover:text-foreground">
-            <Clock size={13} />Verlauf ({verlauf.length})
-          </button>
+          <div className="inline-flex rounded-md border border-border overflow-hidden text-xs">
+            <button onClick={() => setView('single')} className={`px-3 py-1.5 ${view === 'single' ? 'bg-primary/15 text-primary font-semibold' : 'text-muted-foreground hover:text-foreground'}`}>Einzel &amp; Vergleich</button>
+            <button onClick={() => setView('fleet')} className={`px-3 py-1.5 border-l border-border ${view === 'fleet' ? 'bg-primary/15 text-primary font-semibold' : 'text-muted-foreground hover:text-foreground'}`}>Flotten-Analyse</button>
+          </div>
+          {view === 'single' && (
+            <button onClick={() => setVerlaufOffen(o => !o)} className="inline-flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-md border border-border text-muted-foreground hover:text-foreground">
+              <Clock size={13} />Verlauf ({verlauf.length})
+            </button>
+          )}
         </div>
       </div>
 
       <div className="flex-1 overflow-auto p-6 space-y-4">
+        {view === 'fleet' && <NetFleet by={by} onOpenAnalyse={setAnalyse} />}
+        {view === 'single' && (<>
+        {/* Benutzer-Suche → zugewiesene PCs */}
+        <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
+          <div className="flex items-center gap-1.5 text-sm font-semibold text-primary mb-1"><UserSearch size={14} />Nach Benutzer suchen</div>
+          <p className="text-[11px] text-muted-foreground mb-2">Namen (Vor-/Nachname), Corp-ID oder Abteilung eingeben — Treffer erscheinen sofort; die zugewiesenen PCs lassen sich direkt in den Scan übernehmen.</p>
+
+          {!gewaehlt && <UserPicker onPick={benutzerWaehlen} placeholder="Benutzer suchen (Name, Corp-ID, Abteilung)…" />}
+          {userMsg && <div className="mt-2 text-[11px] text-muted-foreground">{userMsg}</div>}
+
+          {/* Gewählter Benutzer + seine PCs */}
+          {gewaehlt && (
+            <div className="mt-2">
+              <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                <span className="text-xs text-foreground"><b>{gewaehlt.displayName}</b> <span className="font-mono text-muted-foreground">({gewaehlt.sam})</span>{userPCs.length ? ` — ${userPCs.length} PC(s)` : ''}</span>
+                <button onClick={() => { setGewaehlt(null); setUserPCs([]); setUserMsg('') }} className="text-[11px] text-muted-foreground hover:text-foreground">andere Auswahl</button>
+                {userPCs.length > 0 && (
+                  <div className="ml-auto flex items-center gap-1.5">
+                    <button onClick={() => setProblemInput(v => appendHosts(v, userPCs.map(p => p.hostname)))}
+                      className="text-[11px] px-2 py-1 rounded border border-red-500/40 text-red-300 hover:bg-red-500/10">alle → Problem</button>
+                    <button onClick={() => setReferenzInput(v => appendHosts(v, userPCs.map(p => p.hostname)))}
+                      className="text-[11px] px-2 py-1 rounded border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10">alle → Referenz</button>
+                  </div>
+                )}
+              </div>
+              {userLoading ? (
+                <p className="text-[11px] text-muted-foreground inline-flex items-center gap-1.5"><Loader2 size={12} className="animate-spin" />PCs werden ermittelt…</p>
+              ) : (
+              <div className="space-y-1">
+                {userPCs.map(p => (
+                  <div key={p.hostname} className="flex items-center gap-2 px-2.5 py-1.5 rounded border border-border bg-background">
+                    <Laptop size={14} className="text-muted-foreground shrink-0" />
+                    <span className="inline-flex items-center gap-1"><span className="text-sm font-mono font-semibold text-foreground">{p.hostname}</span><DeviceInfoButton hostname={p.hostname} /></span>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-muted/50 text-muted-foreground border border-border">{p.quelle}</span>
+                    <span className="text-[11px] text-muted-foreground truncate">{[p.model, p.os, p.status, p.lastLogon ? 'zuletzt ' + p.lastLogon : ''].filter(Boolean).join(' · ')}</span>
+                    <div className="ml-auto flex items-center gap-1 shrink-0">
+                      <button onClick={() => setProblemInput(v => appendHosts(v, [p.hostname]))}
+                        className="inline-flex items-center gap-0.5 text-[11px] px-1.5 py-1 rounded border border-red-500/40 text-red-300 hover:bg-red-500/10" title="als Problem-PC übernehmen"><Plus size={11} />Problem</button>
+                      <button onClick={() => setReferenzInput(v => appendHosts(v, [p.hostname]))}
+                        className="inline-flex items-center gap-0.5 text-[11px] px-1.5 py-1 rounded border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10" title="als Referenz-PC übernehmen"><Plus size={11} />Referenz</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              )}
+            </div>
+          )}
+        </div>
+
         {/* Eingabe */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="rounded-lg border border-red-500/30 bg-red-500/5 p-3">
@@ -189,6 +272,7 @@ export default function NetzwerkDiagnose({ onBack }: { onBack: () => void }) {
             </div>
           </div>
         )}
+        </>)}
       </div>
 
       {analyse && <NetAnalyse lauf={analyse} onClose={() => setAnalyse(null)} />}

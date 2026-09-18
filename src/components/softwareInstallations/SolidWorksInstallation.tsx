@@ -4,6 +4,7 @@ import {
   Clock, Terminal, ChevronDown, RefreshCw, Square, Eye,
 } from 'lucide-react'
 import { api } from '../../electronAPI'
+import SolidWorksHelp from '../solidworks/SolidWorksHelp'
 import { createLogger } from '../../utils/activityLogger'
 import { pathService } from '../../services/pathService'
 import { useSwInstallStore } from '../../store/swInstallStore'
@@ -427,7 +428,7 @@ export default function SolidWorksInstallation() {
       <div>
         <div className="flex items-center gap-2">
           <Wrench size={22} className="text-blue-400" />
-          <h2 className="text-lg font-bold text-foreground">SolidWorks 2024 SP5 Installation</h2>
+          <h2 className="text-lg font-bold text-foreground"><SolidWorksHelp>SolidWorks</SolidWorksHelp> 2024 SP5 Installation</h2>
         </div>
         <p className="text-xs text-muted-foreground mt-1">Automatisierte Ausfuehrung der Schritte 1-9 der offiziellen Installationsanleitung</p>
       </div>

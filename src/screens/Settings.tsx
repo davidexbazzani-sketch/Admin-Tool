@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database, Eye, EyeOff, Users, RotateCcw, AlertTriangle, RefreshCw, Radar, Archive, Download, Lock, KeyRound } from 'lucide-react'
+import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database, Eye, EyeOff, Users, RotateCcw, AlertTriangle, RefreshCw, Radar, Archive, Download, Lock, KeyRound, BookOpen, Upload, ChevronDown, ChevronRight, FileText } from 'lucide-react'
 import { buildKnowledgeSnapshot } from '../services/knowledgeSnapshot'
+import { pickAndReadMaster, analyzeMaster, runImport, type ImportAnalysis, type ImportProgress } from '../services/masterImport'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
 import { SCAN_REGISTRY, type ScanStatus } from '../services/scanRegistry'
@@ -910,6 +911,161 @@ function BackupCard() {
   )
 }
 
+// ── Wissensdatenbank-Import: Tickets/Rollen → Personen-/Geräte-Notizen (PIN) ──
+function MasterImportCard() {
+  const session = useAuthStore(s => s.session)
+  const by = session?.user.displayName || session?.user.username || 'unbekannt'
+
+  const [pin, setPin] = useState('')
+  const [unlocked, setUnlocked] = useState(false)
+  const [pinErr, setPinErr] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [analysis, setAnalysis] = useState<ImportAnalysis | null>(null)
+  const [err, setErr] = useState('')
+  const [importing, setImporting] = useState(false)
+  const [progress, setProgress] = useState<ImportProgress | null>(null)
+  const [result, setResult] = useState<{ persons: number; devices: number; failed: number } | null>(null)
+  const [showPeople, setShowPeople] = useState(false)
+  const [showHosts, setShowHosts] = useState(false)
+
+  function tryUnlock() {
+    if (pin.trim() === BACKUP_PIN) { setUnlocked(true); setPinErr(false) }
+    else setPinErr(true)
+  }
+
+  async function chooseAndAnalyze() {
+    setBusy(true); setErr(''); setAnalysis(null); setResult(null); setProgress(null)
+    try {
+      const picked = await pickAndReadMaster()
+      if (!picked) return
+      const fname = picked.path.split(/[\\/]/).pop() || 'Master.md'
+      const a = await analyzeMaster(picked.md, fname)
+      setAnalysis(a)
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e))
+    } finally { setBusy(false) }
+  }
+
+  async function doImport() {
+    if (!analysis) return
+    const total = analysis.persons.length + analysis.devices.length
+    if (!window.confirm(`${total} Notiz-Blöcke werden geschrieben (${analysis.persons.length} Nutzer, ${analysis.devices.length} Geräte).\n\nBestehende Import-Blöcke werden dabei aktualisiert. Fortfahren?`)) return
+    setImporting(true); setResult(null); setProgress({ done: 0, total, phase: 'persons' })
+    try {
+      const r = await runImport(analysis, by, p => setProgress(p))
+      setResult(r)
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e))
+    } finally { setImporting(false); setProgress(null) }
+  }
+
+  return (
+    <Card title="Wissensdatenbank-Import" icon={<BookOpen size={15} />} subtitle="Tickets &amp; Rolleninfo aus SKF_MARINE_MASTER.md als Notizen bei Nutzern &amp; Geräten hinterlegen (PIN-geschützt).">
+      {!unlocked ? (
+        <div className="space-y-3 max-w-sm">
+          <p className="text-xs text-muted-foreground inline-flex items-center gap-1.5"><Lock size={13} />Dieser Bereich ist mit einer PIN geschützt.</p>
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <KeyRound size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <input value={pin} onChange={e => { setPin(e.target.value); setPinErr(false) }} onKeyDown={e => { if (e.key === 'Enter') tryUnlock() }}
+                type="password" inputMode="numeric" placeholder="PIN"
+                className={`w-full pl-8 pr-3 py-2 text-sm rounded-md border bg-background text-foreground focus:outline-none ${pinErr ? 'border-red-500' : 'border-border focus:border-primary'}`} />
+            </div>
+            <button onClick={tryUnlock} className="px-4 py-2 text-sm rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90">Entsperren</button>
+          </div>
+          {pinErr && <p className="text-xs text-red-400">Falsche PIN.</p>}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          <div className="text-[12px] text-amber-300 bg-amber-500/10 border border-amber-500/25 rounded-md px-3 py-2 flex items-start gap-2">
+            <AlertTriangle size={14} className="shrink-0 mt-px" />
+            <span>Schreibt eine gebündelte Notiz in die <strong>echten</strong> Personen- und Geräte-Dossiers. Nur <strong>sichere Namens-/Hostname-Treffer</strong> werden geschrieben; nichts Neues wird angelegt. Ein erneuter Import <strong>aktualisiert</strong> den Block (kein Duplikat). Mails werden bewusst nicht importiert.</span>
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            <button onClick={chooseAndAnalyze} disabled={busy || importing}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-md font-semibold border border-border hover:bg-accent text-foreground disabled:opacity-50">
+              {busy ? <Loader size={14} className="animate-spin" /> : <FileText size={14} />}
+              Datei wählen &amp; analysieren
+            </button>
+            <button onClick={() => { setUnlocked(false); setPin(''); setAnalysis(null); setResult(null); setErr('') }}
+              className="px-3 py-2 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground">Sperren</button>
+          </div>
+
+          {err && <div className="text-xs rounded-md px-3 py-2 border border-red-500/40 bg-red-500/10 text-red-300">Fehler: {err}</div>}
+
+          {analysis && (
+            <div className="space-y-2.5 rounded-lg border border-border bg-background/50 p-3">
+              <div className="text-xs text-muted-foreground">Datei: <span className="font-mono text-foreground">{analysis.fileName}</span> · Stand {analysis.builtAt}</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <Stat label="Tickets gesamt" value={analysis.totalTickets} sub={`${analysis.serviceNowCount} SNOW · ${analysis.fieldServiceCount} FS`} />
+                <Stat label="Nutzer zugeordnet" value={analysis.persons.length} sub={`${analysis.unmatchedReporters.length} offen`} tone="emerald" />
+                <Stat label="Geräte zugeordnet" value={analysis.devices.length} sub={`${analysis.unresolvedHosts.length} Hostnamen offen`} tone="emerald" />
+                <Stat label="Rollen erkannt" value={analysis.rolesFound} sub="Mails: nicht importiert" />
+              </div>
+
+              {analysis.unmatchedReporters.length > 0 && (
+                <div className="rounded-md border border-border">
+                  <button onClick={() => setShowPeople(v => !v)} className="w-full flex items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground hover:text-foreground">
+                    {showPeople ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+                    Nicht zugeordnete Melder ({analysis.unmatchedReporters.length}) — bekommen keine Notiz
+                  </button>
+                  {showPeople && (
+                    <div className="max-h-48 overflow-y-auto px-3 pb-2 text-[11px] font-mono text-muted-foreground grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                      {analysis.unmatchedReporters.map(u => <div key={u.name} className="truncate">{u.name} <span className="opacity-60">· {u.count}</span></div>)}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {analysis.unresolvedHosts.length > 0 && (
+                <div className="rounded-md border border-border">
+                  <button onClick={() => setShowHosts(v => !v)} className="w-full flex items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground hover:text-foreground">
+                    {showHosts ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+                    Nicht zugeordnete Hostnamen ({analysis.unresolvedHosts.length})
+                  </button>
+                  {showHosts && (
+                    <div className="max-h-40 overflow-y-auto px-3 pb-2 text-[11px] font-mono text-muted-foreground grid grid-cols-2 sm:grid-cols-3 gap-x-4">
+                      {analysis.unresolvedHosts.map(u => <div key={u.host} className="truncate">{u.host} <span className="opacity-60">· {u.count}</span></div>)}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="flex items-center gap-2 pt-1">
+                <button onClick={doImport} disabled={importing || (analysis.persons.length === 0 && analysis.devices.length === 0)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
+                  {importing ? <Loader size={14} className="animate-spin" /> : <Upload size={14} />}
+                  Importieren – Notizen schreiben
+                </button>
+                {importing && progress && (
+                  <span className="text-xs text-muted-foreground tabular-nums">{progress.done}/{progress.total} ({progress.phase === 'persons' ? 'Nutzer' : 'Geräte'})…</span>
+                )}
+              </div>
+
+              {result && (
+                <div className="text-xs rounded-md px-3 py-2 border border-green-500/40 bg-green-500/10 text-green-300">
+                  Fertig: {result.persons} Nutzer-Notizen · {result.devices} Geräte-Notizen geschrieben{result.failed ? ` · ${result.failed} fehlgeschlagen` : ''}.
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
+  )
+}
+
+function Stat({ label, value, sub, tone }: { label: string; value: number; sub?: string; tone?: 'emerald' }) {
+  return (
+    <div className="rounded-md border border-border bg-card px-3 py-2">
+      <div className={`text-lg font-bold tabular-nums ${tone === 'emerald' ? 'text-emerald-400' : 'text-foreground'}`}>{value.toLocaleString('de-DE')}</div>
+      <div className="text-[10px] text-muted-foreground leading-tight">{label}</div>
+      {sub && <div className="text-[10px] text-muted-foreground/60 leading-tight mt-0.5">{sub}</div>}
+    </div>
+  )
+}
+
 export default function Settings() {
   const settings = useAppStore((s) => s.settings)
   const setSettings = useAppStore((s) => s.setSettings)
@@ -1433,6 +1589,9 @@ export default function Settings() {
           <PathConfigSection />
         </Card>
       )}
+
+      {/* ── Wissensdatenbank-Import (PIN-geschützt, Admin) ── */}
+      {isAdmin && <MasterImportCard />}
 
       {/* ── Backup: Wissens-Snapshot (PIN-geschützt) ── */}
       <BackupCard />

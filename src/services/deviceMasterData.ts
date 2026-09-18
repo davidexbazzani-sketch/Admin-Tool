@@ -124,11 +124,17 @@ export async function findInventoryItem(hostname: string): Promise<InventoryItem
 
 // ── 3) Endgeraete-Uebersicht ──────────────────────────────────────────────────
 
-export async function findEndpointDevice(hostname: string): Promise<EndpointDevice | null> {
+export async function findEndpointDevice(hostname: string, serial?: string): Promise<EndpointDevice | null> {
   const h = canonicalHost(hostname)
+  const ns = (s: string) => (s || '').trim().toUpperCase().replace(/\s+/g, '')
+  const wantSerial = ns(serial || serialFromHostname(hostname) || '')
   try {
     const devices = await loadDevices()
-    return devices.find(d => canonicalHost(d.hostname) === h) ?? null
+    // 1) exakter Hostname-Treffer; 2) sonst über die Seriennummer (viele Endgeräte
+    // sind per Serial identifiziert, nicht per Hostname).
+    return devices.find(d => h && canonicalHost(d.hostname) === h)
+      ?? (wantSerial ? devices.find(d => ns(d.serial) === wantSerial) : undefined)
+      ?? null
   } catch { /* Quelle optional */ }
   return null
 }

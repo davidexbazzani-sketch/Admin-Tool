@@ -95,6 +95,7 @@ async function drawDetailPage(
   const fields: { label: string; value: string }[] = [
     { label: 'MAC-Adresse', value: marker.mac },
     { label: 'Seriennummer', value: marker.serial },
+    { label: 'IP-Adresse', value: marker.ip },
     { label: 'Modell', value: marker.model },
     { label: 'Notizen', value: marker.notes },
   ]
@@ -253,7 +254,7 @@ export async function exportAccessPointsPdf(
         }
         const plan = floorplans.find(p => p.id === m.floorplanId)
         const line = `#${String(n).padStart(3, '0')}   ${m.name || '(ohne Namen)'}`
-        const meta = `${plan?.name || '—'} · Seite ${m.page}${m.model ? ' · ' + m.model : ''}${m.mac ? ' · MAC ' + m.mac : ''}`
+        const meta = `${plan?.name || '—'} · Seite ${m.page}${m.model ? ' · ' + m.model : ''}${m.ip ? ' · IP ' + m.ip : ''}${m.mac ? ' · MAC ' + m.mac : ''}`
         page.drawText(line, { x: 36, y, size: 10, font: fontBold, color: COLOR_TEXT })
         page.drawText(meta, { x: 220, y, size: 8.5, font, color: COLOR_MUTED })
         y -= 14

@@ -153,7 +153,7 @@ const FIELD_ALIASES: Record<keyof Omit<EndpointDevice, 'id'>, string[]> = {
   model: ['model', 'modell', 'modelname', 'geraetemodell', 'gerätemodell', 'modeltype', 'modelltyp'],
   state: ['state', 'status', 'zustand'],
   substate: ['substate', 'verwendung', 'substatus', 'unterstatus'],
-  comments: ['comments', 'kommentar', 'comment', 'bemerkung', 'bemerkungen', 'notiz'],
+  comments: ['comments', 'kommentar', 'kommentare', 'comment', 'bemerkung', 'bemerkungen', 'notiz', 'notizen', 'note', 'notes', 'anmerkung', 'anmerkungen', 'worknotes', 'additionalcomments', 'kommentarzumasset', 'commentsandworknotes'],
   retiredDate: ['retireddate', 'retired', 'leasingende', 'leasing', 'ausmusterung', 'retirementdate'],
   company: ['company', 'unternehmen', 'firma'],
   assetOwnership: ['assetownership', 'ownership', 'werbezahlt', 'eigentuemer', 'eigentümer', 'besitzer'],
@@ -174,17 +174,32 @@ function cellToString(v: unknown, isDate: boolean): string {
   return String(v).trim()
 }
 
+// Kommentar-Spalten großzügig erkennen: jede (noch nicht anderweitig zugeordnete)
+// Spalte, deren Kopf einen dieser Begriffe ENTHÄLT, gilt als Kommentar. Deckt
+// Varianten aus ServiceNow-/Asset-Exporten ab, z. B. „Kommentar zum Asset",
+// „Additional comments", „Comments and Work notes".
+const COMMENT_CONTAINS = ['comment', 'kommentar', 'bemerkung', 'notiz', 'anmerkung', 'worknote']
+
 /** Mappt die Roh-Zeilen eines Excel-Sheets (Header->Wert) auf EndpointDevices. */
 export function mapRowsToDevices(rows: Record<string, unknown>[]): EndpointDevice[] {
   if (rows.length === 0) return []
   const headers = Object.keys(rows[0])
   const headerToField = new Map<string, keyof Omit<EndpointDevice, 'id'>>()
+  const commentHeaders: string[] = []
   for (const h of headers) {
     const nh = norm(h)
+    let matched = false
     for (const [field, aliases] of Object.entries(FIELD_ALIASES) as [keyof Omit<EndpointDevice, 'id'>, string[]][]) {
-      if (aliases.includes(nh)) { headerToField.set(h, field); break }
+      if (aliases.includes(nh)) { headerToField.set(h, field); matched = true; break }
     }
+    if (matched) {
+      if (headerToField.get(h) === 'comments') commentHeaders.push(h)   // exakte Kommentar-Spalte
+      continue
+    }
+    // Fallback: nicht zugeordnete Spalte, deren Kopf nach Kommentar aussieht.
+    if (COMMENT_CONTAINS.some(k => nh.includes(k))) commentHeaders.push(h)
   }
+  const commentSet = new Set(commentHeaders)   // Duplikate vermeiden
 
   const out: EndpointDevice[] = []
   let idx = 0
@@ -192,9 +207,16 @@ export function mapRowsToDevices(rows: Record<string, unknown>[]): EndpointDevic
     const dev: Partial<EndpointDevice> = {}
     for (const h of headers) {
       const field = headerToField.get(h)
-      if (!field) continue
+      if (!field || field === 'comments') continue   // Kommentar unten gesammelt
       dev[field] = cellToString(row[h], field === 'retiredDate')
     }
+    // Kommentar aus ALLEN erkannten Kommentar-Spalten zusammenführen (nichts verlieren).
+    const parts: string[] = []
+    for (const h of commentSet) {
+      const v = cellToString(row[h], false)
+      if (v && !parts.includes(v)) parts.push(v)
+    }
+    if (parts.length) dev.comments = parts.join(' · ')
     if (!(dev.serial || dev.hostname)) continue
     out.push(normalizeDevice(dev, idx++))
   }

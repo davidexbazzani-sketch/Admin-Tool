@@ -105,8 +105,15 @@ export function daysUntil(isoDate: string): number {
 
 export function formatGermanDate(iso: string): string {
   if (!iso) return ''
-  const parts = iso.split('-')
-  if (parts.length !== 3) return iso
+  const s = iso.trim()
+  // Volles ISO-Datum/-Zeit (mit „T" oder Zeitanteil) → sauber über Date parsen,
+  // damit z. B. "2026-09-13T06:13:27.34+02:00" nicht zerlegt/verstümmelt wird.
+  if (s.includes('T') || s.length > 10) {
+    const d = new Date(s)
+    if (!isNaN(d.getTime())) return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  }
+  const parts = s.split('-')                     // reines "JJJJ-MM-TT"
+  if (parts.length !== 3) return s
   return `${parts[2]}.${parts[1]}.${parts[0]}`
 }
 

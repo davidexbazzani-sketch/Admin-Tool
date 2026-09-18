@@ -79,8 +79,12 @@ export interface AdPersonInfo {
   managerSam?: string
   lastLogon?: string        // AD LastLogonDate (ISO) — "zuletzt angemeldet"
   groups: string[]          // MemberOf (CN-Liste)
+  mailboxes?: MailboxRef[]  // Gruppen-/Freigabepostfächer mit AutoMapping-Vollzugriff (msExchDelegateListBL)
   error?: string
 }
+
+/** Ein dem User zugeordnetes (Gruppen-)Postfach. */
+export interface MailboxRef { name: string; email: string }
 
 function psq(s: string): string { return s.replace(/'/g, "''") }
 
@@ -101,7 +105,7 @@ export async function fetchAdPersonInfo(name: string, sam?: string): Promise<AdP
   const script = [
     `$ErrorActionPreference = 'SilentlyContinue'`,
     `$tab = [char]9`,
-    `$props = @('SamAccountName','DisplayName','EmployeeID','Title','Department','EmailAddress','UserPrincipalName','telephoneNumber','ipPhone','Office','whenCreated','Enabled','Manager','MemberOf','LastLogonDate')`,
+    `$props = @('SamAccountName','DisplayName','EmployeeID','Title','Department','EmailAddress','UserPrincipalName','telephoneNumber','ipPhone','Office','whenCreated','Enabled','Manager','MemberOf','LastLogonDate','msExchDelegateListBL')`,
     `$u = $null`,
     sam ? `$u = Get-ADUser -Filter "SamAccountName -eq '${psq(sam)}'" -Properties $props | Select-Object -First 1` : ``,
     ...variants.map(v =>
@@ -116,6 +120,8 @@ export async function fetchAdPersonInfo(name: string, sam?: string): Promise<AdP
     `$en = if ($u.Enabled) { '1' } else { '0' }`,
     `Write-Output ("ADP$tab" + [string]$u.SamAccountName + $tab + (& $clean $u.DisplayName) + $tab + [string]$u.EmployeeID + $tab + (& $clean $u.Title) + $tab + (& $clean $u.Department) + $tab + $em + $tab + (& $clean $u.telephoneNumber) + $tab + (& $clean $u.ipPhone) + $tab + (& $clean $u.Office) + $tab + $wc + $tab + $en + $tab + $mgrName + $tab + $mgrSam + $tab + $ll)`,
     `foreach ($g in @($u.MemberOf)) { if ($g -match '^CN=([^,]+)') { Write-Output ("GRP$tab" + $Matches[1]) } }`,
+    // Gruppen-/Freigabepostfächer mit AutoMapping-Vollzugriff (Backlink) → Name + primäre SMTP auflösen.
+    `foreach ($d in @($u.msExchDelegateListBL)) { $mb = Get-ADObject -Identity $d -Properties displayName,mail -EA SilentlyContinue; if ($mb) { $mbMail = [string]$mb.mail; $mbName = & $clean $mb.displayName; if (-not $mbName) { $mbName = $mbMail }; Write-Output ("MBX$tab" + $mbName + $tab + $mbMail) } }`,
   ].filter(Boolean).join('\n')
 
   try {
@@ -126,6 +132,12 @@ export async function fetchAdPersonInfo(name: string, sam?: string): Promise<AdP
     if (!line) return { found: false, groups: [], error: res.stderr?.trim() || 'Keine Antwort von AD' }
     const p = line.split('\t')
     const groups = out.split(/\r?\n/).filter(l => l.startsWith('GRP\t')).map(l => l.slice(4).trim()).filter(Boolean).sort((a, b) => a.localeCompare(b, 'de'))
+    const mbSeen = new Set<string>()
+    const mailboxes: MailboxRef[] = out.split(/\r?\n/)
+      .filter(l => l.startsWith('MBX\t'))
+      .map(l => { const c = l.split('\t'); return { name: (c[1] || '').trim(), email: (c[2] || '').trim() } })
+      .filter(m => (m.name || m.email) && !mbSeen.has((m.email || m.name).toLowerCase()) && mbSeen.add((m.email || m.name).toLowerCase()))
+      .sort((a, b) => a.name.localeCompare(b.name, 'de'))
     return {
       found: true,
       sam: p[1] || undefined,
@@ -143,6 +155,7 @@ export async function fetchAdPersonInfo(name: string, sam?: string): Promise<AdP
       managerSam: p[13] || undefined,
       lastLogon: p[14] || undefined,
       groups,
+      mailboxes,
     }
   } catch (e) {
     return { found: false, groups: [], error: e instanceof Error ? e.message : 'AD-Abfrage fehlgeschlagen' }

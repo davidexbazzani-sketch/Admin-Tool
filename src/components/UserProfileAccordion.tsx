@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import type { UserProfileData } from '../types'
 import GroupComparisonPanel from './GroupComparisonPanel'
+import { DeviceInfoButton } from './device/DeviceDossier'
 import { api } from '../electronAPI'
 import { useIsAdmin } from '../store/authStore'
 import { createLogger } from '../utils/activityLogger'
@@ -449,7 +450,7 @@ export default function UserProfileAccordion({ data, deviceLoading, onQueryDevic
             </div>
             {data.Device ? (
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-mono text-sm font-medium text-foreground flex-1">{data.Device}</span>
+                <span className="font-mono text-sm font-medium text-foreground flex-1 flex items-center gap-1 min-w-0"><span className="truncate">{data.Device}</span><DeviceInfoButton hostname={data.Device} /></span>
                 {data.LogonTime && <span className="text-[11px] text-muted-foreground">{data.LogonTime}</span>}
                 {data.DevMethod && <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded text-muted-foreground shrink-0">{data.DevMethod}</span>}
                 <button onClick={() => copy('device', data.Device)} className="text-muted-foreground hover:text-primary transition-colors p-0.5" title="Kopieren">

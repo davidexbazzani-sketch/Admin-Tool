@@ -94,6 +94,26 @@ export async function createChecklist(data: Omit<Checklist, 'id' | 'createdAt'>)
   return { ok: true, checklist: item }
 }
 
+/**
+ * Legt MEHRERE neue Checklisten in EINEM Speichervorgang an (reines Anhängen).
+ * Bestehende Einträge werden dabei nur gelesen und unverändert wieder gespeichert —
+ * es wird nichts überschrieben oder gelöscht. Für den Checklisten-Import.
+ */
+export async function createManyChecklists(items: Omit<Checklist, 'id' | 'createdAt'>[]): Promise<{ ok: boolean; created: number; error?: string }> {
+  if (items.length === 0) return { ok: true, created: 0 }
+  const store = await loadStore()
+  const now = Date.now()
+  const added: Checklist[] = items.map((data, i) => ({
+    ...data,
+    id: `cl_${now}_${i}_${Math.random().toString(36).slice(2, 8)}`,
+    createdAt: new Date().toISOString(),
+  }))
+  store.checklists.push(...added)   // nur anhängen — Bestehendes bleibt unangetastet
+  const ok = await saveStore(store)
+  if (!ok) return { ok: false, created: 0, error: 'Netzlaufwerk nicht erreichbar oder Schreibrechte fehlen.' }
+  return { ok: true, created: added.length }
+}
+
 export async function updateChecklist(id: string, patch: Partial<Checklist>): Promise<{ ok: boolean; checklist?: Checklist; error?: string }> {
   const store = await loadStore()
   const idx = store.checklists.findIndex(c => c.id === id)

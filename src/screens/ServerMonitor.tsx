@@ -6,12 +6,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Server, RefreshCw, Loader, Plus, Trash2, ServerOff, ServerCog, Mail, Check, X, Download,
-  History, Clock, Send, Pin, FileText,
+  History, Clock, Send, Pin, FileText, HardDrive, MemoryStick,
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import {
   loadServerConfig, saveServerConfig, loadInventoryServers, mergeInventoryServers,
-  loadServerStatus, runPingCycle, hostKey, removeHostState,
+  loadServerStatus, runPingCycle, hostKey, removeHostState, runServerMetricsScan,
   type ServerTile, type ServerMonitorStatus,
 } from '../services/serverMonitor'
 import {
@@ -25,6 +25,32 @@ function fmtStamp(iso: string, dateOnly?: boolean): string {
   const d = new Date(iso)
   if (isNaN(d.getTime())) return iso
   return dateOnly ? d.toLocaleDateString('de-DE') : d.toLocaleString('de-DE')
+}
+
+// GB hübsch formatieren (bis 100 mit einer Nachkommastelle, darüber gerundet).
+function fmtGB(n: number): string {
+  const v = n >= 100 ? Math.round(n) : Math.round(n * 10) / 10
+  return v.toLocaleString('de-DE', { maximumFractionDigits: 1 })
+}
+
+// Auslastungsbalken (RAM/Festplatte): Farbe nach Schwellwert, Wert rechts.
+function MetricBar({ icon, label, pct, sub }: { icon: React.ReactNode; label: string; pct: number; sub: string }) {
+  const p = Math.max(0, Math.min(100, Math.round(pct)))
+  const tone = p >= 90 ? 'bg-red-500' : p >= 75 ? 'bg-amber-500' : 'bg-emerald-500'
+  const txt = p >= 90 ? 'text-red-400' : p >= 75 ? 'text-amber-400' : 'text-emerald-400'
+  return (
+    <div>
+      <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+        <span className="shrink-0 text-muted-foreground/70">{icon}</span>
+        <span className="font-medium text-foreground/80">{label}</span>
+        <span className={`ml-auto tabular-nums font-semibold ${txt}`}>{p}%</span>
+        <span className="tabular-nums">{sub}</span>
+      </div>
+      <div className="mt-0.5 h-1.5 w-full rounded-full bg-muted/40 overflow-hidden">
+        <div className={`h-full rounded-full ${tone}`} style={{ width: `${p}%` }} />
+      </div>
+    </div>
+  )
 }
 
 function HistoryDialog({ tile, by, onClose }: { tile: ServerTile; by: string; onClose: () => void }) {
@@ -103,6 +129,7 @@ export default function ServerMonitor() {
   const [status, setStatus] = useState<ServerMonitorStatus>({ pingRunAt: null, rebootRunAt: null, servers: {} })
   const [loading, setLoading] = useState(true)
   const [checking, setChecking] = useState(false)
+  const [measuring, setMeasuring] = useState(false)
   const [msg, setMsg] = useState('')
   const [showAdd, setShowAdd] = useState(false)
   const [newHost, setNewHost] = useState('')
@@ -177,6 +204,18 @@ export default function ServerMonitor() {
     } finally { setChecking(false) }
   }
 
+  async function measureNow() {
+    if (measuring) return
+    setMeasuring(true); setMsg('')
+    try {
+      const r = await runServerMetricsScan(by)
+      await refreshStatus()
+      setMsg(`Auslastung gemessen: ${r.summary}.`)
+    } catch (e) {
+      setMsg('Auslastungs-Messung fehlgeschlagen: ' + (e instanceof Error ? e.message : String(e)))
+    } finally { setMeasuring(false) }
+  }
+
   // ── Drag & Drop (Raster-Umsortieren, wie im Dashboard) ──
   function onDragStart(e: React.DragEvent, id: string) {
     // Kein Drag, wenn man in einem Bedienelement (Eingabe/Checkbox/Button) startet.
@@ -216,6 +255,10 @@ export default function ServerMonitor() {
           <button onClick={checkNow} disabled={checking}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-blue-500/40 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 disabled:opacity-40">
             {checking ? <Loader size={12} className="animate-spin" /> : <RefreshCw size={12} />}Jetzt prüfen
+          </button>
+          <button onClick={measureNow} disabled={measuring} title="Arbeitsspeicher- & Festplatten-Auslastung jetzt messen (läuft sonst automatisch täglich 11:00)"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 disabled:opacity-40">
+            {measuring ? <Loader size={12} className="animate-spin" /> : <MemoryStick size={12} />}Auslastung messen
           </button>
           <button onClick={addFromInventory}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
@@ -283,6 +326,19 @@ export default function ServerMonitor() {
                   <div className="mt-1.5 text-[11px] text-muted-foreground">
                     Letzter Reboot: <span className="text-foreground">{st?.lastReboot || '—'}</span>
                   </div>
+                  {st?.metrics ? (
+                    <div className="mt-2 space-y-1.5">
+                      <MetricBar icon={<MemoryStick size={11} />} label="RAM" pct={st.metrics.ramUsedPct}
+                        sub={`${fmtGB(st.metrics.ramUsedGB)} / ${fmtGB(st.metrics.ramTotalGB)} GB`} />
+                      {st.metrics.disks.map(d => (
+                        <MetricBar key={d.drive} icon={<HardDrive size={11} />} label={d.drive} pct={d.usedPct}
+                          sub={`${fmtGB(d.freeGB)} GB frei / ${fmtGB(d.sizeGB)} GB`} />
+                      ))}
+                      <div className="text-[9px] text-muted-foreground/60">Auslastung: {fmtStamp(st.metrics.at)}</div>
+                    </div>
+                  ) : (
+                    <div className="mt-1.5 text-[10px] text-muted-foreground/60">Auslastung: noch nicht gemessen (täglich 11:00)</div>
+                  )}
                   <textarea defaultValue={tile.note || ''} placeholder="Info / Notiz zum Server…" rows={2}
                     onBlur={e => patchTile(tile.id, { note: e.target.value.trim() })}
                     className="mt-2 w-full px-2 py-1 text-[11px] rounded-md border border-border bg-background text-foreground resize-none focus:outline-none focus:border-primary" />
