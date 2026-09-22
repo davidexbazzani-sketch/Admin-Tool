@@ -15,6 +15,7 @@ import { runRadarScanOnce, runVlanScanOnce, RADAR_SCAN_SCHEDULE, VLAN_SCAN_SCHED
 import { runServerMetricsScan, SERVER_METRICS_STATUS } from './serverMonitor'
 import { runLostDevicesScanOnce, LOST_SCAN_SCHEDULE } from './lostDevices'
 import { runAccessCheckScanOnce, NIS2_ACCESS_STATUS } from './nis2Access'
+import { runNetworkDrivesScanOnce, NETWORK_DRIVES_STATUS } from './deviceNetworkDrives'
 import { loadRunStatus, saveRunStatus, isStatusClaimed, claimExclusive } from './scanSchedules'
 
 export interface ScanStatus {
@@ -213,4 +214,17 @@ const nis2AccessScan: ScanDef = {
   run(by) { return runWithClaim(NIS2_ACCESS_STATUS, () => runAccessCheckScanOnce(by)) },
 }
 
-export const SCAN_REGISTRY: ScanDef[] = [softwareScan, printerConnScan, printerIpScan, deviceScan, radarScan, vlanScan, serverMetricsScan, lostDevicesScan, nis2AccessScan]
+// ── Verbundene Netzlaufwerke (alle Computer) ──────────────────────────────────
+const networkDrivesScan: ScanDef = {
+  id: 'network-drives',
+  label: 'Verbundene Netzlaufwerke',
+  description: 'Liest für alle Computer per WinRM die verbundenen Netzlaufwerke ein. Das Ergebnis erscheint im Geräte-„i" (hinter dem Hostnamen) unter „Verbundene Netzlaufwerke".',
+  cadence: '',
+  async loadStatus() {
+    const s = await loadRunStatus(NETWORK_DRIVES_STATUS)
+    return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
+  },
+  run(by) { return runWithClaim(NETWORK_DRIVES_STATUS, () => runNetworkDrivesScanOnce(by)) },
+}
+
+export const SCAN_REGISTRY: ScanDef[] = [softwareScan, printerConnScan, printerIpScan, deviceScan, radarScan, vlanScan, serverMetricsScan, lostDevicesScan, nis2AccessScan, networkDrivesScan]

@@ -34,6 +34,7 @@ import BugReportWidget from './components/BugReportWidget'
 import BetaBanner from './components/BetaBanner'
 import LicenseAlarmController from './components/licenses/LicenseAlarmController'
 import EmployeeReminderController from './components/employees/EmployeeReminderController'
+import DepartureEmailController from './components/scans/DepartureEmailController'
 import BackupSchedulerController from './components/backups/BackupSchedulerController'
 import SoftwareScanController from './components/softwareInventory/SoftwareScanController'
 import PrinterConnectionScanController from './components/printer/PrinterConnectionScanController'
@@ -44,6 +45,7 @@ import VlanScanController from './components/scans/VlanScanController'
 import ServerMonitorController from './components/server/ServerMonitorController'
 import GameInviteController from './components/games/GameInviteController'
 import LostDeviceScanController from './components/scans/LostDeviceScanController'
+import NetworkDrivesScanController from './components/scans/NetworkDrivesScanController'
 import Nis2AccessScanController from './components/scans/Nis2AccessScanController'
 import DriverRolloutController from './components/scans/DriverRolloutController'
 import ErrorFlashOverlay from './components/ErrorFlashOverlay'
@@ -323,6 +325,7 @@ export default function App() {
             <BugReportWidget currentScreen={screen} />
             <LicenseAlarmController />
             <EmployeeReminderController />
+            <DepartureEmailController />
             <BackupSchedulerController />
             <SoftwareScanController />
             <PrinterConnectionScanController />
@@ -331,6 +334,7 @@ export default function App() {
             <RadarScanController />
             <VlanScanController />
             <LostDeviceScanController />
+            <NetworkDrivesScanController />
             <Nis2AccessScanController />
             <DriverRolloutController />
             <ServerMonitorController />

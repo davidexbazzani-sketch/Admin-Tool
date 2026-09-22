@@ -26,6 +26,7 @@ export const SCAN_SCHEDULE_DEFAULTS: Record<string, ScanScheduleConfig> = {
   'server-metrics':      { enabled: true, days: [0, 1, 2, 3, 4, 5, 6], time: '11:00' }, // täglich 11:00 (RAM/Festplatte)
   'lost-devices':        { enabled: true, days: [3, 4], time: '11:00' },                // Mi + Do 11:00 (verlorene Geräte Online-Check)
   'nis2-access':         { enabled: true, days: [0, 1, 2, 3, 4, 5, 6], time: '11:00' }, // täglich 11:00 (NIS2 lokale Adminrechte)
+  'network-drives':      { enabled: true, days: [2], time: '13:00' },                   // Di 13:00 (verbundene Netzlaufwerke aller PCs)
 }
 
 export const WEEKDAY_LABELS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']

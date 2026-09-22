@@ -136,7 +136,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // ── E-Mail (nodemailer) ───────────────────────────────────────────────────
   sendEmailRaw: (opts: {
-    to: string; subject: string; body: string; html?: boolean
+    to: string; cc?: string; subject: string; body: string; html?: boolean
     smtp: string; port: number; user: string; pass: string; from?: string
   }) => ipcRenderer.invoke('mail:sendRaw', opts),
 

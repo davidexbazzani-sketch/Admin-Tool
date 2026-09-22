@@ -1616,17 +1616,17 @@ ipcMain.on('window:close', () => mainWindow?.close())
 
 // ── E-Mail via Outlook COM ───────────────────────────────────────────────────
 ipcMain.handle('mail:sendRaw', async (_e, opts: {
-  to: string; subject: string; body: string; html?: boolean
+  to: string; cc?: string; subject: string; body: string; html?: boolean
   smtp: string; port: number; user?: string; pass?: string; from?: string
   useTls?: boolean; method?: 'outlook' | 'nodemailer' | 'powershell'
 }): Promise<{ success: boolean; error?: string; method?: string }> => {
 
-  console.log(`[mail:sendRaw] to=${opts.to} subject="${opts.subject?.slice(0, 40)}"`)
+  console.log(`[mail:sendRaw] to=${opts.to}${opts.cc ? ` cc=${opts.cc}` : ''} subject="${opts.subject?.slice(0, 40)}"`)
 
   try {
     const { sendViaOutlookScheduledTask } = require('./outlookMailer') as typeof import('./outlookMailer')
     const result = await sendViaOutlookScheduledTask({
-      to: opts.to, subject: opts.subject, body: opts.body, html: opts.html,
+      to: opts.to, cc: opts.cc, subject: opts.subject, body: opts.body, html: opts.html,
     })
     console.log('[mail:sendRaw] result:', JSON.stringify(result))
     return result

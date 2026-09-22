@@ -10,6 +10,7 @@ import { api } from '../electronAPI'
 import Spinner from '../components/Spinner'
 import Card from '../components/Card'
 import PhoneCheck from '../components/PhoneCheck'
+import EverphoneRegister from '../components/xelion/EverphoneRegister'
 
 type Tab = 'single' | 'list' | 'all'
 
@@ -20,6 +21,7 @@ export default function XelionCheck() {
   const isAdmin = useAppStore((s) => s.isAdmin)
 
   const [tab, setTab] = useState<Tab>('single')
+  const [view, setView] = useState<'query' | 'everphone'>('query')
   const [singleInput, setSingleInput] = useState('')
   const [listItems, setListItems] = useState([{ id: makeId(), value: '' }])
 
@@ -187,12 +189,31 @@ export default function XelionCheck() {
     </div>
   ) : undefined
 
-  return (
-    <div className="flex flex-col h-full overflow-y-auto p-6 gap-6">
+  const header = (
+    <div className="flex items-center justify-between gap-3 flex-wrap">
       <div>
         <h1 className="text-2xl font-bold text-foreground">📱 Diensthandy & Xelion</h1>
         <p className="text-sm text-muted-foreground mt-1">AD-Abfrage für Telefonnummern und Xelion-Accounts</p>
       </div>
+      <div className="flex gap-1 p-1 bg-muted rounded-lg">
+        <button onClick={() => setView('query')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'query' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Abfrage</button>
+        <button onClick={() => setView('everphone')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'everphone' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Everphone-Register</button>
+      </div>
+    </div>
+  )
+
+  if (view === 'everphone') {
+    return (
+      <div className="flex flex-col h-full overflow-y-auto p-6 gap-6">
+        {header}
+        <EverphoneRegister />
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col h-full overflow-y-auto p-6 gap-6">
+      {header}
 
       <Card title="Eingabe">
         {/* Tabs */}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Users, UploadCloud, FileText, FileSpreadsheet, Download, Plus, RefreshCw,
   ChevronDown, ChevronRight, Pencil, Trash2, X, Check, Loader, CheckCircle2,
@@ -23,6 +23,12 @@ import {
   exportEmployeesExcel, classifyFile,
 } from '../services/employeeImport'
 import { readCentralAdUsers, buildNameIndex, lookupUserByName } from '../services/adUserDirectory'
+import type { AdUserListItem } from '../services/adUsersList'
+import { fuzzyNameMatch } from '../utils/nameMatch'
+import { loadDevices, type EndpointDevice } from '../services/endpointDevices'
+import { devicesForName, isActiveAssignment } from '../services/departureDevices'
+import { loadReminderStore, type ReminderStore } from '../services/departureReminder'
+import DepartureMailDialog from '../components/employees/DepartureMailDialog'
 
 const POLL_MS = 15_000
 
@@ -57,6 +63,11 @@ export default function EmployeeManagement() {
 
   const [employees, setEmployees] = useState<Employee[]>([])
   const [departures, setDepartures] = useState<Departure[]>([])
+  const [devices, setDevices] = useState<EndpointDevice[]>([])
+  const [expandedDep, setExpandedDep] = useState<string | null>(null)
+  const [reminderStore, setReminderStore] = useState<ReminderStore>({ states: {} })
+  const [mailDep, setMailDep] = useState<Departure | null>(null)
+  const [mailDunning, setMailDunning] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [dragging, setDragging] = useState(false)
@@ -82,9 +93,11 @@ export default function EmployeeManagement() {
 
   const refresh = useCallback(async () => {
     try {
-      const [emps, deps, cls] = await Promise.all([listEmployees(), listDepartures(), listChecklists()])
+      const [emps, deps, cls, devs, rem] = await Promise.all([listEmployees(), listDepartures(), listChecklists(), loadDevices().catch(() => [] as EndpointDevice[]), loadReminderStore()])
       setEmployees(emps)
       setDepartures(deps)
+      setDevices(devs)
+      setReminderStore(rem)
       setChecklistCorpIds(new Set(cls.map(c => (c.corpId || '').trim().toUpperCase()).filter(Boolean)))
       setError('')
     } catch {
@@ -326,6 +339,15 @@ export default function EmployeeManagement() {
   const onboardedEmps = filteredEmps.filter(e => isOnboarded(e))
   const filteredDeps = useMemo(() => departures.filter(d => !q || [d.name, d.globalId, d.manager, d.deviceName].some(v => v.toLowerCase().includes(q))), [departures, q])
 
+  // Ausgetretene ↔ Endgeräte: je Austritt die noch auf ihn zugewiesenen Geräte
+  // (fuzzy Namensabgleich, siehe departureDevices/nameMatch). Einmal berechnet.
+  const depDeviceMap = useMemo(() => {
+    const m: Record<string, EndpointDevice[]> = {}
+    for (const d of departures) { const list = devicesForName(d.name, d.globalId, devices); if (list.length) m[d.id] = list }
+    return m
+  }, [departures, devices])
+  const depWithDevicesCount = useMemo(() => Object.keys(depDeviceMap).length, [depDeviceMap])
+
   const newEmptyEmployee = (): Employee => ({
     id: '', startDate: '', name: '', vorname: '', globalId: '', manager: '', jobTitle: '', department: '', costCenter: '',
     managerContacted: false, laptopReady: false, hardwareType: '', hardwareLocation: '', hardwareBy: '', workplaceReady: false, allDone: false, deviceHandedOver: false, request: '', ritmLaptop: '', deploymentTask: '', hardwareSerial: '', laptopType: '',
@@ -446,6 +468,7 @@ export default function EmployeeManagement() {
                 <button onClick={() => setShowDepartures(v => !v)} className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground">
                   {showDepartures ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
                   <UserMinus size={15} className="text-amber-400" />Austritte ({filteredDeps.length})
+                  {depWithDevicesCount > 0 && <span className="ml-1 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-red-500/15 text-red-300 border border-red-500/30"><AlertTriangle size={10} />{depWithDevicesCount} noch mit Geräten</span>}
                 </button>
                 <button onClick={() => setEditDep(newEmptyDeparture())} className="flex items-center gap-1 px-2 py-1 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground"><Plus size={12} />Austritt</button>
               </div>
@@ -470,13 +493,43 @@ export default function EmployeeManagement() {
                         {filteredDeps.map(d => {
                           const days = daysUntil(d.exitDate)
                           const soon = !isNaN(days) && days >= 0 && days <= 7
+                          const departed = !isNaN(days) && days < 0
+                          const matched = depDeviceMap[d.id] || []
+                          const hasDev = matched.length > 0
+                          const expanded = expandedDep === d.id
+                          const rs = reminderStore.states[d.id]
+                          const remDays = rs?.sendAt && !rs.sentAt ? Math.max(0, Math.ceil((Date.parse(rs.sendAt) - Date.now()) / 86400000)) : null
+                          const remLabel = rs?.sentAt ? 'gesendet' : (remDays != null ? `in ${remDays} T` : 'Reminder')
                           return (
-                            <tr key={d.id} className="border-t border-border hover:bg-accent/20">
+                            <Fragment key={d.id}>
+                            <tr className={`border-t border-border hover:bg-accent/20 ${hasDev ? (departed ? 'bg-red-500/10' : 'bg-amber-500/5') : ''}`}>
                               <td className="px-3 py-2 whitespace-nowrap">
                                 <span className="text-foreground">{formatGermanDate(d.exitDate)}</span>
                                 {!isNaN(days) && <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded ${soon ? 'bg-amber-500/20 text-amber-200' : 'bg-accent text-muted-foreground'}`}>{days < 0 ? 'erfolgt' : `in ${days} T`}</span>}
                               </td>
-                              <td className="px-3 py-2 text-foreground"><span className="inline-flex items-center gap-1">{d.name}<PersonInfoButton name={d.name} /></span></td>
+                              <td className="px-3 py-2 text-foreground">
+                                <span className="inline-flex items-center gap-1 flex-wrap">
+                                  {d.name}<PersonInfoButton name={d.name} />
+                                  {hasDev && (
+                                    <button onClick={() => setExpandedDep(expanded ? null : d.id)}
+                                      title="Noch zugewiesene Endgeräte anzeigen"
+                                      className={`ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border ${departed ? 'bg-red-500/15 text-red-300 border-red-500/40' : 'bg-amber-500/15 text-amber-200 border-amber-500/40'}`}>
+                                      <AlertTriangle size={10} />{matched.length} Gerät{matched.length === 1 ? '' : 'e'}
+                                      {expanded ? <ChevronDown size={10} /> : <ChevronRight size={10} />}
+                                    </button>
+                                  )}
+                                  <button onClick={() => { setMailDunning(false); setMailDep(d) }} title="Reminder-Mail an Manager – Vorschau & senden"
+                                    className={`ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] border ${rs?.sentAt ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'border-border text-muted-foreground hover:bg-accent/40'}`}>
+                                    <Mail size={10} />{remLabel}
+                                  </button>
+                                  {departed && hasDev && (
+                                    <button onClick={() => { setMailDunning(true); setMailDep(d) }} title="Nach Austritt: Rückgabe der Geräte beim Manager anmahnen"
+                                      className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border bg-red-500/15 text-red-300 border-red-500/40 hover:bg-red-500/25">
+                                      <Mail size={10} />Anmahnen
+                                    </button>
+                                  )}
+                                </span>
+                              </td>
                               <td className="px-3 py-2 text-muted-foreground font-mono text-xs">{d.globalId}</td>
                               <td className="px-3 py-2 text-muted-foreground">{d.manager}</td>
                               <td className="px-3 py-2 text-muted-foreground"><span className="inline-flex items-center gap-1">{d.deviceName}{d.deviceName && <DeviceInfoButton hostname={d.deviceName} />}</span></td>
@@ -487,6 +540,31 @@ export default function EmployeeManagement() {
                                 <button onClick={() => setEditDep(d)} className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground"><Pencil size={13} /></button>
                               </td>
                             </tr>
+                            {expanded && (
+                              <tr className="border-t border-border bg-background/60">
+                                <td colSpan={7} className="px-4 py-2.5">
+                                  <div className="text-[11px] text-muted-foreground mb-1.5 inline-flex items-center gap-1">
+                                    <AlertTriangle size={11} className={departed ? 'text-red-400' : 'text-amber-400'} />
+                                    Noch auf „{d.name}" zugewiesene Endgeräte (aus der Endgeräte-Übersicht):
+                                  </div>
+                                  <div className="flex flex-col gap-1">
+                                    {matched.map(dev => (
+                                      <div key={dev.id} className="flex items-center gap-2 flex-wrap text-xs">
+                                        <span className="inline-flex items-center gap-1 font-mono text-foreground">
+                                          {dev.hostname || dev.serial || '—'}
+                                          {(dev.hostname || dev.serial) && <DeviceInfoButton hostname={dev.hostname || undefined} serial={dev.serial || undefined} />}
+                                        </span>
+                                        {dev.model && <span className="text-muted-foreground">{dev.model}</span>}
+                                        {dev.serial && dev.hostname && <span className="text-muted-foreground/70 font-mono">SN {dev.serial}</span>}
+                                        {dev.state && <span className={`px-1.5 py-0.5 rounded text-[10px] ${isActiveAssignment(dev) ? 'bg-blue-500/15 text-blue-300' : 'bg-accent text-muted-foreground'}`}>{dev.state}</span>}
+                                        <span className="text-muted-foreground/70">zugew.: {dev.assignedTo}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                            </Fragment>
                           )
                         })}
                       </tbody>
@@ -515,6 +593,7 @@ export default function EmployeeManagement() {
 
       {editEmp && <EmployeeEditModal emp={editEmp} username={username} onClose={() => setEditEmp(null)} onSaved={() => { setEditEmp(null); refresh() }} />}
       {editDep && <DepartureEditModal dep={editDep} username={username} onClose={() => setEditDep(null)} onSaved={() => { setEditDep(null); refresh() }} />}
+      {mailDep && <DepartureMailDialog dep={mailDep} reminderState={reminderStore.states[mailDep.id]} hasOpenDevices={(depDeviceMap[mailDep.id] || []).length > 0} startDunning={mailDunning} onClose={() => { setMailDep(null); setMailDunning(false) }} onSent={refresh} />}
       {mailEmp && <ManagerMailDialog emp={mailEmp} onClose={() => setMailEmp(null)} />}
     </div>
   )
@@ -1029,6 +1108,27 @@ function DepartureEditModal({ dep, username, onClose, onSaved }: { dep: Departur
   const [err, setErr] = useState('')
   const set = <K extends keyof Departure>(k: K, v: Departure[K]) => setF(prev => ({ ...prev, [k]: v }))
 
+  // AD-Verzeichnis für automatische Global-ID (+ Manager) aus dem Namen
+  const [adIndex, setAdIndex] = useState<Map<string, AdUserListItem> | null>(null)
+  const [adUsers, setAdUsers] = useState<AdUserListItem[]>([])
+  const [adHint, setAdHint] = useState('')
+  useEffect(() => { void readCentralAdUsers().then(d => { if (d) { setAdUsers(d.users); setAdIndex(buildNameIndex(d.users)) } }) }, [])
+
+  function autofillFromAd(name: string) {
+    const nm = name.trim()
+    if (!nm) { setAdHint(''); return }
+    if (!adIndex) return
+    let u = lookupUserByName(adIndex, nm)
+    if (!u) u = adUsers.find(x => x.displayName && fuzzyNameMatch(x.displayName, nm))
+    if (!u) { setAdHint(`kein AD-Treffer für „${nm}" – Global ID bitte manuell`); return }
+    setF(prev => ({
+      ...prev,
+      globalId: prev.globalId?.trim() ? prev.globalId : (u!.sam || '').toUpperCase(),
+      manager: prev.manager?.trim() ? prev.manager : (u!.managerName || prev.manager),
+    }))
+    setAdHint(`aus AD übernommen: ${u.displayName}${u.sam ? ` · ${u.sam.toUpperCase()}` : ''}`)
+  }
+
   async function save() {
     setSaving(true); setErr('')
     const payload: Partial<Departure> = { ...f, exitDate: toIsoDate(f.exitDate) }
@@ -1045,13 +1145,14 @@ function DepartureEditModal({ dep, username, onClose, onSaved }: { dep: Departur
   return (
     <ModalShell title={isNew ? 'Neuer Austritt' : `Austritt: ${dep.name}`} onClose={onClose}>
       <div className="grid grid-cols-2 gap-3">
-        <Field label="Name"><Inp v={f.name} on={v => set('name', v)} /></Field>
+        <Field label="Name"><Inp v={f.name} on={v => set('name', v)} onBlur={() => autofillFromAd(f.name)} /></Field>
         <Field label="Global ID"><Inp v={f.globalId} on={v => set('globalId', v.toUpperCase())} mono /></Field>
         <Field label="Austrittsdatum (TT.MM.JJJJ)"><Inp v={f.exitDate} on={v => set('exitDate', v)} placeholder="z.B. 31.07.2026" /></Field>
         <Field label="Manager"><Inp v={f.manager} on={v => set('manager', v)} /></Field>
         <Field label="Geräte-Name"><Inp v={f.deviceName} on={v => set('deviceName', v)} /></Field>
         <Field label="SNOW Task"><Inp v={f.task} on={v => set('task', v)} /></Field>
       </div>
+      {adHint && <p className={`text-[11px] ${adHint.startsWith('aus AD') ? 'text-emerald-400' : 'text-amber-400'}`}>{adHint}</p>}
       <Field label="Sonstiges"><textarea value={f.notes} onChange={e => set('notes', e.target.value)} rows={2} className="w-full px-2.5 py-1.5 text-sm rounded-md bg-card border border-border text-foreground focus:outline-none focus:ring-1 focus:ring-primary" /></Field>
       <label className="flex items-center gap-2 mt-1 text-sm text-foreground cursor-pointer">
         <input type="checkbox" checked={f.deviceReturned} onChange={() => set('deviceReturned', !f.deviceReturned)} className="accent-primary" />Gerät wurde abgegeben
@@ -1093,7 +1194,7 @@ function ModalShell({ title, onClose, children }: { title: string; onClose: () =
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return <label className="block"><span className="text-[11px] text-muted-foreground">{label}</span><div className="mt-0.5">{children}</div></label>
 }
-function Inp({ v, on, mono, placeholder }: { v: string; on: (v: string) => void; mono?: boolean; placeholder?: string }) {
-  return <input value={v} placeholder={placeholder} onChange={e => on(e.target.value)}
+function Inp({ v, on, mono, placeholder, onBlur }: { v: string; on: (v: string) => void; mono?: boolean; placeholder?: string; onBlur?: () => void }) {
+  return <input value={v} placeholder={placeholder} onChange={e => on(e.target.value)} onBlur={onBlur}
     className={`w-full px-2.5 py-1.5 text-sm rounded-md bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary ${mono ? 'font-mono' : ''}`} />
 }

@@ -10,7 +10,7 @@ import {
   loadDirectory, departmentsOf, usersInDepartment, buildReportsIndex, collectReports,
   loadDeviceIndex, type UserDevice,
 } from '../../services/rolloutSelect'
-import { resolveSamByName } from '../../services/personMasterData'
+import { resolveSamByName, fetchAdPersonInfo } from '../../services/personMasterData'
 import { fetchOrgChart } from '../../services/adOrgChart'
 import { ensureCmsl, scanHosts, type HpHostReport } from '../../services/hpDrivers'
 import { istRolloutTreiber, createRollout, type Rollout } from '../../services/driverRollout'
@@ -93,8 +93,12 @@ export default function RolloutCreate({ by, onCreated, onCancel }: {
     const t = mgrTerm.trim(); if (!t) return
     setOrgBusy(true); setMgrMsg(''); setMgrGroups([])
     const { dir, devIdx } = await ensureOrg()
-    const sam = await resolveSamByName(t)
-    if (!sam) { setMgrMsg(`Vorgesetzter „${t}" nicht im Verzeichnis gefunden.`); setOrgBusy(false); return }
+    // Autoritative CorpID/SamAccountName LIVE aus AD (dieselbe Quelle wie das Personen-„i");
+    // der Tages-Cache liefert teils keine oder für Get-ADUser ungültige CorpID → Cache nur als Fallback.
+    let sam: string | undefined
+    try { const info = await fetchAdPersonInfo(t); if (info.found) sam = info.sam } catch { /* Cache-Fallback unten */ }
+    if (!sam) sam = await resolveSamByName(t)
+    if (!sam) { setMgrMsg(`Vorgesetzter „${t}" nicht in AD gefunden.`); setOrgBusy(false); return }
     // 1) Offline (schnell): über den zwischengespeicherten managerSam-Index.
     let reportUsers = collectReports(buildReportsIndex(dir), sam).map(u => ({ sam: u.sam, name: u.displayName, dept: u.department as string | undefined }))
     // 2) Fallback LIVE aus AD (DirectReports, rekursiv) — falls der Cache keine

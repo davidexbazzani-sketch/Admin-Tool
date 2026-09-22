@@ -11,6 +11,7 @@
 import { api } from '../electronAPI'
 import { ensureWinRM } from '../utils/winrmUtils'
 import { runInUserContext, type ClientActionResult } from './printerConnections'
+import type { InventoryItem } from '../types/auth'
 
 export interface NetDriveEntry { letter: string; unc: string }
 export interface StoredNetworkDrives {
@@ -110,6 +111,51 @@ export async function refreshNetworkDrivesLive(hostname: string, by: string): Pr
     const reason = e instanceof Error ? e.message : String(e)
     return prev ? { ...prev, ok: false, reason } : { hostname: h, drives: [], ok: false, reason, scannedAt: nowIso, scannedBy: by }
   }
+}
+
+// ── Geplanter Scan über ALLE Computer (Automatische Scans) ───────────────────
+/** Status-Datei für den Zeitplan/Claim des Netzlaufwerk-Scans. */
+export const NETWORK_DRIVES_STATUS = 'device_network_drives/_scan_status.json'
+
+/** Computer-Hostnamen aus dem Inventar (Kategorie „Computer", dedupliziert). */
+async function loadComputerHostnames(): Promise<string[]> {
+  try {
+    const items = (await api().netReadJson<InventoryItem[]>('inventory/inventory.json')) ?? []
+    const seen = new Set<string>()
+    const out: string[] = []
+    for (const i of Array.isArray(items) ? items : []) {
+      if ((i.category || '').toLowerCase() !== 'computer') continue
+      const name = (i.name || '').trim()
+      if (!name) continue
+      const key = name.toLowerCase().split('.')[0]
+      if (seen.has(key)) continue
+      seen.add(key); out.push(name)
+    }
+    return out
+  } catch { return [] }
+}
+
+/**
+ * EIN geplanter Lauf: liest für ALLE Computer die verbundenen Netzlaufwerke live
+ * ein (max. 10 parallel, WinRM-Regel) und speichert je Host zentral. Offline-PCs
+ * behalten automatisch ihren zuletzt gespeicherten Stand (refreshNetworkDrivesLive).
+ * Ergebnis erscheint danach im Geräte-„i" unter „Verbundene Netzlaufwerke".
+ */
+export async function runNetworkDrivesScanOnce(by: string, onTick?: () => void): Promise<{ ok: boolean; summary: string }> {
+  const hosts = await loadComputerHostnames()
+  if (hosts.length === 0) return { ok: false, summary: 'Keine Computer im Inventar gefunden.' }
+  let ok = 0, off = 0, drives = 0
+  const BATCH = 10
+  for (let i = 0; i < hosts.length; i += BATCH) {
+    const chunk = hosts.slice(i, i + BATCH)
+    const results = await Promise.all(chunk.map(h => refreshNetworkDrivesLive(h, by).catch(() => null)))
+    for (const r of results) {
+      if (!r) { off++; continue }
+      if (r.ok) { ok++; drives += r.drives.length } else off++
+    }
+    onTick?.()
+  }
+  return { ok: true, summary: `${hosts.length} Computer · ${ok} gescannt (${drives} Laufwerke) · ${off} offline/Fehler` }
 }
 
 /** Ein Netzlaufwerk im Kontext des angemeldeten Benutzers verbinden (persistent). */

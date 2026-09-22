@@ -54,7 +54,7 @@ export const PRINTER_SEED: PrinterSeed[] = [
     paperFormats: [
       "A4"
     ],
-    location: "Container 05 Instandhaltung"
+    location: "H6 / Container 05 / Instandhaltung"
   },
   {
     name: "DEHAM007",
@@ -882,6 +882,135 @@ export const PRINTER_SEED: PrinterSeed[] = [
       "A4"
     ],
     location: "VS006 A4 Farbe"
+  },
+  {
+    name: "DEHAM005",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "H9 Co WLAN Etikettendrucker"
+  },
+  {
+    name: "DEHAM08a",
+    duplex: "",
+    color: "Farbe",
+    paperFormats: [
+      "A3",
+      "A4"
+    ],
+    location: "k214 A3 A4 Color"
+  },
+  {
+    name: "PMD577",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "H8 Etikettendrucker Vorverpackung"
+  },
+  {
+    name: "PMD578",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "H8 Etikettendrucker Hochregallager"
+  },
+  {
+    name: "PMD582",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "H6 Co10 Stabi Etikettendrucker"
+  },
+  {
+    name: "PMD588",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "Etikettendrucker (Reserve IT, ohne Messer)"
+  },
+  {
+    name: "PMD619",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "Etikettendrucker defekt bei IT"
+  },
+  {
+    name: "PMD630",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "H8 Vorverpackung Etikettendrucker"
+  },
+  {
+    name: "PMD638",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "WLAN Etikettendrucker Versand 2(temporär)"
+  },
+  {
+    name: "PMD639",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "WLAN Etikettendrucker TEST (bei Marc)"
+  },
+  {
+    name: "PMD862",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "WLAN Etikettendrucker"
+  },
+  {
+    name: "PMD863",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "Versand Käfig Süd WLAN Etikettendrucker"
+  },
+  {
+    name: "PMD864",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "WLAN Etikettendrucker DEFEKT (bei Georg)"
+  },
+  {
+    name: "PMD866",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "Versand Käfig Nord WLAN Etikettendrucker"
+  },
+  {
+    name: "PMD867",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "WLAN Etikettendrucker H8 Vorverpackung"
+  },
+  {
+    name: "PMD868",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "WLAN Etikettendrucker"
+  },
+  {
+    name: "PMD870",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "WLAN Etikettendrucker Versand 1"
+  },
+  {
+    name: "PMD871",
+    duplex: "",
+    color: "",
+    paperFormats: [],
+    location: "WLAN Etikettendrucker Versand 2"
   }
 ]
 

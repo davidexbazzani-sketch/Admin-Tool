@@ -156,7 +156,7 @@ declare global {
 
       // ── E-Mail (Outlook COM / PowerShell / Nodemailer) ─────────────────────
       sendEmailRaw(opts: {
-        to: string; subject: string; body: string; html?: boolean
+        to: string; cc?: string; subject: string; body: string; html?: boolean
         smtp: string; port: number; user?: string; pass?: string; from?: string
         useTls?: boolean; method?: 'outlook' | 'nodemailer' | 'powershell'
       }): Promise<{ success: boolean; error?: string; method?: string }>
