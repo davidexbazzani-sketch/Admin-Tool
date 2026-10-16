@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { BatteryCharging, FileText, LogIn, X, ZoomIn, AlertTriangle, Loader2, ExternalLink } from 'lucide-react'
+import { BatteryCharging, FileText, LogIn, X, ZoomIn, AlertTriangle, Loader2, ExternalLink, User } from 'lucide-react'
 import usvImg from '../../resources/USV/USV_freigestellt.png'
 import stickerLeft from '../../resources/USV/Sticker_USV_2_links.png'
 import stickerRight from '../../resources/USV/Sticker_USV1_rechts.png'
 import { api } from '../electronAPI'
+import { zugangFuer, usePinSperre, PasswortZeile, oeffneMitLogin, oeffneImBrowser } from '../components/netzwerkgeraete/zugang'
 
 // Anordnung (siehe Bild): LINKS = USV 2, RECHTS = USV 1.
 // URLs aus der Vergabe-Textdatei: links (USV2) = .199, rechts (USV1) = .198.
@@ -36,10 +37,9 @@ const RIGHT: UpsDef = {
 export default function USV() {
   const [sticker, setSticker] = useState<{ src: string; title: string } | null>(null)
   const [login, setLogin] = useState<UpsDef | null>(null)
-  const [user, setUser] = useState('')
-  const [pass, setPass] = useState('')
   const [loginErr, setLoginErr] = useState('')
   const [opening, setOpening] = useState(false)
+  const { entsperrt, mitPin, pinDialog } = usePinSperre()
   const [docOpening, setDocOpening] = useState(false)
   const [toast, setToast] = useState<{ kind: 'success' | 'error'; text: string } | null>(null)
 
@@ -48,24 +48,22 @@ export default function USV() {
   }
 
   function openLogin(ups: UpsDef) {
-    setLogin(ups); setUser(''); setPass(''); setLoginErr('')
+    setLogin(ups); setLoginErr('')
   }
 
-  async function submitLogin() {
-    if (!login) return
-    if (user.trim().toLowerCase() !== 'apc' || pass !== 'apc') {
-      setLoginErr('Benutzer oder Passwort falsch.')
-      return
-    }
+  // Zugang wie bei der Telefonanlage: PIN 0506 → Passwort anzeigen/kopieren bzw.
+  // Tool-Fenster mit automatisch eingetragenem Benutzer + Passwort. Zugangsdaten aus
+  // resources/Netzwerkgeraete/usv.json (nicht im Quelltext/Repo).
+  async function anmelden(ups: UpsDef, weg: 'tool' | 'browser') {
+    const z = zugangFuer('usv', ups.ip)
+    if (!z) { setLoginErr('Zugangsdaten fehlen in diesem Build (resources/Netzwerkgeraete/usv.json).'); return }
     setOpening(true)
-    const r = await api().openInEdgeOrChrome(login.url)
+    const r = weg === 'tool'
+      ? await oeffneMitLogin({ url: ups.url, title: `${ups.name} (${ups.ip})`, benutzer: z.benutzer, passwort: z.passwort })
+      : await oeffneImBrowser({ url: ups.url, title: ups.name, passwort: z.passwort })
     setOpening(false)
-    if (r.success) {
-      setLogin(null)
-      flash({ kind: 'success', text: r.fallback ? `${login.name}: im Standardbrowser geöffnet.` : `${login.name}: im Browser geöffnet.` })
-    } else {
-      setLoginErr(r.error || 'Browser konnte nicht geöffnet werden.')
-    }
+    if (r.ok) { setLogin(null); flash({ kind: 'success', text: r.text }) }
+    else setLoginErr(r.text)
   }
 
   async function openDoc() {
@@ -108,7 +106,7 @@ export default function USV() {
         <BatteryCharging size={22} className="text-emerald-400" />
         <div className="flex-1 min-w-0">
           <h1 className="text-lg font-semibold text-foreground">USV — Unterbrechungsfreie Stromversorgung</h1>
-          <p className="text-xs text-muted-foreground">Zwei APC Smart-UPS VT. Sticker antippen zum Vergrößern · „Log In" führt (nach Anmeldung) zur UPS-Weboberfläche.</p>
+          <p className="text-xs text-muted-foreground">Zwei APC Smart-UPS VT. Sticker antippen zum Vergrößern · „Log In" → mit PIN 0506 direkt zur UPS-Weboberfläche (Anmeldung automatisch).</p>
         </div>
         {/* USV Notfall Plan (Dokument) — schräg oben rechts */}
         <button onClick={openDoc} disabled={docOpening}
@@ -152,30 +150,32 @@ export default function USV() {
               <LogIn size={18} className="text-blue-400" />
               <h3 className="text-base font-semibold text-foreground">Anmeldung {login.name}</h3>
             </div>
-            <p className="text-xs text-muted-foreground mb-4">Zugangsdaten eingeben, um zur UPS-Weboberfläche ({login.ip}) zu gelangen.</p>
+            <p className="text-xs text-muted-foreground mb-4">UPS-Weboberfläche ({login.ip}). Mit PIN 0506 wird das Passwort angezeigt bzw. beim Öffnen automatisch eingetragen.</p>
             <div className="space-y-2">
-              <label className="text-[11px] text-muted-foreground block">User
-                <input value={user} onChange={e => { setUser(e.target.value); setLoginErr('') }} autoFocus autoComplete="off"
-                  onKeyDown={e => { if (e.key === 'Enter') submitLogin() }}
-                  className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary" />
-              </label>
-              <label className="text-[11px] text-muted-foreground block">Password
-                <input type="password" value={pass} onChange={e => { setPass(e.target.value); setLoginErr('') }} autoComplete="new-password"
-                  onKeyDown={e => { if (e.key === 'Enter') submitLogin() }}
-                  className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary" />
-              </label>
+              <div className="flex items-center gap-2 rounded-md border border-border bg-background px-2.5 py-1.5">
+                <User size={13} className="text-muted-foreground shrink-0" />
+                <span className="text-[11px] text-muted-foreground">Benutzer</span>
+                <code className="flex-1 font-mono text-sm text-foreground select-text">{zugangFuer('usv', login.ip)?.benutzer || '—'}</code>
+              </div>
+              <PasswortZeile passwort={zugangFuer('usv', login.ip)?.passwort ?? ''} entsperrt={entsperrt} mitPin={mitPin} />
             </div>
             {loginErr && <p className="mt-2 text-xs text-red-300 flex items-center gap-1"><AlertTriangle size={13} />{loginErr}</p>}
             <div className="flex items-center gap-2 mt-4">
               <button onClick={() => setLogin(null)} disabled={opening} className="px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:bg-accent disabled:opacity-50">Abbrechen</button>
-              <button onClick={submitLogin} disabled={opening || !user.trim() || !pass}
-                className="ml-auto inline-flex items-center gap-1.5 px-4 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
-                {opening ? <Loader2 size={13} className="animate-spin" /> : <ExternalLink size={13} />}Anmelden &amp; öffnen
+              <button onClick={() => mitPin(() => void anmelden(login, 'browser'))} disabled={opening}
+                className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-40">
+                <ExternalLink size={13} />Im Browser
+              </button>
+              <button onClick={() => mitPin(() => void anmelden(login, 'tool'))} disabled={opening}
+                className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
+                {opening ? <Loader2 size={13} className="animate-spin" /> : <LogIn size={13} />}Öffnen &amp; anmelden
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {pinDialog}
 
       {/* Toast */}
       {toast && (

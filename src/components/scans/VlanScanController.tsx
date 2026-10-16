@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { getScanSchedule, isConfiguredDue, loadRunStatus, saveRunStatus, isStatusClaimed } from '../../services/scanSchedules'
 import { VLAN_SCAN_SCHEDULE, runVlanScanOnce } from '../../services/extraScans'
+import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 
 const POLL_MS = 20 * 60 * 1000
 const HEARTBEAT_MS = 5 * 60 * 1000
@@ -54,11 +55,14 @@ export default function VlanScanController() {
 
   useEffect(() => {
     if (!username) return
-    void tick()
+    // Erster Lauf entzerrt: sonst greifen beim Start alle Controller gleichzeitig
+    // aufs Netzlaufwerk zu und das Fenster hakt in den ersten Sekunden.
+    const startAbbrechen = ersterLaufEntzerrt(() => { void tick() })
     const t = setInterval(() => { void tick() }, POLL_MS)
-    const onFocus = () => { void tick() }
-    window.addEventListener('focus', onFocus)
-    return () => { clearInterval(t); window.removeEventListener('focus', onFocus) }
+    // Beim Zurückkehren ins Fenster nachsehen — gebündelt und entzerrt über den
+    // gemeinsamen Melder, damit nicht alle Controller gleichzeitig loslaufen.
+    const abmelden = onAppFocus(() => { void tick() })
+    return () => { clearInterval(t); abmelden(); startAbbrechen() }
   }, [tick, username])
 
   return null

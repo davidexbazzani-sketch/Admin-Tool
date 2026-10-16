@@ -54,6 +54,8 @@ async function exportExcel(run: InventoryRun, savePath: string): Promise<void> {
     ['Abgeschlossen von', run.completedBy || '—'],
     ['Geräte gesamt', String(totalDevices)],
     ['Erfasst', String(scanned)],
+    ['— davon per Scan (Barcode/QR)', String(run.devices.filter(d => d.capture === 'scan').length)],
+    ['— davon manuell eingetippt', String(run.devices.filter(d => d.capture === 'manual').length)],
     ['Fehlend', String(missing)],
     ['Nachträglich gefunden', String(lateFound)],
     ['Unerwartete Scans', String(run.extras.length)],
@@ -74,7 +76,7 @@ async function exportExcel(run: InventoryRun, savePath: string): Promise<void> {
 
   // Geräte-Sheet (mit allen Spalten aus dem Originalimport + Inventur-Status)
   const dws = wb.addWorksheet('Geräte')
-  const headers = ['Status', 'Seriennummer', 'Gerätetyp', 'Company', 'Status (Quelle)', 'Substate', 'Kommentar', 'Erfasst am', 'Erfasst von', 'AD-Hostname', 'AD-Online', 'AD-Letzter Logon', 'AD-Akt. Benutzer', 'AD-Notiz', 'Nachträgl. gefunden', 'Nachträgl. Notiz']
+  const headers = ['Status', 'Seriennummer', 'Gerätetyp', 'Company', 'Status (Quelle)', 'Substate', 'Kommentar', 'Erfasst am', 'Erfasst von', 'Erfassungsart', 'AD-Hostname', 'AD-Online', 'AD-Letzter Logon', 'AD-Akt. Benutzer', 'AD-Notiz', 'Nachträgl. gefunden', 'Nachträgl. Notiz']
   const hr = dws.addRow(headers)
   hr.eachCell(cell => { cell.font = { bold: true, color: { argb: 'FFFFFFFF' } }; cell.fill = head; cell.alignment = { vertical: 'middle' } })
   for (const d of run.devices) {
@@ -83,6 +85,7 @@ async function exportExcel(run: InventoryRun, savePath: string): Promise<void> {
       status,
       d.serial, d.deviceType, d.company, d.status, d.substate, d.comment,
       fmtDateTime(d.scannedAt), d.scannedBy || '',
+      d.capture === 'scan' ? 'Scan' : d.capture === 'manual' ? 'Manuell' : '',
       d.adHostname || '', d.adOnline === undefined ? '' : (d.adOnline ? 'Ja' : 'Nein'), fmtDateTime(d.adLastOnline), d.adCurrentUser || '', d.adNote || '',
       d.lateFound ? fmtDateTime(d.lateFoundAt) : '', d.lateNote || '',
     ])
@@ -90,7 +93,7 @@ async function exportExcel(run: InventoryRun, savePath: string): Promise<void> {
   }
   dws.columns = [
     { width: 14 }, { width: 18 }, { width: 18 }, { width: 16 }, { width: 16 }, { width: 14 }, { width: 28 },
-    { width: 20 }, { width: 18 }, { width: 22 }, { width: 12 }, { width: 20 }, { width: 24 }, { width: 24 },
+    { width: 20 }, { width: 18 }, { width: 14 }, { width: 22 }, { width: 12 }, { width: 20 }, { width: 24 }, { width: 24 },
     { width: 20 }, { width: 24 },
   ]
 
@@ -122,6 +125,9 @@ async function exportWord(run: InventoryRun, savePath: string): Promise<void> {
   const scanned = run.devices.filter(d => d.scanned).length
   const missing = run.devices.filter(d => !d.scanned)
   const lateFound = run.devices.filter(d => d.lateFound)
+  const capScan = run.devices.filter(d => d.capture === 'scan').length
+  const capManual = run.devices.filter(d => d.capture === 'manual').length
+  const capPart = (capScan + capManual > 0) ? ` · ${capScan} gescannt / ${capManual} manuell` : ''
 
   const headerCells = (labels: string[]) => labels.map(t => new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: t, bold: true, size: 16 })] })] }))
   const cell = (s: string) => new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: s, size: 16 })] })] })
@@ -131,7 +137,7 @@ async function exportWord(run: InventoryRun, savePath: string): Promise<void> {
     new Paragraph({ children: [new TextRun({ text: run.title, bold: true, size: 28, color: '1E40AF' })] }),
     new Paragraph({ children: [new TextRun({ text: `Importiert: ${fmtDateTime(run.importedAt)} von ${run.importedBy}`, italics: true, color: '666666' })] }),
     new Paragraph({ children: [new TextRun({ text: `Abgeschlossen: ${fmtDateTime(run.completedAt) || '—'} ${run.completedBy ? 'von ' + run.completedBy : ''}`, italics: true, color: '666666' })] }),
-    new Paragraph({ children: [new TextRun({ text: `Geräte: ${run.devices.length} gesamt · ${scanned} erfasst · ${missing.length} fehlend · ${lateFound.length} nachgefunden · ${run.extras.length} unerwartete Scans`, bold: true })] }),
+    new Paragraph({ children: [new TextRun({ text: `Geräte: ${run.devices.length} gesamt · ${scanned} erfasst${capPart} · ${missing.length} fehlend · ${lateFound.length} nachgefunden · ${run.extras.length} unerwartete Scans`, bold: true })] }),
     new Paragraph({ text: '' }),
   ]
 
@@ -202,6 +208,9 @@ async function exportPdf(run: InventoryRun, savePath: string): Promise<void> {
   const scanned = run.devices.filter(d => d.scanned).length
   const missing = run.devices.filter(d => !d.scanned)
   const lateFound = run.devices.filter(d => d.lateFound)
+  const capScan = run.devices.filter(d => d.capture === 'scan').length
+  const capManual = run.devices.filter(d => d.capture === 'manual').length
+  const capPart = (capScan + capManual > 0) ? ` · ${capScan} gescannt / ${capManual} manuell` : ''
 
   doc.setFontSize(16); doc.setTextColor(30, 64, 175)
   doc.text('Hardware-Inventur', 14, 16)
@@ -211,7 +220,7 @@ async function exportPdf(run: InventoryRun, savePath: string): Promise<void> {
   doc.text(`Importiert: ${fmtDateTime(run.importedAt)} von ${run.importedBy}`, 14, 30)
   doc.text(`Abgeschlossen: ${fmtDateTime(run.completedAt) || '—'} ${run.completedBy ? 'von ' + run.completedBy : ''}`, 14, 35)
   doc.setFontSize(10); doc.setTextColor(20, 20, 20)
-  doc.text(`Geräte: ${run.devices.length} gesamt · ${scanned} erfasst · ${missing.length} fehlend · ${lateFound.length} nachgefunden · ${run.extras.length} unerwartete Scans`, 14, 43)
+  doc.text(`Geräte: ${run.devices.length} gesamt · ${scanned} erfasst${capPart} · ${missing.length} fehlend · ${lateFound.length} nachgefunden · ${run.extras.length} unerwartete Scans`, 14, 43)
 
   let y = 50
 

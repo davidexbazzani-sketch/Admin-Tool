@@ -18,6 +18,9 @@ import {
   addPrinterEntry, deletePrinterEntry, savePrinterMaster,
   type PrinterDossier, type PrinterDossierEntry, type PrinterMasterData, type DossierFile,
 } from '../../services/printerDossier'
+import {
+  standortGeaendert, manuellerStand, spiegleStandortInListe,
+} from '../../services/printerLocation'
 import { PrinterMasterData as PrinterMasterDataTab } from './PrinterMasterData'
 import { PrinterActions } from './PrinterActions'
 import { PrinterConnections } from './PrinterConnections'
@@ -99,8 +102,17 @@ function PrinterDossierModal({ printerName, onClose }: { printerName: string; on
   }, [tab, printerName])
 
   async function saveMaster(m: PrinterMasterData) {
-    const updated = await savePrinterMaster(printerName, m, currentUser)
+    // Hat jemand den Standort von Hand geändert, wird er gestempelt und gegen Import,
+    // Scan und Seed gesperrt — und zugleich in die Standort-Übersicht gespiegelt, damit
+    // Liste und „i"-Fenster nicht auseinanderlaufen (genau das war die Fehlerquelle).
+    const neuerOrt = (m.location || '').trim()
+    const geaendert = standortGeaendert(dossier?.master, neuerOrt)
+    const mitStempel: PrinterMasterData = geaendert
+      ? { ...m, ...manuellerStand(neuerOrt, currentUser, new Date().toISOString()) }
+      : m
+    const updated = await savePrinterMaster(printerName, mitStempel, currentUser)
     setDossier(updated)
+    if (geaendert) { try { await spiegleStandortInListe(printerName, neuerOrt) } catch { /* offline */ } }
   }
 
   async function attachPending() {

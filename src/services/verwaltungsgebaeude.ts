@@ -33,6 +33,9 @@ function normalize(raw: unknown): OtDevice | null {
     createdBy: typeof r.createdBy === 'string' ? r.createdBy : '',
     createdAt: typeof r.createdAt === 'string' ? r.createdAt : now,
     updatedAt: typeof r.updatedAt === 'string' ? r.updatedAt : now,
+    placedBy: typeof r.placedBy === 'string' ? r.placedBy : undefined,
+    placedAt: typeof r.placedAt === 'string' ? r.placedAt : undefined,
+    placedVia: r.placedVia === 'refresh' || r.placedVia === 'manual' ? r.placedVia : undefined,
   }
 }
 
@@ -51,12 +54,14 @@ async function saveAll(devices: OtDevice[]): Promise<boolean> {
 
 export async function createDevice(data: { page: number; x: number; y: number; hostname?: string; createdBy?: string; kind?: 'device' | 'lock' }): Promise<OtDevice> {
   const now = new Date().toISOString()
+  const host = (data.hostname || '').trim()
   const d: OtDevice = {
     id: newId(), page: Math.max(1, Math.round(data.page) || 1),
     x: clamp01(data.x), y: clamp01(data.y),
-    hostname: (data.hostname || '').trim(), arbeitsplatz: '', notes: '',
+    hostname: host, arbeitsplatz: '', notes: '',
     kind: data.kind === 'lock' ? 'lock' : undefined,
     createdBy: data.createdBy || '', createdAt: now, updatedAt: now,
+    ...(host ? { placedBy: data.createdBy || '', placedAt: now, placedVia: 'manual' as const } : {}),
   }
   const all = await listDevices()
   all.push(d)
@@ -64,11 +69,19 @@ export async function createDevice(data: { page: number; x: number; y: number; h
   return d
 }
 
-export async function updateDevice(id: string, patch: Partial<Pick<OtDevice, 'hostname' | 'arbeitsplatz' | 'notes' | 'page' | 'x' | 'y'>>): Promise<boolean> {
+export async function updateDevice(id: string, patch: Partial<Pick<OtDevice, 'hostname' | 'arbeitsplatz' | 'notes' | 'page' | 'x' | 'y'>>, opts?: { by?: string; refresh?: boolean }): Promise<boolean> {
   const all = await listDevices()
-  const next = all.map(d => d.id === id
-    ? { ...d, ...patch, x: patch.x != null ? clamp01(patch.x) : d.x, y: patch.y != null ? clamp01(patch.y) : d.y, updatedAt: new Date().toISOString() }
-    : d)
+  const now = new Date().toISOString()
+  const settingHost = patch.hostname != null && patch.hostname.trim() !== ''
+  const next = all.map(d => {
+    if (d.id !== id) return d
+    const m: OtDevice = { ...d, ...patch, x: patch.x != null ? clamp01(patch.x) : d.x, y: patch.y != null ? clamp01(patch.y) : d.y, updatedAt: now }
+    if (settingHost) {
+      if (opts?.refresh) { m.placedBy = opts.by || d.placedBy || d.createdBy || ''; m.placedAt = now; m.placedVia = 'refresh' }
+      else if (!d.placedAt) { m.placedBy = opts?.by || d.createdBy || ''; m.placedAt = now; m.placedVia = 'manual' }
+    }
+    return m
+  })
   return saveAll(next)
 }
 

@@ -3,8 +3,10 @@ import { Pause, Play, SkipBack, SkipForward, X, Loader } from 'lucide-react'
 import {
   resolvePlayerConfig, detectSlideMediaType, slideSrcUrl, isPlayableSlide, activeSlideUrl,
   localHtmlFsPath,
+  slideProtocolUrl,
   type Slide, type PresentationConfig, type TransitionType,
 } from '../services/presentationConfig'
+import { bettetVerweiseEin } from '../services/presentationHtml'
 import { writeHeartbeat, clearHeartbeat, HEARTBEAT_INTERVAL_MS } from '../services/presentationClients'
 import { readClientPush, type RemotePush } from '../services/presentationRemote'
 import { api } from '../electronAPI'
@@ -279,6 +281,8 @@ export default function PresentationPlayer() {
   // werden (Folie bleibt schwarz). Wir lesen den Inhalt ein und zeigen ihn als
   // data:-URL. Cache: Dateipfad → data-URL.
   const [htmlData, setHtmlData] = useState<Record<string, string>>({})
+  // Pfade, bei denen das Protokoll nicht geladen hat → dann doch srcDoc (eingebettet).
+  const [htmlFallback, setHtmlFallback] = useState<Record<string, boolean>>({})
   const htmlLoadingRef = useRef<Set<string>>(new Set())
 
   // Client identity (Windows username + hostname) — written into each heartbeat
@@ -316,15 +320,28 @@ export default function PresentationPlayer() {
     }
     if (livePush?.url) { const p = localHtmlFsPath(livePush.url); if (p) candidates.push(p) }
 
+    // Ordner im Hauptprozess freigeben — nur was hier angemeldet ist, liefert das
+    // skfslide://-Protokoll aus. Muss VOR dem Anzeigen der Folie passieren.
+    for (const p of candidates) {
+      try { void api().slideAllowFolder(p) } catch { /* ältere Version ohne Protokoll */ }
+    }
+
     for (const p of candidates) {
       if (htmlData[p] || htmlLoadingRef.current.has(p)) continue
       htmlLoadingRef.current.add(p)
       api().readFile(p)
-        .then(r => {
-          if (r.success && r.data) {
-            const html = decodeBase64Utf8(r.data)
-            if (html) setHtmlData(prev => ({ ...prev, [p]: html }))
-          }
+        .then(async r => {
+          if (!r.success || !r.data) return
+          const roh = decodeBase64Utf8(r.data)
+          if (!roh) return
+          // Bilder, Stylesheets und Schriften NEBEN der HTML-Datei fest einbetten.
+          // `srcDoc` hat keine Basis-Adresse — ohne diesen Schritt bliebe jedes
+          // `<img src="bilder/logo.png">` leer und die Folie sähe kaputt aus.
+          const fertig = await bettetVerweiseEin(roh, p, async (pfad) => {
+            const d = await api().readFile(pfad).catch(() => null)
+            return d && d.success && d.data ? d.data : null
+          }).catch(() => null)
+          setHtmlData(prev => ({ ...prev, [p]: fertig?.html ?? roh }))
         })
         .catch(() => { /* offline / nicht lesbar → bleibt leer */ })
         .finally(() => { htmlLoadingRef.current.delete(p) })
@@ -645,9 +662,38 @@ export default function PresentationPlayer() {
           const localHtml = localHtmlFsPath(effectiveUrl)
           const src = slideSrcUrl(effectiveUrl)
 
-          // Lokale/UNC HTML: als <iframe srcdoc> anzeigen. Chromium blockiert
-          // Top-Level-Navigation zu file:// und data:-HTML im <webview> (Folie
-          // bliebe schwarz) — srcdoc rendert das Dokument inline.
+          // Lokale/UNC HTML: über das eigene Protokoll als richtige Seite laden.
+          // Nur so greifen Modul-Skripte, Importmaps (three.js & Co.) und relative
+          // Verweise — `srcDoc` hat keine echte Herkunft und `file://` lädt das
+          // <webview> nicht. Scheitert das Laden, wird auf srcDoc zurückgefallen.
+          if (localHtml && !htmlFallback[localHtml]) {
+            return (
+              <webview
+                key={slide.id}
+                ref={(el: HTMLElement | null) => {
+                  if (el) {
+                    webviewRefs.current.set(slide.id, el as WebviewEl)
+                    el.addEventListener('dom-ready', () => applyZoom(slide), { once: true } as AddEventListenerOptions)
+                    // Nur echte Fehlschläge der Hauptseite zählen — abgebrochene Ladevorgänge
+                    // (-3) und Unterrahmen würden sonst grundlos auf srcDoc umschalten.
+                    const onFail = (ev: Event) => {
+                      const e = ev as Event & { errorCode?: number; isMainFrame?: boolean }
+                      if (e.errorCode === -3 || e.isMainFrame === false) return
+                      el.removeEventListener('did-fail-load', onFail)
+                      setHtmlFallback(prev => ({ ...prev, [localHtml]: true }))
+                    }
+                    el.addEventListener('did-fail-load', onFail)
+                  } else {
+                    webviewRefs.current.delete(slide.id)
+                  }
+                }}
+                src={slideProtocolUrl(localHtml)}
+                allowpopups="true"
+                partition="persist:presentation"
+                style={baseStyle}
+              />
+            )
+          }
           if (localHtml) {
             const html = htmlData[localHtml]
             return (
@@ -716,8 +762,32 @@ export default function PresentationPlayer() {
       {/* Remote live-push overlay: ueberlagert die Praesentation im Vollbild */}
       {livePush && (
         <div style={{ position: 'absolute', inset: 0, zIndex: 30, backgroundColor: '#000' }}>
-          {pushLocalHtml ? (
-            // Lokale/UNC HTML als Inline-Dokument (srcdoc) — siehe Folien oben.
+          {pushLocalHtml && !htmlFallback[pushLocalHtml] ? (
+            // Lokale/UNC HTML über das Folien-Protokoll — wie bei den Folien oben.
+            <webview
+              key={`push_${livePush.id}`}
+              ref={(el: HTMLElement | null) => {
+                if (el) {
+                  const z = livePush.zoom
+                  el.addEventListener('dom-ready', () => {
+                    try { (el as WebviewEl).setZoomFactor(z) } catch { /* not ready */ }
+                  }, { once: true } as AddEventListenerOptions)
+                  const onFail = (ev: Event) => {
+                    const e = ev as Event & { errorCode?: number; isMainFrame?: boolean }
+                    if (e.errorCode === -3 || e.isMainFrame === false) return
+                    el.removeEventListener('did-fail-load', onFail)
+                    setHtmlFallback(prev => ({ ...prev, [pushLocalHtml]: true }))
+                  }
+                  el.addEventListener('did-fail-load', onFail)
+                }
+              }}
+              src={slideProtocolUrl(pushLocalHtml)}
+              allowpopups="true"
+              partition="persist:presentation"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', backgroundColor: '#000' }}
+            />
+          ) : pushLocalHtml ? (
+            // Rückfall: Inline-Dokument (srcdoc) mit eingebetteten Verweisen.
             pushHtml ? (
               <iframe
                 title={livePush.title || 'HTML'}

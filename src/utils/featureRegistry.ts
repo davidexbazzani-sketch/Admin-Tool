@@ -72,7 +72,7 @@ export const FEATURES: FeatureDef[] = [
   { id: 'gruppen-suche', label: 'Gruppen-Suche', category: 'Grundfunktionen', userBlocked: true, description: 'Benutzer/Computer anhand ihrer AD-Gruppen-Mitgliedschaften finden und exportieren' },
   { id: 'access-points', label: 'Access Points Übersicht', category: 'Grundfunktionen', description: 'WLAN-Access-Points auf Lageplänen verorten, Inventar importieren, hochauflösender PDF-Export' },
   { id: 'ot-devices', label: 'OT-Geräte', category: 'Grundfunktionen', description: 'PCs auf dem Hallenplan verorten (Hostname/Arbeitsplatz), Liste + Aufleuchten im Plan, verlustfreies Zoomen' },
-  { id: 'pruffeld-zoll', label: 'Prüffeld & Zoll', category: 'Grundfunktionen', description: 'Geräte auf dem Lageplan „Halle 1–11, Gesamtübersicht" verorten (wie OT-Geräte, eigene Liste)' },
+  { id: 'pruffeld-zoll', label: 'Halle & Zoll', category: 'Grundfunktionen', description: 'Geräte auf dem Lageplan „Halle 1–11, Gesamtübersicht" verorten (wie OT-Geräte, eigene Liste)' },
   { id: 'verwaltungsgebaeude', label: 'Verwaltungsgebäude', category: 'Grundfunktionen', description: 'Geräte auf dem Grundriss „KG-Staffelgeschoss" verorten (wie OT-Geräte, Feld Raumnummer, eigene Liste)' },
 
   // ── Geplante Aufgaben ─────────────────────────────────────────────────────

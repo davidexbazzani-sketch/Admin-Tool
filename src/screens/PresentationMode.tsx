@@ -7,17 +7,28 @@ import {
   Send, Tv, Square, Code2, Share2, Save, Star, StickyNote, FolderOpen, ChevronLeft, Info,
 } from 'lucide-react'
 import Card from '../components/Card'
+
+/** Base64 (wie readFile es liefert) → Text. UTF-8-fest, damit Umlaute nicht zerfallen. */
+function decodeBase64Utf8(b64: string): string {
+  try {
+    const bin = atob(b64)
+    const bytes = new Uint8Array(bin.length)
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+    return new TextDecoder('utf-8', { fatal: false }).decode(bytes)
+  } catch { return '' }
+}
 import { api } from '../electronAPI'
 import {
   loadConfig, saveLocal, clearLocal,
   loadUserOverride, saveUserOverride, clearUserOverride, listUserOverrides,
   loadPlaylistsContainer, createPlaylist, createPlaylistFromConfig, renamePlaylist, deletePlaylist, setActivePlaylist,
   playlistToConfig, savePlaylist, savePreviewSession, PREVIEW_SESSION_SENTINEL,
-  makeNewSlide, makeEmptyConfig, detectSlideMediaType, slideSrcUrl,
-  isLocalDrivePath, uploadMediaToShare, withPdfViewParams,
+  makeNewSlide, makeEmptyConfig, detectSlideMediaType, slideSrcUrl, localHtmlFsPath, slideProtocolUrl,
+  isLocalDrivePath, uploadMediaToShare, uploadHtmlMitDateien, withPdfViewParams,
   makeNewVariant, activeRotationIndex, nextRotationSwitch,
   type PresentationConfig, type Slide, type StorageMode, type SlideRotation, type SlideVariant,
 } from '../services/presentationConfig'
+import { bettetVerweiseEin } from '../services/presentationHtml'
 import {
   listClients, formatLastSeen,
   type ListedClient,
@@ -60,6 +71,37 @@ export default function PresentationMode() {
   const [displays, setDisplays] = useState<DisplayInfo[]>([])
   const [selectedDisplay, setSelectedDisplay] = useState<number | null>(null)
   const [preview, setPreview] = useState<Slide | null>(null)
+  // Lokale/UNC HTML-Vorschau: Chromium blockiert file:// in einem <iframe src>, die
+  // Vorschau blieb deshalb schwarz. Sie wird — wie im Player — eingelesen, die
+  // verwiesenen Dateien eingebettet und als srcDoc angezeigt.
+  const [previewHtml, setPreviewHtml] = useState<{ html: string; fehlend: string[] } | null>(null)
+  const [previewLaedt, setPreviewLaedt] = useState(false)
+  useEffect(() => {
+    setPreviewHtml(null)
+    const pfad = preview ? localHtmlFsPath(preview.url) : null
+    if (!pfad) return
+    let abgebrochen = false
+    setPreviewLaedt(true)
+    // Ordner freigeben, damit skfslide:// die Datei ausliefern darf.
+    try { void api().slideAllowFolder(pfad) } catch { /* ältere Version */ }
+    void (async () => {
+      try {
+        const r = await api().readFile(pfad)
+        if (!r.success || !r.data) throw new Error(r.error || 'nicht lesbar')
+        const roh = decodeBase64Utf8(r.data)
+        const fertig = await bettetVerweiseEin(roh, pfad, async (p2) => {
+          const d = await api().readFile(p2).catch(() => null)
+          return d && d.success && d.data ? d.data : null
+        })
+        if (!abgebrochen) setPreviewHtml({ html: fertig.html, fehlend: fertig.fehlend })
+      } catch {
+        if (!abgebrochen) setPreviewHtml({ html: '', fehlend: [] })
+      } finally {
+        if (!abgebrochen) setPreviewLaedt(false)
+      }
+    })()
+    return () => { abgebrochen = true }
+  }, [preview])
   const [dragId, setDragId] = useState<string | null>(null)
   const [toast, setToast] = useState<Toast | null>(null)
   const [confirmClearLocal, setConfirmClearLocal] = useState(false)
@@ -1590,7 +1632,31 @@ export default function PresentationMode() {
               </div>
               <button onClick={() => setPreview(null)} className="text-xs text-muted-foreground hover:text-foreground">Schließen</button>
             </div>
-            <iframe src={slideSrcUrl(preview.url)} className="flex-1 w-full bg-background" />
+            {localHtmlFsPath(preview.url) ? (
+              previewLaedt ? (
+                <div className="flex-1 flex items-center justify-center text-xs text-muted-foreground">Seite wird gelesen …</div>
+              ) : previewHtml?.html ? (
+                <>
+                  {/* Über das eigene Protokoll als richtige Seite — sonst laufen weder
+                      Modul-Skripte noch Importmaps (three.js & Co.). */}
+                  <iframe title={preview.title || 'HTML'} src={slideProtocolUrl(localHtmlFsPath(preview.url) || '')} className="flex-1 w-full bg-white" />
+                  {previewHtml.fehlend.length > 0 && (
+                    <div className="shrink-0 px-4 py-2 border-t border-border text-[11px] text-foreground">
+                      <b>{previewHtml.fehlend.length} Datei(en) fehlen</b> und bleiben in der Folie leer:{' '}
+                      <span className="font-mono">{previewHtml.fehlend.slice(0, 6).join(', ')}</span>
+                      {previewHtml.fehlend.length > 6 && ' …'}
+                      <span className="text-muted-foreground"> — müssen im selben Ordner wie die HTML-Datei liegen.</span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex-1 flex items-center justify-center text-xs text-foreground px-6 text-center">
+                  Die Datei konnte nicht gelesen werden. Liegt sie auf dem Netzlaufwerk und ist sie noch vorhanden?
+                </div>
+              )
+            ) : (
+              <iframe src={slideSrcUrl(preview.url)} className="flex-1 w-full bg-background" />
+            )}
           </div>
         </div>
       )}
@@ -1911,6 +1977,8 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
   // only render on the machine it was picked on (black screen everywhere else).
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState('')
+  // Rückmeldung zum HTML-Upload: wie viele Beilagen mitkamen, was fehlte.
+  const [uploadHinweis, setUploadHinweis] = useState('')
 
   async function pickFile() {
     let path: string | null = null
@@ -1927,6 +1995,23 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
     }
     setUploading(true)
     try {
+      // HTML-Seiten verweisen auf Bilder, Stylesheets und Schriften nebenan. Die müssen
+      // mit aufs Netzlaufwerk, sonst käme beim Anzeige-PC eine halbe Seite an.
+      if (/.html?$/i.test(path)) {
+        const res = await uploadHtmlMitDateien(path)
+        if (res.ok) {
+          onPatch({ url: res.uncPath })
+          setUploadHinweis(res.fehlend.length > 0
+            ? `${res.mitgenommen} zugehörige Datei(en) mitkopiert — ${res.fehlend.length} nicht gefunden: ${res.fehlend.slice(0, 4).join(', ')}${res.fehlend.length > 4 ? ' …' : ''}. Diese bleiben in der Folie leer.`
+            : res.mitgenommen > 0
+              ? `${res.mitgenommen} zugehörige Datei(en) mitkopiert (Bilder, Stylesheets, Schriften).`
+              : '')
+        } else {
+          onPatch({ url: path })
+          setUploadError(`Upload aufs Netzlaufwerk fehlgeschlagen (${res.error}). Die Folie zeigt die Datei nur auf diesem PC an.`)
+        }
+        return
+      }
       const res = await uploadMediaToShare(path)
       if (res.ok) {
         onPatch({ url: withPdfViewParams(res.uncPath) })
@@ -2079,6 +2164,14 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
           {uploadError && (
             <p className="text-[10px] text-red-400 flex items-center gap-1">
               <AlertTriangle size={10} className="shrink-0" /> {uploadError}
+            </p>
+          )}
+          {/* HTML-Upload: was mitkam und was fehlt. Fehlende Dateien bleiben in der
+              Folie leer — das soll man erfahren, bevor es auf der Wand auffällt. */}
+          {uploadHinweis && (
+            <p className="text-[10px] text-foreground flex items-start gap-1">
+              <Info size={10} className="shrink-0 mt-0.5" /> {uploadHinweis}
+              <button onClick={() => setUploadHinweis('')} className="ml-auto text-muted-foreground hover:text-foreground">×</button>
             </p>
           )}
           {!uploading && !uploadError && isLocalDrivePath(slide.url) && (

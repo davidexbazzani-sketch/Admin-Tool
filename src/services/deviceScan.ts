@@ -1,8 +1,12 @@
-// ── Geräte-Scan: IP / MAC / Seriennummer (alle 3 Tage 15:00 + manuell) ────────
-// Liest für alle Inventar-Geräte (Server, Computer, Drucker) IP-Adresse,
-// MAC-Adresse und — wenn möglich — die Seriennummer aus und hinterlegt sie in
-// den Stammdaten: Computer/Server im Inventar (inventory.json), Drucker in ihrem
-// Drucker-Dossier (master.ip/mac).
+// ── Geräte-Scan: IP / MAC / Seriennummer (Mo + Do 15:00 + manuell) ───────────
+// Liest für Server und Computer IP-Adresse, MAC-Adresse und — wenn möglich — die
+// Seriennummer aus und hinterlegt sie im Inventar (inventory.json).
+//
+// DRUCKER SIND AUSGENOMMEN. Ihre Stammdaten (IP, MAC, Seriennummer, Modell, ERP-ID)
+// kommen aus dem Drucker-Import der ERP-Liste in der Standort-Übersicht und dürfen
+// nicht von einer SNMP-Abfrage überschrieben werden. Die IP der Drucker pflegt der
+// eigene Drucker-IP-Scan (printerIpScan.ts) — und auch der nur, wenn der Drucker
+// unter der hinterlegten Adresse nicht mehr antwortet.
 //
 // Ablauf (voll, gedrosselt nach den Performance-Regeln):
 //   1) Hostname → IP per DNS (host-keyed).
@@ -19,7 +23,6 @@ import type { InventoryItem } from '../types/auth'
 import { pingBatch } from './userPresenceScan'
 import { readArpTable } from './vlans'
 import { serialFromHostname } from './deviceMasterData'
-import { loadPrinterDossier, savePrinterMaster } from './printerDossier'
 import { ensureWinRM } from '../utils/winrmUtils'
 
 const DEVICE_SCAN_SCHEDULE = 'device_scan/schedule.json'
@@ -75,38 +78,6 @@ export function isDeviceScanClaimed(s: DeviceScanSchedule, now = Date.now()): bo
 function psList(items: string[]): string { return items.map(h => `'${h.replace(/'/g, "''")}'`).join(',') }
 function normMac(m?: string): string { return (m || '').trim().replace(/-/g, ':').toUpperCase() }
 
-// Hex (12 Zeichen) → 'AA:BB:CC:DD:EE:FF'; leer bei ungültig oder 00:00:…
-function hexToMac(hex?: string): string {
-  const h = (hex || '').replace(/[^0-9a-fA-F]/g, '')
-  if (h.length !== 12 || /^0{12}$/i.test(h)) return ''
-  return (h.match(/.{2}/g) || []).join(':').toUpperCase()
-}
-
-// Drucker-MAC + Seriennummer per SNMP (routet über Subnetze — anders als ARP):
-//   MAC   = ifPhysAddress (1.3.6.1.2.1.2.2.1.6, erster echter 6-Byte-Wert)
-//   Serial= prtGeneralSerialNumber (Printer-MIB 1.3.6.1.2.1.43.5.1.1.17)
-async function snmpPrinterInfo(ip: string, community: string): Promise<{ mac?: string; serial?: string }> {
-  const out: { mac?: string; serial?: string } = {}
-  try {
-    const r = await api().snmpQuery({ host: ip, op: 'walk', oid: '1.3.6.1.2.1.2.2.1.6', version: 'v2c', community, timeoutMs: 2500, retries: 1 })
-    if (r.success && r.varbinds) {
-      for (const vb of r.varbinds) { const mac = hexToMac(vb.hex); if (mac) { out.mac = mac; break } }
-    }
-  } catch { /* kein SNMP */ }
-  try {
-    const r = await api().snmpQuery({ host: ip, op: 'get', oids: ['1.3.6.1.2.1.43.5.1.1.17.1'], version: 'v2c', community, timeoutMs: 2500, retries: 1 })
-    let s = ''
-    const vb0 = r.success && r.varbinds ? r.varbinds[0] : undefined
-    if (vb0 && vb0.type !== 'error' && typeof vb0.value === 'string') s = vb0.value.trim()
-    if (!s) {
-      const rw = await api().snmpQuery({ host: ip, op: 'walk', oid: '1.3.6.1.2.1.43.5.1.1.17', version: 'v2c', community, timeoutMs: 2500, retries: 1 })
-      const hit = rw.success && rw.varbinds ? rw.varbinds.find(v => typeof v.value === 'string' && v.value.trim()) : undefined
-      if (hit && typeof hit.value === 'string') s = hit.value.trim()
-    }
-    if (s && s.toLowerCase() !== 'null') out.serial = s
-  } catch { /* keine Serial */ }
-  return out
-}
 
 /** Hostname → IPv4 per DNS, host-keyed (Schlüssel = UPPERCASE-Hostname). */
 async function resolveHostIpMap(hosts: string[]): Promise<Map<string, string>> {
@@ -202,20 +173,22 @@ async function winrmMachineInfo(hosts: string[], onAdvance?: (n: number) => void
 export async function runDeviceScan(by: string, onProgress?: (done: number, total: number) => void): Promise<{ scanned: number; updated: number }> {
   const inv = (await api().netReadJson<InventoryItem[]>(INVENTORY_FILE)) ?? []
   const all = (Array.isArray(inv) ? inv : []).filter(i => i.name && i.name.trim())
+  // NUR Computer und Server. Drucker sind bewusst ausgenommen: ihre Stammdaten
+  // (IP, MAC, Seriennummer, Modell) kommen aus dem Drucker-Import der ERP-Liste und
+  // duerfen nicht von einer SNMP-Abfrage ueberschrieben werden.
   const machines = all.filter(i => { const c = (i.category || '').toLowerCase(); return c === 'computer' || c === 'server' })
-  const printers = all.filter(i => (i.category || '').toLowerCase() === 'drucker')
-  const total = machines.length + printers.length
+  const total = machines.length
   let done = 0
   const bump = (n = 1) => { done += n; onProgress?.(done, total) }
   const nameOf = (i: InventoryItem) => i.name.trim()
   const upKey = (i: InventoryItem) => nameOf(i).toUpperCase()
 
   // 1) DNS host→ip
-  const hostIp = await resolveHostIpMap(all.map(nameOf))
+  const hostIp = await resolveHostIpMap(machines.map(nameOf))
   const ipFor = (i: InventoryItem) => (i.ip || '').trim() || hostIp.get(upKey(i)) || ''
 
   // 2) Ping-Sweep (füllt ARP) + ARP-Tabelle
-  const ips = [...new Set(all.map(ipFor).filter(Boolean))]
+  const ips = [...new Set(machines.map(ipFor).filter(Boolean))]
   let up = new Set<string>()
   try { const r = await pingBatch(ips, 500); up = new Set(r.up) } catch { /* egal */ }
   let arp = new Map<string, string>()
@@ -250,32 +223,6 @@ export async function runDeviceScan(by: string, onProgress?: (done: number, tota
     if (advance) bump()
   }
   if (machines.length) { try { await api().netWriteJson(INVENTORY_FILE, freshArr) } catch { /* offline */ } }
-
-  // 5) Drucker: IP (DNS/Inventar) + MAC/Serial per SNMP (routet über Subnetze),
-  //    ARP nur als MAC-Fallback im eigenen Subnetz. In 8er-Batches (SNMP ist I/O-lastig).
-  const SNMP_BATCH = 8
-  for (let i = 0; i < printers.length; i += SNMP_BATCH) {
-    const chunk = printers.slice(i, i + SNMP_BATCH)
-    const results = await Promise.all(chunk.map(async p => {
-      try {
-        const ip = ipFor(p)
-        const dossier = await loadPrinterDossier(p.name)
-        const master = { ...(dossier?.master || {}) }
-        const community = (master.snmpCommunity || '').trim() || 'public'
-        const snmp = ip ? await snmpPrinterInfo(ip, community) : {}
-        const mac = normMac(snmp.mac || (ip ? arp.get(ip) : '') || '')
-        const serial = (snmp.serial || '').trim()
-        let ch = false
-        if (ip && master.ip !== ip) { master.ip = ip; ch = true }
-        if (mac && master.mac !== mac) { master.mac = mac; ch = true }
-        if (serial && master.serial !== serial) { master.serial = serial; ch = true }
-        if (ch) { await savePrinterMaster(p.name, master, by); return true }
-      } catch { /* nächster Drucker */ }
-      return false
-    }))
-    updated += results.filter(Boolean).length
-    bump(chunk.length)
-  }
 
   return { scanned: total, updated }
 }

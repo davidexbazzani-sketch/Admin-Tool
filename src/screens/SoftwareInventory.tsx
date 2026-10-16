@@ -3,9 +3,10 @@ import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import {
   Plus, X, Play, Download, Monitor, List, Loader,
   CheckCircle, XCircle, AlertTriangle, Package, Info,
-  Database, Trash2, RefreshCw, Clock, Zap, Layers, HelpCircle,
+  Database, Trash2, RefreshCw, Clock, Zap, Layers, HelpCircle, Search,
 } from 'lucide-react'
 import ExcelJS from 'exceljs'
+import SoftwareSuche from '../components/softwareInventory/SoftwareSuche'
 import { api } from '../electronAPI'
 import type { PSResult } from '../electronAPI'
 import { useIsMasterAdmin } from '../store/authStore'
@@ -228,7 +229,13 @@ async function loadInventoryHostnames(): Promise<string[]> {
 // Component
 // ══════════════════════════════════════════════════════════════════════════════
 
+// Hülle: Scan-Ansicht (bisheriger Screen) ↔ „Software suchen" (Suche + Export mit Karten)
 export default function SoftwareInventory() {
+  const [suche, setSuche] = useState(false)
+  return suche ? <SoftwareSuche onBack={() => setSuche(false)} /> : <SoftwareInventarScan onSuche={() => setSuche(true)} />
+}
+
+function SoftwareInventarScan({ onSuche }: { onSuche: () => void }) {
   const isMaster = useIsMasterAdmin()
 
   // ── Host list ──────────────────────────────────────────────────────────────
@@ -688,6 +695,10 @@ export default function SoftwareInventory() {
           <p className="text-sm text-muted-foreground mt-1">
             Unternehmensweiter Software-Scan mit Excel-Export
           </p>
+          <button onClick={onSuche} title="Software suchen: auf welchen PCs ist sie installiert? Mit Corp-ID, Name, Modell, Standort — Export als PDF/Excel mit Karte"
+            className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90">
+            <Search size={13} />Software suchen
+          </button>
         </div>
         {/* Persistent data info */}
         {!persistLoading && persistent && persistent.scannedPCs.length > 0 && scan.phase === 'idle' && (
@@ -772,7 +783,7 @@ export default function SoftwareInventory() {
                       }}
                       data-hostinput
                       className={`flex-1 px-3 py-1.5 text-sm rounded-md border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors ${isAlreadyScanned ? 'border-green-500/40 bg-green-500/5' : 'border-border'}`} />
-                    {isAlreadyScanned && <CheckCircle size={14} className="text-green-400 shrink-0" title="Bereits erfasst" />}
+                    {isAlreadyScanned && <span title="Bereits erfasst" className="shrink-0"><CheckCircle size={14} className="text-green-400" /></span>}
                     <button onClick={() => setHosts(prev => prev.length > 1 ? prev.filter((_, i) => i !== idx) : prev)} disabled={hosts.length <= 1}
                       className="w-7 h-7 flex items-center justify-center rounded border border-border text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-colors disabled:opacity-30">
                       <X size={13} />

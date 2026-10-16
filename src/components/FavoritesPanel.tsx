@@ -323,8 +323,12 @@ export default function FavoritesPanel() {
                               <span className="font-mono text-foreground truncate block text-[11px]"><span className="inline-flex items-center gap-1">{d.hostname}{d.hostname && <DeviceInfoButton hostname={d.hostname} />}</span></span>
                               {d.label && <span className="text-[9px] text-muted-foreground truncate block">{d.label}</span>}
                             </div>
+                            <button onClick={() => handleRemoveDevice(d.hostname)} title="Aus Favoriten entfernen"
+                              className="p-0.5 rounded hover:bg-red-500/10 text-muted-foreground hover:text-red-400 shrink-0">
+                              <Trash2 size={11} />
+                            </button>
                             <button onClick={() => { setMenuHost(menuHost === d.hostname ? null : d.hostname); setMenuSkill(null) }}
-                              className="p-0.5 rounded hover:bg-accent text-muted-foreground opacity-0 group-hover:opacity-100 shrink-0">
+                              className="p-0.5 rounded hover:bg-accent text-muted-foreground shrink-0">
                               <MoreVertical size={11} />
                             </button>
                           </>
@@ -376,6 +380,10 @@ export default function FavoritesPanel() {
                           <span className="text-foreground truncate block text-[11px]">{s.label}</span>
                           <span className="text-[9px] text-muted-foreground truncate block">{s.category}</span>
                         </div>
+                        <button onClick={() => handleRemoveSkill(s.skillId)} title="Aus Favoriten entfernen"
+                          className="p-0.5 rounded hover:bg-red-500/10 text-muted-foreground hover:text-red-400 shrink-0">
+                          <Trash2 size={11} />
+                        </button>
                         <button onClick={() => { setMenuSkill(menuSkill === s.skillId ? null : s.skillId); setMenuHost(null) }}
                           className="p-0.5 rounded hover:bg-accent text-muted-foreground shrink-0">
                           <MoreVertical size={11} />

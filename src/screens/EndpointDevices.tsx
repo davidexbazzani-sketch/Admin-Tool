@@ -3,7 +3,7 @@ import {
   MonitorSmartphone, Search, RefreshCw, Upload, Loader2, Filter, ListFilter,
   Building2, Cpu, Wallet, Activity, X, FileDown, Users, Mail, Send, CheckCircle2, AlertTriangle, ChevronRight, CheckSquare,
   History, Wifi, WifiOff, Save, FolderOpen, FileText, Trash2, Pencil, ArrowLeft,
-  Paperclip, ClipboardCheck, ExternalLink,
+  Paperclip, ClipboardCheck, ExternalLink, MapPin,
 } from 'lucide-react'
 import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
 import { api } from '../electronAPI'
@@ -27,8 +27,13 @@ import { batchAdLookup, type AdLookupResult } from '../services/adUserLookup'
 import { ensureDailyAdUsers, buildNameIndex, lookupUserByName, reverseCommaName } from '../services/adUserDirectory'
 import type { AdUserListItem } from '../services/adUsersList'
 import { ColumnFilter } from './UserOverview'
+import { spaltenFilter, type Spalte } from '../utils/spaltenFilter'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
+import { loadLocationLookup, type LocationHit } from '../services/deviceMaps'
+import { useMapIntentStore } from '../store/mapIntentStore'
+import { useAppStore } from '../store/appStore'
+import type { Screen } from '../types'
 
 // Benutzer aus der zentralen Benutzer-Uebersicht in das AD-Lookup-Format bringen.
 function userToLookup(name: string, u?: AdUserListItem): AdLookupResult {
@@ -155,6 +160,13 @@ export default function EndpointDevices() {
   const [fSubstate, setFSubstate] = useState<Set<string>>(new Set())
   const [fCompany, setFCompany] = useState<Set<string>>(new Set())
   const [fOwner, setFOwner] = useState<Set<string>>(new Set())
+  const [fLocation, setFLocation] = useState<Set<string>>(new Set())
+
+  // Standort-Lookup (aus den 3 Karten, EINMAL geladen → In-Memory-Nachschlag pro Zeile)
+  const [locOf, setLocOf] = useState<((h?: string, s?: string) => LocationHit | null) | null>(null)
+  useEffect(() => { loadLocationLookup().then(fn => setLocOf(() => fn)).catch(() => {}) }, [])
+  const NO_LOC = 'Ohne Standort'
+  const locLabel = (d: EndpointDevice) => (locOf?.(d.hostname, d.serial)?.label) ?? NO_LOC
 
   async function reload() {
     setLoading(true)
@@ -174,35 +186,40 @@ export default function EndpointDevices() {
   // Berichts (dann arbeitet man "im Bericht").
   const baseDevices = openReport ? openReport.devices : devices
 
-  // Distinct-Werte je Filterspalte (Wert -> Anzahl)
-  function distinct(sel: (d: EndpointDevice) => string): Map<string, number> {
-    const m = new Map<string, number>()
-    for (const d of baseDevices) { const v = sel(d); m.set(v, (m.get(v) ?? 0) + 1) }
-    return m
-  }
-  const dModel = useMemo(() => distinct(d => classifyModel(d.model)), [baseDevices])
-  const dState = useMemo(() => distinct(d => d.state), [baseDevices])
-  const dSubstate = useMemo(() => distinct(d => d.substate), [baseDevices])
-  const dCompany = useMemo(() => distinct(d => d.company), [baseDevices])
-  const dOwner = useMemo(() => distinct(d => d.assetOwnership), [baseDevices])
+  // Spalten EINMAL deklariert — Filtern und Zählen benutzen denselben Ausleser.
+  // Die Zahlen in den Aufklapplisten beziehen sich damit auf die aktuelle Auswahl
+  // (jede Spalte rechnet alle ANDEREN Filter mit, ihren eigenen nicht) — siehe
+  // src/utils/spaltenFilter.ts.
+  const spalten = useMemo<Spalte<EndpointDevice>[]>(() => [
+    { id: 'model', werte: d => [classifyModel(d.model)], gewaehlt: fModel },
+    { id: 'state', werte: d => [d.state], gewaehlt: fState },
+    { id: 'substate', werte: d => [d.substate], gewaehlt: fSubstate },
+    { id: 'company', werte: d => [d.company], gewaehlt: fCompany },
+    { id: 'owner', werte: d => [d.assetOwnership], gewaehlt: fOwner },
+    { id: 'location', werte: d => [locLabel(d)], gewaehlt: fLocation },
+    // locOf wird nachgeladen → gehört in die Abhängigkeiten, sonst bleiben die
+    // Standort-Zahlen auf dem Stand vor dem Laden stehen.
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  ], [fModel, fState, fSubstate, fCompany, fOwner, fLocation, locOf])
 
-  const anyFilter = fModel.size || fState.size || fSubstate.size || fCompany.size || fOwner.size || search.trim()
+  const anyFilter = fModel.size || fState.size || fSubstate.size || fCompany.size || fOwner.size || fLocation.size || search.trim()
 
-  const filtered = useMemo(() => {
+  const { zeilen: filtered, werte } = useMemo(() => {
     const q = search.trim().toLowerCase()
-    return baseDevices.filter(d => {
-      if (q && !([d.serial, d.hostname, d.assignedTo, d.model, d.comments].some(v => v.toLowerCase().includes(q)))) return false
-      if (fModel.size && !fModel.has(classifyModel(d.model))) return false
-      if (fState.size && !fState.has(d.state)) return false
-      if (fSubstate.size && !fSubstate.has(d.substate)) return false
-      if (fCompany.size && !fCompany.has(d.company)) return false
-      if (fOwner.size && !fOwner.has(d.assetOwnership)) return false
-      return true
-    })
-  }, [baseDevices, search, fModel, fState, fSubstate, fCompany, fOwner])
+    return spaltenFilter(baseDevices, spalten, d =>
+      !q || [d.serial, d.hostname, d.assignedTo, d.model, d.comments, locLabel(d)]
+        .some(v => v.toLowerCase().includes(q)))
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, [baseDevices, spalten, search, locOf])
 
   function resetFilters() {
-    setSearch(''); setFModel(new Set()); setFState(new Set()); setFSubstate(new Set()); setFCompany(new Set()); setFOwner(new Set())
+    setSearch(''); setFModel(new Set()); setFState(new Set()); setFSubstate(new Set()); setFCompany(new Set()); setFOwner(new Set()); setFLocation(new Set())
+  }
+
+  // Navigation zur Karte + Marker fokussieren (Vorbild goLocation in DeviceDossier)
+  function goToMap(mapId: Screen, host: string) {
+    useMapIntentStore.getState().setIntent({ screen: mapId, hostname: host, mode: 'focus' })
+    useAppStore.getState().setScreen(mapId)
   }
 
   // Kostensumme der aktuell gefilterten Auswahl (nur Geräte mit bekanntem Model-Typ)
@@ -584,6 +601,7 @@ IT Support Marine`
       const res = await exportEndpointDevices(devicesToExport, format, {
         title: openReport ? `Endgeräte-Übersicht – ${openReport.name}` : undefined,
         lastOnline: offlineMode ? loMapToObject() : undefined,
+        locText: locOf ? (d) => { const l = locOf(d.hostname, d.serial); return l ? (l.arbeitsplatz ? `${l.label} · ${l.roomLabel}: ${l.arbeitsplatz}` : l.label) : '' } : undefined,
       })
       if (!res.ok && !res.cancelled) setImportStatus(res.error || 'Export fehlgeschlagen.')
     } finally { setExporting(null) }
@@ -853,11 +871,12 @@ IT Support Marine`
         <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mx-1">
           <Filter size={11} />Filter
         </span>
-        <ColumnFilter label="Model Type" icon={<Cpu size={11} />}     values={dModel}    selected={fModel}    onChange={setFModel} />
-        <ColumnFilter label="Status"     icon={<Activity size={11} />} values={dState}    selected={fState}    onChange={setFState} />
-        <ColumnFilter label="Verwendung" icon={<ListFilter size={11} />} values={dSubstate} selected={fSubstate} onChange={setFSubstate} />
-        <ColumnFilter label="Unternehmen" icon={<Building2 size={11} />} values={dCompany}  selected={fCompany}  onChange={setFCompany} />
-        <ColumnFilter label="Wer bezahlt?" icon={<Wallet size={11} />}  values={dOwner}    selected={fOwner}    onChange={setFOwner} />
+        <ColumnFilter label="Model Type" icon={<Cpu size={11} />}     values={werte.model}    selected={fModel}    onChange={setFModel} />
+        <ColumnFilter label="Status"     icon={<Activity size={11} />} values={werte.state}    selected={fState}    onChange={setFState} />
+        <ColumnFilter label="Verwendung" icon={<ListFilter size={11} />} values={werte.substate} selected={fSubstate} onChange={setFSubstate} />
+        <ColumnFilter label="Unternehmen" icon={<Building2 size={11} />} values={werte.company}  selected={fCompany}  onChange={setFCompany} />
+        <ColumnFilter label="Wer bezahlt?" icon={<Wallet size={11} />}  values={werte.owner}    selected={fOwner}    onChange={setFOwner} />
+        <ColumnFilter label="Standort"   icon={<MapPin size={11} />}   values={werte.location} selected={fLocation} onChange={setFLocation} />
         {anyFilter ? (
           <button onClick={resetFilters} className="flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30">
             <X size={11} />Filter zurücksetzen
@@ -1211,6 +1230,7 @@ IT Support Marine`
                 <th className="px-3 py-2">Model-Typ</th>
                 <th className="px-3 py-2">Status</th>
                 <th className="px-3 py-2">Verwendung</th>
+                <th className="px-3 py-2">Standort</th>
                 <th className="px-3 py-2">Kommentar zum Asset</th>
                 <th className="px-3 py-2">Leasingende</th>
                 <th className="px-3 py-2">Unternehmen</th>
@@ -1233,6 +1253,13 @@ IT Support Marine`
                     </td>
                     <td className="px-3 py-2 text-muted-foreground">{d.state || '—'}</td>
                     <td className="px-3 py-2 text-muted-foreground">{d.substate || '—'}</td>
+                    <td className="px-3 py-2">
+                      {(() => { const loc = locOf?.(d.hostname, d.serial); return loc
+                        ? <button onClick={() => goToMap(loc.mapId, d.hostname)} title="Auf der Karte anzeigen"
+                            className="inline-flex items-center gap-1 text-primary hover:underline">
+                            <MapPin size={11} />{loc.label}{loc.arbeitsplatz ? ` · ${loc.roomLabel}: ${loc.arbeitsplatz}` : ''}</button>
+                        : <span className="text-muted-foreground">—</span> })()}
+                    </td>
                     <td className="px-3 py-2 text-muted-foreground max-w-[22rem] truncate" title={d.comments || undefined}>{d.comments || '—'}</td>
                     <td className="px-3 py-2 text-muted-foreground">{d.retiredDate || '—'}</td>
                     <td className="px-3 py-2 text-muted-foreground">{d.company || '—'}</td>
@@ -1241,7 +1268,7 @@ IT Support Marine`
                 )
               })}
               {filtered.length === 0 && (
-                <tr><td colSpan={11} className="px-3 py-10 text-center text-muted-foreground">Keine Geräte entsprechen den Filtern.</td></tr>
+                <tr><td colSpan={12} className="px-3 py-10 text-center text-muted-foreground">Keine Geräte entsprechen den Filtern.</td></tr>
               )}
             </tbody>
           </table>

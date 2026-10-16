@@ -40,6 +40,7 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
   const [adProgress, setAdProgress] = useState<{ done: number; total: number } | null>(null)
 
   const [search, setSearch] = useState('')
+  const [onlyManual, setOnlyManual] = useState(false)
   const [exportOpen, setExportOpen] = useState(false)
   const [exporting, setExporting] = useState(false)
 
@@ -70,16 +71,22 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
   const missing = useMemo(() => (run?.devices || []).filter(d => !d.scanned), [run])
   const lateFound = useMemo(() => (run?.devices || []).filter(d => d.lateFound), [run])
   const scanned = useMemo(() => (run?.devices || []).filter(d => d.scanned), [run])
+  const captureCounts = useMemo(() => {
+    let scan = 0, manual = 0
+    for (const d of scanned) { if (d.capture === 'scan') scan++; else if (d.capture === 'manual') manual++ }
+    return { scan, manual }
+  }, [scanned])
   const filteredScanned = useMemo(() => {
     const q = search.trim().toLowerCase()
-    if (!q) return scanned
-    return scanned.filter(d =>
+    let list = onlyManual ? scanned.filter(d => d.capture === 'manual') : scanned
+    if (q) list = list.filter(d =>
       d.serial.toLowerCase().includes(q)
       || d.deviceType.toLowerCase().includes(q)
       || d.company.toLowerCase().includes(q)
       || d.comment.toLowerCase().includes(q),
     )
-  }, [scanned, search])
+    return list
+  }, [scanned, search, onlyManual])
   const filteredMissing = useMemo(() => {
     const q = search.trim().toLowerCase()
     if (!q) return missing
@@ -186,6 +193,7 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
           <h1 className="text-base font-semibold text-foreground leading-tight truncate">{run.title}</h1>
           <p className="text-[11px] text-muted-foreground">
             {run.status === 'completed' ? 'Abgeschlossen' : 'Offen'} · {scannedCount}/{run.devices.length} erfasst · {missing.length} fehlend{lateFound.length > 0 && <> · {lateFound.length} nachgefunden</>}
+            {(captureCounts.scan + captureCounts.manual) > 0 && <> · <span className="text-blue-300">{captureCounts.scan} gescannt</span> / <span className="text-amber-300">{captureCounts.manual} manuell</span></>}
             <span className="ml-2 opacity-70">· Stand {fmtDate(run.updatedAt)}</span>
           </p>
         </div>
@@ -270,6 +278,12 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
       {/* Such-/Info-Leiste */}
       <div className="flex items-center gap-2 px-5 py-2 border-b border-border mt-3 shrink-0">
         <span className="text-[11px] text-muted-foreground">{run.extras.length} unerwartet · {missing.length} fehlend · {scannedCount} erfasst</span>
+        {captureCounts.manual > 0 && (
+          <button onClick={() => setOnlyManual(v => !v)}
+            className={`inline-flex items-center gap-1 px-2 py-0.5 text-[11px] rounded-md border ${onlyManual ? 'border-amber-500/50 bg-amber-500/10 text-amber-200' : 'border-border text-muted-foreground hover:bg-accent/30'}`}>
+            Nur manuell ({captureCounts.manual})
+          </button>
+        )}
         <div className="relative ml-auto">
           <SearchIcon size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Filtern…" className="w-56 pl-6 pr-2 py-1 rounded-md bg-card border border-border text-xs" />
@@ -327,6 +341,7 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
                     <span className="font-mono text-foreground truncate">{d.serial}</span>
                     <DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} />
                     {d.lateFound && <span className="text-[9px] px-1 rounded-full bg-emerald-500 text-black">nachträglich</span>}
+                    {d.capture && <span className={`ml-auto shrink-0 text-[9px] px-1.5 py-0.5 rounded border ${d.capture === 'scan' ? 'bg-blue-500/15 text-blue-300 border-blue-500/30' : 'bg-amber-500/15 text-amber-300 border-amber-500/30'}`}>{d.capture === 'scan' ? 'Scan' : 'Manuell'}</span>}
                   </div>
                   <div className="text-[10px] text-muted-foreground truncate">{[d.deviceType, d.company].filter(Boolean).join(' · ') || '—'}</div>
                 </div>

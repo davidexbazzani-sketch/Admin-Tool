@@ -2,12 +2,14 @@ import { app, BrowserWindow, ipcMain, dialog, shell, Menu, screen as electronScr
 import { join } from 'path'
 import { spawn, execFileSync, execFile, type ChildProcess } from 'child_process'
 import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync, statSync, unlinkSync } from 'fs'
+import { createHash } from 'crypto'
 import { userInfo, hostname, tmpdir } from 'os'
 import Store from 'electron-store'
 import { runPowerShell, killAllProcesses } from './powerShellRunner'
 import * as auth from './authManager'
 import * as ns from './networkStorage'
 import { registerKnowledgeSearchIpc } from './knowledgeSearchIpc'
+import { registriereSlideSchema, bedieneSlideProtokoll, erlaubeOrdner, setzeVendorOrdner } from './slideProtocol'
 
 // Wissenssuche-IPC (knowledge:load / knowledge:status) einmalig registrieren.
 registerKnowledgeSearchIpc()
@@ -284,7 +286,23 @@ function openPresentationWindow(opts?: { displayId?: number; previewPlaylistId?:
   })
 }
 
-app.whenReady().then(createWindow)
+// Das Folien-Schema muss vor dem Start angemeldet werden, sonst gilt es nicht als
+// sichere Herkunft (und Modul-Skripte/Importmaps in HTML-Folien funktionieren nicht).
+registriereSlideSchema()
+
+app.whenReady().then(() => {
+  // Offline-Kopie der Folien-Bibliotheken (three.js, GSAP …), siehe scripts/slideVendor.mjs
+  setzeVendorOrdner(isDev ? join(__dirname, '../public/slide-vendor') : join(__dirname, '../dist/slide-vendor'))
+  bedieneSlideProtokoll()
+  createWindow()
+})
+
+// Der Renderer gibt den Ordner einer HTML-Folie frei, bevor er sie anzeigt. Nur was
+// hier freigegeben ist, liefert skfslide:// aus.
+ipcMain.handle('slide:allowFolder', (_e, htmlPfad: string) => {
+  erlaubeOrdner(String(htmlPfad || ''))
+  return true
+})
 
 // Mutual-TLS: Firmen-Proxy (Zscaler) / SSL-Inspection oder ServiceNow selbst
 // verlangt beim TLS-Handshake ein CLIENT-Zertifikat. Fuer webContents (Fenster/
@@ -667,12 +685,98 @@ function snNavGet(win: BrowserWindow, url: string, extraHeaders: string): Promis
 
 ipcMain.handle('servicenow:certDiag', () => lastClientCertInfo)
 
+// ── ServiceNow OAuth 2.0 (Client-ID/-Secret vom HCL-Support) ──────────────────
+// Hat das Integrationskonto Client-ID + Secret, wird statt Basic Auth ein Bearer-
+// Token benutzt. Token-Abruf an /oauth_token.do — mit Benutzer/Passwort zuerst
+// grant_type=password (klassischer ServiceNow-Weg), sonst/danach client_credentials.
+// Abruf ebenfalls per fetch im versteckten Fenster (mTLS/Zscaler wie oben).
+// Token wird im Speicher gehalten bis kurz vor Ablauf; bei 401 einmal neu holen.
+type SnAuth = { user?: string; pass?: string; clientId?: string; clientSecret?: string }
+type SnRaw = { ok: boolean; status?: number; body?: string; error?: string }
+// Strukturierte Fehlerangaben für die Zugangsprüfung im Renderer (daraus entsteht
+// u. a. die englische Begründung für den ServiceNow-Support). Rohtexte von ServiceNow
+// bleiben unverändert; Zugangsdaten/Token sind NIE enthalten.
+type SnTokenAttempt = { grant: string; status: number; error?: string; description?: string; netError?: string }
+type SnDiag = {
+  method: 'oauth' | 'basic' | 'sso'
+  stage: 'connect' | 'token' | 'api'
+  status?: number
+  attempts?: SnTokenAttempt[]
+  snMessage?: string
+  snDetail?: string
+  netError?: string
+  table?: string
+}
+const snTokenCache = new Map<string, { token: string; exp: number }>()
+
+// Zugangsdaten von Copy&Paste-Artefakten befreien (Zeilenumbrüche/Tabs aus dem
+// Support-Chat) — häufige Ursache für ein fälschliches 401. Normale Leerzeichen
+// bleiben im Passwort erhalten; Benutzer/Client-ID/Secret zusätzlich außen trimmen.
+function snCleanAuth(a?: SnAuth) {
+  const strip = (s?: string) => (s || '').replace(/[\r\n\t]/g, '')
+  const user = strip(a?.user).trim()
+  const pass = strip(a?.pass)
+  const clientId = strip(a?.clientId).trim()
+  const clientSecret = strip(a?.clientSecret).trim()
+  const oauth = !!(clientId && clientSecret)
+  const basic = !oauth && !!(user && pass)
+  return { user, pass, clientId, clientSecret, oauth, basic }
+}
+
+function snWinFetch(win: BrowserWindow, url: string, init: Record<string, unknown>): Promise<SnRaw> {
+  const js = `(async()=>{try{const r=await fetch(${JSON.stringify(url)},${JSON.stringify(init)});const t=await r.text();return{ok:true,status:r.status,body:t}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
+  return win.webContents.executeJavaScript(js, true) as Promise<SnRaw>
+}
+
+async function snOAuthToken(win: BrowserWindow, origin: string, a: ReturnType<typeof snCleanAuth>, force = false): Promise<{ token?: string; error?: string; attempts?: SnTokenAttempt[] }> {
+  // Schlüssel enthält einen Hash ALLER Zugangsdaten — ein geändertes Secret/Passwort
+  // darf beim „Testen & speichern" nicht still das alte Token weiterbenutzen.
+  const key = origin + '|' + createHash('sha256').update([a.clientId, a.clientSecret, a.user, a.pass].join('\u0000')).digest('hex')
+  const hit = snTokenCache.get(key)
+  if (!force && hit && hit.exp > Date.now()) return { token: hit.token }
+  snTokenCache.delete(key)
+  const grants = a.user && a.pass ? ['password', 'client_credentials'] : ['client_credentials']
+  const errs: string[] = []
+  const attempts: SnTokenAttempt[] = []
+  for (const grant of grants) {
+    const p = new URLSearchParams({ grant_type: grant, client_id: a.clientId, client_secret: a.clientSecret })
+    if (grant === 'password') { p.set('username', a.user); p.set('password', a.pass) }
+    const r = await snWinFetch(win, origin + '/oauth_token.do', {
+      method: 'POST', cache: 'no-store', credentials: 'omit',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: p.toString(),
+    })
+    if (!r || !r.ok) {
+      errs.push(`${grant}: ${r?.error || 'Verbindungsfehler'}`)
+      attempts.push({ grant, status: 0, netError: r?.error || 'Verbindungsfehler' })
+      continue
+    }
+    let d: { access_token?: string; expires_in?: number | string; error?: string; error_description?: string } | null = null
+    try { d = r.body ? JSON.parse(r.body) : null } catch { d = null }
+    const status = r.status || 0
+    if (status >= 200 && status < 300 && d?.access_token) {
+      const ttl = Math.max(120, Number(d.expires_in) || 1800)
+      snTokenCache.set(key, { token: d.access_token, exp: Date.now() + (ttl - 60) * 1000 })
+      return { token: d.access_token }
+    }
+    const why = d?.error_description || d?.error || ''
+    // Bekannte ServiceNow-Antworten in Klartext übersetzen (Original bleibt dahinter stehen).
+    let klar = ''
+    if (/integration user is not configured/i.test(why)) klar = 'HCL muss am OAuth-Eintrag noch den „OAuth Application User“ hinterlegen'
+    else if (/invalid_client|client.*(not found|invalid)/i.test(why)) klar = 'Client ID oder Client Secret falsch'
+    else if (grant === 'password' && /access_denied|invalid_grant/i.test(why)) klar = 'Benutzername/Passwort für diesen OAuth-Client abgelehnt'
+    errs.push(`${grant}: ${klar ? klar + ' — ' : ''}HTTP ${status}${why ? ` (${why})` : ''}`)
+    attempts.push({ grant, status, error: d?.error, description: d?.error_description })
+  }
+  return { error: 'OAuth-Token nicht erhalten — ' + errs.join('; '), attempts }
+}
+
 ipcMain.handle('servicenow:request', async (_e, opts: {
   instanceUrl: string
   method?: 'GET' | 'POST' | 'PATCH'; table: string; sysId?: string
   query?: string; fields?: string; limit?: number; body?: unknown
-  auth?: { user: string; pass: string }
-}): Promise<{ success: boolean; status?: number; data?: unknown; error?: string; needsLogin?: boolean }> => {
+  auth?: SnAuth
+}): Promise<{ success: boolean; status?: number; data?: unknown; error?: string; needsLogin?: boolean; diag?: SnDiag }> => {
   try {
     const method = opts.method === 'PATCH' ? 'PATCH' : opts.method === 'POST' ? 'POST' : 'GET'
     const base = (opts.instanceUrl || '').trim().replace(/\/+$/, '')
@@ -692,18 +796,14 @@ ipcMain.handle('servicenow:request', async (_e, opts: {
     params.set('sysparm_exclude_reference_link', 'true')
     const url = origin + path + '?' + params.toString()
 
-    // Integrationskonto (Basic Auth) hat Vorrang; ohne Konto authentifiziert die
-    // SSO-Sitzung (Cookie). Transport IMMER ueber das versteckte Fenster —
-    // net.request scheitert am Firmenrechner an der Client-Zertifikat-Auswahl
-    // (Zscaler/mTLS, select-client-certificate feuert nur fuer webContents).
-    // Zugangsdaten von Copy&Paste-Artefakten befreien (Zeilenumbrüche/Tabs aus dem
-    // Support-Chat) — häufige Ursache für ein fälschliches 401. Normale Leerzeichen
-    // bleiben erhalten. Beim Benutzernamen zusätzlich außen trimmen.
-    const stripCtrl = (s: string) => (s || '').replace(/[\r\n\t]/g, '')
-    const cleanUser = stripCtrl(opts.auth?.user || '').trim()
-    const cleanPass = stripCtrl(opts.auth?.pass || '')
-    const usedBasic = !!(cleanUser && cleanPass)
-    const basicB64 = usedBasic ? Buffer.from(`${cleanUser}:${cleanPass}`, 'utf8').toString('base64') : ''
+    // Integrationskonto hat Vorrang: OAuth (Client-ID/-Secret) vor Basic Auth; ohne
+    // Konto authentifiziert die SSO-Sitzung (Cookie). Transport IMMER ueber das
+    // versteckte Fenster — net.request scheitert am Firmenrechner an der Client-
+    // Zertifikat-Auswahl (Zscaler/mTLS, select-client-certificate feuert nur fuer webContents).
+    const a = snCleanAuth(opts.auth)
+    const usedBasic = a.basic
+    const usedAccount = a.oauth || a.basic
+    const basicB64 = usedBasic ? Buffer.from(`${a.user}:${a.pass}`, 'utf8').toString('base64') : ''
     const extraHeaders = 'Accept: application/json' + (usedBasic ? '\nAuthorization: Basic ' + basicB64 : '')
 
     const win = ensureSnWindow()
@@ -718,51 +818,68 @@ ipcMain.handle('servicenow:request', async (_e, opts: {
 
     // Eigentliche Anfrage IMMER per same-origin fetch (GET wie POST/PATCH). Der
     // Authorization-Header wird hier zuverlässig als Request-Header gesendet.
-    // WICHTIG bei Basic Auth: Cookies WEGLASSEN (credentials:'omit') — sonst kann
-    // eine veraltete/ungültige SSO-Sitzung in derselben Partition das Integrations-
-    // konto überstimmen und ein falsches 401 liefern. Ohne Basic Auth (SSO)
-    // authentifiziert dagegen der Session-Cookie -> credentials:'include'.
-    const headers: Record<string, string> = { Accept: 'application/json' }
-    if (opts.body) headers['Content-Type'] = 'application/json'
-    if (usedBasic) headers.Authorization = 'Basic ' + basicB64
-    const init = {
-      method, headers,
-      body: opts.body ? JSON.stringify(opts.body) : undefined,
-      cache: 'no-store',
-      credentials: usedBasic ? 'omit' : 'include',
+    // WICHTIG mit Integrationskonto: Cookies WEGLASSEN (credentials:'omit') — sonst
+    // kann eine veraltete/ungültige SSO-Sitzung in derselben Partition das Konto
+    // überstimmen und ein falsches 401 liefern. Ohne Konto (SSO) authentifiziert
+    // dagegen der Session-Cookie -> credentials:'include'.
+    const authMethod: SnDiag['method'] = a.oauth ? 'oauth' : usedBasic ? 'basic' : 'sso'
+    let tokenAttempts: SnTokenAttempt[] | undefined
+    const send = async (forceToken: boolean): Promise<SnRaw> => {
+      const headers: Record<string, string> = { Accept: 'application/json' }
+      if (opts.body) headers['Content-Type'] = 'application/json'
+      if (a.oauth) {
+        const t = await snOAuthToken(win, origin, a, forceToken)
+        if (!t.token) { tokenAttempts = t.attempts; return { ok: false, error: t.error } }
+        headers.Authorization = 'Bearer ' + t.token
+      } else if (usedBasic) headers.Authorization = 'Basic ' + basicB64
+      return snWinFetch(win, url, {
+        method, headers,
+        body: opts.body ? JSON.stringify(opts.body) : undefined,
+        cache: 'no-store',
+        credentials: usedAccount ? 'omit' : 'include',
+      })
     }
-    const js = `(async()=>{try{const r=await fetch(${JSON.stringify(url)},${JSON.stringify(init)});const t=await r.text();return{ok:true,status:r.status,body:t}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
-    const raw = await win.webContents.executeJavaScript(js, true) as { ok: boolean; status?: number; body?: string; error?: string }
+    let raw = await send(false)
+    // Abgelaufenes/widerrufenes Token: einmal frisch holen und wiederholen.
+    if (a.oauth && raw?.ok && raw.status === 401) raw = await send(true)
 
     if (!raw || !raw.ok) {
       let m = raw?.error || 'Anfrage fehlgeschlagen'
       if (/Failed to fetch|NetworkError|ERR_/i.test(m)) m = 'Verbindungsfehler bei der API-Anfrage: ' + m
-      return { success: false, error: m }
+      const diag: SnDiag = tokenAttempts
+        ? { method: authMethod, stage: 'token', attempts: tokenAttempts }
+        : { method: authMethod, stage: 'connect', netError: raw?.error || 'Anfrage fehlgeschlagen', table: opts.table }
+      return { success: false, error: m, diag }
     }
     let data: unknown
     try { data = raw.body ? JSON.parse(raw.body) : undefined } catch { data = raw.body }
     const status = raw.status || 0
     const hasResult = !!(data && typeof data === 'object' && 'result' in (data as Record<string, unknown>))
     if ((status >= 200 && status < 300) || (status === 0 && hasResult)) return { success: true, status: status || 200, data }
+    const snErr = (data as { error?: { message?: string; detail?: string } } | undefined)?.error
+    const apiDiag: SnDiag = { method: authMethod, stage: 'api', status, snMessage: snErr?.message, snDetail: snErr?.detail, table: opts.table }
 
     // Nicht angemeldet: 401 ODER es kam eine (SSO-)Anmeldeseite/HTML statt JSON zurueck.
     if (status === 401 || (!hasResult && snLooksLikeLogin(typeof raw.body === 'string' ? raw.body : ''))) {
-      if (usedBasic) {
+      if (usedAccount) {
         // Integrationskonto abgelehnt -> KEIN SSO-Prompt, sondern klare Meldung.
         // ServiceNows eigene Fehlermeldung (z. B. „User Not Authenticated") mit anzeigen —
         // hilft zu unterscheiden: falsches Passwort vs. Basic Auth für das Konto gesperrt.
         const snMsg = (data as { error?: { message?: string; detail?: string } } | undefined)?.error
         const detail = snMsg ? (snMsg.detail || snMsg.message || '') : ''
-        return { success: false, status: status || 401, error: 'Integrationskonto abgelehnt (401)' + (detail ? ` — ${detail}` : '') + ' — Benutzername/Passwort prüfen; das Konto muss auf DIESER Instanz existieren und Basic-Auth für die REST-API erlaubt sein.' }
+        const hint = a.oauth
+          ? ' — OAuth-Token wurde ausgestellt, aber von der Table-API abgelehnt (OAuth-Profil/Rollen des Kontos bei HCL prüfen).'
+          : ' — Benutzername/Passwort prüfen; das Konto muss auf DIESER Instanz existieren und Basic-Auth für die REST-API erlaubt sein.'
+        return { success: false, status: status || 401, error: 'Integrationskonto abgelehnt (401)' + (detail ? ` — ${detail}` : '') + hint, diag: { ...apiDiag, status: status || 401 } }
       }
-      return { success: false, status: status || 401, needsLogin: true, error: 'ServiceNow-SSO-Anmeldung erforderlich. Bitte im Zugang-Panel anmelden.' }
+      return { success: false, status: status || 401, needsLogin: true, error: 'ServiceNow-SSO-Anmeldung erforderlich. Bitte im Zugang-Panel anmelden.', diag: { ...apiDiag, status: status || 401 } }
     }
     let msg = `HTTP ${status}`
     if (status === 403) msg = 'Kein Zugriff (403) — ServiceNow-Rolle/Rechte für die Tabelle prüfen.'
     else if (status === 404) msg = 'Nicht gefunden (404) — Tabelle oder Instanz-URL prüfen.'
-    const em = (data as { error?: { message?: string } } | undefined)?.error?.message
+    const em = snErr?.message
     if (em) msg += ` — ${em}`
-    return { success: false, status, data, error: msg }
+    return { success: false, status, data, error: msg, diag: apiDiag }
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : String(err) }
   }
@@ -774,7 +891,7 @@ ipcMain.handle('servicenow:request', async (_e, opts: {
 // über das versteckte Fenster (mTLS). dataBase64 = das PDF Base64-kodiert.
 ipcMain.handle('servicenow:attach', async (_e, opts: {
   instanceUrl: string; table: string; sysId: string; fileName: string; contentType?: string; dataBase64: string
-  auth?: { user: string; pass: string }
+  auth?: SnAuth
 }): Promise<{ success: boolean; status?: number; sysId?: string; error?: string; needsLogin?: boolean }> => {
   try {
     const base = (opts.instanceUrl || '').trim().replace(/\/+$/, '')
@@ -790,11 +907,10 @@ ipcMain.handle('servicenow:attach', async (_e, opts: {
     const url = origin + '/api/now/attachment/file?' + params.toString()
     const ct = opts.contentType || 'application/pdf'
 
-    const stripCtrl = (s: string) => (s || '').replace(/[\r\n\t]/g, '')
-    const cleanUser = stripCtrl(opts.auth?.user || '').trim()
-    const cleanPass = stripCtrl(opts.auth?.pass || '')
-    const usedBasic = !!(cleanUser && cleanPass)
-    const basicB64 = usedBasic ? Buffer.from(`${cleanUser}:${cleanPass}`, 'utf8').toString('base64') : ''
+    const a = snCleanAuth(opts.auth)
+    const usedBasic = a.basic
+    const usedAccount = a.oauth || a.basic
+    const basicB64 = usedBasic ? Buffer.from(`${a.user}:${a.pass}`, 'utf8').toString('base64') : ''
     const extraHeaders = 'Accept: application/json' + (usedBasic ? '\nAuthorization: Basic ' + basicB64 : '')
 
     const win = ensureSnWindow()
@@ -803,10 +919,20 @@ ipcMain.handle('servicenow:attach', async (_e, opts: {
     if (!onOrigin) await snNavGet(win, origin + '/api/now/table/sys_user?sysparm_limit=1', extraHeaders)
 
     const b64 = (opts.dataBase64 || '').replace(/^data:[^,]*,/, '')
-    const authHeaderJs = usedBasic ? `,'Authorization':${JSON.stringify('Basic ' + basicB64)}` : ''
-    const credentials = usedBasic ? 'omit' : 'include'
-    const js = `(async()=>{try{const b64=${JSON.stringify(b64)};const bin=atob(b64);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);const r=await fetch(${JSON.stringify(url)},{method:'POST',headers:{'Accept':'application/json','Content-Type':${JSON.stringify(ct)}${authHeaderJs}},body:arr,cache:'no-store',credentials:${JSON.stringify(credentials)}});const t=await r.text();return{ok:true,status:r.status,body:t}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
-    const raw = await win.webContents.executeJavaScript(js, true) as { ok: boolean; status?: number; body?: string; error?: string }
+    const credentials = usedAccount ? 'omit' : 'include'
+    const send = async (forceToken: boolean): Promise<SnRaw> => {
+      let authz = usedBasic ? 'Basic ' + basicB64 : ''
+      if (a.oauth) {
+        const t = await snOAuthToken(win, origin, a, forceToken)
+        if (!t.token) return { ok: false, error: t.error }
+        authz = 'Bearer ' + t.token
+      }
+      const authHeaderJs = authz ? `,'Authorization':${JSON.stringify(authz)}` : ''
+      const js = `(async()=>{try{const b64=${JSON.stringify(b64)};const bin=atob(b64);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);const r=await fetch(${JSON.stringify(url)},{method:'POST',headers:{'Accept':'application/json','Content-Type':${JSON.stringify(ct)}${authHeaderJs}},body:arr,cache:'no-store',credentials:${JSON.stringify(credentials)}});const t=await r.text();return{ok:true,status:r.status,body:t}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
+      return win.webContents.executeJavaScript(js, true) as Promise<SnRaw>
+    }
+    let raw = await send(false)
+    if (a.oauth && raw?.ok && raw.status === 401) raw = await send(true)
     if (!raw || !raw.ok) return { success: false, error: 'Upload fehlgeschlagen: ' + (raw?.error || 'unbekannt') }
     let data: unknown
     try { data = raw.body ? JSON.parse(raw.body) : undefined } catch { data = raw.body }
@@ -815,7 +941,7 @@ ipcMain.handle('servicenow:attach', async (_e, opts: {
       const r = (data as { result?: { sys_id?: string } } | undefined)?.result
       return { success: true, status, sysId: r?.sys_id }
     }
-    if (status === 401) return { success: false, status, needsLogin: !usedBasic, error: usedBasic ? 'Integrationskonto abgelehnt (401) beim Upload.' : 'ServiceNow-Anmeldung erforderlich.' }
+    if (status === 401) return { success: false, status, needsLogin: !usedAccount, error: usedAccount ? 'Integrationskonto abgelehnt (401) beim Upload.' : 'ServiceNow-Anmeldung erforderlich.' }
     const em = (data as { error?: { message?: string } } | undefined)?.error?.message
     return { success: false, status, error: `Upload HTTP ${status}` + (em ? ` — ${em}` : '') }
   } catch (err) {
@@ -898,6 +1024,7 @@ ipcMain.handle('servicenow:login', async (_e, instanceUrl: string): Promise<{ su
 ipcMain.handle('servicenow:logout', async (): Promise<{ success: boolean }> => {
   try {
     if (snWindow && !snWindow.isDestroyed()) { snWindow.destroy(); snWindow = null }
+    snTokenCache.clear()
     await electronSession.fromPartition(SN_PARTITION).clearStorageData()
     return { success: true }
   } catch { return { success: false } }
@@ -1101,6 +1228,52 @@ ipcMain.handle('taskmgr:close', (_e, host?: string) => {
   return { success: true }
 })
 
+// ─── „Sound Fix" als eigenständiges Fenster (je Ziel-Host) ───────────────────
+// Gleiches Muster wie der Task-Manager: gleiches Bundle, Hash "#soundfix" +
+// "?host=<host>". Damit kann der Bediener im Hauptfenster weiterarbeiten,
+// während die Treibersuche/-installation hier nebenher läuft.
+const soundfixWindows = new Map<string, BrowserWindow>()
+function openSoundFixWindow(opts: { host: string; displayId?: number }) {
+  const host = (opts?.host || '').trim()
+  if (!host) return
+  const key = host.toLowerCase()
+  const existing = soundfixWindows.get(key)
+  if (existing && !existing.isDestroyed()) { existing.focus(); return }
+
+  const displays = electronScreen.getAllDisplays()
+  const primary = electronScreen.getPrimaryDisplay()
+  const requested = opts?.displayId != null ? displays.find(d => d.id === opts.displayId) : null
+  const target = requested ?? primary
+  const w = 860, h = 820
+  const bx = target.bounds.x + Math.max(0, Math.floor((target.bounds.width - w) / 2))
+  const by = target.bounds.y + Math.max(0, Math.floor((target.bounds.height - h) / 2))
+
+  const win = new BrowserWindow({
+    x: bx, y: by, width: w, height: h, minWidth: 620, minHeight: 480,
+    title: `Sound Fix — ${host}`,
+    frame: true, autoHideMenuBar: true, backgroundColor: '#0b0f17',
+    webPreferences: {
+      preload: join(__dirname, 'preload.js'),
+      contextIsolation: true, nodeIntegration: false, sandbox: false,
+    },
+    show: false,
+  })
+  if (isDev) win.loadURL(`http://localhost:5173/?host=${encodeURIComponent(host)}#soundfix`)
+  else win.loadFile(join(__dirname, '../dist/index.html'), { hash: 'soundfix', query: { host } })
+  win.once('ready-to-show', () => win.show())
+  win.on('closed', () => { soundfixWindows.delete(key) })
+  soundfixWindows.set(key, win)
+}
+
+ipcMain.handle('soundfix:open', (_e, opts: { host: string; displayId?: number }) => {
+  openSoundFixWindow(opts)
+  return { success: true }
+})
+ipcMain.handle('soundfix:close', (_e, host?: string) => {
+  if (host) { const wnd = soundfixWindows.get(host.toLowerCase()); if (wnd && !wnd.isDestroyed()) wnd.close() }
+  return { success: true }
+})
+
 // ─── Edge-Anzeige (SSO): URL in echtem Microsoft-Edge-Fenster (App-Modus) ─────
 // Der interne Chromium hat keinen Zugriff auf den Windows-/Entra-SSO-Kontext.
 // Fuer SSO-Seiten (eMaint/Auth0/Microsoft-SAML) starten wir daher echte
@@ -1243,6 +1416,39 @@ ipcMain.handle('usv:openDoc', async () => {
     const err = await shell.openPath(p)
     return err ? { success: false, error: err } : { success: true }
   } catch (e) { return { success: false, error: e instanceof Error ? e.message : String(e) } }
+})
+
+// ── Netzwerkgeräte: Weboberfläche im eigenen Fenster + Passwort automatisch eintragen ──
+// (Telefonanlage Grandstream, APC-USV „Log On" u. a.) Edge kann kein Passwort vorbelegen — deshalb ein
+// Tool-Fenster mit eigener Partition. Nach jedem Laden sucht ein kleines Skript bis zu
+// 15 s nach dem Passwortfeld (die Seiten bauen das Formular per JS auf), trägt Benutzer
+// und Passwort ein und klickt „Login". Klappt das nicht, kann der Nutzer das Passwort
+// aus der Zwischenablage einfügen (der Renderer kopiert es vorher).
+ipcMain.handle('netzgeraet:openWeb', (_e, opts: { url: string; title?: string; user?: string; pass?: string }) => {
+  const u = (opts?.url || '').trim()
+  if (!/^https?:\/\//i.test(u)) return { success: false, error: 'Ungültige URL — nur http/https erlaubt.' }
+  try {
+    const win = new BrowserWindow({
+      width: 1280, height: 900, show: true, autoHideMenuBar: true,
+      title: opts.title || u,
+      webPreferences: { partition: 'persist:netzwerkgeraete', contextIsolation: true, nodeIntegration: false, sandbox: true },
+    })
+    const fill = `(()=>{const U=${JSON.stringify(opts.user || '')},P=${JSON.stringify(opts.pass || '')};if(!P||window.__skfFilled)return;let n=0;
+      const set=(el,v)=>{const d=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');d.set.call(el,v);el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))};
+      const vis=el=>!!(el.offsetWidth||el.offsetHeight||el.getClientRects().length);
+      const t=setInterval(()=>{n++;const pw=[...document.querySelectorAll('input[type=password]')].find(vis);
+        if(pw){clearInterval(t);window.__skfFilled=true;
+          const txt=[...document.querySelectorAll('input[type=text],input:not([type])')].find(el=>vis(el)&&!el.value);
+          if(txt&&U)set(txt,U);set(pw,P);
+          const btn=[...document.querySelectorAll('button,input[type=submit],input[type=button],a')].find(b=>vis(b)&&/log\\s*(in|on)|anmelden|sign\\s*in/i.test(b.value||b.textContent||''));
+          setTimeout(()=>{if(btn)btn.click();else if(pw.form)pw.form.requestSubmit?pw.form.requestSubmit():pw.form.submit()},150)}
+        if(n>60)clearInterval(t)},250)})()`
+    win.webContents.on('did-finish-load', () => { win.webContents.executeJavaScript(fill, true).catch(() => { /* Seite ohne Login */ }) })
+    win.loadURL(u).catch(() => { /* Fehlerseite zeigt Chromium selbst */ })
+    return { success: true }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : String(err) }
+  }
 })
 
 // ─── Path Configuration IPC ─────────────────────────────────────────────────
@@ -1615,6 +1821,12 @@ ipcMain.on('window:maximize', () => {
 ipcMain.on('window:close', () => mainWindow?.close())
 
 // ── E-Mail via Outlook COM ───────────────────────────────────────────────────
+// Outlook-Aktionen (Übergabe-Termine: Einladung/Update/Absage, Postfach-Scan) — siehe outlookAktion.ts
+ipcMain.handle('outlook:aktion', async (_e, eingabe: Record<string, unknown>, timeoutMs?: number) => {
+  const { outlookAktion } = require('./outlookAktion') as typeof import('./outlookAktion')
+  return outlookAktion(eingabe || {}, Math.min(Math.max(timeoutMs || 60000, 10000), 300000))
+})
+
 ipcMain.handle('mail:sendRaw', async (_e, opts: {
   to: string; cc?: string; subject: string; body: string; html?: boolean
   smtp: string; port: number; user?: string; pass?: string; from?: string

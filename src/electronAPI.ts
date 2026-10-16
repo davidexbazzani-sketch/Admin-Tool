@@ -16,6 +16,27 @@ export interface FileReadResult {
   error?: string
 }
 
+/** ServiceNow-Integrationskonto: Client-ID + Secret → OAuth (Vorrang), sonst Benutzer + Passwort → Basic Auth. */
+export interface SnAuthPayload {
+  user?: string
+  pass?: string
+  clientId?: string
+  clientSecret?: string
+}
+
+/** Strukturierte Fehlerangaben einer ServiceNow-Anfrage (ohne Zugangsdaten/Token). */
+export interface SnDiag {
+  method: 'oauth' | 'basic' | 'sso'
+  /** connect = keine HTTP-Antwort · token = OAuth-Token nicht erhalten · api = Table-API hat abgelehnt */
+  stage: 'connect' | 'token' | 'api'
+  status?: number
+  attempts?: { grant: string; status: number; error?: string; description?: string; netError?: string }[]
+  snMessage?: string
+  snDetail?: string
+  netError?: string
+  table?: string
+}
+
 declare global {
   interface Window {
     electronAPI: {
@@ -68,12 +89,12 @@ declare global {
         instanceUrl: string
         method?: 'GET' | 'POST' | 'PATCH'; table: string; sysId?: string
         query?: string; fields?: string; limit?: number; body?: unknown
-        auth?: { user: string; pass: string }   // Integrationskonto (Basic Auth); ohne = SSO-Sitzung
-      }): Promise<{ success: boolean; status?: number; data?: unknown; error?: string; needsLogin?: boolean }>
+        auth?: SnAuthPayload   // Integrationskonto (OAuth bzw. Basic Auth); ohne = SSO-Sitzung
+      }): Promise<{ success: boolean; status?: number; data?: unknown; error?: string; needsLogin?: boolean; diag?: SnDiag }>
       /** Datei-Anhang an einen ServiceNow-Datensatz hochladen (Attachment-API, binär). */
       serviceNowAttach(opts: {
         instanceUrl: string; table: string; sysId: string; fileName: string; contentType?: string; dataBase64: string
-        auth?: { user: string; pass: string }
+        auth?: SnAuthPayload
       }): Promise<{ success: boolean; status?: number; sysId?: string; error?: string; needsLogin?: boolean }>
       serviceNowCertDiag(): Promise<{
         at: string; url: string; count: number
@@ -134,6 +155,8 @@ declare global {
       netGetBasePath(): Promise<string>
       netSetBasePath(path: string): Promise<boolean>
       netWriteRawFile(relativePath: string, base64Data: string): Promise<boolean>
+      /** Ordner einer HTML-Folie fuer das skfslide://-Protokoll freigeben. */
+      slideAllowFolder(htmlPfad: string): Promise<boolean>
       netReadRawFile(relativePath: string): Promise<string | null>
 
       // ── Wissensdatenbank (dedicated IPC) ──────────────────────────────────
@@ -183,10 +206,16 @@ declare global {
       // USV: URL in Edge/Chrome öffnen + Notfallplan (DOCX)
       openInEdgeOrChrome(url: string): Promise<{ success: boolean; fallback?: boolean; error?: string }>
       usvOpenDoc(): Promise<{ success: boolean; error?: string }>
+      /** Outlook per COM im Benutzerkontext: meeting-create/-update/-cancel, scan (siehe electron/outlookAktion.ts). */
+      outlookAktion(eingabe: Record<string, unknown>, timeoutMs?: number): Promise<Record<string, unknown>>
+      /** Weboberfläche eines Netzwerkgeräts im Tool-Fenster öffnen; Benutzer/Passwort werden automatisch eingetragen. */
+      netzgeraetOpenWeb(opts: { url: string; title?: string; user?: string; pass?: string }): Promise<{ success: boolean; error?: string }>
 
       // Task-Manager als eigenständiges Fenster (je Ziel-Host)
       taskmgrOpen(opts: { host: string; displayId?: number; admin?: boolean }): Promise<{ success: boolean }>
       taskmgrClose(host?: string): Promise<{ success: boolean }>
+      soundfixOpen(opts: { host: string; displayId?: number }): Promise<{ success: boolean }>
+      soundfixClose(host?: string): Promise<{ success: boolean }>
     }
     electronSend(channel: string): void
     electronDrop: { getPath(file: File): string }

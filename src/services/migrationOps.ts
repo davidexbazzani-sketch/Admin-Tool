@@ -1,6 +1,6 @@
 // ── WinRM-Operationen fürs Migrations-Cockpit ─────────────────────────────────
-// Sammelt die einzelnen Kachel-Aktionen (Sprache, Umgebungsvariablen, Netzlauf-
-// werke/WLAN, Windows-Updates, Neustart). Alle best-effort, nicht destruktiv,
+// Sammelt die einzelnen Kachel-Aktionen (Netzlaufwerke/WLAN, Windows-Updates,
+// Neustart). Sprache steckt jetzt in languageSetup.ts (Basic-Kachel). Alle best-effort, nicht destruktiv,
 // laufen über WinRM/Invoke-Command; per-User-Dinge über runInUserContext.
 // HINWEIS: Windows-Update-Install über PSRemoting ist token-bedingt heikel →
 // Fallback UsoClient; im echten Betrieb testen.
@@ -8,8 +8,10 @@
 import { api } from '../electronAPI'
 import { ensureWinRM } from '../utils/winrmUtils'
 import { runInUserContext, type ClientActionResult } from './printerConnections'
-import { psGetNetworkDrives, psTransferWlanProfiles, psTransferEnvVars } from '../utils/migrationCommands'
+import { psTransferWlanProfiles } from '../utils/migrationCommands'
 import { writeTempFile, copyToPublicDesktop } from './onboardingDeploy'
+import { pathService } from './pathService'
+import { refreshNetworkDrivesLive, type NetDriveEntry } from './deviceNetworkDrives'
 
 function psq(s: string): string { return (s || '').replace(/'/g, "''") }
 /** UTF-16LE-Base64 für `powershell -EncodedCommand`. */
@@ -31,116 +33,13 @@ async function invoke(host: string, inner: string, timeoutMs = 60000): Promise<{
   catch (e) { return { ok: false, out: e instanceof Error ? e.message : String(e) } }
 }
 
-// ── Sprache ───────────────────────────────────────────────────────────────────
-export interface LangInfo { systemLocale: string; culture: string; uiOverride: string }
-export async function getLanguage(host: string): Promise<{ ok: boolean; info?: LangInfo; text?: string }> {
-  const up = await ensureWinRM(host)
-  if (!up) return { ok: false, text: 'WinRM nicht erreichbar' }
-  const inner = `[pscustomobject]@{ systemLocale=(Get-WinSystemLocale).Name; culture=(Get-Culture).Name; uiOverride=[string](Get-WinUILanguageOverride) } | ConvertTo-Json -Compress`
-  const script = `try { $o = Invoke-Command -ComputerName '${psq(host)}' -ErrorAction Stop -ScriptBlock { ${inner} }; $o | ConvertTo-Json -Compress } catch { 'ERR:' + $_.Exception.Message }`
-  try {
-    const r = await api().runPowerShell(script, 45000)
-    const j = parseJson<LangInfo>(r.stdout)
-    if (!j) return { ok: false, text: (r.stdout || '').replace(/^ERR:/, '').trim() || 'keine Antwort' }
-    return { ok: true, info: { systemLocale: String(j.systemLocale || ''), culture: String(j.culture || ''), uiOverride: String(j.uiOverride || '') } }
-  } catch (e) { return { ok: false, text: e instanceof Error ? e.message : String(e) } }
-}
-/** Setzt die Sprache komplett auf Deutsch (de-DE): per-User im Benutzerkontext + System-Locale via Admin. */
-export async function setGermanLanguage(newHost: string): Promise<ClientActionResult> {
-  const userOp = [
-    `$lang='de-DE'`,
-    `$list = Get-WinUserLanguageList`,
-    `if ($list.LanguageTag -notcontains $lang) { $list.Add($lang); Set-WinUserLanguageList $list -Force }`,
-    `Set-WinUILanguageOverride -Language $lang`,
-    `Set-Culture $lang`,
-  ].join('\n')
-  const userRes = await runInUserContext(newHost, userOp, 60000)
-  // System-Locale + GeoId (Maschine, Admin-Kontext)
-  const sys = await invoke(newHost, `try { Set-WinSystemLocale de-DE; Set-WinHomeLocation -GeoId 94; 'OK' } catch { 'ERR:' + $_.Exception.Message }`, 45000)
-  const sysOk = sys.ok && sys.out.includes('OK')
-  const text = `Benutzer: ${userRes.ok ? 'de-DE gesetzt' : 'Fehler (' + userRes.text + ')'} · System: ${sysOk ? 'de-DE gesetzt' : 'Fehler'}. Neuanmeldung/Neustart nötig.`
-  return { ok: userRes.ok || sysOk, text }
-}
-
-/** Sprache-Umstellung (de-DE) als .cmd auf den Public Desktop legen (User führt sie aus →
- *  per-User-Sprache greift zuverlässig; System-Locale nur mit Adminrechten). Selbstlöschend. */
-export async function deployLanguageScript(newHost: string): Promise<{ ok: boolean; text?: string }> {
-  const fileName = 'SKF-Sprache-Deutsch.cmd'
-  const desktop = `C:\\Users\\Public\\Desktop\\${fileName}`
-  const ps = [
-    `$ErrorActionPreference='SilentlyContinue'`,
-    `$lang='de-DE'`,
-    `$list = Get-WinUserLanguageList`,
-    `if ($list.LanguageTag -notcontains $lang) { $list.Add($lang); Set-WinUserLanguageList $list -Force }`,
-    `Set-WinUILanguageOverride -Language $lang`,
-    `Set-Culture $lang`,
-    `try { Set-WinSystemLocale $lang; Set-WinHomeLocation -GeoId 94 } catch {}`,
-    `Remove-Item '${psq(desktop)}' -Force -EA SilentlyContinue`,
-  ].join('\n')
-  const enc = toEncodedCommand(ps)
-  const cmd = ['@echo off', 'title SKF Sprache auf Deutsch', 'echo Setze Sprache auf Deutsch, bitte warten...', `powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${enc}`, 'echo Fertig - bitte neu anmelden.', 'timeout /t 4 >nul'].join('\r\n')
-  const tmp = await writeTempFile(cmd, `lang_${Date.now().toString(36)}`, 'cmd')
-  if (!tmp.ok || !tmp.path) return { ok: false, text: tmp.error }
-  const cp = await copyToPublicDesktop(newHost, tmp.path, fileName)
-  return { ok: cp.ok, text: cp.error }
-}
-
-// ── Umgebungsvariablen ─────────────────────────────────────────────────────────
-export interface EnvVar { name: string; value: string; scope: 'System' | 'Benutzer' }
-export async function getEnvVars(host: string): Promise<{ ok: boolean; vars?: EnvVar[]; text?: string }> {
-  const inner = [
-    `$out=@()`,
-    `try { (Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment' -EA Stop).PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' } | ForEach-Object { $out += [pscustomobject]@{ name=$_.Name; value=[string]$_.Value; scope='System' } } } catch {}`,
-    `foreach ($hv in @(Get-ChildItem 'registry::HKEY_USERS' -EA SilentlyContinue | Where-Object { $_.PSChildName -like 'S-1-5-21-*' -and $_.PSChildName -notlike '*_Classes' })) { try { (Get-ItemProperty ('registry::HKU\\'+$hv.PSChildName+'\\Environment') -EA Stop).PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' } | ForEach-Object { $out += [pscustomobject]@{ name=$_.Name; value=[string]$_.Value; scope='Benutzer' } } } catch {} }`,
-    `@($out)`,
-  ].join('\n')
-  const script = `try { $o = Invoke-Command -ComputerName '${psq(host)}' -ErrorAction Stop -ScriptBlock { ${inner} }; $o | Select-Object name,value,scope | ConvertTo-Json -Compress -Depth 4 } catch { 'ERR:' + $_.Exception.Message }`
-  try {
-    const r = await api().runPowerShell(script, 45000)
-    const t = (r.stdout ?? '').trim()
-    if (!t || t.startsWith('ERR:')) return { ok: false, text: t.replace(/^ERR:/, '').trim() || 'keine Antwort' }
-    const parsed = parseJson<EnvVar[] | EnvVar>(t)
-    const arr = Array.isArray(parsed) ? parsed : parsed ? [parsed] : []
-    return { ok: true, vars: arr.map(v => ({ name: String(v.name || ''), value: String(v.value || ''), scope: v.scope === 'System' ? 'System' : 'Benutzer' })) }
-  } catch (e) { return { ok: false, text: e instanceof Error ? e.message : String(e) } }
-}
-/** Umgebungsvariablen (Benutzer + System) vom Alt- aufs Neugerät übernehmen. */
-export async function transferEnvVars(oldHost: string, newHost: string, corpId: string): Promise<{ ok: boolean; text?: string }> {
-  // Benutzer-Variablen: bewährter Builder (SID-Auflösung via ProfileList).
-  let userText = 'übersprungen (keine Corp-ID)'
-  if (corpId) {
-    try { const r = await api().runPowerShell(psTransferEnvVars(oldHost, newHost, corpId), 60000); userText = (r.stdout || '').trim().slice(0, 200) || 'ok' }
-    catch (e) { userText = 'Fehler: ' + (e instanceof Error ? e.message : String(e)) }
-  }
-  // System-Variablen: HKLM Session Manager vom Alt lesen, aufs Neu schreiben (nur nicht-Standard).
-  const std = "'Path','TEMP','TMP','windir','OS','PROCESSOR_ARCHITECTURE','NUMBER_OF_PROCESSORS','PATHEXT','ComSpec','DriverData','PSModulePath'"
-  const sysScript = [
-    `try {`,
-    `  $src = Invoke-Command -ComputerName '${psq(oldHost)}' -EA Stop -ScriptBlock { (Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment') } | Select-Object *`,
-    `  $skip = @(${std})`,
-    `  $pairs = @(); $src.PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' -and $skip -notcontains $_.Name } | ForEach-Object { $pairs += ($_.Name + '=' + [string]$_.Value) }`,
-    `  Invoke-Command -ComputerName '${psq(newHost)}' -EA Stop -ArgumentList (,$pairs) -ScriptBlock { param($pairs) foreach ($p in $pairs) { $i=$p.IndexOf('='); if($i -gt 0){ [Environment]::SetEnvironmentVariable($p.Substring(0,$i), $p.Substring($i+1), 'Machine') } } }`,
-    `  Write-Output ('OK:' + $pairs.Count + ' System-Variablen')`,
-    `} catch { Write-Output ('ERR:' + $_.Exception.Message) }`,
-  ].join('\n')
-  let sysText = ''
-  try { const r = await api().runPowerShell(sysScript, 60000); sysText = (r.stdout || '').trim() } catch (e) { sysText = 'ERR:' + (e instanceof Error ? e.message : String(e)) }
-  const ok = !/^ERR|Fehler/i.test(userText) || sysText.startsWith('OK:')
-  return { ok, text: `Benutzer: ${userText} · System: ${sysText.replace(/^OK:/, '').replace(/^ERR:/, 'Fehler: ')}` }
-}
-
 // ── Netzlaufwerke + WLAN ───────────────────────────────────────────────────────
-export interface NetDrive { letter: string; unc: string }
-export async function getNetworkDrives(oldHost: string): Promise<{ ok: boolean; drives?: NetDrive[]; text?: string }> {
-  try {
-    const r = await api().runPowerShell(psGetNetworkDrives(oldHost), 45000)
-    const t = (r.stdout ?? '').trim()
-    const parsed = parseJson<{ letter?: string; uncPath?: string }[] | { letter?: string; uncPath?: string }>(t)
-    if (!parsed) return t.startsWith('ERR') || t.startsWith('SKIP') ? { ok: false, text: t } : { ok: true, drives: [] }
-    const arr = Array.isArray(parsed) ? parsed : [parsed]
-    return { ok: true, drives: arr.filter(d => d.letter && d.uncPath).map(d => ({ letter: String(d.letter), unc: String(d.uncPath) })) }
-  } catch (e) { return { ok: false, text: e instanceof Error ? e.message : String(e) } }
-}
+// Das AUSLESEN der Laufwerke steckt bewusst NICHT hier, sondern in
+// deviceNetworkDrives.refreshNetworkDrivesLive: der frühere Weg über
+// `Win32_MappedLogicalDisk` in einer WinRM-Sitzung lieferte immer eine leere Liste,
+// weil verbundene Laufwerke zur Anmeldesitzung gehören. [[network_drive_migration]]
+export type NetDrive = NetDriveEntry
+
 /** Netzlaufwerke im Benutzerkontext des Neugeräts verbinden (persistent). */
 export async function mapNetworkDrives(newHost: string, drives: NetDrive[]): Promise<ClientActionResult> {
   if (!drives.length) return { ok: false, text: 'Keine Netzlaufwerke zum Übernehmen.' }
@@ -150,27 +49,121 @@ export async function mapNetworkDrives(newHost: string, drives: NetDrive[]): Pro
   }).join('\n')
   return runInUserContext(newHost, op, 90000)
 }
-/** Netzlaufwerke als .bat auf den Public Desktop des Neugeräts legen (der User führt sie
- *  nach der Anmeldung aus → mappt im eigenen Kontext). Selbstlöschend. */
-export async function deployDrivesScript(newHost: string, drives: NetDrive[]): Promise<{ ok: boolean; text?: string }> {
-  if (!drives.length) return { ok: false, text: 'Keine Netzlaufwerke zum Übernehmen.' }
-  const fileName = 'SKF-Netzlaufwerke-verbinden.bat'
-  const lines = ['@echo off', 'title SKF Netzlaufwerke verbinden', 'echo Verbinde Netzlaufwerke, bitte warten...']
+
+/**
+ * Verbindet nur die Laufwerke, die auf dem neuen PC noch NICHT vorhanden sind — gleicher
+ * Buchstabe mit gleicher Freigabe wird übersprungen. Ein bereits belegter Buchstabe mit
+ * ANDEREM Ziel wird ebenfalls in Ruhe gelassen und gemeldet, statt ihn zu überschreiben.
+ */
+export async function mapMissingNetworkDrives(newHost: string, drives: NetDrive[]): Promise<ClientActionResult & { neu: number; schonDa: number; konflikt: string[] }> {
+  const leer = { neu: 0, schonDa: 0, konflikt: [] as string[] }
+  if (!drives.length) return { ok: false, text: 'Keine Netzlaufwerke zum Übernehmen.', ...leer }
+
+  const vorhanden = await refreshNetworkDrivesLive(newHost, 'auto-setup').catch(() => null)
+  const belegt = new Map<string, string>()
+  for (const d of vorhanden?.drives || []) belegt.set(d.letter.toUpperCase(), d.unc.replace(/\\+$/, '').toLowerCase())
+
+  const fehlend: NetDrive[] = []
+  const konflikt: string[] = []
+  let schonDa = 0
   for (const d of drives) {
     const letter = d.letter.replace(/[^A-Za-z]/g, '').slice(0, 1).toUpperCase()
     if (!letter) continue
-    lines.push(`net use ${letter}: "${d.unc.replace(/"/g, '')}" /persistent:yes`)
+    const ziel = d.unc.replace(/\\+$/, '').toLowerCase()
+    const ist = belegt.get(letter)
+    if (ist === undefined) { fehlend.push(d); continue }
+    if (ist === ziel) { schonDa++; continue }
+    konflikt.push(`${letter}: zeigt bereits auf ${ist}`)
   }
-  lines.push('echo Fertig.', 'timeout /t 3 >nul', 'del "%~f0"')
+
+  if (!fehlend.length) {
+    const teile = [`${schonDa} bereits vorhanden`]
+    if (konflikt.length) teile.push(...konflikt)
+    return { ok: true, text: teile.join(' · '), neu: 0, schonDa, konflikt }
+  }
+
+  const r = await mapNetworkDrives(newHost, fehlend)
+  const teile = [r.ok ? `${fehlend.length} neu verbunden` : (r.text || 'Verbinden fehlgeschlagen')]
+  if (schonDa) teile.push(`${schonDa} bereits vorhanden`)
+  if (konflikt.length) teile.push(...konflikt)
+  return { ok: r.ok, text: teile.join(' · '), neu: r.ok ? fehlend.length : 0, schonDa, konflikt }
+}
+/** Markerdatei, die die .bat nach erfolgreichem Verbinden schreibt — daran erkennt das
+ *  Tool, dass der Anwender sie ausgeführt hat (die .bat läuft ohne Rückkanal). */
+function drivesMarker(id: string): string {
+  return `${pathService.getToolRoot('unc')}\\refresh_migration\\${id}\\netzlaufwerke_verbunden.txt`
+}
+
+/** Hat der Anwender die .bat vom Desktop ausgeführt? */
+export async function checkDrivesApplied(id: string): Promise<boolean> {
+  try {
+    const r = await api().runPowerShell(`if (Test-Path -LiteralPath '${psq(drivesMarker(id))}') { 'JA' } else { 'NEIN' }`, 30000)
+    return (r.stdout || '').includes('JA')
+  } catch { return false }
+}
+
+/**
+ * Netzlaufwerke als .bat auf den Public Desktop des Neugeräts legen — die Rückfallebene,
+ * wenn niemand angemeldet ist und das Hintergrund-Verbinden deshalb nicht greift. Der
+ * Anwender führt sie nach seiner Anmeldung aus, sie mappt in seinem eigenen Kontext.
+ * Zeigt ihr Ergebnis an (vorher blitzte das Fenster kommentarlos durch) und hinterlässt
+ * eine Markerdatei, damit das Tool den Punkt als erledigt erkennt.
+ */
+export async function deployDrivesScript(newHost: string, drives: NetDrive[], id: string): Promise<{ ok: boolean; text?: string }> {
+  if (!drives.length) return { ok: false, text: 'Keine Netzlaufwerke zum Übernehmen.' }
+  const fileName = 'SKF-Netzlaufwerke-verbinden.bat'
+  const marker = drivesMarker(id)
+  const lines = [
+    '@echo off',
+    'title SKF Netzlaufwerke verbinden',
+    'echo Verbinde die Netzlaufwerke vom alten PC...',
+    'echo.',
+    'set SKFFEHLER=0',
+  ]
+  for (const d of drives) {
+    const letter = d.letter.replace(/[^A-Za-z]/g, '').slice(0, 1).toUpperCase()
+    if (!letter) continue
+    const unc = d.unc.replace(/"/g, '')
+    // Bestehende Belegung vorher lösen, sonst scheitert net use mit „bereits verwendet".
+    lines.push(`net use ${letter}: /delete /y >nul 2>&1`)
+    lines.push(`net use ${letter}: "${unc}" /persistent:yes`)
+    lines.push(`if errorlevel 1 (set SKFFEHLER=1& echo   FEHLER bei ${letter}: ${unc}) else (echo   OK   ${letter}: ${unc})`)
+  }
+  lines.push(
+    'echo.',
+    'if "%SKFFEHLER%"=="1" (echo Mindestens ein Laufwerk konnte nicht verbunden werden - bitte bei der IT melden.) else (echo Fertig - alle Laufwerke sind verbunden.)',
+    // Marker nur bei vollem Erfolg; schlägt das Schreiben fehl, ist das nicht schlimm.
+    `if "%SKFFEHLER%"=="0" (>"${marker}" echo %COMPUTERNAME%^|%USERNAME%^|%DATE% %TIME% 2>nul)`,
+    'pause',
+    // (goto) 2>nul beendet die Batch sauber, bevor sie sich selbst löscht.
+    '(goto) 2>nul & del "%~f0"',
+  )
   const tmp = await writeTempFile(lines.join('\r\n'), `drives_${Date.now().toString(36)}`, 'bat')
   if (!tmp.ok || !tmp.path) return { ok: false, text: tmp.error }
   const cp = await copyToPublicDesktop(newHost, tmp.path, fileName)
-  return { ok: cp.ok, text: cp.error }
+  return { ok: cp.ok, text: cp.ok ? `„${fileName}" liegt auf dem Desktop von ${newHost} — der angemeldete Benutzer startet sie per Doppelklick.` : cp.error }
 }
 
+/** Modell-Typen (classifyModel), bei denen WLAN-Profile übernommen werden — Desktops
+ *  haben keinen WLAN-Adapter, dort wird die Übernahme gar nicht erst angeboten. */
+export const WLAN_KATEGORIEN = ['Laptop Standard', 'Laptop light', 'Laptop Workstation']
+export function wlanSinnvoll(modelKategorie: string): boolean {
+  return WLAN_KATEGORIEN.includes((modelKategorie || '').trim())
+}
+
+/**
+ * WLAN-Profile vom Alt- aufs Neugerät. Erfolg heißt: Profile wurden tatsächlich
+ * importiert — `SKIPPED:` (keine Profile / kein Adapter) galt früher fälschlich als
+ * Erfolg und verdeckte, dass nichts passiert war.
+ */
 export async function transferWlan(oldHost: string, newHost: string): Promise<{ ok: boolean; text?: string }> {
-  try { const r = await api().runPowerShell(psTransferWlanProfiles(oldHost, newHost), 60000); const t = (r.stdout || '').trim(); return { ok: !/^ERR/i.test(t), text: t.slice(0, 300) || 'ok' } }
-  catch (e) { return { ok: false, text: e instanceof Error ? e.message : String(e) } }
+  try {
+    const r = await api().runPowerShell(psTransferWlanProfiles(oldHost, newHost), 60000)
+    const t = (r.stdout || '').trim()
+    if (/^ERR/i.test(t)) return { ok: false, text: t.replace(/^ERR:/i, '').slice(0, 300) }
+    if (/^SKIPPED/i.test(t)) return { ok: false, text: t.replace(/^SKIPPED:/i, '').slice(0, 300) || 'nichts zu übertragen' }
+    return { ok: /OK/.test(t), text: t.replace(/^OK:?/, '').trim().slice(0, 300) || 'Profile übernommen' }
+  } catch (e) { return { ok: false, text: e instanceof Error ? e.message : String(e) } }
 }
 
 // ── Windows-Updates ────────────────────────────────────────────────────────────

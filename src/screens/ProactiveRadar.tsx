@@ -1,5 +1,5 @@
 // ── Proaktives Radar – Screen ─────────────────────────────────────────────────
-// Zwei Tabs (Geräte-Leasing / AD-Hygiene) mit maximaler Filter-Freiheit:
+// Drei Tabs (Geräte-Leasing / AD-Hygiene / Wochenend-Check) mit maximaler Filter-Freiheit:
 // frei einstellbarer Schwellenwert (Tage/Wochen/Monate), Kategorie- und Feld-
 // Filter, Volltextsuche, sortierbare Spalten, CSV-Export und Drill-in in die
 // Dossiers. Reiner Ansichts-Screen — kein Popup, keine E-Mail (nur per Klick).
@@ -7,11 +7,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Radar, RefreshCw, Loader2, Download, Search, Settings2, ChevronUp, ChevronDown,
-  AlertTriangle, ShieldAlert, CalendarClock, X, Mail, Send, Eye,
+  AlertTriangle, ShieldAlert, CalendarClock, X, Mail, Send, Eye, Power,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import { PersonInfoButton } from '../components/person/PersonDossier'
+import WeekendCheckTab from '../components/radar/WeekendCheckTab'
 import {
   computeLeasingItems, computeHygieneItems, loadHygieneUsers, refreshAdHygiene,
   loadRadarSettings, saveRadarSettings, urgencyFuture, urgencyPast,
@@ -23,7 +24,7 @@ import {
   type PwdReminderConfig, type ReminderPreview,
 } from '../services/pwdReminder'
 
-type Tab = 'leasing' | 'hygiene'
+type Tab = 'leasing' | 'hygiene' | 'weekend'
 type Unit = 'days' | 'weeks' | 'months'
 type Timeframe = 'all' | 'within' | 'overdue'
 
@@ -49,6 +50,7 @@ async function exportCsv(filename: string, header: string[], rows: string[][]) {
 
 export default function ProactiveRadar() {
   const [tab, setTab] = useState<Tab>('leasing')
+  const [weekendCount, setWeekendCount] = useState<number | null>(null)
   const [settings, setSettings] = useState<RadarSettings>(DEFAULT_RADAR_SETTINGS)
 
   const [leasing, setLeasing] = useState<RadarItem[]>([])
@@ -106,6 +108,7 @@ export default function ProactiveRadar() {
         <div className="flex items-center gap-1.5 mt-3">
           <TabBtn active={tab === 'leasing'} onClick={() => setTab('leasing')} icon={<CalendarClock size={14} />} label={`Geräte-Leasing (${leasing.length})`} />
           <TabBtn active={tab === 'hygiene'} onClick={() => setTab('hygiene')} icon={<ShieldAlert size={14} />} label={`AD-Hygiene (${hygiene.length})`} />
+          <TabBtn active={tab === 'weekend'} onClick={() => setTab('weekend')} icon={<Power size={14} />} label={weekendCount == null ? 'Wochenend-Check' : `Wochenend-Check (${weekendCount})`} />
         </div>
       </div>
 
@@ -118,7 +121,10 @@ export default function ProactiveRadar() {
       {showSettings && <SettingsPanel settings={settings} onClose={() => setShowSettings(false)} onSaved={(s) => { setSettings(s); reload() }} />}
 
       <div className="flex-1 min-h-0 overflow-auto px-6 py-4">
-        {loading ? (
+        {tab === 'weekend' ? (
+          // Lädt seine Daten selbst (Endgeräte-Übersicht + Messergebnisse)
+          <WeekendCheckTab onCount={setWeekendCount} exportCsv={exportCsv} />
+        ) : loading ? (
           <div className="flex items-center justify-center gap-2 py-20 text-sm text-muted-foreground"><Loader2 size={15} className="animate-spin" />Lade Radar-Daten…</div>
         ) : tab === 'leasing' ? (
           <LeasingTab items={leasing} />

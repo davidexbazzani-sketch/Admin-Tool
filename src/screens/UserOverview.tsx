@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Users as UsersIcon, RefreshCw, Loader, Search, Filter, ChevronDown,
   CheckCircle, XCircle, Send, Terminal, Zap, Info, X, Play, Eye,
-  ListFilter, Monitor, User as UserIcon, Briefcase, Building2, Cpu,
+  ListFilter, Monitor, User as UserIcon, Briefcase, Building2, Cpu, Volume2,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAppStore } from '../store/appStore'
@@ -12,7 +12,9 @@ import { logDossierAction } from '../services/personDossier'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import { ProcessPanel } from '../components/ProcessPanel'
+import { SoundFixPanel } from '../components/device/SoundFixPanel'
 import { type AdUserListItem } from '../services/adUsersList'
+import { spaltenFilter, type Spalte } from '../utils/spaltenFilter'
 import { ensureDailyAdUsers } from '../services/adUserDirectory'
 import {
   DAILY_QUERIES, DAILY_ACTIONS, getCommandById,
@@ -183,63 +185,33 @@ export default function UserOverview() {
     }))
   }, [users, hostnamesBySam])
 
-  // Distinct values per filter column
-  const distinct = useMemo(() => {
-    const status = new Map<string, number>()
-    const corp = new Map<string, number>()
-    const dept = new Map<string, number>()
-    const title = new Map<string, number>()
-    const host = new Map<string, number>()
-    for (const r of rows) {
-      const s = r.enabled ? 'Aktiv' : 'Inaktiv'
-      status.set(s, (status.get(s) ?? 0) + 1)
-      corp.set(r.sam, (corp.get(r.sam) ?? 0) + 1)
-      const d = (r.department ?? '').trim()
-      dept.set(d, (dept.get(d) ?? 0) + 1)
-      const t = (r.title ?? '').trim()
-      title.set(t, (title.get(t) ?? 0) + 1)
-      if (r.hostnames.length === 0) host.set('', (host.get('') ?? 0) + 1)
-      else for (const h of r.hostnames) host.set(h, (host.get(h) ?? 0) + 1)
-    }
-    return { status, corp, dept, title, host }
-  }, [rows])
+  // Spalten EINMAL deklariert — Filtern und Zählen benutzen denselben Ausleser.
+  // Die Zahlen in den Aufklapplisten beziehen sich damit auf die aktuelle Auswahl
+  // (jede Spalte rechnet alle ANDEREN Filter mit, ihren eigenen nicht).
+  const spalten = useMemo<Spalte<UserRow>[]>(() => [
+    { id: 'status', werte: r => [r.enabled ? 'Aktiv' : 'Inaktiv'], gewaehlt: filterStatus },
+    { id: 'corp', werte: r => [r.sam], gewaehlt: filterCorp },
+    { id: 'dept', werte: r => [(r.department ?? '').trim()], gewaehlt: filterDept },
+    { id: 'title', werte: r => [(r.title ?? '').trim()], gewaehlt: filterTitle },
+    // Ein Benutzer zählt unter JEDEM seiner Hostnamen; ohne Hostname unter ''.
+    { id: 'host', werte: r => (r.hostnames.length ? r.hostnames : ['']), gewaehlt: filterHost },
+  ], [filterStatus, filterCorp, filterDept, filterTitle, filterHost])
+
+  const { zeilen: filteredRows, werte: distinct } = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    return spaltenFilter(rows, spalten, r =>
+      !q || r.sam.toLowerCase().includes(q)
+        || r.displayName.toLowerCase().includes(q)
+        || (r.title ?? '').toLowerCase().includes(q)
+        || (r.department ?? '').toLowerCase().includes(q)
+        || (r.email ?? '').toLowerCase().includes(q)
+        || r.hostnames.some(h => h.toLowerCase().includes(q)))
+  }, [rows, spalten, search])
 
   const anyFilter = filterStatus.size + filterCorp.size + filterDept.size + filterTitle.size + filterHost.size > 0
   function resetAllFilters() {
     setFilterStatus(new Set()); setFilterCorp(new Set()); setFilterDept(new Set()); setFilterTitle(new Set()); setFilterHost(new Set())
   }
-
-  // Combined filter logic (search + column filters)
-  const filteredRows = useMemo(() => {
-    const q = search.trim().toLowerCase()
-    return rows.filter(r => {
-      if (q) {
-        const matches =
-          r.sam.toLowerCase().includes(q) ||
-          r.displayName.toLowerCase().includes(q) ||
-          (r.title ?? '').toLowerCase().includes(q) ||
-          (r.department ?? '').toLowerCase().includes(q) ||
-          (r.email ?? '').toLowerCase().includes(q) ||
-          r.hostnames.some(h => h.toLowerCase().includes(q))
-        if (!matches) return false
-      }
-      if (filterStatus.size > 0) {
-        const s = r.enabled ? 'Aktiv' : 'Inaktiv'
-        if (!filterStatus.has(s)) return false
-      }
-      if (filterCorp.size > 0 && !filterCorp.has(r.sam)) return false
-      if (filterDept.size > 0 && !filterDept.has((r.department ?? '').trim())) return false
-      if (filterTitle.size > 0 && !filterTitle.has((r.title ?? '').trim())) return false
-      if (filterHost.size > 0) {
-        if (r.hostnames.length === 0) {
-          if (!filterHost.has('')) return false
-        } else {
-          if (!r.hostnames.some(h => filterHost.has(h))) return false
-        }
-      }
-      return true
-    })
-  }, [rows, search, filterStatus, filterCorp, filterDept, filterTitle, filterHost])
 
   const allFilteredSelected = filteredRows.length > 0 && filteredRows.every(r => selected.has(r.sam.toUpperCase()))
   function toggleSelectAll() {
@@ -764,6 +736,8 @@ export function DaylisModal({ selectedRows, chosenHostBySam, onClose }: DaylisMo
   const [results, setResults] = useState<RunResultRow[]>([])
   const [running, setRunning] = useState(false)
   const [procHost, setProcHost] = useState<string | null>(null)
+  // Daylis-Einträge mit eigener Oberfläche („Öffnen" statt „Ausführen") — aktuell „Sound Fix".
+  const [panelCmd, setPanelCmd] = useState<DailyCommand | null>(null)
 
   // Aufgeloeste (eindeutige) Hosts der Auswahl — Prozess-Verwaltung braucht genau einen.
   const resolvedHosts = useMemo(() => {
@@ -891,6 +865,8 @@ export function DaylisModal({ selectedRows, chosenHostBySam, onClose }: DaylisMo
               commands={DAILY_QUERIES}
               picked={pickedQueries}
               onToggle={id => toggle(pickedQueries, setPickedQueries, id)}
+              singleHost={singleHost}
+              onOpenPanel={setPanelCmd}
             />
             <CommandList
               title="Eingriffe"
@@ -898,6 +874,8 @@ export function DaylisModal({ selectedRows, chosenHostBySam, onClose }: DaylisMo
               commands={DAILY_ACTIONS}
               picked={pickedActions}
               onToggle={id => toggle(pickedActions, setPickedActions, id)}
+              singleHost={singleHost}
+              onOpenPanel={setPanelCmd}
             />
 
             {neededParams.length > 0 && (
@@ -991,16 +969,33 @@ export function DaylisModal({ selectedRows, chosenHostBySam, onClose }: DaylisMo
         </div>
       </div>
     )}
+
+    {panelCmd && singleHost && (
+      <div className="fixed inset-0 z-[55] flex items-center justify-center bg-black/70 backdrop-blur-sm p-6" onClick={e => { e.stopPropagation(); setPanelCmd(null) }}>
+        <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-3xl max-h-[88vh] flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
+          <div className="shrink-0 px-5 py-3 border-b border-border flex items-center gap-2">
+            <Volume2 size={16} className="text-emerald-400" />
+            <h3 className="text-base font-semibold text-foreground">{panelCmd.label} — {singleHost}</h3>
+            <button onClick={() => setPanelCmd(null)} className="ml-auto p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground"><X size={16} /></button>
+          </div>
+          <div className="overflow-y-auto p-4">
+            <SoundFixPanel hostname={singleHost} />
+          </div>
+        </div>
+      </div>
+    )}
    </>
   )
 }
 
-function CommandList({ title, icon, commands, picked, onToggle }: {
+function CommandList({ title, icon, commands, picked, onToggle, singleHost, onOpenPanel }: {
   title: string
   icon: React.ReactNode
   commands: DailyCommand[]
   picked: Set<string>
   onToggle: (id: string) => void
+  singleHost?: string
+  onOpenPanel?: (c: DailyCommand) => void
 }) {
   const [infoFor, setInfoFor] = useState<string | null>(null)
   return (
@@ -1012,6 +1007,38 @@ function CommandList({ title, icon, commands, picked, onToggle }: {
         {commands.map(c => {
           const isPicked = picked.has(c.id)
           const showInfo = infoFor === c.id
+          // Einträge mit eigener Oberfläche werden nicht angehakt, sondern geöffnet.
+          if (c.panel) {
+            return (
+              <div key={c.id}>
+                <div className="flex items-center gap-2 px-2 py-1.5 rounded-md text-xs hover:bg-accent/20">
+                  <span className="flex-1 text-foreground">{c.label}</span>
+                  <button
+                    type="button"
+                    onClick={() => singleHost && onOpenPanel?.(c)}
+                    disabled={!singleHost}
+                    title={singleHost ? `${c.label} für ${singleHost} öffnen` : 'Nur für genau ein Gerät möglich — bitte einen einzelnen Benutzer auswählen'}
+                    className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-600 text-white hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    Öffnen
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setInfoFor(infoFor === c.id ? null : c.id)}
+                    title="Info"
+                    className={`p-1 rounded ${showInfo ? 'text-blue-300 bg-blue-500/10' : 'text-muted-foreground hover:text-foreground'}`}
+                  >
+                    <Info size={11} />
+                  </button>
+                </div>
+                {showInfo && (
+                  <p className="ml-2 mr-2 mt-1 mb-2 px-2 py-1 text-[10px] text-muted-foreground border-l-2 border-blue-500/40 bg-blue-500/5 rounded-r">
+                    {c.info}
+                  </p>
+                )}
+              </div>
+            )
+          }
           return (
             <div key={c.id}>
               <label className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-xs cursor-pointer ${

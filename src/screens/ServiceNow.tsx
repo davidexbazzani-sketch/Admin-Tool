@@ -2,28 +2,77 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import {
   Ticket, RefreshCw, Loader2, Search, ExternalLink, Settings as SettingsIcon,
   CheckCircle2, AlertTriangle, Filter, ListFilter, Flag, Users2, X, Save,
-  LogIn, LogOut, ShieldCheck, KeyRound, Trash2, Eye, EyeOff, Plus,
+  LogIn, LogOut, ShieldCheck, KeyRound, Trash2, Eye, EyeOff, Plus, Zap, Copy, XCircle,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
 import { ColumnFilter } from './UserOverview'
+import { spaltenFilter, type Spalte } from '../utils/spaltenFilter'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { logDossierAction } from '../services/personDossier'
 import {
   loadConfig, saveConfig, isConfigured, listTickets, recordUrl, certDiag,
-  login, logout, loadIntegrationAccount, saveIntegrationAccount, testConnection,
+  login, logout, loadIntegrationAccount, saveIntegrationAccount, testConnection, usesOAuth, cleanAuth,
   instanceHost, isDevInstance,
   createIncident, closeIncident, resolveSysUserSysId, resolveGroupSysId,
   CLOSE_CODES, DEFAULT_ASSIGNMENT_GROUPS,
   loadHandoverConfig, saveHandoverConfig, DEFAULT_TEMPLATE_SYS_ID,
   DEFAULT_INSTANCE, type ServiceNowConfig, type SnTable, type SnTicket, type CertDiag, type CloseState, type HandoverConfig,
 } from '../services/servicenow'
+import { erklaereSnFehler, type SnErklaerung } from '../services/servicenowExplain'
+import type { SnDiag } from '../electronAPI'
 
 const TABLE_LABEL: Record<SnTable, string> = { incident: 'Incidents', task: 'Tasks' }
 
 /** Assignment-Group-Eingabe (Komma/Semikolon/Zeilenumbruch getrennt) → Liste. */
 function parseGroups(s: string): string[] {
   return s.split(/[,;\n]/).map(g => g.trim()).filter(Boolean)
+}
+
+interface PruefErgebnis {
+  at: Date
+  ok: boolean
+  /** 'gespeichert' = aktiver Zugang · 'eingegeben' = gerade getestete, noch nicht gespeicherte Werte */
+  quelle: 'gespeichert' | 'eingegeben'
+  methode: string
+  host: string
+  erklaerung?: SnErklaerung
+}
+
+function baueErgebnis(
+  r: { ok: boolean; error?: string; diag?: SnDiag }, quelle: PruefErgebnis['quelle'], methode: string,
+  instanceUrl: string, clientId?: string, user?: string,
+): PruefErgebnis {
+  const at = new Date()
+  let host = instanceUrl
+  try { host = new URL(instanceUrl).host } catch { /* Rohwert */ }
+  return {
+    at, ok: r.ok, quelle, methode, host,
+    erklaerung: r.ok ? undefined : erklaereSnFehler(r.diag, r.error, { instanceUrl, clientIdEnde: (clientId || '').slice(-4), user, at }),
+  }
+}
+
+/** Beschriftetes Zugangsdaten-Feld (optional verdeckt mit Auge-Knopf). */
+function ZugangFeld({ label, hinweis, value, onChange, geheim, sichtbar, umschalten }: {
+  label: string; hinweis: string; value: string; onChange: (v: string) => void
+  geheim?: boolean; sichtbar?: boolean; umschalten?: () => void
+}) {
+  return (
+    <label className="block text-[11px] font-medium text-foreground">{label}
+      <div className="relative mt-0.5">
+        <input value={value} onChange={e => onChange(e.target.value)}
+          type={geheim && !sichtbar ? 'password' : 'text'} autoCapitalize="off" autoCorrect="off" spellCheck={false}
+          className={`w-full px-2.5 py-1.5 ${geheim ? 'pr-8 ' : ''}text-sm rounded-md bg-background border border-border text-foreground font-mono focus:outline-none focus:border-primary`} />
+        {geheim && (
+          <button type="button" onClick={umschalten} title={sichtbar ? `${label} verbergen` : `${label} anzeigen`}
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1 rounded text-muted-foreground hover:text-foreground">
+            {sichtbar ? <EyeOff size={13} /> : <Eye size={13} />}
+          </button>
+        )}
+      </div>
+      <span className="block mt-0.5 text-[10px] font-normal text-muted-foreground/80">{hinweis}</span>
+    </label>
+  )
 }
 
 export default function ServiceNow() {
@@ -40,6 +89,16 @@ export default function ServiceNow() {
   const [intUser, setIntUser] = useState('')
   const [intPass, setIntPass] = useState('')
   const [intShowPass, setIntShowPass] = useState(false)
+  // OAuth (Client-ID/-Secret vom HCL-Support) — hat Vorrang vor Basic Auth
+  const [intClientId, setIntClientId] = useState('')
+  const [intSecret, setIntSecret] = useState('')
+  const [intShowSecret, setIntShowSecret] = useState(false)
+  const [intOAuth, setIntOAuth] = useState(false)
+  // Verbindungsstatus (oben im Zugang-Panel): klappt der Login? Wenn nicht: warum (DE) + Begründung für HCL (EN)
+  const [check, setCheck] = useState<PruefErgebnis | null>(null)
+  const [checking, setChecking] = useState(false)
+  const [kopiert, setKopiert] = useState(false)
+  const [showAuto, setShowAuto] = useState(false)
   const [intActive, setIntActive] = useState(false)
   const [intBusy, setIntBusy] = useState(false)
   // Checklisten-Übergabe-Automatik (Task schließen + Primary-User-Incident)
@@ -70,7 +129,11 @@ export default function ServiceNow() {
     void (async () => {
       const [c, acc] = await Promise.all([loadConfig(), loadIntegrationAccount(true)])
       setCfg(c); setForm(c); setGroupsText((c.assignmentGroups ?? []).join(', '))
-      if (acc) { setIntUser(acc.user); setIntPass(acc.pass); setIntActive(true) }
+      if (acc) {
+        setIntUser(acc.user ?? ''); setIntPass(acc.pass ?? '')
+        setIntClientId(acc.clientId ?? ''); setIntSecret(acc.clientSecret ?? '')
+        setIntActive(true); setIntOAuth(usesOAuth(acc))
+      }
       try { setHo(await loadHandoverConfig()) } catch { /* Default */ }
     })()
   }, [])
@@ -83,31 +146,59 @@ export default function ServiceNow() {
     } finally { setHoBusy(false) }
   }
 
-  // Integrationskonto speichern (zentral) + sofort testen
-  async function saveIntegration() {
+  // Zugang speichern (zentral) + sofort testen. OAuth = NUR Client ID + Secret
+  // (Benutzer/Passwort werden dann nicht mitgeschickt); 'basic' = altes Konto.
+  async function saveIntegration(mode: 'oauth' | 'basic') {
     setIntBusy(true); setTestResult(null)
     try {
-      const u = intUser.trim()
-      if (!u || !intPass) { setTestResult({ ok: false, msg: 'Benutzername und Passwort des Integrationskontos eingeben.' }); return }
-      const test = await testConnection(form, { user: u, pass: intPass })
-      if (!test.ok) { setTestResult({ ok: false, msg: 'Test fehlgeschlagen: ' + (test.error || 'unbekannt') + ' — Hinweis: Das Konto muss auf GENAU dieser Instanz existieren (dev/prod sind getrennte Konten!).' }); return }
+      const oauth = mode === 'oauth'
+      const cred = cleanAuth(oauth ? { clientId: intClientId, clientSecret: intSecret } : { user: intUser, pass: intPass })
+      if (oauth && !usesOAuth(cred)) { setTestResult({ ok: false, msg: 'Client ID und Client Secret eingeben.' }); return }
+      if (!oauth && !(cred.user && cred.pass)) { setTestResult({ ok: false, msg: 'Benutzername und Passwort eingeben.' }); return }
+      const test = await testConnection(form, cred)
+      const methode = oauth ? 'Client ID + Secret (OAuth)' : `altes Konto „${cred.user}“ (Basic Auth)`
+      setCheck(baueErgebnis(test, 'eingegeben', methode, form.instanceUrl, cred.clientId, cred.user))
+      if (!test.ok) return   // Begründung steht oben im Statusfeld; nichts gespeichert
       const groups = parseGroups(groupsText)
       const next = { ...form, assignmentGroups: groups }
-      const ok = await saveIntegrationAccount(u, intPass, currentUser, form.instanceUrl, groups)
+      const ok = await saveIntegrationAccount(cred, currentUser, form.instanceUrl, groups)
       if (!ok) { setTestResult({ ok: false, msg: 'Test OK, aber Speichern auf dem Netzlaufwerk fehlgeschlagen.' }); return }
       await saveConfig(next); setForm(next); setCfg(next)
-      setIntActive(true); setNeedsLogin(false)
-      setTestResult({ ok: true, msg: `Integrationskonto „${u}“ getestet & zentral gespeichert (Instanz ${instanceHost(form)}) — gilt ab jetzt für alle App-Nutzer.` })
+      setIntActive(true); setIntOAuth(oauth); setNeedsLogin(false)
+      setCheck(c => c && { ...c, quelle: 'gespeichert' })
+      // Gespeichert ist jetzt genau EIN Weg — die Felder des anderen leeren, damit nichts Altes suggeriert wird.
+      if (oauth) { setIntUser(''); setIntPass('') } else { setIntClientId(''); setIntSecret('') }
+      const wer = oauth ? 'Zugang per Client ID + Secret (OAuth)' : `Konto „${cred.user}“ (Basic Auth)`
+      setTestResult({ ok: true, msg: `${wer} getestet & zentral gespeichert (Instanz ${instanceHost(form)}) — gilt ab jetzt für alle App-Nutzer.` })
       void load()
     } finally { setIntBusy(false) }
+  }
+
+  // Gespeicherten Zugang prüfen (beim Öffnen des Zugang-Panels + per Knopf).
+  async function pruefeGespeicherten() {
+    const c = cfg ?? form
+    if (!isConfigured(c)) return
+    setChecking(true)
+    try {
+      const acc = await loadIntegrationAccount(true)
+      const methode = acc ? (usesOAuth(acc) ? 'Client ID + Secret (OAuth)' : `altes Konto „${acc.user}“ (Basic Auth)`) : 'SSO-Anmeldung'
+      const r = await testConnection(c)
+      setCheck(baueErgebnis(r, 'gespeichert', methode, c.instanceUrl, acc?.clientId, acc?.user))
+    } finally { setChecking(false) }
+  }
+  useEffect(() => { if (showConfig) void pruefeGespeicherten() /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [showConfig])
+
+  async function kopiereBegruendung() {
+    if (!check?.erklaerung) return
+    try { await navigator.clipboard.writeText(check.erklaerung.englisch); setKopiert(true); setTimeout(() => setKopiert(false), 2000) } catch { /* egal */ }
   }
 
   async function removeIntegration() {
     if (!window.confirm('Integrationskonto entfernen? Alle App-Nutzer fallen dann auf die SSO-Anmeldung zurück.')) return
     setIntBusy(true)
     try {
-      await saveIntegrationAccount('', '', currentUser)
-      setIntUser(''); setIntPass(''); setIntActive(false)
+      await saveIntegrationAccount({}, currentUser)
+      setIntUser(''); setIntPass(''); setIntClientId(''); setIntSecret(''); setIntActive(false); setIntOAuth(false)
       setTestResult({ ok: true, msg: 'Integrationskonto entfernt — SSO-Anmeldung ist wieder aktiv.' })
     } finally { setIntBusy(false) }
   }
@@ -165,25 +256,21 @@ export default function ServiceNow() {
     const d = new Date(iso); return isNaN(d.getTime()) ? '' : d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
   }
 
-  function distinct(sel: (t: SnTicket) => string): Map<string, number> {
-    const m = new Map<string, number>()
-    for (const t of tickets) { const v = sel(t) || '(leer)'; m.set(v, (m.get(v) ?? 0) + 1) }
-    return m
-  }
-  const dState = useMemo(() => distinct(t => t.state), [tickets])
-  const dPrio = useMemo(() => distinct(t => t.priority), [tickets])
-  const dGroup = useMemo(() => distinct(t => t.assignmentGroup), [tickets])
+  // Spalten EINMAL deklariert — Filtern und Zählen benutzen denselben Ausleser.
+  // Die Zahlen in den Aufklapplisten beziehen sich damit auf die aktuelle Auswahl
+  // (jede Spalte rechnet alle ANDEREN Filter mit, ihren eigenen nicht).
+  const spalten = useMemo<Spalte<SnTicket>[]>(() => [
+    { id: 'state', werte: t => [t.state || '(leer)'], gewaehlt: fState },
+    { id: 'prio', werte: t => [t.priority || '(leer)'], gewaehlt: fPrio },
+    { id: 'group', werte: t => [t.assignmentGroup || '(leer)'], gewaehlt: fGroup },
+  ], [fState, fPrio, fGroup])
 
-  const filtered = useMemo(() => {
+  const { zeilen: filtered, werte } = useMemo(() => {
     const q = search.trim().toLowerCase()
-    return tickets.filter(t => {
-      if (q && !([t.number, t.shortDescription, t.assignedTo, t.assignmentGroup, t.caller].some(v => v.toLowerCase().includes(q)))) return false
-      if (fState.size && !fState.has(t.state || '(leer)')) return false
-      if (fPrio.size && !fPrio.has(t.priority || '(leer)')) return false
-      if (fGroup.size && !fGroup.has(t.assignmentGroup || '(leer)')) return false
-      return true
-    })
-  }, [tickets, search, fState, fPrio, fGroup])
+    return spaltenFilter(tickets, spalten, t =>
+      !q || [t.number, t.shortDescription, t.assignedTo, t.assignmentGroup, t.caller]
+        .some(v => v.toLowerCase().includes(q)))
+  }, [tickets, spalten, search])
 
   const anyFilter = fState.size || fPrio.size || fGroup.size || search.trim()
   function resetFilters() { setSearch(''); setFState(new Set()); setFPrio(new Set()); setFGroup(new Set()) }
@@ -215,9 +302,13 @@ export default function ServiceNow() {
             {loadedAt && !loading && <> · zuletzt geladen {fmtRel(loadedAt)}</>}
           </p>
         </div>
-        <button onClick={() => setShowConfig(v => !v)} title="ServiceNow-Zugang konfigurieren"
-          className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
+        <button onClick={() => { setShowConfig(v => !v); setShowAuto(false) }} title="Verbindung zu ServiceNow prüfen und Zugang einrichten"
+          className={`flex items-center gap-1.5 px-3 py-2 text-xs rounded-md border hover:bg-accent ${showConfig ? 'border-primary/50 text-foreground bg-primary/10' : 'border-border text-muted-foreground hover:text-foreground'}`}>
           <SettingsIcon size={14} />Zugang
+        </button>
+        <button onClick={() => { setShowAuto(v => !v); setShowConfig(false) }} title="Automatik bei Geräteübergabe (Checklisten → ServiceNow)"
+          className={`flex items-center gap-1.5 px-3 py-2 text-xs rounded-md border hover:bg-accent ${showAuto ? 'border-primary/50 text-foreground bg-primary/10' : 'border-border text-muted-foreground hover:text-foreground'}`}>
+          <Zap size={14} />Automatik{ho.enabled ? ' · an' : ''}
         </button>
         <button onClick={load} disabled={loading || !isConfigured(cfg)} title="Neu laden"
           className="p-2 rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground disabled:opacity-40">
@@ -225,114 +316,134 @@ export default function ServiceNow() {
         </button>
       </div>
 
-      {/* Zugang / Konfiguration */}
+      {/* Zugang: 1) klappt die Verbindung?  2) Zugang von HCL  3) Instanz & Filter (eingeklappt) */}
       {showConfig && (
-        <div className="shrink-0 px-6 py-4 border-b border-border bg-muted/5">
+        <div className="shrink-0 max-h-[70vh] overflow-auto px-6 py-4 border-b border-border bg-muted/5">
           <div className="max-w-2xl space-y-3">
-            <p className="text-xs text-muted-foreground">
-              Empfohlen: das <strong className="text-foreground">Integrationskonto</strong> (Basic Auth, vom ServiceNow-Support bereitgestellt) — wird zentral gespeichert und gilt für alle App-Nutzer, ohne Anmeldung.
-              Ohne Integrationskonto greift der <strong className="text-foreground">SSO-Fallback</strong> (Anmeldung wie im Browser, Sitzung bleibt lokal).
-            </p>
-            <div className="grid grid-cols-1 gap-2">
-              <label className="text-[11px] text-muted-foreground">Instanz-URL
-                <div className="flex gap-2 mt-0.5">
-                  <input value={form.instanceUrl} onChange={e => setForm(f => ({ ...f, instanceUrl: e.target.value }))} placeholder={DEFAULT_INSTANCE}
-                    className="flex-1 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary" />
-                  <button onClick={saveInstance} disabled={testing || !form.instanceUrl.trim()}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-40">
-                    {testing ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}Speichern
-                  </button>
-                </div>
-              </label>
-              <label className="text-[11px] text-muted-foreground">Assignment Groups (nur diese Tickets laden — kommagetrennt, leer = alle)
-                <input value={groupsText} onChange={e => setGroupsText(e.target.value)} placeholder="FS DE Hamburg, Marine infrastructure support"
-                  className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary" />
-                <span className="block mt-0.5 text-[10px] text-muted-foreground/80">Serverseitiger Filter: es werden gezielt die Tickets dieser Gruppen geladen (behebt „falsche/leere" Liste). Über „Speichern" (Instanz) oder „Testen &amp; speichern" (Konto) übernehmen.</span>
-              </label>
+
+            {/* 1) Verbindungsstatus */}
+            <div className={`rounded-md border p-3 space-y-2 ${!check ? 'border-border bg-background/60' : check.ok ? 'border-emerald-500/40 bg-emerald-500/5' : 'border-red-500/40 bg-red-500/5'}`}>
+              <div className="flex items-center gap-2 flex-wrap">
+                {checking ? <Loader2 size={18} className="animate-spin text-muted-foreground" />
+                  : !check ? <AlertTriangle size={18} className="text-muted-foreground" />
+                  : check.ok ? <CheckCircle2 size={18} className="text-emerald-400" />
+                  : <XCircle size={18} className="text-red-400" />}
+                <span className="text-sm font-semibold text-foreground">
+                  {checking ? 'Verbindung wird geprüft…'
+                    : !check ? 'Verbindung noch nicht geprüft'
+                    : check.ok ? 'Login klappt'
+                    : 'Login klappt nicht'}
+                </span>
+                {check && !checking && (
+                  <span className="text-[11px] text-muted-foreground">
+                    {check.quelle === 'eingegeben' && !check.ok ? 'eingegebene Werte (nicht gespeichert)' : 'gespeicherter Zugang'} · {check.methode} · {check.host} · {check.at.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                )}
+                <button onClick={() => void pruefeGespeicherten()} disabled={checking || !isConfigured(cfg ?? form)}
+                  className="ml-auto inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-40">
+                  <RefreshCw size={12} className={checking ? 'animate-spin' : ''} />Erneut prüfen
+                </button>
+              </div>
+
+              {check && !check.ok && check.erklaerung && !checking && (
+                <>
+                  <p className="text-xs text-foreground">{check.erklaerung.kurz}</p>
+                  {check.erklaerung.wer === 'wir' ? (
+                    <p className="text-[11px] text-amber-300">Das liegt sehr wahrscheinlich an unserer Seite (Netzwerk/Einstellung) — erst intern prüfen, nicht an HCL schicken.</p>
+                  ) : (
+                    <div className="rounded-md border border-border bg-background/80">
+                      <div className="flex items-center gap-2 px-2.5 py-1.5 border-b border-border">
+                        <span className="text-[11px] font-semibold text-foreground">Begründung für HCL (Englisch) — zum Weiterleiten</span>
+                        <button onClick={() => void kopiereBegruendung()}
+                          className="ml-auto inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90">
+                          {kopiert ? <CheckCircle2 size={12} /> : <Copy size={12} />}{kopiert ? 'Kopiert' : 'Kopieren'}
+                        </button>
+                      </div>
+                      <pre className="px-2.5 py-2 text-[11px] leading-relaxed text-foreground/90 whitespace-pre-wrap font-mono select-text max-h-64 overflow-auto">{check.erklaerung.englisch}</pre>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
 
-            {/* Integrationskonto (Basic Auth, zentral) */}
+            {/* 2) Zugang von HCL */}
             <div className="rounded-md border border-border bg-background/60 p-3 space-y-2">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <KeyRound size={14} className="text-blue-400" />
-                <span className="text-xs font-semibold text-foreground">Integrationskonto (Basic Auth)</span>
-                {intActive && <span className="inline-flex items-center gap-1 text-[11px] text-emerald-300"><ShieldCheck size={12} />aktiv — gilt für alle App-Nutzer</span>}
+                <span className="text-xs font-semibold text-foreground">Zugang von HCL</span>
+                {intActive && <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground"><ShieldCheck size={12} />gespeichert: {intOAuth ? 'Client ID + Secret' : 'altes Konto (Benutzer + Passwort)'}</span>}
+              </div>
+              <p className="text-[11px] text-muted-foreground">Nur die zwei Werte aus dem HCL-Chat eintragen. „Testen &amp; speichern" prüft zuerst — das Ergebnis erscheint oben; gespeichert wird nur bei Erfolg.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2">
+                <ZugangFeld label="Client ID" hinweis="Wert hinter „Client ID –“"
+                  value={intClientId} onChange={setIntClientId} />
+                <ZugangFeld label="Client Secret" hinweis="Wert hinter „Client Secret –“"
+                  value={intSecret} onChange={setIntSecret} geheim sichtbar={intShowSecret} umschalten={() => setIntShowSecret(v => !v)} />
               </div>
               <div className="flex gap-2 flex-wrap">
-                <input value={intUser} onChange={e => setIntUser(e.target.value)} placeholder="Benutzer (z. B. automated_user)"
-                  autoCapitalize="off" autoCorrect="off" spellCheck={false}
-                  className="w-56 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground font-mono focus:outline-none focus:border-primary" />
-                <div className="relative flex-1 min-w-[220px]">
-                  <input value={intPass} onChange={e => setIntPass(e.target.value)} placeholder="Passwort"
-                    type={intShowPass ? 'text' : 'password'} autoCapitalize="off" autoCorrect="off" spellCheck={false}
-                    className="w-full px-2.5 py-1.5 pr-8 text-sm rounded-md bg-background border border-border text-foreground font-mono focus:outline-none focus:border-primary" />
-                  <button type="button" onClick={() => setIntShowPass(v => !v)} title={intShowPass ? 'Passwort verbergen' : 'Passwort anzeigen'}
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1 rounded text-muted-foreground hover:text-foreground">
-                    {intShowPass ? <EyeOff size={13} /> : <Eye size={13} />}
-                  </button>
-                </div>
-                <button onClick={saveIntegration} disabled={intBusy || !intUser.trim() || !intPass}
+                <button onClick={() => void saveIntegration('oauth')} disabled={intBusy || !(intClientId.trim() && intSecret.trim())}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
                   {intBusy ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}Testen &amp; speichern
                 </button>
                 {intActive && (
-                  <button onClick={removeIntegration} disabled={intBusy} title="Integrationskonto entfernen (zurück zu SSO)"
+                  <button onClick={removeIntegration} disabled={intBusy} title="Zugang entfernen (zurück zu SSO)"
                     className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-red-400 hover:border-red-500/40 disabled:opacity-40">
                     <Trash2 size={13} />Entfernen
                   </button>
                 )}
               </div>
-              <p className="text-[11px] text-muted-foreground">
-                Wird beim Speichern getestet und zentral auf dem IT-Netzlaufwerk abgelegt (nur für die IT erreichbar). Passwort einfach per Copy&nbsp;&amp;&nbsp;Paste aus dem Support-Chat einfügen — Sonderzeichen sind kein Problem.
-              </p>
-            </div>
 
-            {/* Checklisten-Übergabe → ServiceNow-Automatik */}
-            <div className="rounded-md border border-border bg-background/60 p-3 space-y-2">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-semibold text-foreground">Automatik bei Geräteübergabe (Checklisten)</span>
-                <label className="ml-auto inline-flex items-center gap-2 text-xs text-foreground cursor-pointer">
-                  <input type="checkbox" checked={ho.enabled} onChange={e => setHo(h => ({ ...h, enabled: e.target.checked }))} className="accent-primary" />
-                  aktiv
-                </label>
-              </div>
-              <p className="text-[11px] text-muted-foreground">
-                Wenn eine Checkliste als „übergeben" bestätigt wird, laufen automatisch (im Hintergrund, ohne Browser): Deployment-<strong className="text-foreground">Task schließen</strong> + Checkliste als PDF anhängen und ein <strong className="text-foreground">Primary-User-Incident</strong> anlegen. Nutzt das oben konfigurierte Konto/die Instanz.
-              </p>
-              <div className="flex gap-2 flex-wrap items-end">
-                <label className="text-[11px] text-muted-foreground flex-1 min-w-[260px]">Vorlage-Incident (sys_id, „copy incident")
-                  <input value={ho.templateSysId} onChange={e => setHo(h => ({ ...h, templateSysId: e.target.value }))} placeholder={DEFAULT_TEMPLATE_SYS_ID}
-                    className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground font-mono focus:outline-none focus:border-primary" />
-                </label>
-                <label className="text-[11px] text-muted-foreground w-28">Task-Schließ-Status
-                  <input value={ho.closeState} onChange={e => setHo(h => ({ ...h, closeState: e.target.value }))} placeholder="3"
-                    className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground font-mono focus:outline-none focus:border-primary" />
-                </label>
-                <button onClick={saveHo} disabled={hoBusy}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
-                  {hoBusy ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}Speichern
+              <details className="pt-1">
+                <summary className="text-[11px] text-muted-foreground cursor-pointer select-none hover:text-foreground">Alternativ: altes Konto mit Benutzername + Passwort (Basic Auth)</summary>
+                <div className="mt-2 space-y-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2">
+                    <ZugangFeld label="Benutzername" hinweis="z. B. automated_user"
+                      value={intUser} onChange={setIntUser} />
+                    <ZugangFeld label="Passwort" hinweis="Passwort dieses Kontos"
+                      value={intPass} onChange={setIntPass} geheim sichtbar={intShowPass} umschalten={() => setIntShowPass(v => !v)} />
+                  </div>
+                  <button onClick={() => void saveIntegration('basic')} disabled={intBusy || !(intUser.trim() && intPass)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-40">
+                    {intBusy ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}Altes Konto testen &amp; speichern
+                  </button>
+                </div>
+              </details>
+
+              {/* SSO nur, solange kein Zugang von HCL gespeichert ist */}
+              {!intActive && <div className="flex items-center gap-2 flex-wrap pt-1 border-t border-border">
+                <span className="text-[11px] text-muted-foreground">Ohne Zugang von HCL: persönliche SSO-Anmeldung</span>
+                <button onClick={doLogin} disabled={loggingIn || !form.instanceUrl.trim()}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-40">
+                  {loggingIn ? <Loader2 size={12} className="animate-spin" /> : <LogIn size={12} />}Anmelden (SSO)
                 </button>
-              </div>
-              {hoMsg && <p className="text-[11px] text-emerald-300">{hoMsg}</p>}
-              <p className="text-[10px] text-muted-foreground/80">Status 3 = „Closed Complete". Vorlage-sys_id ist instanz-spezifisch (prod) — an eurer Instanz prüfen. Bei Problemen erscheint je Schritt eine Fehlermeldung; die Checkliste wird trotzdem als erledigt gespeichert.</p>
+                {signedIn && (
+                  <button onClick={doLogout}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent"><LogOut size={12} />Abmelden{snUser ? ` (${snUser})` : ''}</button>
+                )}
+              </div>}
             </div>
 
-            {/* Anmeldestatus + SSO-Buttons (Fallback ohne Integrationskonto) */}
-            {!intActive && <div className="flex items-center gap-2 flex-wrap">
-              {signedIn ? (
-                <span className="inline-flex items-center gap-1.5 text-xs text-emerald-300"><ShieldCheck size={14} />Angemeldet{snUser ? ` als ${snUser}` : ''}</span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 text-xs text-amber-300"><AlertTriangle size={14} />Nicht angemeldet</span>
-              )}
-              <button onClick={doLogin} disabled={loggingIn || !form.instanceUrl.trim()}
-                className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
-                {loggingIn ? <Loader2 size={13} className="animate-spin" /> : <LogIn size={13} />}Bei ServiceNow anmelden (SSO)
-              </button>
-              {signedIn && (
-                <button onClick={doLogout}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent"><LogOut size={13} />Abmelden</button>
-              )}
-            </div>}
+            {/* 3) Instanz & Ticket-Filter — selten nötig, daher eingeklappt */}
+            <details className="rounded-md border border-border bg-background/60 p-3">
+              <summary className="text-xs font-semibold text-foreground cursor-pointer select-none">Instanz &amp; Ticket-Filter <span className="font-normal text-muted-foreground">— {instanceHost(form) || 'nicht gesetzt'}{parseGroups(groupsText).length ? ` · ${parseGroups(groupsText).length} Gruppen` : ' · alle Gruppen'}</span></summary>
+              <div className="mt-2 grid grid-cols-1 gap-2">
+                <label className="text-[11px] text-muted-foreground">Instanz-URL
+                  <input value={form.instanceUrl} onChange={e => setForm(f => ({ ...f, instanceUrl: e.target.value }))} placeholder={DEFAULT_INSTANCE}
+                    className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary" />
+                </label>
+                <label className="text-[11px] text-muted-foreground">Assignment Groups (nur diese Tickets laden — kommagetrennt, leer = alle)
+                  <input value={groupsText} onChange={e => setGroupsText(e.target.value)} placeholder="FS DE Hamburg, Marine infrastructure support"
+                    className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary" />
+                </label>
+                <div>
+                  <button onClick={saveInstance} disabled={testing || !form.instanceUrl.trim()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-40">
+                    {testing ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}Speichern
+                  </button>
+                </div>
+              </div>
+            </details>
+
             {testResult && (
               <div className={`flex items-center gap-2 text-xs ${testResult.ok ? 'text-emerald-300' : 'text-red-300'}`}>
                 {testResult.ok ? <CheckCircle2 size={13} /> : <AlertTriangle size={13} />}{testResult.msg}
@@ -366,6 +477,41 @@ export default function ServiceNow() {
         </div>
       )}
 
+      {/* Automatik bei Geräteübergabe — eigener Bereich (nicht Teil des Zugangs) */}
+      {showAuto && (
+        <div className="shrink-0 px-6 py-4 border-b border-border bg-muted/5">
+          <div className="max-w-2xl rounded-md border border-border bg-background/60 p-3 space-y-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Zap size={14} className="text-amber-400" />
+              <span className="text-xs font-semibold text-foreground">Automatik bei Geräteübergabe (Checklisten)</span>
+              <label className="ml-auto inline-flex items-center gap-2 text-xs text-foreground cursor-pointer">
+                <input type="checkbox" checked={ho.enabled} onChange={e => setHo(h => ({ ...h, enabled: e.target.checked }))} className="accent-primary" />
+                aktiv
+              </label>
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              Wenn eine Checkliste als „übergeben" bestätigt wird, laufen automatisch (im Hintergrund, ohne Browser): Deployment-<strong className="text-foreground">Task schließen</strong> + Checkliste als PDF anhängen und ein <strong className="text-foreground">Primary-User-Incident</strong> anlegen. Nutzt den Zugang unter „Zugang".
+            </p>
+            <div className="flex gap-2 flex-wrap items-end">
+              <label className="text-[11px] text-muted-foreground flex-1 min-w-[260px]">Vorlage-Incident (sys_id, „copy incident")
+                <input value={ho.templateSysId} onChange={e => setHo(h => ({ ...h, templateSysId: e.target.value }))} placeholder={DEFAULT_TEMPLATE_SYS_ID}
+                  className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground font-mono focus:outline-none focus:border-primary" />
+              </label>
+              <label className="text-[11px] text-muted-foreground w-28">Task-Schließ-Status
+                <input value={ho.closeState} onChange={e => setHo(h => ({ ...h, closeState: e.target.value }))} placeholder="3"
+                  className="w-full mt-0.5 px-2.5 py-1.5 text-sm rounded-md bg-background border border-border text-foreground font-mono focus:outline-none focus:border-primary" />
+              </label>
+              <button onClick={saveHo} disabled={hoBusy}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
+                {hoBusy ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}Speichern
+              </button>
+            </div>
+            {hoMsg && <p className="text-[11px] text-emerald-300">{hoMsg}</p>}
+            <p className="text-[10px] text-muted-foreground/80">Status 3 = „Closed Complete". Vorlage-sys_id ist instanz-spezifisch (prod) — an eurer Instanz prüfen. Bei Problemen erscheint je Schritt eine Fehlermeldung; die Checkliste wird trotzdem als erledigt gespeichert.</p>
+          </div>
+        </div>
+      )}
+
       {/* Tabs + Filter */}
       <div className="shrink-0 px-6 py-2 border-b border-border flex items-center gap-2 flex-wrap bg-muted/5">
         <div className="flex items-center gap-1 mr-1">
@@ -386,9 +532,9 @@ export default function ServiceNow() {
             className="w-full pl-7 pr-3 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
         </div>
         <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mx-1"><Filter size={11} />Filter</span>
-        <ColumnFilter label="Status" icon={<ListFilter size={11} />} values={dState} selected={fState} onChange={setFState} />
-        <ColumnFilter label="Priorität" icon={<Flag size={11} />} values={dPrio} selected={fPrio} onChange={setFPrio} />
-        <ColumnFilter label="Gruppe" icon={<Users2 size={11} />} values={dGroup} selected={fGroup} onChange={setFGroup} />
+        <ColumnFilter label="Status" icon={<ListFilter size={11} />} values={werte.state} selected={fState} onChange={setFState} />
+        <ColumnFilter label="Priorität" icon={<Flag size={11} />} values={werte.prio} selected={fPrio} onChange={setFPrio} />
+        <ColumnFilter label="Gruppe" icon={<Users2 size={11} />} values={werte.group} selected={fGroup} onChange={setFGroup} />
         {anyFilter ? (
           <button onClick={resetFilters} className="flex items-center gap-1 px-2 py-1 text-[11px] rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30"><X size={11} />Filter zurücksetzen</button>
         ) : null}

@@ -15,6 +15,20 @@ interface ReminderState { date: string; sentSams: string[] }
 
 const WOCHENTAG = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag']
 
+// ── Links in der Mail ────────────────────────────────────────────────────────
+// Feste Adressen, keine Nutzereingabe — deshalb bewusst OHNE esc(): das würde
+// kaufmännische Und-Zeichen in Query-Teilen zerstören. esc() bleibt für Namen und
+// Datumsangaben zuständig.
+/** Microsoft-Sicherheitsinformationen — dort Zeile „Kennwort" → „Ändern". */
+const LINK_PASSWORT_AENDERN = 'https://mysignins.microsoft.com/security-info'
+/** Selbstwiederherstellung bei gesperrtem Konto / Anmeldeproblemen. */
+const LINK_KONTO_WIEDERHERSTELLEN = 'https://passwordreset.microsoftonline.com'
+
+/** Ein Link, der in Outlook sichtbar als Hyperlink ankommt. */
+function link(url: string, text: string): string {
+  return `<a href="${url}" target="_blank" rel="noopener" style="color:#0a58ca;font-weight:600;">${text}</a>`
+}
+
 // ── Datums-/Wochenend-Logik ──────────────────────────────────────────────────
 function dateOnly(d: Date): Date { return new Date(d.getFullYear(), d.getMonth(), d.getDate()) }
 function isWeekend(d: Date): boolean { const w = d.getDay(); return w === 0 || w === 6 }
@@ -137,16 +151,34 @@ export function buildReminderMail(user: { name: string; pwdExpiry?: string }, no
     `<p>Hallo${vorname ? ' ' + esc(vorname) : ''},</p>` +
     `<p>dein Windows-Passwort läuft <b>${esc(wann)}</b> ab.</p>` +
     dringlichkeit +
-    `<p><b>Am einfachsten änderst du dein Passwort direkt am PC über die Tastenkombination ` +
+    // ── Im Büro ──────────────────────────────────────────────────────────────
+    `<p><b>Im Büro — am einfachsten direkt am PC über die Tastenkombination ` +
     `<span style="font-family:Consolas,monospace;background:#eee;padding:1px 5px;border-radius:3px;">Strg + Alt + Entf</span> ` +
     `→ „Kennwort ändern".</b></p>` +
-    `<p>So geht's:</p>` +
     `<ol>` +
     `<li><b>Strg + Alt + Entf</b> drücken und <b>„Kennwort ändern"</b> wählen.</li>` +
     `<li>Aktuelles Passwort eingeben, dann zweimal das neue Passwort.</li>` +
     `</ol>` +
-    `<p style="color:#666;font-size:10pt;">Diese Erinnerung wird automatisch von der IT versendet. ` +
-    `Bei Problemen mit der Passwortänderung melde dich bitte bei der IT.</p>` +
+    // ── Im Home Office ───────────────────────────────────────────────────────
+    // Der eigentliche Grund für diesen Block: über Strg + Alt + Entf von zu Hause
+    // kommt die Änderung nicht beim Rechner an — die Leute sperren sich damit aus.
+    `<p style="margin-top:14px;"><b>Im Home Office — bitte NICHT über Strg + Alt + Entf.</b><br>` +
+    `Dein Rechner kennt sonst weiterhin das alte Passwort, und du sperrst dich damit selbst aus. ` +
+    `So geht es richtig:</p>` +
+    `<ol>` +
+    `<li>Passwort online ändern: ${link(LINK_PASSWORT_AENDERN, 'Passwort ändern (Microsoft)')} ` +
+    `— dort in der Zeile <b>„Kennwort"</b> auf <b>„Ändern"</b>.</li>` +
+    `<li>Danach <b>einmal über Zscaler neu authentifizieren</b>: Zscaler öffnen → links auf ` +
+    `<b>„Private Access"</b> → rechts bei <b>„Authentication Status"</b> auf <b>„Authenticate Early"</b> ` +
+    `→ den Anweisungen folgen und mit dem <b>neuen</b> Passwort anmelden.</li>` +
+    `</ol>` +
+    // ── Bei Problemen ────────────────────────────────────────────────────────
+    `<p style="margin-top:14px;"><b>Bei Problemen</b> — Konto gesperrt, Anmeldung klappt nicht, ` +
+    `Probleme mit der Authentifizierung: Du kannst dein Konto auch von zu Hause <b>selbst wiederherstellen</b>:<br>` +
+    `${link(LINK_KONTO_WIEDERHERSTELLEN, 'Konto wiederherstellen / Passwort zurücksetzen')}</p>` +
+    `<p>Du brauchst dafür eine deiner hinterlegten Anmeldemethoden (Microsoft Authenticator auf dem Handy ` +
+    `oder deine Mobilnummer). Hilft das nicht weiter, melde dich bitte bei der IT.</p>` +
+    `<p style="color:#666;font-size:10pt;">Diese Erinnerung wird automatisch von der IT versendet.</p>` +
     `<p>Viele Grüße<br>Deine IT</p>` +
     `</div>`
   return { subject, body }

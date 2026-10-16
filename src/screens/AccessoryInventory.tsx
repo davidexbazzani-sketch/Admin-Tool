@@ -9,6 +9,7 @@ import { useAuthStore } from '../store/authStore'
 import {
   loadItems, saveItems, createItem, computeOrderList, sortItems, formatOrderText,
   loadHistory, addHistoryEntry, setHistorySentToSascha, setHistoryLineArrived, deleteHistoryEntry,
+  replaceHistoryLines,
   type AccessoryItem, type OrderLine, type AccessoryHistoryEntry,
 } from '../services/accessoryInventory'
 import { exportOrderList, prepareOrderAttachment, type AccessoryExportFormat } from '../services/accessoryInventoryExport'
@@ -35,6 +36,9 @@ function fmtDateTime(iso: string): string {
   const d = new Date(iso); if (isNaN(d.getTime())) return ''
   return d.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
+
+/** Betreff der Bestell-Mail — bewusst fest und nicht editierbar. */
+const EMAIL_BETREFF = 'Zubehör Inventur'
 
 export default function AccessoryInventory() {
   const user = useAuthStore(s => s.session?.user)
@@ -77,12 +81,21 @@ export default function AccessoryInventory() {
   // Ergebnisseite: E-Mail + Export + Sascha
   const [emailTo, setEmailTo] = useState('')
   const [emailCc, setEmailCc] = useState<string[]>([])
-  const [emailSubject, setEmailSubject] = useState('')
+  const emailSubject = EMAIL_BETREFF   // fest — kein State mehr nötig
   const [emailSending, setEmailSending] = useState(false)
   const [emailStatus, setEmailStatus] = useState('')
   const [attachFormats, setAttachFormats] = useState<Set<AccessoryExportFormat>>(new Set())
   const [exporting, setExporting] = useState<AccessoryExportFormat | null>(null)
   const [celebrating, setCelebrating] = useState(false)  // Easter Egg nach Abschluss
+
+  // Nachtrag auf der Ergebnisseite: Kleinteile, die nicht auf der Liste standen.
+  // „uebernehmen" entscheidet, ob das Teil dauerhaft in die Inventarliste wandert.
+  const [historyId, setHistoryId] = useState<string | null>(null)
+  const [nachtragName, setNachtragName] = useState('')
+  const [nachtragMenge, setNachtragMenge] = useState('1')
+  const [nachtragLink, setNachtragLink] = useState('')
+  const [nachtragUebernehmen, setNachtragUebernehmen] = useState(true)
+  const [nachtragHinweis, setNachtragHinweis] = useState('')
 
   const reload = useCallback(async () => {
     setLoading(true)
@@ -211,13 +224,14 @@ export default function AccessoryInventory() {
     const lines = computeOrderList(next)
     setOrderLines(lines)
     // E-Mail-Felder vorbereiten
-    setEmailSubject(`Zubehör-Bestellung IT (${new Date().toLocaleDateString('de-DE')})`)
     setEmailStatus('')
+    setNachtragName(''); setNachtragMenge('1'); setNachtragLink(''); setNachtragHinweis('')
     // Historien-Eintrag anlegen (der "An Sascha geschickt"-Haken sitzt jetzt
     // im jeweiligen Historien-Eintrag, nicht mehr auf der Ergebnisseite)
     try {
       const entry = await addHistoryEntry(lines, currentUserName)
       setHistory(prev => [entry, ...prev])
+      setHistoryId(entry.id)   // für spätere Nachträge, damit die Historie mitwandert
     } catch { /* Historie optional */ }
     setCelebrating(true)   // Skyline-Drift starten, dann Liste einblenden
     setMode('result')
@@ -229,6 +243,53 @@ export default function AccessoryInventory() {
   }
   function wizardBack() {
     if (wizardIndex > 0) setWizardIndex(i => i - 1)
+  }
+
+  /**
+   * Kleinteil nachtragen, das bei der Inventur nicht auf der Liste stand.
+   * Es landet immer in der Bestellliste dieser Inventur (E-Mail, Export, Historie).
+   * Ist „dauerhaft übernehmen" angehakt, wandert es zusätzlich in die Inventarliste,
+   * damit es künftig automatisch mitgezählt wird.
+   */
+  async function addNachtrag() {
+    const name = nachtragName.trim()
+    if (!name) { setNachtragHinweis('Bitte einen Namen eintragen.'); return }
+    const menge = Math.max(1, Math.round(Number(nachtragMenge) || 0))
+    const link = nachtragLink.trim()
+
+    // Doppelte Position vermeiden — sonst steht das Teil zweimal in der Mail.
+    if (orderLines.some(l => l.item.name.trim().toLowerCase() === name.toLowerCase())) {
+      setNachtragHinweis(`„${name}" steht bereits auf der Bestellliste.`)
+      return
+    }
+
+    let eintrag: AccessoryItem
+    if (nachtragUebernehmen) {
+      // Dauerhaft: IST 0, SOLL = nachbestellte Menge → beim nächsten Mal wird gezählt.
+      const maxOrder = items.reduce((mx, it) => Math.max(mx, it.order), 0)
+      eintrag = createItem(name, 0, menge, link, maxOrder + 1)
+      await persist([...items, eintrag])
+    } else {
+      // Nur für diese Inventur — nicht speichern, aber dieselbe Form verwenden.
+      eintrag = createItem(name, 0, menge, link, 0)
+    }
+
+    const naechste = [...orderLines, { item: eintrag, quantity: menge }]
+    setOrderLines(naechste)
+    // Historie nachziehen, damit dort dieselbe Liste steht wie in der Mail.
+    if (historyId) {
+      try {
+        await replaceHistoryLines(historyId, naechste)
+        setHistory(prev => prev.map(e => e.id === historyId
+          ? { ...e, lines: naechste.map(({ item, quantity }) => ({ name: item.name, quantity, amazonLink: item.amazonLink, arrived: e.lines.find(l => l.name.toLowerCase() === item.name.toLowerCase())?.arrived ?? false })), reorderCount: naechste.length, totalUnits: naechste.reduce((sum, l) => sum + l.quantity, 0) }
+          : e))
+      } catch { /* Historie ist optional */ }
+    }
+
+    setNachtragHinweis(nachtragUebernehmen
+      ? `„${name}" ergänzt und dauerhaft in die Inventarliste übernommen.`
+      : `„${name}" nur für diese Inventur ergänzt.`)
+    setNachtragName(''); setNachtragMenge('1'); setNachtragLink('')
   }
 
   // ── Ergebnisseite: E-Mail ─────────────────────────────────────────────────
@@ -603,6 +664,58 @@ export default function AccessoryInventory() {
               </>
             )}
 
+            {/* Kleinteile nachtragen, die nicht auf der Liste standen */}
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">Kleinteil nachtragen</p>
+              <p className="text-[11px] text-muted-foreground mb-3">
+                Etwas gefunden, das nicht auf der Liste stand? Hier ergänzen — es kommt in diese Bestellliste und optional dauerhaft ins Inventar.
+              </p>
+              <div className="space-y-2">
+                <input
+                  value={nachtragName}
+                  onChange={e => { setNachtragName(e.target.value); setNachtragHinweis('') }}
+                  onKeyDown={e => { if (e.key === 'Enter') void addNachtrag() }}
+                  placeholder="Name des Kleinteils"
+                  className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
+                />
+                <div className="flex items-center gap-2">
+                  <label className="text-[11px] text-muted-foreground shrink-0">Menge:</label>
+                  <input
+                    value={nachtragMenge}
+                    onChange={e => setNachtragMenge(e.target.value.replace(/[^\d]/g, ''))}
+                    inputMode="numeric"
+                    className="w-20 px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
+                  />
+                  <input
+                    value={nachtragLink}
+                    onChange={e => setNachtragLink(e.target.value)}
+                    placeholder="Bestelllink (optional)"
+                    className="flex-1 px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
+                  />
+                </div>
+                <label className="flex items-start gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={nachtragUebernehmen}
+                    onChange={e => setNachtragUebernehmen(e.target.checked)}
+                    className="w-4 h-4 mt-0.5 accent-primary shrink-0"
+                  />
+                  <span className="text-xs text-foreground">
+                    Dauerhaft in die Inventarliste übernehmen
+                    <span className="block text-[11px] text-muted-foreground">Wird mit IST 0 und SOLL = Menge angelegt und ist ab der nächsten Inventur dabei.</span>
+                  </span>
+                </label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button
+                    onClick={() => void addNachtrag()}
+                    disabled={!nachtragName.trim()}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40"
+                  ><Plus size={14} />Hinzufügen</button>
+                  {nachtragHinweis && <span className="text-[11px] text-muted-foreground">{nachtragHinweis}</span>}
+                </div>
+              </div>
+            </div>
+
             {/* Export-Buttons */}
             <div className="rounded-xl border border-border bg-card p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2.5">Bestellliste exportieren</p>
@@ -659,11 +772,9 @@ export default function AccessoryInventory() {
                 </div>
                 <div>
                   <label className="text-[11px] text-muted-foreground block mb-1">Betreff:</label>
-                  <input
-                    value={emailSubject}
-                    onChange={e => setEmailSubject(e.target.value)}
-                    className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
-                  />
+                  <div className="w-full px-2.5 py-2 rounded-md bg-muted/20 border border-border text-sm text-foreground">
+                    {emailSubject}
+                  </div>
                 </div>
                 <div>
                   <label className="text-[11px] text-muted-foreground inline-flex items-center gap-1.5 mb-1.5">

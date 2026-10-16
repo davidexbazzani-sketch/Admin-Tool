@@ -14,7 +14,7 @@ import { api } from '../electronAPI'
 import { canonicalHost, isIpAddress } from './deviceDossier'
 import { loadDevices, type EndpointDevice } from './endpointDevices'
 import { normalizeSerial } from './hardwareInventory'
-import { loadConfig, loadIntegrationAccount } from './servicenow'
+import { authOf, loadConfig, loadIntegrationAccount } from './servicenow'
 import type { InventoryItem } from '../types/auth'
 
 function psq(s: string): string { return s.replace(/'/g, "''") }
@@ -391,7 +391,7 @@ export async function fetchDeviceServiceNow(hostname: string, serial?: string): 
   try { cfg = await loadConfig() } catch { return { configured: false, ci: null, tickets: [] } }
   if (!cfg?.instanceUrl?.trim()) return { configured: false, ci: null, tickets: [] }
   const acc = await loadIntegrationAccount().catch(() => null)
-  const auth = acc ? { user: acc.user, pass: acc.pass } : undefined
+  const auth = authOf(acc)
 
   const out: DeviceServiceNow = { configured: true, ci: null, tickets: [], instanceUrl: cfg.instanceUrl }
 

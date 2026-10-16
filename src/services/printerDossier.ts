@@ -57,6 +57,17 @@ export interface PrinterMasterData {
   tonerType?: string         // Tonerart / Verbrauchsmaterial
   info?: string              // freies Notizfeld (Stammdaten)
   custom?: PrinterCustomField[]
+  // ── Aus dem Drucker-Import der ERP-Liste (Standort-Übersicht) ──────────────
+  // Diese Werte gelten als richtig; kein Scan überschreibt sie (Drucker sind aus
+  // dem Geräte-Scan ausgenommen, siehe deviceScan.ts).
+  // Standort von Hand gesetzt → gegen Import, Scan und Seed geschützt. Nur ein
+  // weiterer Eintrag von Hand ändert ihn wieder (siehe printerLocation.ts).
+  locationManual?: boolean
+  locationBy?: string
+  locationAt?: string
+  managed?: boolean          // Spalte „Ist verwaltet" aus der ERP-Liste
+  importedAt?: string        // Zeitpunkt des letzten Imports
+  importedBy?: string
 }
 
 export interface PrinterDossier {
@@ -131,6 +142,36 @@ export async function loadAllPrinterIps(): Promise<Record<string, string>> {
         const d = await api().netReadJson<PrinterDossier>(`${DATA}/${f}`)
         const ip = (d?.master?.ip || '').trim()
         if (ip && d?.printerName) out[ip] = d.printerName
+      } catch { /* nächstes */ }
+    }
+  } catch { /* kein Ordner */ }
+  return out
+}
+
+/**
+ * Alle Drucker-Dossiers EINMAL durchgehen und die Merkmale liefern, über die der
+ * Drucker-Import zuordnet (IP, MAC, Seriennummer). Ein Verzeichnislauf statt N
+ * Einzelabfragen — bei über hundert Druckern ist das der Unterschied zwischen
+ * „geht sofort" und „hängt".
+ */
+export async function loadAllPrinterMerkmale(): Promise<Map<string, { ip?: string; mac?: string; serial?: string; erpId?: string; standortManuell?: string }>> {
+  const out = new Map<string, { ip?: string; mac?: string; serial?: string; erpId?: string; standortManuell?: string }>()
+  try {
+    const files = await api().netListDir(DATA)
+    for (const f of files || []) {
+      if (!/.json$/i.test(f)) continue
+      try {
+        const d = await api().netReadJson<PrinterDossier>(`${DATA}/${f}`)
+        if (!d?.printerName) continue
+        out.set(d.printerName, {
+          ip: (d.master?.ip || '').trim(),
+          mac: (d.master?.mac || '').trim(),
+          serial: (d.master?.serial || '').trim(),
+          erpId: (d.master?.assetTag || '').trim(),
+          // Nur der von HAND gesetzte Standort — ein automatisch entstandener hat hier
+          // nichts zu suchen, sonst würde er den Seed-Wert verdrängen.
+          standortManuell: d.master?.locationManual ? (d.master.location || '').trim() : '',
+        })
       } catch { /* nächstes */ }
     }
   } catch { /* kein Ordner */ }

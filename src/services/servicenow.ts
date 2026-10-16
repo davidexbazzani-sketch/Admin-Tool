@@ -2,23 +2,25 @@
 // Duenner Client um den Main-Prozess-Handler `servicenow:request`.
 //
 // Anmeldung — zwei Wege, in dieser Reihenfolge:
-//   1. INTEGRATIONSKONTO (Basic Auth): dediziertes ServiceNow-Service-Konto
-//      (z. B. automated_user), das der HCL-Support bereitgestellt hat. Wird
+//   1. INTEGRATIONSKONTO: dediziertes ServiceNow-Service-Konto, das der
+//      HCL-Support bereitgestellt hat — mit Client-ID/-Secret per OAuth 2.0
+//      (Bearer-Token, Vorrang), sonst Benutzer/Passwort per Basic Auth. Wird
 //      ZENTRAL auf dem IT-Netzlaufwerk gespeichert (config/servicenow/
 //      integration.json) -> alle App-User nutzen es automatisch, niemand muss
 //      sich anmelden. Einmal im Zugang-Panel eintragen.
 //   2. SSO-Sitzung (Fallback, wie bisher): das persoenliche SKF-Konto ist
 //      SSO-basiert und hat kein lokales Passwort; Sitzung liegt in der
 //      persistenten Partition 'persist:servicenow'.
-// Phase 1: nur lesen (GET).
 
-import { api } from '../electronAPI'
+import { api, type SnAuthPayload, type SnDiag } from '../electronAPI'
 
 // ── Integrationskonto (zentral fuer alle App-User) ────────────────────────────
 
 export interface SnIntegrationAccount {
   user: string
   pass: string
+  clientId?: string           // OAuth (vom HCL-Support) — mit Secret hat OAuth Vorrang vor Basic Auth
+  clientSecret?: string
   instanceUrl?: string        // zentral: alle App-Nutzer arbeiten auf DERSELBEN Instanz
   assignmentGroups?: string[] // zentral: nur Tickets dieser Gruppen laden (leer = alle)
   updatedBy?: string
@@ -35,33 +37,46 @@ export async function loadIntegrationAccount(force = false): Promise<SnIntegrati
   if (!force && integrationCache !== undefined) return integrationCache
   try {
     const a = await api().netReadJson<SnIntegrationAccount>(INTEGRATION_FILE)
-    integrationCache = a && a.user && a.pass ? a : null
+    integrationCache = a && ((a.user && a.pass) || (a.clientId && a.clientSecret)) ? a : null
   } catch { integrationCache = null }
   return integrationCache
 }
 
-export async function saveIntegrationAccount(user: string, pass: string, by: string, instanceUrl?: string, assignmentGroups?: string[]): Promise<boolean> {
-  const u = user.trim()
-  // Copy&Paste-Artefakte (Zeilenumbrüche/Tabs) entfernen — normale Leerzeichen bleiben.
-  pass = (pass || '').replace(/[\r\n\t]/g, '')
+/** Hat das Konto OAuth-Zugangsdaten (Client-ID + Secret)? */
+export function usesOAuth(acc: SnAuthPayload | null | undefined): boolean {
+  return !!(acc?.clientId?.trim() && acc?.clientSecret?.trim())
+}
+
+/** Zugangsdaten bereinigen: Copy&Paste-Artefakte (Zeilenumbrüche/Tabs) raus — normale Leerzeichen im Passwort bleiben. */
+export function cleanAuth(a: SnAuthPayload): Required<SnAuthPayload> {
+  const strip = (s?: string) => (s || '').replace(/[\r\n\t]/g, '')
+  return { user: strip(a.user).trim(), pass: strip(a.pass), clientId: strip(a.clientId).trim(), clientSecret: strip(a.clientSecret).trim() }
+}
+
+export async function saveIntegrationAccount(cred: SnAuthPayload, by: string, instanceUrl?: string, assignmentGroups?: string[]): Promise<boolean> {
+  const c = cleanAuth(cred)
   const groups = (assignmentGroups ?? []).map(g => g.trim()).filter(Boolean)
   try {
-    if (!u || !pass) {
+    if (!(c.user && c.pass) && !usesOAuth(c)) {
       // Leeren = Konto entfernen -> zurueck zum SSO-Fallback (Gruppen ebenfalls entfernt)
       await api().netWriteJson(INTEGRATION_FILE, {})
       integrationCache = null
       return true
     }
     // Array IMMER speichern (auch leer) — leeres Array = bewusst „alle Gruppen".
-    const payload: SnIntegrationAccount = { user: u, pass, instanceUrl: instanceUrl?.trim() || undefined, assignmentGroups: groups, updatedBy: by, updatedAt: new Date().toISOString() }
+    const payload: SnIntegrationAccount = {
+      user: c.user, pass: c.pass,
+      clientId: c.clientId || undefined, clientSecret: c.clientSecret || undefined,
+      instanceUrl: instanceUrl?.trim() || undefined, assignmentGroups: groups, updatedBy: by, updatedAt: new Date().toISOString(),
+    }
     const ok = await api().netWriteJson(INTEGRATION_FILE, payload)
     if (ok) integrationCache = payload
     return ok
   } catch { return false }
 }
 
-function authOf(acc: SnIntegrationAccount | null): { user: string; pass: string } | undefined {
-  return acc ? { user: acc.user, pass: acc.pass } : undefined
+export function authOf(acc: SnIntegrationAccount | null): SnAuthPayload | undefined {
+  return acc ? { user: acc.user, pass: acc.pass, clientId: acc.clientId, clientSecret: acc.clientSecret } : undefined
 }
 
 export interface ServiceNowConfig {
@@ -196,15 +211,15 @@ export async function listTickets(
 
 export async function testConnection(
   cfg: ServiceNowConfig,
-  authOverride?: { user: string; pass: string },
-): Promise<{ ok: boolean; error?: string; needsLogin?: boolean }> {
+  authOverride?: SnAuthPayload,
+): Promise<{ ok: boolean; error?: string; needsLogin?: boolean; diag?: SnDiag }> {
   const auth = authOverride ?? authOf(await loadIntegrationAccount())
   const res = await api().serviceNowRequest({
     instanceUrl: cfg.instanceUrl,
     method: 'GET', table: 'sys_user', fields: 'sys_id', limit: 1,
     auth,
   })
-  return res.success ? { ok: true } : { ok: false, error: res.error, needsLogin: res.needsLogin }
+  return res.success ? { ok: true } : { ok: false, error: res.error, needsLogin: res.needsLogin, diag: res.diag }
 }
 
 // ── Phase 2: Schreiben (Ticket erstellen / schließen / zuweisen) ──────────────

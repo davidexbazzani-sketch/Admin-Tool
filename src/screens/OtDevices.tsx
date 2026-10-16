@@ -127,7 +127,7 @@ export default function OtDevices() {
 
   // ── Detail bearbeiten ──
   function patchLocal(id: string, patch: Partial<OtDevice>) { setDevices(prev => prev.map(d => d.id === id ? { ...d, ...patch } : d)) }
-  async function persist(id: string, patch: Partial<Pick<OtDevice, 'hostname' | 'arbeitsplatz' | 'notes'>>) { await updateDevice(id, patch) }
+  async function persist(id: string, patch: Partial<Pick<OtDevice, 'hostname' | 'arbeitsplatz' | 'notes'>>) { await updateDevice(id, patch, { by: currentUser }) }
   async function removeSelected() {
     if (!selected) return
     const id = selected.id
@@ -272,6 +272,11 @@ export default function OtDevices() {
                   className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
                 />
               </div>
+              {selected.placedAt && (
+                <p className="text-[10px] text-muted-foreground border-t border-border pt-2">
+                  {selected.placedVia === 'refresh' ? '🔄 Ausgetauscht (Refresh)' : '📍 In Karte gesetzt'} von <span className="text-foreground">{selected.placedBy || '—'}</span> am {new Date(selected.placedAt).toLocaleDateString('de-DE')}
+                </p>
+              )}
               <p className="text-[10px] text-muted-foreground">Zum Verschieben den Punkt auf dem Plan ziehen.</p>
               <button onClick={removeSelected} className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md border border-red-500/40 text-red-300 hover:bg-red-500/10 text-sm">
                 <Trash2 size={14} />PC entfernen

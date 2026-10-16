@@ -26,7 +26,7 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'location-overview',      label: 'Standort-Übersicht',     category: 'Standort' },
   { id: 'access-points',          label: 'Access Points',          category: 'Standort' },
   { id: 'ot-devices',             label: 'OT-Geräte',              category: 'Standort' },
-  { id: 'pruffeld-zoll',          label: 'Prüffeld & Zoll',        category: 'Standort' },
+  { id: 'pruffeld-zoll',          label: 'Halle & Zoll',           category: 'Standort' },
   { id: 'verwaltungsgebaeude',    label: 'Verwaltungsgebäude',     category: 'Standort' },
   { id: 'departments-overview',   label: 'Abteilungs-Übersicht',   category: 'Standort' },
   { id: 'organization-structure', label: 'Organisationsstruktur',  category: 'Standort' },
@@ -62,12 +62,13 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'user-presence',      label: 'Wo angemeldet?',         category: 'Infrastruktur' },
   { id: 'licenses',           label: 'Lizenzen-Kalender',      category: 'Infrastruktur', adminOnly: true },
   { id: 'proactive-radar',    label: 'Proaktives Radar',       category: 'Infrastruktur', adminOnly: true },
+  { id: 'critical-devices',   label: 'Kritische Geräte',       category: 'Infrastruktur', adminOnly: true },
   { id: 'nis2',               label: 'NIS2',                   category: 'Infrastruktur', adminOnly: true },
   { id: 'software-inventory', label: 'Software-Inventar',      category: 'Infrastruktur', adminOnly: true },
   { id: 'network-radar',      label: 'Netzwerk-Radar',         category: 'Infrastruktur', adminOnly: true },
   { id: 'vlan-overview',      label: 'VLAN-Übersicht',         category: 'Infrastruktur', adminOnly: true },
   { id: 'backups',            label: 'Back-Ups',               category: 'Infrastruktur', adminOnly: true },
-  { id: 'usv',                label: 'USV',                    category: 'Infrastruktur' },
+  { id: 'usv',                label: 'Netzwerkgeräte',         category: 'Infrastruktur' },   // Kennung bleibt 'usv' (gespeicherte Favoriten/Ausblendungen)
   { id: 'dashboards',         label: 'Dashboards',             category: 'Infrastruktur' },
 
   // Telefonie

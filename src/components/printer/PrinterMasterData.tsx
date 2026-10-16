@@ -9,7 +9,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import {
   ChevronDown, ChevronRight, Loader2, Printer, Save, Plus, Trash2, RefreshCw,
-  Boxes, Ticket, ExternalLink, Wifi, WifiOff, Droplet, FileStack,
+  Boxes, Ticket, ExternalLink, Wifi, WifiOff, Droplet, FileStack, Lock,
 } from 'lucide-react'
 import { api } from '../../electronAPI'
 import { seedForPrinter } from '../../data/printerSeed'
@@ -98,7 +98,12 @@ export function PrinterMasterData({ printerName, master, onSave }: {
 
   function collect(): PrinterMasterData {
     const clean = (s: string) => (s.trim() ? s.trim() : undefined)
+    // Der gespeicherte Stand kommt ZUERST und wird nur von den Formularfeldern
+    // überschrieben. Ohne das gingen beim Speichern alle Felder verloren, die dieses
+    // Formular nicht kennt — MAC (aus dem Scan), „Ist verwaltet", die Import-Stempel
+    // und die Standort-Sperre. Das Formular darf nur seine eigenen Felder leeren.
     return {
+      ...(master || {}),
       duplex: clean(duplex), color: clean(color), paperFormats: clean(paperFormats), location: clean(location),
       ip: clean(ip), model: clean(model), serial: clean(serial), assetTag: clean(assetTag),
       printServer: clean(printServer), snmpCommunity: clean(snmpCommunity), snmpWriteCommunity: clean(snmpWriteCommunity),
@@ -175,6 +180,18 @@ export function PrinterMasterData({ printerName, master, onSave }: {
         <Field label="Farbe" value={color} onChange={setColor} placeholder={seed?.color} />
         <Field label="Papierformat" value={paperFormats} onChange={setPaperFormats} placeholder={seed?.paperFormats.join(', ')} />
         <Field label="Standort" value={location} onChange={setLocation} placeholder={seed?.location} />
+        {/* Ein von Hand gesetzter Standort ist gegen Import, Scan und Seed geschützt —
+            das muss man sehen, sonst wirkt es wie Zufall, dass er stehen bleibt. */}
+        {master?.locationManual && (
+          <p className="flex items-start gap-1.5 ml-[10.5rem] mt-0.5 text-[11px] text-muted-foreground">
+            <Lock size={11} className="shrink-0 mt-px" />
+            <span>
+              Von Hand gesetzt{master.locationBy ? ` von ${master.locationBy}` : ''}
+              {master.locationAt ? ` am ${new Date(master.locationAt).toLocaleDateString('de-DE')}` : ''} —
+              kein Import und kein Scan ändert ihn. Zum Freigeben das Feld leeren und speichern.
+            </span>
+          </p>
+        )}
       </Section>
 
       {/* Netzwerk & Verwaltung (frei editierbar) */}

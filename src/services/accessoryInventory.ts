@@ -268,3 +268,30 @@ export async function deleteHistoryEntry(id: string): Promise<boolean> {
   const existing = await loadHistory()
   return saveHistory(existing.filter(e => e.id !== id))
 }
+
+/**
+ * Bestellpositionen eines Historien-Eintrags ersetzen. Wird gebraucht, wenn nach dem
+ * Abschluss der Inventur noch Kleinteile nachgetragen werden: sonst stünde in der
+ * Historie eine andere Liste als in der verschickten Mail.
+ * Bereits gesetzte „Angekommen"-Haken bleiben über den Namen erhalten.
+ */
+export async function replaceHistoryLines(id: string, lines: OrderLine[]): Promise<boolean> {
+  const existing = await loadHistory()
+  const next = existing.map(e => {
+    if (e.id !== id) return e
+    const alteHaken = new Map(e.lines.map(l => [l.name.toLowerCase(), l.arrived]))
+    const neu: AccessoryHistoryLine[] = lines.map(({ item, quantity }) => ({
+      name: item.name,
+      quantity,
+      amazonLink: item.amazonLink,
+      arrived: alteHaken.get(item.name.toLowerCase()) ?? false,
+    }))
+    return {
+      ...e,
+      lines: neu,
+      reorderCount: neu.length,
+      totalUnits: neu.reduce((sum, l) => sum + l.quantity, 0),
+    }
+  })
+  return saveHistory(next)
+}

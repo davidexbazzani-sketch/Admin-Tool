@@ -13,9 +13,15 @@
 //   - needsParams optional flag — UI shows extra input modal (e.g. password reset)
 
 import { api } from '../electronAPI'
+import { buildZscalerOpenInner, deuteZscalerAntwort } from './zscalerStart'
 import { ensureWinRM } from '../utils/winrmUtils'
 
 export type DailyKind = 'read' | 'write'
+
+// Manche Einträge sind kein Einzelbefehl, sondern eine Oberfläche mit mehreren
+// Schritten. Sie werden in Daylis NICHT angehakt und mit „Ausführen" gestartet,
+// sondern bekommen einen eigenen Knopf „Öffnen".
+export type DailyPanel = 'soundfix'
 
 export interface DailyContext {
   hostname: string         // target machine (may be empty for user-only commands)
@@ -36,6 +42,7 @@ export interface DailyCommand {
   requiresHost?: boolean   // true if a hostname is mandatory
   requiresUser?: boolean   // true if SAM is mandatory
   needsParams?: { name: string; label: string; type?: 'text' | 'password' }[]
+  panel?: DailyPanel       // gesetzt = öffnet eine Oberfläche statt einen Befehl auszuführen
   run: (ctx: DailyContext) => Promise<DailyResult>
 }
 
@@ -225,10 +232,44 @@ const queryIsOnline: DailyCommand = {
   },
 }
 
+/**
+ * Die reine Corp ID aus dem, was die Benutzer-Erkennung liefert. Je nach Fallback-Weg
+ * kommt „DOMAIN\ab12345", „ab12345" oder „ab12345@skf.net" zurück.
+ */
+export function corpIdAus(benutzer: string): string {
+  return (String(benutzer ?? '').trim().split('\\').pop() ?? '').split('@')[0].trim()
+}
+
+/**
+ * Corp ID → Anzeigename aus dem AD.
+ *
+ * Läuft bewusst auf dem ADMIN-PC und nicht im Invoke-Command auf dem Ziel-PC — dort ist
+ * das AD-Modul in der Regel nicht installiert.
+ *
+ * `DisplayName` und nicht `Name`: `Name` ist der CN und sieht oft wie „Mustermann, Max"
+ * oder gar wie die Corp ID aus. Findet sich nichts (lokales Konto, Dienstkonto, AD nicht
+ * erreichbar), kommt ein leerer String zurück — die Antwort bleibt dann einfach ohne
+ * Namen, statt einen Fehler über eine funktionierende Abfrage zu legen.
+ */
+async function nameZuCorpId(benutzer: string): Promise<string> {
+  const sam = corpIdAus(benutzer)
+  if (!sam) return ''
+  const script = [
+    `try {`,
+    `  $u = Get-ADUser -Identity '${escPs(sam)}' -Properties DisplayName -EA Stop`,
+    `  if ($u.DisplayName) { Write-Output $u.DisplayName } else { Write-Output $u.Name }`,
+    `} catch { }`,
+  ].join('\n')
+  try {
+    const r = await runPs(script, 15000)
+    return (r.stdout ?? '').split(/\r?\n/).map(l => l.trim()).filter(Boolean)[0] ?? ''
+  } catch { return '' }
+}
+
 const queryLoggedInUser: DailyCommand = {
   id: 'q.loggedInUser',
   label: 'Wer ist angemeldet?',
-  info: 'Liest den aktuell am Ziel-PC angemeldeten Benutzer. Nutzt 4 Fallback-Methoden (Win32_ComputerSystem, quser, explorer.exe Owner, LastLoggedOnUser). Benoetigt WinRM.',
+  info: 'Liest den aktuell am Ziel-PC angemeldeten Benutzer (Corp ID) und loest dazu den Namen aus dem AD auf. Nutzt 4 Fallback-Methoden (Win32_ComputerSystem, quser, explorer.exe Owner, LastLoggedOnUser). Benoetigt WinRM.',
   kind: 'read',
   requiresHost: true,
   async run({ hostname }) {
@@ -245,7 +286,9 @@ const queryLoggedInUser: DailyCommand = {
       if (!resLine) return fail(r.stderr || 'Keine Antwort')
       if (resLine.startsWith('ERR:')) return fail(resLine.slice(4))
       if (resLine === 'NONE') return ok('Niemand angemeldet')
-      return ok(resLine.slice(4))
+      const benutzer = resLine.slice(4)
+      const name = await nameZuCorpId(benutzer)
+      return ok(name ? `${benutzer}  —  ${name}` : benutzer)
     })
   },
 }
@@ -828,6 +871,37 @@ export const DAILY_QUERIES: DailyCommand[] = [
   queryDsregcmdStatus,
 ]
 
+const actionOpenZscaler: DailyCommand = {
+  id: 'a.zscaler',
+  label: 'Zscaler öffnen',
+  info: 'Öffnet Zscaler auf dem Ziel-PC in der Sitzung des angemeldeten Benutzers (einmalige geplante Aufgabe — über WinRM gestartet wäre das Fenster unsichtbar). Zwei Sekunden später erscheint beim Anwender ein Hinweis, wie er sich neu anmeldet.',
+  kind: 'write',
+  requiresHost: true,
+  async run({ hostname }) {
+    if (!hostname) return fail('Kein Hostname')
+    return withWinRM(hostname, async () => {
+      const script = `try { Invoke-Command -ComputerName '${escPs(hostname)}' -ScriptBlock { ${buildZscalerOpenInner()} } -EA Stop } catch { Write-Output ('RES:ERR:' + $_.Exception.Message) }`
+      const r = await runPs(script, 60000)
+      const d = deuteZscalerAntwort(r.stdout ?? '')
+      return d.ok ? ok(d.text) : fail(d.text || r.stderr || 'Zscaler konnte nicht geöffnet werden')
+    })
+  },
+}
+// „Sound Fix" ist kein Einzelbefehl: der Knopf heißt „Öffnen" und zeigt eine
+// Oberfläche mit drei Schritten (Treiber, Dienste, Audio-Geräte), die einzeln und
+// in beliebiger Reihenfolge ausgeführt werden können — siehe SoundFixPanel.tsx.
+const actionSoundFix: DailyCommand = {
+  id: 'a.soundfix',
+  label: 'Sound Fix',
+  info: 'Öffnet eine Oberfläche mit drei Schritten gegen Ton-Probleme: (1) nach Sound-Treibern suchen und sie aktualisieren (HP-Treibersuche, nur Audio — kann bis zu 5 Minuten dauern), (2) die Sound-Dienste wie „Windows-Audio" prüfen und starten/stoppen/neu starten, (3) Wiedergabe- und Aufnahmegeräte aktivieren/deaktivieren samt Pegel und Stummschaltung. Die Schritte sind unabhängig voneinander. Das Fenster lässt sich abtrennen, dann läuft alles im Hintergrund weiter.',
+  kind: 'write',
+  requiresHost: true,
+  panel: 'soundfix',
+  async run() {
+    return fail('„Sound Fix" wird über den Knopf „Öffnen" gestartet — es ist kein Einzelbefehl, sondern eine Oberfläche mit drei Schritten.')
+  },
+}
+
 export const DAILY_ACTIONS: DailyCommand[] = [
   actionUnlockAccount,
   actionResetPassword,
@@ -843,6 +917,8 @@ export const DAILY_ACTIONS: DailyCommand[] = [
   actionClearEdgeCache,
   actionClearTeamsCache,
   actionOpenCDrive,
+  actionOpenZscaler,
+  actionSoundFix,
 ]
 
 export const ALL_DAILY_COMMANDS: DailyCommand[] = [...DAILY_QUERIES, ...DAILY_ACTIONS]

@@ -29,6 +29,7 @@ export type Screen =
   | 'vlan-overview'
   | 'proactive-radar'
   | 'nis2'
+  | 'critical-devices'
   | 'ot-devices'
   | 'pruffeld-zoll'
   | 'verwaltungsgebaeude'

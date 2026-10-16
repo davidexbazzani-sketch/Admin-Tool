@@ -114,6 +114,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   netGetBasePath: () => ipcRenderer.invoke('net:getBasePath'),
   netSetBasePath: (path: string) => ipcRenderer.invoke('net:setBasePath', path),
   netWriteRawFile: (relativePath: string, base64Data: string) => ipcRenderer.invoke('net:writeRawFile', relativePath, base64Data),
+  // Ordner einer HTML-Folie fuer das skfslide://-Protokoll freigeben
+  slideAllowFolder: (htmlPfad: string) => ipcRenderer.invoke('slide:allowFolder', htmlPfad),
   netReadRawFile: (relativePath: string) => ipcRenderer.invoke('net:readRawFile', relativePath),
 
   // ── Wissensdatenbank (dedicated IPC for performance) ──────────────────────
@@ -152,6 +154,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Task-Manager als eigenständiges Fenster (je Ziel-Host)
   taskmgrOpen: (opts: { host: string; displayId?: number; admin?: boolean }) => ipcRenderer.invoke('taskmgr:open', opts),
   taskmgrClose: (host?: string) => ipcRenderer.invoke('taskmgr:close', host),
+  soundfixOpen: (opts: { host: string; displayId?: number }) => ipcRenderer.invoke('soundfix:open', opts),
+  soundfixClose: (host?: string) => ipcRenderer.invoke('soundfix:close', host),
   // Edge-Anzeige (SSO): echte msedge.exe-Fenster im App-Modus
   edgeLaunch: (opts: { url: string; displayId?: number; fullscreen?: boolean; ownProfile?: boolean }) => ipcRenderer.invoke('edge:launch', opts),
   edgeClose: (displayId?: number) => ipcRenderer.invoke('edge:close', displayId),
@@ -159,6 +163,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // USV: URL in Edge/Chrome öffnen + Notfallplan (DOCX) anzeigen
   openInEdgeOrChrome: (url: string) => ipcRenderer.invoke('browser:openInEdgeOrChrome', url),
   usvOpenDoc: () => ipcRenderer.invoke('usv:openDoc'),
+  outlookAktion: (eingabe: unknown, timeoutMs?: number) => ipcRenderer.invoke('outlook:aktion', eingabe, timeoutMs),
+  netzgeraetOpenWeb: (opts: unknown) => ipcRenderer.invoke('netzgeraet:openWeb', opts),
 })
 
 // Global right-click context menu for ALL elements (copy, paste, select all)

@@ -16,7 +16,9 @@ import { runServerMetricsScan, SERVER_METRICS_STATUS } from './serverMonitor'
 import { runLostDevicesScanOnce, LOST_SCAN_SCHEDULE } from './lostDevices'
 import { runAccessCheckScanOnce, NIS2_ACCESS_STATUS } from './nis2Access'
 import { runNetworkDrivesScanOnce, NETWORK_DRIVES_STATUS } from './deviceNetworkDrives'
-import { loadRunStatus, saveRunStatus, isStatusClaimed, claimExclusive } from './scanSchedules'
+import { runEuroparScanClaimed, EUROPAR_SCAN_STATUS, EUROPAR_SCAN_ID } from './europarScan'
+import { runWeekendCheckOnce, dateKey, WEEKEND_CHECK_ID, WEEKEND_CHECK_STATUS } from './weekendCheck'
+import { loadRunStatus, saveRunStatus, isStatusClaimed, claimExclusive, getScanSchedule, WEEKDAY_LABELS } from './scanSchedules'
 
 export interface ScanStatus {
   lastRunAt: string | null
@@ -107,8 +109,8 @@ const printerIpScan: ScanDef = {
 // ── Geräte-Scan (IP/MAC/Serial) ───────────────────────────────────────────────
 const deviceScan: ScanDef = {
   id: 'device-scan',
-  label: 'Geräte-Scan (IP/MAC/Serial)',
-  description: 'Liest für Server, Computer und Drucker IP-Adresse, MAC-Adresse und (wenn möglich) Seriennummer aus und hinterlegt sie in den Stammdaten.',
+  label: 'Geräte-Scan (IP/MAC/Serial) — ohne Drucker',
+  description: 'Liest für Server und Computer IP-Adresse, MAC-Adresse und (wenn möglich) Seriennummer aus und hinterlegt sie in den Stammdaten. DRUCKER SIND AUSGENOMMEN: deren Daten kommen aus dem Drucker-Import der ERP-Liste (Standort-Übersicht → Kategorie Drucker) und werden hier nicht angefasst.',
   cadence: '',
   async loadStatus() {
     const s = await loadDeviceScanSchedule()
@@ -227,4 +229,39 @@ const networkDrivesScan: ScanDef = {
   run(by) { return runWithClaim(NETWORK_DRIVES_STATUS, () => runNetworkDrivesScanOnce(by)) },
 }
 
-export const SCAN_REGISTRY: ScanDef[] = [softwareScan, printerConnScan, printerIpScan, deviceScan, radarScan, vlanScan, serverMetricsScan, lostDevicesScan, nis2AccessScan, networkDrivesScan]
+// ── EuroPAR-Ordner auf den Altgeräten (täglich 12:00) ─────────────────────────
+const europarScan: ScanDef = {
+  id: EUROPAR_SCAN_ID,
+  label: 'EuroPAR-Ordner (Altgeräte)',
+  description: 'Prüft bei allen offenen Refresh-Checklisten, ob auf dem Altgerät C:\\EuroPAR, C:\\Local und C:\\SCHNITTDATEN liegen. Nur markierte Geräte bekommen in der Geräte-Einrichtung die EuroPAR-Kachel und werden automatisch gesichert.',
+  cadence: '',
+  async loadStatus() {
+    const s = await loadRunStatus(EUROPAR_SCAN_STATUS)
+    return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
+  },
+  run(by) { return runEuroparScanClaimed(by) },
+}
+
+// ── Wochenend-Check (So 12:00): welche genutzten PCs laufen noch? ─────────────
+const weekendCheckScan: ScanDef = {
+  id: WEEKEND_CHECK_ID,
+  label: 'Wochenend-Check (PCs an?)',
+  description: 'Pingt sonntags alle genutzten PCs (Endgeräte-Übersicht: In use + Active) an und dokumentiert im Proaktiven Radar (Reiter „Wochenend-Check"), welche am Wochenende nicht ausgeschaltet wurden. Läuft nur, wenn das Tool zur Uhrzeit (bis 2 Std. danach) bei einem Admin geöffnet ist — verpasste Messtage werden nicht nachgeholt.',
+  cadence: '',
+  async loadStatus() {
+    const s = await loadRunStatus(WEEKEND_CHECK_STATUS)
+    return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
+  },
+  async run(by) {
+    // Manuell nur an einem geplanten Messtag — sonst würde die Messung das Wochenende verfälschen.
+    const today = new Date()
+    const cfg = await getScanSchedule(WEEKEND_CHECK_ID)
+    if (!cfg.days.includes(today.getDay())) {
+      const tage = cfg.days.map(d => WEEKDAY_LABELS[d]).join(', ') || '—'
+      return { ok: false, summary: `Der Wochenend-Check kann nur an einem geplanten Messtag ausgeführt werden (${tage}).` }
+    }
+    return runWithClaim(WEEKEND_CHECK_STATUS, () => runWeekendCheckOnce(by, dateKey(today)))
+  },
+}
+
+export const SCAN_REGISTRY: ScanDef[] = [softwareScan, printerConnScan, printerIpScan, deviceScan, radarScan, vlanScan, serverMetricsScan, lostDevicesScan, nis2AccessScan, networkDrivesScan, europarScan, weekendCheckScan]

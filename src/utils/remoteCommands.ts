@@ -36,6 +36,8 @@ export function getLocalMode(): boolean { return _localMode }
 export type ExecMethod = 'winrm' | 'wmi' | 'psexec' | 'schtasks'
 let _execMethod: ExecMethod = 'winrm'
 import { pathService } from '../services/pathService'
+import { buildAudioListInner, buildAudioSwitchInner, buildAudioVolumeInner, buildAudioMuteInner } from '../services/audioDevices'
+import { buildZscalerOpenInner } from '../services/zscalerStart'
 let _psExecDir = pathService.getToolsDir()
 export function setExecMethod(m: ExecMethod) { _execMethod = m }
 export function getExecMethod(): ExecMethod { return _execMethod }
@@ -1283,6 +1285,10 @@ function buildCategories(): Category[] {
     {
       id: 'zscaler', label: 'Zscaler',
       commands: [
+        // Startet die GUI in der Sitzung des angemeldeten Benutzers und zeigt zwei
+        // Sekunden später den Hinweis zur Anmeldung (siehe services/zscalerStart.ts).
+        { id: 'zscopen', func: 'Zscaler öffnen', when: 'Anwender muss sich bei Zscaler neu anmelden',
+          buildCmd: (h) => remote(h, buildZscalerOpenInner()), action: 'write' },
         { id: 'zscstatus', func: 'Status prüfen', when: 'Zscaler funktioniert nicht',
           buildCmd: (h) => remote(h, `$svc = Get-Service ZscalerService -EA SilentlyContinue; $procs = @('ZSATunnel','ZSAService') | ForEach-Object { $p = Get-Process -Name $_ -EA SilentlyContinue; [PSCustomObject]@{Name=$_;Running=($null -ne $p)} }; $cert = Get-ChildItem Cert:\\LocalMachine\\Root | Where-Object { $_.Subject -match 'Zscaler' } | Select-Object Subject,NotAfter; $tunnel = Test-NetConnection -ComputerName 'gateway.zscaler.net' -Port 443 -EA SilentlyContinue; [PSCustomObject]@{Service=@{Name='ZscalerService';Status=$svc.Status};Processes=$procs;Certificate=$cert;TunnelConnectivity=$tunnel.TcpTestSucceeded} | ConvertTo-Json -Depth 4 -Compress`), action: 'read' },
         { id: 'zscsvcrestart', func: 'Dienst neustarten', when: 'Zscaler hängt',
@@ -2144,6 +2150,34 @@ function buildNewCategories(): Category[] {
 }
 
 // NEUE Einzelbefehle, die in eine bestehende Kategorie einsortiert werden.
+// Eigenständige Kategorien, die über EXTRA_CMDS nicht abbildbar sind (die gibt es dort
+// noch nicht). Werden in buildAllCategories() angehängt.
+const EXTRA_CATS: Category[] = [
+  {
+    id: 'audio', label: 'Audio & Sound (Wiedergabe/Aufnahme)',
+    commands: [
+      { id: 'audiolist', func: 'Audio-Geräte anzeigen (aktiviert/deaktiviert)', when: 'Kein Ton, falsches Wiedergabegerät, Mikrofon geht nicht — zeigt Lautsprecher, Kopfhörer, Headset und Mikrofone mit Zustand, Pegel und Standardgerät',
+        buildCmd: (h) => remote(h, buildAudioListInner()), action: 'read' },
+      { id: 'audioenable', func: 'Audio-Gerät aktivieren', when: 'Gerät ist deaktiviert und soll wieder nutzbar sein',
+        buildCmd: (h, i) => remote(h, buildAudioSwitchInner(true, i || '')), action: 'write',
+        input: { type: 'text', placeholder: 'Teil des Gerätenamens, z. B. Headset' },
+        templates: [{ label: 'Lautsprecher', value: 'Speaker' }, { label: 'Kopfhörer', value: 'Headphone' }, { label: 'Mikrofon', value: 'Mikrofon' }] },
+      { id: 'audiodisable', func: 'Audio-Gerät deaktivieren', when: 'Gerät stört, z. B. falsche Ausgabe über den Monitor',
+        buildCmd: (h, i) => remote(h, buildAudioSwitchInner(false, i || '')), action: 'write',
+        input: { type: 'text', placeholder: 'Teil des Gerätenamens, z. B. PHL 275S1' },
+        templates: [{ label: 'Monitor-Audio', value: 'Display Audio' }, { label: 'Stereomix', value: 'Stereomix' }] },
+      { id: 'audiovolume', func: 'Lautstärke (Pegel) setzen', when: 'Ton zu leise oder zu laut — Pegel eines einzelnen Geräts ändern',
+        buildCmd: (h, i) => remote(h, buildAudioVolumeInner(i || '')), action: 'write',
+        input: { type: 'text', placeholder: 'Gerät=Prozent, z. B. Speaker=30' },
+        templates: [{ label: 'Lautsprecher 30 %', value: 'Speaker=30' }, { label: 'Lautsprecher 70 %', value: 'Speaker=70' }, { label: 'Mikrofon 100 %', value: 'Mikrofon=100' }] },
+      { id: 'audiomute', func: 'Stummschaltung ein/aus', when: 'Gerät ist stumm geschaltet oder soll stumm sein',
+        buildCmd: (h, i) => remote(h, buildAudioMuteInner(i || '')), action: 'write',
+        input: { type: 'text', placeholder: 'Gerät=an oder Gerät=aus' },
+        templates: [{ label: 'Lautsprecher Ton an', value: 'Speaker=aus' }, { label: 'Lautsprecher stumm', value: 'Speaker=an' }, { label: 'Mikrofon Ton an', value: 'Mikrofon=aus' }] },
+    ],
+  },
+]
+
 const EXTRA_CMDS: Record<string, CmdDef[]> = {
   repair: [
     { id: 'pendingreboot', func: 'Ausstehender Neustart prüfen', when: 'Steht nach Updates/Installationen ein Neustart aus?',
@@ -2154,6 +2188,7 @@ const EXTRA_CMDS: Record<string, CmdDef[]> = {
 
 // Befehle, die in eine passendere Kategorie umziehen (cmdId -> Ziel-Kategorie).
 const CMD_REHOME: Record<string, string> = {
+  audioreset: 'audio',
   powerplan: 'power', powerhigh: 'power', powerbal: 'power', monitortime: 'power', standbytime: 'power', hibernate: 'power', locktime: 'power',
   defexcadd: 'security', defexcrem: 'security', defquick: 'security', deffull: 'security',
   rdpon: 'rdp', rdpoff: 'rdp',
@@ -2163,7 +2198,7 @@ const CMD_REHOME: Record<string, string> = {
 const CAT_MERGE: Record<string, string> = { remotetasks: 'tasks', diskmgmt: 'disk', drivers: 'devmgr' }
 
 function buildAllCategories(): Category[] {
-  const cats: Category[] = [...buildCategories(), ...buildExtraCategories(), ...buildNewCategories()]
+  const cats: Category[] = [...buildCategories(), ...buildExtraCategories(), ...buildNewCategories(), ...EXTRA_CATS]
     .map(c => ({ ...c, commands: [...c.commands] }))
   const byId = new Map(cats.map(c => [c.id, c]))
   const push = (cat: Category | undefined, cmd: CmdDef) => { if (cat && !cat.commands.some(x => x.id === cmd.id)) cat.commands.push(cmd) }

@@ -11,9 +11,16 @@ import { useDeviceScanStore } from '../store/deviceScanStore'
 import { useAppStore } from '../store/appStore'
 import { createLogger } from '../utils/activityLogger'
 import type { InventoryItem } from '../types/auth'
+import { spaltenFilter, type Spalte } from '../utils/spaltenFilter'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import { PrinterInfoButton } from '../components/printer/PrinterDossier'
+import { loadAllPrinterMerkmale, loadPrinterDossier, savePrinterMaster } from '../services/printerDossier'
+import { setzeStandortManuell } from '../services/printerLocation'
+import {
+  leseZeilen, planPrinterImport, erkenneSpalten, neuerName, planText, modellText,
+  type DruckerZeile, type ImportPlan, type Zuordnung,
+} from '../services/printerImport'
 import { PRINTER_SEED } from '../data/printerSeed'
 import ExcelColumnDialog from '../components/ExcelColumnDialog'
 import { parseExcelSheet, extractFromExcel, type ExcelSheetData } from '../utils/fileImport'
@@ -32,6 +39,18 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 }
 
 const INVENTORY_FILE = 'inventory/inventory.json'
+
+// Spaltenrollen des Drucker-Imports (ERP-Liste). Reihenfolge = Reihenfolge der Knöpfe.
+const DRUCKER_ROLLEN = [
+  { id: 'erpId',      label: 'ERP-ID',        color: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
+  { id: 'serial',     label: 'Seriennummer',  color: 'bg-emerald-500 text-black border-emerald-500/30' },
+  { id: 'ip',         label: 'IP-Adresse',    color: 'bg-blue-500/15 text-blue-300 border-blue-500/30' },
+  { id: 'mac',        label: 'MAC-Adresse',   color: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' },
+  { id: 'hersteller', label: 'Hersteller',    color: 'bg-violet-500/15 text-violet-300 border-violet-500/30' },
+  { id: 'modell',     label: 'Modell',        color: 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30' },
+  { id: 'verwaltet',  label: 'Ist verwaltet', color: 'bg-teal-500/15 text-teal-300 border-teal-500/30' },
+  { id: 'ignore',     label: 'Ignorieren',    color: 'bg-muted text-muted-foreground border-border' },
+]
 
 // Einmaliges, idempotentes Befüllen der Kategorie "Drucker" aus dem SEAL-Wizard-
 // Seed. Der zentrale Marker verhindert Wiederholung (auch instanzübergreifend) —
@@ -92,6 +111,10 @@ export default function LocationOverview() {
   const [printerImporting, setPrinterImporting] = useState(false)
   const [printerImportMsg, setPrinterImportMsg] = useState('')
   const [pendingExcelData, setPendingExcelData] = useState<ExcelSheetData | null>(null)
+  // Drucker-Import aus der ERP-Liste: erst Spalten zuordnen, dann bestätigen, dann schreiben.
+  const [druckerSheet, setDruckerSheet] = useState<ExcelSheetData | null>(null)
+  const [druckerDatei, setDruckerDatei] = useState('')
+  const [druckerPlan, setDruckerPlan] = useState<{ plan: ImportPlan; zeilen: DruckerZeile[]; datei: string } | null>(null)
   // After parsing the source file, hold the prepared name list + a preview of
   // what the smart-sync will do (added / kept / removed).
   const [pendingReplace, setPendingReplace] = useState<{
@@ -158,13 +181,19 @@ export default function LocationOverview() {
         const now = new Date().toISOString()
         const by = session?.user.username ?? 'seed'
         const toAdd: InventoryItem[] = []
+        // Standorte, die jemand von Hand gesetzt hat, schlagen den Seed-Wert — auch wenn
+        // der Drucker hier gerade neu angelegt wird (etwa weil er zwischendurch gelöscht
+        // war). Nur EIN Verzeichnislauf, nicht je Drucker eine Abfrage.
+        const vonHand = await loadAllPrinterMerkmale().catch(() => new Map())
         for (const p of PRINTER_SEED) {
           const key = p.name.trim().toUpperCase()
           if (existing.has(key)) continue
           existing.add(key)
           toAdd.push({
             id: `seed-${p.name}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-            name: p.name, description: p.location, category: 'Drucker', addedAt: now, addedBy: by,
+            name: p.name,
+            description: vonHand.get(p.name)?.standortManuell || p.location,
+            category: 'Drucker', addedAt: now, addedBy: by,
           })
         }
         if (toAdd.length > 0) {
@@ -187,28 +216,19 @@ export default function LocationOverview() {
 
   const categoryItems = items.filter(i => i.category === activeCategory)
 
-  // Distinct values per filterable column (with counts) — used to populate the
-  // Excel-style filter dropdowns. Computed from the unfiltered category list so
-  // the user always sees all options regardless of the current filter state.
-  const distinctValues = useMemo(() => {
-    const host = new Map<string, number>()
-    const corpId = new Map<string, number>()
-    const assigned = new Map<string, number>()
-    const dept = new Map<string, number>()
-    const title = new Map<string, number>()
-    for (const i of categoryItems) {
-      host.set(i.name, (host.get(i.name) ?? 0) + 1)
-      const c = (i.corpId ?? '').trim()
-      corpId.set(c, (corpId.get(c) ?? 0) + 1)
-      const a = (i.assignedTo ?? '').trim()
-      assigned.set(a, (assigned.get(a) ?? 0) + 1)
-      const d = (i.department ?? '').trim()
-      dept.set(d, (dept.get(d) ?? 0) + 1)
-      const t = (i.jobTitle ?? '').trim()
-      title.set(t, (title.get(t) ?? 0) + 1)
-    }
-    return { host, corpId, assigned, dept, title }
-  }, [categoryItems])
+  // Spalten EINMAL deklariert — Filtern und Zählen benutzen denselben Ausleser.
+  //
+  // Die Zahlen beziehen sich auf die aktuelle Auswahl: jede Spalte rechnet alle ANDEREN
+  // Filter mit, ihren eigenen nicht. Damit bleibt der Grund erhalten, aus dem hier früher
+  // über die ungefilterte Liste gezählt wurde („the user always sees all options") — die
+  // eigene Spalte zeigt weiter alle Werte — aber die Zahlen stimmen jetzt zur Auswahl.
+  const spalten = useMemo<Spalte<InventoryItem>[]>(() => [
+    { id: 'host', werte: i => [i.name], gewaehlt: filterHost },
+    { id: 'corpId', werte: i => [(i.corpId ?? '').trim()], gewaehlt: filterCorpId },
+    { id: 'assigned', werte: i => [(i.assignedTo ?? '').trim()], gewaehlt: filterAssigned },
+    { id: 'dept', werte: i => [(i.department ?? '').trim()], gewaehlt: filterDept },
+    { id: 'title', werte: i => [(i.jobTitle ?? '').trim()], gewaehlt: filterTitle },
+  ], [filterHost, filterCorpId, filterAssigned, filterDept, filterTitle])
 
   const anyColumnFilterActive =
     filterHost.size > 0 || filterCorpId.size > 0 || filterAssigned.size > 0 || filterDept.size > 0 || filterTitle.size > 0
@@ -221,32 +241,19 @@ export default function LocationOverview() {
     setFilterTitle(new Set())
   }
 
-  const filteredItems = useMemo(() => {
+  const { zeilen: filteredItems, werte: distinctValues } = useMemo(() => {
     const q = search.trim().toLowerCase()
-    return categoryItems.filter(i => {
-      // Search bar (matches across all relevant fields)
-      if (q) {
-        const matchesSearch =
-          i.name.toLowerCase().includes(q) ||
-          (i.ip ?? '').includes(search) ||
-          (i.serial ?? '').toLowerCase().includes(q) ||
-          (i.model ?? '').toLowerCase().includes(q) ||
-          (i.description ?? '').toLowerCase().includes(q) ||
-          (i.corpId ?? '').toLowerCase().includes(q) ||
-          (i.assignedTo ?? '').toLowerCase().includes(q) ||
-          (i.department ?? '').toLowerCase().includes(q) ||
-          (i.jobTitle ?? '').toLowerCase().includes(q)
-        if (!matchesSearch) return false
-      }
-      // Column filters (empty set = no filter on that column)
-      if (filterHost.size > 0 && !filterHost.has(i.name)) return false
-      if (filterCorpId.size > 0 && !filterCorpId.has((i.corpId ?? '').trim())) return false
-      if (filterAssigned.size > 0 && !filterAssigned.has((i.assignedTo ?? '').trim())) return false
-      if (filterDept.size > 0 && !filterDept.has((i.department ?? '').trim())) return false
-      if (filterTitle.size > 0 && !filterTitle.has((i.jobTitle ?? '').trim())) return false
-      return true
-    })
-  }, [categoryItems, search, filterHost, filterCorpId, filterAssigned, filterDept, filterTitle])
+    return spaltenFilter(categoryItems, spalten, i =>
+      !q || i.name.toLowerCase().includes(q)
+        || (i.ip ?? '').includes(search)
+        || (i.serial ?? '').toLowerCase().includes(q)
+        || (i.model ?? '').toLowerCase().includes(q)
+        || (i.description ?? '').toLowerCase().includes(q)
+        || (i.corpId ?? '').toLowerCase().includes(q)
+        || (i.assignedTo ?? '').toLowerCase().includes(q)
+        || (i.department ?? '').toLowerCase().includes(q)
+        || (i.jobTitle ?? '').toLowerCase().includes(q))
+  }, [categoryItems, spalten, search])
 
   // ── Add item ────────────────────────────────────────────────────────────────
   async function handleAdd(e: React.FormEvent) {
@@ -279,10 +286,20 @@ export default function LocationOverview() {
     setAssignedEditId(null)
   }
   async function saveEdit(id: string) {
+    const vorher = items.find(i => i.id === id)
     const updated = items.map(i => i.id === id
       ? { ...i, name: editName.trim(), ip: editIp.trim() || undefined, description: editDesc.trim() || undefined, assignedTo: editAssigned.trim() || undefined }
       : i)
     await saveItems(updated)
+    // Bei Druckern ist die Beschreibung der Standort. Von Hand eingetragen heißt: er bleibt —
+    // kein Import, kein Scan und kein Seed ändert ihn mehr (siehe printerLocation.ts).
+    // Der Wert wandert zugleich ins Drucker-Dossier, damit Liste und „i" übereinstimmen.
+    if (vorher?.category === 'Drucker' && (vorher.description || '') !== editDesc.trim()) {
+      try {
+        await setzeStandortManuell(editName.trim() || vorher.name, editDesc.trim(),
+          session?.user.displayName || session?.user.username || 'unbekannt')
+      } catch { /* offline — in der Liste steht der Wert trotzdem */ }
+    }
     await log(`Objekt bearbeitet: ${editName}`, editName)
     setEditId(null)
   }
@@ -325,6 +342,10 @@ export default function LocationOverview() {
         // Excel/CSV: show column picker dialog
         const sheetData = parseExcelSheet(bytes)
         if (sheetData.columns.length === 0) { setImportStatus('Keine Spalten gefunden'); return }
+        // In der Kategorie Drucker gilt die ERP-Liste: eigene Spaltenrollen, Abgleich über
+        // IP/MAC/Seriennummer/ERP-ID. Der allgemeine Hostname-Abgleich passt dort nicht —
+        // die Datei hat gar keinen Hostnamen und würde die Liste leerräumen.
+        if (activeCategory === 'Drucker') { setDruckerDatei(path.split(/[\/]/).pop() || 'Datei'); setDruckerSheet(sheetData); return }
         setPendingExcelData(sheetData)
       } else {
         // Plain text: extract hostnames directly
@@ -557,56 +578,112 @@ export default function LocationOverview() {
     } finally { setIpScanBusy(false) }
   }
 
-  // ── Drucker-Infos (Seriennummer/Modell) aus Geräte-Excel übernehmen ─────────
-  // Abgleich über den DRUCKERNAMEN = Spalte „ERP-ID" (z. B. PMD519 / DEHAM003).
-  // Setzt Seriennummer + „Hersteller Modell" bei den bereits vorhandenen Druckern.
-  async function importPrinterInfoFromExcel() {
-    if (printerImporting) return
+  // ── Drucker-Import aus der ERP-Liste ────────────────────────────────────────
+  //
+  // Schritt 1: Spalten sind zugeordnet → Zeilen lesen und planen (reine Rechnung,
+  // src/services/printerImport.ts). Geschrieben wird noch nichts.
+  async function druckerSpaltenGewaehlt(nachRolle: Record<string, string[]>) {
+    const sheet = druckerSheet
+    setDruckerSheet(null)
+    if (!sheet) return
     setPrinterImporting(true); setPrinterImportMsg('')
     try {
-      const path = await api().openFileDialog([{ name: 'Excel / CSV', extensions: ['xlsx', 'xls', 'csv'] }])
-      if (!path) return
-      const res = await api().readFile(path)
-      if (!res.success || !res.data) throw new Error(res.error ?? 'Datei konnte nicht gelesen werden.')
-      const bin = atob(res.data)
-      const bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
-      const sheet = parseExcelSheet(bytes)
-      if (sheet.rows.length === 0) throw new Error('Datei enthält keine Zeilen.')
-      const keys = sheet.columns.map(c => c.name)
-      const find = (pats: RegExp[]) => { for (const re of pats) { const k = keys.find(k => re.test(k.trim())); if (k) return k } return '' }
-      const nameKey = find([/^erp[-\s]?id$/i, /erp/i, /^name$/i, /drucker|printer/i])
-      const serialKey = find([/serien\s*nummer/i, /seriennr/i, /serial/i])
-      const modelKey = find([/^modell$/i, /model/i])
-      const herstKey = find([/hersteller/i, /manufacturer/i])
-      if (!nameKey) throw new Error('Keine „ERP-ID"/Name-Spalte gefunden.')
-      if (!serialKey && !modelKey) throw new Error('Weder „Seriennummer" noch „Modell" gefunden.')
+      const zeilen = leseZeilen(sheet.rows, nachRolle as Zuordnung)
+      // Merkmale aller Drucker in EINEM Verzeichnislauf (statt N Einzelabfragen).
+      const merkmale = await loadAllPrinterMerkmale()
+      const vorhanden = items
+        .filter(i => i.category === 'Drucker' && (i.name || '').trim())
+        .map(i => {
+          const m = merkmale.get(i.name) || {}
+          // Inventar zuerst (dort landet der Import), Dossier als Ergänzung.
+          return { name: i.name, ip: i.ip || m.ip, mac: i.mac || m.mac, serial: i.serial || m.serial, erpId: m.erpId }
+        })
+      setDruckerPlan({ plan: planPrinterImport(zeilen, vorhanden), zeilen, datei: druckerDatei })
+    } catch (e) {
+      setPrinterImportMsg('Datei konnte nicht gelesen werden: ' + (e instanceof Error ? e.message : String(e)))
+    } finally { setPrinterImporting(false) }
+  }
 
-      const val = (row: Record<string, unknown>, k: string) => k ? String(row[k] ?? '').trim() : ''
-      const map = new Map<string, { serial: string; model: string }>()
-      for (const row of sheet.rows) {
-        const nm = val(row, nameKey).toUpperCase()
-        if (!nm) continue
-        const serial = val(row, serialKey)
-        const model = [val(row, herstKey), val(row, modelKey)].filter(Boolean).join(' ').trim()
-        map.set(nm, { serial, model })
+  // Schritt 2: bestätigt → Inventar und Drucker-Dossiers schreiben.
+  // Die Werte aus der Datei gelten als richtig und werden von keinem Scan mehr
+  // überschrieben (Drucker sind aus dem Geräte-Scan ausgenommen).
+  async function druckerImportUebernehmen() {
+    if (!druckerPlan) return
+    const { plan, zeilen, datei } = druckerPlan
+    setDruckerPlan(null); setPrinterImporting(true); setPrinterImportMsg('')
+    try {
+      const nowIso = new Date().toISOString()
+      const by = session?.user.displayName || session?.user.username || 'unbekannt'
+      const patchFuer = new Map<string, DruckerZeile>()
+      for (const t of plan.treffer) patchFuer.set(t.drucker, t.zeile)
+
+      // a) Inventar: vorhandene ergänzen, unbekannte neu anlegen
+      const next: InventoryItem[] = items.map(i => {
+        const z = i.category === 'Drucker' ? patchFuer.get(i.name) : undefined
+        if (!z) return i
+        const modell = modellText(z.hersteller, z.modell)
+        return {
+          ...i,
+          ip: z.ip || i.ip,
+          mac: z.mac || i.mac,
+          serial: z.serial || i.serial,
+          model: modell || i.model,
+          // description (= Standort) bleibt bewusst unangetastet: ein von Hand
+          // gesetzter Standort darf von keinem Import überschrieben werden.
+        }
+      })
+      let angelegt = 0
+      for (const z of plan.neu) {
+        const name = neuerName(z)
+        if (!name) continue
+        if (next.some(i => (i.name || '').trim().toUpperCase() === name.toUpperCase())) continue
+        next.push({
+          id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          name,
+          ip: z.ip || undefined,
+          mac: z.mac || undefined,
+          serial: z.serial || undefined,
+          model: modellText(z.hersteller, z.modell) || undefined,
+          category: 'Drucker',
+          addedAt: nowIso,
+          addedBy: by,
+        })
+        angelegt++
+      }
+      await saveItems(next)
+
+      // b) Drucker-Dossiers: dieselben Werte plus ERP-ID und „Ist verwaltet",
+      //    damit Liste und „i"-Fenster nicht mehr auseinanderlaufen.
+      const alle: { name: string; z: DruckerZeile }[] = [
+        ...plan.treffer.map(t => ({ name: t.drucker, z: t.zeile })),
+        ...plan.neu.map(z => ({ name: neuerName(z), z })).filter(x => x.name),
+      ]
+      const DOSSIER_BATCH = 10   // gedrosselt nach den Performance-Regeln
+      for (let i = 0; i < alle.length; i += DOSSIER_BATCH) {
+        await Promise.all(alle.slice(i, i + DOSSIER_BATCH).map(async ({ name, z }) => {
+          try {
+            const d = await loadPrinterDossier(name)
+            const master = { ...(d?.master || {}) }
+            if (z.ip) master.ip = z.ip
+            if (z.mac) master.mac = z.mac
+            if (z.serial) master.serial = z.serial
+            const modell = modellText(z.hersteller, z.modell)
+            if (modell) master.model = modell
+            if (z.erpId) master.assetTag = z.erpId
+            if (z.verwaltet !== null) master.managed = z.verwaltet
+            master.importedAt = nowIso
+            master.importedBy = by
+            await savePrinterMaster(name, master, by)
+          } catch { /* nächster Drucker */ }
+        }))
       }
 
-      let updated = 0, matched = 0
-      const next = items.map(i => {
-        if (i.category !== 'Drucker') return i
-        const hit = map.get((i.name || '').trim().toUpperCase())
-        if (!hit) return i
-        matched++
-        const patch: Partial<InventoryItem> = {}
-        if (hit.serial && hit.serial !== i.serial) patch.serial = hit.serial
-        if (hit.model && hit.model !== i.model) patch.model = hit.model
-        if (Object.keys(patch).length === 0) return i
-        updated++
-        return { ...i, ...patch }
-      })
-      await saveItems(next)
-      const druckerTotal = next.filter(i => i.category === 'Drucker').length
-      setPrinterImportMsg(`Aus „${path.split(/[\\/]/).pop()}": ${updated} von ${matched} gefundenen Druckern aktualisiert (${druckerTotal} Drucker gesamt, ${sheet.rows.length} Zeilen gelesen).`)
+      await loadItems()
+      const teile = [`${plan.treffer.length} Drucker aktualisiert`]
+      if (angelegt) teile.push(`${angelegt} neu angelegt`)
+      if (plan.unbrauchbar) teile.push(`${plan.unbrauchbar} Zeilen ohne verwertbares Merkmal übersprungen`)
+      setPrinterImportMsg(`Aus „${datei}": ${teile.join(' · ')} (${zeilen.length} Zeilen gelesen). Diese Werte werden von keinem Scan überschrieben.`)
+      await log(`Drucker-Import aus "${datei}": ${teile.join(', ')}`)
     } catch (e) {
       setPrinterImportMsg('Import fehlgeschlagen: ' + (e instanceof Error ? e.message : String(e)))
     } finally { setPrinterImporting(false) }
@@ -658,15 +735,8 @@ export default function LocationOverview() {
               {ipScanBusy ? <Loader size={12} className="animate-spin" /> : <Printer size={12} />}Drucker-IPs scannen
             </button>
           )}
-          {activeCategory === 'Drucker' && (
-            <button onClick={importPrinterInfoFromExcel} disabled={printerImporting}
-              title="Seriennummer und Modell aus einer Geräte-Excel übernehmen (Abgleich über den Druckernamen = Spalte ERP-ID)"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 disabled:opacity-40">
-              {printerImporting ? <Loader size={12} className="animate-spin" /> : <FileSpreadsheet size={12} />}Serien-Nr./Modell aus Excel
-            </button>
-          )}
           <button onClick={scanDevicesNow} disabled={deviceScanRunning}
-            title="IP, MAC und Seriennummer aller Geräte (Server/Computer/Drucker) jetzt auslesen und in den Stammdaten hinterlegen. Läuft im Hintergrund weiter (auch bei Menüwechsel) und sonst automatisch alle 3 Tage um 15:00 Uhr."
+            title="IP, MAC und Seriennummer von Servern und Computern jetzt auslesen und in den Stammdaten hinterlegen. DRUCKER SIND AUSGENOMMEN — deren Daten kommen aus dem Drucker-Import. Läuft im Hintergrund weiter (auch bei Menüwechsel) und sonst automatisch Mo + Do um 15:00 Uhr."
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40">
             {deviceScanRunning ? <Loader size={12} className="animate-spin" /> : <ScanLine size={12} />}Geräte scannen (IP/MAC/Serial)
           </button>
@@ -739,8 +809,12 @@ export default function LocationOverview() {
                   <Plus size={12} /> Hinzufügen
                 </button>
                 <button onClick={handleImport} disabled={importing}
+                  title={activeCategory === 'Drucker'
+                    ? 'Drucker-Daten aus der ERP-Liste importieren (Ist verwaltet, Hersteller, Modell, Seriennummer, ERP-ID, IP, MAC). Zuordnung über IP, MAC, Seriennummer oder ERP-ID; unbekannte Drucker werden neu angelegt.'
+                    : 'Hostnamen aus Excel, CSV oder Textdatei importieren'}
                   className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground transition-colors disabled:opacity-50">
-                  {importing ? <Loader size={12} className="animate-spin" /> : <Upload size={12} />} Import
+                  {importing ? <Loader size={12} className="animate-spin" /> : <Upload size={12} />}
+                  {activeCategory === 'Drucker' ? 'Drucker-Daten importieren' : 'Import'}
                 </button>
                 <button onClick={handleAdEnrich} disabled={adEnriching || selected.size === 0}
                   title={selected.size === 0
@@ -1037,6 +1111,62 @@ export default function LocationOverview() {
           onConfirm={handleExcelConfirm}
           onCancel={() => setPendingExcelData(null)}
         />
+      )}
+
+      {/* Drucker-Import: Spalten zuordnen (eigene Rollen statt Hostname/Seriennummer) */}
+      {druckerSheet && (
+        <ExcelColumnDialog
+          columns={druckerSheet.columns}
+          rows={druckerSheet.rows}
+          titel="Drucker-Daten importieren"
+          untertitel="Welche Spalte enthält was? Die Zuordnung zu den vorhandenen Druckern läuft über IP, MAC, Seriennummer oder ERP-ID."
+          roles={DRUCKER_ROLLEN}
+          initialRoles={erkenneSpalten(druckerSheet.columns.map(c => c.name))}
+          pflichtRollen={['serial', 'ip', 'mac', 'erpId']}
+          onConfirm={() => {}}
+          onConfirmMap={druckerSpaltenGewaehlt}
+          onCancel={() => setDruckerSheet(null)}
+        />
+      )}
+
+      {/* Drucker-Import: bestätigen, bevor geschrieben oder neu angelegt wird */}
+      {druckerPlan && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-card border border-border rounded-xl shadow-2xl w-[560px] max-h-[85vh] flex flex-col">
+            <div className="px-5 py-4 border-b border-border">
+              <h2 className="text-sm font-semibold text-foreground">Drucker-Import übernehmen?</h2>
+              <p className="text-[11px] text-muted-foreground mt-0.5">aus „{druckerPlan.datei}"</p>
+            </div>
+            <div className="px-5 py-4 space-y-3 overflow-y-auto">
+              <p className="text-xs text-foreground">{planText(druckerPlan.plan, druckerPlan.zeilen.length)}</p>
+              {druckerPlan.plan.neu.length > 0 && (
+                <div className="space-y-1">
+                  <p className="text-[11px] font-medium text-foreground">Diese Drucker werden NEU angelegt:</p>
+                  <div className="max-h-40 overflow-auto rounded border border-border bg-background/50 px-2 py-1">
+                    {druckerPlan.plan.neu.map((z, i) => (
+                      <div key={i} className="text-[11px] text-muted-foreground font-mono">
+                        {neuerName(z)}{z.ip ? ` · ${z.ip}` : ''}{z.serial ? ` · ${z.serial}` : ''}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <p className="text-[11px] text-muted-foreground">
+                Die übernommenen Werte gelten als richtig: Drucker sind vom automatischen
+                Geräte-Scan ausgenommen, und die IP wird nur ersetzt, wenn der Drucker dort
+                nicht mehr antwortet.
+              </p>
+            </div>
+            <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-border">
+              <button onClick={() => setDruckerPlan(null)}
+                className="px-4 py-2 text-sm rounded-md border border-border hover:bg-accent text-foreground">Abbrechen</button>
+              <button onClick={druckerImportUebernehmen} disabled={printerImporting}
+                className="px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
+                Übernehmen
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Import smart-sync confirm */}

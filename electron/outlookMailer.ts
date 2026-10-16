@@ -4,9 +4,9 @@ import { execSync } from 'child_process'
 import { userInfo } from 'os'
 
 // VOLLE PFADE — damit es auch im elevated Kontext funktioniert
-const SCHTASKS = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'schtasks.exe')
-const CSCRIPT = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'cscript.exe')
-const WORK_DIR = 'C:\\Temp\\ITAdminMail'
+export const SCHTASKS = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'schtasks.exe')
+export const CSCRIPT = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'cscript.exe')
+export const WORK_DIR = 'C:\\Temp\\ITAdminMail'
 
 interface MailOpts {
   to: string
@@ -24,7 +24,7 @@ interface MailResult {
   method?: string
 }
 
-function getDesktopUser(): string {
+export function getDesktopUser(): string {
   // Methode 1: query user
   try {
     const quser = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'query.exe')
@@ -50,19 +50,20 @@ function getDesktopUser(): string {
   return userInfo().username
 }
 
-function uid(): string {
+export function uid(): string {
   return Math.random().toString(36).slice(2, 10)
 }
 
 // VBS-Datei als UTF-16 LE mit BOM schreiben. cscript.exe liest .vbs sonst als
-// ANSI — Umlaute/Gedankenstriche im INLINE-Text (z. B. Subject) wuerden zu
-// Mojibake ("fÃ¼r", "â€“"). Der Body ist davon unabhaengig (eigene UTF-8-Datei
-// via ADODB.Stream), aber der Betreff steht direkt im Skript.
-function writeVbs(path: string, content: string): void {
+// ANSI — Umlaute/Gedankenstriche im INLINE-Text wuerden zu Mojibake ("fÃ¼r", "â€“").
+// Betreff UND Body stehen inzwischen NICHT mehr inline, sondern werden als eigene
+// UTF-8-Dateien ueber ADODB.Stream eingelesen (siehe subjectPath/bodyPath). Damit
+// haengt kein Text mehr an der Kodierung der Skriptdatei.
+export function writeVbs(path: string, content: string): void {
   writeFileSync(path, '\uFEFF' + content, 'utf16le')
 }
 
-function ensureWorkDir(): void {
+export function ensureWorkDir(): void {
   try {
     if (!existsSync(WORK_DIR)) mkdirSync(WORK_DIR, { recursive: true })
   } catch { /* ok */ }
@@ -73,13 +74,15 @@ export async function sendViaOutlookScheduledTask(opts: MailOpts): Promise<MailR
   ensureWorkDir()
 
   const bodyPath   = join(WORK_DIR, `body_${id}.txt`)
+  const subjPath   = join(WORK_DIR, `subj_${id}.txt`)
   const vbsPath    = join(WORK_DIR, `send_${id}.vbs`)
   const resultPath = join(WORK_DIR, `result_${id}.txt`)
   const taskName   = `ITMailSend_${id}`
 
   try {
-    // Body als UTF-8 Datei schreiben (vermeidet VBS-Encoding-Probleme)
+    // Body UND Betreff als UTF-8-Dateien schreiben (vermeidet VBS-Encoding-Probleme)
     writeFileSync(bodyPath, opts.body, 'utf-8')
+    writeFileSync(subjPath, opts.subject || '', 'utf-8')
 
     // VBScript zusammenbauen
     const vbs = [
@@ -92,6 +95,13 @@ export async function sendViaOutlookScheduledTask(opts: MailOpts): Promise<MailR
       'objStream.LoadFromFile "' + bodyPath.replace(/\\/g, '\\\\') + '"',
       'Dim bodyText',
       'bodyText = objStream.ReadText',
+      'objStream.Close',
+      // Betreff genauso aus einer UTF-8-Datei — nicht als Literal ins Skript, sonst
+      // haengt er an der Kodierung der .vbs (Umlaute wurden zu "ZubehÃ¶r").
+      'objStream.Open',
+      'objStream.LoadFromFile "' + subjPath.replace(/\\/g, '\\\\') + '"',
+      'Dim subjText',
+      'subjText = objStream.ReadText',
       'objStream.Close',
       'Set objStream = Nothing',
       '',
@@ -112,7 +122,7 @@ export async function sendViaOutlookScheduledTask(opts: MailOpts): Promise<MailR
       'objMail.To = "' + (opts.to || '').replace(/"/g, '') + '"',
       opts.cc ? 'objMail.CC = "' + opts.cc.replace(/"/g, '') + '"' : '',
       opts.bcc ? 'objMail.BCC = "' + opts.bcc.replace(/"/g, '') + '"' : '',
-      'objMail.Subject = "' + (opts.subject || '').replace(/"/g, "'") + '"',
+      'objMail.Subject = subjText',
       opts.html ? 'objMail.HTMLBody = bodyText' : 'objMail.Body = bodyText',
       opts.attachmentPath ? 'objMail.Attachments.Add "' + opts.attachmentPath.replace(/"/g, '') + '"' : '',
       '',
@@ -176,6 +186,7 @@ export async function sendViaOutlookScheduledTask(opts: MailOpts): Promise<MailR
     setTimeout(() => {
       try { if (existsSync(vbsPath)) unlinkSync(vbsPath) } catch { /* ok */ }
       try { if (existsSync(bodyPath)) unlinkSync(bodyPath) } catch { /* ok */ }
+      try { if (existsSync(subjPath)) unlinkSync(subjPath) } catch { /* ok */ }
       try { if (existsSync(resultPath)) unlinkSync(resultPath) } catch { /* ok */ }
     }, 5000)
   }
@@ -186,12 +197,14 @@ export async function composeViaOutlookScheduledTask(opts: MailOpts): Promise<Ma
   ensureWorkDir()
 
   const bodyPath   = join(WORK_DIR, `body_${id}.txt`)
+  const subjPath   = join(WORK_DIR, `subj_${id}.txt`)
   const vbsPath    = join(WORK_DIR, `compose_${id}.vbs`)
   const resultPath = join(WORK_DIR, `result_${id}.txt`)
   const taskName   = `ITMailCompose_${id}`
 
   try {
     writeFileSync(bodyPath, opts.body, 'utf-8')
+    writeFileSync(subjPath, opts.subject || '', 'utf-8')
 
     const vbs = [
       'On Error Resume Next',
@@ -203,6 +216,13 @@ export async function composeViaOutlookScheduledTask(opts: MailOpts): Promise<Ma
       'objStream.LoadFromFile "' + bodyPath.replace(/\\/g, '\\\\') + '"',
       'Dim bodyText',
       'bodyText = objStream.ReadText',
+      'objStream.Close',
+      // Betreff genauso aus einer UTF-8-Datei — nicht als Literal ins Skript, sonst
+      // haengt er an der Kodierung der .vbs (Umlaute wurden zu "ZubehÃ¶r").
+      'objStream.Open',
+      'objStream.LoadFromFile "' + subjPath.replace(/\\/g, '\\\\') + '"',
+      'Dim subjText',
+      'subjText = objStream.ReadText',
       'objStream.Close',
       'Set objStream = Nothing',
       '',
@@ -217,7 +237,7 @@ export async function composeViaOutlookScheduledTask(opts: MailOpts): Promise<Ma
       'Set objMail = objOutlook.CreateItem(0)',
       'objMail.To = "' + (opts.to || '').replace(/"/g, '') + '"',
       opts.cc ? 'objMail.CC = "' + opts.cc.replace(/"/g, '') + '"' : '',
-      'objMail.Subject = "' + (opts.subject || '').replace(/"/g, "'") + '"',
+      'objMail.Subject = subjText',
       opts.html ? 'objMail.HTMLBody = bodyText' : 'objMail.Body = bodyText',
       opts.attachmentPath ? 'objMail.Attachments.Add "' + opts.attachmentPath.replace(/"/g, '') + '"' : '',
       '',
@@ -265,6 +285,7 @@ export async function composeViaOutlookScheduledTask(opts: MailOpts): Promise<Ma
     setTimeout(() => {
       try { if (existsSync(vbsPath)) unlinkSync(vbsPath) } catch { /* ok */ }
       try { if (existsSync(bodyPath)) unlinkSync(bodyPath) } catch { /* ok */ }
+      try { if (existsSync(subjPath)) unlinkSync(subjPath) } catch { /* ok */ }
       try { if (existsSync(resultPath)) unlinkSync(resultPath) } catch { /* ok */ }
     }, 5000)
   }

@@ -9,6 +9,7 @@ import { useAppStore } from '../store/appStore'
 import { api } from '../electronAPI'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
+import { hostFromSerial } from '../services/deviceMasterData'
 import {
   listEmployees, listDepartures, createEmployee, updateEmployee, deleteEmployee,
   createDeparture, updateDeparture, deleteDeparture, applyAccessPass,
@@ -28,6 +29,7 @@ import { fuzzyNameMatch } from '../utils/nameMatch'
 import { loadDevices, type EndpointDevice } from '../services/endpointDevices'
 import { devicesForName, isActiveAssignment } from '../services/departureDevices'
 import { loadReminderStore, type ReminderStore } from '../services/departureReminder'
+import { reconcileCriticalDevices } from '../services/deviceTags'
 import DepartureMailDialog from '../components/employees/DepartureMailDialog'
 
 const POLL_MS = 15_000
@@ -114,6 +116,9 @@ export default function EmployeeManagement() {
     window.addEventListener('focus', onFocus)
     return () => { clearInterval(t); window.removeEventListener('focus', onFocus) }
   }, [refresh])
+
+  // Einmalig beim Öffnen: kritische Geräte abgleichen (Austritts-Geräte ohne Karten-Standort taggen).
+  useEffect(() => { void reconcileCriticalDevices(user?.displayName || username || 'system') }, [])
 
   // ── Kern-Verarbeitung: arbeitet auf {name, bytes} — egal ob aus Drop oder Dialog
   async function processItems(items: { name: string; bytes: Uint8Array }[]) {
@@ -1056,7 +1061,10 @@ function EmployeeEditModal({ emp, username, onClose, onSaved }: { emp: Employee;
         <Field label="SNOW Request"><Inp v={f.request} on={v => set('request', v)} /></Field>
         <Field label="RITM Laptop"><Inp v={f.ritmLaptop} on={v => set('ritmLaptop', v)} /></Field>
         <Field label="Deployment-TASK"><Inp v={f.deploymentTask} on={v => set('deploymentTask', v)} mono /></Field>
-        <Field label="Seriennummer Hardware"><Inp v={f.hardwareSerial} on={v => set('hardwareSerial', v)} mono /></Field>
+        <Field label="Seriennummer Hardware"
+          extra={<DeviceInfoButton hostname={hostFromSerial(f.hardwareSerial)} serial={f.hardwareSerial.trim() || undefined} size={13} />}>
+          <Inp v={f.hardwareSerial} on={v => set('hardwareSerial', v)} mono />
+        </Field>
         <Field label="Laptop Typ"><Inp v={f.laptopType} on={v => set('laptopType', v)} /></Field>
         <Field label="Durchwahl"><Inp v={f.phoneExtension} on={v => set('phoneExtension', v)} /></Field>
         <Field label="Einmal-Passwort / Access Pass"><Inp v={f.accessPass} on={v => set('accessPass', v)} mono /></Field>
@@ -1191,8 +1199,16 @@ function ModalShell({ title, onClose, children }: { title: string; onClose: () =
     </div>
   )
 }
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <label className="block"><span className="text-[11px] text-muted-foreground">{label}</span><div className="mt-0.5">{children}</div></label>
+// `extra` steht rechts neben der Beschriftung — dort hängt z. B. das „i" zum
+// Geräte-Dossier hinter der Seriennummer. Im Knopf selbst wird das Klick-Ereignis
+// gestoppt, sonst würde das umschließende <label> zusätzlich das Eingabefeld fokussieren.
+function Field({ label, children, extra }: { label: string; children: React.ReactNode; extra?: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="flex items-center gap-1 text-[11px] text-muted-foreground">{label}{extra}</span>
+      <div className="mt-0.5">{children}</div>
+    </label>
+  )
 }
 function Inp({ v, on, mono, placeholder, onBlur }: { v: string; on: (v: string) => void; mono?: boolean; placeholder?: string; onBlur?: () => void }) {
   return <input value={v} placeholder={placeholder} onChange={e => on(e.target.value)} onBlur={onBlur}

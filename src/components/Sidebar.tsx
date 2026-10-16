@@ -4,8 +4,8 @@ import {
   ChevronRight, UserSearch, Users, FileText, MapPin, Clock,
   Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen, Package, Stethoscope, PackagePlus, MonitorPlay, PhoneCall,
   Building2, Network, ClipboardList, FolderKanban, ScanSearch, Wifi, CalendarClock, Boxes, Cable, UserPlus, ChevronDown, MonitorSmartphone, Ticket,
-  DatabaseBackup, BatteryCharging, Rocket, Radar, Cpu, Server, HardDriveDownload, Factory, Gamepad2, ClipboardCheck, Building,
-  GripVertical, RotateCcw, Check as CheckIcon, LifeBuoy,
+  DatabaseBackup, Router, Rocket, Radar, Cpu, Server, HardDriveDownload, Factory, Gamepad2, ClipboardCheck, Building,
+  GripVertical, RotateCcw, Check as CheckIcon, LifeBuoy, AlertOctagon,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
@@ -55,11 +55,12 @@ const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'licenses': <CalendarClock size={18} />,
   'proactive-radar': <Radar size={18} />,
   'nis2': <ShieldCheck size={18} />,
+  'critical-devices': <AlertOctagon size={18} />,
   'software-inventory': <Package size={18} />,
   'network-radar': <Activity size={18} />,
   'vlan-overview': <Cable size={18} />,
   'backups': <DatabaseBackup size={18} />,
-  'usv': <BatteryCharging size={18} />,
+  'usv': <Router size={18} />,   // Menüpunkt „Netzwerkgeräte" (USV, Telefonanlage, …)
   'dashboards': <LayoutDashboard size={18} />,
   'xelion': <Smartphone size={18} />,
   'rufnummer-vergabe': <PhoneCall size={18} />,
@@ -188,13 +189,15 @@ export default function Sidebar() {
     for (let i = 0; i < REORDERABLE.length; i++) {
       const c = REORDERABLE[i]
       if (seen.has(c.id)) continue
+      // Hinter den vorherigen Katalog-Nachbarn einsortieren, ABER die EIGENE Kategorie
+      // behalten (nicht die des Nachbarn übernehmen — sonst erben bei Nutzern ohne eigene
+      // Reihenfolge alle Punkte kaskadierend die Kategorie des ersten Eintrags).
       let insertAt = 0
-      let category = c.category
       for (let j = i - 1; j >= 0; j--) {
         const idx = result.findIndex(r => r.id === REORDERABLE[j].id)
-        if (idx >= 0) { insertAt = idx + 1; category = result[idx].category; break }
+        if (idx >= 0) { insertAt = idx + 1; break }
       }
-      result.splice(insertAt, 0, { ...c, category })
+      result.splice(insertAt, 0, c)
       seen.add(c.id)
     }
     return result

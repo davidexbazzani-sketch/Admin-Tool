@@ -9,6 +9,7 @@ import { createLogger } from '../../utils/activityLogger'
 import { pathService } from '../../services/pathService'
 import { useSwInstallStore } from '../../store/swInstallStore'
 import { isValidRemoteTarget, isIpv4, ensureWinRmTrustedHost } from '../../utils/remoteTarget'
+import { buildOnlineCheck } from '../../utils/connectivityCheck'
 import Card from '../Card'
 import { DeviceInfoButton } from '../device/DeviceDossier'
 
@@ -383,7 +384,11 @@ export default function SolidWorksInstallation() {
 
     // Ping
     try {
-      const res = await api().runPowerShell(`if (Test-Connection -ComputerName '${h}' -Count 1 -Quiet) { 'OK' } else { 'FAIL' }`, 10000)
+      // Nicht nur ICMP: viele Netze/Clients verwerfen Ping, antworten aber auf SMB (445)
+      // und RPC (135). Reiner Ping meldete dann fälschlich „nicht erreichbar".
+      const res = await api().runPowerShell(
+        buildOnlineCheck(h) + `
+if ($online) { 'OK' } else { 'FAIL' }`, 15000)
       checks.ping = res.stdout.trim() === 'OK' ? 'ok' : 'fail'
     } catch { checks.ping = 'fail' }
     setPreChecks({ ...checks })

@@ -10,6 +10,17 @@
 // The editor (PresentationMode) can save explicitly to any of these targets.
 
 import { api } from '../electronAPI'
+import { findeVerweise, loeseVerweisAuf, ordnerVon } from './presentationHtml'
+
+/** Base64 (wie readFile es liefert) → Text, UTF-8-fest. */
+function decodeBase64Utf8(b64: string): string {
+  try {
+    const bin = atob(b64)
+    const bytes = new Uint8Array(bin.length)
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+    return new TextDecoder('utf-8', { fatal: false }).decode(bytes)
+  } catch { return '' }
+}
 
 // Wechsel-Inhalt einer Folie: zusätzliche Website/PDF, die im Rotations-
 // Rhythmus die Haupt-URL der Folie ersetzt (z. B. Unterhaltungs-Folien,
@@ -96,6 +107,26 @@ export function slideSrcUrl(raw: string): string {
   return s
 }
 
+/**
+ * Dateipfad → Adresse des eigenen Folien-Protokolls, die das <webview> wie eine normale
+ * Webseite lädt (siehe electron/slideProtocol.ts).
+ *
+ *   C:\Praesentation\seite.html        → skfslide://local/C:/Praesentation/seite.html
+ *   \\server\freigabe\seite.html       → skfslide://unc/server/freigabe/seite.html
+ *
+ * Nur so funktionieren Modul-Skripte, Importmaps und relative Verweise in einer
+ * HTML-Folie — `srcDoc` hat keine echte Herkunft, `file://` lädt das <webview> nicht.
+ */
+export function slideProtocolUrl(fsPfad: string): string {
+  const p = (fsPfad || '').trim()
+  if (!p) return ''
+  // Jeden Pfadteil einzeln kodieren, damit die Trenner Trenner bleiben.
+  const teile = (x: string) => x.split('\\').filter(Boolean).map(encodeURIComponent).join('/')
+  if (p.startsWith('\\\\')) return `skfslide://unc/${teile(p.slice(2))}`
+  if (/^[a-z]:\\/i.test(p)) return `skfslide://local/${teile(p)}`
+  return ''
+}
+
 // Liefert den Dateisystem-Pfad zurueck, wenn die URL auf eine LOKALE/UNC
 // HTML-Datei zeigt — sonst null. Das <webview> kann lokale file://-HTML nicht
 // zuverlaessig laden (Folie bleibt schwarz); der Player liest solche Dateien
@@ -147,6 +178,62 @@ export async function uploadMediaToShare(localPath: string): Promise<
     const base = await api().netGetBasePath()
     const uncPath = `${base.replace(/[\\/]+$/, '')}\\${rel.replace(/\//g, '\\')}`
     return { ok: true, uncPath }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) }
+  }
+}
+
+/**
+ * Eine LOKALE HTML-Datei samt der Dateien hochladen, auf die sie verweist (Bilder,
+ * Stylesheets, Schriften). Ohne die Beilagen käme auf dem Anzeige-PC eine halbe Seite an:
+ * er sieht das Laufwerk dieses PCs nicht.
+ *
+ * Alles landet in EINEM Unterordner mit der ursprünglichen Ordnerstruktur, damit die
+ * relativen Verweise weiter stimmen. Zurück kommt der UNC-Pfad der HTML-Datei und die
+ * Liste dessen, was nicht gefunden wurde — das wird dem Nutzer gezeigt, statt es
+ * stillschweigend zu schlucken.
+ */
+export async function uploadHtmlMitDateien(localPath: string): Promise<
+  { ok: true; uncPath: string; mitgenommen: number; fehlend: string[] } | { ok: false; error: string }
+> {
+  try {
+    const read = await api().readFile(localPath)
+    if (!read.success || !read.data) return { ok: false, error: read.error ?? 'Datei konnte nicht gelesen werden' }
+
+    const basename = localPath.split(/[\\/]/).pop() ?? 'seite.html'
+    const safe = basename.replace(/[^a-zA-Z0-9._\-äöüÄÖÜß ]/g, '_')
+    const ordner = `${MEDIA_DIR}/${Date.now()}_${safe.replace(/\.html?$/i, '')}`
+
+    if (!(await api().netWriteRawFile(`${ordner}/${safe}`, read.data))) {
+      return { ok: false, error: 'Netzlaufwerk nicht erreichbar oder Schreibrechte fehlen' }
+    }
+
+    // Verweise einsammeln — auch die, auf die erst ein Stylesheet zeigt.
+    const html = decodeBase64Utf8(read.data)
+    const fehlend: string[] = []
+    let mitgenommen = 0
+    const erledigt = new Set<string>()
+
+    async function nimmMit(inhalt: string, pfad: string, rest: number): Promise<void> {
+      if (rest <= 0) return
+      for (const ref of findeVerweise(inhalt)) {
+        const quelle = loeseVerweisAuf(pfad, ref)
+        if (!quelle) { if (!fehlend.includes(ref)) fehlend.push(ref) ; continue }
+        if (erledigt.has(quelle.toLowerCase())) continue
+        erledigt.add(quelle.toLowerCase())
+        const rel = quelle.slice(ordnerVon(localPath).length + 1).replace(/\\/g, '/')
+        const d = await api().readFile(quelle).catch(() => null)
+        if (!d || !d.success || !d.data) { if (!fehlend.includes(ref)) fehlend.push(ref); continue }
+        if (await api().netWriteRawFile(`${ordner}/${rel}`, d.data)) mitgenommen++
+        if (/\.css$/i.test(quelle)) await nimmMit(decodeBase64Utf8(d.data), quelle, rest - 1)
+      }
+    }
+    await nimmMit(html, localPath, 3)
+
+    const base = await api().netGetBasePath()
+    const relPfad = `${ordner}/${safe}`.replace(/\//g, '\\')
+    const uncPath = `${base.replace(/[\\/]+$/, '')}\\${relPfad}`
+    return { ok: true, uncPath, mitgenommen, fehlend }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : String(e) }
   }

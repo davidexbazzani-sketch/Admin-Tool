@@ -3,7 +3,7 @@
 // Organisation, Kontakt & Arbeitsplatz, Hardware, Postfaecher & Gruppen.
 // Jede Datenquelle laedt unabhaengig — die UI blockiert nie.
 
-import { useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import {
   ChevronDown, ChevronRight, Loader2, Building2, Phone, Laptop, Mail,
   Info as InfoIcon, UserCircle2, AlertTriangle, Pencil, Check, X, Plus, Circle, Printer,
@@ -14,6 +14,7 @@ import {
   type AdPersonInfo, type EmployeeRecords, type AssignedHardware, type PersonOnline, type MailboxRef,
 } from '../../services/personMasterData'
 import { queryLiveMailboxes } from '../../services/outlookMailboxes'
+import MailboxManager from './MailboxManager'
 import { formatGermanDate } from '../../services/employees'
 import { modelTypeDisplay } from '../../services/endpointDevices'
 import type { PhoneEntry } from '../../services/phoneAssignment'
@@ -205,6 +206,11 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
 
     return () => { cancelled = true }
   }, [name, sam])
+
+  /** AD-Stand neu laden — nach dem Ein-/Aushängen eines Gruppenpostfachs. */
+  const aktualisiereAd = useCallback(() => {
+    void fetchAdPersonInfo(name, resolvedSam).then(r => { setAd(r); setAdLoading(false) })
+  }, [name, resolvedSam])
 
   const emp = records?.employee
   const dep = records?.departure
@@ -452,23 +458,22 @@ export function PersonMasterData({ name, sam, onOpenPerson, manualRoom, onSaveRo
         badge={(() => { const n = mergeMailboxes(ad?.mailboxes, liveMbx, ad?.email).length; return n > 0 ? String(n) : undefined })()}>
         {(() => {
           const merged = mergeMailboxes(ad?.mailboxes, liveMbx, ad?.email)
-          if (merged.length === 0) {
-            if ((adLoading && !ad) || liveMbxLoading) return <Empty text="Wird geladen…" />
-            return <Empty text="Keine Gruppenpostfächer gefunden (weder in AD noch live eingebunden)." />
-          }
-          return merged.map((m, i) => (
-            <div key={i} className="flex items-center gap-2 py-0.5 pl-1">
-              <Mail size={11} className="shrink-0 text-blue-400" />
-              <span className="text-xs text-foreground min-w-0 flex-1 break-words">{m.name}</span>
-              {m.email && <span className="text-[10px] font-mono text-muted-foreground shrink-0">{m.email}</span>}
-              <span className={`text-[9px] px-1 py-0.5 rounded shrink-0 ${m.live
-                ? 'bg-green-500/15 text-green-400 border border-green-500/25'
-                : 'bg-muted/30 text-muted-foreground border border-border'}`}
-                title={m.live ? 'Tatsächlich in Outlook eingebunden (live)' : 'Vollzugriff/AutoMapping laut AD'}>
-                {m.live ? 'eingebunden' : 'AD'}
-              </span>
-            </div>
-          ))
+          if (merged.length === 0 && ((adLoading && !ad) || liveMbxLoading)) return <Empty text="Wird geladen…" />
+          return (
+            <>
+              {merged.length === 0 && <Empty text="Keine Gruppenpostfächer gefunden (weder in AD noch live eingebunden)." />}
+              <MailboxManager
+                sam={resolvedSam || ad?.sam || ''}
+                email={ad?.email || ''}
+                eintraege={merged}
+                hosts={Object.keys(liveMbx).length ? Object.keys(liveMbx) : [
+                  ...(hw?.inventory ?? []).map(i => i.name),
+                  ...(hw?.endpoint ?? []).map(d => d.hostname || hostFromSerial(d.serial)),
+                ].map(x => (x || '').trim()).filter(Boolean)}
+                onAktualisieren={aktualisiereAd}
+              />
+            </>
+          )
         })()}
       </TreeSection>
 

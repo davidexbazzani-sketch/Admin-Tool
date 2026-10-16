@@ -128,7 +128,7 @@ export default function PruffeldZoll() {
 
   // ── Detail bearbeiten ──
   function patchLocal(id: string, patch: Partial<OtDevice>) { setDevices(prev => prev.map(d => d.id === id ? { ...d, ...patch } : d)) }
-  async function persist(id: string, patch: Partial<Pick<OtDevice, 'hostname' | 'arbeitsplatz' | 'notes'>>) { await updateDevice(id, patch) }
+  async function persist(id: string, patch: Partial<Pick<OtDevice, 'hostname' | 'arbeitsplatz' | 'notes'>>) { await updateDevice(id, patch, { by: currentUser }) }
   async function removeSelected() {
     if (!selected) return
     const id = selected.id
@@ -143,7 +143,7 @@ export default function PruffeldZoll() {
       <div className="flex items-center gap-3 px-5 py-3 border-b border-border shrink-0">
         <ClipboardCheck className="text-primary" size={22} />
         <div className="min-w-0">
-          <h1 className="text-base font-semibold text-foreground leading-tight">Prüffeld & Zoll</h1>
+          <h1 className="text-base font-semibold text-foreground leading-tight">Halle & Zoll</h1>
           <p className="text-[11px] text-muted-foreground">{devices.length} Gerät(e) auf dem Lageplan verortet</p>
         </div>
         <div className="ml-auto flex items-center gap-2">
@@ -273,6 +273,11 @@ export default function PruffeldZoll() {
                   className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
                 />
               </div>
+              {selected.placedAt && (
+                <p className="text-[10px] text-muted-foreground border-t border-border pt-2">
+                  {selected.placedVia === 'refresh' ? '🔄 Ausgetauscht (Refresh)' : '📍 In Karte gesetzt'} von <span className="text-foreground">{selected.placedBy || '—'}</span> am {new Date(selected.placedAt).toLocaleDateString('de-DE')}
+                </p>
+              )}
               <p className="text-[10px] text-muted-foreground">Zum Verschieben den Punkt auf dem Plan ziehen.</p>
               <button onClick={removeSelected} className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md border border-red-500/40 text-red-300 hover:bg-red-500/10 text-sm">
                 <Trash2 size={14} />Gerät entfernen

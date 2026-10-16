@@ -8,6 +8,7 @@ import {
 } from '../../services/employees'
 import { loadUserMenuOverrides, getHiddenForUser } from '../../services/userMenuVisibility'
 import { computeMenuVisible } from '../../utils/menuVisibility'
+import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 
 /**
  * Wird einmal im authentifizierten Teil der App gemountet (siehe App.tsx).
@@ -76,11 +77,14 @@ export default function EmployeeReminderController() {
 
   useEffect(() => {
     if (!username) return
-    tick()
+    // Erster Lauf entzerrt: sonst greifen beim Start alle Controller gleichzeitig
+    // aufs Netzlaufwerk zu und das Fenster hakt in den ersten Sekunden.
+    const startAbbrechen = ersterLaufEntzerrt(() => { tick() })
     const t = setInterval(tick, POLL_MS)
-    const onFocus = () => tick()
-    window.addEventListener('focus', onFocus)
-    return () => { clearInterval(t); window.removeEventListener('focus', onFocus) }
+    // Beim Zurückkehren ins Fenster nachsehen — gebündelt und entzerrt über den
+    // gemeinsamen Melder, damit nicht alle Controller gleichzeitig loslaufen.
+    const abmelden = onAppFocus(() => tick())
+    return () => { clearInterval(t); abmelden(); startAbbrechen() }
   }, [tick, username])
 
   async function confirmAll() {

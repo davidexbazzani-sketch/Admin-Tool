@@ -32,7 +32,13 @@ function bundleDir(id: string): string { return `${pathService.getToolRoot('unc'
  *  aufs Neugerät) — das EINZIGE, was das Tool selbstständig löscht. */
 export async function deleteQuickAccessBundle(id: string): Promise<void> {
   const dir = bundleDir(id)
-  try { await api().runPowerShell(`Remove-Item -Recurse -Force -LiteralPath '${psq(dir)}' -ErrorAction SilentlyContinue`, 30000) } catch { /* egal */ }
+  const marker = quickAccessMarker(id)
+  try {
+    await api().runPowerShell([
+      `Remove-Item -Recurse -Force -LiteralPath '${psq(dir)}' -ErrorAction SilentlyContinue`,
+      `Remove-Item -Force -LiteralPath '${psq(marker)}' -ErrorAction SilentlyContinue`,
+    ].join('\n'), 30000)
+  } catch { /* egal */ }
 }
 
 /** Drucker des Altgeräts LIVE lesen (Fallback, wenn der Verbindungs-Scan nichts hat, das
@@ -87,18 +93,50 @@ function buildPrinterOp(printers: MigrationPrinter[], selfDeleteFile?: string): 
   return lines.filter(Boolean).join('\n')
 }
 
-function buildQuickAccessOp(id: string, selfDeleteFile?: string): string {
-  const lines = [
-    `$ErrorActionPreference='SilentlyContinue'`,
+/** Markerdatei, die der Anwender-Lauf schreibt — daran erkennt das Tool, dass die
+ *  Schnellzugriffe angekommen sind (die .cmd läuft im Benutzerkontext, ohne Rückkanal). */
+function quickAccessMarker(id: string): string {
+  return `${pathService.getToolRoot('unc')}\\refresh_migration\\${id}\\quickaccess_uebertragen.txt`
+}
+
+/**
+ * Kopiert die gesicherten Schnellzugriffe ins Profil des AUSFÜHRENDEN Benutzers — also
+ * entweder als geplante Aufgabe im Benutzerkontext (applyQuickAccessLive) oder aus der
+ * .cmd auf dem öffentlichen Desktop.
+ *
+ * `mitExitCode` steuert die Fehlerbehandlung — das ist wichtig, nicht kosmetisch:
+ *  • true  (.cmd auf dem Desktop): Write-Host + `exit 0/1`, damit die .cmd dem Anwender
+ *    „Fertig" bzw. „Fehlgeschlagen" anzeigen kann.
+ *  • false (applyQuickAccessLive): NIEMALS `exit` — die Op läuft dort eingebettet in das
+ *    Skript von runInUserContext, das nach der Op erst seine Ergebnisdatei schreibt.
+ *    Ein `exit` würde den Prozess vorher beenden und der Lauf gälte als fehlgeschlagen.
+ *    Stattdessen `throw`, das der umgebende try/catch sauber einsammelt.
+ */
+function buildQuickAccessOp(id: string, mitExitCode = false): string {
+  const fehler = (text: string) => mitExitCode
+    ? `{ Write-Host '${text}'; exit 1 }`
+    : `{ throw '${text}' }`
+  return [
+    `$ErrorActionPreference='Continue'`,
     `$bundle='${psq(bundleDir(id))}'`,
     `$dst="$env:APPDATA\\Microsoft\\Windows\\Recent"`,
-    `if(Test-Path $bundle){`,
-    `  foreach($f in 'AutomaticDestinations','CustomDestinations'){ if(Test-Path (Join-Path $bundle $f)){ New-Item -ItemType Directory -Force (Join-Path $dst $f) | Out-Null; Copy-Item (Join-Path $bundle ($f+'\\*')) (Join-Path $dst $f) -Force -Recurse -EA SilentlyContinue } }`,
-    `  Stop-Process -Name explorer -Force -EA SilentlyContinue`,
-    `} else { throw 'Keine gesicherten Schnellzugriffe gefunden — bitte zuerst vom Altgerät sichern.' }`,
-  ]
-  if (selfDeleteFile) lines.push(`Start-Sleep -Seconds 2`, `Remove-Item '${psq(selfDeleteFile)}' -Force -EA SilentlyContinue`)
-  return lines.filter(Boolean).join('\n')
+    `if(-not (Test-Path $bundle)) ${fehler('Keine gesicherten Schnellzugriffe gefunden - bitte zuerst im IT-Tool vom Altgeraet sichern.')}`,
+    `$n=0`,
+    `foreach($f in 'AutomaticDestinations','CustomDestinations'){`,
+    `  $q = Join-Path $bundle $f`,
+    `  if(Test-Path $q){`,
+    `    New-Item -ItemType Directory -Force (Join-Path $dst $f) | Out-Null`,
+    `    Copy-Item (Join-Path $q '*') (Join-Path $dst $f) -Force -Recurse -EA SilentlyContinue`,
+    `    $n += @(Get-ChildItem -LiteralPath $q -File -Force -EA SilentlyContinue).Count`,
+    `  }`,
+    `}`,
+    `if($n -eq 0) ${fehler('Im Zwischenspeicher lagen keine Dateien.')}`,
+    // Marker fürs Tool — schlägt er fehl (keine Schreibrechte), ist das nicht schlimm.
+    `try { Set-Content -LiteralPath '${psq(quickAccessMarker(id))}' -Value ("$env:COMPUTERNAME|$env:USERNAME|" + (Get-Date -Format 'o')) -Force -EA Stop } catch { }`,
+    `Stop-Process -Name explorer -Force -EA SilentlyContinue`,
+    mitExitCode ? `Write-Host ("$n Datei(en) uebertragen.")` : ``,
+    mitExitCode ? `exit 0` : ``,
+  ].filter(Boolean).join('\n')
 }
 
 // ── Drucker: live anwenden bzw. als .cmd auf den Public Desktop ───────────────
@@ -148,11 +186,34 @@ export async function applyQuickAccessLive(newHost: string, id: string): Promise
 }
 export async function deployQuickAccessScript(newHost: string, id: string): Promise<{ ok: boolean; text?: string }> {
   const fileName = 'SKF-Schnellzugriffe.cmd'
-  const desktop = `C:\\Users\\Public\\Desktop\\${fileName}`
-  const enc = toEncodedCommand(buildQuickAccessOp(id, desktop))
-  const cmd = [`@echo off`, `title SKF Explorer-Schnellzugriffe`, `echo Uebertrage Schnellzugriffe, bitte warten...`, `powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${enc}`].join('\r\n')
+  const enc = toEncodedCommand(buildQuickAccessOp(id, true))
+  // Mit Ergebnis-Ausgabe und pause: vorher blitzte das Fenster durch und der Anwender
+  // wusste nicht, ob es geklappt hat. Selbstlöschung über (goto) 2>nul, sonst meckert cmd.
+  const cmd = [
+    `@echo off`,
+    `title SKF Explorer-Schnellzugriffe`,
+    `echo Uebertrage die Schnellzugriffe vom alten PC...`,
+    `echo Der Explorer startet dabei kurz neu - der Desktop blinkt einmal.`,
+    `echo.`,
+    `powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${enc}`,
+    `echo.`,
+    `if errorlevel 1 (echo FEHLGESCHLAGEN - bitte bei der IT melden.) else (echo Fertig - die Ordner stehen im Explorer unter "Schnellzugriff".)`,
+    `pause`,
+    `(goto) 2>nul & del "%~f0"`,
+  ].join('\r\n')
   const tmp = await writeTempFile(cmd, `qa_${Date.now().toString(36)}`, 'cmd')
   if (!tmp.ok || !tmp.path) return { ok: false, text: tmp.error }
   const cp = await copyToPublicDesktop(newHost, tmp.path, fileName)
-  return { ok: cp.ok, text: cp.error }
+  return { ok: cp.ok, text: cp.ok ? `„${fileName}" liegt auf dem Desktop von ${newHost} — der angemeldete Benutzer startet sie per Doppelklick.` : cp.error }
+}
+
+/**
+ * Hat der Anwender die .cmd ausgeführt? Erkennbar an der Markerdatei, die sie schreibt.
+ * Nötig, weil die .cmd im Benutzerkontext läuft und dem Tool sonst nichts zurückmeldet.
+ */
+export async function checkQuickAccessApplied(id: string): Promise<boolean> {
+  try {
+    const r = await api().runPowerShell(`if (Test-Path -LiteralPath '${psq(quickAccessMarker(id))}') { 'JA' } else { 'NEIN' }`, 30000)
+    return (r.stdout || '').includes('JA')
+  } catch { return false }
 }

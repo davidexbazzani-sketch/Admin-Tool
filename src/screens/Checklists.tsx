@@ -4,7 +4,7 @@ import {
   ClipboardList, Plus, Trash2, Download, Eye, RefreshCw, Search, Loader,
   FileText, Edit3, X, Save, CheckCircle, XCircle, AlertTriangle, ArrowLeft, Printer,
   PackageCheck, RotateCcw, Check, ChevronDown, Mail, Flame, Maximize2, Minimize2, Filter, Info, Columns3, Move,
-  FileSpreadsheet, ChevronRight, MapPin,
+  FileSpreadsheet, ChevronRight, MapPin, CalendarClock, CalendarDays,
 } from 'lucide-react'
 import {
   listChecklists, createChecklist, updateChecklist, deleteChecklist,
@@ -30,6 +30,9 @@ import { useMapIntentStore } from '../store/mapIntentStore'
 import { runHandoverAutomation, handoverSummary } from '../services/checklistServiceNow'
 import SolidWorksHelp from '../components/solidworks/SolidWorksHelp'
 import CoscomHelp from '../components/coscom/CoscomHelp'
+import UebergabeTerminDialog, { kurzTermin } from '../components/checklists/UebergabeTerminDialog'
+import UebergabeKalender from '../components/checklists/UebergabeKalender'
+import { ladeTermine, terminVon, kennung as kennungVon, type TerminStore } from '../services/uebergabeTermine'
 
 type View = 'list' | 'edit' | 'preview'
 
@@ -65,6 +68,7 @@ const HIDEABLE_COLS: { id: string; label: string }[] = [
   { id: 'model', label: 'Model' },
   { id: 'alt', label: 'Alt' },
   { id: 'erstellt', label: 'Erstellt' },
+  { id: 'termin', label: 'Übergabe-Termin' },
   { id: 'signiert', label: 'Signiert' },
   { id: 'uebergeben', label: 'Übergeben' },
 ]
@@ -81,6 +85,7 @@ const COLS: Record<string, { label: string; th: string; td: string }> = {
   model: { label: 'Model', th: 'w-40', td: 'text-muted-foreground' },
   alt: { label: 'Alt', th: '', td: 'font-mono text-muted-foreground' },
   erstellt: { label: 'Erstellt', th: 'w-28', td: 'text-muted-foreground' },
+  termin: { label: 'Übergabe-Termin', th: 'w-40', td: '' },
   signiert: { label: 'Signiert', th: 'w-24 text-center', td: 'text-center' },
   uebergeben: { label: 'Übergeben', th: 'w-32', td: 'text-muted-foreground' },
 }
@@ -88,9 +93,15 @@ const DEFAULT_COL_ORDER = HIDEABLE_COLS.map(c => c.id)
 const DRAG_INDICATOR = '#3b82f6'   // blaue Linie, die anzeigt, wohin das Element kommt
 
 // Anordnung normalisieren: unbekannte IDs raus, fehlende (z.B. nach Update) hinten anhängen.
+// Neue Spalten landen hinter ihrem Vorgänger aus der Standardanordnung (z. B. „Übergabe-Termin"
+// hinter „Erstellt") — nicht einfach ganz hinten.
 function normColOrder(stored: string[] | null | undefined): string[] {
   const base = (stored || []).filter(id => DEFAULT_COL_ORDER.includes(id))
-  for (const id of DEFAULT_COL_ORDER) if (!base.includes(id)) base.push(id)
+  DEFAULT_COL_ORDER.forEach((id, i) => {
+    if (base.includes(id)) return
+    const vorher = DEFAULT_COL_ORDER.slice(0, i).reverse().find(v => base.includes(v))
+    base.splice(vorher ? base.indexOf(vorher) + 1 : 0, 0, id)
+  })
   return base
 }
 
@@ -368,6 +379,11 @@ export default function Checklists() {
 
   // Abhol-Mail-Dialog (nur Bestandsmitarbeiter)
   const [pickupMail, setPickupMail] = useState<Checklist | null>(null)
+  // Übergabe-Termine (gemeinsamer Kalender) + Dialoge
+  const [terminStore, setTerminStore] = useState<TerminStore | null>(null)
+  const [terminFuer, setTerminFuer] = useState<Checklist | null>(null)
+  const [kalenderOffen, setKalenderOffen] = useState(false)
+  useEffect(() => { void ladeTermine().then(setTerminStore) }, [])
 
   // "Hardware fertig" für Bestandsmitarbeiter setzen (Gerät + Abhol-Ort + Bearbeiter).
   async function setChecklistHardware(c: Checklist, key: HardwareType | null, location?: string) {
@@ -635,6 +651,24 @@ export default function Checklists() {
         </span>
       )
       case 'erstellt': return c.createdAt ? new Date(c.createdAt).toLocaleDateString('de-DE') : '—'
+      case 'termin': {
+        const t = terminVon(terminStore, c.id)
+        if (!t) return (
+          <button onClick={e => { e.stopPropagation(); setTerminFuer(c) }} title="Übergabe-Termin per Outlook-Einladung an den Mitarbeiter senden"
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md border border-blue-500/40 bg-blue-500/10 text-[11px] text-blue-300 hover:bg-blue-500/20 whitespace-nowrap">
+            <CalendarClock size={11} />Termin senden
+          </button>
+        )
+        const offeneVs = t.vorschlaege.filter(v => !v.erledigt && v.art === 'vorschlag').length
+        const farbe = t.status === 'abgesagt' ? 'text-red-300' : t.status === 'zugesagt' ? 'text-emerald-300' : t.status === 'verschoben' ? 'text-violet-300' : 'text-foreground'
+        return (
+          <button onClick={e => { e.stopPropagation(); setTerminFuer(c) }} title={`Status: ${t.status} · Raum ${t.raum}${t.outlook ? ' · Einladung gesendet' : ''}`}
+            className={`inline-flex items-center gap-1 text-[11px] hover:underline whitespace-nowrap ${farbe}`}>
+            <CalendarClock size={11} />{kurzTermin(t)}
+            {(offeneVs > 0 || t.status === 'abgesagt' || t.outlook?.veraltet) && <AlertTriangle size={11} className="text-amber-400" />}
+          </button>
+        )
+      }
       case 'signiert': return c.signatureDataUrl
         ? <CheckCircle size={13} className="text-emerald-400 inline" />
         : <XCircle size={13} className="text-muted-foreground/40 inline" />
@@ -773,7 +807,7 @@ export default function Checklists() {
       let refreshMarkerGesetzt = false
       if (c.deviceType === 'refresh' && (c.oldDeviceId || '').trim() && (c.newDeviceSerial || '').trim()) {
         try {
-          const moved = await moveDeviceOnAllMaps(c.oldDeviceId!, c.newDeviceSerial)
+          const moved = await moveDeviceOnAllMaps(c.oldDeviceId!, c.newDeviceSerial, currentUserName)
           for (const m of moved) {
             const t = m.entries.map(e => `${e.alt} → ${e.neu}`).join(', ')
             showToast({ kind: 'success', text: `${m.label} aktualisiert: ${t}` })
@@ -843,6 +877,10 @@ export default function Checklists() {
         </div>
         {view === 'list' ? (
           <>
+            <button onClick={() => setKalenderOffen(true)} title="Alle anstehenden Übergabe-Termine: ansehen, verschieben, eigene eintragen, Antworten im Postfach prüfen"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-blue-500/40 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20">
+              <CalendarDays size={12} />Übergabe-Kalender
+            </button>
             <button onClick={startNew}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500 text-black hover:bg-emerald-500/20">
               <Plus size={12} />Neue Checkliste
@@ -1341,6 +1379,11 @@ export default function Checklists() {
         </div>
       )}
 
+      {terminFuer && (
+        <UebergabeTerminDialog checklist={terminFuer} termin={terminVon(terminStore, terminFuer.id)} kennung={kennungVon(user)} bearbeiterName={currentUserName}
+          onClose={() => setTerminFuer(null)} onGeaendert={setTerminStore} />
+      )}
+      {kalenderOffen && <UebergabeKalender kennung={kennungVon(user)} bearbeiterName={currentUserName} onClose={() => { setKalenderOffen(false); void ladeTermine().then(setTerminStore) }} />}
       {pickupMail && <PickupMailDialog checklist={pickupMail} bearbeiter={currentUserName} onClose={() => setPickupMail(null)} />}
       {pendingExcel && (
         <TaskColumnDialog columns={pendingExcel.columns} rows={pendingExcel.rows}

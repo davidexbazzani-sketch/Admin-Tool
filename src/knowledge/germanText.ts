@@ -60,6 +60,8 @@ export const SYNONYMS: Record<string, string[]> = {
   wifi: ['wlan', 'wireless', 'wifi'],
   usv: ['ups', 'usv', 'notstrom'],
   ups: ['usv', 'ups'],
+  telefonanlage: ['telefonanlage', 'notruftelefon', 'grandstream', 'gxw4224', 'fxs'],
+  notruftelefon: ['notruftelefon', 'telefonanlage', 'grandstream'],
   drucker: ['printer', 'drucker', 'pmd', 'druck'],
   printer: ['drucker', 'printer'],
   mfa: ['mfa', 'authenticator', 'zweifaktor', 'multifactor'],

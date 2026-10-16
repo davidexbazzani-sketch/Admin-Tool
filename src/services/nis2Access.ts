@@ -42,6 +42,12 @@ export interface AccessCheckResult {
   /** canonHost → rohe Domänen-Admin-Mitglieder (User+Gruppen-Leafs) je PC. Basis für den
    *  Merge über Scans: nicht erreichte PCs behalten ihren letzten bekannten Stand. */
   hostMembers?: Record<string, string[]>
+  /** canonHost → wann dieser PC zuletzt WIRKLICH gescannt wurde (ISO). Gleiche Idee wie
+   *  PCResult.scannedAt im Software-Inventar: damit sichtbar ist, wie alt der Stand je PC
+   *  ist — und belegbar, dass frühere Ergebnisse erhalten bleiben. */
+  hostScannedAt?: Record<string, string>
+  /** Für wie viele PCs insgesamt ein Ergebnis vorliegt (nicht nur aus diesem Lauf). */
+  knownPCs?: number
 }
 /** Ein Eintrag aus der importierten „genehmigte Admins"-Liste (SC-Req-Item-Export). */
 export interface ApprovedEntry {
@@ -78,6 +84,7 @@ export async function loadAccessResult(): Promise<AccessCheckResult | null> {
         // des eigenen Standorts) — auch alte Ergebnis-Dateien nicht mehr mit Gruppen zeigen.
         standardGroups: [],
         hostMembers: (r.hostMembers && typeof r.hostMembers === 'object') ? r.hostMembers : {},
+        hostScannedAt: (r.hostScannedAt && typeof r.hostScannedAt === 'object') ? r.hostScannedAt : {},
       }
     }
   } catch { /* noch keiner */ }
@@ -304,15 +311,31 @@ export async function runAccessCheckScanOnce(by: string, onTick?: () => void): P
     onTick?.()
   }
 
-  // Anzeigenamen aus dem AD-Cache auflösen
-  // ── Merge mit vorigem Stand: PCs, die DIESMAL nicht erreicht wurden, behalten ihren
-  //    letzten bekannten Admin-Stand; nur erreichte PCs werden aktualisiert. ──
+  // ── Merge mit dem vorigen Stand (gleiches Vorgehen wie im Software-Inventar) ──
+  // Jeder je erfasste PC behält sein Ergebnis; überschrieben wird NUR, wenn es für
+  // diesen PC in diesem Lauf ein neues gibt. Der Stand wird unmittelbar VOR dem
+  // Schreiben noch einmal frisch geladen, damit ein parallel laufender Scan (andere
+  // Tool-Instanz) nicht überschrieben wird.
   const scannedPCs = reachedHosts.size
+  const jetztIso = new Date().toISOString()
   const prev = await loadAccessResult()
   const prevHostMembers = (prev?.hostMembers && typeof prev.hostMembers === 'object') ? prev.hostMembers : {}
+  const prevHostScannedAt = (prev?.hostScannedAt && typeof prev.hostScannedAt === 'object') ? prev.hostScannedAt : {}
+  // Abgleich mit dem Inventar: PCs, die es dort nicht mehr gibt, fallen raus — sonst
+  // würden ausgemusterte Rechner ewig mitgeschleppt (Reconciliation wie im Software-Inventar).
+  const imInventar = new Set(hosts.map(canon))
   const mergedHostMembers = new Map<string, string[]>()
-  for (const [h, mem] of Object.entries(prevHostMembers)) { if (!reachedHosts.has(h) && Array.isArray(mem)) mergedHostMembers.set(h, mem) }
-  for (const h of reachedHosts) mergedHostMembers.set(h, [...(newHostMembers.get(h) || new Set<string>())])
+  const mergedScannedAt = new Map<string, string>()
+  for (const [h, mem] of Object.entries(prevHostMembers)) {
+    if (reachedHosts.has(h) || !imInventar.has(h) || !Array.isArray(mem)) continue
+    mergedHostMembers.set(h, mem)
+    const t = prevHostScannedAt[h]
+    if (typeof t === 'string' && t) mergedScannedAt.set(h, t)
+  }
+  for (const h of reachedHosts) {
+    mergedHostMembers.set(h, [...(newHostMembers.get(h) || new Set<string>())])
+    mergedScannedAt.set(h, jetztIso)
+  }
 
   // Host->Mitglieder invertieren -> Mitglied->Hosts (Basis fuer Aufloesung + Anzeige).
   for (const [h, leaves] of mergedHostMembers) for (const leaf of leaves) {
@@ -363,8 +386,14 @@ export async function runAccessCheckScanOnce(by: string, onTick?: () => void): P
 
   const hostMembers: Record<string, string[]> = {}
   for (const [h, leaves] of mergedHostMembers) hostMembers[h] = leaves
+  const hostScannedAt: Record<string, string> = {}
+  for (const [h, t] of mergedScannedAt) hostScannedAt[h] = t
+  const knownPCs = mergedHostMembers.size
 
-  await saveAccessResult({ scannedAt: new Date().toISOString(), scannedBy: by, totalPCs: hosts.length, scannedPCs, users, standardGroups, hostMembers })
-  const summary = `${users.length} Benutzer mit direktem lokalem Admin (nur Einzel-Corp-IDs, keine Gruppen) - ${scannedPCs}/${hosts.length} PCs erreicht`
+  await saveAccessResult({
+    scannedAt: jetztIso, scannedBy: by, totalPCs: hosts.length, scannedPCs,
+    users, standardGroups, hostMembers, hostScannedAt, knownPCs,
+  })
+  const summary = `${users.length} Benutzer mit direktem lokalem Admin (nur Einzel-Corp-IDs, keine Gruppen) - ${scannedPCs} PCs in diesem Lauf aktualisiert, ${knownPCs}/${hosts.length} PCs insgesamt bekannt`
   return { ok: true, summary }
 }

@@ -27,6 +27,8 @@ export const SCAN_SCHEDULE_DEFAULTS: Record<string, ScanScheduleConfig> = {
   'lost-devices':        { enabled: true, days: [3, 4], time: '11:00' },                // Mi + Do 11:00 (verlorene Geräte Online-Check)
   'nis2-access':         { enabled: true, days: [0, 1, 2, 3, 4, 5, 6], time: '11:00' }, // täglich 11:00 (NIS2 lokale Adminrechte)
   'network-drives':      { enabled: true, days: [2], time: '13:00' },                   // Di 13:00 (verbundene Netzlaufwerke aller PCs)
+  'europar-scan':        { enabled: true, days: [0, 1, 2, 3, 4, 5, 6], time: '12:00' }, // täglich 12:00 (EuroPAR-Ordner auf den Altgeräten)
+  'weekend-check':       { enabled: true, days: [0], time: '12:00' },                   // So 12:00 (welche PCs laufen am Wochenende) — KEIN Nachholen
 }
 
 export const WEEKDAY_LABELS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']

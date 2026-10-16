@@ -7,6 +7,7 @@ import type { XelionResult } from './adUtils'
 import type { PhoneCheckEntry } from './phoneUtils'
 import { PHONE_FIELD_LABELS } from './phoneUtils'
 import { QUERY_DEFINITIONS } from './queries'
+import { SPALTEN, zeileAlsArray, type DurchwahlZeile } from '../services/rufnummerPruefung'
 import { api } from '../electronAPI'
 
 function getLabel(queryId: string) {
@@ -872,6 +873,68 @@ export async function exportPdfUserProfiles(profiles: UserProfileData[], savePat
     const lines = doc.splitTextToSize(groupText, 180)
     doc.text(lines, 14, finalY + 5)
   }
+
+  await writeAndCheck(savePath, arrayBufferToBase64(doc.output('arraybuffer')))
+}
+
+// ── Xelion-Durchwahlen ───────────────────────────────────────────────────────
+// Exportiert GENAU die Tabelle, die gerade auf dem Bildschirm steht — also inklusive
+// aller gesetzten Filter. Spaltenköpfe und Zeilenumwandlung kommen aus
+// rufnummerPruefung.ts, damit Tabelle, Excel und PDF nicht auseinanderlaufen können.
+
+export async function exportExcelDurchwahlen(
+  zeilen: DurchwahlZeile[], savePath: string, filterText: string,
+): Promise<void> {
+  const wb = new ExcelJS.Workbook()
+  wb.creator = 'IT Admin Tool'
+  wb.created = new Date()
+
+  const ws = wb.addWorksheet('Durchwahlen')
+  ws.addRow([`Xelion-Durchwahlen — ${zeilen.length} Einträge`])
+  ws.getRow(1).font = { bold: true, size: 14 }
+  ws.addRow([filterText || 'Keine Filter gesetzt'])
+  ws.getRow(2).font = { italic: true, color: { argb: 'FF666666' } }
+  ws.addRow([`Erstellt: ${new Date().toLocaleString('de-DE')}`])
+  ws.getRow(3).font = { italic: true, color: { argb: 'FF666666' } }
+  ws.addRow([])
+
+  ws.addRow([...SPALTEN])
+  const kopf = ws.getRow(5)
+  kopf.font = { bold: true }
+  for (const z of zeilen) {
+    const row = ws.addRow(zeileAlsArray(z))
+    // „Kündigung möglich" fett — daran hängt eine Entscheidung.
+    if (z.status === 'kuendbar') row.getCell(9).font = { bold: true }
+  }
+  ws.columns.forEach(col => { col.width = 22 })
+  ws.getColumn(1).width = 12
+  ws.getColumn(2).width = 28
+  ws.getColumn(10).width = 60
+  ws.autoFilter = { from: { row: 5, column: 1 }, to: { row: 5, column: SPALTEN.length } }
+
+  const arrayBuffer = await wb.xlsx.writeBuffer() as ArrayBuffer
+  await writeAndCheck(savePath, arrayBufferToBase64(arrayBuffer))
+}
+
+export async function exportPdfDurchwahlen(
+  zeilen: DurchwahlZeile[], savePath: string, filterText: string,
+): Promise<void> {
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
+  doc.setFontSize(18)
+  doc.text('IT Admin Tool — Xelion-Durchwahlen', 14, 20)
+  doc.setFontSize(10)
+  doc.setTextColor(100)
+  doc.text(`${zeilen.length} Einträge · Erstellt: ${new Date().toLocaleString('de-DE')}`, 14, 28)
+  doc.text(filterText || 'Keine Filter gesetzt', 14, 34)
+
+  autoTable(doc, {
+    startY: 40,
+    head: [[...SPALTEN]],
+    body: zeilen.map(zeileAlsArray),
+    styles: { fontSize: 7, cellPadding: 1.5 },
+    headStyles: { fillColor: [60, 60, 60], textColor: 255 },
+    margin: { left: 14, right: 14 },
+  })
 
   await writeAndCheck(savePath, arrayBufferToBase64(doc.output('arraybuffer')))
 }

@@ -30,6 +30,7 @@ import SoftwareInstallations from './screens/SoftwareInstallations'
 import PresentationMode from './screens/PresentationMode'
 import PresentationPlayer from './screens/PresentationPlayer'
 import TaskManagerWindow from './components/device/TaskManagerWindow'
+import SoundFixWindow from './components/device/SoundFixWindow'
 import BugReportWidget from './components/BugReportWidget'
 import BetaBanner from './components/BetaBanner'
 import LicenseAlarmController from './components/licenses/LicenseAlarmController'
@@ -46,6 +47,12 @@ import ServerMonitorController from './components/server/ServerMonitorController
 import GameInviteController from './components/games/GameInviteController'
 import LostDeviceScanController from './components/scans/LostDeviceScanController'
 import NetworkDrivesScanController from './components/scans/NetworkDrivesScanController'
+import WeekendCheckController from './components/scans/WeekendCheckController'
+import EuroparScanController from './components/scans/EuroparScanController'
+import WindowsUpdateController from './components/scans/WindowsUpdateController'
+import EuroparStagingController from './components/scans/EuroparStagingController'
+import NetworkDriveSetupController from './components/scans/NetworkDriveSetupController'
+import AutoSetupController from './components/scans/AutoSetupController'
 import Nis2AccessScanController from './components/scans/Nis2AccessScanController'
 import DriverRolloutController from './components/scans/DriverRolloutController'
 import ErrorFlashOverlay from './components/ErrorFlashOverlay'
@@ -55,6 +62,8 @@ import { PrinterDossierProvider } from './components/printer/PrinterDossier'
 import type { Screen } from './types'
 import { api } from './electronAPI'
 import { ensureDailyAdUsers } from './services/adUserDirectory'
+import LockScreen from './components/LockScreen'
+import { loadAppLock, canBypassLock, type AppLock } from './services/appLock'
 
 // Lazy-loaded screens (per Performance-Regeln: erst laden wenn geöffnet)
 const ITGuru = lazy(() => import('./screens/ITGuru'))
@@ -85,11 +94,12 @@ const TicketAssignment = lazy(() => import('./screens/TicketAssignment'))
 const PdfTools = lazy(() => import('./pdftools'))
 const PhoneAssignment = lazy(() => import('./screens/PhoneAssignment'))
 const Backups = lazy(() => import('./screens/Backups'))
-const USV = lazy(() => import('./screens/USV'))
+const Netzwerkgeraete = lazy(() => import('./screens/Netzwerkgeraete'))
 const ProactiveRadar = lazy(() => import('./screens/ProactiveRadar'))
 const ServerMonitor = lazy(() => import('./screens/ServerMonitor'))
 const Nis2 = lazy(() => import('./screens/Nis2'))
 const SupportTools = lazy(() => import('./screens/SupportTools'))
+const CriticalDevices = lazy(() => import('./screens/CriticalDevices'))
 
 function renderScreen(screen: Screen) {
   switch (screen) {
@@ -136,6 +146,7 @@ function renderScreen(screen: Screen) {
     case 'network-radar':     return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><NetworkRadar /></Suspense>
     case 'vlan-overview':     return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><VlanOverview /></Suspense>
     case 'nis2':              return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Nis2 /></Suspense>
+    case 'critical-devices':  return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><CriticalDevices /></Suspense>
     case 'knowledge-base':   return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><KnowledgeBase /></Suspense>
     case 'knowledge-search': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><KnowledgeSearch /></Suspense>
     case 'pc-migration':      return <PCMigration />
@@ -146,7 +157,7 @@ function renderScreen(screen: Screen) {
     case 'software-installations': return <SoftwareInstallations />
     case 'presentation-mode': return <PresentationMode />
     case 'backups': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Backups /></Suspense>
-    case 'usv': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><USV /></Suspense>
+    case 'usv': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Netzwerkgeraete /></Suspense>
     case 'proactive-radar': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ProactiveRadar /></Suspense>
     case 'server': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ServerMonitor /></Suspense>
     default:                  return <Home />
@@ -164,6 +175,11 @@ export default function App() {
   if (typeof window !== 'undefined' && window.location.hash === '#taskmgr') {
     return <TaskManagerWindow />
   }
+  // „Sound Fix" ebenso — damit die Treibersuche nebenher laufen kann, während im
+  // Hauptfenster weitergearbeitet wird.
+  if (typeof window !== 'undefined' && window.location.hash === '#soundfix') {
+    return <SoundFixWindow />
+  }
 
   const screen       = useAppStore(s => s.screen)
   const setIsAdmin   = useAppStore(s => s.setIsAdmin)
@@ -178,6 +194,7 @@ export default function App() {
   const initialized     = useAuthStore(s => s.initialized)
 
   const [betaMode, setBetaMode] = useState(true)
+  const [appLock, setAppLockState] = useState<AppLock>({ locked: false })
   const heartbeatTimer = useRef<ReturnType<typeof setInterval> | null>(null)
 
   // Heartbeat management — set on login, refresh every 2 min, clear on logout
@@ -276,6 +293,18 @@ export default function App() {
     void ensureDailyAdUsers().catch(() => {})
   }, [session?.user.username])
 
+  // Globale Programm-Sperre live erkennen (auch bereits angemeldete Nutzer sperren).
+  useEffect(() => {
+    if (!session) return
+    let cancelled = false
+    const tick = () => { void loadAppLock().then(l => { if (!cancelled) setAppLockState(l) }).catch(() => {}) }
+    tick()
+    const t = setInterval(tick, 20_000)
+    const onFocus = () => tick()
+    window.addEventListener('focus', onFocus)
+    return () => { cancelled = true; clearInterval(t); window.removeEventListener('focus', onFocus) }
+  }, [session?.user.username])
+
   // Apply theme
   useEffect(() => {
     if (settings.theme === 'light') document.documentElement.classList.add('light')
@@ -308,6 +337,16 @@ export default function App() {
     )
   }
 
+  // Globale Sperre: alle außer davidxe sehen nur den Sperrbildschirm (angemeldet, aber ohne Inhalte).
+  if (appLock.locked && !canBypassLock(session.user)) {
+    return (
+      <div className="flex flex-col h-screen w-screen overflow-hidden bg-background">
+        <TitleBar />
+        <LockScreen lock={appLock} />
+      </div>
+    )
+  }
+
   // Main app — authenticated
   return (
     <DossierProvider>
@@ -335,6 +374,12 @@ export default function App() {
             <VlanScanController />
             <LostDeviceScanController />
             <NetworkDrivesScanController />
+            <WeekendCheckController />
+            <EuroparScanController />
+            <WindowsUpdateController />
+            <EuroparStagingController />
+            <NetworkDriveSetupController />
+            <AutoSetupController />
             <Nis2AccessScanController />
             <DriverRolloutController />
             <ServerMonitorController />

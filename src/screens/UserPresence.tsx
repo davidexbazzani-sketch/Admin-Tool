@@ -21,6 +21,7 @@ import {
 } from '../services/userPresenceScan'
 import { loadVlanConfig, normalizeCidr, labelFor, type VlanConfig } from '../services/vlans'
 import { exportPresenceScan, exportPresenceDns, exportPresenceWinrm, type ExportFormat } from '../services/userPresenceExport'
+import { spaltenFilter, type Spalte } from '../utils/spaltenFilter'
 import { DaylisModal, ColumnFilter, type UserRow } from './UserOverview'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
@@ -223,19 +224,16 @@ export default function UserPresence() {
     setMode('dns')
   }
 
-  const dnsDistinct = useMemo(() => {
-    const m = new Map<string, number>()
-    for (const r of dnsRows) { const l = DNS_LABEL[r.status]; m.set(l, (m.get(l) ?? 0) + 1) }
-    return m
-  }, [dnsRows])
-  const filteredDns = useMemo(() => {
+  // Nur eine Filterspalte — der einzige „andere Filter" ist die Suche; die Zahlen
+  // beziehen sich dadurch auf das, was gerade in der Tabelle steht.
+  const { zeilen: filteredDns, werte: dnsWerte } = useMemo(() => {
     const q = dnsSearch.trim().toLowerCase()
-    return dnsRows.filter(r => {
-      if (q && !(r.ip.toLowerCase().includes(q) || r.host.toLowerCase().includes(q) || r.fwdIp.toLowerCase().includes(q))) return false
-      if (fDnsStatus.size && !fDnsStatus.has(DNS_LABEL[r.status])) return false
-      return true
-    })
+    return spaltenFilter(
+      dnsRows,
+      [{ id: 'status', werte: r => [DNS_LABEL[r.status]], gewaehlt: fDnsStatus }],
+      r => !q || r.ip.toLowerCase().includes(q) || r.host.toLowerCase().includes(q) || r.fwdIp.toLowerCase().includes(q))
   }, [dnsRows, dnsSearch, fDnsStatus])
+  const dnsDistinct = dnsWerte.status
 
   // ── WinRM/DNS-Fehler ──
   async function refreshWinrmProtocols() { setWinrmProtocols(await listWinrmProtocols()) }
@@ -290,20 +288,17 @@ export default function UserPresence() {
     setWinrmRows(merged); setLoadedWinrmProtocol(null); setWinrmMergedFrom(ids.length); setWinrmOnlyProblems(false); setMode('winrm')
   }
 
-  const winrmDistinct = useMemo(() => {
-    const m = new Map<string, number>()
-    for (const r of winrmRows) { const l = WINRM_LABEL[r.status]; m.set(l, (m.get(l) ?? 0) + 1) }
-    return m
-  }, [winrmRows])
-  const filteredWinrm = useMemo(() => {
+  // Suche UND der Haken „nur Probleme" sind hier die „anderen Filter" — beide müssen
+  // in den Zahlen stecken, sonst zählt die Status-Liste wieder an der Tabelle vorbei.
+  const { zeilen: filteredWinrm, werte: winrmWerte } = useMemo(() => {
     const q = winrmSearch.trim().toLowerCase()
-    return winrmRows.filter(r => {
-      if (winrmOnlyProblems && r.status === 'OK') return false
-      if (q && !(r.hostname.toLowerCase().includes(q) || r.ip.toLowerCase().includes(q) || r.ptr.toLowerCase().includes(q))) return false
-      if (fWinrmStatus.size && !fWinrmStatus.has(WINRM_LABEL[r.status])) return false
-      return true
-    })
+    return spaltenFilter(
+      winrmRows,
+      [{ id: 'status', werte: r => [WINRM_LABEL[r.status]], gewaehlt: fWinrmStatus }],
+      r => (!winrmOnlyProblems || r.status !== 'OK')
+        && (!q || r.hostname.toLowerCase().includes(q) || r.ip.toLowerCase().includes(q) || r.ptr.toLowerCase().includes(q)))
   }, [winrmRows, winrmSearch, fWinrmStatus, winrmOnlyProblems])
+  const winrmDistinct = winrmWerte.status
 
   async function detectSubnets() {
     setDetecting(true)
@@ -619,29 +614,23 @@ export default function UserPresence() {
     }, format)
   }
 
-  const distinct = useMemo(() => {
-    const status = new Map<string, number>(), login = new Map<string, number>(), dns = new Map<string, number>(), dept = new Map<string, number>(), assign = new Map<string, number>()
-    for (const r of massRows) {
-      const st = r.enabled ? 'Aktiv' : 'Inaktiv'; status.set(st, (status.get(st) ?? 0) + 1)
-      const lg = r.loggedIn ? 'Angemeldet' : 'Nicht angemeldet'; login.set(lg, (login.get(lg) ?? 0) + 1)
-      const dn = r.loggedIn ? (r.dnsProblem ? 'DNS-Problem' : 'DNS OK') : '—'; dns.set(dn, (dns.get(dn) ?? 0) + 1)
-      const dp = (r.department ?? '').trim(); dept.set(dp, (dept.get(dp) ?? 0) + 1)
-      const asn = assignFilterLabel(r); assign.set(asn, (assign.get(asn) ?? 0) + 1)
-    }
-    return { status, login, dns, dept, assign }
-  }, [massRows])
-  const filteredMass = useMemo(() => {
+  // Spalten EINMAL deklariert — Filtern und Zählen benutzen denselben Ausleser.
+  // Die Zahlen in den Aufklapplisten beziehen sich damit auf die aktuelle Auswahl
+  // (jede Spalte rechnet alle ANDEREN Filter mit, ihren eigenen nicht).
+  const massSpalten = useMemo<Spalte<ScanRow>[]>(() => [
+    { id: 'status', werte: r => [r.enabled ? 'Aktiv' : 'Inaktiv'], gewaehlt: fStatus },
+    { id: 'login', werte: r => [r.loggedIn ? 'Angemeldet' : 'Nicht angemeldet'], gewaehlt: fLogin },
+    { id: 'dns', werte: r => [r.loggedIn ? (r.dnsProblem ? 'DNS-Problem' : 'DNS OK') : '—'], gewaehlt: fDns },
+    { id: 'dept', werte: r => [(r.department ?? '').trim()], gewaehlt: fDept },
+    { id: 'assign', werte: r => [assignFilterLabel(r)], gewaehlt: fAssign },
+  ], [fStatus, fLogin, fDns, fDept, fAssign])
+
+  const { zeilen: filteredMass, werte: distinct } = useMemo(() => {
     const q = mSearch.trim().toLowerCase()
-    return massRows.filter(r => {
-      if (q) { const hit = r.displayName.toLowerCase().includes(q) || r.sam.toLowerCase().includes(q) || r.ip.toLowerCase().includes(q) || r.hostname.toLowerCase().includes(q); if (!hit) return false }
-      if (fStatus.size && !fStatus.has(r.enabled ? 'Aktiv' : 'Inaktiv')) return false
-      if (fLogin.size && !fLogin.has(r.loggedIn ? 'Angemeldet' : 'Nicht angemeldet')) return false
-      if (fDns.size) { const dn = r.loggedIn ? (r.dnsProblem ? 'DNS-Problem' : 'DNS OK') : '—'; if (!fDns.has(dn)) return false }
-      if (fDept.size && !fDept.has((r.department ?? '').trim())) return false
-      if (fAssign.size && !fAssign.has(assignFilterLabel(r))) return false
-      return true
-    })
-  }, [massRows, mSearch, fStatus, fLogin, fDns, fDept, fAssign])
+    return spaltenFilter(massRows, massSpalten, r =>
+      !q || r.displayName.toLowerCase().includes(q) || r.sam.toLowerCase().includes(q)
+        || r.ip.toLowerCase().includes(q) || r.hostname.toLowerCase().includes(q))
+  }, [massRows, massSpalten, mSearch])
   const anyFilter = fStatus.size + fLogin.size + fDns.size + fDept.size + fAssign.size > 0
 
   return (
@@ -1232,7 +1221,8 @@ interface MassViewProps {
   rows: ScanRow[]; totalRows: number; loadedProtocol: ScanProtocolMeta | null; protocols: ScanProtocolMeta[]; canStart: boolean
   onRun: () => void; onCancel: () => void; onOpenProtocol: (id: string) => void; onDeleteProtocol: (id: string) => void
   mSearch: string; setMSearch: (s: string) => void
-  distinct: { status: Map<string, number>; login: Map<string, number>; dns: Map<string, number>; dept: Map<string, number>; assign: Map<string, number> }
+  // Wert-Karten je Spalten-Id (kommen aus spaltenFilter, Ids sind oben deklariert).
+  distinct: Record<string, Map<string, number>>
   anyFilter: boolean
   fStatus: Set<string>; setFStatus: (s: Set<string>) => void; fLogin: Set<string>; setFLogin: (s: Set<string>) => void
   fDns: Set<string>; setFDns: (s: Set<string>) => void; fDept: Set<string>; setFDept: (s: Set<string>) => void

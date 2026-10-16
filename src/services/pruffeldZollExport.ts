@@ -61,14 +61,14 @@ function sortDevices(list: OtDevice[]): OtDevice[] {
 
 export async function exportPruffeldZollPdf(devices: OtDevice[]): Promise<{ ok: boolean; cancelled?: boolean; error?: string }> {
   const savePath = await api().saveFileDialog(
-    `Prueffeld-Zoll Lageplan ${new Date().toISOString().slice(0, 10)}.pdf`,
+    `Halle-Zoll Lageplan ${new Date().toISOString().slice(0, 10)}.pdf`,
     [{ name: 'PDF', extensions: ['pdf'] }],
   )
   if (!savePath) return { ok: true, cancelled: true }
 
   try {
     const out = await PDFDocument.create()
-    out.setTitle('Prüffeld & Zoll – Lageplan')
+    out.setTitle('Halle & Zoll – Lageplan')
     out.setProducer('IT Admin Tool'); out.setCreator('IT Admin Tool'); out.setCreationDate(new Date())
     const font = await out.embedFont(StandardFonts.Helvetica)
     const fontBold = await out.embedFont(StandardFonts.HelveticaBold)
@@ -107,7 +107,7 @@ export async function exportPruffeldZollPdf(devices: OtDevice[]): Promise<{ ok: 
     let page = out.addPage([W, H])
     let y = H - M
     const drawHeader = (cont: boolean) => {
-      page.drawText(`Prüffeld & Zoll – Arbeitsplätze${cont ? ' (Forts.)' : ''}`, { x: M, y: y - 16, size: cont ? 13 : 18, font: fontBold, color: COLOR_HEAD })
+      page.drawText(`Halle & Zoll – Arbeitsplätze${cont ? ' (Forts.)' : ''}`, { x: M, y: y - 16, size: cont ? 13 : 18, font: fontBold, color: COLOR_HEAD })
       if (!cont) page.drawText(`${numbered.length} Gerät(e) · Stand ${fmtDateTime(new Date())}`, { x: M, y: y - 32, size: 9, font, color: COLOR_MUTED })
       y -= cont ? 30 : 46
       // Spaltenköpfe

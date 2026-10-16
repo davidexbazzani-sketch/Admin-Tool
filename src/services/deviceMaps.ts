@@ -14,16 +14,17 @@ import type { Screen } from '../types'
 
 export interface MapSvc {
   listDevices(): Promise<OtDevice[]>
-  updateDevice(id: string, patch: Partial<Pick<OtDevice, 'hostname' | 'arbeitsplatz' | 'notes' | 'page' | 'x' | 'y'>>): Promise<boolean>
+  updateDevice(id: string, patch: Partial<Pick<OtDevice, 'hostname' | 'arbeitsplatz' | 'notes' | 'page' | 'x' | 'y'>>, opts?: { by?: string; refresh?: boolean }): Promise<boolean>
   createDevice(d: { page: number; x: number; y: number; hostname?: string; createdBy?: string }): Promise<OtDevice>
   canonHost(h: string): string
 }
-export interface MapDef { id: Screen; label: string; roomLabel: string; svc: MapSvc }
+/** planAsset = gebündelter Lageplan (public/…), für Exporte mit Karte. */
+export interface MapDef { id: Screen; label: string; roomLabel: string; svc: MapSvc; planAsset: string }
 
 export const DEVICE_MAPS: MapDef[] = [
-  { id: 'ot-devices', label: 'OT-Geräte / Halle', roomLabel: 'Arbeitsplatz', svc: ot },
-  { id: 'pruffeld-zoll', label: 'Prüffeld & Zoll', roomLabel: 'Arbeitsplatz', svc: pz },
-  { id: 'verwaltungsgebaeude', label: 'Verwaltungsgebäude', roomLabel: 'Raumnummer', svc: vg },
+  { id: 'ot-devices', label: 'OT-Geräte / Halle', roomLabel: 'Arbeitsplatz', svc: ot, planAsset: 'ot-devices/hallenlayout.pdf' },
+  { id: 'pruffeld-zoll', label: 'Halle & Zoll', roomLabel: 'Arbeitsplatz', svc: pz, planAsset: 'pruffeld-zoll/gesamtuebersicht.pdf' },
+  { id: 'verwaltungsgebaeude', label: 'Verwaltungsgebäude', roomLabel: 'Raumnummer', svc: vg, planAsset: 'verwaltungsgebaeude/grundriss.pdf' },
 ]
 export function mapById(id: Screen): MapDef | undefined { return DEVICE_MAPS.find(m => m.id === id) }
 
@@ -42,6 +43,27 @@ export async function findDeviceLocation(hostname: string, serial?: string): Pro
   return null
 }
 
+// ── Batch-Standort-Lookup (alle 3 Karten EINMAL laden → schneller In-Memory-Nachschlag) ─
+// Für Tabellen mit vielen Zeilen: 3 Netz-Reads gesamt statt N×findDeviceLocation.
+/** page/x/y = Marker-Position (Seite 1-basiert, x/y 0..1) — für Exporte mit Karte. */
+export interface LocationHit { mapId: Screen; label: string; roomLabel: string; arbeitsplatz: string; page: number; x: number; y: number }
+export async function loadLocationLookup(): Promise<(hostname?: string, serial?: string) => LocationHit | null> {
+  const byHost = new Map<string, LocationHit>()
+  const bySer = new Map<string, LocationHit>()
+  for (const m of DEVICE_MAPS) {                          // OT → Prüffeld → Verwaltung (Reihenfolge = Priorität)
+    const list = await m.svc.listDevices().catch(() => [])
+    for (const d of list) {
+      const hit: LocationHit = { mapId: m.id, label: m.label, roomLabel: m.roomLabel, arbeitsplatz: d.arbeitsplatz || '', page: d.page || 1, x: d.x, y: d.y }
+      const h = m.svc.canonHost(d.hostname); if (h && !byHost.has(h)) byHost.set(h, hit)
+      const s = normalizeSerial(serialFromHostname(d.hostname) || ''); if (s && !bySer.has(s)) bySer.set(s, hit)
+    }
+  }
+  return (hostname, serial) => {
+    const h = ot.canonHost(hostname || ''); if (h && byHost.has(h)) return byHost.get(h)!
+    const s = normalizeSerial(serial || serialFromHostname(hostname || '') || ''); return (s && bySer.get(s)) || null
+  }
+}
+
 // ── Refresh-Umzug: Altgerät → Neugerät auf allen Karten (Position bleibt) ────
 function istHostname(s: string): boolean { return /^(DEHAM|DESCH|DE)[A-Z0-9]/.test((s || '').trim().toUpperCase().replace(/\s+/g, '')) }
 function serialOf(v: string): string { return istHostname(v) ? serialFromHostname(v) : normalizeSerial(v) }
@@ -49,7 +71,7 @@ function serialOf(v: string): string { return istHostname(v) ? serialFromHostnam
 export interface MapMoveResult { mapId: Screen; label: string; entries: { alt: string; neu: string; arbeitsplatz: string }[] }
 
 /** Altgerät (Serial/Hostname) durch das Neugerät ersetzen — auf ALLEN drei Karten. Idempotent. */
-export async function moveDeviceOnAllMaps(oldDeviceId: string, newDeviceSerial: string): Promise<MapMoveResult[]> {
+export async function moveDeviceOnAllMaps(oldDeviceId: string, newDeviceSerial: string, by?: string): Promise<MapMoveResult[]> {
   const oldId = (oldDeviceId || '').trim()
   const newRaw = (newDeviceSerial || '').trim()
   if (!oldId || !newRaw) return []
@@ -69,7 +91,7 @@ export async function moveDeviceOnAllMaps(oldDeviceId: string, newDeviceSerial: 
       if (!newSer) continue
       const newHost = 'DE' + newSer
       if (canon(newHost) === canon(d.hostname)) continue
-      const ok = await m.svc.updateDevice(d.id, { hostname: newHost })
+      const ok = await m.svc.updateDevice(d.id, { hostname: newHost }, { by, refresh: true })
       if (ok) entries.push({ alt: d.hostname, neu: newHost, arbeitsplatz: d.arbeitsplatz })
     }
     if (entries.length) out.push({ mapId: m.id, label: m.label, entries })

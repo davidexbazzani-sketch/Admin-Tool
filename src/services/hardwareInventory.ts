@@ -22,6 +22,7 @@ export interface InventoryDevice {
   scanned: boolean
   scannedAt?: string
   scannedBy?: string
+  capture?: 'scan' | 'manual'     // wie erfasst: per Barcode/QR-Scanner oder von Hand getippt
   // AD-Lookup-Resultate für fehlende Geräte
   prefixesUsed?: string[]         // welche Präfixe wurden probiert
   adHostname?: string             // erster auflösbarer Hostname
@@ -43,6 +44,7 @@ export interface ScanLogEntry {
   invalid: boolean                // Pattern-Validierung fehlgeschlagen?
   timestamp: string
   by: string
+  capture?: 'scan' | 'manual'     // Erfassungsart der Eingabe
 }
 
 export interface InventoryFieldMap {
@@ -73,7 +75,7 @@ export interface InventoryRun {
   columns: InventoryColumn[]      // alle Spalten aus Excel (für Export)
   devices: InventoryDevice[]
   /** Zusätzlich gescannte Werte, die kein erwartetes Gerät getroffen haben. */
-  extras: Array<{ serial: string; scannedAt: string; scannedBy: string; reason?: string }>
+  extras: Array<{ serial: string; scannedAt: string; scannedBy: string; reason?: string; capture?: 'scan' | 'manual' }>
   scanLog: ScanLogEntry[]
   status: RunStatus
   completedAt?: string
@@ -286,7 +288,7 @@ export interface ScanOutcome {
   device?: InventoryDevice
 }
 
-export async function applyScan(runId: string, rawValue: string, by: string): Promise<{ ok: boolean; outcome?: ScanOutcome; run?: InventoryRun; error?: string }> {
+export async function applyScan(runId: string, rawValue: string, by: string, capture?: 'scan' | 'manual'): Promise<{ ok: boolean; outcome?: ScanOutcome; run?: InventoryRun; error?: string }> {
   const run = await loadRun(runId)
   if (!run) return { ok: false, error: 'Inventur nicht gefunden' }
   if (run.status !== 'open') return { ok: false, error: 'Diese Inventur ist abgeschlossen.' }
@@ -298,7 +300,7 @@ export async function applyScan(runId: string, rawValue: string, by: string): Pr
   if (!norm) {
     // Aus der Eingabe ließ sich kein gültiges Seriennummer-Pattern extrahieren
     // → Falsch-Scan (Hand-Scanner-Fehler oder unerwarteter Code)
-    run.scanLog.push({ scannedValue: value, matched: false, invalid: true, timestamp: ts, by })
+    run.scanLog.push({ scannedValue: value, matched: false, invalid: true, timestamp: ts, by, capture })
     await saveRun(run)
     return { ok: true, run, outcome: { kind: 'invalid', normalizedSerial: '' } }
   }
@@ -306,25 +308,39 @@ export async function applyScan(runId: string, rawValue: string, by: string): Pr
   const dev = run.devices.find(d => d.serial === norm)
   if (dev) {
     if (dev.scanned) {
-      run.scanLog.push({ scannedValue: value, matched: true, invalid: false, timestamp: ts, by })
+      // Ein echter Scan „upgradet" eine zuvor manuelle Erfassung.
+      if (capture === 'scan') dev.capture = 'scan'
+      run.scanLog.push({ scannedValue: value, matched: true, invalid: false, timestamp: ts, by, capture })
       await saveRun(run)
       return { ok: true, run, outcome: { kind: 'matched_again', normalizedSerial: norm, device: dev } }
     }
     dev.scanned = true
     dev.scannedAt = ts
     dev.scannedBy = by
-    run.scanLog.push({ scannedValue: value, matched: true, invalid: false, timestamp: ts, by })
+    dev.capture = capture
+    run.scanLog.push({ scannedValue: value, matched: true, invalid: false, timestamp: ts, by, capture })
     await saveRun(run)
     return { ok: true, run, outcome: { kind: 'matched_new', normalizedSerial: norm, device: dev } }
   }
 
   // Valides Pattern, aber nicht erwartet → Extras
   if (!run.extras.find(e => e.serial === norm)) {
-    run.extras.push({ serial: norm, scannedAt: ts, scannedBy: by })
+    run.extras.push({ serial: norm, scannedAt: ts, scannedBy: by, capture })
   }
-  run.scanLog.push({ scannedValue: value, matched: false, invalid: false, timestamp: ts, by })
+  run.scanLog.push({ scannedValue: value, matched: false, invalid: false, timestamp: ts, by, capture })
   await saveRun(run)
   return { ok: true, run, outcome: { kind: 'extra', normalizedSerial: norm } }
+}
+
+/** Erfassungsart eines Geräts korrigieren (Badge-Klick in der UI). */
+export async function setDeviceCapture(runId: string, serial: string, capture: 'scan' | 'manual'): Promise<{ ok: boolean }> {
+  const run = await loadRun(runId)
+  if (!run) return { ok: false }
+  const dev = run.devices.find(d => d.serial === normalizeSerial(serial))
+  if (dev) { dev.capture = capture; return { ok: await saveRun(run) } }
+  const ex = run.extras.find(e => e.serial === normalizeSerial(serial))
+  if (ex) { ex.capture = capture; return { ok: await saveRun(run) } }
+  return { ok: false }
 }
 
 /**
@@ -384,8 +400,9 @@ export async function markDeviceLateFound(runId: string, serial: string, by: str
   dev.lateFoundAt = ts
   dev.lateFoundBy = by
   dev.lateNote = note || ''
-  // gilt jetzt als "gescannt" für die Bilanz
+  // gilt jetzt als "gescannt" für die Bilanz; nachträgliche Handkorrektur = manuell
   dev.scanned = true
+  if (!dev.capture) dev.capture = 'manual'
   if (!dev.scannedAt) dev.scannedAt = ts
   if (!dev.scannedBy) dev.scannedBy = by
   run.history.push({ timestamp: ts, by, action: `Nachträglich gefunden: ${dev.serial}`, details: note })

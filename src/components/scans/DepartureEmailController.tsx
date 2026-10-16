@@ -14,6 +14,7 @@ import {
   loadReminderStore, saveReminderStore, reconcile, dueDepartures, markSent,
   buildDepartureReminder, loadReminderContext, DEPARTURE_REMINDER_STATUS, SUPPORT_CC,
 } from '../../services/departureReminder'
+import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 
 const POLL_MS = 20 * 60 * 1000
 
@@ -63,11 +64,14 @@ export default function DepartureEmailController() {
 
   useEffect(() => {
     if (!isFounder || !username) return
-    void tick()
+    // Erster Lauf entzerrt: sonst greifen beim Start alle Controller gleichzeitig
+    // aufs Netzlaufwerk zu und das Fenster hakt in den ersten Sekunden.
+    const startAbbrechen = ersterLaufEntzerrt(() => { void tick() })
     const t = setInterval(() => { void tick() }, POLL_MS)
-    const onFocus = () => { void tick() }
-    window.addEventListener('focus', onFocus)
-    return () => { clearInterval(t); window.removeEventListener('focus', onFocus) }
+    // Beim Zurückkehren ins Fenster nachsehen — gebündelt und entzerrt über den
+    // gemeinsamen Melder, damit nicht alle Controller gleichzeitig loslaufen.
+    const abmelden = onAppFocus(() => { void tick() })
+    return () => { clearInterval(t); abmelden(); startAbbrechen() }
   }, [tick, isFounder, username])
 
   return null

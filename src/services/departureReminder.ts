@@ -212,6 +212,7 @@ export async function buildDepartureReminder(dep: Departure, ctx?: ReminderConte
   if (miR.has) {
     lines.push(`${dep.name} hat außerdem ${miR.noun}${miR.detail}. Bitte gib ${miR.plural ? 'diese' : 'dieses'} ebenfalls mit ab.`, '')
   }
+  lines.push('Bitte sorge auch dafür, dass das Headset mit Dongle und Kabel abgegeben wird.', '')
   lines.push('Vielen Dank für deine Unterstützung!', '', 'Viele Grüße', 'IT-Support · SKF Marine')
   return {
     ok: !!a.to, to: a.to, cc: SUPPORT_CC,

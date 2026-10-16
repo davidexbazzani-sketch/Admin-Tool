@@ -2,59 +2,88 @@ import { useState } from 'react'
 import { X, Table } from 'lucide-react'
 import type { ExcelColumn } from '../utils/fileImport'
 
-type ColumnRole = 'hostname' | 'serial' | 'assignedto' | 'ignore'
+type ColumnRole = string
+
+export interface DialogRole {
+  id: string
+  label: string
+  /** Tailwind-Klassen für den gewählten Zustand. */
+  color: string
+}
 
 interface Props {
   columns: ExcelColumn[]
   rows?: Record<string, unknown>[]
   onConfirm: (hostnameColNames: string[], serialColNames: string[], assignedToColNames: string[]) => void
   onCancel: () => void
+  // ── Optional: eigener Rollensatz ──────────────────────────────────────────
+  // Ohne diese Angaben verhält sich der Dialog wie bisher (Hostname/Seriennummer/
+  // ServiceNow) — die bestehenden Aufrufer in Home und UserInfo bleiben unberührt.
+  // Der Drucker-Import gibt seine eigenen Rollen mit.
+  roles?: DialogRole[]
+  titel?: string
+  untertitel?: string
+  /** Vorauswahl je Spaltenname (aus der Kopfzeilen-Erkennung). */
+  initialRoles?: Record<string, string>
+  /** Wird statt `onConfirm` aufgerufen, wenn `roles` gesetzt ist: Rollen-Id → Spaltennamen. */
+  onConfirmMap?: (nachRolle: Record<string, string[]>) => void
+  /** Mindestens eine dieser Rollen muss vergeben sein, sonst bleibt „Importieren" gesperrt. */
+  pflichtRollen?: string[]
 }
 
-const ROLE_LABELS: Record<ColumnRole, string> = {
-  hostname:   'Hostname',
-  serial:     'Seriennummer',
-  assignedto: 'ServiceNow Zuweisung',
-  ignore:     'Ignorieren',
-}
+const IGNORE = 'ignore'
 
-const ROLE_COLORS: Record<ColumnRole, string> = {
-  hostname:   'bg-blue-500/15 text-blue-300 border-blue-500/30',
-  serial:     'bg-emerald-500 text-black border-emerald-500/30',
-  assignedto: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
-  ignore:     'bg-muted text-muted-foreground border-border',
-}
+const STANDARD_ROLLEN: DialogRole[] = [
+  { id: 'hostname',   label: 'Hostname',             color: 'bg-blue-500/15 text-blue-300 border-blue-500/30' },
+  { id: 'serial',     label: 'Seriennummer',         color: 'bg-emerald-500 text-black border-emerald-500/30' },
+  { id: 'assignedto', label: 'ServiceNow Zuweisung', color: 'bg-purple-500/15 text-purple-300 border-purple-500/30' },
+  { id: IGNORE,       label: 'Ignorieren',           color: 'bg-muted text-muted-foreground border-border' },
+]
 
-export default function ExcelColumnDialog({ columns, rows, onConfirm, onCancel }: Props) {
+export default function ExcelColumnDialog({
+  columns, rows, onConfirm, onCancel,
+  roles: rollenProp, titel, untertitel, initialRoles, onConfirmMap, pflichtRollen,
+}: Props) {
+  const eigen = !!rollenProp
+  const rollen = rollenProp ?? STANDARD_ROLLEN
+  const pflicht = pflichtRollen ?? ['hostname', 'serial']
+
   const [roles, setRoles] = useState<Record<string, ColumnRole>>(
-    Object.fromEntries(columns.map((c) => [c.name, c.detectedAs]))
+    Object.fromEntries(columns.map((c) => [c.name, initialRoles?.[c.name] ?? c.detectedAs]))
   )
 
   function setRole(colName: string, role: ColumnRole) {
     setRoles((prev) => ({ ...prev, [colName]: role }))
   }
 
-  function handleConfirm() {
-    const hostnameColNames    = columns.filter((c) => roles[c.name] === 'hostname').map((c) => c.name)
-    const serialColNames      = columns.filter((c) => roles[c.name] === 'serial').map((c) => c.name)
-    const assignedToColNames  = columns.filter((c) => roles[c.name] === 'assignedto').map((c) => c.name)
-    onConfirm(hostnameColNames, serialColNames, assignedToColNames)
+  function spaltenZu(rolle: string): string[] {
+    return columns.filter((c) => roles[c.name] === rolle).map((c) => c.name)
   }
 
-  const hasSelection =
-    Object.values(roles).includes('hostname') || Object.values(roles).includes('serial')
+  function handleConfirm() {
+    if (eigen && onConfirmMap) {
+      const nachRolle: Record<string, string[]> = {}
+      for (const r of rollen) if (r.id !== IGNORE) nachRolle[r.id] = spaltenZu(r.id)
+      onConfirmMap(nachRolle)
+      return
+    }
+    onConfirm(spaltenZu('hostname'), spaltenZu('serial'), spaltenZu('assignedto'))
+  }
+
+  const farbe = (id: string) => rollen.find((r) => r.id === id)?.color ?? ''
+  const hasSelection = pflicht.some((r) => Object.values(roles).includes(r))
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-card border border-border rounded-xl shadow-2xl w-[720px] max-h-[85vh] flex flex-col">
+      <div className={`bg-card border border-border rounded-xl shadow-2xl ${eigen ? "w-[920px]" : "w-[720px]"} max-h-[85vh] flex flex-col`}>
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
           <div className="flex items-center gap-2.5">
             <Table size={16} className="text-primary" />
             <div>
-              <h2 className="text-sm font-semibold text-foreground">Spalten auswählen</h2>
+              <h2 className="text-sm font-semibold text-foreground">{titel ?? 'Spalten auswählen'}</h2>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                Welche Spalten enthalten Hostnames oder Seriennummern?
+                {untertitel ?? 'Welche Spalten enthalten Hostnames oder Seriennummern?'}
               </p>
             </div>
           </div>
@@ -122,20 +151,20 @@ export default function ExcelColumnDialog({ columns, rows, onConfirm, onCancel }
                 </div>
 
                 {/* Role selector */}
-                <div className="flex gap-1 shrink-0">
-                  {(['hostname', 'serial', 'assignedto', 'ignore'] as ColumnRole[]).map((r) => (
+                <div className="flex gap-1 shrink-0 flex-wrap justify-end">
+                  {rollen.map((r) => (
                     <button
-                      key={r}
-                      onClick={() => setRole(col.name, r)}
+                      key={r.id}
+                      onClick={() => setRole(col.name, r.id)}
                       className={`
                         px-2.5 py-1 text-[11px] font-medium rounded border transition-colors
-                        ${role === r
-                          ? ROLE_COLORS[r]
+                        ${role === r.id
+                          ? farbe(r.id)
                           : 'border-border text-muted-foreground hover:bg-accent'
                         }
                       `}
                     >
-                      {ROLE_LABELS[r]}
+                      {r.label}
                     </button>
                   ))}
                 </div>
@@ -147,7 +176,7 @@ export default function ExcelColumnDialog({ columns, rows, onConfirm, onCancel }
         {/* Footer */}
         <div className="flex items-center justify-between px-5 py-3 border-t border-border shrink-0">
           <p className="text-[11px] text-muted-foreground">
-            {Object.values(roles).filter((r) => r !== 'ignore').length} Spalte(n) ausgewählt
+            {Object.values(roles).filter((r) => r !== IGNORE).length} Spalte(n) ausgewählt
           </p>
           <div className="flex gap-2">
             <button

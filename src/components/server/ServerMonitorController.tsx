@@ -12,6 +12,7 @@ import {
   loadServerStatus, saveServerStatus, isStatusClaimed, offlineHostsForTiles,
   loadServerConfig, runPingCycle, runRebootCheck, runServerMetricsIfDue,
 } from '../../services/serverMonitor'
+import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 
 const POLL_MS = 2 * 60 * 1000            // Status alle 2 min lesen (Popup/Blink)
 const PING_INTERVAL_MS = 10 * 60 * 1000  // Ping alle 10 min
@@ -73,11 +74,14 @@ export default function ServerMonitorController() {
 
   useEffect(() => {
     if (!username) return
-    void tick()
+    // Erster Lauf entzerrt: sonst greifen beim Start alle Controller gleichzeitig
+    // aufs Netzlaufwerk zu und das Fenster hakt in den ersten Sekunden.
+    const startAbbrechen = ersterLaufEntzerrt(() => { void tick() })
     const t = setInterval(() => { void tick() }, POLL_MS)
-    const onFocus = () => { void tick() }
-    window.addEventListener('focus', onFocus)
-    return () => { clearInterval(t); window.removeEventListener('focus', onFocus) }
+    // Beim Zurückkehren ins Fenster nachsehen — gebündelt und entzerrt über den
+    // gemeinsamen Melder, damit nicht alle Controller gleichzeitig loslaufen.
+    const abmelden = onAppFocus(() => { void tick() })
+    return () => { clearInterval(t); abmelden(); startAbbrechen() }
   }, [tick, username])
 
   if (!popupOpen || offline.length === 0) return null

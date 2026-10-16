@@ -276,6 +276,7 @@ export async function buildKnowledgeSnapshot(opts: SnapshotOptions = {}): Promis
     const lines: string[] = []
     if (sn) lines.push(`- **ServiceNow-Instanz:** ${sn.instanceUrl}${Array.isArray(sn.assignmentGroups) && sn.assignmentGroups.length ? ` · Gruppen: ${sn.assignmentGroups.join(', ')}` : ''}`)
     if (snAcc?.user) lines.push(`- **ServiceNow-Integrationskonto:** ${snAcc.user} _(Passwort NICHT exportiert)_`)
+    if (snAcc?.clientId) lines.push(`- **ServiceNow-OAuth:** aktiv _(Client-ID/-Secret NICHT exportiert)_`)
     if (on) lines.push(`- **Onboarding:** ${on.rooms?.length ?? 0} Konferenzräume · ${on.generalInfo?.contacts?.length ?? 0} Ansprechpartner · IT-Kontakt: ${on.itContact?.name ?? '—'}`)
     parts.push(`## Konfiguration & Anbindungen\n\n${lines.join('\n') || '_keine_'}\n`)
   }, 'Konfiguration & Anbindungen', 'config')

@@ -3,11 +3,16 @@
 // Punkt (alle 20 s ein Ping). Refresh-Geräte: das Tool zieht selbstständig Drucker +
 // Explorer-Schnellzugriff-Datei vom Altgerät (Netz-Zwischenspeicher, nach Übertragung
 // gelöscht). Klick auf „Einrichten" öffnet das Cockpit mit Kacheln (Treiber, Drucker,
-// Schnellzugriffe, Windows-Updates, SolidWorks, Sprache, Netzlaufwerke, Env, Neustart).
+// Schnellzugriffe, Windows-Updates, SolidWorks, Sprache, Netzlaufwerke, Neustart).
 // Drucker/Schnellzugriffe erst aktiv, wenn Daten da; andere Kacheln nur wenn Gerät online.
+// EuroPAR: der Scan „europar-scan" (täglich 12:00, auch manuell hier startbar) prüft die
+// Altgeräte auf C:\EuroPAR, C:\Local, C:\SCHNITTDATEN. Nur Treffer bekommen die EuroPAR-
+// Kachel (Teil 1 Ordner, Teil 2 Umgebungsvariablen). Sichern und Übertragen erledigt der
+// EuroparStagingController im Hintergrund — NICHT dieser Screen (früher hing es hier und
+// lief dadurch nur, solange der Menüpunkt offen war).
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Rocket, Loader2, RefreshCw, Wand2, Printer, FolderOpen, CheckCircle2, Search, X, HardDrive, FolderDown } from 'lucide-react'
+import { Rocket, Loader2, RefreshCw, Wand2, Printer, FolderOpen, CheckCircle2, Search, X, HardDrive, FolderDown, FolderSync } from 'lucide-react'
 import { listChecklists, type Checklist } from '../services/checklists'
 import { loadChecklistDeviceInfos, hostFromSerial, type ChecklistDeviceInfo } from '../services/deviceMasterData'
 import { classifyModel, MODEL_CATEGORIES } from '../services/endpointDevices'
@@ -15,9 +20,132 @@ import { deployDrivesScript } from '../services/migrationOps'
 import { buildParallelOnlineCheck, parseOnlineCheckLine } from '../utils/connectivityCheck'
 import { api } from '../electronAPI'
 import MigrationCockpit from '../components/checklists/MigrationCockpit'
-import { loadDeviceSetupState, autoPullRefresh, updateDeviceSetupItem, type DeviceSetupItem } from '../services/deviceSetup'
+import { loadDeviceSetupState, autoPullRefresh, isEuroparDevice, updateDeviceSetupItem, type DeviceSetupItem } from '../services/deviceSetup'
+import { europarDirName, formatEuroparSize, type EuroparFolderState } from '../services/europar'
+import { runEuroparScanClaimed } from '../services/europarScan'
+import { runEuroparStagingOnce, EUROPAR_RETRY_MIN } from '../services/europarStaging'
+import { runNetworkDriveSetupOnce } from '../services/networkDriveSetup'
+import { loadStoredNetworkDrives } from '../services/deviceNetworkDrives'
+import { TileInfoButton } from '../components/checklists/TileInfo'
+import type { BasicScriptId, BasicStepResult } from '../services/basicSetup'
+import { EUROPAR_ENV_VARS, europarEnvKomplett, type EuroparEnvState } from '../services/europarEnv'
+import { useCurrentUser } from '../store/authStore'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
+
+// ── EuroPAR-Kachel je Karte ───────────────────────────────────────────────────
+// Erscheint NUR bei Geräten, auf deren Altgerät der Scan „EuroPAR-Ordner" (täglich
+// 12:00) mindestens einen der drei Ordner gefunden hat ([[europar_folder_migration]]).
+function europarSum(fs?: EuroparFolderState[]): { n: number; files: number; bytes: number } {
+  const v = (fs || []).filter(f => f.state !== 'missing')
+  return { n: v.length, files: v.reduce((a, f) => a + f.files, 0), bytes: v.reduce((a, f) => a + f.bytes, 0) }
+}
+function europarScanHint(st?: DeviceSetupItem): string {
+  if (!st?.europarScannedAt) return 'Der Scan „EuroPAR-Ordner" (täglich 12:00) hat dieses Altgerät noch nicht geprüft.'
+  const wann = new Date(st.europarScannedAt).toLocaleString('de-DE')
+  if (st.europarScanText) return `Zuletzt geprüft ${wann} — Altgerät nicht erreichbar: ${st.europarScanText}`
+  return `Zuletzt geprüft ${wann} — auf dem Altgerät liegt keiner der drei EuroPAR-Ordner.`
+}
+/**
+ * Sagt genau, woran es gerade hängt — nicht pauschal „wartet auf das Altgerät".
+ * Nach dem Sichern wartet es auf das NEUGERÄT, nicht mehr auf das Altgerät.
+ */
+function europarStatusText(st?: DeviceSetupItem, neuOnline?: boolean): string {
+  if (!st) return ''
+  if (st.europarApplied) return 'Vollständig auf den neuen PC übertragen · Zwischenspeicher geleert'
+
+  const s = europarSum(st.europarFolders)
+  if (st.europarStaged) {
+    const menge = `${s.n} Ordner im Zwischenspeicher · ${s.files} Dateien · ${formatEuroparSize(s.bytes)}`
+    if (neuOnline === false) return `${menge} — wird übertragen, sobald der neue PC erreichbar ist${st.europarApplyText ? ` (${st.europarApplyText})` : ''}`
+    if (st.europarApplyText && st.europarApplyTriedAt) return `${menge} — letzter Übertragungsversuch: ${st.europarApplyText}`
+    return `${menge} — wird auf den neuen PC übertragen`
+  }
+
+  // Noch nicht gesichert: der letzte Versuch sagt, warum — aber eine alte Meldung darf
+  // nicht wie der aktuelle Stand aussehen. Liegt sie länger zurück als das Wiederhol-
+  // Intervall, steht der nächste Versuch bereits an.
+  if (st.europarStageText) {
+    const t = st.europarTriedAt ? new Date(st.europarTriedAt) : null
+    const wann = t ? t.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) : ''
+    const alt = t ? (Date.now() - t.getTime()) / 60000 >= EUROPAR_RETRY_MIN : true
+    return alt
+      ? `Erneuter Versuch steht an — letzter Versuch${wann ? ` ${wann}` : ''}: ${st.europarStageText}`
+      : `Noch nicht gesichert${wann ? ` (zuletzt ${wann})` : ''}: ${st.europarStageText}`
+  }
+  if (st.europarTriedAt) return 'Sicherung wird gerade versucht…'
+  return 'Für die Sicherung eingeplant — läuft im Hintergrund an'
+}
+
+/**
+ * Wie bei EuroPAR: sagen, WORAUF gerade gewartet wird. Erfasst wird vom Altgerät,
+ * verbunden auf dem Neugerät — und dafür muss dort jemand angemeldet sein.
+ */
+/**
+ * `imDossier` = Anzahl der Laufwerke, die im Geräte-„i" des Altgeräts hinterlegt sind
+ * (zentraler Stand aus device_network_drives/<host>.json). Sind die dort schon erfasst,
+ * gilt der Punkt als ermittelt — auch wenn der eigene Lauf sie noch nicht gespiegelt hat.
+ */
+function netzStatusText(st: DeviceSetupItem | undefined, imDossier: number): string {
+  const n = st?.networkDrives?.length || imDossier
+  if (st?.networkDrivesApplied) return `Netzlaufwerke: ${n} verbunden`
+  if (netzErmittelt(st, imDossier)) {
+    const wartet = st?.networkDrivesApplyText || 'werden auf dem neuen PC verbunden'
+    return `Netzlaufwerke: ${n} ermittelt — ${wartet}`
+  }
+  if (st?.networkDrivesText) return `Netzlaufwerke: ${st.networkDrivesText}`
+  return 'Netzlaufwerke: werden im Hintergrund erfasst'
+}
+/** Ermittelt = eigener Lauf war erfolgreich ODER im Geräte-„i" stehen bereits Laufwerke. */
+function netzErmittelt(st: DeviceSetupItem | undefined, imDossier: number): boolean {
+  return !!(st?.networkDrivesAt && (st.networkDrives?.length || 0) > 0) || imDossier > 0
+}
+
+function EuroparTile({ st, online, onOpen }: { st?: DeviceSetupItem; online: boolean; onOpen: () => void }) {
+  const gefunden = st?.europarFound?.length ? st.europarFound : (st?.europarFolders || []).filter(f => f.state !== 'missing').map(f => f.name)
+  const applied = !!st?.europarApplied
+  const staged = !!st?.europarStaged
+  const envOk = !!st?.europarEnvApplied
+  const fertig = applied && envOk
+  const envOffen = (st?.europarEnvVars || []).filter(v => !v.erfuellt).length
+  return (
+    <div className={`mt-2 rounded-md border p-2 ${fertig ? 'border-green-500/30 bg-green-500/5' : 'border-sky-500/30 bg-sky-500/5'}`}>
+      <div className="flex items-center gap-1.5 flex-wrap">
+        <FolderSync size={13} className={fertig ? 'text-green-400' : 'text-sky-300'} />
+        <span className="text-xs font-semibold text-foreground">EuroPAR</span>
+        <TileInfoButton id="europar" icon={<FolderSync size={16} />} />
+        {fertig && <CheckCircle2 size={12} className="text-green-400" />}
+        {gefunden.map(n => <span key={n} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted/30 text-muted-foreground">C:\{n}</span>)}
+      </div>
+
+      {/* Teil 1: Ordner */}
+      <div className="mt-1 flex items-start gap-1.5">
+        <span className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 border ${applied ? 'bg-green-500/15 text-green-400 border-green-500/30' : staged ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-sky-500/15 text-sky-300 border-sky-500/30'}`}>
+          1 · Ordner
+        </span>
+        <span className="text-[11px] text-muted-foreground">{europarStatusText(st, online)}</span>
+      </div>
+
+      {/* Teil 2: Umgebungsvariablen */}
+      <div className="mt-1 flex items-start gap-1.5">
+        <span className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 border ${envOk ? 'bg-green-500/15 text-green-400 border-green-500/30' : 'bg-amber-500/15 text-amber-300 border-amber-500/30'}`}>
+          2 · Variablen
+        </span>
+        <span className="text-[11px] text-muted-foreground" title={EUROPAR_ENV_VARS.map(v => `${v.name} (${v.scope === 'machine' ? 'System' : 'Benutzer'}) = ${v.value}`).join('\n')}>
+          {envOk ? 'EURO_EURN / EURO_WRKN / Path gesetzt'
+            : st?.europarEnvVars?.length ? `${envOffen} von ${st.europarEnvVars.length} noch offen`
+            : 'noch nicht gesetzt'}
+        </span>
+      </div>
+
+      <button onClick={onOpen} disabled={!online}
+        title={!online ? 'Der neue PC muss online sein' : 'EuroPAR-Kachel im Cockpit öffnen (Ordner übertragen + Variablen setzen)'}
+        className="mt-1.5 inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded border border-border hover:bg-accent/20 disabled:opacity-50">
+        <FolderSync size={11} />{fertig ? 'EuroPAR öffnen' : 'EuroPAR einrichten'}
+      </button>
+    </div>
+  )
+}
 
 export default function DeviceSetup() {
   const [items, setItems] = useState<Checklist[]>([])
@@ -27,7 +155,14 @@ export default function DeviceSetup() {
   const [online, setOnline] = useState<Map<string, boolean>>(new Map())
   const [setupState, setSetupState] = useState<Record<string, DeviceSetupItem>>({})
   const [cockpitFor, setCockpitFor] = useState<Checklist | null>(null)
+  const [cockpitTile, setCockpitTile] = useState<'europar' | null>(null)
   const pulling = useRef<Set<string>>(new Set())
+
+  // Manueller EuroPAR-Scan (sonst täglich 12:00, Einstellungen → Automatische Scans)
+  const [euroScanBusy, setEuroScanBusy] = useState(false)
+  const [euroScanMsg, setEuroScanMsg] = useState('')
+  const me = useCurrentUser()
+  const by = me?.displayName || me?.username || 'tool'
 
   // Filter/Suche
   const [suche, setSuche] = useState('')
@@ -63,6 +198,19 @@ export default function DeviceSetup() {
 
   // Zustand (Drucker/Schnellzugriffe) laden
   useEffect(() => { void loadDeviceSetupState().then(setSetupState).catch(() => {}) }, [])
+
+  // Im Geräte-„i" hinterlegte Netzlaufwerke der Altgeräte (zentraler Stand). Die können
+  // schon vom allgemeinen Netzlaufwerk-Scan stammen — dann ist hier nichts mehr zu tun.
+  const [netzImDossier, setNetzImDossier] = useState<Map<string, number>>(new Map())
+  useEffect(() => {
+    const hosts = [...new Set(items.filter(c => c.deviceType === 'refresh').map(oldHostOf).filter(Boolean))]
+    if (!hosts.length) { setNetzImDossier(new Map()); return }
+    let cancel = false
+    void Promise.all(hosts.map(async h => [h.toLowerCase(), (await loadStoredNetworkDrives(h).catch(() => null))?.drives.length || 0] as const))
+      .then(paare => { if (!cancel) setNetzImDossier(new Map(paare)) })
+    return () => { cancel = true }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, infos])
 
   // Online-Poll (20 s) über alle Neu-Hostnamen
   const pollHosts = useMemo(() => { const s = new Set<string>(); for (const c of items) { const h = newHostOf(c); if (h) s.add(h) } return [...s] /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [items, infos])
@@ -150,6 +298,26 @@ export default function DeviceSetup() {
 
   const filterAktiv = !!suche.trim() || typFilter !== 'all' || !!modelFilter
 
+  /**
+   * EuroPAR sofort anstoßen: erst prüfen, welche Altgeräte die Ordner haben, dann
+   * direkt sichern bzw. übertragen — statt auf den Hintergrundlauf zu warten.
+   */
+  async function europarScanJetzt() {
+    setEuroScanBusy(true)
+    setEuroScanMsg('')
+    try {
+      const r = await runEuroparScanClaimed(by)
+      setEuroScanMsg((r.ok ? '✓ ' : '✕ ') + r.summary + ' · sichern/übertragen läuft…')
+      const s2 = await runEuroparStagingOnce(by, undefined, { alle: true })
+      const s3 = await runNetworkDriveSetupOnce(by, undefined, { alle: true })
+      setEuroScanMsg((r.ok && s2.ok && s3.ok ? '✓ ' : '✕ ') + r.summary + ' · EuroPAR: ' + s2.summary + ' · Netzlaufwerke: ' + s3.summary)
+      const fresh = await loadDeviceSetupState().catch(() => null)
+      if (fresh) setSetupState(fresh)
+    } catch (e) {
+      setEuroScanMsg('✕ ' + (e instanceof Error ? e.message : String(e)))
+    } finally { setEuroScanBusy(false) }
+  }
+
   // Gescannte Netzlaufwerke als .bat auf den Public Desktop des Neugeräts legen.
   async function deployDrives(c: Checklist) {
     const drives = setupState[c.id]?.networkDrives || []
@@ -158,11 +326,11 @@ export default function DeviceSetup() {
     setDriveBusy(s => new Set(s).add(c.id))
     setDriveMsg(m => ({ ...m, [c.id]: '' }))
     try {
-      const r = await deployDrivesScript(newHost, drives)
+      const r = await deployDrivesScript(newHost, drives, c.id)
       if (r.ok) {
-        const next = await updateDeviceSetupItem(c.id, { networkDrivesApplied: true })
-        setSetupState(prev => ({ ...prev, [c.id]: next }))
-        setDriveMsg(m => ({ ...m, [c.id]: '✓ SKF-Netzlaufwerke-verbinden.bat auf dem Desktop des neuen PCs abgelegt.' }))
+        // NICHT als erledigt markieren — die .bat liegt nur bereit. Verbunden ist erst,
+        // wenn der Anwender sie ausgeführt hat; das erkennt der Hintergrundlauf am Marker.
+        setDriveMsg(m => ({ ...m, [c.id]: '✓ SKF-Netzlaufwerke-verbinden.bat liegt auf dem Desktop des neuen PCs — der Anwender startet sie nach der Anmeldung.' }))
       } else {
         setDriveMsg(m => ({ ...m, [c.id]: '✕ ' + (r.text || 'Ablegen fehlgeschlagen.') }))
       }
@@ -182,16 +350,23 @@ export default function DeviceSetup() {
       </div>
       <p className="text-sm text-muted-foreground mb-4">
         Offene Neu- und Refresh-Checklisten. Bei Refresh-Geräten zieht das Tool automatisch Drucker + Explorer-Schnellzugriffe
-        vom Altgerät. „Einrichten" öffnet das Cockpit (Treiber, Windows-Updates, Sprache … — nur bei erreichbarem Gerät).
+        vom Altgerät. Täglich um 12:00 werden die Altgeräte zusätzlich auf die EuroPAR-Ordner geprüft — Treffer bekommen hier
+        eine eigene EuroPAR-Kachel. „Einrichten" öffnet das Cockpit (Treiber, Windows-Updates, Sprache … — nur bei erreichbarem Gerät).
       </p>
 
       <div className="flex items-center gap-3 mb-3 flex-wrap">
         <button onClick={() => void reload()} disabled={loading} className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-border hover:bg-accent/20 disabled:opacity-50">
           {loading ? <Loader2 size={13} className="animate-spin" /> : <RefreshCw size={13} />}Aktualisieren
         </button>
+        <button onClick={() => void europarScanJetzt()} disabled={euroScanBusy}
+          title="Prüft alle Altgeräte offener Refresh-Checklisten auf C:\EuroPAR, C:\Local und C:\SCHNITTDATEN und sichert bzw. überträgt anschließend sofort. Läuft sonst von selbst: Prüfung täglich 12:00, Sichern/Übertragen laufend im Hintergrund."
+          className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-border hover:bg-accent/20 disabled:opacity-50">
+          {euroScanBusy ? <Loader2 size={13} className="animate-spin" /> : <FolderSync size={13} />}EuroPAR + Netzlaufwerke jetzt prüfen
+        </button>
         <label className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
           <input type="checkbox" checked={showDone} onChange={e => setShowDone(e.target.checked)} className="accent-primary" />erledigte anzeigen
         </label>
+        {euroScanMsg && <span className={`text-[11px] ${euroScanMsg.startsWith('✕') ? 'text-red-400' : 'text-green-400'}`}>{euroScanMsg}</span>}
         <span className="text-[11px] text-muted-foreground ml-auto">
           {filterAktiv ? `${shown.length} von ${items.length} · ` : ''}{counts.neu} Neu · {counts.refresh} Refresh
         </span>
@@ -245,7 +420,8 @@ export default function DeviceSetup() {
             const printersReady = !!(st && st.printers?.length)
             const qaReady = !!(st && st.quickAccessStaged)
             const qaApplied = !!(st && st.quickAccessApplied)
-            const drivesCaptured = !!(st && st.networkDrivesAt)
+            const drivesImDossier = netzImDossier.get(oldHost.toLowerCase()) || 0
+            const drivesCaptured = netzErmittelt(st, drivesImDossier)
             const drivesCount = st?.networkDrives?.length || 0
             const drivesApplied = !!(st && st.networkDrivesApplied)
             const driveIsBusy = driveBusy.has(c.id)
@@ -277,11 +453,21 @@ export default function DeviceSetup() {
                         <FolderOpen size={11} />{qaApplied ? 'Schnellzugriffe: übertragen' : qaReady ? 'Schnellzugriffe: gesichert' : 'Schnellzugriffe: wird gesichert…'}
                         {qaApplied && <CheckCircle2 size={11} className="text-green-400" />}
                       </span>
-                      <span className={`inline-flex items-center gap-1 ${drivesCaptured ? 'text-green-400' : 'text-muted-foreground'}`}
-                        title={drivesCaptured ? (st!.networkDrives || []).map(d => `${d.letter}: ${d.unc}`).join('\n') : 'Wird täglich ab 12:00 vom Altgerät gescannt, bis erfasst.'}>
-                        <HardDrive size={11} />{drivesCaptured ? `Netzlaufwerke: ${drivesCount}` : 'Netzlaufwerke: wird ermittelt (tägl. 12:00)'}
+                      <span className={`inline-flex items-center gap-1 ${drivesApplied || drivesCaptured ? 'text-green-400' : 'text-muted-foreground'}`}
+                        title={drivesCaptured
+                          ? ((st?.networkDrives || []).map(d => `${d.letter}: ${d.unc}`).join('\n') || 'Im Geräte-„i" des Altgeräts hinterlegt.')
+                          : 'Wird im Hintergrund vom Altgerät gelesen, sobald es erreichbar ist.'}>
+                        <HardDrive size={11} />{netzStatusText(st, drivesImDossier)}
                       </span>
+                      {!isEuroparDevice(st) && (
+                        <span className="inline-flex items-center gap-1 text-muted-foreground" title={europarScanHint(st)}>
+                          <FolderSync size={11} />{st?.europarScannedAt ? 'EuroPAR: keine Ordner' : 'EuroPAR: noch nicht geprüft'}
+                        </span>
+                      )}
                     </div>
+                    {isEuroparDevice(st) && (
+                      <EuroparTile st={st} online={isOnline === true} onOpen={() => { setCockpitTile('europar'); setCockpitFor(c) }} />
+                    )}
                     {drivesCaptured && drivesCount > 0 && (
                       <div className="mt-1.5 flex items-center gap-2 flex-wrap text-[11px]">
                         <button onClick={() => void deployDrives(c)} disabled={driveIsBusy || isOnline !== true}
@@ -298,7 +484,7 @@ export default function DeviceSetup() {
                 )}
 
                 <div className="mt-3">
-                  <button onClick={() => setCockpitFor(c)}
+                  <button onClick={() => { setCockpitTile(null); setCockpitFor(c) }}
                     className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90">
                     <Wand2 size={13} />Einrichten
                   </button>
@@ -319,11 +505,42 @@ export default function DeviceSetup() {
             printers={st?.printers || []}
             quickAccessReady={!!st?.quickAccessStaged}
             online={nh ? online.get(nh.toLowerCase()) === true : false}
+            initialTile={cockpitTile || undefined}
+            basicRunAt={st?.basicRunAt}
+            basicRunOk={st?.basicRunOk}
+            basicSteps={st?.basicSteps}
+            winUpdateAt={st?.winUpdateAt}
+            winUpdateOk={st?.winUpdateOk}
+            winUpdateText={st?.winUpdateText}
+            autoSetupDoneAt={st?.autoSetupDoneAt}
+            autoSetupOk={st?.autoSetupOk}
+            onAutoSetupDone={() => { void loadDeviceSetupState().then(setSetupState).catch(() => {}) }}
+            onBasicDone={(ok: boolean, steps: BasicStepResult[], at: string, scriptId: BasicScriptId) => {
+              void updateDeviceSetupItem(cockpitFor.id, { basicRunAt: at, basicRunOk: ok, basicSteps: steps, basicScriptId: scriptId })
+                .then(next => setSetupState(prev => ({ ...prev, [cockpitFor.id]: next })))
+            }}
+            europarApplicable={isEuroparDevice(st)}
+            europarReady={!!st?.europarStaged}
+            europarDir={st?.europarDir || europarDirName(nh, cockpitFor.id)}
+            europarFolders={st?.europarFolders || []}
             onQuickAccessApplied={() => {
               void updateDeviceSetupItem(cockpitFor.id, { quickAccessStaged: false, quickAccessApplied: true })
                 .then(next => setSetupState(prev => ({ ...prev, [cockpitFor.id]: next })))
             }}
-            onClose={() => setCockpitFor(null)}
+            onEuroparStaged={(folders, dir) => {
+              void updateDeviceSetupItem(cockpitFor.id, { europarFolders: folders, europarDir: dir, europarStaged: true, europarStagedAt: new Date().toISOString(), europarMarked: true })
+                .then(next => setSetupState(prev => ({ ...prev, [cockpitFor.id]: next })))
+            }}
+            onEuroparEnvApplied={(vars: EuroparEnvState[]) => {
+              void updateDeviceSetupItem(cockpitFor.id, { europarEnvVars: vars, europarEnvApplied: europarEnvKomplett(vars), europarEnvAt: new Date().toISOString() })
+                .then(next => setSetupState(prev => ({ ...prev, [cockpitFor.id]: next })))
+            }}
+            onEuroparApplied={(folders) => {
+              // Zwischenspeicher ist an dieser Stelle bereits geleert (applyEuroparFolders).
+              void updateDeviceSetupItem(cockpitFor.id, { europarFolders: folders, europarStaged: false, europarApplied: true, europarAppliedAt: new Date().toISOString() })
+                .then(next => setSetupState(prev => ({ ...prev, [cockpitFor.id]: next })))
+            }}
+            onClose={() => { setCockpitFor(null); setCockpitTile(null) }}
           />
         )
       })()}

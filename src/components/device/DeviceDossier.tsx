@@ -21,8 +21,10 @@ import {
   type DeviceDossier, type DeviceDossierEntry, type DossierFile,
 } from '../../services/deviceDossier'
 import { ALL_DAILY_COMMANDS, type DailyCommand } from '../../services/dailyCommands'
+import { SoundFixPanel } from './SoundFixPanel'
 import { DeviceMasterData } from './DeviceMasterData'
 import { DeviceTaskManager } from './DeviceTaskManager'
+import CriticalActionButton from './CriticalActionButton'
 
 interface DeviceDossierCtx { open: (hostname: string, serial?: string) => void }
 const DeviceDossierContext = createContext<DeviceDossierCtx | null>(null)
@@ -200,6 +202,7 @@ function DeviceDossierModal({ hostname, serial, onClose }: { hostname: string; s
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30 disabled:opacity-40">
             <Search size={13} className="text-blue-400" />Abfrage
           </button>
+          <CriticalActionButton hostname={display} serial={dossier?.serial || serial} />
         </div>
 
         {/* Tabs */}
@@ -325,13 +328,24 @@ function DeviceDossierModal({ hostname, serial, onClose }: { hostname: string; s
 
 function DeviceDaylisPanel({ hostname, serial, currentUser }: { hostname: string; serial?: string; currentUser: string }) {
   const hostCommands = ALL_DAILY_COMMANDS.filter(c => c.requiresHost && !c.requiresUser)
-  const reads = hostCommands.filter(c => c.kind === 'read')
-  const writes = hostCommands.filter(c => c.kind === 'write')
+  // Einträge mit eigener Oberfläche („Sound Fix") sind keine Einzelbefehle — sie
+  // stehen als eigener Block mit „Öffnen" statt „Ausführen".
+  const panels = hostCommands.filter(c => c.panel)
+  const reads = hostCommands.filter(c => c.kind === 'read' && !c.panel)
+  const writes = hostCommands.filter(c => c.kind === 'write' && !c.panel)
   return (
     <div className="space-y-4">
       <p className="text-xs text-muted-foreground">
         Befehle für <span className="font-mono text-foreground">{hostname}</span>. Abfragen zeigen nur Informationen; Aktionen (rot) verändern das Gerät und werden im Dossier protokolliert.
       </p>
+      {panels.length > 0 && (
+        <div>
+          <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1.5">Werkzeuge</p>
+          <div className="space-y-1.5">
+            {panels.map(c => <DaylisPanelRow key={c.id} cmd={c} hostname={hostname} />)}
+          </div>
+        </div>
+      )}
       <div>
         <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1.5">Abfragen</p>
         <div className="space-y-1.5">
@@ -344,6 +358,34 @@ function DeviceDaylisPanel({ hostname, serial, currentUser }: { hostname: string
           <div className="space-y-1.5">
             {writes.map(c => <DaylisRow key={c.id} cmd={c} hostname={hostname} serial={serial} currentUser={currentUser} isWrite />)}
           </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Daylis-Eintrag mit eigener Oberfläche: „Öffnen" klappt sie auf, zusätzlich lässt
+// sie sich aus dem Panel heraus in ein eigenes Fenster abtrennen.
+function DaylisPanelRow({ cmd, hostname }: { cmd: DailyCommand; hostname: string }) {
+  const [offen, setOffen] = useState(false)
+  return (
+    <div className="rounded-md border border-emerald-500/25 bg-background overflow-hidden">
+      <div className="flex items-center gap-2 px-3 py-1.5">
+        <button onClick={() => setOffen(o => !o)} className="text-muted-foreground hover:text-foreground shrink-0">
+          {offen ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+        </button>
+        <div className="flex-1 min-w-0">
+          <span className="text-xs font-semibold text-emerald-300">{cmd.label}</span>
+          <span className="block text-[10px] text-muted-foreground truncate" title={cmd.info}>{cmd.info}</span>
+        </div>
+        <button onClick={() => setOffen(o => !o)}
+          className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] rounded-md font-semibold shrink-0 bg-emerald-600 text-white hover:bg-emerald-500">
+          {offen ? 'Schließen' : 'Öffnen'}
+        </button>
+      </div>
+      {offen && (
+        <div className="px-3 pb-3 pt-2 border-t border-border/50">
+          <SoundFixPanel hostname={hostname} />
         </div>
       )}
     </div>

@@ -59,8 +59,26 @@ function tokenCloseness(x: string, y: string): 'exact' | 'fuzzy' | null {
 }
 
 /**
+ * „Verklebte" Formen eines Namens: alle Tokens ohne Trennzeichen aneinandergehängt,
+ * einmal in Originalreihenfolge und einmal alphabetisch sortiert.
+ *
+ * Damit werden zusammen- und getrenntgeschriebene Mehrfachnachnamen vergleichbar:
+ * „Daniela Mierswa Silva" und „Daniela MierswaSilva" ergeben beide
+ * `danielamierswasilva`. Realer Fall aus der Durchwahlliste — die Person galt dadurch
+ * fälschlich als „nicht mehr im AD", und ihre Rufnummer wäre auf einer Kündigungsliste
+ * gelandet.
+ */
+function glueForms(tokens: string[]): string[] {
+  if (tokens.length < 2) return []
+  const original = tokens.join('')
+  const sortiert = [...tokens].sort().join('')
+  return original === sortiert ? [original] : [original, sortiert]
+}
+
+/**
  * Passen zwei Personennamen (reihenfolge-unabhängig, tippfehler-/umlaut-tolerant)?
- * z. B. „Matthias Welle" ↔ „Welle Matthias" ↔ „Welle Mathias" ↔ „Welle, Mathias".
+ * z. B. „Matthias Welle" ↔ „Welle Matthias" ↔ „Welle Mathias" ↔ „Welle, Mathias"
+ * und „Daniela Mierswa Silva" ↔ „Daniela MierswaSilva".
  */
 export function fuzzyNameMatch(a: string, b: string): boolean {
   const ta = nameTokens(a)
@@ -82,7 +100,15 @@ export function fuzzyNameMatch(a: string, b: string): boolean {
     if (bestI >= 0) { used.add(bestI); matched++; if (bestKind === 'exact') exact++ }
   }
   // ≥2-Token-Namen: mind. 2 Treffer, davon mind. 1 exakt (gegen Doppel-Tippfehler-Fehlalarm).
-  if (short.length >= 2 && long.length >= 2) return matched >= 2 && exact >= 1
+  if (short.length >= 2 && long.length >= 2) {
+    if (matched >= 2 && exact >= 1) return true
+    // Zusätzlicher Weg, NUR wenn die Token-Prüfung oben nicht gegriffen hat: die
+    // verklebten Formen vergleichen. Das ist exakte Zeichenkettengleichheit, also
+    // keine weitere Unschärfe — es löst nur die Trennung/Zusammenschreibung auf.
+    const ga = glueForms(ta)
+    const gb = glueForms(tb)
+    return ga.some(x => gb.includes(x))
+  }
   // Einzel-Token-Name (selten): nur ein exakter Treffer zählt.
   return exact >= 1
 }

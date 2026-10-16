@@ -6,7 +6,7 @@ import {
 import { useAppStore } from '../../store/appStore'
 import {
   applyScan, loadRun, completeRunWithReasons, extractSerialFromScan, normalizeSerial,
-  unscanDevice, removeExtra,
+  unscanDevice, removeExtra, setDeviceCapture,
   type InventoryRun, type InventoryDevice,
 } from '../../services/hardwareInventory'
 import { loadLostSerialSet, markRecovered } from '../../services/lostDevices'
@@ -23,6 +23,14 @@ interface Props {
 }
 
 const POLL_MS = 8000
+
+// Erkennung Scan vs. manuell am Eingabe-Tempo. Ein Barcode-/QR-Handscanner „tippt"
+// die Seriennummer als quasi-instantanen Zeichen-Burst (+Enter); ein Mensch tippt mit
+// spürbaren Pausen (~100–300 ms/Zeichen). Schwellwerte bewusst großzügig zugunsten
+// „Scan", da der Scanner der Normalfall ist; Fehlklassifikation ist per Badge korrigierbar.
+const MIN_SCAN_LEN = 4      // kürzere Eingaben nicht als Scan werten
+const PER_CHAR_MS = 35      // Ø-Tempo je Zeichen, das noch als Scan gilt
+const MAX_GAP_MS = 45       // größte erlaubte Tasten-Pause für „durchgehend schnell"
 
 type FilterMode = 'all' | 'missing' | 'scanned'
 
@@ -125,15 +133,72 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
     return () => { clearInterval(t); window.removeEventListener('focus', refresh) }
   }, [])
 
+  // Fokus fürs Scannen zurückholen — aber NICHT, solange jemand in der Liste etwas
+  // markiert (sonst springt die Markierung sofort raus und Kopieren geht nicht),
+  // ein anderes Eingabefeld benutzt oder ein Dialog offen ist.
+  const fokusPauseRef = useRef(false)
+  fokusPauseRef.current = !!(extrasReview || confirmComplete || lostFound)
+  const mausGedruecktRef = useRef(false)
+
   function refocus() {
+    if (fokusPauseRef.current || mausGedruecktRef.current) return
+    const sel = window.getSelection()
+    if (sel && !sel.isCollapsed && sel.toString().trim()) return
+    const a = document.activeElement
+    if (a && a !== inputRef.current && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return
     inputRef.current?.focus()
+  }
+
+  useEffect(() => {
+    const down = () => { mausGedruecktRef.current = true }
+    // Maus los: normaler Klick → Scanfeld wieder aktiv; mit Markierung → bleibt (refocus prüft das)
+    const up = () => { mausGedruecktRef.current = false; setTimeout(refocus, 0) }
+    // Scanner/Tastatur tippt, während nichts fokussiert ist (z. B. nach dem Markieren):
+    // Taste ins Scanfeld lenken, damit kein Scan verloren geht. Strg/Alt-Kürzel (Strg+C) bleiben unberührt.
+    const key = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1 || fokusPauseRef.current) return
+      const a = document.activeElement
+      if (a && a !== document.body && a !== document.documentElement) return
+      window.getSelection()?.removeAllRanges()
+      inputRef.current?.focus()
+    }
+    document.addEventListener('mousedown', down, true)
+    document.addEventListener('mouseup', up, true)
+    document.addEventListener('keydown', key, true)
+    return () => {
+      document.removeEventListener('mousedown', down, true)
+      document.removeEventListener('mouseup', up, true)
+      document.removeEventListener('keydown', key, true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Tipp-Tempo-Messung je Eingabe (für Scan-vs-manuell-Erkennung)
+  const timingRef = useRef({ start: 0, last: 0, changes: 0, maxGap: 0, startLen: 0 })
+  function resetTiming() { timingRef.current = { start: 0, last: 0, changes: 0, maxGap: 0, startLen: 0 } }
+  function classifyCapture(finalValue: string): 'scan' | 'manual' {
+    const t = timingRef.current
+    const len = finalValue.length
+    if (len < MIN_SCAN_LEN || t.start === 0) return 'manual'
+    const elapsed = t.last - t.start
+    if (t.changes <= 2 && t.startLen >= MIN_SCAN_LEN) return 'scan'   // in einem Rutsch reingekommen
+    if (elapsed <= len * PER_CHAR_MS) return 'scan'                   // im Schnitt sehr schnell
+    if (t.maxGap <= MAX_GAP_MS && t.changes >= 3) return 'scan'       // durchgehend schnell, keine Denk-Pause
+    return 'manual'
+  }
+
+  async function toggleCapture(serial: string, cur: 'scan' | 'manual') {
+    const next: 'scan' | 'manual' = cur === 'scan' ? 'manual' : 'scan'
+    await setDeviceCapture(runId, serial, next)
+    void reload(true)
   }
 
   async function submit() {
     const raw = value
     if (!raw.trim()) return
+    const capture = classifyCapture(raw)
     setBusy(true)
-    const r = await applyScan(runId, raw, currentUser)
+    const r = await applyScan(runId, raw, currentUser, capture)
     setBusy(false)
     if (!r.ok) { setError(r.error || 'Scan fehlgeschlagen.'); return }
     if (r.run) setRun(r.run)
@@ -149,7 +214,7 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
       return
     }
     setLastResult({ kind: out.kind, serial: out.normalizedSerial, rawValue: raw, ts: Date.now() })
-    setValue('')
+    setValue(''); resetTiming()
 
     // Abgleich: War diese Seriennummer als "verloren" gemeldet? -> gross melden
     // und automatisch zu den wieder aufgefundenen Geraeten verschieben.
@@ -168,6 +233,11 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
   // Eingabe-Wert ändert sich: solange ungültig + abweichend, Flash beibehalten;
   // sobald geleert oder eine Seriennummer extrahierbar ist, Flash entfernen.
   function onChangeValue(v: string) {
+    const now = performance.now()
+    const t = timingRef.current
+    if (v === '') resetTiming()
+    else if (value === '') { t.start = now; t.last = now; t.changes = 1; t.maxGap = 0; t.startLen = v.length }
+    else if (v !== value) { const gap = now - t.last; if (gap > t.maxGap) t.maxGap = gap; t.last = now; t.changes++ }
     setValue(v)
     if (invalid) {
       if (v.trim() === '' || extractSerialFromScan(v)) {
@@ -184,6 +254,7 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
 
   function clearInvalid() {
     setValue('')
+    resetTiming()
     setInvalid(false)
     setErrorFlash(false)
     refocus()
@@ -234,6 +305,11 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
   const devices: InventoryDevice[] = run?.devices || []
   const scannedCount = useMemo(() => devices.filter(d => d.scanned).length, [devices])
   const missingCount = devices.length - scannedCount
+  const captureCounts = useMemo(() => {
+    let scan = 0, manual = 0
+    for (const d of devices) if (d.scanned) { if (d.capture === 'scan') scan++; else if (d.capture === 'manual') manual++ }
+    return { scan, manual }
+  }, [devices])
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -256,6 +332,7 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
           <h1 className="text-base font-semibold text-foreground leading-tight truncate">{run?.title || 'Inventur'}</h1>
           <p className="text-[11px] text-muted-foreground">
             {loading ? 'Lade…' : `${scannedCount}/${devices.length} erfasst · ${missingCount} fehlend`}
+            {(captureCounts.scan + captureCounts.manual) > 0 && <span className="ml-2">· <span className="text-blue-300">{captureCounts.scan} gescannt</span> / <span className="text-amber-300">{captureCounts.manual} manuell</span></span>}
             {run && run.extras.length > 0 && <span className="ml-2 text-amber-300">· {run.extras.length} unerwartete Scans</span>}
             {run && run.scanLog.length > 0 && <span className="ml-2 opacity-70">· {run.scanLog.length} Scan-Aktionen gesamt</span>}
           </p>
@@ -358,6 +435,13 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
                   : <span className="w-3 h-3 rounded-full border border-border shrink-0" />}
                 <span className="font-mono text-foreground truncate">{d.serial}</span>
                 <DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} />
+                {d.scanned && d.capture && (
+                  <button onClick={(e) => { e.stopPropagation(); void toggleCapture(d.serial, d.capture!) }}
+                    title="Erfassungsart umschalten (Scan / Manuell)"
+                    className={`ml-auto shrink-0 px-1.5 py-0.5 rounded text-[9px] font-medium border ${d.capture === 'scan' ? 'bg-blue-500/15 text-blue-300 border-blue-500/30' : 'bg-amber-500/15 text-amber-300 border-amber-500/30'}`}>
+                    {d.capture === 'scan' ? 'Scan' : 'Manuell'}
+                  </button>
+                )}
               </div>
               <div className="text-[10px] text-muted-foreground truncate">{[d.deviceType, d.company].filter(Boolean).join(' · ') || '—'}</div>
             </div>

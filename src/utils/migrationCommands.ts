@@ -191,6 +191,14 @@ try {
 }`.trim()
 }
 
+/**
+ * ACHTUNG — nur für den Screen PCMigration, NICHT für neue Stellen verwenden:
+ * `Win32_MappedLogicalDisk` liefert nur die Laufwerke der AUFRUFENDEN Anmeldesitzung.
+ * Über `Invoke-Command` ist das die WinRM-Sitzung, die keine gemappten Laufwerke hat →
+ * die Liste ist praktisch immer leer. Für echte Ergebnisse
+ * `deviceNetworkDrives.refreshNetworkDrivesLive` nutzen (liest HKU\<SID>\Network).
+ * [[network_drive_migration]]
+ */
 export function psGetNetworkDrives(hostname: string): string {
   const h = esc(hostname)
   return `
@@ -300,7 +308,9 @@ export function psMapDrive(targetPc: string, letter: string, uncPath: string): s
 try {
   Invoke-Command -ComputerName '${h}' -ScriptBlock {
     param($ltr, $path)
-    $r = net use "${ltr}:" "$path" /persistent:yes 2>&1
+    # Bewusst $($ltr): die geschweifte Schreibweise waere von TypeScript interpoliert
+    # worden (leer) — der Befehl haette dann "net use :" ohne Buchstaben abgesetzt.
+    $r = net use "$($ltr):" "$path" /persistent:yes 2>&1
     if ($LASTEXITCODE -ne 0) { throw ($r -join ' ') }
     Write-Output 'OK'
   } -ArgumentList '${l}','${p}' -EA Stop
@@ -359,6 +369,19 @@ if (Test-Path $src) {
 }`.trim()
 }
 
+/**
+ * WLAN-Profile vom Alt- aufs Neugerät übertragen.
+ *
+ * ZWEI Dinge sind hier entscheidend und dürfen nicht "vereinfacht" werden:
+ *  • `user=all` beim Import. Ohne den Parameter gilt laut Windows-Hilfe der Standard
+ *    „nur aktueller Benutzer" — und das ist in einer WinRM-Sitzung das Admin-Konto, nicht
+ *    der Anwender. Das Profil wäre für ihn unsichtbar.
+ *  • Adapter-Prüfung auf BEIDEN Seiten. Ohne WLAN-Adapter liefert netsh nur eine leere
+ *    Ausgabe; dann soll eine verständliche Meldung kommen statt eines stummen Fehlschlags.
+ *
+ * `key=clear` exportiert die WLAN-Schlüssel im Klartext — anders lassen sie sich nicht
+ * mitnehmen. Die XML liegen nur kurz in C:\Temp beider Rechner und werden sofort gelöscht.
+ */
 export function psTransferWlanProfiles(srcPc: string, dstPc: string): string {
   const sh = esc(srcPc)
   const dh = esc(dstPc)
@@ -366,31 +389,41 @@ export function psTransferWlanProfiles(srcPc: string, dstPc: string): string {
 try {
   # Export from source
   $profiles = Invoke-Command -ComputerName '${sh}' -ScriptBlock {
+    if (-not (Get-NetAdapter -Physical -EA SilentlyContinue | Where-Object { $_.InterfaceDescription -match 'Wi-?Fi|Wireless|WLAN|802\\.11' })) { return 'NOADAPTER' }
     $dir = "C:\\Temp\\mig_wlan_$(Get-Random)"
     New-Item -ItemType Directory -Path $dir -Force | Out-Null
     netsh wlan export profile key=clear folder=$dir 2>&1 | Out-Null
-    $r = Get-ChildItem $dir -Filter '*.xml' | ForEach-Object {
+    $r = Get-ChildItem $dir -Filter '*.xml' -EA SilentlyContinue | ForEach-Object {
       @{name=$_.BaseName; content=(Get-Content $_.FullName -Raw)}
     }
     Remove-Item $dir -Recurse -Force -EA SilentlyContinue
     $r
   } -EA Stop
 
-  if (!$profiles) { Write-Output 'SKIPPED:Keine Profile'; return }
+  if ($profiles -eq 'NOADAPTER') { Write-Output 'SKIPPED:Das Altgeraet hat keinen WLAN-Adapter'; return }
+  if (!$profiles) { Write-Output 'SKIPPED:Keine WLAN-Profile auf dem Altgeraet gefunden'; return }
 
   # Import on target
-  Invoke-Command -ComputerName '${dh}' -ScriptBlock {
+  $res = Invoke-Command -ComputerName '${dh}' -ScriptBlock {
     param($profs)
+    if (-not (Get-NetAdapter -Physical -EA SilentlyContinue | Where-Object { $_.InterfaceDescription -match 'Wi-?Fi|Wireless|WLAN|802\\.11' })) { return 'NOADAPTER' }
     $dir = "C:\\Temp\\mig_wlan_$(Get-Random)"
     New-Item -ItemType Directory -Path $dir -Force | Out-Null
+    $ok = 0; $fehler = 0
     foreach ($p in $profs) {
-      $f = "$dir\\$($p.name).xml"
-      Set-Content -Path $f -Value $p.content -Encoding UTF8
-      netsh wlan add profile filename=$f 2>&1 | Out-Null
+      $f = Join-Path $dir ($p.name + '.xml')
+      Set-Content -LiteralPath $f -Value $p.content -Encoding UTF8
+      # user=all: sonst landet das Profil nur beim Konto der Fernsitzung (dem Admin).
+      $out = netsh wlan add profile filename="$f" user=all 2>&1
+      if ($LASTEXITCODE -eq 0) { $ok++ } else { $fehler++ }
     }
     Remove-Item $dir -Recurse -Force -EA SilentlyContinue
-    Write-Output 'OK'
+    if ($fehler -gt 0) { return ('OK:' + $ok + ' Profil(e) fuer alle Benutzer, ' + $fehler + ' fehlgeschlagen') }
+    return ('OK:' + $ok + ' Profil(e) fuer alle Benutzer uebernommen')
   } -ArgumentList (,$profiles) -EA Stop
+
+  if ($res -eq 'NOADAPTER') { Write-Output 'SKIPPED:Der neue PC hat keinen WLAN-Adapter'; return }
+  Write-Output ([string]$res)
 } catch {
   Write-Output "ERR:$($_.Exception.Message)"
 }`.trim()

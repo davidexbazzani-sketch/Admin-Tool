@@ -4,6 +4,7 @@ import { buildKnowledgeSnapshot } from '../services/knowledgeSnapshot'
 import { pickAndReadMaster, analyzeMaster, runImport, type ImportAnalysis, type ImportProgress } from '../services/masterImport'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
+import AppLockCard from '../components/AppLockCard'
 import { SCAN_REGISTRY, type ScanStatus } from '../services/scanRegistry'
 import { useScanStore } from '../store/scanStore'
 import { loadScanSchedules, saveScanSchedules, describeSchedule, WEEKDAY_LABELS, SCAN_SCHEDULE_DEFAULTS, type ScanScheduleConfig } from '../services/scanSchedules'
@@ -1073,6 +1074,7 @@ export default function Settings() {
   const username = session?.user.username ?? ''
   const isMaster = useIsMasterAdmin()
   const isAdmin = useIsAdmin()
+  const isFounder = !!session?.user?.isFounder || ['davidxe', 'bq8069'].includes(username.toLowerCase())
 
   const [local, setLocal] = useState<AppSettings>(settings)
   const [saved, setSaved] = useState(false)
@@ -1573,6 +1575,9 @@ export default function Settings() {
           </div>
         </Card>
       )}
+
+      {/* ── Programm-Sperre (nur davidxe / Founder) ── */}
+      {isFounder && <AppLockCard />}
 
       {/* ── Automatische Scans (Admin) ── */}
       {isAdmin && <AutoScansCard />}

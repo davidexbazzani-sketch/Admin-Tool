@@ -9,8 +9,8 @@ import { api } from '../electronAPI'
 const winrmCache = new Map<string, boolean>()
 
 export function clearWinRMCache(hostname?: string): void {
-  if (hostname) winrmCache.delete(hostname.toLowerCase())
-  else winrmCache.clear()
+  if (hostname) { winrmCache.delete(hostname.toLowerCase()); misserfolgBis.delete(hostname.toLowerCase()) }
+  else { winrmCache.clear(); misserfolgBis.clear() }
 }
 
 export function buildEnsureWinRMScript(hostname: string): string {
@@ -52,10 +52,40 @@ export function buildEnsureWinRMScript(hostname: string): string {
 }
 
 /** Ensures WinRM is running on `hostname`. Result is cached per session. */
+// Laufende Prüfungen je Hostname. Der Cache oben wird erst NACH dem Lauf gefüllt —
+// ohne diese Zwischenstufe starten gleichzeitige Anfragen für denselben PC jeweils ein
+// eigenes powershell.exe mit bis zu 60 s Laufzeit. Das passiert im Alltag ständig
+// (Personen-Dossier fragt Drucker und Postfächer parallel für dasselbe Gerät ab,
+// Sound Fix hat drei Abschnitte auf einem Host, Daylis mehrere Befehle). Jetzt teilen
+// sich alle Wartenden EINE Prüfung.
+const laufendeChecks = new Map<string, Promise<boolean>>()
+
+// Wie lange ein MISSERFOLG gemerkt wird. Erfolge gelten für die Laufzeit des Fensters
+// (WinRM bleibt an), Misserfolge nur kurz: sonst gilt ein PC, der morgens aus war oder
+// bei dem eine einzelne Abfrage in ein Zeitfenster gelaufen ist, bis zum Programm-
+// Neustart als unerreichbar — und das sieht nach „gar nichts geht mehr" aus.
+const MISSERFOLG_GILT_MS = 2 * 60 * 1000
+const misserfolgBis = new Map<string, number>()
+
 export async function ensureWinRM(hostname: string): Promise<boolean> {
   const key = hostname.toLowerCase()
-  if (winrmCache.has(key)) return winrmCache.get(key)!
+  if (winrmCache.get(key) === true) return true
+  if (winrmCache.get(key) === false) {
+    const bis = misserfolgBis.get(key) ?? 0
+    if (Date.now() < bis) return false
+    // Merkzeit abgelaufen → erneut versuchen.
+    winrmCache.delete(key)
+    misserfolgBis.delete(key)
+  }
+  const laufend = laufendeChecks.get(key)
+  if (laufend) return laufend
 
+  const p = ensureWinRMIntern(hostname, key).finally(() => { laufendeChecks.delete(key) })
+  laufendeChecks.set(key, p)
+  return p
+}
+
+async function ensureWinRMIntern(hostname: string, key: string): Promise<boolean> {
   const script = buildEnsureWinRMScript(hostname)
   // 60s wie beim Remote-Doc-Connect: die Kaltaktivierung (WinRM-Dienst per RPC/SMB
   // starten) durchläuft im schlechtesten Fall 3 Methoden mit je bis zu 15s Wartezeit
@@ -68,5 +98,7 @@ export async function ensureWinRM(hostname: string): Promise<boolean> {
   } catch { /* default false */ }
 
   winrmCache.set(key, ok)
+  if (!ok) misserfolgBis.set(key, Date.now() + MISSERFOLG_GILT_MS)
+  else misserfolgBis.delete(key)
   return ok
 }

@@ -7,8 +7,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   ShieldCheck, KeyRound, ChevronLeft, ChevronRight, ChevronDown, RefreshCw, Loader2,
-  FileSpreadsheet, Search, AlertTriangle, Check, X, Monitor, Users, Clock,
+  FileSpreadsheet, Search, AlertTriangle, Check, X, Monitor, Users, Clock, GraduationCap,
 } from 'lucide-react'
+import AwarenessView from '../components/nis2/AwarenessView'
 import { useAuthStore } from '../store/authStore'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
@@ -36,8 +37,9 @@ function groupAccessByPc(u: AdminUser): { pc: string; vias: string[] }[] {
 }
 
 export default function Nis2() {
-  const [view, setView] = useState<'hub' | 'access'>('hub')
+  const [view, setView] = useState<'hub' | 'access' | 'awareness'>('hub')
   if (view === 'access') return <AccessCheckView onBack={() => setView('hub')} />
+  if (view === 'awareness') return <AwarenessView onBack={() => setView('hub')} />
 
   return (
     <div className="flex flex-col h-full bg-background">
@@ -55,6 +57,13 @@ export default function Nis2() {
             <div className="w-10 h-10 rounded-lg bg-blue-500/15 flex items-center justify-center mb-3"><KeyRound size={20} className="text-blue-400" /></div>
             <h3 className="font-semibold text-foreground">Zugänge-Check</h3>
             <p className="text-xs text-muted-foreground mt-1">Alle PCs scannen: wer hat lokale Adminrechte? Abgleich mit der Liste genehmigter Admins.</p>
+            <span className="mt-3 inline-flex items-center gap-1 text-xs text-primary font-medium">Öffnen <ChevronRight size={13} /></span>
+          </button>
+          <button onClick={() => setView('awareness')}
+            className="text-left rounded-xl border border-border bg-card p-5 hover:border-primary/40 hover:bg-accent/20 transition-colors">
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/15 flex items-center justify-center mb-3"><GraduationCap size={20} className="text-emerald-400" /></div>
+            <h3 className="font-semibold text-foreground">Awareness-Schulung</h3>
+            <p className="text-xs text-muted-foreground mt-1">Schulungsübersicht (Excel) hochladen: wer hat bestanden, wer ist offen — mit AD-Status, Abteilung und Mail an die Vorgesetzten.</p>
             <span className="mt-3 inline-flex items-center gap-1 text-xs text-primary font-medium">Öffnen <ChevronRight size={13} /></span>
           </button>
           <div className="rounded-xl border border-dashed border-border/70 bg-card/40 p-5 flex items-center justify-center text-center">
@@ -157,7 +166,7 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
         <div className="min-w-0">
           <h1 className="text-base font-semibold text-foreground leading-tight">Zugänge-Check · Lokale Adminrechte</h1>
           <p className="text-[11px] text-muted-foreground">
-            {result ? <>Letzter Scan: {fmtDateTime(result.scannedAt)} · {result.scannedPCs}/{result.totalPCs} PCs erreicht · {result.users.length} Nutzer mit lokalem Admin · <span className="text-emerald-400">{counts.genehmigt} genehmigt</span>{counts.beantragt ? <> · <span className="text-amber-600">{counts.beantragt} beantragt</span></> : ''}{counts.nicht ? <> · <span className="text-red-400 font-medium">{counts.nicht} ohne Antrag</span></> : ''}</> : 'Noch kein Scan durchgeführt.'}
+            {result ? <>Letzter Scan: {fmtDateTime(result.scannedAt)} · <span title="Für so viele PCs liegt ein Ergebnis vor — auch aus früheren Läufen. Ergebnisse bleiben erhalten und werden nur überschrieben, wenn es für den PC ein neues gibt.">{result.knownPCs ?? result.scannedPCs}/{result.totalPCs} PCs bekannt</span> ({result.scannedPCs} in diesem Lauf aktualisiert) · {result.users.length} Nutzer mit lokalem Admin · <span className="text-emerald-400">{counts.genehmigt} genehmigt</span>{counts.beantragt ? <> · <span className="text-amber-600">{counts.beantragt} beantragt</span></> : ''}{counts.nicht ? <> · <span className="text-red-400 font-medium">{counts.nicht} ohne Antrag</span></> : ''}</> : 'Noch kein Scan durchgeführt.'}
           </p>
         </div>
         <div className="ml-auto flex items-center gap-2">

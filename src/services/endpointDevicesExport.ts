@@ -15,6 +15,7 @@ export type EndpointExportFormat = 'excel' | 'word' | 'pdf'
 export interface EndpointExportOptions {
   title?: string                                   // Titel ueberschreiben (z. B. Berichtsname)
   lastOnline?: Record<string, LastOnlineRow>       // keyed hostname (lowercase) -> Spalten "Zuletzt online"/"Offline seit"
+  locText?: (d: EndpointDevice) => string          // Standort-Text (aus den Karten); wenn gesetzt → Spalte "Standort"
 }
 
 function fmtDateDE(iso?: string): string {
@@ -52,17 +53,18 @@ const TITLE = 'Endgeräte-Übersicht'
 const BASE_COLS = ['Seriennummer', 'PC-Name', 'Zugewiesen an', 'Model', 'Model-Typ', 'Kosten/Monat', 'Status', 'Verwendung', 'Kommentar', 'Leasingende', 'Unternehmen', 'Wer bezahlt?']
 const LO_COLS = ['Zuletzt online', 'Offline seit']
 
-function colsFor(lo?: Record<string, LastOnlineRow>): string[] {
-  return lo ? [...BASE_COLS, ...LO_COLS] : BASE_COLS
+function colsFor(lo?: Record<string, LastOnlineRow>, hasLoc?: boolean): string[] {
+  return [...BASE_COLS, ...(hasLoc ? ['Standort'] : []), ...(lo ? LO_COLS : [])]
 }
 
-function deviceRow(d: EndpointDevice, lo?: Record<string, LastOnlineRow>): string[] {
+function deviceRow(d: EndpointDevice, lo?: Record<string, LastOnlineRow>, locText?: (d: EndpointDevice) => string): string[] {
   const cost = modelCost(d.model)
   const row = [
     d.serial, d.hostname, d.assignedTo, d.model, classifyModel(d.model) || '—',
     cost === null ? '' : formatEuro(cost),
     d.state, d.substate, d.comments, d.retiredDate, d.company, d.assetOwnership,
   ]
+  if (locText) row.push(locText(d))
   if (lo) {
     const r = lo[d.hostname.trim().toLowerCase()]
     row.push(loText(r), loMonths(r))
@@ -92,7 +94,7 @@ async function buildExcel(devices: EndpointDevice[], opts: EndpointExportOptions
   wb.creator = 'IT Admin Tool'; wb.created = new Date()
   const head: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E40AF' } }
   const lo = opts.lastOnline
-  const cols = colsFor(lo)
+  const cols = colsFor(lo, !!opts.locText)
 
   const ws = wb.addWorksheet('Endgeräte')
   ws.addRow([opts.title || TITLE]).getCell(1).font = { bold: true, size: 14 }
@@ -100,8 +102,8 @@ async function buildExcel(devices: EndpointDevice[], opts: EndpointExportOptions
   ws.addRow([])
   const hr = ws.addRow(cols)
   hr.eachCell(c => { c.font = { bold: true, color: { argb: 'FFFFFFFF' } }; c.fill = head })
-  for (const d of devices) ws.addRow(deviceRow(d, lo))
-  ws.columns = [18, 16, 22, 30, 20, 14, 14, 16, 34, 14, 16, 16, ...(lo ? [16, 12] : [])].map(w => ({ width: w }))
+  for (const d of devices) ws.addRow(deviceRow(d, lo, opts.locText))
+  ws.columns = [18, 16, 22, 30, 20, 14, 14, 16, 34, 14, 16, 16, ...(opts.locText ? [26] : []), ...(lo ? [16, 12] : [])].map(w => ({ width: w }))
 
   // Kostenzusammenfassung
   const sum = costSummary(devices)
@@ -125,7 +127,7 @@ async function buildWord(devices: EndpointDevice[], opts: EndpointExportOptions)
   const hcell = (t: string) => new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: t, bold: true, size: 14 })] })] })
   const cell = (t: string) => new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: t, size: 14 })] })] })
   const lo = opts.lastOnline
-  const cols = colsFor(lo)
+  const cols = colsFor(lo, !!opts.locText)
 
   const sum = costSummary(devices)
   const children: (Paragraph | Table)[] = [
@@ -147,7 +149,7 @@ async function buildWord(devices: EndpointDevice[], opts: EndpointExportOptions)
       width: { size: 100, type: WidthType.PERCENTAGE }, borders: ALL,
       rows: [
         new TableRow({ tableHeader: true, children: cols.map(hcell) }),
-        ...devices.map(d => new TableRow({ children: deviceRow(d, lo).map(cell) })),
+        ...devices.map(d => new TableRow({ children: deviceRow(d, lo, opts.locText).map(cell) })),
       ],
     }),
   ]
@@ -158,7 +160,7 @@ async function buildWord(devices: EndpointDevice[], opts: EndpointExportOptions)
 // ── PDF ─────────────────────────────────────────────────────────────────────
 async function buildPdf(devices: EndpointDevice[], opts: EndpointExportOptions): Promise<string> {
   const lo = opts.lastOnline
-  const cols = colsFor(lo)
+  const cols = colsFor(lo, !!opts.locText)
   const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
   doc.setFontSize(15); doc.setTextColor(30, 64, 175); doc.text(opts.title || TITLE, 14, 15)
   doc.setFontSize(9); doc.setTextColor(90); doc.text(`Erstellt: ${fmtNow()} · ${devices.length} Geräte`, 14, 21)
@@ -178,7 +180,7 @@ async function buildPdf(devices: EndpointDevice[], opts: EndpointExportOptions):
   autoTable(doc, {
     startY: y,
     head: [cols],
-    body: devices.map(d => deviceRow(d, lo)),
+    body: devices.map(d => deviceRow(d, lo, opts.locText)),
     styles: { fontSize: 6, cellPadding: 1, overflow: 'linebreak' },
     headStyles: { fillColor: [30, 64, 175], textColor: 255 },
     alternateRowStyles: { fillColor: [240, 244, 255] },

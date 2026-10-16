@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { PackagePlus, Wrench, Phone } from 'lucide-react'
+import { PackagePlus, Wrench, Phone, Headphones } from 'lucide-react'
 import SolidWorksInstallation from '../components/softwareInstallations/SolidWorksInstallation'
 import SolidWorksHelp from '../components/solidworks/SolidWorksHelp'
 import XelionInstallation from '../components/softwareInstallations/XelionInstallation'
+import JabraInstallation from '../components/softwareInstallations/JabraInstallation'
 
-type Section = 'overview' | 'solidworks' | 'xelion'
+type Section = 'overview' | 'solidworks' | 'xelion' | 'jabra'
 
 export default function SoftwareInstallations() {
   const [section, setSection] = useState<Section>('overview')
@@ -44,6 +45,18 @@ export default function SoftwareInstallations() {
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
           </button>
+
+          <button onClick={() => setSection('jabra')}
+            className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+              <Headphones size={20} className="text-emerald-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">Jabra Software</h3>
+              <p className="text-xs text-muted-foreground mt-1">Jabra Direct still im Hintergrund installieren. Prüft vorher, ob ein Jabra-Gerät angeschlossen ist.</p>
+            </div>
+            <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
+          </button>
         </div>
       )}
 
@@ -58,6 +71,13 @@ export default function SoftwareInstallations() {
         <>
           <button onClick={() => setSection('overview')} className="text-xs text-muted-foreground hover:text-foreground mb-3 self-start">&larr; Zurueck zur Uebersicht</button>
           <XelionInstallation />
+        </>
+      )}
+
+      {section === 'jabra' && (
+        <>
+          <button onClick={() => setSection('overview')} className="text-xs text-muted-foreground hover:text-foreground mb-3 self-start">&larr; Zurueck zur Uebersicht</button>
+          <JabraInstallation />
         </>
       )}
     </div>
