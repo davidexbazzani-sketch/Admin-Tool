@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, unlinkSync } from 'fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, unlinkSync, promises as fsp } from 'fs'
 import { join, resolve } from 'path'
 import Store from 'electron-store'
 
@@ -104,6 +104,42 @@ export function deleteFile(relativePath: string): void {
     const full = safeJoin(getBasePath(), relativePath)
     if (existsSync(full)) unlinkSync(full)
   } catch { /* ignore */ }
+}
+
+// ── Asynchrone Varianten (Chat u. a. häufige Abfragen) ────────────────────────
+// Die obigen Funktionen arbeiten synchron und halten den Hauptprozess an, solange das
+// Netzlaufwerk antwortet. Für alles, was regelmäßig im Hintergrund läuft, diese nehmen.
+// Ohne Log je Aufruf (safeJoin protokolliert sonst jeden Takt).
+function joinQuiet(relative: string): string {
+  return getBasePath().replace(/\//g, '\\').replace(/\\+$/, '') + '\\' + relative.replace(/\//g, '\\').replace(/^\\+/, '')
+}
+
+export async function listDirAsync(relativePath: string): Promise<string[]> {
+  try { return await fsp.readdir(joinQuiet(relativePath)) } catch { return [] }
+}
+
+export async function readJsonAsync<T>(relativePath: string): Promise<T | null> {
+  try { return JSON.parse(await fsp.readFile(joinQuiet(relativePath), 'utf8')) as T } catch { return null }
+}
+
+/** Schreibt erst in eine Hilfsdatei und benennt dann um — Leser sehen nie eine halbe Datei. */
+export async function writeJsonAsync(relativePath: string, data: unknown): Promise<boolean> {
+  const full = joinQuiet(relativePath)
+  const tmp = `${full}.${process.pid}.${Date.now()}.tmp`
+  try {
+    await fsp.mkdir(full.substring(0, full.lastIndexOf('\\')), { recursive: true })
+    await fsp.writeFile(tmp, JSON.stringify(data), 'utf8')
+    await fsp.rename(tmp, full)
+    return true
+  } catch (err) {
+    try { await fsp.unlink(tmp) } catch { /* schon weg */ }
+    console.error(`[networkStorage] writeJsonAsync ERROR for "${relativePath}":`, err)
+    return false
+  }
+}
+
+export async function deleteFileAsync(relativePath: string): Promise<boolean> {
+  try { await fsp.unlink(joinQuiet(relativePath)); return true } catch { return false }
 }
 
 export function fileExists(relativePath: string): boolean {

@@ -12,7 +12,7 @@ import {
 import { PersonInfoButton } from '../person/PersonDossier'
 import {
   ladeTermine, aendereTermin, neuerTermin, notizHinzufuegen, loescheTermin, postfachScan, vorschlagEntscheiden,
-  aktualisiereEinladung, sageEinladungAb, speichereEinstellungen, zeitraumText, ausLokal, RAEUME,
+  aktualisiereEinladung, sageEinladungAb, baueAbsage, speichereEinstellungen, zeitraumText, ausLokal, RAEUME,
   type TerminStore, type UebergabeTermin, type TerminStatus,
 } from '../../services/uebergabeTermine'
 
@@ -49,7 +49,9 @@ export default function UebergabeKalender({ kennung, bearbeiterName, onClose }: 
       if (r.store) setStore(r.store)
       if (!r.ok) { setMeldung({ ok: false, text: 'Postfach-Prüfung fehlgeschlagen: ' + r.error }); return }
       const teile = [`${r.neu} neue Antwort(en)`, `${r.umgetragen} automatisch umgetragen`]
-      setMeldung({ ok: !(r.hinweise?.length), text: teile.join(' · ') + (r.hinweise?.length ? ' — ' + r.hinweise.join('; ') : '') })
+      // Gelb nur bei echten Problemen; die Zeilen „… geprüft, … relevant" sind reine Diagnose
+      const problem = (r.hinweise ?? []).some(h => /nicht erreichbar|nicht gelesen|nicht mehr|fehl/i.test(h))
+      setMeldung({ ok: !problem, text: teile.join(' · ') + (r.hinweise?.length ? ' — ' + r.hinweise.join(' · ') : '') })
     } finally { setScan(false) }
   }
 
@@ -64,7 +66,9 @@ export default function UebergabeKalender({ kennung, bearbeiterName, onClose }: 
   const liste = useMemo(() => {
     let l = termine.filter(t => (alle ? true : t.status !== 'storniert' && t.status !== 'erledigt' && t.ende.slice(0, 10) >= heute))
     if (tag) l = l.filter(t => t.start.slice(0, 10) === tag)
-    return l.sort((a, b) => a.start.localeCompare(b.start))
+    // Innerhalb eines Tages nach tatsächlicher Ankunft (falls bekannt), sonst Fensterbeginn
+    const zeitpunkt = (t: UebergabeTermin) => t.ankunft ? `${t.start.slice(0, 10)}T${t.ankunft}` : t.start
+    return l.sort((a, b) => zeitpunkt(a).localeCompare(zeitpunkt(b)))
   }, [termine, alle, tag, heute])
 
   const gruppen = useMemo(() => {
@@ -147,7 +151,12 @@ export default function UebergabeKalender({ kennung, bearbeiterName, onClose }: 
                       const vs = t.vorschlaege.filter(v => !v.erledigt && v.art === 'vorschlag').length
                       return (
                         <button key={t.id} onClick={() => setOffen(t)} className="w-full text-left rounded-lg border border-border bg-background/60 hover:bg-accent/30 px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1">
-                          <span className="text-sm font-mono text-foreground w-28">{t.start.slice(11, 16)}–{t.ende.slice(11, 16)}</span>
+                          {t.ankunft
+                            ? <span className="w-28 leading-tight" title={`Kommt um ${t.ankunft} Uhr · Zeitfenster ${t.start.slice(11, 16)}–${t.ende.slice(11, 16)}`}>
+                                <span className="block text-sm font-mono font-semibold text-emerald-300">{t.ankunft} Uhr</span>
+                                <span className="block text-[10px] font-mono text-muted-foreground">Fenster {t.start.slice(11, 16)}–{t.ende.slice(11, 16)}</span>
+                              </span>
+                            : <span className="text-sm font-mono text-foreground w-28">{t.start.slice(11, 16)}–{t.ende.slice(11, 16)}</span>}
                           <span className="text-sm font-semibold text-foreground">{t.name || t.titel}</span>
                           {t.art !== 'eigener' && <span className={`px-1.5 py-0.5 rounded-full text-[10px] border ${t.art === 'refresh' ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'}`}>{t.art === 'refresh' ? 'Refresh' : 'Neu'}</span>}
                           <span className="text-xs text-muted-foreground">Raum {t.raum}</span>
@@ -190,10 +199,13 @@ function TerminEditor({ termin, kennung, bearbeiterName, onClose, onGespeichert,
   const [bis, setBis] = useState(termin ? termin.ende.slice(11, 16) : '09:00')
   const [raum, setRaum] = useState(termin?.raum ?? RAEUME[0])
   const [status, setStatus] = useState<TerminStatus>(termin?.status ?? 'geplant')
+  const [ankunft, setAnkunft] = useState(termin?.ankunft ?? '')
   const [notiz, setNotiz] = useState('')
   const [outlookMit, setOutlookMit] = useState(true)
   const [busy, setBusy] = useState(false)
   const [fehler, setFehler] = useState('')
+  // Absage: Text wird beim Klick auf „Absagen" vorbereitet und kann angepasst werden
+  const [absageText, setAbsageText] = useState<{ subject: string; body: string } | null>(null)
 
   const start = `${datum}T${von}`, ende = `${datum}T${bis}`
   const zeitOk = !!datum && bis > von
@@ -202,6 +214,7 @@ function TerminEditor({ termin, kennung, bearbeiterName, onClose, onGespeichert,
 
   async function speichern() {
     if (!zeitOk) { setFehler('„bis" muss nach „von" liegen.'); return }
+    if (ankunft && !/^\d{2}:\d{2}(–\d{2}:\d{2})?$/.test(ankunft)) { setFehler('„Kommt um" bitte als 08:30 oder 09:00–10:00 eintragen.'); return }
     setBusy(true); setFehler('')
     try {
       if (!termin) {
@@ -222,7 +235,8 @@ function TerminEditor({ termin, kennung, bearbeiterName, onClose, onGespeichert,
           outlook = { ...termin.outlook, veraltet: false }; outlookHinweis = ' · Outlook-Update gesendet'
         } else { outlook = { ...termin.outlook, veraltet: true }; outlookHinweis = ' · Outlook-Termin NICHT aktualisiert' }
       }
-      let s = await aendereTermin(termin.id, kennung, { titel, name, start, ende, raum, status: zeitGeaendert && status === termin.status ? 'verschoben' : status, outlook },
+      if ((ankunft || '') !== (termin.ankunft || '')) teile.push(ankunft ? `kommt um ${ankunft} Uhr` : 'Ankunftszeit entfernt')
+      let s = await aendereTermin(termin.id, kennung, { titel, name, start, ende, raum, ankunft: ankunft || undefined, status: zeitGeaendert && status === termin.status ? 'verschoben' : status, outlook },
         teile.length ? teile.join(' · ') + outlookHinweis : undefined)
       if (s && notiz.trim()) s = await notizHinzufuegen(termin.id, notiz, kennung)
       if (s) { setNotiz(''); onGespeichert(s) } else setFehler('Speichern fehlgeschlagen (Netzlaufwerk?)')
@@ -240,13 +254,16 @@ function TerminEditor({ termin, kennung, bearbeiterName, onClose, onGespeichert,
     } finally { setBusy(false) }
   }
 
-  async function absagen() {
-    if (!termin || !window.confirm(`Termin ${zeitraumText(termin.start, termin.ende, true)} wirklich absagen?${termin.outlook ? ' Der Mitarbeiter bekommt eine Outlook-Absage.' : ''}`)) return
+  /** mitNachricht = Absagetext an den Mitarbeiter (Outlook-Absage bzw. Absage-Mail); false = still absagen. */
+  async function absagen(mitNachricht: boolean) {
+    if (!termin) return
     setBusy(true); setFehler('')
     try {
-      const r = await sageEinladungAb(termin)
-      if (!r.ok) { setFehler('Outlook-Absage fehlgeschlagen: ' + r.error); return }
-      const s = await aendereTermin(termin.id, kennung, { status: 'storniert' }, termin.outlook ? 'Termin abgesagt (Outlook-Absage gesendet)' : 'Termin abgesagt')
+      const r = await sageEinladungAb(termin, mitNachricht && absageText ? absageText : null)
+      if (!r.ok) { setFehler('Absage fehlgeschlagen: ' + r.error); return }
+      const wie = r.weg === 'outlook' ? (mitNachricht ? 'Outlook-Absage mit Text gesendet' : 'Outlook-Termin zurückgezogen')
+        : r.weg === 'mail' ? `Absage-Mail an ${termin.email} gesendet` : 'keine Nachricht an den Mitarbeiter'
+      const s = await aendereTermin(termin.id, kennung, { status: 'storniert' }, `Termin abgesagt (${wie})`)
       if (s) onFertig(s)
     } finally { setBusy(false) }
   }
@@ -276,7 +293,7 @@ function TerminEditor({ termin, kennung, bearbeiterName, onClose, onGespeichert,
           {termin?.vorschlaege.filter(v => !v.erledigt).map(v => (
             <div key={v.mailId} className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 space-y-1.5">
               <p className="text-xs text-amber-200 font-semibold flex items-center gap-1.5"><MessageSquareReply size={13} />
-                {v.art === 'vorschlag' ? `Neuer Terminvorschlag: ${zeitraumText(v.start!, v.ende!, true)} Uhr` : v.art === 'absage' ? 'Absage ohne konkreten Gegenvorschlag' : 'Antwort ohne erkennbaren Termin'}
+                {v.art === 'vorschlag' ? `Neuer Terminvorschlag: ${zeitraumText(v.start!, v.ende!, true)} Uhr${v.ankunft ? ` · kommt um ${v.ankunft}` : ''}` : v.art === 'absage' ? 'Absage ohne konkreten Gegenvorschlag' : 'Antwort ohne erkennbaren Termin'}
               </p>
               <p className="text-[11px] text-muted-foreground">Mail von {v.von} · {v.empfangen}{v.fundstelle ? ` · erkannt: „${v.fundstelle}"` : ''}</p>
               <p className="text-[11px] text-foreground/80 italic line-clamp-3">„{v.auszug}"</p>
@@ -306,6 +323,12 @@ function TerminEditor({ termin, kennung, bearbeiterName, onClose, onGespeichert,
                 <button key={r} onClick={() => setRaum(r)} className={`flex-1 px-2 py-1.5 text-sm rounded-md border ${raum === r ? 'border-primary bg-primary/15 text-foreground font-semibold' : 'border-border text-muted-foreground hover:bg-accent'}`}>{r}</button>
               ))}</div>
             </div>
+            <label className="text-[11px] text-muted-foreground">Kommt um / zwischen (optional)
+              <div className="flex gap-1 mt-0.5">
+                <input value={ankunft} onChange={e => setAnkunft(e.target.value.replace(/\s*-\s*/, '–'))} placeholder="08:30 oder 09:00–10:00"
+                  className={`flex-1 font-mono ${feld} ${ankunft && !/^\d{2}:\d{2}(–\d{2}:\d{2})?$/.test(ankunft) ? 'border-red-500/60' : ''}`} />
+                {ankunft && <button onClick={() => setAnkunft('')} title="Ankunftszeit entfernen" className="px-2 rounded-md border border-border text-muted-foreground hover:text-foreground"><X size={13} /></button>}
+              </div></label>
             <label className="text-[11px] text-muted-foreground">Status
               <select value={status} onChange={e => setStatus(e.target.value as TerminStatus)} className={`w-full mt-0.5 ${feld}`}>
                 {(['geplant', 'zugesagt', 'verschoben', 'abgesagt', 'erledigt', 'storniert'] as TerminStatus[]).map(s => <option key={s} value={s}>{s}</option>)}
@@ -334,10 +357,34 @@ function TerminEditor({ termin, kennung, bearbeiterName, onClose, onGespeichert,
               <div className="mt-1 space-y-0.5">{[...termin.verlauf].reverse().map((v, i) => <p key={i} className="text-[11px] text-muted-foreground"><span className="text-foreground/80">{fmt(v.at)}</span> · {v.by} — {v.text}</p>)}</div>
             </details>
           )}
+          {absageText && termin && (
+            <div className="rounded-lg border border-red-500/40 bg-red-500/5 p-3 space-y-2">
+              <p className="text-xs font-semibold text-red-200 flex items-center gap-1.5"><Ban size={13} />Termin absagen — Nachricht an {termin.name || 'den Mitarbeiter'}</p>
+              <p className="text-[11px] text-muted-foreground">
+                {termin.outlook ? 'Geht als Outlook-Absage raus (der Termin verschwindet aus seinem Kalender).' : termin.email ? `Geht als Mail an ${termin.email} (CC IT-Support).` : 'Keine Mailadresse hinterlegt — es wird nur im Kalender abgesagt.'}
+              </p>
+              {(termin.outlook || termin.email) && (
+                <textarea value={absageText.body} onChange={e => setAbsageText({ ...absageText, body: e.target.value })} rows={10}
+                  className={`w-full ${feld} text-xs font-mono leading-relaxed`} />
+              )}
+              <div className="flex flex-wrap gap-2">
+                <button onClick={() => setAbsageText(null)} disabled={busy} className="px-3 py-1 text-xs rounded-md border border-border text-muted-foreground hover:bg-accent">Abbrechen</button>
+                <span className="flex-1" />
+                <button onClick={() => void absagen(false)} disabled={busy} title="Nur im Kalender absagen bzw. Outlook-Termin ohne eigenen Text zurückziehen"
+                  className="px-3 py-1 text-xs rounded-md border border-border text-muted-foreground hover:bg-accent">Ohne Nachricht absagen</button>
+                {(termin.outlook || termin.email) && (
+                  <button onClick={() => void absagen(true)} disabled={busy}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 text-xs rounded-md font-semibold bg-red-600 text-white hover:bg-red-500">
+                    {busy ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}Absage senden
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
           {fehler && <p className="text-xs text-red-300 flex items-center gap-1"><AlertTriangle size={13} />{fehler}</p>}
         </div>
         <div className="px-5 py-3 border-t border-border flex items-center gap-2">
-          {termin && termin.status !== 'storniert' && <button onClick={() => void absagen()} disabled={busy} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-red-300 hover:border-red-500/40"><Ban size={13} />Absagen</button>}
+          {termin && termin.status !== 'storniert' && <button onClick={() => setAbsageText(baueAbsage({ name: termin.name, art: termin.art, start: termin.start, ende: termin.ende, bearbeiter: bearbeiterName }))} disabled={busy || !!absageText} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-red-300 hover:border-red-500/40"><Ban size={13} />Absagen</button>}
           {termin && <button onClick={() => void loeschen()} disabled={busy} title="Eintrag aus dem Kalender löschen (keine Outlook-Absage)" className="p-1.5 rounded-md border border-border text-muted-foreground hover:text-red-300"><Trash2 size={13} /></button>}
           <span className="flex-1" />
           <button onClick={onClose} disabled={busy} className="px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:bg-accent">Schließen</button>

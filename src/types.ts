@@ -24,6 +24,7 @@ export type Screen =
   | 'servicenow'
   | 'ticket-assignment'
   | 'support-tools'
+  | 'drucker'
   | 'backups'
   | 'usv'
   | 'vlan-overview'

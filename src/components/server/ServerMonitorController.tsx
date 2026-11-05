@@ -1,8 +1,12 @@
 // ── Server-Monitor: Hintergrund-Controller (global in App.tsx) ────────────────
 // Läuft in jeder offenen Instanz. Zeigt ein menü-unabhängiges Popup + Sidebar-
 // Blink für offline gemeldete Server (aus dem geteilten status.json). Der Ping
-// (alle 10 min, 3-fach-Retry) und die Reboot-Abfrage (2×/Tag) werden nur von der
-// claimenden Instanz ausgeführt (Single-Runner).
+// (alle 5 min, 3-fach-Retry) und die Reboot-Abfrage (alle 15 min + sofort für Server,
+// die wieder erreichbar sind) werden nur von der claimenden Instanz ausgeführt.
+// Dienst-/Einstellungs-Prüfung (inkl. SEAL-sysstatus): bei jedem 5-min-Ping für alle Server,
+// netzschonend gestaffelt (siehe runZustandsPruefung).
+// Neustarts erscheinen bei jedem Admin als Popup oben rechts (bis „Gelesen"), neue
+// Ausfälle/Neustarts zusätzlich als Windows-Benachrichtigung, wenn das Tool im Hintergrund ist.
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AlertTriangle, ServerOff, X, ExternalLink } from 'lucide-react'
@@ -10,13 +14,25 @@ import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { useAppStore } from '../../store/appStore'
 import {
   loadServerStatus, saveServerStatus, isStatusClaimed, offlineHostsForTiles,
-  loadServerConfig, runPingCycle, runRebootCheck, runServerMetricsIfDue,
+  loadServerConfig, runPingCycle, runRebootCheck, runServerMetricsIfDue, runZustandsPruefung,
 } from '../../services/serverMonitor'
+import { ladeEreignisse, ladeGelesen, markiereGelesen, offeneNeustarts, neustartUeberschrift, artText, titelVon } from '../../services/serverEreignisse'
+import { runZertifikatsScanIfDue } from '../../services/serverZertifikate'
+import { useServerEreignisStore } from '../../store/serverEreignisStore'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { ipcRenderer } from '../../utils/ipc'
 
-const POLL_MS = 2 * 60 * 1000            // Status alle 2 min lesen (Popup/Blink)
-const PING_INTERVAL_MS = 10 * 60 * 1000  // Ping alle 10 min
-const REBOOT_INTERVAL_MS = 12 * 60 * 60 * 1000  // Reboot-Check 2×/Tag
+function windowsHinweis(titel: string, text: string, tag: string) {
+  if (document.hasFocus()) return
+  try {
+    const n = new Notification(titel, { body: text, tag })
+    n.onclick = () => ipcRenderer('window:focus')
+  } catch { /* Benachrichtigungen nicht verfügbar */ }
+}
+
+const POLL_MS = 60 * 1000                // Status jede Minute lesen (Popup/Blink) — sonst wird aus „alle 5 min" ein 6-min-Takt
+const PING_INTERVAL_MS = 5 * 60 * 1000   // Ping alle 5 min
+const PING_TOLERANZ_MS = 20 * 1000       // Takt-Spiel: bei 4:40 schon fällig, damit es nicht auf 6 min rutscht
 
 export default function ServerMonitorController() {
   const user = useAuthStore(s => s.session?.user)
@@ -29,6 +45,10 @@ export default function ServerMonitorController() {
   const [popupOpen, setPopupOpen] = useState(false)
   const lastSignature = useRef<string>('')
   const busy = useRef(false)
+  const bekannteNeustarts = useRef<Set<string> | null>(null)
+  const bekannteOffline = useRef<Set<string> | null>(null)
+  const setOffeneNeustarts = useServerEreignisStore(s => s.setOffen)
+  const setGelesenFn = useServerEreignisStore(s => s.setGelesen)
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
@@ -38,18 +58,19 @@ export default function ServerMonitorController() {
       const now = Date.now()
 
       // 1) Ping fällig + nicht fremd-geclaimt → claimen und ausführen.
-      const pingDue = !status.pingRunAt || (now - new Date(status.pingRunAt).getTime()) >= PING_INTERVAL_MS
+      const pingDue = !status.pingRunAt || (now - new Date(status.pingRunAt).getTime()) >= PING_INTERVAL_MS - PING_TOLERANZ_MS
       if (pingDue && !isStatusClaimed(status, now)) {
         const claimToken = `${username}#${Math.random().toString(36).slice(2, 10)}`
         await saveServerStatus({ ...status, running: { by: claimToken, at: new Date().toISOString() } })
         const check = await loadServerStatus()
         if (check.running?.by === claimToken) {
-          await runPingCycle(user?.displayName || username)
-          // 2) Reboot-Check (2×/Tag) im selben Claim-Fenster.
-          const s2 = await loadServerStatus()
-          if (!s2.rebootRunAt || (Date.now() - new Date(s2.rebootRunAt).getTime()) >= REBOOT_INTERVAL_MS) {
-            await runRebootCheck(user?.displayName || username)
-          }
+          const ping = await runPingCycle(user?.displayName || username)
+          // 2) Dienste/Einstellungen ALLER Server bei jedem 5-min-Ping — gestaffelt (max. 2 gleichzeitig,
+          //    Pausen), wieder erreichbare zuerst; überlappende Läufe verhindert die Sperre im Status.
+          const zp = await runZustandsPruefung(user?.displayName || username, undefined, { auto: true, zuerst: ping.wiederDa })
+          // 3) Neustart/Herunterfahren erkennen — ebenfalls alle 5 min für ALLE Server: die Startzeit
+          //    der eben geprüften Server ist schon bekannt, nur die übrigen werden leicht abgefragt (max. 3 gleichzeitig).
+          await runRebootCheck(user?.displayName || username, undefined, { bekannt: zp.boots, throttle: 3 })
         }
         status = await loadServerStatus()
       }
@@ -64,13 +85,46 @@ export default function ServerMonitorController() {
       if (sig && sig !== lastSignature.current) setPopupOpen(true)
       if (off.length === 0) setPopupOpen(false)
       lastSignature.current = sig
+      // neue Ausfälle → Windows-Hinweis (wenn das Tool im Hintergrund ist)
+      const neuOff = bekannteOffline.current ? off.filter(h => !bekannteOffline.current!.has(h)) : []
+      bekannteOffline.current = new Set(off)
+      if (neuOff.length) windowsHinweis(neuOff.length === 1 ? `Server offline: ${neuOff[0]}` : `${neuOff.length} Server offline`, neuOff.join(', '), 'server-offline')
+
+      // 3b) Neustart-Meldungen, die ICH noch nicht gelesen habe → Popup oben rechts
+      const [ereignisse, gelesen] = await Promise.all([ladeEreignisse(), ladeGelesen(username)])
+      if (ereignisse) {
+        const offen = offeneNeustarts(ereignisse, gelesen)
+        const neu = bekannteNeustarts.current ? offen.filter(e => !bekannteNeustarts.current!.has(e.id)) : []
+        bekannteNeustarts.current = new Set(offen.map(e => e.id))
+        setOffeneNeustarts(offen)
+        if (neu.length) windowsHinweis(
+          neu.length === 1
+            ? (neu[0].typ === 'zertifikat' ? titelVon(neu[0]) : neu[0].typ === 'pruefung' ? `Server-Prüfung: Probleme auf ${neu[0].host}` : `${neustartUeberschrift(neu[0])}: ${neu[0].host}`)
+            : `${neu.length} Server-Meldungen`,
+          neu.map(e => e.typ === 'zertifikat' ? `${e.host}: ${e.zert?.cn || ''} · ${e.zert?.verwendung || ''}`
+            : e.typ === 'pruefung' ? `${e.host}: ${(e.probleme || []).slice(0, 3).join(', ')}`
+            : `${e.host}: ${artText(e).split(' — ')[0]}, gestartet ${e.boot || ''}${e.grund ? ` · ${e.grund}` : ''}`).join('\n'), 'server-meldung')
+      }
 
       // 4) Auslastungs-Scan (RAM/Festplatte) – 1×/Tag laut Zeitplan (11:00), self-gated + eigener Claim.
       await runServerMetricsIfDue(user?.displayName || username)
+      // 5) Zertifikate – 1×/Tag laut Zeitplan (07:00), self-gated + eigener Claim
+      await runZertifikatsScanIfDue(user?.displayName || username)
     } catch { /* still */ } finally {
       busy.current = false
     }
-  }, [isAdmin, username, user?.displayName, setServerAlarmCount])
+  }, [isAdmin, username, user?.displayName, setServerAlarmCount, setOffeneNeustarts])
+
+  // „Gelesen" → sofort aus dem Popup, Speichern im Hintergrund
+  useEffect(() => {
+    if (!username) return
+    setGelesenFn((ids: string[]) => {
+      const st = useServerEreignisStore.getState()
+      st.setOffen(st.offen.filter(e => !ids.includes(e.id)))
+      void markiereGelesen(username, ids)
+    })
+    return () => setGelesenFn(null)
+  }, [username, setGelesenFn])
 
   useEffect(() => {
     if (!username) return

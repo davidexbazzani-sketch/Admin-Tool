@@ -13,6 +13,7 @@ import { runPrinterIpScan, loadIpScanSchedule, saveIpScanSchedule } from './prin
 import { runDeviceScan, loadDeviceScanSchedule, saveDeviceScanSchedule, isDeviceScanClaimed } from './deviceScan'
 import { runRadarScanOnce, runVlanScanOnce, RADAR_SCAN_SCHEDULE, VLAN_SCAN_SCHEDULE } from './extraScans'
 import { runServerMetricsScan, SERVER_METRICS_STATUS } from './serverMonitor'
+import { runZertifikatsScan, SERVER_CERTS_SCAN_ID, SERVER_CERTS_STATUS } from './serverZertifikate'
 import { runLostDevicesScanOnce, LOST_SCAN_SCHEDULE } from './lostDevices'
 import { runAccessCheckScanOnce, NIS2_ACCESS_STATUS } from './nis2Access'
 import { runNetworkDrivesScanOnce, NETWORK_DRIVES_STATUS } from './deviceNetworkDrives'
@@ -264,4 +265,17 @@ const weekendCheckScan: ScanDef = {
   },
 }
 
-export const SCAN_REGISTRY: ScanDef[] = [softwareScan, printerConnScan, printerIpScan, deviceScan, radarScan, vlanScan, serverMetricsScan, lostDevicesScan, nis2AccessScan, networkDrivesScan, europarScan, weekendCheckScan]
+// ── Server-Zertifikate (täglich 07:00) ────────────────────────────────────────
+const serverCertsScan: ScanDef = {
+  id: SERVER_CERTS_SCAN_ID,
+  label: 'Server-Zertifikate (Ablauf)',
+  description: 'Liest je Server die Zertifikate (Speicher, IIS/http.sys, RDP, SQL, TLS-Ports) nur lesend und meldet verwendete Zertifikate 30 und 5 Tage vor Ablauf (Popup + Mail laut Kachel-Haken).',
+  cadence: '',
+  async loadStatus() {
+    const s = await loadRunStatus(SERVER_CERTS_STATUS)
+    return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
+  },
+  run(by) { return runWithClaim(SERVER_CERTS_STATUS, () => runZertifikatsScan(by)) },
+}
+
+export const SCAN_REGISTRY: ScanDef[] = [softwareScan, printerConnScan, printerIpScan, deviceScan, radarScan, vlanScan, serverMetricsScan, serverCertsScan, lostDevicesScan, nis2AccessScan, networkDrivesScan, europarScan, weekendCheckScan]

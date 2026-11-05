@@ -1,19 +1,21 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Scan, CheckCircle2, XCircle, AlertTriangle, RefreshCw, Loader2, Check,
-  ChevronLeft, PackageCheck, Search, RotateCcw, Trash2, Info,
+  ChevronLeft, PackageCheck, Search, RotateCcw, Trash2, Info, Archive, Copy,
 } from 'lucide-react'
 import { useAppStore } from '../../store/appStore'
 import {
   applyScan, loadRun, completeRunWithReasons, extractSerialFromScan, normalizeSerial,
-  unscanDevice, removeExtra, setDeviceCapture,
+  unscanDevice, removeExtra, setDeviceCapture, bestaetigeFach,
   type InventoryRun, type InventoryDevice,
 } from '../../services/hardwareInventory'
 import { loadLostSerialSet, markRecovered } from '../../services/lostDevices'
 import { loadDevices as loadEndpointDevices } from '../../services/endpointDevices'
-import { playShrillAlert } from '../../services/scanAlert'
+import { playShrillAlert, playHinweisTon } from '../../services/scanAlert'
 import { DeviceInfoButton } from '../device/DeviceDossier'
 import { hostFromSerial } from '../../services/deviceMasterData'
+import { ladeEigentum, mitEigentum, zaehleEigentum, fachText, fachFehlt, type EigentumLookup } from '../../services/inventurEigentum'
+import { EigentumBadge, EigentumFilter, FachZeile, eigentumKurz, passtEigentum, type EigentumFilterWert } from './Eigentum'
 
 interface Props {
   runId: string
@@ -48,12 +50,29 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
 
   const [filter, setFilter] = useState<FilterMode>('missing')
   const [search, setSearch] = useState('')
+  // „Wer bezahlt?" + Fach aus der Endgeräte-Übersicht (Anzeige + Fach-Pflicht beim Scan;
+  // gespeichert wird beim Abschluss). Alle 2 Min. neu (Cache 60 s) — falls neu importiert.
+  const [eigentum, setEigentum] = useState<EigentumLookup | null>(null)
+  const [eigentumGeprueft, setEigentumGeprueft] = useState(false)
+  const [fEigentum, setFEigentum] = useState<EigentumFilterWert>('alle')
+  useEffect(() => {
+    const lade = () => { void ladeEigentum().then(m => { setEigentum(m); setEigentumGeprueft(true) }) }
+    lade()
+    const t = setInterval(lade, 120000)
+    return () => clearInterval(t)
+  }, [])
   const [confirmComplete, setConfirmComplete] = useState(false)
   const [completing, setCompleting] = useState(false)
 
   // Abgleich gegen die "verloren gemeldeten" Geraete
   const [lostSet, setLostSet] = useState<Set<string>>(new Set())
   const [lostFound, setLostFound] = useState<{ serial: string; location: string } | null>(null)
+
+  // Fach (Platz) fehlt in der Asset-Datenbank → Hinweis + Ton, Inventur pausiert bis bestätigt
+  const [fachOffen, setFachOffen] = useState<{ serial: string; inAssetDb: boolean; owner?: string | null; typ: string } | null>(null)
+  const [fachEingabe, setFachEingabe] = useState('')
+  const [fachBusy, setFachBusy] = useState(false)
+  const [fachFehler, setFachFehler] = useState('')
 
   // Extras-Review vor dem Abschluss (Begruendung je unerwartetem Scan)
   const [extrasReview, setExtrasReview] = useState(false)
@@ -137,7 +156,7 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
   // markiert (sonst springt die Markierung sofort raus und Kopieren geht nicht),
   // ein anderes Eingabefeld benutzt oder ein Dialog offen ist.
   const fokusPauseRef = useRef(false)
-  fokusPauseRef.current = !!(extrasReview || confirmComplete || lostFound)
+  fokusPauseRef.current = !!(extrasReview || confirmComplete || lostFound || fachOffen)
   const mausGedruecktRef = useRef(false)
 
   function refocus() {
@@ -196,6 +215,7 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
   async function submit() {
     const raw = value
     if (!raw.trim()) return
+    if (fachOffen) return   // pausiert, bis das fehlende Fach bestätigt ist
     const capture = classifyCapture(raw)
     setBusy(true)
     const r = await applyScan(runId, raw, currentUser, capture)
@@ -227,7 +247,31 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
         setLostFound({ serial, location })
       }
     }
+
+    // Fach-Pflicht: der genaue Platz muss im ServiceNow-Kommentarfeld (Asset-Datenbank) stehen.
+    // Nur prüfbar, wenn die Endgeräte-Übersicht geladen ist.
+    if (serial && eigentum && r.run) {
+      const m = mitEigentum(r.run, eigentum).run
+      const ziel = m.devices.find(d => d.serial === serial) ?? m.extras.find(x => x.serial === serial)
+      if (ziel && fachFehlt(ziel)) {
+        setFachEingabe(''); setFachFehler('')
+        setFachOffen({ serial, inAssetDb: eigentum.has(serial), owner: ziel.owner, typ: 'deviceType' in ziel ? ziel.deviceType : '' })
+        playHinweisTon()
+        return
+      }
+    }
     refocus()
+  }
+
+  async function fachBestaetigen() {
+    if (!fachOffen) return
+    setFachBusy(true); setFachFehler('')
+    const r = await bestaetigeFach(runId, fachOffen.serial, currentUser, fachEingabe)
+    setFachBusy(false)
+    if (!r.ok) { setFachFehler(r.error || 'Speichern fehlgeschlagen — bitte erneut bestätigen.'); return }
+    if (r.run) setRun(r.run)
+    setFachOffen(null); setFachEingabe('')
+    setTimeout(refocus, 50)
   }
 
   // Eingabe-Wert ändert sich: solange ungültig + abweichend, Flash beibehalten;
@@ -302,7 +346,9 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
     onCompleted()
   }
 
-  const devices: InventoryDevice[] = run?.devices || []
+  const anzeige = useMemo(() => run ? mitEigentum(run, eigentum).run : null, [run, eigentum])
+  const devices: InventoryDevice[] = anzeige?.devices || []
+  const eigentumZahlen = useMemo(() => zaehleEigentum(devices.map(d => d.owner)), [devices])
   const scannedCount = useMemo(() => devices.filter(d => d.scanned).length, [devices])
   const missingCount = devices.length - scannedCount
   const captureCounts = useMemo(() => {
@@ -316,12 +362,13 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
     return devices.filter(d => {
       if (filter === 'missing' && d.scanned) return false
       if (filter === 'scanned' && !d.scanned) return false
+      if (!passtEigentum(fEigentum, d.owner)) return false
       if (!q) return true
       return d.serial.toLowerCase().includes(q)
         || d.deviceType.toLowerCase().includes(q)
-        || d.comment.toLowerCase().includes(q)
+        || `${fachText(d)} ${d.comment}`.toLowerCase().includes(q)
     })
-  }, [devices, filter, search])
+  }, [devices, filter, search, fEigentum])
 
   return (
     <div className="flex flex-col h-full bg-background">
@@ -358,7 +405,7 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
         <div className="flex items-center gap-2 mb-2">
           <Scan size={16} className={invalid ? 'text-red-400' : 'text-primary'} />
           <span className={`text-xs font-semibold ${invalid ? 'text-red-300' : 'text-foreground'}`}>
-            {invalid ? 'Falsch-Scan — bitte den Wert löschen und neu scannen' : 'Seriennummer scannen oder eintippen'}
+            {invalid ? 'Falsch-Scan — bitte den Wert löschen und neu scannen' : fachOffen ? 'Inventur pausiert — erst das fehlende Fach bestätigen' : 'Seriennummer scannen oder eintippen'}
           </span>
           <kbd className="ml-auto px-1.5 py-0.5 bg-card border border-border rounded text-[10px] text-muted-foreground">Enter zum Bestätigen</kbd>
         </div>
@@ -382,7 +429,7 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
           ) : (
             <button
               onClick={submit}
-              disabled={busy || !value.trim()}
+              disabled={busy || !value.trim() || !!fachOffen}
               className="inline-flex items-center gap-1 px-4 py-3 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50"
             >{busy ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}Erfassen</button>
           )}
@@ -402,13 +449,20 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
         )}
       </div>
 
+      {eigentumGeprueft && !eigentum && (
+        <div className="mx-5 mt-2 flex items-center gap-2 px-3 py-1.5 rounded-md border border-amber-500/50 bg-amber-400 text-black text-xs shrink-0">
+          <AlertTriangle size={13} />Endgeräte-Übersicht nicht lesbar — die Fach-Prüfung beim Scannen ist gerade aus (wird alle 2 Min. neu versucht).
+        </div>
+      )}
+
       {/* Filter + Liste */}
-      <div className="flex items-center gap-2 px-5 py-2 border-b border-border mt-3 shrink-0">
+      <div className="flex items-center gap-2 flex-wrap px-5 py-2 border-b border-border mt-3 shrink-0">
         <div className="flex rounded-md border border-border overflow-hidden">
           <FilterBtn active={filter === 'missing'} onClick={() => setFilter('missing')} label={`Fehlend (${missingCount})`} />
           <FilterBtn active={filter === 'scanned'} onClick={() => setFilter('scanned')} label={`Erfasst (${scannedCount})`} />
           <FilterBtn active={filter === 'all'} onClick={() => setFilter('all')} label={`Alle (${devices.length})`} />
         </div>
+        {(eigentum || eigentumZahlen.unbekannt < (eigentumZahlen.skf + eigentumZahlen.hcl + eigentumZahlen.sonst + eigentumZahlen.unbekannt)) && <EigentumFilter wert={fEigentum} onChange={setFEigentum} zahlen={eigentumZahlen} />}
         <div className="relative ml-auto">
           <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
@@ -435,6 +489,7 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
                   : <span className="w-3 h-3 rounded-full border border-border shrink-0" />}
                 <span className="font-mono text-foreground truncate">{d.serial}</span>
                 <DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} />
+                <EigentumBadge owner={d.owner} />
                 {d.scanned && d.capture && (
                   <button onClick={(e) => { e.stopPropagation(); void toggleCapture(d.serial, d.capture!) }}
                     title="Erfassungsart umschalten (Scan / Manuell)"
@@ -443,7 +498,8 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
                   </button>
                 )}
               </div>
-              <div className="text-[10px] text-muted-foreground truncate">{[d.deviceType, d.company].filter(Boolean).join(' · ') || '—'}</div>
+              <div className="text-[10px] text-muted-foreground truncate">{[d.deviceType, d.company, eigentumKurz(d.owner)].filter(Boolean).join(' · ') || '—'}</div>
+              <FachZeile d={d} warnen={d.scanned} />
             </div>
           ))}
           {filtered.length === 0 && (
@@ -451,18 +507,19 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
           )}
         </div>
 
-        {run && run.extras.length > 0 && filter !== 'missing' && (
+        {anzeige && anzeige.extras.length > 0 && filter !== 'missing' && (
           <div className="mt-4">
-            <h3 className="text-[11px] uppercase tracking-wide text-amber-300 mb-1.5">Unerwartete Scans ({run.extras.length})</h3>
+            <h3 className="text-[11px] uppercase tracking-wide text-amber-300 mb-1.5">Unerwartete Scans ({anzeige.extras.length})</h3>
             <p className="text-[10px] text-muted-foreground mb-1.5">Rechtsklick auf einen Eintrag, um ihn zu entfernen.</p>
             <div className="flex flex-wrap gap-1.5">
-              {run.extras.map(x => (
+              {anzeige.extras.filter(x => passtEigentum(fEigentum, x.owner)).map(x => (
                 <span
                   key={x.serial}
                   onContextMenu={(e) => openCtxMenu(e, 'extra', x.serial)}
-                  title="Rechtsklick: Eintrag entfernen"
+                  title={`Rechtsklick: Eintrag entfernen${fachText(x) ? `
+Fach: ${fachText(x)}` : ''}`}
                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-300 text-black text-[10px] font-mono cursor-context-menu"
-                >{x.serial}<DeviceInfoButton hostname={hostFromSerial(x.serial)} serial={x.serial} /></span>
+                >{x.serial}<DeviceInfoButton hostname={hostFromSerial(x.serial)} serial={x.serial} /><EigentumBadge owner={x.owner} />{fachText(x) && <span className="font-sans">· Fach {fachText(x)}</span>}</span>
               ))}
             </div>
           </div>
@@ -552,6 +609,44 @@ export default function ScanPanel({ runId, currentUser, onBack, onCompleted }: P
             <p className="text-lg font-mono text-foreground mb-3">{lostFound.serial}</p>
             <p className="text-sm text-muted-foreground mb-5">Wurde zu „Wieder aufgefundene Geräte" hinzugefügt<br />({lostFound.location}).</p>
             <button onClick={() => { setLostFound(null); refocus() }} className="inline-flex items-center gap-1.5 px-5 py-2 rounded-md text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500">Weiter scannen</button>
+          </div>
+        </div>
+      )}
+
+      {/* Pflicht-Hinweis: Fach (Platz) fehlt in der Asset-Datenbank — kein Schließen per Klick daneben/Escape */}
+      {fachOffen && !lostFound && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4">
+          <div role="alertdialog" aria-modal="true" className="w-full max-w-lg rounded-2xl border-2 border-amber-500 bg-card shadow-2xl overflow-hidden">
+            <div className="flex items-center gap-2 px-6 py-3 bg-amber-400 text-black">
+              <Archive size={20} className="shrink-0" />
+              <h2 className="text-base font-bold">Fach fehlt — Standort in ServiceNow eintragen</h2>
+            </div>
+            <div className="px-6 py-5 space-y-3 text-sm text-foreground">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-lg font-mono font-semibold">{fachOffen.serial}</span>
+                <button title="Seriennummer kopieren" onClick={() => { void navigator.clipboard.writeText(fachOffen.serial).catch(() => {}) }}
+                  className="p-1 rounded border border-border text-muted-foreground hover:text-foreground hover:bg-accent/40"><Copy size={12} /></button>
+                <EigentumBadge owner={fachOffen.owner} />
+                {fachOffen.typ && <span className="text-muted-foreground">{fachOffen.typ}</span>}
+              </div>
+              <p>{fachOffen.inAssetDb
+                ? <>In der Asset-Datenbank ist für dieses Gerät <strong>kein Fach</strong> eingetragen — das Kommentarfeld ist leer.</>
+                : <>Dieses Gerät steht <strong>nicht in der Asset-Datenbank</strong> (Endgeräte-Übersicht) — ein Fach ist nicht bekannt.</>}</p>
+              <p>Bitte jetzt in <strong>ServiceNow</strong> beim Asset im <strong>Kommentarfeld</strong> den genauen Platz eintragen (z. B. „Fach T").</p>
+              <label className="block">
+                <span className="text-xs text-muted-foreground">Eingetragenes Fach (optional — steht dann sofort in Übersicht und Export)</span>
+                <input value={fachEingabe} onChange={e => setFachEingabe(e.target.value)} placeholder="z. B. Fach T"
+                  className="mt-1 w-full px-3 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary" />
+              </label>
+              {fachFehler && <p className="text-xs font-medium text-red-500">{fachFehler}</p>}
+              <p className="text-[11px] text-muted-foreground">Die Inventur ist pausiert, bis du bestätigst. Die Bestätigung wird mit deinem Namen im Verlauf des Berichts festgehalten.</p>
+            </div>
+            <div className="flex items-center px-6 py-3 border-t border-border">
+              <button onClick={() => void fachBestaetigen()} disabled={fachBusy}
+                className="ml-auto inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 disabled:opacity-50">
+                {fachBusy ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}Erledigt — Fach in ServiceNow eingetragen
+              </button>
+            </div>
           </div>
         </div>
       )}

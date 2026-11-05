@@ -5,7 +5,11 @@ import { userInfo } from 'os'
 
 // VOLLE PFADE — damit es auch im elevated Kontext funktioniert
 export const SCHTASKS = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'schtasks.exe')
-export const CSCRIPT = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'cscript.exe')
+// wscript.exe statt cscript.exe: cscript ist ein Konsolenprogramm. Von der Aufgabenplanung
+// in der Sitzung des Benutzers gestartet, öffnet es ein schwarzes Konsolenfenster — beim
+// Postfach-Abgleich der Übergabe-Termine (alle 20 Min) poppte das tagsüber ständig auf.
+// wscript ist der Fenster-Host: gleiche VBS-Engine, kein Fenster.
+export const WSCRIPT = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'wscript.exe')
 export const WORK_DIR = 'C:\\Temp\\ITAdminMail'
 
 interface MailOpts {
@@ -54,7 +58,7 @@ export function uid(): string {
   return Math.random().toString(36).slice(2, 10)
 }
 
-// VBS-Datei als UTF-16 LE mit BOM schreiben. cscript.exe liest .vbs sonst als
+// VBS-Datei als UTF-16 LE mit BOM schreiben. wscript.exe liest .vbs sonst als
 // ANSI — Umlaute/Gedankenstriche im INLINE-Text wuerden zu Mojibake ("fÃ¼r", "â€“").
 // Betreff UND Body stehen inzwischen NICHT mehr inline, sondern werden als eigene
 // UTF-8-Dateien ueber ADODB.Stream eingelesen (siehe subjectPath/bodyPath). Damit
@@ -124,7 +128,16 @@ export async function sendViaOutlookScheduledTask(opts: MailOpts): Promise<MailR
       opts.bcc ? 'objMail.BCC = "' + opts.bcc.replace(/"/g, '') + '"' : '',
       'objMail.Subject = subjText',
       opts.html ? 'objMail.HTMLBody = bodyText' : 'objMail.Body = bodyText',
-      opts.attachmentPath ? 'objMail.Attachments.Add "' + opts.attachmentPath.replace(/"/g, '') + '"' : '',
+      // Anhang VOR dem Senden prüfen: klappt er nicht, wird NICHT gesendet (sonst ginge die
+      // Mail ohne Anhang raus und es käme trotzdem eine Fehlermeldung → doppelter Versand).
+      ...(opts.attachmentPath ? [
+        'Err.Clear',
+        'objMail.Attachments.Add "' + opts.attachmentPath.replace(/"/g, '') + '"',
+        'If Err.Number <> 0 Then',
+        '  Call WriteResult("ERR:Anhang konnte nicht angefuegt werden - " & Err.Description)',
+        '  WScript.Quit 1',
+        'End If',
+      ] : []),
       '',
       'objMail.Send',
       '',
@@ -152,7 +165,7 @@ export async function sendViaOutlookScheduledTask(opts: MailOpts): Promise<MailR
     console.log('[outlookMailer] send: to=' + opts.to + ' user=' + desktopUser + ' task=' + taskName)
 
     // Task erstellen — /rl LIMITED damit es in der normalen User-Session laeuft
-    const createCmd = '"' + SCHTASKS + '" /create /tn "' + taskName + '" /tr "\\"' + CSCRIPT + '\\" //nologo //B \\"' + vbsPath + '\\"" /sc once /st 00:00 /ru "' + desktopUser + '" /rl LIMITED /f'
+    const createCmd = '"' + SCHTASKS + '" /create /tn "' + taskName + '" /tr "\\"' + WSCRIPT + '\\" //nologo //B \\"' + vbsPath + '\\"" /sc once /st 00:00 /ru "' + desktopUser + '" /rl LIMITED /f'
     console.log('[outlookMailer] create:', createCmd)
     execSync(createCmd, { encoding: 'utf-8', windowsHide: true, timeout: 15000 })
 
@@ -261,7 +274,7 @@ export async function composeViaOutlookScheduledTask(opts: MailOpts): Promise<Ma
     writeVbs(vbsPath, vbs)
     const desktopUser = getDesktopUser()
 
-    const createCmd = '"' + SCHTASKS + '" /create /tn "' + taskName + '" /tr "\\"' + CSCRIPT + '\\" //nologo //B \\"' + vbsPath + '\\"" /sc once /st 00:00 /ru "' + desktopUser + '" /rl LIMITED /f'
+    const createCmd = '"' + SCHTASKS + '" /create /tn "' + taskName + '" /tr "\\"' + WSCRIPT + '\\" //nologo //B \\"' + vbsPath + '\\"" /sc once /st 00:00 /ru "' + desktopUser + '" /rl LIMITED /f'
     execSync(createCmd, { encoding: 'utf-8', windowsHide: true, timeout: 15000 })
 
     const runCmd = '"' + SCHTASKS + '" /run /tn "' + taskName + '"'

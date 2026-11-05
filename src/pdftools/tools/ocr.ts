@@ -31,7 +31,16 @@ async function makeWorker(lang: string, langPath: string, logger: (m: { status: 
     corePath: base,
     langPath,
     logger,
+    // Standard wäre ein Worker aus einer blob:-URL — die verbietet die CSP der App (script-src 'self').
+    // Direkt aus der lokalen Datei laden (file:// im installierten Tool, http im Dev-Server).
+    workerBlobURL: false,
   })
+}
+
+/** Worker mit lokalen Sprachdaten, sonst CDN — für eigene Erkennungen (z. B. Pick-Up-Belege). */
+export async function erstelleOcrWorker(lang: string, logger: (m: { status: string; progress: number }) => void = () => undefined): Promise<Worker> {
+  try { return await makeWorker(lang, `${localBase()}tessdata`, logger) }
+  catch { return makeWorker(lang, CDN_LANG, logger) }
 }
 
 export async function ocrDocument(

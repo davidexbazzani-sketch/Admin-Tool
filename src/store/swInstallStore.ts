@@ -8,6 +8,7 @@ import { create } from 'zustand'
 import { api } from '../electronAPI'
 import { pathService } from '../services/pathService'
 import { ensureWinRM, clearWinRMCache } from '../utils/winrmUtils'
+import { beobachtePhase } from '../services/softwareInstallLog'
 
 type StepStatus = 'pending' | 'running' | 'success' | 'warning' | 'error' | 'skipped'
 type Phase = 'idle' | 'running' | 'done' | 'error'
@@ -540,3 +541,9 @@ export const useSwInstallStore = create<SwInstallState>((set, get) => ({
     }
   },
 }))
+
+// Logbuch (Software Installationen): Start und Ergebnis jedes Laufs festhalten.
+beobachtePhase(useSwInstallStore, 'SolidWorks', s => {
+  const warn = Object.values(s.stepStatus).filter(v => v === 'warning').length
+  return `SolidWorks 2024 SP5 installiert${warn ? ` — mit ${warn} Warnung(en), siehe Schritte` : ''}.`
+})

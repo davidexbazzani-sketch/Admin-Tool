@@ -48,6 +48,7 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'onboarding',             label: 'Onboarding',              category: 'IT Support', adminOnly: true },
   { id: 'treiber-installation',   label: 'Treiber-Installation',    category: 'IT Support', adminOnly: true },
   { id: 'support-tools',          label: 'Support Tools',           category: 'IT Support', adminOnly: true },
+  { id: 'drucker',                label: 'Drucker',                 category: 'IT Support', adminOnly: true },
   { id: 'servicenow',             label: 'ServiceNow / Tickets',    category: 'IT Support', adminOnly: true },
   { id: 'ticket-assignment',      label: 'Zuweisung Tickets',       category: 'IT Support', adminOnly: true },
 

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   Boxes, Plus, RefreshCw, AlertTriangle, Loader2, ChevronRight, PackageCheck,
-  Trash2, CheckCircle2, XCircle, FileSpreadsheet, PackageX,
+  Trash2, CheckCircle2, XCircle, FileSpreadsheet, PackageX, Truck,
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import {
@@ -12,8 +12,10 @@ import ImportDialog from '../components/hardwareInventory/ImportDialog'
 import ScanPanel from '../components/hardwareInventory/ScanPanel'
 import ResultsView from '../components/hardwareInventory/ResultsView'
 import LostDevicesView from '../components/hardwareInventory/LostDevicesView'
+import PickupsView from '../components/hardwareInventory/PickupsView'
+import { ladePickups, ladeStatus, offeneGeraete } from '../services/pickups'
 
-type View = { kind: 'list' } | { kind: 'scan'; runId: string } | { kind: 'results'; runId: string } | { kind: 'lost' }
+type View = { kind: 'list' } | { kind: 'scan'; runId: string } | { kind: 'results'; runId: string } | { kind: 'lost' } | { kind: 'pickups' }
 
 const POLL_MS = 30000
 
@@ -33,6 +35,14 @@ export default function HardwareInventory() {
   const [error, setError] = useState('')
   const [importOpen, setImportOpen] = useState(false)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  // Abholungen mit Geräten, die noch nicht „In transit" sind (Stand der letzten State-Prüfung)
+  const [pickupsOffen, setPickupsOffen] = useState(0)
+  useEffect(() => {
+    if (view.kind !== 'list') return
+    let weg = false
+    void Promise.all([ladePickups(), ladeStatus()]).then(([p, st]) => { if (!weg) setPickupsOffen(p.filter(x => offeneGeraete(x, st.status).offen > 0).length) }).catch(() => undefined)
+    return () => { weg = true }
+  }, [view.kind])
 
   const reload = useCallback(async (showSpinner = false) => {
     if (showSpinner) setLoading(true)
@@ -91,6 +101,9 @@ export default function HardwareInventory() {
   if (view.kind === 'lost') {
     return <LostDevicesView currentUser={currentUserName} onBack={() => setView({ kind: 'list' })} />
   }
+  if (view.kind === 'pickups') {
+    return <PickupsView currentUser={currentUserName} onBack={() => setView({ kind: 'list' })} />
+  }
 
   // Liste
   return (
@@ -105,6 +118,12 @@ export default function HardwareInventory() {
           <button onClick={() => reload(true)} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/40 border border-border" title="Aktualisieren"><RefreshCw size={13} className={loading ? 'animate-spin' : ''} /></button>
           <button onClick={() => setView({ kind: 'lost' })} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-amber-500/40 text-amber-300 hover:bg-amber-500/10" title="Verloren gemeldete Geräte verwalten">
             <PackageX size={14} />Verlorene Geräte
+          </button>
+          <button onClick={() => setView({ kind: 'pickups' })} className="relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-sky-500/40 text-sky-300 hover:bg-sky-500/10"
+            title={`Hier werden die abgeholten Geräte erfasst (Abholschein als Foto, PDF oder Excel hochladen).${pickupsOffen ? `
+${pickupsOffen} Abholung(en) mit Geräten, die noch nicht auf „In transit" stehen.` : ''}`}>
+            <Truck size={14} />Pick-Ups
+            {pickupsOffen > 0 && <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[10px] leading-4 text-center">{pickupsOffen}</span>}
           </button>
           <button onClick={() => setImportOpen(true)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:opacity-90">
             <Plus size={14} />Neue Inventur starten

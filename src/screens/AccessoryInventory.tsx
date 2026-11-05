@@ -1,1139 +1,477 @@
+// ── Zubehör-Inventur (Kleinteile-Lager) ───────────────────────────────────────
+// Lagerbestand nach Kategorien: je Artikel Bestand (IST) und Soll direkt eintragen
+// (Enter springt zum nächsten Artikel). „Bestellung verfassen" macht aus allem unter Soll
+// eine Bestellliste für Sascha Herges (direkt senden oder im Outlook-Fenster mit PDF).
+// Änderungen werden gesammelt und nach kurzer Pause gespeichert — nur die geänderten
+// Felder, damit gleichzeitig zählende Kollegen sich nicht überschreiben.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
-  Cable, Plus, Search, Trash2, Edit3, ExternalLink, Play, Check, X,
-  ChevronRight, ChevronLeft, ChevronDown, Loader2, AlertTriangle, ShoppingCart, Link2,
-  RefreshCw, PackageCheck, ClipboardList, Mail, FileDown, History, Send, CheckCircle2, Paperclip,
+  Cable, Plus, Minus, Search, Trash2, Edit3, Loader2, AlertTriangle, ShoppingCart, Link2, Link2Off,
+  RefreshCw, Check, X, ChevronDown, CheckCircle2, Truck, Info, CircleDashed, ExternalLink,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
 import {
-  loadItems, saveItems, createItem, computeOrderList, sortItems, formatOrderText,
-  loadHistory, addHistoryEntry, setHistorySentToSascha, setHistoryLineArrived, deleteHistoryEntry,
-  replaceHistoryLines,
-  type AccessoryItem, type OrderLine, type AccessoryHistoryEntry,
+  ladeLager, aendereLager, patchesAnwenden, neuerArtikel, loadHistory, bestellVorschlag, unterwegsJeArtikel,
+  setHistoryLineArrived, setHistorySentToSascha, deleteHistoryEntry,
+  type AccessoryItem, type AccessoryHistoryEntry, type ArtikelPatch,
 } from '../services/accessoryInventory'
-import { exportOrderList, prepareOrderAttachment, type AccessoryExportFormat } from '../services/accessoryInventoryExport'
-import InventoryCelebration from '../components/accessoryInventory/InventoryCelebration'
+import { KATEGORIEN, kategorieName, rateKategorie, normName, amazonSuche } from '../services/zubehoerKatalog'
+import { linkHref, kurzLink } from '../services/zubehoerBestellung'
+import BestellDialog from '../components/accessoryInventory/BestellDialog'
+import BestellHistorie from '../components/accessoryInventory/BestellHistorie'
 
-type Mode = 'table' | 'wizard' | 'result'
+type Filter = 'alle' | 'unter' | 'ungezaehlt' | 'ohneLink'
 
-interface EditorState {
-  id: string | null            // null = neuer Eintrag
-  name: string
-  current: string
-  target: string
-  amazonLink: string
+const fmt = (iso?: string) => {
+  if (!iso) return ''
+  const d = new Date(iso)
+  return isNaN(d.getTime()) ? '' : d.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })
 }
+function oeffne(url: string) { const h = linkHref(url); if (h) { try { void api().openExternal(h) } catch { /* ignore */ } } }
 
-function openLink(url: string) {
-  const u = url.trim()
-  if (!u) return
-  const href = /^https?:\/\//i.test(u) ? u : `https://${u}`
-  try { api().openExternal(href) } catch { /* ignore */ }
+const ZU_KEY = 'zubehoer.zugeklappt'
+function ladeZu(): Set<string> { try { return new Set(JSON.parse(localStorage.getItem(ZU_KEY) || '[]')) } catch { return new Set() } }
+function merkeZu(s: Set<string>) { try { localStorage.setItem(ZU_KEY, JSON.stringify([...s])) } catch { /* egal */ } }
+
+interface Status { art: 'ungezaehlt' | 'ohneSoll' | 'ok' | 'fehlt' | 'leer'; fehlt: number }
+function statusVon(it: AccessoryItem): Status {
+  if (!it.gezaehltAm) return { art: 'ungezaehlt', fehlt: Math.max(0, it.target - it.current) }
+  if (it.target === 0) return { art: 'ohneSoll', fehlt: 0 }
+  if (it.current >= it.target) return { art: 'ok', fehlt: 0 }
+  return { art: it.current === 0 ? 'leer' : 'fehlt', fehlt: it.target - it.current }
 }
-
-function fmtDateTime(iso: string): string {
-  const d = new Date(iso); if (isNaN(d.getTime())) return ''
-  return d.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-}
-
-/** Betreff der Bestell-Mail — bewusst fest und nicht editierbar. */
-const EMAIL_BETREFF = 'Zubehör Inventur'
 
 export default function AccessoryInventory() {
   const user = useAuthStore(s => s.session?.user)
-  const currentUserName = user?.displayName || user?.username || 'unbekannt'
+  const von = user?.displayName || user?.username || 'unbekannt'
 
-  const [mode, setMode] = useState<Mode>('table')
   const [items, setItems] = useState<AccessoryItem[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [saving, setSaving] = useState(false)
-
-  const [search, setSearch] = useState('')
-  const [expandedId, setExpandedId] = useState<string | null>(null)
-  const [editingLinkId, setEditingLinkId] = useState<string | null>(null)
-  const [linkDraft, setLinkDraft] = useState('')
-
-  const [editor, setEditor] = useState<EditorState | null>(null)
-  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
-
-  // Akkordeon-Sektionen
-  const [openFulfilled, setOpenFulfilled] = useState(true)
-  const [openReorder, setOpenReorder] = useState(true)
-
-  // Historie
   const [history, setHistory] = useState<AccessoryHistoryEntry[]>([])
-  const [showHistory, setShowHistory] = useState(true)
-  const [expandedHistoryId, setExpandedHistoryId] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [fehler, setFehler] = useState('')
+  const [meldung, setMeldung] = useState<{ art: 'ok' | 'info'; text: string } | null>(null)
+  const [speichert, setSpeichert] = useState(false)
+  const [suche, setSuche] = useState('')
+  const [filter, setFilter] = useState<Filter>('alle')
+  const [zu, setZu] = useState<Set<string>>(ladeZu)
+  const [editor, setEditor] = useState<EditorDaten | null>(null)
+  const [loeschId, setLoeschId] = useState<string | null>(null)
+  const [bestellung, setBestellung] = useState(false)
+  const [histBusy, setHistBusy] = useState('')
 
-  // Wizard-State
-  const [wizardIndex, setWizardIndex] = useState(0)
-  const [wizardValues, setWizardValues] = useState<Record<string, string>>({})
-  // Feste Reihenfolge für den laufenden Durchgang (Snapshot bei Start); wächst,
-  // wenn man während der Inventur einen neuen Artikel hinzufügt.
-  const [wizardOrder, setWizardOrder] = useState<AccessoryItem[]>([])
-  // Kleiner Dialog: Artikel WÄHREND der Inventur hinzufügen (z. B. neue TVs im Lager)
-  const [wizardAdd, setWizardAdd] = useState<EditorState | null>(null)
-  const wizardInputRef = useRef<HTMLInputElement>(null)
-  const [orderLines, setOrderLines] = useState<OrderLine[]>([])
+  // ── Gesammelte Änderungen (Patch je Artikel) ──
+  const ausstehend = useRef(new Map<string, ArtikelPatch>())
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const kette = useRef<Promise<void>>(Promise.resolve())
 
-  // Ergebnisseite: E-Mail + Export + Sascha
-  const [emailTo, setEmailTo] = useState('')
-  const [emailCc, setEmailCc] = useState<string[]>([])
-  const emailSubject = EMAIL_BETREFF   // fest — kein State mehr nötig
-  const [emailSending, setEmailSending] = useState(false)
-  const [emailStatus, setEmailStatus] = useState('')
-  const [attachFormats, setAttachFormats] = useState<Set<AccessoryExportFormat>>(new Set())
-  const [exporting, setExporting] = useState<AccessoryExportFormat | null>(null)
-  const [celebrating, setCelebrating] = useState(false)  // Easter Egg nach Abschluss
-
-  // Nachtrag auf der Ergebnisseite: Kleinteile, die nicht auf der Liste standen.
-  // „uebernehmen" entscheidet, ob das Teil dauerhaft in die Inventarliste wandert.
-  const [historyId, setHistoryId] = useState<string | null>(null)
-  const [nachtragName, setNachtragName] = useState('')
-  const [nachtragMenge, setNachtragMenge] = useState('1')
-  const [nachtragLink, setNachtragLink] = useState('')
-  const [nachtragUebernehmen, setNachtragUebernehmen] = useState(true)
-  const [nachtragHinweis, setNachtragHinweis] = useState('')
-
-  const reload = useCallback(async () => {
-    setLoading(true)
-    try {
-      const [list, hist] = await Promise.all([loadItems(), loadHistory()])
-      setItems(list)
-      setHistory(hist)
-      setError('')
-    } catch {
-      setError('Liste konnte nicht geladen werden. Netzlaufwerk erreichbar?')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => { reload() }, [reload])
-
-  async function persist(next: AccessoryItem[]) {
-    const sorted = sortItems(next)
-    setItems(sorted)
-    setSaving(true)
-    try {
-      const ok = await saveItems(sorted)
-      if (!ok) setError('Speichern fehlgeschlagen. Netzlaufwerk erreichbar?')
-      else setError('')
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  // ── Tabelle: Filtern + Aufteilen ──────────────────────────────────────────
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase()
-    if (!q) return items
-    return items.filter(it => it.name.toLowerCase().includes(q))
-  }, [items, search])
-
-  const fulfilledItems = useMemo(() => filtered.filter(it => it.current >= it.target), [filtered])
-  const reorderItems = useMemo(() => filtered.filter(it => it.current < it.target), [filtered])
-
-  // ── Hinzufuegen / Bearbeiten ──────────────────────────────────────────────
-  function openAdd() {
-    setEditor({ id: null, name: '', current: '0', target: '0', amazonLink: '' })
-  }
-  function openEdit(it: AccessoryItem) {
-    setEditor({ id: it.id, name: it.name, current: String(it.current), target: String(it.target), amazonLink: it.amazonLink })
-  }
-  async function saveEditor() {
-    if (!editor) return
-    const name = editor.name.trim()
-    if (!name) return
-    const current = Math.max(0, Math.round(Number(editor.current) || 0))
-    const target = Math.max(0, Math.round(Number(editor.target) || 0))
-    const link = editor.amazonLink.trim()
-    if (editor.id) {
-      await persist(items.map(it => it.id === editor.id ? { ...it, name, current, target, amazonLink: link } : it))
-    } else {
-      const maxOrder = items.reduce((m, it) => Math.max(m, it.order), 0)
-      await persist([...items, createItem(name, current, target, link, maxOrder + 1)])
-    }
-    setEditor(null)
-  }
-
-  async function doDelete(id: string) {
-    setConfirmDeleteId(null)
-    if (expandedId === id) setExpandedId(null)
-    await persist(items.filter(it => it.id !== id))
-  }
-
-  // ── Amazon-Link bearbeiten ────────────────────────────────────────────────
-  function startEditLink(it: AccessoryItem) {
-    setEditingLinkId(it.id)
-    setLinkDraft(it.amazonLink)
-  }
-  async function saveLink(id: string) {
-    await persist(items.map(it => it.id === id ? { ...it, amazonLink: linkDraft.trim() } : it))
-    setEditingLinkId(null)
-  }
-
-  // ── Inventur-Wizard ───────────────────────────────────────────────────────
-  function startInventory() {
-    if (items.length === 0) return
-    const init: Record<string, string> = {}
-    for (const it of items) init[it.id] = String(it.current)
-    setWizardValues(init)
-    setWizardOrder(sortItems(items))
-    setWizardIndex(0)
-    setMode('wizard')
-  }
-
-  // Artikel WÄHREND der laufenden Inventur hinzufügen (inkl. Bestelllink) — der
-  // neue Artikel wird ans Ende des Durchgangs gehängt und mitgezählt.
-  function openWizardAdd() { setWizardAdd({ id: null, name: '', current: '0', target: '0', amazonLink: '' }) }
-  async function saveWizardAdd() {
-    if (!wizardAdd) return
-    const name = wizardAdd.name.trim()
-    if (!name) return
-    const current = Math.max(0, Math.round(Number(wizardAdd.current) || 0))
-    const target = Math.max(0, Math.round(Number(wizardAdd.target) || 0))
-    const link = wizardAdd.amazonLink.trim()
-    const maxOrder = items.reduce((m, it) => Math.max(m, it.order), 0)
-    const neu = createItem(name, current, target, link, maxOrder + 1)
-    await persist([...items, neu])
-    setWizardOrder(prev => [...prev, neu])
-    setWizardValues(prev => ({ ...prev, [neu.id]: String(current) }))
-    setWizardAdd(null)
-  }
-
-  useEffect(() => {
-    if (mode === 'wizard') {
-      const t = setTimeout(() => { wizardInputRef.current?.focus(); wizardInputRef.current?.select() }, 50)
-      return () => clearTimeout(t)
-    }
-  }, [mode, wizardIndex])
-
-  function wizardSetValue(id: string, v: string) {
-    setWizardValues(prev => ({ ...prev, [id]: v.replace(/[^\d]/g, '') }))
-  }
-
-  async function finishInventory(values: Record<string, string>) {
-    const next = items.map(it => ({
-      ...it,
-      current: Math.max(0, Math.round(Number(values[it.id]) || 0)),
-    }))
-    await persist(next)
-    const lines = computeOrderList(next)
-    setOrderLines(lines)
-    // E-Mail-Felder vorbereiten
-    setEmailStatus('')
-    setNachtragName(''); setNachtragMenge('1'); setNachtragLink(''); setNachtragHinweis('')
-    // Historien-Eintrag anlegen (der "An Sascha geschickt"-Haken sitzt jetzt
-    // im jeweiligen Historien-Eintrag, nicht mehr auf der Ergebnisseite)
-    try {
-      const entry = await addHistoryEntry(lines, currentUserName)
-      setHistory(prev => [entry, ...prev])
-      setHistoryId(entry.id)   // für spätere Nachträge, damit die Historie mitwandert
-    } catch { /* Historie optional */ }
-    setCelebrating(true)   // Skyline-Drift starten, dann Liste einblenden
-    setMode('result')
-  }
-
-  function wizardNext() {
-    if (wizardIndex < wizardOrder.length - 1) setWizardIndex(i => i + 1)
-    else void finishInventory(wizardValues)
-  }
-  function wizardBack() {
-    if (wizardIndex > 0) setWizardIndex(i => i - 1)
-  }
-
-  /**
-   * Kleinteil nachtragen, das bei der Inventur nicht auf der Liste stand.
-   * Es landet immer in der Bestellliste dieser Inventur (E-Mail, Export, Historie).
-   * Ist „dauerhaft übernehmen" angehakt, wandert es zusätzlich in die Inventarliste,
-   * damit es künftig automatisch mitgezählt wird.
-   */
-  async function addNachtrag() {
-    const name = nachtragName.trim()
-    if (!name) { setNachtragHinweis('Bitte einen Namen eintragen.'); return }
-    const menge = Math.max(1, Math.round(Number(nachtragMenge) || 0))
-    const link = nachtragLink.trim()
-
-    // Doppelte Position vermeiden — sonst steht das Teil zweimal in der Mail.
-    if (orderLines.some(l => l.item.name.trim().toLowerCase() === name.toLowerCase())) {
-      setNachtragHinweis(`„${name}" steht bereits auf der Bestellliste.`)
-      return
-    }
-
-    let eintrag: AccessoryItem
-    if (nachtragUebernehmen) {
-      // Dauerhaft: IST 0, SOLL = nachbestellte Menge → beim nächsten Mal wird gezählt.
-      const maxOrder = items.reduce((mx, it) => Math.max(mx, it.order), 0)
-      eintrag = createItem(name, 0, menge, link, maxOrder + 1)
-      await persist([...items, eintrag])
-    } else {
-      // Nur für diese Inventur — nicht speichern, aber dieselbe Form verwenden.
-      eintrag = createItem(name, 0, menge, link, 0)
-    }
-
-    const naechste = [...orderLines, { item: eintrag, quantity: menge }]
-    setOrderLines(naechste)
-    // Historie nachziehen, damit dort dieselbe Liste steht wie in der Mail.
-    if (historyId) {
+  const flush = useCallback((): Promise<void> => {
+    if (timer.current) { clearTimeout(timer.current); timer.current = null }
+    kette.current = kette.current.then(async () => {
+      if (!ausstehend.current.size) return
+      const patches = new Map(ausstehend.current)
+      ausstehend.current.clear()
+      setSpeichert(true)
       try {
-        await replaceHistoryLines(historyId, naechste)
-        setHistory(prev => prev.map(e => e.id === historyId
-          ? { ...e, lines: naechste.map(({ item, quantity }) => ({ name: item.name, quantity, amazonLink: item.amazonLink, arrived: e.lines.find(l => l.name.toLowerCase() === item.name.toLowerCase())?.arrived ?? false })), reorderCount: naechste.length, totalUnits: naechste.reduce((sum, l) => sum + l.quantity, 0) }
-          : e))
-      } catch { /* Historie ist optional */ }
-    }
-
-    setNachtragHinweis(nachtragUebernehmen
-      ? `„${name}" ergänzt und dauerhaft in die Inventarliste übernommen.`
-      : `„${name}" nur für diese Inventur ergänzt.`)
-    setNachtragName(''); setNachtragMenge('1'); setNachtragLink('')
-  }
-
-  // ── Ergebnisseite: E-Mail ─────────────────────────────────────────────────
-  function buildEmailBody(): string {
-    const dateStr = new Date().toLocaleDateString('de-DE')
-    return [
-      'Hallo,',
-      '',
-      `anbei die Bestellliste aus der Zubehör-Inventur vom ${dateStr}:`,
-      '',
-      formatOrderText(orderLines),
-      '',
-      'Viele Grüße',
-      currentUserName,
-    ].join('\n')
-  }
-
-  function toggleAttachFormat(f: AccessoryExportFormat) {
-    setAttachFormats(prev => {
-      const next = new Set(prev)
-      if (next.has(f)) next.delete(f); else next.add(f)
-      return next
+        const neu = await aendereLager(list => patchesAnwenden(list, patches), von)
+        setItems(patchesAnwenden(neu, ausstehend.current))
+        setFehler('')
+      } catch (e) {
+        // nicht verlieren: zurück in die Warteschlange (neuere Werte gehen vor)
+        for (const [id, p] of patches) ausstehend.current.set(id, { ...p, ...ausstehend.current.get(id) })
+        setFehler(`${e instanceof Error ? e.message : String(e)} Die Änderungen bleiben vorgemerkt.`)
+      } finally { setSpeichert(false) }
     })
-  }
+    return kette.current
+  }, [von])
 
-  async function sendOrderEmail() {
-    if (!emailTo.trim()) { setEmailStatus('Bitte einen Empfänger (An:) eintragen.'); return }
-    setEmailSending(true)
-    setEmailStatus('')
+  const aendere = useCallback((id: string, p: ArtikelPatch) => {
+    ausstehend.current.set(id, { ...ausstehend.current.get(id), ...p })
+    setItems(list => patchesAnwenden(list, new Map([[id, p]])))
+    if (timer.current) clearTimeout(timer.current)
+    timer.current = setTimeout(() => { void flush() }, 700)
+  }, [flush])
+
+  useEffect(() => () => { void flush() }, [flush])
+
+  const laden = useCallback(async (still = false) => {
+    if (!still) setLoading(true)
     try {
-      const cc = emailCc.map(c => c.trim()).filter(Boolean).join(';')
-
-      // Gewaehlte Formate im Hintergrund erstellen und als echten Dateianhang
-      // anhaengen (mehrere -> komprimiertes ZIP).
-      let attachmentPath: string | undefined
-      const formats = [...attachFormats]
-      if (formats.length > 0) {
-        setEmailStatus('Anhang wird erstellt…')
-        const settings = await api().getSettings()
-        const dir = (settings.exportPath as string) || ''
-        const prep = await prepareOrderAttachment(orderLines, formats, dir)
-        if (prep.ok && prep.path) attachmentPath = prep.path
-        else { setEmailStatus(`Anhang konnte nicht erstellt werden: ${prep.error || 'unbekannt'}`); setEmailSending(false); return }
-      }
-
-      const res = await api().composeEmail({ to: emailTo.trim(), cc, subject: emailSubject, body: buildEmailBody(), attachmentPath })
-      if (res.success) setEmailStatus(attachmentPath ? 'E-Mail mit Anhang wurde geöffnet/versendet.' : 'E-Mail wurde geöffnet/versendet.')
-      else if (res.fallback && attachmentPath) setEmailStatus('E-Mail über Standard-Programm geöffnet (ohne Anhang – Anhang liegt im Dokumente-Ordner).')
-      else setEmailStatus('E-Mail konnte nicht erstellt werden.')
+      await flush()
+      const [lager, hist] = await Promise.all([ladeLager(von), loadHistory()])
+      setItems(patchesAnwenden(lager.items, ausstehend.current))
+      setHistory(hist)
+      setFehler('')
+      if (lager.neuAufgenommen.length) setMeldung({ art: 'info', text: `${lager.neuAufgenommen.length} übliche Büro-Artikel neu in die Liste aufgenommen (Bestand „nicht gezählt"). Bitte zählen — erst dann kommen sie in eine Bestellung. Nicht benötigte Artikel einfach löschen.` })
     } catch (e) {
-      setEmailStatus(e instanceof Error ? e.message : 'E-Mail-Fehler.')
-    } finally {
-      setEmailSending(false)
-    }
+      setFehler(e instanceof Error ? e.message : 'Liste konnte nicht geladen werden. Netzlaufwerk erreichbar?')
+    } finally { setLoading(false) }
+  }, [flush, von])
+  useEffect(() => { void laden() }, [laden])
+  // Stand anderer Admins alle 2 Minuten nachladen — nicht, während jemand tippt
+  useEffect(() => {
+    const t = setInterval(() => {
+      const a = document.activeElement
+      if (bestellung || editor || ausstehend.current.size || (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName))) return
+      void laden(true)
+    }, 120_000)
+    return () => clearInterval(t)
+  }, [laden, bestellung, editor])
+
+  // ── Ableitungen ──
+  const unterwegs = useMemo(() => unterwegsJeArtikel(history), [history])
+  const vorschlag = useMemo(() => bestellVorschlag(items, history), [items, history])
+  const zaehler = useMemo(() => ({
+    alle: items.length,
+    unter: items.filter(it => it.gezaehltAm && it.current < it.target).length,
+    ungezaehlt: items.filter(it => !it.gezaehltAm).length,
+    ohneLink: items.filter(it => !linkHref(it.amazonLink)).length,
+  }), [items])
+  const sichtbar = useMemo(() => {
+    const q = normName(suche)
+    return items.filter(it => {
+      if (q && !normName(`${it.name} ${it.notiz || ''}`).includes(q)) return false
+      if (filter === 'unter') return !!it.gezaehltAm && it.current < it.target
+      if (filter === 'ungezaehlt') return !it.gezaehltAm
+      if (filter === 'ohneLink') return !linkHref(it.amazonLink)
+      return true
+    })
+  }, [items, suche, filter])
+  const gruppen = useMemo(() => {
+    const ids = [...KATEGORIEN.map(k => k.id), ...new Set(sichtbar.map(it => it.kategorie).filter(k => !KATEGORIEN.some(x => x.id === k)))]
+    return ids.map(id => ({ id, name: kategorieName(id), items: sichtbar.filter(it => it.kategorie === id) })).filter(g => g.items.length)
+  }, [sichtbar])
+  // Reihenfolge der Eingabefelder für „Enter → nächster Artikel" (nur aufgeklappte Gruppen)
+  const reihenfolge = useMemo(() => gruppen.filter(g => !zu.has(g.id) || !!suche).flatMap(g => g.items.map(it => it.id)), [gruppen, zu, suche])
+
+  function klappe(id: string) { setZu(s => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); merkeZu(n); return n }) }
+
+  async function mitLager(fn: (l: AccessoryItem[]) => AccessoryItem[]) {
+    await flush()
+    setSpeichert(true)
+    try { const neu = await aendereLager(fn, von); setItems(patchesAnwenden(neu, ausstehend.current)); setFehler(''); return true }
+    catch (e) { setFehler(e instanceof Error ? e.message : String(e)); return false }
+    finally { setSpeichert(false) }
   }
 
-  function addCcField() { setEmailCc(prev => [...prev, '']) }
-  function setCcField(i: number, v: string) { setEmailCc(prev => prev.map((c, idx) => idx === i ? v : c)) }
-  function removeCcField(i: number) { setEmailCc(prev => prev.filter((_, idx) => idx !== i)) }
+  async function speichereEditor(d: EditorDaten): Promise<string | null> {
+    const name = d.name.trim()
+    const dublette = items.find(it => it.id !== d.id && normName(it.name) === normName(name))
+    if (dublette) return `„${dublette.name}" gibt es schon (${kategorieName(dublette.kategorie)}).`
+    const ist = d.current.trim() === '' ? null : Math.max(0, parseInt(d.current, 10) || 0)
+    const soll = Math.max(0, parseInt(d.target, 10) || 0)
+    if (d.id) {
+      const alt = items.find(it => it.id === d.id)
+      const patch: ArtikelPatch = { name, kategorie: d.kategorie, target: soll, amazonLink: d.amazonLink, notiz: d.notiz }
+      if (ist != null && (ist !== alt?.current || !alt?.gezaehltAm)) Object.assign(patch, { current: ist, gezaehltAm: new Date().toISOString(), gezaehltVon: von })
+      ausstehend.current.delete(d.id)
+      return (await mitLager(l => patchesAnwenden(l, new Map([[d.id!, patch]])))) ? null : 'Speichern fehlgeschlagen.'
+    }
+    const neu = neuerArtikel({ name, kategorie: d.kategorie, current: ist, target: soll, amazonLink: d.amazonLink, notiz: d.notiz, von })
+    return (await mitLager(l => [...l, neu])) ? null : 'Speichern fehlgeschlagen.'
+  }
 
-  // ── Ergebnisseite: Export ─────────────────────────────────────────────────
-  async function doExport(format: AccessoryExportFormat) {
-    setExporting(format)
+  async function loesche(id: string) {
+    setLoeschId(null)
+    ausstehend.current.delete(id)
+    await mitLager(l => l.filter(it => it.id !== id))
+  }
+
+  // ── Historie ──
+  async function arrived(id: string, idx: number, wert: boolean) {
+    setHistBusy(`${id}:${idx}`)
     try {
-      const res = await exportOrderList(orderLines, format)
-      if (!res.ok) setEmailStatus(res.error || 'Export fehlgeschlagen.')
-    } finally {
-      setExporting(null)
-    }
+      await flush()
+      const r = await setHistoryLineArrived(id, idx, wert, von)
+      setHistory(r.history)
+      if (r.items) setItems(patchesAnwenden(r.items, ausstehend.current))
+      const l = r.history.find(e => e.id === id)?.lines[idx]
+      if (l && r.gebucht) setMeldung({ art: 'ok', text: r.gebucht > 0 ? `${l.name}: +${r.gebucht} in den Bestand gebucht.` : `${l.name}: ${-r.gebucht} wieder aus dem Bestand genommen.` })
+    } catch (e) { setFehler(e instanceof Error ? e.message : String(e)) }
+    finally { setHistBusy('') }
+  }
+  async function gesendet(id: string, wert: boolean) {
+    setHistBusy(`${id}:gesendet`)
+    try { setHistory(await setHistorySentToSascha(id, wert)) } catch (e) { setFehler(e instanceof Error ? e.message : String(e)) } finally { setHistBusy('') }
+  }
+  async function histLoeschen(id: string) {
+    setHistBusy(`${id}:del`)
+    try { setHistory(await deleteHistoryEntry(id)) } catch (e) { setFehler(e instanceof Error ? e.message : String(e)) } finally { setHistBusy('') }
   }
 
-  // ── Historie: "An Sascha geschickt"-Haken (mit Zeitstempel) ───────────────
-  async function toggleHistorySascha(id: string, value: boolean) {
-    const at = value ? new Date().toISOString() : undefined
-    // optimistisch
-    setHistory(prev => prev.map(e => e.id === id ? { ...e, sentToSascha: value, sentToSaschaAt: at } : e))
-    const res = await setHistorySentToSascha(id, value).catch(() => null)
-    if (res && res.ok) {
-      setHistory(prev => prev.map(e => e.id === id ? { ...e, sentToSascha: value, sentToSaschaAt: res.sentToSaschaAt } : e))
-    }
-  }
+  const chips: { f: Filter; label: string; n: number; ton?: string }[] = [
+    { f: 'alle', label: 'Alle', n: zaehler.alle },
+    { f: 'unter', label: 'Unter Soll', n: zaehler.unter, ton: 'text-amber-500' },
+    { f: 'ungezaehlt', label: 'Nicht gezählt', n: zaehler.ungezaehlt, ton: 'text-blue-500' },
+    { f: 'ohneLink', label: 'Ohne Bestelllink', n: zaehler.ohneLink },
+  ]
 
-  // ── Historie: "Angekommen"-Haken eines bestellten Artikels ────────────────
-  async function toggleHistoryLineArrived(id: string, lineIndex: number, value: boolean) {
-    setHistory(prev => prev.map(e => e.id === id
-      ? { ...e, lines: e.lines.map((l, i) => i === lineIndex ? { ...l, arrived: value } : l) }
-      : e))
-    await setHistoryLineArrived(id, lineIndex, value).catch(() => {})
-  }
-
-  // ── Historie: Eintrag loeschen ────────────────────────────────────────────
-  async function removeHistoryEntry(id: string) {
-    await deleteHistoryEntry(id).catch(() => {})
-    setHistory(prev => prev.filter(e => e.id !== id))
-  }
-
-  // ── Eine Tabellenzeile (in beiden Sektionen wiederverwendet) ──────────────
-  function renderRow(it: AccessoryItem) {
-    const expanded = expandedId === it.id
-    const below = it.current < it.target
-    const noLink = !it.amazonLink.trim()
-    return (
-      <div key={it.id} className="border-b border-border last:border-b-0">
-        <div className={`grid grid-cols-[1fr_80px_80px_120px] items-center gap-2 px-3 py-2 hover:bg-accent/20 ${expanded ? 'bg-accent/10' : ''}`}>
-          <button
-            onClick={() => setExpandedId(expanded ? null : it.id)}
-            className="flex items-center gap-2 text-left min-w-0 group"
-            title="Amazon-Link anzeigen"
-          >
-            <ChevronRight size={14} className={`text-muted-foreground transition-transform shrink-0 ${expanded ? 'rotate-90' : ''}`} />
-            <span className="text-sm text-foreground truncate group-hover:text-primary">{it.name}</span>
-            {noLink
-              ? <span title="Kein Amazon-Link hinterlegt" className="shrink-0 inline-flex"><AlertTriangle size={13} className="text-amber-400" /></span>
-              : <Link2 size={12} className="text-emerald-400 shrink-0" />}
-          </button>
-          <span className={`text-center text-sm font-semibold ${below ? 'text-amber-300' : 'text-emerald-300'}`}>{it.current}</span>
-          <span className="text-center text-sm text-muted-foreground">{it.target}</span>
-          <div className="flex items-center justify-end gap-1">
-            <button onClick={() => setExpandedId(expanded ? null : it.id)} title="Amazon-Link" className="p-1.5 rounded text-muted-foreground hover:text-amber-300 hover:bg-amber-500/10"><Link2 size={13} /></button>
-            <button onClick={() => openEdit(it)} title="Bearbeiten" className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-accent/40"><Edit3 size={13} /></button>
-            {confirmDeleteId === it.id ? (
-              <span className="inline-flex items-center gap-1">
-                <button onClick={() => doDelete(it.id)} className="px-2 py-1 rounded bg-red-500/20 text-red-300 text-[11px]">Löschen</button>
-                <button onClick={() => setConfirmDeleteId(null)} className="px-1.5 py-1 rounded text-muted-foreground hover:bg-accent/40 text-[11px]">Abbruch</button>
-              </span>
-            ) : (
-              <button onClick={() => setConfirmDeleteId(it.id)} title="Löschen" className="p-1.5 rounded text-muted-foreground hover:text-red-300 hover:bg-red-500/10"><Trash2 size={13} /></button>
-            )}
-          </div>
-        </div>
-
-        {expanded && (
-          <div className="px-3 pb-3 pt-1">
-            <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3">
-              <div className="flex items-center gap-2 mb-2">
-                <ShoppingCart size={13} className="text-amber-400" />
-                <span className="text-xs font-semibold text-foreground">Amazon-Bestelllink</span>
-              </div>
-              {editingLinkId === it.id ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    autoFocus
-                    value={linkDraft}
-                    onChange={e => setLinkDraft(e.target.value)}
-                    onKeyDown={e => { if (e.key === 'Enter') saveLink(it.id); if (e.key === 'Escape') setEditingLinkId(null) }}
-                    placeholder="https://www.amazon.de/..."
-                    className="flex-1 min-w-0 px-2.5 py-1.5 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
-                  />
-                  <button onClick={() => saveLink(it.id)} className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md bg-emerald-600 text-white hover:bg-emerald-500 text-xs"><Check size={13} />Speichern</button>
-                  <button onClick={() => setEditingLinkId(null)} className="p-1.5 rounded-md text-muted-foreground hover:bg-accent/40"><X size={14} /></button>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2">
-                  {it.amazonLink.trim() ? (
-                    <button
-                      onClick={() => openLink(it.amazonLink)}
-                      className="flex-1 min-w-0 inline-flex items-center gap-2 px-3 py-2 rounded-md bg-background border border-border text-sm text-blue-300 hover:text-blue-200 hover:border-blue-500/40 truncate"
-                      title={it.amazonLink}
-                    >
-                      <ExternalLink size={14} className="shrink-0" />
-                      <span className="truncate">{it.amazonLink}</span>
-                    </button>
-                  ) : (
-                    <span className="flex-1 text-sm text-amber-300/90 italic inline-flex items-center gap-1.5">
-                      <AlertTriangle size={13} className="shrink-0" />Noch kein Link hinterlegt.
-                    </span>
-                  )}
-                  <button
-                    onClick={() => startEditLink(it)}
-                    title="Link bearbeiten"
-                    className="inline-flex items-center gap-1 px-2.5 py-2 rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent/40 text-xs shrink-0"
-                  ><Edit3 size={13} />Bearbeiten</button>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-    )
-  }
-
-  // ── Render: Wizard ────────────────────────────────────────────────────────
-  if (mode === 'wizard') {
-    const total = wizardOrder.length
-    const cur = wizardOrder[wizardIndex]
-    if (!cur) { setMode('table'); return null }
-    const isLast = wizardIndex === total - 1
-    const progress = Math.round(((wizardIndex + 1) / total) * 100)
-    return (
-      <div className="flex flex-col h-full bg-background">
-        <div className="flex items-center gap-3 px-5 py-3 border-b border-border shrink-0">
-          <ClipboardList className="text-primary" size={22} />
-          <div className="min-w-0">
-            <h1 className="text-base font-semibold text-foreground leading-tight">Inventur läuft</h1>
-            <p className="text-[11px] text-muted-foreground">Teil {wizardIndex + 1} von {total}</p>
-          </div>
-          <div className="ml-auto flex items-center gap-2">
-            <button
-              onClick={openWizardAdd}
-              title="Neuen Artikel hinzufügen (wird sofort mitgezählt)"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-600 text-white hover:bg-emerald-500"
-            ><Plus size={13} />Artikel hinzufügen</button>
-            <button
-              onClick={() => setMode('table')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent/40 border border-border"
-            ><X size={13} />Abbrechen</button>
-          </div>
-        </div>
-
-        <div className="h-1 bg-border shrink-0">
-          <div className="h-full bg-primary transition-all duration-300" style={{ width: `${progress}%` }} />
-        </div>
-
-        <div className="flex-1 flex items-center justify-center p-6">
-          <div className="w-full max-w-xl rounded-2xl border border-border bg-card shadow-xl p-8">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground text-center mb-2">Aktueller IST-Zustand erfassen</p>
-            <h2 className="text-3xl font-bold text-foreground text-center mb-1 break-words">{cur.name}</h2>
-            <p className="text-center text-sm text-muted-foreground mb-6">
-              SOLL-Zustand: <span className="font-semibold text-foreground">{cur.target}</span>
-              <span className="mx-2 opacity-40">·</span>
-              bisher erfasst: <span className="font-semibold text-foreground">{cur.current}</span>
-            </p>
-
-            <label className="block text-center text-sm text-muted-foreground mb-2">Wie viele sind aktuell vorhanden?</label>
-            <input
-              ref={wizardInputRef}
-              value={wizardValues[cur.id] ?? ''}
-              onChange={e => wizardSetValue(cur.id, e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); wizardNext() } }}
-              inputMode="numeric"
-              placeholder="0"
-              className="w-full text-center text-4xl font-bold tracking-wider px-4 py-5 rounded-xl bg-background border-2 border-primary/40 text-foreground focus:outline-none focus:border-primary"
-            />
-
-            <div className="flex items-center justify-between gap-2 mt-8">
-              <button
-                onClick={wizardBack}
-                disabled={wizardIndex === 0}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm border border-border text-muted-foreground hover:text-foreground hover:bg-accent/40 disabled:opacity-40 disabled:cursor-not-allowed"
-              ><ChevronLeft size={15} />Zurück</button>
-              <button
-                onClick={wizardNext}
-                className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90"
-              >
-                {isLast ? (<><PackageCheck size={15} />Inventur abschließen</>) : (<>Weiter<ChevronRight size={15} /></>)}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Artikel während der Inventur hinzufügen (z. B. neue TVs im Lager) */}
-        {wizardAdd && (
-          <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-6" onClick={() => setWizardAdd(null)}>
-            <div className="bg-card border border-border rounded-xl shadow-2xl p-5 max-w-md w-full" onClick={e => e.stopPropagation()}>
-              <div className="flex items-center gap-2 mb-1">
-                <Plus size={18} className="text-emerald-400" />
-                <h3 className="text-base font-semibold text-foreground">Artikel hinzufügen</h3>
-              </div>
-              <p className="text-[11px] text-muted-foreground mb-4">Wird der Liste hinzugefügt und in dieser Inventur direkt mitgezählt.</p>
-              <div className="space-y-3">
-                <div>
-                  <label className="text-[11px] text-muted-foreground font-medium block mb-1">Name</label>
-                  <input
-                    autoFocus
-                    value={wizardAdd.name}
-                    onChange={e => setWizardAdd(s => s ? { ...s, name: e.target.value } : s)}
-                    onKeyDown={e => { if (e.key === 'Enter') saveWizardAdd() }}
-                    placeholder="z. B. TV 55 Zoll"
-                    className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[11px] text-muted-foreground font-medium block mb-1">Aktueller Bestand (IST)</label>
-                    <input
-                      type="number" min={0}
-                      value={wizardAdd.current}
-                      onChange={e => setWizardAdd(s => s ? { ...s, current: e.target.value } : s)}
-                      className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[11px] text-muted-foreground font-medium block mb-1">SOLL-Zustand</label>
-                    <input
-                      type="number" min={0}
-                      value={wizardAdd.target}
-                      onChange={e => setWizardAdd(s => s ? { ...s, target: e.target.value } : s)}
-                      className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[11px] text-muted-foreground font-medium block mb-1 inline-flex items-center gap-1.5"><ShoppingCart size={12} className="text-amber-400" />Bestelllink (Amazon, optional)</label>
-                  <input
-                    value={wizardAdd.amazonLink}
-                    onChange={e => setWizardAdd(s => s ? { ...s, amazonLink: e.target.value } : s)}
-                    placeholder="https://www.amazon.de/..."
-                    className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
-                  />
-                </div>
-              </div>
-              <div className="flex justify-end gap-2 mt-5">
-                <button onClick={() => setWizardAdd(null)} className="px-3 py-2 rounded-md text-sm text-muted-foreground border border-border hover:bg-muted/30">Abbrechen</button>
-                <button onClick={saveWizardAdd} disabled={!wizardAdd.name.trim()} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed">
-                  <Check size={14} />Hinzufügen &amp; mitzählen
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    )
-  }
-
-  // ── Render: Ergebnis / Bestellliste ───────────────────────────────────────
-  if (mode === 'result') {
-    return (
-      <div className="flex flex-col h-full bg-background">
-        <div className="flex items-center gap-3 px-5 py-3 border-b border-border shrink-0">
-          <ShoppingCart className="text-primary" size={22} />
-          <div className="min-w-0">
-            <h1 className="text-base font-semibold text-foreground leading-tight">Bestellliste</h1>
-            <p className="text-[11px] text-muted-foreground">
-              {orderLines.length === 0 ? 'Alles vollständig — nichts zu bestellen' : `${orderLines.length} Position${orderLines.length === 1 ? '' : 'en'} zu bestellen`}
-            </p>
-          </div>
-          <div className="ml-auto flex items-center gap-2">
-            <button
-              onClick={startInventory}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent/40 border border-border"
-            ><RefreshCw size={13} />Erneut zählen</button>
-            <button
-              onClick={() => setMode('table')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:opacity-90"
-            ><Check size={14} />Fertig</button>
-          </div>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-5">
-          <div className="max-w-2xl mx-auto space-y-4">
-            {orderLines.length === 0 ? (
-              <div className="flex flex-col items-center justify-center text-muted-foreground gap-3 py-10">
-                <PackageCheck size={48} className="opacity-30 text-emerald-400" />
-                <p className="text-sm">Alle Kleinteile sind ausreichend vorhanden.</p>
-                <p className="text-xs opacity-70">Es muss nichts nachbestellt werden.</p>
-              </div>
-            ) : (
-              <>
-                <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-blue-500/10 border border-blue-500/30 text-blue-200 text-xs">
-                  <AlertTriangle size={14} className="shrink-0" />
-                  Diese Teile liegen unter dem SOLL-Bestand. Menge = SOLL − IST.
-                </div>
-                {orderLines.map(({ item, quantity }) => (
-                  <div key={item.id} className="rounded-xl border border-border bg-card p-4">
-                    <p className="text-base font-bold text-foreground mb-2">
-                      {item.name} <span className="text-primary">({quantity})</span>
-                    </p>
-                    {item.amazonLink.trim() ? (
-                      <button
-                        onClick={() => openLink(item.amazonLink)}
-                        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/15 border border-amber-500/40 text-amber-200 hover:bg-amber-500/25 text-sm font-medium"
-                      >
-                        <ExternalLink size={14} />Bei Amazon bestellen
-                      </button>
-                    ) : (
-                      <p className="text-xs text-amber-300/90 italic inline-flex items-center gap-1.5">
-                        <AlertTriangle size={13} />Kein Amazon-Link hinterlegt
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </>
-            )}
-
-            {/* Kleinteile nachtragen, die nicht auf der Liste standen */}
-            <div className="rounded-xl border border-border bg-card p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">Kleinteil nachtragen</p>
-              <p className="text-[11px] text-muted-foreground mb-3">
-                Etwas gefunden, das nicht auf der Liste stand? Hier ergänzen — es kommt in diese Bestellliste und optional dauerhaft ins Inventar.
-              </p>
-              <div className="space-y-2">
-                <input
-                  value={nachtragName}
-                  onChange={e => { setNachtragName(e.target.value); setNachtragHinweis('') }}
-                  onKeyDown={e => { if (e.key === 'Enter') void addNachtrag() }}
-                  placeholder="Name des Kleinteils"
-                  className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
-                />
-                <div className="flex items-center gap-2">
-                  <label className="text-[11px] text-muted-foreground shrink-0">Menge:</label>
-                  <input
-                    value={nachtragMenge}
-                    onChange={e => setNachtragMenge(e.target.value.replace(/[^\d]/g, ''))}
-                    inputMode="numeric"
-                    className="w-20 px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
-                  />
-                  <input
-                    value={nachtragLink}
-                    onChange={e => setNachtragLink(e.target.value)}
-                    placeholder="Bestelllink (optional)"
-                    className="flex-1 px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
-                  />
-                </div>
-                <label className="flex items-start gap-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={nachtragUebernehmen}
-                    onChange={e => setNachtragUebernehmen(e.target.checked)}
-                    className="w-4 h-4 mt-0.5 accent-primary shrink-0"
-                  />
-                  <span className="text-xs text-foreground">
-                    Dauerhaft in die Inventarliste übernehmen
-                    <span className="block text-[11px] text-muted-foreground">Wird mit IST 0 und SOLL = Menge angelegt und ist ab der nächsten Inventur dabei.</span>
-                  </span>
-                </label>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <button
-                    onClick={() => void addNachtrag()}
-                    disabled={!nachtragName.trim()}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40"
-                  ><Plus size={14} />Hinzufügen</button>
-                  {nachtragHinweis && <span className="text-[11px] text-muted-foreground">{nachtragHinweis}</span>}
-                </div>
-              </div>
-            </div>
-
-            {/* Export-Buttons */}
-            <div className="rounded-xl border border-border bg-card p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2.5">Bestellliste exportieren</p>
-              <div className="flex flex-wrap gap-2">
-                <button onClick={() => doExport('pdf')} disabled={exporting !== null}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-border text-sm text-foreground hover:bg-accent/40 disabled:opacity-50">
-                  {exporting === 'pdf' ? <Loader2 size={14} className="animate-spin" /> : <FileDown size={14} className="text-red-400" />}Als PDF
-                </button>
-                <button onClick={() => doExport('word')} disabled={exporting !== null}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-border text-sm text-foreground hover:bg-accent/40 disabled:opacity-50">
-                  {exporting === 'word' ? <Loader2 size={14} className="animate-spin" /> : <FileDown size={14} className="text-blue-400" />}Als Word
-                </button>
-                <button onClick={() => doExport('excel')} disabled={exporting !== null}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-border text-sm text-foreground hover:bg-accent/40 disabled:opacity-50">
-                  {exporting === 'excel' ? <Loader2 size={14} className="animate-spin" /> : <FileDown size={14} className="text-emerald-400" />}Als Excel
-                </button>
-              </div>
-            </div>
-
-            {/* E-Mail-Panel */}
-            <div className="rounded-xl border border-border bg-card p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2.5 inline-flex items-center gap-1.5">
-                <Mail size={13} />Bestellliste per E-Mail senden
-              </p>
-              <div className="space-y-2.5">
-                <div>
-                  <label className="text-[11px] text-muted-foreground block mb-1">An:</label>
-                  <input
-                    value={emailTo}
-                    onChange={e => setEmailTo(e.target.value)}
-                    placeholder="empfaenger@firma.de"
-                    className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
-                  />
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-[11px] text-muted-foreground">CC:</label>
-                    <button onClick={addCcField} className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline"><Plus size={11} />CC hinzufügen</button>
-                  </div>
-                  {emailCc.length === 0 && <p className="text-[11px] text-muted-foreground/70 italic">Keine CC-Empfänger. Über „CC hinzufügen" weitere Kollegen ergänzen.</p>}
-                  <div className="space-y-1.5">
-                    {emailCc.map((cc, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <input
-                          value={cc}
-                          onChange={e => setCcField(i, e.target.value)}
-                          placeholder="kollege@firma.de"
-                          className="flex-1 px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
-                        />
-                        <button onClick={() => removeCcField(i)} title="Entfernen" className="p-2 rounded-md text-muted-foreground hover:text-red-300 hover:bg-red-500/10"><X size={14} /></button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[11px] text-muted-foreground block mb-1">Betreff:</label>
-                  <div className="w-full px-2.5 py-2 rounded-md bg-muted/20 border border-border text-sm text-foreground">
-                    {emailSubject}
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[11px] text-muted-foreground inline-flex items-center gap-1.5 mb-1.5">
-                    <Paperclip size={11} />Bestellliste als Anhang beifügen:
-                  </label>
-                  <div className="flex flex-wrap items-center gap-2">
-                    {([
-                      { f: 'pdf' as const, label: 'PDF', dot: 'text-red-400' },
-                      { f: 'word' as const, label: 'Word', dot: 'text-blue-400' },
-                      { f: 'excel' as const, label: 'Excel', dot: 'text-emerald-400' },
-                    ]).map(({ f, label, dot }) => {
-                      const on = attachFormats.has(f)
-                      return (
-                        <button
-                          key={f}
-                          type="button"
-                          onClick={() => toggleAttachFormat(f)}
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs border transition-colors ${on ? 'border-primary/60 bg-primary/10 text-foreground' : 'border-border bg-background text-muted-foreground hover:text-foreground'}`}
-                        >
-                          <span className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center ${on ? 'bg-primary border-primary' : 'border-muted-foreground/50'}`}>
-                            {on && <Check size={10} className="text-white" />}
-                          </span>
-                          <FileDown size={12} className={dot} />{label}
-                        </button>
-                      )
-                    })}
-                  </div>
-                  {attachFormats.size > 1 && (
-                    <p className="text-[11px] text-muted-foreground/70 mt-1">Mehrere Formate werden als ZIP-Archiv angehängt.</p>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={sendOrderEmail}
-                    disabled={emailSending || !emailTo.trim()}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-semibold bg-blue-600 text-white hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {emailSending ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}E-Mail senden
-                  </button>
-                  {emailStatus && <span className="text-xs text-muted-foreground">{emailStatus}</span>}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Easter Egg: Konfetti + Skyline-Drift, danach faded die Liste ein */}
-        {celebrating && <InventoryCelebration onDone={() => setCelebrating(false)} />}
-      </div>
-    )
-  }
-
-  // ── Render: Tabelle ───────────────────────────────────────────────────────
   return (
     <div className="flex flex-col h-full bg-background">
+      {/* Kopf */}
       <div className="flex items-center gap-3 px-5 py-3 border-b border-border shrink-0">
         <Cable className="text-primary" size={22} />
         <div className="min-w-0">
           <h1 className="text-base font-semibold text-foreground leading-tight">Zubehör Inventur</h1>
-          <p className="text-[11px] text-muted-foreground">
-            {items.length} Kleinteile
-            {saving && <span className="ml-2 inline-flex items-center gap-1 opacity-70"><Loader2 size={10} className="animate-spin" />speichern…</span>}
+          <p className="text-[11px] text-muted-foreground flex items-center gap-1.5 flex-wrap">
+            Kleinteile-Lager · {items.length} Artikel · <span className={zaehler.unter ? 'text-amber-500' : ''}>{zaehler.unter} unter Soll</span>
+            {zaehler.ungezaehlt > 0 && <> · <span className="text-blue-500">{zaehler.ungezaehlt} nicht gezählt</span></>}
+            {speichert ? <span className="inline-flex items-center gap-1"><Loader2 size={10} className="animate-spin" />speichert…</span> : null}
           </p>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <button onClick={reload} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/40 border border-border" title="Aktualisieren">
+          <button onClick={() => void laden()} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent border border-border" title="Neu laden (Stand der Kollegen)">
             <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
           </button>
-          <button
-            onClick={startInventory}
-            disabled={items.length === 0}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 disabled:opacity-50"
-          ><Play size={14} />Inventur starten</button>
+          <button onClick={() => setEditor({ name: '', kategorie: 'sonstiges', current: '', target: '1', amazonLink: '', notiz: '' })}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs border border-border text-foreground hover:bg-accent"><Plus size={14} />Artikel hinzufügen</button>
+          <button onClick={() => { void flush().then(() => setBestellung(true)) }} disabled={loading}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50">
+            <ShoppingCart size={14} />Bestellung verfassen
+            {vorschlag.positionen.length > 0 && <span className="ml-0.5 px-1.5 rounded-full bg-white/25 text-[10px]">{vorschlag.positionen.length}</span>}
+          </button>
         </div>
       </div>
 
-      {error && (
-        <div className="mx-5 mt-3 flex items-center gap-2 px-3 py-2 rounded-md bg-red-500/10 border border-red-500/30 text-red-300 text-xs shrink-0">
-          <AlertTriangle size={14} />{error}
-        </div>
-      )}
-
-      {/* Suchleiste + Hinzufuegen */}
-      <div className="flex items-center gap-2 px-5 py-3 shrink-0">
-        <div className="relative flex-1 max-w-sm">
+      {/* Suche + Filter */}
+      <div className="flex items-center gap-2 px-5 py-2.5 shrink-0 flex-wrap">
+        <div className="relative w-64">
           <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <input
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Kleinteil suchen…"
-            className="w-full pl-8 pr-2 py-2 rounded-md bg-card border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
-          />
+          <input value={suche} onChange={e => setSuche(e.target.value)} placeholder="Artikel suchen…"
+            className="w-full pl-8 pr-2 py-1.5 rounded-md bg-card border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50" />
         </div>
-        <button
-          onClick={openAdd}
-          title="Neuen Artikel/Gegenstand manuell anlegen"
-          className="inline-flex items-center gap-1.5 px-3 h-9 rounded-md bg-primary text-primary-foreground hover:opacity-90 shrink-0 text-xs font-medium"
-        ><Plus size={16} />Artikel hinzufügen</button>
+        {chips.map(c => (
+          <button key={c.f} onClick={() => setFilter(c.f)}
+            className={`px-2.5 py-1 rounded-full text-[11px] border ${filter === c.f ? 'border-primary bg-primary/10 text-foreground font-medium' : 'border-border text-muted-foreground hover:bg-accent'}`}>
+            {c.label} <span className={filter === c.f ? '' : c.ton}>{c.n}</span>
+          </button>
+        ))}
+        <span className="ml-auto text-[10px] text-muted-foreground hidden lg:inline">Bestand eintragen · Enter = nächster Artikel · +/− zählt direkt</span>
       </div>
 
-      {/* Inhalt */}
-      <div className="flex-1 overflow-y-auto px-5 pb-5 space-y-4">
-        {!loading && items.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-3">
-            <Cable size={48} className="opacity-30" />
-            <p className="text-sm">Noch keine Kleinteile angelegt.</p>
-            <button onClick={openAdd} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs bg-primary text-primary-foreground hover:opacity-90"><Plus size={14} />Erstes Kleinteil hinzufügen</button>
-          </div>
-        )}
-
-        {items.length > 0 && (
-          <>
-            {/* Sektion: Nachbestellung erforderlich */}
-            <AccordionSection
-              title="Nachbestellung erforderlich"
-              count={reorderItems.length}
-              open={openReorder}
-              onToggle={() => setOpenReorder(o => !o)}
-              accent="amber"
-            >
-              {reorderItems.length === 0
-                ? <div className="px-3 py-6 text-center text-xs text-muted-foreground">Aktuell nichts nachzubestellen.</div>
-                : reorderItems.map(renderRow)}
-            </AccordionSection>
-
-            {/* Sektion: Soll-Zustand erfüllt */}
-            <AccordionSection
-              title="Soll-Zustand erfüllt"
-              count={fulfilledItems.length}
-              open={openFulfilled}
-              onToggle={() => setOpenFulfilled(o => !o)}
-              accent="emerald"
-            >
-              {fulfilledItems.length === 0
-                ? <div className="px-3 py-6 text-center text-xs text-muted-foreground">Kein Kleinteil erfüllt aktuell den SOLL-Bestand.</div>
-                : fulfilledItems.map(renderRow)}
-            </AccordionSection>
-
-            {/* Inventur-Historie */}
-            <div className="rounded-lg border border-border overflow-hidden">
-              <button
-                onClick={() => setShowHistory(o => !o)}
-                className="w-full flex items-center gap-2 px-3 py-2.5 bg-card/80 hover:bg-accent/20"
-              >
-                <History size={15} className="text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">Inventur-Historie</span>
-                <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-muted/40 text-muted-foreground">{history.length}</span>
-                <ChevronDown size={15} className={`ml-auto text-muted-foreground transition-transform ${showHistory ? 'rotate-180' : ''}`} />
-              </button>
-              {showHistory && (
-                <div className="border-t border-border">
-                  {history.length === 0 ? (
-                    <div className="px-3 py-6 text-center text-xs text-muted-foreground">Noch keine abgeschlossene Inventur.</div>
-                  ) : (
-                    history.map(h => {
-                      const open = expandedHistoryId === h.id
-                      const arrivedCount = h.lines.filter(l => l.arrived).length
-                      return (
-                        <div key={h.id} className="border-b border-border last:border-b-0">
-                          {/* Kopfzeile – klappt den Eintrag auf/zu */}
-                          <div className={`flex items-center gap-3 px-3 py-2.5 hover:bg-accent/10 ${open ? 'bg-accent/10' : ''}`}>
-                            <button
-                              onClick={() => setExpandedHistoryId(open ? null : h.id)}
-                              className="flex items-center gap-3 flex-1 min-w-0 text-left"
-                            >
-                              <ChevronRight size={14} className={`text-muted-foreground shrink-0 transition-transform ${open ? 'rotate-90' : ''}`} />
-                              <ClipboardList size={14} className="text-muted-foreground shrink-0" />
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm text-foreground">
-                                  {fmtDateTime(h.timestamp)}
-                                  <span className="text-muted-foreground"> · {h.by}</span>
-                                </p>
-                                <p className="text-[11px] text-muted-foreground">
-                                  {h.reorderCount} Position{h.reorderCount === 1 ? '' : 'en'} nachbestellt · {h.totalUnits} Stück gesamt
-                                  {h.reorderCount > 0 && <span> · {arrivedCount}/{h.reorderCount} angekommen</span>}
-                                </p>
-                              </div>
-                            </button>
-                            {h.sentToSascha && (
-                              <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500 text-black border border-emerald-600 shrink-0">
-                                <CheckCircle2 size={10} />An Sascha
-                              </span>
-                            )}
-                            <button onClick={() => removeHistoryEntry(h.id)} title="Eintrag löschen" className="p-1.5 rounded text-muted-foreground hover:text-red-300 hover:bg-red-500/10 shrink-0"><Trash2 size={12} /></button>
-                          </div>
-
-                          {/* Aufgeklappter Bereich */}
-                          {open && (
-                            <div className="px-3 pb-3 pt-1 bg-background/40 space-y-3">
-                              {/* An Sascha geschickt + Zeitstempel */}
-                              <label className="flex items-center gap-2.5 px-2.5 py-2 rounded-md border border-border bg-card cursor-pointer select-none">
-                                <input
-                                  type="checkbox"
-                                  checked={h.sentToSascha}
-                                  onChange={e => toggleHistorySascha(h.id, e.target.checked)}
-                                  className="w-4 h-4 rounded accent-emerald-500"
-                                />
-                                <span className="text-sm text-foreground">An Sascha geschickt</span>
-                                {h.sentToSascha && h.sentToSaschaAt && (
-                                  <span className="text-[11px] text-emerald-300/90 ml-auto">
-                                    (Haken gesetzt am: {fmtDateTime(h.sentToSaschaAt)} Uhr)
-                                  </span>
-                                )}
-                              </label>
-
-                              {/* Bestellte Artikel mit "Angekommen"-Status */}
-                              {h.lines.length === 0 ? (
-                                <div className="flex items-center gap-2 text-xs text-muted-foreground px-1 py-2">
-                                  <PackageCheck size={14} className="text-emerald-400" />
-                                  Bei dieser Inventur musste nichts nachbestellt werden.
-                                </div>
-                              ) : (
-                                <div className="rounded-md border border-border overflow-hidden">
-                                  <div className="px-2.5 py-1.5 bg-card/70 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                                    Nachbestellte Artikel
-                                  </div>
-                                  {h.lines.map((l, idx) => (
-                                    <label
-                                      key={idx}
-                                      className="flex items-center gap-2.5 px-2.5 py-2 border-t border-border cursor-pointer select-none hover:bg-accent/10"
-                                    >
-                                      <input
-                                        type="checkbox"
-                                        checked={l.arrived}
-                                        onChange={e => toggleHistoryLineArrived(h.id, idx, e.target.checked)}
-                                        className="w-4 h-4 rounded accent-emerald-500 shrink-0"
-                                      />
-                                      <span className={`flex-1 min-w-0 text-sm ${l.arrived ? 'text-muted-foreground line-through' : 'text-foreground'}`}>
-                                        {l.name} <span className="text-primary font-medium">({l.quantity})</span>
-                                      </span>
-                                      {l.amazonLink.trim() && (
-                                        <button
-                                          type="button"
-                                          onClick={e => { e.preventDefault(); openLink(l.amazonLink) }}
-                                          title="Bei Amazon öffnen"
-                                          className="p-1 rounded text-muted-foreground hover:text-amber-300 hover:bg-amber-500/10 shrink-0"
-                                        ><ExternalLink size={13} /></button>
-                                      )}
-                                      <span className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 ${l.arrived ? 'bg-emerald-500 text-black border border-emerald-600' : 'bg-muted/40 text-muted-foreground border border-border'}`}>
-                                        {l.arrived ? 'Angekommen' : 'Offen'}
-                                      </span>
-                                    </label>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      )
-                    })
-                  )}
-                </div>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Hinzufuegen/Bearbeiten-Dialog */}
-      {editor && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-6" onClick={() => setEditor(null)}>
-          <div className="bg-card border border-border rounded-xl shadow-2xl p-5 max-w-md w-full" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center gap-2 mb-4">
-              {editor.id ? <Edit3 size={18} className="text-primary" /> : <Plus size={18} className="text-primary" />}
-              <h3 className="text-base font-semibold text-foreground">{editor.id ? 'Kleinteil bearbeiten' : 'Neues Kleinteil'}</h3>
-            </div>
-            <div className="space-y-3">
-              <div>
-                <label className="text-[11px] text-muted-foreground font-medium block mb-1">Name</label>
-                <input
-                  autoFocus
-                  value={editor.name}
-                  onChange={e => setEditor(s => s ? { ...s, name: e.target.value } : s)}
-                  onKeyDown={e => { if (e.key === 'Enter') saveEditor() }}
-                  placeholder="z.B. Headset"
-                  className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[11px] text-muted-foreground font-medium block mb-1">IST-Zustand</label>
-                  <input
-                    type="number" min={0}
-                    value={editor.current}
-                    onChange={e => setEditor(s => s ? { ...s, current: e.target.value } : s)}
-                    className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] text-muted-foreground font-medium block mb-1">SOLL-Zustand</label>
-                  <input
-                    type="number" min={0}
-                    value={editor.target}
-                    onChange={e => setEditor(s => s ? { ...s, target: e.target.value } : s)}
-                    className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="text-[11px] text-muted-foreground font-medium block mb-1">Amazon-Link (optional)</label>
-                <input
-                  value={editor.amazonLink}
-                  onChange={e => setEditor(s => s ? { ...s, amazonLink: e.target.value } : s)}
-                  placeholder="https://www.amazon.de/..."
-                  className="w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
-                />
-              </div>
-              <p className="text-[10px] text-muted-foreground">Der IST-Zustand wird nicht durch den SOLL-Zustand begrenzt.</p>
-            </div>
-            <div className="flex justify-end gap-2 mt-5">
-              <button onClick={() => setEditor(null)} className="px-3 py-2 rounded-md text-sm text-muted-foreground border border-border hover:bg-muted/30">Abbrechen</button>
-              <button onClick={saveEditor} disabled={!editor.name.trim()} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed">
-                <Check size={14} />Speichern
-              </button>
-            </div>
-          </div>
+      {(fehler || meldung) && (
+        <div className="px-5 space-y-1.5 shrink-0">
+          {fehler && <div className="flex items-start gap-2 px-3 py-2 rounded-md bg-red-500/10 border border-red-500/30 text-red-500 text-xs"><AlertTriangle size={14} className="shrink-0 mt-0.5" /><span className="flex-1">{fehler}</span><button onClick={() => setFehler('')}><X size={12} /></button></div>}
+          {meldung && <div className={`flex items-start gap-2 px-3 py-2 rounded-md text-xs border ${meldung.art === 'ok' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : 'bg-blue-500/10 border-blue-500/30 text-blue-500'}`}>
+            {meldung.art === 'ok' ? <CheckCircle2 size={14} className="shrink-0 mt-0.5" /> : <Info size={14} className="shrink-0 mt-0.5" />}<span className="flex-1">{meldung.text}</span><button onClick={() => setMeldung(null)}><X size={12} /></button></div>}
         </div>
       )}
 
-      {loading && items.length === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center text-muted-foreground gap-2"><Loader2 size={16} className="animate-spin" />Lade Liste…</div>
+      {/* Liste */}
+      <div className="flex-1 overflow-y-auto px-5 pb-5 pt-2.5 space-y-4">
+        {loading && !items.length ? (
+          <div className="flex items-center justify-center py-16 text-muted-foreground gap-2 text-sm"><Loader2 size={16} className="animate-spin" />Lade Lagerliste…</div>
+        ) : (
+          <div className="rounded-lg border border-border bg-card overflow-hidden">
+            <div className="grid grid-cols-[minmax(0,1fr)_120px_120px_168px_64px] items-center gap-3 px-3 py-2 bg-muted/30 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+              <span>Artikel</span><span className="text-center">Bestand (Ist)</span><span className="text-center">Soll</span><span>Status</span><span />
+            </div>
+            {gruppen.length === 0 && <div className="px-3 py-8 text-center text-xs text-muted-foreground">{items.length ? 'Kein Artikel passt zu Suche/Filter.' : 'Noch keine Artikel.'}</div>}
+            {gruppen.map(g => {
+              const geschlossen = zu.has(g.id) && !suche
+              const unter = g.items.filter(it => it.gezaehltAm && it.current < it.target).length
+              const offenZ = g.items.filter(it => !it.gezaehltAm).length
+              return (
+                <div key={g.id}>
+                  <button onClick={() => klappe(g.id)} className="w-full flex items-center gap-2 px-3 py-1.5 border-t border-border bg-muted/10 hover:bg-accent/30 text-left">
+                    <ChevronDown size={13} className={`text-muted-foreground transition-transform ${geschlossen ? '-rotate-90' : ''}`} />
+                    <span className="text-xs font-semibold text-foreground">{g.name}</span>
+                    <span className="text-[10px] text-muted-foreground">{g.items.length} Artikel</span>
+                    {unter > 0 && <span className="text-[10px] text-amber-500">· {unter} unter Soll</span>}
+                    {offenZ > 0 && <span className="text-[10px] text-blue-500">· {offenZ} nicht gezählt</span>}
+                  </button>
+                  {!geschlossen && g.items.map(it => (
+                    <ArtikelZeile key={it.id} it={it} index={reihenfolge.indexOf(it.id)} unterwegs={unterwegs.get(it.id)?.menge ?? 0}
+                      loeschFrage={loeschId === it.id}
+                      onIst={n => aendere(it.id, { current: n, gezaehltAm: new Date().toISOString(), gezaehltVon: von })}
+                      onSoll={n => aendere(it.id, { target: n })}
+                      onEdit={() => setEditor({ id: it.id, name: it.name, kategorie: it.kategorie, current: it.gezaehltAm ? String(it.current) : '', target: String(it.target), amazonLink: it.amazonLink, notiz: it.notiz || '', gezaehlt: it.gezaehltAm ? `${fmt(it.gezaehltAm)}${it.gezaehltVon ? ` von ${it.gezaehltVon}` : ''}` : undefined })}
+                      onLoeschFrage={v => setLoeschId(v ? it.id : null)} onLoeschen={() => void loesche(it.id)} />
+                  ))}
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        <BestellHistorie history={history} busy={histBusy} onArrived={(id, i, w) => void arrived(id, i, w)} onGesendet={(id, w) => void gesendet(id, w)} onLoeschen={id => void histLoeschen(id)} />
+      </div>
+
+      {editor && <ArtikelDialog daten={editor} onClose={() => setEditor(null)} onSpeichern={async d => { const f = await speichereEditor(d); if (!f) setEditor(null); return f }} />}
+      {bestellung && (
+        <BestellDialog items={items} history={history} von={von} onClose={() => setBestellung(false)}
+          onFertig={({ meldung: m, items: neu, eintrag }) => {
+            setBestellung(false)
+            setMeldung({ art: 'ok', text: m })
+            setHistory(h => [eintrag, ...h.filter(e => e.id !== eintrag.id)])
+            if (neu) setItems(patchesAnwenden(neu, ausstehend.current))
+          }} />
       )}
     </div>
   )
 }
 
-// ── Akkordeon-Sektion ─────────────────────────────────────────────────────────
-function AccordionSection({ title, count, open, onToggle, accent, children }: {
-  title: string
-  count: number
-  open: boolean
-  onToggle: () => void
-  accent: 'amber' | 'emerald'
-  children: React.ReactNode
-}) {
-  const badge = accent === 'amber'
-    ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
-    : 'bg-emerald-500 text-black border-emerald-500/30'
-  const dot = accent === 'amber' ? 'bg-amber-400' : 'bg-emerald-400'
+// ── Zahlfeld mit −/+ ─────────────────────────────────────────────────────────
+function ZahlFeld({ wert, leer, onCommit, art, index, titel }: { wert: number; leer?: boolean; onCommit: (n: number) => void; art: 'ist' | 'soll'; index: number; titel: string }) {
+  // Entwurf zusätzlich im Ref: Enter übernimmt SOFORT (nicht erst über blur), und das
+  // anschließende blur übernimmt nicht ein zweites Mal.
+  const [draft, setDraftState] = useState<string | null>(null)
+  const draftRef = useRef<string | null>(null)
+  const setDraft = (v: string | null) => { draftRef.current = v; setDraftState(v) }
+  const commit = () => {
+    const d = draftRef.current
+    if (d === null) return
+    setDraft(null)
+    const s = d.trim()
+    if (s === '') return
+    const n = Math.min(9999, Math.max(0, parseInt(s, 10) || 0))
+    if (n !== wert || leer) onCommit(n)
+  }
+  const springe = (dir: number) => {
+    const el = document.querySelector<HTMLInputElement>(`input[data-zahl="${art}"][data-index="${index + dir}"]`)
+    if (el) { el.focus(); el.select() }
+  }
+  const knopf = 'w-7 h-7 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-30'
   return (
-    <div className="rounded-lg border border-border overflow-hidden">
-      <button onClick={onToggle} className="w-full flex items-center gap-2 px-3 py-2.5 bg-card/80 hover:bg-accent/20">
-        <span className={`w-2 h-2 rounded-full ${dot} shrink-0`} />
-        <span className="text-sm font-semibold text-foreground">{title}</span>
-        <span className={`text-[11px] px-1.5 py-0.5 rounded-full border ${badge}`}>{count}</span>
-        <ChevronDown size={15} className={`ml-auto text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`} />
-      </button>
-      {open && (
-        <div className="border-t border-border">
-          {/* Kopfzeile */}
-          <div className="grid grid-cols-[1fr_80px_80px_120px] items-center gap-2 px-3 py-2 bg-card/40 border-b border-border text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-            <span>Kleinteil</span>
-            <span className="text-center">IST</span>
-            <span className="text-center">SOLL</span>
-            <span className="text-right">Aktionen</span>
-          </div>
-          {children}
+    <div className="flex justify-center">
+      <div className={`inline-flex items-center rounded-md border bg-background overflow-hidden ${leer ? 'border-dashed border-blue-500/50' : 'border-border'}`} title={titel}>
+        <button tabIndex={-1} onClick={() => onCommit(leer ? 0 : Math.max(0, wert - 1))} disabled={!leer && wert <= 0} className={knopf} aria-label="weniger"><Minus size={12} /></button>
+        <input value={draft ?? (leer ? '' : String(wert))} placeholder={leer ? '?' : '0'} inputMode="numeric" data-zahl={art} data-index={index}
+          onChange={e => setDraft(e.target.value.replace(/\D/g, '').slice(0, 4))}
+          onFocus={e => e.currentTarget.select()}
+          onBlur={commit}
+          onKeyDown={e => {
+            if (e.key === 'Enter') { e.preventDefault(); commit(); springe(e.shiftKey ? -1 : 1) }
+            else if (e.key === 'Escape') { setDraft(null); e.currentTarget.blur() }
+            else if (e.key === 'ArrowDown') { e.preventDefault(); commit(); springe(1) }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); commit(); springe(-1) }
+          }}
+          className="w-11 h-7 text-center text-sm font-semibold bg-transparent text-foreground placeholder:text-blue-500/70 focus:outline-none focus:bg-primary/10" />
+        <button tabIndex={-1} onClick={() => onCommit(leer ? 1 : wert + 1)} className={knopf} aria-label="mehr"><Plus size={12} /></button>
+      </div>
+    </div>
+  )
+}
+
+// ── Eine Zeile ────────────────────────────────────────────────────────────────
+function ArtikelZeile({ it, index, unterwegs, loeschFrage, onIst, onSoll, onEdit, onLoeschFrage, onLoeschen }: {
+  it: AccessoryItem; index: number; unterwegs: number; loeschFrage: boolean
+  onIst: (n: number) => void; onSoll: (n: number) => void; onEdit: () => void
+  onLoeschFrage: (v: boolean) => void; onLoeschen: () => void
+}) {
+  const st = statusVon(it)
+  const link = linkHref(it.amazonLink)
+  const badge = st.art === 'ungezaehlt'
+    ? <span className="inline-flex items-center gap-1 text-[11px] text-blue-500"><CircleDashed size={12} />nicht gezählt</span>
+    : st.art === 'ohneSoll' ? <span className="text-[11px] text-muted-foreground">kein Soll</span>
+    : st.art === 'ok' ? <span className="inline-flex items-center gap-1 text-[11px] text-emerald-500"><Check size={12} />Soll erfüllt</span>
+    : <span className={`inline-flex items-center gap-1 text-[11px] font-medium ${st.art === 'leer' ? 'text-red-500' : 'text-amber-500'}`}><AlertTriangle size={12} />{st.art === 'leer' ? 'leer · ' : ''}{st.fehlt} fehlen</span>
+  return (
+    <div className="grid grid-cols-[minmax(0,1fr)_120px_120px_168px_64px] items-center gap-3 px-3 py-1 border-t border-border hover:bg-accent/20">
+      <div className="min-w-0 pl-5">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <button onClick={onEdit} className="text-sm text-foreground truncate text-left hover:text-primary" title={`${it.name} — bearbeiten`}>{it.name}</button>
+          {link
+            ? <button onClick={() => oeffne(it.amazonLink)} title={`Bestelllink öffnen: ${kurzLink(it.amazonLink)}`} className="shrink-0 text-emerald-500 hover:text-emerald-400"><Link2 size={12} /></button>
+            : <span title="Kein Bestelllink hinterlegt" className="shrink-0 text-muted-foreground/60"><Link2Off size={12} /></span>}
         </div>
-      )}
+        {it.notiz && <p className="text-[10px] text-muted-foreground truncate">{it.notiz}</p>}
+      </div>
+      <ZahlFeld art="ist" index={index} wert={it.current} leer={!it.gezaehltAm} onCommit={onIst}
+        titel={it.gezaehltAm ? `Bestand — gezählt ${fmt(it.gezaehltAm)}${it.gezaehltVon ? ` von ${it.gezaehltVon}` : ''}` : 'Noch nicht gezählt — Bestand eintragen'} />
+      <ZahlFeld art="soll" index={index} wert={it.target} onCommit={onSoll} titel="Soll-Bestand" />
+      <div className="min-w-0 leading-tight">
+        {badge}
+        {unterwegs > 0 && <p className="text-[10px] text-blue-500 inline-flex items-center gap-1"><Truck size={10} />{unterwegs} bestellt, unterwegs</p>}
+      </div>
+      <div className="flex items-center justify-end gap-0.5">
+        {loeschFrage ? (
+          <span className="inline-flex items-center gap-0.5">
+            <button onClick={onLoeschen} className="px-1.5 py-0.5 rounded bg-red-500/15 text-red-500 text-[10px]">Löschen</button>
+            <button onClick={() => onLoeschFrage(false)} className="p-0.5 rounded text-muted-foreground hover:bg-accent"><X size={12} /></button>
+          </span>
+        ) : (<>
+          <button onClick={onEdit} title="Bearbeiten" className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-accent"><Edit3 size={13} /></button>
+          <button onClick={() => onLoeschFrage(true)} title="Löschen" className="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-500/10"><Trash2 size={13} /></button>
+        </>)}
+      </div>
+    </div>
+  )
+}
+
+// ── Artikel anlegen / bearbeiten ─────────────────────────────────────────────
+interface EditorDaten { id?: string; name: string; kategorie: string; current: string; target: string; amazonLink: string; notiz: string; gezaehlt?: string }
+
+function ArtikelDialog({ daten, onClose, onSpeichern }: { daten: EditorDaten; onClose: () => void; onSpeichern: (d: EditorDaten) => Promise<string | null> }) {
+  const [d, setD] = useState(daten)
+  const [kategorieGewaehlt, setKategorieGewaehlt] = useState(!!daten.id)
+  const [busy, setBusy] = useState(false)
+  const [fehler, setFehler] = useState('')
+  const set = (p: Partial<EditorDaten>) => { setD(x => ({ ...x, ...p })); setFehler('') }
+  const inp = 'w-full px-2.5 py-2 rounded-md bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50'
+  async function speichern() {
+    if (!d.name.trim() || busy) return
+    setBusy(true)
+    const f = await onSpeichern(d)
+    setBusy(false)
+    if (f) setFehler(f)
+  }
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-6" onClick={onClose}>
+      <div className="bg-card border border-border rounded-xl shadow-2xl p-5 max-w-lg w-full" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center gap-2 mb-4">
+          {d.id ? <Edit3 size={18} className="text-primary" /> : <Plus size={18} className="text-primary" />}
+          <h3 className="text-base font-semibold text-foreground">{d.id ? 'Artikel bearbeiten' : 'Neuer Artikel'}</h3>
+          <button onClick={onClose} className="ml-auto p-1 rounded hover:bg-accent text-muted-foreground"><X size={16} /></button>
+        </div>
+        <div className="space-y-3">
+          <div>
+            <label className="text-[11px] text-muted-foreground font-medium block mb-1">Name</label>
+            <input autoFocus value={d.name} placeholder="z. B. HDMI-Kabel 5 m" className={inp}
+              onChange={e => set({ name: e.target.value, ...(kategorieGewaehlt ? {} : { kategorie: rateKategorie(e.target.value) }) })}
+              onKeyDown={e => { if (e.key === 'Enter') void speichern() }} />
+          </div>
+          <div>
+            <label className="text-[11px] text-muted-foreground font-medium block mb-1">Kategorie</label>
+            <select value={d.kategorie} onChange={e => { set({ kategorie: e.target.value }); setKategorieGewaehlt(true) }} className={inp}>
+              {KATEGORIEN.map(k => <option key={k.id} value={k.id}>{k.name}</option>)}
+            </select>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-[11px] text-muted-foreground font-medium block mb-1">Bestand (Ist)</label>
+              <input value={d.current} onChange={e => set({ current: e.target.value.replace(/\D/g, '').slice(0, 4) })} inputMode="numeric" placeholder="leer = noch nicht gezählt" className={inp} />
+              {d.gezaehlt && <p className="text-[10px] text-muted-foreground mt-0.5">zuletzt gezählt {d.gezaehlt}</p>}
+            </div>
+            <div>
+              <label className="text-[11px] text-muted-foreground font-medium block mb-1">Soll</label>
+              <input value={d.target} onChange={e => set({ target: e.target.value.replace(/\D/g, '').slice(0, 4) })} inputMode="numeric" className={inp} />
+            </div>
+          </div>
+          <div>
+            <label className="text-[11px] text-muted-foreground font-medium block mb-1">Bestelllink (Amazon, optional)</label>
+            <div className="flex items-center gap-2">
+              <input value={d.amazonLink} onChange={e => set({ amazonLink: e.target.value })} placeholder="https://www.amazon.de/…" className={inp} />
+              <button onClick={() => { try { void api().openExternal(linkHref(d.amazonLink) || amazonSuche(d.name || 'IT Zubehör')) } catch { /* ignore */ } }} disabled={!d.name.trim() && !d.amazonLink.trim()}
+                title={linkHref(d.amazonLink) ? 'Link öffnen' : `Bei Amazon nach „${d.name}" suchen — Link dann hier einfügen`}
+                className="inline-flex items-center gap-1 px-2.5 py-2 rounded-md border border-border text-xs text-muted-foreground hover:text-foreground hover:bg-accent shrink-0 disabled:opacity-40">
+                {linkHref(d.amazonLink) ? <><ExternalLink size={13} />Öffnen</> : <><Search size={13} />Suchen</>}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="text-[11px] text-muted-foreground font-medium block mb-1">Notiz (optional)</label>
+            <input value={d.notiz} onChange={e => set({ notiz: e.target.value })} placeholder="z. B. Modell, Lagerort, für wen" className={inp} />
+          </div>
+          {fehler && <p className="text-xs text-red-500 flex items-start gap-1"><AlertTriangle size={13} className="mt-0.5 shrink-0" />{fehler}</p>}
+        </div>
+        <div className="flex justify-end gap-2 mt-5">
+          <button onClick={onClose} className="px-3 py-2 rounded-md text-sm text-muted-foreground border border-border hover:bg-accent">Abbrechen</button>
+          <button onClick={() => void speichern()} disabled={!d.name.trim() || busy} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50">
+            {busy ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}Speichern
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

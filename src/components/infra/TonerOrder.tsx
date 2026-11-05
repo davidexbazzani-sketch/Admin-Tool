@@ -75,7 +75,14 @@ function buildEmailBody(toner: string, qty: number, note: string, company: strin
   return parts.join('\n')
 }
 
-export default function TonerOrder() {
+/**
+ * `vorbelegt` füllt Toner/Menge/Notiz vor (Aufruf aus dem Toner-Lager unter „Drucker"),
+ * `onGesendet` meldet eine erfolgreich verschickte Bestellung zurück (→ „bestellt" im Lager).
+ */
+export default function TonerOrder({ vorbelegt, onGesendet }: {
+  vorbelegt?: { toner: string; menge?: number; notiz?: string }
+  onGesendet?: (toner: string, menge: number) => void
+} = {}) {
   const session = useAuthStore(s => s.session)
   const isMaster = useIsMasterAdmin()
   const isAdmin = useIsAdmin()
@@ -88,9 +95,9 @@ export default function TonerOrder() {
 
   // Form
   const [subject, setSubject] = useState(DEFAULT_CONFIG.defaultSubject)
-  const [toner, setToner] = useState('')
-  const [quantity, setQuantity] = useState(1)
-  const [note, setNote] = useState('')
+  const [toner, setToner] = useState(vorbelegt?.toner ?? '')
+  const [quantity, setQuantity] = useState(vorbelegt?.menge ?? 1)
+  const [note, setNote] = useState(vorbelegt?.notiz ?? '')
   const [attn, setAttn] = useState(displayName)
   const [company, setCompany] = useState(DEFAULT_CONFIG.company)
   const [street, setStreet] = useState(DEFAULT_CONFIG.street)
@@ -193,6 +200,7 @@ export default function TonerOrder() {
         setToast({ type: 'ok', msg: 'Bestellung erfolgreich an Hilker & Pahl gesendet' })
         log('Tonerbestellung gesendet', `${toner} x${quantity} an ${config.recipientEmail}`)
         setCooldown(60)
+        onGesendet?.(toner, quantity)
       } else {
         entry.status = 'fehlgeschlagen'
         setToast({ type: 'error', msg: res.error || 'Unbekannter Fehler' })

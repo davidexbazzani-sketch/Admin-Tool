@@ -176,6 +176,7 @@ function createWindow() {
     // die App laeuft im Hintergrund weiter — und der Installer meldet spaeter
     // "IT Admin Tool kann nicht geschlossen werden".
     try { if (snWindow && !snWindow.isDestroyed()) { snWindow.destroy(); snWindow = null } } catch { /* egal */ }
+    try { if (snApiWindow && !snApiWindow.isDestroyed()) { snApiWindow.destroy(); snApiWindow = null } } catch { /* egal */ }
     try { if (snLoginWindow && !snLoginWindow.isDestroyed()) { snLoginWindow.destroy(); snLoginWindow = null } } catch { /* egal */ }
   })
 }
@@ -289,6 +290,9 @@ function openPresentationWindow(opts?: { displayId?: number; previewPlaylistId?:
 // Das Folien-Schema muss vor dem Start angemeldet werden, sonst gilt es nicht als
 // sichere Herkunft (und Modul-Skripte/Importmaps in HTML-Folien funktionieren nicht).
 registriereSlideSchema()
+
+// Ohne AppUserModelId zeigt Windows keine Benachrichtigungen (Chat) — gleiche Kennung wie im Installer
+if (process.platform === 'win32') app.setAppUserModelId('de.company.admintool')
 
 app.whenReady().then(() => {
   // Offline-Kopie der Folien-Bibliotheken (three.js, GSAP …), siehe scripts/slideVendor.mjs
@@ -638,6 +642,21 @@ function ensureSnWindow(): BrowserWindow {
   return win
 }
 
+// Integrationskonto (OAuth/Basic) läuft in einer EIGENEN, nicht persistenten
+// Partition — getrennt von der SSO-Partition. Dort hat das SSO-Anmeldefenster die
+// komplette ServiceNow-Oberfläche geladen (Cookies, ggf. ein registrierter
+// Service-Worker, der fetch()-Aufrufe der Seite abfängt). Diese Altlasten dürfen
+// einen Bearer-/Basic-Aufruf nicht verfälschen.
+const SN_API_PARTITION = 'servicenow-api'
+let snApiWindow: BrowserWindow | null = null
+function ensureSnApiWindow(): BrowserWindow {
+  if (snApiWindow && !snApiWindow.isDestroyed()) return snApiWindow
+  const win = new BrowserWindow({ show: false, webPreferences: { partition: SN_API_PARTITION, contextIsolation: true, nodeIntegration: false, sandbox: false } })
+  win.on('closed', () => { if (snApiWindow === win) snApiWindow = null })
+  snApiWindow = win
+  return win
+}
+
 // Sieht der Antworttext nach einer (SSO-)Anmeldeseite statt nach JSON aus?
 function snLooksLikeLogin(body: string): boolean {
   const t = (body || '').slice(0, 4000).toLowerCase()
@@ -691,14 +710,15 @@ ipcMain.handle('servicenow:certDiag', () => lastClientCertInfo)
 // grant_type=password (klassischer ServiceNow-Weg), sonst/danach client_credentials.
 // Abruf ebenfalls per fetch im versteckten Fenster (mTLS/Zscaler wie oben).
 // Token wird im Speicher gehalten bis kurz vor Ablauf; bei 401 einmal neu holen.
-type SnAuth = { user?: string; pass?: string; clientId?: string; clientSecret?: string }
-type SnRaw = { ok: boolean; status?: number; body?: string; error?: string }
+type SnAuth = { user?: string; pass?: string; clientId?: string; clientSecret?: string; apiKey?: string }
+type SnRaw = { ok: boolean; status?: number; body?: string; error?: string; wwwAuth?: string }
 // Strukturierte Fehlerangaben für die Zugangsprüfung im Renderer (daraus entsteht
 // u. a. die englische Begründung für den ServiceNow-Support). Rohtexte von ServiceNow
 // bleiben unverändert; Zugangsdaten/Token sind NIE enthalten.
 type SnTokenAttempt = { grant: string; status: number; error?: string; description?: string; netError?: string }
 type SnDiag = {
-  method: 'oauth' | 'basic' | 'sso'
+  method: 'apikey' | 'oauth' | 'basic' | 'sso'
+  wwwAuth?: string
   stage: 'connect' | 'token' | 'api'
   status?: number
   attempts?: SnTokenAttempt[]
@@ -718,13 +738,16 @@ function snCleanAuth(a?: SnAuth) {
   const pass = strip(a?.pass)
   const clientId = strip(a?.clientId).trim()
   const clientSecret = strip(a?.clientSecret).trim()
-  const oauth = !!(clientId && clientSecret)
-  const basic = !oauth && !!(user && pass)
-  return { user, pass, clientId, clientSecret, oauth, basic }
+  const apiKey = strip(a?.apiKey).trim()
+  // Reihenfolge: REST API Key (x-sn-apikey) → OAuth (Client ID/Secret) → Basic
+  const apikey = !!apiKey
+  const oauth = !apikey && !!(clientId && clientSecret)
+  const basic = !apikey && !oauth && !!(user && pass)
+  return { user, pass, clientId, clientSecret, apiKey, apikey, oauth, basic }
 }
 
 function snWinFetch(win: BrowserWindow, url: string, init: Record<string, unknown>): Promise<SnRaw> {
-  const js = `(async()=>{try{const r=await fetch(${JSON.stringify(url)},${JSON.stringify(init)});const t=await r.text();return{ok:true,status:r.status,body:t}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
+  const js = `(async()=>{try{const r=await fetch(${JSON.stringify(url)},${JSON.stringify(init)});const t=await r.text();return{ok:true,status:r.status,body:t,wwwAuth:r.headers.get('www-authenticate')||undefined}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
   return win.webContents.executeJavaScript(js, true) as Promise<SnRaw>
 }
 
@@ -802,11 +825,11 @@ ipcMain.handle('servicenow:request', async (_e, opts: {
     // Zertifikat-Auswahl (Zscaler/mTLS, select-client-certificate feuert nur fuer webContents).
     const a = snCleanAuth(opts.auth)
     const usedBasic = a.basic
-    const usedAccount = a.oauth || a.basic
+    const usedAccount = a.apikey || a.oauth || a.basic
     const basicB64 = usedBasic ? Buffer.from(`${a.user}:${a.pass}`, 'utf8').toString('base64') : ''
     const extraHeaders = 'Accept: application/json' + (usedBasic ? '\nAuthorization: Basic ' + basicB64 : '')
 
-    const win = ensureSnWindow()
+    const win = usedAccount ? ensureSnApiWindow() : ensureSnWindow()
 
     // Bootstrap: Navigation auf die Instanz-Origin (etabliert den same-origin-
     // Kontext für das anschließende fetch UND löst die mTLS-Client-Zertifikat-
@@ -822,12 +845,13 @@ ipcMain.handle('servicenow:request', async (_e, opts: {
     // kann eine veraltete/ungültige SSO-Sitzung in derselben Partition das Konto
     // überstimmen und ein falsches 401 liefern. Ohne Konto (SSO) authentifiziert
     // dagegen der Session-Cookie -> credentials:'include'.
-    const authMethod: SnDiag['method'] = a.oauth ? 'oauth' : usedBasic ? 'basic' : 'sso'
+    const authMethod: SnDiag['method'] = a.apikey ? 'apikey' : a.oauth ? 'oauth' : usedBasic ? 'basic' : 'sso'
     let tokenAttempts: SnTokenAttempt[] | undefined
     const send = async (forceToken: boolean): Promise<SnRaw> => {
       const headers: Record<string, string> = { Accept: 'application/json' }
       if (opts.body) headers['Content-Type'] = 'application/json'
-      if (a.oauth) {
+      if (a.apikey) headers['x-sn-apikey'] = a.apiKey
+      else if (a.oauth) {
         const t = await snOAuthToken(win, origin, a, forceToken)
         if (!t.token) { tokenAttempts = t.attempts; return { ok: false, error: t.error } }
         headers.Authorization = 'Bearer ' + t.token
@@ -857,7 +881,7 @@ ipcMain.handle('servicenow:request', async (_e, opts: {
     const hasResult = !!(data && typeof data === 'object' && 'result' in (data as Record<string, unknown>))
     if ((status >= 200 && status < 300) || (status === 0 && hasResult)) return { success: true, status: status || 200, data }
     const snErr = (data as { error?: { message?: string; detail?: string } } | undefined)?.error
-    const apiDiag: SnDiag = { method: authMethod, stage: 'api', status, snMessage: snErr?.message, snDetail: snErr?.detail, table: opts.table }
+    const apiDiag: SnDiag = { method: authMethod, stage: 'api', status, snMessage: snErr?.message, snDetail: snErr?.detail, table: opts.table, wwwAuth: raw.wwwAuth }
 
     // Nicht angemeldet: 401 ODER es kam eine (SSO-)Anmeldeseite/HTML statt JSON zurueck.
     if (status === 401 || (!hasResult && snLooksLikeLogin(typeof raw.body === 'string' ? raw.body : ''))) {
@@ -867,7 +891,12 @@ ipcMain.handle('servicenow:request', async (_e, opts: {
         // hilft zu unterscheiden: falsches Passwort vs. Basic Auth für das Konto gesperrt.
         const snMsg = (data as { error?: { message?: string; detail?: string } } | undefined)?.error
         const detail = snMsg ? (snMsg.detail || snMsg.message || '') : ''
-        const hint = a.oauth
+        const verlangtApiKey = /api_key/i.test(raw.wwwAuth || '') && !a.apikey
+        const hint = verlangtApiKey
+          ? ' — ServiceNow verlangt für die Table-API einen API-Key (WWW-Authenticate: API_KEY): HCL muss OAuth/Basic in der REST-API-Access-Policy zulassen oder einen API-Key bereitstellen.'
+          : a.apikey
+          ? ' — API-Key abgelehnt (Key aktiv? gehört er zu einem aktiven Benutzer? Ist das API-Key-Profil in der REST-API-Access-Policy der Table-API?).'
+          : a.oauth
           ? ' — OAuth-Token wurde ausgestellt, aber von der Table-API abgelehnt (OAuth-Profil/Rollen des Kontos bei HCL prüfen).'
           : ' — Benutzername/Passwort prüfen; das Konto muss auf DIESER Instanz existieren und Basic-Auth für die REST-API erlaubt sein.'
         return { success: false, status: status || 401, error: 'Integrationskonto abgelehnt (401)' + (detail ? ` — ${detail}` : '') + hint, diag: { ...apiDiag, status: status || 401 } }
@@ -909,11 +938,11 @@ ipcMain.handle('servicenow:attach', async (_e, opts: {
 
     const a = snCleanAuth(opts.auth)
     const usedBasic = a.basic
-    const usedAccount = a.oauth || a.basic
+    const usedAccount = a.apikey || a.oauth || a.basic
     const basicB64 = usedBasic ? Buffer.from(`${a.user}:${a.pass}`, 'utf8').toString('base64') : ''
     const extraHeaders = 'Accept: application/json' + (usedBasic ? '\nAuthorization: Basic ' + basicB64 : '')
 
-    const win = ensureSnWindow()
+    const win = usedAccount ? ensureSnApiWindow() : ensureSnWindow()
     let onOrigin = false
     try { onOrigin = snOriginOf(win.webContents.getURL()) === origin } catch { onOrigin = false }
     if (!onOrigin) await snNavGet(win, origin + '/api/now/table/sys_user?sysparm_limit=1', extraHeaders)
@@ -927,7 +956,7 @@ ipcMain.handle('servicenow:attach', async (_e, opts: {
         if (!t.token) return { ok: false, error: t.error }
         authz = 'Bearer ' + t.token
       }
-      const authHeaderJs = authz ? `,'Authorization':${JSON.stringify(authz)}` : ''
+      const authHeaderJs = a.apikey ? `,'x-sn-apikey':${JSON.stringify(a.apiKey)}` : authz ? `,'Authorization':${JSON.stringify(authz)}` : ''
       const js = `(async()=>{try{const b64=${JSON.stringify(b64)};const bin=atob(b64);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);const r=await fetch(${JSON.stringify(url)},{method:'POST',headers:{'Accept':'application/json','Content-Type':${JSON.stringify(ct)}${authHeaderJs}},body:arr,cache:'no-store',credentials:${JSON.stringify(credentials)}});const t=await r.text();return{ok:true,status:r.status,body:t}}catch(e){return{ok:false,error:String((e&&e.message)||e)}}})()`
       return win.webContents.executeJavaScript(js, true) as Promise<SnRaw>
     }
@@ -946,6 +975,290 @@ ipcMain.handle('servicenow:attach', async (_e, opts: {
     return { success: false, status, error: `Upload HTTP ${status}` + (em ? ` — ${em}` : '') }
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : String(err) }
+  }
+})
+
+// ── ServiceNow: kompletter Fehlerbericht ─────────────────────────────────────
+// Testet jeden Schritt einzeln und protokolliert Anfrage, Status, ALLE Antwort-
+// Header (v. a. WWW-Authenticate) und Antworttext — auf drei Wegen:
+//   A) eigener sauberer Kanal (so arbeitet das Tool mit Client ID/Secret)
+//   B) alter Kanal im SSO-Speicher (Cookies/Service-Worker der Oberfläche)
+//   C) direkt aus dem Hauptprozess (Electron net, ohne Browserseite)
+// Secret, Passwort und Token stehen NIE im Bericht (werden zum Schluss zusätzlich
+// überall ersetzt). Nur lesende GET-Aufrufe — auf ServiceNow wird nichts geändert.
+type SnProbe = {
+  ok: boolean; status?: number; headers?: [string, string][]; body?: string; error?: string
+  ms?: number; sw?: boolean; finalUrl?: string; redirected?: boolean
+}
+
+function snWinProbe(win: BrowserWindow, url: string, init: Record<string, unknown>): Promise<SnProbe> {
+  const js = `(async()=>{const t0=performance.now();try{const r=await fetch(${JSON.stringify(url)},${JSON.stringify(init)});const b=await r.text();const h=[];r.headers.forEach((v,k)=>h.push([k,v]));return{ok:true,status:r.status,headers:h,body:b,ms:Math.round(performance.now()-t0),sw:!!(navigator.serviceWorker&&navigator.serviceWorker.controller),finalUrl:r.url,redirected:r.redirected}}catch(e){return{ok:false,error:String((e&&e.message)||e),ms:Math.round(performance.now()-t0)}}})()`
+  return Promise.race([
+    win.webContents.executeJavaScript(js, true) as Promise<SnProbe>,
+    new Promise<SnProbe>(res => setTimeout(() => res({ ok: false, error: 'Zeitüberschreitung (30 s)' }), 30000)),
+  ]).catch(e => ({ ok: false, error: e instanceof Error ? e.message : String(e) }))
+}
+
+async function snNetProbe(partition: string, url: string, init: { method: string; headers: Record<string, string>; body?: string }): Promise<SnProbe> {
+  const ac = new AbortController()
+  const timer = setTimeout(() => ac.abort(), 25000)
+  const t0 = Date.now()
+  try {
+    const r = await electronSession.fromPartition(partition).fetch(url, { ...init, credentials: 'omit', cache: 'no-store', signal: ac.signal } as RequestInit)
+    const body = await r.text()
+    const headers: [string, string][] = []
+    r.headers.forEach((v, k) => headers.push([k, v]))
+    return { ok: true, status: r.status, headers, body, ms: Date.now() - t0, finalUrl: r.url, redirected: r.redirected }
+  } catch (e) {
+    return { ok: false, error: ac.signal.aborted ? 'Zeitüberschreitung (25 s)' : (e instanceof Error ? e.message : String(e)), ms: Date.now() - t0 }
+  } finally { clearTimeout(timer) }
+}
+
+async function snSeitenZustand(win: BrowserWindow): Promise<string> {
+  const js = `(async()=>{let regs=[];try{regs=navigator.serviceWorker?(await navigator.serviceWorker.getRegistrations()).map(r=>r.scope):[]}catch(e){regs=['Fehler: '+e]}return{url:location.href,sw:!!(navigator.serviceWorker&&navigator.serviceWorker.controller),regs}})()`
+  try {
+    const z = await Promise.race([
+      win.webContents.executeJavaScript(js, true) as Promise<{ url: string; sw: boolean; regs: string[] }>,
+      new Promise<null>(res => setTimeout(() => res(null), 10000)),
+    ])
+    if (!z) return 'Seitenzustand: keine Antwort'
+    return `Seite: ${z.url}\nSeite von Service-Worker gesteuert: ${z.sw ? 'JA' : 'nein'}\nRegistrierte Service-Worker: ${z.regs.length ? z.regs.join(', ') : 'keine'}`
+  } catch (e) { return 'Seitenzustand nicht lesbar: ' + (e instanceof Error ? e.message : String(e)) }
+}
+
+ipcMain.handle('servicenow:fullDiag', async (_e, opts: { instanceUrl: string; auth?: SnAuth; kontext?: string[] }): Promise<{ success: boolean; text?: string; zusammenfassung?: string[]; error?: string }> => {
+  const geheim: string[] = []
+  const merke = (s?: string) => { if (s && s.length >= 4) geheim.push(s) }
+  const zeilen: string[] = []
+  const z = (s = '') => zeilen.push(s)
+  const kurz = (s: string) => s.length <= 8 ? '…' : `…${s.slice(-4)}`
+  try {
+    const base = (opts.instanceUrl || '').trim().replace(/\/+$/, '')
+    const origin = snOriginOf(base)
+    if (!origin) return { success: false, error: 'Instanz-URL ungültig.' }
+    const a = snCleanAuth(opts.auth)
+    merke(a.clientSecret); merke(a.pass); merke(a.apiKey)
+    const basicB64 = a.user && a.pass ? Buffer.from(`${a.user}:${a.pass}`, 'utf8').toString('base64') : ''
+    merke(basicB64)
+
+    const kopf = (titel: string) => { z(); z('═'.repeat(90)); z(titel); z('═'.repeat(90)) }
+    const schritt = (titel: string) => { z(); z(`── ${titel} ` + '─'.repeat(Math.max(3, 86 - titel.length))) }
+    const zeige = (methode: string, url: string, reqHeader: Record<string, string>, reqBody: string | undefined, p: SnProbe, bodyFilter?: (b: string) => string) => {
+      z(`${methode} ${url}`)
+      const rh = Object.entries(reqHeader).map(([k, v]) => {
+        if (/^authorization$/i.test(k)) {
+          const [typ, wert = ''] = v.split(' ')
+          return `${k}: ${typ} «${wert.length} Zeichen, ${kurz(wert)}»`
+        }
+        if (/^x-sn-apikey$/i.test(k)) return `${k}: «${v.length} Zeichen, ${kurz(v)}»`
+        return `${k}: ${v}`
+      })
+      z('Anfrage-Header: ' + (rh.join(' | ') || '—'))
+      if (reqBody !== undefined) z('Anfrage-Body:   ' + reqBody)
+      if (!p.ok) { z(`→ KEINE ANTWORT nach ${p.ms ?? '?'} ms: ${p.error}`); return }
+      z(`→ HTTP ${p.status} nach ${p.ms} ms${p.sw !== undefined ? ` · Service-Worker steuert Seite: ${p.sw ? 'JA' : 'nein'}` : ''}${p.redirected ? ` · UMGELEITET nach ${p.finalUrl}` : ''}`)
+      z('Antwort-Header:')
+      for (const [k, v] of p.headers || []) z(`   ${k}: ${/^set-cookie$/i.test(k) ? v.replace(/=([^;]*)/, '=«…»') : v}`)
+      let b = p.body || ''
+      if (bodyFilter) b = bodyFilter(b)
+      z('Antwort-Text: ' + (b.length > 2500 ? b.slice(0, 2500) + ` … (+${b.length - 2500} Zeichen)` : (b || '(leer)')))
+    }
+    // Token-Antwort: access/refresh_token durch Länge ersetzen
+    const tokenFilter = (b: string) => {
+      try {
+        const d = JSON.parse(b) as Record<string, unknown>
+        for (const k of ['access_token', 'refresh_token', 'id_token']) {
+          if (typeof d[k] === 'string') { merke(d[k] as string); d[k] = `«${(d[k] as string).length} Zeichen, ${kurz(d[k] as string)}»` }
+        }
+        return JSON.stringify(d)
+      } catch { return b }
+    }
+    const holeToken = (p: SnProbe): { token?: string; scope?: string; typ?: string; expires?: string } => {
+      try {
+        const d = JSON.parse(p.body || '') as Record<string, unknown>
+        const t = typeof d.access_token === 'string' ? d.access_token : undefined
+        merke(t)
+        return { token: t, scope: d.scope as string | undefined, typ: d.token_type as string | undefined, expires: d.expires_in !== undefined ? String(d.expires_in) : undefined }
+      } catch { return {} }
+    }
+    const hdr = (p: SnProbe, name: string) => (p.headers || []).find(([k]) => k.toLowerCase() === name)?.[1] || ''
+    const snFehler = (p: SnProbe) => { try { const e = (JSON.parse(p.body || '') as { error?: { message?: string; detail?: string } }).error; return e ? [e.message, e.detail].filter(Boolean).join(' — ') : '' } catch { return '' } }
+
+    const tabelle = (t: string, extra = '') => `${origin}/api/now/table/${t}?sysparm_limit=1&sysparm_fields=sys_id${extra}`
+    const tokenBody = (grant: string) => {
+      const p = new URLSearchParams({ grant_type: grant, client_id: a.clientId, client_secret: a.clientSecret })
+      if (grant === 'password') { p.set('username', a.user); p.set('password', a.pass) }
+      return p.toString()
+    }
+    const tokenBodyAnzeige = (grant: string) => `grant_type=${grant}&client_id=${kurz(a.clientId)}&client_secret=«entfernt»${grant === 'password' ? `&username=${a.user}&password=«entfernt»` : ''}`
+    const TOKEN_HDR = { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' }
+
+    // ── Kopf ─────────────────────────────────────────────────────────────
+    z('IT Admin Tool — ServiceNow Fehlerbericht')
+    z(`Erstellt:        ${new Date().toISOString()} (lokal ${new Date().toLocaleString('de-DE')})`)
+    z(`Tool-Version:    ${app.getVersion()} · Electron ${process.versions.electron} · Chromium ${process.versions.chrome}`)
+    z(`Rechner:         ${hostname()} · Windows-Benutzer ${userInfo().username}`)
+    z(`Instanz:         ${origin}`)
+    z(`Client ID:       ${a.clientId ? `${kurz(a.clientId)} (${a.clientId.length} Zeichen)` : '—'}`)
+    z(`Client Secret:   ${a.clientSecret ? `«entfernt», ${a.clientSecret.length} Zeichen` : '—'}`)
+    z(`Basic-Konto:     ${a.user ? `${a.user} (Passwort «entfernt», ${a.pass.length} Zeichen)` : '—'}`)
+    z(`API-Key:         ${a.apiKey ? `«entfernt», ${a.apiKey.length} Zeichen` : '—'}`)
+    for (const k of opts.kontext || []) z(k)
+    try { z(`Proxy (Tool):    ${await electronSession.fromPartition(SN_API_PARTITION).resolveProxy(origin)}`) } catch { /* egal */ }
+    z(`Client-Zertifikat zuletzt: ${lastClientCertInfo ? `${lastClientCertInfo.count} angeboten für ${lastClientCertInfo.url} (${lastClientCertInfo.at}) — ${lastClientCertInfo.certs.map(c => c.subjectName).join('; ')}` : 'nie angefragt'}`)
+
+    const ergebnis: Record<string, { token?: number; tokenOk?: boolean; scope?: string; tabelle?: number; wwwAuth?: string; snMsg?: string; fehler?: string }> = {}
+
+    // Ablauf für ein Browserfenster (A und B)
+    const fensterLauf = async (key: string, titel: string, win: BrowserWindow, voll: boolean, vorspann: string[] = []) => {
+      kopf(titel)
+      for (const v of vorspann) z(v)
+      const r: typeof ergebnis[string] = {}
+      ergebnis[key] = r
+      schritt('Kanal öffnen (Navigation auf die Instanz, ohne Anmeldung)')
+      const nav = await snNavGet(win, origin + '/api/now/table/sys_user?sysparm_limit=1', 'Accept: application/json')
+      z(nav.ok ? `→ HTTP ${nav.status || '?'} · ${(nav.body || '').slice(0, 300).replace(/\s+/g, ' ')}` : `→ Fehler: ${nav.error}`)
+      z(await snSeitenZustand(win))
+
+      if (voll) {
+        schritt('Ohne Anmeldung (Vergleich: was sagt ServiceNow ohne Zugangsdaten?)')
+        const u = tabelle('sys_user')
+        const p = await snWinProbe(win, u, { method: 'GET', headers: { Accept: 'application/json' }, credentials: 'omit', cache: 'no-store' })
+        zeige('GET', u, { Accept: 'application/json' }, undefined, p)
+      }
+
+      if (a.clientId && a.clientSecret) {
+        const grants = voll && a.user && a.pass ? ['client_credentials', 'password'] : ['client_credentials']
+        for (const grant of grants) {
+          schritt(`OAuth-Token holen (grant_type=${grant})`)
+          const tu = origin + '/oauth_token.do'
+          const tp = await snWinProbe(win, tu, { method: 'POST', headers: TOKEN_HDR, body: tokenBody(grant), credentials: 'omit', cache: 'no-store' })
+          zeige('POST', tu, TOKEN_HDR, tokenBodyAnzeige(grant), tp, tokenFilter)
+          const tk = holeToken(tp)
+          if (grant === 'client_credentials') { r.token = tp.status; r.tokenOk = !!tk.token; r.scope = tk.scope; if (!tp.ok) r.fehler = tp.error }
+          if (!tk.token) { z(`→ KEIN Token erhalten.`); continue }
+          z(`→ Token erhalten: Typ ${tk.typ || '?'} · Scope „${tk.scope ?? '(nicht angegeben)'}" · gültig ${tk.expires ?? '?'} s`)
+          const ziele = grant === 'client_credentials' && voll
+            ? ['sys_user', 'incident', 'sc_task', 'sys_user_group', 'cmdb_ci_computer']
+            : ['sys_user']
+          for (const t of ziele) {
+            schritt(`Table-API mit Bearer-Token (${grant}): ${t}`)
+            const u = tabelle(t)
+            const h = { Accept: 'application/json', Authorization: 'Bearer ' + tk.token }
+            const p = await snWinProbe(win, u, { method: 'GET', headers: h, credentials: 'omit', cache: 'no-store' })
+            zeige('GET', u, h, undefined, p)
+            if (grant === 'client_credentials' && t === 'sys_user') { r.tabelle = p.ok ? p.status : 0; r.wwwAuth = hdr(p, 'www-authenticate'); r.snMsg = snFehler(p); if (!p.ok) r.fehler = p.error }
+          }
+          if (grant === 'client_credentials' && voll) {
+            schritt('Wer bin ich? (Benutzer, unter dem das Token läuft)')
+            const u = `${origin}/api/now/table/sys_user?sysparm_query=user_name=javascript:gs.getUserName()&sysparm_fields=user_name,name,active,locked_out,web_service_access_only,internal_integration_user&sysparm_limit=1`
+            const h = { Accept: 'application/json', Authorization: 'Bearer ' + tk.token }
+            zeige('GET', u, h, undefined, await snWinProbe(win, u, { method: 'GET', headers: h, credentials: 'omit', cache: 'no-store' }))
+          }
+        }
+      }
+      if (a.apiKey) {
+        schritt('Table-API mit REST API Key (Header x-sn-apikey): sys_user')
+        const u = tabelle('sys_user')
+        const h = { Accept: 'application/json', 'x-sn-apikey': a.apiKey }
+        const p = await snWinProbe(win, u, { method: 'GET', headers: h, credentials: 'omit', cache: 'no-store' })
+        zeige('GET', u, h, undefined, p)
+        ergebnis[key + '_apikey'] = { tabelle: p.ok ? p.status : 0, wwwAuth: hdr(p, 'www-authenticate'), snMsg: snFehler(p), fehler: p.ok ? undefined : p.error }
+      }
+      if (a.user && a.pass) {
+        schritt(`Basic Auth mit „${a.user}"`)
+        const u = tabelle('sys_user')
+        const h = { Accept: 'application/json', Authorization: 'Basic ' + basicB64 }
+        const p = await snWinProbe(win, u, { method: 'GET', headers: h, credentials: 'omit', cache: 'no-store' })
+        zeige('GET', u, h, undefined, p)
+        ergebnis[key + '_basic'] = { tabelle: p.ok ? p.status : 0, wwwAuth: hdr(p, 'www-authenticate'), snMsg: snFehler(p), fehler: p.ok ? undefined : p.error }
+      }
+    }
+
+    // A) sauberer Kanal (wie das Tool ab jetzt arbeitet)
+    await fensterLauf('A', 'A) EIGENER SAUBERER KANAL (so arbeitet das Tool mit Client ID/Secret)', ensureSnApiWindow(), true)
+
+    // B) alter Kanal im SSO-Speicher
+    const vorspannB: string[] = []
+    try {
+      const ses = electronSession.fromPartition(SN_PARTITION)
+      const cookies = await ses.cookies.get({ url: origin })
+      vorspannB.push(`Cookies für die Instanz (nur Namen): ${cookies.length ? cookies.map(c => c.name).join(', ') : 'keine'}`)
+      try {
+        const laufend = Object.values(ses.serviceWorkers.getAllRunning()).map(w => w.scope)
+        vorspannB.push(`Laufende Service-Worker in diesem Speicher: ${laufend.length ? laufend.join(', ') : 'keine'}`)
+      } catch { /* egal */ }
+    } catch { /* egal */ }
+    await fensterLauf('B', 'B) ALTER KANAL IM SSO-SPEICHER (persist:servicenow — bisher für alles benutzt)', ensureSnWindow(), false, vorspannB)
+
+    // C) direkt aus dem Hauptprozess
+    kopf('C) DIREKT AUS DEM HAUPTPROZESS (Electron net, ohne Browserseite)')
+    const rC: typeof ergebnis[string] = {}
+    ergebnis.C = rC
+    if (a.clientId && a.clientSecret) {
+      schritt('OAuth-Token holen (grant_type=client_credentials)')
+      const tu = origin + '/oauth_token.do'
+      const tp = await snNetProbe(SN_API_PARTITION, tu, { method: 'POST', headers: TOKEN_HDR, body: tokenBody('client_credentials') })
+      zeige('POST', tu, TOKEN_HDR, tokenBodyAnzeige('client_credentials'), tp, tokenFilter)
+      const tk = holeToken(tp)
+      rC.token = tp.status; rC.tokenOk = !!tk.token; rC.scope = tk.scope; if (!tp.ok) rC.fehler = tp.error
+      if (tk.token) {
+        schritt('Table-API mit Bearer-Token: sys_user')
+        const u = tabelle('sys_user')
+        const h = { Accept: 'application/json', Authorization: 'Bearer ' + tk.token }
+        const p = await snNetProbe(SN_API_PARTITION, u, { method: 'GET', headers: h })
+        zeige('GET', u, h, undefined, p)
+        rC.tabelle = p.ok ? p.status : 0; rC.wwwAuth = hdr(p, 'www-authenticate'); rC.snMsg = snFehler(p); if (!p.ok) rC.fehler = p.error
+      }
+    } else z('Keine Client ID/Secret angegeben — übersprungen.')
+
+    // ── Zusammenfassung ─────────────────────────────────────────────────
+    const zus: string[] = []
+    const nameVon: Record<string, string> = { A: 'Sauberer Kanal (A)', B: 'Alter SSO-Speicher (B)', C: 'Hauptprozess (C)' }
+    for (const k of ['A', 'B', 'C']) {
+      const r = ergebnis[k]
+      if (!r || !(a.clientId && a.clientSecret)) continue
+      const tok = r.tokenOk ? `Token OK (Scope „${r.scope ?? '—'}")` : `kein Token (HTTP ${r.token ?? '—'}${r.fehler ? ', ' + r.fehler : ''})`
+      const tab = r.tabelle === undefined ? '' : r.tabelle === 0 ? ` · Table-API: keine Antwort${r.fehler ? ` (${r.fehler})` : ''}` : ` · Table-API HTTP ${r.tabelle}${r.snMsg ? ` „${r.snMsg}"` : ''}${r.wwwAuth ? ` · WWW-Authenticate: ${r.wwwAuth}` : ''}`
+      zus.push(`${nameVon[k]}: ${tok}${tab}`)
+    }
+    for (const k of ['A_apikey', 'B_apikey']) {
+      const r = ergebnis[k]
+      if (r) zus.push(`API-Key (${k[0]}): Table-API ${r.tabelle ? `HTTP ${r.tabelle}` : 'keine Antwort'}${r.snMsg ? ` „${r.snMsg}"` : ''}`)
+    }
+    for (const k of ['A_basic', 'B_basic']) {
+      const r = ergebnis[k]
+      if (r) zus.push(`Basic „${a.user}" (${k[0]}): Table-API ${r.tabelle ? `HTTP ${r.tabelle}` : 'keine Antwort'}${r.snMsg ? ` „${r.snMsg}"` : ''}`)
+    }
+    const A = ergebnis.A, B = ergebnis.B, C = ergebnis.C
+    const verlangtApiKey = Object.values(ergebnis).some(r => /api_key/i.test(r?.wwwAuth || ''))
+    if (ergebnis.A_apikey?.tabelle === 200) zus.push('BEFUND: Mit dem API-Key funktioniert der Zugang → im Tool „API-Key testen & speichern".')
+    else if (ergebnis.A_apikey?.tabelle === 401) zus.push('BEFUND: Auch der API-Key wird abgelehnt (401) → Key bei HCL prüfen (aktiv, gehört zu aktivem Benutzer, API-Key-Profil in der REST-API-Access-Policy der Table-API).')
+    if (verlangtApiKey && A?.tokenOk && A.tabelle === 401 && ergebnis.A_apikey?.tabelle !== 200)
+      zus.push('BEFUND: ServiceNow antwortet bei JEDER Anmeldeart (OAuth-Token, Benutzer+Passwort, ohne Anmeldung) mit „WWW-Authenticate: API_KEY" → für die Table-API ist auf dieser Instanz per REST-API-Access-Policy nur ein API-Key zugelassen. Das Token ist gültig, wird aber deshalb abgewiesen. Nicht das Tool: HCL muss in der Access-Policy der Table-API das OAuth-Profil (ggf. Basic) ergänzen ODER uns einen REST API Key geben (Header x-sn-apikey, im Tool eintragbar).')
+    else if (a.clientId && a.clientSecret) {
+      if (A?.tabelle === 200) zus.push(B?.tabelle !== 200
+        ? 'BEFUND: Über den sauberen Kanal funktioniert der Zugang. Der alte SSO-Speicher hat die Anfrage verfälscht → Fehler lag im Tool und ist mit dieser Version behoben.'
+        : 'BEFUND: Zugang funktioniert.')
+      else if (A && !A.tokenOk && C && !C.tokenOk) zus.push('BEFUND: ServiceNow stellt kein Token aus → Client ID/Secret oder OAuth-Einstellung bei HCL (siehe Token-Antwort).')
+      else if (A?.tokenOk && A.tabelle === 401 && (C?.tabelle === 401 || !C?.tabelle) && (B?.tabelle === 401 || !B?.tabelle))
+        zus.push(`BEFUND: Token wird ausgestellt, aber JEDER Weg (sauberer Kanal, alter Speicher, Hauptprozess) bekommt 401 von der Table-API → Ursache liegt auf der ServiceNow-Seite (HCL), nicht im Tool. Typisch: OAuth Application User inaktiv/gesperrt/ohne Rollen, REST-API-Access-Policy bzw. Inbound-Authentication-Profile lässt OAuth für die Table-API nicht zu, oder Auth-Scope des OAuth-Eintrags ist nicht „useraccount“${A.scope && A.scope !== 'useraccount' ? ` (Token-Scope hier: „${A.scope}“)` : ''}.`)
+      else if (A?.tabelle === 403) zus.push('BEFUND: Anmeldung klappt, aber 403 → dem Konto fehlen Rollen/ACLs für die Tabelle.')
+      else if (C?.tabelle === 200) zus.push('BEFUND: Direkt aus dem Hauptprozess funktioniert es, im Browserkanal nicht → Problem im Tool-Kanal (bitte Bericht an Entwicklung).')
+    }
+    // Zusammenfassung direkt unter den Kopf stellen
+    const kopfEnde = zeilen.findIndex(l => l.startsWith('Client-Zertifikat zuletzt'))
+    const zusBlock = ['', '═'.repeat(90), 'ZUSAMMENFASSUNG', '═'.repeat(90), ...zus.map(s => '• ' + s)]
+    zeilen.splice(kopfEnde + 1, 0, ...zusBlock)
+
+    // Sicherheitsnetz: keine Geheimnisse im Text
+    let text = zeilen.join('\r\n')
+    for (const g of geheim.sort((x, y) => y.length - x.length)) text = text.split(g).join('«entfernt»')
+    return { success: true, text, zusammenfassung: zus }
+  } catch (e) {
+    let msg = e instanceof Error ? e.message : String(e)
+    for (const g of geheim) msg = msg.split(g).join('«entfernt»')
+    return { success: false, error: msg }
   }
 })
 
@@ -1024,6 +1337,7 @@ ipcMain.handle('servicenow:login', async (_e, instanceUrl: string): Promise<{ su
 ipcMain.handle('servicenow:logout', async (): Promise<{ success: boolean }> => {
   try {
     if (snWindow && !snWindow.isDestroyed()) { snWindow.destroy(); snWindow = null }
+    if (snApiWindow && !snApiWindow.isDestroyed()) { snApiWindow.destroy(); snApiWindow = null }
     snTokenCache.clear()
     await electronSession.fromPartition(SN_PARTITION).clearStorageData()
     return { success: true }
@@ -1578,6 +1892,11 @@ ipcMain.handle('net:deleteFile', (_e, relativePath: string) => {
   return true
 })
 ipcMain.handle('net:isAvailable', () => ns.isNetworkAvailable())
+// Asynchron (blockieren den Hauptprozess nicht) — für Chat und andere häufige Abfragen
+ipcMain.handle('net:listDirAsync', (_e, relativePath: string) => ns.listDirAsync(relativePath))
+ipcMain.handle('net:readJsonAsync', (_e, relativePath: string) => ns.readJsonAsync(relativePath))
+ipcMain.handle('net:writeJsonAsync', (_e, relativePath: string, data: unknown) => ns.writeJsonAsync(relativePath, data))
+ipcMain.handle('net:deleteFileAsync', (_e, relativePath: string) => ns.deleteFileAsync(relativePath))
 ipcMain.handle('net:getBasePath', () => ns.getBasePath())
 ipcMain.handle('net:setBasePath', (_e, path: string) => { ns.setBasePath(path); return true })
 ipcMain.handle('net:writeRawFile', (_e, relativePath: string, base64Data: string) => {
@@ -1819,6 +2138,12 @@ ipcMain.on('window:maximize', () => {
   else mainWindow?.maximize()
 })
 ipcMain.on('window:close', () => mainWindow?.close())
+// Chat-Benachrichtigung angeklickt → Tool nach vorne holen
+ipcMain.on('window:focus', () => {
+  if (!mainWindow) return
+  if (mainWindow.isMinimized()) mainWindow.restore()
+  mainWindow.show(); mainWindow.focus()
+})
 
 // ── E-Mail via Outlook COM ───────────────────────────────────────────────────
 // Outlook-Aktionen (Übergabe-Termine: Einladung/Update/Absage, Postfach-Scan) — siehe outlookAktion.ts
@@ -1831,14 +2156,20 @@ ipcMain.handle('mail:sendRaw', async (_e, opts: {
   to: string; cc?: string; subject: string; body: string; html?: boolean
   smtp: string; port: number; user?: string; pass?: string; from?: string
   useTls?: boolean; method?: 'outlook' | 'nodemailer' | 'powershell'
+  attachmentPath?: string
 }): Promise<{ success: boolean; error?: string; method?: string }> => {
 
-  console.log(`[mail:sendRaw] to=${opts.to}${opts.cc ? ` cc=${opts.cc}` : ''} subject="${opts.subject?.slice(0, 40)}"`)
+  console.log(`[mail:sendRaw] to=${opts.to}${opts.cc ? ` cc=${opts.cc}` : ''} subject="${opts.subject?.slice(0, 40)}"${opts.attachmentPath ? ' +Anhang' : ''}`)
 
   try {
+    // Anhang muss existieren — sonst sendet Outlook ohne ihn und meldet trotzdem einen Fehler
+    // (VBS „On Error Resume Next"), was zu einem zweiten Versand verleiten würde.
+    if (opts.attachmentPath && !existsSync(opts.attachmentPath)) {
+      return { success: false, error: `Anhang nicht gefunden: ${opts.attachmentPath}`, method: 'outlook' }
+    }
     const { sendViaOutlookScheduledTask } = require('./outlookMailer') as typeof import('./outlookMailer')
     const result = await sendViaOutlookScheduledTask({
-      to: opts.to, cc: opts.cc, subject: opts.subject, body: opts.body, html: opts.html,
+      to: opts.to, cc: opts.cc, subject: opts.subject, body: opts.body, html: opts.html, attachmentPath: opts.attachmentPath,
     })
     console.log('[mail:sendRaw] result:', JSON.stringify(result))
     return result
@@ -1870,4 +2201,5 @@ app.on('before-quit', () => {
     _heartbeatUser = null
   }
   if (snWindow && !snWindow.isDestroyed()) { try { snWindow.destroy() } catch { /* ignore */ } snWindow = null }
+  if (snApiWindow && !snApiWindow.isDestroyed()) { try { snApiWindow.destroy() } catch { /* ignore */ } snApiWindow = null }
 })

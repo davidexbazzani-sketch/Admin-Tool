@@ -13,11 +13,13 @@ import type { AdUserListItem } from '../services/adUsersList'
 import { DeviceInfoButton } from './device/DeviceDossier'
 import UserPicker from './UserPicker'
 
-export default function UserPcSearch({ onPick, mitOnlineStatus, placeholder }: {
+export default function UserPcSearch({ onPick, mitOnlineStatus, placeholder, mitCheckbox }: {
   onPick: (hostname: string, serial?: string) => void
   /** Zusätzlich je PC prüfen, ob er gerade erreichbar ist (parallel, ≤10 gleichzeitig). */
   mitOnlineStatus?: boolean
   placeholder?: string
+  /** Je PC ein Kästchen zum Ankreuzen (Einzelauswahl) statt nur Klick auf die Zeile. */
+  mitCheckbox?: boolean
 }) {
   const [chosen, setChosen] = useState<AdUserListItem | null>(null)
   const [pcs, setPcs] = useState<UserPc[]>([])
@@ -88,6 +90,10 @@ export default function UserPcSearch({ onPick, mitOnlineStatus, placeholder }: {
                 return (
                   <div key={pc.hostname}
                     className={`flex items-center gap-2 px-2.5 py-1.5 rounded border ${isPicked ? 'border-primary bg-primary/10' : 'border-border bg-background hover:border-primary/40'}`}>
+                    {mitCheckbox && (
+                      <input type="checkbox" checked={isPicked} onChange={() => pick(pc)}
+                        title="Diesen PC als Ziel wählen" className="accent-primary shrink-0 cursor-pointer" />
+                    )}
                     <button onClick={() => pick(pc)} className="flex items-center gap-2 min-w-0 flex-1 text-left">
                       <Laptop size={14} className="text-muted-foreground shrink-0" />
                       <span className="text-sm font-mono font-semibold text-foreground shrink-0">{pc.hostname}</span>

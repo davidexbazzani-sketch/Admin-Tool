@@ -14,6 +14,7 @@ import {
 import { api } from '../../electronAPI'
 import { seedForPrinter } from '../../data/printerSeed'
 import type { PrinterMasterData, PrinterCustomField } from '../../services/printerDossier'
+import { meldeEinzelScan } from '../../services/druckerFlotte'
 import {
   resolvePrinterIp, pingPrinter, queueStatus, snmpPrinterStatus, type SnmpPrinterStatus,
 } from '../../services/printerActions'
@@ -134,7 +135,11 @@ export function PrinterMasterData({ printerName, master, onSave }: {
       const tasks: Promise<void>[] = []
       if (effIp) {
         tasks.push(pingPrinter(effIp).then(r => setReach(r.text)))
-        tasks.push(snmpPrinterStatus(effIp, snmpCommunity || 'public').then(s => setSnmp(s)))
+        tasks.push(snmpPrinterStatus(effIp, snmpCommunity || 'public').then(s => {
+          setSnmp(s)
+          // Fast leere Patrone? → sofort Toner-Warnung (Popup + Chat), nicht erst beim stündlichen Check
+          if (s.reachable) void meldeEinzelScan(printerName, effIp, s, location.trim() || undefined).catch(() => {})
+        }))
       } else {
         setReach('Keine IP — in Stammdaten eintragen oder Name ist nicht per DNS auflösbar.')
       }

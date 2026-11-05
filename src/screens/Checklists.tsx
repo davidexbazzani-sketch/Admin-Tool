@@ -4,10 +4,10 @@ import {
   ClipboardList, Plus, Trash2, Download, Eye, RefreshCw, Search, Loader,
   FileText, Edit3, X, Save, CheckCircle, XCircle, AlertTriangle, ArrowLeft, Printer,
   PackageCheck, RotateCcw, Check, ChevronDown, Mail, Flame, Maximize2, Minimize2, Filter, Info, Columns3, Move,
-  FileSpreadsheet, ChevronRight, MapPin, CalendarClock, CalendarDays,
+  FileSpreadsheet, ChevronRight, MapPin, CalendarClock, CalendarDays, History,
 } from 'lucide-react'
 import {
-  listChecklists, createChecklist, updateChecklist, deleteChecklist,
+  listChecklists, createChecklist, updateChecklist, deleteChecklist, setChecklistNotiz,
   type Checklist, type DeviceType,
 } from '../services/checklists'
 import { importTasks, type ImportResult } from '../services/checklistImport'
@@ -152,6 +152,18 @@ function isPlaceholder(c: Checklist): boolean {
   return !c.completed && (!(c.name || '').trim() || !(c.newDeviceSerial || '').trim())
 }
 
+/** Seriennummer für den Doppelt-Abgleich: Großschreibung, ohne Leerzeichen. */
+function normSerial(s: string | undefined): string {
+  return (s || '').replace(/\s+/g, '').toUpperCase()
+}
+
+/** Andere Checklisten, für die dieselbe Neu-Gerät-Seriennummer schon vorgesehen ist. */
+function serialDuplicates(all: Checklist[], serial: string, ownId: string | null): Checklist[] {
+  const sn = normSerial(serial)
+  if (!sn) return []
+  return all.filter(c => c.id !== ownId && normSerial(c.newDeviceSerial) === sn)
+}
+
 type Toast = { kind: 'success' | 'error'; text: string }
 
 // Kanonischer Name fuer den Abgleich: klein, Leerzeichen normiert; "Nachname,
@@ -178,6 +190,8 @@ export default function Checklists() {
   const [draft, setDraft] = useState<Omit<Checklist, 'id' | 'createdAt'>>(emptyDraft(currentUserName))
   const [toast, setToast] = useState<Toast | null>(null)
   const [pendingDelete, setPendingDelete] = useState<Checklist | null>(null)
+  // Rückfrage „Seriennummer schon vergeben" – resolve(true) = trotzdem speichern
+  const [dupConfirm, setDupConfirm] = useState<{ dups: Checklist[]; resolve: (ok: boolean) => void } | null>(null)
   const [printingId, setPrintingId] = useState<string | null>(null)
   // Uebersichts-Tab: offene vs. erledigte (uebergebene) Checklisten
   const [listTab, setListTab] = useState<'open' | 'done'>('open')
@@ -397,11 +411,13 @@ export default function Checklists() {
     await updateChecklist(c.id, patch)
   }
 
-  // Notiz je Eintrag direkt aus der Übersicht speichern.
+  // Notiz je Eintrag direkt aus der Übersicht speichern – die alte wandert ins Archiv.
   async function saveNotiz(c: Checklist, text: string) {
     if ((c.notiz || '') === text) return
     setItems(prev => prev.map(x => x.id === c.id ? { ...x, notiz: text } : x))
-    await updateChecklist(c.id, { notiz: text })
+    const res = await setChecklistNotiz(c.id, text, currentUserName)
+    if (res.ok && res.checklist) setItems(prev => prev.map(x => x.id === c.id ? res.checklist! : x))
+    else showToast({ kind: 'error', text: res.error || 'Notiz konnte nicht gespeichert werden' })
   }
 
   // Manuell ergänzte Software je Eintrag speichern (zusätzlich zur Auto-Erkennung).
@@ -723,10 +739,29 @@ export default function Checklists() {
     return errors
   }, [draft])
 
+  // Live-Hinweis unter dem SN-Feld (gegen die geladene Liste, offen + erledigt)
+  const draftSerialDups = useMemo(
+    () => serialDuplicates(items, draft.newDeviceSerial, editingId),
+    [items, draft.newDeviceSerial, editingId],
+  )
+
   async function handleSaveDraft(thenView: View): Promise<Checklist | null> {
     if (validation.length > 0) {
       showToast({ kind: 'error', text: `Pflichtfelder fehlen: ${validation.join(', ')}` })
       return null
+    }
+    // Doppelte Seriennummer: nur nachfragen, wenn die SN neu/geändert ist – eine
+    // bereits bestätigte Dublette soll nicht bei jedem Speichern erneut fragen.
+    const savedSerial = editingId ? items.find(c => c.id === editingId)?.newDeviceSerial : undefined
+    if (normSerial(draft.newDeviceSerial) !== normSerial(savedSerial)) {
+      // Frisch vom Netz lesen – ein Kollege kann die SN gerade erst vergeben haben
+      const fresh = await listChecklists().catch(() => items)
+      const dups = serialDuplicates(fresh, draft.newDeviceSerial, editingId)
+      if (dups.length > 0) {
+        const ok = await new Promise<boolean>(resolve => setDupConfirm({ dups, resolve }))
+        setDupConfirm(null)
+        if (!ok) return null
+      }
     }
     if (editingId) {
       const res = await updateChecklist(editingId, draft)
@@ -1140,7 +1175,20 @@ export default function Checklists() {
               <Field label="Neu-Gerät (Seriennummer) *">
                 <input value={draft.newDeviceSerial} onChange={e => setDraft(d => ({ ...d, newDeviceSerial: e.target.value }))}
                   placeholder="z.B. 5CG54551F8"
-                  className="w-full px-2 py-1.5 text-sm rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary font-mono" />
+                  className={`w-full px-2 py-1.5 text-sm rounded-md border bg-background text-foreground focus:outline-none font-mono ${
+                    draftSerialDups.length > 0 ? 'border-amber-500/70 focus:border-amber-400' : 'border-border focus:border-primary'}`} />
+                {draftSerialDups.length > 0 && (
+                  <div className="text-[10px] text-amber-300 mt-0.5 space-y-0.5">
+                    <p className="inline-flex items-center gap-1 font-semibold">
+                      <AlertTriangle size={11} />Seriennummer ist bereits vergeben:
+                    </p>
+                    {draftSerialDups.map(c => (
+                      <p key={c.id} className="pl-4">
+                        {c.taskNumber || '—'} · {c.name || '(ohne Name)'} · {c.completed ? 'bereits übergeben' : 'offen'}
+                      </p>
+                    ))}
+                  </div>
+                )}
               </Field>
               {draft.deviceType === 'refresh' && (
                 <Field label="Alt-Gerät (Seriennummer oder Hostname) *">
@@ -1354,6 +1402,39 @@ export default function Checklists() {
         </div>
       )}
 
+      {/* Doppelte Seriennummer */}
+      {dupConfirm && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6" onClick={() => dupConfirm.resolve(false)}>
+          <div className="bg-card border border-amber-500/40 rounded-xl p-5 max-w-md w-full" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-2 mb-3">
+              <AlertTriangle size={16} className="text-amber-400" />
+              <h3 className="text-base font-semibold text-foreground">Seriennummer bereits vergeben</h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-2">
+              Die Seriennummer <strong className="font-mono text-foreground">{normSerial(draft.newDeviceSerial)}</strong> ist schon für {dupConfirm.dups.length === 1 ? 'eine andere Checkliste' : `${dupConfirm.dups.length} andere Checklisten`} vorgesehen:
+            </p>
+            <ul className="text-sm mb-4 space-y-1">
+              {dupConfirm.dups.map(c => (
+                <li key={c.id} className="rounded-md border border-border px-2 py-1">
+                  <span className="text-foreground font-medium">{c.name || '(ohne Name)'}</span>
+                  <span className="text-muted-foreground"> · {c.taskNumber || '—'} · {c.completed ? 'bereits übergeben' : 'offen'}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex justify-end gap-2">
+              <button onClick={() => dupConfirm.resolve(false)}
+                className="px-3 py-1.5 text-sm rounded-md border border-border text-muted-foreground hover:bg-accent/30">
+                Abbrechen &amp; korrigieren
+              </button>
+              <button onClick={() => dupConfirm.resolve(true)}
+                className="px-3 py-1.5 text-sm rounded-md bg-amber-600 hover:bg-amber-500 text-white font-semibold">
+                Trotzdem speichern
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Delete confirm */}
       {pendingDelete && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6" onClick={() => setPendingDelete(null)}>
@@ -1381,6 +1462,7 @@ export default function Checklists() {
 
       {terminFuer && (
         <UebergabeTerminDialog checklist={terminFuer} termin={terminVon(terminStore, terminFuer.id)} kennung={kennungVon(user)} bearbeiterName={currentUserName}
+          modell={deviceInfos.get(terminFuer.id)?.newModel}
           onClose={() => setTerminFuer(null)} onGeaendert={setTerminStore} />
       )}
       {kalenderOffen && <UebergabeKalender kennung={kennungVon(user)} bearbeiterName={currentUserName} onClose={() => { setKalenderOffen(false); void ladeTermine().then(setTerminStore) }} />}
@@ -1611,12 +1693,14 @@ function SpaltenAuswahl({ hidden, onToggle, onReset, onResetOrder }: {
 // ── Notizfeld je Eintrag (aus der Übersicht bearbeitbar, optional vergrößert) ──
 // Kompakt = einzeilige Eingabe; per Button auf ein mehrzeiliges Textfeld umschaltbar.
 // Gespeichert wird beim Verlassen des Feldes (onBlur) bzw. Enter im Kompaktmodus.
+// Eine ersetzte Notiz geht nicht verloren: sie liegt im Archiv (Uhr-Button).
 function NotizFeld({ c, onSave }: { c: Checklist; onSave: (text: string) => void }) {
   const [val, setVal] = useState(c.notiz || '')
   const [expanded, setExpanded] = useState(false)
   // Wenn sich der Eintrag von außen ändert (Neuladen), Feld nachziehen.
   useEffect(() => { setVal(c.notiz || '') }, [c.id, c.notiz])
   const commit = () => { const t = val.trim(); if (t !== (c.notiz || '')) onSave(t) }
+  const herkunft = c.notiz && c.notizAt ? `\n— ${c.notizBy || '?'}, ${fmtNotizZeit(c.notizAt)}` : ''
   return (
     <div className="flex items-start gap-1">
       {expanded ? (
@@ -1626,14 +1710,69 @@ function NotizFeld({ c, onSave }: { c: Checklist; onSave: (text: string) => void
       ) : (
         <input value={val} onChange={e => setVal(e.target.value)} onBlur={commit}
           onKeyDown={e => { if (e.key === 'Enter') e.currentTarget.blur() }}
-          placeholder="Notiz …" title={val || 'Notiz hinzufügen'}
+          placeholder="Notiz …" title={val ? val + herkunft : 'Notiz hinzufügen'}
           className="w-full min-w-[100px] px-2 py-1 text-[11px] rounded border border-border bg-background text-foreground truncate focus:outline-none focus:border-primary" />
       )}
       <button type="button" onClick={() => setExpanded(x => !x)} title={expanded ? 'Notiz verkleinern' : 'Notiz vergrößern'}
         className="shrink-0 p-1 rounded border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30">
         {expanded ? <Minimize2 size={11} /> : <Maximize2 size={11} />}
       </button>
+      <NotizArchivButton c={c} />
     </div>
+  )
+}
+
+function fmtNotizZeit(iso?: string): string {
+  if (!iso) return ''
+  const d = new Date(iso)
+  return isNaN(d.getTime()) ? '' : d.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+}
+
+// ── Notiz-Archiv je Zeile: alle ersetzten Notizen, neueste oben ────────────────
+function NotizArchivButton({ c }: { c: Checklist }) {
+  const archiv = c.notizArchiv || []
+  const [open, setOpen] = useState(false)
+  const [pos, setPos] = useState<{ left: number; top: number } | null>(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
+  if (archiv.length === 0) return null
+  const oeffnen = () => {
+    const r = btnRef.current?.getBoundingClientRect()
+    if (r) setPos({ left: Math.max(8, Math.min(r.right - 320, window.innerWidth - 328)), top: Math.min(r.bottom + 4, window.innerHeight - 300) })
+    setOpen(true)
+  }
+  return (
+    <span className="shrink-0">
+      <button ref={btnRef} type="button" onClick={e => { e.stopPropagation(); open ? setOpen(false) : oeffnen() }}
+        title={`Notiz-Archiv (${archiv.length} ältere ${archiv.length === 1 ? 'Notiz' : 'Notizen'})`}
+        className={`relative p-1 rounded border ${open ? 'border-primary text-primary' : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent/30'}`}>
+        <History size={11} />
+        <span className="absolute -top-1.5 -right-1.5 min-w-[13px] h-[13px] px-0.5 rounded-full bg-primary text-primary-foreground text-[8px] leading-[13px] text-center font-semibold">
+          {archiv.length}
+        </span>
+      </button>
+      {open && pos && createPortal(
+        <>
+          <div className="fixed inset-0 z-[60]" onClick={() => setOpen(false)} />
+          <div style={{ position: 'fixed', left: pos.left, top: pos.top }}
+            className="z-[61] w-80 bg-card border border-border rounded-md shadow-xl p-2 text-foreground" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-1.5 px-1 pb-1.5 mb-1 border-b border-border text-[11px] font-semibold">
+              <History size={12} className="text-muted-foreground" />
+              Notiz-Archiv · {c.name || c.taskNumber || '—'}
+              <button onClick={() => setOpen(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={12} /></button>
+            </div>
+            <div className="max-h-64 overflow-y-auto space-y-1.5">
+              {[...archiv].reverse().map((a, i) => (
+                <div key={`${a.ersetztAt}_${i}`} className="rounded border border-border/60 bg-muted/10 px-2 py-1">
+                  <p className="text-[11px] whitespace-pre-wrap break-words">{a.text}</p>
+                  <p className="text-[9px] text-muted-foreground mt-0.5">
+                    {a.at ? `${a.by || '?'}, ${fmtNotizZeit(a.at)}` : 'Ältere Notiz'} · ersetzt {fmtNotizZeit(a.ersetztAt)}{a.ersetztBy ? ` von ${a.ersetztBy}` : ''}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>, document.body)}
+    </span>
   )
 }
 

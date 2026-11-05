@@ -18,6 +18,31 @@ function getCtx(): AudioContext | null {
 }
 
 /**
+ * Hinweis-Ton (Gong, zweimal „ding-dong") — deutlich, aber anders als der
+ * Falsch-Scan-Alarm, damit man am Klang erkennt, was los ist.
+ */
+export function playHinweisTon(): void {
+  const c = getCtx()
+  if (!c) return
+  const start = c.currentTime
+  const toene: [number, number][] = [[880, 0], [660, 0.32], [880, 0.8], [660, 1.12]]
+  for (const [freq, ab] of toene) {
+    const t = start + ab
+    const g = c.createGain()
+    g.gain.setValueAtTime(0.0, t)
+    g.gain.linearRampToValueAtTime(0.5, t + 0.015)
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.45)
+    g.connect(c.destination)
+    const osc = c.createOscillator()
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(freq, t)
+    osc.connect(g)
+    osc.start(t)
+    osc.stop(t + 0.5)
+  }
+}
+
+/**
  * Spielt einen schrillen Alarm-Ton (ca. 1.2 s lang). Kombiniert zwei
  * Oszillatoren (2100 Hz + 2800 Hz Rechteck) mit kurzer Anschlag-Hüllkurve.
  */

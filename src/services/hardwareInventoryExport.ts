@@ -7,6 +7,13 @@ import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { api } from '../electronAPI'
 import type { InventoryRun } from './hardwareInventory'
+import { eigentumText, fachText, zaehleEigentum } from './inventurEigentum'
+
+/** Zeile „SKF Eigentum: x · HCL: y …" für die Kopfbereiche. */
+function eigentumZeile(run: InventoryRun): string {
+  const z = zaehleEigentum(run.devices.map(d => d.owner))
+  return `Eigentum: ${z.skf} SKF Eigentum · ${z.hcl} HCL · ${z.sonst} sonstige · ${z.unbekannt} nicht in Endgeräte-Übersicht`
+}
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer)
@@ -59,6 +66,10 @@ async function exportExcel(run: InventoryRun, savePath: string): Promise<void> {
     ['Fehlend', String(missing)],
     ['Nachträglich gefunden', String(lateFound)],
     ['Unerwartete Scans', String(run.extras.length)],
+    ...((): [string, string][] => {
+      const z = zaehleEigentum(run.devices.map(d => d.owner))
+      return [['SKF Eigentum', String(z.skf)], ['HCL', String(z.hcl)], ['Sonstige (Wer bezahlt?)', String(z.sonst)], ['Nicht in Endgeräte-Übersicht', String(z.unbekannt)]]
+    })(),
   ]
   for (const [k, v] of stats) {
     const row = ws.addRow([k, v])
@@ -74,35 +85,48 @@ async function exportExcel(run: InventoryRun, savePath: string): Promise<void> {
   }
   ws.columns = [{ width: 28 }, { width: 60 }]
 
-  // Geräte-Sheet (mit allen Spalten aus dem Originalimport + Inventur-Status)
+  // Geräte-Sheet: ALLE Geräte der Liste + unerwartete Scans in EINER Tabelle mit
+  // Autofilter → z. B. Status „ERFASST/UNERWARTET" + Eigentum „SKF" + Fach filtern.
+  // Fach = Kommentar aus der Asset-Datenbank; der Import-Kommentar steht separat ganz hinten.
   const dws = wb.addWorksheet('Geräte')
-  const headers = ['Status', 'Seriennummer', 'Gerätetyp', 'Company', 'Status (Quelle)', 'Substate', 'Kommentar', 'Erfasst am', 'Erfasst von', 'Erfassungsart', 'AD-Hostname', 'AD-Online', 'AD-Letzter Logon', 'AD-Akt. Benutzer', 'AD-Notiz', 'Nachträgl. gefunden', 'Nachträgl. Notiz']
+  const headers = ['Status', 'Seriennummer', 'Eigentum', 'Fach (Kommentar)', 'Fach in ServiceNow nachgetragen', 'Gerätetyp', 'Company', 'Status (Quelle)', 'Substate', 'Erfasst am', 'Erfasst von', 'Erfassungsart', 'AD-Hostname', 'AD-Online', 'AD-Letzter Logon', 'AD-Akt. Benutzer', 'AD-Notiz', 'Nachträgl. gefunden', 'Nachträgl. Notiz', 'Begründung (unerwartet)', 'Kommentar (Inventur-Import)']
   const hr = dws.addRow(headers)
   hr.eachCell(cell => { cell.font = { bold: true, color: { argb: 'FFFFFFFF' } }; cell.fill = head; cell.alignment = { vertical: 'middle' } })
+  const erfassung = (c?: 'scan' | 'manual') => c === 'scan' ? 'Scan' : c === 'manual' ? 'Manuell' : ''
+  const nachgetragen = (x: { fachBestaetigtAm?: string; fachBestaetigtVon?: string }) => x.fachBestaetigtAm ? `ja — ${fmtDateTime(x.fachBestaetigtAm)} von ${x.fachBestaetigtVon || '?'}` : ''
   for (const d of run.devices) {
     const status = d.lateFound ? 'NACHGEFUNDEN' : (d.scanned ? 'ERFASST' : 'FEHLEND')
     const row = dws.addRow([
       status,
-      d.serial, d.deviceType, d.company, d.status, d.substate, d.comment,
-      fmtDateTime(d.scannedAt), d.scannedBy || '',
-      d.capture === 'scan' ? 'Scan' : d.capture === 'manual' ? 'Manuell' : '',
+      d.serial, eigentumText(d.owner), fachText(d), nachgetragen(d), d.deviceType, d.company, d.status, d.substate,
+      fmtDateTime(d.scannedAt), d.scannedBy || '', erfassung(d.capture),
       d.adHostname || '', d.adOnline === undefined ? '' : (d.adOnline ? 'Ja' : 'Nein'), fmtDateTime(d.adLastOnline), d.adCurrentUser || '', d.adNote || '',
-      d.lateFound ? fmtDateTime(d.lateFoundAt) : '', d.lateNote || '',
+      d.lateFound ? fmtDateTime(d.lateFoundAt) : '', d.lateNote || '', '', d.comment || '',
     ])
     row.eachCell(cell => { cell.alignment = { vertical: 'top', wrapText: true } })
   }
+  for (const x of run.extras) {
+    const row = dws.addRow([
+      'UNERWARTET', x.serial, eigentumText(x.owner), fachText(x), nachgetragen(x), '', '', '', '',
+      fmtDateTime(x.scannedAt), x.scannedBy || '', erfassung(x.capture),
+      '', '', '', '', '', '', '', x.reason || '', '',
+    ])
+    row.eachCell(cell => { cell.alignment = { vertical: 'top', wrapText: true } })
+  }
+  dws.autoFilter = { from: { row: 1, column: 1 }, to: { row: 1, column: headers.length } }
+  dws.views = [{ state: 'frozen', ySplit: 1 }]
   dws.columns = [
-    { width: 14 }, { width: 18 }, { width: 18 }, { width: 16 }, { width: 16 }, { width: 14 }, { width: 28 },
+    { width: 14 }, { width: 18 }, { width: 16 }, { width: 28 }, { width: 26 }, { width: 18 }, { width: 16 }, { width: 16 }, { width: 14 },
     { width: 20 }, { width: 18 }, { width: 14 }, { width: 22 }, { width: 12 }, { width: 20 }, { width: 24 }, { width: 24 },
-    { width: 20 }, { width: 24 },
+    { width: 20 }, { width: 24 }, { width: 30 }, { width: 30 },
   ]
 
   if (run.extras.length > 0) {
     const ex = wb.addWorksheet('Unerwartete Scans')
-    const exHeader = ex.addRow(['Seriennummer', 'Gescannt am', 'Gescannt von', 'Begründung'])
+    const exHeader = ex.addRow(['Seriennummer', 'Eigentum', 'Fach (Kommentar)', 'Gescannt am', 'Gescannt von', 'Begründung'])
     exHeader.eachCell(cell => { cell.font = { bold: true, color: { argb: 'FFFFFFFF' } }; cell.fill = head })
-    for (const x of run.extras) ex.addRow([x.serial, fmtDateTime(x.scannedAt), x.scannedBy, x.reason || ''])
-    ex.columns = [{ width: 18 }, { width: 22 }, { width: 18 }, { width: 36 }]
+    for (const x of run.extras) ex.addRow([x.serial, eigentumText(x.owner), fachText(x), fmtDateTime(x.scannedAt), x.scannedBy, x.reason || ''])
+    ex.columns = [{ width: 18 }, { width: 16 }, { width: 28 }, { width: 22 }, { width: 18 }, { width: 36 }]
   }
 
   if (run.history.length > 0) {
@@ -138,6 +162,7 @@ async function exportWord(run: InventoryRun, savePath: string): Promise<void> {
     new Paragraph({ children: [new TextRun({ text: `Importiert: ${fmtDateTime(run.importedAt)} von ${run.importedBy}`, italics: true, color: '666666' })] }),
     new Paragraph({ children: [new TextRun({ text: `Abgeschlossen: ${fmtDateTime(run.completedAt) || '—'} ${run.completedBy ? 'von ' + run.completedBy : ''}`, italics: true, color: '666666' })] }),
     new Paragraph({ children: [new TextRun({ text: `Geräte: ${run.devices.length} gesamt · ${scanned} erfasst${capPart} · ${missing.length} fehlend · ${lateFound.length} nachgefunden · ${run.extras.length} unerwartete Scans`, bold: true })] }),
+    new Paragraph({ children: [new TextRun({ text: eigentumZeile(run), color: '444444' })] }),
     new Paragraph({ text: '' }),
   ]
 
@@ -156,15 +181,14 @@ async function exportWord(run: InventoryRun, savePath: string): Promise<void> {
     children.push(new Paragraph({ children: [new TextRun({ text: 'Alle Geräte sind vorhanden.', color: '047857' })] }))
   } else {
     const rows = [
-      new TableRow({ children: headerCells(['Seriennummer', 'Gerätetyp', 'Company', 'Substate', 'AD-Hostname', 'Online', 'Letzter Logon', 'Akt. Benutzer', 'Kommentar']), tableHeader: true }),
+      new TableRow({ children: headerCells(['Seriennummer', 'Eigentum', 'Fach (Kommentar)', 'Gerätetyp', 'Company', 'Substate', 'AD-Hostname', 'Online', 'Letzter Logon', 'Akt. Benutzer']), tableHeader: true }),
       ...missing.map(d => new TableRow({
         children: [
-          cell(d.serial), cell(d.deviceType), cell(d.company), cell(d.substate),
+          cell(d.serial), cell(eigentumText(d.owner)), cell(fachText(d)), cell(d.deviceType), cell(d.company), cell(d.substate),
           cell(d.adHostname || '—'),
           cell(d.adOnline === undefined ? '—' : (d.adOnline ? 'Ja' : 'Nein')),
           cell(fmtDateTime(d.adLastOnline) || '—'),
           cell(d.adCurrentUser || '—'),
-          cell(d.comment),
         ],
       })),
     ]
@@ -174,8 +198,8 @@ async function exportWord(run: InventoryRun, savePath: string): Promise<void> {
   if (lateFound.length > 0) {
     children.push(new Paragraph({ text: 'Nachträglich gefunden', heading: HeadingLevel.HEADING_2 }))
     const rows = [
-      new TableRow({ children: headerCells(['Seriennummer', 'Zeitpunkt', 'Bearbeiter', 'Notiz']), tableHeader: true }),
-      ...lateFound.map(d => new TableRow({ children: [cell(d.serial), cell(fmtDateTime(d.lateFoundAt)), cell(d.lateFoundBy || ''), cell(d.lateNote || '')] })),
+      new TableRow({ children: headerCells(['Seriennummer', 'Eigentum', 'Fach (Kommentar)', 'Zeitpunkt', 'Bearbeiter', 'Notiz']), tableHeader: true }),
+      ...lateFound.map(d => new TableRow({ children: [cell(d.serial), cell(eigentumText(d.owner)), cell(fachText(d)), cell(fmtDateTime(d.lateFoundAt)), cell(d.lateFoundBy || ''), cell(d.lateNote || '')] })),
     ]
     children.push(new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE }, borders: ALL }))
   }
@@ -183,8 +207,8 @@ async function exportWord(run: InventoryRun, savePath: string): Promise<void> {
   if (run.extras.length > 0) {
     children.push(new Paragraph({ text: 'Unerwartete Scans', heading: HeadingLevel.HEADING_2 }))
     const rows = [
-      new TableRow({ children: headerCells(['Seriennummer', 'Zeitpunkt', 'Bearbeiter', 'Begründung']), tableHeader: true }),
-      ...run.extras.map(x => new TableRow({ children: [cell(x.serial), cell(fmtDateTime(x.scannedAt)), cell(x.scannedBy), cell(x.reason || '')] })),
+      new TableRow({ children: headerCells(['Seriennummer', 'Eigentum', 'Fach (Kommentar)', 'Zeitpunkt', 'Bearbeiter', 'Begründung']), tableHeader: true }),
+      ...run.extras.map(x => new TableRow({ children: [cell(x.serial), cell(eigentumText(x.owner)), cell(fachText(x)), cell(fmtDateTime(x.scannedAt)), cell(x.scannedBy), cell(x.reason || '')] })),
     ]
     children.push(new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE }, borders: ALL }))
   }
@@ -222,7 +246,9 @@ async function exportPdf(run: InventoryRun, savePath: string): Promise<void> {
   doc.setFontSize(10); doc.setTextColor(20, 20, 20)
   doc.text(`Geräte: ${run.devices.length} gesamt · ${scanned} erfasst${capPart} · ${missing.length} fehlend · ${lateFound.length} nachgefunden · ${run.extras.length} unerwartete Scans`, 14, 43)
 
-  let y = 50
+  doc.setFontSize(9); doc.setTextColor(70)
+  doc.text(eigentumZeile(run), 14, 48)
+  let y = 55
 
   // Notizen zum Bericht (falls angelegt)
   if (run.notes && run.notes.trim()) {
@@ -249,14 +275,13 @@ async function exportPdf(run: InventoryRun, savePath: string): Promise<void> {
   } else {
     autoTable(doc, {
       startY: y,
-      head: [['Seriennummer', 'Gerätetyp', 'Company', 'Substate', 'AD-Host', 'Online', 'Last Logon', 'Akt. Benutzer', 'Kommentar']],
+      head: [['Seriennummer', 'Eigentum', 'Fach (Kommentar)', 'Gerätetyp', 'Company', 'Substate', 'AD-Host', 'Online', 'Last Logon', 'Akt. Benutzer']],
       body: missing.map(d => [
-        d.serial, d.deviceType, d.company, d.substate,
+        d.serial, eigentumText(d.owner), fachText(d), d.deviceType, d.company, d.substate,
         d.adHostname || '—',
         d.adOnline === undefined ? '—' : (d.adOnline ? 'Ja' : 'Nein'),
         fmtDateTime(d.adLastOnline) || '—',
         d.adCurrentUser || '—',
-        d.comment,
       ]),
       styles: { fontSize: 7, cellPadding: 1.5, overflow: 'linebreak' },
       headStyles: { fillColor: [30, 64, 175], textColor: 255 },
@@ -271,8 +296,8 @@ async function exportPdf(run: InventoryRun, savePath: string): Promise<void> {
     doc.setFontSize(12); doc.setTextColor(30, 64, 175); doc.text('Nachträglich gefunden', 14, y); y += 4
     autoTable(doc, {
       startY: y,
-      head: [['Seriennummer', 'Zeitpunkt', 'Bearbeiter', 'Notiz']],
-      body: lateFound.map(d => [d.serial, fmtDateTime(d.lateFoundAt), d.lateFoundBy || '', d.lateNote || '']),
+      head: [['Seriennummer', 'Eigentum', 'Fach (Kommentar)', 'Zeitpunkt', 'Bearbeiter', 'Notiz']],
+      body: lateFound.map(d => [d.serial, eigentumText(d.owner), fachText(d), fmtDateTime(d.lateFoundAt), d.lateFoundBy || '', d.lateNote || '']),
       styles: { fontSize: 8, cellPadding: 1.5 },
       headStyles: { fillColor: [30, 64, 175], textColor: 255 },
       margin: { left: 14, right: 14 },
@@ -285,8 +310,8 @@ async function exportPdf(run: InventoryRun, savePath: string): Promise<void> {
     doc.setFontSize(12); doc.setTextColor(180, 100, 0); doc.text('Unerwartete Scans', 14, y); y += 4
     autoTable(doc, {
       startY: y,
-      head: [['Seriennummer', 'Zeitpunkt', 'Bearbeiter', 'Begründung']],
-      body: run.extras.map(x => [x.serial, fmtDateTime(x.scannedAt), x.scannedBy, x.reason || '']),
+      head: [['Seriennummer', 'Eigentum', 'Fach (Kommentar)', 'Zeitpunkt', 'Bearbeiter', 'Begründung']],
+      body: run.extras.map(x => [x.serial, eigentumText(x.owner), fachText(x), fmtDateTime(x.scannedAt), x.scannedBy, x.reason || '']),
       styles: { fontSize: 8, cellPadding: 1.5 },
       headStyles: { fillColor: [180, 100, 0], textColor: 255 },
       margin: { left: 14, right: 14 },

@@ -1,5 +1,6 @@
 import { Minus, Maximize2, X } from 'lucide-react'
 import { ipcRenderer } from '../utils/ipc'
+import ChatKnopf from './chat/ChatKnopf'
 
 export default function TitleBar() {
   return (
@@ -11,9 +12,10 @@ export default function TitleBar() {
         IT Admin Tool
       </span>
       <div
-        className="flex gap-1"
+        className="flex gap-1 items-center"
         style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
       >
+        <ChatKnopf />
         <button
           onClick={() => ipcRenderer('window:minimize')}
           className="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 text-muted-foreground transition-colors"

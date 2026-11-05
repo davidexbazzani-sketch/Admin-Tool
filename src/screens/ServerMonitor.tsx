@@ -6,12 +6,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Server, RefreshCw, Loader, Plus, Trash2, ServerOff, ServerCog, Mail, Check, X, Download,
-  History, Clock, Send, Pin, FileText, HardDrive, MemoryStick,
+  History, Clock, Send, Pin, FileText, HardDrive, MemoryStick, ListChecks, ShieldAlert, ShieldCheck,
 } from 'lucide-react'
+import ServerZustandPanel from '../components/server/ServerZustandPanel'
+import { runZertifikatsScan } from '../services/serverZertifikate'
+import { useServerEreignisStore } from '../store/serverEreignisStore'
 import { useAuthStore } from '../store/authStore'
 import {
   loadServerConfig, saveServerConfig, loadInventoryServers, mergeInventoryServers,
-  loadServerStatus, runPingCycle, hostKey, removeHostState, runServerMetricsScan,
+  loadServerStatus, runPingCycle, runRebootCheck, runZustandsPruefung, hostKey, removeHostState, runServerMetricsScan,
+  zerlegeAdressen, meldeAn, meldeStandard, haeufigsteMeldeAdresse,
   type ServerTile, type ServerMonitorStatus,
 } from '../services/serverMonitor'
 import {
@@ -49,6 +53,107 @@ function MetricBar({ icon, label, pct, sub }: { icon: React.ReactNode; label: st
       <div className="mt-0.5 h-1.5 w-full rounded-full bg-muted/40 overflow-hidden">
         <div className={`h-full rounded-full ${tone}`} style={{ width: `${p}%` }} />
       </div>
+    </div>
+  )
+}
+
+function kurzZeit(iso?: string): string {
+  if (!iso) return ''
+  const d = new Date(iso)
+  return isNaN(d.getTime()) ? '' : d.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+}
+
+// Letzter Reboot + wann zuletzt erfolgreich gelesen. Scheiterte die letzte Abfrage,
+// steht das sichtbar da (Wert evtl. veraltet) — statt still einen alten Wert zu zeigen.
+function RebootZeile({ st }: { st?: ServerMonitorStatus['servers'][string] }) {
+  const boot = st?.lastReboot ? new Date(st.lastReboot.replace(' ', 'T')) : null
+  const stunden = boot && !isNaN(boot.getTime()) ? (Date.now() - boot.getTime()) / 3600000 : null
+  const tryT = st?.lastRebootTryAt ? new Date(st.lastRebootTryAt).getTime() : 0
+  const okT = st?.lastRebootCheckAt ? new Date(st.lastRebootCheckAt).getTime() : 0
+  const gescheitert = !!st?.lastRebootError && tryT >= okT
+  return (
+    <div className="mt-1.5 text-[11px] text-muted-foreground">
+      <div className="flex items-center gap-1.5 flex-wrap">
+        <span>Letzter Reboot: <span className="text-foreground">{st?.lastReboot || '—'}</span></span>
+        {stunden !== null && stunden >= 0 && stunden < 48 && (
+          <span className="px-1.5 rounded bg-amber-400 text-black text-[10px] font-medium" title="Der Server wurde in den letzten 48 Stunden neu gestartet">
+            Neustart vor {stunden < 1 ? `${Math.max(1, Math.round(stunden * 60))} min` : `${Math.round(stunden)} h`}
+          </span>
+        )}
+      </div>
+      {gescheitert ? (
+        <div className="mt-0.5 flex items-center gap-1 text-[10px] text-amber-500" title={st?.lastRebootError}>
+          <Clock size={10} className="shrink-0" />
+          <span className="truncate">Abfrage {kurzZeit(st?.lastRebootTryAt)} fehlgeschlagen — Wert evtl. veraltet{okT ? ` (zuletzt gelesen ${kurzZeit(st?.lastRebootCheckAt)})` : ''}</span>
+        </div>
+      ) : okT ? (
+        <div className="mt-0.5 text-[10px] text-muted-foreground/70" title={st?.rebootQuelle === 'dcom' ? 'per DCOM gelesen (WinRM war nicht erreichbar)' : 'per WinRM gelesen'}>
+          gelesen {kurzZeit(st?.lastRebootCheckAt)}{st?.rebootQuelle === 'dcom' ? ' (DCOM)' : ''}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+// Kurzfassung der Dienst-/Einstellungs-Prüfung auf der Kachel — Klick öffnet die Lasche.
+function PruefChip({ st, onClick }: { st?: ServerMonitorStatus['servers'][string]; onClick: () => void }) {
+  const z = st?.pruefung
+  if (!z) return (
+    <button onClick={onClick} className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-md border border-dashed border-border text-[10px] text-muted-foreground hover:text-foreground hover:bg-accent">
+      <ListChecks size={11} />Dienste &amp; Prüfungen einrichten
+    </button>
+  )
+  const ok = z.gesamt - z.probleme - z.hinweise
+  const [farbe, text] = !z.erreichbar ? ['bg-muted text-foreground', 'Prüfung: nicht erreichbar (WinRM)']
+    : z.probleme > 0 ? ['bg-red-600 text-white', `${z.probleme} Problem${z.probleme === 1 ? '' : 'e'} · ${ok}/${z.gesamt} OK`]
+    : z.startetNoch ? ['bg-amber-400 text-black', 'Dienste starten noch …']
+    : z.hinweise > 0 ? ['bg-amber-400 text-black', `${ok}/${z.gesamt} OK · ${z.hinweise} Hinweis${z.hinweise === 1 ? '' : 'e'}`]
+    : ['bg-emerald-600 text-white', `alle ${z.gesamt} Prüfpunkte OK`]
+  return (
+    <button onClick={onClick} title={`Dienste & Prüfungen öffnen · geprüft ${new Date(z.am).toLocaleString('de-DE')}`}
+      className={`mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold hover:opacity-90 ${farbe}`}>
+      <ListChecks size={11} />{text}
+    </button>
+  )
+}
+
+/** Kachel: nächster Zertifikats-Ablauf (rot ≤ 5 Tage/abgelaufen, gelb ≤ 30 Tage, sonst unauffällig). */
+function ZertChip({ st, onClick, onPruefen, pruefend }: { st?: ServerMonitorStatus['servers'][string]; onClick: () => void; onPruefen: () => void; pruefend: boolean }) {
+  const z = st?.zertifikate
+  // Manuell je Server: Zertifikate dieses einen Servers jetzt lesen (nur lesend)
+  const pruefKnopf = (
+    <button onClick={e => { e.stopPropagation(); onPruefen() }} disabled={pruefend} title="Zertifikate nur dieses Servers jetzt prüfen (nur lesend)"
+      className="ml-1 inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[10px] text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-50">
+      {pruefend ? <Loader size={10} className="animate-spin" /> : <RefreshCw size={10} />}{pruefend ? 'prüft…' : 'prüfen'}
+    </button>
+  )
+  if (!z || !z.naechstes) return (
+    <div className="mt-1 flex items-center">
+      <button onClick={onClick} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md border border-dashed border-border text-[10px] text-muted-foreground hover:text-foreground hover:bg-accent">
+        <ShieldCheck size={11} />{z ? (z.erreichbar ? 'kein verwendetes Zertifikat gefunden' : 'Zertifikate: nicht lesbar (WinRM)') : 'Zertifikate noch nicht geprüft'}
+      </button>
+      {pruefKnopf}
+    </div>
+  )
+  const n = z.naechstes
+  const bis = new Date(n.bis).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  const frist = n.tage < 0 ? 'abgelaufen' : n.tage === 0 ? 'läuft heute ab' : n.tage === 1 ? 'läuft morgen ab' : `noch ${n.tage} T`
+  const titel = `Zertifikate öffnen · ${n.cn} (${n.verwendung}) gültig bis ${bis} · geprüft ${new Date(z.am).toLocaleString('de-DE')}`
+  if (z.kritisch > 0 || z.warnung > 0) return (
+    <div className="mt-1 flex items-center flex-wrap">
+      <button onClick={onClick} title={titel}
+        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold hover:opacity-90 ${z.kritisch > 0 ? 'bg-red-600 text-white' : 'bg-amber-400 text-black'}`}>
+        <ShieldAlert size={11} />Zertifikat {frist}: {n.cn.length > 22 ? n.cn.slice(0, 22) + '…' : n.cn}{z.kritisch + z.warnung > 1 ? ` (+${z.kritisch + z.warnung - 1})` : ''}
+      </button>
+      {pruefKnopf}
+    </div>
+  )
+  return (
+    <div className="mt-1 flex items-center">
+      <button onClick={onClick} title={titel} className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground">
+        <ShieldCheck size={11} className="shrink-0" /><span className="whitespace-nowrap">Zertifikate OK · bis {bis}</span>
+      </button>
+      {pruefKnopf}
     </div>
   )
 }
@@ -121,6 +226,128 @@ function HistoryDialog({ tile, by, onClose }: { tile: ServerTile; by: string; on
   )
 }
 
+// ── Melde-Adressen: je Empfänger ein eigenes Feld ─────────────────────────────
+// Gespeichert wird weiter als „a@x; b@y" in notifyEmail — so bleiben bestehende Einträge gültig
+// und der Versand (eine Mail an alle Empfänger) ändert sich nicht.
+/** Gültige Adressen aller Felder (ohne Dubletten) + Zahl der ungültigen Felder. */
+function sammleAdressen(felder: string[]): { gueltig: string[]; ungueltig: number } {
+  const z = zerlegeAdressen(felder.join('; '))
+  return { gueltig: z.gueltig, ungueltig: felder.filter(f => f.trim() && zerlegeAdressen(f).ungueltig.length > 0).length }
+}
+function AdressListe({ wert, onSpeichern, onAendern, klein = true }: {
+  wert?: string
+  /** beim Verlassen eines Feldes / Entfernen: gültige Adressen als „a; b" */
+  onSpeichern: (v: string) => void
+  /** bei jeder Eingabe (für „für alle übernehmen") */
+  onAendern?: (gueltig: string[], ungueltig: number) => void
+  klein?: boolean
+}) {
+  const ausWert = (w?: string) => { const g = zerlegeAdressen(w).gueltig; return g.length ? g : [''] }
+  const [felder, setFelder] = useState<string[]>(() => ausWert(wert))
+  const [neuFokus, setNeuFokus] = useState<number | null>(null)
+  const refs = useRef<(HTMLInputElement | null)[]>([])
+  const zuletzt = useRef(meldeAn(wert))
+  // von außen geändert (z. B. „für alle übernehmen") → Felder neu aufbauen; eigene Änderungen nicht
+  useEffect(() => {
+    const w = meldeAn(wert)
+    if (w !== zuletzt.current) { zuletzt.current = w; setFelder(ausWert(wert)) }
+  }, [wert])
+  useEffect(() => { if (neuFokus !== null) { refs.current[neuFokus]?.focus(); setNeuFokus(null) } }, [neuFokus, felder.length])
+
+  const melde = (liste: string[]) => { const s = sammleAdressen(liste); zuletzt.current = s.gueltig.join('; '); onAendern?.(s.gueltig, s.ungueltig); return zuletzt.current }
+  const speichern = (liste: string[]) => { const v = melde(liste); if (v !== meldeAn(wert)) onSpeichern(v) }
+  const setze = (i: number, v: string) => { const n = felder.map((f, j) => (j === i ? v : f)); setFelder(n); melde(n) }
+  const verlassen = (i: number) => {
+    // eingefügte Liste („a; b") auf eigene Felder verteilen
+    const teile = felder[i].split(/[;,\s]+/).map(t => t.trim()).filter(Boolean)
+    const n = teile.length > 1 ? [...felder.slice(0, i), ...teile, ...felder.slice(i + 1)] : felder
+    if (n !== felder) setFelder(n)
+    speichern(n)
+  }
+  const entfernen = (i: number) => { const n = felder.filter((_, j) => j !== i); const m = n.length ? n : ['']; setFelder(m); speichern(m) }
+  const hinzufuegen = () => { setFelder([...felder, '']); setNeuFokus(felder.length) }
+
+  const gross = klein ? 'text-[11px]' : 'text-xs'
+  const zahl = sammleAdressen(felder).gueltig.length
+  return (
+    <div className="mt-1 space-y-1">
+      {felder.map((f, i) => {
+        const z = f.trim() ? zerlegeAdressen(f) : null
+        const kaputt = !!z && z.ungueltig.length > 0
+        const doppelt = !kaputt && !!f.trim() && felder.slice(0, i).some(g => g.trim().toLowerCase() === f.trim().toLowerCase())
+        return (
+          <div key={i}>
+            <div className="flex items-center gap-1">
+              <input ref={el => { refs.current[i] = el }} type="email" value={f}
+                onChange={e => setze(i, e.target.value)} onBlur={() => verlassen(i)}
+                onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur() }}
+                placeholder={i === 0 ? 'mail@firma.de' : 'weitere Adresse'}
+                className={`flex-1 min-w-0 px-2 py-1 ${gross} rounded-md border ${kaputt ? 'border-amber-500' : 'border-border'} bg-background text-foreground focus:outline-none focus:border-primary`} />
+              {(felder.length > 1 || f) && (
+                <button onClick={() => entfernen(i)} title="Adresse entfernen"
+                  className="shrink-0 p-1 rounded text-muted-foreground hover:text-red-500 hover:bg-red-500/10"><X size={11} /></button>
+              )}
+            </div>
+            {kaputt && <div className="mt-0.5 text-[10px]"><span className="px-1 rounded font-semibold bg-amber-400 text-black">ungültig — wird nicht gespeichert</span></div>}
+            {doppelt && <div className="mt-0.5 text-[10px] text-muted-foreground">steht schon weiter oben — wird nur einmal angeschrieben</div>}
+          </div>
+        )
+      })}
+      <div className="flex items-center gap-2">
+        <button onClick={hinzufuegen} className={`inline-flex items-center gap-1 ${klein ? 'text-[10px]' : 'text-[11px]'} text-primary hover:underline`}>
+          <Plus size={klein ? 10 : 11} />weitere Adresse
+        </button>
+        {zahl > 1 && <span className="text-[10px] text-muted-foreground">{zahl} Empfänger</span>}
+      </div>
+    </div>
+  )
+}
+
+/** „Mail-Meldungen für alle Server": Adressen + Arten auf einen Schlag setzen. */
+function MeldungenFuerAlle({ tiles, onUebernehmen, onSchliessen }: {
+  tiles: ServerTile[]; onUebernehmen: (patch: (t: ServerTile) => ServerTile, text: string) => void; onSchliessen: () => void
+}) {
+  const [adressen, setAdressen] = useState(() => haeufigsteMeldeAdresse(tiles))
+  const [offline, setOffline] = useState(true)
+  const [neustart, setNeustart] = useState(true)
+  const [probleme, setProbleme] = useState(true)
+  const [zertifikat, setZertifikat] = useState(true)
+  const [ergaenzen, setErgaenzen] = useState(true)
+  const [ungueltig, setUngueltig] = useState(0)
+  const z = zerlegeAdressen(adressen)
+  const ohne = tiles.filter(t => !meldeAn(t.notifyEmail) || !(t.notifyEnabled && (t.notifyReboot ?? t.notifyEnabled))).length
+  const geht = z.gueltig.length > 0 && ungueltig === 0
+  return (
+    <div className="shrink-0 mx-4 mt-2 px-3 py-2.5 rounded-md bg-card border border-border space-y-2">
+      <div className="flex items-center gap-2">
+        <Mail size={13} className="text-primary shrink-0" />
+        <span className="text-xs font-semibold text-foreground">Mail-Meldungen für alle {tiles.length} Server</span>
+        <span className="text-[11px] text-muted-foreground">{ohne ? `${ohne} Server melden aktuell nicht alles per Mail` : 'alle Server melden per Mail'}</span>
+        <button onClick={onSchliessen} className="ml-auto p-0.5 rounded text-muted-foreground hover:text-foreground"><X size={13} /></button>
+      </div>
+      <AdressListe wert={adressen} onSpeichern={setAdressen} onAendern={(g, u) => { setAdressen(g.join('; ')); setUngueltig(u) }} klein={false} />
+      <div className="flex items-center gap-3 flex-wrap text-[11px] text-foreground">
+        <label className="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" className="rounded accent-primary" checked={offline} onChange={e => setOffline(e.target.checked)} />bei Offline</label>
+        <label className="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" className="rounded accent-primary" checked={neustart} onChange={e => setNeustart(e.target.checked)} />bei Neustart / Herunterfahren</label>
+        <label className="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" className="rounded accent-primary" checked={probleme} onChange={e => setProbleme(e.target.checked)} />bei Problemen</label>
+        <label className="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" className="rounded accent-primary" checked={zertifikat} onChange={e => setZertifikat(e.target.checked)} />bei Zertifikat-Ablauf (30 / 5 Tage)</label>
+        <label className="flex items-center gap-1.5 cursor-pointer text-muted-foreground" title="Aus = die Adressen an allen Kacheln werden durch diese ersetzt">
+          <input type="checkbox" className="rounded accent-primary" checked={ergaenzen} onChange={e => setErgaenzen(e.target.checked)} />vorhandene Adressen behalten (nur ergänzen)
+        </label>
+        <button disabled={!geht}
+          onClick={() => onUebernehmen(
+            t => ({ ...t, notifyEnabled: offline, notifyReboot: neustart, notifyPruefung: probleme, notifyZertifikat: zertifikat,
+              notifyEmail: ergaenzen ? zerlegeAdressen(`${t.notifyEmail || ''}; ${z.gueltig.join('; ')}`).gueltig.join('; ') : z.gueltig.join('; ') }),
+            `Mail-Meldungen für alle ${tiles.length} Server gesetzt: ${[offline && 'Offline', neustart && 'Neustart/Herunterfahren', probleme && 'Probleme', zertifikat && 'Zertifikat-Ablauf'].filter(Boolean).join(', ') || 'keine'} an ${z.gueltig.join(', ')}${ergaenzen ? ' (ergänzt)' : ''}.`)}
+          className="ml-auto inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40">
+          <Check size={12} />Für alle {tiles.length} Server übernehmen
+        </button>
+      </div>
+      <p className="text-[10px] text-muted-foreground">Neu hinzugefügte Server bekommen automatisch alle Meldungen an die meistgenutzte Adresse.</p>
+    </div>
+  )
+}
+
 export default function ServerMonitor() {
   const session = useAuthStore(s => s.session)
   const by = session?.user.displayName || session?.user.username || 'manuell'
@@ -132,10 +359,24 @@ export default function ServerMonitor() {
   const [measuring, setMeasuring] = useState(false)
   const [msg, setMsg] = useState('')
   const [showAdd, setShowAdd] = useState(false)
+  const [showMeldungen, setShowMeldungen] = useState(false)
   const [newHost, setNewHost] = useState('')
   const [newIp, setNewIp] = useState('')
   const [dragId, setDragId] = useState<string | null>(null)
   const [historyTile, setHistoryTile] = useState<ServerTile | null>(null)
+  const [zustandTile, setZustandTile] = useState<ServerTile | null>(null)
+  const [zustandReiter, setZustandReiter] = useState<'status' | 'zertifikate' | undefined>(undefined)
+  const oeffne = (t: ServerTile, reiter?: 'status' | 'zertifikate') => { setZustandReiter(reiter); setZustandTile(t) }
+  // Popup „Status öffnen" / „Zertifikate öffnen" → Lasche dieses Servers direkt öffnen
+  const oeffneHost = useServerEreignisStore(s => s.oeffneHost)
+  const oeffneReiter = useServerEreignisStore(s => s.oeffneReiter)
+  const setOeffneHost = useServerEreignisStore(s => s.setOeffneHost)
+  useEffect(() => {
+    if (!oeffneHost || !tiles.length) return
+    const t = tiles.find(x => hostKey(x.hostname) === hostKey(oeffneHost))
+    if (t) oeffne(t, oeffneReiter || undefined)
+    setOeffneHost(null)
+  }, [oeffneHost, oeffneReiter, tiles, setOeffneHost])
 
   const refreshStatus = useCallback(async () => {
     try { setStatus(await loadServerStatus()) } catch { /* offline */ }
@@ -176,7 +417,7 @@ export default function ServerMonitor() {
     const host = newHost.trim()
     if (!host) return
     const pos = tiles.reduce((mx, t) => Math.max(mx, t.position), -1) + 1
-    const tile: ServerTile = { id: `srv_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`, hostname: host, ip: newIp.trim() || undefined, notifyEnabled: false, position: pos }
+    const tile: ServerTile = { id: `srv_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`, hostname: host, ip: newIp.trim() || undefined, ...meldeStandard(tiles), position: pos }
     await persist([...tiles, tile])
     setNewHost(''); setNewIp(''); setShowAdd(false)
   }
@@ -198,10 +439,33 @@ export default function ServerMonitor() {
     try {
       const r = await runPingCycle(by)
       await refreshStatus()
-      setMsg(`Prüfung fertig: ${r.online} online · ${r.offline} offline.`)
+      setMsg(`Ping fertig: ${r.online} online · ${r.offline} offline — Reboot-Zeiten werden gelesen …`)
+      const rb = await runRebootCheck(by)
+      await refreshStatus()
+      setMsg(`Ping + Reboot fertig — Dienste & Einstellungen werden geprüft …`)
+      const zp = await runZustandsPruefung(by)
+      await refreshStatus()
+      setMsg(`Prüfung fertig: ${r.online} online · ${r.offline} offline · Reboot-Zeit von ${rb.updated} Servern gelesen${rb.fehler ? ` (${rb.fehler} nicht abfragbar — siehe Kachel)` : ''}${rb.neustarts ? ` · ${rb.neustarts} Neustart(s) erkannt` : ''}${zp.geprueft ? ` · ${zp.geprueft} Server geprüft, ${zp.probleme} Problem(e)` : ''}.`)
     } catch (e) {
       setMsg('Prüfung fehlgeschlagen: ' + (e instanceof Error ? e.message : String(e)))
     } finally { setChecking(false) }
+  }
+
+  // Zertifikate EINES Servers manuell prüfen (nur lesend) — Meldungen wie beim täglichen Scan
+  const [zertPruefend, setZertPruefend] = useState<Set<string>>(new Set())
+  async function zertJetzt(tile: ServerTile) {
+    const k = hostKey(tile.hostname)
+    if (zertPruefend.has(k)) return
+    setZertPruefend(prev => new Set(prev).add(k))
+    try {
+      const r = await runZertifikatsScan(by, [tile.hostname])
+      await refreshStatus()
+      setMsg(r.geprueft ? `Zertifikate ${tile.hostname}: ${r.summary.replace(/^1 Server geprüft · /, '')}.` : `Zertifikate ${tile.hostname}: Server laut Ping nicht erreichbar — übersprungen.`)
+    } catch (e) {
+      setMsg(`Zertifikate ${tile.hostname}: fehlgeschlagen — ${e instanceof Error ? e.message : String(e)}`)
+    } finally {
+      setZertPruefend(prev => { const n = new Set(prev); n.delete(k); return n })
+    }
   }
 
   async function measureNow() {
@@ -260,6 +524,10 @@ export default function ServerMonitor() {
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 disabled:opacity-40">
             {measuring ? <Loader size={12} className="animate-spin" /> : <MemoryStick size={12} />}Auslastung messen
           </button>
+          <button onClick={() => setShowMeldungen(v => !v)} title="Mail-Meldungen (Offline, Neustart/Herunterfahren, Probleme) für alle Server auf einmal setzen — auch mehrere Empfänger"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
+            <Mail size={12} />Mail-Meldungen für alle
+          </button>
           <button onClick={addFromInventory}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
             <Download size={12} />Aus Standort-Übersicht laden
@@ -276,6 +544,11 @@ export default function ServerMonitor() {
           <span className="flex-1">{msg}</span>
           <button onClick={() => setMsg('')} className="text-blue-300/70 hover:text-blue-200 text-sm leading-none">×</button>
         </div>
+      )}
+
+      {showMeldungen && (
+        <MeldungenFuerAlle tiles={tiles} onSchliessen={() => setShowMeldungen(false)}
+          onUebernehmen={(patch, text) => { void persist(tiles.map(patch)); setMsg(text); setShowMeldungen(false) }} />
       )}
 
       {showAdd && (
@@ -314,6 +587,7 @@ export default function ServerMonitor() {
                       {tile.description && <span className="text-muted-foreground font-normal"> · {tile.description}</span>}
                     </span>
                     {state === 'offline' ? <ServerOff size={14} className="text-red-400 shrink-0" /> : <ServerCog size={14} className="text-muted-foreground shrink-0" />}
+                    <button onClick={() => oeffne(tile)} title="Dienste & Prüfungen" className="shrink-0 p-0.5 rounded text-muted-foreground/60 hover:text-primary hover:bg-primary/10"><ListChecks size={13} /></button>
                     <button onClick={() => setHistoryTile(tile)} title="Historie öffnen" className="shrink-0 p-0.5 rounded text-muted-foreground/60 hover:text-primary hover:bg-primary/10"><History size={13} /></button>
                     <button onClick={() => removeTile(tile.id)} title="Kachel entfernen" className="shrink-0 p-0.5 rounded text-muted-foreground/60 hover:text-red-400 hover:bg-red-500/10"><Trash2 size={12} /></button>
                   </div>
@@ -323,9 +597,10 @@ export default function ServerMonitor() {
                       {state === 'online' ? 'online' : state === 'offline' ? `offline${st?.consecutiveFailures ? ` (${st.consecutiveFailures}×)` : ''}` : 'noch nicht geprüft'}
                     </span>
                   </div>
-                  <div className="mt-1.5 text-[11px] text-muted-foreground">
-                    Letzter Reboot: <span className="text-foreground">{st?.lastReboot || '—'}</span>
-                  </div>
+                  <RebootZeile st={st} />
+                  <PruefChip st={st} onClick={() => oeffne(tile)} />
+                  <ZertChip st={st} onClick={() => oeffne(tile, 'zertifikate')} pruefend={zertPruefend.has(hostKey(tile.hostname))}
+                    onPruefen={() => void zertJetzt(tile)} />
                   {st?.metrics ? (
                     <div className="mt-2 space-y-1.5">
                       <MetricBar icon={<MemoryStick size={11} />} label="RAM" pct={st.metrics.ramUsedPct}
@@ -342,16 +617,31 @@ export default function ServerMonitor() {
                   <textarea defaultValue={tile.note || ''} placeholder="Info / Notiz zum Server…" rows={2}
                     onBlur={e => patchTile(tile.id, { note: e.target.value.trim() })}
                     className="mt-2 w-full px-2 py-1 text-[11px] rounded-md border border-border bg-background text-foreground resize-none focus:outline-none focus:border-primary" />
-                  <label className="mt-2 flex items-center gap-1.5 text-[11px] text-muted-foreground cursor-pointer">
-                    <input type="checkbox" className="rounded accent-primary" checked={tile.notifyEnabled}
-                      onChange={e => patchTile(tile.id, { notifyEnabled: e.target.checked })} />
-                    <Mail size={11} />Bei Offline benachrichtigen
-                  </label>
-                  {tile.notifyEnabled && (
-                    <input
-                      defaultValue={tile.notifyEmail || ''} placeholder="mail@firma.de"
-                      onBlur={e => patchTile(tile.id, { notifyEmail: e.target.value.trim() })}
-                      className="mt-1 w-full px-2 py-1 text-[11px] rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+                  <div className="mt-2 flex items-center gap-3 flex-wrap text-[11px] text-muted-foreground">
+                    <Mail size={11} className="shrink-0" />
+                    <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn der Server 3× nicht auf Ping antwortet (und wenn er wieder erreichbar ist)">
+                      <input type="checkbox" className="rounded accent-primary" checked={tile.notifyEnabled}
+                        onChange={e => patchTile(tile.id, { notifyEnabled: e.target.checked })} />
+                      bei Offline
+                    </label>
+                    <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn der Server heruntergefahren/neu gestartet wurde — geplant (mit Benutzer und Grund) oder unerwartet">
+                      <input type="checkbox" className="rounded accent-primary" checked={tile.notifyReboot ?? tile.notifyEnabled}
+                        onChange={e => patchTile(tile.id, { notifyReboot: e.target.checked })} />
+                      bei Neustart / Herunterfahren
+                    </label>
+                    <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn bei der Dienst-/Einstellungs-Prüfung ein kritischer Punkt ausfällt">
+                      <input type="checkbox" className="rounded accent-primary" checked={tile.notifyPruefung ?? (tile.notifyReboot ?? tile.notifyEnabled)}
+                        onChange={e => patchTile(tile.id, { notifyPruefung: e.target.checked })} />
+                      bei Problemen
+                    </label>
+                    <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn ein verwendetes Zertifikat in 30 bzw. 5 Tagen abläuft oder abgelaufen ist">
+                      <input type="checkbox" className="rounded accent-primary" checked={tile.notifyZertifikat ?? (tile.notifyPruefung ?? (tile.notifyReboot ?? tile.notifyEnabled))}
+                        onChange={e => patchTile(tile.id, { notifyZertifikat: e.target.checked })} />
+                      bei Zertifikat-Ablauf
+                    </label>
+                  </div>
+                  {(tile.notifyEnabled || (tile.notifyReboot ?? tile.notifyEnabled) || (tile.notifyPruefung ?? (tile.notifyReboot ?? tile.notifyEnabled)) || (tile.notifyZertifikat ?? (tile.notifyPruefung ?? (tile.notifyReboot ?? tile.notifyEnabled)))) && (
+                    <AdressListe wert={tile.notifyEmail} onSpeichern={v => patchTile(tile.id, { notifyEmail: v })} />
                   )}
                 </div>
               )
@@ -361,6 +651,8 @@ export default function ServerMonitor() {
       </div>
 
       {historyTile && <HistoryDialog tile={historyTile} by={by} onClose={() => setHistoryTile(null)} />}
+      {zustandTile && <ServerZustandPanel host={zustandTile.hostname} bezeichnung={zustandTile.description} by={by} startReiter={zustandReiter}
+        onClose={() => setZustandTile(null)} onGeaendert={() => void refreshStatus()} />}
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import {
   Ticket, RefreshCw, Loader2, Search, ExternalLink, Settings as SettingsIcon,
   CheckCircle2, AlertTriangle, Filter, ListFilter, Flag, Users2, X, Save,
-  LogIn, LogOut, ShieldCheck, KeyRound, Trash2, Eye, EyeOff, Plus, Zap, Copy, XCircle,
+  LogIn, LogOut, ShieldCheck, KeyRound, Trash2, Eye, EyeOff, Plus, Zap, Copy, XCircle, FileText,
 } from 'lucide-react'
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
@@ -12,8 +12,8 @@ import { PersonInfoButton } from '../components/person/PersonDossier'
 import { logDossierAction } from '../services/personDossier'
 import {
   loadConfig, saveConfig, isConfigured, listTickets, recordUrl, certDiag,
-  login, logout, loadIntegrationAccount, saveIntegrationAccount, testConnection, usesOAuth, cleanAuth,
-  instanceHost, isDevInstance,
+  login, logout, loadIntegrationAccount, saveIntegrationAccount, testConnection, usesOAuth, usesApiKey, zugangsArt, cleanAuth,
+  instanceHost, isDevInstance, erstelleFehlerbericht,
   createIncident, closeIncident, resolveSysUserSysId, resolveGroupSysId,
   CLOSE_CODES, DEFAULT_ASSIGNMENT_GROUPS,
   loadHandoverConfig, saveHandoverConfig, DEFAULT_TEMPLATE_SYS_ID,
@@ -94,9 +94,16 @@ export default function ServiceNow() {
   const [intSecret, setIntSecret] = useState('')
   const [intShowSecret, setIntShowSecret] = useState(false)
   const [intOAuth, setIntOAuth] = useState(false)
+  // REST API Key (Header x-sn-apikey) — ServiceNow verlangt ihn, wenn die Access-Policy nur API_KEY zulässt
+  const [intApiKey, setIntApiKey] = useState('')
+  const [intShowApiKey, setIntShowApiKey] = useState(false)
+  const [intApi, setIntApi] = useState(false)
   // Verbindungsstatus (oben im Zugang-Panel): klappt der Login? Wenn nicht: warum (DE) + Begründung für HCL (EN)
   const [check, setCheck] = useState<PruefErgebnis | null>(null)
   const [checking, setChecking] = useState(false)
+  // Kompletter Fehlerbericht (Datei zum Weitergeben)
+  const [berichtBusy, setBerichtBusy] = useState(false)
+  const [bericht, setBericht] = useState<{ ok: boolean; pfad?: string; zusammenfassung?: string[]; error?: string } | null>(null)
   const [kopiert, setKopiert] = useState(false)
   const [showAuto, setShowAuto] = useState(false)
   const [intActive, setIntActive] = useState(false)
@@ -132,7 +139,8 @@ export default function ServiceNow() {
       if (acc) {
         setIntUser(acc.user ?? ''); setIntPass(acc.pass ?? '')
         setIntClientId(acc.clientId ?? ''); setIntSecret(acc.clientSecret ?? '')
-        setIntActive(true); setIntOAuth(usesOAuth(acc))
+        setIntApiKey(acc.apiKey ?? '')
+        setIntActive(true); setIntOAuth(usesOAuth(acc)); setIntApi(usesApiKey(acc))
       }
       try { setHo(await loadHandoverConfig()) } catch { /* Default */ }
     })()
@@ -148,15 +156,16 @@ export default function ServiceNow() {
 
   // Zugang speichern (zentral) + sofort testen. OAuth = NUR Client ID + Secret
   // (Benutzer/Passwort werden dann nicht mitgeschickt); 'basic' = altes Konto.
-  async function saveIntegration(mode: 'oauth' | 'basic') {
+  async function saveIntegration(mode: 'oauth' | 'basic' | 'apikey') {
     setIntBusy(true); setTestResult(null)
     try {
       const oauth = mode === 'oauth'
-      const cred = cleanAuth(oauth ? { clientId: intClientId, clientSecret: intSecret } : { user: intUser, pass: intPass })
+      const cred = cleanAuth(mode === 'apikey' ? { apiKey: intApiKey } : oauth ? { clientId: intClientId, clientSecret: intSecret } : { user: intUser, pass: intPass })
+      if (mode === 'apikey' && !usesApiKey(cred)) { setTestResult({ ok: false, msg: 'API-Key eingeben.' }); return }
       if (oauth && !usesOAuth(cred)) { setTestResult({ ok: false, msg: 'Client ID und Client Secret eingeben.' }); return }
-      if (!oauth && !(cred.user && cred.pass)) { setTestResult({ ok: false, msg: 'Benutzername und Passwort eingeben.' }); return }
+      if (mode === 'basic' && !(cred.user && cred.pass)) { setTestResult({ ok: false, msg: 'Benutzername und Passwort eingeben.' }); return }
       const test = await testConnection(form, cred)
-      const methode = oauth ? 'Client ID + Secret (OAuth)' : `altes Konto „${cred.user}“ (Basic Auth)`
+      const methode = zugangsArt(cred)
       setCheck(baueErgebnis(test, 'eingegeben', methode, form.instanceUrl, cred.clientId, cred.user))
       if (!test.ok) return   // Begründung steht oben im Statusfeld; nichts gespeichert
       const groups = parseGroups(groupsText)
@@ -164,11 +173,13 @@ export default function ServiceNow() {
       const ok = await saveIntegrationAccount(cred, currentUser, form.instanceUrl, groups)
       if (!ok) { setTestResult({ ok: false, msg: 'Test OK, aber Speichern auf dem Netzlaufwerk fehlgeschlagen.' }); return }
       await saveConfig(next); setForm(next); setCfg(next)
-      setIntActive(true); setIntOAuth(oauth); setNeedsLogin(false)
+      setIntActive(true); setIntOAuth(oauth); setIntApi(mode === 'apikey'); setNeedsLogin(false)
       setCheck(c => c && { ...c, quelle: 'gespeichert' })
       // Gespeichert ist jetzt genau EIN Weg — die Felder des anderen leeren, damit nichts Altes suggeriert wird.
-      if (oauth) { setIntUser(''); setIntPass('') } else { setIntClientId(''); setIntSecret('') }
-      const wer = oauth ? 'Zugang per Client ID + Secret (OAuth)' : `Konto „${cred.user}“ (Basic Auth)`
+      if (mode === 'apikey') { setIntUser(''); setIntPass(''); setIntClientId(''); setIntSecret('') }
+      else if (oauth) { setIntUser(''); setIntPass(''); setIntApiKey('') }
+      else { setIntClientId(''); setIntSecret(''); setIntApiKey('') }
+      const wer = `Zugang per ${methode}`
       setTestResult({ ok: true, msg: `${wer} getestet & zentral gespeichert (Instanz ${instanceHost(form)}) — gilt ab jetzt für alle App-Nutzer.` })
       void load()
     } finally { setIntBusy(false) }
@@ -181,12 +192,21 @@ export default function ServiceNow() {
     setChecking(true)
     try {
       const acc = await loadIntegrationAccount(true)
-      const methode = acc ? (usesOAuth(acc) ? 'Client ID + Secret (OAuth)' : `altes Konto „${acc.user}“ (Basic Auth)`) : 'SSO-Anmeldung'
+      const methode = zugangsArt(acc)
       const r = await testConnection(c)
       setCheck(baueErgebnis(r, 'gespeichert', methode, c.instanceUrl, acc?.clientId, acc?.user))
     } finally { setChecking(false) }
   }
   useEffect(() => { if (showConfig) void pruefeGespeicherten() /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [showConfig])
+
+  async function fehlerbericht() {
+    setBerichtBusy(true); setBericht(null)
+    try {
+      const r = await erstelleFehlerbericht(cfg ?? form, { clientId: intClientId, clientSecret: intSecret, user: intUser, pass: intPass, apiKey: intApiKey })
+      if (r.abgebrochen) setBericht({ ok: false, zusammenfassung: r.zusammenfassung, error: 'Speichern abgebrochen — Ergebnis siehe unten.' })
+      else setBericht(r)
+    } finally { setBerichtBusy(false) }
+  }
 
   async function kopiereBegruendung() {
     if (!check?.erklaerung) return
@@ -198,7 +218,7 @@ export default function ServiceNow() {
     setIntBusy(true)
     try {
       await saveIntegrationAccount({}, currentUser)
-      setIntUser(''); setIntPass(''); setIntClientId(''); setIntSecret(''); setIntActive(false); setIntOAuth(false)
+      setIntUser(''); setIntPass(''); setIntClientId(''); setIntSecret(''); setIntApiKey(''); setIntActive(false); setIntOAuth(false); setIntApi(false)
       setTestResult({ ok: true, msg: 'Integrationskonto entfernt — SSO-Anmeldung ist wieder aktiv.' })
     } finally { setIntBusy(false) }
   }
@@ -364,6 +384,31 @@ export default function ServiceNow() {
                   )}
                 </>
               )}
+
+              {/* Kompletter Fehlerbericht als Datei */}
+              <div className="flex items-center gap-2 flex-wrap pt-2 border-t border-border/60">
+                <button onClick={() => void fehlerbericht()} disabled={berichtBusy || !isConfigured(cfg ?? form)}
+                  title="Testet jeden Schritt einzeln (nur lesend) und speichert alles als Textdatei — ohne Secret, Passwort und Token"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-md border border-border text-foreground hover:bg-accent disabled:opacity-40">
+                  {berichtBusy ? <Loader2 size={12} className="animate-spin" /> : <FileText size={12} />}
+                  {berichtBusy ? 'Bericht wird erstellt (bis 2 Min.)…' : 'Kompletten Fehlerbericht erstellen'}
+                </button>
+                <span className="text-[11px] text-muted-foreground">Datei ohne Secret/Passwort/Token — kann so weitergegeben werden.</span>
+              </div>
+              {bericht && (
+                <div className={`rounded-md border p-2.5 space-y-1 ${bericht.ok ? 'border-border bg-background/80' : 'border-amber-500/40 bg-background/80'}`}>
+                  {bericht.ok && bericht.pfad && (
+                    <div className="flex items-center gap-2 flex-wrap text-[11px] text-foreground">
+                      <CheckCircle2 size={12} className="text-emerald-500" />Gespeichert: <span className="font-mono break-all">{bericht.pfad}</span>
+                      <button onClick={() => void api().openPath(bericht.pfad!)} className="ml-auto px-2 py-0.5 rounded border border-border hover:bg-accent">Öffnen</button>
+                    </div>
+                  )}
+                  {bericht.error && <p className="text-[11px] text-foreground">{bericht.error}</p>}
+                  {(bericht.zusammenfassung ?? []).map((zl, i) => (
+                    <p key={i} className={`text-[11px] leading-snug ${zl.startsWith('BEFUND') ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>{zl}</p>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* 2) Zugang von HCL */}
@@ -371,7 +416,7 @@ export default function ServiceNow() {
               <div className="flex items-center gap-2 flex-wrap">
                 <KeyRound size={14} className="text-blue-400" />
                 <span className="text-xs font-semibold text-foreground">Zugang von HCL</span>
-                {intActive && <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground"><ShieldCheck size={12} />gespeichert: {intOAuth ? 'Client ID + Secret' : 'altes Konto (Benutzer + Passwort)'}</span>}
+                {intActive && <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground"><ShieldCheck size={12} />gespeichert: {intApi ? 'API-Key' : intOAuth ? 'Client ID + Secret' : 'altes Konto (Benutzer + Passwort)'}</span>}
               </div>
               <p className="text-[11px] text-muted-foreground">Nur die zwei Werte aus dem HCL-Chat eintragen. „Testen &amp; speichern" prüft zuerst — das Ergebnis erscheint oben; gespeichert wird nur bei Erfolg.</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2">
@@ -392,6 +437,18 @@ export default function ServiceNow() {
                   </button>
                 )}
               </div>
+
+              <details className="pt-1" open={intApi || undefined}>
+                <summary className="text-[11px] text-muted-foreground cursor-pointer select-none hover:text-foreground">Alternativ: API-Key von HCL (REST API Key, Header x-sn-apikey) — hat Vorrang vor Client ID/Secret</summary>
+                <div className="mt-2 space-y-2">
+                  <ZugangFeld label="API-Key" hinweis="Wert des REST API Keys aus ServiceNow"
+                    value={intApiKey} onChange={setIntApiKey} geheim sichtbar={intShowApiKey} umschalten={() => setIntShowApiKey(v => !v)} />
+                  <button onClick={() => void saveIntegration('apikey')} disabled={intBusy || !intApiKey.trim()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-foreground hover:bg-accent disabled:opacity-40">
+                    {intBusy ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}API-Key testen &amp; speichern
+                  </button>
+                </div>
+              </details>
 
               <details className="pt-1">
                 <summary className="text-[11px] text-muted-foreground cursor-pointer select-none hover:text-foreground">Alternativ: altes Konto mit Benutzername + Passwort (Basic Auth)</summary>

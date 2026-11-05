@@ -25,6 +25,7 @@ import { PRINTER_SEED } from '../data/printerSeed'
 import ExcelColumnDialog from '../components/ExcelColumnDialog'
 import { parseExcelSheet, extractFromExcel, type ExcelSheetData } from '../utils/fileImport'
 import { batchAdLookup } from '../services/adUserLookup'
+import ComputerSyncHinweis from '../components/location/ComputerSyncHinweis'
 
 const log = createLogger('location-overview')
 
@@ -811,7 +812,9 @@ export default function LocationOverview() {
                 <button onClick={handleImport} disabled={importing}
                   title={activeCategory === 'Drucker'
                     ? 'Drucker-Daten aus der ERP-Liste importieren (Ist verwaltet, Hersteller, Modell, Seriennummer, ERP-ID, IP, MAC). Zuordnung über IP, MAC, Seriennummer oder ERP-ID; unbekannte Drucker werden neu angelegt.'
-                    : 'Hostnamen aus Excel, CSV oder Textdatei importieren'}
+                    : activeCategory === 'Computer'
+                      ? 'Normalerweise nicht nötig: Die Computer-Liste kommt automatisch aus dem Import der Endgeräte-Übersicht. Nur für Sonderfälle — ein Import hier wird beim nächsten Endgeräte-Import wieder überschrieben.'
+                      : 'Hostnamen aus Excel, CSV oder Textdatei importieren'}
                   className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground transition-colors disabled:opacity-50">
                   {importing ? <Loader size={12} className="animate-spin" /> : <Upload size={12} />}
                   {activeCategory === 'Drucker' ? 'Drucker-Daten importieren' : 'Import'}
@@ -827,6 +830,10 @@ export default function LocationOverview() {
               </>
             )}
           </div>
+
+          {activeCategory === 'Computer' && (
+            <ComputerSyncHinweis darfAbgleichen={isMaster} von={session?.user.displayName || session?.user.username || ''} onFertig={() => void loadItems()} />
+          )}
 
           {/* ── Excel-style column filters ── */}
           <div className="shrink-0 px-4 py-2 border-b border-border flex items-center gap-2 flex-wrap bg-muted/5">

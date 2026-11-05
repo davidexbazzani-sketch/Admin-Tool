@@ -8,6 +8,7 @@
 //   hardware-inventory/runs/<id>.json         → Vollständige Lauf-Daten
 
 import { api } from '../electronAPI'
+import { ladeEigentum, mitEigentum } from './inventurEigentum'
 
 export type RunStatus = 'open' | 'completed' | 'archived'
 
@@ -18,6 +19,14 @@ export interface InventoryDevice {
   company: string
   status: string                  // "In Stock" o. ä.
   substate: string
+  /** „Wer bezahlt?" aus der Endgeräte-Übersicht (null = dort nicht vorhanden, undefined = nie abgeglichen) */
+  owner?: string | null
+  /** Asset-Kommentar (= Fach) aus der Endgeräte-Übersicht — Ersatz, wenn `comment` leer ist */
+  epComment?: string
+  // Fach fehlte beim Scan → Bestätigung „in ServiceNow eingetragen" (+ optional das Fach)
+  fachNachgetragen?: string
+  fachBestaetigtAm?: string
+  fachBestaetigtVon?: string
   // Scan-Resultat
   scanned: boolean
   scannedAt?: string
@@ -75,7 +84,8 @@ export interface InventoryRun {
   columns: InventoryColumn[]      // alle Spalten aus Excel (für Export)
   devices: InventoryDevice[]
   /** Zusätzlich gescannte Werte, die kein erwartetes Gerät getroffen haben. */
-  extras: Array<{ serial: string; scannedAt: string; scannedBy: string; reason?: string; capture?: 'scan' | 'manual' }>
+  extras: Array<{ serial: string; scannedAt: string; scannedBy: string; reason?: string; capture?: 'scan' | 'manual'; owner?: string | null; epComment?: string
+    fachNachgetragen?: string; fachBestaetigtAm?: string; fachBestaetigtVon?: string }>
   scanLog: ScanLogEntry[]
   status: RunStatus
   completedAt?: string
@@ -245,7 +255,7 @@ export async function createRun(input: CreateRunInput): Promise<{ ok: boolean; r
     })
   }
 
-  const run: InventoryRun = {
+  const neu: InventoryRun = {
     id: newId('inv'),
     title: input.title || `Inventur ${new Date().toLocaleDateString('de-DE')}`,
     importedFilename: input.importedFilename,
@@ -259,6 +269,7 @@ export async function createRun(input: CreateRunInput): Promise<{ ok: boolean; r
     history: [{ timestamp: now, by: input.importedBy, action: 'Inventur angelegt', details: `${devices.length} Geräte aus ${input.importedFilename} importiert` }],
     updatedAt: now,
   }
+  const { run } = mitEigentum(neu, await ladeEigentum(true).catch(() => null))
   const ok = await saveRun(run)
   if (!ok) return { ok: false, error: ERR_NET }
   return { ok: true, run }
@@ -332,6 +343,27 @@ export async function applyScan(runId: string, rawValue: string, by: string, cap
   return { ok: true, run, outcome: { kind: 'extra', normalizedSerial: norm } }
 }
 
+/**
+ * Fach fehlte beim Scan: Bestätigung festhalten, dass der Platz in ServiceNow im
+ * Kommentarfeld eingetragen wurde (optional mit dem eingetragenen Fach).
+ */
+export async function bestaetigeFach(runId: string, serial: string, by: string, fach?: string): Promise<{ ok: boolean; run?: InventoryRun; error?: string }> {
+  const run = await loadRun(runId)
+  if (!run) return { ok: false, error: 'Inventur nicht gefunden' }
+  const norm = normalizeSerial(serial)
+  const ziel = run.devices.find(d => d.serial === norm) ?? run.extras.find(e => e.serial === norm)
+  if (!ziel) return { ok: false, error: 'Gerät nicht in dieser Inventur gefunden' }
+  const ts = new Date().toISOString()
+  const f = (fach || '').trim()
+  ziel.fachBestaetigtAm = ts
+  ziel.fachBestaetigtVon = by
+  if (f) ziel.fachNachgetragen = f
+  run.history.push({ timestamp: ts, by, action: `Fach in ServiceNow eingetragen: ${norm}`, details: f ? `Fach: ${f}` : 'Fach nicht angegeben' })
+  const ok = await saveRun(run)
+  if (!ok) return { ok: false, error: ERR_NET }
+  return { ok: true, run }
+}
+
 /** Erfassungsart eines Geräts korrigieren (Badge-Klick in der UI). */
 export async function setDeviceCapture(runId: string, serial: string, capture: 'scan' | 'manual'): Promise<{ ok: boolean }> {
   const run = await loadRun(runId)
@@ -348,8 +380,10 @@ export async function setDeviceCapture(runId: string, serial: string, capture: '
  * speichern. `reasons` ist eine Map Seriennummer -> Begründung.
  */
 export async function completeRunWithReasons(runId: string, by: string, reasons: Record<string, string>): Promise<{ ok: boolean; run?: InventoryRun; error?: string }> {
-  const run = await loadRun(runId)
-  if (!run) return { ok: false, error: 'Inventur nicht gefunden' }
+  const geladen = await loadRun(runId)
+  if (!geladen) return { ok: false, error: 'Inventur nicht gefunden' }
+  // Eigentum beim Abschluss als Momentaufnahme festschreiben
+  const { run } = mitEigentum(geladen, await ladeEigentum(true).catch(() => null))
   for (const ex of run.extras) {
     const r = reasons[ex.serial]
     if (r !== undefined) ex.reason = r.trim()
@@ -366,8 +400,9 @@ export async function completeRunWithReasons(runId: string, by: string, reasons:
 
 /** Inventur abschließen (nach Bestätigungsdialog). */
 export async function completeRun(runId: string, by: string): Promise<{ ok: boolean; run?: InventoryRun; error?: string }> {
-  const run = await loadRun(runId)
-  if (!run) return { ok: false, error: 'Inventur nicht gefunden' }
+  const geladen = await loadRun(runId)
+  if (!geladen) return { ok: false, error: 'Inventur nicht gefunden' }
+  const { run } = mitEigentum(geladen, await ladeEigentum(true).catch(() => null))
   const now = new Date().toISOString()
   run.status = 'completed'
   run.completedAt = now

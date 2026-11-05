@@ -1,11 +1,15 @@
 import { useState } from 'react'
-import { PackagePlus, Wrench, Phone, Headphones } from 'lucide-react'
+import { PackagePlus, Wrench, Phone, Headphones, FileText, Box } from 'lucide-react'
 import SolidWorksInstallation from '../components/softwareInstallations/SolidWorksInstallation'
 import SolidWorksHelp from '../components/solidworks/SolidWorksHelp'
 import XelionInstallation from '../components/softwareInstallations/XelionInstallation'
 import JabraInstallation from '../components/softwareInstallations/JabraInstallation'
+import EnaioInstallation from '../components/softwareInstallations/EnaioInstallation'
+import FreeCadInstallation from '../components/softwareInstallations/FreeCadInstallation'
+import InstallLogbuch from '../components/softwareInstallations/InstallLogbuch'
 
-type Section = 'overview' | 'solidworks' | 'xelion' | 'jabra'
+// „E-Drawings" wurde am 04.11.2026 durch „3D-Viewer (FreeCAD)" ersetzt (Ferninstallation lief nicht)
+type Section = 'overview' | 'solidworks' | 'xelion' | 'jabra' | 'enaio' | 'freecad'
 
 export default function SoftwareInstallations() {
   const [section, setSection] = useState<Section>('overview')
@@ -57,7 +61,51 @@ export default function SoftwareInstallations() {
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
           </button>
+
+          <button onClick={() => setSection('enaio')}
+            className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
+            <div className="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+              <FileText size={20} className="text-indigo-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">Enaio</h3>
+              <p className="text-xs text-muted-foreground mt-1">enaio Client + Outlook-Add-Ins übers Netzwerk installieren. Optional vorher alles von enaio vollständig entfernen (inkl. Registry-Reste).</p>
+            </div>
+            <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
+          </button>
+
+          <button onClick={() => setSection('freecad')}
+            className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
+            <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+              <Box size={20} className="text-orange-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">3D-Viewer (FreeCAD)</h3>
+              <p className="text-xs text-muted-foreground mt-1">3D-Modelle (STEP/IGES) ansehen ohne SOLIDWORKS/eDrawings — kostenlos, still installiert, STEP-Dateien öffnen per Doppelklick.</p>
+            </div>
+            <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
+          </button>
         </div>
+      )}
+
+      {section === 'overview' && (
+        <div className="mt-6">
+          <InstallLogbuch titel="Logbuch aller Installationen" />
+        </div>
+      )}
+
+      {section === 'enaio' && (
+        <>
+          <button onClick={() => setSection('overview')} className="text-xs text-muted-foreground hover:text-foreground mb-3 self-start">&larr; Zurueck zur Uebersicht</button>
+          <EnaioInstallation />
+        </>
+      )}
+
+      {section === 'freecad' && (
+        <>
+          <button onClick={() => setSection('overview')} className="text-xs text-muted-foreground hover:text-foreground mb-3 self-start">&larr; Zurueck zur Uebersicht</button>
+          <FreeCadInstallation />
+        </>
       )}
 
       {section === 'solidworks' && (

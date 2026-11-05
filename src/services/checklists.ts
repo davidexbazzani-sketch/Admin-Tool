@@ -23,6 +23,9 @@ export interface Checklist {
   updatedAt?: string         // ISO — touched on every save
   priority?: boolean         // "Hohe Priorität" — orange markiert in der Übersicht
   notiz?: string             // freie Notiz je Eintrag, direkt aus der Übersicht bearbeitbar
+  notizAt?: string           // ISO — wann die aktuelle Notiz geschrieben wurde
+  notizBy?: string           // wer die aktuelle Notiz geschrieben hat
+  notizArchiv?: NotizArchivEintrag[]   // ersetzte Notizen, älteste zuerst — wird nie gekürzt
   manualSoftware?: string[]  // manuell in der Übersicht ergänzte Software (zusätzlich zur Auto-Erkennung)
   // ── Abschluss (Geraet uebergeben + Checkliste unterschrieben) ─────────────
   completed?: boolean        // true = in "Alle erledigten Checklisten" verschoben
@@ -35,6 +38,14 @@ export interface Checklist {
   hardwareLocation?: string  // Abhol-Ort / Raum (kommt in die Abhol-Mail)
   hardwareBy?: string        // Bearbeiter
   hardwareAt?: string        // ISO
+}
+
+export interface NotizArchivEintrag {
+  text: string
+  at?: string                // wann die Notiz geschrieben wurde (fehlt bei Altbestand)
+  by?: string                // wer sie geschrieben hat (fehlt bei Altbestand)
+  ersetztAt: string          // wann sie durch eine neue Notiz abgelöst wurde
+  ersetztBy: string
 }
 
 const STORE_FILE = 'checklists/checklists.json'
@@ -124,6 +135,37 @@ export async function updateChecklist(id: string, patch: Partial<Checklist>): Pr
     id: store.checklists[idx].id,                   // keep stable
     createdAt: store.checklists[idx].createdAt,     // keep stable
     updatedAt: new Date().toISOString(),
+  }
+  store.checklists[idx] = updated
+  const ok = await saveStore(store)
+  if (!ok) return { ok: false, error: 'Netzlaufwerk nicht erreichbar oder Schreibrechte fehlen.' }
+  return { ok: true, checklist: updated }
+}
+
+/**
+ * Setzt die Notiz eines Eintrags. Die bisherige Notiz geht dabei nicht verloren,
+ * sondern wandert ins Archiv (nur anhängen). Archiviert wird gegen den frisch
+ * gelesenen Stand, damit parallele Änderungen von Kollegen nichts überschreiben.
+ */
+export async function setChecklistNotiz(id: string, text: string, by: string): Promise<{ ok: boolean; checklist?: Checklist; error?: string }> {
+  const store = await loadStore()
+  const idx = store.checklists.findIndex(c => c.id === id)
+  if (idx < 0) return { ok: false, error: 'Checkliste nicht gefunden' }
+  const alt = store.checklists[idx]
+  const neu = text.trim()
+  if ((alt.notiz || '').trim() === neu) return { ok: true, checklist: alt }
+  const now = new Date().toISOString()
+  const archiv = [...(alt.notizArchiv || [])]
+  if ((alt.notiz || '').trim()) {
+    archiv.push({ text: alt.notiz!.trim(), at: alt.notizAt, by: alt.notizBy, ersetztAt: now, ersetztBy: by })
+  }
+  const updated: Checklist = {
+    ...alt,
+    notiz: neu,
+    notizAt: neu ? now : undefined,
+    notizBy: neu ? by : undefined,
+    notizArchiv: archiv,
+    updatedAt: now,
   }
   store.checklists[idx] = updated
   const ok = await saveStore(store)

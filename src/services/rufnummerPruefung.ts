@@ -97,9 +97,15 @@ export interface AdKonto {
   lastLogon: string
   telefon: string
   xelion: string[]
+  /** UserPrincipalName (auch wenn EmailAddress gefüllt ist). */
+  upn: string
+  /** SMTP-Proxyadressen — nur, wenn die Abfrage sie mitliefert (Lizenz-Abgleich). */
+  proxies: string[]
+  /** Xelion-Gruppen inkl. verschachtelter Mitgliedschaft — nur aus der Gruppenabfrage. */
+  xelionAlle: string[]
 }
 
-const FELDER = 'DisplayName,Enabled,LastLogonDate,telephoneNumber,MemberOf,EmailAddress,UserPrincipalName,EmployeeID,Department'
+export const FELDER = 'DisplayName,Enabled,LastLogonDate,telephoneNumber,MemberOf,EmailAddress,UserPrincipalName,EmployeeID,Department'
 
 /**
  * Gemeinsamer Ausgabeteil beider Abfragen.
@@ -110,7 +116,14 @@ const FELDER = 'DisplayName,Enabled,LastLogonDate,telephoneNumber,MemberOf,Email
  * damit kündbar. `ConvertTo-Json -InputObject @(…)` liefert dagegen in beiden Fällen
  * ein echtes Array — auch bei genau einem Treffer (lokal gegengeprüft).
  */
-const AUSGABE = [
+const AUSGABE = ausgabeSkript()
+
+/**
+ * Ausgabeteil mit optionalen Zusatzfeldern (je eine Zeile `Name=<Ausdruck>`), z. B. die
+ * Proxyadressen für den Lizenz-Abgleich. `$_` ist das AD-Konto.
+ */
+export function ausgabeSkript(extra: string[] = [], ziel = 'ConvertTo-Json -InputObject @($aus) -Depth 3 -Compress'): string {
+  return [
   `$aus = @($r | ForEach-Object { [pscustomobject]@{`,
   `  N=[string]$(if ($_.DisplayName) { $_.DisplayName } else { $_.Name })`,
   `  S=[string]$_.SamAccountName`,
@@ -123,18 +136,26 @@ const AUSGABE = [
   `  T=[string]$_.telephoneNumber`,
   // Gruppen schon auf dem Server auf Xelion eingrenzen — sonst kämen 40 Gruppen je Person.
   `  X=[string](@($_.MemberOf | ForEach-Object { if ($_ -match '^CN=([^,]+)') { $Matches[1] } } | Where-Object { $_ -match '${XELION_MUSTER}' } | Sort-Object -Unique) -join '${TRENNER}')`,
+  `  U=[string]$_.UserPrincipalName`,
+  ...extra.map(e => `  ${e}`),
   `}})`,
-  `ConvertTo-Json -InputObject @($aus) -Depth 3 -Compress`,
-].join('\n')
+  ziel,
+  ].join('\n')
+}
 
-function psq(s: string): string { return s.replace(/'/g, "''") }
-function ldapEsc(s: string): string {
+/** Trennzeichen für Listenfelder aus PowerShell — für eigene Zusatzfelder. */
+export const LISTEN_TRENNER = TRENNER
+
+export function ldapEsc(s: string): string {
   return s.replace(/\\/g, '\\5c').replace(/\(/g, '\\28').replace(/\)/g, '\\29').replace(/\*/g, '\\2a')
 }
 
-function parseKonten(out: string): AdKonto[] {
-  const j = JSON.parse(out)
-  const arr: Record<string, unknown>[] = Array.isArray(j) ? j : [j]
+const liste = (v: unknown) => String(v ?? '').split(TRENNER).map(g => g.trim()).filter(Boolean)
+
+/** Liest die Konten aus der PowerShell-Ausgabe (Text) oder einem schon geparsten Array. */
+export function parseKonten(out: string | unknown[]): AdKonto[] {
+  const j = typeof out === 'string' ? JSON.parse(out) : out
+  const arr: Record<string, unknown>[] = Array.isArray(j) ? j : j ? [j] : []
   return arr.map(x => ({
     name: String(x.N ?? ''),
     sam: String(x.S ?? ''),
@@ -144,7 +165,10 @@ function parseKonten(out: string): AdKonto[] {
     aktiv: Boolean(x.A),
     lastLogon: String(x.L ?? ''),
     telefon: String(x.T ?? ''),
-    xelion: String(x.X ?? '').split(TRENNER).map(g => g.trim()).filter(Boolean),
+    xelion: liste(x.X),
+    upn: String(x.U ?? ''),
+    proxies: liste(x.P),
+    xelionAlle: liste(x.XN),
   })).filter(k => k.name || k.sam)
 }
 
@@ -217,20 +241,30 @@ async function sucheKontenZuNamen(namen: string[]): Promise<{ konten: AdKonto[];
  * Beantwortet die wichtigste Sicherheitsfrage: trägt jemand diese Durchwahl noch?
  * Das funktioniert über die NUMMER und ist damit vom Namensabgleich unabhängig.
  */
-async function sucheKontenMitRufnummer(): Promise<{ konten: AdKonto[]; fehler?: string }> {
+export async function sucheKontenMitRufnummer(): Promise<{ konten: AdKonto[]; fehler?: string }> {
   const ps = [
     `$ErrorActionPreference='SilentlyContinue'`,
     `if (-not (Get-Command Get-ADUser -EA SilentlyContinue)) { Write-Output 'FEHLER:Das AD-Modul (RSAT) fehlt auf diesem PC.'; return }`,
-    `try { $r = @(Get-ADUser -LDAPFilter '(&(objectCategory=person)(objectClass=user)(telephoneNumber=*))' -Properties ${FELDER} -ResultSetSize 20000 -EA Stop) }`,
+    `try { $r = @(Get-ADUser -LDAPFilter '(&(objectCategory=person)(objectClass=user)(telephoneNumber=*))' -Properties ${FELDER} -ResultSetSize ${RUFNUMMER_LIMIT} -EA Stop) }`,
     `catch { Write-Output ('FEHLER:' + $_.Exception.Message); return }`,
     AUSGABE,
   ].join('\n')
-  const r = await api().runPowerShell(ps, 180000)
+  const r = await api().runPowerShell(ps, 300000)
   const out = (r.stdout || '').trim()
   if (out.startsWith('FEHLER:')) return { konten: [], fehler: out.slice(7) }
   if (!out) return { konten: [], fehler: r.stderr?.trim() || 'Die Rufnummern-Abfrage lieferte keine Antwort.' }
-  try { return { konten: parseKonten(out) } } catch { return { konten: [], fehler: 'Antwort der Rufnummern-Abfrage nicht lesbar.' } }
+  let konten: AdKonto[]
+  try { konten = parseKonten(out) } catch { return { konten: [], fehler: 'Antwort der Rufnummern-Abfrage nicht lesbar.' } }
+  // Die Grenze schneidet STILL ab. Ein unvollständiger Index „wer trägt diese Durchwahl"
+  // würde benutzte Nummern als frei ausweisen — darum ist das ein Fehler, kein Befund.
+  if (konten.length >= RUFNUMMER_LIMIT) {
+    return { konten, fehler: `Die Rufnummern-Abfrage wurde bei ${RUFNUMMER_LIMIT} Konten abgeschnitten.` }
+  }
+  return { konten }
 }
+
+/** Obergrenze der Sammelabfrage „alle Konten mit Rufnummer" (früher 20.000 — zu knapp). */
+const RUFNUMMER_LIMIT = 60000
 
 // ── Hilfen ───────────────────────────────────────────────────────────────────
 

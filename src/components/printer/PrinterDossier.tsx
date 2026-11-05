@@ -12,6 +12,7 @@ import {
   Plus, Zap, ListTree, Wrench, Users,
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
+import { naechsteEbene, dossierZIndex } from '../../utils/dossierEbene'
 import {
   loadPrinterDossier, emptyPrinterDossier, printerKey, canonicalPrinter,
   pickAndStorePrinterFiles, openPrinterFile, deletePrinterFile, formatFileSize,
@@ -45,15 +46,36 @@ export function PrinterInfoButton({ printerName, className, size = 12 }: { print
   )
 }
 
+/** Dossier per Code öffnen (z. B. Klick auf eine ganze Zeile) — gleiches Fenster wie das „i". */
+export function useOeffnePrinterDossier(): ((printerName: string) => void) | null {
+  return useContext(PrinterDossierContext)?.open ?? null
+}
+
+/**
+ * Merkt nur, welches Fenster offen ist. GEZEICHNET wird es von <PrinterDossierSlot /> — der sitzt in
+ * App.tsx INNERHALB aller Dossier-Provider. Sonst fehlen im Fenster die „i"-Knöpfe der anderen
+ * Dossiers (z. B. Geräte-„i" hinter den zugewiesenen Rechnern im Personen-„i").
+ */
+const PrinterDossierZielContext = createContext<{ target: ({ printerName: string } & { ebene: number }) | null; close: () => void } | null>(null)
+
 export function PrinterDossierProvider({ children }: { children: React.ReactNode }) {
-  const [target, setTarget] = useState<{ printerName: string } | null>(null)
-  const open = useCallback((printerName: string) => setTarget({ printerName }), [])
+  const [target, setTarget] = useState<({ printerName: string } & { ebene: number }) | null>(null)
+  const open = useCallback((printerName: string) => setTarget({ printerName, ebene: naechsteEbene() }), [])
+  const close = useCallback(() => setTarget(null), [])
   return (
     <PrinterDossierContext.Provider value={{ open }}>
-      {children}
-      {target && <PrinterDossierModal printerName={target.printerName} onClose={() => setTarget(null)} />}
+      <PrinterDossierZielContext.Provider value={{ target, close }}>
+        {children}
+      </PrinterDossierZielContext.Provider>
     </PrinterDossierContext.Provider>
   )
+}
+
+/** Zeichnet das offene PrinterDossier-Fenster — in App.tsx innerhalb ALLER Dossier-Provider platzieren. */
+export function PrinterDossierSlot() {
+  const t = useContext(PrinterDossierZielContext)
+  if (!t?.target) return null
+  return <div style={{ position: 'relative', zIndex: dossierZIndex(t.target.ebene) }}><PrinterDossierModal printerName={t.target.printerName} onClose={t.close} /></div>
 }
 
 function fmtDateTime(iso?: string): string {

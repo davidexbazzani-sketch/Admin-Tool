@@ -6,6 +6,7 @@
 import { create } from 'zustand'
 import { installiereJabra, JABRA_SCHRITTE, type JabraErgebnis, type JabraSchritt, type SchrittStatus } from '../services/jabraInstall'
 import { logDeviceAction } from '../services/deviceDossier'
+import { logStart, logEnde } from '../services/softwareInstallLog'
 import { useAuthStore } from './authStore'
 
 // Installationen sind schwer (181 MB Kopie + Installer). Mehr als zwei PCs gleichzeitig
@@ -46,6 +47,7 @@ export const useJabraInstallStore = create<JabraState>((set, get) => {
       if (!lauf) continue
       aktiv++
       setLauf(key, l => ({ ...l, phase: 'laeuft', startzeit: Date.now() }))
+      const logId = logStart('Jabra', lauf.host)
 
       const melde = (id: string, status: SchrittStatus, info?: string) => {
         setLauf(key, l => ({ ...l, schritte: l.schritte.map(s => (s.id === id ? { ...s, status, info: info ?? s.info } : s)) }))
@@ -58,6 +60,8 @@ export const useJabraInstallStore = create<JabraState>((set, get) => {
         void logDeviceAction(lauf.host, undefined,
           `Jabra Direct: stille Installation ${erg.ok ? 'erfolgreich' : 'fehlgeschlagen'} — ${erg.text}`.slice(0, 400),
           wer, 'Jabra Software')
+        void logId.then(id => logEnde(id, erg.ok ? 'ok' : 'fehler',
+          `${erg.text}${erg.neustartNoetig ? ' Neustart ausstehend.' : ''}`))
         pumpe()
       }
 

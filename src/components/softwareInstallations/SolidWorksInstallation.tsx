@@ -12,6 +12,7 @@ import { isValidRemoteTarget, isIpv4, ensureWinRmTrustedHost } from '../../utils
 import { buildOnlineCheck } from '../../utils/connectivityCheck'
 import Card from '../Card'
 import { DeviceInfoButton } from '../device/DeviceDossier'
+import InstallLogbuch from './InstallLogbuch'
 
 const log = createLogger('software-installations')
 
@@ -657,6 +658,8 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
           </div>
         </div>
       )}
+
+      <InstallLogbuch software="SolidWorks" titel="Logbuch SolidWorks" />
     </div>
   )
 }

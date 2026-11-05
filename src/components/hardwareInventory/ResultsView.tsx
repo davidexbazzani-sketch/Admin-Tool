@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   PackageCheck, AlertTriangle, RefreshCw, FileDown, FileText, FileSpreadsheet,
   ChevronDown, Search as SearchIcon, ChevronLeft, Loader2, CheckCircle2, XCircle,
@@ -13,6 +13,8 @@ import { lookupMany, type AdLookupResult } from '../../services/hardwareInventor
 import { exportInventoryRun, type InventoryExportFormat } from '../../services/hardwareInventoryExport'
 import { DeviceInfoButton } from '../device/DeviceDossier'
 import { hostFromSerial } from '../../services/deviceMasterData'
+import { ladeEigentum, mitEigentum, speichereEigentum, zaehleEigentum, fachText, type EigentumLookup } from '../../services/inventurEigentum'
+import { EigentumBadge, EigentumFilter, FachZeile, eigentumKurz, passtEigentum, type EigentumFilterWert } from './Eigentum'
 
 interface Props {
   runId: string
@@ -30,7 +32,11 @@ function fmtDate(iso?: string): string {
 }
 
 export default function ResultsView({ runId, currentUser, onBack }: Props) {
-  const [run, setRun] = useState<InventoryRun | null>(null)
+  const [roh, setRun] = useState<InventoryRun | null>(null)
+  // „Wer bezahlt?" aus der Endgeräte-Übersicht; Anzeige + Export nutzen den ergänzten Stand
+  const [eigentum, setEigentum] = useState<EigentumLookup | null>(null)
+  const [fEigentum, setFEigentum] = useState<EigentumFilterWert>('alle')
+  const run = useMemo(() => roh ? mitEigentum(roh, eigentum).run : null, [roh, eigentum])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -61,6 +67,14 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
   }, [runId, editingNotes])
 
   useEffect(() => { reload(true) }, [reload])
+  useEffect(() => { void ladeEigentum().then(setEigentum) }, [])
+  // Frühere/abgeschlossene Berichte einmalig nachtragen (offene erst beim Abschluss → kein Konflikt mit laufenden Scans)
+  const nachgetragen = useRef(false)
+  useEffect(() => {
+    if (!roh || !eigentum || roh.status === 'open' || nachgetragen.current) return
+    nachgetragen.current = true
+    if (mitEigentum(roh, eigentum).geaendert) void speichereEigentum(roh.id, eigentum)
+  }, [roh, eigentum])
   useEffect(() => {
     const t = setInterval(() => reload(false), POLL_MS)
     const onFocus = () => reload(false)
@@ -68,6 +82,12 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
     return () => { clearInterval(t); window.removeEventListener('focus', onFocus) }
   }, [reload])
 
+  const eigentumZahlen = useMemo(() => zaehleEigentum((run?.devices || []).map(d => d.owner)), [run])
+  const extrasGefiltert = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    return (run?.extras || []).filter(x => passtEigentum(fEigentum, x.owner)
+      && (!q || x.serial.toLowerCase().includes(q) || fachText(x).toLowerCase().includes(q) || (x.reason || '').toLowerCase().includes(q)))
+  }, [run, fEigentum, search])
   const missing = useMemo(() => (run?.devices || []).filter(d => !d.scanned), [run])
   const lateFound = useMemo(() => (run?.devices || []).filter(d => d.lateFound), [run])
   const scanned = useMemo(() => (run?.devices || []).filter(d => d.scanned), [run])
@@ -79,25 +99,27 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
   const filteredScanned = useMemo(() => {
     const q = search.trim().toLowerCase()
     let list = onlyManual ? scanned.filter(d => d.capture === 'manual') : scanned
+    list = list.filter(d => passtEigentum(fEigentum, d.owner))
     if (q) list = list.filter(d =>
       d.serial.toLowerCase().includes(q)
       || d.deviceType.toLowerCase().includes(q)
       || d.company.toLowerCase().includes(q)
-      || d.comment.toLowerCase().includes(q),
+      || `${fachText(d)} ${d.comment}`.toLowerCase().includes(q),
     )
     return list
-  }, [scanned, search, onlyManual])
+  }, [scanned, search, onlyManual, fEigentum])
   const filteredMissing = useMemo(() => {
     const q = search.trim().toLowerCase()
-    if (!q) return missing
-    return missing.filter(d =>
+    const list = missing.filter(d => passtEigentum(fEigentum, d.owner))
+    if (!q) return list
+    return list.filter(d =>
       d.serial.toLowerCase().includes(q)
       || d.deviceType.toLowerCase().includes(q)
-      || d.comment.toLowerCase().includes(q)
+      || `${fachText(d)} ${d.comment}`.toLowerCase().includes(q)
       || (d.adHostname || '').toLowerCase().includes(q)
       || (d.adCurrentUser || '').toLowerCase().includes(q),
     )
-  }, [missing, search])
+  }, [missing, search, fEigentum])
 
   function togglePrefix(p: string) {
     setSelectedPrefixes(prev => {
@@ -276,7 +298,7 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
       )}
 
       {/* Such-/Info-Leiste */}
-      <div className="flex items-center gap-2 px-5 py-2 border-b border-border mt-3 shrink-0">
+      <div className="flex items-center gap-2 flex-wrap px-5 py-2 border-b border-border mt-3 shrink-0">
         <span className="text-[11px] text-muted-foreground">{run.extras.length} unerwartet · {missing.length} fehlend · {scannedCount} erfasst</span>
         {captureCounts.manual > 0 && (
           <button onClick={() => setOnlyManual(v => !v)}
@@ -284,6 +306,7 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
             Nur manuell ({captureCounts.manual})
           </button>
         )}
+        {(eigentum || eigentumZahlen.unbekannt < (eigentumZahlen.skf + eigentumZahlen.hcl + eigentumZahlen.sonst + eigentumZahlen.unbekannt)) && <EigentumFilter wert={fEigentum} onChange={setFEigentum} zahlen={eigentumZahlen} />}
         <div className="relative ml-auto">
           <SearchIcon size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Filtern…" className="w-56 pl-6 pr-2 py-1 rounded-md bg-card border border-border text-xs" />
@@ -295,13 +318,14 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
         {/* Unerwartete Scans mit Begründung — ganz oben */}
         {run.extras.length > 0 && (
           <div>
-            <h3 className="text-xs font-semibold text-amber-300 inline-flex items-center gap-1 mb-2"><AlertTriangle size={12} />Unerwartete Scans ({run.extras.length})</h3>
+            <h3 className="text-xs font-semibold text-amber-300 inline-flex items-center gap-1 mb-2"><AlertTriangle size={12} />Unerwartete Scans ({extrasGefiltert.length}/{run.extras.length})</h3>
             <div className="space-y-1.5">
-              {run.extras.map(x => (
+              {extrasGefiltert.map(x => (
                 <div key={x.serial} className="rounded-md border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-[11px]">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-mono font-medium text-foreground">{x.serial}</span>
                     <DeviceInfoButton hostname={hostFromSerial(x.serial)} serial={x.serial} />
+                    <EigentumBadge owner={x.owner} />
                     <span className="text-muted-foreground">gescannt {fmtDate(x.scannedAt)} von {x.scannedBy}</span>
                   </div>
                   <div className="mt-1">
@@ -310,6 +334,7 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
                       ? <span className={x.reason === 'SKF Eigentum' ? 'text-emerald-300 font-medium' : 'text-foreground'}>{x.reason}</span>
                       : <span className="italic text-muted-foreground/70">— keine Begründung hinterlegt —</span>}
                   </div>
+                  <div className="mt-0.5"><FachZeile d={x} warnen /></div>
                 </div>
               ))}
             </div>
@@ -340,10 +365,12 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
                     <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
                     <span className="font-mono text-foreground truncate">{d.serial}</span>
                     <DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} />
+                    <EigentumBadge owner={d.owner} />
                     {d.lateFound && <span className="text-[9px] px-1 rounded-full bg-emerald-500 text-black">nachträglich</span>}
                     {d.capture && <span className={`ml-auto shrink-0 text-[9px] px-1.5 py-0.5 rounded border ${d.capture === 'scan' ? 'bg-blue-500/15 text-blue-300 border-blue-500/30' : 'bg-amber-500/15 text-amber-300 border-amber-500/30'}`}>{d.capture === 'scan' ? 'Scan' : 'Manuell'}</span>}
                   </div>
-                  <div className="text-[10px] text-muted-foreground truncate">{[d.deviceType, d.company].filter(Boolean).join(' · ') || '—'}</div>
+                  <div className="text-[10px] text-muted-foreground truncate">{[d.deviceType, d.company, eigentumKurz(d.owner)].filter(Boolean).join(' · ') || '—'}</div>
+                  <FachZeile d={d} warnen />
                 </div>
               ))}
             </div>
@@ -360,8 +387,9 @@ export default function ResultsView({ runId, currentUser, onBack }: Props) {
               <div key={d.serial} className="flex items-start gap-2 px-2 py-1.5 rounded-md border border-emerald-500/30 bg-emerald-500/5 text-[11px]">
                 <CheckCircle2 size={12} className="text-emerald-400 mt-0.5 shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <div className="font-mono text-foreground inline-flex items-center gap-1">{d.serial}<DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} /></div>
+                  <div className="font-mono text-foreground inline-flex items-center gap-1">{d.serial}<DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} /><EigentumBadge owner={d.owner} /></div>
                   <div className="text-muted-foreground">am {fmtDate(d.lateFoundAt)} von {d.lateFoundBy}{d.lateNote && <> · {d.lateNote}</>}</div>
+                  <FachZeile d={d} warnen />
                 </div>
                 <button onClick={() => onUndoLate(d.serial)} className="text-[10px] text-muted-foreground hover:text-red-300 inline-flex items-center gap-1"><RotateCcw size={11} />zurücknehmen</button>
               </div>
@@ -431,7 +459,9 @@ function MissingRow({ d, onLateFound, onLookupOne }: { d: InventoryDevice; onLat
         <XCircle size={12} className="text-red-400 shrink-0" />
         <span className="font-mono font-medium text-foreground">{d.serial}</span>
         <DeviceInfoButton hostname={hostFromSerial(d.serial)} serial={d.serial} />
+        <EigentumBadge owner={d.owner} />
         {d.deviceType && <span className="text-muted-foreground">{d.deviceType}</span>}
+        {eigentumKurz(d.owner) && <span className="text-muted-foreground">· {eigentumKurz(d.owner)}</span>}
         {d.company && <span className="text-muted-foreground">· {d.company}</span>}
         {d.substate && <span className="text-muted-foreground">· {d.substate}</span>}
         <div className="ml-auto flex items-center gap-1">
@@ -450,7 +480,7 @@ function MissingRow({ d, onLateFound, onLookupOne }: { d: InventoryDevice; onLat
           {d.adNote && <Field label="Hinweis" value={d.adNote} />}
         </div>
       )}
-      {d.comment && <div className="mt-1 pl-4 text-muted-foreground">{d.comment}</div>}
+      <div className="mt-1 pl-4"><FachZeile d={d} /></div>
     </div>
   )
 }

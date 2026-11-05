@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@zxing/library": "0.23.0",
     "bcryptjs": "^3.0.3",
     "docx": "^8.5.0",
     "electron-store": "^8.1.0",
@@ -74,7 +75,13 @@
       "!**/*.mov",
       "!**/*.mkv",
       "!resources/*.exe",
-      "!resources/*.msi"
+      "!resources/*.msi",
+      "!resources/**/*.exe",
+      "!resources/**/*.msi",
+      "!resources/**/*.step",
+      "!resources/**/*.stp",
+      "!resources/**/*.iges",
+      "!resources/**/*.igs"
     ],
     "extraResources": [
       {

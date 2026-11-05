@@ -7,6 +7,7 @@
 import { createContext, useContext, useCallback, useEffect, useState } from 'react'
 import { Info, X, Loader2, Upload, Paperclip, Trash2, ExternalLink, FileText, User, Plus, Zap, ListTree } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
+import { naechsteEbene, dossierZIndex } from '../../utils/dossierEbene'
 import {
   loadDossier, saveDossier, emptyDossier, personKey, canonicalName,
   pickAndStoreDossierFiles, openDossierFile, deleteDossierFile, formatFileSize,
@@ -34,15 +35,31 @@ export function PersonInfoButton({ name, sam, className, size = 12 }: { name?: s
   )
 }
 
+/**
+ * Merkt nur, welches Fenster offen ist. GEZEICHNET wird es von <PersonDossierSlot /> — der sitzt in
+ * App.tsx INNERHALB aller Dossier-Provider. Sonst fehlen im Fenster die „i"-Knöpfe der anderen
+ * Dossiers (z. B. Geräte-„i" hinter den zugewiesenen Rechnern im Personen-„i").
+ */
+const PersonDossierZielContext = createContext<{ target: ({ name: string; sam?: string } & { ebene: number }) | null; close: () => void } | null>(null)
+
 export function DossierProvider({ children }: { children: React.ReactNode }) {
-  const [target, setTarget] = useState<{ name: string; sam?: string } | null>(null)
-  const open = useCallback((name: string, sam?: string) => setTarget({ name, sam }), [])
+  const [target, setTarget] = useState<({ name: string; sam?: string } & { ebene: number }) | null>(null)
+  const open = useCallback((name: string, sam?: string) => setTarget({ name, sam, ebene: naechsteEbene() }), [])
+  const close = useCallback(() => setTarget(null), [])
   return (
     <DossierContext.Provider value={{ open }}>
-      {children}
-      {target && <PersonDossierModal name={target.name} sam={target.sam} onClose={() => setTarget(null)} />}
+      <PersonDossierZielContext.Provider value={{ target, close }}>
+        {children}
+      </PersonDossierZielContext.Provider>
     </DossierContext.Provider>
   )
+}
+
+/** Zeichnet das offene PersonDossier-Fenster — in App.tsx innerhalb ALLER Dossier-Provider platzieren. */
+export function PersonDossierSlot() {
+  const t = useContext(PersonDossierZielContext)
+  if (!t?.target) return null
+  return <div style={{ position: 'relative', zIndex: dossierZIndex(t.target.ebene) }}><PersonDossierModal name={t.target.name} sam={t.target.sam} onClose={t.close} /></div>
 }
 
 function fmtDateTime(iso?: string): string {

@@ -28,6 +28,7 @@ export interface SnPruefKontext {
 const TABELLEN = 'incident, sc_task, sys_user, sys_user_group, cmdb_ci_computer'
 
 function methodeEn(d: SnDiag, k: SnPruefKontext): string {
+  if (d.method === 'apikey') return 'REST API key (header x-sn-apikey)'
   if (d.method === 'oauth') return `OAuth 2.0 (Client ID ending in …${k.clientIdEnde || '????'})`
   if (d.method === 'basic') return `Basic authentication (user "${k.user || '?'}")`
   return 'SSO session'
@@ -88,8 +89,19 @@ export function erklaereSnFehler(diag: SnDiag | undefined, fehler: string | unde
     // stage 'api': erreicht + (ggf.) Token bekommen, aber die Table-API lehnt ab
     const st = diag.status || 0
     const sn = [diag.snMessage, diag.snDetail].filter(Boolean).join(' — ')
-    was.push(`Table API (GET /api/now/table/${diag.table || 'sys_user'}) with ${methodeEn(diag, k)}: HTTP ${st}${sn ? ` — "${sn}"` : ''}`)
-    if (st === 401 && diag.method === 'oauth') {
+    was.push(`Table API (GET /api/now/table/${diag.table || 'sys_user'}) with ${methodeEn(diag, k)}: HTTP ${st}${sn ? ` — "${sn}"` : ''}${diag.wwwAuth ? ` — response header WWW-Authenticate: ${diag.wwwAuth}` : ''}`)
+    const verlangtApiKey = /api_key/i.test(diag.wwwAuth || '')
+    if (st === 401 && verlangtApiKey && diag.method !== 'apikey') {
+      if (diag.method === 'oauth') was.push('The OAuth token itself is issued fine (POST /oauth_token.do, grant_type=client_credentials: HTTP 200, scope "useraccount").')
+      was.push('The instance answers EVERY Table API request with "WWW-Authenticate: API_KEY realm=\"Service-now\"" — with the OAuth bearer token, with Basic authentication and even without any credentials. A default instance answers with "BASIC realm".')
+      fehlt.push('This indicates that the REST API Access Policy covering the Table API (/api/now/table) on this instance only allows the API Key authentication profile — so the valid OAuth token is rejected. Please either:')
+      fehlt.push('(a) add the OAuth inbound authentication profile (and, if possible, Basic) to that policy: System Web Services > API Access Policies > REST API Access Policies → the policy for the Table API → Inbound authentication profiles; or')
+      fehlt.push('(b) create a REST API key for our integration user (System Web Services > API Access Policies > REST API Key) and send it to us — our tool can use it via the "x-sn-apikey" header.')
+      kurz = 'ServiceNow verlangt für die Table-API einen API-Key (WWW-Authenticate: API_KEY) — OAuth und Benutzer+Passwort sind dort nicht zugelassen. HCL muss OAuth in der REST-API-Access-Policy freigeben oder uns einen API-Key geben.'
+    } else if (st === 401 && diag.method === 'apikey') {
+      fehlt.push('The REST API key is rejected. Please check that the key is active, belongs to an active user with the needed roles, and that the API Key profile is part of the REST API Access Policy for the Table API.')
+      kurz = 'API-Key wird abgelehnt (401) — Key/Access-Policy bei HCL prüfen.'
+    } else if (st === 401 && diag.method === 'oauth') {
       fehlt.push('An OAuth token was issued, but the Table API rejects it. Please check that the OAuth Application User is active and allowed to use the REST API (token scope "useraccount").')
       kurz = 'Token erhalten, aber die Table-API lehnt es ab (401) — Einstellung bei HCL.'
     } else if (st === 401 && diag.method === 'basic') {

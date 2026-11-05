@@ -45,9 +45,13 @@ import RadarScanController from './components/scans/RadarScanController'
 import VlanScanController from './components/scans/VlanScanController'
 import ServerMonitorController from './components/server/ServerMonitorController'
 import GameInviteController from './components/games/GameInviteController'
+import ChatController from './components/chat/ChatController'
+import TonerWarnungController from './components/printer/TonerWarnungController'
 import LostDeviceScanController from './components/scans/LostDeviceScanController'
 import NetworkDrivesScanController from './components/scans/NetworkDrivesScanController'
 import WeekendCheckController from './components/scans/WeekendCheckController'
+import KostenVerlaufController from './components/scans/KostenVerlaufController'
+import TerminScanController from './components/checklists/TerminScanController'
 import EuroparScanController from './components/scans/EuroparScanController'
 import WindowsUpdateController from './components/scans/WindowsUpdateController'
 import EuroparStagingController from './components/scans/EuroparStagingController'
@@ -56,9 +60,9 @@ import AutoSetupController from './components/scans/AutoSetupController'
 import Nis2AccessScanController from './components/scans/Nis2AccessScanController'
 import DriverRolloutController from './components/scans/DriverRolloutController'
 import ErrorFlashOverlay from './components/ErrorFlashOverlay'
-import { DossierProvider } from './components/person/PersonDossier'
-import { DeviceDossierProvider } from './components/device/DeviceDossier'
-import { PrinterDossierProvider } from './components/printer/PrinterDossier'
+import { DossierProvider, PersonDossierSlot } from './components/person/PersonDossier'
+import { DeviceDossierProvider, DeviceDossierSlot } from './components/device/DeviceDossier'
+import { PrinterDossierProvider, PrinterDossierSlot } from './components/printer/PrinterDossier'
 import type { Screen } from './types'
 import { api } from './electronAPI'
 import { ensureDailyAdUsers } from './services/adUserDirectory'
@@ -99,6 +103,7 @@ const ProactiveRadar = lazy(() => import('./screens/ProactiveRadar'))
 const ServerMonitor = lazy(() => import('./screens/ServerMonitor'))
 const Nis2 = lazy(() => import('./screens/Nis2'))
 const SupportTools = lazy(() => import('./screens/SupportTools'))
+const Drucker = lazy(() => import('./screens/Drucker'))
 const CriticalDevices = lazy(() => import('./screens/CriticalDevices'))
 
 function renderScreen(screen: Screen) {
@@ -128,6 +133,7 @@ function renderScreen(screen: Screen) {
     case 'servicenow': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ServiceNow /></Suspense>
     case 'ticket-assignment': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><TicketAssignment /></Suspense>
     case 'support-tools': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><SupportTools /></Suspense>
+    case 'drucker': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Drucker /></Suspense>
     case 'gruppen-suche': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><GroupSearch /></Suspense>
     case 'access-points': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><AccessPoints /></Suspense>
     case 'ot-devices': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><OtDevices /></Suspense>
@@ -375,6 +381,8 @@ export default function App() {
             <LostDeviceScanController />
             <NetworkDrivesScanController />
             <WeekendCheckController />
+            <KostenVerlaufController />
+            <TerminScanController />
             <EuroparScanController />
             <WindowsUpdateController />
             <EuroparStagingController />
@@ -384,10 +392,16 @@ export default function App() {
             <DriverRolloutController />
             <ServerMonitorController />
             <GameInviteController />
+            <ChatController />
+            <TonerWarnungController />
             <ErrorFlashOverlay />
           </main>
         </div>
       </div>
+      {/* Dossier-Fenster INNERHALB aller drei Provider → in jedem Fenster funktionieren alle „i“-Knöpfe */}
+      <PersonDossierSlot />
+      <DeviceDossierSlot />
+      <PrinterDossierSlot />
       </PrinterDossierProvider>
      </DeviceDossierProvider>
     </DossierProvider>

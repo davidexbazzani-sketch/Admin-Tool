@@ -5,7 +5,7 @@ import {
   Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen, Package, Stethoscope, PackagePlus, MonitorPlay, PhoneCall,
   Building2, Network, ClipboardList, FolderKanban, ScanSearch, Wifi, CalendarClock, Boxes, Cable, UserPlus, ChevronDown, MonitorSmartphone, Ticket,
   DatabaseBackup, Router, Rocket, Radar, Cpu, Server, HardDriveDownload, Factory, Gamepad2, ClipboardCheck, Building,
-  GripVertical, RotateCcw, Check as CheckIcon, LifeBuoy, AlertOctagon,
+  GripVertical, RotateCcw, Check as CheckIcon, LifeBuoy, AlertOctagon, Printer,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
@@ -46,6 +46,7 @@ const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'servicenow': <Ticket size={18} />,
   'ticket-assignment': <ArrowRightLeft size={18} />,
   'support-tools': <LifeBuoy size={18} />,
+  'drucker': <Printer size={18} />,
   'endpoint-devices': <MonitorSmartphone size={18} />,
   'infra-marine': <Shield size={18} />,
   'infra-projects': <FolderKanban size={18} />,

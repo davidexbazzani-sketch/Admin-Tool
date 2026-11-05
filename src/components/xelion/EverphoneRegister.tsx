@@ -10,8 +10,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Smartphone, Search, UploadCloud, Loader2, Check, X, AlertTriangle, Info,
-  Archive, ArrowLeft, RotateCcw,
+  Archive, ArrowLeft, RotateCcw, Users,
 } from 'lucide-react'
+import ManagerTeamAnsicht from './ManagerTeamAnsicht'
 import { useAuthStore } from '../../store/authStore'
 import Card from '../Card'
 import { openFileForImport } from '../../utils/fileImport'
@@ -43,7 +44,7 @@ export default function EverphoneRegister() {
   const [meta, setMeta] = useState<{ updatedAt: string; updatedBy: string; importedFilename?: string }>({ updatedAt: '', updatedBy: '' })
   const [archiv, setArchiv] = useState<EverphoneArchiveEntry[]>([])
   const [archivMeta, setArchivMeta] = useState<{ updatedAt: string; updatedBy: string }>({ updatedAt: '', updatedBy: '' })
-  const [ansicht, setAnsicht] = useState<'register' | 'archiv'>('register')
+  const [ansicht, setAnsicht] = useState<'register' | 'archiv' | 'manager'>('register')
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [busy, setBusy] = useState(false)
@@ -141,6 +142,11 @@ export default function EverphoneRegister() {
     <div className="flex items-center gap-2">
       {ansicht === 'register' ? (
         <>
+          <button onClick={() => { setAnsicht('manager'); setSearch('') }}
+            title="Manager oder Abteilung wählen → alle Personen mit ihren Rufnummern"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-border text-foreground hover:bg-accent">
+            <Users size={14} />Team / Abteilung
+          </button>
           <button onClick={() => { setAnsicht('archiv'); setSearch('') }}
             title="Einträge, die in einem neuen Import nicht mehr dabei waren"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-border text-foreground hover:bg-accent">
@@ -160,7 +166,9 @@ export default function EverphoneRegister() {
     </div>
   )
 
-  const untertitel = ansicht === 'archiv'
+  const untertitel = ansicht === 'manager'
+    ? 'Alle Mitarbeiter unter einem Manager oder in einer Abteilung — mit Diensthandy und Rufnummer'
+    : ansicht === 'archiv'
     ? (archiv.length
       ? `${archiv.length} archivierte Einträge · ${archivOffen} nicht mehr im Register${archivMeta.updatedAt ? ` · zuletzt ergänzt ${fmtDateTime(archivMeta.updatedAt)}` : ''}`
       : 'Noch nichts archiviert — hier landen Einträge, die in einem neuen Import fehlen.')
@@ -170,8 +178,8 @@ export default function EverphoneRegister() {
 
   return (
     <Card
-      title={ansicht === 'archiv' ? 'Everphone – Archiv' : 'Everphone – Mobilgeräte je Mitarbeiter'}
-      icon={ansicht === 'archiv' ? <Archive size={18} /> : <Smartphone size={18} />}
+      title={ansicht === 'manager' ? 'Everphone – Team oder Abteilung' : ansicht === 'archiv' ? 'Everphone – Archiv' : 'Everphone – Mobilgeräte je Mitarbeiter'}
+      icon={ansicht === 'manager' ? <Users size={18} /> : ansicht === 'archiv' ? <Archive size={18} /> : <Smartphone size={18} />}
       actions={actions} subtitle={untertitel}>
 
       {/* Anleitung nur im Register — im Archiv wäre sie nur Ballast. */}
@@ -218,16 +226,18 @@ export default function EverphoneRegister() {
         </div>
       )}
 
-      {/* Suche */}
-      <div className="relative w-72">
+      {/* Suche (nicht in der Manager-Ansicht — die hat ihr eigenes Feld) */}
+      {ansicht !== 'manager' && <div className="relative w-72">
         <Search size={13} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <input value={search} onChange={e => setSearch(e.target.value)}
           placeholder="Name, E-Mail, Rufnummer, Geräte-ID…"
           className="w-full pl-7 pr-2 py-1.5 rounded-md bg-background border border-border text-xs" />
-      </div>
+      </div>}
 
       {loading ? (
         <div className="flex items-center gap-2 text-muted-foreground text-sm py-8 justify-center"><Loader2 size={16} className="animate-spin" />Wird geladen…</div>
+      ) : ansicht === 'manager' ? (
+        <ManagerTeamAnsicht entries={entries} />
       ) : ansicht === 'archiv' ? (
         /* ── Archiv ──────────────────────────────────────────────────────── */
         archiv.length === 0 ? (

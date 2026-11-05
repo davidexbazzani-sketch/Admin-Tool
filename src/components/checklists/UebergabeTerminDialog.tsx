@@ -9,21 +9,26 @@ import { CalendarClock, X, Loader2, Send, Mail, AlertTriangle, CheckCircle2, Log
 import type { Checklist } from '../../services/checklists'
 import {
   baueEinladung, baueErstanmeldeMail, emailFuer, sendeEinladung, aktualisiereEinladung, sendeMail, oeffneMail,
-  neuerTermin, aendereTermin, standardZeitraum, artVon, zeitraumText, ausLokal, IT_SUPPORT_MAIL, RAEUME,
+  neuerTermin, aendereTermin, standardZeitraum, artVon, formfaktorVon, zeitraumText, ausLokal, IT_SUPPORT_MAIL, RAEUME,
   type UebergabeTermin, type TerminStore,
 } from '../../services/uebergabeTermine'
 
 const p2 = (n: number) => String(n).padStart(2, '0')
 
-export default function UebergabeTerminDialog({ checklist, termin, kennung, bearbeiterName, onClose, onGeaendert }: {
+export default function UebergabeTerminDialog({ checklist, termin, kennung, bearbeiterName, modell, onClose, onGeaendert }: {
   checklist: Checklist
   termin?: UebergabeTermin
   kennung: string
   bearbeiterName: string
+  /** Modell des neuen Geräts (Endgeräte-Übersicht) — für Mini-PC/Tower, falls „Hardware fertig" fehlt. */
+  modell?: string
   onClose: () => void
   onGeaendert: (s: TerminStore) => void
 }) {
   const art = artVon(checklist)
+  // Mini-PC/Tower werden normalerweise NICHT abgeholt → vor dem ersten Senden bestätigen lassen
+  const formfaktor = formfaktorVon(checklist, modell)
+  const [bauformOk, setBauformOk] = useState(false)
   const std = standardZeitraum()
   const [datum, setDatum] = useState(termin ? termin.start.slice(0, 10) : std.datum)
   const [von, setVon] = useState(termin ? termin.start.slice(11, 16) : std.von)
@@ -57,17 +62,19 @@ export default function UebergabeTerminDialog({ checklist, termin, kennung, bear
   const start = `${datum}T${von}`, ende = `${datum}T${bis}`
   const zeitOk = !!datum && /^\d{2}:\d{2}$/.test(von) && /^\d{2}:\d{2}$/.test(bis) && bis > von
   const vergangen = zeitOk && ausLokal(ende).getTime() < Date.now()
-  const vorschlag = useMemo(() => zeitOk ? baueEinladung({ name: checklist.name, art, start, ende, raum, bearbeiter: bearbeiterName, mitTermin }) : null,
-    [checklist.name, art, start, ende, raum, bearbeiterName, zeitOk, mitTermin])
+  const vorschlag = useMemo(() => zeitOk ? baueEinladung({ name: checklist.name, art, start, ende, raum, bearbeiter: bearbeiterName, mitTermin, formfaktor }) : null,
+    [checklist.name, art, start, ende, raum, bearbeiterName, zeitOk, mitTermin, formfaktor])
   const text = eigenerText ?? vorschlag
   const anmVorschlag = baueErstanmeldeMail({ name: checklist.name, raum: anmRaum, bearbeiter: bearbeiterName, wann: anmWann })
   const geaendert = !!termin && (termin.start !== start || termin.ende !== ende || termin.raum !== raum)
   // Es gibt schon einen Outlook-Termin (gesendet oder im Fenster geöffnet) → Änderungen nur als Update, kein zweiter Termin
   const bestehenderTermin = !!termin?.outlook?.entryId
+  // Nur vor der ERSTEN Einladung fragen — ein Update eines bestehenden Termins braucht das nicht
+  const bauformSperre = !!formfaktor && !bestehenderTermin && !bauformOk
 
   /** weg: 'senden' = direkt verschicken · 'outlook' = im Outlook-Fenster öffnen, Benutzer sendet selbst */
   async function versenden(weg: 'senden' | 'outlook') {
-    if (!text || !zeitOk || !to.trim()) return
+    if (!text || !zeitOk || !to.trim() || bauformSperre) return
     setBusy(weg); setMeldung(null)
     try {
       if (bestehenderTermin) {
@@ -75,7 +82,8 @@ export default function UebergabeTerminDialog({ checklist, termin, kennung, bear
         const aktualisiert = { ...termin, start, ende, raum }
         const r = await aktualisiereEinladung(aktualisiert, bearbeiterName)
         if (!r.ok) { setMeldung({ ok: false, text: 'Outlook-Update fehlgeschlagen: ' + r.error }); return }
-        const s = await aendereTermin(termin.id, kennung, { start, ende, raum, email: to.trim(), status: 'verschoben', outlook: { ...termin.outlook!, veraltet: false, geoeffnet: false } },
+        // neue Zeit → alte Ankunftszeit gilt nicht mehr
+        const s = await aendereTermin(termin.id, kennung, { start, ende, raum, email: to.trim(), status: 'verschoben', ankunft: undefined, outlook: { ...termin.outlook!, veraltet: false, geoeffnet: false } },
           `Termin geändert und Update an ${to.trim()} gesendet: ${zeitraumText(termin.start, termin.ende, true)} → ${zeitraumText(start, ende, true)}, Raum ${raum}`)
         if (s) onGeaendert(s)
         setMeldung({ ok: true, text: 'Termin geändert — der Mitarbeiter hat ein Outlook-Update bekommen.' })
@@ -83,11 +91,13 @@ export default function UebergabeTerminDialog({ checklist, termin, kennung, bear
       }
       const anzeigen = weg === 'outlook'
       const jetzt = new Date().toISOString()
+      let bereits = false   // Einladung lag schon im Kalender → nur verknüpft, nichts doppelt gesendet
       let outlook = termin?.outlook
       if (mitTermin) {
         const r = await sendeEinladung({ to: to.trim(), cc, subject: text.subject, body: text.body, start, ende, raum, anzeigen })
         if (!r.ok) { setMeldung({ ok: false, text: `Termin konnte nicht ${anzeigen ? 'in Outlook geöffnet' : 'gesendet'} werden: ${r.error}` }); return }
-        outlook = { entryId: r.entryId || '', globalId: r.globalId, gesendetAt: jetzt, gesendetBy: kennung, geoeffnet: anzeigen }
+        outlook = { entryId: r.entryId || '', globalId: r.globalId, gesendetAt: jetzt, gesendetBy: kennung, geoeffnet: anzeigen && !r.bereitsVorhanden }
+        bereits = !!r.bereitsVorhanden
       } else {
         const r = anzeigen ? await oeffneMail(to.trim(), cc, text.subject, text.body) : await sendeMail(to.trim(), cc, text.subject, text.body)
         if (!r.ok) { setMeldung({ ok: false, text: `Mail konnte nicht ${anzeigen ? 'in Outlook geöffnet' : 'gesendet'} werden: ${r.error}` }); return }
@@ -105,7 +115,9 @@ export default function UebergabeTerminDialog({ checklist, termin, kennung, bear
         })).store
       }
       if (s) onGeaendert(s)
-      setMeldung({ ok: true, text: anzeigen
+      setMeldung({ ok: true, text: bereits
+        ? `Diese Einladung war bereits in deinem Outlook (gleicher Betreff und Termin) — sie wurde mit dem Übergabe-Kalender verknüpft, nichts wurde doppelt gesendet.`
+        : anzeigen
         ? `${was} ist im Outlook-Fenster geöffnet — bitte dort prüfen und absenden. Der Termin steht bereits im Übergabe-Kalender.`
         : `${was} an ${to.trim()} gesendet und im Übergabe-Kalender eingetragen.` })
     } finally { setBusy('') }
@@ -136,7 +148,8 @@ export default function UebergabeTerminDialog({ checklist, termin, kennung, bear
         <div className="px-5 py-4 border-b border-border flex items-center gap-2">
           <CalendarClock size={17} className="text-blue-400" />
           <h3 className="text-sm font-semibold text-foreground">Übergabe-Termin · {checklist.name}</h3>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${art === 'refresh' ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'}`}>{art === 'refresh' ? 'Refresh – Altgerät mitbringen' : 'Neues Gerät'}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${art === 'refresh' ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'}`}>{formfaktor === 'tower' ? 'Tower – erst Anmeldung am Gerät' : art === 'refresh' ? 'Refresh – Altgerät mitbringen' : 'Neues Gerät'}</span>
+          {formfaktor === 'mini' && <span className="px-1.5 py-0.5 rounded-full text-[10px] font-semibold border bg-sky-500/15 text-sky-300 border-sky-500/30">Mini-PC</span>}
           <button onClick={onClose} disabled={!!busy} className="ml-auto p-1 rounded text-muted-foreground hover:text-foreground"><X size={16} /></button>
         </div>
 
@@ -147,6 +160,33 @@ export default function UebergabeTerminDialog({ checklist, termin, kennung, bear
               {termin.nachricht
                 ? <> · {termin.nachricht.art === 'termin' ? 'Termineinladung' : 'Mail (ohne Termin)'} {termin.nachricht.weg === 'geoeffnet' ? 'in Outlook geöffnet' : 'gesendet'} {new Date(termin.nachricht.at).toLocaleString('de-DE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} von {termin.nachricht.by}</>
                 : termin.outlook ? <> · Einladung gesendet {new Date(termin.outlook.gesendetAt).toLocaleString('de-DE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} von {termin.outlook.gesendetBy}</> : ' · noch keine Nachricht'}
+            </div>
+          )}
+
+          {/* Bauform: Mini-PC / Tower werden normalerweise am Arbeitsplatz getauscht */}
+          {formfaktor && !bestehenderTermin && (
+            <div className={`rounded-md border p-3 space-y-2 ${bauformOk ? 'border-border bg-background/60' : 'border-amber-500/50 bg-amber-500/10'}`}>
+              <p className="flex items-start gap-2 text-xs text-foreground">
+                <AlertTriangle size={14} className="text-amber-400 shrink-0 mt-0.5" />
+                {formfaktor === 'mini' ? (
+                  <span>
+                    <b>Mini-PC</b>{modell ? ` (${modell})` : ''}: Bist du sicher, dass das Gerät <b>abgeholt</b> werden soll?
+                    In der Regel werden Mini-PCs <b>direkt am Arbeitsplatz ausgetauscht</b> — dann braucht es keinen Abholtermin.
+                  </span>
+                ) : (
+                  <span>
+                    <b>Tower-PC</b>{modell ? ` (${modell})` : ''}: Bitte erst einen Termin vereinbaren, bei dem sich der Mitarbeiter <b>einmal am Gerät anmeldet</b> —
+                    danach wird der Tower am Arbeitsplatz aufgestellt. Bitte den Mitarbeiter, sich vorher einmal anmelden zu lassen, und frag,
+                    <b> in welchem Bereich er arbeitet: Stabi, Welle oder Abdichtung</b>. Beides steht schon in der Einladung unten.
+                  </span>
+                )}
+              </p>
+              <label className="flex items-center gap-2 pl-6 text-xs text-foreground cursor-pointer">
+                <input type="checkbox" className="accent-primary" checked={bauformOk} onChange={e => setBauformOk(e.target.checked)} disabled={!!busy} />
+                {formfaktor === 'mini'
+                  ? 'Ja, der Mini-PC soll trotzdem abgeholt werden — Termin senden'
+                  : 'Verstanden — der Termin ist für die Anmeldung am Gerät (inkl. Frage nach dem Bereich)'}
+              </label>
             </div>
           )}
 
@@ -246,11 +286,13 @@ export default function UebergabeTerminDialog({ checklist, termin, kennung, bear
             </button>
           ) : (
             <>
-              <button onClick={() => void versenden('outlook')} disabled={!!busy || !zeitOk || !to.trim()} title="Im Outlook-Fenster öffnen — du prüfst und sendest selbst"
+              <button onClick={() => void versenden('outlook')} disabled={!!busy || !zeitOk || !to.trim() || bauformSperre}
+                title={bauformSperre ? 'Erst oben den Hinweis zum Mini-PC/Tower bestätigen' : 'Im Outlook-Fenster öffnen — du prüfst und sendest selbst'}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border text-foreground hover:bg-accent disabled:opacity-40">
                 {busy === 'outlook' ? <Loader2 size={13} className="animate-spin" /> : <ExternalLink size={13} />}In Outlook öffnen
               </button>
-              <button onClick={() => void versenden('senden')} disabled={!!busy || !zeitOk || !to.trim()}
+              <button onClick={() => void versenden('senden')} disabled={!!busy || !zeitOk || !to.trim() || bauformSperre}
+                title={bauformSperre ? 'Erst oben den Hinweis zum Mini-PC/Tower bestätigen' : undefined}
                 className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">
                 {busy === 'senden' ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}Direkt senden
               </button>
@@ -264,5 +306,7 @@ export default function UebergabeTerminDialog({ checklist, termin, kennung, bear
 
 export function kurzTermin(t: UebergabeTermin): string {
   const a = ausLokal(t.start), b = ausLokal(t.ende)
-  return `${['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][a.getDay()]} ${p2(a.getDate())}.${p2(a.getMonth() + 1)}. ${p2(a.getHours())}:${p2(a.getMinutes())}–${p2(b.getHours())}:${p2(b.getMinutes())}`
+  const tag = `${['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][a.getDay()]} ${p2(a.getDate())}.${p2(a.getMonth() + 1)}.`
+  // Mit bekannter Ankunftszeit diese zeigen („kommt 08:30''), sonst das Zeitfenster
+  return t.ankunft ? `${tag} kommt ${t.ankunft}` : `${tag} ${p2(a.getHours())}:${p2(a.getMinutes())}–${p2(b.getHours())}:${p2(b.getMinutes())}`
 }

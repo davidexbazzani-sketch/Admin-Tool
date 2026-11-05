@@ -215,6 +215,43 @@ export async function findAssignedHardware(name: string, sam?: string): Promise<
   return result
 }
 
+/**
+ * Für Sammel-Abfragen (viele Personen auf einmal): Inventar und Endgeräte-Übersicht
+ * EINMAL lesen und eine Suchfunktion zurückgeben — statt je Person beide Dateien neu
+ * vom Netzlaufwerk zu holen. Gleiche Zuordnungsregeln wie `findAssignedHardware`.
+ * Liefert Hostnamen (groß), Geräte „in Benutzung" zuerst.
+ */
+export async function ladeHardwareIndex(): Promise<(name: string, sam?: string) => string[]> {
+  let inventar: InventoryItem[] = []
+  let geraete: EndpointDevice[] = []
+  try {
+    const items = await api().netReadJson<InventoryItem[]>('inventory/inventory.json')
+    if (Array.isArray(items)) inventar = items.filter(it => it.category === 'Computer' && it.name)
+  } catch { /* Quelle optional */ }
+  try { geraete = (await loadDevices()).filter(d => d.hostname) } catch { /* Quelle optional */ }
+
+  return (name: string, sam?: string) => {
+    const samLc = (sam || '').trim().toLowerCase()
+    const treffer: { host: string; rang: number }[] = []
+    for (const d of geraete) {
+      if ((d.assignedTo && samePerson(d.assignedTo, name)) || (samLc && d.assignedTo.trim().toLowerCase() === samLc)) {
+        treffer.push({ host: d.hostname.trim().toUpperCase(), rang: /in use|in benutzung/i.test(`${d.state} ${d.substate}`) ? 0 : 1 })
+      }
+    }
+    for (const it of inventar) {
+      if ((it.assignedTo && samePerson(it.assignedTo, name)) ||
+          (samLc && ((it.corpId && it.corpId.trim().toLowerCase() === samLc) ||
+                     (it.assignedTo && it.assignedTo.trim().toLowerCase() === samLc)))) {
+        treffer.push({ host: it.name.trim().toUpperCase(), rang: 1 })
+      }
+    }
+    const gesehen = new Set<string>()
+    return treffer.sort((a, b) => a.rang - b.rang)
+      .filter(t => t.host && !gesehen.has(t.host) && gesehen.add(t.host))
+      .map(t => t.host)
+  }
+}
+
 // ── Online-Status (leichtgewichtig, nur die zugewiesenen Rechner) ─────────────
 // Prueft, ob die Person GERADE an einem ihrer Rechner angemeldet ist. Bewusst
 // KEIN Standort-weiter Scan (das macht "Wo angemeldet?") — nur die 1–3 bekannten

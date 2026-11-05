@@ -3,8 +3,11 @@ import {
   MonitorSmartphone, Search, RefreshCw, Upload, Loader2, Filter, ListFilter,
   Building2, Cpu, Wallet, Activity, X, FileDown, Users, Mail, Send, CheckCircle2, AlertTriangle, ChevronRight, CheckSquare,
   History, Wifi, WifiOff, Save, FolderOpen, FileText, Trash2, Pencil, ArrowLeft,
-  Paperclip, ClipboardCheck, ExternalLink, MapPin,
+  Paperclip, ClipboardCheck, ExternalLink, MapPin, LineChart,
 } from 'lucide-react'
+import KostenChartDialog from '../components/endpoint/KostenChartDialog'
+import { aktualisiereKostenPunkt } from '../services/endpointCostHistory'
+import { synchronisiereComputer, aktualisiereAdDaten, protokollText } from '../services/standortSync'
 import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
 import { api } from '../electronAPI'
 import { openFileForImport, parseExcelSheet } from '../utils/fileImport'
@@ -101,6 +104,7 @@ export default function EndpointDevices() {
   const [devices, setDevices] = useState<EndpointDevice[]>([])
   const [meta, setMeta] = useState<{ importedAt?: string; importedBy?: string; importedFilename?: string }>({})
   const [loading, setLoading] = useState(true)
+  const [kostenChart, setKostenChart] = useState(false)
   const [search, setSearch] = useState('')
   const [importing, setImporting] = useState(false)
   const [importStatus, setImportStatus] = useState('')
@@ -626,7 +630,21 @@ IT Support Marine`
       const ok = await saveDevices(mapped, { importedBy: currentUser, importedFilename: filename })
       if (!ok) { setImportStatus('Speichern auf dem Netzlaufwerk fehlgeschlagen.'); setImporting(false); return }
       setImportStatus(`${mapped.length} Geräte importiert.`)
+      // Kostenpunkt dieser Woche gleich auf den neuen Stand ziehen (Chart „Kostenverlauf")
+      void aktualisiereKostenPunkt(currentUser).catch(() => undefined)
       await reload()
+      // Standort-Übersicht „Computer" aus derselben Liste abgleichen + AD-Daten nachholen
+      // (im Hintergrund — der Import ist damit schon fertig)
+      void (async () => {
+        const basis = `${mapped.length} Geräte importiert.`
+        setImportStatus(`${basis} Standort-Übersicht wird abgeglichen …`)
+        const s = await synchronisiereComputer(mapped, currentUser, filename).catch(e => ({ ok: false as const, fehler: String(e), protokoll: undefined }))
+        if (!s.ok || !s.protokoll) { setImportStatus(`${basis} Standort-Übersicht: ${s.fehler}`); return }
+        const text = `${basis} ${protokollText(s.protokoll)}`
+        setImportStatus(`${text} · AD-Daten werden geholt …`)
+        const ad = await aktualisiereAdDaten((f, g) => setImportStatus(`${text} · AD-Daten ${f}/${g} …`)).catch(e => ({ ok: false, aufgeloest: 0, nichtGefunden: 0, offen: 0, fehler: String(e) }))
+        setImportStatus(`${text} · AD: ${ad.ok ? `${ad.aufgeloest} aktualisiert${ad.nichtGefunden ? `, ${ad.nichtGefunden} nicht im AD gefunden` : ''}` : `fehlgeschlagen (${ad.fehler})`}`)
+      })()
     } catch (e) {
       setImportStatus('Fehler beim Import: ' + (e instanceof Error ? e.message : String(e)))
     } finally { setImporting(false) }
@@ -926,11 +944,17 @@ IT Support Marine`
             <span className="mx-1 opacity-50">·</span>
             <span className="text-foreground font-semibold">{formatEuro(costTotals.yearly)}</span>/Jahr
           </span>
+          <button onClick={() => setKostenChart(true)} title="Wöchentlicher Verlauf der Monats-/Jahreskosten aller Geräte"
+            className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30 transition-colors">
+            <LineChart size={12} />Chart anzeigen
+          </button>
           <span className="text-muted-foreground border-l border-border pl-3">
             {multiMode ? `${userGroups.length} Nutzer` : offlineMode ? `${offlineRows.length} Geräte` : `${filtered.length} von ${devices.length}`}
           </span>
         </div>
       </div>
+
+      {kostenChart && <KostenChartDialog onClose={() => setKostenChart(false)} />}
 
       {/* Tabelle */}
       {loading ? (

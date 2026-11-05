@@ -13,6 +13,7 @@ import { ensureWinRM, clearWinRMCache } from '../../utils/winrmUtils'
 import { isValidRemoteTarget, isIpv4, ensureWinRmTrustedHost } from '../../utils/remoteTarget'
 import Card from '../Card'
 import { DeviceInfoButton } from '../device/DeviceDossier'
+import InstallLogbuch from './InstallLogbuch'
 
 const log = createLogger('software-installations')
 
@@ -358,6 +359,8 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 bg-card border border-border rounded-lg shadow-2xl px-4 py-3 text-sm text-foreground max-w-sm">{toast}</div>
       )}
+
+      <InstallLogbuch software="Xelion" titel="Logbuch Xelion" />
     </div>
   )
 }

@@ -22,11 +22,15 @@ export interface SnAuthPayload {
   pass?: string
   clientId?: string
   clientSecret?: string
+  /** REST API Key (ServiceNow, Header x-sn-apikey) — hat Vorrang vor OAuth/Basic */
+  apiKey?: string
 }
 
 /** Strukturierte Fehlerangaben einer ServiceNow-Anfrage (ohne Zugangsdaten/Token). */
 export interface SnDiag {
-  method: 'oauth' | 'basic' | 'sso'
+  method: 'apikey' | 'oauth' | 'basic' | 'sso'
+  /** WWW-Authenticate der Antwort — verrät, welche Anmeldeart ServiceNow verlangt (z. B. API_KEY) */
+  wwwAuth?: string
   /** connect = keine HTTP-Antwort · token = OAuth-Token nicht erhalten · api = Table-API hat abgelehnt */
   stage: 'connect' | 'token' | 'api'
   status?: number
@@ -100,6 +104,8 @@ declare global {
         at: string; url: string; count: number
         certs: { subjectName: string; issuerName: string; validExpiry: number }[]
       } | null>
+      /** Kompletter Fehlerbericht (nur lesende Aufrufe; Secret/Passwort/Token entfernt). */
+      serviceNowFullDiag(opts: { instanceUrl: string; auth?: SnAuthPayload; kontext?: string[] }): Promise<{ success: boolean; text?: string; zusammenfassung?: string[]; error?: string }>
       serviceNowLogin(instanceUrl: string): Promise<{ success: boolean; user?: string; error?: string }>
       serviceNowLogout(): Promise<{ success: boolean }>
 
@@ -151,6 +157,11 @@ declare global {
       netExists(relativePath: string): Promise<boolean>
       netListDir(relativePath: string): Promise<string[]>
       netDeleteFile(relativePath: string): Promise<boolean>
+      /** Asynchron im Hauptprozess (blockiert nicht) — für häufige Abfragen wie den Chat. */
+      netListDirAsync(relativePath: string): Promise<string[]>
+      netReadJsonAsync<T = unknown>(relativePath: string): Promise<T | null>
+      netWriteJsonAsync(relativePath: string, data: unknown): Promise<boolean>
+      netDeleteFileAsync(relativePath: string): Promise<boolean>
       netIsAvailable(): Promise<boolean>
       netGetBasePath(): Promise<string>
       netSetBasePath(path: string): Promise<boolean>
@@ -182,6 +193,7 @@ declare global {
         to: string; cc?: string; subject: string; body: string; html?: boolean
         smtp: string; port: number; user?: string; pass?: string; from?: string
         useTls?: boolean; method?: 'outlook' | 'nodemailer' | 'powershell'
+        attachmentPath?: string
       }): Promise<{ success: boolean; error?: string; method?: string }>
 
       // ── Heartbeat / crash detection ───────────────────────────────────────

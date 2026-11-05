@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import type { PrinterMasterData } from '../../services/printerDossier'
 import { logPrinterAction, effectivePrintServer } from '../../services/printerDossier'
+import { meldeEinzelScan } from '../../services/druckerFlotte'
 import {
   queueStatus, listJobs, clearJobs, pausePrinter, resumePrinter, printTestPage, restartSpooler,
   pingPrinter, openPrinterWeb, snmpPrinterStatus, snmpRestartDevice, resolvePrinterIp, type ActionResult,
@@ -115,6 +116,7 @@ export function PrinterActions({ printerName, master, currentUser }: {
       const ip = await effectiveIp(printerName, master); if (!ip) return { ok: false, text: 'Keine IP — in Stammdaten eintragen.' }
       const s = await snmpPrinterStatus(ip, community)
       if (!s.reachable) return { ok: false, text: s.error || 'SNMP nicht erreichbar' }
+      void meldeEinzelScan(printerName, ip, s, master?.location || undefined).catch(() => {})
       const lines = [
         s.sysDescr ? `Modell: ${s.sysDescr}` : '',
         s.printerStatus ? `Status: ${s.printerStatus}` : '',

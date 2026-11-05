@@ -12,6 +12,7 @@ import Card from '../components/Card'
 import PhoneCheck from '../components/PhoneCheck'
 import EverphoneRegister from '../components/xelion/EverphoneRegister'
 import RufnummerPruefung from '../components/xelion/RufnummerPruefung'
+import XelionLizenzen from '../components/xelion/XelionLizenzen'
 
 type Tab = 'single' | 'list' | 'all'
 
@@ -22,7 +23,7 @@ export default function XelionCheck() {
   const isAdmin = useAppStore((s) => s.isAdmin)
 
   const [tab, setTab] = useState<Tab>('single')
-  const [view, setView] = useState<'bestand' | 'query' | 'everphone'>('bestand')
+  const [view, setView] = useState<'bestand' | 'lizenzen' | 'query' | 'everphone'>('bestand')
   const [singleInput, setSingleInput] = useState('')
   const [listItems, setListItems] = useState([{ id: makeId(), value: '' }])
 
@@ -198,6 +199,7 @@ export default function XelionCheck() {
       </div>
       <div className="flex gap-1 p-1 bg-muted rounded-lg">
         <button onClick={() => setView('bestand')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'bestand' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Durchwahlen prüfen</button>
+        <button onClick={() => setView('lizenzen')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'lizenzen' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Lizenzen</button>
         <button onClick={() => setView('query')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'query' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Abfrage</button>
         <button onClick={() => setView('everphone')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'everphone' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Everphone-Register</button>
       </div>
@@ -209,6 +211,15 @@ export default function XelionCheck() {
       <div className="flex flex-col h-full overflow-y-auto p-6 gap-6">
         {header}
         <RufnummerPruefung />
+      </div>
+    )
+  }
+
+  if (view === 'lizenzen') {
+    return (
+      <div className="flex flex-col h-full overflow-y-auto p-6 gap-6">
+        {header}
+        <XelionLizenzen />
       </div>
     )
   }

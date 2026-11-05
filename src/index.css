@@ -106,3 +106,18 @@
     -webkit-appearance: none;
   }
 }
+
+/* ── Diagramm-Farben (validierte Kategorie-Palette, Slot 1 + 2; dunkel/hell getrennt gestuft) ── */
+:root { --viz-1: #3987e5; --viz-2: #d95926; }
+.light { --viz-1: #2a78d6; --viz-2: #eb6834; }
+
+/* Chat-Knopf blinkt, solange ungelesene Nachrichten da sind (ChatKnopf.tsx).
+   Rot mit weißer Schrift — in hellem und dunklem Design gleich gut lesbar. */
+@keyframes chat-blink {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: rgb(220 38 38); color: #fff; }
+}
+.chat-blinkt { animation: chat-blink 1.2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .chat-blinkt { animation: none; background-color: rgb(220 38 38); color: #fff; }
+}

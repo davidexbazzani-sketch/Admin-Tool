@@ -10,6 +10,7 @@
 import { create } from 'zustand'
 import { api } from '../electronAPI'
 import { ensureWinRM } from '../utils/winrmUtils'
+import { beobachtePhase } from '../services/softwareInstallLog'
 
 type StepStatus = 'pending' | 'running' | 'success' | 'warning' | 'error' | 'skipped'
 type Phase = 'idle' | 'running' | 'done' | 'error'
@@ -223,3 +224,9 @@ export const useXelionInstallStore = create<XelionInstallState>((set) => ({
     }
   },
 }))
+
+// Logbuch (Software Installationen): Start und Ergebnis jedes Laufs festhalten.
+beobachtePhase(useXelionInstallStore, 'Xelion', s => {
+  const warn = Object.values(s.stepStatus).filter(v => v === 'warning').length
+  return `Xelion Desktop installiert${warn ? ` — mit ${warn} Warnung(en)` : ''}.`
+})

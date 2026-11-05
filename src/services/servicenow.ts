@@ -21,6 +21,7 @@ export interface SnIntegrationAccount {
   pass: string
   clientId?: string           // OAuth (vom HCL-Support) — mit Secret hat OAuth Vorrang vor Basic Auth
   clientSecret?: string
+  apiKey?: string             // REST API Key (Header x-sn-apikey) — Vorrang vor OAuth/Basic
   instanceUrl?: string        // zentral: alle App-Nutzer arbeiten auf DERSELBEN Instanz
   assignmentGroups?: string[] // zentral: nur Tickets dieser Gruppen laden (leer = alle)
   updatedBy?: string
@@ -37,9 +38,22 @@ export async function loadIntegrationAccount(force = false): Promise<SnIntegrati
   if (!force && integrationCache !== undefined) return integrationCache
   try {
     const a = await api().netReadJson<SnIntegrationAccount>(INTEGRATION_FILE)
-    integrationCache = a && ((a.user && a.pass) || (a.clientId && a.clientSecret)) ? a : null
+    integrationCache = a && ((a.user && a.pass) || (a.clientId && a.clientSecret) || a.apiKey) ? a : null
   } catch { integrationCache = null }
   return integrationCache
+}
+
+/** Hat das Konto einen REST API Key? (Vorrang vor OAuth/Basic) */
+export function usesApiKey(acc: SnAuthPayload | null | undefined): boolean {
+  return !!acc?.apiKey?.trim()
+}
+
+/** Anzeigename des Anmeldewegs. */
+export function zugangsArt(acc: SnAuthPayload | null | undefined): string {
+  if (!acc) return 'SSO-Anmeldung'
+  if (usesApiKey(acc)) return 'API-Key (x-sn-apikey)'
+  if (usesOAuth(acc)) return 'Client ID + Secret (OAuth)'
+  return `altes Konto „${acc.user || '?'}“ (Basic Auth)`
 }
 
 /** Hat das Konto OAuth-Zugangsdaten (Client-ID + Secret)? */
@@ -50,14 +64,14 @@ export function usesOAuth(acc: SnAuthPayload | null | undefined): boolean {
 /** Zugangsdaten bereinigen: Copy&Paste-Artefakte (Zeilenumbrüche/Tabs) raus — normale Leerzeichen im Passwort bleiben. */
 export function cleanAuth(a: SnAuthPayload): Required<SnAuthPayload> {
   const strip = (s?: string) => (s || '').replace(/[\r\n\t]/g, '')
-  return { user: strip(a.user).trim(), pass: strip(a.pass), clientId: strip(a.clientId).trim(), clientSecret: strip(a.clientSecret).trim() }
+  return { user: strip(a.user).trim(), pass: strip(a.pass), clientId: strip(a.clientId).trim(), clientSecret: strip(a.clientSecret).trim(), apiKey: strip(a.apiKey).trim() }
 }
 
 export async function saveIntegrationAccount(cred: SnAuthPayload, by: string, instanceUrl?: string, assignmentGroups?: string[]): Promise<boolean> {
   const c = cleanAuth(cred)
   const groups = (assignmentGroups ?? []).map(g => g.trim()).filter(Boolean)
   try {
-    if (!(c.user && c.pass) && !usesOAuth(c)) {
+    if (!(c.user && c.pass) && !usesOAuth(c) && !usesApiKey(c)) {
       // Leeren = Konto entfernen -> zurueck zum SSO-Fallback (Gruppen ebenfalls entfernt)
       await api().netWriteJson(INTEGRATION_FILE, {})
       integrationCache = null
@@ -66,7 +80,7 @@ export async function saveIntegrationAccount(cred: SnAuthPayload, by: string, in
     // Array IMMER speichern (auch leer) — leeres Array = bewusst „alle Gruppen".
     const payload: SnIntegrationAccount = {
       user: c.user, pass: c.pass,
-      clientId: c.clientId || undefined, clientSecret: c.clientSecret || undefined,
+      clientId: c.clientId || undefined, clientSecret: c.clientSecret || undefined, apiKey: c.apiKey || undefined,
       instanceUrl: instanceUrl?.trim() || undefined, assignmentGroups: groups, updatedBy: by, updatedAt: new Date().toISOString(),
     }
     const ok = await api().netWriteJson(INTEGRATION_FILE, payload)
@@ -76,7 +90,7 @@ export async function saveIntegrationAccount(cred: SnAuthPayload, by: string, in
 }
 
 export function authOf(acc: SnIntegrationAccount | null): SnAuthPayload | undefined {
-  return acc ? { user: acc.user, pass: acc.pass, clientId: acc.clientId, clientSecret: acc.clientSecret } : undefined
+  return acc ? { user: acc.user, pass: acc.pass, clientId: acc.clientId, clientSecret: acc.clientSecret, apiKey: acc.apiKey } : undefined
 }
 
 export interface ServiceNowConfig {
@@ -220,6 +234,36 @@ export async function testConnection(
     auth,
   })
   return res.success ? { ok: true } : { ok: false, error: res.error, needsLogin: res.needsLogin, diag: res.diag }
+}
+
+/**
+ * Kompletten Fehlerbericht erstellen und als Textdatei speichern. Nimmt die im
+ * Panel eingetragenen Werte; leere Felder werden aus dem gespeicherten Zugang ergänzt.
+ * Secret, Passwort und Token stehen nicht in der Datei.
+ */
+export async function erstelleFehlerbericht(cfg: ServiceNowConfig, eingegeben: SnAuthPayload): Promise<{ ok: boolean; pfad?: string; zusammenfassung?: string[]; error?: string; abgebrochen?: boolean }> {
+  const acc = await loadIntegrationAccount(true)
+  const e = cleanAuth(eingegeben)
+  const auth: SnAuthPayload = {
+    clientId: e.clientId || acc?.clientId || '', clientSecret: e.clientSecret || acc?.clientSecret || '',
+    user: e.user || acc?.user || '', pass: e.pass || acc?.pass || '',
+    apiKey: e.apiKey || acc?.apiKey || '',
+  }
+  const kontext = [
+    `Gespeicherter Zugang: ${acc ? zugangsArt(acc) : 'keiner (SSO)'}${acc?.updatedAt ? ` · gespeichert ${new Date(acc.updatedAt).toLocaleString('de-DE')} von ${acc.updatedBy || '?'}` : ''}`,
+    `Ticket-Filter:   ${(cfg.assignmentGroups ?? []).length ? (cfg.assignmentGroups ?? []).join(', ') : 'alle Gruppen'}`,
+  ]
+  const r = await api().serviceNowFullDiag({ instanceUrl: cfg.instanceUrl, auth, kontext })
+  if (!r.success || !r.text) return { ok: false, error: r.error || 'Bericht konnte nicht erstellt werden.' }
+  const stempel = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')
+  const pfad = await api().saveFileDialog(`ServiceNow-Fehlerbericht ${stempel}.txt`, [{ name: 'Text', extensions: ['txt'] }])
+  if (!pfad) return { ok: false, abgebrochen: true, zusammenfassung: r.zusammenfassung }
+  const bytes = new TextEncoder().encode('﻿' + r.text)
+  let bin = ''
+  for (let i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode(...bytes.subarray(i, i + 8192))
+  const w = await api().writeFile(pfad, btoa(bin))
+  if (!w.success) return { ok: false, error: w.error || 'Datei konnte nicht gespeichert werden.', zusammenfassung: r.zusammenfassung }
+  return { ok: true, pfad, zusammenfassung: r.zusammenfassung }
 }
 
 // ── Phase 2: Schreiben (Ticket erstellen / schließen / zuweisen) ──────────────

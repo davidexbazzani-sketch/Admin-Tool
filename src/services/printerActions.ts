@@ -281,7 +281,8 @@ export async function snmpPrinterStatus(ip: string, community?: string, version:
     for (const vb of maxR.varbinds || []) maxes.set(suffixOf(vb.oid, OID.prtSupplyMax), Number(vb.value))
     for (const vb of descR.varbinds || []) {
       const idx = suffixOf(vb.oid, OID.prtSupplyDesc)
-      const name = String(vb.value || '').trim() || `Material ${idx}`
+      // Bezeichnungen enden oft mit einem Nullbyte („…CF360A\u0000") → in der Anzeige ein Kästchen
+      const name = String(vb.value || '').replace(/[\u0000-\u001f\u007f�]/g, '').trim() || `Material ${idx}`
       const level = levels.get(idx)
       const max = maxes.get(idx)
       let percent: number | null = null

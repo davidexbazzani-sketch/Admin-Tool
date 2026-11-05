@@ -8,6 +8,9 @@ import type { PhoneCheckEntry } from './phoneUtils'
 import { PHONE_FIELD_LABELS } from './phoneUtils'
 import { QUERY_DEFINITIONS } from './queries'
 import { SPALTEN, zeileAlsArray, type DurchwahlZeile } from '../services/rufnummerPruefung'
+import {
+  EXPORT_SPALTEN, EMPFEHLUNG_TEXT, AD_TEXT, eintragAlsArray, type LizenzEintrag,
+} from '../services/xelionLizenzen'
 import { api } from '../electronAPI'
 
 function getLabel(queryId: string) {
@@ -934,6 +937,92 @@ export async function exportPdfDurchwahlen(
     styles: { fontSize: 7, cellPadding: 1.5 },
     headStyles: { fillColor: [60, 60, 60], textColor: 255 },
     margin: { left: 14, right: 14 },
+  })
+
+  await writeAndCheck(savePath, arrayBufferToBase64(doc.output('arraybuffer')))
+}
+
+// ── Xelion-Lizenzen ──────────────────────────────────────────────────────────
+
+/**
+ * Drei Blätter: was gekündigt werden kann (zum Weitergeben an den Dienstleister), welche
+ * Durchwahlen zu klären bzw. freizugeben sind, und die gefilterte Gesamtliste.
+ * `pcText` liefert die Zusammenfassung der PC-Prüfung je Eintrag.
+ */
+export async function exportExcelXelionLizenzen(
+  eintraege: LizenzEintrag[], pcText: (e: LizenzEintrag) => string, savePath: string, filterText: string,
+  alleBlatt = 'Alle (gefiltert)', geraeteText: (e: LizenzEintrag) => string = () => '',
+): Promise<void> {
+  const wb = new ExcelJS.Workbook()
+  wb.creator = 'IT Admin Tool'
+  wb.created = new Date()
+  const erstellt = `Erstellt: ${new Date().toLocaleString('de-DE')}`
+
+  const blatt = (name: string, titel: string, kopf: string[], zeilen: string[][], breiten: number[]) => {
+    const ws = wb.addWorksheet(name)
+    ws.addRow([titel]).font = { bold: true, size: 14 }
+    ws.addRow([filterText || 'Keine Filter gesetzt']).font = { italic: true, color: { argb: 'FF666666' } }
+    ws.addRow([erstellt]).font = { italic: true, color: { argb: 'FF666666' } }
+    ws.addRow([])
+    ws.addRow(kopf).font = { bold: true }
+    for (const z of zeilen) ws.addRow(z)
+    kopf.forEach((_, i) => { ws.getColumn(i + 1).width = breiten[i] ?? 22 })
+    ws.autoFilter = { from: { row: 5, column: 1 }, to: { row: 5, column: kopf.length } }
+    ws.views = [{ state: 'frozen', ySplit: 5 }]
+  }
+
+  const kuendbar = eintraege.filter(e => e.empfehlung === 'kuendbar')
+  blatt('Kündigung Anbieter', `Xelion-Lizenzen, die gekündigt werden können — ${kuendbar.length}`,
+    ['Benutzer (Xelion)', 'Name', 'Rufnummer', 'Begründung'],
+    kuendbar.map(e => [e.userName, e.name, e.nummern.map(n => '+' + n).join(', ') || '—', e.grund]),
+    [42, 32, 20, 90])
+
+  const dw = eintraege.filter(e => e.empfehlung === 'durchwahl-klaeren' || e.empfehlung === 'durchwahl-freigeben')
+  blatt('Durchwahlen', `Durchwahlen ohne Lizenz — ${dw.length}`,
+    ['Empfehlung', 'Name', 'Benutzer (Xelion)', 'Abteilung', 'Durchwahl', 'AD-Status', 'Begründung'],
+    dw.map(e => [EMPFEHLUNG_TEXT[e.empfehlung], e.name, e.userName, e.ad.abteilung || '—',
+      e.durchwahlen.join(', ') || e.nummern.map(n => '+' + n).join(', ') || '—', AD_TEXT[e.ad.befund], e.grund]),
+    [30, 30, 40, 24, 12, 14, 90])
+
+  blatt(alleBlatt, `Xelion-Lizenzen — ${eintraege.length} Einträge`,
+    [...EXPORT_SPALTEN], eintraege.map(e => eintragAlsArray(e, pcText(e), geraeteText(e))),
+    [16, 30, 38, 22, 8, 18, 10, 26, 18, 12, 10, 26, 26, 22, 14, 16, 40, 30, 26, 70, 60])
+
+  const arrayBuffer = await wb.xlsx.writeBuffer() as ArrayBuffer
+  await writeAndCheck(savePath, arrayBufferToBase64(arrayBuffer))
+}
+
+/** Spalten fürs PDF — alle 20 passen nicht lesbar auf A4 quer. */
+const LIZENZ_PDF_SPALTEN: (typeof EXPORT_SPALTEN)[number][] = [
+  'Name', 'Benutzer (Xelion)', 'Abteilung', 'Lizenz', 'Durchwahl', 'Rufnummer im AD', 'AD-Status',
+  'Corp ID', 'Zuletzt angemeldet', 'Xelion-Status', 'Zugewiesene Geräte', 'PC-Prüfung', 'Empfehlung', 'Begründung',
+]
+
+/** Tabelle als PDF (A4 quer), Spalten und Werte wie im Excel-Blatt „Alle". */
+export async function exportPdfXelionLizenzen(
+  eintraege: LizenzEintrag[], pcText: (e: LizenzEintrag) => string, savePath: string, filterText: string,
+  geraeteText: (e: LizenzEintrag) => string = () => '',
+): Promise<void> {
+  const idx = LIZENZ_PDF_SPALTEN.map(s => EXPORT_SPALTEN.indexOf(s))
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
+  doc.setFontSize(16)
+  doc.text('IT Admin Tool — Xelion-Lizenzen', 14, 18)
+  doc.setFontSize(9)
+  doc.setTextColor(100)
+  doc.text(`${eintraege.length} Einträge · Erstellt: ${new Date().toLocaleString('de-DE')}`, 14, 25)
+  doc.text(doc.splitTextToSize(filterText || 'Keine Filter gesetzt', 269), 14, 30)
+
+  const empfehlungSpalte = LIZENZ_PDF_SPALTEN.indexOf('Empfehlung')
+  autoTable(doc, {
+    startY: 38,
+    head: [LIZENZ_PDF_SPALTEN],
+    body: eintraege.map(e => { const a = eintragAlsArray(e, pcText(e), geraeteText(e)); return idx.map(i => a[i] ?? '') }),
+    styles: { fontSize: 6.5, cellPadding: 1.2, overflow: 'linebreak' },
+    headStyles: { fillColor: [60, 60, 60], textColor: 255 },
+    columnStyles: { 0: { cellWidth: 24 }, 1: { cellWidth: 30 }, 3: { cellWidth: 10 }, 4: { cellWidth: 16 }, 10: { cellWidth: 30 }, 13: { cellWidth: 50 } },
+    margin: { left: 14, right: 14 },
+    // „Lizenz kündbar" fett — daran hängt eine Entscheidung (wie bei den Durchwahlen).
+    didParseCell: d => { if (d.section === 'body' && d.column.index === empfehlungSpalte && d.cell.raw === EMPFEHLUNG_TEXT.kuendbar) d.cell.styles.fontStyle = 'bold' },
   })
 
   await writeAndCheck(savePath, arrayBufferToBase64(doc.output('arraybuffer')))

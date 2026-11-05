@@ -24,6 +24,7 @@ export const SCAN_SCHEDULE_DEFAULTS: Record<string, ScanScheduleConfig> = {
   'proactive-radar':     { enabled: true, days: [1, 2, 3, 4, 5], time: '07:00' }, // Werktags früh
   'vlan-scan':           { enabled: true, days: [6], time: '03:00' },            // Sa nachts (schwerer Scan)
   'server-metrics':      { enabled: true, days: [0, 1, 2, 3, 4, 5, 6], time: '11:00' }, // täglich 11:00 (RAM/Festplatte)
+  'server-certs':        { enabled: true, days: [0, 1, 2, 3, 4, 5, 6], time: '07:00' }, // täglich 07:00 (Server-Zertifikate: Ablauf 30/5 Tage)
   'lost-devices':        { enabled: true, days: [3, 4], time: '11:00' },                // Mi + Do 11:00 (verlorene Geräte Online-Check)
   'nis2-access':         { enabled: true, days: [0, 1, 2, 3, 4, 5, 6], time: '11:00' }, // täglich 11:00 (NIS2 lokale Adminrechte)
   'network-drives':      { enabled: true, days: [2], time: '13:00' },                   // Di 13:00 (verbundene Netzlaufwerke aller PCs)

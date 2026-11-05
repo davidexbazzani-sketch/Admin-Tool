@@ -2,7 +2,7 @@
 // Since contextBridge doesn't expose ipcRenderer.send directly,
 // we use a hidden channel via the main process through postMessage or
 // simply call the matching API methods.
-export function ipcRenderer(channel: 'window:minimize' | 'window:maximize' | 'window:close') {
+export function ipcRenderer(channel: 'window:minimize' | 'window:maximize' | 'window:close' | 'window:focus') {
   // These are handled via a separate send channel exposed in preload
   // We call electronAPI helper that maps to ipcRenderer.send
   const w = window as unknown as {

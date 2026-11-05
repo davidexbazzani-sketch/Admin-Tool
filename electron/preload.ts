@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer, webUtils } from 'electron'
 
 // Window control sends
 contextBridge.exposeInMainWorld('electronSend', (channel: string) => {
-  const allowed = ['window:minimize', 'window:maximize', 'window:close']
+  const allowed = ['window:minimize', 'window:maximize', 'window:close', 'window:focus']
   if (allowed.includes(channel)) ipcRenderer.send(channel)
 })
 
@@ -47,6 +47,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // ServiceNow Table-API (REST, im Main-Prozess) — Auth via SSO-Sitzung
   serviceNowRequest: (opts: unknown) => ipcRenderer.invoke('servicenow:request', opts),
   serviceNowCertDiag: () => ipcRenderer.invoke('servicenow:certDiag'),
+  serviceNowFullDiag: (opts: unknown) => ipcRenderer.invoke('servicenow:fullDiag', opts),
   serviceNowLogin: (instanceUrl: string) => ipcRenderer.invoke('servicenow:login', instanceUrl),
   serviceNowLogout: () => ipcRenderer.invoke('servicenow:logout'),
 
@@ -110,6 +111,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   netExists: (relativePath: string) => ipcRenderer.invoke('net:exists', relativePath),
   netListDir: (relativePath: string) => ipcRenderer.invoke('net:listDir', relativePath),
   netDeleteFile: (relativePath: string) => ipcRenderer.invoke('net:deleteFile', relativePath),
+  netListDirAsync: (relativePath: string) => ipcRenderer.invoke('net:listDirAsync', relativePath),
+  netReadJsonAsync: (relativePath: string) => ipcRenderer.invoke('net:readJsonAsync', relativePath),
+  netWriteJsonAsync: (relativePath: string, data: unknown) => ipcRenderer.invoke('net:writeJsonAsync', relativePath, data),
+  netDeleteFileAsync: (relativePath: string) => ipcRenderer.invoke('net:deleteFileAsync', relativePath),
   netIsAvailable: () => ipcRenderer.invoke('net:isAvailable'),
   netGetBasePath: () => ipcRenderer.invoke('net:getBasePath'),
   netSetBasePath: (path: string) => ipcRenderer.invoke('net:setBasePath', path),
@@ -140,6 +145,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   sendEmailRaw: (opts: {
     to: string; cc?: string; subject: string; body: string; html?: boolean
     smtp: string; port: number; user: string; pass: string; from?: string
+    attachmentPath?: string
   }) => ipcRenderer.invoke('mail:sendRaw', opts),
 
   // ── Heartbeat / crash detection ───────────────────────────────────────────

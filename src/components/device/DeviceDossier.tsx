@@ -11,6 +11,7 @@ import {
   Plus, Zap, ListTree, Terminal, Radio, Search, Check, ChevronDown, ChevronRight, Cpu,
 } from 'lucide-react'
 import { useAuthStore, useIsAdmin } from '../../store/authStore'
+import { naechsteEbene, dossierZIndex } from '../../utils/dossierEbene'
 import { useAppStore } from '../../store/appStore'
 import { useMapIntentStore } from '../../store/mapIntentStore'
 import type { DeviceEntry, Screen } from '../../types'
@@ -46,15 +47,31 @@ export function DeviceInfoButton({ hostname, serial, className, size = 12 }: { h
   )
 }
 
+/**
+ * Merkt nur, welches Fenster offen ist. GEZEICHNET wird es von <DeviceDossierSlot /> — der sitzt in
+ * App.tsx INNERHALB aller Dossier-Provider. Sonst fehlen im Fenster die „i"-Knöpfe der anderen
+ * Dossiers (z. B. Geräte-„i" hinter den zugewiesenen Rechnern im Personen-„i").
+ */
+const DeviceDossierZielContext = createContext<{ target: ({ hostname: string; serial?: string } & { ebene: number }) | null; close: () => void } | null>(null)
+
 export function DeviceDossierProvider({ children }: { children: React.ReactNode }) {
-  const [target, setTarget] = useState<{ hostname: string; serial?: string } | null>(null)
-  const open = useCallback((hostname: string, serial?: string) => setTarget({ hostname, serial }), [])
+  const [target, setTarget] = useState<({ hostname: string; serial?: string } & { ebene: number }) | null>(null)
+  const open = useCallback((hostname: string, serial?: string) => setTarget({ hostname, serial, ebene: naechsteEbene() }), [])
+  const close = useCallback(() => setTarget(null), [])
   return (
     <DeviceDossierContext.Provider value={{ open }}>
-      {children}
-      {target && <DeviceDossierModal hostname={target.hostname} serial={target.serial} onClose={() => setTarget(null)} />}
+      <DeviceDossierZielContext.Provider value={{ target, close }}>
+        {children}
+      </DeviceDossierZielContext.Provider>
     </DeviceDossierContext.Provider>
   )
+}
+
+/** Zeichnet das offene DeviceDossier-Fenster — in App.tsx innerhalb ALLER Dossier-Provider platzieren. */
+export function DeviceDossierSlot() {
+  const t = useContext(DeviceDossierZielContext)
+  if (!t?.target) return null
+  return <div style={{ position: 'relative', zIndex: dossierZIndex(t.target.ebene) }}><DeviceDossierModal hostname={t.target.hostname} serial={t.target.serial} onClose={t.close} /></div>
 }
 
 function fmtDateTime(iso?: string): string {

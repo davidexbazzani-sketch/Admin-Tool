@@ -2,8 +2,9 @@ import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import {
   Users, UploadCloud, FileText, FileSpreadsheet, Download, Plus, RefreshCw,
   ChevronDown, ChevronRight, Pencil, Trash2, X, Check, Loader, CheckCircle2,
-  AlertTriangle, KeyRound, Calendar, Search, UserMinus, Mail, MessageCircle, Rocket, ClipboardCheck,
+  AlertTriangle, KeyRound, Calendar, Search, UserMinus, Mail, MessageCircle, Rocket, ClipboardCheck, BarChart3,
 } from 'lucide-react'
+import FluktuationChartDialog from '../components/employees/FluktuationChartDialog'
 import { useAuthStore } from '../store/authStore'
 import { useAppStore } from '../store/appStore'
 import { api } from '../electronAPI'
@@ -65,6 +66,7 @@ export default function EmployeeManagement() {
 
   const [employees, setEmployees] = useState<Employee[]>([])
   const [departures, setDepartures] = useState<Departure[]>([])
+  const [chartOffen, setChartOffen] = useState(false)
   const [devices, setDevices] = useState<EndpointDevice[]>([])
   const [expandedDep, setExpandedDep] = useState<string | null>(null)
   const [reminderStore, setReminderStore] = useState<ReminderStore>({ states: {} })
@@ -381,6 +383,7 @@ export default function EmployeeManagement() {
           </div>
           <div className="flex items-center gap-2">
             <button onClick={refresh} title="Aktualisieren" className="p-2 rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground"><RefreshCw size={15} /></button>
+            <button onClick={() => setChartOffen(true)} title="Eintritte und Austritte im Zeitverlauf, Saldo, Trend und Prognose" className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground"><BarChart3 size={14} />Chart anzeigen</button>
             <button onClick={pickFiles} className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground"><UploadCloud size={14} />PDF / Mail einlesen</button>
             <button onClick={() => excelInputRef.current?.click()} className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground"><FileSpreadsheet size={14} />Excel importieren</button>
             <button onClick={onExport} className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground"><Download size={14} />Excel exportieren</button>
@@ -399,6 +402,8 @@ export default function EmployeeManagement() {
           <span className="text-xs text-muted-foreground">{activeEmps.length} aktiv · {onboardedEmps.length} onboarded · {filteredDeps.length} Austritte</span>
         </div>
       </div>
+
+      {chartOffen && <FluktuationChartDialog employees={employees} departures={departures} onClose={() => setChartOffen(false)} />}
 
       {/* Import-Protokoll */}
       {importLog.length > 0 && (

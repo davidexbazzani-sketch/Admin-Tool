@@ -11,6 +11,7 @@ import { DeviceInfoButton } from '../device/DeviceDossier'
 import { isValidRemoteTarget } from '../../utils/remoteTarget'
 import { ladeJabraQuellordner, setzeJabraQuellordner, findeJabraSetup, JABRA_NETZ_ORDNER_STANDARD } from '../../services/jabraInstall'
 import JabraPanel from './JabraPanel'
+import InstallLogbuch from './InstallLogbuch'
 
 export default function JabraInstallation() {
   const [host, setHost] = useState('')
@@ -77,6 +78,8 @@ export default function JabraInstallation() {
           </div>
         </Card>
       )}
+
+      <InstallLogbuch software="Jabra" titel="Logbuch Jabra" />
 
       <Quellordner />
     </div>
