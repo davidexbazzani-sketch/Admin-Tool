@@ -25,7 +25,7 @@ export function zugangFuer(datei: string, ip: string): { benutzer: string; passw
 }
 
 /** PIN-Sperre: `mitPin(aktion)` führt die Aktion sofort aus, wenn schon entsperrt — sonst erst nach PIN. */
-export function usePinSperre() {
+export function usePinSperre(hinweis = 'Für Passwörter und Anmeldung an den Netzwerkgeräten.') {
   const [entsperrt, setEntsperrt] = useState(false)
   const [wartend, setWartend] = useState<null | (() => void)>(null)
   const [pin, setPin] = useState('')
@@ -46,7 +46,7 @@ export function usePinSperre() {
     <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-6" onClick={() => setWartend(null)}>
       <div className="bg-card border border-border rounded-xl shadow-2xl p-5 w-full max-w-xs" onClick={e => e.stopPropagation()}>
         <div className="flex items-center gap-2 mb-1"><Lock size={16} className="text-blue-400" /><h3 className="text-sm font-semibold text-foreground">PIN eingeben</h3></div>
-        <p className="text-xs text-muted-foreground mb-3">Für Passwörter und Anmeldung an den Netzwerkgeräten.</p>
+        <p className="text-xs text-muted-foreground mb-3">{hinweis}</p>
         <input value={pin} onChange={e => { setPin(e.target.value); setFehler(false) }} autoFocus type="password" inputMode="numeric"
           onKeyDown={e => { if (e.key === 'Enter') pruefen() }}
           className="w-full px-3 py-2 text-center tracking-[0.4em] text-lg rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary" />

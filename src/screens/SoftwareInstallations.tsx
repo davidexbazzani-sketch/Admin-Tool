@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PackagePlus, Wrench, Phone, Headphones, FileText, Box } from 'lucide-react'
+import { PackagePlus, Wrench, Phone, Headphones, FileText, Box, MonitorUp, Lock } from 'lucide-react'
 import SolidWorksInstallation from '../components/softwareInstallations/SolidWorksInstallation'
 import SolidWorksHelp from '../components/solidworks/SolidWorksHelp'
 import XelionInstallation from '../components/softwareInstallations/XelionInstallation'
@@ -7,12 +7,16 @@ import JabraInstallation from '../components/softwareInstallations/JabraInstalla
 import EnaioInstallation from '../components/softwareInstallations/EnaioInstallation'
 import FreeCadInstallation from '../components/softwareInstallations/FreeCadInstallation'
 import InstallLogbuch from '../components/softwareInstallations/InstallLogbuch'
+import ItAdminToolInstallation from '../components/softwareInstallations/ItAdminToolInstallation'
+import { usePinSperre } from '../components/netzwerkgeraete/zugang'
 
 // „E-Drawings" wurde am 04.11.2026 durch „3D-Viewer (FreeCAD)" ersetzt (Ferninstallation lief nicht)
-type Section = 'overview' | 'solidworks' | 'xelion' | 'jabra' | 'enaio' | 'freecad'
+type Section = 'overview' | 'solidworks' | 'xelion' | 'jabra' | 'enaio' | 'freecad' | 'itadmintool'
 
 export default function SoftwareInstallations() {
   const [section, setSection] = useState<Section>('overview')
+  // „IT Admin Tool" verteilt das Tool selbst auf andere PCs → nur mit Passwort (einmal pro Besuch)
+  const { mitPin, pinDialog } = usePinSperre('Die Kachel „IT Admin Tool" installiert das Tool auf anderen PCs neu — nur mit Passwort.')
 
   return (
     <div className="flex flex-col h-full overflow-y-auto p-6">
@@ -85,7 +89,27 @@ export default function SoftwareInstallations() {
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
           </button>
+
+          <button onClick={() => mitPin(() => setSection('itadmintool'))} data-kachel="itadmintool"
+            className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
+            <div className="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center">
+              <MonitorUp size={20} className="text-sky-500" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground flex items-center gap-1.5">IT Admin Tool <Lock size={12} className="text-muted-foreground" /></h3>
+              <p className="text-xs text-muted-foreground mt-1">Neue Version des Tools auf andere PCs verteilen: Desktop-Nachricht, Tool beenden, still installieren, Fertig-Nachricht. Nur mit Passwort.</p>
+            </div>
+            <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
+          </button>
         </div>
+      )}
+      {pinDialog}
+
+      {section === 'itadmintool' && (
+        <>
+          <button onClick={() => setSection('overview')} className="text-xs text-muted-foreground hover:text-foreground mb-3 self-start">&larr; Zurueck zur Uebersicht</button>
+          <ItAdminToolInstallation />
+        </>
       )}
 
       {section === 'overview' && (

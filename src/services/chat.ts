@@ -29,6 +29,8 @@ export interface ChatNutzer {
   online: boolean
   inaktiv: boolean
   ageMs: number
+  /** PC, auf dem das Tool zuletzt lief (seit 05.11.2026 im Herzschlag; ältere Einträge ohne) */
+  rechner?: string
 }
 
 export interface ChatNachricht {
@@ -62,8 +64,16 @@ const idAusDatei = (f: string) => f.replace(/\.json$/i, '')
 const istJson = (f: string) => /\.json$/i.test(f) && !/\.tmp$/i.test(f)
 
 // ── Anwesenheit ───────────────────────────────────────────────────────────────
+// Rechnername einmal holen — die Kachel „IT Admin Tool" schlägt damit die PCs vor, auf denen das Tool läuft
+let rechnerName: Promise<string> | null = null
+function rechner(): Promise<string> {
+  if (!rechnerName) rechnerName = api().getHostname().then(h => (h || '').trim().toUpperCase()).catch(() => '')
+  return rechnerName
+}
+
 export async function schreibeHerzschlag(ich: ChatIch, aktivAt: Date): Promise<void> {
-  const daten = { username: lc(ich.username), displayName: ich.displayName || ich.username, at: new Date().toISOString(), aktivAt: aktivAt.toISOString() }
+  const pc = await rechner()
+  const daten = { username: lc(ich.username), displayName: ich.displayName || ich.username, at: new Date().toISOString(), aktivAt: aktivAt.toISOString(), ...(pc ? { rechner: pc } : {}) }
   try { await api().netWriteJsonAsync(praesenzPfad(ich.username), daten) } catch { /* offline → nächster Takt */ }
 }
 
@@ -90,6 +100,7 @@ export async function ladeNutzer(): Promise<ChatNutzer[]> {
       username: d.username, displayName: typeof d.displayName === 'string' && d.displayName ? d.displayName : d.username,
       at: d.at, aktivAt: typeof d.aktivAt === 'string' ? d.aktivAt : d.at,
       online, inaktiv: online && !isNaN(aktiv) && jetzt - aktiv > INAKTIV_NACH_MS, ageMs,
+      ...(typeof d.rechner === 'string' && d.rechner.trim() ? { rechner: d.rechner.trim() } : {}),
     })
   }
   return out.sort((a, b) => Number(b.online) - Number(a.online) || Number(a.inaktiv) - Number(b.inaktiv)

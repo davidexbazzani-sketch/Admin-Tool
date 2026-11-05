@@ -14,7 +14,7 @@ import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
 
 // 'eDrawings' bleibt für alte Logbuch-Einträge (die Kachel wurde am 04.11.2026 durch FreeCAD ersetzt)
-export type InstallSoftware = 'SolidWorks' | 'Xelion' | 'Jabra' | 'Enaio' | 'Enaio Capture' | 'eDrawings' | 'FreeCAD'
+export type InstallSoftware = 'SolidWorks' | 'Xelion' | 'Jabra' | 'Enaio' | 'Enaio Capture' | 'eDrawings' | 'FreeCAD' | 'IT Admin Tool'
 export type InstallStatus = 'laeuft' | 'ok' | 'fehler' | 'abgebrochen'
 
 export interface InstallLogEintrag {
