@@ -1,8 +1,8 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import {
   Stethoscope, Play, ChevronDown, ChevronRight, Loader,
   CheckCircle, XCircle, AlertTriangle, Info, Zap, Download,
-  Shield, Wifi, HardDrive, Activity, Monitor, RefreshCw, Users, Clock, FileText, Puzzle, Boxes, Wrench,
+  Shield, Wifi, HardDrive, Activity, Monitor, RefreshCw, Users, Clock, FileText, Puzzle, Boxes, Wrench, X,
 } from 'lucide-react'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
@@ -15,6 +15,13 @@ import SolidWorksDiagnose from '../swCheck/SolidWorksDiagnose'
 import NetzwerkDiagnose from '../netCheck/NetzwerkDiagnose'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import SolidWorksHelp from '../components/solidworks/SolidWorksHelp'
+import PcSuche, { type PcWahl } from '../components/PcSuche'
+import ProblemAssistent from '../problemAssistent/ProblemAssistent'
+import MonitorUebersicht from '../monitoring/MonitorUebersicht'
+import MonitorAngebot from '../monitoring/MonitorAngebot'
+import { vorschlaegeFuerDiagnose } from '../monitoring/kontrollen'
+import { useMonitorDialog } from '../store/monitorDialogStore'
+import { useAppStore } from '../store/appStore'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -101,6 +108,10 @@ export default function PCDiagnosis() {
   const [sapMode, setSapMode] = useState(false)
   const [swMode, setSwMode] = useState(false)
   const [netMode, setNetMode] = useState(false)
+  const [monMode, setMonMode] = useState(false)
+  const [vollOffen, setVollOffen] = useState(false)
+  const [pcWahl, setPcWahl] = useState<PcWahl | null>(null)
+  const oeffneMonitor = useMonitorDialog(s => s.oeffne)
   const [timeRange, setTimeRange] = useState<TimeRange>('7')
   const [phase, setPhase] = useState<Phase>('idle')
   const [areas, setAreas] = useState<AreaResult[]>([])
@@ -1562,18 +1573,47 @@ export default function PCDiagnosis() {
   // ══════════════════════════════════════════════════════════════════════
 
   // Eigene, fokussierte SAP-Fehlersuche (Kachel) — überlagert die PC-Diagnose.
+  // Werkzeug-Wunsch von der Startseite („Gib dein Problem ein“) einmalig ausführen — Hook VOR den vorzeitigen returns
+  const wunsch = useAppStore(s => s.pcDiagnoseWunsch)
+  useEffect(() => {
+    if (!wunsch) return
+    useAppStore.getState().setPcDiagnoseWunsch(null)
+    werkzeug(wunsch.werkzeug, wunsch.host)
+  }, [wunsch]) // eslint-disable-line react-hooks/exhaustive-deps
+
   if (sapMode) return <SapFehlersuche onBack={() => setSapMode(false)} />
   // SolidWorks-Diagnose (Kachel) — überlagert die PC-Diagnose.
   if (swMode) return <SolidWorksDiagnose onBack={() => setSwMode(false)} />
   if (netMode) return <NetzwerkDiagnose onBack={() => setNetMode(false)} />
+  if (monMode) return <MonitorUebersicht onBack={() => setMonMode(false)} />
+
+  function werkzeug(id: string, host: string) {
+    if (id === 'netzdiagnose') setNetMode(true)
+    else if (id === 'sap-fehlersuche') setSapMode(true)
+    else if (id === 'solidworks-diagnose') setSwMode(true)
+    else if (id === 'voll-diagnose') { if (host) { setPcWahl({ host }); setHostname(host) }; setVollOffen(true); setTimeout(() => document.querySelector('[data-voll-diagnose]')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50) }
+    else if (id === 'ueberwachung') oeffneMonitor(host ? { host } : undefined)
+    else if (id === 'remote-doc') { const st = useAppStore.getState(); if (host) st.setDevices([{ id: 'pa_' + Date.now().toString(36), type: 'hostname', value: host, resolvedHostnames: [host] }]); st.setScreen('remote-doc') }
+    else if (id === 'treiber') useAppStore.getState().setScreen('treiber-installation')
+    else if (id === 'software') useAppStore.getState().setScreen('software-installations')
+    else if (id === 'deinstallation') useAppStore.getState().setScreen('support-tools')
+    else if (id === 'drucker') useAppStore.getState().setScreen('drucker')
+    else if (id === 'drucker-uebersicht') useAppStore.getState().setScreen('drucker-uebersicht')
+  }
 
   return (
     <div className="flex flex-col gap-5 h-full overflow-y-auto p-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <Stethoscope size={24} /> PC-Diagnose
-        </h1>
+        <div className="flex items-center gap-3 flex-wrap max-w-5xl">
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <Stethoscope size={24} /> PC-Diagnose
+          </h1>
+          <button onClick={() => setMonMode(true)} data-ueberwachung-knopf
+            className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-primary/40 text-primary text-xs font-semibold hover:bg-primary/10">
+            <Activity size={14} /> Überwachung über Zeit
+          </button>
+        </div>
         <p className="text-sm text-muted-foreground mt-1">
           Automatische Fehleranalyse — 9 Bereiche, 30+ Checks
         </p>
@@ -1582,10 +1622,11 @@ export default function PCDiagnosis() {
       {/* ── Fokus-Kacheln (nur in der Startphase) ─────────────────────────── */}
       {phase === 'idle' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-5xl">
-          <div className="rounded-lg border border-primary/40 bg-primary/5 p-4">
+          <button onClick={() => setVollOffen(o => !o)} data-kachel-voll aria-expanded={vollOffen}
+            className={`text-left rounded-lg border p-4 transition-colors ${vollOffen ? 'border-primary bg-primary/10 ring-2 ring-primary/30' : 'border-border bg-card hover:border-primary/40 hover:bg-accent/30'}`}>
             <div className="flex items-center gap-2"><Stethoscope size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">Voll-Diagnose</span></div>
-            <p className="text-[11px] text-muted-foreground mt-1">Alle Bereiche &amp; Checks — unten Hostname eingeben und starten.</p>
-          </div>
+            <p className="text-[11px] text-muted-foreground mt-1">Alle Bereiche &amp; Checks — Ziel-PC per Hostname, IP oder Name wählen und starten.</p>
+          </button>
           <button onClick={() => setSapMode(true)} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
             <div className="flex items-center gap-2"><Boxes size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">SAP Fehlersuche</span></div>
             <p className="text-[11px] text-muted-foreground mt-1">Fokussiert auf SAP: Installation, Konfiguration, Netz/Kerberos, Logs, Edge — mit Vergleich &amp; Baseline.</p>
@@ -1602,16 +1643,12 @@ export default function PCDiagnosis() {
       )}
 
       {/* ── Input + Start ──────────────────────────────────────────── */}
-      {phase === 'idle' && (
-        <div className="bg-card rounded-lg border border-border p-5 space-y-4 max-w-xl">
+      {phase === 'idle' && vollOffen && (
+        <div className="bg-card rounded-lg border border-primary/40 p-5 space-y-4 max-w-xl relative" data-voll-diagnose>
+          <button onClick={() => setVollOffen(false)} className="absolute right-3 top-3 p-1 rounded hover:bg-accent text-muted-foreground" title="Schließen"><X size={15} /></button>
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1.5">Hostname</label>
-            <input
-              type="text" placeholder="z.B. DEHAM12345678" value={hostname}
-              onChange={e => setHostname(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && hostname.trim() && startDiagnosis()}
-              className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground font-mono placeholder:text-muted-foreground focus:outline-none focus:border-primary"
-            />
+            <label className="block text-xs font-medium text-muted-foreground mb-1.5">Ziel-PC <span className="font-normal">— Hostname, IP-Adresse, Seriennummer oder Name (zeigt die zugewiesenen Geräte)</span></label>
+            <PcSuche wert={pcWahl} onWahl={w => { setPcWahl(w); setHostname(w?.host || '') }} autoFocus={!pcWahl} />
           </div>
           <div>
             <label className="block text-xs font-medium text-muted-foreground mb-1.5">
@@ -1661,6 +1698,13 @@ export default function PCDiagnosis() {
             }`}>
             <Play size={16} /> {checkSoftware || checkServices ? 'Daten laden & Diagnose vorbereiten' : 'Vollständige Diagnose starten'}
           </button>
+        </div>
+      )}
+
+      {/* ── Große Kachel: Problem-Assistent ───────────────────────── */}
+      {phase === 'idle' && (
+        <div className="max-w-5xl w-full">
+          <ProblemAssistent onWerkzeug={werkzeug} />
         </div>
       )}
 
@@ -1833,6 +1877,8 @@ export default function PCDiagnosis() {
                     <FileText size={12} /> PDF öffnen
                   </button>
                 )}
+                {hostname.trim() && <MonitorAngebot klein host={hostname.trim()} serial={pcWahl?.serial} person={pcWahl?.person}
+                  vorschlag={vorschlaegeFuerDiagnose(sortedFindings.map(f => f.id)).slice(0, 8)} anlass={`Nach Voll-Diagnose vom ${new Date().toLocaleDateString('de-DE')}`} />}
                 <button onClick={() => { setPhase('idle'); setAreas([]); setLastPdfPath(null) }}
                   className="px-4 py-2 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground">
                   Neue Diagnose
@@ -1902,6 +1948,10 @@ export default function PCDiagnosis() {
                       )}
                       {output && (
                         <pre className="mt-2 ml-6 p-2 rounded bg-muted/20 text-[10px] text-muted-foreground max-h-32 overflow-auto font-mono whitespace-pre-wrap">{output}</pre>
+                      )}
+                      {output && !/^"?ERR/.test(output) && hostname.trim() && vorschlaegeFuerDiagnose([f.id]).length > 0 && (
+                        <div className="mt-2 ml-6"><MonitorAngebot host={hostname.trim()} serial={pcWahl?.serial} person={pcWahl?.person} vorschlag={vorschlaegeFuerDiagnose([f.id])}
+                          anlass={`Nach Fehlerbehebung „${f.title}“ (${new Date().toLocaleDateString('de-DE')})`} /></div>
                       )}
                     </div>
                   )

@@ -17,6 +17,8 @@ interface IndexFile { version: number; laeufe: NetIndexEintrag[] }
 
 function sani(s: string): string { return (s || '').replace(/[\\/:*?"<>|]+/g, '_').replace(/\s+/g, '_') }
 function laufPfad(l: NetLauf): string { return `${ROOT}/${sani(l.pc)}/${l.ranAt.slice(0, 16).replace(/[:T]/g, '-')}/lauf.json` }
+/** Pfad, unter dem saveLauf einen Lauf ablegt (für Verweise, z. B. aus der Überwachung). */
+export const laufPfadFuer = laufPfad
 
 export async function saveLauf(l: NetLauf): Promise<void> {
   const pfad = laufPfad(l)

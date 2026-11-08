@@ -10,7 +10,7 @@ import type { InventoryItem } from '../types/auth'
 import { pingBatch } from './userPresenceScan'
 import { melde, detailsZuNeustarts, titelVon, textVon, type MeldeZiel, type ServerEreignis, type NeustartDetail } from './serverEreignisse'
 import type { ZertZusammenfassung } from './serverZertifikate'
-import { ladeSoll, ladeIst, pruefe, kritischeFehler, fasseZusammen, istDcaDienst, DCA_AUSFALL, type Zusammenfassung } from './serverZustand'
+import { ladeSoll, ladeIst, pruefe, kritischeFehler, fasseZusammen, istDcaDienst, DCA_AUSFALL, bestaetigeAusfall, speichereIst, type Zusammenfassung } from './serverZustand'
 import { addHistoryEntry } from './serverHistory'
 import {
   getScanSchedule, isConfiguredDue, loadRunStatus, saveRunStatus,
@@ -534,11 +534,31 @@ async function zustandsPruefungLauf(by: string, cfg: ServerConfig, status: Serve
       if (warteschlange.length) await sleep(PRUEF_PAUSE_MS + Math.floor(Math.random() * PRUEF_PAUSE_MS))
       zusammen[hostKey(host)] = fasseZusammen(soll, ist)
       if (!ist.erreichbar || ist.startetNoch) continue
-      const jetzt = kritischeFehler(soll, ist)
+      let jetzt = kritischeFehler(soll, ist)
+      // vorher schon gemeldete Fehler nicht erneut melden (nur wenn vorher NICHT „startet noch“;
+      // unbestätigte Ausfälle des letzten Laufs gelten NICHT als gemeldet)
+      const vorherUnbestaetigt = new Set(vorher?.unbestaetigt || [])
+      const vorherFehler = vorher && vorher.erreichbar && !vorher.startetNoch ? new Set(kritischeFehler(soll, vorher).map(p => p.id).filter(id => !vorherUnbestaetigt.has(id))) : new Set<string>()
+      let neu = jetzt.filter(p => !vorherFehler.has(p.id))
+      if (neu.length) {
+        // Gegen Fehlalarme: die neu ausgefallenen Punkte 3× innerhalb von 2 min nachprüfen —
+        // gemeldet wird nur, was dann immer noch aus ist.
+        const np = await bestaetigeAusfall(host, soll, neu)
+        // letztes Nachprüf-Ergebnis in den gespeicherten Stand übernehmen (wieder an → ok)
+        ist.ergebnisse = ist.ergebnisse.map(e => np.letzte.get(e.id) || e)
+        // nicht nachprüfbar → beim nächsten Lauf NICHT als „schon gemeldet“ werten
+        ist.unbestaetigt = np.offen.map(p => p.id)
+        ist.nachpruefung = { am: new Date().toISOString(), versuche: np.versuche, bestaetigt: np.bestaetigt.map(p => p.id), wiederOk: np.wiederOk.map(p => p.id) }
+        await speichereIst(host, ist)
+        zusammen[hostKey(host)] = fasseZusammen(soll, ist)
+        jetzt = kritischeFehler(soll, ist)
+        neu = np.bestaetigt
+        if (np.wiederOk.length || np.offen.length) {
+          const txt = [np.wiederOk.length ? `wieder in Ordnung: ${np.wiederOk.map(p => p.anzeige).join(', ')}` : '', np.offen.length ? `nicht nachprüfbar: ${np.offen.map(p => p.anzeige).join(', ')}` : ''].filter(Boolean).join(' · ')
+          await addHistoryEntry(host, `Prüfung: kurzer Ausfall ohne Meldung (Nachprüfung ${np.versuche}×) — ${txt}`, 'IT Admin Tool (Server-Monitor)').catch(() => undefined)
+        }
+      }
       probleme += jetzt.length
-      // vorher schon gemeldete Fehler nicht erneut melden (nur wenn vorher NICHT „startet noch")
-      const vorherFehler = vorher && vorher.erreichbar && !vorher.startetNoch ? new Set(kritischeFehler(soll, vorher).map(p => p.id)) : new Set<string>()
-      const neu = jetzt.filter(p => !vorherFehler.has(p.id))
       if (neu.length) {
         const erg = new Map(ist.ergebnisse.map(e => [e.id, e]))
         ereignisse.push({

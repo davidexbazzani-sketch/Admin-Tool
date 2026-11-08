@@ -17,7 +17,8 @@ export interface FeatureDef {
 
 export const FEATURES: FeatureDef[] = [
   // ── Startbildschirm ──────────────────────────────────────────────────────
-  { id: 'home', label: 'Startbildschirm', category: 'Grundfunktionen', description: 'Hostname/Seriennummer eingeben und Abfragen starten' },
+  { id: 'home', label: 'Gib dein Problem ein (Start)', category: 'Grundfunktionen', description: 'Startseite: Problem beschreiben, Lösung erkennen und ausführen, ServiceNow Welt, geführte Diagnose' },
+  { id: 'massenabfragen', label: 'Massenabfragen', category: 'Grundfunktionen', description: 'Hostname/Seriennummer eingeben, Datei importieren, Liste erstellen und Abfragen starten (früherer Startbildschirm)' },
 
   // ── Abfrage-Menü ─────────────────────────────────────────────────────────
   { id: 'query-menu', label: 'Abfrage-Menü', category: 'Grundfunktionen', description: 'Abfragekategorien auswählen' },

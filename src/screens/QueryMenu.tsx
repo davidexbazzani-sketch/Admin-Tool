@@ -210,7 +210,7 @@ export default function QueryMenu() {
       <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => setScreen('home')}
+            onClick={() => setScreen('massenabfragen')}
             className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft size={16} />

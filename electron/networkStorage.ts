@@ -156,6 +156,31 @@ export function writeRawFile(relativePath: string, base64Data: string): boolean 
   } catch { return false }
 }
 
+/**
+ * Eine LOKALE Datei aufs Netzlaufwerk kopieren — asynchron und ohne sie in den Speicher zu
+ * laden (für große Dateien wie Videos; writeRawFile schickt alles als Base64 durch die IPC).
+ * Kopiert erst in „<ziel>.part" und benennt danach um, damit ein Anzeige-PC nie eine halbe
+ * Datei abspielt. Nie überschreiben: der Zielname ist neu (Zeitstempel im Namen).
+ */
+export async function copyLocalFileAsync(localPath: string, relativePath: string): Promise<{ ok: boolean; bytes?: number; error?: string }> {
+  try {
+    if (/(^|[\\/])\.\.([\\/]|$)/.test(relativePath)) return { ok: false, error: 'Ungültiger Zielpfad' }
+    const full = safeJoin(getBasePath(), relativePath)
+    const dir = full.substring(0, full.lastIndexOf('\\'))
+    await fsp.mkdir(dir, { recursive: true })
+    const st = await fsp.stat(localPath)
+    if (!st.isFile()) return { ok: false, error: 'Keine Datei: ' + localPath }
+    const teil = full + '.part'
+    await fsp.copyFile(localPath, teil)
+    const kopie = await fsp.stat(teil)
+    if (kopie.size !== st.size) { await fsp.unlink(teil).catch(() => {}); return { ok: false, error: `Kopie unvollständig (${kopie.size} von ${st.size} Bytes)` } }
+    await fsp.rename(teil, full)
+    return { ok: true, bytes: st.size }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) }
+  }
+}
+
 export function readRawFile(relativePath: string): string | null {
   try {
     const full = safeJoin(getBasePath(), relativePath)

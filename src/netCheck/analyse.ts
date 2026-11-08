@@ -3,6 +3,7 @@
 // PC-übergreifende Vergleichsmatrix (Problem- vs. Referenz-PCs).
 
 import { findeErklaerung } from './erklaerungen'
+import { ursachenBefunde, werteAus, lanTrennungenEigen, GRUND_TEXT } from './ursachen'
 import type { NetDaten, NetLauf, NetBefund, AdvProp } from './types'
 
 const PWR_NAME = ['Höchstleistung', 'Geringe Energieeinsparung', 'Mittlere Energieeinsparung', 'Maximale Energieeinsparung']
@@ -116,12 +117,14 @@ export function analysiere(lauf: NetLauf): NetBefund[] {
 
   // 8) Ereignis-Auswertung (Aussetzer-Historie)
   const ev = d.ereignisse
+  const ausw = werteAus(lauf)
   if (ev) {
     if (ev.disconnects > 0) {
-      const topGrund = ev.gruende[0]?.grund
+      // Echter Grund aus der Tiefenanalyse (Reason) statt der immer gleichen ersten Meldungszeile
+      const topGrund = ausw?.kats.length ? ausw.kats.map(k => `${k.anzahl}× ${GRUND_TEXT[k.kat]}`).join(', ') : ev.gruende[0]?.grund
       push({ id: 'ereignisse', titel: `WLAN-Aussetzer in ${ev.tage} Tagen: ${ev.disconnects}`, gewicht: ev.disconnects >= 8 ? 'MITTEL' : 'INFO',
         ist: `${ev.disconnects} Trennungen, ${ev.connects} Neuverbindungen`, soll: 'möglichst 0',
-        wirkung: `Ereignisprotokoll WLAN-AutoConfig.${topGrund ? ' Häufigster Grund: „' + topGrund + '".' : ''} Diese Historie belegt, ob und wie oft es tatsächlich trennt.`,
+        wirkung: `Ereignisprotokoll WLAN-AutoConfig.${topGrund ? (ausw?.kats.length ? ' Gemeldete Gründe: ' + topGrund + '.' : ' Häufigster Grund: „' + topGrund + '".') : ''} Diese Historie belegt, ob und wie oft es tatsächlich trennt.`,
         fundort: 'Microsoft-Windows-WLAN-AutoConfig/Operational (Event 8003)',
         kategorie: 'info', fixbar: false })
     }
@@ -145,11 +148,19 @@ export function analysiere(lauf: NetLauf): NetBefund[] {
     }
   }
 
+  // 8b) Ursachen-Analyse (wer/was trennt) — ohne withErkl: die Adapter-Erklärungen passen hier nicht
+  const ursachen = ursachenBefunde(lauf, ausw)
+  const adapterFixbar = out.some(b => b.fixbar)
+  for (const b of ursachen) out.push(b)
+
   // 9) WLAN: nichts Auffälliges?
-  if (!out.some(b => b.fixbar)) {
-    push({ id: 'unauffaellig', titel: 'WLAN: keine offensichtliche Fehlkonfiguration', gewicht: 'INFO',
+  if (!adapterFixbar) {
+    const mitUrsache = ursachen.some(b => b.kategorie === 'ursache' && (b.gewicht === 'HOCH' || b.gewicht === 'MITTEL'))
+    push({ id: 'unauffaellig', titel: mitUrsache ? 'WLAN-Adapter: Einstellungen unauffällig' : 'WLAN: keine offensichtliche Fehlkonfiguration', gewicht: 'INFO',
       ist: '—', soll: '—',
-      wirkung: 'Die typischen WLAN-Fehleinstellungen sind hier nicht gesetzt. Zur Ursachenfindung Problem-PCs mit fehlerfreien Referenz-PCs vergleichen (Reiter „Vergleich"); der Roh-Daten-Anhang im PDF enthält alle Werte.',
+      wirkung: mitUrsache
+        ? 'Die typischen Adapter-Fehleinstellungen (Energiesparen, Roaming, U-APSD …) sind hier nicht gesetzt — die Ursache liegt woanders, siehe die Ursachen-Befunde oben.'
+        : 'Die typischen WLAN-Fehleinstellungen sind hier nicht gesetzt. Zur Ursachenfindung Problem-PCs mit fehlerfreien Referenz-PCs vergleichen (Reiter „Vergleich"); der Roh-Daten-Anhang im PDF enthält alle Werte.',
       fundort: '—', kategorie: 'info', fixbar: false })
   }
   } // ══════════ Ende WLAN-Analyse ══════════
@@ -207,11 +218,13 @@ export function analysiere(lauf: NetLauf): NetBefund[] {
           fundort: 'Get-NetAdapterStatistics', kategorie: 'netzwerk', fixbar: false })
       }
     }
-    // Link-Down-Ereignisse
+    // Link-Down-Ereignisse — das Netzwerkprofil-Protokoll meldet NETZE, nicht Adapter: Einträge in derselben
+    // Minute wie eine WLAN-Trennung gehören zum WLAN (vorher fälschlich als LAN-Trennung gezählt)
     const le = d.lanEreignisse
-    if (le && le.disconnects > 0) {
-      pushLan({ id: 'lan-events', titel: `LAN-Verbindung getrennt in ${le.tage} Tagen: ${le.disconnects}`, gewicht: le.disconnects >= 4 ? 'HOCH' : 'MITTEL', ist: `${le.disconnects} Trennungen, ${le.connects} Neuverbindungen`, soll: 'möglichst 0',
-        wirkung: 'Das Netzwerkprofil-Protokoll belegt tatsächliche LAN-Trennungen. Zusammen mit EEE/Fehlerzählern/Kabel eingrenzen.',
+    const lanEig = lanTrennungenEigen(d)
+    if (le && lanEig.eigene > 0) {
+      pushLan({ id: 'lan-events', titel: `LAN-Verbindung getrennt in ${le.tage} Tagen: ${lanEig.eigene}`, gewicht: lanEig.eigene >= 4 ? 'HOCH' : 'MITTEL', ist: `${lanEig.eigene} Trennungen, ${le.connects} Neuverbindungen${lanEig.gemeinsam ? ` (${lanEig.gemeinsam} weitere gehören zur WLAN-Trennung in derselben Minute)` : ''}`, soll: 'möglichst 0',
+        wirkung: 'Das Netzwerkprofil-Protokoll belegt Trennungen, die nicht zeitgleich mit einer WLAN-Trennung liegen. Zusammen mit EEE/Fehlerzählern/Kabel eingrenzen.',
         fundort: 'Microsoft-Windows-NetworkProfile/Operational (Event 10001)', kategorie: 'info', fixbar: false })
     }
     if (out.length === lanBefore) {
@@ -245,7 +258,8 @@ export function analysiere(lauf: NetLauf): NetBefund[] {
   }
 
   const rank = { HOCH: 0, MITTEL: 1, GERING: 2, INFO: 3 }
-  return out.sort((a, b) => (rank[a.gewicht] - rank[b.gewicht]) || (Number(b.fixbar) - Number(a.fixbar)))
+  // Gewicht → Ursachen vor Einstellungen → behebbar zuerst
+  return out.sort((a, b) => (rank[a.gewicht] - rank[b.gewicht]) || (Number(b.kategorie === 'ursache') - Number(a.kategorie === 'ursache')) || (Number(b.fixbar) - Number(a.fixbar)))
 }
 
 // ── Vergleichsmatrix (Problem- vs. Referenz-PCs) ─────────────────────────────
@@ -288,6 +302,12 @@ export function vergleiche(laeufe: NetLauf[]): VergleichZeile[] {
   add('schema', 'Energieplan', 'Energie', d => d.powercfg?.schema || '')
   add('turnOff', 'Gerät abschaltbar (Energie)', 'Energie', d => d.powerMgmt?.allowTurnOff == null ? '—' : (d.powerMgmt.allowTurnOff ? 'ja' : 'nein'))
   add('modernStandby', 'Modern Standby (S0)', 'Energie', d => d.powercfg?.modernStandby == null ? '—' : (d.powercfg.modernStandby ? 'ja' : 'nein'))
+  const sbN = (v?: number | null) => v == null ? '—' : (['Deaktivieren', 'Aktivieren', 'Von Windows verwaltet'][v] ?? String(v))
+  add('standbyNetzAc', 'Netzwerk im Standby (Netz)', 'Energie', d => sbN(d.tiefe?.standbyNetz?.ac))
+  add('wcmMinimize', 'Richtlinie „Verbindungen minimieren“', 'Richtlinien', d => d.tiefe?.wcm?.minimize == null ? 'nicht gesetzt' : String(d.tiefe.wcm.minimize))
+  add('profilModus', 'Genutztes WLAN-Profil', 'Richtlinien', d => { const a = werteAus({ pc: '', rolle: 'problem', ranAt: new Date().toISOString(), ranBy: '', ok: true, daten: d }); const p = a?.profil; return p ? `${p.name}${p.quelle ? ' · ' + p.quelle : ''}${p.modus ? ' · ' + p.modus : ''}${p.authMode ? ' · 802.1X ' + p.authMode : ''}` : '—' })
+  add('biosLanWlan', 'BIOS LAN/WLAN-Umschaltung', 'System', d => (d.tiefe?.bios || []).find(x => /lan.*wlan|wlan.*lan|auto.?switch/i.test(x.name))?.wert || '—')
+  add('netzSoftware', 'Netzwerk-Software', 'System', d => (d.tiefe?.software || []).map(s => s.name).sort().join(', ') || '—')
   // Alle Advanced-Properties (Union über alle PCs)
   const advNames = new Map<string, string>()   // slug → Anzeigename
   for (const l of laeufe) for (const p of (l.daten.advanced || [])) if (p.name) advNames.set(slug(p.name), p.name)

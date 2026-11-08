@@ -8,11 +8,11 @@
 // Verzeichnis-Listing, asynchron. Nutzerliste nur bei offenem Chat häufig.
 
 import { useCallback, useEffect, useRef } from 'react'
-import { MessageCircle, Printer, X } from 'lucide-react'
+import { Activity, MessageCircle, Printer, X } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { useChatStore } from '../../store/chatStore'
 import { useTonerWarnungStore } from '../../store/tonerWarnungStore'
-import { istDruckerBot } from '../../services/tonerWarnung'
+import { istBot, istDruckerBot, istMonitorBot } from '../../services/chatBots'
 import TonerPopups from '../printer/TonerPopups'
 import ServerPopups from '../server/ServerPopups'
 import { useServerEreignisStore } from '../../store/serverEreignisStore'
@@ -175,13 +175,13 @@ function ChatToasts() {
       {toasts.map(t => (
         <div key={t.id} className="rounded-xl border border-primary/40 bg-card shadow-2xl overflow-hidden">
           <button onClick={() => { oeffne(t.from || null); entferne(t.id) }} className="w-full text-left px-3 py-2.5 hover:bg-accent/30 flex items-start gap-2.5">
-            <span className="mt-0.5 w-8 h-8 shrink-0 rounded-full bg-primary/20 text-primary flex items-center justify-center">{istDruckerBot(t.from) ? <Printer size={15} /> : <MessageCircle size={15} />}</span>
+            <span className="mt-0.5 w-8 h-8 shrink-0 rounded-full bg-primary/20 text-primary flex items-center justify-center">{istDruckerBot(t.from) ? <Printer size={15} /> : istMonitorBot(t.from) ? <Activity size={15} /> : <MessageCircle size={15} />}</span>
             <span className="flex-1 min-w-0">
               <span className="block text-xs font-semibold text-foreground truncate">
                 {t.from ? `${t.fromDisplay}${t.anzahl > 1 ? ` (${t.anzahl})` : ''}` : 'Chat'}
               </span>
               <span className="block text-[11px] text-muted-foreground line-clamp-2 break-words">{t.vorschau}</span>
-              <span className="block mt-1 text-[10px] text-primary">{t.from && !istDruckerBot(t.from) ? 'Klicken zum Antworten' : 'Klicken zum Öffnen'}</span>
+              <span className="block mt-1 text-[10px] text-primary">{t.from && !istBot(t.from) ? 'Klicken zum Antworten' : 'Klicken zum Öffnen'}</span>
             </span>
           </button>
           <div className="flex justify-end px-2 pb-1.5 -mt-1">

@@ -4,7 +4,7 @@ import {
   Globe, Clock, Maximize2, AlertTriangle, ExternalLink, Cloud, HardDrive,
   CheckCircle, XCircle, RotateCcw, Users as UsersIcon, RefreshCw, ArrowLeft,
   Wifi, WifiOff, Image as ImageIcon, FileText, Folder, ListVideo, Copy, Edit3, Check, Repeat,
-  Send, Tv, Square, Code2, Share2, Save, Star, StickyNote, FolderOpen, ChevronLeft, Info,
+  Send, Tv, Square, Code2, Share2, Save, Star, StickyNote, FolderOpen, ChevronLeft, Info, Film,
 } from 'lucide-react'
 import Card from '../components/Card'
 
@@ -24,7 +24,7 @@ import {
   loadPlaylistsContainer, createPlaylist, createPlaylistFromConfig, renamePlaylist, deletePlaylist, setActivePlaylist,
   playlistToConfig, savePlaylist, savePreviewSession, PREVIEW_SESSION_SENTINEL,
   makeNewSlide, makeEmptyConfig, detectSlideMediaType, slideSrcUrl, localHtmlFsPath, slideProtocolUrl,
-  isLocalDrivePath, uploadMediaToShare, uploadHtmlMitDateien, withPdfViewParams,
+  isLocalDrivePath, uploadMediaToShare, uploadHtmlMitDateien, withPdfViewParams, videoBisEnde,
   makeNewVariant, activeRotationIndex, nextRotationSwitch,
   type PresentationConfig, type Slide, type StorageMode, type SlideRotation, type SlideVariant,
 } from '../services/presentationConfig'
@@ -1654,6 +1654,8 @@ export default function PresentationMode() {
                   Die Datei konnte nicht gelesen werden. Liegt sie auf dem Netzlaufwerk und ist sie noch vorhanden?
                 </div>
               )
+            ) : detectSlideMediaType(preview.url) === 'video' ? (
+              <video src={slideSrcUrl(preview.url)} controls autoPlay muted={preview.videoTon !== true} className="flex-1 w-full min-h-0 bg-black" data-vorschau-video />
             ) : (
               <iframe src={slideSrcUrl(preview.url)} className="flex-1 w-full bg-background" />
             )}
@@ -1937,12 +1939,19 @@ function formatIntervalHours(h: number): string {
 }
 
 const MEDIA_FILE_FILTERS = [
-  { name: 'HTML, Bilder & PDFs', extensions: ['html', 'htm', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'avif'] },
+  { name: 'HTML, Bilder, PDFs & Videos', extensions: ['html', 'htm', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'avif', 'mp4', 'm4v', 'webm', 'mov'] },
   { name: 'HTML',           extensions: ['html', 'htm'] },
   { name: 'Bilder',         extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'avif'] },
   { name: 'PDF',            extensions: ['pdf'] },
+  { name: 'Videos (MP4, WebM)', extensions: ['mp4', 'm4v', 'webm', 'mov'] },
   { name: 'Alle Dateien',   extensions: ['*'] },
 ]
+
+/** 83.4 → „1:23 min", 3725 → „1:02:05 h" */
+function formatVideoLaenge(sek: number): string {
+  const t = Math.max(0, Math.round(sek)), h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = t % 60
+  return h ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} h` : `${m}:${String(s).padStart(2, '0')} min`
+}
 
 // ── Single slide row ─────────────────────────────────────────────────────────
 
@@ -1963,6 +1972,9 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
     slide.durationSec >= 60 && slide.durationSec % 60 === 0 ? 'm' : 's'
   )
   const displayedDuration = durationUnit === 'm' ? slide.durationSec / 60 : slide.durationSec
+  // Dauer wurde von außen gesetzt (z. B. Videolänge 8 s) und ist keine volle Minute → Sekunden
+  // zeigen, sonst stünde dort „0,1333 min"
+  useEffect(() => { if (durationUnit === 'm' && slide.durationSec % 60 !== 0) setDurationUnit('s') }, [slide.durationSec, durationUnit])
 
   function updateDuration(val: number, unit: 's' | 'm') {
     const sec = unit === 'm' ? val * 60 : val
@@ -1979,6 +1991,17 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
   const [uploadError, setUploadError] = useState('')
   // Rückmeldung zum HTML-Upload: wie viele Beilagen mitkamen, was fehlte.
   const [uploadHinweis, setUploadHinweis] = useState('')
+  // Videolänge (aus den Metadaten) — zur Anzeige und für „bis zum Ende"
+  const [videoLaenge, setVideoLaenge] = useState<number | null>(null)
+  const [videoFehler, setVideoFehler] = useState('')
+  const istVideo = mediaType === 'video'
+  const bisEnde = videoBisEnde(slide)
+  useEffect(() => { setVideoLaenge(null); setVideoFehler('') }, [slide.url])
+  // Bei „bis zum Ende" die Dauer auf die Videolänge setzen — dann stimmt die Gesamtdauer der Playlist
+  useEffect(() => {
+    if (istVideo && bisEnde && videoLaenge && Math.ceil(videoLaenge) !== slide.durationSec) onPatch({ durationSec: Math.max(1, Math.ceil(videoLaenge)) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [istVideo, bisEnde, videoLaenge])
 
   async function pickFile() {
     let path: string | null = null
@@ -2092,7 +2115,7 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
     }
   }
 
-  const TypeIcon = mediaType === 'image' ? ImageIcon : mediaType === 'pdf' ? FileText : Globe
+  const TypeIcon = mediaType === 'image' ? ImageIcon : mediaType === 'pdf' ? FileText : mediaType === 'video' ? Film : Globe
 
   return (
     <div
@@ -2133,6 +2156,7 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
               <TypeIcon size={12} className={`absolute left-2 top-1/2 -translate-y-1/2 ${
                 mediaType === 'image' ? 'text-purple-400' :
                 mediaType === 'pdf' ? 'text-red-400' :
+                mediaType === 'video' ? 'text-emerald-400' :
                 mediaType === 'url' ? 'text-blue-400' :
                 'text-muted-foreground'
               }`} />
@@ -2140,6 +2164,7 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
                 <span className={`absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-semibold uppercase px-1 rounded ${
                   mediaType === 'image' ? 'bg-purple-500/15 text-purple-300' :
                   mediaType === 'pdf' ? 'bg-red-500/15 text-red-300' :
+                  mediaType === 'video' ? 'bg-emerald-500/15 text-emerald-300' :
                   'bg-blue-500/15 text-blue-300'
                 }`}>
                   {mediaType === 'url' ? 'WEB' : mediaType.toUpperCase()}
@@ -2150,7 +2175,7 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
               type="button"
               onClick={pickFile}
               disabled={uploading}
-              title="HTML-Datei, Bild oder PDF auswählen — wird automatisch aufs Netzlaufwerk hochgeladen, damit alle PCs es anzeigen können"
+              title="HTML-Datei, Bild, PDF oder Video (MP4) auswählen — wird automatisch aufs Netzlaufwerk hochgeladen, damit alle PCs es anzeigen können"
               className="px-2 py-1.5 rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent/30 disabled:opacity-50"
             >
               {uploading ? <Loader size={13} className="animate-spin" /> : <Folder size={13} />}
@@ -2185,10 +2210,12 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {/* Duration */}
           <div>
-            <label className="text-[10px] text-muted-foreground block mb-0.5">Dauer</label>
+            <label className="text-[10px] text-muted-foreground block mb-0.5">{istVideo && bisEnde ? 'Dauer (= Videolänge)' : 'Dauer'}</label>
             <div className="flex gap-1">
               <input
                 type="number" min={1}
+                disabled={istVideo && bisEnde}
+                title={istVideo && bisEnde ? 'Die Folie wechselt, wenn das Video zu Ende ist' : undefined}
                 value={displayedDuration}
                 onChange={e => updateDuration(Number(e.target.value) || 1, durationUnit)}
                 className="w-16 px-2 py-1 rounded-md bg-background border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
@@ -2238,6 +2265,36 @@ function SlideRow({ slide, index, onPatch, onDelete, onPreview, onDragStart, onD
           </div>
         </div>
       </div>
+
+      {/* ── Video: Ton + Wechsel nach dem Ende ── */}
+      {istVideo && (
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 px-2.5 py-1.5 rounded-md border border-emerald-500/30 bg-emerald-500/5 text-[11px]" data-video-optionen>
+          <span className="flex items-center gap-1 text-emerald-400 font-medium"><Film size={11} />Video</span>
+          <label className="flex items-center gap-1.5 text-foreground cursor-pointer">
+            <input type="checkbox" className="accent-primary" checked={bisEnde} data-feld="bisEnde"
+              onChange={e => onPatch({ videoBisEnde: e.target.checked ? undefined : false })} />
+            Nächste Folie, wenn das Video zu Ende ist
+          </label>
+          <label className="flex items-center gap-1.5 text-foreground cursor-pointer">
+            <input type="checkbox" className="accent-primary" checked={slide.videoTon === true} data-feld="ton"
+              onChange={e => onPatch({ videoTon: e.target.checked ? true : undefined })} />
+            Mit Ton
+          </label>
+          <span className="text-muted-foreground" data-video-laenge>
+            {videoFehler ? <span className="text-amber-400">{videoFehler}</span>
+              : videoLaenge ? `Länge ${formatVideoLaenge(videoLaenge)}${bisEnde ? '' : ' · läuft in Schleife für die eingestellte Dauer'}`
+              : 'Länge wird gelesen …'}
+          </span>
+          {/* unsichtbar: nur die Metadaten lesen (Länge, abspielbar?) */}
+          <video src={slideSrcUrl(slide.url)} preload="metadata" muted className="hidden"
+            onLoadedMetadata={e => {
+              const v = e.currentTarget
+              if (v.videoWidth === 0 && v.videoHeight === 0) setVideoFehler('Keine abspielbare Bildspur — vermutlich HEVC (iPhone). Bitte als MP4 (H.264) speichern.')
+              else if (Number.isFinite(v.duration)) setVideoLaenge(v.duration)
+            }}
+            onError={() => setVideoFehler('Video lässt sich hier nicht öffnen — Datei fehlt oder Format nicht unterstützt (MP4 mit H.264 nehmen).')} />
+        </div>
+      )}
 
       {/* ── Wechsel-Inhalte (zeitgesteuerte Rotation) ── */}
       <div className="rounded-md border border-border/70 bg-background/40">

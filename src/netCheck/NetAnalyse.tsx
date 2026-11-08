@@ -1,11 +1,14 @@
 // ── Netzwerk-Diagnose: Analyse-Modal (Befunde, Anwenden, Rückgängig, PDF) ────
 
 import { useEffect, useMemo, useState } from 'react'
-import { X, Wifi, AlertTriangle, ChevronDown, Info, FileDown, RotateCcw, Loader2, Check, ShieldAlert } from 'lucide-react'
+import { X, Wifi, AlertTriangle, ChevronDown, Info, FileDown, RotateCcw, Loader2, Check, ShieldAlert, Stethoscope, Clock } from 'lucide-react'
 import { analysiere } from './analyse'
+import { werteAus, diagnose, zeitleiste, offsetText, zeitKurz, lanZeitgleichMitWlan, GRUND_TEXT, UMFELD_TEXT, type TrennungDetail } from './ursachen'
 import { applyNetFixes, restoreNetFixes, fixToWire, saveFixBackup, loadFixBackup, type NetFixBackup } from './applyFix'
 import { buildLaufPdf, buildAenderungsPdf, savePdf, sanitizeName, type AenderungsBericht, type AenderungsBerichtEintrag } from './pdf'
 import { useAuthStore } from '../store/authStore'
+import MonitorAngebot from '../monitoring/MonitorAngebot'
+import { VORSCHLAG_LAN, VORSCHLAG_WLAN } from '../monitoring/kontrollen'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import type { NetLauf, NetBefund } from './types'
 
@@ -18,12 +21,17 @@ const GEWICHT_BADGE: Record<string, string> = {
 const KAT_LABEL: Record<string, string> = {
   'powercfg-wifi': 'Energieplan (WLAN)', 'netpower': 'Geräte-Energieverwaltung', 'netadv': 'Adapter-Einstellung',
   'treiber': 'Treiber', 'netzwerk': 'Netzwerk / Access Point', 'info': 'Information',
+  'ursache': 'Ursache', 'aufgabe': 'Geplante Aufgabe',
 }
 
 export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: () => void }) {
   const authUser = useAuthStore(s => s.session?.user)
   const by = authUser?.displayName || authUser?.username || 'unbekannt'
   const befunde = useMemo(() => analysiere(lauf), [lauf])
+  const ausw = useMemo(() => werteAus(lauf), [lauf])
+  const diag = useMemo(() => diagnose(lauf, ausw), [lauf, ausw])
+  const [fensterIdx, setFensterIdx] = useState(0)
+  const [leisteOffen, setLeisteOffen] = useState(false)
   const fixbar = befunde.filter(b => b.fixbar && b.fix)
 
   const [selected, setSelected] = useState<Set<string>>(() => new Set(fixbar.filter(b => !b.standardAus).map(b => b.id)))
@@ -78,10 +86,15 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
 
   const d = lauf.daten
   const invasivGewaehlt = fixbar.some(b => b.standardAus && selected.has(b.id))
+  const tiefe = d.tiefe
+  const leiste = useMemo(() => zeitleiste(tiefe, fensterIdx), [tiefe, fensterIdx])
+  const umfeldKats = new Set((ausw?.umfeld || []).map(u => u.kat))
   // ConvertTo-Json macht aus 1-Element-Listen evtl. ein Objekt → defensiv normalisieren.
   const asArr = <T,>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : v ? [v as T] : [])
   const wlanEv = asArr<{ zeit?: string; grund?: string; bssid?: string }>(d.ereignisse?.letzte)
   const lanEv = asArr<{ zeit?: string; grund?: string }>(d.lanEreignisse?.letzte)
+  const lanMitWlan = lanZeitgleichMitWlan(d)
+  const lanGemeinsam = lanMitWlan.filter(Boolean).length
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
@@ -116,31 +129,44 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
           <Kv label="Energieplan" value={d.powercfg?.schema} />
           <Kv label="WLAN-Sparen (Netz/Akku)" value={`${d.powercfg?.wlanAc ?? '—'} / ${d.powercfg?.wlanDc ?? '—'}`} />
           <Kv label="Aussetzer (14 T.)" value={d.ereignisse ? String(d.ereignisse.disconnects) : '—'} />
-          <Kv label="Aktueller AP" value={d.verbindung?.bssid} />
+          <Kv label="Aktueller AP" value={d.verbindung?.bssid || (tiefe?.netshBlockiert ? 'nicht lesbar (Standort aus)' : undefined)} />
           <Kv label="Signal / Funktyp" value={`${d.verbindung?.signal || '—'} / ${d.verbindung?.radio || '—'}`} />
           <Kv label="Modern Standby" value={d.powercfg?.modernStandby == null ? '—' : (d.powercfg.modernStandby ? 'ja' : 'nein')} />
           <Kv label="Adapter abschaltbar" value={d.powerMgmt?.allowTurnOff == null ? '—' : (d.powerMgmt.allowTurnOff ? 'ja' : 'nein')} />
+          {tiefe?.standbyNetz && <Kv label="Netzwerk im Standby (Netz/Akku)" value={`${sbName(tiefe.standbyNetz.ac)} / ${sbName(tiefe.standbyNetz.dc)}`} />}
+          {ausw?.profil && <Kv label="Genutztes Profil" value={`${ausw.profil.name}${ausw.profil.modus ? ' · ' + ausw.profil.modus : ''}${ausw.profil.authMode ? ' · 802.1X ' + ausw.profil.authMode : ''}`} />}
           {d.lan && <Kv label="LAN Link" value={d.lanVerbindung?.linkSpeed || d.lan.linkSpeed} />}
           {d.lan && <Kv label="LAN Fehler (Rx/Tx)" value={d.lanStatistik ? `${d.lanStatistik.rxErr ?? 0} / ${d.lanStatistik.txErr ?? 0}` : '—'} />}
-          {d.lan && <Kv label="LAN Trennungen (14 T.)" value={d.lanEreignisse ? String(d.lanEreignisse.disconnects) : '—'} />}
+          {d.lan && <Kv label="LAN Trennungen (14 T.)" value={d.lanEreignisse ? (lanGemeinsam ? `${d.lanEreignisse.disconnects} (davon ${lanGemeinsam} = WLAN-Trennung)` : String(d.lanEreignisse.disconnects)) : '—'} />}
           {d.lan && <Kv label="LAN abschaltbar" value={d.lanPowerMgmt?.allowTurnOff == null ? '—' : (d.lanPowerMgmt.allowTurnOff ? 'ja' : 'nein')} />}
           {!!d.pingTests?.length && <Kv label="Ping-Verlust (Gateway)" value={`${Math.max(...d.pingTests.map(p => p.verlust))} %`} />}
           {!!d.pingTests?.length && <Kv label="Ping-Latenz Ø" value={(() => { const a = d.pingTests.map(p => p.avg).filter((x): x is number => x != null); return a.length ? `${Math.round(a.reduce((s, x) => s + x, 0) / a.length)} ms` : '—' })()} />}
         </div>
 
         {/* Aussetzer-Zeitpunkte (ausklappbar) */}
-        {(wlanEv.length > 0 || lanEv.length > 0) && (
+        {(wlanEv.length > 0 || lanEv.length > 0 || (ausw?.det.length ?? 0) > 0) && (
           <div className="px-5 py-1.5 border-b border-border shrink-0">
             <button onClick={() => setZeitenOffen(o => !o)}
               className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground">
               <ChevronDown size={13} className={zeitenOffen ? 'rotate-180 transition-transform' : 'transition-transform'} />
-              Genaue Zeitpunkte der Aussetzer{wlanEv.length > 0 ? ` · WLAN: ${wlanEv.length}` : ''}{lanEv.length > 0 ? ` · LAN: ${lanEv.length}` : ''}
+              Genaue Zeitpunkte der Aussetzer{ausw?.det.length ? ` · WLAN: ${ausw.det.length} (mit Grund + Neuverbindung)` : wlanEv.length > 0 ? ` · WLAN: ${wlanEv.length}` : ''}{lanEv.length > 0 ? ` · LAN: ${lanEv.length}` : ''}
             </button>
             {zeitenOffen && (
               <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
-                {wlanEv.length > 0 && (
+                {ausw?.det.length ? (
+                  <div className="rounded border border-sky-500/30 bg-sky-500/5 p-2 md:col-span-2" data-trennungen>
+                    <div className="text-[10px] font-semibold text-sky-500 uppercase tracking-wide mb-1">WLAN-Trennungen (14 T.) — Grund laut Windows und Neuverbindung</div>
+                    <div className="max-h-56 overflow-auto">
+                      <table className="w-full text-[11px]">
+                        <tbody>
+                          {ausw.det.slice(0, 40).map((e, i) => <TrennungZeile key={i} e={e} />)}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                ) : wlanEv.length > 0 && (
                   <div className="rounded border border-sky-500/30 bg-sky-500/5 p-2">
-                    <div className="text-[10px] font-semibold text-sky-300 uppercase tracking-wide mb-1">WLAN-Trennungen (14 T.)</div>
+                    <div className="text-[10px] font-semibold text-sky-500 uppercase tracking-wide mb-1">WLAN-Trennungen (14 T.)</div>
                     <div className="max-h-44 overflow-auto space-y-0.5">
                       {wlanEv.map((e, i) => (
                         <div key={i} className="text-[11px] text-foreground/90">
@@ -154,12 +180,13 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
                 )}
                 {lanEv.length > 0 && (
                   <div className="rounded border border-emerald-500/30 bg-emerald-500/5 p-2">
-                    <div className="text-[10px] font-semibold text-emerald-300 uppercase tracking-wide mb-1">LAN-Trennungen (14 T.)</div>
-                    <div className="max-h-44 overflow-auto space-y-0.5">
+                    <div className="text-[10px] font-semibold text-emerald-500 uppercase tracking-wide mb-1">LAN-Trennungen (14 T.)</div>
+                    <div className="max-h-44 overflow-auto space-y-0.5" data-lan-trennungen>
                       {lanEv.map((e, i) => (
                         <div key={i} className="text-[11px] text-foreground/90">
                           <span className="font-mono text-foreground">{e.zeit || '—'}</span>
                           {e.grund && <span className="text-muted-foreground"> — {e.grund}</span>}
+                          {lanMitWlan[i] && <span className="text-amber-500"> · gleiche Minute wie eine WLAN-Trennung — kein eigener LAN-Ausfall</span>}
                         </div>
                       ))}
                     </div>
@@ -172,6 +199,63 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
 
         {/* Befunde */}
         <div className="flex-1 overflow-auto px-5 py-3 space-y-2">
+          {diag && (
+            <div className="rounded-lg border-2 border-primary/40 bg-primary/5 p-3 space-y-2" data-diagnose>
+              <div className="flex items-start gap-2">
+                <Stethoscope size={16} className="text-primary shrink-0 mt-0.5" />
+                <div className="text-sm font-semibold text-foreground">{diag.titel}</div>
+              </div>
+              {diag.punkte.length > 0 && (
+                <ul className="pl-6 space-y-0.5 text-xs text-foreground list-disc">
+                  {diag.punkte.map((x, i) => <li key={i}>{x}</li>)}
+                </ul>
+              )}
+              {diag.schritte.length > 0 && (
+                <div className="pl-6">
+                  <div className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground mb-0.5">Nächste Schritte</div>
+                  <ol className="list-decimal pl-4 space-y-0.5 text-xs text-foreground">
+                    {diag.schritte.map((x, i) => <li key={i}>{x}</li>)}
+                  </ol>
+                </div>
+              )}
+            </div>
+          )}
+          {tiefe && (tiefe.umfeld?.length ?? 0) > 0 && (
+            <div className="rounded-lg border border-border bg-card p-3" data-zeitleiste>
+              <button onClick={() => setLeisteOffen(o => !o)} className="w-full flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                <Clock size={13} className="text-primary" />Was rund um die Trennungen passiert ist
+                <span className="font-normal text-muted-foreground">· {tiefe.umfeld.length} Trennungen untersucht (−5 … +2 min)</span>
+                <ChevronDown size={13} className={`ml-auto text-muted-foreground ${leisteOffen ? 'rotate-180' : ''}`} />
+              </button>
+              {leisteOffen && (
+                <div className="mt-2 space-y-2">
+                  <div className="flex flex-wrap gap-1">
+                    {tiefe.umfeld.map((f, i) => (
+                      <button key={i} onClick={() => setFensterIdx(i)}
+                        className={`px-2 py-0.5 rounded-full border text-[11px] font-mono ${i === fensterIdx ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent'}`}>
+                        {zeitKurz(Date.parse(f.trennung))}
+                      </button>
+                    ))}
+                  </div>
+                  {leiste && (leiste.eintraege.length ? (
+                    <div className="max-h-64 overflow-auto rounded border border-border/60 divide-y divide-border/40">
+                      {leiste.eintraege.map((e, i) => (
+                        <div key={i} className={`flex items-start gap-2 px-2 py-1 text-[11px] ${e.istTrennung ? 'bg-red-500/10' : e.kat && umfeldKats.has(e.kat) ? 'bg-amber-500/10' : ''}`} data-eintrag={e.kat || ''}>
+                          <span className="font-mono text-muted-foreground w-20 shrink-0 tabular-nums">{offsetText(e.offsetSek)}</span>
+                          <span className="w-24 shrink-0 text-muted-foreground">{e.log}</span>
+                          <span className="min-w-0 flex-1 text-foreground break-words">
+                            <span className="text-muted-foreground">{e.quelle} {e.id}:</span> {e.text}
+                            {e.kat && <span className={`ml-1 text-[10px] px-1 rounded border ${umfeldKats.has(e.kat) ? 'border-amber-500/50 text-amber-500' : 'border-border text-muted-foreground'}`}>{UMFELD_TEXT[e.kat]}</span>}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : <p className="text-[11px] text-muted-foreground italic">In diesem Zeitfenster ist nichts weiter protokolliert.</p>)}
+                  <p className="text-[10px] text-muted-foreground">Rot = die Trennung selbst · gelb = taucht bei mehreren Trennungen kurz davor auf (Verdacht).</p>
+                </div>
+              )}
+            </div>
+          )}
           {befunde.map(b => (
             <BefundKarte key={b.id} b={b} checked={selected.has(b.id)} onCheck={() => toggle(selected, setSelected, b.id)}
               infoOn={infoOpen.has(b.id)} onInfo={() => toggle(infoOpen, setInfoOpen, b.id)}
@@ -195,6 +279,12 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
               </button>
             </div>
           )}
+          {report && report.ok > 0 && (
+            <div className="mt-2">
+              <MonitorAngebot host={lauf.pc} vorschlag={d.aktiv?.lan && !d.aktiv?.wlan ? VORSCHLAG_LAN : VORSCHLAG_WLAN}
+                anlass={`Nach Netzwerk-Behebung am ${new Date(report.at).toLocaleDateString('de-DE')}: ${report.eintraege.filter(e => e.ok).map(e => e.titel).slice(0, 3).join(', ')}`} />
+            </div>
+          )}
         </div>
 
         {/* Fuß / Aktionen */}
@@ -203,7 +293,7 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
           {showConfirm && (
             <div className="text-xs bg-amber-500/10 border border-amber-500/30 rounded px-3 py-2 text-amber-200 space-y-2">
               <div className="flex items-start gap-1.5"><ShieldAlert size={14} className="shrink-0 mt-0.5" />
-                <span>{[...selected].length} Einstellung(en) auf <b>{lauf.pc}</b> ändern?{invasivGewaehlt ? ' Achtung: eine invasive Einstellung (z. B. 802.11ax-Zwang) ist gewählt.' : ''} Adapter-Einstellungen werden erst nach WLAN-Neuverbindung/Neustart wirksam; die Altwerte werden gesichert.</span>
+                <span>{[...selected].length} Einstellung(en) auf <b>{lauf.pc}</b> ändern?{invasivGewaehlt ? ' Achtung: eine optionale Änderung ist gewählt (z. B. Aufgabe deaktivieren, Notlösung, 802.11ax-Zwang).' : ''} Adapter-Einstellungen werden erst nach WLAN-Neuverbindung/Neustart wirksam; die Altwerte werden gesichert.</span>
               </div>
               <div className="flex gap-2">
                 <button onClick={doApply} className="px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90">Ja, ändern</button>
@@ -229,6 +319,30 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
         </div>
       </div>
     </div>
+  )
+}
+
+const sbName = (v?: number | null) => v == null ? '—' : (['Deaktivieren', 'Aktivieren', 'Von Windows'][v] ?? String(v))
+
+function TrennungZeile({ e }: { e: TrennungDetail }) {
+  const warn = e.kat === 'benutzer' || e.kat === 'profil'
+  const nachMin = e.neu ? Math.round(e.neu.nachSek / 60) : null
+  return (
+    <tr className="border-b border-border/30 last:border-0 align-top">
+      <td className="py-0.5 pr-2 font-mono text-foreground whitespace-nowrap">{zeitKurz(e.t)}</td>
+      <td className="py-0.5 pr-2">
+        <span className={warn ? 'text-amber-500 font-semibold' : e.kat === 'neueVerbindung' ? 'text-muted-foreground' : 'text-foreground'}>{GRUND_TEXT[e.kat]}</span>
+        {e.grund && <span className="block text-[10px] text-muted-foreground">{e.grund}{e.code ? ` (Code ${e.code})` : ''}</span>}
+      </td>
+      <td className="py-0.5 pr-2 text-muted-foreground whitespace-nowrap">{e.profil || e.ssid || ''}</td>
+      <td className="py-0.5 text-right whitespace-nowrap">
+        {e.neu
+          ? <span className={e.neu.manuell || e.neu.nachSek > 600 ? 'text-amber-500 font-semibold' : 'text-emerald-500'}>
+              {e.neu.manuell ? 'von Hand' : 'automatisch'} nach {e.neu.nachSek < 90 ? `${e.neu.nachSek} s` : `${nachMin} min`}
+            </span>
+          : <span className="text-red-500 font-semibold">nicht wieder verbunden</span>}
+      </td>
+    </tr>
   )
 }
 

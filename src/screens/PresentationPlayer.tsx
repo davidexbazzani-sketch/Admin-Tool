@@ -3,13 +3,14 @@ import { Pause, Play, SkipBack, SkipForward, X, Loader } from 'lucide-react'
 import {
   resolvePlayerConfig, detectSlideMediaType, slideSrcUrl, isPlayableSlide, activeSlideUrl,
   localHtmlFsPath,
-  slideProtocolUrl,
+  slideProtocolUrl, videoBisEnde,
   type Slide, type PresentationConfig, type TransitionType,
 } from '../services/presentationConfig'
 import { bettetVerweiseEin } from '../services/presentationHtml'
 import { writeHeartbeat, clearHeartbeat, HEARTBEAT_INTERVAL_MS } from '../services/presentationClients'
 import { readClientPush, type RemotePush } from '../services/presentationRemote'
 import { api } from '../electronAPI'
+import VideoFolie from '../components/presentation/VideoFolie'
 
 const CONFIG_POLL_MS = 12_000   // how often the player checks for config updates (live edit)
 const PUSH_POLL_MS = 4_000      // how often the player checks for a remote live-push
@@ -264,6 +265,8 @@ export default function PresentationPlayer() {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [paused, setPaused] = useState(false)
   const [remaining, setRemaining] = useState(0)
+  // Zählt jeden Folienwechsel — startet Videos neu, auch wenn es nur eine Folie gibt
+  const [durchlauf, setDurchlauf] = useState(0)
   const [overlayVisible, setOverlayVisible] = useState(true)
   const [loadingError, setLoadingError] = useState<string>('')
 
@@ -469,9 +472,14 @@ export default function PresentationPlayer() {
     }
   }, [activeSlides, currentIdx])
 
+  // Läuft gerade ein Video „bis zum Ende"? Dann wechselt das Video selbst die Folie
+  // (onEnde), nicht der Zeitgeber — die Restzeit kommt aus dem Video.
+  const aktuelleFolie = activeSlides.length ? activeSlides[currentIdx % activeSlides.length] : undefined
+  const endeVideo = !!aktuelleFolie && detectSlideMediaType(activeSlideUrl(aktuelleFolie, new Date())) === 'video' && videoBisEnde(aktuelleFolie)
+
   // Tick down + advance
   useEffect(() => {
-    if (paused || activeSlides.length === 0) return
+    if (paused || activeSlides.length === 0 || endeVideo) return
     const t = setInterval(() => {
       setRemaining(prev => {
         if (prev <= 1) {
@@ -482,14 +490,14 @@ export default function PresentationPlayer() {
       })
     }, 1000)
     return () => clearInterval(t)
-  }, [paused, activeSlides.length, currentIdx])
+  }, [paused, activeSlides.length, currentIdx, endeVideo])
 
   // When current slide changes: reset countdown to that slide's duration
   useEffect(() => {
     if (activeSlides.length === 0) return
     const cur = activeSlides[currentIdx % activeSlides.length]
     setRemaining(cur.durationSec)
-  }, [currentIdx, activeSlides])
+  }, [currentIdx, activeSlides, durchlauf])
 
   // Per-slide refresh (image src cache-bust or webview reload)
   const imageRefs = useRef<Map<string, HTMLImageElement>>(new Map())
@@ -590,6 +598,7 @@ export default function PresentationPlayer() {
   // (necessary for cube/flip/circle/cinematic — fade alone wouldn't need it).
   const [previousIdx, setPreviousIdx] = useState<number | null>(null)
   function advance(delta: number) {
+    setDurchlauf(d => d + 1)
     setCurrentIdx(i => {
       if (activeSlides.length === 0) return 0
       const next = (i + delta + activeSlides.length) % activeSlides.length
@@ -714,6 +723,24 @@ export default function PresentationPlayer() {
             )
           }
 
+          if (type === 'video') {
+            return (
+              <VideoFolie
+                key={slide.id}
+                src={src}
+                titel={slide.title}
+                aktiv={isCurrent}
+                durchlauf={durchlauf}
+                pausiert={paused || !!livePush}
+                ton={slide.videoTon === true}
+                bisEnde={videoBisEnde(slide)}
+                zoom={slide.zoom}
+                style={baseStyle}
+                onEnde={() => { if (isCurrent) advance(1) }}
+                onRest={sek => { if (isCurrent) setRemaining(sek) }}
+              />
+            )
+          }
           if (type === 'image') {
             return (
               <div key={slide.id} style={baseStyle}>
@@ -800,6 +827,18 @@ export default function PresentationPlayer() {
                 }}
               />
             ) : null
+          ) : pushType === 'video' ? (
+            // Live-Anzeige: stumm in Schleife, bis die Anzeige-Dauer um ist
+            <video
+              key={`push_${livePush.id}`}
+              src={pushSrc}
+              autoPlay muted loop playsInline
+              style={{
+                position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#000',
+                transform: livePush.zoom !== 1 ? `scale(${livePush.zoom})` : undefined,
+                transformOrigin: 'center center',
+              }}
+            />
           ) : pushType === 'image' ? (
             <img
               src={pushSrc}

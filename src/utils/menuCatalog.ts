@@ -17,17 +17,22 @@ export interface MenuCatalogItem {
   adminOnly?: boolean         // benoetigt Admin- oder Master-Rolle
   masterAdminOnly?: boolean   // benoetigt Master-Rolle
   alwaysVisible?: boolean     // kann global NICHT ausgeblendet werden (Start/Einstellungen)
+  /** Unterpunkt: steht NICHT in der Sidebar, sondern als Kachel im Obermenüpunkt
+   *  (bleibt aber in den Einstellungen einzeln ein-/ausblendbar). */
+  elternteil?: Screen
 }
 
 export const MENU_CATALOG: MenuCatalogItem[] = [
-  { id: 'home', label: 'Startbildschirm', category: 'Start', topLevel: true, alwaysVisible: true },
+  { id: 'home', label: 'Gib dein Problem ein', category: 'Start', topLevel: true, alwaysVisible: true },
 
   // Standort
   { id: 'location-overview',      label: 'Standort-Übersicht',     category: 'Standort' },
   { id: 'access-points',          label: 'Access Points',          category: 'Standort' },
-  { id: 'ot-devices',             label: 'OT-Geräte',              category: 'Standort' },
-  { id: 'pruffeld-zoll',          label: 'Halle & Zoll',           category: 'Standort' },
-  { id: 'verwaltungsgebaeude',    label: 'Verwaltungsgebäude',     category: 'Standort' },
+  { id: 'client-geraete',         label: 'Client Geräte',          category: 'Standort' },
+  { id: 'ot-devices',             label: 'OT-Geräte',              category: 'Standort', elternteil: 'client-geraete' },
+  { id: 'pruffeld-zoll',          label: 'Halle & Zoll',           category: 'Standort', elternteil: 'client-geraete' },
+  { id: 'verwaltungsgebaeude',    label: 'Verwaltungsgebäude',     category: 'Standort', elternteil: 'client-geraete' },
+  { id: 'drucker-uebersicht',     label: 'Drucker Übersicht',      category: 'Standort' },
   { id: 'departments-overview',   label: 'Abteilungs-Übersicht',   category: 'Standort' },
   { id: 'organization-structure', label: 'Organisationsstruktur',  category: 'Standort' },
 
@@ -53,6 +58,7 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'ticket-assignment',      label: 'Zuweisung Tickets',       category: 'IT Support', adminOnly: true },
 
   // Infrastruktur
+  { id: 'massenabfragen',     label: 'Massenabfragen',         category: 'Infrastruktur' },   // früherer Startbildschirm (Einzelabfrage, Datei-Import, Liste, Benutzer-Suche)
   { id: 'endpoint-devices',   label: 'Endgeräte-Übersicht',    category: 'Infrastruktur' },
   { id: 'gpu-driver-mgmt',    label: 'Grafik-/Treiber-Verwaltung', category: 'Infrastruktur', adminOnly: true },
   { id: 'infra-marine',       label: 'Infrastruktur Marine',   category: 'Infrastruktur' },
@@ -92,3 +98,8 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'user-logs',       label: 'Benutzer-Logs',      category: 'Einstellungen', masterAdminOnly: true },
   { id: 'bug-mailbox',     label: 'Bug-Meldungen',      category: 'Einstellungen', masterAdminOnly: true },
 ]
+
+/** Unterpunkte eines Obermenüpunkts (z. B. „Client Geräte“ → OT-Geräte, Halle & Zoll, Verwaltungsgebäude). */
+export function kinderVon(id: string): MenuCatalogItem[] { return MENU_CATALOG.filter(m => m.elternteil === id) }
+/** Obermenüpunkt eines Unterpunkts (oder undefined). */
+export function elternVon(id: string): Screen | undefined { return MENU_CATALOG.find(m => m.id === id)?.elternteil }

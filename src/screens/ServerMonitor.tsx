@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Server, RefreshCw, Loader, Plus, Trash2, ServerOff, ServerCog, Mail, Check, X, Download,
   History, Clock, Send, Pin, FileText, HardDrive, MemoryStick, ListChecks, ShieldAlert, ShieldCheck,
+  FileSpreadsheet, Search, ChevronDown, ChevronRight, AlertTriangle,
 } from 'lucide-react'
 import ServerZustandPanel from '../components/server/ServerZustandPanel'
 import { runZertifikatsScan } from '../services/serverZertifikate'
@@ -23,6 +24,14 @@ import {
   type ServerHistoryEntry,
 } from '../services/serverHistory'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
+import ServerListeDialog from '../components/server/ServerListeDialog'
+import { ServerKachelInfo } from '../components/server/ServerSteckbrief'
+import {
+  ladeServerListe, findeServer, gleicheAb, serverTitel, standText,
+  type ServerListe, type ServerEintrag,
+} from '../services/serverListe'
+import { api } from '../electronAPI'
+import type { InventoryItem } from '../types/auth'
 
 // ── Historie-Dialog je Server (frei beschreibbar, automatischer Zeitstempel) ──
 function fmtStamp(iso: string, dateOnly?: boolean): string {
@@ -348,6 +357,81 @@ function MeldungenFuerAlle({ tiles, onUebernehmen, onSchliessen }: {
   )
 }
 
+// Mail-Meldungen einer Kachel: eingeklappt nur eine Zeile (was an, an wen) — aufgeklappt die Häkchen.
+function MailZeile({ tile, patchTile }: { tile: ServerTile; patchTile: (id: string, patch: Partial<ServerTile>) => void }) {
+  const [offen, setOffen] = useState(false)
+  const offline = !!tile.notifyEnabled
+  const neustart = tile.notifyReboot ?? offline
+  const probleme = tile.notifyPruefung ?? neustart
+  const zert = tile.notifyZertifikat ?? probleme
+  const an = [offline && 'Offline', neustart && 'Neustart', probleme && 'Probleme', zert && 'Zertifikat'].filter(Boolean) as string[]
+  const adresse = meldeAn(tile.notifyEmail)
+  return (
+    <div className="mt-1.5" data-mailzeile>
+      <button type="button" onClick={() => setOffen(o => !o)} className="w-full flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground text-left">
+        {offen ? <ChevronDown size={11} className="shrink-0" /> : <ChevronRight size={11} className="shrink-0" />}
+        <Mail size={11} className="shrink-0" />
+        {an.length === 0 ? <span>Mail-Meldungen aus</span>
+          : <span className="truncate">{an.join(' · ')} → {adresse ? <span className="text-foreground">{adresse}</span> : <span className="text-amber-500 font-semibold">keine Adresse!</span>}</span>}
+      </button>
+      {offen && (<>
+        <div className="mt-1.5 flex items-center gap-3 flex-wrap text-[11px] text-muted-foreground pl-4">
+          <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn der Server 3× nicht auf Ping antwortet (und wenn er wieder erreichbar ist)">
+            <input type="checkbox" className="rounded accent-primary" checked={offline} onChange={e => patchTile(tile.id, { notifyEnabled: e.target.checked })} />
+            bei Offline
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn der Server heruntergefahren/neu gestartet wurde — geplant (mit Benutzer und Grund) oder unerwartet">
+            <input type="checkbox" className="rounded accent-primary" checked={neustart} onChange={e => patchTile(tile.id, { notifyReboot: e.target.checked })} />
+            bei Neustart / Herunterfahren
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn bei der Dienst-/Einstellungs-Prüfung ein kritischer Punkt ausfällt">
+            <input type="checkbox" className="rounded accent-primary" checked={probleme} onChange={e => patchTile(tile.id, { notifyPruefung: e.target.checked })} />
+            bei Problemen
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn ein verwendetes Zertifikat in 30 bzw. 5 Tagen abläuft oder abgelaufen ist">
+            <input type="checkbox" className="rounded accent-primary" checked={zert} onChange={e => patchTile(tile.id, { notifyZertifikat: e.target.checked })} />
+            bei Zertifikat-Ablauf
+          </label>
+        </div>
+        {an.length > 0 && <div className="pl-4"><AdressListe wert={tile.notifyEmail} onSpeichern={v => patchTile(tile.id, { notifyEmail: v })} /></div>}
+      </>)}
+    </div>
+  )
+}
+
+type PlattformFilter = 'alle' | 'HCI' | 'Azure' | 'ohne'
+type UmgebungFilter = 'alle' | 'Produktiv' | 'Test' | 'Entwicklung'
+function passtPlattform(e: ServerEintrag | undefined, f: PlattformFilter): boolean {
+  if (f === 'alle') return true
+  if (f === 'ohne') return !e
+  if (!e) return false
+  return f === 'Azure' ? /^azure/i.test(e.plattform) : e.plattform.toUpperCase() === f
+}
+function passtUmgebung(e: ServerEintrag | undefined, f: UmgebungFilter): boolean {
+  if (f === 'alle') return true
+  if (!e) return false
+  const u = e.umgebungen.map(x => x.toLowerCase())
+  if (f === 'Produktiv') return u.some(x => x === 'produktiv' || x.includes('prod & non'))
+  if (f === 'Test') return u.some(x => x === 'test' || x.includes('prod & non'))
+  return u.some(x => x.startsWith('entwick'))
+}
+function passtSuche(t: ServerTile, e: ServerEintrag | undefined, q: string): boolean {
+  if (!q) return true
+  const teile = [t.hostname, t.ip, t.description, t.note]
+  if (e) for (const a of e.anwendungen) teile.push(a.titel, a.alias, a.kommentar, ...a.zustaendig, ...a.typ, ...a.umgebung)
+  if (e) teile.push(e.plattform)
+  const heu = teile.filter(Boolean).join(' ').toLowerCase()
+  return q.toLowerCase().split(/\s+/).filter(Boolean).every(w => heu.includes(w))
+}
+function FilterChip({ aktiv, onClick, children, anzahl }: { aktiv: boolean; onClick: () => void; children: React.ReactNode; anzahl?: number }) {
+  return (
+    <button type="button" onClick={onClick}
+      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[11px] ${aktiv ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent'}`}>
+      {children}{anzahl !== undefined && <span className={aktiv ? 'opacity-80' : 'text-muted-foreground/70'}>{anzahl}</span>}
+    </button>
+  )
+}
+
 export default function ServerMonitor() {
   const session = useAuthStore(s => s.session)
   const by = session?.user.displayName || session?.user.username || 'manuell'
@@ -364,6 +448,14 @@ export default function ServerMonitor() {
   const [newIp, setNewIp] = useState('')
   const [dragId, setDragId] = useState<string | null>(null)
   const [historyTile, setHistoryTile] = useState<ServerTile | null>(null)
+  // Serverliste (SKFM): Steckbrief je Kachel, Suche/Filter, Abgleich mit der Standort-Übersicht
+  const [serverListe, setServerListe] = useState<{ liste: ServerListe | null; herkunft: 'zentral' | 'eingebaut' | 'keine' } | null>(null)
+  const [inventar, setInventar] = useState<InventoryItem[] | null>(null)
+  const [showListe, setShowListe] = useState(false)
+  const [suche, setSuche] = useState('')
+  const [fPlattform, setFPlattform] = useState<PlattformFilter>('alle')
+  const [fUmgebung, setFUmgebung] = useState<UmgebungFilter>('alle')
+  const [nurAuffaellig, setNurAuffaellig] = useState(false)
   const [zustandTile, setZustandTile] = useState<ServerTile | null>(null)
   const [zustandReiter, setZustandReiter] = useState<'status' | 'zertifikate' | undefined>(undefined)
   const oeffne = (t: ServerTile, reiter?: 'status' | 'zertifikate') => { setZustandReiter(reiter); setZustandTile(t) }
@@ -400,6 +492,23 @@ export default function ServerMonitor() {
     const t = setInterval(() => { void refreshStatus() }, 30_000)
     return () => { cancelled = true; clearInterval(t) }
   }, [refreshStatus])
+
+  const ladeListeUndInventar = useCallback(async () => {
+    const [l, inv] = await Promise.all([
+      ladeServerListe(true).catch(() => ({ liste: null, herkunft: 'keine' as const })),
+      api().netReadJsonAsync<InventoryItem[]>('inventory/inventory.json').catch(() => null),
+    ])
+    setServerListe({ liste: l.liste, herkunft: l.herkunft })
+    setInventar(Array.isArray(inv) ? inv : null)
+  }, [])
+  useEffect(() => { void ladeListeUndInventar() }, [ladeListeUndInventar])
+
+  // Nach dem Abgleich-Dialog: Kacheln + Liste neu laden
+  async function nachListe() {
+    const cfg = await loadServerConfig()
+    if (cfg.tiles.length) setTiles(cfg.tiles.slice().sort((a, b) => a.position - b.position))
+    await ladeListeUndInventar()
+  }
 
   async function persist(next: ServerTile[]) {
     setTiles(next)
@@ -501,6 +610,22 @@ export default function ServerMonitor() {
     setDragId(null)
   }
 
+  const liste = serverListe?.liste ?? null
+  const eintragVon = (t: ServerTile) => findeServer(liste, t.hostname)
+  const auffaellig = (t: ServerTile) => {
+    const st = status.servers[hostKey(t.hostname)]
+    return st?.online === false || (st?.pruefung?.probleme ?? 0) > 0 || (st?.zertifikate?.kritisch ?? 0) > 0 || (st?.zertifikate?.warnung ?? 0) > 0
+  }
+  const gefiltert = !!suche.trim() || fPlattform !== 'alle' || fUmgebung !== 'alle' || nurAuffaellig
+  const sichtbar = tiles.filter(t => {
+    const e = eintragVon(t)
+    return passtSuche(t, e, suche.trim()) && passtPlattform(e, fPlattform) && passtUmgebung(e, fUmgebung) && (!nurAuffaellig || auffaellig(t))
+  })
+  const zahl = (f: (t: ServerTile) => boolean) => tiles.filter(f).length
+  const abgleich = liste && inventar ? gleicheAb(liste, inventar, tiles) : null
+  const fehltInv = abgleich ? abgleich.zeilen.filter(z => z.fehltImInventar && !z.andereKategorie).length : 0
+  const fehltKachel = abgleich ? abgleich.zeilen.filter(z => z.fehltAlsKachel).length : 0
+
   const onlineCount = tiles.filter(t => status.servers[hostKey(t.hostname)]?.online === true).length
   const offlineCount = tiles.filter(t => status.servers[hostKey(t.hostname)]?.online === false).length
 
@@ -517,32 +642,36 @@ export default function ServerMonitor() {
         <span className="text-xs text-muted-foreground">{onlineCount} online · {offlineCount > 0 ? <span className="text-red-400 font-medium">{offlineCount} offline</span> : '0 offline'}</span>
         <div className="ml-auto flex items-center gap-2">
           <button onClick={checkNow} disabled={checking}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-blue-500/40 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 disabled:opacity-40">
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-blue-500/40 bg-blue-500/10 text-blue-500 font-medium hover:bg-blue-500/20 disabled:opacity-40">
             {checking ? <Loader size={12} className="animate-spin" /> : <RefreshCw size={12} />}Jetzt prüfen
           </button>
           <button onClick={measureNow} disabled={measuring} title="Arbeitsspeicher- & Festplatten-Auslastung jetzt messen (läuft sonst automatisch täglich 11:00)"
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 disabled:opacity-40">
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-violet-500/40 bg-violet-500/10 text-violet-500 font-medium hover:bg-violet-500/20 disabled:opacity-40">
             {measuring ? <Loader size={12} className="animate-spin" /> : <MemoryStick size={12} />}Auslastung messen
           </button>
           <button onClick={() => setShowMeldungen(v => !v)} title="Mail-Meldungen (Offline, Neustart/Herunterfahren, Probleme) für alle Server auf einmal setzen — auch mehrere Empfänger"
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
             <Mail size={12} />Mail-Meldungen für alle
           </button>
+          <button onClick={() => setShowListe(true)} title="SKFM-Serverliste: Stand ansehen, neue Excel importieren, fehlende Server in Standort-Übersicht und Kacheln übernehmen" data-knopf="serverliste"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
+            <FileSpreadsheet size={12} />Serverliste
+          </button>
           <button onClick={addFromInventory}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
             <Download size={12} />Aus Standort-Übersicht laden
           </button>
           <button onClick={() => setShowAdd(v => !v)}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20">
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 font-medium hover:bg-emerald-500/20">
             <Plus size={12} />Kachel hinzufügen
           </button>
         </div>
       </div>
 
       {msg && (
-        <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-300 flex items-center gap-2">
+        <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-blue-500/10 border border-blue-500/30 text-foreground flex items-center gap-2">
           <span className="flex-1">{msg}</span>
-          <button onClick={() => setMsg('')} className="text-blue-300/70 hover:text-blue-200 text-sm leading-none">×</button>
+          <button onClick={() => setMsg('')} className="text-muted-foreground hover:text-foreground text-sm leading-none">×</button>
         </div>
       )}
 
@@ -562,6 +691,45 @@ export default function ServerMonitor() {
         </div>
       )}
 
+      {/* Hinweis: Server aus der Serverliste fehlen */}
+      {liste && (fehltInv > 0 || fehltKachel > 0) && (
+        <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md border border-primary/30 bg-primary/5 text-foreground flex items-center gap-2 flex-wrap" data-abgleich-hinweis>
+          <FileSpreadsheet size={13} className="text-primary shrink-0" />
+          <span className="flex-1 min-w-[16rem]">
+            Serverliste vom {standText(liste.stand)}: {fehltInv > 0 && <b>{fehltInv} Server fehlen in der Standort-Übersicht</b>}{fehltInv > 0 && fehltKachel > 0 && ' · '}{fehltKachel > 0 && <b>{fehltKachel} als Kachel</b>}.
+          </span>
+          <button onClick={() => setShowListe(true)} className="px-2.5 py-1 rounded-md bg-primary text-primary-foreground font-semibold hover:bg-primary/90">Abgleichen …</button>
+        </div>
+      )}
+
+      {/* Suche + Filter */}
+      {tiles.length > 0 && (
+        <div className="shrink-0 mx-4 mt-2 flex items-center gap-2 flex-wrap" data-filterleiste>
+          <div className="relative w-80 max-w-full">
+            <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input value={suche} onChange={e => setSuche(e.target.value)} placeholder="Suchen: Server, Anwendung, Alias, Person …" data-feld="suche"
+              className="w-full pl-7 pr-6 py-1.5 text-xs rounded-md border border-border bg-background text-foreground focus:outline-none focus:border-primary" />
+            {suche && <button onClick={() => setSuche('')} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"><X size={12} /></button>}
+          </div>
+          {liste && (<>
+            <span className="text-[11px] text-muted-foreground ml-1">Plattform</span>
+            <FilterChip aktiv={fPlattform === 'alle'} onClick={() => setFPlattform('alle')}>alle</FilterChip>
+            <FilterChip aktiv={fPlattform === 'HCI'} onClick={() => setFPlattform('HCI')} anzahl={zahl(t => passtPlattform(eintragVon(t), 'HCI'))}>HCI</FilterChip>
+            <FilterChip aktiv={fPlattform === 'Azure'} onClick={() => setFPlattform('Azure')} anzahl={zahl(t => passtPlattform(eintragVon(t), 'Azure'))}>Azure</FilterChip>
+            <FilterChip aktiv={fPlattform === 'ohne'} onClick={() => setFPlattform('ohne')} anzahl={zahl(t => !eintragVon(t))}>nicht in der Liste</FilterChip>
+            <span className="text-[11px] text-muted-foreground ml-2">Umgebung</span>
+            <FilterChip aktiv={fUmgebung === 'alle'} onClick={() => setFUmgebung('alle')}>alle</FilterChip>
+            <FilterChip aktiv={fUmgebung === 'Produktiv'} onClick={() => setFUmgebung('Produktiv')} anzahl={zahl(t => passtUmgebung(eintragVon(t), 'Produktiv'))}>Produktiv</FilterChip>
+            <FilterChip aktiv={fUmgebung === 'Test'} onClick={() => setFUmgebung('Test')} anzahl={zahl(t => passtUmgebung(eintragVon(t), 'Test'))}>Test</FilterChip>
+            <FilterChip aktiv={fUmgebung === 'Entwicklung'} onClick={() => setFUmgebung('Entwicklung')} anzahl={zahl(t => passtUmgebung(eintragVon(t), 'Entwicklung'))}>Entwicklung</FilterChip>
+          </>)}
+          <FilterChip aktiv={nurAuffaellig} onClick={() => setNurAuffaellig(v => !v)} anzahl={zahl(auffaellig)}><AlertTriangle size={10} />nur Auffällige</FilterChip>
+          {gefiltert && (
+            <span className="text-[11px] text-muted-foreground ml-auto">{sichtbar.length} von {tiles.length} · <button onClick={() => { setSuche(''); setFPlattform('alle'); setFUmgebung('alle'); setNurAuffaellig(false) }} className="underline hover:text-foreground">Filter zurücksetzen</button> · Sortieren per Ziehen nur ohne Filter</span>
+          )}
+        </div>
+      )}
+
       {/* Kacheln */}
       <div className="flex-1 overflow-y-auto p-4">
         {tiles.length === 0 ? (
@@ -571,36 +739,53 @@ export default function ServerMonitor() {
             <p className="text-xs opacity-60 mt-1">„Aus Standort-Übersicht laden" oder „Kachel hinzufügen".</p>
           </div>
         ) : (
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
-            {tiles.map(tile => {
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(370px,1fr))] gap-3 items-start">
+            {sichtbar.length === 0 && <p className="col-span-full text-center py-10 text-sm text-muted-foreground">Kein Server passt zu Suche/Filter.</p>}
+            {sichtbar.map(tile => {
               const st = status.servers[hostKey(tile.hostname)]
               const state: 'online' | 'offline' | 'unknown' = st?.online === true ? 'online' : st?.online === false ? 'offline' : 'unknown'
               const border = state === 'offline' ? 'border-red-500/60' : state === 'online' ? 'border-emerald-500/40' : 'border-border'
+              const eintrag = eintragVon(tile)
+              const titel = (eintrag && serverTitel(eintrag, 2)) || tile.description || ''
               return (
-                <div key={tile.id} draggable
+                <div key={tile.id} draggable={!gefiltert} data-kachel={tile.hostname}
                   onDragStart={e => onDragStart(e, tile.id)} onDragOver={onDragOver} onDrop={e => onDrop(e, tile.id)}
-                  className={`rounded-xl border ${border} bg-card p-3 cursor-grab active:cursor-grabbing ${state === 'offline' ? 'animate-pulse bg-red-500/5' : ''}`}>
-                  <div className="flex items-center gap-2">
-                    <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${state === 'online' ? 'bg-emerald-400' : state === 'offline' ? 'bg-red-500' : 'bg-muted-foreground/40'}`} />
-                    <span className="text-sm font-semibold text-foreground truncate flex-1" title={`${tile.hostname}${tile.description ? ' · ' + tile.description : ''}`}>
-                      <span className="inline-flex items-center gap-1"><span className="font-mono">{tile.hostname}</span>{tile.hostname && <DeviceInfoButton hostname={tile.hostname} />}</span>
-                      {tile.description && <span className="text-muted-foreground font-normal"> · {tile.description}</span>}
-                    </span>
-                    {state === 'offline' ? <ServerOff size={14} className="text-red-400 shrink-0" /> : <ServerCog size={14} className="text-muted-foreground shrink-0" />}
-                    <button onClick={() => oeffne(tile)} title="Dienste & Prüfungen" className="shrink-0 p-0.5 rounded text-muted-foreground/60 hover:text-primary hover:bg-primary/10"><ListChecks size={13} /></button>
-                    <button onClick={() => setHistoryTile(tile)} title="Historie öffnen" className="shrink-0 p-0.5 rounded text-muted-foreground/60 hover:text-primary hover:bg-primary/10"><History size={13} /></button>
-                    <button onClick={() => removeTile(tile.id)} title="Kachel entfernen" className="shrink-0 p-0.5 rounded text-muted-foreground/60 hover:text-red-400 hover:bg-red-500/10"><Trash2 size={12} /></button>
+                  className={`rounded-xl border ${border} bg-card p-3.5 ${gefiltert ? '' : 'cursor-grab active:cursor-grabbing'} ${state === 'offline' ? 'animate-pulse bg-red-500/5' : ''}`}>
+                  {/* Kopf: Status, Name, Anwendung, Aktionen */}
+                  <div className="flex items-start gap-2">
+                    <span className={`mt-1.5 w-2.5 h-2.5 rounded-full shrink-0 ${state === 'online' ? 'bg-emerald-500' : state === 'offline' ? 'bg-red-500' : 'bg-muted-foreground/40'}`} />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-mono text-sm font-bold text-foreground">{tile.hostname}</span>
+                        {tile.hostname && <DeviceInfoButton hostname={tile.hostname} />}
+                        <span className={`text-[11px] ${state === 'offline' ? 'text-red-500 font-semibold' : state === 'online' ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+                          {state === 'online' ? 'online' : state === 'offline' ? `offline${st?.consecutiveFailures ? ` (${st.consecutiveFailures}×)` : ''}` : 'noch nicht geprüft'}
+                        </span>
+                        {tile.ip && <span className="font-mono text-[10px] text-muted-foreground">{tile.ip}</span>}
+                      </div>
+                      {titel && <div className="mt-0.5 text-[13px] font-semibold text-foreground leading-snug" title={titel} data-kachel-titel>{titel}</div>}
+                      {eintrag && tile.description && tile.description !== titel && <div className="text-[10px] text-muted-foreground truncate" title={`Standort-Übersicht: ${tile.description}`}>{tile.description}</div>}
+                    </div>
+                    <div className="flex items-center gap-0.5 shrink-0">
+                      {state === 'offline' ? <ServerOff size={14} className="text-red-500 mr-0.5" /> : <ServerCog size={14} className="text-muted-foreground mr-0.5" />}
+                      <button onClick={() => oeffne(tile)} title="Dienste & Prüfungen" className="p-0.5 rounded text-muted-foreground/70 hover:text-primary hover:bg-primary/10"><ListChecks size={13} /></button>
+                      <button onClick={() => setHistoryTile(tile)} title="Historie öffnen" className="p-0.5 rounded text-muted-foreground/70 hover:text-primary hover:bg-primary/10"><History size={13} /></button>
+                      <button onClick={() => removeTile(tile.id)} title="Kachel entfernen" className="p-0.5 rounded text-muted-foreground/70 hover:text-red-500 hover:bg-red-500/10"><Trash2 size={12} /></button>
+                    </div>
                   </div>
-                  <div className="mt-1 text-[11px] text-muted-foreground flex items-center gap-2 flex-wrap">
-                    {tile.ip && <span className="font-mono">{tile.ip}</span>}
-                    <span className={state === 'offline' ? 'text-red-400 font-medium' : state === 'online' ? 'text-emerald-400' : ''}>
-                      {state === 'online' ? 'online' : state === 'offline' ? `offline${st?.consecutiveFailures ? ` (${st.consecutiveFailures}×)` : ''}` : 'noch nicht geprüft'}
-                    </span>
-                  </div>
+
+                  {/* Steckbrief aus der Serverliste */}
+                  {eintrag ? <ServerKachelInfo e={eintrag} />
+                    : liste ? <div className="mt-2 text-[10px] text-muted-foreground italic">Nicht in der Serverliste vom {standText(liste.stand)}.</div> : null}
+
+                  {/* Betrieb */}
+                  <div className="mt-2.5 pt-2 border-t border-border/60">
                   <RebootZeile st={st} />
+                  <div className="flex items-center gap-x-2 flex-wrap">
                   <PruefChip st={st} onClick={() => oeffne(tile)} />
                   <ZertChip st={st} onClick={() => oeffne(tile, 'zertifikate')} pruefend={zertPruefend.has(hostKey(tile.hostname))}
                     onPruefen={() => void zertJetzt(tile)} />
+                  </div>
                   {st?.metrics ? (
                     <div className="mt-2 space-y-1.5">
                       <MetricBar icon={<MemoryStick size={11} />} label="RAM" pct={st.metrics.ramUsedPct}
@@ -614,35 +799,15 @@ export default function ServerMonitor() {
                   ) : (
                     <div className="mt-1.5 text-[10px] text-muted-foreground/60">Auslastung: noch nicht gemessen (täglich 11:00)</div>
                   )}
+                  </div>
+
+                  {/* Notiz + Mail-Meldungen */}
+                  <div className="mt-2.5 pt-2 border-t border-border/60">
                   <textarea defaultValue={tile.note || ''} placeholder="Info / Notiz zum Server…" rows={2}
                     onBlur={e => patchTile(tile.id, { note: e.target.value.trim() })}
-                    className="mt-2 w-full px-2 py-1 text-[11px] rounded-md border border-border bg-background text-foreground resize-none focus:outline-none focus:border-primary" />
-                  <div className="mt-2 flex items-center gap-3 flex-wrap text-[11px] text-muted-foreground">
-                    <Mail size={11} className="shrink-0" />
-                    <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn der Server 3× nicht auf Ping antwortet (und wenn er wieder erreichbar ist)">
-                      <input type="checkbox" className="rounded accent-primary" checked={tile.notifyEnabled}
-                        onChange={e => patchTile(tile.id, { notifyEnabled: e.target.checked })} />
-                      bei Offline
-                    </label>
-                    <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn der Server heruntergefahren/neu gestartet wurde — geplant (mit Benutzer und Grund) oder unerwartet">
-                      <input type="checkbox" className="rounded accent-primary" checked={tile.notifyReboot ?? tile.notifyEnabled}
-                        onChange={e => patchTile(tile.id, { notifyReboot: e.target.checked })} />
-                      bei Neustart / Herunterfahren
-                    </label>
-                    <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn bei der Dienst-/Einstellungs-Prüfung ein kritischer Punkt ausfällt">
-                      <input type="checkbox" className="rounded accent-primary" checked={tile.notifyPruefung ?? (tile.notifyReboot ?? tile.notifyEnabled)}
-                        onChange={e => patchTile(tile.id, { notifyPruefung: e.target.checked })} />
-                      bei Problemen
-                    </label>
-                    <label className="flex items-center gap-1.5 cursor-pointer" title="Mail, wenn ein verwendetes Zertifikat in 30 bzw. 5 Tagen abläuft oder abgelaufen ist">
-                      <input type="checkbox" className="rounded accent-primary" checked={tile.notifyZertifikat ?? (tile.notifyPruefung ?? (tile.notifyReboot ?? tile.notifyEnabled))}
-                        onChange={e => patchTile(tile.id, { notifyZertifikat: e.target.checked })} />
-                      bei Zertifikat-Ablauf
-                    </label>
+                    className="w-full px-2 py-1 text-[11px] rounded-md border border-border bg-background text-foreground resize-none focus:outline-none focus:border-primary" />
+                  <MailZeile tile={tile} patchTile={patchTile} />
                   </div>
-                  {(tile.notifyEnabled || (tile.notifyReboot ?? tile.notifyEnabled) || (tile.notifyPruefung ?? (tile.notifyReboot ?? tile.notifyEnabled)) || (tile.notifyZertifikat ?? (tile.notifyPruefung ?? (tile.notifyReboot ?? tile.notifyEnabled)))) && (
-                    <AdressListe wert={tile.notifyEmail} onSpeichern={v => patchTile(tile.id, { notifyEmail: v })} />
-                  )}
                 </div>
               )
             })}
@@ -651,6 +816,7 @@ export default function ServerMonitor() {
       </div>
 
       {historyTile && <HistoryDialog tile={historyTile} by={by} onClose={() => setHistoryTile(null)} />}
+      {showListe && <ServerListeDialog by={by} onClose={() => setShowListe(false)} onGeaendert={() => void nachListe()} />}
       {zustandTile && <ServerZustandPanel host={zustandTile.hostname} bezeichnung={zustandTile.description} by={by} startReiter={zustandReiter}
         onClose={() => setZustandTile(null)} onGeaendert={() => void refreshStatus()} />}
     </div>

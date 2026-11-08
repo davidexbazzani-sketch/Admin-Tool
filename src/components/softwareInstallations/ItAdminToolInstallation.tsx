@@ -227,9 +227,10 @@ function StandZeile({ e, setupErstellt }: { e?: StandEintrag; setupErstellt?: st
       {e.laeuft && <Loader2 size={10} className="inline animate-spin mr-1" />}
       {v === 'fehlt'
         ? <span className="text-foreground">IT Admin Tool noch nicht installiert</span>
-        : <>installiert am <span className="text-foreground">{zeitText(s.installiertAm) || '?'}</span>
+        : <>installierter Stand vom <span className="text-foreground">{zeitText(s.standVom) || '?'}</span>
           {v === 'aelter' && <span className="ml-1 text-amber-500 font-semibold">· älter als dieses Setup</span>}
-          {v === 'vermutlich-aktuell' && <span className="ml-1 text-emerald-500">· nach dem Setup installiert — vermutlich schon dieser Stand</span>}</>}
+          {v === 'gleich' && <span className="ml-1 text-emerald-500">· schon der Stand dieses Setups</span>}
+          {v === 'neuer' && <span className="ml-1 text-amber-500 font-semibold">· neuer als dieses Setup!</span>}</>}
       {' · '}{s.prozesse ? <span className="text-amber-500 font-semibold">läuft gerade{s.nutzer.length ? ` (${s.nutzer.join(', ')})` : ''}</span> : 'läuft nicht'}
       {' · '}angemeldet: <span className="text-foreground">{s.angemeldet || 'niemand'}</span>
     </p>
@@ -321,7 +322,7 @@ function AblaufKarte({ setup }: { setup: ToolSetup | null }) {
           </select>
         </li>
         <li>IT Admin Tool beenden (alle Benutzer) und die neue Version still installieren — kein Fenster beim Anwender</li>
-        <li>Prüfen, ob die Programmdateien wirklich neu sind, dann Desktop-Nachricht „Installation ist durch"</li>
+        <li>Prüfen, ob danach wirklich der neue Stand drauf ist (Programmdateien vorher/nachher), dann Desktop-Nachricht „Installation ist durch"</li>
       </ol>
 
       <div className="rounded-md border border-border bg-background p-2.5 space-y-1.5">

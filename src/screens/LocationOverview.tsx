@@ -26,6 +26,7 @@ import ExcelColumnDialog from '../components/ExcelColumnDialog'
 import { parseExcelSheet, extractFromExcel, type ExcelSheetData } from '../utils/fileImport'
 import { batchAdLookup } from '../services/adUserLookup'
 import ComputerSyncHinweis from '../components/location/ComputerSyncHinweis'
+import ServerListeDialog from '../components/server/ServerListeDialog'
 
 const log = createLogger('location-overview')
 
@@ -64,6 +65,7 @@ export default function LocationOverview() {
   const isMaster   = useIsMasterAdmin()
   const isAdmin    = useIsAdmin()
   const session    = useAuthStore(s => s.session)
+  const [showServerListe, setShowServerListe] = useState(false)
   const setScreen  = useAppStore(s => s.setScreen)
   const setDevices = useAppStore(s => s.setDevices)
   const seededRef  = useRef(false)
@@ -809,6 +811,13 @@ export default function LocationOverview() {
                   className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-emerald-500/40 bg-emerald-500 text-black hover:bg-emerald-500/20 transition-colors">
                   <Plus size={12} /> Hinzufügen
                 </button>
+                {activeCategory === 'Server' && (
+                  <button onClick={() => setShowServerListe(true)} data-knopf="serverliste"
+                    title="Mit der SKFM-Serverliste abgleichen: fehlende Server hier eintragen (und auf Wunsch als Server-Kachel anlegen)"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                    <Server size={12} /> Serverliste abgleichen
+                  </button>
+                )}
                 <button onClick={handleImport} disabled={importing}
                   title={activeCategory === 'Drucker'
                     ? 'Drucker-Daten aus der ERP-Liste importieren (Ist verwaltet, Hersteller, Modell, Seriennummer, ERP-ID, IP, MAC). Zuordnung über IP, MAC, Seriennummer oder ERP-ID; unbekannte Drucker werden neu angelegt.'
@@ -1118,6 +1127,10 @@ export default function LocationOverview() {
           onConfirm={handleExcelConfirm}
           onCancel={() => setPendingExcelData(null)}
         />
+      )}
+
+      {showServerListe && (
+        <ServerListeDialog by={session?.user.displayName || session?.user.username || 'Standort-Übersicht'} onClose={() => setShowServerListe(false)} onGeaendert={() => void loadItems()} />
       )}
 
       {/* Drucker-Import: Spalten zuordnen (eigene Rollen statt Hostname/Seriennummer) */}

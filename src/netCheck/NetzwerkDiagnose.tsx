@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import {
-  Wifi, ArrowLeft, Search, Loader2, X, FileDown, Layers, Trash2, Clock, AlertTriangle, ShieldCheck,
+  Wifi, ArrowLeft, Search, Loader2, X, FileDown, Layers, Trash2, Clock, AlertTriangle, ShieldCheck, Activity,
   UserSearch, Plus, Laptop, ChevronRight,
 } from 'lucide-react'
 import { useNetScanStore, type NetScanEntry } from '../store/netScanStore'
@@ -13,6 +13,8 @@ import { ladeBenutzerPCs, type UserPc } from './userPcs'
 import UserPicker from '../components/UserPicker'
 import type { AdUserListItem } from '../services/adUsersList'
 import { useAuthStore } from '../store/authStore'
+import { useMonitorDialog } from '../store/monitorDialogStore'
+import { VORSCHLAG_WLAN } from '../monitoring/kontrollen'
 import type { NetLauf } from './types'
 import NetAnalyse from './NetAnalyse'
 import NetFleet from './NetFleetView'
@@ -96,6 +98,8 @@ export default function NetzwerkDiagnose({ onBack }: { onBack: () => void }) {
           <div className="text-[11px] text-muted-foreground">Einzeln/Vergleich beheben — oder die ganze Laptop-Flotte auf WLAN-Probleme analysieren.</div>
         </div>
         <div className="ml-auto flex items-center gap-2">
+          <button onClick={() => useMonitorDialog.getState().oeffne({ kontrollen: VORSCHLAG_WLAN })} title="Einen PC über Stunden/Tage beobachten — Meldung bei jedem WLAN-Aussetzer, am Ende die Ursachen-Analyse"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-primary/40 text-primary hover:bg-primary/10"><Activity size={13} />Überwachen</button>
           <div className="inline-flex rounded-md border border-border overflow-hidden text-xs">
             <button onClick={() => setView('single')} className={`px-3 py-1.5 ${view === 'single' ? 'bg-primary/15 text-primary font-semibold' : 'text-muted-foreground hover:text-foreground'}`}>Einzel &amp; Vergleich</button>
             <button onClick={() => setView('fleet')} className={`px-3 py-1.5 border-l border-border ${view === 'fleet' ? 'bg-primary/15 text-primary font-semibold' : 'text-muted-foreground hover:text-foreground'}`}>Flotten-Analyse</button>

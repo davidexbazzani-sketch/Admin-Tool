@@ -6,7 +6,7 @@ import {
   ladeGespraech, sende, markiereGelesen, ungelesenBeiPartner, sicher, MAX_ZEICHEN,
   type ChatIch, type ChatNachricht, type ChatNutzer,
 } from '../../services/chat'
-import { DRUCKER_BOT, istDruckerBot } from '../../services/tonerWarnung'
+import { CHAT_BOTS, botVon, istBot } from '../../services/chatBots'
 
 const initialen = (n: string) => n.split(/[\s,]+/).filter(Boolean).slice(0, 2).map(w => w[0]?.toUpperCase() || '').join('') || '?'
 
@@ -19,8 +19,9 @@ function seit(ms: number): string {
   return d === 1 ? 'gestern' : `vor ${d} Tagen`
 }
 
-function statusText(n: ChatNutzer | undefined, bot = false): { text: string; farbe: string } {
-  if (bot) return { text: 'automatische Toner-Meldungen', farbe: 'bg-sky-500' }
+function statusText(n: ChatNutzer | undefined, botName?: string): { text: string; farbe: string } {
+  const b = botVon(botName)
+  if (b) return { text: b.status, farbe: 'bg-sky-500' }
   if (!n) return { text: 'offline', farbe: 'bg-zinc-500' }
   if (n.online && n.inaktiv) return { text: `inaktiv seit ${seit(Date.now() - new Date(n.aktivAt).getTime()).replace('vor ', '')}`, farbe: 'bg-amber-400' }
   if (n.online) return { text: 'online', farbe: 'bg-emerald-400' }
@@ -52,7 +53,7 @@ export default function ChatPanel({ ich, nachSenden }: { ich: ChatIch; nachSende
   const online = andere.filter(n => n.online).length
   const summeUngelesen = anzahlUngelesen(ungelesen)
   const partnerNutzer = partner ? andere.find(n => sicher(n.username) === sicher(partner)) : undefined
-  const partnerName = !partner ? '' : istDruckerBot(partner) ? DRUCKER_BOT.displayName
+  const partnerName = !partner ? '' : botVon(partner) ? botVon(partner)!.displayName
     : (partnerNutzer?.displayName || namen[sicher(partner)] || partner)
 
   if (!offen) return null
@@ -84,11 +85,11 @@ function Kontakte({ andere, geladen, ungelesen, namen, onWaehle }: {
   const [suche, setSuche] = useState('')
   // Absender mit ungelesenen Nachrichten, die (noch) nicht in der Anwesenheitsliste stehen
   // (der Drucker-Absender hat eine feste Zeile ganz oben)
-  const zusaetzlich = Object.keys(ungelesen).filter(u => ungelesen[u].length && !istDruckerBot(u) && !andere.some(n => sicher(n.username) === u))
+  const zusaetzlich = Object.keys(ungelesen).filter(u => ungelesen[u].length && !istBot(u) && !andere.some(n => sicher(n.username) === u))
   const q = suche.trim().toLowerCase()
   const liste = andere.filter(n => !q || n.displayName.toLowerCase().includes(q) || n.username.toLowerCase().includes(q))
   const zeile = (u: string, name: string, n: ChatNutzer | undefined) => {
-    const st = statusText(n, istDruckerBot(u))
+    const st = statusText(n, u)
     const anz = ungelesen[sicher(u)]?.length || 0
     return (
       <button key={u} onClick={() => onWaehle(u)} className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-accent/30 text-left">
@@ -111,7 +112,7 @@ function Kontakte({ andere, geladen, ungelesen, namen, onWaehle }: {
         </div>
       </div>
       <div className="flex-1 overflow-y-auto">
-        {(!q || DRUCKER_BOT.displayName.toLowerCase().includes(q)) && zeile(DRUCKER_BOT.username, DRUCKER_BOT.displayName, undefined)}
+        {CHAT_BOTS.filter(b => !q || b.displayName.toLowerCase().includes(q)).map(b => zeile(b.username, b.displayName, undefined))}
         {zusaetzlich.map(u => zeile(u, namen[u] || u, undefined))}
         <p className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Gerade im Tool ({on.length})</p>
         {!geladen ? <p className="flex items-center gap-1.5 px-3 py-1 text-[11px] text-muted-foreground"><Loader2 size={11} className="animate-spin" />wird geladen …</p>
@@ -199,8 +200,9 @@ function Gespraech({ ich, partner, partnerName, partnerNutzer, onZurueck, nachSe
     }
   }
 
-  const bot = istDruckerBot(partner)
-  const st = statusText(partnerNutzer, bot)
+  const botInfo = botVon(partner)
+  const bot = !!botInfo
+  const st = statusText(partnerNutzer, partner)
   let letzterTag = ''
   return (
     <div className="flex-1 min-h-0 flex flex-col">
@@ -214,7 +216,7 @@ function Gespraech({ ich, partner, partnerName, partnerNutzer, onZurueck, nachSe
       </div>
       <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
         {laedt && <p className="flex items-center gap-1.5 text-[11px] text-muted-foreground"><Loader2 size={12} className="animate-spin" />Lade Verlauf …</p>}
-        {!laedt && !nachrichten.length && <p className="text-[11px] text-muted-foreground text-center py-6">{bot ? 'Noch keine Toner-Meldungen — hier erscheint es, sobald eine Patrone fast leer ist.' : `Noch keine Nachrichten. Schreib ${partnerName.split(/[\s,]+/)[0]} etwas!`}</p>}
+        {!laedt && !nachrichten.length && <p className="text-[11px] text-muted-foreground text-center py-6">{botInfo ? botInfo.leer : `Noch keine Nachrichten. Schreib ${partnerName.split(/[\s,]+/)[0]} etwas!`}</p>}
         {nachrichten.map(n => {
           const meins = sicher(n.from) === sicher(ich.username)
           const tag = tagLabel(n.at)
@@ -239,7 +241,7 @@ function Gespraech({ ich, partner, partnerName, partnerNutzer, onZurueck, nachSe
         })}
         <div ref={unten} />
       </div>
-      {bot && <p className="px-3 py-2 text-[11px] text-muted-foreground border-t border-border">Automatische Meldungen des Toner-Checks — Antworten ist hier nicht möglich.</p>}
+      {botInfo && <p className="px-3 py-2 text-[11px] text-muted-foreground border-t border-border">{botInfo.fuss}</p>}
       {!bot && !partnerNutzer?.online && <p className="px-3 py-1 text-[10px] text-muted-foreground border-t border-border">{partnerName} ist gerade nicht im Tool — die Nachricht kommt beim nächsten Öffnen an.</p>}
       {fehler && <p className="px-3 py-1 text-[10px] text-red-300">{fehler}</p>}
       {!bot && <div className="flex items-end gap-2 px-3 py-2 border-t border-border">

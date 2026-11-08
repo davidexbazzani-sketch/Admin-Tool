@@ -9,9 +9,12 @@
 import { createContext, useContext, useCallback, useEffect, useState } from 'react'
 import {
   Info, X, Loader2, Upload, Paperclip, Trash2, ExternalLink, FileText, Printer,
-  Plus, Zap, ListTree, Wrench, Users,
+  Plus, Zap, ListTree, Wrench, Users, MapPin,
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
+import { useAppStore } from '../../store/appStore'
+import { useMapIntentStore } from '../../store/mapIntentStore'
+import { druckerStandorte, standortVon, abonniereStandorte, DRUCKER_PLAENE, type DruckerMarker } from '../../services/druckerUebersicht'
 import { naechsteEbene, dossierZIndex } from '../../utils/dossierEbene'
 import {
   loadPrinterDossier, emptyPrinterDossier, printerKey, canonicalPrinter,
@@ -29,19 +32,75 @@ import { PrinterConnections } from './PrinterConnections'
 interface PrinterDossierCtx { open: (printerName: string) => void }
 const PrinterDossierContext = createContext<PrinterDossierCtx | null>(null)
 
-/** Kleiner Info-Button hinter einem Druckernamen. Rendert nichts ohne Name/Provider. */
-export function PrinterInfoButton({ printerName, className, size = 12 }: { printerName?: string | null; className?: string; size?: number }) {
+/** Kleiner Info-Button hinter einem Druckernamen — direkt dahinter der Standort-Knopf
+ *  (führt zur „Drucker Übersicht“ und lässt den Drucker aufleuchten). Rendert nichts ohne Name/Provider.
+ *  `ohneStandort`: z. B. in der Drucker Übersicht selbst. */
+export function PrinterInfoButton({ printerName, className, size = 12, ohneStandort }: { printerName?: string | null; className?: string; size?: number; ohneStandort?: boolean }) {
   const ctx = useContext(PrinterDossierContext)
   const n = (printerName || '').trim()
   if (!ctx || !n) return null
   return (
+    <>
+      <button
+        type="button"
+        onClick={e => { e.stopPropagation(); e.preventDefault(); ctx.open(n) }}
+        title={`Infos & Aktionen zu ${n}`}
+        className={className ?? 'inline-flex items-center justify-center shrink-0 p-0.5 rounded text-muted-foreground/70 hover:text-blue-400 hover:bg-blue-500/10'}
+      >
+        <Info size={size} />
+      </button>
+      {!ohneStandort && <DruckerStandortKnopf name={n} size={size} />}
+    </>
+  )
+}
+
+/** Standort des Druckers in der „Drucker Übersicht“ (undefined = lädt, null = nicht eingezeichnet). */
+export function useDruckerStandort(name: string): DruckerMarker | null | undefined {
+  const [m, setM] = useState<DruckerMarker | null | undefined>(undefined)
+  useEffect(() => {
+    let weg = false
+    const lade = () => { void druckerStandorte().then(l => { if (!weg) setM(standortVon(l, name) || null) }) }
+    lade()
+    const ab = abonniereStandorte(lade)
+    return () => { weg = true; ab() }
+  }, [name])
+  return m
+}
+
+/** Zur Karte springen: eingezeichnet → aufleuchten, sonst → direkt einzeichnen. */
+export function zeigeDruckerAufKarte(name: string, eingezeichnet: boolean) {
+  useMapIntentStore.getState().setIntent({ screen: 'drucker-uebersicht', hostname: name, mode: eingezeichnet ? 'focus' : 'place' })
+  useAppStore.getState().setScreen('drucker-uebersicht')
+}
+
+/** Beschrifteter Knopf im Kopf des Drucker-Dossiers. */
+function KarteKnopf({ name, onClose }: { name: string; onClose: () => void }) {
+  const m = useDruckerStandort(name)
+  const plan = m ? DRUCKER_PLAENE.find(p => p.id === m.plan)?.titel : ''
+  return (
+    <button onClick={() => { zeigeDruckerAufKarte(name, !!m); onClose() }} data-drucker-karte
+      title={m ? `Standort: ${plan}${m.arbeitsplatz ? ' · ' + m.arbeitsplatz : ''}` : 'Noch nicht in der Drucker Übersicht eingezeichnet'}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold border shrink-0 ${m ? 'border-emerald-500/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10' : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent/40'}`}>
+      <MapPin size={14} />{m === undefined ? 'Standort …' : m ? 'Auf der Karte zeigen' : 'Auf der Karte einzeichnen'}
+    </button>
+  )
+}
+
+function DruckerStandortKnopf({ name, size }: { name: string; size: number }) {
+  const ziel = useContext(PrinterDossierZielContext)
+  const m = useDruckerStandort(name)
+  const plan = m ? DRUCKER_PLAENE.find(p => p.id === m.plan)?.titel : ''
+  const titel = m === undefined ? `Standort von ${name} wird geladen …`
+    : m ? `Standort: ${plan}${m.arbeitsplatz ? ' · ' + m.arbeitsplatz : ''} — auf der Karte zeigen`
+      : `${name} ist noch nicht in der Drucker Übersicht eingezeichnet — klicken zum Einzeichnen`
+  return (
     <button
-      type="button"
-      onClick={e => { e.stopPropagation(); e.preventDefault(); ctx.open(n) }}
-      title={`Infos & Aktionen zu ${n}`}
-      className={className ?? 'inline-flex items-center justify-center shrink-0 p-0.5 rounded text-muted-foreground/70 hover:text-blue-400 hover:bg-blue-500/10'}
+      type="button" data-drucker-standort={m ? 'ja' : m === null ? 'nein' : 'laedt'}
+      onClick={e => { e.stopPropagation(); e.preventDefault(); zeigeDruckerAufKarte(name, !!m); ziel?.close() }}
+      title={titel}
+      className={`inline-flex items-center justify-center shrink-0 p-0.5 rounded ${m ? 'text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10' : 'text-muted-foreground/40 hover:text-primary hover:bg-primary/10'}`}
     >
-      <Info size={size} />
+      <MapPin size={size} />
     </button>
   )
 }
@@ -191,6 +250,7 @@ function PrinterDossierModal({ printerName, onClose }: { printerName: string; on
               {dossier?.master?.ip && <span className="font-mono"> · {dossier.master.ip}</span>}
             </p>
           </div>
+          <KarteKnopf name={display} onClose={onClose} />
           <button onClick={onClose} disabled={busy} className="p-1.5 rounded hover:bg-accent text-muted-foreground hover:text-foreground disabled:opacity-40"><X size={18} /></button>
         </div>
 

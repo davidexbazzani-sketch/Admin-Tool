@@ -1899,6 +1899,7 @@ ipcMain.handle('net:writeJsonAsync', (_e, relativePath: string, data: unknown) =
 ipcMain.handle('net:deleteFileAsync', (_e, relativePath: string) => ns.deleteFileAsync(relativePath))
 ipcMain.handle('net:getBasePath', () => ns.getBasePath())
 ipcMain.handle('net:setBasePath', (_e, path: string) => { ns.setBasePath(path); return true })
+ipcMain.handle('net:copyLocalFileAsync', (_e, localPath: string, relativePath: string) => ns.copyLocalFileAsync(localPath, relativePath))
 ipcMain.handle('net:writeRawFile', (_e, relativePath: string, base64Data: string) => {
   return ns.writeRawFile(relativePath, base64Data)
 })

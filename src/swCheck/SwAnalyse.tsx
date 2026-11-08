@@ -22,6 +22,8 @@ import {
   type ApplyResult, type FixBackup, type SmbBackupEntry, type FreigabeMessung,
 } from './applyFix'
 import { buildAenderungsPdf, savePdf, type AenderungsBericht, type AenderungsBerichtEintrag } from './pdf'
+import MonitorAngebot from '../monitoring/MonitorAngebot'
+import { VORSCHLAG_SOLIDWORKS } from '../monitoring/kontrollen'
 
 const GEWICHT_BADGE: Record<string, string> = {
   HOCH: 'bg-red-500/15 text-red-300 border-red-500/40',
@@ -267,6 +269,12 @@ export default function SwAnalyse({ lauf, onClose }: { lauf: SwLauf; onClose: ()
         </div>
 
         {msg && <div className={`mx-4 mt-3 px-3 py-2 rounded-md text-xs flex items-center gap-1.5 ${msg.ok ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30' : 'bg-red-500/10 text-red-300 border border-red-500/30'}`}>{msg.ok ? <CheckCircle2 size={13} /> : <XCircle size={13} />}{msg.text}</div>}
+        {report && report.ok > 0 && lauf.pc && (
+          <div className="mx-4 mt-2">
+            <MonitorAngebot host={lauf.pc} person={lauf.kennwerte?.benutzer} vorschlag={VORSCHLAG_SOLIDWORKS}
+              anlass={`Nach SolidWorks-Behebung am ${new Date(report.at).toLocaleDateString('de-DE')}`} />
+          </div>
+        )}
 
         {hatBackup && backup && (
           <div className="mx-4 mt-2 px-3 py-1.5 rounded-md text-[11px] text-muted-foreground bg-muted/30 border border-border">

@@ -46,16 +46,29 @@ export interface Slide {
   refreshIntervalSec: number // 0 = no refresh
   active: boolean
   rotation?: SlideRotation   // optional: zeitgesteuerte Wechsel-Inhalte
+  /** Nur Video-Folien: mit Ton abspielen (Standard: stumm — Flur-TV) */
+  videoTon?: boolean
+  /** Nur Video-Folien: Folie wechselt, wenn das Video zu Ende ist (Standard). false = Video
+   *  läuft in Schleife, bis die eingestellte Dauer um ist. */
+  videoBisEnde?: boolean
 }
 
-export type SlideMediaType = 'url' | 'image' | 'pdf' | 'unknown'
+export type SlideMediaType = 'url' | 'image' | 'pdf' | 'video' | 'unknown'
 
 const IMAGE_EXT_RE = /\.(jpe?g|png|gif|webp|svg|bmp|avif|ico)(\?|#|$)/i
 const PDF_EXT_RE = /\.pdf(\?|#|$)/i
+// Videos spielt der Player selbst ab (<video>), nicht das <webview>. Chromium kann H.264/AAC
+// (normale MP4), VP8/VP9/AV1 (WebM). HEVC (iPhone) und ProRes gehen NICHT — .mov läuft nur,
+// wenn darin H.264 steckt.
+export const VIDEO_EXT_RE = /\.(mp4|m4v|webm|mov)(\?|#|$)/i
+
+/** Wechselt eine Video-Folie erst nach dem Ende des Videos? (Standard: ja) */
+export function videoBisEnde(s: Pick<Slide, 'videoBisEnde'>): boolean { return s.videoBisEnde !== false }
 
 // Auto-detect what kind of media a slide URL represents.
 //   - 'image'    image/*  (jpg/png/gif/webp/svg/bmp/avif/ico)
 //   - 'pdf'      .pdf
+//   - 'video'    .mp4/.m4v/.webm/.mov
 //   - 'url'      http(s)://… (also data:, file:// other than the above)
 //   - 'unknown'  empty / unparseable
 export function detectSlideMediaType(url: string): SlideMediaType {
@@ -63,6 +76,7 @@ export function detectSlideMediaType(url: string): SlideMediaType {
   if (!u) return 'unknown'
   if (IMAGE_EXT_RE.test(u)) return 'image'
   if (PDF_EXT_RE.test(u)) return 'pdf'
+  if (VIDEO_EXT_RE.test(u)) return 'video'
   if (/^https?:\/\//i.test(u)) return 'url'
   if (/^file:\/\//i.test(u)) return 'url' // arbitrary local site
   if (/^\\\\/.test(u) || /^[a-z]:\\/i.test(u)) {
@@ -166,13 +180,21 @@ export async function uploadMediaToShare(localPath: string): Promise<
   { ok: true; uncPath: string } | { ok: false; error: string }
 > {
   try {
+    const basename = localPath.split(/[\\/]/).pop() ?? 'datei'
+    const safe = basename.replace(/[^a-zA-Z0-9._\-äöüÄÖÜß ]/g, '_')
+    const rel = `${MEDIA_DIR}/${Date.now()}_${safe}`
+    // Videos sind oft Hunderte MB groß → direkt im Hauptprozess kopieren statt als Base64
+    // durch die IPC (das würde das Tool minutenlang blockieren und viel Speicher fressen).
+    if (VIDEO_EXT_RE.test(basename)) {
+      const c = await api().netCopyLocalFileAsync(localPath, rel)
+      if (!c.ok) return { ok: false, error: c.error || 'Netzlaufwerk nicht erreichbar oder Schreibrechte fehlen' }
+      const base = await api().netGetBasePath()
+      return { ok: true, uncPath: `${base.replace(/[\\/]+$/, '')}\\${rel.replace(/\//g, '\\')}` }
+    }
     const read = await api().readFile(localPath)
     if (!read.success || !read.data) {
       return { ok: false, error: read.error ?? 'Datei konnte nicht gelesen werden' }
     }
-    const basename = localPath.split(/[\\/]/).pop() ?? 'datei'
-    const safe = basename.replace(/[^a-zA-Z0-9._\-äöüÄÖÜß ]/g, '_')
-    const rel = `${MEDIA_DIR}/${Date.now()}_${safe}`
     const ok = await api().netWriteRawFile(rel, read.data)
     if (!ok) return { ok: false, error: 'Netzlaufwerk nicht erreichbar oder Schreibrechte fehlen' }
     const base = await api().netGetBasePath()
@@ -402,6 +424,8 @@ function normalize(raw: unknown): PresentationConfig {
       refreshIntervalSec: Number(s.refreshIntervalSec) || 0,
       active: s.active !== false,
       rotation: normalizeRotation(s.rotation),
+      ...(s.videoTon === true ? { videoTon: true } : {}),
+      ...(s.videoBisEnde === false ? { videoBisEnde: false } : {}),
     })),
     loop: data.loop !== false,
     transitionMs: Number(data.transitionMs) || 600,

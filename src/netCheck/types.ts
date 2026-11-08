@@ -11,6 +11,8 @@ export type NetFixKat =
   | 'netadv'          // Adapter-Advanced-Setting (Set-NetAdapterAdvancedProperty)
   | 'treiber'         // Treiberstand → Hinweis (Fix über „Treiber-Installation")
   | 'netzwerk'        // Hinweis: eher AP-/netzseitig
+  | 'ursache'         // Tiefenanalyse: wer/was trennt (Zeitmuster, Grund, Umfeld) — kein Fix
+  | 'aufgabe'         // Notlösung als geplante Aufgabe (z. B. automatisch neu verbinden)
   | 'info'            // reine Information
 
 export interface Erklaerung {
@@ -23,7 +25,10 @@ export interface Erklaerung {
 
 // Ein konkreter, anwendbarer Fix.
 export interface NetFix {
-  art: 'advanced' | 'powercfg' | 'powermgmt'
+  art: 'advanced' | 'powercfg' | 'powermgmt' | 'reconnect-task' | 'standby-netz' | 'profil-auto' | 'aufgabe-aus'
+  profil?: string         // reconnect-task / profil-auto: WLAN-Profilname
+  aufgabePfad?: string    // aufgabe-aus: TaskPath (z. B. "\HP\")
+  aufgabeName?: string    // aufgabe-aus: TaskName
   adapter?: 'wlan' | 'lan'   // welcher Adapter (Default: wlan)
   keyword?: string        // advanced: RegistryKeyword (z. B. "RoamAggressiveness")
   displayName?: string    // advanced: DisplayName (Fallback-Match)
@@ -138,6 +143,44 @@ export interface NetDaten {
   tcpGlobal?: TcpGlobal
   system?: { modell?: string; bios?: string; os?: string; benutzer?: string }
   textBericht?: string
+  /** Tiefenanalyse (zweiter Lesedurchgang): wer/was trennt, Umfeld, Änderungen */
+  tiefe?: NetTiefe
+}
+
+// ── Tiefenanalyse ────────────────────────────────────────────────────────────
+/** Event 8003 mit den echten Feldern (Reason/ReasonCode/ConnectionMode) — nicht nur die erste Meldungszeile */
+export interface WlanTrennung { zeit: string; grund?: string; code?: string; modus?: string; profil?: string; ssid?: string }
+/** Event 8001 (verbunden): Verbindungsart „Automatisch/Manuell mit einem Profil" */
+export interface WlanVerbindungEreignis { zeit: string; modus?: string; profil?: string; ssid?: string; auth?: string; onex?: string; phy?: string }
+export type UmfeldLog = 'System' | 'Anwendung' | 'WLAN' | 'Richtlinie' | 'MDM' | 'Aufgabe' | 'Netzprofil' | 'Verbindungsmanager'
+export interface UmfeldEreignis { log: UmfeldLog; zeit: string; quelle: string; id: number; text: string; extra?: string }
+/** Alles, was in den Minuten um EINE Trennung herum protokolliert wurde */
+export interface UmfeldFenster { trennung: string; ereignisse: UmfeldEreignis[] }
+export interface AufgabeTrigger { typ: string; start?: string; wdh?: string; aktiv?: boolean }
+export interface AufgabeInfo { pfad: string; name: string; autor?: string; zustand?: string; letzterLauf?: string; registriert?: string; trigger: AufgabeTrigger[]; aktion?: string }
+export interface Aenderung { art: 'Update' | 'Treiber' | 'Software' | 'Aufgabe' | 'Dienst'; zeit: string; text: string }
+export interface WlanProfil { name: string; quelle?: string; modus?: string; auth?: string; authMode?: string; eap?: string }
+export interface NetTiefe {
+  ok?: boolean
+  fehler?: string
+  trennungen: WlanTrennung[]
+  verbindungen: WlanVerbindungEreignis[]
+  umfeld: UmfeldFenster[]
+  aufgaben: AufgabeInfo[]
+  aenderungen: Aenderung[]
+  profile: WlanProfil[]
+  /** „Netzwerkverbindung im Standbymodus": 0 = Deaktivieren, 1 = Aktivieren, 2 = Von Windows verwaltet */
+  standbyNetz?: { ac?: number | null; dc?: number | null; richtlinieAc?: number | null; richtlinieDc?: number | null }
+  /** Richtlinien des Verbindungs-Managers (WcmSvc) */
+  wcm?: { minimize?: number | null; blockNonDomain?: number | null; softDisconnect?: number | null }
+  bios?: { name: string; wert: string }[]
+  software?: { name: string; version?: string; datum?: string }[]
+  /** `netsh wlan show interfaces` braucht unter Windows 11 die Standortberechtigung */
+  netshBlockiert?: boolean
+  /** NetworkProfile 10000/10001 mit Netzname — zur Zuordnung WLAN vs. LAN */
+  netzprofil?: { zeit: string; id: number; name?: string }[]
+  taskLogAktiv?: boolean
+  dauerMs?: number
 }
 
 export interface NetLauf {

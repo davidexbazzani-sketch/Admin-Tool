@@ -278,7 +278,7 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-6 h-full overflow-y-auto p-6">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Startbildschirm</h1>
+        <h1 className="text-2xl font-bold text-foreground">Massenabfragen</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Geräte eingeben oder importieren, dann Abfrage starten
         </p>

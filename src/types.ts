@@ -1,5 +1,5 @@
 export type Screen =
-  | 'home' | 'query-menu' | 'results' | 'user-info' | 'xelion'
+  | 'home' | 'massenabfragen' | 'query-menu' | 'results' | 'user-info' | 'xelion'
   | 'remote-doc' | 'trickbox' | 'it-guru' | 'network-radar' | 'knowledge-base' | 'knowledge-search' | 'settings'
   | 'user-management' | 'user-logs' | 'location-overview' | 'departments-overview' | 'organization-structure' | 'user-overview' | 'user-presence' | 'checklists' | 'device-setup' | 'gruppen-suche' | 'access-points'
   | 'scheduled-tasks' | 'bug-mailbox' | 'dashboards'
@@ -31,6 +31,8 @@ export type Screen =
   | 'proactive-radar'
   | 'nis2'
   | 'critical-devices'
+  | 'client-geraete'
+  | 'drucker-uebersicht'
   | 'ot-devices'
   | 'pruffeld-zoll'
   | 'verwaltungsgebaeude'

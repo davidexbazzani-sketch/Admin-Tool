@@ -166,6 +166,8 @@ declare global {
       netGetBasePath(): Promise<string>
       netSetBasePath(path: string): Promise<boolean>
       netWriteRawFile(relativePath: string, base64Data: string): Promise<boolean>
+      /** Lokale Datei aufs Netzlaufwerk kopieren (asynchron, ohne Base64 — für große Videos) */
+      netCopyLocalFileAsync(localPath: string, relativePath: string): Promise<{ ok: boolean; bytes?: number; error?: string }>
       /** Ordner einer HTML-Folie fuer das skfslide://-Protokoll freigeben. */
       slideAllowFolder(htmlPfad: string): Promise<boolean>
       netReadRawFile(relativePath: string): Promise<string | null>

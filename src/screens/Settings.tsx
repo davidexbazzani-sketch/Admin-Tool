@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Save, FolderOpen, Info, Mail, Send, Loader, CheckCircle, XCircle, Database, Eye, EyeOff, Users, RotateCcw, AlertTriangle, RefreshCw, Radar, Archive, Download, Lock, KeyRound, BookOpen, Upload, ChevronDown, ChevronRight, FileText } from 'lucide-react'
 import { buildKnowledgeSnapshot } from '../services/knowledgeSnapshot'
 import { pickAndReadMaster, analyzeMaster, runImport, type ImportAnalysis, type ImportProgress } from '../services/masterImport'
@@ -35,6 +35,8 @@ const DEFAULT_EMAIL_CONFIG: UserEmailConfig = {
   notifyEmail: '',
   emailMethod: 'outlook',  // Default: Outlook COM (kein Passwort nötig, wie SKF Protokoll Generator)
 }
+
+const BefehlsTestKarte = lazy(() => import('../befehlsTest/BefehlsTestKarte'))
 
 function KBFileStatus({ basePath, kbPath }: { basePath: string; kbPath: string }) {
   const [files, setFiles] = useState<Array<{ name: string; found: boolean; important: boolean; description: string }>>([])
@@ -158,8 +160,10 @@ const MENU_VISIBILITY_PATH = 'settings/menu_visibility.json'
 // Abgeleitet aus dem zentralen MENU_CATALOG (Single Source of Truth) — so bleibt
 // diese Liste automatisch vollstaendig, wenn neue Menuepunkte hinzukommen.
 // "Immer sichtbar" (Startbildschirm/Einstellungen) sind hier ausgenommen.
+// Unterpunkte (z. B. Kacheln unter „Client Geräte“) erscheinen als „Obermenü › Unterpunkt“.
+const menuLabel = (m: { label: string; elternteil?: string }) => { const e = m.elternteil ? MENU_CATALOG.find(x => x.id === m.elternteil) : undefined; return e ? `${e.label} › ${m.label}` : m.label }
 const CONFIGURABLE_MENUS: { id: string; label: string; group: string }[] =
-  MENU_CATALOG.filter(m => !m.alwaysVisible).map(m => ({ id: m.id, label: m.label, group: m.category }))
+  MENU_CATALOG.filter(m => !m.alwaysVisible).map(m => ({ id: m.id, label: menuLabel(m), group: m.category }))
 
 // Vier Sichtbarkeits-Stufen pro Menüpunkt (Reihenfolge = Dropdown-Reihenfolge).
 const MENU_STATE_OPTIONS: { value: MenuVisibilityState; label: string; hint: string }[] = [
@@ -404,7 +408,7 @@ interface MenuItemDef {
 // einzelne Nutzer (z.B. Kiosk-Konten) wirklich jeden Punkt ausblenden kann.
 const ALL_MENU_ITEMS: MenuItemDef[] = MENU_CATALOG.map(m => ({
   id: m.id,
-  label: m.label,
+  label: menuLabel(m),
   group: m.category,
   ...(m.adminOnly ? { adminFeature: true } : {}),
   ...(m.masterAdminOnly ? { masterOnlyFeature: true } : {}),
@@ -1581,6 +1585,13 @@ export default function Settings() {
 
       {/* ── Automatische Scans (Admin) ── */}
       {isAdmin && <AutoScansCard />}
+
+      {/* ── Befehls-Test: alle Befehle einmal echt auf einem Test-PC (Admin) ── */}
+      {isAdmin && (
+        <Suspense fallback={<div className="text-xs text-muted-foreground">Befehls-Test wird geladen …</div>}>
+          <BefehlsTestKarte />
+        </Suspense>
+      )}
 
       {/* ── Menu Visibility (Master Admin only) ── */}
       {isMaster && <MenuVisibilityCard />}

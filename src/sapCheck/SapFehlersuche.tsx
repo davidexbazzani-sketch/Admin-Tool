@@ -16,6 +16,8 @@ import { aktiveWartungsfenster } from './rules'
 import { saveScan, listScans, loadScan, loadBaseline, setBaseline, loadRecentHosts, pushRecentHost } from './store'
 import { ampelOf, sortBefunde, istKernursache, type SapScan, type SapBefund, type SapBewertung, type SapScanIndexItem, type SapVergleich } from './sapCheck.types'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
+import { useMonitorDialog } from '../store/monitorDialogStore'
+import { VORSCHLAG_SAP } from '../monitoring/kontrollen'
 
 const SEV_ICON: Record<SapBewertung, ReactNode> = {
   fehler: <XCircle size={14} className="text-red-400" />,
@@ -230,6 +232,8 @@ export default function SapFehlersuche({ onBack }: { onBack: () => void }) {
       <div className="shrink-0 px-6 py-3 border-b border-border flex items-center gap-3">
         <button onClick={onBack} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"><ArrowLeft size={14} />Zurück</button>
         <Boxes size={18} className="text-primary" /><h2 className="text-base font-bold text-foreground">SAP Fehlersuche</h2>
+        <button onClick={() => useMonitorDialog.getState().oeffne({ kontrollen: VORSCHLAG_SAP })} title="Einen PC über Stunden/Tage beobachten — Meldung bei jedem SAP-Absturz/-Hänger, am Ende die Analyse"
+          className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-primary/40 text-primary hover:bg-primary/10">Überwachen</button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-6 space-y-4">

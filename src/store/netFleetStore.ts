@@ -62,7 +62,7 @@ export const useNetFleetStore = create<NetFleetState>((set, get) => ({
         const host = list[i]
         active.add(host); set({ current: [...active] })
         try {
-          const r = await runNetScan(host, by, 'problem', { isAborted: () => abort })
+          const r = await runNetScan(host, by, 'problem', { isAborted: () => abort, ohneTiefe: true })
           if (r.ok && r.lauf) {
             results.push(r.lauf); await saveLauf(r.lauf); pushRecentHost(host)
             const dc = r.lauf.daten?.ereignisse?.disconnects ?? 0

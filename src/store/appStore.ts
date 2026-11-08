@@ -5,6 +5,9 @@ interface AppState {
   // Navigation
   screen: Screen
   setScreen: (s: Screen) => void
+  /** Werkzeug der PC-Diagnose, das beim nächsten Öffnen der PC-Diagnose gestartet wird (aus „Gib dein Problem ein“ auf der Startseite). */
+  pcDiagnoseWunsch: { werkzeug: string; host: string } | null
+  setPcDiagnoseWunsch: (w: { werkzeug: string; host: string } | null) => void
 
   // Admin status
   isAdmin: boolean
@@ -80,6 +83,8 @@ interface AppState {
 export const useAppStore = create<AppState>((set) => ({
   screen: 'home',
   setScreen: (screen) => set({ screen }),
+  pcDiagnoseWunsch: null,
+  setPcDiagnoseWunsch: (pcDiagnoseWunsch) => set({ pcDiagnoseWunsch }),
 
   isAdmin: false,
   adminChecked: false,

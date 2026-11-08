@@ -63,6 +63,12 @@ export interface IstStand {
   ergebnisse: PruefErgebnis[]
   /** SEAL: Gesamtzeile + Systeme, die in sysstatus neu auftauchen (nicht im Soll) */
   seal?: { gesamt?: string; neu: string[]; sysstatus?: string; befehl?: string }
+  /** Kritische Punkte, die zwar ausgefallen waren, deren Ausfall die Nachprüfung aber NICHT
+   *  bestätigt hat (wieder an / schwankend / Server kurz weg) → gelten beim nächsten Lauf
+   *  nicht als „schon gemeldet“ und werden dann erneut (mit Nachprüfung) bewertet. */
+  unbestaetigt?: string[]
+  /** Nachprüfung vor einer Meldung (3× innerhalb von 2 min). */
+  nachpruefung?: { am: string; versuche: number; bestaetigt: string[]; wiederOk: string[] }
 }
 
 // ── Analyse-Ergebnis (Inventar) ──────────────────────────────────────────────
@@ -522,8 +528,9 @@ export const statusDe = (s: string) => STATUS_DE[(s || '').toLowerCase()] || s
 /** Bis so lange nach dem Hochfahren gelten fehlende Dienste als „startet noch" (kein Alarm). */
 const ANLAUF_MIN = 10
 
-/** Gegen den Soll-Zustand prüfen und speichern. Nur lesend. */
-export async function pruefe(host: string, soll: SollZustand): Promise<IstStand> {
+/** Gegen den Soll-Zustand prüfen und speichern. Nur lesend.
+ *  `speichern: false` = nur prüfen (Nachprüfung einzelner Punkte — darf den vollständigen Stand nicht überschreiben). */
+export async function pruefe(host: string, soll: SollZustand, opt: { speichern?: boolean } = {}): Promise<IstStand> {
   const TAG = '@@SRVPRUEF@@'
   const am = new Date().toISOString()
   const punkte = soll.punkte.map(p => ({ id: p.id, typ: p.typ, name: p.name, pfad: p.pfad, wert: p.wert, befehl: p.befehl }))
@@ -547,8 +554,70 @@ export async function pruefe(host: string, soll: SollZustand): Promise<IstStand>
       }
     }
   }
-  await api().netWriteJsonAsync(istDatei(host), ist).catch(() => false)
+  if (opt.speichern !== false) await api().netWriteJsonAsync(istDatei(host), ist).catch(() => false)
   return ist
+}
+
+/** Gespeicherten Ist-Stand schreiben (z. B. nach eingearbeiteter Nachprüfung). */
+export async function speichereIst(host: string, ist: IstStand): Promise<void> {
+  await api().netWriteJsonAsync(istDatei(host), ist).catch(() => false)
+}
+
+// ── Nachprüfung vor einer Meldung (gegen Fehlalarme) ─────────────────────────
+export const NACHPRUEF_VERSUCHE = 3
+export const NACHPRUEF_ABSTAND_MS = 40_000          // 3 × 40 s ≈ 2 Minuten
+
+export interface Nachpruefung {
+  /** in ALLEN Nachprüfungen weiterhin ausgefallen → melden */
+  bestaetigt: Pruefpunkt[]
+  /** in mindestens einer Nachprüfung wieder in Ordnung → kein Alarm */
+  wiederOk: Pruefpunkt[]
+  /** nicht nachprüfbar (Server/WinRM kurz weg) → kein Alarm, beim nächsten Lauf erneut bewerten */
+  offen: Pruefpunkt[]
+  /** letztes Ergebnis je nachgeprüftem Punkt (zum Einarbeiten in den gespeicherten Stand) */
+  letzte: Map<string, PruefErgebnis>
+  versuche: number
+}
+
+/**
+ * Prüft NUR die gerade ausgefallenen Punkte noch `versuche`-mal im Abstand von `abstandMs` nach
+ * (nur lesend, ohne den gespeicherten Stand zu überschreiben). Gemeldet werden soll nur, was in
+ * JEDER Nachprüfung noch aus ist. Fällt ein Punkt zwischendurch wieder an, ist es kein Ausfall.
+ */
+export async function bestaetigeAusfall(
+  host: string, soll: SollZustand, ausgefallen: Pruefpunkt[],
+  opt: { versuche?: number; abstandMs?: number; pruefeFn?: typeof pruefe; warte?: (ms: number) => Promise<void> } = {},
+): Promise<Nachpruefung> {
+  const versuche = opt.versuche ?? NACHPRUEF_VERSUCHE
+  const abstand = opt.abstandMs ?? NACHPRUEF_ABSTAND_MS
+  const pr = opt.pruefeFn || pruefe
+  const warte = opt.warte || (ms => new Promise<void>(r => setTimeout(r, ms)))
+  let kandidaten = [...ausgefallen]
+  const wiederOk: Pruefpunkt[] = []
+  const offen = new Set<string>()
+  const letzte = new Map<string, PruefErgebnis>()
+  let gemacht = 0
+  let dauer = 0
+  for (let i = 0; i < versuche && kandidaten.length; i++) {
+    // Starts ≈ abstandMs auseinander; dauert eine Prüfung lange (SEAL), entsprechend kürzer warten
+    await warte(Math.max(Math.min(5000, abstand), abstand - dauer))
+    const t0 = Date.now()
+    const ist = await pr(host, { ...soll, punkte: kandidaten }, { speichern: false })
+    dauer = Date.now() - t0
+    gemacht++
+    if (!ist.erreichbar) { kandidaten.forEach(p => offen.add(p.id)); break }
+    const erg = new Map(ist.ergebnisse.map(e => [e.id, e]))
+    const weiter: Pruefpunkt[] = []
+    for (const p of kandidaten) {
+      const e = erg.get(p.id)
+      if (e) letzte.set(p.id, e)
+      if (!e) { offen.add(p.id); continue }          // keine Antwort zu diesem Punkt → nicht bestätigt
+      if (e.ok) wiederOk.push(p); else weiter.push(p)
+    }
+    kandidaten = weiter
+  }
+  const bestaetigt = kandidaten.filter(p => !offen.has(p.id))
+  return { bestaetigt, wiederOk, offen: ausgefallen.filter(p => offen.has(p.id)), letzte, versuche: gemacht }
 }
 
 /** Kritische Prüfpunkte, die gerade NICHT in Ordnung sind. */

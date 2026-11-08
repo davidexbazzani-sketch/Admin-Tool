@@ -2,6 +2,9 @@
 // Single source of truth for all remote commands.
 // Used by both RemoteDoc.tsx and ScheduledTasks.tsx
 
+import { baueSkript } from '../problemAssistent/motor'
+import { benutzerAktion } from '../problemAssistent/aktionenBenutzer'
+
 export type ActionType = 'read' | 'write' | 'critical'
 
 export interface CmdDef {
@@ -264,6 +267,47 @@ export function remote(hostname: string, script: string): string {
 export function local(cmd: string): string {
   return `try { ${cmd} } catch { Write-Output "ERR:$($_.Exception.Message)" }`
 }
+
+// ── Befehle im Kontext des ANGEMELDETEN Benutzers ────────────────────────────
+// Über WinRM wären $env:APPDATA/$env:TEMP, HKCU:, Cert:\CurrentUser, cmdkey, klist und
+// gestartete Programme die des ADMIN-Kontos (bzw. Session 0) — nicht die des Benutzers.
+// Deshalb laufen diese Befehle über die Bausteine des Problem-Assistenten (Benutzerprofil
+// bzw. geplante Aufgabe in der Sitzung des Benutzers) und HKCU-Befehle über die Registry
+// des angemeldeten Benutzers (Laufwerk HKUB:).
+
+/** Einen oder mehrere Bausteine (aktionenBenutzer.ts) ausführen, Ergebniszeilen ausgeben. */
+export function imBenutzerKontext(h: string, schritte: [string, string?][]): string {
+  const teile = schritte.map(([id, p], i) => {
+    const a = benutzerAktion(id)
+    if (!a) return `$__s${i} = '@@PA@@{"ok":false,"fehler":"Baustein ${id} fehlt"}'`
+    return `$__s${i} = (& {\n${baueSkript(h, a, p || '')}\n}) | Out-String`
+  })
+  return [
+    ...teile,
+    '$__z = New-Object System.Collections.Generic.List[string]; $__ok = 0; $__f = 0',
+    `foreach ($__r in @(${schritte.map((_, i) => '$__s' + i).join(', ')})) {`,
+    "  $__j = $null; $__i = ([string]$__r).LastIndexOf('@@PA@@')",
+    "  if ($__i -ge 0) { try { $__j = ([string]$__r).Substring($__i + 6).Trim() | ConvertFrom-Json } catch {} }",
+    "  if ($__j -and $__j.ok) { $__ok++; foreach ($__l in @($__j.zeilen)) { if ($__l) { [void]$__z.Add([string]$__l) } } }",
+    "  else { $__f++; $__m = $(if ($__j -and $__j.fehler) { [string]$__j.fehler } else { (([string]$__r).Trim() -split '\r?\n')[-1] }); if ($__m -eq 'NOUSER') { $__m = 'Kein Benutzer angemeldet - dieser Befehl laeuft im Konto des angemeldeten Benutzers.' }; [void]$__z.Add('Fehler: ' + $__m) }",
+    '}',
+    "if ($__ok -eq 0) { 'ERR:' + (($__z | ForEach-Object { $_ -replace '^Fehler: ', '' }) -join ' | ') } else { $__z -join [Environment]::NewLine }",
+  ].join('\n')
+}
+
+/** Registry des angemeldeten Benutzers als Laufwerk HKUB: (statt HKCU: = Admin-Konto). */
+const BENUTZER_HIVE_PS = [
+  '$__u = $null; try { $__u = [string](Get-CimInstance Win32_ComputerSystem -EA Stop).UserName } catch {}',
+  "if (-not $__u) { try { $__e = Get-CimInstance Win32_Process -Filter \"Name='explorer.exe'\" -EA Stop | Select-Object -First 1; if ($__e) { $__o = Invoke-CimMethod -InputObject $__e -MethodName GetOwner; if ($__o.User) { $__u = [string]$__o.Domain + '\\' + [string]$__o.User } } } catch {} }",
+  "if (-not $__u) { throw 'Kein Benutzer angemeldet - dieser Befehl betrifft die Einstellungen des angemeldeten Benutzers.' }",
+  '$__sid = (New-Object System.Security.Principal.NTAccount($__u)).Translate([System.Security.Principal.SecurityIdentifier]).Value',
+  "if (-not (Test-Path ('Registry::HKEY_USERS\\' + $__sid))) { throw ('Registry von ' + $__u + ' ist nicht geladen (abgemeldet?).') }",
+  "if (-not (Get-PSDrive -Name HKUB -EA SilentlyContinue)) { New-PSDrive -Name HKUB -PSProvider Registry -Root ('HKEY_USERS\\' + $__sid) | Out-Null }",
+].join('\n')
+export function remoteBenutzer(h: string, script: string): string {
+  return remote(h, BENUTZER_HIVE_PS + '\n' + script.replace(/HKCU:/g, 'HKUB:'))
+}
+
 
 // ── 25 Categories ─────────────────────────────────────────────────────────────
 function buildCategories(): Category[] {
@@ -586,9 +630,11 @@ function buildCategories(): Category[] {
         { id: 'wintemp', func: 'Windows Temp leeren', when: 'Platz freigeben',
           buildCmd: (h) => remote(h, `Remove-Item "C:\\Windows\\Temp\\*" -Recurse -Force -EA SilentlyContinue; Write-Output "Windows Temp geleert"`), action: 'write' },
         { id: 'usertemp', func: 'Benutzer Temp leeren', when: 'Platz freigeben',
-          buildCmd: (h) => remote(h, `Remove-Item "$env:TEMP\\*" -Recurse -Force -EA SilentlyContinue; Write-Output "User Temp geleert"`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['rd-usertemp']]),
+          action: 'write' },
         { id: 'recycle', func: 'Papierkorb leeren', when: 'Platz freigeben',
-          buildCmd: (h) => remote(h, `Clear-RecycleBin -Force -EA SilentlyContinue; Write-Output "Papierkorb geleert"`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['papierkorb-leeren']]),
+          action: 'critical' },
         { id: 'physdisk2', func: 'Physische Disks', when: 'SSD/HDD Gesundheit',
           buildCmd: (h) => remote(h, `Get-PhysicalDisk | Select-Object FriendlyName,MediaType,Size,HealthStatus,OperationalStatus | ConvertTo-Json -Compress`), action: 'read' },
         { id: 'volumes', func: 'Volumes anzeigen', when: 'Partitionen',
@@ -726,7 +772,8 @@ function buildCategories(): Category[] {
         { id: 'compcerts', func: 'Computer-Zertifikate', when: 'VPN/WLAN-Probleme',
           buildCmd: (h) => remote(h, `Get-ChildItem Cert:\\LocalMachine\\My | Select-Object @{N='Betreff';E={$_.Subject}},@{N='Gültig bis';E={$_.NotAfter.ToString('dd.MM.yyyy')}},@{N='Aussteller';E={$_.Issuer.Split(',')[0]}} | ConvertTo-Json -Compress`), action: 'read' },
         { id: 'usercerts', func: 'Benutzer-Zertifikate', when: 'Smartcard, E-Mail',
-          buildCmd: (h) => remote(h, `Get-ChildItem Cert:\\CurrentUser\\My | Select-Object @{N='Betreff';E={$_.Subject}},@{N='Gültig bis';E={$_.NotAfter.ToString('dd.MM.yyyy')}},@{N='Aussteller';E={$_.Issuer.Split(',')[0]}} | ConvertTo-Json -Compress`), action: 'read' },
+          buildCmd: (h) => imBenutzerKontext(h, [['zertifikate']]),
+          action: 'read' },
         { id: 'certenroll', func: 'Auto-Enrollment triggern', when: 'Zertifikate abholen',
           buildCmd: (h) => remote(h, `certutil -pulse 2>&1; Write-Output "Enrollment ausgelöst"`), action: 'write' },
         { id: 'certexpiry', func: 'Bald ablaufende Zertifikate', when: 'Proaktiv erkennen',
@@ -759,9 +806,11 @@ function buildCategories(): Category[] {
             `}`,
           ].join('\n')), action: 'critical' },
         { id: 'klist', func: 'Kerberos-Tickets anzeigen', when: 'Auth-Probleme',
-          buildCmd: (h) => remote(h, `klist 2>&1`), action: 'read' },
+          buildCmd: (h) => imBenutzerKontext(h, [['kerberos-anzeigen']]),
+          action: 'read' },
         { id: 'kpurge', func: 'Kerberos-Tickets löschen', when: 'Nach Gruppenänderung',
-          buildCmd: (h) => remote(h, `klist purge 2>&1; Write-Output "Kerberos-Tickets gelöscht"`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['kerberos-erneuern']]),
+          action: 'write' },
       ],
     },
     // ── 18: WLAN & Netzwerkprofile ───────────────────────────────────────────
@@ -785,11 +834,13 @@ function buildCategories(): Category[] {
       id: 'explorer', label: 'Explorer & Shell',
       commands: [
         { id: 'explorerrestart', func: 'Explorer neustarten', when: 'Taskleiste hängt',
-          buildCmd: (h) => remote(h, `Stop-Process -Name explorer -Force -EA SilentlyContinue; Start-Sleep 1; Start-Process explorer; Write-Output "Explorer neugestartet"`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['explorer-neustart']]),
+          action: 'write' },
         { id: 'iconcache', func: 'Icon-Cache erneuern', when: 'Falsche Icons',
           buildCmd: (h) => remote(h, `ie4uinit -show; Write-Output "Icon-Cache erneuert"`), action: 'write' },
         { id: 'iconcachedel', func: 'Icon-Cache löschen', when: 'Beschädigte Icons',
-          buildCmd: (h) => remote(h, `Stop-Process -Name explorer -Force -EA SilentlyContinue; Remove-Item "$env:LOCALAPPDATA\\Microsoft\\Windows\\Explorer\\iconcache*" -Force -EA SilentlyContinue; Start-Process explorer; Write-Output "Icon-Cache gelöscht und Explorer neugestartet"`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['symbolcache']]),
+          action: 'write' },
       ],
     },
     // ── 21: Screenshot ───────────────────────────────────────────────────────
@@ -1233,30 +1284,38 @@ function buildCategories(): Category[] {
       id: 'appcache', label: 'Anwendungs-Reparatur & Cache',
       commands: [
         { id: 'teamscache', func: 'Teams Cache löschen (MSIX + klassisch)', when: 'Teams langsam/fehlerhaft',
-          buildCmd: (h) => remote(h, `Get-Process -Name ms-teams,Teams -EA SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 2; $classic = "$env:APPDATA\\Microsoft\\Teams"; if (Test-Path $classic) { Remove-Item "$classic\\*" -Recurse -Force }; $msix = Get-ChildItem "$env:LOCALAPPDATA\\Packages" -Filter 'MSTeams_*' -Directory -EA SilentlyContinue; if ($msix) { Remove-Item "$($msix.FullName)\\LocalCache\\*" -Recurse -Force }; Write-Output 'Teams Cache gelöscht'`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['teams-cache']]),
+          action: 'write' },
         { id: 'outlookcache', func: 'Outlook Cache/OST umbenennen', when: 'Outlook langsam/Sync-Probleme',
-          buildCmd: (h) => remote(h, `$osts = Get-ChildItem "$env:LOCALAPPDATA\\Microsoft\\Outlook\\*.ost" -EA SilentlyContinue; if ($osts) { $osts | ForEach-Object { Rename-Item $_.FullName "$($_.FullName).bak" -Force; Write-Output "Umbenannt: $($_.Name) -> $($_.Name).bak" } } else { Write-Output 'Keine OST-Dateien gefunden' }`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['ol-ost-neu']]),
+          action: 'critical' },
         { id: 'outlookrepair', func: 'Outlook Profil reparieren', when: 'Outlook startet nicht/hängt',
-          buildCmd: (h, i) => remote(h, `$flag = '${i || '/safe'}'; Start-Process outlook.exe -ArgumentList $flag; Write-Output "Outlook gestartet mit $flag"`),
+          buildCmd: (h, i) => imBenutzerKontext(h, [['ol-schalter', i || '/safe']]),
           action: 'write', input: { type: 'dropdown', options: ['/safe', '/resetnavpane', '/cleanviews', '/cleanreminders', '/resetsearchcriteria'] } },
         { id: 'ondrivereset', func: 'OneDrive Reset', when: 'OneDrive sync-Probleme',
-          buildCmd: (h) => remote(h, `Start-Process "$env:LOCALAPPDATA\\Microsoft\\OneDrive\\onedrive.exe" -ArgumentList "/reset"; Write-Output 'OneDrive Reset gestartet'`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['od-reset']]),
+          action: 'critical' },
         { id: 'chromecache', func: 'Chrome Cache löschen', when: 'Chrome langsam/fehlerhaft',
-          buildCmd: (h) => remote(h, `Get-Process -Name chrome -EA SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 2; $p = "$env:LOCALAPPDATA\\Google\\Chrome\\User Data\\Default\\Cache"; if (Test-Path $p) { Remove-Item "$p\\*" -Recurse -Force; Write-Output 'Chrome Cache gelöscht' } else { Write-Output 'Cache-Verzeichnis nicht gefunden' }`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['chrome-cache']]),
+          action: 'write' },
         { id: 'edgecache', func: 'Edge Cache löschen', when: 'Edge langsam/fehlerhaft',
-          buildCmd: (h) => remote(h, `Get-Process -Name msedge -EA SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 2; $p = "$env:LOCALAPPDATA\\Microsoft\\Edge\\User Data\\Default\\Cache"; if (Test-Path $p) { Remove-Item "$p\\*" -Recurse -Force; Write-Output 'Edge Cache gelöscht' } else { Write-Output 'Cache-Verzeichnis nicht gefunden' }`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['edge-cache']]),
+          action: 'write' },
         { id: 'sapcache', func: 'SAP Cache löschen', when: 'SAP GUI Fehler/langsam',
-          buildCmd: (h) => remote(h, `$c1 = "$env:APPDATA\\SAP\\Common"; $c2 = "$env:TEMP\\sapgui*"; if (Test-Path $c1) { Remove-Item "$c1\\*" -Recurse -Force }; Remove-Item $c2 -Recurse -Force -EA SilentlyContinue; Write-Output 'SAP Cache gelöscht'`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['sap-cache']]),
+          action: 'write' },
         { id: 'wincachefull', func: 'Windows Komplett-Cache', when: 'Generelle Systemprobleme/Platz',
-          buildCmd: (h) => remote(h, `Remove-Item "$env:TEMP\\*" -Recurse -Force -EA SilentlyContinue; Remove-Item "C:\\Windows\\Temp\\*" -Recurse -Force -EA SilentlyContinue; ipconfig /flushdns | Out-Null; ie4uinit.exe -show 2>$null; Remove-Item "$env:LOCALAPPDATA\\Microsoft\\Windows\\Explorer\\thumbcache_*.db" -Force -EA SilentlyContinue; Remove-Item "C:\\Windows\\Prefetch\\*" -Force -EA SilentlyContinue; Write-Output 'Windows Komplett-Cache bereinigt (Temp, DNS, Icons, Thumbnails, Prefetch)'`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['rd-wincache']]),
+          action: 'write' },
         { id: 'officequick', func: 'Office Schnellreparatur', when: 'Office-Apps fehlerhaft',
           buildCmd: (h) => remote(h, `& "$env:CommonProgramFiles\\Microsoft Shared\\ClickToRun\\OfficeC2RClient.exe" scenario=Repair displaylevel=False; Write-Output 'Office Schnellreparatur gestartet'`), action: 'write', longRunning: true },
         { id: 'officefull', func: 'Office Online-Reparatur', when: 'Schnellreparatur hilft nicht',
           buildCmd: (h) => remote(h, `& "$env:CommonProgramFiles\\Microsoft Shared\\ClickToRun\\OfficeC2RClient.exe" scenario=Repair displaylevel=False forceappshutdown=True; Write-Output 'Office Online-Reparatur gestartet'`), action: 'critical', longRunning: true },
         { id: 'storereset', func: 'Windows Store Reset', when: 'Store-App hängt/Fehler',
-          buildCmd: (h) => remote(h, `Start-Process wsreset.exe -Wait; Write-Output 'Windows Store zurückgesetzt'`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['rd-storereset']]),
+          action: 'write' },
         { id: 'credclear', func: 'Credential Manager bereinigen', when: 'Auth-Probleme Office/Teams/VPN',
-          buildCmd: (h, i) => remote(h, `$filter = '${i || 'Alles'}'; $creds = cmdkey /list 2>&1; if ($filter -eq 'Alles') { $targets = [regex]::Matches($creds, 'Target:\\s*(.+)') | ForEach-Object { $_.Groups[1].Value.Trim() } } else { $targets = [regex]::Matches($creds, 'Target:\\s*(.+)') | ForEach-Object { $_.Groups[1].Value.Trim() } | Where-Object { $_ -match $filter } }; $count = 0; foreach ($t in $targets) { cmdkey /delete:$t 2>&1 | Out-Null; $count++ }; Write-Output "$count Credentials gelöscht (Filter: $filter)"`),
+          buildCmd: (h, i) => imBenutzerKontext(h, [['rd-credclear', i || 'Alles']]),
           action: 'critical', input: { type: 'dropdown', options: ['Office', 'Teams', 'SharePoint', 'VPN', 'Alles'] } },
         { id: 'netreset', func: 'Netzwerk Komplett-Reset', when: 'Netzwerk-Totalausfall',
           buildCmd: (h) => remote(h, `ipconfig /flushdns | Out-Null; netsh winsock reset | Out-Null; netsh int ip reset | Out-Null; arp -d * 2>&1 | Out-Null; ipconfig /release | Out-Null; ipconfig /renew | Out-Null; Write-Output 'Netzwerk komplett zurückgesetzt (DNS, Winsock, TCP/IP, ARP, IP erneuert)'`), action: 'critical' },
@@ -1267,18 +1326,20 @@ function buildCategories(): Category[] {
         { id: 'tempprofilefix', func: 'Temp-Profil Fix', when: 'User bekommt temporäres Profil',
           buildCmd: (h) => remote(h, `$profiles = Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList' | Where-Object { $_.PSChildName -match '\\.bak$' }; if ($profiles) { foreach ($p in $profiles) { $orig = $p.PSChildName -replace '\\.bak$',''; $origPath = "HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\$orig"; if (Test-Path $origPath) { Rename-Item $origPath "$origPath.old" }; Rename-Item $p.PSPath ($p.PSPath -replace '\\.bak$',''); Write-Output "Repariert: $($p.PSChildName)" } } else { Write-Output 'Keine .bak-Profile gefunden' }`), action: 'critical' },
         { id: 'authreset', func: 'Auth-Reset', when: 'SSO/Kerberos/Login-Probleme',
-          buildCmd: (h) => remote(h, `klist purge 2>&1 | Out-Null; ipconfig /flushdns | Out-Null; $creds = cmdkey /list 2>&1; $targets = [regex]::Matches($creds, 'Target:\\s*(.+)') | ForEach-Object { $_.Groups[1].Value.Trim() }; foreach ($t in $targets) { cmdkey /delete:$t 2>&1 | Out-Null }; gpupdate /force 2>&1 | Out-Null; Write-Output 'Auth-Reset abgeschlossen (Kerberos, DNS, Credentials, GPO)'`), action: 'critical', longRunning: true },
+          buildCmd: (h) => imBenutzerKontext(h, [['rd-auth-system'], ['rd-auth-benutzer']]),
+          action: 'critical', longRunning: true },
         { id: 'apprestartuser', func: 'App im User-Kontext neustarten', when: 'App muss als User laufen',
           buildCmd: (h, i) => remote(h, `$proc = '${i || 'notepad'}'; $p = Get-Process -Name $proc -EA SilentlyContinue; if ($p) { $user = (Get-Process -Name $proc -IncludeUserName -EA SilentlyContinue)[0].UserName; Stop-Process -Name $proc -Force; Start-Sleep -Seconds 2; $action = New-ScheduledTaskAction -Execute (Get-Process -Name $proc -EA SilentlyContinue | Select-Object -First 1).Path; if (-not $action) { $action = New-ScheduledTaskAction -Execute $proc }; $principal = New-ScheduledTaskPrincipal -UserId $user -LogonType Interactive; $task = New-ScheduledTask -Action $action -Principal $principal; Register-ScheduledTask -TaskName 'TempRestart' -InputObject $task -Force | Out-Null; Start-ScheduledTask -TaskName 'TempRestart'; Start-Sleep -Seconds 2; Unregister-ScheduledTask -TaskName 'TempRestart' -Confirm:$false; Write-Output "$proc neu gestartet als $user" } else { Write-Output "Prozess $proc nicht gefunden" }`),
           action: 'write', input: { type: 'text', placeholder: 'Prozessname z.B. outlook, teams' } },
         { id: 'wupdatereset', func: 'Windows Update Dienste Reset', when: 'Updates schlagen fehl',
           buildCmd: (h) => remote(h, `Stop-Service wuauserv,bits,cryptsvc -Force -EA SilentlyContinue; Remove-Item 'C:\\Windows\\SoftwareDistribution\\*' -Recurse -Force -EA SilentlyContinue; Remove-Item 'C:\\Windows\\System32\\catroot2\\*' -Recurse -Force -EA SilentlyContinue; Start-Service wuauserv,bits,cryptsvc; Write-Output 'Windows Update Dienste zurückgesetzt (SoftwareDistribution + catroot2 gelöscht)'`), action: 'critical' },
         { id: 'outlookaddincheck', func: 'Outlook Add-In Check', when: 'Outlook-Add-Ins deaktiviert?',
-          buildCmd: (h) => remote(h, `$disabled = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems' -EA SilentlyContinue).PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' } | Measure-Object; $crashing = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList' -EA SilentlyContinue).PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' } | Measure-Object; Write-Output "Deaktivierte Add-Ins: $($disabled.Count)"; Write-Output "Crashing Add-Ins: $($crashing.Count)"; Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\Outlook\\Addins\\*' -EA SilentlyContinue | Select-Object PSChildName,FriendlyName,LoadBehavior | ConvertTo-Json -Compress`), action: 'read' },
+          buildCmd: (h) => remoteBenutzer(h, `$disabled = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems' -EA SilentlyContinue).PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' } | Measure-Object; $crashing = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList' -EA SilentlyContinue).PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' } | Measure-Object; Write-Output "Deaktivierte Add-Ins: $($disabled.Count)"; Write-Output "Crashing Add-Ins: $($crashing.Count)"; Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\Outlook\\Addins\\*' -EA SilentlyContinue | Select-Object PSChildName,FriendlyName,LoadBehavior | ConvertTo-Json -Compress`), action: 'read' },
         { id: 'msirepair', func: 'Windows Installer reparieren', when: 'MSI-Installationen schlagen fehl',
           buildCmd: (h) => remote(h, `msiexec /unregister 2>&1 | Out-Null; Start-Sleep -Seconds 2; msiexec /regserver 2>&1 | Out-Null; Write-Output 'Windows Installer neu registriert'`), action: 'write' },
         { id: 'megacleanup', func: 'MEGA-Cleanup', when: 'Alles auf einmal bereinigen',
-          buildCmd: (h) => remote(h, `$results = @(); Get-Process -Name ms-teams,Teams -EA SilentlyContinue | Stop-Process -Force; $classic = "$env:APPDATA\\Microsoft\\Teams"; if (Test-Path $classic) { Remove-Item "$classic\\*" -Recurse -Force -EA SilentlyContinue }; $msix = Get-ChildItem "$env:LOCALAPPDATA\\Packages" -Filter 'MSTeams_*' -Directory -EA SilentlyContinue; if ($msix) { Remove-Item "$($msix.FullName)\\LocalCache\\*" -Recurse -Force -EA SilentlyContinue }; $results += 'Teams Cache'; Get-Process -Name chrome -EA SilentlyContinue | Stop-Process -Force; Remove-Item "$env:LOCALAPPDATA\\Google\\Chrome\\User Data\\Default\\Cache\\*" -Recurse -Force -EA SilentlyContinue; $results += 'Chrome Cache'; Get-Process -Name msedge -EA SilentlyContinue | Stop-Process -Force; Remove-Item "$env:LOCALAPPDATA\\Microsoft\\Edge\\User Data\\Default\\Cache\\*" -Recurse -Force -EA SilentlyContinue; $results += 'Edge Cache'; Remove-Item "$env:APPDATA\\SAP\\Common\\*" -Recurse -Force -EA SilentlyContinue; Remove-Item "$env:TEMP\\sapgui*" -Recurse -Force -EA SilentlyContinue; $results += 'SAP Cache'; Remove-Item "$env:TEMP\\*" -Recurse -Force -EA SilentlyContinue; Remove-Item "C:\\Windows\\Temp\\*" -Recurse -Force -EA SilentlyContinue; Remove-Item "C:\\Windows\\Prefetch\\*" -Force -EA SilentlyContinue; ipconfig /flushdns | Out-Null; $results += 'Windows Cache + DNS'; Write-Output "MEGA-Cleanup abgeschlossen: $($results -join ', ')"`), action: 'critical', longRunning: true },
+          buildCmd: (h) => imBenutzerKontext(h, [['rd-megacleanup']]),
+          action: 'critical', longRunning: true },
       ],
     },
     // ── 22: Zscaler ───────────────────────────────────────────────────────────
@@ -1294,17 +1355,19 @@ function buildCategories(): Category[] {
         { id: 'zscsvcrestart', func: 'Dienst neustarten', when: 'Zscaler hängt',
           buildCmd: (h) => remote(h, `Restart-Service ZscalerService -Force; Write-Output 'ZscalerService neu gestartet'`), action: 'write' },
         { id: 'zsccacheclear', func: 'Cache löschen + neustarten', when: 'Zscaler Cache-Probleme',
-          buildCmd: (h) => remote(h, `Stop-Service ZscalerService -Force -EA SilentlyContinue; Start-Sleep -Seconds 2; Remove-Item "$env:LOCALAPPDATA\\Zscaler\\*" -Recurse -Force -EA SilentlyContinue; Start-Service ZscalerService; Write-Output 'Zscaler Cache gelöscht und Dienst neu gestartet'`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['rd-zsc-cache']]),
+          action: 'write' },
         { id: 'zsccert', func: 'Root-Zertifikat prüfen', when: 'SSL-Fehler/Zertifikatprobleme',
           buildCmd: (h) => remote(h, `$certs = Get-ChildItem Cert:\\LocalMachine\\Root | Where-Object { $_.Subject -match 'Zscaler' }; if ($certs) { $certs | Select-Object Subject,Issuer,NotBefore,NotAfter,Thumbprint | ConvertTo-Json -Compress } else { Write-Output '"Kein Zscaler Root-Zertifikat gefunden"' }`), action: 'read' },
         { id: 'zscproxy', func: 'Proxy-Einstellungen anzeigen', when: 'Proxy-Konfigurations-Check',
-          buildCmd: (h) => remote(h, `Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' | Select-Object ProxyEnable,ProxyServer,ProxyOverride,AutoConfigURL | ConvertTo-Json -Compress`), action: 'read' },
+          buildCmd: (h) => remoteBenutzer(h, `Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' | Select-Object ProxyEnable,ProxyServer,ProxyOverride,AutoConfigURL | ConvertTo-Json -Compress`), action: 'read' },
         { id: 'zscnettest', func: 'Netzwerk-Test durch Zscaler', when: 'Verbindungsprobleme über Zscaler',
           buildCmd: (h) => remote(h, `$results = @{}; $results.Ping = (Test-Connection ip.zscaler.com -Count 2 -EA SilentlyContinue | Select-Object Address,ResponseTime); $results.DNS = (Resolve-DnsName ip.zscaler.com -EA SilentlyContinue | Select-Object Name,IPAddress); $results.HTTPS = (Test-NetConnection -ComputerName ip.zscaler.com -Port 443 -EA SilentlyContinue).TcpTestSucceeded; $results | ConvertTo-Json -Depth 3 -Compress`), action: 'read' },
         { id: 'zscversion', func: 'Version prüfen', when: 'Zscaler-Version veraltet?',
           buildCmd: (h) => remote(h, `$svc = Get-WmiObject Win32_Service -Filter "Name='ZscalerService'" -EA SilentlyContinue; if ($svc) { $ver = (Get-ItemProperty $svc.PathName.Trim('"')).VersionInfo; [PSCustomObject]@{Path=$svc.PathName;Version=$ver.FileVersion;Product=$ver.ProductName} | ConvertTo-Json -Compress } else { Write-Output '"ZscalerService nicht gefunden"' }`), action: 'read' },
         { id: 'zsclogs', func: 'Logs sammeln', when: 'Zscaler-Fehlerdiagnose',
-          buildCmd: (h) => remote(h, `$logPath = "$env:LOCALAPPDATA\\Zscaler\\logs"; if (Test-Path $logPath) { $logs = Get-ChildItem $logPath -File | Sort-Object LastWriteTime -Descending | Select-Object -First 5; foreach ($log in $logs) { Write-Output "=== $($log.Name) ($('{0:N0}' -f ($log.Length/1KB)) KB) ==="; Get-Content $log.FullName -Tail 30 } } else { Write-Output 'Kein Zscaler Log-Verzeichnis gefunden' }`), action: 'read' },
+          buildCmd: (h) => imBenutzerKontext(h, [['rd-zsc-logs']]),
+          action: 'read' },
       ],
     },
     // ── 23: enaio/DMS ─────────────────────────────────────────────────────────
@@ -1312,20 +1375,21 @@ function buildCategories(): Category[] {
       id: 'enaio', label: 'enaio/DMS',
       commands: [
         { id: 'enaiostatus', func: 'Add-In Status prüfen', when: 'enaio-Add-In geladen?',
-          buildCmd: (h) => remote(h, `$addins = Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\Outlook\\Addins\\*' -EA SilentlyContinue | Where-Object { $_.FriendlyName -match 'enaio|OS_' } | Select-Object PSChildName,FriendlyName,LoadBehavior; $disabled = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems' -EA SilentlyContinue).PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' }; $crashing = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList' -EA SilentlyContinue).PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' }; $dll = Get-ChildItem 'C:\\Program Files*\\enaio\\' -Filter '*.dll' -Recurse -EA SilentlyContinue | Select-Object -First 1; [PSCustomObject]@{AddIns=$addins;DisabledCount=@($disabled).Count;CrashingCount=@($crashing).Count;DLLFound=($null -ne $dll);DLLPath=$dll.FullName} | ConvertTo-Json -Depth 3 -Compress`), action: 'read' },
+          buildCmd: (h) => remoteBenutzer(h, `$addins = Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\Outlook\\Addins\\*' -EA SilentlyContinue | Where-Object { $_.FriendlyName -match 'enaio|OS_' } | Select-Object PSChildName,FriendlyName,LoadBehavior; $disabled = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems' -EA SilentlyContinue).PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' }; $crashing = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList' -EA SilentlyContinue).PSObject.Properties | Where-Object { $_.Name -notmatch '^PS' }; $dll = Get-ChildItem 'C:\\Program Files*\\enaio\\' -Filter '*.dll' -Recurse -EA SilentlyContinue | Select-Object -First 1; [PSCustomObject]@{AddIns=$addins;DisabledCount=@($disabled).Count;CrashingCount=@($crashing).Count;DLLFound=($null -ne $dll);DLLPath=$dll.FullName} | ConvertTo-Json -Depth 3 -Compress`), action: 'read' },
         { id: 'enaioreactivate', func: 'Add-In reaktivieren', when: 'enaio deaktiviert/crasht',
-          buildCmd: (h) => remote(h, `Remove-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems' -Name * -EA SilentlyContinue; Remove-Item 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList' -EA SilentlyContinue; $addins = Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\Outlook\\Addins\\*' -EA SilentlyContinue | Where-Object { $_.FriendlyName -match 'enaio|OS_' }; foreach ($a in $addins) { $key = "HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DoNotDisableAddinList"; if (-not (Test-Path $key)) { New-Item $key -Force | Out-Null }; Set-ItemProperty $key -Name $a.PSChildName -Value 1 }; Write-Output 'enaio Add-In reaktiviert (DisabledItems+CrashingAddinList gelöscht, DoNotDisable gesetzt)'`), action: 'write' },
+          buildCmd: (h) => remoteBenutzer(h, `Remove-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems' -Name * -EA SilentlyContinue; Remove-Item 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList' -EA SilentlyContinue; $addins = Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\Outlook\\Addins\\*' -EA SilentlyContinue | Where-Object { $_.FriendlyName -match 'enaio|OS_' }; foreach ($a in $addins) { $key = "HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DoNotDisableAddinList"; if (-not (Test-Path $key)) { New-Item $key -Force | Out-Null }; Set-ItemProperty $key -Name $a.PSChildName -Value 1 }; Write-Output 'enaio Add-In reaktiviert (DisabledItems+CrashingAddinList gelöscht, DoNotDisable gesetzt)'`), action: 'write' },
         { id: 'enaiooutlookrestart', func: 'Cache löschen + Outlook neustarten', when: 'enaio Cache-Probleme',
-          buildCmd: (h) => remote(h, `Get-Process -Name OUTLOOK -EA SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 3; Remove-Item "$env:LOCALAPPDATA\\enaio\\*" -Recurse -Force -EA SilentlyContinue; Remove-Item "$env:APPDATA\\enaio\\*" -Recurse -Force -EA SilentlyContinue; Start-Sleep -Seconds 1; Start-Process outlook; Write-Output 'enaio Cache gelöscht und Outlook neu gestartet'`), action: 'write' },
+          buildCmd: (h) => imBenutzerKontext(h, [['rd-enaio-cache'], ['ol-starten']]),
+          action: 'write' },
         { id: 'enaioversion', func: 'Version prüfen', when: 'enaio-Version veraltet?',
           buildCmd: (h) => remote(h, `$dll = Get-ChildItem 'C:\\Program Files*\\enaio\\' -Filter '*.dll' -Recurse -EA SilentlyContinue | Select-Object -First 1; if ($dll) { $ver = (Get-ItemProperty $dll.FullName).VersionInfo; [PSCustomObject]@{File=$dll.Name;Version=$ver.FileVersion;Product=$ver.ProductVersion;Path=$dll.FullName} | ConvertTo-Json -Compress } else { Write-Output '"enaio DLL nicht gefunden"' }`), action: 'read' },
         { id: 'enaioserver', func: 'Server-Verbindung testen', when: 'enaio-Verbindungsprobleme',
           buildCmd: (h, i) => remote(h, `$server = '${i || 'enaio-server'}'; $result = Test-NetConnection -ComputerName $server -Port 80 -EA SilentlyContinue; [PSCustomObject]@{Server=$server;Reachable=$result.TcpTestSucceeded;RemoteAddress=$result.RemoteAddress;RTT=$result.PingReplyDetails.RoundtripTime} | ConvertTo-Json -Compress`),
           action: 'read', input: { type: 'text', placeholder: 'enaio Server-Hostname' } },
         { id: 'enaiodisable', func: 'Add-In komplett deaktivieren', when: 'enaio temporär abschalten',
-          buildCmd: (h) => remote(h, `$addins = Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\Outlook\\Addins\\*' -EA SilentlyContinue | Where-Object { $_.FriendlyName -match 'enaio|OS_' }; foreach ($a in $addins) { Set-ItemProperty $a.PSPath -Name LoadBehavior -Value 0 }; Write-Output "enaio Add-In deaktiviert ($(@($addins).Count) Einträge auf LoadBehavior=0 gesetzt)"`), action: 'write' },
+          buildCmd: (h) => remoteBenutzer(h, `$addins = Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\Outlook\\Addins\\*' -EA SilentlyContinue | Where-Object { $_.FriendlyName -match 'enaio|OS_' }; foreach ($a in $addins) { Set-ItemProperty $a.PSPath -Name LoadBehavior -Value 0 }; Write-Output "enaio Add-In deaktiviert ($(@($addins).Count) Einträge auf LoadBehavior=0 gesetzt)"`), action: 'write' },
         { id: 'enaiocleanreg', func: 'Registry bereinigen', when: 'enaio Registry-Reset',
-          buildCmd: (h) => remote(h, `Remove-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems' -Name * -EA SilentlyContinue; Remove-Item 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList' -EA SilentlyContinue; Remove-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DoNotDisableAddinList' -Name * -EA SilentlyContinue; Write-Output 'enaio Resiliency-Registry bereinigt (DisabledItems, CrashingAddinList, DoNotDisableAddinList)'`), action: 'write' },
+          buildCmd: (h) => remoteBenutzer(h, `Remove-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DisabledItems' -Name * -EA SilentlyContinue; Remove-Item 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\CrashingAddinList' -EA SilentlyContinue; Remove-ItemProperty 'HKCU:\\Software\\Microsoft\\Office\\16.0\\Outlook\\Resiliency\\DoNotDisableAddinList' -Name * -EA SilentlyContinue; Write-Output 'enaio Resiliency-Registry bereinigt (DisabledItems, CrashingAddinList, DoNotDisableAddinList)'`), action: 'write' },
       ],
     },
     // ── Standard-Apps / Dateizuordnungen ────────────────────────────────────────
@@ -1336,7 +1400,7 @@ function buildCategories(): Category[] {
         { id: 'assoc-show', func: 'Standard-App für Dateityp anzeigen', when: 'Welche App öffnet PDF, HTML, JPG etc.?',
           buildCmd: (h, i) => {
             const ext = (i || '.pdf').trim().replace(/^\.?/, '.')
-            return remote(h, [
+            return remoteBenutzer(h, [
               `$ext='${ext}'`,
               `$uc = Get-ItemProperty "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\$ext\\UserChoice" -EA SilentlyContinue`,
               `$progId = if($uc){$uc.ProgId}else{'(nicht gesetzt)'}`,
@@ -1359,7 +1423,7 @@ function buildCategories(): Category[] {
           input: { type: 'dropdown', options: ['.pdf', '.html', '.htm', '.txt', '.jpg', '.png', '.docx', '.xlsx', '.pptx', '.mp4', '.mp3', '.zip', '.csv'] },
         },
         { id: 'assoc-overview', func: 'Übersicht: Alle wichtigen Dateitypen', when: 'Standard-Apps für alle gängigen Formate',
-          buildCmd: (h) => remote(h, [
+          buildCmd: (h) => remoteBenutzer(h, [
             `$results = @()`,
             `$exts = @('.pdf','.html','.txt','.jpg','.png','.docx','.xlsx','.pptx','.mp4','.zip','.csv','.xml')`,
             `foreach($ext in $exts) {`,
@@ -1371,9 +1435,9 @@ function buildCategories(): Category[] {
             `  $results += @{Endung=$ext;'Standard-App'=$name;ProgID=$progId}`,
             `}`,
             `$results | ConvertTo-Json -Compress`,
-          ].join(' ')), action: 'read' },
+          ].join('\n')), action: 'read' },
         { id: 'assoc-browser', func: 'Standard-Browser anzeigen', when: 'Welcher Browser ist als Standard eingestellt?',
-          buildCmd: (h) => remote(h, [
+          buildCmd: (h) => remoteBenutzer(h, [
             `$http = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice' -EA SilentlyContinue).ProgId`,
             `$https = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\https\\UserChoice' -EA SilentlyContinue).ProgId`,
             `$known = @{ChromeHTML='Google Chrome';MSEdgeHTM='Microsoft Edge';FirefoxURL='Mozilla Firefox';BraveHTML='Brave Browser';OperaStable='Opera'}`,
@@ -1381,7 +1445,7 @@ function buildCategories(): Category[] {
             `@{'Standard-Browser'=$name;'HTTP ProgID'=$http;'HTTPS ProgID'=$https} | ConvertTo-Json -Compress`,
           ].join('; ')), action: 'read' },
         { id: 'assoc-mail', func: 'Standard-Mail-App anzeigen', when: 'Welche App öffnet E-Mail-Links?',
-          buildCmd: (h) => remote(h, [
+          buildCmd: (h) => remoteBenutzer(h, [
             `$mailto = (Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\mailto\\UserChoice' -EA SilentlyContinue).ProgId`,
             `$known = @{'Outlook.URL.mailto.15'='Microsoft Outlook';'ChromeHTML'='Gmail (Chrome)';'MSEdgeHTM'='Outlook Web (Edge)';'thunderbird.url.mailto'='Mozilla Thunderbird'}`,
             `$name = if($known.ContainsKey($mailto)){$known[$mailto]}else{$mailto}`,
@@ -1392,17 +1456,15 @@ function buildCategories(): Category[] {
         { id: 'assoc-apps', func: 'Verfügbare Apps für einen Dateityp', when: 'Welche Programme sind auf dem PC installiert die diesen Typ öffnen können?',
           buildCmd: (h, i) => {
             const ext = (i || '.pdf').trim().replace(/^\.?/, '.')
-            return remote(h, [
+            return remoteBenutzer(h, [
               `$ext='${ext}'; $apps = @()`,
               `$known = @{ChromeHTML='Google Chrome';MSEdgeHTM='Microsoft Edge';MSEdgePDF='Microsoft Edge (PDF)';FirefoxHTML='Mozilla Firefox';'AcroExch.Document.DC'='Adobe Acrobat Reader';'AcroExch.Document'='Adobe Acrobat';'FoxitPhantomPDF.Document'='Foxit PDF';'Applications\\notepad.exe'='Notepad';'txtfile'='Editor (Notepad)';'Notepad++_file'='Notepad++';'VSCode.txt'='Visual Studio Code';'Applications\\wordpad.exe'='WordPad';'Word.Document.12'='Microsoft Word';'Excel.Sheet.12'='Microsoft Excel';'CompressedFolder'='Windows Explorer (ZIP)';'WinRAR'='WinRAR';'7-Zip.zip'='7-Zip';'VLC.mp4'='VLC Media Player';'WMP11.AssocFile.MP4'='Windows Media Player'}`,
-              `# OpenWithProgids`,
               `$k1="HKLM:\\SOFTWARE\\Classes\\$ext\\OpenWithProgids"`,
-              `if(Test-Path $k1){(Get-ItemProperty $k1 -EA SilentlyContinue).PSObject.Properties | Where-Object {$_.Name -notmatch '^PS'} | ForEach-Object { $pid=$_.Name; $name=if($known.ContainsKey($pid)){$known[$pid]}else{$pid}; $apps += @{App=$name;ProgID=$pid;Quelle='System'} }}`,
-              `# OpenWithList (user)`,
+              `if(Test-Path $k1){(Get-ItemProperty $k1 -EA SilentlyContinue).PSObject.Properties | Where-Object {$_.Name -notmatch '^PS'} | ForEach-Object { $prog=$_.Name; $name=if($known.ContainsKey($prog)){$known[$prog]}else{$prog}; $apps += @{App=$name;ProgID=$prog;Quelle='System'} }}`,
               `$k2="HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\$ext\\OpenWithList"`,
               `if(Test-Path $k2){$p=Get-ItemProperty $k2 -EA SilentlyContinue; $p.PSObject.Properties | Where-Object {$_.Name -match '^[a-z]$'} | ForEach-Object { $apps += @{App=$_.Value;ProgID='—';Quelle='Benutzer'} }}`,
               `if($apps.Count -eq 0){@{Info="Keine registrierten Apps fuer $ext gefunden"} | ConvertTo-Json -Compress}else{$apps | ConvertTo-Json -Compress}`,
-            ].join('; '))
+            ].join('\n'))
           },
           action: 'read',
           input: { type: 'dropdown', options: ['.pdf', '.html', '.txt', '.jpg', '.png', '.docx', '.xlsx', '.mp4', '.zip'] },
@@ -1433,7 +1495,7 @@ function buildCategories(): Category[] {
 
         // ── Einstellungen-App öffnen (Fallback) ──────────────────────────────
         { id: 'assoc-open-settings', func: 'Standard-Apps Einstellungen öffnen', when: 'Windows-Einstellungen für Standard-Apps auf dem Ziel-PC öffnen',
-          buildCmd: (h) => remote(h, `Start-Process 'ms-settings:defaultapps'; @{Aktion='Einstellungen geoeffnet';Hinweis='Die Windows Standard-Apps Einstellungen wurden auf dem Ziel-PC geoeffnet. Der angemeldete Benutzer kann dort seine Standard-Apps aendern.'} | ConvertTo-Json -Compress`),
+          buildCmd: (h) => imBenutzerKontext(h, [['rd-standardapps']]),
           action: 'write' },
       ],
     },
@@ -1590,7 +1652,7 @@ function buildCategories(): Category[] {
               `  [System.Environment]::SetEnvironmentVariable('PATH',$new,'Machine')`,
               `  @{Aktion='Pfad hinzugefuegt';Pfad=$add;Hinweis='Aenderung wird nach Neustart der Programme wirksam.'} | ConvertTo-Json -Compress`,
               `}`,
-            ].join(' '))
+            ].join('\n'))
           },
           action: 'write',
           input: { type: 'text', placeholder: 'z.B. C:\\Tools\\bin' },
@@ -1632,7 +1694,7 @@ function buildCategories(): Category[] {
               `  [System.Environment]::SetEnvironmentVariable($name,$null,'Machine')`,
               `  @{Aktion='Variable geloescht';Variable=$name;'Alter Wert'=$old;Bereich='System'} | ConvertTo-Json -Compress`,
               `}`,
-            ].join(' '))
+            ].join('\n'))
           },
           action: 'critical',
           input: { type: 'text', placeholder: 'VARIABLENNAME' },
@@ -1738,11 +1800,11 @@ function buildCategories(): Category[] {
         { id: 'ietreset', func: 'Internetoptionen zurücksetzen', when: 'Browser/Proxy-Probleme',
           buildCmd: (h) => remote(h, `RunDll32 inetcpl.cpl,ResetIEtoDefaults; Write-Output 'Internetoptionen zurückgesetzt'`), action: 'write' },
         { id: 'proxyshow', func: 'Proxy anzeigen', when: 'Proxy-Konfiguration prüfen',
-          buildCmd: (h) => remote(h, `Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' | Select-Object ProxyEnable,ProxyServer,ProxyOverride,AutoConfigURL | ConvertTo-Json -Compress`), action: 'read' },
+          buildCmd: (h) => remoteBenutzer(h, `Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' | Select-Object ProxyEnable,ProxyServer,ProxyOverride,AutoConfigURL | ConvertTo-Json -Compress`), action: 'read' },
         { id: 'proxyclear', func: 'Proxy löschen', when: 'Proxy deaktivieren',
-          buildCmd: (h) => remote(h, `Set-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name ProxyEnable -Value 0; Remove-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name ProxyServer -EA SilentlyContinue; Write-Output 'Proxy deaktiviert und Server-Eintrag entfernt'`), action: 'write' },
+          buildCmd: (h) => remoteBenutzer(h, `Set-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name ProxyEnable -Value 0; Remove-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name ProxyServer -EA SilentlyContinue; Write-Output 'Proxy deaktiviert und Server-Eintrag entfernt'`), action: 'write' },
         { id: 'proxyset', func: 'Proxy setzen', when: 'Proxy konfigurieren',
-          buildCmd: (h, i) => remote(h, `Set-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name ProxyEnable -Value 1; Set-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name ProxyServer -Value '${i}'; Write-Output "Proxy gesetzt: ${i}"`),
+          buildCmd: (h, i) => remoteBenutzer(h, `Set-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name ProxyEnable -Value 1; Set-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings' -Name ProxyServer -Value '${i}'; Write-Output "Proxy gesetzt: ${i}"`),
           action: 'write', input: { type: 'text', placeholder: 'Proxy:Port z.B. proxy.firma.de:8080' } },
         { id: 'powerplan', func: 'Energiesparplan anzeigen', when: 'Welcher Plan aktiv?',
           buildCmd: (h) => remote(h, `powercfg /getactivescheme 2>&1`), action: 'read' },
@@ -1760,7 +1822,7 @@ function buildCategories(): Category[] {
           buildCmd: (h, i) => remote(h, `powercfg /hibernate ${i || 'on'} 2>&1; Write-Output "Ruhezustand: ${i || 'on'}"`),
           action: 'write', input: { type: 'dropdown', options: ['on', 'off'] } },
         { id: 'locktime', func: 'Sperrbildschirm-Timeout', when: 'Auto-Sperrzeit ändern',
-          buildCmd: (h, i) => remote(h, `$seconds = [int]'${i || '600'}' * 60; Set-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\Control Panel\\Desktop' -Name ScreenSaverTimeout -Value $seconds -Force -EA SilentlyContinue; Set-ItemProperty 'HKCU:\\Control Panel\\Desktop' -Name ScreenSaverTimeout -Value $seconds -Force; Write-Output "Sperrbildschirm-Timeout auf ${i || '600'} Minuten gesetzt"`),
+          buildCmd: (h, i) => remoteBenutzer(h, `$seconds = [int]'${i || '600'}' * 60; Set-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\Control Panel\\Desktop' -Name ScreenSaverTimeout -Value $seconds -Force -EA SilentlyContinue; Set-ItemProperty 'HKCU:\\Control Panel\\Desktop' -Name ScreenSaverTimeout -Value $seconds -Force; Write-Output "Sperrbildschirm-Timeout auf ${i || '600'} Minuten gesetzt"`),
           action: 'write', input: { type: 'text', placeholder: 'Minuten z.B. 10' } },
         { id: 'rdpon', func: 'Remote-Desktop aktivieren', when: 'RDP einschalten',
           buildCmd: (h) => remote(h, `Set-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server' -Name fDenyTSConnections -Value 0 -Type DWord; Enable-NetFirewallRule -DisplayGroup 'Remote Desktop' -EA SilentlyContinue; Write-Output 'Remote-Desktop aktiviert + Firewall-Regel freigegeben'`), action: 'write' },
@@ -1771,7 +1833,7 @@ function buildCategories(): Category[] {
         { id: 'kblayout', func: 'Tastaturlayout anzeigen', when: 'Tastatur-Sprache prüfen',
           buildCmd: (h) => remote(h, `Get-WinUserLanguageList | Select-Object LanguageTag,InputMethodTips,Autonym | ConvertTo-Json -Compress`), action: 'read' },
         { id: 'dpiscale', func: 'DPI-Skalierung anzeigen', when: 'Bildschirm-Skalierung prüfen',
-          buildCmd: (h) => remote(h, `$dpi = (Get-ItemProperty 'HKCU:\\Control Panel\\Desktop\\WindowMetrics' -Name AppliedDPI -EA SilentlyContinue).AppliedDPI; $logPix = (Get-ItemProperty 'HKCU:\\Control Panel\\Desktop' -Name LogPixels -EA SilentlyContinue).LogPixels; [PSCustomObject]@{AppliedDPI=$dpi;LogPixels=$logPix;ScalePercent=[math]::Round(($dpi/96)*100)} | ConvertTo-Json -Compress`), action: 'read' },
+          buildCmd: (h) => remoteBenutzer(h, `$dpi = (Get-ItemProperty 'HKCU:\\Control Panel\\Desktop\\WindowMetrics' -Name AppliedDPI -EA SilentlyContinue).AppliedDPI; $logPix = (Get-ItemProperty 'HKCU:\\Control Panel\\Desktop' -Name LogPixels -EA SilentlyContinue).LogPixels; [PSCustomObject]@{AppliedDPI=$dpi;LogPixels=$logPix;ScalePercent=[math]::Round(($dpi/96)*100)} | ConvertTo-Json -Compress`), action: 'read' },
         { id: 'defexcadd', func: 'Defender-Ausnahme hinzufügen', when: 'False-Positive vermeiden',
           buildCmd: (h, i) => remote(h, `Add-MpPreference -ExclusionPath '${i}'; Write-Output "Defender-Ausnahme hinzugefügt: ${i}"`),
           action: 'write', input: { type: 'text', placeholder: 'Pfad z.B. C:\\Program Files\\App' } },

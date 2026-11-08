@@ -6,6 +6,7 @@
 import { api } from '../electronAPI'
 import { ensureWinRM } from '../utils/winrmUtils'
 import type { NetDaten, NetLauf, HostRolle } from './types'
+import { runTiefe } from './tiefe'
 
 function q(s: string): string { return (s || '').replace(/'/g, "''") }
 
@@ -102,7 +103,11 @@ function buildScript(host: string): string {
   return `try { Invoke-Command -ComputerName '${q(host)}' -ErrorAction Stop -ScriptBlock { ${INNER} } } catch { '@@NETJSON@@' + (@{ ok=$false; fehler=$_.Exception.Message } | ConvertTo-Json -Compress) }`
 }
 
-export interface RunNetOpts { isAborted?: () => boolean }
+export interface RunNetOpts {
+  isAborted?: () => boolean
+  /** Tiefenanalyse (wer/was trennt) weglassen — z. B. in der Flotten-Analyse vieler PCs */
+  ohneTiefe?: boolean
+}
 
 export async function runNetScan(
   host: string, by: string, rolle: HostRolle, opts?: RunNetOpts,
@@ -123,6 +128,9 @@ export async function runNetScan(
   if (!Array.isArray(daten.advanced)) daten.advanced = daten.advanced ? [daten.advanced as never] : []
   daten.lanAdvanced = arr(daten.lanAdvanced)
   daten.pingTests = arr(daten.pingTests)
+  // Zweiter Lesedurchgang: Grund/Umfeld der Trennungen, Aufgaben, Änderungen, Profile, Richtlinien.
+  // Eigener Aufruf (Länge der Befehlszeile); ein Fehler hier macht den Basis-Scan nicht ungültig.
+  if (!opts?.ohneTiefe && !opts?.isAborted?.()) daten.tiefe = await runTiefe(h)
   const lauf: NetLauf = {
     pc: (daten.hostname || h).toUpperCase(),
     ip: /^\d+\.\d+\.\d+\.\d+$/.test(h) ? h : undefined,

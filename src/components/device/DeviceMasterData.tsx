@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   ChevronDown, ChevronRight, Loader2, MonitorSmartphone, Boxes, Package, Ticket,
   AlertTriangle, ExternalLink, Printer, Plus, Link2, CheckCircle2, XCircle, MapPin, Star, RefreshCw,
-  HardDrive, Trash2,
+  HardDrive, Trash2, Server,
 } from 'lucide-react'
 import { api } from '../../electronAPI'
 import {
@@ -31,6 +31,8 @@ import {
 } from '../../services/deviceNetworkDrives'
 import { logPrinterAction } from '../../services/printerDossier'
 import { useCurrentUser } from '../../store/authStore'
+import { serverSteckbrief, standText } from '../../services/serverListe'
+import { ServerSteckbriefVoll, PlattformBadge, UmgebungBadge } from '../server/ServerSteckbrief'
 
 // ── kleine Bausteine (analog PersonMasterData) ────────────────────────────────
 
@@ -357,6 +359,8 @@ export function DeviceMasterData({ hostname, serial, onOpenPerson, onShowLocatio
   const [livePr, setLivePr] = useState<LivePrintersResult | null>(null)
   const [livePrLoading, setLivePrLoading] = useState(false)          // Live NUR auf Klick — nicht automatisch
   const [mapLoc, setMapLoc] = useState<FoundLocation | null>(null)   // Standort auf einer der 3 Karten (falls verortet)
+  // Server: Steckbrief aus der SKFM-Serverliste (Anwendungen, Umgebung, Zuständige)
+  const [srv, setSrv] = useState<Awaited<ReturnType<typeof serverSteckbrief>>>(null)
   const curHostRef = useRef(hostname)
   useEffect(() => { curHostRef.current = hostname; setLivePr(null); setLivePrLoading(false) }, [hostname])
   // Live-Abfrage (WinRM) — wird NUR durch „Live aktualisieren" bzw. nach Verbinden/Standard ausgelöst.
@@ -378,6 +382,8 @@ export function DeviceMasterData({ hostname, serial, onOpenPerson, onShowLocatio
     findInstalledSoftware(hostname).then(r => { if (!cancelled) { setSw(r); setSwLoading(false) } })
     const effSerial = serial || serialFromHostname(hostname) || undefined
     fetchDeviceServiceNow(hostname, effSerial).then(r => { if (!cancelled) { setSn(r); setSnLoading(false) } })
+    setSrv(null)
+    serverSteckbrief(hostname).then(r => { if (!cancelled) setSrv(r) }).catch(() => {})
     // OT-Geräte: ist dieses Gerät auf dem Hallenplan verortet?
     setMapLoc(null)
     findDeviceLocation(hostname, serial).then(loc => { if (!cancelled) setMapLoc(loc) }).catch(() => {})
@@ -405,6 +411,7 @@ export function DeviceMasterData({ hostname, serial, onOpenPerson, onShowLocatio
         <MonitorSmartphone size={16} className="text-blue-400" />
         <span className="text-sm font-semibold text-foreground font-mono">{hostname}</span>
         {effSerial && <span className="text-xs text-muted-foreground">· SN <span className="font-mono">{effSerial}</span></span>}
+        {srv && <span className="inline-flex items-center gap-1 flex-wrap"><PlattformBadge p={srv.eintrag.plattform} />{srv.eintrag.umgebungen.slice(0, 2).map(u => <UmgebungBadge key={u} u={u} />)}</span>}
         {ad && !ad.found && !adLoading && (
           <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
             <AlertTriangle size={9} />{ad.error || 'Kein AD-Computerobjekt'}
@@ -437,6 +444,13 @@ export function DeviceMasterData({ hostname, serial, onOpenPerson, onShowLocatio
           <span className="text-xs text-muted-foreground">Zuletzt: <span className="text-foreground">{fmtLastSeen(ad.lastLogon)}</span></span>
         )}
       </div>
+
+      {/* Server-Steckbrief (SKFM-Serverliste) — nur bei Servern, die in der Liste stehen */}
+      {srv && (
+        <TreeSection icon={<Server size={14} />} title="Server-Steckbrief" badge={`Serverliste ${standText(srv.stand)}`}>
+          <ServerSteckbriefVoll e={srv.eintrag} stand={srv.stand} herkunft={srv.herkunft} />
+        </TreeSection>
+      )}
 
       {/* AD-Computer */}
       <TreeSection icon={<MonitorSmartphone size={14} />} title="Active Directory (Computer)" loading={adLoading}>

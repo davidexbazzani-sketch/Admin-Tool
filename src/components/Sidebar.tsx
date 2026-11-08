@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
-  Home, BarChart3, Smartphone, Wrench, Settings, ShieldCheck, Shield,
+  MessageSquareWarning, BarChart3, Smartphone, Wrench, Settings, ShieldCheck, Shield,
   ChevronRight, UserSearch, Users, FileText, MapPin, Clock,
   Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen, Package, Stethoscope, PackagePlus, MonitorPlay, PhoneCall,
   Building2, Network, ClipboardList, FolderKanban, ScanSearch, Wifi, CalendarClock, Boxes, Cable, UserPlus, ChevronDown, MonitorSmartphone, Ticket,
   DatabaseBackup, Router, Rocket, Radar, Cpu, Server, HardDriveDownload, Factory, Gamepad2, ClipboardCheck, Building,
-  GripVertical, RotateCcw, Check as CheckIcon, LifeBuoy, AlertOctagon, Printer,
+  GripVertical, RotateCcw, Check as CheckIcon, LifeBuoy, AlertOctagon, Printer, ListChecks,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
@@ -16,15 +16,19 @@ import FavoritesPanel from './FavoritesPanel'
 import { loadUserMenuOverrides, getHiddenForUser } from '../services/userMenuVisibility'
 import { loadUserMenuOrders, getOrderForUser, saveUserMenuOrder, clearUserMenuOrder, type MenuOrderEntry } from '../services/userMenuOrder'
 import { PDF_TOOLS_ENABLED } from '../pdftools/config'
-import { MENU_CATALOG, type MenuCatalogItem } from '../utils/menuCatalog'
+import { MENU_CATALOG, kinderVon, elternVon, type MenuCatalogItem } from '../utils/menuCatalog'
+import { useMenuSichtbar } from '../store/menuSichtbarStore'
 import { parseMenuVisibility, computeMenuVisible } from '../utils/menuVisibility'
 
 // Icons je Menüpunkt (Datenliste kommt aus dem zentralen menuCatalog).
 const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
-  'home': <Home size={18} />,
+  'home': <MessageSquareWarning size={18} />,
+  'massenabfragen': <ListChecks size={18} />,
   'gpu-driver-mgmt': <Cpu size={18} />,
   'location-overview': <MapPin size={18} />,
   'access-points': <Wifi size={18} />,
+  'client-geraete': <MonitorSmartphone size={18} />,
+  'drucker-uebersicht': <Printer size={18} />,
   'ot-devices': <Factory size={18} />,
   'pruffeld-zoll': <ClipboardCheck size={18} />,
   'verwaltungsgebaeude': <Building size={18} />,
@@ -168,7 +172,7 @@ export default function Sidebar() {
   // Kategorien zu einer aufklappbaren Gruppe zusammengefasst.
   // Verschiebbare Menüpunkte = alles außer Startbildschirm/Ergebnisse (topLevel)
   // und der fixen Kategorie „Einstellungen".
-  const REORDERABLE = useMemo(() => MENU_CATALOG.filter(c => !c.topLevel && c.category !== 'Einstellungen'), [])
+  const REORDERABLE = useMemo(() => MENU_CATALOG.filter(c => !c.topLevel && !c.elternteil && c.category !== 'Einstellungen'), [])
   const isReorderable = (id: Screen) => REORDERABLE.some(c => c.id === id)
 
   // Verschiebbare Punkte in der persönlichen Reihenfolge (fehlende hinten im Katalog-Standard).
@@ -179,7 +183,7 @@ export default function Sidebar() {
     if (userOrder) {
       for (const o of userOrder) {
         const c = byId.get(o.id as Screen)
-        if (!c || c.topLevel || c.category === 'Einstellungen' || seen.has(c.id)) continue
+        if (!c || c.topLevel || c.elternteil || c.category === 'Einstellungen' || seen.has(c.id)) continue
         seen.add(c.id)
         result.push({ ...c, category: o.category || c.category })
       }
@@ -254,6 +258,9 @@ export default function Sidebar() {
   const ALWAYS_VISIBLE_GLOBAL = new Set<string>(['home', 'settings', 'user-management', 'user-logs', 'bug-mailbox'])
 
   function isVisible(item: NavItem): boolean {
+    // Obermenüpunkt (z. B. „Client Geräte“): nur, wenn mindestens ein Unterpunkt sichtbar ist
+    const kinder = kinderVon(item.id)
+    if (kinder.length && !kinder.some(k => isVisible({ id: k.id, label: k.label, icon: null, adminOnly: k.adminOnly, masterAdminOnly: k.masterAdminOnly }))) return false
     // Feature-Flag: PDF-Werkzeuge-Modul abschaltbar
     if (item.id === 'pdf-tools' && !PDF_TOOLS_ENABLED) return false
     // Zentrale Auswertung (fest verankerte Rolle + globales Ausblenden +
@@ -273,6 +280,9 @@ export default function Sidebar() {
 
   // Alle Eintraege flach (fuer Kiosk-Fallback)
   const visibleItems = MENU.flatMap(s => s.kind === 'item' ? [s.item] : s.items).filter(isVisible)
+  const kinderSichtbar = MENU_CATALOG.filter(c => c.elternteil).map(c => c.id + ':' + (isVisible({ id: c.id, label: c.label, icon: null, adminOnly: c.adminOnly, masterAdminOnly: c.masterAdminOnly }) ? 1 : 0)).join(',')
+  const setzeSichtbar = useMenuSichtbar(st => st.setze)
+  useEffect(() => { setzeSichtbar(Object.fromEntries(kinderSichtbar.split(',').filter(Boolean).map(x => { const [id, v] = x.split(':'); return [id, v === '1'] }))) }, [kinderSichtbar, setzeSichtbar])
 
   function toggleCat(name: string) {
     setOpenCats(prev => {
@@ -293,7 +303,7 @@ export default function Sidebar() {
 
   // Eine einzelne Menue-Schaltflaeche (oben/unten oder innerhalb einer Kategorie)
   function renderItem(item: NavItem, indented: boolean) {
-    const active = screen === item.id
+    const active = screen === item.id || elternVon(screen) === item.id
     const alarmCount = item.id === 'licenses' ? licensesAlarmCount : item.id === 'server' ? serverAlarmCount : 0
     const alarmActive = alarmCount > 0
     const canDrag = arranging && isReorderable(item.id)
@@ -346,7 +356,7 @@ export default function Sidebar() {
   // Kategorie, die den aktuell offenen Screen enthaelt — wird beim Navigieren
   // automatisch aufgeklappt (einmalig), bleibt danach aber frei ein-/ausklappbar.
   const activeCatName = MENU.reduce<string | null>(
-    (acc, s) => acc ?? (s.kind === 'category' && s.items.some(i => i.id === screen) ? s.name : null),
+    (acc, s) => acc ?? (s.kind === 'category' && s.items.some(i => i.id === screen || elternVon(screen) === i.id) ? s.name : null),
     null,
   )
   useEffect(() => {
@@ -359,7 +369,8 @@ export default function Sidebar() {
   useEffect(() => {
     if (!userOverride || isMaster) return
     if (visibleItems.length === 0) return
-    if (!visibleItems.some(i => i.id === screen)) {
+    const unterpunktSichtbar = !!elternVon(screen) && visibleItems.some(i => i.id === elternVon(screen)) && isVisible({ id: screen, label: '', icon: null })
+    if (!visibleItems.some(i => i.id === screen) && !unterpunktSichtbar) {
       setScreen(visibleItems[0].id)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

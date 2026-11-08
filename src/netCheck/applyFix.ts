@@ -19,13 +19,17 @@ function extractJson(stdout: string): string {
 }
 
 export interface NetFixWire {
-  id: string; titel: string; art: 'advanced' | 'powercfg' | 'powermgmt'
+  id: string; titel: string; art: NetFix['art']
   adapter?: 'wlan' | 'lan'
   keyword?: string; displayName?: string; zielRegValue?: string; zielDisplay?: string
   powercfg?: string; powermgmt?: string
+  profil?: string; aufgabePfad?: string; aufgabeName?: string
+  /** reconnect-task: Aktion der Aufgabe als UTF-16-Base64 (für -EncodedCommand) */
+  skriptB64?: string
 }
 export interface NetApplied {
   id: string; titel: string; art: string; adapter?: 'wlan' | 'lan'; keyword?: string
+  profil?: string; aufgabePfad?: string; aufgabeName?: string
   alt: string; neu: string; ok: boolean; fehler?: string
   oldRegValue?: string | null; oldAc?: number | null; oldDc?: number | null; oldTurnOff?: boolean | null
 }
@@ -47,6 +51,10 @@ const HEAD = [
   `function Read-WlanIdx { $t=(powercfg /q SCHEME_CURRENT $sub $set 2>$null | Out-String); @([regex]::Matches($t,'0x[0-9a-fA-F]{1,8}') | ForEach-Object { [Convert]::ToInt32($_.Value,16) }) }`,
   `function PName([object]$i){ if ($i -eq $null){'unbekannt'} else { $n=[int]$i; if ($n -ge 0 -and $n -lt $pnames.Count){$pnames[$n]}else{[string]$i} } }`,
   `$cr='HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e972-e325-11ce-bfc1-08002be10318}'`,
+  `function Read-SbIdx { $t=(powercfg /qh SCHEME_CURRENT SUB_NONE CONNECTIVITYINSTANDBY 2>$null | Out-String); @([regex]::Matches($t,'0x[0-9a-fA-F]{1,8}') | ForEach-Object { [Convert]::ToInt32($_.Value,16) }) }`,
+  `function SbName([object]$i){ if ($i -eq $null){'unbekannt'} else { switch ([int]$i) { 0 {'Deaktivieren'} 1 {'Aktivieren'} 2 {'Von Windows verwaltet'} default {[string]$i} } } }`,
+  `function ProfModus([string]$n){ $o=(netsh wlan show profiles name="$n" 2>&1 | Out-String); if ($o -match '(?im)(Verbindungsmodus|Connection mode)\\s*:\\s*(.+?)\\s*$') { $matches[2] } else { '' } }`,
+  `$tnNeu='ITAdminTool WLAN-Neuverbindung'`,
 ].join('\n')
 
 // ── Anwenden ─────────────────────────────────────────────────────────────────
@@ -54,7 +62,7 @@ const APPLY_BODY = [
   `$parsed = $fj | ConvertFrom-Json; $fixes = @($parsed)`,
   `$results=@(); $needRestart=$false`,
   `foreach ($f in $fixes) {`,
-  `  $r=[ordered]@{ id=[string]$f.id; titel=[string]$f.titel; art=[string]$f.art; adapter=[string]$f.adapter; keyword=[string]$f.keyword; alt=''; neu=''; ok=$false; fehler=$null; oldRegValue=$null; oldAc=$null; oldDc=$null; oldTurnOff=$null }`,
+  `  $r=[ordered]@{ id=[string]$f.id; titel=[string]$f.titel; art=[string]$f.art; adapter=[string]$f.adapter; keyword=[string]$f.keyword; profil=[string]$f.profil; aufgabePfad=[string]$f.aufgabePfad; aufgabeName=[string]$f.aufgabeName; alt=''; neu=''; ok=$false; fehler=$null; oldRegValue=$null; oldAc=$null; oldDc=$null; oldTurnOff=$null }`,
   `  $dev = if ([string]$f.adapter -eq 'lan') { $eth } else { $wifi }`,
   `  try {`,
   `    if ($f.art -eq 'powercfg') {`,
@@ -73,6 +81,38 @@ const APPLY_BODY = [
   `        if ($r.alt -eq '') { $r.alt = 'aktiviert' }; $r.neu='deaktiviert'`,
   `        $pm2 = Get-NetAdapterPowerManagement -Name $dev.Name -ErrorAction SilentlyContinue; $now = $(if($pm2){[string]$pm2.AllowComputerToTurnOffDevice -eq 'Enabled'}else{$false}); $r.ok = (-not $now)`,
   `      } else { $r.fehler='Kein Adapter' }`,
+  `    }`,
+  `    elseif ($f.art -eq 'standby-netz') {`,
+  `      $o=Read-SbIdx; $r.oldAc = $(if($o.Count -ge 1){$o[0]}else{$null}); $r.oldDc = $(if($o.Count -ge 2){$o[1]}else{$null})`,
+  `      $r.alt = "Netz: $(SbName $r.oldAc) / Akku: $(SbName $r.oldDc)"`,
+  `      powercfg /setacvalueindex SCHEME_CURRENT SUB_NONE CONNECTIVITYINSTANDBY 1 | Out-Null; powercfg /S SCHEME_CURRENT | Out-Null`,
+  `      $n=Read-SbIdx; $na=$(if($n.Count -ge 1){$n[0]}else{$null}); $nd=$(if($n.Count -ge 2){$n[1]}else{$null})`,
+  `      $r.neu = "Netz: $(SbName $na) / Akku: $(SbName $nd)"; $r.ok = ($na -eq 1)`,
+  `      if (-not $r.ok) { $r.fehler = 'Wert nicht übernommen (evtl. per Gruppenrichtlinie festgelegt)' }`,
+  `    }`,
+  `    elseif ($f.art -eq 'profil-auto') {`,
+  `      $pn=[string]$f.profil; $r.alt = ProfModus $pn; $r.oldRegValue = $(if ($r.alt -match 'manuell|manual') { 'manual' } else { 'auto' })`,
+  `      $o = (netsh wlan set profileparameter name="$pn" connectionmode=auto 2>&1 | Out-String)`,
+  `      $r.neu = ProfModus $pn; $r.ok = ($r.neu -match 'automati')`,
+  `      if (-not $r.ok) { $r.fehler = (@($o -split '\\r?\\n' | Where-Object { $_.Trim() }) | Select-Object -First 1) }`,
+  `    }`,
+  `    elseif ($f.art -eq 'aufgabe-aus') {`,
+  `      $tk = Get-ScheduledTask -TaskPath ([string]$f.aufgabePfad) -TaskName ([string]$f.aufgabeName) -ErrorAction SilentlyContinue`,
+  `      if ($tk) { $r.oldRegValue = [string]$tk.State; $r.alt = [string]$tk.State; Disable-ScheduledTask -InputObject $tk -ErrorAction SilentlyContinue | Out-Null; $n2 = Get-ScheduledTask -TaskPath ([string]$f.aufgabePfad) -TaskName ([string]$f.aufgabeName) -ErrorAction SilentlyContinue; $r.neu = [string]$n2.State; $r.ok = ($r.neu -eq 'Disabled') } else { $r.fehler = 'Aufgabe nicht gefunden' }`,
+  `    }`,
+  `    elseif ($f.art -eq 'reconnect-task') {`,
+  `      $vorh = Get-ScheduledTask -TaskName $tnNeu -ErrorAction SilentlyContinue`,
+  `      $r.oldRegValue = $(if ($vorh) { 'vorhanden' } else { 'neu' }); $r.alt = $(if ($vorh) { 'Aufgabe schon vorhanden' } else { 'keine' })`,
+  `      $pn=[string]$f.profil`,
+  `      $flt = '*[System[EventID=8003]]'; if ($pn -and $pn -notmatch '[''"<>&]') { $flt = "*[System[EventID=8003]] and *[EventData[Data[@Name='ProfileName']='" + $pn + "']]" }`,
+  `      $sub = "<QueryList><Query Id='0' Path='Microsoft-Windows-WLAN-AutoConfig/Operational'><Select Path='Microsoft-Windows-WLAN-AutoConfig/Operational'>" + $flt + '</Select></Query></QueryList>'`,
+  `      $tr = New-CimInstance -CimClass (Get-CimClass -Namespace Root/Microsoft/Windows/TaskScheduler -ClassName MSFT_TaskEventTrigger) -ClientOnly`,
+  `      $tr.Enabled = $true; $tr.Delay = 'PT20S'; $tr.Subscription = $sub`,
+  `      $ac = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ('-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -EncodedCommand ' + [string]$f.skriptB64)`,
+  `      $grp = (New-Object System.Security.Principal.SecurityIdentifier('S-1-5-32-545')).Translate([System.Security.Principal.NTAccount]).Value`,
+  `      $pr = New-ScheduledTaskPrincipal -GroupId $grp -RunLevel Limited`,
+  `      $st = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Minutes 2) -MultipleInstances IgnoreNew`,
+  `      try { Register-ScheduledTask -TaskName $tnNeu -TaskPath '\\' -Trigger $tr -Action $ac -Principal $pr -Settings $st -Description ('IT Admin Tool: verbindet das WLAN-Profil ' + $pn + ' nach einer Trennung automatisch neu (Notlösung).') -Force -ErrorAction Stop | Out-Null; $chk = Get-ScheduledTask -TaskName $tnNeu -ErrorAction SilentlyContinue; $r.ok = [bool]$chk; $r.neu = $(if ($chk) { 'Aufgabe aktiv (' + $pn + ')' } else { 'nicht angelegt' }) } catch { $r.fehler = "$_" }`,
   `    }`,
   `    elseif ($f.art -eq 'advanced') {`,
   `      if ($dev -and $f.keyword) {`,
@@ -113,6 +153,18 @@ const RESTORE_BODY = [
   `        foreach($k in (Get-ChildItem $cr -ErrorAction SilentlyContinue)){ $p=Get-ItemProperty $k.PSPath -ErrorAction SilentlyContinue; if($p.NetCfgInstanceId -and ([string]$p.NetCfgInstanceId).ToUpper() -eq $guid.ToUpper()){ New-ItemProperty -Path $k.PSPath -Name PnPCapabilities -Value $val -PropertyType DWord -Force | Out-Null; break } }`,
   `        $r.neu=$ziel; $r.ok=$true`,
   `      } else { $r.fehler='Kein Adapter' }`,
+  `    }`,
+  `    elseif ($f.art -eq 'standby-netz') {`,
+  `      if ($f.oldAc -ne $null) { powercfg /setacvalueindex SCHEME_CURRENT SUB_NONE CONNECTIVITYINSTANDBY ([int]$f.oldAc) | Out-Null; powercfg /S SCHEME_CURRENT | Out-Null; $r.neu = "Netz: $(SbName $f.oldAc)"; $r.ok=$true } else { $r.fehler='Kein Altwert' }`,
+  `    }`,
+  `    elseif ($f.art -eq 'profil-auto') {`,
+  `      if ([string]$f.oldRegValue -eq 'manual') { $pn=[string]$f.profil; netsh wlan set profileparameter name="$pn" connectionmode=manual 2>&1 | Out-Null; $r.neu = ProfModus $pn; $r.ok = ($r.neu -match 'manu') } else { $r.ok=$true; $r.neu='unverändert (war schon automatisch)' }`,
+  `    }`,
+  `    elseif ($f.art -eq 'aufgabe-aus') {`,
+  `      if ([string]$f.oldRegValue -and [string]$f.oldRegValue -ne 'Disabled') { $tk = Get-ScheduledTask -TaskPath ([string]$f.aufgabePfad) -TaskName ([string]$f.aufgabeName) -ErrorAction SilentlyContinue; if ($tk) { Enable-ScheduledTask -InputObject $tk -ErrorAction SilentlyContinue | Out-Null; $r.neu = [string](Get-ScheduledTask -TaskPath ([string]$f.aufgabePfad) -TaskName ([string]$f.aufgabeName)).State; $r.ok = ($r.neu -ne 'Disabled') } else { $r.fehler='Aufgabe nicht gefunden' } } else { $r.ok=$true; $r.neu='unverändert' }`,
+  `    }`,
+  `    elseif ($f.art -eq 'reconnect-task') {`,
+  `      if ([string]$f.oldRegValue -eq 'neu') { Unregister-ScheduledTask -TaskName $tnNeu -Confirm:$false -ErrorAction SilentlyContinue; $r.ok = -not (Get-ScheduledTask -TaskName $tnNeu -ErrorAction SilentlyContinue); $r.neu = $(if ($r.ok) { 'Aufgabe entfernt' } else { 'Aufgabe noch da' }) } else { $r.ok=$true; $r.neu='unverändert (bestand schon vorher)' }`,
   `    }`,
   `    elseif ($f.art -eq 'advanced') {`,
   `      if ($dev -and $f.keyword -and $f.oldRegValue -ne $null -and $f.oldRegValue -ne '') {`,
@@ -158,7 +210,34 @@ export function fixToWire(id: string, titel: string, fix: NetFix): NetFixWire {
     id, titel, art: fix.art, adapter: fix.adapter, keyword: fix.keyword, displayName: fix.displayName,
     zielRegValue: fix.zielRegValue, zielDisplay: fix.zielDisplay,
     powercfg: fix.powercfg, powermgmt: fix.powermgmt,
+    profil: fix.profil, aufgabePfad: fix.aufgabePfad, aufgabeName: fix.aufgabeName,
+    skriptB64: fix.art === 'reconnect-task' && fix.profil ? utf16b64(neuverbindungsSkript(fix.profil)) : undefined,
   }
+}
+
+/**
+ * Aktion der Notlösungs-Aufgabe (läuft 20 s nach Event 8003 für den angemeldeten Benutzer).
+ * Verbindet NUR, wenn kein LAN-Kabel aktiv ist, das WLAN gerade nicht verbunden ist und der
+ * Benutzer nicht selbst ein anderes Netz gewählt hat (ReasonCode 3 = „neue Verbindung").
+ */
+export function neuverbindungsSkript(profil: string): string {
+  const p = profil.replace(/'/g, "''")
+  return [
+    "$ErrorActionPreference='SilentlyContinue'",
+    "if (@(Get-NetAdapter -Physical | Where-Object { $_.Status -eq 'Up' -and $_.PhysicalMediaType -match '802.3' }).Count) { return }",
+    "$w = @(Get-NetAdapter -Physical | Where-Object { $_.PhysicalMediaType -match 'Native 802.11|Wireless' -or $_.InterfaceDescription -match 'Wi-Fi|Wireless|WLAN' }) | Select-Object -First 1",
+    "if (-not $w -or $w.Status -eq 'Up') { return }",
+    "$ev = Get-WinEvent -FilterHashtable @{ LogName='Microsoft-Windows-WLAN-AutoConfig/Operational'; Id=8003 } -MaxEvents 1",
+    "if ($ev) { $rc = (([xml]$ev.ToXml()).Event.EventData.Data | Where-Object { $_.Name -eq 'ReasonCode' }).'#text'; if ($rc -eq '3') { return } }",
+    "& \"$env:SystemRoot\\System32\\netsh.exe\" wlan connect ('name=' + '" + p + "')",
+  ].join('\n')
+}
+
+/** String → UTF-16LE → Base64 (Format für powershell -EncodedCommand) */
+export function utf16b64(s: string): string {
+  let bin = ''
+  for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); bin += String.fromCharCode(c & 255, c >> 8) }
+  return btoa(bin)
 }
 
 // ── Backup je PC (für „Rückgängig") ──────────────────────────────────────────

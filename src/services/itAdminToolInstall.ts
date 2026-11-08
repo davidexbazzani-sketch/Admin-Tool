@@ -14,9 +14,12 @@
 //   5. IT Admin Tool beenden (alle Benutzer)
 //   6. Setup still: /S. electron-builder NSIS, perMachine → C:\Program Files\IT Admin Tool.
 //      Das Setup beendet selbst noch einmal hängende Reste (build/installer.nsh).
-//   7. Gegenprobe statt „Exitcode 0 = fertig": app.asar muss NACH dem Start neu
-//      geschrieben sein. Das Setup entpackt mit der Installationszeit als Dateidatum
-//      (lokal nachgesehen: alle Dateien tragen dieselbe Sekunde).
+//   7. Gegenprobe statt „Exitcode 0 = fertig": Dateidatum + Größe der app.asar vorher/nachher.
+//      ACHTUNG (erster echter Lauf 05.11.2026, DE5CG3485QN8): Die installierten Dateien tragen
+//      das Datum des BUILDS (app.asar im Build 14:18:38, Setup 14:19:50), NICHT das der
+//      Installation. „Datum ≥ Installationsstart" war deshalb falsch und meldete einen Fehler,
+//      obwohl der Stand von 22.10. auf 05.11. gewechselt hatte. Richtig: geändert gegenüber
+//      vorher ODER passt zum Setup (Build-Datum kurz vor dem Setup-Datum) = installiert.
 //   8. Desktop-Nachricht „Installation ist durch" (bei Fehlern ein ehrlicher Text)
 //   9. Setup vom PC löschen
 
@@ -182,11 +185,11 @@ function Get-SkfToolOrt {
 }
 function Get-SkfToolStand {
   $ort = Get-SkfToolOrt
-  $exe = $false; $am = ''
+  $exe = $false; $am = ''; $bytes = 0
   if ($ort) {
     $exe = Test-Path -LiteralPath (Join-Path $ort.ordner 'IT Admin Tool.exe')
     $a = Join-Path $ort.ordner 'resources\app.asar'
-    if (Test-Path -LiteralPath $a) { $am = (Get-Item -LiteralPath $a).LastWriteTime.ToUniversalTime().ToString('s') + 'Z' }
+    if (Test-Path -LiteralPath $a) { $ai = Get-Item -LiteralPath $a; $am = $ai.LastWriteTime.ToUniversalTime().ToString('s') + 'Z'; $bytes = [int64]$ai.Length }
   }
   $proz = @(Get-Process -Name 'IT Admin Tool')
   $nutzer = @(Get-Process -Name 'IT Admin Tool' -IncludeUserName | ForEach-Object { [string]$_.UserName } | Where-Object { $_ } | Select-Object -Unique)
@@ -195,7 +198,7 @@ function Get-SkfToolStand {
   [pscustomobject]@{
     ok = $true; rechner = [string]$env:COMPUTERNAME; produktTyp = [int]$os.ProductType; system = [string]$os.Caption
     installiert = [bool]$ort; ordner = $(if ($ort) { [string]$ort.ordner } else { '' }); version = $(if ($ort) { [string]$ort.version } else { '' })
-    exe = [bool]$exe; installiertAm = $am; prozesse = $proz.Count; nutzer = @($nutzer); angemeldet = $angemeldet
+    exe = [bool]$exe; standVom = $am; asarBytes = $bytes; prozesse = $proz.Count; nutzer = @($nutzer); angemeldet = $angemeldet
     jetzt = ((Get-Date).ToUniversalTime().ToString('s') + 'Z')
   }
 }
@@ -216,20 +219,22 @@ export interface ToolStand {
   ordner: string
   version: string
   exe: boolean
-  /** Dateidatum der app.asar = Zeitpunkt der letzten Installation (ISO) */
-  installiertAm: string
+  /** Dateidatum der app.asar (ISO) = Build-Zeitpunkt der installierten Version, NICHT der Installation */
+  standVom: string
+  /** Größe der app.asar — zusammen mit standVom die „Unterschrift" des installierten Stands */
+  asarBytes: number
   prozesse: number
   nutzer: string[]
   angemeldet: string
 }
-const LEER_STAND: ToolStand = { ok: false, rechner: '', produktTyp: 0, system: '', installiert: false, ordner: '', version: '', exe: false, installiertAm: '', prozesse: 0, nutzer: [], angemeldet: '' }
+const LEER_STAND: ToolStand = { ok: false, rechner: '', produktTyp: 0, system: '', installiert: false, ordner: '', version: '', exe: false, standVom: '', asarBytes: 0, prozesse: 0, nutzer: [], angemeldet: '' }
 
 function standAus(j: Record<string, unknown> | null): ToolStand | null {
   if (!j || j.ok !== true) return null
   return {
     ok: true, rechner: String(j.rechner || ''), produktTyp: Number(j.produktTyp) || 0, system: String(j.system || ''),
     installiert: !!j.installiert, ordner: String(j.ordner || ''), version: String(j.version || ''), exe: !!j.exe,
-    installiertAm: String(j.installiertAm || ''), prozesse: Number(j.prozesse) || 0,
+    standVom: String(j.standVom || ''), asarBytes: Number(j.asarBytes) || 0, prozesse: Number(j.prozesse) || 0,
     nutzer: asArr<string>(j.nutzer).map(String).filter(Boolean), angemeldet: String(j.angemeldet || ''),
   }
 }
@@ -263,14 +268,35 @@ export async function pruefeToolStand(host: string): Promise<ToolStand> {
   return zweite ? { ...s, ok: false, gesperrt: true, fehler: zweite } : s
 }
 
-/** Vergleich Installationszeit ↔ Setup-Datum (nur ein Hinweis, keine Sperre). */
-export function standVergleich(s: ToolStand, setupErstellt?: string): 'aelter' | 'vermutlich-aktuell' | 'unbekannt' | 'fehlt' {
+// Build-Zeitfenster: die Programmdateien entstehen beim Bauen kurz VOR der Setup-Datei
+// (gemessen: app.asar 14:18:38, Setup 14:19:50). Großzügig 30 Minuten davor, 2 Minuten danach.
+const BUILD_VORLAUF_MS = 30 * 60_000
+const BUILD_NACHLAUF_MS = 2 * 60_000
+export type StandVergleich = 'aelter' | 'gleich' | 'neuer' | 'unbekannt' | 'fehlt'
+
+/** Installierter Stand ↔ Setup (Build-Datum der Programmdateien gegen Dateidatum des Setups). */
+export function standVergleich(s: ToolStand, setupErstellt?: string): StandVergleich {
   if (!s.installiert || !s.exe) return 'fehlt'
-  const a = ms(s.installiertAm), b = ms(setupErstellt)
+  const a = ms(s.standVom), b = ms(setupErstellt)
   if (isNaN(a) || isNaN(b)) return 'unbekannt'
-  // Installiert, BEVOR dieses Setup gebaut wurde → sicher ein älterer Stand.
-  if (a < b - 60_000) return 'aelter'
-  return 'vermutlich-aktuell'
+  if (a < b - BUILD_VORLAUF_MS) return 'aelter'
+  if (a <= b + BUILD_NACHLAUF_MS) return 'gleich'
+  return 'neuer'
+}
+
+export type InstallBefund = 'neu' | 'gleich' | 'unveraendert' | 'fehlt'
+/**
+ * Was hat die Installation bewirkt? (rein, testbar)
+ *   neu          — Programmdateien anders als vorher (oder vorher nicht installiert)
+ *   gleich       — unverändert, aber schon genau der Stand dieses Setups (drübergespielt)
+ *   unveraendert — unverändert und passt nicht erkennbar zum Setup
+ *   fehlt        — IT Admin Tool.exe / app.asar fehlen danach
+ */
+export function bewerteInstallation(vor: ToolStand, nach: ToolStand, setupErstellt?: string): InstallBefund {
+  if (!nach.installiert || !nach.exe || !nach.standVom) return 'fehlt'
+  if (!vor.installiert || !vor.exe || !vor.standVom) return 'neu'
+  if (nach.standVom !== vor.standVom || nach.asarBytes !== vor.asarBytes) return 'neu'
+  return standVergleich(nach, setupErstellt) === 'gleich' ? 'gleich' : 'unveraendert'
 }
 
 // ── Desktop-Nachrichten ──────────────────────────────────────────────────────
@@ -372,10 +398,11 @@ export function deuteCode(code: number): string {
   return `Setup endete mit Exitcode ${code}`
 }
 
-/** Wurde die Programmdatei durch DIESEN Lauf neu geschrieben? (rein, testbar) */
-export function neuGeschrieben(s: ToolStand, startIso: string): boolean {
-  const a = ms(s.installiertAm), b = ms(startIso)
-  return s.installiert && s.exe && !isNaN(a) && !isNaN(b) && a >= b - 5_000
+/** Kurztext zum installierten Stand für Schritt-Infos. */
+function standText(s: ToolStand, setupErstellt?: string): string {
+  if (!s.installiert || !s.exe) return 'IT Admin Tool noch nicht installiert'
+  const v = standVergleich(s, setupErstellt)
+  return `installierter Stand vom ${zeitText(s.standVom) || '?'}${v === 'aelter' ? ' (älter als dieses Setup)' : v === 'gleich' ? ' (schon der Stand dieses Setups)' : v === 'neuer' ? ' (neuer als dieses Setup!)' : ''}`
 }
 
 /** IT Admin Tool auf dem Ziel-PC ankündigen, beenden, still neu installieren, prüfen, melden. */
@@ -391,10 +418,9 @@ export async function installiereTool(host: string, setup: ToolSetup, opt: ToolO
   melde('ziel', 'laeuft')
   const vor = await pruefeToolStand(host)
   if (!vor.ok) { melde('ziel', 'fehler', vor.fehler); return { ok: false, text: vor.fehler || 'Ziel-PC nicht prüfbar.' } }
-  const vgl = standVergleich(vor, s.erstellt)
   melde('ziel', 'ok', [
     `${vor.rechner || host} erreichbar`,
-    vor.installiert && vor.exe ? `installiert am ${zeitText(vor.installiertAm) || '?'}${vgl === 'aelter' ? ' (älter als dieses Setup)' : ''}` : 'IT Admin Tool noch nicht installiert',
+    standText(vor, s.erstellt),
     vor.prozesse ? `läuft gerade${vor.nutzer.length ? ` (${vor.nutzer.join(', ')})` : ''}` : 'läuft nicht',
     `angemeldet: ${vor.angemeldet || 'niemand'}`,
   ].join(' · '))
@@ -462,12 +488,17 @@ export async function installiereTool(host: string, setup: ToolSetup, opt: ToolO
   melde('pruefen', 'laeuft')
   const nach = await leseStand(host)
   const altDa = nach.ok ? nach.exe : vor.exe
+  // Zustand nach einem unklaren Setup-Ende ehrlich beschreiben (ohne Erfolg zu behaupten)
+  const zustand = () => !nach.ok ? (nach.fehler || 'nicht prüfbar')
+    : !nach.exe ? 'Programmdatei fehlt'
+      : bewerteInstallation(vor, nach, s.erstellt) === 'neu' ? `Programmdateien geändert (Stand vom ${zeitText(nach.standVom)}) — ob das Setup vollständig durchlief, ist unklar`
+        : `Programmdatei vorhanden, Stand unverändert vom ${zeitText(nach.standVom) || '?'}`
   if (!ij || ij.ok === false) {
-    melde('pruefen', nach.ok ? 'warnung' : 'fehler', nach.ok ? (nach.exe ? 'Programmdatei vorhanden (alter Stand)' : 'Programmdatei fehlt') : (nach.fehler || 'nicht prüfbar'))
+    melde('pruefen', nach.ok ? 'warnung' : 'fehler', zustand())
     return scheitern('install', ij?.fehler || (ir.timedOut ? `Keine Rückmeldung vom Ziel-PC innerhalb von ${INSTALL_MINUTEN + 5} Minuten.` : (ir.stderr?.trim() || 'Keine Rückmeldung vom Ziel-PC.')), altDa)
   }
   if (!ij.fertig) {
-    melde('pruefen', 'warnung', nach.ok && nach.exe ? 'Programmdatei vorhanden' : 'Programmdatei fehlt')
+    melde('pruefen', 'warnung', zustand())
     return scheitern('install', `Das Setup hat sich nach ${INSTALL_MINUTEN} Minuten nicht beendet und wurde abgebrochen.`, altDa)
   }
   const codeText = deuteCode(ij.code ?? -1)
@@ -475,13 +506,25 @@ export async function installiereTool(host: string, setup: ToolSetup, opt: ToolO
     melde('install', ij.code === 0 ? 'ok' : 'warnung', codeText)
     return scheitern('pruefen', `${codeText}, die Nachprüfung war aber nicht möglich: ${nach.fehler || 'keine Antwort'}.`, true)
   }
-  const neu = neuGeschrieben(nach, ij.start || '')
-  if (!neu) {
-    melde('install', ij.code === 0 ? 'warnung' : 'fehler', codeText)
-    return scheitern('pruefen', `${codeText}, die Programmdateien wurden aber nicht neu geschrieben${nach.exe ? ` (Stand weiter vom ${zeitText(nach.installiertAm) || '?'})` : ' — IT Admin Tool.exe fehlt'}.`, nach.exe)
+  // Die Dateien tragen das BUILD-Datum (nicht die Installationszeit) → vorher/nachher vergleichen
+  const befund = bewerteInstallation(vor, nach, s.erstellt)
+  const codeOk = ij.code === 0
+  if (befund === 'fehlt') {
+    melde('install', codeOk ? 'warnung' : 'fehler', codeText)
+    return scheitern('pruefen', `${codeText}, danach fehlen aber die Programmdateien (IT Admin Tool.exe / app.asar).`, false)
   }
-  melde('install', ij.code === 0 ? 'ok' : 'warnung', ij.code === 0 ? codeText : `${codeText} — Dateien sind trotzdem neu`)
-  melde('pruefen', 'ok', `Programmdateien neu geschrieben (${zeitText(nach.installiertAm)}) in ${nach.ordner}`)
+  if (befund === 'unveraendert' && !codeOk) {
+    melde('install', 'fehler', codeText)
+    return scheitern('pruefen', `${codeText} — die Programmdateien sind unverändert (Stand weiter vom ${zeitText(nach.standVom) || '?'}).`, true)
+  }
+  const vonBis = `Stand vom ${zeitText(vor.standVom) || '–'} → ${zeitText(nach.standVom)}`
+  let pruefText = ''
+  let pruefWarn = false
+  if (befund === 'neu') pruefText = `Programmdateien erneuert: ${vor.installiert && vor.exe ? vonBis : `neu installiert, Stand vom ${zeitText(nach.standVom)}`}${standVergleich(nach, s.erstellt) === 'gleich' ? ' — passt zum Setup' : ''} · ${nach.ordner}`
+  else if (befund === 'gleich') pruefText = `Es war schon genau der Stand dieses Setups (vom ${zeitText(nach.standVom)}) — neu drübergespielt · ${nach.ordner}`
+  else { pruefWarn = true; pruefText = `Setup meldet Erfolg, die Programmdateien sind aber unverändert (Stand vom ${zeitText(nach.standVom)}) und passen nicht erkennbar zum Setup (erstellt ${zeitText(s.erstellt)}) — vermutlich war dieser Stand schon installiert.` }
+  melde('install', codeOk ? 'ok' : 'warnung', codeOk ? codeText : `${codeText} — die Programmdateien stimmen trotzdem`)
+  melde('pruefen', pruefWarn ? 'warnung' : 'ok', pruefText)
 
   // 8) Fertig-Nachricht
   melde('fertig', 'laeuft')
@@ -493,10 +536,14 @@ export async function installiereTool(host: string, setup: ToolSetup, opt: ToolO
   const sauber = await aufraeumen(host)
   melde('aufraeumen', sauber ? 'ok' : 'warnung', sauber ? 'Setup vom PC entfernt.' : `Das Setup unter ${ZIEL_ORDNER} konnte nicht entfernt werden.`)
 
-  const warn = ij.code !== 0 || !sauber || (!n1.ok && jemand) || (!n2.ok && jemand)
+  const warn = !codeOk || pruefWarn || !sauber || (!n1.ok && jemand) || (!n2.ok && jemand)
+  const was = befund === 'neu'
+    ? (vor.installiert && vor.exe ? `neu installiert (${vonBis})` : `neu installiert (Stand vom ${zeitText(nach.standVom)})`)
+    : befund === 'gleich' ? `neu drübergespielt — es war schon der Stand dieses Setups (vom ${zeitText(nach.standVom)})`
+      : `Setup gelaufen, Programmdateien unverändert (Stand vom ${zeitText(nach.standVom)})`
   return {
     ok: true, warnung: warn,
-    text: `IT Admin Tool auf ${host} neu installiert (${zeitText(nach.installiertAm)}, Setup vom ${zeitText(s.erstellt)}).${bj.vorher ? ' Das laufende Tool wurde vorher beendet.' : ''}`,
+    text: `IT Admin Tool auf ${host} ${was}.${bj.vorher ? ' Das laufende Tool wurde vorher beendet.' : ''}`,
   }
 }
 

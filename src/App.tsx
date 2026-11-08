@@ -47,6 +47,8 @@ import ServerMonitorController from './components/server/ServerMonitorController
 import GameInviteController from './components/games/GameInviteController'
 import ChatController from './components/chat/ChatController'
 import TonerWarnungController from './components/printer/TonerWarnungController'
+import MonitorController from './monitoring/MonitorController'
+import { MonitorDialogSlot } from './monitoring/MonitorDialog'
 import LostDeviceScanController from './components/scans/LostDeviceScanController'
 import NetworkDrivesScanController from './components/scans/NetworkDrivesScanController'
 import WeekendCheckController from './components/scans/WeekendCheckController'
@@ -72,6 +74,7 @@ import { loadAppLock, canBypassLock, type AppLock } from './services/appLock'
 // Lazy-loaded screens (per Performance-Regeln: erst laden wenn geöffnet)
 const ITGuru = lazy(() => import('./screens/ITGuru'))
 const PCDiagnosis = lazy(() => import('./screens/PCDiagnosis'))
+const Startseite = lazy(() => import('./screens/Startseite'))
 const NetworkRadar = lazy(() => import('./screens/NetworkRadar'))
 const VlanOverview = lazy(() => import('./screens/VlanOverview'))
 const KnowledgeBase = lazy(() => import('./screens/KnowledgeBase'))
@@ -79,6 +82,8 @@ const KnowledgeSearch = lazy(() => import('./knowledge/KnowledgeSearch'))
 const InfrastructureProjects = lazy(() => import('./screens/InfrastructureProjects'))
 const GroupSearch = lazy(() => import('./screens/GroupSearch'))
 const AccessPoints = lazy(() => import('./screens/AccessPoints'))
+const ClientGeraete = lazy(() => import('./screens/ClientGeraete'))
+const DruckerUebersicht = lazy(() => import('./screens/DruckerUebersicht'))
 const OtDevices = lazy(() => import('./screens/OtDevices'))
 const PruffeldZoll = lazy(() => import('./screens/PruffeldZoll'))
 const Verwaltungsgebaeude = lazy(() => import('./screens/Verwaltungsgebaeude'))
@@ -108,7 +113,8 @@ const CriticalDevices = lazy(() => import('./screens/CriticalDevices'))
 
 function renderScreen(screen: Screen) {
   switch (screen) {
-    case 'home':              return <Home />
+    case 'home':              return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Startseite /></Suspense>
+    case 'massenabfragen':    return <Home />
     case 'query-menu':        return <QueryMenu />
     case 'results':           return <Results />
     case 'user-info':         return <UserInfo />
@@ -136,6 +142,8 @@ function renderScreen(screen: Screen) {
     case 'drucker': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Drucker /></Suspense>
     case 'gruppen-suche': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><GroupSearch /></Suspense>
     case 'access-points': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><AccessPoints /></Suspense>
+    case 'drucker-uebersicht': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><DruckerUebersicht /></Suspense>
+    case 'client-geraete': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ClientGeraete /></Suspense>
     case 'ot-devices': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><OtDevices /></Suspense>
     case 'pruffeld-zoll': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><PruffeldZoll /></Suspense>
     case 'verwaltungsgebaeude': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Verwaltungsgebaeude /></Suspense>
@@ -394,6 +402,7 @@ export default function App() {
             <GameInviteController />
             <ChatController />
             <TonerWarnungController />
+            <MonitorController />
             <ErrorFlashOverlay />
           </main>
         </div>
@@ -402,6 +411,7 @@ export default function App() {
       <PersonDossierSlot />
       <DeviceDossierSlot />
       <PrinterDossierSlot />
+      <MonitorDialogSlot />
       </PrinterDossierProvider>
      </DeviceDossierProvider>
     </DossierProvider>

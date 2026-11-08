@@ -119,6 +119,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   netGetBasePath: () => ipcRenderer.invoke('net:getBasePath'),
   netSetBasePath: (path: string) => ipcRenderer.invoke('net:setBasePath', path),
   netWriteRawFile: (relativePath: string, base64Data: string) => ipcRenderer.invoke('net:writeRawFile', relativePath, base64Data),
+  netCopyLocalFileAsync: (localPath: string, relativePath: string) => ipcRenderer.invoke('net:copyLocalFileAsync', localPath, relativePath),
   // Ordner einer HTML-Folie fuer das skfslide://-Protokoll freigeben
   slideAllowFolder: (htmlPfad: string) => ipcRenderer.invoke('slide:allowFolder', htmlPfad),
   netReadRawFile: (relativePath: string) => ipcRenderer.invoke('net:readRawFile', relativePath),

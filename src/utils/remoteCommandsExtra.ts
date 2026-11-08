@@ -32,7 +32,7 @@ export function buildExtraCategories(): Category[] {
         { id: 'brightshow', func: 'Helligkeit anzeigen', when: 'Aktuelle Helligkeit (Laptop)',
           buildCmd: (h) => remote(h, `(Get-CimInstance -Namespace root/WMI -ClassName WmiMonitorBrightness).CurrentBrightness`), action: 'read' },
         { id: 'brightset', func: 'Helligkeit setzen', when: 'Helligkeit ändern (Laptop)',
-          buildCmd: (h, i) => remote(h, `(Get-WmiObject -Namespace root/wmi -Class WmiMonitorBrightnessMethods).WmiSetBrightness(5,${i || '50'}); Write-Output 'Helligkeit auf ${i || '50'}% gesetzt'`), action: 'write',
+          buildCmd: (h, i) => { const p = Math.max(0, Math.min(100, parseInt(i || '50', 10) || 50)); return remote(h, `(Get-WmiObject -Namespace root/wmi -Class WmiMonitorBrightnessMethods).WmiSetBrightness(5,${p}); Write-Output 'Helligkeit auf ${p}% gesetzt'`) }, action: 'write',
           input: { type: 'text', placeholder: '0-100 (Prozent)' } },
         { id: 'resshow', func: 'Auflösung anzeigen', when: 'Bildschirmauflösung',
           buildCmd: (h) => remote(h, `Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Screen]::AllScreens | ForEach-Object { @{DeviceName=$_.DeviceName;Bounds="$($_.Bounds.Width)x$($_.Bounds.Height)";Primary=$_.Primary} } | ConvertTo-Json`), action: 'read' },
