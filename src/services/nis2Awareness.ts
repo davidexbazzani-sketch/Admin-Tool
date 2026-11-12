@@ -68,7 +68,12 @@ export interface AwarenessEinstellungen {
 }
 
 /** Steht standardmäßig in CC jeder Manager-Mail. */
-export const STANDARD_CC = 'sascha.herges@skf.de'
+export const STANDARD_CC = 'sascha.herges@skf.com'
+
+/** Bis 11.11.2026 stand hier fälschlich „@skf.de“ — auch in schon gespeicherten Einstellungen berichtigen. */
+export function ccBerichtigt(cc: string | undefined): string {
+  return (cc ?? STANDARD_CC).replace(/sascha\.herges@skf\.de\b/gi, STANDARD_CC)
+}
 
 /**
  * Ablage der Schulung (I:\Public\Public\NIS2\Schulungen\Awareness_Schulung.html) — als
@@ -80,11 +85,40 @@ export const STANDARD_LINK = 'file://W3172/SKF%20Marine/Public/Public/NIS2/Schul
 /** Dieser Satz wird in der HTML-Mail zum Hyperlink auf die Schulung. */
 export const LINK_TEXT = 'Hier liegt die Schulung'
 
-/** Klartext der Mail → HTML; LINK_TEXT wird (falls vorhanden) zum Hyperlink. */
-export function mailZuHtml(text: string, link?: string): string {
+/** Link aus den Einstellungen — leer/fehlend = Standard-Ablage (der Link gehört IMMER in die Manager-Mail). */
+export function schulungsLink(e?: { link?: string }): string {
+  return e?.link?.trim() || STANDARD_LINK
+}
+
+/** Lesbarer Pfad zum Link: file://W3172/SKF%20Marine/… → I:\…, sonst UNC bzw. der Link selbst. */
+export function linkAnzeige(link: string): string {
+  const l = link.trim()
+  if (!/^file:/i.test(l)) return l
+  let p = l.replace(/^file:\/*/i, '')
+  try { p = decodeURI(p) } catch { /* bleibt kodiert */ }
+  const unc = '\\\\' + p.replace(/\//g, '\\')
+  const i = unc.match(/^\\\\W3172\\SKF Marine\\(.*)$/i)
+  return i ? `I:\\${i[1]}` : unc
+}
+
+/** Klartext der Mail → HTML; LINK_TEXT und der angezeigte Pfad werden zum Hyperlink auf die Schulung.
+ *  Fehlt der Satz im (von Hand geänderten) Text, wird er vor „Falls jemand aus deiner Liste“ bzw. dem Dank/Gruß eingefügt. */
+export function mailZuHtml(text: string, link: string = STANDARD_LINK): string {
   const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-  let html = esc(text)
-  if (link?.trim()) html = html.replace(LINK_TEXT, `<a href="${esc(link.trim())}">${LINK_TEXT}</a>`)
+  const ziel = link.trim() || STANDARD_LINK
+  const anzeige = linkAnzeige(ziel)
+  let t = text
+  if (!t.includes(LINK_TEXT) && !t.includes(anzeige)) {
+    const zeile = `${LINK_TEXT}: ${anzeige}\n\n`
+    const vor = ['Nach erfolgreichem Abschluss', 'Falls jemand aus deiner Liste', 'Vielen Dank', 'Viele Grüße'].map(s => t.indexOf(s)).find(i => i >= 0)
+    t = vor != null ? t.slice(0, vor) + zeile + t.slice(vor) : `${t}\n\n${zeile.trim()}`
+  }
+  const a = (s: string) => `<a href="${esc(ziel)}">${esc(s)}</a>`
+  // erst escapen, dann Ersetzen per Funktion (kein $-Muster) — Pfad und Satz je einmal verlinken
+  let html = esc(t)
+  const escAnz = esc(anzeige)
+  if (html.includes(escAnz)) html = html.split(escAnz).join(a(anzeige))
+  html = html.replace(LINK_TEXT, () => a(LINK_TEXT))
   return `<div style="font-family:Calibri,Arial,sans-serif;font-size:11pt">${html.split(/\r?\n/).join('<br>')}</div>`
 }
 
@@ -387,10 +421,11 @@ export function baueManagerMail(o: {
     (reminder > 0 ? `${n === 1 ? 'Die betroffene Person hat' : 'Die Betroffenen haben'} von uns bereits ${reminderText} per E-Mail erhalten. Wir bitten dich daher, ` : 'Wir bitten dich, ')
       + `sie direkt anzusprechen und dafür zu sorgen, dass die Schulung${o.frist ? ` bis zum ${o.frist}` : ' zeitnah'} absolviert wird.`,
   ]
-  if (o.link?.trim()) zeilen.push('', `${LINK_TEXT} — gern direkt an dein Team weitergeben.`)
+  zeilen.push('', `${LINK_TEXT}: ${linkAnzeige(o.link?.trim() || STANDARD_LINK)}`, 'Den Link gern direkt an dein Team weitergeben.')
   zeilen.push(
     '',
-    'Nach erfolgreichem Abschluss erhalten wir automatisch eine Bestätigung — darüber hinaus ist nichts weiter zu tun. Falls jemand aus deiner Liste das Unternehmen bereits verlassen hat oder aus anderen Gründen nicht teilnehmen muss, gib uns bitte kurz Bescheid.',
+    // Kein Satz zu einer „automatischen Bestätigung" — die gibt es nicht (Nutzer 10.11.2026).
+    'Falls jemand aus deiner Liste das Unternehmen bereits verlassen hat oder aus anderen Gründen nicht teilnehmen muss, gib uns bitte kurz Bescheid.',
     '',
     'Vielen Dank für deine Unterstützung!',
     '',

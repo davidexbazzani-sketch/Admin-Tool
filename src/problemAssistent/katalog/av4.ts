@@ -599,7 +599,7 @@ export const PROBLEME_AV4: PaProblem[] = [
       { aktion: 'teams-beenden', optional: true },
       { aktion: 'teams-starten', optional: true },
     ],
-    hinweis: 'Fehlt die Busylight-Software oder ist sie zu alt fürs neue Teams, über das Softwarecenter bzw. die Software-Installationen aktualisieren.',
+    hinweis: 'Fehlt die Busylight-Software oder ist sie zu alt fürs neue Teams, über das Unternehmensportal (Intune) bzw. die Software-Installationen aktualisieren.',
     nachricht: 'Teams meldet seinen Status jetzt wieder an andere Programme. Bitte starten Sie die Busylight-Software einmal neu.',
   },
   {
@@ -771,7 +771,7 @@ export const PROBLEME_AV4: PaProblem[] = [
       { aktion: 'peri-audio-pegel', param: 'Aufnahme: Standard = 90', optional: true },
     ],
     frage: MIKRO('Aufnahme: Logi', ['Aufnahme: Logi', 'Aufnahme: Zone', 'Aufnahme: Logitech', 'Aufnahme: H390']),
-    hinweis: 'Firmware und Tastenbelegung regelt Logi Tune (Softwarecenter bzw. Software-Installationen).',
+    hinweis: 'Firmware und Tastenbelegung regelt Logi Tune (Unternehmensportal bzw. Software-Installationen).',
     nachricht: 'Ihr Logitech-Headset ist jetzt das Standardmikrofon. Bitte klappen Sie den Mikrofonarm ganz nach unten – oben ist es stummgeschaltet.',
   },
   {
@@ -913,7 +913,7 @@ export const PROBLEME_AV4: PaProblem[] = [
       { aktion: 'werkzeug:software', titel: 'Software-Installationen öffnen (Diktiersoftware)' },
     ],
     frage: { label: 'Diktiersoftware (Teil des Namens)', platzhalter: 'z. B. SpeechExec, DSS Player, Olympus', vorlagen: ['SpeechExec', 'DSS Player', 'Olympus', 'Philips', 'Grundig'] },
-    hinweis: 'Fehlt die Diktiersoftware in der Software-Installation, über das Softwarecenter bzw. ServiceNow anfordern (Lizenz beim Fachbereich).',
+    hinweis: 'Fehlt die Diktiersoftware in der Software-Installation, über das Unternehmensportal (Intune) bzw. ServiceNow anfordern (Lizenz beim Fachbereich).',
     nachricht: 'Bitte öffnen Sie die Diktatdateien mit der Diktiersoftware – sie wird Ihnen bereitgestellt, falls sie noch fehlt.',
   },
 

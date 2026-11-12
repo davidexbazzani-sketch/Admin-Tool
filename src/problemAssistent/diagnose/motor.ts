@@ -62,25 +62,40 @@ export function werteAus(u: DgUnter, f: DgFakten): DgBefund[] {
     let trifft = false
     try { trifft = r.wenn(f) === true } catch { trifft = false }
     if (!trifft) continue
+    if (r.viele) {
+      let teile: ReturnType<NonNullable<DgRegel['viele']>> = []
+      try { teile = r.viele(f) } catch { teile = [] }
+      teile.forEach((t, i) => out.push({ regel: r.id + '#' + i, problem: t.problem, text: t.text, schwere: r.schwere, antrag: t.antrag, fehlerbild: t.fehlerbild, viel: true }))
+      continue
+    }
     let text = ''
     try { text = r.befund(f) } catch { text = '' }
     out.push({ regel: r.id, problem: r.problem, text: text || r.id, schwere: r.schwere })
   }
   out.sort((a, b) => b.schwere - a.schwere)
+  // je Problem nur einmal – außer Einzelbefunde einer „viele“-Regel (z. B. mehrere fehlende Gruppen)
   const gesehen = new Set<string>()
-  return out.filter(b => (gesehen.has(b.problem) ? false : (gesehen.add(b.problem), true)))
+  return out.filter(b => { const k = b.viel ? b.regel : b.problem; return gesehen.has(k) ? false : (gesehen.add(k), true) })
 }
 
 /** Sonden eines Unterthemas ausführen (max. 2 gleichzeitig) und Fortschritt melden. */
 export async function fuehreDiagnose(
   host: string, u: DgUnter, sonden: Map<string, DgSonde>, antworten: Record<string, 'ja' | 'nein'>,
-  melde: (e: DgSondenErgebnis, laeuft: string[]) => void, ctx: { sam?: string } = {},
+  melde: (e: DgSondenErgebnis, laeuft: string[]) => void, ctx: { sam?: string; nurLokal?: boolean } = {},
 ): Promise<{ fakten: DgFakten; ergebnisse: DgSondenErgebnis[]; befunde: DgBefund[] }> {
   const { fuehreAus } = await import('../motor')
   const fakten: DgFakten = {}
   for (const [k, v] of Object.entries(antworten)) fakten['frage.' + k] = v
+  // PC nicht erreichbar → nur die Prüfungen am Admin-PC (AD); „pc.erreichbar“ = false nutzen Regeln (Homeoffice)
+  fakten['pc.erreichbar'] = !ctx.nurLokal
   const ergebnisse: DgSondenErgebnis[] = []
-  const liste = u.sonden.map(id => sonden.get(id)).filter((s): s is DgSonde => !!s)
+  const alle = u.sonden.map(id => sonden.get(id)).filter((s): s is DgSonde => !!s)
+  const liste = ctx.nurLokal ? alle.filter(s => s.modus === 'lokal') : alle
+  if (ctx.nurLokal) for (const s of alle) if (s.modus !== 'lokal') {
+    const e: DgSondenErgebnis = { id: s.id, titel: s.titel, ok: false, fehler: 'übersprungen – PC nicht erreichbar', punkte: [], dauerMs: 0 }
+    fakten[s.id + '._ok'] = false
+    ergebnisse.push(e); melde(e, [])
+  }
   const laeuft = new Set<string>()
   let i = 0
   const arbeiter = async () => {
@@ -103,6 +118,7 @@ export async function fuehreDiagnose(
     }
   }
   await Promise.all([arbeiter(), arbeiter()])
+  void import('../../services/aktivitaet').then(m => m.protokolliere({ art: 'manuell', quelle: 'Gib dein Problem ein · Diagnose', aktion: `Diagnose ausgeführt (nur gelesen): ${(u as { titel?: string }).titel || ''}`.trim(), ziel: String(host || '').toUpperCase(), ergebnis: `${ergebnisse.length} Prüfung(en)` })).catch(() => {})
   return { fakten, ergebnisse, befunde: werteAus(u, fakten) }
 }
 

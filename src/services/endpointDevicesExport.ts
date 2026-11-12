@@ -7,7 +7,7 @@ import { Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, Ta
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { api } from '../electronAPI'
-import { classifyModel, modelCost, formatEuro, MODEL_CATEGORIES, type EndpointDevice } from './endpointDevices'
+import { classifyModel, modelCost, deviceCost, istSkfEigentum, formatEuro, MODEL_CATEGORIES, type EndpointDevice } from './endpointDevices'
 import { monthsSince, type LastOnlineRow } from './endpointLastOnline'
 
 export type EndpointExportFormat = 'excel' | 'word' | 'pdf'
@@ -58,7 +58,7 @@ function colsFor(lo?: Record<string, LastOnlineRow>, hasLoc?: boolean): string[]
 }
 
 function deviceRow(d: EndpointDevice, lo?: Record<string, LastOnlineRow>, locText?: (d: EndpointDevice) => string): string[] {
-  const cost = modelCost(d.model)
+  const cost = deviceCost(d)   // SKF-Eigentum: kein Preis
   const row = [
     d.serial, d.hostname, d.assignedTo, d.model, classifyModel(d.model) || '—',
     cost === null ? '' : formatEuro(cost),
@@ -72,12 +72,13 @@ function deviceRow(d: EndpointDevice, lo?: Record<string, LastOnlineRow>, locTex
   return row
 }
 
-// Kosten-Zusammenfassung je Model-Typ + Gesamtsumme (nur bekannte Typen)
-function costSummary(devices: EndpointDevice[]): { rows: [string, number, number][]; totalCount: number; totalCost: number } {
+// Kosten-Zusammenfassung je Model-Typ + Gesamtsumme (nur bekannte Typen).
+// SKF-Eigentum wird nicht mitgezählt (dafür wird nichts mehr gezahlt) — nur als Hinweiszeile.
+function costSummary(devices: EndpointDevice[]): { rows: [string, number, number][]; totalCount: number; totalCost: number; skfOhneKosten: number } {
   const rows: [string, number, number][] = []
   let totalCount = 0, totalCost = 0
   for (const cat of MODEL_CATEGORIES) {
-    const inCat = devices.filter(d => classifyModel(d.model) === cat)
+    const inCat = devices.filter(d => classifyModel(d.model) === cat && !istSkfEigentum(d.assetOwnership))
     if (inCat.length === 0) continue
     const per = modelCost(inCat[0].model) ?? 0
     const sum = per * inCat.length
@@ -85,8 +86,10 @@ function costSummary(devices: EndpointDevice[]): { rows: [string, number, number
     totalCount += inCat.length
     totalCost += sum
   }
-  return { rows, totalCount, totalCost }
+  const skfOhneKosten = devices.filter(d => classifyModel(d.model) && istSkfEigentum(d.assetOwnership)).length
+  return { rows, totalCount, totalCost, skfOhneKosten }
 }
+const SKF_HINWEIS = 'SKF-Eigentum (kein Preis, nicht mitgezählt)'
 
 // ── Excel ─────────────────────────────────────────────────────────────────────
 async function buildExcel(devices: EndpointDevice[], opts: EndpointExportOptions): Promise<string> {
@@ -115,7 +118,10 @@ async function buildExcel(devices: EndpointDevice[], opts: EndpointExportOptions
   for (const [cat, count, s] of sum.rows) cs.addRow([cat, count, formatEuro(s)])
   const tr = cs.addRow(['Gesamt', sum.totalCount, formatEuro(sum.totalCost)])
   tr.eachCell(c => { c.font = { bold: true } })
-  cs.columns = [{ width: 26 }, { width: 12 }, { width: 24 }]
+  if (sum.skfOhneKosten > 0) {
+    cs.addRow([SKF_HINWEIS, sum.skfOhneKosten, '—']).eachCell(c => { c.font = { italic: true, color: { argb: 'FF666666' } } })
+  }
+  cs.columns = [{ width: 40 }, { width: 12 }, { width: 24 }]
 
   return arrayBufferToBase64(await wb.xlsx.writeBuffer() as ArrayBuffer)
 }
@@ -141,6 +147,7 @@ async function buildWord(devices: EndpointDevice[], opts: EndpointExportOptions)
         new TableRow({ tableHeader: true, children: [hcell('Model-Typ'), hcell('Anzahl'), hcell('Kosten/Monat')] }),
         ...sum.rows.map(([cat, count, s]) => new TableRow({ children: [cell(cat), cell(String(count)), cell(formatEuro(s))] })),
         new TableRow({ children: [hcell('Gesamt'), hcell(String(sum.totalCount)), hcell(formatEuro(sum.totalCost))] }),
+        ...(sum.skfOhneKosten > 0 ? [new TableRow({ children: [cell(SKF_HINWEIS), cell(String(sum.skfOhneKosten)), cell('—')] })] : []),
       ],
     }),
     new Paragraph({ text: '' }),
@@ -169,7 +176,11 @@ async function buildPdf(devices: EndpointDevice[], opts: EndpointExportOptions):
   autoTable(doc, {
     startY: 26,
     head: [['Model-Typ', 'Anzahl', 'Kosten/Monat (Summe)']],
-    body: [...sum.rows.map(([cat, count, s]) => [cat, String(count), formatEuro(s)]), ['Gesamt', String(sum.totalCount), formatEuro(sum.totalCost)]],
+    body: [
+      ...sum.rows.map(([cat, count, s]) => [cat, String(count), formatEuro(s)]),
+      ['Gesamt', String(sum.totalCount), formatEuro(sum.totalCost)],
+      ...(sum.skfOhneKosten > 0 ? [[SKF_HINWEIS, String(sum.skfOhneKosten), '—']] : []),
+    ],
     styles: { fontSize: 8, cellPadding: 1.5 },
     headStyles: { fillColor: [30, 64, 175], textColor: 255 },
     margin: { left: 14, right: 14 },

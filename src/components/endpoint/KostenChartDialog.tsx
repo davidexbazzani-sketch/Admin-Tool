@@ -180,7 +180,8 @@ export default function KostenChartDialog({ onClose }: { onClose: () => void }) 
                 </div>
               </div>
               <p className="text-[10px] text-muted-foreground">
-                Gezählt werden alle Geräte der Übersicht mit bekanntem Model-Typ — unabhängig von gesetzten Filtern. Der Punkt der laufenden Woche
+                Gezählt werden alle Geräte der Übersicht mit bekanntem Model-Typ — unabhängig von gesetzten Filtern; SKF-Eigentum ohne Preis
+                (dafür wird nichts mehr gezahlt, gilt ab KW 46/2026). Der Punkt der laufenden Woche
                 wird bis Sonntag auf den aktuellen Stand gezogen (z. B. nach einem Excel-Import), vergangene Wochen bleiben unverändert.
               </p>
             </>

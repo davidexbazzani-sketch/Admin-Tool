@@ -157,14 +157,14 @@ export const PROBLEME_OFFICE2: PaProblem[] = [
     id: 'excel-ace-oledb-treiber-fehlt', titel: 'Datenverbindung: „Der Provider Microsoft.ACE.OLEDB.12.0 ist nicht registriert“', bereich: OFFICE,
     stichworte: ['microsoft.ace.oledb.12.0', 'ace oledb', 'provider ist nicht registriert', 'provider is not registered', 'odbc', 'access database engine', 'treiber nicht gefunden', 'datenverbindung', 'datenquellenname nicht gefunden', 'im002', '32 bit 64 bit', 'sql server treiber'],
     ursache: 'Für die Verbindung zu Access-, ODBC- oder SQL-Datenquellen fehlt der passende Datenbanktreiber, oder er ist in der falschen Bitversion installiert (32-Bit-Treiber bei 64-Bit-Office oder umgekehrt).',
-    loesung: 'Die Office-Architektur wird angezeigt und geprüft, welche Datenbanktreiber installiert sind. Den fehlenden Treiber in der Bitversion von Office über die Software-Installationen bzw. das Softwarecenter installieren.',
+    loesung: 'Die Office-Architektur wird angezeigt und geprüft, welche Datenbanktreiber installiert sind. Den fehlenden Treiber in der Bitversion von Office über die Software-Installationen bzw. das Unternehmensportal (Intune) installieren.',
     schritte: [
       { aktion: 'office-status' },
       { aktion: 'software-suchen', param: '{eingabe}' },
       { aktion: 'werkzeug:software' },
     ],
     frage: { label: 'Treiber bzw. Programm', platzhalter: 'Access Database Engine', vorlagen: ['Access Database Engine', 'ODBC', 'SQL Server'] },
-    hinweis: 'Fehlt der Treiber im Softwarecenter, stellt ihn DXC bereit; ODBC-Datenquellen (DSN) für Fachanwendungen richten Fachabteilung bzw. DXC ein.',
+    hinweis: 'Fehlt der Treiber im Unternehmensportal, stellt ihn DXC bereit; ODBC-Datenquellen (DSN) für Fachanwendungen richten Fachabteilung bzw. DXC ein.',
     nachricht: 'Für Ihre Datenverbindung fehlt ein Datenbanktreiber. Wir installieren ihn – danach bitte Excel neu starten und die Daten aktualisieren.',
   },
   {
@@ -528,7 +528,7 @@ export const PROBLEME_OFFICE2: PaProblem[] = [
     id: 'office-access-fehlt', titel: 'Access-Datenbank öffnet nicht – Access ist nicht installiert', bereich: OFFICE,
     stichworte: ['access', 'accdb', 'mdb', 'access fehlt', 'access runtime', 'datenbank oeffnet nicht', 'kein programm fuer accdb', 'msaccess', 'access installieren', 'access datenbank'],
     ursache: 'Microsoft Access gehört nicht auf jedem PC zum Office-Paket; ohne Access bzw. die kostenlose Access Runtime lassen sich .accdb- und .mdb-Datenbanken nicht öffnen.',
-    loesung: 'Es wird geprüft, ob Access oder die Access Runtime installiert ist; fehlt beides, über die Software-Installationen bzw. das Softwarecenter installieren. Für die reine Nutzung einer fertigen Datenbank genügt meist die Runtime.',
+    loesung: 'Es wird geprüft, ob Access oder die Access Runtime installiert ist; fehlt beides, über die Software-Installationen bzw. das Unternehmensportal (Intune) installieren. Für die reine Nutzung einer fertigen Datenbank genügt meist die Runtime.',
     schritte: [
       { aktion: 'software-suchen', param: 'Access' },
       { aktion: 'office-status' },
@@ -912,7 +912,7 @@ export const PROBLEME_OFFICE2: PaProblem[] = [
       { aktion: 'software-suchen', param: 'Chrome' },
       { aktion: 'browser-beenden' },
       { aktion: 'werkzeug:deinstallation' },
-      { aktion: 'sccm-richtlinie' },
+      { aktion: 'intune-apps-sync' },
     ],
     nachricht: 'Auf Ihrem PC war Chrome doppelt installiert. Wir haben die überzählige Version entfernt – bitte starten Sie Chrome über das Startmenü neu.',
   },
@@ -933,7 +933,7 @@ export const PROBLEME_OFFICE2: PaProblem[] = [
     frage: { label: 'Name des Autostart-Eintrags', platzhalter: 'wie in „Autostart-Programme anzeigen“' },
     hinweis: 'Bei Verdacht auf Schadsoftware oder Datenabfluss die IT-Sicherheit informieren.',
     ueberwachen: ['defender-fund'],
-    nachricht: 'Auf Ihrem PC hat sich ein unerwünschtes Programm installiert, das wir gerade entfernen. Bitte laden Sie Programme nur über das Softwarecenter herunter.',
+    nachricht: 'Auf Ihrem PC hat sich ein unerwünschtes Programm installiert, das wir gerade entfernen. Bitte laden Sie Programme nur über das Unternehmensportal (Intune) herunter.',
   },
   {
     id: 'web-browser-oeffnet-bei-anmeldung', titel: 'Browser öffnet sich bei jeder Anmeldung von selbst mit einer Webseite', bereich: WEB,

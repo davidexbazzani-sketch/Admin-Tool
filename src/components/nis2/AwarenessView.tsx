@@ -18,7 +18,7 @@ import { foldName } from '../../utils/nameMatch'
 import { logDossierAction } from '../../services/personDossier'
 import {
   loadAwareness, parseAwarenessWorkbook, importiereAwareness, adAbgleich, speichereAdErgebnis,
-  protokolliereKontakt, speichereEinstellungen, baueManagerMail, mailZuHtml, STANDARD_CC, STANDARD_LINK, LINK_TEXT,
+  protokolliereKontakt, speichereEinstellungen, baueManagerMail, mailZuHtml, STANDARD_CC, ccBerichtigt, STANDARD_LINK, LINK_TEXT, schulungsLink, linkAnzeige,
   type AwarenessStand, type AwarenessPerson, type AdInfo, type ManagerKontakt, type AwarenessEinstellungen,
 } from '../../services/nis2Awareness'
 
@@ -65,7 +65,7 @@ export default function AwarenessView({ onBack }: { onBack: () => void }) {
   }, [])
   useEffect(() => { void neuLaden() }, [neuLaden])
 
-  const einst: AwarenessEinstellungen = { reminderAnzahl: 2, cc: STANDARD_CC, link: STANDARD_LINK, ...stand?.einstellungen }
+  const einst: AwarenessEinstellungen = { reminderAnzahl: 2, ...stand?.einstellungen, cc: ccBerichtigt(stand?.einstellungen?.cc), link: schulungsLink(stand?.einstellungen) }
 
   // ── Import + AD ────────────────────────────────────────────────────────────
   async function adStarten(basis: AwarenessStand) {
@@ -432,7 +432,7 @@ function MailDialog({ g, vorschlag, cc: ccStart, link, onClose, onErledigt }: {
             <textarea value={body} onChange={e => setBody(e.target.value)} rows={18}
               className="w-full mt-0.5 px-2.5 py-2 text-xs rounded-md bg-background border border-border text-foreground font-mono leading-relaxed focus:outline-none focus:border-primary" />
           </label>
-          {link && body.includes(LINK_TEXT) && <p className="text-[10px] text-muted-foreground">„{LINK_TEXT}“ wird in der Mail als <b>Hyperlink</b> auf die Schulung gesendet.</p>}
+          <p className="text-[10px] text-muted-foreground" data-schulungslink>„{LINK_TEXT}“ und der Pfad werden in der Mail zum <b>Hyperlink</b> auf die Schulung ({linkAnzeige(link || STANDARD_LINK)}){body.includes(LINK_TEXT) ? '' : ' — der Satz fehlt im Text und wird automatisch vor dem Schluss eingefügt'}.</p>
           {fehler && <p className="text-xs text-red-300 flex items-center gap-1"><AlertTriangle size={13} />{fehler}</p>}
         </div>
         <div className="flex items-center gap-2 px-4 py-3 border-t border-border">
@@ -516,7 +516,7 @@ function EinstellungenDialog({ einst, onClose, onSpeichern }: { einst: Awareness
       <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-md p-5 space-y-2" onClick={e => e.stopPropagation()}>
         <h3 className="text-sm font-semibold text-foreground flex items-center gap-2"><Settings2 size={16} className="text-blue-400" />Text-Einstellungen (für alle Admins)</h3>
         <Feld label="Frist („bis zum …“, leer = „zeitnah“)" value={frist} onChange={setFrist} placeholder="31.10.2026" />
-        <Feld label={`Link zur Schulung (wird zum Hyperlink „${LINK_TEXT}“, leer = ohne)`} value={link} onChange={setLink} placeholder={STANDARD_LINK} />
+        <Feld label={`Link zur Schulung (wird zum Hyperlink „${LINK_TEXT}“, leer = Standard-Ablage ${linkAnzeige(STANDARD_LINK)})`} value={link} onChange={setLink} placeholder={STANDARD_LINK} />
         <Feld label="CC" value={cc} onChange={setCc} />
         <Feld label="Bereits versendete Erinnerungen an die Mitarbeitenden" value={anzahl} onChange={setAnzahl} />
         <div className="flex gap-2 pt-2">

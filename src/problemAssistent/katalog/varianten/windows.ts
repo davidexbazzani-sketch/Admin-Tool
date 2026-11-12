@@ -332,7 +332,7 @@ export const VARIANTEN_WINDOWS: Record<string, string[]> = {
     'Seit Outlook neu eingerichtet ist, indiziert der PC ohne Ende.',
   ],
   'leistung-softwareverteilung-im-hintergrund': [
-    'Das Softwarecenter installiert gerade etwas und der PC ist dadurch langsam.',
+    'Das Unternehmensportal installiert gerade etwas und der PC ist dadurch langsam.',
     'Im Hintergrund läuft eine Installation, die alles ausbremst.',
     'Der Rechner ist träge, weil gerade Programme verteilt werden.',
   ],
@@ -466,25 +466,20 @@ export const VARIANTEN_WINDOWS: Record<string, string[]> = {
   'update-andere-installation-laeuft': [
     'Das Setup sagt, ich soll warten, bis eine andere Installation fertig ist.',
     'Es kommt immer, dass bereits eine Installation ausgeführt wird, obwohl ich nichts installiere.',
-    'Im Softwarecenter steht Fehler 1618, angeblich läuft schon etwas.',
+    'Die Installation aus dem Unternehmensportal scheitert mit 1618, angeblich läuft schon etwas.',
   ],
   'update-installer-dienst-fehler': [
     'Bei jeder MSI-Datei kommt, dass auf den Installationsdienst nicht zugegriffen werden kann.',
     'Der Windows Installer funktioniert nicht, keine Installation startet.',
     'Programme lassen sich weder installieren noch entfernen, es kommt ein Installer-Fehler.',
   ],
-  'update-softwarecenter-zeigt-programm-nicht': [
-    'Die IT hat mir ein Programm freigegeben, aber im Softwarecenter sehe ich es nicht.',
-    'Das Programm, das der Kollege im Softwarecenter hat, fehlt bei mir.',
-    'Unter Anwendungen im Softwarecenter ist die Software nicht aufgelistet.',
+  'update-unternehmensportal-zeigt-programm-nicht': [
+    'Die IT hat mir ein Programm freigegeben, aber im Unternehmensportal sehe ich es nicht.',
+    'Das Programm, das der Kollege im Unternehmensportal hat, fehlt bei mir.',
+    'Unter Anwendungen im Unternehmensportal ist die Software nicht aufgelistet.',
   ],
-  'update-softwarecenter-oeffnet-nicht': [
-    'Das Softwarecenter startet nicht oder zeigt nur eine leere Seite.',
-    'Beim Öffnen des Softwarecenters kommt, dass es keine Verbindung herstellen kann.',
-    'Im Softwarecenter steht gar nichts, keine Programme und keine Updates.',
-  ],
-  'update-softwarecenter-download-haengt': [
-    'Im Softwarecenter bleibt die Installation beim Herunterladen ewig stehen.',
+  'update-unternehmensportal-download-haengt': [
+    'Im Unternehmensportal bleibt die Installation beim Herunterladen ewig stehen.',
     'Der Fortschritt beim Download eines Programms bewegt sich nicht.',
     'Die Software wird seit Stunden heruntergeladen und nichts passiert.',
   ],
@@ -573,15 +568,18 @@ export const VARIANTEN_WINDOWS: Record<string, string[]> = {
     'Das Update scheitert an fehlenden Berechtigungen.',
     'Ein Programm lässt sich nicht installieren, weil der Zugriff abgelehnt wird.',
   ],
-  'update-softwarecenter-erkennung-0x87d00324': [
-    'Das Programm ist installiert, aber das Softwarecenter zeigt „Fehlgeschlagen“.',
-    'Im Softwarecenter steht ein Fehler, obwohl die Software läuft.',
-    'Die Installation hat geklappt, trotzdem meldet das Softwarecenter einen Fehlercode.',
+  'update-intune-0x87d1041c-nicht-erkannt': [
+    'Das Programm ist installiert, aber das Unternehmensportal zeigt „Fehlgeschlagen“.',
+    'Im Unternehmensportal steht ein Fehler, obwohl die Software läuft.',
+    'Die Installation hat geklappt, trotzdem meldet das Unternehmensportal einen Fehlercode.',
   ],
   'update-unternehmensportal-fehlt': [
     'Ich finde das Unternehmensportal nicht auf meinem Rechner.',
     'Die App für die Firmen-Software startet nicht.',
     'Mir wurde gesagt, ich soll im Unternehmensportal nachsehen, aber es ist nicht da.',
+    'Das Unternehmensportal startet nicht oder zeigt nur eine leere Seite.',
+    'Beim Öffnen des Unternehmensportals kommt, dass es keine Verbindung herstellen kann.',
+    'Im Unternehmensportal steht gar nichts, keine Apps zur Auswahl.',
   ],
   'update-microsoft-store-geht-nicht': [
     'Der Store öffnet sich nicht oder bleibt leer.',

@@ -37,6 +37,8 @@ const DEFAULT_EMAIL_CONFIG: UserEmailConfig = {
 }
 
 const BefehlsTestKarte = lazy(() => import('../befehlsTest/BefehlsTestKarte'))
+const BerechtigungsAbzugKarte = lazy(() => import('../components/BerechtigungsAbzugKarte'))
+const AktivitaetsProtokollKarte = lazy(() => import('../components/AktivitaetsProtokollKarte'))
 
 function KBFileStatus({ basePath, kbPath }: { basePath: string; kbPath: string }) {
   const [files, setFiles] = useState<Array<{ name: string; found: boolean; important: boolean; description: string }>>([])
@@ -1590,6 +1592,20 @@ export default function Settings() {
       {isAdmin && (
         <Suspense fallback={<div className="text-xs text-muted-foreground">Befehls-Test wird geladen …</div>}>
           <BefehlsTestKarte />
+        </Suspense>
+      )}
+
+      {/* ── Aktivitätsprotokoll: wer/was hat wann welchen Eingriff ausgelöst (Admin) ── */}
+      {isAdmin && (
+        <Suspense fallback={<div className="text-xs text-muted-foreground">Aktivitätsprotokoll wird geladen …</div>}>
+          <AktivitaetsProtokollKarte />
+        </Suspense>
+      )}
+
+      {/* ── Berechtigungs-Abzug: Ordnerrechte & ZPA-Rollen als Datei (Admin, nur lesend) ── */}
+      {isAdmin && (
+        <Suspense fallback={<div className="text-xs text-muted-foreground">Berechtigungs-Abzug wird geladen …</div>}>
+          <BerechtigungsAbzugKarte />
         </Suspense>
       )}
 

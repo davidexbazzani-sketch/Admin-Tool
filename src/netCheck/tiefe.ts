@@ -45,11 +45,11 @@ try {
   foreach ($e in @(Get-WinEvent -FilterHashtable @{ LogName='Microsoft-Windows-NetworkProfile/Operational'; Id=10000,10001; StartTime=$seit } -MaxEvents 120)) { $d = EvD $e; [void]$np.Add([ordered]@{ zeit=(Iso $e.TimeCreated); id=[int]$e.Id; name=[string]$d['Name'] }) }
   $T.netzprofil = @($np)
 
-  # ── 2) Umfeld der letzten 6 Trennungen (−5 … +2 min) ──
+  # ── 2) Umfeld der letzten 12 Trennungen (−5 … +2 min) ──
   $tl = Get-WinEvent -ListLog 'Microsoft-Windows-TaskScheduler/Operational'; $T.taskLogAktiv = [bool]($tl -and $tl.IsEnabled)
   $sysQ = 'Kernel-Power|Power-Troubleshooter|Kernel-PnP|UserPnp|WindowsUpdateClient|Netwtw|rtw|Realtek|RTWlan|e1d|e1i|e1r|e2f|NDIS|Tcpip|Dhcp|WLAN|Wlan|Wcm|NetAdapter|Kernel-General|Winlogon|BTHUSB|Intel'
   $umf = New-Object System.Collections.ArrayList
-  for ($i = 0; $i -lt [Math]::Min(6, $trZeit.Count); $i++) {
+  for ($i = 0; $i -lt [Math]::Min(12, $trZeit.Count); $i++) {
     # ACHTUNG: PowerShell-Variablen kennen keine Groß-/Kleinschreibung — $tz, nie $t (wäre $T!)
     $tz = [datetime]$trZeit[$i]; $von = $tz.AddMinutes(-5); $bis = $tz.AddMinutes(2)
     $L = New-Object System.Collections.ArrayList
@@ -126,6 +126,7 @@ try {
     $sp = (netsh wlan show profiles name="$nm" 2>&1 | Out-String)
     if ($sp -match '(?im)(Verbindungsmodus|Connection mode)\s*:\s*(.+?)\s*$') { $o.modus = $matches[2] }
     if ($sp -match '(?im)(Authentifizierung|Authentication)\s*:\s*(.+?)\s*$') { $o.auth = $matches[2] }
+    if ($sp -match '(?im)(MAC-Randomisierung|MAC Randomization)\s*:\s*(.+?)\s*$') { $o.zufallsMac = $matches[2] }
     foreach ($f in $xmlDateien) { $x = ''; try { $x = [IO.File]::ReadAllText($f.FullName) } catch { continue }; if ($x -match ('<name>' + [regex]::Escape($nm) + '</name>')) { if ($x -match '<authMode>([^<]+)</authMode>') { $o.authMode = $matches[1] }; if ($x -match '<connectionMode>([^<]+)</connectionMode>' -and -not $o.modus) { $o.modus = $matches[1] }; if ($x -match '<(?:\w+:)?Type[^>]*>(\d+)</(?:\w+:)?Type>') { $o.eap = $matches[1] }; break } }
   }
   $T.profile = @($pr | Select-Object -First 20)

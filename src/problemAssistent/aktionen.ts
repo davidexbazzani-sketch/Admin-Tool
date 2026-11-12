@@ -68,7 +68,6 @@ if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based S
 if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired') { $g += 'Windows Update' }
 $pfro = (Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager' -Name PendingFileRenameOperations -EA SilentlyContinue).PendingFileRenameOperations
 if ($pfro) { $g += 'Dateien warten auf Ersetzen' }
-try { $ccm = Invoke-CimMethod -Namespace root\ccm\ClientSDK -ClassName CCM_ClientUtilities -MethodName DetermineIfRebootPending -EA Stop; if ($ccm.RebootPending -or $ccm.IsHardRebootPending) { $g += 'Softwareverteilung (SCCM)' } } catch {}
 if ($g.Count) { Zeile ('Neustart ausstehend: ja — ' + ($g -join ', ')) } else { Zeile 'Neustart ausstehend: nein' }` }),
   A({ id: 'info-ereignisse', titel: 'Fehler der letzten 24 Stunden', modus: 'system', risiko: 'lesen',
     beschreibung: 'Kritische Fehler und Fehler aus System- und Anwendungsprotokoll, zusammengefasst nach Quelle.',
@@ -281,16 +280,37 @@ foreach ($e in $ev | Select-Object -First 20) {
 Zeile 'Tiefe Ursachen-Analyse: Kachel „Netzwerk Probleme“.'` }),
 
   // ══ VPN / Zscaler / Cisco ═══════════════════════════════════════════════════
-  A({ id: 'zscaler-status', titel: 'Zscaler-Status', modus: 'system', risiko: 'lesen',
-    beschreibung: 'Dienst, Tray-App und Version von Zscaler Client Connector.',
+  A({ id: 'zscaler-status', titel: 'Zscaler prüfen: installiert, eingeschaltet, verbunden?', modus: 'system', risiko: 'lesen', timeoutMs: 60000,
+    beschreibung: 'Prüft, ob Zscaler installiert ist, der Dienst läuft, der Tunnel steht, die App (Symbol im Infobereich) läuft und ob das Internet wirklich über Zscaler geht (Prüfseite ip.zscaler.com → zeigt, ob „Internet Security“ ausgeschaltet wurde). Ändert nichts.',
     ps: String.raw`
-$s = Get-Service ZSAService -EA SilentlyContinue
-if (-not $s) { Zeile 'Zscaler ist nicht installiert.' } else {
-  Zeile ('Dienst ZSAService: ' + $s.Status + ' (' + $s.StartType + ')')
-  $t = @(Get-Process ZSATray -IncludeUserName -EA SilentlyContinue); Zeile ('Tray-App: ' + $(if ($t.Count) { 'läuft für ' + (($t | ForEach-Object { $_.UserName }) -join ', ') } else { 'läuft NICHT' }))
-  $v = (Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*' -EA SilentlyContinue | Where-Object { $_.DisplayName -match 'Zscaler' } | Select-Object -First 1).DisplayVersion
-  Zeile ('Version: ' + $v)
-}` }),
+$zsv = Get-Service -Name 'ZSAService' -EA SilentlyContinue
+if (-not $zsv) { Zeile '✗ Zscaler ist NICHT installiert (Dienst ZSAService fehlt) — ohne Zscaler kein Internet/Intranet über SKF. Über das Unternehmensportal (Intune) installieren lassen.'; return }
+$aus = @()
+$ver = (Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*' -EA SilentlyContinue | Where-Object { $_.DisplayName -match 'Zscaler' } | Select-Object -First 1).DisplayVersion
+Zeile ('Zscaler Client Connector ' + $ver + ' · Dienst ZSAService: ' + $zsv.Status + ' (Start: ' + $zsv.StartType + ')')
+if ($zsv.Status -ne 'Running') { $aus += 'Dienst läuft nicht' }
+$tun = @(Get-Process -Name 'ZSATunnel' -EA SilentlyContinue).Count -gt 0
+$app = @(Get-Process -Name 'ZSATray' -EA SilentlyContinue).Count -gt 0
+Zeile ('Tunnel (ZSATunnel): ' + $(if ($tun) { 'läuft' } else { 'läuft NICHT' }))
+Zeile ('App (Symbol im Infobereich): ' + $(if ($app) { 'läuft' } else { 'läuft nicht' }))
+if (-not $tun) { $aus += 'kein Tunnel' }
+$ad = @(Get-NetAdapter -IncludeHidden -EA SilentlyContinue | Where-Object { [string]$_.InterfaceDescription -match '(?i)Zscaler' })
+foreach ($x in $ad) { Zeile ('Zscaler-Netzwerkadapter: ' + $x.Status) }
+$zia = $null; $wo = ''
+try {
+  $r = Invoke-WebRequest -Uri 'https://ip.zscaler.com/' -UseBasicParsing -TimeoutSec 8 -EA Stop
+  $h = [string]$r.Content
+  if ($h -match '(?i)not going through') { $zia = $false } elseif ($h -match '(?i)via Zscaler|Zscaler Cloud') { $zia = $true }
+  if ($h -match '(?i)Zscaler Cloud:?\s*([^<\.]+)') { $wo = $Matches[1].Trim() }
+} catch { Zeile ('Prüfseite ip.zscaler.com nicht erreichbar: ' + $_.Exception.Message) }
+if ($zia -eq $true) { Zeile ('Internet läuft über Zscaler' + $(if ($wo) { ' (' + $wo + ')' } else { '' })) }
+elseif ($zia -eq $false) { Zeile 'Internet läuft NICHT über Zscaler'; $aus += 'Internet Security aus' }
+if ($aus.Count) {
+  Zeile ('⚠ ERGEBNIS: Zscaler ist NICHT richtig eingeschaltet (' + ($aus -join ', ') + ').')
+  Zeile '  → Zscaler-App öffnen: „Internet Security“ und „Private Access“ müssen auf ON stehen und „Authenticated“ zeigen; sonst „Turn on“ bzw. neu anmelden.'
+} else { Zeile '✓ ERGEBNIS: Zscaler ist eingeschaltet und verbunden.' }
+Zeile 'Hinweis: Im Büro zeigt Zscaler „Trusted Network“ – Private Access darf dort aus sein.'
+` }),
   A({ id: 'zscaler-neustart', titel: 'Zscaler-Dienst neu starten', modus: 'system', risiko: 'aendern',
     beschreibung: 'Startet den Zscaler-Dienst neu (Internet/Intranet kurz weg).',
     ps: String.raw`DienstNeu 'ZSAService'` }),
@@ -833,7 +853,7 @@ Zeile ('DISM (Code ' + $LASTEXITCODE + '): ' + $z.Trim())` }),
   A({ id: 'installation-laeuft', titel: 'Hängende Installation finden', modus: 'system', risiko: 'lesen',
     beschreibung: 'Läuft gerade eine Installation (msiexec/Setup), die andere blockiert?',
     ps: String.raw`
-$p = @(Get-CimInstance Win32_Process -EA SilentlyContinue | Where-Object { $_.Name -match '^(msiexec|setup|install|TrustedInstaller|OfficeClickToRun|ccmsetup|winget)' -and $_.CommandLine -notmatch '/V$' })
+$p = @(Get-CimInstance Win32_Process -EA SilentlyContinue | Where-Object { $_.Name -match '^(msiexec|setup|install|TrustedInstaller|OfficeClickToRun|AgentExecutor|winget)' -and $_.CommandLine -notmatch '/V$' })
 if (-not $p.Count) { Zeile 'Keine laufende Installation.' }
 foreach ($x in $p) { Zeile ('' + $x.Name + ' seit ' + $x.CreationDate.ToString('dd.MM. HH:mm') + ' · ' + ([string]$x.CommandLine).Substring(0, [math]::Min(160, ([string]$x.CommandLine).Length))) }` }),
   A({ id: 'software-suchen', titel: 'Installierte Software suchen', modus: 'system', risiko: 'lesen',
@@ -850,11 +870,17 @@ foreach ($s in $sw | Select-Object -First 25) { Zeile ('' + $s.DisplayName + ' �
 $t = @(Get-ScheduledTask -TaskPath '\Microsoft\Windows\EnterpriseMgmt\*' -EA SilentlyContinue | Where-Object { $_.TaskName -match 'PushLaunch|Schedule #3' })
 if (-not $t.Count) { Zeile 'Gerät ist nicht in Intune registriert.' }
 foreach ($x in $t) { Start-ScheduledTask -TaskPath $x.TaskPath -TaskName $x.TaskName -EA SilentlyContinue; Zeile ('Gestartet: ' + $x.TaskName) }` }),
-  A({ id: 'sccm-richtlinie', titel: 'Softwarecenter (SCCM) aktualisieren', modus: 'system', risiko: 'aendern',
-    beschreibung: 'Holt die Computerrichtlinie und die Anwendungsauswertung neu — Softwarecenter zeigt danach neue Programme.',
+  A({ id: 'intune-apps-sync', titel: 'Unternehmensportal (Intune) aktualisieren: Apps und Richtlinien neu abrufen', modus: 'system', risiko: 'aendern', timeoutMs: 120000,
+    beschreibung: 'Startet die Intune-Synchronisierung (geplante Aufgaben unter \\Microsoft\\Windows\\EnterpriseMgmt) und startet die Intune-Verwaltungserweiterung (Dienst IntuneManagementExtension) neu — zugewiesene Apps werden neu ausgewertet, hängende Installationen neu angestoßen, und das Unternehmensportal zeigt danach den aktuellen Stand.',
     ps: String.raw`
-if (-not (Get-CimClass -Namespace root\ccm -ClassName SMS_Client -EA SilentlyContinue)) { Zeile 'Kein SCCM-Client installiert.' } else {
-  foreach ($g in '{00000000-0000-0000-0000-000000000021}', '{00000000-0000-0000-0000-000000000022}', '{00000000-0000-0000-0000-000000000121}', '{00000000-0000-0000-0000-000000000113}') { try { Invoke-CimMethod -Namespace root\ccm -ClassName SMS_Client -MethodName TriggerSchedule -Arguments @{ sScheduleID = $g } -EA Stop | Out-Null; Zeile ('Zyklus ' + $g + ' angestoßen') } catch { Zeile ('Zyklus ' + $g + ': ' + $_.Exception.Message) } }
+$t = @(Get-ScheduledTask -TaskPath '\Microsoft\Windows\EnterpriseMgmt\*' -EA SilentlyContinue | Where-Object { $_.TaskName -match 'PushLaunch|Schedule #3' })
+if (-not $t.Count) { Zeile 'Intune-Synchronisierung: keine Aufgaben unter \Microsoft\Windows\EnterpriseMgmt — das Gerät ist nicht bei Intune registriert.' }
+foreach ($x in $t) { try { Start-ScheduledTask -TaskPath $x.TaskPath -TaskName $x.TaskName -EA Stop; Zeile ('Intune-Synchronisierung gestartet: ' + $x.TaskName) } catch { Zeile ('Intune-Synchronisierung ' + $x.TaskName + ': ' + $_.Exception.Message) } }
+$ime = Get-Service -Name IntuneManagementExtension -EA SilentlyContinue
+if (-not $ime) { Zeile ('Intune-Verwaltungserweiterung (Dienst IntuneManagementExtension) fehlt — über Intune werden auf diesem PC keine Win32-Apps verteilt' + $(if ($t.Count) { '.' } else { ' bzw. das Gerät ist nicht registriert.' })) }
+else {
+  DienstNeu 'IntuneManagementExtension'
+  Zeile 'Die Intune-Verwaltungserweiterung wertet die zugewiesenen Apps jetzt neu aus (meist 5–15 Minuten). Danach im Unternehmensportal unter „Einstellungen → Synchronisieren“ den Stand abrufen bzw. die App erneut installieren.'
 }` }),
 
   // ══ Anmeldung / Konto / Domäne ══════════════════════════════════════════════

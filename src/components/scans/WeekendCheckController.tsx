@@ -11,7 +11,10 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { getScanSchedule, loadRunStatus, saveRunStatus, isStatusClaimed } from '../../services/scanSchedules'
-import { WEEKEND_CHECK_ID, WEEKEND_CHECK_STATUS, isInWindow, loadWeekendResults, runWeekendCheckOnce } from '../../services/weekendCheck'
+import {
+  WEEKEND_CHECK_ID, WEEKEND_CHECK_STATUS, isInWindow, loadWeekendResults, runWeekendCheckOnce,
+  fehlendeAnmeldungen, leseFehlendeAnmeldungen,
+} from '../../services/weekendCheck'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 
 // Kürzer als bei den anderen Scans: das Messfenster ist nur 2 Std. lang.
@@ -29,8 +32,16 @@ export default function WeekendCheckController() {
     const cfg = await getScanSchedule(WEEKEND_CHECK_ID)
     const slotKey = isInWindow(cfg, new Date())
     if (!slotKey) return
-    // Für diesen Messtag schon gemessen (auch von einer anderen Instanz)?
-    try { if ((await loadWeekendResults()).messungen[slotKey]) return } catch { return }
+    // Für diesen Messtag schon gemessen (auch von einer anderen Instanz)? Dann höchstens
+    // noch die angemeldeten Benutzer nachlesen, die z. B. eine ältere Tool-Version nicht liest.
+    let nurNachlesen = false
+    try {
+      const m = (await loadWeekendResults()).messungen[slotKey]
+      if (m) {
+        if (fehlendeAnmeldungen(m).length === 0) return
+        nurNachlesen = true
+      }
+    } catch { return }
 
     let s
     try { s = await loadRunStatus(WEEKEND_CHECK_STATUS) } catch { return }
@@ -52,7 +63,9 @@ export default function WeekendCheckController() {
 
     const by = user?.displayName || username
     try {
-      const res = await runWeekendCheckOnce(by, slotKey, heartbeat)
+      const res = nurNachlesen
+        ? await leseFehlendeAnmeldungen(slotKey, heartbeat)
+        : await runWeekendCheckOnce(by, slotKey, heartbeat)
       await saveRunStatus(WEEKEND_CHECK_STATUS, { lastRunAt: res.ok ? new Date().toISOString() : s.lastRunAt, lastResult: res.ok ? 'success' : 'error', lastSummary: res.summary, running: undefined })
     } catch {
       try { await saveRunStatus(WEEKEND_CHECK_STATUS, { lastRunAt: s.lastRunAt, lastResult: 'error', lastSummary: 'Unerwarteter Fehler beim Wochenend-Check', running: undefined }) } catch { /* egal */ }

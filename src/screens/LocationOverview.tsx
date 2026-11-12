@@ -500,12 +500,15 @@ export default function LocationOverview() {
       const needsLookupIds = new Set(needsLookup.map(i => i.id))
       let resolved = 0
       let notFound = 0
+      let ohneAntwort = 0
       const updated = items.map(i => {
         // Only touch items we actually queried — already-complete items stay untouched
         if (!needsLookupIds.has(i.id) || !i.assignedTo) return i
         const res = lookup.get(i.assignedTo.trim())
         if (!res || !res.found) {
-          if (res && !res.found) notFound++
+          // „keine Antwort“ (Zeitgrenze, AD nicht erreichbar) ist etwas anderes als „im AD nicht gefunden“
+          if (res?.error) ohneAntwort++
+          else if (res) notFound++
           return i
         }
         resolved++
@@ -523,6 +526,7 @@ export default function LocationOverview() {
       await log(`AD-Daten aktualisiert (Auswahl): ${resolved} aufgeloest, ${notFound} nicht gefunden, ${skippedComplete} uebersprungen (${activeCategory})`)
       const parts: string[] = [`${resolved} aufgeloest`]
       if (notFound > 0) parts.push(`${notFound} nicht in AD gefunden`)
+      if (ohneAntwort > 0) parts.push(`${ohneAntwort} ohne Antwort vom AD (Zeitgrenze oder AD nicht erreichbar) – bitte noch einmal starten, es werden nur die offenen abgefragt`)
       if (skippedComplete > 0) parts.push(`${skippedComplete} bereits vollstaendig (uebersprungen)`)
       setAdEnrichStatus(parts.join(', ') + '.')
     } catch (e) {

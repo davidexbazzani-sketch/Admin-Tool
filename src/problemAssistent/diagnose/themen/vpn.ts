@@ -4,6 +4,7 @@
 // Mitbenutzt: net, aad (gemeinsam), dnsprx/dnsweb (Netz). Alles NUR LESEND.
 import { ja, liste, nein, num, txt, zahl } from '../motor'
 import type { DgFakten, DgOber, DgSonde } from '../types'
+import { ausserhalbFirmennetz } from './laufwerke'
 
 const da = (f: DgFakten, k: string): boolean => f[k] !== null && f[k] !== undefined && f[k] !== ''
 /** Zscaler installiert, Dienst bekannt und läuft NICHT */
@@ -134,9 +135,14 @@ export const THEMEN_VPN: DgOber[] = [
       },
       {
         id: 'zs-intern', titel: 'Im Homeoffice: Laufwerke, Intranet oder interne Programme gehen nicht', beschreibung: 'Internet geht, aber Netzlaufwerke, Intranet, SAP oder Fachprogramme sind zu Hause nicht erreichbar',
-        sonden: ['zs', 'net', 'aad', 'vpn'],
+        sonden: ['zs', 'net', 'aad', 'vpn', 'zpa'],
         regeln: [
           { id: 'fehlt', wenn: f => nein(f['zs.installiert']), befund: () => 'Zscaler ist nicht installiert – ohne Zscaler gibt es von zu Hause keinen Zugang ins Firmennetz', problem: 'vpn-zscaler-nicht-installiert', schwere: 3 },
+          { id: 'zpa-basis', wenn: f => nein(f['zpa.basis']), befund: () => 'Die Grundrolle für den Fernzugriff („Remote Access“, Azure_AD_SSO_Akamai_EAA_Client) fehlt – ohne sie geht im Homeoffice keine einzige interne Anwendung, auch wenn die Rollen für SAP, enaio oder Babtec da sind', problem: 'vpn-fernzugriff-beantragen', schwere: 3, imBereich: ausserhalbFirmennetz },
+          { id: 'zpa-fileserver', wenn: f => nein(f['zpa.fileserver']), befund: () => 'Die Homeoffice-Berechtigung für die Marine-Fileserver fehlt (EAA_File_Servers_Marine_Prod) – Laufwerke gehen von zu Hause nicht', problem: 'laufwerk-homeoffice-berechtigung-fehlt', schwere: 2, imBereich: ausserhalbFirmennetz },
+          { id: 'zpa-sap', wenn: f => nein(f['zpa.sapProd']) || nein(f['zpa.sapNonProd']), befund: f => `SAP-Rolle(n) für das Homeoffice fehlen: ${[nein(f['zpa.sapProd']) ? '„Marine Production“' : '', nein(f['zpa.sapNonProd']) ? '„Marine Non Production“' : ''].filter(Boolean).join(' und ')} – nur relevant, wenn SAP gebraucht wird`, problem: 'sap-homeoffice-geht-nicht', schwere: 1, imBereich: ausserhalbFirmennetz },
+          { id: 'zpa-enaio', wenn: f => nein(f['zpa.enaio']), befund: () => 'Rolle „Marine enaio“ fehlt – enaio geht von zu Hause nicht (nur relevant, wenn enaio gebraucht wird)', problem: 'vpn-enaio-homeoffice', schwere: 1, imBereich: ausserhalbFirmennetz },
+          { id: 'zpa-babtec', wenn: f => nein(f['zpa.babtec']), befund: () => 'Rolle „Marine Babtec“ fehlt – Babtec geht von zu Hause nicht (nur relevant, wenn Babtec gebraucht wird)', problem: 'vpn-babtec-homeoffice', schwere: 1, imBereich: ausserhalbFirmennetz },
           { id: 'dienst', wenn: f => zsSteht(f), befund: f => `Zscaler-Dienst läuft nicht (${txt(f['zs.dienst'])})`, problem: 'vpn-zscaler-symbol-fehlt', schwere: 3 },
           { id: 'cisco-konflikt', wenn: f => ja(f['vpn.ciscoVerbunden']) && zsLaeuft(f), befund: () => 'Cisco-VPN ist verbunden, während Zscaler läuft – beide kommen sich in die Quere', problem: 'vpn-cisco-zscaler-konflikt', schwere: 3 },
           { id: 'privat-vpn', wenn: f => liste(f['vpn.privatVpn']).length > 0, befund: f => `Privates VPN-Programm installiert: ${txt(f['vpn.privatVpn'])}`, problem: 'vpn-privates-vpn', schwere: 3 },
@@ -145,7 +151,7 @@ export const THEMEN_VPN: DgOber[] = [
           { id: 'domaene-weg', wenn: f => zsLaeuft(f) && ja(f['zs.tunnel']) && da(f, 'net.domaene') && nein(f['net.domaeneErreichbar']), befund: f => `Zscaler läuft, aber die Domäne ${txt(f['net.domaene'])} ist nicht erreichbar (Private Access/ZPA)`, problem: 'vpn-intranet-homeoffice', schwere: 2 },
           { id: 'kerberos', wenn: f => ja(f['net.domaeneErreichbar']) && nein(f['aad.kerberosTgt']), befund: () => 'Firmennetz ist erreichbar, aber es gibt kein Kerberos-Anmeldeticket (Kennwort geändert?)', problem: 'vpn-nach-kennwortaenderung-homeoffice', schwere: 2 },
         ],
-        ohneBefund: ['vpn-intranet-homeoffice', 'vpn-einzelne-anwendung-homeoffice', 'vpn-zscaler-neuer-mitarbeiter-zpa', 'vpn-fernzugriff-beantragen'],
+        ohneBefund: ['vpn-fernzugriff-beantragen', 'laufwerk-homeoffice-berechtigung-fehlt', 'vpn-intranet-homeoffice', 'vpn-einzelne-anwendung-homeoffice', 'vpn-zscaler-neuer-mitarbeiter-zpa'],
       },
       {
         id: 'zs-langsam', titel: 'Internet mit Zscaler langsam oder Seite blockiert', beschreibung: 'Seiten laden zäh oder nur halb, Zscaler-Sperrseite, Download wird blockiert, Lüfter läuft wegen Zscaler',

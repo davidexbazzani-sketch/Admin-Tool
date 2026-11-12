@@ -196,6 +196,8 @@ declare global {
         smtp: string; port: number; user?: string; pass?: string; from?: string
         useTls?: boolean; method?: 'outlook' | 'nodemailer' | 'powershell'
         attachmentPath?: string
+        /** nur fürs Aktivitätsprotokoll (wird vor dem IPC-Aufruf entfernt) */
+        protokoll?: { art: 'automatisch' | 'manuell'; quelle: string }
       }): Promise<{ success: boolean; error?: string; method?: string }>
 
       // ── Heartbeat / crash detection ───────────────────────────────────────
@@ -236,4 +238,32 @@ declare global {
   }
 }
 
-export const api = () => window.electronAPI
+// ── Mailversand mitprotokollieren (Aktivitätsprotokoll, services/aktivitaet.ts) ──
+// Das von contextBridge gelieferte Objekt ist eingefroren → einmal eine Kopie mit umhülltem
+// sendEmailRaw anlegen. Automatische Absender übergeben `protokoll: { art, quelle }`.
+type MailOpts = Parameters<Window['electronAPI']['sendEmailRaw']>[0]
+type MailHook = (o: MailOpts, r: { success: boolean; error?: string; method?: string }) => void
+let mailHook: MailHook | null = null
+/** Wird von services/aktivitaet.ts beim Start gesetzt. */
+export function setzeMailHook(h: MailHook): void { mailHook = h }
+let umhuellt: Window['electronAPI'] | null = null
+let quelle: Window['electronAPI'] | null = null
+export const api = (): Window['electronAPI'] => {
+  const e = window.electronAPI
+  if (!e) return e
+  if (umhuellt && quelle === e) return umhuellt
+  try {
+    const kopie = { ...e } as Window['electronAPI']
+    const roh = e.sendEmailRaw
+    if (typeof roh === 'function') {
+      kopie.sendEmailRaw = async (o: MailOpts) => {
+        const { protokoll, ...rest } = o
+        const r = await roh(rest)
+        try { mailHook?.({ ...rest, protokoll }, r) } catch { /* nie stören */ }
+        return r
+      }
+    }
+    umhuellt = kopie; quelle = e
+    return kopie
+  } catch { return e }
+}

@@ -33,6 +33,9 @@ export interface ChatNutzer {
   rechner?: string
 }
 
+/** Angehängte Datei (z. B. Erklärvideo) — liegt unter chat/dateien/<id>/<name> im Tool-Netzordner */
+export interface ChatDatei { name: string; rel: string; bytes: number }
+
 export interface ChatNachricht {
   id: string
   from: string
@@ -41,6 +44,7 @@ export interface ChatNachricht {
   toDisplay: string
   text: string
   at: string
+  datei?: ChatDatei
 }
 
 export interface PosteingangHinweis { id: string; from: string; fromDisplay: string; at: string; vorschau: string }
@@ -108,18 +112,44 @@ export async function ladeNutzer(): Promise<ChatNutzer[]> {
 }
 
 // ── Senden ────────────────────────────────────────────────────────────────────
-export async function sende(ich: ChatIch, an: { username: string; displayName: string }, text: string): Promise<ChatNachricht | null> {
+export async function sende(ich: ChatIch, an: { username: string; displayName: string }, text: string, datei?: ChatDatei): Promise<ChatNachricht | null> {
   const t = text.replace(/\s+$/, '').slice(0, MAX_ZEICHEN)
   if (!t.trim()) return null
   const n: ChatNachricht = {
     id: neueId(ich.username), from: lc(ich.username), fromDisplay: ich.displayName || ich.username,
     to: lc(an.username), toDisplay: an.displayName || an.username, text: t, at: new Date().toISOString(),
+    ...(datei ? { datei } : {}),
   }
   // Erst die Nachricht, dann der Hinweis — ohne gespeicherte Nachricht kein „ungelesen"
   if (!(await api().netWriteJsonAsync(`${gespraechOrdner(n.from, n.to)}/${n.id}.json`, n))) return null
   const hinweis: PosteingangHinweis = { id: n.id, from: n.from, fromDisplay: n.fromDisplay, at: n.at, vorschau: t.slice(0, 140) }
   await api().netWriteJsonAsync(`${posteingang(n.to)}/${n.id}.json`, hinweis)
   return n
+}
+
+// ── Dateien (Erklärvideos) ────────────────────────────────────────────────────
+export const CHAT_DATEIEN = `${ROOT}/dateien`
+export const dateiName = (name: string) => (name.replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '_').replace(/^\.+/, '').trim().slice(0, 120)) || 'video.mp4'
+/** Nur Pfade im eigenen Dateien-Ordner des Chats, ohne „..“ */
+export const istChatDateiPfad = (rel: string) => typeof rel === 'string' && rel.startsWith(CHAT_DATEIEN + '/') && !/(^|[\\/])\.\.([\\/]|$)/.test(rel)
+export const groesseText = (b: number) => b >= 1024 ** 3 ? `${(b / 1024 ** 3).toFixed(1).replace('.', ',')} GB` : b >= 1024 ** 2 ? `${(b / 1024 ** 2).toFixed(1).replace('.', ',')} MB` : `${Math.max(1, Math.round(b / 1024))} KB`
+
+/** Lokale Datei ins Netz kopieren und als Nachricht mit Anhang schicken. */
+export async function sendeDatei(ich: ChatIch, an: { username: string; displayName: string }, lokalerPfad: string, name: string, text: string): Promise<{ ok: true; nachricht: ChatNachricht } | { ok: false; fehler: string }> {
+  const sauber = dateiName(name)
+  const rel = `${CHAT_DATEIEN}/${neueId(ich.username)}/${sauber}`
+  const r = await api().netCopyLocalFileAsync(lokalerPfad, rel).catch(e => ({ ok: false as const, error: (e as Error).message }))
+  if (!r.ok) return { ok: false, fehler: r.error || 'Kopieren ins Netzlaufwerk fehlgeschlagen.' }
+  const n = await sende(ich, an, text.trim() || `🎬 Video: ${sauber}`, { name: sauber, rel, bytes: r.bytes || 0 })
+  return n ? { ok: true, nachricht: n } : { ok: false, fehler: 'Video liegt im Netz, aber die Nachricht konnte nicht gespeichert werden.' }
+}
+
+/** Anhang öffnen (Standardprogramm, z. B. Medienwiedergabe) — direkt vom Netzlaufwerk. */
+export async function oeffneChatDatei(d: ChatDatei): Promise<string | null> {
+  if (!istChatDateiPfad(d.rel)) return 'Ungültiger Dateipfad.'
+  const basis = (await api().netGetBasePath()).replace(/[\\/]+$/, '')
+  const r = await api().openPath(basis + '\\' + d.rel.replace(/\//g, '\\'))
+  return r.success ? null : (r.error || 'Datei konnte nicht geöffnet werden.')
 }
 
 // ── Lesen ─────────────────────────────────────────────────────────────────────

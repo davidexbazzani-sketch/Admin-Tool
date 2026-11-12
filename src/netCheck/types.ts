@@ -25,7 +25,7 @@ export interface Erklaerung {
 
 // Ein konkreter, anwendbarer Fix.
 export interface NetFix {
-  art: 'advanced' | 'powercfg' | 'powermgmt' | 'reconnect-task' | 'standby-netz' | 'profil-auto' | 'aufgabe-aus'
+  art: 'advanced' | 'powercfg' | 'powermgmt' | 'reconnect-task' | 'standby-netz' | 'profil-auto' | 'aufgabe-aus' | 'mac-fest'
   profil?: string         // reconnect-task / profil-auto: WLAN-Profilname
   aufgabePfad?: string    // aufgabe-aus: TaskPath (z. B. "\HP\")
   aufgabeName?: string    // aufgabe-aus: TaskName
@@ -36,6 +36,8 @@ export interface NetFix {
   zielDisplay?: string    // advanced: Ziel-DisplayValue (Alternative)
   powercfg?: 'wlan-max'   // powercfg: WLAN-Energiesparmodus AC+DC → Höchstleistung (0)
   powermgmt?: 'disable-turnoff'  // powermgmt: „Gerät ausschalten…" deaktivieren
+  akku?: boolean          // standby-netz: zusätzlich auch im Akkubetrieb aktivieren
+  beiAufwachen?: boolean  // reconnect-task: zusätzlich nach dem Aufwachen aus dem Standby neu verbinden
 }
 
 export interface NetBefund {
@@ -53,6 +55,8 @@ export interface NetBefund {
   standardAus?: boolean    // nicht per Default vorausgewählt (invasive/optionale Fixes)
   hinweis?: string
   erklaerung?: Erklaerung
+  /** Was zu tun ist — steht bei JEDER Ursache (im Tool behebbar oder wer es sonst ändern muss). */
+  loesung?: string
 }
 
 // ── Rohdaten aus dem Collector ───────────────────────────────────────────────
@@ -159,7 +163,7 @@ export interface UmfeldFenster { trennung: string; ereignisse: UmfeldEreignis[] 
 export interface AufgabeTrigger { typ: string; start?: string; wdh?: string; aktiv?: boolean }
 export interface AufgabeInfo { pfad: string; name: string; autor?: string; zustand?: string; letzterLauf?: string; registriert?: string; trigger: AufgabeTrigger[]; aktion?: string }
 export interface Aenderung { art: 'Update' | 'Treiber' | 'Software' | 'Aufgabe' | 'Dienst'; zeit: string; text: string }
-export interface WlanProfil { name: string; quelle?: string; modus?: string; auth?: string; authMode?: string; eap?: string }
+export interface WlanProfil { name: string; quelle?: string; modus?: string; auth?: string; authMode?: string; eap?: string; /** „MAC-Randomisierung" laut netsh (Deaktiviert / Aktiviert / Täglich …) */ zufallsMac?: string }
 export interface NetTiefe {
   ok?: boolean
   fehler?: string

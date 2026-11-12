@@ -15,11 +15,13 @@ export interface DgPunkt { t: string; s: 'ok' | 'warn' | 'fehler' | 'info'; x?: 
  *   Fakt 'name' $wert          → Messwert „<id>.name“ (Zahl, Text, $true/$false, Liste)
  *   Punkt 'Titel' 'ok|warn|fehler|info' 'Text'
  * Eine Sonde ändert NIE etwas und wirft keine Fehler für „nicht vorhanden“ (dann Fakt … $false).
+ * „lokal“ läuft auf dem Admin-PC (AD-Abfragen; vom Ziel-PC aus fehlt per WinRM die Anmeldung am DC),
+ * $S = angemeldeter Benutzer des Ziel-PCs (z. B. „CORP\BW68266“).
  */
 export interface DgSonde {
   id: string
   titel: string
-  modus: 'system' | 'profil' | 'benutzer'
+  modus: 'system' | 'profil' | 'benutzer' | 'lokal'
   timeoutMs?: number
   ps: string
 }
@@ -35,7 +37,14 @@ export interface DgRegel {
   problem: string
   /** 3 = eindeutig die Ursache · 2 = sehr wahrscheinlich · 1 = möglicher Beitrag */
   schwere: 1 | 2 | 3
+  /** Zusatzbedingung in der Komplett-Diagnose eines Bereichs — dort fehlt der Zusammenhang des
+   *  Unterthemas (z. B. „im Homeoffice“), die Regel muss ihn dann aus den Messwerten ableiten. */
+  imBereich?: (f: DgFakten) => boolean
+  /** Mehrere Befunde aus einer Regel (z. B. je fehlende Berechtigung einer) – ersetzt dann befund/problem. */
+  viele?: (f: DgFakten) => DgBefundTeil[]
 }
+
+export interface DgBefundTeil { text: string; problem: string; antrag?: string; fehlerbild?: string }
 
 /** Rückfrage an den Anwender (wird zum Fakt „frage.<id>“ = 'ja' | 'nein'). */
 export interface DgFrage { id: string; text: string }
@@ -61,6 +70,6 @@ export interface DgOber {
   unter: DgUnter[]
 }
 
-export interface DgBefund { regel: string; problem: string; text: string; schwere: 1 | 2 | 3 }
+export interface DgBefund { regel: string; problem: string; text: string; schwere: 1 | 2 | 3; antrag?: string; fehlerbild?: string; viel?: boolean }
 
 export interface DgSondenErgebnis { id: string; titel: string; ok: boolean; fehler?: string; punkte: DgPunkt[]; dauerMs: number }

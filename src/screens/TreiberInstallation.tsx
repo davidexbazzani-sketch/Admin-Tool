@@ -14,7 +14,7 @@ import RolloutView from '../components/driverRollout/RolloutView'
 import { useAuthStore } from '../store/authStore'
 import { api } from '../electronAPI'
 import { loadDevices, classifyModel, MODEL_CATEGORIES, type EndpointDevice } from '../services/endpointDevices'
-import { ensureCmsl, installCmslAllUsers, scanHosts, type HpHostReport, type DriverItem, type DriverKlasse, type DriverStatus } from '../services/hpDrivers'
+import { ensureCmsl, installCmslAllUsers, scanHosts, installierbar, type HpHostReport, type DriverItem, type DriverKlasse, type DriverStatus } from '../services/hpDrivers'
 import { exportHpDriverReport } from '../services/hpDriversReport'
 import { useHpDeployStore } from '../store/hpDeployStore'
 import { clearWinRMCache } from '../utils/winrmUtils'
@@ -54,7 +54,7 @@ const KLASSE_ROW: Record<DriverKlasse, string> = {
 
 // Ein Treiber ist „anwendbar", wenn er zur vorhandenen Hardware passt ODER keinen
 // Hardware-Bezug hat (BIOS/Firmware/Software). Nur nicht-anwendbare werden gesperrt.
-const istAnwendbar = (it: DriverItem) => it.anwendbar || it.ohneHardwareBezug
+const istAnwendbar = (it: DriverItem) => (it.anwendbar || it.ohneHardwareBezug) && !it.matchUnsicher
 
 // Status-Badge: nicht-anwendbare überschreiben den Versionsstatus (der wäre sinnlos).
 function statusBadge(it: DriverItem): { badge: string; label: string } {
@@ -214,10 +214,8 @@ function PcAuswahlView({ onBack }: { onBack: () => void }) {
   const [rebootMode, setRebootMode] = useState<'notify' | 'reboot'>('notify')
   const [notifyUser, setNotifyUser] = useState(true)   // Benutzer am Ziel-PC vorher/nachher benachrichtigen
   const [activateHost, setActivateHost] = useState<string | null>(null)   // WinRM-Aktivierung (wie Remote Doc)
-  // Je PC: nicht-anwendbare Treiber trotzdem anhakbar machen (Sonderfälle).
-  const [forceHosts, setForceHosts] = useState<Set<string>>(new Set())
-  const isForced = (host: string) => forceHosts.has(host.toLowerCase())
-  const toggleForce = (host: string) => setForceHosts(prev => { const n = new Set(prev); const k = host.toLowerCase(); n.has(k) ? n.delete(k) : n.add(k); return n })
+  // „Nicht-anwendbare erzwingen“ gibt es nicht mehr (11.11.2026): Angeboten wird nur, was sicher zu diesem
+  // PC gehört und neuer ist — die Regel steht in hpDrivers.installierbar() und gilt im ganzen Tool.
   const [pdfBusy, setPdfBusy] = useState(false)
   // „aktuelle" Treiber nach dem Scan standardmäßig ausblenden → der (Re-)Scan zeigt nur Offenes.
   const [showAktuell, setShowAktuell] = useState(false)
@@ -250,7 +248,7 @@ function PcAuswahlView({ onBack }: { onBack: () => void }) {
           init.add(keyOf(r.hostname, it.softpaqId))
         }
       }
-      setChecked(init); setBiosOk(new Set()); setFirmwareAckd(false); setForceHosts(new Set())
+      setChecked(init); setBiosOk(new Set()); setFirmwareAckd(false)
     } catch (e) { setError('Scan fehlgeschlagen: ' + (e instanceof Error ? e.message : String(e))) }
     finally { setScanning(false); setScanProg(null) }
   }
@@ -273,8 +271,8 @@ function PcAuswahlView({ onBack }: { onBack: () => void }) {
 
   function toggleItem(host: string, item: DriverItem) {
     const k = keyOf(host, item.softpaqId)
-    // Nicht-anwendbare nur anhaken, wenn „erzwingen" aktiv ist.
-    if (!istAnwendbar(item) && !isForced(host) && !checked.has(k)) return
+    // Nur anhakbar, was sicher zu diesem PC gehört UND neuer ist (eine Regel für das ganze Tool: installierbar()).
+    if (!installierbar(item).ok && !checked.has(k)) return
     // BIOS: pro Stück bestätigen. Firmware: nur EINMAL pro Vorgang bestätigen (danach direkt anhaken).
     if (item.klasse === 'bios' && !biosOk.has(k) && !checked.has(k)) { setBiosDialog({ host, item }); return }
     if (item.klasse === 'firmware' && !firmwareAckd && !checked.has(k)) { setBiosDialog({ host, item }); return }
@@ -294,12 +292,11 @@ function PcAuswahlView({ onBack }: { onBack: () => void }) {
   // werden sie mit angehakt (Reinstall unschädlich); ausgeblendet zählen sie nicht.
   // Nicht-anwendbare bleiben aus, außer „erzwingen" ist für diesen PC aktiv.
   function selectAllHost(r: HpHostReport) {
-    const forced = isForced(r.hostname)
     setChecked(prev => {
       const n = new Set(prev)
       for (const it of sichtbareItems(r)) {
         if (it.klasse === 'bios' || it.klasse === 'firmware') continue
-        if (!istAnwendbar(it) && !forced) continue
+        if (!installierbar(it).ok) continue
         n.add(keyOf(r.hostname, it.softpaqId))
       }
       return n
@@ -616,7 +613,6 @@ function PcAuswahlView({ onBack }: { onBack: () => void }) {
         {reports.map(r => {
           const updates = r.items.filter(i => i.anwendbar && !i.ohneHardwareBezug && i.status === 'veraltet').length
           const nichtAnwendbar = r.items.filter(i => !istAnwendbar(i)).length
-          const forced = isForced(r.hostname)
           const res = deployResults[r.hostname.toLowerCase()]
           const sichtbar = sichtbareItems(r)
           const aktuellVersteckt = r.items.filter(i => i.status === 'aktuell').length
@@ -655,12 +651,7 @@ function PcAuswahlView({ onBack }: { onBack: () => void }) {
                         {showAktuell ? `${aktuellVersteckt} aktuelle ausblenden` : `${aktuellVersteckt} bereits aktuell — einblenden`}
                       </button>
                     )}
-                    {nichtAnwendbar > 0 && (
-                      <button onClick={() => toggleForce(r.hostname)} title="Nicht-anwendbare Treiber trotzdem anhakbar machen (Sonderfälle)"
-                        className={`px-2 py-1 rounded border ${forced ? 'border-amber-500/50 bg-amber-500/15 text-amber-300' : 'border-border text-muted-foreground hover:text-foreground'}`}>
-                        {forced ? 'Erzwingen: an' : `Nicht-anwendbare erzwingen (${nichtAnwendbar})`}
-                      </button>
-                    )}
+                    {nichtAnwendbar > 0 && <span className="text-muted-foreground/70" title="Diese Treiber gehören zu Hardware, die in diesem PC nicht steckt – sie lassen sich nicht installieren.">{nichtAnwendbar} gehören zu anderer Hardware</span>}
                     <span className="text-muted-foreground/70">{r.items.filter(it => checked.has(keyOf(r.hostname, it.softpaqId))).length} gewählt</span>
                     <span className="ml-auto flex flex-wrap items-center gap-2.5 text-[10px] text-muted-foreground/70">
                       <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400" />veraltet = älter als HP-Stand</span>
@@ -684,12 +675,13 @@ function PcAuswahlView({ onBack }: { onBack: () => void }) {
                         const isChecked = checked.has(k)
                         const st = statusBadge(it)
                         const anwendbar = istAnwendbar(it)
-                        const gesperrt = !anwendbar && !forced
+                        const darf = installierbar(it)
+                        const gesperrt = !darf.ok
                         return (
                           <tr key={it.softpaqId} className={`border-b border-border/40 ${KLASSE_ROW[it.klasse]} ${!anwendbar ? 'opacity-45' : ''}`}>
                             <td className="py-1.5 pl-1">
                               <input type="checkbox" checked={isChecked} disabled={gesperrt} onChange={() => toggleItem(r.hostname, it)}
-                                title={gesperrt ? 'Nicht anwendbar für dieses Gerät — über „…erzwingen" freischalten' : undefined}
+                                title={gesperrt ? `Wird nicht angeboten: ${darf.grund}` : undefined}
                                 className={`${gesperrt ? 'opacity-40 cursor-not-allowed' : ''} ${it.klasse === 'kritisch' ? 'accent-amber-500' : it.klasse === 'bios' ? 'accent-red-500' : 'accent-primary'}`} />
                             </td>
                             <td className="py-1.5 pr-2 text-foreground">

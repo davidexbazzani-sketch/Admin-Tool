@@ -117,7 +117,7 @@ export const PROBLEME_DRUCKER3: PaProblem[] = [
       { aktion: 'dr-testseite', param: '{eingabe}', optional: true },
     ],
     frage: DRUCKER,
-    hinweis: 'Bleibt der Fehler, muss das Treiberpaket als Paket vorinstalliert werden (Softwarecenter bzw. DXC); Druckertreiber selbst entfernt oder installiert das Tool nicht.',
+    hinweis: 'Bleibt der Fehler, muss das Treiberpaket als Paket vorinstalliert werden (Unternehmensportal (Intune) bzw. DXC); Druckertreiber selbst entfernt oder installiert das Tool nicht.',
     ueberwachen: ['spooler-absturz'],
     nachricht: 'Der Drucker wurde neu eingerichtet. Bitte prüfen Sie, ob er jetzt in Ihrer Druckerauswahl erscheint.',
   },
@@ -724,7 +724,7 @@ export const PROBLEME_DRUCKER3: PaProblem[] = [
       { aktion: 'software-suchen', param: 'Scan', titel: 'Installierte Scan-Software suchen' },
       { aktion: 'scan-wia-neustart' },
     ],
-    hinweis: 'Fehlt der TWAIN-Treiber, wird er über Softwarecenter bzw. DXC installiert; Scans über „Windows-Fax und -Scan“ funktionieren auch ohne TWAIN.',
+    hinweis: 'Fehlt der TWAIN-Treiber, wird er über Unternehmensportal (Intune) bzw. DXC installiert; Scans über „Windows-Fax und -Scan“ funktionieren auch ohne TWAIN.',
     nachricht: 'Der Scan-Dienst wurde neu gestartet. Bitte wählen Sie im Scanprogramm die Scanner-Quelle erneut aus.',
   },
   {
@@ -745,7 +745,7 @@ export const PROBLEME_DRUCKER3: PaProblem[] = [
       { aktion: 'scan-wia-neustart' },
       { aktion: 'rd-storereset', optional: true },
     ],
-    hinweis: 'Ist der Microsoft Store per Richtlinie gesperrt, kommt die Scan-App über das Softwarecenter; „Windows-Fax und -Scan“ schaltet DXC als optionale Funktion frei.',
+    hinweis: 'Ist der Microsoft Store per Richtlinie gesperrt, kommt die Scan-App über das Unternehmensportal (Intune); „Windows-Fax und -Scan“ schaltet DXC als optionale Funktion frei.',
     nachricht: 'Der Scan-Dienst wurde repariert. Bitte öffnen Sie die Scan-App erneut.',
   },
   {
@@ -935,7 +935,7 @@ export const PROBLEME_DRUCKER3: PaProblem[] = [
       { aktion: 'usb-energiesparen-aus' },
       { aktion: 'dr-spooler-neustart' },
     ],
-    hinweis: 'Fehlt DYMO Connect oder ist es veraltet, über Software-Installationen bzw. Softwarecenter installieren; doppelte DYMO-Einträge mit „Alten Drucker entfernen“ aufräumen.',
+    hinweis: 'Fehlt DYMO Connect oder ist es veraltet, über Software-Installationen bzw. das Unternehmensportal (Intune) installieren; doppelte DYMO-Einträge mit „Alten Drucker entfernen“ aufräumen.',
     nachricht: 'Ihr DYMO-Drucker wurde neu erkannt. Bitte starten Sie DYMO Connect neu.',
   },
   // ── Home Office / private Geräte ──
@@ -960,7 +960,7 @@ export const PROBLEME_DRUCKER3: PaProblem[] = [
       { aktion: 'dr-testseite', param: '{eingabe}', optional: true },
     ],
     frage: { label: 'Name des Heimdruckers (wie in „Drucker anzeigen“)', platzhalter: 'z. B. HP DeskJet', vorlagen: ['HP', 'Canon', 'Epson', 'Brother'] },
-    hinweis: 'Ob private Drucker erlaubt sind, regelt die IT-Sicherheitsrichtlinie; Herstellertreiber installiert nur DXC bzw. das Softwarecenter – das Tool vergibt keine Adminrechte. Vertrauliche Unterlagen nicht zu Hause drucken.',
+    hinweis: 'Ob private Drucker erlaubt sind, regelt die IT-Sicherheitsrichtlinie; Herstellertreiber installiert nur DXC bzw. das Unternehmensportal (Intune) – das Tool vergibt keine Adminrechte. Vertrauliche Unterlagen nicht zu Hause drucken.',
   },
   {
     id: 'drucker-netzwerkgeraete-auto-install',
@@ -1006,7 +1006,7 @@ export const PROBLEME_DRUCKER3: PaProblem[] = [
       { aktion: 'dr-testseite', param: '{eingabe}', optional: true },
     ],
     frage: USB_DRUCKER,
-    hinweis: 'Den Drucker möglichst direkt am Laptop statt am Monitor-Hub anschließen; fehlt der Treiber, installiert ihn DXC bzw. das Softwarecenter.',
+    hinweis: 'Den Drucker möglichst direkt am Laptop statt am Monitor-Hub anschließen; fehlt der Treiber, installiert ihn DXC bzw. das Unternehmensportal (Intune).',
     ueberwachen: ['treiber-ladefehler'],
     nachricht: 'Ihr USB-Drucker wurde neu erkannt. Bitte drucken Sie Ihr Dokument noch einmal.',
   },
@@ -1523,7 +1523,7 @@ export const PROBLEME_DRUCKER3: PaProblem[] = [
       { aktion: 'software-suchen', param: 'Logi', titel: 'Logitech-Software suchen' },
       { aktion: 'werkzeug:software' },
     ],
-    hinweis: 'Logitech-Software nur aus dem Softwarecenter bzw. über DXC; ohne Software lassen sich die meisten Geräte per Bluetooth koppeln.',
+    hinweis: 'Logitech-Software nur aus dem Unternehmensportal bzw. über DXC; ohne Software lassen sich die meisten Geräte per Bluetooth koppeln.',
   },
   // ── Tastatur / Eingabehilfen ──
   {
@@ -1850,7 +1850,7 @@ export const PROBLEME_DRUCKER3: PaProblem[] = [
       { aktion: 'geraet-neustart', param: '{eingabe}', optional: true },
     ],
     frage: geraet('z. B. Wacom, signotec', ['Wacom', 'signotec', 'Tablet', 'Pen']),
-    hinweis: 'Fehlt der Treiber (Wacom, signotec), über Software-Installationen bzw. Softwarecenter installieren.',
+    hinweis: 'Fehlt der Treiber (Wacom, signotec), über Software-Installationen bzw. das Unternehmensportal (Intune) installieren.',
     nachricht: 'Ihr Tablett wurde neu erkannt. Bitte probieren Sie den Stift noch einmal.',
   },
   {
@@ -1893,7 +1893,7 @@ export const PROBLEME_DRUCKER3: PaProblem[] = [
       { aktion: 'geraet-neustart', param: '{eingabe}', optional: true },
     ],
     frage: geraet('z. B. Prolific, USB Serial, FTDI', ['Prolific', 'USB Serial', 'FTDI', 'CH340']),
-    hinweis: 'Die COM-Nummer im Messprogramm stellt der Key-User ein; Hersteller-Treiber für Adapter installieren DXC bzw. das Softwarecenter (Adapter mit „Prolific Code 10“ ggf. tauschen).',
+    hinweis: 'Die COM-Nummer im Messprogramm stellt der Key-User ein; Hersteller-Treiber für Adapter installieren DXC bzw. das Unternehmensportal (Intune) (Adapter mit „Prolific Code 10“ ggf. tauschen).',
   },
   {
     id: 'hardware-monitor-usb-hub',

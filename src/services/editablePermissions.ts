@@ -56,10 +56,19 @@ export function buildDefaultCatalog(): PermissionsCatalog {
   }
 }
 
+/** Bis 11.11.2026 stand bei „Remote Access to Drive I:“ fälschlich der Fileshare-Antrag (der ist für Abteilungsordner). */
+function berichtige(c: PermissionsCatalog): PermissionsCatalog {
+  const soll = PERMISSIONS.find(p => p.id === 'perm-ho-laufwerk-i')
+  for (const e of c.entries) {
+    if (e.id === 'perm-ho-laufwerk-i' && soll && /fileshare access request/i.test(e.snowLabel || '')) { e.snowLabel = soll.snowLabel; e.snowUrl = soll.snowUrl }
+  }
+  return c
+}
+
 export async function loadCatalog(): Promise<PermissionsCatalog> {
   try {
     const data = await api().netReadJson<PermissionsCatalog>(CATALOG_PATH)
-    if (data && Array.isArray(data.entries)) return data
+    if (data && Array.isArray(data.entries)) return berichtige(data)
   } catch { /* fallback */ }
   const defaults = buildDefaultCatalog()
   try { await api().netWriteJson(CATALOG_PATH, defaults) } catch { /* ok */ }

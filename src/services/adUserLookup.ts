@@ -50,15 +50,25 @@ function buildScript(batch: string[]): string {
     `  try {`,
     `    $idStr = ($id -as [string])`,
     `    $esc = $idStr -replace "'", "''"`,
-    `    $u = Get-ADUser -Filter "SamAccountName -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1`,
-    `    if (-not $u) {`,
-    `      $u = Get-ADUser -Filter "EmployeeID -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1`,
-    `    }`,
-    `    if (-not $u) {`,
-    `      $u = Get-ADUser -Filter "DisplayName -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1`,
-    `    }`,
-    `    if (-not $u) {`,
+    `    $istMail = $idStr -match '@'`,
+    // Hinweis: bewusst ohne Backslash-Muster — in dieser Schreibweise (Template-Zeichenkette) ginge der Backslash verloren.
+    `    $istName = (-not $istMail) -and ($idStr.Trim() -match '[ ,]')`,
+    `    if ($istMail) {`,
     `      $u = Get-ADUser -Filter "EmailAddress -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1`,
+    `      if (-not $u) { $u = Get-ADUser -Filter "UserPrincipalName -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1 }`,
+    `    } elseif ($istName) {`,
+    `      $u = Get-ADUser -Filter "DisplayName -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1`,
+    `      if (-not $u) {`,
+    // dieselbe Person in der anderen Schreibweise: „Nachname, Vorname“ ↔ „Vorname Nachname“ (weiterhin exakter Vergleich)
+    `        $alt = ''`,
+    `        if ($idStr -match '^ *([^,]+?) *, *(.+?) *$') { $alt = $matches[2] + ' ' + $matches[1] }`,
+    `        else { $w = @($idStr.Trim() -split ' +'); if ($w.Count -ge 2) { $alt = $w[-1] + ', ' + (($w[0..($w.Count - 2)]) -join ' ') } }`,
+    `        if ($alt) { $altEsc = $alt -replace "'", "''"; $u = Get-ADUser -Filter "DisplayName -eq '$altEsc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1 }`,
+    `      }`,
+    `    } else {`,
+    `      $u = Get-ADUser -Filter "SamAccountName -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1`,
+    `      if (-not $u) { $u = Get-ADUser -Filter "EmployeeID -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1 }`,
+    `      if (-not $u) { $u = Get-ADUser -Filter "DisplayName -eq '$esc'" -Properties $props -EA SilentlyContinue | Select-Object -First 1 }`,
     `    }`,
     `  } catch { $u = $null }`,
     `  if ($u) {`,
@@ -93,7 +103,9 @@ function buildScript(batch: string[]): string {
 //   - TIMEOUT_MS: hard cap per batch — keep generous so batches with many
 //     not-found entries (each goes through all 4 resolution strategies) still
 //     finish. With 25 identities and ~3s worst-case per lookup, 120s is safe.
-const BATCH_SIZE = 25
+// Kleine Blöcke: Der Fortschritt bewegt sich alle paar Sekunden, und läuft ein Block in die
+// Zeitgrenze, fehlen höchstens 6 Antworten statt aller.
+const BATCH_SIZE = 6
 const PARALLEL_BATCHES = 3
 const TIMEOUT_MS = 120000
 
@@ -101,6 +113,8 @@ async function runBatch(batch: string[], results: Map<string, AdLookupResult>): 
   try {
     const res = await api().runPowerShell(buildScript(batch), TIMEOUT_MS)
     const raw = res.stdout ?? ''
+    // Zeitgrenze erreicht: was schon beantwortet ist, zählt; der Rest wird als „keine Antwort“ gemeldet (nicht als „nicht gefunden“)
+    if (res.timedOut) for (const id of batch) if (!raw.includes('ADRES\t' + id + '\t')) results.set(id, { identity: id, found: false, error: 'Zeitüberschreitung bei der AD-Abfrage' })
     if (res.stderr) console.log('[batchAdLookup] batch stderr:', res.stderr.slice(0, 300))
 
     const lines = raw.split(/\r?\n/).filter(l => l.startsWith('ADRES\t'))

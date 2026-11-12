@@ -47,7 +47,10 @@ export function bereichsDiagnose(bereich: PaBereich): DgUnter | null {
   const ohneBefund: string[] = []
   for (const o of themen) for (const u of o.unter) {
     for (const s of u.sonden) if (!sonden.includes(s)) sonden.push(s)
-    for (const r of u.regeln) regeln.push({ ...r, id: u.id + '/' + r.id })
+    for (const r of u.regeln) {
+      const zusatz = r.imBereich
+      regeln.push({ ...r, id: u.id + '/' + r.id, wenn: zusatz ? f => r.wenn(f) && zusatz(f) : r.wenn })
+    }
     for (const p of u.ohneBefund.slice(0, 1)) if (!ohneBefund.includes(p)) ohneBefund.push(p)
   }
   return {

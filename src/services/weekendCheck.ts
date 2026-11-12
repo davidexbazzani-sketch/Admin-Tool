@@ -3,6 +3,9 @@
 // werden alle PCs aus der Endgeräte-Übersicht mit Status „In use" + Verwendung „Active"
 // angepingt. Das Ergebnis wird je Messtag dauerhaft gespeichert und im Proaktiven Radar
 // (Reiter „Wochenend-Check") als fortlaufende Tabelle angezeigt.
+// Bei jedem PC, der an ist, wird zusätzlich ausgelesen, wer angemeldet ist (Konsole,
+// gesperrte/getrennte Sitzungen) und ob das die zugewiesene Person ist — nur lesend,
+// ohne WinRM einzuschalten (services/anmeldeAbgleich.ts).
 //
 // WICHTIG: Es wird NIE nachgeholt. Ein Ping am Montag würde nichts über das Wochenende
 // aussagen — verpasste Messtage bleiben „nicht gemessen" (siehe isInWindow).
@@ -16,6 +19,7 @@ import { loadDevices, type EndpointDevice } from './endpointDevices'
 import { isDeviceInUse } from './deviceMaps'
 import { latestWeeklySlot, type ScanScheduleConfig } from './scanSchedules'
 import { buildParallelOnlineCheck, parseOnlineCheckLine } from '../utils/connectivityCheck'
+import { pruefeAnmeldung, zuweisungText, type AngemeldeterBenutzer, type AbgleichStufe } from './anmeldeAbgleich'
 
 export const WEEKEND_CHECK_ID = 'weekend-check'
 export const WEEKEND_CHECK_STATUS = 'weekend-check/_scan_status.json'
@@ -26,8 +30,27 @@ export const WINDOW_MS = 2 * 60 * 60 * 1000
 /** Wartezeit bis zur zweiten Prüfung der Offline-Geräte (kurze Netzaussetzer abfangen). */
 const RETRY_DELAY_MS = 5 * 60 * 1000
 const CHUNK = 40
+/** So viele PCs werden gleichzeitig nach dem angemeldeten Benutzer gefragt (Bulk-Regel: max. 10). */
+const ANMELDE_PARALLEL = 5
 
-export interface HostResult { online: boolean; method: string }
+/** Wer zum Messzeitpunkt an einem eingeschalteten PC angemeldet war. */
+export interface WeekendAnmeldung {
+  /** [] = niemand angemeldet (bzw. nicht ermittelbar, siehe stufe/fehler). */
+  benutzer: AngemeldeterBenutzer[]
+  /** Abgleich mit der Zuweisung zum Messzeitpunkt. */
+  stufe: AbgleichStufe
+  /** Zugewiesene Person zum Messzeitpunkt (Anzeigetext). */
+  zugewiesen?: string
+  weg?: string
+  fehler?: string
+  am: string
+}
+export interface HostResult {
+  online: boolean
+  method: string
+  /** Nur bei online — fehlt bei Messungen vor dem 10.11.26 oder wenn noch nicht ausgelesen. */
+  anmeldung?: WeekendAnmeldung
+}
 export interface MessResult {
   checkedAt: string
   by: string
@@ -149,7 +172,9 @@ async function mergeAndSave(slotKey: string, by: string, total: number, found: M
   for (const [k, v] of found) {
     // Einmal „an" bleibt „an" (zweite Prüfung kann nur offline → online korrigieren).
     if (hosts[k]?.online && !v.online) continue
-    hosts[k] = v
+    // Gelesene Anmeldung eines weiterhin eingeschalteten PCs nicht verwerfen.
+    const alt = hosts[k]?.anmeldung
+    hosts[k] = v.online && alt && !v.anmeldung ? { ...v, anmeldung: alt } : v
   }
   cur.messungen[slotKey] = { checkedAt: new Date().toISOString(), by, total: Math.max(total, prev?.total ?? 0), hosts }
   try { return await api().netWriteJson(RESULTS_PATH, cur) } catch { return false }
@@ -169,15 +194,110 @@ export async function runWeekendCheckOnce(by: string, slotKey: string, onTick?: 
   if (first.size === 0) return { ok: false, summary: 'Keine Antwort von der Online-Prüfung (PowerShell).' }
   if (!(await mergeAndSave(slotKey, by, devices.length, first))) return { ok: false, summary: 'Ergebnis konnte nicht gespeichert werden.' }
 
+  // Wer ist an den eingeschalteten PCs angemeldet? Läuft in der Wartezeit bis zur zweiten Runde.
+  const zweiteRundeAb = Date.now() + RETRY_DELAY_MS
+  const an = hosts.filter(h => first.get(hostKey(h))?.online)
+  await speichereAnmeldungen(slotKey, await leseAnmeldungen(an, onTick))
+
   const offline = hosts.filter(h => !first.get(hostKey(h))?.online)
   if (offline.length > 0) {
-    const until = Date.now() + RETRY_DELAY_MS
-    while (Date.now() < until) { await new Promise(r => setTimeout(r, 30_000)); onTick?.() }
+    while (Date.now() < zweiteRundeAb) {
+      await new Promise(r => setTimeout(r, Math.min(30_000, Math.max(1000, zweiteRundeAb - Date.now()))))
+      onTick?.()
+    }
     const second = await pingHosts(offline, onTick)
     await mergeAndSave(slotKey, by, devices.length, second)
+    const spaeterAn = offline.filter(h => second.get(hostKey(h))?.online)
+    await speichereAnmeldungen(slotKey, await leseAnmeldungen(spaeterAn, onTick))
   }
 
   const final = (await loadWeekendResults()).messungen[slotKey]
-  const on = final ? Object.values(final.hosts).filter(h => h.online).length : 0
-  return { ok: true, summary: `${wochentag(slotKey)} ${slotKey.split('-').reverse().join('.')}: ${on} von ${devices.length} PCs an.` }
+  return { ok: true, summary: zusammenfassung(slotKey, final, devices.length) }
+}
+
+// ── Angemeldete Benutzer an den eingeschalteten PCs ──────────────────────────
+
+/** Ergebnis von pruefeAnmeldung → gespeicherte Form. */
+async function leseEineAnmeldung(host: string): Promise<WeekendAnmeldung> {
+  try {
+    const e = await pruefeAnmeldung(host)
+    // Der PC hat auf Ping geantwortet — „nicht erreichbar" heißt hier: Fernabfrage-Ports zu.
+    const fehler = e.fehler && /^PC nicht erreichbar/i.test(e.fehler)
+      ? 'PC antwortet, aber weder WinRM (5985) noch RPC (135) sind erreichbar.'
+      : e.fehler
+    return {
+      benutzer: e.angemeldet,
+      stufe: e.stufe,
+      zugewiesen: e.zuweisung ? zuweisungText(e.zuweisung) : undefined,
+      weg: e.weg,
+      fehler: fehler || undefined,
+      am: new Date(e.geprueftAm).toISOString(),
+    }
+  } catch (err) {
+    return { benutzer: [], stufe: 'unbekannt', fehler: err instanceof Error ? err.message : 'Abfrage fehlgeschlagen.', am: new Date().toISOString() }
+  }
+}
+
+/** Liest bei allen übergebenen PCs, wer angemeldet ist (höchstens ANMELDE_PARALLEL gleichzeitig). */
+async function leseAnmeldungen(hosts: string[], onTick?: () => void): Promise<Map<string, WeekendAnmeldung>> {
+  const aus = new Map<string, WeekendAnmeldung>()
+  let i = 0
+  const arbeiter = async () => {
+    while (i < hosts.length) {
+      const h = hosts[i++]
+      aus.set(hostKey(h), await leseEineAnmeldung(h))
+      onTick?.()
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(ANMELDE_PARALLEL, hosts.length) }, arbeiter))
+  return aus
+}
+
+/** Frisch nachladen, Anmeldungen nur bei eingeschalteten PCs dieses Messtags eintragen, schreiben. */
+async function speichereAnmeldungen(slotKey: string, gelesen: Map<string, WeekendAnmeldung>): Promise<boolean> {
+  if (gelesen.size === 0) return true
+  const cur = await readResults()
+  const m = cur?.messungen[slotKey]
+  if (!cur || !m) return false
+  for (const [k, a] of gelesen) {
+    const h = m.hosts[k]
+    if (!h?.online) continue
+    // Ein gelesenes Ergebnis nicht durch einen späteren Fehlversuch ersetzen.
+    if (h.anmeldung && h.anmeldung.stufe !== 'unbekannt' && a.stufe === 'unbekannt') continue
+    m.hosts[k] = { ...h, anmeldung: a }
+  }
+  try { return await api().netWriteJson(RESULTS_PATH, cur) } catch { return false }
+}
+
+/** Eingeschaltete PCs eines Messtags, bei denen der angemeldete Benutzer noch fehlt. */
+export function fehlendeAnmeldungen(m: MessResult | undefined): string[] {
+  if (!m) return []
+  return Object.entries(m.hosts).filter(([, h]) => h.online && !h.anmeldung).map(([k]) => k)
+}
+
+/**
+ * Nachlesen im Messfenster: Stammt die Messung z. B. von einer älteren Tool-Version oder
+ * wurde sie abgebrochen, fehlen bei eingeschalteten PCs die angemeldeten Benutzer.
+ */
+export async function leseFehlendeAnmeldungen(slotKey: string, onTick?: () => void): Promise<{ ok: boolean; summary: string }> {
+  const cur = await readResults()
+  if (!cur) return { ok: false, summary: 'Ergebnisdatei nicht lesbar – abgebrochen, nichts überschrieben.' }
+  const m = cur.messungen[slotKey]
+  const fehlen = fehlendeAnmeldungen(m)
+  if (!m || fehlen.length === 0) return { ok: true, summary: zusammenfassung(slotKey, m, m?.total ?? 0) }
+  if (!(await speichereAnmeldungen(slotKey, await leseAnmeldungen(fehlen, onTick)))) {
+    return { ok: false, summary: 'Angemeldete Benutzer konnten nicht gespeichert werden.' }
+  }
+  const final = (await loadWeekendResults()).messungen[slotKey]
+  return { ok: true, summary: zusammenfassung(slotKey, final, final?.total ?? m.total) }
+}
+
+/** „Sonntag 15.11.2026: 12 von 180 PCs an, bei 9 war jemand angemeldet (3× nicht die zugewiesene Person)." */
+export function zusammenfassung(slotKey: string, m: MessResult | undefined, total: number): string {
+  const an = m ? Object.values(m.hosts).filter(h => h.online) : []
+  const mitBenutzer = an.filter(h => (h.anmeldung?.benutzer.length ?? 0) > 0).length
+  const fremd = an.filter(h => h.anmeldung?.stufe === 'fremd').length
+  const kopf = `${wochentag(slotKey)} ${slotKey.split('-').reverse().join('.')}: ${an.length} von ${total} PCs an`
+  if (an.length === 0) return kopf + '.'
+  return `${kopf}, bei ${mitBenutzer} war jemand angemeldet${fremd ? ` (${fremd}× nicht die zugewiesene Person)` : ''}.`
 }

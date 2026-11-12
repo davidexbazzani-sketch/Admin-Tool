@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PackagePlus, Wrench, Phone, Headphones, FileText, Box, MonitorUp, Lock } from 'lucide-react'
+import { PackagePlus, Wrench, Phone, Headphones, FileText, Box, MonitorUp, Lock, Cpu } from 'lucide-react'
 import SolidWorksInstallation from '../components/softwareInstallations/SolidWorksInstallation'
 import SolidWorksHelp from '../components/solidworks/SolidWorksHelp'
 import XelionInstallation from '../components/softwareInstallations/XelionInstallation'
@@ -8,10 +8,11 @@ import EnaioInstallation from '../components/softwareInstallations/EnaioInstalla
 import FreeCadInstallation from '../components/softwareInstallations/FreeCadInstallation'
 import InstallLogbuch from '../components/softwareInstallations/InstallLogbuch'
 import ItAdminToolInstallation from '../components/softwareInstallations/ItAdminToolInstallation'
+import VcRedistInstallation from '../components/softwareInstallations/VcRedistInstallation'
 import { usePinSperre } from '../components/netzwerkgeraete/zugang'
 
 // „E-Drawings" wurde am 04.11.2026 durch „3D-Viewer (FreeCAD)" ersetzt (Ferninstallation lief nicht)
-type Section = 'overview' | 'solidworks' | 'xelion' | 'jabra' | 'enaio' | 'freecad' | 'itadmintool'
+type Section = 'overview' | 'solidworks' | 'xelion' | 'jabra' | 'enaio' | 'freecad' | 'itadmintool' | 'vcredist'
 
 export default function SoftwareInstallations() {
   const [section, setSection] = useState<Section>('overview')
@@ -90,6 +91,18 @@ export default function SoftwareInstallations() {
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
           </button>
 
+          <button onClick={() => setSection('vcredist')} data-kachel="vcredist"
+            className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
+            <div className="w-10 h-10 rounded-lg bg-violet-500/20 flex items-center justify-center">
+              <Cpu size={20} className="text-violet-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">Visual C++ Laufzeit</h3>
+              <p className="text-xs text-muted-foreground mt-1">Alle Visual-C++-Redistributables (2005 bis 2015–2026) einzeln oder alle auf einmal still installieren — direkt von Microsoft, Signatur geprüft.</p>
+            </div>
+            <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
+          </button>
+
           <button onClick={() => mitPin(() => setSection('itadmintool'))} data-kachel="itadmintool"
             className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
             <div className="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center">
@@ -122,6 +135,13 @@ export default function SoftwareInstallations() {
         <>
           <button onClick={() => setSection('overview')} className="text-xs text-muted-foreground hover:text-foreground mb-3 self-start">&larr; Zurueck zur Uebersicht</button>
           <EnaioInstallation />
+        </>
+      )}
+
+      {section === 'vcredist' && (
+        <>
+          <button onClick={() => setSection('overview')} className="text-xs text-muted-foreground hover:text-foreground mb-3 self-start">&larr; Zurueck zur Uebersicht</button>
+          <VcRedistInstallation />
         </>
       )}
 

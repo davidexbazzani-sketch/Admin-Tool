@@ -113,7 +113,7 @@ function TreiberTeil({ host, onFertig }: { host: string; onFertig: (b: boolean) 
     const items = soundItems.filter(it => gewaehlt.has(it.softpaqId))
     if (!items.length || laeuft) return
     setSekunden(0)
-    await useHpDeployStore.getState().run([{ host, items }], { rebootMode: 'notify', by: 'Sound Fix' })
+    await useHpDeployStore.getState().run([{ host, items }], { rebootMode: 'notify', by: 'Sound Fix', ausloeser: { art: 'manuell', quelle: 'Sound Fix' } })
   }
 
   // Nach erfolgreicher Installation gilt der Schritt als erledigt.

@@ -16,6 +16,7 @@ import {
 } from '../../services/freecadInstall'
 import { useFreeCadInstallStore } from '../../store/freecadInstallStore'
 import InstallLogbuch from './InstallLogbuch'
+import { AnmeldeStatus, useAnmeldeCheck } from './AnmeldeCheck'
 
 function mmss(s: number): string {
   const m = Math.floor(s / 60), r = s % 60
@@ -76,6 +77,7 @@ export default function FreeCadInstallation() {
               <DeviceInfoButton hostname={host} serial={serial} />
               <button onClick={() => { setHost(''); setSerial(undefined) }} className="ml-auto text-[11px] text-muted-foreground hover:text-foreground">anderer PC</button>
             </div>
+            <AnmeldeStatus host={host} />
             <FreeCadPanel host={host} />
           </div>
         </Card>
@@ -122,6 +124,7 @@ function FreeCadPanel({ host }: { host: string }) {
   const [desktop, setDesktop] = useState(true)
   const [beenden, setBeenden] = useState(true)
   const [dauer, setDauer] = useState(0)
+  const { vorStart, anmeldeDialog } = useAnmeldeCheck()
 
   useEffect(() => { setStand(null); setDauer(0) }, [key])
   useEffect(() => {
@@ -214,7 +217,7 @@ function FreeCadPanel({ host }: { host: string }) {
 
       {/* ── Start ────────────────────────────────────────────────────────── */}
       <div className="flex items-center gap-2 flex-wrap">
-        <button onClick={() => starte(host, { verknuepfen, erzwingen: verknuepfen && erzwingen, desktop, beenden })} disabled={laeuft}
+        <button onClick={() => { const opt = { verknuepfen, erzwingen: verknuepfen && erzwingen, desktop, beenden }; void vorStart(host, () => starte(host, opt)) }} disabled={laeuft}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold text-white bg-amber-600 hover:bg-amber-500 disabled:opacity-40">
           {laeuft ? <Loader2 size={13} className="animate-spin" /> : <PackageCheck size={13} />}
           {laeuft ? 'läuft …' : fc ? 'Aktualisieren / Verknüpfung prüfen' : 'FreeCAD installieren'}
@@ -252,6 +255,7 @@ function FreeCadPanel({ host }: { host: string }) {
           <span className="whitespace-pre-wrap break-words">{lauf.ergebnis.text}</span>
         </div>
       )}
+      {anmeldeDialog}
     </div>
   )
 }

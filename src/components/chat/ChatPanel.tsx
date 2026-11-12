@@ -1,10 +1,10 @@
 // ── Chat – Fenster oben rechts (ein-/ausklappbar) ─────────────────────────────
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { MessageCircle, X, ChevronUp, ChevronDown, ArrowLeft, Send, Search, Loader2, Check, CheckCheck, AlertTriangle } from 'lucide-react'
+import { MessageCircle, X, ChevronUp, ChevronDown, ArrowLeft, Send, Search, Loader2, Check, CheckCheck, AlertTriangle, Film, Play } from 'lucide-react'
 import { useChatStore, anzahlUngelesen } from '../../store/chatStore'
 import {
-  ladeGespraech, sende, markiereGelesen, ungelesenBeiPartner, sicher, MAX_ZEICHEN,
-  type ChatIch, type ChatNachricht, type ChatNutzer,
+  ladeGespraech, sende, markiereGelesen, ungelesenBeiPartner, sicher, MAX_ZEICHEN, oeffneChatDatei, groesseText,
+  type ChatIch, type ChatNachricht, type ChatNutzer, type ChatDatei,
 } from '../../services/chat'
 import { CHAT_BOTS, botVon, istBot } from '../../services/chatBots'
 
@@ -125,6 +125,30 @@ function Kontakte({ andere, geladen, ungelesen, namen, onWaehle }: {
   )
 }
 
+/** Angehängtes Video: Name, Größe, „Öffnen“ (Standardprogramm, direkt vom Netzlaufwerk) */
+function DateiAnhang({ datei, meins }: { datei: ChatDatei; meins: boolean }) {
+  const [laedt, setLaedt] = useState(false)
+  const [fehler, setFehler] = useState('')
+  async function oeffne() {
+    setLaedt(true); setFehler('')
+    const f = await oeffneChatDatei(datei).catch(e => (e as Error).message)
+    setLaedt(false)
+    if (f) setFehler(f)
+  }
+  return (
+    <span className={`mt-1.5 flex items-center gap-2 rounded-lg px-2 py-1.5 ${meins ? 'bg-black/15' : 'bg-background/60 border border-border'}`} data-chat-datei>
+      <Film size={16} className="shrink-0" />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate font-medium" title={datei.name}>{datei.name}</span>
+        <span className="block text-[10px] opacity-70">{typeof datei.bytes === 'number' && datei.bytes > 0 ? groesseText(datei.bytes) : 'Video'}{fehler && <span className="text-red-300"> · {fehler}</span>}</span>
+      </span>
+      <button onClick={() => void oeffne()} disabled={laedt} className={`shrink-0 inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-semibold ${meins ? 'bg-white/20 hover:bg-white/30' : 'bg-primary text-primary-foreground hover:opacity-90'} disabled:opacity-50`} title="Video öffnen">
+        {laedt ? <Loader2 size={11} className="animate-spin" /> : <Play size={11} />}Öffnen
+      </button>
+    </span>
+  )
+}
+
 const uhrzeit = (iso: string) => new Date(iso).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
 function tagLabel(iso: string): string {
   const d = new Date(iso), h = new Date(), g = new Date(); g.setDate(h.getDate() - 1)
@@ -229,6 +253,7 @@ function Gespraech({ ich, partner, partnerName, partnerNutzer, onZurueck, nachSe
                 <div className={`max-w-[80%] rounded-2xl px-3 py-1.5 text-xs whitespace-pre-wrap break-words ${meins
                   ? `${n.fehler ? 'bg-red-500/30' : 'bg-primary'} text-primary-foreground rounded-br-sm` : 'bg-accent text-foreground rounded-bl-sm'}`}>
                   {n.text}
+                  {n.datei && typeof n.datei.rel === 'string' && typeof n.datei.name === 'string' && <DateiAnhang datei={n.datei} meins={meins} />}
                   <span className={`flex items-center justify-end gap-0.5 mt-0.5 text-[9px] ${meins ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
                     {uhrzeit(n.at)}
                     {meins && (n.fehler ? <AlertTriangle size={10} /> : n.sendet ? <Loader2 size={10} className="animate-spin" />

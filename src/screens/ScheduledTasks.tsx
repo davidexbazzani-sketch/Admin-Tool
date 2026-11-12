@@ -51,7 +51,7 @@ async function loadEmailCfg(username: string): Promise<UserEmailConfig | null> {
 // ── Helper: send email ─────────────────────────────────────────────────────────
 async function sendMail(cfg: UserEmailConfig, to: string, subject: string, body: string) {
   if (!cfg.email || !cfg.smtp) return
-  await api().sendEmailRaw({ to, subject, body, smtp: cfg.smtp, port: cfg.port, useTls: cfg.useTls, from: cfg.email, method: cfg.emailMethod })
+  await api().sendEmailRaw({ to, subject, body, smtp: cfg.smtp, port: cfg.port, useTls: cfg.useTls, from: cfg.email, method: cfg.emailMethod, protokoll: { art: 'automatisch', quelle: 'Geplante Aufgaben' } })
 }
 
 // ── Helper: check if a global schedule matches now ────────────────────────────

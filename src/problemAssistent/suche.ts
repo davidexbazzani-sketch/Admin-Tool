@@ -87,6 +87,8 @@ const GRUPPEN: string[][] = [
   ['profil', 'temporaer', 'tempprofil'],
   ['uhr', 'uhrzeit', 'zeit', 'datum'],
   ['installieren', 'installation', 'install', 'softwarecenter', 'setup'],
+  // Software kommt bei uns nur über Intune: wer noch „Softwarecenter“ sagt, meint das Unternehmensportal
+  ['unternehmensportal', 'softwarecenter', 'companyportal', 'intune'],
   ['enaio', 'dms', 'archiv'],
   ['xelion', 'telefon', 'telefonie', 'softphone', 'anruf'],
   ['explorer', 'datei-explorer', 'dateiexplorer', 'windows-explorer'],

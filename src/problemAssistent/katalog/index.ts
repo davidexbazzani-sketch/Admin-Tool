@@ -76,4 +76,44 @@ export const KERNPROBLEME = new Set<string>()
   }
 }
 
-export const PROBLEME: PaProblem[] = ROH.map(p => (VARIANTEN[p.id] ? { ...p, beschreibungen: [...(p.beschreibungen || []), ...VARIANTEN[p.id]] } : p))
+/** Bei jedem Netzwerk-/Internetproblem wird ZUERST geprüft, ob Zscaler eingeschaltet ist (Vorgabe IT Marine). */
+const ZS_BEREICHE = new Set<string>(['Netzwerk & Internet', 'WLAN', 'VPN & Zscaler'])
+const ZS_BROWSER = /internet|l(ae|ä)dt nicht|nicht erreichbar|keine verbindung|offline|proxy|zertifikat|err_|dns|zscaler|seite.*(geht|kommt) nicht/i
+export function mitZscalerSchritt(p: PaProblem): PaProblem {
+  const passt = ZS_BEREICHE.has(p.bereich) || (p.bereich === 'Browser' && ZS_BROWSER.test(p.titel + ' ' + p.stichworte.join(' ')))
+  if (!passt || p.schritte.some(s => s.aktion === 'zscaler-status')) return p
+  return { ...p, schritte: [{ aktion: 'zscaler-status' }, ...p.schritte] }
+}
+
+/** Browser-Probleme: Cache von Edge UND Chrome hilft oft (Vorgabe IT Marine) – „nur Edge“ wird zu „alle Browser“,
+ *  fehlt ein Cache-Schritt, wird er angeboten (bei SAP-Web/Fiori angehakt, sonst optional). */
+const WEB_SAP = /fiori|webgui|web-?gui|launchpad/i
+export function mitBrowserCache(p: PaProblem): PaProblem {
+  const text = p.id + ' ' + p.titel
+  const sapWeb = WEB_SAP.test(text)
+  if (p.bereich !== 'Browser' && !sapWeb) return p
+  let schritte = p.schritte.map(s => (s.aktion === 'edge-cache' ? { ...s, aktion: 'browser-cache-alle', titel: s.titel ? s.titel.replace(/Edge-Cache/g, 'Browser-Cache (Edge, Chrome, Firefox)') : undefined } : s))
+  if (!schritte.some(s => s.aktion === 'browser-cache-alle')) schritte = [...schritte, sapWeb ? { aktion: 'browser-cache-alle' } : { aktion: 'browser-cache-alle', optional: true }]
+  return { ...p, schritte }
+}
+
+/** SAP im Browser (Fiori/WebGUI): im Homeoffice braucht es die ZPA-Rolle für SAP – wird nach Zscaler geprüft (liest nur, im AD). */
+export function mitSapHomeoffice(p: PaProblem): PaProblem {
+  if (!WEB_SAP.test(p.id + ' ' + p.titel) || p.schritte.some(s => s.aktion === 'zpa-rollen-pruefen')) return p
+  // Reihenfolge: Zscaler an? → im Homeoffice SAP-Rolle da? → dann erst Tickets/Cache
+  const zs = p.schritte.find(s => s.aktion === 'zscaler-status') || { aktion: 'zscaler-status' }
+  const schritte = [zs, { aktion: 'zpa-rollen-pruefen', param: 'SAP', titel: 'Im Homeoffice: SAP-Fernzugriff (ZPA-Rolle „Marine Production“) prüfen' }, ...p.schritte.filter(s => s.aktion !== 'zscaler-status')]
+  return { ...p, schritte }
+}
+
+/** Zusätzliche Anwender-Formulierungen (Suche), zentral gepflegt. */
+const ZUSATZ_BESCHREIBUNGEN: Record<string, string[]> = {
+  'sap-fiori-browser': ['Ich komme nicht in Fiori rein', 'Kommt nicht ins Fiori-Launchpad rein', 'Fiori geht nicht auf', 'Fiori lädt nicht im Homeoffice', 'Anmeldung an Fiori klappt nicht', 'Fiori-Seite bleibt weiß oder dreht sich nur'],
+  'browser-sap-fiori': ['Fiori fragt nach Benutzer und Kennwort', 'Ich komme nicht in Fiori rein, es kommt eine Anmeldemaske', 'Fiori Anmeldung schlägt fehl'],
+}
+
+export const PROBLEME: PaProblem[] = ROH.map(p => {
+  const extra = [...(VARIANTEN[p.id] || []), ...(ZUSATZ_BESCHREIBUNGEN[p.id] || [])]
+  const mit = extra.length ? { ...p, beschreibungen: [...(p.beschreibungen || []), ...extra] } : p
+  return mitSapHomeoffice(mitBrowserCache(mitZscalerSchritt(mit)))
+})

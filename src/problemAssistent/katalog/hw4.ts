@@ -291,7 +291,7 @@ export const PROBLEME_HW4: PaProblem[] = [
       'Unten rechts dreht sich die Einrichtung und es passiert einfach nichts.',
       'Windows is stuck on „Setting up a device“.',
     ],
-    ursache: 'Die Geräteinstallation wartet auf eine andere Installation (Windows Update, Softwarecenter), sucht im Internet nach einem Treiber, den Zscaler bzw. der Proxy blockiert, oder der Geräteinstallationsdienst hängt.',
+    ursache: 'Die Geräteinstallation wartet auf eine andere Installation (Windows Update, Intune), sucht im Internet nach einem Treiber, den Zscaler bzw. der Proxy blockiert, oder der Geräteinstallationsdienst hängt.',
     loesung: 'Zeigt laufende Installationen und Geräte mit Fehler, startet den Geräteinstallationsdienst neu und lässt Windows erneut nach der Hardware suchen.',
     schritte: [
       { aktion: 'installation-laeuft' },
@@ -323,7 +323,7 @@ export const PROBLEME_HW4: PaProblem[] = [
       { aktion: 'werkzeug:treiber', titel: TREIBER },
       { aktion: 'werkzeug:software', optional: true, titel: 'Software-Installationen öffnen (Herstellertreiber)' },
     ],
-    hinweis: 'Benutzer bekommen keine Adminrechte. Herstellertreiber, die nicht über HP bzw. das Softwarecenter verteilt werden, bei DXC zur Paketierung anfragen.',
+    hinweis: 'Benutzer bekommen keine Adminrechte. Herstellertreiber, die nicht über HP bzw. das Unternehmensportal verteilt werden, bei DXC zur Paketierung anfragen.',
   },
   {
     id: 'hardware-erst-nach-neustart-erkannt',
@@ -1702,7 +1702,7 @@ export const PROBLEME_HW4: PaProblem[] = [
       { aktion: 'software-suchen', param: 'Logi' },
       { aktion: 'werkzeug:software', titel: 'Software-Installationen öffnen (Logitech-Software)' },
     ],
-    hinweis: 'Ist die Logitech-Software nicht im Softwarecenter freigegeben, bei DXC anfragen. In Teams wirkt Hervorheben nur, wenn der ganze Bildschirm geteilt wird.',
+    hinweis: 'Ist die Logitech-Software nicht im Unternehmensportal freigegeben, bei DXC anfragen. In Teams wirkt Hervorheben nur, wenn der ganze Bildschirm geteilt wird.',
   },
   {
     id: 'hardware-wacom-falscher-bildschirm',
@@ -1835,7 +1835,7 @@ export const PROBLEME_HW4: PaProblem[] = [
       { aktion: 'werkzeug:software', optional: true, titel: 'Software-Installationen öffnen (Messmittel-Software)' },
     ],
     frage: geraet('z. B. Mitutoyo, USB-ITN, U-WAVE, HID-Tastatur', ['Mitutoyo', 'U-WAVE', 'USB-ITN', 'HID-Tastatur', 'Sylvac']),
-    hinweis: 'Messmittel-Software und Funkkanäle betreut die Qualitätssicherung bzw. der Messmittel-Lieferant; Software nur über Softwarecenter/DXC.',
+    hinweis: 'Messmittel-Software und Funkkanäle betreut die Qualitätssicherung bzw. der Messmittel-Lieferant; Software nur über das Unternehmensportal (Intune) bzw. DXC.',
   },
 
   // ══ Serielle Geräte / COM-Ports ═════════════════════════════════════════════
@@ -2017,7 +2017,7 @@ export const PROBLEME_HW4: PaProblem[] = [
       { aktion: 'werkzeug:treiber', optional: true, titel: TREIBER },
     ],
     frage: geraet('z. B. Smartcard, Cherry, CCID', ['Smartcard', 'Smart Card', 'Cherry', 'CCID']),
-    hinweis: 'Tastatur direkt am PC bzw. Laptop anschließen (nicht am Monitor-Hub). Hersteller-Treiber für Cherry-Leser nur über Softwarecenter/DXC.',
+    hinweis: 'Tastatur direkt am PC bzw. Laptop anschließen (nicht am Monitor-Hub). Hersteller-Treiber für Cherry-Leser nur über das Unternehmensportal (Intune) bzw. DXC.',
   },
   {
     id: 'hardware-smartcard-wird-nicht-gelesen',

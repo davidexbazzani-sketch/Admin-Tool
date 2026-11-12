@@ -354,8 +354,9 @@ export const PERMISSIONS: PermissionEntry[] = [
     id: 'perm-ho-laufwerk-i',
     name: 'Remote Access to Drive I:',
     adGroupName: 'EAA_File_Servers_Marine_Prod',
-    snowLabel: 'Fileshare Access Request - Service Portal',
-    snowUrl: 'https://skfprod.service-now.com/sp?id=sc_cat_item&table=sc_cat_item&sys_id=1db45ac8db0cf01098f90892f3961956',
+    // Homeoffice-Rolle „Marine Fileservers“ = Anwendungs-Antrag (nicht „Fileshare Access Request“, der ist für Abteilungsordner)
+    snowLabel: 'Add/Remove Remote Access to Applications for a User - Service Portal',
+    snowUrl: 'https://skfprod.service-now.com/sp?id=sc_cat_item&sys_id=02973a8393df92949bdeba647aba1020',
     section: 'homeoffice',
   },
   {

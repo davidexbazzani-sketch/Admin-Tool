@@ -112,7 +112,7 @@ foreach ($n in $pakete) {
 Zeile 'Bitte Office, Teams und OneDrive einmal beenden und neu starten; die Konten unter Einstellungen → Konten → „Auf Arbeits- oder Schulkonto zugreifen“ prüfen.'` }),
 
   A({ id: 'konto4-registry-pol-erneuern', titel: 'Beschädigte lokale Richtliniendatei (Registry.pol) erneuern und Richtlinien neu anwenden', modus: 'system', risiko: 'aendern', timeoutMs: 240000,
-    beschreibung: 'Gegen Gruppenrichtlinien-Fehler 1096 („Registry.pol konnte nicht gelesen werden“) und Richtlinien, die seitdem nicht mehr ankommen (auch Softwarecenter/Updates): Prüft die lokale Zwischendatei Registry.pol (Computer und Benutzer) auf die gültige Kennung „PReg“, benennt eine beschädigte Datei um (Sicherung *.alt_…) — auf Wunsch auch eine gültige — und wendet die Computerrichtlinien neu an. Windows schreibt die Datei aus den Domänenrichtlinien neu; an den Richtlinien selbst ändert sich nichts.',
+    beschreibung: 'Gegen Gruppenrichtlinien-Fehler 1096 („Registry.pol konnte nicht gelesen werden“) und Richtlinien, die seitdem nicht mehr ankommen (auch Update- und Intune-Vorgaben): Prüft die lokale Zwischendatei Registry.pol (Computer und Benutzer) auf die gültige Kennung „PReg“, benennt eine beschädigte Datei um (Sicherung *.alt_…) — auf Wunsch auch eine gültige — und wendet die Computerrichtlinien neu an. Windows schreibt die Datei aus den Domänenrichtlinien neu; an den Richtlinien selbst ändert sich nichts.',
     param: { label: 'Wann umbenennen', platzhalter: 'Nur wenn beschädigt', optionen: ['Nur wenn beschädigt', 'Auch wenn gültig'] },
     ps: String.raw`
 $modus = ([string]$P).Trim()

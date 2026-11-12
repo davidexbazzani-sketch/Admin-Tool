@@ -7,8 +7,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Cable, Plus, Minus, Search, Trash2, Edit3, Loader2, AlertTriangle, ShoppingCart, Link2, Link2Off,
-  RefreshCw, Check, X, ChevronDown, CheckCircle2, Truck, Info, CircleDashed, ExternalLink,
+  RefreshCw, Check, X, ChevronDown, CheckCircle2, Truck, Info, CircleDashed, ExternalLink, Headphones,
 } from 'lucide-react'
+import HeadsetVergabe from '../components/accessoryInventory/HeadsetVergabe'
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
 import {
@@ -42,10 +43,38 @@ function statusVon(it: AccessoryItem): Status {
   return { art: it.current === 0 ? 'leer' : 'fehlt', fehlt: it.target - it.current }
 }
 
+type Reiter = 'bestand' | 'headsets'
+const REITER_KEY = 'zubehoer.reiter'
+
+// Reiter „Bestand" (Kleinteile-Lager) und „Headset Vergabe". Der Bestand bleibt beim Wechsel
+// eingehängt (nur versteckt), damit gesammelte, noch nicht gespeicherte Zählungen nicht verloren gehen.
 export default function AccessoryInventory() {
   const user = useAuthStore(s => s.session?.user)
   const von = user?.displayName || user?.username || 'unbekannt'
+  const [reiter, setReiter] = useState<Reiter>(() => { try { return localStorage.getItem(REITER_KEY) === 'headsets' ? 'headsets' : 'bestand' } catch { return 'bestand' } })
+  const [headsetsGeladen, setHeadsetsGeladen] = useState(reiter === 'headsets')
+  const wechsel = (r: Reiter) => { setReiter(r); if (r === 'headsets') setHeadsetsGeladen(true); try { localStorage.setItem(REITER_KEY, r) } catch { /* egal */ } }
+  const REITER: { id: Reiter; label: string; icon: JSX.Element }[] = [
+    { id: 'bestand', label: 'Bestand', icon: <Cable size={14} /> },
+    { id: 'headsets', label: 'Headset Vergabe', icon: <Headphones size={14} /> },
+  ]
+  return (
+    <div className="flex flex-col h-full bg-background">
+      <div className="flex gap-1 border-b border-border px-5 pt-1.5 shrink-0" data-zubehoer-reiter>
+        {REITER.map(r => (
+          <button key={r.id} onClick={() => wechsel(r.id)} data-reiter={r.id}
+            className={`inline-flex items-center gap-1.5 px-3 py-2 text-sm border-b-2 -mb-px ${reiter === r.id ? 'border-primary text-foreground font-semibold' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>
+            {r.icon}{r.label}
+          </button>
+        ))}
+      </div>
+      <div className={reiter === 'bestand' ? 'flex-1 min-h-0' : 'hidden'}><BestandAnsicht von={von} /></div>
+      {headsetsGeladen && <div className={reiter === 'headsets' ? 'flex-1 min-h-0' : 'hidden'}><HeadsetVergabe von={von} /></div>}
+    </div>
+  )
+}
 
+function BestandAnsicht({ von }: { von: string }) {
   const [items, setItems] = useState<AccessoryItem[]>([])
   const [history, setHistory] = useState<AccessoryHistoryEntry[]>([])
   const [loading, setLoading] = useState(true)

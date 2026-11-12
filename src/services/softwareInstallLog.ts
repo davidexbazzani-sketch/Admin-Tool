@@ -12,9 +12,10 @@
 import { create } from 'zustand'
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
+import { anmeldeVermerk } from './anmeldeAbgleich'
 
 // 'eDrawings' bleibt für alte Logbuch-Einträge (die Kachel wurde am 04.11.2026 durch FreeCAD ersetzt)
-export type InstallSoftware = 'SolidWorks' | 'Xelion' | 'Jabra' | 'Enaio' | 'Enaio Capture' | 'eDrawings' | 'FreeCAD' | 'IT Admin Tool'
+export type InstallSoftware = 'SolidWorks' | 'Xelion' | 'Jabra' | 'Enaio' | 'Enaio Capture' | 'eDrawings' | 'FreeCAD' | 'IT Admin Tool' | 'Visual C++'
 export type InstallStatus = 'laeuft' | 'ok' | 'fehler' | 'abgebrochen'
 
 export interface InstallLogEintrag {
@@ -76,10 +77,12 @@ const offen = new Map<string, InstallLogEintrag>()
 
 /** Lauf beginnt — liefert die ID für logEnde. */
 export function logStart(software: InstallSoftware, host: string, details?: string): Promise<string> {
+  // Vorab-Prüfung „wer ist angemeldet / wem zugewiesen" mit ins Logbuch (falls kurz vorher gelaufen)
+  const vermerk = anmeldeVermerk(host)
   const e: InstallLogEintrag = {
     id: `inst_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
     software, host: host.trim().toUpperCase(), von: wer(), start: new Date().toISOString(),
-    status: 'laeuft', text: 'Installation läuft …', details,
+    status: 'laeuft', text: 'Installation läuft …', details: [details, vermerk].filter(Boolean).join(' · ') || undefined,
   }
   offen.set(e.id, e)
   return nacheinander(() => upsert(e)).then(() => e.id)

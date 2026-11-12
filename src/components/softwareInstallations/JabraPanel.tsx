@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { erkenneJabra, type JabraErkennung } from '../../services/jabraInstall'
 import { useJabraInstallStore } from '../../store/jabraInstallStore'
+import { AnmeldeStatus, useAnmeldeCheck } from './AnmeldeCheck'
 
 function mmss(s: number): string {
   const m = Math.floor(s / 60), r = s % 60
@@ -26,6 +27,7 @@ export default function JabraPanel({ host, kompakt }: { host: string; kompakt?: 
   const starte = useJabraInstallStore(s => s.starte)
   const verwerfe = useJabraInstallStore(s => s.verwerfe)
   const laeuft = lauf?.phase === 'laeuft' || lauf?.phase === 'wartet'
+  const { vorStart, anmeldeDialog } = useAnmeldeCheck()
 
   // Beim Wechsel des Ziel-PCs die alte Erkennung verwerfen — sonst steht die
   // Geräteliste des vorigen Rechners unter dem neuen Namen.
@@ -64,6 +66,9 @@ export default function JabraPanel({ host, kompakt }: { host: string; kompakt?: 
           Die Geräteprüfung ist unabhängig davon: installieren lässt sich auch, wenn gerade kein Jabra-Gerät angeschlossen ist.
         </p>
       )}
+
+      {/* Im Sound Fix steht der PC schon fest — dort die Anmelde-Zeile hier zeigen */}
+      {kompakt && <AnmeldeStatus host={host} kompakt />}
 
       {/* ── Geräteprüfung ───────────────────────────────────────────────────── */}
       <div className="rounded-md border border-border bg-background p-2.5 space-y-2">
@@ -120,7 +125,7 @@ export default function JabraPanel({ host, kompakt }: { host: string; kompakt?: 
 
       {/* ── Installation ────────────────────────────────────────────────────── */}
       <div className="flex items-center gap-2 flex-wrap">
-        <button onClick={() => starte(host)} disabled={laeuft}
+        <button onClick={() => void vorStart(host, () => starte(host))} disabled={laeuft}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-amber-600 text-white hover:bg-amber-500 disabled:opacity-40">
           {laeuft ? <Loader2 size={13} className="animate-spin" /> : <PackageCheck size={13} />}
           {laeuft ? 'Installation läuft …' : erkennung?.installiert ? 'Erneut installieren' : 'Jabra Direct installieren'}
@@ -170,6 +175,7 @@ export default function JabraPanel({ host, kompakt }: { host: string; kompakt?: 
           </span>
         </div>
       )}
+      {anmeldeDialog}
     </div>
   )
 }

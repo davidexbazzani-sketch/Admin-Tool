@@ -22,6 +22,7 @@ import { sendDesktopMessage } from './desktopMessage'
 import { basicScriptForCategory, runBasicSetup } from './basicSetup'
 import { applyPrintersLive, deployQuickAccessScript, readOldPrinters, readOldPrintersLive } from './refreshMigration'
 import { scanOneHost } from './hpDrivers'
+import { protokolliere, AUTOMATISCH, PER_KLICK, type AktAusloeser } from './aktivitaet'
 import { useHpDeployStore } from '../store/hpDeployStore'
 import { mapMissingNetworkDrives, deployDrivesScript } from './migrationOps'
 import { refreshNetworkDrivesLive } from './deviceNetworkDrives'
@@ -59,6 +60,8 @@ interface Ctx {
   by: string
   /** true = nur Fehlendes nachziehen (Wiederholung) */
   nurFehlende: boolean
+  /** Auslöser fürs Aktivitätsprotokoll (automatisch per stündlichem Ping oder per Klick) */
+  aus: AktAusloeser
 }
 
 interface StepDef {
@@ -121,7 +124,7 @@ const SCHRITTE: StepDef[] = [
         await updateDeviceSetupItem(c.id, { driversRunAt: new Date().toISOString(), driversText: 'keine Treiber offen' })
         return { ok: true, text: 'keine Treiber offen' }
       }
-      await useHpDeployStore.getState().run([{ host: c.newHost, items }], { rebootMode: 'notify', by: c.by })
+      await useHpDeployStore.getState().run([{ host: c.newHost, items }], { rebootMode: 'notify', by: c.by, ausloeser: c.aus })
       const erg = useHpDeployStore.getState().results[c.newHost.toLowerCase()]
       const ok = !erg || erg.status !== 'fehler'
       await updateDeviceSetupItem(c.id, { driversRunAt: new Date().toISOString(), driversText: erg?.message || `${items.length} Treiber angestoßen` })
@@ -280,7 +283,7 @@ export async function runAutoSetup(
   checklist: Checklist,
   info: ChecklistDeviceInfo | undefined,
   by: string,
-  opts?: { nurFehlende?: boolean; ohneMeldungen?: boolean },
+  opts?: { nurFehlende?: boolean; ohneMeldungen?: boolean; automatisch?: boolean },
 ): Promise<AutoSetupResult> {
   const id = checklist.id
   const newHost = (info?.newHostname || hostFromSerial((checklist.newDeviceSerial || '').trim()) || '').trim()
@@ -292,6 +295,9 @@ export async function runAutoSetup(
     modelKategorie: classifyModel(info?.newModel || ''),
     isRefresh, by,
     nurFehlende: opts?.nurFehlende !== false,
+    aus: opts?.automatisch
+      ? AUTOMATISCH('Komplett-Einrichtung', `Stündliche Automatik: neuer PC ${newHost} der Checkliste „${checklist.name}“ (${checklist.deviceType === 'refresh' ? 'Refresh' : 'Neugerät'}) wurde erreichbar`)
+      : PER_KLICK('Komplett-Einrichtung', `Checkliste „${checklist.name}“${opts?.nurFehlende ? ' – nur Fehlendes nachziehen' : ''}`),
   }
 
   const stand: AutoStepResult[] = SCHRITTE.map(s => ({ id: s.id, label: s.label, status: 'offen' }))
@@ -307,6 +313,7 @@ export async function runAutoSetup(
   melden()
 
   try {
+    protokolliere({ ...ctx.aus, aktion: 'Komplett-Einrichtung gestartet', ziel: newHost.toUpperCase(), details: SCHRITTE.map(x => x.label) })
     if (!opts?.ohneMeldungen) await sendDesktopMessage(newHost, START_MELDUNG, 600)
 
     for (let i = 0; i < SCHRITTE.length; i++) {
@@ -344,7 +351,10 @@ export async function runAutoSetup(
       autoSetupSteps: stand,
       // Ein vollständiger Durchlauf schaltet die stündliche Automatik für dieses Gerät ab.
       autoSetupAutomatikAus: true,
+      autoSetupVon: by,
+      autoSetupArt: ctx.aus.art,
     }).catch(() => {})
+    protokolliere({ ...ctx.aus, aktion: 'Komplett-Einrichtung beendet', ziel: newHost.toUpperCase(), ergebnis: ok ? 'alle Schritte ohne Fehler' : 'mit Fehlern', details: stand.map(x => `${x.status === 'ok' ? '✓' : x.status === 'fehler' ? '✗' : '–'} ${x.label}${x.text ? ': ' + x.text : ''}`) })
 
     if (!opts?.ohneMeldungen) {
       const mini = ctx.modelKategorie === 'Desktop Mini'

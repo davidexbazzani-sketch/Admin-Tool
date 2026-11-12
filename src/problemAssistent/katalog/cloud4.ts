@@ -75,7 +75,7 @@ export const PROBLEME_CLOUD4: PaProblem[] = [
       { aktion: 'od-neustart' },
       { aktion: 'od-reset', optional: true },
     ],
-    hinweis: 'Bleibt der Fehler, OneDrive über das Softwarecenter neu installieren lassen (DXC).',
+    hinweis: 'Bleibt der Fehler, OneDrive über das Unternehmensportal (Intune) neu installieren lassen (DXC).',
     nachricht: 'Wir haben OneDrive aktualisiert und neu gestartet. Bitte prüfen Sie, ob die Wolke wieder ohne Fehlermeldung ist.',
   },
   {
@@ -2007,7 +2007,7 @@ export const PROBLEME_CLOUD4: PaProblem[] = [
       { aktion: 'od-status' },
       { aktion: 'software-suchen', param: 'Loop' },
     ],
-    hinweis: 'Bedienthema; die Loop-App stellt DXC bei Bedarf über das Softwarecenter bereit.',
+    hinweis: 'Bedienthema; die Loop-App stellt DXC bei Bedarf über das Unternehmensportal (Intune) bereit.',
     nachricht: 'Loop- und Whiteboard-Dateien öffnen Sie im Browser (Rechtsklick → „Online anzeigen“) oder direkt in Teams. Bitte löschen Sie sie nicht.',
   },
   {

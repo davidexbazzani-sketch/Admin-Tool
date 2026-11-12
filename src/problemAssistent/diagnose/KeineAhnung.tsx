@@ -25,8 +25,8 @@ const SCHWERE = {
 
 interface Lauf { laeuft: boolean; aktiv: string[]; ergebnisse: DgSondenErgebnis[]; befunde: DgBefund[] | null; dauerMs?: number }
 
-export default function KeineAhnung({ host, verb, onLoesung, onSchliessen }: {
-  host: string; verb: PaVerbindung | null; onLoesung: (problemId: string) => void; onSchliessen: () => void
+export default function KeineAhnung({ host, verb, onLoesung, onSchliessen, ersatz }: {
+  host: string; verb: PaVerbindung | null; onLoesung: (problemId: string) => void; onSchliessen: () => void; ersatz?: DgErsatzBenutzer | null
 }) {
   const [ober, setOber] = useState<DgOber | null>(null)
   const [unter, setUnter] = useState<DgUnter | null>(null)
@@ -95,21 +95,31 @@ export default function KeineAhnung({ host, verb, onLoesung, onSchliessen }: {
         </div>
       )}
 
-      {unter && <Diagnose key={unter.id} unter={unter} host={host} verb={verb} titel={titel} onLoesung={onLoesung} />}
+      {unter && <Diagnose key={unter.id} unter={unter} host={host} verb={verb} titel={titel} onLoesung={onLoesung} ersatz={ersatz} />}
     </div>
   )
 }
 
+/** Zugewiesene Person des PCs (Endgeräte/Inventar → AD) — wenn niemand angemeldet bzw. der PC nicht erreichbar ist. */
+export interface DgErsatzBenutzer { sam: string; name: string }
+
 /** Diagnose eines Unterthemas (bzw. eines ganzen Bereichs). autoStart = sofort loslegen, versucht = schon ausgeführte Lösungen markieren. */
-export function Diagnose({ unter, host, verb, titel, onLoesung, autoStart, versucht }: {
+export function Diagnose({ unter, host, verb, titel, onLoesung, autoStart, versucht, ersatz }: {
   unter: DgUnter; host: string; verb: PaVerbindung | null; titel: Map<string, { titel: string; bereich: string }>; onLoesung: (id: string) => void
-  autoStart?: boolean; versucht?: string[]
+  autoStart?: boolean; versucht?: string[]; ersatz?: DgErsatzBenutzer | null
 }) {
   const [antworten, setAntworten] = useState<Record<string, 'ja' | 'nein'>>({})
   const [lauf, setLauf] = useState<Lauf | null>(null)
   const [offen, setOffen] = useState(false)
-  const bereit = !!host && !!verb?.ok
   const sonden = unter.sonden.map(id => DG_SONDEN_MAP.get(id)).filter(Boolean)
+  const online = !!verb?.ok
+  // Benutzer für die AD-Prüfungen: angemeldeter Benutzer, sonst die zugewiesene Person
+  const sam = verb?.benutzer || (ersatz ? ersatz.sam : '')
+  const ersatzAktiv = !verb?.benutzer && !!ersatz
+  const lokale = sonden.filter(s => s!.modus === 'lokal').length
+  // PC nicht erreichbar (Verbindungsversuch abgeschlossen): nur AD-Prüfungen, wenn das Thema welche hat
+  const nurLokal = !online && !!verb && lokale > 0 && !!sam
+  const bereit = !!host && (online || nurLokal)
   const gestartet = useRef(false)
   useEffect(() => { if (autoStart && bereit && !gestartet.current) { gestartet.current = true; void starte() } }) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -120,7 +130,7 @@ export function Diagnose({ unter, host, verb, titel, onLoesung, autoStart, versu
     const r = await fuehreDiagnose(host, unter, DG_SONDEN_MAP, antworten, (e, aktiv) => {
       if (e.dauerMs || !e.ok || e.punkte.length) { const i = ergebnisse.findIndex(x => x.id === e.id); if (i >= 0) ergebnisse[i] = e; else ergebnisse.push(e) }
       setLauf({ laeuft: true, aktiv, ergebnisse: [...ergebnisse], befunde: null })
-    }, { sam: verb?.benutzer })
+    }, { sam, nurLokal })
     setLauf({ laeuft: false, aktiv: [], ergebnisse: r.ergebnisse, befunde: r.befunde, dauerMs: Date.now() - t0 })
     setOffen(r.befunde.length === 0)
   }
@@ -151,8 +161,18 @@ export function Diagnose({ unter, host, verb, titel, onLoesung, autoStart, versu
             className="inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg bg-violet-600 text-white font-semibold hover:bg-violet-700 disabled:opacity-50">
             <Play size={14} />Diagnose starten
           </button>
-          <span className="text-[11px] text-muted-foreground">{bereit ? `${sonden.length} Prüfung(en) auf ${host} — liest nur, ändert nichts` : !host ? 'Erst oben den Ziel-PC wählen.' : 'Der Ziel-PC ist noch nicht verbunden.'}</span>
+          <span className="text-[11px] text-muted-foreground">{
+            !host ? 'Erst oben den Ziel-PC wählen.'
+              : nurLokal ? `${host} ist nicht erreichbar – es laufen nur die ${lokale} AD-Prüfung(en) (Berechtigungen) für ${ersatzAktiv ? ersatz!.name + ' (zugewiesen)' : sam}. Liest nur.`
+                : online ? `${sonden.length} Prüfung(en) auf ${host} — liest nur, ändert nichts`
+                  : !verb ? 'Der Ziel-PC wird noch verbunden …'
+                    : lokale ? 'Der Ziel-PC ist nicht erreichbar und ihm ist keine Person zugeordnet – Berechtigungen nicht prüfbar.'
+                      : 'Der Ziel-PC ist nicht erreichbar – für dieses Thema braucht die Diagnose den PC.'
+          }</span>
         </div>
+      )}
+      {!lauf && online && ersatzAktiv && lokale > 0 && (
+        <p className="text-[11px] text-muted-foreground">Niemand angemeldet – die Berechtigungen werden für die zugewiesene Person {ersatz!.name} geprüft.</p>
       )}
 
       {lauf && (
@@ -185,9 +205,14 @@ export function Diagnose({ unter, host, verb, titel, onLoesung, autoStart, versu
                         <span className={`text-[10px] px-1.5 py-0.5 rounded font-semibold shrink-0 ${sw.badge}`}>{sw.text}</span>
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-foreground">{b.text}</p>
+                          {b.fehlerbild && <p className="text-[11px] text-foreground/80 mt-0.5">Fehlerbild ohne diese Berechtigung: {b.fehlerbild}</p>}
+                          {b.antrag && <p className="text-[11px] text-muted-foreground mt-0.5">Antrag: {b.antrag}</p>}
                           {p && <p className="text-[11px] text-muted-foreground mt-0.5">Lösung: {p.titel}{versucht?.includes(b.problem) ? <span className="ml-1.5 px-1.5 py-px rounded bg-muted text-foreground">schon versucht</span> : null}</p>}
                         </div>
-                        {p && <button onClick={() => onLoesung(b.problem)} className="shrink-0 inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md bg-primary text-primary-foreground hover:bg-primary/90">Lösung öffnen</button>}
+                        <div className="shrink-0 flex flex-col gap-1 items-end">
+                          {b.antrag && <button onClick={() => { void import('../../serviceNowWelt/oeffnen').then(m => m.oeffneSnEintrag(b.antrag!)) }} className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md border border-primary/40 text-primary hover:bg-primary/10">Antrag öffnen</button>}
+                          {p && <button onClick={() => onLoesung(b.problem)} className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md bg-primary text-primary-foreground hover:bg-primary/90">Lösung öffnen</button>}
+                        </div>
                       </div>
                     </div>
                   )
@@ -195,7 +220,9 @@ export function Diagnose({ unter, host, verb, titel, onLoesung, autoStart, versu
               </div>
             ) : (
               <div className="rounded-lg border border-border bg-card p-3 space-y-2" data-dg-ohne-befund>
-                <p className="text-sm text-foreground flex items-center gap-1.5"><Info size={14} className="text-sky-500" />Keine eindeutige Ursache gefunden — die Prüfungen sind unauffällig ({zaehl.ok} in Ordnung{zaehl.warn ? `, ${zaehl.warn} Hinweise` : ''}).</p>
+                <p className="text-sm text-foreground flex items-center gap-1.5"><Info size={14} className="text-sky-500" />{nurLokal
+                  ? <>Die Berechtigungen sind unauffällig ({zaehl.ok} in Ordnung{zaehl.warn ? `, ${zaehl.warn} Hinweise` : ''}). Den PC selbst konnte die Diagnose nicht prüfen, weil er nicht erreichbar ist.</>
+                  : <>Keine eindeutige Ursache gefunden — die Prüfungen sind unauffällig ({zaehl.ok} in Ordnung{zaehl.warn ? `, ${zaehl.warn} Hinweise` : ''}).</>}</p>
                 <p className="text-[11px] text-muted-foreground">Am häufigsten hilft bei diesem Thema:</p>
                 {unter.ohneBefund.map(id => { const p = titel.get(id); return p ? (
                   <button key={id} onClick={() => onLoesung(id)} className="w-full text-left rounded-md border border-border px-3 py-1.5 hover:bg-accent/30 text-xs text-foreground flex items-center gap-2"><ChevronRight size={13} className="text-primary" />{p.titel}</button>

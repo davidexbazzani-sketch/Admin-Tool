@@ -10,7 +10,7 @@
 //   radar/ad_hygiene_cache.json         (AD-Hygiene-Daten inkl. Passwort-Ablauf)
 
 import { api } from '../electronAPI'
-import { loadDevices, modelCost, modelTypeDisplay, formatEuro } from './endpointDevices'
+import { loadDevices, deviceCost, modelTypeDisplay, formatEuro } from './endpointDevices'
 import { listDepartures, daysUntil, formatGermanDate, toIsoDate } from './employees'
 import { readCentralAdUsers } from './adUserDirectory'
 
@@ -123,7 +123,7 @@ export async function computeLeasingItems(): Promise<RadarItem[]> {
     if (!d.retiredDate) continue          // nur Geräte mit Leasingende
     const iso = toIsoDate(d.retiredDate)
     const days = daysUntil(iso)
-    const cost = modelCost(d.model)
+    const cost = deviceCost(d)   // SKF-Eigentum: kein Preis
     items.push({
       id: `lease_${d.id}`,
       tab: 'leasing', category: 'leasing', kind: 'future',

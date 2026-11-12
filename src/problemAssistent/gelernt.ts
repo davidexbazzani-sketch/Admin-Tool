@@ -17,6 +17,25 @@ interface Datei { von: string; eintraege: { q: string; id: string; n: number; zu
 
 let cache: Promise<PaGelernt[]> | null = null
 
+/** Umbenannte bzw. zusammengelegte Probleme (Softwarecenter → Intune, 08.11.2026): Gelerntes bleibt gültig. */
+const UMBENANNT: Record<string, string> = {
+  'leistung-sms-agent-host-cpu': 'leistung-intune-agent-cpu',
+  'leistung-ccmcache-belegt-platz': 'leistung-imecache-belegt-platz',
+  'update-softwarecenter-0x80091007-hash': 'update-unternehmensportal-inhalt-fehler',
+  'update-softwarecenter-inhalt-nicht-gefunden': 'update-unternehmensportal-inhalt-fehler',
+  'update-softwarecenter-neustart-countdown': 'update-intune-neustart-angekuendigt',
+  'update-softwarecenter-haengt-wird-installiert': 'update-unternehmensportal-haengt-wird-installiert',
+  'update-softwarecenter-0x87d0070c-laufzeit': 'update-unternehmensportal-haengt-wird-installiert',
+  'update-softwarecenter-anforderungen-nicht-erfuellt': 'update-unternehmensportal-anforderungen-nicht-erfuellt',
+  'update-softwarecenter-zeigt-programm-nicht': 'update-unternehmensportal-zeigt-programm-nicht',
+  'update-softwarecenter-download-haengt': 'update-unternehmensportal-download-haengt',
+  'update-softwarecenter-cache-voll': 'update-unternehmensportal-zu-wenig-speicher',
+  'update-softwarecenter-oeffnet-nicht': 'update-unternehmensportal-fehlt',
+  'update-softwarecenter-erkennung-0x87d00324': 'update-intune-0x87d1041c-nicht-erkannt',
+  'update-softwarecenter-0x87d00668-weiter-erforderlich': 'update-intune-0x87d1041c-nicht-erkannt',
+  'update-softwarecenter-wartungsfenster': 'update-intune-neustart-angekuendigt',
+}
+
 /** Alle Lern-Einträge aller Benutzer (gleiche Eingabe + Problem zusammengezählt). */
 export function ladeGelernt(neu = false): Promise<PaGelernt[]> {
   if (cache && !neu) return cache
@@ -29,9 +48,10 @@ export function ladeGelernt(neu = false): Promise<PaGelernt[]> {
       if (!d || !Array.isArray(d.eintraege)) continue
       for (const e of d.eintraege) {
         if (!e || typeof e.q !== 'string' || typeof e.id !== 'string') continue
-        const k = `${e.q}\u0000${e.id}`
+        const id = UMBENANNT[e.id] || e.id
+        const k = `${e.q}\u0000${id}`
         const alt = summe.get(k)
-        summe.set(k, { q: e.q, id: e.id, n: (alt?.n || 0) + Math.max(1, Math.min(50, Number(e.n) || 1)) })
+        summe.set(k, { q: e.q, id, n: (alt?.n || 0) + Math.max(1, Math.min(50, Number(e.n) || 1)) })
       }
     }
     return [...summe.values()]

@@ -270,5 +270,6 @@ export async function runSwScan(pc: string, by: string, opts: RunSwOptions): Pro
     winrm: skripte.some(s => s.ok) ? 'ok' : 'fehler',
     skripte, auffaelligkeiten: auff, kennwerte,
   }
+  void import('../services/aktivitaet').then(m => m.protokolliere({ art: 'manuell', quelle: 'SolidWorks-Diagnose', aktion: 'Diagnose ausgeführt (nur gelesen)', ziel: String(pc).toUpperCase(), benutzer: by })).catch(() => {})
   return { ok: true, lauf }
 }

@@ -253,7 +253,7 @@ export const PROBLEME_KOMMUNIKATION2: PaProblem[] = [
       { aktion: 'werkzeug:software', titel: 'Teams neu installieren' },
       { aktion: 'neustart-countdown', param: '15', optional: true },
     ],
-    hinweis: 'Scheitert die Installation auch nach einem Neustart, prüft DXC die Bereitstellung (Intune/Softwarecenter).',
+    hinweis: 'Scheitert die Installation auch nach einem Neustart, prüft DXC die Bereitstellung (Intune).',
     ueberwachen: ['disk-voll'],
     nachricht: 'Teams wird auf Ihrem PC neu installiert. Bitte lassen Sie den PC eingeschaltet; eventuell ist ein Neustart nötig.',
   },

@@ -16,7 +16,7 @@ export async function melde(auftrag: MonAuftrag, z: MonZustand, art: MonMeldung[
   try { await sende(MONITOR_BOT, { username: auftrag.erstelltVon.username, displayName: auftrag.erstelltVon.displayName }, chatText) } catch { /* Netzlaufwerk weg — steht trotzdem im Zustand */ }
   if (auftrag.mail && auftrag.mailAn?.trim()) {
     try {
-      const r = await api().sendEmailRaw({ to: auftrag.mailAn.trim(), subject: titel, body: (mailText || chatText) + '\n\n— IT Admin Tool · PC-Überwachung', smtp: '', port: 587 })
+      const r = await api().sendEmailRaw({ to: auftrag.mailAn.trim(), subject: titel, body: (mailText || chatText) + '\n\n— IT Admin Tool · PC-Überwachung', smtp: '', port: 587, protokoll: { art: 'automatisch', quelle: 'PC-Überwachung' } })
       m.mail = r.success ? 'ok' : 'fehler'
       if (!r.success) m.mailFehler = r.error || 'unbekannt'
     } catch (e) { m.mail = 'fehler'; m.mailFehler = e instanceof Error ? e.message : String(e) }

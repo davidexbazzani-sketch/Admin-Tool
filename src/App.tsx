@@ -46,12 +46,14 @@ import VlanScanController from './components/scans/VlanScanController'
 import ServerMonitorController from './components/server/ServerMonitorController'
 import GameInviteController from './components/games/GameInviteController'
 import ChatController from './components/chat/ChatController'
+import AufnahmeController from './aufnahme/AufnahmeController'
 import TonerWarnungController from './components/printer/TonerWarnungController'
 import MonitorController from './monitoring/MonitorController'
 import { MonitorDialogSlot } from './monitoring/MonitorDialog'
 import LostDeviceScanController from './components/scans/LostDeviceScanController'
 import NetworkDrivesScanController from './components/scans/NetworkDrivesScanController'
 import WeekendCheckController from './components/scans/WeekendCheckController'
+import PcVerlaufController, { PcFehlerController, WartelisteController } from './components/scans/PcVerlaufController'
 import KostenVerlaufController from './components/scans/KostenVerlaufController'
 import TerminScanController from './components/checklists/TerminScanController'
 import EuroparScanController from './components/scans/EuroparScanController'
@@ -67,11 +69,16 @@ import { DeviceDossierProvider, DeviceDossierSlot } from './components/device/De
 import { PrinterDossierProvider, PrinterDossierSlot } from './components/printer/PrinterDossier'
 import type { Screen } from './types'
 import { api } from './electronAPI'
+import { starteMailProtokoll } from './services/aktivitaet'
+
+// Aktivitätsprotokoll: Mailversand mitschreiben (einmal beim Laden)
+starteMailProtokoll()
 import { ensureDailyAdUsers } from './services/adUserDirectory'
 import LockScreen from './components/LockScreen'
 import { loadAppLock, canBypassLock, type AppLock } from './services/appLock'
 
 // Lazy-loaded screens (per Performance-Regeln: erst laden wenn geöffnet)
+const AufnahmeLeiste = lazy(() => import('./aufnahme/AufnahmeLeiste'))
 const ITGuru = lazy(() => import('./screens/ITGuru'))
 const PCDiagnosis = lazy(() => import('./screens/PCDiagnosis'))
 const Startseite = lazy(() => import('./screens/Startseite'))
@@ -193,6 +200,10 @@ export default function App() {
   // Hauptfenster weitergearbeitet wird.
   if (typeof window !== 'undefined' && window.location.hash === '#soundfix') {
     return <SoundFixWindow />
+  }
+  // Präsentiermodus: kleine Aufnahme-Leiste (eigenes Fenster, nimmt auf und kodiert)
+  if (typeof window !== 'undefined' && window.location.hash === '#aufnahme') {
+    return <Suspense fallback={null}><AufnahmeLeiste /></Suspense>
   }
 
   const screen       = useAppStore(s => s.screen)
@@ -389,6 +400,9 @@ export default function App() {
             <LostDeviceScanController />
             <NetworkDrivesScanController />
             <WeekendCheckController />
+            <PcVerlaufController />
+            <PcFehlerController />
+            <WartelisteController />
             <KostenVerlaufController />
             <TerminScanController />
             <EuroparScanController />
@@ -401,6 +415,7 @@ export default function App() {
             <ServerMonitorController />
             <GameInviteController />
             <ChatController />
+            <AufnahmeController />
             <TonerWarnungController />
             <MonitorController />
             <ErrorFlashOverlay />

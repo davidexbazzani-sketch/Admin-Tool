@@ -17,6 +17,7 @@
 import { api } from '../electronAPI'
 import { ensureWinRM, clearWinRMCache } from '../utils/winrmUtils'
 import { logDeviceAction } from './deviceDossier'
+import { protokolliere, PER_KLICK, type AktAusloeser } from './aktivitaet'
 
 const q = (s: string) => (s || '').replace(/'/g, '')
 
@@ -505,9 +506,12 @@ function matchHardware(deviceIds: string[], hardware: PresentDevice[]): MatchErg
   if (!deviceIds.length) return { anwendbar: false, unsicher: false, grund: 'kein [Devices]-Abschnitt' }
   const hostHw = hardware.flatMap(d => d.hwids.map(h => ({ h: h.toUpperCase(), dev: d })))
   const geraet = (dev: PresentDevice) => `${dev.klasse || 'Gerät'} (${dev.instanceId.split('\\').slice(0, 2).join('\\')})`
+  // Kennungen, die nur den Hersteller nennen (z. B. „PCI\VEN_8086“), sagen nichts über das Gerät
+  const nurHersteller = (s: string) => /(VEN|VID)_[0-9A-F]{4}/.test(s) && !/(DEV|PID)_[0-9A-F]{4}/.test(s)
   // Stufe 1: voller SoftPaq-String
   for (const sp of deviceIds) {
     const S = sp.toUpperCase()
+    if (nurHersteller(S)) continue
     const hit = hostHw.find(x => x.h.includes(S))
     if (hit) return { anwendbar: true, unsicher: false, grund: `${sp} ↔ ${geraet(hit.dev)}`, instanceId: hit.dev.instanceId }
   }
@@ -518,14 +522,37 @@ function matchHardware(deviceIds: string[], hardware: PresentDevice[]): MatchErg
     const hit = hostHw.find(x => x.h.includes(m[0]))
     if (hit) return { anwendbar: true, unsicher: false, grund: `${m[0]} ↔ ${geraet(hit.dev)}`, instanceId: hit.dev.instanceId }
   }
-  // Stufe 3: nur VEN (unsicher — richtiger Hersteller, evtl. anderes Modell)
+  // Stufe 2b: USB-Geräte (VID&PID)
   for (const sp of deviceIds) {
-    const m = sp.toUpperCase().match(/VEN_[0-9A-F]{4}/)
+    const m = sp.toUpperCase().match(/VID_[0-9A-F]{4}&PID_[0-9A-F]{4}/)
     if (!m) continue
     const hit = hostHw.find(x => x.h.includes(m[0]))
-    if (hit) return { anwendbar: true, unsicher: true, grund: `nur Hersteller ${m[0]} ↔ ${geraet(hit.dev)} — unsicher`, instanceId: hit.dev.instanceId }
+    if (hit) return { anwendbar: true, unsicher: false, grund: `${m[0]} ↔ ${geraet(hit.dev)}`, instanceId: hit.dev.instanceId }
+  }
+  // KEINE Stufe „nur Hersteller“ mehr: Dass im PC irgendein Gerät desselben Herstellers steckt (z. B. ein
+  // Intel-Netzwerkchip), heißt nicht, dass ein Intel-WLAN-Treiber dazugehört. Nur zur Erklärung vermerken.
+  for (const sp of deviceIds) {
+    const m = sp.toUpperCase().match(/(VEN|VID)_[0-9A-F]{4}/)
+    if (m && hostHw.some(x => x.h.includes(m[0]))) return { anwendbar: false, unsicher: false, grund: `nur der Hersteller (${m[0]}) passt, nicht das Gerät — gehört zu anderer Hardware` }
   }
   return { anwendbar: false, unsicher: false, grund: 'keine passende Hardware vorhanden' }
+}
+
+/**
+ * Darf dieser Treiber auf diesem PC installiert werden? Die EINE Regel für alle Stellen im Tool
+ * (Menü „Treiber-Installation“, Netzwerk-Diagnose, „Gib dein Problem ein“, Verteilung) — und
+ * deployOneHost prüft sie vor dem Installieren noch einmal. Angeboten wird nur, was
+ *   • nachweislich zu einem Gerät in DIESEM PC gehört (Hersteller + Gerätekennung) bzw. BIOS/Firmware/
+ *     Software aus dem HP-Katalog genau dieses Modells ist, und
+ *   • nachweislich neuer ist als das Installierte (oder noch gar nicht installiert).
+ */
+export function installierbar(i: DriverItem): { ok: boolean; grund: string } {
+  if (i.matchUnsicher) return { ok: false, grund: 'nur der Hersteller passt, nicht das Gerät' }
+  if (!i.anwendbar && !i.ohneHardwareBezug) return { ok: false, grund: /nicht lesbar/.test(i.matchGrund || '') ? 'Hardware des PCs nicht lesbar – nicht prüfbar' : 'gehört zu anderer Hardware' }
+  if (i.ohneHardwareBezug && i.klasse !== 'bios' && i.klasse !== 'firmware' && /Metadaten/.test(i.matchGrund || '')) return { ok: false, grund: 'Zugehörigkeit nicht prüfbar (HP-Angaben fehlen)' }
+  if (i.status === 'aktuell') return { ok: false, grund: 'diese oder eine neuere Version ist schon installiert' }
+  if (i.status === 'unbekannt') return { ok: false, grund: 'Versionen nicht vergleichbar – nicht sicher neuer' }
+  return { ok: true, grund: '' }
 }
 
 /** SoftPaq-Liste + installierte Treiber + Device-Map → bewertete Treiber-Items. */
@@ -539,11 +566,11 @@ export function evaluate(scan: HostScan, catalog: RawSoftpaq[], devices: Softpaq
     // Anwendbarkeit bestimmen.
     let anwendbar = true, ohneHardwareBezug = false, matchUnsicher = false, matchGrund = ''
     let matchInstanceId: string | undefined
-    if (!kannFiltern) {
-      // Kein PnP-Inventar → nicht filterbar, wie bisher (ungefiltert), klar gekennzeichnet.
-      matchGrund = 'Hardware-Inventar fehlt – ungefiltert'
-    } else if (klasse === 'bios' || klasse === 'firmware') {
+    if (klasse === 'bios' || klasse === 'firmware') {
       ohneHardwareBezug = true; matchGrund = 'BIOS/Firmware – kein Hardware-Bezug'
+    } else if (!kannFiltern) {
+      // Hardware des PCs nicht lesbar → Zugehörigkeit nicht prüfbar → zur Sicherheit NICHT anbieten
+      anwendbar = false; matchGrund = 'Hardware des PCs nicht lesbar – Zugehörigkeit nicht prüfbar'
     } else if (!meta) {
       ohneHardwareBezug = true; matchGrund = 'keine Metadaten geladen'
     } else if (!meta.ok) {
@@ -677,7 +704,23 @@ export async function scanHosts(
 // Admin-PC lädt den SoftPaq (Get-Softpaq), kopiert ihn nach \\host\c$\Temp und
 // startet ihn still am Ziel per Invoke-Command (Start-Process, wie GPU-Verteilung).
 export type RebootMode = 'notify' | 'reboot'
-export interface HpDeployOptions { rebootMode: RebootMode; by: string; notifyUser?: boolean }
+export interface HpDeployOptions {
+  rebootMode: RebootMode; by: string; notifyUser?: boolean; ausloeser?: AktAusloeser
+  /** Netzwerk-Treiber (WLAN/LAN/WWAN) NICHT per Fernaufruf, sondern als SYSTEM-Aufgabe am PC installieren:
+   *  der Treibertausch trennt kurz die Verbindung — die Installation läuft trotzdem sicher zu Ende. */
+  netzAbgesichert?: boolean
+}
+
+/** Treiber, die mit Netzwerk zu tun haben: WLAN, LAN/Ethernet (auch Dock/USB-GbE), WWAN/Mobilfunk.
+ *  Bluetooth allein zählt nicht (auch wenn HP es unter „Network“ einsortiert). BIOS/Firmware nie. */
+export function istNetzwerkTreiber(it: { name: string; category: string; klasse?: DriverKlasse }): boolean {
+  if (it.klasse === 'bios' || it.klasse === 'firmware') return false
+  const t = `${it.category} ${it.name}`
+  const netz = /wireless|\bwlan\b|wi-?fi|\bw-?lan\b|ethernet|\blan\b|\bgbe\b|\bnic\b|\bwwan\b|mobile broadband|\blte\b|\b5g\b|network|netzwerk/i
+  if (!netz.test(t)) return false
+  if (/bluetooth/i.test(it.name) && !/wireless lan|wlan|wi-?fi|ethernet|\blan\b/i.test(it.name)) return false
+  return true
+}
 export interface HpDeployStep { host: string; phase: string; status: 'running' | 'ok' | 'error' }
 
 // Ein je Treiber nachgeprüftes Ergebnis (nach Installation + Nachscan + ggf. Wiederholung).
@@ -797,7 +840,97 @@ async function installFirmwareViaTask(host: string, exeName: string): Promise<{ 
   return { ok: false, info: `Firmware-Installer meldete Code ${ltr} (evtl. bereits aktuell / nicht anwendbar / Neustart erforderlich).`, reboot: false }
 }
 
-async function installOne(host: string, item: DriverItem): Promise<{ ok: boolean; info: string; reboot: boolean; retriable?: boolean }> {
+// ── Netzwerk-Treiber abgesichert installieren ────────────────────────────────
+// Ein WLAN-/LAN-Treiber trennt beim Tausch kurz die Verbindung, über die das Tool gerade arbeitet.
+// Per Invoke-Command würde der Fernaufruf abreißen (Fehler → evtl. zweiter Installer-Start). Deshalb:
+// eine Einmal-Aufgabe als SYSTEM startet den Installer AM PC, schreibt den Exitcode in eine Datei und
+// löscht die Exe; das Tool fragt danach (mit Geduld für die Funkpause) nur noch das Ergebnis ab.
+const NETZ_DEADLINE_MS = 20 * 60 * 1000   // so lange auf Ergebnis/Wiedererreichbarkeit warten
+const NETZ_POLL_MS = 15000
+
+/** PS-Block (Ziel-PC): Aufgabe anlegen + starten. Args: $exe, $tn */
+export const NETZ_START_PS = String.raw`param($exe,$tn)
+$exePfad = 'C:\Temp\' + $exe
+$erg = $exePfad + '.ergebnis'
+if (-not (Test-Path -LiteralPath $exePfad)) { 'NOEXE'; return }
+Remove-Item -LiteralPath $erg -Force -ErrorAction SilentlyContinue
+$cmd = ('$p = Start-Process -FilePath ''{0}'' -ArgumentList ''-s'' -PassThru -Wait; Set-Content -LiteralPath ''{1}'' -Value ([string]$p.ExitCode) -Encoding ASCII; Remove-Item -LiteralPath ''{0}'' -Force -ErrorAction SilentlyContinue' -f $exePfad, $erg)
+$b64 = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($cmd))
+$ac = New-ScheduledTaskAction -Execute ($env:SystemRoot + '\System32\WindowsPowerShell\v1.0\powershell.exe') -Argument ('-NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand ' + $b64)
+$pr = New-ScheduledTaskPrincipal -UserId 'SYSTEM' -LogonType ServiceAccount -RunLevel Highest
+$st = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Minutes 20)
+Register-ScheduledTask -TaskName $tn -TaskPath '\' -Action $ac -Principal $pr -Settings $st -Description 'IT Admin Tool: Netzwerk-Treiber installieren (wird danach entfernt)' -Force -ErrorAction Stop | Out-Null
+Start-ScheduledTask -TaskName $tn -TaskPath '\' -ErrorAction Stop
+'STARTED'`
+
+/** PS-Block (Ziel-PC): Stand abfragen. Args: $exe, $tn → NETZ|<State>|<LastTaskResult>|<Exitcode aus Datei> */
+export const NETZ_POLL_PS = String.raw`param($exe,$tn)
+$erg = 'C:\Temp\' + $exe + '.ergebnis'
+$t = Get-ScheduledTask -TaskName $tn -TaskPath '\' -ErrorAction SilentlyContinue
+$st = $(if ($t) { [string]$t.State } else { 'GONE' })
+$lr = $(if ($t) { [string](Get-ScheduledTaskInfo -TaskName $tn -TaskPath '\' -ErrorAction SilentlyContinue).LastTaskResult } else { '' })
+$ex = $(if (Test-Path -LiteralPath $erg) { ([string](Get-Content -LiteralPath $erg -Raw)).Trim() } else { '' })
+'NETZ|' + $st + '|' + $lr + '|' + $ex`
+
+/** PS-Block (Ziel-PC): aufräumen. Args: $exe, $tn */
+export const NETZ_AUFRAEUMEN_PS = String.raw`param($exe,$tn)
+Stop-ScheduledTask -TaskName $tn -TaskPath '\' -ErrorAction SilentlyContinue
+Unregister-ScheduledTask -TaskName $tn -TaskPath '\' -Confirm:$false -ErrorAction SilentlyContinue
+Remove-Item -LiteralPath ('C:\Temp\' + $exe + '.ergebnis') -Force -ErrorAction SilentlyContinue
+Remove-Item -LiteralPath ('C:\Temp\' + $exe) -Force -ErrorAction SilentlyContinue
+'CLEAN'`
+
+/** Antwort der Abfrage lesen. */
+export function leseNetzPoll(out: string): { state: string; ltr: number; exit: number } | null {
+  const m = (out || '').match(/NETZ\|(\w+)\|(-?\d*)\|(-?\d*)/)
+  if (!m) return null
+  return { state: m[1], ltr: m[2] === '' ? Number.NaN : Number(m[2]), exit: m[3] === '' ? Number.NaN : Number(m[3]) }
+}
+
+export async function installNetzViaSystemTask(host: string, exeName: string, warte: (ms: number) => Promise<void> = ms => new Promise(r => setTimeout(r, ms))): Promise<{ ok: boolean; info: string; reboot: boolean; retriable: boolean }> {
+  const h = q(host)
+  const tn = `ITAdminTool Netztreiber ${exeName.replace(/\.exe$/i, '')}`
+  const ruf = (ps: string, t: number) => api().runPowerShell(
+    `try { Invoke-Command -ComputerName '${h}' -ErrorAction Stop -ScriptBlock { ${ps} } -ArgumentList '${q(exeName)}','${q(tn)}' } catch { 'ERR:' + $_.Exception.Message }`, t)
+  const sr = await ruf(NETZ_START_PS, 60000)
+  const so = (sr.stdout || '').trim()
+  if (so.includes('NOEXE')) return { ok: false, info: 'Treiberdatei kam am PC nicht an (C:\\Temp).', reboot: false, retriable: false }
+  if (!so.includes('STARTED')) {
+    await ruf(NETZ_AUFRAEUMEN_PS, 30000)
+    return { ok: false, info: 'Installations-Aufgabe nicht startbar: ' + (so.replace(/^ERR:/, '') || 'unbekannt'), reboot: false, retriable: false }
+  }
+  // Abfragen — Fehlschläge zwischendurch sind ERWARTET (Netzwerk ist während des Treibertauschs kurz weg).
+  const ende = Date.now() + NETZ_DEADLINE_MS
+  const maxRunden = Math.ceil(NETZ_DEADLINE_MS / NETZ_POLL_MS)
+  let letzt: { state: string; ltr: number; exit: number } | null = null
+  let zuletztErreicht = Date.now(); let erreichtRunde = 0; let runde = 0; let fertigOhneDatei = 0
+  while (runde < maxRunden && Date.now() < ende) {
+    runde++
+    await warte(NETZ_POLL_MS)
+    const pr = await ruf(NETZ_POLL_PS, 40000)
+    const p = leseNetzPoll(pr.stdout || '')
+    if (!p) continue                                                    // PC gerade nicht erreichbar → weiter warten
+    zuletztErreicht = Date.now(); erreichtRunde = runde; letzt = p
+    if (Number.isFinite(p.exit)) break                                  // Ergebnis liegt vor
+    if (p.state !== 'Running' && p.state !== 'Queued') { if (++fertigOhneDatei >= 2) break } // beendet, aber keine Datei
+  }
+  const erreichbar = !!letzt && runde - erreichtRunde <= 2
+  if (!letzt || (!erreichbar && !Number.isFinite(letzt.exit))) {
+    const seit = new Date(zuletztErreicht).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+    return { ok: false, info: `PC seit ${seit} nicht mehr erreichbar — die Installation läuft am PC selbstständig weiter. Bitte vor Ort prüfen, ob das Netzwerk wieder da ist (notfalls Neustart).`, reboot: false, retriable: false }
+  }
+  await ruf(NETZ_AUFRAEUMEN_PS, 30000)
+  if (!Number.isFinite(letzt.exit)) {
+    if (letzt.state === 'Running') return { ok: false, info: `Installer nach ${Math.round(NETZ_DEADLINE_MS / 60000)} Min nicht fertig — abgebrochen.`, reboot: false, retriable: false }
+    return { ok: false, info: `Installer ohne Ergebnis beendet (Aufgabe meldet ${Number.isFinite(letzt.ltr) ? letzt.ltr : 'nichts'}).`, reboot: false, retriable: false }
+  }
+  const code = letzt.exit
+  const reboot = REBOOT_EXITS.has(code)
+  if (!OK_EXITS.has(code)) return { ok: false, info: `Installer-Exitcode ${code}.`, reboot, retriable: false }
+  return { ok: true, info: `ok (Exit ${code}${reboot ? ', Neustart nötig' : ''}, als SYSTEM-Aufgabe)`, reboot, retriable: false }
+}
+
+async function installOne(host: string, item: DriverItem, netzAbgesichert = false): Promise<{ ok: boolean; info: string; reboot: boolean; retriable?: boolean }> {
   const h = q(host)
   const adminTmp = `$env:TEMP\\hpdrv`
   const localName = `${item.softpaqId}.exe`
@@ -839,6 +972,9 @@ async function installOne(host: string, item: DriverItem): Promise<{ ok: boolean
   // Firmware: NICHT still in Session 0 (HPUP.exe hängt dort), sondern interaktiv in der
   // Sitzung des angemeldeten Benutzers (geplante Aufgabe). Flasht meist beim Neustart.
   if (item.klasse === 'firmware') return await installFirmwareViaTask(host, localName)
+
+  // Netzwerk-Treiber (auf Wunsch): als SYSTEM-Aufgabe am PC — übersteht die kurze Funkpause beim Treibertausch.
+  if (netzAbgesichert && istNetzwerkTreiber(item)) return await installNetzViaSystemTask(host, localName)
 
   // 3) Am Ziel installieren UND ÜBERWACHEN (HP-SoftPaq: -s = silent extract+install).
   //    Statt stur bis 15 Min zu warten: Prozess starten (-PassThru, KEIN -Wait) und alle 10 s
@@ -909,7 +1045,9 @@ async function deployToHost(
       i++
       const tag = (!item.anwendbar && !item.ohneHardwareBezug) ? ' · erzwungen (nicht anwendbar)'
         : item.matchUnsicher ? ' · Match unsicher' : ''
-      const maxV = (item.klasse === 'bios' || item.klasse === 'firmware') ? 1 : MAX_VERSUCHE
+      const netz = !!opts.netzAbgesichert && istNetzwerkTreiber(item)
+      // BIOS, Firmware und abgesicherte Netzwerk-Treiber NIE automatisch wiederholen
+      const maxV = (item.klasse === 'bios' || item.klasse === 'firmware' || netz) ? 1 : MAX_VERSUCHE
       // Jeder Treiber einzeln abgesichert — ein Fehlschlag/Timeout darf den ganzen PC NICHT abbrechen.
       let r: { ok: boolean; info: string; reboot: boolean; retriable?: boolean } = { ok: false, info: 'nicht installiert', reboot: false }
       let n = 0
@@ -917,7 +1055,7 @@ async function deployToHost(
         if (isAborted?.()) break
         n++
         step(`${phaseLabel} (${i}/${liste.length}) ${item.name}${tag}${maxV > 1 ? ` · Versuch ${n}/${maxV}` : ''}`, 'running')
-        try { r = await installOne(host, item) }
+        try { r = await installOne(host, item, netz) }
         catch (e) { r = { ok: false, info: 'Fehler: ' + (e instanceof Error ? e.message : String(e)), reboot: false, retriable: true } }
         if (r.ok || r.retriable === false) break   // Erfolg ODER aussichtslos → nicht weiter probieren
       }
@@ -1035,7 +1173,7 @@ async function schreibeDossierNotiz(r: HpDeployResult, by: string): Promise<void
   if (inst.length) zeilen.push('Installiert: ' + inst.map(e => `${e.name} → ${e.sollVersion}`).join('; '))
   if (offen.length) zeilen.push('Offen/fehlgeschlagen: ' + offen.map(e => e.name).join('; '))
   // logDeviceAction schluckt Fehler selbst (Protokollierung darf den Ablauf nie stören).
-  await logDeviceAction(r.host, undefined, zeilen.join('\n'), by, 'Treiber-Installation')
+  await logDeviceAction(r.host, undefined, zeilen.join('\n'), by, 'Treiber-Installation', { ohneProtokoll: true })
 }
 
 /** Einen EINZELNEN PC installieren (inkl. Nachprüfung/Wiederholung + Dossier-Notiz).
@@ -1053,8 +1191,20 @@ export async function deployOneHost(
   host: string, items: DriverItem[], opts: HpDeployOptions, onStep?: (s: HpDeployStep) => void,
   isAborted?: () => boolean,
 ): Promise<HpDeployResult> {
+  // Letzte Schranke: Was nicht sicher zu diesem PC gehört oder nicht neuer ist, wird NICHT installiert.
+  const abgelehnt = items.filter(i => !installierbar(i).ok)
+  items = items.filter(i => installierbar(i).ok)
+  if (abgelehnt.length) protokolliere({ ...(opts.ausloeser || PER_KLICK('Treiber-Installation')), aktion: `HP-Treiber NICHT installiert (${abgelehnt.length}) – Sicherheitsprüfung`, ziel: host.toUpperCase(), details: abgelehnt.map(i => `${i.softpaqId} · ${i.name}: ${installierbar(i).grund}`) })
+  if (!items.length) {
+    return { host, status: 'fehler', message: `Nichts installiert: ${abgelehnt.map(i => `${i.name} – ${installierbar(i).grund}`).join('; ') || 'keine Treiber gewählt'}.`, perItem: [], ergebnisse: [], verifyMoeglich: false, ranAt: new Date().toISOString() } as HpDeployResult
+  }
+  // Aktivitätsprotokoll: Auslöser + SoftPaq-Nummern (damit Security-Meldungen wie „sp172533.exe auf …“ zuordenbar sind)
+  const aus = opts.ausloeser || PER_KLICK('Treiber-Installation')
+  const liste = items.map(i => `${i.softpaqId || 'sp?'} · ${i.name} ${i.latestVersion || ''}`.trim())
+  protokolliere({ ...aus, aktion: `HP-Treiber installieren (${items.length})`, ziel: host.toUpperCase(), details: [...liste, `Ablauf: SoftPaq am Admin-PC von HP laden → \\\\${host}\\c$\\Temp → still starten (-s) per PowerShell-Fernzugriff → danach löschen`] })
   if (opts.notifyUser) await notifyLoggedInUser(host, 'Die IT aktualisiert jetzt automatisch die Treiber auf diesem PC. Bitte speichern Sie Ihre Arbeit - es kann zu kurzen Unterbrechungen kommen.')
   const r = await deployToHost(host, items, opts, onStep, isAborted)
+  protokolliere({ ...aus, aktion: 'HP-Treiber installiert – Ergebnis', ziel: host.toUpperCase(), ergebnis: `${r.status}: ${r.message}${r.needsReboot ? ' · Neustart nötig' : ''}`, details: r.perItem.map(p => `${p.ok ? '✓' : '✗'} ${p.name} – ${p.info}`) })
   await schreibeDossierNotiz(r, opts.by)   // Eintrag „Treiber installiert am …" ins PC-Dossier
   await recordInstalledSoftpaqs(r)         // Zustand für den verlässlichen Nachscan merken
   if (opts.notifyUser) await notifyLoggedInUser(host, r.needsReboot

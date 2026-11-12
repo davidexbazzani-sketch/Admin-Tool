@@ -12,6 +12,8 @@ import {
 import { useAuthStore } from '../store/authStore'
 import { ensureDailyAdUsers } from '../services/adUserDirectory'
 import type { AdUserListItem } from '../services/adUsersList'
+import { fuzzyNameMatch } from '../utils/nameMatch'
+import type { DgErsatzBenutzer } from './diagnose/KeineAhnung'
 import { logDeviceAction } from '../services/deviceDossier'
 import { logDossierAction } from '../services/personDossier'
 import PcSuche, { type PcWahl } from '../components/PcSuche'
@@ -21,12 +23,16 @@ import { PROBLEME, KERNPROBLEME } from './katalog'
 import { AKTIONEN, WERKZEUGE, aktion } from './aktionen'
 import { useTestStand } from '../befehlsTest/stand'
 import TreiberCheck, { treiberRelevant } from './TreiberCheck'
+import RechteCheck, { rechteRelevant } from './RechteCheck'
 import type { BtStand } from '../befehlsTest/types'
 import { baueIndexAsync, erkenne, type PaIndex, type PaErkennung, type PaGelernt, type PaKontext, type PaSicherheit, type PaTreffer } from './suche'
 import { ladeGelernt, lerne } from './gelernt'
 import { fuehreAus, sendeDesktopNachricht, verbindeUndLies, type PaErgebnis, type PaModus, type PaVerbindung } from './motor'
 import { PA_BEREICHE, type PaBereich, type PaProblem, type PaSchritt } from './types'
 import { ladeDruckerListe, type DruckerZiel } from '../services/druckerFlotte'
+import PcAenderungen from '../pcVerlauf/PcAenderungen'
+import type { BezugKontext } from '../pcVerlauf/bezug'
+import { usePaVorgabe } from './vorgabe'
 
 const MODUS: Record<PaModus, string> = { system: 'als Admin', profil: 'Benutzerprofil', benutzer: 'Sitzung des Benutzers', lokal: 'vom Admin-PC' }
 const RISIKO = {
@@ -42,13 +48,14 @@ const vorname = (name: string) => { const n = name.trim(); if (!n) return ''; if
 // Suchindex: einmal je Programmsitzung, schrittweise im Hintergrund (die Oberfläche bleibt bedienbar)
 let indexFertig: PaIndex | null = null
 let indexLaeuft: Promise<PaIndex> | null = null
-function ladeIndex(): Promise<PaIndex> {
+export function ladeIndex(): Promise<PaIndex> {
   if (!indexLaeuft) indexLaeuft = baueIndexAsync(PROBLEME, id => aktion(id)?.titel || WERKZEUGE[id.replace(/^werkzeug:/, '')]?.titel || '').then(ix => (indexFertig = ix))
   return indexLaeuft
 }
 const ServiceNowWelt = lazy(() => import('../serviceNowWelt/ServiceNowWelt'))
 const KeineAhnung = lazy(() => import('./diagnose/KeineAhnung'))
 const BereichsDiagnose = lazy(() => import('./diagnose/BereichsDiagnose'))
+const BerechtigungsCheck = lazy(() => import('./BerechtigungsCheck'))
 const LEER: PaErkennung = { treffer: [], sicherheit: 'keine', gruende: [], erkannt: [], unbekannt: [], parameter: [] }
 
 export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: string, host: string) => void }) {
@@ -58,6 +65,8 @@ export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: stri
   const [verb, setVerb] = useState<PaVerbindung | null>(null)
   const [verbindet, setVerbindet] = useState(false)
   const [person, setPerson] = useState<AdUserListItem | null>(null)
+  // Zugewiesene Person des PCs (für AD-Prüfungen, wenn niemand angemeldet bzw. der PC nicht erreichbar ist)
+  const [ersatz, setErsatz] = useState<DgErsatzBenutzer | null>(null)
   const [q, setQ] = useState('')
   const [bereich, setBereich] = useState<PaBereich | null>(null)
   const [markiert, setMarkiert] = useState(0)
@@ -69,6 +78,7 @@ export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: stri
   const [bereicheOffen, setBereicheOffen] = useState(false)
   const [welt, setWelt] = useState<'probleme' | 'servicenow'>('probleme')
   const [ahnungslos, setAhnungslos] = useState(false)
+  const [berCheck, setBerCheck] = useState(false)
   const eingabeRef = useRef<HTMLInputElement>(null)
 
   const [index, setIndex] = useState<PaIndex | null>(indexFertig)
@@ -81,11 +91,18 @@ export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: stri
   const rest = useMemo(() => erk.treffer.filter(t => !oben.some(o => o.p.id === t.p.id)).slice(0, 40), [erk, oben])
   const auswahl = useMemo(() => [...oben, ...rest], [oben, rest])
   const proBereich = useMemo(() => { const m = new Map<string, number>(); for (const p of PROBLEME) m.set(p.bereich, (m.get(p.bereich) || 0) + 1); return m }, [])
+  // Wozu sollen die Änderungen am PC passen? Gewähltes Problem, sonst das, was die Eingabe erkennen lässt
+  const aendKontext = useMemo<BezugKontext | null>(() => {
+    if (problem) return { bereiche: [problem.bereich], text: `${geoeffnetMit} ${problem.titel}` }
+    if (welt !== 'probleme' || ahnungslos) return null
+    const b = bereich ? [bereich] : [...new Set(oben.map(t => t.p.bereich))]
+    return b.length || qSuche.trim() ? { bereiche: b, text: qSuche } : null
+  }, [problem, geoeffnetMit, welt, ahnungslos, bereich, oben, qSuche])
 
   useEffect(() => { void ladeGelernt().then(setGelernt) }, [])
   // PC gewählt → verbinden + Benutzer lesen
   useEffect(() => {
-    setVerb(null); setPerson(null)
+    setVerb(null); setPerson(null); setErsatz(null)
     if (!pc?.host) return
     let weg = false
     setVerbindet(true)
@@ -96,6 +113,13 @@ export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: stri
         const dir = await ensureDailyAdUsers().catch(() => null)
         const u = dir?.dir?.users.find(x => x.sam.toLowerCase() === v.sam!.toLowerCase())
         if (!weg && u) setPerson(u)
+      } else if (pc.person) {
+        // Nur eindeutige Treffer übernehmen — lieber keine Prüfung als die falsche Person
+        const dir = await ensureDailyAdUsers().catch(() => null)
+        const alle = dir?.dir?.users || []
+        const genau = alle.filter(x => x.displayName.trim().toLowerCase() === pc.person!.trim().toLowerCase())
+        const kand = genau.length ? genau : alle.filter(x => x.enabled && fuzzyNameMatch(x.displayName, pc.person!))
+        if (!weg && kand.length === 1) setErsatz({ sam: kand[0].sam, name: kand[0].displayName })
       }
       setTimeout(() => eingabeRef.current?.focus(), 50)
     })
@@ -129,6 +153,18 @@ export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: stri
   const behoben = (id: string) => {
     if (geoeffnetMit.trim()) void lerne(geoeffnetMit, id, user?.username || by).then(ok => { if (ok) void ladeGelernt(true).then(setGelernt) })
   }
+  // Sprung von außen (z. B. Proaktives Radar → PC-Fehler): PC und Problem übernehmen
+  const vorgabe = usePaVorgabe(s => s.vorgabe)
+  useEffect(() => {
+    if (!vorgabe) return
+    usePaVorgabe.getState().setze(null)
+    setWelt('probleme'); setAhnungslos(false); setBereich(null)
+    setPc({ host: vorgabe.host, serial: vorgabe.serial, person: vorgabe.person, quelle: 'Radar' })
+    setQ(vorgabe.suche)
+    const p = vorgabe.problemId ? PROBLEME.find(x => x.id === vorgabe.problemId) : null
+    if (p) { oeffne(p); setGeoeffnetMit(vorgabe.suche) } else setProblem(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vorgabe])
   const zeigeListe = !problem && !ahnungslos && (q.trim() || bereich)
   const kurz = q.trim().split(/\s+/).filter(Boolean).length <= 2
 
@@ -145,6 +181,8 @@ export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: stri
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">1 · Ziel-PC</p>
           <PcSuche wert={pc} onWahl={w => { setPc(w); setProblem(null) }} placeholder="Hostname, IP-Adresse, Seriennummer oder Name des Benutzers …" />
           {pc?.host && <VerbindungsKarte verb={verb} laeuft={verbindet} person={person} onNeu={() => { const p = pc; setPc(null); setTimeout(() => setPc(p), 0) }} />}
+          {/* Was hat sich an diesem PC in den letzten 14 Tagen geändert — und was davon passt zum Problem? */}
+          {pc?.host && <PcAenderungen host={pc.host} live={!!verb?.ok && verb.winrm} kontext={aendKontext} />}
         </div>
 
         {/* 2 · Problem */}
@@ -163,7 +201,7 @@ export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: stri
               <ServiceNowWelt q={q} setQ={setQ} />
             </Suspense>
           ) : problem ? (
-            <ProblemDetail key={problem.id} problem={problem} pc={pc} verb={verb} person={person} by={by} onAusgefuehrt={ausgefuehrt} vorbelegung={vorbelegung}
+            <ProblemDetail key={problem.id} problem={problem} pc={pc} verb={verb} person={person} ersatz={ersatz} by={by} onAusgefuehrt={ausgefuehrt} vorbelegung={vorbelegung}
               alternativen={alternativen} versucht={versucht} onBehoben={behoben} onNaechstes={p => oeffne(p, true)}
               onLoesungId={id => { const p = PROBLEME.find(x => x.id === id); if (p) oeffne(p, true) }}
               onZurueck={() => { setProblem(null); setTimeout(() => eingabeRef.current?.focus(), 0) }} onWerkzeug={onWerkzeug} />
@@ -188,9 +226,21 @@ export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: stri
                   Keine Ahnung, was das Problem ist?
                 </button>
               </div>
+              {/* Berechtigungscheck: Homeoffice, SolidWorks, Ordner auf Laufwerk I:, Grundausstattung, Lizenzen */}
+              <div className="flex justify-start">
+                <button onClick={() => setBerCheck(x => !x)} data-berechtigungscheck-knopf title="Im AD prüfen, welche Berechtigungen eine Person hat und welche fehlen – mit Link zum Antrag"
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 text-xs font-semibold ${berCheck ? 'bg-emerald-600 text-white border-emerald-600' : 'border-emerald-500/40 text-emerald-600 hover:bg-emerald-500/10'}`}>
+                  <ShieldAlert size={14} />Berechtigungscheck machen
+                </button>
+              </div>
+              {berCheck && (
+                <Suspense fallback={<p className="text-xs text-muted-foreground inline-flex items-center gap-2"><Loader2 size={13} className="animate-spin" />Berechtigungscheck wird geladen …</p>}>
+                  <BerechtigungsCheck sam={verb?.sam || ersatz?.sam} name={person?.displayName || ersatz?.name} onSchliessen={() => setBerCheck(false)} />
+                </Suspense>
+              )}
               {ahnungslos && (
                 <Suspense fallback={<p className="text-xs text-muted-foreground inline-flex items-center gap-2"><Loader2 size={13} className="animate-spin" />Diagnose wird geladen …</p>}>
-                  <KeineAhnung host={pc?.host || ''} verb={verb} onSchliessen={() => setAhnungslos(false)}
+                  <KeineAhnung host={pc?.host || ''} verb={verb} ersatz={ersatz} onSchliessen={() => setAhnungslos(false)}
                     onLoesung={id => { const p = PROBLEME.find(x => x.id === id); if (p) { setAhnungslos(false); oeffne(p) } }} />
                 </Suspense>
               )}
@@ -368,8 +418,8 @@ function TestStempel({ t }: { t?: BtStand[string] }) {
   return <span className="text-[9px] px-1.5 py-px rounded-full border border-red-500/40 text-red-600 dark:text-red-400" title={`Test ${wann} fehlgeschlagen: ${t.t || ''}`}>Test fehlgeschlagen</span>
 }
 
-function ProblemDetail({ problem, pc, verb, person, by, onZurueck, onWerkzeug, onAusgefuehrt, vorbelegung, alternativen = [], versucht = [], onBehoben, onNaechstes, onLoesungId }: {
-  problem: PaProblem; pc: PcWahl | null; verb: PaVerbindung | null; person: AdUserListItem | null; by: string; vorbelegung?: string
+function ProblemDetail({ problem, pc, verb, person, ersatz, by, onZurueck, onWerkzeug, onAusgefuehrt, vorbelegung, alternativen = [], versucht = [], onBehoben, onNaechstes, onLoesungId }: {
+  problem: PaProblem; pc: PcWahl | null; verb: PaVerbindung | null; person: AdUserListItem | null; ersatz?: DgErsatzBenutzer | null; by: string; vorbelegung?: string
   onZurueck: () => void; onWerkzeug: (id: string, host: string) => void; onAusgefuehrt?: (id: string) => void
   alternativen?: PaProblem[]; versucht?: string[]; onBehoben?: (id: string) => void; onNaechstes?: (p: PaProblem) => void; onLoesungId?: (id: string) => void
 }) {
@@ -392,11 +442,17 @@ function ProblemDetail({ problem, pc, verb, person, by, onZurueck, onWerkzeug, o
 
   const host = pc?.host || ''
   const gewaehlt = problem.schritte.map((s, i) => ({ s, i, a: aktion(s.aktion) })).filter(x => x.a && an.has(x.i))
-  const kritisch = gewaehlt.some(x => x.a!.risiko === 'kritisch')
-  const aendernd = gewaehlt.some(x => x.a!.risiko !== 'lesen')
-  const brauchtEingabe = !!problem.frage && gewaehlt.some(x => x.s.param?.includes('{eingabe}'))
-  const ohneBenutzer = !verb?.benutzer && gewaehlt.some(x => x.a!.modus === 'profil' || x.a!.modus === 'benutzer')
-  const grund = !host ? 'Erst den Ziel-PC wählen.' : !verb ? 'Verbindung wird geprüft …' : !verb.ok ? 'Der PC ist nicht erreichbar.' : !gewaehlt.length && !nachrichtAn ? 'Keinen Schritt ausgewählt.' : brauchtEingabe && !eingabe.trim() ? `Bitte „${problem.frage!.label}“ angeben.` : ''
+  // PC nicht erreichbar: AD-Prüfungen (Art „lokal“, laufen am Admin-PC) gehen trotzdem — für die zugewiesene Person
+  const adSam = verb?.benutzer || (ersatz ? ersatz.sam : '')
+  const offline = !!verb && !verb.ok
+  const lokalGewaehlt = gewaehlt.filter(x => x.a!.modus === 'lokal')
+  const laufen = offline ? lokalGewaehlt : gewaehlt
+  const kritisch = laufen.some(x => x.a!.risiko === 'kritisch')
+  const aendernd = laufen.some(x => x.a!.risiko !== 'lesen')
+  const brauchtEingabe = !!problem.frage && laufen.some(x => x.s.param?.includes('{eingabe}'))
+  const ohneBenutzer = !offline && !verb?.benutzer && gewaehlt.some(x => x.a!.modus === 'profil' || x.a!.modus === 'benutzer')
+  const nurAd = offline && lokalGewaehlt.length > 0 && !!adSam
+  const grund = !host ? 'Erst den Ziel-PC wählen.' : !verb ? 'Verbindung wird geprüft …' : offline && !nurAd ? (lokalGewaehlt.length ? 'Der PC ist nicht erreichbar und ihm ist keine Person zugeordnet.' : 'Der PC ist nicht erreichbar.') : !gewaehlt.length && !nachrichtAn ? 'Keinen Schritt ausgewählt.' : brauchtEingabe && !eingabe.trim() ? `Bitte „${problem.frage!.label}“ angeben.` : ''
   const param = (s: PaSchritt) => (s.param || '').replace(/\{eingabe\}/g, eingabe.trim())
 
   async function ausfuehren() {
@@ -407,16 +463,18 @@ function ProblemDetail({ problem, pc, verb, person, by, onZurueck, onWerkzeug, o
     let ok = 0, fehler = 0, geaendert = 0
     const erledigt: string[] = []
     for (const x of gewaehlt) {
+      if (offline && x.a!.modus !== 'lokal') { stand[x.i] = { status: 'uebersprungen' }; setLauf({ ...stand }); continue }
       stand[x.i] = { status: 'laeuft' }; setLauf({ ...stand })
-      const erg = await fuehreAus(host, x.a!, param(x.s), { sam: verb?.benutzer })
+      const erg = await fuehreAus(host, x.a!, param(x.s), { sam: x.a!.modus === 'lokal' ? adSam : verb?.benutzer })
       stand[x.i] = { status: erg.ok ? 'ok' : 'fehler', erg }; setLauf({ ...stand })
       if (erg.ok) { ok++; if (x.a!.risiko !== 'lesen') { geaendert++; erledigt.push(x.s.titel || x.a!.titel) } } else fehler++
     }
     let msg: { ok: boolean; info: string } | undefined
-    if (nachrichtAn && nachricht.trim()) msg = await sendeDesktopNachricht(host, nachricht.trim())
+    if (nachrichtAn && nachricht.trim() && !offline) msg = await sendeDesktopNachricht(host, nachricht.trim())
     if (erledigt.length) {
       const text = `Problem-Assistent: „${problem.titel}“ — ${erledigt.join(', ')}${fehler ? ` (${fehler} Schritt(e) mit Fehler)` : ''}`
-      void logDeviceAction(host, pc?.serial, text, by, 'Problem-Assistent')
+      void logDeviceAction(host, pc?.serial, text, by, 'Problem-Assistent', { ohneProtokoll: true })
+      void import('../services/aktivitaet').then(m => m.protokolliere({ art: 'manuell', quelle: 'Gib dein Problem ein', aktion: `Lösung ausgeführt: ${problem.titel}`, ziel: host.toUpperCase(), ergebnis: `${ok} ok · ${fehler} Fehler`, details: erledigt }))
       if (name) void logDossierAction(name, person?.sam, `${text} · auf ${host}`, by, 'Problem-Assistent')
     }
     setFertig({ ok, fehler, geaendert, msg }); setLaeuft(false)
@@ -510,6 +568,7 @@ function ProblemDetail({ problem, pc, verb, person, by, onZurueck, onWerkzeug, o
         </div>
 
         {/* Optional: Treiber prüfen (WLAN, Netzwerk, Audio/Kamera, Grafik/Dock, Hardware) */}
+        {rechteRelevant(problem) && <RechteCheck host={host} verb={verb} ersatz={ersatz} />}
         {treiberRelevant(problem) && <TreiberCheck host={host} problem={problem} by={by} />}
 
         {/* Desktop-Nachricht */}
@@ -580,14 +639,14 @@ function ProblemDetail({ problem, pc, verb, person, by, onZurueck, onWerkzeug, o
             <div className="space-y-1.5">
               <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Ursache gezielt suchen</p>
               {!bereichsDg ? (
-                <button onClick={() => setBereichsDg(true)} disabled={!host || !verb?.ok} data-bereichs-diagnose-start
+                <button onClick={() => setBereichsDg(true)} disabled={!host || !verb} data-bereichs-diagnose-start
                   className="w-full text-left rounded-md border-2 border-violet-500/40 px-3 py-2 hover:bg-violet-500/5 disabled:opacity-50">
                   <span className="block text-sm font-medium text-violet-700 dark:text-violet-300">Komplette Diagnose „{problem.bereich}“ starten</span>
                   <span className="block text-[11px] text-muted-foreground">Liest alles zu diesem Bereich auf dem PC aus – Ereignisanzeige, Abstürze, Einstellungen, Dienste, Treiber, Netz – und zeigt zu jedem Befund die Lösung. Ändert nichts.</span>
                 </button>
               ) : (
                 <Suspense fallback={<p className="text-xs text-muted-foreground inline-flex items-center gap-2"><Loader2 size={13} className="animate-spin" />Diagnose wird geladen …</p>}>
-                  <BereichsDiagnose bereich={problem.bereich} host={host} verb={verb} versucht={[...versucht, problem.id]} onLoesung={id => onLoesungId?.(id)} />
+                  <BereichsDiagnose bereich={problem.bereich} host={host} verb={verb} ersatz={ersatz} versucht={[...versucht, problem.id]} onLoesung={id => onLoesungId?.(id)} />
                 </Suspense>
               )}
             </div>
@@ -598,7 +657,7 @@ function ProblemDetail({ problem, pc, verb, person, by, onZurueck, onWerkzeug, o
         )}
 
         <div className="flex items-center gap-3 pt-1">
-          <span className="text-xs text-muted-foreground">{grund || (aendernd ? `${gewaehlt.length} Schritt(e) gewählt` : `${gewaehlt.length} prüfende(r) Schritt(e)`)}</span>
+          <span className="text-xs text-muted-foreground">{grund || (nurAd ? `PC nicht erreichbar – es laufen nur die ${lokalGewaehlt.length} AD-Prüfung(en) für ${verb?.benutzer || ersatz?.name}` : aendernd ? `${gewaehlt.length} Schritt(e) gewählt` : `${gewaehlt.length} prüfende(r) Schritt(e)`)}</span>
           <button onClick={() => { if (!aendernd && !nachrichtAn) void ausfuehren(); else setFrage(true) }} disabled={!!grund || laeuft} data-problem-ausfuehren
             className="ml-auto inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold disabled:opacity-40 shadow-sm">
             {laeuft ? <Loader2 size={15} className="animate-spin" /> : <Play size={15} />}{laeuft ? 'Läuft …' : fertig ? 'Erneut ausführen' : aendernd ? 'Lösung ausführen' : 'Prüfen'}

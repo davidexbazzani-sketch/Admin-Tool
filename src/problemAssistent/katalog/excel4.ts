@@ -806,7 +806,7 @@ export const PROBLEME_EXCEL4: PaProblem[] = [
       { aktion: 'office-update' },
       { aktion: 'office-schnellreparatur', optional: true },
     ],
-    hinweis: 'Fehlt die WebView2-Laufzeit ganz, über die Software-Installationen bzw. das Softwarecenter nachinstallieren.',
+    hinweis: 'Fehlt die WebView2-Laufzeit ganz, über die Software-Installationen bzw. das Unternehmensportal (Intune) nachinstallieren.',
     ueberwachen: ['office-absturz'],
     nachricht: 'Wir haben Ihr Office aktualisiert und die Komponenten von Power Query geprüft. Bitte starten Sie Excel neu und öffnen Sie den Editor erneut.',
   },

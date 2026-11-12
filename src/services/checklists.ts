@@ -38,6 +38,10 @@ export interface Checklist {
   hardwareLocation?: string  // Abhol-Ort / Raum (kommt in die Abhol-Mail)
   hardwareBy?: string        // Bearbeiter
   hardwareAt?: string        // ISO
+  // ── Headset (nur neue Mitarbeiter: Start ≤ 6 Monate zurück oder in der Zukunft) ──
+  // Leer = Ja (Voreinstellung). Beim Speichern/Erledigen wird es bei neuen Mitarbeitern
+  // explizit gesetzt; Ja + Erledigt → Eintrag in Zubehör Inventur → „Headset Vergabe".
+  headsetUebergeben?: boolean
 }
 
 export interface NotizArchivEintrag {

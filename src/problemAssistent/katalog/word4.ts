@@ -1136,12 +1136,12 @@ export const PROBLEME_WORD4: PaProblem[] = [
       'Ticket: think-cell nicht verfügbar, Controlling-Bericht muss erstellt werden.',
     ],
     ursache: 'think-cell ist ein COM-Add-in; stürzt es ab, deaktiviert PowerPoint es, nach einem Office-Update kann eine alte think-cell-Version inkompatibel sein, oder der Lizenzschlüssel ist abgelaufen.',
-    loesung: 'Die Installation wird gesucht, die Add-ins angezeigt und von PowerPoint deaktivierte Add-ins wieder eingeschaltet. PowerPoint neu starten; meldet think-cell einen abgelaufenen Schlüssel oder eine zu alte Version, über das Softwarecenter aktualisieren.',
+    loesung: 'Die Installation wird gesucht, die Add-ins angezeigt und von PowerPoint deaktivierte Add-ins wieder eingeschaltet. PowerPoint neu starten; meldet think-cell einen abgelaufenen Schlüssel oder eine zu alte Version, über das Unternehmensportal (Intune) aktualisieren.',
     schritte: [
       { aktion: 'software-suchen', param: 'think-cell' },
       { aktion: 'office-addins' },
       { aktion: 'office-addins-ein' },
-      { aktion: 'sccm-richtlinie', optional: true },
+      { aktion: 'intune-apps-sync', optional: true },
     ],
     hinweis: 'Lizenzschlüssel und neue think-cell-Versionen stellt die Softwareverteilung (DXC) bereit.',
     nachricht: 'Wir haben die abgeschalteten PowerPoint-Erweiterungen wieder eingeschaltet. Bitte starten Sie PowerPoint neu – die think-cell-Registerkarte sollte wieder da sein.',
@@ -1641,7 +1641,7 @@ export const PROBLEME_WORD4: PaProblem[] = [
       'Ticket: Visio Desktop nicht verfügbar, nur Visio für das Web.',
     ],
     ursache: 'Mit „Visio Plan 1“ bzw. den in Microsoft 365 enthaltenen Visio-Funktionen gibt es nur Visio im Web; die Desktop-App gehört zu Visio Plan 2 und muss zusätzlich installiert werden.',
-    loesung: 'Installation und Lizenz werden geprüft. Ist eine Plan-2-Lizenz zugewiesen, Visio über die Software-Installation bzw. das Softwarecenter installieren; ohne passende Lizenz bleibt es bei Visio im Web.',
+    loesung: 'Installation und Lizenz werden geprüft. Ist eine Plan-2-Lizenz zugewiesen, Visio über die Software-Installation bzw. das Unternehmensportal (Intune) installieren; ohne passende Lizenz bleibt es bei Visio im Web.',
     schritte: [
       { aktion: 'software-suchen', param: 'Visio' },
       { aktion: 'office-konto-lizenz' },

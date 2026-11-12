@@ -12,7 +12,7 @@ import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
 import { api } from '../electronAPI'
 import { openFileForImport, parseExcelSheet } from '../utils/fileImport'
 import {
-  loadDevices, loadMeta, saveDevices, mapRowsToDevices, classifyModel, modelCost, formatEuro,
+  loadDevices, loadMeta, saveDevices, mapRowsToDevices, classifyModel, modelCost, deviceCost, istSkfEigentum, formatEuro,
   type EndpointDevice,
 } from '../services/endpointDevices'
 import { exportEndpointDevices, type EndpointExportFormat } from '../services/endpointDevicesExport'
@@ -226,11 +226,16 @@ export default function EndpointDevices() {
     useAppStore.getState().setScreen(mapId)
   }
 
-  // Kostensumme der aktuell gefilterten Auswahl (nur Geräte mit bekanntem Model-Typ)
+  // Kostensumme der aktuell gefilterten Auswahl (nur Geräte mit bekanntem Model-Typ).
+  // SKF-Eigentum hat keinen Preis — dafür wird nichts mehr gezahlt.
   const costTotals = useMemo(() => {
-    let monthly = 0, known = 0
-    for (const d of filtered) { const c = modelCost(d.model); if (c !== null) { monthly += c; known++ } }
-    return { monthly, yearly: monthly * 12, known }
+    let monthly = 0, known = 0, skf = 0
+    for (const d of filtered) {
+      const c = deviceCost(d)
+      if (c !== null) { monthly += c; known++ }
+      else if (modelCost(d.model) !== null && istSkfEigentum(d.assetOwnership)) skf++
+    }
+    return { monthly, yearly: monthly * 12, known, skf }
   }, [filtered])
 
   // ── "Zuletzt online": Zeilen der aktuell gefilterten Geraete mit Scan-Ergebnis ─
@@ -939,7 +944,7 @@ IT Support Marine`
           </label>
         )}
         <div className="ml-auto flex items-center gap-3 text-xs">
-          <span className="text-muted-foreground" title={`Summe der monatlichen Kosten über ${costTotals.known} Gerät(e) mit bekanntem Model-Typ (aktuelle Auswahl)`}>
+          <span className="text-muted-foreground" title={`Summe der monatlichen Kosten über ${costTotals.known} Gerät(e) mit bekanntem Model-Typ (aktuelle Auswahl)${costTotals.skf ? ` — ${costTotals.skf} Gerät(e) SKF-Eigentum ohne Preis, dafür wird nichts mehr gezahlt` : ''}`}>
             <span className="text-foreground font-semibold">{formatEuro(costTotals.monthly)}</span>/Monat
             <span className="mx-1 opacity-50">·</span>
             <span className="text-foreground font-semibold">{formatEuro(costTotals.yearly)}</span>/Jahr
@@ -1264,7 +1269,8 @@ IT Support Marine`
             <tbody>
               {filtered.map(d => {
                 const cat = classifyModel(d.model)
-                const cost = modelCost(d.model)
+                const cost = deviceCost(d)
+                const skfOhnePreis = cost === null && cat && istSkfEigentum(d.assetOwnership)
                 return (
                   <tr key={d.id} className="border-b border-border/40 hover:bg-accent/10">
                     <td className="px-3 py-2 font-mono text-foreground">{d.serial || '—'}</td>
@@ -1274,6 +1280,7 @@ IT Support Marine`
                     <td className="px-3 py-2 text-foreground">
                       {cat || <span className="text-muted-foreground">—</span>}
                       {cost !== null && <span className="ml-1.5 text-[11px] px-1.5 py-0.5 rounded bg-accent text-muted-foreground">{formatEuro(cost)}/Monat</span>}
+                      {skfOhnePreis && <span className="ml-1.5 text-[11px] text-muted-foreground italic" title="SKF-Eigentum — dafür wird nichts mehr gezahlt, deshalb ohne Preis">kein Preis</span>}
                     </td>
                     <td className="px-3 py-2 text-muted-foreground">{d.state || '—'}</td>
                     <td className="px-3 py-2 text-muted-foreground">{d.substate || '—'}</td>

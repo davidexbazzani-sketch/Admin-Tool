@@ -4,24 +4,46 @@
 // dieser Reiter zeigt nur an (Daten: services/weekendCheck.ts).
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Loader2, Download, Search, Power, Info } from 'lucide-react'
+import { Loader2, Download, Search, Power, Info, User, AlertTriangle, Check } from 'lucide-react'
 import { DeviceInfoButton } from '../device/DeviceDossier'
 import { PersonInfoButton } from '../person/PersonDossier'
 import { KopfFilter } from '../KopfFilter'
 import { foldName } from '../../utils/nameMatch'
 import {
   listWeekendDevices, loadWeekendResults, messtageSince, hostKey, wochentag,
-  type WeekendDevice, type WeekendResults, type HostResult,
+  type WeekendDevice, type WeekendResults, type HostResult, type WeekendAnmeldung,
 } from '../../services/weekendCheck'
+import { benutzerText } from '../../services/anmeldeAbgleichLogik'
 import { getScanSchedule, describeSchedule } from '../../services/scanSchedules'
 
 /** Erster Messtag der Tabelle (Start der Dokumentation: Sonntag 11.10.26). */
 const START_TAG = '2026-10-11'
 
 type Zelle = 'an' | 'aus' | 'nicht gemessen'
-type FilterId = 'model' | 'assignedTo' | 'zuletzt'
+type FilterId = 'model' | 'assignedTo' | 'zuletzt' | 'angemeldet'
 
 const LEER = new Set<string>()
+
+/** Kategorie für den Spaltenfilter „Angemeldet". */
+function anmeldeKategorie(c: { z: Zelle; r?: HostResult }): string {
+  if (c.z !== 'an') return c.z === 'aus' ? 'PC aus' : 'nicht gemessen'
+  const a = c.r?.anmeldung
+  if (!a) return 'nicht ausgelesen'
+  switch (a.stufe) {
+    case 'passt': return 'zugewiesene Person'
+    case 'fremd': return 'andere Person'
+    case 'ohne-zuweisung': return 'angemeldet (Gerät ohne Zuweisung)'
+    case 'niemand': return 'niemand angemeldet'
+    default: return 'nicht ermittelbar'
+  }
+}
+
+/** Ein Satz für Tooltip/Export: wer war angemeldet? */
+function anmeldeText(a: WeekendAnmeldung | undefined, mitFehler = true): string {
+  if (!a) return 'nicht ausgelesen'
+  if (a.benutzer.length) return a.benutzer.map(b => benutzerText(b)).join(', ')
+  return a.stufe === 'unbekannt' ? `nicht ermittelbar${mitFehler && a.fehler ? ` (${a.fehler})` : ''}` : 'niemand angemeldet'
+}
 
 function kurz(key: string): string {
   const [, m, d] = key.split('-')
@@ -89,19 +111,27 @@ export default function WeekendCheckTab({ onCount, exportCsv }: {
     { id: 'model', titel: 'Modell', wert: d => d.model, leerText: '(ohne)' },
     { id: 'assignedTo', titel: 'Zugewiesen an', wert: d => d.assignedTo, leerText: '(niemand)' },
     { id: 'zuletzt', titel: letzter ? `Zuletzt (${kurz(letzter)})` : 'Zuletzt', wert: d => (letzter ? zelle(d, letzter).z : 'nicht gemessen') },
+    { id: 'angemeldet', titel: letzter ? `Angemeldet (${kurz(letzter)})` : 'Angemeldet', wert: d => anmeldeKategorie(letzter ? zelle(d, letzter) : { z: 'nicht gemessen' }) },
   ]
+  /** Angemeldete Benutzer der letzten Messung (nur bei PCs, die an waren). */
+  const letzteAnmeldung = (d: WeekendDevice): WeekendAnmeldung | undefined => {
+    if (!letzter) return undefined
+    const c = zelle(d, letzter)
+    return c.z === 'an' ? c.r?.anmeldung : undefined
+  }
   // Wortweise: jedes eingegebene Wort muss in IRGENDEINER Spalte vorkommen — Reihenfolge,
   // Komma und Umlaut-Schreibweise egal („Davide Bazzani" findet „Bazzani, Davide").
   const suchWoerter = foldName(q).split(/[\s,;]+/).filter(Boolean)
   const trifftSuche = (d: WeekendDevice) => {
     if (!suchWoerter.length) return true
-    const text = foldName([d.hostname, d.serial, d.model, d.assignedTo].join(' '))
+    const angemeldet = (letzteAnmeldung(d)?.benutzer ?? []).map(b => `${b.name ?? ''} ${b.sam}`).join(' ')
+    const text = foldName([d.hostname, d.serial, d.model, d.assignedTo, angemeldet].join(' '))
     return suchWoerter.every(w => text.includes(w))
   }
   const passt = (f: typeof filterDefs[number], d: WeekendDevice) => !(aus[f.id]?.has(f.wert(d)))
 
   const { zeilen, werte } = useMemo(() => {
-    const werte: Record<FilterId, Map<string, number>> = { model: new Map(), assignedTo: new Map(), zuletzt: new Map() }
+    const werte: Record<FilterId, Map<string, number>> = { model: new Map(), assignedTo: new Map(), zuletzt: new Map(), angemeldet: new Map() }
     for (const f of filterDefs) for (const d of devices) werte[f.id].set(f.wert(d), 0)
     for (const f of filterDefs) {
       for (const d of devices) {
@@ -121,10 +151,20 @@ export default function WeekendCheckTab({ onCount, exportCsv }: {
   }, [loading])
 
   const zuletztAn = letzter ? devices.filter(d => zelle(d, letzter).z === 'an').length : 0
+  const zuletztMitBenutzer = devices.filter(d => (letzteAnmeldung(d)?.benutzer.length ?? 0) > 0).length
+  const zuletztFremd = devices.filter(d => letzteAnmeldung(d)?.stufe === 'fremd').length
 
   async function exportieren() {
-    const header = ['Hostname', 'Seriennummer', 'Modell', 'Zugewiesen an', ...tage.map(lang), 'Wie oft an']
-    const rows = zeilen.map(d => [d.hostname, d.serial, d.model, d.assignedTo, ...tage.map(k => zelle(d, k).z), String(wieOft(d))])
+    const header = ['Hostname', 'Seriennummer', 'Modell', 'Zugewiesen an', letzter ? `Angemeldet am ${lang(letzter)}` : 'Angemeldet', ...tage.map(lang), 'Wie oft an']
+    const exportZelle = (d: WeekendDevice, k: string) => {
+      const c = zelle(d, k)
+      return c.z === 'an' && c.r?.anmeldung ? `an (${anmeldeText(c.r.anmeldung, false)})` : c.z
+    }
+    const rows = zeilen.map(d => {
+      const c = letzter ? zelle(d, letzter) : { z: 'nicht gemessen' as Zelle }
+      const angemeldet = c.z === 'an' ? anmeldeText(c.r?.anmeldung) : ''
+      return [d.hostname, d.serial, d.model, d.assignedTo, angemeldet, ...tage.map(k => exportZelle(d, k)), String(wieOft(d))]
+    })
     await exportCsv(`Wochenend-Check_${new Date().toISOString().slice(0, 10)}.csv`, header, rows)
   }
 
@@ -141,7 +181,10 @@ export default function WeekendCheckTab({ onCount, exportCsv }: {
             Alle genutzten PCs (Endgeräte-Übersicht: Status <b>In use</b> + Verwendung <b>Active</b>). Gemessen wird
             {plan ? <> <b>{plan}</b></> : ' sonntags'} per Ping — aber nur, wenn das Tool dann (bis 2 Std. danach) bei einem
             Admin geöffnet ist. Verpasste Messtage werden nicht nachgeholt und bleiben „nicht gemessen".
-            {letzter && <> Letzte Messung: <b>{lang(letzter)}</b> — <b className="text-red-300">{zuletztAn}</b> von {devices.length} PCs waren an.</>}
+            Bei PCs, die an sind, wird dabei auch ausgelesen, wer angemeldet ist und ob das die zugewiesene Person ist.
+            {letzter && <> Letzte Messung: <b>{lang(letzter)}</b> — <b className="text-red-300">{zuletztAn}</b> von {devices.length} PCs waren an
+              {zuletztMitBenutzer > 0 && <>, bei <b>{zuletztMitBenutzer}</b> war jemand angemeldet</>}
+              {zuletztFremd > 0 && <> (<b className="text-amber-500">{zuletztFremd}× nicht die zugewiesene Person</b>)</>}.</>}
           </div>
         </div>
         <div className="ml-auto flex items-center gap-2">
@@ -177,9 +220,14 @@ export default function WeekendCheckTab({ onCount, exportCsv }: {
                       onChange={neu => setAus(a => ({ ...a, [f.id]: neu }))} />
                   </th>
                 ))}
-                <th className="bg-card text-center font-semibold px-2.5 py-2 border-b border-r border-border whitespace-nowrap">
+                <th className="bg-card text-center font-semibold px-2.5 py-2 border-b border-border whitespace-nowrap">
                   <KopfFilter titel={filterDefs[2].titel} werte={werte.zuletzt} ausgeblendet={aus.zuletzt ?? LEER}
                     onChange={neu => setAus(a => ({ ...a, zuletzt: neu }))} />
+                </th>
+                <th className="bg-card text-left font-semibold px-2.5 py-2 border-b border-r border-border whitespace-nowrap"
+                  title="Wer war bei der letzten Messung am PC angemeldet? (nur bei PCs, die an waren)">
+                  <KopfFilter titel={filterDefs[3].titel} werte={werte.angemeldet} ausgeblendet={aus.angemeldet ?? LEER}
+                    onChange={neu => setAus(a => ({ ...a, angemeldet: neu }))} />
                 </th>
                 <th className="bg-card text-center font-semibold px-2.5 py-2 border-b border-r border-border whitespace-nowrap" title="Wie oft war der PC an einem gemessenen Messtag an?">Wie oft an</th>
                 {tage.map(k => (
@@ -203,7 +251,8 @@ export default function WeekendCheckTab({ onCount, exportCsv }: {
                     <td className="px-2.5 py-1.5 border-b border-border whitespace-nowrap text-foreground/90">
                       {d.assignedTo ? <span className="inline-flex items-center gap-1">{d.assignedTo}<PersonInfoButton name={d.assignedTo} /></span> : '—'}
                     </td>
-                    <td className="px-2.5 py-1.5 border-b border-r border-border text-center"><ZellenBadge {...(letzter ? zelle(d, letzter) : { z: 'nicht gemessen' as Zelle })} /></td>
+                    <td className="px-2.5 py-1.5 border-b border-border text-center"><ZellenBadge {...(letzter ? zelle(d, letzter) : { z: 'nicht gemessen' as Zelle })} /></td>
+                    <td className="px-2.5 py-1.5 border-b border-r border-border whitespace-nowrap"><AnmeldeZelle {...(letzter ? zelle(d, letzter) : { z: 'nicht gemessen' as Zelle })} /></td>
                     <td className={`px-2.5 py-1.5 border-b border-r border-border text-center font-semibold ${n > 0 ? 'text-red-300' : 'text-muted-foreground'}`}>{gemessen.length ? `${n}×` : '—'}</td>
                     {tage.map(k => (
                       <td key={k} className="px-2 py-1.5 border-b border-border text-center"><ZellenBadge {...zelle(d, k)} /></td>
@@ -219,11 +268,55 @@ export default function WeekendCheckTab({ onCount, exportCsv }: {
   )
 }
 
+const STATUS_KURZ: Record<string, string> = { aktiv: 'aktiv', gesperrt: 'gesperrt', getrennt: 'getrennt' }
+
+/** Spalte „Angemeldet": wer war bei der letzten Messung angemeldet? */
+function AnmeldeZelle({ z, r }: { z: Zelle; r?: HostResult }) {
+  if (z !== 'an') return <span className="text-muted-foreground/40">–</span>
+  const a = r?.anmeldung
+  if (!a) {
+    return <span className="text-[11px] italic text-muted-foreground" title="Bei dieser Messung wurde der angemeldete Benutzer noch nicht ausgelesen (ältere Messung).">nicht ausgelesen</span>
+  }
+  const geprueft = `Ausgelesen ${new Date(a.am).toLocaleString('de-DE')}${a.weg ? ` über ${a.weg}` : ''}`
+  if (a.benutzer.length === 0) {
+    return a.stufe === 'unbekannt'
+      ? <span className="text-[11px] text-muted-foreground" title={`${a.fehler || 'Nicht ermittelbar.'}\n${geprueft}`}>nicht ermittelbar</span>
+      : <span className="text-[11px] text-muted-foreground" title={geprueft}>niemand angemeldet</span>
+  }
+  const fremd = a.stufe === 'fremd'
+  const titel = [
+    fremd ? 'Nicht die zugewiesene Person' : a.stufe === 'passt' ? 'Die zugewiesene Person' : 'Gerät ist niemandem zugewiesen',
+    `Zugewiesen: ${a.zugewiesen || 'niemandem'}`,
+    geprueft,
+  ].join('\n')
+  return (
+    <span data-anmelde-stufe={a.stufe} title={titel} className={`inline-flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] ${fremd ? 'text-amber-500' : 'text-foreground/90'}`}>
+      {fremd ? <AlertTriangle size={11} className="shrink-0" /> : a.stufe === 'passt' ? <Check size={11} className="shrink-0 text-emerald-500" /> : <User size={11} className="shrink-0 text-muted-foreground" />}
+      {a.benutzer.map(b => (
+        <span key={b.konto || b.sam} className="inline-flex items-center gap-1">
+          <span className={fremd ? 'font-semibold' : ''}>{b.name || b.konto || b.sam}</span>
+          {b.name && <span className="text-muted-foreground">({b.sam})</span>}
+          {STATUS_KURZ[b.status] && <span className="rounded px-1 text-[10px] bg-muted/40 text-muted-foreground">{STATUS_KURZ[b.status]}</span>}
+          {b.name && <PersonInfoButton name={b.name} sam={b.sam} />}
+        </span>
+      ))}
+    </span>
+  )
+}
+
 function ZellenBadge({ z, r }: { z: Zelle; r?: HostResult }) {
   if (z === 'an') {
-    return <span title={`Online (${r?.method || 'Ping'}) — PC war nicht ausgeschaltet`}
+    const a = r?.anmeldung
+    const titel = [`Online (${r?.method || 'Ping'}) — PC war nicht ausgeschaltet`]
+    if (a) {
+      titel.push(`Angemeldet: ${anmeldeText(a)}`)
+      if (a.stufe === 'fremd') titel.push(`Zugewiesen: ${a.zugewiesen || '—'} — nicht dieselbe Person`)
+    }
+    return <span title={titel.join('\n')}
       className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-red-500/15 text-red-300 border border-red-500/40">
-      <span className="w-1.5 h-1.5 rounded-full bg-red-400" />an</span>
+      <span className="w-1.5 h-1.5 rounded-full bg-red-400" />an
+      {a && a.benutzer.length > 0 && <User size={9} className={a.stufe === 'fremd' ? 'text-amber-500' : ''} />}
+    </span>
   }
   if (z === 'aus') {
     return <span title="Nicht erreichbar — PC war aus"

@@ -261,7 +261,7 @@ Zeile ('Version vorher: ' + $vor)
 $t = @(Get-ScheduledTask -EA SilentlyContinue | Where-Object { $_.TaskName -like 'OneDrive*Standalone Update Task*' -and ($_.TaskName -like ('*' + $uSid) -or $_.TaskName -like '*Per-Machine*') })
 if (-not $t.Count) {
   $pmu = @('C:\Program Files\Microsoft OneDrive\OneDriveStandaloneUpdater.exe', 'C:\Program Files (x86)\Microsoft OneDrive\OneDriveStandaloneUpdater.exe') | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
-  if (-not $pmu) { throw 'Keine OneDrive-Update-Aufgabe für diesen Benutzer gefunden — OneDrive bitte über das Softwarecenter neu installieren.' }
+  if (-not $pmu) { throw 'Keine OneDrive-Update-Aufgabe für diesen Benutzer gefunden — OneDrive bitte über das Unternehmensportal (Intune) neu installieren.' }
   $pr = Start-Process -FilePath $pmu -PassThru; [void]$pr.WaitForExit(150000); Zeile 'Updater (pro Computer) direkt ausgeführt.'
 } else {
   foreach ($x in $t) { Start-ScheduledTask -TaskPath $x.TaskPath -TaskName $x.TaskName -EA Stop; Zeile ('Update-Aufgabe gestartet: ' + $x.TaskName) }

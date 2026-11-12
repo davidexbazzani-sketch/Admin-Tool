@@ -14,6 +14,7 @@ import { isValidRemoteTarget, isIpv4, ensureWinRmTrustedHost } from '../../utils
 import Card from '../Card'
 import { DeviceInfoButton } from '../device/DeviceDossier'
 import InstallLogbuch from './InstallLogbuch'
+import { AnmeldeStatus, useAnmeldeCheck } from './AnmeldeCheck'
 
 const log = createLogger('software-installations')
 
@@ -39,10 +40,10 @@ export default function XelionInstallation() {
   const [localPhase, setLocalPhase] = useState<'config' | 'prechecks'>('config')
   const [preChecks, setPreChecks] = useState<Record<string, PreCheck>>({})
   const [installedVersion, setInstalledVersion] = useState<string | null>(null)
-  const [loggedOnUser, setLoggedOnUser] = useState<string | null>(null)
   const [showConfirm, setShowConfirm] = useState(false)
   const [elapsed, setElapsed] = useState(0)
   const logRef = useRef<HTMLDivElement>(null)
+  const { vorStart, anmeldeDialog } = useAnmeldeCheck()
 
   const phase = store.phase !== 'idle' ? store.phase : localPhase
   const targetValid = isValidRemoteTarget(hostname)
@@ -84,7 +85,6 @@ export default function XelionInstallation() {
     const h = hostname.trim()
     setLocalPhase('prechecks')
     setInstalledVersion(null)
-    setLoggedOnUser(null)
     clearWinRMCache(h)  // frische Aktivierung erzwingen (kein veralteter Cache)
     // 'user' ist KEIN blockierender Check mehr — die Installation ist moeglich,
     // sobald der PC online + WinRM erreichbar ist.
@@ -120,16 +120,8 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
     } catch { checks.remote = 'fail' }
     setPreChecks({ ...checks })
 
-    // Angemeldeten Benutzer ermitteln (nur zur Info — MSIX installiert pro
-    // Benutzer). Robuste Erkennung: Win32_ComputerSystem, sonst explorer.exe-Besitzer
-    // (erfasst auch RDP-/Zweit-Sessions). Blockiert die Installation NICHT.
-    try {
-      const res = await api().runPowerShell(
-        `try { (Invoke-Command -ComputerName '${h}' -ScriptBlock { $u=(Get-CimInstance Win32_ComputerSystem -EA SilentlyContinue).UserName; if(-not $u){ try { $u=(Get-Process -IncludeUserName -Name explorer -EA Stop | Select-Object -First 1 -ExpandProperty UserName) } catch {} }; $u } -EA Stop) } catch { '' }`,
-        15000,
-      )
-      setLoggedOnUser(res.stdout.trim() || null)
-    } catch { setLoggedOnUser(null) }
+    // Wer angemeldet ist (und ob das die zugewiesene Person ist), zeigt <AnmeldeStatus> —
+    // die Prüfung läuft dort, sobald dieser Schritt erscheint.
 
     // Bereits installiert? (Get-AppxPackage -AllUsers, da MSIX pro Benutzer)
     try {
@@ -139,6 +131,12 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
       )
       setInstalledVersion(res.stdout.trim() || null)
     } catch { setInstalledVersion(null) }
+  }
+
+  /** Vorher prüfen, wer angemeldet ist — Hinweis, wenn nicht die zugewiesene Person. */
+  function startMitPruefung() {
+    setShowConfirm(false)
+    void vorStart(hostname.trim(), startInstallation)
   }
 
   function startInstallation() {
@@ -244,14 +242,12 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
               </div>
             ))}
 
-            {/* Info (nicht blockierend): angemeldeter Benutzer */}
-            <div className="flex items-center gap-2 text-xs pt-1">
-              <Info size={14} className="text-blue-400 shrink-0" />
-              <span className="text-foreground">
-                Angemeldeter Benutzer: {loggedOnUser
-                  ? <strong>{loggedOnUser}</strong>
-                  : <span className="text-muted-foreground">wird zur Laufzeit ermittelt — Installation laeuft im Kontext des aktiven Benutzers</span>}
-              </span>
+            {/* Wer ist angemeldet — und ist das die zugewiesene Person? (nicht blockierend) */}
+            <div className="pt-1 space-y-1">
+              <AnmeldeStatus host={hostname.trim()} />
+              <p className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                <Info size={12} className="text-blue-400 shrink-0" />Xelion wird für den gerade angemeldeten Benutzer installiert.
+              </p>
             </div>
 
             {installedVersion && (
@@ -327,7 +323,7 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
           {(phase === 'done' || phase === 'error') && (
             <div className="flex gap-2">
               <button onClick={() => { store.reset(); setLocalPhase('config'); setPreChecks({}); setInstalledVersion(null) }} className="px-4 py-2 rounded-lg text-sm text-muted-foreground border border-border hover:text-foreground">Zurueck zur Konfiguration</button>
-              {phase === 'error' && <button onClick={startInstallation} className="px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90">Erneut versuchen</button>}
+              {phase === 'error' && <button onClick={startMitPruefung} className="px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90">Erneut versuchen</button>}
             </div>
           )}
         </>
@@ -350,7 +346,7 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
             </div>
             <div className="flex justify-end gap-2">
               <button onClick={() => setShowConfirm(false)} className="px-4 py-2 rounded-lg text-sm text-muted-foreground border border-border hover:bg-muted/20">Abbrechen</button>
-              <button onClick={startInstallation} className="px-4 py-2 rounded-lg text-sm font-semibold bg-teal-600 hover:bg-teal-500 text-white">{installedVersion ? 'Trotzdem neu installieren' : 'Installation starten'}</button>
+              <button onClick={startMitPruefung} className="px-4 py-2 rounded-lg text-sm font-semibold bg-teal-600 hover:bg-teal-500 text-white">{installedVersion ? 'Trotzdem neu installieren' : 'Installation starten'}</button>
             </div>
           </div>
         </div>
@@ -359,6 +355,8 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 bg-card border border-border rounded-lg shadow-2xl px-4 py-3 text-sm text-foreground max-w-sm">{toast}</div>
       )}
+
+      {anmeldeDialog}
 
       <InstallLogbuch software="Xelion" titel="Logbuch Xelion" />
     </div>

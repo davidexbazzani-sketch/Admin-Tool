@@ -75,7 +75,7 @@ export default function AutoSetupController() {
         const reach = await checkReachability(host).catch(() => ({ online: false }))
         await updateDeviceSetupItem(c.id, { autoSetupPingAt: new Date().toISOString() }).catch(() => {})
         if (!reach.online) { offline++; continue }
-        const r = await runAutoSetup(c, info, by)
+        const r = await runAutoSetup(c, info, by, { automatisch: true })
         eingerichtet++
         if (!r.ok) ok = false
       }

@@ -519,7 +519,7 @@
     "typos": ["kb fhelt", "update fhelt"],
     "symptoms": ["Bestimmtes KB-Update wird nicht in Windows Update angeboten", "Manuelle Suche findet Update nicht", "Update wird als nicht kompatibel markiert"],
     "quickCheck": "Welche KB-Nummer wird benötigt?",
-    "solutions": ["KB-Nummer im Microsoft Update Katalog suchen und manuell installieren", "Voraussetzungs-Updates prüfen (Servicing Stack Update)", "Windows Update Problembehandlung ausführen", "Update über WSUS/SCCM erzwingen", "GPO prüfen ob Updates blockiert werden"],
+    "solutions": ["KB-Nummer im Microsoft Update Katalog suchen und manuell installieren", "Voraussetzungs-Updates prüfen (Servicing Stack Update)", "Windows Update Problembehandlung ausführen", "Update über Intune bzw. Windows Update erzwingen", "GPO prüfen ob Updates blockiert werden"],
     "skillMapping": [
       {"skillId": "rd_gpo_hotfixid", "label": "Bestimmtes Update suchen", "priority": 1, "effectiveness": 95},
       {"skillId": "rd_gpo_hotfix", "label": "Installierte Updates", "priority": 2, "effectiveness": 80},

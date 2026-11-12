@@ -5,7 +5,19 @@
 //         sec (Defender, Firewall, BitLocker – nie Schlüssel –, TPM, Secure Boot, Computerzertifikate)
 // Alles NUR LESEND.
 import { ja, liste, nein, num, txt, zahl } from '../motor'
-import type { DgFakten, DgOber, DgSonde } from '../types'
+import type { DgFakten, DgOber, DgRegel, DgSonde } from '../types'
+import { berText, ordneGruppeZu } from '../../berechtigungen'
+import { ausserhalbFirmennetz } from './laufwerke'
+
+/** Je fehlende Gruppe (Sonde „rechte“: Vergleich mit den Kollegen) ein Befund mit Fehlerbild und Antrag. */
+export const RECHTE_ALLE_REGEL: DgRegel = {
+  id: 'gruppen-fehlen', wenn: f => num(f['rechte.fehlenAnzahl']) > 0, befund: () => '', problem: 'berechtigung-fehlt-kollegen-vergleich', schwere: 2,
+  viele: f => liste(f['rechte.fehlen']).filter(z => { const [cn = '', desc = ''] = z.split('|'); return ordneGruppeZu(cn, desc).art.id !== 'ignorieren' }).map(z => {
+    const [cn = '', desc = '', anz = '0', von = '0'] = z.split('|')
+    const b = berText(cn, desc, Number(anz), Number(von))
+    return { text: b.text, problem: b.problem, antrag: b.antrag, fehlerbild: b.fehlerbild }
+  }),
+}
 
 /** Enthält die Liste (z. B. Statuscodes) einen der Werte? Fehlender Fakt ⇒ false. */
 const hat = (f: DgFakten, k: string, ...werte: string[]): boolean => liste(f[k]).some(x => werte.includes(String(x).toLowerCase()))
@@ -270,6 +282,18 @@ export const THEMEN_KONTO: DgOber[] = [
     id: 'konto', titel: 'Anmeldung, Konto & Sicherheit', symbol: 'KeyRound',
     beschreibung: 'Anmeldung klappt nicht, Konto gesperrt, ständige Kennwortabfragen, MFA, PIN, BitLocker, Zertifikate, Virenschutz',
     unter: [
+      {
+        id: 'ko-berechtigung', titel: 'Kollegen können etwas, was ich nicht kann – fehlt eine Berechtigung?',
+        beschreibung: 'Programm, Ordner, Postfach, Lizenz oder Homeoffice-Zugang geht beim Benutzer nicht, bei den Kollegen schon; neue Mitarbeiter: wurden alle Berechtigungen bestellt?',
+        sonden: ['rechte', 'zpa'],
+        regeln: [
+          RECHTE_ALLE_REGEL,
+          { id: 'zpa-basis', wenn: f => nein(f['zpa.basis']) && ausserhalbFirmennetz(f), befund: () => 'PC ist nicht im Firmennetz und die Grundrolle für den Fernzugriff („Remote Access“, Azure_AD_SSO_Akamai_EAA_Client) fehlt', problem: 'vpn-fernzugriff-beantragen', schwere: 3 },
+          { id: 'zpa-fileserver', wenn: f => nein(f['zpa.fileserver']) && ausserhalbFirmennetz(f), befund: () => 'PC ist nicht im Firmennetz und die Homeoffice-Rolle „Marine Fileservers“ fehlt', problem: 'laufwerk-homeoffice-berechtigung-fehlt', schwere: 2 },
+          { id: 'kein-vergleich', wenn: f => ja(f['rechte.gelesen']) && num(f['rechte.kollegen']) < 2, befund: () => 'Kein Vergleich möglich: Im AD sind keine Kollegen mit gleicher Abteilung bzw. gleichem Vorgesetzten gepflegt', problem: 'berechtigung-fehlt-kollegen-vergleich', schwere: 1 },
+        ],
+        ohneBefund: ['berechtigung-fehlt-kollegen-vergleich', 'laufwerk-abteilungsordner-keine-berechtigung', 'vpn-fernzugriff-beantragen'],
+      },
       {
         id: 'ko-anmeldung', titel: 'Windows-Anmeldung klappt nicht / Konto gesperrt / Kennwort abgelaufen',
         beschreibung: '„Kennwort falsch“, obwohl es stimmt, „Konto gesperrt“, „Kennwort abgelaufen“, „Vertrauensstellung gestört“, „Kein Anmeldeserver“',

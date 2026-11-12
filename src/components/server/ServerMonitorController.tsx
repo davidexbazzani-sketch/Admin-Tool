@@ -21,9 +21,10 @@ import { runZertifikatsScanIfDue } from '../../services/serverZertifikate'
 import { useServerEreignisStore } from '../../store/serverEreignisStore'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 import { ipcRenderer } from '../../utils/ipc'
+import { ladeServerStumm, useServerStumm } from '../../services/serverStumm'
 
 function windowsHinweis(titel: string, text: string, tag: string) {
-  if (document.hasFocus()) return
+  if (document.hasFocus() || useServerStumm.getState().stumm) return
   try {
     const n = new Notification(titel, { body: text, tag })
     n.onclick = () => ipcRenderer('window:focus')
@@ -79,10 +80,12 @@ export default function ServerMonitorController() {
       // Nur aktuell konfigurierte Kacheln zählen — gelöschte Server nie als Alarm.
       const cfg = await loadServerConfig()
       const off = offlineHostsForTiles(status, cfg.tiles)
+      // Glocke durchgestrichen → keine Popups, kein Blinken, keine Windows-Hinweise für DIESEN Benutzer
+      const stumm = useServerStumm.getState().stumm
       setOffline(off)
-      setServerAlarmCount(off.length)
+      setServerAlarmCount(stumm ? 0 : off.length)
       const sig = off.slice().sort().join('|')
-      if (sig && sig !== lastSignature.current) setPopupOpen(true)
+      if (sig && sig !== lastSignature.current && !stumm) setPopupOpen(true)
       if (off.length === 0) setPopupOpen(false)
       lastSignature.current = sig
       // neue Ausfälle → Windows-Hinweis (wenn das Tool im Hintergrund ist)
@@ -96,7 +99,7 @@ export default function ServerMonitorController() {
         const offen = offeneNeustarts(ereignisse, gelesen)
         const neu = bekannteNeustarts.current ? offen.filter(e => !bekannteNeustarts.current!.has(e.id)) : []
         bekannteNeustarts.current = new Set(offen.map(e => e.id))
-        setOffeneNeustarts(offen)
+        setOffeneNeustarts(stumm ? [] : offen)
         if (neu.length) windowsHinweis(
           neu.length === 1
             ? (neu[0].typ === 'zertifikat' ? titelVon(neu[0]) : neu[0].typ === 'pruefung' ? `Server-Prüfung: Probleme auf ${neu[0].host}` : `${neustartUeberschrift(neu[0])}: ${neu[0].host}`)
@@ -114,6 +117,18 @@ export default function ServerMonitorController() {
       busy.current = false
     }
   }, [isAdmin, username, user?.displayName, setServerAlarmCount, setOffeneNeustarts])
+
+  // Glocke: beim Anmelden laden; Umschalten wirkt sofort (stumm → alles weg, wieder an → beim nächsten Lauf wieder da)
+  const stumm = useServerStumm(s => s.stumm)
+  useEffect(() => { if (username) void ladeServerStumm(username) }, [username])
+  const erstesMal = useRef(true)
+  useEffect(() => {
+    if (stumm) { setPopupOpen(false); setServerAlarmCount(0); setOffeneNeustarts([]); return }
+    if (erstesMal.current) { erstesMal.current = false; return }
+    // wieder laut: aktuellen Stand zeigen, aber keine Windows-Hinweise für Altes nachholen
+    lastSignature.current = ''
+    void tick()
+  }, [stumm]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // „Gelesen" → sofort aus dem Popup, Speichern im Hintergrund
   useEffect(() => {
@@ -138,7 +153,7 @@ export default function ServerMonitorController() {
     return () => { clearInterval(t); abmelden(); startAbbrechen() }
   }, [tick, username])
 
-  if (!popupOpen || offline.length === 0) return null
+  if (stumm || !popupOpen || offline.length === 0) return null
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4">

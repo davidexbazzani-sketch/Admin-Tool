@@ -3,13 +3,15 @@
 import { useEffect, useMemo, useState } from 'react'
 import { X, Wifi, AlertTriangle, ChevronDown, Info, FileDown, RotateCcw, Loader2, Check, ShieldAlert, Stethoscope, Clock } from 'lucide-react'
 import { analysiere } from './analyse'
-import { werteAus, diagnose, zeitleiste, offsetText, zeitKurz, lanZeitgleichMitWlan, GRUND_TEXT, UMFELD_TEXT, type TrennungDetail } from './ursachen'
+import { werteAus, diagnose, zeitleiste, offsetText, zeitKurz, lanZeitgleichMitWlan, aussetzerProtokoll, GRUND_TEXT, UMFELD_TEXT, type TrennungDetail, type AussetzerZeile } from './ursachen'
 import { applyNetFixes, restoreNetFixes, fixToWire, saveFixBackup, loadFixBackup, type NetFixBackup } from './applyFix'
+import { logDeviceAction } from '../services/deviceDossier'
 import { buildLaufPdf, buildAenderungsPdf, savePdf, sanitizeName, type AenderungsBericht, type AenderungsBerichtEintrag } from './pdf'
 import { useAuthStore } from '../store/authStore'
 import MonitorAngebot from '../monitoring/MonitorAngebot'
 import { VORSCHLAG_LAN, VORSCHLAG_WLAN } from '../monitoring/kontrollen'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
+import NetzTreiberBox from './NetzTreiberBox'
 import type { NetLauf, NetBefund } from './types'
 
 const GEWICHT_BADGE: Record<string, string> = {
@@ -30,6 +32,7 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
   const befunde = useMemo(() => analysiere(lauf), [lauf])
   const ausw = useMemo(() => werteAus(lauf), [lauf])
   const diag = useMemo(() => diagnose(lauf, ausw), [lauf, ausw])
+  const protokoll = useMemo(() => aussetzerProtokoll(lauf, ausw, befunde), [lauf, ausw, befunde])
   const [fensterIdx, setFensterIdx] = useState(0)
   const [leisteOffen, setLeisteOffen] = useState(false)
   const fixbar = befunde.filter(b => b.fixbar && b.fix)
@@ -71,6 +74,7 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
     setReport(rep)
     const bk: NetFixBackup = { host: lauf.pc, changedAt: rep.at, changedBy: by, entries: res.results.filter(r => r.ok), neustartNoetig: res.neustartNoetig }
     await saveFixBackup(bk); setBackup(bk)
+    void logDeviceAction(lauf.pc, undefined, [`Netzwerk-Diagnose: ${okN} von ${gewaehlt.length} Einstellung(en) geändert`, ...eintraege.map(e => `${e.ok ? '✓' : '✗'} ${e.titel}: ${e.alt} → ${e.neu}${e.fehler ? ` (${e.fehler})` : ''}`)].join('\n'), by, 'Netzwerk-Diagnose')
     setMsg(`${okN} von ${gewaehlt.length} Einstellung(en) geändert.` + (res.neustartNoetig ? ' Adapter-Einstellungen werden nach WLAN-Neuverbindung/Neustart wirksam.' : ''))
   }
 
@@ -80,6 +84,7 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
     const res = await restoreNetFixes(lauf.pc, backup.entries)
     setRestoring(false)
     if (!res.ok && res.error) { setMsg('Fehler beim Zurücksetzen: ' + res.error); return }
+    void logDeviceAction(lauf.pc, undefined, [`Netzwerk-Diagnose: Änderungen rückgängig gemacht (${res.results.filter(r => r.ok).length} von ${backup.entries.length})`, ...res.results.map(r => `${r.ok ? '✓' : '✗'} ${r.titel}: ${r.neu || ''}`)].join('\n'), by, 'Netzwerk-Diagnose')
     setMsg(`${res.results.filter(r => r.ok).length} von ${backup.entries.length} Einstellung(en) zurückgesetzt.`)
     setReport(null)
   }
@@ -199,6 +204,7 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
 
         {/* Befunde */}
         <div className="flex-1 overflow-auto px-5 py-3 space-y-2">
+          {protokoll.length > 0 && <AussetzerProtokoll zeilen={protokoll} />}
           {diag && (
             <div className="rounded-lg border-2 border-primary/40 bg-primary/5 p-3 space-y-2" data-diagnose>
               <div className="flex items-start gap-2">
@@ -220,6 +226,7 @@ export default function NetAnalyse({ lauf, onClose }: { lauf: NetLauf; onClose: 
               )}
             </div>
           )}
+          {lauf.pc && <NetzTreiberBox host={lauf.pc} by={by} />}
           {tiefe && (tiefe.umfeld?.length ?? 0) > 0 && (
             <div className="rounded-lg border border-border bg-card p-3" data-zeitleiste>
               <button onClick={() => setLeisteOffen(o => !o)} className="w-full flex items-center gap-1.5 text-xs font-semibold text-foreground">
@@ -346,6 +353,40 @@ function TrennungZeile({ e }: { e: TrennungDetail }) {
   )
 }
 
+/** Aussetzer-Protokoll: an welchem Tag, um wie viel Uhr, wieso — und was dagegen hilft. */
+function AussetzerProtokoll({ zeilen }: { zeilen: AussetzerZeile[] }) {
+  const [nurEcht, setNurEcht] = useState(false)
+  const echt = zeilen.filter(z => !z.normal)
+  const sicht = nurEcht ? echt : zeilen
+  return (
+    <div className="rounded-lg border border-border bg-card p-3 space-y-2" data-aussetzer-protokoll>
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="text-xs font-semibold text-foreground">Aussetzer-Protokoll (14 Tage)</span>
+        <span className="text-[11px] text-muted-foreground">{zeilen.length} Trennung{zeilen.length === 1 ? '' : 'en'} · davon <b className="text-foreground">{echt.length} während der Arbeit</b> · {zeilen.length - echt.length} beim Standby bzw. gewollt</span>
+        <label className="ml-auto inline-flex items-center gap-1 text-[11px] text-muted-foreground cursor-pointer"><input type="checkbox" checked={nurEcht} onChange={e => setNurEcht(e.target.checked)} className="accent-primary" />nur Aussetzer während der Arbeit</label>
+      </div>
+      <div className="max-h-64 overflow-auto rounded border border-border/60">
+        <table className="w-full text-[11px]">
+          <thead className="bg-muted/40 text-muted-foreground sticky top-0"><tr className="text-left"><th className="px-2 py-1 font-normal">Tag</th><th className="px-2 py-1 font-normal">Uhrzeit</th><th className="px-2 py-1 font-normal">Netz</th><th className="px-2 py-1 font-normal">Wieso</th><th className="px-2 py-1 font-normal">Wieder verbunden</th><th className="px-2 py-1 font-normal">Lösung</th></tr></thead>
+          <tbody>
+            {sicht.map((z, i) => (
+              <tr key={i} className={`border-t border-border/40 align-top ${z.normal ? 'opacity-70' : ''}`} data-aussetzer={z.art}>
+                <td className="px-2 py-1 whitespace-nowrap text-foreground">{z.tag}</td>
+                <td className="px-2 py-1 whitespace-nowrap font-mono text-foreground">{z.uhr}</td>
+                <td className="px-2 py-1"><span className={`px-1.5 py-px rounded-full border text-[10px] ${z.verbindung === 'LAN' ? 'border-emerald-500/40 text-emerald-500' : 'border-sky-500/40 text-sky-500'}`}>{z.verbindung}</span></td>
+                <td className="px-2 py-1 text-foreground">{z.wieso}{!z.untersucht && z.verbindung === 'WLAN' && z.art !== 'anderesNetz' && <span className="text-muted-foreground"> (nur Grund laut Windows)</span>}</td>
+                <td className={`px-2 py-1 whitespace-nowrap ${/von Hand|nicht wieder/.test(z.wieder) && !z.normal ? 'text-amber-500' : 'text-muted-foreground'}`}>{z.wieder || '—'}</td>
+                <td className={`px-2 py-1 ${/^Im Tool/.test(z.loesung) ? 'text-emerald-500 font-semibold' : 'text-muted-foreground'}`}>{z.loesung}</td>
+              </tr>
+            ))}
+            {!sicht.length && <tr><td colSpan={6} className="px-2 py-3 text-center text-muted-foreground">Kein Aussetzer während der Arbeit.</td></tr>}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
 function Kv({ label, value }: { label: string; value?: string | null }) {
   return <div className="min-w-0"><span className="text-muted-foreground">{label}: </span><span className="text-foreground font-mono break-words">{value || '—'}</span></div>
 }
@@ -372,6 +413,7 @@ function BefundKarte({ b, checked, onCheck, infoOn, onInfo, ausfOn, onAusf }: {
             <button onClick={onInfo} className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground"><Info size={12} />Problem & Wirkung</button>
             {b.erklaerung && <button onClick={onAusf} className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground"><ChevronDown size={12} className={ausfOn ? 'rotate-180 transition-transform' : 'transition-transform'} />Ausführliche Erklärung</button>}
           </div>
+          {b.loesung && <div className="mt-1.5 text-xs rounded px-2 py-1 border border-emerald-500/30 bg-emerald-500/5 text-foreground" data-loesung><b className="text-emerald-500">Lösung:</b> {b.loesung}</div>}
           {infoOn && <div className="mt-1.5 text-xs text-foreground/90 bg-muted/20 rounded p-2">{b.wirkung}{b.hinweis ? ` — ${b.hinweis}` : ''}</div>}
           {ausfOn && b.erklaerung && (
             <div className="mt-1.5 text-xs bg-muted/20 rounded p-2 space-y-1">

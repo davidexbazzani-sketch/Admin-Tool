@@ -140,5 +140,6 @@ export async function runNetScan(
     ok: true,
     daten,
   }
+  void import('../services/aktivitaet').then(m => m.protokolliere({ art: 'manuell', quelle: 'Netzwerk-Diagnose', aktion: 'Diagnose ausgeführt (nur gelesen)', ziel: String(h).toUpperCase(), benutzer: by })).catch(() => {})
   return { ok: true, lauf }
 }

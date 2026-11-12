@@ -89,6 +89,23 @@ export function modelCost(model: string): number | null {
   return c === undefined ? null : c
 }
 
+/**
+ * „Wer bezahlt?" = SKF → das Gerät ist SKF-Eigentum; dafür wird nichts mehr gezahlt.
+ * Gleiche Regel wie das Inventur-Label „SKF Eigentum" (services/inventurEigentum.ts).
+ */
+export function istSkfEigentum(assetOwnership: string | null | undefined): boolean {
+  return /skf/i.test(assetOwnership || '')
+}
+
+/**
+ * Monatliche Kosten EINES Geräts: nach Model-Typ — SKF-Eigentum wird nicht mit einem
+ * Preis erfasst (null). Überall dort verwenden, wo Kosten je Gerät gezählt werden.
+ */
+export function deviceCost(d: Pick<EndpointDevice, 'model' | 'assetOwnership'>): number | null {
+  if (istSkfEigentum(d.assetOwnership)) return null
+  return modelCost(d.model)
+}
+
 /** Anzeigetext des Model-Typs: "Laptop Standard" bzw. "—" wenn unbekannt. */
 export function modelTypeDisplay(model: string): string {
   return classifyModel(model) || '—'

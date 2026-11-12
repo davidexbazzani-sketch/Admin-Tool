@@ -10,6 +10,8 @@ const PROG: PaBereich = 'Weitere Programme'
 const NETZ: PaBereich = 'Netzwerk & Internet'
 const VPN: PaBereich = 'VPN & Zscaler'
 const UPD: PaBereich = 'Updates & Software'
+const LW: PaBereich = 'Netzlaufwerke & Dateien'
+const KONTO: PaBereich = 'Anmeldung & Konto'
 
 export const PROBLEME_TICKETS5: PaProblem[] = [
   // ══ SAP · Kinit ═════════════════════════════════════════════════════════════
@@ -74,7 +76,7 @@ export const PROBLEME_TICKETS5: PaProblem[] = [
       'Coscom ist auf dem neuen PC noch nicht verbunden.',
     ],
     ursache: 'Coscom wird über die Softwareverteilung installiert; der Zugang (Benutzer in Coscom) und die Lizenz (Dongle bzw. Lizenzserver) werden getrennt eingerichtet.',
-    loesung: 'Die Prüfung zeigt, ob Coscom und die Lizenzsoftware schon installiert sind und der Dongle erkannt wird. Fehlt Coscom, über die Software-Kachel bzw. das Softwarecenter installieren; das Coscom-Konto legt der Coscom-Key-User an.',
+    loesung: 'Die Prüfung zeigt, ob Coscom und die Lizenzsoftware schon installiert sind und der Dongle erkannt wird. Fehlt Coscom, über die Software-Kachel bzw. das Unternehmensportal (Intune) installieren; das Coscom-Konto legt der Coscom-Key-User an.',
     schritte: [
       { aktion: 'coscom-pruefen' },
       { aktion: 'software-suchen', param: 'Coscom' },
@@ -205,7 +207,7 @@ export const PROBLEME_TICKETS5: PaProblem[] = [
       'Ticket: HomeOffice Remote Berechtigung beantragt.',
       'ZPA Fileshare Zugang einrichten.',
     ],
-    ursache: 'Aus dem Homeoffice gehen interne Laufwerke, Anwendungen und PCs über Zscaler Private Access (ZPA). Dafür braucht der Benutzer die passende ZPA-Rolle bzw. die Anwendung muss in ZPA freigeschaltet sein.',
+    ursache: 'Aus dem Homeoffice gehen interne Laufwerke, Anwendungen und PCs über Zscaler Private Access (ZPA). Dafür braucht der Benutzer immer die Grundrolle „Remote Access“ (ZPA Client Role, AD-Gruppe Azure_AD_SSO_Akamai_EAA_Client) und zusätzlich je Anwendung die passende ZPA-Rolle (z. B. SAP: „Marine Production“ + „Marine Non Production“, enaio: „Marine enaio“, Babtec: „Marine Babtec“, Laufwerke: „Marine Fileservers“).',
     loesung: 'Der Zscaler-Zustand wird geprüft (angemeldet, verbunden). Fehlt die Berechtigung, wird sie über ServiceNow beantragt (ZPA Client Role). Danach Zscaler neu anmelden.',
     schritte: [
       { aktion: 'zscaler-status' },
@@ -227,8 +229,8 @@ export const PROBLEME_TICKETS5: PaProblem[] = [
       'Neuer Mitarbeiter: enaio geht nur im Büro.',
       'Ticket: enaio im Homeoffice – ZPA-Rolle Marine enaio beantragt.',
     ],
-    ursache: 'Im Homeoffice erreicht enaio seinen Server nur über Zscaler Private Access. Dafür braucht der Benutzer die ZPA-Rolle „Marine enaio“; fehlt sie oder ist Zscaler nicht angemeldet, gibt es keine Verbindung.',
-    loesung: 'Zscaler-Zustand und Verbindung werden geprüft und die Zscaler-App geöffnet. Ist Zscaler angemeldet und enaio geht trotzdem nicht, fehlt die Rolle „Marine enaio“ — im Antrag „ZPA Client Role“ nachsehen und beantragen.',
+    ursache: 'Im Homeoffice erreicht enaio seinen Server nur über Zscaler Private Access. Dafür braucht der Benutzer die Grundrolle „Remote Access“ (ZPA Client Role, AD-Gruppe Azure_AD_SSO_Akamai_EAA_Client) UND die ZPA-Rolle „Marine enaio“; fehlt eine davon oder ist Zscaler nicht angemeldet, gibt es keine Verbindung.',
+    loesung: 'Zscaler-Zustand und Verbindung werden geprüft und die Zscaler-App geöffnet. Ist Zscaler angemeldet und enaio geht trotzdem nicht, fehlt die Grundrolle „Remote Access“ oder die Rolle „Marine enaio“ — im Antrag „ZPA Client Role“ nachsehen und beantragen.',
     schritte: [
       { aktion: 'zscaler-status' },
       { aktion: 'net-test' },
@@ -251,8 +253,8 @@ export const PROBLEME_TICKETS5: PaProblem[] = [
       'Ticket: Babtec Zugang Problem – Homeoffice.',
       'Neuer Mitarbeiter braucht Babtec im Homeoffice.',
     ],
-    ursache: 'Im Homeoffice erreicht Babtec seinen Server nur über Zscaler Private Access. Dafür braucht der Benutzer die ZPA-Rolle „Marine Babtec“; fehlt sie oder ist Zscaler nicht angemeldet, gibt es keine Verbindung.',
-    loesung: 'Zscaler-Zustand und Verbindung werden geprüft und die Zscaler-App geöffnet. Ist Zscaler angemeldet und Babtec geht trotzdem nicht, fehlt die Rolle „Marine Babtec“ — im Antrag „ZPA Client Role“ nachsehen und beantragen.',
+    ursache: 'Im Homeoffice erreicht Babtec seinen Server nur über Zscaler Private Access. Dafür braucht der Benutzer die Grundrolle „Remote Access“ (ZPA Client Role, AD-Gruppe Azure_AD_SSO_Akamai_EAA_Client) UND die ZPA-Rolle „Marine Babtec“; fehlt eine davon oder ist Zscaler nicht angemeldet, gibt es keine Verbindung.',
+    loesung: 'Zscaler-Zustand und Verbindung werden geprüft und die Zscaler-App geöffnet. Ist Zscaler angemeldet und Babtec geht trotzdem nicht, fehlt die Grundrolle „Remote Access“ oder die Rolle „Marine Babtec“ — im Antrag „ZPA Client Role“ nachsehen und beantragen.',
     schritte: [
       { aktion: 'zscaler-status' },
       { aktion: 'net-test' },
@@ -305,11 +307,11 @@ export const PROBLEME_TICKETS5: PaProblem[] = [
       'PDF24 bzw. PDF-XChange installiert.',
     ],
     frage: { label: 'Welches Programm?', platzhalter: 'z. B. Babtec, Corel, Snagit', vorlagen: ['Babtec', 'Corel', 'Snagit', 'PDF-XChange', 'FSPP'] },
-    ursache: 'Standardprogramme kommen über das Softwarecenter bzw. das Unternehmensportal, Sonderprogramme über die Software-Kachel des Tools oder eine Bestellung (Lizenz).',
-    loesung: 'Erst wird geprüft, ob das Programm schon (in einer anderen Version) installiert ist. Danach über die Software-Kachel installieren bzw. im Softwarecenter anbieten; braucht es eine Lizenz, über ServiceNow bestellen.',
+    ursache: 'Standardprogramme kommen über das Unternehmensportal (Intune) bzw. das Unternehmensportal, Sonderprogramme über die Software-Kachel des Tools oder eine Bestellung (Lizenz).',
+    loesung: 'Erst wird geprüft, ob das Programm schon (in einer anderen Version) installiert ist. Danach über die Software-Kachel installieren bzw. im Unternehmensportal anbieten; braucht es eine Lizenz, über ServiceNow bestellen.',
     schritte: [
       { aktion: 'software-suchen', param: '{eingabe}' },
-      { aktion: 'sccm-richtlinie', optional: true, titel: 'Softwarecenter aktualisieren' },
+      { aktion: 'intune-apps-sync', optional: true, titel: 'Unternehmensportal (Intune) aktualisieren' },
       { aktion: 'werkzeug:software' },
     ],
     hinweis: 'Programme mit Lizenz (Adobe Pro, Corel, Visio …) vorher über ServiceNow bestellen bzw. die Lizenz klären.',
@@ -337,5 +339,88 @@ export const PROBLEME_TICKETS5: PaProblem[] = [
     ],
     hinweis: 'Vor dem Neuaufsetzen: Fachprogramm-Ordner (EuroPar, Coscom), PST-Archive und Browser-Favoriten sichern. Das Tool setzt keinen PC neu auf.',
     servicenow: { name: 'Reinstall PC with Windows 10 (Wipe and load)', wozu: 'Neuaufsetzen beantragen' },
+  },
+
+  // ══ Berechtigungen: häufigste Ursachen laut Field Service ═══════════════════
+  {
+    id: 'laufwerk-homeoffice-berechtigung-fehlt',
+    titel: 'Laufwerke gehen im Homeoffice nicht – ZPA-Rolle „Marine Fileservers“ fehlt',
+    bereich: LW,
+    stichworte: ['marine fileservers', 'marine fileserver', 'fileserver homeoffice', 'laufwerk homeoffice berechtigung', 'homeoffice laufwerk rolle', 'zpa fileserver', 'eaa file servers', 'i laufwerk zuhause beantragen', 'laufwerke nur im buero', 'homeoffice keine laufwerke'],
+    beschreibungen: [
+      'Im Homeoffice sehe ich das Laufwerk I: nicht, im Büro geht alles.',
+      'Von zu Hause komme ich nicht an unseren Abteilungsordner.',
+      'Zscaler ist verbunden, aber die Netzlaufwerke bleiben rot.',
+      'Neuer Mitarbeiter: Laufwerke gehen nur in der Firma, nicht zu Hause.',
+      'Ticket: ZPA-Rolle Marine Fileservers beantragt.',
+    ],
+    ursache: 'Im Homeoffice laufen die Netzlaufwerke über Zscaler Private Access. Dafür braucht der Benutzer die ZPA-Rolle „Marine Fileservers“ (AD-Gruppe EAA_File_Servers_Marine_Prod). Fehlt sie, bleiben I: und die Abteilungslaufwerke zu Hause getrennt, obwohl Zscaler angemeldet ist – im Büro geht alles. Das ist bei SKF Marine die häufigste Ursache.',
+    loesung: 'Im AD wird geprüft, ob der Benutzer die Rolle hat. Fehlt sie, wird sie in ServiceNow („ZPA Client Role“) beantragt. Nach der Zuweisung Zscaler ab- und wieder anmelden (bzw. PC neu starten) und die Laufwerke neu verbinden.',
+    schritte: [
+      { aktion: 'zpa-rollen-pruefen', param: 'Fileserver', titel: 'Homeoffice-Berechtigung für die Marine-Fileserver im AD prüfen (EAA_File_Servers_Marine_Prod)' },
+      { aktion: 'zscaler-status' },
+      { aktion: 'lw-neu-verbinden', optional: true, titel: 'Nach Zuweisung der Rolle: Laufwerke neu verbinden' },
+    ],
+    hinweis: 'Benötigte ZPA-Rolle: „Marine Fileservers“ (EAA_File_Servers_Marine_Prod). Die Rolle vergibt das Zscaler-/Netzwerkteam auf Antrag – das Tool ändert keine Berechtigungen. Hat der Benutzer die Rolle schon, liegt es am Zscaler-Zustand („Netzlaufwerke im Homeoffice nicht erreichbar“).',
+    servicenow: { name: 'ZPA Client Role: Request or Check or Change Remote Access for a User', wozu: 'Rolle „Marine Fileservers“ beantragen bzw. prüfen' },
+  },
+  {
+    id: 'laufwerk-abteilungsordner-keine-berechtigung',
+    titel: 'Kein Zugriff auf den Abteilungsordner – Berechtigung fehlt (Vergleich mit den Kollegen)',
+    bereich: LW,
+    stichworte: ['abteilungsordner', 'abteilungsordner kein zugriff', 'abteilungsordner fehlt', 'ordner der abteilung', 'kollegen haben zugriff', 'kollege kann ich nicht', 'ordner nicht sichtbar', 'ordner leer berechtigung', 'neuer mitarbeiter ordner', 'gleiche rechte wie kollege'],
+    beschreibungen: [
+      'Ich komme nicht in unseren Abteilungsordner, die Kollegen schon.',
+      'Den Ordner meiner Abteilung sehe ich auf I: gar nicht.',
+      'Neue Mitarbeiterin hat keinen Zugriff auf den Ordner ihrer Abteilung.',
+      'Zugriff verweigert auf den Ordner Einkauf, auch im Büro.',
+      'Ich brauche dieselben Ordnerrechte wie mein Kollege.',
+    ],
+    ursache: 'Ordner auf W3172 sind über AD-Gruppen freigegeben („RW/RO access to \\\\W3172\\SKF Marine\\…“). Fehlt dem Benutzer die Gruppe – häufig nach Abteilungswechsel, bei neuen Mitarbeitern oder nach langer Abwesenheit –, sieht er den Ordner nicht (zugriffsbasierte Aufzählung) oder bekommt „Zugriff verweigert“. Das gilt im Büro genauso wie im Homeoffice.',
+    loesung: 'Der Abgleich im AD zeigt, welche Ordnerberechtigungen die Abteilungskollegen haben und dem Benutzer fehlen – mit Gruppenname für den Antrag. Optional wird ein konkreter Pfad mit dem Konto des Benutzers getestet (bekannte Gruppe, aber Anmeldung noch alt → ab- und wieder anmelden).',
+    schritte: [
+      { aktion: 'rechte-kollegen-vergleich' },
+      { aktion: 'rechte-pruefen', param: '{eingabe}', optional: true, titel: 'Konkreten Ordner mit dem Konto des Benutzers testen' },
+      { aktion: 'kerberos-erneuern', optional: true, titel: 'Wurde die Gruppe gerade vergeben: Anmeldetickets erneuern' },
+    ],
+    frage: { label: 'Pfad des Ordners (optional)', platzhalter: 'z. B. I:\\Einkauf' },
+    hinweis: 'Rechte vergibt DXC auf Antrag des Ordnerverantwortlichen bzw. der Führungskraft – das Tool ändert keine Berechtigungen. Im Homeoffice zusätzlich die ZPA-Rolle „Marine Fileservers“ prüfen.',
+    servicenow: { name: 'Fileshare Access Request', wozu: 'Ordnerzugriff in ServiceNow beantragen' },
+  },
+  {
+    id: 'berechtigung-fehlt-kollegen-vergleich',
+    titel: 'Kollegen können es, ich nicht – fehlende Berechtigung finden (Vergleich aller AD-Gruppen)',
+    bereich: KONTO,
+    stichworte: ['berechtigung fehlt', 'keine berechtigung', 'kollege kann es', 'kollegen koennen', 'bei kollegen geht es', 'nur bei mir nicht', 'fehlende rechte', 'rechte fehlen', 'ad gruppe fehlt', 'gruppenmitgliedschaft fehlt', 'zugriff fehlt'],
+    beschreibungen: [
+      'Bei meinen Kollegen geht das Programm, bei mir kommt „keine Berechtigung“.',
+      'Ich habe nicht dieselben Rechte wie mein Kollege.',
+      'Mir fehlt irgendeine Berechtigung, aber welche?',
+      'Seit dem Abteilungswechsel geht einiges nicht mehr.',
+      'Kollege sieht das Postfach, ich nicht.',
+    ],
+    ursache: 'Berechtigungen hängen an AD-Gruppen (Ordner, Postfächer, Lizenzen, Software, Homeoffice-Rollen, Fachanwendungen). Fehlt dem Benutzer eine Gruppe, die seine Kollegen haben, gehen genau diese Dinge nicht – häufig nach Abteilungswechsel oder wenn bei neuen Mitarbeitern nicht alles bestellt wurde.',
+    loesung: 'Der Vergleich im AD zeigt jede Gruppe, die die meisten Kollegen haben und dem Benutzer fehlt – mit Art, Fehlerbild und dem passenden ServiceNow-Antrag. Die Führungskraft bzw. der Gruppenverantwortliche bestellt sie; danach ab- und wieder anmelden.',
+    schritte: [{ aktion: 'rechte-alle-vergleich' }, { aktion: 'zpa-rollen-pruefen', optional: true, titel: 'Homeoffice-Rollen (ZPA) zusätzlich einzeln anzeigen' }],
+    hinweis: 'Das Tool vergibt keine Berechtigungen. Nicht jede Abweichung ist ein Fehler (andere Aufgabe, andere Rolle) – entscheidend ist, ob das Fehlerbild zum Problem passt.',
+    servicenow: { name: 'Manage My AD Security Groups', wozu: 'Gruppenverantwortliche: Mitglieder einer AD-Gruppe verwalten' },
+  },
+  {
+    id: 'neuer-mitarbeiter-berechtigungen-pruefen',
+    titel: 'Neuer Mitarbeiter: Wurden alle Berechtigungen bestellt? (Abgleich mit den Kollegen)',
+    bereich: KONTO,
+    stichworte: ['neuer mitarbeiter berechtigungen', 'neue mitarbeiterin rechte', 'onboarding berechtigungen', 'berechtigungen vergessen', 'manager hat vergessen', 'rechte nicht bestellt', 'neuer kollege kein zugriff', 'erster arbeitstag kein zugriff', 'neueinstellung rechte', 'onboarding rechte'],
+    beschreibungen: [
+      'Neuer Mitarbeiter kommt nirgends rein – wurden die Berechtigungen bestellt?',
+      'Die Führungskraft hat beim Onboarding die Rechte vergessen.',
+      'Neue Kollegin sieht die Abteilungslaufwerke und das Gruppenpostfach nicht.',
+      'Am ersten Tag geht SAP und enaio nicht.',
+      'Bitte prüfen, ob der Neue dieselben Rechte hat wie das Team.',
+    ],
+    ursache: 'Bei neuen Mitarbeitern bestellt die Führungskraft Geräte und Software, vergisst aber oft die Berechtigungen (Abteilungsordner, Gruppenpostfach, Homeoffice-Rollen, Fachanwendungen). Dann fehlen dem Neuen Gruppen, die alle Kollegen haben.',
+    loesung: 'Der Abgleich im AD listet alle Gruppen, die das Team hat und der neue Mitarbeiter noch nicht – je mit Fehlerbild und ServiceNow-Antrag, damit die Führungskraft gezielt nachbestellen kann.',
+    schritte: [{ aktion: 'rechte-alle-vergleich' }, { aktion: 'zpa-rollen-pruefen', titel: 'Homeoffice-Rollen (ZPA) des neuen Mitarbeiters' }],
+    hinweis: 'Das Tool vergibt keine Berechtigungen. Die Liste an die Führungskraft geben; sie bestellt die fehlenden Gruppen in ServiceNow.',
+    servicenow: { name: 'IT Onboarding of Personal Accounts', wozu: 'Onboarding-Antrag (Konto) – fehlende Berechtigungen gezielt nachbestellen' },
   },
 ]

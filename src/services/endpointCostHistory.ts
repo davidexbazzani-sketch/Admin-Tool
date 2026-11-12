@@ -8,7 +8,7 @@
 // Speicher: endpoint-devices/kosten_verlauf.json (geteilt für alle App-User)
 
 import { api } from '../electronAPI'
-import { loadDevices, classifyModel, modelCost, type EndpointDevice } from './endpointDevices'
+import { loadDevices, classifyModel, deviceCost, type EndpointDevice } from './endpointDevices'
 
 export interface KostenPunkt {
   woche: string                 // ISO-Kalenderwoche, z. B. "2026-W44"
@@ -43,7 +43,7 @@ export function berechneKosten(devices: EndpointDevice[]): Pick<KostenPunkt, 'mo
   let monatlich = 0, geraete = 0
   const jeTyp: KostenPunkt['jeTyp'] = {}
   for (const d of devices) {
-    const c = modelCost(d.model)
+    const c = deviceCost(d)   // SKF-Eigentum kostet nichts mehr
     if (c === null) continue
     monatlich += c; geraete++
     const typ = classifyModel(d.model)

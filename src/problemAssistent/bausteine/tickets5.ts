@@ -4,6 +4,9 @@
 // Remotedesktop-Zugang. Alles wirkt NUR auf dem Ziel-PC — nie auf SAP-Systeme, Lizenzserver oder Freigaben.
 
 import type { PaAktion } from '../motor'
+import { SONDEN_LAUFWERKE } from '../diagnose/themen/laufwerke'
+import { SONDEN_GEMEINSAM } from '../diagnose/themen/gemeinsam'
+import { berPsAusgemustert, berPsTabelle } from '../berechtigungen'
 
 const A = (a: PaAktion): PaAktion => a
 
@@ -203,13 +206,16 @@ $esc = $dn.Replace('\', '\5c').Replace('(', '\28').Replace(')', '\29').Replace('
 foreach ($dm in $doms) {
   try {
     $sg = New-Object System.DirectoryServices.DirectorySearcher([ADSI]('LDAP://' + $dm))
-    $sg.Filter = '(&(objectCategory=group)(|(cn=EAA_*)(cn=Azure_AD_SSO_Akamai_EAA_Client))(member:1.2.840.113556.1.4.1941:=' + $esc + '))'
+    $sg.Filter = '(&(objectCategory=group)(|(cn=EAA_*)(cn=Azure_AD_SSO_Akamai_EAA_Client)(cn=Azure_AD_SSO_Akamai_EAA_3Pext))(member:1.2.840.113556.1.4.1941:=' + $esc + '))'
     $sg.PageSize = 500; [void]$sg.PropertiesToLoad.Add('cn')
     foreach ($g in $sg.FindAll()) { [void]$gruppen.Add([string]$g.Properties['cn'][0]) }
   } catch {}
 }
 Zeile ('Benutzer: ' + $sam + ' · ' + @($gruppen | Where-Object { $_ -like 'EAA_*' }).Count + ' Fernzugriff-Gruppe(n)')
-Zeile ('Fernzugriff über SKF-PC (Grundrolle): ' + $(if ($gruppen.Contains('Azure_AD_SSO_Akamai_EAA_Client')) { 'vorhanden' } else { 'nicht gefunden – ggf. „ZPA Client Role“ beantragen' }))
+# Grundrolle „Remote Access“ (ZPA Client Role) ist PFLICHT – ohne sie geht im Homeoffice keine einzige Anwendung, auch mit EAA_-Gruppen nicht
+$basis = $gruppen.Contains('Azure_AD_SSO_Akamai_EAA_Client') -or $gruppen.Contains('Azure_AD_SSO_Akamai_EAA_3Pext')
+$basisText = 'Grundrolle Fernzugriff „Remote Access“ (Azure_AD_SSO_Akamai_EAA_Client' + $(if ($gruppen.Contains('Azure_AD_SSO_Akamai_EAA_3Pext')) { ' bzw. _3Pext für Externe' } else { '' }) + ')'
+Zeile ($(if ($basis) { '✓ ' } else { '✗ ' }) + $basisText + $(if ($basis) { '' } else { ' – FEHLT: ohne Grundrolle geht im Homeoffice KEINE Anwendung → „ZPA Client Role“ beantragen' }))
 $fehlt = @()
 foreach ($k in $karte.Keys) {
   $hat = @($karte[$k] | Where-Object { $gruppen.Contains($_) }).Count -gt 0
@@ -221,8 +227,9 @@ if ($wunsch) {
   $betroffen = @($karte.Keys | Where-Object { $_.ToLower().Contains($wunsch) -or (($karte[$_] -join ' ').ToLower().Contains($wunsch)) })
   if (-not $betroffen.Count) { Zeile ('Zum Programm „' + $P + '“ ist keine Marine-Fernzugriff-Gruppe bekannt.') }
   else {
-    $los = @($betroffen | Where-Object { $fehlt -contains $_ })
-    if ($los.Count) { Zeile ('FEHLT für ' + $P + ': ' + (($los | ForEach-Object { $_ + ' (' + ($karte[$_] -join ' / ') + ')' }) -join ', ') + ' – im Antrag „ZPA Client Role“ bzw. „ZPA: Check which Applications …“ prüfen und beantragen.') }
+    $los = @($betroffen | Where-Object { $fehlt -contains $_ } | ForEach-Object { $_ + ' (' + ($karte[$_] -join ' / ') + ')' })
+    if (-not $basis) { $los = @($basisText) + $los }
+    if ($los.Count) { Zeile ('FEHLT für ' + $P + ': ' + ($los -join ', ') + ' – im Antrag „ZPA Client Role“ bzw. „ZPA: Check which Applications …“ prüfen und beantragen.') }
     else { Zeile ('Für ' + $P + ' sind alle nötigen Fernzugriff-Gruppen vorhanden – am Recht liegt es nicht (Zscaler-Anmeldung prüfen).') }
   }
 }
@@ -332,7 +339,7 @@ $pf86 = [Environment]::GetEnvironmentVariable('ProgramFiles(x86)')
 $acro = @((Join-Path $env:ProgramFiles 'Adobe\Acrobat DC\Acrobat\Acrobat.exe'), (Join-Path $pf86 'Adobe\Acrobat DC\Acrobat\Acrobat.exe'), (Join-Path $pf86 'Adobe\Acrobat Reader DC\Reader\AcroRd32.exe'), (Join-Path $env:ProgramFiles 'Adobe\Acrobat Reader DC\Reader\AcroRd32.exe')) | Where-Object { $_ -and (Test-Path -LiteralPath $_) } | Select-Object -First 1
 Zeile ('Adobe: ' + $(if ($acro) { $acro } else { 'NICHT installiert' }))
 Zeile ('PDF öffnet beim Benutzer mit: ' + $(if ($wahl) { $wahl } else { '(keine eigene Wahl – Windows-Standard bzw. Nachfrage)' }))
-if (-not $acro) { throw 'Adobe Acrobat/Reader ist nicht installiert – zuerst über die Software-Kachel bzw. das Softwarecenter installieren.' }
+if (-not $acro) { throw 'Adobe Acrobat/Reader ist nicht installiert – zuerst über die Software-Kachel bzw. das Unternehmensportal (Intune) installieren.' }
 if ($wahl -match '^(Acrobat|AcroExch)\.') { Zeile 'Adobe ist bereits Standard für PDF – an der Zuordnung liegt es nicht.' }
 else {
   $f = Join-Path $env:TEMP 'IT-Admin-Tool-PDF-Standard.pdf'
@@ -362,6 +369,42 @@ Zeile ('Dienst Remotedesktopdienste: ' + $(if ($sv) { [string]$sv.Status + ' (' 
 $mit = @(Get-LocalGroupMember -SID 'S-1-5-32-555' -EA SilentlyContinue | ForEach-Object { [string]$_.Name })
 Zeile ('Remotedesktopbenutzer: ' + $(if ($mit.Count) { $mit -join ', ' } else { 'niemand (nur Administratoren dürfen)' }))
 Zeile ('Verbinden mit: mstsc /v:' + $env:COMPUTERNAME)
+`,
+  }),
+
+  // ══ Ordnerrechte mit den Kollegen vergleichen (gleiche Prüfung wie die Diagnose-Sonde „lwr“) ═══════
+  A({ id: 'rechte-kollegen-vergleich', titel: 'Ordnerrechte auf W3172 mit den Abteilungskollegen vergleichen (AD)', modus: 'lokal', risiko: 'lesen', timeoutMs: 150000,
+    beschreibung: 'Liest vom Admin-PC aus im AD alle Freigabegruppen von W3172 (Beschreibung „… access to \\\\W3172\\…“) und vergleicht die des angemeldeten Benutzers mit seinen Abteilungskollegen (sonst: gleicher Vorgesetzter). Zeigt, welche Ordnerberechtigung die meisten Kollegen haben und ihm fehlt – samt Gruppe für den Antrag. Braucht keinen Pfad, nur lesend – Berechtigungen ändert das Tool nie.',
+    ps: String.raw`
+$dgS = 'lwr'
+function Fakt([string]$n, $v) { }
+function Punkt([string]$t, [string]$st, [string]$x) { $z = switch ($st) { 'ok' { '✓ ' } 'fehler' { '✗ ' } 'warn' { '⚠ ' } default { '· ' } }; Zeile ($z + $t + $(if ($x) { ': ' + $x } else { '' })) }
+` + (SONDEN_LAUFWERKE.find(s => s.id === 'lwr')?.ps ?? "throw 'Prüfung fehlt'") + String.raw`
+Zeile 'Hinweis: Fehlende Rechte beantragt der Ordnerverantwortliche bzw. die Führungskraft in ServiceNow („Fileshare Access Request“) – Gruppe aus der Liste oben angeben.'
+`,
+  }),
+
+  // ══ ALLE Berechtigungen mit den Kollegen vergleichen + Antrag/Fehlerbild je Gruppe ═══════════════
+  A({ id: 'rechte-alle-vergleich', titel: 'Alle Berechtigungen (AD-Gruppen) mit den Abteilungskollegen vergleichen – mit Antrag und Fehlerbild', modus: 'lokal', risiko: 'lesen', timeoutMs: 150000,
+    beschreibung: 'Liest vom Admin-PC aus im AD alle Sicherheitsgruppen des Benutzers und seiner Abteilungskollegen (sonst: gleicher Vorgesetzter). Zeigt jede Gruppe, die die meisten Kollegen haben und ihm fehlt – mit Art (Homeoffice-Rolle, Ordner, Postfach, Lizenz, Adminrechte, Software …), dem Fehlerbild ohne diese Berechtigung und dem passenden ServiceNow-Antrag. Ideal auch für neue Mitarbeiter („wurde alles bestellt?“). Nur lesend – das Tool vergibt keine Berechtigungen.',
+    ps: String.raw`
+$dgS = 'rechte'
+function Fakt([string]$n, $v) { }
+function Punkt([string]$t, [string]$st, [string]$x) { if ($t -like 'Fehlt: *') { return }; $z = switch ($st) { 'ok' { '✓ ' } 'fehler' { '✗ ' } 'warn' { '⚠ ' } default { '· ' } }; Zeile ($z + $t + $(if ($x) { ': ' + $x } else { '' })) }
+` + (SONDEN_GEMEINSAM.find(s => s.id === 'rechte')?.ps ?? "throw 'Prüfung fehlt'") + String.raw`
+$berTab = @((ConvertFrom-Json '` + berPsTabelle().replace(/'/g, "''") + String.raw`') | ForEach-Object { $_ })
+function Einordnen([string]$cn, [string]$desc) { foreach ($t in $berTab) { if (($t.n -and $cn -match $t.n) -or ($t.b -and $desc -match $t.b)) { return $t } }; $null }
+$berAlt = '` + berPsAusgemustert().replace(/'/g, "''") + String.raw`'
+$alt = @($fehlen | Where-Object { ($_.cn + ' ' + $_.desc) -match $berAlt })
+$fehlen = @($fehlen | Where-Object { ($_.cn + ' ' + $_.desc) -notmatch $berAlt })
+if ($alt.Count) { Zeile ('(' + $alt.Count + ' ausgemusterte Verteil-/Deinstallationsgruppe(n) übersprungen – fehlen ist kein Problem)') }
+foreach ($x in $fehlen) {
+  $e = Einordnen $x.cn $x.desc
+  Zeile ('⚠ ' + $(if ($e) { $e.t } else { 'AD-Berechtigung' }) + ': ' + $x.cn + ' fehlt (' + $x.anz + ' von ' + $n + ' Kollegen)' + $(if ($x.desc) { ' – ' + $x.desc } else { '' }))
+  if ($e) { Zeile ('    Fehlerbild: ' + $e.f); Zeile ('    Antrag: ' + $e.a) }
+  else { Zeile '    Antrag: über den Gruppenverantwortlichen („Manage My AD Security Groups“) bzw. passenden Zugriffsantrag in der ServiceNow Welt suchen' }
+}
+if ($fehlen.Count) { Zeile 'Hinweis: Berechtigungen bestellt die Führungskraft bzw. der Gruppen-/Ordnerverantwortliche in ServiceNow. Nach der Zuweisung ab- und wieder anmelden.' }
 `,
   }),
 ]

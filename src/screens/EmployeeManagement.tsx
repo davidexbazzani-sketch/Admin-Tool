@@ -10,6 +10,7 @@ import { useAppStore } from '../store/appStore'
 import { api } from '../electronAPI'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
+import HomeofficeFit from '../components/employees/HomeofficeFit'
 import { hostFromSerial } from '../services/deviceMasterData'
 import {
   listEmployees, listDepartures, createEmployee, updateEmployee, deleteEmployee,
@@ -735,7 +736,10 @@ function EmployeeCard({ emp, onToggle, onSetHardware, onHandover, hasChecklist, 
             </p>
           )}
         </div>
-        <button onClick={onEdit} className="shrink-0 p-1.5 rounded hover:bg-accent text-muted-foreground hover:text-foreground"><Pencil size={14} /></button>
+        <div className="shrink-0 flex items-center gap-1">
+          <HomeofficeFit schluessel={emp.id} globalId={emp.globalId} upn={emp.accessPassUpn} vorname={emp.vorname} name={emp.name} />
+          <button onClick={onEdit} title="Bearbeiten" className="shrink-0 p-1.5 rounded hover:bg-accent text-muted-foreground hover:text-foreground"><Pencil size={14} /></button>
+        </div>
       </div>
     </div>
   )

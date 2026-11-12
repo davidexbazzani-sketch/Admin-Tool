@@ -12,6 +12,7 @@ import { isValidRemoteTarget } from '../../utils/remoteTarget'
 import { ladeJabraQuellordner, setzeJabraQuellordner, findeJabraSetup, JABRA_NETZ_ORDNER_STANDARD } from '../../services/jabraInstall'
 import JabraPanel from './JabraPanel'
 import InstallLogbuch from './InstallLogbuch'
+import { AnmeldeStatus } from './AnmeldeCheck'
 
 export default function JabraInstallation() {
   const [host, setHost] = useState('')
@@ -74,6 +75,7 @@ export default function JabraInstallation() {
               <button onClick={() => { setHost(''); setSerial(undefined) }}
                 className="ml-auto text-[11px] text-muted-foreground hover:text-foreground">anderer PC</button>
             </div>
+            <AnmeldeStatus host={host} />
             <JabraPanel host={host} />
           </div>
         </Card>

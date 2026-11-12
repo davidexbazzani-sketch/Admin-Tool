@@ -332,12 +332,12 @@ export const PROBLEME_DRUCK4: PaProblem[] = [
       'The Adobe PDF printer is missing or does not create files.',
     ],
     ursache: 'Den Drucker „Adobe PDF“ bringt nur Acrobat Pro mit (nicht der Reader); nach Updates oder einer Lizenzumstellung fehlt er bzw. sein Anschluss oder der Distiller ist beschädigt.',
-    loesung: 'Prüft, welches Acrobat installiert ist, zeigt die Drucker und startet die Druckwarteschlange neu. Fehlt der Drucker, Acrobat Pro über „Hilfe → Installation reparieren“ bzw. das Softwarecenter reparieren.',
+    loesung: 'Prüft, welches Acrobat installiert ist, zeigt die Drucker und startet die Druckwarteschlange neu. Fehlt der Drucker, Acrobat Pro über „Hilfe → Installation reparieren“ bzw. das Unternehmensportal reparieren.',
     schritte: [
       { aktion: 'software-suchen', param: 'Acrobat' },
       { aktion: 'dr-anzeigen' },
       { aktion: 'dr-spooler-neustart' },
-      { aktion: 'sccm-richtlinie', optional: true, titel: 'Softwarecenter aktualisieren (Acrobat-Reparatur anbieten)' },
+      { aktion: 'intune-apps-sync', optional: true, titel: 'Unternehmensportal (Intune) aktualisieren (Acrobat-Reparatur anbieten)' },
     ],
     hinweis: 'Mit dem Reader gibt es keinen „Adobe PDF“-Drucker – dann „Microsoft Print to PDF“ verwenden. Acrobat-Pro-Lizenzen vergibt die IT nach Freigabe.',
     nachricht: 'Bitte reparieren Sie Acrobat über „Hilfe → Installation reparieren“ oder nutzen Sie bis dahin „Microsoft Print to PDF“.',
@@ -455,7 +455,7 @@ export const PROBLEME_DRUCK4: PaProblem[] = [
       { aktion: 'dr-voreinstellung', param: 'Schriften als Bitmap|{eingabe}', optional: true, titel: 'Schriften als Bitmap senden' },
     ],
     frage: DRUCKER,
-    hinweis: 'Fehlt die Barcode-Schrift auf dem PC ganz (auch am Bildschirm kein Barcode), muss sie über das Softwarecenter bzw. DXC installiert werden.',
+    hinweis: 'Fehlt die Barcode-Schrift auf dem PC ganz (auch am Bildschirm kein Barcode), muss sie über das Unternehmensportal (Intune) bzw. DXC installiert werden.',
     nachricht: 'Die Schriftersetzung wurde ausgeschaltet. Bitte drucken Sie die Begleitkarte noch einmal.',
   },
   {
@@ -988,7 +988,7 @@ export const PROBLEME_DRUCK4: PaProblem[] = [
       { aktion: 'dr-spooler-reparieren' },
       { aktion: 'dr-warteschlange-leeren', optional: true },
     ],
-    hinweis: 'Den schuldigen Treiber (Modul aus „Druck-Ereignisse“) tauscht DXC bzw. das Softwarecenter – das Tool entfernt keine Treiber.',
+    hinweis: 'Den schuldigen Treiber (Modul aus „Druck-Ereignisse“) tauscht DXC bzw. das Unternehmensportal (Intune) – das Tool entfernt keine Treiber.',
     ueberwachen: ['app-absturz', 'spooler-absturz'],
   },
   {
@@ -1206,7 +1206,7 @@ export const PROBLEME_DRUCK4: PaProblem[] = [
       { aktion: 'dr-warteschlange-leeren', optional: true },
     ],
     frage: DRUCKER,
-    hinweis: 'Stürzt der Spooler immer wieder mit demselben Treibermodul ab, muss der Treiber ersetzt werden (DXC/Softwarecenter).',
+    hinweis: 'Stürzt der Spooler immer wieder mit demselben Treibermodul ab, muss der Treiber ersetzt werden (DXC bzw. das Unternehmensportal (Intune)).',
     ueberwachen: ['spooler-absturz'],
   },
   {
@@ -1218,7 +1218,7 @@ export const PROBLEME_DRUCK4: PaProblem[] = [
       'Drucker hinzufügen bricht mit „Vorgang konnte nicht abgeschlossen werden (Fehler 0x000005b3)“ ab.',
       'Die Treiberinstallation sagt, für diesen Vorgang sei eine interaktive Fensterstation erforderlich.',
       'Fehler 5b3 beim Verbinden mit dem neuen Multifunktionsgerät.',
-      'Bei der Einrichtung über das Softwarecenter kommt Fehler 1459 vom Drucker.',
+      'Bei der Einrichtung über das Unternehmensportal (Intune) kommt Fehler 1459 vom Drucker.',
       'Printer setup fails with 0x000005b3, this operation requires an interactive window station.',
     ],
     ursache: 'Der Druckertreiber will bei der Installation ein Fenster zeigen (Hersteller-Setup, Gerätekonfiguration), die Installation läuft aber im Hintergrund ohne Benutzersitzung – Windows bricht dann mit 0x000005b3 ab.',
@@ -1294,15 +1294,15 @@ export const PROBLEME_DRUCK4: PaProblem[] = [
       'The printer driver is unknown (0x00000705).',
     ],
     ursache: 'Der Treiber der Warteschlange ist auf diesem PC (noch) nicht vorhanden und darf ohne Freigabe nicht nachgeladen werden – typisch bei neuen Gerätemodellen.',
-    loesung: 'Zeigt die installierten Treiber, wendet die Computerrichtlinien für die Treiberinstallation neu an, holt die Softwarecenter-Richtlinie und verbindet den Drucker erneut über SEAL.',
+    loesung: 'Zeigt die installierten Treiber, wendet die Computerrichtlinien für die Treiberinstallation neu an, synchronisiert Intune (Apps und Richtlinien) und verbindet den Drucker erneut über SEAL.',
     schritte: [
       { aktion: 'dr-treiber' },
       { aktion: 'gpupdate' },
-      { aktion: 'sccm-richtlinie' },
+      { aktion: 'intune-apps-sync' },
       { aktion: 'dr-verbinden', param: '{eingabe}' },
     ],
     frage: DRUCKER,
-    hinweis: 'Fehlt das Treiberpaket weiterhin, muss es für dieses Modell im Softwarecenter bzw. von DXC bereitgestellt werden – das Tool installiert keine Treiber.',
+    hinweis: 'Fehlt das Treiberpaket weiterhin, muss es für dieses Modell im Unternehmensportal bzw. von DXC bereitgestellt werden – das Tool installiert keine Treiber.',
   },
   {
     id: 'druck-fehler-0x704',
@@ -1326,7 +1326,7 @@ export const PROBLEME_DRUCK4: PaProblem[] = [
       { aktion: 'dr-testseite', param: '{eingabe}', optional: true },
     ],
     frage: DRUCKER,
-    hinweis: 'Fehlt der SEAL Add Printer Wizard ganz, wird er über das Softwarecenter bzw. DXC neu installiert.',
+    hinweis: 'Fehlt der SEAL Add Printer Wizard ganz, wird er über das Unternehmensportal (Intune) bzw. DXC neu installiert.',
   },
   {
     id: 'druck-fehler-0xbc9',
@@ -1374,7 +1374,7 @@ export const PROBLEME_DRUCK4: PaProblem[] = [
       { aktion: 'dr-testseite', param: '{eingabe}', optional: true },
     ],
     frage: DRUCKER,
-    hinweis: 'Für USB- und Spezialdrucker ohne SEAL muss der Herstellertreiber über das Softwarecenter neu installiert werden.',
+    hinweis: 'Für USB- und Spezialdrucker ohne SEAL muss der Herstellertreiber über das Unternehmensportal (Intune) neu installiert werden.',
   },
   // ══ Treiber ═════════════════════════════════════════════════════════════════
   {
@@ -1419,7 +1419,7 @@ export const PROBLEME_DRUCK4: PaProblem[] = [
       { aktion: 'druck-details', param: '{eingabe}' },
     ],
     frage: HEIM,
-    hinweis: 'Herstellertreiber für private Drucker installiert das Tool nicht; das geht über das Softwarecenter bzw. nach Freigabe durch DXC. Oft genügt es, die Funktion im Druckdialog unter „Weitere Einstellungen“ zu wählen.',
+    hinweis: 'Herstellertreiber für private Drucker installiert das Tool nicht; das geht über das Unternehmensportal (Intune) bzw. nach Freigabe durch DXC. Oft genügt es, die Funktion im Druckdialog unter „Weitere Einstellungen“ zu wählen.',
   },
   {
     id: 'druck-geschuetzter-druckmodus',

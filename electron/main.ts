@@ -10,6 +10,7 @@ import * as auth from './authManager'
 import * as ns from './networkStorage'
 import { registerKnowledgeSearchIpc } from './knowledgeSearchIpc'
 import { registriereSlideSchema, bedieneSlideProtokoll, erlaubeOrdner, setzeVendorOrdner } from './slideProtocol'
+import { registriereAufnahme } from './aufnahme'
 
 // Wissenssuche-IPC (knowledge:load / knowledge:status) einmalig registrieren.
 registerKnowledgeSearchIpc()
@@ -97,6 +98,9 @@ const store = new Store({
 })
 
 let mainWindow: BrowserWindow | null = null
+
+// Bildschirmaufnahme („Erklärvideo“): Leiste, Maus, Tastenkürzel, Dateien (electron/aufnahme.ts)
+registriereAufnahme({ hauptfenster: () => mainWindow, isDev, preload: join(__dirname, 'preload.js'), distIndex: join(__dirname, '../dist/index.html') })
 
 // Sicherheitsnetz: ein einzelner Fehler im Main-Prozess soll NIE das ganze
 // Admin-Tool beenden — nur protokollieren (sonst wuerde z. B. ein Fehler rund um
@@ -364,6 +368,22 @@ ipcMain.handle('ps:checkAdmin', async () => {
   return result.stdout.toLowerCase().trim() === 'true'
 })
 
+/**
+ * Bekannter Electron-Fehler unter Windows: Nach einem modalen Dialog (Datei öffnen/speichern,
+ * alert/confirm/prompt) nehmen Eingabefelder keinen Fokus mehr an — Knöpfe reagieren, aber in
+ * Textfelder kann man nicht klicken, bis das Fenster einmal gewechselt wurde (z. B. Suche in
+ * „Headset Vergabe" nach dem Excel-Import). Abhilfe: Fenster kurz ab- und wieder anwählen.
+ * Nur wenn unser Fenster vorne ist — nie einer anderen Anwendung den Fokus wegnehmen.
+ */
+function fokusZurueck(win: BrowserWindow | null | undefined): void {
+  if (!win || win.isDestroyed()) return
+  setTimeout(() => {
+    if (win.isDestroyed() || win.isMinimized() || !win.isFocused()) return
+    win.blur(); win.focus(); win.webContents.focus()
+  }, 50)
+}
+ipcMain.on('window:refocus', (e) => fokusZurueck(BrowserWindow.fromWebContents(e.sender)))
+
 // File open dialog
 ipcMain.handle('dialog:openFile', async (_e, filters?: Electron.FileFilter[]) => {
   const result = await dialog.showOpenDialog(mainWindow!, {
@@ -372,6 +392,7 @@ ipcMain.handle('dialog:openFile', async (_e, filters?: Electron.FileFilter[]) =>
       { name: 'Alle Dateien', extensions: ['xlsx', 'xls', 'csv', 'docx', 'pdf'] },
     ],
   })
+  fokusZurueck(mainWindow)
   return result.canceled ? null : result.filePaths[0]
 })
 
@@ -381,6 +402,7 @@ ipcMain.handle('dialog:saveFile', async (_e, defaultPath?: string, filters?: Ele
     defaultPath,
     filters: filters ?? [{ name: 'Alle Dateien', extensions: ['*'] }],
   })
+  fokusZurueck(mainWindow)
   return result.canceled ? null : result.filePath
 })
 
@@ -389,6 +411,7 @@ ipcMain.handle('dialog:selectDirectory', async () => {
   const result = await dialog.showOpenDialog(mainWindow!, {
     properties: ['openDirectory'],
   })
+  fokusZurueck(mainWindow)
   return result.canceled ? null : result.filePaths[0]
 })
 
@@ -2129,6 +2152,7 @@ ipcMain.handle('dialog:openFiles', async (_e, filters?: Electron.FileFilter[]) =
     properties: ['openFile', 'multiSelections'],
     filters: filters ?? [{ name: 'Alle Dateien', extensions: ['*'] }],
   })
+  fokusZurueck(mainWindow)
   return result.canceled ? [] : result.filePaths
 })
 

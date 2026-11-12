@@ -72,6 +72,8 @@ export interface DeviceSetupItem {
   autoSetupSteps?: AutoStepResult[]  // Ergebnis je Schritt
   autoSetupAutomatikAus?: boolean    // true = stündlicher Ping für dieses Gerät eingestellt
   autoSetupPingAt?: string           // letzter Erreichbarkeits-Versuch der Automatik
+  autoSetupVon?: string              // wer (Tool-Konto) den letzten Durchlauf ausgeführt hat
+  autoSetupArt?: 'automatisch' | 'manuell'  // ausgelöst durch die stündliche Automatik oder per Klick
   updatedAt: string
 }
 interface StateFile { version: number; items: Record<string, DeviceSetupItem> }

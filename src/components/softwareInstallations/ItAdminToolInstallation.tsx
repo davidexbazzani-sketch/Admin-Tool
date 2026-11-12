@@ -14,6 +14,7 @@ import Card from '../Card'
 import UserPcSearch from '../UserPcSearch'
 import { DeviceInfoButton } from '../device/DeviceDossier'
 import InstallLogbuch from './InstallLogbuch'
+import { AnmeldeStatus, useAnmeldeCheck } from './AnmeldeCheck'
 import { api } from '../../electronAPI'
 import { isValidRemoteTarget } from '../../utils/remoteTarget'
 import { ladeNutzer, type ChatNutzer } from '../../services/chat'
@@ -191,6 +192,7 @@ function ZielKarte({ setup }: { setup: ToolSetup | null }) {
                       {l && <LaufAbzeichen l={l} />}
                     </div>
                     <StandZeile e={staende[key]} setupErstellt={setup?.ok ? setup.erstellt : undefined} />
+                    <AnmeldeStatus host={z.host} kompakt />
                   </div>
                   <button onClick={() => pruefe(z.host)} disabled={staende[key]?.laeuft || aktiv} title="Ist-Stand neu prüfen"
                     className="shrink-0 p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-40">
@@ -232,7 +234,6 @@ function StandZeile({ e, setupErstellt }: { e?: StandEintrag; setupErstellt?: st
           {v === 'gleich' && <span className="ml-1 text-emerald-500">· schon der Stand dieses Setups</span>}
           {v === 'neuer' && <span className="ml-1 text-amber-500 font-semibold">· neuer als dieses Setup!</span>}</>}
       {' · '}{s.prozesse ? <span className="text-amber-500 font-semibold">läuft gerade{s.nutzer.length ? ` (${s.nutzer.join(', ')})` : ''}</span> : 'läuft nicht'}
-      {' · '}angemeldet: <span className="text-foreground">{s.angemeldet || 'niemand'}</span>
     </p>
   )
 }
@@ -293,6 +294,7 @@ function AblaufKarte({ setup }: { setup: ToolSetup | null }) {
   const starte = useItAdminToolStore(s => s.starte)
   const [vorwarn, setVorwarn] = useState(30)
   const [frage, setFrage] = useState(false)
+  const { vorStart, anmeldeDialog } = useAnmeldeCheck()
 
   const bereit = ziele.filter(z => {
     const key = z.host.toLowerCase()
@@ -305,8 +307,10 @@ function AblaufKarte({ setup }: { setup: ToolSetup | null }) {
 
   function los() {
     if (!setup?.ok) return
-    starte(bereit.map(z => z.host), setup, { vorwarnSekunden: vorwarn })
+    const hosts = bereit.map(z => z.host), s = setup, v = vorwarn
     setFrage(false)
+    // Vorher je PC prüfen, wer angemeldet ist — Hinweis, wenn nicht die zugewiesene Person
+    void vorStart(hosts, () => starte(hosts, s, { vorwarnSekunden: v }))
   }
 
   return (
@@ -356,6 +360,7 @@ function AblaufKarte({ setup }: { setup: ToolSetup | null }) {
           </div>
         </div>
       )}
+      {anmeldeDialog}
     </Card>
   )
 }

@@ -4,7 +4,7 @@
 // (dauert einige Minuten) und installiert nur, was der Admin ausdrücklich bestätigt.
 import { useMemo, useState } from 'react'
 import { Cpu, Loader2, CheckCircle2, XCircle, AlertTriangle, Download, ChevronDown, ChevronRight } from 'lucide-react'
-import type { DriverItem, HpHostReport } from '../services/hpDrivers'
+import { installierbar, type DriverItem, type HpHostReport } from '../services/hpDrivers'
 import type { PaBereich, PaProblem } from './types'
 
 /** Passende HP-Treiberkategorien je Problem (Kategorie bzw. Name des SoftPaqs). */
@@ -22,7 +22,7 @@ function themaMuster(p: PaProblem): { muster: RegExp; text: string } | null {
 /** Soll die Treiberprüfung bei diesem Problem angeboten werden? */
 export function treiberRelevant(p: PaProblem): boolean { return !!themaMuster(p) }
 
-const anbietbar = (i: DriverItem) => i.klasse !== 'bios' && i.klasse !== 'firmware' && !i.ohneHardwareBezug && (i.status === 'veraltet' || i.status === 'verfuegbar') && i.anwendbar
+const anbietbar = (i: DriverItem) => i.klasse !== 'bios' && i.klasse !== 'firmware' && !i.ohneHardwareBezug && installierbar(i).ok
 
 export default function TreiberCheck({ host, problem, by }: { host: string; problem: PaProblem; by: string }) {
   const thema = useMemo(() => themaMuster(problem), [problem])
@@ -62,7 +62,7 @@ export default function TreiberCheck({ host, problem, by }: { host: string; prob
     setInstalliert({ laeuft: true, text: 'Treiber werden geladen und installiert …' })
     try {
       const { deployOneHost } = await import('../services/hpDrivers')
-      const r = await deployOneHost(host, items, { rebootMode: 'notify', by, notifyUser: true }, s => setInstalliert({ laeuft: true, text: s.phase }))
+      const r = await deployOneHost(host, items, { rebootMode: 'notify', by, notifyUser: true, ausloeser: { art: 'manuell', quelle: 'Gib dein Problem ein → Treiber prüfen', grund: `Problem „${problem.titel}“` } }, s => setInstalliert({ laeuft: true, text: s.phase }))
       const ok = r.ergebnisse?.length ? r.ergebnisse.filter(e => e.verifiziert).length : r.perItem.filter(e => e.ok).length
       setInstalliert({ laeuft: false, ok: ok === items.length, text: `${ok} von ${items.length} Treiber(n) installiert${r.needsReboot ? ' – Neustart nötig (Benutzer wurde informiert)' : ''}.` })
     } catch (e) { setInstalliert({ laeuft: false, ok: false, text: e instanceof Error ? e.message : String(e) }) }

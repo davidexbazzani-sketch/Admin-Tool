@@ -1,7 +1,7 @@
 // ── Diagnose-Thema „Updates & Software“ ──────────────────────────────────────
 // Sonden: upwu (Windows Update: Dienst, Richtlinie, Verlauf, Fehlercodes, ausstehender Neustart)
 //         upsw (Installationen: Windows Installer, MSI-Fehler, Laufzeiten, Abstürze, Adminrechte/UAC)
-//         upcm (Softwarecenter/ConfigMgr und Unternehmensportal/Intune)
+//         upin (Unternehmensportal/Intune: Registrierung, Synchronisierung, Verwaltungserweiterung, App-Status)
 //         uphp (Hersteller, BIOS-Alter, Geräte mit Treiberfehlern, Grafiktreiber)
 // Alles NUR LESEND.
 import { ja, liste, nein, num, txt, zahl } from '../motor'
@@ -53,7 +53,6 @@ if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based S
 if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired') { $gr += 'Windows Update' }
 $pfr = (Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager' -Name PendingFileRenameOperations -EA SilentlyContinue).PendingFileRenameOperations
 if ($pfr) { $gr += 'Dateien ersetzen' }
-if (Test-Path 'HKLM:\SOFTWARE\Microsoft\SMS\Mobile Client\Reboot Management\RebootData') { $gr += 'Softwarecenter' }
 Fakt 'neustartGruende' @($gr)
 $hb = (Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power' -Name HiberbootEnabled -EA SilentlyContinue).HiberbootEnabled
 Fakt 'schnellstart' ($hb -eq 1)
@@ -135,53 +134,63 @@ if ($jus) { Punkt 'Java-Updater' 'info' 'jusched.exe läuft (fragt nach Adminrec
 `,
   },
   {
-    id: 'upcm', titel: 'Softwarecenter (ConfigMgr) und Unternehmensportal (Intune)', modus: 'system', timeoutMs: 120000,
+    id: 'upin', titel: 'Unternehmensportal und Intune (Registrierung, Synchronisierung, Verwaltungserweiterung, App-Installationen)', modus: 'system', timeoutMs: 120000,
     ps: String.raw`
-function EvCm([hashtable]$h, [int]$max) { try { return @(Get-WinEvent -FilterHashtable $h -MaxEvents $max -EA Stop).Count } catch { return 0 } }
-$cc = Get-Service -Name CcmExec -EA SilentlyContinue
-Fakt 'ccmInstalliert' ([bool]$cc); Fakt 'ccmDienst' $(if ($cc) { [string]$cc.Status } else { $null })
-$ver = (Get-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Microsoft\SMS\Mobile Client' -Name ProductVersion -EA SilentlyContinue).ProductVersion
-$scx = Test-Path 'C:\Windows\CCM\ClientUX\SCClient.exe'
-Fakt 'softwarecenter' $scx
-Punkt 'ConfigMgr-Client (Softwarecenter)' $(if (-not $cc) { 'info' } elseif ($cc.Status -ne 'Running') { 'fehler' } else { 'ok' }) $(if (-not $cc) { 'nicht installiert' } else { [string]$cc.Status + $(if ($ver) { ', Version ' + $ver } else { '' }) + $(if (-not $scx) { ', SCClient.exe fehlt' } else { '' }) })
-$apF = @(); $apC = @(); $apW = 0; $apI = 0; $updF = 0; $cmOk = $false
-if ($cc) {
-  try {
-    $ap = @(Get-CimInstance -Namespace 'root/ccm/ClientSDK' -ClassName CCM_Application -EA Stop -OperationTimeoutSec 30)
-    $cmOk = $true
-    $apF = @($ap | Where-Object { $_.EvaluationState -eq 13 -or ($_.ErrorCode -and [string]$_.InstallState -ne 'Installed') })
-    $apC = @($apF | ForEach-Object { '0x{0:X8}' -f $_.ErrorCode } | Where-Object { $_ -ne '0x00000000' } | ForEach-Object { $_.ToLower() } | Select-Object -Unique)
-    $apW = @($ap | Where-Object { $_.EvaluationState -eq 14 }).Count
-    $apI = @($ap | Where-Object { $_.EvaluationState -in 5, 7 }).Count
-  } catch {}
-  try { $updF = @(Get-CimInstance -Namespace 'root/ccm/ClientSDK' -ClassName CCM_SoftwareUpdate -EA Stop -OperationTimeoutSec 30 | Where-Object { $_.EvaluationState -eq 13 }).Count } catch {}
-}
-Fakt 'appsFehler' @($apF | ForEach-Object { [string]$_.Name } | Select-Object -First 5); Fakt 'appFehlerCodes' @($apC)
-Fakt 'appsWartenWartungsfenster' $apW; Fakt 'appsLaufen' $apI; Fakt 'updatesFehler' $updF
-if ($cc) { Punkt 'Softwarecenter-Installationen' $(if ($apF.Count -or $updF) { 'fehler' } elseif (-not $cmOk) { 'info' } else { 'ok' }) $(if (-not $cmOk) { 'nicht abfragbar (Adminrechte nötig)' } else { '' + $apF.Count + ' Anwendung(en) fehlerhaft' + $(if ($apC.Count) { ' (' + ($apC -join ', ') + ')' } else { '' }) + ', ' + $updF + ' Update(s) fehlerhaft, ' + $apI + ' laufen, ' + $apW + ' warten auf das Wartungsfenster' }) }
-$cgb = $null; $cmax = $null
-if ($cc -and (Test-Path 'C:\Windows\ccmcache')) {
-  $sum = 0.0; Get-ChildItem -LiteralPath 'C:\Windows\ccmcache' -Recurse -File -Force -EA SilentlyContinue | ForEach-Object { $sum += $_.Length }
-  $cgb = [math]::Round($sum / 1GB, 1)
-  try { $cmax = [math]::Round([double](Get-CimInstance -Namespace 'root/ccm/SoftMgmtAgent' -ClassName CacheConfig -EA Stop).Size / 1024, 1) } catch {}
-}
-Fakt 'cacheGB' $cgb; Fakt 'cacheMaxGB' $cmax
-if ($null -ne $cgb) { Punkt 'Softwarecenter-Cache' $(if ($null -ne $cmax -and $cmax -gt 0 -and $cgb -ge 0.9 * $cmax) { 'warn' } else { 'ok' }) ('' + $cgb + ' GB belegt' + $(if ($cmax) { ' von ' + $cmax + ' GB' } else { '' })) }
-# Intune / Unternehmensportal
+function EvIn([hashtable]$h, [int]$max) { try { return @(Get-WinEvent -FilterHashtable $h -MaxEvents $max -EA Stop).Count } catch { return 0 } }
 $enr = @(Get-ChildItem -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Enrollments' -EA SilentlyContinue | ForEach-Object { Get-ItemProperty -LiteralPath $_.PSPath -EA SilentlyContinue } | Where-Object { $_.ProviderID -eq 'MS DM Server' })
 $intune = $enr.Count -gt 0
 $ime = Get-Service -Name IntuneManagementExtension -EA SilentlyContinue
 $dmw = Get-Service -Name dmwappushservice -EA SilentlyContinue
 $cp = $null; try { $cp = [bool](@(Get-AppxPackage -AllUsers -Name 'Microsoft.CompanyPortal' -EA Stop).Count) } catch {}
-$mdm = EvCm @{ LogName = 'Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Admin'; Level = 2; StartTime = (Get-Date).AddDays(-7) } 300
+$mdm = EvIn @{ LogName = 'Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Admin'; Level = 2; StartTime = (Get-Date).AddDays(-7) } 300
 $store = (Get-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore' -Name RemoveWindowsStore -EA SilentlyContinue).RemoveWindowsStore -eq 1
-Fakt 'intuneRegistriert' $intune; Fakt 'imeDienst' $(if ($ime) { [string]$ime.Status } else { $null }); Fakt 'dmwap' $(if ($dmw) { [string]$dmw.StartType } else { $null })
+Fakt 'intuneRegistriert' $intune; Fakt 'imeInstalliert' ([bool]$ime); Fakt 'imeDienst' $(if ($ime) { [string]$ime.Status } else { $null }); Fakt 'dmwap' $(if ($dmw) { [string]$dmw.StartType } else { $null })
 Fakt 'unternehmensportal' $cp; Fakt 'mdmFehler7' $mdm; Fakt 'storeGesperrt' $store
-Punkt 'Intune-Registrierung' $(if ($intune) { 'ok' } else { 'info' }) $(if ($intune) { 'registriert' + $(if ($ime) { ', Intune-Erweiterung ' + [string]$ime.Status } else { ', Intune-Erweiterung nicht installiert' }) } else { 'nicht bei Intune registriert' })
+Punkt 'Intune-Registrierung' $(if ($intune) { 'ok' } else { 'fehler' }) $(if ($intune) { 'registriert' } else { 'nicht bei Intune registriert – Apps aus dem Unternehmensportal kommen nicht an' })
+Punkt 'Intune-Verwaltungserweiterung' $(if (-not $ime) { $(if ($intune) { 'warn' } else { 'info' }) } elseif ([string]$ime.Status -ne 'Running') { 'fehler' } else { 'ok' }) $(if (-not $ime) { 'nicht installiert (Dienst IntuneManagementExtension fehlt – keine Win32-Apps)' } else { 'Dienst ' + [string]$ime.Status + ', Start ' + [string]$ime.StartType })
+# letzte erfolgreiche Synchronisierung mit Intune (OMA-DM)
+$sync = $null
+foreach ($acc in @(Get-ChildItem -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Provisioning\OMADM\Accounts' -EA SilentlyContinue)) {
+  $sv = (Get-ItemProperty -LiteralPath (Join-Path $acc.PSPath 'Protected\ConnInfo') -Name ServerLastSuccessTime -EA SilentlyContinue).ServerLastSuccessTime
+  if ([string]$sv -match '^(\d{8}T\d{6})Z$') { try { $zt = [datetime]::ParseExact(($Matches[1] -replace 'T', ''), 'yyyyMMddHHmmss', [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]'AssumeUniversal'); if ($null -eq $sync -or $zt -gt $sync) { $sync = $zt } } catch {} }
+}
+$syncStd = $(if ($sync) { [math]::Round(((Get-Date) - $sync).TotalHours, 1) } else { $null })
+Fakt 'syncVorStunden' $syncStd
 if ($intune) {
+  Punkt 'Letzte Intune-Synchronisierung' $(if ($null -eq $syncStd) { 'info' } elseif ($syncStd -ge 24) { 'warn' } else { 'ok' }) $(if ($null -eq $syncStd) { 'nicht ermittelbar' } else { 'vor ' + $syncStd + ' Std. (' + $sync.ToString('dd.MM. HH:mm') + ')' })
   Punkt 'Unternehmensportal' $(if ($cp -eq $false) { 'warn' } else { 'ok' }) $(if ($null -eq $cp) { 'nicht prüfbar (Adminrechte nötig)' } elseif ($cp) { 'installiert' } else { 'NICHT installiert' })
   Punkt 'Geräteverwaltung (7 Tage)' $(if ($mdm -ge 20) { 'warn' } else { 'ok' }) ('' + $mdm + ' Fehler im MDM-Protokoll' + $(if ($dmw -and [string]$dmw.StartType -eq 'Disabled') { ', Push-Dienst dmwappushservice DEAKTIVIERT' } else { '' }))
 }
+# Status der Intune-Apps (Win32) aus der Registry der Verwaltungserweiterung, Namen aus dem IME-Log
+$nm = @{}
+foreach ($lf in @(Get-ChildItem -LiteralPath 'C:\ProgramData\Microsoft\IntuneManagementExtension\Logs' -Filter '*.log' -EA SilentlyContinue | Where-Object { $_.Name -match '^(IntuneManagementExtension|AppWorkload)' } | Sort-Object LastWriteTime -Descending | Select-Object -First 3)) {
+  foreach ($mm in [regex]::Matches((@(Get-Content -LiteralPath $lf.FullName -Tail 6000 -EA SilentlyContinue) -join ' '), '"Id":"([0-9a-fA-F-]{36})","Name":"([^"]{1,90})"')) { $nm[$mm.Groups[1].Value.ToLower()] = $mm.Groups[2].Value }
+}
+$apF = @(); $apC = @(); $apL = 0; $apA = 0; $apG = 0
+foreach ($bn in @(Get-ChildItem -LiteralPath 'HKLM:\SOFTWARE\Microsoft\IntuneManagementExtension\Win32Apps' -EA SilentlyContinue)) {
+  foreach ($ak in @(Get-ChildItem -LiteralPath $bn.PSPath -EA SilentlyContinue)) {
+    if ($ak.PSChildName -notmatch '^([0-9a-fA-F-]{36})_\d+$') { continue }
+    $aid = $Matches[1].ToLower()
+    $es = (Get-ItemProperty -LiteralPath $ak.PSPath -Name EnforcementStateMessage -EA SilentlyContinue).EnforcementStateMessage
+    if (-not $es) { continue }
+    $js = $null; try { $js = [string]$es | ConvertFrom-Json -EA Stop } catch {}
+    if (-not $js) { continue }
+    $apG++
+    $est = [int]$js.EnforcementState
+    if ($est -ge 5000 -and $est -lt 6000) {
+      $apF += $(if ($nm.ContainsKey($aid)) { $nm[$aid] } else { 'App ' + $aid.Substring(0, 8) })
+      try { $hx = '0x{0:x8}' -f ([int64]$js.ErrorCode -band [int64]4294967295); if ($hx -ne '0x00000000') { $apC += $hx } } catch {}
+    } elseif ($est -ge 3000 -and $est -lt 4000) { $apA++ } elseif ($est -ge 2000 -and $est -lt 3000) { $apL++ }
+  }
+}
+$apF = @($apF | Select-Object -Unique); $apC = @($apC | Select-Object -Unique)
+Fakt 'appsGesamt' $apG; Fakt 'appsFehler' @($apF | Select-Object -First 5); Fakt 'appFehlerCodes' @($apC)
+Fakt 'appsLaufen' $apL; Fakt 'appsAnforderung' $apA
+if ($ime -or $apG) { Punkt 'Intune-Apps (Unternehmensportal)' $(if ($apF.Count) { 'fehler' } elseif ($apA -or $apL) { 'warn' } else { 'ok' }) ('' + $apG + ' ausgewertet · ' + $apF.Count + ' mit Fehler' + $(if ($apF.Count) { ' (' + (@($apF | Select-Object -First 4) -join ', ') + $(if ($apC.Count) { '; ' + ($apC -join ', ') } else { '' }) + ')' } else { '' }) + ' · ' + $apA + ' Anforderungen nicht erfüllt · ' + $apL + ' laufen/warten') }
+$imc = $null
+if (Test-Path -LiteralPath 'C:\Windows\IMECache') { $sum = 0.0; Get-ChildItem -LiteralPath 'C:\Windows\IMECache' -Recurse -File -Force -EA SilentlyContinue | ForEach-Object { $sum += $_.Length }; $imc = [math]::Round($sum / 1GB, 1) }
+Fakt 'imeCacheGB' $imc
+if ($null -ne $imc) { Punkt 'Intune-Installationscache (IMECache)' $(if ($imc -ge 8) { 'warn' } else { 'ok' }) ('' + $imc + ' GB belegt') }
 `,
   },
   {
@@ -218,7 +227,7 @@ if ($rtx) { Punkt 'NVIDIA RTX Desktop Manager' 'fehler' 'installiert – bricht 
 export const THEMEN_SOFTWARE: DgOber[] = [
   {
     id: 'software', titel: 'Updates & Software', symbol: 'Package',
-    beschreibung: 'Windows Update hängt, Programm lässt sich nicht installieren, Softwarecenter/Unternehmensportal, Treiber/BIOS, Neustart, Adminrechte',
+    beschreibung: 'Windows Update hängt, Programm lässt sich nicht installieren, Unternehmensportal (Intune), Treiber/BIOS, Neustart, Adminrechte',
     unter: [
       {
         id: 'up-wu', titel: 'Windows Update hängt oder schlägt fehl',
@@ -248,7 +257,7 @@ export const THEMEN_SOFTWARE: DgOber[] = [
           { id: 'bc9', wenn: f => hat(f, 'upwu.fehlerCodes', '0x80070bc9', '0x80070bc2'), befund: () => 'Update meldet „Neustart nötig“ (0x80070bc9) auch nach dem Neustart', problem: 'update-fehler-0x80070bc9-neustart-schleife', schwere: 3 },
           { id: 'dateien', wenn: f => liste(f['upwu.neustartGruende']).includes('Dateien ersetzen'), befund: () => 'Beim nächsten Neustart müssen noch Dateien ersetzt werden – Installationen brechen bis dahin ab', problem: 'update-installation-neustart-ausstehend', schwere: 1 },
         ],
-        ohneBefund: ['update-neustart-staendig-verlangt', 'update-installation-neustart-ausstehend', 'update-softwarecenter-neustart-countdown'],
+        ohneBefund: ['update-neustart-staendig-verlangt', 'update-installation-neustart-ausstehend', 'update-intune-neustart-angekuendigt'],
       },
       {
         id: 'up-install', titel: 'Programm lässt sich nicht installieren',
@@ -266,20 +275,24 @@ export const THEMEN_SOFTWARE: DgOber[] = [
         ohneBefund: ['update-programm-installation-scheitert', 'update-installer-fehler-2503', 'update-programm-installieren'],
       },
       {
-        id: 'up-softwarecenter', titel: 'Softwarecenter oder Unternehmensportal geht nicht',
-        beschreibung: 'Softwarecenter öffnet nicht oder ist leer, Installation hängt bei „Wird heruntergeladen“, App aus dem Unternehmensportal installiert nicht',
-        sonden: ['upcm', 'net'],
+        id: 'up-portal', titel: 'Unternehmensportal (Intune): App fehlt, installiert nicht oder hängt',
+        beschreibung: 'Unternehmensportal öffnet nicht oder ist leer, Programm fehlt im Portal, App bleibt bei „Wird heruntergeladen“/„Wird installiert“ oder meldet „Fehler bei der Installation“',
+        sonden: ['upin', 'net', 'sys'],
         regeln: [
-          { id: 'ccm-dienst', wenn: f => ja(f['upcm.ccmInstalliert']) && txt(f['upcm.ccmDienst']) !== 'Running', befund: f => `Der ConfigMgr-Dienst (CcmExec) läuft nicht (${txt(f['upcm.ccmDienst'])})`, problem: 'update-softwarecenter-oeffnet-nicht', schwere: 3 },
-          { id: 'kein-client', wenn: f => nein(f['upcm.ccmInstalliert']) && nein(f['upcm.intuneRegistriert']), befund: () => 'Weder ConfigMgr-Client (Softwarecenter) noch Intune-Registrierung vorhanden', problem: 'update-softwarecenter-oeffnet-nicht', schwere: 2 },
-          { id: 'cache', wenn: f => hat(f, 'upcm.appFehlerCodes', '0x87d01201') || (num(f['upcm.cacheMaxGB']) > 0 && num(f['upcm.cacheGB']) >= 0.9 * num(f['upcm.cacheMaxGB'])), befund: f => `Softwarecenter-Cache ist voll (${zahl(f['upcm.cacheGB'])} von ${zahl(f['upcm.cacheMaxGB'])} GB)`, problem: 'update-softwarecenter-cache-voll', schwere: 3 },
-          { id: 'download', wenn: f => hat(f, 'upcm.appFehlerCodes', '0x87d00607', '0x87d00215', '0x87d00669'), befund: f => `Inhalt nicht gefunden bzw. Download hängt (${welche(f, 'upcm.appFehlerCodes', '0x87d00607', '0x87d00215', '0x87d00669')})`, problem: 'update-softwarecenter-download-haengt', schwere: 3 },
-          { id: 'erkennung', wenn: f => hat(f, 'upcm.appFehlerCodes', '0x87d00324', '0x87d00213'), befund: () => 'Installation lief, wird aber nicht erkannt (0x87D00324)', problem: 'update-softwarecenter-erkennung-0x87d00324', schwere: 3 },
-          { id: 'app-fehler', wenn: f => liste(f['upcm.appsFehler']).length > 0, befund: f => `Softwarecenter meldet Fehler bei: ${txt(f['upcm.appsFehler'])}${liste(f['upcm.appFehlerCodes']).length ? ' (' + txt(f['upcm.appFehlerCodes']) + ')' : ''}`, problem: 'update-programm-installation-scheitert', schwere: 2 },
-          { id: 'wartungsfenster', wenn: f => num(f['upcm.appsWartenWartungsfenster']) > 0, befund: f => `${f['upcm.appsWartenWartungsfenster']} Installation(en) warten auf das Wartungsfenster`, problem: 'update-softwarecenter-wartungsfenster', schwere: 2 },
-          { id: 'intune', wenn: f => ja(f['upcm.intuneRegistriert']) && (nein(f['upcm.unternehmensportal']) || (f['upcm.imeDienst'] != null && txt(f['upcm.imeDienst']) !== 'Running')), befund: f => nein(f['upcm.unternehmensportal']) ? 'Das Unternehmensportal ist nicht installiert' : `Intune-Verwaltungserweiterung läuft nicht (${txt(f['upcm.imeDienst'])})`, problem: 'update-unternehmensportal-app', schwere: 2 },
+          { id: 'nicht-registriert', wenn: f => nein(f['upin.intuneRegistriert']), befund: () => 'Der PC ist nicht bei Intune registriert – Apps aus dem Unternehmensportal kommen nicht an', problem: 'update-unternehmensportal-fehlt', schwere: 3 },
+          { id: 'ime-aus', wenn: f => ja(f['upin.intuneRegistriert']) && f['upin.imeDienst'] != null && txt(f['upin.imeDienst']) !== 'Running', befund: f => `Die Intune-Verwaltungserweiterung (Dienst IntuneManagementExtension) läuft nicht (${txt(f['upin.imeDienst'])})`, problem: 'update-unternehmensportal-app', schwere: 3 },
+          { id: 'ime-fehlt', wenn: f => ja(f['upin.intuneRegistriert']) && nein(f['upin.imeInstalliert']), befund: () => 'Die Intune-Verwaltungserweiterung fehlt – Win32-Apps aus dem Unternehmensportal werden nicht installiert', problem: 'update-unternehmensportal-app', schwere: 2 },
+          { id: 'portal', wenn: f => ja(f['upin.intuneRegistriert']) && nein(f['upin.unternehmensportal']), befund: () => 'Das Unternehmensportal ist nicht installiert', problem: 'update-unternehmensportal-fehlt', schwere: 2 },
+          { id: 'erkennung', wenn: f => hat(f, 'upin.appFehlerCodes', '0x87d1041c'), befund: () => 'App wurde installiert, wird von Intune aber nicht erkannt (0x87D1041C)', problem: 'update-intune-0x87d1041c-nicht-erkannt', schwere: 3 },
+          { id: 'download', wenn: f => hat(f, 'upin.appFehlerCodes', '0x87d1313c'), befund: () => 'Download einer App wurde unterbrochen (0x87D1313C)', problem: 'update-intune-download-abgebrochen-0x87d1313c', schwere: 3 },
+          { id: 'inhalt', wenn: f => hat(f, 'upin.appFehlerCodes', '0x87d300c9', '0x87d30065', '0x80091007'), befund: f => `App-Inhalt konnte nicht geladen bzw. entpackt werden (${welche(f, 'upin.appFehlerCodes', '0x87d300c9', '0x87d30065', '0x80091007')})`, problem: 'update-unternehmensportal-inhalt-fehler', schwere: 3 },
+          { id: 'platz', wenn: f => hat(f, 'upin.appFehlerCodes', '0x80070070') || (liste(f['upin.appsFehler']).length > 0 && num(f['sys.cFreiGB']) < 15), befund: f => `App-Installation scheitert, auf C: sind nur ${zahl(f['sys.cFreiGB'])} GB frei`, problem: 'update-unternehmensportal-zu-wenig-speicher', schwere: 3 },
+          { id: 'anforderung', wenn: f => num(f['upin.appsAnforderung']) > 0, befund: f => `${f['upin.appsAnforderung']} App(s) mit „Anforderungen nicht erfüllt“ (nicht anwendbar)`, problem: 'update-unternehmensportal-anforderungen-nicht-erfuellt', schwere: 2 },
+          { id: 'app-fehler', wenn: f => liste(f['upin.appsFehler']).length > 0, befund: f => `Intune meldet Fehler bei: ${txt(f['upin.appsFehler'])}${liste(f['upin.appFehlerCodes']).length ? ' (' + txt(f['upin.appFehlerCodes']) + ')' : ''}`, problem: 'update-unternehmensportal-app', schwere: 2 },
+          { id: 'sync-alt', wenn: f => ja(f['upin.intuneRegistriert']) && num(f['upin.syncVorStunden']) >= 24, befund: f => `Letzte erfolgreiche Intune-Synchronisierung vor ${zahl(f['upin.syncVorStunden'])} Stunden`, problem: 'update-unternehmensportal-zeigt-programm-nicht', schwere: 2 },
+          { id: 'laeuft', wenn: f => num(f['upin.appsLaufen']) > 0, befund: f => `${f['upin.appsLaufen']} App-Installation(en) laufen noch bzw. warten (z. B. auf einen Neustart)`, problem: 'update-unternehmensportal-haengt-wird-installiert', schwere: 1 },
         ],
-        ohneBefund: ['update-softwarecenter-zeigt-programm-nicht', 'update-softwarecenter-oeffnet-nicht', 'update-unternehmensportal-app', 'update-unternehmensportal-fehlt'],
+        ohneBefund: ['update-unternehmensportal-zeigt-programm-nicht', 'update-unternehmensportal-fehlt', 'update-unternehmensportal-app', 'update-unternehmensportal-download-haengt'],
       },
       {
         id: 'up-treiber', titel: 'Treiber oder BIOS veraltet (HP)',
@@ -322,7 +335,7 @@ export const THEMEN_SOFTWARE: DgOber[] = [
           { id: 'kompat', wenn: f => liste(f['upsw.kompatAdmin']).length > 0, befund: f => `„Als Administrator ausführen“ ist als Kompatibilität gesetzt für: ${txt(f['upsw.kompatAdmin'])}`, problem: 'programm-fachprogramm-kompatibilitaet-zuruecksetzen', schwere: 2 },
           { id: 'java-updater', wenn: f => ja(f['upsw.javaUpdater']), befund: () => 'Der Java-Updater (jusched) läuft und verlangt Adminrechte', problem: 'programm-java-update-fenster-jusched', schwere: 2 },
           { id: 'ist-admin', wenn: f => ja(f['upsw.benutzerIstAdmin']), befund: () => 'Der angemeldete Benutzer ist lokaler Administrator – Windows fragt dann nur „Ja/Nein“', problem: 'sicherheit-uac-nur-ja-nein-konto-ist-admin', schwere: 1 },
-          { id: 'installation', wenn: f => f['frage.installieren'] === 'ja' && nein(f['upsw.benutzerIstAdmin']), befund: () => 'Installationen brauchen Adminrechte – Software über das Softwarecenter bzw. die IT installieren', problem: 'update-adminrechte-verlangt', schwere: 2 },
+          { id: 'installation', wenn: f => f['frage.installieren'] === 'ja' && nein(f['upsw.benutzerIstAdmin']), befund: () => 'Installationen brauchen Adminrechte – Software über das Unternehmensportal (Intune) bzw. die IT installieren', problem: 'update-adminrechte-verlangt', schwere: 2 },
           { id: 'beim-start', wenn: f => f['frage.installieren'] === 'nein' && nein(f['upsw.benutzerIstAdmin']), befund: () => 'Das Programm verlangt bei jedem Start Adminrechte', problem: 'programm-fachprogramm-adminrechte-beim-start', schwere: 2 },
         ],
         ohneBefund: ['update-adminrechte-verlangt', 'sicherheit-programm-verlangt-adminrechte', 'programm-fachprogramm-adminrechte-beim-start'],

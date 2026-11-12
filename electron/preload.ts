@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer, webUtils } from 'electron'
 
 // Window control sends
 contextBridge.exposeInMainWorld('electronSend', (channel: string) => {
-  const allowed = ['window:minimize', 'window:maximize', 'window:close', 'window:focus']
+  const allowed = ['window:minimize', 'window:maximize', 'window:close', 'window:focus', 'window:refocus']
   if (allowed.includes(channel)) ipcRenderer.send(channel)
 })
 
@@ -117,6 +117,32 @@ contextBridge.exposeInMainWorld('electronAPI', {
   netDeleteFileAsync: (relativePath: string) => ipcRenderer.invoke('net:deleteFileAsync', relativePath),
   netIsAvailable: () => ipcRenderer.invoke('net:isAvailable'),
   netGetBasePath: () => ipcRenderer.invoke('net:getBasePath'),
+
+  // Bildschirmaufnahme („Erklärvideo“) — electron/aufnahme.ts
+  aufnahme: {
+    quellen: () => ipcRenderer.invoke('aufnahme:quellen'),
+    neuerOrdner: () => ipcRenderer.invoke('aufnahme:neuer-ordner'),
+    starte: (opts: unknown) => ipcRenderer.invoke('aufnahme:starte', opts),
+    optionen: () => ipcRenderer.invoke('aufnahme:optionen'),
+    fertig: (ergebnis: unknown) => ipcRenderer.invoke('aufnahme:fertig', ergebnis),
+    verworfen: (ordner?: string) => ipcRenderer.invoke('aufnahme:verworfen', ordner),
+    leisteMinimieren: () => ipcRenderer.invoke('aufnahme:leiste-minimieren'),
+    oeffne: (pfad: string) => ipcRenderer.invoke('aufnahme:oeffne', pfad),
+    anhaengen: (id: number, bytes: Uint8Array) => ipcRenderer.invoke('aufnahme:anhaengen', id, bytes),
+    schreibeBei: (id: number, pos: number, bytes: Uint8Array) => ipcRenderer.invoke('aufnahme:schreibe-bei', id, pos, bytes),
+    kopiere: (id: number, quelle: string, offset: number, laenge: number) => ipcRenderer.invoke('aufnahme:kopiere', id, quelle, offset, laenge),
+    schliesse: (id: number) => ipcRenderer.invoke('aufnahme:schliesse', id),
+    lese: (pfad: string, offset: number, laenge: number) => ipcRenderer.invoke('aufnahme:lese', pfad, offset, laenge),
+    kopiereDatei: (von: string, nach: string) => ipcRenderer.invoke('aufnahme:kopiere-datei', von, nach),
+    loesche: (ordner: string) => ipcRenderer.invoke('aufnahme:loesche', ordner),
+    speichernDialog: (vorschlag: string) => ipcRenderer.invoke('aufnahme:speichern-dialog', vorschlag),
+    imOrdnerZeigen: (pfad: string) => ipcRenderer.invoke('aufnahme:im-ordner-zeigen', pfad),
+    abspielen: (pfad: string) => ipcRenderer.invoke('aufnahme:abspielen', pfad),
+    groesse: (pfad: string) => ipcRenderer.invoke('aufnahme:groesse', pfad),
+    beiMaus: (cb: (m: { x: number; y: number; displayId: string }) => void) => { const f = (_e: unknown, m: { x: number; y: number; displayId: string }) => cb(m); ipcRenderer.on('aufnahme:maus', f); return () => ipcRenderer.removeListener('aufnahme:maus', f) },
+    beiTaste: (cb: (t: string) => void) => { const f = (_e: unknown, t: string) => cb(t); ipcRenderer.on('aufnahme:taste', f); return () => ipcRenderer.removeListener('aufnahme:taste', f) },
+    beiFertig: (cb: (e: unknown) => void) => { const f = (_e: unknown, e: unknown) => cb(e); ipcRenderer.on('aufnahme:fertig', f); return () => ipcRenderer.removeListener('aufnahme:fertig', f) },
+  },
   netSetBasePath: (path: string) => ipcRenderer.invoke('net:setBasePath', path),
   netWriteRawFile: (relativePath: string, base64Data: string) => ipcRenderer.invoke('net:writeRawFile', relativePath, base64Data),
   netCopyLocalFileAsync: (localPath: string, relativePath: string) => ipcRenderer.invoke('net:copyLocalFileAsync', localPath, relativePath),

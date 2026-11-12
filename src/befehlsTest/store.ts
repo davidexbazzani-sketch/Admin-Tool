@@ -415,6 +415,7 @@ export const useBefehlsTest = create<BtState>((set, get) => {
       }
       for (const x of k.katalog) L.ergebnisse[x.key] = { status: 'offen', text: '', dauerMs: 0, am: '' }
       spiegeln()
+      void import('../services/aktivitaet').then(m => m.protokolliere({ art: 'manuell', quelle: 'Befehls-Test (Einstellungen)', aktion: `Befehls-Test gestartet: ${k.katalog.length} Befehle werden echt ausgeführt`, ziel: host.toUpperCase(), details: [`Remote Doc: ${e.optionen.remoteDoc ? 'ja' : 'nein'}`] }))
       await speichere(true)
       await speichereEinstellung()
       void arbeite()

@@ -1380,7 +1380,7 @@ export const PROBLEME_OFFICE3: PaProblem[] = [
       'Access shows ODBC call failed for linked SQL tables.',
     ],
     ursache: 'Auf dem PC fehlt der passende ODBC-Treiber bzw. die Datenquelle (DSN), die Bitversion passt nicht zu Office, oder die Windows-Anmeldung am SQL-Server scheitert wegen veralteter Kerberos-Tickets.',
-    loesung: 'Installierte ODBC-Treiber und die Kerberos-Tickets des Benutzers werden angezeigt; die Tickets werden erneuert. Danach Access neu öffnen; fehlt der Treiber, über die Software-Installationen bzw. das Softwarecenter installieren.',
+    loesung: 'Installierte ODBC-Treiber und die Kerberos-Tickets des Benutzers werden angezeigt; die Tickets werden erneuert. Danach Access neu öffnen; fehlt der Treiber, über die Software-Installationen bzw. das Unternehmensportal (Intune) installieren.',
     schritte: [
       { aktion: 'software-suchen', param: 'ODBC' },
       { aktion: 'kerberos-anzeigen' },
@@ -1779,13 +1779,13 @@ export const PROBLEME_OFFICE3: PaProblem[] = [
       'Word reports missing proofing tools for a language.',
     ],
     ursache: 'Für die Sprache des Textes sind keine Korrekturhilfen installiert; sie gehören zu einem Sprachpaket bzw. Korrekturhilfen-Paket, das über die Softwareverteilung kommt.',
-    loesung: 'Installierte Office-Sprachen werden angezeigt und das Softwarecenter aktualisiert, damit das Paket bereitsteht; danach im Softwarecenter die Korrekturhilfen installieren und Office neu starten.',
+    loesung: 'Installierte Office-Sprachen werden angezeigt und das Unternehmensportal aktualisiert, damit das Paket bereitsteht; danach im Unternehmensportal die Korrekturhilfen installieren und Office neu starten.',
     schritte: [
       { aktion: 'office-status' },
-      { aktion: 'sccm-richtlinie' },
+      { aktion: 'intune-apps-sync' },
     ],
     hinweis: 'Fehlt das Korrekturhilfen-Paket in der Softwareverteilung, stellt DXC es bereit. Ist der Text nur falsch als Sprache markiert, siehe „Rechtschreibprüfung prüft in falscher Sprache oder gar nicht“.',
-    nachricht: 'Wir haben die Softwareverteilung aktualisiert. Bitte installieren Sie im Softwarecenter die Korrekturhilfen für die gewünschte Sprache und starten Sie Office neu.',
+    nachricht: 'Wir haben die Softwareverteilung aktualisiert. Bitte installieren Sie im Unternehmensportal die Korrekturhilfen für die gewünschte Sprache und starten Sie Office neu.',
   },
   {
     id: 'office-schliesst-sich-fuer-update', titel: 'Word/Excel schließen sich mitten in der Arbeit – „Office muss aktualisiert werden“', bereich: OFFICE,

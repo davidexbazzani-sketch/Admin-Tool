@@ -105,5 +105,6 @@ export async function runSapScan(host: string, by: string, opts: RunSapOptions):
     pc: h, ranAt: new Date().toISOString(), ranBy: by, befunde: final,
     meta: { toolVersion: TOOL_VERSION, dauerMs: Date.now() - started, winrm: pre.winrm },
   }
+  void import('../services/aktivitaet').then(m => m.protokolliere({ art: 'manuell', quelle: 'SAP-Fehlersuche', aktion: 'Diagnose ausgeführt (nur gelesen)', ziel: String(host).toUpperCase(), benutzer: by })).catch(() => {})
   return { ok: true, scan }
 }

@@ -175,7 +175,7 @@ if ($wahl -like 'Anzeige *') {
     Set-ItemProperty -Path $k -Name UILanguageTag -Value $tag -Type String
     Set-ItemProperty -Path $k -Name HelpLanguageTag -Value $tag -Type String
     Set-ItemProperty -Path $k -Name FollowSystemUI -Value 'Off' -Type String
-    Zeile ('Jetzt: Office-Oberfläche ' + $tag + ' (fehlt das Sprachpaket, bleibt Office bei der vorhandenen Sprache — Paket über DXC/Softwarecenter).')
+    Zeile ('Jetzt: Office-Oberfläche ' + $tag + ' (fehlt das Sprachpaket, bleibt Office bei der vorhandenen Sprache — Paket über DXC bzw. das Unternehmensportal (Intune)).')
   }
 } else {
   $tag = $(if ($wahl -eq 'Bearbeitung Deutsch') { 'de-DE' } else { 'en-US' })

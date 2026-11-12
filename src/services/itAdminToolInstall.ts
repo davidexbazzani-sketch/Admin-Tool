@@ -149,6 +149,14 @@ async function serverNamen(): Promise<Set<string>> {
   return namen
 }
 
+/** Steht der Host in der Server-Liste (Server-Monitor + Inventar)? Auch für andere Software-Kacheln. */
+export async function istBekannterServer(host: string): Promise<boolean> {
+  const h = (host || '').trim().toUpperCase()
+  if (!h) return false
+  const s = await serverNamen()
+  return s.has(h) || s.has(h.split('.')[0])
+}
+
 /** Grund, warum auf diesem Ziel NICHT installiert wird — oder '' (rein, testbar). */
 export function sperrGrund(host: string, eigener: string, server: Set<string>): string {
   const h = (host || '').trim()

@@ -86,7 +86,7 @@ $e6008 = @(EvSt @{ LogName = 'System'; Id = 6008; StartTime = (Get-Date).AddDays
 $starts = @(EvSt @{ LogName = 'System'; Id = 6005; StartTime = (Get-Date).AddDays(-30) } 500).Count
 Fakt 'unerwartet6008' $e6008; Fakt 'starts30' $starts
 $nst = @(EvSt @{ LogName = 'System'; ProviderName = 'User32'; Id = 1074; StartTime = (Get-Date).AddDays(-30) } 200)
-$updEv = @($nst | Where-Object { $prc = ''; try { $prc = [string]$_.Properties[0].Value } catch {}; $prc -match '(?i)TrustedInstaller|MoUsoCoreWorker|musnotification|usoclient|MoNotificationUx|CcmExec|ccmsetup|wuauclt' -or [string]$_.Properties[2].Value -match '(?i)Aktualisierung|Service Pack|Update|Upgrade' })
+$updEv = @($nst | Where-Object { $prc = ''; try { $prc = [string]$_.Properties[0].Value } catch {}; $prc -match '(?i)TrustedInstaller|MoUsoCoreWorker|musnotification|usoclient|MoNotificationUx|IntuneWindowsAgent|IntuneManagementExtension|omadmclient|wuauclt' -or [string]$_.Properties[2].Value -match '(?i)Aktualisierung|Service Pack|Update|Upgrade' })
 $upd = $updEv.Count
 Fakt 'neustarts30' $nst.Count; Fakt 'updateNeustarts30' $upd
 if ($nst.Count) {
@@ -303,7 +303,7 @@ export const THEMEN_STABILITAET: DgOber[] = [
         sonden: ['stpw', 'stbs', 'sys'],
         regeln: [
           { id: 'bluescreen-neustart', wenn: f => num(f['stpw.mitBugcheck30']) > 0 || num(f['stbs.anzahl30']) > 0, befund: f => `Hinter den Neustarts stecken Bluescreens (${num(f['stbs.anzahl30']) > 0 ? f['stbs.anzahl30'] : f['stpw.mitBugcheck30']}× in 30 Tagen${txt(f['stbs.letzterCode']) ? ', zuletzt ' + txt(f['stbs.letzterCode']) : ''}) – Windows startet danach automatisch neu`, problem: 'leistung-pc-startet-staendig-neu', schwere: 3 },
-          { id: 'update-neustart', wenn: f => num(f['stpw.updateNeustarts30']) >= 2, befund: f => `${f['stpw.updateNeustarts30']} Neustarts in 30 Tagen wurden von Updates bzw. der Softwareverteilung ausgelöst (zuletzt ${txt(f['stpw.letzterUpdateAusloeser'])})`, problem: 'update-softwarecenter-neustart-countdown', schwere: 2 },
+          { id: 'update-neustart', wenn: f => num(f['stpw.updateNeustarts30']) >= 2, befund: f => `${f['stpw.updateNeustarts30']} Neustarts in 30 Tagen wurden von Updates bzw. der Softwareverteilung ausgelöst (zuletzt ${txt(f['stpw.letzterUpdateAusloeser'])})`, problem: 'update-intune-neustart-angekuendigt', schwere: 2 },
           { id: 'eingefroren', wenn: f => num(f['stpw.knopf30']) > 0, befund: f => `${f['stpw.knopf30']}× wurde der PC per Ein/Aus-Taste hart ausgeschaltet – er war vorher eingefroren`, problem: 'leistung-pc-friert-ein', schwere: 2 },
           { id: 'hitze', wenn: f => num(f['stpw.thermik30']) > 0 || num(f['stpw.tempC']) >= 90, befund: f => (num(f['stpw.thermik30']) > 0 ? `${f['stpw.thermik30']} Hitze-Meldung(en) in 30 Tagen` : `Temperatur ${f['stpw.tempC']} °C`), problem: 'akku-ueberhitzung-standby-aus', schwere: 2 },
           { id: 'whea', wenn: f => num(f['stpw.whea30']) > 0, befund: f => `${f['stpw.whea30']} Hardwarefehler (WHEA) in 30 Tagen`, problem: 'leistung-hardwarefehler-whea', schwere: 2 },

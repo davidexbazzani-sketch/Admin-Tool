@@ -30,6 +30,8 @@ export const SCAN_SCHEDULE_DEFAULTS: Record<string, ScanScheduleConfig> = {
   'network-drives':      { enabled: true, days: [2], time: '13:00' },                   // Di 13:00 (verbundene Netzlaufwerke aller PCs)
   'europar-scan':        { enabled: true, days: [0, 1, 2, 3, 4, 5, 6], time: '12:00' }, // täglich 12:00 (EuroPAR-Ordner auf den Altgeräten)
   'weekend-check':       { enabled: true, days: [0], time: '12:00' },                   // So 12:00 (welche PCs laufen am Wochenende) — KEIN Nachholen
+  'pc-fehler':           { enabled: true, days: [1, 2, 3, 4, 5], time: '09:00' },       // Mo–Fr 09:00 (Proaktive Fehlersuche) — eigener Scan, getrennt vom Änderungsverlauf
+  'pc-verlauf':          { enabled: true, days: [1, 2, 3, 4, 5], time: '10:00' },       // Mo–Fr 10:00 (Änderungsverlauf je PC) — bewusst VOR den 11/12-Uhr-Scans
 }
 
 export const WEEKDAY_LABELS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
@@ -114,7 +116,16 @@ export async function loadRunStatus(path: string): Promise<ScanRunStatus> {
   } catch { /* noch keiner */ }
   return { lastRunAt: null }
 }
+const scanGemeldet = new Map<string, string>()
 export async function saveRunStatus(path: string, s: ScanRunStatus): Promise<boolean> {
+  // Lauf beendet (keine Sperre mehr, Ergebnis da) → einmal ins Aktivitätsprotokoll: wann, auf welchem Admin-PC, unter welchem Konto
+  if (!s.running && s.lastResult && s.lastSummary) {
+    const marke = `${s.lastRunAt}|${s.lastSummary}`
+    if (scanGemeldet.get(path) !== marke) {
+      scanGemeldet.set(path, marke)
+      void import('./aktivitaet').then(m => m.protokolliere({ art: 'automatisch', quelle: `Scan (${path.split('/')[0]})`, aktion: 'Scan-Lauf beendet (nur gelesen)', ergebnis: s.lastSummary!.slice(0, 400), grund: s.lastResult === 'error' ? 'mit Fehler' : undefined })).catch(() => {})
+    }
+  }
   try { return await api().netWriteJson(path, s) } catch { return false }
 }
 export function isStatusClaimed(s: ScanRunStatus, now = Date.now()): boolean {

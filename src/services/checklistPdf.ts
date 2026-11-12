@@ -24,6 +24,14 @@ function formatGermanDate(iso?: string): string {
 export interface BuildPdfOptions {
   /** Filename suggestion (without .pdf). If not given, derived from task + name. */
   filename?: string
+  /** Zeile „Headset übergeben: Ja/Nein" (nur neue Mitarbeiter). Fehlt → aus c.headsetUebergeben, sonst keine Zeile. */
+  headset?: boolean
+}
+
+/** Headset-Zeile: ausdrücklich übergeben (Bildschirm kennt den Mitarbeiter) oder gespeichert (nach dem Erledigen). */
+export function headsetWert(c: Pick<Checklist, 'headsetUebergeben'>, headset?: boolean): boolean | undefined {
+  if (typeof headset === 'boolean') return headset
+  return typeof c.headsetUebergeben === 'boolean' ? c.headsetUebergeben : undefined
 }
 
 export async function buildChecklistPdf(c: Checklist, opts: BuildPdfOptions = {}): Promise<{ doc: jsPDF; filename: string }> {
@@ -93,6 +101,14 @@ export async function buildChecklistPdf(c: Checklist, opts: BuildPdfOptions = {}
   doc.text('(Seriennummer)', marginX + 35 + doc.getTextWidth(c.newDeviceSerial || '—') + 4, y)
   doc.setFontSize(11)
   doc.setTextColor(0, 0, 0)
+  const hs = headsetWert(c, opts.headset)
+  if (hs !== undefined) {
+    y += 8
+    doc.setFont('helvetica', 'bold')
+    doc.text('Headset übergeben:', marginX, y)
+    doc.setFont('helvetica', 'normal')
+    doc.text(hs ? 'Ja' : 'Nein', marginX + 42, y)
+  }
   y += 12
 
   // ── Comment block (optional) ─────────────────────────────────────────────
@@ -170,8 +186,8 @@ export async function buildChecklistPdf(c: Checklist, opts: BuildPdfOptions = {}
 }
 
 // Trigger a browser-side download (Save-As dialog)
-export async function downloadChecklistPdf(c: Checklist): Promise<void> {
-  const { doc, filename } = await buildChecklistPdf(c)
+export async function downloadChecklistPdf(c: Checklist, headset?: boolean): Promise<void> {
+  const { doc, filename } = await buildChecklistPdf(c, { headset })
   doc.save(filename)
 }
 
@@ -184,7 +200,7 @@ function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-async function buildChecklistPrintHtml(c: Checklist): Promise<string> {
+export async function buildChecklistPrintHtml(c: Checklist, headset?: boolean): Promise<string> {
   let logoImg = ''
   try {
     const { url, aspect } = await ensureSkfLogo()
@@ -237,6 +253,7 @@ async function buildChecklistPrintHtml(c: Checklist): Promise<string> {
     <div style="height:5mm"></div>
     ${oldDeviceRow}
     <div class="row"><span class="lbl">Hardware neu:</span><span class="val">${esc(c.newDeviceSerial || '—')}</span><span class="hint">(Seriennummer)</span></div>
+    ${(() => { const hs = headsetWert(c, headset); return hs === undefined ? '' : `<div class="row" data-headset><span class="lbl">Headset übergeben:</span><span class="val">${hs ? 'Ja' : 'Nein'}</span></div>` })()}
     <div class="comments">
       <div class="title">Kommentare:</div>
       <div class="body">${commentHtml}</div>
@@ -258,8 +275,8 @@ async function buildChecklistPrintHtml(c: Checklist): Promise<string> {
 }
 
 /** Druckt die Checkliste direkt auf dem Standarddrucker (ohne Dialog). */
-export async function printChecklist(c: Checklist): Promise<{ success: boolean; error?: string }> {
-  const html = await buildChecklistPrintHtml(c)
+export async function printChecklist(c: Checklist, headset?: boolean): Promise<{ success: boolean; error?: string }> {
+  const html = await buildChecklistPrintHtml(c, headset)
   try {
     return await api().printHtml(html)
   } catch (e) {

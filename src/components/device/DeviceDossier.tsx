@@ -8,8 +8,9 @@
 import { createContext, useContext, useCallback, useEffect, useState } from 'react'
 import {
   Info, X, Loader2, Upload, Paperclip, Trash2, ExternalLink, FileText, MonitorSmartphone,
-  Plus, Zap, ListTree, Terminal, Radio, Search, Check, ChevronDown, ChevronRight, Cpu,
+  Plus, Zap, ListTree, Terminal, Radio, Search, Check, ChevronDown, ChevronRight, Cpu, History,
 } from 'lucide-react'
+import PcAenderungen from '../../pcVerlauf/PcAenderungen'
 import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { naechsteEbene, dossierZIndex } from '../../utils/dossierEbene'
 import { useAppStore } from '../../store/appStore'
@@ -94,7 +95,7 @@ function DeviceDossierModal({ hostname, serial, onClose }: { hostname: string; s
   const [busy, setBusy] = useState(false)
   const [newText, setNewText] = useState('')
   const [pendingFiles, setPendingFiles] = useState<DossierFile[]>([])
-  const [tab, setTab] = useState<'info' | 'notes' | 'daylis' | 'tasks'>('info')
+  const [tab, setTab] = useState<'info' | 'notes' | 'daylis' | 'tasks' | 'aenderungen'>('info')
   const key = deviceKey(hostname)
 
   useEffect(() => {
@@ -236,6 +237,10 @@ function DeviceDossierModal({ hostname, serial, onClose }: { hostname: string; s
             className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 -mb-px ${tab === 'tasks' ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>
             <Cpu size={13} />Task-Manager
           </button>
+          <button type="button" onClick={() => setTab('aenderungen')} data-tab-aenderungen
+            className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 -mb-px ${tab === 'aenderungen' ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>
+            <History size={13} />Änderungen
+          </button>
           <button type="button" onClick={() => setTab('notes')}
             className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 -mb-px ${tab === 'notes' ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>
             <FileText size={13} />Notizen &amp; Dateien{entryCount > 0 ? ` (${entryCount})` : ''}
@@ -260,6 +265,14 @@ function DeviceDossierModal({ hostname, serial, onClose }: { hostname: string; s
         {tab === 'tasks' && (
           <div className="flex-1 min-h-0">
             <DeviceTaskManager hostname={display} isAdmin={isAdmin} />
+          </div>
+        )}
+
+        {/* Änderungsverlauf: was hat sich an diesem PC geändert (nur lesend) */}
+        {tab === 'aenderungen' && (
+          <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4 space-y-2">
+            <PcAenderungen host={display} tage={30} zeitraumWahl />
+            <p className="text-[11px] text-muted-foreground">Programme, Windows-Updates, Treiber, Dienste, Autostart, geplante Aufgaben, feste Netzwerkeinstellungen und BIOS. Wird werktags im Hintergrund gelesen; in „Gib dein Problem ein“ erscheinen die letzten 14 Tage passend zum Problem.</p>
           </div>
         )}
 

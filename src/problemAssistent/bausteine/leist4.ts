@@ -1,8 +1,8 @@
 // ── Problem-Assistent: Lösungsbausteine Runde 4, Gruppe „leist“ ──
 // Regeln wie in ../aktionen.ts. Gemeinsame Bruchstücke: ./gemeinsam (OFFICE_C2R, DRUCKER_PS, OFFICE_APPS).
 // Leistung & Speicher / Updates & Software: Start-/Anmelde-/Herunterfahr-Analyse, Installationsprotokoll mit Klartext
-// zu Fehlercodes, versteckte Speicherfresser, Ruhezustands-/Auslagerungs-/Absturzabbild-Einstellung, Softwarecenter-Cache
-// und Speicheroptimierung. Datenträger/Partitionen, Schattenkopien (vssadmin), BCD und Benutzerdateien werden nie verändert.
+// zu Fehlercodes, versteckte Speicherfresser, Ruhezustands-/Auslagerungs-/Absturzabbild-Einstellung, Intune-Installationscache
+// (IMECache) und Speicheroptimierung. Datenträger/Partitionen, Schattenkopien (vssadmin), BCD und Benutzerdateien werden nie verändert.
 
 import type { PaAktion } from '../motor'
 
@@ -75,7 +75,7 @@ $md = @(Ev @{ LogName = 'System'; ProviderName = 'Microsoft-Windows-MemoryDiagno
 if ($md.Count) { foreach ($e in $md) { Zeile ('Speicherdiagnose ' + $e.TimeCreated.ToString('dd.MM.yyyy HH:mm') + ': ' + (Erste $e)) } } else { Zeile 'Speicherdiagnose: kein Ergebnis im Protokoll (lief noch nie bzw. wurde abgebrochen).' }` }),
 
   A({ id: 'leist4-installationsprotokoll', titel: 'Installationsprotokoll: letzte Installationen und Updates mit Fehlercode im Klartext', modus: 'system', risiko: 'lesen', timeoutMs: 180000,
-    beschreibung: 'Zeigt die Installationen der letzten 30 Tage mit Ergebnis und Klartext zu bekannten Codes (1603, 1618, 1619, 1638, 0x8024…, 0x800f…, 0x87D…): Windows Installer (MsiInstaller 1033/1034/1035), Windows-Update-Verlauf mit Fehlercode, Softwarecenter (Anwendungen und Updates mit Fehler, Exitcodes aus AppEnforce.log) und Intune-Verwaltungserweiterung (Exitcodes aus dem IME-Log). Optional nur Einträge zu einem Programm oder Code. Ändert nichts.',
+    beschreibung: 'Zeigt die Installationen der letzten 30 Tage mit Ergebnis und Klartext zu bekannten Codes (1603, 1618, 1619, 1638, 0x8024…, 0x800f…, 0x87D…): Windows Installer (MsiInstaller 1033/1034/1035), Windows-Update-Verlauf mit Fehlercode, Intune-Apps aus dem Unternehmensportal (Status und Fehlercode je App aus der Registry der Intune-Verwaltungserweiterung) und Exit-/Fehlercodes aus dem IME-Log (IntuneManagementExtension.log, AppWorkload.log). Optional nur Einträge zu einem Programm oder Code. Ändert nichts.',
     param: { label: 'Programm oder Code (optional – leer = alles)', platzhalter: 'z. B. SAP, Java, 0x80070643, 1603', vorlagen: ['SAP', 'Java', 'Adobe', 'Office', 'Visual C++', '.NET', 'Kumulatives Update', 'Defender'] },
     ps: String.raw`
 $f = $P.Trim()
@@ -91,16 +91,16 @@ $tx = @{
   '2738' = 'VBScript-Laufzeit für das Setup nicht verfügbar'
   '0x80070643' = 'schwerwiegender Installationsfehler (= MSI 1603)'; '0x80070652' = 'eine andere Installation läuft (= MSI 1618)'; '0x80070666' = 'andere Version bereits installiert (= MSI 1638)'
   '0x80070bc2' = 'Neustart nötig, um abzuschließen'; '0x80070bc9' = 'vorheriger Neustart steht noch aus'; '0x80070005' = 'Zugriff verweigert'; '0x80070070' = 'zu wenig Speicherplatz'
-  '0x80070002' = 'Datei nicht gefunden (Update-Zwischenspeicher)'; '0x80070020' = 'Datei wird von einem anderen Prozess verwendet'; '0x80070570' = 'Datei oder Verzeichnis beschädigt'
+  '0x80070002' = 'Datei nicht gefunden (Installationsbefehl bzw. Update-Zwischenspeicher)'; '0x80070020' = 'Datei wird von einem anderen Prozess verwendet'; '0x80070570' = 'Datei oder Verzeichnis beschädigt'
   '0x800705b4' = 'Zeitüberschreitung'; '0x8007000d' = 'Daten ungültig (beschädigter Download)'; '0x80092004' = 'Signatur/Katalog nicht gefunden (catroot2)'
   '0x8024a105' = 'Update-Agent: Installation abgebrochen (Neustart bzw. Zwischenspeicher)'; '0x8024401c' = 'Zeitüberschreitung zum Update-Server'; '0x80244022' = 'Update-Server überlastet (HTTP 503)'
   '0x8024402c' = 'Update-Server nicht auflösbar (Proxy/DNS)'; '0x80240438' = 'Update-Dienst nicht erreichbar'; '0x80246007' = 'Update nicht vollständig heruntergeladen'; '0x80200056' = 'Download durch Neustart/Abmeldung unterbrochen'
   '0x80d02002' = 'Übermittlungsoptimierung: Download-Zeitüberschreitung'; '0x800f0922' = 'Verbindung zum Update-Server bzw. Wiederherstellungspartition zu klein'
   '0x800f0831' = 'Vorgänger-Paket fehlt im Komponentenspeicher'; '0x800f0982' = 'Komponente passt nicht (Sprachpaket/Feature)'; '0x800f081f' = 'Quelldateien nicht gefunden'; '0x800f0954' = 'Quelle Windows Update per Richtlinie gesperrt'
   '0x80073701' = 'Komponente fehlt'; '0x80073712' = 'Komponentenspeicher beschädigt'; '0xc1900208' = 'inkompatible App blockiert das Funktionsupdate'; '0xc1900101' = 'Treiberproblem – Funktionsupdate zurückgesetzt'
-  '0x87d00607' = 'Softwarecenter: Inhalt konnte nicht heruntergeladen werden'; '0x87d00324' = 'nach der Installation nicht erkannt (Erkennungsregel)'; '0x87d01201' = 'Softwarecenter-Cache zu klein'
-  '0x87d00215' = 'Element bzw. Inhalt nicht gefunden'; '0x87d00669' = 'kein Inhaltsort für Softwareupdates verfügbar'; '0x87d0070c' = 'maximale Laufzeit überschritten'; '0x87d00668' = 'Update nach Installation weiterhin erforderlich'
-  '0x87d01106' = 'Installationsdatei/Befehlszeile ungültig'; '0x80091007' = 'Hashwert stimmt nicht (beschädigter Download im ccmcache)'; '0x87d1041c' = 'Intune: App nach der Installation nicht erkannt'; '0x87d1313c' = 'Intune: Verbindung beim Download abgebrochen'
+  '0x87d1041c' = 'Intune: App nach der Installation nicht erkannt (Erkennungsregel)'; '0x87d1313c' = 'Intune: Verbindung beim Download abgebrochen'
+  '0x87d30065' = 'Intune: App-Inhalt konnte nicht abgerufen werden (Download)'; '0x87d300c9' = 'Intune: App-Inhalt konnte nicht heruntergeladen bzw. entpackt werden'
+  '0x87d13b9f' = 'Intune: Installation bzw. Ablösung der App gescheitert (Details im IME-Log)'; '0x80091007' = 'Hashwert stimmt nicht (beschädigter Download)'
 }
 function Hex($n) { try { return ('0x{0:x8}' -f ([int64]$n -band [int64]4294967295)) } catch { return [string]$n } }
 function Klar([string]$c) { $k = $c.Trim().ToLower(); if ($k -match '^-\d+$') { $k = Hex $k }; if ($tx.ContainsKey($k)) { return ' = ' + $tx[$k] }; return '' }
@@ -125,30 +125,34 @@ try {
   Zeile ('Windows-Update-Verlauf (30 Tage): ' + $hi.Count + ' Einträge, davon fehlgeschlagen/abgebrochen: ' + $hf.Count)
   foreach ($u in @($hf | Select-Object -First 8)) { $h = Hex $u.HResult; Zeile ('  FEHLER ' + ([datetime]$u.Date).ToLocalTime().ToString('dd.MM. HH:mm') + ' ' + ([string]$u.Title).Substring(0, [math]::Min(110, ([string]$u.Title).Length)) + ' · ' + $h + (Klar $h)) }
 } catch { Zeile 'Windows-Update-Verlauf: nicht lesbar.' }
-try {
-  $ap = @(Get-CimInstance -Namespace root\ccm\ClientSDK -ClassName CCM_Application -EA Stop)
-  $af = @($ap | Where-Object { [int64]$_.ErrorCode -ne 0 -and (-not $rx -or [string]$_.Name -match $rx) })
-  Zeile ('Softwarecenter-Anwendungen: ' + $ap.Count + ', mit Fehler: ' + $af.Count)
-  foreach ($a in @($af | Select-Object -First 8)) { $h = Hex $a.ErrorCode; Zeile ('  ' + $a.Name + ' · ' + $a.InstallState + ' · ' + $h + (Klar $h)) }
-  $su = @(Get-CimInstance -Namespace root\ccm\ClientSDK -ClassName CCM_SoftwareUpdate -EA SilentlyContinue)
-  $sf = @($su | Where-Object { [int64]$_.ErrorCode -ne 0 -and (-not $rx -or [string]$_.Name -match $rx) })
-  Zeile ('Softwarecenter-Updates: ' + $su.Count + ' offen, mit Fehler: ' + $sf.Count)
-  foreach ($a in @($sf | Select-Object -First 5)) { $h = Hex $a.ErrorCode; Zeile ('  ' + ([string]$a.Name).Substring(0, [math]::Min(100, ([string]$a.Name).Length)) + ' · ' + $h + (Klar $h)) }
-} catch { Zeile 'Softwarecenter (Configuration Manager): nicht installiert bzw. nicht abfragbar.' }
-$al = 'C:\Windows\CCM\Logs\AppEnforce.log'
-if (Test-Path -LiteralPath $al) {
-  $app = ''; $ex = New-Object System.Collections.Generic.List[string]
-  foreach ($l in @(Get-Content -LiteralPath $al -Tail 4000 -EA SilentlyContinue)) {
-    $dm = [regex]::Match($l, 'date="(\d\d)-(\d\d)-\d{4}"')
-    $t = ($l -replace '^<!\[LOG\[', '' -replace '\]LOG\]!>.*$', '').Trim()
-    $am = [regex]::Match($t, 'enforcement for App DT "([^"]+)"')
-    if ($am.Success) { $app = $am.Groups[1].Value; continue }
-    $em = [regex]::Match($t, '(?i)terminated with exitcode:\s*(-?\d+)')
-    if ($em.Success -and $em.Groups[1].Value -ne '0' -and (-not $rx -or $app -match $rx)) { $ex.Add($(if ($dm.Success) { $dm.Groups[2].Value + '.' + $dm.Groups[1].Value + '. ' } else { '' }) + $app + ' · Exitcode ' + $em.Groups[1].Value + (Klar $em.Groups[1].Value)) }
+function IntSt([int]$v) { if ($v -ge 5000 -and $v -lt 6000) { 'Fehler' } elseif ($v -ge 3000 -and $v -lt 4000) { 'Anforderungen nicht erfüllt' } elseif ($v -ge 2000 -and $v -lt 3000) { 'läuft bzw. wartet (z. B. auf Neustart)' } elseif ($v -ge 1000 -and $v -lt 2000) { 'installiert' } else { 'nicht versucht bzw. unbekannt' } }
+$w32 = 'HKLM:\SOFTWARE\Microsoft\IntuneManagementExtension\Win32Apps'
+if (Test-Path -LiteralPath $w32) {
+  $nm = @{}
+  foreach ($lf in @(Get-ChildItem -LiteralPath 'C:\ProgramData\Microsoft\IntuneManagementExtension\Logs' -Filter '*.log' -EA SilentlyContinue | Where-Object { $_.Name -match '^(IntuneManagementExtension|AppWorkload)' } | Sort-Object LastWriteTime -Descending | Select-Object -First 3)) {
+    foreach ($mm in [regex]::Matches((@(Get-Content -LiteralPath $lf.FullName -Tail 6000 -EA SilentlyContinue) -join ' '), '"Id":"([0-9a-fA-F-]{36})","Name":"([^"]{1,90})"')) { $nm[$mm.Groups[1].Value.ToLower()] = $mm.Groups[2].Value }
   }
-  Zeile ('Softwarecenter-Installationen mit Exitcode ≠ 0 (AppEnforce.log): ' + $ex.Count)
-  foreach ($z in @($ex | Select-Object -Last 6)) { Zeile ('  ' + $z) }
-}
+  $wa = New-Object System.Collections.Generic.List[object]
+  foreach ($u in @(Get-ChildItem -LiteralPath $w32 -EA SilentlyContinue)) {
+    foreach ($k in @(Get-ChildItem -LiteralPath $u.PSPath -EA SilentlyContinue)) {
+      if ($k.PSChildName -notmatch '^([0-9a-fA-F-]{36})_\d+$') { continue }
+      $id = $Matches[1].ToLower()
+      $es = (Get-ItemProperty -LiteralPath $k.PSPath -Name EnforcementStateMessage -EA SilentlyContinue).EnforcementStateMessage
+      if (-not $es) { continue }
+      $j = $null; try { $j = [string]$es | ConvertFrom-Json -EA Stop } catch {}
+      if (-not $j) { continue }
+      $nam = $(if ($nm.ContainsKey($id)) { $nm[$id] } else { 'App ' + $id.Substring(0, 8) })
+      $ec = Hex $j.ErrorCode
+      if ($rx -and $nam -notmatch $rx -and $ec -notmatch $rx) { continue }
+      $wa.Add([pscustomobject]@{ n = $nam; st = [int]$j.EnforcementState; c = $ec })
+    }
+  }
+  $waF = @($wa | Where-Object { $_.st -ge 5000 -and $_.st -lt 6000 })
+  $waA = @($wa | Where-Object { $_.st -ge 3000 -and $_.st -lt 4000 })
+  $waL = @($wa | Where-Object { $_.st -ge 2000 -and $_.st -lt 3000 })
+  Zeile ('Intune-Apps aus dem Unternehmensportal (Win32): ' + $wa.Count + ' ausgewertet · Fehler: ' + $waF.Count + ' · Anforderungen nicht erfüllt: ' + $waA.Count + ' · laufen/warten: ' + $waL.Count)
+  foreach ($x in @(@($waF) + @($waA) + @($waL) | Select-Object -First 10)) { Zeile ('  ' + $x.n + ' · ' + (IntSt $x.st) + ' (' + $x.st + ')' + $(if ($x.c -ne '0x00000000') { ' · ' + $x.c + (Klar $x.c) } else { '' })) }
+} else { Zeile 'Intune-Apps (Win32): keine Einträge — über die Intune-Verwaltungserweiterung wurde auf diesem PC noch keine App installiert.' }
 $il = 'C:\ProgramData\Microsoft\IntuneManagementExtension\Logs'
 if (Test-Path -LiteralPath $il) {
   $ie = New-Object System.Collections.Generic.List[string]
@@ -164,7 +168,7 @@ if (Test-Path -LiteralPath $il) {
 }` }),
 
   A({ id: 'leist4-speicher-systembereiche', titel: 'Versteckte Speicherfresser: Ruhezustand, Auslagerung, Wiederherstellungspunkte, Caches, Papierkörbe, Profile', modus: 'profil', risiko: 'lesen', timeoutMs: 420000,
-    beschreibung: 'Zeigt, was auf C: belegt ist und im Explorer meist nicht auffällt: Ruhezustands-, Auslagerungs- und Swapdatei, Speicherabbilder, Wiederherstellungspunkte (Schattenkopie-Speicher), reservierter Speicher, Windows.old, Installer-Cache, Softwarecenter-Cache (ccmcache), Update-Downloads, Übermittlungsoptimierung, Fehlerberichte, Papierkörbe aller Benutzer, die Größe aller Benutzerprofile (mit letzter Nutzung) und die größten Dateien im Profil des angemeldeten Benutzers. Nur online gehaltene OneDrive-Dateien zählen nicht. Ändert nichts.',
+    beschreibung: 'Zeigt, was auf C: belegt ist und im Explorer meist nicht auffällt: Ruhezustands-, Auslagerungs- und Swapdatei, Speicherabbilder, Wiederherstellungspunkte (Schattenkopie-Speicher), reservierter Speicher, Windows.old, Installer-Cache, Intune-Installationscache (IMECache), Update-Downloads, Übermittlungsoptimierung, Fehlerberichte, Papierkörbe aller Benutzer, die Größe aller Benutzerprofile (mit letzter Nutzung) und die größten Dateien im Profil des angemeldeten Benutzers. Nur online gehaltene OneDrive-Dateien zählen nicht. Ändert nichts.',
     ps: String.raw`
 $c = Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='C:'"
 Zeile ('Laufwerk C: ' + (Groesse $c.FreeSpace) + ' frei von ' + (Groesse $c.Size) + ' · belegt ' + (Groesse ([double]$c.Size - [double]$c.FreeSpace)))
@@ -179,7 +183,7 @@ foreach ($i in @(Get-ChildItem -LiteralPath 'C:\' -Force -File -EA SilentlyConti
 foreach ($i in @(Get-ChildItem -LiteralPath 'C:\Windows' -Force -File -Filter 'MEMORY.DMP' -EA SilentlyContinue)) { $sys.Add([pscustomobject]@{ n = 'Speicherabbild MEMORY.DMP vom ' + $i.LastWriteTime.ToString('dd.MM.yyyy'); g = [double]$i.Length }) }
 $ord = [ordered]@{
   'C:\Windows.old' = 'Windows.old (vorherige Windows-Version)'; 'C:\$WINDOWS.~BT' = 'Setup-Reste $WINDOWS.~BT'; 'C:\Windows\Installer' = 'Installer-Cache C:\Windows\Installer (nie von Hand löschen)'
-  'C:\Windows\ccmcache' = 'Softwarecenter-Cache C:\Windows\ccmcache'; 'C:\Windows\SoftwareDistribution\Download' = 'Update-Downloads'
+  'C:\Windows\IMECache' = 'Intune-Installationscache C:\Windows\IMECache'; 'C:\Windows\SoftwareDistribution\Download' = 'Update-Downloads'
   'C:\Windows\ServiceProfiles\NetworkService\AppData\Local\Microsoft\Windows\DeliveryOptimization\Cache' = 'Übermittlungsoptimierung'; 'C:\Windows\Minidump' = 'Minidumps'
   'C:\Windows\LiveKernelReports' = 'LiveKernelReports'; 'C:\ProgramData\Microsoft\Windows\WER' = 'Fehlerberichte (WER)'; 'C:\Windows\Logs' = 'Windows-Protokolle'; 'C:\Windows\Temp' = 'Windows-Temp'
   'C:\ProgramData\Package Cache' = 'Package Cache (Setup-Quellen)'; 'C:\Windows\System32\DriverStore\FileRepository' = 'Treiberspeicher'; 'C:\Temp' = 'C:\Temp'; 'C:\Install' = 'C:\Install'
@@ -285,30 +289,29 @@ if ($w -like 'Ruhezustand*') {
   Zeile 'Wirkt nach dem nächsten Neustart.'
 }` }),
 
-  A({ id: 'leist4-ccmcache-leeren', titel: 'Softwarecenter-Cache (ccmcache) leeren', modus: 'system', risiko: 'aendern', timeoutMs: 300000,
-    beschreibung: 'Leert den Zwischenspeicher des Configuration-Manager-Clients über dessen eigene Schnittstelle — wie Systemsteuerung → Configuration Manager → Cache → „Dateien löschen“: alte Installationsquellen werden entfernt, Inhalte gerade laufender Installationen und dauerhaft vorgehaltene Inhalte bleiben. Zeigt Cache-Grenze, Belegung und Ordnergröße vorher/nachher. Hilft bei C: voll durch C:\\Windows\\ccmcache, 0x87D01201 und beschädigten Downloads (0x80091007 „Hashwert ist nicht korrekt“).',
+  A({ id: 'leist4-imecache-leeren', titel: 'Intune-Installationscache (C:\\Windows\\IMECache) aufräumen', modus: 'system', risiko: 'aendern', timeoutMs: 300000,
+    beschreibung: 'Entfernt in C:\\Windows\\IMECache nur alte Reste früherer Intune-Installationen: Unterordner, in denen seit mindestens 7 Tagen nichts mehr geändert wurde und die nicht gesperrt sind. Läuft gerade eine Installation (msiexec, Setup aus dem IMECache, Intune-Skript), wird nichts gelöscht. Die Intune-Verwaltungserweiterung lädt benötigte Inhalte bei der nächsten Installation selbst neu herunter. Zeigt Ordnergröße vorher/nachher. Hilft bei C: voll durch IMECache-Reste und bei beschädigten Downloads (0x80091007 „Hashwert ist nicht korrekt“, 0x87D300C9).',
     ps: String.raw`
-$ui = $null
-try { $ui = New-Object -ComObject UIResource.UIResourceMgr -EA Stop } catch {}
-if (-not $ui) { throw 'Softwarecenter (Configuration-Manager-Client) ist auf diesem PC nicht installiert.' }
-$ci = $ui.GetCacheInfo()
-$el = @($ci.GetCacheElements())
-$vorG = 0.0; foreach ($e in $el) { $vorG += [double]$e.ContentSize * 1KB }
-$ort = [string]$ci.Location
-Zeile ('Cache ' + $ort + ': ' + $el.Count + ' Inhalte, ' + (Groesse $vorG) + ' · Grenze ' + $ci.TotalSize + ' MB · frei ' + $ci.FreeSize + ' MB')
-$vorD = $(if ($ort -and (Test-Path -LiteralPath $ort)) { [double](OrdnerGroesse $ort) } else { 0.0 })
-$msi = @(Get-CimInstance Win32_Process -Filter "Name='msiexec.exe'" -EA SilentlyContinue).Count
-$bleibt = 0
-foreach ($e in $el) {
-  if ([int]$e.ReferenceCount -gt 0) { $bleibt++; continue }
-  try { $ci.DeleteCacheElementEx([string]$e.CacheElementID, $false) } catch { try { $ci.DeleteCacheElement([string]$e.CacheElementID) } catch { $bleibt++ } }
+$ort = 'C:\Windows\IMECache'
+if (-not (Test-Path -LiteralPath $ort)) { Zeile 'C:\Windows\IMECache ist nicht vorhanden — über Intune wurden hier noch keine Win32-Apps installiert, es gibt nichts aufzuräumen.'; return }
+$lauf = @(Get-CimInstance Win32_Process -EA SilentlyContinue | Where-Object { ($_.Name -match '^(msiexec|setup|install|AgentExecutor)' -and [string]$_.CommandLine -notmatch '/V$') -or [string]$_.ExecutablePath -match '(?i)\\IMECache\\' -or [string]$_.CommandLine -match '(?i)\\IMECache\\' })
+if ($lauf.Count) { Zeile ('Gerade läuft eine Installation (' + ((@($lauf | ForEach-Object { [string]$_.Name } | Select-Object -Unique)) -join ', ') + ') — es wurde nichts gelöscht. Bitte nach Abschluss der Installation erneut ausführen.'); return }
+$vor = [double](OrdnerGroesse $ort)
+$grenze = (Get-Date).AddDays(-7)
+$alle = @(Get-ChildItem -LiteralPath $ort -Directory -Force -EA SilentlyContinue)
+$weg = 0; $frei = 0.0; $jung = 0; $gesperrt = 0
+foreach ($d in $alle) {
+  $neuste = Get-ChildItem -LiteralPath $d.FullName -Recurse -Force -EA SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+  if ($d.LastWriteTime -ge $grenze -or ($neuste -and $neuste.LastWriteTime -ge $grenze)) { $jung++; continue }
+  $gr = [double](OrdnerGroesse $d.FullName)
+  $ziel = $d.Name + '.alt-' + (Get-Date -Format 'yyyyMMddHHmmss')
+  # Umbenennen klappt nur, wenn keine Datei darin geöffnet ist — sonst gilt der Ordner als gesperrt und bleibt.
+  try { Rename-Item -LiteralPath $d.FullName -NewName $ziel -EA Stop } catch { $gesperrt++; continue }
+  try { Remove-Item -LiteralPath (Join-Path $ort $ziel) -Recurse -Force -EA Stop; $weg++; $frei += $gr } catch { $gesperrt++; Zeile ('Nicht vollständig entfernt: ' + $d.Name + ' (' + $_.Exception.Message + ')') }
 }
-Start-Sleep -Seconds 2
-$na = @($ci.GetCacheElements()); $naG = 0.0; foreach ($e in $na) { $naG += [double]$e.ContentSize * 1KB }
-Zeile ('Entfernt: ' + ($el.Count - $na.Count) + ' Inhalte (' + (Groesse ([math]::Max([double]0, $vorG - $naG))) + ') · bleiben: ' + $na.Count + ' (in Benutzung bzw. dauerhaft vorgehalten)')
-if ($ort -and (Test-Path -LiteralPath $ort)) { Zeile ('Ordner ' + $ort + ': ' + (Groesse $vorD) + ' → ' + (Groesse ([double](OrdnerGroesse $ort)))) }
-if ($msi) { Zeile 'Hinweis: Gerade läuft eine Installation (msiexec) — deren Inhalte bleiben im Cache.' }
-Zeile ('Freier Platz auf C: jetzt ' + (Groesse ([double](Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='C:'").FreeSpace)) + ' — benötigte Inhalte lädt das Softwarecenter bei der nächsten Installation neu.')` }),
+Zeile ('IMECache: ' + $alle.Count + ' Unterordner · entfernt: ' + $weg + ' (' + (Groesse $frei) + ') · jünger als 7 Tage: ' + $jung + ' · gesperrt/übersprungen: ' + $gesperrt)
+Zeile ('Ordner ' + $ort + ': ' + (Groesse $vor) + ' → ' + (Groesse ([double](OrdnerGroesse $ort))))
+Zeile ('Freier Platz auf C: jetzt ' + (Groesse ([double](Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='C:'").FreeSpace)) + ' — benötigte Inhalte lädt die Intune-Verwaltungserweiterung bei der nächsten Installation neu.')` }),
 
   A({ id: 'leist4-speicheroptimierung', titel: 'Speicheroptimierung (Storage Sense) des Benutzers einstellen', modus: 'profil', risiko: 'aendern',
     beschreibung: 'Stellt für den angemeldeten Benutzer die Windows-Speicheroptimierung ein (Einstellungen → System → Speicher): einschalten mit wöchentlichem Lauf, temporären Dateien und Papierkorb-Inhalten älter als 30 Tage — wahlweise zusätzlich Downloads älter als 60 Tage —, nur das automatische Leeren des Downloads-Ordners abschalten oder die Speicheroptimierung ganz ausschalten. OneDrive-Einstellungen bleiben unberührt. Zeigt alte und neue Werte; eine Richtlinie hat Vorrang und wird gemeldet.',

@@ -4,7 +4,7 @@ import {
   ClipboardList, Plus, Trash2, Download, Eye, RefreshCw, Search, Loader,
   FileText, Edit3, X, Save, CheckCircle, XCircle, AlertTriangle, ArrowLeft, Printer,
   PackageCheck, RotateCcw, Check, ChevronDown, Mail, Flame, Maximize2, Minimize2, Filter, Info, Columns3, Move,
-  FileSpreadsheet, ChevronRight, MapPin, CalendarClock, CalendarDays, History,
+  FileSpreadsheet, ChevronRight, MapPin, CalendarClock, CalendarDays, History, Headphones,
 } from 'lucide-react'
 import {
   listChecklists, createChecklist, updateChecklist, deleteChecklist, setChecklistNotiz,
@@ -15,7 +15,8 @@ import { openFileForImport, parseExcelSheet, type ExcelSheetData } from '../util
 import TaskColumnDialog, { detectTaskCol } from '../components/TaskColumnDialog'
 import { downloadChecklistPdf, printChecklist } from '../services/checklistPdf'
 import { batchAdLookup } from '../services/adUserLookup'
-import { listEmployees, formatGermanDate, HARDWARE_OPTIONS, hardwareLabel, type Employee, type HardwareType } from '../services/employees'
+import { listEmployees, formatGermanDate, HARDWARE_OPTIONS, hardwareLabel, istNeuerMitarbeiter, type Employee, type HardwareType } from '../services/employees'
+import { erfasseAusCheckliste } from '../services/headsetVergabe'
 import { readCentralAdUsers, buildNameIndex, lookupUserByName } from '../services/adUserDirectory'
 import { ensureSkfLogo } from '../services/skfLogo'
 import SignaturePad from '../components/SignaturePad'
@@ -199,6 +200,8 @@ export default function Checklists() {
   const [employees, setEmployees] = useState<Employee[]>([])
   // Checkliste, deren Geraeteuebergabe gerade bestaetigt werden soll
   const [pendingComplete, setPendingComplete] = useState<Checklist | null>(null)
+  const [headsetAbschluss, setHeadsetAbschluss] = useState(true)   // Haken im Dialog „Geräteübergabe bestätigen"
+  useEffect(() => { if (pendingComplete) setHeadsetAbschluss(pendingComplete.headsetUebergeben !== false) }, [pendingComplete])
   const [placeOnMap, setPlaceOnMap] = useState<Checklist | null>(null)   // Neu-Gerät: Standort einzeichnen?
   const setScreen = useAppStore(s => s.setScreen)
   // Geräteinfos je Checklisten-ID (Modell des neuen Geräts, Kommentar + relevante
@@ -477,6 +480,15 @@ export default function Checklists() {
     }
     return m
   }, [employees])
+  // „Neuer Mitarbeiter" nur, wenn der Start ≤ 6 Monate zurückliegt oder in der Zukunft liegt
+  // (sonst würden z. B. Refresh-Checklisten von Leuten, die letztes Jahr angefangen haben, als neu gelten).
+  const neuerMa = (name: string): Employee | undefined => {
+    const e = empByName.get(canonName(name))
+    return e && istNeuerMitarbeiter(e) ? e : undefined
+  }
+  // Headset-Zeile für PDF/Druck: nur bei neuen Mitarbeitern (leer = Ja)
+  const headsetFuer = (c: Pick<Checklist, 'name' | 'headsetUebergeben'>): boolean | undefined =>
+    neuerMa(c.name) ? c.headsetUebergeben !== false : undefined
 
   // Geräteinfos laden: pro Checkliste das Modell des NEUEN Geräts sowie Software +
   // Kommentar des ALTGERÄTS aus Endgeräte-Übersicht + Software-Inventar zusammenführen.
@@ -712,6 +724,7 @@ export default function Checklists() {
       oldDeviceId: c.oldDeviceId,
       comment: c.comment,
       priority: c.priority,
+      headsetUebergeben: c.headsetUebergeben,
       signatureDataUrl: c.signatureDataUrl,
       signatureDate: c.signatureDate,
       createdBy: c.createdBy,
@@ -763,8 +776,10 @@ export default function Checklists() {
         if (!ok) return null
       }
     }
+    // Neuer Mitarbeiter: Headset-Haken ausdrücklich speichern (Voreinstellung Ja)
+    const zuSpeichern = neuerMa(draft.name) ? { ...draft, headsetUebergeben: draft.headsetUebergeben !== false } : draft
     if (editingId) {
-      const res = await updateChecklist(editingId, draft)
+      const res = await updateChecklist(editingId, zuSpeichern)
       if (!res.ok || !res.checklist) {
         showToast({ kind: 'error', text: res.error || 'Speichern fehlgeschlagen' })
         return null
@@ -774,7 +789,7 @@ export default function Checklists() {
       setView(thenView)
       return res.checklist
     } else {
-      const res = await createChecklist(draft)
+      const res = await createChecklist(zuSpeichern)
       if (!res.ok || !res.checklist) {
         showToast({ kind: 'error', text: res.error || 'Anlegen fehlgeschlagen' })
         return null
@@ -795,7 +810,7 @@ export default function Checklists() {
       if (res.ok && res.checklist) toExport = res.checklist
     }
     try {
-      await downloadChecklistPdf(toExport)
+      await downloadChecklistPdf(toExport, headsetFuer(toExport))
       showToast({ kind: 'success', text: 'PDF erstellt — bitte speichern' })
     } catch (e) {
       showToast({ kind: 'error', text: `PDF-Export fehlgeschlagen: ${e instanceof Error ? e.message : String(e)}` })
@@ -817,7 +832,7 @@ export default function Checklists() {
     }
     setPrintingId(c.id)
     try {
-      const r = await printChecklist(toPrint)
+      const r = await printChecklist(toPrint, headsetFuer(toPrint))
       if (r.success) showToast({ kind: 'success', text: 'Checkliste wird gedruckt' })
       else showToast({ kind: 'error', text: `Drucken fehlgeschlagen: ${r.error || 'unbekannt'}` })
     } finally {
@@ -830,10 +845,13 @@ export default function Checklists() {
     if (!pendingComplete) return
     const c = pendingComplete
     setPendingComplete(null)
+    const empNeu = neuerMa(c.name)
+    const headsetJa = !!empNeu && headsetAbschluss
     const res = await updateChecklist(c.id, {
       completed: true,
       completedAt: new Date().toISOString(),
       completedBy: currentUserName,
+      ...(empNeu ? { headsetUebergeben: headsetAbschluss } : {}),
     })
     if (res.ok) {
       showToast({ kind: 'success', text: `Checkliste für "${c.name}" als erledigt verschoben` })
@@ -850,8 +868,14 @@ export default function Checklists() {
           refreshMarkerGesetzt = moved.length > 0
         } catch { /* best effort – Checkliste bleibt erledigt */ }
       }
+      // Neuer Mitarbeiter + Headset übergeben → Zubehör Inventur „Headset Vergabe" (nie doppelt je Checkliste)
+      if (headsetJa) {
+        erfasseAusCheckliste({ ...c, headsetUebergeben: true }, empNeu, currentUserName)
+          .then(neu => { if (neu) showToast({ kind: 'success', text: `Headset-Übergabe an "${c.name}" in der Zubehör Inventur erfasst` }) })
+          .catch(e => showToast({ kind: 'error', text: `Headset-Übergabe nicht erfasst: ${e instanceof Error ? e.message : String(e)}` }))
+      }
       await reload()
-      void runServiceNowHandover(c)   // Hintergrund: Task schließen + Checkliste anhängen + Primary-User-Incident
+      void runServiceNowHandover(res.checklist ?? c)   // Hintergrund: Task schließen + Checkliste anhängen + Primary-User-Incident
       // Neugerät → zum Einzeichnen auffordern (überspringbar). Auch bei Refresh, wenn das
       // Altgerät auf KEINER Karte verortet war (sonst wurde der Marker bereits umgeschrieben).
       if ((c.newDeviceSerial || '').trim() && (c.deviceType === 'new' || (c.deviceType === 'refresh' && !refreshMarkerGesetzt))) setPlaceOnMap(c)
@@ -1019,7 +1043,7 @@ export default function Checklists() {
                 </thead>
                 <tbody>
                   {filteredItems.map(c => {
-                    const emp = empByName.get(canonName(c.name))
+                    const emp = neuerMa(c.name)
                     const info = deviceInfos.get(c.id)
                     return (
                     <tr key={c.id} data-rowid={c.id}
@@ -1101,6 +1125,14 @@ export default function Checklists() {
                 }`}>
                 <Flame size={13} />Hohe Priorität{draft.priority ? ' ✓' : ''}
               </button>
+              {neuerMa(draft.name) && (
+                <label data-headset-haken title="Nur bei neuen Mitarbeitern (Start ≤ 6 Monate oder in der Zukunft). Wird beim Erledigen in der Zubehör Inventur → „Headset Vergabe“ erfasst."
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold border cursor-pointer select-none ${draft.headsetUebergeben !== false ? 'bg-sky-500/15 border-sky-500/50 text-foreground' : 'border-border text-muted-foreground'}`}>
+                  <input type="checkbox" checked={draft.headsetUebergeben !== false}
+                    onChange={e => setDraft(d => ({ ...d, headsetUebergeben: e.target.checked }))} className="accent-primary" />
+                  <Headphones size={13} />Headset übergeben
+                </label>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1254,6 +1286,9 @@ export default function Checklists() {
                 <strong>Hardware neu:</strong> {draft.newDeviceSerial || '—'}
                 <span className="italic text-slate-500 text-xs ml-2">(Seriennummer)</span>
               </p>
+              {neuerMa(draft.name) && (
+                <p data-headset-vorschau><strong>Headset übergeben:</strong> {draft.headsetUebergeben !== false ? 'Ja' : 'Nein'}</p>
+              )}
             </div>
 
             <div className="mt-5">
@@ -1351,6 +1386,13 @@ export default function Checklists() {
                 <AlertTriangle size={12} className="shrink-0" />
                 Hinweis: Diese Checkliste hat noch keine digitale Unterschrift.
               </p>
+            )}
+            {neuerMa(pendingComplete.name) && (
+              <label data-headset-abschluss className="flex items-center gap-2 text-sm text-foreground mb-3 px-2.5 py-2 rounded-md border border-sky-500/40 bg-sky-500/5 cursor-pointer select-none">
+                <input type="checkbox" checked={headsetAbschluss} onChange={e => setHeadsetAbschluss(e.target.checked)} className="accent-primary" />
+                <Headphones size={14} className="text-sky-500" />Headset wurde übergeben
+                <span className="ml-auto text-[10px] text-muted-foreground whitespace-nowrap" title="Wird in der Zubehör Inventur unter „Headset Vergabe“ erfasst">→ Headset Vergabe</span>
+              </label>
             )}
             <p className="text-xs text-muted-foreground mb-4">
               Nach der Bestätigung wird die Checkliste in die Übersicht „Erledigt" verschoben.

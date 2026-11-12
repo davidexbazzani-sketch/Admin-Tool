@@ -1,6 +1,7 @@
 import { Minus, Maximize2, X } from 'lucide-react'
 import { ipcRenderer } from '../utils/ipc'
 import ChatKnopf from './chat/ChatKnopf'
+import AufnahmeKnopf from '../aufnahme/AufnahmeKnopf'
 
 export default function TitleBar() {
   return (
@@ -15,6 +16,7 @@ export default function TitleBar() {
         className="flex gap-1 items-center"
         style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
       >
+        <AufnahmeKnopf />
         <ChatKnopf />
         <button
           onClick={() => ipcRenderer('window:minimize')}

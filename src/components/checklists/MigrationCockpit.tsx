@@ -350,7 +350,7 @@ async function runTileBatch(id: TileId, ctx: CockpitCtx): Promise<void> {
     const rep = await scanOneHost(ctx.newHost).catch(() => null)
     if (!rep) return
     const items = rep.items.filter(i => i.klasse !== 'bios' && i.anwendbar && !i.ohneHardwareBezug && (i.status === 'veraltet' || i.status === 'verfuegbar'))
-    if (items.length) await useHpDeployStore.getState().run([{ host: ctx.newHost, items }], { rebootMode: 'notify', by: ctx.by })
+    if (items.length) await useHpDeployStore.getState().run([{ host: ctx.newHost, items }], { rebootMode: 'notify', by: ctx.by, ausloeser: { art: 'manuell', quelle: 'Migrations-Cockpit (Geräte-Einrichtung)' } })
     return
   }
   if (id === 'setupscript') {
@@ -472,7 +472,7 @@ function DriversPanel({ ctx }: { ctx: CockpitCtx }) {
   function toggle(id: string) { setSel(p => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n }) }
   async function install() {
     const chosen = items.filter(i => sel.has(i.softpaqId))
-    if (chosen.length) await hpRun([{ host: ctx.newHost, items: chosen as DriverItem[] }], { rebootMode: 'notify', by: ctx.by })
+    if (chosen.length) await hpRun([{ host: ctx.newHost, items: chosen as DriverItem[] }], { rebootMode: 'notify', by: ctx.by, ausloeser: { art: 'manuell', quelle: 'Migrations-Cockpit (Treiber-Auswahl)' } })
   }
   const phase = phaseByHost[hostLc]
   const res = results[hostLc]

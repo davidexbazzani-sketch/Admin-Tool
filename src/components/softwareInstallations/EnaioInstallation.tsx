@@ -19,6 +19,7 @@ import {
 import { useEnaioInstallStore } from '../../store/enaioInstallStore'
 import InstallLogbuch from './InstallLogbuch'
 import { EnaioCaptureKnopf } from './EnaioCaptureDialog'
+import { AnmeldeStatus, useAnmeldeCheck } from './AnmeldeCheck'
 
 function mmss(s: number): string {
   const m = Math.floor(s / 60), r = s % 60
@@ -85,6 +86,7 @@ export default function EnaioInstallation() {
               <button onClick={() => { setHost(''); setSerial(undefined) }}
                 className="ml-auto text-[11px] text-muted-foreground hover:text-foreground">anderer PC</button>
             </div>
+            <AnmeldeStatus host={host} />
             <EnaioPanel host={host} />
           </div>
         </Card>
@@ -111,6 +113,7 @@ function EnaioPanel({ host }: { host: string }) {
   const [bestaetigen, setBestaetigen] = useState(false)
   const [dauer, setDauer] = useState(0)
   const [protokollAuf, setProtokollAuf] = useState(false)
+  const { vorStart, anmeldeDialog } = useAnmeldeCheck()
 
   useEffect(() => { setStand(null); setBestaetigen(false); setDauer(0) }, [key])
   useEffect(() => {
@@ -130,7 +133,8 @@ function EnaioPanel({ host }: { host: string }) {
   function los() {
     if (entfernen && !bestaetigen) { setBestaetigen(true); return }
     setBestaetigen(false)
-    starte(host, { entfernen, outlookBeenden })
+    const opt = { entfernen, outlookBeenden }
+    void vorStart(host, () => starte(host, opt))
   }
 
   const outlookLaeuft = (stand?.outlook.length ?? 0) > 0
@@ -274,6 +278,7 @@ function EnaioPanel({ host }: { host: string }) {
           )}
         </div>
       )}
+      {anmeldeDialog}
     </div>
   )
 }

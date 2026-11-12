@@ -354,7 +354,7 @@ export const PROBLEME_LW4: PaProblem[] = [
     ],
     ursache: 'Ordnerrechte werden über AD-Gruppen vergeben; welche Gruppe auf einem Ordner wirkt und wer Besitzer ist, sieht der Anwender nicht. Ohne diese Angabe bleibt ein Antrag oft liegen.',
     loesung: 'Die Pfadprüfung – am PC des betroffenen Benutzers ausgeführt – zeigt, bis zu welcher Ebene sein Zugriff reicht, den Besitzer, alle berechtigten Gruppen (geerbt oder direkt gesetzt), in welchen davon er Mitglied ist und seine Rechte (Lesen, Schreiben, Ordner anlegen, Löschen).',
-    schritte: [{ aktion: 'rechte-pruefen', param: '{eingabe}' }, { aktion: 'lw4-pfad-zugriff', param: '{eingabe}' }],
+    schritte: [{ aktion: 'rechte-pruefen', param: '{eingabe}' }, { aktion: 'rechte-kollegen-vergleich', titel: 'Welche Ordnerrechte haben die Abteilungskollegen, die ihm fehlen?' }, { aktion: 'lw4-pfad-zugriff', param: '{eingabe}' }],
     frage: { label: 'Pfad des Ordners', platzhalter: 'z. B. I:\\Einkauf\\Lieferanten', vorlagen: PFAD_VORLAGEN },
     hinweis: 'Rechte vergibt DXC auf Antrag des Ordnerverantwortlichen bzw. der Führungskraft – das Tool ändert keine Berechtigungen.',
     servicenow: { name: 'Fileshare Access Request', wozu: 'Ordnerzugriff in ServiceNow beantragen' },

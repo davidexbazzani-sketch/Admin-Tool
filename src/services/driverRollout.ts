@@ -169,10 +169,11 @@ async function processTarget(id: string, hostname: string, opts: HpDeployOptions
 }
 
 /** Alle noch nicht fertigen Ziele eines Rollouts verarbeiten (in Batches ≤4). */
-async function processRollout(id: string, by: string, heartbeat?: () => void): Promise<void> {
+async function processRollout(id: string, by: string, heartbeat?: () => void, automatisch = false): Promise<void> {
   const start = (await loadRollouts()).find(x => x.id === id)
   if (!start) return
-  const opts: HpDeployOptions = { rebootMode: start.rebootMode, by, notifyUser: start.notifyUser }
+  const grund = `Rollout „${start.name}“ (angelegt von ${start.createdBy})`
+  const opts: HpDeployOptions = { rebootMode: start.rebootMode, by, notifyUser: start.notifyUser, ausloeser: automatisch ? { art: 'automatisch', quelle: 'Treiber-Rollout (Zeitplan)', grund } : { art: 'manuell', quelle: 'Treiber-Rollout „Jetzt ausführen“', grund } }
   const pending = Object.values(start.targets).filter(t => t.status !== 'done').map(t => t.hostname)
   for (let i = 0; i < pending.length; i += DEPLOY_BATCH) {
     const batch = pending.slice(i, i + DEPLOY_BATCH)
@@ -192,7 +193,7 @@ export async function runDriverRolloutOnce(by: string, heartbeat?: () => void): 
   const now = Date.now()
   const list = await loadRollouts()
   const due = list.filter(r => r.status === 'aktiv' && isConfiguredDue(r.schedule, r.lastRunAt, now))
-  for (const r of due) await processRollout(r.id, by, heartbeat)
+  for (const r of due) await processRollout(r.id, by, heartbeat, true)
   const done = due.length
   return { ok: true, summary: done ? `${done} Rollout(s) verarbeitet` : 'Kein Rollout fällig' }
 }

@@ -13,6 +13,7 @@ import { buildOnlineCheck } from '../../utils/connectivityCheck'
 import Card from '../Card'
 import { DeviceInfoButton } from '../device/DeviceDossier'
 import InstallLogbuch from './InstallLogbuch'
+import { AnmeldeStatus, useAnmeldeCheck } from './AnmeldeCheck'
 
 const log = createLogger('software-installations')
 
@@ -334,6 +335,7 @@ export default function SolidWorksInstallation() {
   const [showConfirm, setShowConfirm] = useState(false)
   const [elapsed, setElapsed] = useState(0)
   const logRef = useRef<HTMLDivElement>(null)
+  const { vorStart, anmeldeDialog } = useAnmeldeCheck()
 
   // Determine effective phase: store takes priority if running/done/error
   const phase = storePhase !== 'idle' ? storePhase : localPhase
@@ -418,6 +420,12 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
     const script = generateScript({ groups, enableUac, enableLanguage, enableUpdates, enableHpia, mode })
     store.startInstall(hostname.trim(), script)
     log('SolidWorks-Installation gestartet', `Zielrechner: ${hostname.trim()}`)
+  }
+
+  /** Vorher prüfen, wer angemeldet ist — Hinweis, wenn nicht die zugewiesene Person. */
+  function startMitPruefung() {
+    setShowConfirm(false)
+    void vorStart(hostname.trim(), startInstallation)
   }
 
   function fmtElapsed(ms: number): string {
@@ -551,6 +559,8 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
               </div>
             ))}
 
+            <div className="pt-1"><AnmeldeStatus host={hostname.trim()} /></div>
+
             <div className="flex gap-2 pt-3 border-t border-border">
               <button onClick={() => setLocalPhase('config')} className="px-3 py-1.5 rounded-lg text-xs text-muted-foreground border border-border hover:text-foreground">Zurueck</button>
               <button onClick={() => setShowConfirm(true)} disabled={!allPreChecksOk}
@@ -630,7 +640,7 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
           {phase === 'error' && (
             <div className="flex gap-2">
               <button onClick={() => { store.reset(); setLocalPhase('config') }} className="px-4 py-2 rounded-lg text-sm text-muted-foreground border border-border hover:text-foreground">Zurueck zur Konfiguration</button>
-              <button onClick={startInstallation} className="px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90">Erneut versuchen</button>
+              <button onClick={startMitPruefung} className="px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90">Erneut versuchen</button>
             </div>
           )}
         </>
@@ -653,11 +663,13 @@ if ($online) { 'OK' } else { 'FAIL' }`, 15000)
             <p className="text-[11px] text-yellow-400 mb-4">Der Vorgang kann nicht ohne Weiteres abgebrochen werden.</p>
             <div className="flex justify-end gap-2">
               <button onClick={() => setShowConfirm(false)} className="px-4 py-2 rounded-lg text-sm text-muted-foreground border border-border hover:bg-muted/20">Abbrechen</button>
-              <button onClick={startInstallation} className="px-4 py-2 rounded-lg text-sm font-semibold bg-red-600 hover:bg-red-500 text-white">Installation starten</button>
+              <button onClick={startMitPruefung} className="px-4 py-2 rounded-lg text-sm font-semibold bg-red-600 hover:bg-red-500 text-white">Installation starten</button>
             </div>
           </div>
         </div>
       )}
+
+      {anmeldeDialog}
 
       <InstallLogbuch software="SolidWorks" titel="Logbuch SolidWorks" />
     </div>

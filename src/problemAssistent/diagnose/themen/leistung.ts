@@ -55,21 +55,21 @@ if ($null -ne $leist) { Punkt 'Prozessortakt' $(if ($leist -lt 50 -and $cpuGes -
 # bekannte Lastverursacher
 $def = AnteilPf @('MsMpEng', 'MpDefenderCoreService', 'NisSrv', 'MpCopyAccelerator')
 $idx = AnteilPf @('SearchIndexer', 'SearchProtocolHost', 'SearchFilterHost')
-$ccm = AnteilPf @('CcmExec', 'ccmsetup', 'CmRcService')
+$imeA = AnteilPf @('Microsoft.Management.Services.IntuneWindowsAgent', 'AgentExecutor')
 $wmi = AnteilPf @('WmiPrvSE')
 $tel = AnteilPf @('CompatTelRunner', 'DeviceCensus')
 $exp = AnteilPf @('explorer')
 $dwmA = AnteilPf @('dwm')
 $hpA = 0.0; foreach ($k in @($jeName.Keys)) { if ($k -match '^HP') { $hpA += $jeName[$k] } }
-Fakt 'defenderCpu' $def; Fakt 'indexerCpu' $idx; Fakt 'ccmCpu' $ccm; Fakt 'wmiCpu' $wmi; Fakt 'telemetrieCpu' $tel; Fakt 'explorerCpu' $exp; Fakt 'dwmCpu' $dwmA; Fakt 'hpCpu' ([math]::Round($hpA, 1))
+Fakt 'defenderCpu' $def; Fakt 'indexerCpu' $idx; Fakt 'imeCpu' $imeA; Fakt 'wmiCpu' $wmi; Fakt 'telemetrieCpu' $tel; Fakt 'explorerCpu' $exp; Fakt 'dwmCpu' $dwmA; Fakt 'hpCpu' ([math]::Round($hpA, 1))
 $auff = @()
-foreach ($paar in @(@('Virenscanner (Defender)', $def), @('Suchindexer', $idx), @('Softwarecenter-Agent (CcmExec)', $ccm), @('WMI-Anbieterhost', $wmi), @('Kompatibilitäts-Telemetrie', $tel), @('Explorer', $exp), @('Desktopfenster-Manager', $dwmA), @('HP-Hintergrundprogramme', $hpA))) { if ([double]$paar[1] -ge 10) { $auff += ($paar[0] + ' ' + [math]::Round([double]$paar[1]) + ' %') } }
-Punkt 'Bekannte Lastverursacher' $(if ($auff.Count) { 'warn' } else { 'ok' }) $(if ($auff.Count) { $auff -join ', ' } else { 'keiner auffällig (Defender, Suchindexer, Softwarecenter, WMI, Telemetrie)' })
+foreach ($paar in @(@('Virenscanner (Defender)', $def), @('Suchindexer', $idx), @('Intune-Verwaltungserweiterung', $imeA), @('WMI-Anbieterhost', $wmi), @('Kompatibilitäts-Telemetrie', $tel), @('Explorer', $exp), @('Desktopfenster-Manager', $dwmA), @('HP-Hintergrundprogramme', $hpA))) { if ([double]$paar[1] -ge 10) { $auff += ($paar[0] + ' ' + [math]::Round([double]$paar[1]) + ' %') } }
+Punkt 'Bekannte Lastverursacher' $(if ($auff.Count) { 'warn' } else { 'ok' }) $(if ($auff.Count) { $auff -join ', ' } else { 'keiner auffällig (Defender, Suchindexer, Intune-Verwaltungserweiterung, WMI, Telemetrie)' })
 # läuft eine Installation im Hintergrund?
 $msi = @($alle | Where-Object { $_.ProcessName -eq 'msiexec' }).Count
-$inst = @($alle | Where-Object { $_.ProcessName -match '^(TiWorker|TrustedInstaller|ccmsetup|setup|MoUsoCoreWorker|wuauclt|OfficeClickToRun)$' } | ForEach-Object { [string]$_.ProcessName } | Select-Object -Unique)
-$instCpu = AnteilPf @('TiWorker', 'TrustedInstaller', 'msiexec', 'ccmsetup', 'setup', 'MoUsoCoreWorker', 'wuauclt')
-$instLaeuft = ($msi -ge 2) -or ($instCpu -ge 5) -or (@($inst | Where-Object { $_ -match '^(ccmsetup|setup)$' }).Count -gt 0)
+$inst = @($alle | Where-Object { $_.ProcessName -match '^(TiWorker|TrustedInstaller|setup|MoUsoCoreWorker|wuauclt|OfficeClickToRun)$' } | ForEach-Object { [string]$_.ProcessName } | Select-Object -Unique)
+$instCpu = AnteilPf @('TiWorker', 'TrustedInstaller', 'msiexec', 'setup', 'MoUsoCoreWorker', 'wuauclt')
+$instLaeuft = ($msi -ge 2) -or ($instCpu -ge 5) -or (@($inst | Where-Object { $_ -match '^setup$' }).Count -gt 0)
 if ($msi -ge 2) { $inst = @($inst) + @('msiexec ×' + $msi) }
 Fakt 'installLaeuft' $instLaeuft; Fakt 'installProzesse' @($inst); Fakt 'installCpu' $instCpu
 Punkt 'Installation im Hintergrund' $(if ($instLaeuft) { 'warn' } else { 'ok' }) $(if ($instLaeuft) { 'läuft gerade: ' + (@($inst) -join ', ') + ' (' + $instCpu + ' % CPU)' } else { 'keine' })
@@ -195,8 +195,8 @@ $cbs = GroesseGrob 'C:\Windows\Logs\CBS' 2
 Fakt 'swDownloadGB' $sd.gb; Fakt 'doCacheGB' $doc.gb; Fakt 'cbsGB' $cbs.gb
 $upd = @{ gb = [math]::Round($sd.gb + $doc.gb + $cbs.gb, 1); voll = ($sd.voll -and $doc.voll -and $cbs.voll) }
 Fakt 'updateResteGB' $upd.gb; ZeigPl 'Update-Reste (Download, Übermittlung, CBS-Protokolle)' $upd 5
-$ccm = GroesseGrob 'C:\Windows\ccmcache' 4
-Fakt 'ccmcacheGB' $ccm.gb; ZeigPl 'Softwarecenter-Cache (ccmcache)' $ccm 8
+$imc = GroesseGrob 'C:\Windows\IMECache' 4
+Fakt 'imecacheGB' $imc.gb; ZeigPl 'Intune-Installationscache (IMECache)' $imc 8
 $wt = GroesseGrob 'C:\Windows\Temp' 3
 Fakt 'winTempGB' $wt.gb; ZeigPl 'Windows-Temp' $wt 3
 $ins = GroesseGrob 'C:\Windows\Installer' 4
@@ -370,7 +370,7 @@ export const THEMEN_LEISTUNG: DgOber[] = [
         regeln: [
           { id: 'windows-old', wenn: f => num(f['pfplatz.windowsOldGB']) >= 3, befund: f => `Ordner „Windows.old“ belegt ${zahl(f['pfplatz.windowsOldGB'])} GB`, problem: 'leistung-windows-old-belegt-platz', schwere: 3 },
           { id: 'update-reste', wenn: f => num(f['pfplatz.updateResteGB']) >= 5, befund: f => `Update-Reste belegen ${zahl(f['pfplatz.updateResteGB'])} GB (Download ${zahl(f['pfplatz.swDownloadGB'])}, Übermittlungsoptimierung ${zahl(f['pfplatz.doCacheGB'])}, CBS-Protokolle ${zahl(f['pfplatz.cbsGB'])} GB)`, problem: 'leistung-windows-ordner-gross', schwere: 2 },
-          { id: 'ccmcache', wenn: f => num(f['pfplatz.ccmcacheGB']) >= 8, befund: f => `Softwarecenter-Cache (ccmcache) belegt ${zahl(f['pfplatz.ccmcacheGB'])} GB`, problem: 'leistung-ccmcache-belegt-platz', schwere: 2 },
+          { id: 'imecache', wenn: f => num(f['pfplatz.imecacheGB']) >= 8, befund: f => `Intune-Installationscache (C:\\Windows\\IMECache) belegt ${zahl(f['pfplatz.imecacheGB'])} GB`, problem: 'leistung-imecache-belegt-platz', schwere: 2 },
           { id: 'dumps', wenn: f => num(f['pfplatz.dumpsGB']) >= 2, befund: f => `Absturzabbilder und Fehlerberichte belegen ${zahl(f['pfplatz.dumpsGB'])} GB (MEMORY.DMP ${zahl(f['pfplatz.memoryDmpGB'])} GB)`, problem: 'leistung-speicherabbilder-belegen-platz', schwere: 2 },
           { id: 'user-temp', wenn: f => num(f['pfplatz.userTempMaxGB']) >= 3, befund: f => `Temp-Ordner von ${txt(f['pfplatz.userTempMaxWer'])} belegt ${zahl(f['pfplatz.userTempMaxGB'])} GB`, problem: 'leistung-benutzer-temp-viele-gb', schwere: 2 },
           { id: 'papierkorb', wenn: f => num(f['pfplatz.papierkorbGB']) >= 3, befund: f => `Papierkorb (alle Benutzer) belegt ${zahl(f['pfplatz.papierkorbGB'])} GB`, problem: 'leistung-papierkorb-viele-gb', schwere: 2 },
@@ -385,7 +385,7 @@ export const THEMEN_LEISTUNG: DgOber[] = [
         regeln: [
           { id: 'defender', wenn: f => num(f['pf.defenderCpu']) >= 10, befund: f => `Virenscanner (Defender) belegt ${zahl(f['pf.defenderCpu'])} % Prozessor`, problem: 'leistung-defender-scan-bremst', schwere: 3 },
           { id: 'indexer', wenn: f => num(f['pf.indexerCpu']) >= 10, befund: f => `Suchindexer belegt ${zahl(f['pf.indexerCpu'])} % Prozessor`, problem: 'leistung-suchindexer-last', schwere: 3 },
-          { id: 'ccmexec', wenn: f => num(f['pf.ccmCpu']) >= 10, befund: f => `Softwarecenter-Agent (CcmExec) belegt ${zahl(f['pf.ccmCpu'])} % Prozessor`, problem: 'leistung-sms-agent-host-cpu', schwere: 3 },
+          { id: 'intune-agent', wenn: f => num(f['pf.imeCpu']) >= 10, befund: f => `Intune-Verwaltungserweiterung (IntuneWindowsAgent/AgentExecutor) belegt ${zahl(f['pf.imeCpu'])} % Prozessor`, problem: 'leistung-intune-agent-cpu', schwere: 3 },
           { id: 'wmi', wenn: f => num(f['pf.wmiCpu']) >= 10, befund: f => `WMI-Anbieterhost (WmiPrvSE) belegt ${zahl(f['pf.wmiCpu'])} % Prozessor`, problem: 'leistung-wmi-provider-host-last', schwere: 3 },
           { id: 'telemetrie', wenn: f => num(f['pf.telemetrieCpu']) >= 10, befund: f => `Kompatibilitäts-Telemetrie (CompatTelRunner) belegt ${zahl(f['pf.telemetrieCpu'])} % Prozessor`, problem: 'leistung-compatibility-telemetry-last', schwere: 2 },
           { id: 'install', wenn: f => ja(f['pf.installLaeuft']), befund: f => `Hintergrundinstallation läuft (${txt(f['pf.installProzesse'])}, ${zahl(f['pf.installCpu'])} % CPU)`, problem: 'leistung-softwareverteilung-im-hintergrund', schwere: 2 },

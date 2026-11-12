@@ -5,9 +5,10 @@ import {
   Bug, LogOut, Crown, LayoutDashboard, ArrowRightLeft, Lightbulb, Activity, BookOpen, Package, Stethoscope, PackagePlus, MonitorPlay, PhoneCall,
   Building2, Network, ClipboardList, FolderKanban, ScanSearch, Wifi, CalendarClock, Boxes, Cable, UserPlus, ChevronDown, MonitorSmartphone, Ticket,
   DatabaseBackup, Router, Rocket, Radar, Cpu, Server, HardDriveDownload, Factory, Gamepad2, ClipboardCheck, Building,
-  GripVertical, RotateCcw, Check as CheckIcon, LifeBuoy, AlertOctagon, Printer, ListChecks,
+  GripVertical, RotateCcw, Check as CheckIcon, LifeBuoy, AlertOctagon, Printer, ListChecks, Bell, BellOff,
 } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
+import { useServerStumm, setzeServerStumm } from '../services/serverStumm'
 import { useAuthStore, useIsMasterAdmin, useIsAdmin } from '../store/authStore'
 import { useRadarStore } from '../store/radarStore'
 import { api } from '../electronAPI'
@@ -251,6 +252,7 @@ export default function Sidebar() {
   const licensesAlarmCount = useAppStore(s => s.licensesAlarmCount)
   const employeeReminderCount = useAppStore(s => s.employeeReminderCount)
   const serverAlarmCount = useAppStore(s => s.serverAlarmCount)
+  const serverStumm = useServerStumm(s => s.stumm)
 
   // Global never-hide list (so master admin can never lock themself out).
   // Per-user overrides take precedence over this and can hide everything —
@@ -343,6 +345,21 @@ export default function Sidebar() {
         {item.id === 'employee-management' && employeeReminderCount > 0 && !active && (
           <span className="shrink-0 px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold" title={`${employeeReminderCount} neue Mitarbeiter beginnen bald`}>
             {employeeReminderCount}
+          </span>
+        )}
+        {item.id === 'server' && !arranging && (
+          <span
+            role="button" tabIndex={0} data-server-glocke
+            aria-label={serverStumm ? 'Server-Mitteilungen wieder einschalten' : 'Server-Mitteilungen ausschalten'}
+            aria-pressed={serverStumm}
+            title={serverStumm
+              ? 'Server-Mitteilungen sind AUS – du bekommst keine Popups, Windows-Hinweise und kein Blinken. Klicken zum Einschalten.'
+              : 'Server-Mitteilungen sind an. Klicken zum Ausschalten (nur für dich – die Prüfungen laufen weiter).'}
+            onClick={e => { e.stopPropagation(); void setzeServerStumm(session?.user?.username || '', !serverStumm) }}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); void setzeServerStumm(session?.user?.username || '', !serverStumm) } }}
+            className={`shrink-0 -my-1 p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 ${serverStumm ? 'text-red-500 dark:text-red-400' : active ? 'text-primary-foreground/80' : 'text-muted-foreground opacity-60 group-hover:opacity-100'}`}
+          >
+            {serverStumm ? <BellOff size={13} /> : <Bell size={13} />}
           </span>
         )}
         {item.id === 'network-radar' && radarScanning && (

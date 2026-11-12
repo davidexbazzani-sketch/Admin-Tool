@@ -117,6 +117,20 @@ export function formatGermanDate(iso: string): string {
   return `${parts[2]}.${parts[1]}.${parts[0]}`
 }
 
+/** Wie viele Monate nach dem Start jemand noch als „neuer Mitarbeiter" gilt. */
+export const NEU_MONATE = 6
+
+/** „Neuer Mitarbeiter" = Start in den letzten 6 Kalendermonaten ODER in der Zukunft.
+ *  Ohne (lesbares) Startdatum: nein — sonst würden Altbestände dauerhaft als neu gelten. */
+export function istNeuerMitarbeiter(e: { startDate?: string } | null | undefined, heute: Date = new Date()): boolean {
+  const iso = toIsoDate(e?.startDate || '')
+  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!m) return false
+  const start = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+  const grenze = new Date(heute.getFullYear(), heute.getMonth() - NEU_MONATE, heute.getDate())
+  return start.getTime() >= grenze.getTime()
+}
+
 /** Normalisiert beliebige Datumseingaben (TT.MM.JJJJ oder JJJJ-MM-TT) zu ISO. */
 export function toIsoDate(input: string): string {
   if (!input) return ''

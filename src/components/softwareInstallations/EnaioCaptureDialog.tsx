@@ -14,6 +14,7 @@ import {
 } from '../../services/enaioCapture'
 import { useEnaioCaptureStore } from '../../store/enaioCaptureStore'
 import InstallLogbuch from './InstallLogbuch'
+import { useAnmeldeCheck } from './AnmeldeCheck'
 
 export function EnaioCaptureKnopf({ host }: { host: string }) {
   const [auf, setAuf] = useState(false)
@@ -47,6 +48,7 @@ function EnaioCaptureDialog({ host, onClose }: { host: string; onClose: () => vo
   const [quellenAuf, setQuellenAuf] = useState(false)
   const [fund, setFund] = useState<CaptureFund | null>(null)
   const [sucht, setSucht] = useState(false)
+  const { vorStart, anmeldeDialog } = useAnmeldeCheck()
 
   // Sobald Capture gewollt ist: Quellen gleich prüfen — so sieht man VOR dem Start, was
   // gefunden wurde und was übersprungen wird.
@@ -171,7 +173,7 @@ function EnaioCaptureDialog({ host, onClose }: { host: string; onClose: () => vo
                       {!serverSucht && !serverWahl && <p className="text-[11px] text-muted-foreground">wird nach der Quellensuche geprüft …</p>}
                       {serverWahl && <ServerAnzeige wahl={serverWahl} />}
                     </div>
-                    <button onClick={() => starte(host, opt)}
+                    <button onClick={() => { const o = opt; void vorStart(host, () => starte(host, o)) }}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md font-semibold bg-amber-600 hover:bg-amber-500 text-white">
                       <Play size={12} />Enaio Capture einrichten
                     </button>
@@ -195,6 +197,7 @@ function EnaioCaptureDialog({ host, onClose }: { host: string; onClose: () => vo
           <InstallLogbuch software="Enaio Capture" titel="Logbuch Enaio Capture" />
         </div>
       </div>
+      {anmeldeDialog}
     </div>
   )
 }

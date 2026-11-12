@@ -49,7 +49,7 @@ export default function DepartureEmailController() {
         for (const dep of due) {
           const mail = await buildDepartureReminder(dep, ctx)
           if (!mail.ok || !mail.to) continue // keine Manager-E-Mail → nur manuell (UI)
-          const res = await api().sendEmailRaw({ to: mail.to, cc: SUPPORT_CC, subject: mail.subject, body: mail.body, smtp: '', port: 587 })
+          const res = await api().sendEmailRaw({ to: mail.to, cc: SUPPORT_CC, subject: mail.subject, body: mail.body, smtp: '', port: 587, protokoll: { art: 'automatisch', quelle: 'Austritts-Reminder (Zeitplan)' } })
           if (res.success) {
             store = markSent(store, dep.id, by, new Date().toISOString())
             await saveReminderStore(store) // sofort persistieren → idempotent

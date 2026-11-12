@@ -1389,7 +1389,7 @@ export const PROBLEME_WEB4: PaProblem[] = [
       { aktion: 'web-browser-zustand' },
       { aktion: 'web-browser-option', param: 'Hardwarebeschleunigung an' },
     ],
-    hinweis: 'Die HEVC-Videoerweiterung verteilt DXC über Unternehmensportal bzw. Softwarecenter.',
+    hinweis: 'Die HEVC-Videoerweiterung verteilt DXC über Unternehmensportal (Intune).',
   },
 
   // ══ Zwischenablage ══════════════════════════════════════════════════════════

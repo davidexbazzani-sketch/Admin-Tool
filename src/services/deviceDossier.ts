@@ -130,8 +130,18 @@ export async function deleteDeviceEntry(hostname: string, entryId: string, by: s
  */
 export async function logDeviceAction(
   hostname: string, serial: string | undefined, text: string, by: string, source?: string,
+  /** ohneProtokoll: der Aufrufer schreibt das Aktivitätsprotokoll selbst (sonst stünde es doppelt). */
+  opts?: { ohneProtokoll?: boolean },
 ): Promise<void> {
   if (!hostname || !hostname.trim() || !text || !text.trim()) return
+  // Jeder Eingriff zusätzlich ins zentrale Aktivitätsprotokoll (Datum, Admin-PC, Bearbeiter) — Einstellungen → „Aktivitätsprotokoll“
+  if (!opts?.ohneProtokoll) {
+    void import('./aktivitaet').then(m => m.protokolliere({
+      art: /warteliste|automatisch|hintergrund|auto-?setup/i.test(`${by} ${source || ''}`) ? 'automatisch' : 'manuell',
+      quelle: source || 'Geräte-Dossier', aktion: text.trim().split('\n')[0].slice(0, 300), ziel: hostname.trim().toUpperCase(),
+      details: text.trim().split('\n').slice(1, 40),
+    })).catch(() => {})
+  }
   try {
     const entry: DeviceDossierEntry = {
       id: 'a_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7),

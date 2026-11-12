@@ -19,6 +19,8 @@ import { runAccessCheckScanOnce, NIS2_ACCESS_STATUS } from './nis2Access'
 import { runNetworkDrivesScanOnce, NETWORK_DRIVES_STATUS } from './deviceNetworkDrives'
 import { runEuroparScanClaimed, EUROPAR_SCAN_STATUS, EUROPAR_SCAN_ID } from './europarScan'
 import { runWeekendCheckOnce, dateKey, WEEKEND_CHECK_ID, WEEKEND_CHECK_STATUS } from './weekendCheck'
+import { runPcVerlaufScan, PC_VERLAUF_ID, PC_VERLAUF_STATUS } from '../pcVerlauf/lesen'
+import { runPcFehlerScan, PC_FEHLER_ID, PC_FEHLER_STATUS } from '../pcFehler/lauf'
 import { loadRunStatus, saveRunStatus, isStatusClaimed, claimExclusive, getScanSchedule, WEEKDAY_LABELS } from './scanSchedules'
 
 export interface ScanStatus {
@@ -247,7 +249,7 @@ const europarScan: ScanDef = {
 const weekendCheckScan: ScanDef = {
   id: WEEKEND_CHECK_ID,
   label: 'Wochenend-Check (PCs an?)',
-  description: 'Pingt sonntags alle genutzten PCs (Endgeräte-Übersicht: In use + Active) an und dokumentiert im Proaktiven Radar (Reiter „Wochenend-Check"), welche am Wochenende nicht ausgeschaltet wurden. Läuft nur, wenn das Tool zur Uhrzeit (bis 2 Std. danach) bei einem Admin geöffnet ist — verpasste Messtage werden nicht nachgeholt.',
+  description: 'Pingt sonntags alle genutzten PCs (Endgeräte-Übersicht: In use + Active) an und dokumentiert im Proaktiven Radar (Reiter „Wochenend-Check"), welche am Wochenende nicht ausgeschaltet wurden — bei eingeschalteten PCs auch, wer angemeldet ist (nur lesend). Läuft nur, wenn das Tool zur Uhrzeit (bis 2 Std. danach) bei einem Admin geöffnet ist — verpasste Messtage werden nicht nachgeholt.',
   cadence: '',
   async loadStatus() {
     const s = await loadRunStatus(WEEKEND_CHECK_STATUS)
@@ -278,4 +280,30 @@ const serverCertsScan: ScanDef = {
   run(by) { return runWithClaim(SERVER_CERTS_STATUS, () => runZertifikatsScan(by)) },
 }
 
-export const SCAN_REGISTRY: ScanDef[] = [softwareScan, printerConnScan, printerIpScan, deviceScan, radarScan, vlanScan, serverMetricsScan, serverCertsScan, lostDevicesScan, nis2AccessScan, networkDrivesScan, europarScan, weekendCheckScan]
+// ── Änderungsverlauf je PC (Mo–Fr 10:00) ──────────────────────────────────────
+const pcVerlaufScan: ScanDef = {
+  id: PC_VERLAUF_ID,
+  label: 'Änderungsverlauf je PC (aktueller Stand, „Was hat sich geändert?")',
+  description: 'Liest werktags von allen genutzten PCs (Endgeräte-Übersicht: In use + Active, keine Server) den Stand von Programmen, Windows-Updates, Treibern, Diensten, Autostart, geplanten Aufgaben, festen Netzwerkeinstellungen und BIOS und hält fest, was sich geändert hat. Nur lesend, netzschonend: höchstens 3 PCs gleichzeitig, WinRM wird nicht eingeschaltet, ein unveränderter PC schickt nur wenige hundert Bytes. Anzeige in „Gib dein Problem ein“ (Änderungen der letzten 14 Tage, passend zum Problem) und im Geräte-„i".',
+  cadence: '',
+  async loadStatus() {
+    const s = await loadRunStatus(PC_VERLAUF_STATUS)
+    return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
+  },
+  run(by) { return runWithClaim(PC_VERLAUF_STATUS, () => runPcVerlaufScan(by)) },
+}
+
+// ── Proaktive Fehlersuche (Mo–Fr 09:00) — eigener Scan, getrennt vom Änderungsverlauf ──
+const pcFehlerScan: ScanDef = {
+  id: PC_FEHLER_ID,
+  label: 'Proaktive Fehlersuche (PC-Fehler im Proaktiven Radar)',
+  description: 'Sucht werktags auf allen genutzten PCs (keine Server) nach Fehlern, bevor sie jemand meldet: alle Windows-Ereignisprotokolle der letzten 7 Tage (Abstürze von Outlook, Teams, SolidWorks …, Bluescreens, Festplatten- und Hardwarefehler, abgestürzte Dienste, fehlgeschlagene Updates, Fehlermeldungen von Office) und ob Laufwerk I: verbunden ist. Der PC zählt selbst zusammen, übers Netz geht nur die Zusammenfassung. Nur lesend und für den Benutzer unsichtbar (kein Fenster), höchstens 3 PCs gleichzeitig. Ergebnis: Proaktives Radar → „PC-Fehler“, jeweils mit Lösungsweg.',
+  cadence: '',
+  async loadStatus() {
+    const s = await loadRunStatus(PC_FEHLER_STATUS)
+    return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
+  },
+  run(by) { return runWithClaim(PC_FEHLER_STATUS, () => runPcFehlerScan(by)) },
+}
+
+export const SCAN_REGISTRY: ScanDef[] = [pcFehlerScan, pcVerlaufScan, softwareScan, printerConnScan, printerIpScan, deviceScan, radarScan, vlanScan, serverMetricsScan, serverCertsScan, lostDevicesScan, nis2AccessScan, networkDrivesScan, europarScan, weekendCheckScan]
