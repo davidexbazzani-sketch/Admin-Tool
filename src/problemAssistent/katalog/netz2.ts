@@ -133,7 +133,7 @@ export const PROBLEME_NETZ2: PaProblem[] = [
     stichworte: ['dns langsam', 'host wird aufgeloest', 'resolving host', 'seiten laden verzoegert', 'erst nach sekunden', 'dns timeout', 'erster aufruf langsam', 'namensaufloesung langsam', 'warten auf antwort', 'jede seite haengt kurz'],
     ursache: 'Der erste eingetragene DNS-Server antwortet nicht mehr (alte, von Hand eingetragene oder vom Heimrouter verteilte Adresse). Windows wartet bei jedem neuen Namen erst die Zeitüberschreitung ab und fragt dann den nächsten.',
     loesung: 'Netzwerkstatus und Verbindungstest zeigen die eingetragenen DNS-Server und ob Namen aufgelöst werden. Der DNS-Cache wird geleert; sind DNS-Server von Hand eingetragen, werden sie wieder auf „automatisch“ gestellt (optional).',
-    schritte: [{ aktion: 'net-status' }, { aktion: 'net-test' }, { aktion: 'dns-leeren' }, { aktion: 'dns-automatisch', optional: true }],
+    schritte: [{ aktion: 'net-status' }, { aktion: 'net-test' }, { aktion: 'dns-leeren' }, { aktion: 'dns-automatisch', optional: true }, { aktion: 'werkzeug:netzdiagnose' }],
     hinweis: 'Verteilt der Heimrouter einen toten DNS-Server, startet der Anwender den Router neu bzw. korrigiert ihn dort; im Büro korrigiert DXC die DHCP-Einstellung.',
     ueberwachen: ['dns-fehler'],
     nachricht: 'Wir haben die Namensauflösung Ihres PCs bereinigt. Webseiten sollten jetzt ohne Verzögerung laden.',

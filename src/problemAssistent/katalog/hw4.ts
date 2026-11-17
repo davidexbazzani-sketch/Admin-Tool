@@ -1182,6 +1182,8 @@ export const PROBLEME_HW4: PaProblem[] = [
     schritte: [
       { aktion: 'top-prozesse' },
       { aktion: 'hw4-kuehlung', param: LEISE },
+      { aktion: 'werkzeug:treiber', titel: 'BIOS und Treiber aktualisieren (HP) – neue Lüfter- und Energiesteuerung' },
+      { aktion: 'werkzeug:ueberwachung' },
     ],
     hinweis: 'Lüftungsschlitze reinigen bzw. Wärmeleitpaste erneuern nur über den HP-Service. Langsam nur am Dock: „Laptop am Dock plötzlich sehr langsam“.',
     ueberwachen: ['cpu-gedrosselt'],
@@ -1366,6 +1368,7 @@ export const PROBLEME_HW4: PaProblem[] = [
     schritte: [
       { aktion: 'datentraeger-zustand' },
       { aktion: 'speicher-analyse' },
+      { aktion: 'werkzeug:backups', titel: 'Vor dem Tausch: Daten sichern (Back-Ups)' },
     ],
     hinweis: 'Vorsorglicher SSD-Tausch über HP-Garantie (innerhalb der Laufzeit) bzw. ServiceNow; vorher Daten sichern.',
   },

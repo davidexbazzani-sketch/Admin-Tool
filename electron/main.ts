@@ -11,9 +11,14 @@ import * as ns from './networkStorage'
 import { registerKnowledgeSearchIpc } from './knowledgeSearchIpc'
 import { registriereSlideSchema, bedieneSlideProtokoll, erlaubeOrdner, setzeVendorOrdner } from './slideProtocol'
 import { registriereAufnahme } from './aufnahme'
+import * as zugriffe from './zugriffsProtokoll'
 
 // Wissenssuche-IPC (knowledge:load / knowledge:status) einmalig registrieren.
 registerKnowledgeSearchIpc()
+
+// Server-Zugriffsprotokoll + Schonung der Cluster-Knoten (siehe electron/zugriffsProtokoll.ts).
+// Basis nur als Pfad — geschrieben wird asynchron, ein nicht erreichbares Netzlaufwerk blockiert nie.
+zugriffe.richteEin({ basis: () => { try { return ns.getBasePath() } catch { return '' } }, pc: hostname() })
 
 // ========= WISSENSDATENBANK + GURU DEBUG =========
 try {
@@ -298,12 +303,28 @@ registriereSlideSchema()
 // Ohne AppUserModelId zeigt Windows keine Benachrichtigungen (Chat) — gleiche Kennung wie im Installer
 if (process.platform === 'win32') app.setAppUserModelId('de.company.admintool')
 
-app.whenReady().then(() => {
-  // Offline-Kopie der Folien-Bibliotheken (three.js, GSAP …), siehe scripts/slideVendor.mjs
-  setzeVendorOrdner(isDev ? join(__dirname, '../public/slide-vendor') : join(__dirname, '../dist/slide-vendor'))
-  bedieneSlideProtokoll()
-  createWindow()
-})
+// Nur EIN Tool je Windows-Sitzung (17.11.2026): Lief das Tool zweimal (z. B. Autostart + Doppelklick),
+// machten BEIDE die automatischen Server-Abfragen — im Zugriffsprotokoll liefen Ping und Neustart-
+// Abfrage in jedem dritten Takt doppelt. Ein zweiter Start holt jetzt nur das offene Fenster nach vorn.
+// (Nicht im Entwicklungsmodus — dort soll das installierte Tool daneben weiterlaufen dürfen.)
+const einzigeInstanz = isDev || app.requestSingleInstanceLock()
+if (!einzigeInstanz) {
+  app.quit()
+} else {
+  app.on('second-instance', () => {
+    const w = mainWindow
+    if (!w || w.isDestroyed()) return
+    if (w.isMinimized()) w.restore()
+    if (!w.isVisible()) w.show()
+    w.focus()
+  })
+  app.whenReady().then(() => {
+    // Offline-Kopie der Folien-Bibliotheken (three.js, GSAP …), siehe scripts/slideVendor.mjs
+    setzeVendorOrdner(isDev ? join(__dirname, '../public/slide-vendor') : join(__dirname, '../dist/slide-vendor'))
+    bedieneSlideProtokoll()
+    createWindow()
+  })
+}
 
 // Der Renderer gibt den Ordner einer HTML-Folie frei, bevor er sie anzeigt. Nur was
 // hier freigegeben ist, liefert skfslide:// aus.
@@ -355,9 +376,14 @@ app.on('activate', () => {
 // ─── IPC Handlers ───────────────────────────────────────────────────────────
 
 // PowerShell execution
-ipcMain.handle('ps:run', async (_e, command: string, timeoutMs?: number) => {
-  return runPowerShell(command, timeoutMs ?? 30000)
-})
+// Vorher: Welche Server spricht der Befehl an? Cluster-Knoten nur per Ping (sonst wird der
+// Befehl NICHT ausgeführt), jeder Server-Zugriff kommt ins Zugriffsprotokoll.
+ipcMain.handle('ps:run', (_e, command: string, timeoutMs?: number, meta?: zugriffe.ZugriffMeta) =>
+  zugriffe.psGeschuetzt(command, timeoutMs ?? 30000, meta, runPowerShell))
+
+// Zugriffsprotokoll: Kontext (Servernamen, Knoten, Benutzer) von der Oberfläche + Lesen
+ipcMain.handle('zugriffe:kontext', (_e, k: zugriffe.ZugriffKontext) => { zugriffe.setzeKontext(k || {}); return true })
+ipcMain.handle('zugriffe:lade', (_e, f: zugriffe.ZugriffFilter) => zugriffe.ladeZugriffe(f))
 
 // Admin check
 ipcMain.handle('ps:checkAdmin', async () => {
@@ -2221,6 +2247,7 @@ ipcMain.handle('heartbeat:check', (_e, username: string) => {
   return ns.readJson<{ username: string; timestamp: string }>(`heartbeat/${username}.json`)
 })
 app.on('before-quit', () => {
+  zugriffe.leerenBeimBeenden()
   if (_heartbeatUser) {
     try { ns.deleteFile(`heartbeat/${_heartbeatUser}.json`) } catch { /* ignore */ }
     _heartbeatUser = null

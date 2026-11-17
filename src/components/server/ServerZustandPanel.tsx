@@ -2,6 +2,8 @@
 // Status:     jeder Prüfpunkt des Soll-Zustands mit aktuellem Stand + Beheben-Knopf
 // Einrichten: Server analysieren → Vorschlag → Auswahl als Soll-Zustand speichern
 // Software:   installierte Programme, Rollen, Betriebssystem (aus der Analyse)
+// Komplett-Diagnose: alle gespeicherten Läufe mit Datum/Uhrzeit + Ergebnis; Lösungswege nur mit PIN 0506
+// Schnell-Health-Check: letzter DISM- + SFC-Lauf mit Erklärung der Befehle, Verlauf
 // Beheben nur nach Rückfrage; jede Aktion landet in Server-Historie + Geräte-Dossier.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -16,6 +18,8 @@ import {
 import { SEAL_ABFRAGE, sealBefehlFehler, istSealSonderpunkt } from '../../services/sealStatus'
 import { setzePruefZusammenfassung } from '../../services/serverMonitor'
 import ZertifikateReiter from './ZertifikateReiter'
+import DiagnoseReiter from './DiagnoseReiter'
+import HealthReiter from './HealthReiter'
 import { addHistoryEntry } from '../../services/serverHistory'
 import { logDeviceAction } from '../../services/deviceDossier'
 
@@ -29,7 +33,7 @@ interface Props {
   startReiter?: Reiter
 }
 
-export type Reiter = 'status' | 'einrichten' | 'zertifikate' | 'software'
+export type Reiter = 'status' | 'einrichten' | 'zertifikate' | 'software' | 'diagnose' | 'health'
 
 const GRUPPEN: { titel: string; typen: Pruefpunkt['typ'][] }[] = [
   { titel: 'Dienste', typen: ['dienst'] },
@@ -117,8 +121,8 @@ export default function ServerZustandPanel({ host, bezeichnung, by, onClose, onG
           <button onClick={onClose} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent" title="Schließen (Esc)"><X size={16} /></button>
         </div>
         <div className="shrink-0 px-5 pt-2 border-b border-border flex gap-1">
-          {([['status', 'Status'], ['einrichten', 'Einrichten'], ['zertifikate', 'Zertifikate'], ['software', 'Software']] as [Reiter, string][]).map(([r, t]) => (
-            <button key={r} onClick={() => setReiter(r)}
+          {([['status', 'Status'], ['einrichten', 'Einrichten'], ['zertifikate', 'Zertifikate'], ['software', 'Software'], ['diagnose', 'Komplett-Diagnose'], ['health', 'Schnell-Health-Check']] as [Reiter, string][]).map(([r, t]) => (
+            <button key={r} onClick={() => setReiter(r)} data-reiter={r}
               className={`px-3 py-1.5 text-xs font-medium rounded-t-md border-b-2 -mb-px ${reiter === r ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>{t}</button>
           ))}
         </div>
@@ -151,6 +155,10 @@ export default function ServerZustandPanel({ host, bezeichnung, by, onClose, onG
               onGespeichert={async (s) => { setSoll(s); setReiter('status'); await jetztPruefen(s) }} />
           ) : reiter === 'zertifikate' ? (
             <ZertifikateReiter host={host} by={by} onGeaendert={onGeaendert} />
+          ) : reiter === 'diagnose' ? (
+            <DiagnoseReiter host={host} />
+          ) : reiter === 'health' ? (
+            <HealthReiter host={host} bezeichnung={bezeichnung} by={by} />
           ) : (
             <SoftwareReiter inv={inv} onAnalysieren={() => setReiter('einrichten')} />
           )}

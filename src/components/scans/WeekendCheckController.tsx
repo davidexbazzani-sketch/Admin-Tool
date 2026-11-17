@@ -16,6 +16,7 @@ import {
   fehlendeAnmeldungen, leseFehlendeAnmeldungen,
 } from '../../services/weekendCheck'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 // Kürzer als bei den anderen Scans: das Messfenster ist nur 2 Std. lang.
 const POLL_MS = 10 * 60 * 1000
@@ -29,6 +30,7 @@ export default function WeekendCheckController() {
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     const cfg = await getScanSchedule(WEEKEND_CHECK_ID)
     const slotKey = isInWindow(cfg, new Date())
     if (!slotKey) return

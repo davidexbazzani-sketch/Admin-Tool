@@ -7,9 +7,15 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Server, RefreshCw, Loader, Plus, Trash2, ServerOff, ServerCog, Mail, Check, X, Download,
   History, Clock, Send, Pin, FileText, HardDrive, MemoryStick, ListChecks, ShieldAlert, ShieldCheck,
-  FileSpreadsheet, Search, ChevronDown, ChevronRight, AlertTriangle,
+  FileSpreadsheet, Search, ChevronDown, ChevronRight, AlertTriangle, ScanSearch, Stethoscope, Footprints,
 } from 'lucide-react'
-import ServerZustandPanel from '../components/server/ServerZustandPanel'
+import ZugriffeDialog from '../components/server/ZugriffeDialog'
+import { istClusterKnoten, NUR_PING_KURZ, NUR_PING_TEXT } from '../services/serverSchonung'
+import { oeffneWerkzeug } from './Startseite'
+import ServerZustandPanel, { type Reiter as ZustandReiter } from '../components/server/ServerZustandPanel'
+import { DismChip, DismPanel, DismBerichtDialog } from '../components/server/DismScan'
+import { useDismScanStore, type DismBericht } from '../store/dismScanStore'
+import { istAuffaellig, HEALTH_TOOLTIP, type DismMeta } from '../services/serverDism'
 import { runZertifikatsScan } from '../services/serverZertifikate'
 import { useServerEreignisStore } from '../store/serverEreignisStore'
 import { useAuthStore } from '../store/authStore'
@@ -32,6 +38,8 @@ import {
 } from '../services/serverListe'
 import { api } from '../electronAPI'
 import type { InventoryItem } from '../types/auth'
+import { ladeLeiter, leiterText, type Leiter } from '../services/automatikLeiter'
+import { ladeRundlauf, rundlaufText, type RundlaufStand } from '../services/serverRundlauf'
 
 // ── Historie-Dialog je Server (frei beschreibbar, automatischer Zeitstempel) ──
 function fmtStamp(iso: string, dateOnly?: boolean): string {
@@ -91,9 +99,10 @@ function RebootZeile({ st }: { st?: ServerMonitorStatus['servers'][string] }) {
         )}
       </div>
       {gescheitert ? (
-        <div className="mt-0.5 flex items-center gap-1 text-[10px] text-amber-500" title={st?.lastRebootError}>
+        <div className="mt-0.5 flex items-center gap-1 text-[10px] text-amber-500" data-reboot-fehler
+          title={`${st?.lastRebootError || 'fehlgeschlagen'}${st?.lastRebootVon ? `\nabgefragt von ${st.lastRebootVon}` : ''}`}>
           <Clock size={10} className="shrink-0" />
-          <span className="truncate">Abfrage {kurzZeit(st?.lastRebootTryAt)} fehlgeschlagen — Wert evtl. veraltet{okT ? ` (zuletzt gelesen ${kurzZeit(st?.lastRebootCheckAt)})` : ''}</span>
+          <span className="truncate">Abfrage {kurzZeit(st?.lastRebootTryAt)}{st?.lastRebootVon ? ` von ${st.lastRebootVon.split(' ')[0]}` : ''} fehlgeschlagen — Wert evtl. veraltet{okT ? ` (zuletzt gelesen ${kurzZeit(st?.lastRebootCheckAt)})` : ''}</span>
         </div>
       ) : okT ? (
         <div className="mt-0.5 text-[10px] text-muted-foreground/70" title={st?.rebootQuelle === 'dcom' ? 'per DCOM gelesen (WinRM war nicht erreichbar)' : 'per WinRM gelesen'}>
@@ -119,7 +128,8 @@ function PruefChip({ st, onClick }: { st?: ServerMonitorStatus['servers'][string
     : z.hinweise > 0 ? ['bg-amber-400 text-black', `${ok}/${z.gesamt} OK · ${z.hinweise} Hinweis${z.hinweise === 1 ? '' : 'e'}`]
     : ['bg-emerald-600 text-white', `alle ${z.gesamt} Prüfpunkte OK`]
   return (
-    <button onClick={onClick} title={`Dienste & Prüfungen öffnen · geprüft ${new Date(z.am).toLocaleString('de-DE')}`}
+    <button onClick={onClick} data-pruef-chip={z.erreichbar ? 'ok' : 'nicht-erreichbar'}
+      title={`Dienste & Prüfungen öffnen · geprüft ${new Date(z.am).toLocaleString('de-DE')}${z.von ? ` von ${z.von}` : ''}${!z.erreichbar && z.fehler ? `\nGrund: ${z.fehler}` : ''}`}
       className={`mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold hover:opacity-90 ${farbe}`}>
       <ListChecks size={11} />{text}
     </button>
@@ -138,7 +148,9 @@ function ZertChip({ st, onClick, onPruefen, pruefend }: { st?: ServerMonitorStat
   )
   if (!z || !z.naechstes) return (
     <div className="mt-1 flex items-center">
-      <button onClick={onClick} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md border border-dashed border-border text-[10px] text-muted-foreground hover:text-foreground hover:bg-accent">
+      <button onClick={onClick} data-zert-chip={z ? (z.erreichbar ? 'leer' : 'nicht-lesbar') : 'neu'}
+        title={z ? `geprüft ${new Date(z.am).toLocaleString('de-DE')}${z.von ? ` von ${z.von}` : ''}${!z.erreichbar && z.fehler ? `\nGrund: ${z.fehler}` : ''}` : undefined}
+        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md border border-dashed border-border text-[10px] text-muted-foreground hover:text-foreground hover:bg-accent">
         <ShieldCheck size={11} />{z ? (z.erreichbar ? 'kein verwendetes Zertifikat gefunden' : 'Zertifikate: nicht lesbar (WinRM)') : 'Zertifikate noch nicht geprüft'}
       </button>
       {pruefKnopf}
@@ -448,6 +460,8 @@ export default function ServerMonitor() {
   const [newIp, setNewIp] = useState('')
   const [dragId, setDragId] = useState<string | null>(null)
   const [historyTile, setHistoryTile] = useState<ServerTile | null>(null)
+  /** Dialog „Tool-Zugriffe“: null = zu, '' = alle Server, sonst Host */
+  const [zugriffeHost, setZugriffeHost] = useState<string | null>(null)
   // Serverliste (SKFM): Steckbrief je Kachel, Suche/Filter, Abgleich mit der Standort-Übersicht
   const [serverListe, setServerListe] = useState<{ liste: ServerListe | null; herkunft: 'zentral' | 'eingebaut' | 'keine' } | null>(null)
   const [inventar, setInventar] = useState<InventoryItem[] | null>(null)
@@ -456,9 +470,15 @@ export default function ServerMonitor() {
   const [fPlattform, setFPlattform] = useState<PlattformFilter>('alle')
   const [fUmgebung, setFUmgebung] = useState<UmgebungFilter>('alle')
   const [nurAuffaellig, setNurAuffaellig] = useState(false)
+  const [showDism, setShowDism] = useState(false)
+  const [dismBericht, setDismBericht] = useState<Pick<DismBericht, 'md' | 'json' | 'vorschlag' | 'titel'> | null>(null)
+  const dismLaeuft = useDismScanStore(s => !!s.lauf && !s.lauf.fertigAm)
+  const dismOffen = useDismScanStore(s => !!s.lauf)
+  // Ergebnis eines Servers da → Kachel-Status (status.json) neu lesen
+  const dismFertig = useDismScanStore(s => Object.values(s.hosts).filter(h => h.phase === 'fertig').length)
   const [zustandTile, setZustandTile] = useState<ServerTile | null>(null)
-  const [zustandReiter, setZustandReiter] = useState<'status' | 'zertifikate' | undefined>(undefined)
-  const oeffne = (t: ServerTile, reiter?: 'status' | 'zertifikate') => { setZustandReiter(reiter); setZustandTile(t) }
+  const [zustandReiter, setZustandReiter] = useState<ZustandReiter | undefined>(undefined)
+  const oeffne = (t: ServerTile, reiter?: ZustandReiter) => { setZustandReiter(reiter); setZustandTile(t) }
   // Popup „Status öffnen" / „Zertifikate öffnen" → Lasche dieses Servers direkt öffnen
   const oeffneHost = useServerEreignisStore(s => s.oeffneHost)
   const oeffneReiter = useServerEreignisStore(s => s.oeffneReiter)
@@ -470,8 +490,13 @@ export default function ServerMonitor() {
     setOeffneHost(null)
   }, [oeffneHost, oeffneReiter, tiles, setOeffneHost])
 
+  // Wer ist der EINE Automatik-PC (BQ8069 bzw. Vertretung)? + Stand der Dienst-Schleife (Rundlauf)
+  const [leiter, setLeiter] = useState<Leiter | null>(null)
+  const [rundlauf, setRundlauf] = useState<RundlaufStand | null>(null)
   const refreshStatus = useCallback(async () => {
     try { setStatus(await loadServerStatus()) } catch { /* offline */ }
+    const [l, r] = await Promise.all([ladeLeiter(), ladeRundlauf()])
+    setLeiter(l); setRundlauf(r)
   }, [])
 
   // Initial: Config laden (bei leer → aus Inventar befüllen) + Status + Polling.
@@ -502,6 +527,9 @@ export default function ServerMonitor() {
     setInventar(Array.isArray(inv) ? inv : null)
   }, [])
   useEffect(() => { void ladeListeUndInventar() }, [ladeListeUndInventar])
+  useEffect(() => { if (dismFertig) void refreshStatus() }, [dismFertig, refreshStatus])
+  // läuft im Hintergrund ein DISM-Lauf, Panel beim Öffnen des Bildschirms zeigen
+  useEffect(() => { if (dismOffen) setShowDism(true) }, [dismOffen])
 
   // Nach dem Abgleich-Dialog: Kacheln + Liste neu laden
   async function nachListe() {
@@ -615,7 +643,16 @@ export default function ServerMonitor() {
   const auffaellig = (t: ServerTile) => {
     const st = status.servers[hostKey(t.hostname)]
     return st?.online === false || (st?.pruefung?.probleme ?? 0) > 0 || (st?.zertifikate?.kritisch ?? 0) > 0 || (st?.zertifikate?.warnung ?? 0) > 0
+      || istAuffaellig(st?.dism?.zustand) || st?.dism?.sfc === 'verletzungen'
   }
+  // Angaben für den Health-Check-Bericht (Bezeichnung, Anwendungen aus der Serverliste, IP)
+  const dismMeta = (t: ServerTile): DismMeta => {
+    const e = eintragVon(t)
+    return { bezeichnung: t.description || undefined, anwendungen: (e && serverTitel(e, 8)) || undefined, ip: t.ip || undefined }
+  }
+  const dismScan = (t: ServerTile) => useDismScanStore.getState().starteEinzel(t.hostname.trim(), dismMeta(t), by)
+  /** Reiter „Schnell-Health-Check“ eines Servers öffnen (Kachel-Chip, Ergebnisliste im Sammel-Panel) */
+  const oeffneHealth = (host: string) => { const t = tiles.find(x => hostKey(x.hostname) === hostKey(host)); if (t) oeffne(t, 'health') }
   const gefiltert = !!suche.trim() || fPlattform !== 'alle' || fUmgebung !== 'alle' || nurAuffaellig
   const sichtbar = tiles.filter(t => {
     const e = eintragVon(t)
@@ -636,11 +673,31 @@ export default function ServerMonitor() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="shrink-0 px-6 py-4 border-b border-border flex items-center gap-3">
+      <div className="shrink-0 px-6 py-4 border-b border-border flex items-center gap-3 flex-wrap">
         <Server size={20} className="text-primary" />
         <h1 className="text-lg font-bold text-foreground">Server</h1>
         <span className="text-xs text-muted-foreground">{onlineCount} online · {offlineCount > 0 ? <span className="text-red-400 font-medium">{offlineCount} offline</span> : '0 offline'}</span>
-        <div className="ml-auto flex items-center gap-2">
+        {(() => {
+          const m = leiterText(leiter)
+          const farbe = m.aktiv && m.bevorzugt ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-500'
+            : m.aktiv ? 'border-amber-500/40 bg-amber-500/10 text-amber-500' : 'border-red-500/40 bg-red-500/10 text-red-500'
+          return (
+            <span title={m.titel} data-melder={m.aktiv ? (m.bevorzugt ? 'bevorzugt' : 'vertretung') : 'keiner'}
+              className={`inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border ${farbe}`}>
+              <Send size={11} />{m.text}
+            </span>
+          )
+        })()}
+        {(() => {
+          const r = rundlaufText(rundlauf)
+          return (
+            <span title={r.titel} data-rundlauf={r.aktiv ? 'aktiv' : 'pausiert'}
+              className={`inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border ${r.aktiv ? 'border-border bg-muted/40 text-foreground' : 'border-dashed border-border text-muted-foreground'}`}>
+              <ListChecks size={11} />{r.text}
+            </span>
+          )
+        })()}
+        <div className="ml-auto flex items-center gap-2 flex-wrap justify-end [&>button]:whitespace-nowrap">
           <button onClick={checkNow} disabled={checking}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-blue-500/40 bg-blue-500/10 text-blue-500 font-medium hover:bg-blue-500/20 disabled:opacity-40">
             {checking ? <Loader size={12} className="animate-spin" /> : <RefreshCw size={12} />}Jetzt prüfen
@@ -649,9 +706,19 @@ export default function ServerMonitor() {
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-violet-500/40 bg-violet-500/10 text-violet-500 font-medium hover:bg-violet-500/20 disabled:opacity-40">
             {measuring ? <Loader size={12} className="animate-spin" /> : <MemoryStick size={12} />}Auslastung messen
           </button>
+          <button onClick={() => setShowDism(v => !v)} data-knopf="dism-panel"
+            title={`Health Check für alle Server öffnen (Start, Fortschritt, Ergebnisse, Bericht).\n\n${HEALTH_TOOLTIP}`}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-teal-500/40 bg-teal-500/10 text-teal-500 font-medium hover:bg-teal-500/20">
+            {dismLaeuft ? <Loader size={12} className="animate-spin" /> : <ScanSearch size={12} />}Health Check
+          </button>
           <button onClick={() => setShowMeldungen(v => !v)} title="Mail-Meldungen (Offline, Neustart/Herunterfahren, Probleme) für alle Server auf einmal setzen — auch mehrere Empfänger"
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
             <Mail size={12} />Mail-Meldungen für alle
+          </button>
+          <button onClick={() => setZugriffeHost('')} data-knopf="zugriffe"
+            title="Zugriffsprotokoll: Was hat das IT Admin Tool wann mit welchem Server gemacht (Ping, lesend, ändernd)? Auch für Server ohne Kachel, z. B. um einen Ausfallzeitpunkt."
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
+            <Footprints size={12} />Tool-Zugriffe
           </button>
           <button onClick={() => setShowListe(true)} title="SKFM-Serverliste: Stand ansehen, neue Excel importieren, fehlende Server in Standort-Übersicht und Kacheln übernehmen" data-knopf="serverliste"
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
@@ -668,11 +735,35 @@ export default function ServerMonitor() {
         </div>
       </div>
 
+      {/* Automatischer Lauf ist auf einem PC bei ALLEN Servern gescheitert → liegt am PC, nicht an den Servern */}
+      {(() => {
+        const st = Object.entries(status.abfrageStoerung || {}).filter(([, s]) => Date.now() - Date.parse(s.at) < 3 * 3600_000)
+        if (!st.length) return null
+        return (
+          <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-amber-500/10 border border-amber-500/40 text-foreground space-y-0.5" data-abfrage-stoerung>
+            {st.map(([was, s]) => (
+              <p key={was} className="flex items-start gap-1.5">
+                <AlertTriangle size={13} className="mt-0.5 shrink-0 text-amber-500" />
+                <span>
+                  <b>{was}</b> um {new Date(s.at).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} auf <b>{s.von || 'einem anderen PC'}</b> bei allen {s.server} Servern gescheitert: <span className="text-muted-foreground">{s.fehler}</span>.
+                  {' '}Das liegt am prüfenden PC (Rechte, WinRM oder Zscaler), nicht an den Servern – die Werte der Kacheln wurden deshalb nicht überschrieben.
+                </span>
+              </p>
+            ))}
+          </div>
+        )
+      })()}
+
       {msg && (
         <div className="shrink-0 mx-4 mt-2 px-3 py-2 text-xs rounded-md bg-blue-500/10 border border-blue-500/30 text-foreground flex items-center gap-2">
           <span className="flex-1">{msg}</span>
           <button onClick={() => setMsg('')} className="text-muted-foreground hover:text-foreground text-sm leading-none">×</button>
         </div>
+      )}
+
+      {showDism && (
+        <DismPanel tiles={tiles} status={status} metaVon={dismMeta} by={by}
+          onBericht={b => setDismBericht(b)} onSchliessen={() => setShowDism(false)} onOeffnen={oeffneHealth} />
       )}
 
       {showMeldungen && (
@@ -747,6 +838,8 @@ export default function ServerMonitor() {
               const border = state === 'offline' ? 'border-red-500/60' : state === 'online' ? 'border-emerald-500/40' : 'border-border'
               const eintrag = eintragVon(tile)
               const titel = (eintrag && serverTitel(eintrag, 2)) || tile.description || ''
+              // Cluster-Knoten (HCI, vom Dienstleister verwaltet): das Tool pingt nur (serverSchonung.ts)
+              const knoten = istClusterKnoten(tile.hostname)
               return (
                 <div key={tile.id} draggable={!gefiltert} data-kachel={tile.hostname}
                   onDragStart={e => onDragStart(e, tile.id)} onDragOver={onDragOver} onDrop={e => onDrop(e, tile.id)}
@@ -762,13 +855,25 @@ export default function ServerMonitor() {
                           {state === 'online' ? 'online' : state === 'offline' ? `offline${st?.consecutiveFailures ? ` (${st.consecutiveFailures}×)` : ''}` : 'noch nicht geprüft'}
                         </span>
                         {tile.ip && <span className="font-mono text-[10px] text-muted-foreground">{tile.ip}</span>}
+                        {knoten && (
+                          <span className="inline-flex items-center px-1.5 py-0.5 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-500 text-[10px] font-medium" title={NUR_PING_TEXT} data-knoten-chip={tile.hostname}>
+                            {NUR_PING_KURZ}
+                          </span>
+                        )}
                       </div>
                       {titel && <div className="mt-0.5 text-[13px] font-semibold text-foreground leading-snug" title={titel} data-kachel-titel>{titel}</div>}
                       {eintrag && tile.description && tile.description !== titel && <div className="text-[10px] text-muted-foreground truncate" title={`Standort-Übersicht: ${tile.description}`}>{tile.description}</div>}
                     </div>
                     <div className="flex items-center gap-0.5 shrink-0">
                       {state === 'offline' ? <ServerOff size={14} className="text-red-500 mr-0.5" /> : <ServerCog size={14} className="text-muted-foreground mr-0.5" />}
-                      <button onClick={() => oeffne(tile)} title="Dienste & Prüfungen" className="p-0.5 rounded text-muted-foreground/70 hover:text-primary hover:bg-primary/10"><ListChecks size={13} /></button>
+                      {!knoten && (<>
+                        <button onClick={() => oeffneWerkzeug('voll-diagnose', tile.hostname.trim())} data-server-volldiagnose={tile.hostname}
+                          title="Komplett-Diagnose dieses Servers: liest nur (Ereignisse, Integrität, Dienste, Datenträger …), Eingriffe erst nach Bestätigung mit Namenseingabe"
+                          className="p-0.5 rounded text-muted-foreground/70 hover:text-primary hover:bg-primary/10"><Stethoscope size={13} /></button>
+                        <button onClick={() => oeffne(tile)} title="Dienste & Prüfungen" data-server-pruefungen={tile.hostname} className="p-0.5 rounded text-muted-foreground/70 hover:text-primary hover:bg-primary/10"><ListChecks size={13} /></button>
+                      </>)}
+                      <button onClick={() => setZugriffeHost(tile.hostname.trim())} title="Tool-Zugriffe: Was hat das IT Admin Tool wann mit diesem Server gemacht?" data-server-zugriffe={tile.hostname}
+                        className="p-0.5 rounded text-muted-foreground/70 hover:text-primary hover:bg-primary/10"><Footprints size={13} /></button>
                       <button onClick={() => setHistoryTile(tile)} title="Historie öffnen" className="p-0.5 rounded text-muted-foreground/70 hover:text-primary hover:bg-primary/10"><History size={13} /></button>
                       <button onClick={() => removeTile(tile.id)} title="Kachel entfernen" className="p-0.5 rounded text-muted-foreground/70 hover:text-red-500 hover:bg-red-500/10"><Trash2 size={12} /></button>
                     </div>
@@ -780,13 +885,21 @@ export default function ServerMonitor() {
 
                   {/* Betrieb */}
                   <div className="mt-2.5 pt-2 border-t border-border/60">
+                  {knoten ? (
+                    <div className="text-[11px] text-muted-foreground space-y-0.5" data-knoten-betrieb={tile.hostname}>
+                      <div>Letzter Reboot: <span className="text-foreground">nur über Ping erkennbar</span> (kein Zugriff auf den Knoten)</div>
+                      <div className="text-[10px] text-muted-foreground/80">Keine Dienst-, Zertifikats-, Health-Check- oder Auslastungs-Abfrage –{NUR_PING_TEXT.split(': ')[1]}</div>
+                    </div>
+                  ) : (<>
                   <RebootZeile st={st} />
                   <div className="flex items-center gap-x-2 flex-wrap">
                   <PruefChip st={st} onClick={() => oeffne(tile)} />
                   <ZertChip st={st} onClick={() => oeffne(tile, 'zertifikate')} pruefend={zertPruefend.has(hostKey(tile.hostname))}
                     onPruefen={() => void zertJetzt(tile)} />
                   </div>
-                  {st?.metrics ? (
+                  </>)}
+                  <DismChip host={tile.hostname} st={st} onOeffnen={() => oeffne(tile, 'health')} onScan={() => dismScan(tile)} />
+                  {knoten ? null : st?.metrics ? (
                     <div className="mt-2 space-y-1.5">
                       <MetricBar icon={<MemoryStick size={11} />} label="RAM" pct={st.metrics.ramUsedPct}
                         sub={`${fmtGB(st.metrics.ramUsedGB)} / ${fmtGB(st.metrics.ramTotalGB)} GB`} />
@@ -816,6 +929,8 @@ export default function ServerMonitor() {
       </div>
 
       {historyTile && <HistoryDialog tile={historyTile} by={by} onClose={() => setHistoryTile(null)} />}
+      {zugriffeHost !== null && <ZugriffeDialog host={zugriffeHost} onClose={() => setZugriffeHost(null)} />}
+      {dismBericht && <DismBerichtDialog bericht={dismBericht} onClose={() => setDismBericht(null)} />}
       {showListe && <ServerListeDialog by={by} onClose={() => setShowListe(false)} onGeaendert={() => void nachListe()} />}
       {zustandTile && <ServerZustandPanel host={zustandTile.hostname} bezeichnung={zustandTile.description} by={by} startReiter={zustandReiter}
         onClose={() => setZustandTile(null)} onGeaendert={() => void refreshStatus()} />}

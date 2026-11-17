@@ -184,7 +184,7 @@ export async function ermittleZugriff(host: string, frisch = false): Promise<Zug
   ].join('\n')
   let z: Zugriff = { art: null, am: Date.now() }
   try {
-    const r = await api().runPowerShell(script, 60000)
+    const r = await api().runPowerShell(script, 60000, { quelle: 'Back-Ups: Chiron-Karte (Erreichbarkeit)', art: 'lesen' })
     const m = r.stdout.match(/\{[\s\S]*\}/)
     if (m) {
       const o = JSON.parse(m[0]) as { winrm: boolean; winrmFehler: string; smb: boolean; smbFehler: string }
@@ -227,7 +227,8 @@ function Read-SkfText([string]$p) { if ([IO.File]::Exists($p)) { return [IO.File
 export interface OpErgebnis<T = Record<string, unknown>> { ok: boolean; daten?: T; fehler?: string; zugriff?: 'winrm' | 'smb' }
 
 /** Führt PowerShell-Code auf dem Server aus (WinRM) bzw. gegen dessen Admin-Freigabe (Fallback). */
-async function aufServer<T = Record<string, unknown>>(host: string, code: string, args: Record<string, unknown> = {}, dateien: Record<string, string> = {}, timeoutMs = 120000): Promise<OpErgebnis<T>> {
+/** `art` fürs Zugriffsprotokoll: Status/Verlauf lesen = 'lesen', alles andere ändert etwas auf dem Server. */
+async function aufServer<T = Record<string, unknown>>(host: string, code: string, args: Record<string, unknown> = {}, dateien: Record<string, string> = {}, timeoutMs = 120000, art: 'lesen' | 'aendern' = 'aendern'): Promise<OpErgebnis<T>> {
   const z = CHIRON_TEST.winrmLokal ? { art: 'winrm' as const, am: Date.now() } : await ermittleZugriff(host)
   if (!z.art) {
     return { ok: false, fehler: `Server ${host} nicht erreichbar — WinRM: ${kurz(z.winrmFehler) || 'nein'} · Admin-Freigabe: ${kurz(z.smbFehler) || 'nein'}` }
@@ -261,7 +262,7 @@ async function aufServer<T = Record<string, unknown>>(host: string, code: string
     `finally { ${tmpDateien.map(([, p]) => `Remove-Item -LiteralPath '${q(p)}' -Force -ErrorAction SilentlyContinue`).join('; ') || '$null = 0'} }`,
   ].join('\n')
   try {
-    const r = await api().runPowerShell(script, timeoutMs)
+    const r = await api().runPowerShell(script, timeoutMs, { quelle: art === 'lesen' ? 'Back-Ups: Chiron-Karte (Stand lesen)' : 'Back-Ups: Chiron-Karte (Aktion)', art })
     const i = r.stdout.indexOf('@@SKF@@'), e = r.stdout.indexOf('@@SKFERR@@')
     if (i >= 0) {
       const t = r.stdout.slice(i + 7).trim()
@@ -432,7 +433,7 @@ export async function warteAufAuftrag<T = unknown>(host: string, id: string, max
 $p = Join-Path $B ('auftraege\ergebnisse\' + [string]$A.id + '.json')
 @{ ergebnis = (Read-SkfText $p); status = (Read-SkfText (Join-Path $B 'status.json')) }
 `
-    const r = await aufServer<{ ergebnis: string; status: string }>(host, code, { id }, {}, 60000)
+    const r = await aufServer<{ ergebnis: string; status: string }>(host, code, { id }, {}, 60000, 'lesen')
     if (!r.ok) { if (++fehlversuche > 6) return { ok: false, fehler: r.fehler }; continue }
     fehlversuche = 0
     let st: ChironStatus | null = null
@@ -458,7 +459,7 @@ $aktiv = $null
 if ($q.rc -eq 0) { $mm = [regex]::Match($q.out, '<Settings>[\s\S]*?<Enabled>(true|false)</Enabled>'); if ($mm.Success) { $aktiv = ($mm.Groups[1].Value -eq 'true') } else { $aktiv = $true } }
 @{ eingerichtet = [bool]$skript; version = $ver; status = (Read-SkfText (Join-Path $B 'status.json')); konfig = (Read-SkfText (Join-Path $B 'config.json')); schluessel = (Read-SkfText (Join-Path $B 'schluessel.json')); aufgabeRc = $q.rc; aufgabeAktiv = $aktiv; aufgabeOut = $(if ($q.rc -ne 0) { $q.out } else { '' }) }
 `
-  const r = await aufServer<{ eingerichtet: boolean; version: string; status: string; konfig: string; schluessel: string; aufgabeRc: number; aufgabeAktiv: boolean | null; aufgabeOut: string }>(host, code, {}, {}, 90000)
+  const r = await aufServer<{ eingerichtet: boolean; version: string; status: string; konfig: string; schluessel: string; aufgabeRc: number; aufgabeAktiv: boolean | null; aufgabeOut: string }>(host, code, {}, {}, 90000, 'lesen')
   const gelesenAm = new Date().toISOString()
   if (!r.ok || !r.daten) return { erreichbar: false, fehler: r.fehler, gelesenAm, eingerichtet: false, status: null, konfig: null, schluessel: null, aufgabe: null }
   const d = r.daten
@@ -482,7 +483,7 @@ export async function liesVerlauf(host: string, max = 400): Promise<{ ok: boolea
 function Get-SkfLetzte([string]$p, [int]$n) { if (-not [IO.File]::Exists($p)) { return }; $z = [IO.File]::ReadAllLines($p); if ($z.Count -le $n) { $z } else { $z[($z.Count - $n)..($z.Count - 1)] } }
 @{ verlauf = @(Get-SkfLetzte (Join-Path $B 'verlauf.jsonl') ([int]$A.max)); aktionen = @(Get-SkfLetzte (Join-Path $B 'aktionen.jsonl') 200) }
 `
-  const r = await aufServer<{ verlauf: string[] | string; aktionen: string[] | string }>(host, code, { max }, {}, 90000)
+  const r = await aufServer<{ verlauf: string[] | string; aktionen: string[] | string }>(host, code, { max }, {}, 90000, 'lesen')
   if (!r.ok || !r.daten) return { ok: false, fehler: r.fehler, verlauf: [], aktionen: [] }
   const zeilen = <T,>(v: string[] | string | undefined): T[] => ([] as string[]).concat(v ?? []).map(l => { try { return JSON.parse(String(l).replace(/^\uFEFF/, '')) as T } catch { return null } }).filter((x): x is T => !!x)
   return { ok: true, verlauf: zeilen<ChironVerlauf>(r.daten.verlauf).reverse(), aktionen: zeilen<ChironAktion>(r.daten.aktionen).reverse() }

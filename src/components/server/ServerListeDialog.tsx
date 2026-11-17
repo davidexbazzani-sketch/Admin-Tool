@@ -20,6 +20,10 @@ import {
   standText, type ServerListe,
 } from '../../services/serverListe'
 import { PlattformBadge, UmgebungBadge } from './ServerSteckbrief'
+import { istClusterKnoten, KNOTEN_TITEL, NUR_PING_KURZ, NUR_PING_TEXT } from '../../services/serverSchonung'
+
+/** Cluster-Knoten (HCI): fester Name oder Titel „HCI Cluster Node“/„Cluster Admin“ in der Serverliste. */
+const istKnotenZeile = (z: { host: string; titel?: string }) => istClusterKnoten(z.host) || KNOTEN_TITEL.test(z.titel || '')
 
 const datumText = (iso?: string) => {
   if (!iso) return ''
@@ -66,7 +70,8 @@ export default function ServerListeDialog({ by, onClose, onGeaendert }: { by: st
   useEffect(() => {
     if (!abgleich) return
     const a: Record<string, Auswahl> = {}
-    for (const z of abgleich.zeilen) a[z.host] = { inv: z.fehltImInventar && !z.andereKategorie, kachel: z.fehltAlsKachel }
+    // Cluster-Knoten (HCI) NICHT vorhaken — das Tool soll sie nur anpingen (serverSchonung.ts)
+    for (const z of abgleich.zeilen) { const kn = istKnotenZeile(z); a[z.host] = { inv: !kn && z.fehltImInventar && !z.andereKategorie, kachel: !kn && z.fehltAlsKachel } }
     setAuswahl(a)
   }, [abgleich])
 
@@ -153,8 +158,9 @@ export default function ServerListeDialog({ by, onClose, onGeaendert }: { by: st
     } finally { setBusy(false) }
   }
 
-  const alleInv = abgleich?.zeilen.filter(z => z.fehltImInventar && !z.andereKategorie) ?? []
-  const alleKachel = abgleich?.zeilen.filter(z => z.fehltAlsKachel) ?? []
+  // „alle“ an-/abhaken lässt Cluster-Knoten aus (einzeln anhaken geht weiterhin)
+  const alleInv = abgleich?.zeilen.filter(z => z.fehltImInventar && !z.andereKategorie && !istKnotenZeile(z)) ?? []
+  const alleKachel = abgleich?.zeilen.filter(z => z.fehltAlsKachel && !istKnotenZeile(z)) ?? []
   const setAlle = (feld: keyof Auswahl, wert: boolean) => setAuswahl(prev => {
     const n = { ...prev }
     for (const z of feld === 'inv' ? alleInv : alleKachel) n[z.host] = { ...n[z.host], [feld]: wert }
@@ -283,7 +289,14 @@ export default function ServerListeDialog({ by, onClose, onGeaendert }: { by: st
                                   : <span className="text-muted-foreground">vorhanden</span>}
                               </td>
                               <td className="px-2.5 py-1.5 font-mono font-semibold text-foreground">{z.host}</td>
-                              <td className="px-2.5 py-1.5 text-foreground">{z.titel || <span className="text-muted-foreground">—</span>}</td>
+                              <td className="px-2.5 py-1.5 text-foreground">
+                                {z.titel || <span className="text-muted-foreground">—</span>}
+                                {istKnotenZeile(z) && (
+                                  <span className="ml-1.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-amber-500/40 bg-amber-500/10 text-amber-500 text-[10px] font-medium whitespace-nowrap" title={NUR_PING_TEXT} data-knoten-hinweis={z.host}>
+                                    {NUR_PING_KURZ} – nicht vorgewählt
+                                  </span>
+                                )}
+                              </td>
                               <td className="px-2.5 py-1.5"><span className="inline-flex flex-wrap gap-1"><PlattformBadge p={z.plattform} />{z.umgebungen.map(u => <UmgebungBadge key={u} u={u} />)}</span></td>
                               <td className="px-2.5 py-1.5 whitespace-nowrap">
                                 {!z.fehltAlsKachel ? null : erreichbar === null

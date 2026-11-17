@@ -238,6 +238,10 @@ const PA: Record<string, Test> = {
   'office-addin-aus': { wert: 'Excel: ITAdminTool.Test' },
   'prozess-beenden': { wert: 'notepad', prio: 14 },
   'dienst-neustart': { wert: 'Spooler' },
+  'dienst-starttyp-standard': { wert: 'Spooler' },
+  // markiert C: — chkdsk läuft dann beim abschließenden Neustart des Tests (dauert dort 1–3 min länger);
+  // der Baustein selbst darf NICHT neu starten (Nachher-Prüfung „kein-neustart“)
+  'chkdsk-beim-start': { wert: 'C:', phase: 'neustart', prio: 5, nachher: 'kein-neustart' },
   'software-suchen': { wert: 'Adobe' },
   'geraet-neustart': { wert: 'Kamera' },
   'geraet-aktivieren': { wert: 'Kamera' },

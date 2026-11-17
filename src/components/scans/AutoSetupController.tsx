@@ -17,6 +17,7 @@ import { loadChecklistDeviceInfos, hostFromSerial } from '../../services/deviceM
 import { loadDeviceSetupState, updateDeviceSetupItem, type DeviceSetupItem } from '../../services/deviceSetup'
 import { checkReachability } from '../../services/onboardingDeploy'
 import { runAutoSetup } from '../../services/autoSetup'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 export const AUTO_SETUP_STATUS = 'device_setup/auto_setup_status.json'
 
@@ -33,6 +34,7 @@ export default function AutoSetupController() {
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     let s
     try { s = await loadRunStatus(AUTO_SETUP_STATUS) } catch { return }
     if (isStatusClaimed(s, Date.now())) return

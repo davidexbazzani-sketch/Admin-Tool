@@ -19,6 +19,7 @@ import { PC_VERLAUF_ID, PC_VERLAUF_STATUS, runPcVerlaufScan, nachleseFaellig, me
 import { PC_FEHLER_ID, PC_FEHLER_STATUS, PC_FEHLER_NACHLESE, runPcFehlerScan } from '../../pcFehler/lauf'
 import { WARTELISTE_STATUS, WARTE_ABSTAND_MS, ladeWarteliste, laufWarteliste } from '../../pcFehler/warteliste'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 const POLL_MS = 20 * 60 * 1000
 const HEARTBEAT_MS = 5 * 60 * 1000
@@ -55,6 +56,7 @@ function useHintergrundLauf(def: LaufDef) {
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     let s
     try { s = await loadRunStatus(def.status) } catch { return }
     if (isStatusClaimed(s)) return
@@ -105,6 +107,7 @@ export function WartelisteController() {
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     let s
     try { s = await loadRunStatus(WARTELISTE_STATUS) } catch { return }
     if (isStatusClaimed(s)) return

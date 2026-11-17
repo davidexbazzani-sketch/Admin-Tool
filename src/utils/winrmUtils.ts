@@ -5,6 +5,7 @@
 // Result is cached per hostname for the lifetime of the renderer process.
 
 import { api } from '../electronAPI'
+import { istClusterKnoten } from '../services/serverSchonung'
 
 const winrmCache = new Map<string, boolean>()
 
@@ -17,8 +18,11 @@ export function buildEnsureWinRMScript(hostname: string): string {
   const h = hostname.replace(/'/g, "''")
   return [
     `$winrm = $false`,
+    `$versucht = $false`,
     `try { Test-WSMan -ComputerName '${h}' -EA Stop | Out-Null; $winrm = $true } catch {}`,
     `if (-not $winrm) {`,
+    // Zugriffsprotokoll: nur wenn wirklich ein Start versucht wird, zählt der Zugriff als „ändernd“
+    `  $versucht = $true`,
     `  # Method 1: Get-Service -ComputerName | Start() — RPC/SMB, same as compmgmt.msc`,
     `  try {`,
     `    $svc = Get-Service -ComputerName '${h}' -Name WinRM -EA Stop`,
@@ -47,7 +51,7 @@ export function buildEnsureWinRMScript(hostname: string): string {
     `    } catch {}`,
     `  }`,
     `}`,
-    `@{ winrmActive=$winrm } | ConvertTo-Json -Compress`,
+    `@{ winrmActive=$winrm; __zugriff=$(if ($versucht) { 'aendern' } else { 'lesen' }) } | ConvertTo-Json -Compress`,
   ].join('\n')
 }
 
@@ -68,6 +72,8 @@ const MISSERFOLG_GILT_MS = 2 * 60 * 1000
 const misserfolgBis = new Map<string, number>()
 
 export async function ensureWinRM(hostname: string): Promise<boolean> {
+  // Cluster-Knoten (HCI, vom Dienstleister verwaltet): nie WinRM prüfen oder starten — nur Ping
+  if (istClusterKnoten(hostname)) return false
   const key = hostname.toLowerCase()
   if (winrmCache.get(key) === true) return true
   if (winrmCache.get(key) === false) {
@@ -90,7 +96,7 @@ async function ensureWinRMIntern(hostname: string, key: string): Promise<boolean
   // 60s wie beim Remote-Doc-Connect: die Kaltaktivierung (WinRM-Dienst per RPC/SMB
   // starten) durchläuft im schlechtesten Fall 3 Methoden mit je bis zu 15s Wartezeit
   // (≈33s). 30s waren zu knapp -> Timeout -> fälschlich "WinRM nicht aktiv".
-  const result = await api().runPowerShell(script, 60000)
+  const result = await api().runPowerShell(script, 60000, { quelle: 'WinRM-Prüfung', art: 'lesen' })
   let ok = false
   try {
     const parsed = JSON.parse(result.stdout.trim())

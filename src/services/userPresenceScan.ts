@@ -7,7 +7,8 @@
 // Ergebnisse werden als Protokoll (mit Datum/Uhrzeit) zentral gespeichert; alte
 // Protokolle bleiben abrufbar.
 
-import { api } from '../electronAPI'
+import { api, type PsMeta } from '../electronAPI'
+import { knotenVonIp } from './serverSchonung'
 
 export interface ComputerRecord {
   hostname: string
@@ -532,7 +533,7 @@ export function expandSubnets(cidrs: string[], maxTotal = 8192): { ips: string[]
 // runPowerShell-Timeout reissen und der GANZE Batch lieferte still 0 Treffer
 // (Symptom: "0 von 0 geprueft"). Ausgewertet werden nur fertige Tasks; der
 // DONE-Marker verraet, ob das Skript regulaer durchgelaufen ist.
-export async function pingBatch(ips: string[], timeoutMs = 500): Promise<{ up: string[]; error?: string }> {
+export async function pingBatch(ips: string[], timeoutMs = 500, meta?: PsMeta): Promise<{ up: string[]; error?: string }> {
   if (ips.length === 0) return { up: [] }
   const list = ips.map(ip => `'${ip}'`).join(',')
   const script = [
@@ -545,7 +546,7 @@ export async function pingBatch(ips: string[], timeoutMs = 500): Promise<{ up: s
     `Write-Output 'DONE'`,
   ].join('\n')
   try {
-    const res = await api().runPowerShell(script, 30000)
+    const res = await api().runPowerShell(script, 30000, meta ?? { art: 'ping' })
     const out = res.stdout ?? ''
     const up = out.split(/\r?\n/).filter(l => l.startsWith('UP\t')).map(l => l.split('\t')[1]).filter(Boolean)
     if (!out.includes('DONE')) {
@@ -600,8 +601,16 @@ export async function resolveHostsToIps(hostnames: string[]): Promise<string[]> 
 // Status:  OK + sam  = Benutzer gefunden ·  OK ohne sam = erreichbar, niemand
 // angemeldet ·  OFFLINE = per DCOM/quser nicht erreichbar (Kandidat fuer den
 // WinRM-Pass).  activate=false laesst Schritt 3 (WinRM) weg.
-export async function scanIpsBatch(ips: string[], activate = true, maxParallel = IP_PROBE_BATCH_SIZE_SINGLE): Promise<ComputerRecord[]> {
-  if (ips.length === 0) return []
+export async function scanIpsBatch(alleIps: string[], activate = true, maxParallel = IP_PROBE_BATCH_SIZE_SINGLE): Promise<ComputerRecord[]> {
+  // Cluster-Knoten (HCI) nur per Ping: keine DCOM-/quser-/WinRM-Abfrage — erreichbar laut
+  // Ping, Name aus der DNS-Auflösung (serverSchonung.ts)
+  const knotenRecs: ComputerRecord[] = []
+  const ips = alleIps.filter(ip => {
+    const k = knotenVonIp(ip)
+    if (k) knotenRecs.push({ hostname: k, status: 'OK', sam: '', ip, dnsIp: ip, dnsProblem: false })
+    return !k
+  })
+  if (ips.length === 0) return knotenRecs
   const poolMax = Math.max(1, Math.min(maxParallel, IP_PROBE_BATCH_SIZE_SINGLE))
   const list = ips.map(ip => `'${ip}'`).join(',')
   const waitSec = activate ? IP_PROBE_WAIT_SEC : 20
@@ -662,8 +671,8 @@ export async function scanIpsBatch(ips: string[], activate = true, maxParallel =
         dnsProblem: dp === '1',
       })
     }
-    return recs
+    return [...recs, ...knotenRecs]
   } catch {
-    return ips.map(ip => ({ hostname: ip, status: 'ERR' as const, sam: '', ip, dnsIp: '', dnsProblem: false }))
+    return [...ips.map(ip => ({ hostname: ip, status: 'ERR' as const, sam: '', ip, dnsIp: '', dnsProblem: false })), ...knotenRecs]
   }
 }

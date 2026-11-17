@@ -6,8 +6,8 @@ interface AppState {
   screen: Screen
   setScreen: (s: Screen) => void
   /** Werkzeug der PC-Diagnose, das beim nächsten Öffnen der PC-Diagnose gestartet wird (aus „Gib dein Problem ein“ auf der Startseite). */
-  pcDiagnoseWunsch: { werkzeug: string; host: string } | null
-  setPcDiagnoseWunsch: (w: { werkzeug: string; host: string } | null) => void
+  pcDiagnoseWunsch: { werkzeug: string; host: string; text?: string } | null
+  setPcDiagnoseWunsch: (w: { werkzeug: string; host: string; text?: string } | null) => void
 
   // Admin status
   isAdmin: boolean

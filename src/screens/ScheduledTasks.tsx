@@ -1,18 +1,18 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   Clock, Plus, Pause, Play, Trash2, Loader, ChevronRight, ChevronDown,
   X, Save, Monitor, CheckSquare, Info, Pencil, Bell, RefreshCw,
   ArrowUp, ArrowDown, Search, Wifi,
 } from 'lucide-react'
 import { api } from '../electronAPI'
+import { loadEmailCfg } from '../services/geplanteAufgaben'
 import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
 import { createLogger } from '../utils/activityLogger'
 import { CATEGORIES } from '../utils/remoteCommands'
-import type { ScheduledTask, UserEmailConfig } from '../types/auth'
+import type { ScheduledTask } from '../types/auth'
 
 const log = createLogger('scheduled-tasks')
 const WEEKDAYS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
-const EMAIL_CONFIG_PATH = (u: string) => `email_config/${u}.json`
 
 type View = 'list' | 'form'
 
@@ -41,92 +41,8 @@ function defaultCmdSchedule(): CmdSchedule {
   return { type: 'once', time: '08:00', date: '', days: [1], repeat: 'weekly' }
 }
 
-// ── Helper: load per-user email config ────────────────────────────────────────
-async function loadEmailCfg(username: string): Promise<UserEmailConfig | null> {
-  try {
-    return await api().netReadJson<UserEmailConfig>(EMAIL_CONFIG_PATH(username))
-  } catch { return null }
-}
-
-// ── Helper: send email ─────────────────────────────────────────────────────────
-async function sendMail(cfg: UserEmailConfig, to: string, subject: string, body: string) {
-  if (!cfg.email || !cfg.smtp) return
-  await api().sendEmailRaw({ to, subject, body, smtp: cfg.smtp, port: cfg.port, useTls: cfg.useTls, from: cfg.email, method: cfg.emailMethod, protokoll: { art: 'automatisch', quelle: 'Geplante Aufgaben' } })
-}
-
-// ── Helper: check if a global schedule matches now ────────────────────────────
-function shouldRunNow(task: ScheduledTask, now: Date): boolean {
-  if (task.status !== 'active') return false
-  const s = task.schedule
-  const hhmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
-  if (s.time !== hhmm) return false
-  const today = now.toISOString().slice(0, 10)
-  const dow = now.getDay()
-  if (s.type === 'once') return (s.dates ?? []).includes(today)
-  if (!(s.days ?? []).includes(dow)) return false
-  if (s.repeat === 'biweekly') {
-    const weekNum = Math.floor(now.getTime() / (7 * 24 * 60 * 60 * 1000))
-    return weekNum % 2 === 0
-  }
-  if (s.repeat === 'monthly') {
-    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-    let d = firstOfMonth
-    while (d.getDay() !== dow) d = new Date(d.getTime() + 86400000)
-    return d.getDate() === now.getDate()
-  }
-  return true
-}
-
-// ── Helper: check if a per-cmd schedule matches now ───────────────────────────
-function scheduleMatchesNow(
-  s: { type: 'once' | 'recurring'; time: string; date?: string; days?: number[]; repeat?: string },
-  now: Date,
-): boolean {
-  const hhmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
-  if (s.time !== hhmm) return false
-  const today = now.toISOString().slice(0, 10)
-  const dow = now.getDay()
-  if (s.type === 'once') return s.date === today
-  if (!(s.days ?? []).includes(dow)) return false
-  if (s.repeat === 'biweekly') {
-    const weekNum = Math.floor(now.getTime() / (7 * 24 * 60 * 60 * 1000))
-    return weekNum % 2 === 0
-  }
-  if (s.repeat === 'monthly') {
-    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-    let d = firstOfMonth
-    while (d.getDay() !== dow) d = new Date(d.getTime() + 86400000)
-    return d.getDate() === now.getDate()
-  }
-  return true
-}
-
-// ── Helper: ensure WinRM is running on a device ───────────────────────────────
-async function ensureWinRM(device: string): Promise<void> {
-  const h = device.replace(/'/g, "''")
-  try {
-    const onlineScript = '$o=$false; try{if(Test-Connection ' + "'" + h + "'" + ' -Count 1 -Quiet -EA SilentlyContinue){$o=$true}}catch{}; if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync(' + "'" + h + "'" + ',445).Wait(2000)){$o=$true};$t.Close()}catch{}}; if($o){"True"}else{"False"}'
-    const pingRes = await api().runPowerShell(onlineScript, 10000)
-    if (pingRes.stdout.trim().toLowerCase() !== 'true') {
-      console.log(`[ScheduledTasks] WinRM pre-check: ${device} not reachable`)
-      return
-    }
-    const winrmScript = [
-      `try { Test-WSMan -ComputerName '${h}' -EA Stop | Out-Null; Write-Output 'ALREADY_OK' }`,
-      `catch {`,
-      `  try {`,
-      `    $svc = Get-Service -ComputerName '${h}' -Name WinRM -EA Stop`,
-      `    $svc.Start(); $svc.WaitForStatus('Running', [TimeSpan]::FromSeconds(15))`,
-      `    Write-Output 'STARTED'`,
-      `  } catch { Write-Output "FAIL:$($_.Exception.Message)" }`,
-      `}`,
-    ].join('\n')
-    const res = await api().runPowerShell(winrmScript, 30000)
-    console.log(`[ScheduledTasks] WinRM pre-check ${device}: ${res.stdout.trim()}`)
-  } catch (e) {
-    console.error(`[ScheduledTasks] WinRM pre-check error for ${device}:`, e)
-  }
-}
+// Ausgeführt werden die Aufgaben seit 17.11.2026 im Hintergrund, nur auf dem Automatik-PC
+// (services/geplanteAufgaben.ts + components/scans/GeplanteAufgabenController.tsx).
 
 export default function ScheduledTasks() {
   const isMaster = useIsMasterAdmin()
@@ -172,9 +88,6 @@ export default function ScheduledTasks() {
   const [svcError, setSvcError]             = useState<Record<string, string>>({})
   const [svcSearch, setSvcSearch]           = useState<Record<string, string>>({})
 
-  const schedulerRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const ranThisMinute = useRef<Set<string>>(new Set())
-
   // Load own email address for "An mich" button
   useEffect(() => {
     if (username) {
@@ -192,194 +105,11 @@ export default function ScheduledTasks() {
 
   useEffect(() => { loadTasks() }, [loadTasks])
 
-  // ── Scheduler ─────────────────────────────────────────────────────────────────
+  // Stand (lastRun/lastResult) regelmäßig still nachladen — ausgeführt wird im Hintergrund
   useEffect(() => {
-    schedulerRef.current = setInterval(async () => {
-      const now = new Date()
-      const minuteKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}-${now.getMinutes()}`
-      const currentTasks: ScheduledTask[] = await api().netReadJson('scheduled_tasks/tasks.json').catch(() => []) ?? []
-
-      // 6a: WinRM pre-check — 60 seconds before any scheduled command
-      const in60 = new Date(now.getTime() + 60000)
-      const in60hhmm = `${String(in60.getHours()).padStart(2, '0')}:${String(in60.getMinutes()).padStart(2, '0')}`
-      for (const task of currentTasks) {
-        if (task.status !== 'active') continue
-        const hasPerCmdSchedule = task.commands.some(c => c.schedule)
-        let willRunSoon = false
-        if (hasPerCmdSchedule) {
-          willRunSoon = task.commands.some(c => c.schedule && scheduleMatchesNow(c.schedule, in60))
-        } else {
-          willRunSoon = task.schedule.time === in60hhmm && shouldRunNow(
-            { ...task, schedule: { ...task.schedule, time: in60hhmm } }, in60
-          )
-        }
-        if (willRunSoon) {
-          const preKey = `pre-${task.id}-${in60hhmm}`
-          if (!ranThisMinute.current.has(preKey)) {
-            ranThisMinute.current.add(preKey)
-            task.devices.forEach(device => ensureWinRM(device).catch(() => {}))
-          }
-        }
-      }
-
-      // Run due tasks/commands
-      for (const task of currentTasks) {
-        if (task.status !== 'active') continue
-        const hasPerCmdSchedule = task.commands.some(c => c.schedule)
-
-        if (hasPerCmdSchedule) {
-          // 6b: per-cmd schedule — each command is triggered independently
-          for (const cmdDef of task.commands) {
-            if (!cmdDef.schedule) continue
-            if (!scheduleMatchesNow(cmdDef.schedule, now)) continue
-            const cmdKey = `${task.id}-${cmdDef.cmdId}-${minuteKey}`
-            if (ranThisMinute.current.has(cmdKey)) continue
-            ranThisMinute.current.add(cmdKey)
-            runSingleCommand(task, cmdDef)
-          }
-        } else {
-          const taskKey = `${task.id}-${minuteKey}`
-          if (ranThisMinute.current.has(taskKey)) continue
-          if (!shouldRunNow(task, now)) continue
-          ranThisMinute.current.add(taskKey)
-          runTask(task)
-        }
-      }
-
-      if (ranThisMinute.current.size > 500) ranThisMinute.current.clear()
-    }, 30000)
-    return () => { if (schedulerRef.current) clearInterval(schedulerRef.current) }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    const t = setInterval(() => { void api().netReadJson<ScheduledTask[]>('scheduled_tasks/tasks.json').then(d => { if (Array.isArray(d)) setTasks(d) }).catch(() => {}) }, 60_000)
+    return () => clearInterval(t)
   }, [])
-
-  // ── Run a single command (for per-cmd schedule) ───────────────────────────────
-  async function runSingleCommand(task: ScheduledTask, cmdDef: ScheduledTask['commands'][0]) {
-    const emailCfg = await loadEmailCfg(username)
-    const cat = CATEGORIES.find(c => c.id === cmdDef.catId)
-    const cmd = cat?.commands.find(c => c.id === cmdDef.cmdId)
-    if (!cmd) return
-
-    for (const device of task.devices) {
-      let ok = false
-      let output = ''
-      try {
-        const psCmd = cmd.buildCmd(device, cmdDef.input)
-        const res = await api().runPowerShell(psCmd, 120000)
-        ok = res.exitCode === 0
-        output = res.stdout || res.stderr || ''
-      } catch (e) { output = String(e) }
-
-      if (cmdDef.notifyEmail && emailCfg) {
-        const subject = cmdDef.notifySubject || `IT Admin Tool – ${task.name}: ${cmd.func}`
-        const body = (cmdDef.notifyBody || `Aufgabe: ${task.name}\nBefehl: ${cmd.func}\nGerät: {device}\nErgebnis: {status}\nZeit: {time}`)
-          .replace(/\{device\}/g, device)
-          .replace(/\{status\}/g, ok ? 'Erfolgreich' : 'Fehler')
-          .replace(/\{time\}/g, new Date().toLocaleString('de-DE'))
-          .replace(/\{output\}/g, output.slice(0, 500))
-        try { await sendMail(emailCfg, cmdDef.notifyEmail, subject, body) } catch { /* ignore */ }
-      }
-    }
-  }
-
-  async function runTask(task: ScheduledTask) {
-    const emailCfg = await loadEmailCfg(username)
-    const hasReboot = task.commands.some(c => c.catId === 'reboot')
-    if (hasReboot && task.rebootOptions?.preRebootEmail?.enabled && emailCfg) {
-      const mins = task.rebootOptions.preRebootEmail.minutesBefore
-      const recip = task.rebootOptions.preRebootEmail.recipients || emailCfg.notifyEmail
-      if (recip && mins > 0) {
-        setTimeout(async () => {
-          try {
-            const subject = task.rebootOptions?.preRebootEmail?.subject || `IT Admin Tool – Reboot geplant: ${task.name}`
-            const body = task.rebootOptions?.preRebootEmail?.body || `Geräte: ${task.devices.join(', ')}\nReboot startet in ${mins} Minuten.`
-            await sendMail(emailCfg, recip, subject, body)
-          } catch { /* ignore */ }
-        }, Math.max(0, (task.schedule.time ? 0 : mins * 60000) - mins * 60000))
-      }
-    }
-
-    const results: Record<string, 'success' | 'error'> = {}
-    for (const device of task.devices) {
-      for (const sc of task.commands) {
-        const cat = CATEGORIES.find(c => c.id === sc.catId)
-        const cmd = cat?.commands.find(c => c.id === sc.cmdId)
-        if (!cmd) continue
-        let ok = false
-        let output = ''
-        try {
-          const psCmd = cmd.buildCmd(device, sc.input)
-          const res = await api().runPowerShell(psCmd, 120000)
-          ok = res.exitCode === 0
-          output = res.stdout || res.stderr || ''
-          results[`${device}/${sc.cmdId}`] = ok ? 'success' : 'error'
-        } catch (e) {
-          output = String(e)
-          results[`${device}/${sc.cmdId}`] = 'error'
-        }
-        if (sc.notifyEmail && emailCfg) {
-          const subject = sc.notifySubject || `IT Admin Tool – ${task.name}: ${cmd.func}`
-          const body = (sc.notifyBody || `Aufgabe: ${task.name}\nBefehl: ${cmd.func}\nGerät: {device}\nErgebnis: {status}\nZeit: {time}`)
-            .replace(/\{device\}/g, device)
-            .replace(/\{status\}/g, ok ? 'Erfolgreich' : 'Fehler')
-            .replace(/\{time\}/g, new Date().toLocaleString('de-DE'))
-            .replace(/\{output\}/g, output.slice(0, 500))
-          try { await sendMail(emailCfg, sc.notifyEmail, subject, body) } catch { /* ignore */ }
-        }
-      }
-    }
-
-    const allOk = Object.values(results).every(r => r === 'success')
-    const updated = tasks.map(t =>
-      t.id === task.id ? { ...t, lastRun: new Date().toISOString(), lastResult: allOk ? 'success' : 'error' as const } : t
-    )
-    await api().netWriteJson('scheduled_tasks/tasks.json', updated)
-    setTasks(updated)
-
-    if (hasReboot && task.rebootOptions?.onlineNotification?.enabled && emailCfg) {
-      const recip = task.rebootOptions.onlineNotification.recipients || emailCfg.notifyEmail
-      if (recip) {
-        const services = task.rebootOptions.onlineNotification.checkServices ?? []
-        const onlineSubject = task.rebootOptions.onlineNotification.subject
-        const onlineBody = task.rebootOptions.onlineNotification.body
-        for (const device of task.devices) {
-          pollUntilOnline(device, services, emailCfg, recip, task.name, onlineSubject, onlineBody)
-        }
-      }
-    }
-  }
-
-  async function pollUntilOnline(device: string, services: string[], cfg: UserEmailConfig, recip: string, taskName: string, customSubject?: string, customBody?: string) {
-    for (let i = 0; i < 120; i++) {
-      await new Promise(r => setTimeout(r, 60000))
-      try {
-        const hd = device.replace(/'/g, "''")
-        const pollScript = '$o=$false; try{if(Test-Connection ' + "'" + 'hd' + "'" + ' -Count 1 -Quiet -EA SilentlyContinue){$o=$true}}catch{}; if(-not $o){try{$t=New-Object System.Net.Sockets.TcpClient;if($t.ConnectAsync(' + "'" + 'hd' + "'" + ',445).Wait(2000)){$o=$true};$t.Close()}catch{}}; if($o){"True"}else{"False"}'
-        const pingResult = await api().runPowerShell(pollScript.replace(/hd/g, hd), 10000)
-        if (pingResult.stdout.trim().toLowerCase() === 'true') {
-          let svcStatus = ''
-          if (services.length > 0) {
-            const svcScript = `Get-Service -ComputerName '${device}' -Name ${services.map(s => `'${s}'`).join(',')} -EA SilentlyContinue | Select-Object Name,Status | ConvertTo-Json -Compress`
-            const svcRes = await api().runPowerShell(svcScript, 15000)
-            try {
-              const svcArr = JSON.parse(svcRes.stdout.trim())
-              const arr = Array.isArray(svcArr) ? svcArr : [svcArr]
-              const notRunning = arr.filter((s: Record<string, unknown>) => String(s.Status ?? '') !== 'Running')
-              if (notRunning.length > 0) continue
-              svcStatus = arr.map((s: Record<string, unknown>) => `${s.Name}: ${s.Status}`).join(', ')
-            } catch { continue }
-          }
-          const subject = customSubject || `IT Admin Tool – ${device} wieder online`
-          const body = (customBody || `Aufgabe: {task}\nGerät: {device}\nStatus: Online und bereit\nZeit: {time}\n{services}`)
-            .replace(/\{task\}/g, taskName)
-            .replace(/\{device\}/g, device)
-            .replace(/\{time\}/g, new Date().toLocaleString('de-DE'))
-            .replace(/\{services\}/g, svcStatus ? `Dienste: ${svcStatus}` : '')
-          await sendMail(cfg, recip, subject, body)
-          return
-        }
-      } catch { /* ignore */ }
-    }
-  }
 
   async function saveTasks(updated: ScheduledTask[]) {
     await api().netWriteJson('scheduled_tasks/tasks.json', updated)
@@ -633,7 +363,7 @@ export default function ScheduledTasks() {
       <div className="shrink-0 flex items-center gap-2.5 px-5 py-2 bg-amber-500/10 border-b border-amber-500/30">
         <Info size={13} className="text-amber-400 shrink-0" />
         <p className="text-xs text-amber-400">
-          Hinweis: Geplante Aufgaben werden nur ausgeführt wenn das IT Admin Tool aktiv läuft. WinRM wird automatisch 60 Sek. vor Ausführung aktiviert.
+          Hinweis: Geplante Aufgaben laufen im Hintergrund – auch wenn dieser Bildschirm geschlossen ist – und nur auf EINEM PC: dem Automatik-PC (BQ8069, sonst genau eine Vertretung mit offenem Admin-Tool). Jede Ausführung wird vermerkt, damit nichts doppelt läuft. WinRM wird automatisch 60 Sek. vor Ausführung aktiviert.
         </p>
       </div>
 

@@ -11,6 +11,9 @@
 
 import { api } from '../electronAPI'
 import { b64, esc, fernBefehl, getagged, verbinde } from '../services/enaioInstall'
+import { istClusterKnoten } from '../services/serverSchonung'
+
+const KNOTEN_FEHLER = (h: string) => `${h} ist ein Cluster-Knoten (HCI, vom Dienstleister verwaltet). Das IT Admin Tool pingt ihn nur an – es liest dort nichts aus und ändert nichts.`
 
 export type PaModus = 'system' | 'profil' | 'benutzer' | 'lokal'
 export type PaRisiko = 'lesen' | 'aendern' | 'kritisch'
@@ -217,8 +220,10 @@ export async function fuehreAus(host: string, a: PaAktion, param = '', ctx: { sa
   const h = host.trim()
   if (!h) return { ok: false, zeilen: [], fehler: 'Kein Ziel-PC gewählt.', dauerMs: 0 }
   if (a.param?.pflicht && !param.trim()) return { ok: false, zeilen: [], fehler: `Bitte „${a.param.label}“ angeben.`, dauerMs: 0 }
+  if (a.modus !== 'lokal' && istClusterKnoten(h)) return { ok: false, zeilen: [], fehler: KNOTEN_FEHLER(h), dauerMs: 0 }
   try {
-    const r = await api().runPowerShell(baueSkript(h, a, param, ctx.sam || ''), (a.timeoutMs ?? 60000) + 30000)
+    const r = await api().runPowerShell(baueSkript(h, a, param, ctx.sam || ''), (a.timeoutMs ?? 60000) + 30000,
+      { quelle: `Baustein: ${a.titel}`.slice(0, 80), art: a.risiko === 'lesen' ? 'lesen' : 'aendern' })
     const j = getagged<{ ok?: boolean; fehler?: string | null; zeilen?: unknown; benutzer?: string }>(r.stdout, TAG)
     if (!j) {
       if (a.trenntVerbindung) return { ok: true, zeilen: ['Befehl abgesetzt — die Verbindung wurde dabei wie erwartet kurz getrennt.'], dauerMs: Date.now() - t0 }
@@ -269,6 +274,8 @@ export async function verbindeUndLies(host: string): Promise<PaVerbindung> {
   const h = host.trim()
   const leer: PaVerbindung = { ok: false, online: false, winrm: false }
   if (!h) return { ...leer, fehler: 'Kein Ziel-PC gewählt.' }
+  // Cluster-Knoten (HCI, vom Dienstleister verwaltet): nichts lesen, nichts einschalten (serverSchonung.ts)
+  if (istClusterKnoten(h)) return { ...leer, fehler: KNOTEN_FEHLER(h) }
   try {
     const p = await api().runPowerShell(
       `$h='${esc(h)}'; $on=$false; try { $on = Test-Connection -ComputerName $h -Count 1 -Quiet -EA SilentlyContinue } catch {}; ` +
@@ -276,8 +283,13 @@ export async function verbindeUndLies(host: string): Promise<PaVerbindung> {
       `if ($on) { 'ONLINE' } else { 'OFFLINE' }`, 20000)
     if (!(p.stdout || '').includes('ONLINE')) return { ...leer, fehler: `${h} antwortet nicht (ausgeschaltet, nicht im Netz oder falscher Name).` }
   } catch { /* weiter mit WinRM — der Ping kann geblockt sein */ }
-  const f = await verbinde(h)
-  if (f) return { ...leer, online: true, fehler: f }
+  // Server: dort schaltet das Tool nichts ein (ensureWinRM würde notfalls den WinRM-Dienst fern starten) —
+  // nur lesend verbinden; WinRM läuft auf Servern ohnehin. Eingriffe auf Servern: Komplett-Diagnose mit Namensbestätigung.
+  const server = await import('../services/itAdminToolInstall').then(m => m.istBekannterServer(h)).catch(() => false)
+  if (!server) {
+    const f = await verbinde(h)
+    if (f) return { ...leer, online: true, fehler: f }
+  }
   try {
     const r = await api().runPowerShell(fernBefehl(h, INFO_INNER, '@@PAINFO@@'), 45000)
     const j = getagged<{ benutzer?: string; modell?: string; os?: string; boot?: string; gesperrt?: boolean; sitzung?: string; ip?: string; akku?: boolean; wlan?: boolean; fehler?: string }>(r.stdout, '@@PAINFO@@')

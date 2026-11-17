@@ -7,8 +7,9 @@
 import { lazy, Suspense, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import {
   MessageSquareWarning, Loader2, CheckCircle2, XCircle, AlertTriangle, Wifi, User, Lock, Monitor, ChevronDown, Play, ShieldAlert,
-  Send, Wrench, ExternalLink, Search, X, Info, Sparkles, MinusCircle, ListChecks, Lightbulb,
+  Send, Wrench, ExternalLink, Search, X, Info, Sparkles, MinusCircle, ListChecks, Lightbulb, Stethoscope,
 } from 'lucide-react'
+import { VollDiagnoseInfo } from '../vollDiagnose/VollDiagnoseInfo'
 import { useAuthStore } from '../store/authStore'
 import { ensureDailyAdUsers } from '../services/adUserDirectory'
 import type { AdUserListItem } from '../services/adUsersList'
@@ -58,7 +59,7 @@ const BereichsDiagnose = lazy(() => import('./diagnose/BereichsDiagnose'))
 const BerechtigungsCheck = lazy(() => import('./BerechtigungsCheck'))
 const LEER: PaErkennung = { treffer: [], sicherheit: 'keine', gruende: [], erkannt: [], unbekannt: [], parameter: [] }
 
-export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: string, host: string) => void }) {
+export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: string, host: string, text?: string) => void }) {
   const user = useAuthStore(s => s.session?.user)
   const by = user?.displayName || user?.username || 'unbekannt'
   const [pc, setPc] = useState<PcWahl | null>(null)
@@ -226,12 +227,26 @@ export default function ProblemAssistent({ onWerkzeug }: { onWerkzeug: (id: stri
                   Keine Ahnung, was das Problem ist?
                 </button>
               </div>
-              {/* Berechtigungscheck: Homeoffice, SolidWorks, Ordner auf Laufwerk I:, Grundausstattung, Lizenzen */}
-              <div className="flex justify-start">
+              {/* Berechtigungscheck, Netzwerk-Diagnose · rechts (unter „Keine Ahnung“): Komplett-Diagnose */}
+              <div className="flex items-center gap-2 flex-wrap">
                 <button onClick={() => setBerCheck(x => !x)} data-berechtigungscheck-knopf title="Im AD prüfen, welche Berechtigungen eine Person hat und welche fehlen – mit Link zum Antrag"
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 text-xs font-semibold ${berCheck ? 'bg-emerald-600 text-white border-emerald-600' : 'border-emerald-500/40 text-emerald-600 hover:bg-emerald-500/10'}`}>
                   <ShieldAlert size={14} />Berechtigungscheck machen
                 </button>
+                <button onClick={() => onWerkzeug('netzdiagnose', pc?.host || '')} data-netzwerkdiagnose-knopf
+                  title={pc?.host ? `Netzwerk-Diagnose für ${pc.host} starten (WLAN-Aussetzer, Ursachen, Behebung)` : 'Netzwerk-Diagnose öffnen (WLAN-Aussetzer, Ursachen, Behebung)'}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-sky-500/40 text-sky-600 text-xs font-semibold hover:bg-sky-500/10">
+                  <Wifi size={14} />Netzwerk-Diagnose
+                </button>
+                <div className="ml-auto flex items-center gap-1.5">
+                  <button onClick={() => onWerkzeug('voll-diagnose', pc?.host || '', q.trim() || undefined)} data-komplett-diagnose-knopf
+                    title="Prüft den ganzen PC (bzw. Server), vertieft gezielt bis zur Ursache und schlägt für jeden Befund einen Lösungsweg vor – eingegriffen wird erst nach Bestätigung"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-violet-500/40 text-violet-600 text-xs font-semibold hover:bg-violet-500/10">
+                    <Stethoscope size={14} />Komplett-Diagnose (alles prüfen)
+                  </button>
+                  <span className="text-[10px] text-muted-foreground whitespace-nowrap">ca. 3–6 min</span>
+                  <VollDiagnoseInfo />
+                </div>
               </div>
               {berCheck && (
                 <Suspense fallback={<p className="text-xs text-muted-foreground inline-flex items-center gap-2"><Loader2 size={13} className="animate-spin" />Berechtigungscheck wird geladen …</p>}>
@@ -420,7 +435,7 @@ function TestStempel({ t }: { t?: BtStand[string] }) {
 
 function ProblemDetail({ problem, pc, verb, person, ersatz, by, onZurueck, onWerkzeug, onAusgefuehrt, vorbelegung, alternativen = [], versucht = [], onBehoben, onNaechstes, onLoesungId }: {
   problem: PaProblem; pc: PcWahl | null; verb: PaVerbindung | null; person: AdUserListItem | null; ersatz?: DgErsatzBenutzer | null; by: string; vorbelegung?: string
-  onZurueck: () => void; onWerkzeug: (id: string, host: string) => void; onAusgefuehrt?: (id: string) => void
+  onZurueck: () => void; onWerkzeug: (id: string, host: string, text?: string) => void; onAusgefuehrt?: (id: string) => void
   alternativen?: PaProblem[]; versucht?: string[]; onBehoben?: (id: string) => void; onNaechstes?: (p: PaProblem) => void; onLoesungId?: (id: string) => void
 }) {
   const [behoben, setBehoben] = useState<null | 'ja' | 'nein'>(null)
@@ -526,7 +541,7 @@ function ProblemDetail({ problem, pc, verb, person, ersatz, by, onZurueck, onWer
                 <div key={i} className="flex items-center gap-2 rounded-md border border-dashed border-border px-3 py-2">
                   <Wrench size={14} className="text-primary shrink-0" />
                   <span className="min-w-0"><span className="block text-[13px] text-foreground">{s.titel || w?.titel}</span><span className="block text-[11px] text-muted-foreground">{w?.beschreibung}</span></span>
-                  <button onClick={() => onWerkzeug(s.aktion.slice(9), host)} className="ml-auto shrink-0 inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md border border-primary/40 text-primary hover:bg-primary/10"><ExternalLink size={12} />öffnen</button>
+                  <button onClick={() => onWerkzeug(s.aktion.slice(9), host, s.aktion === 'werkzeug:voll-diagnose' ? problem.titel : undefined)} data-werkzeug={s.aktion.slice(9)} className="ml-auto shrink-0 inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md border border-primary/40 text-primary hover:bg-primary/10"><ExternalLink size={12} />öffnen</button>
                 </div>
               )
             }
@@ -638,7 +653,14 @@ function ProblemDetail({ problem, pc, verb, person, ersatz, by, onZurueck, onWer
             ) : <p className="text-xs text-muted-foreground">Im Katalog gibt es keine weitere passende Möglichkeit.</p>}
             <div className="space-y-1.5">
               <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Ursache gezielt suchen</p>
-              {!bereichsDg ? (
+              {problem.bereich === 'Server' ? (
+                // Server: keine PC-Bereichsdiagnose, sondern die Komplett-Diagnose im Server-Modus (liest nur, Eingriff mit Namensbestätigung)
+                <button onClick={() => onWerkzeug('voll-diagnose', host, problem.titel)} data-server-komplett-diagnose
+                  className="w-full text-left rounded-md border-2 border-violet-500/40 px-3 py-2 hover:bg-violet-500/5">
+                  <span className="block text-sm font-medium text-violet-700 dark:text-violet-300">Komplett-Diagnose für den Server starten</span>
+                  <span className="block text-[11px] text-muted-foreground">Liest Ereignisprotokolle, Komponentenspeicher, Rollen, VSS und den Server-Monitor aus und zeigt zu jedem Befund den Lösungsweg. Eingriffe nur nach Bestätigung mit dem Servernamen.</span>
+                </button>
+              ) : !bereichsDg ? (
                 <button onClick={() => setBereichsDg(true)} disabled={!host || !verb} data-bereichs-diagnose-start
                   className="w-full text-left rounded-md border-2 border-violet-500/40 px-3 py-2 hover:bg-violet-500/5 disabled:opacity-50">
                   <span className="block text-sm font-medium text-violet-700 dark:text-violet-300">Komplette Diagnose „{problem.bereich}“ starten</span>

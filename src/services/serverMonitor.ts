@@ -10,7 +10,11 @@ import type { InventoryItem } from '../types/auth'
 import { pingBatch } from './userPresenceScan'
 import { melde, detailsZuNeustarts, titelVon, textVon, type MeldeZiel, type ServerEreignis, type NeustartDetail } from './serverEreignisse'
 import type { ZertZusammenfassung } from './serverZertifikate'
-import { ladeSoll, ladeIst, pruefe, kritischeFehler, fasseZusammen, istDcaDienst, DCA_AUSFALL, bestaetigeAusfall, speichereIst, type Zusammenfassung } from './serverZustand'
+import type { DismKurz } from './serverDism'
+import { mailRechtJetzt, eigeneKennung, type LaufVon } from './serverMelder'
+import { istClusterKnoten } from './serverSchonung'
+import { zugriffeVorEreignissen } from './zugriffe'
+import { ladeSoll, ladeIst, pruefe, kritischeFehler, fasseZusammen, istDcaDienst, DCA_AUSFALL, bestaetigeAusfall, speichereIst, type Zusammenfassung, type IstStand, type SollZustand } from './serverZustand'
 import { addHistoryEntry } from './serverHistory'
 import {
   getScanSchedule, isConfiguredDue, loadRunStatus, saveRunStatus,
@@ -114,10 +118,12 @@ export interface ServerStatus {
   lastRebootCheckAt?: string   // letzte ERFOLGREICHE Abfrage
   lastRebootTryAt?: string     // letzter Versuch (auch fehlgeschlagen)
   lastRebootError?: string     // Grund, wenn der letzte Versuch scheiterte (sonst leer)
+  lastRebootVon?: string       // welcher PC (Konto) zuletzt abgefragt hat — „DE5CG… (bq8069)“
   rebootQuelle?: 'winrm' | 'dcom'
   metrics?: ServerMetrics      // RAM-/Festplatten-Auslastung (täglicher Scan)
   pruefung?: Zusammenfassung   // letzte Dienst-/Einstellungs-Prüfung (Kurzfassung für die Kachel)
   zertifikate?: ZertZusammenfassung   // letzter Zertifikats-Scan (nächster Ablauf, Anzahl ≤ 30 / ≤ 5 Tage)
+  dism?: DismKurz              // letzter DISM-ScanHealth (Komponentenspeicher) bzw. „läuft gerade“
 }
 export interface ServerMonitorStatus {
   pingRunAt: string | null
@@ -126,8 +132,26 @@ export interface ServerMonitorStatus {
   running?: { by: string; at: string }
   /** Sperre der automatischen Dienst-Prüfung (alle 5 min) — damit sich zwei Läufe nie überlappen */
   pruefungLaeuft?: { by: string; at: string }
+  /** Rechner, der den letzten automatischen Lauf gemacht (und damit gemeldet) hat — bevorzugt BQ8069 (serverMelder.ts) */
+  pingVon?: LaufVon
+  /**
+   * Automatischer Lauf, der bei ALLEN Servern an der Verbindung scheiterte (je Art: „Neustart-Abfrage“,
+   * „Dienste & Prüfungen“, „Zertifikats-Scan“). Das liegt am prüfenden PC (Rechte, WinRM, Zscaler) —
+   * die Werte der Kacheln wurden dann NICHT überschrieben; der Server-Bildschirm zeigt einen Hinweis.
+   */
+  abfrageStoerung?: Record<string, AbfrageStoerung>
   servers: Record<string, ServerStatus>
 }
+export interface AbfrageStoerung { von: string; at: string; fehler: string; server: number }
+/** Störung eintragen bzw. (bei Erfolg) austragen — für aktualisiereStatus. */
+export function mitStoerung(s: ServerMonitorStatus, was: string, st: AbfrageStoerung | null): Record<string, AbfrageStoerung> | undefined {
+  const m = { ...(s.abfrageStoerung || {}) }
+  if (st) m[was] = st
+  else delete m[was]
+  return Object.keys(m).length ? m : undefined
+}
+/** Mindestens so viele Server muss ein Lauf gefragt haben, damit „alle gescheitert“ als Störung des PCs gilt. */
+export const STOERUNG_AB_SERVERN = 2
 
 export function hostKey(h: string): string { return (h || '').trim().toUpperCase() }
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
@@ -182,7 +206,7 @@ export function mergeInventoryServers(tiles: ServerTile[], inv: InventoryServer[
 export async function loadServerStatus(): Promise<ServerMonitorStatus> {
   try {
     const s = await api().netReadJson<ServerMonitorStatus>(STATUS_PATH)
-    if (s && typeof s === 'object') return { pingRunAt: s.pingRunAt ?? null, rebootRunAt: s.rebootRunAt ?? null, metricsRunAt: s.metricsRunAt ?? null, running: s.running, pruefungLaeuft: s.pruefungLaeuft, servers: s.servers || {} }
+    if (s && typeof s === 'object') return { pingRunAt: s.pingRunAt ?? null, rebootRunAt: s.rebootRunAt ?? null, metricsRunAt: s.metricsRunAt ?? null, running: s.running, pruefungLaeuft: s.pruefungLaeuft, pingVon: s.pingVon, abfrageStoerung: s.abfrageStoerung, servers: s.servers || {} }
   } catch { /* noch keiner */ }
   return { pingRunAt: null, rebootRunAt: null, metricsRunAt: null, servers: {} }
 }
@@ -194,9 +218,17 @@ export async function saveServerStatus(s: ServerMonitorStatus): Promise<boolean>
  * sonst überschreiben Ping, Reboot-Abfrage und Auslastungs-Scan gegenseitig ihre
  * Ergebnisse, wenn sie sich zeitlich überlappen.
  */
-export async function aktualisiereStatus(fn: (frisch: ServerMonitorStatus) => ServerMonitorStatus): Promise<boolean> {
-  const frisch = await loadServerStatus()
-  return saveServerStatus(fn(frisch))
+// Seit dem Rundlauf (17.11.2026) schreiben Ping-Takt und Dienst-Schleife im SELBEN Fenster
+// unabhängig voneinander — Lesen+Schreiben deshalb strikt nacheinander, sonst überschreibt
+// ein Schreiber die frischen Felder des anderen.
+let statusKette: Promise<unknown> = Promise.resolve()
+export function aktualisiereStatus(fn: (frisch: ServerMonitorStatus) => ServerMonitorStatus): Promise<boolean> {
+  const p = statusKette.then(async () => {
+    const frisch = await loadServerStatus()
+    return saveServerStatus(fn(frisch))
+  })
+  statusKette = p.catch(() => false)
+  return p
 }
 
 export function isStatusClaimed(s: ServerMonitorStatus, now = Date.now()): boolean {
@@ -220,11 +252,11 @@ export function offlineHostsForTiles(s: ServerMonitorStatus, tiles: ServerTile[]
 export async function removeHostState(hostname: string): Promise<void> {
   const key = hostKey(hostname)
   try {
-    const status = await loadServerStatus()
-    if (status.servers[key]) {
+    await aktualisiereStatus(status => {
+      if (!status.servers[key]) return status
       const servers = { ...status.servers }; delete servers[key]
-      await saveServerStatus({ ...status, servers })
-    }
+      return { ...status, servers }
+    })
   } catch { /* offline */ }
   try {
     const n = (await api().netReadJson<Record<string, string>>(NOTIFIED_PATH)) ?? {}
@@ -238,7 +270,7 @@ async function pingReachable(targets: string[]): Promise<Set<string>> {
   let pending = [...new Set(targets.filter(Boolean))]
   for (let attempt = 0; attempt < 3 && pending.length; attempt++) {
     let up = new Set<string>()
-    try { up = new Set((await pingBatch(pending, 800)).up) } catch { up = new Set() }
+    try { up = new Set((await pingBatch(pending, 800, { quelle: 'Server-Monitor: Ping', art: 'ping' })).up) } catch { up = new Set() }
     for (const t of pending) if (up.has(t)) reachable.add(t)
     pending = pending.filter(t => !up.has(t))
     if (pending.length && attempt < 2) await sleep(1000)   // 2 weitere Pings nach kurzer Pause
@@ -275,6 +307,9 @@ export async function runPingCycle(by: string): Promise<{ online: number; offlin
   const wiederDa: string[] = []   // war offline, jetzt erreichbar → evtl. neu gestartet
   const ereignisse: ServerEreignis[] = []
   const ziele: Record<string, MeldeZiel> = {}
+  // Offline-Mails bevorzugt von BQ8069: ist das ein anderer PC und BQ8069 an, hier NICHT mailen —
+  // „gemeldet“ bleibt offen, BQ8069 schickt die Mail in seinem nächsten Lauf (serverMelder.ts).
+  let mailJetzt: boolean | null = null
 
   for (const t of cfg.tiles) {
     const key = hostKey(t.hostname)
@@ -300,8 +335,11 @@ export async function runPingCycle(by: string): Promise<{ online: number; offlin
       // Mail bei Offline (einmalig bis Recovery), nur wenn aktiviert + Adresse
       // Nur bei ERFOLG als gemeldet merken — sonst versucht es der nächste Zyklus erneut.
       const an = meldeAn(t.notifyEmail)
-      if (t.notifyEnabled && an && !notified[key]) {
-        const e: ServerEreignis = { host: t.hostname.trim(), bezeichnung: t.description, ip: t.ip, at: prev.online === false && prev.lastCheckAt ? prev.lastCheckAt : now, id: '', typ: 'offline' }
+      if (t.notifyEnabled && an && !notified[key] && mailJetzt === null) mailJetzt = await mailRechtJetzt()
+      if (t.notifyEnabled && an && !notified[key] && mailJetzt) {
+        const e: ServerEreignis = { host: t.hostname.trim(), bezeichnung: t.description, ip: t.ip, at: prev.online === false && prev.lastCheckAt ? prev.lastCheckAt : now, id: `mail|${key}`, typ: 'offline' }
+        // Was hat das Tool in den 2 h davor mit dem Server gemacht? (Zugriffsprotokoll)
+        try { e.zugriffe = (await zugriffeVorEreignissen([e]))[e.id] } catch { /* ohne Zeile */ }
         try {
           const r = await api().sendEmailRaw({ to: an, subject: titelVon(e), body: textVon(e), smtp: '', port: 587 })
           if (r?.success) notified[key] = now
@@ -352,14 +390,26 @@ function parseRebootJson(txt: string): RebootRoh[] {
 /**
  * `bekannt` = Startzeiten, die die Dienst-Prüfung gerade schon gelesen hat (HOSTKEY → boot) —
  * diese Server werden nicht noch einmal abgefragt. `throttle` = max. gleichzeitige
- * WinRM-Sitzungen für die übrigen (automatischer 5-min-Lauf: 3, „Jetzt prüfen": 10).
+ * WinRM-Sitzungen für die übrigen (automatischer 5-min-Lauf: 1 = nacheinander, „Jetzt prüfen": 10).
+ * `frischMs` = Server, deren Startzeit in dieser Zeit schon gelesen wurde (z. B. vom Rundlauf
+ * der Dienst-Prüfung), gar nicht erst abfragen.
  */
-export async function runRebootCheck(by: string, nurHosts?: string[], opt: { bekannt?: Record<string, string>; throttle?: number } = {}): Promise<{ updated: number; fehler: number; neustarts: number }> {
+export async function runRebootCheck(by: string, nurHosts?: string[], opt: { bekannt?: Record<string, string>; throttle?: number; auto?: boolean; frischMs?: number } = {}): Promise<{ updated: number; fehler: number; neustarts: number; stoerung?: boolean; ausgelassen?: number }> {
   const cfg = await loadServerConfig()
   const status = await loadServerStatus()
   const now = new Date().toISOString()
+  const von = await eigeneKennung().catch(() => '')
   const wunsch = nurHosts ? new Set(nurHosts.map(hostKey)) : null
-  const alle = [...new Set(cfg.tiles.map(t => t.hostname.trim()).filter(Boolean))].filter(h => !wunsch || wunsch.has(hostKey(h)))
+  const frischAb = opt.frischMs ? Date.now() - opt.frischMs : 0
+  const istFrisch = (h: string) => {
+    if (!frischAb || opt.bekannt?.[hostKey(h)]) return false
+    const t = Date.parse(status.servers[hostKey(h)]?.lastRebootCheckAt || '')
+    return !isNaN(t) && t >= frischAb
+  }
+  // Cluster-Knoten (HCI) nur per Ping — keine Startzeit-Abfrage (serverSchonung.ts)
+  const kandidaten = [...new Set(cfg.tiles.map(t => t.hostname.trim()).filter(Boolean))].filter(h => (!wunsch || wunsch.has(hostKey(h))) && !istClusterKnoten(h))
+  const alle = kandidaten.filter(h => !istFrisch(h))
+  const ausgelassen = kandidaten.length - alle.length
   const ergebnis = new Map<string, { boot?: string; fehler?: string; quelle?: 'winrm' | 'dcom' }>()
   const bekannt = opt.bekannt || {}
   for (const h of alle) { const b = bekannt[hostKey(h)]; if (b) ergebnis.set(hostKey(h), { boot: b, quelle: 'winrm' }) }
@@ -391,7 +441,7 @@ export async function runRebootCheck(by: string, nurHosts?: string[], opt: { bek
     let roh: RebootRoh[] = []
     let blockFehler = ''
     try {
-      const res = await api().runPowerShell(script, 240000)
+      const res = await api().runPowerShell(script, 240000, { quelle: 'Server-Monitor: Neustart-Abfrage', art: 'lesen' })
       const txt = (res.stdout ?? '').trim()
       roh = txt && !txt.startsWith('ERR:') ? parseRebootJson(txt) : []
       if (!roh.length) blockFehler = res.timedOut ? 'Zeitüberschreitung der WinRM-Abfrage' : (res.stderr || 'keine Antwort per WinRM').split(/\r?\n/)[0].slice(0, 200)
@@ -423,7 +473,7 @@ export async function runRebootCheck(by: string, nurHosts?: string[], opt: { bek
       `ConvertTo-Json -InputObject @($aus) -Compress`,
     ].join('\n')
     try {
-      const res = await api().runPowerShell(script, 180000)
+      const res = await api().runPowerShell(script, 180000, { quelle: 'Server-Monitor: Neustart-Abfrage (DCOM)', art: 'lesen' })
       for (const o of parseRebootJson((res.stdout ?? '').trim())) {
         const k = hostKey(String(o.Host || ''))
         if (o.Boot && String(o.Boot).trim()) ergebnis.set(k, { boot: String(o.Boot).trim(), quelle: 'dcom' })
@@ -434,6 +484,12 @@ export async function runRebootCheck(by: string, nurHosts?: string[], opt: { bek
 
   let updated = 0, fehler = 0
   for (const v of ergebnis.values()) { if (v.boot) updated++; else fehler++ }
+  // Störung des prüfenden PCs? Automatischer Lauf, mehrere Server per WinRM/DCOM gefragt, KEINER hat
+  // geantwortet (laut Ping sind sie da) → das liegt am PC (Rechte, WinRM, Zscaler), nicht an den Servern.
+  // Dann die Kacheln NICHT mit „fehlgeschlagen“ überschreiben, sondern die Störung des Laufs vermerken.
+  const gefragt = new Set(hosts.map(hostKey))
+  const stoerung = !!opt.auto && gefragt.size >= STOERUNG_AB_SERVERN && ![...gefragt].some(k => ergebnis.get(k)?.boot)
+  const ersterFehler = [...gefragt].map(k => ergebnis.get(k)?.fehler).find(Boolean) || 'keine Antwort per WinRM'
 
   // Neustart erkannt = neue, spätere Startzeit als bisher bekannt (und nicht älter als 7 Tage)
   const neu: { key: string; host: string; boot: string; vorher: string }[] = []
@@ -462,28 +518,109 @@ export async function runRebootCheck(by: string, nurHosts?: string[], opt: { bek
   await aktualisiereStatus(frisch => {
     const servers = { ...frisch.servers }
     for (const [k, v] of ergebnis) {
+      if (stoerung && !v.boot && gefragt.has(k)) continue   // Störung des PCs: alter Wert bleibt stehen
       const alt = servers[k] || { online: true, consecutiveFailures: 0 }
       servers[k] = v.boot
-        ? { ...alt, lastReboot: v.boot, lastRebootCheckAt: now, lastRebootTryAt: now, lastRebootError: undefined, rebootQuelle: v.quelle }
-        : { ...alt, lastRebootTryAt: now, lastRebootError: v.fehler }
+        ? { ...alt, lastReboot: v.boot, lastRebootCheckAt: now, lastRebootTryAt: now, lastRebootError: undefined, lastRebootVon: von || undefined, rebootQuelle: v.quelle }
+        : { ...alt, lastRebootTryAt: now, lastRebootError: v.fehler, lastRebootVon: von || undefined }
     }
+    const abfrageStoerung = stoerung ? mitStoerung(frisch, 'Neustart-Abfrage', { von, at: now, fehler: ersterFehler.slice(0, 300), server: gefragt.size })
+      : [...gefragt].some(k => ergebnis.get(k)?.boot) ? mitStoerung(frisch, 'Neustart-Abfrage', null) : frisch.abfrageStoerung
     // Teil-Abfrage (nur wieder erreichbare Server) verschiebt den Stundenrhythmus nicht
-    return { ...frisch, rebootRunAt: nurHosts ? frisch.rebootRunAt : now, servers }
+    return { ...frisch, rebootRunAt: nurHosts ? frisch.rebootRunAt : now, servers, abfrageStoerung }
   })
   if (neustartEreignisse.length) await melde(neustartEreignisse, meldeZiele(cfg.tiles), by).catch(() => [])
-  return { updated, fehler, neustarts: neustartEreignisse.length }
+  return { updated, fehler, neustarts: neustartEreignisse.length, stoerung, ausgelassen }
 }
 
 // ── Dienst-/Einstellungs-Prüfung gegen den Soll-Zustand ──────────────────────
+// Automatisch läuft sie seit 17.11.2026 als RUNDLAUF (services/serverRundlauf.ts): immer nur
+// EIN Server, 5 s Pause, nach dem letzten wieder der erste — bevorzugt auf BQ8069.
+// runZustandsPruefung bleibt für „Jetzt prüfen“ von Hand (alle Server, 2 gleichzeitig).
+
+/** Ergebnis der Prüfung EINES Servers (gemeinsamer Kern von Rundlauf und „Jetzt prüfen“). */
+export interface EinzelPruefung {
+  host: string
+  zusammenfassung: Zusammenfassung
+  erreichbar: boolean
+  boot?: string
+  /** Stand vor dieser Prüfung — zum Zurückschreiben bei einer Störung des prüfenden PCs */
+  vorher: IstStand | null
+  /** kritische Probleme jetzt */
+  probleme: number
+  /** neues Ereignis „pruefung“ (Popup + Mail) — noch NICHT gemeldet */
+  ereignis?: ServerEreignis
+  /** SEAL (`sysstatus`) in diesem Durchgang mitgeprüft? */
+  mitSeal: boolean
+}
+
 /**
- * Prüft alle Server mit Soll-Zustand (oder nur `nurHosts`), die laut Ping erreichbar
- * sind — nur lesend und netzschonend gestaffelt: höchstens 2 Server gleichzeitig, nach
- * jedem Server eine kurze Pause mit Zufallsanteil (1,5–3 s), Reihenfolge: `zuerst`
- * (z. B. gerade wieder erreichbar), danach die am längsten nicht geprüften.
- * Neue kritische Fehler (die vorher in Ordnung waren) → Ereignis „pruefung" (Popup + Mail).
+ * Einen Server gegen seinen Soll-Zustand prüfen — nur lesend. `null` = kein Soll-Zustand.
+ * Neue kritische Fehler (vorher in Ordnung) werden 3× innerhalb von 2 min nachgeprüft
+ * (bestaetigeAusfall) — nur was dann noch aus ist, wird zum Ereignis „pruefung“.
  * Kurz nach dem Hochfahren (`startetNoch`) wird nicht gemeldet; die nächste Prüfung entscheidet.
- * `auto` = automatischer Lauf (alle 5 min): läuft schon einer (Sperre `pruefungLaeuft`,
- * < 10 min alt, auch von einem anderen Rechner), wird dieser übersprungen.
+ * `mitSeal` entscheidet, ob SEAL-`sysstatus` diesmal mitläuft (sonst gilt der letzte SEAL-Stand weiter).
+ */
+export async function pruefeServerEinmal(t: ServerTile, o: { von: string; mitSeal?: (soll: SollZustand, vorher: IstStand | null) => boolean }): Promise<EinzelPruefung | null> {
+  const host = t.hostname.trim()
+  const soll = await ladeSoll(host)
+  if (!soll || !soll.punkte.length) return null
+  const vorher = await ladeIst(host)
+  const hatSeal = soll.punkte.some(p => p.typ === 'seal')
+  const mitSeal = hatSeal && (o.mitSeal ? o.mitSeal(soll, vorher) : true)
+  const ist = await pruefe(host, soll, { ohneSeal: hatSeal && !mitSeal, vorher })
+  const von = o.von
+  const basis = { host, erreichbar: ist.erreichbar, boot: ist.erreichbar && ist.boot ? ist.boot : undefined, vorher, mitSeal }
+  if (!ist.erreichbar || ist.startetNoch) return { ...basis, zusammenfassung: fasseZusammen(soll, ist, von), probleme: 0 }
+  let jetzt = kritischeFehler(soll, ist)
+  // vorher schon gemeldete Fehler nicht erneut melden (nur wenn vorher NICHT „startet noch“;
+  // unbestätigte Ausfälle des letzten Laufs gelten NICHT als gemeldet)
+  const vorherUnbestaetigt = new Set(vorher?.unbestaetigt || [])
+  const vorherFehler = vorher && vorher.erreichbar && !vorher.startetNoch ? new Set(kritischeFehler(soll, vorher).map(p => p.id).filter(id => !vorherUnbestaetigt.has(id))) : new Set<string>()
+  let neu = jetzt.filter(p => !vorherFehler.has(p.id))
+  if (neu.length) {
+    // Gegen Fehlalarme: die neu ausgefallenen Punkte 3× innerhalb von 2 min nachprüfen —
+    // gemeldet wird nur, was dann immer noch aus ist.
+    const np = await bestaetigeAusfall(host, soll, neu)
+    // letztes Nachprüf-Ergebnis in den gespeicherten Stand übernehmen (wieder an → ok)
+    ist.ergebnisse = ist.ergebnisse.map(e => np.letzte.get(e.id) || e)
+    // nicht nachprüfbar → beim nächsten Lauf NICHT als „schon gemeldet“ werten
+    ist.unbestaetigt = np.offen.map(p => p.id)
+    ist.nachpruefung = { am: new Date().toISOString(), versuche: np.versuche, bestaetigt: np.bestaetigt.map(p => p.id), wiederOk: np.wiederOk.map(p => p.id) }
+    await speichereIst(host, ist)
+    jetzt = kritischeFehler(soll, ist)
+    neu = np.bestaetigt
+    if (np.wiederOk.length || np.offen.length) {
+      const txt = [np.wiederOk.length ? `wieder in Ordnung: ${np.wiederOk.map(p => p.anzeige).join(', ')}` : '', np.offen.length ? `nicht nachprüfbar: ${np.offen.map(p => p.anzeige).join(', ')}` : ''].filter(Boolean).join(' · ')
+      await addHistoryEntry(host, `Prüfung: kurzer Ausfall ohne Meldung (Nachprüfung ${np.versuche}×) — ${txt}`, 'IT Admin Tool (Server-Monitor)').catch(() => undefined)
+    }
+  }
+  let ereignis: ServerEreignis | undefined
+  if (neu.length) {
+    const erg = new Map(ist.ergebnisse.map(e => [e.id, e]))
+    ereignis = {
+      id: `pruefung|${hostKey(host)}|${ist.am}`, typ: 'pruefung', host, bezeichnung: t.description, ip: t.ip, at: ist.am,
+      probleme: jetzt.map(p => {
+        const e = erg.get(p.id)
+        // SEAL: die auslösende sysstatus-Zeile mitschicken („[E] DPF License invalid" …)
+        const det = p.typ === 'seal' && e?.detail ? ` — ${e.detail.length > 220 ? e.detail.slice(0, 220) + ' …' : e.detail}`
+          : istDcaDienst(p) ? ` — ${DCA_AUSFALL}` : ''
+        return `${p.anzeige}: ${e?.status || 'nicht in Ordnung'}${p.typ === 'dienst' ? ` (${p.name})` : ''}${det}`
+      }),
+    }
+  } else if (!jetzt.length && vorherFehler.size) {
+    await addHistoryEntry(host, 'Prüfung: alle kritischen Prüfpunkte wieder in Ordnung', 'IT Admin Tool (Server-Monitor)').catch(() => undefined)
+  }
+  return { ...basis, zusammenfassung: fasseZusammen(soll, ist, von), probleme: jetzt.length, ereignis }
+}
+
+/**
+ * „Jetzt prüfen“: alle Server mit Soll-Zustand (oder nur `nurHosts`), die laut Ping erreichbar
+ * sind — nur lesend und gestaffelt: höchstens 2 Server gleichzeitig, nach jedem Server eine
+ * kurze Pause mit Zufallsanteil (1,5–3 s), Reihenfolge: `zuerst`, danach die am längsten
+ * nicht geprüften. SEAL läuft hier immer mit.
+ * `auto` = (alter) automatischer Lauf: läuft schon einer (Sperre `pruefungLaeuft`, < 10 min alt,
+ * auch der Rundlauf hält sie frisch), wird dieser übersprungen.
  */
 const PRUEF_PARALLEL = 2
 const PRUEF_PAUSE_MS = 1500
@@ -502,19 +639,23 @@ export async function runZustandsPruefung(by: string, nurHosts?: string[], opt: 
     if ((await loadServerStatus()).pruefungLaeuft?.by !== token) return { geprueft: 0, probleme: 0, boots: {}, uebersprungen: true }
   }
   try {
-    return await zustandsPruefungLauf(by, cfg, status, nurHosts, opt.zuerst)
+    return await zustandsPruefungLauf(by, cfg, status, nurHosts, opt.zuerst, !!opt.auto)
   } finally {
     if (token) await aktualisiereStatus(f => f.pruefungLaeuft?.by === token ? { ...f, pruefungLaeuft: undefined } : f).catch(() => false)
   }
 }
 
-async function zustandsPruefungLauf(by: string, cfg: ServerConfig, status: ServerMonitorStatus, nurHosts?: string[], zuerst?: string[]): Promise<ZustandsLauf> {
+async function zustandsPruefungLauf(by: string, cfg: ServerConfig, status: ServerMonitorStatus, nurHosts?: string[], zuerst?: string[], auto = false): Promise<ZustandsLauf> {
   const boots: Record<string, string> = {}
+  const von = await eigeneKennung().catch(() => '')
+  /** Stand vor diesem Lauf je Server — zum Zurückschreiben, falls der Lauf am prüfenden PC scheitert */
+  const vorherJe = new Map<string, IstStand | null>()
   const wunsch = nurHosts ? new Set(nurHosts.map(hostKey)) : null
   const vorn = new Set((zuerst || []).map(hostKey))
   const zuletzt = (t: ServerTile) => { const a = status.servers[hostKey(t.hostname)]?.pruefung?.am; const ms = a ? new Date(a).getTime() : NaN; return isNaN(ms) ? 0 : ms }
   const tiles = cfg.tiles
-    .filter(t => t.hostname.trim() && (!wunsch || wunsch.has(hostKey(t.hostname))) && status.servers[hostKey(t.hostname)]?.online !== false)
+    // Cluster-Knoten (HCI) nur per Ping — keine Dienst-Prüfung (serverSchonung.ts)
+    .filter(t => t.hostname.trim() && !istClusterKnoten(t.hostname) && (!wunsch || wunsch.has(hostKey(t.hostname))) && status.servers[hostKey(t.hostname)]?.online !== false)
     .sort((a, b) => (vorn.has(hostKey(b.hostname)) ? 1 : 0) - (vorn.has(hostKey(a.hostname)) ? 1 : 0) || zuletzt(a) - zuletzt(b))
   const zusammen: Record<string, Zusammenfassung> = {}
   const ereignisse: ServerEreignis[] = []
@@ -523,66 +664,34 @@ async function zustandsPruefungLauf(by: string, cfg: ServerConfig, status: Serve
   const arbeiter = async (start: number) => {
     if (start) await sleep(start)
     for (let t = warteschlange.shift(); t; t = warteschlange.shift()) {
-      const host = t.hostname.trim()
-      const soll = await ladeSoll(host)
-      if (!soll || !soll.punkte.length) continue
-      const vorher = await ladeIst(host)
-      const ist = await pruefe(host, soll)
+      const e = await pruefeServerEinmal(t, { von })
+      if (!e) continue
       geprueft++
-      if (ist.erreichbar && ist.boot) boots[hostKey(host)] = ist.boot
+      vorherJe.set(e.host, e.vorher)
+      if (e.boot) boots[hostKey(e.host)] = e.boot
+      zusammen[hostKey(e.host)] = e.zusammenfassung
+      probleme += e.probleme
+      if (e.ereignis) ereignisse.push(e.ereignis)
       // netzschonend: kurze Pause mit Zufallsanteil, bevor dieser Arbeiter den nächsten Server fragt
       if (warteschlange.length) await sleep(PRUEF_PAUSE_MS + Math.floor(Math.random() * PRUEF_PAUSE_MS))
-      zusammen[hostKey(host)] = fasseZusammen(soll, ist)
-      if (!ist.erreichbar || ist.startetNoch) continue
-      let jetzt = kritischeFehler(soll, ist)
-      // vorher schon gemeldete Fehler nicht erneut melden (nur wenn vorher NICHT „startet noch“;
-      // unbestätigte Ausfälle des letzten Laufs gelten NICHT als gemeldet)
-      const vorherUnbestaetigt = new Set(vorher?.unbestaetigt || [])
-      const vorherFehler = vorher && vorher.erreichbar && !vorher.startetNoch ? new Set(kritischeFehler(soll, vorher).map(p => p.id).filter(id => !vorherUnbestaetigt.has(id))) : new Set<string>()
-      let neu = jetzt.filter(p => !vorherFehler.has(p.id))
-      if (neu.length) {
-        // Gegen Fehlalarme: die neu ausgefallenen Punkte 3× innerhalb von 2 min nachprüfen —
-        // gemeldet wird nur, was dann immer noch aus ist.
-        const np = await bestaetigeAusfall(host, soll, neu)
-        // letztes Nachprüf-Ergebnis in den gespeicherten Stand übernehmen (wieder an → ok)
-        ist.ergebnisse = ist.ergebnisse.map(e => np.letzte.get(e.id) || e)
-        // nicht nachprüfbar → beim nächsten Lauf NICHT als „schon gemeldet“ werten
-        ist.unbestaetigt = np.offen.map(p => p.id)
-        ist.nachpruefung = { am: new Date().toISOString(), versuche: np.versuche, bestaetigt: np.bestaetigt.map(p => p.id), wiederOk: np.wiederOk.map(p => p.id) }
-        await speichereIst(host, ist)
-        zusammen[hostKey(host)] = fasseZusammen(soll, ist)
-        jetzt = kritischeFehler(soll, ist)
-        neu = np.bestaetigt
-        if (np.wiederOk.length || np.offen.length) {
-          const txt = [np.wiederOk.length ? `wieder in Ordnung: ${np.wiederOk.map(p => p.anzeige).join(', ')}` : '', np.offen.length ? `nicht nachprüfbar: ${np.offen.map(p => p.anzeige).join(', ')}` : ''].filter(Boolean).join(' · ')
-          await addHistoryEntry(host, `Prüfung: kurzer Ausfall ohne Meldung (Nachprüfung ${np.versuche}×) — ${txt}`, 'IT Admin Tool (Server-Monitor)').catch(() => undefined)
-        }
-      }
-      probleme += jetzt.length
-      if (neu.length) {
-        const erg = new Map(ist.ergebnisse.map(e => [e.id, e]))
-        ereignisse.push({
-          id: `pruefung|${hostKey(host)}|${ist.am}`, typ: 'pruefung', host, bezeichnung: t.description, ip: t.ip, at: ist.am,
-          probleme: jetzt.map(p => {
-            const e = erg.get(p.id)
-            // SEAL: die auslösende sysstatus-Zeile mitschicken („[E] DPF License invalid" …)
-            const det = p.typ === 'seal' && e?.detail ? ` — ${e.detail.length > 220 ? e.detail.slice(0, 220) + ' …' : e.detail}`
-              : istDcaDienst(p) ? ` — ${DCA_AUSFALL}` : ''
-            return `${p.anzeige}: ${e?.status || 'nicht in Ordnung'}${p.typ === 'dienst' ? ` (${p.name})` : ''}${det}`
-          }),
-        })
-      } else if (!jetzt.length && vorherFehler.size) {
-        await addHistoryEntry(host, 'Prüfung: alle kritischen Prüfpunkte wieder in Ordnung', 'IT Admin Tool (Server-Monitor)').catch(() => undefined)
-      }
     }
   }
   // höchstens PRUEF_PARALLEL gleichzeitig; der zweite Arbeiter startet versetzt, damit nie zwei Anfragen im Gleichtakt laufen
   await Promise.all(Array.from({ length: PRUEF_PARALLEL }, (_, i) => arbeiter(i * 1000)))
-  if (Object.keys(zusammen).length) {
+  // Störung des prüfenden PCs? Automatischer Lauf, mehrere Server geprüft, KEINER erreichbar (laut Ping
+  // sind sie da) → liegt am PC (Rechte, WinRM, Zscaler): alten Stand zurückschreiben, Kacheln nicht ändern.
+  const gepruefte = Object.values(zusammen)
+  const stoerung = auto && gepruefte.length >= STOERUNG_AB_SERVERN && gepruefte.every(z => !z.erreichbar)
+  if (stoerung) for (const [host, v] of vorherJe) if (v) await speichereIst(host, v).catch(() => undefined)
+  if (gepruefte.length) {
+    const ersterFehler = gepruefte.map(z => z.fehler).find(Boolean) || 'keine Antwort per WinRM'
     await aktualisiereStatus(frisch => {
       const servers = { ...frisch.servers }
-      for (const [k, z] of Object.entries(zusammen)) servers[k] = { ...(servers[k] || { online: true, consecutiveFailures: 0 }), pruefung: z }
-      return { ...frisch, servers }
+      if (!stoerung) for (const [k, z] of Object.entries(zusammen)) servers[k] = { ...(servers[k] || { online: true, consecutiveFailures: 0 }), pruefung: z }
+      const abfrageStoerung = !auto ? frisch.abfrageStoerung
+        : stoerung ? mitStoerung(frisch, 'Dienste & Prüfungen', { von, at: new Date().toISOString(), fehler: ersterFehler.slice(0, 300), server: gepruefte.length })
+          : gepruefte.some(z => z.erreichbar) ? mitStoerung(frisch, 'Dienste & Prüfungen', null) : frisch.abfrageStoerung
+      return { ...frisch, servers, abfrageStoerung }
     })
   }
   if (ereignisse.length) await melde(ereignisse, meldeZiele(cfg.tiles), by).catch(() => [])
@@ -605,7 +714,8 @@ export async function runServerMetricsScan(by: string): Promise<{ ok: boolean; s
   const cfg = await loadServerConfig()
   const status = await loadServerStatus()
   const now = new Date().toISOString()
-  const hosts = [...new Set(cfg.tiles.map(t => t.hostname.trim()).filter(Boolean))]
+  // Cluster-Knoten (HCI) nur per Ping — keine Auslastungs-Abfrage (serverSchonung.ts)
+  const hosts = [...new Set(cfg.tiles.map(t => t.hostname.trim()).filter(h => h && !istClusterKnoten(h)))]
   const servers: Record<string, ServerStatus> = { ...status.servers }
   let updated = 0
   const CHUNK = 40
@@ -625,7 +735,7 @@ export async function runServerMetricsScan(by: string): Promise<{ ok: boolean; s
       `$r | Select-Object PSComputerName, TotalKB, FreeKB, Disks | ConvertTo-Json -Depth 5 -Compress`,
     ].join('\n')
     try {
-      const res = await api().runPowerShell(script, 180000)
+      const res = await api().runPowerShell(script, 180000, { quelle: 'Auslastung', art: 'lesen' })
       const txt = (res.stdout ?? '').trim()
       if (txt && !txt.startsWith('ERR:')) {
         const parsed = JSON.parse(txt)

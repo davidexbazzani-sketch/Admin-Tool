@@ -12,6 +12,7 @@
 import { api } from '../electronAPI'
 import { listWeekendDevices } from '../services/weekendCheck'
 import { loadServerConfig } from '../services/serverMonitor'
+import { istClusterKnoten } from '../services/serverSchonung'
 import { baueLeseSkript, TAG, type LeseModus } from './sammler'
 import { leseAusgabe, uebernehme, type Antwort } from './logik'
 import type { PcDatei, PcIndex } from './typen'
@@ -122,6 +123,8 @@ const laufend = new Map<string, Promise<LeseErgebnis>>()
  */
 export function lesePcJetzt(host: string): Promise<LeseErgebnis> {
   const k = hostKey(host)
+  // Cluster-Knoten (HCI, vom Dienstleister verwaltet): nichts lesen — nur Ping (serverSchonung.ts)
+  if (istClusterKnoten(host)) return Promise.resolve({ host: k, status: 'fehler', neueAenderungen: 0, bytes: 0, text: 'Cluster-Knoten – das IT Admin Tool liest hier nichts aus.' })
   const schon = laufend.get(k)
   if (schon) return schon
   const p = (async (): Promise<LeseErgebnis> => {

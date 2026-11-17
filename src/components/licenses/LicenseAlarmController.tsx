@@ -10,6 +10,7 @@ import {
 import { loadUserMenuOverrides, getHiddenForUser } from '../../services/userMenuVisibility'
 import { computeMenuVisible } from '../../utils/menuVisibility'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 /**
  * Wird einmal im authentifizierten Teil der App gemountet (siehe App.tsx).
@@ -66,11 +67,10 @@ export default function LicenseAlarmController() {
     if (!username) return
 
     // ── E-Mail-Aufholversand ──────────────────────────────────────────────
-    // Läuft IMMER, sobald irgendein User das Tool öffnet — unabhängig davon,
-    // ob für ihn der Menüpunkt sichtbar ist. So gehen Erinnerungen, die in
-    // einer Funkstille-Phase fällig gewesen wären, beim nächsten Start raus
-    // (Dedup über Netzlaufwerk-Log verhindert Doppelversand).
-    sendPendingEmails(username).catch(() => {})
+    // Seit 17.11.2026 nur auf dem EINEN Automatik-PC (BQ8069 bevorzugt, sonst genau eine
+    // Vertretung) — nie von mehreren PCs. Erinnerungen, die in einer Funkstille-Phase fällig
+    // gewesen wären, gehen raus, sobald der Automatik-PC wieder läuft (Dedup über Netzlaufwerk-Log).
+    void darfAutomatik().then(ok => { if (ok) sendPendingEmails(username).catch(() => {}) }).catch(() => {})
 
     // ── Popup / Sidebar-Blink: nur für User mit sichtbarem Menüpunkt ───────
     if (!menuVisible()) {

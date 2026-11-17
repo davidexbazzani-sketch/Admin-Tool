@@ -10,6 +10,7 @@ import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { getScanSchedule, isConfiguredDue, loadRunStatus, saveRunStatus, isStatusClaimed } from '../../services/scanSchedules'
 import { NETWORK_DRIVES_STATUS, runNetworkDrivesScanOnce } from '../../services/deviceNetworkDrives'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 const POLL_MS = 20 * 60 * 1000
 const HEARTBEAT_MS = 5 * 60 * 1000
@@ -23,6 +24,7 @@ export default function NetworkDrivesScanController() {
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     let s
     try { s = await loadRunStatus(NETWORK_DRIVES_STATUS) } catch { return }
     const now = Date.now()

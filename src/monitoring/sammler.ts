@@ -123,7 +123,7 @@ export function normalisiereAntwort(j: unknown): MonSammlerAntwort | null {
 export async function sammle(host: string, a: SammlerAuftrag): Promise<MonSammlerAntwort> {
   const leer = (fehler: string): MonSammlerAntwort => ({ ok: false, fehler, jetzt: new Date().toISOString(), ereignisse: [], anzahl: {}, fehlend: [], messwerte: {}, dienste: {} })
   try {
-    const r = await api().runPowerShell(fernBefehl(host, SAMMLER_INNER, TAG, b64(JSON.stringify(sammlerNutzlast(a)))), 120000)
+    const r = await api().runPowerShell(fernBefehl(host, SAMMLER_INNER, TAG, b64(JSON.stringify(sammlerNutzlast(a)))), 120000, { quelle: 'Überwachung über Zeit', art: 'lesen' })
     const j = getagged<unknown>(r.stdout, TAG)
     if (!j) return leer((r.stderr || '').trim().slice(0, 300) || (r.timedOut ? 'Zeitüberschreitung' : 'Keine Antwort vom PC'))
     if ((j as { ok?: boolean }).ok === false) return leer(String((j as { fehler?: string }).fehler || 'Abfrage fehlgeschlagen'))
@@ -138,7 +138,7 @@ export async function istErreichbar(host: string): Promise<boolean> {
     const r = await api().runPowerShell(
       `$h='${h}'; $on=$false; try { $on = Test-Connection -ComputerName $h -Count 1 -Quiet -EA SilentlyContinue } catch {}; ` +
       `if (-not $on) { foreach ($p in 445,135,5985) { try { $t = New-Object System.Net.Sockets.TcpClient; if ($t.ConnectAsync($h, $p).Wait(2500)) { $on = $true }; $t.Close() } catch {}; if ($on) { break } } }; ` +
-      `if ($on) { 'ONLINE' } else { 'OFFLINE' }`, 20000)
+      `if ($on) { 'ONLINE' } else { 'OFFLINE' }`, 20000, { quelle: 'Überwachung über Zeit (Erreichbarkeit)', art: 'ping' })
     return (r.stdout || '').includes('ONLINE')
   } catch { return false }
 }

@@ -16,6 +16,7 @@ import { listJobs, dueSlot, updateJob, claimJob, type BackupJob } from '../../se
 import { pruefeErreichbar } from '../../services/backupEngine'
 import { syncPcErgebnisse } from '../../services/backupPcSync'
 import { berichtAusFehler } from '../../services/backupBericht'
+import { darfAutomatik } from '../../services/automatikLeiter'
 import { useBackupRunStore, backupLaeuft, eigenerRechner } from '../../store/backupRunStore'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 
@@ -62,6 +63,10 @@ export default function BackupSchedulerController() {
       // 1) Eigenen unterbrochenen Lauf wieder aufnehmen
       const eigen = jobs.find(j => j.lauf && j.lastResult === 'running' && j.lauf.rechner === ich)
       if (eigen && await useBackupRunStore.getState().fortsetzen(eigen)) return
+
+      // Alles Weitere (Aufräumen, Ergebnisse der PCs einsammeln, fällige Jobs starten) nur auf dem
+      // EINEN Automatik-PC (BQ8069 bevorzugt) — ein eigener unterbrochener Lauf geht oben trotzdem weiter
+      if (!(await darfAutomatik())) return
 
       // 2) Hängende Einträge aufräumen
       await raeumeAuf(jobs, ich)

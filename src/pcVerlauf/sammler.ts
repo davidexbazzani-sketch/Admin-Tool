@@ -263,6 +263,12 @@ export const SAMMLER_BLOCK = String.raw`{
           $p = Werte $e
           if ($p.Count) { $app = [string]$p[0]; if ($e.Id -eq 1000 -and $p.Count -gt 6) { $app = $app + '|' + [string]$p[3] + '|' + [string]$p[6] } }
         }
+        # Dienste: je Dienst eine eigene Zeile (sonst teilen sich alle Dienste einer Kennung EINEN Beispieltext)
+        if ($e.ProviderName -eq 'Service Control Manager') {
+          $p = Werte $e
+          $sn = @($p | Where-Object { $_ -and $_ -notmatch '^\d+$' })
+          if ($sn.Count) { $app = (([string]$sn[0]) -replace '\s+', ' ').Trim(); if ($app.Length -gt 80) { $app = $app.Substring(0, 80) } }
+        }
         Merke $e ([string]$lg.LogName) $app ''
       }
     }

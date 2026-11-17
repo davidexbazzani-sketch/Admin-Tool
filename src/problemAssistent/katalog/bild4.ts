@@ -406,6 +406,7 @@ export const PROBLEME_BILD4: PaProblem[] = [
       { aktion: 'info-zuverlaessigkeit' },
       { aktion: 'grafik-treiber-info' },
       { aktion: 'bild4-grafik-option', param: 'GPU-Planung aus' },
+      { aktion: 'bild4-grafik-option', param: 'TDR-Wartezeit 8 Sekunden', optional: true, titel: 'Grafik: Wartezeit vor dem Treiber-Neustart auf 8 Sekunden verlängern' },
       { aktion: 'werkzeug:treiber', optional: true, titel: TREIBER },
       { aktion: 'neustart-countdown', optional: true, titel: NEUSTART },
     ],

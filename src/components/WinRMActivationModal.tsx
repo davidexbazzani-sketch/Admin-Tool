@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Loader, CheckCircle, XCircle, AlertTriangle, X, Wifi, WifiOff, Shield, HelpCircle } from 'lucide-react'
 import { api } from '../electronAPI'
 import WinRMHelpModal from './WinRMHelpModal'
+import { istClusterKnoten, NUR_PING_TEXT } from '../services/serverSchonung'
 
 type StepStatus = 'pending' | 'running' | 'success' | 'error' | 'skipped'
 
@@ -25,6 +26,8 @@ const DEFAULT_TIMEOUT = 30000
 
 export default function WinRMActivationModal({ hostname, onSuccess, onRestricted, onCancel, psExecPath, timeout = DEFAULT_TIMEOUT }: Props) {
   const h = hostname.replace(/'/g, "''")
+  // Cluster-Knoten (HCI, vom Dienstleister verwaltet): nie aktivieren — kein sc.exe, PsExec, Aufgabe, WMI
+  const knoten = istClusterKnoten(hostname)
   const [steps, setSteps] = useState<MethodStep[]>([
     { id: 'ping',    label: 'Ping prüfen',                    status: 'running' },
     { id: 'winrm',   label: 'WinRM testen',                   status: 'pending' },
@@ -65,6 +68,12 @@ export default function WinRMActivationModal({ hostname, onSuccess, onRestricted
 
   useEffect(() => {
     let cancelled = false
+    if (knoten) {
+      setSteps(prev => prev.map(s => ({ ...s, status: 'skipped' as StepStatus, detail: s.id === 'ping' ? 'Cluster-Knoten – das Tool pingt hier nur, es aktiviert nichts' : undefined })))
+      setPhase('done-fail')
+      void log(`${hostname}: Cluster-Knoten – WinRM-Aktivierung übersprungen (nur Ping)`)
+      return () => { cancelled = true }
+    }
     ;(async () => {
       await log(`Verbindungsversuch zu ${hostname} gestartet`)
 
@@ -321,7 +330,19 @@ export default function WinRMActivationModal({ hostname, onSuccess, onRestricted
               <span className="text-xs text-emerald-400 flex-1">WinRM erfolgreich aktiviert!</span>
             </>
           )}
-          {phase === 'done-fail' && (
+          {phase === 'done-fail' && knoten && (
+            <>
+              <AlertTriangle size={14} className="text-amber-400" />
+              <span className="text-xs text-muted-foreground flex-1" data-winrm-knoten={hostname} title={NUR_PING_TEXT}>
+                Cluster-Knoten (vom Dienstleister verwaltet) – WinRM wird hier nicht aktiviert.
+              </span>
+              <button onClick={onCancel}
+                className="px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground">
+                Schließen
+              </button>
+            </>
+          )}
+          {phase === 'done-fail' && !knoten && (
             <>
               <AlertTriangle size={14} className="text-amber-400" />
               <span className="text-xs text-muted-foreground flex-1">Alle Methoden fehlgeschlagen</span>

@@ -13,6 +13,7 @@ import { ladeStand, ladeBestaetigt, bestaetige } from '../../services/tonerWarnu
 import { pruefeAlleDrucker, imScanFenster } from '../../services/druckerFlotte'
 import { onAppFocus } from '../../utils/appFocus'
 import { ipcRenderer } from '../../utils/ipc'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 const LESEN_MS = 2 * 60_000
 const PRUEFEN_MS = 10 * 60_000
@@ -64,6 +65,8 @@ export default function TonerWarnungController() {
   const pruefen = useCallback(async () => {
     const me = ich.current
     if (!me || !imScanFenster()) return     // tagsüber nicht einmal nachsehen
+    // Drucker abfragen (SNMP) nur auf dem EINEN Automatik-PC (BQ8069 bevorzugt) — Popups bekommt jeder
+    if (!(await darfAutomatik())) return
     const r = await pruefeAlleDrucker(me).catch(() => null)
     if (r?.gelaufen) void lesen()
   }, [lesen])

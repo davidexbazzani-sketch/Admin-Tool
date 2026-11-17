@@ -7,6 +7,7 @@ import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { getScanSchedule, isConfiguredDue, loadRunStatus, saveRunStatus, isStatusClaimed, claimExclusive } from '../../services/scanSchedules'
 import { RADAR_SCAN_SCHEDULE, runRadarScanOnce } from '../../services/extraScans'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 const POLL_MS = 20 * 60 * 1000
 const SCAN_ID = 'proactive-radar'
@@ -18,6 +19,7 @@ export default function RadarScanController() {
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     let s
     try { s = await loadRunStatus(RADAR_SCAN_SCHEDULE) } catch { return }
     const now = Date.now()

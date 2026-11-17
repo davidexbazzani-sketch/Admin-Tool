@@ -7,6 +7,7 @@ import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
 import { beende, takt, type Pruefer } from './runner'
 import { ladeAuftrag, speichereAuftrag } from './store'
+import { darfAutomatik } from '../services/automatikLeiter'
 
 const TAKT_MS = 60_000
 const ERSTER_MS = 40_000
@@ -35,7 +36,12 @@ export default function MonitorController() {
     const lauf = async () => {
       if (weg || busy.current || !aktuell) return
       busy.current = true
-      try { await takt(aktuell) } catch { /* nächster Takt */ } finally { busy.current = false }
+      try {
+        // Geprüft wird nur auf dem EINEN Automatik-PC (BQ8069 bevorzugt). Ist dieser PC es nicht
+        // (mehr), eine evtl. gehaltene Prüfer-Sperre sofort abgeben, damit er übernehmen kann.
+        if (!(await darfAutomatik())) { await beende().catch(() => undefined); return }
+        await takt(aktuell)
+      } catch { /* nächster Takt */ } finally { busy.current = false }
     }
     const t1 = setTimeout(() => void lauf(), ERSTER_MS)
     const t2 = setInterval(() => void lauf(), TAKT_MS)

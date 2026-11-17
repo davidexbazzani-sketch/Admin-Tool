@@ -1,6 +1,8 @@
 // ── PC-Fehler: Ablage auf dem Netzlaufwerk ───────────────────────────────────
 //   pc-fehler/uebersicht.json   klein: nur PCs MIT Befund (für das Proaktive Radar)
-//   pc-fehler/pcs/<HOST>.json   je PC mit Befund: Befunde + nicht zugeordnete Fehler (Detailansicht)
+//   pc-fehler/pcs/<HOST>.json   je gelesenem PC (auch ohne Befund): Befunde, nicht zugeordnete
+//                               Fehler (Detailansicht) und ALLE Fehlergruppen des PCs (`fe`, für
+//                               den Export „Alle Fehler exportieren“)
 // Jeder Lauf liefert das vollständige Bild der letzten 7 Tage — es wird ersetzt, nicht angehäuft.
 // Ist ein PC wieder fehlerfrei, verschwindet er aus der Übersicht.
 // Wurde ein Befund behoben, merkt sich die Übersicht den Zeitpunkt: Alte Protokolleinträge von
@@ -32,7 +34,11 @@ export interface PcFehlerUebersicht {
   /** Host → Befund → wann behoben (8 Tage, dann sind die alten Protokolleinträge ohnehin aus dem 7-Tage-Fenster). */
   behoben?: Record<string, Record<string, string>>
 }
-export interface PcFehlerDatei { v: 1; host: string; am: string; befunde: Befund[]; unbekannt: FehlerGruppe[]; rauschen: number; unterSchwelle: number }
+export interface PcFehlerDatei {
+  v: 1; host: string; am: string; befunde: Befund[]; unbekannt: FehlerGruppe[]; rauschen: number; unterSchwelle: number
+  /** Alle Fehlergruppen, wie der PC sie geschickt hat (Zeilen „Protokoll⇥Quelle⇥…“). Fehlt bei Dateien älterer Tool-Versionen. */
+  fe?: string[]
+}
 
 export async function ladeUebersicht(): Promise<PcFehlerUebersicht | null> {
   try {
@@ -50,8 +56,9 @@ export async function ladePcFehler(host: string): Promise<PcFehlerDatei | null> 
 export type FehlerMeldung = Record<string, PcFehlerEintrag | null>
 
 /**
- * Antwort eines PCs auswerten und – nur wenn es Befunde gibt – die Detaildatei schreiben.
- * Liefert die Anzahl der Befunde. `vorher` = Stand der Übersicht vor diesem Lauf.
+ * Antwort eines PCs auswerten und die Detaildatei schreiben (für JEDEN gelesenen PC — der Export
+ * „Alle Fehler“ braucht auch die PCs ohne Befund). Liefert die Anzahl der Befunde.
+ * `vorher` = Stand der Übersicht vor diesem Lauf.
  */
 export async function verarbeiteFehler(host: string, am: string, roh: { fe?: unknown; lw?: unknown }, vorher: PcFehlerUebersicht, meldung: FehlerMeldung): Promise<number> {
   const gruppen = leseGruppen(roh.fe)
@@ -62,11 +69,36 @@ export async function verarbeiteFehler(host: string, am: string, roh: { fe?: unk
   // Schon behoben? Dann zählt nur, was DANACH wieder aufgetreten ist
   const behoben = vorher.behoben?.[host] || {}
   const befunde = a.befunde.filter(b => !(behoben[b.key] && b.zuletzt <= behoben[b.key])).sort((x, y) => SCHWERE_RANG[x.schwere] - SCHWERE_RANG[y.schwere] || y.anzahl - x.anzahl)
-  if (!befunde.length) { if (vorher.pcs[host]) meldung[host] = null; return 0 }
-  const datei: PcFehlerDatei = { v: 1, host, am, befunde, unbekannt: a.unbekannt.slice(0, 40), rauschen: a.rauschen, unterSchwelle: a.unterSchwelle }
+  const fe = (roh.fe as unknown[]).filter((z): z is string => typeof z === 'string')
+  const datei: PcFehlerDatei = { v: 1, host, am, befunde, unbekannt: a.unbekannt.slice(0, 40), rauschen: a.rauschen, unterSchwelle: a.unterSchwelle, fe }
   try { await api().netWriteJsonAsync(pfad(host), datei) } catch { /* Übersicht reicht fürs Radar */ }
+  if (!befunde.length) { if (vorher.pcs[host]) meldung[host] = null; return 0 }
   meldung[host] = { am, befunde, unbekannt: a.unbekannt.length }
   return befunde.length
+}
+
+/**
+ * Für den Export: die Detaildateien ALLER PCs lesen (asynchron, 6 gleichzeitig — die Oberfläche
+ * bleibt bedienbar). null = Netzlaufwerk nicht erreichbar.
+ */
+export async function ladeAllePcDateien(onFortschritt?: (fertig: number, gesamt: number) => void): Promise<PcFehlerDatei[] | null> {
+  if (!(await ladeUebersicht())) return null
+  let namen: string[] = []
+  try { namen = (await api().netListDirAsync(ORDNER)).filter(n => /\.json$/i.test(n)) } catch { return null }
+  const aus: PcFehlerDatei[] = []
+  let i = 0, fertig = 0
+  const arbeiter = async () => {
+    while (i < namen.length) {
+      const n = namen[i++]
+      try {
+        const d = await api().netReadJsonAsync<PcFehlerDatei>(`${ORDNER}/${n}`)
+        if (d && typeof d.host === 'string' && typeof d.am === 'string' && Array.isArray(d.befunde)) aus.push(d)
+      } catch { /* einzelne kaputte Datei überspringen */ }
+      onFortschritt?.(++fertig, namen.length)
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(6, namen.length) }, arbeiter))
+  return aus
 }
 
 function raeumeAuf(u: PcFehlerUebersicht): void {

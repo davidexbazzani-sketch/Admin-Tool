@@ -169,10 +169,10 @@ function VergleichsAnsicht({ v }: { v: SapVergleich }) {
 }
 
 // ── Hauptkomponente ───────────────────────────────────────────────────────────
-export default function SapFehlersuche({ onBack }: { onBack: () => void }) {
+export default function SapFehlersuche({ onBack, startHost, autoStart }: { onBack: () => void; startHost?: string; autoStart?: boolean }) {
   const session = useAuthStore(s => s.session)
   const by = session?.user.displayName || session?.user.username || 'unbekannt'
-  const [hostA, setHostA] = useState('')
+  const [hostA, setHostA] = useState(startHost || '')
   const [hostB, setHostB] = useState('')
   const [compareMode, setCompareMode] = useState(false)
   const [days, setDays] = useState(7)
@@ -213,6 +213,13 @@ export default function SapFehlersuche({ onBack }: { onBack: () => void }) {
     } finally { setScanning(false) }
   }
   function cancel() { abortRef.current = true; void api().cancelAll(); setScanning(false) }
+  // Übergabe aus der Komplett-Diagnose: PC vorbelegt → Scan gleich starten (einmal)
+  const autoGestartet = useRef(false)
+  useEffect(() => {
+    if (!autoStart || !startHost || autoGestartet.current) return
+    autoGestartet.current = true
+    void start()
+  }, [autoStart, startHost]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function compareWithBaseline() {
     const base = await loadBaseline(hostA.trim())

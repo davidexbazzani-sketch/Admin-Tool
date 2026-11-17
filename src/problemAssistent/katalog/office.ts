@@ -192,6 +192,7 @@ export const PROBLEME_OFFICE: PaProblem[] = [
       { aktion: 'info-zuverlaessigkeit' },
       { aktion: 'office-addins' },
       { aktion: 'office-addin-aus', param: '{eingabe}' },
+      { aktion: 'office-update', optional: true, titel: 'Office aktualisieren (neuere Version verträgt das Add-in oft wieder)' },
     ],
     frage: { label: 'Programm und Add-in (Name aus der Liste)', platzhalter: 'Excel: Name.Des.Addins' },
     ueberwachen: ['office-absturz'],

@@ -1,27 +1,33 @@
 // ── Server-Monitor: Hintergrund-Controller (global in App.tsx) ────────────────
 // Läuft in jeder offenen Instanz. Zeigt ein menü-unabhängiges Popup + Sidebar-
 // Blink für offline gemeldete Server (aus dem geteilten status.json). Der Ping
-// (alle 5 min, 3-fach-Retry) und die Reboot-Abfrage (alle 15 min + sofort für Server,
-// die wieder erreichbar sind) werden nur von der claimenden Instanz ausgeführt.
-// Dienst-/Einstellungs-Prüfung (inkl. SEAL-sysstatus): bei jedem 5-min-Ping für alle Server,
-// netzschonend gestaffelt (siehe runZustandsPruefung).
+// (alle 5 min, 3-fach-Retry) und die Neustart-Abfrage (alle 5 min, EIN Server zur Zeit,
+// ohne die Server, die der Rundlauf gerade gelesen hat) laufen nur in der claimenden Instanz.
+// Dienst-/Einstellungs-Prüfung (inkl. SEAL-sysstatus): seit 17.11.2026 eigene Endlosschleife,
+// immer nur EIN Server, 5 s Pause (services/serverRundlauf.ts) — unabhängig vom Ping-Takt.
 // Neustarts erscheinen bei jedem Admin als Popup oben rechts (bis „Gelesen"), neue
 // Ausfälle/Neustarts zusätzlich als Windows-Benachrichtigung, wenn das Tool im Hintergrund ist.
+// Wer prüft und meldet (Mail): bevorzugt BQ8069 — andere PCs nur, solange BQ8069 aus ist
+// (Herzschlag in server_monitor/melder.json, siehe services/serverMelder.ts).
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AlertTriangle, ServerOff, X, ExternalLink } from 'lucide-react'
 import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { useAppStore } from '../../store/appStore'
 import {
-  loadServerStatus, saveServerStatus, isStatusClaimed, offlineHostsForTiles,
-  loadServerConfig, runPingCycle, runRebootCheck, runServerMetricsIfDue, runZustandsPruefung,
+  loadServerStatus, aktualisiereStatus, isStatusClaimed, offlineHostsForTiles,
+  loadServerConfig, runPingCycle, runRebootCheck, runServerMetricsIfDue,
 } from '../../services/serverMonitor'
-import { ladeEreignisse, ladeGelesen, markiereGelesen, offeneNeustarts, neustartUeberschrift, artText, titelVon } from '../../services/serverEreignisse'
+import { starteRundlauf, vorziehen } from '../../services/serverRundlauf'
+import { ladeEreignisse, ladeGelesen, markiereGelesen, offeneNeustarts, neustartUeberschrift, artText, titelVon, sendeWartende } from '../../services/serverEreignisse'
 import { runZertifikatsScanIfDue } from '../../services/serverZertifikate'
 import { useServerEreignisStore } from '../../store/serverEreignisStore'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 import { ipcRenderer } from '../../utils/ipc'
 import { ladeServerStumm, useServerStumm } from '../../services/serverStumm'
+import { eigenerRechner, eigenesKonto, istBevorzugt, schreibeHerzschlag, HERZSCHLAG_MS } from '../../services/serverMelder'
+import { darfAutomatik } from '../../services/automatikLeiter'
+import { starteServerZiele } from '../../services/serverZieleKontext'
 
 function windowsHinweis(titel: string, text: string, tag: string) {
   if (document.hasFocus() || useServerStumm.getState().stumm) return
@@ -34,6 +40,11 @@ function windowsHinweis(titel: string, text: string, tag: string) {
 const POLL_MS = 60 * 1000                // Status jede Minute lesen (Popup/Blink) — sonst wird aus „alle 5 min" ein 6-min-Takt
 const PING_INTERVAL_MS = 5 * 60 * 1000   // Ping alle 5 min
 const PING_TOLERANZ_MS = 20 * 1000       // Takt-Spiel: bei 4:40 schon fällig, damit es nicht auf 6 min rutscht
+const NEUSTART_FRISCH_MS = 5 * 60 * 1000 // Startzeit, die der Rundlauf in dieser Zeit gelesen hat, nicht noch einmal abfragen
+
+/** Darf DIESER PC die automatischen Server-Prüfungen machen? Nur der EINE Automatik-PC
+ *  (BQ8069 bevorzugt, sonst genau eine Vertretung) — services/automatikLeiter.ts */
+const darfPruefen = () => darfAutomatik()
 
 export default function ServerMonitorController() {
   const user = useAuthStore(s => s.session?.user)
@@ -51,6 +62,10 @@ export default function ServerMonitorController() {
   const setOffeneNeustarts = useServerEreignisStore(s => s.setOffen)
   const setGelesenFn = useServerEreignisStore(s => s.setGelesen)
 
+  // Zugriffsprotokoll + Schonung der Cluster-Knoten: Servernamen, Knoten und Benutzer an den
+  // Hauptprozess (einmal nach dem Login, dann alle 15 min) — services/serverZieleKontext.ts
+  useEffect(() => { if (username) starteServerZiele() }, [username])
+
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
     busy.current = true
@@ -58,20 +73,30 @@ export default function ServerMonitorController() {
       let status = await loadServerStatus()
       const now = Date.now()
 
+      // 0) Wer prüft und meldet? Nur der EINE Automatik-PC — BQ8069, sonst genau eine Vertretung.
+      const [ich, konto] = await Promise.all([eigenerRechner(), eigenesKonto()])
+      const recht = { darf: await darfPruefen() }
+
       // 1) Ping fällig + nicht fremd-geclaimt → claimen und ausführen.
       const pingDue = !status.pingRunAt || (now - new Date(status.pingRunAt).getTime()) >= PING_INTERVAL_MS - PING_TOLERANZ_MS
-      if (pingDue && !isStatusClaimed(status, now)) {
+      if (recht.darf && pingDue && !isStatusClaimed(status, now)) {
         const claimToken = `${username}#${Math.random().toString(36).slice(2, 10)}`
-        await saveServerStatus({ ...status, running: { by: claimToken, at: new Date().toISOString() } })
+        const at = new Date().toISOString()
+        // In den FRISCHEN Stand schreiben (die Dienst-Schleife schreibt parallel) …
+        await aktualisiereStatus(f => ({ ...f, running: { by: claimToken, at }, pingVon: { rechner: ich || 'unbekannt', konto: konto || undefined, benutzer: user?.displayName || username, at } }))
+        // … und erst nach kurzer Zufallspause gegenlesen: schreibt ein zweiter Lauf fast gleichzeitig,
+        // gewinnt nur einer (vorher liefen Ping + Neustart-Abfrage in jedem dritten Takt doppelt)
+        await new Promise(r => setTimeout(r, 1000 + Math.floor(Math.random() * 2000)))
         const check = await loadServerStatus()
         if (check.running?.by === claimToken) {
           const ping = await runPingCycle(user?.displayName || username)
-          // 2) Dienste/Einstellungen ALLER Server bei jedem 5-min-Ping — gestaffelt (max. 2 gleichzeitig,
-          //    Pausen), wieder erreichbare zuerst; überlappende Läufe verhindert die Sperre im Status.
-          const zp = await runZustandsPruefung(user?.displayName || username, undefined, { auto: true, zuerst: ping.wiederDa })
-          // 3) Neustart/Herunterfahren erkennen — ebenfalls alle 5 min für ALLE Server: die Startzeit
-          //    der eben geprüften Server ist schon bekannt, nur die übrigen werden leicht abgefragt (max. 3 gleichzeitig).
-          await runRebootCheck(user?.displayName || username, undefined, { bekannt: zp.boots, throttle: 3 })
+          // Mails, die ein anderer PC von Hand erkannt, aber für BQ8069 vorgemerkt hat, jetzt verschicken
+          await sendeWartende().catch(() => undefined)
+          // 2) Gerade wieder erreichbare Server prüft die Dienst-Schleife als nächstes (Rundlauf, 1 Server zur Zeit)
+          if (ping.wiederDa.length) await vorziehen(ping.wiederDa).catch(() => null)
+          // 3) Neustart/Herunterfahren erkennen — alle 5 min, EIN Server zur Zeit; was der Rundlauf
+          //    in den letzten 5 min schon gelesen hat, wird nicht noch einmal abgefragt
+          await runRebootCheck(user?.displayName || username, undefined, { throttle: 1, frischMs: NEUSTART_FRISCH_MS, auto: true })
         }
         status = await loadServerStatus()
       }
@@ -110,13 +135,49 @@ export default function ServerMonitorController() {
       }
 
       // 4) Auslastungs-Scan (RAM/Festplatte) – 1×/Tag laut Zeitplan (11:00), self-gated + eigener Claim.
-      await runServerMetricsIfDue(user?.displayName || username)
-      // 5) Zertifikate – 1×/Tag laut Zeitplan (07:00), self-gated + eigener Claim
-      await runZertifikatsScanIfDue(user?.displayName || username)
+      // 5) Zertifikate – 1×/Tag laut Zeitplan (07:00), self-gated + eigener Claim (meldet Ablauf per Mail)
+      //    Beide wie die Prüfungen oben: bevorzugt auf BQ8069.
+      if (recht.darf) {
+        await runServerMetricsIfDue(user?.displayName || username)
+        await runZertifikatsScanIfDue(user?.displayName || username)
+      }
     } catch { /* still */ } finally {
       busy.current = false
     }
   }, [isAdmin, username, user?.displayName, setServerAlarmCount, setOffeneNeustarts])
+
+  // Herzschlag NUR auf BQ8069: jede Minute „ich bin da“ (unabhängig davon, ob gerade ein Lauf
+  // beschäftigt ist) — solange er frisch ist, lassen alle anderen PCs Prüfungen + Meldungen aus.
+  // Abmelden/Schließen → „weg“, damit sofort ein anderer übernimmt.
+  useEffect(() => {
+    if (!username || !isAdmin) return
+    let aktiv = true
+    let t: ReturnType<typeof setInterval> | null = null
+    const name = () => useAuthStore.getState().session?.user.displayName || username
+    void Promise.all([eigenerRechner(), eigenesKonto()]).then(([ich, konto]) => {
+      if (!aktiv || !istBevorzugt(ich, konto)) return
+      void schreibeHerzschlag(name())
+      t = setInterval(() => { void schreibeHerzschlag(name()) }, HERZSCHLAG_MS)
+    })
+    return () => {
+      aktiv = false
+      if (t) { clearInterval(t); void schreibeHerzschlag(name(), true) }
+    }
+  }, [username, isAdmin])
+
+  // Dienst-Prüfung als Endlosschleife: immer nur EIN Server, 5 s Pause, nach dem letzten wieder der
+  // erste — nur auf BQ8069 bzw. als Vertretung, solange BQ8069 aus ist (services/serverRundlauf.ts).
+  // Abmelden/Schließen gibt die Schleife frei, damit sofort ein anderer berechtigter PC übernimmt.
+  useEffect(() => {
+    if (!username || !isAdmin) return
+    const stop = starteRundlauf({
+      by: () => useAuthStore.getState().session?.user.displayName || username,
+      darf: darfPruefen,
+    })
+    const beimSchliessen = () => stop()
+    window.addEventListener('beforeunload', beimSchliessen)
+    return () => { window.removeEventListener('beforeunload', beimSchliessen); stop() }
+  }, [username, isAdmin])
 
   // Glocke: beim Anmelden laden; Umschalten wirkt sofort (stumm → alles weg, wieder an → beim nächsten Lauf wieder da)
   const stumm = useServerStumm(s => s.stumm)

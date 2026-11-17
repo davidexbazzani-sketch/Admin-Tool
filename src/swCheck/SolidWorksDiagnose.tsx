@@ -151,17 +151,17 @@ function VergleichAnsicht({ a, b }: { a: SwLauf; b: SwLauf }) {
 }
 
 // ── Hauptkomponente ───────────────────────────────────────────────────────────
-export default function SolidWorksDiagnose({ onBack }: { onBack: () => void }) {
+export default function SolidWorksDiagnose({ onBack, startHost, autoStart }: { onBack: () => void; startHost?: string; autoStart?: boolean }) {
   const session = useAuthStore(s => s.session)
   const by = session?.user.displayName || session?.user.username || 'unbekannt'
 
-  const [mode, setMode] = useState<'endpoint' | 'manual'>('endpoint')
+  const [mode, setMode] = useState<'endpoint' | 'manual'>(startHost ? 'manual' : 'endpoint')
   const [devices, setDevices] = useState<EndpointDevice[]>([])
   const [modelFilter, setModelFilter] = useState<string>('Desktop Workstation')
   const [stateFilter, setStateFilter] = useState('')
   const [substateFilter, setSubstateFilter] = useState('')
   const [selected, setSelected] = useState<Set<string>>(new Set())
-  const [manualInput, setManualInput] = useState('')
+  const [manualInput, setManualInput] = useState(startHost || '')
 
   const [skriptSel, setSkriptSel] = useState<Set<string>>(new Set(SW_SKRIPTE.filter(s => s.standard).map(s => s.id)))
   const [server, setServer] = useState('w3143')
@@ -253,6 +253,14 @@ export default function SolidWorksDiagnose({ onBack }: { onBack: () => void }) {
     setError(''); setVergleich(null); setOffenPc('')
     void startScan(hostsToScan, by, { skripte: Array.from(skriptSel), server })
   }
+  // Übergabe aus der Komplett-Diagnose: PC vorbelegt → Scan gleich starten (einmal)
+  const autoGestartet = useRef(false)
+  useEffect(() => {
+    if (!autoStart || !startHost || autoGestartet.current || running) return
+    autoGestartet.current = true
+    setError(''); setVergleich(null); setOffenPc('')
+    void startScan([startHost], by, { skripte: Array.from(skriptSel), server })
+  }, [autoStart, startHost]) // eslint-disable-line react-hooks/exhaustive-deps
   // Nach Abschluss (running true→false): bei Einzel-PC öffnen + Verlauf aktualisieren.
   useEffect(() => {
     if (prevRunning.current && !running && ergebnisse.length === 1) {

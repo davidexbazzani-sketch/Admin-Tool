@@ -15,6 +15,7 @@ import {
   buildDepartureReminder, loadReminderContext, DEPARTURE_REMINDER_STATUS, SUPPORT_CC,
 } from '../../services/departureReminder'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 const POLL_MS = 20 * 60 * 1000
 
@@ -26,6 +27,7 @@ export default function DepartureEmailController() {
 
   const tick = useCallback(async () => {
     if (!isFounder || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     busy.current = true
     try {
       const [departures, store0] = await Promise.all([listDepartures().catch(() => []), loadReminderStore()])

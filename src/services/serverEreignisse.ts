@@ -13,6 +13,9 @@
 
 import { api } from '../electronAPI'
 import { addHistoryEntry } from './serverHistory'
+import { eigenerRechner, eigenerRechnerSofort, mailRechtJetzt } from './serverMelder'
+import { istClusterKnoten } from './serverSchonung'
+import { zugriffeVorEreignissen } from './zugriffe'
 
 const DATEI = 'server_monitor/ereignisse.json'
 const gelesenDatei = (u: string) => `server_monitor/gelesen/${(u || 'unbekannt').toLowerCase().replace(/[^a-z0-9._-]/g, '_')}.json`
@@ -47,7 +50,12 @@ export interface ServerEreignis {
   dauerMin?: number          // wieder-online: wie lange nicht erreichbar
   probleme?: string[]        // pruefung: was nicht in Ordnung ist (je Zeile ein Prüfpunkt)
   zert?: ZertMeldung         // zertifikat
-  mail?: 'gesendet' | 'fehler' | 'aus'
+  /** 'wartet' = erkannt auf einem anderen PC, während BQ8069 an war → BQ8069 schickt die Mail beim nächsten Lauf */
+  mail?: 'gesendet' | 'fehler' | 'aus' | 'wartet'
+  /** Empfänger einer wartenden Mail */
+  mailAn?: string
+  /** offline/neustart: Zugriffe des Tools in den 2 h davor (Zugriffsprotokoll, services/zugriffe.ts) */
+  zugriffe?: string
 }
 
 interface Datei { ereignisse: ServerEreignis[] }
@@ -75,12 +83,42 @@ async function fuegeHinzu(neu: ServerEreignis[]): Promise<ServerEreignis[]> {
   return ok ? wirklich : []
 }
 
-async function setzeMailStatus(ids: string[], status: ServerEreignis['mail']): Promise<void> {
+async function setzeMailStatus(ids: string[], status: ServerEreignis['mail'], an?: Record<string, string>): Promise<void> {
   if (!ids.length) return
   const alt = await ladeEreignisse()
   if (!alt) return
   const set = new Set(ids)
-  await api().netWriteJsonAsync(DATEI, { ereignisse: alt.map(e => set.has(e.id) ? { ...e, mail: status } : e) }).catch(() => false)
+  await api().netWriteJsonAsync(DATEI, {
+    ereignisse: alt.map(e => {
+      if (!set.has(e.id)) return e
+      const { mailAn: _alt, ...rest } = e
+      return status === 'wartet' && an?.[e.id] ? { ...rest, mail: status, mailAn: an[e.id] } : { ...rest, mail: status }
+    }),
+  }).catch(() => false)
+}
+
+/** Wartende Mails höchstens so lange nachsenden — danach wären sie nur noch verwirrend. */
+const WARTEN_MAX_MS = 24 * 3600_000
+/**
+ * Mails nachsenden, die ein anderer PC erkannt, aber nicht selbst verschickt hat (BQ8069 war an).
+ * Läuft nur im beanspruchten automatischen Lauf (also auf BQ8069 bzw. dessen Vertretung) → nie doppelt.
+ */
+export async function sendeWartende(jetzt = Date.now()): Promise<{ gesendet: number; fehler: number }> {
+  const alle = await ladeEreignisse()
+  const wartend = (alle || []).filter(e => e.mail === 'wartet')
+  if (!wartend.length) return { gesendet: 0, fehler: 0 }
+  await eigenerRechner()   // für „Gemeldet … auf <PC>“ im Mailtext
+  const ok: string[] = [], fehler: string[] = []
+  for (const e of wartend) {
+    if (!e.mailAn || jetzt - new Date(e.at).getTime() > WARTEN_MAX_MS) { fehler.push(e.id); continue }
+    try {
+      const r = await api().sendEmailRaw({ to: e.mailAn, subject: titelVon(e), body: textVon(e), smtp: '', port: 587 })
+      if (r?.success) ok.push(e.id); else fehler.push(e.id)
+    } catch { fehler.push(e.id) }
+  }
+  await setzeMailStatus(ok, 'gesendet')
+  await setzeMailStatus(fehler, 'fehler')
+  return { gesendet: ok.length, fehler: fehler.length }
 }
 
 export async function ladeGelesen(user: string): Promise<Set<string>> {
@@ -178,7 +216,9 @@ export function textVon(e: ServerEreignis): string {
     z.push(`Art:              ${artText(e)}`)
     if (e.grund) z.push(`Details:          ${e.grund}`)
   }
-  z.push('', `Gemeldet vom ${MONITOR_ABSENDER} am ${zeit(new Date().toISOString())}.`)
+  if ((e.typ === 'offline' || e.typ === 'neustart') && e.zugriffe) z.push('', e.zugriffe)
+  const pc = eigenerRechnerSofort()
+  z.push('', `Gemeldet vom ${MONITOR_ABSENDER}${pc ? ` auf ${pc}` : ''} am ${zeit(new Date().toISOString())}.`)
   return z.join('\n')
 }
 
@@ -190,8 +230,19 @@ export interface MeldeZiel { email?: string; offline: boolean; neustart: boolean
  * angehakt). `ziele` = Kachel-Einstellungen je HOSTKEY. Liefert die neuen Ereignisse.
  */
 export async function melde(ereignisse: ServerEreignis[], ziele: Record<string, MeldeZiel>, _by?: string): Promise<ServerEreignis[]> {
+  // Ausfall (offline/neustart): Was hat das Tool in den 2 h davor mit dem Server gemacht?
+  // (Zugriffsprotokoll — fehlt es, gibt es keine Zeile)
+  const ohneZeile = ereignisse.filter(e => (e.typ === 'offline' || e.typ === 'neustart') && !e.zugriffe)
+  if (ohneZeile.length) {
+    const zeilen = await zugriffeVorEreignissen(ohneZeile).catch(() => ({} as Record<string, string>))
+    for (const e of ohneZeile) if (zeilen[e.id]) e.zugriffe = zeilen[e.id]
+  }
   const neu = await fuegeHinzu(ereignisse)
-  const ok: string[] = [], fehler: string[] = [], aus: string[] = []
+  const ok: string[] = [], fehler: string[] = [], aus: string[] = [], warten: string[] = []
+  const wartenAn: Record<string, string> = {}
+  // Mails gehen bevorzugt von BQ8069 raus: ist BQ8069 an und das hier ein anderer PC (z. B. „Jetzt prüfen“
+  // von Hand), wird die Mail nur vorgemerkt — BQ8069 schickt sie beim nächsten Lauf (≤ 5 min).
+  let sofort: boolean | null = null
   for (const e of neu) {
     const historie = e.typ === 'zertifikat' && e.zert
       ? `Zertifikat ${zertFrist(e.zert)}: ${e.zert.cn} (gültig bis ${datum(e.zert.bis)}) · ${e.zert.verwendung}`
@@ -201,11 +252,13 @@ export async function melde(ereignisse: ServerEreignis[], ziele: Record<string, 
       ? `${e.aktion === 'herunterfahren' ? 'Herunterfahren + Start' : 'Neustart'} erkannt: ${e.ausAm ? `aus ${bootText(e.ausAm)}, ` : ''}gestartet ${bootText(e.boot)} — ${e.art === 'geplant' ? 'geplant' : e.art === 'unerwartet' ? 'UNERWARTET' : 'Art unbekannt'}${e.grund ? ` · ${e.grund}` : ''}`
       : e.typ === 'offline' ? `Nicht erreichbar seit ${zeit(e.at)} (3× kein Ping)`
       : `Wieder erreichbar seit ${zeit(e.at)}${e.dauerMin ? ` (ca. ${e.dauerMin} min weg)` : ''}`
-    await addHistoryEntry(e.host, historie, MONITOR_ABSENDER).catch(() => undefined)
+    await addHistoryEntry(e.host, e.zugriffe ? `${historie} — ${e.zugriffe}` : historie, MONITOR_ABSENDER).catch(() => undefined)
 
     const z = ziele[e.host.toUpperCase()]
     const will = !!z?.email && (e.typ === 'neustart' ? z.neustart : e.typ === 'pruefung' ? !!z.pruefung : e.typ === 'zertifikat' ? !!z.zertifikat : z.offline)
     if (!will) { aus.push(e.id); continue }
+    if (sofort === null) sofort = await mailRechtJetzt()
+    if (!sofort) { warten.push(e.id); wartenAn[e.id] = z!.email!; continue }
     try {
       const r = await api().sendEmailRaw({ to: z!.email!, subject: titelVon(e), body: textVon(e), smtp: '', port: 587 })
       if (r?.success) ok.push(e.id); else fehler.push(e.id)
@@ -214,6 +267,7 @@ export async function melde(ereignisse: ServerEreignis[], ziele: Record<string, 
   await setzeMailStatus(ok, 'gesendet')
   await setzeMailStatus(fehler, 'fehler')
   await setzeMailStatus(aus, 'aus')
+  await setzeMailStatus(warten, 'wartet', wartenAn)
   return neu
 }
 
@@ -262,8 +316,10 @@ export function neustartDetailAus(o: Record<string, unknown>): NeustartDetail {
   return { art: 'unbekannt' }
 }
 
-export async function detailsZuNeustarts(hosts: string[], vorher: Record<string, string> = {}): Promise<Record<string, NeustartDetail>> {
+export async function detailsZuNeustarts(alleHosts: string[], vorher: Record<string, string> = {}): Promise<Record<string, NeustartDetail>> {
   const aus: Record<string, NeustartDetail> = {}
+  // Cluster-Knoten (HCI) nur per Ping — keine Ereignisprotokoll-Abfrage (serverSchonung.ts)
+  const hosts = alleHosts.filter(h => !istClusterKnoten(h))
   if (!hosts.length) return aus
   const liste = hosts.map(h => `'${h.replace(/'/g, "''")}'`).join(',')
   // je Server die vorherige Startzeit, Schlüssel = Kurzname wie $env:COMPUTERNAME
@@ -298,7 +354,7 @@ export async function detailsZuNeustarts(hosts: string[], vorher: Record<string,
     `ConvertTo-Json -InputObject @($r | Select-Object PSComputerName, Unerwartet, UnerwartetId, GeplantAm, SauberAm, Prozess, Grund, Typ, Kommentar, Benutzer) -Compress`,
   ].join('\n')
   try {
-    const res = await api().runPowerShell(script, 180000)
+    const res = await api().runPowerShell(script, 180000, { quelle: 'Server-Monitor: Neustart-Grund', art: 'lesen' })
     const txt = (res.stdout ?? '').trim()
     const p = txt ? JSON.parse(txt) : []
     for (const o of (Array.isArray(p) ? p : [p])) {

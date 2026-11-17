@@ -42,6 +42,7 @@ import { PROBLEME_PROG4 } from './prog4'
 import { PROBLEME_KONTO4 } from './konto4'
 import { PROBLEME_SAPCAD4 } from './sapcad4'
 import { PROBLEME_TICKETS5 } from './tickets5'
+import { PROBLEME_DIAGNOSE5 } from './diagnose5'
 import { VARIANTEN_TEAMS } from './varianten/teams'
 import { VARIANTEN_OUTLOOK } from './varianten/outlook'
 import { VARIANTEN_OFFICE } from './varianten/office'
@@ -53,10 +54,11 @@ import { VARIANTEN_PERIPHERIE } from './varianten/peripherie'
 import { VARIANTEN_WINDOWS } from './varianten/windows'
 import { VARIANTEN_KONTO } from './varianten/konto'
 import { VARIANTEN_TICKETS } from './varianten/tickets'
+import { VARIANTEN_VOLLDIAGNOSE } from './varianten/volldiagnose'
 
 /** Zusätzliche Beschreibungen bestehender Probleme (aus varianten/*.ts), je Problem-ID zusammengeführt. */
 export const VARIANTEN: Record<string, string[]> = {}
-for (const v of [VARIANTEN_TEAMS, VARIANTEN_OUTLOOK, VARIANTEN_OFFICE, VARIANTEN_CLOUD, VARIANTEN_NETZ, VARIANTEN_ZUGANG, VARIANTEN_DRUCKER, VARIANTEN_PERIPHERIE, VARIANTEN_WINDOWS, VARIANTEN_KONTO, VARIANTEN_TICKETS]) for (const [id, l] of Object.entries(v)) VARIANTEN[id] = [...(VARIANTEN[id] || []), ...l]
+for (const v of [VARIANTEN_TEAMS, VARIANTEN_OUTLOOK, VARIANTEN_OFFICE, VARIANTEN_CLOUD, VARIANTEN_NETZ, VARIANTEN_ZUGANG, VARIANTEN_DRUCKER, VARIANTEN_PERIPHERIE, VARIANTEN_WINDOWS, VARIANTEN_KONTO, VARIANTEN_TICKETS, VARIANTEN_VOLLDIAGNOSE]) for (const [id, l] of Object.entries(v)) VARIANTEN[id] = [...(VARIANTEN[id] || []), ...l]
 
 const ROH: PaProblem[] = [
   ...PROBLEME_KOMMUNIKATION, ...PROBLEME_OFFICE, ...PROBLEME_NETZ, ...PROBLEME_ARBEITSPLATZ, ...PROBLEME_SYSTEM,
@@ -64,6 +66,8 @@ const ROH: PaProblem[] = [
   ...PROBLEME_TEAMS3, ...PROBLEME_OUTLOOK3, ...PROBLEME_OFFICE3, ...PROBLEME_CLOUD3, ...PROBLEME_NETZ3, ...PROBLEME_ZUGANG3, ...PROBLEME_DRUCKER3, ...PROBLEME_PERIPHERIE3, ...PROBLEME_WINDOWS3, ...PROBLEME_KONTO3,
   // Runde 4
   ...PROBLEME_TMEET4, ...PROBLEME_TCHAT4, ...PROBLEME_OLMAIL4, ...PROBLEME_OLORG4, ...PROBLEME_EXCEL4, ...PROBLEME_WORD4, ...PROBLEME_CLOUD4, ...PROBLEME_WEB4, ...PROBLEME_NETZ4, ...PROBLEME_WLAN4, ...PROBLEME_LW4, ...PROBLEME_DRUCK4, ...PROBLEME_HW4, ...PROBLEME_AV4, ...PROBLEME_BILD4, ...PROBLEME_WIN4, ...PROBLEME_LEIST4, ...PROBLEME_PROG4, ...PROBLEME_KONTO4, ...PROBLEME_SAPCAD4, ...PROBLEME_TICKETS5,
+  // Befunde der Komplett-Diagnose (16.11.2026)
+  ...PROBLEME_DIAGNOSE5,
 ]
 
 /** Grundprobleme: die ersten sechs je Bereich aus den Grundkatalogen — bei sehr kurzer Eingabe zuerst. */

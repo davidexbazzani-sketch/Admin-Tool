@@ -5,7 +5,7 @@ export const PA_BEREICHE = [
   'Netzwerk & Internet', 'WLAN', 'VPN & Zscaler', 'Netzlaufwerke & Dateien',
   'Drucker & Scannen', 'Hardware & Geräte', 'Audio & Headset', 'Bildschirm & Grafik', 'Kamera & Mikrofon', 'Akku & Energie',
   'Windows & Oberfläche', 'Leistung & Speicher', 'Updates & Software', 'Anmeldung & Konto', 'Sicherheit',
-  'SAP', 'SolidWorks & CAD', 'Smartphone & MFA', 'Weitere Programme', 'Telefonie & Sonstiges',
+  'SAP', 'SolidWorks & CAD', 'Smartphone & MFA', 'Weitere Programme', 'Telefonie & Sonstiges', 'Server',
 ] as const
 export type PaBereich = typeof PA_BEREICHE[number]
 

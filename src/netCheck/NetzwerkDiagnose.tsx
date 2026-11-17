@@ -1,6 +1,6 @@
 // ── Netzwerk-Diagnose: Einstiegs-/Scan-UI (Multi-PC, Problem vs. Referenz) ───
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Wifi, ArrowLeft, Search, Loader2, X, FileDown, Layers, Trash2, Clock, AlertTriangle, ShieldCheck, Activity,
   UserSearch, Plus, Laptop, ChevronRight,
@@ -32,12 +32,19 @@ function appendHosts(current: string, hosts: string[]): string {
   return (current.trim() ? current.trim() + '\n' : '') + neu.join('\n')
 }
 
-export default function NetzwerkDiagnose({ onBack }: { onBack: () => void }) {
+export default function NetzwerkDiagnose({ onBack, startHost, autoStart }: { onBack: () => void; startHost?: string; autoStart?: boolean }) {
   const authUser = useAuthStore(s => s.session?.user)
   const by = authUser?.displayName || authUser?.username || 'unbekannt'
   const { running, done, total, current, ergebnisse, runLog, error, finishedTick, run, cancel, clear } = useNetScanStore()
 
-  const [problemInput, setProblemInput] = useState('')
+  const [problemInput, setProblemInput] = useState(startHost || '')
+  // Übergabe aus der Komplett-Diagnose bzw. „Gib dein Problem ein“: PC vorbelegt → Analyse gleich starten (einmal)
+  const autoGestartet = useRef(false)
+  useEffect(() => {
+    if (!autoStart || !startHost || autoGestartet.current || running) return
+    autoGestartet.current = true
+    void run([{ host: startHost, rolle: 'problem' }], by)
+  }, [autoStart, startHost]) // eslint-disable-line react-hooks/exhaustive-deps
   const [referenzInput, setReferenzInput] = useState('')
   const [recent] = useState<string[]>(() => loadRecentHosts())
   const [analyse, setAnalyse] = useState<NetLauf | null>(null)

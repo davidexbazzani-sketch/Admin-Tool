@@ -12,6 +12,7 @@ import {
 } from '../../services/deviceScan'
 import { getScanSchedule, isConfiguredDue } from '../../services/scanSchedules'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 const POLL_MS = 20 * 60 * 1000       // alle 20 min prüfen, ob ein Lauf fällig ist
 const HEARTBEAT_MS = 5 * 60 * 1000   // Claim höchstens alle 5 min auffrischen
@@ -24,6 +25,7 @@ export default function DeviceScanController() {
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     let s
     try { s = await loadDeviceScanSchedule() } catch { return }
     const now = Date.now()

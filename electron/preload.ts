@@ -8,8 +8,11 @@ contextBridge.exposeInMainWorld('electronSend', (channel: string) => {
 
 contextBridge.exposeInMainWorld('electronAPI', {
   // PowerShell execution
-  runPowerShell: (command: string, timeoutMs?: number) =>
-    ipcRenderer.invoke('ps:run', command, timeoutMs),
+  runPowerShell: (command: string, timeoutMs?: number, meta?: unknown) =>
+    ipcRenderer.invoke('ps:run', command, timeoutMs, meta),
+  // Server-Zugriffsprotokoll (electron/zugriffsProtokoll.ts)
+  zugriffeKontext: (k: unknown) => ipcRenderer.invoke('zugriffe:kontext', k),
+  zugriffeLade: (f: unknown) => ipcRenderer.invoke('zugriffe:lade', f),
 
   // Admin check (Windows process elevation — separate from app auth)
   checkAdmin: () => ipcRenderer.invoke('ps:checkAdmin'),

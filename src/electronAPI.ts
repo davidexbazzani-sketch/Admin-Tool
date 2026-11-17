@@ -9,6 +9,27 @@ export interface PSResult {
   timedOut: boolean
 }
 
+/** Angaben fürs Server-Zugriffsprotokoll (electron/zugriffsProtokoll.ts): welche Funktion, welche Art. */
+export interface PsMeta { quelle?: string; art?: 'ping' | 'lesen' | 'aendern' }
+
+/** Ein protokollierter Zugriff des Tools auf einen Server (nie der Befehlstext). */
+export interface ZugriffEintrag {
+  /** Start (ISO) */
+  t: string
+  /** Dauer in ms */
+  ms: number
+  /** angesprochene Server (Kurzname) */
+  h: string[]
+  /** Funktion im Tool */
+  q: string
+  a: 'ping' | 'lesen' | 'aendern'
+  e: 'ok' | 'fehler' | 'zeitlimit' | 'gesperrt'
+  x?: string
+  pc: string
+  u: string
+}
+export interface ZugriffLadeErgebnis { eintraege: ZugriffEintrag[]; gekappt: boolean; dateien: number; fehler?: string }
+
 export interface FileReadResult {
   success: boolean
   data?: string   // base64
@@ -45,7 +66,11 @@ declare global {
   interface Window {
     electronAPI: {
       // PowerShell
-      runPowerShell(command: string, timeoutMs?: number): Promise<PSResult>
+      runPowerShell(command: string, timeoutMs?: number, meta?: PsMeta): Promise<PSResult>
+      /** Servernamen, Cluster-Knoten (nur Ping) und Benutzer an den Hauptprozess (Zugriffsprotokoll + Sperre). */
+      zugriffeKontext(k: { namen: string[]; knoten: string[]; ipNamen: Record<string, string>; benutzer: string }): Promise<boolean>
+      /** Protokollierte Server-Zugriffe aller Admin-PCs im Zeitraum (optional nur ein Server). */
+      zugriffeLade(f: { host?: string; von: string; bis: string; max?: number }): Promise<ZugriffLadeErgebnis>
       checkAdmin(): Promise<boolean>
 
       // File dialogs
@@ -246,6 +271,17 @@ type MailHook = (o: MailOpts, r: { success: boolean; error?: string; method?: st
 let mailHook: MailHook | null = null
 /** Wird von services/aktivitaet.ts beim Start gesetzt. */
 export function setzeMailHook(h: MailHook): void { mailHook = h }
+// Zugriffsprotokoll (17.11.2026): Befehle ohne `meta.quelle` erschienen dort nur als
+// „Fernbefehl (erkannt)“ — nicht zuzuordnen. Jetzt geht als Rückfall mit, auf welchem Bildschirm
+// (bzw. ob im Hintergrund) der Befehl entstand. Gesetzt von App.tsx.
+let psHinweis: (() => string) | null = null
+export function setzePsQuellenHinweis(f: () => string): void { psHinweis = f }
+/** Quelle für das Zugriffsprotokoll ergänzen, falls der Aufrufer keine mitgibt (rein, testbar). */
+export function mitRueckfallQuelle(meta: PsMeta | undefined, hinweis: string): PsMeta | undefined {
+  if (meta?.quelle || !hinweis) return meta
+  return { ...(meta || {}), quelle: `Fernbefehl · ${hinweis}`.slice(0, 80) }
+}
+
 let umhuellt: Window['electronAPI'] | null = null
 let quelle: Window['electronAPI'] | null = null
 export const api = (): Window['electronAPI'] => {
@@ -254,6 +290,14 @@ export const api = (): Window['electronAPI'] => {
   if (umhuellt && quelle === e) return umhuellt
   try {
     const kopie = { ...e } as Window['electronAPI']
+    const ps = e.runPowerShell
+    if (typeof ps === 'function') {
+      kopie.runPowerShell = (command: string, timeoutMs?: number, meta?: PsMeta) => {
+        let h = ''
+        try { h = psHinweis?.() || '' } catch { /* nie stören */ }
+        return ps(command, timeoutMs, mitRueckfallQuelle(meta, h))
+      }
+    }
     const roh = e.sendEmailRaw
     if (typeof roh === 'function') {
       kopie.sendEmailRaw = async (o: MailOpts) => {

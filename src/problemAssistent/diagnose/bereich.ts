@@ -32,6 +32,8 @@ export const BEREICH_DIAGNOSE: Record<PaBereich, string[]> = {
   'Smartphone & MFA': ['telefonie', 'konto'],
   'Weitere Programme': ['fachprogramme'],
   'Telefonie & Sonstiges': ['telefonie'],
+  // Server: keine geführte Bereichsdiagnose (deren Sonden sind für PCs) — stattdessen die Komplett-Diagnose (Server-Modus)
+  'Server': [],
 }
 
 export function diagnoseThemen(bereich: PaBereich): DgOber[] {

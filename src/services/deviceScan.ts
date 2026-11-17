@@ -24,6 +24,7 @@ import { pingBatch } from './userPresenceScan'
 import { readArpTable } from './vlans'
 import { serialFromHostname } from './deviceMasterData'
 import { ensureWinRM } from '../utils/winrmUtils'
+import { istClusterKnoten } from './serverSchonung'
 
 const DEVICE_SCAN_SCHEDULE = 'device_scan/schedule.json'
 const INVENTORY_FILE = 'inventory/inventory.json'
@@ -145,7 +146,7 @@ async function winrmMachineInfo(hosts: string[], onAdvance?: (n: number) => void
       `$r | Select-Object PSComputerName, IP, MAC, Serial | ConvertTo-Json -Depth 3 -Compress`,
     ].join('\n')
     try {
-      const res = await api().runPowerShell(script, 180000)
+      const res = await api().runPowerShell(script, 180000, { quelle: 'Geräte-Scan', art: 'lesen' })
       const txt = (res.stdout ?? '').trim()
       if (txt && !txt.startsWith('ERR:')) {
         const parsed = JSON.parse(txt)
@@ -176,7 +177,8 @@ export async function runDeviceScan(by: string, onProgress?: (done: number, tota
   // NUR Computer und Server. Drucker sind bewusst ausgenommen: ihre Stammdaten
   // (IP, MAC, Seriennummer, Modell) kommen aus dem Drucker-Import der ERP-Liste und
   // duerfen nicht von einer SNMP-Abfrage ueberschrieben werden.
-  const machines = all.filter(i => { const c = (i.category || '').toLowerCase(); return c === 'computer' || c === 'server' })
+  // Cluster-Knoten (HCI, vom Dienstleister verwaltet) bleiben ganz außen vor — nur Ping (serverSchonung.ts)
+  const machines = all.filter(i => { const c = (i.category || '').toLowerCase(); return (c === 'computer' || c === 'server') && !istClusterKnoten(i.name) })
   const total = machines.length
   let done = 0
   const bump = (n = 1) => { done += n; onProgress?.(done, total) }

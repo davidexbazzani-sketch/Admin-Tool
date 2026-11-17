@@ -785,12 +785,93 @@ if (-not $s) { $s = Get-Service -EA SilentlyContinue | Where-Object { $_.Display
 if (-not $s) { throw ('Dienst „' + $P + '“ nicht gefunden.') }
 if ($s.Name -match '^(WinRM|RpcSs|LanmanServer|Netlogon|Dhcp|Dnscache|EventLog|lsass|SamSs)$') { throw ('Dienst ' + $s.Name + ' wird aus der Ferne nicht neu gestartet (würde die Verbindung/Anmeldung stören).') }
 DienstNeu $s.Name` }),
+  A({ id: 'dienst-starttyp-standard', titel: 'Dienst-Starttyp auf Windows-Standard zurücksetzen und starten', modus: 'system', risiko: 'aendern',
+    beschreibung: 'Setzt einen abgeschalteten Windows-Dienst (z. B. Windows Update, BITS, Kryptografie, Windows Installer, Druckwarteschlange) auf seinen Standard-Starttyp zurück und startet ihn. Ohne hinterlegten Standard wird „Deaktiviert“ zu „Manuell“.',
+    param: { label: 'Dienstname', platzhalter: 'z. B. wuauserv, BITS, Spooler', pflicht: true },
+    ps: String.raw`
+$n = $P.Trim()
+$s = Get-Service -Name $n -EA SilentlyContinue
+if (-not $s) { $s = Get-Service -EA SilentlyContinue | Where-Object { $_.DisplayName -like ('*' + $n + '*') } | Select-Object -First 1 }
+if (-not $s) { throw ('Dienst „' + $n + '“ nicht gefunden.') }
+if ($s.Name -match '^(RpcSs|RpcEptMapper|SamSs|lsass|DcomLaunch|LSM|BrokerInfrastructure)$') { throw ('Dienst ' + $s.Name + ' wird nicht angefasst.') }
+$std = @{ wuauserv = 'Manual'; BITS = 'Manual'; CryptSvc = 'Automatic'; TrustedInstaller = 'Manual'; msiserver = 'Manual'; UsoSvc = 'Automatic'; DoSvc = 'Automatic'; Spooler = 'Automatic'; Audiosrv = 'Automatic'; AudioEndpointBuilder = 'Automatic'; Dnscache = 'Automatic'; LanmanWorkstation = 'Automatic'; Winmgmt = 'Automatic'; Schedule = 'Automatic'; EventLog = 'Automatic'; mpssvc = 'Automatic'; BFE = 'Automatic'; WSearch = 'Automatic'; VSS = 'Manual'; IntuneManagementExtension = 'Automatic'; WinRM = 'Automatic'; ProfSvc = 'Automatic'; gpsvc = 'Automatic'; Themes = 'Automatic' }
+$ziel = $std[$s.Name]
+if (-not $ziel -and $s.StartType -eq 'Disabled') { $ziel = 'Manual' }
+if ($ziel -and [string]$s.StartType -ne $ziel) { $alt = [string]$s.StartType; Set-Service -Name $s.Name -StartupType $ziel -EA Stop; Zeile ('Dienst ' + $s.DisplayName + ': Starttyp ' + $alt + ' → ' + $ziel) }
+else { Zeile ('Dienst ' + $s.DisplayName + ': Starttyp ' + [string]$s.StartType + ' (unverändert)') }
+if ((Get-Service -Name $s.Name).StartType -ne 'Disabled' -and (Get-Service -Name $s.Name).Status -ne 'Running') { try { Start-Service -Name $s.Name -EA Stop } catch { Zeile ('Start: ' + $_.Exception.Message) } }
+Zeile ('Dienst ' + $s.DisplayName + ': ' + (Get-Service -Name $s.Name).Status)` }),
+  A({ id: 'chkdsk-beim-start', titel: 'Datenträgerprüfung beim nächsten Start (chkdsk)', modus: 'system', risiko: 'kritisch',
+    beschreibung: 'Markiert ein NTFS-Laufwerk zur Prüfung; beim nächsten Neustart prüft und repariert chkdsk das Dateisystem (5–60 Minuten, der PC ist dann nicht nutzbar). Den Neustart separat auslösen.',
+    param: { label: 'Laufwerk', platzhalter: 'z. B. C:', vorlagen: ['C:', 'D:'] },
+    ps: String.raw`
+$lw = 'C'; if ($P -match '^\s*([A-Za-z]):?\s*$') { $lw = $Matches[1].ToUpper() }
+$vol = Get-Volume -DriveLetter $lw -EA Stop
+if ([string]$vol.FileSystem -notmatch 'NTFS') { throw ('Laufwerk ' + $lw + ': ist kein NTFS-Laufwerk (' + $vol.FileSystem + ').') }
+$o = ((& (Join-Path $env:SystemRoot 'System32\fsutil.exe') dirty set ($lw + ':') 2>&1 | Out-String) -replace '\s+', ' ').Trim()
+if ($LASTEXITCODE -ne 0) { throw ('fsutil: ' + $o) }
+$q = ((& (Join-Path $env:SystemRoot 'System32\fsutil.exe') dirty query ($lw + ':') 2>&1 | Out-String) -replace '\s+', ' ').Trim()
+Zeile ('Laufwerk ' + $lw + ': zur Prüfung markiert (' + $q + ').')
+Zeile 'Beim nächsten Neustart prüft chkdsk das Dateisystem (5–60 Minuten). Neustart separat auslösen bzw. abwarten.'` }),
   A({ id: 'dienste-gestoppt', titel: 'Automatische Dienste, die nicht laufen', modus: 'system', risiko: 'lesen',
     beschreibung: 'Dienste mit Starttyp „Automatisch“, die gerade nicht laufen.',
     ps: String.raw`
 $d = @(Get-CimInstance Win32_Service -Filter "StartMode='Auto' AND State<>'Running'" | Where-Object { $_.Name -notmatch '^(gupdate|edgeupdate|MapsBroker|sppsvc|RemoteRegistry|tiledatamodelsvc|WbioSrvc|CDPSvc|wuauserv|BITS|ShellHWDetection|DoSvc|GoogleUpdater)' })
 if (-not $d.Count) { Zeile 'Alle automatischen Dienste laufen.' }
 foreach ($s in $d) { Zeile ('' + $s.DisplayName + ' (' + $s.Name + '): ' + $s.State) }` }),
+  // ── Lesende Prüfungen aus der Komplett-Diagnose (16.11.2026) ──
+  A({ id: 'dism-pruefen', titel: 'Komponentenspeicher prüfen (DISM CheckHealth, nur lesen)', modus: 'system', risiko: 'lesen', timeoutMs: 300000,
+    beschreibung: 'Fragt ab, ob der Windows-Komponentenspeicher als beschädigt markiert ist (gesund / reparierbar / nicht reparierbar) und ob die Wartung auf einen Neustart wartet. Ändert nichts.',
+    ps: String.raw`
+$o = (& (Join-Path $env:SystemRoot 'System32\dism.exe') /English /Online /Cleanup-Image /CheckHealth 2>&1 | Out-String)
+$c = $LASTEXITCODE
+if ($o -match 'No component store corruption detected') { Zeile 'Komponentenspeicher: keine Beschädigung festgestellt.' }
+elseif ($o -match 'not repairable') { Zeile 'Komponentenspeicher: BESCHÄDIGT und NICHT reparierbar – Daten sichern, dann In-Place-Upgrade bzw. neu aufsetzen.' }
+elseif ($o -match 'component store is repairable') { Zeile 'Komponentenspeicher: BESCHÄDIGT, aber reparierbar – DISM RestoreHealth, danach SFC.' }
+else {
+  $bed = @{ '740' = 'braucht Administratorrechte'; '87' = 'Parameter unbekannt (sehr altes Windows bzw. falscher Aufruf)'; '5' = 'Zugriff verweigert'; '1726' = 'abgebrochen – meist läuft gerade eine andere Wartung (Windows Update) oder ein Neustart steht aus'; '1009' = 'Registrierung beschädigt'; '14098' = 'Komponentenspeicher beschädigt' }
+  $f = (@($o -split '\r?\n' | Where-Object { $_ -match 'Error|Fehler' } | Select-Object -First 2) -join ' ').Trim()
+  Zeile ('DISM CheckHealth (Code ' + $c + '): ' + $(if ($bed[[string]$c]) { $bed[[string]$c] } elseif ($f) { $f } else { 'Ergebnis nicht erkannt' }))
+}
+if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending') { Zeile 'Die Windows-Wartung wartet auf einen Neustart – erst neu starten, dann reparieren bzw. erneut prüfen.' }
+if (Test-Path (Join-Path $env:SystemRoot 'WinSxS\pending.xml')) { Zeile 'pending.xml vorhanden – eine Wartung wird erst beim nächsten Neustart abgeschlossen.' }` }),
+  A({ id: 'aufgaben-fehler', titel: 'Geplante Aufgaben mit Fehlern anzeigen (ohne Microsoft-Aufgaben)', modus: 'system', risiko: 'lesen', timeoutMs: 180000,
+    beschreibung: 'Listet eingeschaltete Aufgaben der Aufgabenplanung (ohne \\Microsoft\\…), deren letzter Lauf mit einem Fehler endete – mit dem Ergebniscode im Klartext. Ändert nichts.',
+    ps: String.raw`
+$gut = @(0, 267008, 267009, 267011, 267014, 267045)
+$txt = @{ '0x8007010B' = 'Ordner bei „Starten in“ fehlt bzw. ist falsch'; '0x80070002' = 'Programm bzw. Datei nicht gefunden'; '0x80070003' = 'Pfad nicht gefunden'; '0x8007052E' = 'Anmeldung des Aufgabenkontos fehlgeschlagen (Kennwort falsch/abgelaufen)'; '0x80070005' = 'Zugriff verweigert'; '0x1' = 'Programm endete mit Fehlercode 1 (Skript- bzw. Programmfehler, oft falscher Pfad)'; '0x2' = 'Datei nicht gefunden (Code 2)'; '0x800710E0' = 'Ausführung abgelehnt (Bedingung, Konto oder Richtlinie)'; '0x8004131F' = 'Läuft bereits (Instanz noch aktiv)'; '0xC000013A' = 'Abgebrochen (Strg+C bzw. Herunterfahren)'; '0x41304' = 'Kein weiterer Lauf geplant' }
+$n = 0
+foreach ($t in @(Get-ScheduledTask -EA SilentlyContinue | Where-Object { $_.TaskPath -notlike '\Microsoft\*' -and [string]$_.State -ne 'Disabled' })) {
+  try { $i = Get-ScheduledTaskInfo -InputObject $t -EA Stop } catch { continue }
+  if (-not $i.LastRunTime -or $i.LastRunTime -lt (Get-Date).AddYears(-10)) { continue }
+  $u = [uint32]([int64]$i.LastTaskResult -band 4294967295)
+  if ($gut -contains [int64]$u) { continue }
+  $hex = '0x' + $u.ToString('X')
+  $b = $txt[$hex]
+  $n++
+  Zeile ('' + $t.TaskPath + $t.TaskName + ': Ergebnis ' + $hex + $(if ($b) { ' – ' + $b } else { '' }) + ' · zuletzt ' + $i.LastRunTime.ToString('dd.MM.yyyy HH:mm'))
+}
+if (-not $n) { Zeile 'Keine fehlerhaften Aufgaben (außer Microsoft-Aufgaben).' }` }),
+  A({ id: 'schattenkopien-status', titel: 'Schattenkopien, Wiederherstellungspunkte und VSS prüfen', modus: 'system', risiko: 'lesen', timeoutMs: 180000,
+    beschreibung: 'Zeigt den Volumeschattenkopie-Dienst, vorhandene Schattenkopien und Wiederherstellungspunkte, den Speicher dafür und die VSS-Fehler der letzten 14 Tage (auch Writer-Fehler). Ändert nichts.',
+    ps: String.raw`
+$s = Get-Service -Name VSS -EA SilentlyContinue
+Zeile ('Volumeschattenkopie-Dienst: ' + $(if ($s) { [string]$s.Status + ' (Starttyp ' + [string]$s.StartType + ')' } else { 'nicht vorhanden' }))
+$k = @(Get-CimInstance Win32_ShadowCopy -EA SilentlyContinue)
+Zeile ('Schattenkopien: ' + $k.Count + $(if ($k.Count) { ' (neueste ' + ([datetime](@($k | Sort-Object InstallDate)[-1].InstallDate)).ToString('dd.MM.yyyy HH:mm') + ')' } else { '' }))
+foreach ($st in @(Get-CimInstance Win32_ShadowStorage -EA SilentlyContinue)) { Zeile ('Speicher für Schattenkopien: belegt ' + (Groesse $st.UsedSpace) + ' von höchstens ' + $(if ([double]$st.MaxSpace -ge 1e15) { 'unbegrenzt' } else { Groesse $st.MaxSpace })) }
+try {
+  $rp = @(Get-CimInstance -Namespace root/default -ClassName SystemRestore -EA Stop)
+  Zeile ('Wiederherstellungspunkte: ' + $rp.Count + $(if ($rp.Count) { ' (neuester ' + ([Management.ManagementDateTimeConverter]::ToDateTime([string](@($rp | Sort-Object SequenceNumber)[-1].CreationTime))).ToString('dd.MM.yyyy HH:mm') + ')' } else { ' – Computerschutz evtl. aus' }))
+} catch { Zeile 'Wiederherstellungspunkte: nicht lesbar (Computerschutz aus?)' }
+# bewusst ohne vssadmin (Sicherheitssoftware meldet Aufrufe) — Writer-Fehler stehen als VSS-Ereignisse im Protokoll
+try { $ev = @(Get-WinEvent -FilterHashtable @{ LogName = 'Application'; ProviderName = 'VSS'; Level = 2; StartTime = (Get-Date).AddDays(-14) } -MaxEvents 50 -EA Stop) } catch { $ev = @() }
+Zeile ('VSS-Fehler der letzten 14 Tage: ' + $ev.Count)
+foreach ($g in @($ev | Group-Object Id | Sort-Object Count -Descending | Select-Object -First 3)) {
+  $m = (([string]$g.Group[0].Message) -replace '\s+', ' ').Trim()
+  if ($m.Length -gt 140) { $m = $m.Substring(0, 140) + ' …' }
+  Zeile ('  Ereignis ' + $g.Name + ' (' + $g.Count + '×): ' + $m)
+}` }),
   A({ id: 'autostart', titel: 'Autostart-Programme anzeigen', modus: 'profil', risiko: 'lesen',
     beschreibung: 'Programme, die mit Windows bzw. mit der Anmeldung starten.',
     ps: String.raw`
@@ -1380,7 +1461,7 @@ export const WERKZEUGE: Record<string, { titel: string; beschreibung: string }> 
   'netzdiagnose': { titel: 'WLAN-/Netzwerk-Diagnose öffnen', beschreibung: 'Tiefe Ursachen-Analyse mit Behebung (Kachel „Netzwerk Probleme“).' },
   'sap-fehlersuche': { titel: 'SAP Fehlersuche öffnen', beschreibung: 'Installation, Konfiguration, Kerberos/SNC, Landscape im Vergleich.' },
   'solidworks-diagnose': { titel: 'SolidWorks Diagnose öffnen', beschreibung: 'Bestandsaufnahme, Lizenzserver, empfohlene Einstellungen.' },
-  'voll-diagnose': { titel: 'Voll-Diagnose starten', beschreibung: 'Alle Bereiche und Ereignisprotokolle prüfen.' },
+  'voll-diagnose': { titel: 'Komplett-Diagnose starten', beschreibung: 'Prüft den ganzen PC bzw. Server (Ereignisprotokolle, DISM/SFC, Updates, Dienste, Datenträger …), vertieft bis zur Ursache und schlägt Lösungen vor – eingegriffen wird erst nach Bestätigung.' },
   'ueberwachung': { titel: 'Überwachung über Zeit einrichten', beschreibung: 'Meldet, wenn der Fehler wiederkommt.' },
   'remote-doc': { titel: 'In Remote Doc öffnen', beschreibung: 'Alle Einzelbefehle für diesen PC.' },
   'treiber': { titel: 'Treiber-Installation (HP) öffnen', beschreibung: 'HP-Treiber/BIOS-Pakete prüfen und installieren.' },
@@ -1388,4 +1469,8 @@ export const WERKZEUGE: Record<string, { titel: string; beschreibung: string }> 
   'deinstallation': { titel: 'Support Tools → Deinstallation öffnen', beschreibung: 'Programme sauber fern deinstallieren (mit Vorschau), z. B. NVIDIA RTX Desktop Manager.' },
   'drucker': { titel: 'Menü „Drucker“ öffnen', beschreibung: 'Drucker-Liste, Toner, Warnungen und Verbinden.' },
   'drucker-uebersicht': { titel: 'Drucker Übersicht (Lageplan) öffnen', beschreibung: 'Wo steht welcher Drucker?' },
+  'backups': { titel: 'Back-Ups öffnen (Daten sichern)', beschreibung: 'Benutzerdaten auf das Netzlaufwerk sichern – vor Hardware-Tausch oder Neuaufsetzen.' },
+  'vc-redist': { titel: 'Visual-C++-Laufzeiten installieren', beschreibung: 'Kachel „Visual C++ Laufzeit“ in den Software-Installationen.' },
+  'server-zustand': { titel: 'Server: Dienste & Prüfungen öffnen', beschreibung: 'Soll/Ist der Dienste, Ports, Aufgaben und Freigaben dieses Servers; Beheben dort per Klick.' },
+  'server-zertifikate': { titel: 'Server: Zertifikate öffnen', beschreibung: 'Verwendete Zertifikate und Ablaufdaten dieses Servers.' },
 }

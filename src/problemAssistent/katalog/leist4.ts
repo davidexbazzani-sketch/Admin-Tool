@@ -1059,6 +1059,7 @@ export const PROBLEME_LEIST4: PaProblem[] = [
       { aktion: 'leist4-start-analyse', titel: 'Startanalyse inkl. Dateisystem und Speicherdiagnose' },
       { aktion: 'laufwerk-pruefen' },
       { aktion: 'werkzeug:treiber', optional: true },
+      { aktion: 'werkzeug:backups', titel: 'Daten sofort sichern (Back-Ups)' },
     ],
     hinweis: 'Bei Lesefehlern der SSD sofort Daten sichern (OneDrive/Netzlaufwerk) und Tausch über den HP-Hardware-Service veranlassen.',
     nachricht: 'Ihr PC hatte Lesefehler von der Festplatte. Bitte speichern Sie wichtige Dateien auf OneDrive – wir kümmern uns um die Hardware.',
@@ -2233,6 +2234,7 @@ export const PROBLEME_LEIST4: PaProblem[] = [
     schritte: [
       { aktion: 'software-suchen', param: 'Visual C++' },
       { aktion: 'software-suchen', param: '{eingabe}', titel: 'Betroffenes Programm suchen (Bitversion)' },
+      { aktion: 'werkzeug:vc-redist', titel: 'Fehlende Laufzeiten fern installieren (Kachel „Visual C++ Laufzeit“, x86 und x64)' },
       { aktion: 'werkzeug:software' },
     ],
     frage: PROGRAMM,
@@ -2281,6 +2283,7 @@ export const PROBLEME_LEIST4: PaProblem[] = [
       { aktion: 'info-zuverlaessigkeit', titel: ZUVER },
       { aktion: 'software-suchen', param: 'Visual C++' },
       { aktion: 'sfc', optional: true },
+      { aktion: 'werkzeug:vc-redist', titel: 'Visual-C++-Laufzeiten fern neu installieren (Kachel „Visual C++ Laufzeit“)' },
       { aktion: 'werkzeug:software' },
     ],
     hinweis: 'Tritt R6025 nur in einem Fachprogramm auf, ist es ein Programmfehler – Version und Ablauf an den Hersteller bzw. Fachbereich melden.',

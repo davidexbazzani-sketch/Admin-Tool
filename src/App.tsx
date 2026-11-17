@@ -64,15 +64,23 @@ import AutoSetupController from './components/scans/AutoSetupController'
 import Nis2AccessScanController from './components/scans/Nis2AccessScanController'
 import DriverRolloutController from './components/scans/DriverRolloutController'
 import ErrorFlashOverlay from './components/ErrorFlashOverlay'
+import AutomatikLeiterController from './components/AutomatikLeiterController'
+import GeplanteAufgabenController from './components/scans/GeplanteAufgabenController'
+import { darfAutomatik } from './services/automatikLeiter'
 import { DossierProvider, PersonDossierSlot } from './components/person/PersonDossier'
 import { DeviceDossierProvider, DeviceDossierSlot } from './components/device/DeviceDossier'
 import { PrinterDossierProvider, PrinterDossierSlot } from './components/printer/PrinterDossier'
 import type { Screen } from './types'
-import { api } from './electronAPI'
+import { api, setzePsQuellenHinweis } from './electronAPI'
 import { starteMailProtokoll } from './services/aktivitaet'
 
 // Aktivitätsprotokoll: Mailversand mitschreiben (einmal beim Laden)
 starteMailProtokoll()
+// Zugriffsprotokoll: Fernbefehle ohne eigene Quellangabe bekommen den offenen Bildschirm mit
+setzePsQuellenHinweis(() => {
+  const s = useAppStore.getState().screen
+  return `offen: ${s || '?'}${typeof document !== 'undefined' && document.hidden ? ', Tool im Hintergrund' : ''}`
+})
 import { ensureDailyAdUsers } from './services/adUserDirectory'
 import LockScreen from './components/LockScreen'
 import { loadAppLock, canBypassLock, type AppLock } from './services/appLock'
@@ -313,9 +321,14 @@ export default function App() {
   // ein Benutzer angemeldet ist. Laeuft im Hintergrund (blockiert die UI nicht)
   // und legt den Stand zentral ab, damit alle Clients dieselben Daten sehen
   // (u. a. E-Mail-Adressen fuer die Endgeraete-Uebersicht).
+  // Seit 17.11.2026 nur auf dem Automatik-PC (BQ8069 bzw. genau eine Vertretung) — stündlich
+  // nachsehen, ob der Tagesabgleich fällig ist (ensureDailyAdUsers prüft das Datum selbst).
   useEffect(() => {
     if (!session) return
-    void ensureDailyAdUsers().catch(() => {})
+    const pruefe = () => { void darfAutomatik().then(ok => { if (ok) void ensureDailyAdUsers().catch(() => {}) }).catch(() => {}) }
+    const start = setTimeout(pruefe, 45_000)
+    const t = setInterval(pruefe, 60 * 60_000)
+    return () => { clearTimeout(start); clearInterval(t) }
   }, [session?.user.username])
 
   // Globale Programm-Sperre live erkennen (auch bereits angemeldete Nutzer sperren).
@@ -387,6 +400,8 @@ export default function App() {
               {renderScreen(screen)}
             </ErrorBoundary>
             <BugReportWidget currentScreen={screen} />
+            {/* zuerst: bestimmt den EINEN Automatik-PC (BQ8069 bevorzugt) — alle Scans fragen ihn */}
+            <AutomatikLeiterController />
             <LicenseAlarmController />
             <EmployeeReminderController />
             <DepartureEmailController />
@@ -412,6 +427,7 @@ export default function App() {
             <AutoSetupController />
             <Nis2AccessScanController />
             <DriverRolloutController />
+            <GeplanteAufgabenController />
             <ServerMonitorController />
             <GameInviteController />
             <ChatController />

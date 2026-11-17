@@ -20,6 +20,7 @@ import { isDeviceInUse } from './deviceMaps'
 import { latestWeeklySlot, type ScanScheduleConfig } from './scanSchedules'
 import { buildParallelOnlineCheck, parseOnlineCheckLine } from '../utils/connectivityCheck'
 import { pruefeAnmeldung, zuweisungText, type AngemeldeterBenutzer, type AbgleichStufe } from './anmeldeAbgleich'
+import { istClusterKnoten } from './serverSchonung'
 
 export const WEEKEND_CHECK_ID = 'weekend-check'
 export const WEEKEND_CHECK_STATUS = 'weekend-check/_scan_status.json'
@@ -85,7 +86,8 @@ export async function listWeekendDevices(): Promise<WeekendDevice[]> {
   for (const d of all) {
     if (!isWeekendRelevant(d)) continue
     const k = hostKey(d.hostname)
-    if (!k || seen.has(k)) continue
+    // Cluster-Knoten (HCI, vom Dienstleister verwaltet) gehören nicht in den Wochenend-Check (serverSchonung.ts)
+    if (!k || seen.has(k) || istClusterKnoten(k)) continue
     seen.set(k, { hostname: d.hostname.trim(), serial: d.serial, model: d.model, assignedTo: d.assignedTo })
   }
   return [...seen.values()].sort((a, b) => a.hostname.localeCompare(b.hostname))

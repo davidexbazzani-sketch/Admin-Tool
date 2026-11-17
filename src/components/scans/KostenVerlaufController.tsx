@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { aktualisiereKostenPunkt } from '../../services/endpointCostHistory'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 const POLL_MS = 6 * 60 * 60 * 1000
 
@@ -18,6 +19,7 @@ export default function KostenVerlaufController() {
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     busy.current = true
     try { await aktualisiereKostenPunkt(user?.displayName || username) } catch { /* nächster Versuch */ }
     finally { busy.current = false }

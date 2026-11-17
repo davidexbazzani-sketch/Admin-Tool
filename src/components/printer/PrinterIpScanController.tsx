@@ -8,6 +8,7 @@ import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { loadIpScanSchedule, saveIpScanSchedule, runPrinterIpScan } from '../../services/printerIpScan'
 import { getScanSchedule, isConfiguredDue, latestWeeklySlot } from '../../services/scanSchedules'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 const POLL_MS = 10 * 60 * 1000
 
@@ -18,6 +19,7 @@ export default function PrinterIpScanController() {
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     const now = new Date()
     let s
     try { s = await loadIpScanSchedule() } catch { return }

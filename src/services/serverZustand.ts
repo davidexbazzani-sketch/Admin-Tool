@@ -63,6 +63,9 @@ export interface IstStand {
   ergebnisse: PruefErgebnis[]
   /** SEAL: Gesamtzeile + Systeme, die in sysstatus neu auftauchen (nicht im Soll) */
   seal?: { gesamt?: string; neu: string[]; sysstatus?: string; befehl?: string }
+  /** Wann SEAL-`sysstatus` zuletzt wirklich gelaufen ist. Der Rundlauf fragt SEAL nur jede dritte
+   *  Runde ab — dazwischen werden die letzten SEAL-Ergebnisse übernommen (sealAm ≠ am). */
+  sealAm?: string
   /** Kritische Punkte, die zwar ausgefallen waren, deren Ausfall die Nachprüfung aber NICHT
    *  bestätigt hat (wieder an / schwankend / Server kurz weg) → gelten beim nächsten Lauf
    *  nicht als „schon gemeldet“ und werden dann erneut (mit Nachprüfung) bewertet. */
@@ -352,7 +355,7 @@ export function inventarAusRoh(host: string, d: Record<string, unknown>): Invent
 /** `sealBefehl` = von Hand eingetragener sysstatus-Aufruf (leer = automatisch suchen). */
 export async function analysiere(host: string, sealBefehl?: string): Promise<{ ok: boolean; inventar?: Inventar; fehler?: string }> {
   const TAG = '@@SRVANALYSE@@'
-  const r = await api().runPowerShell(fern(host, ANALYSE_INNER, TAG, { sealBefehl: (sealBefehl || '').trim() }, 300000), 320000)
+  const r = await api().runPowerShell(fern(host, ANALYSE_INNER, TAG, { sealBefehl: (sealBefehl || '').trim() }, 300000), 320000, { quelle: 'Dienste & Prüfungen: Analyse', art: 'lesen' })
   const d = lies<Record<string, unknown>>(r.stdout, TAG)
   if (!d) return { ok: false, fehler: r.timedOut ? 'Zeitüberschreitung bei der Analyse' : kurzFehler(r.stderr) || 'keine Antwort per WinRM' }
   if (d.ok === false) return { ok: false, fehler: kurzFehler(d.fehler as string) }
@@ -529,17 +532,23 @@ export const statusDe = (s: string) => STATUS_DE[(s || '').toLowerCase()] || s
 const ANLAUF_MIN = 10
 
 /** Gegen den Soll-Zustand prüfen und speichern. Nur lesend.
- *  `speichern: false` = nur prüfen (Nachprüfung einzelner Punkte — darf den vollständigen Stand nicht überschreiben). */
-export async function pruefe(host: string, soll: SollZustand, opt: { speichern?: boolean } = {}): Promise<IstStand> {
+ *  `speichern: false` = nur prüfen (Nachprüfung einzelner Punkte — darf den vollständigen Stand nicht überschreiben).
+ *  `ohneSeal` = SEAL-`sysstatus` diesmal auslassen (dauert 30–50 s); die SEAL-Ergebnisse aus `vorher`
+ *  gelten weiter (mit `sealAm`). Hat der Server NUR SEAL-Punkte, wird SEAL trotzdem geprüft. */
+export async function pruefe(host: string, soll: SollZustand, opt: { speichern?: boolean; ohneSeal?: boolean; vorher?: IstStand | null } = {}): Promise<IstStand> {
   const TAG = '@@SRVPRUEF@@'
   const am = new Date().toISOString()
-  const punkte = soll.punkte.map(p => ({ id: p.id, typ: p.typ, name: p.name, pfad: p.pfad, wert: p.wert, befehl: p.befehl }))
-  const mitSeal = soll.punkte.some(p => p.typ === 'seal')
+  const sealIds = new Set(soll.punkte.filter(p => p.typ === 'seal').map(p => p.id))
+  const ohneSeal = !!opt.ohneSeal && sealIds.size > 0 && sealIds.size < soll.punkte.length
+  const gesendet = ohneSeal ? soll.punkte.filter(p => p.typ !== 'seal') : soll.punkte
+  const punkte = gesendet.map(p => ({ id: p.id, typ: p.typ, name: p.name, pfad: p.pfad, wert: p.wert, befehl: p.befehl }))
+  const mitSeal = !ohneSeal && sealIds.size > 0
   let ist: IstStand
   if (!punkte.length) ist = { host: key(host), am, erreichbar: true, ergebnisse: [] }
   else {
     // mit SEAL: sysstatus darf bis 120 s (ggf. 2 Versuche) dauern
-    const r = await api().runPowerShell(fern(host, PRUEF_INNER, TAG, punkte, mitSeal ? 300000 : 180000), mitSeal ? 320000 : 180000)
+    const r = await api().runPowerShell(fern(host, PRUEF_INNER, TAG, punkte, mitSeal ? 300000 : 180000), mitSeal ? 320000 : 180000,
+      { quelle: opt.speichern === false ? 'Dienste & Prüfungen: Nachprüfung' : 'Dienste & Prüfungen', art: 'lesen' })
     const d = lies<{ ok?: boolean; fehler?: string; boot?: string; ergebnisse?: unknown; seal?: SealRoh | null }>(r.stdout, TAG)
     if (!d || d.ok === false) {
       ist = { host: key(host), am, erreichbar: false, fehler: d?.fehler ? kurzFehler(d.fehler) : r.timedOut ? 'Zeitüberschreitung' : kurzFehler(r.stderr) || 'keine Antwort per WinRM', ergebnisse: [] }
@@ -551,6 +560,15 @@ export async function pruefe(host: string, soll: SollZustand, opt: { speichern?:
         const s = sealErgebnisse(soll.punkte, d.seal || undefined)
         ist.ergebnisse.push(...s.ergebnisse)
         ist.seal = { gesamt: s.status?.gesamt, neu: s.neu, sysstatus: d.seal?.sysstatus || undefined, befehl: d.seal?.befehl || undefined }
+        ist.sealAm = am
+      } else if (ohneSeal && opt.vorher?.erreichbar) {
+        // SEAL diesmal ausgelassen → letzte SEAL-Ergebnisse übernehmen (Anzeige „SEAL zuletzt geprüft …“)
+        const alt = opt.vorher.ergebnisse.filter(e => sealIds.has(e.id))
+        if (alt.length) {
+          ist.ergebnisse.push(...alt)
+          ist.seal = opt.vorher.seal
+          ist.sealAm = opt.vorher.sealAm || opt.vorher.am
+        }
       }
     }
   }
@@ -627,8 +645,9 @@ export function kritischeFehler(soll: SollZustand, ist: IstStand): Pruefpunkt[] 
 }
 
 /** schnell = Server mit SEAL-Prüfpunkten → wird alle 5 min geprüft (statt 15). */
-export interface Zusammenfassung { gesamt: number; probleme: number; hinweise: number; am: string; erreichbar: boolean; startetNoch?: boolean; schnell?: boolean }
-export function fasseZusammen(soll: SollZustand, ist: IstStand): Zusammenfassung {
+/** `fehler` = Grund, wenn nicht erreichbar · `von` = welcher PC (Konto) geprüft hat (für den Tooltip der Kachel). */
+export interface Zusammenfassung { gesamt: number; probleme: number; hinweise: number; am: string; erreichbar: boolean; startetNoch?: boolean; schnell?: boolean; fehler?: string; von?: string }
+export function fasseZusammen(soll: SollZustand, ist: IstStand, von?: string): Zusammenfassung {
   const erg = new Map(ist.ergebnisse.map(e => [e.id, e]))
   let probleme = 0, hinweise = 0
   for (const p of soll.punkte) {
@@ -637,7 +656,10 @@ export function fasseZusammen(soll: SollZustand, ist: IstStand): Zusammenfassung
     if (e.ok) { if (e.warnung) hinweise++; continue }
     if (p.stufe === 'kritisch') probleme++; else hinweise++
   }
-  return { gesamt: soll.punkte.length, probleme, hinweise, am: ist.am, erreichbar: ist.erreichbar, startetNoch: ist.startetNoch, schnell: soll.punkte.some(p => p.typ === 'seal') || undefined }
+  return {
+    gesamt: soll.punkte.length, probleme, hinweise, am: ist.am, erreichbar: ist.erreichbar, startetNoch: ist.startetNoch, schnell: soll.punkte.some(p => p.typ === 'seal') || undefined,
+    fehler: ist.erreichbar ? undefined : ist.fehler, von: von || undefined,
+  }
 }
 
 // ── 4. Beheben (nur auf Klick) ───────────────────────────────────────────────
@@ -676,7 +698,7 @@ export const AKTION_INNER = String.raw`
 export async function behebe(host: string, p: Pruefpunkt, aktion: Aktion): Promise<{ ok: boolean; neu?: string; fehler?: string }> {
   const TAG = '@@SRVFIX@@'
   const ziel = p.typ === 'port' && p.zuDienst ? { typ: 'dienst', name: p.zuDienst } : { typ: p.typ, name: p.name, pfad: p.pfad }
-  const r = await api().runPowerShell(fern(host, AKTION_INNER, TAG, { ...ziel, aktion }), 150000)
+  const r = await api().runPowerShell(fern(host, AKTION_INNER, TAG, { ...ziel, aktion }), 150000, { quelle: 'Dienste & Prüfungen: Beheben', art: 'aendern' })
   const d = lies<{ ok?: boolean; neu?: string; fehler?: string }>(r.stdout, TAG)
   if (!d) return { ok: false, fehler: r.timedOut ? 'Zeitüberschreitung' : kurzFehler(r.stderr) || 'keine Antwort per WinRM' }
   return d.ok ? { ok: true, neu: statusDe(d.neu || '') } : { ok: false, fehler: kurzFehler(d.fehler) }

@@ -16,11 +16,13 @@
 
 import { api } from '../electronAPI'
 import { fern, lies, kurzFehler, ladeInventar } from './serverZustand'
+import { istClusterKnoten } from './serverSchonung'
 import {
-  loadServerConfig, loadServerStatus, aktualisiereStatus, hostKey, meldeZiele,
+  loadServerConfig, loadServerStatus, aktualisiereStatus, hostKey, meldeZiele, mitStoerung, STOERUNG_AB_SERVERN,
   type ServerTile,
 } from './serverMonitor'
 import { melde, type ServerEreignis } from './serverEreignisse'
+import { eigeneKennung } from './serverMelder'
 import { getScanSchedule, isConfiguredDue, loadRunStatus, saveRunStatus, isStatusClaimed as isRunStatusClaimed } from './scanSchedules'
 
 export type VerwendungsArt = 'iis' | 'httpsys' | 'rdp' | 'sql' | 'port'
@@ -58,6 +60,9 @@ export interface ZertZusammenfassung {
   warnung: number            // ≤ 30 Tage
   kritisch: number           // ≤ 5 Tage oder abgelaufen
   naechstes?: { cn: string; bis: string; tage: number; verwendung: string }
+  /** Grund, wenn nicht lesbar · welcher PC (Konto) gelesen hat — für den Tooltip der Kachel */
+  fehler?: string
+  von?: string
 }
 
 export const SCHWELLE_WARNUNG = 30
@@ -258,7 +263,7 @@ export function zertAusRoh(host: string, d: Record<string, unknown>): ZertStand 
   }
 }
 
-export function fasseZertZusammen(s: ZertStand, jetzt = Date.now()): ZertZusammenfassung {
+export function fasseZertZusammen(s: ZertStand, jetzt = Date.now(), von?: string): ZertZusammenfassung {
   const rel = s.zertifikate.filter(zertRelevant)
   let warnung = 0, kritisch = 0
   let naechstes: ZertZusammenfassung['naechstes']
@@ -269,7 +274,7 @@ export function fasseZertZusammen(s: ZertStand, jetzt = Date.now()): ZertZusamme
     else if (st === 'kritisch' || st === 'abgelaufen') kritisch++
     if (!naechstes || z.bis < naechstes.bis) naechstes = { cn: z.cn, bis: z.bis, tage: t, verwendung: verwendungText(z) }
   }
-  return { am: s.am, erreichbar: s.erreichbar, verwendet: rel.length, warnung, kritisch, naechstes }
+  return { am: s.am, erreichbar: s.erreichbar, verwendet: rel.length, warnung, kritisch, naechstes, fehler: s.erreichbar ? undefined : s.fehler, von: von || undefined }
 }
 
 /** Meldungen je Schwelle: 30 Tage, 5 Tage, abgelaufen — feste IDs → je Zertifikat und Schwelle nur EINMAL. */
@@ -290,12 +295,16 @@ export function zertEreignisse(s: ZertStand, tile?: Pick<ServerTile, 'hostname' 
 }
 
 // ── Abfrage ─────────────────────────────────────────────────────────────────
-/** Zertifikate eines Servers lesen und speichern (nur lesend am Server). */
-export async function pruefeZertifikate(host: string): Promise<ZertStand> {
+/**
+ * Zertifikate eines Servers lesen und speichern (nur lesend am Server).
+ * `fehlerNichtSpeichern`: einen gescheiterten Stand nur zurückgeben — der automatische Lauf entscheidet
+ * erst am Ende, ob er ihn speichert (scheitert er bei ALLEN Servern, liegt es am prüfenden PC).
+ */
+export async function pruefeZertifikate(host: string, opt: { fehlerNichtSpeichern?: boolean } = {}): Promise<ZertStand> {
   const TAG = '@@SRVZERT@@'
   const [extra, inv] = await Promise.all([ladeExtraPorts(host), ladeInventar(host).catch(() => null)])
   const payload = { standard: TLS_STANDARD_PORTS, extra: [...new Set([...extra, ...sealTlsPorts(inv?.seal?.roh)])] }
-  const r = await api().runPowerShell(fern(host, ZERT_INNER, TAG, payload, 180000), 200000)
+  const r = await api().runPowerShell(fern(host, ZERT_INNER, TAG, payload, 180000), 200000, { quelle: 'Zertifikats-Scan', art: 'lesen' })
   const d = lies<Record<string, unknown>>(r.stdout, TAG)
   let stand: ZertStand
   if (!d || d.ok === false) {
@@ -304,8 +313,11 @@ export async function pruefeZertifikate(host: string): Promise<ZertStand> {
     stand = { ...(alt || { zertifikate: [], ports: [] }), host: key(host), am: new Date().toISOString(), erreichbar: false,
       fehler: d?.fehler ? kurzFehler(String(d.fehler)) : r.timedOut ? 'Zeitüberschreitung' : kurzFehler(r.stderr) || 'keine Antwort per WinRM' }
   } else stand = zertAusRoh(host, d)
-  await api().netWriteJsonAsync(standDatei(host), stand).catch(() => false)
+  if (stand.erreichbar || !opt.fehlerNichtSpeichern) await speichereZertStand(host, stand)
   return stand
+}
+export async function speichereZertStand(host: string, stand: ZertStand): Promise<void> {
+  await api().netWriteJsonAsync(standDatei(host), stand).catch(() => false)
 }
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
@@ -315,22 +327,26 @@ const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
  * Zufallsanteil. Kurzfassung in status.json, neue Schwellen → Popup + Mail (Kachel-Haken
  * „bei Zertifikat-Ablauf"). `nurHosts` = einzelne Server (Knopf im Panel).
  */
-export async function runZertifikatsScan(by: string, nurHosts?: string[]): Promise<{ ok: boolean; summary: string; geprueft: number; warnungen: number }> {
+export async function runZertifikatsScan(by: string, nurHosts?: string[], opt: { auto?: boolean } = {}): Promise<{ ok: boolean; summary: string; geprueft: number; warnungen: number; stoerung?: boolean }> {
   const cfg = await loadServerConfig()
   const status = await loadServerStatus()
+  const von = await eigeneKennung().catch(() => '')
   const wunsch = nurHosts ? new Set(nurHosts.map(hostKey)) : null
-  const tiles = cfg.tiles.filter(t => t.hostname.trim() && (!wunsch || wunsch.has(hostKey(t.hostname))) && status.servers[hostKey(t.hostname)]?.online !== false)
+  // Cluster-Knoten (HCI) nur per Ping — kein Zertifikats-Scan (serverSchonung.ts)
+  const tiles = cfg.tiles.filter(t => t.hostname.trim() && !istClusterKnoten(t.hostname) && (!wunsch || wunsch.has(hostKey(t.hostname))) && status.servers[hostKey(t.hostname)]?.online !== false)
   const zusammen: Record<string, ZertZusammenfassung> = {}
   const ereignisse: ServerEreignis[] = []
+  /** automatischer Lauf: gescheiterte Stände erst am Ende speichern (siehe Störung unten) */
+  const gescheitert: { host: string; s: ZertStand }[] = []
   let geprueft = 0, fehler = 0, warnungen = 0
   const schlange = [...tiles]
   const arbeiter = async (start: number) => {
     if (start) await sleep(start)
     for (let t = schlange.shift(); t; t = schlange.shift()) {
-      const s = await pruefeZertifikate(t.hostname.trim())
+      const s = await pruefeZertifikate(t.hostname.trim(), { fehlerNichtSpeichern: !!opt.auto })
       geprueft++
-      if (!s.erreichbar) fehler++
-      const z = fasseZertZusammen(s)
+      if (!s.erreichbar) { fehler++; if (opt.auto) gescheitert.push({ host: t.hostname.trim(), s }) }
+      const z = fasseZertZusammen(s, Date.now(), von)
       zusammen[hostKey(t.hostname)] = z
       warnungen += z.warnung + z.kritisch
       if (s.erreichbar) ereignisse.push(...zertEreignisse(s, t))
@@ -338,16 +354,28 @@ export async function runZertifikatsScan(by: string, nurHosts?: string[]): Promi
     }
   }
   await Promise.all([arbeiter(0), arbeiter(1000)])
+  // Störung des prüfenden PCs? Automatischer Lauf, mehrere Server, KEINER lesbar → liegt am PC (Rechte,
+  // WinRM, Zscaler): Kacheln und gespeicherte Stände bleiben, wie sie sind; der Lauf wird später wiederholt.
+  const stoerung = !!opt.auto && geprueft >= STOERUNG_AB_SERVERN && fehler === geprueft
+  if (!stoerung) for (const g of gescheitert) await speichereZertStand(g.host, g.s)
   if (Object.keys(zusammen).length) {
+    const ersterFehler = Object.values(zusammen).map(z => z.fehler).find(Boolean) || 'keine Antwort per WinRM'
     await aktualisiereStatus(frisch => {
       const servers = { ...frisch.servers }
-      for (const [k, z] of Object.entries(zusammen)) servers[k] = { ...(servers[k] || { online: true, consecutiveFailures: 0 }), zertifikate: z }
-      return { ...frisch, servers }
+      if (!stoerung) for (const [k, z] of Object.entries(zusammen)) servers[k] = { ...(servers[k] || { online: true, consecutiveFailures: 0 }), zertifikate: z }
+      const abfrageStoerung = !opt.auto ? frisch.abfrageStoerung
+        : stoerung ? mitStoerung(frisch, 'Zertifikats-Scan', { von, at: new Date().toISOString(), fehler: ersterFehler.slice(0, 300), server: geprueft })
+          : fehler < geprueft ? mitStoerung(frisch, 'Zertifikats-Scan', null) : frisch.abfrageStoerung
+      return { ...frisch, servers, abfrageStoerung }
     })
   }
   if (ereignisse.length) await melde(ereignisse, meldeZiele(cfg.tiles), by).catch(() => [])
+  if (stoerung) return { ok: false, stoerung, geprueft, warnungen: 0, summary: `Zertifikats-Scan auf ${von || 'diesem PC'} bei allen ${geprueft} Servern gescheitert (WinRM) – Werte nicht überschrieben, neuer Versuch in 1 Stunde` }
   return { ok: true, geprueft, warnungen, summary: `${geprueft} Server geprüft${fehler ? ` (${fehler} nicht erreichbar)` : ''} · ${warnungen} Zertifikat(e) laufen in ≤ ${SCHWELLE_WARNUNG} Tagen ab oder sind abgelaufen` }
 }
+
+/** Scheitert der tägliche Lauf an einer Störung des prüfenden PCs, frühestens nach so langer Zeit erneut. */
+const NEUER_VERSUCH_NACH_STOERUNG_MS = 60 * 60_000
 
 /** Täglich laut Zeitplan (Einstellungen → Automatische Scans → server-certs, Standard 07:00). */
 export async function runZertifikatsScanIfDue(by: string, now = Date.now()): Promise<boolean> {
@@ -355,12 +383,16 @@ export async function runZertifikatsScanIfDue(by: string, now = Date.now()): Pro
   const st = await loadRunStatus(SERVER_CERTS_STATUS)
   if (!isConfiguredDue(sched, st.lastRunAt, now)) return false
   if (isRunStatusClaimed(st, now)) return false
+  // Letzter Versuch scheiterte an einer Störung des prüfenden PCs → erst nach 1 Stunde wieder
+  const gestoert = (await loadServerStatus()).abfrageStoerung?.['Zertifikats-Scan']
+  if (gestoert && now - Date.parse(gestoert.at) < NEUER_VERSUCH_NACH_STOERUNG_MS) return false
   const token = `${by}#${Math.random().toString(36).slice(2, 10)}`
   await saveRunStatus(SERVER_CERTS_STATUS, { ...st, running: { by: token, at: new Date().toISOString() } })
   if ((await loadRunStatus(SERVER_CERTS_STATUS)).running?.by !== token) return false
   try {
-    const r = await runZertifikatsScan(by)
-    await saveRunStatus(SERVER_CERTS_STATUS, { lastRunAt: new Date().toISOString(), lastResult: r.ok ? 'success' : 'error', lastSummary: r.summary, running: undefined })
+    const r = await runZertifikatsScan(by, undefined, { auto: true })
+    // Störung: „lastRunAt“ bleibt alt → der Lauf ist weiter fällig und wird (nach 1 h) wiederholt
+    await saveRunStatus(SERVER_CERTS_STATUS, { lastRunAt: r.stoerung ? st.lastRunAt : new Date().toISOString(), lastResult: r.ok ? 'success' : 'error', lastSummary: r.summary, running: undefined })
     return true
   } catch {
     await saveRunStatus(SERVER_CERTS_STATUS, { ...st, running: undefined })

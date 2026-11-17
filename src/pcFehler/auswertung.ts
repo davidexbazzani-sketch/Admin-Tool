@@ -58,20 +58,30 @@ function trifft(r: Regel, g: FehlerGruppe): boolean {
 
 const HOEHER: Record<Schwere, Schwere> = { niedrig: 'mittel', mittel: 'hoch', hoch: 'hoch' }
 const RANG: Record<Schwere, number> = { hoch: 0, mittel: 1, niedrig: 2 }
-const wert = <T,>(v: T | ((g: FehlerGruppe) => T), g: FehlerGruppe): T => (typeof v === 'function' ? (v as (g: FehlerGruppe) => T)(g) : v)
+export const wert = <T,>(v: T | ((g: FehlerGruppe) => T), g: FehlerGruppe): T => (typeof v === 'function' ? (v as (g: FehlerGruppe) => T)(g) : v)
+
+/** Zuordnung einer Fehlergruppe — dieselbe für das Radar und den Export. `key` = Befund-Schlüssel je PC. */
+export type Zuordnung = { art: 'regel'; regel: Regel; key: string } | { art: 'rauschen' } | { art: 'unbekannt' }
+export function ordneZu(g: FehlerGruppe): Zuordnung {
+  const r = REGELN.find(x => trifft(x, g))
+  if (r) return { art: 'regel', regel: r, key: r.jeProgramm ? `${r.id}|${(g.app.split('|')[0] || '').toLowerCase()}` : r.id }
+  return RAUSCHEN.test(g.quelle) || RAUSCHEN.test(g.log) ? { art: 'rauschen' } : { art: 'unbekannt' }
+}
+/** Schwere nach Anzahl (ab `schwererAb` eine Stufe höher). */
+export const schwereFuer = (r: Regel, anzahl: number): Schwere => (r.schwererAb && anzahl >= r.schwererAb ? HOEHER[r.schwere] : r.schwere)
 
 export function werteAus(gruppen: FehlerGruppe[]): Auswertung {
   const sammel = new Map<string, { r: Regel; g: FehlerGruppe; anzahl: number; zuerst: string; zuletzt: string }>()
   const unbekannt: FehlerGruppe[] = []
   let rauschen = 0
   for (const g of gruppen) {
-    const r = REGELN.find(x => trifft(x, g))
-    if (!r) {
-      if (RAUSCHEN.test(g.quelle) || RAUSCHEN.test(g.log)) rauschen++
+    const z = ordneZu(g)
+    if (z.art !== 'regel') {
+      if (z.art === 'rauschen') rauschen++
       else unbekannt.push(g)
       continue
     }
-    const key = r.jeProgramm ? `${r.id}|${(g.app.split('|')[0] || '').toLowerCase()}` : r.id
+    const r = z.regel, key = z.key
     const s = sammel.get(key)
     if (!s) sammel.set(key, { r, g, anzahl: g.anzahl, zuerst: g.zuerst, zuletzt: g.zuletzt })
     else {
@@ -84,7 +94,7 @@ export function werteAus(gruppen: FehlerGruppe[]): Auswertung {
   let unterSchwelle = 0
   for (const [key, s] of sammel) {
     if (s.anzahl < (s.r.ab ?? 1)) { unterSchwelle++; continue }
-    const schwere = s.r.schwererAb && s.anzahl >= s.r.schwererAb ? HOEHER[s.r.schwere] : s.r.schwere
+    const schwere = schwereFuer(s.r, s.anzahl)
     befunde.push({
       key, regel: s.r.id, titel: wert(s.r.titel, s.g), schwere, bedeutung: s.r.bedeutung, suche: wert(s.r.suche, s.g),
       anzahl: s.anzahl, zuerst: s.zuerst, zuletzt: s.zuletzt, beispiel: s.g.text.slice(0, 240), quelle: `${s.g.quelle} ${s.g.id}`,

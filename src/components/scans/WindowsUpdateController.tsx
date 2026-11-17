@@ -10,6 +10,7 @@ import { useAuthStore, useIsAdmin } from '../../store/authStore'
 import { loadRunStatus, saveRunStatus, isStatusClaimed } from '../../services/scanSchedules'
 import { WINUPDATE_STATUS, WINUPDATE_INTERVAL_H, runAutoWindowsUpdatesOnce } from '../../services/autoWindowsUpdate'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
+import { darfAutomatik } from '../../services/automatikLeiter'
 
 const POLL_MS = 30 * 60 * 1000        // alle 30 min prüfen, ob ein Gerät fällig ist
 const HEARTBEAT_MS = 5 * 60 * 1000
@@ -22,6 +23,7 @@ export default function WindowsUpdateController() {
 
   const tick = useCallback(async () => {
     if (!isAdmin || !username || busy.current) return
+    if (!(await darfAutomatik())) return   // nur der EINE Automatik-PC (BQ8069 bevorzugt) — services/automatikLeiter.ts
     let s
     try { s = await loadRunStatus(WINUPDATE_STATUS) } catch { return }
     const now = Date.now()

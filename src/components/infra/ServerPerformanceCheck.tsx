@@ -9,6 +9,7 @@ import { createLogger } from '../../utils/activityLogger'
 import Card from '../Card'
 import { DeviceInfoButton } from '../device/DeviceDossier'
 import type { InventoryItem } from '../../types/auth'
+import { istClusterKnoten } from '../../services/serverSchonung'
 
 const log = createLogger('infra-marine')
 
@@ -280,11 +281,14 @@ export default function ServerPerformanceCheck() {
   // ── Run performance checks ─────────────────────────────────────────────────
 
   async function runChecks() {
-    const toCheck = servers.filter(s => selected.has(s.id))
+    // Cluster-Knoten (HCI, vom Dienstleister verwaltet) nur per Ping — hier nicht abfragen (serverSchonung.ts)
+    const knoten = servers.filter(s => selected.has(s.id) && istClusterKnoten(s.name))
+    const toCheck = servers.filter(s => selected.has(s.id) && !istClusterKnoten(s.name))
     setPhase('checking')
     setChecking(true)
     setResults([])
     setLogLines([])
+    if (knoten.length) addLog(`Übersprungen (Cluster-Knoten, nur Ping): ${knoten.map(s => s.name).join(', ')}`)
     setProgress({ done: 0, total: toCheck.length })
 
     const allResults: PerfResult[] = []
@@ -298,7 +302,7 @@ export default function ServerPerformanceCheck() {
         addLog(`Pruefe ${srv.name}...`)
         try {
           const ps = buildCheckPs(srv.name)
-          const res = await api().runPowerShell(ps, 90000)
+          const res = await api().runPowerShell(ps, 90000, { quelle: 'Server-Performance-Check', art: 'lesen' })
           const parsed = JSON.parse(res.stdout.trim()) as PerfResult
           parsed.timestamp = new Date().toISOString()
           parsed.assessment = assess(parsed)

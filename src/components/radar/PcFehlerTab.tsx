@@ -8,8 +8,9 @@
 // Ist ein PC nicht erreichbar, wird die Behebung vorgemerkt und alle 2 Stunden nachgeholt.
 
 import { Fragment, useEffect, useMemo, useState } from 'react'
-import { Loader2, Search, ChevronRight, ChevronDown, Play, AlertTriangle, AlertOctagon, Info, RefreshCw, X, Wrench, Clock, CheckCircle2, XCircle, ShieldCheck } from 'lucide-react'
+import { Loader2, Search, ChevronRight, ChevronDown, Play, AlertTriangle, AlertOctagon, Info, RefreshCw, X, Wrench, Clock, CheckCircle2, XCircle, ShieldCheck, FileDown } from 'lucide-react'
 import { DeviceInfoButton } from '../device/DeviceDossier'
+import PcFehlerExport from './PcFehlerExport'
 import { PersonInfoButton } from '../person/PersonDossier'
 import { usePinSperre } from '../netzwerkgeraete/zugang'
 import { useAppStore } from '../../store/appStore'
@@ -48,7 +49,8 @@ export default function PcFehlerTab({ onCount }: { onCount?: (n: number | null) 
   const by = user?.displayName || user?.username || 'unbekannt'
   const { mitPin, pinDialog } = usePinSperre('Fehler aus dem Proaktiven Radar beheben – nur mit PIN.')
   const [daten, setDaten] = useState<PcFehlerUebersicht | null>(null)
-  const [geraete, setGeraete] = useState<Map<string, { person: string; serial: string }>>(new Map())
+  const [geraete, setGeraete] = useState<Map<string, { person: string; serial: string; modell: string }>>(new Map())
+  const [exportOffen, setExportOffen] = useState(false)
   const [laedt, setLaedt] = useState(true)
   const [fehler, setFehler] = useState('')
   const [index, setIndex] = useState<PaIndex | null>(null)
@@ -68,8 +70,8 @@ export default function PcFehlerTab({ onCount }: { onCount?: (n: number | null) 
     void Promise.all([ladeUebersicht(), loadDevices().catch(() => []), ladeWarteliste()]).then(([u, dev, w]) => {
       if (!u) setFehler('Das Netzlaufwerk ist nicht erreichbar – die Fehlerliste konnte nicht geladen werden.')
       setDaten(u); setWarte(w)
-      const m = new Map<string, { person: string; serial: string }>()
-      for (const d of dev) { const h = (d.hostname || '').trim().split('.')[0].toUpperCase(); if (h && !m.has(h)) m.set(h, { person: d.assignedTo || '', serial: d.serial || '' }) }
+      const m = new Map<string, { person: string; serial: string; modell: string }>()
+      for (const d of dev) { const h = (d.hostname || '').trim().split('.')[0].toUpperCase(); if (h && !m.has(h)) m.set(h, { person: d.assignedTo || '', serial: d.serial || '', modell: (d.model || '').trim() }) }
       setGeraete(m)
     }).finally(() => setLaedt(false))
   }
@@ -180,7 +182,7 @@ export default function PcFehlerTab({ onCount }: { onCount?: (n: number | null) 
         <span>
           Die <b className="text-foreground">Proaktive Fehlersuche</b> ({zeitplan || 'werktags'}) liest von jedem genutzten PC die Fehler der letzten 7 Tage aus allen Windows-Ereignisprotokollen und prüft, ob Laufwerk I: verbunden ist – nur lesend und für den Benutzer unsichtbar.
           Hier stehen nur PCs mit einem <b className="text-foreground">bekannten Fehlerbild</b>; das übliche Rauschen der Protokolle ist ausgeblendet.
-          {daten?.stand ? <> Stand: <b className="text-foreground">{zeit(daten.stand)}</b>{daten.gelesen != null ? <> · {daten.gelesen} PCs gelesen, {zeilen.length} mit Befund</> : null}.</> : ' Es liegt noch kein Lauf vor.'}
+          {daten?.stand ? <> Stand: <b className="text-foreground">{zeit(daten.stand)}</b>{daten.gelesen != null ? <> · beim letzten Lauf {daten.gelesen} PCs gelesen</> : null} · <span data-fehler-mitbefund>{zeilen.length} PCs mit Befund (je PC der zuletzt gelesene Stand, höchstens 3 Wochen alt)</span>.</> : ' Es liegt noch kein Lauf vor.'}
         </span>
       </div>
       {fehler && <p className="text-xs text-red-500 flex gap-1.5"><AlertTriangle size={13} className="mt-0.5" />{fehler}</p>}
@@ -233,6 +235,11 @@ export default function PcFehlerTab({ onCount }: { onCount?: (n: number | null) 
           title={behebbar.length ? 'Alle angezeigten Fehler beheben, soweit das unbemerkt geht – mit Vorschau' : 'In dieser Ansicht lässt sich nichts unbemerkt beheben'}
           className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md bg-primary text-primary-foreground font-semibold disabled:opacity-40">
           <ShieldCheck size={13} />Alle beheben ({behebbar.length}) …
+        </button>
+        <button onClick={() => setExportOffen(true)} data-fehler-export-knopf
+          title="Alle Fehler aller gelesenen PCs als Datei exportieren – auch die, für die es noch keine Lösung gibt"
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md border border-border text-foreground hover:bg-accent/30">
+          <FileDown size={13} />Alle Fehler exportieren
         </button>
         <button onClick={laden} disabled={laedt} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:text-foreground disabled:opacity-50">
           {laedt ? <Loader2 size={13} className="animate-spin" /> : <RefreshCw size={13} />}Neu laden
@@ -358,6 +365,7 @@ export default function PcFehlerTab({ onCount }: { onCount?: (n: number | null) 
       )}
 
       {sammel && <SammelDialog plaene={behebbar} behebe={behebe} onClose={() => { setSammel(false); laden() }} />}
+      {exportOffen && <PcFehlerExport von={by} modell={h => geraete.get(h.split('.')[0].toUpperCase())?.modell || ''} onClose={() => setExportOffen(false)} />}
       {pinDialog}
     </div>
   )

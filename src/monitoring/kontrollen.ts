@@ -334,6 +334,22 @@ const DIAG_ZU_KONTROLLE: [RegExp, string[]][] = [
   [/^sw-teams/, ['teams-absturz']],
   [/^perf-/, ['cpu-hoch', 'ram-hoch', 'speicher-knapp']],
   [/^prof-temp/, ['temp-profil']],
+  // ── Befund-Typen der Volldiagnose 2.0 (src/vollDiagnose) ──
+  [/^(evt:bluescreen|v1-(treiber|hardware|speicher|systemdateien|unklar))$/, ['bluescreen', 'unerwartet-aus', 'whea']],
+  [/^(evt:hart-aus|v1-(strom|ausschalter|hitze)|evt:lx-drosselung)$/, ['unerwartet-aus', 'bluescreen', 'cpu-gedrosselt']],
+  [/^(evt:hardware-whea)$/, ['whea', 'bluescreen']],
+  [/^(evt:grafik-haengt|evt:lx-livekernel|v1-grafik|v2-grafik)$/, ['grafik-reset', 'bluescreen']],
+  [/^evt:lx-livekernel-(usb|sonst)$/, []],
+  [/^(evt:absturz-|v2-|evt:lx-dotnet)/, ['app-absturz', 'app-haengt']],
+  // USB-Stick/Wechseldatenträger: keine Platten-Überwachung (betrifft nicht die eingebaute Platte)
+  [/^(evt:platte-extern|v5-wechseldatentraeger)$/, []],
+  [/^(evt:platte-|evt:lx-dateisystem|v1-datentraeger|v5-)/, ['disk-fehler', 'speicher-reset', 'ntfs-fehler']],
+  [/^(integ-platz-knapp|v3-platz)$/, ['disk-voll']],
+  [/^(zus-dienst|evt:lx-dienst|evt:dienst-)/, ['dienst-absturz', 'dienst-startfehler']],
+  [/^(evt:lx-kein-dc|evt:lx-zeit|evt:lx-kerberos|evt:lx-gpo|evt:richtlinien|evt:vertrauen)$/, ['dc-nicht-erreichbar', 'gpo-fehler', 'zeit-sync']],
+  [/^(evt:wlan-|evt:lx-(dns|dhcp|lan|ip-konflikt))/, ['wlan-trennung', 'erreichbar', 'netz-getrennt', 'dns-fehler']],
+  [/^(evt:virenschutz|evt:lx-(bedrohung|defender))/, ['defender-fund', 'defender-aus']],
+  [/^(integ-wu-fehler|integ-speicher|integ-neustart|v3-|v4-)/, ['update-fehler', 'update-installiert']],
 ]
 
 /** Vorschläge zu Befund-IDs der Voll-Diagnose (Reihenfolge bleibt, keine Doppel). */

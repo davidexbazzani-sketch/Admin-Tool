@@ -620,7 +620,7 @@ export const PROBLEME_WLAN4: PaProblem[] = [
     ],
     ursache: 'Der Dienst „Zscaler Service“ (ZSAService) wurde auf „Manuell“ oder „Deaktiviert“ gestellt (frühere Fehlersuche, Tuning-Programm) oder startet wegen einer beschädigten Installation nicht rechtzeitig. Ohne Dienst gibt es keinen Tunnel – keinen Internet-Schutz und keinen Zugriff auf interne Anwendungen.',
     loesung: 'Die Zscaler-Diagnose zeigt Dienst und Starttyp, die Dienstliste weitere Startfehler. Der Starttyp wird auf „Automatisch“ gesetzt und der Dienst gestartet, danach die Zscaler-App.',
-    schritte: [{ aktion: 'wlan4-zscaler-diagnose' }, { aktion: 'dienste-gestoppt' }, { aktion: 'wlan4-dienste-reparieren', param: 'Zscaler (ZSAService)' }, { aktion: 'zscaler-tray' }],
+    schritte: [{ aktion: 'wlan4-zscaler-diagnose' }, { aktion: 'dienste-gestoppt' }, { aktion: 'wlan4-dienste-reparieren', param: 'Zscaler (ZSAService)' }, { aktion: 'zscaler-tray' }, { aktion: 'zscaler-neustart', optional: true, titel: 'Stürzt der Dienst ab: Zscaler-Dienst neu starten' }],
     hinweis: 'Lässt sich der Dienst nicht starten oder der Starttyp nicht ändern (Manipulationsschutz), ist eine Neuinstallation über DXC nötig.',
     ueberwachen: ['zscaler-dienst', 'dienst-startfehler'],
     nachricht: 'Zscaler startet ab jetzt wieder automatisch mit Windows. Bitte prüfen Sie nach dem nächsten Neustart, ob das Zscaler-Symbol unten rechts erscheint.',
