@@ -70,11 +70,18 @@ export function pruefeDaten(roh: unknown, benutzer: string, heute: string): Prue
     einstufung: obj(d.einstufung, {}), formcheck: obj(d.formcheck, {}), kalib: arr<[number, number]>(d.kalib).slice(-60),
     muster: obj(d.muster, {}), wirkung: obj(d.wirkung, {}), spaeterLaut: arr<string>(d.spaeterLaut).slice(-10), zaehler: obj(d.zaehler, {}), zaehlerBis: obj(d.zaehlerBis, {}),
     gesehenHinweise: obj(d.gesehenHinweise, {}),
+    ernstfaelle: arr<CoachDaten['ernstfaelle'][number]>(d.ernstfaelle).filter(e => e && typeof e.id === 'string' && typeof e.datum === 'string').slice(-20),
+    eigeneLeitern: arr<CoachDaten['eigeneLeitern'][number]>(d.eigeneLeitern).filter(e => e && Array.isArray(e.stufen)).slice(-10),
+    kompass: { ...l.kompass, ...obj<Partial<CoachDaten['kompass']>>(d.kompass, {}), ziele: arr<CoachDaten['kompass']['ziele'][number]>(obj<Partial<CoachDaten['kompass']>>(d.kompass, {}).ziele).slice(-12) },
+    vorhaben: arr<CoachDaten['vorhaben'][number]>(d.vorhaben).filter(v => v && typeof v.id === 'string').slice(-30),
+    vorhabenHeute: Array.isArray(d.vorhabenHeute) && d.vorhabenHeute.length === 3 ? d.vorhabenHeute as CoachDaten['vorhabenHeute'] : l.vorhabenHeute,
+    widerspruch: obj(d.widerspruch, {}),
+    messungen: arr<CoachDaten['messungen'][number]>(d.messungen).filter(x => x && typeof x.tag === 'number' && x.m && typeof x.m === 'object'),
   }
   return { status: ueberfuehrt ? 'ueberfuehrt' : 'ok', daten }
 }
 
-const BUCH_ARTEN: BuchEintrag['art'][] = ['konter', 'geschichte', 'erfolg', 'satz', 'reflexion', 'plan', 'wortliste', 'routine', 'antwort', 'wofuer']
+const BUCH_ARTEN: BuchEintrag['art'][] = ['konter', 'geschichte', 'erfolg', 'satz', 'reflexion', 'plan', 'wortliste', 'routine', 'antwort', 'wofuer', 'kompass']
 export function pruefeBuch(roh: unknown, benutzer: string): Pruefung<CoachBuch> {
   if (!roh || typeof roh !== 'object') return { status: 'kaputt', daten: null }
   const b = roh as Partial<CoachBuch>

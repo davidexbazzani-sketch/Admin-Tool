@@ -71,8 +71,50 @@ export interface TagesPlan {
   sig: string
 }
 
+// ── Stufe 2: echtes Leben ──
+/** Ernstfall (Rede, Gespräch, Prüfung …) mit Fahrplan; Erinnerungen nennen nie den Anlass */
+export interface Ernstfall {
+  id: string; titel: string; art: 'rede' | 'gespraech' | 'pruefung' | 'vorstellung' | 'telefon' | 'sonst'
+  /** JJJJ-MM-TT */ datum: string; zeit?: string; erster?: string; letzter?: string
+  /** erledigte Etappen des Fahrplans (Kennungen aus kern/leben.ts) */ erledigt: string[]
+  auswertung?: { lief: number; anspannung: number; mitnehmen: string }
+}
+/** eigene Angst-Leiter (Format „leiter“) */
+export interface EigeneLeiter { id: string; titel: string; stufen: { text: string; anspannung: number; erledigt?: number }[] }
+/** Kompass: Ziel aus der Ziel-Pyramide mit Wochen-Checks */
+export interface Ziel {
+  id: string; lebensziel: string; drei: string; neunzig: string; woche: string; heute: string; hindernis: string; plan: string
+  angelegt: number; erledigt?: number
+  checks: { tag: number; voran: string; hindert: string; naechster: string }[]
+}
+export interface Kompass {
+  /** Station → Tagnummer, an der sie abgeschlossen wurde */
+  stationen: Record<string, number>
+  /** Lebensbereich → [Tagnummer, Wert 0–10][] (die letzten vier Einschätzungen) */
+  lebensrad: Record<string, [number, number][]>
+  werte: string[]
+  ziele: Ziel[]
+  rueckblick?: number
+}
+export type Schaerfe = 'sanft' | 'normal' | 'arschtritt'
+export interface Vorhaben {
+  id: string; kat: string; titel: string
+  /** gewünschte Häufigkeit je Woche (1–7) */ proWoche: number
+  fenster: ('morgen' | 'mittag' | 'abend')[]
+  kleinster: string; wennDann: string; hindernis: string
+  schaerfe: Schaerfe; an: boolean
+  /** hintereinander weggeklickt */ weg: number
+  /** Tagnummern, an denen es erledigt wurde (die letzten 120) */ gemacht: number[]
+  /** „Heute nicht“ gilt für diesen Tag */ heuteNicht?: number
+  /** zuletzt erinnert (Tagnummer) und mit welcher Art */ zuletzt?: number; letzteArt?: string
+  /** Fenster → wie oft auf eine Erinnerung reagiert wurde (lernt die gute Tageszeit) */ reagiert: Record<string, number>
+  /** Frage „leiser, kleiner oder streichen?“ schon gestellt */ gefragt?: number
+}
+
 export interface OffeneMission { id: string; gewaehlt: number; plan: string; befuerchtung?: string; wahrscheinlich?: number; anspannung?: number }
-export interface ErledigteMission { tag: number; eingetreten?: boolean; anspannung?: number; mitnehmen?: string }
+export interface ErledigteMission { tag: number; eingetreten?: boolean; anspannung?: number; mitnehmen?: string
+  /** aus der offenen Mission übernommen – für die Beweisliste „befürchtet / passiert“ */
+  befuerchtung?: string; wahrscheinlich?: number; vorher?: number }
 
 export interface CoachDaten {
   v: number
@@ -113,11 +155,24 @@ export interface CoachDaten {
   zaehlerBis: Record<string, number>
   /** einmalige Hinweise schon gesehen */
   gesehenHinweise: Record<string, number>
+  // ── Stufe 2 ──
+  ernstfaelle: Ernstfall[]
+  eigeneLeitern: EigeneLeiter[]
+  kompass: Kompass
+  vorhaben: Vorhaben[]
+  /** Erinnerungen an Vorhaben heute: [Datum, Anzahl gezeigt, zuletzt (Minuten seit Mitternacht)] */
+  vorhabenHeute: [string, number, number]
+  /** „Das stimmt so nicht“: Fähigkeit → Tagnummer des Widerspruchs (Bruno gewichtet neu) */
+  widerspruch: Record<FaehId, number>
+  // ── Stufe 4 ──
+  /** Messwerte der Sprechaufnahmen (nur Zahlen, keine Töne) – die Startaufnahme bleibt immer, sonst die letzten 40 */
+  messungen: SprechMessung[]
 }
+export interface SprechMessung { tag: number; art: 'start' | 'vergleich' | 'uebung'; text?: string; m: import('./mikro/analyse').Messung }
 
 export interface BuchEintrag {
   id: string
-  art: 'konter' | 'geschichte' | 'erfolg' | 'satz' | 'reflexion' | 'plan' | 'wortliste' | 'routine' | 'antwort' | 'wofuer'
+  art: 'konter' | 'geschichte' | 'erfolg' | 'satz' | 'reflexion' | 'plan' | 'wortliste' | 'routine' | 'antwort' | 'wofuer' | 'kompass'
   tag: number
   bezug?: string
   text: string
@@ -145,6 +200,7 @@ export function leereDaten(benutzer: string, heute: string): CoachDaten {
     verlauf: [], runde: { nr: 1, trainings: 0 }, kasten: {}, gesehen: {}, tage: {}, wochen: {},
     missionen: { offen: [], erledigt: {}, verschoben: {} }, einstufung: {}, formcheck: {}, kalib: [], muster: {}, wirkung: {},
     spaeterLaut: [], zaehler: {}, zaehlerBis: {}, gesehenHinweise: {},
+    ernstfaelle: [], eigeneLeitern: [], kompass: { stationen: {}, lebensrad: {}, werte: [], ziele: [] }, vorhaben: [], vorhabenHeute: ['', 0, 0], widerspruch: {}, messungen: [],
   }
 }
 export const leeresBuch = (benutzer: string): CoachBuch => ({ v: DATEN_V, benutzer, eintraege: [] })

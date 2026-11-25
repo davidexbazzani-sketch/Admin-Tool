@@ -21,7 +21,7 @@
         { "id": "k1c", "sagt": "Sie lächelt so wie bei allen: „Spät. Schönen Abend euch!“ – und wendet sich dem nächsten Gast zu.",
           "wahl": [
             { "text": "„Dir auch!“ – und zurück an den Tisch.", "wert": 2, "weiter": "k2", "rueck": "Das leise Nein gehört und angenommen. Mehr braucht es nicht." },
-            { "text": "„Ich kann ja warten.“", "wert": 0, "tendenz": "beharren", "weiter": "k2", "rueck": "Das klingt für sie nach jemandem, der nach einem Nein bleibt – unangenehm, bei der Arbeit erst recht. Sven zieht dich zurück an den Tisch." }
+            { "text": "„Ich kann ja warten, bis du Feierabend hast – ich hab Zeit.“", "wert": 0, "tendenz": "beharren", "weiter": "k2", "rueck": "Das klingt für sie nach jemandem, der nach einem Nein bleibt – unangenehm, bei der Arbeit erst recht. Sven zieht dich zurück an den Tisch." }
           ] },
         { "id": "k2", "sagt": "In der Pause nach Runde zwei kommt jemand vom Nachbartisch zu euch. Die Person scherzt über eure Antwort zur Hauptstadt von Australien, fragt nach eurem Teamnamen, lacht viel und fragt dich, woher du so viel über Vögel weißt. Sven zwinkert dir zu.",
           "wahl": [
@@ -133,7 +133,7 @@
         { "id": "k3c", "sagt": "„Puh, zu dir gleich? Ich treff mich beim ersten Mal lieber irgendwo draußen.“",
           "wahl": [
             { "text": "„Klar, versteh ich gut. Kaffee am Samstag auf dem Markt?“", "wert": 2, "weiter": "k4", "rueck": "Grenze gehört und sofort angenommen. Das schafft Vertrauen." },
-            { "text": "„Ich beiß doch nicht. Bei mir ist es gemütlicher.“", "wert": 0, "tendenz": "beharren", "weiter": "ende2", "rueck": "Eine genannte Grenze wird kleingeredet. Das ist Druck – genau das, wovor die Person sich schützt." }
+            { "text": "„Ich beiß doch nicht. Bei mir ist es viel gemütlicher als in einem vollen Café.“", "wert": 0, "tendenz": "beharren", "weiter": "ende2", "rueck": "Eine genannte Grenze wird kleingeredet. Das ist Druck – genau das, wovor die Person sich schützt." }
           ] },
         { "id": "k4", "sagt": "Drei Tage keine Antwort auf deinen Vorschlag.",
           "wahl": [
@@ -191,7 +191,7 @@
         { "id": "k3b", "sagt": "Sie zögert. „Ich … weiß nicht. Ist halt so.“",
           "wahl": [
             { "text": "„Klar, das reicht völlig. Sorry für die Frage.“", "wert": 2, "weiter": "k4", "rueck": "Gut zurückgeholt. Ein ehrliches Einlenken nimmt die Spannung." },
-            { "text": "„Liegt's an mir?“", "wert": 0, "tendenz": "beharren", "weiter": "k4", "rueck": "Jetzt soll sie dich auch noch trösten. Das macht ihr Nein schwerer, nicht leichter." }
+            { "text": "„Liegt's an mir? Sag ruhig ehrlich, was dich an mir stört – ich kann das ab.“", "wert": 0, "tendenz": "beharren", "weiter": "k4", "rueck": "Jetzt soll sie dich auch noch trösten. Das macht ihr Nein schwerer, nicht leichter." }
           ] },
         { "id": "k4", "sagt": "Auf dem Heimweg meldet sich dein Kopf: „Das war's. Du bist einfach nicht interessant.“",
           "wahl": [
@@ -258,7 +258,7 @@
             { "text": "„Warte kurz – ich wollte noch sagen: Ich hab mich heute gern mit dir unterhalten.“", "wert": 2, "weiter": "k5", "rueck": "Spät, aber gesagt. Ein Satz genügt." },
             { "text": "„Tschüss, bis nächste Woche!“", "wert": 1, "weiter": "ende3", "rueck": "Freundlich. Nur bleibt dein Interesse unsichtbar." }
           ] },
-        { "id": "k5", "sagt": "Jule lächelt. „Ging mir genauso. Du bist ein guter Gnocchi-Partner.“",
+        { "id": "k5", "sagt": "Jule lächelt. „Ging mir genauso. Mit dir macht Gnocchi-Rollen Spaß.“",
           "wahl": [
             { "text": "„Kaffee nächste Woche vor dem Kurs? Wenn nicht, auch völlig okay.“", "wert": 2, "weiter": "k6", "rueck": "Konkret, klein, mit Ausweg. Sie kann leicht Ja und leicht Nein sagen." },
             { "text": "„Gib mir doch deine Nummer, dann schreib ich dir wegen eines Kaffees.“", "wert": 1, "weiter": "k6", "rueck": "Klar gefragt. Nur ohne Ausweg – mit „oder lieber nicht?“ wäre ein Nein leichter." },
@@ -267,7 +267,7 @@
         { "id": "k5b", "sagt": "Jule: „Heute nicht, ich bin echt müde.“",
           "wahl": [
             { "text": "„Klar, schlaf gut! Wenn du mal Lust auf einen Kaffee hast, sag Bescheid.“", "wert": 2, "weiter": "k6", "rueck": "Ihr Nein angenommen – ohne gleich die nächste Frage hinterherzuschicken. Die Tür steht offen, den nächsten Schritt macht sie." },
-            { "text": "„Ach komm, nur ein Glas, dann wirst du wieder wach!“", "wert": 0, "tendenz": "beharren", "weiter": "ende2", "rueck": "Ein Nein wird übergangen – und Alkohol als Argument gleich mit." }
+            { "text": "„Ach komm, nur ein Glas, dann wirst du schon wieder wach – ich lad dich auch ein!“", "wert": 0, "tendenz": "beharren", "weiter": "ende2", "rueck": "Ein Nein wird übergangen – und Alkohol als Argument gleich mit." }
           ] },
         { "id": "k6", "sagt": "Jule grinst. „Ja, gern! Hier, meine Nummer – dann machen wir was aus.“",
           "wahl": [

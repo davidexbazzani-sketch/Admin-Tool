@@ -1,0 +1,303 @@
+{
+  "einheiten": [
+    {
+      "id": "stegreif-2-01", "bereich": "stegreif", "stufe": 2, "nr": 1,
+      "titel": "Gestern – heute – morgen mit Richtung",
+      "faehigkeiten": ["stegreif.struktur", "stegreif.kern"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Der Bauplan ist Praxiswissen aus Rhetorik und Moderation. Dass das Ende einer Reihe gut hängen bleibt, ist für Wortlisten belegt – für gesprochene Rückblicke eine Übertragung.",
+      "quellen": ["praxis-stegreif", "abrahams2023", "murdock1962"],
+      "aha": "Gestern – heute – morgen ist kein Lebenslauf in drei Kapiteln. Gestern bekommt einen Satz, heute den Kern, morgen einen nächsten Schritt – dann hat dein Rückblick eine Richtung.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Montagsrunde. Dr. Albers: „Wie steht es mit dem Umzug ins neue Lager?“ Zwei Drittel sind umgezogen, der Rest soll Freitag folgen – dafür fehlt dir noch eine helfende Hand.", "schwach": "„Also, angefangen haben wir ja vor drei Wochen, da standen nur die Regale, dann kam die Lieferung mit den Kisten, dann hatte Tarek Urlaub, dann …“", "stark": "„Vor drei Wochen standen nur die Regale. Heute sind zwei Drittel drüben, alles läuft. Freitag folgt der Rest – dafür brauche ich Tarek einen Tag.“", "frage": "Nach welcher Antwort weiß Dr. Albers, was er tun soll?", "unterschied": "Die erste erzählt jeden Tag nach – das Gestern frisst die ganze Zeit. Die zweite gibt dem Gestern einen Satz, dem Heute den Stand und dem Morgen eine klare Bitte. Die Bitte steht am Ende und bleibt hängen." },
+        { "art": "karte", "text": "Die Gewichte im Bauplan: Gestern ist ein Satz – die Ausgangslage, damit man den Weg sieht. Heute ist der Kern – der Stand mit einem Bild oder einer Zahl. Morgen ist ein Schritt – ein Termin, eine Bitte, eine Entscheidung. Geht es um eine Panne oder ein schnelles Update ohne Rückblick, nimm die Schwester des Bauplans: Was ist los – was heißt das – was jetzt." },
+        { "art": "rangfolge", "kopf": { "id": "stegreif-2-01-a", "faehigkeit": "stegreif.struktur", "stufe": 4, "kanal": "wissen" },
+          "frage": "Lena soll beim Teamfrühstück kurz erzählen, wie ihr erstes halbes Jahr war. Bring ihre Sätze in die Reihenfolge des Bauplans.",
+          "eintraege": [
+            { "text": "„Im Frühjahr kannte ich hier niemanden und habe jede Mail dreimal gelesen.“", "warum": "Gestern: ein Satz, der zeigt, woher sie kommt." },
+            { "text": "„Heute betreue ich die Bestellungen allein und frage nur noch bei Sonderfällen.“", "warum": "Heute: der Kern – wo sie jetzt steht." },
+            { "text": "„Als Nächstes möchte ich auch die Lieferanten am Telefon übernehmen.“", "warum": "Morgen: ein konkreter Schritt nach vorn." },
+            { "text": "„Danke an alle, die meine Fragen ausgehalten haben.“", "warum": "Ein kurzer Schluss – herzlich und mit Punkt." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-2-01-b", "faehigkeit": "stegreif.kern", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du gibst in der Runde den Stand zur Umstellung der Kundenkartei. Wofür nutzt du das „Morgen“ am besten?",
+          "antworten": [
+            { "text": "Für die Liste aller offenen Punkte – damit niemand sagt, du hättest etwas verschwiegen.", "wert": 0, "tendenz": "alles", "warum": "Eine Liste am Ende verwässert den Schluss. Offene Punkte gehören in die Mail danach." },
+            { "text": "Für einen Ausblick, wie gut es einmal wird.", "wert": 1, "warum": "Freundlich und nach vorn gerichtet – aber noch ohne Schritt, den jemand tun kann." },
+            { "text": "Für den nächsten Schritt mit Termin – oder eine Bitte an die Runde.", "wert": 2, "warum": "Das Ende bleibt am besten hängen. Ein Schritt oder eine Bitte macht aus dem Bericht etwas, das weitergeht." },
+            { "text": "Gar nicht – wer nach dem Stand fragt, will nur das Heute hören.", "wert": 0, "tendenz": "abbrechen", "warum": "Ohne Morgen endet der Bericht in der Luft. Die Runde fragt dann nach: „Und jetzt?“" }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stegreif-2-01-c", "faehigkeit": "stegreif.struktur", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Im Verein fragt man dich nach dem Stand fürs Sommerfest. Bau aus dem Bericht einen Rückblick mit Gestern – heute – morgen, höchstens drei Sätze.",
+          "vorlage": "„Also, im Januar haben wir angefangen, dann kam die Sache mit dem Zelt, dann hat der Wirt abgesagt, dann haben wir einen neuen gefunden, und jetzt sind wir eigentlich so weit, nur die Musik fehlt noch, und das Wetter weiß man ja nie.“",
+          "kriterien": ["ein Satz zur Ausgangslage", "der Stand als Kern", "ein konkreter nächster Schritt"],
+          "muster": ["„Im Januar hatten wir weder Zelt noch Wirt. Jetzt steht beides, nur die Musik fehlt. Bis Monatsende buche ich eine Band – wer kennt eine?“", "„Am Anfang ging fast alles schief. Heute ist das Fest bis auf die Musik geplant. Nächster Schritt: Vorschläge für eine Band bis Freitag an mich.“"] },
+        { "art": "zuordnen", "kopf": { "id": "stegreif-2-01-d", "faehigkeit": "stegreif.struktur", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Welcher Bauplan passt zu welcher Frage?",
+          "faecher": ["Gestern – heute – morgen", "Was – was heißt das – was jetzt"],
+          "karten": [
+            { "text": "„Wie war dein erstes Jahr bei uns?“", "fach": 0 },
+            { "text": "„Der Server ist ausgefallen – was nun?“", "fach": 1 },
+            { "text": "„Wie hat sich der Chor entwickelt, seit du dabei bist?“", "fach": 0 },
+            { "text": "„Der Lieferant hat abgesagt. Was bedeutet das für uns?“", "fach": 1 },
+            { "text": "„Wo steht ihr mit dem Umbau?“", "fach": 0 },
+            { "text": "„Die Halle ist für Samstag doppelt gebucht – was machen wir?“", "fach": 1 }
+          ] },
+        { "art": "mission", "ref": "stegreif-m-08" }
+      ],
+      "regel": "Gestern ein Satz, heute der Kern, morgen ein Schritt.",
+      "merkkarten": [
+        { "id": "stegreif-2-01-m1", "frage": "Wie verteilst du das Gewicht bei Gestern – heute – morgen?", "antwort": "Gestern ein Satz, heute der Kern, morgen ein konkreter Schritt oder eine Bitte." },
+        { "id": "stegreif-2-01-m2", "frage": "Welcher Bauplan passt bei einer Panne besser?", "antwort": "Was ist los – was heißt das – was jetzt." }
+      ],
+      "mission": "stegreif-m-08"
+    },
+    {
+      "id": "stegreif-2-02", "bereich": "stegreif", "stufe": 2, "nr": 2,
+      "titel": "Dafür, dagegen, Fazit: Stellung beziehen",
+      "faehigkeiten": ["stegreif.struktur", "stegreif.kern"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Meta-Analysen zu Überzeugungstexten: Wer die Gegenseite nennt und entkräftet, überzeugt im Mittel mehr als einseitig – wer sie nur nennt, weniger. Für spontane Meinungen im Gespräch ist das eine Übertragung; der Bauplan selbst ist Praxiswissen.",
+      "quellen": ["okeefe1999", "allen1991", "praxis-stegreif"],
+      "aha": "Eine Meinung wird glaubwürdiger, wenn du die Gegenseite kennst – und sie nicht einfach stehen lässt. Ein Punkt dafür, einer dagegen, dann ein Fazit, das den Einwand aufnimmt.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Du willst jemanden von deiner Meinung überzeugen. Was wirkte in Meta-Analysen zu Überzeugungstexten im Mittel am stärksten?", "optionen": ["nur die Vorteile nennen", "Vor- und Nachteile nennen und offenlassen", "Vor- und Nachteile nennen und den Nachteil entkräften"], "richtig": 2, "loesung": "Vor- und Nachteile nennen und den Nachteil entkräften", "aufloesung": "Zweiseitig mit Entkräftung überzeugte mehr als einseitig. Zweiseitig ohne Entkräftung überzeugte sogar weniger als einseitig. Für den Bauplan heißt das: Das Dagegen bekommt im Fazit eine Antwort." },
+        { "art": "karte", "text": "Der Bauplan für Meinungsfragen: Dafür – ein Punkt, der stärkste. Dagegen – ein ehrlicher Punkt, kein Strohmann. Fazit – deine Meinung, und zwar so, dass sie den Einwand aufnimmt: „Ja, wenn …“ oder „Nein, außer …“. Ein Fazit ohne „wenn“ klingt stur, gar kein Fazit klingt unentschlossen. Und: je Seite ein Punkt. Mehr wird zur Liste." },
+        { "art": "auswahl", "kopf": { "id": "stegreif-2-02-a", "faehigkeit": "stegreif.kern", "stufe": 5, "kanal": "wissen" },
+          "frage": "Miriam fragt in der Kaffeeküche: „Vier-Tage-Woche im Sommer – was hältst du davon?“ Du findest: Ja, wenn das Telefon freitags besetzt bleibt. Welcher Schluss ist am stärksten?",
+          "antworten": [
+            { "text": "„Dafür: langes Wochenende. Dagegen: lange Tage. Mal sehen, was die anderen meinen.“", "wert": 0, "tendenz": "ausweichen", "warum": "Beide Seiten, aber kein Fazit. Miriam weiß danach nicht, wo du stehst." },
+            { "text": "„Ich bin dafür.“", "wert": 1, "warum": "Klar – aber dein Einwand mit dem Telefon geht verloren, und damit das, was deine Meinung glaubwürdig macht." },
+            { "text": "„Dafür – wenn freitags jemand das Telefon übernimmt.“", "wert": 2, "warum": "Ein Fazit, das den Einwand gleich beantwortet. Klar und ehrlich zugleich." },
+            { "text": "„Kommt drauf an, wie man das genau umsetzt, und auf die Kollegen, und auf die Kunden, und eigentlich auch auf den Sommer.“", "wert": 0, "tendenz": "ausweichen", "warum": "Vier Bedingungen ohne Meinung. „Kommt drauf an“ ist ein Anfang, kein Fazit." }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "stegreif-2-02-b", "faehigkeit": "stegreif.struktur", "stufe": 5, "kanal": "koennen" },
+          "plan": "Dafür – dagegen – Fazit",
+          "anlass": "Jule Marek fragt nach dem Kochkurs: „Sollen wir nächstes Mal zusammen auf den Wochenmarkt statt in den Supermarkt?“",
+          "felder": [
+            { "name": "Dafür", "hilfe": "Der stärkste Punkt – einer." },
+            { "name": "Dagegen", "hilfe": "Ein ehrlicher Einwand, kein Strohmann." },
+            { "name": "Fazit", "hilfe": "Deine Meinung mit „wenn“ oder „außer“ – sie nimmt den Einwand auf." }
+          ],
+          "muster": [
+            "„Dafür: Wir sehen, was gerade Saison hat. Dagegen: Der Markt ist nur samstags. Mein Fazit: ja – wenn wir den Kurs auf Samstagvormittag legen.“",
+            "„Dafür: Es macht mehr Spaß. Dagegen: Es dauert länger. Fazit: ja, außer an den Abenden mit dem langen Rezept.“"
+          ] },
+        { "art": "fehler", "kopf": { "id": "stegreif-2-02-c", "faehigkeit": "stegreif.struktur", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Carla fragt in der Runde nach deiner Meinung zum Homeoffice-Freitag. Markier, was den Bauplan verwässert.",
+          "teile": [
+            { "t": "„Dafür spricht, dass es freitags ruhiger ist," },
+            { "t": "und man spart die Fahrt, und man kann nebenbei waschen, und die Luft ist besser.", "fehler": "Drei Gründe mehr – aus dem Bauplan wird eine Liste." },
+            { "t": "Dagegen spricht, dass Absprachen zäher werden." },
+            { "t": "Aber das ist ja eigentlich auch egal.", "fehler": "Der Einwand wird weggewischt statt beantwortet." },
+            { "t": "Mein Fazit: ja – mit einem festen Telefontermin am Morgen." },
+            { "t": "Also, ich weiß nicht, wie seht ihr das?“", "fehler": "Der Nachsatz nimmt das Fazit wieder zurück." }
+          ] },
+        { "art": "experiment", "auftrag": "Wenn dich diese Woche jemand nach deiner Meinung fragt: ein Punkt dafür, einer dagegen – und ein Fazit mit „wenn“ oder „außer“.", "dauer": "woche", "nachfrage": "Wie hat dein Gegenüber auf das Fazit mit „wenn“ reagiert?" },
+        { "art": "reflexion", "frage": "Bei welchen Fragen weichst du gern ins „Kommt drauf an“ aus? Wie würde dort dein Fazit lauten?", "insBuch": "saetze" }
+      ],
+      "regel": "Ein Punkt dafür, einer dagegen – und ein Fazit, das den Einwand aufnimmt.",
+      "merkkarten": [
+        { "id": "stegreif-2-02-m1", "frage": "Was macht ein gutes Fazit aus?", "antwort": "Es sagt deine Meinung und nimmt den Einwand auf: „Ja, wenn …“ oder „Nein, außer …“." },
+        { "id": "stegreif-2-02-m2", "frage": "Warum die Gegenseite nicht einfach stehen lassen?", "antwort": "Genannt und nicht beantwortet, schwächt sie deine Meinung. Mit Antwort macht sie sie glaubwürdiger." }
+      ]
+    },
+    {
+      "id": "stegreif-2-03", "bereich": "stegreif", "stufe": 2, "nr": 3,
+      "titel": "Der Vergleich aus dem Alltag – und seine Grenze",
+      "faehigkeiten": ["stegreif.vergleich", "stegreif.wortfluss"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass das Vergleichen von Fällen hilft, ein Prinzip zu erkennen und zu übertragen, zeigen Lernstudien und eine Meta-Analyse. Dass Alltagsvergleiche im Gespräch besser verstanden werden und das Nennen der Grenze hilft, ist Praxiswissen.",
+      "quellen": ["gentner2003", "alfieri2013", "praxis-stegreif"],
+      "aha": "Ein guter Vergleich teilt mit der Sache das Prinzip, nicht das Aussehen. Und jeder Vergleich hat eine Grenze – wer sie selbst nennt, nimmt dem Einwand „Der Vergleich hinkt“ den Wind.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "stegreif-2-03-a", "faehigkeit": "stegreif.vergleich", "stufe": 4, "kanal": "wissen" },
+          "frage": "Jonas soll erklären, warum Updates gleich eingespielt werden sollen: Sie schließen Lücken, die Angreifer gerade entdeckt haben. Welcher Vergleich trifft das Prinzip?",
+          "antworten": [
+            { "text": "„Wie ein neues Kleid – mal etwas Frisches.“", "wert": 0, "warum": "Ein Bild für „neu“, nicht für „Lücke schließen“. Es trifft die Oberfläche." },
+            { "text": "„Wie der Ölwechsel beim Auto: kleine Pflege jetzt, kein großer Schaden später.“", "wert": 1, "warum": "Trifft „rechtzeitig pflegen“ – aber nicht, dass jemand eine Schwachstelle ausnutzt." },
+            { "text": "„Wie ein Schloss, das der Hersteller nachbessert, sobald Einbrecher einen Trick kennen.“", "wert": 2, "warum": "Gleiches Prinzip: eine bekannte Lücke, jemand nutzt sie aus, der Hersteller schließt sie." },
+            { "text": "„Wie ein Patch – also eben ein Update für das System.“", "wert": 0, "tendenz": "fachwort", "warum": "Das erklärt die Sache mit sich selbst. Wer das Wort nicht kennt, weiß danach nicht mehr." }
+          ] },
+        { "art": "karte", "text": "Einen Vergleich findest du in drei Schritten. Erstens: Fass das Prinzip in einen schlichten Satz – „Eine bekannte Lücke wird ausgenutzt“. Zweitens: Wo im Alltag gilt dasselbe? Klopf Bereiche ab – Haus, Küche, Verkehr, Geld, Sport. Drittens: Prüf die Grenze – wo passt das Bild nicht mehr? Nenn sie selbst: „Der Vergleich hat eine Grenze: …“ Dann wirkt er ehrlich statt schief." },
+        { "art": "studie", "frage": "Hilft es, zwei Fälle nebeneinanderzulegen?", "aufbau": "In drei Studien lasen Erwachsene zwei Fallbeschreibungen zum Verhandeln. Eine Gruppe sollte die Fälle miteinander vergleichen, eine andere las sie einzeln.", "ergebnis": "Wer verglichen hatte, erkannte das gemeinsame Prinzip öfter – und wandte es danach in einer eigenen Verhandlung eher an.", "grenze": "Lernstudien zum Verhandeln, nicht zum Erklären im Gespräch. Eine Meta-Analyse über viele solche Versuche findet eine mäßige Wirkung mit großer Streuung.", "beleg": "B", "quellen": ["gentner2003", "alfieri2013"] },
+        { "art": "zuordnen", "kopf": { "id": "stegreif-2-03-b", "faehigkeit": "stegreif.vergleich", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Trifft der Vergleich das Prinzip – oder nur die Oberfläche?",
+          "faecher": ["trifft das Prinzip", "nur die Oberfläche"],
+          "karten": [
+            { "text": "Eine Firewall ist wie ein Türsteher: Wer nicht auf der Liste steht, kommt nicht rein.", "fach": 0 },
+            { "text": "Eine Firewall ist wie eine Brandmauer – heißt ja auch so.", "fach": 1 },
+            { "text": "Zinseszins ist wie ein Schneeball, der beim Rollen immer schneller wächst.", "fach": 0 },
+            { "text": "Eine Datenbank ist wie ein Bücherregal, weil beide groß sind.", "fach": 1 },
+            { "text": "Ein Engpass ist wie ein Trichter: Egal wie viel oben hineinkommt, unten läuft nur so viel durch.", "fach": 0 },
+            { "text": "Ein Budget ist wie eine Torte, weil man es aufteilt und es rund aussieht im Diagramm.", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-2-03-c", "faehigkeit": "stegreif.wortfluss", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du suchst einen Vergleich, und dir fällt nichts ein. Was hilft am ehesten?",
+          "antworten": [
+            { "text": "Auf Vergleiche verzichten und das Fachwort lieber genauer erklären.", "wert": 0, "tendenz": "aufgeben", "warum": "Manchmal nötig – aber meist gibt es ein Bild, wenn man systematisch sucht." },
+            { "text": "Den ersten Einfall nehmen, der dir kommt.", "wert": 1, "warum": "Oft gut genug. Prüf kurz, ob er das Prinzip trifft – nicht nur das Aussehen." },
+            { "text": "So lange grübeln, bis dir ein wirklich origineller Vergleich einfällt, den noch keiner gehört hat.", "wert": 0, "tendenz": "zensor", "warum": "Der Anspruch an Originalität bremst. Ein schlichtes Bild, das trägt, ist mehr wert." },
+            { "text": "Das Prinzip in einen Satz fassen und Bereiche abklopfen: Haus, Küche, Verkehr, Geld.", "wert": 2, "warum": "Erst das Prinzip, dann gezielt suchen – so wechselst du die Richtung, bis ein Bild passt." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stegreif-2-03-d", "faehigkeit": "stegreif.vergleich", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Tante Renate fragt, was ein Passwort-Manager ist. Erklär es mit einem Vergleich – und nenn seine Grenze in einem Halbsatz.",
+          "vorlage": "„Ein Passwort-Manager speichert alle Passwörter verschlüsselt. Man braucht nur noch ein einziges Hauptpasswort.“",
+          "kriterien": ["Bild aus dem Alltag", "gleiches Prinzip", "die Grenze genannt"],
+          "muster": ["„Wie ein Tresor für alle Schlüssel: Du brauchst nur noch den einen Tresorschlüssel. Nur – verlierst du den, hilft dir nur noch, was du vorher als Ersatz hinterlegt hast.“", "„Wie das Schließfach im Schwimmbad: Alles liegt sicher drin, du trägst nur das eine Band am Arm. Der Unterschied: Ersatz für dieses Band gibt es nur, wenn du vorgesorgt hast.“"] },
+        { "art": "experiment", "auftrag": "Sammle diese Woche drei Vergleiche für Dinge aus deinem Alltag oder deiner Arbeit, die andere oft nicht verstehen – jeden mit seiner Grenze.", "dauer": "woche", "nachfrage": "Welcher Vergleich hat im Gespräch getragen – und hat jemand die Grenze angesprochen?" },
+        { "art": "reflexion", "frage": "Welche Sache erklärst du immer wieder? Welches Bild aus dem Alltag passt dazu – und wo hinkt es?" }
+      ],
+      "regel": "Erst das Prinzip, dann das Bild – und die Grenze selbst nennen.",
+      "merkkarten": [
+        { "id": "stegreif-2-03-m1", "frage": "Wie findest du einen Vergleich?", "antwort": "Prinzip in einen Satz fassen, dann Bereiche abklopfen: Haus, Küche, Verkehr, Geld, Sport." },
+        { "id": "stegreif-2-03-m2", "frage": "Woran erkennst du einen schiefen Vergleich?", "antwort": "Er teilt mit der Sache nur das Aussehen oder den Namen, nicht das Prinzip." },
+        { "id": "stegreif-2-03-m3", "frage": "Was tust du mit der Grenze eines Vergleichs?", "antwort": "Du nennst sie selbst: „Der Vergleich hat eine Grenze: …“" }
+      ]
+    },
+    {
+      "id": "stegreif-2-04", "bereich": "stegreif", "stufe": 2, "nr": 4,
+      "titel": "Die Überraschungsfrage: Sorte erkennen",
+      "faehigkeiten": ["stegreif.zeit", "stegreif.struktur"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Dass Druck Denkplatz belegt, zeigen Laborstudien. Dass sich Fragen nach Sorten ordnen und mit passenden Bauplänen beantworten lassen, ist Praxiswissen aus Rhetorik-Trainings.",
+      "quellen": ["beilock2005", "abrahams2023", "praxis-stegreif"],
+      "aha": "Die meisten Fragen gehören zu wenigen Sorten: Meinung, Stand, Panne, Vorschlag. Erkennst du die Sorte, ist der Bauplan schon gewählt – in der Zeit, in der du einmal ausatmest.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Beim Teamessen fragt die Geschäftsführerin in die Runde: „Was würden Sie an unserer Einarbeitung ändern?“ Ihr Blick bleibt bei dir. Dir fällt ein: Die Neuen fragen jeden und trauen sich bald nicht mehr.", "schwach": "„Puh. Also, die Einarbeitung … da gäbe es vieles, man könnte, also, vielleicht mehr Zeit, oder mehr Unterlagen, ich weiß nicht …“", "stark": "Ausatmen. „Ein Vorschlag: eine feste Ansprechperson in der ersten Woche. Heute fragen die Neuen jeden – und trauen sich bald nicht mehr. Mit einer Person geht es schneller.“", "frage": "Was hat die zweite Antwort anders gemacht?", "unterschied": "Sie hat erkannt: Das ist eine Vorschlagsfrage – und Problem, Lösung, Nutzen genommen, mit dem Vorschlag vorn. Der Atemzug davor hat für diese Entscheidung gereicht." },
+        { "art": "karte", "text": "Vier Sorten, vier Pläne. Meinung („Was halten Sie von …?“): Dafür – dagegen – Fazit. Stand („Wie weit seid ihr?“): Gestern – heute – morgen. Panne („Was ist da los?“): Was – was heißt das – was jetzt. Vorschlag („Was würden Sie ändern?“): Problem – Lösung – Nutzen, den Vorschlag gern zuerst. Passt keine Sorte, frag zurück: „Meinen Sie eher … oder …?“" },
+        { "art": "zuordnen", "kopf": { "id": "stegreif-2-04-a", "faehigkeit": "stegreif.struktur", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Welche Sorte Frage ist das?",
+          "faecher": ["Meinung", "Stand", "Panne", "Vorschlag"],
+          "karten": [
+            { "text": "„Was halten Sie von festen Bürozeiten?“", "fach": 0 },
+            { "text": "„Bist du für den Ausflug an den See?“", "fach": 0 },
+            { "text": "„Wie weit seid ihr mit dem Katalog?“", "fach": 1 },
+            { "text": "„Wo steht der Umbau der Küche?“", "fach": 1 },
+            { "text": "„Die Bestellung ist verschwunden – was ist da los?“", "fach": 2 },
+            { "text": "„Warum läuft die Kasse schon wieder nicht?“", "fach": 2 },
+            { "text": "„Was würdest du am Vereinsheim ändern?“", "fach": 3 },
+            { "text": "„Wie könnten wir die Wartezeit am Telefon senken?“", "fach": 3 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-2-04-b", "faehigkeit": "stegreif.zeit", "stufe": 5, "kanal": "wissen" },
+          "frage": "Herr Petersen ruft an: „Was ist bei Ihnen los? Die Lieferung ist schon wieder zu spät.“ Du weißt: Sie hängt im Lager fest und kommt Donnerstag. Welche Antwort passt?",
+          "antworten": [
+            { "text": "„Das tut mir leid. Ich schaue sofort nach und rufe Sie zurück.“", "wert": 1, "warum": "Freundlich – aber du weißt schon Bescheid. Sag es ihm gleich." },
+            { "text": "„Sie hängt bei uns im Lager. Heißt: Sie kommt Donnerstag. Ich schicke Ihnen heute die Sendungsnummer.“", "wert": 2, "warum": "Panne erkannt, Plan gewählt: was los ist, was es heißt, was jetzt passiert." },
+            { "text": "„Ach, bei uns geht gerade alles ein bisschen drunter und drüber.“", "wert": 0, "tendenz": "ausweichen", "warum": "Eine Stimmung statt einer Auskunft. Er weiß danach weniger als vorher." },
+            { "text": "„An uns liegt es nicht – die Spedition hat dieses Jahr überall Probleme.“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Erst die Schuld verteilen, dann – vielleicht – die Auskunft. Er wollte wissen, wann die Lieferung kommt." }
+          ] },
+        { "art": "buehne", "kopf": { "id": "stegreif-2-04-c", "faehigkeit": "stegreif.zeit", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "stegreif-v-0099" },
+          "auftrag": "Antworte laut auf die Frage: „Was würden Sie an Ihrem Arbeitsplatz als Erstes ändern?“ Erst ausatmen, die Sorte erkennen, dann der Bauplan.",
+          "sekunden": 45, "publikum": "klein",
+          "stoerungen": ["Jemand hakt nach: „Und warum gerade das?“", "Zwei Leute in der Runde flüstern miteinander.", "„Bitte kurz – wir haben wenig Zeit.“"],
+          "pruefliste": ["einmal ausgeatmet, bevor du anfingst", "Sorte erkannt: Vorschlag", "Problem – Lösung – Nutzen eingehalten", "nach einer Störung zum Plan zurückgefunden (falls eine kam)"] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-2-04-d", "faehigkeit": "stegreif.struktur", "stufe": 6, "kanal": "wissen" },
+          "frage": "Tarek fragt: „Was denkst du über die Sache mit dem neuen Standort?“ Die Frage passt in keine Sorte. Was tust du?",
+          "antworten": [
+            { "text": "„Meinst du den Umzug selbst oder die längeren Wege?“ – dann der passende Bauplan.", "wert": 2, "warum": "Die Rückfrage macht aus einer unklaren Frage eine Sorte – und gibt dir zwei Sekunden." },
+            { "text": "Punkt – Grund – Beispiel nehmen; der passt fast immer.", "wert": 1, "warum": "Ein sicherer Allzweck-Plan. Nur triffst du vielleicht nicht, was Tarek wissen wollte." },
+            { "text": "Einfach loslegen und unterwegs herausfinden, worauf er eigentlich hinauswill.", "wert": 0, "tendenz": "drauflos", "warum": "Ohne Richtung wird es lang – und Tarek fragt am Ende doch nach." },
+            { "text": "„Schwer zu sagen.“", "wert": 0, "tendenz": "ausweichen", "warum": "Beendet die Frage, ohne sie zu beantworten." }
+          ] },
+        { "art": "reflexion", "frage": "Welche Sorte Frage erwischt dich am häufigsten kalt? Schreib den Bauplan auf, den du ab jetzt dafür nimmst.", "insBuch": "saetze" }
+      ],
+      "regel": "Ausatmen, Sorte erkennen, Bauplan nehmen – unklar? Zurückfragen.",
+      "merkkarten": [
+        { "id": "stegreif-2-04-m1", "frage": "Welche vier Sorten Fragen gibt es meistens?", "antwort": "Meinung, Stand, Panne, Vorschlag." },
+        { "id": "stegreif-2-04-m2", "frage": "Welcher Bauplan gehört zu welcher Sorte?", "antwort": "Meinung: dafür – dagegen – Fazit. Stand: gestern – heute – morgen. Panne: was – was heißt das – was jetzt. Vorschlag: Problem – Lösung – Nutzen." }
+      ]
+    },
+    {
+      "id": "stegreif-2-05", "bereich": "stegreif", "stufe": 2, "nr": 5,
+      "titel": "Der Blackout-Plan: drei Hänger, drei Sätze",
+      "faehigkeiten": ["stegreif.zeit", "stegreif.kern"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Wenn-Dann-Pläne sind über viele Studien gut belegt; dass Redner überschätzen, wie sichtbar ihre Nervosität ist, zeigt ein Experiment. Die drei Hänger und die Sätze dazu sind Praxiswissen.",
+      "quellen": ["gollwitzer2006", "webb2012", "savitsky2003", "praxis-stegreif"],
+      "aha": "Ein Blackout fühlt sich endlos an und dauert meist Sekunden. Wer für die drei typischen Hänger je einen Wenn-Dann-Satz hat, entscheidet im Leerlauf nichts – er tut, was er sich vorgenommen hat.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wenn du den Faden verlierst, merkt es sofort jeder im Raum.", "urteil": "falsch", "warum": "Redner überschätzen, wie sichtbar ihre Nervosität ist. Eine Pause von ein paar Sekunden wirkt von außen manchmal sogar wie Absicht – von innen fühlt sie sich wie eine Ewigkeit an." },
+        { "art": "karte", "text": "Drei Hänger, drei Sätze. Mitten im Satz ist alles weg: stehen bleiben, ausatmen, den letzten Satz wiederholen – der Rest kommt meist nach. Die Frage ist weg: „Wie war Ihre Frage genau?“ Der nächste Punkt fehlt: zusammenfassen und schließen – „Kurz gesagt: …“. Den Ablauf findest du auch im Notfallkoffer unter „Faden verloren“." },
+        { "art": "studie", "frage": "Helfen Wenn-Dann-Pläne, wenn es eng wird?", "aufbau": "Übersichtsarbeiten fassten viele Studien zusammen, in denen Menschen einen Vorsatz als „Wenn X, dann tue ich Y“ fassten – bei Zielen aller Art und beim Steuern von Gefühlen wie Angst.", "ergebnis": "Mit Wenn-Dann-Plan setzten Menschen ihre Vorsätze im Mittel deutlich öfter um, auch im Umgang mit Gefühlen.", "grenze": "Meist Laborversuche und Alltagsziele. Für den Hänger beim Reden nicht eigens geprüft – die Wirkung über so viele Ziele spricht für eine Übertragung.", "beleg": "A", "quellen": ["gollwitzer2006", "webb2012"] },
+        { "art": "zuordnen", "kopf": { "id": "stegreif-2-05-a", "faehigkeit": "stegreif.zeit", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Welcher Hänger – welcher Plan?",
+          "faecher": ["letzten Satz wiederholen", "nach der Frage fragen", "zusammenfassen und schließen"],
+          "karten": [
+            { "text": "Mitten im Satz ist das Wort weg.", "fach": 0 },
+            { "text": "Ein Zwischenruf hat dich aus dem Gedanken gerissen.", "fach": 0 },
+            { "text": "Du hast so lange geantwortet, dass du die Frage vergessen hast.", "fach": 1 },
+            { "text": "Eine lange Zwischenfrage hat dich weit weggeführt.", "fach": 1 },
+            { "text": "Nach dem zweiten Punkt fällt dir der dritte nicht ein.", "fach": 2 },
+            { "text": "Alles ist gesagt, aber dir fehlt ein Ende.", "fach": 2 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stegreif-2-05-b", "faehigkeit": "stegreif.zeit", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Mach aus dem Wunsch einen Wenn-Dann-Satz für den Hänger, der dich am meisten sorgt.",
+          "vorlage": "„Hoffentlich passiert mir das nicht wieder.“",
+          "kriterien": ["ein Auslöser, den du sofort erkennst", "eine kleine Handlung", "ein Satz, den du sagen kannst"],
+          "muster": ["„Wenn mir mitten im Satz das Wort fehlt, dann atme ich aus und wiederhole meinen letzten Satz.“", "„Wenn ich die Frage vergessen habe, dann frage ich: Wie war Ihre Frage genau?“", "„Wenn mir der nächste Punkt fehlt, dann sage ich: Kurz gesagt … – und höre auf.“"] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-2-05-c", "faehigkeit": "stegreif.kern", "stufe": 6, "kanal": "wissen" },
+          "frage": "Mitten in deinem Bericht in der Abteilungsrunde ist der Kopf leer. Zwei von drei Punkten hast du genannt. Dein Kern: Bis März braucht es eine Entscheidung. Was rettet den Beitrag?",
+          "antworten": [
+            { "text": "Schnell irgendetwas weiterreden, damit niemand die Lücke bemerkt.", "wert": 0, "tendenz": "schwimmen", "warum": "Jetzt beginnt das Schwimmen – und genau das fällt auf, nicht die Pause." },
+            { "text": "Aufs Stichwort schauen und weitermachen, sobald der dritte Punkt wieder da ist.", "wert": 1, "warum": "Geht, wenn das Stichwort schnell hilft. Fehlt es, bleibt die Lücke länger als nötig." },
+            { "text": "„Kurz gesagt: Bis März brauchen wir eine Entscheidung.“ – und Schluss.", "wert": 2, "warum": "Der Kern rettet den Beitrag. Kaum jemand vermisst den dritten Punkt – alle haben das Wichtigste gehört." },
+            { "text": "„Entschuldigung, ich bin total raus – ich fange noch mal von vorne an.“", "wert": 0, "tendenz": "entschuldigen", "warum": "Die Entschuldigung macht die Lücke groß, und der Neustart wiederholt, was alle schon gehört haben." }
+          ] },
+        { "art": "reflexion", "frage": "Welcher der drei Hänger ist deiner? Schreib den Wenn-Dann-Satz so auf, dass du ihn morgen noch weißt.", "insBuch": "saetze" }
+      ],
+      "regel": "Für jeden Hänger ein Wenn-Dann: wiederholen, nachfragen oder schließen.",
+      "merkkarten": [
+        { "id": "stegreif-2-05-m1", "frage": "Mitten im Satz ist alles weg. Was tust du?", "antwort": "Stehen bleiben, ausatmen, den letzten Satz wiederholen." },
+        { "id": "stegreif-2-05-m2", "frage": "Dir fehlt der nächste Punkt. Was rettet dich?", "antwort": "Zusammenfassen und schließen: „Kurz gesagt: …“" },
+        { "id": "stegreif-2-05-m3", "frage": "Wie sichtbar ist dein Hänger für andere?", "antwort": "Weniger, als du denkst – von außen wirkt eine kurze Pause manchmal sogar wie Absicht." }
+      ]
+    },
+    {
+      "id": "stegreif-2-06", "bereich": "stegreif", "stufe": 2, "nr": 6,
+      "titel": "Dein Vorrat an Geschichten",
+      "faehigkeiten": ["stegreif.wortfluss", "stegreif.assoziation"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Erzählungen im Mittel besser verstanden und behalten werden als Sachtexte, zeigt eine Meta-Analyse – mit gelesenen Texten. Dass ein Geschichten-Vorrat beim spontanen Reden hilft, ist Praxiswissen.",
+      "quellen": ["mar2021", "praxis-stegreif"],
+      "aha": "Fünf gute Geschichten aus deinem Leben passen auf viele Fragen. Wer sie kurz erzählen kann und weiß, wofür jede steht, hat in fast jeder Runde einen Anfang.",
+      "schritte": [
+        { "art": "studie", "frage": "Merkt man sich Geschichten besser als Erklärungen?", "aufbau": "Eine Meta-Analyse fasste über 75 Stichproben mit mehr als 33.000 Teilnehmenden zusammen. Verglichen wurde, wie gut Menschen erzählende und sachlich erklärende Texte verstanden und behielten.", "ergebnis": "Erzählende Texte wurden im Mittel besser verstanden und besser behalten. Der Befund hielt mehreren Prüfungen stand.", "grenze": "Gelesene Texte, keine gesprochenen Antworten. Wie groß der Vorteil beim Erzählen im Gespräch ist, ist nicht eigens untersucht.", "beleg": "A", "quellen": ["mar2021"] },
+        { "art": "geschichte", "titel": "Carlas Karteikarte", "figur": "Carla Demir", "text": "Carla war vor jeder Fragerunde nervös – nicht wegen der Fachfragen, sondern wegen der anderen: „Erzählen Sie mal, wie Sie zu dem Projekt kamen.“ Irgendwann schrieb sie fünf Geschichten auf eine Karteikarte. Je eine Zeile, dazu drei Stichwörter. Der Umzug mit dem kaputten Aufzug steht für Planung, Pannen und Team. Ihr erstes Projekt, das scheiterte, steht für Fehler und Lernen. Seitdem schaut sie bei einer Frage nicht mehr nach der perfekten Antwort, sondern nach dem passenden Stichwort. Neulich fragte Dr. Albers nach ihrem schwierigsten Moment. Carla lächelte – Aufzug.", "frage": "Welches Erlebnis aus deinem Leben steht für mehr als ein Thema?" },
+        { "art": "karte", "text": "Eine Vorratsgeschichte hat drei Teile. Lage: wo, wer, was war los – ein Satz. Wendung: was Unerwartetes passierte. Schluss: was du daraus mitnimmst. Erzählt dauert sie unter einer Minute. Dann bekommt sie Stichwörter: Wofür steht sie? Geduld, Fehler, Mut, Team, Neuanfang. Über diese Stichwörter findet dein Kopf sie wieder, wenn eine Frage eines davon berührt." },
+        { "art": "geschichtenbau", "kopf": { "id": "stegreif-2-06-a", "faehigkeit": "stegreif.wortfluss", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Bau deine erste Vorratsgeschichte: ein kleines Erlebnis, bei dem etwas schiefging und gut ausging.",
+          "felder": [
+            { "name": "Lage", "hilfe": "Wo, wer, was war los – ein Satz." },
+            { "name": "Wendung", "hilfe": "Was passierte Unerwartetes?" },
+            { "name": "Schluss", "hilfe": "Was nimmst du daraus mit?" },
+            { "name": "Stichwörter", "hilfe": "Wofür steht die Geschichte? Zwei oder drei Wörter." }
+          ],
+          "muster": [
+            "Lage: Mein erster Tag im neuen Job, ich sollte das Team begrüßen. Wendung: Ich hatte die Namensliste der falschen Abteilung dabei. Schluss: Ich habe gelacht, gefragt – und kannte danach alle Namen. Stichwörter: Pannen, Humor, Anfang.",
+            "Lage: Eine Radtour, die ich geplant hatte. Wendung: Nach zehn Kilometern ein Platten, kein Werkzeug. Schluss: Ein Bauer half uns, seitdem fahre ich nie ohne Flickzeug. Stichwörter: Planung, Hilfe annehmen."
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "stegreif-2-06-b", "faehigkeit": "stegreif.assoziation", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Deine Geschichte: Beim ersten Kundentermin fehlt dir ein Ordner – du sagst offen, was fehlt, und schickst es am selben Tag nach. Für welche Frage taugt sie?",
+          "faecher": ["passt", "passt kaum"],
+          "karten": [
+            { "text": "„Erzählen Sie von einem Fehler.“", "fach": 0 },
+            { "text": "„Wie gehen Sie mit Druck um?“", "fach": 0 },
+            { "text": "„Was ist Ihnen im Umgang mit Kunden wichtig?“", "fach": 0 },
+            { "text": "„Was ist Ihr Lieblingsessen?“", "fach": 1 },
+            { "text": "„Welche Programme kennen Sie?“", "fach": 1 },
+            { "text": "„Wo machen Sie gern Urlaub?“", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-2-06-c", "faehigkeit": "stegreif.assoziation", "stufe": 6, "kanal": "wissen" },
+          "frage": "Jule fragt im Kochkurs: „Was war dein größtes Küchen-Desaster?“ Du hast keine Küchengeschichte, aber eine vom Umzug: Das erste Essen war Pizza auf dem Boden zwischen Kartons. Was tust du?",
+          "antworten": [
+            { "text": "Eine Küchenpanne erfinden, damit sie zur Frage passt.", "wert": 0, "tendenz": "bluffen", "warum": "Erfundenes fällt bei Nachfragen auf – und du hattest eine echte Geschichte." },
+            { "text": "„Kein Küchen-, aber ein Umzugs-Desaster: Mein erstes Essen war Pizza auf dem Boden.“", "wert": 2, "warum": "Eine Brücke vom Stichwort „Desaster“ zu deiner Geschichte. Ehrlich, kurz, und die Runde lacht mit." },
+            { "text": "„Ehrlich gesagt ist mir in der Küche noch nie etwas Schlimmes passiert.“", "wert": 1, "warum": "Ehrlich, aber das Gespräch endet. Eine Brücke zu einer verwandten Geschichte hält es offen." },
+            { "text": "Vom ganzen Umzug erzählen – vom Packen über den Transporter bis zu den Kartons, die heute noch im Keller stehen.", "wert": 0, "tendenz": "alles", "warum": "Die Geschichte wird zum Bericht. Die Pointe mit der Pizza geht unter." }
+          ] },
+        { "art": "experiment", "auftrag": "Schreib diese Woche jeden Abend eine Geschichte in deinen Geschichten-Schatz – Lage, Wendung, Schluss und drei Stichwörter.", "dauer": "woche", "nachfrage": "Welche Geschichte hast du schon erzählt – und bei welcher Frage?" },
+        { "art": "reflexion", "frage": "Welche Geschichte erzählst du schon oft? Wofür steht sie eigentlich?", "insBuch": "geschichten" }
+      ],
+      "regel": "Lage, Wendung, Schluss – und Stichwörter, damit du sie wiederfindest.",
+      "merkkarten": [
+        { "id": "stegreif-2-06-m1", "frage": "Welche drei Teile hat eine Vorratsgeschichte?", "antwort": "Lage, Wendung, Schluss – erzählt in unter einer Minute." },
+        { "id": "stegreif-2-06-m2", "frage": "Wie findest du die passende Geschichte im Moment?", "antwort": "Über ihre Stichwörter: Wofür steht sie – Fehler, Mut, Team, Geduld?" }
+      ]
+    }
+  ]
+}

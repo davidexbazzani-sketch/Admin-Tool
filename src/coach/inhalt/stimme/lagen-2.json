@@ -1,0 +1,250 @@
+{
+  "lagen": [
+    {
+      "id": "stimme-l-06", "bereich": "stimme", "phase": "k", "umfeld": "vorgesetzte", "faehigkeiten": ["stimme.aufbau", "stimme.bild", "stimme.tempo"], "stufe": 5,
+      "titel": "Die Frage in der Leitungsrunde", "figur": "Dr. Henrik Albers",
+      "einleitung": "Du sitzt als Gast in der Leitungsrunde – eigentlich nur für einen Punkt am Ende. Plötzlich fragt Dr. Albers nach deinem Projekt. Du übst: Antwort zuerst, eine Zahl mit Bild, Details auf Nachfrage.",
+      "lage": "Donnerstag, 9 Uhr, Leitungsrunde mit sechs Leuten. Du betreust die Umstellung auf das neue Ersatzteillager: Seit drei Wochen läuft es. Das Lager arbeitet in drei Schichten; jede hat früher etwa eine Stunde am Tag nach Teilen gesucht, jetzt ungefähr eine halbe. Nur die Beschriftung hinkt hinterher: An einem Drittel der Fächer fehlen noch Schilder, bis Monatsende sollen alle hängen. Dr. Albers leitet die Runde.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers, mitten in einem anderen Punkt: „Apropos Lager – Sie sind ja da. Lohnt sich die Umstellung?“ Alle schauen dich an.",
+          "wahl": [
+            { "text": "„Ja. Die Suchzeit hat sich ungefähr halbiert.“", "wert": 2, "weiter": "k2", "rueck": "Antwort zuerst, dazu die eine Zahl. Jetzt kann er entscheiden, wie viel er wissen will." },
+            { "text": "„Also, angefangen haben wir ja vor drei Wochen, erst mit den Regalen, dann kam die Software, und dann haben wir …“", "wert": 0, "tendenz": "ausweichen", "weiter": "k1b", "rueck": "Die Chronik vor der Antwort. In einer Leitungsrunde ist die Geduld dafür kurz." },
+            { "text": "„Ich glaube schon, ja – soweit man das nach drei Wochen sagen kann, es ist ja noch früh.“", "wert": 1, "weiter": "k2", "rueck": "Die Antwort ist drin, aber zwischen Weichmachern versteckt. Du hast Zahlen – nutz sie." }
+          ] },
+        { "id": "k1b", "sagt": "Dr. Albers hebt die Hand: „Kurz bitte. Ja oder nein?“",
+          "wahl": [
+            { "text": "Kurz still, dann: „Ja. Die Suchzeit hat sich ungefähr halbiert.“", "wert": 2, "weiter": "k2", "rueck": "Gefangen: Pause, dann die Antwort und die Zahl." },
+            { "text": "„Na ja, so einfach ist das nicht zu sagen, es gibt da mehrere Seiten …“", "wert": 0, "tendenz": "ausweichen", "weiter": "k2", "rueck": "Er hat nach einer klaren Antwort gefragt. Jetzt wirkt es, als wüsstest du sie nicht." }
+          ] },
+        { "id": "k2", "sagt": "Eine Kollegin aus dem Einkauf: „Was heißt das konkret – wie viel Suchzeit spart ihr?“",
+          "wahl": [
+            { "text": "„Vorher hat jede Schicht etwa eine Stunde am Tag nach Teilen gesucht, jetzt ungefähr eine halbe.“", "wert": 1, "weiter": "k3", "rueck": "Konkret und richtig. Mit einem Bild, das alle kennen, bliebe es noch besser hängen." },
+            { "text": "„Jede Schicht sucht eine halbe Stunde weniger – zusammen fast ein Arbeitstag pro Woche. Als hätten wir freitags einen Kollegen mehr.“", "wert": 2, "weiter": "k3", "rueck": "Zahl und Bild zugleich: Den zusätzlichen Kollegen am Freitag hat jeder vor Augen." },
+            { "text": "„Das steht alles in meiner Auswertung, die kann ich Ihnen gern schicken.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k3", "rueck": "Die Auswertung als Zusatz ist gut – als Ersatz für die Antwort nicht." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers: „Und wo hakt es noch?“",
+          "wahl": [
+            { "text": "„Nirgends, eigentlich läuft alles rund.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3b", "rueck": "Die Beschriftung hinkt – das kommt ohnehin heraus. Dann wackelt auch die gute Zahl." },
+            { "text": "„An der Beschriftung. | Ein Drittel der Fächer fehlt noch. | Bis Monatsende sind wir fertig.“", "wert": 2, "weiter": "k4", "rueck": "Wieder die Antwort zuerst, ehrlich und mit Termin. Das macht auch die gute Nachricht glaubwürdig." },
+            { "text": "„Ein paar Kleinigkeiten noch, nichts Wildes.“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich, aber vage. Mit dem Wort „Beschriftung“ und einem Termin wäre es greifbar." }
+          ] },
+        { "id": "k3b", "sagt": "Die Kollegin aus dem Einkauf: „Wirklich? Ich habe gestern zehn Minuten nach einem Fach gesucht – ohne Schild.“",
+          "wahl": [
+            { "text": "„Stimmt, die Beschriftung fehlt noch an einem Drittel der Fächer. Bis Monatsende ist sie fertig.“", "wert": 2, "weiter": "k4", "rueck": "Fehler eingeräumt, Fakt und Termin nachgeliefert. Die Runde nimmt dir das ab." },
+            { "text": "„Das war bestimmt eine Ausnahme.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k4", "rueck": "Jetzt verteidigst du eine Lücke, die es gibt. Das kostet mehr Vertrauen als das Eingeständnis." }
+          ] },
+        { "id": "k4", "sagt": "Dr. Albers nickt: „Gut. Brauchen Sie noch etwas?“",
+          "wahl": [
+            { "text": "„Ja: zwei Stunden von Jonas für die Schilder, nächste Woche.“", "wert": 2, "weiter": "ende1", "rueck": "Eine klare Bitte mit Umfang und Termin – leicht zu entscheiden." },
+            { "text": "„Nein danke, wir kriegen das schon irgendwie hin, auch wenn es etwas knapp wird mit der Zeit.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende2", "rueck": "Die Chance auf Hilfe verschenkt – und dazu noch Zweifel gesät." },
+            { "text": "„Vielleicht etwas Unterstützung bei den Schildern.“", "wert": 1, "weiter": "ende1", "rueck": "Richtung stimmt. Wer, wie lange, wann – dann kann er sofort Ja sagen." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers: „Bekommen Sie. Danke.“ Dann geht es weiter mit dem nächsten Punkt.", "ende": "Antwort zuerst, die Zahl mit einem Bild, das Problem ehrlich mit Termin, die Bitte konkret. So reichen zwei Minuten in der Leitungsrunde." },
+        { "id": "ende2", "sagt": "Dr. Albers nickt: „Gut. Dann weiter im Text.“ Die Schilder bleiben an dir hängen – mit einem Termin, der knapp wird.", "ende": "Antwort zuerst, die Zahl mit Bild, die Lücke ehrlich mit Termin – und die Bitte konkret. Wer in der Runde nicht sagt, was er braucht, bekommt es selten." }
+      ],
+      "prinzipien": ["erster Satz = die Antwort", "eine Zahl mit Bild statt einer Auswertung", "Lücken ehrlich mit Termin", "Bitte mit Umfang und Termin"],
+      "transfer": "Welche Frage zu deiner Arbeit könnte dir als Nächstes überraschend gestellt werden – und wie lautet dein erster Satz?"
+    },
+    {
+      "id": "stimme-l-07", "bereich": "stimme", "phase": "k", "umfeld": "gruppe", "faehigkeiten": ["stimme.aufbau", "stimme.bild", "stimme.pause"], "stufe": 5,
+      "titel": "Die Begrüßung beim Straßenfest", "figur": "Frau Sommer",
+      "einleitung": "Frau Sommer hat dich gebeten, das Straßenfest mit ein paar Worten zu eröffnen. Du übst den Einstieg ohne Entschuldigung, eine Dreierliste mit dem Stärksten zuletzt und einen Schluss, der alle zum Buffet schickt.",
+      "lage": "Samstag, 15 Uhr, etwa vierzig Nachbarn zwischen Bierbänken, Kinder rennen herum, ein Grill raucht. Kein Mikrofon. Frau Sommer klopft an ein Glas und nickt dir zu.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Es wird halbwegs ruhig. Hinten lacht noch eine Gruppe.",
+          "wahl": [
+            { "text": "„Also, ähm, ich bin ja eigentlich gar nicht so der Redner, aber Frau Sommer hat gefragt …“", "wert": 0, "tendenz": "kleinreden", "weiter": "k1b", "rueck": "Die Entschuldigung besetzt den Anfang – und hinten hört ohnehin noch keiner zu." },
+            { "text": "Auf die Bank steigen, ausatmen, zur hinteren Gruppe schauen und warten, bis sie es merkt.", "wert": 2, "weiter": "k2", "rueck": "Du wirst sichtbar, und die Stille holt die letzten Gespräche ein. Dein erster Satz bekommt Gehör." },
+            { "text": "Gleich laut loslegen, damit die hinten auch etwas mitbekommen.", "wert": 1, "weiter": "k2", "rueck": "Verständlich – aber gegen Gelächter anreden strengt an. Eine stille Sekunde hätte gereicht." }
+          ] },
+        { "id": "k1b", "sagt": "Ein paar lächeln nachsichtig. Hinten wird weitergelacht.",
+          "wahl": [
+            { "text": "Kurz still werden, zur hinteren Gruppe schauen, dann neu anfangen: „Liebe Nachbarn!“", "wert": 2, "weiter": "k2", "rueck": "Neustart mit Pause – der Anfang gehört jetzt dir." },
+            { "text": "Einfach weitermachen und dabei immer schneller werden, damit es möglichst bald vorbei ist.", "wert": 0, "tendenz": "tempo", "weiter": "k2", "rueck": "Schneller hört dich hinten noch weniger, und du hetzt dich selbst." }
+          ] },
+        { "id": "k2", "sagt": "Frau Sommer klopft noch einmal ans Glas. Jetzt hören alle zu. Dein eigentlicher erster Satz.",
+          "wahl": [
+            { "text": "„Wer von euch wohnt schon länger als zehn Jahre in unserer Straße? Hand hoch!“", "wert": 2, "weiter": "k3", "rueck": "Eine Frage, die alle mitmachen lässt. Die Hände gehen hoch, das Eis ist gebrochen." },
+            { "text": "„Herzlich willkommen zum Straßenfest.“", "wert": 1, "weiter": "k3", "rueck": "Freundlich und klar. Eine Frage oder ein kleiner Fall hätte die Leute stärker abgeholt." },
+            { "text": "„Ich wollte nur kurz was sagen, dauert auch nicht lange, versprochen.“", "wert": 0, "tendenz": "kleinreden", "weiter": "k3", "rueck": "Du kündigst an, dass es unwichtig ist. Genau so hören die Leute dann auch zu." }
+          ] },
+        { "id": "k3", "sagt": "Es ist ruhig genug. Jetzt willst du sagen, warum es das Fest gibt.",
+          "wahl": [
+            { "text": "„Wir feiern, weil wir uns kennenlernen wollen, weil die Kinder Platz brauchen, weil der Grill da war und weil der Sommer bald vorbei ist.“", "wert": 0, "weiter": "k4", "rueck": "Vier Gründe gleichrangig – keiner bleibt hängen, und der wichtigste geht unter." },
+            { "text": "„Heute gibt es Kuchen, Würstchen – | und Nachbarn, die man endlich mal beim Namen kennt.“", "wert": 2, "weiter": "k4", "rueck": "Eine Dreierliste mit dem Wichtigsten zuletzt – die winzige Pause davor macht es zur Pointe." },
+            { "text": "„Wir wollen uns heute einfach mal besser kennenlernen.“", "wert": 1, "weiter": "k4", "rueck": "Klar und ehrlich. Als Dreierliste mit Pause hätte der Satz mehr Schwung." }
+          ] },
+        { "id": "k4", "sagt": "Ein Kind ruft: „Wann gibt's Essen?“ Alle lachen.",
+          "wahl": [
+            { "text": "Mitlachen, dann: „Gute Frage – genau darauf komme ich jetzt.“", "wert": 2, "weiter": "k5", "rueck": "Du nimmst die Störung auf und machst sie zur Überleitung." },
+            { "text": "Streng in Richtung des Kindes schauen und weiterreden.", "wert": 0, "tendenz": "abwerten", "weiter": "k5", "rueck": "Die Stimmung kippt – und die Frage stellen sich insgeheim alle." },
+            { "text": "Lachen und den Faden suchen: „Wo war ich – ach ja …“", "wert": 1, "weiter": "k5", "rueck": "Locker, kein Drama. Die Frage des Kindes ist aber die perfekte Brücke zum Schluss." }
+          ] },
+        { "id": "k5", "sagt": "Dein Schluss.",
+          "wahl": [
+            { "text": "„So, das war's eigentlich schon von mir, mehr wollte ich gar nicht sagen. Danke, dass ihr zugehört habt, und jetzt guten Appetit oder so.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Der letzte Eindruck ist ein Achselzucken – und keiner weiß, ob das Buffet offen ist." },
+            { "text": "„Zum Schluss nur noch eines: || Das Buffet ist eröffnet. Wer sich zu jemandem setzt, den er noch nicht kennt – hat heute gewonnen.“", "wert": 2, "weiter": "ende1", "rueck": "Signal, die Aufforderung, die alle hören wollten, und ein Kreis zum Sinn des Festes." },
+            { "text": "„Das Buffet ist eröffnet!“", "wert": 1, "weiter": "ende1", "rueck": "Klar und willkommen. Mit einem Satz zum Kennenlernen davor hätte dein Schluss noch etwas mitgegeben." }
+          ] },
+        { "id": "ende1", "sagt": "Applaus. Frau Sommer drückt dir den Arm: „Danke, dass du das übernommen hast.“ Die ersten Kinder stürmen schon zum Grill.", "ende": "Still werden statt entschuldigen, eine Frage als Einstieg, drei Glieder mit dem Wichtigsten zuletzt, die Störung als Brücke – und ein Schluss, der alle in Bewegung bringt." }
+      ],
+      "prinzipien": ["Stille holt die Aufmerksamkeit, nicht die Lautstärke", "Einstieg ohne Entschuldigung – mit einer Frage", "Dreierliste: das Stärkste zuletzt, Pause davor", "Schluss = Signal und Aufforderung"],
+      "transfer": "Bei welcher Gelegenheit könntest du demnächst ein paar Worte sagen – und mit welcher Frage würdest du beginnen?"
+    },
+    {
+      "id": "stimme-l-08", "bereich": "stimme", "phase": "k", "umfeld": "kunden", "faehigkeiten": ["stimme.auftritt", "stimme.bild", "stimme.betonung"], "stufe": 6,
+      "titel": "Vorstellung in der Werkhalle", "figur": "Nadine Köhler",
+      "einleitung": "Frau Köhler hat euch beauftragt. Jetzt sollst du ihrem Team in der Werkhalle erklären, was sich mit eurer Wartung ändert. Du übst Stand und Blick ohne Bühne, Gesten, die zeigen, einen Kontrast – und die Stimme in einer lauten Halle.",
+      "lage": "Montag, 7:30 Uhr, Werkhalle von Frau Köhlers Betrieb. Bisher kam hier ein Techniker erst, wenn eine Maschine ausfiel; ihr kommt regelmäßig vorher – der erste Termin ist am Donnerstag. Acht Leute in Arbeitskleidung stehen im Halbkreis, im Hintergrund läuft eine Maschine. Kein Tisch, kein Beamer. Du hast zehn Minuten vor Schichtbeginn.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Frau Köhler: „Das ist unser neuer Wartungspartner. Bitte.“ Acht Blicke, einige verschränkte Arme.",
+          "wahl": [
+            { "text": "Einen Schritt näher, Füße auf den Boden, ausatmen: „Guten Morgen. Ich will, dass eure Maschinen seltener stillstehen.“", "wert": 2, "weiter": "k2", "rueck": "Näher statt lauter, fester Stand, Zweck im ersten Satz. Die Arme bleiben verschränkt – aber sie hören zu." },
+            { "text": "Am Rand stehen bleiben und über die Maschine hinweg laut anfangen.", "wert": 0, "weiter": "k2b", "rueck": "Gegen die Maschine anrufen strengt die Stimme an, und aus der Entfernung wirkst du wie ein Fremder." },
+            { "text": "„Ich weiß, ihr habt gleich Schicht, ich halte euch auch nicht lange auf.“", "wert": 1, "weiter": "k2", "rueck": "Rücksichtsvoll – aber du beginnst mit dem, was du ihnen nimmst, statt mit dem, was du bringst." }
+          ] },
+        { "id": "k2b", "sagt": "Einer ruft: „Was? Lauter!“ Deine Stimme kratzt schon.",
+          "wahl": [
+            { "text": "Drei Schritte näher kommen, ruhiger weitersprechen und Frau Köhler bitten, die Maschine kurz anzuhalten.", "wert": 2, "weiter": "k2", "rueck": "Abstand und Lärm verkleinern statt Stimme vergrößern – so trägt sie ohne Pressen." },
+            { "text": "Noch lauter werden.", "wert": 0, "weiter": "k2", "rueck": "Das hält die Stimme keine zehn Minuten durch – und es klingt nach Befehl." }
+          ] },
+        { "id": "k2", "sagt": "Ein älterer Mitarbeiter: „Wartung hatten wir schon. Was ist bei euch anders?“",
+          "wahl": [
+            { "text": "„Bisher kam die Wartung, wenn etwas KAPUTT war. | Wir kommen, BEVOR es kaputtgeht.“", "wert": 2, "weiter": "k3", "rueck": "Ein Kontrast, bei dem beide Seiten den Ton bekommen. Der Unterschied ist sofort klar." },
+            { "text": "„Wir haben ein ganz neues Konzept, das auf vorbeugender Instandhaltung beruht und viele Vorteile bietet.“", "wert": 0, "weiter": "k3", "rueck": "Prospektsprache. Was „vorbeugende Instandhaltung“ hier bedeutet, sieht keiner vor sich." },
+            { "text": "„Wir kommen regelmäßig, nach festem Plan.“", "wert": 1, "weiter": "k3", "rueck": "Stimmt und ist kurz. Erst der Gegensatz zum Bisherigen macht den Unterschied hörbar." }
+          ] },
+        { "id": "k3", "sagt": "Jetzt willst du zeigen, was ihr bei einem Besuch macht. Neben dir steht die Fräse.",
+          "wahl": [
+            { "text": "An der Fräse zeigen: „Hier prüfen wir das Öl. | Hier die Lager. | Und hier – || die Steuerung. Da steckt das meiste Geld drin.“", "wert": 2, "weiter": "k4", "rueck": "Gesten, die zeigen, eine Dreierliste mit dem Wichtigsten zuletzt – alle schauen dahin, wo du zeigst." },
+            { "text": "Die Hände in den Jackentaschen lassen und die Prüfpunkte aus dem Kopf aufzählen.", "wert": 0, "tendenz": "vermeiden", "weiter": "k4", "rueck": "Die Maschine steht direkt neben dir – und keiner sieht, wovon du redest." },
+            { "text": "Das Prüfblatt hochhalten und vorlesen.", "wert": 1, "weiter": "k4", "rueck": "Gründlich, aber dein Blick hängt am Blatt. Zeigen an der Maschine wäre anschaulicher." }
+          ] },
+        { "id": "k4", "sagt": "Die jüngere Mitarbeiterin ganz links hat noch nichts gesagt. Der Ältere neben dir redet viel.",
+          "wahl": [
+            { "text": "Beim nächsten Gedanken bewusst zu ihr schauen: „Und für euch an der Linie heißt das: weniger Hektik am Montagmorgen.“", "wert": 2, "weiter": "k5", "rueck": "Ein Gedanke, eine Person – und gerade die Stillen fühlen sich gemeint." },
+            { "text": "Weiter zum Älteren sprechen, er ist ja der Interessierte.", "wert": 1, "weiter": "k5", "rueck": "Verständlich, er gibt dir Rückmeldung. Aber die anderen sieben schalten ab, wenn du nur ihn anschaust." },
+            { "text": "Abwechselnd ganz schnell jeden einmal anschauen, damit sich keiner übergangen fühlt – auch die ganz rechts am Rand und die hinter der Säule.", "wert": 0, "tendenz": "ueberkontrolle", "weiter": "k5", "rueck": "Huschende Blicke wirken unruhig. Lieber ein ganzer Gedanke für eine Person, dann die nächste." }
+          ] },
+        { "id": "k5", "sagt": "Frau Köhler schaut auf die Uhr. Noch eine Minute bis Schichtbeginn.",
+          "wahl": [
+            { "text": "„Zum Schluss: || Bevor es kaputtgeht. Am Donnerstag ist der erste Termin – sagt mir bis dahin, welche Maschine euch am meisten Ärger macht.“", "wert": 2, "weiter": "ende1", "rueck": "Signal, Kernsatz, ein konkreter nächster Schritt mit Termin." },
+            { "text": "„Ja, dann – das war's. Fragen könnt ihr mir auch per Mail schicken.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Kein Kernsatz, keine Bitte – und in der Halle schreibt niemand Mails." },
+            { "text": "„Danke euch. Am Donnerstag sehen wir uns.“", "wert": 1, "weiter": "ende1", "rueck": "Freundlich und mit Termin. Der Kernsatz und eine Bitte hätten dem Schluss mehr gegeben." }
+          ] },
+        { "id": "ende1", "sagt": "Die Schicht beginnt, die Maschinen werden lauter. Im Gehen brummt der Ältere: „Die Fräse. Fangt mit der Fräse an.“", "ende": "Näher statt lauter, ein Kontrast, Hände, die zeigen, ein Blick für die Stillen und ein Schluss mit Bitte: Auch ohne Bühne trägt ein Auftritt." }
+      ],
+      "prinzipien": ["näher gehen und Lärm verkleinern statt lauter werden", "Kontrast: beide Seiten betonen", "Gesten zeigen, worüber du sprichst", "ein Gedanke, eine Person – auch die Stillen", "Schluss mit Kernsatz und Bitte"],
+      "transfer": "Wo sprichst du ohne Bühne vor einer Gruppe im Stehen – und was könntest du dort mit den Händen zeigen?"
+    },
+    {
+      "id": "stimme-l-09", "bereich": "stimme", "phase": "k", "umfeld": "telefon", "faehigkeiten": ["stimme.aufbau", "stimme.auftritt", "stimme.tempo"], "stufe": 6,
+      "titel": "Das Update in der großen Videorunde", "figur": "Jonas Wegner",
+      "einleitung": "Du stellst in der monatlichen Videorunde der ganzen Abteilung euer Ergebnis vor; Jonas kümmert sich um die Technik und antwortet auf Fachfragen. Du übst Antwort zuerst, die Kamera beim Kernsatz, ruhiges Tempo trotz Zeitdruck und einen Schluss, der hängen bleibt.",
+      "lage": "Mittwoch, 10 Uhr, Videokonferenz mit gut dreißig Leuten, die meisten ohne Kamera. Du hast fünf Minuten. Euer Ergebnis: Mit dem neuen Ablauf antworten wir Kunden im Schnitt einen Tag schneller.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Die Moderatorin: „Als Nächstes das Update zur Kundenanfrage – bitte.“ Du siehst dreißig schwarze Kacheln und dein eigenes Gesicht.",
+          "wahl": [
+            { "text": "In die Kamera schauen: „Kurz und gut: || Unsere Kunden bekommen jetzt einen Tag früher eine Antwort.“", "wert": 2, "weiter": "k2", "rueck": "Ergebnis zuerst, mit Pause davor und Blick in die Kamera – für alle fühlt es sich an wie Blickkontakt." },
+            { "text": "„Hallo zusammen, hört ihr mich? Sieht man meinen Bildschirm? Moment, ich muss noch das richtige Fenster finden, gleich geht's los …“", "wert": 0, "tendenz": "ausweichen", "weiter": "k1b", "rueck": "Die ersten Sekunden – die am meisten hängen bleiben – gehen an die Technik." },
+            { "text": "„Hallo zusammen. Ich stelle euch heute vor, was wir im letzten Quartal gemacht haben.“", "wert": 1, "weiter": "k2", "rueck": "Höflich und geordnet. Das Ergebnis selbst wäre der stärkere erste Satz." }
+          ] },
+        { "id": "k1b", "sagt": "Jonas schreibt in den Chat: „Ton und Bild gehen. Leg los.“",
+          "wahl": [
+            { "text": "Ausatmen, Blick in die Kamera: „Danke, Jonas. Das Ergebnis zuerst: Kunden bekommen einen Tag früher eine Antwort.“", "wert": 2, "weiter": "k2", "rueck": "Neustart gelungen: kurz bedankt, dann die Antwort zuerst." },
+            { "text": "„Okay, super, dann, äh, fange ich mal an mit dem Hintergrund …“", "wert": 0, "tendenz": "tempo", "weiter": "k2", "rueck": "Jetzt startest du mit der Vorgeschichte – das Ergebnis rutscht ans Ende." }
+          ] },
+        { "id": "k2", "sagt": "Inzwischen hast du das Ergebnis genannt: im Schnitt einen Tag schneller. Ein Kollege schaltet sein Mikrofon ein: „Im Schnitt? Wie viel ist das in Stunden?“ Jonas kennt die Zahlen genau.",
+          "wahl": [
+            { "text": "„Jonas, du hast die Zahlen – magst du kurz?“", "wert": 2, "weiter": "k3", "rueck": "Du gibst die Fachfrage an den Fachmann weiter und lässt ihm Raum – ohne für ihn zu sprechen." },
+            { "text": "Schnell selbst eine ungefähre Zahl nennen, damit es nicht stockt.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3", "rueck": "Geraten statt gewusst – und Jonas, der es weiß, sitzt daneben." },
+            { "text": "„Das reiche ich nach.“", "wert": 1, "weiter": "k3", "rueck": "Ehrlich, wenn keiner es weiß. Hier sitzt der Fachmann mit in der Runde." }
+          ] },
+        { "id": "k3", "sagt": "Jonas meldet sich ruhig, mit kleinen Pausen, und schließt: „Von zweiunddreißig auf neun Stunden.“ Die Moderatorin schreibt: „Noch zwei Minuten.“",
+          "wahl": [
+            { "text": "„Danke. Was das heißt: Ein Kunde, der morgens fragt, hat seine Antwort noch am selben Tag.“", "wert": 2, "weiter": "k4", "rueck": "Die Zahl bekommt ein Bild – in Ruhe gesagt, obwohl die Zeit drängt." },
+            { "text": "Jetzt im Eiltempo alle sechs Folien durchklicken, damit alles drankommt.", "wert": 0, "tendenz": "tempo", "weiter": "k4", "rueck": "Sechs Folien in zwei Minuten – keiner nimmt mehr etwas mit." },
+            { "text": "„Danke, Jonas. Dann springe ich jetzt direkt zum Schluss, die Details stehen in den Folien.“", "wert": 1, "weiter": "k4", "rueck": "Gute Entscheidung, zu kürzen. Ein Satz, was die neun Stunden bedeuten, hätte noch hineingepasst." }
+          ] },
+        { "id": "k4", "sagt": "Dein Schluss. Noch eine Minute.",
+          "wahl": [
+            { "text": "Blick in die Kamera: „Zum Schluss: Antwort am selben Tag. || Meine Bitte: Probiert den Ablauf ab Montag in euren Teams aus.“", "wert": 2, "weiter": "ende1", "rueck": "Signal, Kernsatz, Bitte – und der Blick in die Kamera macht ihn zum persönlichen Satz." },
+            { "text": "„Ja, das wär's. Fragen gern in den Chat.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Ein Schluss ohne Kernsatz. Nach der nächsten Präsentation erinnert sich niemand an deine." },
+            { "text": "„Wenn ihr euch eines merkt: Antwort am selben Tag. Danke euch allen und Jonas fürs Mitmachen.“", "wert": 1, "weiter": "ende1", "rueck": "Kernsatz gesetzt, freundlicher Dank. Eine Bitte, was die anderen jetzt tun sollen, fehlt noch." }
+          ] },
+        { "id": "ende1", "sagt": "Die Moderatorin: „Danke. Dann zum nächsten Punkt.“ Im Chat erscheinen ein paar Daumen.", "ende": "Ergebnis zuerst, der Fachmann mit Raum, eine Zahl mit Bild, Ruhe unter Zeitdruck und ein Kernsatz in die Kamera – so kommt man auch durch dreißig schwarze Kacheln." }
+      ],
+      "prinzipien": ["Ergebnis zuerst, Technik vorher klären", "Fachfragen an den Fachmann geben – und ihm Raum lassen", "unter Zeitdruck kürzen, nicht schneller werden", "Kernsatz in die Kamera"],
+      "transfer": "Wann sprichst du als Nächstes per Video vor vielen – und welchen Satz sagst du dort in die Kamera?"
+    },
+    {
+      "id": "stimme-l-10", "bereich": "stimme", "phase": "k", "umfeld": "gruppe", "faehigkeiten": ["stimme.aufbau", "stimme.bild", "stimme.betonung", "stimme.auftritt", "stimme.pause", "stimme.tempo"], "stufe": 7, "sparring": true,
+      "titel": "Sparring: Der Infoabend", "figur": "Carla Demir",
+      "einleitung": "Der Abschluss der Phase Können. Du stellst an einem Infoabend den neuen Lieferdienst vor – vor Kunden, die skeptisch sind. Alles kommt zusammen: Einstieg, Zahl mit Bild, Kontrast und Dreierliste, Stand und Hände, Antwort zuerst und ein Schluss, der bleibt.",
+      "lage": "Dienstag, 18 Uhr, Konferenzraum, rund vierzig Gäste – Stammkunden, darunter Herr Petersen. Carla moderiert. Du hast acht Minuten und danach Fragen. Der neue Dienst ab März: Lieferung am nächsten Werktag statt in drei bis fünf Tagen, dafür eine kleine Pauschale. Kommt ein Teil doch später, entfällt die Pauschale. Für die meisten Gäste kostet eine Stunde Maschinenstillstand weit über hundert Euro. Am Ausgang liegt eine Liste zum Eintragen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Carla: „Und jetzt: was sich für Sie ändert.“ Du gehst nach vorn. Das Mikrofon steht am Pult, die Folie mit dem Titel leuchtet.",
+          "wahl": [
+            { "text": "Das Mikrofon vom Pult nehmen, einen Schritt neben das Pult treten, ausatmen, in die Runde schauen – dann beginnen.", "wert": 2, "weiter": "k2", "rueck": "Frei stehen, Boden spüren, eine stille Sekunde: Du gehst mit Ruhe in den Gipfel der Aufregung." },
+            { "text": "Hinter dem Pult stehen bleiben und gleich vom Blatt anfangen.", "wert": 1, "weiter": "k2", "rueck": "Sicher, aber versteckt. Hände und Blick bleiben am Pult hängen." },
+            { "text": "„Ich hoffe, Sie hören mich, ich bin heute ein bisschen aufgeregt, also nicht wundern, wenn ich mich mal verhaspele …“", "wert": 0, "tendenz": "kleinreden", "weiter": "k1b", "rueck": "Die Entschuldigung macht alle auf eine Nervosität aufmerksam, die kaum einer gesehen hätte." }
+          ] },
+        { "id": "k1b", "sagt": "Ein paar Gäste lächeln mitleidig. Herr Petersen ruft: „Lauter, bitte!“",
+          "wahl": [
+            { "text": "Mikrofon näher an den Mund, kurz still, dann neu: „Drei bis fünf Tage. So lange warten Sie heute auf ein Ersatzteil.“", "wert": 2, "weiter": "k2b", "rueck": "Technik gelöst, Neustart mit einem Einstieg, der jeden im Raum betrifft." },
+            { "text": "Ohne Mikrofon lauter sprechen.", "wert": 0, "weiter": "k2b", "rueck": "Das Mikrofon ist da – deine Stimme wird es dir nach acht Minuten danken, wenn du es nutzt." }
+          ] },
+        { "id": "k2", "sagt": "Vierzig Gesichter. Dein erster Satz.",
+          "wahl": [
+            { "text": "„Drei bis fünf Tage. || So lange warten Sie heute auf ein Ersatzteil. Ab März: einen.“", "wert": 2, "weiter": "k3", "rueck": "Eine Zahl, die jeder aus eigener Erfahrung kennt, und ein Kontrast mit Pause. Alle sind dabei." },
+            { "text": "„Guten Abend, schön, dass Sie da sind. Ich möchte Ihnen heute unseren neuen Lieferdienst vorstellen.“", "wert": 1, "weiter": "k3", "rueck": "Höflich und klar. Mit einer Zahl oder einem Fall hättest du sie vom ersten Satz an gepackt." },
+            { "text": "„Bevor ich anfange, kurz zu unserer Firmengeschichte, die ja bis 1985 zurückreicht …“", "wert": 0, "tendenz": "ausweichen", "weiter": "k3", "rueck": "Der Anfang bleibt am besten hängen – und du verschenkst ihn an etwas, das keiner wissen wollte." }
+          ] },
+        { "id": "k2b", "sagt": "Jetzt hören alle. Herr Petersen nickt.",
+          "wahl": [
+            { "text": "„Ab März ist das Teil am nächsten Werktag da.“ – das Wort „nächsten“ betont, dann kurz still.", "wert": 2, "weiter": "k3", "rueck": "Kernbotschaft früh, betont und mit Stille danach." },
+            { "text": "Die Vorteile der Reihe nach von der Folie ablesen.", "wert": 0, "weiter": "k3", "rueck": "Dein Blick wandert zur Wand – und die Zuhörer lesen schneller, als du sprichst." }
+          ] },
+        { "id": "k3", "sagt": "Du kommst zum Nutzen. Auf deiner Karte stehen sechs Vorteile.",
+          "wahl": [
+            { "text": "„Sie sparen Lagerplatz, Sie sparen Telefonate – || und Ihre Maschine steht keinen Tag länger still als nötig.“", "wert": 2, "weiter": "k4", "rueck": "Drei Glieder, das stärkste zuletzt, mit Pause davor. Die anderen drei Vorteile stehen im Handzettel." },
+            { "text": "Alle sechs Vorteile von der Karte der Reihe nach aufzählen – wer weiß schon, welcher für wen im Raum am meisten zählt.", "wert": 0, "weiter": "k4", "rueck": "Ab vier Punkten werden Zuhörer eher misstrauisch, und keiner bleibt hängen." },
+            { "text": "Nur den wichtigsten nennen: „Ihre Maschine steht kürzer still.“", "wert": 1, "weiter": "k4", "rueck": "Klar und stark. Als Dreierliste hätte der Satz mehr Gewicht und Rhythmus." }
+          ] },
+        { "id": "k4", "sagt": "Du willst die Pauschale nennen: zwölf Euro je Lieferung. Du ahnst Gemurmel.",
+          "wahl": [
+            { "text": "Ruhig und langsam: „Das kostet zwölf Euro je Lieferung. || Weniger als eine Viertelstunde Stillstand an einer Ihrer Maschinen.“", "wert": 2, "weiter": "k5", "rueck": "Die Zahl offen, langsam, mit einem Bild, das jeder im Raum gegenrechnen kann." },
+            { "text": "Den Preis schnell und leise im Nebensatz erwähnen.", "wert": 0, "tendenz": "vermeiden", "weiter": "k5", "rueck": "Wer den Preis versteckt, macht ihn größer. Spätestens in der Fragerunde kommt er zurück." },
+            { "text": "„Das kostet eine kleine Pauschale von zwölf Euro, aber das lohnt sich wirklich, ehrlich.“", "wert": 1, "weiter": "k5", "rueck": "Offen genannt – gut. Das „ehrlich“ klingt nach Beschwichtigung; ein Bild hätte es leiser belegt." }
+          ] },
+        { "id": "k5", "sagt": "Du erklärst den Ablauf: Bestellung bis 14 Uhr, Lieferung am nächsten Werktag, Abholung der Altteile. Wohin mit den Händen?",
+          "wahl": [
+            { "text": "Drei Stationen von links nach rechts in die Luft setzen – Bestellung, Lieferung, Abholung –, dazwischen ruhige Hände.", "wert": 2, "weiter": "k6", "rueck": "Die Geste zeigt den Ablauf, den die Worte beschreiben – das hilft beim Verstehen." },
+            { "text": "Am Kabel des Mikrofons spielen, das gibt Halt.", "wert": 0, "weiter": "k6", "rueck": "Zappeln ohne Bezug lenkt ab – und alle schauen aufs Kabel." },
+            { "text": "Zur Leinwand drehen und auf der Folie mit dem Ablauf zeigen, Station für Station – dort steht ja alles schön übersichtlich.", "wert": 1, "weiter": "k6", "rueck": "Hilft, aber dann redest du zur Wand. Die Geste vor dem Körper hält den Blick bei dir." }
+          ] },
+        { "id": "k6", "sagt": "Carla: „Wir haben Zeit für Fragen.“ Herr Petersen: „Und was, wenn das Teil am nächsten Tag doch nicht kommt?“",
+          "wahl": [
+            { "text": "Kurz still, dann: „Sie fragen, was passiert, wenn wir es nicht schaffen. Dann zahlen Sie keine Pauschale.“", "wert": 2, "weiter": "k7", "rueck": "Pause, Frage zurückgegeben – für ihn besonders wichtig –, Antwort zuerst." },
+            { "text": "„Das kommt eigentlich nicht vor, wir haben das ja gründlich getestet, da können Sie ganz beruhigt sein, wirklich.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "k7", "rueck": "Ein Versprechen, das beim ersten Ausfall bricht. Und seine Frage ist nicht beantwortet." },
+            { "text": "„Dann rufen wir Sie an und sagen Bescheid.“", "wert": 1, "weiter": "k7", "rueck": "Ehrlich und hilfreich. Was mit der Pauschale passiert, wollte er aber eigentlich wissen." }
+          ] },
+        { "id": "k7", "sagt": "Herr Petersen: „Hm. Gut.“ Carla: „Ein Schlusswort?“",
+          "wahl": [
+            { "text": "„Zum Schluss: || Drei bis fünf Tage waren gestern. Ab März: einer. Tragen Sie sich am Ausgang ein – dann sind Sie gleich dabei.“", "wert": 2, "weiter": "ende1", "rueck": "Signal, der Kontrast zwischen alt und neu – und ein konkreter nächster Schritt." },
+            { "text": "„Danke für Ihre Aufmerksamkeit.“", "wert": 1, "weiter": "ende1", "rueck": "Höflich. Die letzten Sekunden hätten deinen Kernsatz und eine Bitte tragen können." },
+            { "text": "„Ach, eine Sache habe ich noch vergessen: Die Lieferung geht auch samstags, gegen Aufpreis.“", "wert": 0, "weiter": "ende1", "rueck": "Neue Information am Ende verdrängt den Kernsatz – alle reden jetzt über den Samstag." }
+          ] },
+        { "id": "ende1", "sagt": "Applaus. Beim Hinausgehen fragt Herr Petersen Carla, wo man sich für den neuen Dienst anmeldet.", "ende": "Frei stehen, Einstieg mit Zahl, Dreierliste, Preis offen mit Bild, Hände, die den Ablauf zeigen, Antwort zuerst in der Fragerunde und ein Schluss, der den Kreis schließt: Das ist die Phase Können in acht Minuten." }
+      ],
+      "prinzipien": ["frei stehen und vor dem ersten Satz ausatmen", "Einstieg mit einer Zahl, die alle kennen", "drei Vorteile, das stärkste zuletzt", "Preis offen, langsam und mit Bild", "Antwort zuerst in der Fragerunde", "Schluss: Kreis zum Einstieg und nächster Schritt"],
+      "transfer": "Welche Präsentation steht bei dir an – und welche drei Teile aus diesem Abend nimmst du mit?"
+    }
+  ]
+}

@@ -1,0 +1,233 @@
+{
+  "einheiten": [
+    {
+      "id": "mut-3-01", "bereich": "mut", "stufe": 3, "nr": 1,
+      "titel": "Abwechseln schlägt Wiederholen",
+      "faehigkeiten": ["mut.leiter", "mut.sicherheit"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Üben an wechselnden Orten die Rückkehr der Angst an einem neuen Ort verringert, zeigt eine kleine Studie zu Spinnenangst; in einer Folgestudie derselben Gruppe hielt dieser Vorteil nur kurz an. Die Lernforschung zu Angst stützt das Abwechseln. Für soziale Angst ist es nicht eigens untersucht – eine begründete Übertragung.",
+      "quellen": ["shiban2013", "shiban2015", "craske2014", "vervliet2013"],
+      "aha": "Wer immer dieselbe Sprosse am selben Ort geht, lernt: Dort ist es sicher. Wer Orte, Menschen und Schwierigkeit mischt, lernt: Ich schaffe das auch anderswo.",
+      "schritte": [
+        { "art": "studie", "frage": "Hilft es, an verschiedenen Orten zu üben?", "aufbau": "Menschen mit starker Spinnenangst übten viermal mit einer Spinne in einer virtuellen Umgebung. Die eine Gruppe übte immer im selben Raum, die andere in wechselnden Räumen. Danach wurden alle in einem neuen Raum geprüft – und mit einer echten Spinne.", "ergebnis": "Wer an wechselnden Orten geübt hatte, bei dem kam die Angst im neuen Raum weniger zurück. Der Vorteil zeigte sich auch bei der echten Spinne.", "grenze": "Eine kleine Studie zu Spinnenangst, nicht zu sozialer Angst. In einer Folgestudie hielt der Vorteil nur kurz an. Die Übertragung auf Gespräche und Auftritte ist begründet, aber nicht eigens geprüft.", "beleg": "B", "quellen": ["shiban2013", "shiban2015"] },
+        { "art": "karte", "text": "Drei Dinge kannst du wechseln. Den Ort: die Frage nicht nur in der Teamrunde, sondern auch im Verein und im Mieterrat. Die Menschen: nicht nur vor Wohlgesinnten, auch vor Fremden und vor Strengen. Die Schwierigkeit: ab und zu eine höhere Sprosse einstreuen. Und prüf, ob eine Krücke mitwandert – etwa die Kollegin, ohne die du nirgends hingehst. Abwechseln fühlt sich schwerer an – das kann es haltbarer machen." },
+        { "art": "zuordnen", "kopf": { "id": "mut-3-01-a", "faehigkeit": "mut.leiter", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Nur wiederholt oder schon abgewechselt?",
+          "faecher": ["nur wiederholt", "abgewechselt"],
+          "karten": [
+            { "text": "jede Woche dieselbe Frage im selben Kurs", "fach": 0 },
+            { "text": "die Frage einmal im Kurs, einmal in der Hausversammlung, einmal im Verein", "fach": 1 },
+            { "text": "immer nur Kollegen anrufen, die du gut kennst", "fach": 0 },
+            { "text": "nach drei leichten Anrufen einen schwierigen einstreuen", "fach": 1 },
+            { "text": "immer dienstags um zehn, wenn es ruhig ist", "fach": 0 },
+            { "text": "einmal vor Freunden, einmal vor Fremden vortragen", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "mut-3-01-b", "faehigkeit": "mut.leiter", "stufe": 6, "kanal": "wissen" },
+          "frage": "Lena stellt seit vier Wochen in der Vierer-Runde Fragen. Es fällt ihr inzwischen leicht. Was ist der beste Plan für die nächsten zwei Wochen?",
+          "antworten": [
+            { "text": "Weiter jede Woche dieselbe Frage in der Vierer-Runde, bis es sich ganz selbstverständlich anfühlt.", "wert": 0, "tendenz": "absichern", "warum": "Was schon leicht ist, bringt kaum Neues. Sie lernt nur, dass diese eine Runde sicher ist." },
+            { "text": "Die Frage auch in der Teamrunde und im Sportverein – und einmal eine Meinung statt einer Frage.", "wert": 2, "warum": "Neue Orte, neue Menschen, eine etwas höhere Sprosse: So wird aus „hier geht es“ ein „es geht“." },
+            { "text": "Gleich zur obersten Sprosse springen: der Einwand vor dem ganzen Team.", "wert": 1, "warum": "Ein Sprung nach oben darf ab und zu sein. Ohne Zwischenschritte an neuen Orten ist er aber riskant." }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "mut-3-01-c", "faehigkeit": "mut.leiter", "stufe": 7, "kanal": "koennen" },
+          "plan": "Mein Wechselplan", "anlass": "Eine Sprosse, die dir inzwischen an einem Ort leichtfällt.",
+          "felder": [
+            { "name": "Die Sprosse", "hilfe": "Was fällt dir inzwischen an einem Ort leicht?" },
+            { "name": "Zwei neue Orte", "hilfe": "Wo könntest du dasselbe tun?" },
+            { "name": "Andere Menschen", "hilfe": "Vor wem wäre es ungewohnter – Fremde, Strengere, mehr Leute?" },
+            { "name": "Eine höhere Sprosse zwischendurch", "hilfe": "Was streust du einmal ein?" }
+          ],
+          "muster": ["Sprosse: im Team eine Frage stellen. Orte: Verein, Hausversammlung. Menschen: vor dem Vorstand. Höher: im Team einmal eine eigene Meinung.", "Sprosse: beim Bäcker nach etwas fragen, das nicht ausliegt. Orte: Baumarkt, Bücherei. Menschen: an einem vollen Samstag. Höher: im Baumarkt eine Ware reklamieren."] },
+        { "art": "auswahl", "kopf": { "id": "mut-3-01-d", "faehigkeit": "mut.sicherheit", "stufe": 7, "kanal": "wissen" },
+          "frage": "Jonas geht seine Sprosse – eine Frage in der Runde – inzwischen an drei Orten. Aber nie ohne Miriam neben sich. Was hilft ihm jetzt am meisten?",
+          "antworten": [
+            { "text": "Einmal ohne Miriam gehen – an einem Ort, der schon gut klappt.", "wert": 2, "warum": "Die Krücke ist mitgewandert. Ohne sie erlebt Jonas, dass nicht Miriam, sondern er selbst die Frage gestellt hat." },
+            { "text": "Miriam bitten, sich etwas weiter weg zu setzen.", "wert": 1, "warum": "Ein guter Zwischenschritt, um die Krücke abzubauen. Der volle Schritt ist, einmal ohne sie zu gehen." },
+            { "text": "Mit Miriam noch zwei neue Orte dazunehmen – Abwechslung ist das Wichtigste, und mit ihr fühlt er sich sicher.", "wert": 0, "tendenz": "kruecke", "warum": "Mehr Orte sind gut, aber die Krücke wandert mit – Jonas schreibt den Erfolg weiter Miriam zu." }
+          ] },
+        { "art": "reflexion", "frage": "Welche Sprosse gehst du immer am selben Ort, mit denselben Menschen? Wo gehst du sie als Nächstes?" }
+      ],
+      "regel": "Ort, Menschen, Schwierigkeit wechseln – und prüfen, ob eine Krücke mitwandert.",
+      "merkkarten": [
+        { "id": "mut-3-01-m1", "frage": "Was kannst du beim Üben wechseln?", "antwort": "Den Ort, die Menschen und die Schwierigkeit – ab und zu eine höhere Sprosse einstreuen." },
+        { "id": "mut-3-01-m2", "frage": "Warum lohnt sich das Abwechseln?", "antwort": "Was nur an einem Ort geübt wurde, gilt oft nur dort. Wechselnde Orte können die neue Erfahrung haltbarer machen." }
+      ]
+    },
+    {
+      "id": "mut-3-02", "bereich": "mut", "stufe": 3, "nr": 2,
+      "titel": "Der Vortrag",
+      "faehigkeiten": ["mut.buehne", "mut.aufmerksamkeit"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Programme gegen Redeangst mit viel Üben vor Publikum wirken laut Meta-Analysen deutlich und anhaltend. Die einzelnen Bausteine sind unterschiedlich gut belegt: der Blick nach außen und die Aufnahme mit Vorhersage gestützt, die Probe-Treppe Praxiswissen.",
+      "quellen": ["ebrahimi2019", "mcwilliam2025", "videofeedback", "clarkwells1995", "praxis-mut"],
+      "aha": "Ein Vortrag ist die oberste Sprosse vieler Leitern. Du gehst sie wie jede andere: vorher die Befürchtung, dabei der Blick zu den Zuhörern, danach der Abgleich – und eine Aufnahme gegen das strenge Bild im Kopf.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer einen Vortrag sicher halten will, liest am besten ein ausgefeiltes Manuskript ab.", "urteil": "teils", "warum": "Für ein genaues Zitat oder eine Zahl ist Ablesen sinnvoll. Als Schutz vor jedem Hänger wird es zur Krücke: Der Blick klebt am Blatt, die Zuhörer verschwinden – und du erlebst nie, dass es frei auch geht." },
+        { "art": "karte", "text": "Die Probe-Treppe: allein im Stehen, dann vor einer Person, dann vor zwei oder drei, die dazwischenfragen dürfen. Auf der Bühne eine Karte mit Stichworten statt Manuskript. Der Blick sucht drei freundliche Gesichter in drei Richtungen und wechselt zwischen ihnen. Fragen: zuhören, kurz wiederholen, antworten – oder „Das kläre ich und melde mich.“ Den Fahrplan für die Tage davor findest du im Bereich Nervosität." },
+        { "art": "auswahl", "kopf": { "id": "mut-3-02-a", "faehigkeit": "mut.aufmerksamkeit", "stufe": 6, "kanal": "wissen" },
+          "frage": "Mitten in deinem Vortrag gähnt jemand in der zweiten Reihe. Welcher Gedanke hilft dir am meisten?",
+          "antworten": [
+            { "text": "„Ich langweile alle. Jetzt merken sie, dass ich das nicht kann.“", "wert": 0, "tendenz": "katastrophe", "warum": "Ein Gähnen wird zum Urteil über dich. Es kann an der Uhrzeit, der Nacht oder der Luft liegen." },
+            { "text": "„Ein Gähnen. Zurück zu den drei Gesichtern – nächster Punkt.“", "wert": 2, "warum": "Du nimmst es wahr, deutest es nicht und lenkst den Blick zurück zu deinen Zuhörern." },
+            { "text": "„Vielleicht ist er müde. Ich spreche lieber etwas schneller, dann bin ich früher fertig und halte niemanden unnötig auf.“", "wert": 1, "warum": "Die Deutung ist freundlich. Schneller zu werden hilft aber weder dir noch den Wachen im Raum." }
+          ] },
+        { "art": "buehne", "kopf": { "id": "mut-3-02-b", "faehigkeit": "mut.buehne", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "mut-v-0171" },
+          "auftrag": "Halte die ersten zwei Minuten eines Vortrags, den du halten könntest – im Stehen, mit Stichwortkarte, so als säßen zwanzig Leute vor dir.", "sekunden": 120, "publikum": "gross",
+          "stoerungen": ["Jemand fragt dazwischen: „Woher stammt die Zahl?“", "Jemand gähnt sichtbar.", "Das Licht flackert kurz."],
+          "pruefliste": ["mit Stichwortkarte statt Manuskript", "den Blick zwischen drei Richtungen gewechselt", "die Zwischenfrage angenommen", "nach den Störungen nicht schneller geworden"] },
+        { "art": "zuordnen", "kopf": { "id": "mut-3-02-c", "faehigkeit": "mut.aufmerksamkeit", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Während des Vortrags: Blick nach außen oder nach innen?",
+          "faecher": ["nach außen", "nach innen"],
+          "karten": [
+            { "text": "„Die Frau links nickt – dort mache ich weiter.“", "fach": 0 },
+            { "text": "„Wie klinge ich gerade?“", "fach": 1 },
+            { "text": "„Was will der Fragende eigentlich wissen?“", "fach": 0 },
+            { "text": "„Sieht man, dass meine Hände zittern?“", "fach": 1 },
+            { "text": "prüfen, ob die hinterste Reihe die Folie lesen kann", "fach": 0 },
+            { "text": "im Kopf mitzählen, wie oft du „äh“ gesagt hast", "fach": 1 }
+          ] },
+        { "art": "experiment", "auftrag": "Nimm einen Probedurchlauf deines nächsten Vortrags auf. Schreib vorher drei Sätze, wie du glaubst zu wirken. Sieh die Aufnahme dann an wie bei einer fremden Person und vergleiche.", "dauer": "woche", "nachfrage": "Wo hast du besser gewirkt, als du vorhergesagt hattest – und was nimmst du für den echten Vortrag mit?" },
+        { "art": "reflexion", "frage": "Welcher Vortrag steht bei dir als oberste Sprosse? Welche Stufe der Probe-Treppe gehst du als Nächstes?" }
+      ],
+      "regel": "Probe-Treppe, Stichworte statt Manuskript, drei Gesichter – und danach der Abgleich.",
+      "merkkarten": [
+        { "id": "mut-3-02-m1", "frage": "Wie sieht die Probe-Treppe aus?", "antwort": "Allein im Stehen, dann vor einer Person, dann vor zwei oder drei, die dazwischenfragen dürfen." },
+        { "id": "mut-3-02-m2", "frage": "Wohin geht dein Blick im Vortrag?", "antwort": "Zu drei freundlichen Gesichtern in drei Richtungen, im Wechsel – nach außen, nicht nach innen." },
+        { "id": "mut-3-02-m3", "frage": "Wie hilft eine Aufnahme am meisten?", "antwort": "Vorher aufschreiben, wie du zu wirken glaubst – dann ansehen wie bei einer fremden Person und vergleichen." }
+      ]
+    },
+    {
+      "id": "mut-3-03", "bereich": "mut", "stufe": 3, "nr": 3,
+      "titel": "Das schwierige Gespräch suchen",
+      "faehigkeiten": ["mut.vorhersage", "mut.nein"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass ehrliche Gespräche angenehmer verlaufen als erwartet, zeigen Experimente einer Forschergruppe; dass andere sich Rückmeldung mehr wünschen, als man glaubt, ebenfalls. Wie man ein schwieriges Gespräch vorbereitet, ist Praxiswissen.",
+      "quellen": ["levine2018", "abiesber2022", "givi2024", "praxis-mut"],
+      "aha": "Schwierige Gespräche werden nicht leichter, wenn du auf den richtigen Moment wartest. Wer sie selbst ansetzt, vorbereitet und die Befürchtung prüft, erlebt meist: Ehrlichkeit kommt besser an als gedacht.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Menschen sollten drei Tage lang in allen Gesprächen ganz ehrlich sein. Wie erlebten sie das im Vergleich zu ihrer Erwartung?", "optionen": ["unangenehmer als erwartet", "ungefähr wie erwartet", "angenehmer als erwartet"], "richtig": 2, "loesung": "Angenehmer als erwartet", "aufloesung": "Die ehrlichen Gespräche waren angenehmer und verbindender, als die Teilnehmenden befürchtet hatten, und die anderen reagierten weniger negativ. Die Angst vor dem ehrlichen Satz ist oft größer als seine Folgen." },
+        { "art": "karte", "text": "Ein schwieriges Gespräch suchst du, statt darauf zu warten, dass der richtige Moment kommt. Schlag selbst einen Zeitpunkt vor: „Hast du Donnerstag zwanzig Minuten? Ich möchte etwas mit dir besprechen.“ Bereite fünf Dinge vor: Anlass, Ziel, ersten Satz, deinen Wunsch und einen Plan B. Schreib die Befürchtung auf. Und rechne damit, dass du dabei ein Nein vertreten musst – oder eins hörst. Beides darf sein." },
+        { "art": "gespraechskarte", "anlass": "Ein Gespräch, das du seit Wochen vor dir herschiebst – in der Familie, mit Freunden oder bei der Arbeit.", "beispiel": { "ziel": "Tante Renate weiß, dass ich Weihnachten dieses Jahr nicht ausrichte.", "erster": "„Renate, ich möchte etwas mit dir besprechen, das mir wichtig ist.“", "wunsch": "„Dieses Jahr feiere ich Weihnachten nicht bei mir. Ich komme gern am zweiten Feiertag zu dir.“", "planB": "Wenn sie gekränkt ist: Ihre Enttäuschung würdigen, das Nein wiederholen, das Angebot stehen lassen." } },
+        { "art": "auswahl", "kopf": { "id": "mut-3-03-a", "faehigkeit": "mut.vorhersage", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du willst Sven endlich sagen, dass dich seine Sprüche über deinen Job seit Monaten ärgern. Welche Vorbereitung bringt dir am meisten?",
+          "antworten": [
+            { "text": "Die Befürchtung aufschreiben („Er lacht mich aus und ist beleidigt“), Wahrscheinlichkeit dazu – dann einen Termin vorschlagen.", "wert": 2, "warum": "So wird aus der Angst eine prüfbare Vorhersage, und das Gespräch hat einen Rahmen statt eines zufälligen Moments." },
+            { "text": "Warten, bis er wieder einen Spruch macht, und dann sofort reagieren.", "wert": 1, "warum": "Direkt am Anlass kann es klappen. Im Ärger des Moments fehlt aber oft der ruhige erste Satz." },
+            { "text": "Mehrere Wochen lang jeden Spruch mitschreiben, damit du am Ende genug Beweise hast und er nichts mehr abstreiten kann.", "wert": 0, "tendenz": "absichern", "warum": "Eine Beweissammlung macht aus dem Gespräch eine Anklage – und schiebt es weiter hinaus." }
+          ] },
+        { "art": "dialog", "kopf": { "id": "mut-3-03-b", "faehigkeit": "mut.nein", "stufe": 7, "kanal": "koennen" },
+          "gespraech": { "titel": "Weihnachten bei dir?", "figur": "Tante Renate", "lage": "Du hast Tante Renate um einen Anruf gebeten. Du willst ihr sagen, dass du Weihnachten dieses Jahr nicht ausrichtest.", "start": "k1", "knoten": [
+            { "id": "k1", "sagt": "Renate: „Na, was gibt's denn so Wichtiges?“", "wahl": [
+              { "text": "„Ich wollte dir sagen, dass ich Weihnachten dieses Jahr nicht bei mir feiere. Ich komme gern am zweiten Feiertag zu dir.“", "wert": 2, "weiter": "k2", "rueck": "Gleich zur Sache, mit Nein und ehrlichem Angebot." },
+              { "text": "„Ach, nichts Besonderes eigentlich. Wie geht's dir denn? Was macht dein Knie?“", "wert": 0, "tendenz": "ausweichen", "weiter": "k1b", "rueck": "Du hast den Anruf selbst angesetzt – und weichst jetzt aus." },
+              { "text": "„Ich weiß gar nicht, wie ich anfangen soll … Weihnachten feiere ich dieses Jahr nicht bei mir. Am zweiten Feiertag komme ich gern.“", "wert": 1, "weiter": "k2", "rueck": "Ehrlich, und alles gesagt. Den Anlauf vorweg hättest du nicht gebraucht." }
+            ] },
+            { "id": "k1b", "sagt": "Renate erzählt zehn Minuten von ihrem Knie. Dann: „Und Weihnachten machen wir wie immer bei dir, ja?“", "wahl": [
+              { "text": "„Genau darüber wollte ich reden. Dieses Jahr feiere ich nicht bei mir. Am zweiten Feiertag komme ich gern.“", "wert": 2, "weiter": "k2", "rueck": "Spät, aber gesagt – die Gelegenheit genutzt." },
+              { "text": "„Ja … klar.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Das Gespräch, das du gesucht hast, findet nicht statt." }
+            ] },
+            { "id": "k2", "sagt": "Renate: „Nach allem, was ich früher jedes Jahr für die ganze Familie gekocht habe? Das hätte ich nicht von dir gedacht.“", "wahl": [
+              { "text": "„Das weiß ich zu schätzen. Trotzdem feiere ich dieses Jahr nicht bei mir. Am zweiten Feiertag komme ich gern.“", "wert": 2, "weiter": "ende1", "rueck": "Die Vergangenheit gewürdigt, das Nein gehalten, das Angebot wiederholt – der Schuld-Hebel greift nicht." },
+              { "text": "„Das ist jetzt unfair. Du weißt genau, wie viel Arbeit das jedes Jahr für mich allein ist, und keiner hilft mir.“", "wert": 1, "tendenz": "rechtfertigen", "weiter": "ende1", "rueck": "Ein wahrer Grund – aber du verteidigst dich gegen den Vorwurf, statt das Nein zu halten." },
+              { "text": "„Na gut, dann mach ich es halt doch.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ein Satz mit Schuldgefühl – und das Nein ist weg." }
+            ] },
+            { "id": "ende1", "sagt": "Renate schweigt kurz. „Na schön. Dann bringst du am zweiten Feiertag aber deinen Kartoffelsalat mit.“", "ende": "Gesagt, gehalten, Angebot stehen gelassen. Die Kränkung war kurz – das Verhältnis hat es ausgehalten." },
+            { "id": "ende2", "sagt": "Im Dezember stehst du wieder drei Tage in der Küche.", "ende": "Schuld zu wecken ist ein Hebel, um ein Nein zu kippen. Nächstes Mal: würdigen, was der andere getan hat – und das Nein trotzdem halten." }
+          ], "prinzipien": ["selbst ansetzen, gleich zur Sache", "Schuld-Hebel würdigen, nicht nachgeben", "das Angebot stehen lassen"] } },
+        { "art": "umformulieren", "kopf": { "id": "mut-3-03-c", "faehigkeit": "mut.vorhersage", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Mach aus dem Grund fürs Schweigen eine Befürchtung, die du nach dem Gespräch prüfen kannst – mit Wahrscheinlichkeit.",
+          "vorlage": "„Ich sag Jule lieber nichts davon, dass sie mich ständig unterbricht. Sonst ist die Stimmung im Kochkurs kaputt.“",
+          "kriterien": ["beschreibt, was man sehen oder hören würde", "nennt eine Wahrscheinlichkeit", "lässt sich hinterher mit Ja oder Nein beantworten"],
+          "muster": ["„Jule ist gekränkt und redet beim nächsten Kurs nicht mit mir. Wahrscheinlichkeit: 50.“", "„Sie sagt: ‚Das bildest du dir ein‘, und wir streiten. Wahrscheinlichkeit: 40.“"] },
+        { "art": "reflexion", "frage": "Welches Gespräch schiebst du gerade am längsten vor dir her? Wann schlägst du einen Zeitpunkt dafür vor?" }
+      ],
+      "regel": "Selbst ansetzen, fünf Dinge vorbereiten, Befürchtung aufschreiben – dann reden.",
+      "merkkarten": [
+        { "id": "mut-3-03-m1", "frage": "Was bereitest du für ein schwieriges Gespräch vor?", "antwort": "Anlass, Ziel, ersten Satz, deinen Wunsch, einen Plan B – und die Befürchtung mit Wahrscheinlichkeit." },
+        { "id": "mut-3-03-m2", "frage": "Wie verlaufen ehrliche Gespräche meist?", "antwort": "Angenehmer als erwartet – andere reagieren weniger negativ, als man befürchtet." }
+      ]
+    },
+    {
+      "id": "mut-3-04", "bereich": "mut", "stufe": 3, "nr": 4,
+      "titel": "Ablehnung sammeln",
+      "faehigkeiten": ["mut.ablehnung", "mut.leiter"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Wiederholte Kontakte mit Fremden senkten in einer Studie mit Studierenden die Furcht vor Ablehnung; dass Bittende Ja-Raten unterschätzen, ist mehrfach gezeigt. Das gezielte Sammeln von Neins stammt aus Erfahrungsberichten – kontrollierte Studien dazu gibt es nicht.",
+      "quellen": ["sandstrom2022", "flynn2008", "jiang2015", "praxis-mut"],
+      "aha": "Wer Neins zählt, statt sie zu fürchten, dreht das Spiel um: Jedes Nein ist ein Punkt. Nach einigen Wochen weißt du aus Erfahrung, was ein Nein wirklich kostet – meist wenig.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Jule und du wollt beide mutiger fragen lernen. Zwei Wochen später vergleicht ihr.", "schwach": "Du hast auf die perfekte Gelegenheit gewartet. Gefragt hast du zweimal – beide Male bei Menschen, bei denen ein Ja sicher war.", "stark": "Jule hat sich zehn Bitten vorgenommen, bei denen ein Nein gut möglich war. Sie hat sechs Neins gesammelt – und vier Ja, mit denen sie nie gerechnet hätte.", "frage": "Wer hat in den zwei Wochen mehr gelernt?", "unterschied": "Jule hat das Nein zum Ziel gemacht. Dadurch hat sie es oft erlebt und gemerkt, wie klein es bleibt – und nebenbei Türen geöffnet. Wer nur sichere Bitten stellt, lernt nichts über das Nein." },
+        { "art": "karte", "text": "Ablehnung sammeln heißt: Du nimmst dir für eine oder zwei Wochen eine Zahl von Bitten vor, bei denen ein Nein gut möglich ist – und jedes Nein ist ein Punkt. Nach jeder Bitte notierst du kurz: Was habe ich gefragt? Was kam? Wie fühlte es sich eine Stunde später an? Es gelten die Regeln für Mutproben: privat, harmlos, höflich, eine Bitte, ein Dank, kein Nachhaken. Kommen nur noch Ja, sind deine Bitten zu klein." },
+        { "art": "zaehler", "name": "Nein-Konto", "auftrag": "Zähl jede Bitte, bei der ein Nein gut möglich war – egal, wie sie ausging. Jedes Nein ist ein Punkt.", "tage": 14 },
+        { "art": "auswahl", "kopf": { "id": "mut-3-04-a", "faehigkeit": "mut.ablehnung", "stufe": 7, "kanal": "wissen" },
+          "frage": "In deiner ersten Sammelwoche hast du fünfmal gefragt – und fünfmal Ja bekommen. Was heißt das?",
+          "antworten": [
+            { "text": "Deine Bitten sind noch zu sicher. Nächste Woche fragst du um etwas, bei dem ein Nein wahrscheinlicher ist.", "wert": 2, "warum": "Fünf Ja sind schön – zeigen aber, dass du das Nein umgangen hast. Lernen willst du, wie es sich anfühlt." },
+            { "text": "Du bist eben überzeugend – die Übung brauchst du nicht mehr, du kannst dich anderen Dingen zuwenden.", "wert": 0, "tendenz": "kleinreden", "warum": "Die Ja-Serie sagt mehr über die Bitten als über dich. Die Furcht vor dem Nein ist noch nicht geprüft." },
+            { "text": "Ein guter Anfang – andere sagen eben öfter Ja, als man denkt.", "wert": 1, "warum": "Stimmt, und auch das ist eine Erfahrung. Für das Sammeln von Neins braucht es trotzdem größere Bitten." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "mut-3-04-b", "faehigkeit": "mut.leiter", "stufe": 7, "kanal": "wissen" },
+          "frage": "Ordne die Bitten danach, wie wahrscheinlich ein Nein ist – von „Nein sehr wahrscheinlich“ bis „Nein eher selten“.",
+          "eintraege": [
+            { "text": "Einen Nachbarn fragen, ob du dir für eine Woche sein Lastenrad leihen darfst", "warum": "Groß und ungewöhnlich – ein Nein liegt nahe." },
+            { "text": "Bei einem ausgebuchten Kurs nach einem Nachrückplatz fragen", "warum": "Oft gibt es keinen Platz – aber manchmal sagt jemand ab." },
+            { "text": "Auf dem Wochenmarkt fragen, ob du ein Stück probieren darfst", "warum": "Üblich und klein – ein Nein kommt seltener." },
+            { "text": "Eine Bekannte nach ihrem liebsten Ausflugsziel fragen", "warum": "Kostet nichts – fast alle antworten gern." }
+          ] },
+        { "art": "szene", "kopf": { "id": "mut-3-04-c", "faehigkeit": "mut.ablehnung", "stufe": 8, "kanal": "wissen" },
+          "beschreibung": "Im Park fotografiert ein Mann mit einer alten Kamera. Du fragst ihn, ob du einmal durch den Sucher schauen darfst. Er antwortet gereizt: „Nee. Ich bin hier nicht zum Vorführen.“",
+          "frage": "Wie gehst du damit um?",
+          "antworten": [
+            { "text": "„Verstehe. Danke trotzdem.“ – und gehen. Später notieren: Ein Nein, schroff, nach einer Stunde fast vergessen.", "wert": 2, "warum": "Ein schroffes Nein ist auch ein Nein – es galt der Bitte, nicht dir. Gesammelt ist gesammelt." },
+            { "text": "Ihm erklären, dass du nur neugierig bist und deine Frage ganz bestimmt nicht böse oder respektlos gemeint war.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Das ist Nachhaken in anderer Form. Dein Teil ist erledigt: eine Bitte, ein Dank." },
+            { "text": "Für heute aufhören und dich zu Hause erholen.", "wert": 1, "warum": "Eine Pause ist in Ordnung. Wichtig ist, dass das schroffe Nein nicht zur Regel wird – die nächste Bitte kommt." }
+          ] },
+        { "art": "mission", "ref": "mut-m-10" }
+      ],
+      "regel": "Jedes Nein ist ein Punkt – und kommen nur noch Ja, sind die Bitten zu klein.",
+      "merkkarten": [
+        { "id": "mut-3-04-m1", "frage": "Wie funktioniert das Ablehnung-Sammeln?", "antwort": "Ein, zwei Wochen lang Bitten mit echter Nein-Chance; jedes Nein ist ein Punkt; nach jeder Bitte kurz notieren." },
+        { "id": "mut-3-04-m2", "frage": "Was heißt es, wenn nur noch Ja kommen?", "antwort": "Deine Bitten sind zu sicher – frag um etwas, bei dem ein Nein wahrscheinlicher ist." }
+      ],
+      "mission": "mut-m-10"
+    },
+    {
+      "id": "mut-3-05", "bereich": "mut", "stufe": 3, "nr": 5,
+      "titel": "Rückfälle gehören dazu",
+      "faehigkeiten": ["mut.verstehen", "mut.leiter"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Übungen gegen Angst die alte Angst nicht löschen und sie nach Pausen, Ortswechsel oder Stress zurückkehren kann, ist Stand der Lernforschung. Dass Selbstvorwürfe das Weitermachen eher bremsen und ein einzelnes Auslassen Gewohnheiten kaum schadet, zeigen Einzelstudien aus anderen Bereichen. Der Rückfall-Plan ist Praxiswissen.",
+      "quellen": ["vervliet2013", "craske2014", "wohl2010", "lally2010", "praxis-mut"],
+      "aha": "Üben löscht die alte Angst nicht, es überstimmt sie. Nach einer Pause, an einem neuen Ort oder unter Stress meldet sie sich zurück. Das ist kein Scheitern, sondern das Zeichen: eine Sprosse tiefer wieder einsteigen.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Kommt die Angst nach Monaten zurück, war das ganze Üben umsonst.", "urteil": "falsch", "warum": "Was du geübt hast, ist nicht weg. Neben der alten Angst steht jetzt eine neue Erfahrung. Nach einer Pause oder unter Stress meldet sich die alte manchmal lauter – mit ein paar Sprossen holst du die neue wieder nach vorn." },
+        { "art": "karte", "text": "Nach dem Üben stehen im Gedächtnis zwei Einträge: „Das ist gefährlich“ und „Das ging gut“. Meist gewinnt der neue. Typische Auslöser für die Rückkehr der Angst: lange Pause, neuer Ort, viel Stress, eine schlechte Erfahrung. Dann hilft ein Rückfall-Plan: eine Sprosse tiefer, Befürchtungs-Probe, Beweisliste lesen, bald wieder üben – ohne Selbstvorwurf. Bleibt die Angst über Wochen stark, hol dir Unterstützung." },
+        { "art": "zuordnen", "kopf": { "id": "mut-3-05-a", "faehigkeit": "mut.verstehen", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Was lässt die alte Angst eher zurückkommen – was beugt vor?",
+          "faecher": ["eher zurück", "beugt vor"],
+          "karten": [
+            { "text": "nach dem Urlaub drei Monate gar nicht üben", "fach": 0 },
+            { "text": "die Sprosse an mehreren Orten gehen", "fach": 1 },
+            { "text": "nach einem schlechten Abend allem ausweichen", "fach": 0 },
+            { "text": "auch nach geschafften Sprossen ab und zu wiederholen", "fach": 1 },
+            { "text": "sich nach einem Rückschlag sagen: „Ich bin eben so.“", "fach": 0 },
+            { "text": "die Beweisliste lesen, bevor es wieder losgeht", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "mut-3-05-b", "faehigkeit": "mut.leiter", "stufe": 7, "kanal": "wissen" },
+          "frage": "Carla war auf Sprosse acht – Beiträge vor der Abteilung. Nach einer harten Kritik in der Runde ist sie drei Wochen lang jeder Wortmeldung ausgewichen. Wo steigt sie am besten wieder ein?",
+          "antworten": [
+            { "text": "Gleich wieder auf Sprosse acht – sonst verliert sie, was sie sich erarbeitet hat.", "wert": 1, "warum": "Kann gelingen, wenn sie sich bereit fühlt. Nach drei Wochen Ausweichen ist ein etwas leichterer Wiedereinstieg aber oft sicherer." },
+            { "text": "Eine Sprosse tiefer – ein kurzer Beitrag in der kleinen Runde – und dann bald wieder hoch.", "wert": 2, "warum": "Ein leichterer Wiedereinstieg holt die neue Erfahrung zurück, ohne zu überfordern – dann Sprosse für Sprosse wieder hoch." },
+            { "text": "Ganz von vorn bei Sprosse eins, um wirklich sicher zu sein – lieber langsam und gründlich als noch einmal so eine Erfahrung.", "wert": 0, "tendenz": "absichern", "warum": "Das behandelt den Rückschlag, als wäre alles weg. Ihre Erfahrung ist noch da – sie braucht nur einen leichteren Anlauf." }
+          ] },
+        { "art": "kritiker", "kopf": { "id": "mut-3-05-c", "faehigkeit": "mut.verstehen", "stufe": 7, "kanal": "koennen" },
+          "satz": "„Ich bin wieder ganz am Anfang. Das ganze Üben hat nichts gebracht.“",
+          "kriterien": ["benennt den Rückschlag ehrlich", "erinnert an das, was schon geschafft ist", "endet mit einem kleinen nächsten Schritt"],
+          "muster": ["„Die Angst ist zurück – das gehört dazu. Ich habe die Sprosse schon fünfmal geschafft. Diese Woche gehe ich eine kleinere.“", "„Ein schlechter Abend löscht nicht zwanzig gute. Ich lese meine Beweisliste und frage morgen in der kleinen Runde.“"] },
+        { "art": "wenndann", "anlass": "Dein Rückfall-Plan", "wenn": ["Wenn ich merke, dass ich wieder ausweiche,", "Wenn ich nach einer Pause wieder anfange,", "Wenn ich mir sage: „Das bringt alles nichts“,"], "dann": ["… gehe ich in dieser Woche eine Sprosse tiefer – aber ich gehe sie.", "… lese ich zuerst meine Beweisliste.", "… schreibe ich drei Dinge auf, die ich schon geschafft habe."] },
+        { "art": "reflexion", "frage": "Was war bisher dein größter Rückschlag – und was hat dir geholfen, wieder einzusteigen?", "insBuch": "erfolg" },
+        { "art": "fachhilfe", "thema": "seele" }
+      ],
+      "regel": "Ein Rückfall ist kein Neuanfang: eine Sprosse tiefer – und bald wieder hoch.",
+      "merkkarten": [
+        { "id": "mut-3-05-m1", "frage": "Warum kann die alte Angst zurückkommen?", "antwort": "Üben löscht sie nicht, es überstimmt sie. Nach Pausen, an neuen Orten oder unter Stress meldet sie sich zurück." },
+        { "id": "mut-3-05-m2", "frage": "Was steht in deinem Rückfall-Plan?", "antwort": "Eine Sprosse tiefer einsteigen, Befürchtungs-Probe, Beweisliste lesen, bald wieder üben – ohne Selbstvorwurf." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+{
+  "lagen": [
+    {
+      "id": "lesen-l-11", "bereich": "lesen", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["lesen.buendel", "lesen.koerper", "lesen.pruefen"], "stufe": 7,
+      "titel": "Die Hausversammlung", "figur": "Frau Sommer",
+      "einleitung": "Neun Nachbarn, eine Begeisterte und viele Stille. Du übst, das Muster einer Runde zu lesen, statt Einzelne zu deuten – und die Stimmung so anzusprechen, dass alle mitreden.",
+      "lage": "Hausversammlung im Gemeinschaftsraum, neun Nachbarn. Du hast angeboten, die Runde zu leiten. Thema: Soll der Hof neu gestaltet werden – mit Kosten für alle? Frau Sommer redet gern und viel.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Frau Sommer schwärmt fünf Minuten von Hochbeeten. Zwei jüngere Nachbarn schauen auf ihre Handys, ein älteres Paar flüstert. Ein Mann in der letzten Reihe hat die Arme verschränkt und sagt nichts.",
+          "wahl": [
+            { "text": "Frau Sommer freundlich bremsen und öffnen: „Danke! Ich würde gern hören, wie es die anderen sehen.“", "wert": 2, "weiter": "k2", "rueck": "Handys, Flüstern, Schweigen – das Muster sagt: Die Runde ist noch nicht dabei. Du öffnest sie, ohne jemanden vorzuführen." },
+            { "text": "Den Mann in der letzten Reihe ansprechen: „Sie scheinen ja ziemlich dagegen zu sein, so wie Sie dasitzen?“", "wert": 0, "tendenz": "einzelzeichen", "weiter": "k2c", "rueck": "Ein Einzelner, ein Einzelzeichen – und vor allen gedeutet." },
+            { "text": "Frau Sommer weiterreden lassen – ihre Begeisterung steckt vielleicht an.", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k2b", "rueck": "Die Runde zeigt eher das Gegenteil. Du hörst nur die Lauteste." }
+          ] },
+        { "id": "k2", "sagt": "Stille. Vier Sekunden, fünf. Dann fragt die junge Frau mit dem Kinderwagen leise: „Wie hoch wären denn die Kosten pro Wohnung?“ Das ältere Paar nickt sofort.",
+          "wahl": [
+            { "text": "„Gute Frage – das scheint mehrere zu beschäftigen. Wer hat dazu noch Gedanken?“", "wert": 2, "weiter": "k3", "rueck": "Das Nicken der anderen zeigt: Die Frage steht für mehrere. Du machst sie zum Thema der Runde." },
+            { "text": "„Die Kosten klären wir später, erst einmal sammeln wir in Ruhe alle schönen Ideen für den Hof.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k3b", "rueck": "Gerade die Frage, auf die alle nicken, schiebst du weg." },
+            { "text": "Die geschätzte Zahl nennen und gleich darüber abstimmen lassen.", "wert": 1, "weiter": "k3", "rueck": "Die Zahl gehört auf den Tisch – gut. Abstimmen, bevor alle reden konnten, ist aber zu früh." }
+          ] },
+        { "id": "k2b", "sagt": "Frau Sommer redet weiter. Inzwischen tippen vier auf ihren Handys, das ältere Paar holt sich Wasser.",
+          "wahl": [
+            { "text": "Jetzt bremsen: „Danke, Frau Sommer. Ich merke, es gibt noch Fragen – wer möchte?“", "wert": 2, "weiter": "k2", "rueck": "Spät, aber richtig: Das Muster ist jetzt nicht mehr zu übersehen." },
+            { "text": "Weiterlaufen lassen bis zum Ende.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Die Runde hat innerlich schon abgestimmt – ohne dich." }
+          ] },
+        { "id": "k2c", "sagt": "Der Mann zuckt zusammen. „Dagegen? Ich friere nur, die Heizung hier ist aus.“ Ein paar lachen.",
+          "wahl": [
+            { "text": "„Entschuldigung, falsch gedeutet. Dann frage ich mal alle: Wie seht ihr das?“", "wert": 2, "weiter": "k2", "rueck": "Deutung zurück, Frage an die ganze Runde." },
+            { "text": "„Na ja, so wie Sie da hinten sitzen, sah es schon sehr danach aus, ehrlich gesagt.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Du hältst an der Deutung fest – vor neun Leuten." }
+          ] },
+        { "id": "k3", "sagt": "Jetzt reden mehrere. Die Kosten sind für einige ein Problem, andere wünschen sich vor allem einen Fahrradständer. Frau Sommer wird still und schaut auf ihre Hände.",
+          "wahl": [
+            { "text": "Zusammenfassen: „Ich höre: klein anfangen, klare Kosten.“ Zu Frau Sommer: „Wären Hochbeete ein zweiter Schritt?“", "wert": 2, "weiter": "ende1", "rueck": "Du fasst das Muster zusammen und holst die Verstummte zurück." },
+            { "text": "„Gut, dann lassen wir das mit den Hochbeeten.“", "wert": 1, "weiter": "ende3", "rueck": "Die Mehrheit hast du gut gelesen. Dass Frau Sommer verstummt ist, nicht." }
+          ] },
+        { "id": "k3b", "sagt": "Die Runde stockt wieder. Das ältere Paar schaut sich an und schüttelt leicht den Kopf.",
+          "wahl": [
+            { "text": "„Ich habe den Eindruck, die Kosten sind noch nicht geklärt. Was bräuchtet ihr, um zu entscheiden?“", "wert": 2, "weiter": "k3", "rueck": "Die Stimmung angesprochen, ohne Namen – und mit einer Frage, die weiterführt." },
+            { "text": "„Also, Hand hoch, wer dafür ist.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende2", "rueck": "Abstimmen, solange die Bedenken unausgesprochen sind, bringt sie nur später zurück." }
+          ] },
+        { "id": "ende1", "sagt": "Am Ende: ein Fahrradständer jetzt, Hochbeete im Frühjahr. Frau Sommer übernimmt die Pflanzenliste und strahlt.", "ende": "Das Muster war da: eine Stimme, die den Raum füllt, Handys, Flüstern, eine Frage, auf die alle nicken. Am Ende hat die Runde gesprochen, weil du sie geöffnet hast – und die Begeisterte hast du wieder eingebunden." },
+        { "id": "ende2", "sagt": "Die Abstimmung scheitert knapp. Danach reden im Treppenhaus alle über die Kosten – nur nicht mit dir.", "ende": "Die Zeichen der Runde waren da. Wer nur auf die Lauteste hört, einen Einzelnen deutet oder abstimmen lässt, bevor die Bedenken auf dem Tisch sind, verpasst, was die Stillen denken." },
+        { "id": "ende3", "sagt": "Der Fahrradständer kommt. Frau Sommer kommt zur nächsten Versammlung nicht.", "ende": "Die Mehrheit hast du gut gelesen. Dabei ist die Begeisterte verstummt – auch das gehört zur Runde. Ein Satz an sie hätte gereicht." }
+      ],
+      "prinzipien": ["das Muster lesen, nicht jeden Einzelnen", "Stille ist in der Runde selten Zustimmung", "die Frage, auf die alle nicken, zum Thema machen", "auch die Verstummte zurückholen"],
+      "transfer": "In welcher Runde füllt bei dir eine Stimme den Raum, während andere verstummen? Mit welchem Satz würdest du die Runde öffnen?"
+    },
+    {
+      "id": "lesen-l-12", "bereich": "lesen", "phase": "m", "umfeld": "kollegen", "faehigkeiten": ["lesen.stimme", "lesen.pruefen", "lesen.beobachten"], "stufe": 7,
+      "titel": "Die Videorunde am Freitag", "figur": "Tarek Yılmaz",
+      "einleitung": "Fünf Menschen, fünf kleine Bilder, eine wackelige Leitung. Du übst, online mit dem Ohr zu lesen, Pausen nicht als Zögern zu deuten und die Leisen mit Namen einzubinden.",
+      "lage": "Freitag, Videorunde mit fünf Leuten. Du stellst vor, wie die Urlaubsplanung künftig laufen soll. Dr. Albers ist zugeschaltet, Lena aus dem Homeoffice, Tarek vom Zug aus, Jonas aus dem Büro.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Nach deiner Frage „Passt das so?“ eine Sekunde Stille. Dann reden Lena und Jonas gleichzeitig los, brechen ab, entschuldigen sich. Wieder Stille.",
+          "wahl": [
+            { "text": "„Die Leitung verschluckt den Takt. Lena, fang du an, dann Jonas.“", "wert": 2, "weiter": "k2", "rueck": "Gleichzeitiges Anfangen ist online meist die Verzögerung – kein Zögern. Du ordnest den Takt mit Namen." },
+            { "text": "Die Stille als Zögern lesen: „Ihr seid offenbar nicht überzeugt von meinem Vorschlag, das merke ich ja.“", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k2c", "rueck": "Online ist eine Pause oft nur die Leitung." },
+            { "text": "„Okay, dann gehen wir weiter.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k2b", "rueck": "Zwei wollten etwas sagen – du gehst darüber hinweg." }
+          ] },
+        { "id": "k2", "sagt": "Lena: „Mir fehlt, wer die Vertretung regelt.“ Jonas schreibt in den Chat: „Gleiche Frage.“ Tarek, Kamera aus, sagt nichts. Das Bild von Dr. Albers friert immer wieder ein.",
+          "wahl": [
+            { "text": "„Gute Frage, kommt gleich.“ Dann: „Tarek, du bist unterwegs – hörst du uns? Wie siehst du das?“", "wert": 2, "weiter": "k3", "rueck": "Du nimmst die Frage auf und holst den ohne Bild mit Namen herein." },
+            { "text": "Tarek gedanklich abhaken – Kamera aus, also wohl nicht bei der Sache.", "wert": 0, "tendenz": "etikett", "weiter": "k3b", "rueck": "Kamera aus hat viele Gründe: Zug, Leitung, Umgebung." },
+            { "text": "Die Frage nach der Vertretung ausführlich beantworten und die Runde danach zügig beenden – es ist ja Freitag.", "wert": 1, "weiter": "k3b", "rueck": "Die Frage beantwortest du. Tarek bleibt aber außen vor." }
+          ] },
+        { "id": "k2b", "sagt": "Am Montag schreibt Lena dir: „Die Vertretung ist noch völlig offen, oder?“ Jonas hatte dieselbe Frage im Chat gestellt – gelesen hat sie keiner.",
+          "wahl": [
+            { "text": "„Stimmt, das ist untergegangen. Dienstag eine Viertelstunde – reihum durch alle?“", "wert": 2, "weiter": "ende4", "rueck": "Gut nachgeholt. Ein Teil der Klarheit kommt aber später als nötig." },
+            { "text": "„Das steht doch eigentlich alles schon im Entwurf, den ich am Freitag gezeigt habe.“", "wert": 0, "tendenz": "abwehren", "weiter": "ende2", "rueck": "Wenn zwei dieselbe Frage haben, liegt es selten nur an ihnen." }
+          ] },
+        { "id": "k2c", "sagt": "Lena, leicht verunsichert: „Nein, nein – wir haben nur gleichzeitig angefangen.“",
+          "wahl": [
+            { "text": "„Ach so, die Leitung. Lena, du zuerst, dann Jonas.“", "wert": 2, "weiter": "k2", "rueck": "Deutung zurück, Takt geordnet." },
+            { "text": "„Klang aber zögerlich.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Du bleibst bei einer Deutung, die online besonders wenig trägt." }
+          ] },
+        { "id": "k3", "sagt": "Tarek, mit Fahrtwind im Hintergrund, langsam: „Ja … passt schon. Ich hätte nur … ach, egal.“",
+          "wahl": [
+            { "text": "„Klingt nicht ganz nach egal. Sag ruhig – oder schreib es mir nachher.“", "wert": 2, "weiter": "ende1", "rueck": "Du hörst das abgebrochene Aber und gibst ihm zwei Wege, es zu sagen." },
+            { "text": "„Okay, gut – dann sind wir für heute durch. Danke euch allen und ein schönes Wochenende!“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende3", "rueck": "„Ach, egal“ ist selten egal." },
+            { "text": "„Du klingst genervt – ist was?“", "wert": 1, "weiter": "ende1", "rueck": "Du fragst nach – gut. „Genervt“ ist aber eine Deutung; im Zug klingt jeder anders." }
+          ] },
+        { "id": "k3b", "sagt": "Nach der Runde schreibt Tarek im Chat: „War im Funkloch. Wer übernimmt im August meine Kunden?“",
+          "wahl": [
+            { "text": "„Danke für die Nachricht – das klären wir. Ich ruf dich gleich an.“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst seine Frage ernst, statt sie aufs Protokoll zu schieben." },
+            { "text": "„Danke dir – das steht aber eigentlich alles schon im Protokoll von heute.“", "wert": 1, "weiter": "ende3", "rueck": "Vielleicht stimmt das. Ein kurzer Anruf hätte aber gezeigt, dass er zählt." }
+          ] },
+        { "id": "ende1", "sagt": "Tareks Frage zur Vertretung im August ist in zwei Minuten geklärt.", "ende": "Online täuscht das Bild: Gleichzeitiges Reden war die Leitung, nicht Zögern; Kamera aus hieß Zug, nicht Desinteresse. Am Ende kam Tareks Frage auf den Tisch. Wer reihum mit Namen fragt, hört sie schon in der Runde statt erst danach." },
+        { "id": "ende2", "sagt": "Die Vertretung bleibt offen. In den Tagen danach kommen drei Mails mit derselben Frage.", "ende": "Online täuscht der Takt: Pausen und gleichzeitiges Anfangen sind oft die Leitung. Als Zögern gedeutet, übergangen oder abgewehrt, bleiben die Fragen offen – und kommen später per Mail." },
+        { "id": "ende3", "sagt": "Die Planung steht – bis Tarek im August merkt, dass niemand seine Kunden übernimmt.", "ende": "Eine Frage blieb offen – bis August. Online gehen die Leisen, die ohne Kamera und die im Funkloch leicht verloren. Ein „ach, egal“ oder eine Nachricht nach der Runde verdient eine Nachfrage." },
+        { "id": "ende4", "sagt": "Am Dienstag ist die Vertretung in einer Viertelstunde geklärt – auch für Tareks Kunden im August.", "ende": "Gut nachgeholt. Online geht eine Frage leicht unter, wenn nach einer Pause einfach weitergemacht wird. Reihum mit Namen gefragt, wäre sie schon am Freitag gekommen." }
+      ],
+      "prinzipien": ["online ist eine Pause oft nur die Leitung", "Kamera aus ist kein Desinteresse", "mit Namen fragen, reihum", "„ach, egal“ ist selten egal – auch am Telefon im Zug"],
+      "transfer": "Wer in deinen Videorunden ist meist ohne Bild oder still? Mit welchem Satz holst du ihn das nächste Mal herein?"
+    },
+    {
+      "id": "lesen-l-13", "bereich": "lesen", "phase": "m", "umfeld": "fremde", "faehigkeiten": ["lesen.beobachten", "lesen.eigen", "lesen.grundlinie"], "stufe": 8,
+      "titel": "Der Neue im Kochkurs", "figur": "Jule Marek",
+      "einleitung": "Zwei Neue, ein schneller Eindruck. Du übst, deine eigenen Brillen zu bemerken – Sympathie, Ähnlichkeit, Stil – und die Gegenprobe zu machen, bevor ein Etikett hängen bleibt.",
+      "lage": "Kochkurs, neuer Kursblock. Zwei Neue: ein Mann um die sechzig, laut, mit starkem Dialekt, der beim Begrüßen gleich erklärt, wie man Zwiebeln richtig schneidet. Und eine Frau in deinem Alter, die wie du gern wandert und sofort mit dir lacht. Jule bittet dich, mit einem der beiden eine Kochgruppe zu bilden.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dein erster Gedanke: Der Mann ist ein Besserwisser, die Frau ist sympathisch.",
+          "wahl": [
+            { "text": "Den Gedanken bemerken und gegenprüfen: Würde ich den Zwiebel-Tipp bei jemand Sympathischem auch so lesen?", "wert": 2, "weiter": "k2", "rueck": "Du merkst, dass Sympathie und Ähnlichkeit schon mitlesen – und prüfst, bevor du wählst." },
+            { "text": "Mit der Frau zusammen – das passt einfach.", "wert": 1, "weiter": "k2b", "rueck": "Nicht verboten, nach Sympathie zu wählen. Nur bleibt dein Bild vom Mann ungeprüft." },
+            { "text": "Jule zuflüstern: „Mit dem Oberlehrer koch ich nicht, der weiß ja jetzt schon alles besser als wir alle.“", "wert": 0, "tendenz": "etikett", "weiter": "k2c", "rueck": "Ein Etikett nach zwei Sätzen – und gleich weitergegeben." }
+          ] },
+        { "id": "k2", "sagt": "Du kochst mit ihm. Beim Gemüseschneiden zeigt er der Gruppe nebenan, wie man das Messer hält. Die lachen und bedanken sich. Er strahlt.",
+          "wahl": [
+            { "text": "Festhalten: Er hilft gern und freut sich, wenn es ankommt – „Besserwisser“ war meine Deutung.", "wert": 2, "weiter": "k3", "rueck": "Du trennst Beobachtung und Deutung – und lässt die neue Beobachtung gegen dein Etikett sprechen." },
+            { "text": "„Na also, er kann's einfach nicht lassen – jetzt erklärt er auch noch der Gruppe nebenan, wie man ein Messer hält.“", "wert": 0, "tendenz": "bestaetigung", "weiter": "k3b", "rueck": "Du liest nur, was dein erstes Bild bestätigt – den Dank der anderen übersiehst du." }
+          ] },
+        { "id": "k2b", "sagt": "Ihr kocht zusammen. Die Frau ist nett – aber beim Abschmecken sagt sie zu allem „passt schon“, und das Risotto brennt an. Am Nachbarherd rettet der Mann das Risotto einer anderen Gruppe.",
+          "wahl": [
+            { "text": "Merken: Sympathisch heißt nicht geübt, laut nicht unangenehm. Nächste Woche tauschen.", "wert": 2, "weiter": "k3", "rueck": "Du lässt die Beobachtung deinen ersten Eindruck korrigieren." },
+            { "text": "Pech gehabt mit dem Risotto – nächste Woche koche ich trotzdem wieder mit ihr, das passt einfach.", "wert": 1, "weiter": "ende3", "rueck": "Freundlich, und die Frau ist ja nett. Dein Bild vom Mann bleibt aber ungeprüft." }
+          ] },
+        { "id": "k2c", "sagt": "Jule schaut dich an. „Oberlehrer? Der war vierzig Jahre Koch in einer Kantine. Kennst du ihn schon?“",
+          "wahl": [
+            { "text": "„Nein – ich hab ihn nach zwei Sätzen eingeordnet. Ich koch mit ihm.“", "wert": 2, "weiter": "k3", "rueck": "Ehrlich zur eigenen Brille – und gleich die Probe aufs Exempel." },
+            { "text": "„Ist doch egal, was er früher gemacht hat – ich bleib bei meinem Eindruck.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Du hältst ein Urteil aus Sekunden gegen neue Tatsachen fest." }
+          ] },
+        { "id": "k3", "sagt": "Am Ende des Abends erzählt der Mann, er sei neu in der Stadt, seit seine Frau gestorben ist. „Beim Kochen fühl ich mich nützlich.“",
+          "wahl": [
+            { "text": "„Dann bist du hier richtig. Nächste Woche kochen wir zusammen – zeig mir das mit den Zwiebeln.“", "wert": 2, "weiter": "ende1", "rueck": "Aus dem Besserwisser ist ein Mensch mit einer Geschichte geworden – und du machst ein Angebot." },
+            { "text": "„Das tut mir leid.“ – und zusammenpacken.", "wert": 1, "weiter": "ende3", "rueck": "Mitfühlend, aber knapp. Er hat dir gerade etwas Persönliches anvertraut." }
+          ] },
+        { "id": "k3b", "sagt": "Später hörst du, wie er zu Jule sagt: „Ich will mich nicht aufdrängen. Ich kenne hier nur noch niemanden.“",
+          "wahl": [
+            { "text": "Die eigene Deutung prüfen – und ihn beim Spülen fragen, was ihn in den Kurs gebracht hat.", "wert": 2, "weiter": "k3", "rueck": "Gut korrigiert: Seine eigenen Worte zeigen, was hinter dem Lauten steckt." },
+            { "text": "„Klingt nach Mitleidsmasche.“", "wert": 0, "tendenz": "etikett", "weiter": "ende2", "rueck": "Jetzt deutest du sogar seine Offenheit gegen ihn. So bestätigt man ein Vorurteil, statt es zu prüfen." }
+          ] },
+        { "id": "ende1", "sagt": "Drei Wochen später seid ihr die Gruppe mit den besten Zwiebeln. Und er fragt dich, wo man rund um die Stadt gut wandert.", "ende": "Laut, Dialekt, ein ungefragter Tipp – und schon stand ein erstes Bild. Ein zweiter Blick hat gezeigt, was dahinter war. Sympathie und Ähnlichkeit sind echte Gefühle, aber keine Belege." },
+        { "id": "ende2", "sagt": "Der Mann kommt nach zwei Wochen nicht mehr.", "ende": "Ein Etikett aus den ersten Sekunden, gegen jeden Gegenbeweis gehalten. So bestätigt man ein Vorurteil, statt es zu prüfen." },
+        { "id": "ende3", "sagt": "Der Kurs läuft weiter. Mit dem Mann wechselst du ab und zu ein paar Worte, mehr nicht.", "ende": "Kein Schaden – aber eine verpasste Gelegenheit. Ein erster Eindruck ändert sich erst ganz, wenn du dem Menschen dahinter Zeit und ein Angebot gibst." }
+      ],
+      "prinzipien": ["den ersten Eindruck als Vermutung behandeln", "Gegenprobe: Würde ich das bei jemand Sympathischem genauso lesen?", "Sympathie und Ähnlichkeit sind Gefühle, keine Belege", "neue Beobachtungen gegen das eigene Etikett sprechen lassen"],
+      "transfer": "Wen hast du in den letzten Monaten schnell eingeordnet? Was würdest du sehen, wenn du die Gegenprobe machst?"
+    },
+    {
+      "id": "lesen-l-14", "bereich": "lesen", "phase": "m", "umfeld": "freunde", "faehigkeiten": ["lesen.gesicht", "lesen.beobachten", "lesen.grundlinie"], "stufe": 8,
+      "titel": "Die Verlobungsfeier", "figur": "Sven",
+      "einleitung": "Ein ruhiger Mensch in seiner Zweitsprache – an deiner eigenen Grundlinie gemessen, wirkt er kühl. Du übst, jemanden an seiner eigenen Grundlinie zu lesen und Unterschiede mit Fragen statt mit Etiketten zu überbrücken.",
+      "lage": "Sven feiert seine Verlobung. Am Tisch sitzt die Familie seiner Verlobten, die erst seit einigen Jahren in Deutschland lebt. Du sitzt neben ihrem Vater. Er spricht langsam Deutsch, lächelt wenig und schaut dir selten lange in die Augen. Seine Frau ist lebhaft und lacht viel.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Du erzählst eine lustige Geschichte über Sven von früher. Die Mutter lacht laut. Der Vater nickt nur, schaut auf seinen Teller und sagt nach einer Weile: „Hm.“",
+          "wahl": [
+            { "text": "Leise zur Mutter: „Ich glaube, ich hab Ihren Mann mit meiner Geschichte irgendwie verärgert, oder?“", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k2c", "rueck": "Du deutest Schweigen als Ärger – an deiner eigenen Grundlinie gemessen, nicht an seiner." },
+            { "text": "Nicht gleich deuten: Vielleicht ist das seine Grundlinie – und Deutsch ist nicht seine erste Sprache.", "wert": 2, "weiter": "k2", "rueck": "Du rechnest mit seiner eigenen Grundlinie und mit der Lage einer Zweitsprache." },
+            { "text": "Noch einen Witz nachlegen, damit er auch lacht.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k2b", "rueck": "Schnelle Witze in einer Zweitsprache sind schwer – mehr davon macht es nicht leichter." }
+          ] },
+        { "id": "k2", "sagt": "Du stellst ihm eine Frage und hörst zu. Er antwortet ausführlich und langsam, mit Pausen zwischen den Sätzen, und erzählt bald von seiner Arbeit: Er ist Ingenieur und baut Brücken. Als du nachfragst, beugt er sich vor.",
+          "wahl": [
+            { "text": "Die Pausen aushalten und weiterfragen – er wendet sich zu, das spricht eher für Interesse.", "wert": 2, "weiter": "k3", "rueck": "Vorbeugen und ausführliche Antworten zeigen Zuwendung – leiser, als du es gewohnt bist." },
+            { "text": "In die Pausen hineinhelfen und seine Sätze ergänzen, damit es schneller geht.", "wert": 0, "tendenz": "uebernehmen", "weiter": "k3b", "rueck": "Gut gemeint, aber du nimmst ihm das Wort. Pausen in einer Zweitsprache sind Denkzeit." },
+            { "text": "Noch kurz bei ihm bleiben und dann höflich zur Mutter wechseln – mit ihr ist das Gespräch einfach leichter.", "wert": 1, "weiter": "ende3", "rueck": "Verständlich und nicht unhöflich. Aber du verpasst, dass er sich gerade zuwendet." }
+          ] },
+        { "id": "k2b", "sagt": "Der zweite Witz geht noch mehr ins Leere. Der Vater sagt höflich: „Sven ist ein guter Mann.“ Dann Stille.",
+          "wahl": [
+            { "text": "„Das ist er. Wie haben Sie ihn kennengelernt?“ – und dann zuhören.", "wert": 2, "weiter": "k2", "rueck": "Gut umgeschwenkt: Er gibt dir ein ernstes Thema, du nimmst es auf." },
+            { "text": "Sich abwenden: Mit ihm ist es eben schwierig.", "wert": 0, "tendenz": "etikett", "weiter": "ende2", "rueck": "Ein Etikett nach zwei Witzen, die in einer Zweitsprache schwer zu verstehen waren." }
+          ] },
+        { "id": "k2c", "sagt": "Die Mutter lacht. „Verärgert? Nein! Er lacht beim Essen nie viel. Und lustige Geschichten auf Deutsch – das ist zu schnell für ihn.“",
+          "wahl": [
+            { "text": "„Ach so. Dann frag ich ihn lieber erst mal, was er so macht.“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst die Auskunft über seine Grundlinie auf und suchst einen anderen Weg." },
+            { "text": "„Na, ein bisschen Lächeln wäre trotzdem nett gewesen, auch wenn er nicht alles verstanden hat.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Du misst ihn weiter an deiner Latte – obwohl du gerade erfahren hast, dass sie nicht passt." }
+          ] },
+        { "id": "k3", "sagt": "Der Vater: „Brücken müssen ruhig stehen, auch wenn viele darüberlaufen.“ Er lächelt zum ersten Mal kurz. Dann fragt er dich direkt: „Und Sie? Wofür ist Ihre Arbeit gut?“",
+          "wahl": [
+            { "text": "Die direkte Frage nicht als Angriff lesen: ehrlich antworten und zurückfragen.", "wert": 2, "weiter": "ende1", "rueck": "Direktheit kann Interesse sein. Du antwortest offen und hältst das Gespräch lebendig." },
+            { "text": "„Wie meinen Sie das denn?“ – leicht pikiert.", "wert": 1, "weiter": "ende3", "rueck": "Nachfragen ist gut – der Ton liest aber einen Angriff hinein, wo vielleicht Neugier war." }
+          ] },
+        { "id": "k3b", "sagt": "Der Vater hält inne und sagt freundlich, aber bestimmt: „Danke. Ich finde die Wörter.“",
+          "wahl": [
+            { "text": "„Entschuldigung. Ich habe Zeit.“ – und warten.", "wert": 2, "weiter": "k3", "rueck": "Gut korrigiert: Du gibst ihm die Zeit, die eine Zweitsprache braucht." },
+            { "text": "Lachen und weiter helfen – es ist ja gut gemeint.", "wert": 0, "tendenz": "uebernehmen", "weiter": "ende2", "rueck": "Er hat dir gerade gesagt, was er braucht. Gut gemeint ist hier nicht gut gemacht." }
+          ] },
+        { "id": "ende1", "sagt": "Beim Abschied gibt der Vater dir lange die Hand: „Gutes Gespräch.“ Sven grinst: „Was hast du mit ihm gemacht? Der redet sonst kaum.“", "ende": "Wenig Lächeln, Pausen, wenig Blick, eine direkte Frage – an deiner Grundlinie gemessen sah das nach Abstand aus. An seiner gemessen: Zweitsprache, ruhiges Temperament, andere Gewohnheiten. Und als er sich vorbeugte, hat er gezeigt, was er nicht sagte." },
+        { "id": "ende2", "sagt": "Der Rest des Abends bleibt höflich. Sven fragt später: „Und, wie fandest du ihn?“ Dir fällt nur „schwierig“ ein.", "ende": "An der eigenen Grundlinie gemessen, wirkt ein ruhiger Mensch in einer Zweitsprache schnell kühl. Mit Geduld und Fragen hättest du einen anderen Menschen kennengelernt." },
+        { "id": "ende3", "sagt": "Ihr unterhaltet euch nett, aber kurz. Später erzählt Sven, sein Schwiegervater habe nach dir gefragt.", "ende": "Er war interessiert – du hast es nur nicht ganz gelesen. Ruhige Temperamente zeigen Interesse leiser: durch Vorbeugen, Nachfragen, eine direkte Frage." }
+      ],
+      "prinzipien": ["jeden an seiner eigenen Grundlinie messen", "in einer Zweitsprache sind Pausen Denkzeit", "Direktheit kann Interesse sein", "Zuwendung zeigt sich auch leise: Vorbeugen, Nachfragen"],
+      "transfer": "Wen liest du vielleicht an deiner eigenen Latte statt an seiner? Was würdest du ihn fragen, um ihn besser kennenzulernen?"
+    },
+    {
+      "id": "lesen-l-15", "bereich": "lesen", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["lesen.beobachten", "lesen.grundlinie", "lesen.buendel", "lesen.gesicht", "lesen.koerper", "lesen.stimme", "lesen.pruefen", "lesen.eigen"], "stufe": 9, "sparring": true,
+      "titel": "Sparring: Die Besprechungsrunde", "figur": "Dr. Henrik Albers",
+      "einleitung": "Das Sparring zum Abschluss: Du leitest eine Runde mit fünf Menschen, zwei davon online. Wechselnde Signale, ein Stocken, das kein Zögern ist, ein leises Aber – und eine Rückmeldung zu deiner Wirkung, die du prüfen statt glauben solltest.",
+      "lage": "Quartalsrunde, du leitest sie zum ersten Mal. Im Raum: Dr. Albers, Miriam und Lena. Zugeschaltet: Tarek aus dem Homeoffice und Jonas aus der Werkstatt. Thema: dein Vorschlag, ab Januar ein neues System für Aufträge zu nutzen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Runde 1. Du stellst den Vorschlag vor. Miriam nickt eifrig. Lena schreibt mit. Albers sagt nichts und schaut zum Fenster. Tareks Bild ist schwarz, Jonas' Ton hakt.",
+          "wahl": [
+            { "text": "Das Muster festhalten: Miriam wohl dafür, Albers' Blick allein sagt wenig, die beiden online kann ich kaum lesen.", "wert": 2, "weiter": "k2", "rueck": "Du liest die Runde, ohne jeden Einzelnen zu deuten – und weißt, wo du noch blind bist." },
+            { "text": "„Herr Albers, Sie wirken skeptisch?“", "wert": 0, "tendenz": "einzelzeichen", "weiter": "k2b", "rueck": "Ein Blick zum Fenster ist ein Einzelzeichen – und vor allen gedeutet." },
+            { "text": "Miriam nickt so eifrig – die Runde ist offenbar dafür, also können wir gleich in die genaue Planung für Januar gehen.", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k2", "rueck": "Eine Begeisterte ist nicht die Runde. Drei weitere kannst du gar nicht lesen." }
+          ] },
+        { "id": "k2", "sagt": "Runde 2. Du fragst nach Fragen. Miriam und Lena schauen beide zu Albers, bevor eine von ihnen etwas sagt. Albers: „Erst mal die anderen.“",
+          "wahl": [
+            { "text": "Reihum mit Namen, die online zuerst: „Jonas, Tarek – ihr arbeitet am meisten damit.“", "wert": 2, "weiter": "k3", "rueck": "Du nimmst Albers' Hinweis auf und holst die herein, die du am wenigsten lesen kannst." },
+            { "text": "„Dann sind wohl alle einverstanden.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k3", "rueck": "Stille nach einem Blick zum Chef ist keine Zustimmung." },
+            { "text": "Albers höflich bitten, als Erfahrenster doch zuerst seine Meinung zur Umstellung zu sagen.", "wert": 1, "weiter": "k3", "rueck": "Höflich, aber er wollte die anderen zuerst hören. Danach richtet sich sonst jeder nach ihm." }
+          ] },
+        { "id": "k2b", "sagt": "Albers dreht sich zu dir. „Skeptisch? Nein. Ich habe überlegt, wer das einführt.“ Miriam und Lena schauen auf ihre Unterlagen.",
+          "wahl": [
+            { "text": "„Danke – falsch gelesen. Wer hat Fragen? Jonas, Tarek, ihr zuerst.“", "wert": 2, "weiter": "k3", "rueck": "Deutung zurück, Runde geöffnet – mit Namen." },
+            { "text": "„Sah aber so aus.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Du stellst deine Deutung über sein Wort – vor dem ganzen Team." }
+          ] },
+        { "id": "k3", "sagt": "Runde 3. Jonas, über die hakende Leitung: Er stockt vor einem Wort und setzt neu an. Dann: „Grundsätzlich gut. Aber in der Werkstatt ist das Netz schwach.“ Tarek, Kamera aus, schweigt.",
+          "wahl": [
+            { "text": "Jonas ausreden lassen – sein Stocken ist kein Zögern, sein „aber“ schon. „Danke, wichtiger Punkt. Tarek, wie siehst du's?“", "wert": 2, "weiter": "k4", "rueck": "Du trennst Stocken und Vorbehalt, nimmst den Punkt auf und holst den Nächsten herein." },
+            { "text": "„Die Leitung ist schlecht, Jonas – schreib es lieber in den Chat.“", "wert": 1, "weiter": "k4", "rueck": "Bei schlechter Leitung manchmal sinnvoll. Er hatte seinen Punkt aber schon gesagt – und es kann wirken, als solle er lieber nicht sprechen." },
+            { "text": "Weiter – das mit dem Netz in der Werkstatt klären wir später in Ruhe unter uns.", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k4b", "rueck": "Ein „grundsätzlich … aber“ verschoben, ist selten erledigt." }
+          ] },
+        { "id": "k4", "sagt": "Runde 4. Tarek, nach einer langen Pause: „Ja … kann man machen.“ Im Chat schreibt er nichts.",
+          "wahl": [
+            { "text": "„Klingt nach einem Aber. Was müsste anders sein, damit es für dich passt?“", "wert": 2, "weiter": "k5", "rueck": "Du hörst Pause und „kann man machen“ und lädst das Bedenken ein." },
+            { "text": "„Gut, dann haben wir alle.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k5b", "rueck": "„Kann man machen“ nach langer Pause ist kein klares Ja." },
+            { "text": "„Tarek, du klingst irgendwie genervt – passt dir an meinem Vorschlag etwas nicht, oder was ist los?“", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k5c", "rueck": "Eine Deutung über eine Stimme aus dem Homeoffice – vor allen." }
+          ] },
+        { "id": "k4b", "sagt": "Albers fragt: „Und das Netz in der Werkstatt?“ Stille. Jonas hat sich aus der Konferenz abgemeldet.",
+          "wahl": [
+            { "text": "„Stimmt, das habe ich übergangen. Ich kläre es mit Jonas bis Mittwoch.“ Dann: „Tarek, wie siehst du's?“", "wert": 2, "weiter": "k4", "rueck": "Ehrlich korrigiert und die Runde wieder geöffnet." },
+            { "text": "„Das wird sich schon lösen.“", "wert": 0, "tendenz": "abwiegeln", "weiter": "ende2", "rueck": "Ein Bedenken weggewischt – und der, der es hatte, ist schon weg." }
+          ] },
+        { "id": "k5", "sagt": "Tarek: „Ich bin drei Tage die Woche beim Kunden. Wenn das System nur im Firmennetz läuft, kann ich unterwegs nichts eintragen.“",
+          "wahl": [
+            { "text": "Zusammenfassen und prüfen: „Also: Netz in der Werkstatt, Zugriff von unterwegs. Sehe ich das richtig?“", "wert": 2, "weiter": "k6", "rueck": "Du prüfst dein Verständnis, statt es anzunehmen." },
+            { "text": "„Das lässt sich bestimmt lösen – so etwas bekommt die IT erfahrungsgemäß schnell in den Griff, keine Sorge.“", "wert": 1, "weiter": "k6", "rueck": "Zuversichtlich – aber ohne zu prüfen, ob du beide Bedenken richtig verstanden hast." }
+          ] },
+        { "id": "k5b", "sagt": "Zwei Tage später schreibt Tarek dir privat: „Ehrlich gesagt kann ich mit dem System beim Kunden nicht arbeiten.“",
+          "wahl": [
+            { "text": "„Danke, dass du es sagst. Woran liegt es – und was bräuchtest du?“", "wert": 2, "weiter": "k5", "rueck": "Spät, aber offen: Du lädst das Bedenken ein, statt es abzuwehren." },
+            { "text": "„Hättest du in der Runde sagen können.“", "wert": 0, "tendenz": "vorwurf", "weiter": "ende3", "rueck": "Er sagt es jetzt. Ein Vorwurf lehrt nur, beim nächsten Mal ganz zu schweigen." }
+          ] },
+        { "id": "k5c", "sagt": "Tarek: „Genervt? Nein, ich hab nur schlechten Empfang.“ Kurze Pause. „Aber ein Problem hab ich schon.“",
+          "wahl": [
+            { "text": "„Sorry, falsch gelesen. Erzähl – was ist das Problem?“", "wert": 2, "weiter": "k5", "rueck": "Deutung zurück, Frage offen." },
+            { "text": "„Na dann ist ja alles gut – dann machen wir mit dem nächsten Punkt weiter.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende2", "rueck": "Er bietet dir sein Bedenken an – und du nimmst es nicht." }
+          ] },
+        { "id": "k6", "sagt": "Runde 5. Nach der Runde sagt Miriam: „Du hast ziemlich unsicher gewirkt, als Albers nichts gesagt hat.“ Du hattest dich ruhig gefühlt. Albers schreibt dir: „Gute Runde. Bitte die zwei Bedingungen klären.“",
+          "wahl": [
+            { "text": "Miriam fragen, woran sie es gesehen hat, und es mit Albers' Nachricht abgleichen.", "wert": 2, "weiter": "ende1", "rueck": "Auch eine Rückmeldung ist eine Vermutung. Du prüfst sie – ohne sie abzuwehren." },
+            { "text": "„Ich war überhaupt nicht unsicher!“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende3", "rueck": "Du wehrst ab, statt zu fragen, was sie gesehen hat." },
+            { "text": "Ihr glauben und die nächste Runde lieber jemand anderem überlassen – wenn ich so unsicher wirke, ist das besser.", "wert": 0, "tendenz": "selbstabwertung", "weiter": "ende3", "rueck": "Ein einzelner Eindruck ist kein Urteil über dich – und Albers sah es anders." }
+          ] },
+        { "id": "ende1", "sagt": "Im Januar startet das System – mit Netz in der Werkstatt und Zugriff von unterwegs. Tarek trägt als Erster etwas ein.", "ende": "Fünf Menschen, zwei davon online, wechselnde Signale. Am Ende lagen beide Bedenken auf dem Tisch, und die Rückmeldung zu deiner Wirkung hast du geprüft statt geglaubt. Schau zurück: Wo hast du gelesen und gefragt – und wo erst gedeutet und dann korrigiert? Dafür ist Menschenlesen da: besser verstehen, besser fragen." },
+        { "id": "ende2", "sagt": "Im Januar wird das System eingeführt. Die Werkstatt nutzt es nicht, Tarek trägt nichts ein.", "ende": "Die Bedenken waren in der Runde – nur kamen sie nicht auf den Tisch. Wer deutet statt fragt, an einer Deutung festhält oder ein Bedenken wegwischt, hört es erst als stilles Nein." },
+        { "id": "ende3", "sagt": "Das System kommt – mit Verspätung, nach einigem Hin und Her.", "ende": "Zwei Stellen entscheiden in solchen Runden viel: ein Bedenken ohne Vorwurf annehmen – und eine Rückmeldung zu deiner Wirkung prüfen, statt sie abzuwehren oder blind zu glauben." }
+      ],
+      "prinzipien": ["das Muster der Runde lesen, nicht jeden Einzelnen", "wen du nicht lesen kannst, fragst du mit Namen", "ein Stocken ist kein Zögern – ein „grundsätzlich … aber“ schon", "Bedenken einladen, zusammenfassen, prüfen", "auch eine Rückmeldung zu deiner Wirkung ist eine Vermutung"],
+      "transfer": "Welche Runde leitest oder erlebst du demnächst? Wen wirst du dort am schwersten lesen können – und mit welcher Frage holst du ihn herein?"
+    }
+  ]
+}

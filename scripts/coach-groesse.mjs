@@ -83,7 +83,7 @@ const datei = join(WURZEL, 'derCoach', 'credits.json')
 if (existsSync(datei)) {
   const posten = JSON.parse(readFileSync(datei, 'utf8')).posten ?? []
   const summe = posten.reduce((s, p) => s + p.credits, 0)
-  console.log(`Higgsfield: ${summe.toFixed(2)} von ${CREDITS} Credits verbraucht (Reserve ${RESERVE} nur nach Meldung) – ${posten.length} Posten`)
-  if (summe > CREDITS + RESERVE) { fehler++; console.log('FEHLER  Credit-Rahmen samt Reserve überschritten') } else if (summe > CREDITS) console.log('Hinweis Reserve angebrochen – Davide muss das wissen')
+  console.log(`Higgsfield: ${summe.toFixed(2)} von ${CREDITS + RESERVE} Credits verbraucht (Rahmen ${CREDITS} + Reserve ${RESERVE}, Reserve am 25.11.2026 freigegeben) – ${posten.length} Posten`)
+  if (summe > CREDITS + RESERVE) { fehler++; console.log('FEHLER  Credit-Rahmen samt Reserve überschritten') } else if (summe > CREDITS) console.log('Hinweis Reserve angebrochen (freigegeben) – im Abschlussbericht nennen')
 }
 process.exit(fehler ? 1 : 0)

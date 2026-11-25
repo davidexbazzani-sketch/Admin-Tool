@@ -1,0 +1,232 @@
+{
+  "lagen": [
+    {
+      "id": "flirten-l-11", "bereich": "flirten", "phase": "m", "umfeld": "kennenlernen", "faehigkeiten": ["flirten.dranbleiben", "flirten.signale", "flirten.korb"], "stufe": 7,
+      "titel": "Die Antwort, die auf sich warten lässt", "figur": "eine Person, die du zweimal getroffen hast",
+      "einleitung": "Nach zwei schönen Treffen wird es still. Du übst, die eigene Unruhe von dem zu trennen, was passiert, einmal klar nachzufassen – und ein leises Ende anzunehmen, ohne dich kleinzumachen.",
+      "lage": "Ihr hattet zwei Treffen: einen langen Spaziergang und einen Abend im Biergarten. Beide Male habt ihr viel gelacht. Seit deiner letzten Nachricht vor vier Tagen kam nichts.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dein Kopf: „Sie hat jemand Besseren gefunden. Schreib ihr, bevor es zu spät ist!“",
+          "wahl": [
+            { "text": "Erst prüfen: Fakt ist nur, dass seit vier Tagen nichts kam. Gründe kann es viele geben.", "wert": 2, "weiter": "k2", "rueck": "Fakt und Deutung getrennt. Die Unruhe darf da sein, sie muss aber nicht schreiben." },
+            { "text": "Sofort drei Nachrichten: „Hey?“ – „Alles okay?“ – „Sag doch einfach, wenn du nicht mehr willst.“", "wert": 0, "tendenz": "ueberziehen", "weiter": "ende3", "rueck": "Aus der Unruhe wird eine Flut mit Vorwurf. Das macht ein Ja schwerer und ein Nein unangenehmer." },
+            { "text": "Ihr Profil in der App prüfen, ob sie online war.", "wert": 0, "tendenz": "kontrollieren", "weiter": "k2", "rueck": "Verständlich – beruhigt aber selten. Was sie online tut, sagt nichts über ihre Antwort an dich, und Nachsehen wird schnell zur Gewohnheit." },
+            { "text": "Dich ablenken und morgen wieder draufschauen.", "wert": 1, "weiter": "k2", "rueck": "Gut für dich. Ein kurzer Satz an dich selbst – „Fakt ist nur: Es kam noch nichts“ – macht das Warten leichter." }
+          ] },
+        { "id": "k2", "sagt": "Zwei weitere Tage vergehen. Noch immer nichts.",
+          "wahl": [
+            { "text": "Einmal: „Ich fand unsere Treffen schön. Lust auf ein drittes? Sonst alles Gute!“", "wert": 2, "weiter": "k3", "rueck": "Einmal, klar, freundlich, mit Ausweg. Damit hast du alles gesagt – der nächste Schritt liegt bei ihr." },
+            { "text": "Ein lustiges Bild schicken, damit es nicht nach Nachfragen aussieht.", "wert": 1, "weiter": "k3", "rueck": "Locker und ohne Vorwurf. Eine klare Frage würde euch beiden aber das Rätseln ersparen." },
+            { "text": "„Ich finde es echt respektlos, einfach nicht mehr zu antworten, nachdem wir uns so gut verstanden haben.“", "wert": 0, "tendenz": "vorwurf", "weiter": "ende3", "rueck": "Der Ärger ist verständlich. Ein Vorwurf ändert aber nichts an ihrer Antwort – er verschließt nur die Tür." }
+          ] },
+        { "id": "k3", "sagt": "Am nächsten Abend: „Hey, sorry für die Funkstille. Ich mag dich, aber ich merke, dass es bei mir nicht für mehr reicht. Ich wollte nicht einfach verschwinden.“",
+          "wahl": [
+            { "text": "„Danke, dass du es mir sagst. Schade – aber gut zu wissen. Alles Gute dir!“", "wert": 2, "weiter": "k4", "rueck": "Ein Korb, freundlich angenommen und gewürdigt, dass sie ehrlich war. Kein Nachhaken." },
+            { "text": "„Woran liegt's denn? Vielleicht kann ich ja was ändern, wenn du mir sagst, was dich stört.“", "wert": 0, "tendenz": "beharren", "weiter": "ende2", "rueck": "Ein Nein braucht keinen Grund. Die Frage macht aus der Absage eine Verhandlung." },
+            { "text": "Nicht mehr antworten.", "wert": 1, "weiter": "k4", "rueck": "Du nimmst das Nein an. Ein kurzer Dank hätte gezeigt, dass ihre Ehrlichkeit ankam." }
+          ] },
+        { "id": "k4", "sagt": "Später auf dem Sofa meldet sich der Kritiker: „Zwei Treffen, und dann reicht es nicht. Typisch.“",
+          "wahl": [
+            { "text": "„Es hat für sie nicht gepasst. Ich hab mich gezeigt und hab zwei schöne Abende gehabt.“", "wert": 2, "weiter": "ende1", "rueck": "Enttäuschung erlaubt, Urteil geprüft, das Gute gesehen. So bleibst du offen für die nächste Begegnung." },
+            { "text": "„Ich lösch die App. Bringt eh nichts, am Ende will mich sowieso keiner richtig kennenlernen.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende4", "rueck": "Verständlich nach einem Stich. Rückzug schützt nur kurz – und nimmt dir jede Chance." },
+            { "text": "„Egal, die Nächste.“", "wert": 1, "weiter": "ende1", "rueck": "Gelassen. Geprüft hast du den Satz damit aber nicht – er meldet sich beim nächsten Mal wieder." }
+          ] },
+        { "id": "ende1", "sagt": "Du schreibst Sven, ob er am Wochenende Lust auf eine Radtour hat. Er hat.", "ende": "Du bist offen geblieben. Was den Weg dahin trägt: Fakt und Deutung trennen, einmal klar nachfassen, ein Nein mit Dank annehmen – und danach freundlich mit dir reden und das Gute sehen. Dranbleiben heißt hier: an dir dranbleiben." },
+        { "id": "ende2", "sagt": "Sie antwortet kurz: „Es liegt nicht an etwas Bestimmtem. Mach's gut.“ Danach ist Ruhe.", "ende": "Ein Nein nach dem Warum zu fragen, verlängert nur den Schmerz – für beide. Beim nächsten Mal: danken und gehen lassen." },
+        { "id": "ende3", "sagt": "Es kommt keine Antwort mehr.", "ende": "Flut oder Vorwurf haben die Tür zugemacht, ob sie offen war oder nicht. Beim nächsten Mal: Fakt prüfen, einmal freundlich nachfassen, dann Ruhe." },
+        { "id": "ende4", "sagt": "Du löschst die App. Am Wochenende bleibst du zu Hause.", "ende": "Das Nein hast du gut angenommen – danach hat der Rückzug gesiegt. Beim nächsten Mal: dich trösten wie jemanden, den du gernhast, und dir etwas vornehmen, das dir guttut." }
+      ],
+      "prinzipien": ["Fakt und Deutung trennen", "einmal klar nachfassen, dann Ruhe", "ein Nein mit Dank annehmen, kein Warum", "freundlich mit dir reden", "an dir dranbleiben, nicht an der Person"],
+      "transfer": "Was macht dein Kopf, wenn eine Antwort ausbleibt? Welcher Satz hilft dir, die Unruhe nicht ins Handy zu tippen?"
+    },
+    {
+      "id": "flirten-l-12", "bereich": "flirten", "phase": "m", "umfeld": "kennenlernen", "faehigkeiten": ["flirten.gespraech", "flirten.zeigen", "flirten.korb"], "stufe": 7,
+      "titel": "Was suchst du eigentlich?", "figur": "eine Person, die du seit einigen Wochen triffst",
+      "einleitung": "Nach dem fünften Treffen willst du wissen, wohin es geht. Du übst, einen Wunsch als Auskunft zu sagen, eine andere Antwort auszuhalten – und ehrlich zu entscheiden, was für dich passt.",
+      "lage": "Ihr trefft euch seit sechs Wochen ungefähr einmal pro Woche. Heute habt ihr gekocht und sitzt noch beim Nachtisch. Du merkst, dass du dir etwas Festes wünschst.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Er räumt die Teller zusammen. „Schöner Abend. Ich mag unsere Donnerstage.“",
+          "wahl": [
+            { "text": "„Ich auch. Darf ich dir was sagen? Ich merke, dass ich mir etwas Festes wünsche. Wie ist das bei dir?“", "wert": 2, "weiter": "k2", "rueck": "Ein Ich-Satz und eine offene Frage – eine Auskunft, keine Forderung." },
+            { "text": "Nichts sagen – es läuft ja gut, warum etwas riskieren.", "wert": 1, "weiter": "k1b", "rueck": "Nachvollziehbar. Nur bleibt dein Wunsch unsichtbar, und mit jeder Woche wird die Frage schwerer." },
+            { "text": "„Mal ehrlich: Siehst du noch andere? Ich will nicht mehr hingehalten werden, das hab ich schon zu oft erlebt.“", "wert": 0, "tendenz": "vorwurf", "weiter": "k2", "rueck": "Eine Prüfung mit Vorwurf. Er soll sich verteidigen, bevor er weiß, was du dir wünschst." }
+          ] },
+        { "id": "k1b", "sagt": "Drei Wochen später. Er erwähnt nebenbei, dass er am Wochenende ein Date hatte.",
+          "wahl": [
+            { "text": "„Oh. Dann sag ich es jetzt: Ich wünsche mir etwas Festes. Wie siehst du das?“", "wert": 2, "weiter": "k2", "rueck": "Spät, aber klar. Ein Wunsch, den du nie sagst, kann niemand erfüllen – oder ablehnen." },
+            { "text": "Nichts sagen, aber den Rest des Abends kühl sein.", "wert": 0, "tendenz": "gekraenkt", "weiter": "ende3", "rueck": "Er wusste nichts von deinem Wunsch. Kühle ohne Worte lässt ihn raten." }
+          ] },
+        { "id": "k2", "sagt": "Er überlegt lange. „Ich mag dich wirklich. Aber ich will gerade nichts Festes. Mir gefällt es so, wie es ist – locker.“",
+          "wahl": [
+            { "text": "„Danke, dass du ehrlich bist. Darüber muss ich nachdenken.“", "wert": 2, "weiter": "k3", "rueck": "Seine Antwort gehört, ohne Vorwurf – und du gibst dir Zeit, statt sofort nachzugeben oder zu gehen." },
+            { "text": "„Vielleicht änderst du ja deine Meinung, wenn wir uns noch öfter sehen.“", "wert": 0, "tendenz": "beharren", "weiter": "k3", "rueck": "Seine Antwort wird zum Hindernis, das Zeit wegräumen soll. Das ist die Hoffnung, die oft lange wehtut." },
+            { "text": "„Okay, dann eben locker.“", "wert": 1, "weiter": "k3", "rueck": "Freundlich. Ob „locker“ für dich passt, hast du aber noch gar nicht geprüft." }
+          ] },
+        { "id": "k3", "sagt": "Zu Hause merkst du: Locker reicht dir nicht. Du willst etwas Festes – mit ihm oder mit jemand anderem.",
+          "wahl": [
+            { "text": "Ihm sagen: „Locker passt für mich nicht. Ich hör lieber auf, solange es schön war.“", "wert": 2, "weiter": "ende1", "rueck": "Ehrlich zu dir und zu ihm. Unterschiedliche Wünsche sind niemandes Fehler." },
+            { "text": "Weitermachen wie bisher und hoffen, dass er sich mit der Zeit doch noch richtig in dich verliebt.", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Du verleugnest deinen Wunsch – und machst aus seiner ehrlichen Antwort einen Plan, ihn umzustimmen." },
+            { "text": "Ihm seltener schreiben und abwarten, ob es von selbst ausläuft.", "wert": 1, "weiter": "ende3", "rueck": "Schont dich kurzfristig. Er bleibt aber im Unklaren – ein klarer Satz wäre fairer." }
+          ] },
+        { "id": "ende1", "sagt": "Er antwortet: „Schade. Aber ich versteh dich. Danke für die schönen Donnerstage.“", "ende": "Ehrlich für dich entschieden und das Ende ausgesprochen. Unterschiedliche Wünsche sind niemandes Fehler – das tut weh und spart beiden Monate des Hoffens." },
+        { "id": "ende2", "sagt": "Monate später seid ihr immer noch „locker“. Du wartest bei jedem Treffen auf ein Zeichen, das nicht kommt.", "ende": "Wer seinen Wunsch verschweigt, um den anderen nicht zu verlieren, verliert oft sich selbst. Beim nächsten Mal: die Antwort ernst nehmen – und entscheiden, was du brauchst." },
+        { "id": "ende3", "sagt": "Es läuft langsam aus. Ein richtiges Ende gab es nicht, nur weniger Nachrichten.", "ende": "Ohne klares Wort bleibt vieles unausgesprochen – für dich und für ihn. Beim nächsten Mal: sagen, was du suchst, und ein Ende aussprechen, statt es auslaufen zu lassen." }
+      ],
+      "prinzipien": ["Wunsch als Ich-Satz und Frage", "eine andere Antwort aushalten", "nicht auf Umstimmen hoffen", "ehrlich für dich entscheiden", "ein Ende aussprechen statt auslaufen lassen"],
+      "transfer": "Gibt es einen Wunsch, den du in einer Beziehung oder beim Kennenlernen schon lange nicht ausgesprochen hast? Wie klänge er als Ich-Satz?"
+    },
+    {
+      "id": "flirten-l-13", "bereich": "flirten", "phase": "m", "umfeld": "kennenlernen", "faehigkeiten": ["flirten.haltung", "flirten.signale", "flirten.zeigen"], "stufe": 8,
+      "titel": "Der Abschied an der Haustür", "figur": "eine Person, mit der du ausgehst",
+      "einleitung": "Zwei Abende, zwei Abschiede an der Haustür. Du übst, nach Nähe zu fragen, ein Zögern sofort gelten zu lassen, ein Ja nicht auszudehnen – und selbst Nein zu sagen, wenn du nicht willst.",
+      "lage": "Drittes Treffen: Kino und danach ein Spaziergang. Du bringst sie auf ihren Wunsch noch bis zur Haustür. Sie bleibt stehen und lächelt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "„Das war ein schöner Abend.“ Sie schaut dich an.",
+          "wahl": [
+            { "text": "„Fand ich auch. Darf ich dich küssen?“", "wert": 2, "weiter": "k2", "rueck": "Klar gefragt – ein Ja darauf ist schöner als jedes Raten, ein Nein leicht zu sagen." },
+            { "text": "Sie ohne zu fragen küssen – der Blick ist doch eindeutig, und Fragen würde die Stimmung kaputtmachen.", "wert": 0, "tendenz": "ueberdeuten", "weiter": "k1b", "rueck": "Ein Blick ist kein Ja. Wer selbst will, liest leicht mehr hinein." },
+            { "text": "„Gute Nacht!“ – und gehen, obwohl du sie gern geküsst hättest.", "wert": 1, "weiter": "ende3", "rueck": "Kein Druck. Ein Wunsch, den du nie zeigst, bleibt aber unsichtbar." }
+          ] },
+        { "id": "k1b", "sagt": "Sie dreht den Kopf zur Seite und tritt einen Schritt zurück.",
+          "wahl": [
+            { "text": "Sofort zurücktreten: „Entschuldige, ich hätte fragen sollen.“", "wert": 2, "weiter": "k2", "rueck": "Ihr Zurückweichen ist ein Nein. Du nimmst es sofort an und benennst deinen Fehler." },
+            { "text": "„Ach komm, du wolltest doch auch.“", "wert": 0, "tendenz": "beharren", "weiter": "ende2", "rueck": "Ein Zurückweichen wird übergangen. Das ist keine Werbung mehr, sondern eine Grenzüberschreitung." }
+          ] },
+        { "id": "k2", "sagt": "Sie zögert. „Lieber noch nicht. Ich mag dich – ich brauch nur etwas Zeit.“",
+          "wahl": [
+            { "text": "„Klar. Ich hab den Abend sehr genossen. Schlaf gut!“", "wert": 2, "weiter": "k3", "rueck": "Ihr Nein gilt sofort und ohne Enttäuschung, die sie tragen soll." },
+            { "text": "„Wie viel Zeit denn ungefähr?“", "wert": 0, "tendenz": "druck", "weiter": "ende2", "rueck": "Aus ihrem Tempo wird eine Frist. Sie soll ihr Nein verhandeln." },
+            { "text": "„Okay … hab ich was falsch gemacht?“", "wert": 1, "weiter": "k3", "rueck": "Du nimmst es an. Die Frage legt ihr aber auf, dich zu beruhigen – sie hat gesagt, dass sie dich mag." }
+          ] },
+        { "id": "k3", "sagt": "Eine Woche später, viertes Treffen. An ihrer Haustür fragt sie diesmal: „Darf ich dich küssen?“ Du sagst Ja, ihr küsst euch. Dann: „Willst du noch mit hochkommen?“ Du merkst: Für heute ist dir das zu schnell.",
+          "wahl": [
+            { "text": "„Heute noch nicht – der Kuss war schön. Ich will es langsam angehen.“", "wert": 2, "weiter": "k4", "rueck": "Ein Ja zum Kuss ist kein Ja zu mehr – auch nicht für dich. Du sagst klar und warm, was du willst." },
+            { "text": "Mitgehen, damit sie nicht enttäuscht ist.", "wert": 0, "tendenz": "nachgeben", "weiter": "ende4", "rueck": "Ihre mögliche Enttäuschung ist kein Grund, gegen dein Gefühl zu handeln. Dein Nein zählt genauso." },
+            { "text": "„Äh – ich muss morgen früh raus.“", "wert": 1, "weiter": "k4", "rueck": "Ein Ausweg, der funktioniert. Ehrlich gesagt („zu schnell für mich“) weiß sie aber, woran sie ist." }
+          ] },
+        { "id": "k4", "sagt": "Sie nickt. „Klar, versteh ich. Dann bis Samstag?“",
+          "wahl": [
+            { "text": "„Bis Samstag. Ich freu mich.“", "wert": 2, "weiter": "ende1", "rueck": "Sie hat dein Nein sofort angenommen – genau so, wie du ihres. Beide wissen, woran sie sind." },
+            { "text": "„Sorry nochmal, echt, ich hoffe, du bist jetzt nicht sauer, ich wollte dich nicht verletzen …“", "wert": 1, "weiter": "ende1", "rueck": "Lieb gemeint. Ein Nein muss man nicht lange entschuldigen – sie hat es ja angenommen." },
+            { "text": "„Schauen wir mal.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende3", "rueck": "Dein Nein galt dem Hochkommen, nicht ihr. So klingt es, als wäre auch Samstag unsicher." }
+          ] },
+        { "id": "ende1", "sagt": "Sie winkt aus dem Hausflur. Auf dem Heimweg schreibt sie: „Ich mag, dass wir uns Zeit lassen.“", "ende": "Am Ende stand ein Nein auf jeder Seite – und beide haben es sofort angenommen. Was trägt: fragen statt raten, ein Ja gilt für jetzt und für das eine, Zögern ist ein Nein, und dein eigenes Nein zählt genauso." },
+        { "id": "ende2", "sagt": "Sie sagt kühl „Gute Nacht“ und schließt die Tür. Am nächsten Tag schreibt sie, dass sie dich nicht mehr treffen möchte.", "ende": "Ein Zurückweichen oder Zögern zu verhandeln, überschreitet eine Grenze – und kostet Vertrauen. Beim nächsten Mal: fragen, und jedes Nein sofort gelten lassen." },
+        { "id": "ende3", "sagt": "Ihr verabschiedet euch etwas unsicher. Keiner weiß genau, wie der andere den Abend fand.", "ende": "Kein Druck – aber dein Wunsch oder deine Freude blieb unsichtbar. Beim nächsten Mal: fragen, was du dir wünschst, und sagen, dass du dich freust." },
+        { "id": "ende4", "sagt": "Oben merkst du, dass du dich unwohl fühlst, und gehst bald.", "ende": "Mitzugehen verpflichtet dich zu nichts – gut, dass du gegangen bist, als es sich falsch anfühlte. Beim nächsten Mal: Ein Kuss ist kein Versprechen auf mehr. Du darfst schon an der Tür Nein sagen, so freundlich, wie sie es konnte." }
+      ],
+      "prinzipien": ["fragen statt raten", "Zurückweichen und Zögern sind ein Nein", "ein Ja gilt für jetzt und für das eine", "auch dein Nein zählt", "ein angenommenes Nein nicht lange entschuldigen"],
+      "transfer": "Wie fragst du in einem nahen Moment, ohne dass es sich für dich hölzern anfühlt? Und wie sagst du selbst „noch nicht“, freundlich und klar?"
+    },
+    {
+      "id": "flirten-l-14", "bereich": "flirten", "phase": "m", "umfeld": "freunde", "faehigkeiten": ["flirten.korb", "flirten.dranbleiben", "flirten.ansprechen"], "stufe": 8,
+      "titel": "Wiedersehen auf Jules Feier", "figur": "Jule Marek",
+      "einleitung": "Nach einem Korb triffst du die Person auf einer Feier wieder – und eine Freundin möchte dich jemand Neuem vorstellen. Du übst, freundlich und gelassen zu bleiben, nicht nachzuhaken und dich für eine neue Begegnung zu öffnen.",
+      "lage": "Vor drei Wochen hat eine Person, mit der du dich viermal getroffen hast, es freundlich beendet. Heute feiert Jule ihren Geburtstag im Garten. Beim Ankommen siehst du: Die Person ist auch da – sie kennt Jule aus dem Kochkurs.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Jule nimmt dich zur Seite. „Ich hab erst gestern erfahren, dass ihr euch getroffen habt. Ist es okay für dich, dass sie hier ist?“",
+          "wahl": [
+            { "text": "„Danke, dass du fragst. Ist okay – es war schade, aber fair.“", "wert": 2, "weiter": "k2", "rueck": "Ehrlich und gelassen. Jule weiß, woran sie ist, und niemand muss sich verstecken." },
+            { "text": "„Ehrlich gesagt nicht. Hättest du sie nicht ausladen können?“", "wert": 0, "tendenz": "vorwurf", "weiter": "k2", "rueck": "Jule kann nichts dafür, und die Person hat nichts falsch gemacht. Ein Nein ist kein Grund, jemanden auszuladen." },
+            { "text": "„Ich bleib vielleicht nicht so lange.“", "wert": 1, "weiter": "k2", "rueck": "Ehrlich und völlig in Ordnung, wenn es dir zu viel ist. Du darfst gehen, wann du willst." }
+          ] },
+        { "id": "k2", "sagt": "Am Buffet steht ihr plötzlich nebeneinander. Sie lächelt etwas vorsichtig. „Hi. Schön, dich zu sehen.“",
+          "wahl": [
+            { "text": "„Hi! Dich auch. Hast du schon Jules Quiche probiert?“", "wert": 2, "weiter": "k3", "rueck": "Freundlich und normal – das macht es für euch beide leicht." },
+            { "text": "„Na, hast du's dir inzwischen anders überlegt?“", "wert": 0, "tendenz": "beharren", "weiter": "ende2", "rueck": "Ein zweiter Anlauf nach einem klaren Nein – auch im Scherz bringt er sie in eine Klemme." },
+            { "text": "Kurz nicken und schnell zu den anderen gehen.", "wert": 1, "weiter": "k3", "rueck": "Verständlich, wenn es noch wehtut. Ein kurzes Hallo hätte gezeigt, dass zwischen euch nichts kaputt ist." }
+          ] },
+        { "id": "k3", "sagt": "Später bringt Jule eine Freundin aus ihrem Laufteam zum Feuerkorb. „Ihr zwei seid beide neu im Viertel“, sagt sie – und wird gleich wieder zum Grill gerufen. Ihr steht allein da, die Freundin lächelt etwas unsicher.",
+          "wahl": [
+            { "text": "„Ich bin {name}. Seit wann wohnst du hier – hast du schon einen Lieblingsbäcker?“", "wert": 2, "weiter": "k4", "rueck": "Name, Jules Brücke aufgegriffen und eine leichte Frage, auf die man gern antwortet. So ist die Lücke schnell gefüllt." },
+            { "text": "„Ach, ich bin gerade eigentlich gar nicht in der Stimmung, Leute kennenzulernen.“", "wert": 1, "weiter": "ende3", "rueck": "Ehrlich, und das darfst du. Ein freundliches Hallo ohne Ziel wäre trotzdem möglich gewesen." },
+            { "text": "„Freut mich. Jule hat mir schon erzählt, dass du Single bist.“", "wert": 0, "tendenz": "ueberziehen", "weiter": "k4", "rueck": "Das bringt sie in Verlegenheit – und Jule gleich mit. Eine Vorstellung braucht keinen Beziehungsstatus." }
+          ] },
+        { "id": "k4", "sagt": "Ihr redet eine Weile über das Viertel und gute Laufstrecken. Sie ist freundlich, aber sie schaut immer wieder zu ihrer Gruppe und sagt dann: „Ich geh mal wieder rüber, schön dich kennenzulernen!“",
+          "wahl": [
+            { "text": "„Fand ich auch. Schönen Abend noch!“", "wert": 2, "weiter": "ende1", "rueck": "Das Bündel gelesen, den Abgang leicht gemacht. Nicht jede Vorstellung wird mehr – und das ist in Ordnung." },
+            { "text": "„Schon? Gib mir doch noch schnell deine Nummer – Jule wollte uns ja nicht umsonst zusammenbringen.“", "wert": 0, "tendenz": "beharren", "weiter": "ende2", "rueck": "Ihr Abschied wird verhandelt – und Jules Vorstellung als Hebel benutzt." },
+            { "text": "„Okay.“ – und enttäuscht ins Glas schauen.", "wert": 1, "weiter": "ende1", "rueck": "Du lässt sie gehen. Ein freundlicher Satz hätte den Abschied für beide leichter gemacht." }
+          ] },
+        { "id": "ende1", "sagt": "Spät am Abend tanzt du mit Jule und ein paar anderen. Die Person vom Buffet winkt dir zum Abschied.", "ende": "Am Ende hast du jemanden gehen lassen, ohne nachzuhaken – und bist trotzdem geblieben. Was trägt: nach einem Korb normal grüßen, sich vorstellen lassen ohne Ziel, das Bündel lesen. Ein Abend mit Freunden ist auch ein guter Abend." },
+        { "id": "ende2", "sagt": "Sie wird still, entschuldigt sich und geht früh. Jule fragt dich später, was los war.", "ende": "Ein klares Nein oder einen Abschied zu verhandeln, bringt andere in eine Klemme – und auch die Gastgeberin. Beim nächsten Mal: normal grüßen, gehen lassen, nicht nachhaken." },
+        { "id": "ende3", "sagt": "Die Freundin lächelt verständnisvoll und geht zurück zu ihrer Gruppe. Du gehst bald nach Hause.", "ende": "Nach einem Korb darfst du dir Zeit lassen. Ein Hallo ohne Ziel kostet aber wenig und hält dich in Kontakt – beim nächsten Mal vielleicht ein paar Minuten länger bleiben." }
+      ],
+      "prinzipien": ["nach einem Korb normal grüßen", "kein zweiter Anlauf, auch nicht im Scherz", "eine Vorstellung leicht machen", "das Bündel lesen und gehen lassen", "Freunde sind auch ein guter Abend"],
+      "transfer": "Wem aus einem früheren Korb begegnest du noch? Welcher erste Satz würde es euch beiden leicht machen?"
+    },
+    {
+      "id": "flirten-l-15", "bereich": "flirten", "phase": "m", "umfeld": "freunde", "faehigkeiten": ["flirten.haltung", "flirten.signale", "flirten.ansprechen", "flirten.gespraech", "flirten.zeigen", "flirten.korb", "flirten.dranbleiben"], "stufe": 9, "sparring": true,
+      "titel": "Sparring: Das Sommerfest bei Jule", "figur": "ein Freund von Jule",
+      "einleitung": "Das Sparring zum Abschluss der Meisterschaft: Jule stellt dich einem Freund vor. Vom ersten Satz über die Einladung und das zweite Treffen bis zum Gespräch über Wünsche und dem Moment an der Tür – alles, was du gelernt hast, in einem Bogen.",
+      "lage": "Jules Sommerfest im Hof. Sie winkt dich zu sich: „Komm, ich will dir jemanden vorstellen. Er spielt in meiner Band Schlagzeug und ist genauso schlecht im Grillen wie du.“ Er lacht und streckt die Hand aus.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "„Hi, ich bin der Schlagzeuger. Jule übertreibt – ich bin noch schlechter.“",
+          "wahl": [
+            { "text": "„Ich bin {name}. Wollen wir's beweisen? Da liegen noch Würstchen.“", "wert": 2, "weiter": "k2", "rueck": "Name, ein Aufgreifen von Jules Brücke und ein leichtes Angebot zur Lage." },
+            { "text": "„Jule hat gesagt, du bist Single und suchst jemanden.“", "wert": 0, "tendenz": "ueberziehen", "weiter": "k1b", "rueck": "Das stellt ihn vor allen bloß – und macht aus einer Vorstellung ein Verhör." },
+            { "text": "„Hi.“", "wert": 1, "weiter": "k2", "rueck": "Freundlich, aber ohne Aufhänger. Jule hatte dir einen geschenkt." }
+          ] },
+        { "id": "k1b", "sagt": "Er lacht verlegen. „Äh – danke, Jule.“ Jule verdreht die Augen.",
+          "wahl": [
+            { "text": "„Sorry, das war plump. Ich bin {name}. Und das Grillen – Wettkampf?“", "wert": 2, "weiter": "k2", "rueck": "Fehler benannt, ehrlich neu angesetzt, zurück zur Lage." },
+            { "text": "„Ist doch nicht schlimm, ich bin auch Single.“", "wert": 0, "tendenz": "ueberziehen", "weiter": "ende3", "rueck": "Nachlegen macht es nicht leichter. Er sucht einen Ausgang." }
+          ] },
+        { "id": "k2", "sagt": "Am Grill erzählt er, dass er als Krankenpfleger im Schichtdienst arbeitet und das Schlagzeug sein Ventil ist. „Nach einer Nachtschicht muss irgendwas laut sein.“",
+          "wahl": [
+            { "text": "„Das kann ich mir vorstellen. Was ist schwerer – die Nächte oder danach abschalten?“", "wert": 2, "weiter": "k3", "rueck": "Eine Ebene tiefer, behutsam – er hat es selbst angeboten." },
+            { "text": "„Ich hab früher auch Musik gemacht, Gitarre, sogar mit Auftritten, und einmal haben wir …“", "wert": 0, "tendenz": "uebertrumpfen", "weiter": "k3", "rueck": "Sein Ventil wird zu deiner Bühne. Sein Aufhänger bleibt liegen." },
+            { "text": "„Wo arbeitest du denn?“", "wert": 1, "tendenz": "ausfragen", "weiter": "k3", "rueck": "Freundlich, aber zurück zu den Fakten. Er hatte dir etwas Persönlicheres angeboten." }
+          ] },
+        { "id": "k3", "sagt": "Er erzählt offen, fragt dich zurück, lacht über deine verkohlte Wurst und holt dir ungefragt eine neue. Als die Band zum Spielen gerufen wird, zögert er.",
+          "wahl": [
+            { "text": "„Geh ruhig. Ich hab mich gern mit dir unterhalten – Lust auf einen Kaffee nächste Woche? Kein Muss.“", "wert": 2, "weiter": "k4", "rueck": "Gehen lassen, Interesse in einem Satz, klein eingeladen, mit Ausweg." },
+            { "text": "„Bleib doch noch, die schaffen das ohne dich.“", "wert": 0, "tendenz": "beharren", "weiter": "ende3", "rueck": "Er wird gebraucht und zögert. Wer festhält, macht ihm den Abschied schwer." },
+            { "text": "„Viel Spaß beim Spielen!“", "wert": 1, "weiter": "k4b", "rueck": "Freundlich. Die Zeichen sprachen für mehr – ein Satz hätte gereicht." }
+          ] },
+        { "id": "k4b", "sagt": "Nach dem Auftritt kommt er von selbst zu dir. „Und? Zu laut?“",
+          "wahl": [
+            { "text": "„Genau richtig. Hast du nächste Woche Lust auf einen Kaffee? Wenn nicht, auch okay.“", "wert": 2, "weiter": "k4", "rueck": "Er kam von selbst – ein starkes Zeichen. Du nutzt die zweite Gelegenheit für eine leichte Einladung." },
+            { "text": "„Ging so.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende4", "rueck": "Ein kleiner Stich als Antwort auf seine Offenheit. Er zieht sich zurück." }
+          ] },
+        { "id": "k4", "sagt": "„Sehr gern.“ Ihr tauscht Nummern. Eine Woche später, nach dem Kaffee und einem langen Spaziergang, sitzt ihr auf einer Bank am Fluss. Er sagt: „Ich muss dir was sagen. Ich mag dich – aber ich hab gerade wenig Zeit wegen der Schichten. Ich weiß nicht, ob ich was Festes hinkriege.“",
+          "wahl": [
+            { "text": "„Danke, dass du das so offen sagst. Mir wäre etwas Festes schon wichtig. Lass uns schauen, ob es zusammenpasst.“", "wert": 2, "weiter": "k5", "rueck": "Seine Grenze gehört, deinen Wunsch als Auskunft gesagt, die Frage offen gelassen." },
+            { "text": "„Ach, das kriegen wir schon hin.“", "wert": 1, "weiter": "k5", "rueck": "Zuversichtlich und warm. Seine Sorge wird aber kleingeredet – und dein eigener Wunsch bleibt ungesagt." },
+            { "text": "„Dann setz halt Prioritäten.“", "wert": 0, "tendenz": "druck", "weiter": "ende4", "rueck": "Aus seiner ehrlichen Sorge wird eine Aufgabe, die er für dich lösen soll." }
+          ] },
+        { "id": "k5", "sagt": "Er lächelt. „Ich will's versuchen – in meinem Tempo.“ Auf dem Heimweg begleitet er dich bis zur Haustür. Ihr steht dicht beieinander.",
+          "wahl": [
+            { "text": "„Darf ich dich küssen?“", "wert": 2, "weiter": "k6", "rueck": "Fragen statt raten – gerade, wenn der Moment eindeutig scheint." },
+            { "text": "Ihn ohne zu fragen küssen – der Abend war doch eindeutig, da braucht es keine Worte mehr.", "wert": 0, "tendenz": "ueberdeuten", "weiter": "k6b", "rueck": "Ein schöner Abend ist kein Ja. Wer selbst will, liest leicht mehr hinein." },
+            { "text": "„Gute Nacht“ sagen und reingehen.", "wert": 1, "weiter": "ende2", "rueck": "Kein Druck. Dein Wunsch bleibt aber unsichtbar – ein Satz hätte gereicht." }
+          ] },
+        { "id": "k6b", "sagt": "Er erstarrt kurz und tritt einen halben Schritt zurück.",
+          "wahl": [
+            { "text": "Sofort zurücktreten: „Entschuldige, ich hätte fragen sollen. Alles okay bei dir?“", "wert": 2, "weiter": "ende5", "rueck": "Erstarren und Zurückweichen sind kein Ja. Erst aufhören, dann fragen, wie es ihm geht – nicht, ob es doch noch geht." },
+            { "text": "„Komm, jetzt sei nicht so.“", "wert": 0, "tendenz": "beharren", "weiter": "ende6", "rueck": "Ein Erstarren wird übergangen. Das ist eine Grenzüberschreitung." },
+            { "text": "Erschrocken zurücktreten und nichts sagen.", "wert": 1, "weiter": "ende5", "rueck": "Du hörst sofort auf – das zählt. Ein kurzes „Entschuldige, alles okay?“ hätte ihm gezeigt, dass du es bemerkt hast." }
+          ] },
+        { "id": "k6", "sagt": "Er lächelt. „Gern. Aber nur küssen heute – ich hab morgen Frühschicht.“ Ihr küsst euch. Dann schaust du ihn an.",
+          "wahl": [
+            { "text": "„Gute Nacht. Schreib mir, wann deine nächste freie Schicht ist.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Ja gilt für jetzt und für das eine. Du nimmst seine Grenze an und lässt ihm den nächsten Schritt." },
+            { "text": "„Bist du sicher? Ein Tee geht doch noch.“", "wert": 0, "tendenz": "beharren", "weiter": "ende3", "rueck": "Er hat gesagt, wofür sein Ja gilt. Wer weiterfragt, macht aus einem Ja ein Nein, das er verteidigen muss." },
+            { "text": "„Okay. Schade, aber okay.“", "wert": 1, "weiter": "ende1", "rueck": "Du nimmst es an. Das „schade“ legt ihm deine Enttäuschung in die Hand – er hat dir gerade etwas Schönes geschenkt." }
+          ] },
+        { "id": "ende1", "sagt": "Er winkt noch einmal von der Straßenecke. Am nächsten Abend schreibt er: „Donnerstag hab ich frei. Kaffee?“", "ende": "Am Ende hast du gefragt, sein Ja dort enden lassen, wo er es gesagt hat, und ihm den nächsten Schritt gelassen. Was den ganzen Bogen trägt: eine Vorstellung leicht machen, eine Ebene tiefer fragen, klein einladen, Wünsche als Auskunft sagen, nach Nähe fragen – und jedes Zögern gelten lassen." },
+        { "id": "ende2", "sagt": "Ihr verabschiedet euch freundlich. Er schreibt am nächsten Tag ein knappes „Danke für den Abend“.", "ende": "Kein Fehler – aber dein Wunsch blieb unsichtbar. Beim nächsten Mal: fragen, was du dir wünschst; ein Nein ist dann leicht zu sagen, ein Ja schöner." },
+        { "id": "ende3", "sagt": "Er wird still und hält Abstand. Auch Jule merkt, dass etwas nicht stimmt.", "ende": "Peinliches nachzulegen, einen Abschied festzuhalten oder eine Grenze zu verhandeln, kostet Vertrauen – auch im Freundeskreis. Beim nächsten Mal: eine Vorstellung leicht machen, jedes Nein sofort gelten lassen und einen Abschied nicht festhalten." },
+        { "id": "ende4", "sagt": "Er bleibt höflich, aber verschlossen. Ein weiteres Treffen kommt nicht zustande.", "ende": "Ein Stich oder Druck als Antwort auf seine Offenheit verschließt die Tür. Beim nächsten Mal: Offenheit würdigen und deinen eigenen Wunsch als Ich-Satz sagen." },
+        { "id": "ende5", "sagt": "Er nickt, noch etwas überrumpelt. „Schon gut. Ich geh jetzt. Gute Nacht.“ Am nächsten Tag schreibt er: „Danke, dass du gleich aufgehört hast. Ich brauch ein bisschen.“", "ende": "Du hast sofort aufgehört, als er erstarrte – richtig. Davor fehlte die Frage: Ein schöner Abend ist kein Ja. Ob und wann es weitergeht, entscheidet jetzt er. Beim nächsten Mal: erst fragen, dann küssen." },
+        { "id": "ende6", "sagt": "Er schüttelt den Kopf, sagt leise „Gute Nacht“ und geht schnell. Am nächsten Tag schreibt er, dass er dich nicht mehr treffen möchte.", "ende": "Ohne Frage zum Kuss angesetzt, dann sein Erstarren übergangen – das ist eine Grenzüberschreitung, keine Werbung. Sein Rückzug ist sein gutes Recht. Beim nächsten Mal: erst fragen, und bei jedem Zögern sofort aufhören." }
+      ],
+      "prinzipien": ["eine Vorstellung leicht machen", "eine Ebene tiefer, im Wechsel", "klein, konkret, mit Ausweg einladen", "Wünsche als Auskunft, nicht als Forderung", "vor Nähe fragen – ein Ja gilt für das eine", "Zögern und Zurückweichen sind ein Nein"],
+      "transfer": "Wer in deinem Freundeskreis könnte dich jemandem vorstellen – und wen könntest du selbst einmal vorstellen? Was wäre ein guter erster Rahmen dafür?"
+    }
+  ]
+}

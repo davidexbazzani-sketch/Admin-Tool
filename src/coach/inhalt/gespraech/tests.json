@@ -295,7 +295,7 @@
       "id": "gespraech-fc-017",
       "faehigkeit": "gespraech.widerspruch",
       "stufe": 4,
-      "frage": "In der Elternvertretung sagt jemand: „Ein Kuchenbasar bringt doch eh nichts, das weiß jeder.“ Du siehst das anders. Was sagst du?",
+      "frage": "Im Vorstand des Sportvereins sagt jemand: „Ein Kuchenbasar bringt doch eh nichts, das weiß jeder.“ Du siehst das anders. Was sagst du?",
       "antworten": [
         { "text": "„Das stimmt doch gar nicht.“", "wert": 0, "warum": "Behauptung gegen Behauptung – ihr dreht euch." },
         {
@@ -325,7 +325,7 @@
       "id": "gespraech-fc-019",
       "faehigkeit": "gespraech.absprache",
       "stufe": 2,
-      "frage": "Am Ende eines Elternabends sagt die Lehrerin: „Wer kümmert sich um den Ausflug?“ Alle schauen weg. Du würdest es übernehmen. Was sagst du?",
+      "frage": "Am Ende der Vereinsversammlung sagt die Vorsitzende: „Wer kümmert sich um den Ausflug?“ Alle schauen weg. Du würdest es übernehmen. Was sagst du?",
       "antworten": [
         {
           "text": "„Ich kann ja mal schauen, ob ich das hinbekomme, und melde mich dann irgendwann bei Ihnen, sobald ich mehr weiß.“",
@@ -333,11 +333,11 @@
           "warum": "Ein Anfang. Was genau und bis wann, bleibt offen."
         },
         {
-          "text": "„Ich frage bis Ende nächster Woche zwei Ziele an und schicke sie in die Elterngruppe.“",
+          "text": "„Ich frage bis Ende nächster Woche zwei Ziele an und schicke sie in die Vereinsgruppe.“",
           "wert": 2,
           "warum": "Wer, was, bis wann – alle wissen, woran sie sind."
         },
-        { "text": "„Das sollte doch eigentlich der Elternbeirat machen.“", "wert": 0, "tendenz": "abschieben", "warum": "Vielleicht richtig – aber so bleibt es bei niemandem." }
+        { "text": "„Das sollte doch eigentlich der Vorstand machen.“", "wert": 0, "tendenz": "abschieben", "warum": "Vielleicht richtig – aber so bleibt es bei niemandem." }
       ]
     },
     {
@@ -384,7 +384,7 @@
       "id": "gespraech-fc-022",
       "faehigkeit": "gespraech.oben",
       "stufe": 2,
-      "frage": "Deine Chefin hat dir eine Aufgabe gegeben, aber du verstehst das Ziel nicht ganz. Was tust du?",
+      "frage": "Dr. Albers hat dir eine Aufgabe gegeben, aber du verstehst das Ziel nicht ganz. Was tust du?",
       "antworten": [
         { "text": "Irgendwie anfangen und hoffen, dass es passt.", "wert": 0, "tendenz": "vermeiden", "warum": "Dann merkt ihr erst am Ende, dass ihr Verschiedenes gemeint habt." },
         {
@@ -393,9 +393,9 @@
           "warum": "Eine offene Frage nach dem Ziel – kurz und ohne dich kleinzumachen."
         },
         {
-          "text": "Eine Kollegin fragen, was die Chefin wohl gemeint haben könnte – die kennt sie ja schon viel länger.",
+          "text": "Eine Kollegin fragen, was Dr. Albers wohl gemeint haben könnte – die kennt ihn ja schon viel länger.",
           "wert": 1,
-          "warum": "Kann helfen – aber die Kollegin muss auch raten. Die Chefin weiß es sicher."
+          "warum": "Kann helfen – aber die Kollegin muss auch raten. Dr. Albers weiß es sicher."
         }
       ]
     },
@@ -441,13 +441,203 @@
           "warum": "Höflich, aber sehr vorsichtig. Mit einem Plan für die Lücke wird es leichter, Ja zu sagen."
         }
       ]
+    },
+    {
+      "id": "gespraech-fc-025",
+      "faehigkeit": "gespraech.feedback",
+      "stufe": 4,
+      "frage": "Eine Freundin zeigt dir ihre Bewerbung und fragt nach deiner Meinung. Das Anschreiben ist gut – nur steht ihre wichtigste Erfahrung ganz unten. Was sagst du?",
+      "antworten": [
+        { "text": "„Sieht gut aus, schick sie ab!“", "wert": 0, "tendenz": "beschoenigen", "warum": "Freundlich, aber sie hat um deine Meinung gebeten – und verpasst die Chance, sie zu verbessern." },
+        { "text": "„Der Einstieg ist stark. Deine Erfahrung im Lager steht aber ganz unten – was meinst du, holst du sie nach oben?“", "wert": 2, "warum": "Konkretes Lob, eine klare Beobachtung und eine Frage nach ihrer Sicht. Sie entscheidet selbst." },
+        { "text": "„Die Reihenfolge ist irgendwie nicht so glücklich, das würde ich an deiner Stelle noch mal komplett umbauen, bevor du sie abschickst.“", "wert": 0, "tendenz": "vage", "warum": "Vage und groß. Sie weiß nicht, was genau sie ändern soll." },
+        { "text": "„Ich würde die Lagererfahrung weiter nach oben setzen.“", "wert": 1, "warum": "Konkret und hilfreich. Mit dem, was gut ist, und einer Frage nach ihrer Sicht kommt es noch besser an." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-026",
+      "faehigkeit": "gespraech.zuhoeren",
+      "stufe": 5,
+      "frage": "Beim Abendessen sagt die Person, mit der du zusammenlebst: „Du hörst mir in letzter Zeit kaum noch zu.“ Was ist die beste erste Antwort?",
+      "antworten": [
+        { "text": "„Das stimmt doch gar nicht, ich hör dir immer zu.“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Ein Widerspruch zeigt ihr eher, dass du gerade nicht zuhörst." },
+        { "text": "„Ich hab gerade halt viel im Kopf, mit der Arbeit und allem, das weißt du doch.“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Eine Erklärung, bevor du verstanden hast, was gemeint ist." },
+        { "text": "„Oh. Danke, dass du's sagst. Wann ist es dir zuletzt so gegangen?“", "wert": 2, "warum": "Danke und eine Frage nach dem Beispiel. Jetzt erfährst du, worum es geht." },
+        { "text": "„Tut mir leid.“", "wert": 1, "warum": "Anerkennend. Mit einer Nachfrage wüsstest du, was du ändern kannst." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-027",
+      "faehigkeit": "gespraech.ich",
+      "stufe": 5,
+      "frage": "Der Vorstand deines Vereins bittet dich, zusätzlich die Kasse zu übernehmen. Du leitest schon die Jugendgruppe und hast keine Zeit dafür. Was sagst du?",
+      "antworten": [
+        { "text": "„Ich weiß nicht so recht … Ich muss mal schauen, wie das mit allem passt.“", "wert": 0, "tendenz": "ausweichen", "warum": "Weder Ja noch Nein. Der Vorstand plant mit dir." },
+        { "text": "„Die Kasse übernehme ich nicht – neben der Jugendgruppe geht das nicht. Bei der Übergabe an jemand Neuen helfe ich gern einen Abend.“", "wert": 2, "warum": "Klar im Nein, ein Grund, ein Angebot, das du halten kannst." },
+        { "text": "„Nein, das geht nicht.“", "wert": 1, "warum": "Klar und ehrlich. Mit einem kleinen Angebot spürt der Vorstand, dass dir der Verein wichtig bleibt." },
+        { "text": "„Na gut, wenn sich sonst keiner findet.“", "wert": 0, "tendenz": "nachgeben", "warum": "Ein Ja, das gegen dich arbeitet – und gegen die Jugendgruppe." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-028",
+      "faehigkeit": "gespraech.absprache",
+      "stufe": 6,
+      "frage": "Eine Nachbarin fragt, ob du dich in ihren drei Urlaubswochen um ihre Pflanzen kümmerst. Am mittleren Wochenende bist du selbst weg. Welche Antwort ist eine klare Absprache?",
+      "antworten": [
+        { "text": "„Klar, mach ich.“", "wert": 0, "tendenz": "schlucken", "warum": "Am mittleren Wochenende vertrocknen die Pflanzen – oder du sagst kurzfristig ab." },
+        { "text": "„Gern, nur am Wochenende vom 12. bin ich weg. Fragst du Frau Sommer für die zwei Tage? Ich geb ihr den Schlüssel am Freitag.“", "wert": 2, "warum": "Was geht, was nicht, wer die Lücke füllt und wann der Schlüssel übergeben wird." },
+        { "text": "„Mach ich, außer am mittleren Wochenende.“", "wert": 1, "warum": "Ehrlich. Wer dann gießt, bleibt aber offen." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-029",
+      "faehigkeit": "gespraech.konflikt",
+      "stufe": 6,
+      "frage": "Du und dein Bruder wollt beide über Pfingsten das Ferienhaus der Familie nutzen. Eure Gründe sind genannt, aber ihr dreht euch im Kreis. Was hilft am meisten?",
+      "antworten": [
+        { "text": "„Wir losen.“", "wert": 1, "warum": "Fair und schnell. Vielleicht hätte aber eine Lösung beide bedient." },
+        { "text": "„Ich hab das Haus seit drei Jahren nicht genutzt, das ist ja wohl eindeutig.“", "wert": 0, "tendenz": "position", "warum": "Ein möglicher Maßstab – aber als Machtwort gesagt, nicht als Vorschlag." },
+        { "text": "„Lass uns erst sammeln, was noch ginge – geteilte Tage, ein anderes Wochenende, beide zusammen – und dann einen Maßstab festlegen.“", "wert": 2, "warum": "Erst Möglichkeiten, dann ein gemeinsamer Maßstab. So kommt ihr aus dem Kreis heraus." },
+        { "text": "„Dann fahr halt du. Mir ist es nicht so wichtig, hab ich mir eben umsonst Hoffnungen gemacht.“", "wert": 0, "tendenz": "beleidigt", "warum": "Klingt nach Nachgeben, trägt aber einen Vorwurf. Und dein Anliegen ist weg." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-030",
+      "faehigkeit": "gespraech.fragen",
+      "stufe": 5,
+      "frage": "Bei der Dienstplanung sagt eine Kollegin: „Die Spätschicht nehm ich auf keinen Fall.“ Welche Frage hilft am meisten?",
+      "antworten": [
+        { "text": "„Was macht die Spätschicht für dich schwierig?“", "wert": 2, "warum": "Offen, ohne Vorwurf, nach dem Grund. Vielleicht gibt es eine Lösung für genau das." },
+        { "text": "„Und wer soll sie dann machen, wenn jeder so denkt wie du?“", "wert": 0, "tendenz": "vorwurf", "warum": "Eine Frage mit Vorwurf. Sie verteidigt sich, statt den Grund zu nennen." },
+        { "text": "„Ist das dein letztes Wort, oder können wir da noch mal in Ruhe drüber reden, wenn alle dabei sind?“", "wert": 1, "warum": "Öffnet die Tür ein Stück. Nach dem Grund zu fragen, bringt euch schneller weiter." },
+        { "text": "„Warum eigentlich nicht?“", "wert": 0, "tendenz": "verhoeren", "warum": "Ein Warum, das nach Rechtfertigung verlangt." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-031",
+      "faehigkeit": "gespraech.widerspruch",
+      "stufe": 7,
+      "frage": "In der Eigentümerversammlung sind alle für eine teure neue Fassade. Du hältst das undichte Dach für dringender. Wie bringst du das ein?",
+      "antworten": [
+        { "text": "„Darf ich kurz dagegenhalten? Die Fassade wertet das Haus auf – nur hält das Dach wohl keinen Winter mehr. Erst das Dach prüfen?“", "wert": 2, "warum": "Erlaubnis, Würdigung, eine Sorge mit Grund und ein Vorschlag – früh, solange noch nichts beschlossen ist." },
+        { "text": "„Eine Fassade jetzt ist doch Unsinn.“", "wert": 0, "tendenz": "abwerten", "warum": "Ein Urteil ohne Grund. Die anderen fühlen sich angegriffen." },
+        { "text": "Nach der Versammlung dem Verwalter eine Mail schreiben.", "wert": 1, "warum": "Besser als nichts. Aber in der Versammlung hätten alle deinen Punkt gehört, bevor entschieden wird." },
+        { "text": "Nichts sagen – wenn alle dafür sind, wird es schon richtig sein.", "wert": 0, "tendenz": "vermeiden", "warum": "Gerade wenn alle nicken, ist ein echter Einwand am wertvollsten." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-032",
+      "faehigkeit": "gespraech.oben",
+      "stufe": 7,
+      "frage": "Mittwoch: Wegen einer Kundenreklamation schaffst du den Bericht für Dr. Albers bis Freitag nicht. Was tust du?",
+      "antworten": [
+        { "text": "Bis Freitagabend durcharbeiten und hoffen.", "wert": 0, "tendenz": "schlucken", "warum": "Vielleicht klappt es. Wenn nicht, erfährt Dr. Albers es zu spät." },
+        { "text": "Heute Dr. Albers sagen: „Die Reklamation hat zwei Tage gekostet. Bericht Montag oder Kurzfassung Freitag? Ich rate zu Montag.“", "wert": 2, "warum": "Früh, mit Lage, Möglichkeiten und Vorschlag. So kann er planen." },
+        { "text": "Am Freitag Bescheid sagen, wenn klar ist, dass es nicht reicht – vorher weißt du ja selbst noch nicht genau, wie weit du kommst.", "wert": 0, "tendenz": "aufschieben", "warum": "Dann bleibt keine Zeit mehr, etwas umzuplanen." },
+        { "text": "Heute Bescheid sagen, dass es knapp wird.", "wert": 1, "warum": "Früh und ehrlich. Mit Möglichkeiten und einem Vorschlag kann er gleich entscheiden." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-033",
+      "faehigkeit": "gespraech.konflikt",
+      "stufe": 7,
+      "frage": "Im Streit sagt ein guter Freund: „Du bist so ein Besserwisser.“ Du spürst, wie du gleich zurückschießen willst. Was ist die beste Reaktion?",
+      "antworten": [
+        { "text": "„Und du bist beleidigt, sobald man dir widerspricht.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Etikett gegen ein Etikett. Jetzt streitet ihr über Charaktere." },
+        { "text": "„Autsch. Was hab ich gerade gemacht, das so ankommt?“", "wert": 2, "warum": "Das Etikett nicht erwidert, das eigene Gefühl kurz genannt und nach dem Verhalten gefragt." },
+        { "text": "Schweigen und das Thema wechseln.", "wert": 0, "tendenz": "mauern", "warum": "Der Ärger bleibt – bei beiden." },
+        { "text": "„Ich brauch kurz eine Pause. Lass uns gleich weiterreden.“", "wert": 1, "warum": "Eine Pause verhindert den Gegenschlag. Mit einer Nachfrage danach wird sie zum Gegenmittel." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-034",
+      "faehigkeit": "gespraech.zuhoeren",
+      "stufe": 6,
+      "frage": "Du entkalkst die Kaffeemaschine im Büro. Ein Kollege sagt im Vorbeigehen: „Ah, endlich macht's mal jemand.“ Was tust du?",
+      "antworten": [
+        { "text": "Dich ärgern – er hält dich offenbar für jemanden, der sonst nie was macht.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Du hörst nur auf dem Beziehungsohr. Vielleicht war es Erleichterung oder Dank." },
+        { "text": "„Ich mach's ja nicht zum ersten Mal!“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Eine Verteidigung gegen einen Vorwurf, der vielleicht gar keiner war." },
+        { "text": "„Klingt, als hätte dich die Maschine schon länger genervt?“", "wert": 2, "warum": "Du prüfst die Selbstkundgabe, statt eine Spitze zu vermuten – und erfährst, wie er es meinte." },
+        { "text": "Es als Dank nehmen und lächeln.", "wert": 1, "warum": "Freundlich gedeutet – meist liegst du damit nicht schlecht. Sicher weißt du es aber nur mit einer Nachfrage." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-035",
+      "faehigkeit": "gespraech.fragen",
+      "stufe": 8,
+      "frage": "Deine Mutter sagt am Telefon, nachdem du weniger Besuche angekündigt hast: „Ach, ich komm schon allein zurecht.“ Du bist nicht sicher, wie sie es meint. Was fragst du?",
+      "antworten": [
+        { "text": "„Klingt ein bisschen, als wärst du enttäuscht. Ist das so?“", "wert": 2, "warum": "Die vermutete Seite als Frage – sie kann bestätigen oder korrigieren, ohne sich zu rechtfertigen." },
+        { "text": "„Super, dann ist ja alles gut.“", "wert": 0, "tendenz": "ueberhoeren", "warum": "Du nimmst nur die Sachseite. Eine mögliche Enttäuschung bleibt unausgesprochen." },
+        { "text": "„Jetzt mach mir bitte kein schlechtes Gewissen, ich hab dir doch erklärt, warum es gerade nicht anders geht.“", "wert": 0, "tendenz": "gedankenlesen", "warum": "Du unterstellst eine Absicht und verteidigst dich gleich mit." },
+        { "text": "„Wie meinst du das?“", "wert": 1, "warum": "Offen und gut. Mit einer vorsichtigen Vermutung zeigst du, dass du genau hinhörst." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-036",
+      "faehigkeit": "gespraech.widerspruch",
+      "stufe": 8,
+      "frage": "In der Hausversammlung sagt ein Nachbar: „Wer gegen die Kamera im Treppenhaus ist, hat wohl was zu verbergen.“ Du bist dagegen. Was hilft am meisten?",
+      "antworten": [
+        { "text": "„Ich hab nichts zu verbergen!“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Du verteidigst dich gegen eine Unterstellung – und dein Argument kommt nicht vor." },
+        { "text": "„Das ist eine Unterstellung, die ich nicht annehme. Mein Punkt ist: Wer sieht die Aufnahmen, und wie lange werden sie gespeichert?“", "wert": 2, "warum": "Den Zug benannt, ohne zurückzuschlagen, und sofort zurück zur Sache." },
+        { "text": "„Das ist eine ziemlich unfaire Bemerkung.“", "wert": 1, "warum": "Richtig erkannt. Ohne dein Argument danach bleibt aber nur die Empörung im Raum." },
+        { "text": "„Und wer dafür ist, will wohl alle überwachen.“", "wert": 0, "tendenz": "angreifen", "warum": "Eine Unterstellung gegen eine Unterstellung. Die Versammlung kippt in Lager." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-037",
+      "faehigkeit": "gespraech.absprache",
+      "stufe": 8,
+      "frage": "Am Ende einer Projektbesprechung sagst du: „Gut, Lena macht den Entwurf bis Mittwoch, und wir schauen nächste Woche mal drauf.“ Was fehlt am ehesten, damit die Absprache hält?",
+      "antworten": [
+        { "text": "Nichts – wer, was und bis wann sind ja da.", "wert": 0, "tendenz": "vage", "warum": "Fast. Aber was „fertig“ heißt und was passiert, wenn es hakt, ist offen – und „nächste Woche mal“ ist kein Termin." },
+        { "text": "Was „fertig“ heißt, was passiert, wenn es hakt, und ein fester Termin zum Draufschauen.", "wert": 2, "warum": "Genau an diesen Lücken scheitern Absprachen meist – nicht an Wer und Wann." },
+        { "text": "Eine Mail an alle.", "wert": 1, "warum": "Hilft beim Erinnern. Die Lücken in der Absprache selbst schließt sie aber nicht." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-038",
+      "faehigkeit": "gespraech.feedback",
+      "stufe": 7,
+      "frage": "Nach dem Spiel sagt die Trainerin deiner Freizeitmannschaft vor allen: „Du hast heute nur für dich gespielt.“ Du findest das unfair. Was ist die beste Antwort?",
+      "antworten": [
+        { "text": "„Das stimmt überhaupt nicht, ich hab zweimal abgespielt, und die anderen haben die Bälle verloren!“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Vor allen verteidigt – jetzt geht es ums Rechthaben, und die Mannschaft hört zu." },
+        { "text": "„Okay.“ – und dich den Rest des Abends ärgern.", "wert": 0, "tendenz": "schlucken", "warum": "Die Kritik bleibt in dir stecken, ohne dass du weißt, was genau gemeint war." },
+        { "text": "„Danke. Mich interessiert, woran du das festmachst – können wir nachher kurz zu zweit reden?“", "wert": 2, "warum": "Danke, Frage nach dem Beispiel und ein Gespräch unter vier Augen. Entscheiden, was du annimmst, kannst du danach." },
+        { "text": "„Kannst du mir ein Beispiel nennen?“", "wert": 1, "warum": "Die richtige Frage. Vor allen wird die Antwort aber leicht zum öffentlichen Streit." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-039",
+      "faehigkeit": "gespraech.ich",
+      "stufe": 9,
+      "frage": "Die Person, mit der du zusammen bist, kommentiert seit Monaten, wie du Auto fährst – auch vor Freunden. Du willst es endlich ansprechen. Welcher Einstieg ist am besten?",
+      "antworten": [
+        { "text": "„Du kritisierst ständig alles, was ich mache.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein harter Einstieg mit Übertreibung. Darauf folgt Verteidigung statt Zuhören." },
+        { "text": "„Mir liegt was auf dem Herzen: Wenn du vor Freunden kommentierst, wie ich fahre, fühl ich mich vorgeführt. Können wir darüber reden?“", "wert": 2, "warum": "Sanfter Einstieg: Anliegen, Beobachtung, Wirkung, Einladung." },
+        { "text": "„Wir müssen mal reden.“", "wert": 1, "warum": "Kündigt ein Gespräch an – klingt aber ernst, ohne zu sagen, worum es geht." },
+        { "text": "„Ach, ist eigentlich nicht so wichtig, nur so eine Kleinigkeit, aber manchmal, wenn wir mit anderen unterwegs sind und du dann so …“", "wert": 0, "tendenz": "kleinmachen", "warum": "So klein gemacht, dass es auch klein behandelt wird." }
+      ]
+    },
+    {
+      "id": "gespraech-fc-040",
+      "faehigkeit": "gespraech.oben",
+      "stufe": 9,
+      "frage": "Vor zwei Monaten hast du deinem Vorgesetzten gesagt, dass du mehr Verantwortung möchtest. Seitdem ist nichts passiert. Was ist der beste nächste Schritt?",
+      "antworten": [
+        { "text": "Abwarten – er hat es sicher nicht vergessen.", "wert": 0, "tendenz": "aufschieben", "warum": "Vielleicht doch. Ohne Nachfassen bleibt dein Anliegen eines unter vielen." },
+        { "text": "„Sie haben mein Anliegen offenbar komplett vergessen.“", "wert": 0, "tendenz": "vorwurf", "warum": "Ein Vorwurf. Er verteidigt sich, statt über Möglichkeiten zu sprechen." },
+        { "text": "Um einen Termin bitten: „Ich würde gern an unser Gespräch anknüpfen. Ich hätte zwei Ideen, welche Aufgabe ich übernehmen könnte.“", "wert": 2, "warum": "Freundlich nachgefasst, mit Termin und konkreten Vorschlägen. So kann er leicht Ja sagen." },
+        { "text": "Eine Mail: „Gibt es schon Neuigkeiten zu meinem Wunsch?“", "wert": 1, "warum": "Nachgefasst – gut. Mit eigenen Vorschlägen gibst du ihm etwas, worüber er entscheiden kann." }
+      ]
     }
   ],
   "selbstbild": [
     { "id": "gespraech-sb-1", "text": "Wenn mir jemand etwas erzählt, fasse ich zusammen, bevor ich einen Rat gebe.", "faehigkeit": "gespraech.zuhoeren" },
     { "id": "gespraech-sb-2", "text": "Wenn ich vermute, was in jemandem vorgeht, frage ich nach, statt davon auszugehen.", "faehigkeit": "gespraech.fragen" },
     { "id": "gespraech-sb-3", "text": "Wenn mich etwas stört, kann ich es als Beobachtung mit einem klaren Wunsch sagen.", "faehigkeit": "gespraech.ich" },
-    { "id": "gespraech-sb-4", "text": "Ich kann auch meiner Vorgesetzten widersprechen, ohne anzugreifen.", "faehigkeit": "gespraech.widerspruch" },
+    { "id": "gespraech-sb-4", "text": "Ich kann auch meiner Führungskraft widersprechen, ohne anzugreifen.", "faehigkeit": "gespraech.widerspruch" },
     { "id": "gespraech-sb-5", "text": "Am Ende eines Gesprächs ist klar, wer was bis wann macht.", "faehigkeit": "gespraech.absprache" }
   ],
   "verhalten": [
@@ -459,7 +649,7 @@
     { "id": "gespraech-vh-2", "text": "Wie oft hast du in den letzten zwei Wochen etwas angesprochen, das dich gestört hat, statt es zu schlucken?", "faehigkeit": "gespraech.ich" },
     {
       "id": "gespraech-vh-3",
-      "text": "Wie oft hast du in den letzten zwei Wochen in einer Runde oder bei einer Vorgesetzten einen Einwand gebracht?",
+      "text": "Wie oft hast du in den letzten zwei Wochen in einer Runde oder bei einer Führungskraft einen Einwand gebracht?",
       "faehigkeit": "gespraech.widerspruch"
     }
   ]

@@ -25,7 +25,7 @@
           "frage": "Morgen ist Teamrunde, und Dr. Albers fragt gern spontan nach. Welche Vorbereitung bringt dir am meisten?",
           "antworten": [
             { "text": "Den eigenen Stand am Abend vorher einmal grob im Kopf durchgehen.", "wert": 1, "warum": "Hilft – aber der erste Satz fehlt dir dann trotzdem, wenn die Frage kommt." },
-            { "text": "Eine ausführliche Fassung Wort für Wort lernen, damit dir in der Runde kein einziges Wort fehlt.", "wert": 0, "tendenz": "auswendig", "warum": "Auswendig Gelerntes reißt beim ersten vergessenen Wort ab. Merk dir Punkte, nicht Sätze." },
+            { "text": "Eine ausführliche Fassung Wort für Wort auswendig lernen.", "wert": 0, "tendenz": "auswendig", "warum": "Auswendig Gelerntes reißt beim ersten vergessenen Wort ab. Merk dir Punkte, nicht Sätze." },
             { "text": "Für die zwei, drei wahrscheinlichsten Fragen je den ersten Satz zurechtlegen.", "wert": 2, "warum": "Genau das ist Vorrat: Der Anfang steht, der Rest folgt dem Bauplan." },
             { "text": "Vorher eine Runde Gehirnjogging am Handy, um schneller zu denken.", "wert": 0, "warum": "Du wirst besser im Spiel – für die Teamrunde ist der Nutzen kaum belegt." }
           ] },
@@ -263,7 +263,7 @@
         { "art": "auswahl", "kopf": { "id": "stegreif-1-06-b", "faehigkeit": "stegreif.wortfluss", "stufe": 2, "kanal": "wissen" },
           "frage": "Nach zwanzig Sekunden fällt dir nichts mehr ein. Was hilft am ehesten weiter?",
           "antworten": [
-            { "text": "Abbrechen – wenn nichts mehr kommt, ist die Quelle eben erschöpft und weiteres Grübeln bringt nichts.", "wert": 0, "tendenz": "aufgeben", "warum": "Nach einem Stocken kommen oft noch Einfälle. Die Pause ist ein Übergang, kein Ende." },
+            { "text": "Abbrechen – wenn nichts mehr kommt, ist die Quelle erschöpft.", "wert": 0, "tendenz": "aufgeben", "warum": "Nach einem Stocken kommen oft noch Einfälle. Die Pause ist ein Übergang, kein Ende." },
             { "text": "Die Richtung wechseln: statt Verwendungen jetzt Orte, Menschen oder Gefühle.", "wert": 2, "warum": "Ein neuer Blickwinkel öffnet eine neue Schublade. So geht es meist schnell weiter." },
             { "text": "Still abwarten, bis wieder etwas kommt.", "wert": 1, "warum": "Manchmal reicht das. Schneller geht es, wenn du aktiv die Richtung wechselst." },
             { "text": "Nur noch auf einen wirklich guten Einfall warten.", "wert": 0, "tendenz": "zensor", "warum": "Jetzt bewertet der innere Zensor mit – und bremst. Beim Sammeln zählt die Menge." }

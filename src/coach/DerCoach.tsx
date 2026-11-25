@@ -1,7 +1,7 @@
 // Der Coach — Wurzel des Raums im Pausenraum (seit 25.11.2026). Wird erst beim Öffnen geladen (lazy in App.tsx);
 // Inhalte kommen einzeln nach, wenn sie gebraucht werden. Bauplan: src/coach/LIESMICH.md.
 import { useEffect, useState } from 'react'
-import { ArrowLeft, Compass, CalendarCheck, Dumbbell, LifeBuoy, Lock, Map as KarteSymbol, Settings, UserRound } from 'lucide-react'
+import { ArrowLeft, Compass, CalendarCheck, Dumbbell, Flag, LifeBuoy, ListChecks, Lock, Map as KarteSymbol, Settings, UserRound } from 'lucide-react'
 import './coach.css'
 import { setzeHost, host } from './host/aktiv'
 import { adminToolHost } from './host/adminTool'
@@ -22,15 +22,21 @@ import { Reise } from './bereiche/Reise'
 import { Ecke } from './bereiche/Ecke'
 import { Einstellungen } from './bereiche/Einstellungen'
 import { Notfallkoffer } from './bereiche/Notfallkoffer'
+import { Missionen } from './bereiche/Missionen'
+import { Kompass } from './bereiche/Kompass'
+import { Vorhaben } from './bereiche/Vorhaben'
 import { Paket } from './ablauf/Paket'
 
 setzeHost(adminToolHost)
 
-type Ansicht = 'heute' | 'reise' | 'halle' | 'ecke' | 'einstellungen' | 'notfall'
+type Ansicht = 'heute' | 'reise' | 'halle' | 'missionen' | 'kompass' | 'vorhaben' | 'ecke' | 'einstellungen' | 'notfall'
 const NAV: { id: Ansicht; name: string; S: typeof Compass }[] = [
   { id: 'heute', name: 'Heute', S: CalendarCheck },
   { id: 'reise', name: 'Reise', S: KarteSymbol },
   { id: 'halle', name: 'Halle', S: Dumbbell },
+  { id: 'missionen', name: 'Missionen', S: Flag },
+  { id: 'kompass', name: 'Kompass', S: Compass },
+  { id: 'vorhaben', name: 'Vorhaben', S: ListChecks },
   { id: 'ecke', name: 'Ecke', S: UserRound },
   { id: 'einstellungen', name: 'Einstellungen', S: Settings },
 ]
@@ -101,9 +107,12 @@ export default function DerCoach() {
           : !eingestiegen ? <Einstieg index={index} onFertig={() => setAnsicht('heute')} />
             : lauf ? <Paket bloecke={lauf.bloecke} laut={lauf.laut} ohneUhr={ohneZeitdruck} imPlan={lauf.imPlan} onEnde={() => setLauf(null)} />
               : bereich ? <Bereichsseite index={index} bereich={bereich} onZurueck={() => setBereich(null)} onUeben={uebe} />
-                : ansicht === 'heute' ? <Heute index={index} onStart={starte} onNotfall={id => { setNotfall(id); setAnsicht('notfall') }} />
+                : ansicht === 'heute' ? <Heute index={index} onStart={starte} onNotfall={id => { setNotfall(id); setAnsicht('notfall') }} onGeh={geh} />
                   : ansicht === 'halle' ? <Halle index={index} onBereich={setBereich} />
                     : ansicht === 'reise' ? <Reise index={index} />
+                      : ansicht === 'missionen' ? <Missionen index={index} />
+                      : ansicht === 'kompass' ? <Kompass />
+                      : ansicht === 'vorhaben' ? <Vorhaben />
                       : ansicht === 'ecke' ? <Ecke index={index} />
                         : ansicht === 'einstellungen' ? <Einstellungen index={index} />
                           : <Notfallkoffer start={notfall} onZurueck={() => geh('heute')} />}

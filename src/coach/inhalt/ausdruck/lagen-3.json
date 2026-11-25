@@ -1,0 +1,236 @@
+{
+  "lagen": [
+    {
+      "id": "ausdruck-l-11", "bereich": "ausdruck", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["ausdruck.satzbau", "ausdruck.treffend", "ausdruck.register"], "stufe": 7,
+      "titel": "Ein Toast auf Miriam", "figur": "Miriam Okafor",
+      "einleitung": "Zwei Minuten, das ganze Team, ein Glas Sekt in der Hand. Du übst, fürs Ohr zu schreiben, einen Vergleich zu finden, der sitzt, und im eigenen Ton zu bleiben.",
+      "lage": "Miriam ist seit zehn Jahren in der Firma. In der Kaffeeküche stehen zwanzig Leute, Tarek hat Sekt geöffnet. Carla nickt dir zu: Du sagst ein paar Worte. Miriam ist die, die jeden Montag als Erste lacht – und die jeden fragt, wie es ihm geht, und wirklich zuhört.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Alle schauen dich an. Dein erster Satz?",
+          "wahl": [
+            { "text": "„Liebe Miriam, herzlichen Glückwunsch zum Jubiläum.“", "wert": 1, "weiter": "k2", "rueck": "Freundlich und passend. Hängen bleibt es nicht – so fängt jeder Toast an." },
+            { "text": "„Ich bin ja kein großer Redner, und eigentlich sollte das jemand anders machen, aber na gut, ich versuch's mal …“", "wert": 0, "tendenz": "kleinmachen", "weiter": "k1b", "rueck": "Der erste Satz entschuldigt sich für die übrigen. Alle hören jetzt auf die Unsicherheit." },
+            { "text": "„Zehn Jahre Miriam – das sind zehn Jahre, in denen montags früh jemand gelacht hat.“", "wert": 2, "weiter": "k2", "rueck": "Ein Satz in einem Atem, ein Bild, das alle kennen. Die Küche lacht – und hört zu." }
+          ] },
+        { "id": "k1b", "sagt": "Tarek ruft dazwischen: „Doch, bist du!“ Ein paar lachen.",
+          "wahl": [
+            { "text": "Mitlachen und neu ansetzen: „Gut, dann eben als großer Redner: Zehn Jahre Miriam – zehn Jahre, in denen montags jemand gelacht hat.“", "wert": 2, "weiter": "k2", "rueck": "Tareks Steilvorlage aufgenommen und mit einem starken Satz neu angefangen." },
+            { "text": "„Nein, wirklich nicht, ich hab mir nur schnell was überlegt …“", "wert": 0, "tendenz": "kleinmachen", "weiter": "ende2", "rueck": "Du redest weiter über dich statt über Miriam. Der Toast verliert seinen Anlass." }
+          ] },
+        { "id": "k2", "sagt": "Jetzt der Mittelteil. Was sagst du über Miriam?",
+          "wahl": [
+            { "text": "„Miriam ist unser Fels in der Brandung, der uns den Rücken freihält, immer den Ball ins Rollen bringt und nie die Flinte ins Korn wirft.“", "wert": 0, "tendenz": "bildbruch", "weiter": "k3", "rueck": "Vier abgegriffene Bilder, die sich beißen – ein Fels, der Bälle rollt. Die Küche grinst an der falschen Stelle." },
+            { "text": "„Miriam ist für uns wie die Kaffeemaschine: Ohne sie läuft morgens nichts – nur dass sie nie entkalkt werden muss.“", "wert": 2, "weiter": "k3", "rueck": "Ein Bild aus genau diesem Raum, mit einer Grenze, die einen Lacher bringt. Es passt zu Miriam und zu dir." },
+            { "text": "„Miriam ist sehr wichtig für unser Team.“", "wert": 1, "weiter": "k3", "rueck": "Wahr und herzlich, aber blass. Ein Bild oder ein Beispiel würde es greifbar machen." }
+          ] },
+        { "id": "k3", "sagt": "Ein Beispiel soll es greifbar machen.",
+          "wahl": [
+            { "text": "„Laut Personalakte war sie an genau 2.347 Arbeitstagen im Haus, abzüglich Urlaub, Fortbildungen und Brückentagen.“", "wert": 0, "tendenz": "papier", "weiter": "k4", "rueck": "Eine genaue Zahl mit Einschub – fürs Ohr zu viel, fürs Herz zu wenig." },
+            { "text": "„Sie hat in zehn Jahren bestimmt dreitausend Mal gefragt: ‚Na, wie geht's?‘ – und jedes Mal zugehört.“", "wert": 2, "weiter": "k4", "rueck": "Eine runde Zahl mit Bild, und das Wichtige am Satzende: zugehört." },
+            { "text": "„Ich erinnere mich an so viele Geschichten, dass ich gar nicht weiß, wo ich anfangen soll.“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich – aber dann erzähl eine. Ohne Geschichte bleibt nur die Ankündigung." }
+          ] },
+        { "id": "k4", "sagt": "Der Schluss. Die Gläser sind schon halb oben.",
+          "wahl": [
+            { "text": "„Also: Auf Miriam – und auf die nächsten zehn Jahre Montage mit Lachen.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Bild als Schlusspunkt, bei dem alle das Glas heben. Kam es schon am Anfang, schließt sich der Bogen – fürs Ohr ist diese Wiederholung kein Fehler." },
+            { "text": "„Auf Miriam!“", "wert": 1, "weiter": "ende1", "rueck": "Kurz und richtig. Mit einem Bild zum Schluss bliebe der Toast länger hängen." },
+            { "text": "„Ja, das war's dann eigentlich auch schon von meiner Seite, mehr wollte ich gar nicht sagen.“", "wert": 0, "tendenz": "verpuffen", "weiter": "ende3", "rueck": "Der Toast hört auf, statt zu enden. Alle wissen nicht, wann sie trinken sollen." }
+          ] },
+        { "id": "ende1", "sagt": "Die Gläser klirren. Miriam wischt sich über die Augen: „Ihr seid unmöglich.“ Dann lacht sie – als Erste.", "ende": "Der Schluss war klar, die Gläser sind oben. Fürs Ohr trägt am meisten: ein Anfang mit Bild, ein Vergleich aus dem Raum, eine runde Zahl, der Kern am Schluss noch einmal. So klingt ein Text, der fürs Ohr geschrieben ist – und nach dir." },
+        { "id": "ende2", "sagt": "Carla übernimmt freundlich: „Dann sag ich's: Auf Miriam!“", "ende": "Kein Drama – Miriam freut sich trotzdem. Aber ein Toast braucht keinen Redner, nur einen ersten Satz. Den kannst du vorher schreiben." },
+        { "id": "ende3", "sagt": "Kurze Stille, dann hebt Tarek sein Glas: „Äh – auf Miriam?“", "ende": "Kein Drama – Miriam freut sich trotzdem. Nur der Schluss fehlte. Fürs Ohr gilt: ein klares letztes Wort, damit alle wissen, wann es vorbei ist." }
+      ],
+      "prinzipien": ["ein erster Satz in einem Atem", "ein Vergleich aus der Welt der Zuhörer", "runde Zahl mit Bild statt Aktenzahl", "der Kern am Schluss noch einmal", "im eigenen Ton bleiben"],
+      "transfer": "Bei welchem Anlass sagst du als Nächstes ein paar Worte? Schreib den ersten und den letzten Satz – fürs Ohr."
+    },
+    {
+      "id": "ausdruck-l-12", "bereich": "ausdruck", "phase": "m", "umfeld": "kollegen", "faehigkeiten": ["ausdruck.bildung", "ausdruck.treffend", "ausdruck.diplomatie"], "stufe": 7,
+      "titel": "Jonas und die Rundmail", "figur": "Jonas Wegner",
+      "einleitung": "Ein Fachmann will, dass alle seine Warnung lesen. Du hilfst ihm, Fachwörter mit Maß zu benutzen, einen passenden Vergleich zu finden – und ihm das zu sagen, ohne ihn zu belehren.",
+      "lage": "Jonas aus der Technik hat eine Rundmail an alle geschrieben: Es kommen mehr gefälschte Mails als sonst. Er bittet dich, sie vorher zu lesen. Jonas ist fachlich der Beste im Haus – und ein bisschen stolz auf seinen Text.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Jonas: „Liest du mal drüber? Diesmal sollen es wirklich alle lesen.“ Der erste Satz: „Aufgrund vermehrter Social-Engineering-Angriffe mittels Spear-Phishing ist eine erhöhte Vigilanz bezüglich eingehender E-Mails obligatorisch.“",
+          "wahl": [
+            { "text": "„Das versteht doch kein Mensch.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Der Kern stimmt, der Satz trifft ihn als Person. Jetzt verteidigt er den Text, statt ihn zu ändern." },
+            { "text": "„Fachlich stimmt alles. Für alle außerhalb der Technik würde ich ein paar Wörter übersetzen – darf ich Vorschläge machen?“", "wert": 2, "weiter": "k2", "rueck": "Erst die Sache gewürdigt, dann ein Befund, dann eine Frage. Er sagt gern Ja." },
+            { "text": "„Gib her, ich schreib's dir schnell um.“", "wert": 1, "weiter": "k2", "rueck": "Hilfsbereit – aber du nimmst ihm den Text aus der Hand. Fragen wäre freundlicher." }
+          ] },
+        { "id": "k1b", "sagt": "Jonas verschränkt die Arme: „Aha. Und was genau versteht man nicht?“",
+          "wahl": [
+            { "text": "„Entschuldige, das war platt. Konkret: ‚Spear-Phishing‘ und ‚Vigilanz‘ kennen die meisten nicht. Darf ich Alltagswörter vorschlagen?“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: Entschuldigung, dann konkret – zwei Wörter statt „alles“." },
+            { "text": "„Na, alles eigentlich.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Pauschal und schon wieder ein Urteil. Jonas schickt die Mail lieber so ab." }
+          ] },
+        { "id": "k2", "sagt": "Jonas: „Okay. Wie würdest du den ersten Satz schreiben?“",
+          "wahl": [
+            { "text": "„Bitte seid vorsichtig mit Mails.“", "wert": 1, "weiter": "k3", "rueck": "Verständlich, aber so allgemein, dass niemand weiß, worauf er achten soll." },
+            { "text": "„Gerade kommen mehr gefälschte Mails, die aussehen wie von Kollegen. Bitte schaut bei jedem Link und Anhang zweimal hin.“", "wert": 2, "weiter": "k3", "rueck": "Alltagswörter, ein konkretes Was und eine Bitte, die jeder umsetzen kann." },
+            { "text": "„Achtung: Aufgrund der aktuellen Bedrohungslage ist ab sofort eine erhöhte Vigilanz bei allen eingehenden Mails erforderlich!“", "wert": 0, "tendenz": "imponieren", "weiter": "k2b", "rueck": "Anders, aber nicht klarer – das schwierigste Wort ist geblieben. Wer „Vigilanz“ nicht kennt, liest weiter nichts." }
+          ] },
+        { "id": "k2b", "sagt": "Jonas nickt zufrieden: „Gut, so nehm ich's.“ Du liest deinen Satz noch einmal – „Vigilanz“ steht immer noch drin.",
+          "wahl": [
+            { "text": "„Warte – ‚Vigilanz‘ kennt kaum jemand. Lieber: Bitte schaut bei jedem Link und Anhang zweimal hin.“", "wert": 2, "weiter": "k3", "rueck": "Gut gefangen: Das schwierige Wort fliegt raus, die Bitte wird konkret." },
+            { "text": "„Lass so. Wer's nicht kennt, kann es ja nachschlagen.“", "wert": 0, "tendenz": "fachsprache", "weiter": "ende3", "rueck": "Nachschlagen wird kaum jemand. Wer an dem Wort hängen bleibt, liest die Warnung nicht zu Ende." }
+          ] },
+        { "id": "k3", "sagt": "Jonas: „Und wie erklär ich, warum jeder für jedes Konto ein eigenes Passwort braucht?“",
+          "wahl": [
+            { "text": "„Wie mit Schlüsseln: Für jede Tür ein eigener. Wird einer geklaut, kommt der Dieb nur durch diese eine Tür.“", "wert": 2, "weiter": "k4", "rueck": "Ein Bild, das jeder kennt, und es passt im entscheidenden Punkt: ein Verlust, nicht alle Türen offen." },
+            { "text": "„Das folgt aus dem Prinzip der Kompartimentierung.“", "wert": 0, "tendenz": "fachsprache", "weiter": "k4", "rueck": "Ein Fachwort, um ein Fachwort zu erklären. Für die Buchhaltung kein Bild." },
+            { "text": "„Damit nicht alles auf einmal betroffen ist.“", "wert": 1, "weiter": "k4", "rueck": "Stimmt und ist kurz. Mit einem Bild bliebe es länger hängen." }
+          ] },
+        { "id": "k4", "sagt": "Jonas: „Das Wort ‚Phishing‘ lass ich aber drin. Das hört man ständig in den Nachrichten.“",
+          "wahl": [
+            { "text": "„Nein, raus mit allen englischen Wörtern – wir schreiben auf Deutsch, auch wenn das Wort in den Nachrichten vorkommt.“", "wert": 0, "tendenz": "ueberkorrigieren", "weiter": "ende1", "rueck": "Zu streng. Ein bekanntes Fachwort darf bleiben – wenn es kurz erklärt ist." },
+            { "text": "„Lass es drin, das kennt doch jeder.“", "wert": 1, "weiter": "ende1", "rueck": "Viele kennen es. Ein Halbsatz Erklärung holt auch die übrigen ab." },
+            { "text": "„Ja, behalt es – und erklär es einmal kurz: ‚Phishing, also gefälschte Mails, die an Passwörter wollen.‘“", "wert": 2, "weiter": "ende1", "rueck": "Ein Bildungswort mit Maß: Es bleibt, weil es bekannt und genau ist, und der Halbsatz nimmt alle mit." }
+          ] },
+        { "id": "ende1", "sagt": "Zwei Tage später kommt Jonas vorbei: „Drei Leute haben mir verdächtige Mails weitergeleitet. Sonst kommt da nie was.“", "ende": "Die Warnung kommt an. Was dabei am meisten trägt: Fachliches würdigen, konkret statt pauschal kritisieren, Alltagswörter, ein Vergleich aus dem Alltag – und ein bekanntes Fachwort mit Erklärung. So erreicht Wissen die, die es brauchen." },
+        { "id": "ende2", "sagt": "Jonas schickt die Mail so ab. In der Kaffeeküche fragt jemand: „Was ist eigentlich Vigilanz?“", "ende": "Kein Drama – aber ein pauschales Urteil schließt Türen. Beim nächsten Mal: erst würdigen, dann zwei konkrete Wörter nennen." },
+        { "id": "ende3", "sagt": "Jonas schickt die Mail ab. In der Kaffeeküche fragt jemand: „Vigilanz – ist das was Ansteckendes?“", "ende": "Kein Drama – aber ein Fachwort, das unerklärt stehen bleibt, hält genau die Leser ab, die die Warnung brauchen. Beim nächsten Mal: übersetzen oder im selben Satz erklären." }
+      ],
+      "prinzipien": ["erst die Sache würdigen, dann der Befund", "Alltagswort statt Fachwort", "ein Vergleich aus dem Alltag der Leser", "bekannte Fachwörter behalten und kurz erklären", "konkret statt pauschal"],
+      "transfer": "Welcher Text aus deinem Fach soll von allen verstanden werden? Such die zwei schwierigsten Wörter – und entscheide: übersetzen oder erklären?"
+    },
+    {
+      "id": "ausdruck-l-13", "bereich": "ausdruck", "phase": "m", "umfeld": "freunde", "faehigkeiten": ["ausdruck.treffend", "ausdruck.diplomatie", "ausdruck.register"], "stufe": 8,
+      "titel": "Sven und die Kündigung", "figur": "Sven",
+      "einleitung": "Ein alter Freund schreibt dir eine schwere Nachricht. Du übst, Gefühle in Worte zu fassen, ohne sie dem anderen einzureden – und am Ende auch deine eigenen zu nennen.",
+      "lage": "Dienstagabend, 21 Uhr. Sven, dein alter Freund, der sonst gern stichelt, schreibt dir: „Bin heute gekündigt worden. Nach zwölf Jahren.“",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Die Nachricht steht auf deinem Bildschirm. Was schreibst du zurück?",
+          "wahl": [
+            { "text": "„Oh Mann, Sven. Nach zwölf Jahren – das ist ein Schlag. Wie geht's dir gerade?“", "wert": 2, "weiter": "k2", "rueck": "Du benennst, was passiert ist, und fragst nach seinem Gefühl, statt es ihm vorzugeben." },
+            { "text": "„Kopf hoch! Mit deiner Erfahrung findest du sofort was Neues. Hast du schon bei den Stellenanzeigen geschaut?“", "wert": 0, "tendenz": "ratschlag", "weiter": "k1b", "rueck": "Gut gemeint, aber zu früh. Er ist noch beim Schreck, du schon bei der Bewerbung." },
+            { "text": "„Ach du Schande. Das tut mir leid.“", "wert": 1, "weiter": "k2", "rueck": "Ehrliches Mitgefühl. Eine Frage dazu öffnet ihm die Tür, mehr zu erzählen." }
+          ] },
+        { "id": "k1b", "sagt": "Sven: „Ja, danke. Bewerbungen. Klar.“",
+          "wahl": [
+            { "text": "„Sorry, das war zu schnell. Wie geht's dir überhaupt damit?“", "wert": 2, "weiter": "k2", "rueck": "Du merkst es und gehst einen Schritt zurück – zu ihm statt zur Lösung." },
+            { "text": "„Ich mein ja nur: Je früher du dich bewirbst, desto besser stehen deine Chancen.“", "wert": 0, "tendenz": "ratschlag", "weiter": "ende2", "rueck": "Du bleibst beim Rat. Sven zieht sich zurück." }
+          ] },
+        { "id": "k2", "sagt": "Sven: „Keine Ahnung. Wütend, glaub ich. Und irgendwie auch erleichtert. Das ist das Komische.“",
+          "wahl": [
+            { "text": "„Erleichtert? Das redest du dir doch nur ein.“", "wert": 0, "tendenz": "deuten", "weiter": "k3", "rueck": "Du sagst ihm, was er fühlt – und widersprichst seinem eigenen Wort. Er fühlt sich nicht ernst genommen." },
+            { "text": "„Verstehe.“", "wert": 1, "weiter": "k3", "rueck": "Lässt ihn gelten. Eine Nachfrage hätte ihm geholfen, das Komische zu sortieren." },
+            { "text": "„Beides gleichzeitig – klingt gar nicht komisch. Wütend, wie es lief, und erleichtert, weil es dort schon zäh war? Oder ganz anders?“", "wert": 2, "weiter": "k3", "rueck": "Du nimmst beide Gefühle ernst, bietest genauere Wörter an – und lässt ihm das letzte Wort." }
+          ] },
+        { "id": "k3", "sagt": "Sven: „Na ja. Jetzt sitz ich hier und starr die Wand an.“",
+          "wahl": [
+            { "text": "„Soll ich vorbeikommen? Ich bring Pizza mit, wir müssen über nichts reden.“", "wert": 2, "weiter": "k4", "rueck": "Ein konkretes Angebot, ohne Bedingung. Manchmal sagt das mehr als jedes Wort." },
+            { "text": "„Mach am besten heute noch deinen Lebenslauf fertig, dann hast du's hinter dir.“", "wert": 0, "tendenz": "ratschlag", "weiter": "ende2", "rueck": "Ein Auftrag für heute Abend. Er wollte gerade nicht funktionieren müssen." },
+            { "text": "„Wenn du reden willst, ich bin da.“", "wert": 1, "weiter": "k4", "rueck": "Warm und offen. Konkreter wäre ein Angebot, das er nur annehmen muss." }
+          ] },
+        { "id": "k4", "sagt": "Später am Abend, nach einem langen Gespräch. Sven: „Danke, dass du da warst. Und du? Du bist so still heute.“",
+          "wahl": [
+            { "text": "„Gut, gut. Alles bestens.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "ende3", "rueck": "Du überspielst. Er hat dir gerade eine Tür geöffnet." },
+            { "text": "„Ehrlich? Ich bin erschrocken, als deine Nachricht kam. Und ich bin froh, dass du sie mir geschrieben hast.“", "wert": 2, "weiter": "ende1", "rueck": "Zwei genaue Gefühlswörter, kurz und ohne Drama. Freundschaft geht in beide Richtungen." },
+            { "text": "„Heute ging's um dich – aber danke, dass du fragst.“", "wert": 1, "weiter": "ende3", "rueck": "Freundlich und rücksichtsvoll. Ein Satz über dich hätte ihm gezeigt, dass er dir wichtig ist." }
+          ] },
+        { "id": "ende1", "sagt": "Sven lacht kurz: „Erschrocken. Na, wenigstens einer, der heute ehrlich ist.“", "ende": "Am Ende ein genaues Wort für dein eigenes Gefühl – das hat ihn erreicht. Dazu gehört der Weg davor: nachfragen statt deuten, beide Gefühle ernst nehmen, ein konkretes Angebot statt eines Rats. So klingt Mitgefühl in Worten." },
+        { "id": "ende2", "sagt": "Sven: „Ja. Ich meld mich.“ Er meldet sich erst nach zwei Wochen.", "ende": "Kein Drama – die Freundschaft hält. Aber wer im Schreck einen Rat bekommt, fühlt sich allein. Beim nächsten Mal: erst fragen, dann helfen." },
+        { "id": "ende3", "sagt": "Sven: „Okay. Danke dir.“", "ende": "Kein Drama – der Abend hat ihm gutgetan. Aber Freundschaft geht in beide Richtungen: Ein genaues Wort für dein eigenes Gefühl hätte ihm gezeigt, dass er dir wichtig ist." }
+      ],
+      "prinzipien": ["nachfragen statt Gefühle vorgeben", "gemischte Gefühle gelten lassen", "erst Zuwendung, dann Rat", "ein konkretes Angebot", "das eigene Gefühl genau benennen"],
+      "transfer": "Wem könntest du diese Woche schreiben: „Wie geht's dir damit?“ – und wirklich auf die Antwort warten?"
+    },
+    {
+      "id": "ausdruck-l-14", "bereich": "ausdruck", "phase": "m", "umfeld": "fremde", "faehigkeiten": ["ausdruck.register", "ausdruck.treffend", "ausdruck.diplomatie"], "stufe": 8,
+      "titel": "Die Bewertung für die Werkstatt", "figur": "eine Werkstattinhaberin",
+      "einleitung": "Ein Text für Fremde, im Netz, für alle sichtbar. Du übst, im eigenen Ton fair zu bleiben: konkret, mit benanntem Ärger statt Wut – und ohne Imponierwörter.",
+      "lage": "Die Autowerkstatt Brückner hat deine Bremsen repariert: sauber, zum vereinbarten Preis. Aber statt am Dienstag war das Auto erst am Freitag fertig – ohne Anruf. Du hast zweimal nachgefragt und bist zwei Tage Bus gefahren. Jetzt schreibst du eine Bewertung.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Zuerst die Überschrift.",
+          "wahl": [
+            { "text": "„Katastrophe!!! Finger weg von dieser Werkstatt!“", "wert": 0, "tendenz": "wut", "weiter": "k1b", "rueck": "Die Wut des Freitags – aber die Reparatur war gut. Wer das liest, bekommt ein falsches Bild." },
+            { "text": "„Gute Reparatur, schlechte Absprache“", "wert": 2, "weiter": "k2", "rueck": "Fair und genau: Was gut war und was nicht, steht schon in vier Wörtern." },
+            { "text": "„Na ja.“", "wert": 1, "weiter": "k2", "rueck": "Ehrlich, aber unscharf. Was war denn so lala?" }
+          ] },
+        { "id": "k1b", "sagt": "Bevor du abschickst, liest du die Überschrift noch einmal. Die Bremse quietscht jedenfalls nicht mehr.",
+          "wahl": [
+            { "text": "Neu schreiben: „Gute Reparatur, schlechte Absprache“.", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt. Die Wut ist da – sie darf in den Text, aber genau benannt." },
+            { "text": "So lassen und abschicken – die Wut ist echt, und ehrlich ist sie auch.", "wert": 0, "tendenz": "wut", "weiter": "ende2", "rueck": "Ehrlich ist sie. Fair ist sie nicht, denn die Reparatur war gut." }
+          ] },
+        { "id": "k2", "sagt": "Der erste Satz.",
+          "wahl": [
+            { "text": "„Die Reparatur war okay.“", "wert": 1, "weiter": "k3", "rueck": "Fair, aber blass. Was genau war gut?" },
+            { "text": "„Diese Werkstatt ist ein absoluter Saftladen, das kann ich nach dieser Woche wirklich jedem sagen.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende3", "rueck": "Ein Urteil über alle, die dort arbeiten – auch über den, der deine Bremse gut repariert hat." },
+            { "text": "„Die Bremse ist einwandfrei repariert, und der Preis lag genau beim Kostenvoranschlag.“", "wert": 2, "weiter": "k3", "rueck": "Konkret und fair. Wer weiterliest, glaubt dir jetzt auch die Kritik." }
+          ] },
+        { "id": "k3", "sagt": "Jetzt der Ärger.",
+          "wahl": [
+            { "text": "„Die Kommunikation war in eklatantem Ausmaß suboptimal und kundenunfreundlich.“", "wert": 0, "tendenz": "imponieren", "weiter": "k4", "rueck": "Drei große Wörter, kein Bild. Was ist eigentlich passiert?" },
+            { "text": "„Statt Dienstag war das Auto erst Freitag fertig, ohne Anruf. Ich fragte zweimal nach und fuhr zwei Tage Bus. Das hat mich geärgert.“", "wert": 2, "weiter": "k4", "rueck": "Was passiert ist, was es dich gekostet hat – und dein Gefühl, genau benannt. Kein Wort zu viel." },
+            { "text": "„Leider gab es Verzögerungen.“", "wert": 1, "weiter": "k4", "rueck": "Höflich, aber so allgemein, dass die Werkstatt nicht weiß, was sie ändern soll." }
+          ] },
+        { "id": "k4", "sagt": "Miriam liest mit: „Ein bisschen bissiger, sonst liest das keiner!“ Wie endest du?",
+          "wahl": [
+            { "text": "„Vielleicht schafft ihr es ja nächstes Jahr, ein Telefon zu bedienen – die Nummer steht immerhin auf eurer Rechnung.“", "wert": 0, "tendenz": "sarkasmus", "weiter": "ende3", "rueck": "Bissig, ja. Aber Spott macht aus einer fairen Bewertung eine Abrechnung." },
+            { "text": "„Fachlich würde ich wiederkommen – wenn ihr anruft, sobald sich etwas verschiebt.“", "wert": 2, "weiter": "ende1", "rueck": "Dein eigener, ruhiger Ton: ein ehrliches Fazit und eine klare Bitte für das nächste Mal." },
+            { "text": "„Insgesamt drei von fünf Sternen.“", "wert": 1, "weiter": "ende1", "rueck": "Ein klares Fazit. Ein Satz dazu, was sie besser machen können, hätte ihnen mehr geholfen." }
+          ] },
+        { "id": "ende1", "sagt": "Am nächsten Tag antwortet die Inhaberin unter der Bewertung: „Danke für die offenen Worte. Die Verspätung tut uns leid – das schauen wir uns an.“", "ende": "Die Werkstatt antwortet sachlich – ein fairer Ton lädt dazu ein. Am meisten hilft eine Bewertung, wenn alles drinsteht: was gut war, was nicht, wie es dich getroffen hat – und was du dir wünschst. Das nützt Lesern und Werkstatt." },
+        { "id": "ende2", "sagt": "Unter deiner Bewertung schreibt jemand: „Komisch, bei mir war die Reparatur top.“", "ende": "Kein Drama – aber Wut ohne Einzelheiten wirkt wie ein schlechter Tag, nicht wie eine Erfahrung. Benenn das Gefühl und sag, was passiert ist." },
+        { "id": "ende3", "sagt": "Die Inhaberin antwortet knapp: „Schade, dass Sie es so sehen.“", "ende": "Kein Drama – aber Spott und Pauschalurteile lassen die Werkstatt in die Abwehr gehen. Ein fairer Ton erreicht mehr als ein bissiger." }
+      ],
+      "prinzipien": ["fair: das Gute und das Schlechte nennen", "konkret, was passiert ist", "das Gefühl benennen statt Wut ausschütten", "keine Imponierwörter", "der eigene ruhige Ton statt Spott"],
+      "transfer": "Wo willst du gerade Dampf ablassen – in einer Bewertung, einer Mail, einer Nachricht? Schreib zuerst, was gut war."
+    },
+    {
+      "id": "ausdruck-l-15", "bereich": "ausdruck", "phase": "m", "umfeld": "familie", "faehigkeiten": ["ausdruck.treffend", "ausdruck.satzbau", "ausdruck.knapp", "ausdruck.register", "ausdruck.bildung", "ausdruck.diplomatie", "ausdruck.wendungen"], "stufe": 8, "sparring": true,
+      "titel": "Sparring: Die Rede zu Renates Siebzigstem", "figur": "Tante Renate",
+      "einleitung": "Das Sparring zum Abschluss der Meisterschaft: drei Minuten, dreißig Gäste, eine Jubilarin, die sagt, was sie denkt. Alles kommt zusammen – fürs Ohr geschrieben, mit Bild und Gefühl, im eigenen Ton.",
+      "lage": "Tante Renate wird siebzig. Seit Jahrzehnten backt sie für jedes Fest der Familie. Im Gasthaus sitzen dreißig Gäste, du hältst die Rede. Vorher hat sie dich zur Seite genommen: „Aber keine Lobhudelei, hörst du?“ Du hast drei Minuten.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Runde 1 – du stehst auf, das Klirren am Glas wird leiser. Dein erster Satz?",
+          "wahl": [
+            { "text": "„Liebe Renate, du hast gesagt: keine Lobhudelei. Also gut – dann nur Tatsachen.“", "wert": 2, "weiter": "k2", "rueck": "Dein Ton, ihr Wunsch, ein kleiner Lacher – und alle wollen hören, welche Tatsachen kommen." },
+            { "text": "„Sehr geehrte Damen und Herren, liebe Jubilarin, wir haben uns heute anlässlich eines ganz besonderen Ereignisses versammelt …“", "wert": 0, "tendenz": "zu-steif", "weiter": "k1b", "rueck": "Rathaus-Ton bei einem Familienfest. Renate verzieht schon das Gesicht." },
+            { "text": "„Liebe Tante Renate, herzlichen Glückwunsch zum Siebzigsten!“", "wert": 1, "weiter": "k2", "rueck": "Warm und richtig. Nur nimmt er nicht auf, was sie dir mitgegeben hat." }
+          ] },
+        { "id": "k1b", "sagt": "Renate ruft dazwischen: „Kind, wir sind hier nicht im Rathaus!“ Die Gäste lachen.",
+          "wahl": [
+            { "text": "Mitlachen: „Du hast recht. Noch mal von vorn: Liebe Renate, keine Lobhudelei – nur Tatsachen.“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst ihren Einwurf als Geschenk. Jetzt stimmen Ton und Saal." },
+            { "text": "Weiterlesen, wie es auf dem Zettel steht.", "wert": 0, "tendenz": "zu-steif", "weiter": "k2", "rueck": "Der Zettel gewinnt gegen den Saal. Die Hälfte der Gäste schaut jetzt aufs Handy." }
+          ] },
+        { "id": "k2", "sagt": "Runde 2 – die erste Tatsache.",
+          "wahl": [
+            { "text": "„Siebzig Jahre – das sind an die tausend Kuchen für diese Familie. Ich habe mindestens hundert davon gegessen.“", "wert": 2, "weiter": "k3", "rueck": "Eine runde Zahl mit Bild, das Wichtige am Ende – und ein Lacher, der nichts beschönigt." },
+            { "text": "„In den sieben Dekaden ihres Daseins hat die Jubilarin eine beachtliche Vita akkumuliert.“", "wert": 0, "tendenz": "imponieren", "weiter": "k3", "rueck": "Bildungswörter ohne Not – und fürs Ohr eine Hürde. Hier sagt kein Wort mehr als das einfache." },
+            { "text": "„Sie hat in siebzig Jahren viel erlebt.“", "wert": 1, "weiter": "k3", "rueck": "Stimmt für jeden mit siebzig. Eine Tatsache, die nur zu Renate passt, wäre stärker." }
+          ] },
+        { "id": "k3", "sagt": "Runde 3 – wie ist Renate? Ein Bild soll es sagen.",
+          "wahl": [
+            { "text": "„Sie ist sehr ehrlich.“", "wert": 1, "weiter": "k4", "rueck": "Trifft zu. Ein Vergleich würde es lebendig machen." },
+            { "text": "„Renate ist unser Leuchtturm, der mit beiden Beinen fest im Sattel sitzt.“", "wert": 0, "tendenz": "bildbruch", "weiter": "k4", "rueck": "Ein Leuchtturm mit Beinen im Sattel – die Gäste lachen, aber nicht an der richtigen Stelle." },
+            { "text": "„Renate ist wie ein Wetterbericht, der immer stimmt: nicht immer angenehm, aber man weiß, woran man ist.“", "wert": 2, "weiter": "k4", "rueck": "Ein Bild aus dem Alltag, das genau ihre Eigenart trifft – und über das sie selbst lacht." }
+          ] },
+        { "id": "k4", "sagt": "Runde 4 – der persönliche Moment. Mit sechzehn wusstest du nicht, wohin – Renate hat dich damals zwei Wochen bei sich wohnen lassen.",
+          "wahl": [
+            { "text": "„Sie bedeutet mir unendlich, unbeschreiblich, unglaublich viel.“", "wert": 0, "tendenz": "stapeln", "weiter": "k4b", "rueck": "Drei große Wörter, kein Bild. Genau die Lobhudelei, die sie nicht wollte." },
+            { "text": "„Mit sechzehn wusste ich nicht, wohin. Renate ließ mich zwei Wochen bei sich wohnen. Ich war verloren – und bei ihr endlich wieder ruhig.“", "wert": 2, "weiter": "k5", "rueck": "Eine kurze Geschichte, zwei genaue Gefühlswörter. Keine Lobhudelei – eine Tatsache." },
+            { "text": "„Ich bin ihr für vieles sehr dankbar.“", "wert": 1, "weiter": "k5", "rueck": "Ehrlich, aber allgemein. Ein Beispiel würde zeigen, wofür." }
+          ] },
+        { "id": "k4b", "sagt": "Renate ruft: „Kind, was hab ich dir gesagt?“ Die Gäste lachen.",
+          "wahl": [
+            { "text": "„Doch, doch, das musste jetzt sein – sie ist einfach großartig!“", "wert": 0, "tendenz": "stapeln", "weiter": "ende4", "rueck": "Noch ein großes Wort obendrauf. Sie hat dich gewarnt – jetzt hört der Saal nur Lob, keine Tatsache." },
+            { "text": "Mitlachen: „Stimmt. Also eine Tatsache: Mit sechzehn hast du mich zwei Wochen bei dir wohnen lassen. Da wurde ich wieder ruhig.“", "wert": 2, "weiter": "k5", "rueck": "Du nimmst den Einwurf mit Humor und lieferst statt großer Wörter eine Tatsache – mit einem genauen Gefühlswort." }
+          ] },
+        { "id": "k5", "sagt": "Runde 5 – der Schluss. Die Gläser stehen bereit.",
+          "wahl": [
+            { "text": "„Also, keine Lobhudelei, nur eine letzte Tatsache: Auf Renate ist Verlass. Auf Renate!“", "wert": 2, "weiter": "ende1", "rueck": "Ein kurzer Kernsatz und ein klares Zeichen fürs Glas – und wer am Anfang von Lobhudelei sprach, schließt hier den Bogen." },
+            { "text": "„Alles Gute, Renate!“", "wert": 1, "weiter": "ende2", "rueck": "Herzlich und klar. Der Bogen zum Anfang hätte die Rede rund gemacht." },
+            { "text": "„Ja, das war's dann eigentlich, mehr wollte ich gar nicht sagen – ihr wollt ja bestimmt auch endlich essen.“", "wert": 0, "tendenz": "verpuffen", "weiter": "ende3", "rueck": "Die Rede hört auf, statt zu enden. Niemand weiß, ob jetzt getrunken wird." }
+          ] },
+        { "id": "ende1", "sagt": "Renate steht auf, hebt ihr Glas und sagt in die Stille: „Auf Verlass. Das lass ich mir gefallen.“", "ende": "Der Schluss sitzt: ein Kernsatz, das Glas oben. Meisterschaft heißt, dass alles zusammenkommt – ein erster Satz im eigenen Ton, eine runde Zahl mit Bild, ein Vergleich ohne Bildbruch, ein genau benanntes Gefühl, der Bogen am Schluss. Einfache Wörter, an der richtigen Stelle." },
+        { "id": "ende2", "sagt": "Renate nickt zufrieden und stößt mit dem ganzen Tisch an.", "ende": "Kein Drama – Renate freut sich. Mit dem Bogen zum Anfang wäre der Schluss rund gewesen: Fürs Ohr darf der Kern am Schluss noch einmal kommen." },
+        { "id": "ende3", "sagt": "Kurze Stille. Dann ruft Renate: „Na, dann prost, Kind!“", "ende": "Kein Drama – Renate rettet die Lage. Aber ein Schluss, der verpufft, nimmt der Rede den Moment. Schreib den letzten Satz vorher auf." },
+        { "id": "ende4", "sagt": "Renate winkt ab und hebt ihr Glas: „Na gut, Kind. Dann prost.“", "ende": "Kein Drama – sie trägt es mit Humor. Aber große Wörter sind genau die Lobhudelei, die sie nicht wollte. Eine kleine Tatsache sagt mehr als drei Superlative." }
+      ],
+      "prinzipien": ["der erste Satz im eigenen Ton", "Tatsachen statt Lobhudelei", "eine runde Zahl mit Bild", "ein Vergleich ohne Bildbruch", "ein Gefühl, genau benannt", "der Kern am Schluss noch einmal"],
+      "transfer": "Für wen könntest du eine kleine Rede halten – laut oder auf einer Karte? Schreib eine Tatsache, ein Bild und ein Gefühl auf."
+    }
+  ]
+}

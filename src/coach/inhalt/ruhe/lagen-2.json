@@ -1,0 +1,281 @@
+{
+  "lagen": [
+    {
+      "id": "ruhe-l-06", "bereich": "ruhe", "phase": "k", "umfeld": "kollegen", "faehigkeiten": ["ruhe.vorbereitung", "ruhe.fokus", "ruhe.mittendrin"], "stufe": 5,
+      "titel": "Die Woche vor dem Kundentag", "figur": "Tarek Yılmaz",
+      "einleitung": "Eine Woche bis zu deinem ersten Vortrag beim Kundentag. Du übst den Fahrplan, Proben wie im Ernstfall und einen ersten Plan für eine Panne.",
+      "lage": "Montag. Am Freitag sprichst du beim Kundentag zehn Minuten über euer neues Lieferangebot. Tarek Yılmaz sitzt dir gegenüber und hat angeboten, dir zu helfen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Montagmorgen. Dein Text ist halb fertig. Wie gehst du die Woche an?",
+          "wahl": [
+            { "text": "Fahrplan festlegen: heute der Text, Dienstag und Mittwoch laut mit Uhr, Donnerstag vor Tarek, Freitag nichts Neues.", "wert": 2, "weiter": "k2", "rueck": "Jeder Tag hat seine Aufgabe – am Freitag brauchst du nichts mehr zu entscheiden." },
+            { "text": "Erst den Text perfekt machen und am Donnerstagabend einmal durchsprechen.", "wert": 1, "weiter": "k1b", "rueck": "Ein Durchlauf ist gut, aber spät und ohne Zuhörer. Die Aufregung lernst du so erst am Freitag kennen." },
+            { "text": "Abwarten, bis du in Stimmung bist – unter Druck arbeitest du ohnehin am besten, und am Donnerstag hast du ja noch den ganzen Abend.", "wert": 0, "tendenz": "flucht", "weiter": "k1b", "rueck": "Aufschieben spart heute Aufregung und packt sie gesammelt auf den Donnerstag." }
+          ] },
+        { "id": "k1b", "sagt": "Donnerstag, 18 Uhr. Der Text ist fertig, laut gesprochen hast du ihn noch nicht. Tarek packt gerade seine Sachen.",
+          "wahl": [
+            { "text": "„Tarek, hast du zehn Minuten? Ich würde den Vortrag einmal vor dir halten.“", "wert": 2, "weiter": "k3", "rueck": "Spät, aber genau richtig: Eine Probe vor Publikum zeigt dir heute, was morgen hakt." },
+            { "text": "Ihn gehen lassen und den Text zu Hause noch zweimal still lesen.", "wert": 0, "tendenz": "flucht", "weiter": "k4", "rueck": "Still klingt alles glatt. Die erste laute Fassung hörst du jetzt morgen – vor Publikum." }
+          ] },
+        { "id": "k2", "sagt": "Mittwoch. Du probst laut im Stehen mit Uhr. Nach zwölf Minuten bist du erst bei Folie sechs von neun.",
+          "wahl": [
+            { "text": "Kürzen: eine Folie streichen, das Beispiel straffen – und noch einmal mit Uhr.", "wert": 2, "weiter": "k3", "rueck": "Genau dafür ist die Probe mit Uhr da. Heute kostet die Überlänge noch nichts." },
+            { "text": "Nichts ändern. Am Freitag sprichst du einfach etwas schneller, dann passt es schon irgendwie in die zehn Minuten.", "wert": 0, "weiter": "k3", "rueck": "Schneller reden unter Aufregung führt eher zu Hängern – und die Zuhörer kommen nicht mit." },
+            { "text": "Fragen, ob du fünfzehn Minuten bekommen kannst.", "wert": 1, "weiter": "k3", "rueck": "Kann klappen – aber der Ablauf des Tages hängt daran. Kürzen liegt in deiner Hand." }
+          ] },
+        { "id": "k3", "sagt": "Du hältst den Vortrag vor Tarek. Mitten in Folie drei fragt er: „Und was kostet das den Kunden?“ Dein Kopf ist leer.",
+          "wahl": [
+            { "text": "Pause, ausatmen, aufs Stichwort: „Die Preise kommen auf Folie fünf.“ Danach notieren: Diese Frage braucht einen Plan.", "wert": 2, "weiter": "k4", "rueck": "Der Hänger in der Probe ist ein Geschenk: Er zeigt dir die Stelle, die einen Plan braucht." },
+            { "text": "„Stopp, das zählt nicht. Frag mich das bitte erst, wenn ich fertig bin.“", "wert": 1, "weiter": "k3b", "rueck": "Verständlich – aber am Freitag kann das auch jemand fragen. Jetzt kannst du es gefahrlos üben." },
+            { "text": "Abbrechen: „Ich bin einfach nicht der Typ für Vorträge.“", "wert": 0, "tendenz": "katastrophe", "weiter": "k3b", "rueck": "Ein Hänger in der Probe sagt nichts über deinen Typ – er zeigt nur, wo noch ein Plan fehlt." }
+          ] },
+        { "id": "k3b", "sagt": "Tarek: „Ich frag gleich noch mal. Diesmal bist du vorbereitet.“",
+          "wahl": [
+            { "text": "Einen Wenn-Dann-Satz notieren: „Wenn jemand nach Preisen fragt, dann verweise ich auf Folie fünf.“ – und weiter.", "wert": 2, "weiter": "k4", "rueck": "Aus dem Hänger wird ein Plan. Genau so wird geprobt." }
+          ] },
+        { "id": "k4", "sagt": "Freitag, Kundentag. Fünf Minuten vor deinem Beitrag fällt der Beamer aus. Der Techniker: „Zehn Minuten, mindestens.“",
+          "wahl": [
+            { "text": "Ausatmen, Karte in die Hand: „Dann erzähle ich Ihnen das Angebot – die Folien schicke ich nach.“", "wert": 2, "weiter": "k5", "rueck": "Dein erster Satz und die Stichworte tragen auch ohne Folien." },
+            { "text": "Um Verschiebung bitten, bis die Technik wieder läuft.", "wert": 0, "tendenz": "flucht", "weiter": "k4b", "rueck": "Die Wartezeit füllt sich mit Grübeln – und der Ablauf des Tages gerät ins Rutschen." }
+          ] },
+        { "id": "k4b", "sagt": "Die Moderatorin: „Verschieben geht leider nicht. Bitte jetzt.“",
+          "wahl": [
+            { "text": "Ausatmen, Stichwortkarte, erster Satz – frei erzählen.", "wert": 2, "weiter": "k5", "rueck": "Gut, dass du deinen ersten Satz kennst. Er trägt auch ohne Folien." }
+          ] },
+        { "id": "k5", "sagt": "Du sprichst frei. In der dritten Reihe fragt eine Kundin: „Was kostet das?“",
+          "wahl": [
+            { "text": "Lächeln: „Danke – genau dazu komme ich jetzt.“ Und dann dein Preisteil.", "wert": 2, "weiter": "ende1", "rueck": "Ruhig angenommen und in deinen Ablauf eingebaut. Wer so eine Frage in der Probe schon einmal gehört hat, findet diesen Satz leichter." },
+            { "text": "„Das reiche ich Ihnen gern schriftlich nach.“", "wert": 1, "weiter": "ende1", "rueck": "Höflich und sicher – aber der Preisteil steht ohnehin in deinem Vortrag. Jetzt hätte er gepasst." },
+            { "text": "Ins Stocken geraten und ausführlich erklären, warum die Preise noch nicht ganz fertig sind und wer im Haus darüber entscheidet.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende1", "rueck": "Lange Erklärungen unter Druck klingen nach Ausrede. Ein kurzer Satz zum Preisteil hätte gereicht." }
+          ] },
+        { "id": "ende1", "sagt": "Nach dem Vortrag kommen zwei Kunden zu dir und fragen nach Unterlagen.", "ende": "Die Pannen kamen – der Beamer, die Preisfrage. Was trägt, wird früh angelegt: ein Fahrplan, Proben mit Uhr, eine Probe vor Publikum mit Zwischenfrage. Wer das hat, steht den Pannen nicht unvorbereitet gegenüber." }
+      ],
+      "prinzipien": ["jeder Tag hat seine Aufgabe", "laut proben, mit Uhr", "einmal vor Publikum mit Zwischenfrage", "aus Hängern in der Probe Pläne machen", "Technik-Panne: frei weiter mit der Karte"],
+      "transfer": "Welcher Termin steht bei dir in den nächsten zwei Wochen an? Trag heute ein, wann du laut probst – und vor wem."
+    },
+    {
+      "id": "ruhe-l-07", "bereich": "ruhe", "phase": "k", "umfeld": "kunden", "faehigkeiten": ["ruhe.vorbereitung", "ruhe.fokus", "ruhe.mittendrin"], "stufe": 6,
+      "titel": "Die Videokonferenz mit Frau Köhler", "figur": "Nadine Köhler",
+      "einleitung": "Ein Angebot per Videokonferenz an eine mögliche Kundin. Du übst Wenn-Dann-Pläne für die Technik, den Blick weg vom eigenen Bild und eine Pause, wenn sie kritisch nachfragt.",
+      "lage": "Nadine Köhler, Geschäftsführerin eines kleinen Betriebs, hat dich zu einer Videokonferenz eingeladen. Du stellst euer Angebot vor – zwanzig Minuten. Sie ist knapp bei Zeit und rechnet genau.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Der Tag davor. Was bereitest du vor?",
+          "wahl": [
+            { "text": "Einmal laut vor der Kamera proben, Technik testen, drei Pläne: Ton weg, Bild friert ein, schwere Frage.", "wert": 2, "weiter": "k2", "rueck": "Die Probe vor der Kamera zeigt dir, wie es sich anfühlt – und die Pläne liegen bereit." },
+            { "text": "Die Folien noch einmal überarbeiten und morgen früh kurz die Technik prüfen.", "wert": 1, "weiter": "k2", "rueck": "Die Technik zu prüfen ist gut. Ohne Probe vor der Kamera und ohne Pläne bleibt die Aufregung bis morgen unbekannt." },
+            { "text": "Nichts Besonderes – per Video ist es ja nicht so aufregend wie im echten Raum, und zu Hause sitzt du ohnehin entspannt am eigenen Tisch.", "wert": 0, "weiter": "k1b", "rueck": "Per Video fehlt der Raum, aber Aufregung und Pannen kommen trotzdem – nur anders." }
+          ] },
+        { "id": "k1b", "sagt": "Fünf Minuten vor Beginn: Dein Kopfhörer verbindet sich nicht.",
+          "wahl": [
+            { "text": "Ausatmen, den Lautsprecher des Laptops nehmen, kurze Nachricht: „Bin in zwei Minuten da.“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen. Beim nächsten Mal steht dieser Plan schon am Vortag fest." }
+          ] },
+        { "id": "k2", "sagt": "Die Konferenz beginnt. Unten rechts siehst du dich selbst – und merkst, dass du rot wirst.",
+          "wahl": [
+            { "text": "Die eigene Kachel ausblenden und Frau Köhler ansehen.", "wert": 2, "weiter": "k3", "rueck": "Dein eigenes Bild ist ein Spiegel, der dich die ganze Zeit beobachten lässt. Ohne ihn bist du bei ihr." },
+            { "text": "Unauffällig dein Bild im Auge behalten und abwarten, ob die Röte nachlässt.", "wert": 0, "tendenz": "nach_innen", "weiter": "k2b", "rueck": "So schaust du dir die ganze Zeit selbst zu – und die Röte wird zum Hauptthema in deinem Kopf." },
+            { "text": "Einen Schluck Wasser trinken und weitersprechen, das Bild lässt du, wie es ist.", "wert": 1, "weiter": "k3", "rueck": "Wasser und weitermachen sind gut. Nur bleibt der Spiegel im Blick und lenkt dich immer wieder zu dir." }
+          ] },
+        { "id": "k2b", "sagt": "Frau Köhler: „Alles in Ordnung bei Ihnen? Sie wirken abgelenkt.“",
+          "wahl": [
+            { "text": "„Alles gut, danke. Ich blende nur kurz mein eigenes Bild aus – so bin ich ganz bei Ihnen.“", "wert": 2, "weiter": "k3", "rueck": "Ehrlich und freundlich. Jetzt bist du bei ihr statt bei dir." }
+          ] },
+        { "id": "k3", "sagt": "Frau Köhler: „Ihr Angebot ist deutlich teurer als ein anderes, das ich vorliegen habe. Warum sollte ich das zahlen?“",
+          "wahl": [
+            { "text": "Pause, ausatmen. „Gute Frage. Drei Gründe – der wichtigste für Sie: …“", "wert": 2, "weiter": "k4", "rueck": "Die Pause wirkt überlegt – und gibt dir Zeit, deine Gründe zu ordnen." },
+            { "text": "Sofort einen Nachlass anbieten, damit die unangenehme Stille vorbei ist, bevor sie womöglich ganz abspringt.", "wert": 0, "tendenz": "flucht", "weiter": "k3b", "rueck": "Die Stille fühlt sich nur für dich so lang an. Der schnelle Nachlass kostet Geld und Glaubwürdigkeit." },
+            { "text": "„Lassen Sie mich das prüfen und Ihnen schriftlich antworten.“", "wert": 1, "weiter": "k4", "rueck": "Zeit gewinnen ist erlaubt. Die Gründe für deinen eigenen Preis kennst du aber – hier hätten sie gepasst." }
+          ] },
+        { "id": "k3b", "sagt": "Frau Köhler, kühl: „Wenn Sie so schnell nachgeben, war der Preis wohl nicht ernst gemeint.“",
+          "wahl": [
+            { "text": "Ausatmen. „Da war ich zu schnell. Lassen Sie mich erklären, wofür der Preis steht.“", "wert": 2, "weiter": "k4", "rueck": "Gut gefangen: ehrlich korrigiert und zurück zur Sache." }
+          ] },
+        { "id": "k4", "sagt": "Mitten in deiner Antwort friert dein Bild ein. Frau Köhler: „Hallo? Ich sehe Sie nicht mehr.“",
+          "wahl": [
+            { "text": "„Ich schalte kurz das Bild aus, damit der Ton bleibt.“ – und ruhig weiter.", "wert": 2, "weiter": "k5", "rueck": "Ein ruhiger Satz, und die Technik ist kein Thema mehr. Liegt der Plan schon bereit, kommt er noch schneller." },
+            { "text": "Hektisch neu einwählen, ohne etwas zu sagen.", "wert": 0, "tendenz": "flucht", "weiter": "k4b", "rueck": "Ohne Wort verschwunden – für sie ist die Leitung einfach tot." }
+          ] },
+        { "id": "k4b", "sagt": "Zwei Minuten später bist du wieder drin. Frau Köhler wartet mit verschränkten Armen.",
+          "wahl": [
+            { "text": "„Entschuldigen Sie die Pause. Ich war bei den Gründen – Punkt zwei: …“", "wert": 2, "weiter": "k5", "rueck": "Ein Satz, wo du warst – und weiter. So holst du sie zurück." }
+          ] },
+        { "id": "k5", "sagt": "Frau Köhler: „Gut. Schicken Sie mir das bis Freitag zusammengefasst.“",
+          "wahl": [
+            { "text": "„Mache ich. Danke für Ihre Zeit.“ – danach notieren, was gegriffen hat und welcher Plan noch fehlt.", "wert": 2, "weiter": "ende1", "rueck": "Klarer Abschluss. Und die Notiz macht deine Pläne beim nächsten Mal noch besser." },
+            { "text": "„Gern – und darf ich am Montag kurz nachfragen?“", "wert": 1, "weiter": "ende1", "rueck": "Nachfassen ist gut. Notier dir trotzdem gleich, was heute gegriffen hat." }
+          ] },
+        { "id": "ende1", "sagt": "Am Montag kommt eine Mail: Frau Köhler möchte ein Probeangebot.", "ende": "Was hier trägt: eine Probe vor der Kamera, drei Pläne für Ton, Bild und schwere Frage, das eigene Bild ausgeblendet, eine Pause statt eines schnellen Nachlasses. Technik hakt irgendwann – ein bereitliegender Plan hält die Panne klein." }
+      ],
+      "prinzipien": ["vor der Kamera proben, Technik testen", "das eigene Bild ausblenden", "Wenn-Dann für Ton, Bild und schwere Frage", "Pause statt sofortigem Nachlass"],
+      "transfer": "Hast du bald ein Gespräch per Video? Leg dir heute einen Plan zurecht, falls Bild oder Ton ausfallen – und blende dein eigenes Bild aus."
+    },
+    {
+      "id": "ruhe-l-08", "bereich": "ruhe", "phase": "k", "umfeld": "vorgesetzte", "faehigkeiten": ["ruhe.koerper", "ruhe.fokus", "ruhe.mittendrin"], "stufe": 6,
+      "titel": "Die Fragerunde in der Leitungsrunde", "figur": "Dr. Henrik Albers",
+      "einleitung": "Nach deinem Bericht kommen die Fragen. Du übst Handgriffe gegen Röte, dünne Stimme und zitternde Hände – ohne dich zu verstecken – und eine Pause bei einer harten Frage.",
+      "lage": "Du hast in der Leitungsrunde den Stand eures Projekts vorgestellt. Es lief ordentlich. Jetzt sagt Dr. Albers: „Dann kommen wir zu den Fragen.“ Acht Leute sehen dich an.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dir wird warm im Gesicht. Gleich kommt die erste Frage.",
+          "wahl": [
+            { "text": "Das Wasserglas abstellen, beide Füße fest, Blick zu Dr. Albers. Rot darf ich sein.", "wert": 2, "weiter": "k2", "rueck": "Freie Hände, fester Stand, Blick nach außen – und die Röte darf mitkommen." },
+            { "text": "Das Wasserglas mit beiden Händen festhalten, damit niemand sieht, dass die Hände zittern.", "wert": 0, "tendenz": "kruecke", "weiter": "k1b", "rueck": "Ein Versteck: Es bindet Hände und Aufmerksamkeit – und du erlebst nicht, dass es auch so geht." },
+            { "text": "Einen Kugelschreiber nehmen, um die Fragen mitzuschreiben.", "wert": 1, "weiter": "k2", "rueck": "Mitschreiben ist ein guter Handgriff – solange du nicht dahinter verschwindest." }
+          ] },
+        { "id": "k1b", "sagt": "Das Glas klirrt leise gegen den Tisch. Du hörst es selbst am lautesten.",
+          "wahl": [
+            { "text": "Glas abstellen, Hände locker auf den Tisch, einmal langsam ausatmen.", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen. Ohne Glas haben die Hände nichts mehr, das klirren kann." }
+          ] },
+        { "id": "k2", "sagt": "Ein Kollege aus dem Einkauf: „Warum sind die Kosten im dritten Monat so gestiegen?“ Deine Stimme klingt beim ersten Wort dünn.",
+          "wahl": [
+            { "text": "Kurz ausatmen, dann etwas lauter und langsamer: „Aus zwei Gründen: …“", "wert": 2, "weiter": "k3", "rueck": "Mehr Luft, mehr Zeit – die Stimme trägt wieder." },
+            { "text": "Leiser werden und möglichst schnell antworten, damit keinem auffällt, wie die Stimme zittert.", "wert": 0, "tendenz": "kruecke", "weiter": "k2b", "rueck": "Leiser und schneller macht die Stimme eher dünner – und dich schwerer zu verstehen." },
+            { "text": "„Entschuldigung, meine Stimme … also, zwei Gründe: …“", "wert": 1, "weiter": "k3", "rueck": "Menschlich und kein Drama. Ohne die Entschuldigung bliebe der Blick ganz bei deiner Antwort." }
+          ] },
+        { "id": "k2b", "sagt": "Dr. Albers: „Etwas lauter bitte, wir verstehen Sie hier hinten nicht.“",
+          "wahl": [
+            { "text": "Ausatmen, Blick in die hintere Reihe, lauter und langsamer neu ansetzen.", "wert": 2, "weiter": "k3", "rueck": "Der Zwischenruf schenkt dir die Pause. Lauter und langsamer – jetzt kommt es an." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers: „Ehrlich gesagt überzeugt mich der Zeitplan nicht. Was, wenn der Lieferant wieder ausfällt?“ Eine fertige Antwort hast du nicht.",
+          "wahl": [
+            { "text": "„Lassen Sie mich kurz sortieren.“ Pause. „Zwei Wege sehe ich: …“ – und offen sagen, was noch zu klären ist.", "wert": 2, "weiter": "k4", "rueck": "Laut Zeit nehmen, erste Gedanken teilen, Offenes benennen – das wirkt souverän." },
+            { "text": "Erklären, dass der Lieferant schuld war, dass das niemand ahnen konnte und dass du wirklich alles versucht hast.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k3b", "rueck": "Unter Druck klingt jede lange Erklärung nach Verteidigung. Er hat nach dem Weg gefragt, nicht nach der Schuld." },
+            { "text": "„Das nehme ich mit und schicke bis Mittwoch einen Plan B.“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich und verbindlich. Ein, zwei erste Gedanken dazu hätten noch mehr Sicherheit gezeigt." }
+          ] },
+        { "id": "k3b", "sagt": "Dr. Albers hebt die Hand: „Mir geht es nicht um Schuld. Was schlagen Sie vor?“",
+          "wahl": [
+            { "text": "Ausatmen. „Zwei Wege sehe ich: …“", "wert": 2, "weiter": "k4", "rueck": "Zurück zur Sache – genau das wollte er hören." }
+          ] },
+        { "id": "k4", "sagt": "Letzte Frage. Als du auf das Diagramm zeigst, zittert deine Hand sichtbar.",
+          "wahl": [
+            { "text": "Weiter zeigen und zur Runde sprechen – das Zittern darf mit.", "wert": 2, "weiter": "ende1", "rueck": "Das Zittern siehst vor allem du. Wer weiterzeigt, bleibt bei der Sache – und erlebt, dass es auch so geht." },
+            { "text": "Die Hände unter den Tisch nehmen und nur noch mit Worten erklären, wo die Kurve steigt – dann sieht es niemand mehr.", "wert": 0, "tendenz": "kruecke", "weiter": "ende1", "rueck": "Kein Drama – aber ein Versteck, und das Diagramm wird schwerer zu verstehen." },
+            { "text": "Einmal Fäuste fest und loslassen, dann weiterzeigen.", "wert": 1, "weiter": "ende1", "rueck": "Ein guter Handgriff. Auch ohne ihn hätte das Zittern dem Diagramm nicht geschadet." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers: „Danke. Schicken Sie uns die zwei Wege bis Mittwoch.“", "ende": "Röte, dünne Stimme, zitternde Hände – alles war da. Was trägt, sind Handgriffe, die beim Sprechen helfen: Glas weg, lauter und langsamer, laut Zeit nehmen, die Hände arbeiten lassen. Verstecken kostet mehr, als es schützt." }
+      ],
+      "prinzipien": ["Handgriff statt Versteck", "dünne Stimme: ausatmen, lauter, langsamer", "harte Frage: laut Zeit nehmen, Offenes benennen", "Zittern darf mit"],
+      "transfer": "Welches Zeichen versteckst du sonst – und welchen Handgriff probierst du stattdessen beim nächsten Mal?"
+    },
+    {
+      "id": "ruhe-l-09", "bereich": "ruhe", "phase": "k", "umfeld": "freunde", "faehigkeiten": ["ruhe.koerper", "ruhe.mittendrin", "ruhe.atem", "ruhe.vorbereitung"], "stufe": 7,
+      "titel": "Die Rede auf der Hochzeit", "figur": "Jule Marek",
+      "einleitung": "Eine Rede auf der Hochzeit deiner besten Freundin, mit Mikrofon vor achtzig Gästen. Du übst Proben in Stufen, Handgriffe gegen Zittern und Rührung und die Welle mittendrin.",
+      "lage": "Deine beste Freundin heiratet und hat dich um eine Rede gebeten: achtzig Gäste, ein Mikrofon, nach dem Hauptgang. Jule Marek hat die Torte gebacken und sitzt an deinem Tisch.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Zwei Wochen vorher. Wie probst du?",
+          "wahl": [
+            { "text": "Erst allein laut mit Uhr, dann vor zwei Freunden – mit einer Haarbürste als Mikrofon in der Hand.", "wert": 2, "weiter": "k2", "rueck": "Stufe für Stufe näher an den Ernstfall – sogar das Mikrofon in der Hand übst du mit." },
+            { "text": "Jeden Abend laut im Stehen, aber allein.", "wert": 1, "weiter": "k2", "rueck": "Laut und im Stehen ist gut. Vor Zuhörern hättest du die Aufregung vorher in klein erlebt." },
+            { "text": "Gar nicht. Auf Hochzeiten sind alle gut gelaunt und verzeihen alles, also wird es schon irgendwie gehen.", "wert": 0, "tendenz": "flucht", "weiter": "k1b", "rueck": "Die Gäste verzeihen viel – deine Aufregung kommt trotzdem, nur unvorbereitet." }
+          ] },
+        { "id": "k1b", "sagt": "Am Vorabend merkst du: Der Text ist da, aber du hast ihn nie laut gehört.",
+          "wahl": [
+            { "text": "Einmal laut im Stehen ganz durch, ersten und letzten Satz auswendig – dann Schluss.", "wert": 2, "weiter": "k2", "rueck": "Die Notbremse: einmal laut, die Ränder sicher, dann schlafen." }
+          ] },
+        { "id": "k2", "sagt": "Nach dem Hauptgang kündigt der Trauzeuge dich an. Deine Knie sind weich.",
+          "wahl": [
+            { "text": "Aufstehen, Füße fest, einmal langsam und lang ausatmen, Blick zur Braut – erster Satz.", "wert": 2, "weiter": "k3", "rueck": "Stand, Atem, ein vertrautes Gesicht: Deine Routine trägt dich in den Start." },
+            { "text": "Schnell noch ein Glas Wein zur Beruhigung, dann los.", "wert": 0, "tendenz": "kruecke", "weiter": "k2b", "rueck": "Alkohol trübt Urteil und Aussprache – und lehrt dich, dass es ohne nicht geht." },
+            { "text": "Im Sitzen noch einmal die Karte durchlesen, dann aufstehen und gleich anfangen.", "wert": 1, "weiter": "k3", "rueck": "Gut, die Karte bereitzuhaben. Die Startroutine im Stehen hätte dir mehr Halt gegeben als ein letzter Blick darauf." }
+          ] },
+        { "id": "k2b", "sagt": "Dir wird warm, und du merkst, dass du schneller sprichst als geprobt.",
+          "wahl": [
+            { "text": "Einen Schluck Wasser, Füße fest, bewusst langsamer, Blick auf die Karte.", "wert": 2, "weiter": "k3", "rueck": "Gut gefangen. Beim nächsten Mal trägt die Startroutine – ohne Glas." }
+          ] },
+        { "id": "k3", "sagt": "Das Mikrofon in deiner Hand zittert. Im Lautsprecher knistert es leise.",
+          "wahl": [
+            { "text": "Das Mikrofon in den Ständer stecken – und weitersprechen.", "wert": 2, "weiter": "k4", "rueck": "Ein Handgriff, der dir beim Sprechen hilft: Das Mikrofon ruht, deine Worte stehen im Mittelpunkt." },
+            { "text": "Das Mikrofon so fest umklammern, dass die Knöchel weiß werden, damit es endlich still hält.", "wert": 0, "tendenz": "kruecke", "weiter": "k3b", "rueck": "Fest umklammern macht das Zittern eher stärker – und die Anspannung wandert in die Schultern." },
+            { "text": "Lächeln: „Ihr merkt, wie viel mir das bedeutet.“ – und weiter.", "wert": 1, "weiter": "k4", "rueck": "Herzlich und ehrlich. Ein ruhiger Platz fürs Mikrofon hätte dir zusätzlich geholfen." }
+          ] },
+        { "id": "k3b", "sagt": "Das Knistern wird lauter. Jemand am Nebentisch beugt sich vor.",
+          "wahl": [
+            { "text": "Kurze Pause, einmal lang ausatmen, Schultern sinken lassen, Mikrofon in den Ständer.", "wert": 2, "weiter": "k4", "rueck": "Erst der Körper, dann der Handgriff – jetzt ist Ruhe im Lautsprecher." }
+          ] },
+        { "id": "k4", "sagt": "Du erzählst, wie ihr euch im ersten Semester kennengelernt habt. Plötzlich schnürt dir die Rührung den Hals zu.",
+          "wahl": [
+            { "text": "Kurz innehalten, lächeln, ausatmen – die Rührung darf man sehen. Dann der nächste Satz.", "wert": 2, "weiter": "k5", "rueck": "Rührung auf einer Hochzeit ist kein Fehler, sondern oft das Schönste an der Rede. Die Pause gibt dir die Stimme zurück." },
+            { "text": "Die Rührung wegdrücken, schneller weiterlesen und die Geschichte abkürzen, damit niemand die Tränen sieht.", "wert": 0, "tendenz": "unterdruecken", "weiter": "k4b", "rueck": "Wegdrücken macht es oft lauter – und die schönste Geschichte bleibt halb erzählt." },
+            { "text": "„Entschuldigt – Moment.“ Ein Schluck Wasser, dann weiter.", "wert": 1, "weiter": "k5", "rueck": "Völlig in Ordnung. Die Entschuldigung brauchst du nicht – Rührung ist hier willkommen." }
+          ] },
+        { "id": "k4b", "sagt": "Die Stimme kippt jetzt erst recht. Die Braut sieht dich an und nickt dir zu.",
+          "wahl": [
+            { "text": "Stehen bleiben, ausatmen, ihren Blick erwidern – und langsam weiter.", "wert": 2, "weiter": "k5", "rueck": "Ihr Nicken sagt: Alles gut. Langsam weiter ist genau richtig." }
+          ] },
+        { "id": "k5", "sagt": "Kurz vor dem Schluss ist der Faden weg. Du weißt nicht mehr, was nach der Geschichte kommt.",
+          "wahl": [
+            { "text": "Pause, Blick auf die Karte. Da steht „Glas heben“: „Und darum bitte ich euch jetzt alle …“", "wert": 2, "weiter": "ende1", "rueck": "Deine Karte trägt bis zum letzten Satz." },
+            { "text": "„Hier stand noch etwas Kluges – das hebe ich mir für eure Silberhochzeit auf.“", "wert": 1, "weiter": "ende1", "rueck": "Mit Humor gerettet – das kommt auf Hochzeiten oft gut an. Die Karte hätte dich auch zurückgebracht." },
+            { "text": "„Tja, mehr fällt mir nicht ein.“ – und dich schnell hinsetzen, bevor es noch peinlicher wird.", "wert": 0, "tendenz": "flucht", "weiter": "ende2", "rueck": "Der Hänger fühlt sich riesig an. Für die Gäste war es nur eine kurze Pause." }
+          ] },
+        { "id": "ende1", "sagt": "Die Gäste heben die Gläser. Später umarmt dich die Braut. Jule flüstert: „Du warst ja gar nicht aufgeregt.“", "ende": "Was trägt: Proben mit dem Mikrofon in der Hand, die Startroutine statt eines Glases, ein ruhiger Platz fürs Mikrofon, Rührung zulassen, die Karte bis zum letzten Satz. Und Jules Satz zeigt noch etwas: Man sieht dir viel weniger an, als du spürst." },
+        { "id": "ende2", "sagt": "Die Gäste klatschen herzlich. Den Toast spricht der Trauzeuge.", "ende": "Die Rede war trotzdem ein Geschenk. Beim nächsten Mal: Die Karte trägt bis zum letzten Satz, und ein Hänger ist nur eine Pause." }
+      ],
+      "prinzipien": ["Proben in Stufen, mit Mikrofon in der Hand", "Startroutine statt Glas zur Beruhigung", "Mikrofon in den Ständer statt umklammern", "Rührung zulassen, Pause nehmen", "die Karte trägt bis zum Schluss"],
+      "transfer": "Steht bei dir eine Feier an, auf der du sprechen könntest? Probe die erste Minute einmal mit einem Gegenstand als Mikrofon in der Hand."
+    },
+    {
+      "id": "ruhe-l-10", "bereich": "ruhe", "phase": "k", "umfeld": "gruppe", "faehigkeiten": ["ruhe.verstehen", "ruhe.atem", "ruhe.umdeuten", "ruhe.koerper", "ruhe.fokus", "ruhe.routine", "ruhe.vorbereitung", "ruhe.mittendrin"], "stufe": 7, "sparring": true,
+      "titel": "Sparring: Der Tag der Fachtagung", "figur": "Carla Demir",
+      "einleitung": "Das Sparring zum Abschluss der Phase Können: vom Fahrplan zwei Wochen vorher bis zur Fragerunde. Alles aus dieser Phase kommt vor – Proben, Pläne, Anspannen und Loslassen, einzelne Zeichen und die Welle mittendrin.",
+      "lage": "Du sprichst auf einer Fachtagung zwanzig Minuten über euer Projekt, vor rund hundert Leuten aus der Branche. Carla Demir begleitet dich – sie kennt das Lampenfieber von sich selbst.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Zwei Wochen vorher. Carla: „Wie willst du die Zeit nutzen?“",
+          "wahl": [
+            { "text": "„Diese Woche Text und Uhr, nächste Woche zwei Proben vor dem Team mit Fragen – und drei Wenn-Dann-Pläne.“", "wert": 2, "weiter": "k2", "rueck": "Ein Fahrplan mit Proben in Stufen – so wird die Tagung nicht dein erster Ernstfall." },
+            { "text": "„Ich schreibe den Text fertig und probe am Wochenende davor einmal allein.“", "wert": 1, "weiter": "k2", "rueck": "Eine Probe ist besser als keine. Vor dem Team mit Fragen hättest du den Ernstfall schon einmal in klein erlebt." },
+            { "text": "„Ich lerne alles Wort für Wort auswendig. Dann kann mich wirklich nichts mehr aus dem Konzept bringen.“", "wert": 0, "weiter": "k1b", "rueck": "Wortwörtlich Gelerntes reißt bei der ersten Störung. Stichworte mit festem Anfang und Schluss sind robuster." }
+          ] },
+        { "id": "k1b", "sagt": "Bei der Probe vor dem Team fragt Tarek dazwischen. Danach weißt du nicht mehr, wo im auswendig gelernten Text du warst.",
+          "wahl": [
+            { "text": "Umstellen auf die Stichwortkarte: fünf Punkte, erster und letzter Satz wörtlich, der Rest frei.", "wert": 2, "weiter": "k2", "rueck": "So bleibt der Anfang sicher, und die Mitte verträgt Zwischenfragen." }
+          ] },
+        { "id": "k2", "sagt": "Der Tag. Im Hotelzimmer merkst du: Schultern hart, Kiefer fest.",
+          "wahl": [
+            { "text": "Die Kurzfassung, die du geübt hast: kurz fest, mit dem Ausatmen loslassen, innerlich „ruhig“.", "wert": 2, "weiter": "k3", "rueck": "Was du über Wochen geübt hast, trägt jetzt in einer halben Minute." },
+            { "text": "Eine neue Entspannungsübung aus einem Video ausprobieren, die gerade alle empfehlen und die angeblich besonders schnell wirkt.", "wert": 0, "weiter": "k3", "rueck": "Neues am Tag selbst bringt Unsicherheit. Was du geübt hast, trägt besser." },
+            { "text": "Zehn Minuten zügig ums Hotel gehen.", "wert": 1, "weiter": "k3", "rueck": "Bewegung hilft ein wenig. Deine geübte Kurzfassung hättest du noch dazunehmen können." }
+          ] },
+        { "id": "k3", "sagt": "Zehn Minuten vorher. Der Techniker: „Ihre Folien laufen, aber die Fernbedienung geht nicht.“",
+          "wahl": [
+            { "text": "Ruhig bleiben: „Dann sage ich ‚nächste Folie‘, und Carla klickt.“ Kurz mit Carla absprechen.", "wert": 2, "weiter": "k4", "rueck": "Ein einfacher Ausweg, ruhig abgesprochen. Stand der Plan schon vorher, rufst du ihn nur noch ab." },
+            { "text": "Selbst am Laptop herumprobieren, bis kurz vor Beginn.", "wert": 0, "weiter": "k3b", "rueck": "Jetzt gehst du verschwitzt und ohne Startroutine in den Gipfel der Aufregung." }
+          ] },
+        { "id": "k3b", "sagt": "Drei Minuten vor Beginn. Carla: „Lass, ich klicke für dich. Atme.“",
+          "wahl": [
+            { "text": "„Danke.“ – Füße fest, langsam und lang aus, dein Satz: „Aufgeregt heißt bereit.“", "wert": 2, "weiter": "k4", "rueck": "Hilfe angenommen, Routine gemacht – jetzt kann es losgehen." }
+          ] },
+        { "id": "k4", "sagt": "Du beginnst. Hinten im Saal sitzt eine bekannte Fachfrau und macht sich Notizen. Dein Herz macht einen Satz.",
+          "wahl": [
+            { "text": "Den Satz zu Ende, Pause, langsam ausatmen, Blick zu einem freundlichen Gesicht – weiter.", "wert": 2, "weiter": "k5", "rueck": "Die Welle kommt und geht. Erst der Körper, dann der Blick nach außen." },
+            { "text": "Denken: „Sie schreibt bestimmt auf, was alles falsch ist.“ – und schneller werden.", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k4b", "rueck": "Was sie notiert, weißt du nicht. Vielleicht ist es gerade dein bester Gedanke." },
+            { "text": "Innerlich „Energie, gut so“ sagen und ohne Pause weitersprechen.", "wert": 1, "weiter": "k5", "rueck": "Der Satz hilft. Eine kurze Pause zum Ausatmen hätte dem Körper zusätzlich Zeit gegeben." }
+          ] },
+        { "id": "k4b", "sagt": "Du merkst, dass du hetzt. Zwei Leute in der ersten Reihe runzeln die Stirn.",
+          "wahl": [
+            { "text": "Bremsen: Pause, ausatmen, den letzten Gedanken noch einmal langsamer.", "wert": 2, "weiter": "k5", "rueck": "Langsamer statt schneller – jetzt kommen alle wieder mit." }
+          ] },
+        { "id": "k5", "sagt": "Folie zwölf. Dir wird warm im Gesicht, die Stimme wird dünner.",
+          "wahl": [
+            { "text": "Weiter zur Runde sprechen, den nächsten Satz etwas lauter und langsamer.", "wert": 2, "weiter": "k6", "rueck": "Handgriff statt Versteck: Die Stimme trägt, die Röte darf bleiben." },
+            { "text": "Carla bitten, das Licht im Saal zu dimmen, damit niemand die Röte sieht.", "wert": 0, "tendenz": "kruecke", "weiter": "k6", "rueck": "Ein Versteck mit Aufwand – und die Zuhörer sehen auch weniger von dir." },
+            { "text": "Einen Schluck Wasser nehmen und dann weiter.", "wert": 1, "weiter": "k6", "rueck": "Eine gute kleine Pause. Etwas lauter und langsamer danach hätte die Stimme zusätzlich gestützt." }
+          ] },
+        { "id": "k6", "sagt": "Fragerunde. Ein Mann steht auf: „Ihre Zahlen widersprechen einer Studie, die ich kenne.“",
+          "wahl": [
+            { "text": "„Lassen Sie mich kurz sortieren.“ Pause. „Welche Studie meinen Sie? Ich schaue sie mir gern genau an.“", "wert": 2, "weiter": "ende1", "rueck": "Zeit gewonnen, nachgefragt, offen geblieben – ruhiger geht es kaum." },
+            { "text": "„Unsere Zahlen stimmen, da bin ich mir sicher.“", "wert": 1, "weiter": "ende1", "rueck": "Klar – aber ohne Nachfrage klingt es nach Abwehr. Eine Rückfrage zeigt Ruhe und Interesse." },
+            { "text": "Rot werden und lange erklären, woher jede einzelne Zahl stammt, bis die Moderatorin unterbricht.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Unter Druck wird die Verteidigung lang – und der Kern geht verloren." }
+          ] },
+        { "id": "ende1", "sagt": "Nach dem Vortrag tauschen drei Leute mit dir Karten. Carla: „Ich hätte nicht gedacht, dass du so aufgeregt warst.“", "ende": "Vom Fahrplan bis zur Fragerunde: Proben mit Fragen, Geübtes statt Neuem, ein Plan für die Technik, Pause bei der Welle, lauter bei dünner Stimme, Zeit gewinnen bei der harten Frage. Die Aufregung war den ganzen Tag dabei – das sind die Griffe, mit denen du sie führst." },
+        { "id": "ende2", "sagt": "Die Moderatorin: „Wir müssen leider weiter.“ Du setzt dich, das Gesicht heiß.", "ende": "Eine harte Frage ist kein Urteil über den Vortrag. Beim nächsten Mal: laut Zeit nehmen, nachfragen und anbieten, es später zu klären." }
+      ],
+      "prinzipien": ["Fahrplan mit Proben in Stufen", "Stichworte statt Wort für Wort", "am Tag nur Geübtes", "Technik-Plan bereithalten", "Welle: Satz zu Ende, Pause, lang aus", "harte Frage: Zeit nehmen, nachfragen"],
+      "transfer": "Welcher große Termin steht bei dir als Nächstes an? Plane heute die zwei Wochen davor: Proben, Pläne – und welches geübte Werkzeug du am Tag nimmst."
+    }
+  ]
+}

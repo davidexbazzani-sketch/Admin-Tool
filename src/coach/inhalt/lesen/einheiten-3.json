@@ -1,0 +1,210 @@
+{
+  "einheiten": [
+    {
+      "id": "lesen-3-01", "bereich": "lesen", "stufe": 3, "nr": 1,
+      "titel": "Die Runde lesen",
+      "faehigkeiten": ["lesen.buendel", "lesen.koerper"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass schon eine kurze Stille in einer Gruppe Unsicherheit und das Gefühl auslöst, nicht dazuzugehören, zeigen kleine Versuche. Wie man eine Runde liest und die Stimmung anspricht, ist Praxiswissen.",
+      "quellen": ["koudenburg2011", "praxis-lesen"],
+      "aha": "In der Runde liest du nicht jeden einzeln – du liest das Muster. Wer verstummt, wohin die Blicke gehen, wann es stockt. Und dann sprichst du die Stimmung an, nicht die Person.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Teamrunde, fünf Leute. Nach Tareks Vorschlag wird es still. Miriam schaut zu Dr. Albers, Lena auf ihren Block, Jonas tippt auf dem Laptop.", "schwach": "Du nimmst die Stille als Zustimmung: „Gut, dann der nächste Punkt.“", "stark": "Du sagst: „Ich habe den Eindruck, da sind wir noch nicht ganz beieinander. Was fehlt noch?“", "frage": "Was macht die zweite Reaktion besser?", "unterschied": "Stille ist in einer Runde selten Zustimmung. Die zweite Reaktion spricht das Muster an, ohne jemanden vorzuführen – und gibt allen einen leichten Weg, Bedenken zu sagen." },
+        { "art": "studie", "frage": "Was macht eine kurze Stille mit einer Gruppe?", "aufbau": "Versuchspersonen sahen ein Video eines Gesprächs zu dritt – einmal flüssig, einmal mit einer Pause von vier Sekunden nach einer Bemerkung. Ein zweiter Versuch nutzte ein geschriebenes Gespräch.", "ergebnis": "Mit der Stille fühlten sie sich unsicherer, eher abgelehnt und weniger zugehörig. Die Pause selbst fiel ihnen kaum auf.", "grenze": "Kleine Versuche mit Video und Text, keine echten Besprechungen. Wie stark das im Alltag wirkt, ist offen.", "beleg": "B", "quellen": ["koudenburg2011"] },
+        { "art": "karte", "titel": "Das Muster, nicht die Einzelnen", "text": "Achte in der Runde auf fünf Dinge: Wer redet viel, wer verstummt – und seit welchem Punkt? Wen schauen die anderen an, bevor sie antworten? Wessen Idee wird aufgegriffen, wessen überhört? Bilden sich Grüppchen, die miteinander flüstern? Und wann stockt es? Sprich die Stimmung ohne Namen an. Einzelne, die still geworden sind, fragst du danach unter vier Augen." },
+        { "art": "buendel", "kopf": { "id": "lesen-3-01-a", "faehigkeit": "lesen.buendel", "stufe": 6, "kanal": "wissen" },
+          "lage": "Vereinsabend, acht Leute. Der Vorsitzende schlägt vor, die Beiträge fürs Sommerfest zu erhöhen.",
+          "frage": "Welche Zeichen sprechen eher dafür, dass ein Teil der Runde nicht mitgeht?",
+          "zeichen": [
+            { "text": "Drei schauen nach dem Vorschlag auf den Tisch, niemand fragt nach.", "stuetzt": true, "warum": "Bei einem Vorschlag, der Geld kostet, ist Schweigen ohne Nachfrage eher ein stilles Nein als ein Ja." },
+            { "text": "Das Gespräch springt schnell zum nächsten Punkt, den keiner angekündigt hat.", "stuetzt": true, "warum": "Ein Themenwechsel ohne Abschluss kann heißen: Man will dem Konflikt ausweichen." },
+            { "text": "Zwei flüstern miteinander und schauen danach zur Kassenwartin.", "stuetzt": true, "warum": "Seitengespräche gleich nach einem Vorschlag sind oft der Ort für Bedenken, die keiner laut sagt." },
+            { "text": "Eine Frau holt ihre Brille aus der Tasche.", "stuetzt": false, "warum": "Alltag – sie will vielleicht nur die Zahlen lesen." },
+            { "text": "Der Vorsitzende lacht über seinen eigenen Witz.", "stuetzt": false, "warum": "Das sagt etwas über ihn, kaum etwas über die Runde." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "lesen-3-01-b", "faehigkeit": "lesen.koerper", "stufe": 6, "kanal": "wissen" },
+          "frage": "Nach deinem Vorschlag stockt die Runde. Ordne deine Reaktionen von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Ich habe den Eindruck, wir sind da noch nicht einig. Was spricht dagegen?“", "warum": "Spricht das Muster an, lädt Bedenken ein und stellt niemanden bloß." },
+            { "text": "„Gibt es noch Fragen?“", "warum": "Offen, aber wenig einladend – auf diese Frage schweigen viele." },
+            { "text": "„Gut, dann weiter zum nächsten Punkt.“", "warum": "Du überhörst die Stille. Die Bedenken kommen später – als stilles Nein." },
+            { "text": "„Lena, du schaust skeptisch. Was passt dir nicht?“", "warum": "Eine Deutung über eine Einzelne, vor allen ausgesprochen. Das macht es den Stillen am schwersten." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "lesen-3-01-c", "faehigkeit": "lesen.buendel", "stufe": 7, "kanal": "wissen" },
+          "frage": "Nach der Runde. Lena war still wie immer und hat mitgeschrieben. Miriam hat viel geredet wie immer. Tarek, der sonst jede Runde mit einem Witz belebt, hat heute kein Wort gesagt. Wen sprichst du unter vier Augen an?",
+          "antworten": [
+            { "text": "Lena – sie hat ja gar nichts gesagt.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Für Lena ist Stille die Grundlinie, und sie hat mitgeschrieben wie sonst. Nichts spricht für eine Veränderung." },
+            { "text": "Alle drei kurz – sicher ist sicher.", "wert": 1, "warum": "Freundlich und schadet nicht. Den deutlichsten Hinweis hast du aber bei einem." },
+            { "text": "Niemanden – wer etwas auf dem Herzen hat, sagt es schon.", "wert": 0, "tendenz": "vermeiden", "warum": "Viele warten, bis jemand fragt – gerade die, bei denen sich etwas geändert hat." },
+            { "text": "Tarek – bei ihm ist die Stille neu.", "wert": 2, "warum": "Gegen die Grundlinie gelesen, ist Tareks Schweigen die deutlichste Veränderung der Runde." }
+          ] },
+        { "art": "mission", "ref": "lesen-m-09" }
+      ],
+      "regel": "Lies das Muster der Runde – sprich die Stimmung an, nicht die Person.",
+      "merkkarten": [
+        { "id": "lesen-3-01-m1", "frage": "Worauf achtest du, wenn du eine Runde liest?", "antwort": "Wer redet, wer verstummt (seit wann), wohin die Blicke gehen, wessen Idee aufgegriffen wird, wann es stockt." },
+        { "id": "lesen-3-01-m2", "frage": "Wie sprichst du eine stockende Runde an?", "antwort": "Ohne Namen: „Ich habe den Eindruck, wir sind noch nicht einig. Was fehlt?“ – Einzelne danach unter vier Augen." }
+      ],
+      "mission": "lesen-m-09"
+    },
+    {
+      "id": "lesen-3-02", "bereich": "lesen", "stufe": 3, "nr": 2,
+      "titel": "Online lesen: die Videokonferenz",
+      "faehigkeiten": ["lesen.stimme", "lesen.pruefen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Sprecherwechsel im Videogespräch länger dauern, zeigt eine Studie; die Erklärung über Übertragungsverzögerungen ist die Deutung der Autoren. Warum Videogespräche anstrengen, ist ein noch ungeprüftes Denkmodell. Zur Stimme gibt es eine Versuchsreihe mit kleinen Effekten.",
+      "quellen": ["boland2022", "bailenson2021", "kraus2017", "praxis-lesen"],
+      "aha": "Online fehlt der Körper, der Blick täuscht, und die Leitung verschiebt jede Pause. Lies mehr mit dem Ohr – und ersetz, was das Bild nicht zeigt, durch kurze Fragen mit Namen.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Wie verändert sich im Videogespräch die Zeit, bis der Nächste spricht – verglichen mit dem Gespräch am Tisch?", "optionen": ["kaum", "sie wird spürbar länger", "sie wird kürzer"], "richtig": 1, "loesung": "Sie wird spürbar länger", "aufloesung": "In einem Versuch dauerte es im Mittel rund eine halbe Sekunde statt gut einer Zehntelsekunde. Die Forscher vermuten winzige Verzögerungen der Übertragung, die den gemeinsamen Takt stören. Darum: Eine Pause online ist oft nur die Leitung – kein Zögern." },
+        { "art": "karte", "titel": "Was online fehlt – und was bleibt", "text": "Es fehlt der Körper unterhalb der Schultern. Der Blick täuscht: Wer dich ansieht, schaut auf den Bildschirm, nicht in die Kamera. Die Kamera ist aus – wegen der Leitung, der Müdigkeit oder eines Kindes im Raum. Die eigene Ansicht lenkt ab. Was bleibt, ist die Stimme, und sie trägt viel. Ersetz den Rest durch Worte: Menschen mit Namen ansprechen, nach Fragen bis drei zählen, den Chat mitlesen." },
+        { "art": "zuordnen", "kopf": { "id": "lesen-3-02-a", "faehigkeit": "lesen.stimme", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Was lässt sich in der Videokonferenz eher lesen – und was kaum?",
+          "faecher": ["eher lesbar", "online kaum lesbar"],
+          "karten": [
+            { "text": "Tempo und Zögern in der Stimme", "fach": 0 },
+            { "text": "ein „grundsätzlich“ vor einer Zusage", "fach": 0 },
+            { "text": "was jemand in den Chat schreibt", "fach": 0 },
+            { "text": "ob jemand dich wirklich anschaut", "fach": 1 },
+            { "text": "eine kurze Pause vor der Antwort", "fach": 1 },
+            { "text": "ob jemand unruhig mit den Füßen wippt", "fach": 1 }
+          ] },
+        { "art": "szene", "kopf": { "id": "lesen-3-02-b", "faehigkeit": "lesen.pruefen", "stufe": 6, "kanal": "wissen" },
+          "beschreibung": "Videorunde, sechs Leute. Du stellst den neuen Ablauf vor. Lenas Bild ist eingefroren, Tarek hat die Kamera aus, Miriam schaut seitlich weg und tippt. Dr. Albers sagt: „Gut, dann machen wir das so.“",
+          "frage": "Was tust du, bevor die Runde weitergeht?",
+          "antworten": [
+            { "text": "„Miriam, du tippst die ganze Zeit – bist du überhaupt dabei?“", "wert": 0, "tendenz": "vorwurf", "warum": "Vielleicht schreibt sie mit oder sucht eine Zahl. Eine Deutung als Vorwurf, vor allen." },
+            { "text": "Im Chat fragen, ob jemand noch Einwände hat.", "wert": 1, "warum": "Gibt den Stillen einen Kanal. Mit Namen gefragt, kommt aber eher eine Antwort." },
+            { "text": "„Kurz vorher: Lena, Tarek, Miriam – passt das für euch? Lena, du warst eingefroren.“", "wert": 2, "warum": "Du ersetzt, was das Bild nicht zeigt, durch eine kurze Runde mit Namen – und holst Lena zurück." },
+            { "text": "Tarek als desinteressiert abhaken, weil seine Kamera aus ist.", "wert": 0, "tendenz": "etikett", "warum": "Kamera aus hat viele Gründe: Leitung, Müdigkeit, Umgebung. Ein Urteil daraus ist geraten." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "lesen-3-02-c", "faehigkeit": "lesen.pruefen", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Mach aus der Schnell-Frage eine Online-Nachfrage mit Namen und Ausweg.",
+          "vorlage": "„Noch Fragen? … Nein? Gut, weiter.“ (Du hast nach der Frage keine Sekunde gewartet.)",
+          "kriterien": ["wartet die Pause ab", "spricht mindestens eine Person mit Namen an", "lässt ein Bedenken zu"],
+          "muster": ["„Ich warte kurz, falls jemand noch etwas hat … Jonas, aus Technik-Sicht – passt das so?“", "„Bevor wir weitergehen: Lena und Tarek, ihr habt noch nichts gesagt – Einwände sind willkommen.“"] },
+        { "art": "experiment", "auftrag": "Zähl in deiner nächsten Videorunde nach jeder Frage innerlich bis drei, bevor du weitersprichst. Und bezieh mindestens einmal eine Person mit Namen ein, die noch nichts gesagt hat.", "dauer": "woche", "nachfrage": "Was kam in den drei Sekunden – und was hat die Person mit Namen gesagt?" },
+        { "art": "reflexion", "frage": "Was hast du online schon einmal falsch gelesen – eine Pause, eine abgeschaltete Kamera, einen Blick zur Seite?" }
+      ],
+      "regel": "Online mehr hören und fragen – eine Pause ist oft nur die Leitung.",
+      "merkkarten": [
+        { "id": "lesen-3-02-m1", "frage": "Warum ist eine Pause online oft kein Zögern?", "antwort": "Sprecherwechsel dauern im Video spürbar länger – vermutlich wegen kleiner Verzögerungen der Übertragung." },
+        { "id": "lesen-3-02-m2", "frage": "Was ersetzt online, was das Bild nicht zeigt?", "antwort": "Menschen mit Namen ansprechen, nach Fragen bis drei zählen, den Chat mitlesen – und auf die Stimme hören." }
+      ]
+    },
+    {
+      "id": "lesen-3-03", "bereich": "lesen", "stufe": 3, "nr": 3,
+      "titel": "Eigene Vorurteile",
+      "faehigkeiten": ["lesen.beobachten", "lesen.eigen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Halo-Effekt, schnelle erste Eindrücke, die Benachteiligung autistischer Menschen nach wenigen Sekunden und das Übertragen eigenen Interesses sind in einzelnen guten Studien gezeigt. Die Ähnlichkeits-Brille ist hier Praxiswissen ohne eigene Quelle; dass die Gegenprobe Vorurteile im Alltag mindert, ebenfalls.",
+      "quellen": ["nisbett1977", "willis2006", "sasson2017", "lee2020", "praxis-lesen"],
+      "aha": "Du liest nie neutral. Sympathie, Ähnlichkeit, deine Stimmung und der Stil des anderen färben, was du siehst. Die Gegenprobe hilft: Würde ich das bei jemand anderem genauso lesen?",
+      "schritte": [
+        { "art": "studie", "frage": "Färbt Sympathie auf alles andere ab?", "aufbau": "Studierende sahen denselben Dozenten auf Video – einmal warm und zugewandt, einmal kühl und streng. Danach beurteilten sie sein Aussehen, seine Gesten und seinen Akzent.", "ergebnis": "Beim warmen Dozenten fanden sie Aussehen, Gesten und Akzent ansprechend, beim kühlen störend. Dass ihre Sympathie das Urteil gefärbt hatte, merkten sie nicht.", "grenze": "Ein klassischer Versuch mit Studierenden. Der Effekt – Halo-Effekt genannt – ist seither vielfach beschrieben.", "beleg": "B", "quellen": ["nisbett1977"] },
+        { "art": "karte", "titel": "Die Brillen, die du mitbringst", "text": "Vier Brillen färben, was du siehst. Sympathie: Wen du magst, liest du freundlicher. Ähnlichkeit: Gleiche Heimat, gleicher Sport, gleicher Humor – schon wirkt jemand fähiger. Deine Stimmung: Wer gereizt ist, sieht Gereiztheit; wer interessiert ist, sieht Interesse beim anderen. Stil statt Inhalt: Autistische Menschen wurden nach wenigen Sekunden Video ungünstiger beurteilt – las man nur ihre Worte, nicht." },
+        { "art": "zuordnen", "kopf": { "id": "lesen-3-03-a", "faehigkeit": "lesen.beobachten", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Welche Brille ist hier am Werk?",
+          "faecher": ["Sympathie färbt alles", "Ähnlichkeit", "eigene Stimmung"],
+          "karten": [
+            { "text": "Weil er so herzlich ist, hältst du auch seine Zahlen für richtig.", "fach": 0 },
+            { "text": "Sie wirkt gepflegt und freundlich – also bestimmt auch gründlich.", "fach": 0 },
+            { "text": "Er kommt aus deinem Heimatort – du findest ihn sofort fähig.", "fach": 1 },
+            { "text": "Sie hat wie du Handball gespielt – du traust ihr mehr zu.", "fach": 1 },
+            { "text": "Du bist gereizt und findest heute alle unfreundlich.", "fach": 2 },
+            { "text": "Du bist frisch verliebt und siehst überall Flirts.", "fach": 2 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "lesen-3-03-b", "faehigkeit": "lesen.eigen", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Mach die Gegenprobe: Schreib dein Urteil als Beobachtung um – und frag dich, ob du es bei jemand anderem genauso lesen würdest.",
+          "vorlage": "„Der Neue im Lager ist unhöflich.“ (Er grüßt knapp, spricht mit Akzent und schaut beim Reden kaum hoch.)",
+          "kriterien": ["nennt nur das beobachtete Verhalten", "stellt die Gegenfrage", "nennt mindestens eine andere Erklärung"],
+          "muster": ["„Er grüßt knapp und schaut wenig hoch. Würde ich das bei Tarek auch unhöflich nennen? Vielleicht ist er schüchtern oder es ist neu für ihn.“", "„Kurzer Gruß, wenig Blick. Ohne den Akzent hätte ich wohl ‚zurückhaltend‘ gedacht. Ich lerne ihn erst mal kennen.“"] },
+        { "art": "auswahl", "kopf": { "id": "lesen-3-03-c", "faehigkeit": "lesen.beobachten", "stufe": 7, "kanal": "wissen" },
+          "frage": "Du sitzt bei zwei Vorstellungsgesprächen mit dabei. Der erste Bewerber lacht viel, erzählt locker und kommt aus deiner Stadt. Der zweite antwortet knapp, schaut oft weg, seine Antworten sind genauer. Den ersten magst du sofort. Was tust du?",
+          "antworten": [
+            { "text": "Auf dein Bauchgefühl hören – der erste passt einfach.", "wert": 0, "tendenz": "uebersicher", "warum": "Das Gefühl ist echt, aber gefärbt: Sympathie und Ähnlichkeit wirken, ohne dass man es merkt." },
+            { "text": "Beide Antworten Punkt für Punkt nach denselben Fragen vergleichen – dann entscheiden.", "wert": 2, "warum": "Gleiche Maßstäbe für beide bremsen Halo-Effekt und Ähnlichkeit. Das Gefühl darf mitreden, aber nicht allein entscheiden." },
+            { "text": "Den zweiten streichen – wer kaum aufschaut, wirkt im Team unsicher und kommt bei Kunden schlecht an.", "wert": 0, "tendenz": "etikett", "warum": "Wenig Blick sagt wenig über Können. Seine genaueren Antworten zeigen eher in eine andere Richtung." },
+            { "text": "Eine Kollegin bitten, beide ebenfalls zu beurteilen.", "wert": 1, "warum": "Ein zweiter Blick hilft. Mit festen Fragen für beide wäre er noch fairer." }
+          ] },
+        { "art": "mission", "ref": "lesen-m-07" }
+      ],
+      "regel": "Mach die Gegenprobe: Würde ich das bei jemand anderem genauso lesen?",
+      "merkkarten": [
+        { "id": "lesen-3-03-m1", "frage": "Welche vier Brillen färben dein Lesen?", "antwort": "Sympathie, Ähnlichkeit, deine eigene Stimmung und der Stil des anderen statt seines Inhalts." },
+        { "id": "lesen-3-03-m2", "frage": "Wie geht die Gegenprobe?", "antwort": "Die Person im Kopf austauschen: Würde ich dasselbe Verhalten bei jemand anderem genauso lesen?" }
+      ],
+      "mission": "lesen-m-07"
+    },
+    {
+      "id": "lesen-3-04", "bereich": "lesen", "stufe": 3, "nr": 4,
+      "titel": "Kulturen und Temperamente",
+      "faehigkeiten": ["lesen.gesicht", "lesen.beobachten"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Dass Kulturen sich Gefühlsgesichter verschieden vorstellen und direkten Blick verschieden bewerten, zeigen einzelne gute Studien; wie groß die Unterschiede sind, ist umstritten. Pausen im Gespräch unterscheiden sich zwischen Sprachen etwas; dass sie in einer Zweitsprache oft länger sind, ist Praxiswissen. Dass Verständigung eine Aufgabe beider Seiten ist, ist ein Denkmodell.",
+      "quellen": ["jack2012", "cowen2021", "akechi2013", "stivers2009", "milton2012"],
+      "aha": "Jeder Mensch hat seine eigene Grundlinie – geprägt von Temperament, Sprache und Herkunft. Was bei dir „wenig“ heißt, ist bei anderen viel. Kultur ist ein Hinweis zum Fragen, kein Etikett.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Ein Lächeln versteht man überall auf der Welt gleich.", "urteil": "teils", "warum": "Manche Ausdrücke treten weltweit in ähnlichen Lagen auf. Aber wann man lächelt und was es heißt – Freude, Höflichkeit, Verlegenheit –, regeln Kulturen und Menschen verschieden." },
+        { "art": "karte", "titel": "Andere Regeln, andere Grundlinie", "text": "Kulturen stellen sich Gefühlsgesichter verschieden vor. Ein direkter Blick wirkte in einem Vergleich auf japanische Teilnehmende eher unnahbar als auf finnische. Pausen vor Antworten sind je nach Sprache etwas verschieden lang, in einer Zweitsprache oft länger. Und Temperamente: Bei Lena ist „interessant“ viel, bei Miriam ist „super“ normal. Wichtig: Jeder Mensch ist anders als „seine Kultur“ – frag ihn." },
+        { "art": "szene", "kopf": { "id": "lesen-3-04-a", "faehigkeit": "lesen.gesicht", "stufe": 7, "kanal": "wissen" },
+          "beschreibung": "Eine Kollegin aus dem Partnerwerk ist für drei Monate bei euch; Deutsch ist ihre zweite Sprache. Du erklärst ihr einen Fehler in ihrer Tabelle. Sie lächelt, nickt mehrmals und sagt: „Ja, ja, verstanden.“ Am nächsten Tag ist der Fehler noch drin. Miriam sagt: „Die nimmt dich nicht ernst.“",
+          "frage": "Was ist die beste Lesart – und was tust du?",
+          "antworten": [
+            { "text": "Miriam hat recht – das Lächeln war wohl nicht ernst gemeint.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Lächeln und Nicken können hier auch heißen: „Ich höre zu“ oder „Ich will nicht unhöflich sein“. Respektlos ist nur eine von vielen Erklärungen." },
+            { "text": "Nicken heißt vielleicht nur „Ich höre zu“. Diesmal klären, was ankam: „Wie würdest du es jetzt ändern?“", "wert": 2, "warum": "Du deutest Lächeln und Nicken nicht als Zusage und prüfst das Verständnis mit einer offenen Frage." },
+            { "text": "In ihrer Kultur lächelt man bei Kritik bestimmt immer.", "wert": 0, "tendenz": "klischee", "warum": "Ein Klischee ersetzt die Frage an sie selbst. Kultur kann ein Hinweis sein – kein Etikett." },
+            { "text": "Es ihr noch einmal langsamer und schriftlich erklären.", "wert": 1, "warum": "Hilft bei einer Zweitsprache. Ob es angekommen ist, weißt du aber erst, wenn sie es in eigenen Worten sagt." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "lesen-3-04-b", "faehigkeit": "lesen.beobachten", "stufe": 7, "kanal": "wissen" },
+          "frage": "Du stellst eine Idee vor. Miriam (lebhaft, herzlich) ruft: „Super!“ Lena (ruhig, genau) sagt: „Hm. Interessant.“ Was liest du heraus?",
+          "antworten": [
+            { "text": "Miriam ist begeistert, Lena hält nichts davon – „interessant“ heißt ja meistens „lieber nicht“.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Du misst beide an derselben Latte. Gegen ihre eigene Grundlinie gelesen, kann Lenas „interessant“ viel heißen." },
+            { "text": "Beide an ihrer eigenen Grundlinie messen – und Lena fragen, was ihr auffällt.", "wert": 2, "warum": "Jedes Temperament hat seinen eigenen Maßstab. Eine Frage holt Lenas genauen Blick in die Runde." },
+            { "text": "Keine Ahnung – darum gleich abstimmen lassen.", "wert": 0, "tendenz": "ausweichen", "warum": "Eine Abstimmung verdeckt, was die Ruhigen zu sagen hätten." },
+            { "text": "Beide sind wohl dafür – bei Lena ist „interessant“ schon viel.", "wert": 1, "warum": "Gut gegen ihre Grundlinie gelesen. Ob „interessant“ hier Zustimmung oder ein leises Bedenken ist, klärt aber erst eine Frage." }
+          ] },
+        { "art": "wenndann", "anlass": "Wenn du jemanden nicht lesen kannst – oder er dich falsch liest", "wenn": ["… jemand anders zeigt, als ich es gewohnt bin", "… ich gerade „Kultur“ oder „Typ“ als Erklärung im Kopf habe", "… ich merke, dass ich falsch verstanden werde"], "dann": ["… lerne ich erst seine Grundlinie kennen, bevor ich deute", "… mache ich daraus eine Frage an die Person, nicht ein Urteil", "… sage ich offen, wie ich es meine – Verständigung ist Aufgabe beider Seiten"] },
+        { "art": "reflexion", "frage": "Mit wem verstehst du dich schwer, ohne recht zu wissen warum? Welches Temperament, welche Sprache oder Gewohnheit könnte dahinterstecken – und was würdest du ihn fragen?" }
+      ],
+      "regel": "Lies jeden an seiner eigenen Grundlinie – Kultur ist ein Anlass zu fragen.",
+      "merkkarten": [
+        { "id": "lesen-3-04-m1", "frage": "Was heißt Nicken und Lächeln bei einer Erklärung nicht unbedingt?", "antwort": "„Verstanden“ oder „einverstanden“ – oft nur „Ich höre zu“. Verständnis prüfst du mit einer offenen Frage." },
+        { "id": "lesen-3-04-m2", "frage": "Wie gehst du mit Kultur als Erklärung um?", "antwort": "Als Hinweis, nicht als Etikett: Jeder Mensch ist anders als „seine Kultur“ – frag ihn selbst." }
+      ]
+    },
+    {
+      "id": "lesen-3-05", "bereich": "lesen", "stufe": 3, "nr": 5,
+      "titel": "Sicherheit ist kein Beweis",
+      "faehigkeiten": ["lesen.pruefen", "lesen.grundlinie"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Eine ältere Meta-Analyse (1997, 18 Stichproben) zeigt: Beim Lügen-Erkennen hängen Sicherheit und Treffsicherheit praktisch nicht zusammen. Ein Versuch mit Ermittlern und einer zur Glaubwürdigkeit bestätigen das Bild. Dass eine Trefferliste das Gespür schärft, ist Praxiswissen.",
+      "quellen": ["depaulo1997", "kassin2005", "tenney2007", "bond2006", "eyal2018"],
+      "aha": "Das Gefühl „Ich weiß es“ ist kein Befund. Beim Lügen-Erkennen sagte Sicherheit fast nichts über Treffer. Wer gut liest, schätzt seine Sicherheit, prüft – und zählt mit.",
+      "schritte": [
+        { "art": "auswahl", "sicherheit": true, "kopf": { "id": "lesen-3-05-a", "faehigkeit": "lesen.pruefen", "stufe": 6, "kanal": "wissen" },
+          "frage": "Wie gut sagt das Gefühl, sich sicher zu sein, voraus, ob man beim Lügen-Erkennen richtig liegt? Gib danach an, wie sicher du dir bist.",
+          "antworten": [
+            { "text": "Gut – wer sich sicher ist, liegt meistens auch richtig, sonst wäre man nicht so sicher.", "wert": 0, "tendenz": "uebersicher", "warum": "Über viele Stichproben hing Sicherheit kaum mit Treffern zusammen. Sicher waren Urteilende vor allem, wenn sie etwas für wahr hielten." },
+            { "text": "Schwer zu sagen – das müsste man mitzählen.", "wert": 1, "warum": "Richtig gedacht: Mitzählen ist der Weg. Die Forschung hat es getan – Sicherheit und Treffer hingen kaum zusammen." },
+            { "text": "Kaum – Sicherheit und Treffer hängen fast nicht zusammen.", "wert": 2, "warum": "So zeigte es eine Meta-Analyse über 18 Stichproben. Das Gefühl ist echt, als Beweis taugt es nicht." }
+          ] },
+        { "art": "studie", "frage": "Macht Erfahrung treffsicherer – oder nur sicherer?", "aufbau": "Studierende und Ermittler sahen oder hörten zehn Häftlinge, die eine Tat gestanden – zur Hälfte wahr, zur Hälfte für den Versuch erfunden. Nach jedem Geständnis sollten sie sagen, ob es stimmt, und wie sicher sie sind.", "ergebnis": "Die Ermittler waren deutlich sicherer und hielten die Gestehenden eher für schuldig. Genauer waren sie nicht – die Studierenden lagen sogar eher besser.", "grenze": "Ein Versuch mit gespielten Geständnissen. Er passt aber zu einer Meta-Analyse, nach der Sicherheit und Treffer beim Lügen-Erkennen kaum zusammenhängen.", "beleg": "B", "quellen": ["kassin2005", "depaulo1997"] },
+        { "art": "karte", "titel": "Sicherheit ist ein Gefühl, kein Befund", "text": "Sicherheit wächst mit Erfahrung, mit Wiederholung und damit, dass wir uns an Treffer besser erinnern als an Fehlschüsse – ob wir richtig liegen, sagt sie wenig. Drei Gewohnheiten helfen: die Sicherheit in Zahlen schätzen („70 von 100“), die Vermutung mit einer Frage prüfen und mitzählen, wie oft es stimmte. Und wer Zweifel offen zeigt, wirkt nach einem Fehler glaubwürdiger als jemand, der sich ganz sicher gab." },
+        { "art": "geschichte", "titel": "Albers und der Bauch", "figur": "Dr. Henrik Albers", "text": "Dr. Albers hat mir erzählt, wie er einmal einen Bewerber fast aussortiert hätte. Der Mann sagte, er kenne sich mit einem bestimmten Programm gut aus, und dabei rieb er sich den Nacken und schaute aus dem Fenster. Albers war sich sicher: geflunkert. Neunzig von hundert, hat er gesagt. Statt zu urteilen, gab er ihm eine kleine Aufgabe am Rechner. Der Mann löste sie in zehn Minuten – besser als alle anderen. Seitdem schreibt Albers bei jedem Gespräch auf, wie sicher er sich bei seinem ersten Urteil ist. Er sagt, seine Neunziger liegen ungefähr so oft richtig wie seine Sechziger.", "frage": "Bei welchem Urteil über einen Menschen warst du dir zuletzt sehr sicher – und hast du es je geprüft?" },
+        { "art": "rangfolge", "kopf": { "id": "lesen-3-05-b", "faehigkeit": "lesen.grundlinie", "stufe": 7, "kanal": "wissen" },
+          "frage": "Du bist dir zu 90 von 100 sicher: Miriam ist sauer auf dich. Ordne die nächsten Schritte von stark nach schwach.",
+          "eintraege": [
+            { "text": "Mit ihrer Grundlinie vergleichen – seit wann ist sie anders? – und dann fragen: „Ich hab den Eindruck, zwischen uns hakt was. Stimmt das?“", "warum": "Erst prüfen, ob es wirklich eine Veränderung ist, dann die Vermutung mit Ausweg zur Frage machen." },
+            { "text": "Ein paar Tage weiter beobachten, ob es so bleibt.", "warum": "Vorsichtig und fair. Nur bleibt eine Vermutung so lange ungeprüft – und färbt, was du siehst." },
+            { "text": "Sie ansprechen: „Ich weiß, dass du sauer auf mich bist.“", "warum": "Deine Sicherheit als Tatsache ausgesprochen. Liegst du falsch, muss sie sich erst verteidigen." },
+            { "text": "Einer Kollegin erzählen, dass Miriam sauer auf dich ist.", "warum": "Eine ungeprüfte Vermutung wird zur Geschichte über Miriam – und die verbreitet sich ohne sie." }
+          ] },
+        { "art": "experiment", "auftrag": "Führ diese Woche eine Trefferliste: Wenn du etwas über jemanden vermutest, notier die Vermutung und wie sicher du bist (von 0 bis 100). Prüf sie, wo es passt, mit einer Frage – und trag ein, ob du richtiglagst.", "dauer": "woche", "nachfrage": "Nach einer Woche: Lagen deine sehr sicheren Vermutungen öfter richtig als die unsicheren?" },
+        { "art": "mission", "ref": "lesen-m-10" }
+      ],
+      "regel": "Sicherheit ist ein Gefühl, kein Beweis – schätzen, prüfen, mitzählen.",
+      "merkkarten": [
+        { "id": "lesen-3-05-m1", "frage": "Wie hängen Sicherheit und Treffer beim Lügen-Erkennen zusammen?", "antwort": "Praktisch gar nicht – so eine Meta-Analyse. Ermittler waren in einem Versuch sicherer, aber nicht genauer." },
+        { "id": "lesen-3-05-m2", "frage": "Welche drei Gewohnheiten machen dein Gespür ehrlicher?", "antwort": "Sicherheit in Zahlen schätzen, die Vermutung mit einer Frage prüfen, mitzählen, wie oft es stimmte." },
+        { "id": "lesen-3-05-m3", "frage": "Wer wirkt nach einem Fehler glaubwürdiger?", "antwort": "Wer seine Unsicherheit vorher offen gezeigt hat – mehr als jemand, der sich ganz sicher gab." }
+      ],
+      "mission": "lesen-m-10"
+    }
+  ]
+}

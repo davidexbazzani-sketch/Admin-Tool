@@ -58,7 +58,7 @@ export function Reise({ index }: { index: InhaltsIndex }) {
       <div key={k} className="dc-reihe" style={{ flexWrap: 'nowrap' }} data-dc-reise-kurs={k}>
         <span className="dc-reihe" style={{ width: 240, flex: 'none', gap: 8, flexWrap: 'nowrap' }}><Symbol name={info.zeichen} />{info.name}{k.includes('/') && <span className="dc-klein dc-stumm"> · {index.schwerpunkte.find(s => s.id === k.split('/')[1])?.name}</span>}</span>
         <span className="dc-balken" style={{ flex: 1 }}><i style={{ width: `${f.gesamt ? (f.erledigt / f.gesamt) * 100 : 0}%` }} /></span>
-        <span className="dc-klein dc-stumm dc-zahl" style={{ width: 150, textAlign: 'right' }}>{f.gesamt ? (f.fertig ? 'Freilauf' : `${f.erledigt}/${f.gesamt} · ${f.phase ? PHASEN[f.phase] : ''}`) : 'Inhalte folgen'}</span>
+        <span className="dc-klein dc-stumm dc-zahl" style={{ width: 150, textAlign: 'right' }}>{f.gesamt ? (f.fertig ? 'Meisterklasse' : `${f.erledigt}/${f.gesamt} · ${f.phase ? PHASEN[f.phase] : ''}`) : 'Inhalte folgen'}</span>
       </div>) })
   }
   return (

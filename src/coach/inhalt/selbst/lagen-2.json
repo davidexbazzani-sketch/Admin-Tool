@@ -1,0 +1,258 @@
+{
+  "lagen": [
+    {
+      "id": "selbst-l-06", "bereich": "selbst", "phase": "k", "umfeld": "kollegen", "faehigkeiten": ["selbst.vergleich", "selbst.kritiker", "selbst.beweise"], "stufe": 5,
+      "titel": "Die neue Rolle", "figur": "Carla Demir",
+      "einleitung": "Du übernimmst ein Kundenprojekt von einer Kollegin, die alle bewundern. Du übst, ein Vorbild als Quelle statt als Messlatte zu nutzen, das Hochstapler-Gefühl mit deinem Anteil zu beantworten und einen Erfolg sachlich zu nennen.",
+      "lage": "Carla Demir wechselt in eine andere Abteilung. Ab Montag betreust du ihr wichtigstes Kundenprojekt – Herrn Petersen. Carla gilt im Haus als die Beste.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Montag, Übergabe. Carla schiebt dir den Ordner hin: „Da ist alles drin. Du machst das schon.“ In dir sagt eine Stimme: „Sie war perfekt. Du bist nur der Ersatz.“",
+          "wahl": [
+            { "text": "„Danke, Carla. Darf ich dich in den ersten zwei Wochen anrufen, wenn ich nicht weiterweiß?“", "wert": 2, "weiter": "k2", "rueck": "Du nutzt ein erreichbares Vorbild als Quelle, nicht als Messlatte – und holst dir ihr Wissen." },
+            { "text": "Nicken, lächeln und dabei denken: „So gut wie sie werde ich niemals, da kann ich mich anstrengen, wie ich will.“", "wert": 0, "tendenz": "vergleichen", "weiter": "k1b", "rueck": "Der Stich ist verständlich. Ein „nie“ danach macht aus dem Vergleich ein Urteil, das dich lähmt." },
+            { "text": "„Danke. Ich mache es auf meine Art.“", "wert": 1, "weiter": "k2", "rueck": "Dein eigener Weg ist gut. Ein bisschen von Carlas Erfahrung mitzunehmen, kostet dich aber nichts." }
+          ] },
+        { "id": "k1b", "sagt": "Abends sitzt du seit zwei Stunden über Carlas alten Unterlagen und vergleichst sie mit deinen. Es sticht bei jeder Seite.",
+          "wahl": [
+            { "text": "Die drei Fragen: Was genau beeindruckt mich? Ihre klare Gliederung. Die übernehme ich – der Rest wird meins.", "wert": 2, "weiter": "k2", "rueck": "Aus dem Stich wird ein Schritt. Genau so treibt ein Vergleich an, statt zu drücken." },
+            { "text": "Dr. Albers morgen sagen, dass jemand anderes besser geeignet wäre.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Dann entscheidet das Gefühl – nicht deine Eignung, die zur Auswahl geführt hat." }
+          ] },
+        { "id": "k2", "sagt": "Erstes Treffen mit Herrn Petersen. Er lehnt sich zurück: „Frau Demir hat das immer ganz anders gemacht.“ Dir wird heiß: „Jetzt fliegt es auf.“",
+          "wahl": [
+            { "text": "„Ich mache es etwas anders: freitags eine kurze Übersicht für Sie. Fehlt etwas, sagen Sie es mir.“", "wert": 2, "weiter": "k3", "rueck": "Ruhig, mit eigenem Plan und offen für seine Wünsche. Das Hochstapler-Gefühl war laut – du hast trotzdem gehandelt." },
+            { "text": "„Ich mache alles genau so wie Frau Demir, versprochen – Sie werden keinen Unterschied merken, ich habe mir alles angesehen.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3", "rueck": "Du versprichst, eine andere zu sein. Das hält nicht lange – und dein eigener Plan verschwindet." },
+            { "text": "„Wie hat sie es denn gemacht? Dann schaue ich, was ich übernehme.“", "wert": 1, "weiter": "k3", "rueck": "Neugierig und offen – gut. Einen eigenen Vorschlag dazu hättest du auch schon gehabt." }
+          ] },
+        { "id": "k3", "sagt": "Zwei Wochen später leitet dir Dr. Albers eine Mail von Herrn Petersen weiter: „Die Zusammenarbeit läuft sehr gut.“ Darüber steht: „Gut gemacht.“ In dir: „Nur Glück. Petersen hatte gute Laune.“",
+          "wahl": [
+            { "text": "Den Satz bemerken und in die Beweisliste schreiben, was du in den zwei Wochen selbst getan hast.", "wert": 2, "weiter": "k4", "rueck": "Du lässt den Erfolg zählen – mit deinem Anteil. So bricht der Hochstapler-Kreis." },
+            { "text": "Dir eingestehen, dass es wohl wirklich Glück war – Herr Petersen war in diesen zwei Wochen einfach gut gelaunt.", "wert": 0, "tendenz": "kleinreden", "weiter": "k3b", "rueck": "So zählt kein Erfolg als Beweis – und beim nächsten Problem ist das Hochstapler-Gefühl wieder da." },
+            { "text": "Mit „Danke!“ antworten und weiterarbeiten.", "wert": 1, "weiter": "k4", "rueck": "Annehmen ist gut. Deinen Anteil schwarz auf weiß zu haben, macht den Erfolg erst zum Beweis." }
+          ] },
+        { "id": "k3b", "sagt": "Am Abend legt der Kritiker nach: „Beim ersten echten Problem fliegst du auf.“",
+          "wahl": [
+            { "text": "Den Satz wörtlich aufschreiben und zwei Dinge daneben, die du in diesem Projekt schon gelöst hast.", "wert": 2, "weiter": "k4", "rueck": "Prüfen statt glauben: Mit Belegen schrumpft der Satz auf seine wahre Größe." },
+            { "text": "Das ganze Wochenende durcharbeiten und jede Unterlage von Carla noch einmal prüfen, damit dir bloß kein Problem entgeht.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k4", "rueck": "Überarbeiten füttert den Kreis: Klappt es, war es wieder nur der Aufwand." }
+          ] },
+        { "id": "k4", "sagt": "Freitag, Teamrunde. Dr. Albers fragt in die Runde: „Wie läuft das Projekt Petersen?“",
+          "wahl": [
+            { "text": "„Ganz okay, denke ich. Das meiste hatte Carla ja schon vorbereitet, ich habe eigentlich nur weitergemacht.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Carlas Vorarbeit war da – die letzten zwei Wochen aber waren deine. Die darfst du nennen." },
+            { "text": "„Gut. Ich bin eingearbeitet, die Absprachen stehen, und Herr Petersen ist zufrieden.“", "wert": 2, "weiter": "ende1", "rueck": "Sachlich, ohne „nur“, ohne Witz auf deine Kosten. So klingt ein Erfolg, der dir gehört." },
+            { "text": "„Läuft.“", "wert": 1, "weiter": "ende1", "rueck": "Stimmt und ist nicht kleingeredet. Ein Satz mehr hätte gezeigt, was du geleistet hast." }
+          ] },
+        { "id": "ende1", "sagt": "Der Freitag ist vorbei. Das Projekt Petersen ist jetzt deins.", "ende": "Neue Rolle, alte Messlatte: Ein bewundertes Vorbild hilft als Quelle, nicht als Maßstab. Meldet sich das Hochstapler-Gefühl, steht dein Anteil dagegen – auf Papier und, wenn man dich fragt, auch laut." },
+        { "id": "ende2", "sagt": "Dr. Albers schaut dich an: „Ich habe Sie ausgesucht, weil Sie die Kunden kennen. Versuchen Sie es.“ Du gehst mit einem flauen Gefühl zurück an den Platz.", "ende": "Fast hätte das Gefühl entschieden. Beim nächsten Stich: Was genau beeindruckt mich, was davon will ich lernen – und was kann ich schon?" }
+      ],
+      "prinzipien": ["Vorbild als Quelle, nicht als Messlatte", "nach dem Stich: Was genau? Welcher Schritt ist meiner?", "Hochstapler-Satz mit dem eigenen Anteil beantworten", "Erfolge sachlich nennen – ohne „nur“"],
+      "transfer": "Mit wem misst du dich gerade – und was davon könntest du als Quelle nutzen statt als Messlatte?"
+    },
+    {
+      "id": "selbst-l-07", "bereich": "selbst", "phase": "k", "umfeld": "familie", "faehigkeiten": ["selbst.grenzen", "selbst.haltung"], "stufe": 5,
+      "titel": "Der Siebzigste von Tante Renate", "figur": "Tante Renate",
+      "einleitung": "Ein Familienfest, bei dem alle etwas von dir wollen. Du übst, eine Grenze mit Angebot zu setzen, sie bei Vorwürfen ruhig zu halten und vor allen aufrecht zu bleiben.",
+      "lage": "Tante Renate wird siebzig. Am Sonntag feiert die Familie im Gasthaus. Deine Woche ist schon voll. Am Montagabend ruft sie an.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Renate: „Du machst doch den Kuchen, die Deko und eine kleine Rede, oder? Du kannst das alles so schön.“",
+          "wahl": [
+            { "text": "„Die Rede halte ich gern. Kuchen und Deko schaffe ich diese Woche nicht.“", "wert": 2, "weiter": "k2", "rueck": "Ein klares Nein mit einem echten Angebot – das, was du wirklich geben willst." },
+            { "text": "„Klar, mach ich alles.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1b", "rueck": "Ein schnelles Ja aus Gewohnheit. Die Rechnung kommt später in der Woche." },
+            { "text": "„Ich schau erst in meinen Kalender, was diese Woche noch alles ansteht, und sag dir morgen Bescheid.“", "wert": 1, "weiter": "k1c", "rueck": "Bedenkzeit statt Sofort-Ja – ein guter erster Schritt. Morgen kommt die eigentliche Antwort." }
+          ] },
+        { "id": "k1c", "sagt": "Dienstag. Du hast in den Kalender geschaut: Für alles reicht die Zeit nicht. Du rufst Renate an.",
+          "wahl": [
+            { "text": "„Die Rede halte ich gern. Für Kuchen und Deko fehlt mir diese Woche die Zeit.“", "wert": 2, "weiter": "k2", "rueck": "Die Bedenkzeit hat sich gelohnt: Du sagst, was du gibst, und was nicht." },
+            { "text": "„Na gut, irgendwie kriege ich das schon alles hin.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1b", "rueck": "Du hast nachgerechnet – und dann doch gegen dein Ergebnis zugesagt." }
+          ] },
+        { "id": "k1b", "sagt": "Mittwoch, 23 Uhr. Du stehst in der Küche, der Teig will nicht, die Deko liegt noch im Karton. Du bist wütend – auf Renate und auf dich.",
+          "wahl": [
+            { "text": "Jemanden aus der Familie anrufen: „Übernimmst du die Deko? Ich schaffe nicht alles.“", "wert": 2, "weiter": "k3", "rueck": "Spät, aber eine echte Grenze: Du sagst, was zu viel ist, und bittest um Hilfe." },
+            { "text": "Weitermachen und dir schwören, dass Renate irgendwann merkt, was du alles für sie tust.", "wert": 0, "tendenz": "nachgeben", "weiter": "k3", "rueck": "Stilles Aufopfern hofft darauf, dass andere deine Grenze erraten. Das tun sie selten." }
+          ] },
+        { "id": "k2", "sagt": "Renate seufzt: „Na ja. Wenn du nicht mal einen Kuchen für deine alte Tante backst … Mir hilft ja sowieso keiner.“",
+          "wahl": [
+            { "text": "„Ich merke, du bist enttäuscht. Die Rede halte ich gern – den Kuchen bestellen wir bei der Bäckerei Hansen.“", "wert": 2, "weiter": "k3", "rueck": "Du siehst ihre Enttäuschung, steigst nicht ins Schuld-Spiel ein und bleibst bei deinem Nein. Die Bestellung ist ein Angebot, kein Rückzieher." },
+            { "text": "„Du hast recht, entschuldige. Ich backe ihn doch.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k3", "rueck": "Der Vorwurf hat gewirkt – und ihr lernt beide, dass dein Nein mit genug Druck kippt." },
+            { "text": "Ihr ausführlich erklären, was du diese Woche alles vorhast, damit sie es versteht.", "wert": 1, "tendenz": "rechtfertigen", "weiter": "k3", "rueck": "Verständlich – aber jeder Grund ist eine Einladung zum Verhandeln. Dein Nein braucht keine Beweise." }
+          ] },
+        { "id": "k3", "sagt": "Sonntag, die Feier. Kurz vor deiner Rede sagt Renate laut in die Runde: „Und, wie sieht's bei dir in der Liebe aus? Erzähl doch mal!“ Einige lachen.",
+          "wahl": [
+            { "text": "Lächeln: „Renate, das Thema lasse ich heute aus. Jetzt kommt erst mal deine Rede.“", "wert": 2, "weiter": "k4", "rueck": "Freundlich, klar, mit neuem Thema – du gibst keine Auskunft, die du nicht geben willst." },
+            { "text": "Verlegen mitlachen, auf den Teller schauen und hoffen, dass gleich jemand anderes etwas sagt.", "wert": 0, "tendenz": "kleinmachen", "weiter": "k4", "rueck": "Du machst dich klein, damit es schnell vorbei ist. Der Satz kommt beim nächsten Fest wieder." },
+            { "text": "„Und bei dir, Renate? Immer noch so neugierig wie früher?“", "wert": 0, "tendenz": "angreifen", "weiter": "k4", "rueck": "Ein Lacher auf ihre Kosten – an ihrem Geburtstag. Die Grenze geht im Ärger unter." },
+            { "text": "Nichts sagen, einmal ausatmen und aufstehen.", "wert": 1, "weiter": "k4", "rueck": "Du lässt dich nicht hineinziehen – gut. Ein freundlicher Satz hätte ihr gezeigt, wo deine Grenze liegt." }
+          ] },
+        { "id": "k4", "sagt": "Du stehst auf. Ein Onkel ruft: „Aber mach's kurz!“ Alle Blicke liegen auf dir.",
+          "wahl": [
+            { "text": "„Ach, ich kann eh nicht gut reden, sorry schon mal, ich mach's ganz schnell, dann könnt ihr weiteressen …“", "wert": 0, "tendenz": "kleinmachen", "weiter": "ende1", "rueck": "Die Entschuldigung vorweg macht deine Rede kleiner, bevor sie begonnen hat." },
+            { "text": "Aufrecht stehen, kurz in die Runde schauen: „Versprochen – drei Minuten.“ Dann anfangen.", "wert": 2, "weiter": "ende1", "rueck": "Präsent ohne Druck: Du nimmst den Zwischenruf auf und nimmst dir deinen Platz." },
+            { "text": "Sofort losreden, schnell und ohne aufzuschauen.", "wert": 1, "weiter": "ende1", "rueck": "Du hältst durch – gut. Ein Atemzug und ein Blick vorher hätten dir die Bühne gegeben." }
+          ] },
+        { "id": "ende1", "sagt": "Als du von Renates Gartenfesten erzählst, wischt sie sich eine Träne weg. Später drückt sie deinen Arm: „Schön hast du das gemacht.“", "ende": "Familienfeste testen Grenzen besonders: Sag, was du gibst und was nicht. Bleib bei Vorwürfen freundlich bei deinem Nein, ohne aufzurechnen. Und nimm dir vor allen deinen Platz – aufrecht und ohne Entschuldigung." }
+      ],
+      "prinzipien": ["Nein mit echtem Angebot", "Bedenkzeit statt Sofort-Ja", "Enttäuschung anerkennen, Nein stehen lassen", "persönliche Fragen freundlich ablehnen", "vor allen aufrecht, ohne Entschuldigung"],
+      "transfer": "Bei welchem Familienmitglied kippt dein Nein am leichtesten – und welchen Satz nimmst du dir für das nächste Treffen vor?"
+    },
+    {
+      "id": "selbst-l-08", "bereich": "selbst", "phase": "k", "umfeld": "kunden", "faehigkeiten": ["selbst.mitgefuehl", "selbst.kritiker", "selbst.beweise"], "stufe": 6,
+      "titel": "Der vergessene Termin", "figur": "Herr Petersen",
+      "einleitung": "Du hast einen Kundentermin verpasst. Du übst, den Fehler offen zu nennen, ihn in vier Schritten zu verdauen statt nachts zu grübeln – und am nächsten Morgen mit einem glaubwürdigen Satz ins Gespräch zu gehen.",
+      "lage": "Dienstag. Um zehn Uhr wolltest du Herrn Petersen anrufen, um das neue Angebot durchzugehen. Er hört nicht mehr gut und hatte sich dafür extra Zeit genommen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "11:40 Uhr. Beim Blick in den Kalender wird dir heiß: der Anruf. In dir: „Wie kann man nur so unfähig sein.“",
+          "wahl": [
+            { "text": "Sofort anrufen: „Herr Petersen, ich habe unseren Termin um zehn verpasst. Das tut mir leid. Passt es jetzt oder um drei?“", "wert": 2, "weiter": "k2", "rueck": "Was – was jetzt. Offen, ohne Ausrede, mit Angebot. Schneller lässt sich ein Fehler kaum kleiner machen." },
+            { "text": "Eine Mail schicken: „Leider kam bei mir etwas sehr Dringendes dazwischen.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k1b", "rueck": "Eine erfundene Ausrede schützt kurz – und macht aus einem Versehen etwas, das du verbergen willst." },
+            { "text": "Erst zwanzig Minuten runterkommen, dann anrufen und dich entschuldigen.", "wert": 1, "weiter": "k2", "rueck": "Ruhig anzurufen ist gut. Jede Minute Warten lässt ihn aber länger im Ungewissen." }
+          ] },
+        { "id": "k1b", "sagt": "Herr Petersen antwortet knapp: „Ich hatte mir den ganzen Vormittag freigehalten.“",
+          "wahl": [
+            { "text": "Anrufen und ehrlich sein: „Es kam nichts dazwischen – ich habe den Termin schlicht vergessen. Das tut mir leid.“", "wert": 2, "weiter": "k2", "rueck": "Spät, aber ehrlich. Wer einen Fehler offen nennt, wirkt meist souveräner, als er sich fühlt." },
+            { "text": "Noch einmal zurückschreiben und betonen, wie dringend die andere Sache war – leider ließ es sich nicht verschieben.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende3", "rueck": "Die Ausrede wird größer – und das Vertrauen kleiner." }
+          ] },
+        { "id": "k2", "sagt": "Am Telefon. Herr Petersen: „Wie bitte? Ach so. … Na gut. Ich war verärgert, ehrlich gesagt.“",
+          "wahl": [
+            { "text": "„Ich bin echt unmöglich. Entschuldigen Sie tausendmal.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3", "rueck": "Die Selbstbeschimpfung lenkt alle Aufmerksamkeit auf dich – und er muss dich am Ende noch trösten." },
+            { "text": "„Das verstehe ich. Für unsere Termine stelle ich mir jetzt eine Erinnerung. Gehen wir das Angebot durch?“", "wert": 2, "weiter": "k3", "rueck": "Sein Ärger darf sein. Du nennst eine Lehre und kommst zur Sache – so wird der Fehler zur Episode." },
+            { "text": "„Tut mir wirklich leid.“ Und dann warten.", "wert": 1, "weiter": "k3", "rueck": "Ehrlich und kurz. Ein nächster Schritt hätte ihm gezeigt, dass es nicht wieder passiert." }
+          ] },
+        { "id": "k3", "sagt": "Abends zu Hause. Der Anruf lief am Ende gut. Trotzdem kreist es: „Wenn Albers das erfährt …“",
+          "wahl": [
+            { "text": "Die vier Schritte: Wiedergutgemacht ist es. Lehre: Erinnerung für Kundentermine. Dir verzeihen. Akte zu.", "wert": 2, "weiter": "k4", "rueck": "Verdaut statt gekaut: Der Fehler hat eine Lehre hinterlassen und darf gehen." },
+            { "text": "Das Telefonat noch einmal und noch einmal im Kopf durchspielen, um sicher zu wissen, was du nächstes Mal besser sagst.", "wert": 0, "tendenz": "gruebeln", "weiter": "k3b", "rueck": "Fühlt sich nach Vorsorge an, bringt aber keine neue Lehre – nur einen späten Abend." },
+            { "text": "Eine Serie anschalten und dich ablenken.", "wert": 1, "weiter": "k4", "rueck": "Ablenken entlastet. Mit festgehaltener Lehre käme der Gedanke seltener zurück." }
+          ] },
+        { "id": "k3b", "sagt": "Ein Uhr nachts. Du liegst wach und hörst seinen Satz: „Ich hatte mir den Vormittag freigehalten.“",
+          "wahl": [
+            { "text": "Aufstehen, die Lehre auf einen Zettel schreiben – „Kundentermine mit Erinnerung“ – und dir sagen: „Akte zu.“", "wert": 2, "weiter": "k4", "rueck": "Konkret statt im Kreis: Die Lehre steht, der Kopf darf loslassen." },
+            { "text": "Beschließen, Kundentermine künftig lieber Tarek zu überlassen – der vergisst so etwas bestimmt nicht so leicht.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Das schützt kurz und nimmt dir jede Chance, es gut zu machen." }
+          ] },
+        { "id": "k4", "sagt": "Mittwochmorgen. Dr. Albers kommt an deinen Platz: „Herr Petersen hat vorhin angerufen.“ Dein Herz klopft.",
+          "wahl": [
+            { "text": "„Er hat sich beschwert, oder? Ich wusste es. Ich kann das erklären, es war ein einziges Mal und kommt nicht wieder vor.“", "wert": 0, "tendenz": "katastrophe", "weiter": "k5", "rueck": "Gedankenlesen ohne Daten – du antwortest auf einen Satz, den Albers noch gar nicht gesagt hat." },
+            { "text": "Innerlich: „Fehler gemacht, gut korrigiert.“ Dann: „Ja, den Termin hatte ich verpasst – und am selben Tag nachgeholt.“", "wert": 2, "weiter": "k5", "rueck": "Dein glaubwürdiger Satz trägt: Du nennst den Fehler selbst, sachlich und mit dem, was du getan hast." },
+            { "text": "Abwarten, was er zu sagen hat.", "wert": 1, "weiter": "k5", "rueck": "Ruhig und ohne Katastrophe – gut. Den Fehler selbst anzusprechen, hätte dir noch mehr Stand gegeben." }
+          ] },
+        { "id": "k5", "sagt": "Dr. Albers: „Er wollte sagen, dass ihm das Angebot gefällt. Den Termin hat er auch erwähnt – und dass Sie es offen gesagt haben. Gut so.“",
+          "wahl": [
+            { "text": "„Danke, das freut mich. Für Kundentermine habe ich mir jetzt eine Erinnerung eingerichtet.“", "wert": 2, "weiter": "ende1", "rueck": "Lob angenommen, Lehre genannt – ohne Kleinreden." },
+            { "text": "„Ach, da hatte ich einfach Glück.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Dass Herr Petersen zufrieden ist, hat mit deinem Angebot und deinem offenen Umgang zu tun – nicht mit Glück." },
+            { "text": "„Puh. Gut.“", "wert": 1, "weiter": "ende1", "rueck": "Erleichterung ist verständlich. Ein „Danke“ hätte das Lob bei dir ankommen lassen." }
+          ] },
+        { "id": "ende1", "sagt": "Abends denkst du noch einmal an den Dienstag. Der Termin ist nachgeholt, das Angebot gefällt.", "ende": "Ein Fehler ist verdaut, wenn er etwas hinterlassen hat: eine Wiedergutmachung, eine Lehre – und die Erlaubnis, weiterzumachen. Ein glaubwürdiger Satz hilft, wenn er am nächsten Morgen wieder hochkommt." },
+        { "id": "ende2", "sagt": "Der Fehler ist geklärt, aber er begleitet dich noch tagelang.", "ende": "Ausweichen macht einen kleinen Fehler groß. Beim nächsten Mal: Lehre aufschreiben, dir verzeihen – und die nächste Chance selbst nutzen." },
+        { "id": "ende3", "sagt": "Herr Petersen bleibt kühl. Den neuen Termin macht er erst für nächste Woche – und du weißt, dass deine Ausrede nicht stimmt.", "ende": "Eine Ausrede macht aus einem Versehen etwas, das man verbergen will – und kostet Vertrauen. Beim nächsten Mal: offen nennen, eine Lehre ziehen, dir verzeihen – Akte zu." }
+      ],
+      "prinzipien": ["Fehler offen und schnell nennen, ohne Ausrede", "Ärger des anderen stehen lassen, Lehre nennen", "vier Schritte: wiedergutmachen, Lehre, verzeihen, abschließen", "glaubwürdiger Satz mit Beweis für den nächsten Morgen"],
+      "transfer": "Welcher Fehler ist bei dir noch nicht verdaut? Welcher der vier Schritte fehlt ihm noch?"
+    },
+    {
+      "id": "selbst-l-09", "bereich": "selbst", "phase": "k", "umfeld": "gruppe", "faehigkeiten": ["selbst.haltung", "selbst.grenzen"], "stufe": 6,
+      "titel": "Dein Vorschlag in der großen Runde", "figur": "Miriam Okafor",
+      "einleitung": "Du bringst vor zwölf Leuten einen Vorschlag ein. Du übst, ohne Vorrede anzufangen, bei einer Unterbrechung deinen Satz zu Ende zu bringen und dich nicht mit Zusatzarbeit zu überladen.",
+      "lage": "Abteilungsrunde, zwölf Leute. Dr. Albers leitet. Du willst eine Liste mit den häufigsten Kundenfragen vorschlagen, die direkt im Kundenportal stehen und Anrufe sparen soll.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Sie hatten noch einen Punkt?“",
+          "wahl": [
+            { "text": "„Ja, also, nur ganz kurz, ist vielleicht auch gar nicht so wichtig, aber …“", "wert": 0, "tendenz": "kleinmachen", "weiter": "k1b", "rueck": "Drei Weichmacher – dein Vorschlag wirkt klein, bevor ihn jemand gehört hat." },
+            { "text": "Aufrichten, kurzer Blick: „Ja. Ich schlage eine Liste mit den zehn häufigsten Kundenfragen vor – das spart uns Anrufe.“", "wert": 2, "weiter": "k2", "rueck": "Ohne Vorrede, mit Nutzen. So bekommt dein Vorschlag die Aufmerksamkeit, die er verdient." },
+            { "text": "„Darf ich kurz etwas vorschlagen?“", "wert": 1, "weiter": "k2", "rueck": "Höflich und in Ordnung – er hat ja schon gefragt. Den Vorschlag direkt zu nennen, spart die Schleife." }
+          ] },
+        { "id": "k1b", "sagt": "Zwei Leute schauen auf ihr Handy. Dr. Albers: „Und der Punkt ist?“",
+          "wahl": [
+            { "text": "Einmal ausatmen, neu ansetzen: „Eine Liste mit den zehn häufigsten Kundenfragen. Sie spart uns Anrufe.“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: Der zweite Anlauf ist klar und ohne Entschuldigung." },
+            { "text": "„Ach, egal. Ist nicht so dringend – das können wir auch gern ein andermal besprechen, wenn mehr Zeit ist.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Dein Vorschlag verschwindet – nicht, weil er schlecht war, sondern weil er nicht gesagt wurde." }
+          ] },
+        { "id": "k2", "sagt": "Miriam fällt dir ins Wort: „So eine Liste hatten wir vor ein paar Jahren schon. Hat keiner gelesen.“",
+          "wahl": [
+            { "text": "„Danke für den Hinweis. Lass mich den Satz zu Ende bringen: Diesmal hängt die Liste direkt im Kundenportal.“", "wert": 2, "weiter": "k3", "rueck": "Du nimmst ihren Einwand auf und hältst deinen Platz – freundlich und bestimmt." },
+            { "text": "Verstummen.", "wert": 0, "tendenz": "vermeiden", "weiter": "k2b", "rueck": "Ein Einwand ist kein Urteil. Ohne deinen zweiten Satz bleibt nur ihrer im Raum." },
+            { "text": "„Miriam, lass mich doch mal ausreden, echt jetzt.“", "wert": 0, "tendenz": "angreifen", "weiter": "k3", "rueck": "Dein Platz ist dir wichtig – zu Recht. Der gereizte Ton macht aus dem Vorschlag aber einen Streit." },
+            { "text": "„Interessant – woran lag es damals, dass sie keiner gelesen hat? Das hilft mir, es diesmal anders zu machen.“", "wert": 1, "weiter": "k3", "rueck": "Neugierig und klug – ihr Wissen kann helfen. Deinen eigenen Punkt hast du dabei aber noch nicht zu Ende gebracht." }
+          ] },
+        { "id": "k2b", "sagt": "Kurze Stille. Dr. Albers schaut dich an: „Wollten Sie noch etwas ergänzen?“",
+          "wahl": [
+            { "text": "„Ja. Die Liste soll direkt ins Kundenportal – da, wo die Fragen entstehen.“", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance genutzt: Du bringst deinen Gedanken zu Ende." },
+            { "text": "„Nein, passt schon – Miriam hat ja recht, so etwas hatten wir alles schon mal.“", "wert": 0, "tendenz": "kleinmachen", "weiter": "ende2", "rueck": "Du lässt dir den Platz wieder abnehmen – diesmal sogar angeboten." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers: „Gefällt mir. Wer übernimmt das?“ Stille. Alle schauen dich an. Dein Monat ist schon voll – unter anderem mit dem Monatsbericht.",
+          "wahl": [
+            { "text": "„Ich übernehme den Entwurf, wenn dafür der Monatsbericht diesmal bei jemand anderem liegt.“", "wert": 2, "weiter": "k4", "rueck": "Ja zur eigenen Idee, mit einer Grenze: Du sagst, was du dafür abgibst." },
+            { "text": "„Ich mach das. Irgendwie schaffe ich das schon nebenher.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k4", "rueck": "Eine gute Idee wird zur Last, wenn sie einfach oben draufkommt – und „irgendwie“ ist kein Plan." },
+            { "text": "„Ich kann den Entwurf machen, brauche aber Unterstützung.“", "wert": 1, "weiter": "k4", "rueck": "Gut, dass du sagst, was du brauchst. Konkret zu sagen, was wegfallen soll, macht es verbindlicher." }
+          ] },
+        { "id": "k4", "sagt": "Nach der Runde kommt Miriam zu dir: „Sorry, ich bin vorhin reingeplatzt. Ist eigentlich eine gute Idee.“",
+          "wahl": [
+            { "text": "„Danke, das freut mich. Und erzähl mir gern, was damals schiefging.“", "wert": 2, "weiter": "ende1", "rueck": "Lob angenommen, und ihr Wissen eingeladen – ohne nachzutragen." },
+            { "text": "„Ach, war auch nicht so durchdacht.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Sie lobt dich, und du nimmst es dir wieder weg. Ein „Danke“ hätte gereicht." },
+            { "text": "„Schon okay.“", "wert": 1, "weiter": "ende1", "rueck": "Versöhnlich – gut. Ihr Lob ist dabei aber an dir vorbeigegangen." }
+          ] },
+        { "id": "ende1", "sagt": "Auf dem Weg zurück an deinen Platz gehst du die Runde im Kopf noch einmal durch.", "ende": "Präsenz in der Runde heißt: ohne Vorrede beginnen, bei einer Unterbrechung den Satz zu Ende bringen und Zusatzarbeit nur mit Grenze annehmen. Nicht lauter – klarer." },
+        { "id": "ende2", "sagt": "Die Runde geht weiter. Auf dem Heimweg fällt dir ein, wie du es hättest sagen können.", "ende": "Dein Vorschlag war gut – er ist nur nicht ganz angekommen. Beim nächsten Mal: aufrecht, ohne Entschuldigung, und den Satz zu Ende bringen, auch wenn jemand dazwischenredet." }
+      ],
+      "prinzipien": ["ohne Weichmacher beginnen", "bei Unterbrechung: Einwand aufnehmen, Satz zu Ende bringen", "Zusatzarbeit nur mit Grenze annehmen", "Lob nach der Runde annehmen"],
+      "transfer": "In welcher Runde machst du dich am ehesten klein? Wie lautet dort dein erster Satz ohne Vorrede?"
+    },
+    {
+      "id": "selbst-l-10", "bereich": "selbst", "phase": "k", "umfeld": "kollegen", "faehigkeiten": ["selbst.kritiker", "selbst.beweise", "selbst.grenzen", "selbst.mitgefuehl", "selbst.haltung", "selbst.vergleich"], "stufe": 6, "sparring": true,
+      "titel": "Die erste Woche als Teamleitung", "figur": "Dr. Henrik Albers",
+      "einleitung": "Sparring der Phase Können: Eine ganze Woche in einer neuen Rolle. Du verbindest alles – aufrecht auftreten, Grenzen setzen, einen Fehler offen nennen und verdauen, das Hochstapler-Gefühl und den Vergleich mit deinem Vorgänger mit Belegen beantworten.",
+      "lage": "Dr. Albers hat dich für ein halbes Jahr zur Teamleitung gemacht, während dein bisheriger Teamleiter im Ausland arbeitet. Im letzten Jahr hast du die Einarbeitung der Neuen geleitet und das Projekt Petersen übernommen. Montag, neun Uhr: Dr. Albers stellt dich dem Team vor.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Ab heute leitet {name} das Team.“ Tarek grinst: „Na dann – wir hören auf dein Kommando!“ In dir: „Die merken gleich, dass du das nicht kannst.“",
+          "wahl": [
+            { "text": "„Ähm, ist ja nur übergangsweise, ich weiß auch nicht genau, warum ausgerechnet ich …“", "wert": 0, "tendenz": "kleinmachen", "weiter": "k1b", "rueck": "Du machst dich klein, bevor jemand anders es könnte. Das Team hört: Da traut sich jemand die Rolle selbst nicht zu." },
+            { "text": "Aufrecht, Blick in die Runde: „Ja. Für mich ist das neu – ich baue auf eure Erfahrung. Mittwoch ist unsere erste Runde.“", "wert": 2, "weiter": "k2", "rueck": "Ehrlich neu, ohne Entschuldigung, mit einem klaren nächsten Schritt. So sieht ein Anfang aus." },
+            { "text": "„Danke. Mittwoch erste Runde.“", "wert": 1, "weiter": "k2", "rueck": "Klar und nicht kleingemacht. Ein Satz zu dir und zum Team hätte den Start wärmer gemacht." }
+          ] },
+        { "id": "k1b", "sagt": "Nach der Vorstellung nimmt Dr. Albers dich zur Seite: „Warum machen Sie sich so klein? Ich habe Sie ausgewählt.“",
+          "wahl": [
+            { "text": "„Sie haben recht. Ich habe die Einarbeitung der Neuen geleitet und das Projekt Petersen übernommen. Darauf baue ich.“", "wert": 2, "weiter": "k2", "rueck": "Belege statt Gefühl: Du beantwortest den Hochstapler-Satz mit deinem Anteil." },
+            { "text": "„Ich hoffe nur, Sie bereuen es nicht.“", "wert": 0, "tendenz": "kleinreden", "weiter": "k2", "rueck": "Das Gefühl spricht – und er muss dich jetzt beruhigen, statt mit dir zu planen." }
+          ] },
+        { "id": "k2", "sagt": "Dienstag. Miriam stellt dir eine Kundenbeschwerde auf den Tisch: „Du leitest doch jetzt das Team – mach du das.“ Es ist ihr Kunde.",
+          "wahl": [
+            { "text": "„Die Beschwerde bleibt bei dir. Wenn du nicht weiterkommst, unterstütze ich dich.“", "wert": 2, "weiter": "k3", "rueck": "Eine klare Grenze mit Angebot – Leitung heißt nicht, alles selbst zu machen." },
+            { "text": "Sie seufzend nehmen. In der Leitung muss man so etwas wohl übernehmen, und Miriam hat ja auch viel um die Ohren.", "wert": 0, "tendenz": "nachgeben", "weiter": "k3", "rueck": "Der Antreiber „Mach es allen recht“ in neuer Rolle. So wird die Leitung zur Ablage für alles." },
+            { "text": "„Lass uns morgen in der Runde schauen, wer Kapazität hat.“", "wert": 1, "weiter": "k3", "rueck": "Fair und durchdacht – aber die Beschwerde gehört zu ihrem Kunden. Das hättest du direkt sagen können." }
+          ] },
+        { "id": "k3", "sagt": "Mittwoch, deine erste Runde. Lena meldet sich: „In der Einladung steht als Frist der 4. – gemeint ist doch der 14.?“ Sie hat recht.",
+          "wahl": [
+            { "text": "„Danke, Lena. Richtig ist der 14. – ich korrigiere die Einladung gleich.“", "wert": 2, "weiter": "k4", "rueck": "Was – was jetzt. Sachlich, mit Dank. Ein Tippfehler bleibt ein Tippfehler." },
+            { "text": "„Na super, ich kann nicht mal ein Datum richtig schreiben.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3b", "rueck": "Die Selbstbeschimpfung vor allen macht aus einer Ziffer ein Urteil über deine Leitung." },
+            { "text": "„Das Kalenderprogramm hat das Datum verstellt.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k4", "rueck": "Schuld beim Programm zu suchen, wirkt kleiner, als einen Fehler einfach zu korrigieren." }
+          ] },
+        { "id": "k3b", "sagt": "Tarek lacht freundlich: „Passiert doch jedem.“",
+          "wahl": [
+            { "text": "„Stimmt. Richtig ist der 14. Weiter im Text.“", "wert": 2, "weiter": "k4", "rueck": "Gut gefangen: zurück zur Sache, ohne weiteres Etikett." },
+            { "text": "„Danke.“", "wert": 1, "weiter": "k4", "rueck": "Freundlich angenommen. Die richtige Zahl noch einmal zu nennen, hätte die Sache abgeschlossen." }
+          ] },
+        { "id": "k4", "sagt": "Donnerstagabend. Der Kritiker: „Erste Woche, schon ein Fehler. Dein Vorgänger hätte das nie verbockt. Du bist eine Fehlbesetzung.“",
+          "wahl": [
+            { "text": "Verdauen: korrigiert, Lehre „Einladungen gegenlesen“. Dann: „Ich lerne die Rolle – zwei Sachen liefen diese Woche gut.“", "wert": 2, "weiter": "k5", "rueck": "Lehre, Erlaubnis, Beweis: So sieht ein Abend ohne Grübeln aus." },
+            { "text": "Die ganze Woche noch einmal durchgehen und dich Punkt für Punkt mit deinem Vorgänger vergleichen, um zu sehen, wo du hinterherhinkst.", "wert": 0, "tendenz": "gruebeln", "weiter": "k4b", "rueck": "Grübeln plus Vergleich nach oben – zwei Fallen auf einmal." },
+            { "text": "Eine Freundin anrufen und über etwas ganz anderes reden.", "wert": 1, "weiter": "k5", "rueck": "Ablenkung und Nähe tun gut. Die Lehre aufzuschreiben, hätte das Thema ganz geschlossen." }
+          ] },
+        { "id": "k4b", "sagt": "Mitternacht. Du hast im Kopf jede Entscheidung deines Vorgängers mit deiner verglichen. Es sticht überall.",
+          "wahl": [
+            { "text": "Die drei Fragen: Was kann er, das ich lernen will? Was kann ich, das ihm fehlte? Was ist mein nächster Schritt?", "wert": 2, "weiter": "k5", "rueck": "Aus dem drückenden Vergleich wird ein ziehender – mit eigenen Stärken und einem Schritt." },
+            { "text": "Beschließen, Dr. Albers gleich am Montagmorgen zu sagen, dass du für die Rolle nicht geeignet bist, und alles abzugeben.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Um Mitternacht nach einer schweren Woche ist kein guter Moment für große Entscheidungen." }
+          ] },
+        { "id": "k5", "sagt": "Freitag. Dr. Albers: „Und? Wie war Ihre erste Woche?“",
+          "wahl": [
+            { "text": "„Ach, geht so. Ich hoffe wirklich, ich bin keine allzu große Enttäuschung für Sie – ich gebe mir jedenfalls alle Mühe.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Du verschenkst die Gelegenheit, deine Woche zu zeigen – und lädst ihn ein, dich zu trösten." },
+            { "text": "„Gut. Die erste Runde lief, einen Fehler habe ich gleich korrigiert. Nächste Woche nehme ich mir die Kundenliste vor.“", "wert": 2, "weiter": "ende1", "rueck": "Erfolg, Fehler und Plan – sachlich und ohne „nur“. So berichtet jemand, der seine Rolle annimmt." },
+            { "text": "„Anstrengend, aber okay.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich. Ein Satz zu dem, was gelungen ist, hätte das Bild vervollständigt." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers nickt: „Dann bis Montag.“ Die erste Woche ist vorbei.", "ende": "Eine Woche, in der alles vorkam: aufrecht anfangen, Grenzen in der neuen Rolle, einen Fehler offen korrigieren und verdauen, Hochstapler-Gefühl und Vergleich mit Belegen beantworten. Selbstvertrauen wächst genau so – nicht vor der Woche, sondern durch sie." },
+        { "id": "ende2", "sagt": "Am Montag wartet Dr. Albers mit einem Kaffee auf dich: „Bevor Sie etwas sagen – ich bin mit Ihrer ersten Woche zufrieden.“", "ende": "Die Nacht hat lauter gesprochen als die Woche. Beim nächsten Mal: erst die Lehre aufschreiben, dann die drei Fragen zum Vergleich – große Entscheidungen nie um Mitternacht." }
+      ],
+      "prinzipien": ["aufrecht beginnen, ehrlich neu sein", "Grenzen auch in der neuen Rolle", "Fehler offen korrigieren, abends verdauen", "Hochstapler-Satz und Vergleich mit Belegen beantworten", "Erfolge sachlich berichten"],
+      "transfer": "Welche neue Rolle wartet auf dich – und welcher der Schritte aus dieser Woche fällt dir dort am schwersten?"
+    }
+  ]
+}

@@ -1,0 +1,279 @@
+{
+  "einheiten": [
+    {
+      "id": "selbst-2-01", "bereich": "selbst", "stufe": 2, "nr": 1,
+      "titel": "Vergleichen: der Stich als Wegweiser",
+      "faehigkeiten": ["selbst.vergleich", "selbst.staerken"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Vergleiche nach oben meist drücken, zeigt eine Meta-Analyse. Dass gutartiger Neid antreibt, zeigen vier Experimente einer Forschergruppe; die Bedingung „Aufholen scheint machbar“ prüfte eines davon. Das Stich-Protokoll ist Praxiswissen, nicht eigens geprüft.",
+      "quellen": ["gerber2018", "vandeven2011", "lockwood1997", "wilsonross2001", "praxis-selbst"],
+      "aha": "Ein Vergleich nach oben drückt nicht immer. Er kann antreiben – wenn du glaubst, selbst aufholen zu können. Der Stich zeigt dir, was dir wichtig ist. Was du daraus machst, entscheidest du.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "In Versuchen erlebten Menschen jemanden, der besser abschnitt als sie. Wann spornte sie das an?", "optionen": ["Immer – Konkurrenz belebt.", "Wenn sie glaubten, selbst aufholen zu können.", "Nie – ein Vergleich nach oben drückt nur."], "richtig": 1, "loesung": "Wenn Aufholen machbar schien", "aufloesung": "Dann wurde aus dem Vergleich gutartiger Neid – und mehr Einsatz. Schien Aufholen aussichtslos, blieb es bei Bewunderung ohne Antrieb. Ob ein Vergleich drückt oder zieht, hängt also auch daran, wie du ihn deutest." },
+        { "art": "karte", "text": "Neid gibt es in zwei Sorten. Der missgünstige sagt: „Er soll es nicht haben.“ Er redet den anderen klein und hilft dir nicht weiter. Der gutartige sagt: „Das will ich auch.“ Er kann antreiben. Den Stich selbst suchst du dir nicht aus – er ist menschlich. Aussuchen kannst du die drei Fragen danach: Was genau sticht? Was zeigt mir das, was mir wichtig ist? Und welcher erste Schritt wäre meiner?" },
+        { "art": "zuordnen", "kopf": { "id": "selbst-2-01-a", "faehigkeit": "selbst.vergleich", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Zieht dich dieser Gedanke nach einem Vergleich voran – oder bringt er dich nicht weiter?",
+          "faecher": ["zieht voran", "bringt dich nicht weiter"],
+          "karten": [
+            { "text": "„Wie hat sie das gelernt? Ich frag sie mal.“", "fach": 0 },
+            { "text": "„So weit komme ich sowieso nie.“", "fach": 1 },
+            { "text": "„Vor einem Jahr konnte ich das auch noch nicht.“", "fach": 0 },
+            { "text": "„Der hat bestimmt nur Beziehungen.“", "fach": 1 },
+            { "text": "„Ein Teil davon passt zu mir – den probiere ich.“", "fach": 0 },
+            { "text": "„Neben ihm bin ich ein Nichts.“", "fach": 1 }
+          ] },
+        { "art": "geschichte", "titel": "Miriams Stich", "figur": "Miriam Okafor", "text": "Miriam hat mir erzählt, wie es ihr ging, als eine jüngere Kollegin auf der Betriebsversammlung frei geredet hat – ohne Zettel, mit Witz, alle hingen an ihren Lippen. Miriam saß da und dachte: „Und ich lese seit Jahren ab.“ Erst hat sie die Kollegin innerlich kleingemacht: „Die übt bestimmt jeden Abend vor dem Spiegel.“ Dann hat sie sich gefragt, was genau sie so getroffen hat. Antwort: Sie wollte auch frei reden. Am nächsten Tag hat sie die Kollegin gefragt, wie sie sich vorbereitet. Drei Stichworte auf einer Karte, mehr nicht. Beim nächsten Mal hat Miriam es mit drei Stichworten versucht. Nicht so glänzend. Aber ihres.", "frage": "Wer hat dich zuletzt so gestochen – und was wolltest du in dem Moment eigentlich auch?" },
+        { "art": "auswahl", "kopf": { "id": "selbst-2-01-b", "faehigkeit": "selbst.vergleich", "stufe": 5, "kanal": "wissen" },
+          "frage": "Im Kochkurs bekommt Jule Marek für ihr Risotto Applaus. Deins ist zu fest geworden. Es sticht. Was hilft dir am meisten weiter?",
+          "antworten": [
+            { "text": "„Bei ihr sieht alles so leicht aus – ich hab einfach kein Händchen fürs Kochen.“", "wert": 0, "tendenz": "verallgemeinern", "warum": "Aus einem festen Risotto wird ein Urteil über dein Händchen. Der Vergleich drückt – und du lernst nichts daraus." },
+            { "text": "Jule fragen, wann sie die Brühe nachgießt.", "wert": 2, "warum": "Du machst aus dem Stich eine Frage. Ihr Weg ist erreichbar – genau so spornt ein Vergleich an." },
+            { "text": "Dir sagen, dass es nur ein Kurs ist und Kochen dir ohnehin nicht so wichtig ist.", "wert": 1, "warum": "Entlastet und kann stimmen. Wenn es aber sticht, ist es dir wohl doch etwas wichtig – dann lohnt die Frage." },
+            { "text": "„Sie hat bestimmt zu Hause vorgekocht.“", "wert": 0, "tendenz": "abwerten", "warum": "Missgünstiger Neid: Er macht sie kleiner, dich aber nicht größer." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "selbst-2-01-c", "faehigkeit": "selbst.staerken", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Mach aus dem drückenden Vergleich einen Satz, der eine eigene Stärke nutzt und einen erreichbaren Schritt nennt.",
+          "vorlage": "„Gegen Carla bin ich in Präsentationen ein Witz.“",
+          "kriterien": ["nennt, was du an Carla konkret gut findest", "nennt eine eigene Stärke, die du einbringen kannst", "enthält einen kleinen, machbaren Schritt"],
+          "muster": ["„Carla erzählt mit Bildern. Ich bin stark in Zahlen – nächstes Mal baue ich ein Bild zu meiner wichtigsten Zahl.“", "„Carla wirkt locker. Ich bin gründlich vorbereitet – ich übe einmal den Einstieg laut, dann habe ich auch etwas Lockeres.“", "„Carla hat zwanzig Präsentationen mehr gehalten. Meine Geduld beim Erklären ist echt – die nutze ich in der Fragerunde.“"] },
+        { "art": "experiment", "auftrag": "Führ eine Woche lang ein Stich-Protokoll. Wenn dich ein Vergleich trifft, notier kurz: Wer? Was genau? Was zeigt mir das über meine Wünsche? Welcher kleine Schritt wäre meiner?", "dauer": "woche", "nachfrage": "Welcher Stich hat dir am meisten über deine Wünsche verraten – und hast du einen Schritt gemacht?" },
+        { "art": "reflexion", "frage": "Wer ist für dich ein erreichbares Vorbild – jemand, dessen Weg auch deiner sein könnte? Was willst du dir von ihm oder ihr abschauen?" }
+      ],
+      "regel": "Nach dem Stich drei Fragen: Was genau? Was zeigt es mir? Welcher Schritt ist meiner?",
+      "merkkarten": [
+        { "id": "selbst-2-01-m1", "frage": "Wann treibt ein Vergleich nach oben an?", "antwort": "Wenn Aufholen machbar scheint – dann wird aus dem Stich gutartiger Neid und mehr Einsatz." },
+        { "id": "selbst-2-01-m2", "frage": "Was unterscheidet gutartigen von missgünstigem Neid?", "antwort": "Gutartig: „Das will ich auch.“ Missgünstig: „Er soll es nicht haben.“ Nur der erste bringt dich weiter." },
+        { "id": "selbst-2-01-m3", "frage": "Welche drei Fragen stellst du nach einem Vergleichs-Stich?", "antwort": "Was genau sticht? Was zeigt mir das, was mir wichtig ist? Welcher erste Schritt wäre meiner?" }
+      ]
+    },
+    {
+      "id": "selbst-2-02", "bereich": "selbst", "stufe": 2, "nr": 2,
+      "titel": "Das Hochstapler-Gefühl",
+      "faehigkeiten": ["selbst.kritiker", "selbst.beweise"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass das Gefühl verbreitet ist, zeigt eine systematische Übersicht – wie häufig, hängt stark von der Messung ab. Eine Behandlung hatte bis dahin keine veröffentlichte Studie geprüft. Die Übungen hier sind aus dem Prüfen von Gedanken und der Beweisliste abgeleitet.",
+      "quellen": ["bravata2020", "clance1978", "bandura1997", "niveau2021", "praxis-selbst"],
+      "aha": "„Gleich merken alle, dass ich es nicht kann.“ Dieses Gefühl ist kein Beweis, sondern ein Kritiker-Satz in Verkleidung. Er schreibt Erfolge dem Glück zu – du kannst dagegenhalten: mit deinem Anteil, schwarz auf weiß.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer sich wie ein Hochstapler fühlt, kann es meistens wirklich nicht.", "urteil": "falsch", "warum": "Das Gefühl ist verbreitet, gerade bei Menschen, die viel leisten. Es misst deine Angst, durchschaut zu werden – nicht dein Können." },
+        { "art": "karte", "text": "Das Gefühl läuft oft im Kreis: Eine Aufgabe kommt, die Angst steigt. Man arbeitet viel zu viel – oder schiebt auf und rackert dann. Es klappt. Kurz Erleichterung. Dann der Satz: „Nur Glück“ oder „Nur, weil ich mich so reingehängt habe.“ So zählt der Erfolg nie als Beweis, und beim nächsten Mal geht es von vorn los. Aussteigen heißt: den eigenen Anteil am Erfolg benennen." },
+        { "art": "fehler", "kopf": { "id": "selbst-2-02-a", "faehigkeit": "selbst.kritiker", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Lena Brandt hat für ihre Auswertung Lob bekommen. So redet sie danach mit sich. Markier die Stellen, an denen der Hochstapler-Kritiker spricht.",
+          "teile": [
+            { "t": "Das" }, { "t": "war" },
+            { "t": "nur", "fehler": "„Nur“ macht ihren Anteil klein, bevor sie ihn ansieht." },
+            { "t": "Glück,", "fehler": "Glück statt eigener Arbeit – ihr Anteil verschwindet." }, { "t": "die" }, { "t": "Daten" }, { "t": "waren" },
+            { "t": "zufällig", "fehler": "Zufall statt Arbeit: Wer hat die Daten geprüft und sortiert?" },
+            { "t": "sauber." }, { "t": "Das" },
+            { "t": "hätte", "fehler": "„Hätte jeder gekonnt“ – aber gemacht hat es Lena." },
+            { "t": "jeder" }, { "t": "gekonnt." }, { "t": "Beim" }, { "t": "nächsten" },
+            { "t": "Mal" },
+            { "t": "merken" }, { "t": "alle,", "fehler": "„Alle merken“ – Gedankenlesen in die Zukunft und eine Verallgemeinerung." }, { "t": "dass" }, { "t": "ich" }, { "t": "es" }, { "t": "nicht" }, { "t": "kann." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "selbst-2-02-b", "faehigkeit": "selbst.beweise", "stufe": 5, "kanal": "wissen" },
+          "frage": "Was hält am besten gegen den Satz „Bisher hatte ich nur Glück“? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "Eine Liste mit drei Erfolgen – bei jedem steht, was du selbst dazu getan hast.", "warum": "Konkret, mehrfach, mit eigenem Anteil. Glück erklärt selten eine ganze Reihe." },
+            { "text": "Eine Kollegin nennt dir ein konkretes Beispiel, was du gut gemacht hast.", "warum": "Ein genauer Blick von außen – stark, aber ohne deine eigene Liste schnell wieder vergessen." },
+            { "text": "Jemand sagt allgemein: „Du machst das doch toll.“", "warum": "Lieb, aber ohne Einzelheit – der Kritiker wischt es leicht weg." },
+            { "text": "Abwarten, ob das Gefühl irgendwann von allein verschwindet.", "warum": "Das Gefühl richtet sich selten nach der Zeit. Ohne Beweise bleibt es, wie es ist." }
+          ] },
+        { "art": "kritiker", "kopf": { "id": "selbst-2-02-c", "faehigkeit": "selbst.kritiker", "stufe": 5, "kanal": "koennen" },
+          "satz": "Dein Hochstapler-Satz – wörtlich, so wie er klingt. Schreib darunter, was du konkret getan hast und was du noch lernst.",
+          "kriterien": ["der Satz steht wörtlich da", "mindestens eine konkrete eigene Handlung als Beleg", "ehrlich, was du noch lernst – ohne dich kleinzumachen"],
+          "muster": ["„Die merken gleich, dass ich keine Ahnung habe.“ → „Ich habe die Abrechnung drei Monate fehlerfrei geführt. Die neue Software lerne ich gerade.“", "„Die Beförderung war ein Versehen.“ → „Ich habe zwei Projekte pünktlich abgeschlossen. Führen ist neu für mich – dafür gibt es die Schulung im März.“", "„Irgendwann fliege ich auf.“ → „Ich habe im Herbst die Kundenumstellung allein gestemmt. Wo ich unsicher bin, frage ich – das ist kein Auffliegen, das ist Lernen.“"] },
+        { "art": "auswahl", "kopf": { "id": "selbst-2-02-d", "faehigkeit": "selbst.kritiker", "stufe": 6, "kanal": "wissen" },
+          "frage": "Carla Demir soll ab Montag zum ersten Mal ein großes Projekt leiten; zwei kleinere hat sie sicher geführt. Am Sonntagabend denkt sie: „Gleich merken alle, dass ich das nicht kann.“ Was hilft ihr am ehesten?",
+          "antworten": [
+            { "text": "Das Wochenende durcharbeiten, damit niemand eine Lücke findet.", "wert": 0, "tendenz": "ueberspielen", "warum": "Überarbeiten füttert den Kreis: Klappt es, war es nur der Aufwand. Und die Erschöpfung zahlt sie am Montag." },
+            { "text": "„Ein so großes Projekt ist neu, ja. Zwei kleinere habe ich sicher geführt – den Rest lerne ich.“", "wert": 2, "warum": "Sie nennt Belege und erlaubt sich, neu zu sein. Das prüft den Satz, statt ihn zu überschreien." },
+            { "text": "Mit Miriam darüber reden, die so etwas kennt.", "wert": 1, "warum": "Darüber zu reden entlastet und zeigt: Sie ist nicht allein. Ihre eigenen Belege braucht sie trotzdem." },
+            { "text": "Dr. Albers sagen, dass jemand anderes besser geeignet wäre.", "wert": 0, "tendenz": "vermeiden", "warum": "Dann entscheidet das Gefühl über ihre Arbeit – und die zwei sicher geführten Projekte zählen wieder nicht." }
+          ] },
+        { "art": "mission", "ref": "selbst-m-09" }
+      ],
+      "regel": "Hochstapler-Satz? Deinen Anteil daneben schreiben – konkret, schwarz auf weiß.",
+      "merkkarten": [
+        { "id": "selbst-2-02-m1", "frage": "Ist das Hochstapler-Gefühl ein Zeichen für Unfähigkeit?", "antwort": "Nein. Es ist verbreitet, gerade bei Fähigen – ein Kritiker-Satz, den man prüfen kann." },
+        { "id": "selbst-2-02-m2", "frage": "Wie hält sich das Gefühl am Leben?", "antwort": "Erfolge zählen nie: Sie werden dem Glück oder dem übergroßen Aufwand zugeschrieben." },
+        { "id": "selbst-2-02-m3", "frage": "Was hält am besten dagegen?", "antwort": "Mehrere Erfolge, bei denen dein eigener Anteil konkret dasteht." }
+      ],
+      "mission": "selbst-m-09"
+    },
+    {
+      "id": "selbst-2-03", "bereich": "selbst", "stufe": 2, "nr": 3,
+      "titel": "Grenzen setzen – und halten",
+      "faehigkeiten": ["selbst.grenzen", "selbst.haltung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Selbstsicherheitstraining – für sich eintreten, Nein sagen – ist als Baustein der Therapie untersucht; eine Effektgröße nennt der Coach nicht. Dass ein Nein weniger kostet als befürchtet, zeigt eine Studienreihe zu Einladungen. Die drei Teile und das ruhige Wiederholen sind Praxiswissen.",
+      "quellen": ["speed2018", "givi2024", "smith1975", "praxis-selbst"],
+      "aha": "Eine Grenze ist kein Vortrag und keine Drohung. Sie sagt, was passiert, was du willst und was du tust, wenn es weitergeht. Das Schwierige kommt danach: sie ruhig zu halten, wenn jemand drückt.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Beim Familienessen fragt Tante Renate zum dritten Mal vor allen: „Und, wie sieht's bei dir in der Liebe aus?“ Du willst das Thema nicht mehr.", "schwach": "Du lachst mit, sagst „Mal sehen“ – und ärgerst dich den ganzen Heimweg.", "stark": "„Renate, darüber rede ich beim Essen nicht. Erzähl lieber, wie es mit deinem Garten läuft.“", "frage": "Was macht die zweite Antwort stärker?", "unterschied": "Sie benennt freundlich, was du nicht willst, und bietet gleich ein anderes Thema an. Kein Vorwurf, keine Rechtfertigung. Der Ärger landet nicht auf dem Heimweg." },
+        { "art": "karte", "text": "Eine Grenze hat drei Teile. Erstens: was passiert – konkret, ohne Urteil („Du fragst mich vor allen nach meinem Liebesleben“). Zweitens: was du willst oder nicht willst („Das möchte ich nicht“). Drittens, wenn nötig: was du tust, wenn es weitergeht („Dann wechsle ich das Thema“ oder „Dann gehe ich früher“). Kündige nur an, was du auch tust. Und erkläre nicht zu viel: Jeder Grund lädt zum Verhandeln ein." },
+        { "art": "leiter", "auftrag": "Deine Grenzen-Leiter: Schreib bis zu zehn Grenzen auf, die du gern setzen würdest – von leicht bis schwer. Gib jeder einen Wert, wie viel Herzklopfen sie dir macht. Anfangen wirst du unten.", "beispiel": ["Beim Bäcker sagen, dass ich das andere Brot wollte (10)", "Einer Kollegin sagen, dass ich in der Mittagspause nicht über Arbeit rede (30)", "Am Freitag pünktlich gehen, obwohl noch jemand fragt (45)", "Der Nachbarin sagen, dass ich keine Pakete mehr annehme (55)", "Tante Renate bitten, mein Liebesleben nicht vor allen anzusprechen (75)"] },
+        { "art": "auswahl", "kopf": { "id": "selbst-2-03-a", "faehigkeit": "selbst.grenzen", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du hast Tarek gesagt, dass du seinen Spätdienst nicht übernimmst. Er hakt nach: „Ach komm, nur dieses eine Mal, ich hab sonst niemanden.“ Was tust du?",
+          "antworten": [
+            { "text": "„Ich verstehe, dass es eng ist. Diesmal nicht.“", "wert": 2, "warum": "Ruhig wiederholen: Du siehst seine Lage und bleibst bei deinem Nein – ohne neue Gründe, über die man verhandeln kann." },
+            { "text": "Ihm in Ruhe erklären, warum du diese Woche wirklich keinen Abend frei hast.", "wert": 1, "tendenz": "rechtfertigen", "warum": "Freundlich gemeint. Aber jeder Grund ist ein Angriffspunkt: „Dann tauschen wir eben den Abend.“" },
+            { "text": "„Na gut, aber das ist echt das letzte Mal.“", "wert": 0, "tendenz": "nachgeben", "warum": "Ihr lernt beide: Zweimal fragen macht aus deinem Nein ein Ja. Das „letzte Mal“ hält selten." },
+            { "text": "„Du fragst mich ständig, langsam reicht es mir echt mit dir.“", "wert": 0, "tendenz": "angreifen", "warum": "Aus der Grenze wird ein Angriff auf ihn. Darüber streitet ihr dann – nicht über den Dienst." }
+          ] },
+        { "art": "kunstgriff", "kopf": { "id": "selbst-2-03-b", "faehigkeit": "selbst.grenzen", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Du sagst einer Bekannten ab, ihr am Wochenende beim Streichen zu helfen. Sie antwortet: „Nach allem, was ich für dich getan habe. Na ja – jetzt weiß ich wenigstens, wer echte Freunde sind.“",
+          "frage": "Was passiert hier – und wie antwortest du am besten?",
+          "antworten": [
+            { "text": "„Ich merke, dass du enttäuscht bist. Das darfst du sein. Am Wochenende bleibt es bei Nein.“", "wert": 2, "warum": "Du nimmst ihr Gefühl ernst, steigst aber nicht in das Schuld-Spiel ein. Dein Nein bleibt stehen." },
+            { "text": "„Du hast recht, das war mies von mir. Ich komme doch.“", "wert": 0, "tendenz": "nachgeben", "warum": "Die Schuld wirkt – und du lernst, dass Vorwürfe dein Nein kippen." },
+            { "text": "„Ich hab dir letztes Jahr auch beim Umzug geholfen, wir sind quitt.“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Aufrechnen nimmt ihr Spiel an: Jetzt streitet ihr darüber, wer wem was schuldet." },
+            { "text": "Erst einmal nichts darauf antworten und abwarten, bis sie sich wieder beruhigt hat.", "wert": 1, "warum": "Besser als nachzugeben. Ein kurzer, ruhiger Satz zeigt ihr aber, dass dein Nein auch nach dem Vorwurf gilt." }
+          ],
+          "erklaerung": "Schuld einreden ist eine rote Linie: Ein Nein wird mit Vorwürfen und Aufrechnen unter Druck gesetzt, bis es kippt. Abwehr: das Gefühl des anderen anerkennen, nicht aufrechnen, das Nein einmal ruhig wiederholen. Ihre Enttäuschung ist echt – sie macht dein Nein nicht falsch." },
+        { "art": "umformulieren", "kopf": { "id": "selbst-2-03-c", "faehigkeit": "selbst.haltung", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Mach aus der entschuldigenden Nachricht eine klare, freundliche Grenze – höchstens drei Sätze.",
+          "vorlage": "„Sorry, dass ich so blöd frage, und bitte nicht böse sein, aber könntest du vielleicht, wenn es irgendwie geht, nicht mehr nach 21 Uhr anrufen? Ist nur so ein Gefühl von mir, vielleicht übertreibe ich auch.“",
+          "kriterien": ["ohne Entschuldigung für die Bitte", "nennt konkret, was du willst", "freundlich im Ton", "höchstens drei Sätze"],
+          "muster": ["„Ich habe eine Bitte: Ruf mich bitte nicht mehr nach 21 Uhr an. Danach bin ich offline – tagsüber erreichst du mich gut.“", "„Nach 21 Uhr gehe ich nicht mehr ans Telefon. Schreib mir lieber, dann melde ich mich am nächsten Tag.“"] },
+        { "art": "mission", "ref": "selbst-m-10" }
+      ],
+      "regel": "Was passiert – was du willst – was du tust. Und dann ruhig dabei bleiben.",
+      "merkkarten": [
+        { "id": "selbst-2-03-m1", "frage": "Welche drei Teile hat eine Grenze?", "antwort": "Was passiert (ohne Urteil), was du willst, und wenn nötig, was du tust, wenn es weitergeht." },
+        { "id": "selbst-2-03-m2", "frage": "Wie hältst du eine Grenze, wenn jemand drückt?", "antwort": "Ruhig wiederholen, ohne neue Gründe: „Ich verstehe dich. Diesmal nicht.“" },
+        { "id": "selbst-2-03-m3", "frage": "Woran erkennst du Schuld einreden?", "antwort": "Dein Nein wird mit Vorwürfen und Aufrechnen beantwortet, bis es kippen soll – Gefühl anerkennen, Nein stehen lassen." }
+      ],
+      "mission": "selbst-m-10"
+    },
+    {
+      "id": "selbst-2-04", "bereich": "selbst", "stufe": 2, "nr": 4,
+      "titel": "Fehler verdauen",
+      "faehigkeiten": ["selbst.mitgefuehl", "selbst.kritiker"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass sich selbst zu verzeihen mit weniger Aufschieben danach einherging, zeigt eine Beobachtungsstudie mit Studierenden – kein Experiment. Dass konkretes Nachdenken eher hilft und abstraktes Grübeln eher schadet, fasst eine Übersichtsarbeit zusammen. Die vier Schritte sind Praxiswissen.",
+      "quellen": ["wohl2010", "watkins2008", "tangney2007", "moran2022", "gilovich2000", "neff2003", "praxis-selbst"],
+      "aha": "Ein Fehler ist verdaut, wenn er etwas hinterlassen hat – eine Wiedergutmachung, eine Lehre – und dann gehen darf. Grübeln fragt „Warum bin ich so?“. Verdauen fragt: „Was genau, und was mache ich jetzt?“",
+      "schritte": [
+        { "art": "studie", "frage": "Macht es nachlässig, sich einen Fehler zu verzeihen?", "aufbau": "Studierende im ersten Jahr gaben vor zwei Prüfungen an, wie sehr sie das Lernen aufgeschoben hatten – und nach der ersten Prüfung, wie sehr sie sich das verziehen hatten.", "ergebnis": "Wer sich das Aufschieben vor der ersten Prüfung eher verziehen hatte, schob vor der zweiten weniger auf. Das zeigte sich vor allem bei denen, die stark aufgeschoben hatten.", "grenze": "Eine Beobachtungsstudie mit Studierenden – sie zeigt einen Zusammenhang, keinen Beweis für Ursache und Wirkung. Sie passt aber zu Versuchen, in denen Freundlichkeit mit sich eher lernbereit machte.", "beleg": "B", "quellen": ["wohl2010", "breines2012"] },
+        { "art": "karte", "text": "Verdauen in vier Schritten. Erstens wiedergutmachen, was geht: korrigieren, entschuldigen, nachliefern. Zweitens eine Lehre ziehen – eine, konkret: „Nächstes Mal stelle ich mir eine Erinnerung.“ Drittens dir verzeihen: „Ich habe einen Fehler gemacht. Ich bin trotzdem in Ordnung.“ Viertens abschließen: Akte zu. Kommt der Gedanke wieder, sag dir: „Erledigt – die Lehre steht.“" },
+        { "art": "zuordnen", "kopf": { "id": "selbst-2-04-a", "faehigkeit": "selbst.mitgefuehl", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Grübeln oder verdauen?",
+          "faecher": ["Grübeln", "Verdauen"],
+          "karten": [
+            { "text": "„Warum passiert so etwas immer mir?“", "fach": 0 },
+            { "text": "„Was genau ist schiefgelaufen – und an welcher Stelle?“", "fach": 1 },
+            { "text": "„Was denken die anderen jetzt bloß von mir?“", "fach": 0 },
+            { "text": "„Ich schicke die Korrektur und stelle mir für Fristen eine Erinnerung.“", "fach": 1 },
+            { "text": "„Ich bin einfach nicht gut genug für diese Arbeit.“", "fach": 0 },
+            { "text": "„Die Lehre steht. Für heute ist das Thema zu.“", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "selbst-2-04-b", "faehigkeit": "selbst.kritiker", "stufe": 6, "kanal": "wissen" },
+          "frage": "Jonas Wegner hat vergessen, eine Kundenanfrage weiterzuleiten. Der Kunde war verärgert, Jonas hat sich entschuldigt und die Antwort nachgeliefert. Zwei Tage später liegt er abends noch wach. Was hilft ihm am ehesten?",
+          "antworten": [
+            { "text": "Den Vorfall noch einmal Minute für Minute durchgehen, damit sich so etwas nicht wiederholt.", "wert": 0, "tendenz": "gruebeln", "warum": "Das fühlt sich nach Vorsorge an, bringt aber keine neue Lehre – nur Schlaflosigkeit." },
+            { "text": "Eine Lehre aufschreiben – „Anfragen leite ich sofort weiter“ – und dann: „Akte zu.“", "wert": 2, "warum": "Wiedergutgemacht hat er schon. Mit der Lehre auf Papier darf der Fehler gehen." },
+            { "text": "Sich sagen, dass Fehler eben passieren, und an etwas Schönes denken.", "wert": 1, "warum": "Freundlich und entlastend. Mit einer festgehaltenen Lehre käme der Gedanke seltener zurück." },
+            { "text": "„Ich bin einfach zu schusselig für Kundenkontakt.“", "wert": 0, "tendenz": "abwerten", "warum": "Aus einer vergessenen Weiterleitung wird ein Urteil über ihn – Scham statt Lehre." }
+          ] },
+        { "art": "schreibreise", "titel": "Derselbe Fehler, ein Jahr später", "anleitung": "Nimm einen Fehler, der dich gerade noch beschäftigt. Stell dir vor, es ist ein Jahr später. Du schaust aus dieser Entfernung zurück. Schreib kurz und ehrlich.", "fragen": ["Wie wichtig wird dieser Fehler in einem Jahr noch sein?", "Was hast du wiedergutgemacht – oder was kannst du noch tun?", "Welche eine Lehre nimmst du mit?", "Was würdest du deinem heutigen Ich aus einem Jahr Entfernung sagen?"], "minuten": 5 },
+        { "art": "umformulieren", "kopf": { "id": "selbst-2-04-c", "faehigkeit": "selbst.mitgefuehl", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Übersetze den Scham-Satz in einen Schuld-Satz: von „Ich bin falsch“ zu „Ich habe etwas falsch gemacht“ – mit einem nächsten Schritt.",
+          "vorlage": "„Ich bin so eine Enttäuschung. Kein Wunder, dass sich keiner auf mich verlassen will.“",
+          "kriterien": ["beschreibt die Tat, nicht die Person", "nennt eine Wiedergutmachung oder Lehre", "ohne Selbstbeschimpfung"],
+          "muster": ["„Ich habe zugesagt und es nicht geschafft. Ich sage Bescheid und biete einen neuen Termin an.“", "„Ich habe die Frist verpasst. Ab jetzt trage ich Fristen sofort in den Kalender ein.“"] },
+        { "art": "fachhilfe", "thema": "seele" },
+        { "art": "mission", "ref": "selbst-m-08" }
+      ],
+      "regel": "Wiedergutmachen, eine Lehre ziehen, dir verzeihen – dann: Akte zu.",
+      "merkkarten": [
+        { "id": "selbst-2-04-m1", "frage": "Was sind die vier Schritte, einen Fehler zu verdauen?", "antwort": "Wiedergutmachen, eine Lehre ziehen, dir verzeihen, abschließen." },
+        { "id": "selbst-2-04-m2", "frage": "Woran unterscheidest du Grübeln von Auswerten?", "antwort": "Grübeln fragt abstrakt „Warum bin ich so?“. Auswerten fragt konkret „Was genau – und was jetzt?“" },
+        { "id": "selbst-2-04-m3", "frage": "Wie übersetzt du Scham in Schuld?", "antwort": "Vom Urteil über dich („Ich bin falsch“) zur Tat („Ich habe … falsch gemacht“) – mit nächstem Schritt." }
+      ],
+      "mission": "selbst-m-08"
+    },
+    {
+      "id": "selbst-2-05", "bereich": "selbst", "stufe": 2, "nr": 5,
+      "titel": "Glaubwürdige Sätze für schwere Momente",
+      "faehigkeiten": ["selbst.kritiker", "selbst.muster", "selbst.beweise"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Wenn-Dann-Pläne sind über viele Studien gut belegt. Dass Parolen nicht zuverlässig helfen, ist gestützt; ob sie schaden, ist umstritten. Dass glaubwürdige Sätze mit einem Beweis besser tragen, ist eine begründete Folgerung, nicht eigens geprüft.",
+      "quellen": ["gollwitzer2006", "wood2009", "flynn2020", "bandura1997", "praxis-selbst"],
+      "aha": "Ein guter Satz nützt wenig, wenn er dir im entscheidenden Moment nicht einfällt. Darum baust du dir Sätze für deine drei schwersten Momente – mit einem echten Beweis darin – und hängst sie an einen festen Auslöser.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "selbst-2-05-a", "faehigkeit": "selbst.kritiker", "stufe": 4, "kanal": "wissen" },
+          "frage": "Du hast dieses Jahr zwei große Kunden gehalten und gehst gleich in ein Gespräch über eine Gehaltserhöhung. Welcher Satz trägt dich am ehesten durch die Tür?",
+          "antworten": [
+            { "text": "„Ich bin unschlagbar.“", "wert": 0, "tendenz": "parole", "warum": "Groß, aber kaum zu glauben, wenn das Herz klopft – der Kritiker hat sofort ein Gegenbeispiel." },
+            { "text": "„Ich habe dieses Jahr zwei große Kunden gehalten. Ich darf danach fragen.“", "wert": 2, "warum": "Ein echter Beweis und eine Erlaubnis – beides kannst du dir in dem Moment abnehmen." },
+            { "text": "„Hoffentlich geht es nicht völlig schief.“", "wert": 0, "tendenz": "katastrophe", "warum": "Ehrlich gefühlt, aber er lenkt den Blick auf das Scheitern statt auf deine Gründe." },
+            { "text": "„Ich bin nervös, und das ist in Ordnung.“", "wert": 1, "warum": "Glaubwürdig und entlastend. Mit einem Beweis dazu hätte er noch mehr Halt." }
+          ] },
+        { "art": "karte", "text": "Drei Bauarten für Sätze, die halten. Der Beweis-Satz: „Ich habe schon … geschafft.“ Der Gefühl-und-Können-Satz: „Ich bin nervös und gut vorbereitet.“ Der Weg-Satz: „Ich lerne gerade, …“ Dann die Probe: Wie sehr glaubst du ihn, von 0 bis 10? Unter 6 machst du ihn kleiner und genauer, bis er stimmt. Ein kleiner Satz, den du glaubst, schlägt einen großen, den du nicht glaubst." },
+        { "art": "rangfolge", "kopf": { "id": "selbst-2-05-b", "faehigkeit": "selbst.beweise", "stufe": 5, "kanal": "wissen" },
+          "frage": "Lena Brandt hat die Tagesordnung vorbereitet und sich in jedes Thema eingelesen. Morgen leitet sie zum ersten Mal die Teamrunde. Welcher Satz trägt sie am ehesten? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Ich habe die Tagesordnung vorbereitet und kenne jedes Thema. Den Rest lerne ich dabei.“", "warum": "Beweis plus Weg: konkret, wahr, mit Erlaubnis zum Lernen." },
+            { "text": "„Ich bin aufgeregt, und das darf sein.“", "warum": "Glaubwürdig und freundlich – aber ohne Beweis, auf den sie sich stützen kann." },
+            { "text": "„Es wird schon irgendwie gehen.“", "warum": "Beruhigt kurz, sagt aber nichts darüber, warum es gehen sollte." },
+            { "text": "„Ich bin eine geborene Leiterin.“", "warum": "Eine Parole, die sie sich am Vorabend kaum glaubt." }
+          ] },
+        { "art": "studie", "frage": "Hilft es, einen guten Vorsatz an einen festen Moment zu binden?", "aufbau": "Eine Meta-Analyse fasste 94 Vergleiche zusammen, in denen Menschen ihren Vorsatz als Wenn-Dann-Plan formulierten: „Wenn Situation X kommt, dann tue ich Y.“ Verglichen wurde mit Menschen, die nur ein Ziel hatten.", "ergebnis": "Mit Wenn-Dann-Plan erreichten Menschen ihre Ziele deutlich häufiger – ein mittlerer bis großer Effekt (d = 0,65). Der Auslöser nimmt dem Willen im Moment die Arbeit ab.", "grenze": "Untersucht wurden vor allem Handlungen, nicht Sätze, die man sich sagt. Dass ein Satz am Auslöser besser hält, ist eine Übertragung – eine naheliegende.", "beleg": "A", "quellen": ["gollwitzer2006"] },
+        { "art": "wenndann", "anlass": "Deine drei schwersten Momente – und der Satz, den du dir dann sagst.", "wenn": ["ich vor einer Runde das Wort ergreife", "mich jemand vor anderen kritisiert", "ich um etwas bitten will", "ich nach einem Fehler nach Hause gehe"], "dann": ["sage ich mir: „Ich habe das schon zweimal geschafft.“", "sage ich mir: „Das ist Kritik an der Sache, nicht an mir.“", "sage ich mir: „Ich darf fragen. Ein Nein halte ich aus.“", "sage ich mir: „Die Lehre steht – Akte zu.“"] },
+        { "art": "umformulieren", "kopf": { "id": "selbst-2-05-c", "faehigkeit": "selbst.muster", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Gib dem Antreiber-Satz einen Erlauber-Satz an die Seite, der einen echten Beweis enthält.",
+          "vorlage": "„Ich darf mir keinen einzigen Fehler leisten.“",
+          "kriterien": ["nimmt den Antreiber ernst", "enthält einen echten Beweis aus deinem Leben", "erlaubt dir etwas", "du glaubst ihn mindestens zu 6 von 10"],
+          "muster": ["„Ich habe letztes Jahr einen Fehler gemacht und gut korrigiert – es ging weiter. Gut genug ist gut genug.“", "„Fehler passieren mir wie allen. Bisher habe ich jeden wieder geradegebogen.“", "„Ich darf Fehler machen. Der Bericht im März hatte einen – und der Kunde ist geblieben.“"] },
+        { "art": "reflexion", "frage": "Schreib deine drei Sätze für deine drei schwersten Momente auf – jeden mit einem Beweis. Wie sehr glaubst du jeden, von 0 bis 10?", "insBuch": "saetze" }
+      ],
+      "regel": "Ein Satz für jeden schweren Moment – mit Beweis, geglaubt, an einen Auslöser gebunden.",
+      "merkkarten": [
+        { "id": "selbst-2-05-m1", "frage": "Welche drei Bauarten haben glaubwürdige Sätze?", "antwort": "Beweis-Satz, Gefühl-und-Können-Satz, Weg-Satz." },
+        { "id": "selbst-2-05-m2", "frage": "Wie prüfst du, ob ein Satz taugt?", "antwort": "Glaubst du ihn zu mindestens 6 von 10? Wenn nicht: kleiner und genauer machen." },
+        { "id": "selbst-2-05-m3", "frage": "Warum an einen Auslöser binden?", "antwort": "Wenn-Dann-Pläne helfen deutlich, Vorsätze umzusetzen – der Satz ist dann im Moment da." }
+      ]
+    },
+    {
+      "id": "selbst-2-06", "bereich": "selbst", "stufe": 2, "nr": 6,
+      "titel": "Aufrecht: Platz nehmen ohne Entschuldigung",
+      "faehigkeiten": ["selbst.haltung", "selbst.grenzen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Zur Haltung gibt es zwei Meta-Analysen: Aufrecht hebt das eigene Empfinden leicht, eine breite Siegerpose bringt kaum mehr. Dass Weichmacher und Entschuldigungen kleiner wirken lassen, ist Praxiswissen.",
+      "quellen": ["koerner2022", "elkjaer2022", "praxis-selbst"],
+      "aha": "Präsenz ist nicht laut und nicht breit. Sie heißt: aufrecht stehen oder sitzen, ohne Vorrede sagen, was du willst, und deinen Satz zu Ende bringen – auch wenn jemand dazwischenredet.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Selbstbewusst wirkt, wer viel Raum einnimmt und laut redet.", "urteil": "teils", "warum": "Aufrecht statt zusammengesunken hebt das eigene Empfinden leicht. Eine breite Siegerpose bringt gegenüber normal aufrecht kaum etwas – und Lautstärke wirkt schnell wie Druck statt Ruhe." },
+        { "art": "karte", "text": "Präsenz zeigt sich auf vier Wegen. Körper: beide Füße am Boden, aufrecht, Schultern locker. Sprache: ohne „nur kurz“, „sorry“ und „vielleicht irre ich mich“. Stimme: den Satz zu Ende sprechen, statt ihn fragend auslaufen zu lassen. Blick und Pause: kurz zur Person, dann sprechen. Ist dir direkter Blick unangenehm, schau zur Stirn oder in ihre Richtung – das reicht völlig." },
+        { "art": "wortwahl", "kopf": { "id": "selbst-2-06-a", "faehigkeit": "selbst.haltung", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du willst in der Runde einen Vorschlag machen. Welcher Einstieg ist präsent, ohne zu drücken?",
+          "antworten": [
+            { "text": "„Ich hätte da vielleicht so eine kleine Idee, falls das überhaupt passt …“", "wert": 0, "tendenz": "kleinmachen", "warum": "Drei Weichmacher, bevor die Idee kommt. Sie wirkt schon klein, bevor jemand sie gehört hat." },
+            { "text": "„Ich schlage vor, die Lieferung auf Dienstag zu legen.“", "wert": 2, "warum": "Direkt, freundlich, ohne Vorrede – die Idee steht für sich." },
+            { "text": "„Hört mal alle her, so machen wir das ab jetzt.“", "wert": 0, "tendenz": "ueberspielen", "warum": "Präsent, aber drückend: Die anderen sollen nicht mitentscheiden. Das löst eher Widerstand aus." },
+            { "text": "„Darf ich kurz einen Vorschlag machen?“", "wert": 1, "warum": "Höflich und in Ordnung. Den Vorschlag selbst zu nennen, spart die Schleife." }
+          ] },
+        { "art": "stumm", "kopf": { "id": "selbst-2-06-b", "faehigkeit": "selbst.haltung", "stufe": 4, "kanal": "koennen" },
+          "titel": "Aufrecht in zehn Sekunden",
+          "schritte": ["Stell beide Füße flach auf den Boden – im Sitzen oder Stehen.", "Stell dir einen Faden vor, der dich am Scheitel sanft nach oben zieht.", "Lass die Schultern einmal hochziehen und nach hinten unten sinken.", "Leg die Hände ruhig ab – auf den Tisch, die Oberschenkel oder locker an die Seiten.", "Atme einmal lang aus und heb den Blick zur Person oder in den Raum."],
+          "sekunden": 30,
+          "pruefliste": ["Beide Füße flach am Boden?", "Schultern unten, nicht hochgezogen?", "Blick gehoben, nicht auf den Tisch?"] },
+        { "art": "buehne", "kopf": { "id": "selbst-2-06-c", "faehigkeit": "selbst.haltung", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "selbst-v-0171" },
+          "auftrag": "Steh auf und sag dein Anliegen in drei Sätzen: was du willst, warum es dir wichtig ist, was du vorschlägst. Ohne Entschuldigung vorweg. Wenn jemand dazwischenredet, bring deinen Satz zu Ende.",
+          "sekunden": 45, "publikum": "klein",
+          "stoerungen": ["Jemand fragt dazwischen: „Und das bringt was?“", "Ein Kollege schaut demonstrativ auf die Uhr."],
+          "pruefliste": ["Ohne „sorry“ oder „nur kurz“ begonnen?", "Jeder Satz zu Ende gesprochen, nicht fragend ausgelaufen?", "Nach der Störung ruhig weiter, statt abzubrechen?"] },
+        { "art": "auswahl", "kopf": { "id": "selbst-2-06-d", "faehigkeit": "selbst.grenzen", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du erklärst in der Runde deinen Plan. Miriam fällt dir mitten im Satz ins Wort und redet über etwas anderes. Was tust du?",
+          "antworten": [
+            { "text": "Verstummen und warten, ob dich später noch jemand fragt.", "wert": 0, "tendenz": "vermeiden", "warum": "Dein Punkt verschwindet – und alle lernen, dass man dich unterbrechen kann." },
+            { "text": "„Miriam, du unterbrichst mich ständig, das ist echt respektlos.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Vorwurf vor allen. Jetzt geht es um euch beide, nicht um deinen Plan." },
+            { "text": "Ruhig weiter: „Einen Satz noch, dann gern zu deinem Punkt.“", "wert": 2, "warum": "Freundlich, kurz, bestimmt: Du hältst deinen Platz und bietest ihr ihren an." },
+            { "text": "Nach der Runde zu Miriam gehen und ihr sagen, dass dich das gestört hat.", "wert": 1, "warum": "Gut, es anzusprechen. Im Moment selbst kannst du deinen Satz aber schon zu Ende bringen." }
+          ] },
+        { "art": "experiment", "auftrag": "Weichmacher-Woche: Lies eine Woche lang jede Mail und Nachricht vor dem Absenden einmal durch und streich „nur kurz“, „sorry, dass ich störe“ und „ist bestimmt eine blöde Frage“. Zähl abends, wie viele du gestrichen hast.", "dauer": "woche", "nachfrage": "Wie viele Weichmacher hast du gestrichen – und hat irgendwer anders reagiert als sonst?" },
+        { "art": "reflexion", "frage": "In welcher Lage machst du dich am ehesten klein – mit Körper, Stimme oder Worten? Was nimmst du dir dort als Erstes vor?" }
+      ],
+      "regel": "Aufrecht, ohne Vorrede, Satz zu Ende – das ist Präsenz, nicht Lautstärke.",
+      "merkkarten": [
+        { "id": "selbst-2-06-m1", "frage": "Auf welchen vier Wegen zeigt sich Präsenz?", "antwort": "Körper, Sprache, Stimme sowie Blick und Pause." },
+        { "id": "selbst-2-06-m2", "frage": "Bringt eine breite Siegerpose mehr als normal aufrecht?", "antwort": "Kaum. Aufrecht statt zusammengesunken hebt das Empfinden leicht – mehr ist nicht belegt." },
+        { "id": "selbst-2-06-m3", "frage": "Was sagst du, wenn dich jemand unterbricht?", "antwort": "Ruhig: „Einen Satz noch, dann gern zu deinem Punkt.“" }
+      ]
+    }
+  ]
+}

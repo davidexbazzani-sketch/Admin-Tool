@@ -1,0 +1,274 @@
+{
+  "einheiten": [
+    {
+      "id": "aussprache-2-01", "bereich": "aussprache", "stufe": 2, "nr": 1,
+      "titel": "Lippen und Zunge in Form",
+      "faehigkeiten": ["aussprache.konsonanten", "aussprache.oeffnung"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Silbenketten und Lippenübungen sind Praxiswissen der Sprecherziehung. Dass Mundübungen ohne Sprechen die Aussprache verbessern, ist nicht belegt – eine Übersicht fand bei Kindern mit Ausspracheproblemen keinen starken Beleg. Darum wird hier mit Silben, Wörtern und Sätzen geübt.",
+      "quellen": ["praxis-aussprache", "leegibbon2015", "maas2008"],
+      "aha": "Geläufig wird der Mund nicht durch Grimassen, sondern durch Sprechen selbst: Silben erst genau, dann zügig. Tempo kommt erst, wenn jede Silbe sitzt.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Zungengymnastik ohne Ton – Zunge rausstrecken, Backen aufblasen – macht die Aussprache klar.", "urteil": "teils", "warum": "Als Lockerung vor dem Sprechen tut sie gut. Dass solche Übungen ohne Sprechen die Aussprache verbessern, ist nicht belegt: Eine Übersicht fand bei Kindern mit Ausspracheproblemen keinen starken Beleg. Deutlichkeit übt man am besten beim Sprechen selbst." },
+        { "art": "karte", "text": "Geläufigkeit heißt: Lippen und Zunge wechseln schnell und genau zwischen den Stellen, an denen Laute entstehen – p und b an den Lippen, t und d hinter den oberen Zähnen, k und g hinten am Gaumen. Silbenketten wie „pa-ta-ka“ üben genau diesen Wechsel. Die Regel: erst langsam und gleichmäßig, jede Silbe gleich laut. Schneller erst, wenn zehn Ketten ohne Stolpern gelingen. Verhaspeln heißt: einen Schritt zurück." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-2-01-a", "faehigkeit": "aussprache.konsonanten", "stufe": 3, "kanal": "wissen" },
+          "auftrag": "Wo entsteht der erste Laut? Sprich ihn ruhig leise mit.",
+          "faecher": ["an den Lippen", "Zungenspitze hinter den Zähnen", "hinten am Gaumen"],
+          "karten": [
+            { "text": "p in „Post“", "fach": 0 },
+            { "text": "t in „Tür“", "fach": 1 },
+            { "text": "k in „Kaffee“", "fach": 2 },
+            { "text": "m in „Mantel“", "fach": 0 },
+            { "text": "n in „Nebel“", "fach": 1 },
+            { "text": "g in „Garten“", "fach": 2 }
+          ] },
+        { "art": "lautleiter", "kopf": { "id": "aussprache-2-01-b", "faehigkeit": "aussprache.konsonanten", "stufe": 4, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0144" },
+          "laut": "Lippen – Zunge – Gaumen",
+          "stufen": [
+            { "s": "Silben", "zeilen": ["pa – ta – ka", "ba – da – ga"] },
+            { "s": "Ketten", "zeilen": ["pa-ta-ka pa-ta-ka pa-ta-ka", "ta-ka-pa ta-ka-pa"] },
+            { "s": "Wörter", "zeilen": ["Paket – Tabak – Kapitän", "Datum – Gabel – Bogen"] },
+            { "s": "Sätze", "zeilen": ["Tarek packt den Koffer für die Tagung.", "Die Kollegin bucht das Ticket für Dienstag."] }
+          ],
+          "pruefliste": ["Jede Silbe gleich laut und klar?", "Erst langsam, schneller erst ohne Stolpern?", "Beim Verhaspeln einen Schritt zurück?"] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-2-01-c", "faehigkeit": "aussprache.oeffnung", "stufe": 4, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0129" },
+          "auftrag": "Sätze mit vielen Lippenlauten – erst überdeutlich mit sichtbaren Lippen, dann klar und natürlich.",
+          "zeilen": ["Bitte bring mir morgen die blaue Mappe mit.", "Wir warten bis vierzehn Uhr auf Herrn Petersen.", "Im Mai fahren wir mit dem Wohnmobil an die Mosel."],
+          "weise": "ueberdeutlich",
+          "pruefliste": ["Lippen bei b, p und m sichtbar geschlossen?", "Bei w und f die Unterlippe an den Zähnen?", "Danach natürlich zurückgenommen?"] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-2-01-d", "faehigkeit": "aussprache.konsonanten", "stufe": 4, "kanal": "wissen" },
+          "frage": "Du übst „pa-ta-ka“ und verhaspelst dich ab der dritten Kette. Was tust du?",
+          "antworten": [
+            { "text": "Schneller werden, damit die Zunge mithält.", "wert": 0, "tendenz": "tempo", "warum": "Wer im Stolpern weiter Tempo macht, übt das Stolpern. Tempo ist erst dran, wenn jede Silbe sitzt." },
+            { "text": "Zurück ins langsamere Tempo, bis zehn Ketten sauber sind.", "wert": 2, "warum": "Genauigkeit vor Tempo: Erst wenn der Wechsel sicher sitzt, darf es schneller werden." },
+            { "text": "Aufhören – offenbar ist das nichts für mich.", "wert": 0, "tendenz": "vermeiden", "warum": "Verhaspeln ist bei Silbenketten völlig üblich. Es zeigt nur, wo die Grenze des Tempos gerade liegt." },
+            { "text": "Eine Pause machen und es morgen im selben Tempo noch einmal versuchen.", "wert": 1, "warum": "Verteilt üben ist gut – nur im selben Tempo stolperst du morgen an derselben Stelle. Erst langsamer." }
+          ] },
+        { "art": "experiment", "auftrag": "Sprich vor deinem nächsten Telefonat zehnmal „pa-ta-ka“ – langsam und gleichmäßig. Achte im Gespräch darauf, ob die ersten Sätze leichter kommen.", "dauer": "heute", "nachfrage": "Kamen die ersten Sätze leichter – oder war kein Unterschied zu spüren?" },
+        { "art": "reflexion", "frage": "Bei welchen Wörtern stolpert deine Zunge im Alltag am ehesten – und wie könnte ein eigener Übungssatz dafür lauten?", "insBuch": "saetze" }
+      ],
+      "regel": "Erst genau, dann zügig – geübt wird beim Sprechen, nicht mit Grimassen.",
+      "merkkarten": [
+        { "id": "aussprache-2-01-m1", "frage": "Wie übst du eine Silbenkette richtig?", "antwort": "Erst langsam und gleichmäßig, jede Silbe gleich laut. Schneller erst, wenn sie ohne Stolpern sitzt." },
+        { "id": "aussprache-2-01-m2", "frage": "Helfen Mundübungen ohne Ton der Aussprache?", "antwort": "Als Lockerung ja. Dass sie allein die Aussprache bessern, ist nicht belegt – geübt wird beim Sprechen." }
+      ]
+    },
+    {
+      "id": "aussprache-2-02", "bereich": "aussprache", "stufe": 2, "nr": 2,
+      "titel": "Lange und kurze Vokale",
+      "faehigkeiten": ["aussprache.vokale", "aussprache.oeffnung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass die Länge des Vokals im Deutschen Wörter unterscheidet, ist sprachliches Grundwissen. Größere Abstände zwischen den Vokalen gehören oft zum deutlichen Sprechen, aber nicht immer. Die Übungen sind Praxiswissen.",
+      "quellen": ["krech2009", "smiljanic2009", "praxis-aussprache"],
+      "aha": "Im Deutschen trägt die Länge des Vokals Bedeutung: „Staat“ oder „Stadt“, „Miete“ oder „Mitte“. Wer lange Vokale lang und kurze knapp spricht, erspart dem Ohr das Raten.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Am Telefon sagt Nadine Köhler: „Wir zahlen zur Mitte des Monats.“ Was könnte die Buchhaltung verstehen, wenn das „i“ zu lang gerät?", "optionen": ["„zur Mitte“ – das Wort ist eindeutig", "„Miete“ – als ginge es um eine Mietzahlung", "gar nichts – ein langes i fällt nicht auf"], "richtig": 1, "loesung": "Sie könnte „Miete“ verstehen – eine Zahlung statt eines Termins.", "aufloesung": "„Mitte“ mit kurzem i, „Miete“ mit langem: Ein gedehntes i schiebt das Wort zur Zahlung hin. Der Zusammenhang hilft oft – am Telefon und bei neuen Kunden aber nicht verlässlich." },
+        { "art": "karte", "text": "Lange Vokale sind gedehnt und meist geschlossener: das „ie“ in „Miete“, das „ee“ in „Beet“. Kurze sind knapp und offener, gleich danach folgt der Konsonant: „Mitte“, „Bett“. Im Deutschen hängen ganze Wörter daran: Staat – Stadt, Ofen – offen, Rate – Ratte. Lang heißt nicht langsam: Nur der Vokal dehnt sich, der Satz läuft im normalen Tempo weiter." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-2-02-a", "faehigkeit": "aussprache.vokale", "stufe": 3, "kanal": "wissen" },
+          "auftrag": "Lang oder kurz? Sprich die Wörter halblaut mit.",
+          "faecher": ["lang", "kurz"],
+          "karten": [
+            { "text": "Beet", "fach": 0 },
+            { "text": "Bett", "fach": 1 },
+            { "text": "Rate", "fach": 0 },
+            { "text": "Ratte", "fach": 1 },
+            { "text": "Wahl", "fach": 0 },
+            { "text": "Wall", "fach": 1 }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-2-02-b", "faehigkeit": "aussprache.vokale", "stufe": 4, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0158" },
+          "auftrag": "Wortpaare im Satz – erst überdeutlich, dann klar. Lang wirklich lang, kurz wirklich knapp.",
+          "zeilen": ["Die Miete zahlen wir zur Mitte des Monats.", "Das Beet ist im Garten, das Bett im ersten Stock.", "Den Ofen bitte offen lassen.", "Wir zahlen die Rechnung in zwei Raten."],
+          "weise": "ueberdeutlich",
+          "pruefliste": ["Lange Vokale hörbar gedehnt?", "Kurze knapp, der Konsonant gleich dahinter?", "Satz insgesamt im normalen Tempo?"] },
+        { "art": "vergleich", "lage": "Du beschreibst einer Kollegin am Telefon den Weg zu einem Hof am Stadtrand.", "schwach": "„Du fährst bis zum Stall und dann links.“ – das „a“ lang gezogen, beinahe wie in „Stahl“.", "stark": "„Bis zum Stall – dem Pferdestall – und dann links.“ – das „a“ knapp, dazu ein eindeutiges Wort.", "frage": "Warum ist die zweite Fassung sicherer?", "unterschied": "Der kurze Vokal stimmt, und „Pferdestall“ lässt keine Verwechslung mit „Stahl“ zu. Bei Wörtern, die ein Paar mit anderem Vokal haben, sichert ein zweites Wort ab – wie bei Zahlen." },
+        { "art": "auswahl", "kopf": { "id": "aussprache-2-02-c", "faehigkeit": "aussprache.vokale", "stufe": 4, "kanal": "wissen" },
+          "frage": "Seit du lange Vokale bewusst dehnst, sagt Miriam: „Du klingst wie eine Nachrichtensprecherin in Zeitlupe.“ Was ist wahrscheinlich los?",
+          "antworten": [
+            { "text": "Du dehnst zu wenig – lange Vokale brauchen noch mehr Zeit.", "wert": 0, "warum": "Dann klänge es nicht nach Zeitlupe. Mehr Dehnung macht es eher schlimmer." },
+            { "text": "Miriam neckt gern – solche Bemerkungen von ihr kannst du getrost überhören.", "wert": 0, "tendenz": "abwerten", "warum": "Neckend vielleicht, aber mit einem wahren Kern. Eine Rückmeldung lohnt einen zweiten Blick." },
+            { "text": "Du sprichst den ganzen Satz langsamer, nicht nur die Vokale.", "wert": 2, "warum": "Lang betrifft nur den Vokal. Der Rest des Satzes läuft im normalen Tempo – sonst klingt es gedehnt." },
+            { "text": "Du übertreibst noch die Mundbewegung aus der Übung.", "wert": 1, "warum": "Möglich – die Übertreibung gehört in die Übung. Zeitlupe deutet aber vor allem aufs Tempo." }
+          ] },
+        { "art": "klartext", "kopf": { "id": "aussprache-2-02-d", "faehigkeit": "aussprache.oeffnung", "stufe": 4, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0130" },
+          "text": "Im Frühjahr ziehen wir um. | Die neue Wohnung hat einen Garten | und eine große Küche. | Die Fenster bleiben offen, | bis die Maler fertig sind.",
+          "pruefliste": ["Kiefer bei den offenen Vokalen locker auf?", "Lang und kurz unterscheidbar?", "Klar-Fassung im normalen Tempo?"] },
+        { "art": "reflexion", "frage": "Welches Wort sagst du oft – im Namen, im Ort, im Beruf –, das ein Paar mit anderem Vokal hat? Wie sicherst du es ab?" }
+      ],
+      "regel": "Lang ist der Vokal, nicht der Satz – und wo ein Paar droht, sichert ein zweites Wort.",
+      "merkkarten": [
+        { "id": "aussprache-2-02-m1", "frage": "Woran hängt im Deutschen oft die Bedeutung?", "antwort": "An der Länge des Vokals: Staat – Stadt, Miete – Mitte, Ofen – offen." },
+        { "id": "aussprache-2-02-m2", "frage": "Heißt lang sprechen langsam sprechen?", "antwort": "Nein. Nur der Vokal dehnt sich; der Satz bleibt im normalen Tempo." }
+      ]
+    },
+    {
+      "id": "aussprache-2-03", "bereich": "aussprache", "stufe": 2, "nr": 3,
+      "titel": "Lautgruppen ohne Stolpern",
+      "faehigkeiten": ["aussprache.konsonanten"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Dass vollständig gesprochene Konsonanten zum deutlichen Sprechen gehören, ist gut beschrieben. Das Zerlegen schwerer Wörter ist Praxiswissen der Sprecherziehung ohne eigene Studien.",
+      "quellen": ["praxis-aussprache", "smiljanic2009", "berry1973"],
+      "aha": "Bei Wörtern wie „Herbststurm“ oder „Pflichtschulung“ stolpert man selten, weil die Zunge versagt – sondern weil sie zu schnell drüber will. Zerlegen, langsam zusammensetzen, dann im Satz.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "aussprache-2-03-a", "faehigkeit": "aussprache.konsonanten", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du sollst morgen in der Runde „Arbeitsschutzbestimmungen“ sagen. Wie bereitest du dich vor?",
+          "antworten": [
+            { "text": "Das Wort zerlegen, die Teile sauber sprechen, dann zusammensetzen und im Satz üben.", "wert": 2, "warum": "Die Hürden liegen an den Fugen. Wer sie einzeln übt, setzt das Ganze leicht zusammen." },
+            { "text": "Oft und schnell sagen, bis es flutscht.", "wert": 0, "tendenz": "tempo", "warum": "Schnell und oft festigt eher das Stolpern. Erst die Teile, dann das Ganze." },
+            { "text": "Lieber umschreiben: „die Regeln zum Schutz bei der Arbeit“.", "wert": 1, "warum": "Manchmal klug, Umschreiben ist erlaubt. Wenn das Fachwort gebraucht wird, lohnt das Üben." },
+            { "text": "Gar nicht vorbereiten – wer übt, klingt verkrampft.", "wert": 0, "tendenz": "vermeiden", "warum": "Ein Wort zu üben, macht niemanden steif. Es nimmt nur die Stolperstelle weg." }
+          ] },
+        { "art": "karte", "text": "Lautgruppen sind Stellen, an denen mehrere Konsonanten aufeinandertreffen: „Herbst“, „Pflicht“, „kämpfst“. Oft liegen sie an Wortfugen: „Arbeits-schutz“, „Brand-schutz-tür“. Drei Schritte helfen: zerlegen, jeden Teil sauber sprechen, langsam zusammensetzen. Im Satz darf an der Fuge der Hauch einer Pause stehen. Wo es auf Klarheit ankommt, fehlt kein Laut, und nichts wird gedehnt. Im Plausch darfst du verschleifen." },
+        { "art": "lautleiter", "kopf": { "id": "aussprache-2-03-b", "faehigkeit": "aussprache.konsonanten", "stufe": 4, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0145" },
+          "laut": "Lautgruppen",
+          "stufen": [
+            { "s": "Teile", "zeilen": ["Arbeits – schutz", "Brand – schutz – tür"] },
+            { "s": "Wörter", "zeilen": ["Arbeitsschutz", "Brandschutztür", "Herbststurm"] },
+            { "s": "Wortgruppen", "zeilen": ["die neue Brandschutztür", "im Herbststurm"] },
+            { "s": "Sätze", "zeilen": ["Die neue Brandschutztür bleibt geschlossen.", "Im Herbststurm fielen zwei Bäume auf den Parkplatz."] }
+          ],
+          "pruefliste": ["Jeder Teil erst einzeln sauber?", "Beim Zusammensetzen kein Laut verschluckt?", "Im Satz nicht gedehnt?"] },
+        { "art": "fehler", "kopf": { "id": "aussprache-2-03-c", "faehigkeit": "aussprache.konsonanten", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "So klang die Ansage in der lauten Werkhalle. Im Plausch ist das üblich – hier gehen Wörter unter. Markier die Stellen, an denen in einer Lautgruppe ein Laut verschliffen ist.",
+          "teile": [
+            { "t": "Die" },
+            { "t": "Pflichschulung", "fehler": "„Pflichtschulung“ – vor dem sch fehlt das t." },
+            { "t": "ist" }, { "t": "in" }, { "t": "den" },
+            { "t": "Herbsferien.", "fehler": "„Herbstferien“ – in „-bstf-“ ist das t verloren gegangen." },
+            { "t": "Bitte" }, { "t": "schickt" }, { "t": "eure" },
+            { "t": "Kontakdaten", "fehler": "„Kontaktdaten“ – in „-ktd-“ fehlt das t." },
+            { "t": "an" }, { "t": "Carla." }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-2-03-d", "faehigkeit": "aussprache.konsonanten", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0146" },
+          "auftrag": "Fachwörter aus dem Alltag – zerlegt geübt, jetzt im Ganzen, klar und natürlich.",
+          "zeilen": ["Die Pflichtschulung zum Brandschutz ist im Herbst.", "Bitte die Stromversorgung im Lagerraum prüfen.", "Wir brauchen die Kontaktdaten des Ansprechpartners."],
+          "weise": "klar",
+          "pruefliste": ["Lautgruppen vollständig?", "Kein Wort gedehnt oder zerhackt?", "Satzende gehalten?"] },
+        { "art": "sammeln", "auftrag": "Deine Stolperwörter: Schreib Wörter mit schweren Lautgruppen auf, die du im Beruf oder privat oft sagst. Eins pro Zeile.", "mindestens": 3, "ziel": "wortliste" },
+        { "art": "reflexion", "frage": "Welches deiner Stolperwörter nimmst du dir diese Woche vor – und in welcher Lage sagst du es zum ersten Mal bewusst klar?" }
+      ],
+      "regel": "Zerlegen, sauber sprechen, langsam zusammensetzen – dann erst im Satz.",
+      "merkkarten": [
+        { "id": "aussprache-2-03-m1", "frage": "Die drei Schritte bei einer schweren Lautgruppe?", "antwort": "Zerlegen, jeden Teil sauber sprechen, langsam zusammensetzen – dann im Satz." },
+        { "id": "aussprache-2-03-m2", "frage": "Wo liegen schwere Lautgruppen oft?", "antwort": "An der Fuge zusammengesetzter Wörter: Arbeits-schutz, Herbst-ferien." }
+      ]
+    },
+    {
+      "id": "aussprache-2-04", "bereich": "aussprache", "stufe": 2, "nr": 4,
+      "titel": "Die Stimme trägt: Atem und Satzende",
+      "faehigkeiten": ["aussprache.tragen", "aussprache.takt"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Abspannen und kurze Sinnschritte sind Praxiswissen der Stimmpädagogik ohne Studien bei gesunden Sprechern. Die Vier-Wochen-Grenze bei Heiserkeit stammt aus der deutschen Leitlinie zu Stimmstörungen.",
+      "quellen": ["coblenzer1976", "praxis-aussprache", "dysphonie2022"],
+      "aha": "Oft versackt die Stimme nicht aus Schwäche, sondern weil die Luft für den Satz nicht reicht. Kürzere Sinnschritte und ein Lösen in jeder Pause halten das Satzende.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Lena liest in der Runde einen Absatz vor.", "schwach": "Ein langer Satz in einem Atemzug – am Ende presst sie die letzten Wörter mit Restluft heraus.", "stark": "Derselbe Satz in drei Sinnschritten – in jeder Pause strömt die Luft von selbst nach.", "frage": "Warum trägt die zweite Fassung bis zum Schluss?", "unterschied": "Wer bis zur letzten Luft spricht, presst – die Stimme wird eng und leise. Wer nach jedem Sinnschritt kurz löst, holt ohne Mühe Luft, und das Satzende bekommt dieselbe Kraft wie der Anfang." },
+        { "art": "karte", "text": "Atem und Pause gehören zusammen. Am Ende eines Sinnschritts kurz den Bauch loslassen – dann strömt die Luft von selbst nach, ohne hörbares Schnappen. In der Stimmpädagogik heißt das Abspannen. Schultern bleiben unten, der Hals frei. Je kürzer die Sinnschritte, desto leichter trägt jeder bis zum Ende. Mehr zum Atem findest du im Bereich „Stimme & Auftritt“." },
+        { "art": "anleitung", "titel": "Abspannen ausprobieren", "schritte": ["Steh oder sitz aufrecht, eine Hand unterhalb der Rippen.", "Sprich halblaut: „Am Montag | beginnt die neue Woche.“", "Am Strich den Bauch kurz loslassen – spür, wie die Luft von selbst einströmt.", "Weiter: „Zuerst kommt die Besprechung | und danach die Planung.“", "Kein Schnappen, keine hochgezogenen Schultern."], "sekunden": 60, "stumm": false, "pruefung": ["Kam die Luft in der Pause von selbst?", "Schultern unten geblieben?", "Satzende so kräftig wie der Anfang?"] },
+        { "art": "klartext", "kopf": { "id": "aussprache-2-04-a", "faehigkeit": "aussprache.tragen", "stufe": 4, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0172" },
+          "text": "Liebe Gäste, | schön, dass ihr gekommen seid. | Das Buffet ist im Nebenraum eröffnet. | Getränke gibt es an der Theke | gleich neben dem Eingang. | Um neun beginnt die Musik.",
+          "pruefliste": ["Nach jedem Strich kurz gelöst und Luft kommen lassen?", "Jedes Satzende so gut zu hören wie der Anfang?", "Ohne Druck im Hals?"] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-2-04-b", "faehigkeit": "aussprache.tragen", "stufe": 5, "kanal": "wissen" },
+          "frage": "Nach einer langen Besprechung, in der du viel geredet hast, klingt deine Stimme rau. Was hilft am ehesten?",
+          "antworten": [
+            { "text": "Öfter kräftig räuspern, damit die Stimme wieder frei wird.", "wert": 0, "warum": "Räuspern reizt die Stimmlippen eher. Besser schlucken oder einen Schluck trinken." },
+            { "text": "Kürzere Sätze, mehr Pausen, zwischendurch Wasser – und nicht gegen Lärm anreden.", "wert": 2, "warum": "Entlasten statt weiterpressen: Pausen und kurze Sätze geben der Stimme Luft." },
+            { "text": "Flüstern, um die Stimme zu schonen.", "wert": 0, "warum": "Angestrengtes Flüstern ist für die Stimme keine Erholung. Besser leise mit normaler Stimme und viele Pausen." },
+            { "text": "Abwarten – erst wenn die Heiserkeit länger als vier Wochen bleibt, zur HNO-Praxis, bis dahin alles wie bisher.", "wert": 1, "warum": "Die Vier-Wochen-Grenze stimmt. Bis dahin hilft aber gerade, die Stimme zu entlasten – nicht alles wie bisher." }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-2-04-c", "faehigkeit": "aussprache.takt", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0179" },
+          "auftrag": "Lange Sätze in Sinnschritten – an jedem Strich kurz lösen, die Luft kommt von selbst.",
+          "zeilen": ["Wenn ihr morgen früh kommt, | parkt bitte hinten im Hof, | weil vorne die Straße gesperrt ist.", "Die Unterlagen für das Treffen | liegen ab Dienstag | in der Mappe auf meinem Tisch."],
+          "weise": "klar",
+          "pruefliste": ["Pausen an den Strichen, nicht mitten in Wortgruppen?", "In jeder Pause gelöst?", "Letztes Wort getragen?"] },
+        { "art": "fachhilfe", "thema": "logopaedie" }
+      ],
+      "regel": "Kurze Sinnschritte, in jeder Pause lösen – dann trägt das Satzende.",
+      "merkkarten": [
+        { "id": "aussprache-2-04-m1", "frage": "Was heißt Abspannen?", "antwort": "Am Ende eines Sinnschritts den Bauch kurz loslassen – die Luft strömt von selbst nach." },
+        { "id": "aussprache-2-04-m2", "frage": "Wann gehört Heiserkeit in die Arztpraxis?", "antwort": "Wenn sie länger als vier Wochen anhält – am besten in die HNO-Praxis." }
+      ]
+    },
+    {
+      "id": "aussprache-2-05", "bereich": "aussprache", "stufe": 2, "nr": 5,
+      "titel": "Am Telefon und in der Videokonferenz",
+      "faehigkeiten": ["aussprache.alltag", "aussprache.tragen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass viele Telefonverbindungen die hohen Anteile abschneiden, ist technisch gut erklärt. Eine Forschergruppe fand, dass Sprecherwechsel im Videogespräch deutlich länger dauern als im direkten Gespräch; als Grund vermutet sie die kleinen Übertragungsverzögerungen. Die Tipps zum Sprechen sind Praxiswissen.",
+      "quellen": ["telefonband", "boland2022", "newman2018", "din5009"],
+      "aha": "Am Telefon fehlen oft genau die hohen Töne, an denen man s und f unterscheidet. In der Videokonferenz kommt alles einen Hauch später an. Beides gleichst du aus: buchstabieren, Pause nach der Frage.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Du buchstabierst am Telefon deine Mailadresse. Welche zwei Buchstaben werden dabei besonders oft verwechselt?", "optionen": ["a und e", "Ess und Eff", "m und b"], "richtig": 1, "loesung": "„Ess“ und „Eff“ – sie unterscheiden sich vor allem in hohen Tönen.", "aufloesung": "Bei vielen Telefonverbindungen fehlen gerade diese hohen Anteile. Darum klingen „Ess“ und „Eff“ fast gleich. Die Buchstabiertafel löst das: S wie Salzwedel, F wie Frankfurt." },
+        { "art": "karte", "text": "Viele Telefonverbindungen übertragen nur einen Ausschnitt der Töne. Es fehlen die hohen Anteile, an denen man s und f unterscheidet. Darum: Buchstaben mit der Tafel ansagen, Verwechselbares anders sagen. In der Videokonferenz kommt der Ton einen Hauch später an, und der Wechsel zwischen Sprechern wird holpriger. Darum: nach einer Frage kurz warten, dann antworten – und am Ende Raum lassen." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-2-05-a", "faehigkeit": "aussprache.alltag", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Was hilft eher am Telefon – was eher in der Videokonferenz?",
+          "faecher": ["am Telefon", "in der Videokonferenz"],
+          "karten": [
+            { "text": "Buchstaben mit der Buchstabiertafel", "fach": 0 },
+            { "text": "nach einer Frage einen Moment warten, bevor du antwortest", "fach": 1 },
+            { "text": "„fünfzehn – eins, fünf“ statt nur „fünfzehn“", "fach": 0 },
+            { "text": "Kamera auf Augenhöhe, Gesicht im Licht", "fach": 1 },
+            { "text": "der eigene Name gleich am Anfang", "fach": 0 },
+            { "text": "Kamera an, damit man deinen Mund sieht", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-2-05-b", "faehigkeit": "aussprache.tragen", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du telefonierst mit dem Handy auf Lautsprecher, es liegt vor dir auf dem Schreibtisch. Der Kunde fragt zweimal nach. Was ändert am meisten?",
+          "antworten": [
+            { "text": "Lauter sprechen und dich näher über den Tisch beugen.", "wert": 1, "warum": "Hilft etwas, der Hall des Raums bleibt aber im Ton." },
+            { "text": "Schneller reden, damit das Telefonat kürzer wird und weniger schiefgehen kann.", "wert": 0, "tendenz": "tempo", "warum": "Schneller macht es nicht verständlicher – eher kommen noch mehr Rückfragen." },
+            { "text": "Dem Kunden sagen, dass seine Verbindung schlecht ist.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Vielleicht – aber der Lautsprecher am Tisch ist die Stelle, die du ändern kannst." },
+            { "text": "Handy ans Ohr oder Headset auf – das Mikrofon gehört nah an den Mund.", "wert": 2, "warum": "Technik zuerst: Nah am Mund ist die Stimme laut im Verhältnis zum Raum, der Hall fällt weg." }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-2-05-c", "faehigkeit": "aussprache.alltag", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0190" },
+          "auftrag": "Buchstabieren und Zahlen fürs Telefon – mit Tafel und zweiter Form.",
+          "zeilen": ["Die Lieferung geht an Frau Sommer: | S wie Salzwedel, | O wie Offenbach, | M wie München, | M wie München, | E wie Essen, | R wie Rostock.", "Es sind fünfzehn Kartons – | eins, fünf.", "Die Kundennummer endet auf | vier – vier – sieben."],
+          "weise": "klar",
+          "pruefliste": ["Vor jedem Buchstaben kurz gebremst?", "Die Städte deutlich?", "Zahl in zweiter Form?"] },
+        { "art": "experiment", "auftrag": "Mach vor deiner nächsten Videokonferenz oder deinem nächsten wichtigen Anruf zwei kurze Probeaufnahmen mit deiner Technik: einmal mit dem eingebauten Mikrofon, einmal mit Headset oder dem Handy am Ohr.", "dauer": "woche", "nachfrage": "Welche Fassung klang klarer – und was benutzt du ab jetzt?" },
+        { "art": "reflexion", "frage": "Welchen Namen, welches Wort oder welche Zahl gibst du am Telefon am häufigsten durch – und wie klingt die sichere Fassung?" }
+      ],
+      "regel": "Am Telefon buchstabieren und doppelt sichern, im Video nach der Frage kurz warten.",
+      "merkkarten": [
+        { "id": "aussprache-2-05-m1", "frage": "Warum klingen „Ess“ und „Eff“ am Telefon fast gleich?", "antwort": "Viele Verbindungen schneiden die hohen Töne ab – genau dort unterscheiden sich s und f." },
+        { "id": "aussprache-2-05-m2", "frage": "Was hilft gegen die Verzögerung im Videogespräch?", "antwort": "Nach einer Frage einen Moment warten, dann antworten – und am Ende Raum lassen." }
+      ]
+    },
+    {
+      "id": "aussprache-2-06", "bereich": "aussprache", "stufe": 2, "nr": 6,
+      "titel": "Dein Sprechbild: ein Merkmal pro Woche",
+      "faehigkeiten": ["aussprache.hoeren", "aussprache.alltag"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Fortschritt festhalten und Wenn-Dann-Pläne beim Umsetzen von Vorsätzen helfen, zeigen Meta-Analysen für Vorsätze aller Art – fürs Sprechen sind sie nicht eigens untersucht. Ein Merkmal pro Woche ist Praxiswissen.",
+      "quellen": ["harkin2016", "gollwitzer2006", "maas2008", "praxis-aussprache"],
+      "aha": "Wer alles zugleich ändern will, ändert wenig. Ein Merkmal pro Woche – aus deiner eigenen Aufnahme gewählt – lässt sich üben, beobachten und festigen.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "aussprache-2-06-a", "faehigkeit": "aussprache.hoeren", "stufe": 4, "kanal": "wissen" },
+          "frage": "Deine Aufnahme zeigt drei Baustellen: verschluckte Endungen, kaum Pausen, ein versackendes Satzende. Womit fängst du an?",
+          "antworten": [
+            { "text": "Mit allen dreien gleichzeitig, damit es schneller geht.", "wert": 0, "warum": "Alles zugleich hält kaum jemand durch. Nach ein paar Tagen ist meist alles wie vorher." },
+            { "text": "Mit dem Merkmal, das am meisten Rückfragen kostet.", "wert": 2, "warum": "Eine Baustelle zur Zeit, ausgewählt nach Wirkung. Die übrigen kommen in den nächsten Wochen dran." },
+            { "text": "Mit dem leichtesten, um schnell einen Erfolg zu haben.", "wert": 1, "warum": "Ein früher Erfolg motiviert – solange danach das wichtigere Merkmal folgt." },
+            { "text": "Gar nicht – das zeigt doch, dass es nicht zu mir passt.", "wert": 0, "tendenz": "abwerten", "warum": "Drei Baustellen sind üblich. Deutlich sprechen kann fast jeder – geübt wird eins nach dem anderen." }
+          ] },
+        { "art": "karte", "text": "Dein Sprechbild sind die zwei, drei Merkmale, die bei dir am meisten Deutlichkeit kosten. Du findest sie in deiner Aufnahme und in den Rückfragen anderer. Jede Woche bekommt ein Merkmal: ein Wenn-Dann-Plan für einen festen Moment, abends ein Strich, ob es geklappt hat. Am Ende der Woche eine kurze Aufnahme zum Vergleich. Sitzt es, kommt das nächste – das alte läuft im Hintergrund mit." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-2-06-b", "faehigkeit": "aussprache.hoeren", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Was hörst du – und welches Merkmal steckt dahinter?",
+          "faecher": ["Endungen", "Pausen", "Satzende"],
+          "karten": [
+            { "text": "„Ich hab's nich geschafft.“", "fach": 0 },
+            { "text": "Die Nummer kommt in einem Rutsch.", "fach": 1 },
+            { "text": "Das letzte Wort ist nur noch ein Murmeln.", "fach": 2 },
+            { "text": "„Wir ham's gestern geschick.“", "fach": 0 },
+            { "text": "Drei Gedanken ohne Luft dazwischen", "fach": 1 },
+            { "text": "Die Stimme sinkt und wird dabei leiser.", "fach": 2 }
+          ] },
+        { "art": "klartext", "kopf": { "id": "aussprache-2-06-c", "faehigkeit": "aussprache.hoeren", "stufe": 4, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0199" },
+          "text": "Diese Woche achte ich auf ein Merkmal. | Ich habe es mir aus meiner Aufnahme ausgesucht. | Am Freitag nehme ich denselben Text noch einmal auf | und vergleiche beide Fassungen.",
+          "pruefliste": ["Dein Merkmal der Woche in der Klar-Fassung zu hören?", "Die anderen Punkte nicht schlechter geworden?", "Aufnahme für den Vergleich am Freitag gespeichert?"] },
+        { "art": "geschichte", "titel": "Tareks Wochenplan", "figur": "Tarek Yılmaz", "text": "Tarek hat es zuerst mit allem auf einmal versucht: lauter, langsamer, Mund auf. Nach drei Tagen sagte Miriam: „Du klingst wie ein Roboter.“ Er hat aufgegeben. Im zweiten Anlauf hat er sich nur das Satzende vorgenommen – eine Woche lang, immer beim ersten Satz in der Montagsrunde. Abends ein Strich auf dem Zettel am Bildschirm. In der zweiten Woche kamen die Endungen dazu. Nach einem Monat fragte Dr. Albers nach seinem Bericht nicht mehr nach. Tarek sagt heute: „Ich habe nicht mehr geübt als vorher. Nur nicht mehr alles auf einmal.“", "frage": "Welches Merkmal wäre deine erste Woche?" },
+        { "art": "wenndann", "anlass": "Dein Merkmal für diese Woche.", "wenn": ["ich am Telefon abnehme", "ich in der Runde den ersten Satz sage", "ich eine Sprachnachricht aufnehme", "ich jemandem etwas erkläre"], "dann": ["halte ich das Satzende bis zum letzten Wort", "spreche ich die Endungen hörbar", "setze ich nach jedem Gedanken eine Pause", "öffne ich den Mund bei den Vokalen locker"] },
+        { "art": "zaehler", "name": "Mein Merkmal", "auftrag": "Mach jeden Abend einen Strich, wenn du dein Merkmal heute in deinem festen Moment umgesetzt hast. Nur zählen, nicht bewerten.", "tage": 7 },
+        { "art": "mission", "ref": "aussprache-m-07" }
+      ],
+      "regel": "Ein Merkmal pro Woche, ein fester Moment, ein Strich am Abend.",
+      "merkkarten": [
+        { "id": "aussprache-2-06-m1", "frage": "Was ist dein Sprechbild?", "antwort": "Die zwei, drei Merkmale, die bei dir am meisten Deutlichkeit kosten – gefunden in Aufnahme und Rückfragen." },
+        { "id": "aussprache-2-06-m2", "frage": "Wie lange bleibt ein Merkmal dran?", "antwort": "Eine Woche mit festem Moment und Strich am Abend; dann Vergleichsaufnahme und das nächste." }
+      ],
+      "mission": "aussprache-m-07"
+    }
+  ]
+}

@@ -111,7 +111,7 @@
     ] },
     { "id": "lesen-fc-020", "faehigkeit": "lesen.pruefen", "stufe": 4, "frage": "Ein Teammitglied sagt in der Videokonferenz nichts mehr, seit sein Vorschlag abgelehnt wurde. Was ist am besten?", "antworten": [
       { "text": "Nichts tun – er ist erwachsen.", "wert": 1, "warum": "Respektvoll. Aber eine kurze, offene Frage gibt ihm die Wahl, ob er reden will." },
-      { "text": "Vor allen fragen, ob er jetzt beleidigt ist.", "wert": 0, "tendenz": "bloßstellen", "warum": "Eine Deutung vor der Gruppe – das macht es schwerer, nicht leichter." },
+      { "text": "Vor allen fragen, ob er jetzt beleidigt ist.", "wert": 0, "tendenz": "blossstellen", "warum": "Eine Deutung vor der Gruppe – das macht es schwerer, nicht leichter." },
       { "text": "Danach kurz anrufen: „Du warst danach sehr still. Wie geht's dir mit der Entscheidung?“", "wert": 2, "warum": "Unter vier Augen, mit Beobachtung und offener Frage." }
     ] },
     { "id": "lesen-fc-021", "faehigkeit": "lesen.pruefen", "stufe": 5, "frage": "Ein Verkäufer im Möbelhaus sagt nach zwei Minuten: „Ich sehe sofort: Sie sind jemand, der Qualität schätzt, aber kein Geld zum Fenster hinauswirft.“ Wie ordnest du das ein?", "antworten": [
@@ -135,6 +135,96 @@
       { "text": "Ich schreibe ihnen noch, wie viel mir das Team bedeutet hat.", "wert": 2, "warum": "Was du fühlst, sieht man nicht automatisch. Gesagt kommt es an." },
       { "text": "Beim nächsten Abschied mehr lächeln, damit man es mir ansieht, auch wenn es mir schwerfällt.", "wert": 1, "warum": "Zeichen helfen etwas – ein Satz ist aber eindeutiger als jedes Lächeln." },
       { "text": "Mich ärgern, dass ich so verschlossen bin.", "wert": 0, "tendenz": "selbstabwertung", "warum": "Wenig zu zeigen ist keine Schwäche. Es reicht, das Wichtige zu sagen." }
+    ] },
+    { "id": "lesen-fc-025", "faehigkeit": "lesen.gesicht", "stufe": 4, "frage": "Beim Elternabend, zu dem du deine Schwester begleitest, sitzt ein Vater in der ersten Reihe und verzieht immer wieder das Gesicht, während die Lehrerin spricht. Er sitzt auf einem Kinderstuhl und hält sich ab und zu den Rücken. Was liest du heraus?", "antworten": [
+      { "text": "Er ist mit der Lehrerin unzufrieden.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Die Lage liefert eine naheliegende Erklärung: Kinderstuhl und Rücken. Die Lehrerin ist nur eine von mehreren Möglichkeiten." },
+      { "text": "Wahrscheinlich tut ihm auf dem kleinen Stuhl der Rücken weh – über die Lehrerin sagt das wenig.", "wert": 2, "warum": "Erst die Lage, dann das Gesicht. Hier erklärt die Lage schon viel." },
+      { "text": "Kann der Rücken sein, kann Ärger sein – vielleicht sogar beides auf einmal.", "wert": 1, "warum": "Offen, gut. Die Hand am Rücken macht eine Erklärung aber deutlich wahrscheinlicher." }
+    ] },
+    { "id": "lesen-fc-026", "faehigkeit": "lesen.stimme", "stufe": 5, "frage": "Eine Freundin, die sonst sprudelnd erzählt, antwortet am Telefon auf deine Einladung zum Wochenende: „Äh … ja, ich glaub, das geht.“ Was tust du?", "antworten": [
+      { "text": "Freuen und alles festmachen.", "wert": 0, "tendenz": "ueberhoeren", "warum": "Das „äh“ und das „ich glaub“ passen nicht zu ihrer Grundlinie. Das überhörst du." },
+      { "text": "„Klingt noch nicht ganz sicher – passt etwas nicht?“", "wert": 2, "warum": "Du nennst, was du hörst, und gibst ihr einen leichten Weg, ein Bedenken zu sagen." },
+      { "text": "„Du hast keine Lust, oder?“", "wert": 0, "tendenz": "gedankenlesen", "warum": "Aus Zögern wird Unlust – dabei kann es ein Termin, Geld oder Müdigkeit sein." },
+      { "text": "Zusagen lassen und am Freitag noch mal kurz nachfragen, ob es dabei bleibt.", "wert": 1, "warum": "Rücksichtsvoll. Das Zögern jetzt anzusprechen, klärt es aber früher." }
+    ] },
+    { "id": "lesen-fc-027", "faehigkeit": "lesen.koerper", "stufe": 5, "frage": "Im Vorstand des Sportvereins redet ein Mann laut und lange. Bevor jemand auf eine Frage antwortet, schauen aber alle kurz zu einer Frau, die bisher kaum etwas gesagt hat. Wessen Meinung zum Ausflug holst du zuerst ein?", "antworten": [
+      { "text": "Den Mann – er redet am meisten, also hat er das Sagen.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Redeanteil ist ein schwaches Rang-Zeichen. Wohin die anderen schauen, sagt mehr." },
+      { "text": "Die Frau, ohne den Mann zu übergehen.", "wert": 2, "warum": "Die Blicke der Runde zeigen, auf wessen Wort es ankommt. Und du bindest trotzdem beide ein." },
+      { "text": "Gleich alle zusammen in einer offenen Runde fragen, ohne jemanden hervorzuheben.", "wert": 1, "warum": "Fair und offen. Wer im Raum gehört wird, zeigt sich dann auch – nur langsamer." }
+    ] },
+    { "id": "lesen-fc-028", "faehigkeit": "lesen.pruefen", "stufe": 6, "frage": "Dein Nachbar hat zugesagt, im Urlaub deine Blumen zu gießen: „Ja, mach ich … grundsätzlich.“ Dabei schaut er auf seinen Kalender. Was sagst du?", "antworten": [
+      { "text": "„Super, danke!“ – und den Schlüssel dalassen.", "wert": 0, "tendenz": "ueberhoeren", "warum": "„Grundsätzlich“ und der Blick in den Kalender deuten auf ein Aber, das du überhörst." },
+      { "text": "„Ich höre ein ‚grundsätzlich‘. Gibt es eine Woche, in der es schwierig wird?“", "wert": 2, "warum": "Du nennst, was du hörst, und fragst gezielt – ohne ihm etwas zu unterstellen." },
+      { "text": "„Wenn's dir nicht passt, sag lieber gleich ab – ich frag sonst jemand anderen.“", "wert": 0, "tendenz": "druck", "warum": "Klingt großzügig, setzt ihn aber unter Druck, sich sofort zu entscheiden." },
+      { "text": "Ihm einen Zettel mit allen Terminen hinlegen, damit er planen kann.", "wert": 1, "warum": "Hilft beim Planen. Ob es ein Bedenken gibt, weißt du dadurch aber nicht." }
+    ] },
+    { "id": "lesen-fc-029", "faehigkeit": "lesen.eigen", "stufe": 5, "frage": "Nach einem langen Gespräch mit einer neuen Nachbarin denkst du: „Ich war bestimmt zu langweilig.“ Was sagt die Forschung zu solchen Momenten am ehesten?", "antworten": [
+      { "text": "Dass man meist richtig spürt, wie man ankommt.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Nach Gesprächen unterschätzen Menschen eher, wie sehr der andere sie mag." },
+      { "text": "Dass sie dich wahrscheinlich mehr mag, als du glaubst.", "wert": 2, "warum": "Die Sympathie-Lücke: Wir hören unsere eigenen Stolperer – der andere hört einfach das Gespräch." },
+      { "text": "Dass sich das nicht sagen lässt, ohne sie zu fragen, und man es darum am besten gar nicht erst bewertet.", "wert": 1, "warum": "Im Einzelfall stimmt das. Im Mittel liegt die eigene Schätzung aber eher zu niedrig." }
+    ] },
+    { "id": "lesen-fc-030", "faehigkeit": "lesen.gesicht", "stufe": 6, "frage": "Ein neuer Kollege schaut dir beim Erklären kaum in die Augen, stellt aber genaue Rückfragen und schreibt alles mit. Eine Kollegin meint: „Der hört doch gar nicht richtig zu.“ Was sagst du?", "antworten": [
+      { "text": "„Er fragt genau nach und schreibt mit – das spricht eher dafür, dass er zuhört.“", "wert": 2, "warum": "Du stellst die stärkeren Zeichen gegen ein schwaches. Wenig Blick heißt nicht wenig Aufmerksamkeit." },
+      { "text": "„Stimmt, wer wirklich zuhört, schaut einen an – Blickkontakt gehört einfach dazu.“", "wert": 0, "tendenz": "einzelzeichen", "warum": "Viele hören besser zu, wenn sie wegschauen oder mitschreiben – aus Gewohnheit, Schüchternheit oder Kultur." },
+      { "text": "„Jeder hat seine Art.“", "wert": 1, "warum": "Gelassen. Mit den Zeichen, die für Zuhören sprechen, hätte der Satz mehr Gewicht." },
+      { "text": "„Der ist bestimmt Autist.“", "wert": 0, "tendenz": "diagnose", "warum": "Aus einem Zeichen stellt man keine Diagnose – und als Etikett hilft sie niemandem." }
+    ] },
+    { "id": "lesen-fc-031", "faehigkeit": "lesen.grundlinie", "stufe": 6, "frage": "Deine Mitbewohnerin spricht seit einigen Tagen leiser und langsamer, gähnt oft und lacht seltener. Seit Montag hat sie Nachtschichten im Krankenhaus. Was ist die beste Einschätzung?", "antworten": [
+      { "text": "Sie ist wohl unglücklich in ihrer Beziehung – so verändert, wie sie gerade ist, muss da etwas sein.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine ganze Geschichte aus einer Veränderung – obwohl die Lage eine naheliegende Erklärung bietet." },
+      { "text": "Eine klare Veränderung – vielleicht die Nachtschichten. Freundlich fragen, wie es ihr geht.", "wert": 2, "warum": "Du siehst die Abweichung, rechnest die Lage ein und prüfst mit einer offenen Frage." },
+      { "text": "Vermutlich die Nachtschichten – ich behalte es im Blick.", "wert": 1, "warum": "Die Lage im Blick, gut. Eine kurze Frage, wie es ihr geht, schadet trotzdem nicht." },
+      { "text": "Sie ist sauer auf mich wegen des Abwaschs.", "wert": 0, "tendenz": "selbstbezug", "warum": "Du beziehst eine Veränderung auf dich, für die es andere Gründe gibt." }
+    ] },
+    { "id": "lesen-fc-032", "faehigkeit": "lesen.buendel", "stufe": 7, "frage": "Du stellst im Verein die Abrechnung vor. Der Kassenwart nickt, sagt aber nichts, blättert zweimal zur selben Seite zurück und fragt am Ende: „Und die Spenden vom Sommerfest?“ Was liest du?", "antworten": [
+      { "text": "Er ist einverstanden – er hat ja genickt.", "wert": 0, "tendenz": "ueberhoeren", "warum": "Das Nicken ist ein Zeichen. Zurückblättern und die gezielte Frage zeigen woandershin." },
+      { "text": "Mehrere Zeichen zeigen auf dieselbe Stelle. Die Spenden genauer erklären und fragen, ob noch etwas offen ist.", "wert": 2, "warum": "Blättern, Frage und Stille bündeln sich an einem Punkt – du prüfst genau dort." },
+      { "text": "Er misstraut dir – sonst würde er nicht so genau nachblättern und nachfragen.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Ein Kassenwart, der genau nachsieht, tut seine Aufgabe. Misstrauen ist eine Deutung." },
+      { "text": "Die Frage zu den Spenden beantworten und dann weiter.", "wert": 1, "warum": "Du antwortest auf das deutlichste Zeichen. Ob noch mehr offen ist, prüfst du aber nicht." }
+    ] },
+    { "id": "lesen-fc-033", "faehigkeit": "lesen.buendel", "stufe": 6, "frage": "Familienrat zur Pflege der Großmutter. Dein Bruder redet viel, deine Schwester sagt seit dem Vorschlag „Wir teilen die Wochenenden auf“ nichts mehr und schaut aus dem Fenster, ihr Mann legt ihr die Hand auf den Arm. Was tust du?", "antworten": [
+      { "text": "„Also sind sich alle einig – dann trage ich die Wochenenden gleich in den Kalender ein.“", "wert": 0, "tendenz": "ueberhoeren", "warum": "Stille seit einem bestimmten Vorschlag, Blick weg, eine beruhigende Hand – das ist kein Ja." },
+      { "text": "Die Runde fragen: „Mir scheint, das passt noch nicht für alle. Was fehlt?“", "wert": 2, "warum": "Du liest das Muster seit dem Vorschlag und öffnest die Runde, ohne deine Schwester vorzuführen." },
+      { "text": "„Du bist dagegen, oder?“ – direkt zur Schwester.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine Deutung vor allen, in einer heiklen Familienfrage." },
+      { "text": "Später unter vier Augen mit deiner Schwester reden.", "wert": 1, "warum": "Rücksichtsvoll. Nur wird die Entscheidung in der Runde dann ohne sie getroffen." }
+    ] },
+    { "id": "lesen-fc-034", "faehigkeit": "lesen.stimme", "stufe": 7, "frage": "In der Videokonferenz fragst du: „Kannst du das bis Donnerstag übernehmen?“ Erst nach einer langen Pause antwortet die Kollegin: „Ja.“ Ihr Bild ruckelt. Was ist die beste Lesart?", "antworten": [
+      { "text": "Sie zögert so lange – also will sie es eigentlich nicht übernehmen und traut sich nur nicht.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Online ist eine Pause oft die Leitung. Ein ruckelndes Bild macht das wahrscheinlicher." },
+      { "text": "Die Pause kann die Leitung sein. Nach der Runde kurz fragen, ob Donnerstag passt.", "wert": 2, "warum": "Du deutest die Pause nicht und prüfst mit einer leichten Nachfrage." },
+      { "text": "Ein Ja ist ein Ja – online deute ich keine Pausen.", "wert": 1, "warum": "Online ist das oft vernünftiger als jede Deutung. Eine kurze Bestätigung bei einer Frist kostet trotzdem nichts." }
+    ] },
+    { "id": "lesen-fc-035", "faehigkeit": "lesen.beobachten", "stufe": 7, "frage": "Ein neuer Kunde spricht am Telefon mit starkem Akzent und kleinen Grammatikfehlern. Du merkst, dass du seine Anfrage weniger ernst nimmst als die einer Kundin vom selben Morgen. Was tust du?", "antworten": [
+      { "text": "Beide Anfragen nach denselben Punkten prüfen – Inhalt, nicht Klang.", "wert": 2, "warum": "Gleiche Maßstäbe bremsen den Einfluss von Akzent und Stil auf dein Urteil." },
+      { "text": "Mich auf mein Gefühl verlassen – ich habe Erfahrung mit Kunden.", "wert": 0, "tendenz": "uebersicher", "warum": "Erfahrung macht sicherer, nicht unbedingt genauer. Und das Gefühl ist hier gefärbt." },
+      { "text": "Ihn zum Ausgleich bevorzugt behandeln.", "wert": 0, "tendenz": "ueberkorrektur", "warum": "Auch das ist ein Urteil nach Klang statt nach Inhalt." },
+      { "text": "Mir seine Anfrage schriftlich schicken lassen und sie ohne den Klang im Ohr lesen.", "wert": 1, "warum": "Ein guter Kniff gegen den Stil-Effekt. Ein fester Maßstab für beide wäre noch einfacher." }
+    ] },
+    { "id": "lesen-fc-036", "faehigkeit": "lesen.eigen", "stufe": 8, "frage": "Du bist heute gereizt und findest im Bus alle Leute unfreundlich. Was ist der klügste Gedanke?", "antworten": [
+      { "text": "„Heute sind wirklich alle schlecht gelaunt – das liegt bestimmt am Wetter.“", "wert": 0, "tendenz": "projektion", "warum": "Wenn alle gleich wirken, liegt es oft am eigenen Blick." },
+      { "text": "„Vielleicht lese ich gerade meine eigene Stimmung in andere hinein.“", "wert": 2, "warum": "Du bemerkst die eigene Brille, bevor du andere einordnest." },
+      { "text": "„Egal, ich rede heute einfach mit niemandem.“", "wert": 1, "warum": "Vermeidet Streit – gut. Erkannt hast du die eigene Brille dabei aber noch nicht." }
+    ] },
+    { "id": "lesen-fc-037", "faehigkeit": "lesen.gesicht", "stufe": 8, "frage": "Ein Gastschüler aus einem anderen Land, der bei deiner Schwester wohnt, schaut Erwachsenen beim Reden kaum in die Augen. Deine Schwester fragt: „Ist der unhöflich?“ Was antwortest du?", "antworten": [
+      { "text": "„Ja, das gehört sich einfach nicht.“", "wert": 0, "tendenz": "etikett", "warum": "Wie viel Blick höflich ist, unterscheidet sich zwischen Kulturen und Menschen." },
+      { "text": "„Bei ihm zu Hause gilt das sicher als Respekt, alle Leute dort machen das so.“", "wert": 0, "tendenz": "klischee", "warum": "Ein Klischee ersetzt die Frage an ihn. Es kann sein – muss aber nicht." },
+      { "text": "„Kann eine andere Gewohnheit sein oder Schüchternheit. Frag ihn doch, wie man es bei ihm hält.“", "wert": 2, "warum": "Du nennst Möglichkeiten und machst daraus eine Frage an den Menschen selbst." },
+      { "text": "„Lass ihn erst mal ankommen.“", "wert": 1, "warum": "Geduldig und freundlich. Eine offene Frage würde beiden schneller helfen." }
+    ] },
+    { "id": "lesen-fc-038", "faehigkeit": "lesen.beobachten", "stufe": 9, "frage": "Zwei neue Kolleginnen: Die eine sagt in Runden fast nichts, liefert aber genaue Ergebnisse. Die andere redet viel und begeistert. Dein Chef fragt, wer mehr Verantwortung übernehmen könnte. Was sagst du?", "antworten": [
+      { "text": "„Die Gesprächige – sie zeigt viel mehr Einsatz.“", "wert": 0, "tendenz": "einzelzeichen", "warum": "Redeanteil ist nicht Einsatz. Du liest Temperament als Leistung." },
+      { "text": "„Bei beiden die Ergebnisse ansehen – ruhig heißt nicht weniger engagiert.“", "wert": 2, "warum": "Du trennst Temperament von Leistung und schlägst einen gemeinsamen Maßstab vor." },
+      { "text": "„Die Ruhige – Stille Wasser sind tief.“", "wert": 0, "tendenz": "klischee", "warum": "Auch das ist ein Etikett, nur ein freundliches." },
+      { "text": "„Ich kenne beide noch zu wenig, um das zu sagen.“", "wert": 1, "warum": "Ehrlich. Mit einem Vorschlag, wie man es prüfen könnte, hilfst du mehr." }
+    ] },
+    { "id": "lesen-fc-039", "faehigkeit": "lesen.pruefen", "stufe": 8, "frage": "Ein Freund sagt: „Ich hab ein untrügliches Gespür. Der neue Freund deiner Schwester lügt, das sehe ich sofort.“ Was entgegnest du am ehesten?", "antworten": [
+      { "text": "„Wenn du dir so sicher bist, wird schon was dran sein.“", "wert": 0, "tendenz": "glaeubig", "warum": "Sicherheit sagt beim Lügen-Erkennen fast nichts darüber, ob man richtig liegt." },
+      { "text": "„Sicherheit sagt dabei wenig. Woran machst du es fest?“", "wert": 2, "warum": "Du nennst den Befund und fragst nach Beobachtungen statt nach Gefühl." },
+      { "text": "„So ein Unsinn, du kennst ihn doch gar nicht – woher willst du das bitte wissen?“", "wert": 1, "warum": "Inhaltlich berechtigt, aber schroff. Eine Frage nach seinen Beobachtungen bringt mehr." }
+    ] },
+    { "id": "lesen-fc-040", "faehigkeit": "lesen.grundlinie", "stufe": 9, "frage": "Du bist dir zu 95 von 100 sicher, dass dein Kollege dich seit dem Streit vor einer Woche meidet. Gleichzeitig weißt du: Er ist diese Woche viel beim Kunden. Was ist der beste nächste Schritt?", "antworten": [
+      { "text": "Ihm aus dem Weg gehen – er will es ja so, das merkt man seit dem Streit deutlich.", "wert": 0, "tendenz": "uebersicher", "warum": "Deine Sicherheit ist ein Gefühl. Die Lage – viel beim Kunden – erklärt manches davon anders." },
+      { "text": "Prüfen, ob er in Kundenwochen sonst auch so ist – und ihn dann offen ansprechen.", "wert": 2, "warum": "Du vergleichst mit seiner Grundlinie in ähnlichen Wochen und machst aus der Vermutung eine Frage." },
+      { "text": "Einer Kollegin erzählen, dass er dich meidet.", "wert": 0, "tendenz": "laestern", "warum": "Eine ungeprüfte Vermutung wird zur Geschichte über ihn." },
+      { "text": "Abwarten, bis er wieder mehr im Büro ist.", "wert": 1, "warum": "Fair, weil die Lage mitspielt. Ein kurzes Wort könnte die Unsicherheit aber früher klären." }
     ] }
   ],
   "selbstbild": [

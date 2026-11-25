@@ -1,0 +1,646 @@
+{
+  "eintraege": [
+    { "art": "stumm", "kopf": { "id": "mut-v-0091", "faehigkeit": "mut.buehne", "stufe": 5, "kanal": "koennen" },
+      "titel": "Der erste Satz – still geprobt",
+      "schritte": ["Stell dir den Raum vor, in dem du sprechen wirst: die Stühle, die Gesichter.", "Spür deine Füße auf dem Boden und atme einmal langsam und lang aus.", "Such dir in Gedanken eine freundliche Person aus und schau sie an.", "Sprich deinen ersten Satz innerlich, Wort für Wort, im echten Tempo – zur Sache, ohne Entschuldigung.", "Wiederhole das dreimal, jedes Mal mit einer anderen Person."],
+      "sekunden": 60,
+      "pruefliste": ["den Raum genau vorgestellt", "vor dem Satz ausgeatmet", "eine Person angeschaut", "erster Satz zur Sache, ohne Entschuldigung"] },
+    { "art": "stumm", "kopf": { "id": "mut-v-0092", "faehigkeit": "mut.buehne", "stufe": 4, "kanal": "koennen" },
+      "titel": "Den Einwand innerlich ankündigen",
+      "schritte": ["Denk an einen Punkt aus deiner nächsten Runde, den du anders siehst.", "Sag innerlich: „Ich sehe einen Punkt anders. Darf ich kurz?“", "Dann innerlich den Punkt mit einem Grund.", "Dann den Vorschlag oder die Frage.", "Beweg dabei die Lippen ohne Ton, als würdest du sprechen."],
+      "sekunden": 60,
+      "pruefliste": ["angekündigt", "Punkt mit Grund", "Vorschlag oder Frage", "ohne Entschuldigung davor"] },
+    { "art": "stumm", "kopf": { "id": "mut-v-0093", "faehigkeit": "mut.buehne", "stufe": 6, "kanal": "koennen" },
+      "titel": "Die ersten 30 Sekunden – mit Störung",
+      "schritte": ["Stell dir vor, du stehst vor zwanzig Leuten und beginnst deinen Beitrag.", "Sprich innerlich deinen ersten Satz.", "Mitten im zweiten Satz geht die Tür auf, jemand kommt zu spät.", "Spiel innerlich durch: Satz zu Ende, kurze Pause, ein Nicken zur Tür, dann weiter.", "Schreib danach auf, an welcher Stelle du innerlich schneller geworden bist."],
+      "sekunden": 90,
+      "pruefliste": ["ersten Satz innerlich gesprochen", "die Störung durchgespielt", "Satz zu Ende, dann Pause", "notiert, wo du schneller wurdest"] },
+    { "art": "buehne", "kopf": { "id": "mut-v-0094", "faehigkeit": "mut.buehne", "stufe": 4, "kanal": "koennen", "laut": true, "leise": "mut-v-0092" },
+      "auftrag": "Melde laut einen Einwand an, als säße die Runde schon vor dir: Ankündigung, Punkt mit Grund, Vorschlag.", "sekunden": 30, "publikum": "klein",
+      "stoerungen": ["Jemand seufzt hörbar.", "„Das haben wir doch schon besprochen.“"],
+      "pruefliste": ["angekündigt", "Punkt mit Grund", "Vorschlag am Ende", "bei der Störung nicht zurückgezogen"] },
+    { "art": "buehne", "kopf": { "id": "mut-v-0095", "faehigkeit": "mut.buehne", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "mut-v-0093" },
+      "auftrag": "Steh auf und sprich die ersten dreißig Sekunden eines Beitrags vor zwanzig Leuten – erster Satz frei, ohne Entschuldigung.", "sekunden": 30, "publikum": "gross",
+      "stoerungen": ["Die Tür geht auf, jemand kommt zu spät.", "Jemand flüstert mit dem Nachbarn.", "Ein Handy vibriert auf dem Tisch."],
+      "pruefliste": ["vor dem ersten Satz ausgeatmet", "erster Satz frei und zur Sache", "nach der Störung kurz Pause gemacht", "nicht schneller geworden"] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0096", "faehigkeit": "mut.buehne", "stufe": 3, "kanal": "wissen" },
+      "frage": "In der Besprechung kommt ein Punkt, den du anders siehst. Wann meldest du deinen Einwand am besten an?",
+      "antworten": [
+        { "text": "Gleich bei diesem Punkt, bevor entschieden wird.", "wert": 2, "warum": "Jetzt kann der Einwand noch etwas ändern – und du hast weniger Zeit, die Befürchtung wachsen zu lassen." },
+        { "text": "Am Ende unter „Verschiedenes“, wenn ohnehin noch Zeit ist und niemand mehr unter Druck steht.", "wert": 1, "warum": "Gesagt ist gesagt. Nur ist die Entscheidung dann oft schon gefallen." },
+        { "text": "Nach der Runde im Flur, wenn alles entschieden ist.", "wert": 0, "tendenz": "ausweichen", "warum": "Dann ist der Einwand nur noch Klage – und die Befürchtung bleibt ungeprüft." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0097", "faehigkeit": "mut.buehne", "stufe": 5, "kanal": "wissen" },
+      "frage": "Auf deinen Einwand antwortet jemand: „Das sehen wir anders.“ Was jetzt?",
+      "antworten": [
+        { "text": "Lauter werden und alle Gründe aufzählen, die dir einfallen, damit die anderen endlich verstehen, worum es dir geht.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Mehr Gründe machen dich nicht überzeugender, nur angreifbarer – und die Runde hört Druck statt Sache." },
+        { "text": "„Was genau seht ihr anders?“ – zuhören, dann entscheiden, ob du deinen Punkt noch einmal kurz sagst.", "wert": 2, "warum": "Du holst den Widerspruch herein, statt gegen ihn anzurennen. Dein Punkt bleibt im Raum." },
+        { "text": "Den Punkt nach der Runde schriftlich nachreichen.", "wert": 1, "warum": "Ein sachlicher Weg. In der Runde selbst hättest du gleich erfahren, woran es hakt." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0098", "faehigkeit": "mut.buehne", "stufe": 6, "kanal": "wissen" },
+      "frage": "Im Verein sollst du spontan das Ergebnis eurer Arbeitsgruppe vorstellen. Du hast nichts vorbereitet. Wie fängst du an?",
+      "antworten": [
+        { "text": "„Ich bin jetzt völlig unvorbereitet, also seht es mir nach, wenn es chaotisch wird.“", "wert": 0, "tendenz": "kleinreden", "warum": "Die Entschuldigung macht dich kleiner, bevor du etwas gesagt hast – und lenkt den Blick auf deine Unsicherheit." },
+        { "text": "Um zwei Minuten bitten, um dir Stichworte zu machen.", "wert": 1, "warum": "Ehrlich und oft möglich. Meist reicht aber schon der erste Satz zur Sache." },
+        { "text": "Aufstehen, ausatmen: „Drei Ergebnisse. Das wichtigste zuerst: …“", "wert": 2, "warum": "Eine kleine Landkarte und der wichtigste Punkt – so trägt dich das Thema durch den Anfang." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0099", "faehigkeit": "mut.buehne", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Die Hausversammlung will die Gartenarbeit an eine Firma vergeben. Mach aus deinem zaghaften Satz einen Einwand in drei Teilen.",
+      "vorlage": "„Ich weiß nicht, ob das jetzt passt, aber vielleicht könnte man eventuell noch mal über die Kosten nachdenken?“",
+      "kriterien": ["kündigt den Einwand an", "nennt den Punkt mit Grund", "endet mit Vorschlag oder Frage", "ohne Weichmacher"],
+      "muster": ["„Ich sehe einen Punkt anders. Die Firma kostet uns jeden Monat Geld, das wir für die Fenster brauchen. Können wir erst zwei Angebote vergleichen?“", "„Darf ich widersprechen? Bisher haben wir den Garten selbst gepflegt, und es lief gut. Mein Vorschlag: ein Plan mit festen Wochen.“"] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0100", "faehigkeit": "mut.buehne", "stufe": 6, "kanal": "koennen" },
+      "auftrag": "Mach aus dem Anfang deines Beitrags einen ersten Satz zur Sache.",
+      "vorlage": "„Ja, also, hallo erst mal, ich soll ja jetzt was zu den Parkplätzen sagen, und ich hoffe, das wird nicht zu langweilig …“",
+      "kriterien": ["beginnt mit der Sache", "keine Entschuldigung", "kurz genug für einen Atemzug"],
+      "muster": ["„Ab Mai haben wir zehn Parkplätze weniger. Ich sage euch, wie wir das lösen.“", "„Die Parkplätze werden knapp – drei Vorschläge, zwei Minuten.“"] },
+    { "art": "szene", "kopf": { "id": "mut-v-0101", "faehigkeit": "mut.buehne", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Tarek meldet sich in der Runde: „Ich bin dagegen.“ Dann schweigt er. Alle schauen ihn an, keiner weiß, was er meint.",
+      "frage": "Was fehlt seinem Einwand?",
+      "antworten": [
+        { "text": "Der Grund und ein Vorschlag.", "wert": 2, "warum": "Mutig ist er – aber ohne Grund und Vorschlag kann die Runde nichts damit anfangen." },
+        { "text": "Eine Ankündigung wie „Ich sehe das anders“.", "wert": 1, "warum": "Die hätte geholfen. Wichtiger ist aber, warum er dagegen ist." },
+        { "text": "Nichts – kurz und knapp ist bei einem Einwand immer am besten, dann kann ihn auch keiner zerreden.", "wert": 0, "warum": "Kurz ist gut, aber nicht so kurz, dass die anderen raten müssen." }
+      ] },
+    { "art": "szene", "kopf": { "id": "mut-v-0102", "faehigkeit": "mut.buehne", "stufe": 5, "kanal": "wissen" },
+      "beschreibung": "Miriam soll in der Runde kurz über das Kundenprojekt berichten. Sie beginnt mit drei Minuten Vorgeschichte, bevor sie zum Stand kommt. Hinterher sagt sie: „Ich wollte erst mal warm werden.“",
+      "frage": "Was würdest du ihr fürs nächste Mal raten?",
+      "antworten": [
+        { "text": "„Starte mit dem Stand – die Vorgeschichte kann danach kommen, wenn jemand fragt.“", "wert": 2, "warum": "Der erste Satz zur Sache gibt ihr und der Runde Halt. Warm wird man dann im Thema." },
+        { "text": "„Lies den Anfang ab, dann musst du nicht warm werden.“", "wert": 0, "tendenz": "kruecke", "warum": "Das tauscht den Umweg gegen eine Krücke." },
+        { "text": "„Kürz die Vorgeschichte auf eine Minute, dann ist es in Ordnung.“", "wert": 1, "warum": "Besser – aber der schwerste Moment bleibt aufgeschoben." }
+      ] },
+    { "art": "szene", "kopf": { "id": "mut-v-0103", "faehigkeit": "mut.buehne", "stufe": 6, "kanal": "wissen" },
+      "beschreibung": "In der Vereinsversammlung hast du einen Einwand gegen die geplante Vereinsfahrt angemeldet. Die Vorsitzende sagt: „Darüber können wir später reden.“",
+      "frage": "Was tust du?",
+      "antworten": [
+        { "text": "Nicken und den Punkt für „Verschiedenes“ notieren.", "wert": 1, "warum": "In Ordnung, wenn später wirklich noch entschieden wird. Sonst wird aus „später“ leicht „nie“." },
+        { "text": "„Gern – aber vor der Abstimmung, bitte. Sonst ist es entschieden.“", "wert": 2, "warum": "Freundlich, klar und mit Grund: Du hältst deinen Platz, ohne zu drängeln." },
+        { "text": "Den Einwand fallen lassen, weil es offenbar gerade nicht passt und du die Stimmung nicht stören willst.", "wert": 0, "tendenz": "nachgeben", "warum": "Ein „später“ ist kein Nein. Wer jetzt aufgibt, verschenkt den Mut von eben." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0104", "faehigkeit": "mut.buehne", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Gehört das zu einem guten Einwand – oder lässt du es weg?",
+      "faecher": ["gehört dazu", "lässt du weg"],
+      "karten": [
+        { "text": "„Ich sehe einen Punkt anders.“", "fach": 0 },
+        { "text": "„Vielleicht ist das jetzt eine blöde Idee, aber …“", "fach": 1 },
+        { "text": "ein Grund, warum du es anders siehst", "fach": 0 },
+        { "text": "„Ihr macht das sowieso immer falsch.“", "fach": 1 },
+        { "text": "ein Vorschlag oder eine Frage am Ende", "fach": 0 },
+        { "text": "„Ist nicht so wichtig, nur so ein Gedanke.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0105", "faehigkeit": "mut.buehne", "stufe": 5, "kanal": "wissen" },
+      "auftrag": "Erster Satz vor der Gruppe: zur Sache oder Umweg?",
+      "faecher": ["zur Sache", "Umweg"],
+      "karten": [
+        { "text": "„Unser Sommerfest braucht noch zwölf Helfer.“", "fach": 0 },
+        { "text": "„Ich weiß gar nicht, wo ich anfangen soll …“", "fach": 1 },
+        { "text": "„Zwei Neuigkeiten zum Umbau, dann eine Bitte.“", "fach": 0 },
+        { "text": "„Bevor ich anfange: Ich bin heute etwas durch den Wind.“", "fach": 1 },
+        { "text": "„Der Bus fährt ab Montag eine Viertelstunde früher.“", "fach": 0 },
+        { "text": "„Ihr wisst ja, ich bin nicht so der Redner.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0106", "faehigkeit": "mut.buehne", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Sachlicher Einwand oder Angriff auf die Person?",
+      "faecher": ["sachlicher Einwand", "Angriff auf die Person"],
+      "karten": [
+        { "text": "„Der Termin ist zu knapp für die Prüfung.“", "fach": 0 },
+        { "text": "„Das ist typisch für dich, immer alles auf den letzten Drücker.“", "fach": 1 },
+        { "text": "„Mir fehlt in dem Plan die Urlaubszeit.“", "fach": 0 },
+        { "text": "„Hast du dir das überhaupt durchgelesen?“", "fach": 1 },
+        { "text": "„Ich sehe das Risiko beim Budget anders.“", "fach": 0 },
+        { "text": "„Wer kommt denn auf so eine Idee?“", "fach": 1 }
+      ] },
+    { "art": "stumm", "kopf": { "id": "mut-v-0107", "faehigkeit": "mut.sicherheit", "stufe": 4, "kanal": "koennen" },
+      "titel": "Das Nein ohne Polster",
+      "schritte": ["Denk an eine Bitte, die du ablehnen willst.", "Sag innerlich dein Nein: „Danke, dass du fragst. Das mache ich nicht.“", "Bemerk den Drang, noch einen Grund anzuhängen.", "Lass ihn weg und atme einmal aus.", "Stell dir vor, der andere hakt nach – und sag innerlich dasselbe Nein noch einmal."],
+      "sekunden": 60,
+      "pruefliste": ["das Nein innerlich gesagt", "den Drang zum Rechtfertigen bemerkt", "keinen Grund angehängt", "beim Nachhaken dasselbe Nein"] },
+    { "art": "stumm", "kopf": { "id": "mut-v-0108", "faehigkeit": "mut.sicherheit", "stufe": 5, "kanal": "koennen" },
+      "titel": "Den Zettel im Kopf weglegen",
+      "schritte": ["Stell dir vor, du stehst vor der Runde und hältst deinen Zettel.", "Leg ihn in Gedanken auf den Tisch – nur die Karte mit drei Stichworten bleibt.", "Atme aus und sprich innerlich den ersten Satz frei.", "Schau in Gedanken nur dann auf die Karte, wenn du den nächsten Punkt suchst.", "Notier danach, an welcher Stelle du am liebsten zum Zettel gegriffen hättest."],
+      "sekunden": 90,
+      "pruefliste": ["Zettel in Gedanken weggelegt", "ersten Satz frei gesprochen", "nur bei Bedarf auf die Karte geschaut", "die heikle Stelle notiert"] },
+    { "art": "stumm", "kopf": { "id": "mut-v-0109", "faehigkeit": "mut.sicherheit", "stufe": 6, "kanal": "koennen" },
+      "titel": "Ohne Entschuldigung anfangen",
+      "schritte": ["Sag dir innerlich den Satz, mit dem du sonst einen Beitrag beginnst – etwa „Ich mach's kurz, sorry“.", "Streich ihn in Gedanken durch.", "Sprich innerlich stattdessen den ersten Satz zur Sache.", "Stell dir vor, wie die Runde reagiert: Niemand wartet auf eine Entschuldigung.", "Wiederhole es mit dem Satz, mit dem du sonst endest – etwa „Das war's auch schon“."],
+      "sekunden": 60,
+      "pruefliste": ["den gewohnten Entschuldigungssatz erkannt", "ihn durch einen Satz zur Sache ersetzt", "auch den Schlusssatz geprüft"] },
+    { "art": "buehne", "kopf": { "id": "mut-v-0110", "faehigkeit": "mut.sicherheit", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "mut-v-0108" },
+      "auftrag": "Sprich die erste Minute eines Beitrags, ohne einen Zettel in der Hand. Die Karte mit Stichworten liegt auf dem Tisch – du schaust nur hin, wenn du den nächsten Punkt suchst.", "sekunden": 60, "publikum": "klein",
+      "stoerungen": ["Jemand fragt: „Kannst du das noch mal sagen?“", "Ein Stift fällt zu Boden."],
+      "pruefliste": ["kein Zettel in der Hand", "nur bei Bedarf auf die Karte geschaut", "nach der Frage frei weitergesprochen"] },
+    { "art": "buehne", "kopf": { "id": "mut-v-0111", "faehigkeit": "mut.sicherheit", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "mut-v-0109" },
+      "auftrag": "Halte einen kurzen Beitrag für eine Videorunde – ohne Entschuldigung am Anfang und ohne „Das war's auch schon, sorry“ am Ende.", "sekunden": 60, "publikum": "video",
+      "stoerungen": ["Dein Bild friert kurz ein.", "Jemand schaltet sein Mikrofon an und hustet."],
+      "pruefliste": ["ohne Entschuldigung begonnen", "nach der Störung ruhig weitergesprochen", "mit einem klaren Schlusssatz geendet"] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0112", "faehigkeit": "mut.sicherheit", "stufe": 4, "kanal": "wissen" },
+      "frage": "Woran erkennst du, dass Rechtfertigen gerade eine Krücke ist?",
+      "antworten": [
+        { "text": "Du suchst schon den nächsten Grund, damit der andere bloß nicht enttäuscht ist.", "wert": 2, "warum": "Dann sollen die Gründe ein Gefühl beim anderen verhindern – genau das macht sie zur Krücke." },
+        { "text": "Du nennst überhaupt einen Grund für dein Nein.", "wert": 0, "warum": "Ein Grund ist erlaubt und oft freundlich. Zur Krücke wird erst die Kette, die Ärger verhindern soll." },
+        { "text": "Du fühlst dich hinterher wohler, wenn du dich gut erklärt hast, und schläfst ruhiger.", "wert": 1, "warum": "Ein Hinweis – Erleichterung nach dem Erklären kann zeigen, dass es um Absicherung ging. Sicher erkennst du es am Drang, immer mehr Gründe zu liefern." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0113", "faehigkeit": "mut.sicherheit", "stufe": 5, "kanal": "wissen" },
+      "frage": "Lena nimmt sich vor, bei der Vereinsversammlung nur dann etwas zu sagen, wenn ihre Freundin neben ihr sitzt. Was ist das?",
+      "antworten": [
+        { "text": "Eine Krücke: Gelingt es, schreibt Lena es der Freundin zu.", "wert": 2, "warum": "Der sichere Hafen schützt im Moment – und verhindert die Erfahrung „Ich kann das allein“." },
+        { "text": "Eine gute Vorbereitung, weil ihr die Freundin im Notfall helfen kann.", "wert": 0, "tendenz": "kruecke", "warum": "Helfen ist schön, aber die Bedingung „nur mit ihr“ macht aus der Hilfe eine Krücke." },
+        { "text": "Ein Zwischenschritt, der für den Anfang in Ordnung ist, wenn sie die Freundin später weglässt.", "wert": 1, "warum": "Als bewusster Zwischenschritt kann es passen – solange er nicht zur Dauerbedingung wird." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0114", "faehigkeit": "mut.sicherheit", "stufe": 6, "kanal": "wissen" },
+      "frage": "Du sagst Nein und hängst an: „Ich hoffe, du bist mir jetzt nicht böse.“ Was steckt dahinter?",
+      "antworten": [
+        { "text": "Eine Absicherung: Du willst den Ärger des anderen verhindern, bevor er da ist.", "wert": 2, "warum": "Der Satz holt dir Entlastung – und lenkt den Blick darauf, ob er böse sein darf. Ohne ihn erlebst du, dass ein Nein auch so stehen kann." },
+        { "text": "Reine Höflichkeit, die nie schadet.", "wert": 0, "warum": "Höflich klingt es – aber es macht das Nein zur Frage, ob es erlaubt ist." },
+        { "text": "Manchmal passend, etwa bei einem sehr nahen Menschen, der gerade verletzlich ist und auf dich zählt.", "wert": 1, "warum": "In seltenen Lagen kann so ein Satz passen. Als Gewohnheit nach jedem Nein ist er eine Krücke." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0115", "faehigkeit": "mut.sicherheit", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Nimm dem Nein die Polster weg. Ein Grund darf bleiben.",
+      "vorlage": "„Also, ich würde wirklich gern, aber diese Woche ist echt voll, und mein Rücken macht auch Probleme, und ich hab's meiner Mutter versprochen, tut mir so leid …“",
+      "kriterien": ["klares Nein", "höchstens ein Grund", "keine Entschuldigungs-Kette"],
+      "muster": ["„Diese Woche schaffe ich es nicht.“", "„Danke, dass du fragst. Diese Woche mache ich das nicht – ich habe meiner Mutter etwas versprochen.“"] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0116", "faehigkeit": "mut.sicherheit", "stufe": 6, "kanal": "koennen" },
+      "auftrag": "Mach aus dem Anfang deines Berichts einen Start ohne Krücke.",
+      "vorlage": "„Bevor ich anfange: Ich bin nicht so gut im Präsentieren, und ich lese das jetzt einfach ab, damit ich nichts vergesse, okay?“",
+      "kriterien": ["ohne Entschuldigung", "ohne Ankündigung des Ablesens", "erster Satz zur Sache"],
+      "muster": ["„Der Umbau ist zur Hälfte fertig. Drei Punkte dazu.“", "„Gute Nachricht zuerst: Wir liegen im Zeitplan.“"] },
+    { "art": "dialog", "kopf": { "id": "mut-v-0117", "faehigkeit": "mut.sicherheit", "stufe": 5, "kanal": "koennen" },
+      "gespraech": { "titel": "Warum denn nicht?", "figur": "Frau Sommer", "lage": "Frau Sommer fragt, ob du während ihres Urlaubs drei Wochen lang ihre Pflanzen gießt. Du willst das nicht.", "start": "k1", "knoten": [
+        { "id": "k1", "sagt": "Frau Sommer: „Sie gießen doch bestimmt meine Pflanzen, wenn ich weg bin? Drei Wochen nur.“", "wahl": [
+          { "text": "„Schön, dass Sie wegfahren. Drei Wochen Pflanzen gieße ich nicht.“", "wert": 2, "weiter": "k2", "rueck": "Gewürdigt, Nein – ohne Polster." },
+          { "text": "„Oh, ähm, drei Wochen, da bin ich selbst viel unterwegs, und ich hab ja auch keinen grünen Daumen, und …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k1b", "rueck": "Lauter Gründe – jeder lädt zum Widerlegen ein." },
+          { "text": "„Das passt mir leider nicht.“", "wert": 1, "weiter": "k2", "rueck": "Klar. Ein Wort zu ihrer Reise hätte es wärmer gemacht." }
+        ] },
+        { "id": "k1b", "sagt": "Frau Sommer: „Ach, grüner Daumen braucht's nicht. Und unterwegs sind Sie doch nicht jeden Tag.“", "wahl": [
+          { "text": "„Stimmt. Trotzdem: Ich gieße die Pflanzen nicht.“", "wert": 2, "weiter": "k2", "rueck": "Die Gründe fallen gelassen, das Nein behalten." },
+          { "text": "„Na ja … dann vielleicht doch, wenn es nicht so viele sind.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Die widerlegten Gründe haben das Nein mitgenommen." }
+        ] },
+        { "id": "k2", "sagt": "Frau Sommer: „Warum denn nicht?“", "wahl": [
+          { "text": "„Es passt mir nicht. Dabei bleibt es.“", "wert": 2, "weiter": "ende1", "rueck": "Freundlich und fest – ohne neue Begründung." },
+          { "text": "„Weil ich selbst so viel zu tun habe und nicht weiß, ob ich jeden Tag daran denke, und dann gehen sie ein …“", "wert": 1, "tendenz": "rechtfertigen", "weiter": "ende1", "rueck": "Das Nein hält. Die Gründe brauchst du nicht – „Es passt mir nicht“ genügt." }
+        ] },
+        { "id": "ende1", "sagt": "Frau Sommer: „Na gut. Dann frag ich die Familie im Erdgeschoss.“", "ende": "Das Nein hat gehalten. Je weniger Polster, desto weniger muss es aushalten – „Es passt mir nicht“ genügt." },
+        { "id": "ende2", "sagt": "Drei Wochen lang klingelst du jeden Abend bei Frau Sommer.", "ende": "Die Gründe sollten das Nein schützen – und haben es gekippt. Nächstes Mal: würdigen, Nein, beim Nachhaken dasselbe Nein." }
+      ], "prinzipien": ["Nein ohne Polster", "auf „Warum?“ muss keine Begründung folgen", "dasselbe Nein beim Nachhaken"] } },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0118", "faehigkeit": "mut.sicherheit", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Beim Nein: Werkzeug oder Krücke?",
+      "faecher": ["Werkzeug", "Krücke"],
+      "karten": [
+        { "text": "um Bedenkzeit bitten, wenn du wirklich noch abwägst", "fach": 0 },
+        { "text": "eine Ausrede erfinden, die man nicht widerlegen kann", "fach": 1 },
+        { "text": "das Nein vorher einmal halblaut üben", "fach": 0 },
+        { "text": "nur per Nachricht absagen, damit du keine Reaktion siehst", "fach": 1 },
+        { "text": "ein ehrliches Angebot machen, wenn du es meinst", "fach": 0 },
+        { "text": "nach dem Nein dreimal fragen, ob alles in Ordnung ist", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0119", "faehigkeit": "mut.sicherheit", "stufe": 5, "kanal": "wissen" },
+      "auftrag": "Beim Vortrag: Werkzeug oder Krücke?",
+      "faecher": ["Werkzeug", "Krücke"],
+      "karten": [
+        { "text": "Folien als Gedächtnisstütze mit wenigen Wörtern", "fach": 0 },
+        { "text": "jede Folie Wort für Wort vorlesen", "fach": 1 },
+        { "text": "ein Glas Wasser für den trockenen Mund", "fach": 0 },
+        { "text": "die ganze Zeit hinter dem Rednerpult bleiben, damit niemand die Knie sieht", "fach": 1 },
+        { "text": "eine Uhr im Blick, um die Zeit zu halten", "fach": 0 },
+        { "text": "Fragen grundsätzlich auf später verschieben, damit nichts Unerwartetes kommt", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0120", "faehigkeit": "mut.sicherheit", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Nach einem Nein, das du gesagt hast: bringt dich das weiter oder sichert es nur ab?",
+      "faecher": ["bringt weiter", "sichert nur ab"],
+      "karten": [
+        { "text": "festhalten, wie der andere wirklich reagiert hat", "fach": 0 },
+        { "text": "eine lange Nachricht hinterherschicken, warum es nicht ging", "fach": 1 },
+        { "text": "das Nein in die Beweisliste schreiben", "fach": 0 },
+        { "text": "dem anderen als Ausgleich ungefragt einen Gefallen tun", "fach": 1 },
+        { "text": "dich fragen: Was hatte ich befürchtet?", "fach": 0 },
+        { "text": "Dritte fragen, ob der andere jetzt sauer auf dich ist", "fach": 1 }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0121", "faehigkeit": "mut.nein", "stufe": 3, "kanal": "wissen" },
+      "frage": "Miriam fragt um halb fünf: „Kannst du noch kurz über meinen Bericht lesen?“ Heute schaffst du es nicht mehr, morgen früh schon. Welche Antwort passt am besten?",
+      "antworten": [
+        { "text": "„Heute nicht mehr. Morgen früh zehn Minuten – passt das?“", "wert": 2, "warum": "Ein klares Teil-Ja: Nein zu heute, ein ehrliches Angebot für morgen." },
+        { "text": "„Klar, gib her.“ – und bis sieben bleiben.", "wert": 0, "tendenz": "nachgeben", "warum": "Ein Reflex-Ja, das dich den Abend kostet." },
+        { "text": "„Heute wird's echt schwierig, ich hab noch so viel, mal schauen, ob ich es irgendwie dazwischenschiebe …“", "wert": 1, "warum": "Ehrlich gemeint, aber unklar – Miriam weiß nicht, ob sie mit dir rechnen kann." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0122", "faehigkeit": "mut.nein", "stufe": 5, "kanal": "wissen" },
+      "frage": "Du hast Sven abgesagt, am Samstag mit ihm zum Baumarkt zu fahren. Er fragt: „Warum denn nicht?“ Was antwortest du?",
+      "antworten": [
+        { "text": "„Weil ich Samstag eigentlich ausschlafen wollte und dann noch Wäsche und vielleicht kommt meine Schwester …“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Jeder Grund wird zur Verhandlungsmasse: „Wäsche kannst du doch Sonntag machen.“" },
+        { "text": "„Ich will den Samstag für mich haben.“", "wert": 2, "warum": "Ein ehrlicher Grund, kurz – und keiner, über den man verhandeln kann." },
+        { "text": "„Darum.“", "wert": 1, "warum": "Fest ist es. Etwas freundlicher wäre ein kurzer ehrlicher Satz." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0123", "faehigkeit": "mut.nein", "stufe": 6, "kanal": "wissen" },
+      "frage": "Nach deinem Nein sagt Tarek: „Ich hab dir doch auch beim Umzug geholfen.“ Was hält dein Nein am besten?",
+      "antworten": [
+        { "text": "„Das stimmt, und das weiß ich zu schätzen. Diesmal geht es trotzdem nicht.“", "wert": 2, "warum": "Du würdigst, was er getan hat, und hältst das Nein – der Schuld-Hebel greift nicht." },
+        { "text": "„Das ist jetzt aber unfair. Wir rechnen doch nicht auf, wer wem wann geholfen hat, oder?“", "wert": 1, "warum": "Du benennst den Hebel – das kann helfen. Freundlicher und fester ist: würdigen und Nein wiederholen." },
+        { "text": "„Stimmt … na gut, dann mache ich es.“", "wert": 0, "tendenz": "nachgeben", "warum": "Ein Gefallen von damals ist keine Schuld, die heute fällig wird." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0124", "faehigkeit": "mut.nein", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Der Sportverein bittet dich, für das Turnier drei Kuchen zu backen. Einen schaffst du, drei nicht. Sag es in drei Teilen.",
+      "vorlage": "„Puh, drei … ich weiß nicht, ich versuch's mal, aber versprechen kann ich nichts …“",
+      "kriterien": ["würdigt die Bitte", "klares Nein zu drei", "ein ehrliches Angebot"],
+      "muster": ["„Schön, dass das Turnier steht. Drei Kuchen schaffe ich nicht – einen backe ich gern.“", "„Danke, dass ihr an mich denkt. Drei sind zu viel. Einen Apfelkuchen bringe ich mit.“"] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0125", "faehigkeit": "mut.nein", "stufe": 5, "kanal": "koennen" },
+      "auftrag": "Zum dritten Mal in Folge sollst du das Protokoll schreiben. Sag Nein und mach einen fairen Vorschlag.",
+      "vorlage": "„Na ja, eigentlich hab ich es ja die letzten zweimal schon gemacht, aber wenn sonst keiner will, dann …“",
+      "kriterien": ["klares Nein", "kein „aber wenn sonst keiner“", "ein Vorschlag für die Runde"],
+      "muster": ["„Diesmal schreibe ich nicht. Wollen wir eine feste Reihenfolge machen?“", "„Ich hatte es die letzten zwei Male. Heute ist jemand anderes dran – ich schlage vor, wir wechseln reihum.“"] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0126", "faehigkeit": "mut.nein", "stufe": 6, "kanal": "koennen" },
+      "auftrag": "Jule hakt nach deinem Nein nach: „Komm, nur dieses eine Mal!“ Antworte mit demselben Nein – ohne neuen Grund.",
+      "vorlage": "„Ach Mensch, also gut, nein, warte, eigentlich wollte ich ja … ich weiß nicht …“",
+      "kriterien": ["würdigt ihren Wunsch", "dasselbe Nein noch einmal", "kein neuer Grund", "freundlicher Ton"],
+      "muster": ["„Ich merke, dass es dir wichtig ist. Und trotzdem: Diesmal nicht.“", "„Auch nur einmal nicht, Jule. Aber frag mich gern beim nächsten Kurs wieder.“"] },
+    { "art": "dialog", "kopf": { "id": "mut-v-0127", "faehigkeit": "mut.nein", "stufe": 5, "kanal": "koennen" },
+      "gespraech": { "titel": "Die Abschlussfeier", "figur": "Jule Marek", "lage": "Der Kochkurs endet bald. Jule fragt, ob du die Abschlussfeier organisierst. Du willst das nicht.", "start": "k1", "knoten": [
+        { "id": "k1", "sagt": "Jule: „Du kannst doch so gut organisieren. Machst du die Abschlussfeier?“", "wahl": [
+          { "text": "„Danke für das Kompliment. Die Feier organisiere ich nicht. Einen Salat bringe ich gern mit.“", "wert": 2, "weiter": "k2", "rueck": "Würdigen – Nein – Angebot. Klar und freundlich." },
+          { "text": "„Hm, ich weiß nicht so recht …“", "wert": 1, "weiter": "k1b", "rueck": "Ein Zögern, das Jule als „vielleicht“ hört." },
+          { "text": "„Ach, ich? Na ja, wenn es sonst keiner macht, dann muss ich wohl …“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ein Ja aus Pflichtgefühl, das du nicht wolltest." }
+        ] },
+        { "id": "k1b", "sagt": "Jule: „Also ja? Super!“", "wahl": [
+          { "text": "„Nein, warte. Ich organisiere sie nicht. Einen Salat bringe ich gern.“", "wert": 2, "weiter": "k2", "rueck": "Das Zögern klar gemacht – gut gefangen." },
+          { "text": "„Äh … okay.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Das Zögern wurde zum Ja." }
+        ] },
+        { "id": "k2", "sagt": "Jule: „Schade. Du wärst echt die Beste dafür.“", "wahl": [
+          { "text": "„Danke. Trotzdem nicht. Der Salat steht.“", "wert": 2, "weiter": "ende1", "rueck": "Das Lob angenommen, das Nein gehalten." },
+          { "text": "„Ich bin wirklich gerade total eingespannt, sonst würde ich ja sofort, das weißt du …“", "wert": 1, "tendenz": "rechtfertigen", "weiter": "ende1", "rueck": "Das Nein hält. Die Erklärung brauchst du nicht." }
+        ] },
+        { "id": "ende1", "sagt": "Jule: „Gut, dann frag ich die anderen. Dein Salat ist gebucht!“", "ende": "Ein Lob ist kein Grund für ein Ja. Würdigen, Nein, Angebot – und Jule hat ihre Lösung gefunden." },
+        { "id": "ende2", "sagt": "Zwei Wochen lang telefonierst du Leuten hinterher.", "ende": "Das Kompliment hat das Nein überholt. Nächstes Mal: Danke für das Lob – und trotzdem Nein." }
+      ], "prinzipien": ["würdigen – Nein – Angebot", "ein Lob ist kein Grund für ein Ja", "ein Zögern sofort klarstellen"] } },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0128", "faehigkeit": "mut.nein", "stufe": 4, "kanal": "wissen" },
+      "auftrag": "Ein klares Nein – oder ein Ja mit Hintertür?",
+      "faecher": ["klares Nein", "Ja mit Hintertür"],
+      "karten": [
+        { "text": "„Das mache ich nicht.“", "fach": 0 },
+        { "text": "„Ich schau mal, was sich machen lässt.“", "fach": 1 },
+        { "text": "„Diesmal ohne mich.“", "fach": 0 },
+        { "text": "„Wenn's gar nicht anders geht, frag noch mal.“", "fach": 1 },
+        { "text": "„Nein, danke.“", "fach": 0 },
+        { "text": "„Eher nicht, aber mal sehen.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0129", "faehigkeit": "mut.nein", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Jemand sagt nach deinem Nein: „Ich dachte, auf dich ist Verlass.“ Hält die Antwort dein Nein – oder kippt sie es?",
+      "faecher": ["hält", "kippt"],
+      "karten": [
+        { "text": "„Ist es auch. Diesmal trotzdem nicht.“", "fach": 0 },
+        { "text": "„Na gut, wenn du es so siehst …“", "fach": 1 },
+        { "text": "„Das verstehe ich. Mein Nein bleibt.“", "fach": 0 },
+        { "text": "„Okay, dann mach ich's halt doch.“", "fach": 1 },
+        { "text": "„Darauf kannst du zählen – bei anderem.“", "fach": 0 },
+        { "text": "„Jetzt fühl ich mich schlecht. Was genau brauchst du denn?“", "fach": 1 }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0130", "faehigkeit": "mut.vorhersage", "stufe": 4, "kanal": "wissen" },
+      "frage": "Vor deinem Einwand in der Hausversammlung schreibst du eine Befürchtung auf. Welche kannst du hinterher am besten prüfen?",
+      "antworten": [
+        { "text": "„Der Nachbar aus dem Erdgeschoss sagt laut ‚Unsinn‘. Wahrscheinlichkeit 40.“", "wert": 2, "warum": "Man kann es hören oder nicht – hinterher weißt du es." },
+        { "text": "„Die Leute im Haus mögen mich danach weniger, und das merke ich dann irgendwann im Treppenhaus.“", "wert": 0, "warum": "Weder sichtbar noch mit einem Zeitpunkt – so lässt sich alles als Bestätigung deuten." },
+        { "text": "„Jemand widerspricht mir.“", "wert": 1, "warum": "Prüfbar ist es. Aber Widerspruch ist kein Unglück – die eigentliche Befürchtung steckt dahinter." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0131", "faehigkeit": "mut.vorhersage", "stufe": 6, "kanal": "wissen" },
+      "frage": "Du hast Dr. Albers um einen Tag Homeoffice gebeten. Er sagte sofort Ja. Jetzt denkst du: „Er wollte nur nett sein, eigentlich findet er es blöd.“ Was hilft?",
+      "antworten": [
+        { "text": "Abgleichen: Befürchtet war ein Nein mit Stirnrunzeln, passiert ist ein schnelles Ja. Mehr weißt du nicht – und brauchst du nicht.", "wert": 2, "warum": "Der Abgleich hält dich bei dem, was geschehen ist. Die neue Befürchtung ist eine Vermutung ohne Beleg." },
+        { "text": "Ihn am nächsten Tag fragen, ob das Ja wirklich ernst gemeint war.", "wert": 1, "warum": "Nachfragen ist ehrlich. Hier kann es aber nach Absicherung klingen – sein Ja war klar." },
+        { "text": "Lieber doch ins Büro kommen, um sicherzugehen.", "wert": 0, "tendenz": "absichern", "warum": "So verhinderst du die Erfahrung, dass ein Ja ein Ja ist." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0132", "faehigkeit": "mut.vorhersage", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Du willst deine Nachbarin bitten, ein Paket anzunehmen. Mach aus der vagen Befürchtung eine prüfbare – mit Wahrscheinlichkeit.",
+      "vorlage": "„Die findet das bestimmt aufdringlich.“",
+      "kriterien": ["beschreibt, was man sehen oder hören würde", "nennt eine Wahrscheinlichkeit", "lässt sich hinterher mit Ja oder Nein beantworten"],
+      "muster": ["„Sie seufzt und sagt: ‚Schon wieder?‘ Wahrscheinlichkeit: 30.“", "„Sie sagt Nein und schließt schnell die Tür. Wahrscheinlichkeit: 25.“"] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0133", "faehigkeit": "mut.vorhersage", "stufe": 6, "kanal": "koennen" },
+      "auftrag": "Nach deinem Einwand in der Runde denkst du: „Das war bestimmt total daneben.“ Mach daraus einen Abgleich: befürchtet – passiert.",
+      "vorlage": "„Das war bestimmt total daneben.“",
+      "kriterien": ["nennt, was du befürchtet hattest", "nennt, was beobachtbar passiert ist", "trennt Beobachtung von Deutung"],
+      "muster": ["„Befürchtet: Alle verdrehen die Augen. Passiert: Zwei haben genickt, einer hat nachgefragt.“", "„Befürchtet: Dr. Albers wird gereizt. Passiert: Er hat gesagt, wir schauen es uns an.“"] },
+    { "art": "szene", "kopf": { "id": "mut-v-0134", "faehigkeit": "mut.vorhersage", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Jonas will Dr. Albers um einen ruhigeren Arbeitsplatz bitten. Er sagt dir: „Bestimmt hält er mich dann für empfindlich.“",
+      "frage": "Was ist dieser Satz?",
+      "antworten": [
+        { "text": "Eine Vorhersage, die Jonas prüfen kann, indem er fragt.", "wert": 2, "warum": "Er weiß es nicht – er vermutet. Nur die Bitte selbst zeigt, wie Dr. Albers reagiert." },
+        { "text": "Eine realistische Einschätzung – Chefs mögen solche Bitten eben nicht, das kennt man doch aus Erfahrung.", "wert": 0, "tendenz": "katastrophe", "warum": "Eine Verallgemeinerung ohne Beleg. Bittende unterschätzen oft, wie häufig andere Ja sagen." },
+        { "text": "Ein Zeichen, dass er die Bitte besser schriftlich stellt.", "wert": 1, "warum": "Schriftlich geht auch. Die Befürchtung bleibt aber ungeprüft." }
+      ] },
+    { "art": "szene", "kopf": { "id": "mut-v-0135", "faehigkeit": "mut.vorhersage", "stufe": 5, "kanal": "wissen" },
+      "beschreibung": "Lena hatte befürchtet: „Alle stöhnen, wenn ich widerspreche.“ Passiert ist: Eine Kollegin nickte, niemand stöhnte. Lena sagt: „Da hatte ich halt Glück.“",
+      "frage": "Was übersieht Lena?",
+      "antworten": [
+        { "text": "Dass sie gerade ihre Befürchtung geprüft hat – und die stimmte nicht.", "wert": 2, "warum": "Wer den guten Ausgang dem Glück zuschreibt, lernt nichts daraus. Der Abgleich ist der wirksame Teil." },
+        { "text": "Dass beim nächsten Mal sicher jemand stöhnen wird.", "wert": 0, "tendenz": "katastrophe", "warum": "Eine neue Vorhersage, die sie wieder prüfen könnte – aber kein Grund, das heutige Ergebnis kleinzureden." },
+        { "text": "Dass es nicht nur Glück war, sondern auch an ihrem guten Grund lag, den sie vorher sorgfältig überlegt hatte.", "wert": 1, "warum": "Gut erkannt. Noch wichtiger ist der Abgleich selbst: befürchtet – passiert." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0136", "faehigkeit": "mut.vorhersage", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Vor einer Bitte: prüfbare Befürchtung oder Nebel?",
+      "faecher": ["prüfbar", "Nebel"],
+      "karten": [
+        { "text": "„Sie sagt Nein und dreht sich weg.“", "fach": 0 },
+        { "text": "„Das wird irgendwie peinlich.“", "fach": 1 },
+        { "text": "„Er fragt: ‚Warum gerade ich?‘“", "fach": 0 },
+        { "text": "„Danach ist alles komisch zwischen uns.“", "fach": 1 },
+        { "text": "„Sie lacht kurz auf.“", "fach": 0 },
+        { "text": "„Ich stehe blöd da.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0137", "faehigkeit": "mut.vorhersage", "stufe": 5, "kanal": "wissen" },
+      "auftrag": "Für die Spalte „passiert“: beobachtet oder gedeutet?",
+      "faecher": ["beobachtet", "gedeutet"],
+      "karten": [
+        { "text": "Er hat genickt.", "fach": 0 },
+        { "text": "Er fand meine Frage dumm.", "fach": 1 },
+        { "text": "Sie hat „Danke“ gesagt.", "fach": 0 },
+        { "text": "Sie war genervt.", "fach": 1 },
+        { "text": "Zwei haben mitgeschrieben.", "fach": 0 },
+        { "text": "Alle haben gemerkt, wie nervös ich war.", "fach": 1 }
+      ] },
+    { "art": "dialog", "kopf": { "id": "mut-v-0138", "faehigkeit": "mut.vorhersage", "stufe": 4, "kanal": "koennen" },
+      "gespraech": { "titel": "Die Bitte an Carla", "figur": "Carla Demir", "lage": "Du willst Carla bitten, sich deine Folien anzusehen. Du denkst: „Die hat sowieso keine Zeit.“", "start": "k1", "knoten": [
+        { "id": "k1", "sagt": "Carla sitzt an ihrem Platz. Du stehst zwei Meter entfernt.", "wahl": [
+          { "text": "Kurz notieren: „Sie sagt genervt: ‚Keine Zeit.‘ 70.“ Dann hingehen.", "wert": 2, "weiter": "k2", "rueck": "Befürchtung festgehalten – jetzt wird geprüft." },
+          { "text": "Wieder umdrehen. Sie hat sowieso keine Zeit, und du willst sie wirklich nicht stören.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Die Befürchtung entscheidet – ungeprüft." },
+          { "text": "Hingehen, ohne lange zu überlegen.", "wert": 1, "weiter": "k2", "rueck": "Gehandelt. Mit notierter Befürchtung lernst du hinterher mehr." }
+        ] },
+        { "id": "k2", "sagt": "Carla schaut auf: „Ja?“", "wahl": [
+          { "text": "„Würdest du dir bis Mittwoch zehn Minuten meine Folien ansehen? Sag ruhig Nein, wenn es nicht passt.“", "wert": 2, "weiter": "k3", "rueck": "Was, bis wann, wie lange – und ein freies Nein." },
+          { "text": "„Ach, nichts, schon gut.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Fast gefragt – und dann doch ausgewichen." }
+        ] },
+        { "id": "k3", "sagt": "Carla: „Klar. Morgen früh? Ich hab um neun eine Lücke.“", "wahl": [
+          { "text": "„Morgen um neun, danke!“ – und später abgleichen: befürchtet ‚Keine Zeit‘, passiert ‚Morgen um neun‘.", "wert": 2, "weiter": "ende1", "rueck": "Befürchtet – passiert. Ab in die Beweisliste." },
+          { "text": "„Danke!“ – und denken: „Sie wollte nur nicht unhöflich sein.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Ein klares Ja wird kleingeredet – so lernt die Befürchtung nichts dazu." }
+        ] },
+        { "id": "ende1", "sagt": "Am nächsten Morgen sitzt ihr zehn Minuten über den Folien. Carla hat zwei gute Ideen.", "ende": "Gefragt, Ja bekommen – und die Befürchtung „keine Zeit“ hat nicht gestimmt. Bittende unterschätzen oft, wie gern andere helfen." },
+        { "id": "ende2", "sagt": "Du gehst mit deinen Folien allein in den Kundentermin.", "ende": "Die Befürchtung hat entschieden, ohne geprüft zu werden. Nächstes Mal: notieren, fragen, abgleichen." }
+      ], "prinzipien": ["Befürchtung notieren, dann fragen", "klar bitten, mit freiem Nein", "ein Ja nicht kleinreden"] } },
+    { "art": "dialog", "kopf": { "id": "mut-v-0139", "faehigkeit": "mut.vorhersage", "stufe": 6, "kanal": "koennen" },
+      "gespraech": { "titel": "Nach der Runde", "figur": "Tarek Yılmaz", "lage": "Du hast in der Teamrunde einen Einwand angemeldet. Danach kommt Tarek zu dir.", "start": "k1", "knoten": [
+        { "id": "k1", "sagt": "Tarek: „Na, wie fandest du die Runde?“ In dir: „Alle fanden mich anstrengend.“", "wahl": [
+          { "text": "„Ich hatte befürchtet, dass alle genervt sind. Wie kam mein Einwand bei dir an?“", "wert": 2, "weiter": "k2", "rueck": "Du benennst die Befürchtung und prüfst sie mit einer Frage." },
+          { "text": "„Ganz okay. Ich hab wahrscheinlich zu viel geredet, oder? Sag ruhig, wenn es nervig war, ich kann das ab.“", "wert": 1, "weiter": "k2", "rueck": "Du fragst nach – gut. Die Antwort legst du ihm aber schon halb in den Mund." },
+          { "text": "„Lass uns über was anderes reden.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Die Gelegenheit zum Prüfen ist da – und du weichst aus." }
+        ] },
+        { "id": "k2", "sagt": "Tarek: „Gut, dass du das mit dem Termin gesagt hast. Ich hätte mich nicht getraut.“", "wahl": [
+          { "text": "Abgleichen: „Befürchtet: alle genervt. Passiert: Tarek fand es gut.“ Ab in die Beweisliste.", "wert": 2, "weiter": "ende1", "rueck": "Befürchtet – passiert. So wird der nächste Einwand leichter." },
+          { "text": "„Na ja, der sagt das nur, um nett zu sein.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Eine neue Vermutung, die das Ergebnis wegwischt." }
+        ] },
+        { "id": "ende1", "sagt": "Tarek geht zurück an seinen Platz.", "ende": "Eine Frage hat genügt, um die Befürchtung zu prüfen. Das Ergebnis gehört in die Beweisliste – nicht in den Papierkorb." },
+        { "id": "ende2", "sagt": "Am Abend grübelst du noch über die Runde.", "ende": "Ungeprüft wächst die Befürchtung. Nächstes Mal: kurz nachfragen, wie es ankam." }
+      ], "prinzipien": ["die Befürchtung benennen", "mit einer Frage prüfen", "das Ergebnis nicht wegdeuten"] } },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0140", "faehigkeit": "mut.ablehnung", "stufe": 3, "kanal": "wissen" },
+      "frage": "Du willst Miriam um Rat bei einer kniffligen Tabelle fragen, fürchtest aber, unfähig zu wirken. Was zeigt die Forschung?",
+      "antworten": [
+        { "text": "Wer bei schweren Aufgaben um Rat fragt, wirkt eher kompetenter.", "wert": 2, "warum": "In Experimenten wirkten Rat-Suchende kompetenter – besonders bei schweren Aufgaben und wenn sie jemanden fragten, der sich auskennt." },
+        { "text": "Wer fragt, wirkt immer unsicher – deshalb lieber erst allein probieren, bis es gar nicht mehr anders geht.", "wert": 0, "warum": "Das deckt sich nicht mit den Befunden – und kostet dich Zeit." },
+        { "text": "Es kommt darauf an, wen du fragst.", "wert": 1, "warum": "Stimmt: Wer sich auskennt, ist die richtige Adresse – bei Unkundigen fällt der Vorteil weg. Die Sorge, durch Fragen unfähig zu wirken, ist aber meist unbegründet." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0141", "faehigkeit": "mut.ablehnung", "stufe": 5, "kanal": "wissen" },
+      "frage": "Was macht eine Bitte leicht ablehnbar – im guten Sinn?",
+      "antworten": [
+        { "text": "Du sagst ausdrücklich, dass ein Nein in Ordnung ist, und meinst es so.", "wert": 2, "warum": "Dann ist ein Ja ein echtes Ja – und ein Nein kostet beide wenig." },
+        { "text": "Du fragst so vage, dass der andere gar nicht merkt, dass es eine Bitte ist.", "wert": 0, "tendenz": "ausweichen", "warum": "Dann kann er weder richtig Ja noch Nein sagen." },
+        { "text": "Du fragst per Nachricht statt persönlich, damit der andere in Ruhe überlegen kann und sich nicht gedrängt fühlt.", "wert": 1, "warum": "Manchmal passend. Persönlich gefragt und mit freiem Nein ist es ebenso leicht abzulehnen." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0142", "faehigkeit": "mut.ablehnung", "stufe": 6, "kanal": "wissen" },
+      "frage": "Dr. Albers nach deiner Präsentation: „Zu viele Details. Die Botschaft ging unter.“ Wie reagierst du?",
+      "antworten": [
+        { "text": "„Welche Details hätten Sie weggelassen?“", "wert": 2, "warum": "Du bleibst bei der Sache und holst dir, was du zum Verbessern brauchst." },
+        { "text": "„Die Details hatte aber der Kunde ausdrücklich so gewünscht, das stand schon in der ersten Mail.“", "wert": 1, "tendenz": "rechtfertigen", "warum": "Ein sachlicher Hinweis – vielleicht wichtig. Erst nachfragen, dann einordnen, hätte mehr gebracht." },
+        { "text": "„Ich bin einfach nicht gut im Präsentieren.“", "wert": 0, "tendenz": "abwerten", "warum": "Aus einer Kritik an der Präsentation wird ein Urteil über dich – das hat er nicht gesagt." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0143", "faehigkeit": "mut.ablehnung", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Du willst deine Nachbarin bitten, dir ihre Bohrmaschine zu leihen. Mach daraus eine klare Bitte mit freiem Nein.",
+      "vorlage": "„Sie haben nicht zufällig … also nur falls … Sie brauchen das bestimmt selbst, oder?“",
+      "kriterien": ["sagt, was genau", "nennt einen Zeitraum", "lässt ein Nein frei"],
+      "muster": ["„Könnte ich mir am Samstag für zwei Stunden Ihre Bohrmaschine leihen? Sagen Sie ruhig Nein, wenn es nicht passt.“", "„Darf ich mir Ihre Bohrmaschine bis Sonntag leihen? Ein Nein ist völlig in Ordnung.“"] },
+    { "art": "umformulieren", "kopf": { "id": "mut-v-0144", "faehigkeit": "mut.ablehnung", "stufe": 6, "kanal": "koennen" },
+      "auftrag": "Jemand kritisiert deinen Vorschlag im Verein: „Das ist doch unausgegoren.“ Antworte so, dass du hörst und nachfragst – ohne dich zu verteidigen.",
+      "vorlage": "„Na hör mal, ich hab da Stunden reingesteckt, und du hast doch selbst noch nie was vorgeschlagen!“",
+      "kriterien": ["kein Gegenangriff", "eine Nachfrage zur Sache", "bleibt ruhig"],
+      "muster": ["„Was fehlt dir daran?“", "„Woran machst du das fest? Dann kann ich es nachbessern.“"] },
+    { "art": "dialog", "kopf": { "id": "mut-v-0145", "faehigkeit": "mut.ablehnung", "stufe": 5, "kanal": "koennen" },
+      "gespraech": { "titel": "Die Suppe", "figur": "Jule Marek", "lage": "Kochkurs. Du hast zum ersten Mal die Suppe für alle gekocht. Jule probiert.", "start": "k1", "knoten": [
+        { "id": "k1", "sagt": "Jule: „Ehrlich? Die ist ziemlich versalzen.“", "wahl": [
+          { "text": "„Oh – wie stark? Kann man sie noch retten?“", "wert": 2, "weiter": "k2", "rueck": "Du bleibst bei der Suppe, nicht bei dir." },
+          { "text": "„Das Rezept war so, ich hab genau die Menge genommen, die da stand, und außerdem war das Salz anders …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k1b", "rueck": "Verteidigung, bevor du weißt, wie schlimm es ist." },
+          { "text": "„Ich kann einfach nicht kochen.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Aus „die Suppe ist salzig“ wird „ich kann nichts“." }
+        ] },
+        { "id": "k1b", "sagt": "Jule: „Ist doch nicht schlimm. Ich meine nur die Suppe.“", "wahl": [
+          { "text": "„Stimmt. Was würdest du machen?“", "wert": 2, "weiter": "k2", "rueck": "Zurück zur Sache – gut gefangen." },
+          { "text": "„Schon gut.“ – und still weiterschneiden.", "wert": 1, "weiter": "ende2", "rueck": "Das Gespräch endet, bevor du etwas mitnehmen kannst." }
+        ] },
+        { "id": "k2", "sagt": "Jule: „Kartoffel rein und Brühe dazu. Hab ich auch schon dreimal gebraucht.“", "wahl": [
+          { "text": "„Danke, mach ich.“", "wert": 2, "weiter": "ende1", "rueck": "Annehmen, was stimmt – und weiterkochen." }
+        ] },
+        { "id": "ende1", "sagt": "Eine halbe Stunde später essen alle die Suppe. Jule nimmt Nachschlag.", "ende": "Kritik an der Suppe war Kritik an der Suppe. Nachgefragt, einen Tipp bekommen – und gemerkt, dass anderen dasselbe passiert." },
+        { "id": "ende2", "sagt": "Die Suppe bleibt salzig. Du ärgerst dich den ganzen Abend.", "ende": "Ohne Nachfrage bleibt nur der Stich. Nächstes Mal: Was genau? Was würdest du tun?" }
+      ], "prinzipien": ["die Kritik gilt der Sache", "nachfragen statt verteidigen", "den Tipp annehmen"] } },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0146", "faehigkeit": "mut.ablehnung", "stufe": 4, "kanal": "wissen" },
+      "auftrag": "Kritik an der Sache – oder Urteil über die Person?",
+      "faecher": ["an der Sache", "über die Person"],
+      "karten": [
+        { "text": "„Die Zahlen in Tabelle zwei stimmen nicht.“", "fach": 0 },
+        { "text": "„Du bist so schlampig.“", "fach": 1 },
+        { "text": "„Der Text ist mir zu lang.“", "fach": 0 },
+        { "text": "„Mit dir ist das immer so anstrengend.“", "fach": 1 },
+        { "text": "„Der Termin war zu knapp geplant.“", "fach": 0 },
+        { "text": "„Du kannst so etwas einfach nicht.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0147", "faehigkeit": "mut.ablehnung", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Was hilft dir beim Sortieren nach einer Kritik?",
+      "faecher": ["hilft", "hilft nicht"],
+      "karten": [
+        { "text": "dir die Kritik in eigenen Worten aufschreiben", "fach": 0 },
+        { "text": "nachts im Kopf das Gespräch zehnmal wiederholen", "fach": 1 },
+        { "text": "fragen: Stimmt es ganz, teilweise oder gar nicht?", "fach": 0 },
+        { "text": "allen erzählen, wie ungerecht es war", "fach": 1 },
+        { "text": "einen Punkt auswählen, den du verbessern willst", "fach": 0 },
+        { "text": "dir sagen: „Ich mach eben alles falsch.“", "fach": 1 }
+      ] },
+    { "art": "kritiker", "kopf": { "id": "mut-v-0148", "faehigkeit": "mut.ablehnung", "stufe": 4, "kanal": "koennen" },
+      "satz": "„Sie hat Nein gesagt. Ich hätte gar nicht erst fragen sollen.“",
+      "kriterien": ["trennt das Nein von dir als Person", "würdigt, dass du gefragt hast", "bleibt wahr"],
+      "muster": ["„Sie hat Nein gesagt – zur Bitte, nicht zu mir. Und ich habe gefragt, das war der Plan.“", "„Ein Nein ist eine Antwort, kein Fehler. Gefragt zu haben war richtig.“"] },
+    { "art": "kritiker", "kopf": { "id": "mut-v-0149", "faehigkeit": "mut.ablehnung", "stufe": 5, "kanal": "koennen" },
+      "satz": "„Er hat meinen Vorschlag zerpflückt. Jetzt halten mich alle für unfähig.“",
+      "kriterien": ["trennt Kritik am Vorschlag vom Urteil über dich", "benennt die Vorhersage als Vorhersage", "endet mit einem nächsten Schritt"],
+      "muster": ["„Er hat zwei Punkte am Vorschlag kritisiert. Ob mich jemand für unfähig hält, weiß ich nicht – ich kann Lena fragen.“", "„Der Vorschlag hat Lücken, die er gezeigt hat. Ich bessere sie nach. Über mich hat er nichts gesagt.“"] },
+    { "art": "kritiker", "kopf": { "id": "mut-v-0150", "faehigkeit": "mut.ablehnung", "stufe": 7, "kanal": "koennen" },
+      "satz": "„Die Verkäuferin auf dem Flohmarkt hat bestimmt über mich gelacht, als ich weg war.“",
+      "kriterien": ["unterscheidet Beobachtung und Vermutung", "würdigt die gelungene Mutprobe", "bleibt freundlich mit dir"],
+      "muster": ["„Gesehen habe ich ein knappes Nein. Alles andere vermute ich. Gefragt habe ich – das war die Mutprobe.“", "„Vielleicht hat sie gelacht, vielleicht nicht. Sie hat ihren Tag, ich meine Beweisliste.“"] },
+    { "art": "rangfolge", "kopf": { "id": "mut-v-0151", "faehigkeit": "mut.ablehnung", "stufe": 4, "kanal": "wissen" },
+      "frage": "Jemand kritisiert dich. Bring die Schritte in eine hilfreiche Reihenfolge.",
+      "eintraege": [
+        { "text": "Ausreden lassen und einmal ausatmen.", "warum": "Erst hören – nicht schon verteidigen." },
+        { "text": "Nachfragen: „Woran machst du das fest?“", "warum": "So erfährst du, was genau gemeint ist." },
+        { "text": "Danke sagen.", "warum": "Das beendet das Gespräch freundlich, ohne dass du sofort zustimmen musst." },
+        { "text": "Später in Ruhe sortieren: stimmt ganz, teilweise oder nicht.", "warum": "Mit Abstand urteilst du fairer – über die Kritik und über dich." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "mut-v-0152", "faehigkeit": "mut.ablehnung", "stufe": 6, "kanal": "wissen" },
+      "frage": "Du hast um etwas gebeten und ein Nein bekommen. Ordne die Reaktionen von hilfreich bis ungünstig.",
+      "eintraege": [
+        { "text": "„Danke.“ – und später notieren, wie klein das Nein war.", "warum": "Ein Dank und ein Beweis – so wird das nächste Nein leichter." },
+        { "text": "„Danke.“ – und nicht mehr daran denken.", "warum": "Gut, aber ohne Notiz verblasst die Erfahrung schneller." },
+        { "text": "Noch zweimal nachhaken, ob es nicht doch geht.", "warum": "Bringt den anderen in die Lage, mehrmals Nein sagen zu müssen." },
+        { "text": "Beschließen, nie mehr jemanden um etwas zu bitten.", "warum": "Aus einem Nein wird eine Regel – genau so wächst die Angst." }
+      ] },
+    { "art": "szene", "kopf": { "id": "mut-v-0153", "faehigkeit": "mut.ablehnung", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Du fragst deinen Nachbarn, ob du dir am Samstag seine Leiter leihen kannst. Er sagt: „Samstag streiche ich selbst. Tut mir leid.“",
+      "frage": "Wem galt sein Nein?",
+      "antworten": [
+        { "text": "Der Lage: Er braucht die Leiter selbst.", "wert": 2, "warum": "Bitte, Lage oder ich? Hier eindeutig die Lage." },
+        { "text": "Dir – er leiht dir einfach nicht gern etwas, das hat man ja auch schon an seinem Blick gemerkt.", "wert": 0, "tendenz": "katastrophe", "warum": "Er hat einen klaren Grund genannt. Alles andere ist Vermutung." },
+        { "text": "Der Bitte – vielleicht war Samstag ungünstig gewählt.", "wert": 1, "warum": "Fast: Es lag am Samstag. Über dich sagt das Nein nichts." }
+      ] },
+    { "art": "szene", "kopf": { "id": "mut-v-0154", "faehigkeit": "mut.ablehnung", "stufe": 5, "kanal": "wissen" },
+      "beschreibung": "Als Mutprobe bittest du einen Straßenmusiker um ein Wunschlied und wirfst etwas in den Hut. Er sagt freundlich: „Das kenne ich leider nicht.“",
+      "frage": "Wie geht es weiter?",
+      "antworten": [
+        { "text": "„Schade – dann spiel, was du magst.“ Und notieren: gefragt, Nein, freundlich.", "wert": 2, "warum": "Die Mutprobe ist gemacht: eine Bitte, ein Nein, ein freundlicher Abschluss." },
+        { "text": "„Schade.“ Noch kurz zuhören und weitergehen, ohne es dir zu notieren.", "wert": 1, "warum": "Freundlich und ohne Nachhaken – gut. Ohne Notiz geht aber schnell verloren, wie klein das Nein war." },
+        { "text": "Das Geld wieder aus dem Hut nehmen und schnell weitergehen, weil es dir peinlich ist.", "wert": 0, "tendenz": "flucht", "warum": "Das Nein galt dem Lied – die Flucht macht es größer und unfreundlich." }
+      ] },
+    { "art": "szene", "kopf": { "id": "mut-v-0155", "faehigkeit": "mut.ablehnung", "stufe": 7, "kanal": "wissen" },
+      "beschreibung": "In der Runde sagt Miriam lachend: „Deine Folien sind ja ein Wimmelbild.“ Ein paar lachen mit. Dir wird heiß.",
+      "frage": "Was hilft dir am meisten?",
+      "antworten": [
+        { "text": "Mitlachen und sagen: „Erwischt. Was würdest du weglassen?“", "wert": 2, "warum": "Du nimmst den Spaß an, ohne einzuknicken, und holst dir den sachlichen Kern." },
+        { "text": "Gar nichts sagen und dir vornehmen, keine Folien mehr zu zeigen.", "wert": 0, "tendenz": "vermeiden", "warum": "Ein Spruch wird zur Regel – und Miriam meinte vermutlich nur die vollen Folien." },
+        { "text": "„Die Folien sind halt detailliert.“", "wert": 1, "warum": "Ruhig und standfest. Eine Nachfrage hätte dir zusätzlich gezeigt, was sie meint." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0156", "faehigkeit": "mut.aufmerksamkeit", "stufe": 4, "kanal": "wissen" },
+      "frage": "Während Dr. Albers dich kritisiert, merkst du, wie du rot wirst. Wohin lenkst du deine Aufmerksamkeit?",
+      "antworten": [
+        { "text": "Auf sein Gesicht, um zu sehen, ob er die Röte bemerkt hat und wie er darauf reagiert.", "wert": 0, "tendenz": "nach_innen", "warum": "So bleibst du bei dir – und hörst nicht, was er eigentlich sagt." },
+        { "text": "Auf seine Worte: Welchen Punkt nennt er genau?", "wert": 2, "warum": "Der Blick auf die Sache entlastet – und du kannst gleich gezielt nachfragen." },
+        { "text": "Auf deine Atmung, damit die Röte nachlässt.", "wert": 1, "warum": "Ausatmen hilft dem Körper. Danach gehört die Aufmerksamkeit wieder zu ihm." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0157", "faehigkeit": "mut.aufmerksamkeit", "stufe": 6, "kanal": "wissen" },
+      "frage": "Du bittest Nadine Köhler um einen zweiten Termin. Während du sprichst, beobachtest du ihr Gesicht nach Zeichen von Ablehnung. Was passiert dabei?",
+      "antworten": [
+        { "text": "Du bist mit deiner Angst beschäftigt und hörst schlechter, was sie wirklich sagt.", "wert": 2, "warum": "Wer nach Ablehnung sucht, findet Zeichen – und überhört das Eigentliche." },
+        { "text": "Du kannst rechtzeitig einlenken, bevor sie Nein sagt.", "wert": 0, "tendenz": "absichern", "warum": "Das klingt klug, ist aber Absicherung – und ihr Gesicht sagt selten, was du vermutest." },
+        { "text": "Es hilft dir, dich auf ihre Bedürfnisse einzustellen, wenn du dabei auch zuhörst und nicht nur nach einem Nein suchst.", "wert": 1, "warum": "Aufmerksamkeit für sie ist gut – solange sie Neugier ist, nicht Angst vor dem Nein." }
+      ] },
+    { "art": "kritiker", "kopf": { "id": "mut-v-0158", "faehigkeit": "mut.aufmerksamkeit", "stufe": 5, "kanal": "koennen" },
+      "satz": "„Während er mich kritisiert, sehe ich nur noch, wie rot ich werde.“",
+      "kriterien": ["nimmt die Röte zur Kenntnis", "lenkt den Blick auf die Sache", "kurz genug für den Moment"],
+      "muster": ["„Warm im Gesicht – egal. Welchen Punkt meint er?“", "„Rot darf sein. Ich höre auf seine zwei Punkte.“"] },
+    { "art": "kritiker", "kopf": { "id": "mut-v-0159", "faehigkeit": "mut.aufmerksamkeit", "stufe": 7, "kanal": "koennen" },
+      "satz": "„Bei meiner Bitte muss ich die ganze Zeit aufpassen, dass meine Stimme nicht zittert.“",
+      "kriterien": ["lässt das Zittern zu", "lenkt den Blick auf das Gegenüber oder die Bitte", "freundlich mit dir"],
+      "muster": ["„Die Stimme darf zittern. Ich schaue auf ihn und sage, was ich möchte.“", "„Zittern hört er kaum. Ich bleibe bei meiner Bitte.“"] },
+    { "art": "dialog", "kopf": { "id": "mut-v-0160", "faehigkeit": "mut.aufmerksamkeit", "stufe": 5, "kanal": "koennen" },
+      "gespraech": { "titel": "Die Rückmeldung im Flur", "figur": "Dr. Henrik Albers", "lage": "Nach deiner Präsentation hält dich Dr. Albers im Flur an.", "start": "k1", "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Inhaltlich gut. Aber Sie haben fast nur auf die Folien geschaut.“ In dir: „Er hat gesehen, wie nervös ich war.“", "wahl": [
+          { "text": "„Stimmt. Wohin hätten Sie sich den Blick gewünscht?“", "wert": 2, "weiter": "k2", "rueck": "Bei seinem Punkt geblieben, nicht bei deinem Schreck." },
+          { "text": "„Ich war so nervös, das hat man bestimmt die ganze Zeit gemerkt, oder? Meine Stimme war auch ganz komisch.“", "wert": 0, "tendenz": "nach_innen", "weiter": "k1b", "rueck": "Du sprichst über deine Nervosität – er hatte über den Blick gesprochen." },
+          { "text": "„Ich werde darauf achten.“", "wert": 1, "weiter": "ende1", "rueck": "Höflich. Mit einer Frage hättest du mehr mitgenommen." }
+        ] },
+        { "id": "k1b", "sagt": "Dr. Albers: „Nervös? Hab ich nicht gemerkt. Nur der Blick.“", "wahl": [
+          { "text": "„Gut zu wissen. Wohin soll der Blick gehen?“", "wert": 2, "weiter": "k2", "rueck": "Zurück zur Sache – und eine Befürchtung nebenbei widerlegt." }
+        ] },
+        { "id": "k2", "sagt": "Dr. Albers: „Zu den Leuten. Die Folien kennen Sie doch.“", "wahl": [
+          { "text": "„Danke. Beim nächsten Mal Stichwortkarte und Blick in die Runde.“", "wert": 2, "weiter": "ende1", "rueck": "Angenommen, was stimmt – mit einem konkreten Plan." }
+        ] },
+        { "id": "ende1", "sagt": "Er nickt und geht weiter.", "ende": "Kritik am Blick war Kritik am Blick. Wer bei der Sache bleibt, nimmt etwas mit – und erfährt nebenbei, wie wenig von der Nervosität zu sehen war." }
+      ], "prinzipien": ["bei seinem Punkt bleiben", "nicht über die eigene Nervosität reden", "mit einem Plan abschließen"] } },
+    { "art": "dialog", "kopf": { "id": "mut-v-0161", "faehigkeit": "mut.aufmerksamkeit", "stufe": 6, "kanal": "koennen" },
+      "gespraech": { "titel": "Herr Petersen ist unzufrieden", "figur": "Herr Petersen", "lage": "Herr Petersen ruft an. Er ist verärgert über eine verspätete Lieferung und spricht laut.", "start": "k1", "knoten": [
+        { "id": "k1", "sagt": "Herr Petersen: „Das ist jetzt das zweite Mal! So geht das nicht!“ Dein Herz klopft.", "wahl": [
+          { "text": "„Das verstehe ich. Welche Lieferung meinen Sie genau?“", "wert": 2, "weiter": "k2", "rueck": "Ausatmen, zuhören, nachfragen – der Blick ist bei ihm." },
+          { "text": "„Das tut mir furchtbar leid, ich weiß gar nicht, wie das passieren konnte, ich bin auch erst …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k1b", "rueck": "Viel über dich, nichts über sein Problem." },
+          { "text": "„Moment, ich schaue nach.“", "wert": 1, "weiter": "k2", "rueck": "Sachlich. Ein Satz, der seinen Ärger anerkennt, hätte ihn schneller beruhigt." }
+        ] },
+        { "id": "k1b", "sagt": "Herr Petersen: „Wie bitte? Ich verstehe Sie nicht.“", "wahl": [
+          { "text": "Langsamer und deutlicher: „Welche Lieferung meinen Sie?“", "wert": 2, "weiter": "k2", "rueck": "Zurück zu ihm – und so, dass er dich versteht." }
+        ] },
+        { "id": "k2", "sagt": "Herr Petersen: „Die Schrauben vom Dienstag. Ich brauche sie morgen.“", "wahl": [
+          { "text": "„Ich kläre das bis heute Mittag und rufe Sie zurück.“", "wert": 2, "weiter": "ende1", "rueck": "Konkret und verlässlich." }
+        ] },
+        { "id": "ende1", "sagt": "Herr Petersen, ruhiger: „Gut. Bis Mittag.“", "ende": "Der Ärger galt der Lieferung, nicht dir. Wer zuhört statt sich zu verteidigen, kommt schneller zur Lösung." }
+      ], "prinzipien": ["zuhören statt verteidigen", "nachfragen, was genau", "konkret zusagen"] } },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0162", "faehigkeit": "mut.aufmerksamkeit", "stufe": 4, "kanal": "wissen" },
+      "auftrag": "Während du um etwas bittest: Blick nach außen oder nach innen?",
+      "faecher": ["nach außen", "nach innen"],
+      "karten": [
+        { "text": "„Hat sie gerade Zeit, oder ist sie mitten in etwas?“", "fach": 0 },
+        { "text": "„Klinge ich bettelnd?“", "fach": 1 },
+        { "text": "auf ihre Antwort hören", "fach": 0 },
+        { "text": "„Hoffentlich merkt sie nicht, wie unangenehm mir das ist.“", "fach": 1 },
+        { "text": "„Welche Frage hat er zu meiner Bitte?“", "fach": 0 },
+        { "text": "im Kopf schon die Reaktion auf ein Nein vorbereiten", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0163", "faehigkeit": "mut.aufmerksamkeit", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Kritik hören: Aufmerksamkeit für die Sache oder Selbstbeobachtung?",
+      "faecher": ["für die Sache", "Selbstbeobachtung"],
+      "karten": [
+        { "text": "„Er nennt zwei Punkte: Umfang und Reihenfolge.“", "fach": 0 },
+        { "text": "„Ich sehe bestimmt total geknickt aus.“", "fach": 1 },
+        { "text": "„Welches Beispiel bringt sie?“", "fach": 0 },
+        { "text": "„Mein Hals ist ganz eng.“", "fach": 1 },
+        { "text": "mitschreiben, was er vorschlägt", "fach": 0 },
+        { "text": "überlegen, wie du gerade dastehst", "fach": 1 }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0164", "faehigkeit": "mut.leiter", "stufe": 4, "kanal": "wissen" },
+      "frage": "Du willst mit Mutproben anfangen. Welche passt als erste?",
+      "antworten": [
+        { "text": "Eine mit etwa 30 bis 40 Anspannung – etwa eine Bekannte bitten, dir etwas beizubringen.", "wert": 2, "warum": "Herzklopfen ja, Panik nein – an dieser Sprosse lernst du." },
+        { "text": "Gleich die schwerste: Nachbarn, die du kaum kennst, zu einem Fest im Hof einladen.", "wert": 0, "tendenz": "zu_gross", "warum": "Ein zu großer Schritt endet oft im Rückzug." },
+        { "text": "Eine, die dich überhaupt nicht aufregt, damit du sicher erst mal ein Erfolgserlebnis hast und Mut sammelst.", "wert": 1, "warum": "Ein Erfolg ist schön. Ohne Herzklopfen lernst du aber wenig über das Nein." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "mut-v-0165", "faehigkeit": "mut.leiter", "stufe": 6, "kanal": "wissen" },
+      "frage": "Deine erste Mutprobe brachte ein Nein – und es war kleiner als befürchtet. Wie geht es weiter?",
+      "antworten": [
+        { "text": "Eine ähnliche Mutprobe an einem anderen Ort, dann eine etwas schwerere.", "wert": 2, "warum": "Wiederholen, Ort wechseln, dann steigern – so wird aus einem Nein eine Erfahrung, die überall gilt." },
+        { "text": "Aufhören – das Ziel ist erreicht.", "wert": 0, "tendenz": "vermeiden", "warum": "Ein Nein ist ein Anfang, kein Abschluss. Die Angst lernt erst durch Wiederholen um." },
+        { "text": "Dieselbe Mutprobe am selben Ort noch dreimal.", "wert": 1, "warum": "Wiederholen ist gut. Mit wechselnden Orten wird die Erfahrung haltbarer." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "mut-v-0166", "faehigkeit": "mut.leiter", "stufe": 4, "kanal": "wissen" },
+      "frage": "Miriams Leiter „Rückmeldung erbitten“. Ordne von der leichtesten zur schwersten Sprosse.",
+      "eintraege": [
+        { "text": "Eine Freundin fragen, wie ihr das Geburtstagsgeschenk gefallen hat (25)", "warum": "Vertraut, geringer Einsatz." },
+        { "text": "Tarek fragen, wie ihm ihre Mail an den Kunden gefallen hat (45)", "warum": "Arbeit, aber ein freundlicher Kollege." },
+        { "text": "Dr. Albers um eine Rückmeldung zur Präsentation bitten (65)", "warum": "Vorgesetzter, und es geht um ihre Leistung." },
+        { "text": "Nach der Präsentation in der Runde fragen: „Was war unklar?“ (80)", "warum": "Vor allen – die oberste Sprosse." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "mut-v-0167", "faehigkeit": "mut.leiter", "stufe": 6, "kanal": "wissen" },
+      "frage": "Jonas' Leiter „Einwand anmelden“. Ordne von der leichtesten zur schwersten Sprosse.",
+      "eintraege": [
+        { "text": "Einem Kollegen unter vier Augen sagen, dass er einen Punkt anders sieht (30)", "warum": "Ein Gegenüber, kein Publikum." },
+        { "text": "Im Verein bei einem Termin widersprechen (45)", "warum": "Gruppe, aber freundlich und wenig steht auf dem Spiel." },
+        { "text": "In der Vierer-Runde bei der Arbeit einen Einwand anmelden (60)", "warum": "Arbeit, aber kleine Runde." },
+        { "text": "In der Abteilungsrunde vor Dr. Albers widersprechen (85)", "warum": "Große Runde, Vorgesetzter – die oberste Sprosse." }
+      ] },
+    { "art": "szene", "kopf": { "id": "mut-v-0168", "faehigkeit": "mut.leiter", "stufe": 5, "kanal": "wissen" },
+      "beschreibung": "Tarek hat fünfmal Fremde gebeten, ein Foto von ihm zu machen. Alle haben Ja gesagt, es macht ihn nicht mehr nervös.",
+      "frage": "Was ist sein bester nächster Schritt?",
+      "antworten": [
+        { "text": "Eine Mutprobe, bei der ein Nein wahrscheinlicher ist – etwa bei einem Chor fragen, ob er einmal mitsingen darf.", "wert": 2, "warum": "Die Sprosse ist geschafft. Lernen kann er jetzt nur auf der nächsten." },
+        { "text": "Noch zehn Fotos, damit es wirklich sitzt.", "wert": 0, "tendenz": "absichern", "warum": "Was nicht mehr aufregt, bringt kaum Neues." },
+        { "text": "Eine Pause, weil er schon so viel geschafft hat.", "wert": 1, "warum": "Eine kurze Pause ist erlaubt. Danach geht es auf der nächsten Sprosse weiter." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0169", "faehigkeit": "mut.leiter", "stufe": 4, "kanal": "wissen" },
+      "auftrag": "Nach „Eine Frage in der Vierer-Runde“: passende nächste Sprosse oder zu großer Sprung?",
+      "faecher": ["passende nächste Sprosse", "zu großer Sprung"],
+      "karten": [
+        { "text": "eine Frage in einer anderen kleinen Runde", "fach": 0 },
+        { "text": "ein zwanzigminütiger Vortrag vor der Abteilung", "fach": 1 },
+        { "text": "eine eigene Meinung in der Vierer-Runde", "fach": 0 },
+        { "text": "auf der Betriebsversammlung den Vorstand kritisieren", "fach": 1 },
+        { "text": "eine Frage in der Teamrunde mit acht Leuten", "fach": 0 },
+        { "text": "die Leitung des Jahrestreffens übernehmen", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "mut-v-0170", "faehigkeit": "mut.leiter", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Für jemanden, der gerade mit Mutproben anfängt: zu klein, passend oder zu groß?",
+      "faecher": ["zu klein", "passend", "zu groß"],
+      "karten": [
+        { "text": "die eigene Schwester nach der Uhrzeit fragen", "fach": 0 },
+        { "text": "auf dem Wochenmarkt fragen, ob man ein Stück probieren darf", "fach": 1 },
+        { "text": "bei einem Chor fragen, ob man einmal mitsingen darf", "fach": 1 },
+        { "text": "auf einem fremden Fest eine Rede halten", "fach": 2 },
+        { "text": "im Supermarkt fragen, wo die Milch steht", "fach": 0 },
+        { "text": "Nachbarn, die man nicht kennt, zu sich nach Hause zum Essen einladen", "fach": 2 }
+      ] }
+  ]
+}

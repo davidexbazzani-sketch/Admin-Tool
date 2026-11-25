@@ -57,7 +57,7 @@
         { "text": "„Er hat sich über das Lob nicht gefreut.“", "fach": 1 },
         { "text": "„Er ist ein Miesepeter.“", "fach": 2 }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0007", "faehigkeit": "lesen.beobachten", "stufe": 2, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0007.webp", "kopf": { "id": "lesen-v-0007", "faehigkeit": "lesen.beobachten", "stufe": 2, "kanal": "wissen" },
       "beschreibung": "Wartezimmer einer Arztpraxis. Ein Mann um die fünfzig sitzt auf der Stuhlkante, wippt mit einem Bein und schaut alle paar Sekunden zur Tür des Behandlungsraums. In der Hand hält er einen gefalteten Brief.",
       "frage": "Welche Beschreibung bleibt am nächsten an dem, was zu sehen ist?",
       "antworten": [
@@ -66,7 +66,7 @@
         { "text": "Er ist ungeduldig, weil es schon so lange dauert.", "wert": 1, "warum": "Eine naheliegende Deutung, aber eben eine Deutung. Woher weißt du, wie lange er schon wartet?" },
         { "text": "Er ist ein nervöser Typ, das sieht man sofort an der ganzen Art, wie er dasitzt.", "wert": 0, "tendenz": "etikett", "warum": "Aus einem Moment wird ein Urteil über den ganzen Menschen." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0008", "faehigkeit": "lesen.beobachten", "stufe": 3, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0008.webp", "kopf": { "id": "lesen-v-0008", "faehigkeit": "lesen.beobachten", "stufe": 3, "kanal": "wissen" },
       "beschreibung": "Elternabend in der Schule deines Patenkinds. Eine Mutter in der ersten Reihe hat die Arme verschränkt und die Lippen zusammengepresst. Als die Lehrerin über neue Hausaufgabenregeln spricht, schüttelt sie einmal kurz den Kopf. Der Raum ist kühl, die Fenster sind gekippt.",
       "frage": "Was ist die beste Art, das zu lesen?",
       "antworten": [
@@ -75,7 +75,7 @@
         { "text": "Sie ist einfach eine schwierige Person.", "wert": 0, "tendenz": "etikett", "warum": "Ein Urteil über den Menschen aus drei Sekunden Beobachtung." },
         { "text": "Kann man nicht sagen, also nicht weiter drüber nachdenken.", "wert": 1, "warum": "Vorsichtig, gut. Aber das Kopfschütteln genau bei diesem Thema ist ein brauchbarer Hinweis." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0009", "faehigkeit": "lesen.beobachten", "stufe": 4, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0009.webp", "kopf": { "id": "lesen-v-0009", "faehigkeit": "lesen.beobachten", "stufe": 4, "kanal": "wissen" },
       "beschreibung": "Videoanruf mit fünf Leuten. Jonas hat die Kamera an, schaut aber meist zur Seite, nicht in die Kamera. Er tippt zwischendurch. Als er gefragt wird, antwortet er sofort und genau.",
       "frage": "Was liest du daraus am ehesten?",
       "antworten": [
@@ -145,7 +145,7 @@
         { "text": "Bei starken Gefühlen verrät der Körper oft mehr als das Gesicht.", "fach": 1 },
         { "text": "Eine Veränderung gegenüber dem Gewohnten ist aussagekräftiger als eine einzelne Haltung.", "fach": 1 }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0018", "faehigkeit": "lesen.koerper", "stufe": 2, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0018.webp", "kopf": { "id": "lesen-v-0018", "faehigkeit": "lesen.koerper", "stufe": 2, "kanal": "wissen" },
       "beschreibung": "Bäckerei Hansen, Samstagmorgen, lange Schlange. Vor dir unterhält sich eine Frau mit der Verkäuferin über deren Urlaub. Die Verkäuferin lächelt, antwortet knapp und greift dabei schon nach der nächsten Tüte. Ihr Blick geht zur Schlange.",
       "frage": "Was liest du aus dem Verhalten der Verkäuferin am ehesten?",
       "antworten": [
@@ -154,7 +154,7 @@
         { "text": "Sie freut sich über das Gespräch.", "wert": 1, "warum": "Das Lächeln spricht dafür, der Blick zur Schlange eher für Eile. Beides kann zugleich stimmen." },
         { "text": "Sie ist unhöflich, weil sie die Kundin beim Reden nicht richtig ansieht.", "wert": 0, "tendenz": "etikett", "warum": "Ein Urteil über ihr Verhalten, obwohl die Lage den Blick gut erklärt." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0019", "faehigkeit": "lesen.koerper", "stufe": 3, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0019.webp", "kopf": { "id": "lesen-v-0019", "faehigkeit": "lesen.koerper", "stufe": 3, "kanal": "wissen" },
       "beschreibung": "Stehempfang nach einem Vortrag. Du sprichst mit einem Mann aus einer anderen Abteilung. Er steht dir zugewandt, die Füße zu dir, und lacht über deine Bemerkung. Seit zwei Minuten schaut er immer wieder über deine Schulter zum Ausgang, wo eine Kollegin von ihm wartet und winkt.",
       "frage": "Was tust du?",
       "antworten": [
@@ -163,7 +163,7 @@
         { "text": "Schneller zum Punkt kommen und dann aufhören.", "wert": 1, "warum": "Rücksichtsvoll. Wer es ausspricht, macht es ihm noch leichter." },
         { "text": "Fragen, ob du ihn langweilst.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Du deutest ein Zeichen, das eine einfache Erklärung hat – seine wartende Kollegin." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0020", "faehigkeit": "lesen.koerper", "stufe": 4, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0020.webp", "kopf": { "id": "lesen-v-0020", "faehigkeit": "lesen.koerper", "stufe": 4, "kanal": "wissen" },
       "beschreibung": "Vereinsheim, Jahresversammlung. Der Kassenwart steht vorn und erklärt ein Minus in der Kasse. Er hält sich mit beiden Händen am Rednerpult fest, steht steif, spricht schnell. Sonst ist er der lockerste Mensch im Verein.",
       "frage": "Was ist die klügste Einschätzung?",
       "antworten": [
@@ -192,7 +192,7 @@
         { "text": "Er lächelt nicht.", "stuetzt": false, "warum": "Er ist sonst auch sachlich. Fehlendes Lächeln ist bei ihm die Grundlinie, kein Zeichen." },
         { "text": "Er schaut auf seine Uhr.", "stuetzt": false, "warum": "Allein unklar – vielleicht hat er gleich einen Termin. Spricht eher gegen Interesse, wenn mehr dazukommt." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0023", "faehigkeit": "lesen.grundlinie", "stufe": 2, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0023.webp", "kopf": { "id": "lesen-v-0023", "faehigkeit": "lesen.grundlinie", "stufe": 2, "kanal": "wissen" },
       "beschreibung": "Montagmorgen im Büro. Jonas ist sonst als Erster da und grüßt jeden mit Namen. Heute kommt er um halb zehn, nickt nur kurz in die Runde und setzt Kopfhörer auf.",
       "frage": "Was ist die beste erste Einschätzung?",
       "antworten": [
@@ -201,7 +201,7 @@
         { "text": "Er ist eben auch mal müde, das ist nichts Besonderes, muss man nicht weiter beachten.", "wert": 1, "warum": "Möglich und gelassen. Aber gleich mehrere Gewohnheiten sind anders – das ist eine deutliche Veränderung." },
         { "text": "Er hat bestimmt verschlafen.", "wert": 0, "tendenz": "uebersicher", "warum": "Erklärt die Uhrzeit, aber nicht das knappe Nicken und die Kopfhörer. Geraten." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0024", "faehigkeit": "lesen.grundlinie", "stufe": 3, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0024.webp", "kopf": { "id": "lesen-v-0024", "faehigkeit": "lesen.grundlinie", "stufe": 3, "kanal": "wissen" },
       "beschreibung": "Kochkurs. Jule ist sonst laut, lacht viel und erzählt beim Schneiden ununterbrochen. Heute schneidet sie schweigend Zwiebeln, ihre Augen sind gerötet. Als die Kursleiterin einen Witz macht, lacht sie mit.",
       "frage": "Wie liest du das am besten?",
       "antworten": [
@@ -210,7 +210,7 @@
         { "text": "Sie lacht mit, also ist alles in Ordnung.", "wert": 1, "warum": "Das Lachen spricht gegen etwas Schlimmes. Die Stille bleibt trotzdem eine Abweichung." },
         { "text": "Sie mag die Kursleiterin nicht und zeigt das, indem sie heute einfach nicht mit allen redet.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Sie lacht über deren Witz. Die Deutung passt nicht einmal zu den Zeichen." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0025", "faehigkeit": "lesen.grundlinie", "stufe": 4, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0025.webp", "kopf": { "id": "lesen-v-0025", "faehigkeit": "lesen.grundlinie", "stufe": 4, "kanal": "wissen" },
       "beschreibung": "Abteilungsrunde. Miriam erzählt von ihrem Wochenende wie immer mit viel Lachen. Als Dr. Albers die neue Raumverteilung zeigt, auf der ihr Platz am Fenster wegfällt, hört sie auf zu lachen, schaut auf den Plan und tippt mit dem Stift auf den Tisch. Danach sagt sie: „Okay.“",
       "frage": "Was ist das Wichtigste, das du bemerkst?",
       "antworten": [
@@ -286,7 +286,7 @@
         { "text": "Lena sagt nichts.", "stuetzt": false, "warum": "Lena sagt in Runden meist wenig. Das ist ihre Grundlinie." }
       ] },
     { "art": "buendel", "kopf": { "id": "lesen-v-0033", "faehigkeit": "lesen.buendel", "stufe": 4, "kanal": "wissen" },
-      "lage": "Beim Elternabend in der zugigen Halle des Sportvereins fragst du, wer beim Sommerfest hilft. Ein Vater sagt: „Ja, mal sehen.“",
+      "lage": "Bei der Versammlung in der zugigen Halle des Sportvereins fragst du, wer beim Sommerfest hilft. Ein Vereinskollege sagt: „Ja, mal sehen.“",
       "frage": "Welche Zeichen sprechen eher dafür, dass er eigentlich nicht helfen will?",
       "zeichen": [
         { "text": "Er sagt „mal sehen“ statt einen Tag zu nennen.", "stuetzt": true, "warum": "Eine weiche Antwort ohne Festlegung ist oft eine höfliche Absage." },
@@ -311,7 +311,7 @@
         { "text": "Ein Zeichen, das sehr deutlich ist.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Ein Zeichen ist keins – auch ein deutliches." },
         { "text": "Mehrere Zeichen in dieselbe Richtung.", "wert": 1, "warum": "Der Kern stimmt. Es fehlen Lage und Grundlinie – ohne sie kann ein Bündel in die Irre führen." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0036", "faehigkeit": "lesen.buendel", "stufe": 3, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0036.webp", "kopf": { "id": "lesen-v-0036", "faehigkeit": "lesen.buendel", "stufe": 3, "kanal": "wissen" },
       "beschreibung": "Elternsprechtag beim Patenkind, du bist als Begleitung dabei. Die Lehrerin sagt: „Er ist ein aufgeweckter Junge.“ Dabei schaut sie in ihre Notizen, macht eine Pause und fügt hinzu: „Im Unterricht ist er … sehr lebhaft.“ Sie lächelt kurz.",
       "frage": "Was liest du am ehesten heraus?",
       "antworten": [
@@ -320,7 +320,7 @@
         { "text": "Sie kann ihn nicht leiden.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Ein Aber zum Verhalten heißt nicht Abneigung gegen das Kind." },
         { "text": "Unklar – am besten nachfragen, wie sie das meint.", "wert": 1, "warum": "Nachfragen ist richtig. Du hättest aber schon eine gute Vermutung: ein verpacktes Aber." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0037", "faehigkeit": "lesen.buendel", "stufe": 4, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0037.webp", "kopf": { "id": "lesen-v-0037", "faehigkeit": "lesen.buendel", "stufe": 4, "kanal": "wissen" },
       "beschreibung": "Abendessen bei Freunden. Du erzählst von deinen Umzugsplänen in eine andere Stadt. Deine Freundin sagt: „Wie aufregend!“ Dann stellt sie ihr Glas ab, schaut auf den Tisch, schiebt mit der Gabel Reis hin und her und fragt nichts weiter.",
       "frage": "Was ist die beste Lesart?",
       "antworten": [

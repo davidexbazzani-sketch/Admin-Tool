@@ -15,7 +15,7 @@
       "art": "umformulieren",
       "kopf": { "id": "gespraech-v-0049", "faehigkeit": "gespraech.ich", "stufe": 4, "kanal": "koennen" },
       "auftrag": "Mach aus der Spitze eine Ich-Botschaft, die Tarek annehmen kann.",
-      "vorlage": "In der Mittagspause: „Schön, dass du auch mal erzählst, was du dem Kunden versprochen hast – ich erfahr's ja immer als Letzter.“",
+      "vorlage": "In der Mittagspause: „Schön, dass du auch mal erzählst, was du dem Kunden versprochen hast – ich erfahr's ja immer zuletzt.“",
       "kriterien": ["ohne Ironie", "Beobachtung und Folge", "eine konkrete Bitte für künftig"],
       "muster": [
         "„Von der Zusage an Herrn Petersen hab ich erst heute erfahren, als er mich danach gefragt hat. Das war mir unangenehm. Sagst du mir so was künftig am selben Tag?“",
@@ -691,9 +691,9 @@
     {
       "art": "umformulieren",
       "kopf": { "id": "gespraech-v-0075", "faehigkeit": "gespraech.oben", "stufe": 3, "kanal": "koennen" },
-      "auftrag": "Mach aus dem Einwand eine Frage an deine Vorgesetzte.",
+      "auftrag": "Mach aus dem Einwand eine Frage an Dr. Albers.",
       "vorlage": "„Das mit der neuen Software zum Ersten klappt nie, die Schulung fehlt doch noch.“",
-      "kriterien": ["als Frage oder Vorschlag", "mit Grund", "lässt die Entscheidung bei ihr"],
+      "kriterien": ["als Frage oder Vorschlag", "mit Grund", "lässt die Entscheidung bei ihm"],
       "muster": [
         "„Die Schulung ist erst am Zehnten. Was spricht dagegen, den Start auf danach zu legen?“",
         "„Wäre es denkbar, zum Ersten nur mit zwei Leuten zu testen, bis alle geschult sind?“"
@@ -733,7 +733,7 @@
         { "text": "„Komm nie mit einem Problem ohne fertige Lösung.“", "fach": 0 },
         { "text": "„Ein früh genanntes Risiko ist ein Beitrag.“", "fach": 1 },
         { "text": "„Wer widerspricht, gilt als schwierig.“", "fach": 0 },
-        { "text": "„Ein sachlicher Einwand hilft auch der Chefin.“", "fach": 1 },
+        { "text": "„Ein sachlicher Einwand hilft auch dem Chef.“", "fach": 1 },
         { "text": "„Vor anderen widerspricht man dem Chef nie.“", "fach": 0 },
         { "text": "„Heikles kann ich vorher unter vier Augen klären.“", "fach": 1 }
       ]
@@ -787,7 +787,7 @@
     {
       "art": "auswahl",
       "kopf": { "id": "gespraech-v-0081", "faehigkeit": "gespraech.oben", "stufe": 6, "kanal": "wissen", "sicherheit": true },
-      "frage": "Eine Vorgesetzte macht dich seit Wochen vor anderen herunter, schließt dich von Infos aus und droht mit „Konsequenzen“, wenn du etwas sagst. Was ist jetzt der richtige Weg?",
+      "frage": "Eine Führungskraft macht dich seit Wochen vor anderen herunter, schließt dich von Infos aus und droht mit „Konsequenzen“, wenn du etwas sagst. Was ist jetzt der richtige Weg?",
       "antworten": [
         {
           "text": "Eine bessere Gesprächstechnik suchen und es noch einmal mit einer Ich-Botschaft versuchen.",
@@ -834,7 +834,7 @@
     {
       "art": "kunstgriff",
       "kopf": { "id": "gespraech-v-0083", "faehigkeit": "gespraech.oben", "stufe": 6, "kanal": "wissen", "einfluss": "taktik" },
-      "lage": "Im Jahresgespräch sagt deine Vorgesetzte: „Sie sind doch ein Teamplayer. Sie sind doch auch der Meinung, dass Mehrarbeit in so einer Phase dazugehört?“",
+      "lage": "Im Jahresgespräch sagt Dr. Albers: „Sie sind doch ein Teamplayer. Sie sind doch auch der Meinung, dass Mehrarbeit in so einer Phase dazugehört?“",
       "frage": "Was steckt in dieser Frage?",
       "antworten": [
         {
@@ -920,10 +920,10 @@
     {
       "art": "auswahl",
       "kopf": { "id": "gespraech-v-0088", "faehigkeit": "gespraech.konflikt", "stufe": 5, "kanal": "wissen", "sicherheit": true },
-      "frage": "Im Streit wird dein Partner so wütend, dass er gegen die Tür schlägt und droht: „Pass bloß auf.“ Es ist nicht das erste Mal. Was ist jetzt das Wichtigste?",
+      "frage": "Im Streit wird die Person, mit der du zusammenlebst, so wütend, dass sie gegen die Tür schlägt und droht: „Pass bloß auf.“ Es ist nicht das erste Mal. Was ist jetzt das Wichtigste?",
       "antworten": [
         {
-          "text": "Mit einer ruhigen Ich-Botschaft versuchen, ihn zu beruhigen.",
+          "text": "Mit einer ruhigen Ich-Botschaft versuchen, sie zu beruhigen.",
           "wert": 0,
           "warum": "Bei Drohung geht es nicht mehr um die richtige Formulierung, sondern um deine Sicherheit."
         },
@@ -933,7 +933,7 @@
           "warum": "Drohung und Gewalt sind keine Konflikte, die man mit Technik löst. Du verdienst Schutz und Unterstützung."
         },
         {
-          "text": "Später, wenn er ruhig ist, über alles reden.",
+          "text": "Später, wenn sie ruhig ist, über alles reden.",
           "wert": 0,
           "tendenz": "aushalten",
           "warum": "Reden kann später sinnvoll sein – zuerst zählt deine Sicherheit. Bei Wiederholung braucht es Hilfe von außen."
@@ -1075,7 +1075,7 @@
             "sagt": "Tarek: „Ich betreue die Gärtnerei seit Jahren. Wenn die dich anrufen, wirkt das, als würde ich nichts tun.“",
             "wahl": [
               {
-                "text": "„Dir ist wichtig, dass die Gärtnerei sieht, dass du ihr Ansprechpartner bist. Mir ist wichtig, dass ihre Anfragen nicht liegen bleiben. Wie kriegen wir beides hin?“",
+                "text": "„Dir ist wichtig, dass die Gärtnerei dich als Ansprechpartner sieht. Mir, dass nichts liegen bleibt. Wie kriegen wir beides hin?“",
                 "wert": 2,
                 "weiter": "ende1",
                 "rueck": "Beide Interessen in einem Satz – und eine gemeinsame Frage."

@@ -1,0 +1,260 @@
+{
+  "einheiten": [
+    {
+      "id": "stimme-3-01", "bereich": "stimme", "stufe": 3, "nr": 1,
+      "titel": "Die Geschichte in 60 Sekunden",
+      "faehigkeiten": ["stimme.bild", "stimme.pause"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Geschichten länger wirken als Zahlen, zeigen Online-Experimente einer Forschergruppe. Der Bauplan aus Ort, Person, Wendung und Bedeutung ist Praxiswissen aus Rhetorik und Erzählkunst, nicht eigens geprüft.",
+      "quellen": ["graeber2024", "heath2007", "praxis-stimme"],
+      "aha": "Eine gute Geschichte braucht keine fünf Minuten. Ein Ort, eine Person mit einem Detail, eine Wendung mit Pause davor – und ein Satz, was sie bedeutet. Das passt in eine Minute und bleibt oft länger hängen als eine Folie.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Tarek will das Team überzeugen, vor jeder Auslieferung eine kurze Prüfliste abzuhaken.", "schwach": "„Die Prüfliste ist sinnvoll, weil sie Fehler vermeidet, Zeit spart, Reklamationen verhindert und uns allen mehr Sicherheit gibt.“", "stark": "„Letzten Freitag, kurz vor fünf. Jonas packt die letzte Kiste für Frau Köhler, schon die Jacke an. Ein Blick auf den Lieferschein – || die Schrauben fehlen. Ohne diesen Blick hätte ihre Maschine am Montag stillgestanden. Genau diesen Blick soll die Liste jedem von uns schenken.“", "frage": "Welche Fassung erzählst du deinem Nachbarn in der Kaffeepause weiter?", "unterschied": "Die zweite: Man sieht Jonas mit der Jacke, spürt die Pause vor der Wendung und versteht danach von selbst, wozu die Liste dient. Die erste behauptet nur Vorteile." },
+        { "art": "geschichte", "titel": "Carlas eine Minute", "figur": "Carla Demir", "text": "Carla sollte beim Kundentag das neue Bestellsystem vorstellen – zwanzig Folien voller Funktionen. Bei der Probe schauten alle auf die Uhr. Am Abend vorher hat sie alles umgeworfen. Sie begann mit einer Minute über Herrn Petersen: wie er an einem Montag dreimal anrief, weil keiner seine Bestellung fand, und wie er beim dritten Mal sagte: „Ich will doch nur wissen, wann sie kommt.“ Pause. Dann: „Darum gibt es dieses System.“ Nach dem Vortrag fragte keiner nach Funktionen. Alle wollten wissen, ob Herr Petersen jetzt zufrieden ist.", "frage": "Welcher Mensch steht hinter dem Thema, über das du als Nächstes sprichst?" },
+        { "art": "karte", "text": "Der Bauplan für eine Minute. Ort und Zeit in einem Satz: „Letzten Freitag, kurz vor fünf.“ Eine Person mit einem Detail, das man sieht – die Jacke schon an. Die Wendung: Was ging schief, was war überraschend? Davor eine Pause. Die Bedeutung in einem Satz: „Darum …“. Erzähl in der Gegenwart, lass eine Figur einen kurzen Satz sagen – und lass alles weg, was nicht zur Wendung führt." },
+        { "art": "geschichtenbau", "kopf": { "id": "stimme-3-01-a", "faehigkeit": "stimme.bild", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Bau eine Geschichte aus deinem Alltag, die einen Punkt belegt, den du demnächst machen willst. Höchstens eine Minute.",
+          "felder": [
+            { "name": "Ort und Zeit", "hilfe": "Ein Satz: wann, wo." },
+            { "name": "Person und Detail", "hilfe": "Wer? Und ein Detail, das man vor sich sieht." },
+            { "name": "Wendung", "hilfe": "Was ging schief, was war anders als gedacht? Hier kommt die Pause davor." },
+            { "name": "Bedeutung", "hilfe": "Ein Satz: Was heißt das für die Zuhörer?" }
+          ],
+          "muster": ["Ort und Zeit: Dienstagabend, vor dem Vereinsheim. Person und Detail: Frau Sommer im Regen, ein Blech Kuchen unter dem Arm. Wendung: Die Tür ist zu – || der Abend war abgesagt, nur in der Chatgruppe, und Frau Sommer hat kein Smartphone. Bedeutung: Darum möchte ich, dass wir Änderungen im Verein künftig auch auf Papier aushängen.", "Ort und Zeit: Vorige Woche, Telefonhotline. Person und Detail: Lena, Hörer am Ohr, drei Ordner aufgeschlagen. Wendung: Der Kunde wartet – || und die Bestellung steht im vierten. Bedeutung: Ein Ordner je Kunde, und keiner muss mehr suchen."] },
+        { "art": "auswahl", "kopf": { "id": "stimme-3-01-b", "faehigkeit": "stimme.bild", "stufe": 7, "kanal": "wissen" },
+          "frage": "Deine Geschichte ist gut erzählt, die Runde hat gelacht. Welcher Satz macht sie danach am stärksten zum Argument?",
+          "antworten": [
+            { "text": "„Na ja, so ist das manchmal.“", "wert": 0, "tendenz": "kleinreden", "warum": "Die Geschichte verpufft als Anekdote. Was sie für die Entscheidung bedeutet, bleibt offen." },
+            { "text": "„Darum schlage ich vor: Ab Montag prüft jeder vor dem Versand den Lieferschein.“", "wert": 2, "warum": "Die Bedeutung folgt direkt aus der Wendung und mündet in einen klaren Vorschlag." },
+            { "text": "„Und das war nicht das erste Mal, das ist im letzten Jahr bestimmt schon fünf- oder sechsmal vorgekommen.“", "wert": 1, "warum": "Zeigt, dass es kein Einzelfall ist – ein guter Zusatz. Den Vorschlag selbst hast du aber noch nicht genannt." },
+            { "text": "Gleich noch eine zweite Geschichte erzählen, damit es wirklich sitzt.", "wert": 0, "warum": "Zwei Geschichten hintereinander verwässern die erste. Eine gute, dann die Bedeutung." }
+          ] },
+        { "art": "buehne", "kopf": { "id": "stimme-3-01-c", "faehigkeit": "stimme.bild", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "stimme-v-0210" },
+          "auftrag": "Steh auf und erzähl deine Geschichte aus dem Bauplan – frei, höchstens eine Minute. Vor der Wendung eine Pause, die Bedeutung am Ende ruhig und mit sinkender Stimme.",
+          "sekunden": 60,
+          "publikum": "klein",
+          "stoerungen": ["Jemand lacht an einer Stelle, die nicht witzig gemeint war.", "Jemand fragt: „Wann war das noch mal?“", "Ein Handy vibriert auf dem Tisch."],
+          "pruefliste": ["Ort und Zeit im ersten Satz?", "Ein Detail, das man sieht?", "Pause vor der Wendung gehalten?", "Bedeutung am Ende – nicht „Na ja“?", "In einer Minute geblieben?"] },
+        { "art": "mission", "ref": "stimme-m-09" }
+      ],
+      "regel": "Ort, Person mit Detail, Wendung nach einer Pause – dann ein Satz, was sie bedeutet.",
+      "merkkarten": [
+        { "id": "stimme-3-01-m1", "frage": "Die vier Teile einer Geschichte in einer Minute?", "antwort": "Ort und Zeit, Person mit Detail, Wendung, Bedeutung." },
+        { "id": "stimme-3-01-m2", "frage": "Wo sitzt die Pause?", "antwort": "Direkt vor der Wendung." },
+        { "id": "stimme-3-01-m3", "frage": "Was macht aus einer Anekdote ein Argument?", "antwort": "Der Satz danach: „Darum …“ – mit einem klaren Vorschlag." }
+      ],
+      "mission": "stimme-m-09"
+    },
+    {
+      "id": "stimme-3-02", "bereich": "stimme", "stufe": 3, "nr": 2,
+      "titel": "Überzeugung zeigen",
+      "faehigkeiten": ["stimme.klang", "stimme.betonung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass eine lebendige, zuversichtliche Stimme überzeugender wirkt, zeigt eine Versuchsreihe mit Tonaufnahmen. Dass ein Fehler übersicheren Sprechern mehr schadet als solchen, die Unsicherheit zeigen, zeigen zwei Experimente zu Zeugenaussagen. Die Übertragung auf Vorträge ist naheliegend, aber nicht eigens geprüft.",
+      "quellen": ["vanzant2020", "tenney2007", "praxis-stimme"],
+      "aha": "Überzeugt wirkt, wer sicher klingt, wo er sicher ist – und offen sagt, wo er es nicht ist. Gespielte Sicherheit fliegt beim ersten Fehler auf; ehrliche Sicherheit hält.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "stimme-3-02-a", "faehigkeit": "stimme.betonung", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du empfiehlst Dr. Albers einen neuen Lieferanten. Preis und Qualität hast du geprüft, die Liefertreue kennst du erst aus zwei Bestellungen. Was sagst du?",
+          "antworten": [
+            { "text": "„Ich empfehle ihn. Preis und Qualität stimmen. Bei der Liefertreue haben wir erst zwei Bestellungen – die schaue ich mir weiter an.“", "wert": 2, "warum": "Sicher, wo du es weißt, offen, wo nicht. Das macht die Empfehlung glaubwürdig – auch wenn später einmal etwas hakt." },
+            { "text": "„Ich empfehle ihn, er ist in allem besser.“", "wert": 0, "tendenz": "ueberspielen", "warum": "Klingt stark, bis die erste Lieferung zu spät kommt. Dann ist auch der Rest deiner Empfehlung angekratzt." },
+            { "text": "„Ich weiß nicht, ob ich ihn so richtig empfehlen kann, vielleicht, aber ganz sicher bin ich mir eigentlich nicht.“", "wert": 0, "tendenz": "kleinreden", "warum": "Du hast zwei Dinge sicher geprüft – und versteckst sie hinter Weichmachern." },
+            { "text": "„Ich empfehle ihn, mit einem kleinen Vorbehalt.“", "wert": 1, "warum": "Ehrlich, aber ungenau. Welcher Vorbehalt? Wenn du ihn nennst, wird aus dem Zögern eine klare Einschätzung." }
+          ] },
+        { "art": "studie", "frage": "Lohnt es sich, Unsicherheit zuzugeben?", "aufbau": "Studierende spielten Geschworene und hörten Zeugen, die sehr sicher auftraten oder ihre Unsicherheit bei einzelnen Punkten zeigten. Einige Aussagen stellten sich danach als falsch heraus.", "ergebnis": "Ein nachgewiesener Fehler schadete dem übersicheren Zeugen mehr als dem, der seine Unsicherheit gezeigt hatte. Wer zu seiner Sicherheit passend auftrat, blieb glaubwürdig.", "grenze": "Zwei Experimente mit Studierenden in einer erdachten Gerichtslage. Für Vorträge eine Übertragung – die Richtung passt zu dem, was erfahrene Redner raten.", "beleg": "B", "quellen": ["tenney2007"] },
+        { "art": "karte", "text": "Überzeugung hört man an drei Dingen. Klare Sätze ohne Weichmacher, wo du sicher bist – „Ich empfehle“ statt „Ich würde vielleicht sagen“. Ein Satzende, das sinkt, statt wie eine Frage zu steigen. Wechsel in Lautstärke und Tempo: In Versuchen wirkten so sprechende Redner zuversichtlicher. Und wo du unsicher bist, ein offener Satz mit Plan. Nicht drücken, nicht lauter werden – deine bequeme Lage trägt." },
+        { "art": "tonfall", "kopf": { "id": "stimme-3-02-b", "faehigkeit": "stimme.klang", "stufe": 6, "kanal": "wissen" },
+          "satz": "Wir sollten im März starten.",
+          "fassungen": [
+            { "betont": "Wir sollten im März starten? (Stimme steigt am Ende)", "bedeutung": "klingt wie eine Bitte um Erlaubnis" },
+            { "betont": "Wir sollten im MÄRZ starten. (Stimme sinkt am Ende)", "bedeutung": "eine Empfehlung, hinter der du stehst" },
+            { "betont": "WIR SOLLTEN IM MÄRZ STARTEN! (laut und gepresst)", "bedeutung": "Druck statt Überzeugung – und anstrengend für die Stimme" }
+          ],
+          "frage": "Du bist überzeugt, dass März richtig ist. Welche Fassung zeigt das?",
+          "antworten": [
+            { "text": "Die laute – dann merken alle, wie ernst es dir ist.", "wert": 0, "tendenz": "ueberkontrolle", "warum": "Lautstärke und Druck wirken eher bedrängend und strengen die Stimme an. Überzeugung kommt ruhiger an." },
+            { "text": "Die mit steigendem Ende – das klingt offen für andere Meinungen.", "wert": 1, "warum": "Offen ja, aber auch unsicher. Offenheit zeigst du besser mit einer Frage danach: „Was spricht dagegen?“" },
+            { "text": "Die mit sinkendem Ende und dem Ton auf MÄRZ.", "wert": 2, "warum": "So klingt der Satz nach Aussage. Du stehst dahinter, ohne zu drücken." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stimme-3-02-c", "faehigkeit": "stimme.betonung", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Streich die Weichmacher, wo die Sprecherin sicher ist – und mach aus dem einen echten Zweifel einen offenen Satz mit Plan.",
+          "vorlage": "„Also, ich würde eigentlich sagen, dass der neue Dienstplan vielleicht ganz gut funktioniert, die Rückmeldungen sind irgendwie fast alle positiv, nur ob es im Sommer klappt, weiß man halt nicht so genau.“",
+          "kriterien": ["sichere Aussagen ohne „eigentlich“, „vielleicht“, „irgendwie“", "der echte Zweifel bleibt sichtbar", "ein Plan für den Zweifel"],
+          "muster": ["„Der neue Dienstplan funktioniert. | Die Rückmeldungen sind fast alle positiv. | Offen ist der Sommer – das prüfen wir im Juni.“", "„Der Dienstplan bewährt sich, fast alle sind zufrieden. | Ob er die Urlaubszeit trägt, wissen wir noch nicht. | Ich melde mich dazu Ende Juni.“"] },
+        { "art": "nachsprechen", "kopf": { "id": "stimme-3-02-d", "faehigkeit": "stimme.klang", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "stimme-v-0214" },
+          "auftrag": "Erst kurz „mmh“, dann jede Zeile in deiner bequemen Lage: der sichere Teil mit sinkendem Ende, der offene Teil ruhig, ohne Entschuldigung im Ton.",
+          "zeilen": ["Ich empfehle den neuen Lieferanten. | Bei der Liefertreue schauen wir noch genauer hin.", "Das schaffen wir bis Freitag. | Für den Montag kann ich noch nichts versprechen.", "Mein Vorschlag steht: Wir starten im März.", "Das weiß ich nicht. | Ich kläre es bis morgen."],
+          "weise": "klar",
+          "pruefliste": ["Sichere Sätze mit sinkendem Ende?", "Der offene Satz ruhig, nicht kleinlaut?", "Kein Druck im Hals, keine gespielte Tiefe?"] },
+        { "art": "experiment", "auftrag": "Achte eine Woche lang auf deine Weichmacher. Streich sie dort, wo du sicher bist – und sag einmal bewusst: „Da bin ich nicht sicher. Ich kläre es bis …“", "dauer": "woche", "nachfrage": "Wie haben die anderen auf den offenen Satz reagiert – und wie auf die klaren?" },
+        { "art": "reflexion", "frage": "Bei welchem Thema klingst du unsicherer, als du bist – und bei welchem sicherer, als du es weißt?" }
+      ],
+      "regel": "Sicher, wo du es weißt – offen mit Plan, wo nicht. Satzende sinkt, Stimme bleibt bequem.",
+      "merkkarten": [
+        { "id": "stimme-3-02-m1", "frage": "Woran hört man Überzeugung?", "antwort": "Klare Sätze ohne Weichmacher, sinkendes Satzende, Wechsel in Lautstärke und Tempo." },
+        { "id": "stimme-3-02-m2", "frage": "Warum Unsicherheit offen zeigen?", "antwort": "Ein Fehler schadet dem Übersicheren mehr. Wer passend sicher auftritt, bleibt glaubwürdig." },
+        { "id": "stimme-3-02-m3", "frage": "Ein offener Satz mit Plan?", "antwort": "„Das weiß ich noch nicht. Ich kläre es bis morgen.“" }
+      ]
+    },
+    {
+      "id": "stimme-3-03", "bereich": "stimme", "stufe": 3, "nr": 3,
+      "titel": "Fragen aus dem Publikum",
+      "faehigkeiten": ["stimme.pause", "stimme.aufbau"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Zuhörer aus Zögern, Ähs und Tonfall ablesen, wie sicher jemand bei seiner Antwort ist, zeigt eine Laborstudie; dass ehrliche Unsicherheit glaubwürdiger bleibt als gespielte Sicherheit, zwei Experimente. Der Ablauf der Antwort ist Praxiswissen.",
+      "quellen": ["brennan1995", "tenney2007", "praxis-stimme"],
+      "aha": "Die Fragerunde ist kein Verhör, sondern deine zweite Chance. Hör bis zum Ende zu, gib die Frage in einem Satz zurück, antworte zuerst – und führ am Schluss zu deinem Kernsatz.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "stimme-3-03-a", "faehigkeit": "stimme.pause", "stufe": 6, "kanal": "wissen" },
+          "frage": "Jemand stellt eine Frage, und schon nach dem halben Satz weißt du, worauf er hinauswill. Was tust du?",
+          "antworten": [
+            { "text": "Zuhören bis zum Ende, kurz still, dann antworten.", "wert": 2, "warum": "Oft kommt der eigentliche Punkt erst am Ende. Die Pause zeigt, dass du die Frage ernst nimmst." },
+            { "text": "Freundlich unterbrechen und gleich antworten – das spart allen Zeit.", "wert": 0, "tendenz": "tempo", "warum": "Wer unterbricht, beantwortet leicht die falsche Frage – und der Fragende fühlt sich übergangen." },
+            { "text": "Zuhören und ohne Pause losreden, damit keine peinliche Stille entsteht.", "wert": 1, "warum": "Zuhören bis zum Ende ist richtig. Eine kurze stille Pause wirkt aber gesammelter als ein schneller Anlauf." }
+          ] },
+        { "art": "karte", "text": "Fünf Schritte für jede Frage. Bis zum Ende zuhören. Kurz still – das ist Denkzeit. Die Frage in einem Satz zurückgeben: Alle hören sie, du gewinnst Zeit, Missverständnisse fallen auf. Antwort zuerst, höchstens ein Grund. Dann zurück zu deinem Kernsatz oder: „Beantwortet das Ihre Frage?“ Weißt du es nicht, sag es und nenn einen Termin. Zuhörer hören Unsicherheit an Ähs und Zögern – eine stille Pause verrät weniger." },
+        { "art": "rangfolge", "kopf": { "id": "stimme-3-03-b", "faehigkeit": "stimme.aufbau", "stufe": 6, "kanal": "wissen" },
+          "frage": "Herr Petersen fragt beim Kundenabend nach den neuen Lieferzeiten. Bring deine Antwort in die richtige Reihenfolge.",
+          "eintraege": [
+            { "text": "Zuhören, kurz still.", "warum": "Erst die ganze Frage – dann denken." },
+            { "text": "„Sie fragen, ob sich Ihre Lieferzeit ändert.“", "warum": "Die Frage zurückgeben – gerade bei jemandem, der schlecht hört, klärt das, ob ihr dasselbe meint." },
+            { "text": "„Nein, für Sie bleibt es bei drei Tagen.“", "warum": "Die Antwort zuerst." },
+            { "text": "„Nur Sonderteile brauchen künftig einen Tag länger.“", "warum": "Ein Grund oder eine Einschränkung – nicht mehr." },
+            { "text": "„Und genau dafür ist das neue Lager da: damit Sie sich darauf verlassen können.“", "warum": "Zurück zum Kernsatz – die Frage wird zur Bühne für deine Botschaft." }
+          ] },
+        { "art": "dialog", "kopf": { "id": "stimme-3-03-c", "faehigkeit": "stimme.pause", "stufe": 7, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Die Frage mit Spitze", "figur": "Miriam Okafor",
+            "lage": "Du hast in der Abteilungsrunde den neuen Ablauf für Urlaubsanträge vorgestellt: ein Formular statt bisher drei. Fragerunde. Miriam meldet sich, mit einem Grinsen.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Miriam: „Schön und gut. Aber ist das nicht einfach noch ein Formular mehr, das keiner liest?“ Einige lachen.",
+                "wahl": [
+                  { "text": "Kurz still, dann: „Du fragst, ob das nur mehr Papier ist. Nein – es ersetzt drei alte Formulare.“", "wert": 2, "weiter": "k2", "rueck": "Pause, Frage sachlich zurückgegeben, Antwort zuerst. Die Spitze verpufft, der Inhalt bleibt." },
+                  { "text": "„Na, wenn du es nicht liest, ist das ja nicht mein Problem.“", "wert": 0, "tendenz": "angreifen", "weiter": "k1b", "rueck": "Ein Lacher vielleicht – aber jetzt geht es um euch zwei, nicht um den Ablauf." },
+                  { "text": "„Ja, also, das kann man so sehen, ich hab mir das auch nicht ausgedacht, das kam alles von oben …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k1b", "rueck": "Du rechtfertigst dich und gibst den Vorschlag aus der Hand. Die eigentliche Antwort fehlt." },
+                  { "text": "„Gute Frage!“ – und dann die Vorteile noch einmal von vorn aufzählen.", "wert": 1, "weiter": "k2", "rueck": "Freundlich und sachlich. Kürzer wäre stärker: Frage zurückgeben, Antwort, ein Grund." }
+                ] },
+              { "id": "k1b", "sagt": "Es wird unruhig. Dr. Albers schaut zu dir.",
+                "wahl": [
+                  { "text": "Ausatmen, dann ruhig: „Im Ernst: Es ersetzt drei alte Formulare. Ein Blatt statt drei.“", "wert": 2, "weiter": "k2", "rueck": "Zurück zur Sache – kurz, mit einem Bild. Die Runde folgt dir wieder." },
+                  { "text": "Schnell weitermachen: „Gibt's noch andere Fragen?“", "wert": 0, "tendenz": "vermeiden", "weiter": "k2", "rueck": "Die Frage bleibt im Raum hängen – und mit ihr der Eindruck, dass sie stimmt." }
+                ] },
+              { "id": "k2", "sagt": "Lena, leise: „Und was ist mit Anträgen, die schon eingereicht sind?“ Das hast du nicht geklärt.",
+                "wahl": [
+                  { "text": "„Weiß ich gerade nicht. Ich kläre es mit der Personalabteilung – bis Freitag.“", "wert": 2, "weiter": "k3", "rueck": "Ehrlich und mit Termin. Das wirkt sicherer als jede geratene Antwort." },
+                  { "text": "„Die gelten bestimmt weiter, da mach dir mal keine Sorgen – das wird schon alles so passen.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3", "rueck": "Geraten statt gewusst. Stellt es sich als falsch heraus, wackelt auch der Rest deines Vortrags." },
+                  { "text": "„Äh – da müsste ich – also, ich glaube, äh, eher ja?“", "wert": 1, "weiter": "k3", "rueck": "Ehrlich, aber das Zögern klingt nach mehr Unsicherheit, als nötig wäre. Klar gesagt wirkt „Weiß ich nicht, ich kläre es“ ruhiger." }
+                ] },
+              { "id": "k3", "sagt": "Carla: „Wir müssen langsam weiter. Noch ein Satz von dir?“",
+                "wahl": [
+                  { "text": "„Kurz: Ein Blatt statt drei. Und zu den alten Anträgen melde ich mich bis Freitag.“", "wert": 2, "weiter": "ende1", "rueck": "Kernsatz und Zusage zum Schluss. Die Fragerunde endet bei deiner Botschaft." },
+                  { "text": "„Nein, passt schon, danke.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Das letzte Wort war eine Chance – jetzt endet die Runde bei der letzten Frage statt bei deiner Botschaft." },
+                  { "text": "„Danke für die vielen Fragen, die waren wirklich hilfreich – und jetzt will ich euch nicht länger aufhalten.“", "wert": 1, "weiter": "ende1", "rueck": "Höflich. Mit deinem Kernsatz davor hätte der Schluss mehr getragen." }
+                ] },
+              { "id": "ende1", "sagt": "Carla nickt: „Danke dir. Nächster Punkt.“", "ende": "Pause, Frage zurückgeben, Antwort zuerst, ehrlich bei Lücken – und am Ende zurück zum Kernsatz. So gehört die Fragerunde dir." }
+            ],
+            "prinzipien": ["bis zum Ende zuhören, kurz still", "Frage sachlich zurückgeben – auch die mit Spitze", "Weiß ich nicht + Termin statt raten", "mit dem Kernsatz enden"]
+          } },
+        { "art": "umformulieren", "kopf": { "id": "stimme-3-03-d", "faehigkeit": "stimme.aufbau", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Jemand fragt nach deinem Vortrag: „Was kostet uns das am Ende?“ Mach aus dieser Antwort eine mit Antwort zuerst und Rückweg zum Kernsatz.",
+          "vorlage": "„Ja, also, das ist eine schwierige Frage, da spielen viele Dinge rein, die Lizenzen, die Schulung, wie viele mitmachen, und dann muss man ja auch sehen, was wir sparen, also so pauschal kann man das nicht sagen, aber es hält sich im Rahmen.“",
+          "kriterien": ["Antwort oder ehrliche Einschätzung im ersten Satz", "höchstens ein Grund oder eine Spanne", "am Ende zurück zum Kernsatz"],
+          "muster": ["„Rund 3.000 Euro im ersten Jahr. | Der größte Posten ist die Schulung. | Dafür bekommen wir jede Woche einen halben Tag Suchzeit zurück.“", "„Eine genaue Zahl habe ich noch nicht – ich rechne mit 2.000 bis 4.000 Euro. | Bis Monatsende lege ich die Rechnung vor. | Und dagegen steht die Zeit, die wir jede Woche sparen.“"] },
+        { "art": "mission", "ref": "stimme-m-10" }
+      ],
+      "regel": "Zuhören, Pause, Frage zurückgeben, Antwort zuerst – und zurück zum Kernsatz.",
+      "merkkarten": [
+        { "id": "stimme-3-03-m1", "frage": "Warum die Frage in einem Satz zurückgeben?", "antwort": "Alle hören sie, du gewinnst Zeit, und Missverständnisse fallen sofort auf." },
+        { "id": "stimme-3-03-m2", "frage": "Was tust du, wenn du die Antwort nicht weißt?", "antwort": "Es sagen und einen Termin nennen: „Ich kläre es bis Freitag.“" },
+        { "id": "stimme-3-03-m3", "frage": "Wo endet die Fragerunde am besten?", "antwort": "Bei deinem Kernsatz – nicht bei der letzten Frage." }
+      ],
+      "mission": "stimme-m-10"
+    },
+    {
+      "id": "stimme-3-04", "bereich": "stimme", "stufe": 3, "nr": 4,
+      "titel": "Die Fünf-Minuten-Rede",
+      "faehigkeiten": ["stimme.aufbau", "stimme.tempo"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Gerüst, Wegweiser und Stichwortkarte sind bewährtes Praxiswissen aus Sprecherziehung und Rhetorik-Lehre, nicht in Studien verglichen. Dass Proben unter echten Bedingungen helfen, steht im Bereich Ruhe mit Belegen.",
+      "quellen": ["praxis-stimme", "minto", "quintilian-stegreif"],
+      "aha": "Fünf Minuten sind kein langer Fünfsatz, sondern drei kurze Teile mit einem Rahmen. Wer Einstieg, Wegweiser und Schluss fest hat, darf in der Mitte frei sprechen – und kann kürzen, wenn die Zeit schrumpft.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Wie viele Hauptteile verträgt eine Rede von fünf Minuten, damit die Zuhörer sie danach noch nennen können?", "optionen": ["zwei bis drei", "fünf bis sechs", "so viele, wie der Stoff hergibt"], "richtig": 0, "loesung": "Zwei bis drei.", "aufloesung": "Eine feste Zahl aus Studien gibt es nicht. In der Praxis trägt eine Fünf-Minuten-Rede zwei, höchstens drei Teile – jeder mit einem Kernsatz und einem Bild oder Beispiel. Alles Weitere gehört in die Unterlage oder in die Fragerunde." },
+        { "art": "karte", "text": "Das Gerüst: Einstieg mit Frage, Zahl oder Fall. Der Zweck und ein Wegweiser: „Drei Dinge: wo wir stehen, was hakt, was ich vorschlage.“ Drei Teile, je mit Kernsatz und Bild, dazwischen Überleitungen. Der Schluss mit Kernsatz und nächstem Schritt. Auf die Karte kommen erster und letzter Satz ausformuliert, dazwischen nur Stichworte. Plane eine Kürzung: Welcher Teil fliegt raus, wenn du nur drei Minuten hast?" },
+        { "art": "bauplan", "kopf": { "id": "stimme-3-04-a", "faehigkeit": "stimme.aufbau", "stufe": 7, "kanal": "koennen" },
+          "plan": "Fünf-Minuten-Rede",
+          "anlass": "Eine Rede oder Präsentation, die bei dir ansteht – oder zum Üben: Du stellst dem Verein vor, warum er ein gemeinsames Sommerfest mit der Nachbarschaft feiern sollte.",
+          "felder": [
+            { "name": "Einstieg", "hilfe": "Frage, Zahl mit Bild oder kleiner Fall – ausformuliert." },
+            { "name": "Zweck und Wegweiser", "hilfe": "Was willst du erreichen – und welche drei Teile kommen?" },
+            { "name": "Teil 1", "hilfe": "Kernsatz und ein Bild oder Beispiel." },
+            { "name": "Teil 2", "hilfe": "Kernsatz und ein Bild oder Beispiel." },
+            { "name": "Teil 3", "hilfe": "Das stärkste Argument – Kernsatz und Bild." },
+            { "name": "Schluss", "hilfe": "Signal, Kernsatz, nächster Schritt – ausformuliert." },
+            { "name": "Kürzung", "hilfe": "Was fällt weg, wenn du nur drei Minuten hast?" }
+          ],
+          "muster": ["Einstieg: Wer von euch kennt die Familie, die letzten Sommer in die Nummer zwölf gezogen ist? Zweck: Ich möchte, dass wir im Juli ein Fest mit der Nachbarschaft feiern – drei Gründe. Teil 1: Wir brauchen neue Mitglieder; beim letzten offenen Tag kamen vier dazu. Teil 2: Es kostet wenig – Grill und Bänke haben wir. Teil 3: Wir gehören zum Viertel – und kennen kaum jemanden. Schluss: Zum Schluss: Ein Fest, ein Nachmittag, vielleicht zehn neue Gesichter. Wer hilft mit? Bitte bis Monatsende melden. Kürzung: Teil 2 fällt weg, die Kosten stehen im Aushang."] },
+        { "art": "zuordnen", "kopf": { "id": "stimme-3-04-b", "faehigkeit": "stimme.aufbau", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Was gehört auf deine Stichwortkarte – und was nicht?",
+          "faecher": ["auf die Karte", "nicht auf die Karte"],
+          "karten": [
+            { "text": "der erste Satz, ausformuliert", "fach": 0 },
+            { "text": "der ganze Mittelteil Wort für Wort", "fach": 1 },
+            { "text": "ein Stichwort je Teil, groß geschrieben", "fach": 0 },
+            { "text": "der Schlusssatz mit dem nächsten Schritt", "fach": 0 },
+            { "text": "Entschuldigungen für den Fall, dass etwas schiefgeht", "fach": 1 },
+            { "text": "alle Zahlen, die dir einfallen, mit Nachkommastellen", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stimme-3-04-c", "faehigkeit": "stimme.tempo", "stufe": 7, "kanal": "wissen" },
+          "frage": "Die Runde davor hat überzogen. Carla sagt: „Du hast leider nur drei statt fünf Minuten.“ Was tust du?",
+          "antworten": [
+            { "text": "Alles sagen, nur schneller.", "wert": 0, "tendenz": "tempo", "warum": "Schneller heißt: Die Zuhörer verlieren den Anschluss, und dir geht die Luft aus. Nichts bleibt hängen." },
+            { "text": "Den vorbereiteten Teil streichen, Einstieg und Schluss unverändert – im gewohnten Tempo.", "wert": 2, "warum": "Dafür hast du die Kürzung geplant. Rahmen und Kernsatz bleiben, das Tempo bleibt ruhig." },
+            { "text": "Den Einstieg weglassen und direkt mit den Inhalten anfangen.", "wert": 1, "warum": "Spart Zeit, kostet aber den Anfang, der besonders hängen bleibt. Besser einen Mittelteil kürzen." },
+            { "text": "Darum bitten, beim nächsten Mal sprechen zu dürfen.", "wert": 0, "tendenz": "vermeiden", "warum": "Möglich, wenn es wirklich nicht geht – mit einer geplanten Kürzung passt dein Kern aber auch in drei Minuten." }
+          ] },
+        { "art": "buehne", "kopf": { "id": "stimme-3-04-d", "faehigkeit": "stimme.aufbau", "stufe": 8, "kanal": "koennen", "laut": true, "leise": "stimme-v-0218" },
+          "auftrag": "Halte deine Fünf-Minuten-Rede aus dem Bauplan im Stehen – mit Stichwortkarte, nicht mit Skript. Nach drei Minuten kommt die Ansage: „Noch eine Minute.“ Dann streichst du den geplanten Teil und gehst zum Schluss.",
+          "sekunden": 300,
+          "publikum": "klein",
+          "stoerungen": ["„Noch eine Minute, bitte.“", "Jemand fragt dazwischen: „Was kostet das?“", "Der Beamer flackert kurz."],
+          "pruefliste": ["Einstieg und Schluss frei gesprochen?", "Wegweiser genannt und eingehalten?", "Bei „Noch eine Minute“ ruhig zum Schluss gesprungen – nicht schneller geworden?", "Zwischenfrage kurz beantwortet und zurück zum Faden?"] },
+        { "art": "fahrplan", "anlass": "Deine nächste Rede oder Präsentation von etwa fünf Minuten" },
+        { "art": "reflexion", "frage": "Welcher Teil deiner Rede ist dir am wichtigsten – und hält er auch, wenn die Zeit auf drei Minuten schrumpft?" }
+      ],
+      "regel": "Rahmen fest, Mitte frei: Einstieg, Wegweiser, drei Teile, Schluss – und ein Kürzungsplan.",
+      "merkkarten": [
+        { "id": "stimme-3-04-m1", "frage": "Was steht ausformuliert auf der Karte?", "antwort": "Der erste und der letzte Satz. Dazwischen nur ein Stichwort je Teil." },
+        { "id": "stimme-3-04-m2", "frage": "Was tust du, wenn die Zeit schrumpft?", "antwort": "Den geplanten Teil streichen, Rahmen behalten, Tempo halten." }
+      ]
+    },
+    {
+      "id": "stimme-3-05", "bereich": "stimme", "stufe": 3, "nr": 5,
+      "titel": "Dein Auftritt, dein Stil",
+      "faehigkeiten": ["stimme.auftritt", "stimme.klang"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Rückmeldung mit Aufnahme in Redekursen Inhalt und Vortrag verbessert, ohne die Angst zu steigern, zeigt eine ältere Meta-Analyse; dass Vormachen, Üben und Rückmeldung das Können deutlich heben, eine große Meta-Analyse. Was einen eigenen Stil ausmacht, ist Praxiswissen und Denkmodell.",
+      "quellen": ["bourhis1998", "videofeedback", "taylor2005", "aristoteles-vortrag", "praxis-stimme"],
+      "aha": "Gute Redner klingen nicht gleich, sondern nach sich selbst – nur geschärft. Dein Stil entsteht, wenn du deine Stärken ausbaust und dir eine Baustelle nach der anderen vornimmst.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Es gibt einen richtigen Redestil – man muss nur die Großen kopieren.", "urteil": "falsch", "warum": "Auch ruhige, sachliche Redner überzeugen – mit klarem Aufbau und Wechseln in Tempo und Pause. Kopierte Gesten und gespielte Begeisterung wirken schnell aufgesetzt. Lernen kannst du von anderen das Handwerk – den Ton findest du bei dir." },
+        { "art": "studie", "frage": "Hilft es, sich selbst auf Video zu sehen?", "aufbau": "Eine Meta-Analyse fasste zwölf Studien aus Redekursen zusammen, in denen ein Teil der Teilnehmenden Rückmeldung mit Videoaufnahme bekam.", "ergebnis": "Mit Aufnahme verbesserten sich Inhalt und Vortrag stärker. Die Redeangst stieg dadurch nicht messbar.", "grenze": "Ältere Studien aus Hochschulkursen. Aus der Angstbehandlung kommt der Hinweis: erst vorhersagen, wie man wirkt, dann ansehen – sonst sieht man vor allem Fehler.", "beleg": "B", "quellen": ["bourhis1998", "videofeedback"] },
+        { "art": "karte", "text": "So arbeitest du an deinem Stil. Nimm einen Auftritt auf. Schreib vorher drei Wörter, wie du glaubst zu wirken. Dann ansehen wie bei einer fremden Person: Was trägt schon? Welches Merkmal ist typisch für dich und soll bleiben – Ruhe, Witz, Genauigkeit? Welches eine Merkmal übst du als Nächstes? Ein Merkmal für zwei bis vier Wochen, dann das nächste. Echt wirkt, wer nicht spielt – das wusste schon Aristoteles." },
+        { "art": "werte", "auftrag": "Welche drei Eigenschaften sollen die Zuhörer nach deinem Auftritt nennen? Wähl die, die zu dir passen – nicht die, die du bei anderen bewunderst.", "karten": ["ruhig", "klar", "herzlich", "humorvoll", "begeistert", "sachlich", "genau", "mutig", "nahbar", "entschlossen", "neugierig", "verlässlich"], "waehle": 3 },
+        { "art": "auswahl", "kopf": { "id": "stimme-3-05-a", "faehigkeit": "stimme.auftritt", "stufe": 8, "kanal": "wissen" },
+          "frage": "Du sprichst sachlich und ruhig. Nach einem Vortrag sagt Sven: „Du brauchst mehr Show – mach's wie die Leute im Fernsehen.“ Was nimmst du mit?",
+          "antworten": [
+            { "text": "Nächstes Mal mit großen Gesten und Witzen starten.", "wert": 0, "tendenz": "ueberspielen", "warum": "Ein fremder Stil wirkt schnell aufgesetzt – und verdrängt, was dich trägt." },
+            { "text": "Nachfragen, an welcher Stelle er abgeschaltet hat – und dort gezielt einen Wechsel setzen: eine Geschichte, eine Pause, eine Frage.", "wert": 2, "warum": "Du behältst deine Ruhe und bearbeitest den einen Punkt, an dem es wirklich hakte. Lebendig heißt Wechsel, nicht Show." },
+            { "text": "Es ignorieren – Sven stichelt ja gern.", "wert": 1, "warum": "Dein Stil darf bleiben. Ein Körnchen Wahrheit steckt aber oft drin – nachzufragen kostet nichts." },
+            { "text": "Dich fragen, ob Reden überhaupt etwas für dich ist.", "wert": 0, "tendenz": "abwerten", "warum": "Ein Kommentar zum Stil ist kein Urteil über dich. Auch sachliche Redner überzeugen, wenn sie Wechsel setzen." }
+          ] },
+        { "art": "schreibreise", "titel": "Dein Auftritt in einem Jahr", "anleitung": "Stell dir vor, es ist ein Jahr später. Du hast gerade einen Vortrag gehalten, der dir wichtig war, und er lief gut. Schreib auf, was du siehst und hörst – ohne Perfektion, so wie es zu dir passt.", "fragen": ["Wo stehst du, und wer hört zu?", "Wie klingt deine Stimme – was ist anders als heute?", "Was sagen die Leute danach zu dir?", "Welches Merkmal von dir ist geblieben, weil es dich ausmacht?", "Welchen Schritt hast du in diesem Jahr als Erstes geübt?"], "minuten": 5, "insBuch": "kompass" },
+        { "art": "experiment", "auftrag": "Nimm deinen nächsten Beitrag auf – Ton genügt, Video ist besser. Schreib vorher drei Wörter, wie du glaubst zu wirken. Dann schau oder hör die Aufnahme an wie bei einer fremden Person und vergleich.", "dauer": "woche", "nachfrage": "Wo warst du strenger mit dir als die Aufnahme – und welches Merkmal soll bleiben?" },
+        { "art": "reflexion", "frage": "Welches eine Merkmal übst du in den nächsten vier Wochen – und bei welchem Anlass probierst du es zuerst?", "insBuch": "erfolg" }
+      ],
+      "regel": "Stärken ausbauen, eine Baustelle nach der anderen – klingen wie du, nur geschärft.",
+      "merkkarten": [
+        { "id": "stimme-3-05-m1", "frage": "Wie schaust du deine Aufnahme an?", "antwort": "Erst vorhersagen, wie du wirkst, dann ansehen wie bei einer fremden Person: Was trägt, was bleibt, was übe ich?" },
+        { "id": "stimme-3-05-m2", "frage": "Wie viele Baustellen gleichzeitig?", "antwort": "Eine – für zwei bis vier Wochen, dann die nächste." }
+      ]
+    }
+  ]
+}

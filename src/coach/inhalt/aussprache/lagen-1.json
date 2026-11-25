@@ -70,7 +70,7 @@
         { "id": "k2b", "sagt": "Tarek: „Etwas besser. Aber es hallt noch.“",
           "wahl": [
             { "text": "„Ich nehme das Headset. Eine Sekunde.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt." },
-            { "text": "„Dann bleib ich halt ganz nah dran.“", "wert": 1, "weiter": "k3b", "rueck": "Verständlich, aber du sprichst jetzt in die Tastatur – mit Blick nach unten." }
+            { "text": "„Dann bleib ich halt ganz nah am Laptop dran.“", "wert": 1, "weiter": "k3b", "rueck": "Verständlich, aber du sprichst jetzt in die Tastatur – mit Blick nach unten." }
           ] },
         { "id": "k2c", "sagt": "Dr. Albers: „Entschuldigung, wir haben gerade nur jedes dritte Wort verstanden.“",
           "wahl": [
@@ -85,7 +85,7 @@
         { "id": "k3b", "sagt": "Miriam: „Kannst du das Letzte noch mal sagen? Das ist weggerutscht.“",
           "wahl": [
             { "text": "Aufschauen, das Satzende halten: „Die Zahlen | kommen bis Freitag.“", "wert": 2, "weiter": "k3", "rueck": "Kopf hoch, letztes Wort getragen. Jetzt ist es da." },
-            { "text": "Dasselbe schneller wiederholen, um Zeit zu sparen.", "wert": 0, "tendenz": "tempo", "weiter": "ende2", "rueck": "Schneller ist nicht deutlicher. Miriam gibt auf und schreibt in den Chat." }
+            { "text": "Dasselbe noch einmal, nur schneller und mit Blick auf die Notizen, um Zeit zu sparen.", "wert": 0, "tendenz": "tempo", "weiter": "ende2", "rueck": "Schneller ist nicht deutlicher. Miriam gibt auf und schreibt in den Chat." }
           ] },
         { "id": "ende1", "sagt": "Dr. Albers: „Danke, klar und knapp. Nächster Punkt.“", "ende": "In der Videokonferenz kommt zuerst die Technik, dann die Sprechweise: Headset, Blick zur Kamera, Pausen, Satzende. Schlechter Ton kostet nicht nur Wörter, sondern auch Eindruck." },
         { "id": "ende2", "sagt": "Im Chat erscheint: „Kannst du uns das bitte noch mal schreiben?“", "ende": "Kein Drama – aber dein Beitrag ist untergegangen. Beim nächsten Mal: vorher eine Probeaufnahme, Headset auf, Kopf hoch." }
@@ -119,12 +119,12 @@
         { "id": "k2c", "sagt": "Frau Sommer: „Ach bitte, Sie schaffen das. Ich halte Ihnen das Glas.“",
           "wahl": [
             { "text": "„Gut. Erst die Musik kurz leiser, | dann sage ich es.“", "wert": 2, "weiter": "k2", "rueck": "Mutig – und klug vorbereitet." },
-            { "text": "„Wirklich nicht. Machen Sie lieber.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Verständlich. Aber Frau Sommer krächzt jetzt eine Ansage, die kaum einer hört." }
+            { "text": "„Wirklich nicht, das liegt mir nicht. Machen Sie das lieber, Sie kennen ja alle.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Verständlich. Aber Frau Sommer krächzt jetzt eine Ansage, die kaum einer hört." }
           ] },
         { "id": "k3", "sagt": "Ein Vater ruft von hinten: „Und bis wann geht das Fest?“",
           "wahl": [
             { "text": "Dich ihm zuwenden: „Abbau ist um acht. | Um acht Uhr.“", "wert": 2, "weiter": "ende1", "rueck": "Zugewandt, die Zahl zweimal – auch ganz hinten angekommen." },
-            { "text": "„Bis acht ungefähr!“ – über die Schulter.", "wert": 1, "weiter": "ende1", "rueck": "Richtig, aber über die Schulter geht die Stimme in die andere Richtung." }
+            { "text": "„Bis acht ungefähr, glaub ich!“ – über die Schulter, schon im Weitergehen.", "wert": 1, "weiter": "ende1", "rueck": "Richtig, aber über die Schulter geht die Stimme in die andere Richtung." }
           ] },
         { "id": "k3b", "sagt": "Frau Sommer, leise: „Hinten haben sie nur ‚Essen‘ verstanden.“",
           "wahl": [
@@ -207,7 +207,7 @@
         { "id": "k2c", "sagt": "Eine Stunde später: wieder die Mailbox. Die Zeit wird knapp.",
           "wahl": [
             { "text": "Diesmal sprechen: „Guten Tag, Herr Petersen, | hier ist {name}.“", "wert": 2, "weiter": "k2", "rueck": "Jetzt aber. Gut." },
-            { "text": "Wieder auflegen und eine kurze Mail schreiben.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Herr Petersen liest seine Mails selten am selben Tag. Die Mailbox hätte ihn erreicht." }
+            { "text": "Wieder auflegen und ihm stattdessen eine kurze Mail mit deinem Anliegen schreiben.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Herr Petersen liest seine Mails selten am selben Tag. Die Mailbox hätte ihn erreicht." }
           ] },
         { "id": "k3", "sagt": "Jetzt die Nummer.",
           "wahl": [

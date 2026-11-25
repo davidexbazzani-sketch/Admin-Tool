@@ -77,7 +77,7 @@
         { "id": "k3", "sagt": "„Kein Problem. Was kann ich für Sie tun?“",
           "wahl": [
             { "text": "Du sagst, was du brauchst: einen Termin für nächste Woche.", "wert": 2, "weiter": "k4", "rueck": "Klar und vollständig." },
-            { "text": "Du sagst „irgendwann“, weil dir der Wochentag schwerfällt.", "wert": 1, "tendenz": "vermeiden", "weiter": "k4", "rueck": "Verständlich – nur bekommst du so vielleicht einen Termin, der dir nicht passt." }
+            { "text": "Du sagst nur „irgendwann“, weil dir der Wochentag schwerfällt.", "wert": 1, "tendenz": "vermeiden", "weiter": "k4", "rueck": "Verständlich – nur bekommst du so vielleicht einen Termin, der dir nicht passt." }
           ] },
         { "id": "k3b", "sagt": "„Hallo? Sind Sie noch dran?“",
           "wahl": [

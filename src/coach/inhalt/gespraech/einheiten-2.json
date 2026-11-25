@@ -1,0 +1,737 @@
+{
+  "einheiten": [
+    {
+      "id": "gespraech-2-01",
+      "bereich": "gespraech",
+      "stufe": 2,
+      "nr": 1,
+      "titel": "Rückmeldung, die etwas ändert",
+      "faehigkeiten": ["gespraech.feedback"],
+      "dauerMin": 7,
+      "beleg": "B",
+      "belegHinweis": "In fünf Experimenten unterschätzten Menschen, wie sehr andere Rückmeldung hören wollen. Eine Meta-Analyse zeigt, dass Rückmeldung auch schaden kann. Wie man sie bald, konkret und nach vorn gibt, ist Praxiswissen.",
+      "quellen": ["abiesber2022", "klugerdenisi1996", "praxis-gespraech"],
+      "aha": "Die meisten halten eine Rückmeldung zurück, weil sie glauben, der andere will sie nicht hören. Meist will er – wenn sie konkret ist und nach vorn schaut.",
+      "schritte": [
+        {
+          "art": "schaetzen",
+          "frage": "In Experimenten sollten Menschen einschätzen, wie sehr jemand eine kritische Rückmeldung hören will – etwa zu einer Rede, die noch nicht trägt. Wie lagen sie damit?",
+          "optionen": ["Sie überschätzten den Wunsch", "Sie unterschätzten den Wunsch", "Sie lagen ziemlich richtig"],
+          "richtig": 1,
+          "loesung": "Sie unterschätzten den Wunsch",
+          "aufloesung": "Sie unterschätzten ihn – am stärksten bei den wichtigen Punkten. Wer sich vorher fragte: „Würde ich es an seiner Stelle wissen wollen?“, gab die Rückmeldung öfter."
+        },
+        {
+          "art": "karte",
+          "text": "Rückmeldung, die etwas ändert, kommt bald – solange sich beide erinnern. Sie ist konkret, auch das Lob: „Das Kundenbeispiel am Anfang hat gezogen“ lehrt mehr als „Super“. Sie trennt Lob und Kritik, statt die Kritik zu verstecken. Und sie schaut nach vorn: „Was probierst du beim nächsten Mal?“ Vorher fragen hilft: „Magst du eine Rückmeldung zu …?“"
+        },
+        {
+          "art": "umformulieren",
+          "kopf": { "id": "gespraech-2-01-a", "faehigkeit": "gespraech.feedback", "stufe": 4, "kanal": "koennen" },
+          "auftrag": "Mach aus dem leeren Lob eines, aus dem Tarek etwas lernt.",
+          "vorlage": "„Super Präsentation, Tarek!“ (Er hat mit einem Kundenbeispiel angefangen, und die Fragen danach hat er ruhig und knapp beantwortet.)",
+          "kriterien": ["nennt, was genau gut war", "sagt, was es bewirkt hat", "ehrlich, ohne Übertreibung"],
+          "muster": [
+            "„Dass du mit dem Beispiel von der Spedition angefangen hast, hat sofort gezogen – da haben alle hochgeschaut.“",
+            "„Deine Antworten auf die Fragen waren kurz und ruhig. Dadurch wirkte das Angebot sicher.“",
+            "„Das Kundenbeispiel am Anfang würde ich mir abschauen. Da wussten alle gleich, worum es geht.“"
+          ]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-2-01-b", "faehigkeit": "gespraech.feedback", "stufe": 5, "kanal": "wissen" },
+          "frage": "Lena gibt dir ihren ersten Bericht. Inhaltlich gut – nur steht die wichtigste Zahl auf Seite vier. Sie fragt nicht nach deiner Meinung. Was tust du?",
+          "antworten": [
+            {
+              "text": "Nichts sagen. Sie hat nicht gefragt, und für einen ersten Bericht ist er gut.",
+              "wert": 0,
+              "tendenz": "vermeiden",
+              "warum": "Freundlich gemeint – aber sie wüsste es vermutlich gern. Andere wollen Rückmeldung öfter, als wir glauben."
+            },
+            {
+              "text": "„Magst du eine Rückmeldung? Inhaltlich stark. Nur steht die wichtigste Zahl auf Seite vier – holen wir sie nach vorn?“",
+              "wert": 2,
+              "warum": "Gefragt, echtes Lob getrennt von der Kritik, konkret und nach vorn. Und Lena entscheidet mit."
+            },
+            {
+              "text": "Die Zahl selbst nach vorn schieben und den Bericht gleich weiterleiten, damit er pünktlich rausgeht und Lena nichts merkt.",
+              "wert": 0,
+              "tendenz": "uebernehmen",
+              "warum": "Der Bericht wird besser, Lena lernt nichts – und macht es beim nächsten Mal wieder so."
+            },
+            {
+              "text": "„Guter Bericht. Kleine Sache: Die Hauptzahl gehört nach vorn.“",
+              "wert": 1,
+              "warum": "Klar und kurz. Mit einer Frage nach ihrer Sicht wird daraus ein Gespräch statt einer Anweisung."
+            }
+          ]
+        },
+        {
+          "art": "gespraechskarte",
+          "anlass": "Eine Rückmeldung, die du schon länger geben willst – Lob oder Kritik.",
+          "beispiel": {
+            "ziel": "Lena setzt die Kernaussage künftig an den Anfang.",
+            "erster": "„Hast du fünf Minuten? Ich hab eine Rückmeldung zu deinem Bericht.“",
+            "wunsch": "„Was hältst du davon, die wichtigste Zahl auf die erste Seite zu holen?“",
+            "planB": "Sieht sie es anders: ihre Gründe hören und beim nächsten Bericht gemeinsam draufschauen."
+          }
+        },
+        { "art": "mission", "ref": "gespraech-m-08" }
+      ],
+      "regel": "Bald, konkret, Lob und Kritik getrennt, nach vorn – und vorher fragen.",
+      "merkkarten": [
+        {
+          "id": "gespraech-2-01-m1",
+          "frage": "Warum halten viele eine Rückmeldung zurück?",
+          "antwort": "Sie unterschätzen, wie sehr der andere sie hören will. Frag dich: Würde ich es an seiner Stelle wissen wollen?"
+        },
+        {
+          "id": "gespraech-2-01-m2",
+          "frage": "Was macht ein Lob lehrreich?",
+          "antwort": "Es nennt, was genau gut war und was es bewirkt hat – statt nur „super“."
+        },
+        {
+          "id": "gespraech-2-01-m3",
+          "frage": "Wie endet eine gute Rückmeldung?",
+          "antwort": "Mit dem Blick nach vorn: „Was probierst du beim nächsten Mal?“"
+        }
+      ],
+      "mission": "gespraech-m-08"
+    },
+    {
+      "id": "gespraech-2-02",
+      "bereich": "gespraech",
+      "stufe": 2,
+      "nr": 2,
+      "titel": "Kritik annehmen, ohne einzuknicken",
+      "faehigkeiten": ["gespraech.feedback", "gespraech.zuhoeren"],
+      "dauerMin": 7,
+      "beleg": "P",
+      "belegHinweis": "Die drei Auslöser stammen aus einem Ratgeber zweier Praktiker und sind ein Denkmodell. Nachfragen statt Rechtfertigen ist Praxiswissen aus Training und Mediation.",
+      "quellen": ["stone2014", "praxis-gespraech"],
+      "aha": "Kritik annehmen heißt nicht, ihr recht zu geben. Erst verstehen, was gemeint ist – entscheiden, was du davon annimmst, kannst du danach.",
+      "schritte": [
+        {
+          "art": "vergleich",
+          "lage": "Miriam nach der Teamrunde: „Deine Mails an die Leute im Lager klingen ziemlich schroff. Zwei haben sich schon bei mir beschwert.“",
+          "schwach": "„Schroff? Ich schreib halt knapp, weil alle wenig Zeit haben. Wer hat sich denn beschwert?“",
+          "stark": "„Oh. Danke, dass du's mir sagst. Hast du ein Beispiel, was genau schroff ankam?“",
+          "frage": "Welche Antwort bringt dich weiter?",
+          "unterschied": "Die erste verteidigt sich und sucht den Schuldigen. Die zweite holt erst ein Beispiel – ob du die Kritik annimmst, entscheidest du danach immer noch."
+        },
+        {
+          "art": "karte",
+          "text": "Kritik annehmen in drei Schritten: 1. Danke sagen und um ein Beispiel bitten. 2. In eigenen Worten zurückgeben, was gemeint ist. 3. Entscheiden – gleich oder nach einer Nacht: Was davon nehme ich an, was nicht? Erklären kannst du dich später immer noch. Und ist eine Kritik verletzend oder unfair, darfst du das ruhig sagen: „Den Ton nehme ich nicht an. Den Punkt schon.“"
+        },
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-2-02-a", "faehigkeit": "gespraech.feedback", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Welcher Auslöser zieht hier, wenn die Kritik kommt?",
+          "faecher": ["„Das stimmt doch nicht.“", "„Ausgerechnet du?“", "„Bin ich etwa schlecht?“"],
+          "karten": [
+            { "text": "Du denkst: „Die Zahlen waren doch richtig, er hat nur die falsche Tabelle gelesen.“", "fach": 0 },
+            { "text": "Du denkst: „Der kommt selbst jeden Tag zu spät und sagt mir was von Pünktlichkeit?“", "fach": 1 },
+            { "text": "Du denkst: „Ich krieg einfach nichts richtig hin.“", "fach": 2 },
+            { "text": "Du denkst: „Das war doch gar nicht so gemeint, die hat das falsch verstanden.“", "fach": 0 },
+            { "text": "Du denkst: „Seit wann redet die so mit mir? Wir sind doch Kollegen.“", "fach": 1 },
+            { "text": "Du denkst: „Vielleicht bin ich für die Stelle doch nicht gut genug.“", "fach": 2 }
+          ]
+        },
+        {
+          "art": "dialog",
+          "kopf": { "id": "gespraech-2-02-b", "faehigkeit": "gespraech.feedback", "stufe": 5, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Tarek wurde unterbrochen",
+            "figur": "Tarek Yılmaz",
+            "lage": "Nach der Teamrunde hält Tarek dich im Flur an. Er wirkt nicht wütend, eher ernst.",
+            "start": "k1",
+            "knoten": [
+              {
+                "id": "k1",
+                "sagt": "Tarek: „Du, in der Runde vorhin hast du mich zweimal unterbrochen. Das hat mich geärgert.“",
+                "wahl": [
+                  {
+                    "text": "„Weil du so lange geredet hast – irgendwer muss ja auf die Zeit achten.“",
+                    "wert": 0,
+                    "tendenz": "rechtfertigen",
+                    "weiter": "k2b",
+                    "rueck": "Sofort die Gegenrechnung. Tarek hört: Du bist selbst schuld."
+                  },
+                  {
+                    "text": "„Echt? Danke, dass du's sagst. Wo genau war das?“",
+                    "wert": 2,
+                    "weiter": "k2",
+                    "rueck": "Danke und eine Frage nach dem Beispiel. Jetzt erfährst du, was er meint."
+                  },
+                  {
+                    "text": "„Oh nein, das tut mir so leid, ich bin echt unmöglich, ich weiß auch nicht, was mit mir los ist …“",
+                    "wert": 1,
+                    "weiter": "k2",
+                    "rueck": "Du nimmst es an – aber so viel Entschuldigung macht es schwer, über die Sache zu reden."
+                  }
+                ]
+              },
+              {
+                "id": "k2",
+                "sagt": "Tarek: „Bei den Lieferzeiten. Ich war noch mitten im Satz, und du hast schon deine Zahlen erklärt.“",
+                "wahl": [
+                  {
+                    "text": "„Stimmt, da war ich zu schnell. Ich achte drauf – und sag's mir ruhig gleich, wenn's wieder passiert.“",
+                    "wert": 2,
+                    "weiter": "ende1",
+                    "rueck": "Den Teil angenommen, der stimmt, und eine Abmachung angeboten. Ohne dich kleinzumachen."
+                  },
+                  {
+                    "text": "„Ja, aber meine Zahlen waren an der Stelle eben wichtig.“",
+                    "wert": 0,
+                    "tendenz": "rechtfertigen",
+                    "weiter": "ende2",
+                    "rueck": "Vielleicht waren sie das. Sein Punkt war aber das Unterbrechen – und der bleibt liegen."
+                  },
+                  {
+                    "text": "„Okay. Ich denk drüber nach.“",
+                    "wert": 1,
+                    "weiter": "ende2",
+                    "rueck": "Bedenkzeit ist in Ordnung. Ein Satz, dass du ihn gehört hast, hätte ihm aber gutgetan."
+                  }
+                ]
+              },
+              {
+                "id": "k2b",
+                "sagt": "Tarek, kühler: „Siehst du, jetzt machst du's schon wieder – ich sag was, und du hast gleich die Antwort.“",
+                "wahl": [
+                  {
+                    "text": "„Du hast recht, ich bin gerade wieder reingegrätscht. Erzähl – wo genau war es vorhin?“",
+                    "wert": 2,
+                    "weiter": "k2",
+                    "rueck": "Zweite Chance genutzt: anhalten, zugeben, nachfragen."
+                  },
+                  {
+                    "text": "„Jetzt bist du aber empfindlich. Das war doch eine ganz normale Diskussion unter Kollegen.“",
+                    "wert": 0,
+                    "tendenz": "abwerten",
+                    "weiter": "ende2",
+                    "rueck": "Seine Kritik wird zu seinem Problem erklärt. Das nächste Mal sagt er es dir nicht mehr."
+                  }
+                ]
+              },
+              {
+                "id": "ende1",
+                "sagt": "Tarek grinst: „Deal. Und deine Zahlen waren übrigens gut.“",
+                "ende": "Danke, ein Beispiel, den wahren Teil annehmen: So wird Kritik zu einer Abmachung – und das Verhältnis eher besser."
+              },
+              {
+                "id": "ende2",
+                "sagt": "Tarek nickt kurz und geht zurück an seinen Platz.",
+                "ende": "Kein Drama – aber Tarek hat nicht das Gefühl, dass sein Punkt angekommen ist. Beim nächsten Mal: den wahren Teil annehmen und eine Abmachung anbieten."
+              }
+            ],
+            "prinzipien": ["erst danke und ein Beispiel", "nicht sofort erklären", "den wahren Teil annehmen", "eine Abmachung statt einer Rechtfertigung"]
+          }
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-2-02-c", "faehigkeit": "gespraech.zuhoeren", "stufe": 5, "kanal": "wissen" },
+          "frage": "Dr. Albers im Jahresgespräch: „Manchmal wirken Sie wenig teamorientiert.“ Du weißt nicht, was er meint. Was ist die beste Antwort?",
+          "antworten": [
+            {
+              "text": "„Das sehe ich anders. Ich helfe ständig aus, gerade letzte Woche bei Miriam, und das wissen auch alle hier.“",
+              "wert": 0,
+              "tendenz": "rechtfertigen",
+              "warum": "Du verteidigst dich gegen etwas, das du noch gar nicht verstanden hast."
+            },
+            {
+              "text": "Nicken, notieren und dir vornehmen, mehr im Team zu machen.",
+              "wert": 0,
+              "tendenz": "schlucken",
+              "warum": "Du nimmst die Kritik an, ohne zu wissen, was sie heißt. Woran willst du dann arbeiten?"
+            },
+            {
+              "text": "„Können Sie mir ein Beispiel geben, woran Sie das festmachen? Dann weiß ich, woran ich arbeiten kann.“",
+              "wert": 2,
+              "warum": "Ein Etikett wird zu einer Beobachtung. Erst damit kannst du entscheiden, was du annimmst."
+            },
+            {
+              "text": "Am nächsten Tag per Mail um ein Beispiel bitten.",
+              "wert": 1,
+              "warum": "Besser als raten. Im Gespräch selbst ist die Frage leichter – und er erinnert sich noch."
+            }
+          ]
+        },
+        {
+          "art": "experiment",
+          "auftrag": "Wenn du diese Woche Kritik bekommst – egal wie klein –, sag zuerst: „Danke. Hast du ein Beispiel?“ Entscheide erst danach, was du davon annimmst.",
+          "dauer": "woche",
+          "nachfrage": "Was hat dir das Beispiel gezeigt, das du ohne Nachfrage nicht erfahren hättest?"
+        },
+        {
+          "art": "reflexion",
+          "frage": "Welcher Auslöser zieht bei dir am stärksten – die Sache, die Person oder dein Selbstbild? Woran merkst du es im Moment selbst?"
+        }
+      ],
+      "regel": "Erst danke und ein Beispiel – was du annimmst, entscheidest du danach.",
+      "merkkarten": [
+        {
+          "id": "gespraech-2-02-m1",
+          "frage": "Was ist der erste Satz, wenn Kritik kommt?",
+          "antwort": "„Danke, dass du's sagst. Hast du ein Beispiel?“"
+        },
+        {
+          "id": "gespraech-2-02-m2",
+          "frage": "Heißt annehmen zustimmen?",
+          "antwort": "Nein. Erst verstehen, dann entscheiden, was du davon annimmst – gern nach einer Nacht."
+        },
+        {
+          "id": "gespraech-2-02-m3",
+          "frage": "Die drei Auslöser bei Kritik?",
+          "antwort": "Es scheint falsch, es kommt von der falschen Person, es kratzt am Selbstbild."
+        }
+      ]
+    },
+    {
+      "id": "gespraech-2-03",
+      "bereich": "gespraech",
+      "stufe": 2,
+      "nr": 3,
+      "titel": "Nein mit Angebot",
+      "faehigkeiten": ["gespraech.ich", "gespraech.absprache"],
+      "dauerMin": 7,
+      "beleg": "B",
+      "belegHinweis": "Dass man den Ärger nach einer Absage überschätzt, zeigen Studien zu Einladungen. Dass anderen ein Nein schwerfällt, zeigen Studien zu Bitten. Selbstsicherheitstraining ist untersucht; der Bau „Nein mit Angebot“ ist Praxis.",
+      "quellen": ["givi2024", "flynn2008", "speed2018", "praxis-gespraech"],
+      "aha": "Ein Nein zur Bitte ist kein Nein zum Menschen. Klar im Nein, ein Grund genügt, offen im Angebot – und meist ärgert sich der andere weniger, als du fürchtest.",
+      "schritte": [
+        {
+          "art": "schaetzen",
+          "frage": "Jemand sagt eine Einladung ab. Wie stark ärgert sich die Person, die eingeladen hat – verglichen mit dem, was der Absagende befürchtet?",
+          "optionen": ["stärker als befürchtet", "etwa so wie befürchtet", "weniger als befürchtet"],
+          "richtig": 2,
+          "loesung": "weniger als befürchtet",
+          "aufloesung": "Wer absagt, überschätzt Ärger und Enttäuschung des anderen. Untersucht wurden Einladungen; ob es bei Bitten im Beruf genauso ist, ist offen – die Richtung macht trotzdem Mut."
+        },
+        {
+          "art": "karte",
+          "text": "Ein Nein mit Angebot hat drei Teile: das klare Nein („Diese Woche schaffe ich das nicht.“), höchstens einen Grund – keine Rechtfertigungsschleife – und ein Angebot, das du wirklich halten kannst: später, weniger, anders. Brauchst du Bedenkzeit, nenn eine Uhrzeit. Hakt der andere nach, wiederhol ruhig Nein und Angebot. Wird dein Nein immer wieder übergangen, ist das kein Gespräch mehr, sondern Druck."
+        },
+        {
+          "art": "umformulieren",
+          "kopf": { "id": "gespraech-2-03-a", "faehigkeit": "gespraech.ich", "stufe": 4, "kanal": "koennen" },
+          "auftrag": "Mach aus dem gequälten Ja ein Nein mit Angebot.",
+          "vorlage": "„Ähm … ja, okay, irgendwie krieg ich das schon noch hin.“ (Miriam fragt, ob du am Samstag beim Umzug ihrer Schwester hilfst. Dein Samstag ist schon verplant.)",
+          "kriterien": ["ein klares Nein", "höchstens ein kurzer Grund", "ein Angebot, das du halten kannst"],
+          "muster": [
+            "„Samstag kann ich nicht, da bin ich schon verplant. Sonntagnachmittag könnte ich zwei Stunden Kisten auspacken – hilft das?“",
+            "„Diesmal nicht. Aber ich leih euch gern meine Sackkarre.“",
+            "„Samstag geht nicht. Wenn ihr beim nächsten Mal früher fragt, bin ich gern dabei.“"
+          ]
+        },
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-2-03-b", "faehigkeit": "gespraech.absprache", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Klares Nein mit Angebot, Rechtfertigungsschleife oder verstecktes Ja?",
+          "faecher": ["klar mit Angebot", "Rechtfertigungsschleife", "verstecktes Ja"],
+          "karten": [
+            { "text": "„Bis Freitag schaffe ich es nicht. Bis Dienstag ja.“", "fach": 0 },
+            { "text": "„Ich würd ja gern, aber diese Woche ist so viel, und dann noch der Arzttermin, und mein Auto ist auch …“", "fach": 1 },
+            { "text": "„Mal sehen, ich versuch's.“", "fach": 2 },
+            { "text": "„Nein, die Präsentation übernehme ich nicht. Die Folien zu den Zahlen kann ich beisteuern.“", "fach": 0 },
+            { "text": "„Es tut mir wirklich leid, ich weiß, das ist blöd, normalerweise sag ich ja nie Nein, aber …“", "fach": 1 },
+            { "text": "„Wenn's gar nicht anders geht, dann mach ich's halt.“", "fach": 2 }
+          ]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-2-03-c", "faehigkeit": "gespraech.ich", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du hast Sven gesagt, dass du Freitag nicht mitkommst, und ihm Samstag angeboten. Er: „Ach komm, nur dieses eine Mal! Du bist echt langweilig geworden.“ Was antwortest du?",
+          "antworten": [
+            {
+              "text": "„Ich bin nicht langweilig! Ich hab nur so viel um die Ohren, die Woche war echt anstrengend, und dann …“",
+              "wert": 0,
+              "tendenz": "rechtfertigen",
+              "warum": "Jetzt verteidigst du dich – und jeder neue Grund lädt zum nächsten Nachhaken ein."
+            },
+            {
+              "text": "„Freitag bleibt's beim Nein. Samstag steht – hast du Lust?“",
+              "wert": 2,
+              "warum": "Ruhig wiederholt, ohne neuen Grund, und das Angebot gleich dazu. Klar, aber freundlich."
+            },
+            {
+              "text": "„Na gut, dann komm ich eben doch mit.“",
+              "wert": 0,
+              "tendenz": "nachgeben",
+              "warum": "Der Spruch hat gewirkt. Sven lernt: Nachhaken lohnt sich."
+            },
+            {
+              "text": "„Kann sein, dass ich langweilig bin. Freitag trotzdem nicht.“",
+              "wert": 1,
+              "warum": "Gelassen und klar. Mit dem Angebot für Samstag weiß er außerdem, dass es nicht um ihn geht."
+            }
+          ]
+        },
+        {
+          "art": "wenndann",
+          "anlass": "Bitten, die du nicht erfüllen kannst oder willst",
+          "wenn": ["mich jemand um etwas bittet, das ich nicht schaffe", "der andere nachhakt", "ich unsicher bin"],
+          "dann": ["sage ich: „Das schaffe ich nicht. Was ich anbieten kann: …“", "wiederhole ich ruhig Nein und Angebot – ohne neue Gründe", "sage ich: „Ich sag dir bis … Bescheid.“"]
+        },
+        {
+          "art": "experiment",
+          "auftrag": "Sag diese Woche einmal Nein mit Angebot – bei einer kleinen Bitte, bei der du sonst aus Gewohnheit Ja gesagt hättest.",
+          "dauer": "woche",
+          "nachfrage": "Wie hat der andere reagiert – verglichen mit dem, was du befürchtet hattest?"
+        },
+        {
+          "art": "reflexion",
+          "frage": "Bei wem fällt dir ein Nein am schwersten – und welches Angebot könntest du dort machen, das du wirklich halten kannst?"
+        }
+      ],
+      "regel": "Klar im Nein, ein Grund genügt, offen im Angebot.",
+      "merkkarten": [
+        {
+          "id": "gespraech-2-03-m1",
+          "frage": "Die drei Teile eines Neins mit Angebot?",
+          "antwort": "Ein klares Nein, höchstens ein Grund, ein Angebot, das du halten kannst."
+        },
+        {
+          "id": "gespraech-2-03-m2",
+          "frage": "Der andere hakt nach. Was jetzt?",
+          "antwort": "Nein und Angebot ruhig wiederholen – ohne neue Gründe."
+        },
+        {
+          "id": "gespraech-2-03-m3",
+          "frage": "Du brauchst Bedenkzeit. Wie sagst du es?",
+          "antwort": "Mit Uhrzeit: „Ich sag dir bis morgen zehn Uhr Bescheid.“"
+        }
+      ]
+    },
+    {
+      "id": "gespraech-2-04",
+      "bereich": "gespraech",
+      "stufe": 2,
+      "nr": 4,
+      "titel": "Vom Streit zur Lösung für beide",
+      "faehigkeiten": ["gespraech.konflikt", "gespraech.fragen"],
+      "dauerMin": 7,
+      "beleg": "P",
+      "belegHinweis": "Interessen, mehrere Möglichkeiten und faire Maßstäbe stammen aus der Verhandlungspraxis; als Ablauf in Alltagskonflikten wenig eigens untersucht.",
+      "quellen": ["fisherury", "praxis-gespraech"],
+      "aha": "Halbe-halbe teilt die Positionen – oft bekommt dann keiner, was er braucht. Wer die Interessen kennt, sucht erst mehrere Wege und wählt dann nach einem Maßstab, den beide fair finden.",
+      "schritte": [
+        {
+          "art": "vergleich",
+          "lage": "Spätsommer im Büro. Lena will das Fenster offen, Tarek will es zu. Seit einer Woche geht es auf und zu.",
+          "schwach": "Sie einigen sich auf „gekippt“. Lena ist es trotzdem zu stickig, und Tarek zieht es trotzdem.",
+          "stark": "Sie fragen nach dem Wozu: Lena braucht frische Luft, Tarek sitzt direkt im Zug. Lösung: mehrmals am Tag kurz ganz lüften, und Tarek zieht an den freien Tisch an der Wand.",
+          "frage": "Was unterscheidet die beiden Lösungen?",
+          "unterschied": "Die Mitte teilt die Positionen – keiner bekommt, was er braucht. Wer die Interessen kennt, findet Wege, die beide bedienen."
+        },
+        {
+          "art": "karte",
+          "text": "Vom Streit zur Lösung in vier Zügen: 1. Beide Interessen auf den Tisch – deins auch. 2. Mehrere Möglichkeiten sammeln, ohne gleich zu bewerten. 3. Einen Maßstab vereinbaren, den beide fair finden: Fristen, Aufwand, wer zuletzt dran war. 4. Wählen und als Absprache festhalten. Und klär vorher für dich: Was tust du, wenn ihr euch nicht einigt? Wer das weiß, braucht nicht um jeden Preis zuzustimmen."
+        },
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-2-04-a", "faehigkeit": "gespraech.konflikt", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Du und deine Schwester plant, wo eure Eltern Weihnachten feiern. Interesse, Möglichkeit oder Maßstab?",
+          "faecher": ["Interesse", "Möglichkeit", "Maßstab"],
+          "karten": [
+            { "text": "„Die Kinder sollen am Heiligabend zu Hause sein.“", "fach": 0 },
+            { "text": "„Ein Jahr bei dir, ein Jahr bei mir.“", "fach": 1 },
+            { "text": "„Wer die Eltern übers Jahr seltener sieht, hat Vorrang.“", "fach": 2 },
+            { "text": "„Papa soll nicht lange im Dunkeln Auto fahren.“", "fach": 0 },
+            { "text": "„Heiligabend bei dir, erster Feiertag bei mir.“", "fach": 1 },
+            { "text": "„Entscheidend ist, wie weit die Fahrt für die Eltern ist.“", "fach": 2 }
+          ]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-2-04-b", "faehigkeit": "gespraech.konflikt", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du und Carla streitet, wessen Projekt die neue Kollegin für zwei Wochen bekommt. Ihr kennt die Interessen schon, dreht euch aber im Kreis. Was bringt euch weiter?",
+          "antworten": [
+            {
+              "text": "„Woran könnten wir festmachen, was fair ist – an der Frist, am Kunden, an dem, was ohne Hilfe liegen bleibt?“",
+              "wert": 2,
+              "warum": "Ein gemeinsamer Maßstab. Dann entscheidet nicht mehr, wer lauter ist, sondern ein Grund, den beide anerkennen."
+            },
+            {
+              "text": "„Dann eben jeder eine Woche.“",
+              "wert": 1,
+              "warum": "Schnell und gerecht wirkend. Ob jeder mit einer Woche etwas anfangen kann, ist damit aber nicht geklärt."
+            },
+            {
+              "text": "„Mein Projekt hat die frühere Frist, das ist doch eindeutig.“",
+              "wert": 0,
+              "tendenz": "position",
+              "warum": "Vielleicht ein guter Maßstab – aber als Machtwort gesagt, nicht als Vorschlag."
+            },
+            {
+              "text": "„Lass Dr. Albers entscheiden. Dann haben wir Ruhe, keiner ist hinterher sauer auf den anderen, und wir können weiterarbeiten.“",
+              "wert": 0,
+              "tendenz": "vermeiden",
+              "warum": "Dann entscheidet der, der eure Interessen am wenigsten kennt – bevor ihr eigene Wege gesucht habt."
+            }
+          ]
+        },
+        {
+          "art": "umformulieren",
+          "kopf": { "id": "gespraech-2-04-c", "faehigkeit": "gespraech.fragen", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Tarek will den Dienstwagen am Donnerstag auch. Mach aus deiner Position eine Frage nach seinem Interesse – und nenn deins.",
+          "vorlage": "„Den Dienstwagen nehm ich am Donnerstag, Punkt.“",
+          "kriterien": ["fragt offen nach seinem Wozu", "nennt dein eigenes Interesse", "lässt Raum für eine dritte Lösung"],
+          "muster": [
+            "„Wofür brauchst du ihn Donnerstag? Ich muss um zehn bei einem Kunden in der Stadt sein – vielleicht passt beides.“",
+            "„Lass uns mal schauen, wer wann wohin muss. Bei mir ist es nur der Vormittag.“",
+            "„Was steht bei dir an? Ich hab einen Termin, zu dem ich mit der Bahn schlecht hinkomme.“"
+          ]
+        },
+        {
+          "art": "experiment",
+          "auftrag": "Wenn diese Woche ein kleiner Streit aufkommt – um Termine, Räume, Aufgaben: Sammle mit dem anderen erst drei Möglichkeiten, bevor ihr eine wählt.",
+          "dauer": "woche",
+          "nachfrage": "War unter den drei eine, an die vorher keiner von euch gedacht hatte?"
+        },
+        {
+          "art": "reflexion",
+          "frage": "Denk an einen Streit, der sich im Kreis dreht. Was ist dein Interesse dahinter – und was vermutlich das des anderen? Wie könntest du es herausfinden, statt zu raten?"
+        }
+      ],
+      "regel": "Erst die Interessen, dann mehrere Wege, dann ein Maßstab, den beide fair finden.",
+      "merkkarten": [
+        {
+          "id": "gespraech-2-04-m1",
+          "frage": "Warum ist die Mitte oft keine gute Lösung?",
+          "antwort": "Sie teilt die Positionen. Oft bekommt dann keiner, was er eigentlich braucht."
+        },
+        {
+          "id": "gespraech-2-04-m2",
+          "frage": "Die vier Züge vom Streit zur Lösung?",
+          "antwort": "Interessen beider, mehrere Möglichkeiten, ein fairer Maßstab, eine Absprache."
+        },
+        {
+          "id": "gespraech-2-04-m3",
+          "frage": "Was hilft, wenn ihr euch im Kreis dreht?",
+          "antwort": "Ein Maßstab, den beide anerkennen: „Woran machen wir fest, was fair ist?“"
+        }
+      ]
+    },
+    {
+      "id": "gespraech-2-05",
+      "bereich": "gespraech",
+      "stufe": 2,
+      "nr": 5,
+      "titel": "Widersprechen, wenn alle nicken",
+      "faehigkeiten": ["gespraech.widerspruch", "gespraech.oben"],
+      "dauerMin": 7,
+      "beleg": "B",
+      "belegHinweis": "Dass eine echte Gegenstimme Gruppen zu mehr und besseren Lösungen bringt, zeigen Laborstudien; ein gespielter Kritiker wirkte dort schwächer, in einer anderen Studie half er aber. Empfänglicher Widerspruch ist durch eine Studienreihe gestützt, der Ablauf in der Runde ist Praxis.",
+      "quellen": ["nemeth2001", "greitemeyer2009", "yeomans2020", "detert2011", "praxis-gespraech"],
+      "aha": "Wenn alle nicken, ist dein Einwand kein Störfaktor, sondern ein Beitrag. Bring ihn früh, würdige erst die andere Sicht – und trag die Entscheidung danach mit oder lass sie prüfen.",
+      "schritte": [
+        {
+          "art": "studie",
+          "frage": "Bringt eine echte Gegenstimme mehr als ein bestellter Kritiker?",
+          "aufbau": "Gruppen lösten im Labor Aufgaben. In manchen Gruppen gab es eine echte Gegenstimme, in anderen spielte jemand auf Anweisung den Kritiker – einen Advocatus Diaboli.",
+          "ergebnis": "Gruppen mit echter Gegenstimme fanden mehr und bessere Lösungen. In einer Vorstudie derselben Forscher brachte der gespielte Kritiker die Gruppe eher dazu, ihre erste Meinung zu verteidigen.",
+          "grenze": "Laborstudien. In einer anderen Studie half die bestellte Rolle durchaus – in Gruppen, die anfangs uneins waren. Dein echter Einwand bleibt trotzdem wertvoll.",
+          "beleg": "B",
+          "quellen": ["nemeth2001", "greitemeyer2009"]
+        },
+        {
+          "art": "karte",
+          "text": "Widerspruch in der Runde: früh, solange noch nichts beschlossen ist. Erst die beste Fassung der anderen Sicht in einem Satz („Für Plan A spricht, dass …“), dann deine Sicht als Sicht, ein Beispiel, ein Vorschlag. Bleib bei einem Punkt. Fällt die Entscheidung trotzdem anders, kannst du sie mittragen und einen Prüftermin vorschlagen: „Ich trage es mit. Schauen wir im Mai, ob …“"
+        },
+        {
+          "art": "rangfolge",
+          "kopf": { "id": "gespraech-2-05-a", "faehigkeit": "gespraech.widerspruch", "stufe": 5, "kanal": "wissen" },
+          "frage": "Die Runde ist sich fast einig, den Kundentag nach draußen zu verlegen. Du siehst ein Risiko. Ordne die Einstiege von stark nach schwach.",
+          "eintraege": [
+            {
+              "text": "„Darf ich kurz dagegenhalten? Draußen hat viel für sich – und wir haben keinen Plan für Regen. Wie wäre ein Zelt als Rückfall?“",
+              "warum": "Erlaubnis, Würdigung, ein konkretes Risiko und ein Vorschlag – früh und bei einem Punkt."
+            },
+            {
+              "text": "„Habt ihr eigentlich an Regen gedacht?“",
+              "warum": "Der Punkt ist da, aber ohne Würdigung und Vorschlag klingt er nach Bremse."
+            },
+            {
+              "text": "„Kann sein, dass ich da allein bin, aber ich hab ein ungutes Gefühl.“",
+              "warum": "Sehr vorsichtig und ohne Grund – die Runde kann damit wenig anfangen."
+            },
+            {
+              "text": "Nach der Runde zu Miriam: „Das fällt doch eh ins Wasser.“",
+              "warum": "Der Einwand kommt zu spät und an der falschen Stelle. Geändert wird nichts."
+            }
+          ]
+        },
+        {
+          "art": "buehne",
+          "kopf": { "id": "gespraech-2-05-b", "faehigkeit": "gespraech.widerspruch", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "gespraech-v-0152" },
+          "auftrag": "Steh auf und bring einen Einwand in eine Runde, die sich schon einig scheint: die andere Sicht würdigen, deine Sicht, ein Beispiel, ein Vorschlag. Thema frei – etwa ein Vereinsbeschluss oder eine neue Regel im Team.",
+          "sekunden": 60,
+          "publikum": "klein",
+          "stoerungen": ["Jemand unterbricht: „Das haben wir doch schon besprochen.“", "Ein hörbarer Seufzer aus der Runde.", "„Wir sind uns aber eigentlich alle einig.“"],
+          "pruefliste": ["erst die andere Sicht gewürdigt", "eigene Sicht als Sicht gesagt", "ein konkretes Beispiel", "mit einem Vorschlag geendet", "nach der Störung ruhig beim Punkt geblieben"]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-2-05-c", "faehigkeit": "gespraech.oben", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du hast in der Runde widersprochen. Dr. Albers hört zu, entscheidet aber anders. Was ist jetzt der beste Weg?",
+          "antworten": [
+            {
+              "text": "„Verstanden, ich trage es mit. Können wir in drei Monaten draufschauen, ob es so läuft wie gedacht?“",
+              "wert": 2,
+              "warum": "Du hast deinen Punkt gemacht und trägst die Entscheidung mit. Der Prüftermin hält deinen Einwand lebendig."
+            },
+            {
+              "text": "Nach der Runde unter Kollegen weiter Stimmung dagegen machen.",
+              "wert": 0,
+              "tendenz": "untergraben",
+              "warum": "Das schadet der Sache und deinem Ruf – und beim nächsten Einwand hört man dir weniger zu."
+            },
+            {
+              "text": "Beim nächsten Mal lieber gar nichts mehr sagen.",
+              "wert": 0,
+              "tendenz": "vermeiden",
+              "warum": "Ein Einwand, der nicht durchkommt, war trotzdem richtig. Schweigen kostet beim nächsten Mal mehr."
+            },
+            {
+              "text": "Ihn später unter vier Augen fragen, was den Ausschlag gegeben hat.",
+              "wert": 1,
+              "warum": "Gut, um zu verstehen. Danach gilt: mittragen – oder mit einem neuen Grund kommen, nicht mit demselben."
+            }
+          ]
+        },
+        { "art": "mission", "ref": "gespraech-m-09" }
+      ],
+      "regel": "Früh, erst die andere Sicht würdigen, ein Punkt – danach mittragen oder prüfen.",
+      "merkkarten": [
+        {
+          "id": "gespraech-2-05-m1",
+          "frage": "Wann bringst du einen Einwand in die Runde?",
+          "antwort": "Früh – solange noch nichts beschlossen ist."
+        },
+        {
+          "id": "gespraech-2-05-m2",
+          "frage": "Womit beginnt ein Widerspruch in der Runde?",
+          "antwort": "Mit der besten Fassung der anderen Sicht: „Für Plan A spricht, dass …“"
+        },
+        {
+          "id": "gespraech-2-05-m3",
+          "frage": "Die Runde entscheidet anders als du. Was jetzt?",
+          "antwort": "Mittragen und einen Prüftermin vorschlagen – nicht hinterher Stimmung machen."
+        }
+      ],
+      "mission": "gespraech-m-09"
+    },
+    {
+      "id": "gespraech-2-06",
+      "bereich": "gespraech",
+      "stufe": 2,
+      "nr": 6,
+      "titel": "Nach oben: Prioritäten statt Überstunden",
+      "faehigkeiten": ["gespraech.oben", "gespraech.absprache"],
+      "dauerMin": 7,
+      "beleg": "P",
+      "belegHinweis": "Dass viele Probleme aus Sorge nicht nach oben tragen, zeigt eine Interviewstudie; dass offene Vorgesetzte mehr zu hören bekommen, eine größere. Der Aufbau Lage – Folge – Möglichkeiten – Vorschlag ist Praxiswissen.",
+      "quellen": ["milliken2003", "detert2007", "praxis-gespraech"],
+      "aha": "Wer nach oben nur „zu viel“ sagt, lässt den Chef rechnen. Wer Lage, Folge, Möglichkeiten und einen Vorschlag bringt, macht ihm die Entscheidung leicht – und schlechte Nachrichten früh sind halb so schlimm.",
+      "schritte": [
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-2-06-a", "faehigkeit": "gespraech.oben", "stufe": 5, "kanal": "wissen" },
+          "frage": "Dr. Albers gibt dir eine dritte dringende Aufgabe. Die ersten zwei füllen deine Woche schon. Was sagst du?",
+          "antworten": [
+            {
+              "text": "„Klar, mach ich.“ – und am Wochenende arbeiten.",
+              "wert": 0,
+              "tendenz": "schlucken",
+              "warum": "Er erfährt nie, dass die Woche voll war – und plant beim nächsten Mal genauso."
+            },
+            {
+              "text": "„Gern. Bericht und Angebot sind auch für Freitag. Welche zwei zuerst – und das dritte bis Dienstag?“",
+              "wert": 2,
+              "warum": "Lage, Folge und ein Vorschlag als Frage. Er entscheidet, du arbeitest nicht gegen ein unmögliches Ziel."
+            },
+            {
+              "text": "„Das ist jetzt echt zu viel, ich weiß gar nicht mehr, wo mir der Kopf steht.“",
+              "wert": 0,
+              "tendenz": "klagen",
+              "warum": "Ehrlich, aber ohne Angaben. Er weiß nicht, was du brauchst – und muss selbst rechnen."
+            },
+            {
+              "text": "„Ich hab schon zwei Aufgaben bis Freitag.“",
+              "wert": 1,
+              "warum": "Ehrlich und sachlich. Mit einer Frage nach der Reihenfolge machst du ihm die Entscheidung leichter."
+            }
+          ]
+        },
+        {
+          "art": "karte",
+          "text": "Nach oben trägt ein Anliegen am besten in vier Teilen: Lage („Ich habe drei Aufgaben für Freitag“), Folge („Alle drei schaffe ich nicht gut“), Möglichkeiten („A verschieben, B kürzen, C an Tarek“) und dein Vorschlag. Entscheiden soll, wer entscheidet. Schlechte Nachrichten früh: Am Montag sind sie eine Planungsfrage, am Freitag ein Problem. Noch ohne Lösung? Bring trotzdem Lage und Folge – früh zählt mehr als fertig."
+        },
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-2-06-b", "faehigkeit": "gespraech.oben", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Du sprichst mit Dr. Albers über die Inventur. Lage, Folge, Möglichkeit oder Vorschlag?",
+          "faecher": ["Lage", "Folge", "Möglichkeit", "Vorschlag"],
+          "karten": [
+            { "text": "„In der Inventurwoche sind zwei von uns im Urlaub.“", "fach": 0 },
+            { "text": "„Dann schaffen wir die Zählung nicht bis Freitag.“", "fach": 1 },
+            { "text": "„Wir könnten die Zählung auf zwei Wochen strecken.“", "fach": 2 },
+            { "text": "„Mein Vorschlag: Aushilfen für drei Tage.“", "fach": 3 },
+            { "text": "„Die Zählliste ist dieses Jahr doppelt so lang.“", "fach": 0 },
+            { "text": "„Oder Tarek hilft die halbe Woche mit.“", "fach": 2 },
+            { "text": "„Sonst stimmen die Zahlen für den Jahresabschluss nicht.“", "fach": 1 },
+            { "text": "„Ich würde mit den Aushilfen anfangen – das stört den Betrieb am wenigsten.“", "fach": 3 }
+          ]
+        },
+        {
+          "art": "umformulieren",
+          "kopf": { "id": "gespraech-2-06-c", "faehigkeit": "gespraech.oben", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Mach aus der Klage ein Anliegen mit Lage, Folge, Möglichkeiten und Vorschlag.",
+          "vorlage": "„Das neue Bestellsystem ist eine Katastrophe, keiner kommt damit klar.“ (Du sagst es Dr. Albers. Seit der Umstellung dauert eine Bestellung bei euch etwa doppelt so lange.)",
+          "kriterien": ["beschreibt die Lage konkret", "nennt die Folge", "bietet mindestens zwei Möglichkeiten", "endet mit einem Vorschlag oder einer Frage"],
+          "muster": [
+            "„Seit der Umstellung brauchen wir für eine Bestellung etwa doppelt so lange. Bei Monatsende wird das knapp. Wir könnten eine Schulung machen oder für die Großkunden vorerst beim alten Formular bleiben. Ich würde mit der Schulung anfangen – was meinen Sie?“",
+            "„Die Bestellungen dauern im neuen System etwa doppelt so lange, vor allem bei Sonderwünschen. Kunden warten dadurch länger. Mein Vorschlag: eine Stunde Einweisung für das Team. Oder sollen wir erst Rückmeldungen sammeln?“"
+          ]
+        },
+        {
+          "art": "geschichte",
+          "titel": "Carlas Montag",
+          "figur": "Carla Demir",
+          "text": "Kennst du Carla Demir, die Projektleiterin? Sie hat einmal ein Projekt gerettet – ohne eine einzige Überstunde. Montagmorgen merkte sie: Die Lieferung für den Kunden kommt zwei Wochen zu spät. Ihr erster Gedanke: erst mal selbst lösen, dann merkt keiner, dass es hakt. Sie ging trotzdem um neun zu ihrem Chef. Drei Sätze: was passiert ist, was es für den Termin heißt, zwei Wege – Teillieferung oder neuer Termin. Ihr Vorschlag: Teillieferung. Um zehn war es entschieden. Am Freitag, sagt sie, wäre dieselbe Nachricht ein Brand gewesen. Am Montag war sie eine Planungsfrage.",
+          "frage": "Welche Nachricht trägst du gerade mit dir herum, die heute noch eine Planungsfrage wäre?"
+        },
+        {
+          "art": "experiment",
+          "auftrag": "Bring diese Woche ein Anliegen nach oben in vier Teilen: Lage, Folge, Möglichkeiten, Vorschlag. Schreib dir die vier Sätze vorher auf.",
+          "dauer": "woche",
+          "nachfrage": "Hat dein Vorschlag die Entscheidung leichter gemacht – und wie schnell kam sie?"
+        },
+        {
+          "art": "reflexion",
+          "frage": "Was hält dich davon ab, eine schlechte Nachricht früh nach oben zu geben – und welcher erste Satz würde es dir leichter machen?"
+        }
+      ],
+      "regel": "Lage, Folge, Möglichkeiten, Vorschlag – und schlechte Nachrichten früh.",
+      "merkkarten": [
+        {
+          "id": "gespraech-2-06-m1",
+          "frage": "Die vier Teile eines Anliegens nach oben?",
+          "antwort": "Lage, Folge, Möglichkeiten, dein Vorschlag."
+        },
+        {
+          "id": "gespraech-2-06-m2",
+          "frage": "Zu viel auf dem Tisch – was fragst du?",
+          "antwort": "„Was soll zuerst fertig sein – und was darf warten?“"
+        },
+        {
+          "id": "gespraech-2-06-m3",
+          "frage": "Warum schlechte Nachrichten früh?",
+          "antwort": "Früh ist es eine Planungsfrage, spät ein Problem."
+        }
+      ]
+    }
+  ]
+}

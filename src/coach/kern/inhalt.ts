@@ -1,6 +1,6 @@
 // Der Coach — Inhalte nachladen. Jede Datei unter inhalt/ ist ein eigenes Teilpaket; geholt wird erst, was gebraucht
 // wird. Das Verzeichnis (_index.json) kommt mit dem Raum und reicht dem Planer.
-import type { BereichTests, Einheit, Gemeinsam, Lage, Mission, Quelle, VorratsEintrag, WissensSeite, Figur, Lesetext } from './inhaltTypen'
+import type { BereichTests, Einheit, Gemeinsam, Lage, Leben, Mission, Quelle, VorratsEintrag, WissensSeite, Figur, Lesetext } from './inhaltTypen'
 import type { InhaltsIndex } from './index'
 import { LEERER_INDEX } from './index'
 
@@ -50,6 +50,12 @@ export async function ladeMission(id: string): Promise<Mission | null> {
   if (!m) return null
   return (await ladeDatei<{ missionen: Mission[] }>(m.d))?.missionen.find(x => x.id === id) ?? null
 }
+/** Aufgabe fürs echte Leben: Mission einer Leiter oder Mutprobe aus leben.json (Kennung mut-p-…) */
+export async function ladeAufgabe(id: string): Promise<Mission | null> {
+  if (!id.startsWith('mut-p-')) return ladeMission(id)
+  const p = (await ladeLeben())?.mutproben.find(x => x.id === id)
+  return p ? { id: p.id, bereich: 'mut', stufe: 9, titel: p.titel, auftrag: p.auftrag, ort: 'privat', planVorlage: 'Wenn …, dann frage ich …', halb: p.halb, mutprobe: true } : null
+}
 export async function ladeMissionen(bereich: string): Promise<Mission[]> {
   const i = await ladeIndex()
   const dateien = [...new Set(Object.values(i.missionen).filter(m => m.b === bereich).map(m => m.d))]
@@ -72,6 +78,8 @@ export async function ladeTests(kurs: string): Promise<BereichTests | null> {
   return d ? ladeDatei<BereichTests>(d) : null
 }
 export const ladeGemeinsam = (): Promise<Gemeinsam | null> => ladeDatei<Gemeinsam>('gemeinsam.json')
+/** Inhalte fürs eigene Leben (Vorhaben, Erinnerungen, Mutproben, Fahrpläne, Kompass) – erst beim Öffnen dieser Bereiche */
+export const ladeLeben = (): Promise<Leben | null> => ladeDatei<Leben>('leben.json')
 /** Quellen liegen in quellen.json (gemeinsam) und je Bereich in <bereich>/quellen.json */
 const QUELL_DATEIEN = Object.keys(lader).map(k => k.slice('../inhalt/'.length)).filter(d => d === 'quellen.json' || /^[a-z]+\/quellen(-[nls])?\.json$/.test(d))
 export async function ladeQuellen(): Promise<Map<string, Quelle>> {

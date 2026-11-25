@@ -13,6 +13,7 @@ import type { InhaltsIndex, VorratKopf } from '../index'
 import type { Block, CoachDaten, TagesPlan } from '../typen'
 import { hash32, rng, type Rng } from '../zufall'
 import { tagNummer } from '../zeit'
+import { ernstfallBald } from '../leben'
 import { aktiveBereiche, gewaehlt, kurseVonBereich, naechsterLerntag, lerntageVon } from '../kurs'
 import { faellige } from './wiederholung'
 import { form, luecke, stufeFuer } from './schaetzung'
@@ -28,7 +29,7 @@ export const RUNDE = 5
 
 /** Kennzeichen der Wünsche, bei deren Änderung ein noch nicht begonnener Plan neu entsteht */
 export const signatur = (d: CoachDaten, w: PlanWunsch): string =>
-  [w.dauer, w.laut ? 1 : 0, d.profil.bereiche.join(','), d.profil.schwerpunkte.join(','), d.profil.ohneZeitdruck ? 1 : 0, d.profil.staffel].join('|')
+  [w.dauer, w.laut ? 1 : 0, d.profil.bereiche.join(','), d.profil.schwerpunkte.join(','), d.profil.ohneZeitdruck ? 1 : 0, d.profil.staffel, d.ernstfaelle.filter(e => !e.auswertung).map(e => e.datum).join(',')].join('|')
 
 export interface VorratFilter { faehigkeiten?: FaehId[]; bereiche?: BereichId[]; formate?: SchrittArt[]; band: [number, number]; kanal?: 'wissen' | 'koennen' }
 
@@ -85,7 +86,7 @@ export const uebungstagFuellbar = (index: InhaltsIndex, d: CoachDaten, t: Extrac
 interface Wahl { kurs: KursId; lerntag: Lerntag | null; grund: string }
 
 /** Welcher Kurs bekommt heute den neuen Lerntag? */
-export function waehleKurs(d: CoachDaten, index: InhaltsIndex, r: Rng, ausser?: BereichId): Wahl | null {
+export function waehleKurs(d: CoachDaten, index: InhaltsIndex, r: Rng, ausser?: BereichId, vorzug?: BereichId): Wahl | null {
   let aktiv = aktiveBereiche(d, index).filter(b => b !== ausser)
   if (!aktiv.length) aktiv = gewaehlt(d.profil, index).filter(b => b !== ausser)
   if (!aktiv.length) return null
@@ -100,6 +101,11 @@ export function waehleKurs(d: CoachDaten, index: InhaltsIndex, r: Rng, ausser?: 
       const seit = d.verlauf.length - 1 - d.verlauf.map(v => v[2]).lastIndexOf(vorher.id)
       if (seit >= 1 || aktiv.length === 1) return { kurs: k, lerntag: t, grund: `Die Übung zu „${index.einheiten[(vorher as { einheit: string }).einheit]?.titel ?? 'deiner letzten Einheit'}“ ist dran – solange sie frisch ist, sitzt sie am besten.` }
     }
+  }
+  // Ernstfall in Sicht und „ruhe“ gewählt → ruhe zuerst (auch wenn er gerade nicht in der Staffel ist)
+  if (vorzug && vorzug !== ausser && gewaehlt(d.profil, index).includes(vorzug)) {
+    const k = kurseVonBereich(d.profil, index, vorzug)[0]
+    if (k) return { kurs: k, lerntag: naechsterLerntag(index, k, d.kurse[k]), grund: '' }
   }
   // 2. Gewicht × Rückstand: wie lange ist der Bereich nicht drangewesen?
   const punkte = aktiv.map(b => {
@@ -142,7 +148,7 @@ function freilauf(kurs: KursId, index: InhaltsIndex, d: CoachDaten, tag: number,
 }
 
 const titelVon = (t: Lerntag | null, index: InhaltsIndex): string => {
-  if (!t) return 'Freies Training'
+  if (!t) return 'Meisterklasse'
   if (t.titel) return t.titel
   if (t.art === 'E') return index.einheiten[t.einheit]?.titel ?? 'Neue Einheit'
   if (t.art === 'L' || t.art === 'S') return index.lagen[t.lage]?.titel ?? 'Lage'
@@ -178,7 +184,10 @@ export function planeTag(d: CoachDaten, index: InhaltsIndex, heute: string, w: P
     return { tag: heute, nr, salz, dauer: 3, laut: w.laut, begonnen: false, bloecke, grund: 'Kurztraining: drei Minuten, damit der Faden nicht reißt.', sig }
   }
 
-  const wahl = waehleKurs(d, index, r)
+  // Ernstfall in den nächsten sieben Tagen: ruhe zuerst; morgen oder heute: nur Leichtes, kein neuer Stoff
+  const ernst = ernstfallBald(d, heute, 7)
+  const ernstNah = ernst ? tagNummer(ernst.datum) - tag <= 1 : false
+  const wahl = waehleKurs(d, index, r, undefined, ernst ? 'ruhe' : undefined)
   const kurs = wahl?.kurs
   const { bereich } = kurs ? kursTeile(kurs) : { bereich: undefined }
 
@@ -196,13 +205,29 @@ export function planeTag(d: CoachDaten, index: InhaltsIndex, heute: string, w: P
     const t = wahl?.lerntag ?? null
     let ids = t ? inhaltVon(t, kurs, index, d, r, w.laut, schonDa) : []
     if (!t || !ids.length) ids = freilauf(kurs, index, d, tag, r, w.laut, schonDa, 5)
+    // Meisterklasse (Kursplan durch): jedes dritte Training des Bereichs eine Lage erneut – reihum, Meisterschaft zuerst
+    if (!t) {
+      const { spur } = kursTeile(kurs)
+      const lagen = Object.entries(index.lagen).filter(([, l]) => l.b === bereich && (l.sp ?? 'kern') === spur).sort((a, z) => z[1].s - a[1].s).map(([id]) => id)
+      const frei = d.verlauf.filter(v => v[1] === kurs && v[2] === 'frei').length
+      if (lagen.length && frei % 3 === 2) ids = [`l:${lagen[Math.floor(frei / 3) % lagen.length]}`]
+    }
+    if (ernstNah) {
+      // kurz vor dem Ernstfall: nichts Neues, nur Sicheres – der Lerntag wartet
+      const sicher = freilauf(kurs, index, d, tag, r, w.laut, new Set(schonDa), 4)
+      if (sicher.length) {
+        grund = 'Dein Ernstfall ist nah. Heute kein neuer Stoff – nur Sicheres festigen. Im Notfallkoffer warten deine Startroutine und der Fahrplan.'
+        bloecke.push({ art: 'ueben', titel: 'Sicher bleiben', kurs, ids: sicher, minuten: MIN.neu, fertig: false })
+      }
+    }
     // Wissen hoch, Tun niedrig → Anwendung statt Lektion (die Einheit wartet bis morgen)
     const fs = index.bereiche.find(b => b.id === bereich)?.faehigkeiten.map(f => f.id) ?? []
-    if (t?.art === 'E' && fs.some(f => luecke(d.f[f], tag)) && !d.missionen.offen.some(m => m.id.startsWith(`${bereich}-`)) && d.verlauf.slice(-3).every(v => !v[2].includes('-a-'))) {
+    if (ernstNah && bloecke.some(b => b.titel === 'Sicher bleiben')) { /* schon geplant */ }
+    else if (t?.art === 'E' && fs.some(f => luecke(d.f[f], tag)) && !d.missionen.offen.some(m => m.id.startsWith(`${bereich}-`)) && d.verlauf.slice(-3).every(v => !v[2].includes('-a-'))) {
       grund = 'Du weißt in diesem Bereich schon viel – jetzt zählt, es draußen zu tun. Heute eine kleine Aufgabe fürs echte Leben.'
       bloecke.push({ art: 'neu', titel: 'Echtes Leben', kurs, ids: [`a:mission:${kurs}`], minuten: MIN.neu, fertig: false })
     } else {
-      grund = wahl?.grund || (t ? '' : 'Der Kursplan dieses Bereichs ist durch – der Freilauf trainiert deine schwächsten Fähigkeiten.')
+      grund = wahl?.grund || (t ? '' : 'Kurs geschafft – willkommen in der Meisterklasse. Bruno trainiert deine schwächsten Fähigkeiten mit frischen Aufgaben und holt ab und zu eine Lage zurück, damit du andere Wege gehst.')
       bloecke.push({ art: 'neu', titel: titelVon(t, index), kurs, lerntag: t?.id, ids, minuten: MIN.neu, fertig: false })
     }
   }
@@ -218,7 +243,9 @@ export function planeTag(d: CoachDaten, index: InhaltsIndex, heute: string, w: P
   // gezieltes Üben (ab 15 Minuten): schwächste begonnene Fähigkeit
   if (w.dauer >= 15 && bereiche.length) {
     const begonnen = Object.keys(d.f).filter(f => bereiche.includes(f.split('.')[0] as BereichId))
-    const schwach = begonnen.sort((a, b) => (form(d.f[a], tag) ?? 0.5) - (form(d.f[b], tag) ?? 0.5))[0]
+    // „Das stimmt so nicht“ (Ecke): eine Woche lang wird diese Fähigkeit gezielt nachgeprüft
+    const widerspruch = Object.entries(d.widerspruch ?? {}).filter(([f, t]) => tag - t <= 7 && bereiche.includes(f.split('.')[0] as BereichId)).sort((a, b) => b[1] - a[1])[0]?.[0]
+    const schwach = widerspruch ?? begonnen.sort((a, b) => (form(d.f[a], tag) ?? 0.5) - (form(d.f[b], tag) ?? 0.5))[0]
     const letzteArt = bloecke.flatMap(b => b.ids).filter(i => i.startsWith('v:')).map(i => index.vorrat[i.slice(2)]?.a).pop()
     const nachholen = w.laut ? d.spaeterLaut.filter(id => index.vorrat[id] && erlaubt(index.vorrat[id], d, true)).slice(0, 2) : []
     nachholen.forEach(id => schonDa.add(id))

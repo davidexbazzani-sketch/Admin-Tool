@@ -1,0 +1,299 @@
+{
+  "einheiten": [
+    {
+      "id": "antrieb-2-01", "bereich": "antrieb", "stufe": 2, "nr": 1,
+      "titel": "Vom Kompass zum Vorhaben",
+      "faehigkeiten": ["antrieb.ziele", "antrieb.warum"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass eigene Ziele ausdauernder verfolgt werden, zeigen Längsschnittstudien; dass bei Neuem ein Lernziel mehr bringt, stammt aus der Zielsetzungsforschung. Wunsch, Hindernis und Plan sind in einer Meta-Analyse belegt, mit kleinem bis mittlerem Effekt. Der Rahmen von 90 Tagen ist Praxiswissen.",
+      "quellen": ["sheldon1999", "locke2002", "locke2006", "wang2021", "praxis-antrieb"],
+      "aha": "Der Kompass zeigt dir eine Richtung. Ein Vorhaben wird erst daraus, wenn es deins ist, in deiner Hand liegt und als Tun beschrieben ist: was, wie oft, wann – für die nächsten 90 Tage.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Miriam hat im Kompass bei „Gesundheit und Körper“ eine 4 eingetragen. Sie will etwas ändern.",
+          "schwach": "„Dieses Jahr werde ich endlich fit.“",
+          "stark": "„Bis Ende März gehe ich dienstags und donnerstags in der Mittagspause 20 Minuten – damit mein Kopf nachmittags wieder frei ist.“",
+          "frage": "Mit welchem Satz weiß Miriam morgen, was zu tun ist?",
+          "unterschied": "Der erste beschreibt einen Zustand, den sie nicht direkt tun kann. Der zweite nennt ein Tun mit Tag, Dauer und Zeitraum – und einen eigenen Grund, der an zähen Tagen trägt." },
+        { "art": "karte", "text": "Lebensrad, Werte und Ziel-Pyramide findest du im Kompass, einem eigenen Bereich der App. Hier geht es um den nächsten Schritt: aus einer Richtung ein Vorhaben für 90 Tage machen. Vier Prüfungen, zum Teil wie im Kompass: Ist es meins – will ich oder soll ich? Liegt es in meiner Hand? Ist es ein Tun mit Maß und Zeit? Ist es ganz neu – dann zuerst ein Lernziel: Wege ausprobieren statt sofort Bestleistung." },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-2-01-a", "faehigkeit": "antrieb.ziele", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Liegt dieses Ziel in deiner Hand – oder hängt es vor allem an anderen?",
+          "faecher": ["in meiner Hand", "hängt vor allem an anderen"],
+          "karten": [
+            { "text": "Jeden Monat drei Bewerbungen abschicken", "fach": 0 },
+            { "text": "Bis zum Sommer die neue Stelle haben", "fach": 1 },
+            { "text": "Jeden Sonntag meine Schwester anrufen", "fach": 0 },
+            { "text": "Dass meine Schwester sich öfter meldet", "fach": 1 },
+            { "text": "Dreimal pro Woche 20 Minuten Gitarre üben", "fach": 0 },
+            { "text": "Im Frühjahr in der Band mitspielen dürfen", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-2-01-b", "faehigkeit": "antrieb.warum", "stufe": 4, "kanal": "wissen" },
+          "frage": "Jonas' Kompass: Bei den Werten steht „Neugier“ ganz oben, im Lebensrad hat „Lernen und Wachsen“ nur eine 3. Welches Vorhaben für 90 Tage passt am besten?",
+          "antworten": [
+            { "text": "Den Kurs belegen, den gerade alle im Team machen – dann ist er wenigstens auf dem Stand.", "wert": 0, "tendenz": "uebernehmen", "warum": "Ein Ziel der anderen. Ob es seine Neugier weckt, bleibt offen – und ohne eigenen Grund wird es an zähen Abenden schwer." },
+            { "text": "Jeden Samstagvormittag eine Stunde an einem Bastelprojekt, das seine Neugier weckt.", "wert": 2, "warum": "Es passt zu seinem Wert, liegt in seiner Hand und hat einen festen Platz. So wird aus der Richtung ein Tun." },
+            { "text": "Mehr lernen.", "wert": 1, "warum": "Die Richtung stimmt. Ohne Was, Wann und Wie oft kann er es aber weder schaffen noch verfehlen." },
+            { "text": "Drei Kurse gleichzeitig, damit der Wert endlich zu seinem Recht kommt.", "wert": 0, "tendenz": "ueberladen", "warum": "Viel auf einmal klingt nach Aufbruch – und kippt bei der ersten vollen Woche. Ein Vorhaben zur Zeit trägt weiter." }
+          ] },
+        { "art": "woop", "anlass": "Dein Vorhaben für die nächsten 90 Tage – am besten eins, das aus deinem Kompass kommt. Kein Kompass zur Hand? Nimm, was dich gerade am meisten reizt.",
+          "beispiel": { "wunsch": "Bis Ende März zweimal pro Woche 20 Minuten gehen.", "ergebnis": "Nachmittags wieder einen klaren Kopf haben.", "hindernis": "Mittags denke ich: Nur noch schnell die eine Mail.", "plan": "Wenn ich um zwölf den Gedanken „nur noch schnell“ habe, klappe ich den Laptop zu und nehme die Jacke." } },
+        { "art": "auswahl", "kopf": { "id": "antrieb-2-01-c", "faehigkeit": "antrieb.ziele", "stufe": 5, "kanal": "wissen" },
+          "frage": "Lena will in den nächsten 90 Tagen lernen, Auswertungen mit Formeln selbst zu bauen. Bisher hat sie Tabellen vor allem geprüft, nicht gebaut. Welches Ziel passt für den Anfang?",
+          "antworten": [
+            { "text": "„In vier Wochen baue ich die Monatsauswertung allein – ohne Hilfe.“", "wert": 1, "warum": "Konkret und fordernd. Für ganz Neues ist ein Leistungsziel aber oft zu früh – erst braucht sie Wege." },
+            { "text": "„Ich gebe mein Bestes.“", "wert": 0, "tendenz": "vage", "warum": "Ohne Maßstab. „Mein Bestes“ ist immer irgendwie erfüllt – und sagt nicht, was sie heute tut." },
+            { "text": "„Jede Woche probiere ich zwei neue Formeln an einer echten Liste aus.“", "wert": 2, "warum": "Ein Lernziel: konkret, machbar und auf Wege ausgerichtet. Erst wenn sie die kennt, lohnt ein Leistungsziel." },
+            { "text": "„Bis Ende März kann ich alles, was Tarek kann – vom ersten Feld bis zur letzten Formel.“", "wert": 0, "tendenz": "vergleichen", "warum": "Ein Vergleich ohne Weg dorthin. Tareks Stand liegt nicht in ihrer Hand, ihr nächster Schritt schon." }
+          ] },
+        { "art": "reflexion", "frage": "Wie lautet dein Vorhaben für die nächsten 90 Tage – und besteht es alle vier Prüfungen?" }
+      ],
+      "regel": "Aus der Richtung ein Tun machen: meins, in meiner Hand, mit Maß und Zeit.",
+      "merkkarten": [
+        { "id": "antrieb-2-01-m1", "frage": "Welche vier Prüfungen machen aus einer Richtung ein Vorhaben?", "antwort": "Meins? In meiner Hand? Ein Tun mit Maß und Zeit? Bei Neuem zuerst ein Lernziel?" },
+        { "id": "antrieb-2-01-m2", "frage": "Wann ist ein Lernziel besser als ein Leistungsziel?", "antwort": "Wenn etwas ganz neu ist: erst Wege ausprobieren, dann die Messlatte hoch." },
+        { "id": "antrieb-2-01-m3", "frage": "Wo findest du Lebensrad, Werte und Ziel-Pyramide?", "antwort": "Im Kompass, einem eigenen Bereich der App." }
+      ]
+    },
+    {
+      "id": "antrieb-2-02", "bereich": "antrieb", "stufe": 2, "nr": 2,
+      "titel": "Dem Aufschieben den Anfang nehmen",
+      "faehigkeiten": ["antrieb.start", "antrieb.plan"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass unangenehme Aufgaben am meisten geschoben werden, zeigt eine große Meta-Analyse. Programme gegen Aufschieben helfen im Mittel, aber nur wenig und mit großer Streuung. Die einzelnen Handgriffe sind Praxiswissen.",
+      "quellen": ["steel2007", "sirois2013", "rozental2018", "gollwitzer2006", "praxis-antrieb"],
+      "aha": "Aufgeschoben wird selten die Aufgabe, meist das Gefühl am Anfang. Wer weiß, welches Gefühl es ist – öde, unklar, zu groß –, findet den passenden ersten Schritt und ein festes Zeitfenster dafür.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Eine große Auswertung über Hunderte von Befunden fragte: Welche Aufgaben schieben Menschen am ehesten auf?", "optionen": ["die wichtigsten", "die unangenehmsten", "die kürzesten"], "richtig": 1, "loesung": "Die, die sich unangenehm anfühlen", "aufloesung": "Abneigung gegen die Aufgabe, eine Belohnung, die weit weg liegt, und Zweifel, es zu können, gehörten zu den stärksten Zusammenhängen – neben Eigenschaften wie Impulsivität und wenig Gewissenhaftigkeit. Es geht also selten um Faulheit – oft um das Gefühl am Anfang." },
+        { "art": "karte", "text": "Drei Gefühle stecken oft dahinter. Öde: Mach es kurz und angenehm – Zeitfenster, Musik, danach etwas Schönes. Unklar: Der erste Schritt ist eine Frage oder ein schlechter Entwurf. Zu groß: Schneid einen sichtbaren Handgriff ab. Dazu für alle drei: ein festes Zeitfenster mit Anfang und Ende – „von neun bis halb zehn, nur das“ – und die Ablenkung vorher wegräumen." },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-2-02-a", "faehigkeit": "antrieb.start", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Welches Gefühl steckt hinter dem Aufschieben?",
+          "faecher": ["öde", "unklar", "zu groß"],
+          "karten": [
+            { "text": "„Belege abheften. Das Langweiligste der Welt.“", "fach": 0 },
+            { "text": "„Ich weiß nicht mal, welches Formular die Kasse will.“", "fach": 1 },
+            { "text": "„Der ganze Dachboden muss leer werden.“", "fach": 2 },
+            { "text": "„Wie fängt man so eine Rede überhaupt an?“", "fach": 1 },
+            { "text": "„Zweihundert Fotos sortieren, eins nach dem anderen.“", "fach": 0 },
+            { "text": "„Die komplette Hausarbeit, dreißig Seiten.“", "fach": 2 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-2-02-b", "faehigkeit": "antrieb.start", "stufe": 5, "kanal": "wissen" },
+          "frage": "Tarek schiebt seine Reisekostenabrechnung seit drei Wochen: „Ich weiß nicht mal, welche Belege die Buchhaltung haben will.“ Was ist sein bester erster Schritt?",
+          "antworten": [
+            { "text": "Heute in der Buchhaltung fragen, welche Belege nötig sind – das dauert zwei Minuten.", "wert": 2, "warum": "Das Hindernis ist Unklarheit. Dann ist der erste Schritt eine Frage – klein, heute machbar, und danach ist der Berg kleiner." },
+            { "text": "Am Wochenende alle Belege der letzten Monate sortieren, damit er dann wirklich alles beisammenhat.", "wert": 0, "tendenz": "ueberladen", "warum": "Ein neuer, großer Berg – und die Unklarheit bleibt. Er weiß danach immer noch nicht, was gebraucht wird." },
+            { "text": "Sich einen Termin im Kalender eintragen: Donnerstag, 9 Uhr, Abrechnung.", "wert": 1, "warum": "Ein Zeitfenster hilft. Ohne Antwort auf seine Frage sitzt er am Donnerstag aber wieder vor demselben Nebel." },
+            { "text": "Warten, bis die Buchhaltung nachfragt.", "wert": 0, "tendenz": "aufschieben", "warum": "Dann entscheidet der Druck – und das Gefühl am Anfang wird eher größer." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "antrieb-2-02-c", "faehigkeit": "antrieb.plan", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Mach aus dem Aufschiebe-Satz ein festes Zeitfenster: Tag, Anfang, Ende, erster Handgriff – und was du vorher wegräumst.",
+          "vorlage": "„Die Steuererklärung mache ich mal am Wochenende.“",
+          "kriterien": ["Tag mit Anfang und Ende", "ein sichtbarer erster Handgriff", "eine Ablenkung, die vorher verschwindet"],
+          "muster": ["„Samstag von zehn bis halb elf: Ordner auf den Tisch, die Belege vom Januar heraussuchen. Das Handy liegt so lange im Flur.“", "„Sonntag nach dem Frühstück, 25 Minuten mit Wecker: nur die Seite mit den Fahrtkosten. Fernseher bleibt aus.“"] },
+        { "art": "studie", "frage": "Lässt sich Aufschieben überhaupt ändern?", "aufbau": "Eine Auswertung fasste zwölf Studien zusammen, in denen Menschen ein Programm gegen Aufschieben bekamen – meist aus der Verhaltenstherapie, oft online – und verglich sie mit Menschen ohne Programm.", "ergebnis": "Im Mittel schoben die Teilnehmenden danach etwas weniger auf – ein kleiner Effekt, von Studie zu Studie sehr verschieden. Verhaltenstherapie schnitt etwas besser ab.", "grenze": "Nur wenige, teils kleine Studien. Es gibt keinen Schalter gegen das Aufschieben – aber Hinweise, dass es sich üben lässt.", "beleg": "B", "quellen": ["rozental2018"] },
+        { "art": "mission", "ref": "antrieb-m-08" }
+      ],
+      "regel": "Erst das Gefühl benennen, dann den passenden ersten Schritt – im festen Zeitfenster.",
+      "merkkarten": [
+        { "id": "antrieb-2-02-m1", "frage": "Welche drei Gefühle stecken oft hinter dem Aufschieben?", "antwort": "Öde, unklar, zu groß – und jedes braucht einen anderen ersten Schritt." },
+        { "id": "antrieb-2-02-m2", "frage": "Was ist der erste Schritt, wenn eine Aufgabe unklar ist?", "antwort": "Eine Frage stellen oder einen schlechten Entwurf schreiben." },
+        { "id": "antrieb-2-02-m3", "frage": "Was gehört zu einem festen Zeitfenster?", "antwort": "Tag, Anfang, Ende, der erste Handgriff – und die Ablenkung vorher weggeräumt." }
+      ],
+      "mission": "antrieb-m-08"
+    },
+    {
+      "id": "antrieb-2-03", "bereich": "antrieb", "stufe": 2, "nr": 3,
+      "titel": "Alte Gewohnheiten umlenken",
+      "faehigkeiten": ["antrieb.gewohnheit", "antrieb.plan"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Gewohnheiten von der Umgebung ausgelöst werden und auch gegen gute Absichten laufen, fasst eine große Übersichtsarbeit zusammen. Dass Umbrüche ein Fenster öffnen, zeigt ein Feldexperiment zu umweltfreundlichem Verhalten. Gegen sehr starke Gewohnheiten helfen Wenn-Dann-Pläne nicht immer.",
+      "quellen": ["wood2016", "verplanken2016", "gollwitzer2006", "praxis-antrieb"],
+      "aha": "Gewohnheiten startet nicht dein Wille, sondern ein Auslöser: Ort, Uhrzeit, Stimmung, ein Griff. Wer den Auslöser kennt, kann ihn meiden, eine Hürde einbauen oder ihm eine andere Handlung zuweisen.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer eine schlechte Gewohnheit nicht loswird, hat einfach zu wenig Willen.", "urteil": "falsch", "warum": "Gewohnheiten werden von der Lage ausgelöst und laufen oft an, bevor der Wille mitreden kann. Die Forschung sieht die Schwierigkeit meist beim Auslöser – nicht bei einem schwachen Charakter." },
+        { "art": "karte", "text": "Jede Gewohnheit hat einen Auslöser, eine Handlung und etwas, das sie dir bringt. Heimkommen, Sofa, Handy – und dafür: abschalten. Drei Hebel: den Auslöser meiden oder verändern, eine Hürde vor die Handlung legen, und dasselbe Bedürfnis auf anderem Weg stillen – mit einem Gegenplan: „Wenn ich mich aufs Sofa setze, lege ich das Handy auf die Fensterbank und höre ein Album.“" },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-2-03-a", "faehigkeit": "antrieb.gewohnheit", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Tareks Feierabend-Muster: Was ist Auslöser, was Handlung, was bringt es ihm?",
+          "faecher": ["Auslöser", "Handlung", "was es ihm bringt"],
+          "karten": [
+            { "text": "Er lässt sich nach der Arbeit aufs Sofa fallen.", "fach": 0 },
+            { "text": "Er öffnet die Video-App.", "fach": 1 },
+            { "text": "Er kann eine Weile an nichts denken.", "fach": 2 },
+            { "text": "Es ist kurz nach sechs und die Wohnung ist still.", "fach": 0 },
+            { "text": "Er schaut ein Video nach dem anderen.", "fach": 1 },
+            { "text": "Der Arbeitstag ist für eine Weile weit weg.", "fach": 2 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-2-03-b", "faehigkeit": "antrieb.gewohnheit", "stufe": 5, "kanal": "wissen" },
+          "frage": "Jonas liest im Bett noch Arbeitsmails auf dem Handy – und schläft danach schlecht ein. Was setzt am ehesten am Auslöser an?",
+          "antworten": [
+            { "text": "Sich jeden Abend aufs Neue fest vornehmen, die Mails einfach nicht mehr zu öffnen.", "wert": 0, "tendenz": "wollen", "warum": "Ein täglicher Kampf gegen einen Griff, der von selbst passiert. Der Auslöser – Handy am Bett – bleibt." },
+            { "text": "Das Handy lädt ab zehn in der Küche, auf dem Nachttisch liegt ein Buch.", "wert": 2, "warum": "Der Auslöser verschwindet aus dem Schlafzimmer, und auf dem Nachttisch wartet etwas anderes für die letzten Minuten des Tages." },
+            { "text": "Die Mail-App vom Startbildschirm in einen Ordner schieben.", "wert": 1, "warum": "Eine kleine Hürde – gut. Das Handy liegt aber weiter am Bett und lockt mit allem anderen." },
+            { "text": "Abends Schlaftabletten.", "wert": 0, "warum": "Behandelt die Folge, nicht die Gewohnheit – und gehört, wenn überhaupt, in ärztliche Hand." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "antrieb-2-03-c", "faehigkeit": "antrieb.plan", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Schreib einen Gegenplan: Wenn [Auslöser], dann [eine andere Handlung, die dir dasselbe bringt].",
+          "vorlage": "„Ich will nicht mehr gleich an den Kühlschrank, wenn ich abends heimkomme.“",
+          "kriterien": ["nennt den Auslöser genau", "die neue Handlung stillt dasselbe Bedürfnis", "klein und sofort machbar"],
+          "muster": ["„Wenn ich die Wohnungstür aufschließe, setze ich zuerst Teewasser auf und esse einen Apfel – ankommen will ich ja trotzdem.“", "„Wenn ich die Tasche abstelle, gehe ich erst unter die Dusche – zum Ankommen. Danach koche ich in Ruhe, statt im Stehen zu naschen.“"] },
+        { "art": "karte", "titel": "Umbrüche nutzen", "text": "Wer umzieht oder die Stelle wechselt, verliert für eine Weile seine alten Auslöser. In einem Versuch wirkte ein Programm für umweltfreundliches Verhalten bei frisch Umgezogenen stärker als bei anderen. Solche Wochen sind ein Fenster: Leg dann gleich fest, wie der neue Ablauf aussieht. Und ehrlich: Gegen sehr starke Gewohnheiten hilft ein Wenn-Dann nicht immer – dann zählt die Umgebung doppelt." },
+        { "art": "experiment", "auftrag": "Beobachte drei Tage lang eine Gewohnheit, die du loswerden willst. Notier jedes Mal kurz: Wann, wo, mit wem, in welcher Stimmung – und was hat sie dir gebracht?", "dauer": "woche", "nachfrage": "Welcher Auslöser kam am häufigsten – und welches Bedürfnis steckte dahinter?" },
+        { "art": "reflexion", "frage": "Welchen Auslöser kannst du diese Woche meiden oder verändern – und was tust du stattdessen, wenn er doch kommt?" }
+      ],
+      "regel": "Nicht gegen die Gewohnheit kämpfen – den Auslöser umlenken.",
+      "merkkarten": [
+        { "id": "antrieb-2-03-m1", "frage": "Was startet eine Gewohnheit?", "antwort": "Ein Auslöser aus der Lage – Ort, Uhrzeit, Stimmung, ein Griff –, nicht der Wille." },
+        { "id": "antrieb-2-03-m2", "frage": "Wie sieht ein Gegenplan aus?", "antwort": "Wenn der Auslöser kommt, dann eine andere Handlung, die dasselbe Bedürfnis stillt." },
+        { "id": "antrieb-2-03-m3", "frage": "Warum sind Umzug oder Jobwechsel eine Chance?", "antwort": "Die alten Auslöser fallen weg – neue Abläufe lassen sich dann leichter festlegen." }
+      ]
+    },
+    {
+      "id": "antrieb-2-04", "bereich": "antrieb", "stufe": 2, "nr": 4,
+      "titel": "Rückfälle einplanen",
+      "faehigkeiten": ["antrieb.dranbleiben", "antrieb.fortschritt"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Das Bild vom Ausrutscher, der über Schuld zum Rückfall wird, stammt aus einem Modell der Rückfallvorbeugung in der Suchtbehandlung; für Alltagsvorhaben ist es ein Denkmodell. Dass ein einzelner ausgelassener Tag kaum schadet und Freundlichkeit den Neustart erleichtert, zeigen einzelne Studien.",
+      "quellen": ["larimer1999", "lally2010", "breines2012", "wohl2010", "praxis-antrieb"],
+      "aha": "Rückschläge gehören zu vielen längeren Vorhaben. Entscheidend ist der Moment nach dem ersten Ausrutscher: „Jetzt ist eh alles egal“ macht daraus einen Rückfall – ein vorbereiteter Rückweg nicht.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer einmal rückfällig wird, hat es eben nicht geschafft.", "urteil": "falsch", "warum": "Rückschläge gehören bei vielen Veränderungen dazu. Ob aus einem Ausrutscher ein Rückfall wird, entscheidet sich meist danach – an dem, was du dir sagst und was du als Nächstes tust." },
+        { "art": "karte", "text": "Aus der Rückfall-Forschung stammt ein hilfreiches Denkmodell: Ein Ausrutscher ist ein einzelner Tag, ein Rückfall die Rückkehr zum alten Muster. Dazwischen steht oft ein Gedanke: „Jetzt ist es eh egal.“ Schuld und das Gefühl, versagt zu haben, machen aus dem Ausrutscher eher den Rückfall. Wer diesen Wendepunkt kennt, kann dort anders denken – und den Rückweg schon vorher bauen." },
+        { "art": "auswahl", "kopf": { "id": "antrieb-2-04-a", "faehigkeit": "antrieb.dranbleiben", "stufe": 5, "kanal": "wissen" },
+          "frage": "Lena nascht seit drei Wochen abends kaum noch. Auf einer Geburtstagsfeier isst sie zwei Stücke Torte. Welcher Gedanke hält den Ausrutscher am ehesten klein?",
+          "antworten": [
+            { "text": "„Jetzt ist es eh egal – dann gibt es heute Abend auch noch die Chips.“", "wert": 0, "tendenz": "allesodernichts", "warum": "Genau der Wendepunkt: Aus einem Fest wird ein Abend, aus dem Abend leicht eine Woche." },
+            { "text": "„Zwei Stücke auf einem Fest. Morgen läuft es weiter wie bisher.“", "wert": 2, "warum": "Sachlich, ohne Urteil, mit Blick auf morgen. So bleibt der Ausrutscher ein Ausrutscher." },
+            { "text": "„Ärgerlich. Ich schreibe auf, was mich auf Feiern schwach macht.“", "wert": 1, "warum": "Gut für den nächsten Plan. Noch hilfreicher mit dem Satz dazu, dass es morgen einfach weitergeht." },
+            { "text": "„Typisch ich. Ab Montag fange ich noch mal ganz streng von vorne an, ohne jede Ausnahme.“", "wert": 0, "tendenz": "abwerten", "warum": "Urteil plus Strenge plus Warten auf Montag – drei Wege, aus einem Abend eine lange Pause zu machen." }
+          ] },
+        { "art": "karte", "titel": "Auch nach zweimal", "text": "Die Faustregel „nie zweimal“ hilft vielen. Für alle, die streng mit sich sind: Sie ist kein neues Verbot. Auch nach zwei, fünf oder zwanzig ausgelassenen Tagen gilt dasselbe – der Rückweg-Plan, kein Urteil. Ein langer Ausfall braucht nur eine kleinere Fassung für den Neustart, keine Strafe und kein Nachholen." },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-2-04-b", "faehigkeit": "antrieb.dranbleiben", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Ausrutscher – oder schon ein Rückfall ins alte Muster?",
+          "faecher": ["Ausrutscher", "Rückfall"],
+          "karten": [
+            { "text": "Ein Abend ohne Lesen, weil Besuch da war", "fach": 0 },
+            { "text": "Seit dem Urlaub vor vier Wochen kein Buch mehr angefasst", "fach": 1 },
+            { "text": "Am Montag die Laufrunde verpasst, am Dienstag wieder gelaufen", "fach": 0 },
+            { "text": "Die Laufschuhe stehen seit Anfang des Monats im Schrank", "fach": 1 },
+            { "text": "Auf der Feier wieder geraucht, am nächsten Morgen nicht", "fach": 0 },
+            { "text": "Nach der Feier jeden Abend wieder ein paar Zigaretten", "fach": 1 }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "antrieb-2-04-c", "faehigkeit": "antrieb.dranbleiben", "stufe": 6, "kanal": "koennen" },
+          "plan": "Rückfall-Landkarte", "anlass": "Ein Vorhaben, das dir wichtig ist – und die Lage, in der es am ehesten kippt.",
+          "felder": [
+            { "name": "Riskante Lage", "hilfe": "Wann wackelt es am ehesten? Urlaub, Krankheit, Stress, Feiertage, Besuch …" },
+            { "name": "Frühes Warnzeichen", "hilfe": "Woran merkst du, dass es gerade kippt – bevor es zwei Wochen sind?" },
+            { "name": "Notfall-Fassung", "hilfe": "Die kleinste Fassung, die auch in dieser Lage geht." },
+            { "name": "Rückweg", "hilfe": "Wenn …, dann … – ohne Nachholen." }
+          ],
+          "muster": ["Lage: Urlaub. Warnzeichen: Das Lesezeichen bewegt sich drei Tage nicht. Notfall-Fassung: eine Seite vor dem Einschlafen. Rückweg: Wenn ich zurück bin und die Tasche ausgepackt habe, lege ich das Buch aufs Kissen.", "Lage: Wochen mit Spätdienst. Warnzeichen: Ich sage „diese Woche lohnt es sich nicht“. Notfall-Fassung: zehn Minuten Gehen in der Pause. Rückweg: Wenn der Spätdienst vorbei ist, trage ich sofort die nächsten drei Runden ein."] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-2-04-d", "faehigkeit": "antrieb.fortschritt", "stufe": 6, "kanal": "wissen" },
+          "frage": "Nach einem Rückfall zählst du deine Kreuze der letzten drei Monate: 48 Tage mit Übung, dazwischen eine Lücke von drei Wochen. Welcher Blick hilft dir am meisten weiter?",
+          "antworten": [
+            { "text": "„48 Tage geschafft – und die Lücke zeigt mir, welche Lage für mein Vorhaben riskant ist.“", "wert": 2, "warum": "Fortschritt gesehen, Lücke als Hinweis genutzt. So wird aus dem Rückfall Wissen für die Landkarte." },
+            { "text": "„Die drei Wochen machen alles kaputt.“", "wert": 0, "tendenz": "allesodernichts", "warum": "Drei Wochen machen 48 Tage nicht ungeschehen. Das Urteil verdeckt, was die Zahlen zeigen." },
+            { "text": "„Ich zähle ab jetzt nur noch die guten Wochen – die Lücken ziehen mich zu sehr runter.“", "wert": 0, "tendenz": "vermeiden", "warum": "Verständlich, aber die Lücke ist die nützlichste Information. Sie zeigt, wo dein Plan noch eine Notfall-Fassung braucht." },
+            { "text": "„48 Tage, gar nicht schlecht.“", "wert": 1, "warum": "Freundlich und richtig. Noch mehr bringt der Blick darauf, was die Lücke verursacht hat." }
+          ] },
+        { "art": "reflexion", "frage": "Welche Lage hat dich bisher am häufigsten aus einem Vorhaben geworfen – und was ist dein Wenn-Dann für das nächste Mal?" }
+      ],
+      "regel": "Ein Ausrutscher ist ein Tag – was danach kommt, entscheidet dein vorbereiteter Rückweg.",
+      "merkkarten": [
+        { "id": "antrieb-2-04-m1", "frage": "Was unterscheidet Ausrutscher und Rückfall?", "antwort": "Der Ausrutscher ist ein einzelner Tag, der Rückfall die Rückkehr zum alten Muster." },
+        { "id": "antrieb-2-04-m2", "frage": "Welcher Gedanke macht aus dem Ausrutscher oft einen Rückfall?", "antwort": "„Jetzt ist es eh egal“ – getragen von Schuld und dem Gefühl, versagt zu haben." },
+        { "id": "antrieb-2-04-m3", "frage": "Was gilt nach zwei oder zwanzig ausgelassenen Tagen?", "antwort": "Dasselbe: der Rückweg-Plan mit kleiner Fassung – kein Urteil, kein Nachholen." }
+      ]
+    },
+    {
+      "id": "antrieb-2-05", "bereich": "antrieb", "stufe": 2, "nr": 5,
+      "titel": "Die Woche nach deiner Energie planen",
+      "faehigkeiten": ["antrieb.energie", "antrieb.plan"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass gedankliches Abschalten nach der Arbeit mit weniger Erschöpfung und besserem Schlaf einhergeht, zeigt eine Meta-Analyse über Befragungen – ein Zusammenhang, keine sichere Ursache. Kurze Pausen und Bewegung sind gut belegt. Das Planen nach der eigenen Energiekurve ist Praxiswissen.",
+      "quellen": ["wendsche2017", "albulescu2022", "puetz2006", "palmer2024", "praxis-antrieb"],
+      "aha": "Deine Energie ist kein fester Vorrat, sondern eine Kurve über Tag und Woche. Wer das Wichtige in die frischen Stunden legt und Erholung wie einen Termin behandelt, braucht weniger Willen.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Tarek will in den nächsten acht Wochen für eine Fachprüfung lernen.",
+          "schwach": "Er plant jeden Abend von neun bis elf – nach Training, Essen und den letzten Mails.",
+          "stark": "Er lernt an drei Morgen vor der Arbeit je 45 Minuten, wenn er frisch ist, und hält zwei Abende in der Woche ganz frei.",
+          "frage": "Welcher Plan hält acht Wochen eher?",
+          "unterschied": "Der erste legt das Schwerste in die müdeste Zeit und kostet Schlaf. Der zweite nutzt die frischen Stunden und plant Erholung mit ein – so bleibt Kraft für Woche sechs und sieben." },
+        { "art": "karte", "text": "Drei Fragen für deine Woche: Wann bin ich frisch? Dorthin gehört, was Kopf braucht. Was lädt mich auf? Schlaf, Bewegung, Menschen, wirklich abschalten. Was zieht mich leer? Einen Teil davon kannst du begrenzen oder in müde Zeiten legen. Erholung ist dabei kein Rest, der übrig bleibt, sondern ein Termin wie jeder andere." },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-2-05-a", "faehigkeit": "antrieb.energie", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Gehört das eher in deine frische Zeit – oder geht es auch in der müden?",
+          "faecher": ["frische Zeit", "geht auch müde"],
+          "karten": [
+            { "text": "die Bewerbung schreiben", "fach": 0 },
+            { "text": "das Altpapier wegbringen", "fach": 1 },
+            { "text": "Vokabeln neu lernen", "fach": 0 },
+            { "text": "Wäsche zusammenlegen", "fach": 1 },
+            { "text": "das schwierige Kapitel im Lehrbuch", "fach": 0 },
+            { "text": "Termine für die nächste Woche eintragen", "fach": 1 }
+          ] },
+        { "art": "studie", "frage": "Hilft es, nach Feierabend wirklich abzuschalten?", "aufbau": "Eine Auswertung fasste Befragungen von über 38.000 Beschäftigten zusammen: Wie gut schalten sie nach der Arbeit gedanklich ab – und wie geht es ihnen?", "ergebnis": "Wer besser abschaltete, war im Mittel weniger erschöpft, schlief besser und fühlte sich wohler. Wer in der Freizeit weiterarbeitete, schaltete schlechter ab.", "grenze": "Meist Befragungen: Sie zeigen Zusammenhänge, nicht sicher die Ursache. Gut möglich, dass Erschöpfte auch schwerer abschalten können.", "beleg": "B", "quellen": ["wendsche2017"] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-2-05-b", "faehigkeit": "antrieb.energie", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du kommst um sieben heim, schaust „nur kurz“ in die Arbeitsmails und denkst dann bis zum Schlafen an morgen. Was hilft dem Abschalten am ehesten?",
+          "antworten": [
+            { "text": "Vor dem Gehen ein fester Schluss-Handgriff: drei Punkte für morgen aufschreiben, Laptop zu, Mails bis morgen aus.", "wert": 2, "warum": "Was aufgeschrieben ist, muss der Kopf nicht festhalten – und ohne Mails am Abend fällt der Auslöser fürs Grübeln weg." },
+            { "text": "Abends einfach weniger an die Arbeit denken.", "wert": 0, "tendenz": "wollen", "warum": "Gedanken lassen sich schlecht verbieten. Ein fester Abschluss und kein Mail-Postfach am Abend helfen mehr als ein Vorsatz." },
+            { "text": "Abends Sport machen, damit der Kopf frei wird.", "wert": 1, "warum": "Bewegung tut gut und kann ablenken. Solange die Mails um sieben offen sind, startet das Grübeln aber trotzdem." },
+            { "text": "Die Mails gleich vollständig beantworten, dann ist der Kopf leer.", "wert": 0, "warum": "Arbeit in der Freizeit hing in Befragungen mit schlechterem Abschalten zusammen. Und auf jede Antwort kommt meist eine neue Mail." }
+          ] },
+        { "art": "gespraechskarte", "anlass": "Mit den Menschen, mit denen du zusammenlebst, absprechen, wann du Zeit für dein Vorhaben oder deine Erholung brauchst.",
+          "beispiel": { "ziel": "Zwei feste Abende pro Woche mit einer Stunde für mich.", "erster": "„Ich möchte etwas mit euch absprechen, das mir gerade wichtig ist.“", "wunsch": "„Dienstag und Donnerstag ab acht bin ich eine Stunde für mich – dann bitte nur im Notfall stören.“", "planB": "„Wenn das nicht passt: Welche zwei Abende gehen besser für euch?“" } },
+        { "art": "umformulieren", "kopf": { "id": "antrieb-2-05-c", "faehigkeit": "antrieb.plan", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Leg das Vorhaben in deine frische Zeit – mit Tag, Uhrzeit und Schutz vor Störungen.",
+          "vorlage": "„Ich lerne abends, wenn ich noch Kraft habe.“",
+          "kriterien": ["eine Zeit, in der du meist frisch bist", "fester Tag und feste Uhrzeit", "ein Schutz vor Störungen"],
+          "muster": ["„Dienstag und Freitag von sieben bis halb acht, vor dem Frühstück, am Küchentisch. Das Handy bleibt bis dahin im Flugmodus.“", "„Samstag um neun, eine Stunde in der Bücherei – dort klingelt nichts und niemand braucht mich.“"] },
+        { "art": "reflexion", "frage": "Wann in deiner Woche bist du am frischesten – und was liegt dort gerade? Passt es dorthin?" }
+      ],
+      "regel": "Das Wichtige in die frische Zeit – und Erholung als Termin, nicht als Rest.",
+      "merkkarten": [
+        { "id": "antrieb-2-05-m1", "frage": "Welche drei Fragen helfen beim Planen nach Energie?", "antwort": "Wann bin ich frisch? Was lädt mich auf? Was zieht mich leer?" },
+        { "id": "antrieb-2-05-m2", "frage": "Was hilft beim Abschalten nach Feierabend?", "antwort": "Ein fester Schluss-Handgriff: Punkte für morgen aufschreiben, Laptop zu, Mails bis morgen aus." }
+      ]
+    },
+    {
+      "id": "antrieb-2-06", "bereich": "antrieb", "stufe": 2, "nr": 6,
+      "titel": "Wenn der Plan nicht greift",
+      "faehigkeiten": ["antrieb.plan", "antrieb.fortschritt"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Menschen die Dauer eigener Vorhaben unterschätzen, ist in Studien gut gezeigt. Wenn-Dann-Pläne und Fortschritt-Beobachten sind meta-analytisch belegt. Die Prüfung an vier Stellen ist Praxiswissen.",
+      "quellen": ["buehler1994", "gollwitzer2006", "harkin2016", "praxis-antrieb"],
+      "aha": "Greift ein Plan nicht, liegt es selten an dir, meist an einer Stelle im Plan: Der Auslöser kommt nicht sicher, der Schritt ist zu groß, das Hindernis war ein anderes – oder die Zeit zu knapp geschätzt.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Menschen sollten vorhersagen, wann sie ein eigenes größeres Vorhaben fertig haben. Was zeigte sich in Studien?", "optionen": ["Sie waren meist früher fertig", "Sie brauchten meist länger als geschätzt", "Die Schätzungen trafen meist"], "richtig": 1, "loesung": "Sie brauchten meist länger", "aufloesung": "Selbst wenn Ähnliches früher länger gedauert hatte, schätzten sie zu knapp. Man denkt an den Plan, nicht an das letzte Mal. Viele Pläne scheitern deshalb nicht am Willen, sondern an Zeit, die es nie gab." },
+        { "art": "karte", "text": "Bevor du an dir zweifelst, prüf vier Stellen. Auslöser: Kommt er sicher, jeden Tag, sichtbar? Größe: Geht der Schritt auch an deinem schlechtesten Tag? Hindernis: War es wirklich das, was du vermutet hast? Zeit: Reicht sie – gemessen daran, wie lange Ähnliches beim letzten Mal gedauert hat, mit Puffer? Meist hakt es an genau einer Stelle. Die änderst du – nicht gleich alles." },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-2-06-a", "faehigkeit": "antrieb.plan", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Wo hakt der Plan am ehesten? „Zeit zu knapp“ heißt hier: ein einmaliges Vorhaben, das länger dauert als geplant.",
+          "faecher": ["Auslöser", "Schritt zu groß", "Zeit zu knapp"],
+          "karten": [
+            { "text": "„Wenn ich mal Luft habe, lerne ich.“ – Luft kam nie.", "fach": 0 },
+            { "text": "„Jeden Abend ein ganzes Kapitel“ – nach drei Tagen aufgegeben.", "fach": 1 },
+            { "text": "„Die Bewerbung schreibe ich in der einen Stunde vor dem Kino.“", "fach": 2 },
+            { "text": "„Irgendwann am Wochenende räume ich auf.“", "fach": 0 },
+            { "text": "„Jeden Morgen eine Stunde laufen“ – nach zwei Jahren Pause.", "fach": 1 },
+            { "text": "„Den Umzugskarton-Keller schaffe ich an einem Samstag.“", "fach": 2 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-2-06-b", "faehigkeit": "antrieb.plan", "stufe": 5, "kanal": "wissen" },
+          "frage": "Jonas' Plan: „Wenn ich abends heimkomme, programmiere ich eine Stunde an meinem Projekt.“ Nach zwei Wochen: zweimal geschafft. Er kommt meist erst um acht heim, hungrig. Was ändert er zuerst?",
+          "antworten": [
+            { "text": "Den Schritt: nach dem Abendessen nur 20 Minuten – die lange Stunde bekommt der Samstag.", "wert": 2, "warum": "Der Auslöser bleibt, nur nach dem Essen. Was nicht passte, war die Größe: Eine Stunde ist für müde Abende zu viel." },
+            { "text": "Er nimmt sich vor, sich abends einfach mehr zusammenzunehmen.", "wert": 0, "tendenz": "wollen", "warum": "Der Plan soll den Willen entlasten. Mehr Strenge gegen Hunger und Müdigkeit verliert meist." },
+            { "text": "Er streicht das Projekt – offenbar ist es nichts für ihn.", "wert": 0, "tendenz": "verallgemeinern", "warum": "Zwei Wochen mit einem schlecht gelegten Plan sagen etwas über den Plan, nicht über ihn oder das Projekt." },
+            { "text": "Er isst vorher einen Riegel und bleibt beim Plan.", "wert": 1, "warum": "Löst den Hunger, nicht die Größe. Eine ganze Stunde um acht bleibt für viele Abende zu viel." }
+          ] },
+        { "art": "geschichte", "titel": "Das Hindernis, das keins war", "figur": "Tarek Yılmaz", "text": "Tarek wollte jeden Abend zehn Minuten Gitarre spielen. Nach zwei Wochen hatte er drei Kreuze und einen Verdacht: „Mir fehlt die Disziplin.“ Beim Wochenrückblick schaute er sich die leeren Tage genauer an. An allen war jemand zu Hause. Er wollte nicht, dass man ihn üben hört – die Gitarre blieb im Koffer. Das Hindernis war nicht Faulheit, sondern Scham. Sein neuer Plan: Gespielt wird dienstags und donnerstags, wenn die anderen beim Sport sind. Und irgendwann, sagt er, spielt er ihnen etwas vor.", "frage": "Was steckt bei deinen leeren Tagen wirklich dahinter – das, was du vermutet hast, oder etwas anderes?" },
+        { "art": "rangfolge", "kopf": { "id": "antrieb-2-06-c", "faehigkeit": "antrieb.fortschritt", "stufe": 6, "kanal": "wissen" },
+          "frage": "Dein Wochenrückblick zeigt drei Kreuze an sieben Tagen. Was tust du? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "Anschauen, was an den vier leeren Tagen anders war – und genau diese eine Stelle im Plan ändern.", "warum": "Die Lücken zeigen, wo der Plan hakt. Eine gezielte Änderung lässt alles, was schon trägt, stehen." },
+            { "text": "Den ganzen Plan neu schreiben.", "warum": "Kann helfen, wirft aber auch weg, was an drei Tagen funktioniert hat." },
+            { "text": "Den Plan lassen, wie er ist, und auf eine ruhigere Woche hoffen.", "warum": "Ruhigere Wochen kommen selten. Dieselbe Stelle hakt dann wieder." },
+            { "text": "Das Vorhaben streichen.", "warum": "Drei Kreuze sind ein Anfang, kein Urteil über das Vorhaben." }
+          ] },
+        { "art": "reflexion", "frage": "Welcher deiner Pläne hakt gerade – und an welcher der vier Stellen: Auslöser, Größe, Hindernis oder Zeit?" },
+        { "art": "mission", "ref": "antrieb-m-09" }
+      ],
+      "regel": "Nicht an dir zweifeln – die eine Stelle im Plan finden, die hakt.",
+      "merkkarten": [
+        { "id": "antrieb-2-06-m1", "frage": "An welchen vier Stellen prüfst du einen Plan, der nicht greift?", "antwort": "Auslöser, Größe des Schritts, das echte Hindernis, die Zeit samt Puffer." },
+        { "id": "antrieb-2-06-m2", "frage": "Wie schätzt du die Zeit für ein Vorhaben ehrlicher?", "antwort": "Am letzten ähnlichen Vorhaben messen, nicht am Plan – und einen Puffer einbauen." }
+      ],
+      "mission": "antrieb-m-09"
+    }
+  ]
+}

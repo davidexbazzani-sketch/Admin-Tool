@@ -1,0 +1,859 @@
+{
+  "eintraege": [
+    { "art": "stumm", "kopf": { "id": "ueberzeugen-v-0186", "faehigkeit": "ueberzeugen.profil", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "titel": "Die Vorstellung im Kopf",
+      "schritte": ["Stell dir die Frage vor: „Erzählen Sie etwas über sich.“", "Sprich innerlich deine Vorstellung: für wen, welches Problem, was du tust.", "Häng innerlich eine Erfolgsgeschichte an: Lage, Aufgabe, dein Tun, Ergebnis.", "Stell dir die Zwischenfrage vor: „Und was genau war Ihr Anteil?“ – und antworte innerlich mit „ich“.", "Schreib die drei Stichworte auf, die du nicht vergessen willst."],
+      "sekunden": 90,
+      "pruefliste": ["Vorstellung in drei Teilen", "Geschichte mit Ergebnis", "eigener Anteil klar benannt", "drei Stichworte notiert"] },
+    { "art": "stumm", "kopf": { "id": "ueberzeugen-v-0187", "faehigkeit": "ueberzeugen.abschluss", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "titel": "Der Vorschlag vor der Runde, still",
+      "schritte": ["Denk an eine Runde, in der du demnächst etwas vorschlagen willst.", "Geh innerlich durch: Problem in einem Satz, Nutzen für jede Gruppe, ein ehrlicher Nachteil, ein Beleg.", "Stell dir den Einwurf vor: „Und wer soll das bezahlen?“ – und antworte innerlich ruhig.", "Formulier innerlich die Schlussfrage: Entscheidung oder nächster Schritt – wer, was, bis wann.", "Schreib die Schlussfrage wörtlich auf."],
+      "sekunden": 90,
+      "pruefliste": ["Problem in einem Satz", "Nutzen für mindestens zwei Gruppen", "Einwurf ruhig beantwortet", "Schlussfrage wörtlich notiert"] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0188", "faehigkeit": "ueberzeugen.profil", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Im Vorstellungsgespräch: „Warum sollten wir gerade Sie nehmen?“ Die Stelle soll Lieferengpässe verhindern; du hast im Lager Mindestbestände eingeführt. Welche Antwort ist stark und ehrlich?",
+      "antworten": [
+        { "text": "„Weil ich von allen heute die beste Wahl bin.“", "wert": 0, "tendenz": "aufblasen", "warum": "Eine Behauptung, die du nicht belegen kannst – und die zum Gegenbeweis einlädt." },
+        { "text": "„Sie suchen jemanden gegen Lieferengpässe. Genau das habe ich im Lager gemacht.“", "wert": 2, "warum": "Ihr Bedarf, dein Beleg – sachlich und prüfbar." },
+        { "text": "„Ich bin sehr motiviert und lerne schnell.“", "wert": 1, "warum": "Freundlich, aber das sagen alle. Ein Beispiel würde es glaubwürdig machen." },
+        { "text": "„Das müssen Sie selbst entscheiden, ich will mich da nicht aufdrängen, das wäre mir unangenehm.“", "wert": 0, "tendenz": "kleinmachen", "warum": "Bescheiden bis zum Verschwinden – sie hat dich ausdrücklich gefragt." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0189", "faehigkeit": "ueberzeugen.profil", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Die Interviewerin fragt nach einem Projekt, das nicht geklappt hat. Welche Antwort zeigt dich am besten?",
+      "antworten": [
+        { "text": "„Mir ist eigentlich noch nie etwas so richtig schiefgegangen.“", "wert": 0, "tendenz": "beschoenigen", "warum": "Unglaubwürdig – und es klingt, als würdest du nicht aus Fehlern lernen." },
+        { "text": "„Das lag damals am Team. Ich hatte von Anfang an gewarnt, aber keiner wollte auf mich hören, und am Ende stand ich dumm da.“", "wert": 0, "tendenz": "abschieben", "warum": "Schuld bei anderen – wer zuhört, fragt sich: Wie wird über uns später geredet?" },
+        { "text": "„Eine Umstellung kam drei Wochen zu spät, weil ich den Aufwand unterschätzt hatte. Seitdem plane ich Puffer ein.“", "wert": 2, "warum": "Ein echter Fehler, dein Anteil, was du gelernt hast. Das zeigt Reife." },
+        { "text": "„Einmal kam ein Projekt zu spät.“", "wert": 1, "warum": "Ehrlich, aber ohne deinen Anteil und ohne Lehre bleibt es mager." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0190", "faehigkeit": "ueberzeugen.profil", "stufe": 8, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Ein Kollege hat die Idee mit dir zusammen entwickelt. Im Gespräch mit der Abteilungsleitung fragt man dich, wessen Idee es war. Was sagst du?",
+      "antworten": [
+        { "text": "„Meine.“", "wert": 0, "tendenz": "aneignen", "warum": "Unwahr – und es fällt meist auf. Dann ist dein ganzes Profil beschädigt." },
+        { "text": "„Wir hatten sie zu zweit – ich habe die Zahlen ausgewertet, Tarek hat den Ablauf gebaut.“", "wert": 2, "warum": "Ehrlich und trotzdem sichtbar: Dein Anteil ist klar benannt." },
+        { "text": "„Ach, das war eigentlich alles Tarek, ich habe da höchstens ein bisschen mitgeholfen und Kaffee gekocht.“", "wert": 0, "tendenz": "kleinmachen", "warum": "Du machst deinen echten Anteil unsichtbar." },
+        { "text": "„Eine Teamidee.“", "wert": 1, "warum": "Stimmt, aber unscharf. Wer was gemacht hat, wäre für beide fairer." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0191", "faehigkeit": "ueberzeugen.profil", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus dem „wir“ einen Satz, der deinen Anteil zeigt – ohne die anderen kleinzumachen.",
+      "vorlage": "„Wir haben letztes Jahr das Lager umgestellt.“",
+      "kriterien": ["dein Anteil mit „ich“", "die anderen bleiben erwähnt", "konkret"],
+      "muster": ["„Wir haben das Lager umgestellt. Ich habe die Bestellungen ausgewertet und die Mindestbestände festgelegt.“", "„Bei der Umstellung im Lager war meine Aufgabe die Auswertung – daraus kamen die neuen Bestände.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0192", "faehigkeit": "ueberzeugen.profil", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus der getarnten Stärke eine echte Schwäche – mit dem, was du dagegen tust.",
+      "vorlage": "„Meine Schwäche? Ich bin einfach zu ehrgeizig.“",
+      "kriterien": ["eine echte Schwäche", "was du dagegen tust", "kein verstecktes Eigenlob"],
+      "muster": ["„Ich sage zu schnell Ja zu zusätzlichen Aufgaben. Inzwischen frage ich erst nach, was dafür liegen bleiben darf.“", "„Vor großen Runden bin ich nervös. Ich bereite deshalb den ersten Satz vor – das hilft mir.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0193", "faehigkeit": "ueberzeugen.profil", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Erzähl deine Lücke im Lebenslauf ehrlich und ohne Rechtfertigung.",
+      "vorlage": "„Ähm, ja, also da war ich, ähm, eine Zeit lang zu Hause, das war halt so, private Gründe, das ist jetzt aber alles vorbei, wirklich.“",
+      "kriterien": ["kurz und sachlich", "keine Rechtfertigung", "Brücke zu dem, was du jetzt kannst oder willst"],
+      "muster": ["„Ich habe ein Jahr lang eine Angehörige gepflegt. Organisieren unter Zeitdruck kann ich seitdem noch besser – und jetzt will ich wieder voll arbeiten.“", "„Ein Jahr habe ich mich um meine Familie gekümmert. In der Zeit habe ich den Abendkurs Buchhaltung gemacht.“"] },
+    { "art": "bauplan", "kopf": { "id": "ueberzeugen-v-0194", "faehigkeit": "ueberzeugen.profil", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "plan": "Drei Geschichten für das Vorstellungsgespräch",
+      "anlass": "Ein Gespräch, in dem du zeigen willst, was du kannst – Bewerbung, Beförderung, neues Team.",
+      "felder": [
+        { "name": "Eine Stärke im Fach", "hilfe": "Lage, Aufgabe, dein Tun, Ergebnis." },
+        { "name": "Eine Stärke mit Menschen", "hilfe": "Ein Konflikt, eine Zusammenarbeit, ein schwieriger Kunde." },
+        { "name": "Ein Fehler, aus dem du gelernt hast", "hilfe": "Dein Anteil und was du seitdem anders machst." }
+      ],
+      "muster": ["Fach: Lager, Material fehlte, Bestellungen ausgewertet, seitdem keine Wartezeit. Menschen: Ein Lieferant war ständig verspätet; ich habe mit ihm feste Liefertage vereinbart. Fehler: Umstellung drei Wochen zu spät, Aufwand unterschätzt – seitdem plane ich Puffer ein."] },
+    { "art": "bauplan", "kopf": { "id": "ueberzeugen-v-0195", "faehigkeit": "ueberzeugen.profil", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "plan": "Fragen, die ich am Ende stelle",
+      "anlass": "„Haben Sie noch Fragen an uns?“ – am Ende eines Vorstellungsgesprächs.",
+      "felder": [
+        { "name": "Zum Erfolg", "hilfe": "Woran merkt man nach einem halben Jahr, dass es gepasst hat?" },
+        { "name": "Zur Aufgabe", "hilfe": "Was ist gerade die größte Baustelle?" },
+        { "name": "Zur Zusammenarbeit", "hilfe": "Wie arbeitet das Team, mit wem hast du am meisten zu tun?" }
+      ],
+      "muster": ["„Woran würden Sie nach einem halben Jahr merken, dass Sie richtig entschieden haben?“ · „Was ist im Einkauf gerade die größte Baustelle?“ · „Mit wem würde ich am engsten zusammenarbeiten?“"] },
+    { "art": "stumm", "kopf": { "id": "ueberzeugen-v-0196", "faehigkeit": "ueberzeugen.profil", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "titel": "Die Schwäche im Kopf proben",
+      "schritte": ["Stell dir die Frage vor: „Was ist Ihre größte Schwäche?“", "Sprich innerlich eine echte Schwäche – keine getarnte Stärke.", "Häng innerlich an, was du dagegen tust, mit einem kleinen Beleg.", "Stell dir die Nachfrage vor: „Und hat das geholfen?“ – antworte innerlich ehrlich.", "Schreib die Antwort in zwei Sätzen auf."],
+      "sekunden": 90,
+      "pruefliste": ["echte Schwäche", "was du dagegen tust", "ehrliche Antwort auf die Nachfrage", "zwei Sätze notiert"] },
+    { "art": "stumm", "kopf": { "id": "ueberzeugen-v-0197", "faehigkeit": "ueberzeugen.profil", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "titel": "Dein Stil in einem Satz",
+      "schritte": ["Denk an zwei Momente, in denen du jemanden gut überzeugt hast.", "Frag dich innerlich: Was hatten beide gemeinsam – Fragen, Belege, Begeisterung, Ruhe?", "Sprich innerlich den Satz: „Ich überzeuge, indem ich …“", "Sprich innerlich den zweiten Satz: „Dabei achte ich auf …“ – deine Kippstelle.", "Schreib beide Sätze auf."],
+      "sekunden": 90,
+      "pruefliste": ["zwei echte Momente erinnert", "Gemeinsamkeit benannt", "eigene Kippstelle benannt", "zwei Sätze notiert"] },
+    { "art": "buehne", "kopf": { "id": "ueberzeugen-v-0198", "faehigkeit": "ueberzeugen.profil", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "ueberzeugen-v-0196", "einfluss": "fair" },
+      "auftrag": "Steh auf und beantworte laut: „Was ist Ihre größte Schwäche?“ – eine echte, dazu was du dagegen tust.",
+      "sekunden": 60, "publikum": "klein",
+      "stoerungen": ["„Und hat das geholfen?“", "Jemand runzelt die Stirn.", "„Das klingt mir zu glatt.“"],
+      "pruefliste": ["echte Schwäche, keine getarnte Stärke", "was du dagegen tust", "ehrlich auf die Nachfrage", "ruhig geblieben"] },
+    { "art": "buehne", "kopf": { "id": "ueberzeugen-v-0199", "faehigkeit": "ueberzeugen.profil", "stufe": 8, "kanal": "koennen", "laut": true, "leise": "ueberzeugen-v-0186", "einfluss": "fair" },
+      "auftrag": "Steh auf und stell dich einer neuen Runde vor – Team, Verein, Kunde – in einer Minute: für wen, welches Problem, was du tust, ein Beispiel.",
+      "sekunden": 60, "publikum": "gross",
+      "stoerungen": ["Die Tür geht auf, jemand kommt zu spät.", "„Können Sie das kurz an einem Beispiel zeigen?“", "Ein Handy klingelt."],
+      "pruefliste": ["vier Teile der Vorstellung", "ein Beispiel mit Ergebnis", "nach der Störung weitergesprochen", "ohne Entschuldigung angefangen"] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0200", "faehigkeit": "ueberzeugen.profil", "stufe": 7, "kanal": "wissen" },
+      "auftrag": "Offen gezeigt, getarnt oder kleingemacht?",
+      "faecher": ["offen und belegt", "getarntes Eigenlob", "kleingemacht"],
+      "karten": [
+        { "text": "„Die letzten drei Projekte liefen über meinen Tisch, alle im Zeitplan.“", "fach": 0 },
+        { "text": "„Darin bin ich gut. Zuletzt habe ich die Lieferzeiten halbiert.“", "fach": 0 },
+        { "text": "„Ich bin so erschöpft – alle wollen ständig meinen Rat.“", "fach": 1 },
+        { "text": "„Ich hasse es, dass mich immer alle um Rat fragen.“", "fach": 1 },
+        { "text": "„Ach, das war nichts Besonderes.“", "fach": 2 },
+        { "text": "„Ich hatte da einfach Glück.“", "fach": 2 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0201", "faehigkeit": "ueberzeugen.profil", "stufe": 8, "kanal": "wissen" },
+      "auftrag": "Welche Frage im Vorstellungsgespräch beantwortest du mit welcher deiner Geschichten?",
+      "faecher": ["Stärke im Fach", "Stärke mit Menschen", "Fehler und Lehre"],
+      "karten": [
+        { "text": "„Worauf sind Sie beruflich stolz?“", "fach": 0 },
+        { "text": "„Wie gehen Sie an ein neues Problem heran?“", "fach": 0 },
+        { "text": "„Erzählen Sie von einem schwierigen Kunden.“", "fach": 1 },
+        { "text": "„Wie lösen Sie Streit im Team?“", "fach": 1 },
+        { "text": "„Was würden Sie heute anders machen?“", "fach": 2 },
+        { "text": "„Wann lag Ihre Einschätzung daneben?“", "fach": 2 }
+      ] },
+    { "art": "anschluss", "kopf": { "id": "ueberzeugen-v-0202", "faehigkeit": "ueberzeugen.profil", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "von": "Jule Marek",
+      "aussage": "„Du hast doch das Fest für den Kochkurs organisiert, oder? Das lief echt gut.“",
+      "kriterien": ["nimmt das Lob an", "nennt den eigenen Anteil sachlich", "nennt, wer noch beteiligt war"],
+      "muster": ["„Danke! Ja, Planung und Einkauf waren meins. Die Deko kam von zwei anderen aus dem Kurs – die war wirklich toll.“", "„Danke, das freut mich. Ich habe den Ablauf gebaut; ohne die Helfer am Grill wäre es aber nichts geworden.“"] },
+    { "art": "anschluss", "kopf": { "id": "ueberzeugen-v-0203", "faehigkeit": "ueberzeugen.profil", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "von": "Dr. Albers",
+      "aussage": "„Ich höre, die Umstellung im Einkauf lief gut. Wer war denn da treibend?“",
+      "kriterien": ["sagt offen, was du gemacht hast", "ohne die anderen kleinzumachen", "ohne getarntes Eigenlob"],
+      "muster": ["„Die Idee und die Auswertung kamen von mir. Lena hat die Lieferanten angeschrieben – das war viel Arbeit.“", "„Ich habe es angestoßen und den Plan gemacht. Umgesetzt haben wir es zu dritt.“"] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0204", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Die Interviewerin fragt nach einer Fähigkeit, die du nur in Ansätzen hast. Was wirkt am glaubwürdigsten?",
+      "antworten": [
+        { "text": "„Das kann ich ehrlich gesagt nicht.“ – und dann nichts weiter dazu sagen.", "wert": 1, "warum": "Ehrlich – aber ohne das, was du schon kannst, und ohne Plan wirkt es schwächer, als es ist." },
+        { "text": "„Klar, kein Problem, das kann ich.“", "wert": 0, "tendenz": "flunkern", "warum": "Flunkern bringt laut Forschung im Schnitt nichts – und fliegt im Job auf." },
+        { "text": "„Die Grundlagen kann ich, an den Feinheiten arbeite ich gerade in einem Kurs.“", "wert": 2, "warum": "Was stimmt, was fehlt, was du tust – genau so entsteht Vertrauen." },
+        { "text": "Das Thema geschickt wechseln.", "wert": 0, "tendenz": "ausweichen", "warum": "Ausweichen fällt auf und wirkt, als wolltest du etwas verbergen." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0205", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Du stellst Dr. Albers eine Idee vor. Er fragt: „Wie sicher sind Sie, dass das klappt?“ Du bist dir nicht ganz sicher. Was sagst du?",
+      "antworten": [
+        { "text": "„Hundertprozentig, da verwette ich meinen Kopf drauf.“", "wert": 0, "tendenz": "uebersicher", "warum": "Übersicherheit – klappt etwas nicht, ist dein Wort beim nächsten Mal weniger wert." },
+        { "text": "„Bei den Standardfällen ziemlich sicher. Bei den Sonderfällen weiß ich es nicht – darum der Test.“", "wert": 2, "warum": "Ehrlich abgestuft. Klappt etwas nicht, bleibt dein Wort trotzdem etwas wert – und der Test ist schon eingeplant." },
+        { "text": "„Ach, ich weiß auch nicht so genau. Vielleicht ist es auch eine blöde Idee, und wir lassen es lieber ganz.“", "wert": 0, "tendenz": "kleinmachen", "warum": "Du nimmst deiner Idee die Glaubwürdigkeit, die sie verdient." },
+        { "text": "„Ziemlich sicher.“", "wert": 1, "warum": "Ehrlich, aber ohne zu sagen, wo die Unsicherheit liegt." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0206", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus der übersicheren Zusage eine ehrliche, die trotzdem Vertrauen schafft.",
+      "vorlage": "„Das kriegen wir hundertpro bis Freitag hin, kein Thema.“",
+      "kriterien": ["sagt, was sicher ist und was nicht", "nennt die Bedingung", "kein Versprechen ohne Grundlage"],
+      "muster": ["„Bis Freitag schaffe ich es, wenn die Daten bis Mittwoch da sind. Kommen sie später, melde ich mich sofort.“", "„Freitag ist knapp, aber machbar. Ich sage Ihnen Mittwoch Bescheid, ob es hält.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0207", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Dein Chef möchte, dass im Angebot steht: „Lieferung in drei Tagen.“ Realistisch sind fünf. Schreib den Satz, den du ihm fürs Angebot vorschlägst – ehrlich und trotzdem stark.",
+      "vorlage": "„Lieferung in drei Tagen.“",
+      "kriterien": ["nennt die realistische Zeit", "macht sie trotzdem attraktiv", "kein Versprechen, das nicht hält"],
+      "muster": ["„Lieferung in fünf Werktagen – verlässlich. In dringenden Fällen prüfen wir gern, ob es schneller geht.“", "„Sie haben die Ware nach fünf Werktagen. Diesen Termin halten wir seit einem Jahr ein.“"] },
+    { "art": "bauplan", "kopf": { "id": "ueberzeugen-v-0208", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "plan": "Was stimmt, was fehlt, was ich tue",
+      "anlass": "Eine Frage nach etwas, das du nur teilweise kannst – im Vorstellungsgespräch oder bei einem neuen Auftrag.",
+      "felder": [
+        { "name": "Was stimmt", "hilfe": "Was du sicher kannst, mit Beispiel." },
+        { "name": "Was fehlt", "hilfe": "Die ehrliche Grenze." },
+        { "name": "Was ich tue", "hilfe": "Kurs, Hilfe holen, Zeit einplanen." }
+      ],
+      "muster": ["Was stimmt: Tabellen mit Formeln baue ich täglich. Was fehlt: Auswertungen mit Makros habe ich noch nie gemacht. Was ich tue: Ich lerne es gerade an einem echten Beispiel und frage unseren Controller."] },
+    { "art": "bauplan", "kopf": { "id": "ueberzeugen-v-0209", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "plan": "Der Fehler, den ich selbst melde",
+      "anlass": "Dir ist bei einem Kunden oder Vorgesetzten ein Fehler unterlaufen, der noch nicht aufgefallen ist.",
+      "felder": [
+        { "name": "Was passiert ist", "hilfe": "Sachlich, ohne Ausrede." },
+        { "name": "Was es bedeutet", "hilfe": "Folgen für den anderen." },
+        { "name": "Was ich jetzt tue", "hilfe": "Die Lösung und bis wann." }
+      ],
+      "muster": ["Passiert: In Ihrem Angebot stand ein Tag für die Einrichtung; es sind drei. Bedeutet: Ihr Büro ist bis Mittwoch eingeschränkt. Ich tue: Ich fange Freitagmittag an und arbeite Samstag durch – dann ist nur Ihr Montag betroffen. Passt das?"] },
+    { "art": "stumm", "kopf": { "id": "ueberzeugen-v-0210", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "titel": "Den Fall im Kopf erzählen",
+      "schritte": ["Denk an jemanden, der dir sagt: „Das sagen alle.“", "Erzähl innerlich einen Fall: wer, welches Problem, was getan, welches Ergebnis.", "Häng innerlich einen ehrlichen Haken an.", "Biete innerlich eine Referenz an, die man anrufen kann.", "Schreib den Fall in vier Stichworten auf."],
+      "sekunden": 90,
+      "pruefliste": ["Fall mit Ergebnis", "ehrlicher Haken", "Referenz angeboten", "vier Stichworte notiert"] },
+    { "art": "stumm", "kopf": { "id": "ueberzeugen-v-0211", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "titel": "Die Grenze im Kopf aussprechen",
+      "schritte": ["Denk an eine Frage, bei der du gern übertreiben würdest – Englisch, Erfahrung, Tempo.", "Sprich innerlich, was stimmt, mit einem Beispiel.", "Sprich innerlich die Grenze aus, ohne sie kleinzureden.", "Sprich innerlich, was du dagegen tust.", "Achte darauf, wie es sich anfühlt – und schreib den Satz auf."],
+      "sekunden": 60,
+      "pruefliste": ["was stimmt, mit Beispiel", "Grenze klar benannt", "was du dagegen tust", "Satz notiert"] },
+    { "art": "buehne", "kopf": { "id": "ueberzeugen-v-0212", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "ueberzeugen-v-0210", "einfluss": "fair" },
+      "auftrag": "Steh auf und überzeuge einen Zweifler, der sagt: „Das sagen alle.“ Ein Fall, ein ehrlicher Haken, eine Referenz.",
+      "sekunden": 60, "publikum": "klein",
+      "stoerungen": ["„Und woher weiß ich, dass das stimmt?“", "Jemand verschränkt die Arme.", "„Gibt es auch einen Haken?“"],
+      "pruefliste": ["konkreter Fall mit Ergebnis", "ehrlicher Haken genannt", "prüfbare Referenz angeboten", "nicht beteuert"] },
+    { "art": "buehne", "kopf": { "id": "ueberzeugen-v-0213", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 8, "kanal": "koennen", "laut": true, "leise": "ueberzeugen-v-0211", "einfluss": "fair" },
+      "auftrag": "Steh auf und beantworte vor einer Runde eine Frage nach etwas, das du nur teilweise kannst: was stimmt, was fehlt, was du tust.",
+      "sekunden": 60, "publikum": "gross",
+      "stoerungen": ["„Also können Sie es nicht?“", "Zwei schauen sich an.", "„Wie lange brauchen Sie dafür?“"],
+      "pruefliste": ["was stimmt, mit Beispiel", "Grenze offen genannt", "konkreter Plan", "auf die Nachfrage ruhig geantwortet"] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0214", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Du willst Dr. Albers einen neuen Ablauf für Reklamationen vorschlagen. Er misst seinen Bereich vor allem an der Kundenzufriedenheit. Womit fängst du an?",
+      "antworten": [
+        { "text": "„Mit dem neuen Ablauf ist eine Reklamation in zwei Tagen erledigt statt in einer Woche – das merken die Kunden.“", "wert": 2, "warum": "Du fängst bei seinem Ziel an und belegst es." },
+        { "text": "„Der neue Ablauf ist für uns im Team viel angenehmer und spart uns jede Woche eine Menge Hin und Her mit der Buchhaltung.“", "wert": 1, "warum": "Ein echter Nutzen – aber deiner, nicht der, an dem er gemessen wird." },
+        { "text": "„Ich habe mir da ein Diagramm mit zwölf Schritten überlegt.“", "wert": 0, "tendenz": "merkmale", "warum": "Ablauf statt Nutzen – er hört Aufwand." },
+        { "text": "„Der alte Ablauf ist ehrlich gesagt peinlich.“", "wert": 0, "tendenz": "abwerten", "warum": "Er hat ihn vielleicht eingeführt. Jetzt verteidigt er ihn." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0215", "faehigkeit": "ueberzeugen.nutzen", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Wann sprichst du Dr. Albers am besten auf deine Idee an?",
+      "antworten": [
+        { "text": "Mitten in der Krisensitzung, wenn alle über das Problem reden.", "wert": 0, "tendenz": "zeitpunkt", "warum": "In der Krise hat niemand Kopf für Neues – und vor allen wird es schnell heikel." },
+        { "text": "Im Flur, zwischen zwei Terminen, mit der ganzen Geschichte.", "wert": 0, "tendenz": "zeitpunkt", "warum": "Zwischen Tür und Angel geht nur ein Satz – nicht die ganze Geschichte." },
+        { "text": "Unter vier Augen, wenn es ruhig ist – mit der Bitte um fünf Minuten.", "wert": 2, "warum": "Ruhiger Moment, klarer Rahmen, keine Überrumpelung vor anderen." },
+        { "text": "Per Mail mit allen Unterlagen im Anhang.", "wert": 1, "warum": "Kann klappen, wenn die Mail kurz ist. Für eine Idee mit Fragen ist das Gespräch meist besser." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0216", "faehigkeit": "ueberzeugen.nutzen", "stufe": 8, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Deine Idee spart Zeit, macht aber am Anfang Arbeit. Wie sprichst du das bei Dr. Albers an?",
+      "antworten": [
+        { "text": "Die Anfangsarbeit gar nicht erwähnen – er fragt ja vielleicht nicht nach, und wenn doch, kann man es immer noch erklären.", "wert": 0, "tendenz": "verschweigen", "warum": "Er findet es heraus – dann wirkt der ganze Vorschlag geschönt." },
+        { "text": "„Zwei Wochen Umstellung, danach sparen wir jede Woche drei Stunden. Die Umstellung übernehme ich.“", "wert": 2, "warum": "Risiko selbst genannt, eingeordnet, und du übernimmst Verantwortung." },
+        { "text": "„Am Anfang ist es Arbeit, aber das lohnt sich.“", "wert": 1, "warum": "Ehrlich – aber ohne Zahlen kann er nicht abwägen." },
+        { "text": "„Die Anfangsarbeit ist völlig vernachlässigbar.“", "wert": 0, "tendenz": "beschoenigen", "warum": "Eine Beschönigung, die er prüfen kann." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0217", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Formulier die Idee so, dass Dr. Albers sie als Lösung für sein Problem hört.",
+      "vorlage": "„Ich hätte gern eine neue Software für die Reisekosten.“",
+      "kriterien": ["sein Problem zuerst", "die Idee als Lösung", "ein kleiner erster Schritt"],
+      "muster": ["„Sie hatten sich über die verspäteten Reisekostenabrechnungen geärgert. Ein Programm fürs Handy würde das beschleunigen. Darf ich es mit drei Leuten testen?“", "„Die Abrechnungen kommen oft spät, weil Belege fehlen. Mit einer Handy-Lösung wäre das vorbei – vier Wochen Test?“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0218", "faehigkeit": "ueberzeugen.nutzen", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus der großen Umstellung einen kleinen Versuch, zu dem man leicht Ja sagt.",
+      "vorlage": "„Wir sollten die ganze Abteilung auf das neue Ablagesystem umstellen.“",
+      "kriterien": ["kleiner Umfang", "feste Dauer", "Entscheidung danach bei ihm"],
+      "muster": ["„Darf ich das Ablagesystem vier Wochen mit Lena und Tarek testen? Danach entscheiden Sie anhand der Zahlen.“", "„Ein Versuch nur für die Angebote im März – wenn es nichts bringt, gehen wir zurück.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0219", "faehigkeit": "ueberzeugen.nutzen", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Die Geschäftsführung will vor allem Kosten senken, das Team will weniger Stress. Stell deine Idee so vor, dass beide ihren Nutzen hören.",
+      "vorlage": "„Ich schlage vor, dass wir einen festen Bürotag für Abstimmungen einführen.“",
+      "kriterien": ["Nutzen für die Geschäftsführung", "Nutzen für das Team", "ehrlich und kurz"],
+      "muster": ["„Ein fester Abstimmungstag spart Fahrten und Raummiete – und dem Team die Abstimmerei per Mail an allen anderen Tagen.“", "„Für Sie: weniger Reisekosten. Fürs Team: vier Tage ohne Besprechungen. Wollen wir es bis Ostern testen?“"] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0220", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Bring den Vorschlag nach oben in eine gute Reihenfolge.",
+      "eintraege": [
+        { "text": "Sein Ziel oder Problem nennen.", "warum": "Dann hört er zu, weil es um ihn geht." },
+        { "text": "Die Idee als Lösung in einem Satz.", "warum": "Kurz – Einzelheiten kommen, wenn er fragt." },
+        { "text": "Das Risiko selbst nennen und einordnen.", "warum": "Bevor er es findet – das macht dich glaubwürdig." },
+        { "text": "Um einen kleinen Versuch bitten.", "warum": "Ein kleines Ja fällt leichter als ein großes." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0221", "faehigkeit": "ueberzeugen.nutzen", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Ordne die Einstiege für eine Idee bei Dr. Albers – der stärkste zuerst.",
+      "eintraege": [
+        { "text": "„Sie wollten die Reklamationen schneller erledigt haben – ich hätte einen Vorschlag.“", "warum": "Sein Ziel zuerst – er weiß sofort, warum er zuhören soll." },
+        { "text": "„Ich hätte einen Vorschlag, der uns Zeit spart.“", "warum": "Ein Nutzen, aber allgemein." },
+        { "text": "„Ich habe mir da was überlegt.“", "warum": "Neutral – er weiß nicht, warum es sich lohnt." },
+        { "text": "„Darf ich kurz stören? Ist bestimmt nicht so wichtig.“", "warum": "Kleingemacht, bevor er die Idee kennt." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0222", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Was ist der Nutzen für wen?",
+      "faecher": ["für den Vorgesetzten", "für die Kunden", "für das Team"],
+      "karten": [
+        { "text": "„Ihre Zahlen im Quartalsbericht sehen besser aus.“", "fach": 0 },
+        { "text": "„Sie müssen keine Engpässe mehr ausbügeln.“", "fach": 0 },
+        { "text": "„Reklamationen sind in zwei Tagen erledigt.“", "fach": 1 },
+        { "text": "„Es gibt einen festen Ansprechpartner.“", "fach": 1 },
+        { "text": "„Keine Mails mehr am Freitagabend.“", "fach": 2 },
+        { "text": "„Jeder weiß, wer vertritt.“", "fach": 2 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0223", "faehigkeit": "ueberzeugen.nutzen", "stufe": 7, "kanal": "wissen" },
+      "auftrag": "Spricht der Satz das Ziel des Chefs an – oder nur deins?",
+      "faecher": ["sein Ziel", "nur dein Ziel"],
+      "karten": [
+        { "text": "„Das senkt die Kosten für Nachlieferungen.“", "fach": 0 },
+        { "text": "„Dann laufen die Kunden nicht mehr zur Konkurrenz.“", "fach": 0 },
+        { "text": "„Sie haben dann einen Termin weniger im Monat.“", "fach": 0 },
+        { "text": "„Ich fände es einfach spannender.“", "fach": 1 },
+        { "text": "„Dann muss ich nicht mehr so viel abtippen.“", "fach": 1 },
+        { "text": "„Das wollte ich schon immer mal ausprobieren.“", "fach": 1 }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0224", "faehigkeit": "ueberzeugen.abschluss", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Dein Vorschlag bei Dr. Albers ist gut angekommen. Wie endest du?",
+      "antworten": [
+        { "text": "„Wollen wir es ab Montag vier Wochen testen?“", "wert": 2, "warum": "Eine klare Frage nach einem konkreten Schritt." },
+        { "text": "„Dann denken Sie mal drüber nach, ja?“", "wert": 1, "warum": "Respektvoll, aber ohne Termin oder klaren nächsten Schritt." },
+        { "text": "„Super, dann setze ich das ab Montag einfach mal so um, Sie haben ja nichts dagegen gesagt.“", "wert": 0, "tendenz": "uebergehen", "warum": "Schweigen ist keine Zustimmung – du übergehst seine Entscheidung." },
+        { "text": "Lächeln und gehen – er wird sich schon melden.", "wert": 0, "tendenz": "nichtfragen", "warum": "Ohne Frage passiert meist nichts." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0225", "faehigkeit": "ueberzeugen.abschluss", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Nach deinem Vorschlag in der Teamrunde nicken alle, keiner sagt etwas. Was tust du?",
+      "antworten": [
+        { "text": "„Schön, dann sind ja alle dafür.“", "wert": 0, "tendenz": "unterstellen", "warum": "Nicken ist keine Zustimmung. Ein stilles Nein kommt später als Widerstand zurück." },
+        { "text": "„Wer ist dafür, es bis Ostern zu testen? Und wer hat noch Bedenken?“", "wert": 2, "warum": "Klare Frage – und Raum für Bedenken, bevor es losgeht." },
+        { "text": "„Gibt es noch Fragen?“", "wert": 1, "warum": "Öffnet Raum, aber ohne klare Frage nach der Entscheidung." },
+        { "text": "„Ich schreibe allen eine Mail mit Zusammenfassung, Anhang und einer Bitte um Rückmeldung bis nächste Woche.“", "wert": 0, "tendenz": "vertagen", "warum": "Du vertagst eine Entscheidung, die jetzt möglich wäre." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0226", "faehigkeit": "ueberzeugen.abschluss", "stufe": 8, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Vor dem Vereinsvorstand: Der Vorsitzende ist dafür, die Kassenwartin skeptisch. Wie stellst du die Schlussfrage?",
+      "antworten": [
+        { "text": "„Ich denke, die Mehrheit ist dafür, oder?“", "wert": 0, "tendenz": "unterstellen", "warum": "Du unterstellst ein Ergebnis und übergehst die Skepsis." },
+        { "text": "„Test bis Ostern, jederzeit kündbar. Wer ist dafür? Und was bräuchtest du als Kassenwartin dafür?“", "wert": 2, "warum": "Klare Frage, kleiner Schritt – und die Skeptikerin wird ernst genommen." },
+        { "text": "„Lasst es euch in Ruhe durch den Kopf gehen.“", "wert": 1, "warum": "Respektvoll, aber ohne Schritt vertagt sich die Runde." },
+        { "text": "„Du bist doch nicht gegen Fortschritt, oder? Wir wollen ja nicht ewig in der Steinzeit bleiben.“", "wert": 0, "tendenz": "etikett", "warum": "Ein Etikett, um sie bloßzustellen – das vergiftet die Runde." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0227", "faehigkeit": "ueberzeugen.abschluss", "stufe": 9, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Drei Entscheider, ein gutes Gespräch, aber Nadine sagt: „Wir besprechen das intern.“ Was ist der beste Abschluss?",
+      "antworten": [
+        { "text": "„Bis morgen schicke ich eine Seite mit beiden Möglichkeiten. Darf ich Donnerstag anrufen?“", "wert": 2, "warum": "Unterlage für alle drei, Termin – und die Entscheidung bleibt bei ihnen." },
+        { "text": "„Können wir nicht gleich entscheiden? Sie sind doch alle hier.“", "wert": 0, "tendenz": "draengen", "warum": "Druck auf eine Runde, die um Zeit gebeten hat." },
+        { "text": "„Klar. Melden Sie sich einfach, wenn Sie so weit sind.“", "wert": 1, "warum": "Respektvoll, aber ohne Unterlage und Termin versandet es leicht." },
+        { "text": "„Gern – aber beachten Sie bitte, dass sich die Preise im nächsten Monat erhöhen könnten, man weiß ja nie.“", "wert": 0, "tendenz": "zeitdruck", "warum": "Ein vager Zeitdruck ohne Grundlage – das riecht nach Trick." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0228", "faehigkeit": "ueberzeugen.abschluss", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus dem vagen Ende eine klare Bitte an Dr. Albers.",
+      "vorlage": "„Ja, also, wäre schön, wenn Sie vielleicht mal drüber nachdenken könnten, irgendwann.“",
+      "kriterien": ["eine klare Frage", "ein kleiner, konkreter Schritt", "lässt ein Nein zu"],
+      "muster": ["„Wollen wir es vier Wochen im Team testen? Wenn Sie lieber warten wollen, sagen Sie es offen.“", "„Darf ich Ihnen bis Freitag eine Seite schicken, und Sie entscheiden nächste Woche?“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0229", "faehigkeit": "ueberzeugen.abschluss", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Schreib die Schlussfrage für eine Runde: wer, was, bis wann.",
+      "vorlage": "„So, das war's von mir. Ihr könnt ja mal überlegen.“",
+      "kriterien": ["klare Frage nach Entscheidung oder nächstem Schritt", "wer, was, bis wann", "Raum für Bedenken"],
+      "muster": ["„Mein Vorschlag: Ich richte es bis Montag ein, wir testen bis Ostern. Wer ist dafür – und wer hat noch Bedenken?“", "„Können wir heute entscheiden, ob wir den Versuch machen? Wenn ja, übernehme ich die Einrichtung bis zum 1.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0230", "faehigkeit": "ueberzeugen.abschluss", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Formulier die Bitte an Dr. Albers so, dass auch ein Nein ein klares Ergebnis ist.",
+      "vorlage": "„Und – machen wir das jetzt oder nicht? Ich brauche langsam eine Entscheidung.“",
+      "kriterien": ["klare Frage", "Nein ausdrücklich erlaubt", "kein Druck"],
+      "muster": ["„Können Sie mir bis Freitag sagen, ob wir den Versuch machen? Ein Nein hilft mir genauso – dann plane ich anders.“", "„Ja oder Nein ist beides in Ordnung. Ich möchte nur wissen, ob ich es weiter vorbereiten soll.“"] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0231", "faehigkeit": "ueberzeugen.abschluss", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Ordne die Schlussfragen nach einer Präsentation – die stärkste zuerst.",
+      "eintraege": [
+        { "text": "„Wollen wir bis Ostern testen? Wer ist dafür?“", "warum": "Konkreter Schritt, klare Abstimmung." },
+        { "text": "„Was bräuchten Sie noch, um zu entscheiden?“", "warum": "Gut, wenn noch etwas fehlt – aber noch keine Entscheidung." },
+        { "text": "„Gibt es noch Fragen?“", "warum": "Öffnet Raum, führt aber selten zu einer Entscheidung." },
+        { "text": "„Danke fürs Zuhören.“", "warum": "Höflich, aber ohne jeden nächsten Schritt." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0232", "faehigkeit": "ueberzeugen.abschluss", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Bring die Vorbereitung für einen Vorschlag vor mehreren in eine gute Reihenfolge.",
+      "eintraege": [
+        { "text": "Klären, wer entscheidet, wer zahlt, wer damit arbeitet.", "warum": "Ohne das weißt du nicht, wen du womit überzeugen musst." },
+        { "text": "Die Wichtigsten vorher einzeln sprechen.", "warum": "Einwände kennenlernen, keinen überrumpeln." },
+        { "text": "Den Nutzen für jede Gruppe aufschreiben.", "warum": "Jetzt weißt du, was jeder hören will." },
+        { "text": "Die Schlussfrage wörtlich festlegen.", "warum": "Sonst geht sie im Gespräch unter." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0233", "faehigkeit": "ueberzeugen.abschluss", "stufe": 8, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Die Runde sagt: „Wir entscheiden nächste Woche.“ Ordne deine Reaktionen – die stärkste zuerst.",
+      "eintraege": [
+        { "text": "„Gern. Ich schicke bis morgen eine Seite mit den Zahlen. Wer gibt mir Bescheid, und wann?“", "warum": "Unterlage, Zuständigkeit, Termin – die Entscheidung bleibt bei ihnen." },
+        { "text": "„Gern. Ich schicke bis morgen eine Seite mit den Zahlen.“", "warum": "Hilfreich – aber offen, wer sich wann meldet." },
+        { "text": "„Okay.“", "warum": "Respektvoll, aber es kann versanden." },
+        { "text": "„Das ist zu spät, wir müssen heute entscheiden.“", "warum": "Druck ohne Grund – und die Runde rückt zusammen gegen dich." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0234", "faehigkeit": "ueberzeugen.abschluss", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Klare Bitte oder vage Andeutung?",
+      "faecher": ["klare Bitte", "vage Andeutung"],
+      "karten": [
+        { "text": "„Wollen wir es ab Montag testen?“", "fach": 0 },
+        { "text": "„Können Sie mir bis Freitag Bescheid geben?“", "fach": 0 },
+        { "text": "„Wer übernimmt die Einweisung?“", "fach": 0 },
+        { "text": "„Wäre vielleicht mal eine Überlegung wert.“", "fach": 1 },
+        { "text": "„Man könnte ja irgendwann …“", "fach": 1 },
+        { "text": "„Ich lasse das mal so im Raum stehen.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0235", "faehigkeit": "ueberzeugen.abschluss", "stufe": 7, "kanal": "wissen" },
+      "auftrag": "Was fehlt der Schlussfrage – wer, was oder bis wann?",
+      "faecher": ["wer fehlt", "was fehlt", "bis wann fehlt"],
+      "karten": [
+        { "text": "„Wir testen den Kalender bis Ostern.“ (Aber wer richtet ihn ein?)", "fach": 0 },
+        { "text": "„Bis Freitag kümmert sich jemand darum.“", "fach": 0 },
+        { "text": "„Tarek macht bis Montag was dazu.“", "fach": 1 },
+        { "text": "„Lena kümmert sich bis Ende des Monats.“", "fach": 1 },
+        { "text": "„Miriam schickt allen die Anleitung.“", "fach": 2 },
+        { "text": "„Ich richte den Kalender ein.“", "fach": 2 }
+      ] },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0236", "faehigkeit": "ueberzeugen.abschluss", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Der Versuch mit den Vorlagen", "figur": "Dr. Henrik Albers",
+        "lage": "Du hast Dr. Albers vorgeschlagen, Standardangebote aus Vorlagen zu bauen. Er hört zu, nickt – und schweigt.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Albers: „Hm. Interessant.“",
+            "wahl": [
+              { "text": "„Wollen wir es vier Wochen mit zwei Leuten testen? Dann entscheiden Sie anhand der Zahlen.“", "wert": 2, "weiter": "k2", "rueck": "Ein kleiner, konkreter Schritt – leicht zu bejahen." },
+              { "text": "„Freut mich. Dann lasse ich Sie mal in Ruhe.“", "wert": 0, "tendenz": "nichtfragen", "weiter": "ende2", "rueck": "„Interessant“ ist noch kein Ja. Ohne Frage passiert nichts." },
+              { "text": "„Darf ich noch erklären, wie die Vorlagen im Einzelnen aufgebaut sind?“", "wert": 1, "weiter": "k1b", "rueck": "Mehr Einzelheiten statt einer Frage – er wollte vielleicht gar nicht mehr hören." }
+            ] },
+          { "id": "k1b", "sagt": "Albers schaut auf die Uhr: „Kurz, bitte.“",
+            "wahl": [
+              { "text": "„Dann nur eins: Wollen wir es vier Wochen testen?“", "wert": 2, "weiter": "k2", "rueck": "Gemerkt und zur Frage gekommen." },
+              { "text": "Fünf Minuten lang erklären, wie die Vorlagen aufgebaut sind und welche Felder sie haben.", "wert": 0, "tendenz": "merkmale", "weiter": "ende2", "rueck": "Seine Zeit ist um, deine Frage nie gestellt." }
+            ] },
+          { "id": "k2", "sagt": "Albers: „Vier Wochen … Wer macht mit?“",
+            "wahl": [
+              { "text": "„Lena und Tarek wären dabei. Ich schicke Ihnen Freitag den Plan – passt das?“", "wert": 2, "weiter": "ende1", "rueck": "Verbündete benannt, nächster Schritt mit Termin." },
+              { "text": "„Das könnten Sie ja festlegen.“", "wert": 1, "weiter": "ende3", "rueck": "Höflich, aber du gibst ihm Arbeit zurück, die du übernehmen könntest." }
+            ] },
+          { "id": "ende1", "sagt": "Albers: „Gut. Freitag den Plan.“", "ende": "Aus „interessant“ wurde ein Versuch – weil du klar und klein gefragt hast." },
+          { "id": "ende2", "sagt": "Albers: „Danke.“ Die Idee liegt danach wochenlang.", "ende": "Ohne Frage am Ende bleibt eine gute Idee eine gute Idee." },
+          { "id": "ende3", "sagt": "Albers: „Ich denke darüber nach.“", "ende": "Fast – aber die Arbeit liegt jetzt bei ihm. Ein fertiger Vorschlag macht das Ja leichter." }
+        ],
+        "prinzipien": ["„interessant“ ist kein Ja", "kleiner, konkreter Schritt", "Verbündete nennen", "Termin statt Warten"]
+      } },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0237", "faehigkeit": "ueberzeugen.abschluss", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Die Familienrunde", "figur": "Tante Renate",
+        "lage": "Familientreffen. Du schlägst vor, dass sich alle Geschwister abwechselnd um den Garten der Großeltern kümmern – jedes Wochenende jemand anderes. Tante Renate hat bisher alles allein gemacht und ist skeptisch.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Renate: „Das klappt doch nie. Am Ende mache ich es wieder allein.“",
+            "wahl": [
+              { "text": "„Das verstehe ich – du hast es ja bisher allein gestemmt. Was müsste passieren, damit du dich darauf verlassen kannst?“", "wert": 2, "weiter": "k2", "rueck": "Ihre Erfahrung und Leistung anerkannt, dann nach ihrer Bedingung gefragt." },
+              { "text": "„Diesmal klappt es bestimmt.“", "wert": 1, "weiter": "k2", "rueck": "Zuversichtlich – aber ihre Sorge bleibt unbeantwortet." },
+              { "text": "„Renate, sei doch nicht immer so negativ.“", "wert": 0, "tendenz": "etikett", "weiter": "ende3", "rueck": "Ein Etikett statt einer Antwort – jetzt ist sie gekränkt." }
+            ] },
+          { "id": "k2", "sagt": "Renate: „Ein fester Plan, und wer nicht kann, tauscht selbst – nicht ich.“",
+            "wahl": [
+              { "text": "„Gut. Ich schreibe den Plan bis Sonntag für die nächsten drei Monate. Wer ist dabei?“", "wert": 2, "weiter": "ende1", "rueck": "Ihre Bedingung aufgenommen, Verantwortung übernommen, klare Frage an alle." },
+              { "text": "„Klar, machen wir. Irgendwer schreibt das dann mal auf, das kriegen wir schon irgendwie hin.“", "wert": 0, "tendenz": "vage", "weiter": "ende2", "rueck": "„Irgendwer“ und „mal“ – genau so landet es wieder bei Renate." }
+            ] },
+          { "id": "ende1", "sagt": "Drei Hände gehen hoch. Renate: „Na, dann schauen wir mal.“", "ende": "Skepsis ernst genommen, ihre Bedingung erfüllt, wer, was, bis wann geklärt – so wird aus einem Vorschlag ein Plan." },
+          { "id": "ende2", "sagt": "Nach drei Wochen ruft Renate an: „Wie ich gesagt habe.“", "ende": "Ohne wer, was, bis wann bleibt es bei der, die es immer gemacht hat." },
+          { "id": "ende3", "sagt": "Renate: „Dann macht doch, was ihr wollt.“", "ende": "Etiketten verletzen und schließen Türen. Erst anerkennen, dann fragen." }
+        ],
+        "prinzipien": ["Skepsis anerkennen", "nach der Bedingung fragen", "wer, was, bis wann", "Verantwortung übernehmen"]
+      } },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0238", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Im Fitnessstudio. Du hast nur nach dem Probetraining gefragt. Die Mitarbeiterin: „Nehmen Sie lieber den 12- oder den 24-Monats-Vertrag?“",
+      "frage": "Was passiert – und was antwortest du?",
+      "antworten": [
+        { "text": "„Den 12er – der ist ja kürzer.“", "wert": 0, "tendenz": "nachgeben", "warum": "Du wählst zwischen zwei Verträgen, obwohl du noch keinen wolltest." },
+        { "text": "Falsches Entweder-oder: „Weder noch. Erst das Probetraining, dann sehe ich weiter.“", "wert": 2, "warum": "Die fehlende Möglichkeit ausgesprochen – ruhig und klar." },
+        { "text": "Falsches Entweder-oder: „Kann ich die Verträge mitnehmen und in Ruhe zu Hause vergleichen?“", "wert": 1, "warum": "Gut erkannt und vernünftig. Klarer wäre: erst das, wofür du gekommen bist." },
+        { "text": "„Sie wollen mich doch nur über den Tisch ziehen!“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Vorwurf hilft nicht. Die dritte Möglichkeit nennen genügt." }
+      ],
+      "erklaerung": "Das falsche Entweder-oder verschweigt die Möglichkeit „keins“ – rote Linie. Die Abwehr: die fehlende Möglichkeit laut aussprechen." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0239", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Anrufer: „Sie hatten doch letzte Woche gesagt, dass Sie Interesse an günstigeren Versicherungen haben. Darum schicke ich Ihnen jetzt den Vertrag.“ Du hattest nur gesagt: „Günstiger wäre immer schön.“",
+      "frage": "Was passiert hier?",
+      "antworten": [
+        { "text": "Ein erschlichenes Ja: „Ich habe keinem Vertrag zugestimmt. Bitte schicken Sie nichts.“", "wert": 2, "warum": "Aus einem harmlosen Satz wird eine Zusage gemacht – du stellst es klar." },
+        { "text": "Er hat recht, du hast es ja gesagt.", "wert": 0, "tendenz": "nachgeben", "warum": "„Günstiger wäre schön“ ist keine Zusage zu einem Vertrag." },
+        { "text": "Ein erschlichenes Ja: auflegen und abwarten, ob etwas kommt.", "wert": 1, "warum": "Erkannt, aber ohne Klarstellung. Kommt doch etwas, hilft dir ein klares Nein – am besten schriftlich." },
+        { "text": "„Na gut, dann schicken Sie es halt, ich schaue mal rein, ob es sich lohnt, und melde mich dann.“", "wert": 0, "tendenz": "nachgeben", "warum": "So wird aus dem erschlichenen Ja doch noch eines." }
+      ],
+      "erklaerung": "Das erschlichene Ja: Eine Zustimmung zu etwas Harmlosem wird später als Zusage zum Eigentlichen ausgegeben – rote Linie. Die Abwehr: klar sagen, wozu du Ja gesagt hast und wozu nicht." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0240", "faehigkeit": "ueberzeugen.einfluss", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Online-Händler: Neben dem Preis tickt ein Zähler „Angebot endet in 09:59“. Du lädst die Seite neu – der Zähler beginnt wieder bei 10:00.",
+      "frage": "Was ist das – und was tust du?",
+      "antworten": [
+        { "text": "Künstlicher Zeitdruck: Seite schließen, morgen wiederkommen und vergleichen.", "wert": 2, "warum": "Die Frist ist erfunden. Wer sie ignoriert, nimmt ihr die Wirkung." },
+        { "text": "Schnell bestellen, bevor die Zeit abläuft.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau dafür tickt der Zähler." },
+        { "text": "Künstlicher Zeitdruck: Trotzdem bestellen, der Preis scheint ja gut.", "wert": 1, "warum": "Gut erkannt. Ob der Preis wirklich gut ist, weißt du erst nach einem Vergleich." },
+        { "text": "Eine echte Frist, solche Zähler sind ja Standard.", "wert": 0, "warum": "Ein Zähler, der neu startet, misst keine echte Frist." }
+      ],
+      "erklaerung": "Künstlicher Zeitdruck ist eine erfundene Tatsache – rote Linie. Knappheit wirkt nachweislich auf die Kaufabsicht, darum wird sie gern vorgetäuscht. Die Abwehr: eine Nacht darüber schlafen und vergleichen." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0241", "faehigkeit": "ueberzeugen.einfluss", "stufe": 7, "kanal": "wissen", "einfluss": "taktik" },
+      "lage": "Der Kassenwart deines Vereins fragt dich: „Könntest du das ganze Sommerfest organisieren?“ Du sagst Nein. Er: „Und den Kuchenstand am Samstag?“",
+      "frage": "Was passiert hier – und wie prüfst du?",
+      "antworten": [
+        { "text": "Eine Lüge – sofort ablehnen.", "wert": 0, "warum": "Beide Bitten sind echt. Das ist Taktik, keine rote Linie." },
+        { "text": "Große Bitte vor der kleinen: Die zweite so prüfen, als käme sie allein.", "wert": 2, "warum": "Die Abwehr: Hätte ich auch Ja gesagt, wenn er gleich damit gekommen wäre?" },
+        { "text": "Ja sagen, weil er ja schon nachgegeben hat und man ihm jetzt auch mal entgegenkommen sollte.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau so wirkt die Taktik: Das zweite wirkt wie ein Entgegenkommen." },
+        { "text": "Große Bitte vor der kleinen: Ihn darauf ansprechen.", "wert": 1, "warum": "Darfst du. Entscheidend ist aber, ob du den Kuchenstand willst – nicht, ob er taktiert." }
+      ],
+      "erklaerung": "Erst um viel bitten, dann um weniger: In Studien gab es dadurch eher ein gesagtes Ja als eine Tat. Ohne Lüge ist das Taktik. Die Abwehr: die zweite Bitte für sich prüfen." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0242", "faehigkeit": "ueberzeugen.einfluss", "stufe": 8, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Anlageberater zu Tante Renate: „Bei Ihrer Rente können Sie sich keine Fehler leisten. Unterschreiben Sie heute, sonst ist Ihr Geld in einem Jahr nur noch die Hälfte wert.“ Renate fragt dich um Rat.",
+      "frage": "Was passiert hier – und was rätst du ihr?",
+      "antworten": [
+        { "text": "Angst und künstlicher Zeitdruck: „Nichts heute unterschreiben. Lass uns die Unterlagen zusammen ansehen.“", "wert": 2, "warum": "Du nimmst den Druck raus und bietest Unterstützung – ohne ihr die Entscheidung abzunehmen." },
+        { "text": "„Wenn er das sagt, wird er es wissen – unterschreib lieber gleich.“", "wert": 0, "tendenz": "glauben", "warum": "Eine erfundene Drohung mit Frist – genau so wird Unsicherheit ausgenutzt." },
+        { "text": "Angst und Zeitdruck: Ihr verbieten, mit dem Mann je wieder zu sprechen.", "wert": 0, "tendenz": "bevormunden", "warum": "Erkannt – aber ein Verbot geht über ihren Kopf hinweg. Sie soll selbst entscheiden, mit Ruhe und Hilfe." },
+        { "text": "Angst und Zeitdruck: ihr raten, den Mann nicht mehr hereinzulassen.", "wert": 1, "warum": "Gut erkannt, und die Entscheidung bleibt bei ihr. Noch mehr hilft ihr, die Unterlagen in Ruhe zusammen anzusehen." },
+        { "text": "„Ach, Geldanlage ist sowieso nichts für dich, Renate, das verstehst du ja doch nicht – lass das mal lieber mich machen.“", "wert": 0, "tendenz": "abwerten", "warum": "Du machst sie klein – und nimmst ihr die Entscheidung genauso ab wie er." }
+      ],
+      "erklaerung": "Erfundene Drohung, künstliche Frist und ausgenutzte Unsicherheit – alles rote Linie. Die Abwehr: nichts unter Druck unterschreiben, Unterlagen mitnehmen, unabhängig prüfen lassen." },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0243", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen" },
+      "frage": "Du hast an der Haustür einen Vertrag unterschrieben und bereust es am nächsten Tag. Was stimmt in der Regel?",
+      "antworten": [
+        { "text": "Unterschrieben ist unterschrieben – da kann man nichts machen.", "wert": 0, "warum": "Bei Verträgen außerhalb von Geschäftsräumen gibt es in der Regel ein Widerrufsrecht." },
+        { "text": "Du kannst meist innerhalb von 14 Tagen widerrufen – am besten schriftlich.", "wert": 2, "warum": "So steht es im Gesetz; es gibt Ausnahmen. Schriftlich hast du einen Beleg." },
+        { "text": "Ohne Anwalt geht da gar nichts.", "wert": 0, "warum": "Für einen Widerruf in der Frist brauchst du in der Regel keinen Anwalt." },
+        { "text": "Du kannst widerrufen, aber nur, wenn der Vertreter einverstanden ist.", "wert": 0, "warum": "Falsch: Für den Widerruf brauchst du kein Einverständnis – eine klare Erklärung in der Frist genügt." },
+        { "text": "Beim Unternehmen anrufen und sagen, dass du den Vertrag widerrufst.", "wert": 1, "warum": "Auch das kann als Widerruf gelten – nur fehlt dir dann ein Beleg. Schriftlich in der Frist ist sicherer." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0244", "faehigkeit": "ueberzeugen.einfluss", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Nächsten Samstag willst du ein Auto kaufen. Wann siehst du dir die Abwehr-Sätze gegen Verkaufstricks am besten an?",
+      "antworten": [
+        { "text": "Vor ein paar Monaten einmal reicht, das sitzt dann.", "wert": 0, "warum": "Der Schutz durch Vorbereitung lässt laut Forschung nach etwa zwei Wochen nach." },
+        { "text": "Am Freitag noch einmal kurz – und sie auf einem Zettel mitnehmen.", "wert": 2, "warum": "Kurz vorher frisch, im Laden griffbereit – so schützt die Vorbereitung am besten." },
+        { "text": "Gar nicht, im Laden merkt man das schon.", "wert": 0, "warum": "Unter Druck fallen einem die Sätze oft nicht ein – darum vorher." },
+        { "text": "Ganz zu Beginn der Woche, dann ist es nicht so stressig.", "wert": 1, "warum": "Besser als gar nicht. Je näher am Kauf, desto frischer." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0245", "faehigkeit": "ueberzeugen.einfluss", "stufe": 8, "kanal": "wissen", "einfluss": "taktik" },
+      "frage": "Du kaufst ein gebrauchtes Auto beim Händler. Welche Taktik darfst du ohne schlechtes Gewissen einsetzen?",
+      "antworten": [
+        { "text": "Erzählen, ein anderer Händler biete dasselbe Auto für 2.000 weniger – auch wenn es nicht stimmt, er kann es ja eh nicht prüfen.", "wert": 0, "tendenz": "erfinden", "warum": "Ein erfundener Mitbewerber ist rote Linie – auch als Kunde." },
+        { "text": "Eine echte Alternative nennen und zuerst eine begründete Zahl: „Ein ähnliches steht bei 9.500. Ich biete 9.000.“", "wert": 2, "warum": "Echte Alternative, eigener Anker – Taktik ohne Lüge." },
+        { "text": "Nach dem Preis lange schweigen.", "wert": 1, "warum": "Erlaubt und oft hilfreich – ohne eigene Zahl und Alternative aber nur halb vorbereitet." },
+        { "text": "So lange bleiben, bis der Verkäufer entnervt nachgibt.", "wert": 0, "tendenz": "zermuerben", "warum": "Zermürben ist rote Linie – egal, auf welcher Seite des Tisches." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0246", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Echte Wahl (Taktik) oder falsches Entweder-oder (rote Linie)?",
+      "faecher": ["echte Wahl", "falsches Entweder-oder"],
+      "karten": [
+        { "text": "„Lieber Dienstag oder Donnerstag?“ – nachdem du den Termin wolltest.", "fach": 0 },
+        { "text": "„Blau oder grau?“ – nachdem du dich für das Sofa entschieden hast.", "fach": 0 },
+        { "text": "„Bar oder mit Karte?“ – an der Kasse.", "fach": 0 },
+        { "text": "„12 oder 24 Monate?“ – obwohl du nur das Probetraining wolltest.", "fach": 1 },
+        { "text": "„Unterschreiben Sie heute oder morgen früh?“ – bevor du Ja gesagt hast.", "fach": 1 },
+        { "text": "„Für die Kinder oder für die Rente?“ – als gäbe es nur diese beiden Verträge.", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0247", "faehigkeit": "ueberzeugen.einfluss", "stufe": 7, "kanal": "wissen" },
+      "auftrag": "Welcher Trick steckt dahinter?",
+      "faecher": ["künstlicher Zeitdruck", "erschlichenes Ja", "gespielter Kampf beim Chef", "Notlage ausnutzen"],
+      "karten": [
+        { "text": "Ein Zähler, der beim Neuladen wieder von vorn beginnt.", "fach": 0 },
+        { "text": "„Der Preis gilt nur, solange ich hier bin.“", "fach": 0 },
+        { "text": "„Sie sagten doch, Sie wollen sparen – also unterschreiben Sie.“", "fach": 1 },
+        { "text": "„Sie haben ja schon zugestimmt, dass wir mal reden.“", "fach": 1 },
+        { "text": "„Ich habe meinem Chef 300 Euro für Sie abgerungen – aber nur jetzt.“", "fach": 2 },
+        { "text": "„Der Chef hat ausnahmsweise ein Auge zugedrückt.“", "fach": 2 },
+        { "text": "Der dreifache Preis beim nächtlichen Wasserrohrbruch.", "fach": 3 },
+        { "text": "„Ohne Unterschrift fahre ich wieder“ – du stehst ausgesperrt vor der Tür.", "fach": 3 }
+      ] },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0248", "faehigkeit": "ueberzeugen.einfluss", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Das Probetraining", "figur": "eine Mitarbeiterin im Fitnessstudio",
+        "lage": "Du bist für ein Probetraining ins Fitnessstudio gekommen. Du willst heute nichts unterschreiben.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Mitarbeiterin: „Schön, dass Sie da sind! Nehmen Sie lieber den 12- oder den 24-Monats-Vertrag?“",
+            "wahl": [
+              { "text": "„Weder noch – heute nur das Probetraining.“", "wert": 2, "weiter": "k2", "rueck": "Falsches Entweder-oder erkannt, dritte Möglichkeit genannt." },
+              { "text": "„Ähm, was ist denn der Unterschied?“", "wert": 1, "weiter": "k1b", "rueck": "Neugier ist erlaubt – aber du bist schon in ihrer Wahl gelandet." },
+              { "text": "„Den 12er.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Gewählt, obwohl du nichts wolltest." }
+            ] },
+          { "id": "k1b", "sagt": "Mitarbeiterin: „Der 24er ist pro Monat günstiger. Soll ich ihn gleich fertig machen?“",
+            "wahl": [
+              { "text": "„Nein, danke. Heute nur das Training – die Preise nehme ich schriftlich mit.“", "wert": 2, "weiter": "k2", "rueck": "Zurück zu deinem Plan." },
+              { "text": "„Na gut.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Aus einer Frage wurde ein Vertrag." }
+            ] },
+          { "id": "k2", "sagt": "Nach dem Training: „Und? Heute gibt es übrigens keine Anmeldegebühr – nur heute.“",
+            "wahl": [
+              { "text": "„Was passiert, wenn ich nächste Woche komme?“", "wert": 2, "weiter": "k3", "rueck": "Die Frage prüft die Frist – ruhig." },
+              { "text": "„Dann unterschreibe ich lieber gleich.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Die Frist hat gewirkt." },
+              { "text": "„Das ist doch ein Trick!“", "wert": 1, "weiter": "k3", "rueck": "Gut gespürt, aber ein Vorwurf ist unnötig – fragen wirkt stärker." }
+            ] },
+          { "id": "k3", "sagt": "Mitarbeiterin, zögernd: „Na ja … nächste Woche ist auch noch Aktion.“",
+            "wahl": [
+              { "text": "„Danke. Dann überlege ich in Ruhe und melde mich.“", "wert": 2, "weiter": "ende1", "rueck": "Freundlich, fest, ohne Vorwurf." },
+              { "text": "„Ha, wusste ich's doch! Dann brauche ich mich ja heute wirklich nicht zu beeilen.“", "wert": 1, "weiter": "ende1", "rueck": "Richtig – der Triumph ist aber unnötig." }
+            ] },
+          { "id": "ende1", "sagt": "Du gehst mit der Preisliste und ohne Vertrag.", "ende": "Ohne Unterschrift, mit allen Informationen – und ohne Streit. Entschieden wird zu Hause." },
+          { "id": "ende2", "sagt": "Du unterschreibst. Erst zu Hause liest du die Laufzeit genau.", "ende": "Falsches Entweder-oder und künstliche Frist haben gewirkt. Die Abwehr: dritte Möglichkeit nennen, fragen, was nächste Woche ist." }
+        ],
+        "prinzipien": ["dritte Möglichkeit nennen", "Frist prüfen", "schriftlich mitnehmen", "ohne Vorwurf gehen"]
+      } },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0249", "faehigkeit": "ueberzeugen.einfluss", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Der Anruf mit dem Gewinnspiel", "figur": "ein Anrufer",
+        "lage": "Ein Anrufer sagt, du hättest bei einem Gewinnspiel mitgemacht. Du erinnerst dich nicht daran.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Anrufer: „Sie wollen doch auch gewinnen, oder?“",
+            "wahl": [
+              { "text": "„Worum geht es konkret – und woher haben Sie meine Nummer?“", "wert": 2, "weiter": "k2", "rueck": "Du steigst nicht in die Ja-Kette ein, sondern fragst nach Prüfbarem." },
+              { "text": "„Ja, klar.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1b", "rueck": "Das erste Ja der Kette." }
+            ] },
+          { "id": "k1b", "sagt": "Anrufer: „Und Zeitschriften lesen Sie auch gern?“",
+            "wahl": [
+              { "text": "„Ich merke, ich sage hier nur Ja. Worum geht es konkret?“", "wert": 2, "weiter": "k2", "rueck": "Die Kette benannt und ausgestiegen." },
+              { "text": "„Ja, schon.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1c", "rueck": "Das zweite Ja." }
+            ] },
+          { "id": "k1c", "sagt": "Anrufer: „Wunderbar, dann haben Sie ja schon zugestimmt. Ich schicke Ihnen das Probe-Abo.“",
+            "wahl": [
+              { "text": "„Nein. Ich habe keinem Abo zugestimmt. Schicken Sie nichts.“", "wert": 2, "weiter": "ende1", "rueck": "Das erschlichene Ja zurückgewiesen – klar und kurz." },
+              { "text": "„Ach so, na gut.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Aus zwei harmlosen Ja ist ein Vertrag geworden." }
+            ] },
+          { "id": "k2", "sagt": "Anrufer: „Ein Probe-Abo, ganz unverbindlich, nur die Versandkosten.“",
+            "wahl": [
+              { "text": "„Kein Interesse. Bitte rufen Sie nicht mehr an.“", "wert": 2, "weiter": "ende1", "rueck": "Klar, ohne Gründe – Gründe wären Futter." },
+              { "text": "„Schicken Sie es mir schriftlich, dann schaue ich es mir an.“", "wert": 1, "weiter": "ende1", "rueck": "Vorsichtig, aber du hast kein Interesse – dann reicht ein Nein." }
+            ] },
+          { "id": "ende1", "sagt": "Anrufer: „Na dann.“ Er legt auf.", "ende": "Nichts zugesagt, nichts erklärt, nichts unterschrieben." },
+          { "id": "ende2", "sagt": "Eine Woche später kommt das Abo – mit Rechnung.", "ende": "Die Ja-Kette hat gewirkt. Am Telefon geschlossene Verträge kannst du in der Regel widerrufen – besser ist, gar nicht erst einzusteigen." }
+        ],
+        "prinzipien": ["nicht in die Ja-Kette einsteigen", "nach Prüfbarem fragen", "erschlichenes Ja zurückweisen", "Nein ohne Gründe"]
+      } },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0250", "faehigkeit": "ueberzeugen.haltung", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Dein Vermieter: „Ihren Mietvertrag verlängere ich gern. Ach, übrigens: Mein Neffe verkauft Versicherungen. Es wäre schön, wenn Sie bei ihm abschließen.“",
+      "frage": "Was passiert hier?",
+      "antworten": [
+        { "text": "Ein freundlicher Tipp unter Bekannten, ganz harmlos und eigentlich sogar nett gemeint.", "wert": 0, "tendenz": "glauben", "warum": "Wer über deine Wohnung entscheidet, sollte dir keine Verträge nahelegen – das Gefälle ist zu groß." },
+        { "text": "Abhängigkeit wird genutzt: freundlich ablehnen und die Mietfrage davon trennen.", "wert": 2, "warum": "Du lässt dich nicht unter Druck setzen und hältst beide Dinge auseinander." },
+        { "text": "Abhängigkeit: lieber abschließen, damit die Verlängerung nicht gefährdet ist.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau so wirkt das Ausnutzen von Abhängigkeit." },
+        { "text": "Abhängigkeit: es höflich überhören.", "wert": 1, "warum": "Erkannt, und oft reicht das. Fragt er nach, hilft ein klares, freundliches Nein." }
+      ],
+      "erklaerung": "Wer etwas von dir braucht, das du ihm nicht einfach verweigern kannst, sollte dir nichts verkaufen – Ausnutzen von Abhängigkeit ist rote Linie. Die Abwehr: freundlich ablehnen und beides trennen." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0251", "faehigkeit": "ueberzeugen.haltung", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "In der Vereinssitzung sagt ein Mitglied deutlich: „Ich bin dagegen.“ Der Vorsitzende: „Gut, dann sind wir uns ja alle einig. Nächster Punkt.“",
+      "frage": "Was passiert hier – und was sagst du?",
+      "antworten": [
+        { "text": "Ein übergangenes Nein: „Moment – eben kam ein Nein. Lasst uns kurz hören, warum.“", "wert": 2, "warum": "Du machst das Nein sichtbar, ohne den Vorsitzenden anzugreifen." },
+        { "text": "Nichts sagen, sonst dauert die Sitzung länger.", "wert": 0, "tendenz": "schweigen", "warum": "Ein übergangenes Nein kommt später als Widerstand zurück." },
+        { "text": "Ein übergangenes Nein: „Das ist undemokratisch!“", "wert": 1, "warum": "In der Sache richtig, im Ton scharf. Eine ruhige Rückfrage erreicht mehr." },
+        { "text": "Mit dem Mitglied nach der Sitzung reden, ob es wirklich so gemeint war.", "wert": 0, "tendenz": "vertagen", "warum": "Dann ist der Beschluss schon gefasst." }
+      ],
+      "erklaerung": "Ein Nein zu überhören, damit eine Entscheidung durchgeht, ist rote Linie – auch in einer Runde. Die Abwehr: das Nein ruhig sichtbar machen." },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0252", "faehigkeit": "ueberzeugen.haltung", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Sven fragt dich um Rat, welchen Handyvertrag er nehmen soll. Du bekommst für eine Empfehlung bei einem Anbieter eine Prämie. Was tust du?",
+      "antworten": [
+        { "text": "Den Anbieter mit Prämie empfehlen, ohne es zu sagen.", "wert": 0, "tendenz": "verschweigen", "warum": "Er vertraut dir als Freund. Ein verschwiegener Vorteil zerstört das, wenn er es erfährt." },
+        { "text": "„Ich kriege bei einem Anbieter eine Prämie – vergleich deshalb lieber selbst. Ich zeige dir, worauf du achten solltest.“", "wert": 2, "warum": "Offen gelegt und trotzdem hilfreich – die Entscheidung bleibt bei ihm." },
+        { "text": "Gar keine Empfehlung geben.", "wert": 1, "warum": "Sauber, aber du lässt ihn allein, obwohl du helfen könntest." },
+        { "text": "Den mit Prämie nennen und dazusagen, dass er für wirklich jeden am besten ist, der ein Handy benutzt – egal, wofür und wie oft.", "wert": 0, "tendenz": "uebertreiben", "warum": "Verschwiegener Vorteil plus Übertreibung – doppelt unfair." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0253", "faehigkeit": "ueberzeugen.haltung", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Dein Chef möchte, dass du im Kundengespräch sagst, die neue Version sei „völlig fehlerfrei“. Du weißt von zwei kleinen Fehlern. Was tust du?",
+      "antworten": [
+        { "text": "Es sagen – er ist der Chef.", "wert": 0, "tendenz": "nachgeben", "warum": "Du stehst mit deinem Namen dafür. Fliegt es auf, glaubt der Kunde dir nichts mehr." },
+        { "text": "Vorher mit ihm reden: „Ich sage lieber: zwei kleine Fehler, behoben bis Monatsende – das hält auch bei Nachfragen.“", "wert": 2, "warum": "Du bleibst ehrlich und lieferst ihm einen Satz, der ihn auch schützt." },
+        { "text": "Im Gespräch nichts zum Thema sagen.", "wert": 1, "warum": "Keine Lüge – aber fragt der Kunde direkt, stehst du schlecht da. Vorher klären ist besser." },
+        { "text": "Dem Kunden hinter dem Rücken des Chefs zuflüstern, dass der Chef lügt und die neue Version in Wahrheit zwei Fehler hat.", "wert": 0, "tendenz": "verraten", "warum": "Du lässt deinen Chef auflaufen, statt es mit ihm zu klären." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0254", "faehigkeit": "ueberzeugen.haltung", "stufe": 8, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Nadine Köhler will dein großes Paket kaufen. Du weißt: Das kleine würde ihr vollkommen reichen; das große lohnt sich erst mit einem zweiten Standort. Was tust du?",
+      "antworten": [
+        { "text": "Das große verkaufen – sie will es ja.", "wert": 0, "tendenz": "ausnutzen", "warum": "Kurzfristig mehr Umsatz, langfristig eine Kundin, die sich übervorteilt fühlt, wenn sie es merkt." },
+        { "text": "„Ehrlich gesagt reicht Ihnen das kleine. Das große lohnt erst ab dem zweiten Standort.“", "wert": 2, "warum": "Du hilfst ihr, gut zu entscheiden – das ist die Haltung, und sie kommt beim zweiten Standort zurück." },
+        { "text": "Beide zeigen und sie entscheiden lassen, ohne etwas dazu zu sagen.", "wert": 1, "warum": "Fair, aber du behältst Wissen zurück, das ihr helfen würde." },
+        { "text": "Das große verkaufen und ihr später einen Rabatt geben, wenn sie merkt, dass sie es nicht braucht, damit sie nicht sauer wird.", "wert": 0, "tendenz": "verschleiern", "warum": "Ein Pflaster auf einem Fehler, den du gar nicht machen musst." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0255", "faehigkeit": "ueberzeugen.haltung", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Helfen zu entscheiden – oder die Entscheidung abnehmen?",
+      "faecher": ["hilft entscheiden", "nimmt die Entscheidung ab"],
+      "karten": [
+        { "text": "„Für Ihren Fall würde ich das kleine nehmen – aber Sie kennen Ihren Betrieb.“", "fach": 0 },
+        { "text": "„Ich bekomme eine Prämie dafür – sehen Sie sich auch andere an.“", "fach": 0 },
+        { "text": "„Schlafen Sie eine Nacht darüber.“", "fach": 0 },
+        { "text": "„Ich habe das schon mal für Sie bestellt.“", "fach": 1 },
+        { "text": "„Da gibt es keine Alternative.“", "fach": 1 },
+        { "text": "„Vertrauen Sie mir einfach.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0256", "faehigkeit": "ueberzeugen.haltung", "stufe": 7, "kanal": "wissen" },
+      "auftrag": "Musst du deinen eigenen Vorteil offenlegen?",
+      "faecher": ["ja, offenlegen", "nicht nötig"],
+      "karten": [
+        { "text": "Du empfiehlst einem Freund einen Anbieter, bei dem du eine Prämie bekommst.", "fach": 0 },
+        { "text": "Du rätst der Nachbarin zu einem Handwerker – es ist ein Verwandter von dir.", "fach": 0 },
+        { "text": "Du empfiehlst im Verein einen Caterer, an dem du beteiligt bist.", "fach": 0 },
+        { "text": "Du empfiehlst einen Bäcker, bei dem du selbst gern kaufst.", "fach": 1 },
+        { "text": "Du empfiehlst ein Buch, das dir geholfen hat.", "fach": 1 },
+        { "text": "Du nennst als Verkäufer deinen eigenen Preis.", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0257", "faehigkeit": "ueberzeugen.haltung", "stufe": 8, "kanal": "wissen" },
+      "auftrag": "Wann ist es klug, auf einen Abschluss zu verzichten?",
+      "faecher": ["verzichten", "weiter überzeugen"],
+      "karten": [
+        { "text": "Das Angebot passt nicht zu dem, was der Kunde braucht.", "fach": 0 },
+        { "text": "Der Kunde kann es sich erkennbar nicht leisten.", "fach": 0 },
+        { "text": "Er hat zweimal klar Nein gesagt.", "fach": 0 },
+        { "text": "Er zögert, weil er den Nutzen noch nicht sieht.", "fach": 1 },
+        { "text": "Er hat eine Frage, die du noch nicht beantwortet hast.", "fach": 1 },
+        { "text": "Er sagt: „Klingt gut, ich muss es noch mit meiner Frau besprechen.“", "fach": 1 }
+      ] },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0258", "faehigkeit": "ueberzeugen.haltung", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Sven und das Rennrad", "figur": "Sven",
+        "lage": "Du verkaufst dein altes Rennrad. Sven will es haben – aber du weißt, dass er eigentlich ein Rad für die Stadt mit Gepäckträger sucht.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Sven: „Das nehm ich! Was willst du dafür?“",
+            "wahl": [
+              { "text": "„Moment – du wolltest doch eins für die Stadt mit Gepäckträger. Passt das hier überhaupt?“", "wert": 2, "weiter": "k2", "rueck": "Du hilfst ihm, gut zu entscheiden – auch wenn es dich einen Verkauf kosten kann." },
+              { "text": "„400, Freundschaftspreis.“", "wert": 0, "tendenz": "ausnutzen", "weiter": "ende2", "rueck": "Ein Verkauf, von dem du weißt, dass er nicht passt." },
+              { "text": "„Bist du sicher?“", "wert": 1, "weiter": "k1b", "rueck": "Gute Richtung – aber du sagst nicht, was du weißt." }
+            ] },
+          { "id": "k1b", "sagt": "Sven: „Wieso? Ist doch ein tolles Rad.“",
+            "wahl": [
+              { "text": "„Ist es. Aber du wolltest eins für die Stadt mit Gepäckträger – passt das hier?“", "wert": 2, "weiter": "k2", "rueck": "Jetzt sagst du, was du weißt – und er kann selbst abwägen." },
+              { "text": "„Ach, nur so.“", "wert": 0, "tendenz": "verschweigen", "weiter": "ende2", "rueck": "Du weißt mehr, als du sagst – und er kauft am Bedarf vorbei." }
+            ] },
+          { "id": "k2", "sagt": "Sven: „Hm. Stimmt eigentlich. Aber es ist so schön!“",
+            "wahl": [
+              { "text": "„Ist es. Für die Stadt wirst du dich aber ärgern. Wenn du es trotzdem willst, gehört es dir.“", "wert": 2, "weiter": "ende1", "rueck": "Ehrlich, und die Entscheidung bleibt bei ihm." },
+              { "text": "„Dann nimm es halt, wenn du meinst.“", "wert": 1, "weiter": "ende4", "rueck": "Seine Entscheidung respektiert – mit einem klaren Satz hättest du ihm mehr geholfen." },
+              { "text": "„Na gut, dann vergiss es, ich verkaufe es lieber einem, der damit was anfangen kann.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende3", "rueck": "Du nimmst ihm die Entscheidung ab – und kränkst ihn." }
+            ] },
+          { "id": "ende1", "sagt": "Sven: „Ich schlaf eine Nacht drüber.“ Am nächsten Tag kauft er ein Stadtrad – und erzählt jedem, wie ehrlich du warst.", "ende": "Ein Verkauf weniger, ein Freund, der dir vertraut. Helfen zu entscheiden zahlt sich anders aus als ein schneller Verkauf." },
+          { "id": "ende2", "sagt": "Sven kauft es. Nach einem Monat steht es im Keller.", "ende": "Ein Verkauf, der nicht passte – zwischen Freunden besonders teuer." },
+          { "id": "ende3", "sagt": "Sven: „Schon gut.“ Er ist verstimmt.", "ende": "Ehrlichkeit ohne Respekt vor seiner Entscheidung kränkt." },
+          { "id": "ende4", "sagt": "Sven kauft es – und fährt es selten. Für die Stadt nimmt er doch wieder den Bus.", "ende": "Du hast gesagt, was du weißt, und ihn entscheiden lassen. Ein klarer Satz, wofür das Rad taugt, hätte ihm noch mehr geholfen." }
+        ],
+        "prinzipien": ["sagen, was du weißt", "Entscheidung beim anderen lassen", "auch auf einen Verkauf verzichten können"]
+      } },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0259", "faehigkeit": "ueberzeugen.haltung", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Das zweite Nein", "figur": "Herr Petersen",
+        "lage": "Du hast Herrn Petersen ein Zusatzpaket angeboten. Er hat einmal Nein gesagt, du hast einmal nachgefragt. Jetzt sagt er es noch einmal.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Petersen: „Nein. Ich habe es Ihnen schon gesagt: Ich brauche das nicht.“",
+            "wahl": [
+              { "text": "„In Ordnung. Danke für die klare Antwort.“", "wert": 2, "weiter": "k2", "rueck": "Das Nein gilt – ohne Groll und ohne neuen Anlauf." },
+              { "text": "„Darf ich nur noch einen letzten Punkt erklären?“", "wert": 0, "tendenz": "uebergehen", "weiter": "ende2", "rueck": "Nach dem zweiten Nein ist ein „letzter Punkt“ ein Übergehen." },
+              { "text": "„Schade. Sie verpassen da wirklich etwas.“", "wert": 1, "weiter": "k2", "rueck": "Du nimmst das Nein an, aber mit einem Stich – unnötig." }
+            ] },
+          { "id": "k2", "sagt": "Petersen, entspannter: „Wissen Sie, was ich wirklich bräuchte? Jemanden, der mir die neuen Formulare erklärt.“",
+            "wahl": [
+              { "text": "„Das mache ich gern – soll ich nächste Woche vorbeikommen?“", "wert": 2, "weiter": "ende1", "rueck": "Weil du sein Nein respektiert hast, erfährst du, was er wirklich braucht." },
+              { "text": "„Das wäre übrigens alles im Zusatzpaket drin gewesen, das Sie vorhin abgelehnt haben.“", "wert": 0, "tendenz": "rechthaben", "weiter": "ende3", "rueck": "Rechthaben statt helfen – das alte Nein wird wieder aufgemacht." }
+            ] },
+          { "id": "ende1", "sagt": "Petersen: „Ja, gern. Dienstag?“", "ende": "Ein respektiertes Nein öffnet oft die Tür zu dem, was wirklich gebraucht wird." },
+          { "id": "ende2", "sagt": "Petersen, kühl: „Ich glaube, wir sind fertig.“", "ende": "Ein übergangenes Nein kostet mehr als den einen Verkauf." },
+          { "id": "ende3", "sagt": "Petersen: „Dann lassen wir das auch.“", "ende": "Wer nach einem Nein recht behalten will, verliert den Kunden." }
+        ],
+        "prinzipien": ["nach dem zweiten Nein ist Schluss", "ohne Groll", "zuhören, was wirklich gebraucht wird"]
+      } },
+    { "art": "anschluss", "kopf": { "id": "ueberzeugen-v-0260", "faehigkeit": "ueberzeugen.haltung", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "von": "Jule Marek",
+      "aussage": "„Ehrlich? Bei dir hab ich immer das Gefühl, du willst mir was verkaufen.“",
+      "kriterien": ["nimmt den Eindruck ernst", "fragt nach, woran sie es merkt", "kein Rechtfertigen"],
+      "muster": ["„Oh, das will ich nicht. Woran merkst du das? Dann kann ich darauf achten.“", "„Danke, dass du das sagst. Wann war das zuletzt so?“"] },
+    { "art": "anschluss", "kopf": { "id": "ueberzeugen-v-0261", "faehigkeit": "ueberzeugen.haltung", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "von": "Nadine Köhler",
+      "aussage": "„Ich will ehrlich sein: Ich habe mich für den anderen Anbieter entschieden.“",
+      "kriterien": ["nimmt die Entscheidung an", "fragt einmal, woran es lag", "lässt die Tür offen"],
+      "muster": ["„Danke, dass Sie es mir sagen. Darf ich fragen, was den Ausschlag gegeben hat? Und wenn sich etwas ändert, melden Sie sich gern.“", "„Schade – aber gut, dass es klar ist. Was hätte ich besser machen können?“"] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0262", "faehigkeit": "ueberzeugen.einwand", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Vor der Runde sagt ein Kollege: „Das kostet uns doch nur Zeit.“ Was antwortest du?",
+      "antworten": [
+        { "text": "„Das stimmt nicht.“", "wert": 0, "tendenz": "widersprechen", "warum": "Ein reines Nein ohne Frage – jetzt geht es ums Rechthaben." },
+        { "text": "„Am Anfang ja. Wie viel Zeit wäre für dich in Ordnung, wenn wir danach jede Woche zwei Stunden sparen?“", "wert": 2, "warum": "Einwand anerkannt, eingeordnet, und er wird zum Mitdenker." },
+        { "text": "„Wie meinst du das?“", "wert": 1, "warum": "Gute Nachfrage. Das Anerkennen und Einordnen fehlt noch." },
+        { "text": "„Du bist doch immer gegen alles Neue, das ist ja wirklich nichts Neues bei dir, oder? Das kennen wir ja alle schon.“", "wert": 0, "tendenz": "etikett", "warum": "Ein Etikett vor allen – das macht aus einem Einwand einen Gegner." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0263", "faehigkeit": "ueberzeugen.einwand", "stufe": 8, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "In der Runde kommen drei Einwände auf einmal. Was tust du?",
+      "antworten": [
+        { "text": "Alle drei sofort hintereinander widerlegen.", "wert": 0, "tendenz": "verteidigen", "warum": "Drei Gegenreden auf einmal wirken wie ein Gefecht – und der wichtigste Punkt geht unter." },
+        { "text": "„Drei gute Punkte. Welcher ist euch am wichtigsten? Mit dem fange ich an.“", "wert": 2, "warum": "Anerkannt, sortiert – und die Runde entscheidet, worauf es ankommt." },
+        { "text": "Die Einwände aufschreiben und auf die nächste Sitzung verschieben.", "wert": 1, "warum": "Ordentlich, aber vielleicht ließe sich einer gleich klären." },
+        { "text": "„Lasst mich doch erst mal ausreden, bevor ihr alles schlechtredet, was ich mir überlegt habe.“", "wert": 0, "tendenz": "abwehren", "warum": "Verständlich – aber jetzt ist die Runde gegen dich." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0264", "faehigkeit": "ueberzeugen.einwand", "stufe": 9, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Die Buchhalterin bei Nadine sagt vor allen: „Ihr Angebot ist 6.000 teurer als das andere. Das kann ich nicht vertreten.“ Was ist die stärkste Antwort?",
+      "antworten": [
+        { "text": "„Das andere ist sicher schlechter.“", "wert": 0, "tendenz": "abwerten", "warum": "Du kennst es nicht. Vor allen wird das als Kleinmachen gehört." },
+        { "text": "„Ich gehe 6.000 runter.“", "wert": 0, "tendenz": "nachgeben", "warum": "Nachlass vor dem Vergleich – und vielleicht unter deiner Grenze." },
+        { "text": "„Verständlich. Was müssten Sie vertreten können? Dann vergleichen wir genau diesen Punkt.“", "wert": 2, "warum": "Ihr Bedürfnis ernst genommen – sie braucht ein Argument, kein Gefecht." },
+        { "text": "„Bei mir ist mehr drin – das sehen Sie, wenn Sie beide Angebote einmal in Ruhe Punkt für Punkt durchgehen.“", "wert": 1, "warum": "Vielleicht wahr – aber du schiebst ihr die Arbeit zu, statt mit ihr zu klären, was sie vertreten muss." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0265", "faehigkeit": "ueberzeugen.einwand", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Ein Einwand vor allen. Bring die Schritte in die richtige Reihenfolge.",
+      "eintraege": [
+        { "text": "Anerkennen: „Gut, dass du das ansprichst.“", "warum": "Der andere muss seinen Einwand nicht verteidigen." },
+        { "text": "Nachfragen: „Woran denkst du dabei genau?“", "warum": "Erst wissen, worum es geht." },
+        { "text": "An die Runde geben: „Wie seht ihr das?“", "warum": "Vielleicht beantwortet jemand anders den Einwand besser als du." },
+        { "text": "Antworten oder Lösung anbieten.", "warum": "Jetzt trifft deine Antwort den richtigen Punkt." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0266", "faehigkeit": "ueberzeugen.einwand", "stufe": 8, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "„Das haben wir schon mal probiert.“ Ordne die Antworten – die stärkste zuerst.",
+      "eintraege": [
+        { "text": "„Woran ist es damals gescheitert? Das will ich diesmal anders machen.“", "warum": "Seine Erfahrung wird zum Beitrag." },
+        { "text": "„Verstehe. Diesmal ist der Rahmen anders.“", "warum": "Anerkannt, aber ohne seine Erfahrung zu nutzen." },
+        { "text": "„Das war was anderes.“", "warum": "Wischt seine Erfahrung weg." },
+        { "text": "„Dann lassen wir es eben.“", "warum": "Gibt bei einem einzelnen Einwand sofort auf." }
+      ] },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0267", "faehigkeit": "ueberzeugen.einwand", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Der Einwand im Förderverein", "figur": "ein Mann aus dem Förderverein",
+        "lage": "Im Förderverein schlägst du vor, die Vereinskasse künftig über ein gemeinsames Konto statt bar zu führen. Ein Mann aus der Runde meldet sich.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Mitglied: „Und wer hat dann Zugriff? Das ist mir zu unsicher.“",
+            "wahl": [
+              { "text": "„Gute Frage. Was wäre für dich sicher genug?“", "wert": 2, "weiter": "k2", "rueck": "Anerkannt und nach seiner Bedingung gefragt." },
+              { "text": "„Ach, da passiert schon nichts.“", "wert": 0, "tendenz": "beschwichtigen", "weiter": "ende2", "rueck": "Beschwichtigen beantwortet keine Sorge." },
+              { "text": "„Zwei Leute aus dem Vorstand.“", "wert": 1, "weiter": "k2", "rueck": "Eine Antwort – aber ohne zu wissen, ob sie seine Sorge trifft." }
+            ] },
+          { "id": "k2", "sagt": "Mitglied: „Wenn jede Ausgabe zwei Leute freigeben müssen und alle die Kontoauszüge sehen, wäre ich dabei.“",
+            "wahl": [
+              { "text": "„Gute Idee. Zwei Freigaben, Auszüge für alle einsehbar. Wer ist dafür?“", "wert": 2, "weiter": "ende1", "rueck": "Seine Bedingung wird Teil des Vorschlags – und dann eine klare Frage." },
+              { "text": "„Das ist aber ziemlich viel Aufwand für so eine kleine Vereinskasse, findest du nicht?“", "wert": 0, "tendenz": "abwehren", "weiter": "ende2", "rueck": "Du verwirfst die Lösung, die ihn überzeugt hätte." }
+            ] },
+          { "id": "ende1", "sagt": "Die meisten Hände gehen hoch, auch seine.", "ende": "Aus dem Einwand wurde eine Verbesserung – und aus dem Skeptiker ein Mitträger." },
+          { "id": "ende2", "sagt": "Mitglied: „Dann bin ich dagegen.“ Die Abstimmung wird vertagt.", "ende": "Ein Einwand, den man wegwischt, kommt als Nein zurück." }
+        ],
+        "prinzipien": ["Einwand anerkennen", "nach der Bedingung fragen", "Bedingung in den Vorschlag einbauen", "dann klar abstimmen"]
+      } },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0268", "faehigkeit": "ueberzeugen.einwand", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Der Werkstattleiter", "figur": "Nadines Werkstattleiter",
+        "lage": "Du stellst Nadine Köhler und ihrem Werkstattleiter ein neues Bestellprogramm vor. Der Werkstattleiter verschränkt die Arme.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Werkstattleiter: „Noch ein Programm. Meine Leute wollen arbeiten, nicht klicken.“",
+            "wahl": [
+              { "text": "„Das verstehe ich. Wie bestellen Ihre Leute heute – und was nervt dabei am meisten?“", "wert": 2, "weiter": "k2", "rueck": "Seine Sorge ernst genommen und nach seinem Alltag gefragt." },
+              { "text": "„Das Programm ist kinderleicht.“", "wert": 0, "tendenz": "beschwichtigen", "weiter": "k1b", "rueck": "Klingt, als hieltest du seine Leute für unfähig." },
+              { "text": "„Frau Köhler hat das ja schon entschieden.“", "wert": 0, "tendenz": "uebergehen", "weiter": "ende2", "rueck": "Du übergehst den, der damit arbeiten muss." }
+            ] },
+          { "id": "k1b", "sagt": "Werkstattleiter: „Kinderleicht. Das sagen sie alle.“",
+            "wahl": [
+              { "text": "„Stimmt. Wie bestellen Ihre Leute denn heute?“", "wert": 2, "weiter": "k2", "rueck": "Zurück zum Fragen." },
+              { "text": "„Doch, wirklich.“", "wert": 0, "tendenz": "trotz", "weiter": "ende2", "rueck": "Beteuern überzeugt ihn nicht." }
+            ] },
+          { "id": "k2", "sagt": "Werkstattleiter: „Per Zuruf, und dann bestellt einer doppelt. Letzte Woche wieder.“",
+            "wahl": [
+              { "text": "„Wenn das Programm nur das verhindert – Bestellung mit einem Knopf am Tablet in der Werkstatt –, wäre das was für Sie?“", "wert": 2, "weiter": "ende1", "rueck": "Die Lösung für genau sein Problem, so klein wie möglich." },
+              { "text": "„Dann brauchen Sie unbedingt das volle Programm mit allen Funktionen.“", "wert": 0, "tendenz": "ueberladen", "weiter": "ende2", "rueck": "Mehr, als er wollte – genau das fürchtete er." }
+            ] },
+          { "id": "ende1", "sagt": "Werkstattleiter: „Wenn es nur ein Knopf ist – probieren wir es.“", "ende": "Der Skeptiker wurde zum Mitträger, weil die Lösung sein Problem traf und nicht mehr wollte." },
+          { "id": "ende2", "sagt": "Nadine: „Ohne meinen Werkstattleiter mache ich das nicht.“", "ende": "Wer den übergeht, der damit arbeiten muss, verliert oft die ganze Runde." }
+        ],
+        "prinzipien": ["Sorge ernst nehmen", "nach dem Alltag fragen", "Lösung so klein wie möglich", "Mitarbeitende nie übergehen"]
+      } },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0269", "faehigkeit": "ueberzeugen.einwand", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus der Abwehr eine Antwort, die den Einwand in der Runde aufnimmt.",
+      "vorlage": "„Das ist doch Quatsch, das funktioniert sehr wohl.“",
+      "kriterien": ["erkennt den Einwand an", "fragt nach oder gibt an die Runde", "kein Angriff"],
+      "muster": ["„Gut, dass du das ansprichst. Woran denkst du – an die Technik oder an die Leute?“", "„Berechtigte Sorge. Wie seht ihr anderen das?“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0270", "faehigkeit": "ueberzeugen.einwand", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Bau die Bedingung des Skeptikers in deinen Vorschlag ein.",
+      "vorlage": "Skeptikerin: „Nur, wenn wir jederzeit aussteigen können.“ Du: „Das geht nicht, wir brauchen ein Jahr.“",
+      "kriterien": ["nimmt die Bedingung auf", "ehrlich, was möglich ist", "endet mit einer Frage"],
+      "muster": ["„Einverstanden: monatlich kündbar, und nach drei Monaten schauen wir gemeinsam drauf. Wäre das ein Ja?“", "„Ein Jahr wäre mir lieber – aber dann starten wir mit drei Monaten Probezeit. Passt das?“"] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0271", "faehigkeit": "ueberzeugen.bedarf", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Vor einer Runde mit drei Entscheidern: Was fragst du am Anfang?",
+      "antworten": [
+        { "text": "„Was soll in einem Jahr besser laufen – aus Sicht von jedem von Ihnen?“", "wert": 2, "warum": "Jeder kommt zu Wort, und du erfährst, wen was überzeugt." },
+        { "text": "„Haben Sie mein Angebot gelesen?“", "wert": 0, "tendenz": "zufrueh", "warum": "Es geht sofort um dich und dein Papier." },
+        { "text": "„Darf ich kurz unser Unternehmen vorstellen?“", "wert": 0, "tendenz": "ueberuns", "warum": "Ein Vortrag über dich, bevor du weißt, was sie brauchen." },
+        { "text": "„Frau Köhler, was ist Ihnen wichtig?“", "wert": 1, "warum": "Die Entscheiderin zu fragen ist gut – die anderen beiden aber auch." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0272", "faehigkeit": "ueberzeugen.bedarf", "stufe": 8, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Du bist eher ein ruhiger Typ und fragst viel. Was ist deine größte Gefahr im Erstgespräch?",
+      "antworten": [
+        { "text": "Dass du insgesamt zu wenig redest und der andere am Ende gar nicht mehr weiß, was du eigentlich anbietest.", "wert": 1, "warum": "Kann passieren, ist aber selten das Problem. Zuhören ist deine Stärke." },
+        { "text": "Dass du nach vielen guten Fragen vergisst, zusammenzufassen und um den nächsten Schritt zu bitten.", "wert": 2, "warum": "Genau dort kippt der Stil des Zuhörers – darum die Abschlussfrage vorher aufschreiben." },
+        { "text": "Dass du zu wenig Witze machst.", "wert": 0, "tendenz": "verbiegen", "warum": "Ein fremder Stil hilft dir nicht. Deine Stärke ist eine andere." },
+        { "text": "Dass du zu ehrlich bist.", "wert": 0, "warum": "Ehrlichkeit ist kein Risiko, sondern deine Grundlage." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0273", "faehigkeit": "ueberzeugen.bedarf", "stufe": 7, "kanal": "wissen" },
+      "auftrag": "Wen fragst du was?",
+      "faecher": ["die Entscheiderin", "den Nutzer", "die, die zahlt"],
+      "karten": [
+        { "text": "„Woran würden Sie merken, dass sich das gelohnt hat?“", "fach": 0 },
+        { "text": "„Wie passt das zu Ihren Plänen fürs nächste Jahr?“", "fach": 0 },
+        { "text": "„Was nervt Sie im Alltag am meisten?“", "fach": 1 },
+        { "text": "„Wie machen Sie das heute?“", "fach": 1 },
+        { "text": "„Was müssen Sie vor der Geschäftsführung vertreten können?“", "fach": 2 },
+        { "text": "„Wie planen Sie Ausgaben dieser Größe?“", "fach": 2 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0274", "faehigkeit": "ueberzeugen.bedarf", "stufe": 8, "kanal": "wissen" },
+      "auftrag": "Echte Bedarfsfrage oder verkappter Verkaufssatz?",
+      "faecher": ["echte Frage", "verkappter Verkaufssatz"],
+      "karten": [
+        { "text": "„Was passiert, wenn es so bleibt?“", "fach": 0 },
+        { "text": "„Wie oft kommt das vor?“", "fach": 0 },
+        { "text": "„Woran würden Sie merken, dass es gelöst ist?“", "fach": 0 },
+        { "text": "„Sie wollen doch auch Zeit sparen, oder?“", "fach": 1 },
+        { "text": "„Wäre es nicht toll, wenn das alles automatisch liefe?“", "fach": 1 },
+        { "text": "„Wann wollen Sie anfangen?“ – im ersten Gespräch.", "fach": 1 }
+      ] },
+    { "art": "anschluss", "kopf": { "id": "ueberzeugen-v-0275", "faehigkeit": "ueberzeugen.bedarf", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "von": "Nadines Buchhalterin",
+      "aussage": "„Für mich zählt nur eins: dass ich die Kosten fürs Jahr vorher kenne.“",
+      "kriterien": ["greift ihren Punkt auf", "fragt nach, was genau sie braucht", "noch kein Angebot"],
+      "muster": ["„Verstehe. Heißt das: ein fester Betrag pro Monat – oder reicht eine Obergrenze?“", "„Was hat Sie bisher daran gehindert, die Kosten vorher zu kennen?“"] },
+    { "art": "anschluss", "kopf": { "id": "ueberzeugen-v-0276", "faehigkeit": "ueberzeugen.bedarf", "stufe": 8, "kanal": "koennen", "einfluss": "fair" },
+      "von": "Dr. Albers",
+      "aussage": "„Ihre Idee klingt gut. Aber ich weiß nicht, ob das gerade unsere größte Baustelle ist.“",
+      "kriterien": ["nimmt seinen Zweifel ernst", "fragt nach seiner größten Baustelle", "kein Verteidigen"],
+      "muster": ["„Was ist denn gerade die größte Baustelle? Vielleicht passt die Idee dazu – oder sie wartet.“", "„Verstehe. Woran würden Sie messen, ob sich der Aufwand jetzt lohnt?“"] }
+  ]
+}

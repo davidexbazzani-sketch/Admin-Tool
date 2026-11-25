@@ -1,0 +1,209 @@
+{
+  "einheiten": [
+    {
+      "id": "ruhe-3-01", "bereich": "ruhe", "stufe": 3, "nr": 1,
+      "titel": "Annehmen statt wegdrücken",
+      "faehigkeiten": ["ruhe.umdeuten", "ruhe.verstehen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Unterdrücken den Puls am stärksten steigen lässt und Annehmen den Körper ruhiger hält, zeigt ein gut gemachter Versuch – weniger Angst fühlten die Annehmenden dort aber nicht. Die Akzeptanz- und Commitment-Therapie wirkt bei vielen Beschwerden; bei Redeangst gibt es erst kleine Studien. Die Übungen hier sind daraus abgeleitet, nicht selbst geprüft.",
+      "quellen": ["hofmann2009", "england2012", "atjak2015", "hayes2005"],
+      "aha": "Umdeuten gibt der Aufregung eine Richtung. Annehmen geht einen Schritt weiter: Sie darf da sein, so stark sie will – und du tust trotzdem, was dir wichtig ist. Ziel ist nicht weniger Angst, sondern mehr Handeln.",
+      "schritte": [
+        { "art": "studie", "frage": "Was hilft, wenn vor einer Rede die Angst hochkommt: unterdrücken, umdeuten oder annehmen?", "aufbau": "Über 200 Studierende sollten unvorbereitet eine zehnminütige Rede vor einer Kamera halten. Vorher lernte jede Gruppe einen anderen Umgang mit der Angst: unterdrücken, umdeuten oder annehmen.", "ergebnis": "Wer unterdrückte, hatte den stärksten Pulsanstieg. Umdeuten und Annehmen hielten den Puls niedriger. Weniger Angst fühlten vor allem die Umdeuter; die Annehmenden fühlten sich ähnlich ängstlich wie die Unterdrücker – ihr Körper blieb aber ruhiger.", "grenze": "Eine Studie mit Studierenden. Annehmen zielt ohnehin nicht darauf, dass die Angst kleiner wird, sondern dass sie dich nicht mehr steuert.", "beleg": "B", "quellen": ["hofmann2009"] },
+        { "art": "karte", "text": "Annehmen heißt nicht gutheißen und nicht aufgeben. Es heißt: Ich höre auf, gegen das Gefühl zu arbeiten, und stecke die Kraft in das, was ich tun will. Drei Handgriffe: benennen („Da ist Herzklopfen“), Platz machen („Es darf da sein“) und das Wofür („Ich spreche, weil mir das Projekt wichtig ist“). Die Aufregung wird dabei manchmal kleiner, manchmal nicht. Entscheidend ist, dass du handelst." },
+        { "art": "werte", "auftrag": "Wofür stellst du dich solchen Momenten? Wähl die zwei Gründe, die dir am wichtigsten sind – sie sind dein Wofür, wenn die Aufregung laut wird.", "karten": ["anderen etwas weitergeben", "für meine Sache einstehen", "dazugehören", "mich weiterentwickeln", "Menschen eine Freude machen", "Verantwortung übernehmen", "meine Arbeit sichtbar machen", "Mut vorleben"], "waehle": 2 },
+        { "art": "auswahl", "kopf": { "id": "ruhe-3-01-a", "faehigkeit": "ruhe.umdeuten", "stufe": 6, "kanal": "wissen" },
+          "frage": "Vor deiner Rede zur Silberhochzeit deiner Eltern ist das Herzklopfen so stark wie lange nicht. Welcher Satz ist Annehmen im Sinne dieser Einheit?",
+          "antworten": [
+            { "text": "„Wenn ich es annehme, verschwindet es hoffentlich gleich.“", "wert": 0, "tendenz": "unterdruecken", "warum": "Verdecktes Wegdrücken: Annehmen als Trick, damit das Gefühl geht. Bleibt es, ist der Frust doppelt." },
+            { "text": "„Herzklopfen, ja. Es darf bleiben. Ich rede, weil ich meinen Eltern danken will.“", "wert": 2, "warum": "Benennen, Platz machen, Wofür – genau die drei Handgriffe." },
+            { "text": "„Ich bin aufgeregt – mein Körper stellt Energie bereit.“", "wert": 1, "warum": "Gutes Umdeuten. Annehmen ergänzt das Wofür und erlaubt auch das Herzklopfen, das bleibt." },
+            { "text": "„Ich halte das nicht aus. Ich sage nur kurz Danke.“", "wert": 0, "tendenz": "flucht", "warum": "Die Aufregung entscheidet dann über die Rede – nicht du." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ruhe-3-01-b", "faehigkeit": "ruhe.umdeuten", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Mach aus dem Kampfsatz einen Annehmen-Satz mit Wofür.",
+          "vorlage": "„Diese blöde Nervosität soll endlich aufhören, sonst wird das nichts.“",
+          "kriterien": ["benennt das Gefühl, ohne es zu bewerten", "erlaubt es", "nennt, wofür du trotzdem handelst"],
+          "muster": ["„Da ist die Nervosität. Sie darf mitkommen – ich will, dass das Team den Plan versteht.“", "„Aufregung, ich sehe dich. Ich spreche trotzdem, weil mir die Sache wichtig ist.“", "„Mein Herz klopft. Darf es. Ich bin hier, um für unsere Abteilung zu sprechen.“"] },
+        { "art": "anleitung", "titel": "Platz machen", "schritte": ["Spür kurz hin: Wo sitzt die Aufregung gerade – Brust, Bauch, Hals?", "Gib ihr innerlich einen Namen: „Da ist Herzklopfen.“", "Atme langsam aus, als würdest du um diese Stelle herum Platz machen.", "Sag dir: „Du darfst bleiben.“", "Dann richte den Blick nach außen – auf das, was du gleich tun willst."], "sekunden": 60, "stumm": true },
+        { "art": "mission", "ref": "ruhe-m-06" }
+      ],
+      "regel": "Die Aufregung darf mitkommen – wohin es geht, entscheidet dein Wofür.",
+      "merkkarten": [
+        { "id": "ruhe-3-01-m1", "frage": "Was heißt Annehmen?", "antwort": "Das Gefühl benennen, ihm Platz lassen und trotzdem tun, was dir wichtig ist." },
+        { "id": "ruhe-3-01-m2", "frage": "Was zeigte der Versuch mit der Stegreifrede?", "antwort": "Unterdrücken ließ den Puls am stärksten steigen. Annehmen hielt den Körper ruhiger – weniger Angst fühlte man dadurch aber nicht." },
+        { "id": "ruhe-3-01-m3", "frage": "Woran erkennst du verdecktes Wegdrücken?", "antwort": "Wenn du annimmst, damit das Gefühl verschwindet." }
+      ],
+      "mission": "ruhe-m-06"
+    },
+    {
+      "id": "ruhe-3-02", "bereich": "ruhe", "stufe": 3, "nr": 2,
+      "titel": "Was die Aufregung füttert",
+      "faehigkeiten": ["ruhe.verstehen", "ruhe.fokus"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass man überschätzt, wie sichtbar die eigene Nervosität ist, ist mehrfach gezeigt. Katastrophe, Gedankenlesen und Perfektion samt Prüffragen stammen aus der kognitiven Therapie, der Scheinwerfer aus der Sozialpsychologie, der Kampf gegen das Gefühl aus der Forschung zum Annehmen. Die Tiefenblicke – die alte Sorge um das Ansehen, Adler, die inneren Antreiber – sind Denkmodelle zum Verstehen, keine Befunde über dich.",
+      "quellen": ["savitsky2003", "gilovich2000", "clarkwells1995", "beck1979", "gilbert2001", "adler1927", "kahler1975"],
+      "aha": "Die Aufregung lebt von Gedanken, die sich wie Tatsachen anfühlen: „Alle sehen es“, „Die halten mich für unfähig“, „Nichts darf schiefgehen“. Wer seine Fallen kennt, erkennt sie im Moment – und folgt ihnen nicht blind.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "ruhe-3-02-a", "faehigkeit": "ruhe.verstehen", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Welche Gedankenfalle steckt dahinter?",
+          "faecher": ["Katastrophe", "Kampf gegen das Gefühl", "Scheinwerfer", "Gedankenlesen"],
+          "karten": [
+            { "text": "„Bleibe ich hängen, bin ich hier erledigt.“", "fach": 0 },
+            { "text": "„Wenn ich rot werde, reden alle noch wochenlang darüber.“", "fach": 0 },
+            { "text": "„Ich darf auf keinen Fall aufgeregt sein.“", "fach": 1 },
+            { "text": "„Weg mit diesem Herzklopfen, sofort.“", "fach": 1 },
+            { "text": "„Jeder sieht, wie meine Hände zittern.“", "fach": 2 },
+            { "text": "„Mein Herzklopfen hört man bis in die letzte Reihe.“", "fach": 2 },
+            { "text": "„Der Chef runzelt die Stirn – er findet es schwach.“", "fach": 3 },
+            { "text": "„Die in der ersten Reihe langweilen sich bestimmt.“", "fach": 3 }
+          ] },
+        { "art": "karte", "text": "Jede Falle hat eine Prüffrage. Katastrophe: Was wäre wirklich das Schlimmste, wie wahrscheinlich ist es, und was täte ich dann? Gedankenlesen: Was weiß ich – und was vermute ich nur? Scheinwerfer: Was sehen andere tatsächlich? Perfektion: Was ist gut genug? Kampf: Was passiert, wenn ich das Gefühl lasse? Die Antwort braucht dich nicht ganz zu überzeugen. Es reicht, den Gedanken als Gedanken zu erkennen." },
+        { "art": "studie", "frage": "Wie viel sehen andere von deiner Nervosität?", "aufbau": "Menschen hielten kurze Reden vor anderen. Danach schätzten sie, wie nervös sie gewirkt hatten – und die Zuhörer schätzten dasselbe. In einem zweiten Teil erfuhr eine Gruppe vorher, dass Redner sich meist für durchschaubarer halten, als sie sind.", "ergebnis": "Die Redner hielten sich für viel durchschaubarer, als die Zuhörer sie erlebten. Wer das vorher wusste, redete entspannter.", "grenze": "Studierende, kurze Stegreifreden. Der Grundbefund – man überschätzt, wie sehr andere einen bemerken – ist auch in anderen Versuchen gezeigt.", "beleg": "B", "quellen": ["savitsky2003", "gilovich2000"] },
+        { "art": "umformulieren", "kopf": { "id": "ruhe-3-02-b", "faehigkeit": "ruhe.verstehen", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Prüf den Katastrophen-Gedanken mit den drei Fragen und schreib einen ehrlicheren.",
+          "vorlage": "„Wenn ich vor dem Vorstand hängen bleibe, bin ich hier erledigt.“",
+          "kriterien": ["nennt das realistisch Schlimmste", "schätzt die Wahrscheinlichkeit ehrlich", "nennt, was du dann tätest"],
+          "muster": ["„Das Schlimmste: Ich hänge zehn Sekunden. Wahrscheinlicher ist ein kurzer Hänger – dann schaue ich auf die Karte. Erledigt bin ich deshalb nicht.“", "„Ein Hänger ist unangenehm, kein Ende. Mein Plan: Pause, letzter Satz, weiter.“"] },
+        { "art": "geschichte", "titel": "Carlas alter Satz", "figur": "Carla Demir", "text": "Carla hat mir einmal erzählt, was früher vor jeder Präsentation in ihrem Kopf lief: „Sei perfekt.“ Ein Versprecher, und der Satz meldete sich: „Siehst du? Nicht gut genug.“ Sie hat versucht, ihn abzustellen. Ging nicht. Was dann ging: Sie hat ihn erkannt. „Ah, da ist er wieder, mein Antreiber.“ Und sie hat einen zweiten Satz danebengestellt: „Gut genug ist gut genug. Die hier wollen, dass es gelingt.“ Seitdem fragt sie sich vor dem Auftritt nicht mehr, ob sie einen Fehler macht. Sondern: Was gebe ich den Leuten heute mit?", "frage": "Gibt es bei dir einen Satz, der vor Auftritten mitspricht – und welchen zweiten Satz stellst du daneben?" },
+        { "art": "karte", "titel": "Tiefenblick", "text": "Hinter vielen Fallen steht eine alte Sorge: bewertet und für zu klein befunden zu werden. Ein Denkmodell sagt, Menschen achten seit jeher darauf, ihr Ansehen in der Gruppe nicht zu verlieren – daher die Wucht. Adler nannte das Gefühl, nicht zu genügen, etwas, das fast alle kennen. Manche erkennen sich darin wieder – du auch? Der Handgriff für heute: Frag nicht „Wie komme ich an?“, sondern „Was gebe ich weiter?“" },
+        { "art": "reflexion", "frage": "Welche Falle tappt bei dir am häufigsten zu – und wie lautet deine Prüffrage dafür?" },
+        { "art": "fachhilfe", "thema": "seele" },
+        { "art": "mission", "ref": "ruhe-m-09" }
+      ],
+      "regel": "Gedanken sind Vermutungen, keine Tatsachen – prüf sie, statt ihnen zu folgen.",
+      "merkkarten": [
+        { "id": "ruhe-3-02-m1", "frage": "Welche Fallen füttern die Aufregung?", "antwort": "Katastrophe, Gedankenlesen, Scheinwerfer, Perfektion und der Kampf gegen das Gefühl." },
+        { "id": "ruhe-3-02-m2", "frage": "Welche Frage hilft gegen Gedankenlesen?", "antwort": "Was weiß ich – und was vermute ich nur?" },
+        { "id": "ruhe-3-02-m3", "frage": "Was ist der Handgriff zum Tiefenblick?", "antwort": "Nicht „Wie komme ich an?“, sondern „Was gebe ich weiter?“" }
+      ],
+      "mission": "ruhe-m-09"
+    },
+    {
+      "id": "ruhe-3-03", "bereich": "ruhe", "stufe": 3, "nr": 3,
+      "titel": "Was bei dir wirkt: deine Rangliste",
+      "faehigkeiten": ["ruhe.routine", "ruhe.atem"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Die Werkzeuge selbst sind unterschiedlich gut belegt. Welches bei dir am besten wirkt, sagt keine Studie voraus – darum misst du selbst. Dass die Aufregung nach dem Start ohnehin sinkt, ist gemessen; deshalb misst du direkt vor und nach dem Werkzeug und vergleichst über mehrere Anlässe.",
+      "quellen": ["behnke2004", "fincham2023", "praxis-ruhe"],
+      "aha": "Studien sagen, was im Mittel hilft. Was dir hilft, weißt du erst, wenn du misst: dieselbe Frage vor und nach jedem Werkzeug, über mehrere echte Anlässe. So wird aus Bauchgefühl eine Rangliste.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Du atmest vor einem Anruf lang aus. Deine Anspannung: vorher 70, nach dem Telefonat 30. Was sagt dir das über das Atmen?", "optionen": ["Es hat die Anspannung um 40 Punkte gesenkt.", "Wenig – nach dem Gespräch sinkt die Anspannung ohnehin.", "Dass Atmen bei dir nicht wirkt."], "richtig": 1, "loesung": "Wenig – nach dem Start sinkt die Aufregung meist von selbst", "aufloesung": "Miss direkt vor und direkt nach dem Werkzeug, noch bevor es losgeht. Und vergleich über mehrere Anlässe, im Wechsel mit anderen Werkzeugen. Erst dann zeigt sich, was bei dir trägt." },
+        { "art": "karte", "text": "So entsteht deine Rangliste: Nimm drei Werkzeuge, die du kannst – etwa lang ausatmen, Anspannen und Loslassen, den Namenssatz. Setz vor jedem aufregenden Moment eines davon ein, abwechselnd. Notier jedes Mal die Anspannung von 0 bis 100: direkt davor, direkt nach dem Werkzeug – und wie es lief. Nach drei, vier Anlässen je Werkzeug zeigt sich ein erstes Muster. Keine Gewissheit, aber eine ehrliche Beobachtung." },
+        { "art": "zuordnen", "kopf": { "id": "ruhe-3-03-a", "faehigkeit": "ruhe.routine", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Ehrliche Messung oder Selbsttäuschung?",
+          "faecher": ["ehrlich gemessen", "führt in die Irre"],
+          "karten": [
+            { "text": "Anspannung direkt vor und direkt nach dem Werkzeug notieren", "fach": 0 },
+            { "text": "die Anspannung erst nach dem ganzen Vortrag einschätzen", "fach": 1 },
+            { "text": "die Werkzeuge über mehrere Anlässe abwechseln", "fach": 0 },
+            { "text": "nach einem einzigen guten Tag ein Werkzeug zum Sieger erklären", "fach": 1 },
+            { "text": "auch notieren, wenn ein Werkzeug nichts gebracht hat", "fach": 0 },
+            { "text": "nur die Tage aufschreiben, an denen es gut lief", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ruhe-3-03-b", "faehigkeit": "ruhe.atem", "stufe": 7, "kanal": "wissen" },
+          "frage": "Lena hat zwölf Anlässe gemessen, jedes Werkzeug viermal. Lang ausatmen senkte ihre Anspannung im Schnitt um 15 Punkte, Anspannen und Loslassen um 12, der Satz mit ihrem Namen um 5. Was folgt daraus?",
+          "antworten": [
+            { "text": "Ausatmen und Anspannen kommen in ihre Routine; den Namenssatz probiert sie später noch einmal.", "wert": 2, "warum": "Ein vorläufiges Muster darf die Routine formen – ohne den Rest gleich abzuschreiben." },
+            { "text": "Der Namenssatz wirkt bei niemandem – die Studien dazu müssen falsch sein.", "wert": 0, "warum": "Lenas Messung sagt etwas über Lena, nicht über alle. Und vier Messungen je Werkzeug sind ein Hinweis, kein Urteil." },
+            { "text": "Sie nimmt nur noch das Ausatmen und lässt alles andere weg, weil es vorn liegt.", "wert": 1, "warum": "Möglich – aber 15 und 12 liegen nah beieinander. Beide zu behalten ist sicherer." },
+            { "text": "Zwölf Anlässe sind viel zu wenig. Sie misst lieber noch ein ganzes Jahr weiter, bevor sie an ihrer Routine irgendetwas ändert.", "wert": 0, "warum": "Gründlich, aber zu zögerlich. Ein vorläufiges Muster darf die Routine schon formen." }
+          ] },
+        { "art": "routine", "bausteine": ["Stand: beide Füße fest", "Langsam und lang ausatmen", "Seufzer-Atmung, zwei Runden", "Kurzfassung Anspannen und Loslassen", "Mein Umdeute-Satz", "Mich mit Namen ansprechen", "Annehmen: „Du darfst mitkommen.“", "Blick zu einem freundlichen Gesicht", "Ein Schluck Wasser", "Den ersten Satz innerlich sagen"], "mindestens": 3, "hoechstens": 5 },
+        { "art": "experiment", "auftrag": "Miss in den nächsten Wochen bei jedem aufregenden Moment: Anspannung direkt davor, direkt nach dem Werkzeug – und welches Werkzeug es war. Wechsle zwischen drei Werkzeugen ab, bis jedes drei-, viermal dran war.", "dauer": "woche", "nachfrage": "Welches Werkzeug liegt bei dir bisher vorn – und wie sicher bist du dir?" },
+        { "art": "reflexion", "frage": "Welche drei Werkzeuge kommen in deine Rangliste – und welches hast du bisher unterschätzt?" }
+      ],
+      "regel": "Miss direkt vor und nach dem Werkzeug, über mehrere Anlässe – dann zählt deine Rangliste.",
+      "merkkarten": [
+        { "id": "ruhe-3-03-m1", "frage": "Wie misst du, ob ein Werkzeug bei dir wirkt?", "antwort": "Anspannung direkt vor und direkt nach dem Werkzeug, noch vor dem Start – über mehrere Anlässe im Wechsel." },
+        { "id": "ruhe-3-03-m2", "frage": "Warum taugt „vor dem Vortrag – nach dem Vortrag“ nicht als Messung?", "antwort": "Weil die Aufregung nach dem Start ohnehin sinkt – das schreibst du sonst dem Werkzeug zu." }
+      ]
+    },
+    {
+      "id": "ruhe-3-04", "bereich": "ruhe", "stufe": 3, "nr": 4,
+      "titel": "Der große Auftritt: von A bis Z",
+      "faehigkeiten": ["ruhe.vorbereitung", "ruhe.routine", "ruhe.mittendrin"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Die Bausteine sind einzeln gestützt: Wenn-Dann-Pläne gut, der Dreischritt Wunsch – Hindernis – Plan mit kleinem, aber belegtem Effekt, Üben unter Druck im Sport. Dass sie zusammen einen großen Auftritt tragen, ist eine begründete Übertragung, nicht eigens untersucht.",
+      "quellen": ["webb2012", "wang2021", "low2021", "ebrahimi2019", "praxis-ruhe"],
+      "aha": "Ein großer Auftritt beginnt nicht am Tag selbst, sondern mit dem Ja. Wer ab der Zusage rückwärts plant, verteilt die Aufregung auf viele kleine Schritte – statt sie am Ende auf einmal zu tragen.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Für einen großen Auftritt reicht es, in der letzten Woche richtig reinzuknien.", "urteil": "falsch", "warum": "In einer Woche lässt sich der Text schreiben, aber kaum in Stufen proben. Wer früh beginnt, kann steigern: erst allein, dann vor einer Person, dann vor einer kleinen Runde mit Mikrofon." },
+        { "art": "karte", "text": "Von A bis Z: Zusage – das Ziel in einem Satz. Drei, vier Wochen davor – Aufbau, erster und letzter Satz. Zwei Wochen davor – Proben in Stufen, mit Aufnahme. Eine Woche davor – Probe vor kleiner Runde mit Störungen, drei Wenn-Dann-Pläne. Vortag – einmal durch, dann Schluss. Der Tag – gewohnter Morgen, früh da sein. Fünf Minuten – deine Rangliste. Mittendrin – Pause, lang aus, Stichwort. Danach – drei Fragen." },
+        { "art": "woop", "anlass": "Dein großer Auftritt – ein Vortrag, eine Rede oder eine Prüfung, die dir viel bedeutet.", "beispiel": { "wunsch": "Die Festrede zum Vereinsjubiläum halten, ohne abzulesen.", "ergebnis": "Die Leute lachen an zwei Stellen und sprechen mich danach an.", "hindernis": "Ich schiebe das Proben auf, weil ich mich davor drücke.", "plan": "Wenn es Dienstag 19 Uhr ist, dann stelle ich mich ins Wohnzimmer und spreche zehn Minuten – egal, wie es klingt." } },
+        { "art": "auswahl", "kopf": { "id": "ruhe-3-04-a", "faehigkeit": "ruhe.vorbereitung", "stufe": 8, "kanal": "wissen" },
+          "frage": "Drei Wochen vor deiner Rede zum Firmenjubiläum bleibst du bei jeder Probe an derselben Stelle hängen. Was tust du?",
+          "antworten": [
+            { "text": "Die Stelle Wort für Wort auswendig lernen, dann kann dort nichts mehr passieren.", "wert": 1, "warum": "Kann tragen, macht aber anfällig: Fehlt ein Wort, fehlt alles. Kürzer und mit Stichwort ist robuster." },
+            { "text": "Die Stelle umbauen – kürzer, mit Stichwort – und sie dreimal einzeln proben.", "wert": 2, "warum": "Die Probe hat dir die schwache Stelle gezeigt. Jetzt kostet die Änderung noch nichts." },
+            { "text": "Die Proben vor anderen lassen – die Zuhörer machen dich offenbar nur nervös.", "wert": 0, "tendenz": "flucht", "warum": "Gerade vor Zuhörern lernst du, was im Ernstfall hält. Ohne sie kommt die Aufregung erst am Tag selbst." },
+            { "text": "Hoffen, dass dich die Aufregung am Tag schon tragen wird.", "wert": 0, "warum": "Eine Stelle, die in jeder Probe hakt, hakt unter Aufregung eher stärker." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "ruhe-3-04-b", "faehigkeit": "ruhe.routine", "stufe": 8, "kanal": "wissen" },
+          "auftrag": "Was gehört an den großen Tag – und was nicht mehr?",
+          "faecher": ["gehört an den Tag", "nicht mehr am Tag"],
+          "karten": [
+            { "text": "gewohntes Frühstück, die übliche Tasse", "fach": 0 },
+            { "text": "neue Folien einbauen", "fach": 1 },
+            { "text": "Mikrofon und Technik vor Ort ausprobieren", "fach": 0 },
+            { "text": "einen neuen Witz testen, den noch niemand gehört hat", "fach": 1 },
+            { "text": "die Kurzfassung deiner Routine vor der Tür", "fach": 0 },
+            { "text": "eine neue Atemtechnik aus einem Video ausprobieren", "fach": 1 }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "ruhe-3-04-c", "faehigkeit": "ruhe.mittendrin", "stufe": 8, "kanal": "koennen" },
+          "plan": "Mein Notfallblatt", "anlass": "Ein Blatt, das am großen Tag neben deinem Manuskript oder deiner Karte liegt.",
+          "felder": [
+            { "name": "Mein erster Satz", "hilfe": "Wörtlich, höchstens fünfzehn Wörter." },
+            { "name": "Mein Hänger-Plan", "hilfe": "Erste Stufe und zweite Stufe." },
+            { "name": "Mein Technik-Plan", "hilfe": "Was tust du, wenn Mikrofon, Licht oder Folien streiken?" },
+            { "name": "Mein Satz für schwere Fragen", "hilfe": "Womit gewinnst du Zeit?" },
+            { "name": "Meine Hilfe bei einer Welle", "hilfe": "Dein stärkstes Werkzeug aus der Rangliste." }
+          ],
+          "muster": ["Erster Satz: „Vor fünfzig Jahren fing hier alles mit drei Leuten und einer Werkbank an.“ Hänger: Pause, letzter Satz – sonst „Ich komme zum nächsten Punkt.“ Technik: Mikrofon weg → einen Schritt vor, lauter sprechen. Schwere Frage: „Lassen Sie mich kurz sortieren.“ Welle: langsam und lang ausatmen, Blick zur ersten Reihe."] },
+        { "art": "mission", "ref": "ruhe-m-10" }
+      ],
+      "regel": "Ab dem Ja rückwärts planen – die Aufregung auf viele kleine Schritte verteilen.",
+      "merkkarten": [
+        { "id": "ruhe-3-04-m1", "frage": "Wann beginnt die Vorbereitung auf einen großen Auftritt?", "antwort": "Mit der Zusage: das Ziel in einem Satz, dann rückwärts planen." },
+        { "id": "ruhe-3-04-m2", "frage": "Was gehört am großen Tag nicht mehr dazu?", "antwort": "Nichts Neues: keine neuen Folien, Witze oder Techniken – nur Geprobtes." }
+      ],
+      "mission": "ruhe-m-10"
+    },
+    {
+      "id": "ruhe-3-05", "bereich": "ruhe", "stufe": 3, "nr": 5,
+      "titel": "Danach: auswerten ohne Grübeln",
+      "faehigkeiten": ["ruhe.vorbereitung", "ruhe.fokus", "ruhe.umdeuten"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Nachgrübeln nach sozialen Situationen die Angst vor dem nächsten Mal nährt, ist ein gut untersuchter Teil der Forschung zu sozialer Angst – vor allem an Menschen mit starker Angst. Dass ein freundlicher Blick auf eigene Fehler eher anspornt als bequem macht, zeigen einzelne Experimente. Die drei Fragen und die Zeitgrenze sind Praxiswissen.",
+      "quellen": ["brozovich2008", "clarkwells1995", "breines2012", "ferrari2019", "praxis-ruhe"],
+      "aha": "Auswerten schaut nach vorn: Was übernehme ich? Grübeln dreht sich im Kreis: Was haben die wohl gedacht? Zehn Minuten Auswertung, dann Schluss – und auf eigene Fehler schauen wie bei einem Freund.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Tarek hat im Kundentermin einmal den Faden verloren. Abends sitzt er auf dem Sofa.", "schwach": "Er spielt die Szene wieder und wieder ab, sieht sich rot und verloren vor den Kunden – und am Ende war der ganze Termin „eine Katastrophe“.", "stark": "Er nimmt sich zehn Minuten und drei Fragen: Was lief gut? Was hatte ich befürchtet, und was ist passiert? Was übernehme ich? Dann klappt er das Heft zu.", "frage": "Warum hilft der zweite Abend mehr?", "unterschied": "Beim Grübeln sieht Tarek sich so, wie er befürchtet hat auszusehen – das Bild wird mit jeder Runde dunkler. Die Auswertung vergleicht die Befürchtung mit dem, was geschah, und endet mit einem Schritt nach vorn." },
+        { "art": "karte", "text": "Fachleute nennen das Nachgrübeln „Nachbearbeitung“: Man geht eine Situation immer wieder durch, meist mit dem Blick auf die eigenen Schwächen. Das Bild davon wird dabei oft dunkler – und man geht ängstlicher ins nächste Mal. Woran du Grübeln erkennst: Es kommt kein neuer Gedanke dazu, es fühlt sich schwer an, und am Ende steht kein Schritt." },
+        { "art": "zuordnen", "kopf": { "id": "ruhe-3-05-a", "faehigkeit": "ruhe.fokus", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Auswerten oder grübeln?",
+          "faecher": ["auswerten", "grübeln"],
+          "karten": [
+            { "text": "„Befürchtet: Alle merken es. Passiert: eine Nachfrage, sonst nichts.“", "fach": 0 },
+            { "text": "„Was der wohl gedacht hat, als ich rot wurde …“", "fach": 1 },
+            { "text": "„Nächstes Mal stelle ich das Wasser näher hin.“", "fach": 0 },
+            { "text": "„Ich spiele den Hänger noch einmal durch. Und noch einmal.“", "fach": 1 },
+            { "text": "„Gelungen: der Anfang und die Antwort auf die schwere Frage.“", "fach": 0 },
+            { "text": "„Typisch ich. Immer passiert mir so was.“", "fach": 1 }
+          ] },
+        { "art": "studie", "frage": "Macht es bequem, nach einem Fehler freundlich mit sich zu sein?", "aufbau": "In vier Experimenten dachten Studierende an eigene Fehler oder Schwächen, in einem schnitten sie in einem schweren Test schlecht ab. Eine Gruppe wurde angeleitet, verständnisvoll auf sich zu schauen; die Vergleichsgruppen bekamen eine andere oder keine Anleitung.", "ergebnis": "Nach dem freundlichen Blick wollten sie sich eher verbessern – und lernten nach dem schweren Test länger für einen zweiten Versuch.", "grenze": "Studierende im Labor, kurze Anleitungen. Übungen in Selbstmitgefühl senken in einigen randomisierten Studien zudem das Grübeln.", "beleg": "B", "quellen": ["breines2012", "ferrari2019"] },
+        { "art": "schreibreise", "titel": "Der Brief einer Freundin", "anleitung": "Denk an deinen letzten Auftritt, der nicht so lief wie erhofft. Schreib drei kurze Antworten – so, wie eine gute Freundin sie dir schreiben würde, die dabei war und dich mag.", "fragen": ["Was hat sie gesehen, was dir gelungen ist?", "Was würde sie zu deinem Hänger oder Fehler sagen?", "Was würde sie dir fürs nächste Mal raten?"], "minuten": 4, "insBuch": "erfolg" },
+        { "art": "auswahl", "kopf": { "id": "ruhe-3-05-b", "faehigkeit": "ruhe.vorbereitung", "stufe": 8, "kanal": "wissen" },
+          "frage": "Zwei Tage nach deinem Vortrag ertappst du dich wieder dabei, wie du deinen Hänger durchspielst. Was hilft am meisten?",
+          "antworten": [
+            { "text": "Den Hänger noch einmal ganz genau zerlegen, bis du wirklich verstanden hast, warum er passiert ist.", "wert": 0, "tendenz": "nach_innen", "warum": "Klingt nach Auswerten, ist aber Grübeln: kein neuer Gedanke, nur das alte Bild." },
+            { "text": "Eine Kollegin fragen, wie es auf sie gewirkt hat.", "wert": 1, "warum": "Ein Blick von außen korrigiert oft das Bild im Kopf. Danach aber auch Schluss." },
+            { "text": "Grübeln erkennen, notieren, was du übernimmst – dann bewusst etwas anderes tun.", "wert": 2, "warum": "Erkennen, einen Schritt festhalten, umschalten: So endet die Schleife." },
+            { "text": "Dir vornehmen, künftig keine Vorträge mehr anzunehmen.", "wert": 0, "tendenz": "flucht", "warum": "Das schützt kurz und macht die nächste Hürde höher." }
+          ] },
+        { "art": "reflexion", "frage": "Wann grübelst du am ehesten – auf dem Heimweg, abends, im Bett? Was ist dein Schluss-Zeichen nach den drei Fragen?" },
+        { "art": "fachhilfe", "thema": "seele" }
+      ],
+      "regel": "Zehn Minuten, drei Fragen, dann Schluss – und dich ansehen wie einen Freund.",
+      "merkkarten": [
+        { "id": "ruhe-3-05-m1", "frage": "Woran erkennst du Grübeln?", "antwort": "Kein neuer Gedanke, ein schweres Gefühl – und am Ende kein Schritt." },
+        { "id": "ruhe-3-05-m2", "frage": "Macht Freundlichkeit mit dir selbst bequem?", "antwort": "Eher nicht: In Versuchen wollten Menschen nach einem freundlichen Blick auf ihren Fehler eher dazulernen." }
+      ]
+    }
+  ]
+}

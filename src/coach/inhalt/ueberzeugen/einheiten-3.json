@@ -1,0 +1,243 @@
+{
+  "einheiten": [
+    {
+      "id": "ueberzeugen-3-01", "bereich": "ueberzeugen", "stufe": 3, "nr": 1,
+      "titel": "Eine Idee nach oben verkaufen",
+      "faehigkeiten": ["ueberzeugen.nutzen", "ueberzeugen.abschluss"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Die Schritte stammen aus einem Praxisartikel auf Grundlage der Forschung der Autoren und sind einzeln nicht experimentell geprüft. Studien zeigen: Viele Beschäftigte bringen Anliegen gar nicht erst nach oben – aus Sorge um ihr Ansehen.",
+      "quellen": ["ashford2015", "milliken2003", "detert2011"],
+      "aha": "Deine Begeisterung ist dein Antrieb, nicht sein Grund. Eine Idee kommt oben an, wenn sie bei seinen Zielen anfängt, klein startet und ein Nein erlaubt.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-3-01-a", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Dr. Albers hat zwischen zwei Terminen drei Minuten. Du willst eine neue Ablage für Angebote vorschlagen. Womit fängst du an?",
+          "antworten": [
+            { "text": "„Ich finde unsere Ablage ehrlich gesagt furchtbar chaotisch.“", "wert": 0, "tendenz": "abwerten", "warum": "Kritik an etwas, das er vielleicht selbst eingeführt hat. Er muss erst sein Gesicht schützen." },
+            { "text": "„Das spart uns bei jeder Angebotsfrage Suchen. Darf ich es Ihnen als Versuch zeigen?“", "wert": 2, "warum": "Sein Nutzen zuerst, ein kleiner Schritt, eine klare Bitte – das passt in drei Minuten." },
+            { "text": "„Ich habe am Wochenende drei Ablage-Programme verglichen, die alle ihre Vor- und Nachteile haben.“", "wert": 1, "warum": "Fleißig und ehrlich – aber er hört deine Arbeit, nicht seinen Nutzen." },
+            { "text": "„Hätten Sie mal eine Stunde für mich? Es geht um etwas Grundsätzliches.“", "wert": 0, "tendenz": "vage", "warum": "Groß, vage, teuer: Eine Stunde für etwas Unbekanntes gibt man ungern." }
+          ] },
+        { "art": "karte", "text": "Sechs Schritte nach oben. Bei seinen Zielen anfangen: Zeit, Geld, Ruhe, Ansehen. Den Moment wählen: nicht in der Krise, nicht zwischen Tür und Angel, wenn es mehr braucht. Lösung statt Problem. Klein starten: ein Versuch für vier Wochen statt der großen Umstellung. Risiken selbst nennen, bevor er sie findet. Und nicht vor anderen überrumpeln – erst unter vier Augen. Taktik braucht es nach oben nicht: Klarheit genügt." },
+        { "art": "studie", "frage": "Wie oft bleibt ein wichtiges Anliegen einfach ungesagt?", "aufbau": "Forscherinnen befragten 40 Beschäftigte ausführlich, ob sie schon einmal ein wichtiges Anliegen nicht nach oben gebracht hatten – und warum.", "ergebnis": "Die meisten kannten das. Der häufigste Grund war die Sorge, in schlechtem Licht dazustehen oder Beziehungen zu beschädigen.", "grenze": "Eine kleine, erkundende Studie, keine Zählung für alle Betriebe. Sie zeigt aber: Viele Ideen scheitern nicht am Chef, sondern daran, dass sie nie vorgetragen werden.", "beleg": "B", "quellen": ["milliken2003"] },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-3-01-b", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Übersetz deine Begeisterung in seine Ziele: Was hat Dr. Albers davon?",
+          "vorlage": "„Ich fände es total spannend, wenn wir mal ein neues Programm für die Urlaubsplanung ausprobieren würden.“",
+          "kriterien": ["nennt seinen Nutzen (Zeit, Ruhe, Kosten, Ansehen)", "schlägt einen kleinen ersten Schritt vor", "endet mit einer klaren Frage"],
+          "muster": ["„Im Frühjahr mussten Sie zweimal Engpässe ausbügeln. Ein gemeinsamer Kalender zeigt so etwas vorher. Wollen wir es vier Wochen im Team testen?“", "„Ich hätte einen Vorschlag, der Ihnen die Abstimmung zur Urlaubszeit erspart. Darf ich ihn Ihnen Donnerstag in fünf Minuten zeigen?“"] },
+        { "art": "gespraechskarte", "anlass": "Eine Idee, die du bei deiner Vorgesetzten oder deinem Vorgesetzten durchbringen willst.",
+          "beispiel": { "ziel": "Dr. Albers sagt Ja zu einem vierwöchigen Versuch mit dem gemeinsamen Kalender.", "erster": "„Haben Sie fünf Minuten? Ich hätte einen Vorschlag, der Ihnen die Urlaubsabstimmung erspart.“", "wunsch": "„Wollen wir es vier Wochen im Team testen und dann gemeinsam entscheiden?“", "planB": "Sagt er Nein: nach seinem Grund fragen und vereinbaren, wann ich wiederkommen darf." } },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-3-01-c", "faehigkeit": "ueberzeugen.abschluss", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Dr. Albers sagt: „Interessant, aber nicht jetzt.“ Was tust du?",
+          "antworten": [
+            { "text": "„Aber es würde uns gerade jetzt so viel bringen, wo so viel los ist!“", "wert": 0, "tendenz": "draengen", "warum": "Gegen ein Nein anreden weckt Gegenwehr – nach oben besonders." },
+            { "text": "„Okay.“ – und das Thema nicht mehr ansprechen.", "wert": 1, "warum": "Respektvoll, aber du erfährst nicht, ob es am Zeitpunkt oder an der Sache lag." },
+            { "text": "Die Idee in der nächsten großen Runde vorstellen, damit er vor allen nicht mehr ausweichen kann.", "wert": 0, "tendenz": "ueberrumpeln", "warum": "Den Chef vor anderen zu überrumpeln bricht eine der ungeschriebenen Regeln – und beschädigt Vertrauen." },
+            { "text": "„Verstehe. Was müsste passen, damit es später Thema wird? Darf ich im Frühjahr wieder fragen?“", "wert": 2, "warum": "Du nimmst das Nein an, erfährst den Grund und hältst die Tür offen." }
+          ] },
+        { "art": "mission", "ref": "ueberzeugen-m-07" }
+      ],
+      "regel": "Fang bei seinen Zielen an, starte klein – und lass das Nein zu.",
+      "merkkarten": [
+        { "id": "ueberzeugen-3-01-m1", "frage": "Womit fängt eine Idee nach oben an?", "antwort": "Mit dem Nutzen für die Ziele des anderen." },
+        { "id": "ueberzeugen-3-01-m2", "frage": "Warum klein starten?", "antwort": "Ein Versuch für vier Wochen ist leichter zu bejahen als die große Umstellung." },
+        { "id": "ueberzeugen-3-01-m3", "frage": "Was tust du nach einem Nein von oben?", "antwort": "Nach dem Grund fragen und vereinbaren, wann du wiederkommen darfst." }
+      ],
+      "mission": "ueberzeugen-m-07"
+    },
+    {
+      "id": "ueberzeugen-3-02", "bereich": "ueberzeugen", "stufe": 3, "nr": 2,
+      "titel": "Tricks erkennen und abwehren",
+      "faehigkeiten": ["ueberzeugen.einfluss", "ueberzeugen.haltung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass vorheriges Kennenlernen von Gegenargumenten widerstandsfähiger macht, zeigt eine Meta-Analyse – meist zu Meinungen, kaum zu Verkaufstricks. Das Widerrufsrecht steht im Gesetz; es gibt Ausnahmen. Die Abwehr-Fragen sind Praxiswissen.",
+      "quellen": ["banas2010", "bgb-widerruf", "burger2015", "praxis-ueberzeugen"],
+      "aha": "Rote Tricks brauchen dein schnelles Ja. Wer sie kennt, gewinnt Zeit – und Zeit ist die beste Abwehr: Was heute ein gutes Angebot ist, ist es meist auch morgen.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-3-02-a", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Fair, Taktik oder rote Linie?",
+          "faecher": ["fair – wirkt auch durchschaut", "Taktik – ohne Lüge, mit Preis", "rote Linie – nur erkennen"],
+          "karten": [
+            { "text": "„Den Termin kann ich bis Freitag halten, danach plane ich neu.“ – und es stimmt.", "fach": 0 },
+            { "text": "Den Gesamtpreis schriftlich nennen, alles eingerechnet.", "fach": 0 },
+            { "text": "„Lieber Dienstag oder Donnerstag?“ – nachdem du schon zugesagt hast.", "fach": 1 },
+            { "text": "Erst die große Komplettlösung zeigen, dann die passende kleinere – beide echt.", "fach": 1 },
+            { "text": "Nach dem Preis schweigen und abwarten.", "fach": 1 },
+            { "text": "„Das große oder das mittlere Paket?“ – bevor du überhaupt entschieden hast.", "fach": 2 },
+            { "text": "„Der Preis gilt nur, wenn Sie jetzt sofort unterschreiben.“ – ohne Grund.", "fach": 2 },
+            { "text": "Nach deiner Zusage kommen „Einrichtung“ und „Versicherung“ dazu.", "fach": 2 }
+          ] },
+        { "art": "karte", "text": "Rote Tricks haben eine gemeinsame Schwäche: Sie brauchen ein schnelles Ja. Darum vier Abwehr-Fragen. Was passiert, wenn ich morgen entscheide? Was zahle ich insgesamt, alles eingerechnet? Welche Möglichkeit fehlt in dieser Frage – etwa „keins“? Und würde ich das auch ohne den Druck wollen? Wer sie ruhig stellt, braucht keinen Streit." },
+        { "art": "studie", "frage": "Schützt es, einen Trick vorher zu kennen?", "aufbau": "Eine Meta-Analyse wertete Studien zur sogenannten Impfung aus: Menschen lernten ein Gegenargument vorher in abgeschwächter Form kennen und hörten, wie man es widerlegt. Später kam der echte Überzeugungsversuch.", "ergebnis": "Wer so vorbereitet war, ließ sich im Schnitt schwerer umstimmen als ohne Vorbereitung. Nach etwa zwei Wochen ließ der Schutz nach.", "grenze": "Untersucht wurden vor allem Meinungen, kaum Verkaufsgespräche. Die Übertragung liegt nahe, ist aber nicht geprüft – darum: die Abwehr-Fragen kurz vor dem großen Kauf noch einmal ansehen.", "beleg": "B", "quellen": ["banas2010"] },
+        { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-3-02-b", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Im Küchenstudio, nach der Planung. Der Berater schiebt dir den Auftrag hin: „Machen wir ihn mit Eiche oder mit Granit fertig? Dann unterschreiben Sie hier.“ Du hast noch gar nicht entschieden, ob du hier kaufst.",
+          "frage": "Was passiert – und was antwortest du?",
+          "antworten": [
+            { "text": "Eine echte Wahl – also kurz überlegen und dich für Eiche entscheiden.", "wert": 0, "tendenz": "nachgeben", "warum": "Eine echte Wahl wäre es erst, wenn du schon kaufen willst. So rutschst du in eine Entscheidung, die du nicht getroffen hast." },
+            { "text": "Falsches Entweder-oder: „Weder noch – ob ich hier kaufe, entscheide ich erst.“", "wert": 2, "warum": "Die Frage verschweigt die dritte Möglichkeit. Du sprichst sie aus – ruhig, ohne Streit." },
+            { "text": "Falsches Entweder-oder: „Weiß ich noch nicht“ sagen und dann einfach weiter zuhören, was noch kommt.", "wert": 1, "warum": "Richtig erkannt. Ohne die fehlende Möglichkeit auszusprechen, kommt die nächste Entweder-oder-Frage sofort." },
+            { "text": "„Sie wollen mich doch nur reinlegen!“ – und gehen.", "wert": 0, "tendenz": "angreifen", "warum": "Ein Vorwurf bringt dir nichts. Die ruhige dritte Möglichkeit wirkt stärker." }
+          ],
+          "erklaerung": "Eine echte Entweder-oder-Frage ist Taktik: Sie macht die Wahl leichter, wenn du schon willst. Das falsche Entweder-oder verschweigt die Möglichkeit „keins“, um dich zu drängen – das ist rote Linie." },
+        { "art": "karte", "text": "Ein Wort zum Gesetz: Bei Verträgen an der Haustür, sonst außerhalb von Geschäftsräumen, am Telefon oder im Internet hast du in der Regel 14 Tage Widerrufsrecht, ohne Begründung. Beim gewöhnlichen Kauf im Laden nicht. Es gibt Ausnahmen: Eine Finanzierung ist meist auch im Laden widerrufbar, eine Maßanfertigung oft gar nicht. Darum im Laden: nichts unter Zeitdruck unterschreiben, das Angebot mitnehmen." },
+        { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-3-02-c", "faehigkeit": "ueberzeugen.einfluss", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Autohaus. Ihr seid fast einig. Der Verkäufer: „Ich gehe noch mal zu meinem Chef und kämpfe für Sie.“ Nach zehn Minuten: „Er macht 300 Euro weniger – aber nur, wenn Sie jetzt unterschreiben.“",
+          "frage": "Was ist hier los – und was tust du?",
+          "antworten": [
+            { "text": "Ein großzügiger Chef – gleich annehmen, bevor er es sich anders überlegt.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau dafür ist die Szene gebaut: Der Kampf erzeugt Dankbarkeit, die Frist den Druck." },
+            { "text": "Vielleicht gespielt, sicher künstliche Frist: „Danke. Bitte schriftlich – gilt es, gilt es morgen auch.“", "wert": 2, "warum": "Du nimmst das Angebot mit, ohne den Druck. Echte Angebote überleben eine Nacht." },
+            { "text": "Vielleicht gespielt: jetzt noch einmal 200 Euro mehr Nachlass fordern, solange er in Stimmung ist.", "wert": 1, "warum": "Richtig erkannt, und Verhandeln ist erlaubt. Die künstliche Frist bleibt aber stehen – erst schriftlich mitnehmen." },
+            { "text": "Dem Verkäufer sagen, dass du ihm kein Wort glaubst.", "wert": 0, "tendenz": "angreifen", "warum": "Du weißt es nicht sicher. Ruhig mitnehmen schützt dich, ohne zu streiten." }
+          ],
+          "erklaerung": "Ob der Kampf beim Chef echt war, kannst du nicht wissen. Musst du auch nicht: Die Frist „nur jetzt“ ist das Warnzeichen. Ein Angebot, das schriftlich bis morgen gilt, ist genauso viel wert – gilt es nicht, war es Druck." },
+        { "art": "wenndann", "anlass": "Dein nächster großer Kauf", "wenn": ["Wenn jemand sagt: „Nur noch heute“,", "Wenn ich zwischen zwei Möglichkeiten wählen soll, bevor ich mich entschieden habe,", "Wenn nach meinem Ja neue Kosten auftauchen,"], "dann": ["… frage ich: „Was passiert, wenn ich morgen komme?“", "… nenne ich die dritte: „Oder keins.“", "… entscheide ich neu, als hätte ich noch nicht zugesagt."] },
+        { "art": "experiment", "auftrag": "Vor deinem nächsten größeren Kauf – Vertrag, Möbel, Auto, Handwerker: Lies dir am Tag davor die vier Abwehr-Fragen durch und nimm sie auf einem Zettel oder im Handy mit.", "dauer": "woche", "nachfrage": "Ist dir ein Trick begegnet – und welche Frage hast du gestellt?" },
+        { "art": "reflexion", "frage": "Bei welchem Trick bist du schon einmal schwach geworden? Was würdest du heute sagen?", "insBuch": "saetze" }
+      ],
+      "regel": "Rote Tricks brauchen dein schnelles Ja – nimm dir Zeit und frag nach.",
+      "merkkarten": [
+        { "id": "ueberzeugen-3-02-m1", "frage": "Die vier Abwehr-Fragen?", "antwort": "Was passiert morgen? Was kostet alles? Welche Möglichkeit fehlt? Will ich das auch ohne Druck?" },
+        { "id": "ueberzeugen-3-02-m2", "frage": "Echtes oder falsches Entweder-oder?", "antwort": "Echt, wenn du schon willst. Falsch, wenn es das „keins“ verschweigt." },
+        { "id": "ueberzeugen-3-02-m3", "frage": "Widerrufsrecht beim Kauf im Laden?", "antwort": "In der Regel nicht – darum dort nichts unter Druck unterschreiben." }
+      ]
+    },
+    {
+      "id": "ueberzeugen-3-03", "bereich": "ueberzeugen", "stufe": 3, "nr": 3,
+      "titel": "Das Vorstellungsgespräch: sich zeigen ohne Show",
+      "faehigkeiten": ["ueberzeugen.profil", "ueberzeugen.vertrauen"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Zwei Meta-Analysen: Ehrliche Selbstdarstellung hängt mit besseren Bewertungen zusammen, geschönte im Mittel nicht. Getarntes Eigenlob wirkt unaufrichtig (Studienreihe). Der Aufbau der Beispiele ist Praxiswissen.",
+      "quellen": ["ho2021", "peck2017", "sezer2018", "praxis-ueberzeugen"],
+      "aha": "Im Vorstellungsgespräch gewinnt nicht die beste Show, sondern das beste Beispiel. Stärken ehrlich zeigen wirkt – Flunkern bringt im Schnitt nichts.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Ein bisschen Schönen gehört im Vorstellungsgespräch dazu – sonst hat man keine Chance.", "urteil": "falsch", "warum": "Eine Meta-Analyse fand: Geschönte Angaben hängen im Mittel praktisch nicht mit der Bewertung zusammen. Ehrlich herausgestellte Stärken dagegen schon. Und wer flunkert, muss es im Job durchhalten." },
+        { "art": "karte", "text": "Jede Stärke braucht ein Beispiel in vier Teilen: Lage (wo, wann), Aufgabe (was zu tun war), dein Tun (was genau du gemacht hast – „ich“, wo es deins war) und Ergebnis (was danach anders war). Drei solcher Geschichten decken die meisten Fragen ab. Bei Schwächen: eine echte nennen und sagen, was du dagegen tust. Grenzen offen zu sagen wirkt nicht schwach, sondern glaubwürdig." },
+        { "art": "geschichtenbau", "kopf": { "id": "ueberzeugen-3-03-a", "faehigkeit": "ueberzeugen.profil", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Bau eine Erfolgsgeschichte für dein nächstes Gespräch – ehrlich, mit deinem Anteil.",
+          "felder": [
+            { "name": "Lage", "hilfe": "Wo und wann? Ein Satz." },
+            { "name": "Aufgabe", "hilfe": "Was war das Problem oder das Ziel?" },
+            { "name": "Dein Tun", "hilfe": "Was hast du selbst gemacht? „Ich“, wo es deins war." },
+            { "name": "Ergebnis", "hilfe": "Was war danach anders – gern mit Zahl, wenn sie stimmt." }
+          ],
+          "muster": ["Lage: Letzten Winter im Lager unseres Betriebs. Aufgabe: Ständig fehlte Material, die Werkstatt stand. Mein Tun: Ich habe die Bestellungen ausgewertet und für zwanzig Teile Mindestbestände eingeführt. Ergebnis: Seit März hat die Werkstatt kein einziges Mal mehr auf Material gewartet."] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-3-03-b", "faehigkeit": "ueberzeugen.profil", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "„Was ist Ihre größte Schwäche?“ Welche Antwort ist ehrlich und stark?",
+          "antworten": [
+            { "text": "„Ich bin zu perfektionistisch und arbeite einfach zu viel, das sagen auch meine Kollegen immer.“", "wert": 0, "tendenz": "tarnen", "warum": "Eine getarnte Stärke – das durchschaut jeder, und es wirkt unaufrichtig." },
+            { "text": "„Vor großen Runden bin ich nervös. Ich bereite den Einstieg genau vor und melde mich inzwischen jedes Mal.“", "wert": 2, "warum": "Echte Schwäche, was du dagegen tust, und ein Zeichen für den Fortschritt." },
+            { "text": "„Da fällt mir ehrlich gesagt gerade nichts ein.“", "wert": 0, "tendenz": "ausweichen", "warum": "Wirkt unvorbereitet oder unehrlich – jeder hat Schwächen." },
+            { "text": "„Bei Tabellenprogrammen kenne ich nur die Grundlagen.“", "wert": 1, "warum": "Ehrlich und konkret. Es fehlt, was du dagegen tust." }
+          ] },
+        { "art": "buehne", "kopf": { "id": "ueberzeugen-3-03-c", "faehigkeit": "ueberzeugen.profil", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "ueberzeugen-v-0186", "einfluss": "fair" },
+          "auftrag": "Steh auf und beantworte die Frage „Erzählen Sie etwas über sich“ – mit deiner Vorstellung und einer Erfolgsgeschichte.",
+          "sekunden": 90, "publikum": "klein",
+          "stoerungen": ["„Und was genau war da Ihr Anteil?“", "Jemand schreibt mit und schaut nicht hoch.", "„Das klingt sehr gut – wo ist der Haken?“"],
+          "pruefliste": ["für wen und was du tust", "eine Geschichte mit Lage, Aufgabe, Tun, Ergebnis", "„ich“, wo es dein Anteil war", "nach der Störung ruhig weiter"] },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-3-03-d", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Mach aus der geschönten Antwort eine ehrliche, die trotzdem stark ist.",
+          "vorlage": "„Englisch? Verhandlungssicher, natürlich.“ (In Wahrheit: Mails schreiben klappt gut, Telefonate sind mühsam.)",
+          "kriterien": ["sagt, was stimmt", "nennt, was gut klappt, mit Beispiel", "nennt die Grenze und was du dagegen tust"],
+          "muster": ["„Mails auf Englisch schreibe ich täglich. Telefonate sind noch mühsam – dafür nehme ich gerade einen Abendkurs.“", "„Schriftlich gut, ich betreue zwei Lieferanten in England. Am Telefon brauche ich noch etwas länger.“"] },
+        { "art": "experiment", "auftrag": "Schreib drei Erfolgsgeschichten nach dem Bauplan auf und erzähl eine davon einer Vertrauensperson. Frag sie: Was ist hängen geblieben – und wo hast du „wir“ gesagt, wo „ich“ gemeint war?", "dauer": "woche", "nachfrage": "Welche deiner drei Geschichten kam am besten an – und warum?" },
+        { "art": "reflexion", "frage": "Welche deiner Stärken erwähnst du sonst nie, weil es sich wie Angeben anfühlt? Wie sagst du sie sachlich?", "insBuch": "erfolg" }
+      ],
+      "regel": "Zeig Stärken mit Beispielen und nenn Grenzen offen – Schönen bringt nichts.",
+      "merkkarten": [
+        { "id": "ueberzeugen-3-03-m1", "frage": "Die vier Teile einer Erfolgsgeschichte?", "antwort": "Lage, Aufgabe, dein Tun, Ergebnis." },
+        { "id": "ueberzeugen-3-03-m2", "frage": "Die Frage nach der Schwäche?", "antwort": "Eine echte nennen – und was du dagegen tust." },
+        { "id": "ueberzeugen-3-03-m3", "frage": "Lohnt sich Schönen?", "antwort": "Laut Meta-Analyse im Schnitt nicht. Ehrlich herausgestellte Stärken schon." }
+      ]
+    },
+    {
+      "id": "ueberzeugen-3-04", "bereich": "ueberzeugen", "stufe": 3, "nr": 4,
+      "titel": "Vor mehreren überzeugen",
+      "faehigkeiten": ["ueberzeugen.nutzen", "ueberzeugen.einwand", "ueberzeugen.abschluss"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Der Ablauf ist Praxiswissen; das Zuschneiden auf die Ziele des Gegenübers und das Gewinnen von Verbündeten stammen aus einem Praxisartikel. Belegt ist: Ein eingeordneter Nachteil macht glaubwürdiger – im Schnitt nur ein wenig.",
+      "quellen": ["praxis-ueberzeugen", "ashford2015", "allen1991", "okeefe1999"],
+      "aha": "Vor mehreren überzeugst du nicht „die Runde“, sondern mehrere Menschen mit verschiedenen Fragen. Wer sie vorher kennt, einzeln spricht und am Ende klar fragt, geht mit einer Entscheidung hinaus.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Du stellst im Vorstand deines Sportvereins einen Vorschlag vor: Die Hallenbelegung soll über einen gemeinsamen Online-Kalender laufen.", "schwach": "Zehn Minuten über alle Funktionen des Kalenders, dann: „Noch Fragen?“", "stark": "„Für die Kasse: acht Euro im Monat. Für die Trainer: keine Doppelbelegung mehr. Für die Schriftführerin: keine Liste mehr von Hand. Der Haken: Die Älteren brauchen eine Einweisung – die übernehme ich. Wollen wir es bis Ostern testen?“", "frage": "Welcher Vorschlag hat die besseren Chancen?", "unterschied": "Der erste erklärt das Werkzeug allen gleich. Der zweite spricht jeden mit seiner Frage an, nennt einen ehrlichen Nachteil samt Lösung und endet mit einer klaren Bitte." },
+        { "art": "karte", "text": "Vier Schritte vor mehreren. Vorher klären: Wer entscheidet, wer zahlt, wer muss damit arbeiten – und was will jeder? Die Wichtigsten vorher einzeln sprechen; niemand mag Überraschungen vor Publikum. In der Runde: Problem, Nutzen für jede Gruppe, ein ehrlicher Nachteil, ein Beleg. Einwände anerkennen und an die Runde geben. Zum Schluss eine klare Frage: Entscheidung oder nächster Schritt – wer, was, bis wann." },
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-3-04-a", "faehigkeit": "ueberzeugen.nutzen", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Wer will was hören? Ordne die Sätze zu.",
+          "faecher": ["wer entscheidet", "wer zahlt", "wer damit arbeitet"],
+          "karten": [
+            { "text": "„Das passt zu unserem Ziel, mehr Jugendliche in den Verein zu holen.“", "fach": 0 },
+            { "text": "„Wir testen es bis Ostern und entscheiden dann gemeinsam.“", "fach": 0 },
+            { "text": "„Acht Euro im Monat, kündbar zum Monatsende.“", "fach": 1 },
+            { "text": "„Dafür fallen die Druckkosten für die Aushänge weg.“", "fach": 1 },
+            { "text": "„Du siehst am Handy, ob die Halle frei ist.“", "fach": 2 },
+            { "text": "„Eintragen dauert eine Minute, ich zeige es jedem einmal.“", "fach": 2 }
+          ] },
+        { "art": "buehne", "kopf": { "id": "ueberzeugen-3-04-b", "faehigkeit": "ueberzeugen.abschluss", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "ueberzeugen-v-0187", "einfluss": "fair" },
+          "auftrag": "Steh auf und stell einen Vorschlag vor einer Runde vor – Problem, Nutzen für jeden, ein Nachteil, ein Beleg – und ende mit einer klaren Frage nach der Entscheidung.",
+          "sekunden": 120, "publikum": "klein",
+          "stoerungen": ["„Das haben wir vor Jahren schon mal probiert.“", "Zwei flüstern miteinander.", "„Und wer soll das bezahlen?“"],
+          "pruefliste": ["Nutzen für mindestens zwei Gruppen genannt", "einen ehrlichen Nachteil eingeordnet", "Einwand anerkannt statt verteidigt", "mit einer klaren Frage geendet"] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-3-04-c", "faehigkeit": "ueberzeugen.einwand", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Mitten in deinem Vorschlag sagt ein Vorstandsmitglied: „Das haben wir vor Jahren schon mal probiert. Hat nicht geklappt.“ Was antwortest du?",
+          "antworten": [
+            { "text": "„Das ist lange her – inzwischen hat sich die Technik komplett geändert, das kann man nicht vergleichen.“", "wert": 0, "tendenz": "verteidigen", "warum": "Du wischst seine Erfahrung weg – vor allen. Jetzt muss er sie verteidigen." },
+            { "text": "„Gut, dass du das sagst. Woran ist es damals gescheitert?“", "wert": 2, "warum": "Anerkannt und gefragt. Seine Erfahrung wird zum Beitrag – und du erfährst, worauf es ankommt." },
+            { "text": "„Dann lassen wir es vielleicht lieber.“", "wert": 0, "tendenz": "einknicken", "warum": "Ein einzelner Einwand ist noch kein Nein der Runde." },
+            { "text": "„Verstehe. Ich kläre das bis zur nächsten Sitzung.“", "wert": 1, "warum": "Respektvoll, aber du vertagst, was sich jetzt mit einer Frage klären ließe." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "ueberzeugen-3-04-d", "faehigkeit": "ueberzeugen.abschluss", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Bring den Ablauf vor mehreren in eine gute Reihenfolge.",
+          "eintraege": [
+            { "text": "Vorher mit den Wichtigsten einzeln sprechen.", "warum": "Keiner wird vor Publikum überrascht, und du kennst die Einwände schon." },
+            { "text": "Das Problem in einem Satz nennen.", "warum": "Erst wenn alle das Problem sehen, hat eine Lösung einen Wert." },
+            { "text": "Nutzen für jede Gruppe, ein Nachteil, ein Beleg.", "warum": "Jeder hört seine Antwort, und der Nachteil macht dich glaubwürdig." },
+            { "text": "Einwände anerkennen und an die Runde geben.", "warum": "So wird aus einem Gegner ein Mitdenker." },
+            { "text": "Klar fragen: Entscheidung oder nächster Schritt – wer, was, bis wann.", "warum": "Ohne diese Frage geht die Runde mit einem Nicken auseinander – und nichts passiert." }
+          ] },
+        { "art": "mission", "ref": "ueberzeugen-m-10" }
+      ],
+      "regel": "Kenn die Fragen jedes Einzelnen – und frag am Ende klar nach der Entscheidung.",
+      "merkkarten": [
+        { "id": "ueberzeugen-3-04-m1", "frage": "Drei Rollen, die du vorher klärst?", "antwort": "Wer entscheidet, wer zahlt, wer damit arbeitet." },
+        { "id": "ueberzeugen-3-04-m2", "frage": "Ein Einwand vor allen?", "antwort": "Anerkennen, nachfragen, an die Runde geben." },
+        { "id": "ueberzeugen-3-04-m3", "frage": "Womit endet der Vorschlag?", "antwort": "Mit einer klaren Frage: Entscheidung oder nächster Schritt – wer, was, bis wann." }
+      ],
+      "mission": "ueberzeugen-m-10"
+    },
+    {
+      "id": "ueberzeugen-3-05", "bereich": "ueberzeugen", "stufe": 3, "nr": 5,
+      "titel": "Dein Stil: überzeugen, wie es zu dir passt",
+      "faehigkeiten": ["ueberzeugen.haltung", "ueberzeugen.profil"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Belegt ist: Anpassen an Person und Lage hängt mit Verkaufserfolg zusammen (Meta-Analyse), und in einer Einzelstudie lagen weder die Stillsten noch die Geselligsten vorn. Die vier Stil-Bilder sind ein Denkmodell.",
+      "quellen": ["grant2013", "franke2006", "okeefe2021"],
+      "aha": "Es gibt nicht den einen Überzeuger-Typ. Wer seine Stärke kennt und weiß, wo sie kippt, überzeugt auf seine Art – ruhig, begeistert oder genau.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Überzeugen können vor allem die Lauten und Charmanten.", "urteil": "falsch", "warum": "In einer Studie mit 340 Telefonverkäufern lagen weder die Geselligsten noch die Stillsten vorn, sondern die in der Mitte. Und quer durch viele Studien zählt vor allem, ob jemand zuhört und sich anpasst – das kann jeder Typ." },
+        { "art": "karte", "text": "Vier Stile, keiner besser. Der Zuhörer fragt viel und versteht genau – Gefahr: Er vergisst, am Ende zu fragen. Die Erklärerin ordnet und belegt – Gefahr: zu viele Einzelheiten. Der Begeisterte steckt an – Gefahr: Er überhört Einwände. Die Ruhige wirkt verlässlich – Gefahr: Ihr Nutzen bleibt unausgesprochen. Dein Stil ist deine Stärke. Üben lohnt an der Stelle, wo er kippt." },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-3-05-a", "faehigkeit": "ueberzeugen.haltung", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Lena Brandt ist zurückhaltend und sehr genau. Sie soll zum ersten Mal einem Kunden ein Angebot vorstellen. Welcher Rat passt am besten?",
+          "antworten": [
+            { "text": "„Werd lockerer und fang mit einem Witz an, dann ist das Eis gleich gebrochen.“", "wert": 0, "tendenz": "verbiegen", "warum": "Ein fremder Stil wirkt gespielt. Lena verliert ihre Stärke und gewinnt nichts." },
+            { "text": "„Nutz deine Genauigkeit: drei gute Fragen, ein Beleg. Schreib dir die Abschlussfrage auf.“", "wert": 2, "warum": "Stärke nutzen, die Kippstelle absichern – so überzeugt sie auf ihre Art." },
+            { "text": "„Lass lieber Tarek präsentieren, der redet doch gern.“", "wert": 0, "tendenz": "vermeiden", "warum": "Nimmt Lena die Übung – und dem Kunden eine genaue Ansprechpartnerin." },
+            { "text": "„Bereite dich gut vor, dann klappt das schon.“", "wert": 1, "warum": "Stimmt, ist aber allgemein. Gezielter hilft ihr, die eigene Kippstelle zu kennen: das Fragen am Ende." }
+          ] },
+        { "art": "werte", "auftrag": "Was soll man über dich sagen, nachdem du jemanden überzeugt hast? Wähl die drei wichtigsten.", "karten": ["ehrlich", "gut vorbereitet", "hat zugehört", "begeisternd", "klar", "geduldig", "fair im Preis", "sachkundig", "hat mir die Entscheidung gelassen", "verlässlich"], "waehle": 3 },
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-3-05-b", "faehigkeit": "ueberzeugen.profil", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Welche Kippstelle gehört zu welchem Stil?",
+          "faecher": ["Zuhörer", "Erklärerin", "Begeisterter", "Ruhige"],
+          "karten": [
+            { "text": "Das Gespräch war gut – aber niemand hat nach dem nächsten Schritt gefragt.", "fach": 0 },
+            { "text": "Fünf Fragen hintereinander, der Kunde fühlt sich ausgefragt.", "fach": 0 },
+            { "text": "Der Kunde wollte eine Antwort und bekam zwanzig Minuten Hintergrund.", "fach": 1 },
+            { "text": "Drei Belege, wo einer gereicht hätte.", "fach": 1 },
+            { "text": "Der Einwand des Kunden ging in der Freude über die Idee unter.", "fach": 2 },
+            { "text": "Mehr versprochen, als sich halten lässt.", "fach": 2 },
+            { "text": "Alles stimmte, aber der Nutzen wurde nie ausgesprochen.", "fach": 3 },
+            { "text": "Der Kunde wusste nicht, ob du den Auftrag überhaupt willst.", "fach": 3 }
+          ] },
+        { "art": "schreibreise", "titel": "Dein bester Moment", "anleitung": "Denk an einen Moment, in dem du jemanden überzeugt hast – beruflich oder privat, groß oder klein. Schreib kurz auf:", "fragen": ["Was war die Lage, und wen hast du überzeugt?", "Was hast du getan, das gewirkt hat?", "Welche deiner Stärken steckte darin?", "Wo hättest du beinahe etwas verschenkt?"], "minuten": 4, "insBuch": "erfolg" },
+        { "art": "reflexion", "frage": "Schreib einen Satz: „So überzeuge ich – und darauf achte ich dabei: …“", "insBuch": "saetze" }
+      ],
+      "regel": "Nutz deine Stärke und sichere die Stelle ab, an der sie kippt.",
+      "merkkarten": [
+        { "id": "ueberzeugen-3-05-m1", "frage": "Gibt es den geborenen Überzeuger?", "antwort": "Nein. Zuhören und Anpassen kann jeder Stil – sie zählen mehr als Geselligkeit." },
+        { "id": "ueberzeugen-3-05-m2", "frage": "Die Kippstelle des Zuhörers?", "antwort": "Er vergisst, am Ende um den nächsten Schritt zu bitten." }
+      ]
+    }
+  ]
+}

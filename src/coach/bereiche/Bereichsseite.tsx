@@ -33,7 +33,7 @@ const ABSCHNITTE: { art: WissensArt; titel: string; text: string }[] = [
 const BELEG_ORDNUNG = { A: 0, B: 1, P: 2, D: 3, U: 4 }
 const EINFLUSS = { fair: 'fair', taktik: 'Taktik', rot: 'unfair – erkennen und abwehren' }
 
-function Eintrag({ e }: { e: WissensEintrag }) {
+export function Eintrag({ e }: { e: WissensEintrag }) {
   const name = useName()
   return (
     <div className="dc-karte-flach dc-spalte" style={{ gap: 6, borderColor: e.einfluss === 'rot' ? 'var(--dc-schlecht)' : undefined }} data-dc-wissen={e.id}>

@@ -1,0 +1,276 @@
+{
+  "einheiten": [
+    {
+      "id": "flirten-2-01", "bereich": "flirten", "stufe": 2, "nr": 1,
+      "titel": "Das Gespräch tragen",
+      "faehigkeiten": ["flirten.gespraech", "flirten.zeigen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass tiefere Gespräche angenehmer sind als erwartet und dass Offenheit und Mögen zusammenhängen, ist in Experimenten und einer Meta-Analyse gestützt. Die drei Ebenen als Werkzeug sind Praxiswissen.",
+      "quellen": ["kardas2022", "collins1994", "huang2017", "praxis-flirten"],
+      "aha": "Ein Gespräch trägt, wenn es eine Stufe tiefer geht als Wetter und Beruf – Schritt für Schritt, im Wechsel, und nur so weit, wie der andere mitgeht.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Fremde sollten sich über persönliche Fragen unterhalten statt über Belangloses. Wie erlebten sie das danach – verglichen mit ihrer Erwartung?", "optionen": ["peinlicher als erwartet", "etwa so wie erwartet", "angenehmer und verbindender als erwartet"], "richtig": 2, "loesung": "Angenehmer und verbindender als erwartet", "aufloesung": "Die meisten hatten befürchtet, das Gegenüber wolle lieber an der Oberfläche bleiben. Es war meist interessierter, als sie dachten. Die Scheu vor Tiefe sitzt eher bei dir als beim anderen." },
+        { "art": "karte", "titel": "Drei Ebenen", "text": "Ebene eins: Fakten – „Was machst du beruflich?“ Ebene zwei: Vorlieben und Gründe – „Was gefällt dir daran?“ Ebene drei: Erleben und Werte – „Was hat dich da hingebracht?“ Ein Gespräch trägt, wenn ihr euch im Wechsel eine Ebene nach unten bewegt: Du fragst, hörst zu, legst etwas Eigenes in ähnlicher Tiefe dazu. Antwortet jemand knapp, bleib oben – das ist auch eine Antwort." },
+        { "art": "anschluss", "kopf": { "id": "flirten-2-01-a", "faehigkeit": "flirten.gespraech", "stufe": 4, "kanal": "koennen", "einfluss": "fair" },
+          "von": "Eine Person aus dem Wanderverein",
+          "aussage": "„Ich arbeite in der Buchhaltung. Klingt trocken, ich weiß. Am Wochenende bin ich darum lieber draußen.“",
+          "kriterien": ["greift das „lieber draußen“ auf", "geht eine Ebene tiefer, ohne zu bohren", "legt etwas Eigenes dazu oder lässt Raum dafür"],
+          "muster": ["„Draußen als Ausgleich – was gibt dir das, was dir die Woche nicht gibt?“", "„Mir geht's ähnlich, ich sitze auch viel. Ist es eher die Ruhe oder die Bewegung, die du suchst?“", "„Trocken hab ich nicht gedacht. Seit wann zieht es dich am Wochenende raus?“"] },
+        { "art": "geschichte", "titel": "Die Frage nach dem Brot", "figur": "Jule Marek", "text": "Jule erzählte Bruno von einem Abend im Kochkurs. Ein Teilnehmer fragte sie den ganzen Abend Fakten ab: Beruf, Wohnort, Geschwister. Sie antwortete brav und war froh, als es vorbei war. Eine Woche später fragte eine andere Teilnehmerin nur: „Warum backst du eigentlich so gern Brot?“ Jule erzählte von ihrer Großmutter, die Frage kam zurück, und plötzlich war es halb elf. „Die erste Person wusste mehr über mich“, sagte Jule. „Die zweite kannte mich besser.“", "frage": "Welche Frage stellst du sonst als erste – und welche würde eine Ebene tiefer gehen?" },
+        { "art": "auswahl", "kopf": { "id": "flirten-2-01-b", "faehigkeit": "flirten.gespraech", "stufe": 5, "kanal": "wissen" },
+          "frage": "Auf einer Feier erzählt dir jemand, dass er gerade die Stelle gewechselt hat. Du fragst nach, er antwortet zweimal nur kurz und schaut zur Küche. Was tust du?",
+          "antworten": [
+            { "text": "Eine tiefere Frage stellen: Was ihm im alten Job gefehlt hat – das öffnet ihn sicher.", "wert": 0, "tendenz": "bohren", "warum": "Zwei knappe Antworten und ein Blick weg sind ein Bündel. Tiefer fragen heißt hier: über seine Zeichen hinweggehen." },
+            { "text": "Freundlich lösen: „Ich lass dich mal zur Küche.“", "wert": 2, "warum": "Tiefe geht nur im Wechsel. Wer knapp antwortet, will gerade nicht – du lässt ihn leicht gehen." },
+            { "text": "Von deinem eigenen Jobwechsel erzählen, damit er auftaut.", "wert": 1, "warum": "Etwas Eigenes anzubieten ist gut. Bei so vielen Zeichen weg ist ein freundlicher Abschied aber klarer." },
+            { "text": "Fragen, ob er immer so wortkarg ist.", "wert": 0, "tendenz": "angreifen", "warum": "Das macht ihn zum Problem. Er schuldet dir kein langes Gespräch." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "flirten-2-01-c", "faehigkeit": "flirten.zeigen", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Mach aus der Fakten-Liste eine Frage, die eine Ebene tiefer geht – und leg etwas Eigenes dazu.",
+          "vorlage": "„Wo wohnst du? Seit wann? Und was machst du so?“",
+          "kriterien": ["eine Frage statt drei", "fragt nach Erleben oder Gründen", "ein Stück von dir in ähnlicher Tiefe"],
+          "muster": ["„Ich bin vor zwei Jahren hergezogen und finde immer noch neue Ecken. Wo bist du hier am liebsten?“", "„Mich hat der Garten hergelockt, ehrlich gesagt. Was hält dich in der Stadt?“"] },
+        { "art": "mission", "ref": "flirten-m-06" }
+      ],
+      "regel": "Eine Ebene tiefer, im Wechsel – und nur so weit, wie der andere mitgeht.",
+      "merkkarten": [
+        { "id": "flirten-2-01-m1", "frage": "Die drei Ebenen eines Gesprächs?", "antwort": "Fakten – Vorlieben und Gründe – Erleben und Werte." },
+        { "id": "flirten-2-01-m2", "frage": "Wann bleibst du an der Oberfläche?", "antwort": "Wenn der andere knapp antwortet oder sich abwendet – das ist auch eine Antwort." }
+      ],
+      "mission": "flirten-m-06"
+    },
+    {
+      "id": "flirten-2-02", "bereich": "flirten", "stufe": 2, "nr": 2,
+      "titel": "Die leichte Einladung",
+      "faehigkeiten": ["flirten.zeigen", "flirten.haltung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass andere direkten Bitten öfter nachkommen als gedacht und dass ein Nein schwerer fällt, als Fragende meinen, ist in mehreren Studien gestützt. Das schwere Nein ist auch für romantische Annäherungen gezeigt; wie oft andere Ja sagen, nur für Bitten im Alltag. Der Aufbau der Einladung ist Praxiswissen.",
+      "quellen": ["flynn2008", "bohns2016", "bohns2019", "praxis-flirten"],
+      "aha": "Wer einlädt, unterschätzt meist zwei Dinge: wie oft andere Ja sagen – und wie schwer ihnen ein Nein fällt. Also: mutig fragen und den Ausweg gleich mitliefern.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Nach dem dritten Abend in der Fotogruppe willst du eine Person einladen, mit der du dich jedes Mal gut unterhältst.", "schwach": "„Wir könnten ja mal irgendwann was machen, wenn du Lust hast, also nur wenn es passt, oder so.“", "stark": "„Ich würde gern mal mit dir fotografieren gehen – Samstagvormittag am Hafen? Wenn du keine Lust hast, ist das völlig okay.“", "frage": "Welche Einladung ist leichter zu beantworten – mit Ja und mit Nein?", "unterschied": "Die erste ist so vage, dass niemand weiß, worauf er antwortet. Die zweite nennt was, wann und wo – und baut das Nein gleich mit ein." },
+        { "art": "karte", "titel": "Was, wann, Ausweg", "text": "Eine leichte Einladung hat drei Teile. Was: etwas Kleines, das Reden erlaubt – Kaffee, Spaziergang, Markt. Wann: ein Vorschlag, kein „irgendwann“. Ausweg: im selben Satz, nicht als Nachsatz unter Druck. Klein heißt auch kurz: Eine Stunde lässt sich leichter zusagen als ein ganzer Abend. Und ein Ja machst du sofort konkret: Ort, Zeit, Nummer." },
+        { "art": "rangfolge", "kopf": { "id": "flirten-2-02-a", "faehigkeit": "flirten.zeigen", "stufe": 4, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Nach dem Chor willst du eine Person einladen. Ordne die Einladungen von leicht zu beantworten bis schwer.",
+          "eintraege": [
+            { "text": "„Magst du Sonntag mit mir auf einen Kaffee? Sag ruhig Nein, wenn's nicht passt.“", "warum": "Klein, konkret, Ausweg im selben Satz." },
+            { "text": "„Lust auf einen Kaffee demnächst?“", "warum": "Freundlich und klein, aber ohne Zeitpunkt – die Antwort bleibt in der Schwebe." },
+            { "text": "„Wir sollten mal essen gehen, ich kenn da was Schönes.“", "warum": "Größer als nötig und als Feststellung formuliert – ein Nein fühlt sich an wie Widerspruch." },
+            { "text": "„Ich hab schon zwei Karten fürs Konzert Samstag gekauft. Du kommst doch mit?“", "warum": "Die gekauften Karten machen aus der Einladung eine Schuld. Wer absagt, kostet dich Geld." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "flirten-2-02-b", "faehigkeit": "flirten.haltung", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Mach aus der Einladung eine kleine, konkrete mit leichtem Ausweg.",
+          "vorlage": "„Wir müssen unbedingt mal einen ganzen Tag zusammen an den See fahren!“",
+          "kriterien": ["kleiner und kürzer", "ein konkreter Vorschlag", "Ausweg im selben Satz"],
+          "muster": ["„Hast du Lust, nächsten Samstag eine Runde um den See zu laufen? Wenn nicht, alles gut.“", "„Ich geh Sonntag ans Wasser, auf einen Kaffee am Steg. Magst du mitkommen – oder lieber nicht?“"] },
+        { "art": "auswahl", "kopf": { "id": "flirten-2-02-c", "faehigkeit": "flirten.zeigen", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du lädst ein, die Person sagt: „Ja, gern – meld dich!“ Was ist jetzt der beste nächste Schritt?",
+          "antworten": [
+            { "text": "„Schön! Sonntag um drei im Café am Markt? Dann tauschen wir gleich Nummern.“", "wert": 2, "warum": "Ein Ja wird sofort konkret: Zeit, Ort, Kontakt. So muss keiner hinterherrätseln." },
+            { "text": "Abwarten und erst in ein paar Tagen schreiben, damit es nicht zu eifrig wirkt.", "wert": 0, "tendenz": "taktieren", "warum": "Ein Spiel mit der Uhr. Wer Ja gesagt hat, freut sich über Klarheit – nicht über Warten." },
+            { "text": "„Super, ich meld mich!“ – und am Abend schreiben.", "wert": 1, "warum": "Freundlich und ehrlich. Gleich festmachen spart beiden eine Runde Nachrichten." },
+            { "text": "„Wirklich? Sag nicht nur aus Höflichkeit Ja …“", "wert": 0, "tendenz": "kleinmachen", "warum": "Ein Ja nachzuprüfen, zwingt sie, es zu verteidigen. Ein Ja darf ein Ja sein." }
+          ] },
+        { "art": "mission", "ref": "flirten-m-09" }
+      ],
+      "regel": "Was, wann, Ausweg – und ein Ja sofort festmachen.",
+      "merkkarten": [
+        { "id": "flirten-2-02-m1", "frage": "Die drei Teile einer leichten Einladung?", "antwort": "Was (klein), wann (ein Vorschlag), Ausweg (im selben Satz)." },
+        { "id": "flirten-2-02-m2", "frage": "Was unterschätzen Einladende meist?", "antwort": "Wie oft andere Ja sagen – und wie schwer ihnen ein Nein fällt." }
+      ],
+      "mission": "flirten-m-09"
+    },
+    {
+      "id": "flirten-2-03", "bereich": "flirten", "stufe": 2, "nr": 3,
+      "titel": "Schreiben, ohne zu taktieren",
+      "faehigkeiten": ["flirten.dranbleiben", "flirten.ansprechen"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Zu Antwortzeiten und Nachrichten-Regeln gibt es kaum belastbare Forschung. Gestützt ist: Flirten wird oft übersehen, und besonderes, klares Interesse wird eher erwidert als ein Spiel mit Distanz. Die Warnzeichen für Liebesbetrug stammen von der Verbraucherzentrale.",
+      "quellen": ["praxis-flirten", "hall2015", "eastwick2007", "vz-lovescam"],
+      "aha": "Wer mit der Uhr spielt, versteckt genau das, was der andere wissen will. Schreib, wenn du Lust hast, sag, was du meinst – und hol das Gespräch bald aus dem Chat in ein Treffen.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Antworte nie sofort – sonst wirkst du zu interessiert.", "urteil": "falsch", "warum": "Dafür gibt es keine Belege. Interesse wird ohnehin oft übersehen, und Wartespiele erzeugen Unsicherheit statt Nähe. Antworte, wenn du Zeit und Lust hast – nicht nach einer Regel." },
+        { "art": "karte", "titel": "Drei Regeln fürs Schreiben", "text": "Eins: Eine Nachricht, dann ist der andere dran. Kein Nachschieben, kein „???“. Zwei: Sag, was du meinst – „Ich schreib gern mit dir“ statt Rätsel. Drei: Nach ein paar guten Runden das Treffen vorschlagen. Ob es passt, zeigt sich in der Begegnung, nicht im Chat. Und kommt nichts mehr: einmal locker nachfassen, dann Ruhe." },
+        { "art": "wortwahl", "kopf": { "id": "flirten-2-03-a", "faehigkeit": "flirten.dranbleiben", "stufe": 4, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Ihr schreibt seit einer Woche, es macht Spaß. Welche Nachricht bringt euch weiter?",
+          "antworten": [
+            { "text": "„Ich schreib echt gern mit dir. Lust, das bei einem Spaziergang weiterzuführen? Kein Muss.“", "wert": 2, "warum": "Interesse klar gesagt, ein konkreter nächster Schritt, Ausweg dabei." },
+            { "text": "„Und, was machst du so am Wochenende?“", "wert": 1, "warum": "Eine offene Tür, aber ohne Vorschlag. Vielleicht kommt das Treffen – vielleicht schreibt ihr noch drei Wochen." },
+            { "text": "„Du bist die Einzige, mit der ich gerade schreibe. Ich glaub, das mit uns ist was Besonderes.“", "wert": 0, "tendenz": "ueberziehen", "warum": "Nach einer Woche Chat ist das zu viel. Es legt dem anderen eine Last auf, die er nicht bestellt hat." },
+            { "text": "Erst mal ein paar Stunden nicht antworten, damit es spannend bleibt.", "wert": 0, "tendenz": "taktieren", "warum": "Ein Spiel mit der Uhr. Spannung durch Unsicherheit ist keine Nähe." }
+          ] },
+        { "art": "kunstgriff", "kopf": { "id": "flirten-2-03-b", "faehigkeit": "flirten.dranbleiben", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Seit drei Wochen schreibst du mit einem Kontakt aus einer App. Er schreibt täglich, schwärmt schon von eurer Zukunft, ein Videoanruf klappt nie. Jetzt sitzt er angeblich im Ausland fest und bittet dich um Geld fürs Rückflugticket.",
+          "frage": "Was ist das – und was tust du?",
+          "antworten": [
+            { "text": "Warnzeichen für Liebesbetrug: kein Geld schicken, mit jemandem darüber reden, Chats sichern.", "wert": 2, "warum": "Schnelle Liebesschwüre, kein Video, dann eine Notlage mit Geldbitte – das typische Muster. Geld an jemanden, den du nie getroffen hast, ist tabu." },
+            { "text": "Ihm erst einen kleineren Betrag schicken, um zu sehen, ob er es ernst meint.", "wert": 0, "tendenz": "nachgeben", "warum": "Ein kleiner Betrag ist der Einstieg – danach kommt die nächste Notlage." },
+            { "text": "Auf einem Videoanruf bestehen, bevor du irgendetwas entscheidest.", "wert": 1, "warum": "Ein guter Prüfstein – aber kein sicherer Beweis. Geld gibt es auch nach einem Video nicht." },
+            { "text": "Ihm vorwerfen, ein Betrüger zu sein, und ihn öffentlich bloßstellen.", "wert": 0, "tendenz": "angreifen", "warum": "Verständlicher Ärger. Besser: Kontakt abbrechen, Beweise sichern, melden und Anzeige erstatten." }
+          ],
+          "erklaerung": "Beim Liebesbetrug werden Gefühle gezielt aufgebaut, um an Geld zu kommen. Warnzeichen: schnelle Liebesschwüre, auffällig schöne Fotos, Treffen platzen immer wieder, dann eine Notlage. Abwehr: nie Geld an Unbekannte, Bilder-Rückwärtssuche, mit Vertrauten reden; wer betroffen ist, bricht ab, sichert die Chats und erstattet Anzeige." },
+        { "art": "umformulieren", "kopf": { "id": "flirten-2-03-c", "faehigkeit": "flirten.ansprechen", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Mach aus der Nachrichtenflut eine einzige Nachricht, die freundlich ist und den Ball abgibt.",
+          "vorlage": "„Hey“ – „Bist du da?“ – „Hab ich was Falsches gesagt?“ – „???“",
+          "kriterien": ["eine Nachricht statt vier", "kein Vorwurf", "lässt dem anderen Raum"],
+          "muster": ["„Hey, kein Stress mit der Antwort – ich hab nur an unser Gespräch über die Radtour gedacht. Melde dich, wenn du magst.“", "„Falls du noch Lust auf den Kaffee hast, sag Bescheid. Sonst alles Gute!“"] },
+        { "art": "experiment", "auftrag": "Achte eine Woche lang darauf, ob du bei Nachrichten taktierst – absichtlich warten, kürzer schreiben, als du willst, Gefühle verstecken. Schreib einmal genau das, was du meinst.", "dauer": "woche", "nachfrage": "Wie ging es dir mit der ehrlichen Nachricht – und wie kam sie an?" },
+        { "art": "mission", "ref": "flirten-m-07" }
+      ],
+      "regel": "Eine Nachricht, ehrlich gemeint – dann ein Treffen vorschlagen.",
+      "merkkarten": [
+        { "id": "flirten-2-03-m1", "frage": "Was hilft mehr als Wartespiele?", "antwort": "Schreiben, wenn du Lust hast, und sagen, was du meinst – Interesse wird ohnehin oft übersehen." },
+        { "id": "flirten-2-03-m2", "frage": "Woran erkennst du Liebesbetrug?", "antwort": "Schnelle Liebesschwüre, nie ein Treffen oder Video, dann eine Notlage mit Geldbitte." }
+      ],
+      "mission": "flirten-m-07"
+    },
+    {
+      "id": "flirten-2-04", "bereich": "flirten", "stufe": 2, "nr": 4,
+      "titel": "Das erste Treffen",
+      "faehigkeiten": ["flirten.gespraech", "flirten.haltung", "flirten.signale"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Sicherheitsregeln und der Aufbau eines ersten Treffens sind Praxiswissen. Gestützt ist: Anziehung entsteht in der Begegnung, und Menschen unterschätzen nach einem Gespräch, wie sehr ihr Gegenüber sie mochte.",
+      "quellen": ["praxis-flirten", "joel2017", "boothby2018", "vz-lovescam"],
+      "aha": "Ein gutes erstes Treffen ist kurz, sicher und offen: belebter Ort, eigener Heimweg, ein klares Ende. Und wenn es dir gefällt, sagst du es – dein Gefühl danach ist oft strenger als die Wirklichkeit.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "flirten-2-04-a", "faehigkeit": "flirten.haltung", "stufe": 4, "kanal": "wissen" },
+          "frage": "Ihr habt euch über eine App kennengelernt und wollt euch zum ersten Mal sehen. Welcher Vorschlag passt am besten?",
+          "antworten": [
+            { "text": "Ein Kaffee am Samstagnachmittag im Café am Markt, erst mal eine Stunde.", "wert": 2, "warum": "Belebt, tagsüber, kurz – beide können leicht gehen oder verlängern." },
+            { "text": "Ein Abendessen bei dir zu Hause, du kochst ja gern – das ist doch viel persönlicher.", "wert": 0, "tendenz": "ueberziehen", "warum": "Beim ersten Treffen in die Wohnung ist für viele unsicher und kaum zu verlassen. Ein öffentlicher Ort nimmt beiden den Druck." },
+            { "text": "Ein Kinoabend – dann gibt es keine peinlichen Pausen.", "wert": 1, "warum": "Sicher und entspannt, nur redet ihr kaum. Ein Kaffee vorher oder danach würde es ergänzen." },
+            { "text": "Eine Tageswanderung zu zweit, damit ihr richtig Zeit habt.", "wert": 0, "warum": "Lang, abgelegen, kein leichter Ausweg. Fürs Kennenlernen erst mal zu groß." }
+          ] },
+        { "art": "karte", "titel": "Sicher und entspannt", "text": "Belebter Ort, tagsüber oder früher Abend, eigene An- und Abreise. Sag jemandem, wo du bist. Kein Geld, keine Ausweisdaten, keine Wohnungsadresse beim ersten Mal. Plane kurz – verlängern geht immer, abbrechen ist schwerer. Und im Gespräch: aufgreifen, etwas von dir erzählen, Zeichen im Bündel lesen. Das gilt in beide Richtungen: Mach es auch dem anderen leicht, sich sicher zu fühlen." },
+        { "art": "zuordnen", "kopf": { "id": "flirten-2-04-b", "faehigkeit": "flirten.haltung", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Macht das ein erstes Treffen eher sicherer und leichter – oder eher heikel?",
+          "faecher": ["eher sicherer und leichter", "eher heikel"],
+          "karten": [
+            { "text": "Jede Person kommt und geht auf eigenem Weg.", "fach": 0 },
+            { "text": "Jemand, dem du vertraust, weiß, wo du bist.", "fach": 0 },
+            { "text": "Ein kurzes Videogespräch vorher.", "fach": 0 },
+            { "text": "Du holst die Person zu Hause ab.", "fach": 1 },
+            { "text": "Der Vorschlag, danach „noch kurz“ zu dir zu gehen.", "fach": 1 },
+            { "text": "Immer wieder nachschenken, „damit es lockerer wird“.", "fach": 1 },
+            { "text": "Ein klarer Zeitrahmen: „Ich hab bis fünf.“", "fach": 0 }
+          ] },
+        { "art": "gespraechskarte", "anlass": "Ein erstes Treffen, das bald ansteht – oder das du dir wünschst.", "beispiel": { "ziel": "Eine Stunde gut reden und herausfinden, ob ich die Person wiedersehen möchte.", "erster": "„Hallo! Schön, dass es geklappt hat. Hast du gut hergefunden?“", "wunsch": "Wenn es mir gefällt: „Ich hab mich gern mit dir unterhalten – ich würde das gern wiederholen.“", "planB": "Wenn es nicht passt: „Danke für die Stunde, mach's gut“ – und eigener Heimweg." } },
+        { "art": "dialog", "kopf": { "id": "flirten-2-04-c", "faehigkeit": "flirten.gespraech", "stufe": 6, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Die letzte Viertelstunde",
+            "figur": "ein Kontakt aus einer App",
+            "lage": "Erstes Treffen in einem Café am Nachmittag. Ihr redet seit einer Stunde, es war schön. Die Person schaut auf die Uhr.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "„Oh, schon so spät. Ich muss gleich los, ich bin noch mit meiner Schwester verabredet.“",
+                "wahl": [
+                  { "text": "„Dann will ich dich nicht aufhalten. Ich hab mich gern mit dir unterhalten – das würde ich gern wiederholen.“", "wert": 2, "weiter": "k2", "rueck": "Du lässt sie gehen und sagst klar, dass es dir gefallen hat – ohne eine Antwort zu verlangen." },
+                  { "text": "„Schade. Kannst du nicht absagen? Wir sind gerade so gut im Gespräch.“", "wert": 0, "tendenz": "beharren", "weiter": "ende2", "rueck": "Sie hat einen Plan genannt. Wer ihn kleinredet, macht den Abschied schwer." },
+                  { "text": "„Klar, mach's gut!“", "wert": 1, "weiter": "k2", "rueck": "Freundlich. Dass es dir gefallen hat, bleibt aber unsichtbar." }
+                ] },
+              { "id": "k2", "sagt": "Sie lächelt. „War schön mit dir. Ich weiß nur noch nicht, wie meine nächsten Wochen aussehen.“",
+                "wahl": [
+                  { "text": "„Verstehe. Meld dich gern, wenn du Lust hast – ich freu mich.“", "wert": 2, "weiter": "ende1", "rueck": "Ihr „weiß noch nicht“ ist offen. Du drängst nicht auf einen Termin, und der nächste Schritt liegt bei ihr." },
+                  { "text": "„Dann machen wir gleich was fest – Dienstag oder Mittwoch?“", "wert": 0, "tendenz": "druck", "weiter": "ende2", "rueck": "Sie hat gerade gesagt, dass sie es nicht weiß. Eine Auswahl zwischen zwei Tagen übergeht das." },
+                  { "text": "„Hm, okay. Sag halt Bescheid.“", "wert": 1, "weiter": "ende1", "rueck": "Respektiert ihr Zögern. Ein Satz mehr Wärme würde zeigen, dass du dich freust." }
+                ] },
+              { "id": "ende1", "sagt": "Ihr verabschiedet euch vor dem Café, jede Person geht ihren Weg.", "ende": "Ihr Zögern nicht übergangen, den nächsten Schritt bei ihr gelassen. Ob sie sich meldet, liegt bei ihr. Was dazu gehört: sagen, dass es dir gefallen hat – in einem Satz, ohne Forderung." },
+              { "id": "ende2", "sagt": "Sie lächelt etwas gezwungen, zahlt und geht schnell.", "ende": "Wer ein Ende oder ein Zögern verhandelt, macht aus einem schönen Treffen ein unbequemes. Beim nächsten Mal: gehen lassen, sagen, dass es schön war – und den Ball abgeben." }
+            ],
+            "prinzipien": ["kurz planen, gehen lassen", "sagen, dass es gefallen hat", "ein Zögern nicht übergehen", "den nächsten Schritt nicht erzwingen"]
+          } },
+        { "art": "mission", "ref": "flirten-m-10" }
+      ],
+      "regel": "Belebt, kurz, eigener Heimweg – und sag, wenn es dir gefällt.",
+      "merkkarten": [
+        { "id": "flirten-2-04-m1", "frage": "Vier Dinge für ein sicheres erstes Treffen?", "antwort": "Belebter Ort, eigene An- und Abreise, jemandem Bescheid sagen, kurz planen." },
+        { "id": "flirten-2-04-m2", "frage": "„Ich weiß noch nicht“ am Ende des Treffens – was tust du?", "antwort": "Freundlich offenlassen, den nächsten Schritt nicht erzwingen." }
+      ],
+      "mission": "flirten-m-10"
+    },
+    {
+      "id": "flirten-2-05", "bereich": "flirten", "stufe": 2, "nr": 5,
+      "titel": "Mythen der Verführungsratgeber",
+      "faehigkeiten": ["flirten.haltung", "flirten.signale"], "dauerMin": 7, "beleg": "U",
+      "belegHinweis": "Für die Maschen der Verführungsratgeber gibt es keine Wirksamkeitsbelege. Gestützt ist: Wer sie bevorzugt, hat eher feindselige Haltungen (Befragungen, Zusammenhänge), und ehrliche, direkte Einstiege schneiden besser ab.",
+      "quellen": ["hallcanterberry2011", "strauss2005", "scottodicarlo2023", "kleinke1986", "eastwick2007"],
+      "aha": "Die Maschen der Verführungsratgeber wirken nicht durch Anziehung, sondern durch Druck, Verunsicherung und Zahl. Wer sie kennt, erkennt sie – bei anderen und an sich selbst.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Es ist ein Zahlenspiel: Sprich genug Leute an, dann klappt es irgendwann.", "urteil": "falsch", "warum": "Hinter dem „Zahlenspiel“ steht, Menschen als Versuche zu zählen – ohne Blick auf Ort, Zeichen und Nein. Wer viele Fremde in kurzer Zeit anspricht, trifft zwangsläufig auch Menschen, die das als Belästigung erleben. Üben heißt: oft in Kontakt gehen, wo es passt – nicht möglichst viele abarbeiten." },
+        { "art": "studie", "frage": "Wer findet die drängenden Strategien der Verführungsratgeber gut?", "aufbau": "Zwei Befragungen mit Studierenden und Erwachsenen fragten, wie sehr Menschen solche Strategien gut finden oder nutzen würden – und erfassten zugleich Haltungen zu den Geschlechtern.", "ergebnis": "Wer feindselige, abwertende Haltungen hatte, fand die drängenden Strategien eher gut. Ob die Maschen wirken, hat die Studie nicht geprüft – Belege dafür gibt es auch sonst keine.", "grenze": "Befragungen zeigen Zusammenhänge, keine Ursachen. Ob jemand die Maschen wirklich anwendet, wurde nicht beobachtet.", "beleg": "B", "quellen": ["hallcanterberry2011"] },
+        { "art": "kunstgriff", "kopf": { "id": "flirten-2-05-a", "faehigkeit": "flirten.haltung", "stufe": 5, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Auf einer Party sagt ein Gast zu einer Freundin von dir: „Für jemanden mit so wenig Make-up siehst du echt okay aus.“ Dann wartet er grinsend.",
+          "frage": "Was passiert hier – und wie hilfst du ihr am besten?",
+          "antworten": [
+            { "text": "Verdeckte Abwertung: Sie soll sich verunsichert um ihn bemühen. Ihr zeigen, dass du es auch so hörst, und sie fragen, ob ihr weitergeht.", "wert": 2, "warum": "Du benennst die Masche und gibst ihr Rückhalt und einen leichten Ausweg – sie entscheidet." },
+            { "text": "Ein unbeholfenes Kompliment – er meint es sicher nett.", "wert": 0, "tendenz": "verharmlosen", "warum": "Der eingebaute Stich ist kein Versehen, sondern das Werkzeug der Masche." },
+            { "text": "Ihm knapp sagen: „Das war eher ein halbes Kompliment.“", "wert": 1, "warum": "Klar benannt. Ob sie das von dir will, weiß nur sie – erst sie zu fragen, schont sie mehr." },
+            { "text": "Ihn laut vor allen auslachen.", "wert": 0, "tendenz": "angreifen", "warum": "Du stellst dich an ihre Seite – aber jemanden vor allen bloßzustellen, ist selbst ein unfairer Kunstgriff und rückt sie mit ins Rampenlicht." },
+            { "text": "Abwarten, wie sie reagiert, und dich raushalten.", "wert": 0, "warum": "Sie ist vielleicht froh über einen Blick von dir. Rückhalt kostet dich wenig." }
+          ],
+          "erklaerung": "Die verdeckte Abwertung („Negging“) mischt Lob mit einem Stich, damit der andere sich um Anerkennung bemüht. Sie zielt aufs Selbstwertgefühl und ist eine rote Linie. Abwehr: den Stich benennen („Das war jetzt eher ein halbes Kompliment“), gehen – und im Freundeskreis Rückhalt geben, ohne die Bühne zu übernehmen." },
+        { "art": "zuordnen", "kopf": { "id": "flirten-2-05-b", "faehigkeit": "flirten.signale", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Ehrliches Flirten oder eine Masche, die nur erkannt werden soll?",
+          "faecher": ["ehrlich", "Masche – erkennen und abwehren"],
+          "karten": [
+            { "text": "„Ich fand dich vorhin in der Runde sympathisch und wollte Hallo sagen.“", "fach": 0 },
+            { "text": "Absichtlich drei Tage schweigen, damit der andere unsicher wird.", "fach": 1 },
+            { "text": "„Komm, wir gehen kurz raus, weg von deinen Freunden.“", "fach": 1 },
+            { "text": "„Ich unterhalte mich gern mit dir. Magst du mir deine Nummer geben – oder lieber nicht?“", "fach": 0 },
+            { "text": "Ein eingeübter „spontaner“ Satz über ein erfundenes Erlebnis.", "fach": 1 },
+            { "text": "Nach einem Zögern freundlich gehen.", "fach": 0 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "flirten-2-05-c", "faehigkeit": "flirten.haltung", "stufe": 6, "kanal": "wissen" },
+          "frage": "Sven war auf einem Wochenendseminar „Flirten wie ein Profi“. Er sagt: „Die Techniken funktionieren, ich hab's selbst gesehen!“ Was antwortest du?",
+          "antworten": [
+            { "text": "„Wenn es funktioniert, ist es doch egal, wie.“", "wert": 0, "tendenz": "verharmlosen", "warum": "Auch was kurz wirkt, kann auf Druck und Verunsicherung beruhen. Ob etwas fair ist, entscheidet nicht der Erfolg." },
+            { "text": "„Würde es auch klappen, wenn sie wüsste, was du da tust? Wenn nicht, ist es eine Masche.“", "wert": 2, "warum": "Der Transparenz-Test trennt ehrliches Flirten von Maschen – ohne Sven abzuwerten." },
+            { "text": "„Lass mal sehen, was ihr da gelernt habt.“", "wert": 1, "warum": "Neugier ist in Ordnung, und hinsehen hilft beim Erkennen. Mit dem Transparenz-Test dazu wird ein Gespräch daraus." },
+            { "text": "„So was machen doch nur Typen, die sonst keine abbekommen. Lass den Quatsch einfach bleiben.“", "wert": 0, "tendenz": "abwerten", "warum": "Eine Abwertung beendet das Gespräch, bevor Sven nachdenkt." }
+          ] },
+        { "art": "reflexion", "frage": "Welcher Ratschlag übers Flirten ist dir schon begegnet, der den Transparenz-Test nicht besteht? Was würdest du heute darauf sagen?", "insBuch": "saetze" }
+      ],
+      "regel": "Würde es auch wirken, wenn der andere es durchschaut? Wenn nicht: Finger weg.",
+      "merkkarten": [
+        { "id": "flirten-2-05-m1", "frage": "Der Transparenz-Test fürs Flirten?", "antwort": "Würde es auch wirken, wenn der andere genau wüsste, was ich tue?" },
+        { "id": "flirten-2-05-m2", "frage": "Worauf beruhen die Maschen der Verführungsratgeber?", "antwort": "Auf Druck, Verunsicherung, Täuschung und dem Übergehen eines Nein – Belege für ihre Wirkung gibt es nicht." }
+      ]
+    },
+    {
+      "id": "flirten-2-06", "bereich": "flirten", "stufe": 2, "nr": 6,
+      "titel": "Deine Leiter",
+      "faehigkeiten": ["flirten.dranbleiben", "flirten.ansprechen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Trainings mit wiederholten Begegnungen senkten in älteren Studien die Angst vor Verabredungen; eine Woche Gespräche mit Fremden senkte die Furcht vor Ablehnung. Dass beim Üben die widerlegte Befürchtung zählt, stammt aus der Forschung zur Angstbehandlung – eine Übertragung.",
+      "quellen": ["allen1998", "sandstrom2022", "craske2014"],
+      "aha": "Mut wächst nicht durch Warten, sondern Stufe für Stufe. Deine Leiter beginnt dort, wo es kribbelt, aber noch geht – und jede Stufe prüft eine Befürchtung.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "flirten-2-06-a", "faehigkeit": "flirten.dranbleiben", "stufe": 4, "kanal": "wissen" },
+          "frage": "Du willst mutiger werden beim Kennenlernen. Womit fängst du am besten an?",
+          "antworten": [
+            { "text": "Mit etwas, das kribbelt, aber machbar ist.", "wert": 2, "warum": "Spürbar, aber nicht überwältigend – so lernt der Kopf, dass die Befürchtung nicht eintritt." },
+            { "text": "Mit dem Schwersten, dann ist alles andere leicht.", "wert": 0, "tendenz": "ueberfordern", "warum": "Zu große Sprünge enden oft in Abbruch – und bestätigen die Angst." },
+            { "text": "Erst warten, bis du dich sicher fühlst.", "wert": 0, "tendenz": "vermeiden", "warum": "Sicherheit kommt meist erst mit dem Tun. Warten lässt die Angst wachsen." },
+            { "text": "Mit etwas ganz Leichtem, das gar nicht kribbelt.", "wert": 1, "warum": "Ein sanfter Start ist in Ordnung. Lernen tust du aber dort, wo es ein bisschen aufregend ist." }
+          ] },
+        { "art": "karte", "titel": "Was beim Üben zählt", "text": "Vor jeder Stufe schreibst du auf, was du befürchtest – „Sie wird genervt gucken“ – und wie wahrscheinlich es dir scheint. Danach: Was ist passiert? Gelernt wird aus dem Unterschied. Wichtig ist nicht, dass die Aufregung dabei sinkt, sondern dass du bleibst und hinschaust. Und: Jede Stufe hält die Regeln des Bereichs ein – passender Ort, leichter Ausweg, Nein heißt Nein." },
+        { "art": "leiter", "auftrag": "Bau deine Kennenlern-Leiter: drei bis sechs Stufen von leicht bis schwer, jede mit deiner Anspannung von 0 bis 100. Starte bei 30 bis 40. Jede Stufe an einem Ort, an dem Gespräche üblich sind.", "beispiel": ["Im Kurs einer neuen Person einen Satz zur Lage sagen (30)", "Auf einer Feier jemanden mit Namen ansprechen, den ich nicht kenne (45)", "Einer Bekannten aus dem Verein ein ehrliches Kompliment machen (50)", "Nach einem guten Gespräch nach der Nummer fragen – mit Ausweg (65)", "Zu einem Kaffee einladen (80)"] },
+        { "art": "rangfolge", "kopf": { "id": "flirten-2-06-b", "faehigkeit": "flirten.ansprechen", "stufe": 5, "kanal": "wissen" },
+          "frage": "Ordne diese Stufen einer Leiter von leicht nach schwer – so, wie sie für die meisten ansteigen.",
+          "eintraege": [
+            { "text": "Einer Person im Kurs freundlich zulächeln.", "warum": "Kein Wort nötig, kein Risiko – ein guter Einstieg." },
+            { "text": "Einen Satz zur Lage sagen, ohne Flirtabsicht.", "warum": "Erster Kontakt mit Worten, aber ohne Einsatz." },
+            { "text": "Sich mit Namen vorstellen und ein Gespräch beginnen.", "warum": "Jetzt zeigst du dich – und es kann kurz bleiben oder wachsen." },
+            { "text": "Sagen, dass du dich gern unterhältst.", "warum": "Du zeigst Interesse offen." },
+            { "text": "Zu einem Kaffee einladen.", "warum": "Die größte Stufe: eine Frage, auf die ein Ja oder Nein kommt." }
+          ] },
+        { "art": "kritiker", "kopf": { "id": "flirten-2-06-c", "faehigkeit": "flirten.dranbleiben", "stufe": 6, "kanal": "koennen" },
+          "satz": "„Die anderen können das einfach. Ich bin dafür nicht gemacht.“",
+          "kriterien": ["unterscheidet Talent und Übung", "nennt eine erste, kleine Stufe", "bleibt glaubwürdig"],
+          "muster": ["„Wer es leicht kann, hat es meist oft gemacht. Ich fange mit Stufe eins an: im Kurs einen Satz zur Lage.“", "„Ich hab es bisher selten gemacht – das sagt noch nichts darüber, was ich kann. Diese Woche probiere ich die erste Stufe.“"] },
+        { "art": "woop", "anlass": "Die erste Stufe deiner Leiter in dieser Woche.", "beispiel": { "wunsch": "Am Donnerstag im Kochkurs spreche ich eine Person an, mit der ich noch nicht geredet habe.", "ergebnis": "Ich merke, dass ich das kann – und vielleicht wird es ein nettes Gespräch.", "hindernis": "Ich stehe am Herd und denke: Die hat sicher keine Lust auf mich.", "plan": "Wenn ich das denke, dann sage ich: „Hallo, ich bin {name}. Wie läuft's bei dir mit dem Teig?“" } },
+        { "art": "reflexion", "frage": "Welche Befürchtung steht über deiner ersten Stufe – und woran würdest du merken, dass sie nicht eintritt?" }
+      ],
+      "regel": "Dort anfangen, wo es kribbelt, aber noch geht – und vorher die Befürchtung notieren.",
+      "merkkarten": [
+        { "id": "flirten-2-06-m1", "frage": "Wo beginnt eine gute Leiter?", "antwort": "Bei einer Anspannung von etwa 30 bis 40 – spürbar, aber machbar." },
+        { "id": "flirten-2-06-m2", "frage": "Was lernst du auf jeder Stufe?", "antwort": "Den Unterschied zwischen Befürchtung und dem, was wirklich passiert." }
+      ]
+    }
+  ]
+}

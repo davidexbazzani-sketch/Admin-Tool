@@ -1,0 +1,781 @@
+{
+  "eintraege": [
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0106", "faehigkeit": "ueberzeugen.einfluss", "stufe": 4, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Du willst einen Handwerksbetrieb als Kunden gewinnen. Welche Form von „erst geben“ ist fair?",
+      "antworten": [
+        { "text": "Eine kurze Prüfung der Datensicherung schenken – egal, ob ihr zusammenkommt.", "wert": 2, "warum": "Echte Hilfe ohne Rechnung. Sie wirkt auch, wenn der andere weiß, dass du gern Kunde hättest." },
+        { "text": "Ein Geschenk mitbringen und beim nächsten Treffen daran erinnern, wie großzügig du warst.", "wert": 0, "tendenz": "schuld", "warum": "Aus dem Geschenk wird ein Schuldschein – rote Linie." },
+        { "text": "Gar nichts geben, damit es nicht berechnend wirkt.", "wert": 1, "warum": "Vorsichtig und nicht falsch. Echte Hilfe ohne Bedingung ist aber kein Trick – sie zeigt, was du kannst." },
+        { "text": "Einen Gratismonat anbieten, der sich still verlängert, wenn er nicht kündigt.", "wert": 0, "tendenz": "verschleiern", "warum": "Das Geschenk ist eine Falle. Wer es merkt, traut dir nichts mehr." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0107", "faehigkeit": "ueberzeugen.einfluss", "stufe": 5, "kanal": "wissen", "einfluss": "taktik" },
+      "frage": "Du verkaufst über eine Kleinanzeige drei Gartenstühle. Zwei Interessenten haben sich gemeldet, einer kommt heute Abend. Was darfst du dem anderen sagen?",
+      "antworten": [
+        { "text": "„Es gibt noch einen Interessenten, der heute Abend kommt.“", "wert": 2, "warum": "Echte Knappheit, sachlich gesagt – das ist Taktik ohne Lüge. Der andere entscheidet selbst." },
+        { "text": "„Fünf Leute wollen die Stühle, Sie müssen sich sofort entscheiden.“", "wert": 0, "tendenz": "erfinden", "warum": "Erfundene Zahl und erfundener Druck – rote Linie." },
+        { "text": "Nichts davon sagen, das wäre unfair.", "wert": 1, "warum": "Geht, aber nötig ist es nicht: Eine wahre Information darf der andere kennen." },
+        { "text": "„Wenn Sie nicht gleich zusagen, verkaufe ich sie lieber jemandem, der sie zu schätzen weiß.“", "wert": 0, "tendenz": "abwerten", "warum": "Aus der Information wird eine Drohung mit Spitze – das schadet mehr, als es nützt." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0108", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+      "frage": "Welcher Satz überschreitet die rote Linie?",
+      "antworten": [
+        { "text": "„Ach, Sie sind auch aus dem Sauerland? Ich auch!“ – obwohl du nie dort warst.", "wert": 2, "warum": "Erfundene Gemeinsamkeit ist gespielte Nähe – rote Linie, nur zum Erkennen." },
+        { "text": "„Wir sind beide Handwerksbetriebe hier im Ort.“ – und es stimmt.", "wert": 0, "warum": "Ein echtes Wir zu nennen ist Taktik, keine rote Linie." },
+        { "text": "„Ihre Nachbarin hat die Anlage auch.“ – und sie hat zugestimmt, dass du es sagst.", "wert": 0, "warum": "Echte Bewährtheit mit Erlaubnis – fair." },
+        { "text": "„Ich mag Ihren Laden, wirklich.“ – und du meinst es so, sagst es aber vor allem, um zu gefallen.", "wert": 1, "warum": "Ehrlich gemeint, aber mit Absicht eingesetzt: noch keine Lüge, doch auf dem Weg zur Schmeichelei mit Methode." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0109", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen", "einfluss": "taktik" },
+      "frage": "Du bietest Gartenpflege an: Komplettpaket 120 Euro im Monat, Grundpaket 60. Die Kundin braucht eigentlich nur Rasen und Hecke. Wie zeigst du die Angebote?",
+      "antworten": [
+        { "text": "Nur das Komplettpaket zeigen, das Grundpaket erst, wenn sie fragt.", "wert": 0, "tendenz": "verschweigen", "warum": "Du verschweigst das passende Angebot. Merkt sie es, ist das Vertrauen weg." },
+        { "text": "Beide zeigen und sagen: „Für Rasen und Hecke reicht das Grundpaket.“", "wert": 2, "warum": "Kontrast mit echten Angeboten – und du empfiehlst, was passt. Das wirkt auch durchschaut." },
+        { "text": "Ein drittes, absichtlich schlechtes Paket dazuerfinden, damit das große besser aussieht.", "wert": 0, "tendenz": "koeder", "warum": "Ein erfundenes Lockvogel-Paket – und mit echten Angeboten ließ sich der Köder-Effekt oft nicht einmal zeigen." },
+        { "text": "Nur das Grundpaket zeigen.", "wert": 1, "warum": "Ehrlich und passend. Sie weiß aber nicht, dass es mehr gäbe, falls sie es später braucht." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0110", "faehigkeit": "ueberzeugen.einfluss", "stufe": 4, "kanal": "wissen" },
+      "auftrag": "Welches Prinzip steckt dahinter?",
+      "faecher": ["Sympathie", "Verbindlichkeit", "Einheit", "Bewährtheit"],
+      "karten": [
+        { "text": "„Schöne Werkstatt – haben Sie die selbst eingerichtet?“ (ehrlich gemeint)", "fach": 0 },
+        { "text": "Der Verkäufer hört lange zu und lacht über deine Witze.", "fach": 0 },
+        { "text": "„Sie hatten gesagt, Planbarkeit ist Ihnen am wichtigsten.“", "fach": 1 },
+        { "text": "„Sie wollten sich bis Freitag melden – passt es noch?“", "fach": 1 },
+        { "text": "„Wir sind beide aus demselben Verein.“", "fach": 2 },
+        { "text": "„Als Handwerker unter Handwerkern sage ich Ihnen ehrlich …“", "fach": 2 },
+        { "text": "„Dreißig Familien im Viertel haben schon umgestellt.“", "fach": 3 },
+        { "text": "„Das ist bei uns das meistgekaufte Modell.“", "fach": 3 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0111", "faehigkeit": "ueberzeugen.einfluss", "stufe": 5, "kanal": "wissen" },
+      "auftrag": "Fair, Taktik oder rote Linie?",
+      "faecher": ["fair", "Taktik", "rote Linie"],
+      "karten": [
+        { "text": "Eine echte Referenz nennen, die zugestimmt hat.", "fach": 0 },
+        { "text": "Einen Tipp schenken, ohne etwas dafür zu verlangen.", "fach": 0 },
+        { "text": "Echte Knappheit deutlich betonen.", "fach": 1 },
+        { "text": "Das echte Wir hervorheben: derselbe Ort, dasselbe Handwerk.", "fach": 1 },
+        { "text": "Eine Gemeinsamkeit erfinden, um Nähe zu schaffen.", "fach": 2 },
+        { "text": "„Die meisten Kunden nehmen dieses Paket“ – ohne es zu wissen.", "fach": 2 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0112", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Welche Abwehr passt zu welchem Trick?",
+      "faecher": ["erfundene Frist", "Nachschlag nach dem Ja", "Ja-Kette", "Geschenk als Schuldschein"],
+      "karten": [
+        { "text": "„Was passiert, wenn ich morgen komme?“", "fach": 0 },
+        { "text": "„Schreiben Sie mir das Angebot mit Datum auf.“", "fach": 0 },
+        { "text": "„Was zahle ich insgesamt, alles eingerechnet?“", "fach": 1 },
+        { "text": "„Dann entscheide ich neu, als hätte ich nicht zugesagt.“", "fach": 1 },
+        { "text": "„Ja, sparen will ich. Ob dieser Vertrag passt, prüfe ich trotzdem.“", "fach": 2 },
+        { "text": "„Ich merke, ich sage gerade nur Ja. Ich steige hier mal aus.“", "fach": 2 },
+        { "text": "„Danke für das Entgegenkommen. Entscheiden werde ich nach der Sache.“", "fach": 3 },
+        { "text": "„Das Geschenk nehme ich gern an – eine Zusage ist es nicht.“", "fach": 3 }
+      ] },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0113", "faehigkeit": "ueberzeugen.einfluss", "stufe": 4, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Vertreter an der Haustür: „Ach, Sie haben auch einen Hund! Meiner heißt genauso.“ Später erzählt er beim Nachbarn dasselbe – mit einem anderen Namen.",
+      "frage": "Was passiert hier?",
+      "antworten": [
+        { "text": "Gespielte Nähe: Freundlich bleiben und das Angebot getrennt von der Sympathie prüfen.", "wert": 2, "warum": "Die Gemeinsamkeit ist erfunden. Das Angebot kann trotzdem gut oder schlecht sein – entscheiden solltest du nach der Sache." },
+        { "text": "Ein Zufall, so etwas kommt vor.", "wert": 0, "tendenz": "glauben", "warum": "Beim Nachbarn hieß der Hund anders – das ist kein Zufall." },
+        { "text": "Gespielte Nähe: dem Mann sofort die Tür vor der Nase zumachen und ihn bei den Nachbarn öffentlich bloßstellen.", "wert": 0, "tendenz": "angreifen", "warum": "Erkannt – aber Bloßstellen ist ein Angriff und bringt dir nichts. Nicht unterschreiben genügt." },
+        { "text": "Sympathie ist eine faire Taktik, also ist alles in Ordnung.", "wert": 0, "warum": "Echte Sympathie ja. Erfundene Gemeinsamkeiten sind rote Linie." },
+        { "text": "Gespielte Nähe: kurz „Kein Interesse“ sagen und die Tür schließen.", "wert": 1, "warum": "Gut erkannt und dein gutes Recht. Freundlich bleiben und das Angebot sachlich prüfen kostet dich aber auch nichts." }
+      ],
+      "erklaerung": "Wir mögen Menschen, die uns ähneln – darum wird Ähnlichkeit gern erfunden. Die Abwehr ist schlicht: Freundlichkeit genießen, Entscheidung trennen. „Netter Mensch – passt das Angebot trotzdem?“" },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0114", "faehigkeit": "ueberzeugen.einfluss", "stufe": 5, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Am Telefon: „Fast alle in Ihrer Straße haben schon zu uns gewechselt. Sie gehören zu den Letzten.“ Du kennst drei Nachbarn – keiner hat gewechselt.",
+      "frage": "Was ist das – und was tust du?",
+      "antworten": [
+        { "text": "Bewährtheit – das ist eine faire Information, also überlegen.", "wert": 0, "warum": "Bewährtheit ist nur fair, wenn sie stimmt. Hier spricht alles dagegen." },
+        { "text": "Erfundene Bewährtheit: „Nennen Sie mir zwei Nachbarn, die ich fragen kann.“", "wert": 2, "warum": "Du verlangst Prüfbares. Kommt nichts, ist die Sache klar." },
+        { "text": "Erfundene Bewährtheit – einfach auflegen.", "wert": 1, "warum": "Richtig erkannt, und auflegen ist dein gutes Recht. Die Prüffrage entlarvt es noch deutlicher." },
+        { "text": "„Dann will ich nicht der Letzte sein.“", "wert": 0, "tendenz": "nachgeben", "warum": "Genau darauf zielt der Satz: auf die Angst, allein übrig zu bleiben." }
+      ],
+      "erklaerung": "„Alle machen das“ wirkt, weil wir uns an anderen orientieren. Darum wird es erfunden. Die Abwehr: nach Namen oder Belegen fragen, die du selbst prüfen kannst." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0115", "faehigkeit": "ueberzeugen.einfluss", "stufe": 5, "kanal": "wissen", "einfluss": "taktik" },
+      "lage": "Du suchst eine Wohnung bis 900 Euro. Die Maklerin zeigt dir zuerst eine für 1.300, dann eine für 980: „Die ist dagegen doch ein Schnäppchen.“ Beide Wohnungen sind echt.",
+      "frage": "Was passiert hier – und wie prüfst du?",
+      "antworten": [
+        { "text": "Kontrast: Die 980 gegen deine eigene Grenze von 900 prüfen – nicht gegen die 1.300.", "wert": 2, "warum": "Kontrast mit echten Angeboten ist Taktik. Die Abwehr: dein Maßstab ist dein Budget, nicht die Wohnung davor." },
+        { "text": "Eine rote Linie – sofort gehen.", "wert": 0, "warum": "Beide Wohnungen sind echt. Das ist Taktik, kein Betrug – prüfen reicht." },
+        { "text": "Die 980 nehmen, die Maklerin hat ja recht: Verglichen mit 1.300 ist das wirklich günstig.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau so wirkt Kontrast: Der Vergleich verschiebt deinen Maßstab." },
+        { "text": "Kontrast – nachfragen, ob es auch etwas unter 900 gibt.", "wert": 1, "warum": "Gut, das bringt dich zurück zu deinem Bedarf. Dazu gehört, die 980 ehrlich gegen dein Budget zu halten." }
+      ],
+      "erklaerung": "Was neben etwas Teurem steht, wirkt günstiger. Das ist Taktik ohne Lüge, solange beide Angebote echt sind. Die Abwehr: jedes Angebot gegen den eigenen Bedarf prüfen, nicht gegen das daneben." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0116", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Anruf vom Stromanbieter: „Sie zahlen doch auch nicht gern zu viel, oder?“ – „Nein.“ – „Und Umwelt ist Ihnen wichtig?“ – „Ja.“ – „Dann schicke ich Ihnen den neuen Vertrag zu, einverstanden?“",
+      "frage": "Was passiert hier?",
+      "antworten": [
+        { "text": "Eine Ja-Kette: „Ja, das ist mir wichtig. Ob Ihr Vertrag passt, prüfe ich selbst – schriftlich.“", "wert": 2, "warum": "Du benennst, was stimmt, und steigst aus. Ein Ja zu Werten ist kein Ja zum Vertrag." },
+        { "text": "Ein freundliches Gespräch – „Ja, schicken Sie ruhig.“", "wert": 0, "tendenz": "nachgeben", "warum": "Genau dafür ist die Kette gebaut: Nach zwei Ja fühlt sich ein Nein wie ein Widerspruch an." },
+        { "text": "Eine Ja-Kette: „Nein, danke“ sagen und auflegen.", "wert": 1, "warum": "Richtig erkannt und dein gutes Recht. Wer den Vertrag doch prüfen will, verlangt ihn schriftlich ohne Zusage." },
+        { "text": "Taktik – Fragen zu stellen ist doch immer erlaubt, gerade wenn man den Bedarf herausfinden möchte.", "wert": 0, "warum": "Echte Bedarfsfragen ja. Fragen, auf die nur Ja passt, damit ein Nein wie Widerspruch wirkt, sind rote Linie." }
+      ],
+      "erklaerung": "Die Ja-Kette sammelt harmlose Zustimmungen, um sie in eine Zusage umzudeuten. Die Abwehr: die Kette benennen und Werte vom Vertrag trennen." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0117", "faehigkeit": "ueberzeugen.einfluss", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Sonntagabend, du hast dich ausgesperrt. Der Schlüsseldienst am Telefon nannte „ab 80 Euro“. Vor Ort: „Das Schloss ist ein Spezialfall. 450 Euro, sofort zahlbar, sonst fahre ich wieder.“",
+      "frage": "Was ist hier los – und was tust du?",
+      "antworten": [
+        { "text": "Eine Notlage wird ausgenutzt: Preis schriftlich verlangen und nur das Öffnen beauftragen, nichts zusätzlich.", "wert": 2, "warum": "Du kannst nicht weg – darum nur das Nötigste, alles schriftlich. Den Rest klärst du später in Ruhe." },
+        { "text": "Zahlen, was er sagt – du willst ja rein.", "wert": 0, "tendenz": "nachgeben", "warum": "Verständlich, aber genau darauf zählt er: dass du in der Not nicht prüfst." },
+        { "text": "Ihn wegschicken und im Auto schlafen.", "wert": 1, "warum": "Konsequent, aber teuer für dich. Nur das Nötigste schriftlich beauftragen schützt dich besser." },
+        { "text": "Ihn laut beschimpfen, bis er nachgibt.", "wert": 0, "tendenz": "angreifen", "warum": "Streit in der Notlage macht dich nicht stärker. Ruhig und schriftlich wirkt besser." }
+      ],
+      "erklaerung": "Wer nicht wegkann, wird gedrückt – das ist rote Linie. Die Abwehr: nur das Nötigste beauftragen, Preis schriftlich, Quittung mit Einzelposten, später in Ruhe prüfen lassen." },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0118", "faehigkeit": "ueberzeugen.einfluss", "stufe": 4, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus der vagen Bewährtheit eine echte, prüfbare.",
+      "vorlage": "„Alle sind total zufrieden mit uns.“",
+      "kriterien": ["eine echte Zahl oder ein Name mit Erlaubnis", "prüfbar", "keine Übertreibung"],
+      "muster": ["„Zwölf Betriebe im Landkreis arbeiten mit uns. Zwei davon dürfen Sie gern anrufen.“", "„Herr Petersen ist seit sechs Jahren Kunde – fragen Sie ihn gern, was gut läuft und was nicht.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0119", "faehigkeit": "ueberzeugen.einfluss", "stufe": 5, "kanal": "koennen", "einfluss": "taktik" },
+      "auftrag": "Du verkaufst privat ein Klavier; ein zweiter Interessent kommt morgen wirklich. Sag es dem ersten sachlich, ohne Druck zu machen.",
+      "vorlage": "„Sie müssen sich jetzt sofort entscheiden, sonst ist es weg!“",
+      "kriterien": ["nennt die echte Lage", "kein erfundener Druck", "lässt die Entscheidung beim anderen"],
+      "muster": ["„Morgen um zehn kommt noch jemand. Wenn Sie es wollen, sagen Sie mir bis dahin Bescheid.“", "„Ehrlich gesagt: Morgen schaut es sich noch jemand an. Ich halte es Ihnen gern bis heute Abend.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0120", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Erinnere Nadine Köhler fair an das, was sie selbst gesagt hat – mit Raum, es heute anders zu sehen.",
+      "vorlage": "„Sie haben doch selbst gesagt, dass Ihnen Sicherheit wichtig ist. Dann können Sie jetzt nicht Nein sagen.“",
+      "kriterien": ["wiederholt nur, was sie wirklich gesagt hat", "fragt, ob es noch gilt", "kein Festnageln"],
+      "muster": ["„Beim letzten Mal sagten Sie, Sicherheit sei Ihnen wichtiger als der Preis. Gilt das noch?“", "„Sie hatten Planbarkeit als Wichtigstes genannt. Ist das noch so – oder hat sich etwas geändert?“"] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0121", "faehigkeit": "ueberzeugen.einfluss", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Der Verkäufer sagt: „Nur noch heute zu diesem Preis!“ Ordne deine Reaktionen – die stärkste zuerst.",
+      "eintraege": [
+        { "text": "„Was passiert, wenn ich morgen komme?“ – und eine Nacht darüber schlafen.", "warum": "Prüft die Frist und nimmt ihr die Wirkung, ohne Streit." },
+        { "text": "„Schreiben Sie mir das Angebot bitte mit Datum auf.“", "warum": "Gut: Du nimmst etwas Prüfbares mit. Ob die Frist echt ist, weißt du aber noch nicht." },
+        { "text": "Wortlos gehen.", "warum": "Schützt dich, kostet aber eine Gelegenheit, falls das Angebot doch echt war." },
+        { "text": "Schnell unterschreiben, bevor es weg ist.", "warum": "Genau darauf zielt die Frist." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0122", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Nach deiner Zusage zum Handyvertrag kommen „Anschlussgebühr“ und „Versicherung“ dazu. Ordne die Reaktionen – die stärkste zuerst.",
+      "eintraege": [
+        { "text": "„Was zahle ich insgesamt? Dann entscheide ich neu.“", "warum": "Du behandelst das erste Ja als ungültig, weil sich die Bedingungen geändert haben." },
+        { "text": "„Die Versicherung brauche ich nicht. Ohne sie?“", "warum": "Hilft bei einem Teil – der Nachschlag bleibt aber unbeachtet stehen." },
+        { "text": "Seufzen und zahlen, weil du ja schon zugesagt hast.", "warum": "Genau darauf baut der Lockpreis mit Nachschlag: dass niemand vom Ja zurücktritt." },
+        { "text": "Den Verkäufer anschreien.", "warum": "Ärger verständlich – bringt dir aber weder Klarheit noch einen besseren Preis." }
+      ] },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0123", "faehigkeit": "ueberzeugen.einfluss", "stufe": 5, "kanal": "koennen", "einfluss": "taktik" },
+      "gespraech": {
+        "titel": "Das Sofa in der Kleinanzeige", "figur": "eine Käuferin",
+        "lage": "Du verkaufst ein gut erhaltenes Sofa. In der Anzeige steht „Preis auf Anfrage“. Gezahlt hast du vor zwei Jahren 1.200 Euro; ähnliche Sofas gehen gebraucht für 400 bis 500 weg.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Käuferin: „Schön! Was wollen Sie dafür haben?“",
+            "wahl": [
+              { "text": "„Was würden Sie denn geben?“", "wert": 0, "tendenz": "kleinmachen", "weiter": "k1b", "rueck": "Jetzt setzt sie die erste Zahl – und die wird niedrig." },
+              { "text": "„480 Euro.“ – und dann ruhig abwarten.", "wert": 2, "weiter": "k2", "rueck": "Eine ehrgeizige, aber begründbare Zahl – und Ruhe danach." },
+              { "text": "„1.000 – es war ja sehr teuer.“", "wert": 0, "tendenz": "ueberziehen", "weiter": "ende3", "rueck": "Überzogen: Sie kennt die Preise und geht." }
+            ] },
+          { "id": "k1b", "sagt": "Käuferin: „Hm. 200?“",
+            "wahl": [
+              { "text": "„Davon sind wir weit weg. Ich hatte an 480 gedacht.“", "wert": 2, "weiter": "k2", "rueck": "Die niedrige Zahl beiseitegelegt, deine eigene genannt." },
+              { "text": "„Na gut, sagen wir 300.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ihr Anker hat gewirkt." }
+            ] },
+          { "id": "k2", "sagt": "Käuferin, nach einer Pause: „Geht da noch was?“",
+            "wahl": [
+              { "text": "„450, wenn Sie es heute selbst abholen.“", "wert": 2, "weiter": "ende1", "rueck": "Ein kleiner Nachlass gegen eine Gegenleistung, die dir hilft." },
+              { "text": "„400, weil Sie so nett sind.“", "wert": 1, "weiter": "ende1", "rueck": "Freundlich und noch im Rahmen – aber ohne Gegenleistung." },
+              { "text": "„Nein, keinen Cent. Andere würden sich darum reißen.“", "wert": 0, "tendenz": "erfinden", "weiter": "ende3", "rueck": "Die „anderen“ hast du erfunden – und der Ton schreckt ab." }
+            ] },
+          { "id": "ende1", "sagt": "Käuferin: „Abgemacht.“", "ende": "Abgeschlossen. Am meisten bleibt dir, wenn du die erste begründete Zahl selbst setzt und Nachlass nur gegen etwas gibst. Wo es unterwegs gehakt hat, zeigen dir die Rückmeldungen." },
+          { "id": "ende2", "sagt": "Käuferin: „Super!“ Sie trägt das Sofa weg.", "ende": "Wer die erste Zahl der anderen Seite überlässt, landet oft in ihrer Nähe. Die eigene Zahl vorher festlegen." },
+          { "id": "ende3", "sagt": "Käuferin: „Dann schaue ich lieber weiter.“", "ende": "Überzogene Zahlen und erfundener Andrang kosten den Abschluss." }
+        ],
+        "prinzipien": ["eigene, begründbare Zahl zuerst", "Pause aushalten", "Nachlass gegen Gegenleistung", "nichts erfinden"]
+      } },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0124", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "kanal": "koennen", "einfluss": "taktik" },
+      "gespraech": {
+        "titel": "Das gebrauchte Lastenrad", "figur": "ein Verkäufer",
+        "lage": "Du willst privat ein gebrauchtes Lastenrad kaufen. Angeboten für 1.800 Euro. Du hast recherchiert: Vergleichbare gehen für 1.400 bis 1.600 weg. Deine Grenze: 1.600.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Verkäufer: „Na, gefällt es Ihnen? 1.800, wie in der Anzeige.“",
+            "wahl": [
+              { "text": "„Mir gefällt es. Ich habe Vergleichsangebote angeschaut – ich biete 1.450.“", "wert": 2, "weiter": "k2", "rueck": "Eine eigene, begründete Zahl setzt einen Gegen-Anker." },
+              { "text": "„1.800 ist okay.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Über deiner eigenen Grenze – ohne es auch nur zu versuchen." },
+              { "text": "„900, mehr ist das nicht wert.“", "wert": 0, "tendenz": "ueberziehen", "weiter": "ende3", "rueck": "Überzogen und abwertend – der Verkäufer fühlt sich vorgeführt." }
+            ] },
+          { "id": "k2", "sagt": "Verkäufer: „1.450? Da muss ich lachen. Ich habe es letztes Jahr neu gekauft.“",
+            "wahl": [
+              { "text": "„Verstehe. Woran orientieren Sie sich? Ich habe Angebote für 1.400 bis 1.600 gesehen.“", "wert": 2, "weiter": "k3", "rueck": "Ein neutraler Maßstab statt Gefühl – beide können ihn prüfen." },
+              { "text": "„Dann eben 1.750.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ein Lachen hat dich um 300 Euro bewegt." },
+              { "text": "„1.500 – da komme ich Ihnen entgegen.“", "wert": 1, "weiter": "k3", "rueck": "Ein Schritt auf ihn zu – aber ohne Grund wirkt die Zahl beliebig." }
+            ] },
+          { "id": "k3", "sagt": "Verkäufer: „Hm. Für 1.600 nehmen Sie es mit, und die Regenplane gebe ich dazu.“",
+            "wahl": [
+              { "text": "„Einverstanden.“", "wert": 2, "weiter": "ende1", "rueck": "An deiner Grenze, mit Zugabe – ein faires Ergebnis für beide." },
+              { "text": "„1.550, und Sie tragen es mir noch in den Keller.“", "wert": 1, "weiter": "ende1", "rueck": "Darf man versuchen. Ein fairer Vorschlag lag aber schon auf dem Tisch." }
+            ] },
+          { "id": "ende1", "sagt": "Verkäufer: „Abgemacht.“", "ende": "Eigene Zahl, neutraler Maßstab, deine Grenze im Kopf – so kaufst du fair, ohne über den Tisch gezogen zu werden." },
+          { "id": "ende2", "sagt": "Verkäufer: „Gut, dann gehört es Ihnen.“", "ende": "Über der eigenen Grenze gekauft. Vorher festlegen und im Gespräch daran denken." },
+          { "id": "ende3", "sagt": "Verkäufer: „Dann sind wir fertig.“", "ende": "Eine überzogene Gegenzahl mit Abwertung beendet das Gespräch." }
+        ],
+        "prinzipien": ["eigene begründete Zahl", "neutraler Maßstab", "Grenze kennen", "nicht abwerten"]
+      } },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0125", "faehigkeit": "ueberzeugen.haltung", "stufe": 4, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Du hast Frau Sommer gefragt, ob sie beim Straßenfest einen Stand übernimmt. Sie sagt: „Nein, dieses Jahr nicht.“ Was sagst du?",
+      "antworten": [
+        { "text": "„Schade – aber danke für die klare Antwort.“", "wert": 2, "warum": "Du nimmst das Nein an. Sie bleibt dir gewogen – und sagt vielleicht nächstes Jahr Ja." },
+        { "text": "„Ach komm, es sind doch nur drei Stunden, und alle anderen machen auch mit.“", "wert": 0, "tendenz": "uebergehen", "warum": "Du bearbeitest das Nein – und schiebst ihr Gruppendruck zu." },
+        { "text": "„Darf ich fragen, woran es liegt?“", "wert": 1, "warum": "Einmal fragen ist in Ordnung. Danach sollte das Nein gelten." },
+        { "text": "„Schon gut, dann frage ich eben jemand Zuverlässigeren.“", "wert": 0, "tendenz": "abwerten", "warum": "Aus ihrem Nein wird ein Vorwurf. Das kostet mehr als ein Stand." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0126", "faehigkeit": "ueberzeugen.haltung", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Im Gespräch merkst du: Dein Angebot passt nicht zu dem, was Herr Petersen braucht. Was tust du?",
+      "antworten": [
+        { "text": "Trotzdem weiter überzeugen – vielleicht merkt er es nicht.", "wert": 0, "tendenz": "ueberreden", "warum": "Er merkt es spätestens nach dem Kauf. Dann ist der Kunde weg – und seine Empfehlungen auch." },
+        { "text": "„Ehrlich gesagt passt mein Angebot nicht zu Ihnen. Für Ihren Fall wäre ein Kollege besser.“", "wert": 2, "warum": "Du sagst, wann du nicht der Richtige bist. Das ist ein starker Vertrauensbeweis – und er kommt wieder." },
+        { "text": "Das Thema wechseln und das Gespräch freundlich beenden.", "wert": 1, "warum": "Kein Schaden – aber er weiß nicht, warum, und du verschenkst Vertrauen." },
+        { "text": "Das Angebot so umbiegen, dass es irgendwie passt.", "wert": 0, "tendenz": "verbiegen", "warum": "Ein verbogenes Angebot hält selten, was es verspricht." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0127", "faehigkeit": "ueberzeugen.haltung", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Ein Kunde will sofort unterschreiben, obwohl er einen wichtigen Punkt offensichtlich nicht verstanden hat. Was tust du?",
+      "antworten": [
+        { "text": "Schnell unterschreiben lassen, bevor er es sich anders überlegt.", "wert": 0, "tendenz": "ausnutzen", "warum": "Ein Ja aus Unwissen wird oft bereut – und fällt auf dich zurück." },
+        { "text": "„Bevor Sie unterschreiben: Die Laufzeit ist zwei Jahre. Passt das?“", "wert": 2, "warum": "Du hilfst ihm, gut zu entscheiden – genau das ist die Haltung. Ein Ja danach hält." },
+        { "text": "Ihm die Unterlagen mitgeben und sagen, er soll alles in Ruhe lesen.", "wert": 1, "warum": "Fair, aber du überlässt ihm einen Punkt, den du in einem Satz klären könntest." },
+        { "text": "Unterschreiben lassen und den Punkt später in einer Mail erwähnen, damit es dokumentiert ist und er sich nicht beschweren kann.", "wert": 0, "tendenz": "verschleiern", "warum": "Erst unterschreiben, dann informieren – das ist ein Nachschlag nach dem Ja." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0128", "faehigkeit": "ueberzeugen.haltung", "stufe": 5, "kanal": "wissen" },
+      "auftrag": "Überzeugen oder überreden?",
+      "faecher": ["überzeugen – hilft entscheiden", "überreden – nimmt die Entscheidung ab"],
+      "karten": [
+        { "text": "„Was müsste passen, damit es für Sie stimmt?“", "fach": 0 },
+        { "text": "„Für wen es nichts ist: wer nur einmal im Jahr …“", "fach": 0 },
+        { "text": "„Schlafen Sie gern eine Nacht darüber.“", "fach": 0 },
+        { "text": "„Da gibt es eigentlich nichts zu überlegen.“", "fach": 1 },
+        { "text": "„Wenn Sie jetzt nicht zugreifen, bereuen Sie es.“", "fach": 1 },
+        { "text": "„Jeder vernünftige Mensch würde das nehmen.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0129", "faehigkeit": "ueberzeugen.haltung", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Respektiert der Satz das Nein – oder übergeht er es?",
+      "faecher": ["respektiert das Nein", "übergeht das Nein"],
+      "karten": [
+        { "text": "„Danke für die klare Antwort. Darf ich fragen, woran es lag?“", "fach": 0 },
+        { "text": "„Alles klar. Wenn sich etwas ändert, melden Sie sich gern.“", "fach": 0 },
+        { "text": "„Darf ich im Herbst noch einmal fragen?“", "fach": 0 },
+        { "text": "„Das ist doch kein Nein, das ist ein Noch-nicht.“", "fach": 1 },
+        { "text": "„Ich lasse Ihnen die Unterlagen trotzdem da und rufe morgen an.“", "fach": 1 },
+        { "text": "„Ich verstehe – aber lassen Sie mich noch drei Punkte erklären.“", "fach": 1 }
+      ] },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0130", "faehigkeit": "ueberzeugen.haltung", "stufe": 4, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Du sagst einem Versicherungsvertreter: „Danke, ich brauche das nicht.“ Er lächelt: „Das sagen am Anfang alle. Das ist doch kein Nein, das ist ein Noch-nicht.“",
+      "frage": "Was passiert – und was antwortest du?",
+      "antworten": [
+        { "text": "Er übergeht dein Nein: „Doch, es ist ein Nein.“ – ohne neue Gründe.", "wert": 2, "warum": "Gründe wären Futter für Gegenargumente. Das Nein ruhig wiederholen genügt." },
+        { "text": "Er übergeht dein Nein: dir drei gute Gründe überlegen, warum du es nicht brauchst.", "wert": 1, "warum": "Richtig erkannt. Mit Gründen lädst du aber zur Diskussion ein – die er gewinnen will." },
+        { "text": "Vielleicht hat er recht, und du solltest es dir noch mal anhören.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau darauf zielt die Umdeutung: dass du an deinem eigenen Nein zweifelst." },
+        { "text": "Ihm erklären, dass er ein schlechter Verkäufer ist und sich einen anderen Beruf suchen sollte.", "wert": 0, "tendenz": "angreifen", "warum": "Ein Angriff verlängert das Gespräch nur. Das kurze Nein beendet es." }
+      ],
+      "erklaerung": "Ein Nein umzudeuten ist rote Linie. Die Abwehr ist kurz: das Nein wiederholen, keine Gründe liefern, das Gespräch beenden." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0131", "faehigkeit": "ueberzeugen.haltung", "stufe": 5, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Vertreter sitzt seit zwei Stunden an deinem Küchentisch. Immer wenn du „Ich denke darüber nach“ sagst, fängt er von vorn an. Es ist halb zehn.",
+      "frage": "Was passiert – und was tust du?",
+      "antworten": [
+        { "text": "Zermürben: „Ich habe noch fünf Minuten. Dann gehen Sie, und ich melde mich, wenn ich will.“", "wert": 2, "warum": "Eine klare Zeitgrenze, ausgesprochen. Ein Ja aus Müdigkeit wäre keins." },
+        { "text": "Unterschreiben, damit er endlich geht.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau dafür bleibt er sitzen. Ein Ja aus Erschöpfung wird oft bereut." },
+        { "text": "Zermürben: noch einmal höflich erklären, warum du nachdenken willst.", "wert": 1, "warum": "Richtig erkannt. Erklärungen geben ihm aber den nächsten Einstieg – eine Zeitgrenze beendet es." },
+        { "text": "Einfach so lange schweigen, bis er von selbst aufgibt.", "wert": 0, "tendenz": "aussitzen", "warum": "Er hat Zeit, darauf baut er. Eine klare Grenze ist schneller." }
+      ],
+      "erklaerung": "Zermürben setzt auf Müdigkeit statt auf Gründe – rote Linie. Die Abwehr: eine Zeitgrenze setzen und laut sagen. Bei Verträgen an der Haustür gibt es in der Regel ein Widerrufsrecht – verlassen solltest du dich darauf nicht." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0132", "faehigkeit": "ueberzeugen.haltung", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Fotograf hat zu Hause Probebilder von dir gemacht. Du willst keine Abzüge kaufen. Er: „Ich bin extra eine Stunde hergefahren und habe den ganzen Nachmittag geopfert. Das können Sie mir doch nicht antun.“",
+      "frage": "Was passiert hier?",
+      "antworten": [
+        { "text": "Er hat recht – aus Anstand ein Paket kaufen.", "wert": 0, "tendenz": "schuld", "warum": "Genau so wirkt eingeredete Schuld: Du kaufst für sein Gefühl, nicht für deinen Bedarf." },
+        { "text": "Schuld einreden: „Danke für Ihre Zeit. Kaufen werde ich trotzdem nichts.“", "wert": 2, "warum": "Dank und Entscheidung getrennt – freundlich und fest." },
+        { "text": "Schuld einreden: ihm zum Trost ein einzelnes Bild abkaufen.", "wert": 1, "warum": "Richtig erkannt, und ein Bild ist kein Drama. Kaufen solltest du aber nur, was du wirklich willst." },
+        { "text": "„Das war Ihr Risiko, nicht meins. Hätten Sie halt vorher gefragt, ob ich überhaupt etwas kaufen will.“", "wert": 0, "tendenz": "angreifen", "warum": "Inhaltlich nicht falsch, aber unnötig scharf. Danken und Nein sagen reicht." }
+      ],
+      "erklaerung": "Aus „Ich habe mir Mühe gegeben“ wird „Du schuldest mir etwas“ – das ist rote Linie. Die Abwehr: Dank und Entscheidung trennen." },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0133", "faehigkeit": "ueberzeugen.haltung", "stufe": 4, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus dem Druck einen Satz, der beim Entscheiden hilft.",
+      "vorlage": "„Das müssen Sie einfach nehmen, sonst ärgern Sie sich.“",
+      "kriterien": ["nennt den Grund aus Sicht des anderen", "lässt die Entscheidung bei ihm", "kein Drohen"],
+      "muster": ["„Wenn Ihnen der Ausfall im Frühjahr wieder passieren würde, wäre das abgedeckt. Ob es Ihnen das wert ist, entscheiden Sie.“", "„Für Ihren Fall würde ich es nehmen. Aber Sie kennen Ihren Betrieb besser – was meinen Sie?“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0134", "faehigkeit": "ueberzeugen.haltung", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Antworte auf ein Nein: einmal nachfragen, danken, die Tür offen lassen.",
+      "vorlage": "Jule Marek: „Nein, beim Kochkurs-Ausflug bin ich dieses Mal nicht dabei.“ Du: „Ach komm, ohne dich ist es doch langweilig!“",
+      "kriterien": ["nimmt das Nein an", "höchstens eine Nachfrage", "lässt die Tür offen"],
+      "muster": ["„Schade! Liegt es am Termin? Dann sag gern Bescheid, wenn es beim nächsten Mal passt.“", "„Okay, schade. Ich frag dich beim nächsten Ausflug wieder, wenn du magst.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0135", "faehigkeit": "ueberzeugen.haltung", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Sag einer Kundin, dass dein Angebot für sie nicht passt – und hilf ihr trotzdem weiter.",
+      "vorlage": "„Na ja, eigentlich ist unser Paket schon ganz gut für Sie, glaube ich, irgendwie.“",
+      "kriterien": ["sagt ehrlich, dass es nicht passt", "nennt den Grund", "bietet eine Hilfe oder Alternative an"],
+      "muster": ["„Ehrlich gesagt ist mein Paket für zwei Rechner zu groß. Für Sie reicht ein Notdienst nach Bedarf – ich nenne Ihnen gern jemanden.“", "„Für Ihren kleinen Betrieb würde ich das nicht nehmen. Sichern Sie zuerst Ihre Daten – das zeige ich Ihnen in zehn Minuten.“"] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0136", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 4, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Von 40 Einsätzen im letzten Jahr waren 31 am selben Tag erledigt. Wie sagst du es?",
+      "antworten": [
+        { "text": "„Fast alle Einsätze sind bei uns am selben Tag erledigt.“", "wert": 0, "tendenz": "schoenen", "warum": "31 von 40 ist gut, aber nicht „fast alle“. Wer nachprüft, ist enttäuscht." },
+        { "text": "„31 von 40 Einsätzen im letzten Jahr waren am selben Tag erledigt.“", "wert": 2, "warum": "Genau und prüfbar. Eine ehrliche Zahl ist stärker als eine geschönte." },
+        { "text": "„Drei von vier Einsätzen schaffen wir am selben Tag.“", "wert": 1, "warum": "Fast richtig gerundet (es sind etwas mehr). Die genaue Zahl wäre noch glaubwürdiger." },
+        { "text": "„Wir sind immer schnell da, das wissen alle, die uns kennen, und das sagt auch jeder Kunde über uns.“", "wert": 0, "tendenz": "behaupten", "warum": "Aus einer guten Zahl wird eine leere Behauptung." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0137", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Du willst einem Interessenten eine Referenz nennen. Herr Petersen ist zufrieden, du hast ihn aber nicht gefragt. Was tust du?",
+      "antworten": [
+        { "text": "Seinen Namen trotzdem nennen – er ist ja zufrieden.", "wert": 0, "tendenz": "uebergehen", "warum": "Ohne Erlaubnis gibst du seine Daten weiter. Ruft der Interessent an, ist Herr Petersen überrumpelt." },
+        { "text": "Herrn Petersen vorher fragen, ob du ihn nennen darfst.", "wert": 2, "warum": "Erst die Erlaubnis, dann die Referenz – so ist sie echt und bleibt es." },
+        { "text": "„Einer unserer langjährigen Kunden ist sehr zufrieden.“", "wert": 1, "warum": "Ehrlich, aber nicht prüfbar. Mit Erlaubnis wäre es eine echte Referenz." },
+        { "text": "Eine erfundene Kundenstimme ohne Namen auf die Internetseite stellen.", "wert": 0, "tendenz": "erfinden", "warum": "Erfundene Kundenstimmen sind rote Linie – und rechtlich heikel." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0138", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Nach dem Gespräch merkst du: Eine Zahl, die du genannt hast, war zu hoch – die Einrichtung dauert drei Tage, nicht einen. Was tust du?",
+      "antworten": [
+        { "text": "Nichts – vielleicht klappt es ja doch in einem Tag.", "wert": 0, "tendenz": "verschweigen", "warum": "Klappt es nicht, wirkt alles andere, was du gesagt hast, auch unsicher." },
+        { "text": "Erst nach der Unterschrift erwähnen.", "wert": 0, "tendenz": "verschleiern", "warum": "Das ist ein Nachschlag nach dem Ja – und kostet das Vertrauen ganz." },
+        { "text": "Gleich anrufen: „Ich habe mich vertan – es sind drei Tage. Ändert das etwas für Sie?“", "wert": 2, "warum": "Ein Fehler, den du selbst korrigierst, macht dich glaubwürdiger, nicht schwächer." },
+        { "text": "Es im schriftlichen Angebot richtig hinschreiben, ohne darauf hinzuweisen.", "wert": 1, "warum": "Korrekt, aber versteckt. Liest der Kunde es nicht, fühlt er sich später getäuscht." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0139", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 4, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus dem Superlativ einen Fall.",
+      "vorlage": "„Wir sind die besten Umzugshelfer der Stadt.“",
+      "kriterien": ["ein konkreter Fall", "mit Ergebnis", "keine Übertreibung"],
+      "muster": ["„Letzten Samstag haben wir eine Vierzimmerwohnung im dritten Stock geräumt – um vier stand alles in der neuen Wohnung.“", "„Bei einer Familie im Neubaugebiet ist beim Umzug ein einziges Glas kaputtgegangen. Das haben wir ersetzt.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0140", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus der Zahl ein Vorher-nachher, das man sich vorstellen kann.",
+      "vorlage": "„Unsere Vorlagen sparen 66 Prozent Zeit.“",
+      "kriterien": ["vorher und nachher erkennbar", "in Alltagseinheiten (Minuten, Tage)", "bleibt wahr"],
+      "muster": ["„Ein Standardangebot dauerte eine Stunde. Mit den Vorlagen sind es zwanzig Minuten.“", "„Früher saß unser Büro freitags drei Stunden an den Angeboten, jetzt ist es eine.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0141", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Ergänze den Werbesatz um eine ehrliche Grenze: für wen es nichts ist.",
+      "vorlage": "„Unser Kurs ist für jeden geeignet!“",
+      "kriterien": ["nennt, für wen es nicht passt", "bleibt freundlich", "macht den Rest glaubwürdiger"],
+      "muster": ["„Der Kurs ist für Einsteiger. Wer schon fließend schreibt, langweilt sich bei uns – dem empfehle ich den Aufbaukurs.“", "„Gut für alle, die abends zwei Stunden Zeit haben. Wer nur am Wochenende kann, ist bei uns falsch.“"] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0142", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Ein sehr skeptischer Kunde. Ordne die Belege – der überzeugendste zuerst.",
+      "eintraege": [
+        { "text": "„Rufen Sie den Inhaber der Schreinerei an – er ist einverstanden.“", "warum": "Am prüfbarsten: Er hört es von jemandem, der nichts verkauft." },
+        { "text": "„Bei der Schreinerei gehen die Rechnungen jetzt in zwanzig Minuten raus statt in einer Stunde.“", "warum": "Ein konkreter Fall mit Ergebnis – stark, aber er muss dir glauben." },
+        { "text": "„Wir haben schon viele Betriebe umgestellt.“", "warum": "Richtung stimmt, aber ohne Zahl und Namen bleibt es vage." },
+        { "text": "„Alle unsere Kunden sind begeistert.“", "warum": "Unprüfbar und übertrieben – beim Skeptiker eher schädlich." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0143", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Bring einen Fall in die Reihenfolge, in der man ihn am besten erzählt.",
+      "eintraege": [
+        { "text": "Wer: „Ein Malerbetrieb mit acht Leuten …“", "warum": "Der Zuhörer muss wissen, ob der Fall zu ihm passt." },
+        { "text": "Problem: „… die Wochenplanung dauerte drei Stunden.“", "warum": "Erst das Problem macht die Lösung wertvoll." },
+        { "text": "Was getan wurde: „Wir haben die Planung auf eine Tafel im Netz gelegt.“", "warum": "Kurz, damit es nicht zum Vortrag wird." },
+        { "text": "Ergebnis: „Jetzt ist sie in einer Stunde fertig.“", "warum": "Das Ergebnis bleibt hängen – darum am Ende." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0144", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 4, "kanal": "wissen" },
+      "auftrag": "Kann der Kunde das prüfen?",
+      "faecher": ["prüfbar", "nicht prüfbar"],
+      "karten": [
+        { "text": "„Die Bäckerei Hansen hat zugestimmt, dass Sie dort nachfragen.“", "fach": 0 },
+        { "text": "„Hier ist das Prüfprotokoll vom letzten Jahr.“", "fach": 0 },
+        { "text": "„Sie können das Gerät zwei Wochen zur Probe nutzen.“", "fach": 0 },
+        { "text": "„Unsere Kunden lieben uns.“", "fach": 1 },
+        { "text": "„Wir haben einen hervorragenden Ruf.“", "fach": 1 },
+        { "text": "„Das ist Qualität, die man spürt.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0145", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 5, "kanal": "wissen" },
+      "auftrag": "Behauptung, Fall, Zahl oder Referenz?",
+      "faecher": ["Behauptung", "Fall", "Zahl", "Referenz"],
+      "karten": [
+        { "text": "„Bei uns stimmt die Chemie.“", "fach": 0 },
+        { "text": "„Ein Dachdecker bekam nach dem Umbau seine Angebote am selben Tag raus.“", "fach": 1 },
+        { "text": "„Neun von zehn Aufträgen dieses Jahr waren pünktlich fertig.“", "fach": 2 },
+        { "text": "„Frau Sommer erzählt gern, wie ihr Bad geworden ist – sie freut sich über Anrufe.“", "fach": 3 },
+        { "text": "„Wir denken mit.“", "fach": 0 },
+        { "text": "„Die Wartezeit sank von drei Wochen auf fünf Tage.“", "fach": 2 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0146", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Tatsächlich waren es 7 von 10 Kunden. Ehrlich gesagt oder geschönt?",
+      "faecher": ["ehrlich", "geschönt"],
+      "karten": [
+        { "text": "„7 von 10 Kunden.“", "fach": 0 },
+        { "text": "„Gut zwei Drittel unserer Kunden.“", "fach": 0 },
+        { "text": "„Die große Mehrheit der Kunden.“", "fach": 1 },
+        { "text": "„Fast alle Kunden.“", "fach": 1 },
+        { "text": "„Mehr als die Hälfte der Kunden.“", "fach": 0 },
+        { "text": "„Praktisch jeder Kunde.“", "fach": 1 }
+      ] },
+    { "art": "bauplan", "kopf": { "id": "ueberzeugen-v-0147", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+      "plan": "Meine Beleg-Sammlung",
+      "anlass": "Für Gespräche, in denen jemand fragt: „Und woher weiß ich, dass das stimmt?“",
+      "felder": [
+        { "name": "Ein Fall", "hilfe": "Wer, welches Problem, was getan, welches Ergebnis." },
+        { "name": "Eine Zahl", "hilfe": "Als Vorher-nachher, ehrlich gerundet." },
+        { "name": "Eine Referenz", "hilfe": "Wer darf genannt werden? Erlaubnis eingeholt?" },
+        { "name": "Ein ehrlicher Haken", "hilfe": "Was klappt nicht so gut – und wie ordnest du es ein?" }
+      ],
+      "muster": ["Fall: Eine Arztpraxis hatte jede Woche Druckerärger; nach dem Wechsel im Frühjahr keinen mehr. Zahl: Einsätze am selben Tag erledigt: 31 von 40. Referenz: Herr Petersen, gefragt am Montag, einverstanden. Haken: Am Wochenende bin ich nur im Notfall erreichbar."] },
+    { "art": "bauplan", "kopf": { "id": "ueberzeugen-v-0148", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "plan": "Ein Fall in vier Sätzen",
+      "anlass": "Ein Erfolg aus deiner Arbeit oder deinem Alltag, den du einem Zweifler erzählen kannst.",
+      "felder": [
+        { "name": "Wer", "hilfe": "Damit der Zuhörer merkt: Das passt zu mir." },
+        { "name": "Problem", "hilfe": "Was war schwierig, was hat es gekostet?" },
+        { "name": "Was getan wurde", "hilfe": "Ein Satz, kein Vortrag." },
+        { "name": "Ergebnis", "hilfe": "Was war danach anders – möglichst mit Zahl." }
+      ],
+      "muster": ["Wer: unser Sportverein, 200 Mitglieder. Problem: Hallenzeiten wurden doppelt vergeben, jeden Monat Ärger. Getan: ein gemeinsamer Kalender im Netz, einmal allen gezeigt. Ergebnis: seit März keine Doppelbelegung mehr."] },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0149", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Handwerker zeigt dir auf dem Handy 50 Bewertungen mit fünf Sternen. Alle sind vom selben Monat, alle sehr kurz, keine nennt eine Einzelheit.",
+      "frage": "Was sagt dir das – und was tust du?",
+      "antworten": [
+        { "text": "Möglicherweise gekaufte Bewertungen – nach einem Kunden fragen, den du selbst anrufen kannst.", "wert": 2, "warum": "Das Muster spricht gegen echte Bewertungen. Eine echte Referenz bringt Klarheit." },
+        { "text": "50 Mal fünf Sterne – mehr Beleg geht nicht.", "wert": 0, "tendenz": "glauben", "warum": "Menge ist kein Beleg, wenn Einzelheiten fehlen und alles aus einem Monat stammt." },
+        { "text": "Möglicherweise gekauft – den Handwerker deshalb nicht beauftragen, auch wenn sonst alles passt, und ihm das auch so deutlich sagen.", "wert": 1, "warum": "Vorsicht ist richtig. Ein Prüfweg (Referenz, Probeauftrag) wäre fairer als ein Urteil auf Verdacht." },
+        { "text": "Bewertungen sind immer gefälscht, also egal.", "wert": 0, "warum": "Viele sind echt. Das Muster entscheidet: Einzelheiten, verteilte Daten, auch mal Kritik." }
+      ],
+      "erklaerung": "Erfundene Bewertungen sind rote Linie – und rechtlich heikel. Echte erkennst du an Einzelheiten, verteilten Daten und auch mal einer kritischen Stimme. Die beste Abwehr: eine echte Referenz anrufen." },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0150", "faehigkeit": "ueberzeugen.abschluss", "stufe": 4, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Tarek fragt, was du für die Reparatur seines Fahrrads haben willst. Du machst das nebenher. Wie nennst du den Preis?",
+      "antworten": [
+        { "text": "„So zwischen 30 und 60, je nachdem, mal sehen.“", "wert": 0, "tendenz": "spanne", "warum": "Er hört nur die 30 – und ist bei 50 enttäuscht." },
+        { "text": "„Schlauch, Bremsen, Kette: 45 Euro.“", "wert": 2, "warum": "Was er bekommt und eine Zahl – klar und ohne Entschuldigung." },
+        { "text": "„Ach, gib mir einfach, was du für richtig hältst.“", "wert": 1, "warum": "Unter Freunden oft angenehm. Wenn du Geld willst, ist eine klare Zahl aber für beide leichter." },
+        { "text": "„Eigentlich wären es 60, aber für dich mache ich 30, weil wir ja Kollegen sind und uns gut verstehen.“", "wert": 0, "tendenz": "nachgeben", "warum": "Du verkaufst unter Wert und machst daraus eine Gefälligkeit – das verwischt beides." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0151", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Am Ende des Gesprächs sagt die Kundin: „Ich überlege es mir.“ Was sagst du?",
+      "antworten": [
+        { "text": "„Gern. Darf ich mich Donnerstag melden? Dann haben Sie auch die Antwort auf Ihre Frage zur Lieferzeit.“", "wert": 2, "warum": "Bedenkzeit respektiert, Termin verabredet, etwas Nützliches angekündigt." },
+        { "text": "„Okay, melden Sie sich.“", "wert": 1, "warum": "Respektvoll, aber ohne Termin versandet es leicht." },
+        { "text": "„Was gibt es da noch zu überlegen?“", "wert": 0, "tendenz": "ueberreden", "warum": "Du nimmst ihr das Nachdenken ab – das weckt Gegenwehr." },
+        { "text": "„Ich rufe Sie dann morgen früh an.“", "wert": 0, "tendenz": "draengen", "warum": "Ohne zu fragen und so schnell – das wirkt wie Druck." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0152", "faehigkeit": "ueberzeugen.abschluss", "stufe": 6, "kanal": "wissen", "einfluss": "taktik" },
+      "frage": "Du hast den Preis genannt: „1.200 Euro.“ Der Kunde schweigt und schaut aufs Papier. Was tust du?",
+      "antworten": [
+        { "text": "Ebenfalls ruhig warten.", "wert": 2, "warum": "Die Pause gehört ihm zum Nachdenken. Wer sie aushält, verhandelt nicht gegen sich selbst." },
+        { "text": "„Ich weiß, das ist viel. Wir könnten auch auf 1.000 gehen, wenn Ihnen das lieber wäre.“", "wert": 0, "tendenz": "nachgeben", "warum": "Du lässt nach, bevor er etwas gesagt hat." },
+        { "text": "Nach ein paar Sekunden fragen: „Was geht Ihnen durch den Kopf?“", "wert": 1, "warum": "Freundlich und offen. Ein wenig länger warten hätte ihm mehr Raum gelassen." },
+        { "text": "Nochmal alle Vorteile aufzählen.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Klingt nach Rechtfertigung – als wäre der Preis doch nicht ganz ernst gemeint." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0153", "faehigkeit": "ueberzeugen.abschluss", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Du hast nach einem Angebot zweimal nachgefasst, beide Male mit etwas Nützlichem. Keine Antwort. Was ist jetzt dran?",
+      "antworten": [
+        { "text": "Jede Woche eine neue Mail, bis eine Antwort kommt.", "wert": 0, "tendenz": "nerven", "warum": "Ab hier kippt Vertrautheit in Ärger." },
+        { "text": "Einmal das Nein anbieten: „Soll ich das Thema für jetzt schließen?“", "wert": 2, "warum": "Das entlastet den anderen und schafft Klarheit für beide." },
+        { "text": "Ab jetzt einfach still sein.", "wert": 1, "warum": "Respektvoll. Ein letztes, leichtes Angebot zum Nein hätte aber Klarheit gebracht." },
+        { "text": "Bei seiner Chefin anrufen, ob er überhaupt im Haus ist und sich um die Sache kümmert.", "wert": 0, "tendenz": "uebergehen", "warum": "Du gehst an ihm vorbei – das kostet die Beziehung." }
+      ] },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0154", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Nachhilfe für den Großneffen", "figur": "Frau Sommer",
+        "lage": "Frau Sommer fragt, ob du ihrem Großneffen Mathe-Nachhilfe geben könntest, zweimal die Woche. Du hast dir überlegt: 20 Euro die Stunde.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Frau Sommer: „Das wäre so lieb. Was nehmen Sie denn dafür?“",
+            "wahl": [
+              { "text": "„Ach, das müssen wir nicht so genau nehmen.“", "wert": 0, "tendenz": "kleinmachen", "weiter": "k1b", "rueck": "Klingt großzügig – und lässt beide im Ungewissen." },
+              { "text": "„20 Euro die Stunde.“", "wert": 2, "weiter": "k2", "rueck": "Klar, freundlich, ohne Entschuldigung." },
+              { "text": "„Leider 20 Euro, ich weiß, das ist viel …“", "wert": 1, "weiter": "k2", "rueck": "Die Zahl stimmt, das „leider“ lädt aber zum Handeln ein." }
+            ] },
+          { "id": "k1b", "sagt": "Frau Sommer: „Nein, nein, sagen Sie ruhig. Ich will das ordentlich machen.“",
+            "wahl": [
+              { "text": "„Gut: 20 Euro die Stunde.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt." },
+              { "text": "„Na, so 10 vielleicht.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Unter deinem eigenen Preis – und du ärgerst dich später." }
+            ] },
+          { "id": "k2", "sagt": "Frau Sommer: „Hm. Zweimal die Woche wird für meine Nichte aber teuer.“",
+            "wahl": [
+              { "text": "„Dann einmal die Woche, und er bekommt Aufgaben für zu Hause mit. Wollen wir es vier Wochen so probieren?“", "wert": 2, "weiter": "ende1", "rueck": "Umfang statt Preis angepasst – und ein klarer nächster Schritt." },
+              { "text": "„Dann mache ich 15.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Nachlass ohne Gegenleistung." },
+              { "text": "„Dann überlegen Sie es sich in Ruhe.“", "wert": 1, "weiter": "ende3", "rueck": "Freundlich, aber ohne Vorschlag." }
+            ] },
+          { "id": "ende1", "sagt": "Frau Sommer: „Das ist eine gute Idee. Dienstags?“", "ende": "Klarer Preis, Umfang angepasst, kleiner Schritt zum Ausprobieren – so bleibt es für beide gut." },
+          { "id": "ende2", "sagt": "Frau Sommer: „Wunderbar!“ Nach drei Wochen merkst du, dass es dich ärgert.", "ende": "Unter dem eigenen Preis wird aus Hilfe schnell Groll. Lieber den Umfang anpassen." },
+          { "id": "ende3", "sagt": "Frau Sommer: „Ich spreche mit meiner Nichte.“", "ende": "Kein Fehler – aber ohne Vorschlag und ohne nächsten Schritt bleibt es offen." }
+        ],
+        "prinzipien": ["klare Zahl ohne Entschuldigung", "Umfang statt Preis anpassen", "kleiner nächster Schritt"]
+      } },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0155", "faehigkeit": "ueberzeugen.abschluss", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Die Vereinsfotos", "figur": "der Vorsitzende eines Kegelvereins",
+        "lage": "Du hast dem Vorsitzenden eines Kegelvereins vor zehn Tagen ein Angebot für Vereinsfotos geschickt. Er wollte wissen, ob auch Einzelbilder drin sind – sind sie. Ihr hattet heute zum Telefonieren verabredet.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Vorsitzender: „Ja, hallo?“",
+            "wahl": [
+              { "text": "„Hallo, wie verabredet wegen der Fotos. Kurz zu Ihrer Frage: Einzelbilder sind drin. Passt es gerade?“", "wert": 2, "weiter": "k2", "rueck": "Verabredung, Antwort auf seine Frage, Rücksicht auf den Moment." },
+              { "text": "„Haben Sie sich schon entschieden?“", "wert": 0, "tendenz": "nerven", "weiter": "k1b", "rueck": "Ohne Inhalt wirkt die Frage wie Druck." },
+              { "text": "„Ich bin's wegen der Fotos. Hatten Sie Zeit, reinzuschauen?“", "wert": 1, "weiter": "k2", "rueck": "Freundlich – mit der Antwort auf seine Frage hättest du ihm mehr gebracht." }
+            ] },
+          { "id": "k1b", "sagt": "Vorsitzender: „Äh, noch nicht. Die anderen im Vorstand wollten noch drüber schauen.“",
+            "wahl": [
+              { "text": "„Dann hilft vielleicht die Antwort auf Ihre Frage: Einzelbilder sind drin.“", "wert": 2, "weiter": "k2", "rueck": "Zurück zum Nutzen – gut gerettet." },
+              { "text": "„Wann denn?“", "wert": 0, "tendenz": "draengen", "weiter": "ende3", "rueck": "Druck auf jemanden, der nicht allein entscheidet." }
+            ] },
+          { "id": "k2", "sagt": "Vorsitzender: „Ah, gut. Wir entscheiden das bei der Sitzung am 12.“",
+            "wahl": [
+              { "text": "„Wunderbar. Soll ich Ihnen bis dahin eine Seite für den Vorstand schicken? Und darf ich mich am 13. melden?“", "wert": 2, "weiter": "ende1", "rueck": "Unterlage für die Mitentscheider und ein klarer Termin." },
+              { "text": "„Okay. Dann warte ich.“", "wert": 1, "weiter": "ende2", "rueck": "Respektvoll, aber ohne Hilfe für die Sitzung." },
+              { "text": "„Das ist aber spät. Bis dahin ist der Termin sicher weg.“ – obwohl er noch frei wäre.", "wert": 0, "tendenz": "zeitdruck", "weiter": "ende3", "rueck": "Erfundener Zeitdruck – rote Linie. Er spürt den Druck." }
+            ] },
+          { "id": "ende1", "sagt": "Vorsitzender: „Ja, gern. Am 13. passt.“", "ende": "Nachgefasst mit Nutzen, die Entscheidungsrunde unterstützt, Termin verabredet." },
+          { "id": "ende2", "sagt": "Vorsitzender: „Gut, wir melden uns.“", "ende": "Kein Fehler – aber eine Unterlage für den Vorstand und ein Termin hätten geholfen." },
+          { "id": "ende3", "sagt": "Vorsitzender: „Dann lassen wir es vielleicht.“", "ende": "Druck auf eine Runde, die noch entscheiden muss, kostet den Auftrag." }
+        ],
+        "prinzipien": ["zum verabredeten Termin", "Antwort auf seine Frage mitbringen", "Mitentscheider unterstützen", "Termin statt Druck"]
+      } },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0156", "faehigkeit": "ueberzeugen.abschluss", "stufe": 4, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Nenn den Preis ohne Entschuldigung: Wert, Zahl, Punkt.",
+      "vorlage": "„Also, für die Hecke würde ich, wenn das okay ist, so ungefähr 150 nehmen, ist das zu viel?“",
+      "kriterien": ["fasst kurz zusammen, was der andere bekommt", "eine klare Zahl", "keine Frage nach Erlaubnis"],
+      "muster": ["„Hecke schneiden und den Schnitt mitnehmen: 150 Euro.“", "„Die ganze Hecke, inklusive Abfuhr, kostet 150 Euro. Ich könnte Samstag.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0157", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Schreib eine Nachfass-Mail, die dem Empfänger etwas bringt.",
+      "vorlage": "„Betreff: Nachfrage. Haben Sie mein Angebot erhalten? Ich freue mich auf Ihre Rückmeldung.“",
+      "kriterien": ["bringt eine Information oder Hilfe mit", "kurzer nächster Schritt", "lässt ein Nein zu"],
+      "muster": ["„Betreff: Ihre Frage zur Lieferzeit. Es wären drei Wochen. Passt es, wenn ich Freitag kurz anrufe? Wenn es gerade nicht passt, sagen Sie es gern.“", "„Betreff: Beispiel vom Malerbetrieb. Anbei die Planung, von der ich erzählt hatte. Soll ich nächste Woche noch einmal anrufen?“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0158", "faehigkeit": "ueberzeugen.abschluss", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Schreib das letzte Nachfassen so, dass ein Nein leicht wird.",
+      "vorlage": "„Ich habe jetzt schon dreimal geschrieben und warte immer noch auf eine Antwort.“",
+      "kriterien": ["kein Vorwurf", "bietet das Nein ausdrücklich an", "lässt die Tür offen"],
+      "muster": ["„Ich will Sie nicht weiter mit Mails belästigen. Soll ich das Thema für jetzt schließen? Ein kurzes Ja oder Nein genügt.“", "„Ich vermute, es passt gerade nicht – völlig in Ordnung. Wenn sich das ändert, melden Sie sich gern.“"] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0159", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Bring das Preisgespräch in die richtige Reihenfolge.",
+      "eintraege": [
+        { "text": "Den Wert kurz zusammenfassen.", "warum": "Ohne erkannten Wert wirkt jede Zahl zu hoch." },
+        { "text": "Die Zahl nennen – ohne „leider“.", "warum": "Eine klare Zahl zeigt, dass du sie ernst meinst." },
+        { "text": "Schweigen und zuhören.", "warum": "Die Pause gehört dem anderen – wer sie füllt, lässt oft nach." },
+        { "text": "Bei Nachfrage: Nachlass nur gegen Gegenleistung.", "warum": "So bleibt dein Preis glaubwürdig." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0160", "faehigkeit": "ueberzeugen.abschluss", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Bring das Nachfassen in die richtige Reihenfolge.",
+      "eintraege": [
+        { "text": "Im Gespräch einen Termin fürs Nachfassen verabreden.", "warum": "Dann ist dein Anruf erwartet, nicht lästig." },
+        { "text": "Zum Termin melden – mit etwas Nützlichem.", "warum": "Eine Antwort oder ein Tipp nimmt dem anderen Arbeit ab." },
+        { "text": "Kommt nichts: ein zweites, kurzes Nachfassen.", "warum": "Oft ging es nur im Alltag unter." },
+        { "text": "Dann das Nein anbieten – und Schluss.", "warum": "Klarheit für beide. Die Tür bleibt offen." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0161", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "wissen" },
+      "auftrag": "Nachlass mit Gegenleistung – oder ohne?",
+      "faecher": ["mit Gegenleistung", "ohne Gegenleistung"],
+      "karten": [
+        { "text": "„Bei zwei Jahren Laufzeit gehe ich auf 330.“", "fach": 0 },
+        { "text": "„Wenn Sie es selbst abholen, 450.“", "fach": 0 },
+        { "text": "„Bei Zahlung im Voraus zehn Prozent weniger.“", "fach": 0 },
+        { "text": "„Weil Sie so nett sind, 400.“", "fach": 1 },
+        { "text": "„Na gut, dann eben 300.“", "fach": 1 },
+        { "text": "„Für Sie mache ich einen Sonderpreis.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0162", "faehigkeit": "ueberzeugen.abschluss", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Nützliches Nachfassen, nerviges oder rote Linie?",
+      "faecher": ["nützlich", "nervig", "rote Linie"],
+      "karten": [
+        { "text": "„Anbei die Liste der Teile, nach der Sie gefragt hatten.“", "fach": 0 },
+        { "text": "„Ich habe einen Termin am 12. frei – soll ich ihn für Sie halten?“", "fach": 0 },
+        { "text": "„Ich wollte nur mal kurz nachhaken.“", "fach": 1 },
+        { "text": "Drei Anrufe an einem Tag.", "fach": 1 },
+        { "text": "„Wenn Sie sich nicht melden, gehe ich von einem Ja aus.“", "fach": 2 },
+        { "text": "„Mein Chef macht mir Druck, Sie müssen mir helfen.“ – erfunden.", "fach": 2 }
+      ] },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0163", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "wissen", "einfluss": "taktik" },
+      "lage": "Du verkaufst einer Kundin eine Küchenplanung. Sie sagt: „Gefällt mir. Ich muss das aber noch mit meinem Mann besprechen.“",
+      "frage": "Wie gehst du damit um?",
+      "antworten": [
+        { "text": "„Natürlich. Was wird ihm wichtig sein? Dann gebe ich Ihnen dazu etwas mit.“", "wert": 2, "warum": "Ob echt oder als Atempause gemeint: Du nimmst es ernst und hilfst ihr, das Gespräch zu Hause gut zu führen." },
+        { "text": "„Das sagen Sie doch nur, um Zeit zu gewinnen.“", "wert": 0, "tendenz": "angreifen", "warum": "Selbst wenn es so wäre: Der Vorwurf beendet das Gespräch." },
+        { "text": "„Können wir ihn kurz anrufen? Dann ist es gleich erledigt.“", "wert": 1, "warum": "Kann passen, wenn sie es möchte. Gedrängt wirkt es wie ein Nicht-gehen-Lassen." },
+        { "text": "„Der Preis gilt aber nur heute, das sollte Ihr Mann wissen.“", "wert": 0, "tendenz": "zeitdruck", "warum": "Stimmt das nicht, ist es künstlicher Zeitdruck – rote Linie." }
+      ],
+      "erklaerung": "„Ich muss das abstimmen“ ist eine Taktik, wenn man Zeit gewinnen will – und oft schlicht wahr. Als Verkäufer fragst du, wer mitentscheidet und was diese Person braucht, statt zu drängen." },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0164", "faehigkeit": "ueberzeugen.einwand", "stufe": 4, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Jule Marek sieht dein Angebot für ihr Catering-Fest: „Puh, das ist mehr, als ich dachte.“ Was sagst du zuerst?",
+      "antworten": [
+        { "text": "„Womit hattest du gerechnet?“", "wert": 2, "warum": "Erst verstehen, womit sie vergleicht – dann weißt du, worum es geht." },
+        { "text": "„Das ist aber wirklich günstig für das, was du bekommst – frag mal woanders, die nehmen locker das Doppelte.“", "wert": 0, "tendenz": "verteidigen", "warum": "Du verteidigst, jetzt muss sie ihren Einwand verteidigen." },
+        { "text": "„Okay, dann mache ich es dir billiger.“", "wert": 0, "tendenz": "nachgeben", "warum": "Nachlass, bevor du weißt, was dahintersteckt." },
+        { "text": "„Verstehe. Das ist auch viel Geld.“", "wert": 1, "warum": "Gutes Anerkennen. Die Frage, womit sie vergleicht, fehlt noch." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0165", "faehigkeit": "ueberzeugen.einwand", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Ein Kunde legt dir ein Konkurrenzangebot hin: 20 Prozent billiger. Was tust du?",
+      "antworten": [
+        { "text": "„Die arbeiten bestimmt schlampig.“", "wert": 0, "tendenz": "abwerten", "warum": "Du kennst das Angebot nicht und machst seine Wahl schlecht." },
+        { "text": "Sofort 20 Prozent nachlassen.", "wert": 0, "tendenz": "nachgeben", "warum": "Ohne Vergleich gibst du Geld her – vielleicht für weniger Leistung beim anderen." },
+        { "text": "„Darf ich es neben meins legen? Dann vergleichen wir Punkt für Punkt.“", "wert": 2, "warum": "Ein ehrlicher Vergleich. Ist der andere wirklich besser, sagst du es auch." },
+        { "text": "„Ich kann verstehen, dass das verlockend ist.“", "wert": 1, "warum": "Gutes Anerkennen – der Vergleich sollte folgen." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0166", "faehigkeit": "ueberzeugen.einwand", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Der Vermieter deines Proberaums: „Mehr als drei Abende die Woche kann ich nicht geben.“ Welche Frage öffnet am ehesten eine Lösung?",
+      "antworten": [
+        { "text": "„Was spricht gegen einen vierten Abend?“", "wert": 2, "warum": "Die Frage nach dem Grund. Vielleicht ist es der Lärm, vielleicht der Schlüssel – dafür gibt es Lösungen." },
+        { "text": "„Andere Vermieter sind da flexibler, das wissen Sie hoffentlich, und das spricht sich auch herum.“", "wert": 0, "tendenz": "drohen", "warum": "Druck mit einer Drohung – er wird nur fester." },
+        { "text": "„Okay, dann eben drei.“", "wert": 1, "warum": "Friedlich, aber du hast nicht nach dem Grund gefragt." },
+        { "text": "„Ich zahle das Doppelte.“", "wert": 0, "tendenz": "nachgeben", "warum": "Vielleicht ist Geld gar nicht der Punkt – du rätst teuer." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0167", "faehigkeit": "ueberzeugen.einwand", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Alles ist besprochen. Kurz vor der Unterschrift sagt die Kundin: „Und noch zehn Prozent Rabatt, dann machen wir es.“ Was antwortest du?",
+      "antworten": [
+        { "text": "„Zehn Prozent gehen bei Zahlung im Voraus. Sonst bleibt es beim Preis.“", "wert": 2, "warum": "Nachlass nur gegen Gegenleistung. Dein Preis bleibt ernst, und sie hat eine echte Wahl." },
+        { "text": "„Na gut, zehn Prozent.“", "wert": 0, "tendenz": "nachgeben", "warum": "Ohne Gegenleistung lernt sie: Drücken in letzter Minute lohnt sich." },
+        { "text": "„Nein. Und wenn Sie jetzt damit anfangen, überlege ich mir das Ganze noch mal.“", "wert": 0, "tendenz": "drohen", "warum": "Gekränkt statt ruhig – das gefährdet den ganzen Abschluss." },
+        { "text": "„Der Preis ist gut kalkuliert. Wollen wir es so machen?“", "wert": 1, "warum": "Ruhig und klar. Eine Möglichkeit mit Gegenleistung hätte ihr einen Weg gegeben." }
+      ] },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0168", "faehigkeit": "ueberzeugen.einwand", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Das Treppenhaus", "figur": "eine Kundin",
+        "lage": "Du streichst nebenher Wohnungen. Eine Kundin will Flur und Treppenhaus gestrichen haben; dein Angebot: 900 Euro. Die Hälfte der Arbeit ist das Treppenhaus.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Kundin: „Mehr als 600 kann ich nicht ausgeben.“",
+            "wahl": [
+              { "text": "„Was macht die 600 für Sie aus – ein festes Budget, oder ist es Ihnen das nicht wert?“", "wert": 2, "weiter": "k2", "rueck": "Nach dem Interesse hinter der Zahl gefragt." },
+              { "text": "„Dann wird das nichts.“", "wert": 0, "tendenz": "abbrechen", "weiter": "ende3", "rueck": "Position gegen Position – und Schluss." },
+              { "text": "„Okay, 600.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Derselbe Umfang für zwei Drittel des Preises." }
+            ] },
+          { "id": "k2", "sagt": "Kundin: „Festes Budget. Der Flur ist mir wichtig, da kommen Gäste rein. Das Treppenhaus sieht eh keiner.“",
+            "wahl": [
+              { "text": "„Dann streiche ich den Flur jetzt für 450 und das Treppenhaus im Frühjahr. Wäre das was?“", "wert": 2, "weiter": "ende1", "rueck": "Umfang und Zeitpunkt statt Preis verändert – ihr Budget passt, dein Preis bleibt." },
+              { "text": "„Ohne Treppenhaus sieht es aber nur halb fertig aus.“", "wert": 1, "weiter": "ende3", "rueck": "Mag sein – aber du überhörst ihr Budget." },
+              { "text": "„Dann mache ich beides für 650.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Der volle Umfang für gut zwei Drittel des Preises." }
+            ] },
+          { "id": "ende1", "sagt": "Kundin: „Prima. Und im Frühjahr reden wir übers Treppenhaus.“", "ende": "Interesse gefunden, Möglichkeiten gebaut – beide bekommen, was ihnen wichtig ist." },
+          { "id": "ende2", "sagt": "Kundin: „Super!“ Du arbeitest zwei Tage für deutlich weniger, als du wolltest.", "ende": "Nachgeben ohne Frage löst ihr Problem und schafft deins." },
+          { "id": "ende3", "sagt": "Kundin: „Dann frage ich woanders.“", "ende": "Wer ihr Interesse nicht aufgreift, kann nur das ganze Paket anbieten – Ja oder Nein." }
+        ],
+        "prinzipien": ["nach dem Interesse hinter der Zahl fragen", "Umfang und Zeitpunkt als Möglichkeiten", "Preis halten"]
+      } },
+    { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0169", "faehigkeit": "ueberzeugen.einwand", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "gespraech": {
+        "titel": "Der Jahresvertrag für den Garten", "figur": "ein Kunde",
+        "lage": "Du pflegst nebenher Gärten, 60 Euro im Monat. Ein Kunde will einen Jahresvertrag. Du hast dir überlegt: Bei Zahlung für das ganze Jahr im Voraus wären 55 Euro im Monat möglich.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Kunde: „Wenn ich gleich für ein ganzes Jahr nehme, ist doch sicher ein Rabatt drin, oder?“",
+            "wahl": [
+              { "text": "„Bei Zahlung im Voraus: 55 statt 60 im Monat.“", "wert": 2, "weiter": "k2", "rueck": "Nachlass gegen Gegenleistung – klar und vorbereitet." },
+              { "text": "„Klar, sagen wir 45.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ein großer Nachlass ohne Gegenleistung." },
+              { "text": "„Nein, Rabatte gebe ich grundsätzlich nicht, da könnte ja jeder kommen.“", "wert": 1, "weiter": "k2", "rueck": "Klar, aber starr. Eine Möglichkeit gegen Gegenleistung wäre für beide besser." }
+            ] },
+          { "id": "k2", "sagt": "Kunde: „Und wenn ich monatlich zahle, aber trotzdem für ein Jahr unterschreibe?“",
+            "wahl": [
+              { "text": "„Dann 58 im Monat – die feste Laufzeit hilft mir beim Planen.“", "wert": 2, "weiter": "ende1", "rueck": "Ein kleinerer Nachlass für eine kleinere Gegenleistung – nachvollziehbar." },
+              { "text": "„Dann auch 55.“", "wert": 1, "weiter": "ende1", "rueck": "Freundlich, aber die Vorauszahlung, für die der Nachlass gedacht war, fällt weg." },
+              { "text": "„Das geht gar nicht.“", "wert": 0, "tendenz": "abblocken", "weiter": "ende3", "rueck": "Ein guter Vorschlag einfach abgeblockt." }
+            ] },
+          { "id": "ende1", "sagt": "Kunde: „Gut, abgemacht.“", "ende": "Nachlass nur gegen etwas, das dir nützt – so bleibt der Preis nachvollziehbar." },
+          { "id": "ende2", "sagt": "Kunde: „Prima!“ Im Sommer merkst du, wie wenig übrig bleibt.", "ende": "Nachlass ohne Gegenleistung zahlt am Ende nur einer." },
+          { "id": "ende3", "sagt": "Kunde: „Dann eben nur monatlich ohne Vertrag.“", "ende": "Starr bleiben kostet eine Lösung, die für beide gepasst hätte." }
+        ],
+        "prinzipien": ["Nachlass nur gegen Gegenleistung", "vorher überlegen, was möglich ist", "Möglichkeiten statt Ja oder Nein"]
+      } },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0170", "faehigkeit": "ueberzeugen.einwand", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Statt „Geht nicht“: zwei Möglichkeiten anbieten, die den Preis nicht senken.",
+      "vorlage": "Kunde: „Ich will es billiger.“ Du: „Geht nicht.“",
+      "kriterien": ["mindestens zwei echte Möglichkeiten", "Umfang, Termin oder Zahlungsweise statt Preis", "freundlich"],
+      "muster": ["„Billiger geht es mit weniger Umfang: ohne Abholung 120 statt 150. Oder gleicher Preis, dafür in Raten – was ist Ihnen lieber?“", "„Wenn Sie flexibel beim Termin sind, kann ich es zwischen zwei Aufträge legen. Dann wird es 100 Euro günstiger.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0171", "faehigkeit": "ueberzeugen.einwand", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Reagiere auf das billigere Angebot der Konkurrenz mit einem ehrlichen Vergleich statt mit Abwertung.",
+      "vorlage": "„Der andere ist doch ein Pfuscher, das weiß jeder.“",
+      "kriterien": ["keine Abwertung", "lädt zum Vergleich ein", "sagt ehrlich, wo du teurer bist und warum"],
+      "muster": ["„Legen wir beide nebeneinander. Bei mir ist der Notdienst drin, dort kostet er extra – rechnen Sie, wie oft Sie ihn brauchen.“", "„Kann gut sein, dass er günstiger ist. Fragen Sie ihn nach Gewährleistung und Termin – wenn das passt, nehmen Sie ihn.“"] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0172", "faehigkeit": "ueberzeugen.einwand", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "„Woanders ist es billiger.“ Ordne die Reaktionen – die stärkste zuerst.",
+      "eintraege": [
+        { "text": "„Darf ich das Angebot sehen? Dann vergleichen wir Punkt für Punkt.“", "warum": "Ehrlicher Vergleich – du erfährst, was wirklich dahintersteckt." },
+        { "text": "„Was ist Ihnen beim Vergleich am wichtigsten?“", "warum": "Gute Frage nach dem Interesse; der Vergleich selbst fehlt noch." },
+        { "text": "„Bei uns stimmt eben die Qualität.“", "warum": "Ein Wort statt eines Belegs." },
+        { "text": "„Dann gehe ich auch runter.“", "warum": "Nachlass ohne zu wissen, wofür." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "ueberzeugen-v-0173", "faehigkeit": "ueberzeugen.einwand", "stufe": 6, "kanal": "wissen", "einfluss": "taktik" },
+      "frage": "Du verkaufst privat dein Rennrad für 900. Der Käufer bietet 400. Ordne die Reaktionen – die stärkste zuerst.",
+      "eintraege": [
+        { "text": "„Davon sind wir weit weg. 900, und ich sage Ihnen gern, warum.“", "warum": "Die niedrige Zahl beiseitegelegt, die eigene bleibt stehen." },
+        { "text": "„Woran orientieren Sie sich?“", "warum": "Gute Frage – lässt die 400 aber noch im Raum stehen." },
+        { "text": "„Sagen wir 650, in der Mitte.“", "warum": "Die Mitte zwischen deiner Zahl und seiner niedrigen – sein Anker hat gewirkt." },
+        { "text": "„Unverschämt. Gehen Sie.“", "warum": "Gekränkt – und vielleicht war es nur ein Versuch." }
+      ] },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0174", "faehigkeit": "ueberzeugen.einwand", "stufe": 5, "kanal": "wissen", "einfluss": "taktik" },
+      "lage": "Du bietest einem Verein an, die Webseite zu betreuen, und hast dir 80 Euro im Monat vorgenommen. Der Kassenwart sagt, bevor du eine Zahl nennen kannst: „Mehr als 20 im Monat ist bei uns nicht drin.“",
+      "frage": "Was passiert hier – und was tust du?",
+      "antworten": [
+        { "text": "Ein niedriger Anker: Ruhig deine Zahl nennen und erklären, was dafür drin ist.", "wert": 2, "warum": "Die erste Zahl zieht – wer an seine eigene denkt, wird weniger gezogen. Dann ehrlich klären, ob es passt." },
+        { "text": "Ein niedriger Anker: Ihn als unverschämt zurückweisen.", "wert": 0, "tendenz": "angreifen", "warum": "Taktik ist keine Lüge. Vielleicht ist das Budget wirklich so klein – Ärger hilft nicht." },
+        { "text": "Sich auf 30 einlassen, damit man im Gespräch bleibt.", "wert": 0, "tendenz": "nachgeben", "warum": "Sein Anker hat dich weit unter deine eigene Zahl gezogen." },
+        { "text": "Ein niedriger Anker: Nach dem Grund fragen – ist es das Budget oder der Umfang?", "wert": 1, "warum": "Gute Frage. Ohne deine eigene Zahl bleibt seine aber als einzige im Raum." }
+      ],
+      "erklaerung": "Eine sehr niedrige erste Zahl ist ein Anker: Sie zieht das Gespräch nach unten, ohne zu lügen. Die Abwehr: vorher die eigene Zahl festlegen, die fremde beiseitelegen, die eigene nennen – und nach dem Grund fragen." },
+    { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-v-0175", "faehigkeit": "ueberzeugen.einwand", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Käufer für deinen Wohnwagen: „Ein Händler hat mir gestern einen viel besseren für 5.000 angeboten.“ Fünf Minuten später: „Der Händler wollte 4.000.“ Den Namen will er nicht nennen.",
+      "frage": "Was passiert hier?",
+      "antworten": [
+        { "text": "Vermutlich ein erfundener Mitbewerber: „Dann nehmen Sie den – wenn nicht, bleibt es bei meinem Preis.“", "wert": 2, "warum": "Die Zahlen wechseln, Namen fehlen – du lässt dich nicht ziehen und bleibst freundlich." },
+        { "text": "Schnell runtergehen, bevor er zum Händler geht.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau dafür ist der erfundene Mitbewerber da." },
+        { "text": "Vermutlich erfunden: Ihn vor allen der Lüge überführen.", "wert": 0, "tendenz": "angreifen", "warum": "Du weißt es nicht sicher, und ein Streit bringt dir nichts." },
+        { "text": "Vermutlich erfunden: nachfragen, was genau der andere Wagen hat.", "wert": 1, "warum": "Gut, das prüft die Geschichte. Zieht er sich in Widersprüche, bleib bei deinem Preis." }
+      ],
+      "erklaerung": "Ein Mitbewerber, den es nicht gibt, ist eine erfundene Tatsache – rote Linie. Die Abwehr: ruhig bleiben, Prüfbares verlangen und beim eigenen Preis bleiben." },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0176", "faehigkeit": "ueberzeugen.nutzen", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Schreib den Absatz für einen Bäckermeister verständlich: Nutzen zuerst, Alltagswörter.",
+      "vorlage": "„Mittels digitaler Belegerfassung mit OCR-gestützter Vorkontierung reduziert sich Ihr administrativer Aufwand erheblich.“",
+      "kriterien": ["Alltagswörter", "Nutzen für seinen Alltag zuerst", "bleibt wahr"],
+      "muster": ["„Sie fotografieren Ihre Belege mit dem Handy, den Rest erledigt das Programm. Der Schuhkarton für die Steuer fällt weg.“", "„Weniger Papierkram am Sonntag: Belege abfotografieren, das Programm sortiert sie vor.“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0177", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Schreib einen Betreff mit Nutzen für ein Angebot an den Kegelverein.",
+      "vorlage": "„Betreff: Angebot Fotografie“",
+      "kriterien": ["Nutzen für den Verein", "konkret", "gern mit Preis"],
+      "muster": ["„Betreff: Ihr Jubiläum in Bildern – Gruppen- und Einzelfotos für 350 Euro“", "„Betreff: Fotos fürs Vereinsheim – fertig zwei Wochen nach dem Fest“"] },
+    { "art": "umformulieren", "kopf": { "id": "ueberzeugen-v-0178", "faehigkeit": "ueberzeugen.nutzen", "stufe": 7, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Schreib den ersten Satz eines Angebots: worum es geht und was du vom Leser brauchst.",
+      "vorlage": "„Sehr geehrte Damen und Herren, Bezug nehmend auf unser freundliches Gespräch vom 14. des Monats erlauben wir uns, Ihnen nachfolgend unser Angebot zu unterbreiten.“",
+      "kriterien": ["sagt, worum es geht", "sagt, was du brauchst (Zusage, Termin)", "kurz"],
+      "muster": ["„Hier mein Angebot für Ihren Flur: 450 Euro, fertig in zwei Tagen. Für einen Start im März bräuchte ich bis zum 1. Ihre Zusage.“", "„Wie besprochen: Fotos für Ihr Jubiläum, 350 Euro. Sagen Sie mir bis Freitag, ob es passt?“"] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0179", "faehigkeit": "ueberzeugen.nutzen", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Welcher erste Satz eines Angebots an eine Arztpraxis ist am stärksten?",
+      "antworten": [
+        { "text": "„Wir sind ein junges, dynamisches Team mit langjähriger Erfahrung.“", "wert": 0, "tendenz": "ueberuns", "warum": "Es geht um dich, nicht um die Praxis – und es ist eine Leerformel." },
+        { "text": "„Ab März bleiben weniger Termine leer – das Angebot liegt bei, ich bräuchte bis Freitag Ihre Rückmeldung.“", "wert": 2, "warum": "Ihr Nutzen, worum es geht, was du brauchst – in einem Satz." },
+        { "text": "„Anbei unser Angebot.“", "wert": 1, "warum": "Kurz und klar, aber ohne Nutzen und ohne nächsten Schritt." },
+        { "text": "„Vielen Dank für das angenehme Gespräch, das wir letzte Woche führen durften.“", "wert": 0, "tendenz": "floskel", "warum": "Höflich, aber wer nur den ersten Satz liest, weiß nichts." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0180", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Nadine Köhler hatte letzten Monat einen Serverausfall und wusste nicht, wen sie anrufen soll. Du darfst im Angebot an sie nur drei Punkte hervorheben. Welche?",
+      "antworten": [
+        { "text": "Die drei Punkte, die ihr Problem vom letzten Monat lösen: Notfall in zwei Stunden, tägliche Sicherung, ein Ansprechpartner.", "wert": 2, "warum": "Was sie selbst als Problem genannt hat – das liest sie." },
+        { "text": "Die drei technisch beeindruckendsten Funktionen.", "wert": 0, "tendenz": "merkmale", "warum": "Beeindruckt dich – sie aber hat nach anderem gefragt." },
+        { "text": "Eure drei größten Kunden.", "wert": 1, "warum": "Ein Beleg kann helfen – aber nicht anstelle ihres Nutzens." },
+        { "text": "Alles, was ihr bietet, in drei langen Absätzen.", "wert": 0, "tendenz": "ueberladen", "warum": "Wer alles hervorhebt, hebt nichts hervor." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "ueberzeugen-v-0181", "faehigkeit": "ueberzeugen.nutzen", "stufe": 7, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Wie lang sollte ein Angebot für einen kleinen Auftrag sein?",
+      "antworten": [
+        { "text": "So lang wie nötig, damit alles erklärt ist – lieber zu viel als zu wenig.", "wert": 0, "tendenz": "ueberladen", "warum": "Lange Texte werden überflogen; das Wichtige geht unter." },
+        { "text": "Eine Seite: Nutzen, Preis, ein Haken, nächster Schritt – Einzelheiten in den Anhang.", "wert": 2, "warum": "Das Wichtige oben und kurz. Wer mehr wissen will, findet es im Anhang." },
+        { "text": "Nur der Preis, alles andere klärt man am Telefon.", "wert": 1, "warum": "Kurz ist gut – ohne Nutzen und nächsten Schritt fehlt aber der Grund, Ja zu sagen." },
+        { "text": "Möglichst viele Seiten, das wirkt gründlich und zeigt den Aufwand, den man sich gemacht hat.", "wert": 0, "tendenz": "aufblasen", "warum": "Länge wirkt nicht gründlich, sondern anstrengend." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0182", "faehigkeit": "ueberzeugen.nutzen", "stufe": 5, "kanal": "wissen" },
+      "auftrag": "Fachsprache oder Alltagswort?",
+      "faecher": ["Fachsprache", "Alltagswort"],
+      "karten": [
+        { "text": "„redundante Datenhaltung“", "fach": 0 },
+        { "text": "„Ihre Daten liegen an zwei Orten“", "fach": 1 },
+        { "text": "„Implementierungsphase“", "fach": 0 },
+        { "text": "„die ersten zwei Wochen“", "fach": 1 },
+        { "text": "„Service-Level-Vereinbarung“", "fach": 0 },
+        { "text": "„Wir sind in zwei Stunden da“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "ueberzeugen-v-0183", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Wohin gehört es im Angebot?",
+      "faecher": ["nach oben", "in den Anhang", "streichen"],
+      "karten": [
+        { "text": "Der Nutzen für den Leser", "fach": 0 },
+        { "text": "Der Preis, alles eingerechnet", "fach": 0 },
+        { "text": "Der nächste Schritt mit Datum", "fach": 0 },
+        { "text": "Die technischen Einzelheiten", "fach": 1 },
+        { "text": "Die Allgemeinen Geschäftsbedingungen", "fach": 1 },
+        { "text": "„Wir sind ein dynamisches Team“", "fach": 2 },
+        { "text": "„Wir freuen uns auf eine fruchtbare Zusammenarbeit“", "fach": 2 }
+      ] },
+    { "art": "bauplan", "kopf": { "id": "ueberzeugen-v-0184", "faehigkeit": "ueberzeugen.nutzen", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+      "plan": "Der Nutzen-Absatz",
+      "anlass": "Der wichtigste Absatz eines Angebots oder Vorschlags, den du demnächst schreibst.",
+      "felder": [
+        { "name": "Sein Problem", "hilfe": "In seinen Worten, wie er es geschildert hat." },
+        { "name": "Was sich ändert", "hilfe": "Drei Punkte, in Alltagswörtern." },
+        { "name": "Woran er es merkt", "hilfe": "Ein Bild aus seinem Alltag: der Montagmorgen, der Feierabend." }
+      ],
+      "muster": ["Problem: Letzten Monat war der Server einen Tag weg, keiner wusste, wen man anruft. Was sich ändert: ein fester Ansprechpartner, Hilfe in zwei Stunden, tägliche Sicherung. Woran Sie es merken: Fällt etwas aus, ist ein Anruf genug – und der Rest des Tages gehört wieder Ihnen."] },
+    { "art": "bauplan", "kopf": { "id": "ueberzeugen-v-0185", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+      "plan": "Betreff und erster Satz",
+      "anlass": "Eine Mail, mit der du etwas anbietest oder vorschlägst – und die beim Überfliegen ankommen soll.",
+      "felder": [
+        { "name": "Betreff", "hilfe": "Sein Nutzen, gern mit Zahl oder Datum." },
+        { "name": "Erster Satz", "hilfe": "Worum geht es, was brauchst du von ihm?" },
+        { "name": "Letzter Satz", "hilfe": "Der nächste Schritt – wer, was, bis wann." }
+      ],
+      "muster": ["Betreff: Weniger leere Termine ab März – Angebot 90 Euro im Monat. Erster Satz: Hier mein Angebot für die Terminerinnerung; für den Start im März bräuchte ich bis Freitag Ihre Zusage. Letzter Satz: Ich rufe Sie Donnerstag um zehn an – passt das?"] }
+  ]
+}

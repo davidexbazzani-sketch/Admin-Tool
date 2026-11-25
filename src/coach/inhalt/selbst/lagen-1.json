@@ -21,7 +21,7 @@
         { "id": "k2b", "sagt": "Lena: „In der Tabelle steht 40.“",
           "wahl": [
             { "text": "„Danke, Lena. Dann gilt 40 – ich korrigiere es.“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst die Hilfe an und machst weiter. Mehr braucht es nicht." },
-            { "text": "„Dann hab ich das wohl auch noch vermasselt.“", "wert": 0, "tendenz": "abwerten", "weiter": "k2", "rueck": "„Auch noch“ macht aus einem Fehler eine Reihe. Es war eine Zahl." }
+            { "text": "„Dann hab ich das wohl auch noch vermasselt. Typisch.“", "wert": 0, "tendenz": "abwerten", "weiter": "k2", "rueck": "„Auch noch“ macht aus einem Fehler eine Reihe. Es war eine Zahl." }
           ] },
         { "id": "k2", "sagt": "Die Runde geht weiter, der Rest läuft gut. Am Schreibtisch meldet sich dein Kritiker: „Alle haben gesehen, wie schlampig du bist.“",
           "wahl": [
@@ -112,7 +112,7 @@
         { "id": "k1b", "sagt": "Lena: „Stimmt nicht – ohne deine Erklärungen hätte ich ewig gebraucht.“",
           "wahl": [
             { "text": "„Danke, Lena. Dann nehme ich das gern an.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt. Zwei Menschen haben dasselbe gesehen – das ist ein Beweis." },
-            { "text": "„Ach was, das hätte jeder gemacht.“", "wert": 0, "tendenz": "abwehren", "weiter": "k2", "rueck": "Jetzt widersprichst du schon zwei Leuten, die es von außen besser sehen als dein Kritiker." }
+            { "text": "„Ach was, das hätte doch jeder an meiner Stelle gemacht.“", "wert": 0, "tendenz": "abwehren", "weiter": "k2", "rueck": "Jetzt widersprichst du schon zwei Leuten, die es von außen besser sehen als dein Kritiker." }
           ] },
         { "id": "k2", "sagt": "Dr. Albers: „Wie sind Sie dabei vorgegangen? Das würde ich gern für die nächsten Neuen übernehmen.“",
           "wahl": [
@@ -170,7 +170,7 @@
         { "id": "k4", "sagt": "Montag. Tarek: „Miriam hat übernommen, alles gut. Wie war's bei deiner Schwester?“ Du hattest gefürchtet, er wäre noch sauer.",
           "wahl": [
             { "text": "Erzählen – und dir merken: Befürchtet war Ärger, passiert ist fast nichts.", "wert": 2, "weiter": "ende1", "rueck": "Genau so geht es vielen: Die Sorge vor dem Nein ist größer als die Folge." },
-            { "text": "Dich noch einmal ausführlich für Freitag entschuldigen.", "wert": 1, "tendenz": "rechtfertigen", "weiter": "ende1", "rueck": "Nett gemeint, aber nicht nötig. Dein Nein war in Ordnung." }
+            { "text": "Dich noch einmal ausführlich für Freitag entschuldigen und ihm Hilfe anbieten.", "wert": 1, "tendenz": "rechtfertigen", "weiter": "ende1", "rueck": "Nett gemeint, aber nicht nötig. Dein Nein war in Ordnung." }
           ] },
         { "id": "ende1", "sagt": "Abends notierst du: „Befürchtet: Tarek ist sauer. Passiert: Er fragt nach meiner Schwester.“", "ende": "Ein freundliches Nein kostet meist weniger, als der alte Antreiber behauptet. Innehalten, den Kritiker prüfen, kurz absagen, die Enttäuschung des anderen aushalten – das Recht auf ein Nein hängt nicht davon ab, dass sich alle freuen." },
         { "id": "ende2", "sagt": "Samstag sitzt du im Büro. Das Essen mit deiner Schwester ist verschoben.", "ende": "„Mach es allen recht“ war wieder schneller als du. Beim nächsten Mal: kurz innehalten, „Ich darf Nein sagen“ – und dann ein kurzer, freundlicher Satz." }
@@ -194,7 +194,7 @@
         { "id": "k1b", "sagt": "Dr. Albers: „Mag sein. Trotzdem hätte ich es gern früher gewusst.“",
           "wahl": [
             { "text": "„Da haben Sie recht. Ich hätte früher Bescheid geben sollen.“", "wert": 2, "weiter": "k2", "rueck": "Du übernimmst deinen Teil, ohne dich kleinzumachen." },
-            { "text": "Weiter erklären, was alles schieflief.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2", "rueck": "Jede weitere Erklärung klingt mehr nach Ausrede. Ein Satz zu deinem Anteil hätte gereicht." }
+            { "text": "Weiter erklären, was alles schieflief und wer noch alles beteiligt war.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2", "rueck": "Jede weitere Erklärung klingt mehr nach Ausrede. Ein Satz zu deinem Anteil hätte gereicht." }
           ] },
         { "id": "k1c", "sagt": "Dr. Albers, leicht irritiert: „Furchtbar sind Sie nicht. Es geht um den Bericht.“",
           "wahl": [

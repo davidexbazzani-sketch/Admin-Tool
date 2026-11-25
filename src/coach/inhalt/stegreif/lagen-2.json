@@ -1,0 +1,228 @@
+{
+  "lagen": [
+    {
+      "id": "stegreif-l-06", "bereich": "stegreif", "phase": "k", "umfeld": "vorgesetzte", "faehigkeiten": ["stegreif.struktur", "stegreif.kern"], "stufe": 5,
+      "titel": "Der Stand in der Montagsrunde", "figur": "Dr. Henrik Albers",
+      "einleitung": "Erst eine Frage nach dem Stand, dann eine nach deiner Meinung. Du übst: Gestern – heute – morgen mit einer Bitte am Ende, und Dafür – dagegen – Fazit mit einem „wenn“.",
+      "lage": "Montagsrunde, acht Leute. Du betreust die Umstellung auf digitale Lieferscheine. Vor einem Monat lief alles auf Papier, heute ist die Hälfte der Lieferanten umgestellt. Zwei große zögern, weil sie Aufwand in ihrer Buchhaltung fürchten. Du würdest sie gern gemeinsam mit Dr. Albers anrufen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Wie weit sind Sie mit den digitalen Lieferscheinen?“",
+          "wahl": [
+            { "text": "„Also, wir haben mit den kleinen Lieferanten angefangen, dann kamen die mittleren, da gab es Rückfragen zum Format, dann der Feiertag …“", "wert": 0, "tendenz": "alles", "weiter": "k1b", "rueck": "Das Gestern frisst die ganze Antwort. Dr. Albers wartet noch auf den Stand." },
+            { "text": "„Vor einem Monat alles auf Papier, heute die Hälfte digital. Zwei Große zögern – rufen wir die gemeinsam an?“", "wert": 2, "weiter": "k2", "rueck": "Gestern ein Satz, heute der Kern, morgen eine Bitte. Er weiß sofort, was er tun kann." },
+            { "text": "„Gut. Die Hälfte ist umgestellt.“", "wert": 1, "weiter": "k2", "rueck": "Der Stand stimmt. Es fehlt das Morgen – und damit deine Bitte." }
+          ] },
+        { "id": "k1b", "sagt": "Dr. Albers hebt die Hand: „Und in einem Satz?“",
+          "wahl": [
+            { "text": "„Halb umgestellt, zwei Große zögern – ich hätte Sie gern beim Anruf dabei.“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: Stand und Bitte in einem Satz." },
+            { "text": "„In einem Satz ist das schwer, da gehört eine Menge dazu, wenn man es richtig verstehen will.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Er hat dir die Abkürzung angeboten. Ein Satz reicht für den Stand fast immer." }
+          ] },
+        { "id": "k2", "sagt": "Dr. Albers: „Warum zögern die zwei?“",
+          "wahl": [
+            { "text": "„Die sind halt grundsätzlich gegen alles Neue, das kennt man ja von solchen Firmen.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3", "rueck": "Ein Urteil statt des Grundes – dabei kennst du ihn." },
+            { "text": "„Wegen des Aufwands, glaube ich.“", "wert": 1, "weiter": "k3", "rueck": "Die Richtung stimmt. Du weißt es aber genauer – sag es auch so." },
+            { "text": "„Sie fürchten Aufwand in ihrer Buchhaltung.“", "wert": 2, "weiter": "k3", "rueck": "Kurz und genau – mehr braucht er nicht." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers: „Ihre Meinung: Lassen wir die zwei notfalls beim Papier?“",
+          "wahl": [
+            { "text": "„Kommt drauf an.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Ein Anfang, kein Fazit. Er hat nach deiner Meinung gefragt." },
+            { "text": "„Dafür: kein Streit mit zwei wichtigen Lieferanten. Dagegen: zwei Abläufe kosten Zeit. Fazit: nein – außer bis Jahresende als Übergang.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Punkt je Seite und ein Fazit, das den Einwand aufnimmt. Klar und fair." },
+            { "text": "„Eher nicht. Zwei Abläufe sind auf Dauer zu aufwendig.“", "wert": 1, "weiter": "ende1", "rueck": "Eine klare Meinung mit Grund. Die Gegenseite zu nennen, hätte sie noch glaubwürdiger gemacht." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers: „Gut. Mittwoch sprechen wir über die zwei.“", "ende": "Zwei Fragen, zwei Baupläne: der Stand mit Gestern – heute – morgen und einer Bitte am Ende, die Meinung mit Dafür – dagegen – Fazit. Daran misst du solche Antworten." },
+        { "id": "ende2", "sagt": "Dr. Albers nickt und geht zum nächsten Punkt.", "ende": "Kein Drama. Beim nächsten Mal: Der Stand bekommt ein Morgen, die Meinung ein Fazit." }
+      ],
+      "prinzipien": ["Gestern ein Satz, heute der Kern, morgen ein Schritt", "eine Bitte ans Ende", "ein Punkt je Seite", "Fazit mit „wenn“ oder „außer“"],
+      "transfer": "Nach welchem Stand wirst du als Nächstes gefragt? Was wäre dein Morgen – ein Schritt oder eine Bitte?"
+    },
+    {
+      "id": "stegreif-l-07", "bereich": "stegreif", "phase": "k", "umfeld": "kollegen", "faehigkeiten": ["stegreif.vergleich", "stegreif.kern"], "stufe": 5,
+      "titel": "Der Vergleich in der Kaffeeküche", "figur": "Tarek Yılmaz",
+      "einleitung": "Ein Kollege findet eine neue Regel unsinnig, eine neue Kollegin hört zu. Du übst: ein Vergleich, der das Prinzip trifft – und gelassen bleiben, wenn jemand sagt, er hinke.",
+      "lage": "Ab nächster Woche gibt bei Überweisungen über einem festen Betrag immer eine zweite Person frei – das Vier-Augen-Prinzip. Tarek findet das umständlich. Lena ist neu, steht mit ihrer Tasse daneben und soll die Regel ebenfalls anwenden.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Tarek: „Vier Augen – als ob wir uns gegenseitig nicht trauen. Was soll das?“",
+          "wahl": [
+            { "text": "„Damit Fehler auffallen, bevor Geld rausgeht.“", "wert": 1, "weiter": "k1c", "rueck": "Der Kern stimmt. Ein Bild hätte Tarek gezeigt, dass es nicht um Misstrauen geht." },
+            { "text": "„Das ist halt Vorschrift von oben, da kann man nichts machen – ich finde es ja auch nervig, ehrlich gesagt.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Du schimpfst mit – und Lena lernt gerade, dass die Regel Unsinn ist." },
+            { "text": "„Wie beim Fallschirm: Einer packt, einer prüft. Nicht aus Misstrauen – jeder übersieht mal was.“", "wert": 2, "weiter": "k2", "rueck": "Ein Bild mit demselben Prinzip: Der Zweite sieht, was der Erste übersieht." }
+          ] },
+        { "id": "k1b", "sagt": "Tarek grinst: „Siehst du. Also findest du's auch Quatsch?“",
+          "wahl": [
+            { "text": "„Nein, eigentlich nicht. Wie beim Fallschirm: Einer packt, einer prüft – jeder übersieht mal was.“", "wert": 2, "weiter": "k2", "rueck": "Gut umgeschwenkt – und mit einem Bild, das hängen bleibt." },
+            { "text": "„Na ja, irgendwie schon, aber egal.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Lena hat zugehört. Sie wird die Regel jetzt eher lässig nehmen." }
+          ] },
+        { "id": "k1c", "sagt": "Tarek: „Fehler? Ich mach doch keine. Das ist Misstrauen.“",
+          "wahl": [
+            { "text": "„Kein Misstrauen – wie beim Fallschirm: Einer packt, einer prüft. Jeder übersieht mal was.“", "wert": 2, "weiter": "k2", "rueck": "Jetzt mit Bild: Der Zweite sieht, was der Erste übersieht – ganz ohne Vorwurf." },
+            { "text": "„Na ja, ist halt so.“", "wert": 0, "tendenz": "aufgeben", "weiter": "ende2", "rueck": "Lena hört zu – und lernt, dass die Regel keinen Grund hat." }
+          ] },
+        { "id": "k2", "sagt": "Tarek: „Fallschirm? Wir springen hier nirgends runter. Der Vergleich hinkt.“",
+          "wahl": [
+            { "text": "„Du verstehst es einfach nicht.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Aus dem Gespräch wird ein Streit – und das Prinzip geht verloren." },
+            { "text": "„Stimmt, hier geht's nicht ums Leben. Aber ums Prinzip: Den eigenen Fehler sieht man am schlechtesten.“", "wert": 2, "weiter": "k3", "rueck": "Die Grenze zugegeben, das Prinzip gehalten. Gegen ein ehrliches „Stimmt“ lässt sich schwer anreden." },
+            { "text": "„Dann nimm den Zahnarzt, der lässt sich ja auch Röntgenbilder von Kollegen ansehen.“", "wert": 1, "weiter": "k3", "rueck": "Ein zweites Bild kann helfen. Stärker: zuerst die Grenze zugeben, dann beim Prinzip bleiben." }
+          ] },
+        { "id": "k3", "sagt": "Lena, leise: „Und wenn ich die zweite Person bin und mir etwas komisch vorkommt?“",
+          "wahl": [
+            { "text": "„Frag Dr. Albers.“", "wert": 1, "weiter": "ende1", "rueck": "Ein sicherer Weg. Den Kern aber – nachfragen, bevor du freigibst – sagst du ihr besser selbst." },
+            { "text": "„Ach, freigeben – wird schon passen. Sonst hält es alles auf, und die Kollegen ärgern sich, wenn es länger dauert.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Damit erklärst du die Regel für überflüssig – genau gegenüber der Person, die sie anwenden soll." },
+            { "text": "„Nachfragen, bevor du freigibst. Genau dafür bist du die zweite Person.“", "wert": 2, "weiter": "ende1", "rueck": "Der Kern in zwei Sätzen. Lena weiß jetzt, was sie tun soll – und warum." }
+          ] },
+        { "id": "ende1", "sagt": "Lena nickt. Tarek brummt: „Na gut. Fallschirm. Merk ich mir.“", "ende": "Ein Vergleich mit demselben Prinzip, die Grenze selbst zugeben, der Kern für die, die es anwenden – daran misst du solche Gespräche. So wird aus einer Kaffeeküchen-Debatte Verständnis." },
+        { "id": "ende2", "sagt": "Tarek zuckt mit den Schultern und geht. Lena schaut unsicher in ihre Tasse.", "ende": "Kein Drama – aber beim nächsten Mal: ein Bild, das das Prinzip trifft, und wenn es hinkt, die Grenze zugeben und beim Prinzip bleiben." }
+      ],
+      "prinzipien": ["Vergleich mit demselben Prinzip", "Grenze zugeben, Prinzip halten", "den Kern für die, die es anwenden"],
+      "transfer": "Welche Regel oder Neuerung musst du demnächst jemandem erklären, der sie unsinnig findet? Welches Bild passt?"
+    },
+    {
+      "id": "stegreif-l-08", "bereich": "stegreif", "phase": "k", "umfeld": "kunden", "faehigkeiten": ["stegreif.zeit", "stegreif.struktur", "stegreif.kern"], "stufe": 6,
+      "titel": "Der Faden reißt beim Kundentermin", "figur": "Nadine Köhler",
+      "einleitung": "Mitten in deiner Vorstellung reißt der Faden, dann kommt eine Frage, auf die du nicht vorbereitet bist. Du übst: den Blackout-Plan, ehrlich nachliefern – und ein Schluss-Satz.",
+      "lage": "Du stellst Nadine Köhler in ihrem Büro das Wartungspaket vor. Drei Punkte hast du dir vorgenommen: schnelle Hilfe, feste Kosten – ein Betrag im Monat statt einer Rechnung je Einsatz – und eine feste Ansprechperson. Ob Notfälle am Wochenende drin sind, weißt du nicht sicher. Beim zweiten Punkt klingelt ihr Telefon. Sie nimmt ab, legt nach einer Minute auf und schaut dich an.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Nadine Köhler: „Entschuldigung. Wo waren Sie stehen geblieben?“ Dein Kopf ist leer.",
+          "wahl": [
+            { "text": "„Ich fange am besten noch mal von vorne an.“", "wert": 1, "weiter": "k2b", "rueck": "Ein ehrlicher Ausweg. Nur kostet er Zeit, die sie vielleicht nicht hat." },
+            { "text": "Ausatmen, aufs Stichwort schauen: „Bei den festen Kosten.“", "wert": 2, "weiter": "k2", "rueck": "Stehen bleiben, ausatmen, Stichwort – drei Sekunden, und du bist wieder drin." },
+            { "text": "„Puh, jetzt bin ich völlig raus – das passiert mir sonst nie, ehrlich, mir ist das gerade echt unangenehm.“", "wert": 0, "tendenz": "entschuldigen", "weiter": "k2b", "rueck": "Die Entschuldigung macht aus drei Sekunden Pause ein Thema." }
+          ] },
+        { "id": "k2", "sagt": "Nadine Köhler: „Feste Kosten – heißt was genau?“",
+          "wahl": [
+            { "text": "„Dass Sie besser planen können.“", "wert": 1, "weiter": "k3", "rueck": "Der Nutzen stimmt. Sie rechnet aber genau – sie will wissen, wie es funktioniert." },
+            { "text": "„Ein Betrag im Monat. Keine Rechnung mehr je Einsatz.“", "wert": 2, "weiter": "k3", "rueck": "Genau das, was sie für ihre Rechnung braucht – in zwei kurzen Sätzen." },
+            { "text": "„Dass es auf jeden Fall günstiger wird als bisher, das kann ich Ihnen jetzt schon fest versprechen.“", "wert": 0, "tendenz": "bluffen", "weiter": "k3", "rueck": "Ein Versprechen, das du nicht prüfen kannst. Sie wird es nachrechnen." }
+          ] },
+        { "id": "k2b", "sagt": "Sie schaut auf die Uhr: „Ich habe nur noch fünf Minuten.“",
+          "wahl": [
+            { "text": "„Dann kurz: schnelle Hilfe, feste Kosten, eine Ansprechperson. Wo soll ich genauer werden?“", "wert": 2, "weiter": "k3", "rueck": "Gut gefangen: zusammengefasst und ihr die Wahl gelassen." },
+            { "text": "„Okay, dann spreche ich einfach schneller und erzähle trotzdem alles der Reihe nach.“", "wert": 0, "tendenz": "alles", "weiter": "ende2", "rueck": "Schneller wird nicht klarer. Sie hört bald nur noch mit halbem Ohr zu." }
+          ] },
+        { "id": "k3", "sagt": "Nadine Köhler: „Und wenn bei uns am Wochenende etwas ausfällt?“",
+          "wahl": [
+            { "text": "„Klar, rund um die Uhr, sieben Tage die Woche – das ist bei so einem Paket heute überall Standard.“", "wert": 0, "tendenz": "bluffen", "weiter": "k3b", "rueck": "Klingt sicher – aber du weißt es nicht. Eine falsche Zusage wird hier teuer." },
+            { "text": "„Gute Frage – das müsste ich nachsehen.“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich. Es fehlt noch, wann sie die Antwort bekommt." },
+            { "text": "„Ob das Wochenende drin ist, weiß ich nicht sicher. Ich kläre es und schicke es Ihnen heute.“", "wert": 2, "weiter": "k4", "rueck": "Zugeben, nachliefern, mit Zeitpunkt – das wirkt verlässlicher als jede schnelle Zusage." }
+          ] },
+        { "id": "k3b", "sagt": "Nadine Köhler zieht die Augenbrauen hoch: „Das hätte ich gern schriftlich.“",
+          "wahl": [
+            { "text": "„Da war ich zu schnell. Ich kläre es und schicke es Ihnen heute schriftlich.“", "wert": 2, "weiter": "k4", "rueck": "Stark korrigiert. Zurücknehmen kostet weniger, als bei einer falschen Zusage zu bleiben." },
+            { "text": "„Das ist wirklich überall so, da können Sie sich voll und ganz auf mich verlassen.“", "wert": 0, "tendenz": "bluffen", "weiter": "ende2", "rueck": "Du bleibst beim Bluff. Stimmt es nicht, ist der Auftrag weg – und dein Wort auch." }
+          ] },
+        { "id": "k4", "sagt": "Nadine Köhler: „Gut. Fassen Sie mir das kurz zusammen?“",
+          "wahl": [
+            { "text": "„Ich schicke Ihnen alles noch mal per Mail.“", "wert": 1, "weiter": "ende1", "rueck": "Hilfreich – aber du verschenkst den Moment, in dem dein Kern hängen bleibt." },
+            { "text": "„Also, wie gesagt, das Paket hat ja viele Vorteile, die Kosten, die Hilfe, und dann …“", "wert": 0, "tendenz": "schwimmen", "weiter": "ende2", "rueck": "Eine Wiederholung ohne Ende. Ein Satz mit „Kurz gesagt“ hätte gereicht." },
+            { "text": "„Kurz gesagt: ein Betrag im Monat, schnelle Hilfe, eine feste Person. Das Wochenende kläre ich heute.“", "wert": 2, "weiter": "ende1", "rueck": "Drei Punkte und der offene Punkt mit Zeitpunkt. Protokollreif." }
+          ] },
+        { "id": "ende1", "sagt": "Nadine Köhler steht auf: „Schicken Sie mir das mit dem Wochenende. Dann reden wir weiter.“", "ende": "Reißt der Faden: Stichwort statt Neustart. Fehlt dir etwas: ehrlich nachliefern. Zum Schluss: ein Satz. So bleibt ein Termin gut, auch wenn er nicht nach Plan läuft." },
+        { "id": "ende2", "sagt": "Nadine Köhler: „Schicken Sie mir einfach die Unterlagen.“", "ende": "Kein Drama – beim nächsten Mal: Stichwort statt Neustart, nachliefern statt versprechen, und „Kurz gesagt“ zum Schluss." }
+      ],
+      "prinzipien": ["ausatmen, Stichwort, weiter", "zusammenfassen statt neu anfangen", "zugeben und nachliefern", "Schluss-Satz mit offenem Punkt"],
+      "transfer": "Bei welchem Termin könnte dir der Faden reißen? Welches Stichwort würde dich zurückbringen?"
+    },
+    {
+      "id": "stegreif-l-09", "bereich": "stegreif", "phase": "k", "umfeld": "gruppe", "faehigkeiten": ["stegreif.wortfluss", "stegreif.assoziation"], "stufe": 5,
+      "titel": "Die Vorstellungsrunde im Kochkurs", "figur": "Jule Marek",
+      "einleitung": "Reihum soll jeder etwas über sich erzählen – und die Fragen passen nicht genau zu deinem Vorrat. Du übst: eine Geschichte aus dem Vorrat holen und eine Brücke vom Stichwort zu ihr bauen.",
+      "lage": "Erster Abend im Kochkurs am Donnerstag, zehn Leute, die meisten fremd. Die Kursleiterin bittet um eine Vorstellungsrunde. Jule Marek, neben dir, stellt sich als Erste vor – und fragt dann gleich dich. In deinem Vorrat liegen zwei Geschichten: Bei deinem ersten Umzug war das erste Essen Pizza auf dem Boden zwischen Kartons. Und auf einer Radtour hattet ihr einen Platten ohne Werkzeug – ein Bauer half euch weiter.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Jule: „Erzähl mal: Was führt dich in einen Kochkurs?“",
+          "wahl": [
+            { "text": "„Ehrlich? Mein erstes Essen in der eigenen Wohnung war Pizza auf dem Boden. Das soll nicht so bleiben.“", "wert": 2, "weiter": "k2", "rueck": "Eine Geschichte statt einer Begründung – die Runde lacht, und jeder merkt sich dich." },
+            { "text": "„Ach, bei mir ist das nichts Besonderes, ich bin eigentlich nur hier, weil es sich so ergeben hat.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Du machst dich kleiner, als du bist – und die Runde weiß nichts über dich." },
+            { "text": "„Ich möchte besser kochen lernen.“", "wert": 1, "weiter": "k2", "rueck": "Stimmt sicher. Eine kleine Geschichte hätte es greifbar gemacht." }
+          ] },
+        { "id": "k1b", "sagt": "Jule lacht: „Nichts Besonderes gibt's nicht. Was hast du zuletzt gegessen?“",
+          "wahl": [
+            { "text": "„Pizza. Und ehrlich: In meiner ersten Wohnung sogar auf dem Boden, zwischen Kartons.“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: Das Stichwort „gegessen“ hat deine Geschichte geöffnet." },
+            { "text": "„Nichts Besonderes, wirklich.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Jule hat dir eine zweite Tür aufgehalten." }
+          ] },
+        { "id": "k2", "sagt": "Jule: „Und was war das Schlimmste, das dir je beim Essen passiert ist?“",
+          "wahl": [
+            { "text": "„Hm, da fällt mir gerade nichts ein.“", "wert": 1, "weiter": "k3", "rueck": "Ehrlich – aber in deinem Vorrat lag eine Geschichte, die nur eine kleine Brücke braucht." },
+            { "text": "Eine dramatische Lebensmittelvergiftung im Urlaub erfinden – so etwas bringt in jeder Runde sichere Lacher.", "wert": 0, "tendenz": "bluffen", "weiter": "k2b", "rueck": "Erfundenes fällt bei der ersten Nachfrage auf – und du hattest Echtes." },
+            { "text": "„Kein Kochunglück, eher ein Ausflugsunglück: Platten auf der Radtour – ein Bauer hat uns gerettet.“", "wert": 2, "weiter": "k3", "rueck": "Brücke vom Stichwort „Schlimmstes“ zu einer echten Geschichte. Die Runde fragt nach." }
+          ] },
+        { "id": "k2b", "sagt": "Jule: „Oh je – wo war das denn?“",
+          "wahl": [
+            { "text": "„Ehrlich? Ausgedacht. Die echte Panne: ein Platten auf der Radtour – ein Bauer hat uns gerettet.“", "wert": 2, "weiter": "k3", "rueck": "Stark zurückgenommen – und die echte Geschichte ist sowieso besser." },
+            { "text": "„In Spanien, glaube ich – lange her.“", "wert": 0, "tendenz": "bluffen", "weiter": "ende2", "rueck": "Der Bluff wächst. Nachfragen hält er nicht aus." }
+          ] },
+        { "id": "k3", "sagt": "Jule: „Letzte Frage – was willst du heute Abend lernen?“",
+          "wahl": [
+            { "text": "„Eine Soße, die nicht aus dem Glas kommt.“", "wert": 2, "weiter": "ende1", "rueck": "Konkret und mit einem Augenzwinkern. Die Kursleiterin hört mit und weiß, womit sie dich begeistern kann." },
+            { "text": "„Etwas, das schnell geht.“", "wert": 1, "weiter": "ende1", "rueck": "Klar und brauchbar. Etwas Konkretes hätte Jule noch mehr verraten." },
+            { "text": "„Alles Mögliche eigentlich, ich bin für alles offen, mir ist es wirklich egal, Hauptsache etwas Neues.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Offen klingt freundlich – aber Jule hat nichts, woran sie anknüpfen kann." }
+          ] },
+        { "id": "ende1", "sagt": "Später am Herd knüpft jemand an das an, was du in der Runde erzählt hast.", "ende": "Geschichten aus dem Vorrat, Brücken vom Stichwort, Echtes statt Erfundenes – damit bleibst du nach einer Vorstellungsrunde im Gespräch." },
+        { "id": "ende2", "sagt": "Jule nickt freundlich und dreht sich zur Nächsten.", "ende": "Kein Drama. Beim nächsten Mal: eine Geschichte aus dem Vorrat – und wenn sie nicht genau passt, eine Brücke vom Stichwort zu ihr." }
+      ],
+      "prinzipien": ["Geschichte statt Begründung", "Brücke vom Stichwort zur Geschichte", "echt statt erfunden", "konkret statt „alles Mögliche“"],
+      "transfer": "Wo stellst du dich als Nächstes vor – im Verein, in einem Kurs, bei einer Feier? Welche Geschichte aus deinem Vorrat passt?"
+    },
+    {
+      "id": "stegreif-l-10", "bereich": "stegreif", "phase": "k", "umfeld": "gruppe", "faehigkeiten": ["stegreif.struktur", "stegreif.kern", "stegreif.zeit", "stegreif.vergleich"], "stufe": 6, "sparring": true,
+      "titel": "Sparring: Einspringen für Carla", "figur": "Dr. Henrik Albers und das Team",
+      "einleitung": "Das Sparring zum Abschluss der Phase Können: zehn Minuten Vorlauf, fremder Stoff, fünf Fragen. Stand, Meinung, ein Vergleich, eine Lücke, ein Hänger – und ein Schluss-Satz.",
+      "lage": "Carla ist krank. Zehn Minuten vor der Abteilungsrunde bittet Dr. Albers dich, ihren Stand zum neuen Ticketsystem vorzustellen. Du weißt: Vor zwei Monaten lief alles über ein gemeinsames Postfach. Heute arbeiten drei von fünf Teams im neuen System, die übrigen zwei folgen im März. Anfragen gehen nicht mehr verloren, die Eingabe dauert aber länger. Einen Kostenstand hast du nicht.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Bitte – Carlas Stand zum Ticketsystem.“",
+          "wahl": [
+            { "text": "„Ich bin ja nur eingesprungen, ich weiß nicht so genau – Carla hätte das sicher viel besser gemacht.“", "wert": 0, "tendenz": "entschuldigen", "weiter": "k1b", "rueck": "Verständlich, aber die Runde wartet auf den Stand, nicht auf eine Entschuldigung." },
+            { "text": "„Vor zwei Monaten lief alles übers Postfach. Heute sind drei von fünf Teams im System, zwei folgen im März.“", "wert": 2, "weiter": "k2", "rueck": "Gestern – heute – morgen, ohne Anlauf. Fremder Stoff, sauber geordnet." },
+            { "text": "„Drei von fünf Teams sind umgestellt.“", "wert": 1, "weiter": "k2", "rueck": "Der Kern stimmt. Mit Gestern und Morgen hätte die Runde den Weg gesehen." }
+          ] },
+        { "id": "k1b", "sagt": "Dr. Albers: „Kein Problem. Einfach: Wo stehen wir?“",
+          "wahl": [
+            { "text": "Ausatmen. „Drei von fünf Teams sind im neuen System. Die zwei übrigen folgen im März.“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: Heute und Morgen – mehr braucht der Stand nicht." },
+            { "text": "„Das müsste man Carla fragen, die kennt sich da einfach viel besser aus als ich.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Du weißt den Stand. Ihn zu sagen, ist keine Anmaßung." }
+          ] },
+        { "id": "k2", "sagt": "Miriam: „Und was hältst du davon – lohnt sich das System?“",
+          "wahl": [
+            { "text": "„Ja, weil nichts mehr verloren geht.“", "wert": 1, "weiter": "k3", "rueck": "Klar und mit Grund. Die längere Eingabe zu nennen, hätte deine Meinung glaubwürdiger gemacht." },
+            { "text": "„Kann man so oder so sehen.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k3", "rueck": "Sie hat nach deiner Meinung gefragt. Dafür – dagegen – Fazit hätte dir die Ordnung gegeben." },
+            { "text": "„Dafür: Nichts geht verloren. Dagegen: Die Eingabe dauert. Fazit: ja – wenn wir Vorlagen für häufige Fälle bauen.“", "wert": 2, "weiter": "k3", "rueck": "Ein Punkt je Seite, ein Fazit mit „wenn“ – das ist eine Meinung, mit der man arbeiten kann." }
+          ] },
+        { "id": "k3", "sagt": "Ein Kollege aus dem Lager: „Ich versteh schon nicht, was ein Ticket überhaupt ist.“",
+          "wahl": [
+            { "text": "„Das ist ein strukturierter Datensatz mit Status, Priorität und Verlauf – eigentlich ganz einfach.“", "wert": 0, "tendenz": "fachwort", "weiter": "k4", "rueck": "Fachwörter erklären Fachwörter. Er versteht danach weniger als vorher." },
+            { "text": "„Wie die Wartenummer beim Amt: Jede Anfrage bekommt eine, und keine geht verloren.“", "wert": 2, "weiter": "k4", "rueck": "Ein Bild, das jeder kennt, mit demselben Prinzip. Er nickt." },
+            { "text": "„Eine Anfrage mit Nummer, die gespeichert wird.“", "wert": 1, "weiter": "k4", "rueck": "Richtig und kurz. Ein Bild hätte gezeigt, wozu die Nummer gut ist." }
+          ] },
+        { "id": "k4", "sagt": "Dr. Albers: „Was kostet uns das System im Jahr?“",
+          "wahl": [
+            { "text": "„Da müssten Sie Carla fragen.“", "wert": 1, "weiter": "k5", "rueck": "Ehrlich – aber er hat dich gefragt. Ein eigener nächster Schritt wäre stärker." },
+            { "text": "„Den Kostenstand habe ich nicht. Ich kläre ihn bis Freitag und schicke ihn Ihnen.“", "wert": 2, "weiter": "k5", "rueck": "Zugeben, nachliefern, Termin. Auch beim Einspringen bleibst du verlässlich." },
+            { "text": "„Ungefähr so viel wie das alte Postfach, schätze ich – vielleicht etwas mehr, aber nicht der Rede wert.“", "wert": 0, "tendenz": "bluffen", "weiter": "k4b", "rueck": "Eine geschätzte Zahl ohne Grundlage. Sie gilt ab jetzt als deine." }
+          ] },
+        { "id": "k4b", "sagt": "Jonas aus der Technik: „Nach meiner Info kostet es deutlich mehr als das Postfach.“",
+          "wahl": [
+            { "text": "„Dann war ich zu schnell. Ich kläre die Zahl bis Freitag.“", "wert": 2, "weiter": "k5", "rueck": "Stark zurückgenommen. Das kostet weniger als ein Bluff, der auffliegt." },
+            { "text": "„Na ja, so viel mehr wird es schon nicht sein, das gleicht sich doch alles irgendwie wieder aus.“", "wert": 0, "tendenz": "bluffen", "weiter": "ende2", "rueck": "Du bleibst beim Bluff, obwohl der Fachmann widerspricht." }
+          ] },
+        { "id": "k5", "sagt": "Du willst die nächsten Schritte nennen – und der Faden ist weg. Alle warten.",
+          "wahl": [
+            { "text": "„Oh Gott, jetzt weiß ich gar nichts mehr, Moment, das muss hier irgendwo stehen …“ – und hektisch blättern.", "wert": 0, "tendenz": "schwimmen", "weiter": "k6", "rueck": "Das Blättern macht die Lücke erst sichtbar." },
+            { "text": "Ausatmen, letzten Satz aufgreifen: „Die zwei übrigen Teams folgen im März.“", "wert": 2, "weiter": "k6", "rueck": "Der Blackout-Plan: ausatmen, anknüpfen, weiter. Kaum jemand hat etwas gemerkt." },
+            { "text": "„Mehr habe ich gerade nicht.“", "wert": 1, "weiter": "k6", "rueck": "Ehrlich und ruhig. Mit dem letzten Satz als Brücke wärst du weitergekommen." }
+          ] },
+        { "id": "k6", "sagt": "Dr. Albers: „Danke. Ein Satz zum Schluss?“",
+          "wahl": [
+            { "text": "„Ich glaube, das war's.“", "wert": 1, "weiter": "ende1", "rueck": "Höflich – aber du verschenkst den besten Platz für deinen Kern: das Ende." },
+            { "text": "„Kurz gesagt: drei Teams drin, zwei im März – die Kosten kläre ich bis Freitag.“", "wert": 2, "weiter": "ende1", "rueck": "Stand, nächster Schritt, offener Punkt – in einem Satz. Er bleibt hängen." },
+            { "text": "Noch einmal alles der Reihe nach wiederholen, damit wirklich nichts fehlt und keiner etwas falsch versteht.", "wert": 0, "tendenz": "alles", "weiter": "ende2", "rueck": "Die Runde hat es schon gehört. Ein Satz hätte genügt." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers: „Danke fürs Einspringen. Ich gebe Carla Bescheid.“", "ende": "Fremder Stoff, zehn Minuten Vorlauf: Gestern – heute – morgen, Dafür – dagegen – Fazit, ein Bild für Laien, ehrlich nachliefern, den Faden wiederfinden, ein Schluss-Satz. Das ist die Ausrüstung der Phase Können – schau, welches Stück heute saß und welches noch wackelt." },
+        { "id": "ende2", "sagt": "Dr. Albers schaut auf die Uhr: „Gut, wir müssen weiter.“", "ende": "Kein Drama – Einspringen ist schwer. Für das nächste Mal: erst der Stand ohne Entschuldigung, Lücken ehrlich nachliefern, zum Schluss ein Satz." }
+      ],
+      "prinzipien": ["ohne Anlauf: der Stand", "Meinung mit Fazit", "Bild statt Fachwort", "nachliefern statt schätzen", "Faden über den letzten Satz", "Schluss in einem Satz"],
+      "transfer": "Für wen könntest du einmal einspringen müssen? Welchen Stand solltest du dafür in einem Satz kennen?"
+    }
+  ]
+}

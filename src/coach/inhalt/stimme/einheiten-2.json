@@ -1,0 +1,316 @@
+{
+  "einheiten": [
+    {
+      "id": "stimme-2-01", "bereich": "stimme", "stufe": 2, "nr": 1,
+      "titel": "Antwort zuerst",
+      "faehigkeiten": ["stimme.aufbau", "stimme.tempo"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "„Antwort zuerst“ stammt aus der Beratungspraxis (Pyramidenprinzip) und ist in Sprecherziehung und Führungstraining verbreitet. Eigene Studien dazu gibt es kaum; die Regel ist bewährt, nicht bewiesen.",
+      "quellen": ["minto", "praxis-stimme"],
+      "aha": "Wer gefragt wird, gibt zuerst die Antwort – in einem Satz. Die Gründe folgen, Details nur auf Nachfrage. So hört dein Gegenüber das Wichtigste, solange es noch zuhört.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Dr. Albers trifft Tarek im Flur: „Schaffen wir die Auslieferung bis zum Fünfzehnten?“", "schwach": "„Also, das ist so: Der Lieferant hatte ja Probleme mit den Teilen, dann war Jonas krank, wir haben umgeplant, und wenn das Lager mitzieht, dann müsste es eigentlich klappen.“", "stark": "„Ja – mit zwei Tagen Puffer. | Engpass ist das Lager. | Wenn Sie mögen, schicke ich Ihnen den Plan.“", "frage": "Was weiß Dr. Albers nach der zweiten Fassung, was er nach der ersten nur ahnt?", "unterschied": "Die Antwort: Ja. Dazu den Puffer und den einen Engpass. In der ersten Fassung kommt die Antwort ganz am Ende und versteckt im „müsste eigentlich“ – bis dahin hat er im Kopf schon drei Rückfragen gestellt." },
+        { "art": "karte", "text": "Antwort zuerst heißt: Der erste Satz enthält das Ergebnis – ein Ja oder Nein, eine Zahl, eine Empfehlung. Danach höchstens drei Gründe, das Wichtigste zuerst. Details gibt es auf Nachfrage. Den Fünfsatz nutzt du für Beiträge, die du planst; Antwort zuerst für Fragen, die dich unvorbereitet treffen. Die Antwort sprichst du ruhig und zügig, die eine Zahl oder das Datum darin langsam." },
+        { "art": "auswahl", "kopf": { "id": "stimme-2-01-a", "faehigkeit": "stimme.aufbau", "stufe": 4, "kanal": "wissen" },
+          "frage": "Carla fragt in der Runde: „Wie war das Gespräch mit Frau Köhler?“ Welcher erste Satz folgt dem Prinzip „Antwort zuerst“?",
+          "antworten": [
+            { "text": "„Gut – sie will bis Freitag ein Angebot.“", "wert": 2, "warum": "Bewertung und Ergebnis in einem Satz. Alles Weitere kann folgen, wenn Carla nachfragt." },
+            { "text": "„Wir haben uns um zehn getroffen, erst über ihren Betrieb geredet und dann über die Maschinen.“", "wert": 0, "tendenz": "ausweichen", "warum": "Ein Bericht in zeitlicher Reihenfolge. Das Ergebnis kommt erst am Ende – oder gar nicht." },
+            { "text": "„Ganz gut, glaube ich. Mal sehen, was daraus wird.“", "wert": 0, "tendenz": "kleinreden", "warum": "Eine Antwort, aber ohne Inhalt. Dabei steht fest, dass sie ein Angebot will." },
+            { "text": "„Sie ist interessiert, Details erzähle ich gern gleich.“", "wert": 1, "warum": "Die Richtung stimmt. Das konkrete Ergebnis – Angebot bis Freitag – wäre noch klarer." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stimme-2-01-b", "faehigkeit": "stimme.aufbau", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Miriam fragt dich: „Kannst du Donnerstag die Spätschicht übernehmen?“ Mach aus dieser Antwort eine mit der Antwort zuerst – höchstens drei Sätze.",
+          "vorlage": "„Hm, Donnerstag … da wollte ich eigentlich zum Sport, und am Freitag muss ich früh raus, weil ich den Wagen in die Werkstatt bringe, aber wenn es gar nicht anders geht, dann vielleicht bis acht.“",
+          "kriterien": ["die Antwort steht im ersten Satz", "höchstens ein Grund", "ein klares Angebot oder eine klare Grenze"],
+          "muster": ["„Bis acht ja, länger nicht. | Freitag muss ich früh raus. | Ab acht könnte Tarek übernehmen.“", "„Diesmal nicht. | Donnerstag habe ich schon etwas vor. | Nächste Woche springe ich gern ein.“"] },
+        { "art": "rangfolge", "kopf": { "id": "stimme-2-01-c", "faehigkeit": "stimme.aufbau", "stufe": 5, "kanal": "wissen" },
+          "frage": "Dr. Albers will wissen, ob das neue Lagerprogramm sich lohnt. Bring die Teile deiner Antwort in die Reihenfolge, in der du sie sagst.",
+          "eintraege": [
+            { "text": "„Ja, es lohnt sich.“", "warum": "Die Antwort zuerst – er weiß sofort, woran er ist." },
+            { "text": "„Wir sparen jede Woche etwa einen halben Tag Suchzeit.“", "warum": "Der stärkste Grund folgt direkt, mit einer Zahl, die man sich vorstellen kann." },
+            { "text": "„Die Umstellung dauert zwei Wochen.“", "warum": "Der Preis gehört dazu – ehrlich, aber nach dem Nutzen." },
+            { "text": "„Die Rechnung im Einzelnen kann ich Ihnen schicken.“", "warum": "Details auf Nachfrage – als Angebot zum Schluss." }
+          ] },
+        { "art": "dialog", "kopf": { "id": "stimme-2-01-d", "faehigkeit": "stimme.aufbau", "stufe": 6, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Die Frage im Aufzug", "figur": "Dr. Henrik Albers",
+            "lage": "Du fährst mit Dr. Albers drei Stockwerke im Aufzug. Er fragt nach deinem Projekt. Ihr habt etwa dreißig Sekunden.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Dr. Albers: „Und, wie steht's mit der Umstellung der Kundenkartei?“",
+                "wahl": [
+                  { "text": "„Wir liegen im Plan – Ende des Monats ist sie fertig.“", "wert": 2, "weiter": "k2", "rueck": "Antwort und Termin in einem Satz. Jetzt kann er entscheiden, ob er mehr wissen will." },
+                  { "text": "„Puh, also, wir haben im Sommer angefangen, dann kam die Urlaubszeit, und seitdem …“", "wert": 0, "tendenz": "ausweichen", "weiter": "k1b", "rueck": "Die Vorgeschichte frisst die dreißig Sekunden. Die Antwort fehlt noch." },
+                  { "text": "„Gut so weit. Es gibt ein paar Punkte, die wir noch klären.“", "wert": 1, "weiter": "k2", "rueck": "Freundlich, aber ohne Fakt. Ein Termin hätte die Antwort greifbar gemacht." }
+                ] },
+              { "id": "k1b", "sagt": "Der Aufzug hält im zweiten Stock. Dr. Albers: „Kurz: Werden Sie fertig?“",
+                "wahl": [
+                  { "text": "„Ja. Ende des Monats.“", "wert": 2, "weiter": "k2", "rueck": "Gerettet – kurz, klar, mit Termin." },
+                  { "text": "„Ich denke schon, wenn nichts dazwischenkommt.“", "wert": 0, "tendenz": "kleinreden", "weiter": "k2", "rueck": "Er hat nach einer klaren Antwort gefragt. So bleibt Unsicherheit hängen, die du gar nicht hast." }
+                ] },
+              { "id": "k2", "sagt": "Dr. Albers nickt: „Gibt es etwas, das Sie von mir brauchen?“",
+                "wahl": [
+                  { "text": "„Ja: eine Entscheidung, ob die alten Karten archiviert oder gelöscht werden – bis Freitag.“", "wert": 2, "weiter": "ende1", "rueck": "Wieder die Antwort zuerst, dazu die Bitte mit Termin. Er weiß genau, was er tun soll." },
+                  { "text": "„Nein, nein, alles gut, wir kommen klar.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Dabei fehlt dir eine Entscheidung. Die Gelegenheit war da." },
+                  { "text": "„Vielleicht bei den alten Karten – darüber könnten wir mal reden.“", "wert": 1, "weiter": "ende2", "rueck": "Das Thema ist genannt, die Bitte noch nicht. Mit „bis Freitag“ und einer klaren Frage wäre sie greifbar." }
+                ] },
+              { "id": "ende1", "sagt": "Die Tür geht auf. Dr. Albers: „Gut. Schicken Sie mir die Frage, ich antworte bis Freitag.“", "ende": "Dreißig Sekunden reichen, wenn die Antwort zuerst kommt: Ergebnis, ein Grund, eine Bitte." },
+              { "id": "ende2", "sagt": "Die Tür geht auf. Dr. Albers: „Gut. Wenn Sie etwas von mir brauchen – eine Mail genügt.“", "ende": "Dreißig Sekunden reichen, wenn die Antwort zuerst kommt: Ergebnis, ein Grund – und wenn du etwas brauchst, die Bitte mit Termin. Die Gelegenheit dafür war im Aufzug." }
+            ],
+            "prinzipien": ["erster Satz = die Antwort", "Termin oder Zahl gleich mitliefern", "Bitte mit Termin statt „mal reden“"]
+          } },
+        { "art": "mission", "ref": "stimme-m-08" }
+      ],
+      "regel": "Gefragt? Erst die Antwort in einem Satz, dann der Grund – Details auf Nachfrage.",
+      "merkkarten": [
+        { "id": "stimme-2-01-m1", "frage": "Was steht im ersten Satz deiner Antwort?", "antwort": "Das Ergebnis: Ja oder Nein, eine Zahl, eine Empfehlung." },
+        { "id": "stimme-2-01-m2", "frage": "Wann nimmst du den Fünfsatz, wann „Antwort zuerst“?", "antwort": "Fünfsatz für Beiträge, die du planst. Antwort zuerst für Fragen, die dich spontan treffen." },
+        { "id": "stimme-2-01-m3", "frage": "Wohin mit den Details?", "antwort": "Ans Ende als Angebot – „Die Rechnung schicke ich gern“ – oder auf Nachfrage." }
+      ],
+      "mission": "stimme-m-08"
+    },
+    {
+      "id": "stimme-2-02", "bereich": "stimme", "stufe": 2, "nr": 2,
+      "titel": "Zahl mit Bild",
+      "faehigkeiten": ["stimme.bild", "stimme.tempo"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Geschichten und Anschauliches länger wirken als nackte Zahlen, zeigen Online-Experimente einer Forschergruppe. Wie man eine Zahl am besten bebildert, ist Praxiswissen; im Vortragssaal nicht eigens geprüft.",
+      "quellen": ["graeber2024", "praxis-stimme"],
+      "aha": "Eine nackte Zahl verliert über Nacht den größten Teil ihrer Wirkung. Gib ihr ein Bild – je Tag, je Person, ein Vergleich, ein Gesicht – und sprich sie langsam. Dann bleibt sie.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Eine Zahl und eine Geschichte verändern deine Meinung sofort. Was wirkt einen Tag später noch?", "optionen": ["beide gleich viel", "die Zahl mehr – Zahlen sind sachlich", "die Geschichte deutlich mehr"], "richtig": 2, "loesung": "Die Geschichte deutlich mehr.", "aufloesung": "In Online-Experimenten ging die Wirkung einer Zahl binnen eines Tages um etwa 73 Prozent zurück, die einer Geschichte nur um etwa 32 Prozent. Schon ein anschauliches Detail neben der Zahl half, dass sie hängen blieb – selbst eines ohne neue Information." },
+        { "art": "karte", "text": "Vier Wege, eine Zahl sichtbar zu machen. Herunterbrechen: „3.600 im Jahr – fünfzehn an jedem Arbeitstag.“ Vergleichen mit Bekanntem: „so schwer wie ein Kleinwagen.“ Ein Gesicht dahinter: „Eine davon war Frau Sommer.“ Runden: „fast die Hälfte“ statt „47,3 Prozent“. Dazu die Stimme: kleine Pause vor der Zahl, die Zahl langsam, danach kurz still. Und nur eine wichtige Zahl je Gedanke." },
+        { "art": "zuordnen", "kopf": { "id": "stimme-2-02-a", "faehigkeit": "stimme.bild", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Welcher Weg macht die Zahl hier sichtbar?",
+          "faecher": ["herunterbrechen", "vergleichen", "Gesicht dahinter"],
+          "karten": [
+            { "text": "„1.200 Anrufe im Monat – an jedem Arbeitstag rund sechzig, eine Stunde lang jede Minute einer.“", "fach": 0 },
+            { "text": "„Die Akten wiegen zusammen so viel wie ein Kühlschrank.“", "fach": 1 },
+            { "text": "„Einer dieser Anrufe kam von Herrn Petersen. Er wartete zwanzig Minuten.“", "fach": 2 },
+            { "text": "„500 Euro im Jahr – rund zwei Euro an jedem Arbeitstag.“", "fach": 0 },
+            { "text": "„Die Halle ist so groß wie zwei Fußballfelder.“", "fach": 1 },
+            { "text": "„300 Überstunden im Jahr – dahinter steht Lena, die abends bleibt, bis die Post raus ist.“", "fach": 2 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stimme-2-02-b", "faehigkeit": "stimme.bild", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Gib der Zahl ein Bild, das deine Kollegen vor Augen haben. Ein, zwei Sätze.",
+          "vorlage": "„Wir haben im letzten Jahr 18.000 Blatt Papier ausgedruckt.“",
+          "kriterien": ["die Zahl bleibt drin", "ein Bild, das man sich vorstellen kann", "kurz genug für einen Atem oder zwei"],
+          "muster": ["„18.000 Blatt im Jahr – das sind an jedem Arbeitstag rund 75. Ein dicker Stapel, jeden Morgen neu.“", "„18.000 Blatt – übereinandergestapelt fast so hoch wie eine Tür. Jedes Jahr.“"] },
+        { "art": "auswahl", "kopf": { "id": "stimme-2-02-c", "faehigkeit": "stimme.bild", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du sagst bei der Vereinsversammlung: „Unsere Mitglieder haben 2.400 Stunden ehrenamtlich gearbeitet.“ Welcher Zusatz macht die Zahl am stärksten?",
+          "antworten": [
+            { "text": "„Das ist eine wirklich beeindruckende Zahl, auf die wir alle sehr stolz sein können.“", "wert": 0, "tendenz": "ueberspielen", "warum": "Die Bewertung ersetzt kein Bild. Wie viel 2.400 Stunden sind, weiß danach immer noch niemand." },
+            { "text": "„Das ist mehr als ein ganzes Arbeitsjahr – für einen Menschen, nur für uns.“", "wert": 2, "warum": "Ein Arbeitsjahr kennt jeder. So bekommt die Zahl ein Bild und ein Gefühl." },
+            { "text": "„Genau gesagt waren es 2.412 Stunden.“", "wert": 0, "warum": "Genauer heißt hier nicht klarer. Die Zahl bleibt abstrakt, nur schwerer zu merken." },
+            { "text": "„Im Jahr davor waren es 1.900.“", "wert": 1, "warum": "Der Vergleich zeigt die Richtung. Ein Bild, das man sich vorstellen kann, wirkt noch stärker." }
+          ] },
+        { "art": "sprechen", "kopf": { "id": "stimme-2-02-d", "faehigkeit": "stimme.bild", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "stimme-v-0128" },
+          "auftrag": "Nimm eine Zahl aus deinem Alltag – Kilometer, Mails, Kunden, Stunden – und stell sie in zwei, drei Sätzen vor: kurze Pause davor, die Zahl langsam, dann das Bild.",
+          "sekunden": 40,
+          "pruefliste": ["Pause vor der Zahl?", "Die Zahl langsamer als der Rest?", "Ein Bild, das ein Fremder sofort versteht?"] },
+        { "art": "experiment", "auftrag": "Gib in dieser Woche einer Zahl, die du ohnehin nennst, ein Bild – je Tag, je Person oder ein Vergleich. Die Zahl sagst du langsam.", "dauer": "woche", "nachfrage": "Hat jemand die Zahl oder das Bild später wiederholt?" },
+        { "art": "reflexion", "frage": "Welche Zahl aus deinem Alltag verdient ein Bild – und welches?" }
+      ],
+      "regel": "Eine Zahl, ein Bild – und die Zahl langsam, mit Pause davor.",
+      "merkkarten": [
+        { "id": "stimme-2-02-m1", "frage": "Vier Wege, eine Zahl sichtbar zu machen?", "antwort": "Herunterbrechen, vergleichen, ein Gesicht dahinter, runden." },
+        { "id": "stimme-2-02-m2", "frage": "Warum überhaupt ein Bild?", "antwort": "In Experimenten verblasste die Wirkung einer Zahl über Nacht viel stärker als die einer Geschichte." }
+      ]
+    },
+    {
+      "id": "stimme-2-03", "bereich": "stimme", "stufe": 2, "nr": 3,
+      "titel": "Kontrast und Dreierliste",
+      "faehigkeiten": ["stimme.bild", "stimme.betonung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass rhetorische Mittel wie Kontraste und Dreierlisten lernbar sind und Redner ausstrahlungsstärker wirken lassen, zeigen zwei kleine Studien – als Paket, nicht einzeln. Der Vorteil der Drei stammt aus Werbeversuchen und gilt nicht immer; für Reden ist er eine Übertragung.",
+      "quellen": ["antonakis2011", "shu2014", "praxis-stimme"],
+      "aha": "Ein Gegensatz macht einen Unterschied hörbar, drei Glieder machen eine Aussage rund. Beides wirkt nur, wenn die Stimme mitspielt: beide Seiten betonen, das stärkste Glied zuletzt.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Miriam wirbt in der Runde dafür, die Montagsbesprechung umzubauen.", "schwach": "„Ich finde, die Besprechung könnte besser sein. Sie ist oft lang, manche Themen betreffen nicht alle, man verliert den Überblick, es gibt Wiederholungen, und Entscheidungen fallen selten.“", "stark": "„Wir brauchen nicht MEHR Besprechung. | Wir brauchen BESSERE. | Kürzer, klarer – und mit einer Entscheidung am Ende.“", "frage": "Welche Fassung würdest du nach der Pause noch wiedergeben können?", "unterschied": "Die zweite: ein Gegensatz, den man hört, und eine Dreierliste, deren letztes Glied das Wichtigste ist. Die erste zählt fünf Punkte gleichrangig auf – keiner bleibt hängen." },
+        { "art": "studie", "frage": "Kann man Ausstrahlung lernen?", "aufbau": "Führungskräfte und Studierende lernten in einem Training rhetorische Mittel: Bilder, kleine Geschichten, Kontraste, Dreierlisten, rhetorische Fragen, dazu eine lebendige Stimme und Gestik. Kollegen oder Zuhörer schätzten sie vorher und nachher ein.", "ergebnis": "Nach dem Training wirkten die Teilnehmenden ausstrahlungsstärker als vorher bzw. als die Vergleichsgruppe.", "grenze": "Kleine Gruppen, eine Forschergruppe. Gelernt wurde ein ganzes Paket – welches Mittel wie viel beiträgt, bleibt offen.", "beleg": "B", "quellen": ["antonakis2011"] },
+        { "art": "karte", "text": "Kontrast: zwei Seiten, kurz, gleich gebaut – und beide bekommen den Ton. Dreierliste: drei Glieder, gleich gebaut, das stärkste zuletzt; vor dem dritten eine winzige Pause. Warum drei? In Werbeversuchen wirkten drei Vorzüge besser als vier – ab vier wurden Leser misstrauisch. Mit lebhaften Vorstellungsbildern verschwand der Vorteil. Nimm die Drei als Faustwert, nicht als Gesetz." },
+        { "art": "tonfall", "kopf": { "id": "stimme-2-03-a", "faehigkeit": "stimme.betonung", "stufe": 5, "kanal": "wissen" },
+          "satz": "Nicht schneller arbeiten – klüger planen.",
+          "fassungen": [
+            { "betont": "Nicht schneller arbeiten – klüger planen.", "bedeutung": "ohne Ton – der Gegensatz geht unter" },
+            { "betont": "Nicht SCHNELLER arbeiten – KLÜGER planen.", "bedeutung": "beide Seiten betont – der Gegensatz springt heraus" },
+            { "betont": "NICHT schneller ARBEITEN – klüger PLANEN.", "bedeutung": "drei Töne auf den falschen Wörtern – unruhig, der Sinn verschwimmt" }
+          ],
+          "frage": "Welche Fassung macht den Gegensatz hörbar?",
+          "antworten": [
+            { "text": "Die zweite: SCHNELLER und KLÜGER.", "wert": 2, "warum": "Die beiden Wörter, die sich gegenüberstehen, tragen den Ton. So hört man den Unterschied, ohne ihn zu erklären." },
+            { "text": "Die dritte – mehr Betonung macht den Satz kraftvoller.", "wert": 0, "tendenz": "ueberkontrolle", "warum": "Drei Töne auf den falschen Wörtern machen ihn nur unruhig. Der Gegensatz liegt in „schneller“ und „klüger“." },
+            { "text": "Die erste – der Satz ist stark genug gebaut und braucht keinen Ton.", "wert": 1, "warum": "Gebaut ist er gut. Ohne Ton hört man den Gegensatz aber nur, wenn man genau hinhört." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stimme-2-03-b", "faehigkeit": "stimme.bild", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Mach aus der Aufzählung einen Kontrast oder eine Dreierliste mit dem stärksten Glied am Ende.",
+          "vorlage": "„Der neue Ablauf hat viele Vorteile: Er ist übersichtlich, spart Papier, es gibt weniger Rückfragen, man findet alles schneller, und die Kunden bekommen früher eine Antwort.“",
+          "kriterien": ["höchstens drei Glieder oder zwei Seiten", "gleich gebaut", "das Wichtigste zuletzt"],
+          "muster": ["„Der neue Ablauf spart Papier, spart Rückfragen – und bringt den Kunden schneller eine Antwort.“", "„Bisher suchen wir. | Künftig finden wir.“"] },
+        { "art": "nachsprechen", "kopf": { "id": "stimme-2-03-c", "faehigkeit": "stimme.bild", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "stimme-v-0129" },
+          "auftrag": "Sprich jede Zeile: Beim Kontrast bekommen beide großgeschriebenen Wörter den Ton; bei der Dreierliste vor dem letzten Glied eine winzige Pause, das letzte Wort am deutlichsten.",
+          "zeilen": ["Nicht MEHR Regeln. | KLARERE.", "Wir sparen Zeit, Nerven | – und am Ende GELD.", "Gestern haben wir GESUCHT. | Heute FINDEN wir.", "Kürzer, klarer | – und mit einer ENTSCHEIDUNG."],
+          "weise": "klar",
+          "pruefliste": ["Beide Seiten des Kontrasts hörbar betont?", "Winzige Pause vor dem dritten Glied?", "Das letzte Glied am deutlichsten – und die Stimme danach gesenkt?"] },
+        { "art": "experiment", "auftrag": "Bau in deinen nächsten Beitrag oder eine wichtige Mail genau einen Kontrast oder eine Dreierliste ein – nicht mehr.", "dauer": "woche", "nachfrage": "Hat jemand den Satz aufgegriffen oder wiederholt?" },
+        { "art": "reflexion", "frage": "Welche Aufzählung, die du oft benutzt, ließe sich auf drei Glieder kürzen – und welches gehört ans Ende?" }
+      ],
+      "regel": "Kontrast: beide Seiten betonen. Dreierliste: das Stärkste zuletzt.",
+      "merkkarten": [
+        { "id": "stimme-2-03-m1", "frage": "Welche Wörter betonst du bei einem Kontrast?", "antwort": "Die beiden, die sich gegenüberstehen – „nicht MEHR, sondern BESSERE“." },
+        { "id": "stimme-2-03-m2", "frage": "Wohin gehört bei der Dreierliste das stärkste Glied?", "antwort": "Ans Ende – mit einer winzigen Pause davor." },
+        { "id": "stimme-2-03-m3", "frage": "Warum nicht vier oder fünf Punkte?", "antwort": "In Werbeversuchen wurden Leser ab vier Vorzügen misstrauisch. Drei ist ein guter Faustwert." }
+      ]
+    },
+    {
+      "id": "stimme-2-04", "bereich": "stimme", "stufe": 2, "nr": 4,
+      "titel": "Einstieg ohne Entschuldigung",
+      "faehigkeiten": ["stimme.aufbau", "stimme.pause"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Redner überschätzen, wie sichtbar ihre Nervosität ist, zeigen Experimente; dass Anfang und Ende einer Folge besser behalten werden, ein klassischer Laborbefund mit Wortlisten. Dass eine Entschuldigung zu Beginn schadet, ist Praxiswissen.",
+      "quellen": ["savitsky2003", "murdock1962", "praxis-stimme"],
+      "aha": "„Reden ist nicht so meins, aber …“ macht alle auf das aufmerksam, was sie sonst kaum bemerkt hätten. Beginn lieber mit einer Frage, einer Zahl oder einem kleinen Fall – nach einer Pause.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer sich zu Beginn für seine Nervosität entschuldigt, wirkt sympathisch und nimmt sich Druck.", "urteil": "teils", "warum": "Ein ehrlicher Halbsatz kann entlasten. Meist lenkt die Entschuldigung aber den Blick genau auf die Unsicherheit, die keiner gesehen hätte – und sie besetzt den Anfang, der besonders hängen bleibt." },
+        { "art": "studie", "frage": "Sieht man dir die Nervosität so an, wie du denkst?", "aufbau": "Studierende hielten kurze Reden und schätzten danach, wie nervös sie gewirkt hatten. Zuhörer schätzten dasselbe. Ein Teil der Redner erfuhr vorher, dass man Nervosität meist schlechter sieht, als man glaubt.", "ergebnis": "Die Redner hielten ihre Nervosität für sichtbarer, als die Zuhörer sie wahrnahmen. Wer davon wusste, redete entspannter.", "grenze": "Laborreden vor wenigen Zuhörern. Bei starker Angst kann mehr zu sehen sein – das Muster der Überschätzung ist aber mehrfach gezeigt.", "beleg": "B", "quellen": ["savitsky2003"] },
+        { "art": "karte", "text": "Fünf Einstiege, die tragen: eine Frage an die Runde, eine Zahl mit Bild, ein kleiner Fall („Letzten Dienstag …“), der Zwecksatz („Ich möchte heute eines erreichen: …“) oder ein Gegenstand, den du hochhältst. Vorher: hinstellen, einmal ausatmen, Blick heben, eine Sekunde still. Dann der erste Satz – den kannst du auswendig. Der Anfang bleibt besonders gut hängen; verschenk ihn nicht an Technik oder Entschuldigung." },
+        { "art": "zuordnen", "kopf": { "id": "stimme-2-04-a", "faehigkeit": "stimme.aufbau", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Erster Satz eines Beitrags. Was trägt – und was verschenkt den Anfang?",
+          "faecher": ["trägt", "verschenkt den Anfang"],
+          "karten": [
+            { "text": "„Wer von euch hat diese Woche schon einen Ausdruck gesucht?“", "fach": 0 },
+            { "text": "„Ich hab das ganz schnell zusammengeschustert, also nicht wundern …“", "fach": 1 },
+            { "text": "„Zwanzig Minuten. So lange stand Herr Petersen gestern in der Warteschleife.“", "fach": 0 },
+            { "text": "„Moment, ich muss erst noch die Folien finden … ah, hier.“", "fach": 1 },
+            { "text": "„Ich möchte heute eine Entscheidung zur Urlaubsplanung.“", "fach": 0 },
+            { "text": "„Ich bin nicht so der Redner, aber ich versuch's mal.“", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stimme-2-04-b", "faehigkeit": "stimme.pause", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du stehst auf, um in der Runde deinen Vorschlag vorzustellen. Alle reden noch durcheinander. Was tust du?",
+          "antworten": [
+            { "text": "Sofort mit dem ersten Satz anfangen – sobald du redest, hören sie schon zu.", "wert": 0, "tendenz": "tempo", "warum": "Der erste Satz – der wichtigste – geht im Gemurmel unter." },
+            { "text": "Hinstellen, ausatmen, in die Runde schauen und warten, bis es ruhig ist.", "wert": 2, "warum": "Die stille Sekunde holt die Aufmerksamkeit von allein. Dein erster Satz bekommt die Bühne, die er braucht." },
+            { "text": "„Psst, darf ich mal kurz?“", "wert": 1, "warum": "Wirkt, kostet aber den Start. Oft genügt es, still dazustehen und zu schauen." },
+            { "text": "Lauter werden, bis du über allen bist.", "wert": 0, "warum": "Gegen Gemurmel anreden strengt die Stimme an und macht den Einstieg hektisch." }
+          ] },
+        { "art": "sprechen", "kopf": { "id": "stimme-2-04-c", "faehigkeit": "stimme.aufbau", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "stimme-v-0125" },
+          "auftrag": "Steh auf. Wähle einen Einstieg – Frage, Zahl mit Bild oder kleiner Fall – für einen Beitrag, den du bald halten wirst. Ausatmen, Blick heben, eine Sekunde Stille, dann die ersten zwanzig Sekunden.",
+          "sekunden": 30,
+          "pruefliste": ["Vor dem ersten Wort eine Sekunde still?", "Kein „Also“, kein „Ich wollte nur kurz“?", "Erster Satz ohne Entschuldigung und ohne Technik-Kommentar?"] },
+        { "art": "experiment", "auftrag": "Beginn deinen nächsten Beitrag – in der Besprechung, im Verein, am Telefon – ohne Anlauf und ohne Entschuldigung, mit Frage, Zahl oder Fall.", "dauer": "woche", "nachfrage": "Wie haben die anderen in den ersten Sekunden reagiert?" },
+        { "art": "reflexion", "frage": "Welcher Anlauf-Satz rutscht dir am häufigsten heraus – und welcher erste Satz ersetzt ihn ab jetzt?", "insBuch": "saetze" }
+      ],
+      "regel": "Erst still stehen, dann Frage, Zahl oder Fall – nie die Entschuldigung.",
+      "merkkarten": [
+        { "id": "stimme-2-04-m1", "frage": "Warum keine Entschuldigung zum Start?", "antwort": "Sie lenkt den Blick auf eine Unsicherheit, die man meist kaum sieht – und besetzt den Anfang, der besonders hängen bleibt." },
+        { "id": "stimme-2-04-m2", "frage": "Was tust du vor dem ersten Satz?", "antwort": "Hinstellen, ausatmen, Blick heben, eine Sekunde still." }
+      ]
+    },
+    {
+      "id": "stimme-2-05", "bereich": "stimme", "stufe": 2, "nr": 5,
+      "titel": "Der Schluss, der bleibt",
+      "faehigkeiten": ["stimme.aufbau", "stimme.betonung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass das Ende einer Folge besser behalten wird als die Mitte, ist ein klassischer Laborbefund mit Wortlisten; dass es bei Reden genauso wirkt, ist eine Übertragung. Der Vorteil des Endes zeigt sich vor allem direkt danach; der des Anfangs hält länger. Die Bausteine des Schlusses sind Praxiswissen.",
+      "quellen": ["murdock1962", "praxis-stimme"],
+      "aha": "Was du zuletzt sagst, ist noch frisch, wenn die anderen entscheiden oder aufstehen. Verschenk es nicht an „Das war's“. Sag den Kernsatz noch einmal, nenn den nächsten Schritt – und bleib danach einen Moment still stehen.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Du hörst eine Liste von zwanzig Wörtern und sollst danach so viele wie möglich aufschreiben. Welche fallen dir am ehesten ein?", "optionen": ["die aus der Mitte", "die vom Anfang und vom Ende", "alle etwa gleich gut"], "richtig": 1, "loesung": "Die vom Anfang und vom Ende.", "aufloesung": "Ein klassischer Gedächtnisversuch: Anfang und Ende einer Folge bleiben besser hängen als die Mitte. Das ist mit Wortlisten gezeigt, nicht mit Reden – die Folgerung für den Vortrag liegt aber nahe: Einstieg und Schluss verdienen die meiste Vorbereitung." },
+        { "art": "karte", "text": "Ein Schluss hat drei Bausteine. Ein Signal: „Zum Schluss …“ – dann hören alle noch einmal hin. Der Kernsatz, gern in neuen Worten. Der nächste Schritt oder die Bitte. Wer mag, schließt den Kreis zum Einstieg. Keine neue Information mehr. Den letzten Satz sprichst du ruhiger, die Stimme sinkt. Danach: Blick in die Runde, zwei Sekunden still – erst dann „Danke“." },
+        { "art": "fehler", "kopf": { "id": "stimme-2-05-a", "faehigkeit": "stimme.aufbau", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "So endete Tareks Vorschlag für die neue Urlaubsplanung. Markier die Stellen, die den Schluss schwächen.",
+          "teile": [
+            { "t": "So," },
+            { "t": "ja,", "fehler": "Anlauf ohne Signal – „Zum Schluss“ würde alle noch einmal hinhören lassen." },
+            { "t": "das" }, { "t": "war's" },
+            { "t": "eigentlich.", "fehler": "„Das war's eigentlich“ – der letzte Eindruck ist ein Achselzucken." },
+            { "t": "Ach," }, { "t": "und" },
+            { "t": "der" }, { "t": "Kalender" }, { "t": "hängt" }, { "t": "ab" }, { "t": "März" }, { "t": "auch" }, { "t": "im" },
+            { "t": "Intranet.", "fehler": "Neue Information ganz am Ende – sie verdrängt den Kernsatz." },
+            { "t": "Hoffe,", "fehler": "Die Hoffnung, nicht gelangweilt zu haben, bleibt als Letztes hängen." },
+            { "t": "ich" }, { "t": "hab" }, { "t": "euch" }, { "t": "nicht" }, { "t": "gelangweilt." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stimme-2-05-b", "faehigkeit": "stimme.betonung", "stufe": 5, "kanal": "wissen" },
+          "frage": "Dein letzter Satz lautet: „Lasst uns ab März mit dem neuen Kalender starten.“ Wie sprichst du ihn?",
+          "antworten": [
+            { "text": "Ruhiger als den Rest, MÄRZ betont, die Stimme sinkt – danach zwei Sekunden still.", "wert": 2, "warum": "So klingt der Satz nach Schluss und nicht nach Frage. Die Stille danach lässt ihn wirken." },
+            { "text": "Schnell, damit die Runde endlich weitermachen kann.", "wert": 0, "tendenz": "tempo", "warum": "Wer den Schluss eilig sagt, macht ihn klein – genau der Satz, der hängen bleiben soll." },
+            { "text": "Mit steigender Stimme, damit es freundlich und offen klingt.", "wert": 0, "tendenz": "kleinreden", "warum": "Am Ende steigend klingt die Bitte wie eine Frage. Dann fühlt sich keiner aufgefordert." },
+            { "text": "Etwas lauter als den Rest, um ihm Gewicht zu geben.", "wert": 1, "warum": "Gewicht ja. Ruhe und eine sinkende Stimme geben es meist überzeugender als Lautstärke." }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "stimme-2-05-c", "faehigkeit": "stimme.aufbau", "stufe": 5, "kanal": "koennen" },
+          "plan": "Schluss",
+          "anlass": "Ein Beitrag, den du bald hältst – oder zum Üben: dein Vorschlag, die Teamrunde auf eine halbe Stunde zu kürzen.",
+          "felder": [
+            { "name": "Signal", "hilfe": "Wie kündigst du den Schluss an?" },
+            { "name": "Kernsatz", "hilfe": "Dein wichtigster Gedanke – gern in neuen Worten." },
+            { "name": "Nächster Schritt", "hilfe": "Was sollen die anderen tun oder entscheiden – bis wann?" },
+            { "name": "Kreis (wenn du magst)", "hilfe": "Ein Rückgriff auf deinen Einstieg." }
+          ],
+          "muster": ["Signal: Zum Schluss. Kernsatz: Eine halbe Stunde reicht, wenn wir uns an die Tagesordnung halten. Nächster Schritt: Lasst es uns ab Montag vier Wochen lang testen. Kreis: Und dann reden wir wieder über die zwanzig Minuten, die wir jede Woche zurückbekommen.", "Signal: Wenn ihr euch eines merkt: Kernsatz: Kürzer heißt nicht weniger, sondern klarer. Nächster Schritt: Ich schicke heute die Tagesordnung – bitte bis Freitag ergänzen."] },
+        { "art": "buehne", "kopf": { "id": "stimme-2-05-d", "faehigkeit": "stimme.aufbau", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "stimme-v-0125" },
+          "auftrag": "Steh auf und sprich deinen Schluss aus dem Bauplan – Signal, Kernsatz, nächster Schritt. Danach zwei Sekunden still stehen bleiben, erst dann „Danke“.",
+          "sekunden": 40,
+          "publikum": "klein",
+          "stoerungen": ["Jemand packt schon die Sachen zusammen.", "Ein Stuhl wird laut gerückt.", "Jemand fragt: „Und wann genau?“"],
+          "pruefliste": ["Signal gesetzt?", "Letzter Satz ruhig, Stimme gesunken?", "Zwei Sekunden Stille vor dem „Danke“?", "Keine neue Information am Ende?"] },
+        { "art": "experiment", "auftrag": "Beende deinen nächsten Beitrag mit Signal, Kernsatz und nächstem Schritt – und halte danach zwei Sekunden Stille aus.", "dauer": "woche", "nachfrage": "Was haben die anderen nach deinem Schluss getan oder gesagt?" },
+        { "art": "reflexion", "frage": "Wie endest du gewöhnlich – und welchen Schlusssatz nimmst du dir für die nächste Runde vor?", "insBuch": "saetze" }
+      ],
+      "regel": "Signal, Kernsatz, nächster Schritt – dann still stehen, erst danach „Danke“.",
+      "merkkarten": [
+        { "id": "stimme-2-05-m1", "frage": "Die drei Bausteine eines Schlusses?", "antwort": "Signal, Kernsatz, nächster Schritt – wer mag, schließt den Kreis zum Einstieg." },
+        { "id": "stimme-2-05-m2", "frage": "Was hat am Schluss nichts verloren?", "antwort": "Neue Informationen, „Das war's“ und die Hoffnung, nicht gelangweilt zu haben." },
+        { "id": "stimme-2-05-m3", "frage": "Wie klingt der letzte Satz?", "antwort": "Ruhiger, die Stimme sinkt – danach zwei Sekunden Stille." }
+      ]
+    },
+    {
+      "id": "stimme-2-06", "bereich": "stimme", "stufe": 2, "nr": 6,
+      "titel": "Stehen, schauen, Hände",
+      "faehigkeiten": ["stimme.auftritt", "stimme.atem"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Dass passende Gesten beim Verstehen helfen, zeigen zwei Meta-Analysen. Dass mehr Blickkontakt nicht automatisch überzeugt, zeigt ein Versuch mit Videos. Aufrechte Haltung hebt das eigene Gefühl nur leicht. Stand und Blickführung sind Praxiswissen.",
+      "quellen": ["hostetter2011", "dargue2019", "chen2013", "koerner2022", "praxis-stimme"],
+      "aha": "Dein Körper spricht mit, ob du willst oder nicht. Gib ihm eine Aufgabe: Füße auf den Boden, ein Gedanke für eine Person, Hände, die zeigen, was du sagst.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "stimme-2-06-a", "faehigkeit": "stimme.auftritt", "stufe": 4, "kanal": "wissen" },
+          "frage": "Du stehst vor der Runde und zeigst gerade nichts. Wohin mit den Händen?",
+          "antworten": [
+            { "text": "In die Hosentaschen – dann zappeln sie nicht.", "wert": 0, "tendenz": "vermeiden", "warum": "Versteckt bleiben sie stecken. Wenn du etwas zeigen willst, fehlen sie dir." },
+            { "text": "Locker vor dem Bauch, die Fingerspitzen berühren sich leicht – bereit für die nächste Geste.", "wert": 2, "warum": "Eine ruhige Grundhaltung, aus der jede Geste leicht entsteht. Sie wirkt gesammelt, nicht steif." },
+            { "text": "Hinter dem Rücken verschränkt.", "wert": 0, "warum": "Wirkt schnell wie beim Appell – und die Hände sind für Gesten aus dem Spiel." },
+            { "text": "Locker an den Seiten hängen lassen.", "wert": 1, "warum": "Ruhig und ehrlich. Viele fühlen sich dabei aber nackt – vor dem Bauch sind die Hände schneller einsatzbereit." }
+          ] },
+        { "art": "studie", "frage": "Helfen Gesten den Zuhörern wirklich?", "aufbau": "Zwei Meta-Analysen fassten Studien zusammen, in denen Menschen Erklärungen mit und ohne Gesten hörten und danach geprüft wurde, was sie verstanden hatten.", "ergebnis": "Gesten halfen im Mittel mäßig beim Verstehen – am meisten, wenn sie zeigten, wie etwas aussieht oder abläuft, und wenn sie etwas hinzufügten, was die Worte nicht sagten.", "grenze": "Bei abstrakten Themen und bei Gesten, die nur wiederholen, ist der Gewinn kleiner. Untersucht ist das Verstehen, nicht der Eindruck vom Redner.", "beleg": "A", "quellen": ["hostetter2011", "dargue2019"] },
+        { "art": "karte", "text": "Stand: Füße etwa hüftbreit, Gewicht auf beiden, Knie locker – vor dem ersten Satz einmal ausatmen. Blick: ein Gedanke, eine Person, dann die nächste. Mehr Blickkontakt ist nicht immer besser: In einem Versuch ließen sich Zuhörer, die einem Redner mehr in die Augen sahen, sogar weniger umstimmen. Hände: zeigen, wie groß, wie viele, wohin – dazwischen ruhig vor dem Bauch." },
+        { "art": "zuordnen", "kopf": { "id": "stimme-2-06-b", "faehigkeit": "stimme.auftritt", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Welche Bewegung hilft den Zuhörern – und welche lenkt ab?",
+          "faecher": ["hilft", "lenkt ab"],
+          "karten": [
+            { "text": "bei „drei Schritte“ drei Finger zeigen", "fach": 0 },
+            { "text": "mit dem Kuli klicken, während du sprichst", "fach": 1 },
+            { "text": "bei „von Lager zu Versand“ eine Bewegung von links nach rechts", "fach": 0 },
+            { "text": "beim Sprechen von einem Bein aufs andere wippen", "fach": 1 },
+            { "text": "bei „so hoch wie ein Schrank“ die Hand auf Schulterhöhe", "fach": 0 },
+            { "text": "immer wieder den Ärmel zurechtzupfen", "fach": 1 }
+          ] },
+        { "art": "buehne", "kopf": { "id": "stimme-2-06-c", "faehigkeit": "stimme.auftritt", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "stimme-v-0135" },
+          "auftrag": "Stell dir drei Personen vor dir vor – links, Mitte, rechts. Erklär in einer Minute den Weg von deiner Haustür zur Arbeit: jeden Abschnitt zu einer anderen Person, mit Händen, die die Richtung zeigen. Vor dem ersten Satz: Füße spüren, ausatmen.",
+          "sekunden": 60,
+          "publikum": "klein",
+          "stoerungen": ["Die Person rechts schaut aufs Handy.", "Jemand nickt heftig.", "Die Tür geht auf."],
+          "pruefliste": ["Stand ruhig, kein Wippen?", "Jeder Abschnitt zu einer Person?", "Hände zeigen Richtung und Größe – dazwischen ruhig?", "Bei der Störung kurz Pause, dann weiter?"] },
+        { "art": "auswahl", "kopf": { "id": "stimme-2-06-d", "faehigkeit": "stimme.atem", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du merkst im Stehen, dass dein Atem hoch und flach wird und die Stimme dünner. Was hilft mitten im Vortrag am meisten?",
+          "antworten": [
+            { "text": "Am nächsten Satzende den Bauch loslassen, Füße spüren und den nächsten Satz kürzer machen.", "wert": 2, "warum": "Loslassen holt den Atem nach unten, der Boden gibt Halt, kurze Sätze brauchen weniger Luft." },
+            { "text": "Unauffällig tief einatmen und die Luft anhalten, bis es sich beruhigt.", "wert": 0, "tendenz": "ueberkontrolle", "warum": "Luft anhalten spannt an und macht die Stimme eher noch enger." },
+            { "text": "Einen Schluck Wasser trinken.", "wert": 1, "warum": "Gibt eine Pause und hilft gegen den trockenen Mund. Den Atem holt erst das Loslassen zurück." }
+          ] },
+        { "art": "experiment", "auftrag": "Probier bei deinem nächsten Beitrag im Stehen: ein Gedanke, eine Person – und mindestens eine Geste, die zeigt, wie groß, wie viele oder wohin.", "dauer": "woche", "nachfrage": "Wie hat sich der Blick von Person zu Person angefühlt – und wer hat zurückgeschaut?" },
+        { "art": "reflexion", "frage": "Was macht dein Körper, wenn du vor anderen stehst – und welche eine Gewohnheit möchtest du ersetzen?" }
+      ],
+      "regel": "Füße auf den Boden, ein Gedanke für eine Person, Hände zeigen, was du sagst.",
+      "merkkarten": [
+        { "id": "stimme-2-06-m1", "frage": "Welche Gesten helfen den Zuhörern am meisten?", "antwort": "Die zeigen, wie etwas aussieht oder abläuft – und etwas hinzufügen." },
+        { "id": "stimme-2-06-m2", "frage": "Wie führst du den Blick?", "antwort": "Ein Gedanke, eine Person – dann die nächste. Ruhig, nicht starren." },
+        { "id": "stimme-2-06-m3", "frage": "Wo sind die Hände, wenn sie nichts zeigen?", "antwort": "Locker vor dem Bauch – bereit für die nächste Geste." }
+      ]
+    }
+  ]
+}

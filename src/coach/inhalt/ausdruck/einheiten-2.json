@@ -1,0 +1,333 @@
+{
+  "einheiten": [
+    {
+      "id": "ausdruck-2-01", "bereich": "ausdruck", "stufe": 2, "nr": 1,
+      "titel": "Feste Verbindungen",
+      "faehigkeiten": ["ausdruck.wendungen", "ausdruck.verben"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Welche Verbindungen fest sind, zeigt der Sprachgebrauch und das Wörterbuch. Gut belegt ist nur, wie sie haften: selbst abrufen und verteilt wiederholen.",
+      "quellen": ["praxis-ausdruck", "dunlosky2013"],
+      "aha": "Nicht jedes Hauptwort mit Verb ist Papierdeutsch. „Rücksicht nehmen“ und „in Kraft treten“ sind feste Paare – leer ist nur, was ein einfaches Verb bloß verlängert.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Drei Verbindungen aus Hauptwort und Verb. Welche ist kein Papierdeutsch, sondern ein festes Paar, das bleiben darf?", "optionen": ["eine Prüfung durchführen", "Rücksicht nehmen", "eine Klärung herbeiführen"], "richtig": 1, "loesung": "Rücksicht nehmen", "aufloesung": "Für „Rücksicht nehmen“ gibt es kein einfaches Verb, das dasselbe sagt. „Eine Prüfung durchführen“ ist „prüfen“, „eine Klärung herbeiführen“ ist „klären“ – dort füllt das Verb nur Platz." },
+        { "art": "karte", "text": "Manche Wörter gehören zusammen: Man äußert Bedenken, hält einen Vortrag. Solche festen Paare klingen natürlich, vertauschte fallen auf. Leer ist eine Verbindung, wenn ein blasses Verb – durchführen, vornehmen, tätigen – nur ein einfaches verlängert: „eine Prüfung durchführen“ = prüfen. Übliche Paare wie „einen Antrag stellen“ dürfen bleiben, ebenso solche mit eigenem Sinn („in Kraft treten“ = beginnen zu gelten)." },
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-2-01-a", "faehigkeit": "ausdruck.wendungen", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Festes Paar – oder leere Hülle, die du auflöst?",
+          "faecher": ["festes Paar – bleibt", "leer – auflösen"],
+          "karten": [
+            { "text": "einen Antrag stellen", "fach": 0 },
+            { "text": "Rücksicht nehmen", "fach": 0 },
+            { "text": "in Kraft treten", "fach": 0 },
+            { "text": "eine Überprüfung vornehmen", "fach": 1 },
+            { "text": "eine Bestellung tätigen", "fach": 1 },
+            { "text": "zur Auszahlung bringen", "fach": 1 }
+          ] },
+        { "art": "wortwahl", "kopf": { "id": "ausdruck-2-01-b", "faehigkeit": "ausdruck.wendungen", "stufe": 4, "kanal": "wissen" },
+          "frage": "„Bevor die Kunden fragen, sollten wir über den neuen Ablauf Klarheit ___.“",
+          "antworten": [
+            { "text": "machen", "wert": 0, "warum": "Unüblich – „Klarheit machen“ klingt nach einer Übersetzung." },
+            { "text": "schaffen", "wert": 2, "warum": "Das feste Paar: Klarheit schaffen. So sagt man es." },
+            { "text": "herstellen", "wert": 1, "warum": "Verständlich und nicht falsch, klingt aber technischer. Das übliche Partnerwort ist „schaffen“." },
+            { "text": "tun", "wert": 0, "warum": "Mit „tun“ geht Klarheit keine Verbindung ein." }
+          ] },
+        { "art": "fehler", "kopf": { "id": "ausdruck-2-01-c", "faehigkeit": "ausdruck.wendungen", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Miriams Protokoll. Markier die Stellen, an denen das Partnerwort nicht stimmt.",
+          "teile": [
+            { "t": "„In der Runde hat Lena Bedenken" },
+            { "t": "gesagt,", "fehler": "Bedenken äußert man – oder man meldet sie an." },
+            { "t": "Tarek hat am Zeitplan" },
+            { "t": "Kritik gemacht,", "fehler": "Kritik übt man. „Kritik machen“ ist unüblich." },
+            { "t": "und am Ende haben wir eine Entscheidung getroffen. Carla" },
+            { "t": "gibt", "fehler": "Einen Vortrag hält man. „Einen Vortrag geben“ folgt dem Englischen." },
+            { "t": "am Freitag einen Vortrag dazu.“" }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-2-01-d", "faehigkeit": "ausdruck.verben", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Lös die leeren Verbindungen auf – das feste Paar darf bleiben.",
+          "vorlage": "„Nach Vornahme einer Prüfung bringen wir den Betrag zur Auszahlung. Bedenken können Sie bis Freitag äußern.“",
+          "kriterien": ["leere Verbindungen in Verben aufgelöst", "„Bedenken äußern“ bleibt stehen", "kürzer als die Vorlage"],
+          "muster": ["„Wir prüfen den Fall und zahlen Ihnen dann den Betrag aus. Bedenken können Sie bis Freitag äußern.“", "„Sobald wir geprüft haben, zahlen wir aus. Ihre Bedenken können Sie bis Freitag äußern.“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-2-01-e", "faehigkeit": "ausdruck.wendungen", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du liest eine neue Wendung: „einer Sache Rechnung tragen“ – also sie berücksichtigen. Wie bleibt sie am ehesten hängen?",
+          "antworten": [
+            { "text": "Fünfmal hintereinander lesen.", "wert": 0, "warum": "Wiederlesen fühlt sich gut an, hält aber schwach. Das Wort kommt so nicht aus dem Kopf heraus." },
+            { "text": "Einen Satz aus deinem Leben bauen und in ein paar Tagen aus dem Kopf ergänzen: „Wir tragen … Rechnung.“", "wert": 2, "warum": "Eigener Satz plus späteres Abrufen – so haftet eine Wendung am stärksten." },
+            { "text": "Die Bedeutung nachschlagen und einmal laut sagen.", "wert": 1, "warum": "Ein guter Anfang. Ohne eigenen Satz und spätere Wiederholung verblasst sie aber schnell." },
+            { "text": "Nur „Rechnung“ merken – das Verb ergibt sich.", "wert": 0, "warum": "Gerade das Verb ist der feste Teil. Wer es rät, landet bei „Rechnung machen“." }
+          ] },
+        { "art": "experiment", "auftrag": "Sammle diese Woche drei feste Verbindungen aus Texten, die du liest – jede mit einem eigenen Satz. Am Wochenende deckst du die Verben ab und ergänzt sie aus dem Kopf.", "dauer": "woche", "nachfrage": "Welche der drei Verbindungen hast du schon selbst benutzt?" },
+        { "art": "reflexion", "frage": "Welche Verbindung verwechselst du gern? Schreib die richtige mit einem Satz aus deinem Leben auf.", "insBuch": "saetze" }
+      ],
+      "regel": "Leer ist, was ein einfaches Verb nur verlängert – übliche feste Paare dürfen bleiben.",
+      "merkkarten": [
+        { "id": "ausdruck-2-01-m1", "frage": "Wann bleibt eine Verbindung aus Hauptwort und Verb stehen?", "antwort": "Wenn sie üblich ist oder einen eigenen Sinn trägt: Rücksicht nehmen, einen Antrag stellen, in Kraft treten." },
+        { "id": "ausdruck-2-01-m2", "frage": "Bedenken …? Einen Vortrag …? Kritik …?", "antwort": "Bedenken äußern, einen Vortrag halten, Kritik üben." },
+        { "id": "ausdruck-2-01-m3", "frage": "Wie lernst du eine neue Wendung?", "antwort": "Mit Partnerwort und eigenem Satz – und nach ein paar Tagen aus dem Kopf abrufen." }
+      ]
+    },
+    {
+      "id": "ausdruck-2-02", "bereich": "ausdruck", "stufe": 2, "nr": 2,
+      "titel": "Positiv fassen – ohne zu schummeln",
+      "faehigkeiten": ["ausdruck.diplomatie"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Positiv fassen ist bewährtes Praxiswissen aus Kundengesprächen und Schreibtrainings; eigene Studien zu genau diesen Formulierungen gibt es kaum.",
+      "quellen": ["praxis-ausdruck", "orwell1946"],
+      "aha": "Sag, was geht – nicht nur, was nicht geht. Aber prüf jedes Mal: Ist der Inhalt noch derselbe? „Nicht vor Freitag“ heißt frühestens Freitag, „bis Freitag“ verspricht mehr.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Herr Petersen fragt am Telefon, ob sein Gerät heute fertig wird. Die Reparatur dauert noch bis Donnerstag.", "schwach": "„Heute geht das nicht. Vor Donnerstag wird das nichts.“", "stark": "„Am Donnerstag ist Ihr Gerät fertig – ich rufe Sie an, sobald es so weit ist.“", "frage": "Was macht die zweite Antwort anders?", "unterschied": "Der Inhalt ist derselbe. Die zweite sagt aber, wann es geht und was als Nächstes passiert – Herr Petersen kann planen, statt nur ein Nein zu hören." },
+        { "art": "karte", "text": "Positiv fassen heißt: sagen, was geht, wann es geht und unter welcher Bedingung. „Ohne Unterschrift geht nichts“ wird zu „Sobald Ihre Unterschrift da ist, legen wir los“ – wenn sie das Einzige ist, was fehlt. Die Grenze: Der Inhalt bleibt gleich. Wer aus „frühestens“ ein „spätestens“ macht, verspricht Neues. Und wer eine kräftige Erhöhung „kleine Anpassung“ nennt, redet schön – das täuscht und kostet Vertrauen." },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-2-02-a", "faehigkeit": "ausdruck.diplomatie", "stufe": 4, "kanal": "wissen" },
+          "frage": "„Das geht nicht vor Freitag.“ Welche Fassung sagt dasselbe – nur positiv?",
+          "antworten": [
+            { "text": "„Bis Freitag schaffe ich das.“", "wert": 0, "tendenz": "verschieben", "warum": "Klingt positiv, verschiebt aber den Inhalt: Aus „frühestens Freitag“ wird „spätestens Freitag“. Ein neues Versprechen." },
+            { "text": "„Vor Freitag ist da leider gar nichts drin.“", "wert": 1, "warum": "Ehrlich und klar – aber immer noch nur das Nein." },
+            { "text": "„Ab Freitag kann ich das übernehmen.“", "wert": 2, "warum": "Derselbe Inhalt – frühestens Freitag –, nur von der Seite dessen, was geht." },
+            { "text": "„Ich schau mal, was sich machen lässt.“", "wert": 0, "tendenz": "ausweichen", "warum": "Verschweigt den Freitag. Der andere hofft auf morgen und ist am Ende enttäuscht." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-2-02-b", "faehigkeit": "ausdruck.diplomatie", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Positiv gefasst – oder schöngeredet?",
+          "faecher": ["positiv gefasst – Inhalt bleibt", "schöngeredet – Inhalt verbogen"],
+          "karten": [
+            { "text": "„Sobald die Unterschrift da ist, legen wir los.“", "fach": 0 },
+            { "text": "„Der Saal fasst 40 Leute – für alle anderen bieten wir einen zweiten Termin an.“", "fach": 0 },
+            { "text": "„Ab Montag bin ich wieder erreichbar.“", "fach": 0 },
+            { "text": "„Kleine Preisanpassung“ – für ein Drittel mehr", "fach": 1 },
+            { "text": "„Leicht verzögert“ – für drei Monate Verspätung", "fach": 1 },
+            { "text": "„Ein Erfolg mit Lernpotenzial“ – für ein Projekt, das gescheitert ist", "fach": 1 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-2-02-c", "faehigkeit": "ausdruck.diplomatie", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Sag, was geht und unter welcher Bedingung – ohne mehr zu versprechen als die Vorlage.",
+          "vorlage": "„Ohne den ausgefüllten Antrag können wir Ihnen keinen Termin geben.“",
+          "kriterien": ["sagt, was geht und wann", "verspricht nicht mehr als die Vorlage", "freundlich, ohne Vorwurf"],
+          "muster": ["„Sobald Ihr ausgefüllter Antrag bei uns ist, bekommen Sie einen Termin.“", "„Schicken Sie uns bitte den ausgefüllten Antrag – dann vergeben wir Ihnen einen Termin.“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-2-02-d", "faehigkeit": "ausdruck.diplomatie", "stufe": 6, "kanal": "wissen" },
+          "frage": "Positiv fassen hat Grenzen. Wann ist das klare Nein die bessere Wahl?",
+          "antworten": [
+            { "text": "Wenn es nichts gibt, was stattdessen geht.", "wert": 2, "warum": "Dann wirkt ein künstlich positiver Satz wie Ausweichen. Ein klares Nein mit kurzem Grund ist ehrlicher – und freundlicher." },
+            { "text": "Bei Warnungen und Sicherheitsregeln, etwa „Hier nicht rauchen“.", "wert": 1, "warum": "Auch richtig: Bei Gefahr zählt Klarheit. Die beste Antwort ist allgemeiner – sie gilt für jedes Nein ohne Alternative." },
+            { "text": "Nie – ein Nein klingt immer unfreundlich.", "wert": 0, "warum": "Ein klares, kurzes Nein ist oft das Freundlichste. Unfreundlich ist, den anderen raten zu lassen." },
+            { "text": "Wenn du jemanden schonen willst – dann lieber gar nichts sagen und abwarten, bis er von selbst fragt.", "wert": 0, "tendenz": "vermeiden", "warum": "Schweigen schont niemanden. Der andere plant weiter mit etwas, das nicht kommt." }
+          ] },
+        { "art": "experiment", "auftrag": "Fang heute jede Absage oder Einschränkung mit dem an, was geht: „Ab …“, „Sobald …“, „Was ich anbieten kann: …“", "dauer": "heute", "nachfrage": "Ist der Inhalt dabei gleich geblieben – oder hast du unterwegs etwas versprochen?" },
+        { "art": "reflexion", "frage": "Welches „Das geht nicht“ sagst du oft? Schreib es positiv – mit genau demselben Inhalt.", "insBuch": "saetze" }
+      ],
+      "regel": "Sag, was geht – und prüf, ob der Inhalt derselbe bleibt.",
+      "merkkarten": [
+        { "id": "ausdruck-2-02-m1", "frage": "Was heißt „positiv fassen“?", "antwort": "Sagen, was geht, wann und unter welcher Bedingung – bei gleichem Inhalt." },
+        { "id": "ausdruck-2-02-m2", "frage": "„Nicht vor Freitag“ – positiv, ohne mehr zu versprechen?", "antwort": "„Ab Freitag …“ – nicht „bis Freitag“." },
+        { "id": "ausdruck-2-02-m3", "frage": "Wo endet positiv fassen?", "antwort": "Wo der Inhalt verbogen wird – „kleine Anpassung“ für eine kräftige Erhöhung ist Schönreden." }
+      ]
+    },
+    {
+      "id": "ausdruck-2-03", "bereich": "ausdruck", "stufe": 2, "nr": 3,
+      "titel": "Heikles elegant sagen",
+      "faehigkeiten": ["ausdruck.diplomatie", "ausdruck.register"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Ich-Sätze im Streit weniger feindselig ankommen, zeigt eine Befragungsstudie mit erdachten Sätzen. Das Gesichts-Modell der Höflichkeit ist ein Denkmodell; die Formulierungen sind Praxiswissen.",
+      "quellen": ["rogers2018", "brown1987", "goffman1955", "praxis-ausdruck"],
+      "aha": "Diplomatisch heißt nicht: um den Brei herum. Die Sache bleibt klar, dem anderen bleibt sein Gesicht. Dafür gibt es Bauteile – für Kritik, Erinnerung, Widerspruch und den eigenen Fehler.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Diplomatisch sein heißt, unangenehme Dinge so weich zu verpacken, dass sie kaum auffallen.", "urteil": "falsch", "warum": "Wer so weich verpackt, dass es kaum auffällt, lässt den anderen raten – und nichts ändert sich. Diplomatisch heißt: klar in der Sache, freundlich zur Person." },
+        { "art": "karte", "text": "Vier heikle Lagen, vier Bauteile. Kritik: Befund statt Urteil – „Mir fehlt noch …“. An eine Zusage erinnern: Befund plus Frage – „Die Zahlen fehlen noch. Schaffst du sie bis zwölf?“ Widerspruch nach oben: „Ich sehe ein Problem: … Ginge …?“ Eigener Fehler: drei Sätze – was passiert ist, was es heißt, was du jetzt tust. Keine Ausrede, kein Kriechen." },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-2-03-a", "faehigkeit": "ausdruck.diplomatie", "stufe": 4, "kanal": "wissen" },
+          "frage": "Tarek wollte dir bis gestern die Zahlen schicken. Sie fehlen. Was schreibst du?",
+          "antworten": [
+            { "text": "„Hallo, Tarek, mir fehlen noch die Zahlen von gestern. Schaffst du sie bis heute Mittag?“", "wert": 2, "warum": "Befund und Frage: klar, was fehlt und bis wann – ohne Vorwurf." },
+            { "text": "„Wie immer zu spät, oder?“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Urteil über Tarek statt über die Zahlen. Er wird sich verteidigen, statt zu liefern." },
+            { "text": "„Hallo, Tarek, kein Stress, nur falls du irgendwann mal Zeit hast, wäre es vielleicht nett, wenn du mir die Zahlen schicken könntest.“", "wert": 0, "tendenz": "ausweichen", "warum": "So weich, dass keine Frist mehr übrig bleibt. Tarek liest: nicht eilig." },
+            { "text": "„Hallo, Tarek, wo bleiben die Zahlen?“", "wert": 1, "warum": "Klar, aber etwas spitz – und ohne Frist weiß er nicht, wie dringend es ist." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-2-03-b", "faehigkeit": "ausdruck.register", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Dieselbe Art Kritik in drei Tonlagen. Wem schreibst du welche Fassung?",
+          "faecher": ["locker – an Tarek", "sachlich – an Dr. Albers", "förmlich – an eine Behörde"],
+          "karten": [
+            { "text": "„Du, bei den Kosten komm ich auf was anderes – guckst du noch mal drauf?“", "fach": 0 },
+            { "text": "„Mir fehlt noch dein Teil – schaffst du's bis drei?“", "fach": 0 },
+            { "text": "„Bei den Kosten komme ich auf ein anderes Ergebnis. Darf ich Ihnen kurz zeigen, wo?“", "fach": 1 },
+            { "text": "„Für Punkt 2 brauche ich noch Ihre Freigabe – geht das bis Donnerstag?“", "fach": 1 },
+            { "text": "„In Ihrem Bescheid vom 3. Mai weicht die Summe von meinen Unterlagen ab. Ich bitte um Prüfung.“", "fach": 2 },
+            { "text": "„Die zugesagte Antwort auf meinen Antrag steht noch aus. Ich bitte Sie um Nachricht bis Monatsende.“", "fach": 2 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-2-03-c", "faehigkeit": "ausdruck.diplomatie", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Meld deinen Fehler in drei Sätzen: was passiert ist – was es heißt – was du jetzt tust.",
+          "vorlage": "„Leider ist es aufgrund verschiedener unglücklicher Umstände dazu gekommen, dass die Einladung möglicherweise mit dem falschen Datum rausgegangen sein könnte, was mir natürlich furchtbar leidtut.“",
+          "kriterien": ["sagt klar, was passiert ist – mit „ich“", "nennt die Folge", "nennt den nächsten Schritt", "keine Ausrede, kein Kriechen"],
+          "muster": ["„Ich habe die Einladung mit dem falschen Datum verschickt: dem 4. statt dem 14. Wer sich den 4. eingetragen hat, steht zehn Tage zu früh da. Ich schicke heute noch eine Korrektur an alle.“", "„Mein Fehler: In der Einladung steht der 4. statt des 14. Wer schon zugesagt hat, plant vielleicht falsch. Die Korrektur geht in einer Stunde raus, die drei Zusagen rufe ich an.“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-2-03-d", "faehigkeit": "ausdruck.diplomatie", "stufe": 6, "kanal": "wissen" },
+          "frage": "Dr. Albers will die Schulung auf Freitagnachmittag legen. Freitags fehlt aber die halbe Abteilung. Was sagst du in der Runde?",
+          "antworten": [
+            { "text": "„Freitag? Da ist doch eh keiner da.“", "wert": 0, "tendenz": "abwerten", "warum": "Der Inhalt stimmt, der Ton macht den Vorschlag lächerlich. Albers muss sich jetzt verteidigen." },
+            { "text": "„Darf ich etwas zu bedenken geben? Freitags ist die Besetzung erfahrungsgemäß eher dünn.“", "wert": 1, "warum": "Höflich und sachlich. Mit einem konkreten Gegenvorschlag wäre es leichter zu entscheiden." },
+            { "text": "„Ich sehe ein Problem: Freitags fehlt die halbe Abteilung. Ginge Dienstagvormittag?“", "wert": 2, "warum": "Befund, Grund, Vorschlag – nach oben widersprochen, ohne ihn bloßzustellen." },
+            { "text": "Zustimmen und hinterher im Flur sagen, dass das nicht klappt.", "wert": 0, "tendenz": "vermeiden", "warum": "Der Einwand kommt an, aber nicht bei dem, der entscheidet." }
+          ] },
+        { "art": "geschichte", "titel": "Die Mail um 23 Uhr", "figur": "Carla Demir", "text": "Carla hatte drei Wochen auf ein Angebot gewartet. Um 23 Uhr schrieb sie dem Lieferanten: „Offenbar ist es bei Ihnen nicht üblich, Fristen einzuhalten.“ Sie schickte die Mail nicht ab. Am Morgen las sie sie noch einmal und schrieb neu: „Das Angebot fehlt uns noch – zugesagt war der 1. Ohne Angebot bis Freitag müssen wir uns anders entscheiden.“ Die Antwort kam am selben Tag, mit Entschuldigung. Carla sagt heute: „Die erste Mail war für mich. Die zweite war für ihn.“", "frage": "Welche Mail hättest du um 23 Uhr geschrieben – und welche abgeschickt?" },
+        { "art": "mission", "ref": "ausdruck-m-08" }
+      ],
+      "regel": "Klar in der Sache, freundlich zur Person – Befund, Grund, nächster Schritt.",
+      "merkkarten": [
+        { "id": "ausdruck-2-03-m1", "frage": "Eigener Fehler – welche drei Sätze?", "antwort": "Was passiert ist, was es heißt, was du jetzt tust. Ohne Ausrede, ohne Kriechen." },
+        { "id": "ausdruck-2-03-m2", "frage": "Wie erinnerst du an eine Zusage ohne Vorwurf?", "antwort": "Befund plus Frage: „Mir fehlen noch … – schaffst du es bis …?“" },
+        { "id": "ausdruck-2-03-m3", "frage": "Wie widersprichst du nach oben?", "antwort": "„Ich sehe ein Problem: … Ginge …?“ – Befund, Grund, Vorschlag." }
+      ],
+      "mission": "ausdruck-m-08"
+    },
+    {
+      "id": "ausdruck-2-04", "bereich": "ausdruck", "stufe": 2, "nr": 4,
+      "titel": "Die klare Mail",
+      "faehigkeiten": ["ausdruck.knapp", "ausdruck.satzbau"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass kürzere Bitten öfter beantwortet werden, zeigt ein großer Feldversuch, berichtet von den Autoren selbst. Betreff, Aufbau und eine Bitte je Mail sind Praxiswissen.",
+      "quellen": ["rogers-lasky2023", "langer-verstaendlich", "praxis-ausdruck"],
+      "aha": "Eine klare Mail sagt im Betreff, worum es geht, und im ersten Satz, was du brauchst. Kurze Mails werden eher gelesen – und eher beantwortet.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Forscher schickten rund 7.000 Menschen dieselbe Bitte um eine kurze Umfrage – einmal in 127 Wörtern, einmal in 49. Welche Fassung bekam mehr Antworten?", "optionen": ["die lange", "beide etwa gleich viele", "die kurze"], "richtig": 2, "loesung": "die kurze – fast doppelt so viele", "aufloesung": "Die kurze bekam fast doppelt so viele Antworten (4,8 gegen 2,7 von hundert). Lange Mails werden eher weggelegt – und lassen die Bitte größer wirken: Wer die kurze las, hielt auch die Umfrage öfter für kurz." },
+        { "art": "karte", "text": "Der Bauplan einer klaren Mail: Der Betreff nennt die Hauptsache, mit Bitte und Frist, wenn es eine gibt. Der erste Satz sagt, was du brauchst. Danach nur, was der Leser zum Handeln braucht. Eine Bitte pro Mail – bei mehreren: nummerieren. Am Schluss der nächste Schritt statt einer Floskel. Kurz heißt nicht kühl: Gruß und Dank bleiben." },
+        { "art": "rangfolge", "kopf": { "id": "ausdruck-2-04-a", "faehigkeit": "ausdruck.knapp", "stufe": 5, "kanal": "wissen" },
+          "frage": "Vier Betreffzeilen für dieselbe Mail an Dr. Albers. Ordne von hilfreich nach nutzlos.",
+          "eintraege": [
+            { "text": "„Bitte um Freigabe: neue Zeiterfassung – bis Mittwoch“", "warum": "Bitte, Gegenstand und Frist – er weiß vor dem Öffnen, was zu tun ist." },
+            { "text": "„Freigabe neue Zeiterfassung“", "warum": "Gegenstand und Art der Bitte. Nur die Frist fehlt." },
+            { "text": "„Zeiterfassung“", "warum": "Das Thema stimmt, aber was soll er damit tun?" },
+            { "text": "„Kurze Frage“", "warum": "Sagt nichts – und sie ist selten kurz." }
+          ] },
+        { "art": "fehler", "kopf": { "id": "ausdruck-2-04-b", "faehigkeit": "ausdruck.satzbau", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Dein Entwurf an Miriam. Markier, was die Mail unklar macht.",
+          "teile": [
+            { "t": "„Hallo, Miriam," },
+            { "t": "ich hoffe, du hattest ein schönes Wochenende und bist gut in die Woche gestartet.", "fehler": "Freundlicher Anlauf – aber die Bitte rutscht so in den dritten Satz." },
+            { "t": "Wegen der Messe:" },
+            { "t": "Könntest du die Standplanung übernehmen, und weißt du schon, ob Tarek mitkommt, und hast du die Hotelrechnung noch?", "fehler": "Drei Bitten in einem Satz – die letzte geht unter. Besser nummerieren." },
+            { "t": "Danke dir!" },
+            { "t": "Eine Antwort bei Gelegenheit wäre super.", "fehler": "Keine Frist – „bei Gelegenheit“ heißt oft nie." },
+            { "t": "Viele Grüße“" }
+          ] },
+        { "art": "kern", "kopf": { "id": "ausdruck-2-04-c", "faehigkeit": "ausdruck.knapp", "stufe": 6, "kanal": "koennen" },
+          "absatz": "Hallo, Carla, nachdem wir uns ja letzte Woche in der Runde kurz darüber unterhalten hatten, dass die Raumplanung für das Kundenseminar im März noch offen ist, und ich mir inzwischen ein paar Gedanken dazu gemacht habe, wollte ich dich fragen, ob du eventuell damit einverstanden wärst, wenn ich den großen Raum im Erdgeschoss für den 12. März reserviere, weil der kleine für die erwarteten 30 Leute vermutlich zu eng wird. Es wäre gut, wenn ich bis Freitag Bescheid wüsste, weil der Raum sonst weg sein könnte.",
+          "hoechstWoerter": 30,
+          "kriterien": ["die Bitte steht im ersten Satz", "Raum, Tag und Frist sind drin", "höchstens 30 Wörter"],
+          "muster": ["„Hallo, Carla, darf ich für das Kundenseminar am 12. März den großen Raum im Erdgeschoss reservieren? Der kleine wird wohl zu eng. Bitte sag mir bis Freitag Bescheid.“", "„Carla, ich möchte den großen Raum im Erdgeschoss fürs Kundenseminar am 12. März reservieren – der kleine wird wohl zu eng. Einverstanden? Antwort bitte bis Freitag.“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-2-04-d", "faehigkeit": "ausdruck.satzbau", "stufe": 6, "kanal": "wissen" },
+          "frage": "Albers antwortet auf deine Mail mit zwei Möglichkeiten in einer Zeile: „Welche empfehlen Sie?“ Wie antwortest du?",
+          "antworten": [
+            { "text": "„Das hängt von vielen Faktoren ab, die ich in meiner Mail ja schon ausführlich beschrieben habe.“", "wert": 0, "tendenz": "ausweichen", "warum": "Er hat gefragt, weil er nicht noch einmal lesen will. Die Antwort schiebt die Arbeit zurück." },
+            { "text": "„Möglichkeit B – sie ist im Mai fertig, A erst im August.“", "wert": 2, "warum": "Antwort zuerst, ein Grund dahinter. So knapp, wie gefragt wurde." },
+            { "text": "„Möglichkeit B.“", "wert": 1, "warum": "Klar und knapp. Ein halber Satz Grund hilft ihm, die Empfehlung weiterzugeben." },
+            { "text": "„Ich würde vielleicht eher zu B tendieren, aber A hat auch Vorteile.“", "wert": 0, "tendenz": "ausweichen", "warum": "Zwei Weichmacher und ein Rückzieher – er weiß danach so viel wie vorher." }
+          ] },
+        { "art": "mission", "ref": "ausdruck-m-10" }
+      ],
+      "regel": "Betreff mit der Hauptsache, die Bitte im ersten Satz, eine Bitte je Mail.",
+      "merkkarten": [
+        { "id": "ausdruck-2-04-m1", "frage": "Was gehört in den Betreff?", "antwort": "Die Hauptsache – mit Bitte und Frist, wenn es eine gibt." },
+        { "id": "ausdruck-2-04-m2", "frage": "Wie viele Bitten pro Mail?", "antwort": "Am besten eine. Bei mehreren: nummerieren." },
+        { "id": "ausdruck-2-04-m3", "frage": "Was zeigte der Versuch mit 49 und 127 Wörtern?", "antwort": "Die kurze Mail bekam fast doppelt so viele Antworten – und ließ die Umfrage kürzer wirken." }
+      ],
+      "mission": "ausdruck-m-10"
+    },
+    {
+      "id": "ausdruck-2-05", "bereich": "ausdruck", "stufe": 2, "nr": 5,
+      "titel": "Bedeutungspaare",
+      "faehigkeiten": ["ausdruck.treffend", "ausdruck.bildung"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Die Unterscheidungen folgen den Wörterbüchern. Die Alltagssprache hält sie nicht überall ein – „scheinbar“ steht laut Duden oft im Sinn von „anscheinend“.",
+      "quellen": ["duden-scheinbar", "praxis-ausdruck"],
+      "aha": "Manche Wörter sehen aus wie Zwillinge und meinen Verschiedenes: anscheinend und scheinbar, kindlich und kindisch, effektiv und effizient. Wer sie trennt, schreibt genauer – und korrigiert trotzdem niemanden.",
+      "schritte": [
+        { "art": "mythos", "aussage": "„Scheinbar“ und „anscheinend“ bedeuten dasselbe.", "urteil": "teils", "warum": "Im Alltag werden sie oft gleich benutzt. Genau genommen heißt „anscheinend“: vermutlich so. „Scheinbar“ heißt: nur dem Anschein nach, in Wirklichkeit nicht. „Er ist scheinbar krank“ hieße also: Er tut nur so." },
+        { "art": "karte", "text": "Bedeutungspaare klingen ähnlich und sagen Verschiedenes. Effektiv heißt wirksam, effizient: mit wenig Aufwand. Kindlich ist neutral, kindisch heißt albern. Formal betrifft die Form, formell heißt förmlich, offiziell. Geschäftlich hat mit dem Geschäft zu tun, geschäftig heißt: emsig beschäftigt. Für dich gilt: im eigenen Text genau sein. Für andere: nicht korrigieren – vieles ist im Alltag längst gemischt." },
+        { "art": "wortwahl", "kopf": { "id": "ausdruck-2-05-a", "faehigkeit": "ausdruck.treffend", "stufe": 4, "kanal": "wissen" },
+          "frage": "Die Erzieherin über einen Sechsjährigen: „Er ist noch sehr ___ – er staunt über alles und fragt viel.“",
+          "antworten": [
+            { "text": "kindisch", "wert": 0, "warum": "Abwertend: albern, unreif. Passt eher auf Erwachsene, die sich so benehmen." },
+            { "text": "verspielt", "wert": 1, "warum": "Passt halb – sagt, dass er gern spielt, nicht dass er staunt und fragt." },
+            { "text": "kindlich", "wert": 2, "warum": "Neutral: wie ein Kind eben ist – neugierig, staunend. Genau gemeint." },
+            { "text": "infantil", "wert": 0, "warum": "Ein Fachwort mit abwertendem Beiklang – fürs Gespräch über ein Kind fehl am Platz." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-2-05-b", "faehigkeit": "ausdruck.treffend", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Welches Wort gehört in die Lücke – anscheinend oder scheinbar?",
+          "faecher": ["anscheinend – vermutlich so", "scheinbar – nur dem Anschein nach"],
+          "karten": [
+            { "text": "„Der Zug steht. ___ ist ein Baum auf die Gleise gefallen.“", "fach": 0 },
+            { "text": "„Lenas Platz ist leer – sie ist ___ krank.“", "fach": 0 },
+            { "text": "„Der Drucker läuft wieder – ___ hat Jonas ihn repariert.“", "fach": 0 },
+            { "text": "„Die Aufgabe war nur ___ leicht – im zweiten Teil steckte der Haken.“", "fach": 1 },
+            { "text": "„Er hörte ___ aufmerksam zu, in Gedanken war er im Urlaub.“", "fach": 1 },
+            { "text": "„Die Tür ist nur ___ abgeschlossen – sie klemmt bloß.“", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-2-05-c", "faehigkeit": "ausdruck.bildung", "stufe": 5, "kanal": "wissen" },
+          "frage": "Die Einladung zum Firmenjubiläum kommt mit Siegel, Abendgarderobe ist erwünscht. Wie beschreibst du sie genau?",
+          "antworten": [
+            { "text": "„sehr formal“", "wert": 1, "warum": "Hört man oft, nach dem englischen „formal“. Im Duden heißt „formal“ aber „die Form betreffend“ oder „nur der Form nach“ – gemeint ist hier „formell“." },
+            { "text": "„sehr formell“", "wert": 2, "warum": "Formell heißt förmlich, offiziell – genau das sagen Siegel und Abendgarderobe." },
+            { "text": "„sehr formidabel“", "wert": 0, "warum": "Heißt „großartig“ – ein ganz anderes Wort, nur ähnlicher Klang." },
+            { "text": "„sehr offiziös“", "wert": 0, "warum": "Heißt „halbamtlich“ – nicht das, was gemeint ist." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-2-05-d", "faehigkeit": "ausdruck.bildung", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Mach die Wörter genau: Was ist Zeitersparnis, was eine Vermutung?",
+          "vorlage": "„Die neue Software ist effektiv, weil sie uns pro Woche zwei Stunden spart, und scheinbar sind alle zufrieden – beschwert hat sich jedenfalls niemand.“",
+          "kriterien": ["Zeitersparnis heißt „effizient“ – oder einfach „spart Zeit“", "die Vermutung heißt „anscheinend“ – oder „wohl“", "der Sinn bleibt gleich"],
+          "muster": ["„Die neue Software ist effizient: Sie spart uns zwei Stunden pro Woche. Anscheinend sind alle zufrieden – beschwert hat sich jedenfalls niemand.“", "„Die neue Software spart uns zwei Stunden pro Woche. Alle scheinen zufrieden zu sein – jedenfalls hat sich niemand beschwert.“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-2-05-e", "faehigkeit": "ausdruck.treffend", "stufe": 6, "kanal": "wissen" },
+          "frage": "Miriam schaut aus dem Fenster: „Scheinbar regnet es gleich.“ Was tust du?",
+          "antworten": [
+            { "text": "„Du meinst anscheinend – scheinbar hieße ja, es regnet nur zum Schein.“", "wert": 0, "tendenz": "besserwissen", "warum": "Sachlich richtig, im Gespräch aber Besserwisserei. Jeder hat verstanden, was sie meint." },
+            { "text": "Nichts korrigieren und den Schirm holen. In deinen eigenen Texten unterscheidest du.", "wert": 2, "warum": "Im Gespräch ist der Gebrauch üblich, der Duden verzeichnet ihn. Genau sein ist eine Aufgabe für dich, nicht für andere." },
+            { "text": "Lachen und sagen: „Hoffentlich nur scheinbar.“", "wert": 1, "warum": "Ein freundliches Wortspiel – geht unter Kollegen, die so etwas mögen. Bei anderen kann es wie eine Spitze wirken." }
+          ] },
+        { "art": "reflexion", "frage": "Welches Wortpaar verwechselst du selbst manchmal? Schreib zu jedem Wort einen Satz aus deinem Alltag.", "insBuch": "saetze" }
+      ],
+      "regel": "Im eigenen Text das genaue Wort – bei anderen keine Korrektur.",
+      "merkkarten": [
+        { "id": "ausdruck-2-05-m1", "frage": "Anscheinend oder scheinbar?", "antwort": "Anscheinend = vermutlich so. Scheinbar = nur dem Anschein nach, in Wirklichkeit nicht." },
+        { "id": "ausdruck-2-05-m2", "frage": "Kindlich oder kindisch?", "antwort": "Kindlich = wie ein Kind (neutral). Kindisch = albern, unreif (abwertend)." },
+        { "id": "ausdruck-2-05-m3", "frage": "Formal oder formell?", "antwort": "Formal = die Form betreffend. Formell = förmlich, offiziell." }
+      ]
+    },
+    {
+      "id": "ausdruck-2-06", "bereich": "ausdruck", "stufe": 2, "nr": 6,
+      "titel": "Konkret statt abstrakt",
+      "faehigkeiten": ["ausdruck.treffend", "ausdruck.knapp"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Konkrete Sprache im Kundengespräch: fünf Studien einer Forschergruppe. Dass Geschichten und Anschauliches länger wirken als nackte Zahlen, zeigen Online-Experimente. Die Abstraktionsleiter ist ein Denkmodell aus der Stilkunde.",
+      "quellen": ["packard2021", "graeber2024", "praxis-ausdruck"],
+      "aha": "„Diverse Herausforderungen“ kann niemand beheben. „Die Liste lag in zwei Ordnern“ schon. Steig die Leiter hinab – bis zu etwas, das man sehen kann.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Lena fragt dich, was im Projektbericht unter „Schwierigkeiten“ stehen soll.", "schwach": "„Es gab diverse Herausforderungen im Bereich Kommunikation.“", "stark": "„Zweimal kam eine Bestellung doppelt, weil die Liste in zwei Ordnern lag.“", "frage": "Mit welchem Satz kann das Team etwas anfangen?", "unterschied": "Der zweite zeigt, was passiert ist und wo man ansetzt: eine Liste, ein Ordner. Der erste klingt nach Bericht und verbirgt alles." },
+        { "art": "karte", "text": "Stell dir eine Leiter vor. Oben stehen Sammelwörter: Kommunikation, Ressourcen, Probleme. Unten steht, was man sehen kann: die Liste in zwei Ordnern, die Spätschicht ohne Vertretung. Für Leser steigst du hinab – ein Beispiel, ein Name, ein Datum. Große Zahlen verblassen schnell; mit einem Bild bleiben sie: „120.000 Blatt im Jahr – fast ein Paket Papier an jedem Arbeitstag.“" },
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-2-06-a", "faehigkeit": "ausdruck.treffend", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Oben oder unten auf der Leiter?",
+          "faecher": ["oben – abstrakt", "unten – konkret"],
+          "karten": [
+            { "text": "„Ressourcenengpass“", "fach": 0 },
+            { "text": "„Optimierungsbedarf beim Ablauf“", "fach": 0 },
+            { "text": "„Kommunikationsprobleme“", "fach": 0 },
+            { "text": "„Im März fehlen uns zwei Leute in der Spätschicht.“", "fach": 1 },
+            { "text": "„Die Formulare liegen in drei Ordnern.“", "fach": 1 },
+            { "text": "„Die Mail kam erst nach dem Termin an.“", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-2-06-b", "faehigkeit": "ausdruck.knapp", "stufe": 5, "kanal": "wissen" },
+          "frage": "Dr. Albers fragt im Flur nach dem Stand der neuen Geräte. Welche Antwort ist konkret und kurz?",
+          "antworten": [
+            { "text": "„Die Inbetriebnahme schreitet planmäßig voran, einige Punkte sind noch offen.“", "wert": 0, "tendenz": "vernebeln", "warum": "Klingt nach Stand, sagt keinen. Welche Punkte? Wie viele Geräte?" },
+            { "text": "„Zwei von fünf laufen, der Rest bis Donnerstag.“", "wert": 2, "warum": "Was, wie viel, bis wann – in einem Satz." },
+            { "text": "„Gerät 1 und 2 laufen seit Montag, Gerät 3 hatte am Dienstag einen Fehler, den Jonas behoben hat, bei Gerät 4 fehlt noch ein Kabel …“", "wert": 1, "warum": "Konkret, aber zu viel: Albers wollte den Stand, nicht das Protokoll." },
+            { "text": "„Läuft.“", "wert": 0, "tendenz": "schroff", "warum": "Kurz, aber leer – und es stimmt nur halb." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-2-06-c", "faehigkeit": "ausdruck.treffend", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Steig die Leiter hinab: Sag, was genau passiert ist. Zahlen und Einzelheiten darfst du erfinden – im echten Leben nur die echten.",
+          "vorlage": "„Wir haben die Kundenzufriedenheit durch verschiedene Maßnahmen deutlich verbessert.“",
+          "kriterien": ["nennt mindestens eine konkrete Maßnahme", "sagt, woran man die Verbesserung sieht", "keine Sammelwörter wie „Maßnahmen“"],
+          "muster": ["„Wir rufen jetzt jeden Kunden innerhalb eines Tages zurück. Seitdem kommen halb so viele Beschwerden.“", "„Seit Januar bekommt jeder Kunde am Vortag eine Erinnerung an seinen Termin. Verpasste Termine sind von etwa zehn auf drei im Monat gesunken.“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-2-06-d", "faehigkeit": "ausdruck.treffend", "stufe": 6, "kanal": "wissen" },
+          "frage": "Die Abteilung verbraucht 120.000 Blatt Papier im Jahr. Welcher Satz bleibt in der Teamrunde am ehesten hängen?",
+          "antworten": [
+            { "text": "„Eine enorme, signifikante Menge Papier.“", "wert": 0, "tendenz": "aufblaehen", "warum": "Zwei große Wörter, kein Bild. Wie viel ist „enorm“?" },
+            { "text": "„120.000 Blatt im Jahr.“", "wert": 1, "warum": "Stimmt und ist genau – aber eine nackte Zahl verblasst schnell." },
+            { "text": "„120.000 Blatt im Jahr – fast ein Paket an jedem Arbeitstag.“", "wert": 2, "warum": "Die Zahl bekommt ein Bild aus dem Alltag. Das Paket neben dem Drucker kennt jeder." },
+            { "text": "„Mehr Papier, als ihr euch vorstellen könnt.“", "wert": 0, "warum": "Übertreibt und erklärt nichts – die Zuhörer sollen sich ja gerade etwas vorstellen." }
+          ] },
+        { "art": "mission", "ref": "ausdruck-m-09" }
+      ],
+      "regel": "Steig die Leiter hinab – bis zu etwas, das man sehen kann.",
+      "merkkarten": [
+        { "id": "ausdruck-2-06-m1", "frage": "Wie wird ein Satz konkret?", "antwort": "Die Leiter hinabsteigen: ein Beispiel, ein Name, ein Datum – etwas, das man sehen kann." },
+        { "id": "ausdruck-2-06-m2", "frage": "Wie bleibt eine große Zahl hängen?", "antwort": "Mit einem Bild aus dem Alltag: „… fast ein Paket Papier an jedem Arbeitstag.“" }
+      ],
+      "mission": "ausdruck-m-09"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Flag } from 'lucide-react'
 import type { Mission } from '../kern/inhaltTypen'
-import { ladeMission } from '../kern/inhalt'
+import { ladeAufgabe } from '../kern/inhalt'
 import { useCoach } from '../kern/speicher'
 import { berichteMission, streicheMission, verschiebeMission, waehleMission } from '../kern/buchung'
 import { heute, tagNummer } from '../kern/zeit'
@@ -20,12 +20,21 @@ export function MissionWahl({ id, onFertig }: { id: string; onFertig: () => void
   const [plan, setPlan] = useState('')
   const [befuerchtung, setBefuerchtung] = useState('')
   const [wahrscheinlich, setWahrscheinlich] = useState<number | null>(null)
+  const [vorher, setVorher] = useState<number | null>(null)
   const offen = useCoach(s => s.daten.missionen.offen.some(x => x.id === id))
   const stottern = id.startsWith('aussprache-s-')
-  useEffect(() => { void ladeMission(id).then(x => { setM(x); setPlan(x?.planVorlage ?? '') }) }, [id])
+  useEffect(() => { void ladeAufgabe(id).then(x => { setM(x); setPlan(x?.planVorlage ?? '') }) }, [id])
+  const mutprobenAn = useCoach(x => x.daten.profil.mutproben)
   if (!m) return <Laedt />
+  // Mutproben nur, wenn der Nutzer sie eingeschaltet hat (Einheiten, die mit einer Mutprobe enden, zeigen sonst nur einen Hinweis)
+  if (m.mutprobe && !mutprobenAn) return (
+    <div className="dc-spalte dc-ein" data-dc-mutprobe-aus>
+      <span className="dc-klein dc-leise">Hier würde jetzt eine Mutprobe kommen – eine freiwillige Aufgabe, bei der du bewusst ein Nein riskierst. Mutproben sind bei dir ausgeschaltet; einschalten kannst du sie unter Missionen → Mutproben.</span>
+      <Weiter onClick={onFertig} />
+    </div>
+  )
   const nimm = () => {
-    useCoach.getState().aendere(d => waehleMission(d, { id, gewaehlt: tagNummer(heute()), plan: plan.trim(), befuerchtung: befuerchtung.trim() || undefined, wahrscheinlich: wahrscheinlich ?? undefined }))
+    useCoach.getState().aendere(d => waehleMission(d, { id, gewaehlt: tagNummer(heute()), plan: plan.trim(), befuerchtung: befuerchtung.trim() || undefined, wahrscheinlich: wahrscheinlich ?? undefined, anspannung: vorher ?? undefined }))
     if (plan.trim()) useCoach.getState().schreibeIns({ art: 'plan', text: plan.trim(), bezug: id })
     onFertig()
   }
@@ -41,6 +50,7 @@ export function MissionWahl({ id, onFertig }: { id: string; onFertig: () => void
           <div className="dc-spalte" style={{ marginTop: 8 }}>
             <input className="dc-eingabe" value={befuerchtung} onChange={e => setBefuerchtung(e.target.value)} placeholder="Ich befürchte, dass …" />
             <Anspannung titel="Wie wahrscheinlich ist das (in Prozent)?" wert={wahrscheinlich} setWert={setWahrscheinlich} />
+            <Anspannung titel="Wie angespannt bist du jetzt beim Gedanken daran?" wert={vorher} setWert={setVorher} />
           </div>
         </details>}
       </>}
@@ -62,7 +72,7 @@ export function MissionBericht({ id, onFertig }: { id: string; onFertig: () => v
   const [mitnehmen, setMitnehmen] = useState('')
   const stottern = id.startsWith('aussprache-s-')
   const zeile = useZeile(stottern ? 'stottern-mission' : 'mission', id)
-  useEffect(() => { void ladeMission(id).then(setM) }, [id])
+  useEffect(() => { void ladeAufgabe(id).then(setM) }, [id])
   if (!m) return <Laedt />
   const fertig = () => {
     const st = useCoach.getState()

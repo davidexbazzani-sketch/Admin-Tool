@@ -1,0 +1,241 @@
+{
+  "lagen": [
+    {
+      "id": "antrieb-l-11", "bereich": "antrieb", "phase": "m", "umfeld": "kollegen", "faehigkeiten": ["antrieb.start", "antrieb.warum"], "stufe": 6,
+      "titel": "Das Anschreiben, das nie gut genug ist", "figur": "Miriam Okafor",
+      "einleitung": "Ein wichtiger Schritt wird seit Wochen poliert statt getan. Du übst, dein Muster beim Aufschieben zu erkennen – den Schutz vor dem Urteil –, eine erste Fassung zu erlauben, sie jemandem zu zeigen und mit Termin abzuschicken.",
+      "lage": "Seit zwei Monaten willst du dich auf die interne Stelle in der Teamkoordination bewerben. Das Anschreiben hast du siebenmal angefangen und siebenmal gelöscht. Die Frist endet in zehn Tagen. In der Kaffeeküche spricht Miriam dich an.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Miriam: „Und? Hast du die Bewerbung endlich abgeschickt? Die Frist ist doch bald.“",
+          "wahl": [
+            { "text": "„Hatte einfach keine Zeit, die letzten Wochen waren der Wahnsinn.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k1b", "rueck": "Kann sein, dass die Wochen voll waren. Die Erklärung schützt aber auch – vor der Frage, warum das Anschreiben nie fertig wird." },
+            { "text": "„Nein. Ich fange immer wieder an und lösche alles, weil es nicht gut genug ist.“", "wert": 2, "weiter": "k2", "rueck": "Ehrlich benannt – und damit auch das Muster: die Angst vor dem Urteil." },
+            { "text": "„Noch nicht. Irgendwie hakt es, ich weiß selbst nicht genau, woran – vielleicht am Anfang.“", "wert": 1, "weiter": "k2", "rueck": "Ehrlich und ein guter Anfang. Jetzt lohnt die Frage, welches Gefühl dahintersteckt." }
+          ] },
+        { "id": "k1b", "sagt": "Miriam grinst: „Keine Zeit? Ich hab dich gestern eine halbe Stunde lang die Schriftart vom Anschreiben ändern sehen.“",
+          "wahl": [
+            { "text": "„Erwischt. Ehrlich gesagt habe ich Angst, dass es nicht gut genug ist.“", "wert": 2, "weiter": "k2", "rueck": "Gut, dass du es aussprichst. Mit dem echten Grund lässt sich arbeiten." },
+            { "text": "„Das war wichtig, die Form muss einfach stimmen, sonst nimmt das doch niemand ernst.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Die Form verteidigt das Polieren – und das Polieren schützt davor, abzuschicken." }
+          ] },
+        { "id": "k2", "sagt": "Miriam: „Ich kenn das – meistens steckt dahinter: nicht gut genug. Aber nicht gut genug für wen? Für Dr. Albers – oder für dich?“",
+          "wahl": [
+            { "text": "„Für Dr. Albers natürlich. Der liest ja jedes Komma.“", "wert": 1, "weiter": "k3", "rueck": "Vielleicht. Oft steckt hinter dem Polieren aber auch die eigene Sorge, bewertet zu werden." },
+            { "text": "„Ist doch egal. Ich bin halt perfektionistisch – und ehrlich gesagt ist das ja eigentlich eine Stärke.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3", "rueck": "Gründlichkeit kann eine Stärke sein. Hier hält sie dich davon ab, überhaupt anzutreten." },
+            { "text": "„Für mich, glaube ich. Wenn ich es abschicke und es klappt nicht, war ich nicht gut genug.“", "wert": 2, "weiter": "k3", "rueck": "Du erkennst den Selbstschutz: Was nicht abgeschickt ist, kann nicht abgelehnt werden. Das ist der Kern des Musters." }
+          ] },
+        { "id": "k3", "sagt": "Miriam: „Und wenn die erste Fassung schlecht sein dürfte?“",
+          "wahl": [
+            { "text": "„Dann schreibe ich heute 20 Minuten eine schlechte Fassung und schicke sie dir zum Drüberlesen.“", "wert": 2, "weiter": "k4", "rueck": "Erlaubnis, Zeitfenster und ein Mensch, der liest – drei Mittel gegen die Angst vor dem Urteil." },
+            { "text": "„Darf sie aber nicht. Es geht um meine Zukunft.“", "wert": 0, "tendenz": "allesodernichts", "weiter": "k3b", "rueck": "Gerade weil es wichtig ist, braucht es einen Text, der fertig wird. Eine perfekte Fassung im Kopf entscheidet nichts." },
+            { "text": "„Dann schreibe ich sie heute – und zeige sie dir, wenn sie fertig ist.“", "wert": 1, "weiter": "k4", "rueck": "Der Anfang ist gemacht. „Wenn sie fertig ist“ kann aber wieder lange dauern – lieber die rohe Fassung zeigen." }
+          ] },
+        { "id": "k3b", "sagt": "Miriam: „Ein Anschreiben, das in deinem Ordner liegt, entscheidet über gar nichts. Eins, das ankommt, vielleicht schon.“",
+          "wahl": [
+            { "text": "„… Stimmt. Ich schreibe heute eine erste Fassung, egal wie.“", "wert": 2, "weiter": "k4", "rueck": "Gut umgesteuert: Erst eine Fassung, dann kann sie besser werden." },
+            { "text": "„Ich warte lieber, bis ich richtig in Form bin.“", "wert": 0, "tendenz": "aufschieben", "weiter": "ende2", "rueck": "Die richtige Form kommt selten vor der Frist. Das Warten schützt – und kostet die Chance." }
+          ] },
+        { "id": "k4", "sagt": "Am nächsten Tag fragt Miriam nach der Fassung und liest sie: „Zwei Sätze würde ich streichen, sonst gut. Schick's ab.“",
+          "wahl": [
+            { "text": "„Ich lasse es noch eine Woche liegen und lese es dann in Ruhe noch dreimal durch.“", "wert": 0, "tendenz": "aufschieben", "weiter": "ende3", "rueck": "Das Polieren kommt zurück. Was „gut genug“ ist, entscheidet ein Termin besser als das zehnte Lesen." },
+            { "text": "„Ich streiche die zwei Sätze und schicke es morgen früh um neun ab.“", "wert": 2, "weiter": "ende1", "rueck": "Rückmeldung genutzt, fester Termin, kein neues Polieren. So wird aus dem Text eine Bewerbung." },
+            { "text": "„Ich schicke es jetzt sofort, ohne noch mal reinzuschauen.“", "wert": 1, "weiter": "ende1", "rueck": "Mutig und gut. Ein kurzer Blick auf Miriams zwei Sätze hätte trotzdem nicht geschadet." }
+          ] },
+        { "id": "ende1", "sagt": "Die Bewerbung ist raus. Ob du die Stelle bekommst, weißt du noch nicht – aber zum ersten Mal seit zwei Monaten ist die Sache nicht mehr nur in deinem Kopf.", "ende": "Was gegen dieses Muster hilft: es erkennen, eine erste Fassung erlauben, sie jemandem zeigen und mit Termin abschicken. Gegen die Angst vor dem Urteil hilft selten mehr Polieren – eher ein Text, der ankommt." },
+        { "id": "ende2", "sagt": "Die Frist verstreicht. Das Anschreiben liegt, fein formatiert, in deinem Ordner.", "ende": "Kein Drama – Selbstschutz fühlt sich im Moment sicher an. Nur verhindert er genau das, was du wolltest. Beim nächsten Mal: eine erste Fassung, die schlecht sein darf, und ein Mensch, der sie liest." },
+        { "id": "ende3", "sagt": "Eine Woche später liest du es zum dritten Mal – und findest wieder etwas. Die Frist endet übermorgen.", "ende": "Der Anfang war gemacht, dann kam das Polieren zurück. Was gut genug ist, entscheidet ein fester Abgabetermin besser als das nächste Lesen." }
+      ],
+      "prinzipien": ["ehrlich benennen statt rechtfertigen", "das Muster erkennen: Schutz vor dem Urteil", "eine erste Fassung, die schlecht sein darf", "jemandem zeigen und mit Termin abschicken"],
+      "transfer": "Was polierst du gerade, statt es abzuschicken – und wem könntest du eine erste Fassung zeigen?"
+    },
+    {
+      "id": "antrieb-l-12", "bereich": "antrieb", "phase": "m", "umfeld": "kollegen", "faehigkeiten": ["antrieb.energie", "antrieb.ziele"], "stufe": 7,
+      "titel": "Carla will alles halten", "figur": "Carla Demir",
+      "einleitung": "Eine Kollegin ist seit Monaten erschöpft und will trotzdem alles schaffen. Du übst, nach der Dauer zu fragen, Warnzeichen ernst zu nehmen, ohne eine Diagnose zu stellen, zur Hausarztpraxis zu raten und Vorhaben mit Datum parken zu helfen.",
+      "lage": "Mittagspause. Carla leitet gerade das größte Projekt ihres Jahres, hilft seit dem Frühjahr im Anfängerkurs ihres Töpferateliers mit und läuft dreimal pro Woche um sechs Uhr morgens mit ihrer Nachbarin. Heute schiebt sie ihr Essen nur auf dem Teller hin und her.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Carla: „Ich bin einfach nur müde. Geht schon. Nach dem Projekt wird's besser.“",
+          "wahl": [
+            { "text": "„Kenn ich. Augen zu und durch, in drei Wochen ist das Projekt ja durch.“", "wert": 0, "tendenz": "durchhalten", "weiter": "k1b", "rueck": "Gut gemeint – aber du weißt noch nicht, wie lange es schon so geht." },
+            { "text": "„Dann gönn dir heute Abend mal was Schönes.“", "wert": 1, "weiter": "k2", "rueck": "Lieb gemeint. Ob ein schöner Abend reicht, hängt davon ab, wie lange die Müdigkeit schon da ist." },
+            { "text": "„Du wirkst schon länger so. Wie lange geht das denn schon?“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst ihr „geht schon“ freundlich nicht ganz ab und fragst nach der Dauer – darauf kommt es an." }
+          ] },
+        { "id": "k1b", "sagt": "Carla: „Das habe ich vor drei Wochen auch gesagt. Und vor sechs.“",
+          "wahl": [
+            { "text": "„Hm. Dann ist es vielleicht mehr als eine volle Woche. Wie geht es dir damit?“", "wert": 2, "weiter": "k2", "rueck": "Gut umgesteuert: Jetzt hört sie, dass du es ernst nimmst." },
+            { "text": "„Na, dann hast du ja Übung im Durchhalten – das ist doch eine echte Stärke von dir.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "ende2", "rueck": "Ein Witz an der falschen Stelle – sie zieht sich zurück." }
+          ] },
+        { "id": "k2", "sagt": "Carla seufzt: „Ehrlich gesagt geht das schon seit dem Sommer. Ich schlafe, aber erholt bin ich nicht. Und selbst das Töpfern macht mir keinen Spaß mehr.“",
+          "wahl": [
+            { "text": "„Klingt, als hättest du ein Burn-out.“", "wert": 0, "tendenz": "diagnose", "weiter": "k3", "rueck": "Gut gemeint, aber eine Diagnose aus der Mittagspause kann treffen oder danebenliegen – und schreckt oft ab. Besser: die Zeichen ernst nehmen." },
+            { "text": "„Das klingt nach mehr als Müdigkeit. Magst du mal mit deiner Hausarztpraxis darüber sprechen?“", "wert": 2, "weiter": "k3", "rueck": "Keine Diagnose, aber ernst genommen: Monate, Schlaf erholt nicht, Freude fehlt. Der Weg zur Praxis ist der richtige Vorschlag." },
+            { "text": "„Du brauchst einfach einen besseren Wochenplan. Ich zeig dir mal meinen, der funktioniert bei mir super.“", "wert": 0, "tendenz": "loesen", "weiter": "k3", "rueck": "Planung ist hier nicht das Problem. Wenn Freude und Erholung seit Monaten fehlen, hilft zuerst ein Gespräch mit Fachleuten." }
+          ] },
+        { "id": "k3", "sagt": "Carla: „Und meine ganzen Sachen? Ich hab den Leuten im Töpferkurs zugesagt. Und meine Nachbarin wartet morgens auf mich …“",
+          "wahl": [
+            { "text": "„Was davon könntest du für ein paar Wochen parken – mit Datum, damit es nicht verloren geht?“", "wert": 2, "weiter": "k4", "rueck": "Entlastung mit Rückweg: Nichts ist verloren, nur verschoben – und Carla entscheidet selbst, was." },
+            { "text": "„Zieh alles durch, sonst lässt du die anderen hängen.“", "wert": 0, "tendenz": "durchhalten", "weiter": "ende2", "rueck": "Pflichtgefühl gegen einen leeren Akku – das geht selten lange gut, auch für die anderen nicht." },
+            { "text": "„Sag am besten alles ab, und zwar sofort.“", "wert": 1, "weiter": "k4", "rueck": "Entlastung ist richtig. Alles auf einmal zu streichen, kann aber auch nehmen, was ihr noch guttut – lieber auswählen." }
+          ] },
+        { "id": "k4", "sagt": "Carla überlegt: „Den Kurs kann die Kollegin aus dem Atelier bis Februar übernehmen. Und die Müdigkeit … Meinst du, ich sollte damit mal zur Ärztin?“",
+          "wahl": [
+            { "text": "„Nur, wenn es nach dem Projekt nicht besser wird.“", "wert": 1, "weiter": "ende3", "rueck": "Abwarten kann man – nach Monaten ohne Erholung ist ein früher Termin aber besser als ein später." },
+            { "text": "„Ach, da wirst du doch eh nur krankgeschrieben und sitzt dann zu Hause rum. Mach lieber Yoga.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Das redet ihr den wichtigsten Schritt aus. Yoga kann guttun – ersetzt aber nicht den Blick von Fachleuten." },
+            { "text": "„Ja. Monate ohne Erholung sind ein guter Grund. Magst du heute noch einen Termin ausmachen?“", "wert": 2, "weiter": "ende1", "rueck": "Klar, freundlich, ohne Druck – und mit einem kleinen ersten Schritt für heute." }
+          ] },
+        { "id": "ende1", "sagt": "Eine Woche später erzählt Carla von ihrem Termin in der Praxis. Der Töpferkurs ist bis Februar vertreten. „Es fühlt sich komisch an, etwas abzugeben“, sagt sie. „Aber auch leichter.“", "ende": "Was in so einem Gespräch hilft: nach der Dauer fragen, Zeichen ernst nehmen ohne Diagnose, zur Praxis raten und Vorhaben mit Datum parken. Bei leerem Akku über Monate ist das Klügste nicht der bessere Plan, sondern Hilfe und Entlastung." },
+        { "id": "ende2", "sagt": "Carla winkt ab und wechselt das Thema.", "ende": "Eine verpasste Gelegenheit – aber keine endgültige. Wer seit Monaten erschöpft ist, braucht kein Durchhalten, sondern ernst genommene Zeichen und den Weg zu Fachleuten. Das Gespräch lässt sich nachholen." },
+        { "id": "ende3", "sagt": "Das Projekt ist vorbei. Carla ist immer noch müde – und sucht jetzt einen Termin.", "ende": "Der Kurs ist geparkt, das entlastet. Nur der Weg zur Praxis kam spät. Bei Erschöpfung über Monate ist früh besser als „nach dem Projekt“." }
+      ],
+      "prinzipien": ["nach der Dauer fragen: Tage oder Monate?", "Zeichen ernst nehmen – keine Diagnose stellen", "zur Hausarztpraxis raten, früh statt spät", "Vorhaben mit Datum parken, das Gute behalten"],
+      "transfer": "Wen in deinem Umfeld würdest du gern einmal fragen, wie lange die Müdigkeit schon geht – und wie geht es eigentlich dir?"
+    },
+    {
+      "id": "antrieb-l-13", "bereich": "antrieb", "phase": "m", "umfeld": "freunde", "faehigkeiten": ["antrieb.dranbleiben", "antrieb.fortschritt", "antrieb.warum"], "stufe": 7,
+      "titel": "Halbzeit für Sven", "figur": "Sven",
+      "einleitung": "Ein Freund steckt mitten in seinem Vorhaben und hat keine Lust mehr. Du übst, den Durchhänger in der Mitte einzuordnen, den Blick nach vorn auf einen kleinen Rest zu lenken, das Warum aufzufrischen und die Mitte mit einem Zwischenziel kürzer zu machen.",
+      "lage": "Sven trainiert für seinen ersten Zehn-Kilometer-Lauf im Mai – eine Etappe auf dem Weg zu seinem großen Traum. Im Januar hat er gesagt, er wolle mal wieder etwas schaffen, auf das er stolz ist. Der Trainingsplan hat zwölf Wochen, jetzt ist Woche sechs. Am Telefon klingt er anders als damals.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Sven: „Ich hab null Bock mehr. Am Anfang war jede Woche ein Erfolg. Jetzt lauf ich und lauf ich, und nichts bewegt sich.“",
+          "wahl": [
+            { "text": "„Klingt nach dem typischen Loch in der Mitte. Die Mitte ist oft die zäheste Stelle – das liegt nicht an dir.“", "wert": 2, "weiter": "k2", "rueck": "Du ordnest den Durchhänger ein, statt ihn zu bewerten. Das nimmt ihm die Schwere." },
+            { "text": "„Dann mach erst mal zwei Wochen Pause, die Lust kommt dann schon wieder.“", "wert": 0, "tendenz": "aufschieben", "weiter": "k1b", "rueck": "Eine Pause ohne Plan in der zähsten Phase wird leicht zum Ende." },
+            { "text": "„Du bist schon sechs Wochen dabei – schau mal, wie viel du schon geschafft hast.“", "wert": 1, "weiter": "k2", "rueck": "Ein Blick aufs Geschaffte tut gut. Ab der Mitte zieht aber eher der Blick nach vorn." }
+          ] },
+        { "id": "k1b", "sagt": "Sven: „Pause? Dann komm ich doch gar nicht mehr rein. Bin ich eigentlich der Einzige, der mittendrin so schlappmacht?“",
+          "wahl": [
+            { "text": "„Bist du nicht. Die Mitte ist für viele die zäheste Stelle. Lass uns schauen, was jetzt hilft.“", "wert": 2, "weiter": "k2", "rueck": "Gut eingefangen: entlastet und nach vorn gewendet." },
+            { "text": "„Vielleicht ist Laufen einfach nichts für dich. Manche Menschen sind eben nicht für Ausdauer gemacht.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Aus einem normalen Durchhänger wird ein Urteil über Sven. Das nimmt ihm den Rest Schwung." }
+          ] },
+        { "id": "k2", "sagt": "Sven: „Mag sein. Aber wie komm ich durch die nächsten Wochen?“",
+          "wahl": [
+            { "text": "„Rechne mal aus, wie viele Kilometer du seit Januar schon gelaufen bist – das ist eine ganze Menge.“", "wert": 1, "weiter": "k3", "rueck": "Das Geschaffte macht stolz. Ab der Mitte zieht aber eher der kleine, zählbare Rest bis zum Ziel." },
+            { "text": "„Ab jetzt nach vorn: Schreib die restlichen Läufe bis Mai auf und streich jeden durch.“", "wert": 2, "weiter": "k3", "rueck": "Hinter der Mitte hilft der Blick auf den Rest – sichtbar, zählbar, jeden Lauf ein Stück kleiner." },
+            { "text": "„Lauf einfach mehr, dann siehst du schneller Fortschritte.“", "wert": 0, "tendenz": "ueberladen", "weiter": "k3", "rueck": "Mehr Last in der zähsten Phase erhöht vor allem das Risiko, ganz aufzuhören." }
+          ] },
+        { "id": "k3", "sagt": "Sven: „Hm. Und ehrlich gesagt – ich weiß gar nicht mehr so genau, warum ich das eigentlich mache.“",
+          "wahl": [
+            { "text": "„Egal warum – angefangen ist angefangen.“", "wert": 0, "tendenz": "durchhalten", "weiter": "k4", "rueck": "Durchhalten ohne Warum wird jede Woche schwerer. Den Grund aufzufrischen kostet zwei Minuten." },
+            { "text": "„Du wolltest mal wieder etwas schaffen, auf das du stolz bist. Gilt das noch?“", "wert": 2, "weiter": "k4", "rueck": "Du holst seinen eigenen Grund zurück – und lässt ihn selbst prüfen, ob er noch trägt." },
+            { "text": "„Dann hör doch einfach auf.“", "wert": 0, "tendenz": "aufgeben", "weiter": "ende2", "rueck": "Vielleicht wäre Aufhören irgendwann richtig – aber nicht, bevor er sein Warum geprüft hat." }
+          ] },
+        { "id": "k4", "sagt": "Sven überlegt: „Eigentlich will ich immer noch im Mai über die Linie – mal wieder auf etwas stolz sein. Aber die nächsten Wochen sind trotzdem zäh.“",
+          "wahl": [
+            { "text": "„Dann ein Zwischenziel: in drei Wochen einmal acht Kilometer am Stück.“", "wert": 2, "weiter": "ende1", "rueck": "Ein nahes Ziel macht die Mitte kürzer. Danach beginnt schon der Endspurt." },
+            { "text": "„Bau Abwechslung ein: eine neue Strecke am Fluss – und ich lauf ab jetzt einmal die Woche mit dir.“", "wert": 1, "weiter": "ende1", "rueck": "Abwechslung und Gesellschaft helfen. Mit einem nahen Zwischenziel würde die Mitte noch kürzer." },
+            { "text": "„Dann zähl die Tage bis Mai und beiß die Zähne zusammen.“", "wert": 0, "tendenz": "durchhalten", "weiter": "ende3", "rueck": "Zähne zusammenbeißen trägt manchmal ins Ziel – selten mit Lust auf mehr." }
+          ] },
+        { "id": "ende1", "sagt": "Ein paar Wochen später ruft Sven an: „Die zähe Phase ist rum. Kommst du im Mai zum Zuschauen?“", "ende": "Sven ist durch die Mitte gekommen. Was dort am meisten hilft: den Durchhänger als Teil des Wegs sehen, nach vorn auf einen kleinen Rest schauen, das Warum auffrischen und die Mitte mit einem Zwischenziel kürzer machen." },
+        { "id": "ende2", "sagt": "Sven hängt die Laufschuhe an den Haken. Im Mai läuft er nicht.", "ende": "Kein Drama – in der Mitte geben viele auf. Schade nur, wenn es am Blick lag und nicht am Ziel. Ein kleiner Rest, ein aufgefrischtes Warum und ein Zwischenziel hätten die Mitte kürzer gemacht." },
+        { "id": "ende3", "sagt": "Sven beißt sich durch. Im Mai kommt er ins Ziel – und sagt danach: „Das war's mit Laufen für mich.“", "ende": "Ins Ziel gekommen, aber mit Zähnezusammenbeißen statt mit einem anderen Blick. Zwischenziele und ein sichtbarer Rest hätten die Mitte leichter gemacht – und vielleicht Lust auf mehr gelassen." }
+      ],
+      "prinzipien": ["der Durchhänger in der Mitte ist häufig, kein Charakterfehler", "ab der Mitte nach vorn schauen – auf einen kleinen, zählbaren Rest", "das Warum auffrischen und ehrlich prüfen", "ein nahes Zwischenziel macht die Mitte kürzer"],
+      "transfer": "Wo steckst du gerade in der Mitte – und wie sähe dein kleiner, zählbarer Rest aus?"
+    },
+    {
+      "id": "antrieb-l-14", "bereich": "antrieb", "phase": "m", "umfeld": "freunde", "faehigkeiten": ["antrieb.fortschritt", "antrieb.ziele", "antrieb.warum"], "stufe": 8,
+      "titel": "Jules Tortenkurse", "figur": "Jule Marek",
+      "einleitung": "Ein Vorhaben läuft erfolgreich – und fühlt sich trotzdem nur noch nach Last an. Du übst, mit einer Freundin zurückzuschauen, das ursprüngliche Warum zu prüfen und zwischen weitermachen, anpassen und loslassen zu entscheiden – ohne dass das schon Investierte entscheidet.",
+      "lage": "Sonntagnachmittag in Jules Café. Seit einem Jahr gibt sie dort jeden Freitagabend einen Tortenkurs – zusätzlich zum Laden. Die Kurse sind immer voll. Trotzdem hat sie dich gebeten, mal mit ihr draufzuschauen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Jule: „Die Kurse laufen super. Und ich hasse jeden Freitag. Ist das nicht verrückt?“",
+          "wahl": [
+            { "text": "„Wer volle Kurse hat, sollte nicht jammern.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Erfolg von außen sagt nichts darüber, was es sie kostet. Das Urteil macht das Gespräch zu." },
+            { "text": "„Dann hör auf. Ganz einfach.“", "wert": 1, "weiter": "k2", "rueck": "Vielleicht läuft es darauf hinaus. Vorher lohnt ein Blick, wofür die Kurse gedacht waren – sonst geht das Gute mit." },
+            { "text": "„Gar nicht. Lass uns mal zurückschauen: Was wolltest du damals mit den Kursen?“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst das Gefühl ernst und beginnst den Rückblick beim Warum." }
+          ] },
+        { "id": "k1b", "sagt": "Jule: „Danke auch. Genau deshalb erzähle ich das niemandem.“",
+          "wahl": [
+            { "text": "„Entschuldige, das war daneben. Erzähl – was ist am Freitag so schwer?“", "wert": 2, "weiter": "k2", "rueck": "Gut eingefangen. Jetzt kann sie erzählen." },
+            { "text": "„War doch nur ehrlich.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Ehrlichkeit ohne Neugier wirkt wie ein Urteil. Sie macht dicht." }
+          ] },
+        { "id": "k2", "sagt": "Jule überlegt: „Angefangen habe ich ja aus zwei Gründen: Mehr Leute sollten ins Café finden. Und ich wollte zeigen, was ich kann.“",
+          "wahl": [
+            { "text": "„Und was kostet dich das jeden Freitag?“", "wert": 1, "weiter": "k3", "rueck": "Wichtige Frage – sie kommt nur einen Schritt zu früh. Erst: Hat sich erfüllt, wofür du angefangen hast?" },
+            { "text": "„Und – hat sich das erfüllt?“", "wert": 2, "weiter": "k3", "rueck": "Die Kernfrage jedes Rückblicks: Trägt das Warum noch – oder ist es schon erreicht?" },
+            { "text": "„Das hast du doch längst geschafft, also weiter so.“", "wert": 0, "tendenz": "durchhalten", "weiter": "k3", "rueck": "Ein schneller Schluss. Ob das Warum die Kurse noch braucht und zu welchem Preis, bleibt ungefragt." }
+          ] },
+        { "id": "k3", "sagt": "Jule: „Das Café ist inzwischen voll, auch ohne Kurse. Ich mache sie eigentlich nur noch, weil ich sie angefangen habe. Und nach jedem Freitag bin ich bis Sonntag platt.“",
+          "wahl": [
+            { "text": "„Ein ganzes Jahr Arbeit kannst du doch jetzt nicht einfach so wegwerfen, nach allem, was du reingesteckt hast.“", "wert": 0, "tendenz": "durchhalten", "weiter": "k3b", "rueck": "Was sie gelernt und erreicht hat, bleibt – auch wenn sie aufhört. Die schon investierte Zeit ist kein Grund, weitere zu investieren." },
+            { "text": "„Dann hat der Kurs seinen Zweck erfüllt. Weitermachen, anpassen oder loslassen – was passt?“", "wert": 2, "weiter": "k4", "rueck": "Drei Ausgänge, alle erlaubt – und Jule entscheidet." },
+            { "text": "„Mach erst mal Pause und schau dann weiter.“", "wert": 1, "weiter": "k4", "rueck": "Eine Pause entlastet. Mit Entscheidung und Datum wird daraus kein stilles Vertagen." }
+          ] },
+        { "id": "k3b", "sagt": "Jule: „Eben. Ein ganzes Jahr! Aber so kann ich auch nicht weitermachen.“",
+          "wahl": [
+            { "text": "„Was du gelernt und erreicht hast, bleibt. Die Frage ist nur, wie es ab jetzt weitergeht.“", "wert": 2, "weiter": "k4", "rueck": "Gut korrigiert: Das Vergangene ist sicher, entschieden wird über die Zukunft." },
+            { "text": "„Dann zieh es halt noch ein Jahr durch, so schlimm wird es schon nicht sein, und danach siehst du weiter.“", "wert": 0, "tendenz": "durchhalten", "weiter": "ende2", "rueck": "Noch ein Jahr gegen das eigene Gefühl – das kostet mehr, als es bringt." }
+          ] },
+        { "id": "k4", "sagt": "Jule: „Ganz aufhören will ich nicht. Mit den Leuten backen macht mir ja Spaß – nur nicht jeden Freitag nach zehn Stunden im Laden.“",
+          "wahl": [
+            { "text": "„Dann such dir jemanden, der die Kurse übernimmt.“", "wert": 1, "weiter": "ende1", "rueck": "Möglich – aber dann fehlt ihr genau der Teil, der ihr Freude macht. Ein anderer Rhythmus könnte das Gute halten." },
+            { "text": "„Dann lass es so, wie es ist – irgendwie geht es ja.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Ohne Entscheidung bleibt die Last – bis die Erschöpfung entscheidet." },
+            { "text": "„Dann anpassen: einmal im Monat, an einem ruhigen Nachmittag – und in drei Monaten schaust du wieder drauf.“", "wert": 2, "weiter": "ende1", "rueck": "Das Gute behalten, die Last senken, einen Termin für den nächsten Blick setzen." }
+          ] },
+        { "id": "ende1", "sagt": "Jule schreibt ihre Entscheidung auf einen Zettel und hängt ihn neben die Kasse. „Komisch“, sagt sie. „So leicht habe ich seit Monaten nicht über die Kurse gedacht.“", "ende": "Jule hat entschieden, statt weiter still zu leiden. Was dabei hilft: zurückschauen, das Warum prüfen, dann zwischen weiter, anpassen und loslassen wählen. Anpassen oder abgeben ist kein halbes Aufgeben – es ist eine Entscheidung." },
+        { "id": "ende2", "sagt": "Jule seufzt und schenkt Kaffee nach. Die Kurse laufen weiter, jeden Freitag.", "ende": "Kein Drama – aber eine verpasste Entscheidung. Was nur noch läuft, weil es angefangen wurde, kostet weiter Kraft. Ein Rückblick mit drei Ausgängen hätte sie entlasten können." },
+        { "id": "ende3", "sagt": "Ein halbes Jahr später erzählt Jule, dass sie die Kurse von einem Tag auf den anderen abgesagt hat – nach einem Freitag, an dem gar nichts mehr ging.", "ende": "Ohne Entscheidung hat am Ende die Erschöpfung entschieden. Ein bewusster Rückblick hätte früher einen Weg gezeigt, der das Gute behält." }
+      ],
+      "prinzipien": ["zurückschauen: Wofür wurde es angefangen?", "prüfen, ob sich das Warum schon erfüllt hat", "schon Investiertes ist kein Grund weiterzumachen", "drei Ausgänge: weiter, anpassen, loslassen – mit Datum für den nächsten Blick"],
+      "transfer": "Welches deiner Vorhaben läuft nur noch, weil es angefangen ist – und was wäre dein Ausgang: weiter, anders oder loslassen?"
+    },
+    {
+      "id": "antrieb-l-15", "bereich": "antrieb", "phase": "m", "umfeld": "familie", "faehigkeiten": ["antrieb.warum", "antrieb.ziele", "antrieb.plan", "antrieb.start", "antrieb.gewohnheit", "antrieb.dranbleiben", "antrieb.energie", "antrieb.fortschritt"], "stufe": 9, "sparring": true,
+      "titel": "Ein Jahr später", "figur": "Tante Renate",
+      "einleitung": "Das Sparring der Meisterschaft: ein Jahr im Rückblick und ein neuer Anfang. Du verbindest alles – ehrlich zurückschauen mit Zahlen und Gründen, Rückfälle ohne Drama, Gewohnheiten in kleinen Stufen, ein neues Vorhaben, das deins ist, und bewusst loslassen, was nicht dran ist.",
+      "lage": "Neujahrsfrühstück bei der Familie, ein Jahr nach dem letzten. Tante Renate gießt Kaffee ein und schaut dich über den Rand der Kanne an. Vor einem Jahr hast du hier erzählt, dass du wieder mehr lesen willst.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Renate: „Na, Kind? Was ist aus dem Lesen geworden?“",
+          "wahl": [
+            { "text": "„Ach, wie immer. Hat nicht gehalten.“", "wert": 0, "tendenz": "verallgemeinern", "weiter": "k1b", "rueck": "Ein Urteil über das ganze Jahr in vier Wörtern. Ob es stimmt, zeigt erst ein genauer Blick." },
+            { "text": "„Gemischt. Bis zum Sommer fast jeden Abend, dann eine lange Lücke – seit Oktober läuft es wieder.“", "wert": 2, "weiter": "k2", "rueck": "Ehrlich, mit Verlauf – weder geschönt noch kleingemacht." },
+            { "text": "„Super! Ich habe total viel gelesen.“", "wert": 1, "weiter": "k2", "rueck": "Schön, wenn es so war. Erst ein genauerer Blick zeigt aber, was getragen hat und wo es hakte." }
+          ] },
+        { "id": "k1b", "sagt": "Renate: „Hat nicht gehalten? Du hast mir im März ein Buch empfohlen, das du gerade gelesen hattest.“",
+          "wahl": [
+            { "text": "„Stimmt. Bis zum Sommer lief es eigentlich gut, dann kam eine Lücke. Seit Oktober geht es wieder.“", "wert": 2, "weiter": "k2", "rueck": "Gut korrigiert: Mit dem genauen Blick sieht das Jahr ganz anders aus." },
+            { "text": "„Das eine Buch zählt doch nicht.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Wer jedes Gelingen kleinredet, sieht nie, was trägt – und hat beim nächsten Vorhaben weniger Grund, es zu versuchen." }
+          ] },
+        { "id": "k2", "sagt": "Renate: „Und was hat dir geholfen – und wo hat es gehakt?“",
+          "wahl": [
+            { "text": "„Weiß nicht genau. Irgendwie lief es einfach.“", "wert": 1, "weiter": "k3", "rueck": "Ehrlich. Wer genauer weiß, was getragen hat, kann es fürs nächste Vorhaben nutzen." },
+            { "text": "„Geholfen hat Disziplin. Gehakt hat, dass ich zwischendurch einfach zu faul war, wie so oft bei mir.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3", "rueck": "Disziplin und Faulheit sind Urteile, keine Werkzeuge. Was im Alltag half und wo es kippte, lässt sich dagegen wiederholen oder planen." },
+            { "text": "„Geholfen haben das Buch auf dem Kissen und zwei Seiten als Minimum. Gehakt hat es im Urlaub.“", "wert": 2, "weiter": "k3", "rueck": "Konkrete Hilfen und eine riskante Lage – genau das Wissen, das ein Rückblick liefern soll." }
+          ] },
+        { "id": "k3", "sagt": "Renate: „Und gab es auch Zeiten, in denen es nicht lief? Wie bist du da wieder reingekommen?“",
+          "wahl": [
+            { "text": "„Nach dem Urlaub erst gar nicht, wochenlang. Dann mit einer Seite pro Abend – ohne etwas nachzuholen.“", "wert": 2, "weiter": "k4", "rueck": "Die Lücke ohne Drama benannt, klein und ohne Nachholen zurück – so wird aus einem Rückfall ein Umweg." },
+            { "text": "„Im Oktober habe ich an einem Wochenende drei Bücher nachgeholt.“", "wert": 0, "tendenz": "allesodernichts", "weiter": "k4", "rueck": "Ein Kraftakt – wird er zur Regel, kippt der nächste Wiedereinstieg leicht. Klein und ohne Nachholen ist der verlässlichere Weg." },
+            { "text": "„Irgendwann hat mich das schlechte Gewissen zurückgebracht.“", "wert": 1, "weiter": "k4", "rueck": "Auch ein Weg zurück – aber ein teurer. Ein vorbereiteter Rückweg bringt dich früher und freundlicher wieder hinein." }
+          ] },
+        { "id": "k4", "sagt": "Renate: „Und ist das Lesen jetzt eine Gewohnheit, oder musst du dich noch jedes Mal überwinden?“",
+          "wahl": [
+            { "text": "„Ich will jetzt gleich jeden Abend eine Stunde lesen, wo es so gut läuft.“", "wert": 0, "tendenz": "ueberladen", "weiter": "k5", "rueck": "Ein großer Sprung kann eine laufende Gewohnheit wieder zur Willensfrage machen. Kleine Stufen halten den Anfang leicht." },
+            { "text": "„Mal so, mal so.“", "wert": 1, "weiter": "k5", "rueck": "Normal – bis etwas von selbst läuft, dauert es meist Wochen bis Monate. Gleicher Ort und gleiche Zeit helfen weiter." },
+            { "text": "„Inzwischen meistens von selbst. Ich gehe langsam auf zehn Seiten hoch.“", "wert": 2, "weiter": "k5", "rueck": "Die Gewohnheit trägt – und wächst in kleinen Stufen. So bleibt sie leicht." }
+          ] },
+        { "id": "k5", "sagt": "Renate: „Und dieses Jahr? Wieder ein Vorsatz?“",
+          "wahl": [
+            { "text": "„Ein Ausflug im Monat mit euch – das ist mir wichtig. Und das Lesen läuft weiter.“", "wert": 2, "weiter": "k6", "rueck": "Eins zur Zeit, aus einem eigenen Wert – und das Laufende bleibt geschützt." },
+            { "text": "„Dieses Jahr alles: Sport, Sprache, Lesen, früher schlafen.“", "wert": 0, "tendenz": "ueberladen", "weiter": "k6", "rueck": "Vier Baustellen gleichzeitig gefährden auch das, was schon läuft." },
+            { "text": "„Keine neuen Vorsätze. Ich habe genug mit dem zu tun, was gerade läuft, und das soll auch so bleiben.“", "wert": 1, "weiter": "k6", "rueck": "Bewusst nichts Neues zu beginnen ist klug, wenn das Laufende Kraft braucht. Ein Blick in den Kompass im Frühjahr hält die Tür offen." }
+          ] },
+        { "id": "k6", "sagt": "Renate: „Und das Klavier? Im Sommer hast du erzählt, du wolltest auch wieder spielen.“",
+          "wahl": [
+            { "text": "„Ach, das auch noch … ja, irgendwann, wenn mal Zeit ist.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "So bleibt es als offenes Versprechen liegen – und zieht leise Kraft." },
+            { "text": "„Ich schaue es mir beim Rückblick im März noch einmal an.“", "wert": 1, "weiter": "ende1", "rueck": "Ein Datum statt eines vagen Irgendwann – gut. Manchmal ist die klare Entscheidung heute noch leichter." },
+            { "text": "„Gerade trägt es nicht. Ich lasse es bewusst los – vielleicht später wieder.“", "wert": 2, "weiter": "ende1", "rueck": "Bewusst losgelassen statt still vertagt. Das schafft Platz für das, was gerade dran ist." }
+          ] },
+        { "id": "ende1", "sagt": "Renate hebt die Tasse: „Auf das neue Jahr.“ Am Abend legst du das nächste Buch aufs Kopfkissen.", "ende": "Ein Jahr in einem Gespräch. Was ein Jahresrückblick leisten kann: ehrlich zurückschauen, Hilfen und Hindernisse benennen und entscheiden, was weitergeht und was gehen darf. Vorhaben halten selten durch Willen allein – eher durch Pläne, Rückwege und klare Entscheidungen." },
+        { "id": "ende2", "sagt": "Renate zuckt mit den Schultern und fragt deinen Cousin nach seinen Vorsätzen.", "ende": "Kein Drama – aber du hast dein eigenes Jahr kleiner geredet, als es war. Ein ehrlicher Blick mit Zahlen hätte gezeigt, was getragen hat. Den kannst du jederzeit nachholen." },
+        { "id": "ende3", "sagt": "Im Frühjahr steht das Klavier immer noch unter der Decke – und jedes Mal, wenn du es siehst, piekt das schlechte Gewissen.", "ende": "Ein offenes Irgendwann ist liegen geblieben. Was nicht dran ist, darf bewusst gehen – eine Entscheidung entlastet mehr als ein Versprechen ohne Datum." }
+      ],
+      "prinzipien": ["ehrlich zurückschauen – mit Verlauf, ohne Urteil", "benennen, was geholfen und was gehakt hat", "nach der Lücke klein und ohne Nachholen zurück", "Gewohnheiten in kleinen Stufen steigern", "neue Vorhaben aus dem, was dir wichtig ist – eins zur Zeit", "bewusst loslassen statt vage vertagen"],
+      "transfer": "Wenn du heute auf die letzten zwölf Monate schaust: Was trägt weiter, was passt du an – und was darfst du loslassen?"
+    }
+  ]
+}

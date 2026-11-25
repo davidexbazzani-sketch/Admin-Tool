@@ -6,6 +6,7 @@ import { useCoach } from '../kern/speicher'
 import { fortschritt } from '../kern/kurs'
 import { Symbol } from '../ansicht/Symbol'
 import { Raumbild } from '../ansicht/hilfen'
+import { WissenSuche } from './WissenSuche'
 
 export function Halle({ index, onBereich }: { index: InhaltsIndex; onBereich: (b: BereichId) => void }) {
   const daten = useCoach(s => s.daten)
@@ -14,6 +15,7 @@ export function Halle({ index, onBereich }: { index: InhaltsIndex; onBereich: (b
       <div><span className="dc-ober">Freies Training</span><h1 className="dc-h1">Halle</h1></div>
       <Raumbild name="halle" hoehe={180} position="center 55%" />
       <p className="dc-leise" style={{ margin: 0 }}>Jeder Bereich hat seine eigene Seite: das Wissen dahinter, alle Übungen und Tests, die Aufgaben fürs echte Leben und Spickzettel. Offen für alle – auch für Bereiche, die du nicht gewählt hast.</p>
+      <WissenSuche index={index} />
       <div className="dc-raster">
         {index.bereiche.map(b => {
           const gew = daten.profil.bereiche.includes(b.id)

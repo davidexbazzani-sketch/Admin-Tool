@@ -1,0 +1,281 @@
+{
+  "lagen": [
+    {
+      "id": "ruhe-l-11", "bereich": "ruhe", "phase": "m", "umfeld": "vorgesetzte", "faehigkeiten": ["ruhe.umdeuten", "ruhe.verstehen", "ruhe.fokus"], "stufe": 7,
+      "titel": "Das Gespräch vor dem Auswahlgremium", "figur": "Dr. Henrik Albers",
+      "einleitung": "Ein Auswahlgespräch für die Leitung deines Teams, vor fünf Leuten. Du übst, die Aufregung anzunehmen statt sie wegzudrücken, und Gedankenfallen im Moment zu erkennen.",
+      "lage": "Du bewirbst dich intern auf die Leitung deines Teams. Im Gespräch sitzen fünf Leute, darunter Dr. Albers. Du willst die Stelle wirklich – und genau deshalb ist die Aufregung groß.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Im Flur. Dein Herz hämmert seit einer halben Stunde, und es wird nicht weniger.",
+          "wahl": [
+            { "text": "„Da ist es. Es darf mitkommen – ich bin hier, weil ich dieses Team führen will.“ Dann ein langer Ausatmer.", "wert": 2, "weiter": "k2", "rueck": "Benennen, erlauben, Wofür: Die Aufregung bleibt vielleicht – aber sie führt nicht mehr." },
+            { "text": "„Ich muss das jetzt endlich runterkriegen, sonst vermassele ich alles.“", "wert": 0, "tendenz": "unterdruecken", "weiter": "k1b", "rueck": "Wer gegen das Herzklopfen kämpft, macht es meist lauter." },
+            { "text": "„Ich bin aufgeregt – mein Körper macht sich bereit.“", "wert": 1, "weiter": "k2", "rueck": "Gutes Umdeuten. Dein Wofür hätte dir zusätzlich Halt gegeben, falls das Herzklopfen bleibt." }
+          ] },
+        { "id": "k1b", "sagt": "Du versuchst, ruhig zu werden. Je mehr du es versuchst, desto lauter klopft es.",
+          "wahl": [
+            { "text": "Aufhören zu kämpfen: „Okay, du bleibst. Ich gehe trotzdem rein.“", "wert": 2, "weiter": "k2", "rueck": "Erlauben nimmt dem Kampf die Kraft – und dir den doppelten Stress." }
+          ] },
+        { "id": "k2", "sagt": "Die erste Frage kommt aus der Personalabteilung. Während du antwortest, runzelt Dr. Albers die Stirn.",
+          "wahl": [
+            { "text": "Innerlich: „Gedankenlesen.“ Bei der Antwort bleiben und am Ende fragen: „Möchten Sie dazu noch etwas wissen?“", "wert": 2, "weiter": "k3", "rueck": "Ein Stirnrunzeln kann Nachdenken sein. Nachfragen klärt, was du sonst nur vermutest." },
+            { "text": "Mitten im Satz umschwenken und das Gegenteil sagen, damit er zufrieden ist.", "wert": 0, "weiter": "k2b", "rueck": "Du antwortest auf eine Vermutung statt auf die Frage – und verlierst deinen Standpunkt." },
+            { "text": "Die Stirn nicht weiter beachten und einfach weitersprechen.", "wert": 1, "weiter": "k3", "rueck": "Gut, du bleibst bei der Sache. Die Falle zu benennen, hilft dir zusätzlich beim nächsten Stirnrunzeln." }
+          ] },
+        { "id": "k2b", "sagt": "Jetzt passt deine Antwort nicht mehr zu dem, was du vorhin gesagt hast. Die Frau aus der Personalabteilung fragt nach.",
+          "wahl": [
+            { "text": "Ehrlich: „Da habe ich mich verheddert. Was ich meine, ist: …“", "wert": 2, "weiter": "k3", "rueck": "Offen korrigiert – das wirkt stärker als jede glatte Antwort." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers: „Was war Ihr größter Fehler in Ihren Projekten?“ In deinem Kopf: „Bloß keine Schwäche zeigen. Sei perfekt.“",
+          "wahl": [
+            { "text": "Den Antreiber erkennen – und einen echten Fehler nennen, mit dem, was du seitdem anders machst.", "wert": 2, "weiter": "k4", "rueck": "Gut genug ist gut genug. Ein echter Fehler mit Folgerung zeigt genau, was eine Leitung braucht." },
+            { "text": "Einen Fehler nennen, der eigentlich eine Stärke ist: „Ich arbeite manchmal einfach zu viel und kann schlecht abgeben.“", "wert": 0, "weiter": "k3b", "rueck": "Das kennen Gremien. Es wirkt ausweichend – genau das, was der Antreiber verhindern wollte." }
+          ] },
+        { "id": "k3b", "sagt": "Dr. Albers lächelt knapp: „Und ein echter?“",
+          "wahl": [
+            { "text": "Ausatmen. „Fair. Letztes Jahr habe ich ein Risiko zu spät gemeldet. Seitdem …“", "wert": 2, "weiter": "k4", "rueck": "Zweite Chance genutzt – ehrlich und mit Folgerung." }
+          ] },
+        { "id": "k4", "sagt": "Gegen Ende verhaspelst du dich zweimal. Im Kopf: „Jetzt ist alles verloren.“",
+          "wahl": [
+            { "text": "Katastrophe erkannt: Zwei Versprecher entscheiden kein Gespräch. Ausatmen, langsamer, Schlusssatz.", "wert": 2, "weiter": "k5", "rueck": "Falle erkannt, Prüffrage beantwortet, weiter – und dein Schluss bleibt stark." },
+            { "text": "„Pardon, zweimal verhaspelt.“ – und weiter.", "wert": 1, "weiter": "k5", "rueck": "Locker und ehrlich. Die Falle im Kopf zu erkennen, hilft dir zusätzlich beim nächsten Mal." },
+            { "text": "Das Tempo erhöhen und die letzten Punkte nur noch aufzählen, damit es vorbei ist, bevor noch mehr Fehler passieren.", "wert": 0, "tendenz": "flucht", "weiter": "k5", "rueck": "Die Flucht nach vorn kostet deinen stärksten Teil – den Schluss." }
+          ] },
+        { "id": "k5", "sagt": "Dr. Albers: „Haben Sie noch Fragen an uns?“",
+          "wahl": [
+            { "text": "„Ja: Was wäre für Sie in den ersten hundert Tagen das Wichtigste?“", "wert": 2, "weiter": "ende1", "rueck": "Eine Frage nach vorn – du sprichst schon wie jemand, der die Aufgabe will." },
+            { "text": "„Nein, danke, es ist alles klar.“", "wert": 1, "weiter": "ende1", "rueck": "Geht. Eine eigene Frage hätte einen stärkeren Schluss gemacht." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers steht auf: „Danke. Sie hören bis Ende der Woche von uns.“", "ende": "Drei Fallen meldeten sich: Gedankenlesen, „Sei perfekt“ und Katastrophe. Wer sie im Moment erkennt, muss ihnen nicht folgen – und die Aufregung darf mit, solange dein Wofür die Richtung gibt. Ob du die Stelle bekommst, entscheidet nicht dein Herzklopfen." }
+      ],
+      "prinzipien": ["Aufregung erlauben, Wofür benennen", "ein Stirnrunzeln ist kein Urteil", "Antreiber erkennen, echten Fehler nennen", "Versprecher sind keine Katastrophe"],
+      "transfer": "Welcher Gedanke kommt bei dir vor wichtigen Gesprächen am häufigsten? Gib ihm einen Namen – Katastrophe, Gedankenlesen, Perfektion – und schreib die Prüffrage daneben."
+    },
+    {
+      "id": "ruhe-l-12", "bereich": "ruhe", "phase": "m", "umfeld": "freunde", "faehigkeiten": ["ruhe.verstehen", "ruhe.umdeuten", "ruhe.routine", "ruhe.atem"], "stufe": 8,
+      "titel": "Die Nacht vor dem großen Tag", "figur": "Sven",
+      "einleitung": "Die Nacht vor einer wichtigen Präsentation. Du übst, mit kreisenden Gedanken umzugehen, Annehmen statt Kampf ums Einschlafen und am Morgen deine eigene Rangliste.",
+      "lage": "Morgen um neun präsentierst du vor der Geschäftsleitung. Es ist 23 Uhr, du liegst wach. Dein alter Freund Sven schreibt dir eine Nachricht.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Sven: „Na, morgen der große Tag? Schläfst du schon, oder probst du noch vor dem Spiegel?“",
+          "wahl": [
+            { "text": "„Wach, aber fertig vorbereitet. Ich lege jetzt das Handy weg. Drück mir die Daumen.“", "wert": 2, "weiter": "k2", "rueck": "Kurz, freundlich, und der Abend bekommt ein Ende." },
+            { "text": "Ihm ausführlich schreiben, was morgen alles schiefgehen kann, und noch eine Stunde hin und her chatten.", "wert": 0, "tendenz": "katastrophe", "weiter": "k1b", "rueck": "Jedes Szenario, das du aufschreibst, wird im Kopf größer – und die Nacht kürzer." },
+            { "text": "„Ein bisschen nervös. Erzähl mir lieber was Lustiges von dir.“", "wert": 1, "weiter": "k2", "rueck": "Ablenkung kann helfen – nur nicht zu lange. Das Handy weglegen bleibt der nächste Schritt." }
+          ] },
+        { "id": "k1b", "sagt": "Mitternacht. Sven: „Du machst dich verrückt. Leg dich hin.“ Er hat recht.",
+          "wahl": [
+            { "text": "Handy weg, drei Sorgen auf einen Zettel, daneben je einen Satz: Was täte ich dann?", "wert": 2, "weiter": "k2", "rueck": "Auf dem Zettel sind die Sorgen geordnet – und jede hat eine Antwort." }
+          ] },
+        { "id": "k2", "sagt": "Im Dunkeln läuft der Film: Du stehst vorn, alles ist weg, die Geschäftsleitung schaut auf die Uhr.",
+          "wahl": [
+            { "text": "Den Film benennen: „Katastrophe.“ Dann zu Ende spielen – mit Hänger und deinem Plan danach.", "wert": 2, "weiter": "k3", "rueck": "Der Film bekommt ein anderes Ende: deinen Plan. Das nimmt ihm viel Kraft." },
+            { "text": "Ein Hörbuch anmachen, um auf andere Gedanken zu kommen.", "wert": 1, "weiter": "k3", "rueck": "Kann den Film unterbrechen. Ihn zu benennen und zu Ende zu spielen, nimmt ihm aber mehr Kraft." },
+            { "text": "Aufstehen und den ganzen Vortrag noch dreimal durchgehen, bis du dir ganz sicher bist, dass nichts schiefgehen kann.", "wert": 0, "weiter": "k2b", "rueck": "Um Mitternacht findest du eher Lücken als Sicherheit – und wirst wacher." },
+            { "text": "Dir verbieten, daran zu denken: „Hör sofort auf damit!“", "wert": 0, "tendenz": "unterdruecken", "weiter": "k2b", "rueck": "Gedanken verbieten klappt selten – oft kommen sie lauter zurück." }
+          ] },
+        { "id": "k2b", "sagt": "Ein Uhr. Du bist hellwach, und der Kampf ums Einschlafen beginnt.",
+          "wahl": [
+            { "text": "Licht aus und dir sagen: „Wach liegen darf sein. Eine kurze Nacht übersteht man.“ Dann langsam und lang ausatmen.", "wert": 2, "weiter": "k3", "rueck": "Annehmen nimmt dem Kampf ums Einschlafen den Druck." }
+          ] },
+        { "id": "k3", "sagt": "8.15 Uhr. Du hast fünf Stunden geschlafen. Im Kopf: „Unausgeschlafen kann ich das nicht.“",
+          "wahl": [
+            { "text": "„Müde, aber vorbereitet. Ich habe das geprobt.“ Gewohntes Frühstück, die übliche Tasse, ein Stück zu Fuß.", "wert": 2, "weiter": "k4", "rueck": "Eine Falle erkannt und ein gewohnter Morgen – das gibt Halt." },
+            { "text": "Drei Kaffee hintereinander, damit du richtig wach wirst.", "wert": 0, "weiter": "k3b", "rueck": "Gegen die Müdigkeit verständlich – aber viel Koffein legt noch Herzklopfen auf die Aufregung." },
+            { "text": "Eine Kollegin bitten, im Notfall einzuspringen – dann gehst du entspannter rein.", "wert": 1, "weiter": "k4", "rueck": "Ein Netz kann beruhigen. Es kann aber zur Krücke werden, wenn du es jedes Mal brauchst." }
+          ] },
+        { "id": "k3b", "sagt": "Vor dem Konferenzraum rast dein Herz, die Hände zittern.",
+          "wahl": [
+            { "text": "Wasser trinken, die zwei stärksten Werkzeuge aus deiner Rangliste, dann der erste Satz.", "wert": 2, "weiter": "k4", "rueck": "Gut gefangen. Und beim nächsten Mal: die gewohnte Tasse, keine Extra-Dosis." }
+          ] },
+        { "id": "k4", "sagt": "Noch zwei Minuten. Was nimmst du?",
+          "wahl": [
+            { "text": "Deine Rangliste: die zwei Werkzeuge, die bei dir am meisten gebracht haben, in fester Reihenfolge.", "wert": 2, "weiter": "k5", "rueck": "Du greifst zu dem, was bei dir laut deiner eigenen Messung am meisten bringt – ohne lange zu überlegen." },
+            { "text": "Alles auf einmal: Seufzer-Atmung, Anspannen, Namenssatz, Blick, Wasser und Annehmen – sicher ist sicher.", "wert": 0, "weiter": "k5", "rueck": "Sechs Werkzeuge in zwei Minuten werden zur Hetze. Weniger, aber die richtigen." },
+            { "text": "Das Werkzeug, das in einem Ratgeber auf Platz eins stand.", "wert": 1, "weiter": "k5", "rueck": "Kann passen. Deine eigene Messung sagt aber mehr darüber, was bei dir wirkt." }
+          ] },
+        { "id": "k5", "sagt": "Geschafft. Die Geschäftsführerin: „Danke, klar und gut begründet.“ Abends schreibt Sven: „Und, wie war's?“",
+          "wahl": [
+            { "text": "„Besser als befürchtet. Müde und nervös – und es hat trotzdem gereicht.“", "wert": 2, "weiter": "ende1", "rueck": "Befürchtet und passiert, nebeneinander – genau so lernt dein Kopf fürs nächste Mal." },
+            { "text": "„Ganz okay, glaube ich.“", "wert": 1, "weiter": "ende1", "rueck": "Bescheiden. Mit dem Vergleich zur Befürchtung hättest du mehr davon." }
+          ] },
+        { "id": "ende1", "sagt": "Sven: „Hab ich doch gewusst. Nächstes Mal schläfst du einfach.“", "ende": "Der Film in der Nacht ist eine Katastrophen-Falle; wer gegen das Wachliegen kämpft, macht es lauter, Annehmen nimmt den Druck. Und am Morgen trägt, was du über Wochen gemessen und geübt hast: deine Rangliste." }
+      ],
+      "prinzipien": ["den Abend beenden, Sorgen auf Papier", "den Katastrophen-Film zu Ende spielen – mit deinem Plan", "wach liegen darf sein", "am Morgen: Gewohntes, keine Extra-Dosis Kaffee", "zwei Werkzeuge aus der Rangliste statt alle"],
+      "transfer": "Was tust du, wenn du vor einem wichtigen Tag nicht schlafen kannst? Schreib dir einen Satz für die Nacht auf – und deine zwei stärksten Werkzeuge für den Morgen."
+    },
+    {
+      "id": "ruhe-l-13", "bereich": "ruhe", "phase": "m", "umfeld": "kollegen", "faehigkeiten": ["ruhe.vorbereitung", "ruhe.fokus", "ruhe.umdeuten"], "stufe": 8,
+      "titel": "Der Abend nach dem Hänger", "figur": "Miriam Okafor",
+      "einleitung": "Dein Vortrag ist nicht gut gelaufen: ein langer Hänger vor allen. Du übst, auszuwerten statt zu grübeln, freundlich mit dir zu sein und den nächsten Schritt festzuhalten.",
+      "lage": "Heute Nachmittag hast du vor der Abteilung präsentiert. Nach fünf Minuten war der Faden weg – zwanzig lange Sekunden, bis du wieder drin warst. Danach lief es ordentlich. Miriam Okafor war dabei.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Auf dem Flur. Miriam: „Na? Wie fandest du's?“",
+          "wahl": [
+            { "text": "„Der Hänger hat mich erwischt. Wie hat es von außen gewirkt?“", "wert": 2, "weiter": "k2", "rueck": "Eine ehrliche Frage – und ein Blick von außen, der dein Bild prüfen kann." },
+            { "text": "„Furchtbar. Alle haben gesehen, wie ich komplett versagt habe, und das vergessen die so schnell nicht.“", "wert": 0, "tendenz": "katastrophe", "weiter": "k2", "rueck": "So spricht der Scheinwerfer im Kopf. Miriams Antwort zeigt gleich, was die anderen gesehen haben." },
+            { "text": "„Geht so. Lass uns über was anderes reden.“", "wert": 1, "weiter": "k2", "rueck": "Abstand ist verständlich. Ihre Sicht kann dir aber ein anderes Bild geben." }
+          ] },
+        { "id": "k2", "sagt": "Miriam: „Ehrlich? Ich dachte erst, du machst eine Kunstpause. Und danach war der Teil mit den Kosten richtig gut.“",
+          "wahl": [
+            { "text": "„Danke. Das schreibe ich mir auf – unter ‚befürchtet und passiert‘.“", "wert": 2, "weiter": "k3", "rueck": "Genau so wird aus einem Gespräch auf dem Flur eine Korrektur für dein Bild im Kopf." },
+            { "text": "„Das sagst du doch nur, um nett zu sein.“", "wert": 0, "tendenz": "kleinreden", "weiter": "k3", "rueck": "Damit wischst du einen echten Befund weg – und das dunkle Bild bleibt." }
+          ] },
+        { "id": "k3", "sagt": "Abends auf dem Sofa. Der Hänger läuft zum zehnten Mal in deinem Kopf.",
+          "wahl": [
+            { "text": "Grübeln erkennen. Zehn Minuten, drei Fragen auf Papier – dann bewusst etwas anderes tun.", "wert": 2, "weiter": "k4", "rueck": "Erkennen, auswerten, aufhören: So endet die Schleife mit einem Schritt." },
+            { "text": "Weiter durchspielen. Vielleicht findest du doch noch heraus, warum es passiert ist und wie du es künftig sicher ausschließt.", "wert": 0, "tendenz": "nach_innen", "weiter": "k3b", "rueck": "Klingt nach Auswerten, ist aber Grübeln: kein neuer Gedanke, nur ein dunkleres Bild." },
+            { "text": "Einen Film anmachen, um nicht mehr daran zu denken.", "wert": 1, "weiter": "k4", "rueck": "Ablenkung unterbricht das Kreisen. Mit den drei Fragen vorher hättest du zusätzlich einen Schritt in der Hand." }
+          ] },
+        { "id": "k3b", "sagt": "Elf Uhr. Der Film läuft weiter – und wird mit jeder Runde peinlicher.",
+          "wahl": [
+            { "text": "Erkennen: Es kommt nichts Neues mehr. Drei Fragen auf einen Zettel, Zettel weg, Licht aus.", "wert": 2, "weiter": "k4", "rueck": "Spät, aber erkannt. Der Zettel hält fest, was zählt – der Rest darf ruhen." }
+          ] },
+        { "id": "k4", "sagt": "Was schreibst du bei „Was übernehme ich?“",
+          "wahl": [
+            { "text": "„Den Hänger-Plan mit zweiter Stufe üben – und nach Zwischenfragen kurz sagen, wo ich bin.“", "wert": 2, "weiter": "k5", "rueck": "Konkret und machbar. So wird der Hänger zum Baustein fürs nächste Mal." },
+            { "text": "„Ab jetzt lese ich alles Wort für Wort vom Blatt ab, dann kann so etwas einfach nicht mehr passieren.“", "wert": 0, "tendenz": "kruecke", "weiter": "k5", "rueck": "Eine Krücke: Sie schützt jetzt und verhindert, dass du erlebst, dass es auch ohne geht." },
+            { "text": "„Besser vorbereiten.“", "wert": 1, "weiter": "k5", "rueck": "Die Richtung stimmt – aber was genau? Ein konkreter Schritt hilft mehr." }
+          ] },
+        { "id": "k5", "sagt": "Am nächsten Morgen meldet sich dein innerer Kritiker: „So was passiert auch nur dir.“",
+          "wahl": [
+            { "text": "Antworten wie ein Freund: „Hänger passieren vielen. Du hast weitergemacht, und der Rest war gut.“", "wert": 2, "weiter": "ende1", "rueck": "Fair statt streng – und genau das macht Lust auf den nächsten Versuch." },
+            { "text": "Ihm recht geben und die nächste Präsentation schon einmal absagen.", "wert": 0, "tendenz": "flucht", "weiter": "ende2", "rueck": "Das schützt für den Moment und macht die nächste Hürde höher." }
+          ] },
+        { "id": "ende1", "sagt": "Eine Woche später meldest du dich in der Teamrunde wieder zu Wort.", "ende": "Ein echter Hänger und ein schwerer Abend – und trotzdem ist ein Schritt nach vorn möglich: Miriams Blick von außen, drei Fragen statt Endlosfilm, ein konkreter Plan, Freundlichkeit statt Abrechnung." },
+        { "id": "ende2", "sagt": "Die nächste Präsentation hält Miriam. Du sitzt in der zweiten Reihe.", "ende": "Ausweichen fühlt sich kurz gut an und macht es danach schwerer. Beim nächsten Mal: drei Fragen, ein Plan – und dir selbst zureden wie einem Freund." }
+      ],
+      "prinzipien": ["einen Blick von außen holen", "Grübeln erkennen: nichts Neues, kein Schritt", "drei Fragen, dann Schluss", "ein konkreter Schritt statt einer Krücke", "mit dir reden wie mit einem Freund"],
+      "transfer": "Denk an einen Auftritt, der dir nachhängt. Schreib die drei Fragen dazu auf – und einen Satz, den dir ein guter Freund sagen würde."
+    },
+    {
+      "id": "ruhe-l-14", "bereich": "ruhe", "phase": "m", "umfeld": "telefon", "faehigkeiten": ["ruhe.routine", "ruhe.atem", "ruhe.mittendrin", "ruhe.vorbereitung"], "stufe": 8,
+      "titel": "Das Interview am Telefon", "figur": "Frau Sommer",
+      "einleitung": "Ein Live-Interview am Telefon mit zwanzig Minuten Vorwarnung. Du übst einen Fahrplan im Kleinformat, deine Rangliste unter Zeitdruck und Ruhe, wenn live etwas schiefgeht.",
+      "lage": "Du organisierst mit deiner Nachbarin Frau Sommer das Straßenfest. Sie hat dem Lokalradio deine Nummer gegeben. Die Redaktion ruft an: „Wir würden Sie in zwanzig Minuten live zum Fest befragen. Drei Minuten.“",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Noch zwanzig Minuten. Dein Puls springt.",
+          "wahl": [
+            { "text": "Zusagen. Dann der Mini-Fahrplan: drei Kernpunkte und den ersten Satz notieren, einmal laut sagen, Wasser hinstellen.", "wert": 2, "weiter": "k2", "rueck": "Ein Fahrplan im Kleinformat – zwanzig Minuten reichen dafür." },
+            { "text": "Absagen: „Lieber nicht, am Telefon bin ich nicht so gut.“", "wert": 0, "tendenz": "flucht", "weiter": "k1b", "rueck": "Die Erleichterung hält kurz. Und du weißt am meisten über das Fest." },
+            { "text": "Zusagen und die zwanzig Minuten nutzen, um im Netz nachzulesen, wie man ein Radiointerview gibt.", "wert": 1, "weiter": "k2", "rueck": "Die Zusage ist stark. Nur füllst du die Zeit mit Neuem statt mit deinen drei Punkten." }
+          ] },
+        { "id": "k1b", "sagt": "Frau Sommer ruft sofort an: „Ach komm, du weißt doch am meisten übers Fest! Ich setze mich neben dich, wenn du willst.“",
+          "wahl": [
+            { "text": "„Gut. Komm rüber – ich notiere mir drei Punkte.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt – und Unterstützung angenommen." },
+            { "text": "Bei der Absage bleiben: „Danke, aber mach du das lieber.“", "wert": 0, "tendenz": "flucht", "weiter": "ende2", "rueck": "Verständlich. Die Hürde bleibt aber für das nächste Mal stehen." }
+          ] },
+        { "id": "k2", "sagt": "Noch zwei Minuten. Das Telefon liegt vor dir.",
+          "wahl": [
+            { "text": "Die zwei stärksten Werkzeuge deiner Rangliste, dann den ersten Satz halblaut.", "wert": 2, "weiter": "k3", "rueck": "Keine Zeit zum Suchen – du nimmst, was bei dir wirkt." },
+            { "text": "Den Zettel noch dreimal umschreiben, bis die drei Punkte wirklich perfekt formuliert sind.", "wert": 0, "weiter": "k3", "rueck": "Kurz vorher feilen macht unruhig. Die drei Punkte waren gut genug." },
+            { "text": "Ans Fenster gehen und auf die Straße schauen, bis es klingelt.", "wert": 1, "weiter": "k3", "rueck": "Der Blick nach außen hilft. Mit deinen Werkzeugen wärst du noch besser vorbereitet." }
+          ] },
+        { "id": "k3", "sagt": "Live. Die Moderatorin: „Und, wie viele Besucher erwarten Sie?“ Daran hast du nicht gedacht.",
+          "wahl": [
+            { "text": "Ausatmen: „Letztes Jahr waren es ein paar Hundert. Wir hoffen auf mehr.“", "wert": 2, "weiter": "k4", "rueck": "Eine ehrliche grobe Angabe – mehr braucht das Radio nicht." },
+            { "text": "Schnell eine große Zahl nennen, damit keine Pause entsteht und das Fest im Radio gleich richtig wichtig klingt.", "wert": 0, "tendenz": "flucht", "weiter": "k3b", "rueck": "Eine Pause von zwei Sekunden hört kaum jemand. Eine falsche Zahl schon." },
+            { "text": "„Das weiß ich gerade nicht genau.“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich. Mit einer groben Einordnung hättest du ihr trotzdem etwas gegeben." }
+          ] },
+        { "id": "k3b", "sagt": "Die Moderatorin: „So viele? Das wäre ja ein Rekord!“ Dir fällt ein: Letztes Jahr waren es rund dreihundert.",
+          "wahl": [
+            { "text": "„Pardon, da habe ich übertrieben – es waren rund dreihundert.“ Und weiter mit deinem zweiten Punkt.", "wert": 2, "weiter": "k4", "rueck": "Ruhig korrigiert – das wirkt sicherer, als es sich anfühlt." }
+          ] },
+        { "id": "k4", "sagt": "Die Leitung rauscht, du hörst die Moderatorin kaum noch. Dein Herz rast.",
+          "wahl": [
+            { "text": "Ruhig das Wichtigste in einem Satz: „Ich verstehe Sie schlecht – kurz das Wichtigste: Samstag ab zwölf, für alle.“", "wert": 2, "weiter": "k5", "rueck": "Der Kern ist gesagt, egal was die Leitung macht." },
+            { "text": "Auflegen und hoffen, dass sie noch einmal anruft.", "wert": 0, "tendenz": "flucht", "weiter": "k4b", "rueck": "Live ist das ein Loch in der Sendung – und für dich eine längere Wartezeit." }
+          ] },
+        { "id": "k4b", "sagt": "Das Telefon klingelt sofort wieder. Die Redaktion: „Wir sind noch auf Sendung!“",
+          "wahl": [
+            { "text": "Langsam ausatmen: „Entschuldigung, die Leitung. Das Wichtigste: Samstag ab zwölf, für alle.“", "wert": 2, "weiter": "k5", "rueck": "Zurück im Gespräch – mit dem, was zählt." }
+          ] },
+        { "id": "k5", "sagt": "Die Moderatorin: „Danke! Und Sie selbst – was ist Ihr Lieblingsmoment beim Fest?“",
+          "wahl": [
+            { "text": "Lächeln und eine kurze echte Geschichte erzählen: das Kinderkarussell am Abend.", "wert": 2, "weiter": "ende1", "rueck": "Eine kleine Geschichte lädt die Hörer ein – und du bist ganz bei der Sache." },
+            { "text": "„Wenn alles vorbei ist und nichts schiefgegangen ist.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich und witzig. Eine kleine Geschichte hätte die Hörer noch mehr eingeladen." }
+          ] },
+        { "id": "ende1", "sagt": "Frau Sommer ist begeistert. Am Samstag sagen drei Besucher: „Wir haben Sie im Radio gehört.“", "ende": "Kurze Vorwarnung, großer Puls – und trotzdem reicht ein Plan im Kleinformat: drei Punkte, erster Satz, deine zwei stärksten Werkzeuge, ehrlich statt erfunden, ein Satz bei Technikproblemen. Dafür ist die Rangliste da: Wenn keine Zeit ist, greifst du nicht lange." },
+        { "id": "ende2", "sagt": "Frau Sommer gibt das Interview selbst – und erzählt sehr ausführlich.", "ende": "Ein Nein ist erlaubt. Beim nächsten Mal: zusagen, drei Punkte, erster Satz – zwanzig Minuten reichen für einen Mini-Fahrplan." }
+      ],
+      "prinzipien": ["Mini-Fahrplan: drei Punkte, erster Satz, einmal laut", "zwei Werkzeuge aus der Rangliste", "grob und ehrlich statt erfunden", "Technik-Plan: das Wichtigste in einem Satz"],
+      "transfer": "Was wäre dein Mini-Fahrplan, wenn du in zwanzig Minuten spontan vor anderen sprechen müsstest? Schreib die drei Schritte heute auf."
+    },
+    {
+      "id": "ruhe-l-15", "bereich": "ruhe", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["ruhe.verstehen", "ruhe.atem", "ruhe.umdeuten", "ruhe.koerper", "ruhe.fokus", "ruhe.routine", "ruhe.vorbereitung", "ruhe.mittendrin"], "stufe": 9, "sparring": true,
+      "titel": "Sparring: Die Festrede zum Jubiläum", "figur": "Dr. Henrik Albers",
+      "einleitung": "Das Sparring zum Abschluss der Meisterschaft: ein großer Auftritt von der Zusage bis zum Abend danach. Annehmen, Gedankenfallen, deine Rangliste, der Fahrplan von A bis Z und das Auswerten ohne Grübeln – alles kommt vor.",
+      "lage": "Euer Betrieb wird fünfzig. Dr. Albers fragt, ob du bei der Feier vor zweihundert Gästen eine kurze Festrede im Namen der Belegschaft hältst. Die Feier ist in fünf Wochen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Ich weiß, das ist viel. Sie können auch Nein sagen.“ Dein erster Gedanke: „Vor zweihundert Leuten? Auf keinen Fall.“",
+          "wahl": [
+            { "text": "Den Gedanken als Katastrophen-Falle erkennen, kurz das Wofür prüfen – und zusagen: „Ja. Ich mache es.“", "wert": 2, "weiter": "k2", "rueck": "Die Angst hat gesprochen, entschieden hat dein Wofür." },
+            { "text": "„Darf ich bis morgen überlegen?“", "wert": 1, "weiter": "k1b", "rueck": "Bedenkzeit ist in Ordnung. Achte darauf, dass morgen dein Wofür entscheidet, nicht die Angst." },
+            { "text": "„Lieber nicht – für so etwas bin ich nicht gemacht. Da finden Sie bestimmt jemanden, der viel besser reden kann als ich.“", "wert": 0, "tendenz": "flucht", "weiter": "ende2", "rueck": "Ein Nein ist erlaubt. Hier hat aber die Falle entschieden, nicht du." }
+          ] },
+        { "id": "k1b", "sagt": "Am nächsten Morgen. Die Angst ist noch da – und der Wunsch, für die Kolleginnen und Kollegen zu sprechen, auch.",
+          "wahl": [
+            { "text": "„Ich bin aufgeregt, und ich will das. Ich sage zu.“", "wert": 2, "weiter": "k2", "rueck": "Annehmen und handeln – beides passt in einen Satz." },
+            { "text": "Absagen, weil die Angst über Nacht nicht kleiner geworden ist.", "wert": 0, "tendenz": "flucht", "weiter": "ende2", "rueck": "Die Angst wäre wahrscheinlich auch in fünf Wochen noch da gewesen – und du trotzdem gut." }
+          ] },
+        { "id": "k2", "sagt": "Fünf Wochen. Wie planst du?",
+          "wahl": [
+            { "text": "Rückwärts von der Feier: Ziel in einem Satz, Text bis Woche zwei, Proben in Stufen, in Woche vier vor kleiner Runde mit Mikrofon.", "wert": 2, "weiter": "k3", "rueck": "Von A bis Z verteilt sich die Aufregung auf viele kleine Schritte." },
+            { "text": "Erst einmal sacken lassen und in der letzten Woche alles auf einmal machen.", "wert": 0, "weiter": "k2b", "rueck": "Aufschieben spart jetzt Aufregung und packt sie gesammelt ans Ende." },
+            { "text": "Den Text gleich diese Woche schreiben und ihn dann jeden Abend still durchlesen.", "wert": 1, "weiter": "k3", "rueck": "Früh anzufangen ist gut. Still lesen bereitet aber nicht auf zweihundert Gesichter und ein Mikrofon vor." }
+          ] },
+        { "id": "k2b", "sagt": "Eine Woche vor der Feier. Der Text steht, geprobt hast du nicht. Im Kopf: „Jetzt ist es zu spät.“",
+          "wahl": [
+            { "text": "„Zu spät für perfekt, nicht für gut.“ Ab heute jeden Abend laut, am Wochenende vor zwei Freunden.", "wert": 2, "weiter": "k3", "rueck": "Falle erkannt, Plan gemacht – eine Woche reicht für ein gutes Ergebnis." }
+          ] },
+        { "id": "k3", "sagt": "Eine Probe vor einer kleinen Runde. Du bleibst zweimal an derselben Stelle hängen. Im Kopf: „Sei perfekt.“",
+          "wahl": [
+            { "text": "Den Antreiber erkennen, die Stelle kürzen und mit Stichwort einzeln proben.", "wert": 2, "weiter": "k4", "rueck": "Die Probe zeigt die schwache Stelle – und du baust sie um, solange es nichts kostet." },
+            { "text": "Die ganze Rede neu schreiben – vielleicht ist ja der ganze Text das eigentliche Problem.", "wert": 0, "weiter": "k4", "rueck": "Das wirft alles Geprobte weg. Meist reicht es, die eine Stelle umzubauen." },
+            { "text": "Die Stelle Wort für Wort auswendig lernen.", "wert": 1, "weiter": "k4", "rueck": "Kann tragen – macht aber anfällig, wenn ein Wort fehlt. Kürzer mit Stichwort ist robuster." }
+          ] },
+        { "id": "k4", "sagt": "Der Abend der Feier. Noch fünf Minuten. Der Saal ist voll, die Musik wird leiser. Ein Kellner bietet Sekt an.",
+          "wahl": [
+            { "text": "Die zwei stärksten Werkzeuge deiner Rangliste, dann: „Da ist die Aufregung – ich spreche für alle hier.“", "wert": 2, "weiter": "k5", "rueck": "Rangliste, Annehmen, Wofür – deine ganze Meisterschaft in einer Minute." },
+            { "text": "Ein Glas Sekt nehmen, zur Beruhigung.", "wert": 0, "tendenz": "kruecke", "weiter": "k4b", "rueck": "Alkohol trübt Urteil und Aussprache – und lehrt dich, dass es ohne nicht geht." },
+            { "text": "Noch einmal auf die Toilette gehen und dort in Ruhe die Karte überfliegen.", "wert": 1, "weiter": "k5", "rueck": "Ein ruhiger Ort kann helfen. Deine Rangliste-Werkzeuge hättest du dort auch nehmen können." }
+          ] },
+        { "id": "k4b", "sagt": "Das Glas ist halb leer, ruhiger bist du nicht. Dr. Albers winkt dich nach vorn.",
+          "wahl": [
+            { "text": "Im Vorbeigehen ein Glas Wasser, Füße fest, langsam und lang aus, erster Satz.", "wert": 2, "weiter": "k5", "rueck": "Gut gefangen. Beim nächsten Mal trägt deine Rangliste – ohne Glas." }
+          ] },
+        { "id": "k5", "sagt": "Am Mikrofon. Das Licht blendet, du siehst kaum Gesichter. Die erste Welle kommt.",
+          "wahl": [
+            { "text": "Satz zu Ende, Pause, ausatmen – den Blick zur ersten Reihe, wo du Gesichter erkennst.", "wert": 2, "weiter": "k6", "rueck": "Die Welle kommt und geht. Die erste Reihe gibt dir Gesichter, zu denen du sprichst." },
+            { "text": "Nur noch ins Manuskript schauen und den Rest Wort für Wort ablesen.", "wert": 0, "tendenz": "kruecke", "weiter": "k6", "rueck": "Eine Krücke: Sie schützt jetzt und kostet den Kontakt zu den Gästen. Die Welle wäre auch so gesunken." }
+          ] },
+        { "id": "k6", "sagt": "Mitten in der Geschichte über die Anfänge pfeift das Mikrofon laut auf. Zweihundert Leute zucken zusammen.",
+          "wahl": [
+            { "text": "Lächeln, einen Schritt zurück, warten, bis es still ist: „So begrüßt uns die Technik zum Jubiläum.“ Dann weiter.", "wert": 2, "weiter": "k7", "rueck": "Der Saal lacht mit dir – und du hast die Pause für dich genutzt." },
+            { "text": "Erschrocken abbrechen: „Ich glaube, das war's dann – die Technik will heute nicht.“ Und zurück zum Platz.", "wert": 0, "tendenz": "flucht", "weiter": "k6b", "rueck": "Die Panne fühlt sich riesig an. Für die Gäste ist sie gleich vergessen." },
+            { "text": "Den Techniker bitten, das Mikrofon zu richten, und still warten.", "wert": 1, "weiter": "k7", "rueck": "Vernünftig. Mit einem lockeren Satz hättest du die Pause gleich für dich genutzt." }
+          ] },
+        { "id": "k6b", "sagt": "Dr. Albers ruft von seinem Platz: „Ach was – machen Sie weiter, wir sind gespannt!“",
+          "wahl": [
+            { "text": "Ausatmen, Stichwort, den letzten Satz noch einmal – und weiter.", "wert": 2, "weiter": "k7", "rueck": "Zurück im Faden. Der Saal ist auf deiner Seite." }
+          ] },
+        { "id": "k7", "sagt": "Geschafft. Langer Applaus. Spät in der Nacht liegst du wach und denkst nur an das Pfeifen und an einen Versprecher.",
+          "wahl": [
+            { "text": "Grübeln erkennen. Drei Fragen auf einen Zettel – was lief, befürchtet und passiert, was übernehme ich – dann Licht aus.", "wert": 2, "weiter": "ende1", "rueck": "Auswerten statt grübeln: Das Gelungene ist festgehalten, der Rest darf ruhen." },
+            { "text": "Den ganzen Abend in Gedanken noch einmal durchgehen, Satz für Satz.", "wert": 0, "tendenz": "nach_innen", "weiter": "ende3", "rueck": "Jede Runde macht das Bild dunkler – und den gelungenen Abend kleiner." },
+            { "text": "Einer Freundin schreiben, wie es war, und dann schlafen.", "wert": 1, "weiter": "ende1", "rueck": "Teilen tut gut. Die drei Fragen morgen halten zusätzlich fest, was gelungen ist." }
+          ] },
+        { "id": "ende1", "sagt": "Am Montag kommt eine Kollegin aus der Produktion zu dir: „Deine Geschichte von den Anfängen – genau so war's.“", "ende": "Von der Zusage bis zur Nacht danach: Falle erkennen, rückwärts planen, in Stufen proben, den Antreiber durchschauen, die Rangliste statt eines Glases, Welle und Panne nehmen, auswerten ohne Grübeln. Das ist Meisterschaft – nicht ohne Aufregung, sondern mit ihr." },
+        { "id": "ende2", "sagt": "Dr. Albers nickt: „Schade. Dann frage ich jemand anderen.“", "ende": "Ein Nein ist erlaubt. Prüf beim nächsten Mal, ob die Angst entscheidet oder dein Wofür. Kleine Auftritte bereiten den großen vor." },
+        { "id": "ende3", "sagt": "Um drei Uhr nachts ist der ganze Abend in deinem Kopf ein einziges Pfeifen.", "ende": "Die Rede war gut – das Grübeln hat sie dir in der Nacht kleiner gemacht. Morgen: drei Fragen, dann Schluss, und ein Satz an dich wie an einen Freund." }
+      ],
+      "prinzipien": ["die Angst spricht, das Wofür entscheidet", "rückwärts planen, in Stufen proben", "Antreiber erkennen, Stelle umbauen", "Rangliste statt Sekt", "Welle und Panne: Pause, lächeln, weiter", "danach auswerten, nicht grübeln"],
+      "transfer": "Gibt es einen großen Auftritt, vor dem du dich bisher gedrückt hast? Schreib dein Wofür auf – und den ersten Schritt deines Fahrplans."
+    }
+  ]
+}

@@ -89,7 +89,42 @@ Die Inhalte gehen dem Lehrplan vor; Begründungen stehen in `derCoach/gegenlesen
 | Stimme und Szenenbilder | Claude wählt selbst (Stimmproben per Spracherkennung gegengehört, jedes Bild geprüft); Davide sieht alles am Ende und kann tauschen lassen |
 | Credits | Reserve darf genutzt werden – höchstens 120 insgesamt; Verbrauch im Abschlussbericht |
 | Sichtbarkeit am Ende | vorerst nur Davide (`FREIGEGEBEN = false` bleibt) |
-| Git | nicht committen |
+| Git | committen und auf GitHub pushen erlaubt (Davide, 25.11.2026) – auf dem Zweig `der-coach`; Zusammenführen in `main` erst auf sein Wort; Ordner `--ids/` bleibt draußen |
 | Stottern `s-l-01` k3 | bleibt 0 Punkte, Rückmeldung verständnisvoll |
 | Stegreif-Leiter | Sprossen folgen der Reihenfolge der Einheiten |
 | Beleg-Stufe Soziometer/Bindung/Scham | B, im Text als Modell gekennzeichnet |
+
+## Umsetzung Stufen 2–4 (25.11.2026, Abend) – Entscheidungen von Claude
+
+| Thema | Entscheidung und Grund |
+|---|---|
+| Brunos Stimme | **Gideon** (Higgsfield-Vorgabe, elevenlabs_v4). Vier Proben, alle Deutsch erkannt mit 0 % Wortfehlern; Gideon ist mit Abstand die tiefste (Grundton ≈ 98 Hz gegenüber 133–165 Hz) und passt zu einem älteren Boxtrainer. |
+| Ton-Umfang | 18 Aufnahmen: 8 geführte Übungen (Runterfahren in 60 s + 7 Werkzeuge im Notfallkoffer) und 10 Vorsprech-Sätze (Aussprache/Stimme). Jede wurde mit Whisper gegengehört (Deutsch ≥ 0,9, Wortfehler ≤ 8 %; zwei Einleitungen neu formuliert). Nur auf Knopfdruck, nie automatisch. |
+| Betonungs-Hörbeispiele (Tonfall) | **verworfen.** Die Sprachausgabe setzt Betonung nicht verlässlich: Gemessen an Lautheit und Tonhöhe je Wort lag in allen Fassungen eines Satzes meist dasselbe Wort vorn; Großbuchstaben am Satzanfang wurden teils buchstabiert („W‑E‑R“). Hörbeispiele, die falsch betonen, würden Falsches lehren – Tonfall bleibt mit markierter Schrift. |
+| Szenenbilder | 24 Szenen (17 „Menschen lesen“, 7 Smalltalk) + 3 Publikumsbilder für die Bühne (klein, groß, Video). Nur Szenen mit sichtbarer Körpersprache, keine Telefonate, nichts aus Flirten. Jedes Bild gegen die Beschreibung geprüft; das Bild ergänzt den Text, ersetzt ihn nie. Feste Figuren-Aussehen: Miriam (Anfang 30, kurze Locken, senfgelbe Bluse), Tarek (um 30, kurzer Bart, graue Kapuzenjacke), Jonas (um 35, dunkelblond, schwarze Brille, Flanellhemd), Jule (um 40, rotes Haar im Dutt, gestreifte Schürze), Dr. Albers (um 55, grau, randlose Brille, dunkelblaues Sakko), Lena (um 25, Pferdeschwanz, beige Strickjacke). |
+| Aufnahme-Auswertung | Tempo (Silben je Sekunde Sprechzeit), Pausen, Abfall am Satzende, Lautstärke- und Tonhöhen-Spannweite – **nur gegen die eigene Startaufnahme**, keine Normwerte. Bei Schwerpunkt Stottern zeigt der Coach weder Tempo noch Pausen. Töne werden nur mit „Vergleichsaufnahmen behalten“ abgelegt (verschlüsselt, höchstens acht, Startaufnahme bleibt). |
+| Vorhaben-Erinnerungen | eigene Karte unten rechts, nur außerhalb des Raums, nie neben der Trainings- oder Italienisch-Karte; Obergrenze je Tag, Ruhezeiten, zwei Stunden Abstand; nach dreimal Wegklicken einmal „leiser, kleiner, pausieren?“ |
+| Ernstfall | Termin mit optionaler Uhrzeit; ohne Uhrzeit gilt er erst am Folgetag als vorbei (keine Nachbereitung vor dem Termin). In 7 Tagen: `ruhe` zuerst; am Vortag und am Tag: kein neuer Stoff („Sicher bleiben“). |
+| Widerspruch | „Das stimmt so nicht“ in der Ecke: die Fähigkeit wird eine Woche lang im gezielten Üben nachgeprüft – mit Aufgaben, nicht mit dem Gefühl. |
+
+## Lehrplan-Abweichungen der Phasen Können/Meisterschaft (25.11.2026)
+
+| Bereich | Abweichung | Grund |
+|---|---|---|
+| ruhe | Titel geschärft („Drei Pannen, drei Pläne“, „Hände, Stimme, Röte: Zeichen für Zeichen“); 3-05 übt drei Fähigkeiten; Lage l-14 steht im Kursplan vor l-13 | keine eigene Fähigkeit „danach auswerten“; l-13 setzt 3-05 voraus |
+| aussprache | Titel geschärft („Die Stimme trägt: Atem und Satzende“, „Dein Sprechbild: ein Merkmal pro Woche“, „Klar aus Gewohnheit: Plan für drei Monate“); „Deutlich unter Druck“ verweist auf `ruhe`, „Die Stimme trägt“ auf `stimme` | nicht doppeln, sondern verweisen |
+| konter | „Nachbereiten: aus dem Treppenwitz wird Vorrat“; zusätzliche `vorrat-04.json` mit niedrigen Stufen | Lücken der Grundlagen-Übungstage gefüllt, ohne gegengelesene Übungstage zu ändern |
+| stimme | Fähigkeiten `auftritt` und `bild` bekommen erst in Phase k/m eigene Einheiten (2-02, 2-03, 2-06, 3-01, 3-05); 3-02 lehrt „ehrlich sicher statt übersicher“ | in Phase 1 ohne eigene Einheit; Beleg `tenney2007` |
+| ausdruck | Titel „Positiv fassen – ohne zu schummeln“, „Heikles elegant sagen“; Sparring k „Die heikle Bitte nach oben“ (Dr. Albers) statt „Mail an die Chefin“; Sparring m „Die Rede zu Renates Siebzigstem“ | Besetzung hat keine Chefin; Kern der Übung bleibt |
+| gespraech | Stufe-2-Einheiten vertiefen (Lob mit Blick nach vorn, Maßstäbe statt Halbe-halbe, Widerspruch in der Runde, Prioritäten nach oben); Titel „Vom Streit zur Lösung für beide“, „Widersprechen, wenn alle nicken“, „Nach oben: Prioritäten statt Überstunden“ | Stufe 1 hatte die Grundformen schon |
+| smalltalk | Titel „Namen, die bleiben“, „In eine Runde hinein“, „Ein Vorrat an Themen“, „Wiedersehen: da anknüpfen, wo ihr wart“; „Stille aushalten“ übt `tiefe`/`themen`, „Dein Netz pflegen“ `themen`/`einstieg`; Aushorchen im Plauderton als rote Linie (nur erkennen) | keine eigene Fähigkeit für Stille/Netz; Social Engineering gehört zum Erkennen |
+| selbst | Titel „Vergleichen: der Stich als Wegweiser“, „Grenzen setzen – und halten“, „Glaubwürdige Sätze für schwere Momente“, „Aufrecht: Platz nehmen ohne Entschuldigung“, „Alte Antreiber: was sie dir einmal gaben“; Tiefenblick-Modelle (Schatten, Drama-Dreieck, Riemann) nur als Denkmodell (D), Fachhilfe `seele` in allen Einheiten der Meisterschaft | Präsenz statt Blickzwang; Tiefenpsychologie ehrlich gekennzeichnet |
+| lesen | Können-Sparring „Der Termin in der Praxis“ neu; Meisterschaft-Sparring = „Die Besprechungsrunde“ aus dem Lehrplan | Lehrplan nennt nur ein Sparring |
+| mut | k1 „Ein Nein, das hält“ statt „Nein sagen in drei Teilen“ (die drei Teile lehrt schon 1-07); Titel „Kritik hören, ohne einzuknicken“, „Um etwas bitten: klar und leicht ablehnbar“; Sparring m „Die Mitgliederversammlung“; Mutproben nur über den Reiter „Mutproben“ (leben.json), nicht gedoppelt | vertiefen statt wiederholen |
+| lesen (Nachtrag) | Lagen stehen im Kursplan nach der Einheit, die sie voraussetzt (k: l-06, 08, 07, 09; m: l-12, 13, 14, 11); Mission m-10 erst am Ende von 3-05 | Reihenfolge folgt dem Stoff |
+| antrieb | Können: Kompass-Einheiten des Lehrplans (Lebensrad, Werte, Spuren, bestmögliches Selbst, drei Leben, Ziel-Pyramide) stehen im eigenen Bereich „Kompass“ (leben.json) – 2-01 „Vom Kompass zum Vorhaben“ verweist dorthin, 2-02…06 vertiefen (Aufschieben, alte Gewohnheiten umlenken, Rückfälle, Energie, Plan-Diagnose); Sparrings „Die Woche, in der alles dazwischenkommt“ und „Ein Jahr später“ | nicht doppeln; Kompass ist Stufe 2 der App |
+| flirten | Sparrings „Die Fotogruppe“ (k) und „Das Sommerfest bei Jule“ (m), weil „Der Kochkurs“ schon das Grundlagen-Sparring ist; zusätzlich Liebesbetrug (rot, nur erkennen), Rechtslage § 177 StGB und Erstarren, Eingreifen als Freund, einen Korb geben; queere Menschen sichtbar mitgemeint | Sicherheit und Respekt; Konzept §18 |
+| ueberzeugen | 2-01 „Einfluss-Prinzipien – fair genutzt“ mit sieben Prinzipien (Neuausgabe 2021: „Einheit“); 2-05 „Verhandeln mit Interessen und Alternative“ (Titel kürzer); Sparrings „Der zweite Standort“ und „Der große Auftrag“; 3-02 mit gesetzlichem Widerrufsrecht (§ 312g/§ 355 BGB) | aktueller Stand; Titel ≤ 48 Zeichen |
+| ueberzeugen (Nachtrag) | Kursplan k: l-07 nach 2-05, l-09 direkt nach 2-06; Lagen l-12/l-13 neu gebaut, damit sie Übertragen statt Wiedererkennen prüfen | Lage nach ihrer Einheit; Transfer |
+| stegreif | Titel geschärft („Gestern – heute – morgen mit Richtung“, „Dafür, dagegen, Fazit: Stellung beziehen“, „Der Vergleich aus dem Alltag – und seine Grenze“, „Die Überraschungsfrage: Sorte erkennen“, „Der Blackout-Plan: drei Hänger, drei Sätze“, „Stegreif vor Publikum: der Bogen“, „Die unbequeme Frage: erst antworten“, „Erklären für Laien: erst das Bild“); Sparrings „Einspringen für Carla“ und „Der Tag der offenen Tür“; 3-04 überträgt Dank-Studien (Briefe) auf gesprochenen Dank – gekennzeichnet | vertiefen statt wiederholen |
+| Einfluss: Ausweichen | Brücke nach der Antwort = fair; Brücke statt Antwort = rot (nur erkennen) – betrifft `stegreif-w-038` (Phase 1) und `stegreif-v-0205` | wirkt nur, solange es niemand durchschaut (Rogers & Norton 2011: 39 % → 88 % erkannt) |

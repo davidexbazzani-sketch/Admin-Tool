@@ -1,0 +1,291 @@
+{
+  "einheiten": [
+    {
+      "id": "smalltalk-3-01", "bereich": "smalltalk", "stufe": 3, "nr": 1,
+      "titel": "Gespräche mit Tiefe",
+      "faehigkeiten": ["smalltalk.tiefe", "smalltalk.nachfragen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Wie Antworten auf gute Nachrichten wirken, zeigen vier Studien vor allem mit Paaren – für Bekannte ist es eine Übertragung. Dass gezeigte Schwäche bei anderen milder ankommt als gedacht, zeigen sieben Studien einer Forschergruppe, meist mit gedachten Szenen; dass tiefere Gespräche besser laufen als erwartet, Experimente einer weiteren.",
+      "quellen": ["gable2004", "bruk2018", "kardas2022", "praxis-smalltalk"],
+      "aha": "Tiefe entsteht nicht nur bei Sorgen. Wer sich über gute Nachrichten mitfreut, Schweres hört, ohne es zu reparieren, und selbst etwas zeigt, macht aus Plaudern Nähe.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "smalltalk-3-01-a", "faehigkeit": "smalltalk.tiefe", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Jule strahlt: „Mein Café darf in die großen Räume am Markt umziehen!“ Wie reagiert welche Antwort?",
+          "faecher": ["freut sich mit und fragt nach", "freundlich, aber knapp", "sucht den Haken", "lenkt ab"],
+          "karten": [
+            { "text": "„Wahnsinn! Wie hast du es erfahren?“", "fach": 0 },
+            { "text": "„Die Räume am Markt – erzähl, wie es aussehen soll!“", "fach": 0 },
+            { "text": "„Schön.“", "fach": 1 },
+            { "text": "„Oh, gut für dich.“", "fach": 1 },
+            { "text": "„Größer? Weißt du, wie viele sich damit übernehmen?“", "fach": 2 },
+            { "text": "„Und wer zahlt das alles?“", "fach": 2 },
+            { "text": "„Apropos Café – hast du gesehen, dass der Bäcker zumacht?“", "fach": 3 },
+            { "text": "„Bei mir gibt's auch Neuigkeiten: Ich hab ein neues Auto.“", "fach": 3 }
+          ] },
+        { "art": "karte", "text": "Auf gute Nachrichten kann man auf vier Arten antworten. Nur eine macht die Freude größer: sich mitfreuen und nachfragen – „Wie hast du es erfahren?“ So erzählt der andere den schönen Moment noch einmal. Bei Schwerem gilt das Gegenteil von Reparieren: zuhören, spiegeln, aushalten. Und Tiefe ist gegenseitig: Wer selbst einen ehrlichen Satz zeigt, lädt den anderen ein. Ein Satz – kein Seelenstriptease." },
+        { "art": "studie", "frage": "Wie wirkt es, wenn du eine Schwäche zeigst?", "aufbau": "In sieben Studien sollten Menschen einschätzen, wie es wirkt, eine Schwäche zu zeigen – etwa einen Fehler zuzugeben oder Gefühle zu gestehen. Einmal ging es um sie selbst, einmal um einen anderen Menschen.", "ergebnis": "Bei sich selbst fanden sie es eher peinlich und schwach. Beim anderen fanden sie dasselbe eher mutig und sympathisch.", "grenze": "Eine Forschergruppe; meist gedachte Szenen, vor allem mit Studierenden. Wie viel Offenheit passt, hängt von Lage und Gegenüber ab – ein ehrlicher Satz trägt weiter als ein langer Bericht.", "beleg": "B", "quellen": ["bruk2018"] },
+        { "art": "spiegeln", "kopf": { "id": "smalltalk-3-01-b", "faehigkeit": "smalltalk.nachfragen", "stufe": 6, "kanal": "koennen" },
+          "von": "Tarek Yılmaz", "aussage": "„Meine Schwester zieht zurück in die Türkei. Ist gut für sie, ehrlich. Wir haben halt jeden Sonntag zusammen gekocht.“",
+          "kriterien": ["benennt beides: die Freude für sie und den Verlust für ihn", "als Angebot, nicht als Deutung von oben", "repariert nichts und tröstet nicht weg"],
+          "muster": ["„Du gönnst es ihr – und dir werden die Sonntage fehlen.“", "„Klingt, als wäre da Freude und ein ziemliches Loch zugleich.“"] },
+        { "art": "wortwahl", "kopf": { "id": "smalltalk-3-01-c", "faehigkeit": "smalltalk.tiefe", "stufe": 6, "kanal": "wissen" },
+          "frage": "Lena erzählt in der Kaffeeküche: „Ich laufe jetzt mit Miriam – und am Samstag bin ich meine ersten 15 Kilometer gelaufen.“ Welche Antwort macht ihre Freude größer?",
+          "antworten": [
+            { "text": "„15 Kilometer! Wie war der Moment, als du gemerkt hast, dass du es schaffst?“", "wert": 2, "warum": "Du freust dich mit und lässt sie den besten Moment noch einmal erzählen." },
+            { "text": "„Super, Glückwunsch.“", "wert": 1, "warum": "Freundlich – aber knapp. Eine Frage hinterher macht aus dem Glückwunsch ein Gespräch." },
+            { "text": "„Pass bloß auf deine Knie auf, bei so vielen Kilometern gehen die schneller kaputt, als man denkt.“", "wert": 0, "tendenz": "abwerten", "warum": "Vielleicht gut gemeint, aber du suchst den Haken in ihrer Freude." },
+            { "text": "„Ich bin früher mal einen Halbmarathon gelaufen.“", "wert": 0, "tendenz": "uebertrumpfen", "warum": "Ihr Moment wird zu deinem – und kleiner." }
+          ] },
+        { "art": "dialog", "kopf": { "id": "smalltalk-3-01-d", "faehigkeit": "smalltalk.tiefe", "stufe": 7, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Jules große Nachricht", "figur": "Jule Marek",
+            "lage": "Nach dem Kochkurs. Ihr räumt zusammen die Küche auf. Jule wirkt aufgekratzt.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Jule: „Ich muss es jemandem erzählen: Mein Café darf in die großen Räume am Markt umziehen!“",
+                "wahl": [
+                  { "text": "„Jule! Das ist ja großartig. Wie hast du es erfahren?“", "wert": 2, "weiter": "k2", "rueck": "Mitfreuen und nachfragen – sie erzählt den Moment noch einmal." },
+                  { "text": "„Schön! Und wann geht's los?“", "wert": 1, "weiter": "k2", "rueck": "Freundlich und interessiert – nur springst du gleich zu den Fakten." },
+                  { "text": "„Mutig. In der Lage? Da war doch vorher dieser Laden, der nach einem Jahr wieder zu war.“", "wert": 0, "tendenz": "abwerten", "weiter": "k2b", "rueck": "Du suchst den Haken, bevor die Freude angekommen ist." }
+                ] },
+              { "id": "k2", "sagt": "Jule erzählt vom Anruf des Vermieters, vom Herzklopfen. Dann leiser: „Ehrlich gesagt hab ich auch Angst. Das ganze Ersparte steckt da drin.“",
+                "wahl": [
+                  { "text": "„Mach dir keine Sorgen, das wird schon. Du kannst das!“", "wert": 0, "tendenz": "abblocken", "weiter": "k3", "rueck": "Lieb gemeint, aber du redest die Angst weg, statt sie zu hören." },
+                  { "text": "„Klar. Hast du schon einen Plan B, falls es nicht läuft?“", "wert": 1, "weiter": "k3", "rueck": "Sachlich und hilfreich gemeint – nur rutschst du ins Beraten." },
+                  { "text": "Kurz still bleiben. Dann: „Freude und Angst zugleich – das klingt nach einem großen Schritt.“", "wert": 2, "weiter": "k3", "rueck": "Du hältst die Pause aus und spiegelst beides. Sie fühlt sich verstanden, nicht beraten." }
+                ] },
+              { "id": "k2b", "sagt": "Jule stockt. „Ja … das hab ich auch schon gehört.“ Sie räumt schweigend weiter.",
+                "wahl": [
+                  { "text": "„Entschuldige, das war jetzt der falsche Moment. Erzähl – wie hast du es erfahren?“", "wert": 2, "weiter": "k2", "rueck": "Gut repariert: Du nimmst den Haken zurück und gibst ihr die Freude wieder." },
+                  { "text": "„Ich mein ja nur. Man sollte realistisch bleiben.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Du verteidigst den Haken. Ihre Freude ist jetzt erst mal weg." }
+                ] },
+              { "id": "k3", "sagt": "Jule nickt. Dann: „Und du? Hast du auch so was, das du schon lange machen willst?“",
+                "wahl": [
+                  { "text": "„Ehrlich gesagt: Ich wollte schon immer einen Kurs geben. Ich trau mich nur nicht.“", "wert": 2, "weiter": "ende1", "rueck": "Ein ehrlicher Satz von dir – jetzt ist es ein Gespräch zwischen zwei Menschen, nicht ein Interview." },
+                  { "text": "„Ach, bei mir ist alles ganz unspektakulär.“", "wert": 1, "weiter": "ende3", "rueck": "Bescheiden – aber du schließt die Tür, die sie dir gerade aufgemacht hat." },
+                  { "text": "„Ich? Ich hab schon so viel ausprobiert, Segelschein, Spanisch, zwei Jahre Gitarre – und jedes Mal …“", "wert": 0, "tendenz": "monolog", "weiter": "ende3", "rueck": "Etwas von dir ist gut – als lange Liste nimmt es ihr den Raum." }
+                ] },
+              { "id": "ende1", "sagt": "Jule lacht: „Dann gibst du den ersten im Café!“ Ihr steht noch eine halbe Stunde zwischen den Töpfen.", "ende": "Mitgefreut, die Angst gehört, selbst etwas gezeigt – so wird aus Plaudern Nähe. Und beim Wiedersehen hast du den ersten Satz schon." },
+              { "id": "ende2", "sagt": "Jule räumt zu Ende und verabschiedet sich freundlich, aber kurz.", "ende": "Ein Haken im falschen Moment kann eine gute Nachricht klein machen. Erst mitfreuen – Fragen zu Risiken haben später ihren Platz, wenn sie danach fragt." },
+              { "id": "ende3", "sagt": "Jule erzählt noch ein wenig vom Café. Dann gehen alle.", "ende": "Ein gutes Gespräch über ihre Neuigkeit. Als sie dich nach dir fragte, war das eine Einladung – ein ehrlicher Satz hätte es gegenseitig gemacht." }
+            ],
+            "prinzipien": ["gute Nachrichten groß machen", "Schweres hören statt reparieren", "eine Pause aushalten", "selbst etwas Ehrliches zeigen"]
+          } },
+        { "art": "mission", "ref": "smalltalk-m-06" }
+      ],
+      "regel": "Mitfreuen, ohne Haken; Schweres hören, ohne zu reparieren; selbst etwas zeigen.",
+      "merkkarten": [
+        { "id": "smalltalk-3-01-m1", "frage": "Welche Antwort auf gute Nachrichten macht die Freude größer?", "antwort": "Sich mitfreuen und nachfragen – „Wie hast du es erfahren?“" },
+        { "id": "smalltalk-3-01-m2", "frage": "Jemand erzählt etwas Schweres. Was tust du nicht?", "antwort": "Reparieren, wegtrösten, beraten – erst hören und spiegeln." },
+        { "id": "smalltalk-3-01-m3", "frage": "Wie wirkt eine gezeigte Schwäche auf andere?", "antwort": "Meist sympathischer und mutiger, als sie sich für dich anfühlt." }
+      ],
+      "mission": "smalltalk-m-06"
+    },
+    {
+      "id": "smalltalk-3-02", "bereich": "smalltalk", "stufe": 3, "nr": 2,
+      "titel": "Gastgeber sein: Leute verbinden",
+      "faehigkeiten": ["smalltalk.gruppe", "smalltalk.namen"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Wie man Menschen gut miteinander bekannt macht, ist Praxiswissen. Dass Gespräche kaum mehr als vier Beteiligte tragen, beruht auf Beobachtungen an öffentlichen Orten.",
+      "quellen": ["praxis-smalltalk", "dunbar1995", "kendon1990"],
+      "aha": "Wer zwei Menschen mit Namen, Bezug und einem gemeinsamen Aufhänger vorstellt, schenkt beiden den ersten Satz. Gastgeber sein kannst du auf jeder Feier – nicht nur auf deiner.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Deine Einweihungsfeier. Jule und Frau Sommer stehen nebeneinander am Buffet und kennen sich nicht.", "schwach": "„Kennt ihr euch schon? Jule – Frau Sommer.“", "stark": "„Frau Sommer, das ist Jule – sie ist Konditorin und hat den Kuchen gebacken. Jule, Frau Sommer wohnt unter mir und backt seit Jahren den besten Apfelkuchen im Haus.“", "frage": "Was gibt die zweite Vorstellung den beiden mit?", "unterschied": "Beide hören Namen, Bezug und einen gemeinsamen Aufhänger: Kuchen. Sie müssen nicht suchen – der erste Satz liegt schon auf dem Tisch." },
+        { "art": "karte", "text": "Fünf Handgriffe für Gastgeber: Menschen vorstellen mit Name, Bezug und einem gemeinsamen Aufhänger. Neue in den ersten Minuten nicht allein lassen. Runden über vier teilen: zwei zu etwas Kleinerem holen. Stille Gäste einbinden, ohne Bühne – lieber zu zweit als vor allen. Und dich selbst herausziehen, wenn es läuft. Das geht auch auf fremden Feiern: Gastgeber im Kleinen ist jeder, der jemanden hereinholt." },
+        { "art": "rangfolge", "kopf": { "id": "smalltalk-3-02-a", "faehigkeit": "smalltalk.gruppe", "stufe": 6, "kanal": "wissen" },
+          "frage": "Welche Vorstellung hilft zwei Gästen am meisten ins Gespräch? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Lena, das ist Sven – ihr seid beide letzte Woche euren ersten Volkslauf gelaufen.“", "warum": "Namen, Bezug und ein gemeinsamer Aufhänger – der erste Satz liegt bereit." },
+            { "text": "„Lena, das ist Sven, ein alter Freund von mir. Sven, Lena arbeitet bei uns im Team.“", "warum": "Namen und Bezug – gut, aber den Aufhänger müssen sie selbst suchen." },
+            { "text": "„Lena – Sven. Sven – Lena.“", "warum": "Immerhin die Namen. Danach stehen beide vor einer leeren Seite." },
+            { "text": "„Ihr müsst euch unbedingt kennenlernen!“ – und weg bist du.", "warum": "Druck ohne Brücke: Jetzt sollen sie etwas finden, ohne zu wissen, warum." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "smalltalk-3-02-b", "faehigkeit": "smalltalk.namen", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Mach eine Vorstellung daraus, die beiden etwas mitgibt. Jonas ist aus der Technik und spielt Saxofon. Herr Petersen ist ein langjähriger Kunde, hat früher in einer Blaskapelle gespielt und hört nicht mehr gut.",
+          "vorlage": "„Das ist Jonas, das ist Herr Petersen.“",
+          "kriterien": ["beide Namen deutlich und mit kurzer Pause", "für jeden ein Satz Bezug", "ein gemeinsamer Aufhänger"],
+          "muster": ["„Herr Petersen, darf ich Ihnen Jonas Wegner vorstellen? Jonas ist bei uns in der Technik – und spielt seit zwanzig Jahren Saxofon. Jonas, Herr Petersen ist einer unserer treuesten Kunden und hat lange in einer Blaskapelle gespielt.“", "„Herr Petersen – Jonas Wegner aus unserer Technik. Sie beide verbindet die Musik: Jonas spielt Saxofon, Herr Petersen war viele Jahre in einer Blaskapelle.“"] },
+        { "art": "szene", "kopf": { "id": "smalltalk-3-02-c", "faehigkeit": "smalltalk.gruppe", "stufe": 7, "kanal": "wissen" },
+          "beschreibung": "Deine Einweihungsfeier. In der Küche stehen sechs Leute um die Arbeitsplatte. Tarek erzählt laut, drei hören zu, zwei reden halb über seinen Kopf hinweg. Lena steht schweigend am Kühlschrank.",
+          "frage": "Was tust du?",
+          "antworten": [
+            { "text": "Lena und eine der Halb-Redenden ins Wohnzimmer holen: „Kommt, ich zeig euch die Umbau-Fotos – ihr baut ja beide gerade um.“", "wert": 2, "warum": "Du teilst die zu große Runde und gibst den beiden einen Aufhänger – Lena ist drin, ohne auf einer Bühne zu stehen." },
+            { "text": "„Lena, erzähl doch mal allen, wie es dir im neuen Job gefällt!“", "wert": 0, "tendenz": "buehne", "warum": "Gut gemeint, aber du stellst einen stillen Menschen vor sechs Leuten auf die Bühne." },
+            { "text": "Dich zu Lena stellen und mit ihr reden.", "wert": 1, "warum": "Lena ist nicht mehr allein – gut. Die zu große Runde bleibt aber, wie sie ist." },
+            { "text": "Nichts tun – die Leute sind erwachsen und finden sich schon.", "wert": 0, "tendenz": "vermeiden", "warum": "Manchmal stimmt das. Hier steht jemand am Rand, und eine Runde ist zu groß – ein Handgriff würde beides lösen." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "smalltalk-3-02-d", "faehigkeit": "smalltalk.namen", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du willst zwei Gäste miteinander bekannt machen – und merkst mitten im Satz, dass dir der Name des einen entfallen ist. Was tust du?",
+          "antworten": [
+            { "text": "„Kennt ihr euch schon?“ – und hoffen, dass sie sich selbst vorstellen.", "wert": 1, "warum": "Klappt oft. Bleiben beide stumm, wird es aber schief – und du lernst den Namen nicht sicher." },
+            { "text": "Ehrlich lachen: „Mir ist gerade dein Name weggerutscht – sagst du ihn noch mal?“ Dann weiter mit der Vorstellung.", "wert": 2, "warum": "Kurz, ehrlich, menschlich – und die Vorstellung gelingt trotzdem mit Namen und Bezug." },
+            { "text": "Die Vorstellung abbrechen und das Thema wechseln.", "wert": 0, "tendenz": "vermeiden", "warum": "Jetzt stehen zwei Menschen da, die halb vorgestellt wurden. Eine ehrliche Frage wäre leichter." },
+            { "text": "Einen Namen nehmen, der dir halbwegs richtig vorkommt.", "wert": 0, "tendenz": "raten", "warum": "Liegst du falsch, ist es peinlicher als jede Nachfrage – für drei Leute." }
+          ] },
+        { "art": "experiment", "auftrag": "Mach auf deiner nächsten Feier, im Verein oder in der Firma zwei Menschen miteinander bekannt – mit Namen, Bezug und einem gemeinsamen Aufhänger.", "dauer": "woche", "nachfrage": "Haben die beiden weitergeredet, als du gegangen bist?" },
+        { "art": "reflexion", "frage": "Welche zwei Menschen in deinem Umfeld sollten sich kennen – und was würdest du ihnen als Aufhänger mitgeben?" }
+      ],
+      "regel": "Vorstellen mit Name, Bezug und gemeinsamem Aufhänger – dann dich herausziehen.",
+      "merkkarten": [
+        { "id": "smalltalk-3-02-m1", "frage": "Die drei Teile einer guten Vorstellung?", "antwort": "Beide Namen, für jeden ein Bezug, ein gemeinsamer Aufhänger." },
+        { "id": "smalltalk-3-02-m2", "frage": "Auf deiner Feier ist eine Runde zu groß geworden. Was tust du?", "antwort": "Zwei zu etwas Kleinerem holen – mit einem Grund, der beide verbindet." },
+        { "id": "smalltalk-3-02-m3", "frage": "Wie bindest du stille Gäste ein?", "antwort": "Zu zweit oder in kleiner Runde – nicht vor allen auf eine Bühne." }
+      ]
+    },
+    {
+      "id": "smalltalk-3-03", "bereich": "smalltalk", "stufe": 3, "nr": 3,
+      "titel": "Smalltalk nach oben",
+      "faehigkeiten": ["smalltalk.einstieg", "smalltalk.themen"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Wie man mit Vorgesetzten plaudert, ist Praxiswissen. Dass ehrliche Komplimente besser ankommen, als man denkt, zeigen fünf Studien einer Forschergruppe – Schmeichelei ist damit nicht gemeint.",
+      "quellen": ["praxis-smalltalk", "goffman1955", "boothbybohns2021"],
+      "aha": "Mit Vorgesetzten trägt dasselbe wie mit allen: ein Satz aus dem Raum, eine echte Frage, etwas von dir. Anders ist nur die Dosis – siezen, keine Klagen, kein Schnell-Verkauf.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Mit Vorgesetzten plaudert man besser nicht – das wirkt anbiedernd.", "urteil": "teils", "warum": "Anbiedernd wirkt Schmeichelei und gespieltes Interesse. Ein freundlicher Satz und eine echte Frage wirken dagegen einfach menschlich – auch nach oben." },
+        { "art": "karte", "text": "Nach oben gilt dieselbe Grundform, nur die Dosis ändert sich. Siezen, bis das Du angeboten wird. Eher Anlass und Pläne als Privates – Privates nur so weit, wie der andere es anbietet. Keine Klagen über Kollegen und kein Schnell-Verkauf deiner Idee am Stehtisch. Stattdessen eine Frage, die dich wirklich interessiert: „Was hat Sie an dem Projekt überzeugt?“ Und ein ehrliches, konkretes Lob statt Schmeichelei." },
+        { "art": "auswahl", "kopf": { "id": "smalltalk-3-03-a", "faehigkeit": "smalltalk.einstieg", "stufe": 6, "kanal": "wissen" },
+          "frage": "Morgens, am Tag nach dem Sommerfest, wartest du vor dem Aufzug. Neben dir wartet die Geschäftsführerin, die du nur vom Sehen kennst. Was tust du?",
+          "antworten": [
+            { "text": "„Guten Morgen!“ – mit einem Lächeln, und dann ruhig mitwarten.", "wert": 1, "warum": "Freundlich und völlig in Ordnung. Ein leichter Satz mehr hätte ihr eine kleine Tür geöffnet." },
+            { "text": "„Guten Morgen, ich bin {name} aus dem Einkauf. Waren Sie gestern auch beim Sommerfest?“", "wert": 2, "warum": "Name, Bezug, ein leichter Satz aus dem Anlass – und sie kann kurz oder länger antworten." },
+            { "text": "Die Gelegenheit nutzen und ihr deine Idee für die neue Bestellabwicklung erklären, bevor der Aufzug kommt.", "wert": 0, "tendenz": "verkaufen", "warum": "Ein Flur ist kein Besprechungsraum – und gleich kommt der Aufzug. Eine Idee braucht einen Termin." },
+            { "text": "Aufs Handy schauen, bis der Aufzug kommt.", "wert": 0, "tendenz": "vermeiden", "warum": "Verständlich – aber eine Gelegenheit für einen freundlichen Satz bleibt liegen." }
+          ] },
+        { "art": "gespraechskarte", "anlass": "Ein kurzes Gespräch mit einer Führungskraft beim nächsten Empfang, Betriebsfest oder in der Kaffeeküche",
+          "beispiel": { "ziel": "Dass sie mich kennt und weiß, woran ich arbeite – ohne Verkaufsgespräch.", "erster": "„Guten Abend, ich bin {name} aus dem Einkauf. Wie gefällt Ihnen der Abend?“", "wunsch": "Eine echte Frage stellen: „Was hat Sie damals an dem neuen Standort überzeugt?“", "planB": "Wirkt sie in Eile: „Ich will Sie nicht aufhalten – einen schönen Abend noch!“" } },
+        { "art": "wortwahl", "kopf": { "id": "smalltalk-3-03-b", "faehigkeit": "smalltalk.themen", "stufe": 6, "kanal": "wissen" },
+          "frage": "Dr. Albers trifft dich in der Kaffeeküche: „Und, wie läuft's bei Ihnen?“ Welche Antwort passt am besten?",
+          "antworten": [
+            { "text": "„Gut, danke! Die neue Lieferantenliste ist fast fertig. Und bei Ihnen – war die Messe erfolgreich?“", "wert": 2, "warum": "Kurz, konkret, positiv – und eine Frage zurück. So wird aus der Floskel ein Gespräch." },
+            { "text": "„Gut, danke.“", "wert": 1, "warum": "Höflich und korrekt. Ein konkreter Satz hätte ihm gezeigt, woran du arbeitest." },
+            { "text": "„Ehrlich gesagt chaotisch. Die Kollegen aus dem Vertrieb liefern ihre Zahlen nie pünktlich, und dann bleibt alles an mir hängen.“", "wert": 0, "tendenz": "klagen", "warum": "Klagen über andere am Kaffeeautomaten bleiben hängen – als Klage, nicht als Problem." },
+            { "text": "Ihm in Ruhe alle offenen Punkte deiner drei Projekte aufzählen.", "wert": 0, "tendenz": "monolog", "warum": "Aus der Plauderfrage wird ein Statusbericht. Dafür gibt es bessere Orte." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "smalltalk-3-03-c", "faehigkeit": "smalltalk.themen", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Mach aus der Schmeichelei ein ehrliches, konkretes Lob mit einer Frage.",
+          "vorlage": "„Ihre Rede war super, Sie sind echt ein toller Chef!“",
+          "kriterien": ["nennt etwas Bestimmtes, das dir gefallen hat", "wertet die Person nicht pauschal", "endet mit einer echten Frage"],
+          "muster": ["„Der Teil Ihrer Rede über die Auszubildenden hat mir gefallen. War das Ihre Idee mit den Paten?“", "„Dass Sie das Lager namentlich erwähnt haben, hat dort viele gefreut. Wie sind Sie darauf gekommen?“"] },
+        { "art": "experiment", "auftrag": "Sprich diese Woche eine Person an, die in der Firma über dir steht oder der du sonst eher ausweichst – mit einem Satz aus dem Raum und einer echten Frage.", "dauer": "woche", "nachfrage": "Wie lief es – verglichen mit dem, was du vorher befürchtet hattest?" },
+        { "art": "reflexion", "frage": "Was würdest du eine Führungskraft in deiner Firma gern einmal fragen – nicht fürs Geschäft, sondern weil es dich interessiert?" }
+      ],
+      "regel": "Nach oben dieselbe Form, andere Dosis: siezen, echte Frage, keine Klagen.",
+      "merkkarten": [
+        { "id": "smalltalk-3-03-m1", "frage": "Was ändert sich beim Smalltalk mit Vorgesetzten?", "antwort": "Nicht die Form, nur die Dosis: siezen, eher Anlass als Privates, keine Klagen, kein Verkauf." },
+        { "id": "smalltalk-3-03-m2", "frage": "„Wie läuft's?“ vom Chef – die beste Antwort?", "antwort": "Kurz, konkret, positiv – und eine Frage zurück." },
+        { "id": "smalltalk-3-03-m3", "frage": "Lob oder Schmeichelei – woran erkennst du den Unterschied?", "antwort": "Lob nennt etwas Bestimmtes. Schmeichelei bewertet pauschal die Person." }
+      ]
+    },
+    {
+      "id": "smalltalk-3-04", "bereich": "smalltalk", "stufe": 3, "nr": 4,
+      "titel": "Schwierige Gesprächspartner",
+      "faehigkeiten": ["smalltalk.abschluss", "smalltalk.nachfragen", "smalltalk.themen"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Die Züge gegen Vielreden, Einsilbigkeit und zu persönliche Fragen sind Praxiswissen. Dass Gespräche selten zur rechten Zeit enden, ist untersucht. Wie Angreifer Gespräche zum Aushorchen nutzen, beschreibt das Bundesamt für Sicherheit in der Informationstechnik.",
+      "quellen": ["praxis-smalltalk", "mastroianni2021", "bsi-socialengineering", "goffman1955"],
+      "aha": "Schwierig ist meist eine Lage, kein Mensch. Für jede gibt es einen freundlichen Zug – und eine rote Linie: Wer im Plauderton Internes aushorcht, bekommt nichts.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "smalltalk-3-04-a", "faehigkeit": "smalltalk.abschluss", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Welcher Zug passt zu wem?",
+          "faecher": ["zum Vielredner", "zum Einsilbigen", "zur zu persönlichen Frage", "zum Übertrumpfer"],
+          "karten": [
+            { "text": "Den Namen sagen, das Gesagte in einem Satz würdigen, dann den Abgang anschließen.", "fach": 0 },
+            { "text": "Zusammenfassen und mit einer Brücke das Thema wechseln.", "fach": 0 },
+            { "text": "Mehr von dir geben und Fragen mit Wahl stellen: „Eher Berge oder Meer?“", "fach": 1 },
+            { "text": "Nach zwei Versuchen freundlich weiterziehen.", "fach": 1 },
+            { "text": "Lächeln und offenlassen: „Das bleibt mein kleines Geheimnis.“", "fach": 2 },
+            { "text": "Zurückfragen: „Wie kommst du darauf?“", "fach": 2 },
+            { "text": "Kurz würdigen und deinen Moment trotzdem stehen lassen: „Respekt. Für mich war's ein großer Schritt.“", "fach": 3 },
+            { "text": "Nicht mitbieten – mit einer Frage zu ihm weiter.", "fach": 3 }
+          ] },
+        { "art": "karte", "text": "Vier Lagen kommen oft: Jemand redet ohne Punkt. Jemand antwortet nur mit einem Wort. Jemand übertrumpft jede Geschichte. Jemand fragt nach Gehalt, Kinderwunsch oder Gewicht. Für alle gilt: freundlich bleiben, dich schützen, gehen dürfen. Und eine rote Linie: Fragt dich jemand im Plauderton nach Internem – Zugängen, Programmen, wer wann im Büro ist –, ist das kein Smalltalk, sondern ein Versuch, dich auszuhorchen." },
+        { "art": "kunstgriff", "kopf": { "id": "smalltalk-3-04-b", "faehigkeit": "smalltalk.themen", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Fachtagung, Kaffeepause. Ein freundlicher Herr, den du nicht kennst, plaudert über das Buffet, lobt eure Firma und sagt dann: „Sie kennen sich ja sicher aus. Wer kümmert sich bei Ihnen eigentlich um die Zugänge – und läuft das mit dem Fernzugriff gut?“",
+          "frage": "Was passiert hier – und was antwortest du?",
+          "antworten": [
+            { "text": "Freundlich bleiben, nichts Internes sagen: „Darüber rede ich außerhalb nicht – aber erzählen Sie, was führt Sie her?“", "wert": 2, "warum": "Du erkennst das Aushorchen, bleibst höflich und gibst nichts preis. Auffällige Fragen meldest du danach eurer IT." },
+            { "text": "Allgemein bleiben: „Das macht bei uns die IT.“ – und weiter übers Buffet reden.", "wert": 1, "warum": "Du gibst wenig preis – gut. Erkannt hast du den Versuch aber nicht, und die nächste Frage kommt bestimmt." },
+            { "text": "Erzählen, was du weißt – er war doch nett und kennt sich offenbar aus.", "wert": 0, "tendenz": "vertrauen", "warum": "Genau darauf zielt der Kunstgriff: Freundlichkeit und Lob öffnen die Tür zu Wissen, das ihn nichts angeht." },
+            { "text": "Ihn laut vor allen fragen, ob er hier spionieren will.", "wert": 0, "tendenz": "angreifen", "warum": "Vielleicht ist er nur neugierig. Eine klare, ruhige Grenze schützt dich genauso – ohne Szene." }
+          ],
+          "erklaerung": "Aushorchen im Plauderton ist eine Form von Social Engineering: Freundlichkeit, Lob („Sie kennen sich ja aus“) und ein beiläufiger Ton sollen dich zum Erzählen bringen. Rote Linie – erkennen und abwehren: höflich bleiben, nichts Internes sagen, auffällige Fragen der IT melden." },
+        { "art": "auswahl", "kopf": { "id": "smalltalk-3-04-c", "faehigkeit": "smalltalk.abschluss", "stufe": 7, "kanal": "wissen" },
+          "frage": "Familienfest. Tante Renate fragt vor allen: „Und, was verdienst du eigentlich in deiner neuen Stelle?“ Was antwortest du?",
+          "antworten": [
+            { "text": "Lächeln: „Genug für den Kuchen heute. Erzähl du lieber – wie war eure Reise?“", "wert": 2, "warum": "Eine freundliche Grenze ohne Vortrag – und gleich ein Thema, über das sie gern redet." },
+            { "text": "Die Zahl nennen, damit es keinen Ärger gibt – auch wenn es dir eigentlich unangenehm ist.", "wert": 0, "tendenz": "nachgeben", "warum": "Du darfst Fragen offenlassen – auch in der Familie. Nachgeben gegen dein Gefühl bleibt lange hängen." },
+            { "text": "Ausführlich erklären, warum man über Geld nicht redet.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Ein Vortrag macht die Frage größer, als sie ist. Ein kurzer Satz reicht." },
+            { "text": "„Das sag ich nicht.“", "wert": 1, "warum": "Klar und ehrlich. Mit einem Lächeln und einem neuen Thema bleibt die Stimmung leichter." }
+          ] },
+        { "art": "dialog", "kopf": { "id": "smalltalk-3-04-d", "faehigkeit": "smalltalk.abschluss", "stufe": 7, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Der Herr vom Nachbarstand", "figur": "ein Aussteller vom Nachbarstand",
+            "lage": "Fachmesse, dein Stand. Ein Aussteller vom Nachbarstand erzählt dir seit einer Viertelstunde von seiner Firma. Gleich kommt eine Kundin, mit der du verabredet bist.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Der Aussteller: „… und dann haben wir vor fünf Jahren die zweite Halle gebaut, das war eine Geschichte, sag ich Ihnen, erst die Genehmigung, dann …“",
+                "wahl": [
+                  { "text": "Sanft hineinsprechen: „Darf ich kurz unterbrechen? Zwei Hallen – Respekt. Ich muss gleich meine Kundin empfangen.“", "wert": 2, "weiter": "k2", "rueck": "Eine sanfte Unterbrechung, eine Würdigung, ein echter Grund – er verliert nicht das Gesicht." },
+                  { "text": "Warten, bis er Luft holt – irgendwann muss er ja aufhören.", "wert": 0, "tendenz": "ausweichen", "weiter": "k1b", "rueck": "Vielredner holen oft mitten im Satz Luft. Gespräche enden selten von allein zur rechten Zeit." },
+                  { "text": "Demonstrativ auf die Uhr schauen und Unterlagen sortieren.", "wert": 1, "weiter": "k1b", "rueck": "Ein Zeichen – manche verstehen es. Ein freundlicher Satz ist klarer und netter." }
+                ] },
+              { "id": "k1b", "sagt": "Er redet weiter. Am Gang siehst du deine Kundin, die sich nach deinem Stand umschaut.",
+                "wahl": [
+                  { "text": "„Entschuldigung, da kommt meine Kundin – erzählen Sie mir den Rest morgen beim Kaffee?“", "wert": 2, "weiter": "ende2", "rueck": "Spät, aber freundlich: Entschuldigung, Grund, Ausblick." },
+                  { "text": "Einfach zur Kundin gehen und ihn mitten im Satz stehen lassen.", "wert": 0, "tendenz": "verschwinden", "weiter": "ende3", "rueck": "Die Kundin ist versorgt – aber am Nachbarstand bleibt ein schaler Rest." }
+                ] },
+              { "id": "k2", "sagt": "Er lacht: „Oh, ich halte Sie auf! Aber sagen Sie mal – wer ist eigentlich bei Ihnen für die Bestellsoftware zuständig? Wir hätten da was.“",
+                "wahl": [
+                  { "text": "„Das bespreche ich hier nicht – geben Sie mir gern Ihre Karte. Schöne Messe noch!“", "wert": 2, "weiter": "ende1", "rueck": "Freundlich, klar und ohne Internes. Die Karte lässt ihm einen sauberen Weg." },
+                  { "text": "Ihm den Namen und die Durchwahl eurer IT-Leitung geben, damit er Ruhe gibt.", "wert": 0, "tendenz": "nachgeben", "weiter": "ende3", "rueck": "Der Wunsch nach Ruhe ist verständlich. Für Verkaufsanfragen gibt es die allgemeine Adresse – Namen und Durchwahlen gibst du Fremden besser nicht." },
+                  { "text": "„Puh, das weiß ich gar nicht so genau.“", "wert": 1, "weiter": "ende2", "rueck": "Du gibst nichts preis – gut. Ein klarer Satz und ein Abschied hätten das Gespräch sauber beendet." }
+                ] },
+              { "id": "ende1", "sagt": "Er reicht dir seine Karte: „Machen Sie's gut!“ Du begrüßt deine Kundin pünktlich.", "ende": "Den Vielredner sanft unterbrochen und gewürdigt, die Frage nach Internem freundlich abgeblockt, rechtzeitig gegangen. So bleibst du höflich und klar zugleich." },
+              { "id": "ende2", "sagt": "Er nickt und geht zurück an seinen Stand.", "ende": "Am Ende freundlich gelöst. Je früher und klarer du sanft unterbrichst – und Internes intern lässt –, desto leichter wird der Abschied." },
+              { "id": "ende3", "sagt": "Der Tag geht weiter. Abends ärgerst du dich ein wenig über das Gespräch.", "ende": "Hier ist etwas schiefgelaufen: zu lange gewartet, zu viel preisgegeben oder schroff gegangen. Fürs nächste Mal: sanft unterbrechen, würdigen, Grund nennen – und Internes bleibt intern." }
+            ],
+            "prinzipien": ["sanft unterbrechen", "würdigen, dann gehen", "Internes bleibt intern", "Gehen ist erlaubt"]
+          } },
+        { "art": "reflexion", "frage": "Welcher schwierige Gesprächspartner begegnet dir am häufigsten – und welchen Satz legst du dir für das nächste Mal zurecht?", "insBuch": "saetze" }
+      ],
+      "regel": "Freundlich bleiben, dich schützen, gehen dürfen – Internes bleibt intern.",
+      "merkkarten": [
+        { "id": "smalltalk-3-04-m1", "frage": "Wie bremst du einen Vielredner freundlich?", "antwort": "Namen sagen, in einem Satz würdigen, dann Abgang oder Brücke." },
+        { "id": "smalltalk-3-04-m2", "frage": "Jemand fragt nach deinem Gehalt. Was hilft?", "antwort": "Ein Lächeln, ein kurzer Satz, der offenlässt – und ein neues Thema." },
+        { "id": "smalltalk-3-04-m3", "frage": "Woran erkennst du Aushorchen im Plauderton?", "antwort": "Lob, beiläufiger Ton – und Fragen nach Zugängen, Programmen, Abläufen. Nichts sagen, der IT melden." }
+      ]
+    },
+    {
+      "id": "smalltalk-3-05", "bereich": "smalltalk", "stufe": 3, "nr": 5,
+      "titel": "Dein Netz pflegen",
+      "faehigkeiten": ["smalltalk.themen", "smalltalk.einstieg"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Nachrichten mehr Freude machen als gedacht, zeigen mehrere Studien mit Feldversuchen. Den Wert alter Kontakte zeigt eine Studie mit Führungskräften, den Wert lockerer Kontakte (nicht der ganz entfernten) beim Stellenwechsel ein großer Zufallsversuch. Die Stunden bis zur Freundschaft stammen aus zwei Befragungen.",
+      "quellen": ["liu2023", "levin2011", "rajkumar2022", "hall2019", "sandstromdunn2014"],
+      "aha": "Ein Netz pflegt man nicht mit Strategie, sondern mit kleinen Zeichen. Wer sich meldet, unterschätzt fast immer, wie sehr sich der andere freut – und alte Kontakte sind schneller wieder warm, als man denkt.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Menschen schrieben einem Bekannten eine kurze Nachricht, einfach so. Vorher schätzten sie, wie sehr er sich freuen würde. Was kam heraus?", "optionen": ["Sie überschätzten die Freude.", "Sie lagen ziemlich richtig.", "Sie unterschätzten die Freude – besonders bei überraschenden Nachrichten."], "richtig": 2, "loesung": "Sie unterschätzten die Freude", "aufloesung": "Je überraschender die Nachricht, desto größer die Lücke – bei flüchtigen Bekannten mehr als bei engen Freunden. Der Gedanke „Das ist doch komisch nach so langer Zeit“ ist meist der falsche Richter." },
+        { "art": "studie", "frage": "Lohnt es sich, alte Kontakte zu wecken?", "aufbau": "Führungskräfte in einem berufsbegleitenden Studium sollten Menschen um Rat zu einem Arbeitsvorhaben bitten – darunter frühere Kontakte, mit denen sie seit Jahren nichts mehr zu tun hatten.", "ergebnis": "Der Rat der alten Kontakte war oft so wertvoll wie der aktueller – und brachte oft sogar neuere Gesichtspunkte. Und die Vertrautheit war schnell wieder da.", "grenze": "Eine Studie mit Führungskräften und beruflichen Fragen. Ob es privat genauso ist, wurde dort nicht geprüft.", "beleg": "B", "quellen": ["levin2011"] },
+        { "art": "karte", "text": "Freundschaft braucht Zeit: In Befragungen waren es rund 40 bis 60 gemeinsame Stunden bis zur lockeren Freundschaft, über 200 bis zur engen. Nicht jeder Kontakt kann eng werden – muss er auch nicht. Lockere Bekannte – nicht ganz entfernte – bringen anderes: Neuigkeiten, andere Blickwinkel, beim Stellenwechsel oft mehr als enge Freunde. Pflege heißt: ab und zu ein kleines Zeichen, mit Anlass und ohne Hintergedanken." },
+        { "art": "auswahl", "kopf": { "id": "smalltalk-3-05-a", "faehigkeit": "smalltalk.einstieg", "stufe": 7, "kanal": "wissen" },
+          "frage": "Du hast seit zwei Jahren nichts von einer früheren Kollegin gehört. Gestern lief im Radio ihr Lieblingslied von damals. Was schreibst du?",
+          "antworten": [
+            { "text": "„Gestern lief im Radio ‚euer‘ Lied aus der Mittagspause – ich musste an dich denken. Wie geht's dir?“", "wert": 2, "warum": "Ein echter Anlass, ein warmer Satz, eine offene Frage – genau so eine überraschende Nachricht freut meist sehr." },
+            { "text": "„Hey, lange nichts gehört! Wie geht's dir so – was macht die Arbeit, und wohnst du noch in der alten Wohnung?“", "wert": 1, "warum": "Freundlich und besser als nichts. Der Anlass hätte ihr gezeigt, warum du gerade jetzt an sie denkst." },
+            { "text": "Lieber nicht schreiben – nach zwei Jahren ist das doch seltsam.", "wert": 0, "tendenz": "vermeiden", "warum": "Genau dieser Gedanke unterschätzt die Freude des anderen. Überraschende Nachrichten kommen besonders gut an." },
+            { "text": "„Hey! Sag mal, ist bei euch gerade eine Stelle frei? Ich will mich verändern.“", "wert": 0, "tendenz": "benutzen", "warum": "Nach zwei Jahren Funkstille gleich eine Bitte – das fühlt sich für sie eher nach Nutzen als nach Interesse an." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "smalltalk-3-05-b", "faehigkeit": "smalltalk.themen", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Mach aus der leeren Nachricht eine, über die sich ein alter Bekannter freut.",
+          "vorlage": "„Hi, lange nichts gehört. Wie geht's so?“",
+          "kriterien": ["nennt einen echten Anlass", "zeigt etwas von dir", "endet mit einer Frage, die leicht zu beantworten ist"],
+          "muster": ["„Hallo! Bin heute an unserer alten Kletterhalle vorbeigefahren – sie ist jetzt ein Supermarkt. Kletterst du noch?“", "„Hallo! Ich hab gerade dein Bananenbrot-Rezept wiedergefunden und gebacken – immer noch das beste. Wie geht's euch?“"] },
+        { "art": "woop", "anlass": "Dein Netz in den nächsten drei Monaten pflegen",
+          "beispiel": { "wunsch": "Jeden Monat zwei Menschen ein Zeichen geben, von denen ich lange nichts gehört habe.", "ergebnis": "Alte Kontakte sind wieder warm, und ich habe ein, zwei Treffen, auf die ich mich freue.", "hindernis": "Ich denke: Das ist doch komisch nach so langer Zeit – und schiebe es auf.", "plan": "Wenn ich am ersten Sonntag im Monat meinen Kaffee trinke, dann schreibe ich zwei Nachrichten mit einem Anlass." } },
+        { "art": "experiment", "auftrag": "Schreib heute einem Menschen, von dem du lange nichts gehört hast – mit einem echten Anlass und ohne Bitte.", "dauer": "heute", "nachfrage": "Wie hat er reagiert – verglichen mit dem, was du erwartet hattest?" },
+        { "art": "reflexion", "frage": "Welche drei Menschen hast du aus den Augen verloren, obwohl du sie mochtest? Was wäre ein Anlass, dich bei jedem zu melden?" }
+      ],
+      "regel": "Kleine Zeichen mit Anlass, ohne Hintergedanken – der andere freut sich mehr als gedacht.",
+      "merkkarten": [
+        { "id": "smalltalk-3-05-m1", "frage": "Was unterschätzen Menschen, die sich melden?", "antwort": "Wie sehr sich der andere freut – besonders bei überraschenden Nachrichten." },
+        { "id": "smalltalk-3-05-m2", "frage": "Lohnt es sich, alte Kontakte zu wecken?", "antwort": "Ja – in einer Studie war ihr Rat oft so wertvoll wie der aktueller Kontakte." },
+        { "id": "smalltalk-3-05-m3", "frage": "Wie sieht eine gute Nachricht nach langer Zeit aus?", "antwort": "Ein echter Anlass, etwas von dir, eine leichte Frage – keine Bitte." }
+      ]
+    }
+  ]
+}

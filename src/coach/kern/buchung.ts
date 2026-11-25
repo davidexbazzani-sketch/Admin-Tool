@@ -135,8 +135,10 @@ export function streicheMission(d: CoachDaten, id: string): CoachDaten {
 export function berichteMission(d: CoachDaten, index: InhaltsIndex, id: string, bericht: Omit<ErledigteMission, 'tag'>, heute: string): CoachDaten {
   const tag = tagNummer(heute)
   const m = index.missionen[id]
+  const war = d.missionen.offen.find(x => x.id === id)
   const offen = d.missionen.offen.filter(x => x.id !== id)
-  const erledigt = { ...d.missionen.erledigt, [id]: [...(d.missionen.erledigt[id] ?? []), { ...bericht, tag }].slice(-5) }
+  const mitVorher: ErledigteMission = { ...bericht, tag, ...(war?.befuerchtung ? { befuerchtung: war.befuerchtung } : {}), ...(war?.wahrscheinlich !== undefined ? { wahrscheinlich: war.wahrscheinlich } : {}), ...(war?.anspannung !== undefined ? { vorher: war.anspannung } : {}) }
+  const erledigt = { ...d.missionen.erledigt, [id]: [...(d.missionen.erledigt[id] ?? []), mitVorher].slice(-5) }
   let neu: CoachDaten = { ...d, missionen: { ...d.missionen, offen, erledigt } }
   if (m) {
     const fs = index.bereiche.find(b => b.id === m.b)?.faehigkeiten.filter(f => !f.spur || f.spur === m.sp).map(f => f.id) ?? []

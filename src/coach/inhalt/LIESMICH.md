@@ -62,6 +62,31 @@ im Spiegel ohne Ton, innerlich sprechen, Zungenlage fühlen), nicht nur Wissensf
 brauchen `leise` = Kennung einer stillen Vorrats-Übung derselben Fähigkeit) und ohne Zeitdruck (Übungen mit
 `uhr` zählen dann nicht). `node scripts/coach-pruefe.mjs --soll <b>` zeigt, was fehlt.
 
+## 3a. Phasen „Können“ (k) und „Meisterschaft“ (m) – ab Stufe 3
+
+Je Bereich (nicht für die Schwerpunkte – die sind mit Stufe 1 vollständig):
+
+| | Können (k) | Meisterschaft (m) |
+|---|---|---|
+| Einheiten | `<b>-2-01` … `-06` in `einheiten-2.json` (`"stufe": 2`) | `<b>-3-01` … `-05` in `einheiten-3.json` (`"stufe": 3`) |
+| Lagen | `<b>-l-06` … `-09` + Sparring `<b>-l-10` in `lagen-2.json` | `<b>-l-11` … `-14` + Sparring `<b>-l-15` in `lagen-3.json` |
+| Lerntage (an `kurs.json` **anhängen**, `"phase": "k"` bzw. `"m"`) | 20: 6 E, 6 Ü, 4 L, 3 A, 1 S – Ü `<b>-ue-008…`, A `<b>-a-003…`, S `<b>-s-02` | 18: 5 E, 5 Ü, 4 L, 3 A, 1 S – S `<b>-s-03` |
+| Band der Übungstage | `[3, 6]` bis `[4, 7]` | `[5, 8]` bis `[6, 10]` |
+| Vorrat | neue Datei(en) `vorrat-03.json` …, Nummern fortlaufend nach der höchsten vorhandenen; je Phase rund 80 | dito |
+| Tests | an `tests.json` anhängen: 8 Szenarien je Phase (`<b>-fc-025` …), Stufen 4–7 bzw. 6–9 | |
+
+Sonderfall `aussprache` (Kern): Lagen ab `aussprache-l-56` (k: 56–59, Sparring 60; m: 61–64, Sparring 65), Sparring-Lerntage
+`aussprache-s-52`, `aussprache-s-53`. Die Titel der Einheiten stehen als Stichworte in `derCoach/05_LEHRPLAN.md`
+(„Stufe 2 – Können“, „Stufe 3 – Meisterschaft“) – ausarbeiten, Titel schärfen erlaubt, Fähigkeit und Absicht bleiben.
+Was in Stufe 1 schon vorweggenommen wurde, steht in `derCoach/08_ENTSCHEIDUNGEN.md` (Lehrplan-Abweichungen) und in
+den Einheiten selbst – nicht doppeln, sondern vertiefen. Die Leiter (`leiter.json`) bleibt bei zehn Sprossen;
+Einheiten der Phasen k und m verweisen auf die oberen Sprossen (5–10) oder enden mit `experiment`/`reflexion`.
+
+**Neue Formate ab Stufe 2** (Typen in `kern/inhaltTypen.ts`): `geschichte` (Bruno erzählt), `geschichtenbau` (mit Kopf),
+`gespraechskarte`, `fahrplan` (Ernstfall eintragen), `leiter` (eigene Angst-Leiter), `werte`, `lebensrad`,
+`schreibreise`, `woop`, `buehne` (laut, mit Kopf, braucht `leise`), `stumm` (still, mit Kopf). Werkzeug-Formate ohne
+Kopf zählen wie `reflexion` als nachdenkender Schritt.
+
 ## 4. Einheiten (Prüfskript prüft das)
 
 5–9 Schritte, mindestens drei Formate, nie dasselbe Format zweimal hintereinander, mindestens zwei aktive
@@ -82,10 +107,16 @@ je Datei, auch für Tests und Lagen.
 ## 5. Sprache
 
 - Deutsch, Du-Form, kurze Sätze, Alltagswörter. „Sie“ nur in wörtlicher Rede.
-- Figuren mit Namen nur aus `besetzung.json`. **Namenlose Nebenfiguren in einer Rolle** („ein Verkäufer“, „die Mitarbeiterin
+- Figuren mit Namen nur aus `besetzung.json`; ihre festen Fakten (Alter, Familie, Wohnen, Zeitleisten, Aussehen) stehen
+  verbindlich in `derCoach/figuren.md` – jede Figurenszene dagegen prüfen. Dein Vorgesetzter ist Dr. Albers, eine Chefin
+  gibt es nicht. **Namenlose Nebenfiguren in einer Rolle** („ein Verkäufer“, „die Mitarbeiterin
   der Praxis“, „eine Käuferin“) sind erlaubt. Firmen- und Ortsnamen nur erkennbar erfunden und allgemein („Bäckerei Hansen“),
   nie eine echte, bekannte Marke. Die Anrede des Nutzers ist `{name}`: ohne Namen fällt eine Anrede am Satzanfang/-ende
   weg, mitten im Satz steht „[dein Name]“.
+- **Der Nutzer hat kein festgelegtes Geschlecht, Alter, Familienstand oder Beziehung.** Nie „als Mutter/Vater“, „deine
+  Freundinnen“, „die Retterin“, „dein Partner“ (männlich) für den Nutzer – neutral fassen („dein Kind“, „deine Leute“,
+  „in der Rolle des Retters“ nur als Modellbegriff, „die Person, mit der du zusammenlebst“), oder die Lage so bauen, dass
+  es keine Rolle spielt. Figuren aus der Besetzung behalten ihr Geschlecht.
 - Deutsche Anführungszeichen „…“, Apostroph `'`. Keine doppelten Leerzeichen.
 - Verboten (Prüfskript): garantiert, für immer, nie wieder, heilen, Sprachfehler, Stotterer, bekämpfen, besiegen,
   Versager, Loser, Alpha, rumkriegen, Trick 17, Geheimwaffe, Gehirnwäsche, „du musst“, „reiß dich zusammen“,
@@ -114,6 +145,17 @@ Jede Taktik auf der Wissens-Seite und jede Übung, die eine Einflusstechnik eins
 - `rot` – erfundene Tatsachen, Ausnutzen von Abhängigkeit, Zermürben, Schuld einreden, ein Nein übergehen,
   Verführungsratgeber-Tricks. Vollständig erklären, erkennen, `abwehr` angeben – **nie** als Musterlösung,
   Mission oder Einsatz-Übung (nur `kunstgriff`/`auswahl` zum Erkennen).
+  Dazu zählen auch die **unfairen Kunstgriffe im Streitgespräch** (Killerphrase, Strohmann, Etikett, vergiftetes Lob,
+  ironisches Zustimmen, Lacher holen, Reizen, Fragensalve, erschlichenes Ja): Sie gehören nicht zur roten Linie im
+  engen Sinn aus `08`, laufen aber als `rot` = „nur erkennen und abwehren“ (Entscheidung 25.11.2026).
+  Abgrenzung: Eine **echte** Entweder-oder-Frage („Lieber Dienstag oder Donnerstag?“) ist `taktik`; das **falsche**
+  Entweder-oder, das andere Möglichkeiten verschweigt, um zu drängen, ist `rot`. Ebenso ist die „kleine Zusage zuerst“
+  `taktik`, das „erschlichene Ja“ (Zustimmung zu etwas Harmlosem, später als Zusage zum Eigentlichen ausgegeben) `rot`.
+  Eine **echte** Frist zu nennen ist `fair`; **erfundener oder künstlicher Zeitdruck** („nur noch heute“, „muss jetzt
+  sofort entschieden werden“, ohne dass es stimmt) ist eine erfundene Tatsache und damit `rot`.
+  **Ausweichen:** Die Brücke **nach** der Antwort („Ja, das kostet mehr – und dafür …“) ist `fair`; die Brücke **statt**
+  der Antwort („Gute Frage – lassen Sie uns nach vorn schauen …“, ohne zu antworten) wirkt nur, solange niemand es
+  merkt, und ist `rot` (nur erkennen und abwehren) – Entscheidung 25.11.2026.
 
 Übungen, die Techniken nur **einordnen** lassen (z. B. `zuordnen` mit den Fächern fair / Taktik / rot), tragen kein
 `einfluss` – sie setzen selbst keine Technik ein.

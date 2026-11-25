@@ -33,7 +33,7 @@
         { "id": "k3b", "sagt": "Miriam nickt höflich. Tarek ist schon wieder auf dem Weg zum Schreibtisch.",
           "wahl": [
             { "text": "„Sorry, ich hab euch unterbrochen. Was war mit der Kündigung?“", "wert": 2, "weiter": "ende1", "rueck": "Stark: Du merkst es selbst und gibst das Gespräch zurück." },
-            { "text": "Weiter von deiner Maschine erzählen.", "wert": 0, "tendenz": "uebertrumpfen", "weiter": "ende2", "rueck": "Jetzt redest du allein." }
+            { "text": "Weiter von deiner Maschine erzählen – die kann nämlich sogar Milch aufschäumen.", "wert": 0, "tendenz": "uebertrumpfen", "weiter": "ende2", "rueck": "Jetzt redest du allein." }
           ] },
         { "id": "ende1", "sagt": "Die Maschine piept und gibt doch noch Kaffee. Alle lachen.", "ende": "Die Szene hat gezeigt: Niemand verlangt, dass du der Witzigste bist. Wer mitspielt, gehört dazu – auch gegenüber dem Chef." },
         { "id": "ende2", "sagt": "Alle gehen mit leeren Tassen zurück an den Platz.", "ende": "Kein Drama – aber die Gelegenheit war da. Beim nächsten Mal: aufgreifen und ein Stück dazulegen." }
@@ -73,7 +73,7 @@
         { "id": "k3r", "sagt": "Der Kollege: „Nee, war nur Spaß. Passt schon.“",
           "wahl": [
             { "text": "„Gut. Dann weiter: Bis Monatsende sind wir wieder im Plan.“", "wert": 2, "weiter": "k3", "rueck": "Die Rückfrage hat gewirkt: Der Spruch ist zurückgenommen, du bist beim Thema." },
-            { "text": "„Dann lass solche Sprüche.“", "wert": 1, "weiter": "k3", "rueck": "Verständlich, aber nachtreten war nicht nötig – er hat schon zurückgezogen." }
+            { "text": "„Dann lass solche Sprüche bitte in Zukunft, die helfen hier keinem.“", "wert": 1, "weiter": "k3", "rueck": "Verständlich, aber nachtreten war nicht nötig – er hat schon zurückgezogen." }
           ] },
         { "id": "k3", "sagt": "Dr. Albers nickt: „Gut. Was brauchen Sie, damit das klappt?“", "wahl": [
             { "text": "„Die Freigabe der Daten bis Mittwoch.“", "wert": 2, "weiter": "ende1", "rueck": "Klar, konkret – die Szene endet bei der Sache." },
@@ -158,7 +158,7 @@
       "id": "konter-l-05", "bereich": "konter", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["konter.ruhe", "konter.spiel", "konter.zustimmen", "konter.rueckfrage", "konter.umdeuten", "konter.grenze"], "stufe": 4, "sparring": true,
       "titel": "Sparring: Kaffeeküche – drei Schärfen", "figur": "Sven und Kollegen",
       "einleitung": "Das Sparring zum Abschluss der Grundlagen: drei Sprüche in drei Schärfen – neckend, stichelnd, übergriffig. Jeder verlangt ein anderes Werkzeug.",
-      "lage": "Firmenfeier im Sommer. Sven, ein alter Freund, der jetzt im Haus arbeitet, ist in Form.",
+      "lage": "Firmenfeier im Sommer. Sven, ein alter Freund, den du als Gast mitgebracht hast, ist in Form.",
       "start": "k1",
       "knoten": [
         { "id": "k1", "sagt": "Runde 1 – neckend. Sven, als du ankommst: „Na, hast du dich extra schick gemacht, um mit dem Grill zu reden?“",

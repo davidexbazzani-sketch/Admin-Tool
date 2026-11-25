@@ -1,0 +1,229 @@
+{
+  "lagen": [
+    {
+      "id": "antrieb-l-06", "bereich": "antrieb", "phase": "k", "umfeld": "freunde", "faehigkeiten": ["antrieb.start", "antrieb.plan", "antrieb.ziele"], "stufe": 4,
+      "titel": "Jules Schuhkarton", "figur": "Jule Marek",
+      "einleitung": "Eine Freundin schiebt etwas seit Wochen vor sich her. Du übst, mit ihr das Gefühl hinter dem Aufschieben zu finden, den passenden ersten Schritt und ein festes Zeitfenster – ohne Vortrag und ohne ihr die Sache abzunehmen.",
+      "lage": "Abends im Kochkurs. Jule hat seit gut einem Jahr ihr eigenes kleines Café. Beim Gemüseschneiden seufzt sie: Die Belege fürs letzte Quartal liegen seit Wochen in einem Schuhkarton neben der Kasse.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Jule: „Ich müsste endlich die Belege für die Steuerberaterin sortieren. Ich hasse das. Jeden Abend denke ich: morgen.“",
+          "wahl": [
+            { "text": "„Was genau hält dich ab – ist es öde, unklar oder einfach zu viel?“", "wert": 2, "weiter": "k2", "rueck": "Du fragst nach dem Gefühl, statt gleich einen Rat zu geben. Daraus ergibt sich der passende erste Schritt." },
+            { "text": "„Setz dich einen ganzen Sonntag hin und mach alles am Stück, dann ist es endlich weg und du hast Ruhe.“", "wert": 0, "tendenz": "ueberladen", "weiter": "k1b", "rueck": "Ein ganzer Sonntag ist genau der große Berg, vor dem sie seit Wochen flieht." },
+            { "text": "„Mach's morgen früh als Erstes.“", "wert": 1, "weiter": "k2", "rueck": "Ein fester Moment ist gut. Ob er hilft, hängt davon ab, was sie eigentlich abhält – das weißt du noch nicht." }
+          ] },
+        { "id": "k1b", "sagt": "Jule lacht schief: „Einen ganzen Sonntag? Den hatte ich seit der Eröffnung nicht mehr.“",
+          "wahl": [
+            { "text": "„Stimmt, zu groß gedacht. Was ist eigentlich das Schlimmste an dem Karton?“", "wert": 2, "weiter": "k2", "rueck": "Gut eingefangen. Jetzt geht es um das, was sie wirklich abhält." },
+            { "text": "„Dann nimm dir eben einen frei – anders wird das nichts, so ein Karton erledigt sich nicht nebenbei.“", "wert": 0, "tendenz": "ueberladen", "weiter": "ende2", "rueck": "Der große Block bleibt das Ziel – und damit genau das, was sie seit Wochen meidet." }
+          ] },
+        { "id": "k2", "sagt": "Jule: „Ehrlich? Ich weiß gar nicht, wie die Steuerberaterin die Belege haben will. Nach Monat? Nach Art? Dann sitze ich davor und mache lieber den Teig für morgen.“",
+          "wahl": [
+            { "text": "„Dann frag sie doch heute in zwei Zeilen, wie sie es haben will.“", "wert": 2, "weiter": "k3", "rueck": "Das Hindernis ist Unklarheit. Eine Frage ist der kleinste sinnvolle Schritt – danach ist der Karton nur noch Arbeit, kein Rätsel." },
+            { "text": "„Sortier sie einfach nach Monaten, das passt schon.“", "wert": 1, "weiter": "k3", "rueck": "Kann gut gehen und senkt die Hürde. Aber ob es passt, weiß nur die Steuerberaterin – eine kurze Frage nimmt die Unsicherheit ganz." },
+            { "text": "„Ach, Teig ist doch auch wichtig. Die Belege laufen dir nicht weg, mach dir keinen Stress.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Freundlich gemeint – doch so bekommt das Wegschieben einen guten Grund. Der Karton wird davon nicht leerer." }
+          ] },
+        { "id": "k3", "sagt": "Jule nickt. „Okay. Und wann mache ich das? Abends bin ich platt.“",
+          "wahl": [
+            { "text": "„Wann bist du am frischesten? Da ein festes Zeitfenster, 30 Minuten, nur ein Monat.“", "wert": 2, "weiter": "k4", "rueck": "Eine frische Stunde, ein Ende, ein kleiner Teil – so hat der Anfang kaum Gegner." },
+            { "text": "„Mach eine Liste mit allen Schritten bis zur Abgabe, dann hast du endlich den Überblick über alles.“", "wert": 1, "weiter": "k4", "rueck": "Ordnung hilft. Ohne festen Zeitpunkt bleibt die Liste aber neben dem Karton liegen." },
+            { "text": "„Abends nach Ladenschluss, egal wie platt – Hauptsache überhaupt.“", "wert": 0, "tendenz": "durchhalten", "weiter": "ende2", "rueck": "Damit liegt das Unangenehme in der müdesten Stunde des Tages. Dort verliert es fast immer gegen das Sofa." }
+          ] },
+        { "id": "k4", "sagt": "Jule: „Montags ist das Café zu. Montagmorgen um neun, nach dem ersten Kaffee?“",
+          "wahl": [
+            { "text": "„Klingt gut.“", "wert": 1, "weiter": "ende1", "rueck": "Passt. Mit einem Gedanken an die Ablenkungen wäre der Montag noch sicherer." },
+            { "text": "„Gut. Und was räumst du vorher weg, damit dich nichts rauszieht?“", "wert": 2, "weiter": "ende1", "rueck": "Zeitfenster steht, jetzt noch die Ablenkung. So kommt der Anfang auch gegen ein klingelndes Handy an." },
+            { "text": "„Perfekt. Und wenn du schon dabei bist, trag gleich das ganze Jahr nach.“", "wert": 0, "tendenz": "ueberladen", "weiter": "ende3", "rueck": "Aus dem kleinen Zeitfenster wird wieder der große Berg – und der nächste Montag fällt schwerer." }
+          ] },
+        { "id": "ende1", "sagt": "Montag, 9:40 Uhr. Jule schickt dir ein Foto: der Januar, sortiert und abgeheftet. Darunter: „Februar nächsten Montag.“", "ende": "Der erste Monat ist geschafft. Was den Anfang leicht macht: das Gefühl hinter dem Aufschieben kennen, den passenden ersten Schritt finden, ein festes Zeitfenster in einer frischen Stunde. Die Sache bleibt bei Jule – nur der Anfang wurde leichter." },
+        { "id": "ende2", "sagt": "Drei Wochen später steht der Schuhkarton immer noch neben der Kasse.", "ende": "Kein Drama – große, unklare Aufgaben liegen bei vielen lange. Es fehlte nicht an Willen. Gefehlt hat mindestens eins von beidem: ein kleiner, klarer erster Schritt oder ein festes Zeitfenster in einer frischen Stunde." },
+        { "id": "ende3", "sagt": "Am Montag sitzt Jule bis mittags über dem Karton. Am Montag darauf findet sie einen Grund, es zu lassen.", "ende": "Der Anfang war da – dann wurde der Block zu groß. Ein Zeitfenster mit Ende schützt davor, dass ein langer erster Tag den nächsten verhindert." }
+      ],
+      "prinzipien": ["erst nach dem Gefühl fragen, dann raten", "bei Unklarheit ist der erste Schritt eine Frage", "ein festes Zeitfenster in einer frischen Stunde", "ein Zeitfenster mit Ende – nicht alles auf einmal"],
+      "transfer": "Was schiebst du gerade vor dir her – und ist es öde, unklar oder zu groß?"
+    },
+    {
+      "id": "antrieb-l-07", "bereich": "antrieb", "phase": "k", "umfeld": "kollegen", "faehigkeiten": ["antrieb.gewohnheit", "antrieb.plan"], "stufe": 4,
+      "titel": "Das Nachmittagstief", "figur": "Miriam Okafor",
+      "einleitung": "Eine alte Gewohnheit, die jeden Tag zur selben Zeit anläuft. Du übst, Auslöser und Bedürfnis zu erkennen und einen Gegenplan zu bauen – statt jeden Nachmittag aufs Neue gegen dich zu kämpfen.",
+      "lage": "Seit Monaten dasselbe: Gegen drei sackst du am Schreibtisch ab, gehst zum Automaten im Flur und holst dir einen Schokoriegel. Das willst du ändern. Heute um drei steht Miriam an deinem Tisch.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Miriam: „Na? Ich wette, gleich gehst du zum Automaten. Ich könnte die Uhr nach dir stellen.“",
+          "wahl": [
+            { "text": "„Erwischt. Genau das will ich ändern – komisch, dass es immer um drei ist.“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst den Spruch mit Humor und siehst den Auslöser: die Uhrzeit. Das ist der Anfang jedes Gegenplans." },
+            { "text": "„Heute nicht. Ab heute bleibe ich hart, egal wie groß der Hunger um drei wird – das zieh ich jetzt durch.“", "wert": 0, "tendenz": "wollen", "weiter": "k1b", "rueck": "Ein Vorsatz gegen einen Griff, der jeden Tag um drei von selbst startet – das wird ein täglicher Kampf." },
+            { "text": "„Lass mich, ich brauch das jetzt.“", "wert": 1, "weiter": "k2", "rueck": "Ehrlich: Da ist ein Bedürfnis. Spannend wäre, welches genau." }
+          ] },
+        { "id": "k1b", "sagt": "Halb vier. Du denkst an den Automaten und kannst dich kaum konzentrieren. Miriam kommt mit zwei Tassen zurück: „Und, wie läuft das Hartbleiben?“",
+          "wahl": [
+            { "text": "„Schlecht. Vielleicht geht es gar nicht um Hunger. Was meinst du?“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt: Statt weiter zu kämpfen, fragst du, was hinter dem Griff steckt." },
+            { "text": "„Läuft super, ich merk gar nichts.“ – Und um vier stehst du dann doch wieder am Automaten.", "wert": 0, "tendenz": "ueberspielen", "weiter": "ende2", "rueck": "Der Kampf gegen den Griff verliert, sobald die Kraft nachlässt. Der Auslöser kommt ja jeden Tag wieder." }
+          ] },
+        { "id": "k2", "sagt": "Miriam: „Was holst du dir da eigentlich – Zucker oder Pause?“",
+          "wahl": [
+            { "text": "„Keine Ahnung, ich mach das einfach.“", "wert": 1, "weiter": "k3", "rueck": "Ehrlich – Gewohnheiten laufen oft ohne Grund im Kopf. Genau hinzuschauen ist der nächste Schritt." },
+            { "text": "„Eher Pause. Ich will kurz raus aus dem Tief und weg vom Bildschirm.“", "wert": 2, "weiter": "k3", "rueck": "Das Bedürfnis hinter der Gewohnheit ist gefunden. Jetzt lässt es sich auf anderem Weg stillen." },
+            { "text": "„Zucker natürlich, ohne den übersteh ich den Nachmittag nicht.“", "wert": 0, "weiter": "k3", "rueck": "Kann sein – oft steckt aber noch etwas anderes dahinter. Wer nur gegen den Zucker kämpft, übersieht das." }
+          ] },
+        { "id": "k3", "sagt": "Miriam: „Und was machst du stattdessen? Ich geh um drei immer einmal ums Gebäude.“",
+          "wahl": [
+            { "text": "„Um drei gehe ich mit dir einmal ums Gebäude und hole mir danach einen Tee.“", "wert": 2, "weiter": "k4", "rueck": "Auslöser, neue Handlung, gleiches Bedürfnis – raus und Pause. Und mit Miriam macht es mehr Spaß." },
+            { "text": "„Ich nehm mir vor, um drei einfach weiterzuarbeiten und mich gar nicht erst vom Platz zu bewegen.“", "wert": 0, "tendenz": "wollen", "weiter": "ende2", "rueck": "Der Auslöser kommt, das Bedürfnis nach Pause auch – und nichts fängt es auf." },
+            { "text": "„Ich bring mir Nüsse mit und ess sie am Platz.“", "wert": 1, "weiter": "k4", "rueck": "Besser als der Riegel. Die Pause vom Bildschirm, die du eigentlich willst, fehlt aber noch." }
+          ] },
+        { "id": "k4", "sagt": "Zwei Tage später. Miriam hat um drei einen Termin, du bist allein. Der Automat summt im Flur.",
+          "wahl": [
+            { "text": "„Ich bleib bei meinem Plan – heute eben allein.“", "wert": 2, "weiter": "ende1", "rueck": "Der Plan hält auch ohne Miriam. Genau das macht ihn zu deinem." },
+            { "text": "„Heute ist eine Ausnahme, Miriam ist ja nicht da.“ Du ziehst einen Riegel.", "wert": 0, "weiter": "ende3", "rueck": "Ein Ausrutscher, mehr nicht – aber er zeigt: Für Tage allein fehlt dir noch ein fester Ablauf." },
+            { "text": "„Ich hole mir einen Tee aus der Küche – wenigstens weg vom Bildschirm.“", "wert": 1, "weiter": "ende1", "rueck": "Die halbe Pause – weg vom Bildschirm und am Automaten vorbei. Draußen wäre sie noch erholsamer." }
+          ] },
+        { "id": "ende1", "sagt": "Freitag. Seit einer Woche kein Riegel mehr – nicht, weil du hart geblieben bist, sondern weil um drei etwas anderes passiert.", "ende": "Was eine Gewohnheit umlenkt: den Auslöser erkennen, das Bedürfnis dahinter finden und einen Gegenplan bauen, der auch an Tagen ohne Miriam hält. Gewohnheiten ändert man selten durch Kampf, eher durch Umlenken." },
+        { "id": "ende2", "sagt": "Freitag, kurz nach drei. Du stehst wieder am Automaten.", "ende": "Kein Drama – so geht es vielen. Gegen einen Griff, der jeden Tag zur selben Zeit startet, hilft Hartbleiben selten. Was fehlte: das Bedürfnis dahinter und ein Gegenplan für den Auslöser." },
+        { "id": "ende3", "sagt": "Am nächsten Tag um drei klopft Miriam an deinen Tisch: „Kommst du mit raus?“", "ende": "An diesem einen Tag hat der Automat gewonnen – für Tage allein fehlte noch ein Plan. Damit es kein Muster wird: Leg fest, was du um drei tust, wenn niemand mitkommt." }
+      ],
+      "prinzipien": ["den Auslöser erkennen: Zeit, Ort, Stimmung", "das Bedürfnis hinter der Gewohnheit finden", "ein Gegenplan, der dasselbe Bedürfnis stillt", "eine Fassung für Tage, an denen du allein bist"],
+      "transfer": "Welche Gewohnheit startet bei dir jeden Tag zur selben Zeit – und was holst du dir damit eigentlich?"
+    },
+    {
+      "id": "antrieb-l-08", "bereich": "antrieb", "phase": "k", "umfeld": "kollegen", "faehigkeiten": ["antrieb.dranbleiben", "antrieb.energie", "antrieb.fortschritt"], "stufe": 5,
+      "titel": "Nach fünf Wochen Pause", "figur": "Tarek Yılmaz",
+      "einleitung": "Ein Vorhaben ist nach Urlaub und vollen Wochen eingeschlafen. Du übst, die Lücke nicht zum Neuanfang bei null zu machen, die Gründe ohne Urteil zu benennen, klein und zur richtigen Tageszeit wieder einzusteigen – und für die nächste riskante Lage vorzusorgen.",
+      "lage": "Seit dem Frühjahr lernst du Italienisch, und freitags schreibt ihr euch die Zahl eurer Übungstage. Dann kamen dein Urlaub und drei Wochen voller Abgaben: seit fünf Wochen kein Italienisch. Tarek kommt mit zwei Kaffee an deinen Platz.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Tarek: „Ciao! Und, wie läuft dein Italienisch? Seit Wochen kam freitags keine Zahl mehr von dir.“",
+          "wahl": [
+            { "text": "„Ehrlich: seit fünf Wochen nichts. Erst Urlaub, dann die Abgaben. Ich will wieder rein.“", "wert": 2, "weiter": "k2", "rueck": "Ehrlich, sachlich, mit Blick nach vorn – der beste Ausgangspunkt für einen Rückweg." },
+            { "text": "„Ach, das ist eh verloren. Fünf Wochen – da kann ich wieder ganz bei null anfangen.“", "wert": 0, "tendenz": "allesodernichts", "weiter": "k1b", "rueck": "Fünf Wochen löschen keine Monate. Das „eh verloren“ ist genau der Gedanke, der aus einer Lücke einen Rückfall macht." },
+            { "text": "„Läuft so nebenher, ich bin nur nicht zum Zählen gekommen – war in letzter Zeit einfach zu viel los.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "k1b", "rueck": "Verständlich, dass du es kleinredest. Nur bleibt so verborgen, was los ist – und der Rückweg ungeplant." }
+          ] },
+        { "id": "k1b", "sagt": "Tarek schaut dich über den Becher an: „Vor dem Urlaub konntest du schon im Restaurant bestellen. So was ist nicht einfach weg. Aber sag ehrlich: Wie steht's wirklich?“",
+          "wahl": [
+            { "text": "„Stimmt. Es ist eine Lücke, kein Neuanfang. Und ehrlich gesagt: Ich hab seit fünf Wochen nichts gemacht.“", "wert": 2, "weiter": "k2", "rueck": "Gut korrigiert: Die Lücke ist benannt, der Fortschritt davor auch." },
+            { "text": "„Ehrlich? Es ist weg. Wenn ich einmal raus bin, hat es keinen Sinn. Ich bin einfach nicht der Typ dafür.“", "wert": 0, "tendenz": "verallgemeinern", "weiter": "ende2", "rueck": "Ein Urteil über dich aus einer einzigen Lücke. Es fühlt sich wie Ehrlichkeit an – und versperrt den Rückweg." }
+          ] },
+        { "id": "k2", "sagt": "Tarek: „Woran ist es eigentlich gekippt? Im Frühjahr lief's doch.“",
+          "wahl": [
+            { "text": "„Weil ich zu faul bin, ganz einfach.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3", "rueck": "Ein Urteil statt einer Ursache. Faulheit lässt sich nicht planen – eine riskante Lage schon." },
+            { "text": "„Im Urlaub fehlte mein fester Moment, und nach den Abgaben war ich abends zu leer.“", "wert": 2, "weiter": "k3", "rueck": "Zwei Gründe, sachlich benannt: eine riskante Lage und die Energie. Daraus wird der Plan für das nächste Mal." },
+            { "text": "„Keine Ahnung. Ich hab's einfach schleifen lassen.“", "wert": 1, "weiter": "k3", "rueck": "Ehrlich, aber unscharf. Wer weiß, wann und warum es kippte, kann beim nächsten Mal früher gegensteuern." }
+          ] },
+        { "id": "k3", "sagt": "Tarek: „Und wie steigst du wieder ein? Die Abgaben sind ja auch noch nicht ganz durch.“",
+          "wahl": [
+            { "text": "„Ich hole die fünf Wochen am Wochenende nach – zwei Kapitel pro Tag.“", "wert": 0, "tendenz": "allesodernichts", "weiter": "k3b", "rueck": "Nachholen klingt ehrgeizig, macht den Wiedereinstieg aber schwer – und den nächsten Ausstieg wahrscheinlich." },
+            { "text": "„Ab heute die kleine Fassung: zehn Minuten in der Mittagspause, da bin ich noch frisch.“", "wert": 2, "weiter": "k4", "rueck": "Klein einsteigen, nichts nachholen – und in eine Zeit gelegt, in der du Kraft hast." },
+            { "text": "„Heute Abend eine ganze Lektion, so wie früher – dann bin ich gleich wieder richtig drin.“", "wert": 1, "weiter": "k4", "rueck": "Gut, dass es heute losgeht. Eine ganze Lektion am Abend nach Wochen voller Abgaben ist aber viel – das macht den Einstieg wacklig." }
+          ] },
+        { "id": "k3b", "sagt": "Tarek: „Zwei Kapitel am Tag? Nach fünf Wochen Pause? Das hältst du keine drei Tage durch.“",
+          "wahl": [
+            { "text": "„Hast recht. Lieber zehn Minuten am Tag und dafür wirklich jeden Tag.“", "wert": 2, "weiter": "k4", "rueck": "Klug umgesteuert: klein und verlässlich statt groß und kurz." },
+            { "text": "„Doch, ich zieh das durch. Ich will auf keinen Fall hinterherhinken, ich hab schon genug verpasst.“", "wert": 0, "tendenz": "allesodernichts", "weiter": "ende2", "rueck": "Wer an einem Wochenende alles aufholen will, ist danach erledigt – und lässt es oft ganz." }
+          ] },
+        { "id": "k4", "sagt": "Tarek: „Und was machst du beim nächsten Urlaub anders?“",
+          "wahl": [
+            { "text": "„Ich nehme das Heft mit. Im Urlaub gilt die Mini-Fassung: ein Lied oder ein Satz am Tag.“", "wert": 2, "weiter": "ende1", "rueck": "Eine Notfall-Fassung für die riskante Lage – damit hält der Faden auch in der Ferne." },
+            { "text": "„Im Urlaub mache ich bewusst Pause, und am ersten Arbeitstag steige ich mit zehn Minuten wieder ein.“", "wert": 1, "weiter": "ende1", "rueck": "Auch ein guter Weg: Pause mit festem Rückweg. Eine winzige Fassung im Urlaub hält den Faden noch etwas besser." },
+            { "text": "„Ich hoffe einfach, dass es diesmal anders läuft.“", "wert": 0, "weiter": "ende3", "rueck": "Hoffnung ist kein Plan. Dieselbe Lage wird wieder kommen – und mit ihr dieselbe Lücke." }
+          ] },
+        { "id": "ende1", "sagt": "Freitag schickst du Tarek eine Zahl: vier. Er antwortet: „Che bello!“ – wie schön, du bist zurück.", "ende": "Du bist zurück. Was einen Rückweg leicht macht: die Lücke nicht als Neuanfang bei null sehen, Gründe statt Urteile, eine kleine Fassung zur frischen Zeit statt Nachholen – und ein Plan für den nächsten Urlaub. Schau, ob dir einer dieser Bausteine heute noch gefehlt hat." },
+        { "id": "ende2", "sagt": "Das Italienischbuch wandert zurück ins Regal. Tarek fragt nicht mehr nach.", "ende": "Kein Drama – nach einer langen Lücke wirkt der Rückweg riesig. Er ist es nicht: keine Strafe, kein Nachholen, nur die kleinste Fassung, heute. Die Tür bleibt offen." },
+        { "id": "ende3", "sagt": "Nach dem nächsten Urlaub dauert es wieder Wochen, bis du das Buch aufschlägst.", "ende": "Der Wiedereinstieg kam – nur die riskante Lage blieb ohne Plan. Eine Notfall-Fassung für den Urlaub hätte die nächste Lücke klein gehalten." }
+      ],
+      "prinzipien": ["eine Lücke ist kein Neuanfang bei null", "Gründe benennen statt urteilen", "klein einsteigen, nichts nachholen – in einer frischen Stunde", "für die riskante Lage eine Notfall-Fassung"],
+      "transfer": "Welche Lage hat dich zuletzt aus einem Vorhaben geworfen – und wie sähe dort deine Notfall-Fassung aus?"
+    },
+    {
+      "id": "antrieb-l-09", "bereich": "antrieb", "phase": "k", "umfeld": "kollegen", "faehigkeiten": ["antrieb.plan", "antrieb.fortschritt"], "stufe": 5,
+      "titel": "Lenas Notizbuch", "figur": "Lena Brandt",
+      "einleitung": "Ein Plan greift nicht, und eine Kollegin zweifelt an sich. Du übst, auf die Daten statt auf den Charakter zu schauen, die eine Stelle zu finden, die hakt, den Plan dort zu ändern – und weiter zu zählen.",
+      "lage": "Lena hat sich nach langem Zögern für den Tabellen-Aufbaukurs angemeldet. Ihr Plan: an jedem Werktag abends eine Stunde lernen. Nach drei Wochen kommt sie in der Mittagspause mit ihrem Notizbuch zu dir. Darin: fünf Kreuze.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Lena: „Ich glaube, ich bin einfach nicht diszipliniert genug für so was.“",
+          "wahl": [
+            { "text": "„Fünf Abende sind schon was. Darf ich mal sehen, an welchen Tagen es geklappt hat?“", "wert": 2, "weiter": "k2", "rueck": "Du würdigst das Geschaffte und schaust auf die Daten statt auf ihren Charakter." },
+            { "text": "„Dann nimm dir doch einfach mehr vor, dann schaffst du am Ende auch mehr – Druck hilft manchmal.“", "wert": 0, "tendenz": "ueberladen", "weiter": "k1b", "rueck": "Mehr Plan gegen einen Plan, der schon jetzt nicht greift – das verschärft das Gefühl, zu versagen." },
+            { "text": "„Quatsch, du bist die gründlichste Person, die ich kenne.“", "wert": 1, "weiter": "k2", "rueck": "Lieb und ehrlich gemeint. Was am Plan hakt, bleibt so aber offen." }
+          ] },
+        { "id": "k1b", "sagt": "Lena: „Mehr? Ich schaffe ja nicht mal die eine Stunde.“",
+          "wahl": [
+            { "text": "„Stimmt, falscher Rat. Lass uns lieber schauen, wo der Plan hakt.“", "wert": 2, "weiter": "k2", "rueck": "Gut zurückgenommen. Jetzt geht es um den Plan, nicht um Lena." },
+            { "text": "„Dann vielleicht lieber ein anderer Kurs, der besser zu dir passt.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Der Kurs ist nicht das Problem. Mit demselben Plan hakt auch der nächste." }
+          ] },
+        { "id": "k2", "sagt": "Lena blättert: „Geklappt hat es dienstags und donnerstags. Montag, Mittwoch und Freitag habe ich Chor oder Sport und bin erst um neun zu Hause.“",
+          "wahl": [
+            { "text": "„Vielleicht ist eine Stunde einfach zu lang.“", "wert": 1, "weiter": "k3", "rueck": "Kann sein – aber dienstags und donnerstags hat die Stunde ja geklappt. Das Muster zeigt eher auf die Abende mit Chor und Sport." },
+            { "text": "„Dann eben nach neun noch kurz ran – Hauptsache, die Kette reißt nicht ab, sonst ist der ganze Schwung weg.“", "wert": 0, "tendenz": "durchhalten", "weiter": "ende2", "rueck": "Damit plant sie gegen ihren Akku. Nach neun ist kaum noch Kraft für Neues da." },
+            { "text": "„An drei Abenden gibt es die Stunde gar nicht. Was, wenn du nur Dienstag und Donnerstag planst?“", "wert": 2, "weiter": "k3", "rueck": "Die eine Stelle gefunden: Der Plan verlangte Abende, die es nicht gibt." }
+          ] },
+        { "id": "k3", "sagt": "Lena überlegt: „Wenn ich ehrlich bin, gehen nur Dienstag und Donnerstag. Dann brauche ich ja ewig – der Kurs geht zwölf Wochen.“",
+          "wahl": [
+            { "text": "„Zwei sichere Abende und 30 Minuten am Samstag bringen mehr als drei wacklige.“", "wert": 2, "weiter": "k4", "rueck": "Verlässliche Termine schlagen gut gemeinte. Und der Samstag gibt dem Plan Luft." },
+            { "text": "„Dann bleib bei jedem Werktag und zieh es einfach durch.“", "wert": 0, "tendenz": "durchhalten", "weiter": "ende2", "rueck": "Derselbe Plan wird dieselben Lücken bringen – und dasselbe Urteil über sich." },
+            { "text": "„Dann eben zwei – Hauptsache, es klappt.“", "wert": 1, "weiter": "k4", "rueck": "Verlässlich ist gut. Ob zwei Abende für ihr Ziel reichen, zeigt der Rückblick nach zwei Wochen." }
+          ] },
+        { "id": "k4", "sagt": "Lena: „Und woran merke ich, ob der neue Plan besser ist?“",
+          "wahl": [
+            { "text": "„Zähl weiter – und schau in zwei Wochen, ob die Kreuze an den geplanten Tagen stehen.“", "wert": 2, "weiter": "ende1", "rueck": "Zählen und ein fester Prüftermin zeigen früh, ob die Änderung trägt." },
+            { "text": "„Am Ergebnis – wenn du am Ende des Kurses die Formeln kannst.“", "wert": 1, "weiter": "ende1", "rueck": "Das Ergebnis zählt, kommt aber erst am Ende. Die Kreuze zeigen schon nach zwei Wochen, ob der Plan trägt." },
+            { "text": "„Das merkst du am Gefühl, dafür brauchst du keine Liste.“", "wert": 0, "weiter": "ende3", "rueck": "Das Gefühl hinkt oft hinterher – gerade bei jemandem, der streng mit sich ist." }
+          ] },
+        { "id": "ende1", "sagt": "Zwei Wochen später zeigt dir Lena ihr Notizbuch: An jedem geplanten Tag steht ein Kreuz. „Zum ersten Mal fühlt sich der Kurs nicht nach Versagen an.“", "ende": "Nicht Lena war das Problem, sondern der Auslöser: Abende, die es nicht gab. Den Plan an der einen Stelle geändert und weiter hingeschaut – so greift ein Plan." },
+        { "id": "ende2", "sagt": "Zwei Wochen später hat Lena den Kurs abgebrochen. „Ich hab's halt nicht so mit Disziplin.“", "ende": "Kein Drama – aber schade: Das Urteil über sich blieb stehen, obwohl das Notizbuch etwas anderes zeigte. Der Plan hakte an einer Stelle, die sich ändern ließ." },
+        { "id": "ende3", "sagt": "Einen Monat später weiß Lena nicht genau, ob der neue Plan besser läuft. Sie hat aufgehört zu zählen.", "ende": "Der Plan wurde an der richtigen Stelle geändert – doch ohne Zahlen fehlt der Blick, ob er trägt. Kreuze zeigen es früher als das Gefühl." }
+      ],
+      "prinzipien": ["auf die Daten schauen, nicht auf den Charakter", "die eine Stelle finden, die hakt – hier der Auslöser", "wenige sichere Termine schlagen viele wacklige", "weiter zählen und nach zwei Wochen prüfen"],
+      "transfer": "Welcher Plan von dir hat zuletzt nicht gegriffen – und an welchen Tagen hat er doch geklappt?"
+    },
+    {
+      "id": "antrieb-l-10", "bereich": "antrieb", "phase": "k", "umfeld": "vorgesetzte", "faehigkeiten": ["antrieb.plan", "antrieb.start", "antrieb.dranbleiben", "antrieb.energie", "antrieb.fortschritt", "antrieb.gewohnheit"], "stufe": 7, "sparring": true,
+      "titel": "Die Woche, in der alles dazwischenkommt", "figur": "Dr. Henrik Albers",
+      "einleitung": "Das Sparring der Phase Können: eine Woche, in der dein Plan auf die Wirklichkeit trifft – eine dringende Aufgabe, ein Familienabend, ein leerer Akku. Du übst, den Plan zu halten, wo es geht, anzupassen, wo es nötig ist, und am Sonntag ehrlich zurückzuschauen.",
+      "lage": "Seit sechs Wochen läuft dein Vorhaben für 90 Tage: dienstags, donnerstags und samstags je 30 Minuten am Fotobuch – die Bilder von drei Jahren sollen endlich ein Buch werden. Montagmorgen bittet Dr. Albers dich in sein Büro.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Der Quartalsbericht muss bis Freitag fertig sein. Die Geschäftsführung will die Zahlen früher. Das wird eine volle Woche, fürchte ich.“",
+          "wahl": [
+            { "text": "„Verstanden.“ Und du denkst: Diese Woche gilt fürs Fotobuch die Notfall-Fassung.", "wert": 2, "weiter": "k2", "rueck": "Du sagst Ja zur Aufgabe, ohne dein Vorhaben aufzugeben. Die Notfall-Fassung ist genau für solche Wochen da." },
+            { "text": "„Verstanden.“ Und du denkst: Dann fällt das Fotobuch diese Woche eben ganz aus.", "wert": 0, "tendenz": "allesodernichts", "weiter": "k2b", "rueck": "Verständlich – aber ganz oder gar nicht macht aus einer vollen Woche eine Pause, und Pausen werden gern länger." },
+            { "text": "„Kein Problem, ich arbeite jeden Abend bis Mitternacht – dann schaffe ich auch noch das Fotobuch.“", "wert": 0, "tendenz": "durchhalten", "weiter": "k2b", "rueck": "Mit Schlaf bezahlt man in solchen Wochen doppelt: am Bericht und am Vorhaben." }
+          ] },
+        { "id": "k2b", "sagt": "Dienstagabend. Der Bericht ist halb fertig. Du bist müde, aber nicht leer. Auf dem Tisch liegt der Stapel Fotos.",
+          "wahl": [
+            { "text": "„Fünf Minuten: zehn Fotos für das Kapitel ‚Sommer‘ aussuchen, dann Feierabend.“", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance genutzt: Die kleine Fassung hält den Faden, ohne die Woche zu überladen." },
+            { "text": "„Diese Woche ist eh gelaufen. Ab Montag wieder.“", "wert": 0, "tendenz": "aufschieben", "weiter": "k3", "rueck": "Bis Montag sind es sechs Tage ohne Faden – und Montage haben ihre eigenen Hindernisse." }
+          ] },
+        { "id": "k2", "sagt": "Montagabend. Dienstag und Donnerstag wirst du länger bleiben. Was wird aus deinen drei Terminen?",
+          "wahl": [
+            { "text": "„Ich verschiebe alle drei auf nächste Woche und mache dann sechs.“", "wert": 0, "tendenz": "allesodernichts", "weiter": "k3", "rueck": "Nachholen klingt fair, macht die nächste Woche aber doppelt schwer – und jetzt reißt der Faden." },
+            { "text": "„Dienstag und Donnerstag je fünf Minuten Fotos auswählen, Samstag die volle halbe Stunde.“", "wert": 2, "weiter": "k3", "rueck": "Plan angepasst statt gestrichen: kleine Fassung an den vollen Tagen, der Samstag bleibt." },
+            { "text": "„Dienstag und Donnerstag lasse ich aus, Samstag bleibt.“", "wert": 1, "weiter": "k3", "rueck": "Den Samstag zu halten ist gut. Fünf Minuten an den vollen Tagen würden den Faden noch sicherer halten." }
+          ] },
+        { "id": "k3", "sagt": "Mittwochabend ruft Tante Renate an: „Kommst du morgen zum Abendessen? Dein Cousin ist zu Besuch.“ Donnerstag wäre ein Fotobuch-Tag – und der Bericht drängt.",
+          "wahl": [
+            { "text": "„Gern, ich komme! Fünf Minuten Fotos schaffe ich dann morgens.“", "wert": 2, "weiter": "k4", "rueck": "Menschen sind auch Energie. Und mit fünf Minuten am Morgen bleibt der Faden trotzdem." },
+            { "text": "„Geht leider nicht, Donnerstag ist mein fester Fotobuch-Abend.“", "wert": 0, "tendenz": "starr", "weiter": "k4", "rueck": "Treue zum Plan in Ehren – aber ein Familienabend kann gerade in einer harten Woche eher aufladen als kosten. Ein Plan darf sich biegen." },
+            { "text": "„Ich komme. Das Fotobuch fällt dann eben aus.“", "wert": 1, "weiter": "k4", "rueck": "Gute Wahl für die Familie. Mit fünf Minuten am Morgen bliebe auch der Faden." }
+          ] },
+        { "id": "k4", "sagt": "Freitag, 16 Uhr. Der Bericht ist raus. Dr. Albers: „Danke. Das war eine Kraftleistung.“ Du bist leer. Morgen wäre der lange Fotobuch-Termin.",
+          "wahl": [
+            { "text": "„Heute Abend noch zwei Stunden Fotobuch, um die Woche aufzuholen.“", "wert": 0, "tendenz": "allesodernichts", "weiter": "k5", "rueck": "Mit leerem Akku aufholen – das kostet den Samstag gleich mit." },
+            { "text": "„Ich mache das ganze Wochenende gar nichts – auch kein Fotobuch.“", "wert": 1, "weiter": "k5", "rueck": "Erholung ist nach so einer Woche richtig. Eine kleine Fassung am Samstag hielte trotzdem den Faden – ganz ohne Druck." },
+            { "text": "„Heute nichts mehr. Morgen erst ausschlafen, dann die halbe Stunde – oder die kleine Fassung, wenn der Akku nicht reicht.“", "wert": 2, "weiter": "k5", "rueck": "Erst laden, dann tun – und eine kleine Fassung als Rückfallebene. So bleibt das Vorhaben leicht." }
+          ] },
+        { "id": "k5", "sagt": "Sonntagabend. Zeit für deinen Wochenrückblick.",
+          "wahl": [
+            { "text": "„Bericht geschafft. Was beim Fotobuch half und was nicht, schreibe ich auf – für volle Wochen gilt ab jetzt die Notfall-Fassung.“", "wert": 2, "weiter": "ende1", "rueck": "Was lief, was half, was kommt – ohne Urteil. So wird aus der Woche Wissen, ganz gleich, wie sie gelaufen ist." },
+            { "text": "„Wieder nicht alle drei Termine geschafft. Typisch – das Fotobuch wird bei mir sowieso nie fertig, egal was ich mache.“", "wert": 0, "tendenz": "verallgemeinern", "weiter": "ende2", "rueck": "Eine volle Woche ist kein Beweis für „nie“. Das Urteil macht den Montag schwerer, nicht leichter." },
+            { "text": "„War halt eine volle Woche. Nächste wird bestimmt besser, wenn erst mal der Bericht vom Tisch ist.“", "wert": 1, "weiter": "ende1", "rueck": "Gelassen – gut. Mit dem Blick darauf, was geholfen hat, wird daraus ein Plan für die nächste volle Woche." }
+          ] },
+        { "id": "ende1", "sagt": "Montagmorgen. Im Kalender stehen wieder drei Fotobuch-Termine – und der Stapel Fotos liegt bereit.", "ende": "Plan halten, wo es geht, anpassen, wo es nötig ist, und am Sonntag ehrlich zurückschauen: So übersteht ein Vorhaben die Woche, in der alles dazwischenkommt. Was diese Woche geholfen und was gefehlt hat, gehört auf deine Rückfall-Landkarte." },
+        { "id": "ende2", "sagt": "Das Fotobuch-Projekt wandert in die Schublade. „Wenn mal Ruhe ist“, denkst du.", "ende": "Kein Drama – volle Wochen werfen viele aus der Bahn. Der Rückweg wäre klein gewesen: eine Notfall-Fassung, ein freundlicher Rückblick, ein neuer Termin. Er steht dir weiter offen." }
+      ],
+      "prinzipien": ["volle Woche: Notfall-Fassung statt Ausfall", "nicht nachholen – nächste Woche normal weiter", "ein Plan darf sich biegen: Menschen und Erholung zählen", "nach der Kraftleistung erst den Akku laden", "der Wochenrückblick macht aus der Woche Wissen"],
+      "transfer": "Welche volle Woche steht dir als Nächstes bevor – und wie sieht deine Notfall-Fassung dafür aus?"
+    }
+  ]
+}

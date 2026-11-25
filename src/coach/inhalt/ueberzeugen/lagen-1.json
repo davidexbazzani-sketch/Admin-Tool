@@ -16,7 +16,7 @@
         { "id": "k1b", "sagt": "Nadine: „900? Das ist mehr, als ich dachte. Wir sind nur zwölf Leute.“",
           "wahl": [
             { "text": "„Dann ist das Paket vermutlich zu groß für Sie. Darf ich fragen, wie es bei Ihnen gerade läuft?“", "wert": 2, "weiter": "k2", "rueck": "Gut gerettet: ehrlich eingeordnet und zurück zum Fragen." },
-            { "text": "„Aber da ist wirklich alles drin: Sicherung, Wartung, Notdienst …“", "wert": 0, "tendenz": "merkmale", "weiter": "ende2", "rueck": "Merkmale gegen einen Preis-Schreck – sie hört nur noch zu, um höflich aufzulegen." }
+            { "text": "„Aber da ist wirklich alles drin: Sicherung, Wartung, Notdienst rund um die Uhr, Updates, Fernhilfe …“", "wert": 0, "tendenz": "merkmale", "weiter": "ende2", "rueck": "Merkmale gegen einen Preis-Schreck – sie hört nur noch zu, um höflich aufzulegen." }
           ] },
         { "id": "k2", "sagt": "Nadine: „Ehrlich gesagt läuft es meistens. Aber letzten Monat war der Server einen Tag weg, und keiner wusste, wen man anruft.“",
           "wahl": [
@@ -36,9 +36,9 @@
           ] },
         { "id": "k4", "sagt": "Nadine: „Genau. Was würden Sie mir vorschlagen?“",
           "wahl": [
-            { "text": "„Ein fester Ansprechpartner, der zu Ihren Zeiten in zwei Stunden reagiert. Das heißt: kein halber Tag mehr am Telefon. Soll ich bis Freitag ein Angebot schicken?“", "wert": 2, "weiter": "ende1", "rueck": "Nutzen-Brücke und eine klare Frage nach dem nächsten Schritt." },
+            { "text": "„Fester Ansprechpartner, zu Ihren Zeiten in zwei Stunden da. Kein halber Tag mehr am Telefon. Soll ich bis Freitag ein Angebot schicken?“", "wert": 2, "weiter": "ende1", "rueck": "Nutzen-Brücke und eine klare Frage nach dem nächsten Schritt." },
             { "text": "„Ich schicke Ihnen mal unsere Unterlagen.“", "wert": 1, "weiter": "ende3", "rueck": "Höflich – aber ohne Nutzen und ohne klaren nächsten Schritt." },
-            { "text": "„Am besten nehmen Sie gleich das Rundum-Paket, dann ist alles erledigt. Das nehmen die meisten Betriebe Ihrer Größe, und Sie haben ab sofort Ruhe mit der Technik.“", "wert": 0, "tendenz": "ueberreden", "weiter": "ende2", "rueck": "Zu groß, zu schnell, zu viel Druck. Sie zieht sich zurück." }
+            { "text": "„Nehmen Sie am besten gleich das Rundum-Paket. Das nehmen die meisten Betriebe Ihrer Größe, und Sie haben ab sofort Ruhe mit der Technik.“", "wert": 0, "tendenz": "ueberreden", "weiter": "ende2", "rueck": "Zu groß, zu schnell, zu viel Druck. Sie zieht sich zurück." }
           ] },
         { "id": "ende1", "sagt": "Nadine: „Ja, gern. Freitag passt.“", "ende": "Erst gefragt, dann zusammengefasst, dann Nutzen und nächster Schritt. Sie hat selbst gesagt, was ihr Problem kostet – dein Vorschlag ist jetzt eine Antwort." },
         { "id": "ende2", "sagt": "Nadine: „Ich überlege es mir.“ Sie legt auf.", "ende": "Zu früh angeboten oder mit Merkmalen geantwortet: Sie hat sich nicht verstanden gefühlt. Beim nächsten Mal zuerst die Folgen-Frage." },
@@ -67,8 +67,8 @@
           ] },
         { "id": "k2", "sagt": "Albers: „Bitte. Worum geht es?“",
           "wahl": [
-            { "text": "„Urlaub läuft über Mails. Im Frühjahr waren drei gleichzeitig weg. Ein gemeinsamer Kalender verhindert das – für Sie heißt das: keine Engpässe mehr ausbügeln.“", "wert": 2, "weiter": "k3", "rueck": "Problem mit Beispiel, Lösung, Nutzen für ihn – in drei Sätzen." },
-            { "text": "„Der Kalender hat Farben für jede Abteilung, Erinnerungen, eine Wochenansicht, eine App fürs Handy und lässt sich mit unserem Mailprogramm verbinden.“", "wert": 1, "tendenz": "merkmale", "weiter": "k2b", "rueck": "Merkmale. Ihn interessiert, was es für das Team und für ihn ändert." },
+            { "text": "„Urlaub läuft über Mails. Im Frühjahr waren drei zugleich weg. Ein gemeinsamer Kalender verhindert das – für Sie: keine Engpässe mehr.“", "wert": 2, "weiter": "k3", "rueck": "Problem mit Beispiel, Lösung, Nutzen für ihn – in drei Sätzen." },
+            { "text": "„Der Kalender hat Farben je Abteilung, Erinnerungen, eine Wochenansicht, eine Handy-App und lässt sich mit unserem Mailprogramm verbinden.“", "wert": 1, "tendenz": "merkmale", "weiter": "k2b", "rueck": "Merkmale. Ihn interessiert, was es für das Team und für ihn ändert." },
             { "text": "„Ich finde, wir sind da total altmodisch unterwegs.“", "wert": 0, "tendenz": "abwerten", "weiter": "k2b", "rueck": "Kritik an der bisherigen Lösung, die er vielleicht selbst eingeführt hat. Gesicht wahren geht anders." }
           ] },
         { "id": "k2b", "sagt": "Albers: „Und was hätten wir davon?“",
@@ -84,7 +84,7 @@
         { "id": "k3b", "sagt": "Albers: „Es gibt immer einen Haken.“",
           "wahl": [
             { "text": "„Stimmt: Am Anfang eine halbe Stunde Eintragen. Das bereite ich vor.“", "wert": 2, "weiter": "k4", "rueck": "Gut gerettet." },
-            { "text": "„Wirklich nicht, ich habe das genau geprüft.“", "wert": 0, "tendenz": "verteidigen", "weiter": "ende2", "rueck": "Jetzt verteidigst du – und er glaubt dir weniger." }
+            { "text": "„Wirklich nicht, ich habe das vorher ganz genau geprüft – es gibt nur Vorteile.“", "wert": 0, "tendenz": "verteidigen", "weiter": "ende2", "rueck": "Jetzt verteidigst du – und er glaubt dir weniger." }
           ] },
         { "id": "k4", "sagt": "Albers: „Gut. Und jetzt?“",
           "wahl": [
@@ -193,7 +193,7 @@
         { "id": "k4b", "sagt": "Verkäufer: „Ach, die 30 Euro erlasse ich Ihnen. Dann passt's doch!“",
           "wahl": [
             { "text": "„Es bleibt beim Nein. Ich vergleiche zu Hause.“", "wert": 2, "weiter": "ende1", "rueck": "Das Nein wiederholt statt neu begründet." },
-            { "text": "„Na gut, wenn Sie die 30 erlassen …“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ein kleines Zugeständnis lässt den teuren Rest vergessen." }
+            { "text": "„Na gut, wenn Sie die 30 Euro wirklich erlassen, dann …“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ein kleines Zugeständnis lässt den teuren Rest vergessen." }
           ] },
         { "id": "ende1", "sagt": "Zu Hause findest du in zehn Minuten einen Vertrag für 21 Euro, ohne Anschlussgebühr. Sven: „Respekt.“", "ende": "Ja-Kette, Kontrast, erfundene Frist, eingeredete Schuld, Nachschlag – erkannt. Deine Abwehr: eigener Rahmen, Gesamtpreis schriftlich, eine Nacht Abstand, ein Nein ohne Begründung." },
         { "id": "ende2", "sagt": "Du gehst mit einem Vertrag nach Hause, der jeden Monat mehr kostet als geplant.", "ende": "Kein Drama – aber teuer. Diese Mittel wirken auf jeden. Die Abwehr: den eigenen Rahmen vorher festlegen, Gesamtpreis schriftlich, nichts unter Zeitdruck unterschreiben." }
@@ -210,8 +210,8 @@
       "knoten": [
         { "id": "k1", "sagt": "Nadine: „Schön, dass Sie da sind. Erzählen Sie mal – was machen Sie genau?“",
           "wahl": [
-            { "text": "„Ich sorge dafür, dass in kleinen Betrieben die Technik nicht im Weg steht – zuletzt bei einem Umzug übers Wochenende. Aber wie läuft es bei Ihnen?“", "wert": 2, "weiter": "k2", "rueck": "Kurze Vorstellung mit Beispiel – und der Ball geht gleich an sie." },
-            { "text": "„Ich bin IT-Dienstleister, seit zehn Jahren selbstständig.“", "wert": 1, "weiter": "k2", "rueck": "Stimmt, aber eine Schublade. Ein Satz zum Nutzen hätte mehr gezeigt." },
+            { "text": "„Ich sorge dafür, dass in kleinen Betrieben die Technik nicht stört – zuletzt bei einem Umzug übers Wochenende. Wie läuft es bei Ihnen?“", "wert": 2, "weiter": "k2", "rueck": "Kurze Vorstellung mit Beispiel – und der Ball geht gleich an sie." },
+            { "text": "„Ich mache IT-Service, seit zehn Jahren selbstständig.“", "wert": 1, "weiter": "k2", "rueck": "Stimmt, aber eine Schublade. Ein Satz zum Nutzen hätte mehr gezeigt." },
             { "text": "Zehn Minuten lang Leistungen, Zertifikate und Referenzen aufzählen.", "wert": 0, "tendenz": "merkmale", "weiter": "k1b", "rueck": "Die halbe Zeit ist weg, und du weißt nichts über sie." }
           ] },
         { "id": "k1b", "sagt": "Nadine schaut auf die Uhr: „Beeindruckend. Wir haben aber nur noch zehn Minuten.“",
@@ -237,7 +237,7 @@
           ] },
         { "id": "k4", "sagt": "Nadine: „Genau. Was schlagen Sie vor?“",
           "wahl": [
-            { "text": "„Feste Betreuung, Hilfe in zwei Stunden. Das heißt: Ein Ausfall kostet Stunden statt Tage. Ehrlich gesagt verhindere ich bei den alten Rechnern nicht jeden Ausfall.“", "wert": 2, "weiter": "k5", "rueck": "Nutzen-Brücke und ein ehrlicher Nachteil – glaubwürdig." },
+            { "text": "„Feste Betreuung, Hilfe in zwei Stunden – ein Ausfall kostet Stunden statt Tage. Ehrlich: Jeden Ausfall alter Rechner verhindere ich nicht.“", "wert": 2, "weiter": "k5", "rueck": "Nutzen-Brücke und ein ehrlicher Nachteil – glaubwürdig." },
             { "text": "„Feste Betreuung mit Überwachung, Fernwartung und Sicherung.“", "wert": 1, "tendenz": "merkmale", "weiter": "k5", "rueck": "Richtig, aber als Merkmale. Was heißt das für ihren nächsten Ausfall?" },
             { "text": "„Mit mir haben Sie keinen Ausfall mehr, versprochen.“", "wert": 0, "tendenz": "aufblasen", "weiter": "k5", "rueck": "Ein Versprechen, das du nicht halten kannst. Sie glaubt dir jetzt weniger." }
           ] },
@@ -255,7 +255,7 @@
         { "id": "k6b", "sagt": "Nadine: „Ich weiß nicht. Ich muss darüber nachdenken.“",
           "wahl": [
             { "text": "„Gern. Worüber genau – vielleicht kann ich es gleich klären?“", "wert": 2, "weiter": "k7", "rueck": "Zweite Chance: Du findest heraus, was offen ist." },
-            { "text": "„Natürlich. Darf ich mich am Freitag melden?“", "wert": 1, "weiter": "ende3", "rueck": "Mit nächstem Schritt – aber der Einwand bleibt ungeklärt." }
+            { "text": "„Natürlich, nehmen Sie sich Zeit. Darf ich mich am Freitag bei Ihnen melden?“", "wert": 1, "weiter": "ende3", "rueck": "Mit nächstem Schritt – aber der Einwand bleibt ungeklärt." }
           ] },
         { "id": "k7", "sagt": "Nadine: „Mit dem, was die zwei Tage gekostet haben, wäre es das eigentlich wert. Ich habe nur Sorge, mich lange zu binden.“",
           "wahl": [

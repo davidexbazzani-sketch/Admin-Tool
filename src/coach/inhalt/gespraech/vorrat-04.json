@@ -1,0 +1,974 @@
+{
+  "eintraege": [
+    {
+      "art": "zuordnen",
+      "kopf": { "id": "gespraech-v-0175", "faehigkeit": "gespraech.konflikt", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Streit im Team um eine verpatzte Lieferung. Welcher der vier Zerstörer ist das?",
+      "faecher": ["Kritik am Charakter", "Verachtung", "Rechtfertigung", "Mauern"],
+      "karten": [
+        { "text": "„Du bist einfach schlampig.“", "fach": 0 },
+        { "text": "Ein spöttisches Lachen: „Na, Experte?“", "fach": 1 },
+        { "text": "„Ich hab nur gemacht, was im Auftrag stand.“", "fach": 2 },
+        { "text": "Schweigen, Blick auf den Bildschirm, keine Antwort.", "fach": 3 },
+        { "text": "„Typisch, dass du nie mitdenkst.“", "fach": 0 },
+        { "text": "Augenrollen, als der andere spricht.", "fach": 1 },
+        { "text": "„Wenn mir jemand Bescheid gesagt hätte …“", "fach": 2 },
+        { "text": "„Mach doch, was du willst.“ – und raus.", "fach": 3 }
+      ]
+    },
+    {
+      "art": "zuordnen",
+      "kopf": { "id": "gespraech-v-0176", "faehigkeit": "gespraech.konflikt", "stufe": 8, "kanal": "wissen" },
+      "auftrag": "Welches Gegenmittel steckt in diesem Satz?",
+      "faecher": ["Beschwerde statt Charakter", "Wertschätzung statt Spott", "Anteil statt Ausrede", "Pause statt Mauer"],
+      "karten": [
+        { "text": "„Mir hat gefehlt, dass du Bescheid sagst, als es später wurde.“", "fach": 0 },
+        { "text": "„Ich weiß, wie viel du diese Woche gestemmt hast.“", "fach": 1 },
+        { "text": "„Den Termin hab ich falsch eingetragen, das ist mein Teil.“", "fach": 2 },
+        { "text": "„Ich brauch zwanzig Minuten. Um sieben reden wir weiter.“", "fach": 3 },
+        { "text": "„Die Spülmaschine war heute früh noch voll – räumst du sie abends aus?“", "fach": 0 },
+        { "text": "„Danke, dass du mir das überhaupt sagst.“", "fach": 1 },
+        { "text": "„Stimmt, ich hab nicht nachgefragt.“", "fach": 2 },
+        { "text": "„Ich bin zu geladen für ein gutes Gespräch. Morgen früh?“", "fach": 3 }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0177", "faehigkeit": "gespraech.konflikt", "stufe": 6, "kanal": "wissen" },
+      "frage": "Mitten im Streit merkst du: Dein Herz rast, und du hörst nur noch die Hälfte. Was tust du?",
+      "antworten": [
+        { "text": "Weiterreden – jetzt bloß nicht einknicken.", "wert": 0, "tendenz": "durchziehen", "warum": "In dem Zustand wird aus Reden schnell Verletzen. Ein Gespräch braucht ein offenes Ohr." },
+        { "text": "„Ich bin gerade zu aufgewühlt. Lass uns um acht weiterreden.“", "wert": 2, "warum": "Eine Pause mit Grund und Uhrzeit – das Gegenmittel gegen Mauern und Hochschaukeln." },
+        { "text": "Wortlos rausgehen und die Tür hinter dir zumachen, damit es nicht noch schlimmer wird.", "wert": 0, "tendenz": "mauern", "warum": "Für dich eine Pause, für den anderen ein Abbruch. Ohne Rückkehr fühlt er sich stehengelassen." },
+        { "text": "Einmal lang ausatmen und langsamer weiterreden.", "wert": 1, "warum": "Kann reichen, wenn es nur kurz hochkocht. Hörst du nur noch die Hälfte, hilft eine echte Pause mehr." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0178", "faehigkeit": "gespraech.konflikt", "stufe": 8, "kanal": "wissen" },
+      "frage": "Im Streit sagt die Person, mit der du zusammenlebst: „Du bist einfach egoistisch.“ Welche Antwort entschärft am besten?",
+      "antworten": [
+        { "text": "„Und du bist perfekt, oder was?“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Etikett gegen ein Etikett. Jetzt geht es um Charaktere, nicht mehr um die Sache." },
+        { "text": "„Das tut weh. Was hab ich getan, das sich für dich egoistisch anfühlt?“", "wert": 2, "warum": "Dein Gefühl genannt, das Etikett nicht übernommen und nach dem Verhalten gefragt." },
+        { "text": "„Ich bin nicht egoistisch, ich hab letzte Woche doch erst den ganzen Einkauf gemacht und den Keller aufgeräumt.“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Eine Verteidigung – der andere fühlt sich nicht gehört und legt nach." },
+        { "text": "„Lass uns bitte bei dem bleiben, was heute passiert ist.“", "wert": 1, "warum": "Gut: zurück zum Verhalten. Mit einer Frage nach seinem Anliegen wäre es wärmer." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0179", "faehigkeit": "gespraech.konflikt", "stufe": 9, "kanal": "wissen", "einfluss": "rot" },
+      "frage": "Ein Bekannter fragt seit Wochen fast täglich, ob du ihm dein Auto leihst – obwohl du klar Nein gesagt hast. Heute: „Komm schon, irgendwann sagst du eh Ja.“ Was passiert hier, und was hilft?",
+      "antworten": [
+        { "text": "Zermürben: Er setzt auf deine Müdigkeit. Hilft: „Meine Antwort bleibt Nein. Bitte frag nicht mehr.“", "wert": 2, "warum": "Erkannt und eine klare Grenze gezogen – ohne neue Gründe, die er wieder angreifen kann." },
+        { "text": "Hartnäckigkeit – irgendwann gibt man eben nach, das ist fair.", "wert": 0, "tendenz": "nachgeben", "warum": "Ein Nein, das so lange gefragt wird, bis es kippt, wurde übergangen. Das ist nicht fair." },
+        { "text": "Zermürben. Hilft: Noch einmal ausführlich und geduldig erklären, warum du das Auto selbst jeden Tag brauchst.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Richtig erkannt – aber jeder neue Grund ist ein neuer Angriffspunkt." },
+        { "text": "Zermürben. Hilft: nicht mehr ans Telefon gehen.", "wert": 1, "warum": "Schützt dich. Klarer ist es, die Grenze einmal deutlich auszusprechen." }
+      ]
+    },
+    {
+      "art": "umformulieren",
+      "kopf": { "id": "gespraech-v-0180", "faehigkeit": "gespraech.konflikt", "stufe": 7, "kanal": "koennen" },
+      "auftrag": "Dein Mitbewohner hat um Mitternacht laut telefoniert. Mach aus der Kritik am Charakter eine Beschwerde über ein Verhalten mit Wunsch.",
+      "vorlage": "„Du bist so rücksichtslos!“",
+      "kriterien": ["beschreibt das Verhalten statt den Menschen", "nennt die Folge für dich", "endet mit einem machbaren Wunsch"],
+      "muster": [
+        "„Du hast gestern um Mitternacht laut telefoniert, und ich bin aufgewacht. Kannst du nach elf in dein Zimmer gehen?“",
+        "„Ich hab heute Nacht kaum geschlafen, weil das Telefonat bis spät durch die Wand kam. Wäre es okay, wenn nach elf Ruhe ist?“"
+      ]
+    },
+    {
+      "art": "umformulieren",
+      "kopf": { "id": "gespraech-v-0181", "faehigkeit": "gespraech.konflikt", "stufe": 8, "kanal": "koennen" },
+      "auftrag": "Sven hat drei Treffen abgesagt. Mach aus der Spitze eine ehrliche Aussage über dich.",
+      "vorlage": "„Na, hat der Herr Wichtig auch mal Zeit für alte Freunde?“",
+      "kriterien": ["kein Spott", "sagt, wie es dir geht", "lädt ihn ein, statt ihn festzunageln"],
+      "muster": [
+        "„Ich hab dich vermisst. Drei Absagen hintereinander – ist bei dir gerade viel los?“",
+        "„Mich hat's ehrlich gesagt geknickt, dass es dreimal nicht geklappt hat. Wann passt es dir wirklich?“"
+      ]
+    },
+    {
+      "art": "rangfolge",
+      "kopf": { "id": "gespraech-v-0182", "faehigkeit": "gespraech.konflikt", "stufe": 7, "kanal": "wissen" },
+      "frage": "Ein Streit über die Urlaubsplanung kocht hoch. Ordne die Reaktionen von entschärfend nach anheizend.",
+      "eintraege": [
+        { "text": "„Moment, das kam falsch raus. Was ich meine: Mir ist die Woche im Juli wichtig.“", "warum": "Ein Reparaturversuch mit klarem Anliegen." },
+        { "text": "„Lass uns später weiterreden.“", "warum": "Nimmt Hitze raus – ohne Uhrzeit bleibt die Rückkehr aber offen." },
+        { "text": "„Ich hab das doch nur so gesagt, weil du vorher …“", "warum": "Rechtfertigung – sie verlängert den Streit." },
+        { "text": "Augenrollen und ein „Na klar“.", "warum": "Verachtung – der stärkste Brandbeschleuniger." }
+      ]
+    },
+    {
+      "art": "rangfolge",
+      "kopf": { "id": "gespraech-v-0183", "faehigkeit": "gespraech.konflikt", "stufe": 8, "kanal": "wissen" },
+      "frage": "Ordne die Einstiege in ein Gespräch über die ungleiche Hausarbeit von sanft nach hart.",
+      "eintraege": [
+        { "text": "„Mir ist aufgefallen, dass ich zuletzt die meisten Einkäufe gemacht habe. Das stresst mich. Können wir es neu aufteilen?“", "warum": "Beobachtung, Gefühl, Wunsch – und eine Einladung." },
+        { "text": "„Wir müssen mal über die Einkäufe reden.“", "warum": "Klar, aber kühl und ohne Anliegen." },
+        { "text": "„Ich mach hier ja offenbar alles allein.“", "warum": "Ein Vorwurf mit Übertreibung." },
+        { "text": "„Du bist einfach faul.“", "warum": "Kritik am Charakter – der härteste Einstieg." }
+      ]
+    },
+    {
+      "art": "kunstgriff",
+      "kopf": { "id": "gespraech-v-0184", "faehigkeit": "gespraech.konflikt", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Du sprichst an, dass dein Kollege seine Hälfte der Ablage seit Wochen liegen lässt. Er: „Und du? Letzte Woche hast du auch einmal vergessen, die Post zu holen.“",
+      "frage": "Was passiert hier – und was hilft?",
+      "antworten": [
+        { "text": "Ein Gegenvorwurf, der ablenkt. Hilft: „Das stimmt. Darüber reden wir gern gleich. Erst noch zur Ablage: …“", "wert": 2, "warum": "Den wahren Teil anerkannt, aber nicht vom eigenen Thema abbringen lassen." },
+        { "text": "Ein berechtigter Punkt – du entschuldigst dich und lässt die Ablage ruhen.", "wert": 0, "tendenz": "nachgeben", "warum": "Ein einmaliges Vergessen hebt wochenlanges Liegenlassen nicht auf. Dein Anliegen verschwindet." },
+        { "text": "Ein Gegenvorwurf. Hilft: „Das ist ja wohl was völlig anderes!“", "wert": 1, "warum": "Richtig erkannt. Als Abwehr gesagt, streitet ihr jetzt aber über den Vergleich." }
+      ],
+      "erklaerung": "Der Gegenvorwurf lenkt vom Thema ab, indem er ein anderes aufmacht – ein unfairer Zug, auch wenn der Vorwurf selbst oft stimmt. Darum gehört er zu den Zügen, die du nur erkennst und abwehrst. Abwehr: den wahren Teil anerkennen, für später aufheben und zum eigenen Thema zurückkehren."
+    },
+    {
+      "art": "kunstgriff",
+      "kopf": { "id": "gespraech-v-0185", "faehigkeit": "gespraech.konflikt", "stufe": 8, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Du erzählst deinem Vater, dass du das Angebot in einer anderen Stadt annehmen willst. Er: „Wenn du das machst, brauchst du hier nicht mehr anzurufen.“",
+      "frage": "Was passiert hier – und was hilft?",
+      "antworten": [
+        { "text": "Druck über die Beziehung. Hilft: „Ich merke, dass dich das trifft. Meine Entscheidung steht trotzdem – und ich ruf weiter an.“", "wert": 2, "warum": "Sein Gefühl anerkannt, die Entscheidung gehalten und die Beziehung angeboten – ohne zu drohen." },
+        { "text": "Er meint es nicht so – am besten das Angebot noch einmal überdenken.", "wert": 0, "tendenz": "nachgeben", "warum": "Vielleicht meint er es nicht so. Aber wer wegen einer Drohung nachgibt, lernt: Drohen wirkt." },
+        { "text": "Druck über die Beziehung. Hilft: „Gut, dann eben nicht.“", "wert": 1, "warum": "Erkannt und nicht eingeknickt. Mit einem Satz, der die Tür offen lässt, wäre es weniger hart." }
+      ],
+      "erklaerung": "Wer droht, die Beziehung zu entziehen, nutzt die Abhängigkeit des anderen. Das ist eine rote Linie, auch wenn es aus Angst geschieht. Abwehr: Gefühl anerkennen, Entscheidung halten, die Tür offen lassen. Wiederholt es sich oder macht es Angst, hol dir Unterstützung."
+    },
+    {
+      "art": "konter",
+      "kopf": { "id": "gespraech-v-0186", "faehigkeit": "gespraech.konflikt", "stufe": 7, "kanal": "koennen" },
+      "lage": "Du sprichst an, dass ein Kollege zum dritten Mal zu spät zur Übergabe kam.",
+      "von": "ein Kollege aus der Spätschicht",
+      "spruch": "„Ausgerechnet du redest von Pünktlichkeit?“",
+      "schaerfe": 2,
+      "muster": [
+        { "technik": "wahren Teil anerkennen, zurück zum Thema", "text": "„Stimmt, ich war auch schon zu spät. Heute geht's mir um die Übergabe: Was brauchst du, damit es um zwei klappt?“" },
+        { "technik": "Metaebene", "text": "„Wir können gern über mich reden – danach. Erst die Übergabe.“" },
+        { "technik": "ruhig wiederholen", "text": "„Mir geht's um die Übergabe um zwei.“" }
+      ],
+      "kriterien": ["ohne Gegenangriff", "bleibt beim eigenen Thema", "lässt den Gegenvorwurf nicht ins Leere laufen, sondern vertagt ihn"]
+    },
+    {
+      "art": "konter",
+      "kopf": { "id": "gespraech-v-0187", "faehigkeit": "gespraech.konflikt", "stufe": 8, "kanal": "koennen" },
+      "lage": "Du sagst Sven, dass dich seine Bemerkung vor den anderen gekränkt hat.",
+      "von": "Sven",
+      "spruch": "„Oh, jetzt kommt wieder die Gefühlsnummer.“",
+      "schaerfe": 3,
+      "muster": [
+        { "technik": "Grenze", "text": "„Das ist keine Nummer. Mir ist es ernst.“" },
+        { "technik": "Spott benennen", "text": "„Das klang gerade spöttisch. Ich würde gern, dass du mir zuhörst.“" },
+        { "technik": "zurück zur Sache", "text": "„Mag sein, dass es dich nervt. Trotzdem: Vor den anderen fand ich das nicht in Ordnung.“" }
+      ],
+      "kriterien": ["Spott nicht erwidern", "dein Anliegen bleibt stehen", "ruhig, ohne Rechtfertigung"]
+    },
+    {
+      "art": "stumm",
+      "kopf": { "id": "gespraech-v-0188", "faehigkeit": "gespraech.konflikt", "stufe": 7, "kanal": "koennen" },
+      "titel": "Den sanften Einstieg im Kopf bauen",
+      "schritte": [
+        "Denk an einen Streit, der gerade schwelt.",
+        "Formuliere innerlich drei Sätze: eine Beobachtung, wie es dir damit geht, eine Frage oder ein Wunsch.",
+        "Prüf jeden Satz: Steckt ein „du immer“, „du nie“ oder ein Etikett drin? Streich es.",
+        "Ergänze einen Satz über deinen eigenen Anteil, und sei er klein.",
+        "Schreib die drei Sätze auf und lies sie still – klingt es nach Einladung?"
+      ],
+      "sekunden": 90,
+      "pruefliste": ["Beobachtung statt Etikett", "ein Gefühl oder eine Folge", "eigener Anteil genannt", "endet mit Frage oder Wunsch"]
+    },
+    {
+      "art": "stumm",
+      "kopf": { "id": "gespraech-v-0189", "faehigkeit": "gespraech.konflikt", "stufe": 8, "kanal": "koennen" },
+      "titel": "Die Pause mit Rückkehr vorbereiten",
+      "schritte": [
+        "Erinnere dich an einen Streit, in dem du zu laut oder ganz still geworden bist.",
+        "Spür nach, woran du es zuerst gemerkt hast: Herz, Hände, Stimme, Gedanken?",
+        "Leg dir einen Satz zurecht, mit dem du eine Pause ansagst – mit Grund und Uhrzeit.",
+        "Überleg, was du in der Pause tust, damit du ruhiger wirst, nicht wütender.",
+        "Schreib den Satz und dein erstes Wort für die Rückkehr auf."
+      ],
+      "sekunden": 90,
+      "pruefliste": ["dein frühes Warnzeichen erkannt", "Pausensatz mit Uhrzeit", "ein Plan für die Pause", "ein sanfter Satz für die Rückkehr"]
+    },
+    {
+      "art": "buehne",
+      "kopf": { "id": "gespraech-v-0190", "faehigkeit": "gespraech.konflikt", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "gespraech-v-0188" },
+      "auftrag": "Steh auf und eröffne ein schwieriges Gespräch mit einem sanften Einstieg: dein Anliegen, eine Beobachtung, dein eigener Anteil, eine Frage.",
+      "sekunden": 60,
+      "publikum": "klein",
+      "stoerungen": ["„Fängst du schon wieder damit an?“", "Ein genervter Seufzer.", "„Ich hab jetzt eigentlich keine Zeit.“"],
+      "pruefliste": ["ohne Etikett und ohne „immer“", "eigener Anteil genannt", "mit einer Frage geendet", "nach der Störung nicht lauter geworden"]
+    },
+    {
+      "art": "buehne",
+      "kopf": { "id": "gespraech-v-0191", "faehigkeit": "gespraech.konflikt", "stufe": 8, "kanal": "koennen", "laut": true, "leise": "gespraech-v-0189" },
+      "auftrag": "Spiel einen Streit, der hochkocht: Sag laut und ruhig eine Pause an – mit Grund und Uhrzeit. Dann spiel die Rückkehr: ein sanfter erster Satz.",
+      "sekunden": 60,
+      "publikum": "klein",
+      "stoerungen": ["„Jetzt läufst du wieder weg!“", "Jemand wird lauter.", "„Dann reden wir eben gar nicht mehr.“"],
+      "pruefliste": ["Pause mit Grund angesagt", "Uhrzeit für die Rückkehr genannt", "Stimme blieb ruhig", "sanfter erster Satz nach der Pause"]
+    },
+    {
+      "art": "zuordnen",
+      "kopf": { "id": "gespraech-v-0192", "faehigkeit": "gespraech.ich", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Beschwerde über ein Verhalten – oder Kritik am Charakter?",
+      "faecher": ["Beschwerde", "Kritik am Charakter"],
+      "karten": [
+        { "text": "„Du hast gestern nicht Bescheid gesagt, dass es später wird.“", "fach": 0 },
+        { "text": "„Du denkst halt nur an dich.“", "fach": 1 },
+        { "text": "„Die Wäsche liegt seit Sonntag im Korb.“", "fach": 0 },
+        { "text": "„Du bist so ein Chaot.“", "fach": 1 },
+        { "text": "„Mir hat in der Runde gefehlt, dass du mich unterstützt.“", "fach": 0 },
+        { "text": "„Auf dich kann man sich einfach nicht verlassen.“", "fach": 1 }
+      ]
+    },
+    {
+      "art": "zuordnen",
+      "kopf": { "id": "gespraech-v-0193", "faehigkeit": "gespraech.ich", "stufe": 8, "kanal": "wissen" },
+      "auftrag": "Spricht der Satz über die Absicht des anderen – oder über die Wirkung auf dich?",
+      "faecher": ["Absicht des anderen", "Wirkung auf mich"],
+      "karten": [
+        { "text": "„Du wolltest mich vor allen bloßstellen.“", "fach": 0 },
+        { "text": "„Vor allen hab ich mich bloßgestellt gefühlt.“", "fach": 1 },
+        { "text": "„Dir ist doch egal, wie es mir geht.“", "fach": 0 },
+        { "text": "„Bei mir kam an, dass es dir egal ist.“", "fach": 1 },
+        { "text": "„Du machst das mit Absicht.“", "fach": 0 },
+        { "text": "„Mich hat das ziemlich getroffen.“", "fach": 1 }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0194", "faehigkeit": "gespraech.ich", "stufe": 7, "kanal": "wissen" },
+      "frage": "Seit Monaten kümmerst du dich allein um die Arzttermine eurer Mutter. Du willst das endlich mit deinem Bruder klären. Welcher erste Satz trägt am besten?",
+      "antworten": [
+        { "text": "„Mir ist wichtig, dass wir Mamas Termine besser aufteilen. Seit dem Frühjahr fahre ich jedes Mal – können wir drüber reden?“", "wert": 2, "warum": "Anliegen, Beobachtung, Einladung. Kein Vorwurf, aber klar." },
+        { "text": "„Du lässt mich mit Mama komplett allein.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein harter Einstieg. Er verteidigt sich, bevor er zuhört." },
+        { "text": "„Wir sollten mal über Mama reden.“", "wert": 1, "warum": "Ein Anfang. Ohne dein Anliegen weiß er nicht, worum es geht." },
+        { "text": "„Ach, es ist nur so, dass ich manchmal ein bisschen viel um die Ohren habe mit allem, aber eigentlich geht's ja schon irgendwie …“", "wert": 0, "tendenz": "kleinmachen", "warum": "So klein, dass es verschwindet. Er wird es auch klein behandeln." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0195", "faehigkeit": "gespraech.ich", "stufe": 8, "kanal": "wissen" },
+      "frage": "Tante Renate macht seit Jahren Bemerkungen über deinen Beruf. Nach dem Essen, beim Abwasch, seid ihr allein. Du willst es endlich ansprechen. Welcher Satz?",
+      "antworten": [
+        { "text": "„Renate, ich möchte dir was sagen: Wenn du meinst, ich mach nichts Richtiges, kränkt mich das. Ich mag meine Arbeit. Lässt du das künftig?“", "wert": 2, "warum": "Beobachtung, Wirkung, Bitte – unter vier Augen und ohne Vorwurf über ihren Charakter." },
+        { "text": "„Immer hast du an allem was zu meckern.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Etikett mit „immer“. Sie wehrt sich, statt zuzuhören." },
+        { "text": "„Hast du eigentlich gemerkt, was du vorhin gesagt hast?“", "wert": 1, "warum": "Öffnet das Thema – sagt aber noch nicht, was es mit dir macht." },
+        { "text": "Nichts sagen – sie ist halt so und ändert sich in ihrem Alter sowieso nicht mehr.", "wert": 0, "tendenz": "vermeiden", "warum": "Vielleicht ändert sie sich nicht. Aber sie weiß dann zumindest, wie es bei dir ankommt." }
+      ]
+    },
+    {
+      "art": "umformulieren",
+      "kopf": { "id": "gespraech-v-0196", "faehigkeit": "gespraech.ich", "stufe": 7, "kanal": "koennen" },
+      "auftrag": "Mach aus der Unterstellung eine Ich-Botschaft über die Wirkung.",
+      "vorlage": "„Du wolltest mich vor allen lächerlich machen.“ (Miriam hat in der Runde einen Witz über deinen Tippfehler gemacht.)",
+      "kriterien": ["spricht über die Wirkung, nicht über ihre Absicht", "nennt, was passiert ist", "endet mit einem Wunsch"],
+      "muster": [
+        "„Der Witz über meinen Tippfehler vor allen kam bei mir ziemlich unangenehm an. Sag's mir lieber unter vier Augen.“",
+        "„Ich glaube nicht, dass du's böse meintest. Bei mir kam es trotzdem an, als würde ich vorgeführt. Lass das bitte künftig.“"
+      ]
+    },
+    {
+      "art": "umformulieren",
+      "kopf": { "id": "gespraech-v-0197", "faehigkeit": "gespraech.ich", "stufe": 9, "kanal": "koennen" },
+      "auftrag": "Eine Freundin zahlt seit Monaten ihren Anteil an der gemeinsamen Ferienwohnung nicht. Formuliere den ersten Satz für das Gespräch, das du aufschiebst.",
+      "vorlage": "„Wir müssen reden. Du weißt genau, worum es geht.“",
+      "kriterien": ["nennt die Beziehung oder dein Anliegen", "nennt die Beobachtung ohne Vorwurf", "lädt zum Gespräch ein"],
+      "muster": [
+        "„Mir ist unsere Freundschaft wichtig – und darum will ich was ansprechen: Dein Anteil für die Wohnung ist seit dem Frühjahr offen. Können wir das klären?“",
+        "„Ich schieb das schon eine Weile vor mir her, deshalb sag ich's jetzt: Es geht um die Wohnung und das Geld. Hast du Zeit dafür?“"
+      ]
+    },
+    {
+      "art": "rangfolge",
+      "kopf": { "id": "gespraech-v-0198", "faehigkeit": "gespraech.ich", "stufe": 6, "kanal": "wissen" },
+      "frage": "Dein Kollege hat deine Idee als seine vorgestellt. Ordne die Sätze von klarer Ich-Botschaft nach Du-Vorwurf.",
+      "eintraege": [
+        { "text": "„Die Idee mit dem Lieferplan kam von mir. Dass du sie allein vorgestellt hast, hat mich geärgert. Nenn mich beim nächsten Mal bitte mit.“", "warum": "Beobachtung, Gefühl, Wunsch." },
+        { "text": "„Mich hat geärgert, wie die Vorstellung gelaufen ist.“", "warum": "Ich-Satz, aber ohne Beobachtung und Wunsch." },
+        { "text": "„Du hast meine Idee geklaut.“", "warum": "Ein Vorwurf, der ihm eine Absicht unterstellt." },
+        { "text": "„Du bist echt ein Schleimer.“", "warum": "Ein Etikett über die Person – nur noch Abwehr möglich." }
+      ]
+    },
+    {
+      "art": "rangfolge",
+      "kopf": { "id": "gespraech-v-0199", "faehigkeit": "gespraech.ich", "stufe": 8, "kanal": "wissen" },
+      "frage": "Ordne die Wege, ein lange aufgeschobenes Gespräch zu beginnen, von gut nach schlecht.",
+      "eintraege": [
+        { "text": "Um einen Termin bitten und mit dem vorbereiteten ersten Satz beginnen.", "warum": "Beide sind bereit, und du weißt, wie du anfängst." },
+        { "text": "Einen ruhigen Moment abpassen und spontan anfangen.", "warum": "Kann gut gehen – ohne Vorbereitung rutscht aber leicht ein Vorwurf raus." },
+        { "text": "Es in einer Nachricht zwischen zwei Terminen anreißen.", "warum": "Ohne Ton und Rückfrage wird es leicht falsch verstanden." },
+        { "text": "Warten, bis es von selbst hochkocht.", "warum": "Dann kommt es als Explosion statt als Gespräch." }
+      ]
+    },
+    {
+      "art": "stumm",
+      "kopf": { "id": "gespraech-v-0200", "faehigkeit": "gespraech.ich", "stufe": 7, "kanal": "koennen" },
+      "titel": "Den ersten Satz im Kopf proben",
+      "schritte": [
+        "Denk an das Gespräch, das du aufschiebst.",
+        "Schreib den ersten Satz auf: dein Anliegen, eine Beobachtung, eine Einladung.",
+        "Lies ihn still und streich jedes Wort, das nach Vorwurf klingt.",
+        "Sprich ihn innerlich dreimal – jedes Mal ruhiger und langsamer.",
+        "Notier, wann und wo du ihn sagen wirst."
+      ],
+      "sekunden": 90,
+      "pruefliste": ["Anliegen im ersten Satz", "kein Vorwurf mehr", "innerlich dreimal ruhig gesprochen", "Zeit und Ort notiert"]
+    },
+    {
+      "art": "stumm",
+      "kopf": { "id": "gespraech-v-0201", "faehigkeit": "gespraech.ich", "stufe": 8, "kanal": "koennen" },
+      "titel": "Absicht und Wirkung trennen",
+      "schritte": [
+        "Erinnere dich an einen Satz, der dich gekränkt hat.",
+        "Schreib auf, was du über die Absicht des anderen denkst – und streich es durch.",
+        "Schreib stattdessen: „Bei mir kam an …“",
+        "Ergänze eine Frage: „Wie hast du es gemeint?“",
+        "Lies beides still und prüf: Kann der andere darauf antworten, ohne sich zu verteidigen?"
+      ],
+      "sekunden": 90,
+      "pruefliste": ["Vermutung über die Absicht durchgestrichen", "Wirkung in einem Satz", "eine echte Frage", "keine Unterstellung mehr"]
+    },
+    {
+      "art": "buehne",
+      "kopf": { "id": "gespraech-v-0202", "faehigkeit": "gespraech.ich", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "gespraech-v-0200" },
+      "auftrag": "Steh auf und sag den ersten Satz deines aufgeschobenen Gesprächs laut – dreimal, jedes Mal ruhiger. Beim dritten Mal schau dabei in ein Gesicht oder in den Spiegel.",
+      "sekunden": 45,
+      "publikum": "klein",
+      "stoerungen": ["„Was, jetzt?“", "Ein überraschter Blick.", "„Ach, das schon wieder.“"],
+      "pruefliste": ["Anliegen im ersten Satz", "ohne Vorwurf", "beim dritten Mal ruhiger als beim ersten", "Blickkontakt gehalten"]
+    },
+    {
+      "art": "buehne",
+      "kopf": { "id": "gespraech-v-0203", "faehigkeit": "gespraech.ich", "stufe": 9, "kanal": "koennen", "laut": true, "leise": "gespraech-v-0201" },
+      "auftrag": "Sprich eine Ich-Botschaft, die Absicht und Wirkung trennt: „Ich glaube dir, dass du es nicht so meinst. Bei mir kommt an …“ – und bleib bei dir, wenn der andere dagegenhält.",
+      "sekunden": 60,
+      "publikum": "klein",
+      "stoerungen": ["„Jetzt sei doch nicht so empfindlich.“", "„Das hab ich doch nie gesagt.“", "Lachen."],
+      "pruefliste": ["Absicht anerkannt", "Wirkung klar gesagt", "beim Dagegenhalten nicht gerechtfertigt", "ruhig wiederholt"]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0204", "faehigkeit": "gespraech.zuhoeren", "stufe": 6, "kanal": "wissen" },
+      "frage": "Lena sagt abends: „Du bist ja schon wieder bis zuletzt im Büro.“ Du spürst einen Stich. Was ist die beste Reaktion?",
+      "antworten": [
+        { "text": "„Wie meinst du das – machst du dir Sorgen, oder steckt da was anderes drin?“", "wert": 2, "warum": "Du prüfst, welche Seite gemeint ist, statt sie zu erraten." },
+        { "text": "„Irgendwer muss die Arbeit ja machen.“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Du hörst einen Vorwurf und verteidigst dich – vielleicht war es Sorge." },
+        { "text": "„Danke, dass du an mich denkst.“", "wert": 1, "warum": "Freundlich gedeutet. Ob sie es so meinte, weißt du aber nicht." },
+        { "text": "Nichts sagen und dich ärgern, dass sie dir Vorwürfe macht, obwohl du so viel leistest.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Du deutest auf dem Beziehungsohr – und erfährst nie, was gemeint war." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0205", "faehigkeit": "gespraech.zuhoeren", "stufe": 8, "kanal": "wissen" },
+      "frage": "Herr Petersen am Telefon: „Das hab ich Ihnen doch schon dreimal gesagt.“ Welche Seite steckt am wahrscheinlichsten drin – und was hilft?",
+      "antworten": [
+        { "text": "Selbstkundgabe und Appell: Er ist erschöpft und will, dass es klappt. Hilft: zusammenfassen und bestätigen.", "wert": 2, "warum": "Du hörst hinter dem Vorwurf das Anliegen – und antwortest darauf." },
+        { "text": "Ein Angriff auf dich. Hilft: „So reden Sie bitte nicht mit mir.“", "wert": 0, "tendenz": "abwehren", "warum": "Nur das Beziehungsohr. Jetzt streitet ihr über den Ton statt über sein Problem." },
+        { "text": "Die Sachseite: Er hat es dreimal gesagt. Hilft: nachschauen, ob das stimmt.", "wert": 1, "warum": "Sachlich korrekt. Sein Ärger und seine Bitte bleiben aber unbeantwortet." },
+        { "text": "Gar keine Botschaft – er ist halt ein schwieriger Kunde, mit dem man leben muss.", "wert": 0, "tendenz": "abwerten", "warum": "Ein Etikett über ihn. Dabei sagt sein Satz viel, wenn man hinhört." }
+      ]
+    },
+    {
+      "art": "zuordnen",
+      "kopf": { "id": "gespraech-v-0206", "faehigkeit": "gespraech.zuhoeren", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Deine Mitbewohnerin sagt: „Du hast ja schon wieder neue Schuhe.“ Welche Seite hört man in diesen Deutungen?",
+      "faecher": ["Sache", "Selbstkundgabe", "Beziehung", "Appell"],
+      "karten": [
+        { "text": "„Da stehen neue Schuhe im Flur.“", "fach": 0 },
+        { "text": "„Ich bin neidisch, ich spar gerade.“", "fach": 1 },
+        { "text": "„Du gibst zu viel Geld aus.“", "fach": 2 },
+        { "text": "„Räum die Schuhe weg, der Flur ist voll.“", "fach": 3 },
+        { "text": "„Mir fällt so was auf, ich mag Schuhe.“", "fach": 1 },
+        { "text": "„Ich finde, du bist leichtsinnig.“", "fach": 2 },
+        { "text": "„Zeig mal her, wo hast du die her?“", "fach": 3 },
+        { "text": "„Es sind andere Schuhe als gestern.“", "fach": 0 }
+      ]
+    },
+    {
+      "art": "zuordnen",
+      "kopf": { "id": "gespraech-v-0207", "faehigkeit": "gespraech.zuhoeren", "stufe": 7, "kanal": "wissen" },
+      "auftrag": "Dr. Albers sagt: „Die Präsentation ist morgen um neun.“ Auf welchem Ohr hört diese Antwort?",
+      "faecher": ["Sachohr", "Selbstkundgabe-Ohr", "Beziehungsohr", "Appell-Ohr"],
+      "karten": [
+        { "text": "„Ja, um neun im großen Raum.“", "fach": 0 },
+        { "text": "„Sie sind wohl nervös deswegen?“", "fach": 1 },
+        { "text": "„Sie trauen mir wohl nicht zu, dass ich das weiß?“", "fach": 2 },
+        { "text": "„Ich schick sie Ihnen heute Abend noch.“", "fach": 3 },
+        { "text": "„Steht so im Kalender.“", "fach": 0 },
+        { "text": "„Klingt, als wäre Ihnen der Termin wichtig.“", "fach": 1 },
+        { "text": "„Schon wieder eine Kontrolle?“", "fach": 2 },
+        { "text": "„Ich bin um halb neun da und bau auf.“", "fach": 3 }
+      ]
+    },
+    {
+      "art": "spiegeln",
+      "kopf": { "id": "gespraech-v-0208", "faehigkeit": "gespraech.zuhoeren", "stufe": 7, "kanal": "koennen" },
+      "von": "Miriam, als du in die Runde kommst",
+      "aussage": "„Schön, dass du auch mal Zeit für die Teamrunde hast.“",
+      "kriterien": ["spricht die vermutete Beziehungsseite als Frage an", "ohne Gegenangriff", "lässt ihr Raum, es anders zu meinen"],
+      "muster": [
+        "„Hör ich da raus, dass ich zuletzt oft gefehlt habe und dir das fehlt?“",
+        "„Ist das ein Spaß oder steckt was dahinter? Ich frag lieber.“",
+        "„Klingt, als hättest du mich vermisst – oder ärgert dich was?“"
+      ]
+    },
+    {
+      "art": "spiegeln",
+      "kopf": { "id": "gespraech-v-0209", "faehigkeit": "gespraech.zuhoeren", "stufe": 8, "kanal": "koennen" },
+      "von": "Herr Petersen",
+      "aussage": "„Bei Ihrem Vorgänger lief das irgendwie alles reibungsloser.“",
+      "kriterien": ["hört das Anliegen hinter dem Vergleich", "spiegelt es ohne Kränkung", "fragt nach, was ihm fehlt"],
+      "muster": [
+        "„Da hat Ihnen etwas gefallen, das jetzt fehlt. Was war das genau?“",
+        "„Klingt, als würden Sie sich wieder mehr Verlässlichkeit wünschen. Woran merken Sie das zurzeit am meisten?“"
+      ]
+    },
+    {
+      "art": "wortwahl",
+      "kopf": { "id": "gespraech-v-0210", "faehigkeit": "gespraech.zuhoeren", "stufe": 6, "kanal": "wissen" },
+      "frage": "Sven schreibt, nachdem du abgesagt hast: „Na, du hast ja jetzt wohl Wichtigeres zu tun.“ Welche Antwort passt am besten?",
+      "antworten": [
+        { "text": "„Klingt, als wärst du enttäuscht. Stimmt das?“", "wert": 2, "warum": "Du prüfst die Selbstkundgabe hinter der Spitze – ohne zurückzustechen." },
+        { "text": "„Ja, hab ich tatsächlich.“", "wert": 0, "tendenz": "angreifen", "warum": "Du bestätigst genau das, was ihn verletzt hat." },
+        { "text": "„Sorry, ging nicht anders.“", "wert": 1, "warum": "Freundlich, aber die Enttäuschung dahinter bleibt unbeantwortet." },
+        { "text": "„Jetzt sei doch nicht so beleidigt, das ist echt übertrieben.“", "wert": 0, "tendenz": "abwerten", "warum": "Sein Gefühl wird zum Fehler erklärt. Jetzt ist er wirklich gekränkt." }
+      ]
+    },
+    {
+      "art": "wortwahl",
+      "kopf": { "id": "gespraech-v-0211", "faehigkeit": "gespraech.zuhoeren", "stufe": 8, "kanal": "wissen" },
+      "frage": "Welcher Satz trennt am besten, was der andere wollte, und was bei dir ankam?",
+      "antworten": [
+        { "text": "„Ich glaube dir, dass du's nicht so meintest – bei mir kam es trotzdem verletzend an.“", "wert": 2, "warum": "Absicht anerkannt, Wirkung gehalten. Darauf kann man antworten, ohne sich zu verteidigen." },
+        { "text": "„Du hast mich absichtlich verletzt.“", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine Unterstellung über die Absicht – er wird sie bestreiten, und ihr streitet darüber." },
+        { "text": "„Das hat mich verletzt.“", "wert": 1, "warum": "Klar über die Wirkung. Mit der Anerkennung seiner Absicht fällt ihm das Zuhören leichter." },
+        { "text": "„Egal, wie du's meintest – so geht man nicht mit anderen Menschen um, das weißt du genau.“", "wert": 0, "tendenz": "moralisieren", "warum": "Ein Urteil statt einer Aussage über dich. Er hört eine Predigt." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0212", "faehigkeit": "gespraech.fragen", "stufe": 6, "kanal": "wissen" },
+      "frage": "Tarek sagt in der Runde zu deinem Vorschlag: „Klar, kann man so machen.“ Du bist unsicher, ob das Zustimmung ist. Was tust du?",
+      "antworten": [
+        { "text": "Als Zustimmung nehmen und weitermachen.", "wert": 0, "tendenz": "raten", "warum": "Vielleicht stimmt es. Vielleicht merkst du erst bei der Umsetzung, dass er dagegen war." },
+        { "text": "„Klingt nach ‚ja, aber‘. Was würdest du anders machen?“", "wert": 2, "warum": "Du sprichst die mögliche zweite Seite offen an und lädst ihn ein." },
+        { "text": "„Du bist also dagegen.“", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine Deutung als Tatsache. Jetzt muss er sich gegen deine Vermutung wehren." },
+        { "text": "„Heißt das, du bist dabei?“", "wert": 1, "warum": "Direkt nachgefragt. Offener wäre es, nach seinen Bedenken zu fragen." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0213", "faehigkeit": "gespraech.fragen", "stufe": 8, "kanal": "wissen" },
+      "frage": "Du hast Miriam einen langen Vorschlag geschickt. Sie antwortet nur: „Ok.“ Was tust du?",
+      "antworten": [
+        { "text": "„Ok im Sinne von ‚passt‘ oder eher ‚lass uns reden‘?“", "wert": 2, "warum": "Kurz, locker, mit beiden Deutungen. Sie kann leicht antworten." },
+        { "text": "Annehmen, dass sie sauer ist, und einen langen Entschuldigungstext schreiben, warum du es so vorgeschlagen hast.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Du antwortest auf eine Vermutung – und machst aus einem „Ok“ ein Problem." },
+        { "text": "Es als Zustimmung nehmen.", "wert": 1, "warum": "Oft stimmt das. Bei einem großen Vorschlag lohnt die kurze Rückfrage aber." },
+        { "text": "„Was soll das denn heißen?“", "wert": 0, "tendenz": "angreifen", "warum": "Eine Frage mit Vorwurf. Jetzt muss sie sich für ein Wort rechtfertigen." }
+      ]
+    },
+    {
+      "art": "zuordnen",
+      "kopf": { "id": "gespraech-v-0214", "faehigkeit": "gespraech.fragen", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Fragt der Satz über das Gespräch nach – oder unterstellt er?",
+      "faecher": ["fragt nach", "unterstellt"],
+      "karten": [
+        { "text": "„Hör ich da Ärger raus?“", "fach": 0 },
+        { "text": "„Du bist doch sauer.“", "fach": 1 },
+        { "text": "„Ist das eine Bitte an mich?“", "fach": 0 },
+        { "text": "„Du willst mir doch nur ein schlechtes Gewissen machen.“", "fach": 1 },
+        { "text": "„Wie war das gemeint?“", "fach": 0 },
+        { "text": "„Ich weiß genau, was du damit sagen willst.“", "fach": 1 }
+      ]
+    },
+    {
+      "art": "zuordnen",
+      "kopf": { "id": "gespraech-v-0215", "faehigkeit": "gespraech.fragen", "stufe": 7, "kanal": "wissen" },
+      "auftrag": "Welche Seite der Nachricht prüft diese Frage?",
+      "faecher": ["Sache", "Selbstkundgabe", "Beziehung", "Appell"],
+      "karten": [
+        { "text": "„Welche Zahl meinst du genau?“", "fach": 0 },
+        { "text": "„Wie geht es dir damit?“", "fach": 1 },
+        { "text": "„Ärgert dich gerade was an mir?“", "fach": 2 },
+        { "text": "„Soll ich etwas tun?“", "fach": 3 },
+        { "text": "„Bis wann war das noch mal?“", "fach": 0 },
+        { "text": "„Bist du gestresst?“", "fach": 1 },
+        { "text": "„Hab ich dich gekränkt?“", "fach": 2 },
+        { "text": "„Ist das eine Bitte?“", "fach": 3 }
+      ]
+    },
+    {
+      "art": "spiegeln",
+      "kopf": { "id": "gespraech-v-0216", "faehigkeit": "gespraech.fragen", "stufe": 7, "kanal": "koennen" },
+      "von": "Jule, als du von deinem neuen Kurs erzählst",
+      "aussage": "„Na, du bist ja jetzt Profi. Meinen Rat brauchst du wohl nicht mehr.“",
+      "kriterien": ["spiegelt die mögliche Kränkung", "als Frage, nicht als Deutung", "lädt ein, mehr zu sagen"],
+      "muster": [
+        "„Klingt, als hättest du das Gefühl, ich bräuchte dich nicht mehr. Ist das so?“",
+        "„Hör ich da raus, dass du gern noch gefragt würdest? Ich frag dich nämlich gern.“"
+      ]
+    },
+    {
+      "art": "spiegeln",
+      "kopf": { "id": "gespraech-v-0217", "faehigkeit": "gespraech.fragen", "stufe": 8, "kanal": "koennen" },
+      "von": "Dr. Albers, nach deinem Vorschlag",
+      "aussage": "„Interessanter Ansatz. Mal sehen.“",
+      "kriterien": ["prüft, wie er es meint", "freundlich und knapp", "ohne Rechtfertigung"],
+      "muster": [
+        "„Klingt, als hätten Sie noch Bedenken. Welche denn?“",
+        "„Ist ‚mal sehen‘ eher ein Ja oder eher ein Nein? Dann weiß ich, ob ich weiter daran arbeite.“"
+      ]
+    },
+    {
+      "art": "wortwahl",
+      "kopf": { "id": "gespraech-v-0218", "faehigkeit": "gespraech.fragen", "stufe": 6, "kanal": "wissen" },
+      "frage": "Welcher Satz prüft die Beziehungsseite, ohne zu unterstellen?",
+      "antworten": [
+        { "text": "„Hab ich dich mit irgendwas verärgert?“", "wert": 2, "warum": "Eine offene Frage zur Beziehung. Der andere kann Ja oder Nein sagen, ohne sich zu verteidigen." },
+        { "text": "„Du bist sauer auf mich, oder?“", "wert": 1, "warum": "Fragend, aber mit fertiger Deutung. Offener wäre ohne Vorgabe." },
+        { "text": "„Warum bist du eigentlich so komisch zu mir in letzter Zeit, hab ich dir was getan?“", "wert": 0, "tendenz": "verhoeren", "warum": "Ein Warum mit Etikett („komisch“). Er muss sich rechtfertigen." },
+        { "text": "„Mit dir stimmt doch was nicht.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Urteil statt einer Frage." }
+      ]
+    },
+    {
+      "art": "wortwahl",
+      "kopf": { "id": "gespraech-v-0219", "faehigkeit": "gespraech.fragen", "stufe": 7, "kanal": "wissen" },
+      "frage": "Deine Schwester sagt: „Mach du ruhig, du weißt es ja eh besser.“ Welche Frage öffnet am meisten?",
+      "antworten": [
+        { "text": "„Wieso, weiß ich es nicht besser?“", "wert": 0, "tendenz": "rechthaben", "warum": "Eine Gegenfrage mit Spitze. Jetzt streitet ihr, wer recht hat." },
+        { "text": "„Klingt, als fühltest du dich übergangen. Wie würdest du es machen?“", "wert": 2, "warum": "Die Kränkung gespiegelt und nach ihrer Sicht gefragt." },
+        { "text": "„Okay, dann mach ich's.“", "wert": 0, "tendenz": "ueberhoeren", "warum": "Du nimmst nur die Sachseite. Ihre Kränkung bleibt liegen." },
+        { "text": "„Wie meinst du das?“", "wert": 1, "warum": "Offen und gut. Mit einer Vermutung als Frage zeigst du noch mehr, dass du hingehört hast." }
+      ]
+    },
+    {
+      "art": "kunstgriff",
+      "kopf": { "id": "gespraech-v-0220", "faehigkeit": "gespraech.widerspruch", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ihr plant Weihnachten. Die Person, mit der du zusammenlebst, sagt: „Entweder wir fahren zu meinen Eltern, oder Weihnachten fällt dieses Jahr eben aus.“",
+      "frage": "Was passiert hier – und was hilft?",
+      "antworten": [
+        { "text": "Eine Entweder-oder-Falle. Hilft: „Das klingt, als wäre dir der Besuch sehr wichtig. Lass uns schauen, was es noch für Wege gibt.“", "wert": 2, "warum": "Die Falle erkannt, das Anliegen dahinter gehört und den Rahmen geöffnet." },
+        { "text": "Eine klare Ansage – also fahrt ihr eben zu den Eltern.", "wert": 0, "tendenz": "nachgeben", "warum": "Du nimmst eine der zwei Türen, obwohl es mehr gibt." },
+        { "text": "Eine Entweder-oder-Falle. Hilft: „Das ist Erpressung.“", "wert": 1, "warum": "Erkannt – aber als Vorwurf ausgesprochen, wird es ein Streit über Worte." }
+      ],
+      "erklaerung": "Das falsche Entweder-oder lässt alle anderen Wege verschwinden, um zu drängen – das gehört zur roten Linie. Eine echte Wahl zwischen zwei Möglichkeiten ist etwas anderes. Oft steckt ein echtes Anliegen dahinter. Abwehr: das Anliegen spiegeln und weitere Wege suchen."
+    },
+    {
+      "art": "kunstgriff",
+      "kopf": { "id": "gespraech-v-0221", "faehigkeit": "gespraech.widerspruch", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Du sagst: „Ich fände es gut, wenn wir weniger Fleisch einkaufen.“ Die Antwort: „Ah, du willst mir also vorschreiben, was ich essen darf?“",
+      "frage": "Was passiert hier – und was hilft?",
+      "antworten": [
+        { "text": "Deine Aussage wird verdreht. Hilft: „Das hab ich nicht gesagt. Mein Vorschlag ist: weniger Fleisch beim gemeinsamen Einkauf.“", "wert": 2, "warum": "Ruhig richtiggestellt und den echten Vorschlag wiederholt." },
+        { "text": "Er hat einen Punkt – ausführlich erklären, dass du niemandem etwas vorschreiben willst und warum dir das Thema so wichtig ist.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Du verteidigst eine Meinung, die du nie hattest. Dein Vorschlag geht unter." },
+        { "text": "Verdreht. Hilft: „Du drehst mir immer die Worte im Mund um.“", "wert": 1, "warum": "Richtig erkannt. Das „immer“ macht daraus aber einen neuen Streit." }
+      ],
+      "erklaerung": "Wer eine Aussage übertreibt, um sie leichter anzugreifen, erfindet, was du gesagt hast. Abwehr: nicht die übertriebene Fassung verteidigen, sondern richtigstellen und den echten Punkt wiederholen. Geschieht es ständig, sprich das Muster in Ruhe an."
+    },
+    {
+      "art": "kunstgriff",
+      "kopf": { "id": "gespraech-v-0222", "faehigkeit": "gespraech.widerspruch", "stufe": 8, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Kollege kommt um 16:50 Uhr an deinen Tisch: „Ich brauch deine Freigabe für das neue Angebot – jetzt sofort, sonst ist der Kunde weg.“ Du hast das Angebot noch nie gesehen.",
+      "frage": "Was passiert hier – und was hilft?",
+      "antworten": [
+        { "text": "Zeitdruck, der dich am Prüfen hindert. Hilft: „Ohne Lesen gebe ich nichts frei. Bis wann genau braucht der Kunde es?“", "wert": 2, "warum": "Erkannt und den Druck geprüft, statt ihm zu folgen. Oft ist mehr Zeit als behauptet." },
+        { "text": "Ein Notfall – schnell freigeben, damit der Kunde bleibt.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau das soll der Druck bewirken. Du haftest für etwas, das du nicht kennst." },
+        { "text": "Zeitdruck. Hilft: „Das ist mir zu kurzfristig, komm morgen wieder.“", "wert": 1, "warum": "Erkannt und standgehalten. Mit der Frage nach der echten Frist wäre vielleicht beides gegangen." },
+        { "text": "Zeitdruck. Hilft: ihn wegschicken und Dr. Albers sagen, dass er unprofessionell arbeitet.", "wert": 0, "tendenz": "petzen", "warum": "Vielleicht hat er selbst Druck vom Kunden. Erst fragen, dann urteilen." }
+      ],
+      "erklaerung": "Erfundener Zeitdruck ist eine erfundene Tatsache: Er soll dir die Zeit zum Prüfen nehmen – rote Linie. Eine echte Frist ist fair; ob die Eile hier echt ist, weißt du noch nicht. Abwehr: nach der echten Frist fragen und dir die Zeit nehmen, die die Entscheidung braucht."
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0223", "faehigkeit": "gespraech.widerspruch", "stufe": 7, "kanal": "wissen" },
+      "frage": "Vereinsversammlung. Ein Vereinskollege fällt dir zum dritten Mal ins Wort, als du einen Gegenvorschlag zum Vereinsausflug machst. Was ist der beste nächste Satz?",
+      "antworten": [
+        { "text": "„Lassen Sie mich bitte kurz ausreden – danach bin ich gespannt auf Ihren Punkt.“", "wert": 2, "warum": "Freundlich, klar, mit Zusage. Der Zug ist benannt, ohne ihn bloßzustellen." },
+        { "text": "Schweigen und hoffen, dass die Vorsitzende eingreift.", "wert": 0, "tendenz": "vermeiden", "warum": "Vielleicht greift sie ein. Vielleicht ist dein Vorschlag dann vorbei." },
+        { "text": "„Können Sie vielleicht mal lernen, andere ausreden zu lassen, das ist ja nicht auszuhalten!“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Vorwurf vor allen. Jetzt geht es um ihn und dich, nicht mehr um den Ausflug." },
+        { "text": "„Moment, ich war noch nicht fertig.“", "wert": 1, "warum": "Klar und kurz. Mit der Zusage, dass er danach dran ist, klingt es weniger nach Abwehr." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0224", "faehigkeit": "gespraech.widerspruch", "stufe": 8, "kanal": "wissen" },
+      "frage": "In der Diskussion wechselt dein Gegenüber jedes Mal das Thema, sobald du einen Punkt machst. Was hilft am meisten?",
+      "antworten": [
+        { "text": "Jedem neuen Thema folgen – vielleicht ist es ja wichtig.", "wert": 0, "tendenz": "mitlaufen", "warum": "So kommt dein Punkt nie zu Ende. Genau das bewirkt der Themenwechsel." },
+        { "text": "„Wir sind gerade bei einem neuen Thema. Darf ich erst meinen Punkt zu Ende bringen? Dann gern deins.“", "wert": 2, "warum": "Den Zug benannt, ohne Vorwurf, und sein Thema nicht abgelehnt – nur vertagt." },
+        { "text": "„Du lenkst ab.“", "wert": 1, "warum": "Erkannt. Als Vorwurf gesagt, streitet ihr gleich über das Ablenken." },
+        { "text": "„Mit dir kann man einfach nicht diskutieren, du springst ja ständig von einem Thema zum nächsten.“", "wert": 0, "tendenz": "abwerten", "warum": "Ein Urteil über die Person. Das Gespräch ist damit zu Ende." }
+      ]
+    },
+    {
+      "art": "konter",
+      "kopf": { "id": "gespraech-v-0225", "faehigkeit": "gespraech.widerspruch", "stufe": 7, "kanal": "koennen" },
+      "lage": "Familientreffen. Du erklärst deinen Vorschlag, wie ihr die Pflege von Opa organisieren könnt.",
+      "von": "Tante Renate",
+      "spruch": "„Ach Kind, lass mal. Davon verstehst du nichts.“",
+      "schaerfe": 2,
+      "muster": [
+        { "technik": "ruhig weitersprechen", "text": "„Mag sein, dass ich nicht alles weiß. Hör dir meinen Vorschlag trotzdem zu Ende an.“" },
+        { "technik": "zur Sache", "text": "„Ich hab mit dem Pflegedienst gesprochen. Darf ich kurz erzählen, was die gesagt haben?“" },
+        { "technik": "Metaebene", "text": "„Ich würde gern ausreden. Danach will ich deine Meinung hören.“" }
+      ],
+      "kriterien": ["freundlich, ohne Gegenangriff", "du behältst das Wort", "die Sache bleibt im Mittelpunkt"]
+    },
+    {
+      "art": "konter",
+      "kopf": { "id": "gespraech-v-0226", "faehigkeit": "gespraech.widerspruch", "stufe": 8, "kanal": "koennen" },
+      "lage": "Besprechung. Du widersprichst einer Preisvorgabe, weil du die Kunden kennst.",
+      "von": "ein Kollege aus dem Einkauf",
+      "spruch": "„Du hast doch vom Einkauf null Ahnung.“",
+      "schaerfe": 3,
+      "muster": [
+        { "technik": "zur Sache", "text": "„Vom Einkauf weniger als du, stimmt. Von unseren Kunden einiges – und drei davon haben schon abgewunken.“" },
+        { "technik": "Grenze", "text": "„Das ging gegen mich, nicht gegen das Argument. Mein Punkt bleibt: …“" },
+        { "technik": "Frage", "text": "„Was genau stimmt an meinem Einwand nicht?“" }
+      ],
+      "kriterien": ["den Angriff nicht erwidern", "zurück zur Sache oder klare Grenze", "dein Argument bleibt stehen"]
+    },
+    {
+      "art": "zuordnen",
+      "kopf": { "id": "gespraech-v-0227", "faehigkeit": "gespraech.widerspruch", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Fair, Taktik oder rote Linie?",
+      "faecher": ["fair", "Taktik", "rote Linie"],
+      "karten": [
+        { "text": "„Kann sein, dass ich mich irre. Aus meiner Sicht …“", "fach": 0 },
+        { "text": "„Lieber Dienstag oder Donnerstag?“ – beides geht wirklich.", "fach": 1 },
+        { "text": "„Wenn du gehst, bin ich an allem schuld, was hier schiefläuft.“", "fach": 2 },
+        { "text": "„Ich brauch die Antwort heute noch.“ – obwohl es Zeit hätte.", "fach": 2 },
+        { "text": "„Lass uns erst sammeln, dann entscheiden.“", "fach": 0 },
+        { "text": "„Das muss ich erst noch abstimmen.“ – und das stimmt.", "fach": 1 }
+      ]
+    },
+    {
+      "art": "zuordnen",
+      "kopf": { "id": "gespraech-v-0228", "faehigkeit": "gespraech.widerspruch", "stufe": 8, "kanal": "wissen" },
+      "auftrag": "Welche Antwort passt zu welchem unfairen Zug?",
+      "faecher": ["Unterbrechen", "Entweder-oder", "verdrehte Worte"],
+      "karten": [
+        { "text": "„Ich bring den Satz kurz zu Ende.“", "fach": 0 },
+        { "text": "„Gibt es vielleicht noch einen dritten Weg?“", "fach": 1 },
+        { "text": "„Das hab ich nicht gesagt. Mein Vorschlag ist …“", "fach": 2 },
+        { "text": "„Gleich bist du dran – erst noch mein Gedanke.“", "fach": 0 },
+        { "text": "„Sind das wirklich die einzigen zwei Möglichkeiten?“", "fach": 1 },
+        { "text": "„So hab ich es nicht gemeint. Ich wiederhole gern, was ich gesagt habe.“", "fach": 2 }
+      ]
+    },
+    {
+      "art": "fehler",
+      "kopf": { "id": "gespraech-v-0229", "faehigkeit": "gespraech.absprache", "stufe": 6, "kanal": "wissen" },
+      "auftrag": "Ein neuer Putzplan in der Wohngemeinschaft. Markier die Lücken.",
+      "teile": [
+        { "t": "„Also, ab jetzt putzt jeder mal das Bad,", "fehler": "„Jeder mal“ ist keine Zuständigkeit. Wer in welcher Woche?" },
+        { "t": "die Küche mach ich jeden Sonntag bis 18 Uhr," },
+        { "t": "und den Müll bringen wir halt runter, wenn er voll ist.", "fehler": "Kein Wer – bleibt beim Ersten hängen, den es stört." },
+        { "t": "Mal schauen, ob's klappt.“", "fehler": "Kein Termin zum Draufschauen – so wird Nachfragen zur Kontrolle." }
+      ]
+    },
+    {
+      "art": "fehler",
+      "kopf": { "id": "gespraech-v-0230", "faehigkeit": "gespraech.absprache", "stufe": 8, "kanal": "wissen" },
+      "auftrag": "Die Zusammenfassung nach der Teamrunde. Markier, was der Absprache fehlt.",
+      "teile": [
+        { "t": "„Lena überarbeitet bis Mittwoch die Preisliste," },
+        { "t": "so, dass sie gut aussieht,", "fehler": "Was heißt „gut“? Woran merkt ihr, dass sie fertig ist?" },
+        { "t": "Tarek prüft danach die Zahlen bis Freitag zwölf," },
+        { "t": "und falls was schiefgeht, sehen wir weiter.", "fehler": "Kein Plan für den Fall, dass es hakt: Wer sagt wem wann Bescheid?" },
+        { "t": "Danke euch!“", "fehler": "Kein Termin, an dem ihr gemeinsam draufschaut." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0231", "faehigkeit": "gespraech.absprache", "stufe": 7, "kanal": "wissen" },
+      "frage": "Wozu dient ein Termin zum Draufschauen in einer Absprache?",
+      "antworten": [
+        { "text": "Damit du kontrollieren kannst, ob der andere arbeitet.", "wert": 0, "tendenz": "kontrolle", "warum": "Genau das soll er vermeiden: Vereinbart wird ein gemeinsamer Blick, kein Kontrollbesuch." },
+        { "text": "Er macht das Nachfragen zur Abmachung – und Probleme fallen auf, solange sie noch klein sind.", "wert": 2, "warum": "Beide wissen, wann ihr draufschaut. So ist es keine Kontrolle, sondern Teil der Absprache." },
+        { "text": "Er ersetzt die Frist.", "wert": 0, "tendenz": "vage", "warum": "Er ergänzt die Frist – ersetzt sie aber nicht." },
+        { "text": "Er erinnert alle an die Aufgabe.", "wert": 1, "warum": "Auch das. Wichtiger ist, dass Probleme früh auffallen – ohne dass jemand hinterherläuft." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0232", "faehigkeit": "gespraech.absprache", "stufe": 8, "kanal": "wissen" },
+      "frage": "Eine klare Absprache mit Lena ist zum ersten Mal geplatzt: Das Protokoll kam nicht bis Montag. Was ist der beste erste Satz?",
+      "antworten": [
+        { "text": "„Das Protokoll ist nicht gekommen. Was ist passiert?“", "wert": 2, "warum": "Beobachtung und eine offene Frage. Beim ersten Mal zählt die Ursache, nicht die Strafe." },
+        { "text": "„Ich bin echt enttäuscht von dir. Ich dachte, auf dich kann man sich verlassen, gerade nach dem Gespräch letzte Woche.“", "wert": 0, "tendenz": "vorwurf", "warum": "Ein Urteil über die Person beim ersten Mal. Sie schämt sich, statt zu erklären." },
+        { "text": "Nichts sagen und es selbst schreiben.", "wert": 0, "tendenz": "uebernehmen", "warum": "Sie erfährt nicht, dass es dir fehlte. Die nächste Absprache platzt genauso." },
+        { "text": "„Bis wann schaffst du es?“", "wert": 1, "warum": "Nach vorn gedacht. Ohne die Frage nach dem Grund wiederholt es sich leicht." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0233", "faehigkeit": "gespraech.absprache", "stufe": 9, "kanal": "wissen" },
+      "frage": "Im Verein sagen am Ende der Sitzung alle „Machen wir!“ – aber beim letzten Fest hat sich dann keiner zuständig gefühlt. Was hilft am meisten?",
+      "antworten": [
+        { "text": "Noch in der Sitzung Namen und Termine festhalten: „Wer übernimmt das? Bis wann? Wann schauen wir drauf?“", "wert": 2, "warum": "Wo alle zuständig sind, fühlt sich oft keiner zuständig. Namen und Termine machen Verantwortung sichtbar." },
+        { "text": "Nach der Sitzung eine Mail an alle mit der Bitte, sich zu melden.", "wert": 1, "warum": "Besser als nichts. In der Sitzung selbst geht es leichter – dort hört jeder, wer was übernimmt." },
+        { "text": "Diesmal einfach alles selbst übernehmen, dann klappt es wenigstens.", "wert": 0, "tendenz": "uebernehmen", "warum": "Es klappt – auf deine Kosten. Und alle lernen, dass es auch ohne sie geht." },
+        { "text": "„Ihr habt beim letzten Fest ja leider alle ziemlich versagt, das darf so auf keinen Fall noch einmal passieren.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Vorwurf an alle – und trotzdem keine Zuständigkeit." }
+      ]
+    },
+    {
+      "art": "bauplan",
+      "kopf": { "id": "gespraech-v-0234", "faehigkeit": "gespraech.absprache", "stufe": 7, "kanal": "koennen" },
+      "plan": "Die Absprache mit Frühwarnung",
+      "anlass": "Eine Aufgabe, die jemand für dich erledigt – oder du für jemanden.",
+      "felder": [
+        { "name": "Wer macht was?", "hilfe": "Ein Name pro Aufgabe." },
+        { "name": "Fertig heißt …", "hilfe": "Was genau liegt am Ende vor?" },
+        { "name": "Bis wann?", "hilfe": "Tag und Uhrzeit." },
+        { "name": "Wenn es hakt, dann …", "hilfe": "Wer sagt wem bis wann Bescheid?" }
+      ],
+      "muster": [
+        "Wer: Lena die Preisliste. Fertig: alle Artikel mit neuem Preis, von Tarek gegengelesen. Bis: Mittwoch, 12 Uhr. Wenn es hakt: Lena sagt mir bis Dienstagabend Bescheid.",
+        "Wer: Ich den Elternbrief. Fertig: eine Seite, mit Termin und Kosten. Bis: Freitag, 18 Uhr. Wenn es hakt: Ich schreib der Lehrerin bis Donnerstag."
+      ]
+    },
+    {
+      "art": "bauplan",
+      "kopf": { "id": "gespraech-v-0235", "faehigkeit": "gespraech.absprache", "stufe": 8, "kanal": "koennen" },
+      "plan": "Eine geplatzte Absprache neu treffen",
+      "anlass": "Eine Absprache, die nicht gehalten hat.",
+      "felder": [
+        { "name": "Was war vereinbart?", "hilfe": "Wer, was, bis wann – so genau wie möglich." },
+        { "name": "Was ist passiert?", "hilfe": "Eine Beobachtung, kein Urteil." },
+        { "name": "Meine Frage nach dem Grund", "hilfe": "Offen: „Was ist passiert?“ oder „Was hat gefehlt?“" },
+        { "name": "Die neue Absprache", "hilfe": "Passt sie zur echten Lage?" },
+        { "name": "Wann schauen wir drauf?", "hilfe": "Ein kurzer Termin." }
+      ],
+      "muster": [
+        "Vereinbart: Zahlen Dienstag zwölf, Warnung Montag. Passiert: zweimal Mittwoch, ohne Warnung. Frage: „Was ist passiert?“ Neu: Mittwoch zehn, Warnung Dienstagmittag. Draufschauen: in vier Wochen.",
+        "Vereinbart: Sven holt die Bänke Freitag. Passiert: Samstag früh waren keine da. Frage: „Was ist dazwischengekommen?“ Neu: Donnerstag holen, Schlüssel liegt bei mir. Draufschauen: Mittwochabend kurze Nachricht."
+      ]
+    },
+    {
+      "art": "umformulieren",
+      "kopf": { "id": "gespraech-v-0236", "faehigkeit": "gespraech.absprache", "stufe": 6, "kanal": "koennen" },
+      "auftrag": "Mach aus „zeitnah“ eine Absprache.",
+      "vorlage": "„Ich kümmere mich zeitnah drum.“ (Herr Petersen wartet auf eine Gutschrift.)",
+      "kriterien": ["nennt, was genau passiert", "nennt einen Termin", "sagt, wie er es erfährt"],
+      "muster": [
+        "„Ich schicke Ihnen die Gutschrift bis Donnerstag. Am Donnerstagmittag rufe ich Sie kurz an, ob sie angekommen ist.“",
+        "„Die Gutschrift geht heute an die Buchhaltung, Sie haben sie bis Freitag per Post. Kommt sie nicht, melden Sie sich bitte direkt bei mir.“"
+      ]
+    },
+    {
+      "art": "umformulieren",
+      "kopf": { "id": "gespraech-v-0237", "faehigkeit": "gespraech.absprache", "stufe": 8, "kanal": "koennen" },
+      "auftrag": "Mach aus der Kontrolle einen vereinbarten Blick.",
+      "vorlage": "„Ich ruf dich jeden Tag an und frag, ob du's schon hast.“ (an Tarek, der die Kundenliste aktualisiert)",
+      "kriterien": ["ein gemeinsamer Termin statt täglicher Nachfrage", "ohne Misstrauen im Ton", "mit Frühwarnung"],
+      "muster": [
+        "„Lass uns Mittwoch um zwei kurz draufschauen. Hakt es vorher, sag einfach Bescheid.“",
+        "„Ich frag nicht ständig nach. Donnerstag früh zehn Minuten – passt das? Und wenn was klemmt, meld dich vorher.“"
+      ]
+    },
+    {
+      "art": "fehler",
+      "kopf": { "id": "gespraech-v-0238", "faehigkeit": "gespraech.feedback", "stufe": 7, "kanal": "wissen" },
+      "auftrag": "Eine Rückmeldung zu einer gebrochenen Absprache. Markier, was sie schwächt.",
+      "teile": [
+        { "t": "„Hör mal, wir müssen reden." },
+        { "t": "Du hältst dich ja grundsätzlich an nichts,", "fehler": "Ein Urteil mit Übertreibung. Dagegen wehrt er sich – zu Recht." },
+        { "t": "die Zahlen kamen jetzt zweimal Mittwoch statt Dienstag." },
+        { "t": "Wenn das noch einmal passiert, kannst du was erleben.", "fehler": "Eine Drohung statt einer klaren, ruhig gesagten Folge." },
+        { "t": "Das war's.“", "fehler": "Keine Frage nach dem Grund und keine neue Absprache." }
+      ]
+    },
+    {
+      "art": "fehler",
+      "kopf": { "id": "gespraech-v-0239", "faehigkeit": "gespraech.feedback", "stufe": 8, "kanal": "wissen" },
+      "auftrag": "Miriam sagt dir: „Deine Übergaben sind lückenhaft.“ Markier, wo deine Antwort schwächelt.",
+      "teile": [
+        { "t": "„Danke, dass du's sagst." },
+        { "t": "Aber ehrlich, deine sind auch nicht besser.", "fehler": "Ein Gegenvorwurf – ihre Kritik prallt ab." },
+        { "t": "Hast du ein Beispiel?" },
+        { "t": "Ich hatte die letzten Wochen einfach so viel um die Ohren, da ist das halt mal untergegangen,", "fehler": "Eine Rechtfertigung, bevor du verstanden hast, was genau fehlt." },
+        { "t": "aber ich schau's mir an.“" }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0240", "faehigkeit": "gespraech.feedback", "stufe": 7, "kanal": "wissen" },
+      "frage": "Ein Kollege aus dem Einkauf hat eine Absprache zum zweiten Mal nicht eingehalten. Welche Rückmeldung ist am besten?",
+      "antworten": [
+        { "text": "„Zum zweiten Mal kamen die Zahlen erst Mittwoch. Mir bleibt dann ein halber Tag. Was ist los – und was brauchst du?“", "wert": 2, "warum": "Beobachtung, Wirkung, offene Frage. Beim zweiten Mal zählt die Ursache." },
+        { "text": "„Langsam reicht's mir echt mit dir.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Urteil – er verteidigt sich, statt den Grund zu nennen." },
+        { "text": "„Nächstes Mal bitte pünktlich.“", "wert": 1, "warum": "Klar, aber ohne Frage. Liegt es an der Lage, platzt es wieder." },
+        { "text": "Es Dr. Albers sagen, damit der mit ihm redet, du nicht der Böse bist und es endlich jemand mit Gewicht anspricht.", "wert": 0, "tendenz": "abschieben", "warum": "Er erfährt es von oben, nie von dir. Das kostet Vertrauen auf beiden Seiten." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0241", "faehigkeit": "gespraech.feedback", "stufe": 9, "kanal": "wissen" },
+      "frage": "Dr. Albers hat dir eine Rückmeldung gegeben. Du hast nachgefragt und eine Nacht darüber geschlafen. Einen Teil hältst du für richtig, einen für falsch. Was jetzt?",
+      "antworten": [
+        { "text": "Alles annehmen – er ist ja der Chef.", "wert": 0, "tendenz": "nachgeben", "warum": "Annehmen heißt nicht, allem zuzustimmen. Was du für falsch hältst, setzt du dann nur halbherzig um." },
+        { "text": "„Den Punkt mit den Fristen nehme ich an. Beim Ton in den Mails sehe ich es anders – können wir kurz darüber reden?“", "wert": 2, "warum": "Du zeigst, dass du nachgedacht hast, nimmst an, was stimmt, und widersprichst offen dem Rest." },
+        { "text": "Den richtigen Teil umsetzen und den Rest einfach ignorieren.", "wert": 1, "warum": "Ein Anfang. Sagst du ihm nicht, wo du anderer Meinung bist, hält er den Rest für angenommen." },
+        { "text": "Ihm in einer langen Mail erklären, warum die Kritik insgesamt nicht ganz fair war, mit Beispielen aus dem letzten Jahr.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Die Rechtfertigung überdeckt den Teil, den du annimmst – und schriftlich wirkt es schärfer." }
+      ]
+    },
+    {
+      "art": "bauplan",
+      "kopf": { "id": "gespraech-v-0242", "faehigkeit": "gespraech.feedback", "stufe": 7, "kanal": "koennen" },
+      "plan": "Rückmeldung zu einer gebrochenen Absprache",
+      "anlass": "Jemand hat eine Absprache mit dir nicht eingehalten.",
+      "felder": [
+        { "name": "Was war vereinbart?", "hilfe": "Kurz und genau." },
+        { "name": "Was ist passiert?", "hilfe": "Eine Beobachtung, kein Etikett." },
+        { "name": "Was hieß das für mich?", "hilfe": "Die Folge." },
+        { "name": "Meine Frage", "hilfe": "Nach dem Grund, offen." },
+        { "name": "Nächster Schritt", "hilfe": "Eine neue Absprache oder eine ruhig gesagte Folge." }
+      ],
+      "muster": [
+        "Vereinbart: Lena schickt das Protokoll bis Montag. Passiert: Es kam Mittwoch. Für mich: Ich konnte die Aufgaben nicht verteilen. Frage: „Was hat gefehlt?“ Nächster Schritt: Protokoll künftig am Tag nach der Runde, Stichpunkte reichen.",
+        "Vereinbart: Mein Mitbewohner zahlt seinen Anteil bis zum Ersten. Passiert: Zweimal kam er zur Monatsmitte. Für mich: Ich lege es jedes Mal aus. Frage: „Was macht den Ersten schwierig?“ Nächster Schritt: Dauerauftrag zum Fünfzehnten."
+      ]
+    },
+    {
+      "art": "bauplan",
+      "kopf": { "id": "gespraech-v-0243", "faehigkeit": "gespraech.feedback", "stufe": 8, "kanal": "koennen" },
+      "plan": "Meine Antwort auf eine Kritik – nach einer Nacht",
+      "anlass": "Eine Kritik, die du bekommen hast und über die du nachgedacht hast.",
+      "felder": [
+        { "name": "Was wurde gesagt?", "hilfe": "In eigenen Worten, ohne Wertung." },
+        { "name": "Was nehme ich an?", "hilfe": "Den Teil, der stimmt." },
+        { "name": "Was nehme ich nicht an – und warum?", "hilfe": "Ruhig, mit Grund." },
+        { "name": "Was ändere ich?", "hilfe": "Ein konkreter Schritt." }
+      ],
+      "muster": [
+        "Gesagt: Meine Übergaben sind lückenhaft. Ich nehme an: Die offenen Kundenanfragen fehlen oft. Nicht an: dass sie „immer“ lückenhaft sind – die Termine stimmen. Ich ändere: eine feste Zeile „offene Anfragen“.",
+        "Gesagt: Ich unterbreche in Runden. Ich nehme an: bei Themen, die mich aufregen. Nicht an: dass ich nicht zuhöre. Ich ändere: erst zusammenfassen, dann meine Meinung."
+      ]
+    },
+    {
+      "art": "umformulieren",
+      "kopf": { "id": "gespraech-v-0244", "faehigkeit": "gespraech.feedback", "stufe": 7, "kanal": "koennen" },
+      "auftrag": "Mach aus der Drohung eine klare Folge – ruhig gesagt.",
+      "vorlage": "„Noch einmal, und ich geh zum Chef!“ (Ein Kollege aus dem Vertrieb hat eine Absprache zum dritten Mal nicht eingehalten.)",
+      "kriterien": ["nennt die Beobachtung", "nennt die Folge sachlich", "lässt ihm noch eine Chance"],
+      "muster": [
+        "„Das war jetzt das dritte Mal. Wenn es noch einmal nicht klappt, gebe ich die Aufgabe an Dr. Albers zurück, damit er sie neu verteilt. Was brauchst du, damit es klappt?“",
+        "„Ich will das nicht über deinen Kopf hinweg lösen. Klappt es beim nächsten Mal nicht, muss ich es aber Dr. Albers sagen. Was können wir vorher ändern?“"
+      ]
+    },
+    {
+      "art": "umformulieren",
+      "kopf": { "id": "gespraech-v-0245", "faehigkeit": "gespraech.feedback", "stufe": 8, "kanal": "koennen" },
+      "auftrag": "Mach aus der Rechtfertigung eine Antwort, die die Kritik annimmt und trotzdem deine Sicht zeigt.",
+      "vorlage": "„Das stimmt so nicht. Ich hab ja nur so gehandelt, weil die anderen mir nichts gesagt haben.“ (Dein Chef: „Sie haben den Kunden zu spät informiert.“)",
+      "kriterien": ["erkennt den wahren Teil an", "nennt deine Sicht ohne Ausrede", "schaut nach vorn"],
+      "muster": [
+        "„Stimmt, der Kunde hat es zu spät erfahren. Mir fehlte die Info aus dem Lager – künftig frag ich dort selbst nach, statt zu warten.“",
+        "„Da haben Sie recht. Ich hab auf die Rückmeldung der anderen gewartet. Nächstes Mal informiere ich den Kunden gleich mit dem, was ich weiß.“"
+      ]
+    },
+    {
+      "art": "stumm",
+      "kopf": { "id": "gespraech-v-0246", "faehigkeit": "gespraech.oben", "stufe": 7, "kanal": "koennen" },
+      "titel": "Das Gespräch nach oben im Kopf durchgehen",
+      "schritte": [
+        "Denk an das Gespräch mit deiner Führungskraft, das du aufschiebst.",
+        "Formuliere innerlich die Bitte um einen Termin – ein Satz.",
+        "Dann den ersten Satz im Gespräch: dein Anliegen und eine Beobachtung.",
+        "Stell dir den ersten Einwand vor und deine ruhige Antwort.",
+        "Schreib alles in vier Stichworten auf."
+      ],
+      "sekunden": 90,
+      "pruefliste": ["Bitte um einen Termin formuliert", "erster Satz mit Anliegen", "einen Einwand vorweggenommen", "vier Stichworte notiert"]
+    },
+    {
+      "art": "stumm",
+      "kopf": { "id": "gespraech-v-0247", "faehigkeit": "gespraech.oben", "stufe": 8, "kanal": "koennen" },
+      "titel": "Den Plan B festlegen",
+      "schritte": [
+        "Denk an eine Bitte an deine Führungskraft, die auf ein Nein stoßen könnte.",
+        "Schreib auf, was du dir am meisten wünschst.",
+        "Schreib dann, womit du auch leben könntest – dein Plan B.",
+        "Schreib, was du tust, wenn auch das nicht geht.",
+        "Lies es still und prüf: Gehst du mit diesem Plan ruhiger ins Gespräch?"
+      ],
+      "sekunden": 120,
+      "pruefliste": ["Wunsch klar", "Plan B notiert", "ein Schritt für den Fall „auch das nicht“", "Ruhe beim Gedanken an das Gespräch geprüft"]
+    },
+    {
+      "art": "buehne",
+      "kopf": { "id": "gespraech-v-0248", "faehigkeit": "gespraech.oben", "stufe": 8, "kanal": "koennen", "laut": true, "leise": "gespraech-v-0246" },
+      "auftrag": "Steh auf und eröffne das Gespräch über deine Rolle bei deiner Führungskraft: Anliegen, Beobachtung, Wunsch. Reagier ruhig auf ein „Darüber reden wir ein andermal“.",
+      "sekunden": 60,
+      "publikum": "klein",
+      "stoerungen": ["„Darüber reden wir ein andermal.“", "Dein Gegenüber schaut auf die Uhr.", "„Ist das jetzt wirklich so wichtig?“"],
+      "pruefliste": ["Anliegen im ersten Satz", "eine konkrete Beobachtung", "ein klarer Wunsch", "auf das Abwimmeln mit einem Terminvorschlag reagiert"]
+    },
+    {
+      "art": "buehne",
+      "kopf": { "id": "gespraech-v-0249", "faehigkeit": "gespraech.oben", "stufe": 9, "kanal": "koennen", "laut": true, "leise": "gespraech-v-0247" },
+      "auftrag": "Steh auf und bitte deine Führungskraft um eine Entscheidung, die seit Wochen aufgeschoben wird: die Lage, was das Warten kostet, dein Vorschlag und eine Frist.",
+      "sekunden": 90,
+      "publikum": "klein",
+      "stoerungen": ["„Das muss ich mir noch überlegen.“", "„Warum drängen Sie so?“", "Ein Klopfen an der Tür."],
+      "pruefliste": ["Lage klar", "Kosten des Wartens genannt", "ein Vorschlag", "eine Frist erbeten, ohne zu drängeln", "ruhig nach der Störung"]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0250", "faehigkeit": "gespraech.oben", "stufe": 7, "kanal": "wissen" },
+      "frage": "Dein Chef wimmelt dein Anliegen zum dritten Mal ab: „Darüber reden wir ein andermal.“ Was sagst du?",
+      "antworten": [
+        { "text": "„Gern – wann passt es Ihnen diese Woche? Es ist mir wichtig.“", "wert": 2, "warum": "Freundlich, klar und mit Terminvorschlag. Ein „andermal“ wird so zu einem echten Termin." },
+        { "text": "„Okay.“ – und es nicht mehr ansprechen.", "wert": 0, "tendenz": "aufgeben", "warum": "Nach dem dritten Mal fühlt es sich an, als wäre es unwichtig. Ist es aber nicht." },
+        { "text": "„Das sagen Sie jetzt schon zum dritten Mal. So langsam frage ich mich, ob Sie das überhaupt ernst nehmen.“", "wert": 0, "tendenz": "vorwurf", "warum": "Verständlich, aber ein Vorwurf. Er verteidigt sich, statt einen Termin zu nennen." },
+        { "text": "Ihm eine Mail mit drei Terminvorschlägen schicken.", "wert": 1, "warum": "Hartnäckig und höflich. Im Gespräch selbst ist es meist schneller erledigt." }
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0251", "faehigkeit": "gespraech.oben", "stufe": 9, "kanal": "wissen" },
+      "frage": "Im Gespräch über deine Überlast reagiert Dr. Albers gereizt: „Andere schaffen das auch.“ Was antwortest du?",
+      "antworten": [
+        { "text": "„Dann bin ich wohl einfach zu langsam.“", "wert": 0, "tendenz": "kleinmachen", "warum": "Du übernimmst ein Urteil, das niemand belegt hat – und dein Anliegen ist weg." },
+        { "text": "„Andere haben auch nicht drei Projekte mit derselben Frist!“", "wert": 0, "tendenz": "angreifen", "warum": "Sachlich vielleicht richtig – aber als Gegenangriff. Jetzt streitet ihr übers Vergleichen." },
+        { "text": "„Kann sein. Bei mir sind es gerade drei Projekte mit Frist im März. Ich möchte mit Ihnen klären, was Vorrang hat.“", "wert": 2, "warum": "Den Vergleich stehen lassen, zur Lage zurück und eine Bitte um Entscheidung. Ruhig und sachlich." },
+        { "text": "„Wie schaffen die anderen das denn?“", "wert": 1, "warum": "Eine ehrliche Frage – vielleicht lernst du was. Dein eigenes Anliegen sollte danach aber nicht untergehen." }
+      ]
+    },
+    {
+      "art": "umformulieren",
+      "kopf": { "id": "gespraech-v-0252", "faehigkeit": "gespraech.oben", "stufe": 7, "kanal": "koennen" },
+      "auftrag": "Mach aus dem Vorwurf nach oben ein Anliegen mit Beobachtung und Wunsch.",
+      "vorlage": "„Sie haben mich ja nie gefragt, ob ich die Einsatzplanung überhaupt machen will.“",
+      "kriterien": ["Beobachtung statt Vorwurf", "dein Anliegen", "ein Wunsch oder eine Frage"],
+      "muster": [
+        "„Seit dem Frühjahr mache ich die Einsatzplanung. Mir ist wichtig, dass wir klären, ob das offiziell meine Aufgabe ist.“",
+        "„Die Einsatzplanung ist irgendwann bei mir gelandet, ohne dass wir darüber gesprochen haben. Ich würde gern klären, wie es damit weitergeht.“"
+      ]
+    },
+    {
+      "art": "umformulieren",
+      "kopf": { "id": "gespraech-v-0253", "faehigkeit": "gespraech.oben", "stufe": 8, "kanal": "koennen" },
+      "auftrag": "Mach aus dem Andeuten eine klare Bitte um eine Entscheidung.",
+      "vorlage": "„Na ja, mit der neuen Stelle im Team, das ist halt alles noch so ein bisschen offen …“ (Du willst wissen, ob die Stelle ausgeschrieben wird und ob du dich bewerben kannst.)",
+      "kriterien": ["sagt klar, was du wissen willst", "nennt dein Interesse", "bittet um eine Antwort bis zu einem Zeitpunkt"],
+      "muster": [
+        "„Ich interessiere mich für die neue Stelle im Team. Wird sie ausgeschrieben – und kann ich mich bewerben? Ich bräuchte bis Monatsende eine Antwort.“",
+        "„Mir ist wichtig zu wissen, wie es mit der Stelle weitergeht, weil ich mich bewerben möchte. Wann wissen Sie mehr?“"
+      ]
+    },
+    {
+      "art": "auswahl",
+      "kopf": { "id": "gespraech-v-0254", "faehigkeit": "gespraech.oben", "stufe": 8, "kanal": "wissen" },
+      "frage": "Du hast Dr. Albers um ein Gespräch über deine Aufgaben gebeten. Er sagt: „Ich sehe das Problem nicht.“ Was hilft am meisten?",
+      "antworten": [
+        { "text": "„Darf ich Ihnen zeigen, was ich seit dem Frühjahr übernehme? Dann können Sie es besser einschätzen.“", "wert": 2, "warum": "Du machst das Unsichtbare sichtbar – mit Beobachtungen statt Klage." },
+        { "text": "„Dann ist ja alles gut.“", "wert": 0, "tendenz": "aufgeben", "warum": "Du ziehst dein Anliegen zurück, kaum dass er es nicht gleich versteht." },
+        { "text": "„Das ist ja typisch, dass Sie das nicht sehen.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Urteil über ihn. Jetzt verteidigt er sich, statt hinzusehen." },
+        { "text": "„Für mich ist es aber ein echtes Problem, und das sollte eigentlich schon reichen, damit wir darüber reden.“", "wert": 1, "warum": "Ehrlich und standhaft. Mit konkreten Beispielen versteht er schneller, worum es geht." }
+      ]
+    }
+  ]
+}

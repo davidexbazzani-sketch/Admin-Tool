@@ -8,11 +8,16 @@ import { useCoach } from '../kern/speicher'
 import { planeTag, minutenVon } from '../kern/gehirn/planer'
 import { serie, antrieb } from '../kern/serie'
 import { gewaehlt } from '../kern/kurs'
-import { heute, datumText, tagNummer } from '../kern/zeit'
+import { heute, datumText, tagNummer, uhrzeit } from '../kern/zeit'
+const jetztMinuten = (): number => { const [h, m] = uhrzeit().split(':').map(Number); return h * 60 + m }
 import { aktiveZaehler, zaehle } from '../kern/buchung'
 import { Bruno, useGemeinsam, useZeile } from '../ansicht/hilfen'
+import type { Leben } from '../kern/inhaltTypen'
+import { ladeLeben } from '../kern/inhalt'
+import { auswertungOffen, etappenHeute, vorhabenGemacht, wochenCheckFaellig, rueckblickFaellig, dieseWoche } from '../kern/leben'
+import { EtappeKarte } from './Ernstfaelle'
 
-export function Heute({ index, onStart, onNotfall }: { index: InhaltsIndex; onStart: (p: TagesPlan) => void; onNotfall: (id?: string) => void }) {
+export function Heute({ index, onStart, onNotfall, onGeh }: { index: InhaltsIndex; onStart: (p: TagesPlan) => void; onNotfall: (id?: string) => void; onGeh?: (a: 'kompass' | 'vorhaben' | 'missionen') => void }) {
   const daten = useCoach(s => s.daten)
   const buch = useCoach(s => s.buch)
   const tag = heute()
@@ -77,6 +82,7 @@ export function Heute({ index, onStart, onNotfall }: { index: InhaltsIndex; onSt
       </div>
 
       <Zaehlerkarte />
+      <LebenKarte onNotfall={onNotfall} onGeh={onGeh} />
 
       {offen.length > 0 && (
         <div className="dc-karte-flach dc-spalte" style={{ gap: 6 }}>
@@ -126,6 +132,44 @@ function Zaehlerkarte() {
           </div>
         )
       })}
+    </div>
+  )
+}
+
+/** Echtes Leben auf „Heute“: fällige Etappen eines Ernstfalls, offene Nachbereitung, Vorhaben von heute, Kompass-Check.
+ *  leben.json wird nur geladen, wenn es überhaupt etwas zu zeigen gibt. */
+function LebenKarte({ onNotfall, onGeh }: { onNotfall: (id?: string) => void; onGeh?: (a: 'kompass' | 'vorhaben' | 'missionen') => void }) {
+  const daten = useCoach(s => s.daten)
+  const tag = heute()
+  const nr = tagNummer(tag)
+  const brauchtLeben = daten.ernstfaelle.some(e => !e.auswertung)
+  const [leben, setLeben] = useState<Leben | null>(null)
+  useEffect(() => { if (brauchtLeben && !leben) void ladeLeben().then(setLeben) }, [brauchtLeben, leben])
+  const etappen = leben ? etappenHeute(daten, leben.notfall, tag, jetztMinuten()) : []
+  const auswerten = auswertungOffen(daten, tag, jetztMinuten())
+  const vorhaben = daten.vorhaben.filter(v => v.an && v.heuteNicht !== nr && dieseWoche(v, tag) < v.proWoche || (v.an && v.gemacht.includes(nr)))
+  const check = wochenCheckFaellig(daten, tag).length > 0 || rueckblickFaellig(daten, tag)
+  if (!etappen.length && !auswerten.length && !vorhaben.length && !check) return null
+  return (
+    <div className="dc-spalte" style={{ gap: 8 }} data-dc-leben-heute>
+      {etappen.map(e => <EtappeKarte key={`${e.ernstfall.id}-${e.etappe}`} e={e} />)}
+      {auswerten.map(e => <button key={e.id} type="button" className="dc-wahl" data-an="1" onClick={() => onNotfall(`auswerten:${e.id}`)}><span><b>{e.titel}</b> ist vorbei – wie lief es? Drei kurze Fragen.</span></button>)}
+      {vorhaben.length > 0 && (
+        <div className="dc-karte-flach dc-spalte" style={{ gap: 6 }} data-dc-vorhaben-heute>
+          <span className="dc-ober">Vorhaben</span>
+          {vorhaben.map(v => {
+            const erledigt = v.gemacht.includes(nr)
+            return (
+              <div key={v.id} className="dc-reihe" style={{ justifyContent: 'space-between' }}>
+                <span style={{ opacity: erledigt ? 0.6 : 1 }}><b>{v.titel}</b> <span className="dc-klein dc-stumm dc-zahl">{dieseWoche(v, tag)}/{v.proWoche} diese Woche</span>{!erledigt && v.kleinster && <span className="dc-klein dc-leise" style={{ display: 'block' }}>Kleinster Schritt: {v.kleinster}</span>}</span>
+                <button type="button" className={erledigt ? 'dc-knopf dc-knopf-leise' : 'dc-knopf'} onClick={() => { useCoach.getState().aendere(d => vorhabenGemacht(d, v.id, tag)); void useCoach.getState().sichere() }}>{erledigt ? <><CheckCircle2 size={14} />erledigt</> : 'gemacht'}</button>
+              </div>
+            )
+          })}
+          {onGeh && <button type="button" className="dc-knopf dc-knopf-nackt dc-klein" style={{ alignSelf: 'flex-start' }} onClick={() => onGeh('vorhaben')}>Alle Vorhaben</button>}
+        </div>
+      )}
+      {check && onGeh && <button type="button" className="dc-wahl" onClick={() => onGeh('kompass')} data-dc-kompass-faellig><span><b>Kompass:</b> {rueckblickFaellig(daten, tag) ? 'Dein Rückblick nach drei Monaten ist fällig.' : 'Zeit für den Wochen-Check deiner Ziele – drei Fragen.'}</span></button>}
     </div>
   )
 }

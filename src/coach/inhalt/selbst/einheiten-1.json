@@ -84,7 +84,8 @@
             { "text": "„Stimmt nicht, ich bin super mit Kunden.“", "wert": 0, "tendenz": "parole", "warum": "Eine Gegenbehauptung ohne Belege – der Kritiker findet sofort ein Gegenbeispiel." },
             { "text": "„Dieser Anruf war holprig, andere nicht. Nächstes Mal liegen die Zahlen bereit.“", "wert": 2, "warum": "Du begrenzt das Urteil auf den einen Anruf, nennst Gegenbelege und einen nächsten Schritt." },
             { "text": "„Stimmt wohl. Kundenanrufe überlasse ich ab jetzt lieber den Kolleginnen und Kollegen.“", "wert": 0, "tendenz": "vermeiden", "warum": "So bestätigst du den Kritiker – und nimmst dir die Chance auf Gegenbeweise." },
-            { "text": "„Egal, war ja nur ein Anruf.“", "wert": 1, "tendenz": "kleinreden", "warum": "Nimmt Druck raus. Geprüft ist der Satz damit aber nicht – er kommt beim nächsten Anruf wieder." }
+            { "text": "„Egal, war ja nur ein Anruf.“", "wert": 0, "tendenz": "kleinreden", "warum": "Kleingeredet statt geprüft: Der Satz des Kritikers bleibt stehen und kommt beim nächsten Anruf wieder." },
+            { "text": "„Was genau lief schief? Das schreibe ich mir kurz auf.“", "wert": 1, "warum": "Ein guter Anfang: Du schaust auf den Anruf statt auf dich. Mit Gegenbelegen und einem nächsten Schritt wäre der Kritiker geprüft." }
           ] },
         { "art": "mission", "ref": "selbst-m-01" }
       ],
@@ -302,7 +303,7 @@
           "auftrag": "Parole oder glaubwürdiger Satz?",
           "faecher": ["Parole", "glaubwürdiger Satz"],
           "karten": [
-            { "text": "„Ich bin der Beste.“", "fach": 0 },
+            { "text": "„Ich bin unschlagbar.“", "fach": 0 },
             { "text": "„Ich bin aufgeregt und gut vorbereitet.“", "fach": 1 },
             { "text": "„Mich kann nichts erschüttern.“", "fach": 0 },
             { "text": "„Ich habe das schon zweimal geschafft.“", "fach": 1 },
@@ -317,7 +318,7 @@
         { "art": "auswahl", "kopf": { "id": "selbst-1-07-c", "faehigkeit": "selbst.grenzen", "stufe": 3, "kanal": "wissen" },
           "frage": "Tarek fragt dich zum dritten Mal in diesem Monat, ob du seinen Spätdienst übernimmst. Du willst nicht. In dir meldet sich: „Wer Nein sagt, ist egoistisch.“ Was hilft dir am meisten?",
           "antworten": [
-            { "text": "„Ich bin der großzügigste Kollege überhaupt – ich schaffe alles, auch noch den Samstag.“", "wert": 0, "tendenz": "parole", "warum": "Eine Parole, die du dir gerade nicht glaubst – und die dich zum nächsten Ja treibt." },
+            { "text": "„Ich bin die Großzügigkeit in Person – ich schaffe alles, auch noch den Samstag.“", "wert": 0, "tendenz": "parole", "warum": "Eine Parole, die du dir gerade nicht glaubst – und die dich zum nächsten Ja treibt." },
             { "text": "„Ich darf Nein sagen. Tarek ist wohl weniger enttäuscht, als ich fürchte.“", "wert": 2, "warum": "Ein Erlauber-Satz, der stimmt – und die Sorge auf ihre wahre Größe bringt." },
             { "text": "Ihm sagen, dass du es dir überlegst.", "wert": 1, "warum": "Bedenkzeit ist ein guter Schritt. Den inneren Satz hast du damit aber noch nicht geprüft." },
             { "text": "„Egoistisch nicht – aber ein Nein kann ich mir nicht leisten.“", "wert": 0, "tendenz": "nachgeben", "warum": "Der Antreiber gewinnt wieder. Dein Recht auf ein Nein hängt nicht davon ab, ob es bequem ist." }

@@ -39,7 +39,7 @@
       { "text": "Den ganzen Satz kräftig und mit Nachdruck sprechen.", "wert": 0, "warum": "Dann sticht nichts heraus – Nachdruck auf allem ist kein Akzent." },
       { "text": "Jedes Wort sauber und deutlich aussprechen.", "wert": 1, "warum": "Das ist Deutlichkeit – sie hilft, ist aber noch keine Betonung." },
       { "text": "Am Satzende mit der Stimme nach oben gehen.", "wert": 0, "warum": "Das klingt eher nach Frage als nach Betonung." } ] },
-    { "art": "auswahl", "kopf": { "id": "stimme-v-0054", "faehigkeit": "stimme.betonung", "stufe": 3, "kanal": "wissen" }, "frage": "Herr Petersen fragt: „Ist das Paket schon unterwegs?“ Du antwortest: „Es ist schon angekommen – bei Ihrer Frau im Laden.“ Welches Wort bekommt den Hauptton?", "antworten": [
+    { "art": "auswahl", "kopf": { "id": "stimme-v-0054", "faehigkeit": "stimme.betonung", "stufe": 3, "kanal": "wissen" }, "frage": "Herr Petersen fragt: „Ist das Paket schon unterwegs?“ Du antwortest: „Es ist schon angekommen – bei Ihrem Nachbarn im Laden.“ Welches Wort bekommt den Hauptton?", "antworten": [
       { "text": "„angekommen“ – das ist das Neue gegenüber „unterwegs“.", "wert": 2, "warum": "Er hat nach „unterwegs“ gefragt. Der Gegensatz trägt die Nachricht." },
       { "text": "„Paket“ – darum geht es ja.", "wert": 0, "warum": "Das Paket kennt er schon aus seiner Frage. Neu ist, wo es steht." },
       { "text": "„schon“ – damit er merkt, wie schnell ihr wart.", "wert": 0, "warum": "Klingt nach Eigenlob. Für ihn zählt, dass es da ist – und wo." },
@@ -199,7 +199,7 @@
       { "text": "„Wie lange sucht ihr täglich nach Dateien?“", "fach": 0 },
       { "text": "„Ja, also, ich soll hier was sagen.“", "fach": 1 },
       { "text": "„Drei Minuten, ein Vorschlag, eine Bitte.“", "fach": 0 },
-      { "text": "„Ich bin kein großer Redner.“", "fach": 1 } ] },
+      { "text": "„Reden ist nicht so meins.“", "fach": 1 } ] },
     { "art": "zuordnen", "kopf": { "id": "stimme-v-0092", "faehigkeit": "stimme.aufbau", "stufe": 4, "kanal": "wissen" }, "auftrag": "Starker oder schwacher Schluss?", "faecher": ["stark", "schwach"], "karten": [
       { "text": "„Meine Bitte: Entscheidet heute.“", "fach": 0 },
       { "text": "„Ja, das war's eigentlich.“", "fach": 1 },
@@ -247,7 +247,7 @@
       { "text": "Beide Füße auf dem Boden, etwa hüftbreit, Knie locker.", "wert": 2, "warum": "So trägt dich der Boden, und du wippst nicht." },
       { "text": "Breitbeinig, die Hände in den Hüften – dann wirkst du stärker und fühlst dich auch so.", "wert": 0, "warum": "Eine breite Siegerpose bringt gegenüber normal aufrecht kaum etwas – und kann gespielt wirken." },
       { "text": "Die Beine überkreuzt, locker an den Tisch gelehnt.", "wert": 0, "tendenz": "wackelig", "warum": "Wirkt lässig, aber du stehst wackelig. Ein fester Stand auf beiden Füßen trägt besser." },
-      { "text": "Ständig ein paar Schritte hin und her, damit du in Bewegung bleibst.", "wert": 0, "warum": "Gehen ist erlaubt, ständiges Pendeln lenkt ab. Bewegung mit Absicht – dann wieder stehen." } ] },
+      { "text": "Ab und zu ein paar Schritte gehen und dann wieder stehen bleiben.", "wert": 1, "warum": "Bewegung mit Absicht ist in Ordnung und lockert. Sicher stehst du aber erst, wenn danach beide Füße fest auf dem Boden sind." } ] },
     { "art": "auswahl", "kopf": { "id": "stimme-v-0104", "faehigkeit": "stimme.auftritt", "stufe": 4, "kanal": "wissen" }, "frage": "Wohin schaust du, wenn du vor zehn Leuten sprichst?", "antworten": [
       { "text": "Je Gedanke zu einer Person, dann zur nächsten.", "wert": 2, "warum": "Der Blick wandert ruhig, und jeder fühlt sich einmal angesprochen." },
       { "text": "Auf einen Punkt an der Wand über den Köpfen – dann siehst du keine Gesichter, die dich nervös machen.", "wert": 0, "tendenz": "vermeiden", "warum": "Das beruhigt kurz, aber die Runde fühlt sich nicht angesprochen." },

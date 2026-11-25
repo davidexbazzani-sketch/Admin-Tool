@@ -1,0 +1,315 @@
+{
+  "einheiten": [
+    {
+      "id": "ueberzeugen-2-01", "bereich": "ueberzeugen", "stufe": 2, "nr": 1,
+      "titel": "Einfluss-Prinzipien – fair genutzt",
+      "faehigkeiten": ["ueberzeugen.einfluss", "ueberzeugen.haltung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Die sieben Prinzipien sind die Ordnung eines Sachbuchs (Denkmodell). Einzelne Effekte sind belegt, etwa für echte Knappheit – meist aber klein und schwankend. Der bekannte Hotel-Hinweis wirkte in Deutschland nicht.",
+      "quellen": ["cialdini", "bohner2014", "okeefe2021", "barton2022"],
+      "aha": "Die Einfluss-Prinzipien sind kein Zauberkasten, sondern eine Landkarte. Fair genutzt heißt: Nur was stimmt, kommt auf den Tisch – dann wirkt es auch, wenn der andere es durchschaut.",
+      "schritte": [
+        { "art": "studie", "frage": "Hilft der Hinweis „Die meisten Gäste nutzen ihr Handtuch mehrmals“?", "aufbau": "In deutschen Hotels hingen in den Bädern verschiedene Karten: ein gewöhnlicher Umwelthinweis oder der Hinweis, was die meisten anderen Gäste tun. Gezählt wurde, wer sein Handtuch wieder benutzte.", "ergebnis": "Der Hinweis auf die anderen Gäste wirkte nicht besser als der gewöhnliche – obwohl er in früheren Studien als Paradebeispiel für Einfluss galt.", "grenze": "Eine Feldstudie in einem Land. Sie passt aber zu einer großen Übersicht: Wie man eine Botschaft verpackt, ändert im Schnitt wenig, und im Einzelfall lässt es sich nicht vorhersagen.", "beleg": "B", "quellen": ["bohner2014", "okeefe2021"] },
+        { "art": "karte", "text": "Sieben Prinzipien ordnen, warum Menschen Ja sagen: Gegenseitigkeit, Verbindlichkeit, Bewährtheit (andere machen es auch), Sympathie, Sachkunde, Knappheit und Einheit (das echte Wir). Jedes hat eine faire Form und eine rote: echte Kunden nennen oder erfundene, echte Knappheit oder „nur noch heute“. Der Unterschied liegt fast immer an einer einzigen Frage: Stimmt es?" },
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-2-01-a", "faehigkeit": "ueberzeugen.einfluss", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Welches Prinzip steckt dahinter?",
+          "faecher": ["Gegenseitigkeit", "Bewährtheit", "Sachkunde", "Knappheit"],
+          "karten": [
+            { "text": "„Ich habe Ihnen die Liste schon mal kostenlos zusammengestellt.“", "fach": 0 },
+            { "text": "„Den Tipp gebe ich Ihnen so oder so mit.“", "fach": 0 },
+            { "text": "„Vierzig Betriebe aus dem Landkreis arbeiten schon damit.“", "fach": 1 },
+            { "text": "„Ihre Nachbarin hat dieselbe Anlage seit drei Jahren.“", "fach": 1 },
+            { "text": "„Ich mache diese Umstellungen seit fünfzehn Jahren.“", "fach": 2 },
+            { "text": "„So empfiehlt es auch der Hersteller der Anlage.“", "fach": 2 },
+            { "text": "„Von dem Modell sind noch zwei Stück da.“", "fach": 3 },
+            { "text": "„Der Monteur hat im März nur noch eine Woche frei.“", "fach": 3 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-2-01-b", "faehigkeit": "ueberzeugen.einfluss", "stufe": 4, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Du willst Nadine Köhler zeigen, dass sich dein Angebot bewährt hat. Welcher Satz ist fair?",
+          "antworten": [
+            { "text": "„Alle Betriebe in Ihrer Gegend schwören auf uns.“", "wert": 0, "tendenz": "uebertreiben", "warum": "Nicht prüfbar und vermutlich übertrieben. Fragt sie nach, findet sie die Lücke." },
+            { "text": "„Sechs Betriebe in Ihrer Größe betreuen wir. Zwei davon dürfen Sie gern anrufen.“", "wert": 2, "warum": "Echte Zahl, nachprüfbar – das wirkt auch dann, wenn Nadine genau weiß, was du tust." },
+            { "text": "„Wir sind ziemlich beliebt, glaube ich – beschwert hat sich jedenfalls noch keiner so richtig.“", "wert": 0, "tendenz": "kleinmachen", "warum": "Vage und verdruckst. Kein Beleg, nur ein Gefühl." },
+            { "text": "„Sechs Betriebe arbeiten mit uns.“", "wert": 1, "warum": "Stimmt und ist konkret. Mit dem Angebot, nachzufragen, wird es stärker." }
+          ] },
+        { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-2-01-c", "faehigkeit": "ueberzeugen.einfluss", "stufe": 5, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Ein Verkäufer am Messestand: „Unser Fachbeirat aus Professoren empfiehlt genau dieses Gerät.“ Auf deine Nachfrage kann er keinen einzigen Namen nennen.",
+          "frage": "Was passiert hier – und was tust du?",
+          "antworten": [
+            { "text": "Taktik – Experten zu nennen ist erlaubt, also zählt das Argument.", "wert": 0, "warum": "Nur echte Sachkunde ist fair oder Taktik. Wer keinen Namen nennen kann, verkauft eine Behauptung." },
+            { "text": "Vermutlich erfundene Sachkunde: das Gerät meiden und den Stand verlassen.", "wert": 1, "warum": "Vorsicht ist richtig. Das Gerät selbst kann trotzdem gut sein – prüf es ohne den Beirat." },
+            { "text": "Vermutlich erfundene Sachkunde – das Gerät ohne den angeblichen Beirat prüfen: Unterlagen, Tests, eigener Vergleich.", "wert": 2, "warum": "Ohne einen einzigen Namen ist die Sachkunde vermutlich erfunden – rote Linie. Das Gerät kann trotzdem taugen: Prüf es selbst, ohne den Beirat." },
+            { "text": "Ihn laut einen Lügner nennen, damit es die anderen am Stand auch hören.", "wert": 0, "tendenz": "angreifen", "warum": "Bringt dir nichts außer Streit. Nachfragen und gehen reicht." }
+          ],
+          "erklaerung": "Sachkunde gehört zu den stärksten Gründen, jemandem zu glauben. Genau deshalb wird sie gern erfunden. Die Abwehr: nach Namen, Unterlagen oder einer Quelle fragen, die du selbst prüfen kannst." },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-2-01-d", "faehigkeit": "ueberzeugen.einfluss", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Mach aus der leeren Behauptung einen fairen Satz zur Sachkunde: echt, prüfbar, mit einer ehrlichen Grenze.",
+          "vorlage": "„Ich bin absoluter Experte für Heizungen, mir macht da keiner was vor.“",
+          "kriterien": ["nennt eine echte, prüfbare Erfahrung", "nennt eine Grenze", "ohne Übertreibung"],
+          "muster": ["„Ich warte seit zwölf Jahren Gasheizungen, rund 200 im Jahr. Bei Wärmepumpen hole ich einen Kollegen dazu.“", "„Diese Anlage kenne ich gut – ich habe letztes Jahr acht davon eingebaut. Zur Förderung fragen Sie besser die Energieberatung.“"] },
+        { "art": "experiment", "auftrag": "Achte eine Woche lang auf Werbung, Angebote und Verkaufsgespräche: Welches Prinzip steckt dahinter – und stimmt es? Notier je ein faires und ein rotes Beispiel.", "dauer": "woche", "nachfrage": "Welches Prinzip ist dir am häufigsten begegnet – und wie oft war es erfunden?" },
+        { "art": "reflexion", "frage": "Welches Prinzip nutzt du schon ganz von selbst und fair? Welches würdest du gern bewusster einsetzen?", "insBuch": "saetze" }
+      ],
+      "regel": "Nutz die Prinzipien nur mit dem, was stimmt – dann halten sie dem Durchschauen stand.",
+      "merkkarten": [
+        { "id": "ueberzeugen-2-01-m1", "frage": "Die sieben Einfluss-Prinzipien?", "antwort": "Gegenseitigkeit, Verbindlichkeit, Bewährtheit, Sympathie, Sachkunde, Knappheit, Einheit." },
+        { "id": "ueberzeugen-2-01-m2", "frage": "Wo trennt sich fair von rot?", "antwort": "Fast immer an einer Frage: Stimmt es?" },
+        { "id": "ueberzeugen-2-01-m3", "frage": "Wie verlässlich wirken die Prinzipien?", "antwort": "Meist schwach und schwankend – Haltung und Inhalt zählen mehr." }
+      ]
+    },
+    {
+      "id": "ueberzeugen-2-02", "bereich": "ueberzeugen", "stufe": 2, "nr": 2,
+      "titel": "Belegen: ein Fall, eine Zahl, eine Referenz",
+      "faehigkeiten": ["ueberzeugen.vertrauen"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Ob Zahlen oder Fallbeispiele stärker wirken, ist laut zwei Meta-Analysen uneinheitlich – darum beides. Die Reihenfolge Fall, Zahl, Referenz ist Praxiswissen.",
+      "quellen": ["zebregs2015", "xu2023", "praxis-ueberzeugen"],
+      "aha": "„Wir sind zuverlässig“ sagt jeder. Ein echter Fall, eine Zahl, die man prüfen kann, und jemand, den man anrufen darf – das glaubt man.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Was überzeugt laut Forschung mehr: eine Statistik oder ein anschauliches Fallbeispiel?", "optionen": ["immer die Statistik", "immer das Fallbeispiel", "uneinheitlich – mal das eine, mal das andere"], "richtig": 2, "loesung": "Uneinheitlich", "aufloesung": "Eine Meta-Analyse fand Zahlen stärker für das, was Menschen glauben, Fälle stärker für das, was sie tun wollen. Eine spätere fand insgesamt keinen sicheren Unterschied. Die kluge Folgerung: nicht wählen, sondern beides bringen." },
+        { "art": "karte", "text": "Drei Belege, drei Aufgaben. Der Fall macht es anschaulich: wer, welches Problem, was danach anders war. Die Zahl macht es greifbar – am besten als Vorher-nachher („von drei Stunden auf eine“). Die Referenz macht es prüfbar: jemand, den man anrufen darf. Namen nur, wenn der Kunde zugestimmt hat. Und runde nie zu deinen Gunsten: Eine ehrliche Zahl, die nachgeprüft wird, ist Gold wert." },
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-2-02-a", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Behauptung, Fall, Zahl oder Referenz?",
+          "faecher": ["Behauptung", "Fall", "Zahl", "Referenz"],
+          "karten": [
+            { "text": "„Wir arbeiten besonders sorgfältig.“", "fach": 0 },
+            { "text": "„Kundenzufriedenheit ist uns das Wichtigste.“", "fach": 0 },
+            { "text": "„Bei der Bäckerei Hansen lief die Kasse nach dem Umzug am Montag um sechs.“", "fach": 1 },
+            { "text": "„Eine Arztpraxis hatte jede Woche Druckerärger – seit dem Wechsel im Frühjahr keinen mehr.“", "fach": 1 },
+            { "text": "„Die Angebote gehen jetzt in zehn Minuten raus statt in einer Stunde.“", "fach": 2 },
+            { "text": "„Von 40 Einsätzen im letzten Jahr waren 38 am selben Tag erledigt.“", "fach": 2 },
+            { "text": "„Herr Petersen erzählt Ihnen gern, wie es bei ihm läuft.“", "fach": 3 },
+            { "text": "„Die Schreinerei am Markt ist einverstanden, dass Sie dort nachfragen.“", "fach": 3 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-2-02-b", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Mach aus der Behauptung einen Beleg: ein kurzer Fall mit Ergebnis oder eine Zahl mit Vorher-nachher.",
+          "vorlage": "„Unsere Lösung spart enorm viel Zeit.“",
+          "kriterien": ["konkreter Fall oder Zahl", "Vorher-nachher erkennbar", "bleibt wahr – keine geschönte Rundung"],
+          "muster": ["„Bei einem Malerbetrieb mit acht Leuten dauerte die Wochenplanung drei Stunden. Jetzt ist sie in einer Stunde fertig.“", "„Im letzten Jahr haben wir zwölf Betriebe umgestellt. Bei elf gingen die Rechnungen danach schneller raus, bei einem nicht – dort lag es am alten Drucker.“"] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-2-02-c", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Herr Petersen ist skeptisch: „Das sagen alle.“ Welcher Beleg hilft ihm am meisten?",
+          "antworten": [
+            { "text": "Eine Broschüre mit begeisterten Kundenstimmen, alle ohne Namen.", "wert": 0, "warum": "Nicht prüfbar – und genau das hat ihn skeptisch gemacht." },
+            { "text": "„Ich gebe Ihnen mein Wort darauf, dass es funktioniert. Dafür stehe ich mit meinem Namen.“", "wert": 0, "tendenz": "beteuern", "warum": "Beteuern ersetzt keinen Beleg. Wer schon skeptisch ist, hört darin vor allem Druck." },
+            { "text": "„Bei der Bäckerei lief die Kasse nach dem Umzug am Montag um sechs.“", "wert": 1, "warum": "Ein guter, konkreter Fall. Mit der Möglichkeit, dort nachzufragen, wird er noch stärker." },
+            { "text": "„Fragen Sie bei der Bäckerei Hansen nach – die Inhaberin ist einverstanden.“", "wert": 2, "warum": "Eine echte Stelle, die er selbst fragen kann. Prüfbarer geht es nicht." }
+          ] },
+        { "art": "experiment", "auftrag": "Leg dir eine Beleg-Sammlung an: drei Fälle aus deiner Arbeit mit Ergebnis, zwei Zahlen mit Vorher-nachher und eine Person, die du fragst, ob sie als Referenz genannt werden mag.", "dauer": "woche", "nachfrage": "Welchen Beleg hast du gefunden, der dich selbst überrascht hat?" },
+        { "art": "reflexion", "frage": "Welche Behauptung über deine Arbeit sagst du oft – und welcher Beleg würde sie ersetzen?", "insBuch": "saetze" }
+      ],
+      "regel": "Ersetz jede Behauptung durch einen Fall, eine Zahl oder jemanden, den man fragen kann.",
+      "merkkarten": [
+        { "id": "ueberzeugen-2-02-m1", "frage": "Die drei Belege?", "antwort": "Ein Fall, eine Zahl, eine Referenz." },
+        { "id": "ueberzeugen-2-02-m2", "frage": "Zahl oder Geschichte – was wirkt stärker?", "antwort": "Uneinheitlich. Darum beides." },
+        { "id": "ueberzeugen-2-02-m3", "frage": "Wie wird eine Zahl stark?", "antwort": "Als Vorher-nachher – und ehrlich gerundet." }
+      ]
+    },
+    {
+      "id": "ueberzeugen-2-03", "bereich": "ueberzeugen", "stufe": 2, "nr": 3,
+      "titel": "Über den Preis reden",
+      "faehigkeiten": ["ueberzeugen.abschluss", "ueberzeugen.einwand"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Belegt ist: Wer zuerst eine begründbare Zahl nennt, liegt im Schnitt vorn; überzogene Zahlen kosten Abschlüsse (Meta-Analyse, meist Laborverhandlungen). Der Ablauf Wert – Zahl – Pause und die Gegenleistung sind Praxiswissen.",
+      "quellen": ["petrowsky2025", "curhan2022", "praxis-ueberzeugen"],
+      "aha": "Ein Preis ist keine Bitte um Entschuldigung. Erst der Wert, dann die Zahl, dann Ruhe – und wenn gefeilscht wird: Nachlass nur gegen etwas.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Ein Kunde fragt dich nach dem Preis für die Einrichtung seines neuen Büros.", "schwach": "„Also, das wird leider nicht ganz billig, so um die 2.000, aber da kann man bestimmt noch reden …“", "stark": "„Alle zwölf Plätze laufen am Montag, die Daten sind umgezogen. Das kostet 2.000 Euro.“", "frage": "Welcher Satz lädt zum Feilschen ein?", "unterschied": "Der erste: „leider“, „so um die“ und „da kann man reden“ sagen, dass der Preis nicht ernst gemeint ist. Der zweite fasst erst den Wert zusammen, nennt dann eine klare Zahl – und hört auf." },
+        { "art": "karte", "text": "Drei Schritte: Wert zusammenfassen, Zahl nennen, Pause. Eine klare Zahl ist sicherer als eine Spanne: Reicht die Spanne unter deine Zahl, nimmt der andere das untere Ende. Drückt er den Preis: erst fragen, was dahintersteckt. Gibst du nach, dann nur gegen etwas: weniger Umfang, längere Laufzeit, Zahlung im Voraus. Und überzogene Zahlen sind kein schlauer Zug, sondern ein Risiko: Sie kosten öfter den Abschluss." },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-2-03-a", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Sag denselben Preis ohne Entschuldigung: Wert, Zahl, Punkt.",
+          "vorlage": "„Ich weiß, das ist jetzt viel, und Sie müssen das natürlich nicht, aber fürs Bad würde ich so 3.400 nehmen, wenn das okay ist.“",
+          "kriterien": ["fasst den Wert kurz zusammen", "eine klare Zahl, keine Spanne", "kein „leider“, kein Nachsatz"],
+          "muster": ["„Bad komplett gefliest, mit Abdichtung und Entsorgung, fertig in fünf Tagen: 3.400 Euro.“", "„Für das ganze Bad mit Abdichtung rechne ich 3.400 Euro. Anfangen könnte ich in zwei Wochen.“"] },
+        { "art": "dialog", "kopf": { "id": "ueberzeugen-2-03-b", "faehigkeit": "ueberzeugen.einwand", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+          "gespraech": {
+            "titel": "„Geht da noch was?“", "figur": "der Bräutigam",
+            "lage": "Du fotografierst nebenher Feiern. Ein Paar fragt für seine Hochzeit an; du hast 1.400 Euro für den ganzen Tag genannt.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Bräutigam: „Das Angebot gefällt uns. Aber 1.400 ist happig. Geht da noch was?“",
+                "wahl": [
+                  { "text": "„Für Sie mache ich 1.200.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1b", "rueck": "Nachlass ohne Grund und ohne Gegenleistung: Jetzt wirkt der erste Preis ausgedacht." },
+                  { "text": "„Was genau ist Ihnen zu viel – der Betrag insgesamt oder ein Teil davon?“", "wert": 2, "weiter": "k2", "rueck": "Erst verstehen, bevor du an der Zahl drehst." },
+                  { "text": "„Nein, das ist mein Preis. Andere nehmen viel mehr, und die Bilder sprechen doch für sich.“", "wert": 0, "tendenz": "verteidigen", "weiter": "k1c", "rueck": "Hart und rechtfertigend zugleich. Er hört Abwehr statt Interesse." }
+                ] },
+              { "id": "k1b", "sagt": "Bräutigam: „Und 1.000? Dann sind wir sofort dabei.“",
+                "wahl": [
+                  { "text": "„Nein. Lassen Sie uns lieber schauen, was Sie wirklich brauchen.“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: zurück zum Bedarf statt weiter nach unten." },
+                  { "text": "„Na gut, weil Sie es sind.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Du verhandelst gegen dich selbst." }
+                ] },
+              { "id": "k1c", "sagt": "Bräutigam: „Hm. Dann müssen wir wohl weitersuchen.“",
+                "wahl": [
+                  { "text": "„Darf ich fragen, wo es hakt? Vielleicht passt ein kleineres Paket.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt: fragen statt verteidigen." },
+                  { "text": "„Schade. Viel Glück bei der Suche.“", "wert": 1, "weiter": "ende3", "rueck": "Respektvoll – aber du erfährst nicht, ob es eine Lösung gegeben hätte." }
+                ] },
+              { "id": "k2", "sagt": "Bräutigam: „Ehrlich gesagt: Die Feier am Abend brauchen wir nicht so ausführlich. Uns sind Trauung und Gruppenfotos wichtig.“",
+                "wahl": [
+                  { "text": "„Dann bleibe ich trotzdem den ganzen Tag – der Abend ist oft das Schönste.“", "wert": 1, "weiter": "ende3", "rueck": "Kann stimmen. Aber du überhörst, was ihnen wichtig ist." },
+                  { "text": "„Dann lasse ich 200 nach und bleibe trotzdem bis zum Schluss.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Du gibst Geld und Zeit her. Beim nächsten Mal fragen sie wieder." },
+                  { "text": "„Dann Trauung, Gruppenfotos und eine Stunde Feier für 1.000 Euro. Passt das?“", "wert": 2, "weiter": "ende1", "rueck": "Weniger Preis gegen weniger Umfang – dein Preis bleibt ernst, und beide bekommen, was sie wollen." }
+                ] },
+              { "id": "ende1", "sagt": "Bräutigam: „Perfekt. Schicken Sie uns das so?“", "ende": "Am Ende den Umfang statt nur den Preis verändert – Nachlass gegen Gegenleistung. Am stärksten ist es, wenn du gleich zu Beginn fragst, was hinter „zu teuer“ steckt." },
+              { "id": "ende2", "sagt": "Bräutigam: „Super, abgemacht!“ Du rechnest später nach und ärgerst dich.", "ende": "Nachlass ohne Gegenleistung: Der andere freut sich, du zahlst drauf. Beim nächsten Mal erst fragen, dann den Umfang anpassen." },
+              { "id": "ende3", "sagt": "Bräutigam: „Wir überlegen es uns noch mal.“", "ende": "Kein Streit, aber auch keine Lösung. Wer fragt, was wirklich wichtig ist, findet oft ein Paket, das passt." }
+            ],
+            "prinzipien": ["erst fragen, was hinter „zu teuer“ steckt", "kein Nachlass ohne Gegenleistung", "Umfang statt nur Preis verändern"]
+          } },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-2-03-c", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "wissen", "einfluss": "taktik" },
+          "frage": "Du sollst für einen Auftrag die erste Zahl nennen. Du weißt: Üblich sind 4.000 bis 5.000 Euro, deine Arbeit ist gut. Welche Zahl nennst du?",
+          "antworten": [
+            { "text": "„7.500 Euro“ – runterhandeln kann man immer, am Ende landet man in der Mitte.", "wert": 0, "tendenz": "ueberziehen", "warum": "Überzogene Zahlen führen laut Meta-Analyse öfter zum Abbruch und hinterlassen Unmut." },
+            { "text": "„4.800 Euro.“ – und dann zuhören.", "wert": 2, "warum": "Ehrgeizig, aber begründbar. Wer zuerst eine solche Zahl nennt, liegt im Schnitt vorn." },
+            { "text": "„Irgendwas zwischen 3.500 und 5.000, je nachdem, was Sie brauchen.“", "wert": 0, "tendenz": "spanne", "warum": "Die Spanne lädt ein, das untere Ende zu nehmen – und das liegt hier sogar unter dem Üblichen." },
+            { "text": "„4.200 Euro – das ist fair, dann haben wir keinen Ärger.“", "wert": 1, "warum": "Fair und im Rahmen. Du lässt aber Spielraum liegen, den die Arbeit vermutlich wert ist." }
+          ] },
+        { "art": "mission", "ref": "ueberzeugen-m-08" }
+      ],
+      "regel": "Wert, Zahl, Pause – und Nachlass nur gegen eine Gegenleistung.",
+      "merkkarten": [
+        { "id": "ueberzeugen-2-03-m1", "frage": "Drei Schritte beim Preis?", "antwort": "Wert zusammenfassen, Zahl nennen, Pause." },
+        { "id": "ueberzeugen-2-03-m2", "frage": "„Geht da noch was?“ – was zuerst?", "antwort": "Fragen, was dahintersteckt. Nachlass nur gegen Gegenleistung." },
+        { "id": "ueberzeugen-2-03-m3", "frage": "Warum keine überzogene erste Zahl?", "antwort": "Sie kostet öfter den Abschluss und hinterlässt Unmut." }
+      ],
+      "mission": "ueberzeugen-m-08"
+    },
+    {
+      "id": "ueberzeugen-2-04", "bereich": "ueberzeugen", "stufe": 2, "nr": 4,
+      "titel": "Das Angebot, das man versteht",
+      "faehigkeiten": ["ueberzeugen.nutzen", "ueberzeugen.vertrauen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Ein großer Feldversuch zeigt den Vorteil kurzer Mails, eine Versuchsreihe den Nachteil unnötig schwieriger Wörter. Der Aufbau des Angebots ist Praxiswissen.",
+      "quellen": ["rogers-lasky2023", "oppenheimer2006", "praxis-ueberzeugen"],
+      "aha": "Ein Angebot wird überflogen, nicht gelesen. Was im Betreff und im ersten Satz nicht steht, kommt oft gar nicht an – Nutzen, Preis und nächster Schritt gehören nach oben.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Rund 7.000 Empfänger bekamen dieselbe Bitte um eine kurze Umfrage – als Mail mit 127 oder mit 49 Wörtern. Was geschah?", "optionen": ["die lange brachte mehr Antworten – sie erklärt besser", "kaum ein Unterschied", "die kurze brachte fast doppelt so viele Antworten"], "richtig": 2, "loesung": "Die kurze brachte fast doppelt so viele Antworten.", "aufloesung": "Wer viel liest, überfliegt. Die kurze Mail kam schneller zum Punkt. In einer Nebenstudie hielten Leser der kurzen Mail sogar die Umfrage für kürzer. Ein einzelner, aber großer Feldversuch." },
+        { "art": "karte", "text": "Ein Angebot auf einer Seite: Betreff mit Nutzen („Ihr Büro läuft ab Montag wieder“). Erster Satz: worum es geht und was du brauchst. Drei Punkte, was sich für den Leser ändert. Der Preis klar, alles eingerechnet. Ein ehrlicher Haken mit Einordnung. Zum Schluss ein nächster Schritt mit Datum. Alltagswörter statt Fachsprache: Wer ohne Not schwierige Wörter wählt, wirkt weniger kompetent." },
+        { "art": "fehler", "kopf": { "id": "ueberzeugen-2-04-a", "faehigkeit": "ueberzeugen.nutzen", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Finde die Stellen, die das Angebot schwächen.",
+          "teile": [
+            { "t": "Betreff: Angebot Nr. 2026-117", "fehler": "Kein Nutzen im Betreff – so geht die Mail im Postfach unter." },
+            { "t": "Sehr geehrte Frau Köhler, wie besprochen sende ich Ihnen unser Angebot." },
+            { "t": "Unsere Lösung basiert auf einer hochverfügbaren, redundanten Infrastruktur mit inkrementeller Datensicherung.", "fehler": "Fachsprache und Merkmale – was hat sie davon?" },
+            { "t": "Sie haben jeden Morgen den Stand vom Vorabend, auch wenn ein Rechner ausfällt." },
+            { "t": "Der Preis richtet sich nach Aufwand und wird individuell abgestimmt.", "fehler": "Kein klarer Preis – das weckt Misstrauen und Nachfragen." },
+            { "t": "Bei Fragen stehe ich jederzeit gern zur Verfügung.", "fehler": "Kein nächster Schritt – das Angebot wartet auf ihrem Stapel." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-2-04-b", "faehigkeit": "ueberzeugen.nutzen", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Welcher Betreff bringt Nadine Köhler am ehesten dazu, das Angebot zu öffnen?",
+          "antworten": [
+            { "text": "„Angebot“", "wert": 0, "warum": "Sagt nichts. Im Postfach sieht es aus wie jede Rechnung." },
+            { "text": "„Unser Angebot über Wartung, Sicherung und Notdienst für Ihre gesamte IT-Infrastruktur“", "wert": 1, "warum": "Klar, worum es geht – aber in Merkmalen. Ihr Problem kommt nicht vor." },
+            { "text": "„Nie mehr ein Tag Stillstand: so ist Ihr Betrieb ab Montag abgesichert“", "wert": 0, "tendenz": "uebertreiben", "warum": "Nutzen ja, aber ein Versprechen, das niemand halten kann. Wer liest, wird misstrauisch." },
+            { "text": "„Ihr Server-Ausfall: ab Montag abgesichert (350 Euro im Monat)“", "wert": 2, "warum": "Ihr Problem, der Nutzen und der Preis – sie weiß sofort, worum es geht." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-2-04-c", "faehigkeit": "ueberzeugen.nutzen", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Schreib den Absatz für eine Arztpraxis verständlich: Alltagswörter, Nutzen zuerst, höchstens drei Sätze.",
+          "vorlage": "„Durch die Implementierung einer cloudbasierten Terminmanagementlösung mit automatisierter Patientenbenachrichtigung lassen sich Terminausfälle signifikant reduzieren.“",
+          "kriterien": ["Alltagswörter, kein Fachjargon", "Nutzen für die Praxis zuerst", "höchstens drei Sätze, bleibt wahr"],
+          "muster": ["„Ihre Patienten bekommen am Vortag eine Erinnerung aufs Handy. So bleiben weniger Termine leer.“", "„Weniger leere Termine: Das Programm erinnert jeden Patienten am Tag vorher. Ihr Empfang muss dafür nicht mehr anrufen.“"] },
+        { "art": "bauplan", "kopf": { "id": "ueberzeugen-2-04-d", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+          "plan": "Mein Angebot auf einer Seite",
+          "anlass": "Ein Angebot oder Vorschlag, den du demnächst schriftlich schickst – an einen Kunden, einen Verein oder privat.",
+          "felder": [
+            { "name": "Betreff mit Nutzen", "hilfe": "Was hat der Leser davon – gern mit Preis." },
+            { "name": "Erster Satz", "hilfe": "Worum geht es, und was brauchst du von ihm?" },
+            { "name": "Drei Punkte", "hilfe": "Was ändert sich für ihn? In Alltagswörtern." },
+            { "name": "Preis", "hilfe": "Eine Zahl, alles eingerechnet." },
+            { "name": "Ein ehrlicher Haken", "hilfe": "Ein echter Nachteil – und wie du ihn einordnest." },
+            { "name": "Nächster Schritt", "hilfe": "Wer tut was bis wann?" }
+          ],
+          "muster": ["Betreff: Ihr Bad in fünf Tagen fertig – 3.400 Euro. Erster Satz: Hier ist mein Angebot fürs Bad; für den Start im März bräuchte ich bis zum 10. Ihre Zusage. Drei Punkte: komplett gefliest, Abdichtung inklusive, Entsorgung übernehme ich. Preis: 3.400 Euro, alles drin. Haken: Fünf Tage ist das Bad nicht nutzbar – ich fange montags an, damit das Wochenende frei bleibt. Nächster Schritt: Ich rufe Sie Donnerstag an – passt das?"] },
+        { "art": "experiment", "auftrag": "Schick dein nächstes Angebot oder deinen nächsten schriftlichen Vorschlag nach dem Bauplan. Lass es vorher jemanden fünf Sekunden überfliegen und frag: Was ist hängen geblieben?", "dauer": "woche", "nachfrage": "Hat der Leser in fünf Sekunden Nutzen, Preis und nächsten Schritt gefunden?" },
+        { "art": "reflexion", "frage": "Welches Wort aus deiner Fachsprache versteht außerhalb deines Fachs kaum jemand – und wie sagst du es stattdessen?", "insBuch": "saetze" }
+      ],
+      "regel": "Nutzen, Preis und nächster Schritt nach oben – in Alltagswörtern.",
+      "merkkarten": [
+        { "id": "ueberzeugen-2-04-m1", "frage": "Was gehört in den Betreff eines Angebots?", "antwort": "Der Nutzen für den Leser – gern mit Preis." },
+        { "id": "ueberzeugen-2-04-m2", "frage": "Womit endet ein Angebot?", "antwort": "Mit einem nächsten Schritt und einem Datum." }
+      ]
+    },
+    {
+      "id": "ueberzeugen-2-05", "bereich": "ueberzeugen", "stufe": 2, "nr": 5,
+      "titel": "Verhandeln mit Interessen und Alternative",
+      "faehigkeiten": ["ueberzeugen.einwand", "ueberzeugen.abschluss", "ueberzeugen.einfluss"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Interessen statt Positionen ist Praxiswissen aus dem Harvard-Konzept. Experimente zeigen: Wer an sein eigenes Ziel denkt, wird von der ersten Zahl der Gegenseite weniger gezogen. Längere Pausen gingen mit besseren gemeinsamen Ergebnissen einher.",
+      "quellen": ["fisherury", "galinsky2001", "petrowsky2025", "curhan2022"],
+      "aha": "Hinter „Ich zahle höchstens …“ steckt ein Grund. Wer nach dem Grund fragt, mehrere Möglichkeiten auf den Tisch legt und seine eigene Alternative kennt, verhandelt ruhig – und kann auch gehen.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Jule Marek will deinen alten Kleinwagen kaufen. Du willst 3.000 Euro, sie bietet 2.500.", "schwach": "„Sagen wir 2.750 – wir treffen uns in der Mitte.“", "stark": "„Was macht für dich die 2.500 aus – das Budget, oder siehst du etwas am Auto?“", "frage": "Welcher Satz kann zu einer besseren Lösung für beide führen?", "unterschied": "Die Mitte teilt nur Positionen. Die Frage nach dem Grund öffnet Möglichkeiten: Reicht ihr Budget gerade nicht, hilft vielleicht Zahlung in zwei Raten. Stören sie die Reifen, geht es um Reifen, nicht um 500 Euro." },
+        { "art": "karte", "text": "Vier Werkzeuge. Interessen: Frag nach dem Grund hinter der Forderung. Möglichkeiten: Leg mehr als den Preis auf den Tisch – Umfang, Termin, Zahlungsweise, Laufzeit. Maßstäbe: Was ist fair, gemessen an etwas Neutralem, etwa vergleichbaren Angeboten? Alternative: Wisse vorher, was du tust, wenn ihr euch nicht einigt – und ab welcher Zahl ein Nein besser ist als ein Ja." },
+        { "art": "studie", "frage": "Lässt sich der Zug der ersten Zahl bremsen?", "aufbau": "In drei Experimenten verhandelten Teilnehmende als Käufer oder Verkäufer. Manche wurden gezielt auf andere Angaben gelenkt: ihr eigenes Ziel oder die Grenzen und Alternativen der Gegenseite.", "ergebnis": "Gewöhnlich lag vorn, wer zuerst eine Zahl nannte. Dachte die andere Seite aber an ihr eigenes Ziel oder an die Alternativen des Gegenübers, verschwand dieser Vorteil.", "grenze": "Übungsverhandlungen mit Studierenden. Die Folgerung ist trotzdem praktisch: dein Ziel vorher aufschreiben und im Gespräch daran denken. Die eigene Alternative zu kennen ist Praxiswissen dazu.", "beleg": "B", "quellen": ["galinsky2001"] },
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-2-05-a", "faehigkeit": "ueberzeugen.einwand", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Position oder Interesse?",
+          "faecher": ["Position", "Interesse"],
+          "karten": [
+            { "text": "„Ich zahle höchstens 2.500.“", "fach": 0 },
+            { "text": "„Mehr als 2.500 habe ich diesen Monat nicht auf dem Konto.“", "fach": 1 },
+            { "text": "„Der Umzug muss am Samstag sein.“", "fach": 0 },
+            { "text": "„Am Montag fange ich in der neuen Stelle an.“", "fach": 1 },
+            { "text": "„Ich will einen Rabatt.“", "fach": 0 },
+            { "text": "„Ich muss zu Hause erklären können, warum ich hier kaufe.“", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-2-05-b", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Morgen verhandelst du über den Verkauf deines Wagens. Was erledigst du heute?",
+          "antworten": [
+            { "text": "Dir viele Argumente überlegen, warum das Auto mehr wert ist als jedes andere im Angebot.", "wert": 1, "warum": "Hilft beim Begründen. Ohne Untergrenze weißt du aber nicht, wann du Nein sagen solltest." },
+            { "text": "Zahl, Untergrenze und Alternative aufschreiben: „Unter 2.700 geht er an den Händler.“", "wert": 2, "warum": "Mit deinem Ziel auf dem Zettel zieht dich die Zahl der anderen weniger – und dank der Alternative kannst du freundlich gehen." },
+            { "text": "Nichts – am besten entscheidest du spontan, was sich richtig anfühlt.", "wert": 0, "tendenz": "unvorbereitet", "warum": "Im Gespräch zieht dich die erste Zahl der anderen – dagegen hilft nur, was vorher feststeht." },
+            { "text": "Dir einen zweiten Interessenten ausdenken, um Druck zu machen.", "wert": 0, "tendenz": "erfinden", "warum": "Ein erfundener Mitbewerber ist rote Linie. Echte Alternativen brauchst du – ausgedachte schaden dir." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-2-05-c", "faehigkeit": "ueberzeugen.einwand", "stufe": 6, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Leg statt eines Neins mehrere Möglichkeiten auf den Tisch.",
+          "vorlage": "Kundin: „Ich zahle höchstens 300 im Monat.“ Du: „Dann wird das nichts.“",
+          "kriterien": ["fragt nach dem Grund oder bietet Möglichkeiten", "verändert Umfang, Laufzeit oder Zahlungsweise statt nur den Preis", "bleibt freundlich und ehrlich"],
+          "muster": ["„Was macht die 300 für Sie aus? Geht es ums Budget im ersten Jahr, könnten wir mit Sicherung und Notdienst starten und die Wartung später dazunehmen.“", "„Für 300 ginge es mit Notdienst nur werktags. Oder 350 mit Wochenende – was ist Ihnen wichtiger?“"] },
+        { "art": "mission", "ref": "ueberzeugen-m-06" }
+      ],
+      "regel": "Frag nach dem Grund, leg mehr als den Preis auf den Tisch – kenn deine Alternative.",
+      "merkkarten": [
+        { "id": "ueberzeugen-2-05-m1", "frage": "Die vier Werkzeuge der Verhandlung?", "antwort": "Interessen, Möglichkeiten, Maßstäbe, die eigene Alternative." },
+        { "id": "ueberzeugen-2-05-m2", "frage": "Was schwächt den Zug der ersten Zahl?", "antwort": "An das eigene Ziel denken – oder an die Alternativen der Gegenseite. Am besten vorher aufschreiben." }
+      ],
+      "mission": "ueberzeugen-m-06"
+    },
+    {
+      "id": "ueberzeugen-2-06", "bereich": "ueberzeugen", "stufe": 2, "nr": 6,
+      "titel": "Nachfassen, ohne zu nerven",
+      "faehigkeiten": ["ueberzeugen.abschluss", "ueberzeugen.haltung"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Der Ablauf ist Praxiswissen. Belegt ist das Umfeld: Vertrautheit wächst mit Wiederholung, kippt aber bei zu vielen Kontakten; Druck weckt Gegenwehr.",
+      "quellen": ["praxis-ueberzeugen", "montoya2017", "rains2013"],
+      "aha": "Nach „Ich überlege es mir“ geht es oft nicht um ein Nein, sondern um Alltag. Wer mit etwas Nützlichem nachfasst und irgendwann das Nein anbietet, bleibt willkommen.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer sich nach einem Angebot nicht meldet, hat kein Interesse.", "urteil": "teils", "warum": "Manchmal stimmt es. Oft ist das Angebot nur im Alltag untergegangen. Darum einmal nachfassen – und ein Nein, wenn es kommt, wirklich gelten lassen." },
+        { "art": "karte", "text": "Der Rhythmus: Schon im Gespräch einen Termin fürs Nachfassen vereinbaren („Darf ich mich Donnerstag melden?“). Dann einmal mit etwas Nützlichem: die Antwort auf eine offene Frage, ein Tipp, ein Beispiel. Kommt nichts, ein zweites Mal kurz. Zum Schluss das Nein anbieten: „Soll ich das Thema für jetzt schließen?“ Danach ist Schluss. Zu viele Kontakte kippen: Was erst vertraut wirkt, nervt irgendwann." },
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-2-06-a", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Nützlich, nervig oder rote Linie?",
+          "faecher": ["nützlich", "nervig", "rote Linie"],
+          "karten": [
+            { "text": "„Sie hatten nach der Lieferzeit gefragt: Es wären drei Wochen.“", "fach": 0 },
+            { "text": "„Anbei das Beispiel vom Malerbetrieb, von dem ich erzählt hatte.“", "fach": 0 },
+            { "text": "„Wollte nur mal nachhören, ob Sie sich schon entschieden haben.“", "fach": 1 },
+            { "text": "Die vierte Mail in zwei Wochen, jedes Mal mit demselben Angebot.", "fach": 1 },
+            { "text": "„Ich habe so viel Zeit in Ihr Angebot gesteckt – jetzt können Sie mich nicht hängen lassen.“", "fach": 2 },
+            { "text": "„Das Angebot gilt nur noch bis heute Abend“ – obwohl es nächste Woche genauso gilt.", "fach": 2 }
+          ] },
+        { "art": "geschichte", "titel": "Nadines Stapel", "figur": "Nadine Köhler", "text": "Nadine Köhler hat mir einmal erzählt, wie ihr Schreibtisch im Frühjahr aussieht: Angebote, Rechnungen, Bewerbungen, alles auf einem Stapel. „Ich überlege es mir“ heißt bei ihr meistens: Ich komme gerade nicht dazu. Einer hat sie dreimal angerufen, immer mit derselben Frage, ob sie schon entschieden hat. Den hat sie irgendwann weggedrückt. Ein anderer hat ihr eine Woche nach dem Gespräch zwei Sätze geschickt: die Antwort auf ihre Frage zur Lieferzeit und den Tag, an dem er anruft. Den hat sie genommen. Nicht, weil er hartnäckiger war. Sondern weil er ihr Arbeit abgenommen hat.", "frage": "Was nimmst du dem anderen bei deinem nächsten Nachfassen ab?" },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-2-06-b", "faehigkeit": "ueberzeugen.abschluss", "stufe": 5, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Mach aus dem Nachhaken ein Nachfassen mit Inhalt und klarem nächsten Schritt.",
+          "vorlage": "„Hallo, wollte nur mal nachhören, ob Sie sich schon entschieden haben?“",
+          "kriterien": ["bringt etwas Nützliches mit", "nennt einen nächsten Schritt", "lässt ein Nein zu"],
+          "muster": ["„Sie hatten gefragt, ob die Sicherung auch die Laptops erfasst: ja, alle sechs. Passt es, wenn ich Donnerstag kurz anrufe?“", "„Hier das Beispiel vom Malerbetrieb, von dem ich erzählt hatte. Passt es gerade nicht, sagen Sie es gern – dann melde ich mich im Herbst.“"] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-2-06-c", "faehigkeit": "ueberzeugen.haltung", "stufe": 5, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Zwei Mails, keine Antwort. Was schreibst du beim dritten Mal?",
+          "antworten": [
+            { "text": "Wieder dasselbe Angebot, diesmal mit dem Betreff „Erinnerung: Bitte um Rückmeldung zu meinem Angebot“.", "wert": 0, "tendenz": "nerven", "warum": "Wiederholung ohne Neues: Ab hier kippt Vertrautheit in Ärger." },
+            { "text": "„Soll ich das Thema für jetzt schließen? Ein kurzes Ja oder Nein genügt.“", "wert": 2, "warum": "Du bietest das Nein an. Das entlastet – und schafft Klarheit für beide." },
+            { "text": "Nichts mehr – wer nicht antwortet, will nicht.", "wert": 1, "warum": "Respektvoll. Oft fehlte aber nur die Zeit – ein letztes, leichtes Angebot zum Nein hätte Klarheit gebracht." },
+            { "text": "„Höre ich bis Freitag nichts, plane ich Sie fest ein.“", "wert": 0, "tendenz": "uebergehen", "warum": "Schweigen als Ja auszulegen übergeht ein mögliches Nein – rote Linie." }
+          ] },
+        { "art": "mission", "ref": "ueberzeugen-m-09" }
+      ],
+      "regel": "Einmal mit Nutzen, einmal kurz – dann das Nein anbieten.",
+      "merkkarten": [
+        { "id": "ueberzeugen-2-06-m1", "frage": "Womit fasst du nach?", "antwort": "Mit etwas Nützlichem: einer Antwort, einem Tipp, einem Beispiel." },
+        { "id": "ueberzeugen-2-06-m2", "frage": "Das letzte Nachfassen?", "antwort": "Das Nein anbieten: „Soll ich das Thema für jetzt schließen?“" }
+      ],
+      "mission": "ueberzeugen-m-09"
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "lagen": [
+    {
+      "id": "ausdruck-l-06", "bereich": "ausdruck", "phase": "k", "umfeld": "kunden", "faehigkeiten": ["ausdruck.diplomatie", "ausdruck.treffend"], "stufe": 5,
+      "titel": "Herr Petersen und die Garantie", "figur": "Herr Petersen",
+      "einleitung": "Ein Nein, das niemand hören will. Du übst, früh und klar abzusagen, sofort zu sagen, was geht – und nichts schönzureden.",
+      "lage": "Herr Petersen steht mit seinem Drucker am Tresen. Das Gerät ist kaputt, die Garantie ist vor zwei Monaten abgelaufen. Ihr könntet es zum Festpreis reparieren, und für die Zeit gibt es ein Leihgerät.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Herr Petersen stellt den Drucker ab: „Der druckt nur noch Streifen. Das ist doch ein Garantiefall, oder?“",
+          "wahl": [
+            { "text": "„Das schauen wir uns ganz in Ruhe an – da finden wir bestimmt eine gute Lösung, Sie sind ja ein langjähriger Kunde.“", "wert": 0, "tendenz": "beschoenigen", "weiter": "k1b", "rueck": "Klingt freundlich – und er hört: kostenlos. Das Nein kommt später, dafür doppelt so schwer." },
+            { "text": "„Die Garantie ist im Mai abgelaufen. Was ich anbieten kann: Reparatur zum Festpreis, und für die Zeit ein Leihgerät.“", "wert": 2, "weiter": "k2", "rueck": "Das Nein früh und klar, gleich danach, was geht. Er weiß sofort, woran er ist." },
+            { "text": "„Nein, die Garantie ist abgelaufen.“", "wert": 1, "weiter": "k2", "rueck": "Ehrlich und klar. Was stattdessen geht, fehlt noch – er steht vor einer geschlossenen Tür." }
+          ] },
+        { "id": "k1b", "sagt": "Herr Petersen nickt zufrieden: „Gut. Dann kostet mich das also nichts.“",
+          "wahl": [
+            { "text": "„Doch – das hätte ich gleich sagen sollen. Die Garantie ist im Mai abgelaufen. Ich kann Ihnen aber einen Festpreis nennen.“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: Du korrigierst den falschen Eindruck sofort und bleibst beim Angebot." },
+            { "text": "„Das kann ich jetzt noch nicht genau sagen. Wir werden sehen.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Er geht mit der Hoffnung, die du ihm gemacht hast. Die Rechnung wird sie enttäuschen." }
+          ] },
+        { "id": "k2", "sagt": "„Abgelaufen? Ich hab das Ding doch gerade erst gekauft! Und Ihre Briefe versteh ich sowieso nie.“",
+          "wahl": [
+            { "text": "„Das tut mir leid.“", "wert": 1, "weiter": "k3", "rueck": "Freundlich. Ein Wort dazu, dass du seinen Ärger verstehst, und die Zahlen hätten ihm mehr geholfen." },
+            { "text": "„Verstehe, das ist ärgerlich – zwei Monate drüber. Der Festpreis wären 60 Euro, das Leihgerät kostet nichts.“", "wert": 2, "weiter": "k3", "rueck": "Du nimmst den Ärger ernst, ohne den Inhalt zu ändern – und sagst konkret, was es kostet." },
+            { "text": "„Die Garantiebedingungen standen aber im Vertrag, Paragraf 7. Das liegt nicht an uns.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k3", "rueck": "Stimmt vielleicht – aber jetzt streitet ihr über Paragrafen statt über seinen Drucker." }
+          ] },
+        { "id": "k3", "sagt": "Der Kostenvoranschlag liegt auf dem Tresen: 60 Euro Festpreis, das Leihgerät kostet nichts. Herr Petersen rechnet: „60 Euro. Und wann hätte ich ihn wieder?“",
+          "wahl": [
+            { "text": "„Das hängt von der Ersatzteillieferung ab, die je nach Hersteller schwankt, normalerweise aber zeitnah erfolgt.“", "wert": 0, "tendenz": "vernebeln", "weiter": "ende3", "rueck": "Ein langer Satz ohne Tag. „Zeitnah“ kann er nicht in den Kalender schreiben." },
+            { "text": "„Am Dienstag. Das Leihgerät können Sie gleich mitnehmen.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Tag und ein nächster Schritt – das kann er planen." },
+            { "text": "„In ein paar Tagen.“", "wert": 1, "weiter": "ende4", "rueck": "Kurz und ehrlich, aber ohne Tag. Er wird wohl am Freitag anrufen und fragen." }
+          ] },
+        { "id": "ende1", "sagt": "Herr Petersen klemmt sich den Leihdrucker unter den Arm: „Na gut. Dienstag also.“", "ende": "Preis und Tag stehen – damit kann er planen. Ganz rund wird so ein Gespräch, wenn auch das Nein früh und klar kommt, gleich danach das, was geht, und sein Ärger Platz hat. So wird aus einer schlechten Nachricht ein Plan." },
+        { "id": "ende2", "sagt": "Eine Woche später hält Herr Petersen die Rechnung in der Hand: „Sie haben doch gesagt, das wird nichts kosten!“", "ende": "Kein Drama – aber ein Nein, das wie ein Ja klingt, kommt später doppelt zurück. Beim nächsten Mal: klar absagen, dann anbieten." },
+        { "id": "ende3", "sagt": "Herr Petersen seufzt: „Zeitnah. Das sagen Sie immer.“", "ende": "Kein Drama – er bekommt seinen Drucker. Aber ein Nebelwort kostet Vertrauen. Nenn einen Tag, auch wenn er nur ungefähr ist." },
+        { "id": "ende4", "sagt": "Herr Petersen nimmt das Leihgerät: „Ein paar Tage … na gut. Ich ruf dann Freitag mal an.“", "ende": "Kein Drama – er bekommt seinen Drucker. Aber ohne Tag muss er nachfragen. Nenn einen Tag, auch wenn er nur ungefähr ist." }
+      ],
+      "prinzipien": ["das Nein früh und klar", "sofort sagen, was geht", "Ärger anerkennen statt rechtfertigen", "Preis und Tag konkret", "nichts schönreden"],
+      "transfer": "Welches Nein schiebst du gerade vor dir her? Schreib es in zwei Sätzen: das Nein – und was stattdessen geht."
+    },
+    {
+      "id": "ausdruck-l-07", "bereich": "ausdruck", "phase": "k", "umfeld": "vorgesetzte", "faehigkeiten": ["ausdruck.diplomatie", "ausdruck.knapp", "ausdruck.satzbau"], "stufe": 5,
+      "titel": "Der Fehler, den du meldest", "figur": "Dr. Henrik Albers",
+      "einleitung": "Dir ist ein Fehler passiert, und dein Chef soll es von dir erfahren. Du übst die Meldung in drei Sätzen: was, welche Folge, was jetzt – ohne Nebel, ohne Kriechen.",
+      "lage": "Du hast der Bäckerei Hansen eine Rechnung geschickt – 200 Euro zu wenig. Die Bäckerei hat schon bezahlt. Gemerkt hast du es eben beim Abgleich. Dr. Albers sollte es wissen, bevor die Bäckerei anruft.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Du schreibst Dr. Albers eine Mail. Zuerst der Betreff.",
+          "wahl": [
+            { "text": "„Kurze Info“", "wert": 0, "weiter": "k2", "rueck": "Sagt nichts. Vielleicht öffnet er die Mail erst, wenn die Bäckerei schon angerufen hat." },
+            { "text": "„Info zur Rechnung an die Bäckerei Hansen vom vergangenen Donnerstag“", "wert": 1, "weiter": "k2", "rueck": "Das Thema stimmt. Dass etwas schiefgelaufen ist, sieht er aber erst beim Öffnen." },
+            { "text": "„Fehler in der Rechnung an Bäckerei Hansen – Korrektur läuft“", "wert": 2, "weiter": "k2", "rueck": "Was passiert ist und dass du dich kümmerst – schon in der Betreffzeile." }
+          ] },
+        { "id": "k2", "sagt": "Jetzt der erste Satz.",
+          "wahl": [
+            { "text": "„Ich habe der Bäckerei Hansen 200 Euro zu wenig berechnet.“", "wert": 2, "weiter": "k3", "rueck": "Ein Ich-Satz, die Sache, der Betrag. Klarer geht es nicht." },
+            { "text": "„Bei der Rechnungsstellung an die Bäckerei Hansen ist es zu einer Unstimmigkeit gekommen.“", "wert": 0, "tendenz": "vernebeln", "weiter": "k3", "rueck": "Hauptwortstil ohne Handelnden. „Unstimmigkeit“ versteckt, was passiert ist und wer es war." },
+            { "text": "„Es tut mir unendlich leid, ich weiß gar nicht, wie mir das passieren konnte, ich ärgere mich wahnsinnig über mich.“", "wert": 0, "tendenz": "kriechen", "weiter": "k2b", "rueck": "Viel Gefühl, keine Information. Albers weiß noch nicht einmal, worum es geht." }
+          ] },
+        { "id": "k2b", "sagt": "Miriam liest über deine Schulter: „Albers will wissen, was los ist – nicht, wie schlecht du dich fühlst.“",
+          "wahl": [
+            { "text": "Den Satz ersetzen: „Ich habe der Bäckerei Hansen 200 Euro zu wenig berechnet.“", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance genutzt. Ein kurzes „Das ärgert mich“ darf später kommen – nach der Sache." },
+            { "text": "„Lass mal, so merkt er wenigstens, dass es mir leidtut.“", "wert": 0, "tendenz": "kriechen", "weiter": "k3", "rueck": "Das merkt er auch an einer klaren Meldung. Er muss sich jetzt erst durch dein Bedauern lesen." }
+          ] },
+        { "id": "k3", "sagt": "Was schreibst du zu Folge und nächstem Schritt?",
+          "wahl": [
+            { "text": "„Ich kümmere mich darum.“", "wert": 1, "weiter": "k4", "rueck": "Gut, dass du es übernimmst. Wie und bis wann, weiß er aber nicht." },
+            { "text": "„Der Fehler lag eigentlich am alten Formular, das ich schon lange ändern wollte – da kann das jedem passieren.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k4", "rueck": "Vielleicht stimmt es. Als zweiter Satz klingt es nach Ausrede – das Formular kommt später." },
+            { "text": "„Die Bäckerei hat schon bezahlt. Ich rufe heute an, erkläre den Fehler und schicke eine Nachberechnung.“", "wert": 2, "weiter": "k4", "rueck": "Folge und nächster Schritt in zwei kurzen Sätzen. Albers muss nichts mehr fragen." }
+          ] },
+        { "id": "k4", "sagt": "Zwanzig Minuten später antwortet Albers: „Danke für die schnelle Info. Wie verhindern wir das künftig?“",
+          "wahl": [
+            { "text": "„Ich passe künftig besser auf.“", "wert": 1, "weiter": "ende2", "rueck": "Ehrlich gemeint – aber ein Vorsatz ist kein Ablauf. Er fragt nach einer Regel." },
+            { "text": "„Ich schlage vor: Jede Rechnung über 1.000 Euro liest eine zweite Person gegen.“", "wert": 2, "weiter": "ende1", "rueck": "Ein konkreter Vorschlag, kein Schuldbekenntnis. So wird aus dem Fehler eine Verbesserung." },
+            { "text": "„Fehler passieren halt jedem mal.“", "wert": 0, "tendenz": "abwiegeln", "weiter": "ende2", "rueck": "Stimmt – aber er hat nach dem Künftig gefragt, nicht nach Verständnis." }
+          ] },
+        { "id": "ende1", "sagt": "Albers: „Einverstanden. Machen Sie das so.“", "ende": "Ein Vorschlag für morgen – genau danach hatte er gefragt. Dazu ein Betreff mit der Sache, der Fehler im ersten Satz, zwei Sätze zu Folge und nächstem Schritt: Wer so meldet, gewinnt eher Vertrauen, als dass er es verliert." },
+        { "id": "ende2", "sagt": "Albers: „Sicher. Trotzdem hätte ich bis Freitag gern einen Vorschlag.“", "ende": "Kein Drama – gemeldet hast du es, und zwar von dir aus. Beim nächsten Mal auf die Frage nach dem Künftig gleich einen konkreten Vorschlag mitbringen." }
+      ],
+      "prinzipien": ["Betreff mit der Hauptsache", "der Fehler im ersten Satz, mit „ich“", "Folge und nächster Schritt", "keine Ausrede, kein Kriechen", "einen Vorschlag für die Zukunft"],
+      "transfer": "Welcher Fehler liegt bei dir gerade noch ungemeldet? Schreib die drei Sätze auf: was, welche Folge, was jetzt."
+    },
+    {
+      "id": "ausdruck-l-08", "bereich": "ausdruck", "phase": "k", "umfeld": "gruppe", "faehigkeiten": ["ausdruck.diplomatie", "ausdruck.register", "ausdruck.treffend"], "stufe": 6,
+      "titel": "Die Nachricht an die Hausgemeinschaft", "figur": "Frau Sommer",
+      "einleitung": "Eine Bitte an viele, in einem Chat, den alle lesen. Du übst, positiv zu fassen, den Ton der Gruppe zu treffen und konkret zu sagen, was geht.",
+      "lage": "Im Hausflur stehen seit Wochen fünf Fahrräder kreuz und quer – in einer Reihe an der rechten Wand hätten sie Platz. Frau Sommer, deine Nachbarin, kommt mit ihrem Rollator kaum noch zur Tür. Sie bittet dich, in die Chatgruppe des Hauses zu schreiben. Der Fahrradkeller ist voll.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Frau Sommer: „Schreiben Sie das in die Gruppe! Schreiben Sie: ‚Fahrräder im Flur sind verboten!‘“",
+          "wahl": [
+            { "text": "„Hallo zusammen, im Flur wird es eng: Mit Rollator oder Kinderwagen kommt man kaum noch durch. Könnt ihr eure Räder anders abstellen?“", "wert": 2, "weiter": "k2", "rueck": "Ein Grund, den jeder versteht, und eine Bitte statt eines Verbots – im Ton der Gruppe." },
+            { "text": "„Hiermit wird darauf hingewiesen, dass das Abstellen von Fahrrädern im Hausflur untersagt ist.“", "wert": 0, "tendenz": "zu-steif", "weiter": "k1b", "rueck": "Amtston im Nachbarschaftschat. Wer so angesprochen wird, sucht eher den Widerspruch als einen Platz." },
+            { "text": "„Bitte keine Räder mehr im Flur abstellen.“", "wert": 1, "weiter": "k2", "rueck": "Klar und höflich. Ohne Grund und ohne Alternative fragen sich aber alle: Wohin denn sonst?" }
+          ] },
+        { "id": "k1b", "sagt": "Ein Nachbar aus dem dritten Stock antwortet: „Wer schreibt denn hier wie das Ordnungsamt? Der Keller ist doch voll.“",
+          "wahl": [
+            { "text": "„Sorry für den Amtston. Gemeint war: Im Flur wird's eng für Rollator und Kinderwagen. Lasst uns zusammen eine Lösung suchen.“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst den Ton zurück, ohne die Bitte aufzugeben. Damit ist das Gespräch wieder offen." },
+            { "text": "„Steht so in der Hausordnung.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Formal richtig – aber jetzt geht es um Recht haben, nicht mehr um den Flur." }
+          ] },
+        { "id": "k2", "sagt": "Eine Nachbarin schreibt: „Und wohin dann mit den Rädern? Der Keller ist voll.“",
+          "wahl": [
+            { "text": "„Vielleicht findet sich ja irgendwo noch ein Platz – im Hof, oben im Treppenhaus oder sonst wo, wenn alle ein bisschen mitdenken.“", "wert": 1, "weiter": "ende3", "rueck": "Freundlich, aber vage. Irgendwo ist nirgendwo – die Räder bleiben, wo sie sind." },
+            { "text": "„Das ist nicht mein Problem.“", "wert": 0, "tendenz": "schroff", "weiter": "ende3", "rueck": "Schroff, und die Gruppe schaltet auf Abwehr. Die Frage war berechtigt." },
+            { "text": "„Stimmt, der Keller ist voll. Ich frage die Hausverwaltung nach einem Ständer im Hof. Bis dahin: Räder an die rechte Wand.“", "wert": 2, "weiter": "k3", "rueck": "Du nimmst den Einwand ernst und sagst konkret, was ab heute geht – und was du selbst tust." }
+          ] },
+        { "id": "k3", "sagt": "Am Abend klingelt Frau Sommer: „Und? Haben Sie geschrieben, dass das verboten ist?“",
+          "wahl": [
+            { "text": "„Ich habe um Platz gebeten und einen Fahrradständer im Hof angefragt. So machen eher alle mit.“", "wert": 2, "weiter": "ende1", "rueck": "Ehrlich und freundlich: Du sagst, was du geschrieben hast – und warum." },
+            { "text": "„Ja, so ungefähr.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende1", "rueck": "Das stimmt nicht – und wenn sie die Gruppe liest, merkt sie es." },
+            { "text": "„Nein, verboten hab ich nicht geschrieben – das klingt so streng.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich. Wenn du dazusagst, was du stattdessen geschrieben hast, versteht sie es besser." }
+          ] },
+        { "id": "ende1", "sagt": "Am nächsten Morgen stehen die Räder an der Wand rechts. Frau Sommer kommt mit dem Rollator bis zur Tür.", "ende": "Die konkrete Lösung für heute hat gewirkt. Eine Bitte mit Grund, im Ton der Gruppe, erreicht mehr Leute als ein Verbot im Amtston." },
+        { "id": "ende2", "sagt": "Der Streit in der Gruppe dauert zwei Tage. Die Räder bleiben im Flur.", "ende": "Kein Drama – aber Amtston und Paragrafen machen aus Nachbarn Gegner. Beim nächsten Mal: Grund, Bitte, Lösung – im Ton der Gruppe." },
+        { "id": "ende3", "sagt": "Ein Rad verschwindet in den Hof, vier bleiben im Flur. Frau Sommer quetscht sich mit dem Rollator vorbei.", "ende": "Kein Drama – ein Anfang. Aber ohne konkreten Platz bleiben die meisten Räder, wo sie sind. Beim nächsten Mal: auf den Einwand eine Lösung für heute." }
+      ],
+      "prinzipien": ["Bitte statt Verbot", "ein Grund, den jeder versteht", "im Ton der Gruppe schreiben", "konkret sagen, was ab heute geht", "Einwände ernst nehmen"],
+      "transfer": "Wo steht bei dir eine Bitte an viele an – Verein, Haus, Elterngruppe? Schreib sie mit Grund und einer Lösung für heute."
+    },
+    {
+      "id": "ausdruck-l-09", "bereich": "ausdruck", "phase": "k", "umfeld": "kollegen", "faehigkeiten": ["ausdruck.treffend", "ausdruck.diplomatie", "ausdruck.knapp"], "stufe": 6,
+      "titel": "Eine Rückmeldung für Lena", "figur": "Lena Brandt",
+      "einleitung": "Lena bittet um eine ehrliche Rückmeldung auf ihr erstes Konzept. Du übst, genau zu loben, konkret zu kritisieren und dich auf das Wichtigste zu beschränken.",
+      "lage": "Lena hat einen Plan für die Einarbeitung neuer Kollegen geschrieben, 14 Seiten. Er ist gründlich: In der ersten Woche hat jeder Tag einen Ansprechpartner. Der beste Gedanke steht aber auf Seite 9: Jeder Neue bekommt ab dem ersten Tag einen Paten. Die Seiten 3 bis 6 erklären die alte Regelung, die alle kennen. Und zum Schluss heißt es nur „zeitnah ein Gespräch“ – wann, steht nirgends.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Lena: „Sag ruhig ehrlich, was du denkst. Ich hab lange dran gesessen.“ Womit fängst du an?",
+          "wahl": [
+            { "text": "„Toll geworden, wirklich!“", "wert": 1, "weiter": "k2", "rueck": "Herzlich – aber sie weiß nicht, was gut war. Und ein „aber“ danach wiegt dann doppelt." },
+            { "text": "„Der Plan für die erste Woche ist richtig gut: Jeder Tag hat einen Ansprechpartner.“", "wert": 2, "weiter": "k2", "rueck": "Ein genaues Lob – sie weiß, was sie so lassen kann, und hört, dass du gelesen hast." },
+            { "text": "„Puh, ganz schön lang geworden. Ich hab ehrlich gesagt nicht alles gelesen, aber das meiste sah gut aus.“", "wert": 0, "tendenz": "abwerten", "weiter": "k2", "rueck": "Die Länge ist ein Punkt – aber als erster Satz, und dazu halb gelesen, entwertet es die ganze Arbeit." }
+          ] },
+        { "id": "k2", "sagt": "Jetzt das, was dir fehlt.",
+          "wahl": [
+            { "text": "„Vielleicht könnte man es irgendwie ein bisschen kürzen?“", "wert": 1, "weiter": "k2b", "rueck": "Die Richtung stimmt, aber drei Weichmacher und kein Wo. Lena weiß nicht, was sie tun soll." },
+            { "text": "„Das Konzept ist zu lang und unstrukturiert.“", "wert": 0, "tendenz": "urteilen", "weiter": "k2b", "rueck": "Ein Urteil, kein Befund. Lena hört „schlecht“ – und nicht, was sie ändern kann." },
+            { "text": "„Was mir fehlt, ist der Kern vorn: Auf Seite 9 steht dein bester Satz – jeder Neue bekommt einen Paten. Der gehört auf Seite 1.“", "wert": 2, "weiter": "k3", "rueck": "Befund statt Urteil, mit Seite und Satz. Und nebenbei noch ein Lob." }
+          ] },
+        { "id": "k2b", "sagt": "Lena runzelt die Stirn: „Wo denn? Es ist doch alles wichtig.“",
+          "wahl": [
+            { "text": "„Seite 3 bis 6 erklären die alte Regelung – die kennen alle. Die könnten in den Anhang. Und der Pate von Seite 9 nach vorn.“", "wert": 2, "weiter": "k3", "rueck": "Jetzt wird es konkret: welche Seiten, wohin. Damit kann sie arbeiten." },
+            { "text": "„Na ja, so allgemein halt.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Sie hat nachgefragt, und du bleibst vage. Jetzt weiß sie weniger als vorher." }
+          ] },
+        { "id": "k3", "sagt": "Lena notiert sich etwas: „Okay. Und sonst?“",
+          "wahl": [
+            { "text": "„Sonst passt alles.“", "wert": 1, "weiter": "ende1", "rueck": "Gut, dass du nicht nachlegst. Wenn noch etwas Wichtiges ist, wäre jetzt der Moment." },
+            { "text": "„Ein Punkt noch: Statt ‚zeitnah ein Gespräch‘ würde ich ‚nach zwei Wochen‘ schreiben. Der Rest trägt.“", "wert": 2, "weiter": "ende1", "rueck": "Ein letzter, konkreter Punkt – und ein klares Ende. Mehr braucht ein erstes Konzept nicht." },
+            { "text": "„Ja, eine ganze Menge: die Schrift, die Überschriften, die Tabelle auf Seite 11, die Kommas, die Fußnoten …“", "wert": 0, "tendenz": "ueberhaeufen", "weiter": "ende3", "rueck": "Zwölf Kleinigkeiten verdecken die zwei großen Punkte. Lena weiß nicht mehr, wo sie anfangen soll." }
+          ] },
+        { "id": "ende1", "sagt": "Lena: „Danke. Der Pate kommt auf Seite 1 – das mach ich heute noch.“", "ende": "Lena hat jetzt einen Plan: welche Seite, welcher Satz, wohin damit. Mit einem genauen Lob vorweg und wenigen Punkten danach kommt so eine Rückmeldung am besten an – und dann Schluss." },
+        { "id": "ende2", "sagt": "Lena reicht das Konzept unverändert ein. Dr. Albers fragt: „Und was ist der Kern?“", "ende": "Kein Drama – aber eine vage Kritik hilft niemandem. Beim nächsten Mal: welche Seite, welcher Satz, wohin damit." },
+        { "id": "ende3", "sagt": "Lena schaut auf ihre lange Liste: „Ich glaube, ich fang noch mal von vorn an.“", "ende": "Kein Drama – sie gibt sich Mühe. Aber die Kunst ist die Auswahl: die zwei Punkte, die am meisten bringen." }
+      ],
+      "prinzipien": ["genau loben – was war gut?", "Befund statt Urteil", "konkret: Seite, Satz, wohin", "auf das Wichtigste beschränken", "ein klares Ende"],
+      "transfer": "Wem schuldest du eine Rückmeldung? Schreib ein genaues Lob und höchstens zwei konkrete Punkte."
+    },
+    {
+      "id": "ausdruck-l-10", "bereich": "ausdruck", "phase": "k", "umfeld": "vorgesetzte", "faehigkeiten": ["ausdruck.knapp", "ausdruck.satzbau", "ausdruck.diplomatie", "ausdruck.register", "ausdruck.treffend", "ausdruck.bildung", "ausdruck.wendungen"], "stufe": 6, "sparring": true,
+      "titel": "Sparring: Die heikle Bitte nach oben", "figur": "Dr. Henrik Albers und Miriam Okafor",
+      "einleitung": "Das Sparring zum Abschluss der Phase Können: eine Bitte nach oben, zur falschen Zeit. Betreff, erster Satz, konkreter Nutzen, positiv gefasst, der passende Ton – und eine Antwort auf das Aber.",
+      "lage": "Du möchtest vom 10. bis 14. März an einer Weiterbildung zum Projektmanagement teilnehmen. Sie kostet 1.200 Euro. Der März ist eng, und Dr. Albers hat gerade gesagt, das Budget sei knapp. Miriam hat angeboten, dich in der Woche zu vertreten. Im April starten drei neue Kundenprojekte; deren Planung übernimmt bisher Carla für dich, im Schnitt zwei Tage im Monat. Deine nächste Abgabe ist am 12. März fällig. Albers selbst schreibt knappe Mails.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Runde 1 – der Betreff deiner Mail.",
+          "wahl": [
+            { "text": "„Anfrage bezüglich einer etwaigen Teilnahme an einer Fortbildungsmaßnahme“", "wert": 0, "tendenz": "aufblaehen", "weiter": "k2", "rueck": "Hauptwortkette und „etwaig“: Klingt nach Antrag in dreifacher Ausfertigung – und sagt nicht, wann." },
+            { "text": "„Weiterbildung Projektmanagement“", "wert": 1, "weiter": "k2", "rueck": "Das Thema stimmt. Dass du um etwas bittest und die Vertretung steht, sieht er erst innen." },
+            { "text": "„Bitte um Weiterbildung im März – Vertretung geregelt“", "wert": 2, "weiter": "k2", "rueck": "Bitte, Zeitraum und die Antwort auf seine erste Sorge – alles in einer Zeile." }
+          ] },
+        { "id": "k2", "sagt": "Runde 2 – der erste Satz.",
+          "wahl": [
+            { "text": "„Ich weiß, dass das Budget gerade knapp ist und der März eigentlich ungünstig, aber ich wollte trotzdem mal vorsichtig fragen, ob …“", "wert": 0, "tendenz": "kriechen", "weiter": "k3", "rueck": "Du lieferst seine Gegenargumente gleich mit – noch bevor er weiß, worum es geht." },
+            { "text": "„Ich möchte vom 10. bis 14. März an einer Weiterbildung zum Projektmanagement teilnehmen und bitte Sie um Ihre Zustimmung.“", "wert": 2, "weiter": "k3", "rueck": "Was, wann, welche Bitte – in einem Satz, ohne Weichmacher." },
+            { "text": "„Ich hätte eine Frage zu einer Weiterbildung.“", "wert": 1, "weiter": "k3", "rueck": "Freundlich, aber ein Anlauf. Die eigentliche Bitte rutscht in den zweiten Satz." }
+          ] },
+        { "id": "k3", "sagt": "Runde 3 – warum lohnt sich das? Albers will Nutzen sehen, keine Schlagworte.",
+          "wahl": [
+            { "text": "„Danach plane ich die Kundenprojekte selbst – bisher übernimmt das Carla für mich, im Schnitt zwei Tage im Monat.“", "wert": 2, "weiter": "k4", "rueck": "Konkret und aus seiner Sicht: Carla bekommt Zeit zurück, das Team wird unabhängiger." },
+            { "text": "„Die Maßnahme ist effektiv, effizient und nachhaltig.“", "wert": 0, "tendenz": "imponieren", "weiter": "k4", "rueck": "Drei Schlagworte, kein Bild. Was genau wird nach dem Kurs anders?" },
+            { "text": "„Das bringt dem ganzen Team viel.“", "wert": 1, "weiter": "k4", "rueck": "Die Richtung stimmt. Was genau es bringt, muss er sich selbst ausmalen." }
+          ] },
+        { "id": "k4", "sagt": "Runde 4 – der März ist eng. Wie sprichst du das an?",
+          "wahl": [
+            { "text": "„Im März wird zwar einiges liegen bleiben, aber das holt man ja irgendwie wieder auf.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k5", "rueck": "Du nennst das Problem und lässt es offen. Genau das wird er fragen." },
+            { "text": "„Die Arbeit im März kriege ich schon hin.“", "wert": 1, "weiter": "k5", "rueck": "Zuversichtlich – aber wie? Er muss dir einfach glauben." },
+            { "text": "„Miriam vertritt mich in der Woche, und die Abgabe vom 12. liefere ich schon am 7.“", "wert": 2, "weiter": "k5", "rueck": "Positiv gefasst: Du sagst, was geregelt ist – nicht, was schwierig wird." }
+          ] },
+        { "id": "k5", "sagt": "Runde 5 – Miriam liest mit: „Schreib doch förmlicher, er ist der Chef. Vielleicht: ‚Hiermit erlaube ich mir, Sie zu ersuchen …‘?“",
+          "wahl": [
+            { "text": "„Ich bleib sachlich-freundlich. Er schreibt selbst knapp – so liest er es am liebsten.“", "wert": 2, "weiter": "k6", "rueck": "Der Ton passt zum Empfänger, nicht zur Hierarchie. Förmlich heißt nicht verstaubt." },
+            { "text": "„Gute Idee.“ – und den Anfang umschreiben.", "wert": 0, "tendenz": "zu-steif", "weiter": "k6", "rueck": "Jetzt klingt deine Bitte nach Amtsbrief. Die klare Bitte verschwindet hinter der Formel." },
+            { "text": "Nur den Gruß ändern: „Mit freundlichen Grüßen“.", "wert": 1, "weiter": "k6", "rueck": "Schadet nicht. Nötig war es auch nicht – er schreibt selbst „Viele Grüße“." }
+          ] },
+        { "id": "k6", "sagt": "Runde 6 – Albers antwortet: „Klingt gut. Aber 1.200 Euro sind viel in diesem Quartal. Geht das nicht im Herbst?“",
+          "wahl": [
+            { "text": "„Ja, gut, dann eben im Herbst.“", "wert": 1, "weiter": "ende2", "rueck": "Respektvoll – aber du gibst dein bestes Argument auf, ohne es zu nennen." },
+            { "text": "„Verstehe. Im Herbst ginge es auch – nur planen wir die Aprilprojekte dann ohne mich. Reicht das Budget nicht, nehme ich den Herbst.“", "wert": 2, "weiter": "ende1", "rueck": "Du nennst den Grund für März und lässt ihm die Entscheidung. Klar in der Sache, ohne Druck." },
+            { "text": "„Andere Abteilungen bekommen ihre Weiterbildungen doch auch.“", "wert": 0, "tendenz": "vorwurf", "weiter": "ende3", "rueck": "Ein Vergleich, der wie ein Vorwurf klingt. Jetzt geht es um Gerechtigkeit statt um deinen Kurs." }
+          ] },
+        { "id": "ende1", "sagt": "Albers: „Das Argument mit dem April zieht. Freigegeben – stimmen Sie die Vertretung mit Miriam ab.“", "ende": "Auf das Aber ein Grund statt Druck – das hat ihn überzeugt. Dazu gehören ein Betreff mit Bitte, ein erster Satz mit dem Was und Wann, konkreter Nutzen, eine positiv gefasste Lösung und der passende Ton. Das ist die Ausstattung für jede heikle Bitte nach oben." },
+        { "id": "ende2", "sagt": "Albers: „Gut, dann im Herbst. Erinnern Sie mich im August.“", "ende": "Kein Drama – du bekommst den Kurs. Aber der April war dein stärkstes Argument. Ein Grund in einem Satz, dann darf er entscheiden." },
+        { "id": "ende3", "sagt": "Albers: „Was andere bekommen, ist nicht das Thema. Wir sprechen im Herbst noch einmal.“", "ende": "Kein Drama – die Tür ist nicht zu. Aber ein Vergleich mit anderen macht aus einer Bitte einen Streit. Beim nächsten Mal: dein Grund, nicht ihr Budget." }
+      ],
+      "prinzipien": ["Bitte und Zeitraum in Betreff und ersten Satz", "konkreter Nutzen statt Schlagworte", "positiv fassen, was geregelt ist", "der Ton passt zum Empfänger", "auf das Aber: ein Grund, dann die Entscheidung lassen"],
+      "transfer": "Welche Bitte nach oben schiebst du vor dir her? Schreib Betreff, ersten Satz und den einen Grund, der aus seiner Sicht zählt."
+    }
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "einheiten": [
+    {
+      "id": "antrieb-3-01", "bereich": "antrieb", "stufe": 3, "nr": 1,
+      "titel": "Aufschieben verstehen: dein Muster",
+      "faehigkeiten": ["antrieb.start", "antrieb.warum"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Aufschieben als Flucht vor schlechten Gefühlen ist ein gut gestütztes Modell; dass Sorge vor Fehlern und Bewertung mit mehr Aufschieben einhergeht, zeigt eine Meta-Analyse (klein bis mittel). Der Selbstschutz und der Antreiber „Sei perfekt!“ sind Denkmodelle, keine Befunde über dich. Die Einteilung in fünf Muster ist Praxiswissen.",
+      "quellen": ["sirois2013", "steel2007", "sirois2017", "covington1984", "kahler1975", "wohl2010", "praxis-antrieb"],
+      "aha": "Wer aufschiebt, kauft sofort Erleichterung – und bezahlt später. Jeder hat dabei sein eigenes Muster: öde, unklar, zu groß, Angst vor dem Urteil oder Widerwille. Wer sein Muster kennt, wählt das passende Gegenmittel.",
+      "schritte": [
+        { "art": "studie", "frage": "Warum schieben wir auf, obwohl wir es besser wissen?", "aufbau": "Forschende haben viele Studien zum Aufschieben zusammengetragen und daraus ein Modell gebaut: Was passiert genau in dem Moment, in dem wir eine Aufgabe wegschieben?", "ergebnis": "Wegschieben bringt sofort Erleichterung – das unangenehme Gefühl ist erst einmal weg. Den Preis zahlt das künftige Ich: mit Zeitdruck, Stress und oft Scham. Darum gewinnt im Moment so oft das Wegschieben.", "grenze": "Ein Modell aus vielen Befunden, kein einzelnes Experiment. Es erklärt viel, aber nicht jeden Fall – manchmal ist eine Aufgabe auch schlicht unwichtig.", "beleg": "B", "quellen": ["sirois2013"] },
+        { "art": "karte", "text": "Fünf Muster kommen oft vor. Öde: kurz takten oder mit etwas Angenehmem koppeln. Unklar: eine Frage stellen. Zu groß: einen Handgriff abschneiden. Angst vor dem Urteil: eine erste Fassung, die schlecht sein darf. Widerwille: prüfen, ob es dein Ziel ist – oder das eines anderen. Die meisten haben ein, zwei Lieblingsmuster. Wer seins kennt, verschwendet keine Kraft mit dem falschen Gegenmittel." },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-3-01-a", "faehigkeit": "antrieb.start", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Welches Muster steckt eher dahinter?",
+          "faecher": ["Unklarheit", "Angst vor dem Urteil", "Widerwille"],
+          "karten": [
+            { "text": "„Ich habe die Präsentation schon fünfmal angefangen und immer wieder gelöscht.“", "fach": 1 },
+            { "text": "„Ich weiß nicht, ob der Antrag per Post oder online muss.“", "fach": 0 },
+            { "text": "„Eigentlich will das nur meine Mutter, dass ich den Kurs mache.“", "fach": 2 },
+            { "text": "„Was, wenn Dr. Albers den Entwurf schwach findet?“", "fach": 1 },
+            { "text": "„Mir fehlt, wer mir sagt, wie das neue System funktioniert.“", "fach": 0 },
+            { "text": "„Ich sehe nicht ein, warum ich diesen Bericht schreiben soll.“", "fach": 2 }
+          ] },
+        { "art": "karte", "titel": "Tiefenblick: „Sei perfekt!“", "text": "Ein Denkmodell, kein Befund über dich: Der innere Antreiber „Sei perfekt!“ zeigt sich oft als Polieren statt Abschicken. Dahinter kann Selbstschutz stecken: Was nie fertig wird, kann niemand bewerten. Die Sorge vor Fehlern und Bewertung hängt in Studien tatsächlich mit mehr Aufschieben zusammen. Wer sich darin wiedererkennt, kann einen Erlauber-Satz probieren: „Die erste Fassung darf schlecht sein.“" },
+        { "art": "kritiker", "kopf": { "id": "antrieb-3-01-b", "faehigkeit": "antrieb.start", "stufe": 7, "kanal": "koennen" },
+          "satz": "Was sagst du dir, wenn du etwas zum dritten Mal verschoben hast? Schreib den Satz auf – und darunter eine Fassung, die das Gefühl benennt und einen kleinen Schritt erlaubt.",
+          "kriterien": ["nennt das Gefühl hinter dem Aufschieben", "ohne Urteil über dich als Person", "erlaubt eine unfertige erste Fassung oder einen kleinen Schritt"],
+          "muster": ["„Ich bin so ein Aufschieber.“ → „Ich habe Angst, dass der Bericht nicht gut genug wird. Heute schreibe ich zehn Minuten eine schlechte erste Fassung.“", "„Ich krieg nichts geregelt.“ → „Mir ist unklar, was die Versicherung will. Morgen um neun rufe ich an und frage – mehr nicht.“", "„Wieder nicht angefangen, typisch.“ → „Verschoben ist verschoben. Das Gefühl war Langeweile. Heute 15 Minuten mit Musik, dann ist Schluss.“"] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-3-01-c", "faehigkeit": "antrieb.warum", "stufe": 7, "kanal": "wissen" },
+          "frage": "Miriam schiebt seit Monaten einen Online-Kurs zum Projektmanagement auf, den sie „eigentlich machen sollte“. Alles andere erledigt sie pünktlich. Was hilft ihr am ehesten?",
+          "antworten": [
+            { "text": "Strenger mit sich sein – jeden Abend eine Lektion, ohne Ausnahme.", "wert": 0, "tendenz": "durchhalten", "warum": "Mehr Druck gegen Widerwille macht den Kurs zur täglichen Strafe. Wer nicht weiß, wofür, hält das selten lange durch." },
+            { "text": "Prüfen, ob sie das will: einen eigenen Grund finden – oder mit der Person, die den Kurs erwartet, über einen anderen Weg sprechen.", "wert": 2, "warum": "Pünktlich bei allem anderen, nur hier nicht: Das spricht für Widerwille. Dann hilft die Frage nach dem eigenen Warum mehr als jede Technik." },
+            { "text": "Mit der Zwei-Minuten-Fassung anfangen: heute nur einloggen.", "wert": 1, "warum": "Ein guter Anfang gegen Trägheit. Steckt aber Widerwille dahinter, löst der kleine Schritt die eigentliche Frage nicht." },
+            { "text": "Den Kurs einfach weiter vor sich herschieben, bis keiner mehr danach fragt.", "wert": 0, "tendenz": "vermeiden", "warum": "Die Frage bleibt offen und meldet sich mit schlechtem Gewissen zurück. Eine klare Entscheidung entlastet mehr." }
+          ] },
+        { "art": "reflexion", "frage": "Was ist dein Lieblingsmuster beim Aufschieben – und welcher Satz würde dir beim nächsten Mal den Anfang erlauben?", "insBuch": "saetze" }
+      ],
+      "regel": "Erst das Muster erkennen, dann das passende Gegenmittel – nicht mehr Druck.",
+      "merkkarten": [
+        { "id": "antrieb-3-01-m1", "frage": "Was bringt Aufschieben im Moment – und was kostet es?", "antwort": "Sofort Erleichterung; bezahlt wird später mit Zeitdruck, Stress und oft Scham." },
+        { "id": "antrieb-3-01-m2", "frage": "Welche fünf Muster stecken oft hinter dem Aufschieben?", "antwort": "Öde, unklar, zu groß, Angst vor dem Urteil, Widerwille." },
+        { "id": "antrieb-3-01-m3", "frage": "Welcher Erlauber-Satz hilft bei Angst vor dem Urteil?", "antwort": "„Die erste Fassung darf schlecht sein.“" }
+      ]
+    },
+    {
+      "id": "antrieb-3-02", "bereich": "antrieb", "stufe": 3, "nr": 2,
+      "titel": "Gewohnheiten, die bleiben",
+      "faehigkeiten": ["antrieb.gewohnheit", "antrieb.dranbleiben"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Gewohnheiten durch Wiederholung in gleicher Lage entstehen und am Umfeld hängen, ist gut gestützt; wie lange es dauert, schwankt stark und ist nur in wenigen Studien gemessen. Das stufenweise Steigern ist Praxiswissen.",
+      "quellen": ["wood2016", "singh2024", "lally2010", "verplanken2016", "praxis-antrieb"],
+      "aha": "Eine Gewohnheit bleibt, wenn sie lange genug am selben Auslöser hängt. Erst wenn die kleine Fassung fast von selbst läuft, wird sie größer – Stufe für Stufe. Wer zu früh steigert, braucht wieder Willen.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wenn eine neue Gewohnheit nach ein paar Wochen immer noch Mühe macht, klappt es bei mir eben nicht.", "urteil": "falsch", "warum": "Bis sich etwas von selbst anfühlt, dauert es meist Wochen bis Monate – von Mensch zu Mensch sehr verschieden. Wer nach ein paar Wochen noch Mühe hat, ist meist mitten auf dem normalen Weg." },
+        { "art": "karte", "text": "Stabil wird eine Gewohnheit durch drei Dinge: denselben Auslöser, am besten am selben Ort und zur selben Zeit; eine Handlung, die gleich bleibt; und viele Wiederholungen. Erst wenn die kleine Fassung fast von selbst anläuft, wird sie größer – eine kleine Stufe, dann wieder warten. Wer zu früh steigert, macht aus der Gewohnheit wieder ein Vorhaben, das jeden Tag Willen kostet." },
+        { "art": "rangfolge", "kopf": { "id": "antrieb-3-02-a", "faehigkeit": "antrieb.gewohnheit", "stufe": 6, "kanal": "wissen" },
+          "frage": "Tarek liest seit Wochen jeden Abend im Bett zwei Seiten. Es läuft fast von selbst. Wie steigert er am klügsten? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "Auf vier Seiten gehen – gleicher Ort, gleiche Zeit.", "warum": "Eine kleine Stufe am bewährten Auslöser. Der Anfang bleibt leicht." },
+            { "text": "Gleich auf ein ganzes Kapitel pro Abend.", "warum": "Der Auslöser bleibt, aber der Sprung ist groß – an müden Abenden kippt es leicht." },
+            { "text": "Zusätzlich morgens lesen, mal hier, mal da.", "warum": "Ein neuer, wackliger Auslöser neben dem stabilen – das zweite Lesen hält selten." },
+            { "text": "Das Lesen auf den Sonntag legen, dafür zwei Stunden am Stück.", "warum": "Der tägliche Auslöser fällt weg. Aus der Gewohnheit wird wieder ein Termin, der Willen braucht." }
+          ] },
+        { "art": "geschichte", "titel": "Die neue Kaffeemaschine", "figur": "Frau Sommer", "text": "Frau Sommer gießt seit dem Frühjahr jeden Morgen ihre Balkonblumen, während der Kaffee durchläuft. Dann tauschte sie die alte Maschine gegen eine, die in einer Minute fertig ist. Drei Tage später ließen die Geranien die Köpfe hängen. „Ich habe es einfach vergessen“, erzählte sie im Treppenhaus. Nicht der Wille hatte nachgelassen – der Auslöser war weg. Sie stellte die Gießkanne direkt neben die neue Maschine. Seitdem gießt sie wieder, jeden Morgen, ohne nachzudenken.", "frage": "Woran hängt deine wichtigste Gewohnheit – und was würde passieren, wenn sich das ändert?" },
+        { "art": "auswahl", "kopf": { "id": "antrieb-3-02-b", "faehigkeit": "antrieb.gewohnheit", "stufe": 7, "kanal": "wissen" },
+          "frage": "Du ziehst in drei Wochen um. Was heißt das für deine Gewohnheiten?",
+          "antworten": [
+            { "text": "Nichts – Gewohnheiten nimmt man mit.", "wert": 0, "warum": "Viele Gewohnheiten hängen am Ort. Ohne die alten Auslöser kippen auch gute leicht weg – wie bei der Gießkanne." },
+            { "text": "Eine Chance: Ich lege schon jetzt fest, wo in der neuen Wohnung was passiert.", "wert": 2, "warum": "Umbrüche öffnen ein Fenster. Wer die neuen Auslöser gleich festlegt, hat gute Chancen, die guten Gewohnheiten mitzunehmen und alte leichter zurückzulassen." },
+            { "text": "Erst einmal ankommen, und in ein paar Monaten plane ich in Ruhe neu.", "wert": 1, "warum": "Ankommen braucht Zeit. Nur wird das Fenster mit den Wochen kleiner – bis dahin haben sich oft schon neue Abläufe eingeschliffen." },
+            { "text": "Alle Vorhaben ruhen lassen, bis jeder Karton ausgepackt und jedes Bild aufgehängt ist.", "wert": 0, "tendenz": "aufschieben", "warum": "Bis dahin haben sich neue, zufällige Abläufe festgesetzt. Eine kleine Fassung am ersten Tag hält die Gewohnheit am Leben." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-3-02-c", "faehigkeit": "antrieb.dranbleiben", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Macht das eine Gewohnheit stabiler – oder wackliger?",
+          "faecher": ["stabiler", "wackliger"],
+          "karten": [
+            { "text": "jeden Tag am selben Ort, zur selben Zeit", "fach": 0 },
+            { "text": "steigern, sobald es zweimal geklappt hat", "fach": 1 },
+            { "text": "eine Notfall-Fassung für Reisetage", "fach": 0 },
+            { "text": "die Uhrzeit jeden Morgen neu wählen", "fach": 1 },
+            { "text": "nach dem Umzug gleich einen neuen Auslöser festlegen", "fach": 0 },
+            { "text": "nach dem Urlaub warten, bis es von allein wiederkommt", "fach": 1 }
+          ] },
+        { "art": "experiment", "auftrag": "Nimm eine Gewohnheit, die gerade gut läuft. Prüf eine Woche lang: Startet sie jeden Tag am selben Auslöser, fast ohne Nachdenken? Wenn ja, steig eine kleine Stufe auf.", "dauer": "woche", "nachfrage": "Lief die größere Fassung genauso leicht an – oder war die Stufe zu groß?" },
+        { "art": "reflexion", "frage": "Welche Wochen im kommenden Jahr bringen deine Gewohnheiten durcheinander – und welche Notfall-Fassung legst du jetzt schon fest?" }
+      ],
+      "regel": "Gleicher Auslöser, viele Wiederholungen – steigern erst, wenn es von selbst läuft.",
+      "merkkarten": [
+        { "id": "antrieb-3-02-m1", "frage": "Wie lange dauert es, bis eine Gewohnheit sitzt?", "antwort": "Meist Wochen bis Monate – von Mensch zu Mensch sehr verschieden." },
+        { "id": "antrieb-3-02-m2", "frage": "Wann steigerst du eine Gewohnheit?", "antwort": "Wenn die kleine Fassung fast von selbst anläuft – dann eine kleine Stufe." },
+        { "id": "antrieb-3-02-m3", "frage": "Was tust du vor einem Umzug für deine Gewohnheiten?", "antwort": "Neue Auslöser festlegen, bevor sich zufällige Abläufe einschleifen." }
+      ]
+    },
+    {
+      "id": "antrieb-3-03", "bereich": "antrieb", "stufe": 3, "nr": 3,
+      "titel": "Wenn der Akku leer bleibt",
+      "faehigkeiten": ["antrieb.energie", "antrieb.ziele"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass erst Tätigkeiten und dann die Stimmung kommen, ist für die Verhaltensaktivierung bei Depression gut belegt – sie gehört dort in fachliche Begleitung. Die Warnzeichen sind keine Diagnose, sondern Gründe, Hilfe zu suchen. Vorhaben bewusst zu parken ist Praxiswissen.",
+      "quellen": ["ekers2014", "palmer2024", "wendsche2017", "burkeman2021", "praxis-antrieb"],
+      "aha": "Müdigkeit vergeht mit Schlaf und Pausen. Fehlen aber über Wochen Freude und Kraft, geht es nicht um Willen oder bessere Pläne – dann ist Hilfe dran, und Vorhaben dürfen warten.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "antrieb-3-03-a", "faehigkeit": "antrieb.energie", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Gewöhnliche Müdigkeit – oder ein Grund, dir Hilfe zu holen?",
+          "faecher": ["gewöhnliche Müdigkeit", "Hilfe holen"],
+          "karten": [
+            { "text": "Nach einer vollen Woche müde, nach dem Wochenende wieder besser", "fach": 0 },
+            { "text": "Seit Wochen keine Freude mehr an Dingen, die sonst Spaß machen", "fach": 1 },
+            { "text": "Ein zäher Tag nach einer kurzen Nacht", "fach": 0 },
+            { "text": "Seit Wochen erholt auch ein langer Schlaf nicht mehr", "fach": 1 },
+            { "text": "Nach einem langen Meeting keine Lust auf Sport", "fach": 0 },
+            { "text": "Seit Längerem wirkt alles sinnlos oder hoffnungslos", "fach": 1 }
+          ] },
+        { "art": "karte", "text": "Müdigkeit vergeht mit Schlaf und Pausen. Fehlen aber über Wochen Freude und Antrieb, erholt Schlaf nicht mehr, ziehst du dich zurück oder wirkt alles hoffnungslos, geht es nicht um Vorhaben. Dann hilft zuerst ein Gespräch – in der Hausarztpraxis oder einer psychotherapeutischen Sprechstunde. Bei Gedanken, nicht mehr leben zu wollen, warte nicht: Sprich noch heute mit jemandem – der Hilfe-Hinweis am Ende zeigt, wo." },
+        { "art": "auswahl", "kopf": { "id": "antrieb-3-03-b", "faehigkeit": "antrieb.ziele", "stufe": 6, "kanal": "wissen" },
+          "frage": "Ein Bekannter ist seit Wochen erschöpft, auch nach dem Wochenende. Auf seiner Liste: die neue Stelle als Teamleiter, die Renovierung der Wohnung, Lauftraining, die Kasse im Chor. Was hilft ihm am ehesten?",
+          "antworten": [
+            { "text": "Alles behalten, aber überall nur die Minimum-Fassung.", "wert": 1, "warum": "Kleiner ist gut. Bei Erschöpfung über Wochen fehlt aber der wichtigste Schritt: darüber mit jemandem zu sprechen." },
+            { "text": "Strenger planen: jeden Abend eine feste Stunde für alles, dann geht es schon.", "wert": 0, "tendenz": "durchhalten", "warum": "Mehr Plan gegen einen leeren Akku verschärft die Lage. Erschöpfung über Wochen ist kein Planungsproblem." },
+            { "text": "Zwei Vorhaben mit Datum parken und mit seiner Hausarztpraxis über die Erschöpfung sprechen.", "wert": 2, "warum": "Er entlastet sich sofort und nimmt die Warnzeichen ernst – ohne sich selbst eine Diagnose zu stellen." },
+            { "text": "Durchhalten bis zum Urlaub im Sommer.", "wert": 0, "tendenz": "durchhalten", "warum": "Erschöpfung, die über Wochen bleibt, wartet selten auf den Urlaub. Hilfe früh zu holen ist kein Aufgeben." }
+          ] },
+        { "art": "karte", "titel": "Kleine gute Dinge zuerst", "text": "Wenn der Antrieb fehlt, setzt ein gut belegtes Verfahren gegen Niedergeschlagenheit beim Tun an, nicht beim Gefühl: kleine Tätigkeiten einplanen, die früher gutgetan haben oder dir wichtig sind – ein Spaziergang, ein Anruf, zehn Minuten Musik. Die Stimmung folgt oft, nicht immer. Bei echter Niedergeschlagenheit gehört das in fachliche Begleitung – eine App ersetzt sie nicht." },
+        { "art": "kritiker", "kopf": { "id": "antrieb-3-03-c", "faehigkeit": "antrieb.energie", "stufe": 7, "kanal": "koennen" },
+          "satz": "„Ich bin ständig erschöpft – andere schaffen viel mehr als ich.“ Schreib eine Fassung, die dich ernst nimmt, statt dich zu vergleichen.",
+          "kriterien": ["vergleicht nicht mit anderen", "nimmt die Erschöpfung ernst", "nennt einen kleinen, freundlichen nächsten Schritt"],
+          "muster": ["„Ich bin seit Wochen erschöpft. Das nehme ich ernst: Ich parke zwei Vorhaben und rufe morgen in der Praxis an.“", "„Wie viel andere schaffen, weiß ich nicht. Ich weiß, dass mein Akku leer ist – heute nur ein kurzer Spaziergang und früh ins Bett.“"] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-3-03-d", "faehigkeit": "antrieb.energie", "stufe": 7, "kanal": "wissen" },
+          "frage": "Du parkst dein Sprachvorhaben für zwei Monate, weil zu Hause gerade jemand Pflege braucht. Wie parkst du es klug?",
+          "antworten": [
+            { "text": "Mit einem Datum für den nächsten Blick darauf – und einer winzigen Fassung, die nichts kostet.", "wert": 2, "warum": "Pausieren ist nicht Aufgeben. Das Datum holt das Vorhaben zurück, die winzige Fassung hält den Faden, ohne Kraft zu ziehen." },
+            { "text": "Einfach liegen lassen – es meldet sich dann schon von selbst wieder.", "wert": 0, "tendenz": "vermeiden", "warum": "Was ohne Datum liegt, verschwindet oft still. Später fehlt dann der Moment zum Wiedereinstieg." },
+            { "text": "Den alten Plan halten, notfalls lerne ich eben nachts, wenn alle schlafen.", "wert": 0, "tendenz": "durchhalten", "warum": "Wer mit Schlaf bezahlt, bezahlt mit der Kraft, die er gerade am dringendsten braucht." },
+            { "text": "Eine Notiz schreiben, warum es dir wichtig war.", "wert": 1, "warum": "Hilft beim Wiedereinstieg. Ohne Datum bleibt aber offen, wann du wieder hinschaust." }
+          ] },
+        { "art": "reflexion", "frage": "Was gibt dir gerade am meisten Kraft – und was könntest du für ein paar Wochen bewusst parken, mit Datum?" },
+        { "art": "fachhilfe", "thema": "seele" }
+      ],
+      "regel": "Leerer Akku über Wochen: erst Hilfe und Entlastung, dann wieder Vorhaben.",
+      "merkkarten": [
+        { "id": "antrieb-3-03-m1", "frage": "Wann ist Erschöpfung ein Grund, Hilfe zu suchen?", "antwort": "Wenn über Wochen Freude und Antrieb fehlen, Schlaf nicht erholt oder alles hoffnungslos wirkt. Bei Gedanken, nicht mehr leben zu wollen: noch heute." },
+        { "id": "antrieb-3-03-m2", "frage": "Wie parkst du ein Vorhaben klug?", "antwort": "Mit Datum für den nächsten Blick und einer winzigen Fassung, die nichts kostet." },
+        { "id": "antrieb-3-03-m3", "frage": "Was kommt bei fehlendem Antrieb oft zuerst – Gefühl oder Tun?", "antwort": "Das Tun: kleine gute Tätigkeiten. Die Stimmung folgt oft, nicht immer." }
+      ]
+    },
+    {
+      "id": "antrieb-3-04", "bereich": "antrieb", "stufe": 3, "nr": 4,
+      "titel": "Durch den Durchhänger in der Mitte",
+      "faehigkeiten": ["antrieb.dranbleiben", "antrieb.fortschritt", "antrieb.warum"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass die Anstrengung in der Mitte eines Wegs absinkt, zeigen drei Laborversuche einer Forschungsgruppe – nicht Lebensvorhaben über Monate. Der Rat, anfangs zurück und später nach vorn zu schauen, stammt von den Autoren. Zwischenziele und Abwechslung sind Praxiswissen.",
+      "quellen": ["bonezzi2011", "harkin2016", "sheldon1999", "praxis-antrieb"],
+      "aha": "In der Mitte eines Vorhabens wirken Start und Ziel gleich weit weg – jeder Schritt fühlt sich klein an. Der Durchhänger ist oft keine Charakterfrage, sondern eine Frage des Blicks.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "In Versuchen arbeiteten Menschen an Aufgaben mit klarem Ende. Wann strengten sie sich am wenigsten an?", "optionen": ["am Anfang", "etwa in der Mitte", "kurz vor dem Ende"], "richtig": 1, "loesung": "Etwa in der Mitte", "aufloesung": "Am Anfang zählt jeder Schritt viel, weil der Start nah ist; kurz vor dem Ende rückt das Ziel heran. In der Mitte ist beides weit weg. Der Durchhänger kommt also mit Ansage – und lässt sich vorbereiten." },
+        { "art": "karte", "text": "Zwei Blicke helfen. In der ersten Hälfte schau zurück: was du schon geschafft hast. Ab der Mitte schau nach vorn: was noch fehlt – als kleiner, zählbarer Rest: „noch sechs Abende“, „noch drei Kapitel“. Und mach die Mitte kürzer: Zwischenziele schaffen viele kleine Anfänge und Enden. In einem Versuch hielt eine Anzeige „noch zu tun“ die Anstrengung bis zum Schluss hoch." },
+        { "art": "auswahl", "kopf": { "id": "antrieb-3-04-a", "faehigkeit": "antrieb.fortschritt", "stufe": 7, "kanal": "wissen" },
+          "frage": "Lena ist in Woche sieben von zwölf ihres Tabellen-Kurses. Die Luft ist raus. Welcher Blick hilft ihr jetzt am ehesten?",
+          "antworten": [
+            { "text": "„Noch fünf Wochen – heute ist das nächste Kapitel dran.“", "wert": 2, "warum": "Hinter der Mitte hilft der Blick nach vorn: ein kleiner, zählbarer Rest und der nächste Schritt." },
+            { "text": "„Schon sieben Wochen geschafft.“", "wert": 1, "warum": "Stimmt und tut gut. Hinter der Mitte zieht der kleine Rest bis zum Ziel aber meist stärker." },
+            { "text": "„Erst die Hälfte rum, und es wird immer zäher – da kommt noch so viel auf mich zu.“", "wert": 0, "tendenz": "katastrophe", "warum": "Der Rest wirkt riesig und unzählbar. So fühlt sich jeder Abend klein an." },
+            { "text": "„Ich mache eine Pause, bis die Lust zurückkommt.“", "wert": 0, "tendenz": "aufschieben", "warum": "Die Lust kommt eher mit dem nächsten Schritt. Eine Pause ohne Datum wird leicht zum Ende." }
+          ] },
+        { "art": "karte", "titel": "Das Warum auffrischen", "text": "In der Mitte verblasst oft auch das Warum. Hol es zurück: Lies, was du am Anfang aufgeschrieben hast. Stell dir die Wozu-Frage noch einmal. Schau in deinen Kompass: Zu welchem Wert gehört das Vorhaben? Manchmal zeigt sich dabei: Das Warum trägt nicht mehr. Dann ist ein ehrlicher Rückblick dran – nicht mehr Druck." },
+        { "art": "rangfolge", "kopf": { "id": "antrieb-3-04-b", "faehigkeit": "antrieb.dranbleiben", "stufe": 7, "kanal": "wissen" },
+          "frage": "Woche sieben, das Vorhaben wird zäh. Was hilft am meisten? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "Ein Zwischenziel für die nächsten zwei Wochen setzen und den Rest zählbar machen.", "warum": "Ein nahes Ende zieht. Die Mitte wird kürzer, der nächste Schritt klar." },
+            { "text": "Etwas Abwechslung einbauen: neue Strecke, anderes Übungsbuch, jemand macht mit.", "warum": "Frische hilft gegen Gleichförmigkeit – ohne den Blick auf den Rest bleibt die Mitte aber lang." },
+            { "text": "Mehr Strenge: zusätzlich am Wochenende.", "warum": "Mehr Last in der zähsten Phase erhöht vor allem das Risiko, ganz aufzuhören." },
+            { "text": "Eine Pause einlegen, bis die Lust von selbst zurückkommt.", "warum": "Ohne Datum wird aus der Pause leicht das Ende." }
+          ] },
+        { "art": "kritiker", "kopf": { "id": "antrieb-3-04-c", "faehigkeit": "antrieb.warum", "stufe": 8, "kanal": "koennen" },
+          "satz": "„Ich weiß gar nicht mehr, warum ich damit angefangen habe.“",
+          "kriterien": ["holt den ursprünglichen Grund hervor", "prüft ehrlich, ob er noch trägt", "nennt den nächsten Schritt – weitermachen oder bewusst neu entscheiden"],
+          "muster": ["„Angefangen habe ich, weil ich im Urlaub selbst bestellen wollte. Das will ich immer noch. Heute nur die eine Lektion.“", "„Mein Grund war, Dr. Albers zu beeindrucken. Das trägt nicht mehr. Am Sonntag schaue ich, ob es einen eigenen Grund gibt – sonst lasse ich es.“"] },
+        { "art": "experiment", "auftrag": "Mach für dein Vorhaben den Rest sichtbar: Schreib auf, wie viele Termine, Seiten oder Wochen bis zum nächsten Zwischenziel fehlen, und streich jeden erledigten weg.", "dauer": "woche", "nachfrage": "Fühlte sich die zähe Phase mit sichtbarem Rest anders an?" },
+        { "art": "reflexion", "frage": "Wann kam bei deinen bisherigen Vorhaben der Durchhänger – und was hätte dir damals geholfen?" }
+      ],
+      "regel": "Bis zur Mitte zurückschauen, danach nach vorn – auf einen kleinen, zählbaren Rest.",
+      "merkkarten": [
+        { "id": "antrieb-3-04-m1", "frage": "Warum hängt die Motivation oft in der Mitte durch?", "antwort": "Start und Ziel wirken beide weit weg – jeder Schritt fühlt sich klein an." },
+        { "id": "antrieb-3-04-m2", "frage": "Welcher Blick hilft vor und welcher nach der Mitte?", "antwort": "Vorher zurück auf das Geschaffte, danach nach vorn auf den kleinen, zählbaren Rest." },
+        { "id": "antrieb-3-04-m3", "frage": "Was tust du, wenn das Warum verblasst?", "antwort": "Den ursprünglichen Grund hervorholen und ehrlich prüfen, ob er noch trägt." }
+      ]
+    },
+    {
+      "id": "antrieb-3-05", "bereich": "antrieb", "stufe": 3, "nr": 5,
+      "titel": "Der Rückblick: weiter, anders oder loslassen",
+      "faehigkeiten": ["antrieb.fortschritt", "antrieb.ziele", "antrieb.warum"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Menschen, die unerreichbare Ziele loslassen und sich Neuem zuwenden können, eher zufrieden sind, zeigen Befragungsstudien – keine Experimente. Fortschritt-Beobachten ist meta-analytisch belegt. Der Rückblick alle drei Monate ist Praxiswissen.",
+      "quellen": ["wrosch2003", "harkin2016", "dai2014", "praxis-antrieb"],
+      "aha": "Alle drei Monate lohnt ein ehrlicher Blick zurück. Drei Ausgänge sind gleich gut: weitermachen, anpassen, loslassen. Schlecht ist nur, wenn ein Vorhaben still vergeht, ohne dass du entschieden hast.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer ein Ziel aufgibt, ist gescheitert.", "urteil": "falsch", "warum": "Ziele, die unerreichbar sind oder nicht mehr passen, loslassen zu können – und sich etwas Neuem zuzuwenden –, ging in Studien eher mit hohem Wohlbefinden einher. Bewusst beenden ist etwas anderes als still aufgeben." },
+        { "art": "karte", "text": "Ein Rückblick alle drei Monate – der Kompass hat dafür eigene Fragen zu Werten und Zielen; hier geht es um deine Pläne. Drei Ausgänge sind gleich gut. Weitermachen: Es trägt. Anpassen: Größe, Zeit oder Ziel ändern. Loslassen: Es passt nicht mehr – dann festhalten, was du gelernt hast, und die Zeit neu vergeben. Ein guter Zeitpunkt ist eine Wendemarke: Monatsanfang, Quartal, Geburtstag." },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-3-05-a", "faehigkeit": "antrieb.ziele", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Was passt nach dem Rückblick am ehesten: weitermachen, anpassen oder loslassen?",
+          "faecher": ["weitermachen", "anpassen", "loslassen"],
+          "karten": [
+            { "text": "Läuft an vier von fünf Tagen, macht Freude, das Warum trägt.", "fach": 0 },
+            { "text": "Das Warum trägt, aber die Stunde am Abend klappt nie – 20 Minuten morgens schon.", "fach": 1 },
+            { "text": "Begonnen für einen Job, den es so nicht mehr gibt; Freude war nie dabei.", "fach": 2 },
+            { "text": "Die Kreuze werden mehr, das Ergebnis braucht noch Zeit.", "fach": 0 },
+            { "text": "Das Ziel „Marathon im Mai“ ist nach der Verletzung nicht zu schaffen – laufen will ich aber.", "fach": 1 },
+            { "text": "Seit Monaten nur schlechtes Gewissen, und beim Nachdenken: Ich will es nicht.", "fach": 2 }
+          ] },
+        { "art": "schreibreise", "titel": "Dein Quartal", "anleitung": "Nimm dir zehn Minuten und einen ruhigen Ort. Schreib, ohne zu bewerten – nur hinschauen, wie bei einem Freund.", "fragen": ["Welche Vorhaben hast du in den letzten drei Monaten verfolgt – und wie viele Kreuze, Termine oder Seiten sind daraus geworden?", "Wo kam der Durchhänger, wo ein Rückfall – und wie bist du zurückgekommen?", "Welche Stelle im Plan hat am häufigsten gehakt – Auslöser, Größe, Hindernis oder Zeit?", "Was baust du beim nächsten Vorhaben von Anfang an anders?"], "minuten": 10, "insBuch": "erfolg" },
+        { "art": "auswahl", "kopf": { "id": "antrieb-3-05-b", "faehigkeit": "antrieb.warum", "stufe": 8, "kanal": "wissen" },
+          "frage": "Jonas wollte bis Jahresende eine neue Programmiersprache lernen. Nach drei Monaten merkt er: Im Job braucht er sie doch nicht, Freude macht sie ihm keine. Was ist der klügste Ausgang?",
+          "antworten": [
+            { "text": "Durchziehen – angefangen ist angefangen.", "wert": 0, "tendenz": "durchhalten", "warum": "Die schon investierte Zeit ist kein Grund, weitere zu investieren. Ohne Warum wird jeder Abend teurer." },
+            { "text": "Bewusst beenden, aufschreiben, was er gelernt hat, und die Abende neu vergeben.", "wert": 2, "warum": "Ein klarer Schluss statt eines stillen Endes. Was er gelernt hat, bleibt – und die Zeit geht an etwas, das trägt." },
+            { "text": "Halb so viel weitermachen, damit es nicht ganz verloren ist.", "wert": 1, "warum": "Anpassen ist manchmal richtig. Fehlen aber Bedarf und Freude, verlängert es meist nur das schlechte Gewissen." },
+            { "text": "Gar nichts entscheiden und es leise liegen lassen, bis es irgendwann von selbst vergessen ist.", "wert": 0, "tendenz": "vermeiden", "warum": "Unentschiedenes zieht weiter Kraft – als schlechtes Gewissen. Eine Entscheidung macht frei." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "antrieb-3-05-c", "faehigkeit": "antrieb.fortschritt", "stufe": 8, "kanal": "wissen" },
+          "frage": "Was macht einen Rückblick nach drei Monaten am wertvollsten? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "Zahlen und Gründe: wie oft getan, wann es hakte, was geholfen hat – dann eine Entscheidung.", "warum": "Fortschritt, Hindernisse und Hilfen zusammen ergeben eine Entscheidung, die auf mehr steht als auf dem Gefühl." },
+            { "text": "Nur die Zahlen ansehen.", "warum": "Ehrlich und sichtbar – ohne Gründe weißt du aber nicht, was du ändern sollst." },
+            { "text": "Nur das Gefühl: lief gut oder schlecht.", "warum": "Das Gefühl hinkt oft hinterher und übersieht kleine Fortschritte." },
+            { "text": "Nur die Lücken auflisten.", "warum": "Zeigt Hindernisse, verdeckt aber alles, was gelungen ist – und zieht runter." }
+          ] },
+        { "art": "mission", "ref": "antrieb-m-10" }
+      ],
+      "regel": "Alle drei Monate entscheiden: weitermachen, anpassen oder bewusst loslassen.",
+      "merkkarten": [
+        { "id": "antrieb-3-05-m1", "frage": "Welche drei Ausgänge hat ein Rückblick?", "antwort": "Weitermachen, anpassen, loslassen – alle drei sind gut, wenn du sie entscheidest." },
+        { "id": "antrieb-3-05-m2", "frage": "Ist ein aufgegebenes Ziel ein Scheitern?", "antwort": "Nicht, wenn es bewusst beendet wird: Loslassen und Neues anfangen geht eher mit Wohlbefinden einher." },
+        { "id": "antrieb-3-05-m3", "frage": "Was gehört zu einem guten Rückblick?", "antwort": "Zahlen und Gründe – wie oft, wann es hakte, was half – und am Ende eine Entscheidung." }
+      ],
+      "mission": "antrieb-m-10"
+    }
+  ]
+}

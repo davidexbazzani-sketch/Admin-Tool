@@ -35,6 +35,7 @@ for (const p of alle(INHALT, ['.json'])) {
   try { dateien.set(rel(p), JSON.parse(readFileSync(p, 'utf8'))) } catch (e) { F(rel(p), `kein gültiges JSON – ${e.message}`) }
 }
 const stamm = dateien.get('src/coach/inhalt/bereiche.json')
+const gemeinsamDatei = dateien.get('src/coach/inhalt/gemeinsam.json')
 // Quellen: quellen.json (gemeinsam) und je Bereich <bereich>/quellen.json – eine Kennung nur einmal
 const quellDateien = [...dateien].filter(([d]) => /^src\/coach\/inhalt\/([a-z]+\/)?quellen(-[nls])?\.json$/.test(d))
 const quellenAlle = []
@@ -93,7 +94,7 @@ const laenge = (wo, feld, t, max) => { if (istText(t) && t.length > max) F(wo, `
 
 // ── Übungen (Schritte mit und ohne Kopf) ──
 const laengenStatistik = new Map()   // Datei → [Fragen mit ≥ 3 Antworten, davon beste = längste]
-const AKTIV = new Set(['auswahl', 'wortwahl', 'kunstgriff', 'tonfall', 'szene', 'buendel', 'zuordnen', 'rangfolge', 'fehler', 'dialog', 'konter', 'blitz', 'umformulieren', 'anschluss', 'spiegeln', 'jaund', 'kern', 'humorlabor', 'bauplan', 'kritiker', 'sprechen', 'atem', 'lockern', 'anleitung', 'nachsprechen', 'klartext', 'lautleiter', 'routine', 'stumm', 'reflexion', 'wenndann', 'selbstbild', 'sammeln', 'zaehler', 'experiment', 'schaetzen'])
+const AKTIV = new Set(['auswahl', 'wortwahl', 'kunstgriff', 'tonfall', 'szene', 'buendel', 'zuordnen', 'rangfolge', 'fehler', 'dialog', 'konter', 'blitz', 'umformulieren', 'anschluss', 'spiegeln', 'jaund', 'kern', 'humorlabor', 'bauplan', 'kritiker', 'sprechen', 'atem', 'lockern', 'anleitung', 'nachsprechen', 'klartext', 'lautleiter', 'routine', 'stumm', 'geschichtenbau', 'gespraechskarte', 'fahrplan', 'leiter', 'werte', 'lebensrad', 'schreibreise', 'woop', 'buehne', 'reflexion', 'wenndann', 'selbstbild', 'sammeln', 'zaehler', 'experiment', 'schaetzen'])
 function pruefeKopf(wo, k, bereich) {
   if (!k) { F(wo, 'Kopf fehlt'); return }
   kennung(k.id, wo)
@@ -153,6 +154,14 @@ function pruefeSchritt(wo, s, bereich) {
     case 'dialog': pruefeGespraech(wo, s.gespraech, bereich); break
     case 'atem': if (!s.takt || !(s.takt.aus > 0) || !istText(s.hinweis)) F(wo, 'Atemübung braucht Takt und Hinweis'); if (s.takt && s.takt.aus < s.takt.ein) F(wo, 'beim Atmen muss das Ausatmen länger sein als das Einatmen'); break
     case 'nachsprechen': case 'klartext': case 'lautleiter': case 'sprechen': if (!Array.isArray(s.pruefliste) || !s.pruefliste.length) F(wo, 'Prüfliste fehlt'); if (k && !k.laut) H(wo, `${s.art} ohne „laut“`); break
+    case 'geschichte': if (!istText(s.titel) || !istText(s.text) || !istText(s.figur)) F(wo, 'Geschichte braucht Titel, Figur und Text'); laenge(wo, 'Geschichte', s.text, 700); break
+    case 'geschichtenbau': if (!Array.isArray(s.felder) || s.felder.length < 2 || !Array.isArray(s.muster) || !s.muster.length) F(wo, 'Geschichtenbau braucht Felder und Muster'); break
+    case 'werte': if (!Array.isArray(s.karten) || s.karten.length < s.waehle + 2 || !(s.waehle >= 1)) F(wo, 'Werte: mehr Karten als zu wählen'); break
+    case 'lebensrad': if (!Array.isArray(s.bereiche) || s.bereiche.length < 4) F(wo, 'Lebensrad: mindestens vier Bereiche'); break
+    case 'anleitung': if (s.messen && !(gemeinsamDatei?.werkzeuge ?? []).some(w => w.id === s.werkzeug)) F(wo, 'Anleitung mit messen braucht werkzeug = Kennung aus gemeinsam.json'); break
+    case 'schreibreise': if (!istText(s.anleitung) || !Array.isArray(s.fragen) || !s.fragen.length) F(wo, 'Schreibreise braucht Anleitung und Fragen'); break
+    case 'leiter': if (!Array.isArray(s.beispiel) || s.beispiel.length < 3) F(wo, 'Leiter: mindestens drei Beispielstufen'); break
+    case 'buehne': if (!Array.isArray(s.pruefliste) || !s.pruefliste.length || !(s.sekunden > 0)) F(wo, 'Bühne braucht Sekunden und Prüfliste'); if (k && !k.laut) F(wo, 'Bühne ist laut'); break
     case 'stumm': if (!istText(s.titel) || !Array.isArray(s.schritte) || s.schritte.length < 2 || !Array.isArray(s.pruefliste) || !s.pruefliste.length) F(wo, 'stille Übung braucht Titel, mindestens zwei Schritte und eine Prüfliste'); if (k?.laut) F(wo, 'stille Übung darf nicht laut sein'); break
     case 'mission': if (!missionIds.has(s.ref)) F(wo, `Mission „${s.ref}“ gibt es nicht`); break
     case 'fachhilfe': if (!['logopaedie', 'stottern', 'seele', 'notfall', 'belaestigung', 'mobbing'].includes(s.thema)) F(wo, 'Fachhilfe-Thema unbekannt'); break
@@ -177,9 +186,9 @@ function pruefeGespraech(wo, g, bereich) {
     if (k.ende !== undefined) { if (k.wahl?.length) F(wo, `Knoten ${k.id}: Ende und Wahl zugleich`); continue }
     if (!k.wahl?.length) { F(wo, `Knoten ${k.id}: weder Wahl noch Ende`); continue }
     if (!k.wahl.some(w => w.wert === 2)) F(wo, `Knoten ${k.id}: keine beste Wahl`)
-    for (const w of k.wahl) { if (!ids.has(w.weiter)) F(wo, `Knoten ${k.id}: Ziel „${w.weiter}“ fehlt`); if (!istText(w.rueck)) F(wo, `Knoten ${k.id}: Rückmeldung fehlt`); laenge(wo, 'Wahl', w.text, 180) }
-    if (k.wahl.length >= 3) {
-      const datei = wo.split(' ')[0], l = k.wahl.map(w => (w.text || '').length), b = k.wahl.findIndex(w => w.wert === 2)
+    for (const w of k.wahl) { if (!ids.has(w.weiter)) F(wo, `Knoten ${k.id}: Ziel „${w.weiter}“ fehlt`); if (!istText(w.rueck)) F(wo, `Knoten ${k.id}: Rückmeldung fehlt`); laenge(wo, 'Wahl', w.text, 180); if ((w.text || '').length > 140 && (w.text || '').length <= 180) H(wo, `Knoten ${k.id}: Wahl länger als 140 Zeichen (${w.text.length}) – im Gespräch kürzer fassen`) }
+    if (k.wahl.length >= 2) {
+      const datei = wo.split(' ')[0] + (k.wahl.length === 2 ? ' (Gespräche, zwei Wahlen)' : ''), l = k.wahl.map(w => (w.text || '').length), b = k.wahl.findIndex(w => w.wert === 2)
       const st = laengenStatistik.get(datei) ?? [0, 0, 0], lang = l.indexOf(Math.max(...l)); laengenStatistik.set(datei, [st[0] + 1, st[1] + (b >= 0 && l[b] === Math.max(...l) ? 1 : 0), st[2] + (k.wahl[lang]?.wert === 0 ? 1 : 0)])
     }
   }
@@ -308,7 +317,9 @@ for (const { d, t } of tests) {
     kennung(s.id, `${d} ${s.id}`); if (!faehig.has(s.faehigkeit)) F(`${d} ${s.id}`, 'Fähigkeit unbekannt'); pruefeWahl(`${d} ${s.id}`, s.antworten, { warum: false })
     if (Array.isArray(s.antworten) && s.antworten.length >= 3) {
       const l = s.antworten.map(a => (a.text || '').length), b = s.antworten.findIndex(a => a.wert === 2)
-      const st = laengenStatistik.get(d) ?? [0, 0, 0], lang = l.indexOf(Math.max(...l)); laengenStatistik.set(d, [st[0] + 1, st[1] + (b >= 0 && l[b] === Math.max(...l) ? 1 : 0), st[2] + (s.antworten[lang]?.wert === 0 ? 1 : 0)])
+      // je Phase getrennt zählen (fc-001…024 Grundlagen, 025…032 Können, ab 033 Meisterschaft) – sonst verdünnt Phase 1 die neuen
+      const nr = Number(s.id.match(/fc-(\d+)/)?.[1] ?? 0), dk = `${d} (Tests ${nr <= 24 ? 'Grundlagen' : nr <= 32 ? 'Können' : 'Meisterschaft'})`
+      const st = laengenStatistik.get(dk) ?? [0, 0, 0], lang = l.indexOf(Math.max(...l)); laengenStatistik.set(dk, [st[0] + 1, st[1] + (b >= 0 && l[b] === Math.max(...l) ? 1 : 0), st[2] + (s.antworten[lang]?.wert === 0 ? 1 : 0)])
     }
   }
   for (const s of [...(t.selbstbild ?? []), ...(t.verhalten ?? [])]) { kennung(s.id, `${d} ${s.id}`); if (!faehig.has(s.faehigkeit)) F(`${d} ${s.id}`, 'Fähigkeit unbekannt') }
@@ -319,8 +330,8 @@ for (const { d, t } of tests) {
 
 // ── Beste Antwort zu oft die längste? (leicht zu erraten) ──
 for (const [d, [n, laengste, falsch]] of laengenStatistik) {
-  if (n >= 10 && laengste / n > 0.5) H(d, `beste Antwort ist in ${laengste} von ${n} Fragen die längste – Längen angleichen (Ziel: höchstens die Hälfte)`)
-  if (n >= 10 && falsch / n > 0.7) H(d, `die längste Antwort ist in ${falsch} von ${n} Fragen eine falsche – auch so lässt sich raten (Ziel: gemischt)`)
+  if (n >= 6 && laengste / n > (d.endsWith('zwei Wahlen)') ? 0.75 : 0.5)) H(d, `beste Antwort ist in ${laengste} von ${n} Fragen die längste – Längen angleichen (Ziel: höchstens die Hälfte)`)
+  if (n >= 6 && falsch / n > 0.7) H(d, `die längste Antwort ist in ${falsch} von ${n} Fragen eine falsche – auch so lässt sich raten (Ziel: gemischt)`)
 }
 
 // ── Hilfe-Rufnummern nur in den Fachhilfe-Texten (gemeinsam.json), damit sie an einer Stelle stimmen ──
@@ -340,6 +351,66 @@ for (const { d, t } of tests) for (const s of t.szenarien) {
   const b = s.id.split('-')[0]
   const treffer = uebungsFragen.find(([id, f]) => id.startsWith(b + '-') && aehnlich(s.frage, f) >= 0.75)
   if (treffer) H(`${d} ${s.id}`, `Testfrage gleicht fast wörtlich der Übung ${treffer[0]} – misst Wiedererkennen statt Übertragen`)
+}
+
+// ── leben.json (Stufe 2): Vorhaben, Erinnerungen, Mutproben, Notfall-Abläufe, Kompass ──
+{
+  const eintrag = [...dateien].find(([d]) => d.endsWith('/leben.json') || d === 'leben.json')
+  if (!eintrag) F('leben.json', 'fehlt')
+  else {
+    const [d, L] = eintrag
+    const kats = new Set()
+    for (const k of L.vorhaben ?? []) {
+      if (kats.has(k.kat)) F(d, `Kategorie ${k.kat} doppelt`); kats.add(k.kat)
+      if (!k.titel || !k.zeichen || !Array.isArray(k.ideen) || !Array.isArray(k.impulse)) F(`${d} ${k.kat}`, 'titel, zeichen, ideen, impulse nötig')
+      for (const i of k.ideen ?? []) for (const f of ['titel', 'kleinster', 'wennDann', 'hindernis']) if (!i[f]) F(`${d} ${k.kat} ${i.titel}`, `Feld ${f} fehlt`)
+      if (k.sprung && k.sprung !== 'parla-italiano') F(`${d} ${k.kat}`, 'unbekannter Sprung')
+    }
+    if (kats.size < 16) H(d, `nur ${kats.size} Vorhaben-Kategorien (Ziel 16)`)
+    const ARTEN = ['wennDann', 'kleinster', 'frage', 'idee', 'rueckblick', 'neustart', 'spruch'], SCH = ['sanft', 'normal', 'arschtritt']
+    const PLATZ = { rueckblick: '{anzahl}', idee: '{idee}', wennDann: '{wennDann}', kleinster: '{kleinster}' }
+    const bereichNamen = (stamm?.bereiche ?? []).map(b => b.name).filter(Boolean)
+    for (const a of ARTEN) for (const sch of SCH) {
+      const liste = L.erinnerungen?.[a]?.[sch] ?? []
+      if (liste.length < 3) F(`${d} erinnerungen.${a}.${sch}`, 'mindestens drei Texte')
+      for (const t of liste) {
+        if (PLATZ[a] && !t.includes(PLATZ[a])) F(`${d} erinnerungen.${a}.${sch}`, `„${t}“ ohne ${PLATZ[a]}`)
+        if (/^\{name\}/.test(t)) F(`${d} erinnerungen.${a}.${sch}`, `„${t}“ beginnt mit {name} (ohne Namen klein)`)
+        const rest = t.replace(/\{(titel|kleinster|wennDann|anzahl|idee|name)\}/g, '')
+        if (/[{}]/.test(rest)) F(`${d} erinnerungen.${a}.${sch}`, `„${t}“ unbekannter Platzhalter`)
+        for (const n of bereichNamen) if (n.length > 4 && t.includes(n)) F(`${d} erinnerungen.${a}.${sch}`, `nennt den Bereich „${n}“`)
+        if (t.length > 140) H(`${d} erinnerungen.${a}.${sch}`, `„${t.slice(0, 40)}…“ länger als 140 Zeichen`)
+      }
+    }
+    for (const m of L.mutproben ?? []) {
+      if (!/^mut-p-\d{2}$/.test(m.id)) F(`${d} ${m.id}`, 'Kennung mut-p-NN')
+      kennung(m.id, `${d} ${m.id}`)
+      for (const f of ['titel', 'auftrag', 'halb', 'warum']) if (!m[f]) F(`${d} ${m.id}`, `Feld ${f} fehlt`)
+    }
+    const ETAPPEN = ['woche', 'vortag', 'stunde', 'fuenf', 'minute', 'danach']
+    for (const n of L.notfall ?? []) {
+      const ids = (n.etappen ?? []).map(e => e.id)
+      if (ids.join() !== ETAPPEN.join()) F(`${d} notfall.${n.art}`, `Etappen ${ids.join()} – erwartet ${ETAPPEN.join()}`)
+      for (const e of n.etappen ?? []) if (!e.schritte?.length) F(`${d} notfall.${n.art}.${e.id}`, 'keine Schritte')
+      if (!n.auswertung?.length) F(`${d} notfall.${n.art}`, 'keine Auswertungsfragen')
+    }
+    if (!(L.notfall ?? []).some(n => n.art === 'sonst')) F(d, 'Notfall-Ablauf „sonst“ fehlt (Rückfall)')
+    const K = L.kompass ?? {}
+    const nrs = (K.stationen ?? []).map(s => s.nr).sort((a, b) => a - b)
+    if (nrs.join() !== '1,2,3,4,5,6,7') F(`${d} kompass`, `Stationen ${nrs.join()} – erwartet 1 bis 7`)
+    for (const st of K.stationen ?? []) {
+      kennung(st.id, `${d} ${st.id}`)
+      if (!st.schritte?.length) F(`${d} ${st.id}`, 'keine Schritte')
+      st.schritte?.forEach((x, i) => pruefeSchritt(`${d} ${st.id} Schritt ${i + 1}`, x, 'mut'))
+    }
+    if ((K.werteKarten ?? []).length < 20) F(`${d} kompass`, 'zu wenige Wertekarten')
+    if ((K.lebensrad ?? []).length < 6) F(`${d} kompass`, 'Lebensrad braucht mindestens sechs Bereiche')
+    const felder = (K.pyramide?.stufen ?? []).map(s => s.feld).join()
+    if (felder !== 'lebensziel,drei,neunzig,woche,heute') F(`${d} kompass.pyramide`, `Felder ${felder}`)
+    if (!K.wochenCheck?.length || K.wochenCheck.length < 3) F(`${d} kompass`, 'Wochen-Check braucht drei Fragen (voran, hindert, nächster Schritt)')
+    if (!K.rueckblick?.length) F(`${d} kompass`, 'Rückblick-Fragen fehlen')
+    pruefeTexte(d, L, {})
+  }
 }
 
 // ── Kurspläne ──

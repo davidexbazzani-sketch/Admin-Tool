@@ -38,9 +38,9 @@
       { "text": "Kein Grund zur Sorge. Die stille Pause kannst du trotzdem weiter üben.", "wert": 2, "warum": "Bis etwa fünf je Minute schadeten Füllwörter in einer Studie nicht." },
       { "text": "Viel zu viele – ein guter Redner hat gar keine.", "wert": 0, "warum": "Null ist kein sinnvolles Ziel." },
       { "text": "Zählen allein sagt wenig – hör lieber, ob die Ähs an Stellen stehen, die stören.", "wert": 1, "warum": "Gute Frage an die Aufnahme. Drei je Minute sind aber unbedenklich." } ] },
-    { "id": "stimme-fc-010", "faehigkeit": "stimme.betonung", "stufe": 2, "frage": "Deine Chefin fragt: „Ist der Bericht für Montag?“ Er ist für Dienstag. Wie sagst du: „Der Bericht ist für Dienstag“?", "antworten": [
+    { "id": "stimme-fc-010", "faehigkeit": "stimme.betonung", "stufe": 2, "frage": "Dr. Albers fragt: „Ist der Bericht für Montag?“ Er ist für Dienstag. Wie sagst du: „Der Bericht ist für Dienstag“?", "antworten": [
       { "text": "Mit dem Ton auf „Dienstag“.", "wert": 2, "warum": "Das ist das Neue und der Gegensatz zu „Montag“." },
-      { "text": "Mit dem Ton auf „Bericht“, damit klar ist, worum es geht.", "wert": 0, "warum": "Den Bericht hat sie selbst genannt." },
+      { "text": "Mit dem Ton auf „Bericht“, damit klar ist, worum es geht.", "wert": 0, "warum": "Den Bericht hat er selbst genannt." },
       { "text": "Ohne besondere Betonung, ganz sachlich, damit es nicht wie eine Korrektur klingt.", "wert": 1, "warum": "Höflich, aber der neue Tag sticht nicht heraus." } ] },
     { "id": "stimme-fc-011", "faehigkeit": "stimme.betonung", "stufe": 4, "frage": "Du liest deinem Team eine Mitteilung vor, und hinterher weiß keiner mehr, was neu war. Was hilft beim nächsten Mal am meisten?", "antworten": [
       { "text": "Vorher das Neue markieren und genau dort den Ton setzen.", "wert": 2, "warum": "Wer vorher entscheidet, macht das Neue hörbar." },
@@ -97,18 +97,86 @@
     { "id": "stimme-fc-024", "faehigkeit": "stimme.auftritt", "stufe": 7, "frage": "Kurz vor deinem Vortrag zittern dir die Hände. Ein Kollege rät: „Steck sie in die Hosentaschen, dann sieht's keiner.“ Was stimmt am ehesten?", "antworten": [
       { "text": "Die Hände locker vor dem Körper lassen und für ein paar Gesten nutzen.", "wert": 2, "warum": "Gesten helfen dir beim Sprechen und den anderen beim Verstehen – die Hände haben eine Aufgabe statt ein Versteck." },
       { "text": "Gute Idee – Hauptsache, keiner sieht das Zittern. Auf Gesten verzichtest du heute einfach.", "wert": 0, "warum": "Versteckt werden die Hände steif, und die Gesten fehlen – dabei helfen sie dir beim Sprechen und den anderen beim Verstehen." },
-      { "text": "Die Stichwortkarte in beide Hände nehmen.", "wert": 1, "warum": "Gibt Halt. Eine Hand für die Karte, eine frei für Gesten wirkt lebendiger." } ] }
+      { "text": "Die Stichwortkarte in beide Hände nehmen.", "wert": 1, "warum": "Gibt Halt. Eine Hand für die Karte, eine frei für Gesten wirkt lebendiger." } ] },
+    { "id": "stimme-fc-025", "faehigkeit": "stimme.aufbau", "stufe": 4, "frage": "Bei der Vereinsversammlung fragt jemand: „Reicht das Geld für die neuen Trikots?“ Du hast nachgerechnet – es reicht knapp. Wie beginnst du?", "antworten": [
+      { "text": "„Ich habe nachgerechnet, und es sieht eigentlich ganz gut aus.“", "wert": 1, "warum": "Freundlich und zuversichtlich – das klare Ja und der Spielraum fehlen aber noch." },
+      { "text": "„Ja, knapp – es bleiben rund 80 Euro übrig.“", "wert": 2, "warum": "Antwort zuerst, dazu die eine Zahl, die zählt. Die Aufstellung kann folgen, wenn jemand fragt." },
+      { "text": "„Also, wir hatten im Frühjahr 1.200 Euro, dann kamen die Hallengebühren dazu, dann das Sommerfest …“", "wert": 0, "warum": "Die Rechnung kommt vor dem Ergebnis – bis zur Antwort haben die meisten abgeschaltet." } ] },
+    { "id": "stimme-fc-026", "faehigkeit": "stimme.bild", "stufe": 5, "frage": "In der Hausversammlung willst du dafür werben, die Heizungsrohre im Keller dämmen zu lassen. Das spart dem Haus rund 600 Euro im Jahr, bei zwölf Wohnungen. Was sagst du?", "antworten": [
+      { "text": "„Das wäre eine wirklich erhebliche Einsparung, die sich für uns alle lohnen würde, und gut für die Umwelt ist es auch.“", "wert": 0, "warum": "Viele Worte, keine Zahl, kein Bild – wie viel „erheblich“ ist, bleibt offen." },
+      { "text": "„600 Euro im Jahr – das sind für jede Wohnung 50 Euro, so viel wie ein Essen zu zweit im Restaurant.“", "wert": 2, "warum": "Die Zahl heruntergebrochen auf die eigene Wohnung, dazu ein Bild aus dem Alltag." },
+      { "text": "„Wir sparen damit rund 600 Euro im Jahr.“", "wert": 1, "warum": "Klar und richtig. Auf die eigene Wohnung heruntergebrochen wäre die Zahl greifbarer." } ] },
+    { "id": "stimme-fc-027", "faehigkeit": "stimme.bild", "stufe": 6, "frage": "Du stellst dich zur Wahl als Elternsprecherin oder Elternsprecher und hast eine Minute. Welcher Satz trägt am meisten?", "antworten": [
+      { "text": "„Ich bin zuverlässig, gut organisiert, gesprächsbereit, kenne die Schule seit Jahren, habe Zeit und kann gut mit Lehrern.“", "wert": 0, "warum": "Sechs Eigenschaften gleichrangig – keine bleibt hängen, und so viel Eigenlob macht eher misstrauisch." },
+      { "text": "„Ich höre zu, ich hake nach – und ich bleibe dran, bis etwas passiert.“", "wert": 2, "warum": "Drei gleich gebaute Glieder, das stärkste zuletzt. Kurz genug, um sich zu merken." },
+      { "text": "„Ich setze mich für eure Kinder ein.“", "wert": 1, "warum": "Ehrlich und warm. Mit drei konkreten Gliedern würde greifbar, wie du das tust." } ] },
+    { "id": "stimme-fc-028", "faehigkeit": "stimme.aufbau", "stufe": 5, "frage": "Du sollst die neuen Auszubildenden an ihrem ersten Tag begrüßen und bist selbst nervös. Welcher erste Satz trägt?", "antworten": [
+      { "text": "„Herzlich willkommen bei uns!“", "wert": 1, "warum": "Freundlich und passend. Eine Frage oder ein kleiner Fall würde die Neuen noch stärker abholen." },
+      { "text": "„Ich bin heute zum ersten Mal hier vorn, also seid bitte nachsichtig mit mir, wenn ich mich verhaspele.“", "wert": 0, "warum": "Die Entschuldigung lenkt den Blick auf deine Nervosität, die kaum einer bemerkt hätte – und besetzt den Anfang." },
+      { "text": "„Wer von euch hat heute Nacht schlecht geschlafen? – Ich auch. Vor zwölf Jahren, an meinem ersten Tag hier.“", "wert": 2, "warum": "Eine Frage, die alle betrifft, und ein kleiner Fall, der verbindet. Die Aufregung wird zur Brücke, nicht zur Entschuldigung." } ] },
+    { "id": "stimme-fc-029", "faehigkeit": "stimme.aufbau", "stufe": 6, "frage": "Du bist am Ende deiner Ansprache bei der Vereinsversammlung und merkst: Den Termin für den Ausflug hast du vergessen. Was tust du?", "antworten": [
+      { "text": "Erst den Termin nennen, dann wie geplant mit Kernsatz und Bitte schließen.", "wert": 2, "warum": "Die neue Information kommt vor den Schluss – so bleibt dein Kernsatz das Letzte, was alle hören." },
+      { "text": "Nach dem „Danke“ noch schnell rufen: „Ach, der Ausflug ist am Zwölften!“", "wert": 0, "warum": "Jetzt bleibt der Ausflug hängen, dein Kernsatz ist vergessen – und viele packen schon zusammen." },
+      { "text": "Den Termin im nächsten Vereinsrundbrief nachreichen.", "wert": 1, "warum": "Geht, wenn es nicht eilt. Im Raum gesagt erreicht er alle sofort – vor dem Schluss ist dafür Platz." } ] },
+    { "id": "stimme-fc-030", "faehigkeit": "stimme.auftritt", "stufe": 5, "frage": "Du sprichst im Stehen in einem langen, schmalen Raum. Vorn sitzen die Leute, die dich kennen, hinten die Neuen. Wohin geht dein Blick?", "antworten": [
+      { "text": "Ein Gedanke für eine Person – auch bewusst zu den Neuen in den hinteren Reihen.", "wert": 2, "warum": "Wer angeschaut wird, fühlt sich gemeint. Gerade die Hinteren brauchen das, um dabeizubleiben." },
+      { "text": "Über die Köpfe hinweg auf die Rückwand, so sieht es aus, als schaue man alle an.", "wert": 0, "warum": "Wirkt abwesend: Keiner fühlt sich angesprochen – auch hinten nicht." },
+      { "text": "Vor allem zu den Bekannten vorn, die geben dir Sicherheit.", "wert": 1, "warum": "Freundliche Gesichter geben Halt – für den Anfang gut. Danach gehört der Blick auch zu den Neuen hinten." } ] },
+    { "id": "stimme-fc-031", "faehigkeit": "stimme.auftritt", "stufe": 6, "frage": "Nach deiner Probe sagt eine Freundin: „Deine Hände fliegen die ganze Zeit herum.“ Was nimmst du mit?", "antworten": [
+      { "text": "Ab jetzt die Karte mit beiden Händen festhalten, dann bleiben die Hände ruhig.", "wert": 0, "warum": "So verschwinden auch die Gesten, die helfen. Das Ziel ist Ruhe zwischen den Gesten, nicht gar keine." },
+      { "text": "Weniger gestikulieren.", "wert": 1, "warum": "Richtung stimmt. Genauer: Gesten dort, wo sie etwas zeigen, und dazwischen eine ruhige Grundhaltung." },
+      { "text": "Gesten nur, wo sie etwas zeigen – Größe, Zahl, Richtung –, dazwischen die Hände ruhig vor dem Bauch.", "wert": 2, "warum": "Zeigende Gesten helfen beim Verstehen, Dauerbewegung lenkt ab. Die Ruheposition trennt beides." } ] },
+    { "id": "stimme-fc-032", "faehigkeit": "stimme.betonung", "stufe": 7, "frage": "Du sagst in der Teamrunde: „Das Projekt ist nicht gescheitert – es ist verschoben.“ Wie betonst du den Satz?", "antworten": [
+      { "text": "Ton auf „gescheitert“ und auf „verschoben“.", "wert": 2, "warum": "Beim Kontrast tragen beide Seiten den Ton – so hört man den Unterschied, ohne ihn zu erklären." },
+      { "text": "Ton nur auf „verschoben“, das ist ja die gute Nachricht.", "wert": 1, "warum": "Die gute Nachricht kommt an. Ohne den Ton auf „gescheitert“ fehlt aber der Gegensatz, der sie stark macht." },
+      { "text": "Ton auf „Projekt“, damit alle wissen, worum es geht, und den Rest ruhig und gleichmäßig.", "wert": 0, "warum": "Das Projekt kennen alle schon. Neu ist der Gegensatz – und der geht so unter." } ] },
+    { "id": "stimme-fc-033", "faehigkeit": "stimme.bild", "stufe": 6, "frage": "Im Vorstellungsgespräch fragt man dich: „Erzählen Sie von einer schwierigen Situation im Job.“ Was trägt am meisten?", "antworten": [
+      { "text": "Eine kurze Geschichte: wann und wo, wer beteiligt war, was schiefging – und was du daraus gemacht hast.", "wert": 2, "warum": "Ort, Person, Wendung, Bedeutung: In einer Minute zeigst du, was eine Eigenschaft nur behaupten würde." },
+      { "text": "„Ich bin jemand, der in schwierigen Situationen ruhig bleibt und lösungsorientiert denkt.“", "wert": 1, "warum": "Eine gute Aussage über dich – aber ohne Fall bleibt sie eine Behauptung, die jeder sagen könnte." },
+      { "text": "Den ganzen Ablauf des Projekts von Anfang an schildern, damit nichts fehlt.", "wert": 0, "warum": "Die Wendung geht in der Chronik unter, und die Zeit läuft davon." } ] },
+    { "id": "stimme-fc-034", "faehigkeit": "stimme.klang", "stufe": 8, "frage": "Du stehst den ganzen Tag am Messestand und hältst am Nachmittag noch zwei kurze Vorträge. Gegen Mittag wird deine Stimme rau. Was hilft am meisten?", "antworten": [
+      { "text": "Ab jetzt flüstern, wenn es geht, damit die Stimme sich schont.", "wert": 0, "warum": "Flüstern schont die Stimme nicht – es strengt sie oft eher an. Lieber leise in normaler Stimme oder kurz schweigen." },
+      { "text": "In jeder ruhigen Minute schweigen und trinken.", "wert": 1, "warum": "Richtig und wichtig. Dazu gehört, den Lärm nicht zu überschreien – näher heran, Mikrofon nutzen." },
+      { "text": "Schweigepausen und Wasser, näher an die Leute statt lauter, beim Vortrag das Mikrofon nutzen – und schlucken statt räuspern.", "wert": 2, "warum": "Schonen, wo es geht, Lautstärke durch Nähe und Technik ersetzen, die Stimmlippen nicht zusätzlich reizen." } ] },
+    { "id": "stimme-fc-035", "faehigkeit": "stimme.betonung", "stufe": 7, "frage": "Du stellst im Verein die Planung fürs nächste Jahr vor. Dass die Mitgliederzahl steigt, ist sicher – wie stark, weißt du nicht. Wie sagst du es?", "antworten": [
+      { "text": "„Wir werden um mindestens fünfzig Mitglieder wachsen, da bin ich ganz sicher.“", "wert": 0, "warum": "Eine Zahl, die du nicht kennst. Wird es weniger, glaubt man dir auch das Sichere nicht mehr." },
+      { "text": "„Die Zahl steigt. Wie stark, wissen wir nach den Anmeldungen im Herbst.“", "wert": 2, "warum": "Sicher, wo du es bist, offen mit Termin, wo nicht – das hält auch dann, wenn der Herbst anders ausfällt." },
+      { "text": "„Ich bin ziemlich sicher, dass sie steigen wird, so wie es aussieht.“", "wert": 1, "warum": "Ehrlich, aber ungenauer und weicher, als du sein müsstest: Das Steigen ist ja sicher." } ] },
+    { "id": "stimme-fc-036", "faehigkeit": "stimme.pause", "stufe": 7, "frage": "In der Fragerunde stellt dir jemand eine lange, verschachtelte Frage. Du bist nicht sicher, was er eigentlich wissen will. Was tust du?", "antworten": [
+      { "text": "Kurz still, dann: „Habe ich Sie richtig verstanden: Sie wollen wissen, ob …?“", "wert": 2, "warum": "Die Frage in einem Satz zurückgeben klärt das Missverständnis, gibt dir Zeit und hilft allen im Raum." },
+      { "text": "„Können Sie die Frage bitte noch einmal stellen?“", "wert": 1, "warum": "Ehrlich – aber oft kommt dieselbe lange Frage noch einmal. Selbst zusammenzufassen führt schneller zum Kern." },
+      { "text": "Das beantworten, was du vermutest, und hoffen, dass es passt – dann gibt es wenigstens keine peinliche Pause.", "wert": 0, "warum": "Gerätst du daneben, wirkt es, als hättest du nicht zugehört – und die eigentliche Frage bleibt offen." } ] },
+    { "id": "stimme-fc-037", "faehigkeit": "stimme.aufbau", "stufe": 8, "frage": "Du hast bei der Betriebsversammlung die neue Ablage vorgestellt. In der Fragerunde beschwert sich jemand ausführlich über die Parkplätze. Was tust du?", "antworten": [
+      { "text": "Kurz zustimmen und dann zur nächsten Wortmeldung.", "wert": 1, "warum": "Höflich, aber das Anliegen hängt in der Luft – ein Satz, wohin es gehört, hilft ihm." },
+      { "text": "„Das ist ein eigenes Thema – ich gebe es an Dr. Albers weiter. Gibt es Fragen zur Ablage?“", "wert": 2, "warum": "Ernst genommen, weitergeleitet, zurück zum Thema. Die Fragerunde bleibt bei deinem Vortrag." },
+      { "text": "Mitdiskutieren, bis das Parkplatzproblem geklärt ist – schließlich betrifft es viele im Raum.", "wert": 0, "warum": "Die Fragerunde gehört allen. So endet sie bei einem fremden Thema." } ] },
+    { "id": "stimme-fc-038", "faehigkeit": "stimme.aufbau", "stufe": 8, "frage": "Beim Vereinsjubiläum erzählt dein Vorredner genau die Geschichte, mit der du deine Rede beginnen wolltest. Gleich bist du dran. Was tust du?", "antworten": [
+      { "text": "Die Geschichte trotzdem erzählen – deine Fassung ist ohnehin besser.", "wert": 0, "warum": "Zweimal dieselbe Geschichte langweilt – und es wirkt, als hättest du nicht zugehört." },
+      { "text": "Darauf Bezug nehmen: „Ihr kennt jetzt die Geschichte vom ersten Vereinsfest. Ich erzähle euch, was danach kam.“", "wert": 2, "warum": "Du nutzt die Vorlage als Brücke zu deinem Kernsatz. Das wirkt aufmerksam und souverän." },
+      { "text": "Den Einstieg weglassen und gleich mit dem Zweck beginnen.", "wert": 1, "warum": "Sauber gelöst. Ein Satz, der an den Vorredner anknüpft, hätte dir aber einen Einstieg geschenkt." } ] },
+    { "id": "stimme-fc-039", "faehigkeit": "stimme.auftritt", "stufe": 9, "frage": "Du hast dir zwei Aufnahmen deiner Vorträge angesehen und siehst drei Baustellen: Tempo, Gesten und Blick. Wie gehst du weiter vor?", "antworten": [
+      { "text": "Alle drei auf eine Karte schreiben und vor jedem Auftritt durchlesen.", "wert": 1, "warum": "Gut, sie nicht zu vergessen. Beim Auftritt selbst kann man aber nur auf eines achten." },
+      { "text": "Beim nächsten Vortrag an alle drei gleichzeitig denken, dann geht es am schnellsten.", "wert": 0, "warum": "Drei Baustellen gleichzeitig verkrampfen – und der Kopf ist nicht mehr bei den Zuhörern." },
+      { "text": "Eine Baustelle für die nächsten Wochen wählen, die anderen später.", "wert": 2, "warum": "Ein Merkmal nach dem anderen lässt sich beim Sprechen wirklich üben und wird zur Gewohnheit." } ] },
+    { "id": "stimme-fc-040", "faehigkeit": "stimme.bild", "stufe": 9, "frage": "Ein langjähriges Vereinsmitglied ist gestorben. Du wirst gebeten, bei der Trauerfeier ein paar Worte zu sagen. Was trägt am meisten?", "antworten": [
+      { "text": "Den Lebenslauf mit allen Stationen und Ämtern vorlesen, damit nichts vergessen wird.", "wert": 0, "warum": "Vollständig, aber fern. Die Stationen stehen im Nachruf – im Raum suchen die Menschen den Menschen." },
+      { "text": "Eine kleine, wahre Geschichte, in der man ihn wiedererkennt – ruhig erzählt, mit Pausen, und die Rührung darf man hören.", "wert": 2, "warum": "Ein Moment zum Sehen sagt mehr über ihn als jede Liste. Pausen geben dir und den Zuhörern Raum." },
+      { "text": "Eine Würdigung seiner Eigenschaften: treu, hilfsbereit, immer da.", "wert": 1, "warum": "Respektvoll und wahr. Eine Geschichte würde diese Eigenschaften zeigen, statt sie aufzuzählen." } ] }
   ],
   "selbstbild": [
     { "id": "stimme-sb-1", "text": "Ich spreche in einer Tonlage, die sich für mich bequem anfühlt.", "faehigkeit": "stimme.klang" },
     { "id": "stimme-sb-2", "text": "Mir geht beim Sprechen selten die Luft aus.", "faehigkeit": "stimme.atem" },
     { "id": "stimme-sb-3", "text": "Vor einem wichtigen Satz kann ich eine Pause aushalten.", "faehigkeit": "stimme.pause" },
     { "id": "stimme-sb-4", "text": "Man hört, was mir in meinem Beitrag wichtig ist.", "faehigkeit": "stimme.betonung" },
-    { "id": "stimme-sb-5", "text": "Wenn ich etwas vortrage, wissen die anderen nach dem ersten Satz, worum es geht.", "faehigkeit": "stimme.aufbau" }
+    { "id": "stimme-sb-5", "text": "Wenn ich etwas vortrage, wissen die anderen nach dem ersten Satz, worum es geht.", "faehigkeit": "stimme.aufbau" },
+    { "id": "stimme-sb-6", "text": "Wenn ich etwas erkläre, fällt mir ein Bild, ein Vergleich oder eine kleine Geschichte dazu ein.", "faehigkeit": "stimme.bild" },
+    { "id": "stimme-sb-7", "text": "Wenn ich vor anderen stehe, weiß ich, wohin mit Blick und Händen.", "faehigkeit": "stimme.auftritt" },
+    { "id": "stimme-sb-8", "text": "Ich werde langsamer, wenn etwas Wichtiges kommt – auch wenn ich aufgeregt bin.", "faehigkeit": "stimme.tempo" }
   ],
   "verhalten": [
     { "id": "stimme-vh-1", "text": "Wie oft hast du in den letzten zwei Wochen vor einem wichtigen Satz bewusst eine Pause gemacht?", "faehigkeit": "stimme.pause" },
     { "id": "stimme-vh-2", "text": "Wie oft hast du in den letzten zwei Wochen einen Beitrag mit einem Zwecksatz begonnen?", "faehigkeit": "stimme.aufbau" },
-    { "id": "stimme-vh-3", "text": "Wie oft hast du in den letzten zwei Wochen deine Stimme vor einem Gespräch kurz vorbereitet – mit „mmh“, Wasser oder langem Ausatmen?", "faehigkeit": "stimme.klang" }
+    { "id": "stimme-vh-3", "text": "Wie oft hast du in den letzten zwei Wochen deine Stimme vor einem Gespräch kurz vorbereitet – mit „mmh“, Wasser oder langem Ausatmen?", "faehigkeit": "stimme.klang" },
+    { "id": "stimme-vh-4", "text": "Wie oft hast du in den letzten zwei Wochen eine Zahl mit einem Bild oder eine kleine Geschichte eingesetzt, um etwas zu erklären?", "faehigkeit": "stimme.bild" }
   ]
 }

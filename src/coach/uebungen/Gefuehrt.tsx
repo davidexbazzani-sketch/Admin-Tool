@@ -101,7 +101,12 @@ export function Lockern({ s, onFertig }: BausteinProps<Extract<Schritt, { art: '
   return <Anleitung titel="Mund aufwärmen" schritte={s.uebungen} sekunden={s.sekunden} stumm={s.stummMoeglich} onFertig={() => onFertig({})} />
 }
 export function AnleitungSchritt({ s, onFertig }: BausteinProps<Extract<Schritt, { art: 'anleitung' }>>) {
-  return <Anleitung titel={s.titel} schritte={s.schritte} sekunden={s.sekunden} stumm={s.stumm} pruefung={s.pruefung} onFertig={() => onFertig({})} />
+  const [stufe, setStufe] = useState<'vorher' | 'laeuft' | 'nachher'>(s.messen && s.werkzeug ? 'vorher' : 'laeuft')
+  const [vorher, setVorher] = useState<number | null>(null)
+  const [nachher, setNachher] = useState<number | null>(null)
+  if (stufe === 'vorher') return <div className="dc-spalte dc-ein" data-dc-schritt="anleitung"><span className="dc-ober">{s.titel}</span><Anspannung titel="Wie angespannt bist du gerade?" wert={vorher} setWert={setVorher} /><Weiter text="Los" onClick={() => setStufe('laeuft')} /></div>
+  if (stufe === 'nachher') return <div className="dc-spalte dc-ein" data-dc-schritt="anleitung"><span className="dc-ober">{s.titel}</span><Anspannung titel="Und jetzt?" wert={nachher} setWert={setNachher} /><Weiter onClick={() => onFertig(vorher !== null && nachher !== null && s.werkzeug ? { wirkung: { werkzeug: s.werkzeug, vorher, nachher } } : {})} /></div>
+  return <Anleitung titel={s.titel} schritte={s.schritte} sekunden={s.sekunden} stumm={s.stumm} pruefung={s.pruefung} onFertig={() => (s.messen && s.werkzeug ? setStufe('nachher') : onFertig({}))} />
 }
 
 export function Routine({ s, onFertig }: BausteinProps<Extract<Schritt, { art: 'routine' }>>) {

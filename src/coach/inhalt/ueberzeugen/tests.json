@@ -47,7 +47,7 @@
       { "text": "„Das spart dem ganzen Haus Zeit.“", "wert": 1, "warum": "Ein Nutzen – aber nicht ihrer." },
       { "text": "„Der Ablauf ist komplett digital und automatisiert, die Belege laufen ab jetzt über ein zentrales System.“", "wert": 0, "tendenz": "merkmale", "warum": "Beschreibt das Werkzeug, nicht ihren Gewinn." }
     ] },
-    { "id": "ueberzeugen-fc-010", "faehigkeit": "ueberzeugen.profil", "stufe": 2, "frage": "Beim Elternabend fragt dich ein anderer Vater, was du beruflich machst. Welche Antwort lädt zum Gespräch ein?", "antworten": [
+    { "id": "ueberzeugen-fc-010", "faehigkeit": "ueberzeugen.profil", "stufe": 2, "frage": "Beim Elternabend, wo du die Eltern deines Patenkinds vertrittst, fragt dich ein Vater, was du beruflich machst. Welche Antwort lädt zum Gespräch ein?", "antworten": [
       { "text": "„Ich bin in der Logistik.“", "wert": 1, "warum": "Stimmt, bleibt aber eine Schublade." },
       { "text": "„Ach, nichts Spannendes, ehrlich. Büro halt, viele Tabellen und Besprechungen, so wie bei jedem.“", "wert": 0, "tendenz": "kleinmachen", "warum": "Du machst dich klein und beendest das Gespräch." },
       { "text": "„Ich sorge dafür, dass im Krankenhaus die Medikamente pünktlich auf jeder Station sind.“", "wert": 2, "warum": "Für wen, was, welcher Nutzen – da kann er nachfragen." }
@@ -121,6 +121,96 @@
       { "text": "„Ich könnte es auch für die Hälfte machen – wäre das eine Möglichkeit?“", "wert": 0, "tendenz": "nachgeben", "warum": "Du übergehst das Nein – und weißt nicht, ob es am Preis lag." },
       { "text": "„Danke für die Rückmeldung! Darf ich fragen, was den Ausschlag gegeben hat?“", "wert": 2, "warum": "Ein Nein annehmen und einmal nachfragen – so lernst du etwas, ohne zu drängen." },
       { "text": "„Alles klar, viel Erfolg damit!“", "wert": 1, "warum": "Fair und freundlich – nur ohne zu lernen, was gefehlt hat." }
+    ] },
+    { "id": "ueberzeugen-fc-025", "faehigkeit": "ueberzeugen.haltung", "stufe": 4, "frage": "Du verkaufst auf dem Wochenmarkt Honig von deinen eigenen Bienen. Ein Kunde schwankt zwischen dem großen und dem kleinen Glas und sagt nebenbei, dass er allein lebt und selten Honig isst.", "antworten": [
+      { "text": "„Nehmen Sie das große, das ist pro Gramm viel günstiger und hält ja ewig.“", "wert": 0, "tendenz": "ueberreden", "warum": "Du überhörst, was er gesagt hat – und verkaufst ihm mehr, als er braucht." },
+      { "text": "„Wenn Sie selten Honig essen, reicht das kleine.“", "wert": 2, "warum": "Du hilfst ihm, gut zu entscheiden – auch wenn du dabei weniger verkaufst." },
+      { "text": "„Beide sind gut, das müssen Sie wissen.“", "wert": 1, "warum": "Lässt ihm die Wahl, aber du hast gehört, was ihm helfen würde, und sagst es nicht." }
+    ] },
+    { "id": "ueberzeugen-fc-026", "faehigkeit": "ueberzeugen.bedarf", "stufe": 5, "frage": "Der Vorsitzende deines Tennisvereins fragt dich: „Du kennst dich doch aus – was kostet ein ordentliches WLAN fürs Vereinsheim?“", "antworten": [
+      { "text": "„So 500 bis 1.500, je nachdem.“", "wert": 0, "tendenz": "zufrueh", "warum": "Eine Spanne ohne Grundlage – keiner weiß danach mehr als vorher." },
+      { "text": "„Wofür soll es genutzt werden, von wie vielen gleichzeitig – und was klappt heute nicht?“", "wert": 2, "warum": "Erst Lage und Problem klären, dann lässt sich eine sinnvolle Zahl nennen." },
+      { "text": "„Ich schau mir das am Wochenende mal an, dann sag ich dir was.“", "wert": 1, "warum": "Hilfsbereit – aber ein paar Fragen jetzt würden zeigen, worum es eigentlich geht." },
+      { "text": "„Nehmt das teuerste, dann habt ihr Ruhe.“", "wert": 0, "tendenz": "ueberladen", "warum": "Eine Empfehlung ohne Bedarf – vielleicht viel zu viel für ein Vereinsheim." }
+    ] },
+    { "id": "ueberzeugen-fc-027", "faehigkeit": "ueberzeugen.nutzen", "stufe": 5, "frage": "Du willst Tante Renate überzeugen, ein Tablet auszuprobieren. Sie erzählt oft, dass sie ihre Enkel zu selten sieht. Jetzt sagt sie: „Wozu brauche ich so ein Ding?“", "antworten": [
+      { "text": "„Es hat einen großen Bildschirm, eine Kamera und läuft den ganzen Tag ohne Aufladen.“", "wert": 0, "tendenz": "merkmale", "warum": "Merkmale – sie hat gefragt, was sie davon hat." },
+      { "text": "„Das hat heute doch jeder.“", "wert": 0, "tendenz": "leerebewaehrtheit", "warum": "„Jeder“ ist kein Grund für sie – und sie mag es nicht, gedrängt zu werden." },
+      { "text": "„Du könntest damit die Enkel sonntags sehen, nicht nur hören.“", "wert": 2, "warum": "Ein Nutzen aus ihrem Leben – den kann sie sich vorstellen." },
+      { "text": "„Probier's einfach mal aus.“", "wert": 1, "warum": "Ein kleiner Schritt ist gut, aber ohne Grund hat sie wenig Anlass dazu." }
+    ] },
+    { "id": "ueberzeugen-fc-028", "faehigkeit": "ueberzeugen.profil", "stufe": 6, "frage": "Du schreibst einem neuen Ansprechpartner beim Lieferanten die erste Mail. Wie stellst du dich vor?", "antworten": [
+      { "text": "„Ich mache seit Montag den Einkauf – damit Ihre Lieferungen schnell und ohne Rückfragen bezahlt werden.“", "wert": 2, "warum": "Wer du bist und was er davon hat – kurz und offen." },
+      { "text": "„Ich bin neu im Einkauf.“", "wert": 1, "warum": "Stimmt, gibt aber wenig her. Ein Satz zum Nutzen würde die Zusammenarbeit öffnen." },
+      { "text": "„Mit mir wird die Zusammenarbeit so gut wie nie zuvor – Sie werden schon sehen.“", "wert": 0, "tendenz": "aufblasen", "warum": "Ein Versprechen ohne Beleg – das lädt zum Gegenbeweis ein." }
+    ] },
+    { "id": "ueberzeugen-fc-029", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 5, "frage": "Du empfiehlst Dr. Albers, einen Lieferanten für Druckerpapier, der seit drei Monaten zur Probe liefert, fest zu nehmen. Was überzeugt ihn am ehesten?", "antworten": [
+      { "text": "„Der ist einfach super, glauben Sie mir, ich habe da ein richtig gutes Gefühl.“", "wert": 0, "tendenz": "beteuern", "warum": "Ein Gefühl ist kein Beleg." },
+      { "text": "„Seit drei Monaten liefert er bei uns pünktlich und ist etwas günstiger. Nur Sonderformate hat er nicht.“", "wert": 2, "warum": "Ein Fall aus eigener Erfahrung, ein Vorteil – und ein ehrlicher Haken." },
+      { "text": "„Seit drei Monaten liefert er pünktlich.“", "wert": 1, "warum": "Ein guter Beleg. Mit einem ehrlichen Haken wäre er noch glaubwürdiger." },
+      { "text": "„Alle anderen Abteilungen sind begeistert.“", "wert": 0, "tendenz": "leerebewaehrtheit", "warum": "Nicht prüfbar – und vermutlich übertrieben." }
+    ] },
+    { "id": "ueberzeugen-fc-030", "faehigkeit": "ueberzeugen.einfluss", "stufe": 6, "frage": "Ein Prospekt: „Nur noch 3 Stück auf Lager!“ Auf der Internetseite steht derselbe Satz seit Wochen. Was ist das – und was tust du?", "antworten": [
+      { "text": "Erfundene Knappheit: in Ruhe vergleichen und nur kaufen, wenn es auch ohne den Satz passt.", "wert": 2, "warum": "Seit Wochen „nur noch 3“ ist kaum echt – rote Linie. Deine Entscheidung trennst du vom Druck." },
+      { "text": "Echte Knappheit – schnell bestellen.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau darauf zielt der Satz." },
+      { "text": "Erfundene Knappheit – den Laden ab sofort meiden und allen Bekannten davon abraten, egal wie gut das Angebot ist.", "wert": 1, "warum": "Vorsicht ist verständlich. Das Angebot selbst kann trotzdem gut sein – prüf es ohne den Druck." }
+    ] },
+    { "id": "ueberzeugen-fc-031", "faehigkeit": "ueberzeugen.einwand", "stufe": 6, "frage": "Du bietest einem Nachbarn an, gegen ein kleines Entgelt seine Hecke zu schneiden. Er sagt: „Ach, das mach ich lieber selbst.“", "antworten": [
+      { "text": "„Das klappt doch bei dir nie, das weißt du doch selbst, letztes Jahr war sie bis zum Herbst wild.“", "wert": 0, "tendenz": "abwerten", "warum": "Ein Angriff auf ihn – jetzt verteidigt er sich, statt nachzudenken." },
+      { "text": "„Klar. Was ist dir daran wichtig – das Geld oder dass sie so wird, wie du sie willst?“", "wert": 2, "warum": "Du nimmst den Einwand an und fragst nach dem Grund. Vielleicht passt eine kleinere Hilfe." },
+      { "text": "„Okay, dann nicht.“", "wert": 1, "warum": "Respektvoll – aber du erfährst nicht, ob es eine Lösung gegeben hätte." }
+    ] },
+    { "id": "ueberzeugen-fc-032", "faehigkeit": "ueberzeugen.abschluss", "stufe": 7, "frage": "Du restaurierst alte Möbel. Für einen Schrank hast du 600 Euro genannt. Die Kundin: „Für 500 machen Sie es aber, oder?“", "antworten": [
+      { "text": "„500, wenn ich ihn bis Ende des Monats machen darf statt nächste Woche – dann passt er besser in meinen Plan.“", "wert": 2, "warum": "Nachlass nur gegen Gegenleistung – dein Preis bleibt ernst, und sie hat eine Wahl." },
+      { "text": "„Na gut, 500.“", "wert": 0, "tendenz": "nachgeben", "warum": "Ohne Gegenleistung lernt sie, dass Drücken sich lohnt." },
+      { "text": "„600 ist mein Preis.“", "wert": 1, "warum": "Klar und fest. Eine Möglichkeit gegen Gegenleistung hätte ihr einen Weg zum Ja gegeben." },
+      { "text": "„Für 500 nehme ich das billigere Holzöl.“", "wert": 1, "warum": "Umfang gegen Preis ist erlaubt – sag aber, was das für den Schrank bedeutet, und lass sie wählen." }
+    ] },
+    { "id": "ueberzeugen-fc-033", "faehigkeit": "ueberzeugen.haltung", "stufe": 7, "frage": "Jule Marek will dir dein altes Auto abkaufen. Du weißt, dass die Kupplung bald fällig ist; sie hat nicht danach gefragt.", "antworten": [
+      { "text": "Nichts sagen – sie hat ja nicht gefragt.", "wert": 0, "tendenz": "verschweigen", "warum": "Ein verschwiegener Mangel kostet die Freundschaft, sobald die Kupplung kommt." },
+      { "text": "Es offen sagen und beim Preis einrechnen.", "wert": 2, "warum": "Sie kann gut entscheiden – und du kannst ihr weiter in die Augen schauen." },
+      { "text": "Es erst nach dem Verkauf erwähnen.", "wert": 0, "tendenz": "verschleiern", "warum": "Nach dem Ja ist es zu spät – sie fühlt sich hereingelegt, und ein bekannter, verschwiegener Mangel kann dich sogar haftbar machen." },
+      { "text": "Es andeuten: „Das Auto hat schon ein paar Jahre auf dem Buckel.“", "wert": 1, "warum": "Ein Hinweis – aber zu vage, um gut zu entscheiden." }
+    ] },
+    { "id": "ueberzeugen-fc-034", "faehigkeit": "ueberzeugen.bedarf", "stufe": 7, "frage": "Du bittest eine Bäckerei, das Schulfest zu unterstützen. Inhaberin und Filialleiter sitzen dir gegenüber. Womit fängst du an?", "antworten": [
+      { "text": "„Wir brauchen 300 Euro für die Hüpfburg.“", "wert": 0, "tendenz": "zufrueh", "warum": "Deine Bitte vor ihrem Interesse – warum sollten sie?" },
+      { "text": "„Was wäre für Sie ein guter Grund, ein Schulfest zu unterstützen?“", "wert": 2, "warum": "Erst ihr Interesse – vielleicht Werbung, vielleicht Nachwuchs. Dann passt dein Vorschlag." },
+      { "text": "„Darf ich kurz erzählen, was wir alles geplant haben?“", "wert": 1, "warum": "Freundlich – aber es geht um dich, bevor du weißt, was sie wollen." },
+      { "text": "„Die Bäckerei an der Ecke hat schon zugesagt, Sie wollen ja sicher nicht zurückstehen, oder?“", "wert": 0, "tendenz": "druck", "warum": "Druck über einen Vergleich – und wenn es nicht stimmt, rote Linie." }
+    ] },
+    { "id": "ueberzeugen-fc-035", "faehigkeit": "ueberzeugen.nutzen", "stufe": 8, "frage": "Dr. Albers wird vor allem an der Fehlerquote bei Lieferungen gemessen. Du willst eine doppelte Kontrolle beim Packen vorschlagen. Dein erster Satz?", "antworten": [
+      { "text": "„Ich hätte da eine Idee, die mir am Herzen liegt.“", "wert": 0, "tendenz": "ichzuerst", "warum": "Es geht um dich, nicht um sein Ziel." },
+      { "text": "„Mit einer zweiten Kontrolle beim Packen gehen weniger falsche Lieferungen raus – darf ich sie vier Wochen testen?“", "wert": 2, "warum": "Sein Ziel, deine Lösung, ein kleiner Schritt – in einem Satz." },
+      { "text": "„Wir machen beim Packen ehrlich gesagt viel zu viele Fehler.“", "wert": 1, "warum": "Das Problem stimmt und trifft sein Ziel – aber ohne Lösung klingt es nach Klage." }
+    ] },
+    { "id": "ueberzeugen-fc-036", "faehigkeit": "ueberzeugen.profil", "stufe": 7, "frage": "Im Jahresgespräch fragt Dr. Albers: „Was lief bei Ihnen dieses Jahr gut?“", "antworten": [
+      { "text": "„Ach, eigentlich nichts Besonderes.“", "wert": 0, "tendenz": "kleinmachen", "warum": "Du machst deine Arbeit unsichtbar – genau hier hätte sie Platz." },
+      { "text": "„Die Umstellung der Vorlagen: Standardangebote dauern jetzt zwanzig Minuten statt einer Stunde. Lena hat mitgeholfen.“", "wert": 2, "warum": "Offen, belegt, mit dem Anteil der anderen – so zeigt man sich ohne Show." },
+      { "text": "„Ich habe wirklich hart gearbeitet, oft bis spät.“", "wert": 1, "warum": "Mag stimmen, aber Einsatz ist kein Ergebnis. Ein Beispiel wäre stärker." },
+      { "text": "„Ehrlich gesagt lief ohne mich in der Abteilung fast nichts, alle kamen ständig zu mir.“", "wert": 0, "tendenz": "aufblasen", "warum": "Aufgeblasen und auf Kosten der anderen – das wirkt unaufrichtig." }
+    ] },
+    { "id": "ueberzeugen-fc-037", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 8, "frage": "Du stellst einen Vorschlag vor. Jemand fragt nach einer Zahl, die du nicht kennst.", "antworten": [
+      { "text": "Eine plausible Zahl schätzen und so tun, als wüsstest du sie.", "wert": 0, "tendenz": "flunkern", "warum": "Fliegt es auf, wankt alles andere, was du gesagt hast." },
+      { "text": "„Weiß ich gerade nicht genau. Ich schicke sie Ihnen bis Freitag.“", "wert": 2, "warum": "Ehrlich, mit Zusage – das stärkt das Vertrauen in alles andere." },
+      { "text": "„Das ist für den Vorschlag nicht so wichtig, glauben Sie mir, das spielt im Gesamtbild kaum eine Rolle.“", "wert": 0, "tendenz": "ausweichen", "warum": "Ausweichen wirkt, als wolltest du etwas verbergen." },
+      { "text": "„Ungefähr so viel, aber ohne Gewähr.“", "wert": 1, "warum": "Ehrlich markiert – besser wäre, die genaue Zahl nachzuliefern." }
+    ] },
+    { "id": "ueberzeugen-fc-038", "faehigkeit": "ueberzeugen.einfluss", "stufe": 8, "frage": "Ein Mann klingelt: „Ich habe von der Straße aus gesehen, dass Ziegel auf Ihrem Dach locker sind. Gefährlich! Ich hätte heute noch Zeit – nur heute.“", "antworten": [
+      { "text": "Angst und künstlicher Zeitdruck: „Danke für den Hinweis. Ich lasse das von einem Betrieb meiner Wahl prüfen.“", "wert": 2, "warum": "Du nimmst den Hinweis ernst und entscheidest selbst, wer prüft – ohne Druck." },
+      { "text": "„Dann kommen Sie gleich rauf, bevor etwas passiert – ich will ja nicht, dass jemandem ein Ziegel auf den Kopf fällt.“", "wert": 0, "tendenz": "nachgeben", "warum": "Angst und Frist haben gewirkt – genau das ist der Zweck." },
+      { "text": "Angst und Zeitdruck: ihn beschimpfen und die Tür zuschlagen.", "wert": 0, "tendenz": "angreifen", "warum": "Erkannt – aber Beschimpfen ist ein Angriff und bringt dir nichts. Den Hinweis aufs Dach solltest du trotzdem prüfen lassen." },
+      { "text": "Angst und Zeitdruck: „Kein Bedarf.“ – und die Tür schließen.", "wert": 1, "warum": "Richtig erkannt und ruhig. Den Hinweis aufs Dach solltest du trotzdem von einem Betrieb deiner Wahl prüfen lassen." }
+    ] },
+    { "id": "ueberzeugen-fc-039", "faehigkeit": "ueberzeugen.einwand", "stufe": 8, "frage": "Im Vereinsvorstand sagt der Kassenwart zu deinem Vorschlag: „Viel zu teuer.“", "antworten": [
+      { "text": "„Ist es nicht.“", "wert": 0, "tendenz": "widersprechen", "warum": "Behauptung gegen Behauptung – jetzt geht es ums Rechthaben." },
+      { "text": "„Ich kann es auch billiger machen, wenn das hilft – dann lassen wir eben ein paar Sachen weg.“", "wert": 0, "tendenz": "nachgeben", "warum": "Nachlass, bevor du weißt, womit er vergleicht." },
+      { "text": "„Womit vergleichst du – und was wäre für die Kasse vertretbar?“", "wert": 2, "warum": "Du erfährst seinen Maßstab und seine Grenze – dann kannst du gezielt antworten." },
+      { "text": "„Verstehe, Geld ist knapp.“", "wert": 1, "warum": "Gut anerkannt – die Frage nach seinem Maßstab fehlt noch." }
+    ] },
+    { "id": "ueberzeugen-fc-040", "faehigkeit": "ueberzeugen.abschluss", "stufe": 9, "frage": "Am Ende deines Vorschlags im Vorstand des Fördervereins nicken alle, keiner sagt etwas. Was sagst du?", "antworten": [
+      { "text": "„Wer ist dafür, dass wir es bis zu den Ferien testen? Ich kümmere mich um die Einrichtung bis zum 1.“", "wert": 2, "warum": "Klare Frage, wer, was, bis wann – Nicken wird zur Entscheidung." },
+      { "text": "„Gut, dann sind ja alle einverstanden.“", "wert": 0, "tendenz": "unterstellen", "warum": "Nicken ist keine Zustimmung – stille Bedenken kommen später zurück." },
+      { "text": "„Lasst es euch durch den Kopf gehen.“", "wert": 1, "warum": "Respektvoll, aber ohne Schritt vertagt sich die Sache." }
     ] }
   ],
   "selbstbild": [

@@ -1,0 +1,280 @@
+{
+  "einheiten": [
+    {
+      "id": "konter-3-01", "bereich": "konter", "stufe": 3, "nr": 1,
+      "titel": "Humor nach oben, Humor nach unten",
+      "faehigkeiten": ["konter.necken", "konter.spiel"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Ranghöhere schärfer necken und Rangniedrigere freundlicher, zeigen Beobachtungen in einer Studentenverbindung und eine Übersichtsarbeit. Dass freundlicher Humor von Vorgesetzten mit zufriedeneren Teams einhergeht, zeigt eine Meta-Analyse – Zusammenhänge, keine Ursachen.",
+      "quellen": ["keltner1998", "keltner2001", "mesmer2012", "bitterly2017"],
+      "aha": "Je mehr Macht du hast, desto schwerer wiegt dein Witz – der andere kann schlecht zurück. Nach oben über die Lage scherzen, nach unten über dich selbst.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "In einer Studentenverbindung wurde beobachtet, wie die Mitglieder einander neckten. Wer neckte freundlicher?", "optionen": ["die ranghohen Mitglieder", "die rangniedrigen Mitglieder", "beide gleich"], "richtig": 1, "loesung": "Die rangniedrigen", "aufloesung": "Rangniedrige neckten freundlicher. Eine Übersichtsarbeit fand auch insgesamt: Necken von Ranghöheren ist häufiger und schärfer. Und wer unten steht, kann schlecht zurück – darum wiegt ein Spaß von oben schwerer." },
+        { "art": "karte", "titel": "Oben und unten", "text": "Nach oben: über die Lage, nicht über die Person; nie die Autorität vor anderen ankratzen; ist der Chef witzig, mitspielen. Nach unten – wenn du einarbeitest, leitest oder mehr Erfahrung hast: Dein Witz wiegt schwerer, der andere kann schlecht zurück. Darum lieber über dich oder über „uns“, nie über die Leistung von jemandem, der von dir abhängt. Und höfliches Lachen von unten beweist nicht, dass es gut ankam." },
+        { "art": "zuordnen", "kopf": { "id": "konter-3-01-a", "faehigkeit": "konter.necken", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Passt der Witz – oder lieber nicht?",
+          "faecher": ["passt", "lieber nicht"],
+          "karten": [
+            { "text": "Zu Dr. Albers, als der Beamer streikt: „Die Technik hat heute wohl auch Urlaub beantragt.“", "fach": 0 },
+            { "text": "Zu Dr. Albers, vor dem Kunden: „Unser Chef liest Mails übrigens nur einmal im Monat.“", "fach": 1 },
+            { "text": "Du arbeitest Lena ein. Nach ihrem ersten Fehler sagst du vor der Runde: „Na, das üben wir aber noch.“", "fach": 1 },
+            { "text": "Du arbeitest Lena ein und sagst: „Den Fehler hab ich in meiner ersten Woche auch gemacht. Zweimal.“", "fach": 0 },
+            { "text": "Du leitest die Runde: „Wir sind heute alle etwas langsam – ich vorneweg.“", "fach": 0 },
+            { "text": "Du leitest die Runde und witzelst über den Kollegen, der als Einziger widersprochen hat.", "fach": 1 }
+          ] },
+        { "art": "szene", "kopf": { "id": "konter-3-01-b", "faehigkeit": "konter.necken", "stufe": 7, "kanal": "wissen" },
+          "beschreibung": "Du leitest seit einem Monat ein kleines Projekt. Ein neuer Werkstudent hat im Plan zwei Termine vertauscht. Alle in der Runde haben es gesehen, Tarek grinst schon.",
+          "frage": "Was sagst du?",
+          "antworten": [
+            { "text": "„Na, da hat jemand die Uhr verkehrt herum gelesen.“", "wert": 0, "tendenz": "abwerten", "warum": "Alle lachen – nur einer nicht. Von dir als Leitung wiegt der Spruch schwer, und er kann schlecht zurück." },
+            { "text": "Nichts dazu sagen und die Termine nach der Runde selbst korrigieren.", "wert": 1, "warum": "Schont ihn vor der Runde – doch er lernt nichts daraus. Kurz und freundlich geht es besser." },
+            { "text": "„Willkommen im Klub – ich hab mal einen ganzen Umzug falsch geplant. Wir richten das kurz.“", "wert": 2, "warum": "Der Witz geht auf deine Kosten, der Fehler wird zur Nebensache, und die Sache wird trotzdem geklärt." },
+            { "text": "„Tja, wer beim Planen ans Wochenende denkt …“", "wert": 0, "tendenz": "abwerten", "warum": "Ein Augenzwinkern macht den Vorwurf nicht kleiner. Von oben klingt es wie eine Rüge mit Publikum." }
+          ] },
+        { "art": "konter", "kopf": { "id": "konter-3-01-c", "faehigkeit": "konter.spiel", "stufe": 7, "kanal": "koennen" },
+          "lage": "Dr. Albers stellt dich dem neuen Bereichsleiter vor und sagt mit einem Lächeln:", "von": "Dr. Albers", "spruch": "„Und das ist unser Mensch für alles – vor allem für alles, was in letzter Minute brennt.“", "schaerfe": 1,
+          "muster": [
+            { "technik": "zustimmen und überzeichnen", "text": "„Ich habe immer einen Feuerlöscher im Rucksack. Für alle Fälle.“" },
+            { "technik": "Rolle annehmen", "text": "„Die Feuerwehr hat schon angefragt. Ich bleibe – hier ist mehr los.“" },
+            { "technik": "den Ball nach oben zurückgeben", "text": "„Und er ist der, der die Funken früh genug sieht.“" }
+          ],
+          "kriterien": ["spielt nach oben mit", "lässt den Chef gut dastehen", "kurz"] },
+        { "art": "auswahl", "kopf": { "id": "konter-3-01-d", "faehigkeit": "konter.spiel", "stufe": 6, "kanal": "wissen" },
+          "frage": "Freundlicher Humor von Vorgesetzten hängt in Studien mit zufriedeneren Teams zusammen. Was folgt daraus, wenn du eine Runde leitest?",
+          "antworten": [
+            { "text": "Jede Sitzung mit einem vorbereiteten Witz eröffnen, damit auf jeden Fall gute Stimmung aufkommt.", "wert": 0, "warum": "Ein Zusammenhang ist keine Anleitung. Pflicht-Humor wirkt schnell gezwungen." },
+            { "text": "Ab und zu über die Lage oder dich selbst scherzen – und die Witze der anderen tragen.", "wert": 2, "warum": "Das ist freundlicher Humor, wie ihn die Studien meinen: verbindend, nicht auf Kosten Einzelner." },
+            { "text": "Humor als Leitung ganz lassen und lieber sachlich bleiben.", "wert": 1, "warum": "Ernst schadet nicht. Du verschenkst nur etwas, das mit Zusammenhalt einhergeht." },
+            { "text": "Mit Necken zeigen, dass du nahbar bist – ruhig auch über die Leistung Einzelner, das hält alle wach.", "wert": 0, "tendenz": "abwerten", "warum": "Necken über Leistung trifft von oben besonders hart – und schadet dem, was du erreichen willst." }
+          ] },
+        { "art": "experiment", "auftrag": "Achte heute darauf, wer in deinem Umfeld über wen scherzt – und wer zurückscherzen kann.", "dauer": "heute", "nachfrage": "Wo lief der Humor nur in eine Richtung?" },
+        { "art": "reflexion", "frage": "Wo hast du selbst mehr Macht – beim Einarbeiten, in einer Leitung, in der Familie? Wie kommen deine Witze dort an?" }
+      ],
+      "regel": "Nach oben über die Lage, nach unten über dich – nie über Abhängige.",
+      "merkkarten": [
+        { "id": "konter-3-01-m1", "frage": "Warum wiegt ein Witz von oben schwerer?", "antwort": "Der andere kann schlecht zurück – und Ranghöhere necken oft schärfer." },
+        { "id": "konter-3-01-m2", "frage": "Humor nach oben?", "antwort": "Über die Lage, nicht über die Person – und mitspielen, wenn der Chef witzig ist." }
+      ]
+    },
+    {
+      "id": "konter-3-02", "bereich": "konter", "stufe": 3, "nr": 2,
+      "titel": "Unfaire Taktiken erkennen",
+      "faehigkeiten": ["konter.grenze", "konter.rueckfrage"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Die Sammlung unfairer Kunstgriffe stammt von Schopenhauer (Denkmodell), die Abwehr ist Praxiswissen. Dass als Spaß getarnte Sprüche trotzdem treffen, zeigt eine Tagebuchstudie mit Jugendlichen.",
+      "quellen": ["schopenhauer", "praxis-konter", "douglass2016"],
+      "aha": "Unfaire Taktiken schieben das Gespräch von der Sache auf dich – oder holen das Publikum gegen dich. Wer das Muster ruhig benennt und zur Sache zurückgeht, nimmt ihnen die Kraft.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "konter-3-02-a", "faehigkeit": "konter.grenze", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Welche Taktik steckt dahinter?",
+          "faecher": ["Strohmann", "„War nur Spaß“", "Lacher holen"],
+          "karten": [
+            { "text": "„Du willst also, dass wir alle am Wochenende arbeiten?“ – nachdem du einen Samstag für die Inventur vorgeschlagen hast", "fach": 0 },
+            { "text": "Erst ein Spruch über deine Brotdose, dann, als du ernst schaust: „Mein Gott, war nur Spaß. Humor hast du keinen, oder?“", "fach": 1 },
+            { "text": "„Hat noch jemand verstanden, was das werden soll?“ – mit Blick in die Runde", "fach": 2 },
+            { "text": "„Ach, du bist also gegen Fortschritt?“ – weil du nach den Kosten gefragt hast", "fach": 0 },
+            { "text": "„Entspann dich, das war ein Witz. Du nimmst echt alles persönlich.“", "fach": 1 },
+            { "text": "Er grinst die anderen an und äfft deinen Satz nach.", "fach": 2 }
+          ] },
+        { "art": "karte", "titel": "Das Muster dahinter", "text": "Fast alle unfairen Taktiken tun eins von zwei Dingen. Sie schieben das Gespräch von der Sache auf dich – Unterstellung, Strohmann, „War nur Spaß“. Oder sie holen das Publikum gegen dich – Lacher holen, Nachäffen. Schopenhauer sammelte solche Kunstgriffe schon vor fast zweihundert Jahren. Die Abwehr ist meist dieselbe: das Muster ruhig benennen, dann zurück zur Sache. Nie mit gleicher Münze zurückzahlen." },
+        { "art": "kunstgriff", "kopf": { "id": "konter-3-02-b", "faehigkeit": "konter.rueckfrage", "stufe": 6, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Du schlägst vor, die Kaffeekasse künftig mit einer Liste zu führen. Ein Kollege: „Ah, du willst also jeden kontrollieren und Strafzettel verteilen?“",
+          "frage": "Was passiert hier – und was hilft?",
+          "antworten": [
+            { "text": "Eine Unterstellung – zurückfragen: „Woraus schließt du das?“", "wert": 1, "warum": "Brauchbar. Hier wird aber vor allem dein Vorschlag verzerrt – geraderücken ist direkter." },
+            { "text": "Ein Strohmann – geraderücken: „Nein, nur eine Liste. Was spricht dagegen?“", "wert": 2, "warum": "Du verteidigst nicht die verzerrte Fassung, sondern stellst deine richtig und fragst nach dem echten Einwand." },
+            { "text": "Eine berechtigte Sorge – den Vorschlag lieber zurückziehen, bevor Streit entsteht.", "wert": 0, "tendenz": "vermeiden", "warum": "Er widerspricht nicht deinem Vorschlag, sondern einer verdrehten Fassung davon." },
+            { "text": "Ein Strohmann – mit einem eigenen kontern: „Du willst also, dass die Kasse leer bleibt?“", "wert": 0, "tendenz": "angreifen", "warum": "Mit gleicher Münze zurückzahlen macht aus der Frage einen Schlagabtausch." }
+          ],
+          "erklaerung": "Beim Strohmann wird deine Aussage übertrieben oder verdreht, damit sie leichter anzugreifen ist. Wer die verzerrte Fassung verteidigt, hat schon verloren. Kurz geraderücken, dann nach dem echten Einwand fragen." },
+        { "art": "auswahl", "kopf": { "id": "konter-3-02-d", "faehigkeit": "konter.grenze", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+          "frage": "Bei der Vereinsversammlung schaut ein Mitglied nach deinem Vorschlag grinsend in die Runde: „Hat das noch jemand verstanden?“ Zwei lachen. Was hilft?",
+          "antworten": [
+            { "text": "„Ich hab's verstanden – im Gegensatz zu dir offenbar, aber das wundert hier ja niemanden mehr.“", "wert": 0, "tendenz": "angreifen", "warum": "Jetzt sieht die Runde zwei, die sich streiten – und dein Vorschlag geht unter." },
+            { "text": "„Dann sag ich's kürzer: …“ – und den Kern in einem Satz.", "wert": 2, "warum": "Du machst aus dem Seitenhieb eine Gelegenheit. Die Lacher verpuffen, wenn du sachlich bleibst." },
+            { "text": "Den Vorschlag zurückziehen, wenn ihm ohnehin keiner folgt.", "wert": 0, "tendenz": "vermeiden", "warum": "Zwei Lacher sind keine Abstimmung. Genau darauf zielt die Taktik." },
+            { "text": "„Was genau ist unklar?“ – an ihn gerichtet.", "wert": 1, "warum": "Gute Rückfrage – sie gibt ihm aber die Bühne zurück. Den Kern kurz für alle zu sagen, wirkt stärker." }
+          ] },
+        { "art": "kunstgriff", "kopf": { "id": "konter-3-02-c", "faehigkeit": "konter.grenze", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Ein Kollege macht vor der Runde einen Spruch über dein Alter. Du schaust ihn ernst an. Er: „Mein Gott, war nur Spaß. Du verstehst echt keinen Humor.“",
+          "frage": "Welcher Trick steckt im zweiten Satz – und was hilft?",
+          "antworten": [
+            { "text": "Eine echte Entschuldigung – annehmen und abhaken.", "wert": 0, "warum": "Er nimmt nichts zurück. Er schiebt dir die Schuld zu: Du hättest keinen Humor." },
+            { "text": "„Nur Spaß“ als Rückzug – beweisen, dass du doch Humor hast, und laut mitlachen.", "wert": 0, "tendenz": "kleinreden", "warum": "Dann gilt der Spruch als erlaubt – und der nächste kommt bestimmt." },
+            { "text": "„Nur Spaß“ als Rückzug – trotzdem benennen: „Kann sein. Lass die Altersschiene.“", "wert": 2, "warum": "Du lässt dich nicht auf die Frage nach deinem Humor ein und bleibst beim Verhalten." },
+            { "text": "„Nur Spaß“ als Rückzug – nach der Runde unter vier Augen ansprechen.", "wert": 1, "warum": "Brauchbar, gerade vor großer Runde. Ein kurzer Satz sofort verhindert, dass der Spruch als erlaubt gilt." }
+          ],
+          "erklaerung": "„War nur Spaß“ macht aus seinem Spruch dein Problem. Eine Tagebuchstudie zeigt: Auch Sprüche, die als Spaß abgetan werden, können treffen. Du brauchst keinen Humor-Beweis – nur einen ruhigen Satz zum Verhalten." },
+        { "art": "wenndann", "anlass": "Deine Abwehrsätze", "wenn": ["Wenn jemand meine Aussage verdreht …", "Wenn jemand „War nur Spaß“ sagt …", "Wenn jemand Lacher gegen mich holt …"], "dann": ["… dann sage ich: „So hab ich das nicht gesagt. Mein Punkt ist …“", "… dann sage ich: „Kann sein. Lass es trotzdem.“", "… dann sage ich den Kern noch einmal kurz – für alle."] },
+        { "art": "reflexion", "frage": "Welche unfaire Taktik begegnet dir am häufigsten – und welcher deiner Abwehrsätze passt dazu?", "insBuch": "konter" }
+      ],
+      "regel": "Muster benennen, zurück zur Sache – nie mit gleicher Münze zurückzahlen.",
+      "merkkarten": [
+        { "id": "konter-3-02-m1", "frage": "Was tun fast alle unfairen Taktiken?", "antwort": "Sie schieben das Gespräch von der Sache auf dich oder holen das Publikum gegen dich." },
+        { "id": "konter-3-02-m2", "frage": "Strohmann – was tun?", "antwort": "Kurz geraderücken: „So hab ich das nicht gesagt.“ Dann zur Sache." },
+        { "id": "konter-3-02-m3", "frage": "„War nur Spaß“ – was tun?", "antwort": "„Kann sein. Lass es trotzdem.“ Kein Humor-Beweis nötig." }
+      ]
+    },
+    {
+      "id": "konter-3-03", "bereich": "konter", "stufe": 3, "nr": 3,
+      "titel": "Schlagfertig in der Runde",
+      "faehigkeiten": ["konter.spiel", "konter.ruhe"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass aufgegriffener Humor in Besprechungen mit besserer Zusammenarbeit einhergeht, zeigt eine Beobachtungsstudie (Zusammenhang). Dass man in der Runde für das Publikum antwortet, ist Praxiswissen.",
+      "quellen": ["lehmann2014", "impro", "praxis-konter"],
+      "aha": "In der Runde antwortest du nicht dem, der stichelt, sondern allen, die zuhören. Kurz, freundlich, zurück zur Sache – und die Witze der anderen tragen, statt selbst die Bühne zu suchen.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Abteilungsversammlung, dreißig Leute. Du stellst einen Plan vor. Von hinten ruft jemand: „Und wer soll das alles machen? Die Heinzelmännchen?“", "schwach": "„Wenn du zugehört hättest, wüsstest du, dass das auf Folie fünf steht – aber gut, für dich noch mal …“", "stark": "„Die Heinzelmännchen sind leider ausgebucht – darum zwei neue Stellen. Folie fünf.“", "frage": "Wem antwortet die zweite Fassung?", "unterschied": "Allen im Saal: Sie nimmt das Bild auf, gibt in einem Halbsatz die Sachantwort und geht weiter. Die erste antwortet nur dem Rufer – und belehrt ihn vor allen." },
+        { "art": "karte", "titel": "Regeln für die Runde", "text": "1. Du sprichst für das Publikum, nicht gegen den Rufer. 2. Kürzer als unter vier Augen: ein Satz, dann zur Sache. 3. Witze der anderen tragen – lachen, aufgreifen, weitergeben. Humor, der ein Echo findet, geht mit besserer Zusammenarbeit einher. 4. Niemanden zurücklassen: keine Insider, die Stillen einbeziehen. 5. Schaukeln sich zwei hoch: mit einem leichten Satz die Lage benennen, zurück zum Thema." },
+        { "art": "rangfolge", "kopf": { "id": "konter-3-03-a", "faehigkeit": "konter.spiel", "stufe": 6, "kanal": "wissen" },
+          "frage": "Teamrunde. Tarek witzelt: „Wenn der Plan so weitergeht, brauchen wir einen Plan für den Plan.“ Ordne die Reaktionen von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Und einen dritten für die Ausnahmen. Im Ernst: Zwei Schritte können wir streichen. Welche?“", "warum": "Aufgreifen, kurz weiterspinnen, dann zur Sache – die Runde lacht und arbeitet weiter." },
+            { "text": "Lachen: „Der war gut.“ – und weiter im Text.", "warum": "Trägt seinen Witz, ohne Bühne. Solide." },
+            { "text": "Leicht genervt: „Gut, dass wir dich haben, Tarek – sonst wär's hier ja langweilig.“", "warum": "Ein Lob mit Unterton. Die Runde spürt den Stich." },
+            { "text": "„Können wir bitte ernst bleiben? Wir haben wenig Zeit.“", "warum": "Nachvollziehbar, aber es würgt den Humor ab, der die Runde gerade trägt." }
+          ] },
+        { "art": "buehne", "kopf": { "id": "konter-3-03-b", "faehigkeit": "konter.ruhe", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "konter-v-0163" },
+          "auftrag": "Steh auf und stell zwei Minuten lang einen kleinen Vorschlag vor – etwa eine neue Regel für die Kaffeekasse. Der Coach wirft Zwischenrufe ein. Antworte jeweils mit einem Satz für alle und geh zurück zur Sache.",
+          "sekunden": 120, "publikum": "gross",
+          "stoerungen": ["„Geht das auch kürzer?“", "„Hatten wir schon mal, hat nie geklappt.“", "Lachen aus der letzten Reihe", "„Und wer bezahlt das?“"],
+          "pruefliste": ["Nach jedem Zwischenruf erst ausgeatmet?", "Ein Satz für alle statt ein Streit mit einem?", "Danach zurück zur Sache?", "Die Stimme ruhig gehalten?"] },
+        { "art": "auswahl", "kopf": { "id": "konter-3-03-c", "faehigkeit": "konter.ruhe", "stufe": 7, "kanal": "wissen" },
+          "frage": "Du leitest heute die Runde. Tarek und ein Kollege schaukeln sich mit Sprüchen hoch, es wird spitzer, die anderen schauen weg. Was tust du?",
+          "antworten": [
+            { "text": "Selbst einen noch besseren Spruch einwerfen, damit es locker bleibt und am Ende alle zusammen lachen.", "wert": 0, "tendenz": "uebertrumpfen", "warum": "Ein dritter Mitspieler macht das Hochschaukeln nur länger." },
+            { "text": "Abwarten, bis es sich von selbst legt.", "wert": 1, "warum": "Manchmal klappt das. Wenn andere schon wegschauen, ist es aber kein Spiel mehr – dann hilft ein Satz von dir." },
+            { "text": "„Ihr zwei habt sichtlich Spaß. Wir anderen hätten gern die Tagesordnung zurück.“", "wert": 2, "warum": "Leicht benannt, niemand wird bloßgestellt, und die Runde ist wieder bei der Sache." },
+            { "text": "„Schluss jetzt, ihr benehmt euch wie im Kindergarten!“", "wert": 0, "tendenz": "angreifen", "warum": "Die Ruhe ist hergestellt – auf Kosten von zwei Gesichtern." }
+          ] },
+        { "art": "konter", "kopf": { "id": "konter-3-03-d", "faehigkeit": "konter.spiel", "stufe": 7, "kanal": "koennen" },
+          "lage": "Betriebsversammlung. Du moderierst die Fragerunde, da fällt das Mikrofon aus.", "von": "Jemand aus der dritten Reihe", "spruch": "„Das ist doch Absicht – damit keine Fragen kommen!“", "schaerfe": 1,
+          "muster": [
+            { "technik": "zustimmen und überzeichnen", "text": "„Erwischt. Plan B: Ich wiederhole jede Frage laut. Bitte!“" },
+            { "technik": "Rolle annehmen", "text": "„Das Mikro ist nur schüchtern. Wir rufen einfach lauter.“" },
+            { "technik": "lachen und zur Sache", "text": "(lachen) „Gute Theorie! Fragen gehen trotzdem – ich komme zu euch.“" }
+          ],
+          "kriterien": ["antwortet für den ganzen Saal", "greift das Bild auf", "führt zurück zur Fragerunde"] },
+        { "art": "geschichtenbau", "kopf": { "id": "konter-3-03-e", "faehigkeit": "konter.spiel", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Für die Mission: Bau eine kurze Geschichte für die Runde. Ein kleines Missgeschick reicht – die Pointe kommt ganz am Ende, davor kein Wort zu viel.",
+          "felder": [
+            { "name": "Lage", "hilfe": "Wo, wann, wer war dabei? Ein Satz genügt." },
+            { "name": "Wendung", "hilfe": "Was ging schief – oder ganz anders als gedacht?" },
+            { "name": "Pointe", "hilfe": "Der Satz, der zum Schluss kommt. Danach: kurze Pause, nichts erklären." }
+          ],
+          "muster": ["Lage: Umzug, dritter Stock, kein Aufzug. – Wendung: Zu dritt haben wir das Sofa zwei Stunden lang durchs Treppenhaus gewuchtet. – Pointe: Oben fragt meine Schwester, warum wir es nicht auseinandergeschraubt haben. Es war ein Bausatz."] },
+        { "art": "mission", "ref": "konter-m-09" }
+      ],
+      "regel": "In der Runde: für alle sprechen, kurz bleiben, Witze der anderen tragen.",
+      "merkkarten": [
+        { "id": "konter-3-03-m1", "frage": "Wem antwortest du in der Runde?", "antwort": "Allen, die zuhören – nicht nur dem, der stichelt." },
+        { "id": "konter-3-03-m2", "frage": "Zwei schaukeln sich hoch?", "antwort": "Leicht die Lage benennen und zurück zur Tagesordnung." },
+        { "id": "konter-3-03-m3", "frage": "Eine Geschichte für die Runde?", "antwort": "Lage, Wendung, Pointe – die Pointe ganz ans Ende, dann nichts erklären." }
+      ],
+      "mission": "konter-m-09"
+    },
+    {
+      "id": "konter-3-04", "bereich": "konter", "stufe": 3, "nr": 4,
+      "titel": "Wenn der Witz danebengeht",
+      "faehigkeiten": ["konter.necken", "konter.selbstironie"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass unpassende Witze das Ansehen senken, zeigen acht Experimente einer Forschergruppe. Wie man einen Witz am besten zurücknimmt, ist nicht eigens untersucht – das ist Praxiswissen.",
+      "quellen": ["bitterly2017", "praxis-konter"],
+      "aha": "Ein Witz, über den keiner lacht, ist harmlos – lass ihn liegen. Ein Witz, der jemanden trifft, ist es nicht – nimm ihn sofort und kurz zurück, ohne „aber“.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Einen danebengegangenen Witz rettet man am besten mit einem zweiten.", "urteil": "falsch", "warum": "Ein zweiter Witz hinterher wirkt wie Überspielen. Bei einem Flop hilft Weitermachen, bei einem verletzenden Witz ein kurzes Zurücknehmen." },
+        { "art": "geschichte", "titel": "Tarek und der Notarzt", "figur": "Tarek Yılmaz", "text": "Bruno erzählt: „Carla stand vor ihrer großen Präsentation, man sah ihr die Aufregung an. Tarek rief: ‚Soll ich schon mal den Notarzt rufen?‘ Zwei lachten. Carla wurde still und blätterte in ihren Karten. Tarek merkte es sofort. Er ging zu ihr: ‚Sorry, das war blöd. Du machst das gut.‘ Kein Aber, keine Erklärung, zehn Sekunden. Carla nickte. Nach der Präsentation klatschte Tarek als Erster. Und was ist hängen geblieben? Nicht der Witz – sondern wie er ihn zurückgenommen hat.“", "frage": "Was genau hat Tarek richtig gemacht?" },
+        { "art": "karte", "titel": "Zwei Arten danebenzugehen", "text": "Der Flop: Keiner lacht, aber keiner ist getroffen. Lass ihn liegen und geh weiter – höchstens ein leichter Satz über dich („Der war für die Fachleute“). Nie den Witz erklären. Der Treffer: Jemand ist verletzt. Dann sofort und kurz: „Sorry, das war daneben.“ Ohne „aber“, ohne „war nur Spaß“. Steht viel im Raum, später unter vier Augen noch ein Wort. Dann nicht endlos entschuldigen – sonst wird es wieder dein Thema." },
+        { "art": "zuordnen", "kopf": { "id": "konter-3-04-a", "faehigkeit": "konter.necken", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Flop oder Treffer?",
+          "faecher": ["Flop – liegen lassen", "Treffer – zurücknehmen"],
+          "karten": [
+            { "text": "Dein Wortspiel in der Runde – kurze Stille, dann geht es weiter.", "fach": 0 },
+            { "text": "Dein Spruch über Lenas Brotdose – sie wird rot und isst schweigend weiter.", "fach": 1 },
+            { "text": "Dein Witz beim Kunden – höfliches Lächeln, kein Lachen.", "fach": 0 },
+            { "text": "Dein Spruch über „die Alten in der Buchhaltung“ – eine Kollegin von dort sitzt am Tisch und schaut weg.", "fach": 1 },
+            { "text": "Deine Pointe kommt zu spät. Miriam: „Der war schon tot, bevor er geboren wurde.“ Alle lachen.", "fach": 0 },
+            { "text": "Dein Witz über Svens frühere Freundin – er lacht kurz und ist den Rest des Abends still.", "fach": 1 }
+          ] },
+        { "art": "dialog", "kopf": { "id": "konter-3-04-b", "faehigkeit": "konter.necken", "stufe": 7, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Der Spruch über die Buchhaltung", "figur": "eine Kollegin aus der Buchhaltung",
+            "lage": "Mittagstisch, sechs Leute. Du hast gerade gewitzelt: „In der Buchhaltung brauchen sie für jede Rechnung drei Wochen und vier Stempel.“ Eine Kollegin aus der Buchhaltung sitzt mit am Tisch. Sie legt die Gabel weg.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Sie sagt leise: „Wir sind übrigens zu dritt – für das ganze Haus.“",
+                "wahl": [
+                  { "text": "„Oh. Das war daneben, sorry. Zu dritt für alles – Respekt.“", "wert": 2, "weiter": "k2", "rueck": "Kurz, ohne Aber, und mit Anerkennung für das, was du gerade kleingemacht hast." },
+                  { "text": "„War doch nur Spaß! Ihr nehmt das aber ernst da unten.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "„Nur Spaß“ schiebt ihr die Last zu – und „ihr da unten“ legt noch nach." },
+                  { "text": "„Ich meinte natürlich nicht dich persönlich, sondern eher das System, also die Abläufe insgesamt, weißt du …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k1b", "rueck": "Je länger die Erklärung, desto größer wird der Witz im Nachhinein." }
+                ] },
+              { "id": "k1b", "sagt": "Die Kollegin nickt knapp und schaut auf ihren Teller. Am Tisch wird es still. Tarek räuspert sich.",
+                "wahl": [
+                  { "text": "Durchatmen. „Ich fang noch mal an: Das war ein blöder Spruch. Tut mir leid.“", "wert": 2, "weiter": "k2", "rueck": "Spät, aber gut: Du nimmst ihn zurück, ohne dich zu rechtfertigen." },
+                  { "text": "Schnell das Thema wechseln: „Sagt mal, wer kommt Freitag mit zum Bowling?“", "wert": 0, "tendenz": "ueberspielen", "weiter": "ende2", "rueck": "Überspielen lässt den Spruch im Raum stehen." }
+                ] },
+              { "id": "k2", "sagt": "Sie lächelt vorsichtig: „Schon gut. Drei Wochen dauert es übrigens nur bei Rechnungen ohne Bestellnummer.“",
+                "wahl": [
+                  { "text": "„Notiert – ab jetzt nur noch mit Bestellnummer. Ich bin lernfähig.“", "wert": 2, "weiter": "ende1", "rueck": "Leichte Selbstironie zum Schluss: Jetzt lacht ihr zusammen." },
+                  { "text": "„Siehst du, also doch drei Wochen!“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Damit holst du den Spruch zurück, den du gerade zurückgenommen hast." },
+                  { "text": "„Gut zu wissen, danke.“", "wert": 1, "weiter": "ende1", "rueck": "Freundlich und sachlich – völlig in Ordnung." }
+                ] },
+              { "id": "ende1", "sagt": "Sie erzählt, wie es in der Buchhaltung kurz vor Jahresende zugeht. Alle hören zu.", "ende": "Treffer erkennen, sofort und kurz zurücknehmen, dann die Sache des anderen würdigen. So wird aus einem schlechten Witz ein gutes Gespräch." },
+              { "id": "ende2", "sagt": "Die Kollegin steht früher vom Tisch auf.", "ende": "Kein Drama – aber der Spruch bleibt hängen. Unter vier Augen hilft heute noch ein kurzer Satz: „Der Spruch über die Buchhaltung war daneben. Tut mir leid.“" }
+            ],
+            "prinzipien": ["Treffer erkennen", "kurz zurücknehmen, ohne Aber", "nicht überspielen", "die Sache des anderen würdigen"]
+          } },
+        { "art": "auswahl", "kopf": { "id": "konter-3-04-c", "faehigkeit": "konter.selbstironie", "stufe": 6, "kanal": "wissen" },
+          "frage": "Dein Witz zum Einstieg in die Präsentation geht unter: Stille im Raum. Was nun?",
+          "antworten": [
+            { "text": "Den Witz noch einmal erklären, damit ihn alle verstehen.", "wert": 0, "warum": "Ein erklärter Witz stirbt zweimal." },
+            { "text": "Leicht über dich: „Der war für die Fachleute.“ – und weiter im Text.", "wert": 2, "warum": "Ein Satz, ein Lächeln, weiter. Die Stille gehört zum Spiel." },
+            { "text": "Dich ausführlich entschuldigen, dass du es mit Humor versucht hast, und versprechen, ab jetzt ernst zu bleiben.", "wert": 0, "tendenz": "kleinreden", "warum": "Ein Flop braucht keine Entschuldigung. Das macht aus einer Kleinigkeit ein Thema." },
+            { "text": "Einfach weitermachen, als wäre nichts gewesen.", "wert": 1, "warum": "Völlig in Ordnung. Ein leichter Satz über dich nimmt der Stille noch mehr Gewicht." }
+          ] },
+        { "art": "reflexion", "frage": "Erinnerst du dich an einen Witz von dir, der danebenging? Was würdest du heute sagen – in einem Satz, ohne Aber?", "insBuch": "konter" }
+      ],
+      "regel": "Flop: liegen lassen. Treffer: sofort und kurz zurücknehmen, ohne Aber.",
+      "merkkarten": [
+        { "id": "konter-3-04-m1", "frage": "Keiner lacht – was tun?", "antwort": "Liegen lassen und weiter, höchstens ein leichter Satz über dich. Nie den Witz erklären." },
+        { "id": "konter-3-04-m2", "frage": "Jemand ist getroffen – was tun?", "antwort": "Sofort und kurz: „Sorry, das war daneben.“ Ohne Aber, ohne „nur Spaß“." }
+      ]
+    },
+    {
+      "id": "konter-3-05", "bereich": "konter", "stufe": 3, "nr": 5,
+      "titel": "Dein Stil",
+      "faehigkeiten": ["konter.selbstironie", "konter.spiel", "konter.necken"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Die vier Humorstile stammen aus einem viel genutzten Fragebogen; dass verbindender und gelassener Humor mit Wohlbefinden einhergeht, bestätigt eine Meta-Analyse als Zusammenhang. Welcher Stil zu dir passt, sagt keine Studie – das findest du selbst heraus.",
+      "quellen": ["martin2003", "schneider2018", "ruch2018"],
+      "aha": "Es gibt nicht den einen schlagfertigen Typ. Trocken, verspielt, warm, still beobachtend – alles kann wirken. Dein Stil ist, was du gern sagst, ohne jemanden kleinzumachen.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Ein viel genutzter Fragebogen unterscheidet Humorstile. Wie viele?", "optionen": ["zwei", "vier", "zwölf"], "richtig": 1, "loesung": "Vier", "aufloesung": "Zwei verbinden oder tragen: mit anderen lachen, über Missgeschicke gelassen schmunzeln. Zwei schaden eher: auf Kosten anderer, auf eigene Kosten. Die ersten beiden gehen im Schnitt mit mehr Wohlbefinden einher." },
+        { "art": "karte", "titel": "Vier Humorstile", "text": "Verbindend: mit anderen lachen, Geschichten erzählen, Spannung lösen. Gelassen: über das Leben schmunzeln, auch wenn es schiefgeht. Herabsetzend: Spott auf Kosten anderer. Selbstabwertend: sich kleinmachen, um gemocht zu werden. In den ersten beiden ist Platz für viele Spielarten – trocken, verspielt, erzählend, still beobachtend. Dein Stil ist deine Spielart, innerhalb dieser Grenze." },
+        { "art": "zuordnen", "kopf": { "id": "konter-3-05-a", "faehigkeit": "konter.selbstironie", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Welcher Humorstil steckt dahinter?",
+          "faecher": ["verbindend", "gelassen", "herabsetzend", "selbstabwertend"],
+          "karten": [
+            { "text": "Miriam erzählt vom Betriebsausflug, bei dem der Bus zweimal falsch abbog – die ganze Runde lacht.", "fach": 0 },
+            { "text": "Nach dem Stromausfall: „Endlich Ruhe vor den Mails. Wer hat Kerzen?“", "fach": 1 },
+            { "text": "„Bei der Tabelle hätte ein Kind schneller gerechnet.“ – über die Arbeit der Neuen", "fach": 2 },
+            { "text": "„Ich bin halt zu nichts zu gebrauchen, lacht ruhig.“", "fach": 3 },
+            { "text": "Tarek nennt die Kaffeemaschine „Diva“, und die Runde spinnt den Spaß gemeinsam weiter.", "fach": 0 },
+            { "text": "Im Stau: „Gute Gelegenheit, endlich das Hörbuch fertig zu hören.“", "fach": 1 },
+            { "text": "„Typisch Technik – die finden nicht mal den Ausgang.“", "fach": 2 },
+            { "text": "„Natürlich hab ich's wieder vermasselt. Wie immer. So bin ich eben.“", "fach": 3 }
+          ] },
+        { "art": "geschichte", "titel": "Zwei Stile, beide gut", "figur": "Miriam Okafor und Dr. Henrik Albers", "text": "Bruno erzählt: „Miriam und Dr. Albers sind beide schlagfertig – auf ganz verschiedene Art. Miriam ist schnell, neckt gern und lacht am lautesten über sich selbst. Albers sagt in einer Besprechung vielleicht einen einzigen trockenen Satz. Als der Beamer zum dritten Mal ausfiel, sagte er nur: ‚Ich nehme das persönlich.‘ Der Raum lachte. Hätte Miriam versucht, wie Albers zu sein, hätte es steif gewirkt. Umgekehrt genauso. Eins haben die beiden gemeinsam: Keiner von ihnen lacht über Schwächere.“", "frage": "Wem bist du ähnlicher – oder bist du ganz anders?" },
+        { "art": "werte", "auftrag": "Was soll deinen Humor ausmachen? Wähl die drei Werte, die dir am wichtigsten sind.", "karten": ["Wärme", "Tempo", "Trockenheit", "Mut", "Respekt", "Leichtigkeit", "Ehrlichkeit", "Verspieltheit", "Gelassenheit", "Überraschung"], "waehle": 3 },
+        { "art": "humorlabor", "kopf": { "id": "konter-3-05-b", "faehigkeit": "konter.spiel", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Antworte zweimal auf dieselbe Lage: einmal so, wie es dir leichtfällt, einmal in einem Stil, der dir fremd ist. Welche Fassung bist du?",
+          "vorlage": "Der Aufzug bleibt zwischen zwei Stockwerken stehen. Ein Kollege: „Na toll. Und ich wollte heute früh nach Hause.“",
+          "kriterien": ["zwei verschiedene Fassungen", "beide ohne Spott über andere", "eine fühlt sich nach dir an"],
+          "muster": ["Trocken: „Immerhin sind wir pünktlich – zwischen den Stockwerken.“", "Verspielt: „Ich hab Kekse dabei. Wir halten eine Weile durch.“", "Warm: „Mit dir steck ich gern fest. Was hattest du heute noch vor?“"] },
+        { "art": "reflexion", "frage": "Beschreib deinen Stil in einem Satz – und schreib den Spruch dazu, der am meisten nach dir klingt.", "insBuch": "saetze" },
+        { "art": "mission", "ref": "konter-m-10" }
+      ],
+      "regel": "Spiel deinen Stil – verbindend oder gelassen, nie auf Kosten anderer.",
+      "merkkarten": [
+        { "id": "konter-3-05-m1", "frage": "Die vier Humorstile?", "antwort": "Verbindend, gelassen, herabsetzend, selbstabwertend." },
+        { "id": "konter-3-05-m2", "frage": "Was ist dein Stil?", "antwort": "Deine Spielart von verbindendem und gelassenem Humor – trocken, verspielt, warm oder erzählend." }
+      ],
+      "mission": "konter-m-10"
+    }
+  ]
+}

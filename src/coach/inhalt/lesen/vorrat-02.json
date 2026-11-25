@@ -101,7 +101,7 @@
         { "text": "Zusammengekniffene Augen in der Mittagssonne", "fach": 2 },
         { "text": "Gerötete Augen am Ende einer Nachtschicht", "fach": 2 }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0058", "faehigkeit": "lesen.gesicht", "stufe": 3, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0058.webp", "kopf": { "id": "lesen-v-0058", "faehigkeit": "lesen.gesicht", "stufe": 3, "kanal": "wissen" },
       "beschreibung": "Sportplatz, Jugendspiel. Ein Vater am Spielfeldrand: Augen zusammengekniffen, Mund weit offen, das Gesicht verzerrt. Beide Arme hat er nach oben gerissen, die Fäuste geballt. Auf dem Platz liegen sich Spieler in den Armen.",
       "frage": "Freut er sich oder ärgert er sich?",
       "antworten": [
@@ -110,7 +110,7 @@
         { "text": "Kann man nicht sagen.", "wert": 1, "warum": "Am Gesicht allein stimmt das. Mit Körper und Lage hast du aber gute Hinweise." },
         { "text": "Er ist einer dieser Eltern, die am Rand immer übertreiben und zu viel Druck machen.", "wert": 0, "tendenz": "etikett", "warum": "Aus einem Moment wird ein Urteil über einen Menschen, den du nicht kennst." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0059", "faehigkeit": "lesen.gesicht", "stufe": 4, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0059.webp", "kopf": { "id": "lesen-v-0059", "faehigkeit": "lesen.gesicht", "stufe": 4, "kanal": "wissen" },
       "beschreibung": "Teamrunde. Dr. Albers lobt Lena vor allen für ihre genaue Auswertung. Lena schaut auf den Tisch, wird rot, lächelt nur mit einem Mundwinkel und sagt leise: „Danke.“",
       "frage": "Was ist die wahrscheinlichste Lesart?",
       "antworten": [
@@ -119,7 +119,7 @@
         { "text": "Sie findet ihre Arbeit selbst nicht gut.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine Deutung über ihr Selbstbild, die das Gesicht nicht hergibt." },
         { "text": "Sie ist eben schüchtern, mehr steckt da nicht dahinter – das ist einfach ihre Art bei solchen Dingen.", "wert": 1, "warum": "Passt zu ihrer Art. Ob sie sich freut, bleibt damit aber offen – und wahrscheinlich tut sie es." }
       ] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0060", "faehigkeit": "lesen.gesicht", "stufe": 5, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0060.webp", "kopf": { "id": "lesen-v-0060", "faehigkeit": "lesen.gesicht", "stufe": 5, "kanal": "wissen" },
       "beschreibung": "Kaffeeküche. Ein Kollege aus der IT erzählt dir, dass sein Antrag für ein eigenes Projekt endlich genehmigt wurde. Sein Gesicht bleibt dabei ruhig, die Stimme gleichmäßig. Er erzählt sehr ausführlich, was er als Erstes vorhat.",
       "frage": "Wie liest du das am besten?",
       "antworten": [
@@ -356,11 +356,11 @@
       "vorlage": "„Tarek ist heute irgendwie komisch.“",
       "kriterien": ["nennt, wie er sonst ist", "nennt, was heute anders ist", "ohne Deutung"],
       "muster": ["„Tarek macht sonst bei jeder Gelegenheit Witze – heute hat er in der Pause kaum etwas gesagt.“", "„Sonst kommt er mittags zu uns rüber. Heute ist er am Platz geblieben und hat Kopfhörer aufgesetzt.“"] },
-    { "art": "szene", "kopf": { "id": "lesen-v-0084", "faehigkeit": "lesen.pruefen", "stufe": 4, "kanal": "wissen" },
+    { "art": "szene", "bild": "lesen-v-0084.webp", "kopf": { "id": "lesen-v-0084", "faehigkeit": "lesen.pruefen", "stufe": 4, "kanal": "wissen" },
       "beschreibung": "Teamessen im Restaurant. Lena isst nur ein paar Bissen von ihrem Teller, lehnt das Dessert ab, lächelt und sagt: „War alles lecker.“ Sie unterhält sich angeregt mit ihrer Nachbarin.",
       "frage": "Was tust du?",
       "antworten": [
-        { "text": "Vor allen am Tisch fragen, ob ihr das Essen nicht geschmeckt hat oder ob etwas nicht stimmt.", "wert": 0, "tendenz": "bloßstellen", "warum": "Essen und Körper sind persönliche Themen. Vor allen gefragt, bringt es sie in Verlegenheit." },
+        { "text": "Vor allen am Tisch fragen, ob ihr das Essen nicht geschmeckt hat oder ob etwas nicht stimmt.", "wert": 0, "tendenz": "blossstellen", "warum": "Essen und Körper sind persönliche Themen. Vor allen gefragt, bringt es sie in Verlegenheit." },
         { "text": "Nichts. Sie wirkt gut gelaunt – und nicht jede Beobachtung braucht eine Frage.", "wert": 2, "warum": "Das Bündel zeigt eher Wohlbefinden. Beim Essen ist Zurückhaltung respektvoll." },
         { "text": "Ihr später leise sagen, dass sie mehr essen sollte.", "wert": 0, "tendenz": "bevormunden", "warum": "Ein Rat zu ihrem Körper, um den sie nicht gebeten hat." },
         { "text": "Merken und schauen, ob es öfter so ist.", "wert": 1, "warum": "Aufmerksam, ohne einzugreifen. Bei einem einzelnen Essen gibt es aber wenig zu bemerken." }

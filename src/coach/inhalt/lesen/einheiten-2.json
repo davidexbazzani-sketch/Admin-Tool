@@ -1,0 +1,274 @@
+{
+  "einheiten": [
+    {
+      "id": "lesen-2-01", "bereich": "lesen", "stufe": 2, "nr": 1,
+      "titel": "Gesichter brauchen Lage",
+      "faehigkeiten": ["lesen.gesicht", "lesen.grundlinie"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Dass ein Gesicht allein kein Gefühl verrät und die Lage mitliest, stützt eine große Übersichtsarbeit; umstritten ist nur, wie viel das Gesicht verrät. Dass Schmerz, Medikamente oder schlechtes Hören ein Gesicht verändern, ist Praxiswissen.",
+      "quellen": ["barrett2019", "aviezer2012", "cowen2021", "praxis-lesen"],
+      "aha": "Ein Gesicht ohne Lage ist ein Rätsel. Dieselbe gerunzelte Stirn kann Ärger sein, Kopfweh, Sonne oder angestrengtes Zuhören. Lies zuerst die Lage – dann das Gesicht.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Ein Foto: Augen zusammengekniffen, Stirn gerunzelt, Mund leicht verzogen. Welches Gefühl zeigt es?", "optionen": ["Ärger", "Schmerz", "ohne Lage nicht zu sagen"], "richtig": 2, "loesung": "Ohne Lage nicht zu sagen", "aufloesung": "Ein bestimmter Ausdruck kommt bei einem Gefühl zwar häufiger vor als zufällig – aber nicht meistens und nicht nur dort. Dasselbe Gesicht passt zu Ärger, Schmerz, grellem Licht und starker Konzentration." },
+        { "art": "karte", "titel": "Die Lage liest mit", "text": "Bevor du ein Gesicht deutest, frag nach der Lage. Licht und Lärm: Wer blinzelt, ist vielleicht geblendet; wer die Stirn runzelt, hört vielleicht schlecht. Der Körper: Kopfweh, Rückenschmerzen, eine chronische Krankheit, Medikamente, Müdigkeit. Die Aufgabe: Wer rechnet, schaut streng. Und die Person: Manche Gesichter wirken schon in Ruhe ernst. Erst wenn die Lage nichts erklärt, wird das Gesicht zum Hinweis." },
+        { "art": "szene", "kopf": { "id": "lesen-2-01-a", "faehigkeit": "lesen.gesicht", "stufe": 4, "kanal": "wissen" },
+          "beschreibung": "Montagsrunde. Du stellst den Zwischenstand vor. Carla Demir kneift die Augen zusammen, reibt sich die Schläfe und lacht nicht über Tareks Witz. Vor der Runde hat sie die Jalousie halb heruntergezogen und eine Tablette mit Wasser genommen.",
+          "frage": "Was ist die beste Einschätzung?",
+          "antworten": [
+            { "text": "Ihr passt mein Zwischenstand nicht – ich kürze ihn lieber.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Du beziehst das Gesicht auf dich. Jalousie, Tablette und Schläfe zeigen eher in eine andere Richtung." },
+            { "text": "Vielleicht Kopfweh – die Lage spricht dafür. Danach kurz fragen, wie es ihr geht und ob der Stand passt.", "wert": 2, "warum": "Du liest Gesicht und Lage zusammen und prüfst beides mit einer Frage – nach der Runde, nicht vor allen." },
+            { "text": "Vielleicht Migräne – ich lasse sie heute lieber in Ruhe.", "wert": 1, "warum": "Rücksichtsvoll und nah an der Lage. Ob der Stand passt, weißt du so aber nicht – eine kurze Frage nach der Runde klärt beides." },
+            { "text": "Sie ist genervt von Tarek, weil der in jeder Runde Witze reißt – so, wie sie da die Augen zusammenkneift.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Dass sie nicht lacht, ist ein Zeichen. Neben Tablette und Schläfe ist es das schwächste." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "lesen-2-01-b", "faehigkeit": "lesen.gesicht", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Jemand runzelt die Stirn. Was spricht eher für die Lage, was eher für eine Reaktion auf das Gesagte – und was ist bei dieser Person gewohnt?",
+          "faecher": ["eher die Lage", "eher eine Reaktion aufs Gesagte", "eher die Grundlinie"],
+          "karten": [
+            { "text": "Er runzelt die Stirn schon, seit er hereinkam – vor deinem ersten Satz.", "fach": 0 },
+            { "text": "Sie blinzelt gegen die tief stehende Sonne im Fenster.", "fach": 0 },
+            { "text": "Sie runzelt die Stirn genau bei der Zahl und blättert zurück.", "fach": 1 },
+            { "text": "Er runzelt die Stirn und fragt: „Ab wann gilt das?“", "fach": 1 },
+            { "text": "Sie schaut beim Zuhören immer so streng – seit Jahren.", "fach": 2 },
+            { "text": "Er zieht beim Nachdenken stets die Brauen zusammen.", "fach": 2 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "lesen-2-01-c", "faehigkeit": "lesen.grundlinie", "stufe": 5, "kanal": "wissen" },
+          "frage": "Jule wirkt im Kochkurs seit Wochen blass und müde, lacht seltener und sagt weniger. Ein Teilnehmer meint: „Die hat wohl keine Lust mehr auf uns.“ Was sagst du?",
+          "antworten": [
+            { "text": "„Stimmt, sie zieht sich zurück. Lassen wir sie lieber in Ruhe, sie will ja offenbar nicht.“", "wert": 0, "tendenz": "etikett", "warum": "Aus einer Veränderung wird ein Urteil über ihre Lust – dabei kann vieles dahinterstecken, auch Krankheit oder Sorgen." },
+            { "text": "„Bei ihr ist das neu. Ich frag sie mal in Ruhe, wie es ihr geht.“", "wert": 2, "warum": "Du siehst die Abweichung von ihrer Grundlinie, deutest nicht und bietest unter vier Augen ein Gespräch an." },
+            { "text": "„Vielleicht ist sie krank – das geht uns nichts an.“", "wert": 1, "warum": "Du hältst Krankheit für möglich und gibst kein Urteil ab – gut. Ein freundliches Angebot schadet trotzdem nicht." },
+            { "text": "„Die ist bestimmt schwanger, so blass, wie sie aussieht.“", "wert": 0, "tendenz": "diagnose", "warum": "Eine Vermutung über ihren Körper, ausgesprochen vor anderen. Das gehört nicht in die Runde." }
+          ] },
+        { "art": "experiment", "auftrag": "Wenn dir diese Woche ein Gesicht streng, genervt oder abweisend vorkommt, prüf zuerst die Lage: Licht, Lärm, Uhrzeit, Körper, Aufgabe. Notier dreimal, welche Lage-Erklärung es gegeben hätte.", "dauer": "woche", "nachfrage": "Wie oft hat die Lage schon gereicht, um das Gesicht zu erklären?" },
+        { "art": "reflexion", "frage": "Welches Gesicht hast du schon einmal falsch gelesen, weil du die Lage nicht kanntest?" }
+      ],
+      "regel": "Erst die Lage, dann das Gesicht.",
+      "merkkarten": [
+        { "id": "lesen-2-01-m1", "frage": "Was kann eine gerunzelte Stirn außer Ärger heißen?", "antwort": "Kopfweh, Schmerz, Blendung, schlechtes Hören, Konzentration – oder es ist das gewohnte Gesicht dieser Person." },
+        { "id": "lesen-2-01-m2", "frage": "Wann wird ein Gesicht zum Hinweis?", "antwort": "Wenn die Lage es nicht erklärt und es von der Grundlinie abweicht – und dann bleibt es eine Vermutung." }
+      ]
+    },
+    {
+      "id": "lesen-2-02", "bereich": "lesen", "stufe": 2, "nr": 2,
+      "titel": "Die Stimme verrät mehr",
+      "faehigkeiten": ["lesen.stimme", "lesen.grundlinie"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Eine Versuchsreihe zeigt kleine Vorteile der Stimme allein beim Einschätzen von Gefühlen. Dass Zuhörer aus Zögern Unsicherheit lesen, zeigt eine Studie. Das Hören gegen die Grundlinie ist Praxiswissen.",
+      "quellen": ["kraus2017", "brennan1995", "praxis-lesen"],
+      "aha": "Ohne Bild hören viele genauer hin. Tempo, Pausen, Lautstärke und ein „äh“ an der richtigen Stelle sagen oft mehr als ein Gesicht – gelesen gegen die Grundlinie und die Lage.",
+      "schritte": [
+        { "art": "studie", "frage": "Liest man Gefühle besser, wenn man das Gesicht nicht sieht?", "aufbau": "In fünf Experimenten schätzten Menschen ein, was andere fühlen – nur über die Stimme, mit Bild und Stimme zusammen und in einem Teil der Versuche nur über das Bild.", "ergebnis": "Mit der Stimme allein lagen sie im Mittel etwas genauer als mit dem Bild allein. Gegenüber Bild und Stimme zusammen war der Vorsprung nur in zwei der fünf Experimente deutlich.", "grenze": "Kleine Effekte, eine Arbeitsgruppe, Versuche in den USA. Das Bild ist nicht wertlos – es lenkt nur manchmal ab.", "beleg": "B", "quellen": ["kraus2017"] },
+        { "art": "karte", "titel": "Was die Stimme trägt", "text": "Hör auf vier Dinge: Tempo (schneller oder langsamer als sonst), Pausen (vor allem vor einem Ja), Lautstärke und Höhe (gepresst, leise, plötzlich laut) und kleine Laute wie „äh“ oder ein Seufzer – Zuhörer lesen daraus Unsicherheit. Aber erst die Lage: Erkältung, Heiserkeit, Müdigkeit, Lärm im Hintergrund, eine Zweitsprache. Und immer gegen die Grundlinie: Wie klingt dieser Mensch sonst?" },
+        { "art": "tonfall", "kopf": { "id": "lesen-2-02-a", "faehigkeit": "lesen.stimme", "stufe": 4, "kanal": "wissen" },
+          "satz": "Ja, das machen wir so.",
+          "fassungen": [
+            { "betont": "Ja, das machen wir SO! ↗", "bedeutung": "zügig, die Stimme geht am Ende hoch – klingt nach Zustimmung" },
+            { "betont": "Ja … || das machen wir so. ↘", "bedeutung": "Pause nach dem Ja, die Stimme sinkt – da kann ein Aber mitschwingen" },
+            { "betont": "Jaaa, das machen wir so.", "bedeutung": "gedehntes Ja – Nachdenken, Zögern oder einfach gemütliches Sprechen" }
+          ],
+          "frage": "Lena antwortet auf deinen Vorschlag mit der zweiten Fassung. Sonst sagt sie Ja knapp und schnell. Was ist die beste Lesart?",
+          "antworten": [
+            { "text": "Ein Ja ist ein Ja – also weiter im Plan.", "wert": 0, "tendenz": "ueberhoeren", "warum": "Die Worte zählen, aber Pause und sinkende Stimme weichen von ihrer Grundlinie ab. Das überhörst du." },
+            { "text": "Sie ist dagegen und traut sich nur nicht, es vor mir und den anderen offen zu sagen.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Aus einer Pause wird eine ganze Geschichte über ihre Gründe. Es kann auch Nachdenken sein." },
+            { "text": "Anders als sonst – vielleicht ein Bedenken. Kurz fragen, was sie noch beschäftigt.", "wert": 2, "warum": "Du hörst die Abweichung, hältst sie als Vermutung fest und lädst ein, statt zu unterstellen." },
+            { "text": "Abwarten, ob sie später noch etwas dazu sagt.", "wert": 1, "warum": "Geduldig und ohne Druck. Nur bringen viele ein Bedenken nicht von selbst – eine leichte Frage hilft." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "lesen-2-02-b", "faehigkeit": "lesen.grundlinie", "stufe": 5, "kanal": "wissen" },
+          "frage": "Am Telefon klingt Frau Sommer heute leise, langsam und rau. Sonst redet sie ohne Punkt und Komma. Was tust du?",
+          "antworten": [
+            { "text": "Schnell zum Ende kommen – sie will heute offenbar nicht reden.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Du deutest Unlust in eine Stimme, für die es naheliegende andere Gründe gibt – etwa eine Erkältung." },
+            { "text": "„Sie klingen anders als sonst – sind Sie erkältet, oder ist etwas?“", "wert": 2, "warum": "Du nennst, was du hörst, und lässt Lage und Gefühl offen. Sie kann wählen, was sie erzählt." },
+            { "text": "„Sie klingen bedrückt. Ist etwas passiert?“", "wert": 1, "warum": "Aufmerksam und freundlich gefragt. „Bedrückt“ ist aber schon eine Deutung – eine raue Stimme kann auch Halsweh sein." },
+            { "text": "„Sind Sie mir böse, weil ich das Paket nicht angenommen habe?“", "wert": 0, "tendenz": "selbstbezug", "warum": "Du beziehst die Veränderung auf dich. Dafür spricht hier nichts." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "lesen-2-02-c", "faehigkeit": "lesen.stimme", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du fragst Tarek am Telefon: „Schaffst du die Auswertung bis Freitag?“ Er sagt: „Äh … ja, denk schon.“ Sonst sagt er bei so etwas sofort „Klar!“. Ordne deine Antworten von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Klingt noch nicht ganz sicher. Was könnte dazwischenkommen?“", "warum": "Du nennst, was du hörst, und fragst nach dem Hindernis – so kann er planen statt beschönigen." },
+            { "text": "„Sag Bescheid, wenn's eng wird.“", "warum": "Freundlich und offen. Das Zögern sprichst du aber nicht an – viele melden sich erst, wenn es zu spät ist." },
+            { "text": "„Super, dann plane ich fest damit.“", "warum": "Du nimmst das Ja beim Wort und überhörst „äh“ und „denk schon“." },
+            { "text": "„Du klingst, als hättest du keine Lust.“", "warum": "Eine Deutung als Vorwurf. Zögern heißt hier eher Unsicherheit als Unlust." }
+          ] },
+        { "art": "experiment", "auftrag": "Führ diese Woche ein Telefonat, bei dem du nur auf die Stimme achtest: Tempo, Pausen, Zögern. Notier danach, was du gehört hast und wie es zu dieser Person sonst passt.", "dauer": "woche", "nachfrage": "Was hast du gehört, das dir im Gespräch von Angesicht vielleicht entgangen wäre?" },
+        { "art": "reflexion", "frage": "Bei wem in deinem Umfeld hörst du am Telefon sofort, dass etwas anders ist – und woran?" }
+      ],
+      "regel": "Hör auf Tempo, Pausen und Zögern – gegen die Grundlinie und die Lage.",
+      "merkkarten": [
+        { "id": "lesen-2-02-m1", "frage": "Auf welche vier Dinge achtest du bei der Stimme?", "antwort": "Tempo, Pausen (vor allem vor einem Ja), Lautstärke und Höhe, kleine Laute wie „äh“ oder Seufzer." },
+        { "id": "lesen-2-02-m2", "frage": "Was prüfst du, bevor du eine Stimme deutest?", "antwort": "Die Lage – Erkältung, Müdigkeit, Lärm, Zweitsprache – und wie dieser Mensch sonst klingt." }
+      ]
+    },
+    {
+      "id": "lesen-2-03", "bereich": "lesen", "stufe": 2, "nr": 3,
+      "titel": "Wer hat im Raum das Sagen?",
+      "faehigkeiten": ["lesen.koerper", "lesen.buendel"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Eine Meta-Analyse zur Körpersprache zeigt: Was Menschen über Rang-Zeichen glauben, ist stärker als die tatsächlichen Zusammenhänge. Dass tiefe Stimmen eher für führungsstark gehalten werden, zeigt ein Laborversuch. Auf welche Zeichen man stattdessen achtet (Blicke der anderen, aufgegriffene Ideen), ist Praxiswissen.",
+      "quellen": ["hall2005", "klofstad2012", "praxis-lesen"],
+      "aha": "Nicht wer am lautesten ist, hat das Sagen – sondern auf wen die anderen achten. Schau nicht nur auf die Person. Schau, wohin die Blicke der Runde gehen.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer am lautesten redet und am meisten Raum einnimmt, hat das Sagen.", "urteil": "teils", "warum": "Manchmal stimmt es. Aber Menschen glauben an mehr und stärkere Rang-Zeichen in der Körpersprache, als sich in Studien zeigen. Oft entscheidet jemand, der wenig sagt." },
+        { "art": "karte", "titel": "Wohin die Runde schaut", "text": "Einfluss zeigt sich vor allem im Verhalten der anderen: Wen schauen sie an, bevor sie antworten – oder wenn gelacht wird? Wessen Vorschlag wird aufgegriffen, wessen überhört? Wer fasst am Ende zusammen? Wer darf unterbrechen, ohne dass es stört? Förmlicher Rang und tatsächlicher Einfluss sind nicht immer dieselbe Person. Du liest das, um die richtige Person zu fragen und alle einzubinden – nicht zum Anbiedern." },
+        { "art": "geschichte", "titel": "Der Mann im Sakko", "figur": "Tarek Yılmaz", "text": "Tarek hat mir von seinem ersten Termin in einer Gärtnerei erzählt. Drei Leute am Tisch: ein Mann im Sakko, der redete und redete, eine Frau in Gummistiefeln, die mitschrieb, und ein Azubi. Tarek hat zwanzig Minuten lang dem Sakko alles erklärt. Bei jeder Frage zum Preis haben aber beide Männer kurz zu der Frau geschaut. Gemerkt hat er es erst, als sie den Stift hinlegte und sagte: „Gut. Dann so, ab März.“ Sie war die Inhaberin. Der Mann im Sakko war ihr Steuerberater. Seitdem schaut Tarek bei der ersten Frage nach Geld nicht auf den, der antwortet – sondern dahin, wohin die anderen schauen.", "frage": "In welcher Runde hättest du dich wie Tarek verschätzt?" },
+        { "art": "buendel", "kopf": { "id": "lesen-2-03-a", "faehigkeit": "lesen.buendel", "stufe": 5, "kanal": "wissen" },
+          "lage": "Termin bei einem Handwerksbetrieb. Am Tisch: ein Mann im Hemd, der viel und laut redet; eine Frau in Arbeitsjacke, die wenig sagt; ein junger Mann, der Protokoll führt.",
+          "frage": "Welche Zeichen sprechen eher dafür, dass die Frau in der Arbeitsjacke entscheidet?",
+          "zeichen": [
+            { "text": "Als du nach dem Budget fragst, schauen beide Männer zu ihr.", "stuetzt": true, "warum": "Wohin die anderen bei einer Entscheidungsfrage schauen, ist ein aufschlussreiches Zeichen – zusammen mit anderen." },
+            { "text": "Ihr Einwand zur Lieferzeit wird sofort aufgegriffen, der Mann im Hemd nickt.", "stuetzt": true, "warum": "Wessen Einwand die anderen übernehmen, der hat meist Gewicht." },
+            { "text": "Sie fasst am Ende zusammen: „Gut, dann machen wir den Test.“", "stuetzt": true, "warum": "Wer zusammenfasst und den nächsten Schritt setzt, entscheidet oft." },
+            { "text": "Der Mann im Hemd spricht am lautesten und am längsten.", "stuetzt": false, "warum": "Viel Redeanteil kann Rang sein – oder Begeisterung, Gewohnheit, Fachwissen. Allein sagt es wenig." },
+            { "text": "Sie sitzt nicht am Kopfende, sondern am Fenster.", "stuetzt": false, "warum": "Die Sitzordnung ergibt sich oft zufällig. Allein kein verlässliches Zeichen." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "lesen-2-03-b", "faehigkeit": "lesen.koerper", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du vermutest jetzt: Die Frau in der Arbeitsjacke entscheidet. Wie gehst du im Gespräch damit um?",
+          "antworten": [
+            { "text": "Alle drei einbeziehen – Fragen zu Budget und Termin aber an sie richten.", "wert": 2, "warum": "Du nutzt, was du gelesen hast, ohne die anderen zu übergehen. Liegst du falsch, hast du niemanden vor den Kopf gestoßen." },
+            { "text": "Ab jetzt nur noch mit ihr reden – die anderen haben ja nichts zu sagen.", "wert": 0, "tendenz": "uebersicher", "warum": "Eine Vermutung als Tatsache. Und wer übergangen wird, kann ein Projekt still ausbremsen." },
+            { "text": "Sie direkt fragen: „Sie sind hier die eigentliche Chefin, oder?“", "wert": 0, "tendenz": "blossstellen", "warum": "Vor den anderen ausgesprochen, rückt das die Männer in ein schlechtes Licht – und sie in eine unangenehme Lage." },
+            { "text": "Am Ende fragen: „Wer ist bei Ihnen für die Entscheidung zuständig?“", "wert": 1, "warum": "Eine sachliche Frage klärt viel und unterstellt nichts. Früher gestellt, hätte sie dir das ganze Gespräch erleichtert." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "lesen-2-03-c", "faehigkeit": "lesen.koerper", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Was spricht in einer Runde eher für Einfluss – und was sagt allein wenig?",
+          "faecher": ["spricht eher für Einfluss", "sagt allein wenig"],
+          "karten": [
+            { "text": "Die anderen schauen sie an, bevor sie antworten.", "fach": 0 },
+            { "text": "Sein Vorschlag wird von zwei anderen aufgegriffen.", "fach": 0 },
+            { "text": "Er unterbricht, und niemand stört sich daran.", "fach": 0 },
+            { "text": "Er ist der Größte im Raum.", "fach": 1 },
+            { "text": "Sie trägt das teuerste Kostüm.", "fach": 1 },
+            { "text": "Er hat die tiefste Stimme.", "fach": 1 }
+          ] },
+        { "art": "reflexion", "frage": "In welcher Runde bei dir sind förmlicher Rang und tatsächlicher Einfluss verschieden? Woran erkennst du das – und wer kommt dort zu kurz?" }
+      ],
+      "regel": "Schau nicht auf den Lautesten. Schau, wohin die anderen schauen.",
+      "merkkarten": [
+        { "id": "lesen-2-03-m1", "frage": "Woran erkennst du Einfluss in einer Runde eher?", "antwort": "Wen die anderen anschauen, wessen Idee aufgegriffen wird, wer zusammenfasst – weniger an Größe, Stimme oder Kleidung." },
+        { "id": "lesen-2-03-m2", "frage": "Wofür nutzt du, was du über den Rang liest?", "antwort": "Um die richtige Person zu fragen und alle einzubinden – nie, um andere zu übergehen oder dich anzubiedern." }
+      ]
+    },
+    {
+      "id": "lesen-2-04", "bereich": "lesen", "stufe": 2, "nr": 4,
+      "titel": "Vorbehalte hören",
+      "faehigkeiten": ["lesen.stimme", "lesen.pruefen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Aufnahmen echter Gespräche zeigen: Ablehnende Antworten kommen im Mittel etwas später, ab längeren Pausen deutlich häufiger, vor allem mit Einschränkung davor. Ein Hörversuch zeigt, dass Zuhörer das so verstehen. Für den Einzelfall bleibt es eine Vermutung; das Einladen ist Praxiswissen.",
+      "quellen": ["stivers2009", "kendrick2015", "roberts2006", "praxis-lesen"],
+      "aha": "Ein Vorbehalt kommt selten als Nein. Er kommt als Pause, als „grundsätzlich“, als Ja ohne Schwung. Wer ihn hört, lädt ihn ein – mit Ausweg und ohne Druck.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Wie schnell folgt im Alltag meist die Antwort auf eine Frage?", "optionen": ["nach etwa einer Viertelsekunde", "nach etwa einer Sekunde", "nach zwei bis drei Sekunden"], "richtig": 0, "loesung": "Nach etwa einer Viertelsekunde", "aufloesung": "In Aufnahmen aus zehn Sprachen lag die Pause im Mittel um eine Viertelsekunde. Darum fällt schon eine kleine Pause auf. Ablehnende Antworten kamen eher etwas später – deutlich häufiger erst bei längeren Pausen und mit „na ja“ oder einer Einschränkung davor." },
+        { "art": "karte", "titel": "Das leise Aber", "text": "Typische Formen: „grundsätzlich ja“, „eigentlich schon“, „mal sehen“, „kann man machen“, ein Ja nach einer Pause oder ein Nicken ohne ein Wort dazu. Aber eine Pause hat viele Väter: Nachdenken, Schüchternheit, Angst vor der Runde, eine Zweitsprache, schlechtes Hören. Bei Menschen, die stottern, ist ein Stocken vor dem Wort kein Zögern. Darum: einladen, nicht unterstellen." },
+        { "art": "zuordnen", "kopf": { "id": "lesen-2-04-a", "faehigkeit": "lesen.stimme", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Spricht das eher für einen Vorbehalt – oder hat die Pause eher einen anderen Grund?",
+          "faecher": ["eher ein Vorbehalt", "eher ein anderer Grund"],
+          "karten": [
+            { "text": "„Grundsätzlich schon … ja.“", "fach": 0 },
+            { "text": "„Kann man machen.“ – gedehnt, ohne aufzusehen", "fach": 0 },
+            { "text": "„Eigentlich gern, nur …“", "fach": 0 },
+            { "text": "Jonas stockt vor dem Wort „Montag“, wie öfter, wenn er spricht.", "fach": 1 },
+            { "text": "Die Kollegin aus dem Partnerwerk sucht kurz nach dem deutschen Wort.", "fach": 1 },
+            { "text": "Herr Petersen fragt erst „Wie bitte?“ und sagt dann Ja.", "fach": 1 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "lesen-2-04-b", "faehigkeit": "lesen.pruefen", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Mach aus der Drück-Frage eine Einladung mit Ausweg.",
+          "vorlage": "„Also sind wir uns einig, oder?“ (Miriam hat gerade „Ja, grundsätzlich …“ gesagt und schaut auf ihre Notizen.)",
+          "kriterien": ["nennt, was du gehört hast", "lädt das Bedenken ein", "lässt ein Nein zu"],
+          "muster": ["„Ich höre ein ‚grundsätzlich‘. Was müsste anders sein, damit es für dich passt?“", "„Wenn du ein Bedenken hättest – welches wäre es? Du darfst auch Nein sagen.“", "„Klingt noch nicht ganz rund. Sollen wir es noch eine Nacht liegen lassen?“"] },
+        { "art": "auswahl", "kopf": { "id": "lesen-2-04-c", "faehigkeit": "lesen.pruefen", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du hast das Aber gehört und einmal freundlich nachgefragt. Nadine Köhler sagt: „Nein, nein, alles gut.“ Ihre Stimme bleibt zögerlich. Was jetzt?",
+          "antworten": [
+            { "text": "Nicht lockerlassen, bis sie zugibt, was sie stört.", "wert": 0, "tendenz": "draengen", "warum": "Aus Einladen wird Verhör. Wer sich bedrängt fühlt, sagt erst recht nichts – oder später Nein." },
+            { "text": "„Gut. Und wenn Ihnen später doch etwas einfällt – ein Anruf genügt.“", "wert": 2, "warum": "Einmal eingeladen, dann ihr Wort respektiert und die Tür offen gelassen. Sie entscheidet, wann sie redet." },
+            { "text": "„Ich höre doch, dass Sie zögern.“", "wert": 0, "tendenz": "uebersicher", "warum": "Du stellst deine Deutung über ihr Wort. Das macht sie eher zu." },
+            { "text": "Noch einmal sanft: „Sicher? Mir hilft auch ein kleines Bedenken.“", "wert": 1, "warum": "Ein zweites, leichtes Angebot ist vertretbar. Danach gilt ihr Wort – sonst kippt es in Druck." }
+          ] },
+        { "art": "experiment", "auftrag": "Wenn du diese Woche ein „grundsätzlich“ oder ein Ja ohne Schwung hörst, lade das Bedenken einmal ein – mit Ausweg. Notier, was kam.", "dauer": "woche", "nachfrage": "Was kam, als du eingeladen hast – und hast du danach lockergelassen?" },
+        { "art": "reflexion", "frage": "Bei wem überhörst du ein leises Aber am ehesten – und warum gerade bei ihm?" }
+      ],
+      "regel": "Hör das leise Aber – und lade es einmal ein, mit Ausweg.",
+      "merkkarten": [
+        { "id": "lesen-2-04-m1", "frage": "Woran hörst du einen Vorbehalt eher?", "antwort": "Pause vor dem Ja, „grundsätzlich“, „eigentlich“, „mal sehen“, ein Ja ohne Schwung oder Ergänzung." },
+        { "id": "lesen-2-04-m2", "frage": "Welche anderen Gründe kann eine Pause haben?", "antwort": "Nachdenken, Schüchternheit, Angst vor der Runde, Zweitsprache, schlechtes Hören – und Stottern." },
+        { "id": "lesen-2-04-m3", "frage": "Der andere sagt nach deiner Einladung „alles gut“. Was dann?", "antwort": "Sein Wort gelten lassen und die Tür offen halten – nicht weiterbohren." }
+      ]
+    },
+    {
+      "id": "lesen-2-05", "bereich": "lesen", "stufe": 2, "nr": 5,
+      "titel": "Deine eigene Wirkung",
+      "faehigkeiten": ["lesen.eigen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Mehrere Experimente zeigen: Nervosität und Gefühle sieht man einem weniger an, als man glaubt, und nach Gesprächen unterschätzen Menschen, wie sehr sie gemocht werden. „Erst Wärme, dann Kompetenz“ ist ein viel zitiertes Modell; die einzelnen Schritte sind Praxiswissen.",
+      "quellen": ["gilovich1998", "savitsky2003", "boothby2018", "fiske2007", "praxis-lesen"],
+      "aha": "Andere lesen dich so ungenau wie du sie. Deine Nervosität sehen sie kaum – deine Freude und Zustimmung oft auch nicht. Was ankommen soll, sag es.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Nach einem ersten Gespräch mit einem Fremden: Wie sehr mag er dich – verglichen mit deiner Schätzung?", "optionen": ["mehr, als du glaubst", "etwa so, wie du glaubst", "weniger, als du glaubst"], "richtig": 0, "loesung": "Mehr, als du glaubst", "aufloesung": "Im Labor, unter Mitbewohnern und in einem Workshop unterschätzten Menschen, wie sehr ihr Gegenüber sie mochte. Wir hören im Kopf unsere eigenen Stolperer – der andere hört einfach das Gespräch." },
+        { "art": "karte", "titel": "Du bist schwerer zu lesen, als du glaubst", "text": "Was du innen stark spürst, sieht man außen schwach – das Zittern vor der Ansage wie die Freude über einen Vorschlag. Dazu kommt das Ruhegesicht: Wer konzentriert zuhört, schaut oft streng, ohne es zu merken. Darum zwei Gewohnheiten: Wärme zuerst zeigen – zuwenden, Name, eine Frage. Und sagen, was man nicht sieht: „Ich schaue ernst, weil ich mitrechne. Mir gefällt das.“" },
+        { "art": "buehne", "kopf": { "id": "lesen-2-05-a", "faehigkeit": "lesen.eigen", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "lesen-v-0086" },
+          "auftrag": "Schreib in drei Wörtern auf, wie du wirken willst. Dann erzähl eine Minute von etwas, das dich freut, und nimm dich mit dem Handy auf. Schau die Aufnahme danach einmal ohne Ton an.",
+          "sekunden": 60, "publikum": "video",
+          "stoerungen": ["Nach dreißig Sekunden: Stell dir die Frage „Und, wie fandest du es wirklich?“ und antworte darauf."],
+          "pruefliste": ["vorher drei Wörter notiert", "ohne Ton angesehen wie bei einer fremden Person", "verglichen: Was kam an, was nicht?", "einen Satz gefunden, der sagt, was man nicht sieht"] },
+        { "art": "auswahl", "kopf": { "id": "lesen-2-05-b", "faehigkeit": "lesen.eigen", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du hörst in der Runde konzentriert zu, die Stirn in Falten. Später fragt Dr. Albers: „Sie waren vorhin nicht einverstanden, oder?“ Du warst es aber. Was sagst du?",
+          "antworten": [
+            { "text": "„Ich bin halt so, da kann ich nichts machen.“", "wert": 0, "tendenz": "trotz", "warum": "Du lässt ihn mit seiner falschen Lesart allein. Ein kurzer Satz hätte es geklärt." },
+            { "text": "„Doch, ich war einverstanden – ich schaue so, wenn ich mitrechne.“", "wert": 2, "warum": "Kurz richtiggestellt, ohne Rechtfertigung. Jetzt weiß er, wie er dein Gesicht künftig lesen kann." },
+            { "text": "„Wie kommen Sie darauf?“ – und dann erklären.", "wert": 1, "warum": "Die Rückfrage zeigt dir, was er gesehen hat. Dauert länger, klärt aber auch." },
+            { "text": "Mich ausführlich entschuldigen und erklären, warum mein Gesicht oft so wirkt.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Für ein Gesicht muss sich niemand entschuldigen. Ein Satz genügt." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "lesen-2-05-c", "faehigkeit": "lesen.eigen", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Sag, was man nicht sieht: Mach deine Zustimmung hörbar – kurz und konkret.",
+          "vorlage": "Du nickst nur, als Lena ihren Vorschlag zu Ende erklärt hat. Du findest ihn richtig gut.",
+          "kriterien": ["spricht die Zustimmung aus", "nennt etwas Bestimmtes", "bleibt kurz"],
+          "muster": ["„Gute Idee, Lena – vor allem die Liste für die Übergabe.“", "„Gefällt mir. Den Teil mit den Fristen übernehmen wir genau so.“"] },
+        { "art": "mission", "ref": "lesen-m-06" }
+      ],
+      "regel": "Man sieht dir weniger an, als du denkst – was ankommen soll, sag es.",
+      "merkkarten": [
+        { "id": "lesen-2-05-m1", "frage": "Was ist die Sympathie-Lücke?", "antwort": "Nach Gesprächen unterschätzen Menschen, wie sehr ihr Gegenüber sie mag." },
+        { "id": "lesen-2-05-m2", "frage": "Was tust du, wenn dein Gesicht strenger wirkt, als du bist?", "antwort": "Kurz sagen, was man nicht sieht: „Ich schaue ernst, weil ich mitdenke – mir gefällt das.“" }
+      ],
+      "mission": "lesen-m-06"
+    },
+    {
+      "id": "lesen-2-06", "bereich": "lesen", "stufe": 2, "nr": 6,
+      "titel": "Blickkontakt",
+      "faehigkeiten": ["lesen.gesicht", "lesen.eigen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Einzelne gute Studien: ein großer Versuch mit Videos statt echter Gespräche, ein Versuch mit Kindern zum Wegschauen beim Denken, ein Vergleich zweier Länder. Dass Blickvermeiden zur sozialen Angst gehören kann, beschreibt ein gut gestütztes klinisches Modell. Die Tipps für den eigenen Blick sind Praxiswissen.",
+      "quellen": ["binetti2016", "dohertysneddon2005", "akechi2013", "clarkwells1995", "depaulo2003"],
+      "aha": "Guter Blickkontakt ist kein Starren. Halten, beim Denken lösen, wiederkommen. Und wer dich wenig anschaut, lügt deshalb nicht und langweilt sich auch nicht.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer dir nicht in die Augen schaut, hat etwas zu verbergen.", "urteil": "falsch", "warum": "Blickabwenden hängt kaum mit Lügen zusammen. Viele schauen beim Nachdenken weg; manche sind schüchtern, haben Angst vor der Situation, sind autistisch oder es aus ihrer Kultur anders gewohnt." },
+        { "art": "schaetzen", "frage": "Wie lange fanden Menschen in einem großen Versuch einen Blick im Mittel angenehm?", "optionen": ["etwa eine Sekunde", "gut drei Sekunden", "etwa zehn Sekunden"], "richtig": 1, "loesung": "Gut drei Sekunden", "aufloesung": "Hunderte Museumsbesucher sahen Videos eines Menschen, der sie verschieden lange anschaute. Im Mittel waren gut drei Sekunden angenehm – manche mochten es kürzer, manche länger. Ein Video ist kein Gespräch, und ein Mittelwert ist kein Maßstab für jeden." },
+        { "art": "karte", "titel": "Halten, lösen, wiederkommen", "text": "Wegschauen beim Denken entlastet den Kopf – Kinder schauten bei schweren Fragen öfter weg. Höflicher Blick ist nicht überall gleich: In einem Vergleich wirkte direkter Blick auf japanische Teilnehmende eher unnahbar als auf finnische. Wer Angst vor einer Runde hat, meidet Blicke oft zum Schutz; manche autistische Menschen strengt er an. Für dich: beim Zuhören mehr, beim Denken weg, in der Runde verteilen." },
+        { "art": "szene", "kopf": { "id": "lesen-2-06-a", "faehigkeit": "lesen.gesicht", "stufe": 5, "kanal": "wissen" },
+          "beschreibung": "Vorstellungsgespräch – du sitzt mit Dr. Albers auf der Seite der Fragenden. Die Bewerberin schaut beim Antworten oft zur Seite, beim Zuhören euch an. Ihre Antworten sind genau und durchdacht. Danach sagt Albers: „Die hat nicht mal richtig Blickkontakt gehalten.“",
+          "frage": "Was antwortest du?",
+          "antworten": [
+            { "text": "„Stimmt, sie wirkte ziemlich unsicher – im Kontakt mit Kunden wäre das eher schwierig.“", "wert": 0, "tendenz": "etikett", "warum": "Aus einem Zeichen wird ein Urteil – obwohl ihre Antworten in eine andere Richtung zeigen." },
+            { "text": "„Beim Zuhören hat sie uns angeschaut, beim Nachdenken weg. Die Antworten waren gut.“", "wert": 2, "warum": "Du lieferst die genaue Beobachtung und lenkst auf das, was zählt. Wegschauen beim Denken ist häufig und unverdächtig." },
+            { "text": "„Entscheiden wir lieber nach ihren Antworten.“", "wert": 1, "warum": "Richtig gewichtet. Mit der Beobachtung dazu hätte Albers einen Grund, sein Urteil zu überdenken." },
+            { "text": "„Vielleicht ist sie autistisch, das würde es erklären.“", "wert": 0, "tendenz": "diagnose", "warum": "Aus einem Gespräch stellt man keine Diagnose – und sie gehört nicht in eine Bewerberrunde." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "lesen-2-06-b", "faehigkeit": "lesen.eigen", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Dein eigener Blick: Was hilft eher, was wirkt eher seltsam?",
+          "faecher": ["hilft eher", "wirkt eher seltsam"],
+          "karten": [
+            { "text": "Beim Zuhören anschauen, beim Nachdenken kurz wegsehen.", "fach": 0 },
+            { "text": "In der Runde jeden Gedanken einer anderen Person geben.", "fach": 0 },
+            { "text": "Den Blick lösen, wenn der andere sichtbar ausweicht.", "fach": 0 },
+            { "text": "Ohne Pause fixieren, um Sicherheit zu zeigen.", "fach": 1 },
+            { "text": "Nur die ranghöchste Person anschauen.", "fach": 1 },
+            { "text": "Beim eigenen Vortrag nur auf die Folien schauen.", "fach": 1 }
+          ] },
+        { "art": "buehne", "kopf": { "id": "lesen-2-06-c", "faehigkeit": "lesen.eigen", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "lesen-v-0087" },
+          "auftrag": "Stell dir drei Zuhörer vor – links, in der Mitte, rechts – und sprich zwei Minuten über ein Thema, das du gut kennst. Jeder Gedanke bekommt ein Gesicht; beim Nachdenken darfst du wegschauen.",
+          "sekunden": 120, "publikum": "klein",
+          "stoerungen": ["Die Person links schaut auf ihr Handy.", "Die Person rechts nickt kräftig – bleib trotzdem nicht nur bei ihr."],
+          "pruefliste": ["alle drei Plätze angeschaut", "beim Denken weggeschaut und zurückgekommen", "nicht bei der nickenden Person hängen geblieben"] },
+        { "art": "mission", "ref": "lesen-m-08" }
+      ],
+      "regel": "Halten, beim Denken lösen, wiederkommen – und wenig Blick nicht verdächtigen.",
+      "merkkarten": [
+        { "id": "lesen-2-06-m1", "frage": "Wie lange empfanden Menschen einen Blick im Mittel als angenehm?", "antwort": "Gut drei Sekunden – mit großen Unterschieden zwischen Menschen. Gemessen mit Videos, nicht im Gespräch." },
+        { "id": "lesen-2-06-m2", "frage": "Warum schaut jemand weg, ohne zu lügen oder sich zu langweilen?", "antwort": "Beim Nachdenken, aus Schüchternheit oder Angst, weil es anstrengend ist (etwa bei Autismus) oder weil er es anders gewohnt ist." }
+      ],
+      "mission": "lesen-m-08"
+    }
+  ]
+}

@@ -1,0 +1,312 @@
+{
+  "einheiten": [
+    {
+      "id": "konter-2-01", "bereich": "konter", "stufe": 2, "nr": 1,
+      "titel": "Den Sachkern übersetzen",
+      "faehigkeiten": ["konter.rueckfrage"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Das Vier-Ohren-Modell ist ein Denkmodell, kein Befund. Übersetzen als Technik ist Praxiswissen aus der Schlagfertigkeits-Literatur; Studien dazu gibt es nicht.",
+      "quellen": ["praxis-konter", "schulzvonthun1981"],
+      "aha": "Hinter vielen Stichen steckt ein Wunsch: früher Bescheid, kürzere Mails, mehr Zahlen. Wer den Wunsch beantwortet, statt sich zu verteidigen, ist sofort wieder bei der Sache.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Teamrunde. Dr. Albers blättert in deinem Bericht: „Schön, dass wir die Zahlen auch mal sehen.“", "schwach": "„Ich hatte sie letzte Woche schon angekündigt, aber dann kam die Inventur dazwischen …“", "stark": "„Sie hätten sie gern regelmäßig? Dann schicke ich sie ab jetzt jeden Freitag.“", "frage": "Was macht die zweite Antwort stärker?", "unterschied": "Sie überhört den Stich und hört den Wunsch: Albers will die Zahlen öfter sehen. Wer den Wunsch beantwortet, statt die Vergangenheit zu verteidigen, ist sofort wieder bei der Sache." },
+        { "art": "karte", "titel": "Mit dem Wunsch-Ohr hören", "text": "Jeder Satz sagt mehreres zugleich: etwas zur Sache, etwas über den Sprecher, etwas über eure Beziehung – und einen Wunsch. So sagt es das Vier-Ohren-Modell, ein Denkmodell. Sprüche treffen meist das Beziehungsohr („Er hält mich für langsam“). Übersetzen heißt: bewusst mit dem Wunsch-Ohr hören (im Modell: Appell-Ohr). Was soll ich anders machen? In drei Schritten: Wunsch hören, als Frage zurückgeben, etwas anbieten." },
+        { "art": "zuordnen", "kopf": { "id": "konter-2-01-a", "faehigkeit": "konter.rueckfrage", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Steckt ein Wunsch im Spruch, den du übersetzen kannst?",
+          "faecher": ["Wunsch dahinter – übersetzen", "kein Sachkern – Rückfrage oder stehen lassen"],
+          "karten": [
+            { "text": "„Wieder mal alles auf den letzten Drücker, was?“ – kurz vor einer Frist", "fach": 0 },
+            { "text": "„Na, Prinzessin?“ – ohne Anlass", "fach": 1 },
+            { "text": "„Deine Mails sind ja Romane.“", "fach": 0 },
+            { "text": "„Bei deinem Glück regnet's beim Betriebsausflug.“", "fach": 1 },
+            { "text": "„Kann man dich eigentlich auch mal erreichen?“", "fach": 0 },
+            { "text": "„Typisch du.“ – ohne erkennbaren Grund", "fach": 1 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "konter-2-01-b", "faehigkeit": "konter.rueckfrage", "stufe": 4, "kanal": "koennen" },
+          "auftrag": "Übersetze in drei Schritten: Wunsch hören – als Frage zurückgeben – etwas anbieten.",
+          "vorlage": "Ein Kollege, als du in der Runde nach dem Stand fragst: „Hast du die Mail nicht gelesen? Steht alles drin.“",
+          "kriterien": ["antwortet auf den Wunsch, nicht auf den Stich", "fragt nach oder bietet etwas an", "ohne Unterton"],
+          "muster": ["„Ich hab sie überflogen. Was ist für mich der wichtigste Punkt?“", "„Stimmt, ich lese sie gleich. Nur kurz: Soll ich bis Freitag liefern?“"] },
+        { "art": "auswahl", "kopf": { "id": "konter-2-01-c", "faehigkeit": "konter.rueckfrage", "stufe": 5, "kanal": "wissen" },
+          "frage": "Im Teamchat schreibt ein Kollege unter deinen Vorschlag: „Mutig. Wer soll das bezahlen?“ Welche Antwort übersetzt am besten?",
+          "antworten": [
+            { "text": "„Wie meinst du das?“", "wert": 1, "warum": "Geht – doch im Chat wirkt die nackte Rückfrage schnell schnippisch, und der Wunsch liegt offen da: Er will die Kosten sehen." },
+            { "text": "„Mutig ist immer noch besser, als gar keine Ideen zu haben – wie manche hier.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Seitenhieb vor allen. Aus der Kostenfrage wird ein Streit." },
+            { "text": "„Gute Frage – die Kosten fehlen noch. Ich rechne sie bis Donnerstag nach.“", "wert": 2, "warum": "Du hörst den Wunsch hinter dem Stich und lieferst. Damit ist der Unterton erledigt." },
+            { "text": "„Ich dachte, das Budget reicht, weil letztes Jahr ja auch noch was übrig war, aber vielleicht hab ich mich da verschätzt …“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Du erklärst dich, statt die Frage zu beantworten. Das schwächt den Vorschlag." }
+          ] },
+        { "art": "konter", "kopf": { "id": "konter-2-01-d", "faehigkeit": "konter.rueckfrage", "stufe": 5, "kanal": "koennen" },
+          "lage": "Herr Petersen, ein langjähriger Kunde, wartet seit einer Woche auf ein Ersatzteil. Er ruft an.", "von": "Herr Petersen", "spruch": "„Bei Ihnen lernt man Geduld. Das muss man Ihnen lassen.“", "schaerfe": 2,
+          "muster": [
+            { "technik": "übersetzen", "text": "„Sie warten zu lange, das stimmt. Ich nenne Ihnen bis heute Mittag einen festen Liefertag.“" },
+            { "technik": "zustimmen und zur Sache", "text": "„Leider ein guter Lehrer, ja. Ich kümmere mich heute selbst darum.“" },
+            { "technik": "Rückfrage", "text": "„Bis wann brauchen Sie es spätestens? Dann schaue ich, was ich vorziehen kann.“" }
+          ],
+          "kriterien": ["nimmt den Ärger ernst", "antwortet auf den Wunsch dahinter", "ohne Ausrede"] },
+        { "art": "experiment", "auftrag": "Hör heute bei einem spitzen Satz bewusst mit dem Wunsch-Ohr. Frag dich still: Was will der andere eigentlich von mir?", "dauer": "heute", "nachfrage": "Welcher Wunsch steckte hinter dem Satz – und was hast du geantwortet?" },
+        { "art": "reflexion", "frage": "Welcher spitze Satz fällt in deinem Alltag immer wieder? Schreib den Wunsch dahinter auf – und deine Übersetzung.", "insBuch": "konter" }
+      ],
+      "regel": "Hör den Wunsch hinter dem Stich – und antworte auf den Wunsch.",
+      "merkkarten": [
+        { "id": "konter-2-01-m1", "frage": "Was heißt übersetzen?", "antwort": "Den Wunsch hinter dem Spruch hören, als Frage zurückgeben und etwas anbieten." },
+        { "id": "konter-2-01-m2", "frage": "Und wenn kein Sachkern drinsteckt?", "antwort": "Dann Rückfrage oder stehen lassen. Übersetzen geht nur, wo ein Wunsch ist." }
+      ]
+    },
+    {
+      "id": "konter-2-02", "bereich": "konter", "stufe": 2, "nr": 2,
+      "titel": "Grenze setzen ohne Gesichtsverlust",
+      "faehigkeiten": ["konter.grenze"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass eine ruhige Ansprache ebenso wirkt wie eine scharfe und weniger Ärger erzeugt, zeigen Laborversuche zu vorurteilsbeladenen Äußerungen. Für Sticheleien im Büro ist das übertragen, nicht eigens untersucht; der Aufbau der Grenze ist Praxiswissen.",
+      "quellen": ["czopp2006", "goffman1955", "praxis-konter"],
+      "aha": "Eine Grenze muss nicht laut sein, um zu wirken. Benenn das Verhalten, nicht die Person, und lass dem anderen einen Weg zurück zur Sache – dann behalten beide ihr Gesicht.",
+      "schritte": [
+        { "art": "studie", "frage": "Wirkt eine Grenze besser, wenn sie scharf ist?", "aufbau": "In drei Experimenten äußerten Studierende Vorurteile und wurden danach darauf angesprochen – mal ruhig, mal feindselig. Gemessen wurde, wie sie sich danach äußerten und wie sie die Person fanden, die sie angesprochen hatte.", "ergebnis": "Beide Arten wirkten: Danach kamen seltener solche Äußerungen. Die feindselige Ansprache erzeugte aber mehr Ärger auf die Person, die sie gesetzt hatte.", "grenze": "Laborversuche mit Studierenden und zu Vorurteilen, nicht zu Sticheleien unter Kollegen. Die Richtung passt zur Praxis – ein Versprechen für jeden Fall ist es nicht.", "beleg": "B", "quellen": ["czopp2006"] },
+        { "art": "karte", "titel": "Die Grenze in drei Teilen", "text": "1. Verhalten benennen, nicht die Person: „Der Spruch über mein Gewicht“ statt „Du Idiot“. 2. Wunsch, kurz: „Lass das bitte.“ 3. Rückweg zur Sache: „Also, zum Plan …“ Der Rückweg wahrt das Gesicht – deins und seins. Der Soziologe Goffman beschrieb, dass Menschen in jedem Gespräch beide Gesichter schützen. Wer den anderen vor allen bloßstellt, gewinnt den Moment und verliert die Runde." },
+        { "art": "zuordnen", "kopf": { "id": "konter-2-02-a", "faehigkeit": "konter.grenze", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Benennt der Satz das Verhalten – oder verurteilt er die Person?",
+          "faecher": ["Verhalten benannt", "Person verurteilt"],
+          "karten": [
+            { "text": "„Den Witz über mein Alter lass bitte.“", "fach": 0 },
+            { "text": "„Du bist echt ein Ekel.“", "fach": 1 },
+            { "text": "„Das war jetzt der dritte Spruch über mein Aussehen.“", "fach": 0 },
+            { "text": "„Mit dir kann man einfach nicht reden.“", "fach": 1 },
+            { "text": "„Bitte keine Sprüche über meine Herkunft.“", "fach": 0 },
+            { "text": "„Typisch, dass so was von dir kommt.“", "fach": 1 }
+          ] },
+        { "art": "dialog", "kopf": { "id": "konter-2-02-b", "faehigkeit": "konter.grenze", "stufe": 5, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "„Sei doch nicht so empfindlich“", "figur": "ein Kollege",
+            "lage": "Kaffeeküche. Ein Kollege hat heute zum zweiten Mal einen Spruch über deinen Dialekt gemacht. Du hast ruhig gesagt: „Die Sprüche über meinen Dialekt lass bitte.“",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Er grinst: „Mensch, sei doch nicht so empfindlich. War doch nur Spaß.“",
+                "wahl": [
+                  { "text": "„Mag sein. Trotzdem: Lass sie bitte.“", "wert": 2, "weiter": "k2", "rueck": "Ruhig wiederholt, ohne neue Begründung. Über deine Empfindlichkeit lässt du nicht verhandeln." },
+                  { "text": "„Ich bin überhaupt nicht empfindlich! Ich finde nur, dass man so nicht mit Kollegen redet – das sieht doch jeder so.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k1b", "rueck": "Jetzt redet ihr über dich statt über seine Sprüche." },
+                  { "text": "Mit den Schultern zucken und dir weiter Kaffee einschenken.", "wert": 1, "weiter": "k2", "rueck": "Die Grenze steht – ein ruhiger Satz mehr hätte sie gefestigt." }
+                ] },
+              { "id": "k1b", "sagt": "„Siehst du, schon wieder so gereizt.“ Zwei Kollegen schauen herüber.",
+                "wahl": [
+                  { "text": "Ausatmen. „Ich bleib dabei: Lass die Sprüche. Und jetzt hol ich mir Kaffee.“", "wert": 2, "weiter": "k2", "rueck": "Zurück zum Kern und raus aus der Diskussion – gut gefangen." },
+                  { "text": "„Ich bin nicht gereizt!“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Der laute Satz scheint ihm recht zu geben." }
+                ] },
+              { "id": "k2", "sagt": "Er hebt die Hände: „Schon gut, schon gut.“ Kurze Stille.",
+                "wahl": [
+                  { "text": "„Danke. Kommst du nachher mit zur Besprechung?“", "wert": 2, "weiter": "ende1", "rueck": "Der Rückweg: Du zeigst, dass es um den Spruch ging, nicht um ihn." },
+                  { "text": "„Na also. Hätte man auch gleich so haben können.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Nachtreten nimmt ihm den Rückweg." }
+                ] },
+              { "id": "ende1", "sagt": "Er nickt und geht mit zur Besprechung.", "ende": "Ruhig wiederholen, nicht diskutieren, dann der Weg zurück. So steht die Grenze, und keiner verliert sein Gesicht." },
+              { "id": "ende2", "sagt": "Er dreht sich weg. Die Stimmung bleibt frostig.", "ende": "Kein Drama – gesagt ist die Grenze trotzdem. Beim nächsten Mal: einmal ruhig wiederholen, dann zurück zur Sache, ohne nachzulegen." }
+            ],
+            "prinzipien": ["ruhig wiederholen statt begründen", "nicht über die eigene Empfindlichkeit diskutieren", "nicht nachtreten", "Rückweg zur Sache anbieten"]
+          } },
+        { "art": "auswahl", "kopf": { "id": "konter-2-02-c", "faehigkeit": "konter.grenze", "stufe": 6, "kanal": "wissen" },
+          "frage": "Eine Woche nach deiner Grenze macht derselbe Kollege wieder Sprüche über deinen Dialekt – diesmal vor einem Kunden. Was ist jetzt dran?",
+          "antworten": [
+            { "text": "Vor dem Kunden laut: „Ich hab dir schon mal gesagt, du sollst das lassen!“", "wert": 0, "tendenz": "angreifen", "warum": "Vor dem Kunden bloßgestellt – das schadet dir und dem Gespräch mehr als ihm." },
+            { "text": "Später unter vier Augen: „Ich hatte dich gebeten, das zu lassen. Kommt es wieder, rede ich mit Dr. Albers.“", "wert": 2, "warum": "Vor dem Kunden ruhig bleiben, danach deutlich werden und den nächsten Schritt nennen. Das ist klar, ohne Bühne." },
+            { "text": "Vor dem Kunden übergehen und es dir für das nächste Mal vornehmen.", "wert": 1, "warum": "Vor dem Kunden richtig – aber „nächstes Mal“ heißt oft nie. Heute noch unter vier Augen ansprechen." },
+            { "text": "Ab jetzt im Büro Hochdeutsch sprechen, damit er keinen Anlass mehr hat.", "wert": 0, "tendenz": "vermeiden", "warum": "Du änderst dich, damit er nichts ändern muss. Die Grenze gilt seinem Verhalten, nicht deiner Sprache." }
+          ] },
+        { "art": "konter", "kopf": { "id": "konter-2-02-d", "faehigkeit": "konter.grenze", "stufe": 6, "kanal": "koennen" },
+          "lage": "Abteilungsrunde, zwölf Leute. Du schlägst vor, die Besprechung künftig zu kürzen.", "von": "Ein Kollege aus der Nachbarabteilung", "spruch": "„Klar, die Teilzeitkräfte wollen immer früher heim.“", "schaerfe": 3,
+          "muster": [
+            { "technik": "Grenze und Rückweg", "text": "„Das gehört nicht hierher. Zum Vorschlag: Wir sparen zwanzig Minuten, wenn …“" },
+            { "technik": "Metaebene", "text": "„Das ist ein Spruch, kein Argument. Was hältst du vom Vorschlag?“" },
+            { "technik": "Sache jetzt, Grenze später", "text": "(ausatmen) „Zurück zum Vorschlag: …“ – und nach der Runde unter vier Augen ansprechen." }
+          ],
+          "kriterien": ["benennt das Verhalten, nicht die Person", "zeigt den Weg zur Sache", "ruhig, ohne Gegenangriff"] },
+        { "art": "fachhilfe", "thema": "mobbing" }
+      ],
+      "regel": "Verhalten benennen, Wunsch sagen, zurück zur Sache – ruhig, nicht laut.",
+      "merkkarten": [
+        { "id": "konter-2-02-m1", "frage": "Die drei Teile einer Grenze?", "antwort": "Verhalten benennen, Wunsch sagen, Rückweg zur Sache." },
+        { "id": "konter-2-02-m2", "frage": "„Sei doch nicht so empfindlich.“ – und jetzt?", "antwort": "Ruhig wiederholen: „Mag sein. Trotzdem: Lass es bitte.“ Nicht über dich diskutieren." },
+        { "id": "konter-2-02-m3", "frage": "Es hört nicht auf?", "antwort": "Unter vier Augen deutlich werden, den nächsten Schritt nennen und Vorgesetzte oder eine Vertrauensstelle einbeziehen." }
+      ]
+    },
+    {
+      "id": "konter-2-03", "bereich": "konter", "stufe": 2, "nr": 3,
+      "titel": "Necken, ohne zu verletzen",
+      "faehigkeiten": ["konter.necken"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Was Necken ausmacht und dass Ranghöhere häufiger und schärfer necken, fasst eine Übersichtsarbeit zusammen. Die Regeln zu Thema und Zeichen sind Praxiswissen; Studien zum Üben gibt es nicht.",
+      "quellen": ["keltner2001", "keltner1998", "douglass2016", "praxis-konter"],
+      "aha": "Necken ist eine kleine Provokation mit Augenzwinkern. Ohne das Augenzwinkern – Übertreibung, Spielton, Lächeln – bleibt nur die Provokation.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer Spaß versteht, verträgt jeden Spruch.", "urteil": "falsch", "warum": "Ob ein Spruch neckt oder trifft, hängt am Thema, am Ton und am Verhältnis – nicht nur am Empfänger. Sprüche über Herkunft etwa galten in einer Tagebuchstudie oft als Spaß und machten ängstlichen Jugendlichen trotzdem mehr Angst." },
+        { "art": "karte", "titel": "Was Necken ausmacht", "text": "Forschende beschreiben Necken als spielerische Provokation: Du greifst etwas am anderen auf und zeigst zugleich, dass es nicht ernst gemeint ist – durch Übertreibung, Spielton, Lächeln. Fehlt dieses Zeichen, bleibt nur der Stich. Und Ranghöhere necken oft schärfer – der andere kann schlecht zurück. Darum: über Gewähltes, nie über Körper, Herkunft oder wunde Punkte – und am Ende ein Stück Wohlwollen." },
+        { "art": "zuordnen", "kopf": { "id": "konter-2-03-a", "faehigkeit": "konter.necken", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Spielerisch oder verletzend – wohin gehört der Satz?",
+          "faecher": ["neckt mit Gefühl", "trifft"],
+          "karten": [
+            { "text": "„Dein neues Rennrad ist schneller als unser Server. Darf ich's mal streicheln?“", "fach": 0 },
+            { "text": "„Na, wieder zugenommen?“", "fach": 1 },
+            { "text": "„Du und deine Farbmarker – irgendwann leuchtet das Büro im Dunkeln.“", "fach": 0 },
+            { "text": "„Bei deinem Akzent versteht dich der Kunde eh nicht.“", "fach": 1 },
+            { "text": "„Nur du hast die Anleitung gelesen? Das ist Verrat.“", "fach": 0 },
+            { "text": "„Kein Wunder, dass du niemanden findest.“", "fach": 1 }
+          ] },
+        { "art": "buendel", "kopf": { "id": "konter-2-03-b", "faehigkeit": "konter.necken", "stufe": 5, "kanal": "wissen" },
+          "lage": "Du hast Miriam in der Runde geneckt: „Miriam plant ihren Urlaub mit einer Tabelle. Und mit einer Ersatz-Tabelle.“",
+          "frage": "Welche Zeichen sprechen dafür, dass der Spaß gut angekommen ist?",
+          "zeichen": [
+            { "text": "Sie lacht und legt nach: „Und mit einer Tabelle für die Tabellen.“", "stuetzt": true, "warum": "Wer zurückneckt, spielt mit." },
+            { "text": "Sie lächelt kurz und schaut dann auf ihr Handy.", "stuetzt": false, "warum": "Ein kurzes Lächeln mit Rückzug ist oft Höflichkeit, kein Spaß." },
+            { "text": "Später erzählt sie selbst von ihrer Tabelle.", "stuetzt": true, "warum": "Sie greift das Thema freiwillig wieder auf." },
+            { "text": "Ihr Ton wird knapper, als es um die Urlaubsplanung geht.", "stuetzt": false, "warum": "Ein Wechsel im Ton ist ein Warnzeichen. Kurz nachfragen hilft." },
+            { "text": "Die anderen lachen laut.", "stuetzt": false, "warum": "Das Lachen der Gruppe sagt wenig darüber, wie es der Geneckten geht." }
+          ] },
+        { "art": "konter", "kopf": { "id": "konter-2-03-c", "faehigkeit": "konter.necken", "stufe": 5, "kanal": "koennen" },
+          "lage": "Mittagspause. Tarek erzählt zum dritten Mal diese Woche von seiner Kletterhalle. Neck ihn mit Gefühl.", "von": "Tarek", "spruch": "„… und dann hing ich da, nur an zwei Fingern.“", "schaerfe": 1,
+          "muster": [
+            { "technik": "übertreiben", "text": "„Zwei Finger? Ich schaff mit zwei Fingern nicht mal die Tastatur. Respekt.“" },
+            { "technik": "Rolle annehmen", "text": "„Wir buchen dich für die Glühbirnen im Flur. Bezahlung in Kuchen.“" },
+            { "technik": "gespielter Ernst", "text": "„Notiert. Für deine Heldenbiografie, Kapitel drei.“" }
+          ],
+          "kriterien": ["neckt über Gewähltes", "zeigt deutlich: nicht ernst gemeint", "endet mit Wohlwollen"] },
+        { "art": "auswahl", "kopf": { "id": "konter-2-03-d", "faehigkeit": "konter.necken", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du neckst Sven seit Jahren über seine Unpünktlichkeit. Heute zuckt er beim Spruch kurz zusammen. Was tust du?",
+          "antworten": [
+            { "text": "Nachlegen – er verträgt das doch sonst auch.", "wert": 0, "tendenz": "ueberspielen", "warum": "Lange Freundschaft heißt nicht, dass jeder Tag gleich ist. Sein Zucken ist ein Zeichen." },
+            { "text": "Das Thema wechseln und dir merken, dass der Spruch heute nicht gepasst hat.", "wert": 1, "warum": "Klug – ein kurzes Wort zeigt ihm aber, dass du es gesehen hast." },
+            { "text": "„Ach komm, jetzt sei nicht beleidigt.“", "wert": 0, "tendenz": "abwerten", "warum": "Damit schiebst du ihm die Last zu." },
+            { "text": "Kurz nachfragen: „Zu viel heute? Dann lass ich's.“", "wert": 2, "warum": "Du liest das Zeichen und nimmst den Spaß zurück, ohne Drama." }
+          ] },
+        { "art": "experiment", "auftrag": "Achte heute beim Necken – deinem und dem der anderen – auf das Augenzwinkern: Woran erkennst du, dass es nicht ernst gemeint ist?", "dauer": "heute", "nachfrage": "Welches Zeichen hast du bemerkt – und wo fehlte es?" },
+        { "art": "reflexion", "frage": "Über welches Thema neckst du gern? Ist es für den anderen etwas Gewähltes – oder ein wunder Punkt?" }
+      ],
+      "regel": "Necken mit Augenzwinkern, über Gewähltes, mit Wohlwollen am Ende.",
+      "merkkarten": [
+        { "id": "konter-2-03-m1", "frage": "Was macht aus einem Stich ein Necken?", "antwort": "Das Augenzwinkern – Übertreibung, Spielton, Lächeln – und ein harmloses, gewähltes Thema." },
+        { "id": "konter-2-03-m2", "frage": "Welche Themen sind beim Necken tabu?", "antwort": "Körper, Herkunft, Geschlecht und wunde Punkte." },
+        { "id": "konter-2-03-m3", "frage": "Er zuckt beim Spruch zusammen?", "antwort": "Kurz nachfragen und den Spaß lassen." }
+      ]
+    },
+    {
+      "id": "konter-2-04", "bereich": "konter", "stufe": 2, "nr": 4,
+      "titel": "Selbstironie mit Maß",
+      "faehigkeiten": ["konter.selbstironie"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Dass Humor über sich selbst eine Führungskraft zugewandter wirken lässt als Humor auf Kosten anderer, zeigt ein Experiment mit Fallbeschreibungen. Dass ständiges Selbstkleinmachen mit weniger Wohlbefinden einhergeht, zeigt eine Meta-Analyse – ein Zusammenhang, keine Ursache.",
+      "quellen": ["hoption2013", "schneider2018", "martin2003"],
+      "aha": "Selbstironie entwaffnet, weil du dem Spruch zuvorkommst. Sie wirkt, solange sie Kleinigkeiten trifft – nicht deine Kernaufgabe und nicht deine wunden Punkte.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "In einem Experiment lasen Studierende die Rede einer Führungskraft. Einmal machte sie einen Witz über sich selbst, einmal einen auf Kosten anderer. Welche Fassung wirkte zugewandter?", "optionen": ["der Witz über sich selbst", "der Witz über andere", "kein Unterschied"], "richtig": 0, "loesung": "Der Witz über sich selbst", "aufloesung": "Mit Humor über sich selbst wurde die Führungskraft als zugewandter eingeschätzt. Es war ein einzelnes Experiment mit Fallbeschreibungen – ein Hinweis, kein Gesetz." },
+        { "art": "karte", "titel": "Drei Fragen vor dem Witz über dich", "text": "1. Ist es eine Kleinigkeit? Orientierungssinn, Handschrift, Kochkunst – ja. 2. Trifft es deine Kernaufgabe? Nach einem echten Fehler kommt zuerst die Sache, dann vielleicht der Witz. 3. Wie oft? Selbstironie ist ein Gewürz. Wer sich ständig kleinmacht, wirkt nicht gelassen, sondern unsicher – und Dauer-Selbstabwertung geht in Studien mit weniger Wohlbefinden einher." },
+        { "art": "zuordnen", "kopf": { "id": "konter-2-04-a", "faehigkeit": "konter.selbstironie", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Passt hier Selbstironie – oder lieber nicht?",
+          "faecher": ["passt", "lieber nicht"],
+          "karten": [
+            { "text": "Du hast dich auf dem Weg zum Termin verfahren und kommst fünf Minuten später.", "fach": 0 },
+            { "text": "Deine Rechnung an einen Kunden war falsch – heute ist die Besprechung dazu.", "fach": 1 },
+            { "text": "Deine Schrift auf dem Flipchart ist kaum zu lesen.", "fach": 0 },
+            { "text": "Jemand spricht dich auf die schwere Zeit nach deinem Unfall an.", "fach": 1 },
+            { "text": "Nur du hast die Kleiderordnung der Feier missverstanden.", "fach": 0 },
+            { "text": "Es wäre heute schon dein fünfter Witz über dich.", "fach": 1 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "konter-2-04-b", "faehigkeit": "konter.selbstironie", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Mach daraus Selbstironie mit Maß: über das Missgeschick, nicht über dich als Person.",
+          "vorlage": "Vor der Runde, als das Beamer-Kabel zum dritten Mal nicht passt: „Ich bin echt zu blöd für Technik, sorry, ich kann einfach gar nichts.“",
+          "kriterien": ["lacht über die Lage, nicht über die eigene Person", "kurz", "führt zurück zur Sache"],
+          "muster": ["„Der Beamer und ich lernen uns noch kennen. Dritter Versuch – dann wird geheiratet.“", "„Kurze Pause für Kabel-Yoga. Gleich geht's weiter.“"] },
+        { "art": "auswahl", "kopf": { "id": "konter-2-04-c", "faehigkeit": "konter.selbstironie", "stufe": 6, "kanal": "wissen" },
+          "frage": "Carla Demir eröffnet ihre Präsentation vor der Geschäftsleitung. Alle wissen, dass sie vor Auftritten aufgeregt ist. Welcher erste Satz ist Selbstironie mit Maß?",
+          "antworten": [
+            { "text": "„Ich bin eigentlich gar nicht die Richtige für so was – ich bin da auch nur so reingerutscht.“", "wert": 0, "tendenz": "kleinreden", "warum": "Das trifft ihre Kernaufgabe. Wer sich selbst die Eignung abspricht, lädt alle ein, es zu glauben." },
+            { "text": "„Falls meine Stimme gleich zittert: Das ist die Vorfreude. Sie übertreibt gern.“", "wert": 2, "warum": "Leicht, über eine Kleinigkeit, und es nimmt der Aufregung den Schrecken – ohne an ihrer Arbeit zu kratzen." },
+            { "text": "Gar keinen Witz, gleich mit dem Inhalt anfangen.", "wert": 1, "warum": "Völlig in Ordnung. Selbstironie ist ein Angebot, keine Pflicht." },
+            { "text": "„Keine Sorge, die Zahlen sind sicher genauso wackelig wie meine Knie heute.“", "wert": 0, "tendenz": "kleinreden", "warum": "Ein Witz über die eigenen Zahlen untergräbt genau das, was sie vorstellen will." }
+          ] },
+        { "art": "humorlabor", "kopf": { "id": "konter-2-04-d", "faehigkeit": "konter.selbstironie", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Bau einen selbstironischen Satz über eine harmlose Eigenheit von dir – mit Übertreibung.",
+          "vorlage": "„Mein Orientierungssinn ist …“",
+          "kriterien": ["Kleinigkeit, kein wunder Punkt", "Übertreibung", "ohne Selbstabwertung"],
+          "muster": ["„… so gut, dass mich mein Navi inzwischen persönlich begrüßt.“", "„… legendär. Im Parkhaus kennen sie mich mit Namen.“"] },
+        { "art": "experiment", "auftrag": "Lach heute einmal über ein kleines eigenes Missgeschick. Prüf danach die drei Fragen: Kleinigkeit? Kernaufgabe? Wie oft?", "dauer": "heute", "nachfrage": "Welches Missgeschick war es – und wie haben die anderen reagiert?" },
+        { "art": "reflexion", "frage": "Über welche Kleinigkeit an dir kannst du gelassen lachen? Schreib deinen Satz dafür auf.", "insBuch": "saetze" }
+      ],
+      "regel": "Lach über Kleinigkeiten an dir – nicht über deine Kernaufgabe, nicht dauernd.",
+      "merkkarten": [
+        { "id": "konter-2-04-m1", "frage": "Wann passt Selbstironie?", "antwort": "Bei Kleinigkeiten und Missgeschicken – nicht bei echten Fehlern in der Kernaufgabe, nicht bei wunden Punkten." },
+        { "id": "konter-2-04-m2", "frage": "Wie oft?", "antwort": "Als Gewürz, ab und zu. Dauer-Selbstabwertung wirkt unsicher." }
+      ]
+    },
+    {
+      "id": "konter-2-05", "bereich": "konter", "stufe": 2, "nr": 5,
+      "titel": "Der Rückgriff",
+      "faehigkeiten": ["konter.spiel"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Dass aufgegriffener Humor in Besprechungen mit besserer Zusammenarbeit einhergeht, zeigt eine Beobachtungsstudie – ein Zusammenhang, und nur bei geringer Sorge um den Arbeitsplatz. Der Rückgriff selbst ist Handwerk aus Improvisation und Bühne.",
+      "quellen": ["lehmann2014", "impro"],
+      "aha": "Ein Witz von vorhin, im richtigen Moment wieder aufgenommen, verbindet alle, die dabei waren. Du brauchst keinen neuen Einfall – nur ein gutes Gedächtnis.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Am Morgen hat Tarek die streikende Kaffeemaschine „unsere Diva“ getauft. Am Nachmittag fällt in der Besprechung der Beamer aus.", "schwach": "„Typisch, heute geht aber auch gar nichts.“", "stark": "„Die Diva hat wohl eine Kollegin angesteckt.“", "frage": "Warum lacht die Runde beim zweiten Satz?", "unterschied": "Er greift ein Bild auf, das alle schon kennen. Das Wiedererkennen ist die Pointe – und es zeigt, dass du zugehört hast." },
+        { "art": "studie", "frage": "Was bringt Humor in Besprechungen?", "aufbau": "Forschende filmten 54 Teambesprechungen in zwei Industriebetrieben und werteten jeden Witz und jedes Lachen aus.", "ergebnis": "Wo ein Witz aufgegriffen wurde – Witz, Lachen, weiterer Witz –, gab es mehr unterstützende und lösungsorientierte Beiträge, und die Teams wurden besser bewertet, auch zwei Jahre später. Einzelne Witze ohne Echo zeigten das nicht.", "grenze": "Eine Beobachtungsstudie: Sie zeigt Zusammenhänge, keine Ursache. Wo die Sorge um den Arbeitsplatz groß war, fand sich der Zusammenhang nicht.", "beleg": "B", "quellen": ["lehmann2014"] },
+        { "art": "karte", "titel": "So baust du einen Rückgriff", "text": "1. Merken: ein Bild, über das alle gelacht haben, als Stichwort behalten („die Diva“). 2. Warten: auf eine Lage, die dazu passt – oft später, oft am Ende. 3. Andeuten statt erklären: Ein Wort, ein halber Satz genügt. 4. Für alle verständlich: Wer vorhin nicht dabei war, braucht einen halben Satz Hilfe, sonst wird der Rückgriff zum Insider, der ausschließt. Ein- bis zweimal genügt." },
+        { "art": "auswahl", "kopf": { "id": "konter-2-05-a", "faehigkeit": "konter.spiel", "stufe": 4, "kanal": "wissen" },
+          "frage": "Am Vormittag hat Miriam gewitzelt, der Drucker brauche „eine Kur“. Wann setzt du den Rückgriff am besten?",
+          "antworten": [
+            { "text": "Gleich zwei Minuten später, damit das Bild frisch bleibt.", "wert": 0, "warum": "Zu früh: Das Bild ist noch frisch, es wirkt wie Wiederholen statt Wiederkehren." },
+            { "text": "Beim Feierabend im Hinausgehen: „Grüß mir den Kurgast.“", "wert": 1, "warum": "Geht – ohne Anlass ist der Bogen aber schwächer als im passenden Moment." },
+            { "text": "Am Nachmittag, als der Drucker wieder läuft: „Die Kur hat angeschlagen.“", "wert": 2, "warum": "Eine passende Lage, eine kurze Andeutung – das Wiedererkennen macht den Witz." },
+            { "text": "In der Besprechung mit dem Kunden, der morgens nicht da war.", "wert": 0, "warum": "Für den Kunden ein Rätsel. Ein Rückgriff braucht Leute, die das Bild kennen." }
+          ] },
+        { "art": "humorlabor", "kopf": { "id": "konter-2-05-b", "faehigkeit": "konter.spiel", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Bau den Rückgriff: Das Bild von vorhin trifft auf die neue Lage.",
+          "vorlage": "Morgens nennt Tarek das Großraumbüro „unser Aquarium“, weil alle durch die Glaswand schauen. Nachmittags fällt die Heizung aus, alle sitzen in Jacken.",
+          "kriterien": ["nimmt das Bild von vorhin auf", "passt zur neuen Lage", "kurz, ohne Erklärung"],
+          "muster": ["„Das Aquarium hat auf Kaltwasser umgestellt.“", "„Die Fische tragen jetzt Schal. Artgerecht ist anders.“"] },
+        { "art": "rangfolge", "kopf": { "id": "konter-2-05-c", "faehigkeit": "konter.spiel", "stufe": 5, "kanal": "wissen" },
+          "frage": "Lena war heute Morgen nicht dabei, als alle über Tareks „Aquarium“ gelacht haben. Jetzt sitzt sie mit in der Runde. Ordne von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Das Aquarium – so nennt Tarek unser Büro, Lena – hat auf Kaltwasser umgestellt.“", "warum": "Ein halber Satz Hilfe, und Lena kann mitlachen." },
+            { "text": "„Das Aquarium hat auf Kaltwasser umgestellt.“ – und Lena später kurz erklären, was gemeint war.", "warum": "Funktioniert für die anderen; Lena bleibt für einen Moment draußen." },
+            { "text": "„Das Aquarium hat auf Kaltwasser umgestellt.“ – alle lachen, Lena schaut fragend.", "warum": "Ein Insider vor einer Neuen grenzt aus, auch ohne Absicht." },
+            { "text": "„Insider, Lena. Das verstehst du in einem Jahr.“", "warum": "Macht den Ausschluss ausdrücklich – das Gegenteil von verbinden." }
+          ] },
+        { "art": "mission", "ref": "konter-m-08" }
+      ],
+      "regel": "Merk dir das Bild, warte auf den Moment, deute es nur an.",
+      "merkkarten": [
+        { "id": "konter-2-05-m1", "frage": "Was braucht ein Rückgriff?", "antwort": "Ein Bild, das alle kennen, eine passende Lage und eine kurze Andeutung." },
+        { "id": "konter-2-05-m2", "frage": "Jemand war nicht dabei?", "antwort": "Ein halber Satz Hilfe – sonst wird der Rückgriff zum Insider." }
+      ],
+      "mission": "konter-m-08"
+    },
+    {
+      "id": "konter-2-06", "bereich": "konter", "stufe": 2, "nr": 6,
+      "titel": "Nachbereiten: aus dem Treppenwitz wird Vorrat",
+      "faehigkeiten": ["konter.ruhe", "konter.zustimmen", "konter.umdeuten"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Wenn-Dann-Pläne helfen nachweislich, Vorsätze im richtigen Moment umzusetzen (Meta-Analyse). Für Schlagfertigkeit ist das nicht eigens untersucht; der Treppenwitz-Plan selbst ist Praxiswissen.",
+      "quellen": ["gollwitzer2006", "diderot", "praxis-konter"],
+      "aha": "Der gute Satz fällt dir auf der Treppe ein? Dann ist er nicht verloren. Schreib ihn auf, bau zwei Geschwister dazu und häng ihn an ein „Wenn“ – beim nächsten Mal liegt er bereit.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Woher kommt das Wort „Treppenwitz“?", "optionen": ["aus einem Lustspiel, das auf einer Treppe spielt", "von einem Bild bei Diderot: Die Antwort fällt einem erst unten an der Treppe ein", "aus der Sprache der Bergsteiger"], "richtig": 1, "loesung": "Von einem Bild bei Diderot", "aufloesung": "Bei Diderot verliert ein empfindsamer Mensch bei einem Einwand die Fassung und fängt sich erst unten an der Treppe wieder. Daraus wurde „l'esprit de l'escalier“, auf Deutsch Treppenwitz. Es geht also seit gut zweihundert Jahren vielen so." },
+        { "art": "geschichte", "titel": "Miriams Heft", "figur": "Miriam Okafor", "text": "Bruno erzählt: „Miriam gilt bei euch als die Schlagfertigste. Weißt du, warum? Sie hat ein Heft. Vor ein paar Jahren sagte ein Kunde zu ihr: ‚Junge Frau, holen Sie mal jemanden, der sich auskennt.‘ Ihr fiel nichts ein. Abends schrieb sie drei Antworten auf. Wochen später kam derselbe Satz wieder, von einem anderen. Sie lächelte: ‚Da sind Sie bei mir richtig. Worum geht es?‘ Seitdem schreibt sie jeden Treppenwitz auf. Die Sprüche wiederholen sich, sagt sie. Nur die Leute wechseln.“", "frage": "Welcher Spruch kommt bei dir immer wieder?" },
+        { "art": "karte", "titel": "Der Treppenwitz-Plan, Stufe zwei", "text": "1. Noch am selben Tag notieren: wer, was, wo – und was du gesagt hast. 2. Drei Antworten in drei Techniken bauen, etwa Zustimmen, Umdeuten, Rückfrage. 3. Die beste wählen: Passt sie zu dir? Verletzt sie niemanden? Ist sie kurz? 4. Als Wenn-Dann-Satz festmachen: „Wenn jemand mein Alter anspricht, dann sage ich …“ 5. Nach ein paar Wochen sortieren: Welche Themen kehren wieder?" },
+        { "art": "studie", "frage": "Warum ein „Wenn“?", "aufbau": "Eine Meta-Analyse fasste 94 Vergleiche zusammen, in denen Menschen ihren Vorsatz als Wenn-Dann-Plan festlegten – oder nur als Ziel.", "ergebnis": "Mit Wenn-Dann-Plan setzten sie ihre Vorsätze deutlich öfter um. Der Auslöser im „Wenn“ ruft im richtigen Moment das „Dann“ ab.", "grenze": "Untersucht wurden Gesundheit, Lernen und Alltag, nicht Schlagfertigkeit. Dass ein vorbereiteter Satz im Schreck abrufbar ist, ist eine plausible Übertragung.", "beleg": "A", "quellen": ["gollwitzer2006"] },
+        { "art": "geschichtenbau", "kopf": { "id": "konter-2-06-a", "faehigkeit": "konter.ruhe", "stufe": 5, "kanal": "koennen" },
+          "auftrag": "Nimm einen Spruch, auf den dir nichts eingefallen ist, und mach daraus Vorrat.",
+          "felder": [
+            { "name": "Lage", "hilfe": "Wer hat was gesagt, wo, vor wem?" },
+            { "name": "Was du gesagt hast", "hilfe": "Ehrlich – auch Schweigen zählt." },
+            { "name": "Drei Antworten", "hilfe": "Je eine Technik: Zustimmen, Umdeuten, Rückfrage – oder andere." },
+            { "name": "Dein Wenn-Dann", "hilfe": "„Wenn jemand …, dann sage ich …“" }
+          ],
+          "muster": ["Lage: In der IT-Besprechung fragt ein Kollege laut: „Na, hast du dich verlaufen?“ – Gesagt: „Äh, nein.“ – Drei Antworten: „Ja, und ich bleibe trotzdem.“ (Zustimmen) · „Ich bin der Blick von außen.“ (Umdeuten) · „Braucht ihr jemanden aus meiner Abteilung? Dann bin ich richtig.“ (Übersetzen) – Wenn-Dann: Wenn jemand fragt, was ich hier will, dann sage ich: „Ich bin der Blick von außen.“"] },
+        { "art": "wenndann", "anlass": "Deine häufigsten Sprüche", "wenn": ["Wenn jemand über meine Pünktlichkeit stichelt …", "Wenn jemand mein Alter anspricht …", "Wenn mir gar nichts einfällt …"], "dann": ["… dann sage ich: „Ich wollte sichergehen, dass ihr mich vermisst.“", "… dann sage ich: „Erfahrung. Davon hab ich reichlich.“", "… dann atme ich aus und sage: „Kann man so sehen.“"] },
+        { "art": "auswahl", "kopf": { "id": "konter-2-06-b", "faehigkeit": "konter.ruhe", "stufe": 4, "kanal": "wissen" },
+          "frage": "Für den Spruch „Du mit deinem Ordnungsfimmel“ hast du drei Antworten gebaut. Nach welcher Regel wählst du die für deinen Vorrat?",
+          "antworten": [
+            { "text": "Die, die du ruhig mit deiner eigenen Stimme sagen kannst.", "wert": 2, "warum": "Im Schreck kommt nur heraus, was zu dir passt. Ein Satz, den du gern sagst, ist leichter abzurufen." },
+            { "text": "Die schärfste – damit endlich Ruhe ist und keiner mehr auf die Idee kommt, dich so anzusprechen.", "wert": 0, "tendenz": "angreifen", "warum": "Scharfe Sätze machen aus einem Spruch einen Streit – und sie klingen im Ernstfall oft härter als geplant." },
+            { "text": "Die witzigste, auch wenn sie nicht ganz zu dir passt.", "wert": 1, "warum": "Witz hilft – doch ein Satz, der nicht zu dir passt, klingt gespielt oder bleibt im Schreck stecken." },
+            { "text": "Alle drei behalten und im Moment entscheiden.", "wert": 0, "warum": "Im Schreck ist Auswählen schwer. Ein fester Satz ist leichter abzurufen." }
+          ] },
+        { "art": "reflexion", "frage": "Schreib deinen ersten Wenn-Dann-Satz auf – für den Spruch, der dir am häufigsten begegnet.", "insBuch": "konter" }
+      ],
+      "regel": "Noch am selben Tag: notieren, drei Antworten bauen, eine behalten.",
+      "merkkarten": [
+        { "id": "konter-2-06-m1", "frage": "Der Treppenwitz-Plan?", "antwort": "Notieren, drei Antworten in drei Techniken bauen, die beste als Wenn-Dann-Satz festmachen." },
+        { "id": "konter-2-06-m2", "frage": "Welche Antwort kommt in den Vorrat?", "antwort": "Die, die zu dir passt und die du ruhig sagen kannst – nicht unbedingt die witzigste." }
+      ]
+    }
+  ]
+}

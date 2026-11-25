@@ -16,7 +16,7 @@
         { "id": "k1f", "sagt": "Eine Stunde nach deiner Mail klingelt das Telefon. Auf dem Display: Petersen.",
           "wahl": [
             { "text": "Einmal lang ausatmen, rangehen, Name sagen.", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance genutzt: ein Atemzug, dann rein. Die Aufregung ist da – und du gehst trotzdem ran." },
-            { "text": "Klingeln lassen und später zurückrufen.", "wert": 0, "tendenz": "flucht", "weiter": "ende2", "rueck": "Das Ausweichen macht den nächsten Anruf noch schwerer – für dich und für ihn." }
+            { "text": "Klingeln lassen und später in Ruhe zurückrufen.", "wert": 0, "tendenz": "flucht", "weiter": "ende2", "rueck": "Das Ausweichen macht den nächsten Anruf noch schwerer – für dich und für ihn." }
           ] },
         { "id": "k2", "sagt": "Herr Petersen: „Petersen. Wer ist da? Und sprechen Sie bitte deutlich, ich höre nicht mehr so gut.“",
           "wahl": [
@@ -57,9 +57,9 @@
     },
     {
       "id": "ruhe-l-02", "bereich": "ruhe", "phase": "g", "umfeld": "fremde", "faehigkeiten": ["ruhe.koerper", "ruhe.fokus", "ruhe.umdeuten", "ruhe.mittendrin"], "stufe": 3,
-      "titel": "Das Vorstellungsgespräch", "figur": "Nadine Köhler",
+      "titel": "Das Vorstellungsgespräch", "figur": "die Geschäftsführerin",
       "einleitung": "Ein Vorstellungsgespräch in einem kleinen Betrieb. Du übst, was gegen feuchte Hände und zitternde Stimme hilft, den Blick nach außen und Ruhe bei einer schweren Frage.",
-      "lage": "Du bewirbst dich bei einem kleinen Betrieb. Die Geschäftsführerin, Nadine Köhler, ist freundlich, knapp bei Zeit und fragt genau. Du sitzt im Wartebereich, noch zehn Minuten.",
+      "lage": "Du bewirbst dich bei einem kleinen Betrieb. Die Geschäftsführerin ist freundlich, knapp bei Zeit und fragt genau. Du sitzt im Wartebereich, noch zehn Minuten.",
       "start": "k1",
       "knoten": [
         { "id": "k1", "sagt": "Deine Hände sind feucht, und du merkst ein leichtes Zittern. Was tust du in den zehn Minuten?",
@@ -68,43 +68,43 @@
             { "text": "Die Unterlagen ein letztes Mal komplett durchlesen, damit dir im Gespräch jede Zahl und jede Station deines Lebenslaufs sofort einfällt.", "wert": 1, "weiter": "k2", "rueck": "Beruhigt manche, hält dich aber im Kopf. Besser: nur noch deinen ersten Satz." },
             { "text": "Auf die Toilette gehen und den Puls am Handgelenk messen.", "wert": 0, "tendenz": "nach_innen", "weiter": "k1b", "rueck": "Puls messen richtet den Scheinwerfer auf dich – und eine hohe Zahl macht es nur schlimmer." }
           ] },
-        { "id": "k1b", "sagt": "Hundertzehn Schläge. Jetzt rast das Herz erst recht. Da steht Frau Köhler in der Tür: „Kommen Sie gern herein.“",
+        { "id": "k1b", "sagt": "Hundertzehn Schläge. Jetzt rast das Herz erst recht. Da steht die Geschäftsführerin in der Tür: „Kommen Sie gern herein.“",
           "wahl": [
             { "text": "Innerlich: „Mein Körper stellt Energie bereit.“ Lächeln, Hand geben.", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: Umdeuten statt Zahl, und der Blick geht zu ihr." },
             { "text": "„Ich bin heute irgendwie nicht ganz da, entschuldigen Sie.“", "wert": 0, "tendenz": "kleinreden", "weiter": "k2", "rueck": "Damit kündigst du eine Schwäche an, die sie sonst kaum bemerkt hätte." }
           ] },
-        { "id": "k2", "sagt": "Frau Köhler: „Schön, dass Sie da sind. Darf ich Ihnen einen Kaffee anbieten?“",
+        { "id": "k2", "sagt": "Die Geschäftsführerin: „Schön, dass Sie da sind. Darf ich Ihnen einen Kaffee anbieten?“",
           "wahl": [
             { "text": "„Gern ein Wasser, danke.“", "wert": 2, "weiter": "k3", "rueck": "Wasser hilft gegen den trockenen Mund, und du legst kein Koffein auf die Aufregung." },
-            { "text": "„Ja, gern einen starken.“", "wert": 1, "weiter": "k3", "rueck": "Völlig höflich – nur treibt Koffein die Aufregung eher an. Ein Glas Wasser daneben hilft." }
+            { "text": "„Ja, gern einen starken, danke.“", "wert": 1, "weiter": "k3", "rueck": "Völlig höflich – nur treibt Koffein die Aufregung eher an. Ein Glas Wasser daneben hilft." }
           ] },
-        { "id": "k3", "sagt": "Frau Köhler: „Erzählen Sie mal: Warum gerade wir?“ Du hörst, wie deine Stimme beim ersten Wort dünn klingt.",
+        { "id": "k3", "sagt": "Die Geschäftsführerin: „Erzählen Sie mal: Warum gerade wir?“ Du hörst, wie deine Stimme beim ersten Wort dünn klingt.",
           "wahl": [
             { "text": "Den ersten Satz bewusst etwas lauter und langsamer, Blick zu ihr.", "wert": 2, "weiter": "k4", "rueck": "Lauter und langsamer stützt die Stimme. Der Blick zu ihr holt dich aus der Selbstbeobachtung." },
             { "text": "„Sorry, meine Stimme … ich bin ein bisschen nervös.“ Dann tief Luft holen und neu ansetzen.", "wert": 1, "weiter": "k3b", "rueck": "Ehrlich und menschlich – und völlig in Ordnung. Nur lenkt es kurz den Blick auf dich statt auf deine Antwort." },
             { "text": "Genau darauf achten, ob die Stimme weiter zittert.", "wert": 0, "tendenz": "nach_innen", "weiter": "k3b", "rueck": "Wer seiner Stimme lauscht, hört nicht mehr der Frage zu." }
           ] },
-        { "id": "k3b", "sagt": "Frau Köhler lächelt: „Das geht den meisten so. Also – warum wir?“",
+        { "id": "k3b", "sagt": "Die Geschäftsführerin lächelt: „Das geht den meisten so. Also – warum wir?“",
           "wahl": [
             { "text": "Ausatmen, an ihre Frage denken, antworten: was dich an diesem Betrieb reizt und was du mitbringst.", "wert": 2, "weiter": "k4", "rueck": "Zurück zur Aufgabe. Die Aufregung darf mitkommen." },
             { "text": "Weiter erklären, warum du so nervös bist.", "wert": 0, "tendenz": "nach_innen", "weiter": "k4", "rueck": "Jetzt geht es um deine Nervosität statt um dich als Bewerberin oder Bewerber." }
           ] },
-        { "id": "k4", "sagt": "Frau Köhler: „Was war Ihr größter Fehler im letzten Job – und was haben Sie daraus gemacht?“ Dein Kopf ist schlagartig leer.",
+        { "id": "k4", "sagt": "Die Geschäftsführerin: „Was war Ihr größter Fehler im letzten Job – und was haben Sie daraus gemacht?“ Dein Kopf ist schlagartig leer.",
           "wahl": [
             { "text": "„Gute Frage – lassen Sie mich kurz überlegen.“ Pause, ausatmen.", "wert": 2, "weiter": "k5", "rueck": "Laut Zeit nehmen ist erlaubt und wirkt überlegt. In der Pause kommt die Erinnerung zurück." },
             { "text": "Sofort drauflosreden, irgendein Fehler wird schon passen – Hauptsache, es entsteht keine Pause.", "wert": 0, "tendenz": "flucht", "weiter": "k4b", "rueck": "Unter Druck kommt selten das passende Beispiel." },
             { "text": "„Mir fällt gerade keiner ein.“", "wert": 1, "weiter": "k4b", "rueck": "Ehrlich, aber so wirkt es, als gäbe es nichts zu lernen. Eine Pause hätte gereicht." }
           ] },
-        { "id": "k4b", "sagt": "Frau Köhler: „Hm. Denken Sie ruhig kurz nach.“",
+        { "id": "k4b", "sagt": "Die Geschäftsführerin: „Hm. Denken Sie ruhig kurz nach.“",
           "wahl": [
             { "text": "Das Angebot annehmen: ausatmen, ein echtes Beispiel nennen und sagen, was du seitdem anders machst.", "wert": 2, "weiter": "k5", "rueck": "Gut gerettet. Sie hat dir die Pause sogar angeboten – nimm sie." }
           ] },
-        { "id": "k5", "sagt": "Frau Köhler nickt: „Danke, das war offen. Haben Sie noch Fragen an uns?“",
+        { "id": "k5", "sagt": "Die Geschäftsführerin nickt: „Danke, das war offen. Haben Sie noch Fragen an uns?“",
           "wahl": [
             { "text": "Eine vorbereitete Frage stellen: „Wie sieht eine typische erste Woche bei Ihnen aus?“", "wert": 2, "weiter": "ende1", "rueck": "Eine vorbereitete Frage zeigt Interesse – und ist leicht, weil du sie schon kennst." },
             { "text": "„Nein, eigentlich ist alles klar.“", "wert": 1, "weiter": "ende1", "rueck": "Geht. Eine eigene Frage hätte einen stärkeren Schluss gemacht." }
           ] },
-        { "id": "ende1", "sagt": "Frau Köhler begleitet dich zur Tür: „Wir melden uns bis Freitag.“", "ende": "Hände anspannen und loslassen, Wasser statt Kaffee, Stimme lauter und langsamer, Blick nach außen und laut Zeit nehmen. Aufgeregt sein durfte man dir anmerken – es hat dir nicht geschadet." }
+        { "id": "ende1", "sagt": "Die Geschäftsführerin begleitet dich zur Tür: „Wir melden uns bis Freitag.“", "ende": "Hände anspannen und loslassen, Wasser statt Kaffee, Stimme lauter und langsamer, Blick nach außen und laut Zeit nehmen. Aufgeregt sein durfte man dir anmerken – es hat dir nicht geschadet." }
       ],
       "prinzipien": ["Körperzeichen gezielt angehen statt beobachten", "Wasser statt Extra-Kaffee", "den Blick nach außen richten", "bei schweren Fragen laut Zeit nehmen", "Aufregung darf man merken"],
       "transfer": "Steht bei dir ein Gespräch an, das dir wichtig ist? Leg dir eine Frage zurecht, mit der du Zeit gewinnst, und eine, die du am Ende stellst."
@@ -230,7 +230,7 @@
         { "id": "k1", "sagt": "Noch dreißig Minuten. Carla: „Ich hol mir einen Kaffee. Willst du auch einen?“",
           "wahl": [
             { "text": "„Für mich ein Wasser, danke.“", "wert": 2, "weiter": "k2", "rueck": "Kein Extra-Koffein auf die Aufregung – und Wasser hilft gegen den trockenen Mund." },
-            { "text": "„Ja, einen großen, bitte.“", "wert": 1, "weiter": "k2", "rueck": "Kein Drama – aber Koffein treibt eher an. Stell dir ein Wasser dazu." }
+            { "text": "„Ja, einen großen und starken, bitte.“", "wert": 1, "weiter": "k2", "rueck": "Kein Drama – aber Koffein treibt eher an. Stell dir ein Wasser dazu." }
           ] },
         { "id": "k2", "sagt": "Noch fünfzehn Minuten. Dir fällt ein besserer Satz für Folie vier ein. Carla: „Willst du noch was ändern?“",
           "wahl": [

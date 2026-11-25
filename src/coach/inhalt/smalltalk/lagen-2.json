@@ -1,0 +1,268 @@
+{
+ "lagen": [
+  {
+   "id": "smalltalk-l-06", "bereich": "smalltalk", "phase": "k", "umfeld": "gruppe",
+   "faehigkeiten": ["smalltalk.namen", "smalltalk.einstieg", "smalltalk.gruppe"],
+   "stufe": 5,
+   "titel": "Die Vorstellungsrunde",
+   "figur": "ein Mann aus dem Fotokurs",
+   "einleitung": "Eine Vorstellungsrunde unter Fremden. Du übst, den eigenen Satz vorher fertig zu haben, deinen Namen so zu sagen, dass er hängen bleibt, einen verpassten Namen ehrlich nachzufragen – und in der Pause eine kleine Runde zu bilden.",
+   "lage": "Erster Abend im Fotokurs der Volkshochschule. Acht Leute sitzen im Kreis, du kennst niemanden. Die Kursleiterin lächelt: „Lasst uns eine Runde machen – Name und warum ihr hier seid.“ Du sitzt auf Platz sechs.",
+   "start": "k1",
+   "knoten": [
+    { "id": "k1", "sagt": "Die Erste beginnt. Du hast noch fünf Leute Zeit.",
+     "wahl": [
+      { "text": "Deinen Satz jetzt in zwei Sekunden festlegen – „Ich will endlich mehr als Handyfotos“ – und dann nur noch zuhören.", "wert": 2, "weiter": "k2", "rueck": "Satz fertig, Kopf frei. Jetzt hörst du die Namen – auch den direkt vor dir." },
+      { "text": "Bis du dran bist, an deinem Satz feilen, damit er möglichst originell klingt und die anderen vielleicht sogar lachen.", "wert": 0, "tendenz": "nach_innen", "weiter": "k2b", "rueck": "Dein Kopf ist bei dir – die Namen rauschen vorbei." },
+      { "text": "Gar nichts vorbereiten.", "wert": 1, "weiter": "k2b", "rueck": "Locker – nur kommt das Grübeln dann genau dann, wenn der Mann vor dir spricht." }
+     ] },
+    { "id": "k2", "sagt": "Platz fünf, ein Mann mit einer alten Kamera um den Hals, nennt seinen Namen und sagt: „Ich hab die Kamera von meinem Großvater geerbt und keine Ahnung, wie sie geht.“ Dann bist du dran.",
+     "wahl": [
+      { "text": "„Ich bin {name}.“", "wert": 1, "weiter": "k3a", "rueck": "Klar und kurz. Ein Satz mehr hätte den anderen einen Aufhänger gegeben." },
+      { "text": "„Hallo, ich bin {name}. Ich will mehr können als Handyfotos – so eine Kamera wie nebenan, das wär's.“", "wert": 2, "weiter": "k3a", "rueck": "Name mit kleiner Pause, ein Bezug – und du greifst sogar den Aufhänger vor dir auf." },
+      { "text": "„Na ja, ich bin halt {name}, nichts Besonderes, ich mach nur so ein bisschen Fotos mit dem Handy, wie alle.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3a", "rueck": "Du machst dich kleiner, bevor es losgeht. Ein Bezug hilft mehr als eine Entschuldigung." }
+     ] },
+    { "id": "k2b", "sagt": "Platz fünf, ein Mann mit einer alten Kamera, sagt etwas über seinen Großvater. Seinen Namen hast du verpasst. Jetzt schauen alle dich an.",
+     "wahl": [
+      { "text": "„Hallo, ich bin {name} – ich will endlich mehr als Handyfotos.“", "wert": 2, "weiter": "k3", "rueck": "Gut gerettet: Name, Pause, Bezug. Den verpassten Namen holst du dir gleich." },
+      { "text": "„Äh … ich bin {name}.“ – und schnell an den Platz neben dir weitergeben.", "wert": 1, "weiter": "k3", "rueck": "Gesagt – das zählt. Mit einem Bezug hätten die anderen mehr zum Anknüpfen gehabt." }
+     ] },
+    { "id": "k3", "sagt": "Pause, Kaffee im Flur. Der Mann mit der alten Kamera steht allein am Fenster und dreht an einem Rädchen.",
+     "wahl": [
+      { "text": "Hingehen: „Ich war vorhin so mit meinem Satz beschäftigt – wie war noch mal dein Name? Und die Kamera vom Großvater, was ist das für eine?“", "wert": 2, "weiter": "k4", "rueck": "Ehrlich nachgefragt, gleich einen Aufhänger aufgegriffen – die meisten kennen das Problem." },
+      { "text": "Hingehen und über die Kamera reden – den Namen lieber nicht ansprechen, das wäre jetzt peinlich.", "wert": 1, "weiter": "k4b", "rueck": "Das Gespräch kommt in Gang. Nur wird die Frage nach dem Namen mit jeder Minute größer." },
+      { "text": "Am Kaffeeautomaten bleiben – er sieht beschäftigt aus.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Er dreht an einem Rädchen und steht allein – das ist eher eine Einladung als eine Absage." }
+     ] },
+    { "id": "k3a", "sagt": "Pause, Kaffee im Flur. Der Mann mit der alten Kamera – seinen Namen hast du dir gemerkt – steht allein am Fenster und dreht an einem Rädchen.",
+     "wahl": [
+      { "text": "Hingehen, ihn mit Namen ansprechen: „Die Kamera vom Großvater – was ist das für eine?“", "wert": 2, "weiter": "k4", "rueck": "Name benutzt – das erste Abrufen – und gleich den Aufhänger aufgegriffen." },
+      { "text": "Hingehen: „Spannende Kamera! Was ist das für eine?“", "wert": 1, "weiter": "k4", "rueck": "Ein guter Aufhänger. Mit seinem Namen wäre es zugleich ein Abruf gewesen." },
+      { "text": "Am Kaffeeautomaten bleiben – er sieht beschäftigt aus, und du willst ihn nicht stören.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Er steht allein und dreht an einem Rädchen – eher eine Einladung als eine Absage." }
+     ] },
+    { "id": "k4", "sagt": "Er lacht – seinen Namen hast du jetzt sicher. „Ehrlich gesagt weiß ich nicht mal, wie man den Film einlegt.“ Eine Frau aus dem Kurs bleibt neben euch stehen und schaut neugierig auf die Kamera.",
+     "wahl": [
+      { "text": "Einen halben Schritt zur Seite, ihn mit Namen vorstellen: „Er hat die Kamera vom Großvater geerbt – kennst du dich mit so was aus?“", "wert": 2, "weiter": "ende1", "rueck": "Name benutzt – jedes Abrufen festigt ihn –, Kreis geöffnet, Aufhänger weitergegeben." },
+      { "text": "Weiter mit ihm über die Kamera reden – sie kann ja fragen, wenn sie will.", "wert": 0, "tendenz": "ausschliessen", "weiter": "ende2", "rueck": "Ihr seid gut im Gespräch, aber sie bleibt draußen. Ein halber Schritt hätte gereicht." },
+      { "text": "Ihr zulächeln.", "wert": 1, "weiter": "ende2", "rueck": "Ein freundliches Zeichen. Mit einem Satz wäre sie in der Runde." }
+     ] },
+    { "id": "k4b", "sagt": "Ihr redet zehn Minuten über alte Kameras. Dann ruft die Kursleiterin: „Weiter geht's!“ Er sagt: „War nett mit dir, {name}.“",
+     "wahl": [
+      { "text": "„Fand ich auch! Sag mir deinen Namen noch einmal? Er ist mir vorhin durchgerutscht.“", "wert": 2, "weiter": "ende5", "rueck": "Spät, aber ehrlich – und nächste Woche kannst du ihn mit Namen begrüßen." },
+      { "text": "„Fand ich auch, bis nächste Woche!“ – und hoffen, dass ihn dann jemand anderes mit Namen anspricht.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende4", "rueck": "Er kennt deinen Namen, du seinen nicht. Nächste Woche wird die Frage noch größer." }
+     ] },
+    { "id": "ende1", "sagt": "Zu dritt beugt ihr euch über die Kamera. Als die Pause endet, weißt du zwei neue Namen – und beim Abschied sagst du beide.", "ende": "Den Namen gesichert – gemerkt oder ehrlich nachgefragt –, ihn benutzt und eine dritte Person hereingeholt. So wird aus einer Vorstellungsrunde ein Anfang." },
+    { "id": "ende2", "sagt": "Der Kurs geht weiter. Auf dem Heimweg sagst du den Namen innerlich noch einmal.", "ende": "Ein gutes Gespräch mit Namen. Fürs nächste Mal: Wer neugierig neben euch steht, ist mit einem halben Schritt schon dabei." },
+    { "id": "ende3", "sagt": "Die Pause ist vorbei. Er sitzt wieder neben dir – gesprochen habt ihr nicht.", "ende": "Ein sicherer Platz am Automaten, aber kein Kontakt. In Kursen ist die erste Pause die leichteste Gelegenheit – fast alle sind neu." },
+    { "id": "ende4", "sagt": "In der nächsten Woche grüßt er dich mit Namen. Du lächelst und sagst: „Hallo!“", "ende": "Die Frage nach dem Namen wird nicht leichter, je länger man wartet. Gleich in der ersten Pause ist sie am kleinsten." },
+    { "id": "ende5", "sagt": "Er sagt seinen Namen noch einmal und grinst: „Bis nächste Woche, {name}.“", "ende": "Den Namen spät, aber ehrlich geholt – nächste Woche kannst du ihn damit begrüßen. Früher gefragt, ist die Frage noch kleiner." }
+   ],
+   "prinzipien": ["den eigenen Satz vorher fertig haben", "Name mit Pause und Bezug", "verpasste Namen ehrlich holen", "den Namen benutzen", "den Kreis öffnen"],
+   "transfer": "Wo steht bei dir die nächste Vorstellungsrunde an – Kurs, Verein, Workshop? Welchen Satz legst du dir vorher fest?"
+  },
+  {
+   "id": "smalltalk-l-07", "bereich": "smalltalk", "phase": "k", "umfeld": "freunde",
+   "faehigkeiten": ["smalltalk.gruppe", "smalltalk.erzaehlen", "smalltalk.namen"],
+   "stufe": 5,
+   "titel": "Der Grillabend bei Jule",
+   "figur": "Jule Marek",
+   "einleitung": "Ein Fest, auf dem du nur die Gastgeberin kennst. Du übst, eine offene Teilrunde zu finden, eine Mini-Geschichte zu erzählen und den Ball zurückzugeben – und zu merken, wann eine Runde zu groß wird.",
+   "lage": "Samstagabend, Jules Garten. Rund fünfzehn Gäste, Lichterketten, der Grill raucht. Jule begrüßt dich, drückt dir ein Glas in die Hand – und muss sofort zurück an den Grill. Du kennst sonst niemanden.",
+   "start": "k1",
+   "knoten": [
+    { "id": "k1", "sagt": "Du schaust dich um. Am Gartentisch sitzen vier eng beieinander und lachen über ein Handyfoto. Neben der Hecke stehen zwei, einer mit dem Rücken halb zum Garten, und reden über Tomaten.",
+     "wahl": [
+      { "text": "Zu den beiden an der Hecke: „Darf ich? Ich hab Tomaten gehört – meine auf dem Balkon werden dieses Jahr einfach nicht rot.“", "wert": 2, "weiter": "k2", "rueck": "Die offenere Runde, ans laufende Thema angeknüpft, etwas von dir dazu." },
+      { "text": "An den Tisch zu den vier gehen und fragen, was auf dem Foto ist.", "wert": 1, "weiter": "k2b", "rueck": "Mutig. Die vier sitzen aber eng und sind mitten in einem Witz – dort bist du der Fünfte." },
+      { "text": "Jule am Grill helfen, damit du etwas zu tun hast.", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Hilfsbereit – und eine bequeme Flucht. Die Gäste lernst du so nicht kennen." }
+     ] },
+    { "id": "k1b", "sagt": "Jule nimmt dir die Zange aus der Hand: „Lieb von dir – aber geh mal zu den anderen. Die beiden an der Hecke sind nett, das sind meine Nachbarn.“",
+     "wahl": [
+      { "text": "Hingehen: „Hallo, Jule schickt mich – ihr seid die Nachbarn? Ich bin {name}.“", "wert": 2, "weiter": "k2", "rueck": "Jule hat dir einen Bezug geschenkt – und du nutzt ihn." },
+      { "text": "Am Rand stehen bleiben, an deinem Glas nippen und warten, bis jemand auf dich zukommt.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Die Tür war offen – mit Bezug und Hinweis der Gastgeberin." }
+     ] },
+    { "id": "k2", "sagt": "Die beiden rücken zur Seite. Die Frau lacht: „Tomaten sind hier gerade das große Thema.“ Der Mann dreht sich ganz zu dir: „Und woher kennst du Jule?“",
+     "wahl": [
+      { "text": "„Aus dem Kochkurs. Am ersten Abend hab ich Zucker statt Salz in die Suppe getan, Jule hat sie gerettet. Und ihr, seit wann kennt ihr sie?“", "wert": 2, "weiter": "k3", "rueck": "Eine Mini-Geschichte mit Haken und kleiner Panne – und der Ball geht zurück." },
+      { "text": "„Aus dem Kochkurs.“", "wert": 1, "weiter": "k3b", "rueck": "Richtig und freundlich – aber zu. Eine kleine Geschichte hätte den beiden etwas zum Anknüpfen gegeben." },
+      { "text": "„Aus dem Kochkurs, wir kochen da immer drei Gänge, letztes Mal italienisch, davor thailändisch, davor …“", "wert": 0, "tendenz": "monolog", "weiter": "k3b", "rueck": "Viele Fakten, kein Haken, keine Frage zurück." }
+     ] },
+    { "id": "k2b", "sagt": "Die vier schauen kurz auf. Einer sagt: „Ach, nur ein Insider.“ Dann lachen sie weiter.",
+     "wahl": [
+      { "text": "Freundlich nicken und zu den beiden an der Hecke weiterziehen.", "wert": 2, "weiter": "k2", "rueck": "Kein Urteil über dich – die Runde war geschlossen. Die offenere wartet." },
+      { "text": "Danebenstehen bleiben, bis der Witz vorbei ist.", "wert": 0, "tendenz": "ausweichen", "weiter": "ende3", "rueck": "Langes Warten am Rand einer geschlossenen Runde fühlt sich für alle schief an." }
+     ] },
+    { "id": "k3", "sagt": "Die Frau lacht: „Zucker statt Salz! Mein Mann hat mal Spülmittel in den Salat …“ Er protestiert. Ihr lacht zu dritt.",
+     "wahl": [
+      { "text": "„Spülmittel? Das will ich hören!“", "wert": 2, "weiter": "k4", "rueck": "Deine Geschichte hat eine andere ausgelöst – und du lässt ihr den Raum." },
+      { "text": "„Das ist noch gar nichts – ich hab auch mal den Ofen auf Grillen statt Backen gestellt, und dann …“", "wert": 0, "tendenz": "uebertrumpfen", "weiter": "k4", "rueck": "Ihre Geschichte war gerade dran – du nimmst ihr das Wort." },
+      { "text": "Mitlachen und schweigen.", "wert": 1, "weiter": "k4", "rueck": "Lachen ist eine gute Antwort. Ein „Erzähl!“ hätte ihr gezeigt, dass du es hören willst." }
+     ] },
+    { "id": "k3b", "sagt": "Kurze Stille. Die Frau nickt höflich: „Aha.“ Der Mann schaut kurz zum Grill.",
+     "wahl": [
+      { "text": "Nachlegen: „Am ersten Abend hab ich Zucker statt Salz in die Suppe getan – Jule hat sie gerettet. Und ihr, seit wann kennt ihr sie?“", "wert": 2, "weiter": "k3", "rueck": "Gut gerettet: Die Mini-Geschichte kommt doch noch – und der Ball geht zurück." },
+      { "text": "„Ich hol mir mal was vom Grill.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Die Stille war nur eine Pause. Ein Satz von dir hätte sie gefüllt." }
+     ] },
+    { "id": "k4", "sagt": "Vier weitere Gäste stellen sich dazu, darunter Jule mit einer Platte. Jetzt seid ihr sieben, und zwei reden schon über den Kopf der Frau hinweg über Fußball.",
+     "wahl": [
+      { "text": "Dich zur Frau drehen, mit der du schon redest: „Und die Tomaten – zeigst du mir mal, welche Sorte das ist?“", "wert": 2, "weiter": "ende1", "rueck": "Die Runde ist zu groß geworden. Du bildest bewusst eine kleine – mit einem Grund." },
+      { "text": "Versuchen, alle sieben zusammenzuhalten, indem du laut eine neue Frage in die Runde stellst, die alle betrifft.", "wert": 0, "tendenz": "buehne", "weiter": "ende2", "rueck": "Sieben Menschen tragen selten ein Gespräch. Die Runde zerfällt trotzdem – nur lauter." },
+      { "text": "Einfach dableiben und zuhören, wer gerade spricht.", "wert": 1, "weiter": "ende2", "rueck": "Geht. In einer Runde von sieben hörst du aber mehr zu, als du redest – eine kleinere bringt mehr." }
+     ] },
+    { "id": "ende1", "sagt": "Ihr steht am Beet, sie zeigt dir die Tomaten. Beim Abschied sagt sie: „Bring nächstes Mal deine Suppe mit!“ Jule zwinkert dir zu.", "ende": "Eine offene Runde gefunden, eine Mini-Geschichte erzählt, den Ball zurückgegeben – und als es zu groß wurde, eine kleine Runde gebildet." },
+    { "id": "ende2", "sagt": "Der Abend wird laut und lustig. Irgendwann stehst du am Rand der großen Runde.", "ende": "Ein schöner Abend mit guten Momenten. Wird eine Runde größer als vier, lohnt es sich, eine kleine zu bilden – dort entstehen die Gespräche, an die man sich erinnert." },
+    { "id": "ende3", "sagt": "Du isst eine Bratwurst und redest kurz mit Jule. Gegen zehn gehst du.", "ende": "Kein Fehler, aber kaum Kontakt. Eine offene Runde und eine kleine Geschichte über dich und die Gastgeberin hätten gereicht." }
+   ],
+   "prinzipien": ["die offene Teilrunde suchen", "eine Mini-Geschichte mit Haken", "den Ball zurückgeben", "die Geschichte der anderen lassen", "aus einer zu großen Runde eine kleine machen"],
+   "transfer": "Auf welchem Fest kennst du demnächst nur die Gastgeber? Welche Mini-Geschichte passt zur Frage „Woher kennst du …?“"
+  },
+  {
+   "id": "smalltalk-l-08", "bereich": "smalltalk", "phase": "k", "umfeld": "kunden",
+   "faehigkeiten": ["smalltalk.tiefe", "smalltalk.themen"],
+   "stufe": 6,
+   "titel": "Abendessen mit Herrn Petersen",
+   "figur": "Herr Petersen",
+   "einleitung": "Ein Abend, an dem Stille entsteht – mal leer, mal voll. Du übst, die leere Stille mit dem Faden nach hinten zu füllen, die volle auszuhalten und so zu sprechen, dass ein Gegenüber, das schlecht hört, gut folgen kann.",
+   "lage": "Nach einem langen Kundentermin führt ihr Herrn Petersen, einen langjährigen Kunden, zum Essen aus. Dr. Albers muss nach der Vorspeise dringend telefonieren. Jetzt sitzt du allein mit Herrn Petersen am Tisch. Er hört nicht mehr gut und fragt öfter nach.",
+   "start": "k1",
+   "knoten": [
+    { "id": "k1", "sagt": "Herr Petersen faltet seine Serviette. Stille. Das Restaurant ist voll und laut.",
+     "wahl": [
+      { "text": "Ihm zugewandt, deutlich: „Sie hatten vorhin erzählt, dass Sie früher selbst hier in der Gegend gewohnt haben. Wo genau war das?“", "wert": 2, "weiter": "k2", "rueck": "Der Faden nach hinten – und du sprichst so, dass er dein Gesicht sieht." },
+      { "text": "Schnell irgendetwas über das Wetter sagen, damit es nicht so still ist.", "wert": 1, "weiter": "k1b", "rueck": "Füllt die Stille. Der Faden nach hinten hätte mehr geöffnet." },
+      { "text": "Aufs Handy schauen, bis Dr. Albers zurückkommt.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Für dich sicher, für ihn unhöflich: Er ist euer Gast." }
+     ] },
+    { "id": "k1b", "sagt": "Herr Petersen beugt sich vor: „Wie bitte? Hier ist es so laut.“",
+     "wahl": [
+      { "text": "Gesicht zu ihm, etwas langsamer statt lauter: „Nur übers Wetter. Erzählen Sie lieber – Sie haben doch früher hier gewohnt?“", "wert": 2, "weiter": "k2", "rueck": "Gut: Gesicht zu ihm, deutlich statt laut – und ein besseres Thema obendrein." },
+      { "text": "Den Satz genauso noch einmal sagen, nur lauter.", "wert": 0, "tendenz": "ueberspielen", "weiter": "ende2", "rueck": "Lauter hilft wenig, wenn er dein Gesicht nicht sieht. Und über das Wetter will er nicht zweimal reden." }
+     ] },
+    { "id": "k2", "sagt": "Er lächelt: „Zwei Straßen weiter. Wir haben dreißig Jahre dort gewohnt, meine Frau und ich.“ Er schaut auf sein Glas. „Seit sie nicht mehr lebt, gehe ich kaum noch essen.“ Dann ist es still.",
+     "wahl": [
+      { "text": "Schnell: „Das tut mir leid. Wie finden Sie eigentlich den Wein?“", "wert": 0, "tendenz": "themenwechsel", "weiter": "ende2", "rueck": "Die Stille war voll – ein schneller Wechsel sagt ihm: Darüber reden wir nicht." },
+      { "text": "Ein paar Atemzüge schweigen, ihn ansehen. Dann deutlich: „Dreißig Jahre zwei Straßen weiter – da hängen viele Erinnerungen dran.“", "wert": 2, "weiter": "k3", "rueck": "Du hältst die volle Stille aus und spiegelst. Er entscheidet, ob er weitererzählt." },
+      { "text": "„Das tut mir sehr leid.“", "wert": 1, "weiter": "k3b", "rueck": "Aufrichtig und angemessen. Mit einem Satz mehr – oder einfach Stille – hätte er weitererzählen können." }
+     ] },
+    { "id": "k3", "sagt": "Er nickt. „Sie hat hier immer den Fisch bestellt. Heute habe ich ihn auch genommen.“ Er lächelt ein wenig.",
+     "wahl": [
+      { "text": "„Dann essen Sie heute ein bisschen für sie mit. Was hat sie daran so gemocht?“", "wert": 2, "weiter": "ende1", "rueck": "Warm, ohne zu bohren – und eine Frage, die schöne Erinnerungen weckt." },
+      { "text": "„Wie lange ist das jetzt her, wenn ich fragen darf?“", "wert": 1, "weiter": "ende1", "rueck": "Höflich gefragt – nur zieht die Frage zur Trauer statt zur Erinnerung." },
+      { "text": "„Meine Oma ist letztes Jahr gestorben, das war auch ganz schlimm, wir haben damals …“", "wert": 0, "tendenz": "uebertrumpfen", "weiter": "ende2", "rueck": "Verständlich – aber jetzt geht es um deinen Verlust, nicht um seinen Moment." }
+     ] },
+    { "id": "k3b", "sagt": "Er nickt: „Danke.“ Es wird wieder still. Er dreht sein Glas.",
+     "wahl": [
+      { "text": "Die Stille noch einen Moment lassen. Dann: „Dreißig Jahre hier in der Gegend – was war Ihr Lieblingsort?“", "wert": 2, "weiter": "ende1", "rueck": "Die Pause ausgehalten, dann eine Frage, die zu schönen Erinnerungen führt." },
+      { "text": "„Na ja. Und, wie läuft's bei Ihnen im Betrieb?“", "wert": 0, "tendenz": "themenwechsel", "weiter": "ende2", "rueck": "Ein Sprung zurück ins Geschäft – ohne Brücke." }
+     ] },
+    { "id": "ende1", "sagt": "Er erzählt vom Hafen, von den Sonntagen, vom Fisch, den seine Frau hier immer bestellt hat. Als Dr. Albers zurückkommt, sagt Herr Petersen: „Wir haben uns gut unterhalten.“", "ende": "Die leere Stille mit dem Faden nach hinten gefüllt, deutlich und zugewandt gesprochen, die volle Stille ausgehalten. So wird aus einem Pflichtessen ein Abend, an den sich ein Kunde erinnert." },
+    { "id": "ende2", "sagt": "Ihr redet über das Essen. Höflich, ein wenig steif. Dr. Albers kommt zurück.", "ende": "Nichts Schlimmes passiert. Nur: Stille nach etwas Persönlichem ist selten peinlich – meist ist sie eine Einladung. Und lauter sprechen hilft weniger, als das Gesicht zuzuwenden." },
+    { "id": "ende3", "sagt": "Zehn Minuten Schweigen. Als Dr. Albers zurückkommt, sieht Herr Petersen müde aus.", "ende": "Ein Gast, der allein am Tisch sitzt, fühlt sich schnell vergessen. Der Faden nach hinten – „Sie hatten vorhin erzählt …“ – ist fast immer da." }
+   ],
+   "prinzipien": ["die leere Stille mit dem Faden nach hinten füllen", "die volle Stille aushalten", "spiegeln statt trösten", "Gesicht zuwenden, deutlich statt laut"],
+   "transfer": "Mit wem sitzt du demnächst länger an einem Tisch, ohne dass ein Thema vorgegeben ist? Welchen Faden aus eurem letzten Gespräch könntest du aufnehmen?"
+  },
+  {
+   "id": "smalltalk-l-09", "bereich": "smalltalk", "phase": "k", "umfeld": "kunden",
+   "faehigkeiten": ["smalltalk.themen", "smalltalk.nachfragen", "smalltalk.namen"],
+   "stufe": 6,
+   "titel": "Wiedersehen mit Nadine Köhler",
+   "figur": "Nadine Köhler",
+   "einleitung": "Ein Wiedersehen nach Monaten. Du übst, dem anderen mit deinem Namen zu helfen, dort anzuknüpfen, wo ihr aufgehört habt – und das Gespräch auch diesmal nicht ins Verkaufen kippen zu lassen.",
+   "lage": "Regionale Handwerksmesse, ein halbes Jahr nach eurem Jubiläumsempfang. Am Stand einer Holzwerkstatt steht Nadine Köhler, die Schreinerin, mit der du damals über ihre Treppe und ihren Vater gesprochen hast – „Er würde sagen: Stufe drei knarzt“, hatte sie gelacht. Sie sieht dich und zögert kurz.",
+   "start": "k1",
+   "knoten": [
+    { "id": "k1", "sagt": "Frau Köhler lächelt unsicher, als suche sie nach deinem Namen.",
+     "wahl": [
+      { "text": "„Frau Köhler! {name} – wir hatten beim Jubiläumsempfang über Ihre Treppe gesprochen.“", "wert": 2, "weiter": "k2", "rueck": "Du hilfst ihr mit deinem Namen und dem Ort – niemand muss raten." },
+      { "text": "„Hallo! Sie erinnern sich doch bestimmt noch an mich? Wir hatten uns doch so nett unterhalten!“", "wert": 0, "tendenz": "pruefen", "weiter": "k1b", "rueck": "Jetzt muss sie raten – und das ist ihr sichtlich unangenehm." },
+      { "text": "„Hallo, Frau Köhler!“", "wert": 1, "weiter": "k1b", "rueck": "Freundlich, mit ihrem Namen. Mit deinem Namen dazu hätte sie nicht suchen müssen." }
+     ] },
+    { "id": "k1b", "sagt": "Sie lacht verlegen: „Ehrlich gesagt … helfen Sie mir kurz?“",
+     "wahl": [
+      { "text": "„{name}, vom Jubiläumsempfang – Sie haben mir von der Treppe im Bauernhaus erzählt.“", "wert": 2, "weiter": "k2", "rueck": "Kurz und herzlich gerettet – jetzt hat sie Namen und Anknüpfung." },
+      { "text": "„Ach, nicht so wichtig.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende3", "rueck": "Bescheiden gemeint – aber sie steht jetzt ohne Faden da." }
+     ] },
+    { "id": "k2", "sagt": "„Natürlich! Schön, Sie zu sehen.“ Sie wirkt erleichtert. „Viel los hier, oder?“",
+     "wahl": [
+      { "text": "„Sehr! Und, wie ist die Treppe geworden? Knarzt Stufe drei noch?“", "wert": 2, "weiter": "k3", "rueck": "Genau da angeknüpft, wo ihr aufgehört habt – sogar mit ihrem Witz von damals." },
+      { "text": "„Ja, total voll. Haben Sie schon die Halle mit den Werkzeugen gesehen?“", "wert": 1, "weiter": "k2b", "rueck": "Freundlich, aus der Lage. Euer gemeinsamer Faden von damals bliebe aber liegen." },
+      { "text": "„Ja. Sagen Sie, haben Sie inzwischen über unsere Angebote nachgedacht? Ich hätte da etwas Neues für Betriebe Ihrer Größe.“", "wert": 0, "tendenz": "verkaufen", "weiter": "k2b", "rueck": "Sie ist auf einer Messe, ja – aber sie hat dich als Gesprächspartner in Erinnerung, nicht als Verkäufer." }
+     ] },
+    { "id": "k2b", "sagt": "Sie antwortet knapp und schaut zu ihrem Stand.",
+     "wahl": [
+      { "text": "„Ich muss Sie noch etwas fragen: Hat Stufe drei am Ende noch geknarzt?“", "wert": 2, "weiter": "k3", "rueck": "Der Faden nach hinten – gerade noch rechtzeitig." },
+      { "text": "„Dann will ich Sie nicht aufhalten.“", "wert": 1, "weiter": "ende2", "rueck": "Rücksichtsvoll. Euer Faden von damals hätte noch zwei gute Minuten getragen." }
+     ] },
+    { "id": "k3", "sagt": "Sie lacht laut: „Sie wissen das noch? Ja – mein Vater hat sie beim ersten Besuch sofort gefunden. Er war das erste Mal seit Langem wieder in einer Werkstatt.“",
+     "wahl": [
+      { "text": "„Ihr Vater war mit dabei? Wie war das für Sie beide?“", "wert": 2, "weiter": "ende1", "rueck": "Du greifst den leisen Aufhänger auf – wieder eine Stufe tiefer, wie damals." },
+      { "text": "„Ha, typisch. Und was bauen Sie gerade?“", "wert": 1, "weiter": "ende4", "rueck": "Gut für den Faden – nur der Vater, der persönlichste Aufhänger, bleibt liegen." },
+      { "text": "„Mein Vater bastelt auch gern, letztens hat er ein Vogelhaus gebaut, das war vielleicht schief …“", "wert": 0, "tendenz": "themenwechsel", "weiter": "ende5", "rueck": "Etwas Eigenes ist gut – nur nicht genau in ihrem Moment." }
+     ] },
+    { "id": "ende1", "sagt": "Sie erzählt, wie ihr Vater mit der Hand über das Holz gestrichen hat. Zum Abschied: „Melden Sie sich mal, wenn Sie in der Gegend sind – ich zeig Ihnen die Werkstatt.“", "ende": "Mit deinem Namen geholfen, dort angeknüpft, wo ihr wart, und wieder eine Stufe tiefer gegangen. So wird aus einer Begegnung eine Beziehung." },
+    { "id": "ende2", "sagt": "Sie lächelt freundlich und wendet sich ihrem Stand zu.", "ende": "Ein freundliches Wiedersehen. Euer Gespräch von damals war der stärkste erste Satz – je früher du ihn nutzt, desto weiter trägt er." },
+    { "id": "ende3", "sagt": "Ihr redet zwei Minuten über die Messe, beide etwas unsicher. Dann geht sie weiter.", "ende": "Beim Wiedersehen hilft ein kurzer Satz mit Namen und Ort beiden. Bescheidenheit ist hier keine Hilfe – sie lässt den anderen suchen." },
+    { "id": "ende4", "sagt": "Sie erzählt von einem Esstisch aus alter Eiche. Zum Abschied: „Melden Sie sich mal, wenn Sie in der Gegend sind – ich zeig Ihnen die Werkstatt.“", "ende": "Mit deinem Namen geholfen und dort angeknüpft, wo ihr wart. Ihr Vater war der leise Aufhänger – eine Frage dazu hätte euch noch eine Stufe tiefer geführt." },
+    { "id": "ende5", "sagt": "Sie hört höflich zu. Dann ruft jemand nach ihr, sie winkt und geht an ihren Stand.", "ende": "Euer Faden von damals hat getragen. Als sie von ihrem Vater erzählte, war das ihr Moment – eine Frage dazu hätte euch eine Stufe tiefer geführt." }
+   ],
+   "prinzipien": ["beim Wiedersehen den eigenen Namen und den Ort nennen", "dort anknüpfen, wo ihr aufgehört habt", "leise Aufhänger wieder aufgreifen", "kein Verkauf aus Smalltalk"],
+   "transfer": "Wen triffst du bald wieder, mit dem du einmal gut geredet hast? Was war euer letzter Faden?"
+  },
+  {
+   "id": "smalltalk-l-10", "bereich": "smalltalk", "phase": "k", "umfeld": "familie",
+   "faehigkeiten": ["smalltalk.namen", "smalltalk.gruppe", "smalltalk.erzaehlen", "smalltalk.themen", "smalltalk.tiefe", "smalltalk.nachfragen"],
+   "stufe": 6,
+   "sparring": true,
+   "titel": "Sparring: Die Hochzeit am Tisch sieben",
+   "figur": "Gäste am Tisch sieben und Tante Renate",
+   "einleitung": "Das Sparring zum Abschluss der Phase Können: eine Hochzeit in fünf Momenten – Namen am Tisch, die Mini-Geschichte, die Stille zwischen den Gängen, die zu große Runde und ein Wiedersehen. Jede Wahl hat Folgen.",
+   "lage": "Hochzeit deines Cousins. Am Tisch sieben sitzen acht Gäste, die du nicht kennst: Freunde des Bräutigams, eine Kollegin der Braut. Tante Renate sitzt am Nachbartisch. Die Tischkarten sind klein und schlecht zu lesen.",
+   "start": "k1",
+   "knoten": [
+    { "id": "k1", "sagt": "Ihr setzt euch. Die Frau links neben dir sagt: „Wollen wir uns kurz vorstellen? Sonst sitzen wir hier den ganzen Abend namenlos.“ Alle nicken. Du bist als Vierter dran.",
+     "wahl": [
+      { "text": "Deinen Satz sofort festlegen – „Der Bräutigam ist mein Cousin“ – und dann den anderen zuhören.", "wert": 2, "weiter": "k2", "rueck": "Satz fertig, Kopf frei. Die Namen vor dir kommen an." },
+      { "text": "In Ruhe überlegen, was du Witziges über das Brautpaar erzählen könntest, damit der Tisch gleich lacht.", "wert": 0, "tendenz": "nach_innen", "weiter": "k2b", "rueck": "Witz gefunden, Namen verpasst – vor allem den direkt vor dir." },
+      { "text": "Die Tischkarten lesen, während die anderen reden.", "wert": 1, "weiter": "k2b", "rueck": "Ein Notbehelf. Wer liest, schaut aber weg – und merkt sich weniger." }
+     ] },
+    { "id": "k2", "sagt": "Der Mann direkt vor dir sagt seinen Namen: „… ich hab mit dem Bräutigam studiert.“ Dann du. Danach fragt er dich: „Und, woher kennt ihr euch – ihr seid verwandt, oder? Habt ihr viel zusammen erlebt?“",
+     "wahl": [
+      { "text": "„Jeden Sommer bei Oma. Einmal haben wir ihr Rosenbeet nach einem Schatz umgegraben – es gab trotzdem Kuchen. Wie war er im Studium?“", "wert": 2, "weiter": "k3", "rueck": "Eine Mini-Geschichte mit Haken und Ball zurück. Der ganze Tisch hört mit." },
+      { "text": "„Ja, schon. Wir sind verwandt.“", "wert": 1, "weiter": "k3", "rueck": "Stimmt, aber es gibt nichts zum Anknüpfen. Eine kleine Geschichte hätte den Tisch geöffnet." },
+      { "text": "Alles aufzählen: die Sommer, die Geburtstage, die Abifeier, den Umzug, die Taufen – der Reihe nach.", "wert": 0, "tendenz": "monolog", "weiter": "k3", "rueck": "Viel Material, keine Geschichte – und keine Frage zurück." }
+     ] },
+    { "id": "k2b", "sagt": "Du bist dran, sagst deinen Satz. Der Mann vor dir fragt dich etwas und spricht dich dabei mit Namen an. Seinen Namen hast du nicht mitbekommen.",
+     "wahl": [
+      { "text": "„Ich war gerade so mit meinem Satz beschäftigt – sag deinen Namen noch einmal? Dann erzähl ich dir alles.“", "wert": 2, "weiter": "k3", "rueck": "Ehrlich und mit Humor – fast jeder am Tisch kennt das." },
+      { "text": "Antworten und den Rest des Abends seinen Namen umgehen.", "wert": 0, "tendenz": "vermeiden", "weiter": "k3", "rueck": "Geht – aber den ganzen Abend ohne Namen ist anstrengender als eine Frage." }
+     ] },
+    { "id": "k3", "sagt": "Nach der Suppe wird es still am Tisch. Die Musik macht Pause, alle schauen in ihre Gläser. Die Kollegin der Braut hatte vorhin erwähnt, dass sie die Torte gesehen hat.",
+     "wahl": [
+      { "text": "Den Faden nach hinten: „Du hattest vorhin die Torte erwähnt – wie viele Stockwerke hat sie?“", "wert": 2, "weiter": "k4", "rueck": "Die leere Stille mit einem Faden von vorhin gefüllt – der Tisch lacht und redet." },
+      { "text": "„Peinliche Stille, was?“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich benannt, manche lachen. Ein Faden von vorhin hätte das Gespräch weiter getragen." },
+      { "text": "Aufs Handy schauen, bis der nächste Gang kommt.", "wert": 0, "tendenz": "vermeiden", "weiter": "k4b", "rueck": "Der Tisch bleibt still – und du hattest einen Faden in der Hand." }
+     ] },
+    { "id": "k4", "sagt": "Nach dem Essen an der Bar. Um dich herum stehen sieben vom Tisch, alle reden durcheinander. Der Mann, der vorhin direkt vor dir dran war, sagt leise zu dir: „Ich bin übrigens gerade mitten in einer Trennung. Darum bin ich heute etwas still.“",
+     "wahl": [
+      { "text": "Ein Schritt aus der großen Runde: „Klingt nach einer schweren Zeit. Magst du erzählen – oder lieber was anderes?“", "wert": 2, "weiter": "k5", "rueck": "Eine kleine Runde aus der großen gemacht, gespiegelt – und ihm die Wahl gelassen." },
+      { "text": "„Oh. Das wird schon wieder. Komm, wir holen uns noch einen Sekt!“", "wert": 0, "tendenz": "abblocken", "weiter": "k5", "rueck": "Freundlich gemeint, aber du redest weg, was er gerade geteilt hat." },
+      { "text": "„Oh, das tut mir leid.“ – und dann weiter mit der großen Runde lachen und anstoßen, damit er auf andere Gedanken kommt.", "wert": 1, "weiter": "k5", "rueck": "Anteilnahme ist da. In der lauten Runde bleibt für ihn aber kein Raum." }
+     ] },
+    { "id": "k4b", "sagt": "Nach dem Essen an der Bar stehen sieben vom Tisch beieinander und reden durcheinander. Am Rand steht der Mann, der vorhin vor dir dran war, und schaut in sein Glas.",
+     "wahl": [
+      { "text": "Zu ihm gehen: „Viel los hier. Wie geht's dir – du warst vorhin so still?“", "wert": 2, "weiter": "k5", "rueck": "Aus der großen Runde eine kleine gemacht – und eine offene Frage." },
+      { "text": "In der großen Runde bleiben.", "wert": 1, "weiter": "k5", "rueck": "Geht. Wer am Rand steht, freut sich aber oft über ein Gespräch zu zweit." }
+     ] },
+    { "id": "k5", "sagt": "Später kommt Tante Renate an die Bar: „Na, du! Letztes Jahr wolltest du doch den Kletterkurs machen – und?“",
+     "wahl": [
+      { "text": "„Hab ich! Beim ersten Mal hing ich zehn Minuten in zwei Metern Höhe und hab mich nicht getraut. Und du – warst du nicht in Portugal?“", "wert": 2, "weiter": "ende1", "rueck": "Sie knüpft an – du antwortest mit einer Mini-Geschichte und knüpfst selbst an ihrem Faden an." },
+      { "text": "„Ja, hab ich gemacht.“", "wert": 1, "weiter": "ende2", "rueck": "Stimmt. Sie hat sich etwas gemerkt – eine kleine Geschichte hätte das gewürdigt." },
+      { "text": "„Ach, Renate, du immer mit deinen Fragen.“", "wert": 0, "tendenz": "abwehren", "weiter": "ende2", "rueck": "Sie hat sich an dich erinnert – das war Interesse, kein Angriff." }
+     ] },
+    { "id": "ende1", "sagt": "Renate lacht schallend über deine zwei Meter. Später tanzt du mit dem halben Tisch sieben.", "ende": "Zum Schluss stark angeknüpft: eine Mini-Geschichte und eine Frage zurück. Für den ganzen Abend zählen dieselben Züge – Satz vorher fertig, Namen behalten, ein Faden für die Stille, eine kleine Runde für Persönliches." },
+    { "id": "ende2", "sagt": "Der Abend ist schön, wenn auch mit ein paar verpassten Türen. Gegen Mitternacht fährst du nach Hause.", "ende": "Ein guter Abend mit Luft nach oben. Fürs nächste Fest: Geschichten auf Vorrat, die Stille mit einem Faden füllen und bei Persönlichem eine kleine Runde bilden." }
+   ],
+   "prinzipien": ["den eigenen Satz vorher fertig haben", "eine Mini-Geschichte mit Ball zurück", "die leere Stille mit dem Faden nach hinten füllen", "aus der großen Runde eine kleine machen", "beim Wiedersehen anknüpfen"],
+   "transfer": "Welches Fest steht bei dir als Nächstes an? Nimm dir drei Dinge vor: eine Geschichte auf Vorrat, einen Faden für die Stille und eine Person für ein Gespräch zu zweit."
+  }
+ ]
+}

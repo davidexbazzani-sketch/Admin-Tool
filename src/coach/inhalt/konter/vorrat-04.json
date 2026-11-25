@@ -1,0 +1,132 @@
+{
+  "eintraege": [
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0243", "faehigkeit": "konter.spiel", "stufe": 2, "kanal": "wissen" }, "auftrag": "Spielt die Antwort mit – oder steigt sie aus?", "faecher": ["spielt mit", "steigt aus"], "karten": [
+      { "text": "„Der Kühlschrank brummt wie ein Bär.“ – „Dann füttern wir ihn lieber.“", "fach": 0 },
+      { "text": "„Der Kühlschrank brummt wie ein Bär.“ – „Der ist halt alt.“", "fach": 1 },
+      { "text": "„Mein Auto hat Heimweh.“ – „Fahr es öfter in seine Werkstatt.“", "fach": 0 },
+      { "text": "„Mein Auto hat Heimweh.“ – „Autos haben keine Gefühle.“", "fach": 1 },
+      { "text": "„Die Heizung flüstert.“ – „Was sagt sie?“", "fach": 0 },
+      { "text": "„Die Heizung flüstert.“ – „Ruf den Hausmeister.“", "fach": 1 }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0244", "faehigkeit": "konter.ruhe", "stufe": 3, "kanal": "wissen" }, "frage": "Ein Bekannter auf einer Party: „Na, wieder allein unterwegs?“ Dir fällt nichts ein. Was ist ein guter erster Schritt?", "antworten": [
+      { "text": "Schnell erklären, warum deine Begleitung heute nicht mitkommen konnte.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Du verteidigst dich gegen eine Frage, die keine Erklärung braucht." },
+      { "text": "Einmal ausatmen, lächeln: „Kann man so sagen.“", "wert": 2, "warum": "Die Sekunde gewonnen und ein Allzwecksatz – gelassener geht es kaum." },
+      { "text": "Die Frage überhören und das Thema wechseln.", "wert": 1, "warum": "Geht – ein ruhiger Satz zeigt aber mehr Gelassenheit." },
+      { "text": "„Und du? Immer noch mit der Langweilerin?“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Angriff auf einen Menschen, der gar nicht dabei ist." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0245", "faehigkeit": "konter.ruhe", "stufe": 3, "kanal": "wissen" }, "frage": "Jemand macht vor der Runde einen Spruch über deine neue Frisur. Ordne von gelassen bis getroffen.", "eintraege": [
+      { "text": "Ausatmen, lächeln: „Danke für die Aufmerksamkeit.“", "warum": "Ruhig und mit einem Augenzwinkern." },
+      { "text": "Kurz lächeln und weitermachen.", "warum": "Gelassen, ohne Worte – solide." },
+      { "text": "Rot werden und an die Haare fassen.", "warum": "Verständlich – doch es zeigt, dass der Spruch getroffen hat." },
+      { "text": "„Deine ist auch nicht besser!“", "warum": "Ein Gegenangriff macht aus dem Spruch einen Streit." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0246", "faehigkeit": "konter.spiel", "stufe": 3, "kanal": "wissen" }, "frage": "Tarek: „Der Montag hat heute Verspätung.“ Ordne die Antworten von stark nach schwach.", "eintraege": [
+      { "text": "„Vielleicht steht er mit dem Dienstag im Stau.“", "warum": "Das Bild aufgenommen und ein Stück dazugelegt." },
+      { "text": "Lachen: „Der war gut.“", "warum": "Vollwertig – nur ohne Weiterspinnen." },
+      { "text": "„Es ist doch Montag.“", "warum": "Sachlich korrigiert – das Spiel ist vorbei." },
+      { "text": "„Meiner hat schon um sechs angefangen, das ist noch viel schlimmer …“", "warum": "Übertrumpfen – jetzt geht es um dich." }
+    ] },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0247", "faehigkeit": "konter.ruhe", "stufe": 4, "kanal": "wissen", "einfluss": "rot" }, "lage": "In einer Diskussion sticht ein Kollege immer wieder nach: „Na, jetzt wirst du ja doch nervös.“ – „Jetzt wird's persönlich, was?“ Du merkst: Er will dich wütend machen.", "frage": "Was steckt dahinter – und was hilft?", "antworten": [
+      { "text": "Ehrliche Sorge – ihm erklären, dass du gar nicht nervös bist.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Wer sich verteidigt, zeigt genau die Unruhe, auf die er zielt." },
+      { "text": "Reizen, bis du die Fassung verlierst – ruhig bleiben: „Zurück zum Punkt: …“", "wert": 2, "warum": "Ausatmen und bei der Sache bleiben – dann läuft der Trick ins Leere." },
+      { "text": "Reizen – genauso zurückreizen, damit er merkt, wie sich das anfühlt.", "wert": 0, "tendenz": "angreifen", "warum": "Dann seid ihr beide wütend, und die Sache geht unter." },
+      { "text": "Reizen – die Diskussion vertagen.", "wert": 1, "warum": "Kann klug sein. Oft genügt aber, ruhig weiterzumachen." }
+    ], "erklaerung": "Schon Schopenhauer beschrieb den Kunstgriff, den anderen zornig zu machen: Wer wütend ist, argumentiert schlechter. Die Abwehr: ausatmen und ruhig zur Sache." },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0248", "faehigkeit": "konter.ruhe", "stufe": 5, "kanal": "wissen", "einfluss": "rot" }, "lage": "Ein Kunde unterbricht dich am Telefon nach jedem halben Satz: „Ja, ja, ja. Und weiter?“", "frage": "Was passiert hier – und was hilft?", "antworten": [
+      { "text": "Ungeduld – schneller reden, damit er zufrieden ist.", "wert": 0, "warum": "Wer sich hetzen lässt, verliert den Faden." },
+      { "text": "Unhöflichkeit – „Lassen Sie mich doch bitte endlich einmal ausreden, so kommen wir doch nicht weiter!“", "wert": 1, "warum": "Verständlich und manchmal nötig. Ruhiger wirkt: „Einen Satz noch, dann gehört Ihnen das Wort.“" },
+      { "text": "Dauerndes Unterbrechen setzt dich unter Druck – den Kern zuerst: „Kurz gesagt: …“", "wert": 2, "warum": "Wer den Kern zuerst sagt, bietet nichts mehr zum Unterbrechen." },
+      { "text": "Absicht – einfach auflegen.", "wert": 0, "tendenz": "vermeiden", "warum": "Das beendet das Gespräch, aber nicht das Problem." }
+    ], "erklaerung": "Dauerndes Unterbrechen setzt dich unter Zeitdruck. Ausatmen, den Kern zuerst sagen – dann gibt es nichts mehr zu unterbrechen." },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0249", "faehigkeit": "konter.zustimmen", "stufe": 3, "kanal": "wissen" }, "auftrag": "Stimmt die Antwort zu – oder widerspricht sie?", "faecher": ["stimmt zu und überzeichnet", "widerspricht"], "karten": [
+      { "text": "„Du bist ja eine Nachteule.“ – „Ich hab einen Mondkalender im Geldbeutel.“", "fach": 0 },
+      { "text": "„Du bist ja eine Nachteule.“ – „Gar nicht, ich geh früh schlafen.“", "fach": 1 },
+      { "text": "„Du trinkst viel Kaffee.“ – „Meine Blutgruppe ist Espresso.“", "fach": 0 },
+      { "text": "„Du trinkst viel Kaffee.“ – „So viel ist das gar nicht.“", "fach": 1 },
+      { "text": "„Du bist ja ein Bücherwurm.“ – „Ich wohne quasi in der Bücherei.“", "fach": 0 },
+      { "text": "„Du bist ja ein Bücherwurm.“ – „Ich lese auch nicht mehr als andere.“", "fach": 1 }
+    ] },
+    { "art": "umformulieren", "kopf": { "id": "konter-v-0250", "faehigkeit": "konter.zustimmen", "stufe": 3, "kanal": "koennen" }, "auftrag": "Stimm zu und überzeichne.", "vorlage": "„Du bist ja immer als Erstes im Büro.“", "kriterien": ["gibt recht", "übertreibt", "freundlich"], "muster": ["„Ich wohne praktisch hier. Der Hausmeister grüßt mich als Mitbewohner.“", "„Stimmt. Ich schließe auf und sag der Kaffeemaschine Guten Morgen.“"] },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0251", "faehigkeit": "konter.umdeuten", "stufe": 3, "kanal": "wissen" }, "auftrag": "Umdeutung oder Rechtfertigung?", "faecher": ["Umdeutung", "Rechtfertigung"], "karten": [
+      { "text": "„Du bist so laut.“ – „Ich bin begeisterungsfähig.“", "fach": 0 },
+      { "text": "„Du bist so laut.“ – „Ich hab halt eine kräftige Stimme, dafür kann ich nichts.“", "fach": 1 },
+      { "text": "„Du bist so vorsichtig.“ – „Umsichtig. Bei mir geht selten was schief.“", "fach": 0 },
+      { "text": "„Du bist so vorsichtig.“ – „Ich hatte mal einen Unfall, deshalb …“", "fach": 1 },
+      { "text": "„Du bist so neugierig.“ – „Interessiert. Ich merk mir, was euch wichtig ist.“", "fach": 0 },
+      { "text": "„Du bist so neugierig.“ – „Ich frag doch nur, weil ich nett sein will.“", "fach": 1 }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0252", "faehigkeit": "konter.umdeuten", "stufe": 4, "kanal": "wissen" }, "auftrag": "Rückseite mit Nutzen – oder nur Gegenangriff?", "faecher": ["Rückseite mit Nutzen", "nur Gegenangriff"], "karten": [
+      { "text": "„Du bist so ordentlich.“ – „Dafür findet bei mir jeder alles.“", "fach": 0 },
+      { "text": "„Du bist so ordentlich.“ – „Und bei dir sieht's aus wie im Keller.“", "fach": 1 },
+      { "text": "„Du bist so stur.“ – „Verlässlich: Was ich zusage, halte ich.“", "fach": 0 },
+      { "text": "„Du bist so stur.“ – „Besser stur als so wankelmütig wie du.“", "fach": 1 },
+      { "text": "„Du bist so ehrgeizig.“ – „Ich will, dass es gut wird – für alle.“", "fach": 0 },
+      { "text": "„Du bist so ehrgeizig.“ – „Und du bist faul.“", "fach": 1 }
+    ] },
+    { "art": "blitz", "kopf": { "id": "konter-v-0253", "faehigkeit": "konter.spiel", "stufe": 3, "kanal": "koennen", "uhr": true }, "auftrag": "Spinn weiter: „Der Drucker hat heute schlechte Laune.“ Finde so viele Fortsetzungen wie möglich.", "ziel": 5, "sekunden": 60, "beispiele": ["„Er druckt nur noch in Grau. Passend.“", "„Er will einen Tag frei.“", "„Er hat sich vom Scanner getrennt.“"] },
+    { "art": "blitz", "kopf": { "id": "konter-v-0254", "faehigkeit": "konter.spiel", "stufe": 4, "kanal": "koennen", "uhr": true }, "auftrag": "Rolle annehmen: Die Kaffeemaschine kündigt. Was steht in ihrem Kündigungsschreiben? Sammle Sätze.", "ziel": 5, "sekunden": 60, "beispiele": ["„Ich fühle mich nicht wertgeschätzt – niemand entkalkt mich.“", "„Ich wechsle zu einer Firma, die Tee trinkt.“", "„Meine Resttassen lasse ich mir auszahlen.“"] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0255", "faehigkeit": "konter.necken", "stufe": 4, "kanal": "wissen" }, "frage": "Jule zeigt dir stolz ihre erste selbst gebaute Hochzeitstorte – sie steht etwas schief. Ordne die Sprüche von „neckt mit Gefühl“ bis „trifft“.", "eintraege": [
+      { "text": "„Die steht schief, damit sie dem Brautpaar zuzwinkert. Und sie sieht großartig aus.“", "warum": "Übertreibung mit warmem Schluss." },
+      { "text": "„Ein bisschen schief – aber sicher lecker, oder?“", "warum": "Freundlich, nur ohne Augenzwinkern." },
+      { "text": "„Der schiefe Turm von Pisa, oder?“", "warum": "Ein bekannter Spruch – an ihrem Stolz vorbei." },
+      { "text": "„Und dafür hast du drei Kochkurse gemacht?“", "warum": "Trifft ihren Stolz – kein Necken mehr." }
+    ] },
+    { "art": "blitz", "kopf": { "id": "konter-v-0256", "faehigkeit": "konter.necken", "stufe": 3, "kanal": "koennen", "uhr": true }, "auftrag": "Übertreib freundlich: Wie lang ist die Schlange vor dem Kaffeeautomaten?", "ziel": 5, "sekunden": 60, "beispiele": ["„Man bekommt eine Wartenummer und ein Kissen.“", "„Die Ersten feiern schon Jubiläum.“", "„Es gibt schon eine Schlange für die Schlange.“"] },
+    { "art": "jaund", "kopf": { "id": "konter-v-0257", "faehigkeit": "konter.necken", "stufe": 3, "kanal": "koennen" }, "start": "Miriam: „Dein Schreibtisch sieht aus, als wäre ein Sturm durchgezogen.“", "kriterien": ["nimmt das Bild an", "neckt freundlich zurück oder legt nach", "bleibt leicht"], "muster": ["„Ja, und der Wetterdienst hat ihn schon getauft: Sturmtief Montag.“", "„Ja, und du warst die Einzige, die eine Warnung bekommen hat.“"] },
+    { "art": "jaund", "kopf": { "id": "konter-v-0258", "faehigkeit": "konter.necken", "stufe": 4, "kanal": "koennen" }, "start": "Sven: „Du hast ja mehr Pflanzen als Freunde.“", "kriterien": ["nimmt das Bild an", "neckt mit Augenzwinkern zurück", "ohne Stich"], "muster": ["„Ja, und die Pflanzen widersprechen nie. Anders als du.“", "„Ja, und eine davon heißt Sven. Braucht auch viel Wasser.“"] },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0259", "faehigkeit": "konter.necken", "stufe": 4, "kanal": "wissen", "einfluss": "rot" }, "lage": "Ein Kollege sagt vor der Gruppe über deinen Akzent: „Ach, sag doch noch mal „Eichhörnchen“, das klingt so süß!“ Alle schauen dich an.", "frage": "Ist das Necken – oder etwas anderes? Was hilft?", "antworten": [
+      { "text": "Getarnter Spott über ein heikles Thema – ruhig: „Lass das mit dem Akzent, bitte.“", "wert": 2, "warum": "Bei Sprache und Herkunft ist der Spaß schnell einseitig. Ein ruhiger Satz zeigt allen: Das ist kein Spiel." },
+      { "text": "Harmloses Necken – mitspielen und das Wort noch einmal sagen, dann lachen alle zusammen.", "wert": 0, "tendenz": "kleinreden", "warum": "Wer mitspielt, erlaubt die Nummer – und sie kommt wieder." },
+      { "text": "Getarnter Spott – später unter vier Augen ansprechen.", "wert": 1, "warum": "Gut. Ein kurzer Satz sofort macht für alle klar, dass hier eine Grenze ist." },
+      { "text": "Harmloses Necken – mit einem Witz über seinen Dialekt zurück.", "wert": 0, "tendenz": "angreifen", "warum": "Retourkutsche auf demselben Feld – jetzt sind es zwei." }
+    ], "erklaerung": "Necken braucht ein harmloses, gewähltes Thema und die Möglichkeit, zurückzugeben. Bei Sprache, Herkunft oder Körper wird aus „süß“ schnell ein Vorführen. Die Abwehr: das Verhalten benennen." },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0260", "faehigkeit": "konter.necken", "stufe": 5, "kanal": "wissen", "einfluss": "rot" }, "lage": "In deiner neuen Gruppe nennen dich alle „Professor“, weil du oft nachfragst – meist mit Augenrollen.", "frage": "Was passiert hier – und was hilft?", "antworten": [
+      { "text": "Ein Kosename – sich geschmeichelt fühlen.", "wert": 0, "warum": "Das Augenrollen zeigt: Es ist kein Lob." },
+      { "text": "Ein Etikett – umdeuten: „Danke, der Doktortitel kommt nächstes Jahr.“", "wert": 1, "warum": "Witzig und gelassen. Beim Augenrollen ist eine klare Grenze aber stärker." },
+      { "text": "Ein Etikett, das dich kleinhalten soll – einmal klar sagen, wie du heißt, und weiter nachfragen.", "wert": 2, "warum": "Du lässt dich nicht festlegen und änderst nichts an dem, was du gut machst." },
+      { "text": "Ein Etikett – ab jetzt weniger fragen, damit es aufhört.", "wert": 0, "tendenz": "vermeiden", "warum": "Du änderst dich, damit die anderen nichts ändern müssen." }
+    ], "erklaerung": "Ein Spitzname kann liebevoll sein – oder ein Etikett, das dich festlegt. Das Augenrollen verrät es. Die Abwehr: einmal klar sagen, wie du heißt, und weitermachen." },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0261", "faehigkeit": "konter.spiel", "stufe": 4, "kanal": "wissen", "einfluss": "rot" }, "lage": "Mittagspause. Tarek ist gerade gegangen. Ein Kollege grinst in die Runde: „Habt ihr Tareks neue Frisur gesehen? Kommt, wer hat den besten Spruch?“", "frage": "Was passiert hier – und was hilft?", "antworten": [
+      { "text": "Ein Spiel – mitmachen, ist ja nur Spaß.", "wert": 0, "tendenz": "kleinreden", "warum": "Über Abwesende witzeln ist kein Mitspielen, sondern Lästern." },
+      { "text": "Einladung zum Lästern – schweigen.", "wert": 1, "warum": "Besser als mitmachen. Ein freundlicher Satz für Tarek wirkt aber stärker." },
+      { "text": "Einladung zum Lästern – den Kollegen anfahren: „Du bist echt das Letzte, so über Leute zu reden.“", "wert": 0, "tendenz": "angreifen", "warum": "Richtig erkannt, doch der Angriff macht aus dem Lästern einen Streit." },
+      { "text": "Einladung zum Lästern – nicht mitspielen: „Mir gefällt sie. Wer will noch Kaffee?“", "wert": 2, "warum": "Freundlich abgelehnt und weiter – das nimmt dem Lästern die Bühne." }
+    ], "erklaerung": "Mitspielen heißt, ein Bild aufzugreifen – nicht, über jemanden herzuziehen, der nicht da ist. Wer die Einladung freundlich ablehnt, nimmt dem Lästern die Bühne." },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0262", "faehigkeit": "konter.spiel", "stufe": 5, "kanal": "wissen", "einfluss": "rot" }, "lage": "In deinem Team gibt es seit Monaten einen Dauerwitz über eine Kollegin, die einmal ihre Präsentation vergessen hatte. Bei jeder Panne heißt es: „Na, war's wieder unsere Vergessliche?“ Sie lacht inzwischen nicht mehr mit.", "frage": "Was ist das – und was tust du?", "antworten": [
+      { "text": "Ein harmloser Dauerwitz – mitmachen, das schweißt zusammen.", "wert": 0, "warum": "Sie lacht nicht mehr mit – damit ist es kein gemeinsamer Witz mehr." },
+      { "text": "Ein Witz, der zur Rolle geworden ist – nicht mehr bedienen und einmal sagen: „Lassen wir das mal ruhen.“", "wert": 2, "warum": "Du steigst aus und gibst den anderen einen leichten Weg, es auch zu tun." },
+      { "text": "Ein Dauerwitz – selbst nicht mehr mitmachen, aber nichts dazu sagen.", "wert": 1, "warum": "Ein Anfang. Ein freundliches Wort hilft ihr mehr." },
+      { "text": "Ein Dauerwitz – ihr raten, sich ein dickeres Fell zuzulegen.", "wert": 0, "tendenz": "abwerten", "warum": "Du verschiebst das Problem auf sie." }
+    ], "erklaerung": "Ein Witz verbindet, solange alle mitlachen können. Lacht die Betroffene nicht mehr, ist er zur Rolle geworden, aus der sie schwer herauskommt. Nicht mehr bedienen – und es einmal freundlich aussprechen." },
+    { "art": "blitz", "kopf": { "id": "konter-v-0263", "faehigkeit": "konter.umdeuten", "stufe": 4, "kanal": "koennen", "uhr": true }, "auftrag": "Finde zu jeder „Schwäche“ die Rückseite: vorsichtig, verträumt, kritisch, eigensinnig, langsam, gesprächig.", "ziel": 6, "sekunden": 60, "beispiele": ["vorsichtig → umsichtig", "verträumt → einfallsreich", "kritisch → genau", "eigensinnig → unabhängig", "langsam → gründlich", "gesprächig → kontaktfreudig"] },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0264", "faehigkeit": "konter.umdeuten", "stufe": 4, "kanal": "wissen", "einfluss": "rot" }, "lage": "Nach deinem Einwand sagt ein Kollege: „Du bist halt unser Bedenkenträger vom Dienst.“ Ein paar lachen.", "frage": "Was passiert hier – und was hilft?", "antworten": [
+      { "text": "Berechtigte Kritik – den Einwand zurückziehen.", "wert": 0, "tendenz": "vermeiden", "warum": "Ein Etikett ist keine Kritik – es ersetzt sie." },
+      { "text": "Ein Etikett – „Ich bin überhaupt kein Bedenkenträger, ich will nur, dass nichts schiefgeht!“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Du verteidigst dich gegen das Etikett, statt deinen Einwand zu wiederholen." },
+      { "text": "Ein Etikett statt eines Arguments – umdeuten: „Ich nenne es Risikoprüfung. Das Risiko ist …“", "wert": 2, "warum": "Die Umdeutung nimmt dem Etikett die Spitze, und dein Einwand kommt doch noch auf den Tisch." },
+      { "text": "Ein Etikett – mitlachen und weitermachen.", "wert": 1, "warum": "Gelassen – doch dein Einwand ist noch nicht gehört. Bring ihn nach dem Lachen noch einmal." }
+    ], "erklaerung": "Ein Etikett ersetzt ein Argument: Wer „Bedenkenträger“ ist, muss nicht mehr ernst genommen werden. Die Umdeutung nimmt ihm die Spitze – dann zurück zur Sache." },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0265", "faehigkeit": "konter.umdeuten", "stufe": 5, "kanal": "wissen", "einfluss": "rot" }, "lage": "Nach deiner Präsentation sagt eine Kollegin vor allen: „Toll, dass du dich traust, so einfache Folien zu zeigen.“", "frage": "Welcher Trick steckt darin – und was hilft?", "antworten": [
+      { "text": "Vergiftetes Lob – „Was soll das denn heißen?“", "wert": 1, "warum": "Eine Rückfrage geht. Die Umdeutung lässt den Haken eleganter ins Leere laufen." },
+      { "text": "Echtes Lob – sich freuen.", "wert": 0, "warum": "„Traust“ und „so einfach“ sind der Haken." },
+      { "text": "Vergiftetes Lob – die Rückseite annehmen: „Danke – einfach ist Absicht. Dann versteht es jeder.“", "wert": 2, "warum": "Du drehst den Haken in eine Stärke – ohne Gegenangriff." },
+      { "text": "Vergiftetes Lob – „Deine waren dafür so voll, dass keiner was erkennen konnte.“", "wert": 0, "tendenz": "angreifen", "warum": "Retourkutsche vor allen – beide verlieren." }
+    ], "erklaerung": "Ein vergiftetes Lob verpackt Kritik als Kompliment. Wer die Rückseite annimmt – „einfach ist Absicht“ –, macht aus dem Haken eine Stärke." },
+    { "art": "blitz", "kopf": { "id": "konter-v-0266", "faehigkeit": "konter.zustimmen", "stufe": 4, "kanal": "koennen", "uhr": true }, "auftrag": "Stimm zu und übertreib: „Du bist ja ein Gewohnheitstier.“ Sammle Antworten.", "ziel": 5, "sekunden": 60, "beispiele": ["„Ich sitze seit zehn Jahren auf demselben Stuhl. Er kennt mich.“", "„Meine Gewohnheiten haben schon Gewohnheiten.“", "„Mein Brötchen bestellt sich inzwischen selbst.“"] },
+    { "art": "blitz", "kopf": { "id": "konter-v-0267", "faehigkeit": "konter.zustimmen", "stufe": 5, "kanal": "koennen", "uhr": true }, "auftrag": "Stimm zu und übertreib: „Du bist ja schon wieder im Urlaub.“ Sammle Antworten.", "ziel": 5, "sekunden": 60, "beispiele": ["„Ich komme nur noch zum Wäschewaschen vorbei.“", "„Mein Koffer hat hier einen Zweitwohnsitz.“", "„Ich bin nur zu Besuch.“"] },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0268", "faehigkeit": "konter.zustimmen", "stufe": 4, "kanal": "wissen", "einfluss": "rot" }, "lage": "In der Besprechung: „Du bist doch auch für Sicherheit, oder? Na also – dann bist du auch für Kameras in der Kaffeeküche.“", "frage": "Welcher Trick ist das – und was hilft?", "antworten": [
+      { "text": "Ein logischer Schluss – zustimmen.", "wert": 0, "warum": "Aus „für Sicherheit“ folgt nicht „für jede Maßnahme“." },
+      { "text": "Ein Trick – alles ablehnen: „Ich bin überhaupt nicht für noch mehr Sicherheit hier im Haus.“", "wert": 0, "warum": "Damit lässt du dich ins andere Extrem drängen." },
+      { "text": "Ein Trick – „Das eine hat mit dem anderen nichts zu tun.“", "wert": 1, "warum": "Richtig erkannt. Mit einem klaren Ja zum Allgemeinen wirkt es weniger trotzig." },
+      { "text": "Zustimmung abringen – zustimmen und trennen: „Sicherheit ja. Kameras in der Küche nein.“", "wert": 2, "warum": "Dem Allgemeinen zugestimmt, die Folgerung ausdrücklich getrennt." }
+    ], "erklaerung": "Erst holt sich jemand ein Ja zu etwas Allgemeinem, dann tut er so, als folge daraus sein Vorschlag. Die Abwehr: dem Allgemeinen zustimmen und die Folgerung ausdrücklich trennen." },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0269", "faehigkeit": "konter.zustimmen", "stufe": 5, "kanal": "wissen", "einfluss": "rot" }, "lage": "Du bringst in der Runde einen Einwand. Ein Kollege seufzt laut: „Ja, ja, du hast natürlich wie immer recht.“", "frage": "Was steckt dahinter – und was hilft?", "antworten": [
+      { "text": "Ironisches Zustimmen – beim Wort nehmen: „Danke! Dann noch kurz mein Einwand: …“", "wert": 2, "warum": "Du nimmst die Zustimmung beim Wort, ohne eine Entscheidung zu behaupten – und der Einwand kommt doch noch auf den Tisch." },
+      { "text": "Echte Zustimmung – dich bedanken und den Einwand fallen lassen.", "wert": 0, "warum": "Der Seufzer verrät die Ironie – dein Einwand ist noch nicht geklärt." },
+      { "text": "Ironie – „Das war jetzt aber ironisch gemeint, oder? So ganz ernst nehmen kann ich das nicht.“", "wert": 1, "warum": "Benennt den Unterton. Wörtlich nehmen ist eleganter und führt zur Sache." },
+      { "text": "Ironie – „Im Gegensatz zu dir, ja.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Seitenhieb – und schon geht es um euch statt um den Einwand." }
+    ], "erklaerung": "Ironisches Zustimmen soll deinen Einwand lächerlich machen, ohne ihn zu widerlegen. Wer die Zustimmung wörtlich nimmt, dreht den Spieß freundlich um." },
+    { "art": "blitz", "kopf": { "id": "konter-v-0270", "faehigkeit": "konter.rueckfrage", "stufe": 4, "kanal": "koennen", "uhr": true }, "auftrag": "Sammle ruhige Rückfragen auf Sticheleien – so viele wie möglich, ohne Unterton.", "ziel": 5, "sekunden": 60, "beispiele": ["„Wie meinst du das?“", "„Was genau stört dich?“", "„Woran machst du das fest?“", "„Was würdest du anders machen?“"] },
+    { "art": "blitz", "kopf": { "id": "konter-v-0271", "faehigkeit": "konter.rueckfrage", "stufe": 5, "kanal": "koennen", "uhr": true }, "auftrag": "Übersetze in Fragen: „Schon wieder ein neues Formular?“ Finde so viele sachliche Rückfragen wie möglich.", "ziel": 4, "sekunden": 60, "beispiele": ["„Ist dir der Aufwand zu groß?“", "„Welches Feld ist überflüssig?“", "„Wie ginge es einfacher?“"] },
+    { "art": "stumm", "kopf": { "id": "konter-v-0272", "faehigkeit": "konter.spiel", "stufe": 8, "kanal": "koennen" }, "titel": "Die Anekdote im Kopf", "schritte": ["Wähl ein kleines Missgeschick dieser Woche.", "Leg innerlich Lage, Wendung und Pointe fest – die Pointe ganz ans Ende.", "Such ein Stichwort vom Anfang, das du zum Schluss als Rückgriff wieder aufnehmen kannst.", "Erzähl die Geschichte innerlich einmal durch, mit einer kleinen Pause vor der Pointe."], "sekunden": 90, "pruefliste": ["Pointe am Ende?", "Stichwort für den Rückgriff gefunden?", "Unter 90 Sekunden geblieben?"] }
+  ]
+}

@@ -1,0 +1,252 @@
+{
+  "einheiten": [
+    {
+      "id": "ausdruck-3-01", "bereich": "ausdruck", "stufe": 3, "nr": 1,
+      "titel": "Bildungswortschatz mit Maß",
+      "faehigkeiten": ["ausdruck.bildung", "ausdruck.treffend"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass unnötig gehobene Wörter das Urteil über den Verfasser senken, zeigen Experimente mit Texten. Dass Abrufen und verteiltes Wiederholen Wörter halten, ist breit belegt. Welche Wörter sich lohnen, ist Stilkunde.",
+      "quellen": ["oppenheimer2006", "bullock2019", "dunlosky2013", "praxis-ausdruck"],
+      "aha": "Ein Bildungswort lohnt sich, wenn es einen halben Satz spart: „ambivalent“ statt „gut und schlecht zugleich“. Es schadet, wenn es nur Eindruck machen soll – oder der andere es nicht kennt.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "ausdruck-3-01-a", "faehigkeit": "ausdruck.bildung", "stufe": 6, "kanal": "wissen" },
+          "frage": "In welchem Satz verdient das gehobene Wort seinen Platz?",
+          "antworten": [
+            { "text": "„Das Ergebnis ist ambivalent: Die Kosten sinken, die Wartezeit steigt.“", "wert": 2, "warum": "„Ambivalent“ fasst „gut und schlecht zugleich“ in ein Wort – und der Satz erklärt es gleich mit." },
+            { "text": "„Zwischen Plan und Ergebnis gibt es eine Diskrepanz.“", "wert": 1, "warum": "Richtig benutzt. Nur sagt „Abweichung“ genau dasselbe – und das versteht jeder." },
+            { "text": "„Das ist eine prägnante, präzise, pointierte und in jeder Hinsicht profunde Analyse.“", "wert": 0, "tendenz": "aufblaehen", "warum": "Vier gehobene Wörter für fast dasselbe. Eins hätte gereicht – und mehr gesagt." },
+            { "text": "„Wir sollten das Meeting ambivalent gestalten.“", "wert": 0, "tendenz": "imponieren", "warum": "Ergibt keinen Sinn: Ein Treffen „zwiespältig gestalten“? Das Wort soll nur klug klingen." }
+          ] },
+        { "art": "karte", "text": "Ein gehobenes Wort ist dann ein Gewinn, wenn es mehr sagt als das einfache: „lakonisch“ heißt knapp und trocken, „Quintessenz“ das Wesentliche auf den Punkt. Zwei Fragen davor: Sagt es mehr? Kennt es der andere? Bist du unsicher, erklär es im Halbsatz mit: „ambivalent, also zwiespältig“. Neue Wörter lernst du am besten mit ihrem Nachbarn und dem Unterschied: plausibel ist nicht dasselbe wie belegt." },
+        { "art": "wortwahl", "kopf": { "id": "ausdruck-3-01-b", "faehigkeit": "ausdruck.bildung", "stufe": 6, "kanal": "wissen" },
+          "frage": "Auf Herrn Petersens zweiseitige Beschwerde antwortet der Hausmeister nur: „Wird erledigt.“ Seine Antwort war ___.",
+          "antworten": [
+            { "text": "eloquent", "wert": 0, "warum": "Heißt „wortgewandt, beredt“ – fast das Gegenteil von zwei Wörtern." },
+            { "text": "prägnant", "wert": 1, "warum": "Kurz und treffend – stimmt. Es fehlt aber das Trockene, das hier mitschwingt." },
+            { "text": "lakonisch", "wert": 2, "warum": "Knapp und trocken, ohne ein Wort zu viel – genau so." },
+            { "text": "obsolet", "wert": 0, "warum": "Heißt „überholt, veraltet“ – passt nicht zu einer Antwort." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-3-01-c", "faehigkeit": "ausdruck.bildung", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Nachbarwörter mit Unterschied: Ist das nur plausibel – oder schon belegt?",
+          "faecher": ["plausibel – klingt einleuchtend", "belegt – durch Daten gestützt"],
+          "karten": [
+            { "text": "„Die Erklärung klingt einleuchtend, geprüft hat sie noch niemand.“", "fach": 0 },
+            { "text": "„Das würde erklären, warum der Drucker nur montags streikt.“", "fach": 0 },
+            { "text": "„Klingt logisch – ich kann's mir gut vorstellen.“", "fach": 0 },
+            { "text": "„Drei Messungen zeigen denselben Wert.“", "fach": 1 },
+            { "text": "„Die Kassendaten zeigen den Anstieg seit Januar.“", "fach": 1 },
+            { "text": "„Der Hersteller hat den Fehler im Prüfbericht bestätigt.“", "fach": 1 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-3-01-d", "faehigkeit": "ausdruck.bildung", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Prunk raus, Genauigkeit rein: Behalte höchstens ein Bildungswort – eins, das wirklich etwas sagt.",
+          "vorlage": "„Die Quintessenz unseres Diskurses ist, dass eine Diskrepanz zwischen Plan und Realität existiert, die wir pragmatisch und proaktiv adressieren sollten.“",
+          "kriterien": ["höchstens ein gehobenes Wort, und nur eins, das mehr sagt", "sagt, was zu tun ist", "beim ersten Hören verständlich"],
+          "muster": ["„Kurz gesagt: Plan und Wirklichkeit gehen auseinander. Lasst uns eine pragmatische Lösung suchen – eine, die bis Monatsende trägt.“", "„Das Wichtigste aus unserer Runde: Der Plan passt nicht mehr zur Wirklichkeit. Wir sollten das jetzt angehen, nicht erst im Herbst.“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-3-01-e", "faehigkeit": "ausdruck.treffend", "stufe": 7, "kanal": "wissen" },
+          "frage": "Du hast „ambivalent“ gerade verstanden. Was hilft am meisten, damit du es in einer Woche noch selbst benutzt?",
+          "antworten": [
+            { "text": "Heute einen Satz aus deinem Leben bauen, in drei Tagen die Bedeutung aus dem Kopf aufschreiben.", "wert": 2, "warum": "Eigener Satz und spätere Abfrage – so wandert ein Wort vom Erkennen ins Benutzen." },
+            { "text": "Eine Liste mit dreißig Bildungswörtern heute Abend am Stück lernen und morgen früh noch einmal durchlesen.", "wert": 0, "warum": "Am Stück gepaukt und nur wiedergelesen ist schnell vergessen – und dreißig Wörter ohne eigenen Satz bleiben fremd." },
+            { "text": "Es ab heute in jede Mail einbauen.", "wert": 1, "warum": "Benutzen hilft. In jeder Mail wird es aber zum Tick – und passt längst nicht überall." }
+          ] },
+        { "art": "experiment", "auftrag": "Wähl ein Bildungswort, das du verstehst, aber nie benutzt. Bau heute einen eigenen Satz damit – und benutz es diese Woche einmal im Gespräch, aber nur dort, wo es genauer ist als das einfache.", "dauer": "woche", "nachfrage": "Hat das Wort gepasst – oder wäre das einfache besser gewesen?" },
+        { "art": "reflexion", "frage": "Welches Wort aus dieser Einheit nimmst du in deinen Wortschatz auf? Schreib es mit Nachbarwort, Unterschied und eigenem Satz auf.", "insBuch": "saetze" }
+      ],
+      "regel": "Ein Bildungswort, wenn es mehr sagt und der andere es kennt – sonst das einfache.",
+      "merkkarten": [
+        { "id": "ausdruck-3-01-m1", "frage": "Zwei Fragen vor jedem gehobenen Wort?", "antwort": "Sagt es mehr als das einfache? Kennt es der andere?" },
+        { "id": "ausdruck-3-01-m2", "frage": "Was heißt „lakonisch“?", "antwort": "Knapp und trocken, ohne Ausschmückung." },
+        { "id": "ausdruck-3-01-m3", "frage": "Plausibel oder belegt?", "antwort": "Plausibel klingt einleuchtend. Belegt ist, was Daten stützen." }
+      ]
+    },
+    {
+      "id": "ausdruck-3-02", "bereich": "ausdruck", "stufe": 3, "nr": 2,
+      "titel": "Vergleiche, die sitzen",
+      "faehigkeiten": ["ausdruck.treffend", "ausdruck.bildung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Belegt ist: Wer zwei Fälle vergleicht, erkennt das gemeinsame Prinzip besser (Meta-Analyse, mäßiger Effekt). Ob ein einzelner Erklär-Vergleich ebenso hilft, ist damit nicht gezeigt – das und wie man einen guten Vergleich baut, ist Praxiswissen. Ein einzelnes Bildwort lenkt Meinungen kaum, ein ausgebautes Bild nur schwach.",
+      "quellen": ["gentner2003", "alfieri2013", "brugman2019", "antonakis2011", "praxis-ausdruck"],
+      "aha": "Ein guter Vergleich holt das Fremde in die Welt des Zuhörers – und passt genau in dem Punkt, um den es geht. Zum Erklären stark, zum Überreden schwach.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Jonas soll dem Team erklären, warum jedes Konto ein eigenes Passwort braucht.", "schwach": "„Bei Credential Stuffing werden kompromittierte Zugangsdaten automatisiert auf anderen Plattformen getestet.“", "stark": "„Ein Passwort für alles ist wie ein Schlüssel für Haus, Auto und Büro: Wer ihn findet, kommt überall rein.“", "frage": "Welche Erklärung bleibt beim Team hängen?", "unterschied": "Die zweite nimmt ein Bild aus dem Alltag, das genau im entscheidenden Punkt passt: ein Fund, alle Türen offen. Die erste stimmt, erreicht aber nur Fachleute." },
+        { "art": "karte", "text": "Ein Vergleich sitzt, wenn er aus der Welt des Zuhörers kommt und im entscheidenden Punkt passt. Ein Bild pro Gedanke – zwei, die sich beißen, ergeben einen Bildbruch („das Ruder herumreißen, bevor der Boden wegbricht“). Abgegriffene Bilder wie „Spitze des Eisbergs“ erklären nichts mehr. Stark wird ein Vergleich, wenn du seine Grenze nennst: „… nur dass …“. Und: Bilder erklären gut, Meinungen lenken sie kaum." },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-3-02-a", "faehigkeit": "ausdruck.treffend", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du erklärst Frau Sommer, was eine Datensicherung ist. Welcher Vergleich passt am besten?",
+          "antworten": [
+            { "text": "„Wie ein Sicherheitsnetz.“", "wert": 1, "warum": "Stimmt im Kern, bleibt aber blass – sie weiß noch nicht, was genau passiert." },
+            { "text": "„Wie die Spiegelung im RAID-Verbund.“", "wert": 0, "tendenz": "fachsprache", "warum": "Ein Fachwort, erklärt mit einem anderen. Für Frau Sommer kein Bild." },
+            { "text": "„Wie ein Fotoalbum, von dem eine Kopie bei Ihrer Tochter liegt: Geht Ihres verloren, gibt es die Bilder noch.“", "wert": 2, "warum": "Aus ihrer Welt, und es passt genau im entscheidenden Punkt: eine zweite Kopie an einem anderen Ort." },
+            { "text": "„Wie eine Versicherung, ein Fallschirm und ein doppelter Boden zugleich.“", "wert": 0, "tendenz": "bildbruch", "warum": "Drei Bilder auf einmal – keins davon wird zu Ende gedacht." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "ausdruck-3-02-b", "faehigkeit": "ausdruck.treffend", "stufe": 7, "kanal": "wissen" },
+          "frage": "Vier Vergleiche für „Der Server ist überlastet“ – für Laien. Ordne von treffend nach schief.",
+          "eintraege": [
+            { "text": "„Wie eine Supermarktkasse, an der plötzlich alle gleichzeitig anstehen.“", "warum": "Passt genau: viele Anfragen, eine Stelle, die sie abarbeitet – darum wartet man." },
+            { "text": "„Wie ein voller Bus – es passt keiner mehr rein.“", "warum": "Verständlich. Nur arbeitet ein Server Anfragen nach und nach ab – der Bus fährt einfach weg." },
+            { "text": "„Wie ein Motor, der heiß läuft.“", "warum": "Ein Bild für Überlastung, aber es sagt nicht, warum: zu viele Anfragen auf einmal." },
+            { "text": "„Das ist nur die Spitze des Eisbergs.“", "warum": "Abgegriffen und schief: Es gibt keinen verborgenen Rest, nur zu viel auf einmal." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-3-02-c", "faehigkeit": "ausdruck.bildung", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Erklär den Satz mit einem Vergleich aus dem Alltag – und nenn seine Grenze.",
+          "vorlage": "„Unser neues Ticketsystem priorisiert Anfragen nach Dringlichkeit.“",
+          "kriterien": ["ein Bild aus dem Alltag", "passt im entscheidenden Punkt", "nennt die Grenze, etwa mit „nur dass …“"],
+          "muster": ["„Wie in der Notaufnahme: Wer am dringendsten Hilfe braucht, kommt zuerst dran – nur dass bei uns niemand blutet, sondern höchstens der Drucker streikt.“", "„Wie Vorfahrt für den Rettungswagen: Dringendes darf vor, alles andere wartet kurz und kommt danach dran – nur kommt bei uns das Dringende per Mail statt mit Blaulicht.“"] },
+        { "art": "mythos", "aussage": "Mit dem richtigen Bild kann man die Meinung der Zuhörer drehen.", "urteil": "falsch", "warum": "In einer Auswertung von 91 Studien wirkte ein einzelnes bildhaftes Wort praktisch nicht, ein ausgebautes Bild nur schwach. Bilder helfen beim Verstehen – überreden können sie wenig." },
+        { "art": "experiment", "auftrag": "Erklär diese Woche einmal etwas aus deiner Arbeit mit einem Vergleich aus dem Alltag deines Gegenübers – und nenn dazu, wo der Vergleich aufhört.", "dauer": "woche", "nachfrage": "Hat dein Gegenüber mit dem Bild weitergedacht oder nachgefragt?" },
+        { "art": "reflexion", "frage": "Welches abgegriffene Bild benutzt du oft? Schreib einen frischen Vergleich dafür auf.", "insBuch": "saetze" }
+      ],
+      "regel": "Ein Bild aus der Welt des Zuhörers, ein Bild pro Gedanke – und die Grenze dazu.",
+      "merkkarten": [
+        { "id": "ausdruck-3-02-m1", "frage": "Woher kommt ein guter Vergleich?", "antwort": "Aus der Welt des Zuhörers – und er passt in dem Punkt, um den es geht." },
+        { "id": "ausdruck-3-02-m2", "frage": "Was ist ein Bildbruch?", "antwort": "Zwei Bilder, die sich beißen – etwa ein Ruder und ein wegbrechender Boden." },
+        { "id": "ausdruck-3-02-m3", "frage": "Wofür taugen Bilder, wofür kaum?", "antwort": "Zum Erklären gut – Meinungen lenken sie kaum." }
+      ]
+    },
+    {
+      "id": "ausdruck-3-03", "bereich": "ausdruck", "stufe": 3, "nr": 3,
+      "titel": "Schreiben fürs Hören",
+      "faehigkeiten": ["ausdruck.satzbau", "ausdruck.knapp"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Die Regeln stammen aus Rundfunk und Redenschreiben. Gestützt ist: Anschauliches bleibt länger als nackte Zahlen, und einzelne Füllwörter schaden dem Eindruck kaum – erst viele.",
+      "quellen": ["praxis-ausdruck", "graeber2024", "laske2024", "langer-verstaendlich"],
+      "aha": "Der Leser kann zurückblättern, der Zuhörer nicht. Wer fürs Ohr schreibt, baut kurze Sätze, sagt das Verb früh und wiederholt den Kern – was auf Papier doppelt wirkt, hilft beim Hören.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Du sollst diesen Satz vortragen: „Die Kosten stiegen (vgl. Anlage 2) ggü. dem Vj. um 1,37 Mio. €.“ Was macht ihn fürs Ohr am schwersten?", "optionen": ["die Klammer", "die Abkürzungen und die genaue Zahl", "beides zusammen"], "richtig": 2, "loesung": "beides zusammen", "aufloesung": "Eine Klammer kann man nicht hören, und jede Abkürzung muss beim Sprechen erst aufgelöst werden. Fürs Ohr: „Die Kosten sind gestiegen – fast 1,4 Millionen Euro mehr als im letzten Jahr.“" },
+        { "art": "karte", "text": "Schreiben fürs Hören: Sätze, die du in einem Atem sprichst. Das Verb früh, keine Klammern, Abkürzungen ausgeschrieben. Zahlen runden und mit einem Bild verbinden. Ankündigen, sagen, am Schluss den Kern wiederholen. Das Wichtige ans Satzende – dort liegt beim Sprechen die Betonung. Und keine Angst vor einem „äh“: Einzelne stören kaum. Plane lieber Pausen ein als Füllwörter." },
+        { "art": "fehler", "kopf": { "id": "ausdruck-3-03-a", "faehigkeit": "ausdruck.satzbau", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Eine Ansage für die Teamrunde – gut lesbar, schwer zu hören. Markier, woran die Zuhörer scheitern.",
+          "teile": [
+            { "t": "„Liebe Kolleginnen und Kollegen, aufgrund der ab dem" },
+            { "t": "1.3. (vgl. Rundmail v. 12.2.)", "fehler": "Klammer und Abkürzungen – beim Zuhören nicht zu verstehen." },
+            { "t": "geltenden neuen Parkregelung," },
+            { "t": "die, wie Sie wissen, mit dem Umbau der Einfahrt, der bis Mai dauert, zusammenhängt,", "fehler": "Zwei Einschübe vor dem Verb – die Zuhörer verlieren den Faden." },
+            { "t": "bitten wir Sie, ab März auf dem hinteren Parkplatz zu parken.", "fehler": "Die Bitte steckt am Ende eines langen Satzes und kommt nur einmal. Fürs Ohr: vorn sagen und am Schluss wiederholen." },
+            { "t": "Danke.“" }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-3-03-b", "faehigkeit": "ausdruck.satzbau", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Schreib die Ansage fürs Ohr: kurze Sätze, das Verb früh, die Bitte am Schluss wiederholt.",
+          "vorlage": "„Liebe Kolleginnen und Kollegen, aufgrund der ab dem 1.3. (vgl. Rundmail v. 12.2.) geltenden neuen Parkregelung, die, wie Sie wissen, mit dem Umbau der Einfahrt, der bis Mai dauert, zusammenhängt, bitten wir Sie, ab März auf dem hinteren Parkplatz zu parken. Danke.“",
+          "kriterien": ["jeder Satz in einem Atem", "keine Klammern und Abkürzungen", "die Bitte steht vorn und am Schluss"],
+          "muster": ["„Liebe Kolleginnen und Kollegen, ab März parken wir alle auf dem hinteren Parkplatz. Der Grund: Die Einfahrt wird bis Mai umgebaut. Also noch einmal: ab März bitte hinten parken. Danke.“", "„Eine Bitte zum Parken: Ab März parken wir hinten. Die Einfahrt wird umgebaut, bis in den Mai hinein. Also: ab März bitte hinten parken. Danke.“"] },
+        { "art": "buehne", "kopf": { "id": "ausdruck-3-03-c", "faehigkeit": "ausdruck.satzbau", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "ausdruck-v-0186" },
+          "auftrag": "Trag deine Ansage vor, als stündest du vor dem Team. Danach sag den Kern noch einmal ohne Blatt.",
+          "sekunden": 45, "publikum": "klein",
+          "stoerungen": ["Jemand kommt zu spät herein.", "Ein Telefon klingelt."],
+          "pruefliste": ["Jeder Satz in einem Atem?", "Die Bitte am Schluss wiederholt?", "Wo du suchen musstest: Pause statt Füllwort?"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-3-03-d", "faehigkeit": "ausdruck.knapp", "stufe": 7, "kanal": "wissen" },
+          "frage": "Beim Probelesen rutscht dir an zwei Stellen ein „äh“ heraus. Was tust du?",
+          "antworten": [
+            { "text": "Den Text so lange üben, bis an keiner Stelle mehr ein einziges „äh“ herauskommt.", "wert": 1, "warum": "Üben hilft. Ein Vortrag ganz ohne „äh“ ist aber kein nötiges Ziel – einzelne stören Zuhörer kaum." },
+            { "text": "Gelassen bleiben und an den zwei Stellen eine bewusste Pause einplanen.", "wert": 2, "warum": "Einzelne Füllwörter schaden kaum. Die Pause gibt dir Zeit und den Zuhörern auch." },
+            { "text": "Den Text Wort für Wort ablesen, damit nichts schiefgehen kann.", "wert": 0, "tendenz": "vermeiden", "warum": "Dann klingt es nach Papier, und der Blick ist weg vom Team. Das kostet mehr als ein „äh“." },
+            { "text": "Mit „Reden ist nicht so meins“ anfangen.", "wert": 0, "tendenz": "kleinmachen", "warum": "Lenkt die Aufmerksamkeit genau auf das, was du verstecken willst – und verschenkt den ersten Satz." }
+          ] },
+        { "art": "reflexion", "frage": "Wann trägst du das nächste Mal etwas vor – einen Toast, eine Ansage, einen kurzen Stand? Schreib den ersten und den letzten Satz fürs Ohr.", "insBuch": "saetze" }
+      ],
+      "regel": "Fürs Ohr: ein Atem pro Satz, das Verb früh, der Kern am Schluss noch einmal.",
+      "merkkarten": [
+        { "id": "ausdruck-3-03-m1", "frage": "Was kann der Leser, was der Zuhörer nicht kann?", "antwort": "Zurückblättern. Darum: kurze Sätze, ankündigen, am Schluss wiederholen." },
+        { "id": "ausdruck-3-03-m2", "frage": "Wie klingt eine Zahl fürs Ohr?", "antwort": "Gerundet, ausgesprochen und mit einem Bild verbunden." },
+        { "id": "ausdruck-3-03-m3", "frage": "Ein „äh“ beim Vortragen – schlimm?", "antwort": "Einzelne kaum. Besser als Füllwerk ist eine kurze Pause." }
+      ]
+    },
+    {
+      "id": "ausdruck-3-04", "bereich": "ausdruck", "stufe": 3, "nr": 4,
+      "titel": "Der eigene Ton",
+      "faehigkeiten": ["ausdruck.register", "ausdruck.treffend"], "dauerMin": 7, "beleg": "D",
+      "belegHinweis": "Stil als Summe wiederkehrender Entscheidungen ist ein Denkangebot aus der Stilkunde, kein Messbefund. Die Übungen sind Praxiswissen.",
+      "quellen": ["praxis-ausdruck", "pinker2014", "zinsser1976"],
+      "aha": "Dein Ton ist keine Sammlung besonderer Wörter, sondern die Summe deiner Entscheidungen: lieber das Verb, lieber das Beispiel, lieber ein Satz weniger. Wer sie kennt, bleibt in jedem Register erkennbar.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-3-04-a", "faehigkeit": "ausdruck.register", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Sechs Nachrichten, drei Absender. Wer hat was geschrieben?",
+          "faecher": ["Miriam – herzlich, neckend", "Dr. Albers – sachlich, knapp", "Lena – zurückhaltend, genau"],
+          "karten": [
+            { "text": "„Na, du Held der Tabellen – Kaffee um drei?“", "fach": 0 },
+            { "text": "„Du hast gestern so geschuftet, da steht ein Stück Kuchen für dich im Kühlschrank.“", "fach": 0 },
+            { "text": "„Danke. Freigegeben. Bitte bis Freitag umsetzen.“", "fach": 1 },
+            { "text": "„Termin verschoben auf Donnerstag, 10 Uhr. Grund: Kundenbesuch.“", "fach": 1 },
+            { "text": "„Ich habe drei Stellen gefunden, die ich nicht sicher verstehe – darf ich sie dir morgen zeigen?“", "fach": 2 },
+            { "text": "„Kurze Rückfrage zu Seite 4: Ist hier der Netto- oder der Bruttobetrag gemeint?“", "fach": 2 }
+          ] },
+        { "art": "karte", "text": "Ein eigener Ton entsteht aus Entscheidungen, die du immer wieder gleich triffst: wie du anfängst, wie lang deine Sätze sind, ob ein Beispiel kommt, wie viel Wärme und Humor du zeigst. Register wechselst du wie Kleidung – im Chat locker, in der Mail an das Amt förmlich. Der Mensch darunter bleibt derselbe. Drei Fallen: Floskeln von der Stange, eine fremde Stimme kopieren, den Ton nach Laune wechseln." },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-3-04-b", "faehigkeit": "ausdruck.register", "stufe": 7, "kanal": "wissen" },
+          "frage": "Du schreibst zum ersten Mal einen Beitrag für den Rundbrief der Firma. Im Alltag bist du eher trocken-humorvoll. Was passt?",
+          "antworten": [
+            { "text": "So schreiben wie die Geschäftsführung in ihren Rundbriefen, damit es seriös und angemessen wirkt.", "wert": 1, "warum": "Seriös schon – aber dann liest man einen Fremden. Ein Hauch deines Tons macht den Text lesenswert." },
+            { "text": "Jeden Absatz mit einem Witz beginnen – so kennen dich ja alle.", "wert": 0, "tendenz": "ueberziehen", "warum": "Im Gespräch passt der Witz zur Lage. Im Text wird er zum Muster und lenkt vom Inhalt ab." },
+            { "text": "Deinen Ton behalten, aber dosiert: ein trockener Satz am Anfang, dann sachlich.", "wert": 2, "warum": "Erkennbar du, und trotzdem passend zum Anlass. So klingt Anpassen ohne Verbiegen." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-3-04-c", "faehigkeit": "ausdruck.treffend", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Tausch die Floskeln gegen deine eigenen Sätze. Der Inhalt bleibt.",
+          "vorlage": "An Tarek: „Ich hoffe, diese Nachricht erreicht dich wohlauf. Anbei wie besprochen die Unterlagen. Lass mich gerne wissen, falls du Fragen hast. Ich freue mich auf die weitere Zusammenarbeit.“",
+          "kriterien": ["keine Floskel von der Stange", "klingt nach dir und passt zu Tarek", "Unterlagen und Angebot für Fragen bleiben"],
+          "muster": ["„Hier die Unterlagen von heute Morgen. Seite 3 ist die wichtige. Fragen gern bis Freitag – danach bin ich im Urlaub.“", "„Wie versprochen: die Unterlagen. Kommt dir bei der Kalkulation etwas komisch vor, ruf an – ich hab den Fehler letztes Mal auch erst beim dritten Lesen gefunden.“"] },
+        { "art": "schreibreise", "titel": "Dein Ton auf einer Seite", "anleitung": "Nimm drei Texte, die du in letzter Zeit geschrieben hast: eine kurze Nachricht, eine Mail, etwas Persönliches. Lies sie hintereinander und beantworte die Fragen – ehrlich, nicht streng.", "fragen": ["Welche Wörter oder Wendungen kommen in allen dreien vor?", "Welche davon magst du – welche sind nur Gewohnheit?", "Woran würde ein Freund erkennen, dass die Texte von dir sind?", "Welchen Satz würdest du heute anders schreiben – und wie?"], "minuten": 8, "insBuch": "saetze" },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-3-04-d", "faehigkeit": "ausdruck.treffend", "stufe": 8, "kanal": "wissen" },
+          "frage": "Lena schreibt dir: „Ich klinge in meinen Mails so steif. Soll ich einfach so schreiben wie Miriam?“ Was rätst du ihr?",
+          "antworten": [
+            { "text": "„Lies Miriams Mails und nimm dir eine Sache ab, die zu dir passt.“", "wert": 1, "warum": "Lernen am Vorbild hilft – solange es eine Sache bleibt und nicht die ganze Stimme." },
+            { "text": "„Ja, übernimm ihren Stil ganz und gar – der kommt bei allen im Haus gut an, das sieht man doch jeden Tag.“", "wert": 0, "tendenz": "verkleiden", "warum": "Eine fremde Stimme klingt geliehen. Bei Lena würde Miriams Necken wie verkleidet wirken." },
+            { "text": "„Behalt deine Genauigkeit – die ist dein Ton. Ein wärmerer erster Satz reicht oft schon.“", "wert": 2, "warum": "Lenas Stärke bleibt, nur der Einstieg wird freundlicher. So ändert sich die Wirkung, nicht der Mensch." },
+            { "text": "„Mehr Ausrufezeichen, dann klingt alles lockerer!“", "wert": 0, "tendenz": "aufsetzen", "warum": "Satzzeichen ersetzen keinen Ton. Viele Ausrufezeichen wirken schnell aufgesetzt." }
+          ] },
+        { "art": "reflexion", "frage": "Welche drei Entscheidungen machen deinen Ton aus? Schreib sie als Sätze: „Ich schreibe lieber … als …“", "insBuch": "saetze" }
+      ],
+      "regel": "Register wechseln wie Kleidung – die Entscheidungen, die dich ausmachen, bleiben.",
+      "merkkarten": [
+        { "id": "ausdruck-3-04-m1", "frage": "Was ist ein eigener Ton?", "antwort": "Die Summe der Entscheidungen, die du immer wieder gleich triffst – Wortwahl, Satzlänge, Wärme, Humor." },
+        { "id": "ausdruck-3-04-m2", "frage": "Wie passt du dich an, ohne dich zu verbiegen?", "antwort": "Das Register wechseln, die eigenen Entscheidungen behalten – und vom Vorbild höchstens eine Sache übernehmen." }
+      ]
+    },
+    {
+      "id": "ausdruck-3-05", "bereich": "ausdruck", "stufe": 3, "nr": 5,
+      "titel": "Wortschatz für Gefühle",
+      "faehigkeiten": ["ausdruck.treffend", "ausdruck.diplomatie"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Gefühle fein zu unterscheiden, hängt mit besserem Umgang mit Belastung zusammen – vor allem in Zusammenhangsstudien. Dass Benennen Gefühle dämpft, zeigen Laborstudien; die Wirkung ist eher klein. Die Formulierungen sind Praxiswissen.",
+      "quellen": ["kashdan2015", "torre2018", "rogers2018", "praxis-ausdruck"],
+      "aha": "„Schlecht“ sagt fast nichts. Enttäuscht, gekränkt oder erschöpft sagt, was du brauchst: Klärung, Entschuldigung oder Pause. Wer Gefühle fein unterscheidet, kommt im Schnitt besser mit ihnen zurecht.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Was passiert eher, wenn du ein unangenehmes Gefühl in Worte fasst – etwa „Ich bin gerade ziemlich gekränkt“?", "optionen": ["Es wird stärker.", "Es bleibt gleich.", "Es wird oft etwas schwächer."], "richtig": 2, "loesung": "Es wird oft etwas schwächer.", "aufloesung": "Viele erwarten das Gegenteil. In Laborstudien dämpfte das Benennen Gefühle messbar – etwas weniger als gezieltes Umdeuten, dafür ohne dass es sich nach Arbeit anfühlt." },
+        { "art": "karte", "text": "Wer zwischen enttäuscht, gekränkt und gereizt unterscheidet, weiß eher, was er braucht: Kränkung will Klärung, Erschöpfung will Pause, Enttäuschung will vielleicht ein neues Ziel. Menschen, die negative Gefühle fein unterscheiden, greifen unter Druck seltener zu schädlichen Auswegen. Das Werkzeug ist eine Wortleiter: vom Sammelwort „schlecht“ eine Sprosse hinab. Bei anderen gilt: nachfragen statt festlegen." },
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-3-05-a", "faehigkeit": "ausdruck.treffend", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Welches Gefühl steckt am ehesten im Satz?",
+          "faecher": ["enttäuscht", "gekränkt", "erschöpft"],
+          "karten": [
+            { "text": "„Ich hatte mich so auf das Konzert gefreut – und dann fiel es aus.“", "fach": 0 },
+            { "text": "„Das neue Rad hält nicht, was im Laden versprochen wurde.“", "fach": 0 },
+            { "text": "„Sie hat vor allen gesagt, meine Arbeit sei schlampig.“", "fach": 1 },
+            { "text": "„Mein Vorschlag wurde belächelt, als wäre er naiv.“", "fach": 1 },
+            { "text": "„Seit Wochen schlafe ich schlecht und arbeite bis spät.“", "fach": 2 },
+            { "text": "„Ich kann heute einfach nichts mehr aufnehmen.“", "fach": 2 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-3-05-b", "faehigkeit": "ausdruck.diplomatie", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Sven hat zum dritten Mal kurzfristig abgesagt. Sag, was du fühlst – statt, was er ist.",
+          "vorlage": "„Du bist so unzuverlässig! Immer lässt du mich hängen.“",
+          "kriterien": ["nennt dein Gefühl genau", "beschreibt den Anlass statt Svens Charakter", "sagt, was du dir wünschst"],
+          "muster": ["„Ich war enttäuscht, als du gestern um acht abgesagt hast – das war jetzt das dritte Mal. Sag mir bitte früher Bescheid, wenn's nicht klappt.“", "„Ehrlich gesagt bin ich gerade ziemlich genervt: dritte Absage in einem Monat. Mir sind unsere Abende wichtig. Wollen wir einen Termin suchen, der für dich wirklich passt?“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-3-05-c", "faehigkeit": "ausdruck.diplomatie", "stufe": 7, "kanal": "wissen" },
+          "frage": "Jule schreibt dir abends: „Mein Café hatte heute drei Gäste. Drei. Ich weiß nicht, wie lange ich das noch durchhalte.“ Was antwortest du?",
+          "antworten": [
+            { "text": "„Kopf hoch, das wird schon!“", "wert": 0, "tendenz": "beschwichtigen", "warum": "Gut gemeint, aber es wischt ihr Gefühl weg. Sie fühlt sich eher allein damit." },
+            { "text": "„Oh nein, das tut mir leid.“", "wert": 1, "warum": "Mitgefühl ist da. Eine Frage dazu würde ihr Raum geben, mehr zu sagen." },
+            { "text": "„Das klingt nach einem zermürbenden Tag. Magst du erzählen, wie es dir gerade damit geht?“", "wert": 2, "warum": "Du gibst dem Gefühl einen Namen, ohne ihr etwas einzureden – und fragst nach, statt zu raten." },
+            { "text": "„Hast du schon über Werbung in der Zeitung nachgedacht? Oder über einen Mittagstisch für die Büros nebenan?“", "wert": 0, "tendenz": "ratschlag", "warum": "Ratschläge kommen zu früh. Erst wenn sie sich verstanden fühlt, ist sie offen für Ideen." }
+          ] },
+        { "art": "wortwahl", "kopf": { "id": "ausdruck-3-05-d", "faehigkeit": "ausdruck.treffend", "stufe": 8, "kanal": "wissen" },
+          "frage": "Die ganze Woche hattest du Angst vor deinem ersten Vortrag. Jetzt ist er vorbei, und er lief gut. Welches Wort trifft das Gefühl, das als Erstes kommt? „Ich bin so ___.“",
+          "antworten": [
+            { "text": "erleichtert", "wert": 2, "warum": "Die Last fällt ab – genau das Gefühl, wenn eine Angst sich nicht erfüllt hat." },
+            { "text": "stolz", "wert": 1, "warum": "Passt auch – meint eher die eigene Leistung und kommt oft gleich danach." },
+            { "text": "gut", "wert": 0, "warum": "Ein Sammelwort. Es sagt nicht, was du fühlst." },
+            { "text": "gelassen", "wert": 0, "warum": "Gelassenheit ist Ruhe ohne Druck. Nach einer Woche Angst fühlt es sich anders an: Es löst sich etwas." }
+          ] },
+        { "art": "reflexion", "frage": "Denk an einen Moment dieser Woche, in dem du „gut“ oder „schlecht“ gesagt hättest. Welches genauere Wort trifft es – und was hätte dieses Gefühl gebraucht?", "insBuch": "saetze" },
+        { "art": "fachhilfe", "thema": "seele" }
+      ],
+      "regel": "Eine Sprosse hinab: das genaue Gefühlswort – bei dir benennen, bei anderen nachfragen.",
+      "merkkarten": [
+        { "id": "ausdruck-3-05-m1", "frage": "Was heißt es, Gefühle fein zu unterscheiden?", "antwort": "Statt „schlecht“ das genaue Wort finden: enttäuscht, gekränkt, gereizt, erschöpft." },
+        { "id": "ausdruck-3-05-m2", "frage": "Ärger über jemanden – wie sagst du es?", "antwort": "Dein Gefühl und den Anlass nennen, nicht seinen Charakter: „Ich war enttäuscht, als …“" },
+        { "id": "ausdruck-3-05-m3", "frage": "Jemand erzählt von einem schweren Tag. Was hilft zuerst?", "antwort": "Das Gefühl würdigen und nachfragen – nicht beschwichtigen, nicht gleich Rat geben." }
+      ]
+    }
+  ]
+}

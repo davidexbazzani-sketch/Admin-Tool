@@ -575,6 +575,394 @@
           "warum": "Die Richtung stimmt, aber ohne Bild bleibt es eine Behauptung."
         }
       ]
+    },
+    {
+      "id": "stegreif-fc-025",
+      "faehigkeit": "stegreif.struktur",
+      "stufe": 4,
+      "frage": "Beim Treffen der Wandergruppe fragt man dich nach deinem ersten Jahr in der neuen Stadt. Anfangs kanntest du niemanden, heute hast du feste Leute, nächstes Jahr willst du selbst eine Tour leiten. Wie antwortest du?",
+      "antworten": [
+        {
+          "text": "„Ganz gut so weit, danke.“",
+          "wert": 1,
+          "warum": "Freundlich und kurz. Ein Satz zu Gestern, Heute und Morgen hätte den anderen etwas zum Anknüpfen gegeben."
+        },
+        {
+          "text": "„Anfangs kannte ich niemanden. Heute habe ich feste Leute – und nächstes Jahr will ich selbst eine Tour leiten.“",
+          "wert": 2,
+          "warum": "Gestern – heute – morgen in zwei Sätzen, mit einem Ausblick, auf den die Gruppe reagieren kann."
+        },
+        {
+          "text": "„Also, im Januar bin ich angekommen, dann kam der Umzugsstress, im März habe ich die Gruppe gefunden, im Mai kam die erste Tour …“",
+          "wert": 0,
+          "tendenz": "alles",
+          "warum": "Ein Monat nach dem anderen – das Wichtige geht in der Aufzählung unter."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-026",
+      "faehigkeit": "stegreif.kern",
+      "stufe": 5,
+      "frage": "Der Hausmeister fragt dich: „Sollen wir im Hof Fahrradbügel aufstellen?“ Du findest: ja, solange die Mülltonnen weiter Platz haben. Was sagst du?",
+      "antworten": [
+        {
+          "text": "„Da gibt es im Haus sicher viele Meinungen – fragen Sie am besten alle einmal einzeln, dann sieht man weiter.“",
+          "wert": 0,
+          "tendenz": "ausweichen",
+          "warum": "Er hat dich gefragt. Ein Fazit mit Bedingung wäre eine echte Hilfe gewesen."
+        },
+        {
+          "text": "„Ja – wenn die Mülltonnen weiter Platz haben.“",
+          "wert": 2,
+          "warum": "Meinung und Bedingung in einem Satz – das Fazit nimmt den Einwand gleich auf."
+        },
+        {
+          "text": "„Ja, gute Idee.“",
+          "wert": 1,
+          "warum": "Klar. Deine Bedingung mit den Tonnen geht dabei aber verloren."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-027",
+      "faehigkeit": "stegreif.vergleich",
+      "stufe": 5,
+      "frage": "Du willst im Verein erklären, warum der Vorstand zusammenhalten muss, und vergleichst ihn mit einer Fußballmannschaft. Du ahnst: Gleich sagt jemand, dass es im Vorstand keinen Trainer gibt. Was tust du?",
+      "antworten": [
+        {
+          "text": "Abwarten und erst dann antworten, wenn wirklich jemand widerspricht – vielleicht merkt es ja keiner.",
+          "wert": 1,
+          "warum": "Geht – aber wer die Grenze selbst nennt, nimmt dem Einwand vorher den Wind."
+        },
+        {
+          "text": "Lieber ganz auf den Vergleich verzichten – er könnte ja angreifbar sein.",
+          "wert": 0,
+          "tendenz": "zensor",
+          "warum": "Jedes Bild hinkt irgendwo. Ohne Bild bleibt nur die trockene Erklärung."
+        },
+        {
+          "text": "Gleich selbst sagen: „Einen Trainer haben wir nicht – aber wie im Team gewinnt keiner allein.“",
+          "wert": 2,
+          "warum": "Grenze zuerst zugegeben, Prinzip gehalten. Der Einwand ist beantwortet, bevor er kommt."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-028",
+      "faehigkeit": "stegreif.vergleich",
+      "stufe": 6,
+      "frage": "Ein Kollege fragt, warum du jeden Monat einen kleinen Betrag zurücklegst, statt einmal im Jahr viel. Dein Grund: Ein bisschen jeden Monat hält man leichter durch als einmal im Jahr einen großen Kraftakt. Welcher Vergleich trifft das Prinzip?",
+      "antworten": [
+        {
+          "text": "„Wie Zähneputzen: Jeden Tag ein bisschen bringt mehr als einmal im Monat ganz viel.“",
+          "wert": 2,
+          "warum": "Gleiches Prinzip – Regelmäßigkeit schlägt seltene große Anstrengung – in einem Bild, das jeder kennt."
+        },
+        {
+          "text": "„Wie ein Lottogewinn, nur in Raten.“",
+          "wert": 0,
+          "warum": "Lotto ist Zufall – Sparen ist das Gegenteil. Das Bild führt in die falsche Richtung."
+        },
+        {
+          "text": "„Kleinvieh macht auch Mist.“",
+          "wert": 1,
+          "warum": "Ein bekannter Spruch – er sagt aber, dass sich Kleines summiert, nicht, dass man es leichter durchhält."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-029",
+      "faehigkeit": "stegreif.zeit",
+      "stufe": 6,
+      "frage": "Im Sportverein fragt dich jemand: „Was ist eigentlich mit dem Hallenschlüssel passiert?“ Du hast ihn verlegt, ein Ersatz kommt Freitag. Welcher Plan passt am besten?",
+      "antworten": [
+        {
+          "text": "Dafür – dagegen – Fazit.",
+          "wert": 0,
+          "warum": "Niemand hat nach deiner Meinung gefragt – gefragt ist, was los ist."
+        },
+        {
+          "text": "Punkt – Grund – Beispiel, der passt fast immer.",
+          "wert": 1,
+          "warum": "Geht fast immer. Für eine Panne passt Was – was heißt das – was jetzt genauer."
+        },
+        {
+          "text": "Was ist los – was heißt das – was jetzt.",
+          "wert": 2,
+          "warum": "Eine Pannen-Frage: was passiert ist, was es für alle heißt, wie es weitergeht."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-030",
+      "faehigkeit": "stegreif.zeit",
+      "stufe": 6,
+      "frage": "Du führst Besucher durch eure Werkstatt und erklärst eine Maschine. Plötzlich fällt dir ihr Name nicht ein. Was tust du?",
+      "antworten": [
+        {
+          "text": "Stehen bleiben und warten, bis der Name wieder da ist – egal, wie lange es dauert.",
+          "wert": 0,
+          "tendenz": "festhaengen",
+          "warum": "Die Besucher brauchen den Namen nicht – sie wollen wissen, was die Maschine tut."
+        },
+        {
+          "text": "„Wie heißt sie gleich – egal, wichtiger ist, was sie tut: …“ und weiter.",
+          "wert": 2,
+          "warum": "Die Lücke gelassen benannt und über den Kern weitergemacht. Kaum jemand vermisst den Namen."
+        },
+        {
+          "text": "Einen Kollegen fragen.",
+          "wert": 1,
+          "warum": "Ehrlich und praktisch – solange einer in der Nähe ist."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-031",
+      "faehigkeit": "stegreif.wortfluss",
+      "stufe": 6,
+      "frage": "Du hast bald ein Vorstellungsgespräch. Fragen wie „Erzählen Sie von einer Situation, in der Sie improvisieren mussten“ sind wahrscheinlich. Was ist die beste Vorbereitung?",
+      "antworten": [
+        {
+          "text": "Eine einzige perfekte Geschichte Wort für Wort auswendig lernen.",
+          "wert": 1,
+          "warum": "Eine Geschichte im Vorrat hilft. Wort für Wort wird sie aber steif – und passt nicht auf jede Frage."
+        },
+        {
+          "text": "Spontan etwas erfinden, das gut klingt.",
+          "wert": 0,
+          "tendenz": "bluffen",
+          "warum": "Erfundenes fällt bei der ersten Nachfrage auf."
+        },
+        {
+          "text": "Einige kleine echte Geschichten mit Stichwörtern bereithalten, die zu verschiedenen Fragen passen.",
+          "wert": 2,
+          "warum": "Ein Vorrat mit Stichwörtern passt auf viele Fragen – und echte Geschichten halten Nachfragen aus."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-032",
+      "faehigkeit": "stegreif.assoziation",
+      "stufe": 7,
+      "frage": "Beim Sommerfest erzählt jemand begeistert von einem Segeltörn. Du segelst nicht, hast aber eine Geschichte vom Paddeln im Dauerregen. Wie kommst du ins Gespräch?",
+      "antworten": [
+        {
+          "text": "„Segeln nicht – aber Paddeln im Dauerregen. Seitdem weiß ich: Wasser von oben ist schlimmer als von unten.“",
+          "wert": 2,
+          "warum": "Eine Brücke vom Stichwort „Wasser“ zu deiner eigenen Geschichte – mit einem Augenzwinkern."
+        },
+        {
+          "text": "„Wo seid ihr denn gesegelt?“",
+          "wert": 1,
+          "warum": "Freundlich und offen – von dir kommt aber noch nichts."
+        },
+        {
+          "text": "Von deinem Garten erzählen.",
+          "wert": 0,
+          "tendenz": "themawechsel",
+          "warum": "Ohne Brücke ein Themenwechsel – die andere Person bleibt mit ihrem Törn allein."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-033",
+      "faehigkeit": "stegreif.struktur",
+      "stufe": 6,
+      "frage": "Bei der Einweihung des neuen Spielplatzes sprichst du spontan ein paar Worte. Dein erster Satz war: „Ab heute wird hier wieder gelacht.“ Womit schließt du am besten?",
+      "antworten": [
+        {
+          "text": "„Ja, also … mehr fällt mir jetzt auch nicht ein. Das war's eigentlich, glaube ich.“",
+          "wert": 0,
+          "tendenz": "auslaufen",
+          "warum": "So läuft die Rede aus, statt zu enden – hängen bleibt die Unsicherheit."
+        },
+        {
+          "text": "„Also: Ab heute wird hier gelacht – die Rutsche ist eröffnet!“",
+          "wert": 2,
+          "warum": "Zurück zum ersten Satz und eine Einladung: Der Bogen schließt sich, und alle wissen, dass jetzt Schluss ist."
+        },
+        {
+          "text": "„Danke fürs Zuhören.“",
+          "wert": 1,
+          "warum": "Höflich und klar. Mit einem Griff zurück zum ersten Satz wäre der Bogen geschlossen."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-034",
+      "faehigkeit": "stegreif.kern",
+      "stufe": 7,
+      "frage": "Beim Vereinstreffen fragt jemand: „Die Fahrt zum Turnier kostet dieses Jahr mehr, oder?“ Das stimmt – dafür fährt diesmal ein Bus statt der Bahn. Was sagst du?",
+      "antworten": [
+        {
+          "text": "„Ach, das sind doch nur ein paar Euro, das fällt kaum ins Gewicht.“",
+          "wert": 0,
+          "tendenz": "kleinreden",
+          "warum": "Wahr ist es – aber kleingeredet. Für manche sind ein paar Euro viel."
+        },
+        {
+          "text": "„Dafür fährt diesmal ein Bus.“",
+          "wert": 1,
+          "warum": "Der Grund stimmt – aber du übergehst, dass die Fahrt teurer ist. Das merkt jeder."
+        },
+        {
+          "text": "„Ja, etwas mehr. Dafür fährt diesmal ein Bus statt der Bahn.“",
+          "wert": 2,
+          "warum": "Erst den wahren Teil zugeben, dann einordnen. So glaubt man dir auch den Vorteil."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-035",
+      "faehigkeit": "stegreif.zeit",
+      "stufe": 7,
+      "frage": "Auf der Mieterversammlung ruft ein Nachbar: „Sie wollen doch nur Ihren eigenen Parkplatz retten!“ Du hast gar keinen Parkplatz im Hof – dir geht es um die Feuerwehrzufahrt. Was antwortest du?",
+      "antworten": [
+        {
+          "text": "„Das ist eine Frechheit, so etwas vor allen zu unterstellen!“",
+          "wert": 0,
+          "tendenz": "angreifen",
+          "warum": "Die Empörung macht aus der Sache einen Streit – und die Feuerwehrzufahrt geht unter."
+        },
+        {
+          "text": "„Das stimmt nicht.“",
+          "wert": 1,
+          "warum": "Richtig – aber ohne deinen eigentlichen Grund bleibt der Verdacht im Raum."
+        },
+        {
+          "text": "„Ich habe keinen Parkplatz im Hof. Mir geht es um die Feuerwehrzufahrt.“",
+          "wert": 2,
+          "warum": "Die Unterstellung ruhig richtiggestellt, dann dein echter Grund in einem Satz."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-036",
+      "faehigkeit": "stegreif.zeit",
+      "stufe": 8,
+      "frage": "Du fragst die Hausverwaltung, wann die Heizung repariert wird. Die Antwort: „Wir investieren dieses Jahr viel ins Haus – neue Fenster, ein neues Dach …“ Was ist am wirksamsten?",
+      "antworten": [
+        {
+          "text": "Freundlich nachfassen: „Schön. Und wann wird die Heizung repariert?“",
+          "wert": 2,
+          "warum": "Wird die Frage wiederholt, ist das Ausweichen sichtbar – und eine Antwort fällig."
+        },
+        {
+          "text": "Dich für die Auskunft bedanken und gehen – sie werden sich schon melden.",
+          "wert": 0,
+          "tendenz": "nachgeben",
+          "warum": "Du nimmst die Brücke an – und die Heizung bleibt offen."
+        },
+        {
+          "text": "Die Frage danach noch einmal schriftlich stellen.",
+          "wert": 1,
+          "warum": "Geht und schafft Klarheit, dauert aber. Im Gespräch wäre die Antwort jetzt fällig."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-037",
+      "faehigkeit": "stegreif.vergleich",
+      "stufe": 8,
+      "frage": "Angenommen, du arbeitest in der Buchhaltung und sollst beim Berufsinfotag einer Schulklasse erklären, was du tust. Was trägt am besten?",
+      "antworten": [
+        {
+          "text": "„Ich mache die Kreditorenbuchhaltung und die Abschlüsse nach Handelsrecht.“",
+          "wert": 0,
+          "tendenz": "fachwort",
+          "warum": "Für Schüler nur neue Wörter – keiner weiß danach mehr."
+        },
+        {
+          "text": "„Ich bin so etwas wie das Haushaltsbuch der Firma: Ich schreibe auf, was reinkommt und rausgeht.“",
+          "wert": 2,
+          "warum": "Ein Bild aus dem Alltag mit demselben Prinzip. Jetzt können die Schüler nachfragen."
+        },
+        {
+          "text": "„Ich kümmere mich um die Zahlen.“",
+          "wert": 1,
+          "warum": "Stimmt und ist kurz – ein Bild würde zeigen, welche Zahlen und wozu."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-038",
+      "faehigkeit": "stegreif.assoziation",
+      "stufe": 8,
+      "frage": "Der Hausmeister geht in den Ruhestand, und man bittet dich spontan um ein paar Worte. Dir fällt ein: Jeden Winter hat er als Erster Schnee geräumt, und alle kamen sicher aus dem Haus. Was sagst du?",
+      "antworten": [
+        {
+          "text": "„Danke für alles!“",
+          "wert": 1,
+          "warum": "Herzlich – mit dem Schnee als Bild wäre es sein Dank geworden."
+        },
+        {
+          "text": "„Danke für das Schneeräumen, die Mülltonnen, die Glühbirnen, den Rasen, die Hecke, die Reparaturen, den Keller …“",
+          "wert": 0,
+          "tendenz": "alles",
+          "warum": "Eine Liste verwässert den Dank. Ein Bild, das alle kennen, wiegt mehr."
+        },
+        {
+          "text": "„Ihre Spuren im Schnee waren jeden Winter die ersten – dank Ihnen kamen wir alle sicher raus. Danke!“",
+          "wert": 2,
+          "warum": "Ein Bild, die Tat, die Wirkung – konkret und nur für ihn."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-039",
+      "faehigkeit": "stegreif.jaund",
+      "stufe": 8,
+      "frage": "Du führst Gäste durch die Altstadt. Es fängt an zu regnen, und jemand schlägt vor, ins kleine Museum am Platz zu gehen. Was tust du?",
+      "antworten": [
+        {
+          "text": "„Ja, und dort erzähle ich euch die restlichen Geschichten – drinnen und trocken.“",
+          "wert": 2,
+          "warum": "Der Plan weicht dem guten Einfall, und deine Führung lebt weiter."
+        },
+        {
+          "text": "„Nein, die Route steht, wir ziehen das jetzt durch – ein bisschen Regen hat noch niemandem geschadet.“",
+          "wert": 0,
+          "tendenz": "abblocken",
+          "warum": "Am Plan festhalten, wenn der Moment etwas Besseres anbietet, kostet die Stimmung der Gruppe."
+        },
+        {
+          "text": "„Gute Idee – kurz abstimmen?“",
+          "wert": 1,
+          "warum": "Offen und fair. Mit einem eigenen Baustein hättest du die Idee gleich mitgetragen."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-040",
+      "faehigkeit": "stegreif.zeit",
+      "stufe": 9,
+      "frage": "Gleich sollst du vor der versammelten Belegschaft spontan zu einer Panne deines Teams Stellung nehmen. Wofür nutzt du die Minute davor am besten?",
+      "antworten": [
+        {
+          "text": "Jeden Satz im Kopf Wort für Wort ausformulieren.",
+          "wert": 0,
+          "tendenz": "auswendig",
+          "warum": "Ein Text im Kopf belegt den Platz, den du gleich brauchst – und reißt beim ersten vergessenen Wort ab."
+        },
+        {
+          "text": "Ausatmen und dir sagen: „Du kennst die Fakten. Erst der wahre Teil, dann der nächste Schritt.“",
+          "wert": 2,
+          "warum": "Abstand durch das „du“, dazu ein Plan für den ersten Satz – so bleibt Platz im Kopf."
+        },
+        {
+          "text": "Die schlimmsten Nachfragen durchspielen, damit dich nichts überrascht.",
+          "wert": 0,
+          "tendenz": "gruebeln",
+          "warum": "Klingt nach Vorbereitung, nährt aber vor allem die Sorge. In einer Minute bringt der erste Satz mehr."
+        },
+        {
+          "text": "Die wichtigsten Fakten auf einen Zettel schreiben.",
+          "wert": 1,
+          "warum": "Hilft dem Kopf. Ein Selbstgespräch mit „du“ und ein klarer erster Satz geben zusätzlich Halt."
+        }
+      ]
     }
   ],
   "selbstbild": [

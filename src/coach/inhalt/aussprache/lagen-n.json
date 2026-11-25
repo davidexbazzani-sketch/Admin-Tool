@@ -21,7 +21,7 @@
         { "id": "k1c", "sagt": "Dr. Albers: „Läuft – heißt was genau?“",
           "wahl": [
             { "text": "„Das Angebot ist verschickt. | Antwort bis Mittwoch.“", "wert": 2, "weiter": "k2", "rueck": "Jetzt hat er, was er braucht – in zwei klaren Sätzen." },
-            { "text": "„Na ja, so wie geplant halt.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "k2b", "rueck": "Ausweichend und leise. Jetzt schaut die ganze Runde zu dir." }
+            { "text": "„Na ja, so wie geplant halt. Das wird schon alles, denke ich.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "k2b", "rueck": "Ausweichend und leise. Jetzt schaut die ganze Runde zu dir." }
           ] },
         { "id": "k2", "sagt": "Dr. Albers: „Gut. Und die Rabattfrage?“ – Genau das Thema, bei dem du unsicher bist. Du merkst, wie deine Stimme sinkt.",
           "wahl": [
@@ -37,7 +37,7 @@
         { "id": "k3", "sagt": "Dr. Albers: „Gut. Dann bis morgen?“",
           "wahl": [
             { "text": "„Ja. | Bis morgen, zwölf Uhr, | haben Sie die Zahl.“", "wert": 2, "weiter": "ende1", "rueck": "Zusage mit Uhrzeit, Satzende gehalten. Klarer geht ein Abschluss nicht." },
-            { "text": "„Jo, mach ich.“ – schon halb zum Laptop gedreht.", "wert": 1, "tendenz": "satzende", "weiter": "ende1", "rueck": "Kommt an, aber die Zusage bleibt vage. Eine Uhrzeit hätte sie festgemacht." }
+            { "text": "„Jo, mach ich, klar.“ – schon halb zum Laptop gedreht.", "wert": 1, "tendenz": "satzende", "weiter": "ende1", "rueck": "Kommt an, aber die Zusage bleibt vage. Eine Uhrzeit hätte sie festgemacht." }
           ] },
         { "id": "ende1", "sagt": "Dr. Albers nickt und geht zum nächsten Punkt. Tarek zeigt dir unter dem Tisch einen Daumen.", "ende": "In einer Lage, die dein Muster anzieht, hast du den ersten Satz klar gesetzt, die Stimme beim unsicheren Thema gehalten und mit einer genauen Zusage geschlossen. So sieht Umgewöhnen im Alltag aus." },
         { "id": "ende2", "sagt": "Nach der Runde fragt Tarek: „Was hast du jetzt eigentlich zur Rabattfrage gesagt?“", "ende": "Kein Drama – aber dein Beitrag ist untergegangen. Beim nächsten Mal: Kopf hoch vor dem ersten Satz, und wenn die Stimme sinkt, das Satzende bewusst halten." }
@@ -86,7 +86,7 @@
         { "id": "k3", "sagt": "Nadine Köhler: „Gut. Dann besprechen wir das am Donnerstag. Passt Ihnen neun Uhr?“",
           "wahl": [
             { "text": "„Donnerstag, | neun Uhr, | passt gut. | Bis dann, Frau Köhler.“", "wert": 2, "weiter": "ende1", "rueck": "Termin wiederholt, Satzende gehalten. So bleibt nichts offen." },
-            { "text": "„Joa, passt, bis dann …“ – leiser werdend.", "wert": 1, "tendenz": "satzende", "weiter": "ende1", "rueck": "Freundlich, aber der Termin ist nicht noch einmal gefallen. Am Ende verschwindet die Stimme." }
+            { "text": "„Joa, passt schon, alles klar, bis dann …“ – leiser werdend, schon halb aufgelegt.", "wert": 1, "tendenz": "satzende", "weiter": "ende1", "rueck": "Freundlich, aber der Termin ist nicht noch einmal gefallen. Am Ende verschwindet die Stimme." }
           ] },
         { "id": "ende1", "sagt": "Nadine Köhler: „Prima, steht im Kalender. Bis Donnerstag.“", "ende": "Erst die Lage ordnen, dann sprechen: ruhiger Ort, Name mit Pause, Nummer in Gruppen, Termin zum Schluss. Ein kurzer Anruf, der keine Frage offen lässt." },
         { "id": "ende2", "sagt": "Am nächsten Tag schreibt Nadine Köhler: „Ich finde Ihr Angebot nicht – können Sie es noch einmal schicken?“", "ende": "Kein Weltuntergang, aber ein Umweg. Beim nächsten Mal: kurz raus aus dem Lärm, Name in Silben, Nummer angekündigt und in Gruppen." }
@@ -110,7 +110,7 @@
         { "id": "k1b", "sagt": "Miriam: „Ganz unauffällig, versprochen. Niemand merkt was.“",
           "wahl": [
             { "text": "„Na gut. | Probieren wir es.“", "wert": 2, "weiter": "k2", "rueck": "Mutig. Gerade das Unangenehme bringt hier am meisten." },
-            { "text": "„Nein, wirklich nicht.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Deine Entscheidung. Nur übst du heute ohne Spiegel von außen." }
+            { "text": "„Nein, wirklich nicht. Ich übe das lieber allein.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Deine Entscheidung. Nur übst du heute ohne Spiegel von außen." }
           ] },
         { "id": "k2", "sagt": "9:00 Uhr. Dein Telefon klingelt. Miriam sitzt am Nachbartisch.",
           "wahl": [
@@ -120,7 +120,7 @@
         { "id": "k2b", "sagt": "Miriam tippt sich ans Ohr. Der Anrufer schweigt kurz.",
           "wahl": [
             { "text": "Kurz innehalten: „Verzeihung – | hier spricht …“", "wert": 2, "weiter": "k3", "rueck": "Zeichen gesehen, umgeschaltet. Dafür ist es da." },
-            { "text": "Das Zeichen übersehen und weiterreden.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3", "rueck": "Der Anrufer fragt später noch einmal nach deinem Namen. Das nächste Zeichen nimmst du besser an." }
+            { "text": "Das Zeichen übersehen und im selben Tempo einfach weiterreden.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3", "rueck": "Der Anrufer fragt später noch einmal nach deinem Namen. Das nächste Zeichen nimmst du besser an." }
           ] },
         { "id": "k3", "sagt": "10:30 Uhr, Runde. Dr. Albers: „Wie hoch wird das Budget?“ Die Zahl ist noch nicht sicher. Du spürst, wie du leiser wirst.",
           "wahl": [

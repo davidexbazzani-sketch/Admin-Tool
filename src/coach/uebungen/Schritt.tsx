@@ -7,7 +7,8 @@ import { Fehler, Rangfolge, Zuordnen } from './Sortieren'
 import { Bauplan, Blitz, Freitext, Reflexion } from './Freitext'
 import { GespraechSpieler } from './Gespraech'
 import { AnleitungSchritt, Atem, Lockern, Routine } from './Gefuehrt'
-import { Klartext, Lautleiter, Nachsprechen, Sprechen, Stumm } from './Sprechen'
+import { Buehne, Klartext, Lautleiter, Nachsprechen, Sprechen, Stumm } from './Sprechen'
+import { Fahrplan, Geschichte, Geschichtenbau, Gespraechskarte, Lebensrad, Leiter, Schreibreise, Werte, Woop } from './Werkzeuge'
 import { Experiment, Sammeln, Selbstbild, Wenndann, Zaehler } from './Plan'
 
 export function Schritt(p: BausteinProps<S>) {
@@ -34,6 +35,16 @@ export function Schritt(p: BausteinProps<S>) {
     case 'anleitung': return <AnleitungSchritt {...p} s={s} />
     case 'routine': return <Routine {...p} s={s} />
     case 'stumm': return <Stumm {...p} s={s} />
+    case 'buehne': return <Buehne {...p} s={s} />
+    case 'geschichte': return <Geschichte {...p} s={s} />
+    case 'geschichtenbau': return <Geschichtenbau {...p} s={s} />
+    case 'gespraechskarte': return <Gespraechskarte {...p} s={s} />
+    case 'fahrplan': return <Fahrplan {...p} s={s} />
+    case 'leiter': return <Leiter {...p} s={s} />
+    case 'werte': return <Werte {...p} s={s} />
+    case 'lebensrad': return <Lebensrad {...p} s={s} />
+    case 'schreibreise': return <Schreibreise {...p} s={s} />
+    case 'woop': return <Woop {...p} s={s} />
     case 'nachsprechen': return <Nachsprechen {...p} s={s} />
     case 'klartext': return <Klartext {...p} s={s} />
     case 'lautleiter': return <Lautleiter {...p} s={s} />

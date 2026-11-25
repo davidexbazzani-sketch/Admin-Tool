@@ -103,11 +103,34 @@ export type Schritt =
   | { art: 'sprechen'; kopf: Kopf; auftrag: string; sekunden: number; pruefliste: string[] }
   | { art: 'atem'; werkzeug: string; schritte: string[]; takt: { ein: number; aus: number; runden: number }; hinweis: string; messen: boolean; ton?: string }
   | { art: 'lockern'; uebungen: string[]; sekunden: number; stummMoeglich: boolean }
-  | { art: 'anleitung'; titel: string; schritte: string[]; sekunden: number; stumm: boolean; pruefung?: string[] }
+  | { art: 'anleitung'; titel: string; schritte: string[]; sekunden: number; stumm: boolean; pruefung?: string[]
+      /** Anspannung vorher/nachher messen (zählt für „Was bei mir wirkt“); braucht die Kennung eines Werkzeugs aus gemeinsam.json */
+      messen?: boolean; werkzeug?: string }
   | { art: 'nachsprechen'; kopf: Kopf; auftrag: string; zeilen: string[]; weise: 'gewohnt' | 'ueberdeutlich' | 'klar' | 'frei'; pruefliste: string[]; ton?: string }
   | { art: 'klartext'; kopf: Kopf; text: string; pruefliste: string[] }
   | { art: 'lautleiter'; kopf: Kopf; laut: string; stufen: { s: string; zeilen: string[] }[]; pruefliste: string[] }
   | { art: 'routine'; bausteine: string[]; mindestens: number; hoechstens: number }
+  // ── Stufe 2: Werkzeuge fürs eigene Leben (ohne Wertung, Ergebnis geht ins Buch bzw. in Kompass/Notfallkoffer) ──
+  /** Bruno erzählt einen kurzen Fall aus der Stammbesetzung */
+  | { art: 'geschichte'; titel: string; figur: string; text: string; frage?: string }
+  /** eigenes Erlebnis in Lage – Wendung – Schluss gießen; landet im Geschichten-Schatz */
+  | { art: 'geschichtenbau'; kopf: Kopf; auftrag: string; felder: { name: string; hilfe: string }[]; muster: string[] }
+  /** Gespräch vorbereiten: Anlass, Ziel, erster Satz, Wunsch, Plan B – als Karte zum Mitnehmen */
+  | { art: 'gespraechskarte'; anlass: string; beispiel?: { ziel: string; erster: string; wunsch: string; planB: string } }
+  /** Ernstfall eintragen; der Coach baut den Weg dorthin (Woche, Vortag, Stunde, fünf Minuten, eine Minute, danach) */
+  | { art: 'fahrplan'; anlass: string }
+  /** eigene Angst-Leiter: bis zu zehn Stufen mit Anspannungswert */
+  | { art: 'leiter'; auftrag: string; beispiel: string[] }
+  /** Werte sortieren: die wichtigsten wählen */
+  | { art: 'werte'; auftrag: string; karten: string[]; waehle: number }
+  /** Lebensrad: Lebensbereiche 0–10 einschätzen */
+  | { art: 'lebensrad'; bereiche: string[] }
+  /** geführtes Schreiben (bestmögliches Selbst, 80. Geburtstag, drei Leben …) */
+  | { art: 'schreibreise'; titel: string; anleitung: string; fragen: string[]; minuten: number; insBuch?: 'erfolg' | 'saetze' | 'geschichten' | 'kompass' }
+  /** Wunsch – Ergebnis – Hindernis – Plan */
+  | { art: 'woop'; anlass: string; beispiel?: { wunsch: string; ergebnis: string; hindernis: string; plan: string } }
+  /** Bühne: aufstehen und reden, mit Publikum, Stoppuhr und kleinen Störungen (laut, braucht leise-Ersatz) */
+  | { art: 'buehne'; kopf: Kopf; auftrag: string; sekunden: number; publikum: 'klein' | 'gross' | 'video'; stoerungen: string[]; pruefliste: string[] }
   /** stille Übung mit Kopf (Mundbild im Spiegel, innerlich sprechen, Zungenlage fühlen) – echte Ersatzübung für laute Aufgaben */
   | { art: 'stumm'; kopf: Kopf; titel: string; schritte: string[]; sekunden: number; pruefliste: string[] }
   // Anwenden und nachdenken
@@ -261,4 +284,41 @@ export interface Gemeinsam {
   einfuehrung: { titel: string; text: string }[]
   gleich: { id: string; titel: string; bereich?: BereichId; schritte: string[] }[]
   mittendrin: string[]
+}
+
+// ── Stufe 2: Inhalte fürs eigene Leben (inhalt/leben.json) ──
+
+export type SchaerfeId = 'sanft' | 'normal' | 'arschtritt'
+export type ErinnerungsArt = 'wennDann' | 'kleinster' | 'frage' | 'idee' | 'rueckblick' | 'neustart' | 'spruch'
+export type FahrplanEtappe = 'woche' | 'vortag' | 'stunde' | 'fuenf' | 'minute' | 'danach'
+export type ErnstfallArt = 'rede' | 'gespraech' | 'pruefung' | 'vorstellung' | 'telefon' | 'sonst'
+
+export interface VorhabenIdee { titel: string; kleinster: string; wennDann: string; hindernis: string }
+export interface VorhabenKategorie {
+  kat: string            // Kennung, z. B. "bewegung"
+  titel: string
+  zeichen: string        // lucide-Symbolname
+  /** Sprung in einen anderen Raum (nur wenn sichtbar) */
+  sprung?: 'parla-italiano'
+  ideen: VorhabenIdee[]
+  /** konkrete Ideen für die Erinnerungsart „idee“ (Unternehmung, Freude, Buchimpuls …) */
+  impulse: string[]
+}
+export interface Mutprobe { id: string; titel: string; auftrag: string; halb: string; warum: string }
+export interface NotfallAblauf { art: ErnstfallArt; titel: string; etappen: { id: FahrplanEtappe; titel: string; schritte: string[] }[]; auswertung: string[] }
+export interface KompassStation { id: string; nr: number; titel: string; kurz: string; minuten: number; einleitung: string; schritte: Schritt[] }
+export interface Leben {
+  vorhaben: VorhabenKategorie[]
+  /** Erinnerungstexte je Art und Schärfe; Platzhalter {titel} {kleinster} {wennDann} {anzahl} {name} */
+  erinnerungen: Record<ErinnerungsArt, Record<SchaerfeId, string[]>>
+  mutproben: Mutprobe[]
+  notfall: NotfallAblauf[]
+  kompass: {
+    stationen: KompassStation[]
+    werteKarten: string[]
+    lebensrad: string[]
+    pyramide: { stufen: { feld: 'lebensziel' | 'drei' | 'neunzig' | 'woche' | 'heute'; titel: string; hilfe: string; beispiel: string }[]; pruefFragen: string[] }
+    wochenCheck: string[]
+    rueckblick: string[]
+  }
 }

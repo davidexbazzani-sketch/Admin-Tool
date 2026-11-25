@@ -1,0 +1,297 @@
+{
+  "einheiten": [
+    {
+      "id": "stegreif-3-01", "bereich": "stegreif", "stufe": 3, "nr": 1,
+      "titel": "Stegreif vor Publikum: der Bogen",
+      "faehigkeiten": ["stegreif.struktur", "stegreif.kern"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Redner ihre Nervosität für sichtbarer halten, als sie ist, zeigt ein Experiment; dass Anfang und Ende besser hängen bleiben, ist für Wortlisten belegt. Der Bogen aus erstem und letztem Satz ist Praxiswissen.",
+      "quellen": ["savitsky2003", "murdock1962", "praxis-stegreif"],
+      "aha": "Vor Publikum trägt dich nicht die Mitte, sondern der Bogen: ein erster Satz, der das Thema setzt, ein letzter, der es schließt. Stehen diese beiden, darf alles dazwischen spontan sein.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Beim Jubiläum des Sportvereins drückt dir der Vorsitzende das Mikrofon in die Hand: „Sag doch was über unsere Laufgruppe!“ Fünfzig Leute schauen. Du weißt: Am Anfang war kaum jemand sportlich, heute lauft ihr dienstags zu zwölft.", "schwach": "„Oh, äh, ja, also die Laufgruppe … wir laufen ja, dienstags, und das macht Spaß, also, ähm … ja. Danke.“", "stark": "„Unsere Laufgruppe zeigt: Anfangen kann jeder – am Anfang war kaum einer von uns sportlich. Heute laufen wir dienstags zu zwölft. Und der Dreizehnte? Könntest du sein. Danke!“", "frage": "Welche Antwort bleibt den fünfzig Leuten im Kopf?", "unterschied": "Die zweite hat einen Bogen: Der erste Satz behauptet etwas, der letzte lädt ein. Die Mitte ist schlicht – ein Satz zum Heute. Mehr braucht eine Minute vor Publikum nicht." },
+        { "art": "karte", "text": "Der Bogen in drei Teilen. Erster Satz: eine Aussage, kein Anlauf – nicht „Ich wurde gerade überrascht …“, sondern gleich das Thema. Mitte: ein Bauplan, den du kennst. Letzter Satz: zurück zum Anfang oder eine Einladung – dann schweigen, nicht „… ja, das war's“. Vor einer Gruppe darfst du langsamer sein als im Gespräch und zwischen den Teilen Pausen lassen. Von innen wirkt das wackliger, als es von außen aussieht." },
+        { "art": "auswahl", "kopf": { "id": "stegreif-3-01-a", "faehigkeit": "stegreif.kern", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du sollst vor dreißig Leuten spontan zum Thema „Was macht ein gutes Team aus?“ sprechen. Welcher erste Satz trägt am besten?",
+          "antworten": [
+            { "text": "„Das Wort Team kommt ja eigentlich aus dem Englischen …“", "wert": 0, "tendenz": "umweg", "warum": "Ein Anlauf über das Wort statt einer Aussage zur Sache. Die Zuhörer warten noch." },
+            { "text": "„Ein gutes Team erkennt man daran, wer hilft, wenn es eng wird.“", "wert": 2, "warum": "Eine Aussage, die man sich merken kann – und an der du die Minute entlangführen kannst." },
+            { "text": "„Ich bin ehrlich gesagt völlig unvorbereitet und weiß gar nicht, was ich zu diesem großen Thema sagen soll.“", "wert": 0, "tendenz": "entschuldigen", "warum": "Die Entschuldigung macht alle unruhig – und schwächt, was danach kommt." },
+            { "text": "„Zu Teams gäbe es viel zu sagen – ich nehme einen Punkt.“", "wert": 1, "warum": "Gut gegliedert und ehrlich. Noch stärker: den Punkt gleich als ersten Satz sagen." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "stegreif-3-01-b", "faehigkeit": "stegreif.struktur", "stufe": 7, "kanal": "wissen" },
+          "frage": "Bring die Minute zum Thema „Was macht ein gutes Team aus?“ in einen Bogen.",
+          "eintraege": [
+            { "text": "„Ein gutes Team erkennt man daran, wer hilft, wenn es eng wird.“", "warum": "Erster Satz: die Aussage, die den Bogen spannt." },
+            { "text": "„Wenn alles läuft, ist jeder nett. Wichtig wird es bei der Panne.“", "warum": "Der Grund – kurz." },
+            { "text": "„Als bei uns im Frühjahr die Bestellungen liegen blieben, kamen drei Leute freiwillig früher.“", "warum": "Ein Beispiel macht den Grund greifbar." },
+            { "text": "„Also: Schaut, wer hilft, wenn es eng wird. Das ist euer Team.“", "warum": "Letzter Satz: zurück zum Anfang – dann schweigen." }
+          ] },
+        { "art": "buehne", "kopf": { "id": "stegreif-3-01-c", "faehigkeit": "stegreif.struktur", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "stegreif-v-0177" },
+          "auftrag": "Steh auf und sprich eine Minute vor einer vollen Runde zum Thema „Was ich gern früher gewusst hätte“. Erster Satz, ein Bauplan, letzter Satz – dann schweigen.",
+          "sekunden": 60, "publikum": "gross",
+          "stoerungen": ["Ein Stuhl schrammt laut über den Boden.", "Jemand ruft: „Lauter, bitte!“", "Die Moderation hebt die Hand: noch zwanzig Sekunden."],
+          "pruefliste": ["erster Satz ohne Anlauf", "ein Bauplan in der Mitte", "nach einer Störung kurz Pause, dann weiter (falls eine kam)", "letzter Satz gesagt – und danach geschwiegen"] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-3-01-d", "faehigkeit": "stegreif.struktur", "stufe": 7, "kanal": "wissen" },
+          "frage": "Nach dreißig Sekunden merkst du: Die Mitte wird lang, und dein letzter Satz steht schon fest. Was tust du?",
+          "antworten": [
+            { "text": "Noch einen Punkt anhängen, damit die Rede runder wird.", "wert": 0, "tendenz": "alles", "warum": "Je länger die Mitte, desto mehr verblasst der Bogen. Rund wird es durch den Schluss, nicht durch Länge." },
+            { "text": "Zum letzten Satz springen – dafür hast du ihn.", "wert": 2, "warum": "Der feste Schlusssatz ist dein Notausgang. Kaum jemand vermisst, was du weglässt." },
+            { "text": "Den laufenden Gedanken zu Ende bringen und dann zum Schluss kommen.", "wert": 1, "warum": "Sauber – solange der Gedanke kurz ist. Sonst lieber gleich den letzten Satz." },
+            { "text": "Ins Publikum fragen: „Hört ihr überhaupt noch zu?“", "wert": 0, "tendenz": "entschuldigen", "warum": "Lenkt die Aufmerksamkeit auf deine Unsicherheit – und weg vom Thema." }
+          ] },
+        { "art": "reflexion", "frage": "Wo könntest du in den nächsten Wochen eine Minute vor mehreren Leuten sprechen? Wie hieße dein erster Satz – und dein letzter?" }
+      ],
+      "regel": "Erster Satz und letzter Satz stehen – die Mitte darf spontan sein.",
+      "merkkarten": [
+        { "id": "stegreif-3-01-m1", "frage": "Was ist der Bogen einer Stegreifrede?", "antwort": "Ein erster Satz, der das Thema setzt, und ein letzter, der es schließt – dazwischen ein Bauplan." },
+        { "id": "stegreif-3-01-m2", "frage": "Die Mitte wird zu lang. Was tust du?", "antwort": "Zum festen letzten Satz springen – und danach schweigen." }
+      ]
+    },
+    {
+      "id": "stegreif-3-02", "bereich": "stegreif", "stufe": 3, "nr": 2,
+      "titel": "Die unbequeme Frage: erst antworten",
+      "faehigkeiten": ["stegreif.zeit", "stegreif.kern"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Ausweichen oft unbemerkt bleibt, bis die Frage sichtbar wird, zeigen Experimente mit gestellten Debatten; dass ein sicher vorgetragener Fehler schadet, zeigen Laborstudien. Wie man unbequeme Fragen gut beantwortet, ist Praxiswissen.",
+      "quellen": ["rogers-norton2011", "tenney2007", "praxis-stegreif"],
+      "aha": "Ausweichen fällt seltener auf, als man denkt – bis jemand die Frage wiederholt. Dann sehen es fast alle. Wer zuerst ehrlich antwortet, darf danach über alles reden.",
+      "schritte": [
+        { "art": "studie", "frage": "Merkt man, wenn jemand einer Frage ausweicht?", "aufbau": "In vier Experimenten sahen oder hörten über tausend Erwachsene Ausschnitte gestellter Debatten. Manche Redner beantworteten die gestellte Frage, andere eine ähnliche, aber andere Frage.", "ergebnis": "Viele bemerkten das Ausweichen nicht und bewerteten die Ausweichenden nicht schlechter. Schlecht kamen deutlich fremde Antworten an – und stockende auf die richtige Frage. Blieb die Frage eingeblendet, bemerkten weit mehr das Ausweichen.", "grenze": "Gestellte Debatten am Bildschirm. Im Gespräch kann jeder nachfragen – dann ist die Frage wieder sichtbar, und das Ausweichen auch.", "beleg": "B", "quellen": ["rogers-norton2011"] },
+        { "art": "karte", "text": "Drei Schritte für die unbequeme Frage. Erstens: den wahren Teil im ersten Satz beantworten, auch wenn er wehtut – „Ja, wir sind zu spät.“ Zweitens: einordnen – den Grund oder was du jetzt tust. Drittens: erst dann die Brücke zu deinem Punkt. Steckt ein falscher Vorwurf in der Frage, stell ihn ruhig richtig. Darfst du etwas nicht sagen, sag genau das – und warum." },
+        { "art": "kunstgriff", "kopf": { "id": "stegreif-3-02-a", "faehigkeit": "stegreif.zeit", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Du stellst in der Abteilungsrunde dein Projekt vor. Ein Kollege fragt schnell hintereinander: „Was kostet das, wer soll das machen, warum hören wir erst jetzt davon – und ist das nicht sowieso schon entschieden?“ Entschieden ist noch nichts.",
+          "frage": "Was ist das – und wie antwortest du?",
+          "antworten": [
+            { "text": "Alle vier in einem langen Satz unterbringen, damit keine offen bleibt.", "wert": 0, "tendenz": "schwimmen", "warum": "So verhedderst du dich – und die Spitze am Ende bleibt im Raum stehen." },
+            { "text": "Die Frage beantworten, die dir am leichtesten fällt.", "wert": 1, "warum": "Ein Anfang. Ohne Ansage wirkt es aber, als wolltest du den Rest übergehen." },
+            { "text": "„Das sind ganz schön viele Fragen auf einmal. Wollen Sie mich vorführen?“", "wert": 0, "tendenz": "angreifen", "warum": "Du unterstellst eine Absicht. Die Runde sieht jetzt einen Streit statt dein Projekt." },
+            { "text": "Eine Fragensalve. „Vier Fragen – ich fange mit den Kosten an.“ Dann eine nach der anderen.", "wert": 2, "warum": "Zählen, ansagen, einzeln beantworten – so behältst du die Ordnung. Die Spitze am Ende beantwortest du sachlich und zuletzt." }
+          ],
+          "erklaerung": "Die Fragensalve – viele Fragen auf einmal, oft mit einer Spitze am Ende – setzt unter Druck, ob gewollt oder nicht. Gezielt eingesetzt ist sie ein unfairer Kunstgriff: Wer alles zugleich beantworten will, verheddert sich. Abwehr: zählen, ansagen, einzeln beantworten. Die Spitze („sowieso entschieden?“) sachlich und zuletzt: „Entschieden ist noch nichts – deshalb stelle ich es heute vor.“" },
+        { "art": "auswahl", "kopf": { "id": "stegreif-3-02-b", "faehigkeit": "stegreif.kern", "stufe": 7, "kanal": "wissen" },
+          "frage": "Nadine Köhler fragt: „Ihr Angebot ist teurer als das andere. Warum sollte ich bei Ihnen kaufen?“ Du weißt: Bei euch ist die Wartung im Preis, beim anderen kostet sie extra.",
+          "antworten": [
+            { "text": "„Ja, im Kaufpreis sind wir teurer. Dafür ist bei uns die Wartung drin – beim anderen kommt sie dazu.“", "wert": 2, "warum": "Erst den wahren Teil zugeben, dann einordnen. So glaubt sie dir auch den Vorteil." },
+            { "text": "„Weil bei uns die Wartung inklusive ist.“", "wert": 1, "warum": "Der richtige Grund – aber du übergehst, dass sie mit dem Preis recht hat." },
+            { "text": "„Qualität hat eben ihren Preis, das wissen Sie ja.“", "wert": 0, "tendenz": "ausweichen", "warum": "Eine Floskel statt einer Antwort. Wer genau rechnet, hört das sofort." },
+            { "text": "„Lassen Sie uns lieber über die neuen Funktionen sprechen – da sind wir den anderen weit voraus.“", "wert": 0, "tendenz": "ausweichen", "warum": "Eine Antwort auf eine andere Frage. Fragt sie nach, steht das Ausweichen im Raum." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stegreif-3-02-c", "faehigkeit": "stegreif.zeit", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Ein Kunde fragt: „Warum ignorieren Sie meine Mails seit Wochen?“ Eine Mail hast du tatsächlich zu spät beantwortet, ignoriert hast du nichts. Trenn den Vorwurf ab und antworte ehrlich.",
+          "vorlage": "„Also, das stimmt so nicht, wir ignorieren hier niemanden, wir haben nur gerade sehr viel zu tun, das müssen Sie verstehen …“",
+          "kriterien": ["falschen Vorwurf ruhig richtiggestellt", "den wahren Teil zugegeben", "ein nächster Schritt"],
+          "muster": ["„Ignoriert habe ich sie nicht – aber auf die letzte zu spät geantwortet, das stimmt. Heute bekommen Sie die Antwort.“", "„Ignorieren war es nicht, eine Verspätung schon – das tut mir leid. Ich kläre Ihre Frage jetzt mit Ihnen.“"] },
+        { "art": "dialog", "kopf": { "id": "stegreif-3-02-d", "faehigkeit": "stegreif.kern", "stufe": 7, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Die Frage nach der Frist", "figur": "Dr. Henrik Albers",
+            "lage": "Abteilungsrunde. Euer Team hat die Frist für den Quartalsbericht verpasst: Zwei Zulieferungen fehlten, und ihr habt den Engpass zu spät gemeldet. Inzwischen fehlt nur noch eine Tabelle – Freitag ist der Bericht fertig.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Dr. Albers, vor allen: „Warum hat Ihr Team die Frist verpasst?“",
+                "wahl": [
+                  { "text": "„Wir hatten ja auch noch die Inventur, und dann die Urlaubszeit, und die anderen Abteilungen waren auch nicht schneller …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2b", "rueck": "Erst Gründe, dann Vergleiche mit anderen – die Antwort auf „warum“ geht darin unter." },
+                  { "text": "„Zwei Zulieferungen fehlten. Den Engpass haben wir zu spät gemeldet.“", "wert": 2, "weiter": "k2", "rueck": "Der wahre Grund und der eigene Anteil – im ersten Satz. Das nimmt der Frage die Spitze." },
+                  { "text": "„Lassen Sie uns lieber nach vorn schauen.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k2b", "rueck": "Nach vorn ist richtig – aber erst nach der Antwort. So ist es Ausweichen, und Dr. Albers fragt nach." },
+                  { "text": "„Zwei Zulieferungen fehlten.“", "wert": 1, "weiter": "k2", "rueck": "Der Grund stimmt – dein eigener Anteil fehlt noch." }
+                ] },
+              { "id": "k2", "sagt": "Dr. Albers nickt: „Und wann kommt er jetzt?“",
+                "wahl": [
+                  { "text": "„Freitag. Es fehlt nur noch eine Tabelle.“", "wert": 2, "weiter": "ende1", "rueck": "Termin und Stand in zwei Sätzen. Mehr will er nicht." },
+                  { "text": "„So bald wie möglich, wir geben alles.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Kein Termin – damit bleibt die nächste Frist offen." }
+                ] },
+              { "id": "k2b", "sagt": "Dr. Albers, ruhig: „Ich habe gefragt, warum.“",
+                "wahl": [
+                  { "text": "„Zwei Zulieferungen fehlten, und wir haben es zu spät gemeldet. Freitag ist er da.“", "wert": 2, "weiter": "ende1", "rueck": "Gut gefangen: Antwort, eigener Anteil, Termin." },
+                  { "text": "„Das ist eine längere Geschichte, das erzähle ich Ihnen lieber später einmal in Ruhe unter vier Augen.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Jetzt hat die ganze Runde gesehen, dass die Antwort fehlt." }
+                ] },
+              { "id": "ende1", "sagt": "Dr. Albers: „Gut.“ Er geht zum nächsten Punkt.", "ende": "Ehrlich antworten, eigenen Anteil nennen, Termin geben – so ist eine unbequeme Frage schnell erledigt." },
+              { "id": "ende2", "sagt": "Dr. Albers notiert etwas und geht weiter. Die Frage bleibt offen.", "ende": "Kein Drama – beim nächsten Mal: die ehrliche Antwort zuerst und ein fester Termin statt „so bald wie möglich“." }
+            ],
+            "prinzipien": ["den wahren Teil zuerst", "eigener Anteil statt Schuld verteilen", "ein Termin statt „so bald wie möglich“"]
+          } },
+        { "art": "reflexion", "frage": "Welcher unbequemen Frage weichst du gern aus? Schreib die ehrliche Antwort in einem Satz auf – und die Brücke danach.", "insBuch": "saetze" }
+      ],
+      "regel": "Den wahren Teil zuerst, dann einordnen – erst danach die Brücke.",
+      "merkkarten": [
+        { "id": "stegreif-3-02-m1", "frage": "In welcher Reihenfolge beantwortest du eine unbequeme Frage?", "antwort": "Den wahren Teil zuerst, dann einordnen, erst dann die Brücke zu deinem Punkt." },
+        { "id": "stegreif-3-02-m2", "frage": "Was tust du mit einem falschen Vorwurf in der Frage?", "antwort": "Ruhig richtigstellen – und dann den wahren Teil beantworten." },
+        { "id": "stegreif-3-02-m3", "frage": "Jemand stellt vier Fragen auf einmal. Was tust du?", "antwort": "Zählen, ansagen, einzeln beantworten – die Spitze sachlich und zuletzt." }
+      ]
+    },
+    {
+      "id": "stegreif-3-03", "bereich": "stegreif", "stufe": 3, "nr": 3,
+      "titel": "Erklären für Laien: erst das Bild",
+      "faehigkeiten": ["stegreif.vergleich", "stegreif.kern"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Menschen ihr Verständnis überschätzen und es beim Erklären merken, und dass Wissende schlecht einschätzen, was andere wissen, zeigen Experimente. Nachfragen machte in anderen Versuchen treffsicherer. Der Bauplan für Laien ist Praxiswissen.",
+      "quellen": ["rozenblit2002", "tullis2023", "eyal2018", "praxis-stegreif"],
+      "aha": "Wer etwas gut kann, vergisst, wie es war, es nicht zu wissen. Darum erklärst du Laien mit Kern, Bild und Beispiel – und fragst nach, statt zu raten, was der andere schon weiß.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Menschen schätzten ein, wie gut sie verstehen, wie etwa ein Reißverschluss funktioniert. Dann sollten sie es Schritt für Schritt erklären. Was geschah mit ihrer Einschätzung?", "optionen": ["sie stieg", "sie blieb gleich", "sie sank"], "richtig": 2, "loesung": "Sie sank", "aufloesung": "Nach dem Erklären schätzten die meisten ihr Verständnis niedriger ein – erst beim Erklären zeigten sich die Lücken. Darum: einmal laut erklären, bevor du es vor anderen tust." },
+        { "art": "karte", "text": "Wer etwas weiß, schätzt schlecht ein, was andere wissen – auch wenn er sich bemüht. Raten hilft kaum, Fragen schon. Der Bauplan für Laien: der Kern in einem Satz ohne Fachwort. Ein Bild aus dem Alltag. Ein Beispiel aus der Welt des anderen. Dann nachfragen: „Was davon kanntest du schon?“ oder „Sag mal in deinen Worten, was jetzt passiert.“ Das Fachwort kommt zuletzt – wenn der andere es braucht." },
+        { "art": "kern", "kopf": { "id": "stegreif-3-03-a", "faehigkeit": "stegreif.kern", "stufe": 7, "kanal": "koennen" },
+          "absatz": "Wir migrieren am Wochenende die Postfächer auf die neue Serverumgebung, deshalb sind die Mailkonten von Samstag acht Uhr bis Sonntag achtzehn Uhr nicht erreichbar; die lokalen Offline-Daten werden danach neu synchronisiert, was beim ersten Start des Mailprogramms am Montag einige Minuten dauern kann, also bitte nicht abbrechen.",
+          "hoechstWoerter": 25,
+          "kriterien": ["ohne Fachwort", "nennt, wann Mail nicht geht", "nennt, was Montag zu tun ist", "höchstens 25 Wörter"],
+          "muster": ["„Am Wochenende geht keine Mail. Montag startet das Mailprogramm ein paar Minuten langsamer – bitte warten, nicht abbrechen.“", "„Samstag früh bis Sonntagabend keine Mail. Am Montag braucht das Programm beim Start etwas Geduld.“"] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-3-03-b", "faehigkeit": "stegreif.vergleich", "stufe": 7, "kanal": "wissen" },
+          "frage": "Tante Renate fragt, was ein „Phishing-Link“ ist. Welche Erklärung passt am besten?",
+          "antworten": [
+            { "text": "„Das ist Social Engineering über manipulierte Links.“", "wert": 0, "tendenz": "fachwort", "warum": "Ein Fachwort erklärt das andere. Renate weiß danach so viel wie vorher." },
+            { "text": "„Ein gefälschter Link, der an dein Passwort will.“", "wert": 1, "warum": "Richtig und kurz. Ein Bild würde zeigen, warum die Seite dahinter so echt wirkt." },
+            { "text": "„Wie ein falscher Briefträger, der den Schlüssel ‚zur Prüfung‘ will: Der Link führt auf eine echt wirkende Seite, die dein Passwort will.“", "wert": 2, "warum": "Bild und Kern zusammen: echt wirkender Bote, Ziel ist der Schlüssel. Das merkt sie sich." },
+            { "text": "„Etwas ganz Gefährliches – klick nie auf irgendwas, dann passiert dir auch nichts.“", "wert": 0, "tendenz": "angst", "warum": "Macht Angst, erklärt aber nichts. Und „nie auf irgendwas“ hält niemand durch." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "stegreif-3-03-c", "faehigkeit": "stegreif.kern", "stufe": 7, "kanal": "wissen" },
+          "frage": "Herr Petersen fragt, warum er beim Anmelden jetzt zusätzlich einen Code per SMS bekommt. Bring deine Erklärung in die Reihenfolge für Laien.",
+          "eintraege": [
+            { "text": "„Damit niemand mit Ihrem Passwort allein an Ihr Konto kommt.“", "warum": "Der Kern zuerst – ohne Fachwort." },
+            { "text": "„Wie bei der Bank: Karte und Geheimzahl – eins allein reicht nicht.“", "warum": "Ein Bild, das er seit Jahren kennt." },
+            { "text": "„Errät jemand Ihr Passwort, fehlt ihm trotzdem der Code auf Ihrem Handy.“", "warum": "Ein Beispiel aus seiner Welt." },
+            { "text": "„Probieren Sie es gleich einmal – ich schaue zu.“", "warum": "Prüfen statt raten: Was er selbst tut, zeigt, ob es angekommen ist." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-3-03-d", "faehigkeit": "stegreif.kern", "stufe": 8, "kanal": "wissen" },
+          "frage": "Du erklärst Lena die Monatsabrechnung. Woran merkst du am verlässlichsten, ob sie es verstanden hat?",
+          "antworten": [
+            { "text": "Du fragst: „Alles klar?“ – und sie nickt.", "wert": 0, "warum": "Nicken heißt oft nur „Ich will nicht aufhalten“. Gerade Lena fragt ungern nach." },
+            { "text": "Du liest es an ihrem Gesicht ab.", "wert": 0, "tendenz": "raten", "warum": "Ein Gesicht verrät dir vielleicht, dass sie unsicher ist – aber nicht, was genau fehlt. Das zeigen erst Fragen oder ihr eigenes Tun." },
+            { "text": "Du bittest sie, den nächsten Schritt selbst zu machen und dabei laut zu sagen, was sie tut.", "wert": 2, "warum": "Was sie selbst tun und erklären kann, hat sie verstanden. Lücken zeigen sich sofort." },
+            { "text": "Du fragst: „Was davon war neu für dich?“", "wert": 1, "warum": "Eine gute Frage – sie zeigt, wo sie stand. Ob es jetzt sitzt, zeigt erst das eigene Tun." }
+          ] },
+        { "art": "experiment", "auftrag": "Erklär diese Woche einer Person ohne Vorwissen etwas aus deinem Alltag oder deiner Arbeit: Kern, Bild, Beispiel – und lass sie es danach in eigenen Worten sagen.", "dauer": "woche", "nachfrage": "Was hat sie anders wiedergegeben, als du gedacht hattest?" },
+        { "art": "reflexion", "frage": "Welches Fachwort benutzt du so oft, dass du vergessen hast, dass andere es nicht kennen? Wie hieße es in Alltagssprache?" }
+      ],
+      "regel": "Kern ohne Fachwort, ein Bild, ein Beispiel – dann fragen statt raten.",
+      "merkkarten": [
+        { "id": "stegreif-3-03-m1", "frage": "Wie baust du eine Erklärung für Laien?", "antwort": "Kern ohne Fachwort, ein Bild aus dem Alltag, ein Beispiel aus der Welt des anderen, dann nachfragen." },
+        { "id": "stegreif-3-03-m2", "frage": "Woran merkst du, ob es angekommen ist?", "antwort": "Lass den anderen es in eigenen Worten sagen oder selbst tun – Nicken reicht nicht." }
+      ]
+    },
+    {
+      "id": "stegreif-3-04", "bereich": "stegreif", "stufe": 3, "nr": 4,
+      "titel": "Trinkspruch und Dankeswort",
+      "faehigkeiten": ["stegreif.assoziation", "stegreif.struktur"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Dank beim Empfänger besser ankommt, als die Dankenden erwarten, zeigen Experimente mit Dankesbriefen. Für gesprochenen Dank eine Übertragung; der Bauplan für Trinkspruch und Dank ist Praxiswissen.",
+      "quellen": ["kumar2018", "praxis-stegreif"],
+      "aha": "Beim Danken unterschätzen viele, wie sehr es den anderen freut, und überschätzen, wie peinlich es wird. Konkret schlägt schön: was jemand getan hat, was es bewirkt hat – dann das Glas.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Ein Dankeswort wirkt nur, wenn es schön formuliert ist.", "urteil": "falsch", "warum": "In Versuchen achteten die Dankenden vor allem auf ihre Worte, die Empfänger auf die Wärme – und sie freuten sich mehr, als die Schreibenden erwartet hatten. Konkret schlägt geschliffen." },
+        { "art": "karte", "text": "Der Dank: die Tat – was hat die Person getan? Die Wirkung – was hat es gebracht? Der Abschluss – Wunsch oder Glas. Der Trinkspruch: Anlass – eine Erinnerung – ein Wunsch – „Auf …!“ – Heute, Gestern, Morgen im Festkleid. Den Einstieg findest du über das, was da ist: Ort, Essen, ein Gegenstand, der zur Person passt. Unter einer Minute. Keine Geschichte, die nur zwei verstehen, und keine, die jemanden bloßstellt." },
+        { "art": "zuordnen", "kopf": { "id": "stegreif-3-04-a", "faehigkeit": "stegreif.struktur", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Du dankst Frau Sommer beim Hoffest, weil sie im Urlaub nach deiner Wohnung gesehen hat. Tat, Wirkung oder Abschluss?",
+          "faecher": ["Tat", "Wirkung", "Abschluss"],
+          "karten": [
+            { "text": "„Sie haben drei Wochen lang meine Blumen gegossen.“", "fach": 0 },
+            { "text": "„Und jeden Tag die Post hereingeholt.“", "fach": 0 },
+            { "text": "„Ich konnte im Urlaub wirklich abschalten.“", "fach": 1 },
+            { "text": "„Zum ersten Mal kam ich heim, und nichts war vertrocknet.“", "fach": 1 },
+            { "text": "„Darauf ein Glas – auf die beste Nachbarin im Haus!“", "fach": 2 },
+            { "text": "„Beim nächsten Mal gieße ich Ihre.“", "fach": 2 }
+          ] },
+        { "art": "geschichtenbau", "kopf": { "id": "stegreif-3-04-b", "faehigkeit": "stegreif.assoziation", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Bau einen Trinkspruch für eine Feier, die bald ansteht – vom Anlass über eine Erinnerung zum Wunsch.",
+          "felder": [
+            { "name": "Einstieg", "hilfe": "Etwas, das gerade da ist: Ort, Essen, Wetter, ein Gegenstand." },
+            { "name": "Erinnerung", "hilfe": "Ein kleiner, echter Moment mit der Person." },
+            { "name": "Wunsch", "hilfe": "Einer – persönlich, nicht allgemein." },
+            { "name": "Glas", "hilfe": "„Auf …!“" }
+          ],
+          "muster": [
+            "Einstieg: „Jule, an diesem Tisch hast du mir gezeigt, wie man Zwiebeln ohne Tränen schneidet.“ Erinnerung: „Beim ersten Abend ist mir der Risotto angebrannt – du hast nur gesagt: ‚Dann gibt's heute Röstaromen.‘“ Wunsch: „Dass du weiter so gelassen bleibst.“ Glas: „Auf Jule!“",
+            "Einstieg: „Sven, ausgerechnet hier im Garten haben wir uns vor Jahren um den Grill gestritten.“ Erinnerung: „Du hast gewonnen – und seitdem grillst du für alle.“ Wunsch: „Ein Jahr, in dem du auch mal sitzen bleibst.“ Glas: „Auf Sven!“"
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-3-04-c", "faehigkeit": "stegreif.assoziation", "stufe": 7, "kanal": "wissen" },
+          "frage": "Beim Abschiedsessen für eine Kollegin, die in Rente geht, bittet Dr. Albers dich spontan um ein paar Worte. Dir fällt ein: Vor jeder Präsentation lag ein grüner Apfel vor ihr – und danach war sie in Hochform. Was machst du daraus?",
+          "antworten": [
+            { "text": "„Ich weiß gar nicht, was ich sagen soll, ich bin echt nicht gut in so was – aber trotzdem: danke.“", "wert": 0, "tendenz": "entschuldigen", "warum": "Die Entschuldigung nimmt dem Dank die Wärme. Dabei hattest du schon ein Bild." },
+            { "text": "„Danke für alles – du wirst uns fehlen.“", "wert": 1, "warum": "Herzlich und kurz. Mit dem Apfel wäre es deins geworden statt ein Satz für jeden." },
+            { "text": "Vom Apfel zu gesunder Ernährung im Büro überleiten.", "wert": 0, "tendenz": "themawechsel", "warum": "Die Brücke führt weg von ihr. Es ist ihr Abend." },
+            { "text": "„Für mich gehört zu dir der grüne Apfel – und was danach kam: Hochform. Danke dafür!“", "wert": 2, "warum": "Vom Gegenstand zur Person: ein Bild, das alle kennen, und ein Dank, der nur zu ihr passt." }
+          ] },
+        { "art": "buehne", "kopf": { "id": "stegreif-3-04-d", "faehigkeit": "stegreif.assoziation", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "stegreif-v-0180" },
+          "auftrag": "Steh auf und sprich einen Dank an eine Person, die dir dieses Jahr geholfen hat: Tat, Wirkung, Glas.",
+          "sekunden": 45, "publikum": "klein",
+          "stoerungen": ["Jemand ruft: „Lauter!“", "Gläser klirren schon, bevor du fertig bist.", "Die Person winkt verlegen ab: „Ach, das war doch nichts.“"],
+          "pruefliste": ["eine konkrete Tat genannt", "die Wirkung gesagt", "nach einem Abwinken freundlich weitergemacht (falls es kam)", "mit dem Glas oder einem Wunsch geendet"] },
+        { "art": "mission", "ref": "stegreif-m-09" }
+      ],
+      "regel": "Tat, Wirkung, Glas – konkret schlägt schön.",
+      "merkkarten": [
+        { "id": "stegreif-3-04-m1", "frage": "Welche drei Teile hat ein Dankeswort?", "antwort": "Die Tat, die Wirkung, der Abschluss mit Wunsch oder Glas." },
+        { "id": "stegreif-3-04-m2", "frage": "Was unterschätzen viele beim Danken?", "antwort": "Wie sehr es den anderen freut – und sie überschätzen, wie peinlich es wird." },
+        { "id": "stegreif-3-04-m3", "frage": "Wie findest du einen Einstieg für den Trinkspruch?", "antwort": "Über das, was gerade da ist: Ort, Essen, ein Gegenstand, der zur Person passt." }
+      ],
+      "mission": "stegreif-m-09"
+    },
+    {
+      "id": "stegreif-3-05", "bereich": "stegreif", "stufe": 3, "nr": 5,
+      "titel": "Schnell denken unter Druck",
+      "faehigkeiten": ["stegreif.zeit", "stegreif.jaund"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Üben unter künstlichem Druck verbesserte in einer Meta-Analyse die Leistung unter Druck – im Sport und ähnlichen Bereichen. Ein Selbstgespräch mit Abstand half in einem Experiment bei Reden nach kurzer Vorbereitung. Für Stegreif-Reden selbst fehlen eigene Studien.",
+      "quellen": ["kross2014", "low2021", "beilock2005", "quintilian-stegreif"],
+      "aha": "Druck lässt sich nicht abschalten, aber üben. Wer unter kleinen Störungen probt und sich mit „du“ anspricht, hat im Ernstfall mehr Platz im Kopf – und darf den Plan ändern, wenn der Moment etwas Besseres bietet.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "stegreif-3-05-a", "faehigkeit": "stegreif.zeit", "stufe": 7, "kanal": "wissen" },
+          "frage": "Zwei Minuten vor deinem spontanen Beitrag rast der Kopf. Welches Selbstgespräch hilft am ehesten?",
+          "antworten": [
+            { "text": "„Ich darf jetzt bloß keinen Fehler machen.“", "wert": 0, "tendenz": "druck", "warum": "Der Satz legt noch eine Sorge auf den Tisch – genau dort, wo du Platz brauchst." },
+            { "text": "„Du kennst das Thema. Erster Satz, dann der Bauplan.“", "wert": 2, "warum": "Mit „du“ sprichst du mit dir wie mit einer anderen Person – das schafft Abstand. Dazu ein klarer nächster Schritt." },
+            { "text": "„Ich schaffe das schon irgendwie.“", "wert": 1, "warum": "Freundlich, aber ohne Plan. Mit „du“ und einem nächsten Schritt wird daraus Halt." },
+            { "text": "„Nicht dran denken“ – und schnell noch die Nachrichten auf dem Handy lesen, bis du dran bist.", "wert": 0, "tendenz": "flucht", "warum": "Ablenkung hilft kurz. Den ersten Satz hast du danach aber noch nicht." }
+          ] },
+        { "art": "studie", "frage": "Hilft es, mit sich selbst wie mit einer anderen Person zu sprechen?", "aufbau": "Teilnehmende sollten nach kurzer Vorbereitung vor Beobachtern eine Rede halten. Vorher sprachen sie in Gedanken mit sich – die einen mit „ich“, die anderen mit „du“ oder ihrem Namen.", "ergebnis": "Wer mit „du“ oder dem eigenen Namen gesprochen hatte, wurde von unabhängigen Beobachtern besser bewertet, war weniger belastet und grübelte danach weniger.", "grenze": "Experimente mit Studierenden und einer einzelnen Rede. Wie lange die Wirkung trägt und ob sie im Berufsalltag gleich groß ist, ist offen.", "beleg": "B", "quellen": ["kross2014"] },
+        { "art": "karte", "text": "Drei Griffe unter Druck. Erstens: ausatmen und dich mit „du“ ansprechen – das schafft Abstand. Zweitens: Antwort zuerst, ein Bauplan; der Rest ergibt sich. Drittens: Bietet der Moment etwas – ein Zwischenruf, eine bessere Idee –, nimm es an: „Ja, und …“. Ein Plan darf dem guten Einfall weichen. Und üben: mit Uhr, Zuhörer, Zwischenfrage. Was unter kleinem Druck geprobt ist, trägt eher auch unter großem." },
+        { "art": "dialog", "kopf": { "id": "stegreif-3-05-b", "faehigkeit": "stegreif.jaund", "stufe": 8, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Der Zwischenruf", "figur": "Miriam Okafor",
+            "lage": "Du stellst in der Runde deinen Plan für den Tag der offenen Tür vor: drei Stände, jeder eine Stunde besetzt. Mitten im zweiten Punkt ruft Miriam dazwischen.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Miriam: „Wie wär's, wenn die Besucher an jedem Stand etwas selbst ausprobieren dürfen?“ Alle schauen zu dir.",
+                "wahl": [
+                  { "text": "„Ja, und wer alle drei Stände schafft, bekommt am Ausgang einen Stempel und einen Kaffee.“", "wert": 2, "weiter": "k2", "rueck": "Angenommen und ausgebaut – dein Plan ist jetzt besser als vorher, und Miriam ist an Bord." },
+                  { "text": "„Lass mich bitte erst ausreden, dann können wir über alle Ideen sprechen.“", "wert": 1, "weiter": "k2b", "rueck": "Höflich und verständlich. Aber die Idee war gut – du verschenkst den Schwung des Moments." },
+                  { "text": "„Ja, aber dafür haben wir weder Zeit noch Material, das wird nichts.“", "wert": 0, "tendenz": "abblocken", "weiter": "k2b", "rueck": "Unter Druck blockt man schnell ab. Die Bedenken mögen stimmen – zuerst hast du aber die Idee zugemacht." }
+                ] },
+              { "id": "k2", "sagt": "Dr. Albers: „Gefällt mir. Und was kostet das zusätzlich?“ Du weißt es nicht.",
+                "wahl": [
+                  { "text": "„Das weiß ich noch nicht. Ich rechne es bis Donnerstag durch und sage es Ihnen.“", "wert": 2, "weiter": "ende1", "rueck": "Zugeben, was du weißt, nachliefern – auch im Schwung bleibst du ehrlich." },
+                  { "text": "„So gut wie nichts.“", "wert": 0, "tendenz": "bluffen", "weiter": "ende3", "rueck": "Eine Zahl aus der Begeisterung heraus. Sie wird ab jetzt als deine Zusage gelten." }
+                ] },
+              { "id": "k2b", "sagt": "Miriam zuckt mit den Schultern. Die Runde wird still.",
+                "wahl": [
+                  { "text": "„Moment – Miriams Idee ist gut. Ja, und an jedem Stand probiert man etwas aus. Das baue ich ein.“", "wert": 2, "weiter": "k2", "rueck": "Stark umgeschwenkt: Der Plan weicht dem besseren Einfall, und du sagst es offen." },
+                  { "text": "Mit dem zweiten Punkt weitermachen, als wäre nichts gewesen.", "wert": 0, "weiter": "ende2", "rueck": "Die Idee liegt jetzt ungenutzt im Raum – und Miriam merkt sich das." }
+                ] },
+              { "id": "ende1", "sagt": "Dr. Albers nickt. Miriam grinst dir zu: „Siehst du.“", "ende": "Unter Druck einen Zwischenruf annehmen und ausbauen – und ehrlich bleiben, wo du etwas nicht weißt. So wird aus einer Störung ein besserer Plan." },
+              { "id": "ende2", "sagt": "Der Plan geht durch, wie er war. Miriam schaut auf ihr Handy.", "ende": "Kein Drama – aber beim nächsten Mal: Erst „Ja, und“, dann prüfen. Ein Plan darf dem guten Einfall weichen." },
+              { "id": "ende3", "sagt": "Dr. Albers notiert: „Also keine Zusatzkosten.“", "ende": "Kein Drama – die Idee hast du gut angenommen. Nur die Zahl war geraten: Was du nicht weißt, lieferst du nach, auch im Schwung." }
+            ],
+            "prinzipien": ["Zwischenruf als Angebot", "Ja, und statt Ja, aber", "der Plan darf weichen", "auch im Schwung nicht bluffen"]
+          } },
+        { "art": "zuordnen", "kopf": { "id": "stegreif-3-05-c", "faehigkeit": "stegreif.zeit", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Schafft das unter Druck Platz im Kopf – oder belegt es Platz?",
+          "faecher": ["schafft Platz", "belegt Platz"],
+          "karten": [
+            { "text": "dich mit „du“ ansprechen", "fach": 0 },
+            { "text": "einen Bauplan wählen", "fach": 0 },
+            { "text": "einmal lang ausatmen", "fach": 0 },
+            { "text": "„Was denken die jetzt von mir?“", "fach": 1 },
+            { "text": "jeden Satz vorher im Kopf ausformulieren", "fach": 1 },
+            { "text": "auf jedes eigene „Äh“ achten", "fach": 1 }
+          ] },
+        { "art": "stumm", "kopf": { "id": "stegreif-3-05-d", "faehigkeit": "stegreif.zeit", "stufe": 8, "kanal": "koennen" },
+          "titel": "Die Störungsprobe im Kopf",
+          "schritte": ["Stell dir vor, du beantwortest vor einer Runde die Frage: „Was würden Sie hier ändern?“", "Sag innerlich deinen ersten Satz – mit „du“ davor: „Du kennst das. Erster Satz …“", "Stell dir einen Zwischenruf vor und bau ihn innerlich mit „Ja, und …“ ein.", "Stell dir vor, jemand zeigt: noch zehn Sekunden. Sag innerlich deinen Schlusssatz.", "Notier, an welcher Stelle der Kopf am engsten wurde."],
+          "sekunden": 90,
+          "pruefliste": ["ersten Satz innerlich gesagt", "den Zwischenruf angenommen statt abgeblockt", "bei „zehn Sekunden“ zum Schluss gesprungen", "die engste Stelle notiert"] },
+        { "art": "mission", "ref": "stegreif-m-10" }
+      ],
+      "regel": "Ausatmen, „du“, Antwort zuerst – und den guten Einfall annehmen.",
+      "merkkarten": [
+        { "id": "stegreif-3-05-m1", "frage": "Welches Selbstgespräch hilft unter Druck?", "antwort": "Eines mit „du“ oder deinem Namen – und einem klaren nächsten Schritt." },
+        { "id": "stegreif-3-05-m2", "frage": "Was tust du mit einem guten Zwischenruf?", "antwort": "Annehmen und ausbauen: „Ja, und …“ – der Plan darf weichen." },
+        { "id": "stegreif-3-05-m3", "frage": "Wie übst du für Druck?", "antwort": "Mit kleinen Störungen: Uhr, Zuhörer, Zwischenfrage." }
+      ],
+      "mission": "stegreif-m-10"
+    }
+  ]
+}

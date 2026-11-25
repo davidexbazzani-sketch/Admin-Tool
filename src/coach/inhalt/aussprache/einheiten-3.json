@@ -1,0 +1,214 @@
+{
+  "einheiten": [
+    {
+      "id": "aussprache-3-01", "bereich": "aussprache", "stufe": 3, "nr": 1,
+      "titel": "Klar bei normalem Tempo",
+      "faehigkeiten": ["aussprache.takt", "aussprache.konsonanten", "aussprache.vokale"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass geübte Sprecher auch bei normalem Tempo deutlich sprechen und dann besser verstanden werden, zeigen Studien einer Forschergruppe mit wenigen Sprechern. Wie leicht das Ungeübten gelingt, ist nicht untersucht. Die Tempostufen sind Praxiswissen.",
+      "quellen": ["krause2002", "krause2019", "smiljanic2009", "stipancic2016"],
+      "aha": "Deutlich heißt nicht langsam. Geübte Sprecher lernten, im normalen Tempo deutlich zu sprechen – und wurden im Rauschen klar besser verstanden. Das Tempo bleibt, die Genauigkeit kommt dazu.",
+      "schritte": [
+        { "art": "studie", "frage": "Geht deutlich auch im normalen Tempo?", "aufbau": "Sprecher übten, deutlich zu sprechen, ohne langsamer zu werden. Zuhörer mit gutem Gehör hörten ihre Sätze im Rauschen: gewohnt gesprochen, deutlich im normalen Tempo und deutlich und langsam.", "ergebnis": "Deutlich im normalen Tempo brachte rund 14 Prozentpunkte mehr verstandene Wörter, deutlich und langsam rund 18. Der größte Teil des Gewinns kam also ohne Tempoverlust.", "grenze": "Nur fünf Sprecher, die gezielt geübt hatten, und eine Laborsituation. Ob es Ungeübten ebenso gelingt, ist offen.", "beleg": "B", "quellen": ["krause2002"] },
+        { "art": "karte", "text": "Im normalen Tempo deutlich: Das gelingt mit Genauigkeit statt Dehnung. Die Endungen bleiben, die Vokale behalten ihre Länge, nach Sinnschritten kommen kurze Pausen. Was wegfällt, ist das Ziehen der Wörter. Übe in drei Stufen: überdeutlich und langsam, dann deutlich im mittleren Tempo, dann deutlich im Alltagstempo. Hör nach jeder Stufe hin: Ist noch alles da?" },
+        { "art": "auswahl", "kopf": { "id": "aussprache-3-01-a", "faehigkeit": "aussprache.takt", "stufe": 6, "kanal": "wissen" },
+          "frage": "Du sollst in fünf Minuten viel erklären und willst trotzdem verstanden werden. Was ist der beste Weg?",
+          "antworten": [
+            { "text": "Schneller sprechen, damit alles hineinpasst.", "wert": 0, "tendenz": "tempo", "warum": "Mehr Tempo kostet zuerst die Endungen – und damit den Sinn." },
+            { "text": "Den Text wortwörtlich ablesen, damit kein Gedanke verloren geht und du die Zeit sicher einhältst.", "wert": 0, "warum": "Ablesen kostet oft Blick und Satzende, und unter Zeitdruck liest man schneller." },
+            { "text": "Normales Tempo, dafür Endungen und Pausen halten – und weniger Stoff.", "wert": 2, "warum": "Genauigkeit im eigenen Tempo plus weniger Stoff: So kommt mehr an als mit allem im Galopp." },
+            { "text": "Langsam sprechen und dafür die Hälfte weglassen.", "wert": 1, "warum": "Weniger Stoff ist klug. Langsam allein ist aber nicht der sicherste Gewinn – Genauigkeit und Pausen tragen mehr." }
+          ] },
+        { "art": "lautleiter", "kopf": { "id": "aussprache-3-01-b", "faehigkeit": "aussprache.konsonanten", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0223" },
+          "laut": "Drei Tempostufen",
+          "stufen": [
+            { "s": "überdeutlich und langsam", "zeilen": ["Wir haben den Termin nicht verschoben, er bleibt am Dienstag.", "Das Paket ist gestern angekommen."] },
+            { "s": "deutlich, mittleres Tempo", "zeilen": ["Wir haben den Termin nicht verschoben, er bleibt am Dienstag.", "Das Paket ist gestern angekommen."] },
+            { "s": "deutlich, Alltagstempo", "zeilen": ["Wir haben den Termin nicht verschoben, er bleibt am Dienstag.", "Das Paket ist gestern angekommen."] }
+          ],
+          "pruefliste": ["Endungen in allen drei Stufen da?", "Im Alltagstempo nichts verschluckt?", "Pause nach dem ersten Sinnschritt geblieben?"] },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-3-01-c", "faehigkeit": "aussprache.vokale", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Was darf bei mehr Tempo kürzer werden – und was nicht?",
+          "faecher": ["darf kürzer werden", "bleibt"],
+          "karten": [
+            { "text": "Wiederholungen ohne neue Information", "fach": 0 },
+            { "text": "das t in „nicht“", "fach": 1 },
+            { "text": "langgezogene Wörter", "fach": 0 },
+            { "text": "der lange Vokal in „Miete“", "fach": 1 },
+            { "text": "Füllwörter wie „sozusagen“", "fach": 0 },
+            { "text": "die Pause vor einer Zahl", "fach": 1 }
+          ] },
+        { "art": "klartext", "kopf": { "id": "aussprache-3-01-d", "faehigkeit": "aussprache.takt", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0210" },
+          "text": "Kurz zum Stand: | Die Lieferung ist nicht gekommen, | weil die Spedition ausgefallen ist. | Wir haben den Kunden informiert | und einen neuen Termin vereinbart: | Donnerstag, | zehn Uhr.",
+          "pruefliste": ["Dritte Fassung im Alltagstempo?", "Endungen und lange Vokale geblieben?", "Pause vor der Zeitangabe?"] },
+        { "art": "experiment", "auftrag": "Sprich heute eine Erklärung bewusst im normalen Tempo – nur mit hörbaren Endungen und einer Pause nach jedem Gedanken.", "dauer": "heute", "nachfrage": "Hat jemand nachgefragt – und hat es sich für dich schneller angefühlt, als es war?" },
+        { "art": "reflexion", "frage": "Wann bist du bisher langsamer geworden, um deutlich zu sein – und wo hätte Genauigkeit gereicht?" }
+      ],
+      "regel": "Deutlich ist Genauigkeit, nicht Zeitlupe: Endungen, Längen, Pausen – im eigenen Tempo.",
+      "merkkarten": [
+        { "id": "aussprache-3-01-m1", "frage": "Wie viel brachte deutlich im normalen Tempo in einer Studie?", "antwort": "Rund 14 Prozentpunkte mehr verstandene Wörter – deutlich und langsam rund 18." },
+        { "id": "aussprache-3-01-m2", "frage": "Was darf bei mehr Tempo wegfallen?", "antwort": "Dehnung, Füllwörter, Wiederholungen. Endungen, Vokallängen und Pausen vor Dichtem bleiben." }
+      ]
+    },
+    {
+      "id": "aussprache-3-02", "bereich": "aussprache", "stufe": 3, "nr": 2,
+      "titel": "Deutlich unter Druck",
+      "faehigkeiten": ["aussprache.alltag", "aussprache.takt"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass die Anspannung kurz vor dem Start oder in der ersten Minute am höchsten ist, zeigen Studien zur Redeangst. Dass man unter Druck schneller und enger spricht, ist Praxiswissen; der vorbereitete erste Satz stützt sich auf die Forschung zu Wenn-Dann-Plänen, nicht auf eigene Studien.",
+      "quellen": ["behnke2004", "gollwitzer2006", "praxis-aussprache"],
+      "aha": "Unter Druck werden viele schneller, der Kiefer enger, die Enden fallen weg – am stärksten am Anfang. Darum lohnt ein vorbereiteter, klarer erster Satz.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer aufgeregt ist, sollte auf die Aussprache gar nicht erst achten – das macht es nur schlimmer.", "urteil": "teils", "warum": "Dauerkontrolle unter Druck lenkt tatsächlich ab. Ein einziger vorbereiteter Anker – der erste Satz, die Pause vor der Zahl – entlastet dagegen, weil er nicht erst im Moment erdacht werden will." },
+        { "art": "karte", "text": "Die Anspannung ist kurz vor dem Start oder in der ersten Minute am höchsten und sinkt danach – wie schnell, ist verschieden. Genau in diesem Fenster wird das Sprechen oft schneller, enger und leiser. Darum: den ersten Satz vorher festlegen und im Klar-Modus proben. Dazu ein Anker für unterwegs: Kommt eine Zahl oder ein Name, kurz bremsen. Mehr zur Aufregung selbst findest du im Bereich „Nervosität im Griff“." },
+        { "art": "auswahl", "kopf": { "id": "aussprache-3-02-a", "faehigkeit": "aussprache.alltag", "stufe": 6, "kanal": "wissen" },
+          "frage": "Dr. Albers fragt dich in der Abteilungsrunde unerwartet nach dem Stand. Du spürst dein Herz klopfen. Was tust du zuerst?",
+          "antworten": [
+            { "text": "Sofort losreden, damit keine peinliche Stille entsteht.", "wert": 0, "tendenz": "tempo", "warum": "Gerade der hektische Start kostet die Enden. Eine kurze Pause fällt viel weniger auf, als es sich anfühlt." },
+            { "text": "Kurz Luft holen, Blick in die Runde, dann ein kurzer erster Satz mit gehaltenem Ende.", "wert": 2, "warum": "Ein Moment zum Ankommen, dann ein kurzer, klarer Anfang – genau dort, wo die Anspannung am größten ist." },
+            { "text": "„Darf ich das nachreichen?“ – auch wenn du den Stand eigentlich kennst.", "wert": 0, "tendenz": "vermeiden", "warum": "Du kennst den Stand. Zwei klare Sätze genügen – und die Gelegenheit ist genutzt." },
+            { "text": "Erst die Unterlagen durchblättern und dann vom Blatt antworten, damit nichts Falsches gesagt wird.", "wert": 1, "warum": "Sicherheit ist gut, aber mit gesenktem Kopf versackt die Stimme. Erst ein Satz aus dem Kopf, dann gern Einzelheiten vom Blatt." }
+          ] },
+        { "art": "fahrplan", "anlass": "Ein Moment, in dem du bald unter Druck sprechen wirst – eine Präsentation, ein schwieriges Telefonat, eine Wortmeldung." },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-3-02-b", "faehigkeit": "aussprache.takt", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0211" },
+          "auftrag": "Erste Sätze für Druckmomente – vorbereitet, klar, mit Pause nach dem ersten Sinnschritt.",
+          "zeilen": ["Kurz zum Stand: | Zwei von drei Punkten sind erledigt.", "Gute Frage. | Die Antwort hat zwei Teile.", "Darf ich kurz ergänzen? | Mir fehlt noch ein Punkt."],
+          "weise": "klar",
+          "pruefliste": ["Erster Sinnschritt klar, dann Pause?", "Satzende gehalten?", "Ruhiges Tempo, obwohl der Satz kurz ist?"] },
+        { "art": "buehne", "kopf": { "id": "aussprache-3-02-c", "faehigkeit": "aussprache.alltag", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0245" },
+          "auftrag": "Steh auf und berichte eine Minute lang vom Stand eines Vorhabens – einer Reise, eines Umzugs, eines Projekts. Zwischendurch kommen Störungen.",
+          "sekunden": 60, "publikum": "klein",
+          "stoerungen": ["Jemand fragt dazwischen: „Wie war das mit dem Termin?“", "Ein Handy klingelt.", "„Etwas lauter bitte!“"],
+          "pruefliste": ["Erster Satz klar und mit Pause?", "Nach einer Störung neu angesetzt, nicht schneller geworden?", "Zahlen und Namen gebremst?"] },
+        { "art": "mission", "ref": "aussprache-m-10" }
+      ],
+      "regel": "Unter Druck zählt der Anfang: erster Satz vorbereitet, bei Namen und Zahlen kurz bremsen.",
+      "merkkarten": [
+        { "id": "aussprache-3-02-m1", "frage": "Wann ist die Anspannung meist am höchsten?", "antwort": "Kurz vor dem Start oder in der ersten Minute – danach sinkt sie, unterschiedlich schnell." },
+        { "id": "aussprache-3-02-m2", "frage": "Welche zwei Anker tragen unter Druck?", "antwort": "Ein vorbereiteter erster Satz und die kurze Bremse vor Namen und Zahlen." }
+      ],
+      "mission": "aussprache-m-10"
+    },
+    {
+      "id": "aussprache-3-03", "bereich": "aussprache", "stufe": 3, "nr": 3,
+      "titel": "Vorlesen, dass man zuhört",
+      "faehigkeiten": ["aussprache.takt", "aussprache.tragen"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Pausenstriche, Vorauslesen und der Blick am Satzende sind Praxiswissen der Sprecherziehung ohne eigene Studien.",
+      "quellen": ["praxis-aussprache", "quintilian", "coblenzer1976"],
+      "aha": "Wer vorliest, liest oft für sich: Kopf gesenkt, gleiche Melodie, kaum Pausen. Wer für andere liest, schaut voraus, setzt Sinnschritte und blickt am Satzende auf.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Carla liest bei einem Firmenjubiläum den Brief eines früheren Kollegen vor.", "schwach": "Sie hält das Blatt tief vor dem Bauch, liest ohne aufzusehen, jeder Satz in derselben Melodie.", "stark": "Sie hält das Blatt auf Brusthöhe, hat Pausenstriche eingezeichnet und schaut am Ende jedes Satzes kurz in die Runde.", "frage": "Warum hören in der zweiten Fassung mehr Leute zu?", "unterschied": "Blick und Pausen machen aus dem Ablesen ein Sprechen zu Menschen. Wer am Satzende aufschaut, hält das Ende – und die Zuhörer merken, dass sie gemeint sind." },
+        { "art": "karte", "text": "Vorlesen für andere braucht Vorbereitung: Einmal still lesen und Pausenstriche nach Sinnschritten setzen. Das wichtigste Wort im Satz unterstreichen. Zahlen und Namen mit einem Punkt markieren: hier bremsen. Beim Lesen das Blatt auf Brusthöhe, damit der Kopf oben bleibt, und mit den Augen schon ein Stück vorauslaufen – dann ist am Satzende Zeit für einen kurzen Blick in die Runde." },
+        { "art": "fehler", "kopf": { "id": "aussprache-3-03-a", "faehigkeit": "aussprache.takt", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "So hat jemand die Pausenstriche gesetzt. Markier die Striche, die eine Wortgruppe zerreißen.",
+          "teile": [
+            { "t": "Im Sommer" },
+            { "t": "| fahren wir mit dem" },
+            { "t": "| Rad an den See.", "fehler": "Der Strich trennt „mit dem“ von „Rad“ – die Pause gehört vor „mit dem Rad“." },
+            { "t": "Die Kinder packen den Proviant" },
+            { "t": "und die" },
+            { "t": "| Badesachen,", "fehler": "„die Badesachen“ gehört zusammen – der Strich gehört vor „und“." },
+            { "t": "| Opa bringt den Kuchen." }
+          ] },
+        { "art": "klartext", "kopf": { "id": "aussprache-3-03-b", "faehigkeit": "aussprache.tragen", "stufe": 6, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0261" },
+          "text": "Liebe Renate, | zu deinem Geburtstag | haben wir uns etwas überlegt. | Wir laden dich ein | zu einer Fahrt an die Mosel. | Abfahrt ist am ersten Mai, | um neun Uhr, | vor deiner Haustür.",
+          "pruefliste": ["Am Ende jedes Satzes kurz aufgeschaut?", "Satzende gehalten?", "Datum und Uhrzeit gebremst?"] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-3-03-c", "faehigkeit": "aussprache.takt", "stufe": 7, "kanal": "wissen" },
+          "frage": "Du liest bei einer Feier einen Text vor und merkst: Die ersten Gäste flüstern miteinander. Was hilft am ehesten?",
+          "antworten": [
+            { "text": "Lauter lesen und den Kopf im Blatt lassen, damit du die Stelle nicht verlierst.", "wert": 1, "warum": "Lauter hilft ein wenig. Mit dem Blick im Blatt fehlt aber das, was Zuhörer zurückholt: angesehen werden." },
+            { "text": "Kurz innehalten, aufschauen und den nächsten Satz an die Flüsternden richten.", "wert": 2, "warum": "Eine Pause und ein Blick holen die Aufmerksamkeit freundlich zurück." },
+            { "text": "Schneller lesen, damit der Text bald vorbei ist.", "wert": 0, "tendenz": "tempo", "warum": "Im Galopp verlierst du noch mehr Zuhörer – und das Ende versackt." },
+            { "text": "Spitz unterbrechen: „Ich warte gern, bis alle so weit sind.“", "wert": 0, "tendenz": "angreifen", "warum": "Das kann die Stimmung kippen. Ein Blick und eine kurze Pause erreichen meist dasselbe – freundlicher." }
+          ] },
+        { "art": "stumm", "kopf": { "id": "aussprache-3-03-d", "faehigkeit": "aussprache.takt", "stufe": 6, "kanal": "koennen" },
+          "titel": "Den Text vorbereiten",
+          "schritte": ["Nimm einen kurzen Text, den du bald vorlesen könntest – eine Karte, eine Ansprache, ein Gedicht.", "Lies ihn still und setz mit dem Stift Striche nach jedem Sinnschritt.", "Unterstreich in jedem Satz das wichtigste Wort.", "Markier Zahlen und Namen mit einem kleinen Punkt davor: hier bremsen.", "Lies ihn innerlich im Takt der Striche und stell dir am Satzende einen Blick in die Runde vor."],
+          "sekunden": 90,
+          "pruefliste": ["Striche nach Sinnschritten, nicht mitten in Wortgruppen?", "In jedem Satz ein wichtigstes Wort?", "Zahlen und Namen markiert?"] },
+        { "art": "reflexion", "frage": "Wann wirst du das nächste Mal etwas vorlesen – bei der Arbeit, im Verein, in der Familie? Was machst du vorher mit dem Blatt?" }
+      ],
+      "regel": "Vorlesen heißt sprechen: Striche setzen, vorauslesen, am Satzende aufschauen.",
+      "merkkarten": [
+        { "id": "aussprache-3-03-m1", "frage": "Drei Vorbereitungen für einen Vorlesetext?", "antwort": "Pausenstriche nach Sinnschritten, das wichtigste Wort unterstreichen, Zahlen und Namen markieren." },
+        { "id": "aussprache-3-03-m2", "frage": "Wozu mit den Augen vorauslesen?", "antwort": "Damit am Satzende Zeit für einen Blick in die Runde bleibt – und das Ende gehalten wird." }
+      ]
+    },
+    {
+      "id": "aussprache-3-04", "bereich": "aussprache", "stufe": 3, "nr": 4,
+      "titel": "Im Lärm verstanden werden",
+      "faehigkeiten": ["aussprache.tragen", "aussprache.oeffnung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass man im Lärm von selbst lauter spricht, zeigten fünf Sprecherinnen. Dass so gesprochene Sätze im Lärm besser verstanden werden, wurde mit den Aufnahmen einer Sprecherin geprüft – ein Einzelbefund. Näher rangehen, zuwenden und kurze Sätze sind Praxiswissen.",
+      "quellen": ["pittman2001", "smiljanic2009", "praxis-aussprache"],
+      "aha": "Im Lärm wirst du von selbst lauter – und das hilft sogar. Mehr Kraft allein reicht aber nicht: Abstand, Blick und Mundbild zählen mit.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Eine Sprecherin las Sätze einmal in Ruhe und einmal bei Rauschen. Zuhörer hörten die Sätze danach in Stimmengewirr – gleich laut abgespielt. Wie kamen die im Lärm gesprochenen Sätze an?", "optionen": ["schlechter – gepresst und verzerrt", "etwa gleich gut", "besser als die Sätze aus der Ruhe"], "richtig": 2, "loesung": "Besser – auch bei gleicher Lautstärke.", "aufloesung": "Im Lärm spricht man von selbst lauter und dehnt die Wörter etwas. Diese Sprechweise kam bei Zuhörern im Stimmengewirr besser an, selbst als der Lautstärkevorteil herausgerechnet war. Lärm macht dich also nicht von vornherein unverständlich." },
+        { "art": "karte", "text": "Im Lärm zählt mehr als Lautstärke. Erstens Abstand: Näher rangehen bringt oft mehr als lauter rufen. Zweitens Blick: Wer dein Gesicht sieht, liest am Mund mit. Drittens Mund auf: Enge Vokale und leise Endungen gehen im Lärm leicht unter. Viertens kurze Sätze, das Wichtigste zuerst – Zahlen zur Sicherheit zeigen. Und die Stimme schonen: tragen statt schreien." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-3-04-a", "faehigkeit": "aussprache.tragen", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Hilft das im Lärm – oder schadet es eher?",
+          "faecher": ["hilft", "schadet eher"],
+          "karten": [
+            { "text": "zwei Schritte näher gehen", "fach": 0 },
+            { "text": "über die Schulter rufen", "fach": 1 },
+            { "text": "Gesicht zum Gegenüber, Licht im Gesicht", "fach": 0 },
+            { "text": "gegen die Maschine anschreien", "fach": 1 },
+            { "text": "die Zahl mit den Fingern zeigen", "fach": 0 },
+            { "text": "lange Sätze mit Nebensätzen", "fach": 1 }
+          ] },
+        { "art": "buehne", "kopf": { "id": "aussprache-3-04-b", "faehigkeit": "aussprache.tragen", "stufe": 8, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0263" },
+          "auftrag": "Mach Musik oder ein Rauschen an – leise genug, dass es dich nicht anstrengt. Erklär einer gedachten Person zwei Meter entfernt, wo ihr euch nachher trefft.",
+          "sekunden": 45, "publikum": "klein",
+          "stoerungen": ["Die Musik wird lauter.", "„Wie bitte – wo?“", "Die Person dreht sich halb weg."],
+          "pruefliste": ["Kurze Sätze, das Wichtigste zuerst?", "Mund weiter offen als sonst?", "Getragen statt geschrien, Hals frei?"] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-3-04-c", "faehigkeit": "aussprache.tragen", "stufe": 7, "kanal": "wissen" },
+          "frage": "In der lauten Kantine versteht dich Tarek am Nebentisch nicht. Was tust du?",
+          "antworten": [
+            { "text": "Lauter rufen, bis er es versteht.", "wert": 0, "tendenz": "lautstaerke", "warum": "Rufen strengt an und stört die anderen – und auf Abstand gehen trotzdem Silben verloren." },
+            { "text": "Ihm eine Nachricht aufs Handy schreiben.", "wert": 1, "warum": "Funktioniert – manchmal ist Schreiben im Lärm sogar das Klügste. Zwei Schritte und ein Blick sind oft schneller." },
+            { "text": "Mit großen Lippenbewegungen lautlos zu ihm hinüberformen – er soll es einfach ablesen.", "wert": 0, "warum": "Ablesen allein klappt nur bei wenigen kurzen Wörtern. Mit Stimme und Nähe ist es sicherer." },
+            { "text": "Aufstehen, hingehen, ihn ansehen und kurz sagen, was du willst.", "wert": 2, "warum": "Nähe, Gesicht und ein kurzer Satz – das trägt im Lärm weiter als jede Lautstärke." }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-3-04-d", "faehigkeit": "aussprache.oeffnung", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0269" },
+          "auftrag": "Kurze Sätze für laute Orte – Mund weiter auf als sonst, das Wichtigste zuerst.",
+          "zeilen": ["Gleis drei, | nicht Gleis zwo.", "Zwei Kaffee, | einer mit Milch.", "Treffpunkt: | am Ausgang Nord.", "Um halb sieben | am Tor."],
+          "weise": "klar",
+          "pruefliste": ["Kiefer deutlich offen?", "Das Wichtigste zuerst?", "Kurz und mit Pause?"] },
+        { "art": "mission", "ref": "aussprache-m-09" }
+      ],
+      "regel": "Im Lärm: näher ran, Gesicht zeigen, Mund auf, kurz – tragen statt schreien.",
+      "merkkarten": [
+        { "id": "aussprache-3-04-m1", "frage": "Was hilft im Lärm mehr als lauter rufen?", "antwort": "Näher rangehen, zuwenden, Mund auf, kurze Sätze mit dem Wichtigsten zuerst." },
+        { "id": "aussprache-3-04-m2", "frage": "Macht Lärm dich von vornherein unverständlich?", "antwort": "Nein. Im Lärm spricht man von selbst lauter und etwas gedehnter – in einer Studie wurde das sogar besser verstanden." }
+      ],
+      "mission": "aussprache-m-09"
+    },
+    {
+      "id": "aussprache-3-05", "bereich": "aussprache", "stufe": 3, "nr": 5,
+      "titel": "Klar aus Gewohnheit: Plan für drei Monate",
+      "faehigkeiten": ["aussprache.alltag", "aussprache.hoeren"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Wie lange Gewohnheiten brauchen, ist für Gesundheitsverhalten untersucht, nicht fürs Sprechen; die Spanne ist groß. Dass Wenn-Dann-Pläne und das Festhalten von Fortschritt bei Vorsätzen helfen, zeigen Meta-Analysen.",
+      "quellen": ["singh2024", "lally2010", "gollwitzer2006", "harkin2016"],
+      "aha": "Gewohnheiten brauchen in Studien meist um zwei Monate, oft länger – und ein ausgelassener Tag wirft dich nicht zurück. Drei Monate mit festen Momenten geben dem Klar-Modus Zeit, Gewohnheit zu werden.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Wie lange dauerte es in Studien, bis eine neue Alltagsgewohnheit fest saß?", "optionen": ["21 Tage, bei fast allen", "meist um zwei Monate, mit großer Spanne", "ein ganzes Jahr"], "richtig": 1, "loesung": "Meist um zwei Monate – bei manchen wenige Tage, bei anderen fast ein Jahr.", "aufloesung": "Die Mitte lag bei etwa zwei Monaten, der Durchschnitt höher; die Spanne reichte von 4 bis 335 Tagen. Untersucht wurden Gesundheitsgewohnheiten, nicht das Sprechen. Die oft genannten 21 Tage haben die Studien nicht bestätigt." },
+        { "art": "karte", "text": "Dein Plan für drei Monate: Monat eins – zwei feste Momente aus deinem Wenn-Dann-Plan, jeden Abend ein Strich. Monat zwei – ein dritter Moment kommt dazu, dazu dein Merkmal der Woche. Monat drei – die Momente laufen; du achtest auf die Lagen, in denen du rutschst: Hektik, Müdigkeit, bestimmte Menschen. Am Ende jedes Monats dieselbe Aufnahme zum Vergleich. Ein ausgelassener Tag zählt nicht – das Weitermachen zählt." },
+        { "art": "auswahl", "kopf": { "id": "aussprache-3-05-a", "faehigkeit": "aussprache.alltag", "stufe": 7, "kanal": "wissen" },
+          "frage": "Nach sechs Wochen merkst du: In einer hektischen Woche hast du deine Klar-Momente vier Tage lang vergessen. Was jetzt?",
+          "antworten": [
+            { "text": "Von vorn anfangen – die Serie ist ja gerissen.", "wert": 0, "warum": "Eine gerissene Serie ist kein Neustart. Was in sechs Wochen gewachsen ist, ist nicht weg." },
+            { "text": "Für hektische Wochen künftig einen kleineren Plan festlegen: nur ein Moment statt drei.", "wert": 1, "warum": "Klug für die Zukunft – zuerst zählt aber, morgen wieder einzusteigen." },
+            { "text": "Den Plan aufgeben, er passt offenbar nicht zu dir.", "wert": 0, "tendenz": "vermeiden", "warum": "Ausrutscher gehören dazu. Wer jetzt aufhört, verschenkt sechs Wochen." },
+            { "text": "Mit dem nächsten Moment wieder einsteigen und notieren, was die Woche so voll gemacht hat.", "wert": 2, "warum": "Weitermachen statt neu anfangen – und aus dem Ausrutscher lernen, wann der Plan kleiner sein darf." }
+          ] },
+        { "art": "woop", "anlass": "Dein Klar-Modus in drei Monaten.", "beispiel": { "wunsch": "In drei Monaten spreche ich am Telefon und in der Montagsrunde klar, ohne lange daran zu denken.", "ergebnis": "Niemand fragt mehr nach meinem Namen; ich fühle mich sicher, wenn ich das Wort habe.", "hindernis": "In hektischen Wochen vergesse ich alles und rede schnell.", "plan": "Wenn ich merke, dass es hektisch wird, dann halte ich nur noch einen Moment: die Telefonbegrüßung." } },
+        { "art": "klartext", "kopf": { "id": "aussprache-3-05-b", "faehigkeit": "aussprache.hoeren", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0278" },
+          "text": "lesetext-01",
+          "pruefliste": ["Denselben Text wie bei der Startaufnahme gelesen?", "Unterschied bei deinem Merkmal hörbar?", "Die gewohnte Fassung schon näher an der klaren als am Anfang?"] },
+        { "art": "reflexion", "frage": "Was hat sich seit deiner Startaufnahme verändert, das du am Anfang nicht für möglich gehalten hättest?", "insBuch": "erfolg" }
+      ],
+      "regel": "Drei Monate, feste Momente, ein Strich am Abend – ein ausgelassener Tag zählt nicht.",
+      "merkkarten": [
+        { "id": "aussprache-3-05-m1", "frage": "Wie lange brauchten Gewohnheiten in Studien?", "antwort": "Meist um zwei Monate, im Durchschnitt länger; die Spanne reichte von wenigen Tagen bis fast ein Jahr." },
+        { "id": "aussprache-3-05-m2", "frage": "Was tust du nach einem Ausrutscher?", "antwort": "Mit dem nächsten Moment wieder einsteigen – ein ausgelassener Tag wirft dich nicht zurück." }
+      ]
+    }
+  ]
+}

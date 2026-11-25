@@ -174,10 +174,10 @@
               { "text": "„Schwierige Frage. Es gibt Kosten, Aufsicht, Zeit, aber auch schöne Seiten, und die Kinder, und dann ist da noch das Wetter …“", "wert": 0, "tendenz": "alles", "weiter": "k2b", "rueck": "Alles gleichzeitig – deine Meinung bleibt unklar." },
               { "text": "„Grundsätzlich gern.“", "wert": 1, "weiter": "k2", "rueck": "Klar, aber ohne Grund. Ein Satz mehr hätte die anderen mitgenommen." }
             ] },
-          { "id": "k2", "sagt": "Ein anderer Vater: „Und die Kosten?“",
+          { "id": "k2", "sagt": "Ein Vater: „Und die Kosten?“",
             "wahl": [
               { "text": "„Gute Frage. Dafür gibt es den Förderverein – den könnten wir fragen.“", "wert": 2, "weiter": "ende1", "rueck": "Einwand angenommen, Lösung vorgeschlagen." },
-              { "text": "„Na ja, irgendwie geht das immer.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende1", "rueck": "Klingt nach Ausweichen. Ein konkreter Vorschlag wäre stärker." }
+              { "text": "„Na ja, irgendwie geht das am Ende ja immer, da findet sich bestimmt eine Lösung.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende1", "rueck": "Klingt nach Ausweichen. Ein konkreter Vorschlag wäre stärker." }
             ] },
           { "id": "k2b", "sagt": "Die Lehrerin: „Und unterm Strich?“",
             "wahl": [
@@ -208,7 +208,7 @@
           { "id": "k2", "sagt": "Dr. Albers: „Gut. Brauchen Sie etwas von mir?“",
             "wahl": [
               { "text": "„Ja: eine Freigabe für die Daten aus dem Norden.“", "wert": 2, "weiter": "ende1", "rueck": "Eine klare Bitte. Er kann sofort Ja sagen." },
-              { "text": "„Nein, das schaffe ich schon irgendwie.“", "wert": 1, "weiter": "ende1", "rueck": "Tapfer – aber wenn du etwas brauchst, ist jetzt der Moment." }
+              { "text": "„Nein, danke – das schaffe ich schon irgendwie allein.“", "wert": 1, "weiter": "ende1", "rueck": "Tapfer – aber wenn du etwas brauchst, ist jetzt der Moment." }
             ] },
           { "id": "ende1", "sagt": "Dr. Albers: „Gut. Danke.“ Er legt auf.", "ende": "Ein Anruf ohne Vorwarnung: Stand, Rest, Termin – und eine klare Bitte. Fertig in einer Minute." },
           { "id": "ende2", "sagt": "Dr. Albers: „Gut, schicken Sie mir das per Mail.“", "ende": "Kein Drama. Beim nächsten Mal: Stand in einem Satz, dann der Rest." }

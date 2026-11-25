@@ -395,7 +395,7 @@ Verzweigtes Gespräch; jede Wahl hat eine Folge und eine kurze Rückmeldung. Am 
 
 **Zeitdruck-Aufgaben:** „Drei Einstiege für eine Kochgruppe – 30 Sekunden.“ · „Fünf Fragen zum Thema Garten – 30 Sekunden.“ · „Zehn Übertreibungen für ‚Es regnet‘ – 60 Sekunden.“ (Bei „ohne Zeitdruck“: dieselbe Aufgabe ohne Uhr.)
 
-**Umformulieren:** „Das geht nicht vor Freitag.“ → „Das schaffe ich bis Freitag.“ (positiv) · „Ich würde vielleicht vorschlagen wollen, dass wir das verschieben.“ → „Ich schlage vor, wir verschieben das.“ (ohne Weichmacher)
+**Umformulieren:** „Das geht nicht vor Freitag.“ → „Das schaffe ich am Freitag.“ (positiv, ohne den Inhalt zu verschieben – „bis Freitag“ hieße: vielleicht schon früher) · „Ich würde vielleicht vorschlagen wollen, dass wir das verschieben.“ → „Ich schlage vor, wir verschieben das.“ (ohne Weichmacher)
 
 **Nachsprechen, nach Ziel geordnet:**
 

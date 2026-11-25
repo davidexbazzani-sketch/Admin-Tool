@@ -1,0 +1,278 @@
+{
+  "lagen": [
+    {
+      "id": "konter-l-11", "bereich": "konter", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["konter.necken", "konter.spiel", "konter.selbstironie"], "stufe": 7,
+      "titel": "Du leitest die Runde", "figur": "Tarek Yılmaz",
+      "einleitung": "Zum ersten Mal leitest du die Wochenrunde – mit dem Spaßvogel, der Neuen, einem Werkstudenten und dem Chef per Video. Du übst Humor nach oben und nach unten.",
+      "lage": "Dr. Albers ist auf Dienstreise und hat dich gebeten, die Wochenrunde zu leiten. Acht Leute, darunter Lena und ein neuer Werkstudent. Albers schaltet sich für die letzten zehn Minuten per Video dazu.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Tarek zum Start: „Oh, Chef auf Zeit! Müssen wir jetzt Sie sagen?“",
+          "wahl": [
+            { "text": "„Tarek, heute bitte mal ohne Sprüche, wir haben viel vor.“", "wert": 0, "weiter": "k1b", "rueck": "Gleich zu Beginn gebremst – die Runde startet angespannt." },
+            { "text": "„Nur bis halb elf. Danach dürft ihr mich wieder duzen und ignorieren.“", "wert": 2, "weiter": "k2", "rueck": "Selbstironie in der neuen Rolle: Du machst deine Rolle klein, nicht die anderen." },
+            { "text": "Ohne Lächeln: „Ja, ab jetzt bitte nur noch mit Anmeldung.“", "wert": 1, "weiter": "k2", "rueck": "Als Spiel gemeint – ohne Lächeln kommt es von oben schnell ernst an." }
+          ] },
+        { "id": "k1b", "sagt": "Tarek hebt die Hände: „Jawohl.“ Ein paar schauen sich an.",
+          "wahl": [
+            { "text": "„War zu streng, sorry. Sprüche sind erlaubt – nur kurze.“", "wert": 2, "weiter": "k2", "rueck": "Zurückgenommen, mit Augenzwinkern – die Runde atmet auf." },
+            { "text": "Nichts zurücknehmen und einfach mit Punkt eins der Tagesordnung anfangen.", "wert": 1, "weiter": "k2", "rueck": "Geht. Die Stimmung bleibt etwas steif." }
+          ] },
+        { "id": "k2", "sagt": "Punkt eins: Der Werkstudent stellt seine Auswertung vor. Eine Spalte ist verrutscht, die Zahlen stimmen nicht. Tarek grinst: „Mutig, mutig. Hast du die Zahlen gewürfelt?“ Der Werkstudent wird rot.",
+          "wahl": [
+            { "text": "„Die Spalte ist verrutscht – passiert mir jeden zweiten Monat. Wir schieben sie kurz zurück.“", "wert": 2, "weiter": "k3", "rueck": "Du machst den Fehler klein, indem du dich danebenstellst, holst die Sache zurück und nimmst Tareks Spruch die Bühne – ohne Tarek bloßzustellen." },
+            { "text": "Mitlachen: „Würfeln ist auch eine Methode.“", "wert": 0, "tendenz": "abwerten", "weiter": "k2b", "rueck": "Von der Leitung mitgelacht, wiegt der Spruch doppelt – und der Werkstudent kann schlecht zurück." },
+            { "text": "„Tarek, das ist unfair. Er ist neu.“", "wert": 1, "weiter": "k3", "rueck": "Richtig gemeint – doch vor allen wird der Werkstudent so zum Schützling. Erst die Sache, später ein Wort mit Tarek." }
+          ] },
+        { "id": "k2b", "sagt": "Der Werkstudent spricht den Rest der Vorstellung mit gesenktem Blick.",
+          "wahl": [
+            { "text": "„Kurz zurück: Das war daneben von mir. Die Auswertung ist gut, nur eine Spalte ist verrutscht. Weiter.“", "wert": 2, "weiter": "k3", "rueck": "Gerade als Leitung: einen Treffer sofort zurückgenommen." },
+            { "text": "Zum nächsten Punkt gehen.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3", "rueck": "Überspielt – der Spruch bleibt an ihm hängen." }
+          ] },
+        { "id": "k3", "sagt": "Punkt zwei: Lena schlägt ein neues Ablagesystem vor. Ein Kollege: „Noch ein System? Wir haben doch schon drei, die keiner benutzt.“ Ein paar lachen.",
+          "wahl": [
+            { "text": "„Also ich finde den Vorschlag super und würde alle bitten, ihn erst mal anzuhören, bevor wir hier lachen.“", "wert": 1, "weiter": "k4", "rueck": "Schützend und klar – etwas belehrend für eine Runde, die nur geschmunzelt hat." },
+            { "text": "Mitlachen: „Stimmt, drei Systeme reichen eigentlich.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3b", "rueck": "Als Leitung hast du gerade Lenas Vorschlag beerdigt." },
+            { "text": "„Dann ist das vielleicht das erste, das einer benutzt. Lena, was ist anders?“", "wert": 2, "weiter": "k4", "rueck": "Leicht aufgegriffen, dann bekommt Lena das Wort. Der Spruch wird zur Frage." }
+          ] },
+        { "id": "k3b", "sagt": "Lena schaut auf ihre Unterlagen. Niemand sagt etwas.",
+          "wahl": [
+            { "text": "„Halt – das war vorschnell von mir. Lena, erzähl, was dein System anders macht.“", "wert": 2, "weiter": "k4", "rueck": "Gerettet: Du gibst ihr die Bühne zurück." },
+            { "text": "„Gut, dann vertagen wir das.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Vertagt heißt hier: begraben." }
+          ] },
+        { "id": "k4", "sagt": "Albers schaltet sich per Video dazu: „Na, steht das Haus noch? Oder muss ich früher zurückkommen?“",
+          "wahl": [
+            { "text": "„Alles steht – sogar ein neues Ablagesystem. Lena erklärt es Ihnen gleich.“", "wert": 2, "weiter": "k5", "rueck": "Du spielst nach oben mit und gibst den Erfolg weiter – an Lena." },
+            { "text": "Lachend: „Kommen Sie lieber früher, hier ist ohne Sie das reinste Chaos!“", "wert": 0, "tendenz": "abwerten", "weiter": "k5", "rueck": "Als Witz gemeint – vor dem Chef macht er die ganze Runde klein." },
+            { "text": "„Alles in Ordnung, Herr Albers.“", "wert": 1, "weiter": "k5", "rueck": "Sachlich und korrekt. Ein kleiner Satz zum Mitspielen hätte die Runde mitgenommen." }
+          ] },
+        { "id": "k5", "sagt": "Albers: „Schön. Dann hätte ich bis Freitag gern eine Zusammenfassung.“ Tarek ruft dazwischen: „Vom Chef auf Zeit natürlich!“",
+          "wahl": [
+            { "text": "„Natürlich – vom Chef auf Zeit, mit Stempel. Freitag früh liegt sie bei Ihnen.“", "wert": 2, "weiter": "ende1", "rueck": "Tareks Spruch aufgenommen, die eigene Rolle leicht genommen – und die Zusage steht, mit Termin." },
+            { "text": "„Wenn Tarek mitschreibt, gern.“", "wert": 1, "weiter": "ende1", "rueck": "Leicht zurückgespielt – nach oben aber weniger klar als eine Zusage." }
+          ] },
+        { "id": "ende1", "sagt": "Nach der Runde nicken dir ein paar Leute zu. Lena bleibt noch und erzählt mehr von ihrem System.", "ende": "Wer leitet, dessen Witz wiegt schwerer. Über dich selbst lachen, Fehler anderer klein halten, ihre Ideen tragen, nach oben mitspielen – so bleibt Humor eine Stärke der Leitung." },
+        { "id": "ende2", "sagt": "Die Runde endet pünktlich, aber gedämpft.", "ende": "Kein Drama. Als Leitung zählt dein Lachen doppelt – auch das Mitlachen. Beim nächsten Mal: erst die Idee tragen, dann lachen." }
+      ],
+      "prinzipien": ["nach unten über dich scherzen", "Fehler anderer klein halten", "Ideen anderer tragen", "nach oben mitspielen"],
+      "transfer": "Wo leitest du – eine Runde, ein Projekt, eine Familienfeier? Was sagst du, wenn dort jemand über einen Schwächeren lacht?"
+    },
+    {
+      "id": "konter-l-12", "bereich": "konter", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["konter.grenze", "konter.rueckfrage", "konter.ruhe"], "stufe": 8,
+      "titel": "Die Hausversammlung", "figur": "ein Nachbar",
+      "einleitung": "Eine Hausversammlung, ein Vorschlag und ein Nachbar mit vielen Tricks: Strohmann, Lacher holen, Killerphrase. Du übst, sie zu erkennen und ruhig abzuwehren.",
+      "lage": "Hausversammlung im Gemeinschaftsraum, fünfzehn Leute. Du schlägst vor, im Hof überdachte Fahrradständer aufzustellen. Frau Sommer, deine Nachbarin, sitzt neben dir. Ein Nachbar aus dem dritten Stock ist dagegen – und nicht zimperlich.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Der Nachbar: „Aha. Sie wollen also den ganzen Hof zubetonieren, damit Ihr Rad nicht nass wird?“ Ein paar murmeln.",
+          "wahl": [
+            { "text": "„Nein – vier Ständer an der Wand, kein Beton. Was stört Sie daran?“", "wert": 2, "weiter": "k2", "rueck": "Strohmann erkannt: kurz geraderückt, dann nach dem echten Einwand gefragt." },
+            { "text": "„Ich will doch gar nichts zubetonieren, ich hab nur gesagt, dass wir vielleicht ein paar Ständer, also wenn alle einverstanden sind …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k1b", "rueck": "Du verteidigst die verzerrte Fassung – und wirst dabei immer kleiner." },
+            { "text": "„Und Sie wollen wohl, dass alle Räder im Treppenhaus stehen?“", "wert": 0, "tendenz": "angreifen", "weiter": "k1c", "rueck": "Strohmann gegen Strohmann – jetzt streiten zwei Zerrbilder." }
+          ] },
+        { "id": "k1b", "sagt": "Der Nachbar lehnt sich zurück: „Na, da weiß wohl jemand selbst nicht, was er will.“ Gelächter.",
+          "wahl": [
+            { "text": "Ausatmen. „Doch: vier Ständer an der Wand. Mehr nicht. Wer hat Fragen?“", "wert": 2, "weiter": "k2", "rueck": "Zurück zum Kern, kurz und für alle – die Lacher verpuffen." },
+            { "text": "Rot werden und den Vorschlag zurückziehen.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Genau darauf zielte die Taktik." }
+          ] },
+        { "id": "k1c", "sagt": "Der Nachbar lacht: „Getroffen, was?“ Frau Sommer zupft dich am Ärmel.",
+          "wahl": [
+            { "text": "„Entschuldigung, das war unnötig. Mein Vorschlag ist klein: vier Ständer an der Wand.“", "wert": 2, "weiter": "k2", "rueck": "Den eigenen Ausrutscher zurückgenommen, zurück zur Sache – das bringt dir die Runde zurück." },
+            { "text": "„Sie haben angefangen.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Schulhof statt Hausversammlung." }
+          ] },
+        { "id": "k2", "sagt": "Der Nachbar grinst in die Runde: „Hat das noch jemand verstanden? Ich jedenfalls nicht.“ Zwei lachen.",
+          "wahl": [
+            { "text": "„Wenn Sie zugehört hätten, statt Witze zu machen, hätten Sie es auch verstanden.“", "wert": 0, "tendenz": "angreifen", "weiter": "k2b", "rueck": "Die Runde sieht jetzt zwei, die sich streiten." },
+            { "text": "„Was genau ist unklar?“", "wert": 1, "weiter": "k3", "rueck": "Gute Rückfrage – sie gibt ihm allerdings die Bühne zurück." },
+            { "text": "„Dann zeig ich's kurz.“ – und die Skizze herumgeben.", "wert": 2, "weiter": "k3", "rueck": "Lacher holen läuft ins Leere, wenn du einfach für alle erklärst." }
+          ] },
+        { "id": "k2b", "sagt": "Der Nachbar: „Oh, empfindlich.“ Frau Sommer seufzt hörbar.",
+          "wahl": [
+            { "text": "„Kann sein. Zurück zum Vorschlag – hier ist die Skizze.“", "wert": 2, "weiter": "k3", "rueck": "Ruhig, kein Nachlegen, zurück zur Sache." },
+            { "text": "„Ich bin nicht empfindlich! Ich will hier nur ernst genommen werden.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Jetzt geht es um dich, nicht um Fahrradständer." }
+          ] },
+        { "id": "k3", "sagt": "Der Nachbar, lauter: „Das haben wir hier seit dreißig Jahren nicht gebraucht. Immer muss alles neu sein.“",
+          "wahl": [
+            { "text": "„Gewohnheit ist ein Argument. Gibt es noch andere?“", "wert": 1, "weiter": "k4", "rueck": "Gut erkannt, mit kleinem Seitenhieb. Eine offene Frage nach seinen Gründen wäre freundlicher." },
+            { "text": "„Was genau spricht heute dagegen – Platz, Kosten, Aussehen?“", "wert": 2, "weiter": "k4", "rueck": "Killerphrase und Verallgemeinerung zugleich – du fragst nach dem Grund und bietest Möglichkeiten an." },
+            { "text": "„Dreißig Jahre ohne Ständer – und genau so sieht der Hof auch aus.“", "wert": 0, "tendenz": "angreifen", "weiter": "k3b", "rueck": "Ein Lacher auf seine Kosten. Gewonnen hast du ihn damit nicht." }
+          ] },
+        { "id": "k3b", "sagt": "Einige lachen, der Nachbar verschränkt die Arme: „Dann stimmen wir eben ab. Ich bin dagegen.“",
+          "wahl": [
+            { "text": "„Bevor wir abstimmen: Was müsste anders sein, damit Sie zustimmen könnten?“", "wert": 2, "weiter": "k4", "rueck": "Du holst ihn zurück ins Gespräch – ohne den Seitenhieb zu wiederholen." },
+            { "text": "„Gut, stimmen wir ab.“", "wert": 1, "weiter": "ende3", "rueck": "Sachlich – nur stimmt der Nachbar jetzt aus Trotz dagegen." }
+          ] },
+        { "id": "k4", "sagt": "Er überlegt: „Na ja … die Wand ist direkt vor meinem Kellerfenster. Da wird's dunkel.“",
+          "wahl": [
+            { "text": "„Ach, so dunkel wird es da schon nicht werden, das Dach ist ja ziemlich schmal und hell.“", "wert": 0, "weiter": "ende3", "rueck": "Du wischst die einzige echte Sorge des Abends weg." },
+            { "text": "„Das ist ein echter Punkt. Was, wenn die Ständer an die Garagenwand kommen?“", "wert": 2, "weiter": "ende1", "rueck": "Hinter den Taktiken steckte eine echte Sorge – und du hast sie gefunden." },
+            { "text": "„Darüber können wir reden.“", "wert": 1, "weiter": "ende1", "rueck": "Offen – ein konkreter Vorschlag hätte es schneller gemacht." }
+          ] },
+        { "id": "ende1", "sagt": "Abstimmung: zwölf dafür, zwei Enthaltungen, eine Gegenstimme – der Nachbar stimmt dafür. Frau Sommer flüstert: „Das war aber elegant.“", "ende": "Strohmann geraderücken, Lacher mit Sache beantworten, nach dem Grund fragen – und hinter allem die echte Sorge finden. So verlieren unfaire Taktiken ihre Kraft." },
+        { "id": "ende2", "sagt": "Der Vorschlag wird vertagt. Frau Sommer klopft dir auf dem Flur auf die Schulter: „Nächstes Mal klappt's.“", "ende": "Kein Drama. Die Taktiken haben gewirkt, weil sie das Gespräch auf dich gelenkt haben. Beim nächsten Mal: kurz geraderücken, für alle sprechen, nach dem Grund fragen." },
+        { "id": "ende3", "sagt": "Der Vorschlag wird knapp angenommen. Der Nachbar stimmt dagegen und geht verärgert.", "ende": "Durchgekommen – aber mit einem verärgerten Nachbarn. Die echte Sorge hinter seinen Sprüchen blieb ungehört." }
+      ],
+      "prinzipien": ["Strohmann geraderücken", "Lacher mit Sache beantworten", "nach dem Grund fragen", "die echte Sorge finden", "nie mit gleicher Münze zurückzahlen"],
+      "transfer": "Wo begegnen dir verzerrte Aussagen oder Lacher gegen dich – in Versammlungen, im Verein, im Beruf? Welcher deiner Abwehrsätze passt dazu?"
+    },
+    {
+      "id": "konter-l-13", "bereich": "konter", "phase": "m", "umfeld": "kunden", "faehigkeiten": ["konter.necken", "konter.selbstironie", "konter.spiel"], "stufe": 8,
+      "titel": "Der Witz beim Kunden", "figur": "Herr Petersen",
+      "einleitung": "Ein langjähriger Kunde, ein heikler Preis und dein Chef am Tisch. Du übst Humor, der beim Kunden ankommt – und das Retten, wenn er danebengeht.",
+      "lage": "Herr Petersen, ein langjähriger Kunde, ist zur Jahresbesprechung im Haus. Er hört nicht mehr gut und fragt nach, wenn er etwas nicht versteht. Dr. Albers sitzt mit am Tisch. Es geht um Petersens alte Maschine, die immer öfter ausfällt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Petersen seufzt: „Die alte Dame macht's nicht mehr lange.“ Du willst die Stimmung lockern.",
+          "wahl": [
+            { "text": "„Ja, die hat schon einiges hinter sich.“", "wert": 1, "weiter": "k2", "rueck": "Freundlich und sachlich. Sein Bild hättest du aufnehmen können." },
+            { "text": "„Die Maschine ist ja auch fast so alt wie … na, Sie wissen schon, wer hier am Tisch.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Ein Altersspruch beim Kunden – der Witz zielt am Ende auf ihn." },
+            { "text": "„Die alte Dame hat sich ihre Rente verdient. Wir suchen ihr eine würdige Nachfolgerin.“", "wert": 2, "weiter": "k2", "rueck": "Du spielst sein Bild weiter – liebevoll über die Maschine, nicht über ihn." }
+          ] },
+        { "id": "k1b", "sagt": "Petersen beugt sich vor: „Wie bitte? So alt wie wer?“ Dr. Albers schaut dich an.",
+          "wahl": [
+            { "text": "„Ein schlechter Witz von mir – vergessen Sie ihn. Ich meinte: Sie hat sich die Rente verdient.“", "wert": 2, "weiter": "k2", "rueck": "Nicht erklärt, sondern ersetzt. Er nimmt es mit einem Lächeln." },
+            { "text": "Den Witz laut und langsam noch einmal sagen.", "wert": 0, "weiter": "k1c", "rueck": "Ein erklärter Witz stirbt zweimal – und dieser trifft beim zweiten Mal deutlich." }
+          ] },
+        { "id": "k1c", "sagt": "Petersen, kühl: „Ah. So alt wie ich. Verstehe.“",
+          "wahl": [
+            { "text": "„Das war daneben, entschuldigen Sie. Ihre Erfahrung mit der Maschine ist für uns Gold wert.“", "wert": 2, "weiter": "k2", "rueck": "Kurz zurückgenommen, ohne Aber, mit echter Anerkennung." },
+            { "text": "„Nein, nein, so war das wirklich nicht gemeint, ich wollte doch nur sagen, dass die Maschine schon …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Die Erklärung macht es schlimmer." }
+          ] },
+        { "id": "k2", "sagt": "Petersen lächelt: „Eine Nachfolgerin bräuchte sie wohl. Aber bitte keine, bei der mir am Telefon jemand erklärt, ich soll sie neu starten.“",
+          "wahl": [
+            { "text": "„Neu starten hilft aber wirklich oft, Herr Petersen – das sollten Sie ruhig immer zuerst versuchen.“", "wert": 0, "weiter": "k3", "rueck": "Sachlich vielleicht richtig – doch er hat gerade gescherzt, und du belehrst ihn." },
+            { "text": "„Versprochen: Neustart nur nach Rücksprache mit Ihnen.“", "wert": 2, "weiter": "k3", "rueck": "Gespielter Ernst – und zugleich eine Zusage, mit der er etwas anfangen kann." },
+            { "text": "Lachen.", "wert": 1, "weiter": "k3", "rueck": "Mitlachen ist eine vollwertige Antwort." }
+          ] },
+        { "id": "k3", "sagt": "Dann kommt der Preis für die neue Maschine. Petersen schluckt: „Dafür kauf ich mir ja eine Insel.“ Er schaut zu Albers.",
+          "wahl": [
+            { "text": "„Eine kleine, ja. Dafür fällt die Nachfolgerin seltener aus als die alte Dame. Darf ich zeigen, was im Preis steckt?“", "wert": 2, "weiter": "k4", "rueck": "Zugestimmt, verkleinert, dann zur Sache – sein Witz bekommt Raum, der Preis eine Begründung." },
+            { "text": "„Inseln sind auch teurer geworden.“", "wert": 1, "weiter": "k4", "rueck": "Mitgespielt – nur bleibt sein Schreck über den Preis unbeantwortet." },
+            { "text": "„Der Preis ist wirklich schon sehr knapp gerechnet, da steckt kaum Spielraum drin, wir haben uns …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k4", "rueck": "Rechtfertigen klingt nach schlechtem Gewissen." }
+          ] },
+        { "id": "k4", "sagt": "Petersen, halb im Spaß, halb im Ernst: „Herr Albers, Ihre Leute sind ja richtige Komiker. Wird das auch berechnet?“",
+          "wahl": [
+            { "text": "„Entschuldigung, wir wollten nicht unseriös wirken.“", "wert": 1, "weiter": "ende1", "rueck": "Höflich – doch er hat gescherzt. Ein Augenzwinkern hätte gepasst." },
+            { "text": "„Der Humor ist inklusive. Die Wartung nicht – die ist dafür sehr ernst gemeint.“", "wert": 2, "weiter": "ende1", "rueck": "Leicht, über euch selbst, und zurück zur Sache." },
+            { "text": "„Bei Ihrer Maschine braucht man eben Humor.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende3", "rueck": "Wieder ein Seitenhieb auf seine Wahl – er hat die Maschine gekauft." }
+          ] },
+        { "id": "ende1", "sagt": "Petersen nickt: „Schicken Sie mir das Angebot. Mit Humor.“ Dr. Albers zwinkert dir zu.", "ende": "Beim Kunden: sein Bild weiterspielen, nie auf seine Kosten, einen Witz nie erklären – und einen danebengegangenen sofort ersetzen. So bleibt Humor eine Stärke im Gespräch." },
+        { "id": "ende2", "sagt": "Petersen wird förmlich. Das Gespräch endet pünktlich, ohne Angebot.", "ende": "Kein Drama – aber ein Witz, der den Kunden trifft, kostet. Beim nächsten Mal: kurz zurücknehmen, ohne Erklärung." },
+        { "id": "ende3", "sagt": "Petersen lacht nicht mehr. „Schicken Sie das Angebot.“ Es klingt kühl.", "ende": "Kein Drama. Witze über das, was der Kunde gewählt hat, treffen ihn selbst. Lieber über euch und die Lage." }
+      ],
+      "prinzipien": ["sein Bild weiterspielen", "nie auf Kosten des Kunden", "einen Witz nie erklären", "Danebengegangenes sofort ersetzen"],
+      "transfer": "Mit wem sprichst du beruflich, bei dem ein Witz schnell falsch ankommen kann? Welches Thema ist dort sicher?"
+    },
+    {
+      "id": "konter-l-14", "bereich": "konter", "phase": "m", "umfeld": "familie", "faehigkeiten": ["konter.spiel", "konter.selbstironie", "konter.grenze", "konter.necken"], "stufe": 8,
+      "titel": "Das Sommerfest der Familie", "figur": "Tante Renate",
+      "einleitung": "Zwanzig Leute, drei Generationen, ein Alleinunterhalter und eine kleine Rede über dich. Du übst Schlagfertigkeit vor der Familienrunde – leicht vor allen, klar unter vier Augen.",
+      "lage": "Sommerfest im Garten deiner Eltern, zwanzig Leute aus drei Generationen. Tante Renate sitzt in der Mitte der langen Tafel. Dein Cousin, der gern den Alleinunterhalter gibt, ist schon in Fahrt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dein Cousin, laut: „Und, wie läuft's bei dir? Immer noch keine Beförderung? Wird schon, Kopf hoch!“ Ein paar am Tisch lachen.",
+          "wahl": [
+            { "text": "„Doch, ich hab gerade ein neues Projekt bekommen, das ist eigentlich sogar wichtiger als eine Beförderung, weil …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k1b", "rueck": "Vor der ganzen Familie verteidigt – genau das wollte die Bühne." },
+            { "text": "„Ich arbeite dran. Bis dahin bin ich einfach unbezahlbar.“", "wert": 2, "weiter": "k2", "rueck": "Zustimmen und umdeuten mit Augenzwinkern – vor zwanzig Leuten gelassen." },
+            { "text": "„Und wie läuft's mit deinem Bauch, Cousin?“", "wert": 0, "tendenz": "angreifen", "weiter": "k1c", "rueck": "Eine Retourkutsche über den Körper vor drei Generationen – jetzt wird über dich gesprochen." }
+          ] },
+        { "id": "k1b", "sagt": "Der Cousin grinst: „Wichtiger als eine Beförderung, soso.“ Tante Renate schaut über den Rand ihrer Brille.",
+          "wahl": [
+            { "text": "„Genau. Karriere mit Aussicht.“ – lächeln und das Brot weiterreichen.", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance: Mit einem leichten Satz ist die Bühne geschlossen." },
+            { "text": "Weiter erklären, worum es in dem Projekt geht und warum es so wichtig für dich ist.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Je länger die Erklärung, desto größer die Bühne für ihn." }
+          ] },
+        { "id": "k1c", "sagt": "Stille. Deine Mutter: „Also wirklich.“ Der Cousin lacht gequält.",
+          "wahl": [
+            { "text": "„Sorry, das war unter der Gürtellinie. Zurück zum Kuchen – wer will?“", "wert": 2, "weiter": "k2", "rueck": "Treffer zurückgenommen, Rückweg gebaut. Die Tafel atmet auf." },
+            { "text": "„Er hat angefangen.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Schulhof statt Sommerfest." }
+          ] },
+        { "id": "k2", "sagt": "Später steht Tante Renate auf: „Ich sag nur kurz was.“ Sie erzählt, wie du als Kind beim Sommerfest in den Gartenteich gefallen bist. Alle lachen und schauen zu dir.",
+          "wahl": [
+            { "text": "„Das stimmt so gar nicht, ich bin ausgerutscht, weil jemand den Rasen gesprengt hatte …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k3", "rueck": "Familiengeschichten gewinnt man nicht mit Gegendarstellungen." },
+            { "text": "Rot werden und lächeln.", "wert": 1, "weiter": "k3", "rueck": "Völlig in Ordnung – ein kleiner Satz hätte gezeigt, dass du es gern mitträgst." },
+            { "text": "„Ich wollte nur die Fische begrüßen. Sie waren nicht begeistert.“", "wert": 2, "weiter": "k3", "rueck": "Selbstironie über ein Missgeschick von früher – du lachst mit und gibst Renate die Bühne zurück." }
+          ] },
+        { "id": "k3", "sagt": "Renate fährt fort: „Und heute ist aus dem Kind jemand geworden, auf den ich sehr stolz bin.“ Dann, mit Blick auf den Cousin: „Auch ohne Beförderung.“ Der Tisch lacht.",
+          "wahl": [
+            { "text": "„Danke, Tante Renate. Vom Teich halte ich mich trotzdem fern.“", "wert": 2, "weiter": "k4", "rueck": "Ein warmes Danke und ein Rückgriff auf ihre Geschichte – sie bekommt das Lachen." },
+            { "text": "„Siehst du, Cousin!“", "wert": 0, "tendenz": "angreifen", "weiter": "k4", "rueck": "Nachtreten mit Renates Hilfe – der Moment gehörte ihr, nicht dem Streit." },
+            { "text": "„Danke.“ – und ihr zuprosten.", "wert": 1, "weiter": "k4", "rueck": "Herzlich und schlicht. Ein Rückgriff auf den Teich hätte den Kreis geschlossen." }
+          ] },
+        { "id": "k4", "sagt": "Am Abend, beim Abräumen, fragt dich der Cousin leise: „War das vorhin blöd von mir? Mit der Beförderung?“",
+          "wahl": [
+            { "text": "„Nein, nein, alles gut.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Friedlich – doch du nimmst die Grenze zurück, und beim nächsten Fest fragt er wieder." },
+            { "text": "„Ein bisschen. Lass es beim nächsten Mal, dann ist alles gut.“", "wert": 2, "weiter": "ende1", "rueck": "Ehrlich, klar, versöhnlich – eine Grenze mit Rückweg." },
+            { "text": "„Allerdings. Du machst das jedes Jahr, und jedes Jahr lachen alle über mich – ich hab langsam echt genug davon.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich und verständlich. Er lenkt gerade ein – ein kürzerer Satz macht es ihm leichter, es wirklich zu lassen." }
+          ] },
+        { "id": "ende1", "sagt": "Er nickt und trägt mit dir die Stühle in die Garage.", "ende": "Vor der großen Runde: gelassen bleiben, über dich lachen, die Bühne der anderen tragen. Unter vier Augen: die Grenze. So bleibt das Familienfest ein Fest." },
+        { "id": "ende2", "sagt": "Der Rest des Nachmittags ist angespannt. Tante Renate redet beim Abschied nur kurz mit dir.", "ende": "Kein Drama – Familie verzeiht viel. Beim nächsten Fest: ein leichter Satz statt einer Erklärung, und die Grenze lieber unter vier Augen." }
+      ],
+      "prinzipien": ["vor der Runde leicht bleiben", "über Missgeschicke selbst lachen", "die Bühne der anderen tragen", "Grenze unter vier Augen"],
+      "transfer": "Welcher Spruch kommt in deiner Familie bei jedem Fest? Leg dir einen leichten Satz für die Runde und einen klaren für danach zurecht."
+    },
+    {
+      "id": "konter-l-15", "bereich": "konter", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["konter.ruhe", "konter.rueckfrage", "konter.zustimmen", "konter.umdeuten", "konter.grenze", "konter.spiel", "konter.necken", "konter.selbstironie"], "stufe": 9, "sparring": true,
+      "titel": "Sparring: Der Jahresauftakt", "figur": "Dr. Henrik Albers",
+      "einleitung": "Das Sparring zum Abschluss der Meisterschaft: Du moderierst den Jahresauftakt vor vierzig Leuten. Ein Witz geht unter, eine unfaire Taktik, ein Zwischenruf, der Chef neckt dich – und am Ende dein Schlusssatz.",
+      "lage": "Jahresauftakt der Abteilung, vierzig Leute. Dr. Albers hat dich gebeten, durch das Programm zu führen und zum Schluss das Jahr in fünf Minuten vorzustellen. Im Saal sitzen auch Lena, Tarek, Miriam, Carla und Jonas.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Runde 1 – der Flop. Du begrüßt alle: „Schön, dass alle da sind. Auch die, die eigentlich lieber im Homeoffice wären.“ Stille.",
+          "wahl": [
+            { "text": "„Das war ein Witz, Leute! Weil ja viele lieber zu Hause … also, ihr wisst schon, was ich meine.“", "wert": 0, "weiter": "k1b", "rueck": "Erklärt – und damit doppelt gestorben." },
+            { "text": "„Der war für die Fachleute. Dann eben ernsthaft: Willkommen!“", "wert": 2, "weiter": "k2", "rueck": "Den Flop leicht genommen – ein Satz über dich, und weiter." },
+            { "text": "Einfach weitermachen.", "wert": 1, "weiter": "k2", "rueck": "Völlig in Ordnung – ein leichter Satz hätte der Stille das Gewicht genommen." }
+          ] },
+        { "id": "k1b", "sagt": "Ein paar lachen jetzt verlegen. Tarek ruft: „Wir haben's verstanden, ehrlich!“",
+          "wahl": [
+            { "text": "„Danke, Tarek. Dann zur Sache – bevor ich den nächsten erkläre.“", "wert": 2, "weiter": "k2", "rueck": "Mit Selbstironie gerettet." },
+            { "text": "Rot werden und schnell weitermachen.", "wert": 1, "weiter": "k2", "rueck": "Weiter ist richtig. Ein Lächeln dazu hätte geholfen." }
+          ] },
+        { "id": "k2", "sagt": "Runde 2 – eine unfaire Taktik. In der Fragerunde zum neuen Ablauf sagt der Leiter der Nachbarabteilung: „Ihr wollt also, dass wir eure Arbeit gleich mitmachen? Interessanter Plan.“ Einige lachen.",
+          "wahl": [
+            { "text": "„Ihr macht ja sonst auch nicht so viel, da wär's mal eine Abwechslung.“", "wert": 0, "tendenz": "angreifen", "weiter": "k2b", "rueck": "Ein Gegenangriff auf eine ganze Abteilung, vor vierzig Leuten." },
+            { "text": "„So ist das nicht gemeint, also wirklich nicht, wir haben uns das genau überlegt, und es geht eigentlich nur um …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2c", "rueck": "Du verteidigst seine Fassung statt deiner." },
+            { "text": "„Nein – nur, dass die Übergabe an einer Stelle passiert. Was braucht ihr dafür?“", "wert": 2, "weiter": "k3", "rueck": "Strohmann geraderückt, nach dem Bedarf gefragt – ruhig, ohne Spitze." }
+          ] },
+        { "id": "k2b", "sagt": "Gemurmel. Dr. Albers räuspert sich in der ersten Reihe.",
+          "wahl": [
+            { "text": "„Das war unnötig, entschuldige. Mein Punkt: eine Übergabestelle. Was braucht ihr dafür?“", "wert": 2, "weiter": "k3", "rueck": "Zurückgenommen und zur Sache – vor allen. Das bringt dir mehr als der Lacher." },
+            { "text": "Weitermachen, als wäre nichts gewesen.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3", "rueck": "Der Spruch bleibt im Saal." }
+          ] },
+        { "id": "k2c", "sagt": "Er lächelt: „Na, so genau überlegt klingt das aber nicht.“",
+          "wahl": [
+            { "text": "Ausatmen. „Dann kurz: eine Übergabestelle statt drei. Was braucht ihr dafür?“", "wert": 2, "weiter": "k3", "rueck": "Zurück zum Kern, für alle – die zweite Chance genutzt." },
+            { "text": "Weiter erklären.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Die Fragerunde gehört jetzt ihm." }
+          ] },
+        { "id": "k3", "sagt": "Runde 3 – ein Zwischenruf. Miriam ruft: „Und gibt's für die neue Übergabestelle auch ein Maskottchen?“ Der Saal lacht.",
+          "wahl": [
+            { "text": "„Gute Idee – Vorschläge bis Freitag. Der beste bekommt einen Kaffee.“", "wert": 2, "weiter": "k4", "rueck": "Ihren Witz getragen und weitergegeben – der Saal spielt mit, und du bleibst bei der Sache." },
+            { "text": "„Miriam, bitte, wir sind hier nicht im Kindergarten.“", "wert": 0, "tendenz": "angreifen", "weiter": "k3b", "rueck": "Vor vierzig Leuten gebremst – und eine gute Stimmung gleich mit." },
+            { "text": "Mitlachen und weiter.", "wert": 1, "weiter": "k4", "rueck": "Mitlachen trägt ihren Witz. Aufgreifen hätte den Saal noch mehr mitgenommen." }
+          ] },
+        { "id": "k3b", "sagt": "Miriam hebt die Hände. Der Saal ist plötzlich still.",
+          "wahl": [
+            { "text": "„Das war zu streng, Miriam. Maskottchen-Vorschläge nehm ich gern – nach der Pause.“", "wert": 2, "weiter": "k4", "rueck": "Zurückgenommen, mit Augenzwinkern – die Stimmung kommt zurück." },
+            { "text": "Weitermachen.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k4", "rueck": "Die Stimmung bleibt gedrückt." }
+          ] },
+        { "id": "k4", "sagt": "Runde 4 – der Chef neckt. Dr. Albers kündigt deine Vorstellung an und sagt lächelnd: „Eingeplant sind fünf Minuten. Bei unserer Moderation rechnen wir mit zwanzig.“",
+          "wahl": [
+            { "text": "„Bei Ihnen waren es letztes Jahr fünfundzwanzig, Herr Albers.“", "wert": 0, "tendenz": "angreifen", "weiter": "k5", "rueck": "Vor vierzig Leuten auf Kosten des Chefs – riskant, auch wenn er lacht." },
+            { "text": "„Ich hab sie auf vier gekürzt. Die übrige Minute schenke ich Ihnen.“", "wert": 2, "weiter": "k5", "rueck": "Nach oben mitgespielt, kurz – und Albers bekommt ein kleines Geschenk." },
+            { "text": "„Nein, nein, ich halte mich kurz, wirklich, es sind nur fünf Minuten, ich hab es extra zweimal geprobt.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k5", "rueck": "Du verteidigst dich gegen ein Augenzwinkern." }
+          ] },
+        { "id": "k5", "sagt": "Runde 5 – der Schluss. Deine Vorstellung ist fast vorbei, der Saal hört aufmerksam zu. Du hast noch einen Satz.",
+          "wahl": [
+            { "text": "„Das wird unser Jahr: eine Übergabestelle, vielleicht ein Maskottchen – und hoffentlich mehr Lacher als mein erster Witz.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Rückgriff auf den Tag – alle, die da waren, lachen. Ein guter Schluss verbindet." },
+            { "text": "„Danke fürs Zuhören.“", "wert": 1, "weiter": "ende1", "rueck": "Klar und freundlich. Ein Rückgriff hätte den Bogen zum Anfang geschlagen." },
+            { "text": "„Und falls die Nachbarabteilung noch Fragen zu ihrer Arbeit hat – wir machen sie gern mit.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende3", "rueck": "Ein Seitenhieb zum Schluss – Nachtreten bleibt hängen, auch wenn einige lachen." }
+          ] },
+        { "id": "ende1", "sagt": "Applaus. Dr. Albers sagt im Hinausgehen: „Gut gemacht. Und fast in der Zeit.“", "ende": "Einen Flop leicht nehmen, eine unfaire Taktik geraderücken, den Witz einer anderen tragen, nach oben mitspielen, zum Schluss ein Rückgriff. Meisterschaft heißt: nicht der beste Spruch, sondern der richtige – für alle im Raum." },
+        { "id": "ende2", "sagt": "Die Fragerunde endet unruhig, der Zeitplan ist dahin.", "ende": "Kein Drama. Vor großer Runde zählt: kurz geraderücken, nicht verteidigen. Schreib dir für den Strohmann einen Wenn-Dann-Satz." },
+        { "id": "ende3", "sagt": "Ein paar lachen, der Leiter der Nachbarabteilung nicht. Albers schaut ernst.", "ende": "Fast stark – bis zum letzten Satz. Ein Seitenhieb zum Schluss überschattet vieles davor. Ein Rückgriff verbindet, Nachtreten trennt." }
+      ],
+      "prinzipien": ["einen Flop leicht nehmen", "Strohmann geraderücken", "Witze anderer tragen", "nach oben mitspielen", "Rückgriff zum Schluss"],
+      "transfer": "Wo stehst du demnächst vor einer Runde? Welche zwei Sätze legst du dir zurecht – einen für den Flop, einen für den Schluss?"
+    }
+  ]
+}

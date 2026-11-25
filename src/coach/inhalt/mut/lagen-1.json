@@ -63,7 +63,7 @@
           ] },
         { "id": "k2", "sagt": "Du bist dran. Die Verkäuferin schaut müde: „Ja, bitte?“",
           "wahl": [
-            { "text": "„Entschuldigung, das ist mir echt unangenehm, aber ich glaube, vielleicht ist der Wasserkocher hier irgendwie kaputt, oder ich mache was falsch …“", "wert": 1, "tendenz": "kleinreden", "weiter": "k3", "rueck": "Das Anliegen kommt an – nur sehr weich. Sag ruhig klar, was du möchtest." },
+            { "text": "„Entschuldigung, das ist mir echt unangenehm, aber ich glaube, der Wasserkocher ist irgendwie kaputt, oder ich mache was falsch …“", "wert": 1, "tendenz": "kleinreden", "weiter": "k3", "rueck": "Das Anliegen kommt an – nur sehr weich. Sag ruhig klar, was du möchtest." },
             { "text": "„Der Wasserkocher ist Schrott. Ich will mein Geld.“", "wert": 0, "tendenz": "angreifen", "weiter": "k2c", "rueck": "Klar ist nicht dasselbe wie scharf. Die Verkäuferin kann nichts für das Gerät." },
             { "text": "„Den Wasserkocher habe ich vor drei Tagen gekauft. Er tropft. Ich hätte gern einen neuen oder das Geld zurück.“", "wert": 2, "weiter": "k3", "rueck": "Was, seit wann, was du möchtest – freundlich und klar." }
           ] },

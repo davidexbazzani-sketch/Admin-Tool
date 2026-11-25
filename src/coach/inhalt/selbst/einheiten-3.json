@@ -1,0 +1,259 @@
+{
+  "einheiten": [
+    {
+      "id": "selbst-3-01", "bereich": "selbst", "stufe": 3, "nr": 1,
+      "titel": "Alte Antreiber: was sie dir einmal gaben",
+      "faehigkeiten": ["selbst.muster", "selbst.grenzen"], "dauerMin": 7, "beleg": "D",
+      "belegHinweis": "Die fünf Antreiber sind ein Denkmodell der Transaktionsanalyse, nicht experimentell geprüft – eine Landkarte, keine Diagnose. Für einen Teil davon gibt es Forschung: Perfektionistische Sorgen gehen über viele Studien mit mehr Aufschieben einher (ein Zusammenhang, keine Ursache).",
+      "quellen": ["kahler1975", "sirois2017", "praxis-selbst"],
+      "aha": "Im Denkmodell war ein Antreiber einmal eine kluge Antwort: Er sicherte Anerkennung oder ersparte Ärger. Heute treibt er oft weiter, als dir guttut. Du brauchst ihn nicht loszuwerden – merk, wann er spricht, und wähl neu.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "selbst-3-01-a", "faehigkeit": "selbst.muster", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Welcher Antreiber spricht hier am ehesten?",
+          "faecher": ["Sei perfekt!", "Sei stark!", "Beeil dich!", "Streng dich an!", "Mach es allen recht!"],
+          "karten": [
+            { "text": "Die Folie geht erst raus, wenn jede Schrift exakt gleich groß ist – um Mitternacht.", "fach": 0 },
+            { "text": "Mit Fieber zur Arbeit, „geht schon“.", "fach": 1 },
+            { "text": "Schon beim Zuhören an der Antwort tippen.", "fach": 2 },
+            { "text": "Was leicht ging, zählt nicht – nur, was Mühe gekostet hat.", "fach": 3 },
+            { "text": "Zusagen, obwohl die Woche voll ist – damit niemand enttäuscht ist.", "fach": 4 },
+            { "text": "Niemandem erzählen, dass einem gerade alles zu viel ist.", "fach": 1 },
+            { "text": "Nach einer Absage stundenlang grübeln, ob der andere jetzt sauer ist.", "fach": 4 }
+          ] },
+        { "art": "karte", "text": "Die Transaktionsanalyse beschreibt fünf Antreiber. Ein Denkmodell: Manche erkennen sich darin wieder – du auch? Jeder hatte einmal einen Sinn. „Sei stark“ hat vielleicht geschützt, „Mach es allen recht“ Frieden gestiftet. Unter Stress werden sie lauter. Zwei Fragen helfen: Wofür hat mir dieser Antreiber einmal gedient? Und was kostet er mich heute? Würdigen statt verurteilen – dann fällt das Neuwählen leichter." },
+        { "art": "studie", "frage": "Macht „Sei perfekt“ wenigstens fleißiger?", "aufbau": "Eine Meta-Analyse fasste Studien zusammen, die Perfektionismus und Aufschieben gemessen hatten. Unterschieden wurden zwei Seiten: hohe Ansprüche an sich (Streben) und die Sorge vor Fehlern und Bewertung.", "ergebnis": "Wer stark fürchtet, Fehler zu machen und bewertet zu werden, schob im Mittel eher auf. Wer einfach hohe Ansprüche hatte, eher etwas weniger.", "grenze": "Zusammenhänge aus Fragebögen, keine Ursache. Ein Hinweis, kein Beweis: Mit dem Aufschieben hängt eher die Angst zusammen, nicht der hohe Anspruch.", "beleg": "A", "quellen": ["sirois2017"] },
+        { "art": "geschichte", "titel": "Tareks Ja", "figur": "Tarek Yılmaz", "text": "Tarek war der, den man fragen konnte. Spätdienst? Tarek. Umzug? Tarek. Er hat mir mal gesagt: „Ich kann gar nicht anders.“ Irgendwann saß er am Sonntagabend über einer Präsentation, die eigentlich nicht seine war, und hat gemerkt, wie wütend er war – auf die anderen und auf sich. Er hat sich gefragt, woher das kommt. Seine Antwort: Zu Hause war es immer gut, wenn er half. Das darf er behalten. Neu ist ein zweiter Satz: „Ich helfe gern – wenn ich es will, nicht weil ich muss.“ Seitdem sagt er öfter: „Ich sag dir morgen Bescheid.“ Und manchmal Nein. Gemocht wird er immer noch.", "frage": "Welcher Antreiber ist bei dir am lautesten – und was hat er dir einmal Gutes gebracht?" },
+        { "art": "auswahl", "kopf": { "id": "selbst-3-01-b", "faehigkeit": "selbst.grenzen", "stufe": 7, "kanal": "wissen" },
+          "frage": "17:30 Uhr. Dr. Albers fragt, ob du „noch schnell“ die Zahlen für morgen aufbereitest. Du bist erschöpft. In dir sagt es: „Keine Schwäche zeigen, du schaffst das.“ Was ist der stärkste Schritt?",
+          "antworten": [
+            { "text": "Den Antreiber erkennen und abwägen: „Heute nicht mehr. Morgen um acht liegen die Zahlen bei Ihnen.“", "wert": 2, "warum": "Du hörst den Antreiber, folgst ihm aber nicht blind – und bietest eine Lösung, die zu deinen Kräften passt." },
+            { "text": "Es machen – Härte gegen dich selbst hat dich bisher immer weitergebracht.", "wert": 0, "tendenz": "nachgeben", "warum": "Der Antreiber entscheidet. Kurzfristig klappt es, aber die Erschöpfung wächst – und er wird lauter." },
+            { "text": "Zusagen und es heimlich schlampig machen, damit er dich nicht so schnell wieder fragt.", "wert": 0, "tendenz": "ausweichen", "warum": "Das Nein wird versteckt statt gesagt – und deine Arbeit sieht schlechter aus, als du bist." },
+            { "text": "Fragen, ob es wirklich heute sein muss.", "wert": 1, "warum": "Guter erster Schritt: Er prüft den Druck. Dein eigener Vorschlag macht es noch leichter." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "selbst-3-01-c", "faehigkeit": "selbst.muster", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Würdige den Antreiber in einem Satz – und gib ihm einen Erlauber an die Seite, der für heute gilt.",
+          "vorlage": "„Sei stark. Niemand darf merken, dass dir das zu viel ist.“",
+          "kriterien": ["erkennt an, wofür der Antreiber einmal gut war", "erlaubt dir etwas Konkretes für heute", "ohne dich zu beschimpfen"],
+          "muster": ["„Stark sein hat mir früher geholfen, durchzukommen. Heute darf ich sagen: Diese Woche ist mir zu viel.“", "„Danke, dass du mich so oft getragen hast. Heute bitte ich Miriam, mir die Liste abzunehmen.“", "„Ich bin stark – und darum kann ich mir auch Hilfe holen.“"] },
+        { "art": "experiment", "auftrag": "Antreiber-Woche: Notier jedes Mal, wenn dein lautester Antreiber spricht – Situation und Satz. Probier mindestens einmal bewusst deinen Erlauber aus und schreib auf, was passiert ist.", "dauer": "woche", "nachfrage": "Wann war dein Antreiber am lautesten – und was ist passiert, als du einmal anders gewählt hast?" },
+        { "art": "reflexion", "frage": "In welcher Lage diese Woche probierst du deinen Erlauber zuerst – und wie lautet er?" },
+        { "art": "fachhilfe", "thema": "seele" }
+      ],
+      "regel": "Den Antreiber würdigen, seinen Preis sehen – und heute neu wählen.",
+      "merkkarten": [
+        { "id": "selbst-3-01-m1", "frage": "Welche fünf Antreiber beschreibt die Transaktionsanalyse?", "antwort": "Sei perfekt! Sei stark! Beeil dich! Streng dich an! Mach es allen recht!" },
+        { "id": "selbst-3-01-m2", "frage": "Welche zwei Fragen stellst du deinem Antreiber?", "antwort": "Wofür hast du mir einmal gedient? Was kostest du mich heute?" },
+        { "id": "selbst-3-01-m3", "frage": "Womit geht „Sei perfekt“ laut Forschung am ehesten einher?", "antwort": "Die Sorge vor Fehlern geht mit mehr Aufschieben einher – nicht der hohe Anspruch selbst. Ein Zusammenhang, keine Ursache." }
+      ]
+    },
+    {
+      "id": "selbst-3-02", "bereich": "selbst", "stufe": 3, "nr": 2,
+      "titel": "Die Brille von früher",
+      "faehigkeiten": ["selbst.muster", "selbst.kritiker"], "dauerMin": 7, "beleg": "D",
+      "belegHinweis": "Lebensfallen (Schemata) sind ein Denkmodell aus der Schematherapie; die Therapie selbst ist bei bestimmten Störungen klinisch untersucht, die Alltagsübungen hier nicht. Der Fragebogen der Schematherapie ist lizenzpflichtig und wird nicht verwendet. Keine Diagnose.",
+      "quellen": ["young2003", "youngklosko1993", "beck1979", "praxis-selbst"],
+      "aha": "Manche Momente treffen dich viel stärker, als sie es verdienen. Dann schaust du vielleicht durch eine Brille von früher. Erkennst du sie, kannst du fragen: Was passiert heute wirklich – und was kann ich heute tun?",
+      "schritte": [
+        { "art": "vergleich", "lage": "Freitag, 16 Uhr. Lena Brandt bekommt von Dr. Albers eine Mail mit einem Satz: „Bitte Montag kurz Rücksprache.“", "schwach": "Lena denkt: „Ich habe etwas falsch gemacht. Er will mich loswerden.“ Sie schläft schlecht und geht am Montag mit einer Entschuldigung ins Büro.", "stark": "Lena merkt den Schreck und denkt: „Ah – meine alte Brille ‚Ich genüge nicht‘. Was weiß ich wirklich? Eine Mail mit einem Satz.“ Sie schreibt zurück: „Gern. Worum geht es, damit ich mich vorbereiten kann?“", "frage": "Was macht Lena in der zweiten Fassung anders?", "unterschied": "Der Schreck ist in beiden Fassungen da. In der zweiten erkennt sie die Brille, trennt Tatsache und Deutung und tut etwas Erwachsenes: nachfragen. So wird aus einem Wochenende voller Angst eine offene Frage." },
+        { "art": "karte", "text": "Die Schematherapie beschreibt früh gelernte Grundüberzeugungen wie „Ich genüge nicht“, „Ich werde verlassen“ oder „Meine Wünsche zählen nicht“. Ein Denkmodell – manche erkennen sich darin wieder. Drei Zeichen, dass die Brille auf ist: Die Reaktion ist viel stärker als der Anlass. Das Gefühl ist alt und vertraut. Und es fühlt sich an wie „immer“. Dann hilft der Satz: „Das fühlt sich an wie damals – heute kann ich …“" },
+        { "art": "buendel", "kopf": { "id": "selbst-3-02-a", "faehigkeit": "selbst.muster", "stufe": 6, "kanal": "wissen" },
+          "lage": "Jule Marek sagt das gemeinsame Kochen am Samstag ab: „Mir ist was dazwischengekommen, sorry!“ Du sitzt danach eine Stunde wie gelähmt da.",
+          "frage": "Welche Zeichen sprechen dafür, dass hier eine Brille von früher mitschaut?",
+          "zeichen": [
+            { "text": "Das Gefühl ist viel stärker, als eine verschobene Verabredung es verdient.", "stuetzt": true, "warum": "Reaktion größer als Anlass – das erste Zeichen." },
+            { "text": "Das Gefühl „Ich bin anderen nicht wichtig“ kennst du schon lange.", "stuetzt": true, "warum": "Alt und vertraut – das zweite Zeichen." },
+            { "text": "Du denkst: „Das passiert mir immer.“", "stuetzt": true, "warum": "Das „immer“-Gefühl verrät oft eine Grundüberzeugung statt des heutigen Anlasses." },
+            { "text": "Du hattest dich auf den Samstag gefreut.", "stuetzt": false, "warum": "Enttäuschung über eine Absage ist ganz normal und braucht keine Brille als Erklärung." },
+            { "text": "Jule hat keinen Grund genannt.", "stuetzt": false, "warum": "Eine Tatsache über die Nachricht, kein Zeichen für deine Brille. Nachfragen kann klären." }
+          ] },
+        { "art": "kritiker", "kopf": { "id": "selbst-3-02-b", "faehigkeit": "selbst.kritiker", "stufe": 7, "kanal": "koennen" },
+          "satz": "Der Satz, den deine Brille dir in solchen Momenten sagt – wörtlich. Schreib darunter einen Damals-heute-Satz: was heute anders ist und was du heute tun kannst.",
+          "kriterien": ["der Brillen-Satz steht wörtlich da", "trennt, was damals war und was heute ist", "nennt eine erwachsene Handlung für heute", "ohne die Kindheit zu deuten oder jemandem die Schuld zu geben"],
+          "muster": ["„Ich bin nicht wichtig.“ → „Das fühlt sich an wie früher. Heute habe ich Menschen, die sich melden. Ich frage Jule nach einem neuen Termin.“", "„Ich genüge nicht.“ → „Damals konnte ich nichts dagegen tun. Heute kann ich nachfragen, was gemeint ist.“", "„Meine Wünsche zählen nicht.“ → „Das Gefühl ist alt. Heute sage ich selbst, was ich mir wünsche.“"] },
+        { "art": "auswahl", "kopf": { "id": "selbst-3-02-c", "faehigkeit": "selbst.muster", "stufe": 7, "kanal": "wissen" },
+          "frage": "Bei Kritik von Dr. Albers fühlst du dich jedes Mal ganz klein: stumm, mit heißem Gesicht. Was bringt dich am ehesten weiter?",
+          "antworten": [
+            { "text": "Herausfinden, wer in deiner Kindheit daran schuld ist.", "wert": 0, "tendenz": "graben", "warum": "Graben in der Vergangenheit bringt im Büro keinen Schritt – und Schuldfragen helfen heute selten." },
+            { "text": "Die Brille erkennen – „Das ist das alte Gefühl“ – und eine erwachsene Frage stellen: „Was genau soll anders werden?“", "wert": 2, "warum": "Du bemerkst das Muster und handelst im Heute: Die Frage holt dich zurück in die Sache." },
+            { "text": "Kritikgespräche mit ihm künftig möglichst vermeiden – oder sie so kurz halten, dass das alte Gefühl gar nicht erst aufkommen kann.", "wert": 0, "tendenz": "vermeiden", "warum": "So bleibt die Brille unbeobachtet – und jedes unvermeidliche Gespräch trifft dich doppelt." },
+            { "text": "Nach dem Gespräch die Freundes-Probe machen.", "wert": 1, "warum": "Hilft danach gut. Im Moment selbst ist das Erkennen der Brille der erste Schritt." }
+          ] },
+        { "art": "schreibreise", "titel": "Deine Brille und ihre Gegenbeweise", "anleitung": "Nimm dir ein paar Minuten in Ruhe. Es geht nicht darum, die Vergangenheit aufzurollen, sondern darum, eine wiederkehrende Brille zu erkennen und ihr Belege aus deinem heutigen Leben entgegenzustellen.", "fragen": ["Welcher Satz meldet sich bei dir immer wieder, wenn etwas viel stärker trifft, als es sollte?", "Wann hat er sich zuletzt gemeldet – was war der Anlass?", "Was spricht aus deinem heutigen Leben dagegen? Nenne zwei Belege.", "Was würde der erwachsene, ruhige Teil in dir beim nächsten Mal tun?"], "minuten": 8, "insBuch": "saetze" },
+        { "art": "experiment", "auftrag": "Brillen-Detektor: Wenn dich diese Woche etwas unverhältnismäßig stark trifft, halt kurz an und frag: Größer als der Anlass? Alt und vertraut? „Immer“? Wenn ja, sag dir deinen Damals-heute-Satz und tu eine erwachsene Kleinigkeit.", "dauer": "woche", "nachfrage": "Hast du die Brille einmal im Moment erkannt – und was hast du dann getan?" },
+        { "art": "fachhilfe", "thema": "seele" }
+      ],
+      "regel": "Größer als der Anlass, alt, „immer“? Dann: Damals – heute – was tue ich jetzt?",
+      "merkkarten": [
+        { "id": "selbst-3-02-m1", "frage": "Woran erkennst du, dass eine Brille von früher mitschaut?", "antwort": "Die Reaktion ist viel stärker als der Anlass, das Gefühl ist alt und vertraut, und es fühlt sich an wie „immer“." },
+        { "id": "selbst-3-02-m2", "frage": "Wie geht der Damals-heute-Satz?", "antwort": "„Das fühlt sich an wie damals – heute kann ich …“, und dann eine erwachsene Handlung." },
+        { "id": "selbst-3-02-m3", "frage": "Was ist das Modell der Lebensfallen – und was nicht?", "antwort": "Ein Denkmodell zum Wiedererkennen. Keine Diagnose und kein Grund, in der Kindheit nach Schuldigen zu suchen." }
+      ]
+    },
+    {
+      "id": "selbst-3-03", "bereich": "selbst", "stufe": 3, "nr": 3,
+      "titel": "Schatten und Projektion",
+      "faehigkeiten": ["selbst.muster", "selbst.vergleich"], "dauerMin": 7, "beleg": "D",
+      "belegHinweis": "Schatten und Projektion sind Denkmodelle aus der Tiefenpsychologie (Jung; Sigmund und Anna Freud) und kaum experimentell geprüft. Sozialpsychologische Experimente stützen eine schwache Form: Was man an sich wegzudenken versucht, sieht man eher bei anderen. Nicht jeder Ärger ist Projektion.",
+      "quellen": ["jung1951", "freud-a1936", "newman1997", "praxis-selbst"],
+      "aha": "Wer dich auffällig stark aufregt oder fasziniert, zeigt dir manchmal eine eigene Seite, die du dir nicht erlaubst. Manchmal ist Ärger aber einfach berechtigt. Die Kunst ist, beides zu unterscheiden.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "selbst-3-03-a", "faehigkeit": "selbst.muster", "stufe": 6, "kanal": "wissen" },
+          "frage": "Lena ärgert sich jeden Tag über Miriam, die in jeder Runde spontan das Wort ergreift. Andere stört es kaum. Welche Frage führt Lena am ehesten weiter?",
+          "antworten": [
+            { "text": "„Was genau an ihr regt mich so auf – und würde ich mir davon gern selbst etwas erlauben?“", "wert": 2, "warum": "Die Frage nimmt den Ärger ernst und öffnet den Blick nach innen, ohne Miriam freizusprechen oder Lena anzuklagen." },
+            { "text": "„Stört sie den Ablauf der Runde tatsächlich?“", "wert": 1, "warum": "Wichtige Sachfrage – manchmal ist Ärger einfach berechtigt. Dass es nur Lena so trifft, spricht aber für einen zweiten Blick." },
+            { "text": "„Sie ist halt eine Selbstdarstellerin, da kann man nichts machen.“", "wert": 0, "tendenz": "abwerten", "warum": "Ein Etikett beendet das Nachdenken – über Miriam und über Lena." },
+            { "text": "„Wahrscheinlich bin ich genauso wie sie und will es nicht zugeben.“", "wert": 0, "tendenz": "verallgemeinern", "warum": "Ein Kurzschluss: Der Schatten ist eine Frage, keine fertige Antwort über dich." }
+          ] },
+        { "art": "karte", "text": "C. G. Jung nannte „Schatten“ die Seiten, die man an sich nicht sehen will – oft früher unerwünschte: Wut, Ehrgeiz, Lust auf Aufmerksamkeit. Die Psychoanalyse beschreibt Projektion: Man sieht Eigenes beim anderen – Anna Freud zählte sie zu den Abwehrmechanismen. Denkmodelle – erkennst du dich wieder? Hinweise: Die Reaktion ist stark, kommt bei verschiedenen Menschen wieder, und andere teilen sie kaum." },
+        { "art": "zuordnen", "kopf": { "id": "selbst-3-03-b", "faehigkeit": "selbst.vergleich", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Eher ein Schatten-Hinweis – oder eher berechtigter Ärger über die Sache?",
+          "faecher": ["eher Schatten-Hinweis", "eher berechtigter Ärger"],
+          "karten": [
+            { "text": "Dich nervt jeder, der Feierabend pünktlich macht – obwohl er seine Arbeit erledigt hat.", "fach": 0 },
+            { "text": "Ein Kollege gibt deine Idee in der Runde als seine aus.", "fach": 1 },
+            { "text": "Du findest Menschen unerträglich, die sich etwas gönnen.", "fach": 0 },
+            { "text": "Die Nachbarin lässt seit Wochen ihren Müll vor deiner Tür stehen.", "fach": 1 },
+            { "text": "Es regt dich auf, wenn jemand über eigene Erfolge spricht – bei jedem, immer wieder.", "fach": 0 },
+            { "text": "Jemand sagt einen Termin zum dritten Mal kurzfristig ab.", "fach": 1 }
+          ] },
+        { "art": "geschichte", "titel": "Der goldene Schatten", "figur": "Lena Brandt", "text": "Lena hat mir erzählt, wie Miriam sie früher genervt hat. „Die redet einfach drauflos!“ Irgendwann hat Lena sich gefragt: Regt mich da etwas auf, das ich mir selbst nie erlaube? Für sie passte es. Bei ihr zu Hause hieß es: Erst denken, dann reden – am besten gar nicht. Sie wollte nicht wie Miriam werden. Aber ein kleines bisschen davon, das wollte sie. Seitdem sagt Lena in jeder Runde einen Gedanken, bevor er ganz fertig ist. Einen. Und Miriam? Nervt sie manchmal immer noch. Aber weniger. Was du an anderen bewunderst, kann übrigens auch Schatten sein – eine Stärke, die in dir wartet.", "frage": "Wen bewunderst oder beneidest du – und welche eigene Seite könnte darin auf dich warten?" },
+        { "art": "umformulieren", "kopf": { "id": "selbst-3-03-c", "faehigkeit": "selbst.vergleich", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Mach aus dem abwertenden Satz eine Frage an dich: Was davon würdest du dir in deiner eigenen Dosis erlauben?",
+          "vorlage": "„Diese Angeberin muss auch jedem erzählen, was sie alles geschafft hat.“",
+          "kriterien": ["ohne Etikett für die andere Person", "benennt das Verhalten, das dich trifft", "fragt, was davon du dir in kleiner Dosis erlauben würdest"],
+          "muster": ["„Sie erzählt offen von ihren Erfolgen. Ich erzähle nie von meinen – vielleicht darf ich das einmal pro Woche.“", "„Es trifft mich, wenn jemand stolz auf sich ist. Worauf bin ich gerade stolz, und wem sage ich es?“"] },
+        { "art": "reflexion", "frage": "Wer regt dich auf – und wen bewunderst du? Was davon darfst du dir in deiner eigenen Dosis erlauben?" },
+        { "art": "fachhilfe", "thema": "seele" }
+      ],
+      "regel": "Starker Ärger, immer wieder? Frag: Was davon erlaube ich mir nicht – in meiner Dosis?",
+      "merkkarten": [
+        { "id": "selbst-3-03-m1", "frage": "Was meinte Jung mit dem Schatten?", "antwort": "Seiten an sich, die man nicht sehen will – und darum eher bei anderen bemerkt. Ein Denkmodell." },
+        { "id": "selbst-3-03-m2", "frage": "Woran erkennst du einen möglichen Schatten-Hinweis?", "antwort": "Die Reaktion ist stark, kommt bei verschiedenen Menschen wieder, und andere teilen sie kaum." },
+        { "id": "selbst-3-03-m3", "frage": "Was ist der „goldene Schatten“?", "antwort": "Was du an anderen bewunderst, kann eine eigene Stärke sein, die du dir noch nicht erlaubst." }
+      ]
+    },
+    {
+      "id": "selbst-3-04", "bereich": "selbst", "stufe": 3, "nr": 4,
+      "titel": "Nähe und Abstand",
+      "faehigkeiten": ["selbst.muster", "selbst.grenzen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Die Bindungsforschung ist umfangreich und empirisch gestützt; im Erwachsenenalter lässt sich Bindung besser als zwei Regler beschreiben als in festen Typen. Eine Selbsteinschätzung hier ist keine Diagnose. Riemanns Grundformen der Angst sind ein Denkmodell.",
+      "quellen": ["bowlby1988", "mikulincer2016", "fraley2015", "riemann1961", "praxis-selbst"],
+      "aha": "Wenn es eng wird, ziehen manche zum anderen hin und brauchen Bestätigung, andere ziehen sich zurück. Beides ist ein alter Schutz. Stark wird es, wenn du deine Richtung merkst und einen Schritt dazwischen wählst.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Lassen sich Erwachsene in feste Bindungstypen einteilen – „sicher“, „ängstlich“, „vermeidend“?", "optionen": ["Ja, jeder Mensch gehört klar zu einem Typ.", "Besser beschreiben es zwei Regler, auf denen jeder irgendwo steht.", "Nein, Bindung spielt bei Erwachsenen keine Rolle mehr."], "richtig": 1, "loesung": "Zwei Regler statt fester Typen", "aufloesung": "Ein Regler misst die Sorge, verlassen oder abgelehnt zu werden, der andere, wie sehr man Nähe meidet. Jeder steht irgendwo darauf – und die Lage kann sich durch neue, verlässliche Beziehungen verändern." },
+        { "art": "karte", "text": "Wer auf dem Regler „Sorge“ höher steht, sucht unter Druck eher Nähe: nachfragen, Bestätigung, schnell klären wollen. Wer auf dem Regler „Meiden“ höher steht, zieht sich eher zurück: allein klarkommen, Funkstille. Riemann beschrieb Ähnliches als Spannung zwischen Nähe und Abstand. Beides ist kein Fehler. Der Handgriff: Merk deine Richtung – und wähl einen Schritt in die Mitte." },
+        { "art": "zuordnen", "kopf": { "id": "selbst-3-04-a", "faehigkeit": "selbst.muster", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Zieht es hier eher zur Nähe hin – oder eher in den Rückzug?",
+          "faecher": ["zur Nähe hin", "in den Rückzug"],
+          "karten": [
+            { "text": "Nach einem Streit fünf Nachrichten in einer Stunde schicken.", "fach": 0 },
+            { "text": "Nach einem Streit tagelang nicht ans Telefon gehen.", "fach": 1 },
+            { "text": "Immer wieder fragen: „Ist wirklich alles gut zwischen uns?“", "fach": 0 },
+            { "text": "Probleme lieber allein lösen, auch wenn Hilfe da wäre.", "fach": 1 },
+            { "text": "Bei kurzen Antworten sofort denken, der andere sei sauer.", "fach": 0 },
+            { "text": "Wenn es persönlich wird, schnell das Thema wechseln.", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "selbst-3-04-b", "faehigkeit": "selbst.grenzen", "stufe": 7, "kanal": "wissen" },
+          "frage": "Mitten in einem Streit mit dem Menschen, mit dem du zusammenlebst, merkst du: Du willst nur noch weg. Was ist der stärkste Schritt?",
+          "antworten": [
+            { "text": "Wortlos die Tür hinter dir zumachen.", "wert": 0, "tendenz": "vermeiden", "warum": "Der Rückzug schützt dich – lässt den anderen aber im Ungewissen, und das heizt den Streit eher an." },
+            { "text": "„Ich brauche eine halbe Stunde für mich. Dann reden wir weiter.“", "wert": 2, "warum": "Abstand mit Rückkehr: Du nimmst dir, was du brauchst, und der andere weiß, dass du wiederkommst." },
+            { "text": "Bleiben und weiterreden, obwohl du innerlich schon längst abgeschaltet hast.", "wert": 1, "warum": "Du bleibst im Kontakt – das ist viel. Mit einer kurzen, angekündigten Pause würde das Gespräch aber besser." },
+            { "text": "„Mit dir kann man ja eh nicht reden.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Abgang mit Vorwurf: Der Abstand wird zur Strafe." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "selbst-3-04-c", "faehigkeit": "selbst.muster", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Mach aus der Nachricht voller Sorge eine ruhige Bitte – ehrlich über dein Gefühl, ohne Druck.",
+          "vorlage": "„Warum antwortest du nicht?? Hab ich was falsch gemacht??? Sag doch einfach, wenn du sauer bist!!“",
+          "kriterien": ["benennt dein Gefühl in einem Satz", "ohne Vorwurf und ohne Satzzeichen-Kette", "lässt dem anderen Zeit"],
+          "muster": ["„Ich hab dir vorhin geschrieben und mach mir ein bisschen Gedanken. Meld dich, wenn du Luft hast.“", "„Ich merke, dass mich die Stille unruhig macht. Alles gut bei dir? Keine Eile.“"] },
+        { "art": "gespraechskarte", "anlass": "Ein Gespräch mit einem Menschen, der dir wichtig ist, darüber, was jeder von euch unter Druck braucht – mehr Nähe oder mehr Abstand.", "beispiel": { "ziel": "Wir verstehen, warum der eine nach einem Streit reden will und der andere erst Ruhe braucht.", "erster": "„Mir ist aufgefallen, dass wir nach einem Streit ganz unterschiedlich reagieren. Können wir darüber mal in Ruhe reden?“", "wunsch": "„Wenn du Abstand brauchst, sag mir, wann wir weiterreden – dann kann ich warten.“", "planB": "Wird es heute zu viel, verabreden wir einen ruhigen Abend dafür." } },
+        { "art": "reflexion", "frage": "In welche Richtung zieht es dich, wenn es eng wird – zur Nähe hin oder in den Rückzug? Wie sähe dein Schritt in die Mitte aus?" },
+        { "art": "fachhilfe", "thema": "seele" }
+      ],
+      "regel": "Merk deine Richtung – Nähe oder Rückzug – und wähl einen Schritt in die Mitte.",
+      "merkkarten": [
+        { "id": "selbst-3-04-m1", "frage": "Wie beschreibt man Bindung bei Erwachsenen heute eher?", "antwort": "Mit zwei Reglern – Sorge vor Ablehnung und Meiden von Nähe – statt mit festen Typen." },
+        { "id": "selbst-3-04-m2", "frage": "Wie sieht Abstand mit Rückkehr aus?", "antwort": "„Ich brauche eine halbe Stunde für mich. Dann reden wir weiter.“" },
+        { "id": "selbst-3-04-m3", "frage": "Ist eine Bindungs-Neigung festgelegt?", "antwort": "Nicht fest: Sie ist recht stabil, kann sich aber durch neue, verlässliche Beziehungen verändern." }
+      ]
+    },
+    {
+      "id": "selbst-3-05", "bereich": "selbst", "stufe": 3, "nr": 5,
+      "titel": "Raus aus dem Drama-Dreieck",
+      "faehigkeiten": ["selbst.muster", "selbst.grenzen", "selbst.mitgefuehl"], "dauerMin": 7, "beleg": "D",
+      "belegHinweis": "Drama-Dreieck und Gewinner-Dreieck sind Denkmodelle aus der Transaktionsanalyse, nicht experimentell geprüft. Sie helfen, wiederkehrende Rollen zu erkennen – sie sagen nichts darüber, wer im Recht ist.",
+      "quellen": ["karpman1968", "choy1990", "kahler1975", "praxis-selbst"],
+      "aha": "Opfer, Retter, Verfolger: Drei Rollen halten manchen Streit endlos am Laufen – und die Spieler tauschen ständig die Plätze. Aussteigen heißt nicht weglaufen, sondern die Rolle wechseln: verletzlich, fürsorglich, klar.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "selbst-3-05-a", "faehigkeit": "selbst.muster", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Welche Rolle im Drama-Dreieck spricht hier?",
+          "faecher": ["Verfolger", "Retter", "Opfer"],
+          "karten": [
+            { "text": "„Wenn du das nicht kapierst, kann ich dir auch nicht helfen.“", "fach": 0 },
+            { "text": "„Lass mal, ich mach das schnell für dich – ist doch kein Problem.“", "fach": 1 },
+            { "text": "„Mir hilft ja nie jemand, ich kann da gar nichts machen.“", "fach": 2 },
+            { "text": "„Typisch, wieder hast du alles vermasselt.“", "fach": 0 },
+            { "text": "„Ich rede mit dem Chef für dich, du brauchst dich um nichts zu kümmern.“", "fach": 1 },
+            { "text": "„Immer muss ich alles ausbaden.“", "fach": 2 }
+          ] },
+        { "art": "karte", "text": "Das Drama-Dreieck (Karpman) ist ein Denkmodell: Das Opfer fühlt sich ohnmächtig, der Retter hilft ungefragt, der Verfolger beschuldigt. Und die Rollen wechseln: Der Retter fühlt sich irgendwann ausgenutzt und wird zum Opfer – oder zum Verfolger. Die Selbstwert-Spur: Im Modell landet, wer es allen recht machen will, leicht beim Retten, wer sich hart kritisiert, beim Opfer. Manche erkennen sich darin – du auch?" },
+        { "art": "dialog", "kopf": { "id": "selbst-3-05-b", "faehigkeit": "selbst.grenzen", "stufe": 7, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Tarek und der Chef", "figur": "Tarek Yılmaz",
+            "lage": "Mittagspause. Tarek setzt sich zu dir, sichtlich geladen.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Tarek: „Albers hat mich schon wieder auf dem Kieker. Ich kann machen, was ich will, es ist nie recht. Ich bin echt machtlos.“",
+                "wahl": [
+                  { "text": "„Ich red mit Albers für dich. Das klären wir schon.“", "wert": 0, "tendenz": "retten", "weiter": "k2b", "rueck": "Gut gemeint – aber du übernimmst sein Problem. So bleibt er in der Opfer-Rolle, und du rutschst ins Retten." },
+                  { "text": "„Klingt frustrierend. Was genau ist passiert?“", "wert": 2, "weiter": "k2", "rueck": "Fürsorglich, ohne zu übernehmen: Du hörst zu und holst ihn aus dem „nie“ in die Einzelheiten." },
+                  { "text": "„Na ja, selbst schuld, wenn du dauernd zu spät lieferst.“", "wert": 0, "tendenz": "angreifen", "weiter": "k2c", "rueck": "Vielleicht ist was dran – aber jetzt steckst du in der Verfolger-Rolle, und er verteidigt sich nur noch." }
+                ] },
+              { "id": "k2b", "sagt": "Tarek: „Echt? Danke! Am besten gleich heute, ich trau mich da nicht hin.“",
+                "wahl": [
+                  { "text": "„Moment – ich glaube, das kannst du besser selbst. Erzähl erst mal: Was genau ist passiert?“", "wert": 2, "weiter": "k2", "rueck": "Gute Wende: Du gibst ihm die Verantwortung zurück und bleibst trotzdem an seiner Seite." },
+                  { "text": "„Klar, ich mach das gleich nach der Pause.“", "wert": 0, "tendenz": "retten", "weiter": "ende3", "rueck": "Jetzt trägst du seinen Konflikt – und Albers fragt sich, warum Tarek nicht selbst kommt." }
+                ] },
+              { "id": "k2c", "sagt": "Tarek: „Super. Jetzt fällst du mir auch noch in den Rücken.“",
+                "wahl": [
+                  { "text": "„Sorry, das war hart. Erzähl mal, was genau passiert ist.“", "wert": 2, "weiter": "k2", "rueck": "Du steigst aus der Verfolger-Rolle aus, ohne dich zu verbiegen." },
+                  { "text": "„Ich sag ja nur, wie es ist. Wer ständig zu spät liefert, muss sich über Ärger nicht wundern.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Ihr streitet jetzt über dich statt über seine Lage – das Drama läuft weiter." }
+                ] },
+              { "id": "k2", "sagt": "Tarek: „Er hat vor allen gesagt, mein Bericht sei zu spät. War er auch, aber ich hatte drei Sachen gleichzeitig.“",
+                "wahl": [
+                  { "text": "„Dann geht es eigentlich um zu viele Aufgaben. Was davon kannst du mit ihm klären?“", "wert": 2, "weiter": "k3", "rueck": "Du hilfst ihm vom Opfer zum Handelnden: Was ist mein Anteil, was kann ich tun?" },
+                  { "text": "„Drei Sachen? Dann ist er wirklich unfair.“", "wert": 1, "weiter": "k3", "rueck": "Mitgefühl tut ihm gut. Bestätigst du nur das Unrecht, bleibt er aber machtlos." }
+                ] },
+              { "id": "k3", "sagt": "Tarek überlegt: „Ich könnte ihn fragen, welche der drei Sachen Vorrang hat.“",
+                "wahl": [
+                  { "text": "„Gute Idee. Willst du den ersten Satz einmal an mir ausprobieren?“", "wert": 2, "weiter": "ende1", "rueck": "Unterstützen statt übernehmen – das ist die fürsorgliche Rolle im Gewinner-Dreieck." },
+                  { "text": "„Gut, dann ist das ja geklärt. Erzähl mir nachher, wie es gelaufen ist.“", "wert": 1, "weiter": "ende4", "rueck": "Du lässt ihm die Verantwortung. Ein Angebot zum Üben hätte ihm den Schritt leichter gemacht." }
+                ] },
+              { "id": "ende1", "sagt": "Tarek probiert den Satz an dir aus. Am Nachmittag geht er zu Albers.", "ende": "So steigt man aus dem Dreieck: nicht retten, nicht beschuldigen, sondern zuhören, nach Einzelheiten fragen, ihm die Handlung zurückgeben und Unterstützung anbieten. Wer unterwegs in eine Rolle rutscht, kann jederzeit umsteigen." },
+              { "id": "ende2", "sagt": "Die Pause ist vorbei. Tarek ist so geladen wie vorher, und du nimmst ein ungutes Gefühl mit an den Schreibtisch.", "ende": "Beschuldigen hält das Drama am Laufen: Er verteidigt sich, statt etwas zu ändern. Beim nächsten Mal: zuhören, nach Einzelheiten fragen und fragen, was er selbst tun kann." },
+              { "id": "ende3", "sagt": "Tarek ist erleichtert. Nach der Pause gehst du zu Albers – mit einem Konflikt, der nicht deiner ist.", "ende": "Retten fühlt sich gut an und hält das Drama doch am Laufen: Tarek bleibt machtlos, du trägst seine Last. Beim nächsten Mal: zuhören, nach Einzelheiten fragen, fragen, was er selbst tun kann." },
+              { "id": "ende4", "sagt": "Tarek nickt und isst weiter. Am Nachmittag geht er allein zu Albers – ein bisschen wackelig.", "ende": "Zuhören, nach Einzelheiten fragen, ihm die Handlung lassen – das führt aus dem Dreieck. Was noch fehlte: Unterstützung anbieten, etwa den ersten Satz einmal mit ihm üben." }
+            ],
+            "prinzipien": ["nicht retten: das Problem bleibt beim anderen", "nicht verfolgen: Einzelheiten statt Schuld", "fürsorglich: zuhören und fragen, was er tun kann", "Unterstützung anbieten, nicht übernehmen"]
+          } },
+        { "art": "karte", "titel": "Der Ausstieg", "text": "Das Gewinner-Dreieck (Choy) zeigt drei Ausgänge. Statt Opfer: verletzlich – „Mir geht es damit schlecht. Ich brauche …“, und selbst nach Lösungen suchen. Statt Retter: fürsorglich – zuhören, fragen, nur helfen, wenn man gefragt wird. Statt Verfolger: bestimmt – das Anliegen klar sagen, ohne den anderen kleinzumachen. Du kannst jede Rolle verlassen, egal, wo die anderen stehen." },
+        { "art": "umformulieren", "kopf": { "id": "selbst-3-05-c", "faehigkeit": "selbst.mitgefuehl", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Mach aus dem Opfer-Satz einen verletzlichen, handelnden Satz: ehrlich, wie es dir geht, und was du jetzt tust oder erbittest.",
+          "vorlage": "„Immer bleibt alles an mir hängen, mir hilft ja eh keiner.“",
+          "kriterien": ["nennt ehrlich dein Gefühl", "ohne „immer“ und „keiner“", "enthält eine Bitte oder eigene Handlung"],
+          "muster": ["„Ich bin gerade erschöpft. Ich bitte Miriam morgen, die Kundenliste zu übernehmen.“", "„Mir ist das diese Woche zu viel. Ich sage Dr. Albers, welche Aufgabe warten muss.“", "„Ich fühle mich allein damit. Ich frage im Team, wer mir eine Stunde hilft.“"] },
+        { "art": "experiment", "auftrag": "Dreieck-Woche: Achte bei Streit, Klagen und Lästern darauf, welche Rolle du gerade spielst. Wähl einmal bewusst den Ausgang: verletzlich, fürsorglich oder bestimmt.", "dauer": "woche", "nachfrage": "In welche Rolle rutschst du am häufigsten – und welchen Ausgang hast du ausprobiert?" },
+        { "art": "reflexion", "frage": "In welcher Beziehung spielst du am ehesten Retter, Opfer oder Verfolger? Welcher Ausgang wäre dort dein erster Schritt?" },
+        { "art": "fachhilfe", "thema": "seele" }
+      ],
+      "regel": "Nicht retten, nicht klagen, nicht beschuldigen – verletzlich, fürsorglich, bestimmt.",
+      "merkkarten": [
+        { "id": "selbst-3-05-m1", "frage": "Welche drei Rollen hat das Drama-Dreieck?", "antwort": "Verfolger, Retter, Opfer – und die Spieler wechseln ständig die Plätze." },
+        { "id": "selbst-3-05-m2", "frage": "Was sind die drei Ausgänge im Gewinner-Dreieck?", "antwort": "Verletzlich statt Opfer, fürsorglich statt Retter, bestimmt statt Verfolger." },
+        { "id": "selbst-3-05-m3", "frage": "Wie hilfst du, ohne zu retten?", "antwort": "Zuhören, nach Einzelheiten fragen, fragen, was der andere tun kann – und nur auf Wunsch unterstützen." }
+      ]
+    }
+  ]
+}

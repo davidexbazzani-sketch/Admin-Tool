@@ -1,0 +1,265 @@
+{
+  "lagen": [
+    {
+      "id": "aussprache-l-56", "bereich": "aussprache", "phase": "k", "umfeld": "kunden", "faehigkeiten": ["aussprache.vokale", "aussprache.oeffnung", "aussprache.alltag"], "stufe": 4,
+      "titel": "Das Angebot für Frau Köhler", "figur": "Nadine Köhler",
+      "einleitung": "Ein Telefonat mit einer möglichen Kundin, die genau rechnet. Du übst lange und kurze Vokale, einen wachen Mund nach einem langen Tag und das Absichern verwechselbarer Wörter. Der Strich | steht für eine kleine Pause.",
+      "lage": "Später Nachmittag, du hast den ganzen Tag geredet. Nadine Köhler, Geschäftsführerin eines kleinen Betriebs, ruft an. Sie braucht zwölf Holzplatten, zugeschnitten nach Maß. Dein Kiefer fühlt sich müde an.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Es klingelt. Auf dem Display steht „Köhler“. Du merkst, dass dein Mund vom langen Tag ganz träge ist.",
+          "wahl": [
+            { "text": "Vor dem Abnehmen zweimal kauen und die Lippen flattern lassen, dann: „Guten Tag, | {name}.“", "wert": 2, "weiter": "k2", "rueck": "Zwei Sekunden Lockern wecken den Kiefer. Der Anfang sitzt." },
+            { "text": "Schnell abnehmen, bevor sie auflegt: „Ja, {name}, hallo?“", "wert": 1, "weiter": "k2b", "rueck": "Freundlich und schnell – nur der müde Mund ist mit am Telefon." },
+            { "text": "Klingeln lassen und sie morgen früh zurückrufen, wenn du wieder frisch bist und die Stimme ausgeruht ist.", "wert": 0, "tendenz": "vermeiden", "weiter": "k2c", "rueck": "Verständlich nach einem langen Tag. Aber eine Kundin, die selbst anruft, wartet ungern bis morgen." }
+          ] },
+        { "id": "k2", "sagt": "Frau Köhler: „Ich brauche zwölf Platten, nach Maß zugeschnitten. Können Sie das?“",
+          "wahl": [
+            { "text": "„Nach Maß – | also genau zugeschnitten. | Das können wir.“ – mit lockerem Kiefer.", "wert": 2, "weiter": "k3", "rueck": "Klar gesprochen, und „genau zugeschnitten“ sichert ab: Sie hört, dass du ihren Auftrag verstanden hast." },
+            { "text": "„Klar, kein Problem, machen wir.“ – schnell, ohne ihren Auftrag noch einmal zu wiederholen.", "wert": 0, "tendenz": "tempo", "weiter": "k3b", "rueck": "Eine Zusage, aber nichts davon zeigt, dass du „nach Maß“ gehört hast. Eine Kundin, die genau rechnet, fragt da nach." }
+          ] },
+        { "id": "k2b", "sagt": "Frau Köhler: „Hallo? Sie klingen etwas weit weg. Ich brauche zwölf Platten nach Maß.“",
+          "wahl": [
+            { "text": "Kurz den Kiefer lockern, dann klar: „Entschuldigung. | Nach Maß, | genau zugeschnitten. | Das geht.“", "wert": 2, "weiter": "k3", "rueck": "Den Hinweis aufgenommen und neu angesetzt. Jetzt ist dein Mund wach." },
+            { "text": "Weiterreden wie bisher, sie hat dich ja verstanden.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3b", "rueck": "„Weit weg“ war ein Hinweis. Der träge Mund bleibt – und die nächste Angabe wird schwieriger." }
+          ] },
+        { "id": "k2c", "sagt": "Am nächsten Morgen ruft Frau Köhler noch einmal an. Sie hat inzwischen auch bei einem anderen Betrieb angefragt. „Ich brauche zwölf Platten nach Maß.“",
+          "wahl": [
+            { "text": "„Danke, dass Sie noch einmal anrufen. | Nach Maß – | genau zugeschnitten. | Das können wir.“", "wert": 2, "weiter": "k3", "rueck": "Ausgeruht und klar. Etwas Vorsprung ist weg, aber das Gespräch läuft." },
+            { "text": "„Ja, ja, kriegen wir hin.“", "wert": 1, "weiter": "k3b", "rueck": "Eine Zusage – aber ob du „nach Maß“ verstanden hast, hört sie nicht." }
+          ] },
+        { "id": "k3", "sagt": "Frau Köhler: „Gut. Und die Lieferung – Mitte oder Ende des Monats?“",
+          "wahl": [
+            { "text": "„Zur Mitte, | wahrscheinlich.“", "wert": 1, "weiter": "k4", "rueck": "Kurz und richtig. Ein Datum dazu hätte die Angabe sicher gemacht." },
+            { "text": "„Zur Mitte. | Um den Fünfzehnten.“ – das i knapp gesprochen.", "wert": 2, "weiter": "k4", "rueck": "Kurzes i und ein Datum dazu. „Miete“ hört hier niemand." },
+            { "text": "„Mitte des Monats“ – das i lang gezogen, weil du es besonders deutlich machen willst.", "wert": 0, "weiter": "k4b", "rueck": "Gut gemeint, aber gedehnt wird aus „Mitte“ fast „Miete“. Deutlich heißt beim kurzen Vokal: knapp." }
+          ] },
+        { "id": "k3b", "sagt": "Frau Köhler: „Moment – haben Sie ‚nach Maß‘ verstanden? Ich brauche zwölf Stück, genau zugeschnitten.“",
+          "wahl": [
+            { "text": "„Ja, genau. | Nach Maß – | zwölf Platten, | genau zugeschnitten.“", "wert": 2, "weiter": "k3", "rueck": "Ruhig bestätigt, klar gesprochen, mit Zahl abgesichert. So holst du das Gespräch zurück." },
+            { "text": "„Hab ich doch gesagt.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Wer der Kundin das Nachfragen übelnimmt, verliert sie. Bestätigen hätte einen Satz gekostet." }
+          ] },
+        { "id": "k4", "sagt": "Frau Köhler: „Gut. Schicken Sie mir das Angebot?“",
+          "wahl": [
+            { "text": "„Gern. Zur Sicherheit: | zwölf Platten, | nach Maß, | Lieferung zur Monatsmitte. | Stimmt das so?“", "wert": 2, "weiter": "ende1", "rueck": "Zusammenfassung mit allen heiklen Wörtern – lang und kurz an der richtigen Stelle." },
+            { "text": "„Mach ich, kommt heute noch.“", "wert": 1, "weiter": "ende1", "rueck": "Die Zusage passt. Eine kurze Zusammenfassung hätte jedes Missverständnis ausgeschlossen." }
+          ] },
+        { "id": "k4b", "sagt": "Frau Köhler: „Miete? Was für eine Miete?“",
+          "wahl": [
+            { "text": "„Die Mitte – | des Monats. | Um den Fünfzehnten.“ – das i jetzt knapp.", "wert": 2, "weiter": "k4", "rueck": "Gerettet: kurzes i und ein Datum dazu." },
+            { "text": "„MIIITTE!“", "wert": 0, "tendenz": "lautstaerke", "weiter": "ende2", "rueck": "Lauter und noch gedehnter – das macht es eher schlimmer. Ihre Geduld ist aufgebraucht." }
+          ] },
+        { "id": "ende1", "sagt": "Frau Köhler: „Prima. Das Angebot schaue ich mir gleich an.“", "ende": "Ein wacher Mund vor dem Anruf, lange Vokale lang, kurze knapp – und wo ein Wort ein Paar hat, sichert ein zweites Wort ab." },
+        { "id": "ende2", "sagt": "Frau Köhler: „Ich melde mich, wenn ich noch Fragen habe.“ Sie meldet sich nicht.", "ende": "Nicht der Inhalt hat gefehlt, sondern Klarheit an zwei Stellen. Beim nächsten Mal: lange Vokale lang, kurze knapp, Verwechselbares mit einem zweiten Wort absichern – und eine Nachfrage ruhig beantworten." }
+      ],
+      "prinzipien": ["vor dem Anruf kurz lockern", "lange Vokale lang, kurze knapp", "verwechselbare Wörter mit einem zweiten Wort absichern", "am Ende zusammenfassen"],
+      "transfer": "Welches Wort in deinem Alltag hat ein Paar mit anderem Vokal – und wie sicherst du es beim nächsten Mal ab?"
+    },
+    {
+      "id": "aussprache-l-57", "bereich": "aussprache", "phase": "k", "umfeld": "gruppe", "faehigkeiten": ["aussprache.konsonanten", "aussprache.takt"], "stufe": 5,
+      "titel": "Die Schulung am Montag", "figur": "Carla Demir",
+      "einleitung": "Du stellst in der Runde neue Regeln vor – voller langer Fachwörter. Du übst Lautgruppen ohne Stolpern, das Zerlegen schwerer Wörter und den ruhigen Neuansatz nach einem Versprecher.",
+      "lage": "Montagsrunde, zwölf Leute. Carla Demir leitet das Projekt und hat dich gebeten, die neue Brandschutzordnung in drei Minuten vorzustellen. Darin stehen Wörter wie „Brandschutzbeauftragte“, „Feuerlöscherstandorte“ und „Fluchtwegpläne“.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Am Freitag davor. Carla: „Schaffst du das am Montag? Die Wörter sind ja echte Zungenbrecher.“",
+          "wahl": [
+            { "text": "„Ja. Ich übe die schweren Wörter am Wochenende: zerlegen, zusammensetzen, im Satz.“", "wert": 2, "weiter": "k2", "rueck": "Vorbereitung an der richtigen Stelle: bei den Wörtern, an denen du stolpern könntest." },
+            { "text": "„Klar, ich les es vom Blatt, das geht schon.“", "wert": 1, "weiter": "k2b", "rueck": "Ablesen hilft beim Inhalt – die Lautgruppen sind beim ersten lauten Lesen trotzdem neu." },
+            { "text": "„Kann das nicht jemand anderes machen? Ich verhaspel mich bei solchen Wörtern immer, das wird für alle peinlich.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k2c", "rueck": "Bei solchen Wörtern verhaspeln sich viele – und mit fünf Minuten Übung ist es meist weg. Absagen nimmt dir die Chance." }
+          ] },
+        { "id": "k2", "sagt": "Montag. Du beginnst. Das erste schwere Wort kommt: „Feuerlöscherstandorte“.",
+          "wahl": [
+            { "text": "Kurz vor dem Wort bremsen, dann in Teilen: „Feuerlöscher – | standorte“.", "wert": 2, "weiter": "k3", "rueck": "Der Hauch einer Pause an der Fuge – niemand bemerkt sie, aber jeder versteht das Wort." },
+            { "text": "Mit Schwung drüber, damit es souverän klingt.", "wert": 0, "tendenz": "tempo", "weiter": "k3b", "rueck": "Schwung an einer Lautgruppe endet oft im Knoten. Es kommt „Feuerlöschstandote“ an." }
+          ] },
+        { "id": "k2b", "sagt": "Montag. Du liest vom Blatt. Beim ersten schweren Wort – „Feuerlöscherstandorte“ – stockst du kurz.",
+          "wahl": [
+            { "text": "Ruhig neu ansetzen: „Feuerlöscher – | standorte.“ – und weiterlesen.", "wert": 2, "weiter": "k3", "rueck": "Ein Neuansatz ist kein Drama. In Teilen sitzt das Wort." },
+            { "text": "Schneller weiterlesen und über das Wort hinweggehen, damit es hoffentlich keiner merkt.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3b", "rueck": "Gerade das Hetzen danach fällt auf – und das nächste Wort stolpert gleich mit." }
+          ] },
+        { "id": "k2c", "sagt": "Carla: „Ich glaube, du kannst das. Nimm dir die drei Wörter am Wochenende vor.“",
+          "wahl": [
+            { "text": "„Gut. Ich zerlege sie und übe sie im Satz.“", "wert": 2, "weiter": "k2", "rueck": "Mutig und klug: Die Vorbereitung nimmt dem Montag den Schrecken." },
+            { "text": "„Na gut – dann les ich es halt irgendwie ab.“", "wert": 1, "weiter": "k2b", "rueck": "Du machst es – das zählt. Mit fünf Minuten Übung wäre es leichter." }
+          ] },
+        { "id": "k3", "sagt": "Weiter im Text: „Die Brandschutzbeauftragte sitzt im zweiten Stock.“ Du versprichst dich: „Bransch…“",
+          "wahl": [
+            { "text": "Ohne Pause weiter, als wäre nichts gewesen.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k4", "rueck": "Das Wort bleibt halb – und wer die Beauftragte sucht, weiß nicht, wie das Amt heißt." },
+            { "text": "„Ach, diese Wörter! Wer denkt sich so was aus?“ – ein Lacher, dann weiter im gleichen Tempo.", "wert": 1, "weiter": "k4", "rueck": "Humor entspannt den Raum. Das Wort selbst bleibt aber verschluckt – ein sauberer Neuansatz hätte es gerettet." },
+            { "text": "Kurz anhalten, lächeln, sauber neu: „Brandschutz – | beauftragte.“", "wert": 2, "weiter": "k4", "rueck": "Ein Versprecher mit ruhigem Neuansatz wirkt souverän. Die Runde nimmt ihn kaum wahr." }
+          ] },
+        { "id": "k3b", "sagt": "Tarek ruft halb im Scherz: „Feuerlösch-was?“ Ein paar lachen.",
+          "wahl": [
+            { "text": "Mitlachen, dann klar: „Feuerlöscher – | standorte. | Also: wo die Löscher hängen.“", "wert": 2, "weiter": "k3", "rueck": "Mitlachen und anders sagen – das Wort ist da, und der Raum ist auf deiner Seite." },
+            { "text": "Rot werden und schnell zum nächsten Punkt springen.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Verständlich – aber das Wort bleibt ungeklärt, und der Faden ist weg." }
+          ] },
+        { "id": "k4", "sagt": "Zum Schluss: „Die Fluchtwegpläne hängen ab sofort an jedem Ausgang.“ Carla fragt: „Hängen die auch im Lager?“",
+          "wahl": [
+            { "text": "„Ja. | Auch im Lager. | Am Tor und an der Seitentür.“", "wert": 2, "weiter": "ende1", "rueck": "Kurze Sätze, Pausen, der Ort genau. So endet ein Beitrag klar." },
+            { "text": "„Ja, überall, auch im Lager und in der Werkstatt und wo sonst noch Ausgänge sind, also eigentlich überall.“", "wert": 1, "weiter": "ende1", "rueck": "Richtig, aber die Antwort verliert sich. Kurz und genau trägt besser." }
+          ] },
+        { "id": "ende1", "sagt": "Carla nach der Runde: „Danke. Die neuen Regeln sind jetzt bei allen angekommen.“", "ende": "Schwere Lautgruppen vorher zerlegen, an der Fuge der Hauch einer Pause, nach einem Versprecher ruhig neu ansetzen. So verliert ein Fachwort seinen Schrecken." },
+        { "id": "ende2", "sagt": "Nach der Runde fragt eine Kollegin leise: „Was war das mit den Löschern?“", "ende": "Kein Unglück – aber das Wichtigste ging unter. Beim nächsten Mal: schwere Wörter vorher zerlegen und nach einem Stolpern ruhig neu ansetzen." }
+      ],
+      "prinzipien": ["schwere Wörter vorher zerlegen und üben", "an der Fuge der Hauch einer Pause", "nach einem Versprecher ruhig neu ansetzen", "anders sagen, wenn ein Wort nicht ankommt"],
+      "transfer": "Welche Fachwörter sagst du bald vor anderen? Nimm dir das schwerste vor: zerlegen, zusammensetzen, im Satz."
+    },
+    {
+      "id": "aussprache-l-58", "bereich": "aussprache", "phase": "k", "umfeld": "kunden", "faehigkeiten": ["aussprache.tragen", "aussprache.takt"], "stufe": 5,
+      "titel": "Die Führung durch die Werkstatt", "figur": "Nadine Köhler",
+      "einleitung": "Du führst Besuch durch einen großen, hallenden Raum und erklärst im Gehen. Du übst kurze Sinnschritte, Luft in den Pausen und ein Satzende, das bis zur letzten Person in der Gruppe trägt.",
+      "lage": "Nadine Köhler kommt mit zwei Mitarbeitern zu Besuch. Du führst sie durch die Werkstatt eures Betriebs: hohe Decke, es hallt, ihr geht hintereinander. Du sollst zeigen, wie ihre Platten entstehen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Ihr steht am Eingang. Frau Köhler und ihre Mitarbeiter schauen dich an.",
+          "wahl": [
+            { "text": "„Herzlich willkommen bei uns, ich zeige Ihnen heute, wie Ihre Platten entstehen, vom Lager bis zum Zuschnitt.“ – in einem Atemzug.", "wert": 1, "weiter": "k2c", "rueck": "Inhaltlich prima, aber auf einen Atem: Das Ende war schon dünn." },
+            { "text": "Zur Gruppe drehen, Blick zum Hintersten: „Willkommen. | Wir gehen den Weg einer Platte: | vom Lager | bis zum Zuschnitt.“", "wert": 2, "weiter": "k2", "rueck": "Kurze Sinnschritte, Blick nach hinten – der Anfang trägt bis zum Letzten." },
+            { "text": "Schon losgehen und über die Schulter erklären, damit keine Zeit verloren geht.", "wert": 0, "tendenz": "satzende", "weiter": "k2b", "rueck": "Über die Schulter geht die Stimme nach vorn in den Raum – die Gruppe hört nur Bruchstücke." }
+          ] },
+        { "id": "k2", "sagt": "Ihr steht am Lager. Du willst erklären, wie lange das Holz trocknet und warum.",
+          "wahl": [
+            { "text": "„Hier lagert das Holz. | Mehrere Wochen. | So verzieht es sich später nicht.“ – in jeder Pause kurz lösen.", "wert": 2, "weiter": "k3", "rueck": "Drei kurze Schritte, Luft in jeder Pause. Jeder Satz endet so kräftig, wie er begann." },
+            { "text": "Einen langen Satz mit allen Einzelheiten – du kennst dich hier ja aus.", "wert": 0, "tendenz": "tempo", "weiter": "k3b", "rueck": "Wer sich auskennt, packt zu viel in einen Atem. Hinten versackt das Wichtigste: warum." }
+          ] },
+        { "id": "k2b", "sagt": "Einer der Mitarbeiter fragt: „Entschuldigung – was haben Sie am Eingang gesagt?“",
+          "wahl": [
+            { "text": "Stehen bleiben, umdrehen: „Wir gehen den Weg einer Platte. | Vom Lager | bis zum Zuschnitt.“", "wert": 2, "weiter": "k2", "rueck": "Stehen, zuwenden, kurz. So holst du die Gruppe zurück." },
+            { "text": "Im Gehen lauter wiederholen.", "wert": 1, "weiter": "k2", "rueck": "Lauter kommt etwas an – zugewandt und im Stehen wäre es sicherer." }
+          ] },
+        { "id": "k2c", "sagt": "Frau Köhler: „Und wo fangen wir an?“ Du merkst: Dir ist die Luft ausgegangen.",
+          "wahl": [
+            { "text": "Kurz lösen, Luft kommen lassen: „Beim Lager. | Folgen Sie mir.“", "wert": 2, "weiter": "k2", "rueck": "Neu Luft holen, kurz sagen. Jetzt hast du wieder Luft für das Lager." },
+            { "text": "Mit der Restluft weiter: „Beim Lager, da drüben, wo die Bretter stehen.“", "wert": 0, "tendenz": "satzende", "weiter": "k3b", "rueck": "Restluft macht die Stimme eng und das Ende leise. Erst lösen, dann sprechen." }
+          ] },
+        { "id": "k3", "sagt": "Am Zuschnitt. Die Säge steht still, aber es hallt. Frau Köhler steht hinten, ihre Mitarbeiter vorn.",
+          "wahl": [
+            { "text": "Zu den beiden vorn sprechen, die stehen am nächsten.", "wert": 1, "weiter": "k4", "rueck": "Die vorn verstehen dich. Frau Köhler, die entscheidet, bekommt nur die Hälfte." },
+            { "text": "Lauter werden, dabei an die Säge gelehnt, den Blick auf das Sägeblatt, damit du nichts Falsches erklärst.", "wert": 0, "tendenz": "lautstaerke", "weiter": "k4", "rueck": "Lauter, aber zur Säge gewandt – die Stimme geht in die falsche Richtung." },
+            { "text": "Einen Schritt zur Seite, damit alle dich sehen; das Satzende zu Frau Köhler: „Hier wird zugeschnitten. | Auf den Millimeter.“", "wert": 2, "weiter": "k4", "rueck": "Sichtbar, Blick nach hinten, Satzende gehalten – auch hinten kommt „Millimeter“ an." }
+          ] },
+        { "id": "k3b", "sagt": "Am Lager. Frau Köhler: „Ich habe hinten kaum etwas verstanden. Wie lange lagert das Holz hier?“",
+          "wahl": [
+            { "text": "„Mehrere Wochen. | Damit es sich später nicht verzieht.“ – mit gehaltenem Ende.", "wert": 2, "weiter": "k3", "rueck": "Zwei Sätze, zwei Enden, die tragen. Jetzt ist es angekommen." },
+            { "text": "„Ach, das ist eigentlich nicht so wichtig. Hauptsache, die Platten passen am Ende.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Für eine Kundin, die genau rechnet, ist das nicht egal. Sie macht sich eine Notiz." }
+          ] },
+        { "id": "k4", "sagt": "Zum Schluss fragt Frau Köhler: „Und wann könnten Sie liefern?“",
+          "wahl": [
+            { "text": "„In drei Wochen. | Drei.“ – Blick zu ihr, Satzende gehalten.", "wert": 2, "weiter": "ende1", "rueck": "Die Zahl zweimal, das Ende gehalten. Mehr Klarheit geht kaum." },
+            { "text": "„So in drei Wochen, denk ich, kommt drauf an …“ – leiser werdend.", "wert": 1, "tendenz": "satzende", "weiter": "ende1", "rueck": "Die Zahl kommt an, das Ende versackt in der Unsicherheit." }
+          ] },
+        { "id": "ende1", "sagt": "Frau Köhler: „Danke für die Führung. Jetzt weiß ich, wie unsere Platten entstehen.“", "ende": "Kurze Sinnschritte, in jeder Pause neue Luft, Blick zur hintersten Person, Satzende gehalten – so trägt eine Stimme durch einen hallenden Raum." },
+        { "id": "ende2", "sagt": "Frau Köhler verabschiedet sich freundlich, aber knapp.", "ende": "Wer sich auskennt, spricht zu viel auf einen Atem. Beim nächsten Mal: kurze Schritte, Luft in den Pausen, das Ende halten." }
+      ],
+      "prinzipien": ["kurze Sinnschritte, in jeder Pause lösen", "stehen und zuwenden statt im Gehen erklären", "das Satzende zur hintersten Person", "Zahlen zweimal"],
+      "transfer": "Wo erklärst du bald etwas mehreren Menschen in einem großen Raum? Wie kurz wird dein erster Sinnschritt?"
+    },
+    {
+      "id": "aussprache-l-59", "bereich": "aussprache", "phase": "k", "umfeld": "telefon", "faehigkeiten": ["aussprache.alltag", "aussprache.tragen", "aussprache.konsonanten"], "stufe": 6,
+      "titel": "Der Anruf aus dem Zug", "figur": "Dr. Henrik Albers",
+      "einleitung": "Ein Telefonat mit schlechter Verbindung. Du übst die Technik auf deiner Seite, Buchstabieren mit der Tafel und Zahlen in zweiter Form.",
+      "lage": "Dr. Albers ruft dich aus dem Zug an, die Verbindung rauscht. Er sitzt gleich bei einem Kunden und braucht zwei Angaben: den Namen des neuen Lieferanten – Holzhandel Seefeld – und die Zahl der bestellten Paletten: fünfzehn. Dein Handy liegt auf Lautsprecher auf dem Schreibtisch.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Hallo? Ich verstehe Sie schlecht. Hallt es bei Ihnen?“",
+          "wahl": [
+            { "text": "Näher ans Handy beugen und lauter sprechen.", "wert": 1, "weiter": "k2b", "rueck": "Etwas besser, der Hall des Büros bleibt im Ton." },
+            { "text": "Lautsprecher aus, Handy ans Ohr: „Jetzt besser? | Hier ist {name}.“", "wert": 2, "weiter": "k2", "rueck": "Erst die Technik auf deiner Seite. Mikrofon nah am Mund, der Raumhall fällt weg." },
+            { "text": "„Das liegt an Ihrem Zug, Herr Dr. Albers – hier bei mir ist alles ruhig, die Leitung ist sonst immer gut.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2b", "rueck": "Der Zug rauscht, ja. Deinen Teil – den Lautsprecher am Tisch – kannst du trotzdem ändern." }
+          ] },
+        { "id": "k2", "sagt": "Dr. Albers: „Gut. Wie heißt der neue Lieferant?“",
+          "wahl": [
+            { "text": "„Holzhandel Seefeld. | Ich buchstabiere: | S wie Salzwedel, | E, E, | F wie Frankfurt, | E, L, D.“", "wert": 2, "weiter": "k3", "rueck": "Genau bei S und F hilft die Tafel – im Rauschen klingen „Ess“ und „Eff“ fast gleich." },
+            { "text": "„Seefeld, mit S und F.“", "wert": 1, "weiter": "k3b", "rueck": "Knapp – aber „Ess“ und „Eff“ sind am Telefon die klassische Verwechslung." }
+          ] },
+        { "id": "k2b", "sagt": "Dr. Albers: „Es rauscht immer noch. Wie heißt der Lieferant?“",
+          "wahl": [
+            { "text": "Jetzt doch ans Ohr, dann: „Seefeld. | S wie Salzwedel, | F wie Frankfurt.“", "wert": 2, "weiter": "k3", "rueck": "Technik nachgebessert und gleich buchstabiert. Gerettet." },
+            { "text": "„SEEFELD!“", "wert": 0, "tendenz": "lautstaerke", "weiter": "k3b", "rueck": "Lauter macht „Ess“ und „Eff“ nicht unterscheidbarer." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers: „Seefeld, notiert. Und wie viele Paletten?“",
+          "wahl": [
+            { "text": "„Ich schick's Ihnen gleich per Nachricht, dann haben Sie es schwarz auf weiß, und es kann nichts schiefgehen.“", "wert": 1, "weiter": "k4", "rueck": "Eine gute Ergänzung – nur sitzt er gleich im Termin. Erst sagen, dann zur Sicherheit schicken." },
+            { "text": "„Fünfzehn. | Eins, fünf.“", "wert": 2, "weiter": "k4", "rueck": "Fünfzehn und fünfzig klingen im Rauschen ähnlich. Die Ziffern schließen das aus." },
+            { "text": "„Fünfzehn Stück, wie besprochen.“", "wert": 1, "weiter": "k4b", "rueck": "Richtig – im Rauschen aber leicht mit „fünfzig“ zu verwechseln." }
+          ] },
+        { "id": "k3b", "sagt": "Dr. Albers: „Feefeld? Oder Seefeld? Und wie viele Paletten waren es?“",
+          "wahl": [
+            { "text": "„Seefeld – | S wie Salzwedel. | Und es sind fünfzehn Paletten: | eins, fünf.“", "wert": 2, "weiter": "k4", "rueck": "Beides auf einmal geklärt: die Tafel für den Buchstaben, die Ziffern für die Zahl." },
+            { "text": "„Mit S. Wie Seefeld eben. Fünfzehn.“", "wert": 0, "weiter": "k4b", "rueck": "„Wie Seefeld eben“ erklärt nichts, und die Zahl bleibt ungesichert." }
+          ] },
+        { "id": "k4", "sagt": "Dr. Albers: „Danke. Gleich kommt ein Tunnel – noch etwas?“",
+          "wahl": [
+            { "text": "„Nur zur Sicherheit: | Seefeld, | fünfzehn Paletten. | Gute Fahrt!“", "wert": 2, "weiter": "ende1", "rueck": "Eine kurze Zusammenfassung vor dem Funkloch. So geht er sicher in den Termin." },
+            { "text": "„Nein, das war's.“", "wert": 1, "weiter": "ende1", "rueck": "Kurz und freundlich. Eine Zusammenfassung hätte noch einmal abgesichert." }
+          ] },
+        { "id": "k4b", "sagt": "Später schreibt Dr. Albers: „Fünfzig Paletten?? Der Kunde ist überrascht.“",
+          "wahl": [
+            { "text": "Sofort anrufen: „Fünfzehn – | eins, fünf. | Entschuldigung für die Verwirrung.“", "wert": 2, "weiter": "ende3", "rueck": "Schnell und klar korrigiert. Das nächste Mal gleich mit Ziffern." },
+            { "text": "„Ich hab doch fünfzehn gesagt!“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Mag sein – im Rauschen kam es anders an. Wer recht haben will, verliert Zeit." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers nach dem Termin: „Alles hat gepasst. Danke für die klare Ansage.“", "ende": "Technik zuerst, Buchstaben mit der Tafel, Zahlen in zweiter Form, kurze Zusammenfassung. Am Telefon fehlen oft die hohen Töne – du gleichst es aus." },
+        { "id": "ende2", "sagt": "Dr. Albers beginnt den Termin mit einer Entschuldigung.", "ende": "Im Rauschen klingt fünfzehn wie fünfzig und Ess wie Eff. Beim nächsten Mal: Ziffern dazu, Tafel für Buchstaben." },
+        { "id": "ende3", "sagt": "Der Kunde lacht: „Dann eben fünfzehn.“ Alles klärt sich.", "ende": "Gut korrigiert – aber vermeidbar. Eine zweite Form der Zahl spart die Nachricht danach." }
+      ],
+      "prinzipien": ["erst die Technik auf deiner Seite", "S und F mit der Buchstabiertafel", "Zahlen mit Ziffern absichern", "vor dem Funkloch kurz zusammenfassen"],
+      "transfer": "Welchen Namen und welche Zahl gibst du oft am Telefon durch? Wie klingt die sichere Fassung mit Tafel und Ziffern?"
+    },
+    {
+      "id": "aussprache-l-60", "bereich": "aussprache", "phase": "k", "umfeld": "kollegen", "faehigkeiten": ["aussprache.alltag", "aussprache.tragen", "aussprache.takt", "aussprache.konsonanten", "aussprache.oeffnung", "aussprache.hoeren"], "stufe": 6, "sparring": true,
+      "titel": "Sparring: Das Projekt-Update im Video", "figur": "Carla Demir",
+      "einleitung": "Das Sparring zum Abschluss der Phase Können: drei Minuten Bericht in der Videorunde – Technik, ein schweres Wort, lange Sätze, eine Rückfrage. Alles aus dieser Phase kommt zusammen.",
+      "lage": "Freitag, Videokonferenz mit acht Leuten. Carla Demir leitet. Du berichtest über die Umstellung auf das neue Lagerverwaltungssystem: den Stand, ein Problem mit den Etiketten und den neuen Starttermin am Fünfzehnten. Du sitzt im Homeoffice.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Zehn Minuten vorher. Du hast Zeit für eine Sache.",
+          "wahl": [
+            { "text": "Eine kurze Probeaufnahme mit Headset, dazu einmal „Lagerverwaltungssystem“ zerlegt und im Satz gesprochen.", "wert": 2, "weiter": "k2", "rueck": "Technik geprüft, das schwerste Wort geübt – die zwei größten Stolpersteine sind weg." },
+            { "text": "Die Folien noch einmal durchgehen und die Zahlen prüfen.", "wert": 1, "weiter": "k2b", "rueck": "Inhaltlich sicher. Ton und das lange Wort bleiben ungeprüft." },
+            { "text": "Schnell noch Mails beantworten – reden kannst du ja, das hast du schon oft gemacht.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k2c", "rueck": "Routine trägt viel – aber nicht über ein hallendes Laptop-Mikrofon und ein Wort mit sieben Silben." }
+          ] },
+        { "id": "k2", "sagt": "Carla: „Du bist dran.“",
+          "wahl": [
+            { "text": "Zur Kamera, Mund locker: „Kurz zum Stand: | Das Lagerverwaltungssystem | läuft im Test.“", "wert": 2, "weiter": "k3", "rueck": "Blick zur Kamera, erster Sinnschritt kurz, das schwere Wort ohne Hast." },
+            { "text": "Den Bericht vom Zettel ablesen, Kopf gesenkt, zügig.", "wert": 0, "tendenz": "satzende", "weiter": "k3b", "rueck": "Zügig und mit gesenktem Kopf versacken die Satzenden – im Video doppelt." }
+          ] },
+        { "id": "k2b", "sagt": "Carla: „Du bist dran.“ Nach deinem ersten Satz schreibt Tarek in den Chat: „Dein Ton ist abgehackt.“",
+          "wahl": [
+            { "text": "„Ich schalte die Kamera aus, dann wird der Ton stabiler.“ Danach kürzere Sinnschritte und Zahlen doppelt.", "wert": 2, "weiter": "k3", "rueck": "Bandbreite für den Ton, dazu kurze Schritte: So kommt auch bei wackeliger Leitung alles an." },
+            { "text": "Weiterreden, es geht ja um den Inhalt.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3b", "rueck": "Der Inhalt kommt nur so gut an wie der Ton." }
+          ] },
+        { "id": "k2c", "sagt": "Carla: „Du bist dran.“ Schon bei „Lagerverwaltungssystem“ verhaspelst du dich.",
+          "wahl": [
+            { "text": "Kurz anhalten, in Teilen neu: „Lagerverwaltungs – | system.“ Dann ruhig weiter.", "wert": 2, "weiter": "k3", "rueck": "Ruhiger Neuansatz in Teilen – genau so, wie du es geübt hast." },
+            { "text": "„Das neue System eben, ihr wisst schon.“", "wert": 1, "weiter": "k3", "rueck": "Umschreiben ist erlaubt und rettet den Moment. Beim nächsten Bericht wartet das Wort aber wieder." }
+          ] },
+        { "id": "k3", "sagt": "Jetzt kommt das Problem: Die Etiketten werden falsch gedruckt. Du hast dafür einen langen Satz vorbereitet.",
+          "wahl": [
+            { "text": "Den langen Satz auf einen Atem durchziehen.", "wert": 0, "tendenz": "satzende", "weiter": "k4b", "rueck": "Am Ende presst du die Lösung mit Restluft heraus – genau den Teil, der beruhigen sollte." },
+            { "text": "Sinnschritte, in jeder Pause lösen: „Die Etiketten | werden falsch gedruckt. | Die Ursache kennen wir. | Die Lösung kommt nächste Woche.“", "wert": 2, "weiter": "k4", "rueck": "Kurze Schritte, Luft in jeder Pause, jedes Ende gehalten. So kommt das Problem klar an, ohne dramatisch zu klingen." }
+          ] },
+        { "id": "k3b", "sagt": "Carla: „Sorry, ich hab den Anfang nicht verstanden. Wo stehen wir?“",
+          "wahl": [
+            { "text": "Zur Kamera, ruhig neu: „Im Test. | Das System läuft. | Ein Problem gibt es noch.“", "wert": 2, "weiter": "k3", "rueck": "Kurz, zugewandt, Ende gehalten – der zweite Anlauf gelingt." },
+            { "text": "Dasselbe noch einmal sagen, nur etwas lauter.", "wert": 1, "weiter": "k3", "rueck": "Lauter hilft ein wenig. Kürzere Schritte und ein gehaltenes Ende hätten mehr gebracht." }
+          ] },
+        { "id": "k4", "sagt": "Dr. Albers, zugeschaltet: „Wann genau starten wir jetzt?“",
+          "wahl": [
+            { "text": "Sofort lossprechen, noch während er fragt: „Am Fünfzehnten!“", "wert": 0, "tendenz": "tempo", "weiter": "k4b", "rueck": "Im Video überlappt das leicht – sein Fragenende und dein Anfang gehen beide unter." },
+            { "text": "„Am Fünfzehnten, glaube ich, außer es kommt noch etwas dazwischen.“", "wert": 1, "weiter": "ende1", "rueck": "Kommt an, aber das „glaube ich“ schwächt eine Angabe, die du sicher kennst." },
+            { "text": "Eine kleine Pause wegen der Verzögerung, dann: „Am Fünfzehnten. | Eins, fünf.“", "wert": 2, "weiter": "ende1", "rueck": "Pause für die Verzögerung, die Zahl in zwei Formen. Mehr Sicherheit geht kaum." }
+          ] },
+        { "id": "k4b", "sagt": "Carla: „Das letzte Stück ist bei uns nicht angekommen. Kannst du es noch einmal sagen – mit dem Termin?“",
+          "wahl": [
+            { "text": "Kurz warten, dann ruhig: „Die Lösung kommt nächste Woche. | Start ist am Fünfzehnten – | eins, fünf.“", "wert": 2, "weiter": "ende1", "rueck": "Neu angesetzt, Ende gehalten, Zahl gesichert." },
+            { "text": "„Steht alles in der Mail.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Vielleicht – aber jetzt fragen acht Leute, und die Antwort hätte drei Sekunden gedauert." }
+          ] },
+        { "id": "ende1", "sagt": "Carla: „Danke, das war klar. Nächster Punkt.“", "ende": "Technik vorher prüfen, schwere Wörter zerlegen, lange Sätze in Schritte teilen, nach einer Frage kurz warten, Zahlen in zwei Formen. Das ist der Klar-Modus der Phase Können." },
+        { "id": "ende2", "sagt": "Am Nachmittag rufen zwei Kollegen an und fragen nach dem Termin.", "ende": "Kein Drama – aber vermeidbar. Beim nächsten Mal: nach einer Frage kurz warten, lange Sätze in Schritte teilen, die Zahl doppelt – und eine Nachfrage gleich beantworten." }
+      ],
+      "prinzipien": ["vorher Technik und das schwerste Wort prüfen", "lange Sätze in Sinnschritte, Luft in den Pausen", "im Video nach der Frage kurz warten", "Zahlen in zwei Formen"],
+      "transfer": "Wann ist dein nächster Bericht im Video? Was prüfst du zehn Minuten vorher?"
+    }
+  ]
+}

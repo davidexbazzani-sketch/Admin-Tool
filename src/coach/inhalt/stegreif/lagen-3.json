@@ -1,0 +1,227 @@
+{
+  "lagen": [
+    {
+      "id": "stegreif-l-11", "bereich": "stegreif", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["stegreif.zeit", "stegreif.kern", "stegreif.struktur"], "stufe": 7,
+      "titel": "Die Hausversammlung", "figur": "Frau Sommer",
+      "einleitung": "Eine Minute vor zwanzig Nachbarn, dann Fragen – eine mit Vorwurf, eine Salve. Du übst: den Bogen, den wahren Teil zuerst, eine Fragensalve sortieren.",
+      "lage": "Hausversammlung, zwanzig Leute im Gemeinschaftsraum. Du stellst den Plan für einen abschließbaren Fahrradraum im Keller vor. Bisher stehen die Fahrräder im Hausflur. Der Raum kostet jede Mietpartei rund einen Euro im Monat, den Umbau macht der Hausmeister, jede Partei bekommt einen Schlüssel – darum zahlen auch alle. Beschlossen ist noch nichts. Der Kellerraum, in dem Frau Sommer ihre Weinregale hat, würde geräumt; ein Ersatzraum ist vorgesehen. Mit ihr gesprochen hast du vorher nicht.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Der Hausverwalter: „Bitte – eine Minute zu Ihrem Vorschlag.“",
+          "wahl": [
+            { "text": "„Ich schlage einen Fahrradraum im Keller vor. Fragen gern.“", "wert": 1, "weiter": "k2", "rueck": "Klar und kurz. Ein Satz zum Warum und einer zu den Kosten hätten den Bogen gespannt." },
+            { "text": "„Ja, also, ich bin da so reingerutscht, eigentlich wollte das jemand anders machen, aber gut, es geht um die Fahrräder …“", "wert": 0, "tendenz": "entschuldigen", "weiter": "k2", "rueck": "Der Anlauf kostet dich die erste, wichtigste Aufmerksamkeit." },
+            { "text": "„Unsere Räder stehen im Flur. Ein abschließbarer Raum im Keller ändert das – für rund einen Euro im Monat je Partei.“", "wert": 2, "weiter": "k2", "rueck": "Problem, Lösung, Preis – der Bogen steht nach zwei Sätzen." }
+          ] },
+        { "id": "k2", "sagt": "Frau Sommer: „Und mein Weinkeller fliegt raus, oder was? Mich hat ja keiner gefragt!“",
+          "wahl": [
+            { "text": "„Ihr Raum würde geräumt, ja – ein Ersatz ist vorgesehen. Und ich hätte Sie vorher fragen sollen.“", "wert": 2, "weiter": "k3", "rueck": "Der wahre Teil zuerst, dann der Ersatz, dann der eigene Fehler. Das nimmt dem Vorwurf die Luft." },
+            { "text": "„Darüber können wir gern nach der Versammlung reden.“", "wert": 1, "weiter": "k2b", "rueck": "Freundlich – aber vor zwanzig Leuten klingt das nach Ausweichen." },
+            { "text": "„Das ist jetzt nicht das Thema, Frau Sommer, es geht ums ganze Haus und nicht um Ihre Weinflaschen.“", "wert": 0, "tendenz": "abwerten", "weiter": "k2b", "rueck": "Du machst ihre Sorge klein – vor allen. Jetzt geht es nicht mehr um Fahrräder, sondern um dich." }
+          ] },
+        { "id": "k2b", "sagt": "Frau Sommer verschränkt die Arme: „Also ja oder nein?“",
+          "wahl": [
+            { "text": "„Ja, Ihr Raum würde geräumt. Ein Ersatz ist vorgesehen – den zeige ich Ihnen gern morgen.“", "wert": 2, "weiter": "k3", "rueck": "Gut gefangen: die ehrliche Antwort im ersten Wort, dann der nächste Schritt." },
+            { "text": "„Das entscheide ja nicht ich allein.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Stimmt vielleicht – beantwortet aber nicht, was sie gefragt hat. Das merken alle." }
+          ] },
+        { "id": "k3", "sagt": "Ein Nachbar: „Was kostet das, wer baut das um, wer kriegt Schlüssel – und warum soll auch zahlen, wer gar kein Rad hat?“",
+          "wahl": [
+            { "text": "„Sie können doch nicht vier Fragen auf einmal stellen, so kann ja keiner vernünftig antworten.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Ein Vorwurf statt einer Ordnung. Die Spitze am Ende bleibt so im Raum." },
+            { "text": "„Vier Fragen, der Reihe nach: ein Euro im Monat, der Hausmeister baut, jede Partei kriegt einen Schlüssel – darum zahlen auch alle.“", "wert": 2, "weiter": "k4", "rueck": "Gezählt, sortiert, einzeln beantwortet – die Spitze sachlich und zuletzt." },
+            { "text": "„Kosten: rund ein Euro im Monat.“", "wert": 1, "weiter": "k4", "rueck": "Richtig – nur bleiben drei Fragen offen, auch die mit der Spitze." }
+          ] },
+        { "id": "k4", "sagt": "Der Hausverwalter: „Danke. Ein Satz zum Schluss?“",
+          "wahl": [
+            { "text": "„Ich glaube, ich habe alles gesagt, oder? Ich weiß jetzt auch nicht mehr, was noch fehlen könnte.“", "wert": 0, "tendenz": "entschuldigen", "weiter": "ende3", "rueck": "Das Ende ist der Platz, der hängen bleibt – hier bleibt Unsicherheit hängen." },
+            { "text": "„Kurz gesagt: Räder raus aus dem Flur, ein Euro im Monat – und den Ersatzraum kläre ich mit Frau Sommer.“", "wert": 2, "weiter": "ende1", "rueck": "Zurück zum Anfang, dazu der offene Punkt – und Frau Sommer hört, dass sie zählt." },
+            { "text": "„Ich hoffe, ihr stimmt zu.“", "wert": 1, "weiter": "ende1", "rueck": "Freundlich. Dein Kern hätte an diese Stelle gepasst." }
+          ] },
+        { "id": "ende1", "sagt": "Der Hausverwalter: „Dann stimmen wir nächsten Monat ab.“ Frau Sommer nickt dir knapp zu.", "ende": "Ein Bogen in einer Minute, der wahre Teil zuerst, eine Salve sortiert, ein Schluss-Satz – damit überstehst du auch eine Versammlung mit Gegenwind." },
+        { "id": "ende2", "sagt": "Es wird unruhig. Der Hausverwalter vertagt das Thema.", "ende": "Kein Drama – vertagt ist nicht verloren. Beim nächsten Mal: die ehrliche Antwort zuerst, Fragen zählen und einzeln beantworten." },
+        { "id": "ende3", "sagt": "Der Hausverwalter: „Gut, dann stimmen wir nächsten Monat ab.“", "ende": "Kein Drama – abgestimmt wird trotzdem. Nur das Ende ist verpufft: Beim nächsten Mal mit „Kurz gesagt: …“ schließen." }
+      ],
+      "prinzipien": ["der Bogen in einer Minute", "den wahren Teil zuerst", "eigenen Fehler offen nennen", "Fragensalve zählen und sortieren", "Schluss-Satz mit offenem Punkt"],
+      "transfer": "Wo stellst du demnächst etwas vor, bei dem jemand verlieren könnte? Was wäre dort die ehrliche Antwort im ersten Satz?"
+    },
+    {
+      "id": "stegreif-l-12", "bereich": "stegreif", "phase": "m", "umfeld": "kunden", "faehigkeiten": ["stegreif.vergleich", "stegreif.kern"], "stufe": 7,
+      "titel": "Herr Petersen und das Kundenportal", "figur": "Herr Petersen",
+      "einleitung": "Ein Kunde, der schlecht hört und keine Fachwörter mag, soll ein neues Portal nutzen. Du übst: Kern ohne Fachwort, ein Bild, das er kennt – und prüfen, ob es angekommen ist.",
+      "lage": "Herr Petersen ist im Haus. Ab nächstem Monat kommen Rechnungen über das neue Kundenportal statt per Post. Du weißt: Sobald eine Rechnung da ist, bekommt er eine Mail. Zum Anmelden braucht er sein Passwort und einen Code, der aufs Handy kommt. Wer möchte, kann die Rechnung weiterhin zusätzlich auf Papier bestellen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Herr Petersen: „Was ist das, dieses Portal? Ich bekomme meine Rechnungen doch per Post.“",
+          "wahl": [
+            { "text": "„Eine Internetseite, auf der Ihre Rechnungen liegen.“", "wert": 1, "weiter": "k2", "rueck": "Richtig und kurz. Ein Bild aus seinem Alltag hätte es greifbar gemacht." },
+            { "text": "„Ein webbasiertes Self-Service-Portal mit Zwei-Faktor-Login, in dem Sie alle Dokumente als PDF abrufen.“", "wert": 0, "tendenz": "fachwort", "weiter": "k1b", "rueck": "Fünf Fachwörter in einem Satz. Er hat keines davon gebraucht." },
+            { "text": "„Wie ein Briefkasten im Internet, nur für Sie. Kommt eine Rechnung, bekommen Sie eine Mail.“", "wert": 2, "weiter": "k2", "rueck": "Ein Bild, das er seit Jahrzehnten kennt – und gleich, was er davon merkt." }
+          ] },
+        { "id": "k1b", "sagt": "Herr Petersen, die Hand am Ohr: „Bitte noch mal – auf Deutsch.“",
+          "wahl": [
+            { "text": "Langsam: „Ein Briefkasten im Internet, nur für Sie.“", "wert": 2, "weiter": "k2", "rueck": "Gut umgeschaltet: erst das Bild, dann das, was er tun muss." },
+            { "text": "„Na ja, eine Plattform eben, für Ihre Dokumente, online, mit Login und allem.“", "wert": 0, "tendenz": "fachwort", "weiter": "ende2", "rueck": "Andere Fachwörter, dasselbe Problem." }
+          ] },
+        { "id": "k2", "sagt": "Herr Petersen: „Und warum dann noch ein Code aufs Handy?“",
+          "wahl": [
+            { "text": "„Das erkläre ich Ihnen lieber nicht im Einzelnen, das ist technisch sehr kompliziert, und das brauchen Sie ja auch gar nicht.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3", "rueck": "Gut gemeint, kommt aber an wie: „Das verstehen Sie eh nicht.“" },
+            { "text": "„Wie bei der Bank: Karte und Geheimzahl. Hier sind es Passwort und Code.“", "wert": 2, "weiter": "k3", "rueck": "Gleiches Prinzip, vertrautes Bild: eins allein reicht nicht." },
+            { "text": "„Wegen der Sicherheit.“", "wert": 1, "weiter": "k3", "rueck": "Stimmt – bleibt aber ein Wort ohne Bild." }
+          ] },
+        { "id": "k3", "sagt": "Herr Petersen: „Verstanden. Glaube ich.“",
+          "wahl": [
+            { "text": "„Gut, dann ist ja alles klar.“", "wert": 0, "tendenz": "raten", "weiter": "k3b", "rueck": "„Glaube ich“ war ein Zeichen. Ob es angekommen ist, weißt du nicht." },
+            { "text": "„Soll ich es Ihnen aufschreiben?“", "wert": 1, "weiter": "k4", "rueck": "Hilfreich. Ob er es verstanden hat, zeigt dir das aber noch nicht." },
+            { "text": "„Darf ich fragen: Was machen Sie, wenn die Mail kommt?“", "wert": 2, "weiter": "k4", "rueck": "Nachfragen statt raten. Seine Antwort zeigt dir, was angekommen ist." }
+          ] },
+        { "id": "k3b", "sagt": "Am nächsten Tag ruft er an: „Ich habe eine Mail bekommen. Was mache ich jetzt?“",
+          "wahl": [
+            { "text": "„Klicken Sie auf den Knopf in der Mail. Ich bleibe am Telefon, bis Sie drin sind.“", "wert": 2, "weiter": "k4", "rueck": "Gut aufgefangen: Schritt für Schritt, mit ihm zusammen." },
+            { "text": "„Steht doch alles in der Mail drin.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Für dich steht es da. Für ihn offenbar nicht." }
+          ] },
+        { "id": "k4", "sagt": "Herr Petersen: „Und wenn ich das alles nicht will?“",
+          "wahl": [
+            { "text": "„Das müsste ich nachfragen.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich – aber du weißt die Antwort schon." },
+            { "text": "„Dann bestellen Sie die Rechnung zusätzlich auf Papier. Das geht weiterhin.“", "wert": 2, "weiter": "ende1", "rueck": "Die ehrliche Antwort, auch wenn sie dem Portal Kunden kostet. Er bleibt dir als Kunde." },
+            { "text": "„Ab nächstem Monat geht es leider nur noch so, da kann man nichts machen, das ist inzwischen überall so.“", "wert": 0, "tendenz": "bluffen", "weiter": "ende2", "rueck": "Das stimmt nicht – Papier geht weiterhin. Merkt er es, ist dein Wort weniger wert." }
+          ] },
+        { "id": "ende1", "sagt": "Herr Petersen: „Gut. Ich probier's.“", "ende": "Kern ohne Fachwort, Bilder aus seiner Welt, nachfragen statt raten, ehrlich bei der unbequemen Frage – so erklärst du Laien etwas Neues." },
+        { "id": "ende2", "sagt": "Herr Petersen seufzt und geht zur Buchhaltung.", "ende": "Kein Drama. Beim nächsten Mal: erst das Bild, dann nachfragen, was angekommen ist – und ehrlich sagen, was auch anders geht." }
+      ],
+      "prinzipien": ["Bild vor Fachwort", "gleiches Prinzip, vertrautes Bild", "nachfragen statt raten", "ehrlich, auch wenn es unbequem ist"],
+      "transfer": "Wem erklärst du demnächst etwas Neues, der nicht vom Fach ist? Welches Bild aus seiner Welt passt?"
+    },
+    {
+      "id": "stegreif-l-13", "bereich": "stegreif", "phase": "m", "umfeld": "kollegen", "faehigkeiten": ["stegreif.assoziation", "stegreif.struktur"], "stufe": 7,
+      "titel": "Ein paar Worte an Carla", "figur": "Carla Demir",
+      "einleitung": "Beim Projektabschluss sollst du spontan Danke sagen. Du übst: einen Einstieg über das, was im Raum ist, Tat und Wirkung – und gelassen bleiben, wenn die Person abwinkt.",
+      "lage": "Projektabschluss mit Kuchen im Besprechungsraum. Carla hat das Projekt geleitet. Jede Woche hat sie eine Viertelstunde für Fragen angeboten – dadurch warst du mit dem neuen Programm schnell sicher. An der Pinnwand hängt noch ihre Liste: für jede Projektwoche ein grünes Häkchen. Dr. Albers klopft an seine Tasse.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Bevor wir anschneiden – möchten Sie ein paar Worte an Carla sagen?“",
+          "wahl": [
+            { "text": "Aufstehen, ausatmen: „Gern, ganz kurz.“", "wert": 2, "weiter": "k2", "rueck": "Zwei Sekunden gewonnen, und alle wissen: Es wird kurz. Das entspannt auch dich." },
+            { "text": "„Oh nein, ich bin echt schlecht in so was, sag du lieber was, Miriam, du kannst das viel besser als ich.“", "wert": 0, "tendenz": "entschuldigen", "weiter": "k1b", "rueck": "Verständlich. Aber dein Dank wäre ein anderer gewesen als Miriams." },
+            { "text": "Sitzen bleiben und von dort etwas sagen.", "wert": 1, "weiter": "k2", "rueck": "Geht. Im Stehen bekommt der Dank mehr Gewicht – und du mehr Luft." }
+          ] },
+        { "id": "k1b", "sagt": "Miriam lacht: „Ach komm, zwei Sätze reichen.“",
+          "wahl": [
+            { "text": "„Na gut – zwei Sätze.“ Aufstehen, ausatmen.", "wert": 2, "weiter": "k2", "rueck": "Gut: Du nimmst Miriams Angebot an. Zwei Sätze sind ein Plan." },
+            { "text": "Den Kopf schütteln und sitzen bleiben.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Darfst du. Carla hätte sich aber über deine zwei Sätze gefreut – mehr, als du denkst." }
+          ] },
+        { "id": "k2", "sagt": "Alle schauen dich an. Womit fängst du an?",
+          "wahl": [
+            { "text": "„Carla, ich möchte dir danken.“", "wert": 1, "weiter": "k3", "rueck": "Klar und herzlich. Ein Bild aus dem Raum hätte den Anfang zu deinem gemacht." },
+            { "text": "„Ein Projekt ist ja immer Teamleistung, und eigentlich haben wir alle …“", "wert": 0, "tendenz": "umweg", "weiter": "k3", "rueck": "Ein Anlauf, der von Carla wegführt. Es ist ihr Moment." },
+            { "text": "„Carla, an der Pinnwand hängt deine Liste – jedes Häkchen eine Woche, in der wir weitergekommen sind.“", "wert": 2, "weiter": "k3", "rueck": "Vom Gegenstand im Raum zur Person – ein Einstieg, den jeder sieht." }
+          ] },
+        { "id": "k3", "sagt": "Jetzt die Tat und die Wirkung.",
+          "wahl": [
+            { "text": "„Deine Viertelstunde für Fragen jede Woche – dadurch saß ich im neuen Programm schnell sicher.“", "wert": 2, "weiter": "k4", "rueck": "Eine Tat, eine Wirkung, beides konkret. Mehr braucht ein Dank nicht." },
+            { "text": "„Du hast so viel gemacht: Planung, Präsentationen, Mails, Termine, Abstimmungen, Schulungen, einfach alles …“", "wert": 0, "tendenz": "alles", "weiter": "k4", "rueck": "Eine Liste verwässert den Dank. Eine Sache, die dich wirklich berührt hat, wiegt mehr." },
+            { "text": "„Du warst immer für uns da.“", "wert": 1, "weiter": "k4", "rueck": "Warm, aber allgemein. Ein konkreter Moment bleibt besser hängen." }
+          ] },
+        { "id": "k4", "sagt": "Carla winkt verlegen ab: „Ach, das war doch selbstverständlich.“",
+          "wahl": [
+            { "text": "„Doch, doch, wirklich, das war ganz und gar nicht selbstverständlich, im Gegenteil, ehrlich, glaub mir das bitte!“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende3", "rueck": "Du diskutierst mit ihrer Bescheidenheit. Ein kurzer Satz und das Glas hätten genügt." },
+            { "text": "Lächeln: „Für dich vielleicht. Für mich war es viel wert. Auf Carla!“", "wert": 2, "weiter": "ende1", "rueck": "Das Abwinken angenommen, den Dank gehalten, mit dem Glas geschlossen." },
+            { "text": "„Na gut.“ – und hinsetzen.", "wert": 1, "weiter": "ende3", "rueck": "Freundlich, aber der Schluss fehlt. Ein „Auf Carla!“ hätte den Moment rund gemacht." }
+          ] },
+        { "id": "ende1", "sagt": "Tassen werden gehoben. Carla wird rot und lächelt dir zu.", "ende": "Ein Einstieg über das, was im Raum ist, eine Tat, eine Wirkung, ein Glas – Danke sagen braucht keine schönen Worte, nur konkrete." },
+        { "id": "ende2", "sagt": "Dr. Albers sagt selbst ein paar Worte. Dann wird angeschnitten.", "ende": "Kein Drama. Für das nächste Mal: Tat, Wirkung, Glas – zwei Sätze reichen." },
+        { "id": "ende3", "sagt": "Dr. Albers hebt die Tasse: „Auf Carla!“", "ende": "Kein Drama – der Dank ist angekommen. Beim nächsten Mal: das Abwinken annehmen, ein kurzer Satz, dann selbst das Glas heben." }
+      ],
+      "prinzipien": ["Einstieg über das, was im Raum ist", "eine Tat, eine Wirkung", "Abwinken annehmen, Dank halten", "mit dem Glas schließen"],
+      "transfer": "Wem könntest du in den nächsten Wochen konkret danken – für welche Tat, mit welcher Wirkung?"
+    },
+    {
+      "id": "stegreif-l-14", "bereich": "stegreif", "phase": "m", "umfeld": "kunden", "faehigkeiten": ["stegreif.zeit", "stegreif.jaund", "stegreif.kern"], "stufe": 8,
+      "titel": "Zwei Minuten statt zehn", "figur": "Nadine Köhler",
+      "einleitung": "Dein Plan fällt in der ersten Sekunde: Statt zehn Minuten hast du zwei. Du übst: unter Druck den Kern finden, eine unerwartete Idee annehmen und trotzdem nichts versprechen, was du nicht weißt.",
+      "lage": "Du stellst Nadine Köhler und ihrem Werkstattleiter euer Angebot vor. Geplant waren zehn Minuten mit Folien: ein fester Betrag im Monat, schnelle Hilfe bei Ausfällen, eine feste Ansprechperson – im Urlaub übernimmt eine feste Vertretung. Kaum bist du im Raum, wird klar: Die Zeit ist knapp.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Nadine Köhler: „Tut mir leid, ich habe nur zwei Minuten. Was ist das Wichtigste?“",
+          "wahl": [
+            { "text": "„Dann spreche ich einfach schneller und zeige die Folien im Schnelldurchlauf – das schaffen wir.“", "wert": 0, "tendenz": "alles", "weiter": "k1b", "rueck": "Unter Druck hält man am Plan fest. Hier hätte der Plan weichen sollen." },
+            { "text": "„Dann schicke ich Ihnen die Folien per Mail.“", "wert": 1, "weiter": "k1b", "rueck": "Höflich – aber du verschenkst die zwei Minuten, die sie dir gibt." },
+            { "text": "Ausatmen. „Ein fester Betrag im Monat – und wenn etwas ausfällt, hilft Ihnen eine feste Person.“", "wert": 2, "weiter": "k2", "rueck": "Der Plan weicht, der Kern bleibt: ein Satz, den sie sich merken kann." }
+          ] },
+        { "id": "k1b", "sagt": "Sie hebt die Hand: „Bitte keine Folien. Ein Satz.“",
+          "wahl": [
+            { "text": "„Ein fester Betrag im Monat und eine feste Person, wenn etwas ausfällt.“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: Der Kern passt in einen Satz." },
+            { "text": "„In einem Satz geht das leider nicht, dafür ist unser Angebot einfach zu umfangreich.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Wer den Kern nicht in einem Satz sagt, sagt ihn in zwei Minuten auch nicht." }
+          ] },
+        { "id": "k2", "sagt": "Der Werkstattleiter: „Und wenn Ihre feste Person im Urlaub ist?“",
+          "wahl": [
+            { "text": "„Das passiert eigentlich nie, unsere Leute sind fast immer da, und wenn doch, findet sich schon irgendwer.“", "wert": 0, "tendenz": "bluffen", "weiter": "k3", "rueck": "Eine Beruhigung ohne Grundlage – und dabei gibt es eine echte Antwort." },
+            { "text": "„Dann übernimmt eine feste Vertretung. Sie wissen also immer, wen Sie anrufen.“", "wert": 2, "weiter": "k3", "rueck": "Kurz, wahr und mit dem Nutzen für ihn." },
+            { "text": "„Das regeln wir dann schon.“", "wert": 1, "weiter": "k3", "rueck": "Gut gemeint, aber vage – dabei weißt du es genau." }
+          ] },
+        { "id": "k3", "sagt": "Nadine Köhler: „Könnten Sie das Paket nicht gleich auch für unsere zweite Werkstatt anbieten?“ Davon war nie die Rede.",
+          "wahl": [
+            { "text": "„Darüber müsste ich erst mit meinem Chef sprechen.“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich – aber die Idee bekommt keinen Schwung." },
+            { "text": "„Nein, das Paket gilt nur für einen Standort.“", "wert": 0, "tendenz": "abblocken", "weiter": "k4", "rueck": "Schnell zugemacht, ohne es zu wissen – vielleicht wäre es ein zweiter Auftrag gewesen." },
+            { "text": "„Ja, und dann läuft in beiden Werkstätten alles gleich. Ob wir das schaffen, kläre ich bis Freitag.“", "wert": 2, "weiter": "k4", "rueck": "Die Idee angenommen und ausgebaut – und ehrlich, was du noch nicht weißt." }
+          ] },
+        { "id": "k4", "sagt": "Nadine Köhler steht auf: „Ich muss los. Ein Satz zum Mitnehmen?“",
+          "wahl": [
+            { "text": "„Vielleicht kann ich ganz schnell noch die Folie mit den Preisstufen zeigen, das dauert nur eine Sekunde, wirklich …“", "wert": 0, "tendenz": "alles", "weiter": "ende2", "rueck": "Sie steht schon. Jetzt zählt nur noch ein Satz." },
+            { "text": "„Rufen Sie mich einfach an.“", "wert": 1, "weiter": "ende1", "rueck": "Freundlich. Dein Kern hätte an diese Stelle gehört." },
+            { "text": "„Ein Betrag, eine feste Person, schnelle Hilfe – und die zweite Werkstatt kläre ich bis Freitag.“", "wert": 2, "weiter": "ende1", "rueck": "Kern und offener Punkt mit Termin. Sie geht mit genau dem, was zählt." }
+          ] },
+        { "id": "ende1", "sagt": "Nadine Köhler, schon in der Tür: „Gut. Wir hören voneinander.“", "ende": "Fällt der Plan in der ersten Sekunde, zählt der Kern: ein Satz statt zehn Folien, eine unerwartete Idee annehmen, nichts versprechen, was du nicht weißt – daran misst du schnelles Denken unter Druck." },
+        { "id": "ende2", "sagt": "Sie ist schon zur Tür hinaus. Der Werkstattleiter zuckt mit den Schultern.", "ende": "Kein Drama – zwei Minuten sind hart. Beim nächsten Mal: Plan loslassen, Kern in einen Satz, Schluss mit Termin." }
+      ],
+      "prinzipien": ["der Plan darf weichen, der Kern bleibt", "ein Satz statt Schnelldurchlauf", "Ja, und für die unerwartete Idee", "nichts versprechen, was du nicht weißt"],
+      "transfer": "Was ist der Kern deines nächsten Vorschlags – in einem Satz, falls du nur zwei Minuten bekommst?"
+    },
+    {
+      "id": "stegreif-l-15", "bereich": "stegreif", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["stegreif.struktur", "stegreif.kern", "stegreif.zeit", "stegreif.vergleich", "stegreif.jaund", "stegreif.assoziation"], "stufe": 8, "sparring": true,
+      "titel": "Sparring: Der Tag der offenen Tür", "figur": "die Geschäftsführerin und die Gäste",
+      "einleitung": "Das Sparring zum Abschluss der Meisterschaft: ohne Vorwarnung auf der Bühne. Du übst alles zusammen – ein erster Satz, eine Erklärung für ein Kind, eine unbequeme Frage, eine Panne und ein Dank.",
+      "lage": "Tag der offenen Tür. Rund vierzig Gäste: Nachbarn, Familien, ein paar Kunden. Eigentlich führst du nur durch deine Abteilung. Da reicht dir die Geschäftsführerin auf der kleinen Bühne das Mikrofon. Was du weißt: Deine Abteilung sorgt dafür, dass Bestellungen am selben Tag das Haus verlassen. Im Herbst wurden wegen eines neuen Programms zwei frei gewordene Stellen nicht neu besetzt; entlassen wurde niemand. Dein Team hat die Stände für heute seit Wochen vorbereitet.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Die Geschäftsführerin: „Erzählen Sie unseren Gästen doch, was Ihre Abteilung macht!“",
+          "wahl": [
+            { "text": "„Wir kümmern uns um die Bestellungen.“", "wert": 1, "weiter": "k2", "rueck": "Richtig. Was die Gäste davon haben, fehlt noch – und damit ein Satz, der hängen bleibt." },
+            { "text": "„Wenn Sie heute bei uns bestellen, verlässt Ihre Bestellung heute noch das Haus. Dafür sorgen wir.“", "wert": 2, "weiter": "k2", "rueck": "Ein erster Satz aus Sicht der Gäste – und schon steht der Bogen." },
+            { "text": "„Oh, äh, das ist ziemlich trocken, ich weiß nicht, ob das die Gäste wirklich interessiert …“", "wert": 0, "tendenz": "abwerten", "weiter": "k2", "rueck": "Du redest deine Arbeit klein, bevor du sie erklärt hast." }
+          ] },
+        { "id": "k2", "sagt": "Ein Kind in der ersten Reihe ruft: „Und was ist eine Bestellung?“ Einige lachen.",
+          "wahl": [
+            { "text": "„Das erklärt dir nachher jemand anderes.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k3", "rueck": "Die schönste Frage des Tages – und du gibst sie weiter." },
+            { "text": "„Wenn jemand bei uns etwas kauft.“", "wert": 1, "weiter": "k3", "rueck": "Stimmt. Ein Bild aus der Welt des Kindes hätte alle mitgenommen." },
+            { "text": "„Wie ein Wunschzettel: Jemand schreibt auf, was er haben will – und wir packen es ein und schicken es los.“", "wert": 2, "weiter": "k3", "rueck": "Ein Bild, das jedes Kind kennt – und die Erwachsenen verstehen es auch." }
+          ] },
+        { "id": "k3", "sagt": "Ein Mann in der zweiten Reihe: „Und wie viele Leute habt ihr wegen dem neuen Programm rausgeworfen?“",
+          "wahl": [
+            { "text": "„Darüber spreche ich heute nicht, das ist ein Tag zum Feiern und nicht für solche Fragen.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k3b", "rueck": "Vierzig Leute haben die Frage gehört. Ohne Antwort bleibt der Vorwurf stehen." },
+            { "text": "„Rausgeworfen wurde niemand. Zwei frei gewordene Stellen haben wir nicht neu besetzt – das stimmt.“", "wert": 2, "weiter": "k4", "rueck": "Die Unterstellung richtiggestellt, den wahren Teil zugegeben. Mehr kann niemand verlangen." },
+            { "text": "„Niemand wurde entlassen.“", "wert": 1, "weiter": "k4", "rueck": "Wahr – aber ein Teil fehlt. Kommt er später heraus, wirkt der Satz wie Ausweichen." }
+          ] },
+        { "id": "k3b", "sagt": "Der Mann: „Also doch!“ Einige Gäste schauen dich an.",
+          "wahl": [
+            { "text": "„Nein. Entlassen wurde niemand. Zwei frei gewordene Stellen haben wir nicht neu besetzt.“", "wert": 2, "weiter": "k4", "rueck": "Gut gefangen: jetzt doch die ehrliche Antwort, ruhig und vollständig." },
+            { "text": "„Ich sage dazu jetzt nichts mehr.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Schweigen wirkt hier wie ein Ja." }
+          ] },
+        { "id": "k4", "sagt": "Plötzlich fällt das Mikrofon aus. Von hinten ruft jemand: „Wir hören nichts!“",
+          "wahl": [
+            { "text": "Am Mikrofon herumdrücken und leise weiterreden, bis es hoffentlich wieder geht.", "wert": 0, "tendenz": "schwimmen", "weiter": "k5", "rueck": "Die Hälfte des Saals ist jetzt raus." },
+            { "text": "Einen Schritt nach vorn, lauter: „Dann ohne Technik – kommen Sie ruhig näher!“", "wert": 2, "weiter": "k5", "rueck": "Die Panne als Angebot genommen: Ja, und – die Gäste rücken näher, die Stimmung steigt." },
+            { "text": "Warten, bis jemand das Mikrofon repariert.", "wert": 1, "weiter": "k5", "rueck": "Ruhig – aber die Pause gehört jetzt der Technik statt dir." }
+          ] },
+        { "id": "k5", "sagt": "Die Geschäftsführerin: „Und zum Schluss – ein Wort an Ihr Team?“",
+          "wahl": [
+            { "text": "„Danke an alle!“", "wert": 1, "weiter": "ende1", "rueck": "Herzlich. Mit der Tat – den Ständen – wäre es ein Dank geworden, der trifft." },
+            { "text": "„Ihr habt diese Stände seit Wochen vorbereitet – dass heute alles läuft, ist euer Werk. Danke euch!“", "wert": 2, "weiter": "ende1", "rueck": "Tat, Wirkung, Dank – und ein Schluss, bei dem dein Team strahlt." },
+            { "text": "„Ich weiß gar nicht, wen ich alles nennen soll, da waren so viele beteiligt, ich will ja niemanden vergessen …“", "wert": 0, "tendenz": "entschuldigen", "weiter": "ende2", "rueck": "Die Sorge, jemanden zu vergessen, frisst den Dank. „Mein Team“ schließt alle ein." }
+          ] },
+        { "id": "ende1", "sagt": "Applaus. Die Geschäftsführerin nimmt das Mikrofon zurück und bittet die Gäste an die Stände.", "ende": "Ohne Vorwarnung auf der Bühne zählt: ein erster Satz aus Sicht der Gäste, ein Bild für ein Kind, eine ehrliche Antwort auf einen Vorwurf, eine Panne als Angebot, ein konkreter Dank. Meisterschaft im Stegreif heißt nicht fehlerfrei, sondern mit Plan." },
+        { "id": "ende2", "sagt": "Die Geschäftsführerin übernimmt das Mikrofon und leitet zum Buffet über.", "ende": "Kein Drama – die Bühne ohne Vorwarnung ist eine der schwersten Lagen. Für das nächste Mal: der wahre Teil zuerst, die Panne annehmen, der Dank mit einer Tat." }
+      ],
+      "prinzipien": ["erster Satz aus Sicht der Zuhörer", "ein Bild für Laien", "Unterstellung richtigstellen, Wahres zugeben", "die Panne als Angebot", "Dank mit Tat und Wirkung"],
+      "transfer": "Bei welchem Anlass könntest du ohne Vorwarnung nach vorn gebeten werden? Wie hieße dein erster Satz?"
+    }
+  ]
+}

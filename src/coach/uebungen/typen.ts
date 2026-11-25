@@ -1,5 +1,5 @@
 // Der Coach — gemeinsame Schnittstelle der Übungsbausteine.
-import type { BuchEintrag } from '../kern/typen'
+import type { BuchEintrag, EigeneLeiter, Ernstfall } from '../kern/typen'
 
 export interface Ergebnis {
   /** 0..1; fehlt bei ungewerteten Schritten (Karte, Atem, Reflexion …) */
@@ -19,6 +19,11 @@ export interface Ergebnis {
   spaeterLaut?: string
   /** Zähler einrichten (steht dann `tage` Tage auf „Heute“) */
   zaehler?: { name: string; tage: number }
+  /** Stufe 2: Ernstfall eingetragen, eigene Leiter gebaut, Werte gewählt, Lebensrad eingeschätzt */
+  ernstfall?: Ernstfall
+  leiter?: EigeneLeiter
+  werte?: string[]
+  lebensrad?: Record<string, number>
 }
 
 export interface BausteinProps<S> {

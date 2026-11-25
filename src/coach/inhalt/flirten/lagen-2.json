@@ -1,0 +1,245 @@
+{
+  "lagen": [
+    {
+      "id": "flirten-l-06", "bereich": "flirten", "phase": "k", "umfeld": "kennenlernen", "faehigkeiten": ["flirten.gespraech", "flirten.zeigen", "flirten.haltung"], "stufe": 5,
+      "titel": "Nach der Wanderung", "figur": "eine Person aus dem Wanderverein",
+      "einleitung": "Nach einer Vereinswanderung sitzt ihr noch in der Einkehr. Du übst, ein Gespräch eine Ebene tiefer zu tragen, Zeichen zu lesen und am Ende leicht ablehnbar einzuladen.",
+      "lage": "Sonntag, Wanderverein. Nach zwölf Kilometern sitzt du in der Gaststube neben einer Person, mit der du unterwegs schon ein paarmal gelacht hast. Die anderen reden über das Wetter.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Die Person streckt die Beine aus. „Puh. Ich bin erst seit dem Frühjahr dabei. Ehrlich gesagt war ich vorher jahrelang kaum draußen.“",
+          "wahl": [
+            { "text": "„Was hat dich im Frühjahr rausgebracht?“", "wert": 2, "weiter": "k2", "rueck": "Du greifst das „kaum draußen“ auf und fragst nach dem Erleben – eine Ebene tiefer, ohne zu bohren." },
+            { "text": "„Seit dem Frühjahr? Ich bin schon seit acht Jahren im Verein und kenne fast jede Strecke hier.“", "wert": 0, "tendenz": "uebertrumpfen", "weiter": "k2", "rueck": "Jetzt geht es um dich. Ihr offener Satz bleibt liegen." },
+            { "text": "„Und wo wohnst du?“", "wert": 1, "tendenz": "ausfragen", "weiter": "k2", "rueck": "Freundlich, aber zurück auf die Fakten-Ebene. Sie hatte dir etwas Persönlicheres angeboten." }
+          ] },
+        { "id": "k2", "sagt": "Sie erzählt weiter: „Im Winter hab ich den Job gewechselt und gemerkt, dass ich die Wochenenden nur noch verschlafe. Da dachte ich: Jetzt oder nie.“",
+          "wahl": [
+            { "text": "„Mutig. Bei mir war's das Laufen, das mich rausgeholt hat. Bereust du's?“", "wert": 2, "weiter": "k3", "rueck": "Würdigen, etwas Eigenes in ähnlicher Tiefe, eine offene Frage – so wird es ein Wechsel, kein Verhör." },
+            { "text": "„Was war das für ein Job? Und was machst du jetzt?“", "wert": 1, "tendenz": "ausfragen", "weiter": "k3", "rueck": "Interessiert, aber zwei Fakten-Fragen auf einmal. Das „Jetzt oder nie“ wäre die tiefere Tür gewesen." },
+            { "text": "„Na ja, Wochenenden verschlafen ist doch auch nicht schlimm, das machen doch die meisten so.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3", "rueck": "Gut gemeint, aber es wischt weg, was ihr wichtig war." }
+          ] },
+        { "id": "k3", "sagt": "Sie erzählt lebhaft, lacht über ihre erste Wanderung mit falschen Schuhen und fragt dich zurück, welche Strecke deine liebste ist. Die anderen brechen langsam auf.",
+          "wahl": [
+            { "text": "„Ich hab mich gern mit dir unterhalten. Samstag die Strecke am See? Kein Muss.“", "wert": 2, "weiter": "k4", "rueck": "Interesse in einem Satz, ein kleiner, konkreter Vorschlag, der Ausweg dabei." },
+            { "text": "„Wir sehen uns ja beim nächsten Vereinstermin.“", "wert": 1, "weiter": "ende2", "rueck": "Freundlich und ohne Druck. Ob dir das Gespräch etwas bedeutet hat, weiß sie so aber nicht." },
+            { "text": "„Komm, wir bleiben einfach noch hier sitzen, die anderen brauchen wir doch nicht. Noch ein Bier?“", "wert": 0, "tendenz": "druck", "weiter": "k3b", "rueck": "Ohne Frage, ob sie will – und weg von der Gruppe. Für sie wird es eng." }
+          ] },
+        { "id": "k3b", "sagt": "Sie zögert und schaut zu den anderen. „Ich glaub, ich fahr mit dem Bus mit.“",
+          "wahl": [
+            { "text": "„Klar, gute Heimfahrt! War schön mit dir.“", "wert": 2, "weiter": "ende2", "rueck": "Ihr Zögern gehört, sofort angenommen, freundlich verabschiedet." },
+            { "text": "„Ach komm, der nächste Bus kommt doch auch.“", "wert": 0, "tendenz": "beharren", "weiter": "ende3", "rueck": "Ein Zögern ist ein Nein. Wer es verhandelt, macht ihr den Abschied schwer." }
+          ] },
+        { "id": "k4", "sagt": "Sie lächelt. „Samstag bin ich bei meiner Schwester. Aber Sonntag ginge.“",
+          "wahl": [
+            { "text": "„Sonntag passt. Um zehn am Parkplatz am See?“", "wert": 2, "weiter": "ende1", "rueck": "Ein Gegenvorschlag ist ein Ja. Du machst es sofort konkret." },
+            { "text": "„Oh, cool – Sonntag, oder wann immer du willst, ich bin flexibel, sag einfach, was dir passt.“", "wert": 1, "weiter": "ende4", "rueck": "Herzlich. Ein klarer Vorschlag für Ort und Zeit nimmt ihr die Planung ab." },
+            { "text": "„Schade, Samstag wär besser gewesen.“", "wert": 0, "tendenz": "vorwurf", "weiter": "ende4", "rueck": "Sie hat Ja gesagt – nur an einem anderen Tag. Ein Seufzer macht aus dem Ja ein Problem." }
+          ] },
+        { "id": "ende1", "sagt": "Ihr tauscht Nummern. Auf dem Heimweg schreibt sie: „Freu mich auf Sonntag. Diesmal mit richtigen Schuhen.“", "ende": "Die Einladung hat getragen, und den Gegenvorschlag hast du sofort festgemacht – ein Gegenvorschlag ist ein Ja. Was das Gespräch davor trägt: eine Ebene tiefer fragen und etwas von dir dazulegen." },
+        { "id": "ende4", "sagt": "Sie schlägt selbst Uhrzeit und Treffpunkt vor. Ihr tauscht Nummern.", "ende": "Das Treffen steht – Ort und Zeit musste aber sie festlegen. Beim nächsten Mal: einen Gegenvorschlag freudig annehmen, ohne Seufzer, und gleich selbst konkret machen." },
+        { "id": "ende2", "sagt": "Ihr verabschiedet euch freundlich. Beim nächsten Termin grüßt sie dich, ihr redet kurz.", "ende": "Ein gutes Gespräch, aber dein Interesse blieb unsichtbar oder die Einladung ohne Frage. Beim nächsten Mal: in einem Satz sagen, dass es dir gefallen hat – und klein, konkret, mit Ausweg einladen." },
+        { "id": "ende3", "sagt": "Sie lacht verlegen, nimmt ihre Jacke und geht schnell zum Bus.", "ende": "Ein Zögern verhandelt, weg von der Gruppe gedrängt – damit war das schöne Gespräch verdorben. Beim nächsten Mal: fragen statt bestimmen, und ein Zögern sofort gelten lassen." }
+      ],
+      "prinzipien": ["eine Ebene tiefer, im Wechsel", "etwas Eigenes dazulegen", "Interesse in einem Satz zeigen", "klein, konkret, mit Ausweg einladen", "ein Zögern gilt sofort"],
+      "transfer": "In welcher Gruppe kennst du jemanden, mit dem du nur über Fakten redest? Welche Frage würde eine Ebene tiefer gehen?"
+    },
+    {
+      "id": "flirten-l-07", "bereich": "flirten", "phase": "k", "umfeld": "freunde", "faehigkeiten": ["flirten.dranbleiben", "flirten.ansprechen", "flirten.zeigen"], "stufe": 5,
+      "titel": "Svens Regeln fürs Schreiben", "figur": "Sven",
+      "einleitung": "Nach einem Konzert hast du eine Nummer bekommen. Sven hat ein paar „Regeln“ parat. Du übst, ehrlich zu schreiben statt zu taktieren, ein Treffen vorzuschlagen und mit einer Absage umzugehen.",
+      "lage": "Montagabend. Am Samstag hast du nach einem Konzert lange mit einer Person geredet, am Ende habt ihr Nummern getauscht. Sven sitzt bei dir auf dem Sofa und schaut dir über die Schulter.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Sven: „Schreib ihr bloß nicht zuerst. Und wenn sie schreibt: mindestens drei Stunden warten. Sonst wirkst du verzweifelt.“",
+          "wahl": [
+            { "text": "„Ich schreib einfach, dass mir der Abend gefallen hat. Wartespiele sind nicht meins.“", "wert": 2, "weiter": "k2", "rueck": "Ehrliches Interesse statt Spielregeln. Für Wartespiele gibt es keine Belege – für übersehenes Interesse schon." },
+            { "text": "„Okay, ich warte, bis sie sich meldet.“", "wert": 1, "weiter": "k1b", "rueck": "Kein Druck – aber wenn beide warten, schreibt niemand." },
+            { "text": "„Gute Idee – ich schreib erst am Donnerstag, dann wird sie richtig neugierig auf mich.“", "wert": 0, "tendenz": "taktieren", "weiter": "k1b", "rueck": "Ein Spiel mit der Uhr. Neugier durch Unsicherheit ist keine Nähe." }
+          ] },
+        { "id": "k1b", "sagt": "Donnerstag. Keine Nachricht von ihr. Sven zuckt die Schultern.",
+          "wahl": [
+            { "text": "Jetzt schreiben: „Hey, ich denk noch an unser Gespräch über die Vorband. Gutes Wochenende gehabt?“", "wert": 2, "weiter": "k2", "rueck": "Eine Nachricht mit Bezug, ohne Spiel – dann ist sie dran." },
+            { "text": "Nichts schreiben – sie hätte sich ja auch melden können, schließlich hat sie deine Nummer genauso.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Ihr habt beide gewartet. So schläft ein guter Anfang ein." }
+          ] },
+        { "id": "k2", "sagt": "Sie antwortet nach einer Stunde, freundlich und ausführlich, mit einer Gegenfrage. Ihr schreibt ein paar Tage hin und her. Sven: „Jetzt halt sie schön auf Abstand, damit sie sich bemüht.“",
+          "wahl": [
+            { "text": "„Nö.“ – und schreibst: „Lust auf einen Kaffee am Sonntag? Wenn nicht, alles gut.“", "wert": 2, "weiter": "k3", "rueck": "Du holst das Gespräch aus dem Chat in eine Begegnung – klar und leicht ablehnbar." },
+            { "text": "Weiterschreiben wie bisher, ohne Vorschlag.", "wert": 1, "weiter": "ende2", "rueck": "Freundlich. Nur: Ob es passt, zeigt sich im Treffen, nicht im Chat." },
+            { "text": "Einen Tag gar nicht antworten und danach wieder besonders charmant schreiben, wie Sven sagt.", "wert": 0, "tendenz": "taktieren", "weiter": "ende2", "rueck": "Heiß und kalt erzeugt Unsicherheit statt Nähe – und ist eine Masche aus den Verführungsratgebern." }
+          ] },
+        { "id": "k3", "sagt": "Ihre Antwort: „Sonntag klappt leider nicht, sorry! Ich hab gerade viel um die Ohren.“",
+          "wahl": [
+            { "text": "„Kein Problem! Wenn du mal Luft hast und Lust, sag Bescheid.“", "wert": 2, "weiter": "k4", "rueck": "Freundlich, Ball abgegeben. Ob „viel um die Ohren“ ein Aufschub oder ein leises Nein ist, entscheidet sie." },
+            { "text": "„Und Montag? Oder Dienstag? Mittwoch hätte ich auch Zeit.“", "wert": 0, "tendenz": "beharren", "weiter": "ende3", "rueck": "Drei neue Termine nach einer Absage. Sie soll dreimal Nein sagen." },
+            { "text": "„Schade.“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich. Ein Satz mehr Wärme hätte gezeigt, dass die Tür offen steht." }
+          ] },
+        { "id": "k4", "sagt": "Eine Woche später schreibt sie: „So, wieder Luft! Steht der Kaffee noch?“ Sven grinst: „Lass sie ein bisschen zappeln.“",
+          "wahl": [
+            { "text": "„Ja, gern! Samstag um drei im Café am Park?“", "wert": 2, "weiter": "ende1", "rueck": "Ein Ja ist ein Ja – du machst es sofort konkret. Zappeln lassen ist ein Spiel, kein Interesse." },
+            { "text": "„Mal sehen, ob ich da kann.“ – obwohl du kannst.", "wert": 0, "tendenz": "taktieren", "weiter": "ende4", "rueck": "Eine kleine Unehrlichkeit, damit du begehrter wirkst. Sie merkt eher Kühle als Begehren." },
+            { "text": "„Na endlich, ich dachte schon, das wird nix mehr.“", "wert": 1, "weiter": "ende4", "rueck": "Ehrliche Freude – mit einem kleinen Vorwurf im Gepäck. Ein schlichtes „Ja, gern!“ wäre leichter." }
+          ] },
+        { "id": "ende1", "sagt": "Samstag, drei Uhr. Sie kommt pünktlich und erzählt als Erstes von der Vorband.", "ende": "Als sie sich meldete, hast du sofort festgemacht – ohne Zappelnlassen. Was den ganzen Weg trägt: ehrlich schreiben, bald ein Treffen vorschlagen, eine Absage ohne Nachhaken annehmen. Svens Regeln braucht es dafür nicht." },
+        { "id": "ende4", "sagt": "Sie schreibt: „Okay … sag einfach, wann.“ Das Treffen kommt zustande, ihre Freude klingt gedämpft.", "ende": "Fast. Auf ein Ja passt ein schlichtes „Ja, gern!“ mit Ort und Zeit – ohne Vorwurf und ohne Zappelnlassen." },
+        { "id": "ende2", "sagt": "Zwei Wochen später ist Funkstille. Keiner von euch schreibt mehr.", "ende": "Der Anfang ist eingeschlafen – durch Warten, ein Spiel mit der Uhr oder weil niemand ein Treffen vorgeschlagen hat. Beim nächsten Mal: schreiben, wenn du Lust hast, sagen, was du meinst – und ein Treffen vorschlagen." },
+        { "id": "ende3", "sagt": "Sie antwortet nur noch knapp: „Ich meld mich.“ Es kommt nichts mehr.", "ende": "Eine Absage mit drei neuen Terminen zu beantworten, macht aus einer Einladung Druck. Beim nächsten Mal: einmal Tür offen lassen, dann ist sie dran." }
+      ],
+      "prinzipien": ["schreiben, wenn du Lust hast – nicht nach Regeln", "eine Nachricht, dann ist der andere dran", "bald ein Treffen vorschlagen", "eine Absage nicht mit neuen Terminen beantworten", "ein Ja sofort festmachen"],
+      "transfer": "Welche „Regel“ fürs Schreiben hast du schon mal befolgt, obwohl sie sich falsch anfühlte? Was würdest du heute stattdessen schreiben?"
+    },
+    {
+      "id": "flirten-l-08", "bereich": "flirten", "phase": "k", "umfeld": "kennenlernen", "faehigkeiten": ["flirten.gespraech", "flirten.haltung", "flirten.signale"], "stufe": 6,
+      "titel": "Das erste Treffen am Fluss", "figur": "ein Kontakt aus einer App",
+      "einleitung": "Ein erstes Treffen nach zwei Wochen Schreiben. Du übst, es sicher und leicht zu halten, das Gespräch zu tragen, Zeichen zu lesen – und an einer Stelle eine Grenze zu setzen, ohne den Abend zu verderben.",
+      "lage": "Samstag, später Nachmittag. Ihr habt euch an der Uferpromenade verabredet, viel los, Eisdiele, Bänke. Du bist allein mit dem Rad gekommen und hast einer Freundin gesagt, wo du bist. Die Person kommt mit zwei Minuten Verspätung und winkt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "„Hi! Sorry, die Bahn. Du siehst genau aus wie auf deinem Foto – das ist ja schon mal was.“ Er lacht etwas nervös.",
+          "wahl": [
+            { "text": "„Du auch! Ich bin auch ein bisschen aufgeregt. Eis und ein Stück am Wasser entlang?“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst seine Nervosität auf, zeigst deine und machst einen leichten Vorschlag." },
+            { "text": "„Zwei Minuten zu spät – na, das fängt ja gut an. Hoffentlich wird das keine Gewohnheit.“", "wert": 0, "tendenz": "vorwurf", "weiter": "k2", "rueck": "Als Scherz gemeint, kommt es als Vorwurf an. Er fühlt sich gleich geprüft." },
+            { "text": "„Hi. Wollen wir?“", "wert": 1, "weiter": "k2", "rueck": "Freundlich und knapp. Auf sein kleines Geständnis einzugehen hätte gleich Nähe geschaffen." }
+          ] },
+        { "id": "k2", "sagt": "Ihr lauft am Wasser entlang. Er erzählt, dass er Erzieher ist und am liebsten mit den Kindern im Wald ist. Dann fragt er nach deinem Job.",
+          "wahl": [
+            { "text": "Kurz antworten und zurückfragen: „Was mögen die Kinder im Wald am meisten?“", "wert": 2, "weiter": "k3", "rueck": "Du gibst etwas von dir und greifst seinen Aufhänger auf. Beide kommen zu Wort." },
+            { "text": "Ausführlich von deinem Projekt erzählen, deinen Erfolgen und dem nächsten Karriereschritt.", "wert": 0, "tendenz": "angeben", "weiter": "k3", "rueck": "Ein Vortrag über dich. Sein Wald bleibt liegen." },
+            { "text": "„Ach, nichts Spannendes.“", "wert": 1, "weiter": "k3", "rueck": "Bescheiden, aber er bekommt nichts zum Aufgreifen. Ein Stück von dir gehört dazu." }
+          ] },
+        { "id": "k3", "sagt": "Es ist eine gute Stunde. Er lacht viel, fragt nach, bleibt an der Brücke stehen. Dann: „Ich wohn gleich da vorn. Sollen wir zu mir, ich hab noch Wein da?“",
+          "wahl": [
+            { "text": "„Heute lieber nicht – aber ich hab echt Spaß. Noch einen Kaffee da drüben?“", "wert": 2, "weiter": "k4", "rueck": "Klare Grenze, freundlich, und ein Gegenvorschlag an einem öffentlichen Ort. Du entscheidest, wo ihr seid." },
+            { "text": "Mitgehen, obwohl du dich dabei unwohl fühlst – du willst nicht unhöflich sein.", "wert": 0, "tendenz": "nachgeben", "weiter": "k3b", "rueck": "Höflichkeit ist kein Grund, gegen dein Gefühl zu handeln. Beim ersten Treffen ist ein öffentlicher Ort dein gutes Recht." },
+            { "text": "„Nein danke, ich geh dann mal.“ – und schnell aufs Rad.", "wert": 1, "weiter": "ende3", "rueck": "Völlig in Ordnung, wenn du gehen willst – du schuldest keine Erklärung. Wolltest du eigentlich bleiben, hätte ein Gegenvorschlag den Abend gerettet." }
+          ] },
+        { "id": "k3b", "sagt": "Vor seiner Haustür merkst du, dass du nicht hochwillst.",
+          "wahl": [
+            { "text": "„Ich hab's mir anders überlegt – ich fahr jetzt heim. Danke für den schönen Nachmittag.“", "wert": 2, "weiter": "ende3", "rueck": "Gut zurückgeholt. Du darfst deine Meinung jederzeit ändern – auch vor der Tür." },
+            { "text": "Doch mit hochgehen, um ihn nicht zu enttäuschen.", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Seine Enttäuschung wäre seine. Dein Unbehagen ist ein Zeichen, das zählt." }
+          ] },
+        { "id": "k4", "sagt": "Er nickt sofort. „Klar, gute Idee.“ Beim Kaffee erzählt er weiter, ihr lacht über einen Hund, der Enten jagt. Es wird langsam dunkel.",
+          "wahl": [
+            { "text": "„Ich fand's richtig schön heute. Ich würde dich gern wiedersehen.“", "wert": 2, "weiter": "ende1", "rueck": "Ein klarer Satz, ohne Forderung. Er weiß jetzt, woran er ist." },
+            { "text": "Nichts sagen und hoffen, dass er schreibt.", "wert": 1, "weiter": "ende4", "rueck": "Kein Druck – aber er hat deine Grenze gehört und weiß vielleicht nicht, ob du ihn magst." },
+            { "text": "„Das mit dem Wein vorhin war übrigens echt daneben.“", "wert": 0, "tendenz": "vorwurf", "weiter": "ende4", "rueck": "Er hat dein Nein sofort angenommen. Es nachträglich vorzuhalten, macht aus einer gelösten Lage einen Streit." }
+          ] },
+        { "id": "ende1", "sagt": "Er strahlt. „Ich dich auch.“ Ihr verabschiedet euch an der Brücke, jeder fährt seinen Weg.", "ende": "Eine Grenze freundlich gesetzt, einen Gegenvorschlag gemacht und am Ende gesagt, was dir gefällt – so fühlt sich ein erstes Treffen für beide gut an. Dazu gehört auch das Gespräch davor: aufgreifen und etwas von dir geben." },
+        { "id": "ende2", "sagt": "Oben fühlst du dich die ganze Zeit unwohl und gehst nach einer halben Stunde.", "ende": "Aus Höflichkeit mitzugehen ist menschlich – und verpflichtet dich zu nichts. Gut, dass du gegangen bist. Beim nächsten Mal: Beim ersten Treffen ist ein öffentlicher Ort dein gutes Recht, und deine Meinung darfst du bis zuletzt ändern." },
+        { "id": "ende3", "sagt": "Du fährst heim und schreibst der Freundin, dass du gut angekommen bist.", "ende": "Du hast auf dich geachtet – das zählt. Wolltest du ihn eigentlich wiedersehen, sag es ihm: Ein Nein zur Wohnung ist kein Nein zur Person." },
+        { "id": "ende4", "sagt": "Ihr verabschiedet euch etwas steif. Am nächsten Tag kommt eine kurze Nachricht: „Danke für gestern.“", "ende": "Die Grenze war richtig. Danach blieb dein Interesse unsichtbar oder kam als Vorwurf an. Beim nächsten Mal: Eine angenommene Grenze nicht nachtragen – und sagen, wenn es dir gefallen hat." }
+      ],
+      "prinzipien": ["belebter Ort, eigener Heimweg, jemand weiß Bescheid", "aufgreifen und etwas von dir geben", "eine Grenze freundlich setzen, Gegenvorschlag machen", "die eigene Meinung jederzeit ändern dürfen", "sagen, wenn es gefällt"],
+      "transfer": "Was ist dir bei einem ersten Treffen wichtig, damit du dich sicher fühlst? Und welcher Satz hilft dir, eine Grenze freundlich zu setzen?"
+    },
+    {
+      "id": "flirten-l-09", "bereich": "flirten", "phase": "k", "umfeld": "freunde", "faehigkeiten": ["flirten.haltung", "flirten.signale", "flirten.korb"], "stufe": 6,
+      "titel": "Svens Wochenendseminar", "figur": "Sven",
+      "einleitung": "Sven kommt von einem Seminar über „Verführung“ und will die Tricks auf einer Feier ausprobieren. Du übst, Maschen zu erkennen, einem Freund ehrlich zu widersprechen und einzugreifen, wenn jemand bedrängt wird – ohne die Bühne zu übernehmen.",
+      "lage": "Samstag, Gartenfeier bei Freunden. Sven hat ein Wochenendseminar „Flirten wie ein Profi“ besucht und ist begeistert. Er steht mit dir am Grill.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "„Pass auf: Ich sag der Frau da drüben gleich, ihre Frisur sei ‚mutig für ihr Alter‘. Das verunsichert, dann will sie mir gefallen. Hab ich gelernt.“",
+          "wahl": [
+            { "text": "„Würde das auch klappen, wenn sie wüsste, was du vorhast? Wenn nicht, lass es.“", "wert": 2, "weiter": "k2", "rueck": "Der Transparenz-Test – ehrlich und ohne Sven abzuwerten." },
+            { "text": "„Mach doch einfach, mal sehen, was passiert – schlimmer als ein Korb kann es ja nicht werden.“", "wert": 0, "tendenz": "verharmlosen", "weiter": "k1b", "rueck": "Die verdeckte Abwertung ist eine Masche, die aufs Selbstwertgefühl zielt. Zuschauen macht sie nicht harmloser." },
+            { "text": "„Ich glaub, das kommt nicht gut an.“", "wert": 1, "weiter": "k2", "rueck": "Richtig. Ein Satz, warum, würde Sven mehr zum Nachdenken bringen." }
+          ] },
+        { "id": "k1b", "sagt": "Sven geht hin und sagt den Satz. Die Frau schaut ihn kurz an: „Wow. Danke für nichts.“ Sie dreht sich zu ihren Freundinnen.",
+          "wahl": [
+            { "text": "Später zu Sven: „Das war ein halbes Kompliment mit Stich. Sie hat es genau so gehört.“", "wert": 2, "weiter": "k2", "rueck": "Du benennst die Masche nachträglich – ehrlich unter Freunden." },
+            { "text": "„Pech gehabt, die nächste klappt bestimmt.“", "wert": 0, "tendenz": "verharmlosen", "weiter": "k2", "rueck": "Das bestätigt Sven im Zahlenspiel. Die Masche war das Problem, nicht das Pech." }
+          ] },
+        { "id": "k2", "sagt": "Später siehst du, wie ein anderer Gast eine junge Frau, die schon viel getrunken hat, von ihrer Gruppe wegzieht: „Komm, wir gehen mal kurz nach vorn zur Straße.“ Sie lacht unsicher.",
+          "wahl": [
+            { "text": "Hingehen und sie direkt fragen: „Alles okay? Wir wollten gleich Kuchen holen – kommst du mit?“", "wert": 2, "weiter": "k3", "rueck": "Du gibst ihr einen leichten Ausweg und lässt ihr die Wahl – ohne Szene." },
+            { "text": "Nichts tun – sie ist erwachsen.", "wert": 0, "weiter": "k2b", "rueck": "Angetrunken und weg von der Gruppe – „aus der Gruppe holen“ ist eine rote Linie. Ein Blick von dir kostet wenig." },
+            { "text": "Ihre Freundinnen anstoßen, damit sie nach ihr schauen.", "wert": 1, "weiter": "k3", "rueck": "Gut – sie kennen sie. Schneller und sicherer ist, wenn jemand sofort hingeht." }
+          ] },
+        { "id": "k2b", "sagt": "Fünf Minuten später sind die beiden nicht mehr zu sehen. Ihre Freundinnen schauen sich suchend um.",
+          "wahl": [
+            { "text": "Den Freundinnen sagen, in welche Richtung sie gegangen sind, und mit ihnen nachsehen.", "wert": 2, "weiter": "k3", "rueck": "Gut umentschieden. Gemeinsam nachzusehen ist kein Übergriff, sondern Achtsamkeit." },
+            { "text": "Weiterfeiern – das geht dich nichts an, und die beiden wollten vielleicht einfach ihre Ruhe haben.", "wert": 0, "weiter": "ende4", "rueck": "Wegschauen ist bequem. Wer betrunken weggeführt wird, braucht oft genau den einen Blick." }
+          ] },
+        { "id": "k3", "sagt": "Die junge Frau ist wieder bei ihren Freundinnen. Sven hat inzwischen mit einer Person geredet, die freundlich, aber klar gesagt hat: „Ich hab kein Interesse.“ Er flüstert dir zu: „Im Seminar hieß es: Ein Nein ist nur letzter Widerstand. Ich versuch's in zehn Minuten noch mal.“",
+          "wahl": [
+            { "text": "„Nein, Sven. Ein Nein ist ein Nein. Lass sie in Ruhe – komm, wir holen uns was zu trinken.“", "wert": 2, "weiter": "k4", "rueck": "Klar und kurz – und ein Angebot, das ihm hilft, ohne Gesichtsverlust aus der Lage zu kommen." },
+            { "text": "„Na ja, wenn du meinst. Aber bleib nett.“", "wert": 0, "tendenz": "verharmlosen", "weiter": "ende2", "rueck": "„Nett“ übergangen bleibt übergangen. Hier gibt es kein „sanft“." },
+            { "text": "„Ich find das falsch.“ – und weggehen.", "wert": 1, "weiter": "k4", "rueck": "Klar gesagt. Bei ihm zu bleiben und ihn abzulenken, schützt die Person noch besser." }
+          ] },
+        { "id": "k4", "sagt": "Später am Abend setzt sich Sven zu dir und seufzt. „Ehrlich gesagt hab ich das Seminar gemacht, weil ich mich nicht traue, einfach normal zu reden.“",
+          "wahl": [
+            { "text": "„Das versteh ich. Normal reden kann man üben – fang klein an, im Chor oder im Kurs. Ohne Tricks.“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst seine Unsicherheit ernst und zeigst einen ehrlichen Weg." },
+            { "text": "„Tja, mit den Tricks wird's jedenfalls nichts.“", "wert": 1, "weiter": "ende1", "rueck": "Stimmt in der Sache. Ein freundlicherer Satz würde ihm helfen, den nächsten Schritt zu gehen." },
+            { "text": "„Dann lass es halt mit dem Flirten.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende3", "rueck": "Seine Offenheit wird abgewiesen. Gerade jetzt könnte er einen ehrlichen Rat brauchen." }
+          ] },
+        { "id": "ende1", "sagt": "Sven lacht schief. „Vielleicht such ich mir wirklich mal einen Kurs. Ohne Tricks.“", "ende": "Hinter Svens Seminar steckte, was hinter vielen Maschen steckt: Unsicherheit – die man ehrlich üben kann. Was an so einem Abend trägt: Maschen benennen, ein Nein ohne Wenn und Aber gelten lassen, Fremden einen leichten Ausweg geben." },
+        { "id": "ende2", "sagt": "Sven versucht es noch einmal. Die Person lässt ihn stehen und geht früh. Die Stimmung ist gekippt, Sven ist schlecht gelaunt.", "ende": "Ein „Bleib nett“ macht ein übergangenes Nein nicht harmloser. Beim nächsten Mal: klar benennen, Sven etwas anderes anbieten und ein Nein ohne Wenn und Aber gelten lassen." },
+        { "id": "ende3", "sagt": "Sven zuckt die Schultern und holt sich noch ein Bier. Ihr redet an dem Abend nicht mehr darüber.", "ende": "Den Fehler hast du benannt – aber Svens ehrlicher Satz blieb ohne Antwort. Beim nächsten Mal: die Unsicherheit dahinter ernst nehmen und einen ehrlichen Weg zeigen." },
+        { "id": "ende4", "sagt": "Erst nach einer Weile finden die Freundinnen die junge Frau vorn an der Straße und bringen sie nach Hause.", "ende": "Wegschauen ist bequem – aber wer angetrunken von der Gruppe weggeführt wird, braucht oft genau einen Blick. Beim nächsten Mal: hingehen und einen leichten Ausweg anbieten oder die Freundinnen holen." }
+      ],
+      "prinzipien": ["der Transparenz-Test", "Maschen benennen, ohne den Freund abzuwerten", "einen leichten Ausweg anbieten, wenn jemand weggezogen wird", "ein Nein ist nie „letzter Widerstand“", "hinter Maschen steckt oft Unsicherheit"],
+      "transfer": "Kennst du jemanden, der auf Flirt-Tricks schwört? Welcher Satz würde ihn zum Nachdenken bringen, ohne ihn bloßzustellen?"
+    },
+    {
+      "id": "flirten-l-10", "bereich": "flirten", "phase": "k", "umfeld": "kennenlernen", "faehigkeiten": ["flirten.gespraech", "flirten.zeigen", "flirten.haltung", "flirten.signale", "flirten.dranbleiben", "flirten.ansprechen"], "stufe": 7, "sparring": true,
+      "titel": "Sparring: Die Fotogruppe", "figur": "eine Person aus der Fotogruppe",
+      "einleitung": "Das Sparring zum Abschluss der Phase Können: vom Gespräch in der Fotogruppe über die Einladung und das Schreiben bis zum ersten Treffen. Du trägst das Gespräch, lädst leicht ablehnbar ein, schreibst ohne Taktieren und hältst das Treffen sicher und offen.",
+      "lage": "Dienstagabend, Fotogruppe im Stadtteilzentrum. Nach dem Bildervergleich stehst du mit einer Person am Fenster, deren Hafenbilder dir aufgefallen sind. Ihr kennt euch vom Sehen, geredet habt ihr noch kaum.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Die Person packt die Kamera ein. „Puh, ich zeig meine Bilder nie gern vor allen.“",
+          "wahl": [
+            { "text": "„Dabei war dein Bild vom Hafen im Nebel mein liebstes heute. Wie bist du auf die Stimmung gekommen?“", "wert": 2, "weiter": "k2", "rueck": "Ein ehrliches Kompliment zu etwas Gemachtem und eine Frage, auf die man gern antwortet." },
+            { "text": "„Musst du auch nicht, mit dem Gesicht.“", "wert": 0, "tendenz": "koerper", "weiter": "k1b", "rueck": "Ein Satz über das Aussehen statt über die Bilder – und ein schräger noch dazu." },
+            { "text": "„Ging mir genauso.“", "wert": 1, "weiter": "k2", "rueck": "Verbindend, aber kurz. Ein Satz zu ihren Bildern hätte mehr geöffnet." }
+          ] },
+        { "id": "k1b", "sagt": "Sie zieht die Augenbrauen hoch. „Äh. Okay.“",
+          "wahl": [
+            { "text": "„Sorry, das war daneben. Ich wollte eigentlich sagen: Dein Hafenbild war mein liebstes heute.“", "wert": 2, "weiter": "k2", "rueck": "Gut zurückgeholt: Fehler benannt, ehrlich neu angesetzt." },
+            { "text": "„War doch ein Kompliment!“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende3", "rueck": "Sie hat gezeigt, dass es nicht gut ankam. Das zu übergehen, beendet das Gespräch." }
+          ] },
+        { "id": "k2", "sagt": "Sie lächelt. „Das Hafenbild ist um sechs am Kai entstanden – ich konnte nicht schlafen. Seit dem Umzug hierher bin ich morgens oft wach.“",
+          "wahl": [
+            { "text": "„Dann hat die Schlaflosigkeit wenigstens ein gutes Bild gemacht. Sind die frühen Morgen eher schön oder eher zäh?“", "wert": 2, "weiter": "k3", "rueck": "Würdigen und eine Ebene tiefer fragen – nach ihrem Erleben, behutsam, denn sie hat es selbst angeboten." },
+            { "text": "„Welche Kamera hast du eigentlich?“", "wert": 1, "tendenz": "ausfragen", "weiter": "k3", "rueck": "Ein sicheres Thema, aber zurück zu den Fakten. Sie hatte etwas Persönlicheres angeboten." },
+            { "text": "„Umziehen kenn ich, ich bin dreimal umgezogen, und beim letzten Mal hab ich mir eine ganz neue Küche …“", "wert": 0, "tendenz": "uebertrumpfen", "weiter": "k3", "rueck": "Jetzt geht es um dich. Ihr offener Satz bleibt liegen." }
+          ] },
+        { "id": "k3", "sagt": "Sie erzählt, ihr lacht zusammen über ein verwackeltes Möwenbild. Sie fragt zurück, was du am liebsten fotografierst, und bleibt stehen, als die anderen schon gehen.",
+          "wahl": [
+            { "text": "„Ich unterhalte mich gern mit dir. Samstagmorgen zusammen zum Hafen? Sag ruhig Nein.“", "wert": 2, "weiter": "k4", "rueck": "Das Bündel gelesen, Interesse in einem Satz, klein und konkret eingeladen, mit Ausweg." },
+            { "text": "„Wir müssen unbedingt mal zusammen eine Fototour machen – ein ganzes Wochenende an der Küste!“", "wert": 0, "tendenz": "ueberziehen", "weiter": "k3b", "rueck": "Zu groß für den Anfang – und als Feststellung kaum abzulehnen." },
+            { "text": "„Bis nächsten Dienstag!“", "wert": 1, "weiter": "ende2", "rueck": "Freundlich. Die Zeichen sprachen für mehr – ein Satz hätte gereicht." }
+          ] },
+        { "id": "k3b", "sagt": "Sie lacht unsicher. „Ein ganzes Wochenende? Ich weiß nicht …“",
+          "wahl": [
+            { "text": "„Stimmt, viel zu groß. Vielleicht erst mal ein Kaffee am Samstag? Ganz ohne Muss.“", "wert": 2, "weiter": "k4", "rueck": "Ihr Zögern galt dem Wochenende. Du nimmst es zurück und bietest etwas Kleines mit Ausweg an." },
+            { "text": "„Komm schon, das wird toll!“", "wert": 0, "tendenz": "beharren", "weiter": "ende3", "rueck": "Ein Zögern wird überredet. Sie zieht sich zurück." }
+          ] },
+        { "id": "k4", "sagt": "Sie lächelt. „Gern! Lass uns Nummern tauschen, ich schreib dir.“ Zwei Tage vergehen ohne Nachricht.",
+          "wahl": [
+            { "text": "Einmal kurz schreiben: „Hey, hier ist {name} von der Fotogruppe. Samstag steht noch – neun am Kai? Wenn's nicht passt, sag einfach.“", "wert": 2, "weiter": "k5", "rueck": "Eine Nachricht mit konkretem Vorschlag – dann ist sie dran." },
+            { "text": "„Hallo?? Du wolltest doch schreiben.“", "wert": 0, "tendenz": "vorwurf", "weiter": "ende3", "rueck": "Ein Vorwurf nach zwei Tagen. Niemand schuldet eine schnelle Antwort." },
+            { "text": "Warten – sie hat ja gesagt, sie schreibt.", "wert": 1, "weiter": "k5", "rueck": "Respektvoll. Eine kurze Nachricht mit Ort und Zeit hätte euch beiden geholfen." }
+          ] },
+        { "id": "k5", "sagt": "Dann kommt ihre Nachricht: „Sorry, Chaoswoche! Samstag, neun Uhr am Kai – ich bin dabei.“ Samstag am Kai: Ihr fotografiert, trinkt Kaffee, es ist leicht. Nach zwei Stunden sagt sie: „Ich muss los, ich hab Familienessen.“",
+          "wahl": [
+            { "text": "„Das war ein richtig schöner Morgen. Ich würde das gern wiederholen – wenn du auch magst.“", "wert": 2, "weiter": "k6", "rueck": "Gehen lassen und klar sagen, dass es dir gefallen hat – ohne eine Antwort zu verlangen." },
+            { "text": "„Schon? Schreib dem Familienessen, dass du später kommst.“", "wert": 0, "tendenz": "beharren", "weiter": "ende3", "rueck": "Ein genanntes Ende wird verhandelt. Das macht den Abschied schwer." },
+            { "text": "„Okay, bis Dienstag!“", "wert": 1, "weiter": "k6", "rueck": "Freundlich. Ein Satz, dass es dir gefallen hat, hätte mehr gesagt." }
+          ] },
+        { "id": "k6", "sagt": "Sie zögert kurz. „War schön heute. Ich weiß nur noch nicht, ob ich gerade für mehr als Fotografieren bereit bin.“",
+          "wahl": [
+            { "text": "„Danke, dass du das sagst. Fotografieren mit dir ist schon ein Gewinn. Meld dich, wenn du magst.“", "wert": 2, "weiter": "ende1", "rueck": "Ihr Zögern gehört, keine Frage hinterhergeschickt, die Tür offen gelassen – den nächsten Schritt macht sie." },
+            { "text": "„Wieso nicht? Lass es doch einfach auf dich zukommen.“", "wert": 0, "tendenz": "druck", "weiter": "ende3", "rueck": "Sie hat ihre Grenze genannt. Ein „Wieso“ verlangt eine Begründung." },
+            { "text": "„Okay. Dann lass ich dich in Ruhe.“", "wert": 1, "weiter": "ende2", "rueck": "Du respektierst sie. Ein Satz Wärme hätte gezeigt, dass du auch die Fotografie-Freundschaft schätzt." }
+          ] },
+        { "id": "ende1", "sagt": "Sie lächelt und geht. Am Dienstag in der Gruppe setzt sie sich neben dich. Wohin es führt, ist offen.", "ende": "Ihr Zögern hast du sofort gelten lassen und die Tür offen gehalten. Was daraus wird, entscheidet ihr beide, in ihrem Tempo. Was den ganzen Weg trägt: ehrlich loben, klein einladen, ohne Taktieren schreiben, ein Ende nicht verhandeln." },
+        { "id": "ende2", "sagt": "Ihr grüßt euch weiter freundlich in der Gruppe. Mehr passiert nicht.", "ende": "Kein Fehler, aber dein Interesse oder deine Wärme blieben unsichtbar. Beim nächsten Mal: in einem Satz sagen, was dir gefällt – auch wenn die Antwort offen ist." },
+        { "id": "ende3", "sagt": "Sie wird kühl und kommt in den nächsten Wochen seltener in die Gruppe.", "ende": "Ein Zögern übergangen, ein Ende verhandelt, eine Bemerkung übers Aussehen verteidigt oder ein Vorwurf geschickt – das kostet Vertrauen, und für sie die Gruppe. Beim nächsten Mal: klein einladen, ein Zögern gelten lassen, den Ball abgeben." }
+      ],
+      "prinzipien": ["ehrliches Kompliment zu etwas Gemachtem", "eine Ebene tiefer, behutsam", "klein, konkret, mit Ausweg einladen", "eine Nachricht mit Vorschlag, dann Ruhe", "ein Ende und ein Zögern gelten lassen"],
+      "transfer": "Mit wem aus einer Gruppe würdest du gern einmal etwas Kleines unternehmen? Wie lautet deine Einladung – in einem Satz, mit Ausweg?"
+    }
+  ]
+}

@@ -1,0 +1,249 @@
+{
+  "lagen": [
+    {
+      "id": "lesen-l-06", "bereich": "lesen", "phase": "k", "umfeld": "kollegen", "faehigkeiten": ["lesen.gesicht", "lesen.grundlinie", "lesen.pruefen"], "stufe": 4,
+      "titel": "Das strenge Gesicht", "figur": "Miriam Okafor",
+      "einleitung": "Ein strenges Gesicht, während du deinen Entwurf zeigst. Du übst, zuerst die Lage zu lesen, dann das Gesicht – und eine Deutung zurückzunehmen, bevor sie Schaden macht.",
+      "lage": "Mittags im Großraumbüro. Du zeigst Miriam den Entwurf für die Kundenbroschüre, an der ihr zusammen arbeitet. Miriam ist sonst herzlich, macht Sprüche und lacht viel.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Miriam hört zu, die Stirn gerunzelt, die Augen zusammengekniffen. Kein Spruch, kein Lachen. Die Sonne fällt schräg auf ihren Bildschirm, neben der Tastatur liegt eine Packung Tabletten.",
+          "wahl": [
+            { "text": "Sie findet den Entwurf schlecht – ich biete gleich an, alles zu überarbeiten, bevor sie es sagen muss.", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k2b", "rueck": "Du beziehst ein Gesicht auf deinen Entwurf, obwohl die Lage andere Erklärungen anbietet." },
+            { "text": "Anders als sonst. Aber Sonne und Tabletten erklären viel – nicht gleich auf den Entwurf beziehen.", "wert": 2, "weiter": "k2", "rueck": "Erst die Lage, dann das Gesicht. Die Veränderung merkst du dir trotzdem." },
+            { "text": "„Ist der Entwurf so schlimm?“", "wert": 1, "weiter": "k2c", "rueck": "Eine Frage ist gut – sie bezieht das Gesicht aber schon auf dich." }
+          ] },
+        { "id": "k2", "sagt": "Du zeigst die zweite Seite. Miriam reibt sich die Stirn und sagt: „Ja … mach weiter.“ Ihre Stimme ist leiser als sonst.",
+          "wahl": [
+            { "text": "„Du wirkst heute angeschlagen. Sollen wir das auf morgen schieben?“", "wert": 2, "weiter": "k3", "rueck": "Du nennst, was du siehst und hörst, und bietest einen Ausweg an – ohne Deutung über den Entwurf." },
+            { "text": "Zügig durch die restlichen Seiten, damit es für sie schnell vorbei ist.", "wert": 1, "weiter": "k3b", "rueck": "Rücksichtsvoll gemeint. Nur hört dir gerade jemand zu, der kaum hinschauen kann." },
+            { "text": "„Wenn dir an dem Entwurf etwas nicht passt, sag es mir lieber gleich, statt die ganze Zeit so zu gucken.“", "wert": 0, "tendenz": "vorwurf", "weiter": "k3c", "rueck": "Aus einem Gesicht wird ein Vorwurf – und die Lage hast du übergangen." }
+          ] },
+        { "id": "k2b", "sagt": "Miriam schaut irritiert. „Überarbeiten? Wieso? Ich hab doch noch gar nichts gesagt.“",
+          "wahl": [
+            { "text": "„Stimmt. Ich hab dein Gesicht gedeutet – vorschnell. Wie findest du ihn?“", "wert": 2, "weiter": "k3", "rueck": "Gut zurückgenommen: von der Deutung zurück zur Frage." },
+            { "text": "„Na ja, so wie du schaust, war das ziemlich eindeutig – da braucht es gar keine Worte mehr.“", "wert": 0, "tendenz": "uebersicher", "weiter": "k3c", "rueck": "Du hältst an der Deutung fest – gegen ihr Wort." }
+          ] },
+        { "id": "k2c", "sagt": "„Schlimm? Nein.“ Miriam blinzelt. „Ich seh nur grad schlecht.“",
+          "wahl": [
+            { "text": "„Ach so. Ist es die Sonne – oder geht's dir nicht gut?“", "wert": 2, "weiter": "k3", "rueck": "Du greifst ihren Hinweis auf und fragst nach der Lage." },
+            { "text": "„Okay …“ – und weiter, auch wenn der Zweifel am Entwurf bleibt.", "wert": 1, "weiter": "k3b", "rueck": "Du glaubst ihr – gut. Die Lage klärst du aber nicht." }
+          ] },
+        { "id": "k3", "sagt": "Miriam atmet aus. „Migräne. Seit heute früh, die Tablette wirkt noch nicht. Der Entwurf ist gut, glaub ich – ich kann nur gerade nicht richtig hingucken.“",
+          "wahl": [
+            { "text": "„Dann morgen in Ruhe. Soll ich die Jalousie runterlassen?“", "wert": 2, "weiter": "ende1", "rueck": "Du richtest dich nach der Lage und machst ein kleines Angebot." },
+            { "text": "„Aber ganz kurz noch: Seite drei, ist die so okay?“", "wert": 1, "weiter": "ende3", "rueck": "Verständlich, dass du es wissen willst. Ein Urteil unter Migräne ist aber kein gutes Urteil." }
+          ] },
+        { "id": "k3b", "sagt": "Nach der letzten Seite sagt Miriam nur: „Gut. Ich schau's mir später an.“ Sie schiebt die Tabletten in die Schublade.",
+          "wahl": [
+            { "text": "„Danke. Du wirkst heute nicht ganz fit – lass dir Zeit damit.“", "wert": 2, "weiter": "ende1", "rueck": "Spät, aber gut: Du sprichst die Lage an und nimmst den Druck raus." },
+            { "text": "„Okay. Sag Bescheid, wenn dir was nicht gefällt.“", "wert": 1, "weiter": "ende3", "rueck": "Offen, aber die Lage bleibt unausgesprochen." }
+          ] },
+        { "id": "k3c", "sagt": "Miriam lehnt sich zurück. „Mir passt was nicht? Ich hab Migräne. Danke auch.“",
+          "wahl": [
+            { "text": "„Entschuldige – ich hab dein Gesicht auf den Entwurf bezogen. Machen wir morgen weiter?“", "wert": 2, "weiter": "ende1", "rueck": "Ehrlich zurückgenommen, ohne Rechtfertigung." },
+            { "text": "„Das konnte ich ja nicht wissen – du hättest auch einfach sagen können, dass du Kopfweh hast.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Stimmt – und genau darum hättest du fragen können. So bleibt der Vorwurf stehen." }
+          ] },
+        { "id": "ende1", "sagt": "Am nächsten Morgen ist Miriam wieder ganz die Alte: „Seite drei ist super. Für Seite vier hätte ich eine Idee.“", "ende": "Das strenge Gesicht hatte mit dem Entwurf nichts zu tun – Sonne und Tabletten lieferten die Lage. Wer zuerst die Lage liest oder eine Deutung zurücknimmt, sobald sie auffällt, hält ein Missverständnis klein." },
+        { "id": "ende2", "sagt": "Miriam dreht sich weg. Den Rest des Tages schreibt sie dir nur noch per Mail.", "ende": "Ein Gesicht ohne Lage gedeutet und dann noch verteidigt – so wird aus Kopfweh ein Konflikt. Beim nächsten Mal: Lage prüfen, Deutung zurücknehmen, fragen." },
+        { "id": "ende3", "sagt": "Miriam nickt mühsam. Am nächsten Tag sieht sie den Entwurf ganz anders und will vieles ändern.", "ende": "Du hast das Gespräch durchgezogen, obwohl die Lage dagegen sprach. Wer gerade Schmerzen hat, urteilt anders als sonst. Verschieben hätte euch beiden geholfen." }
+      ],
+      "prinzipien": ["erst die Lage, dann das Gesicht", "Schmerz, Licht und Medikamente verändern jedes Gesicht", "eine Deutung lieber zurücknehmen als verteidigen", "nach der Lage fragen, nicht nach dem Urteil"],
+      "transfer": "Wann hast du zuletzt ein Gesicht auf dich bezogen, das mit dir nichts zu tun hatte? Was hätte dir die Lage verraten?"
+    },
+    {
+      "id": "lesen-l-07", "bereich": "lesen", "phase": "k", "umfeld": "telefon", "faehigkeiten": ["lesen.stimme", "lesen.grundlinie", "lesen.pruefen"], "stufe": 5,
+      "titel": "Jule am Telefon", "figur": "Jule Marek",
+      "einleitung": "Ein Telefonat ohne Gesicht, nur mit Stimme. Du übst, ein leises Zögern gegen die Grundlinie zu hören und das Bedenken einzuladen, statt es zu überreden.",
+      "lage": "Du rufst Jule aus dem Kochkurs an. Ihr wollt zusammen den Abschlussabend für die Gruppe ausrichten. Jule ist sonst offen, direkt und schnell begeistert.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Du erzählst von deiner Idee: fünf Gänge, alles frisch vom Markt, jeder zahlt seinen Anteil. Am anderen Ende kurze Stille. Dann Jule: „Mhm … klingt … aufwendig.“",
+          "wahl": [
+            { "text": "„Aufwendig, ja, aber das wird richtig toll! Ich hab schon eine Einkaufsliste und eine Idee für die Deko.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k2b", "rueck": "Du redest über das Zögern hinweg. Bei Jule ist Stille vor einer Antwort ungewohnt." },
+            { "text": "Innehalten: Jule ist sonst sofort Feuer und Flamme. Heute Pause, „mhm“, langsam.", "wert": 2, "weiter": "k2", "rueck": "Gegen ihre Grundlinie gehört, sind das drei Zeichen in eine Richtung." },
+            { "text": "„Du hast keine Lust drauf, oder?“", "wert": 1, "weiter": "k2c", "rueck": "Du fragst nach – gut. Aber „keine Lust“ ist schon eine fertige Deutung." }
+          ] },
+        { "id": "k2", "sagt": "Du lässt die Pause stehen. Jule: „Ja, grundsätzlich … also, die Idee ist schön.“ Sie lacht kurz, ein bisschen zu kurz.",
+          "wahl": [
+            { "text": "„Ich höre ein ‚grundsätzlich‘. Was wäre dir lieber?“", "wert": 2, "weiter": "k3", "rueck": "Du nennst, was du hörst, und lädst ihr Bedenken ein." },
+            { "text": "„Schön! Dann teilen wir die Gänge auf.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k2b", "rueck": "„Grundsätzlich“ und das kurze Lachen gehen unter." },
+            { "text": "„Ist es das Geld? Fünf Gänge vom Markt sind teuer, das kann sich nicht jeder leisten, das weiß ich.“", "wert": 1, "weiter": "k3", "rueck": "Vielleicht nah dran. Aber du legst ihr ein heikles Thema in den Mund, statt sie es selbst sagen zu lassen." }
+          ] },
+        { "id": "k2b", "sagt": "Jule: „Ja, können wir machen. Schick mir mal die Liste.“ Ihre Stimme ist flach, das Gespräch wird kürzer.",
+          "wahl": [
+            { "text": "„Mach ich. Sag mal – du klingst nicht ganz begeistert. Passt dir etwas nicht?“", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance genutzt: Du sprichst an, was du hörst." },
+            { "text": "Liste schicken, freundlich verabschieden und auflegen – sie hat ja eben zugesagt, das reicht.", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende2", "rueck": "Ein Ja ohne Schwung bei jemandem, der sonst begeistert ist – das war eine Einladung zum Nachfragen." }
+          ] },
+        { "id": "k2c", "sagt": "Jule, schnell: „Doch, doch! Hab ich.“ Dann wieder eine Pause.",
+          "wahl": [
+            { "text": "„Okay. Ich höre nur ein Zögern. Gibt es einen Teil, der dir nicht passt?“", "wert": 2, "weiter": "k3", "rueck": "Du nimmst die Deutung zurück und fragst nach dem, was du hörst." },
+            { "text": "„Na dann, super – dann legen wir los.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende2", "rueck": "Die Pause nach dem „Doch“ hast du überhört." }
+          ] },
+        { "id": "k3", "sagt": "Jule atmet hörbar aus. „Ehrlich? Die Kosten. Zwei aus der Gruppe sind gerade knapp bei Kasse. Bei fünf Gängen vom Markt sagen die ab – und wahrscheinlich, ohne zu sagen, warum.“",
+          "wahl": [
+            { "text": "„Gut, dass du's sagst. Wie sähe ein Abend aus, bei dem alle dabei sein können?“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst das Bedenken ernst und lässt sie die Lösung mitbauen." },
+            { "text": "„Dann machen wir drei Gänge statt fünf.“", "wert": 1, "weiter": "ende3", "rueck": "Du reagierst auf das Bedenken – gut. Ob drei Gänge reichen, hast du aber nicht gefragt." }
+          ] },
+        { "id": "ende1", "sagt": "Jule wird hörbar schneller: „Jeder bringt einen Gang mit, wir kochen zusammen! Ich mach den Nachtisch.“", "ende": "Stille, „mhm“, ein Zögern – bei einer, die sonst sofort Feuer fängt. Als du nachgefragt hast, kam das eigentliche Bedenken: nicht die Arbeit, sondern dass niemand wegen des Geldes fehlt." },
+        { "id": "ende2", "sagt": "Zwei Wochen später sagen drei aus dem Kurs ab. Jule kommt, ist aber den ganzen Abend still.", "ende": "Die Stimme hatte es angekündigt. Ein Ja ohne Schwung bei jemandem, der sonst begeistert ist, verdient eine Frage, bevor es losgeht." },
+        { "id": "ende3", "sagt": "Jule: „Ja, besser.“ Am Abend sind fast alle da; einer bleibt nur kurz.", "ende": "Du hast auf den Vorbehalt reagiert – gut. Mit einer offenen Frage hätte Jule ihre eigene Lösung beigesteuert, die wirklich für alle passt." }
+      ],
+      "prinzipien": ["am Telefon trägt die Stimme alles", "gegen die Grundlinie hören: Wer sonst begeistert ist und zögert …", "„grundsätzlich“ ist eine Einladung zum Nachfragen", "das Bedenken sie selbst sagen lassen"],
+      "transfer": "Wen würdest du am Telefon sofort am Zögern erkennen? Welche Frage stellst du, wenn es das nächste Mal so klingt?"
+    },
+    {
+      "id": "lesen-l-08", "bereich": "lesen", "phase": "k", "umfeld": "kunden", "faehigkeiten": ["lesen.koerper", "lesen.buendel", "lesen.pruefen"], "stufe": 5,
+      "titel": "Die Runde in der Tischlerei", "figur": "Nadine Köhler",
+      "einleitung": "Drei Menschen am Tisch, und der Lauteste entscheidet nicht. Du übst, Einfluss an den Blicken der anderen zu lesen – und alle einzubinden.",
+      "lage": "Dritter Termin bei Nadine Köhlers Tischlerei. Es geht um neue Rechner für die Werkstatt. Am Tisch: Frau Köhler, ihr Werkstattmeister, ein älterer Mann mit ruhiger Stimme, und ihr Sohn, der gerade in den Betrieb einsteigt und viel redet.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Der Sohn übernimmt sofort: Tablets für alle, am liebsten die neuesten. Frau Köhler schaut auf die Uhr. Der Meister sagt nichts und dreht seinen Kaffeebecher.",
+          "wahl": [
+            { "text": "Dem Sohn die Tablets ausführlich erklären – er redet am meisten und wird am Ende wohl auch entscheiden.", "wert": 0, "tendenz": "einzelzeichen", "weiter": "k2b", "rueck": "Viel Redeanteil ist kein Rang. Du weißt noch nicht, auf wen die anderen hören." },
+            { "text": "Alle einbeziehen: „Wer arbeitet in der Werkstatt am meisten mit den Geräten?“", "wert": 2, "weiter": "k2", "rueck": "Eine sachliche Frage an alle – und du siehst, wohin die Blicke gehen." },
+            { "text": "Nur mit Frau Köhler reden – sie ist die Chefin.", "wert": 1, "weiter": "k2c", "rueck": "Sie unterschreibt, ja. Aber wer täglich mit den Geräten arbeitet, kann ein Projekt still ausbremsen." }
+          ] },
+        { "id": "k2", "sagt": "Frau Köhler und ihr Sohn schauen beide zum Meister. Der räuspert sich: „Mit Sägestaub und Leimfingern? Da hält kein Tablet lange.“",
+          "wahl": [
+            { "text": "„Guter Punkt. Was bräuchte es, damit es in der Werkstatt hält?“", "wert": 2, "weiter": "k3", "rueck": "Du hast gesehen, wohin die Blicke gingen, und fragst den Mann, auf den alle hören." },
+            { "text": "„Es gibt robuste Hüllen, das ist kein Problem.“", "wert": 1, "weiter": "k3", "rueck": "Eine Antwort, bevor du sein Problem ganz kennst. Zum Glück redet er weiter." },
+            { "text": "Weiter mit dem Sohn über die Tablets reden – der Meister ist bei allem Neuen eben grundsätzlich skeptisch.", "wert": 0, "tendenz": "etikett", "weiter": "k3b", "rueck": "Ein Etikett statt einer Frage – und ausgerechnet über den, auf den die anderen schauen." }
+          ] },
+        { "id": "k2b", "sagt": "Der Sohn ist begeistert. Frau Köhler schaut zum zweiten Mal auf die Uhr. Bevor sie antwortet, blickt sie kurz zum Meister. Der schüttelt kaum merklich den Kopf.",
+          "wahl": [
+            { "text": "Das Bündel lesen und den Meister fragen: „Sie sind täglich in der Werkstatt – was halten Sie davon?“", "wert": 2, "weiter": "k2", "rueck": "Gut korrigiert: Wohin die Chefin vor ihrer Antwort schaut, sagt viel." },
+            { "text": "Den Sohn weiter begeistern – wenn er überzeugt ist, zieht die Mutter mit.", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende2", "rueck": "Du überhörst das Kopfschütteln und den Blick der Chefin." }
+          ] },
+        { "id": "k2c", "sagt": "Frau Köhler hört dir zu und unterbricht dann: „Fragen Sie lieber ihn.“ Sie zeigt auf den Meister. „Ich unterschreibe, aber er muss damit arbeiten.“",
+          "wahl": [
+            { "text": "„Gern.“ Zum Meister: „Was brauchen Sie in der Werkstatt?“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst den Hinweis sofort auf." },
+            { "text": "„Sie entscheiden doch am Ende – mir reicht es, wenn Sie zufrieden sind.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende2", "rueck": "Sie hat dir gesagt, auf wen es ankommt. Du überhörst es." }
+          ] },
+        { "id": "k3", "sagt": "Der Meister: „Ein fester Rechner an der Wand, große Schrift, abwischbar. Und keiner, der jede Woche was Neues will.“ Der Sohn verzieht das Gesicht. Frau Köhler nickt langsam.",
+          "wahl": [
+            { "text": "„Dann ein fester Rechner in der Werkstatt.“ Zum Sohn: „Und für Sie ein Tablet fürs Büro und die Termine?“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst den Entscheidenden ernst und lässt den Neuen nicht leer ausgehen." },
+            { "text": "„Gut, dann nur feste Rechner.“", "wert": 1, "weiter": "ende3", "rueck": "Sachlich richtig. Das verzogene Gesicht des Sohnes hast du aber nicht beachtet." }
+          ] },
+        { "id": "k3b", "sagt": "Der Meister steht auf, holt sich Kaffee nach und bleibt am Fenster stehen. Frau Köhler: „Wir melden uns.“",
+          "wahl": [
+            { "text": "Zum Meister: „Bevor wir auseinandergehen – ich würde gern noch hören, was Sie brauchen.“", "wert": 2, "weiter": "k3", "rueck": "Spät, aber richtig: Du holst den zurück, auf den alle hören." },
+            { "text": "Die Unterlagen auf den Tisch legen, mich bedanken und gehen – Frau Köhler hat ja gesagt, sie melden sich.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Er hat sich sichtbar abgewandt – und du gehst ohne seine Stimme." }
+          ] },
+        { "id": "ende1", "sagt": "Frau Köhler schaut zum Meister, der nickt. Dann sie: „So machen wir's.“", "ende": "Der Lauteste war nicht der Entscheidende. Gezeigt hat es sich daran, wohin die Blicke bei Fragen gingen. Am Ende hattest du alle drei dabei: die, die unterschreibt, den, der damit arbeitet, und den, der neu ist." },
+        { "id": "ende2", "sagt": "Eine Woche später kommt eine Absage: „Passt nicht zu unserer Werkstatt.“", "ende": "Viel Redeanteil ist kein Rang. Wer nicht sieht, wohin die anderen vor ihrer Antwort blicken, redet mit dem Falschen – und übergeht den, auf dessen Wort es ankommt." },
+        { "id": "ende3", "sagt": "Der Auftrag kommt. Beim Einrichten ist der Sohn nicht dabei.", "ende": "Den Entscheidenden hast du gefunden. Der Neue ist leer ausgegangen – und wird künftig mitreden. Einen Platz für ihn zu finden, hätte nichts gekostet." }
+      ],
+      "prinzipien": ["viel Redeanteil ist kein Rang", "schau, wohin die anderen vor ihrer Antwort blicken", "fragen, wer damit arbeitet", "alle einbinden – auch den, der verliert"],
+      "transfer": "In welcher Runde redet bei dir jemand viel, ohne zu entscheiden? Auf wen schauen dort die anderen?"
+    },
+    {
+      "id": "lesen-l-09", "bereich": "lesen", "phase": "k", "umfeld": "vorgesetzte", "faehigkeiten": ["lesen.stimme", "lesen.pruefen", "lesen.grundlinie"], "stufe": 6,
+      "titel": "Carla sagt grundsätzlich ja", "figur": "Carla Demir",
+      "einleitung": "Zwei Pausen in einer Besprechung – eine ist ein Vorbehalt, die andere nicht. Du übst, ein leises Aber zu hören und es von einem Stocken beim Sprechen zu unterscheiden.",
+      "lage": "Projektbesprechung. Du schlägst vor, die Abnahme beim Kunden um zwei Wochen vorzuziehen. Carla Demir leitet das Projekt; sie sagt sonst schnell und klar, was sie denkt. Jonas Wegner aus der Technik ist dabei – er stottert und geht offen damit um.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Carla, nach einer Pause: „Grundsätzlich … ja. Können wir so machen.“ Sie schaut dabei in ihren Kalender, nicht zu dir.",
+          "wahl": [
+            { "text": "„Super, dann gebe ich es heute noch an den Kunden weiter, damit er sich den Termin gleich freihalten kann.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k2b", "rueck": "Du nimmst das Ja beim Wort. Pause, „grundsätzlich“ und Blick weg überhörst du." },
+            { "text": "Bei Carla ungewohnt. Ich frage: „Was müsste passen, damit es ein klares Ja ist?“", "wert": 2, "weiter": "k2", "rueck": "Pause, „grundsätzlich“, Blick weg – gegen ihre Grundlinie gehört, ist das ein Bündel." },
+            { "text": "„Du findest die Idee schlecht, gib's zu.“", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k2c", "rueck": "Aus einem Zögern wird eine Ablehnung – vor allen." }
+          ] },
+        { "id": "k2", "sagt": "Carla überlegt. Bevor sie antwortet, setzt Jonas an. Er stockt vor dem ersten Wort, länger.",
+          "wahl": [
+            { "text": "Ruhig warten und ihn anschauen – sein Stocken ist kein Zögern.", "wert": 2, "weiter": "k3", "rueck": "Bei Jonas gehört das Stocken zu seinem Sprechen. Es sagt nichts über Zweifel." },
+            { "text": "Den Satz für ihn beenden: „Du meinst die Technik, oder?“", "wert": 0, "tendenz": "uebernehmen", "weiter": "k3b", "rueck": "Gut gemeint, aber du nimmst ihm das Wort – und liest sein Stocken als Unsicherheit." },
+            { "text": "Schnell zu Carla zurück, damit es für Jonas nicht unangenehm wird.", "wert": 0, "tendenz": "uebergehen", "weiter": "k3b", "rueck": "Unangenehm wird es eher, wenn man ihn übergeht. Er hatte etwas zu sagen." }
+          ] },
+        { "id": "k2b", "sagt": "Am Nachmittag schreibt Carla: „Können wir das mit der Abnahme noch mal kurz besprechen?“",
+          "wahl": [
+            { "text": "Anrufen: „Klar. Dein Ja vorhin klang schon etwas zögerlich – was beschäftigt dich?“", "wert": 2, "weiter": "k3p", "rueck": "Zweite Chance genutzt – unter vier Augen." },
+            { "text": "„Wir hatten doch abgemacht, dass es so geht.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Du hältst sie an einem Ja fest, das keins war." }
+          ] },
+        { "id": "k2c", "sagt": "Carla zieht die Augenbrauen hoch. „Schlecht? Nein. Ich hab nur gerechnet.“ Ihr Ton wird kühler.",
+          "wahl": [
+            { "text": "„Sorry, falsch gedeutet. Ich hörte nur ein ‚grundsätzlich‘ – was müsste passen?“", "wert": 2, "weiter": "k2", "rueck": "Deutung zurück, Beobachtung als Frage." },
+            { "text": "„Klang aber so, ehrlich gesagt – so wie du eben in deinen Kalender geschaut hast.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Du stellst deine Deutung über ihr Wort." }
+          ] },
+        { "id": "k3b", "sagt": "Jonas hebt die Hand und sagt in Ruhe: „Moment. Die Prüfstände.“ Kurze Stille in der Runde.",
+          "wahl": [
+            { "text": "„Entschuldige – sag du es.“ Und warten.", "wert": 2, "weiter": "k3", "rueck": "Gut korrigiert. Jetzt hat er den Raum, den er braucht." },
+            { "text": "„Ach so, die Prüfstände, klar.“ – und weiter.", "wert": 1, "weiter": "k3", "rueck": "Du nimmst den Punkt auf. Dass du ihm vorher nicht den Raum gelassen hast, bleibt unausgesprochen." }
+          ] },
+        { "id": "k3", "sagt": "Jonas: „Die Prüfstände sind erst ab dem Fünfzehnten frei.“ Carla nickt. „Genau das. Darum mein ‚grundsätzlich‘. Ich will vor dem Kunden nicht wieder verschieben müssen.“",
+          "wahl": [
+            { "text": "„Dann biete ich dem Kunden den Sechzehnten an, mit Prüfung vorher. Passt das euch beiden?“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst den Vorbehalt auf und findest einen Mittelweg – und prüfst ihn bei beiden." },
+            { "text": "„Dann bleiben wir lieber beim alten Termin, bevor wir beim Kunden wieder verschieben müssen.“", "wert": 1, "weiter": "ende3", "rueck": "Sicher, aber du gibst deinen Vorschlag ganz auf, obwohl ein Mittelweg möglich war." }
+          ] },
+        { "id": "k3p", "sagt": "Carla am Telefon: „Die Prüfstände sind erst ab dem Fünfzehnten frei, sagt Jonas. Ich wollte das vor allen nicht so breittreten.“",
+          "wahl": [
+            { "text": "„Danke. Dann frag ich Jonas, ob der Sechzehnte geht, und schlage den vor.“", "wert": 2, "weiter": "ende1", "rueck": "Du dankst und löst – ohne Vorwurf." },
+            { "text": "„Hättest du ruhig in der Runde sagen können.“", "wert": 0, "tendenz": "vorwurf", "weiter": "ende4", "rueck": "Sie hat dir ihr Bedenken anvertraut. Ein Vorwurf macht es ihr beim nächsten Mal schwerer." }
+          ] },
+        { "id": "ende1", "sagt": "Carla, diesmal ohne Pause: „Ja. So machen wir's.“", "ende": "Carlas „grundsätzlich“ war ein Vorbehalt mit gutem Grund. Als du nachgefragt hast, kam er auf den Tisch – und eure Lösung nimmt ihn auf. Je früher du ein leises Aber einlädst, desto weniger muss nachgebessert werden." },
+        { "id": "ende2", "sagt": "Der Kunde bekommt den früheren Termin. Zwei Tage vorher muss Carla absagen – die Prüfstände waren belegt.", "ende": "Das Bedenken war hörbar: Pause, „grundsätzlich“, Blick weg – bei einer, die sonst klar redet. Überhört oder als Ablehnung gedeutet, kam es erst als Absage beim Kunden an." },
+        { "id": "ende3", "sagt": "Alles bleibt beim Alten. Carla ist erleichtert; der Kunde hätte sich über einen früheren Termin gefreut.", "ende": "Den Vorbehalt hast du gehört. Ganz aufgeben musstest du deinen Vorschlag aber nicht – eine Frage nach dem, was passen müsste, hätte einen Mittelweg gezeigt." },
+        { "id": "ende4", "sagt": "Carla: „Hätte ich, ja.“ Sie legt auf. Den Termin klärt ihr später per Mail.", "ende": "Wer dir ein Bedenken anvertraut, braucht zuerst ein Danke, dann eine Lösung. Ein Vorwurf lehrt nur, beim nächsten Mal zu schweigen." }
+      ],
+      "prinzipien": ["„grundsätzlich“ plus Pause plus Blick weg – bei einer, die sonst klar redet", "ein Stocken beim Sprechen ist kein Zögern", "niemandem das Wort abnehmen", "den Vorbehalt einladen, dann einen Mittelweg suchen"],
+      "transfer": "Bei wem hörst du ein „grundsätzlich“, das eigentlich ein Aber ist? Und bei wem würdest du eine Pause fälschlich für ein Zögern halten?"
+    },
+    {
+      "id": "lesen-l-10", "bereich": "lesen", "phase": "k", "umfeld": "kunden", "faehigkeiten": ["lesen.beobachten", "lesen.grundlinie", "lesen.buendel", "lesen.gesicht", "lesen.koerper", "lesen.stimme", "lesen.pruefen", "lesen.eigen"], "stufe": 6, "sparring": true,
+      "titel": "Sparring: Der Termin in der Praxis", "figur": "die Praxisinhaberin",
+      "einleitung": "Das Sparring zum Abschluss der Phase Können: dreißig Minuten in einer Praxis mit drei Menschen. Gesicht und Lage, Rang im Raum, ein leises Aber, eine Stille ohne Verdacht – und deine eigene Wirkung.",
+      "lage": "Du stellst mit Miriam einer Physiotherapie-Praxis eure Betreuung der Rechner vor. Am Tisch: die Inhaberin, die Praxismanagerin und eine Auszubildende. Ihr habt dreißig Minuten zwischen zwei Behandlungen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Runde 1. Die Inhaberin begrüßt euch mit schmalem Lächeln, kneift beim Zuhören die Augen zusammen und bewegt vorsichtig die Schulter. Sie kommt gerade aus einer Behandlung.",
+          "wahl": [
+            { "text": "Sie ist skeptisch – also schnell mit den stärksten Argumenten anfangen, bevor wir sie ganz verlieren.", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k2", "rueck": "Du deutest ein Gesicht, für das die Lage eine naheliegende Erklärung liefert." },
+            { "text": "Erst die Lage: Sie kommt aus einer Behandlung, die Schulter schmerzt wohl. Kein Urteil übers Gesicht.", "wert": 2, "weiter": "k2", "rueck": "Erst die Lage, dann das Gesicht." },
+            { "text": "„Sie wirken nicht überzeugt – sollen wir ein andermal kommen?“", "wert": 1, "weiter": "k2", "rueck": "Höflich angeboten, aber auf eine Deutung gebaut. Die Schulter hätte die Frage verändert." }
+          ] },
+        { "id": "k2", "sagt": "Runde 2. Du fragst nach dem größten Ärger mit den Rechnern. Die Inhaberin antwortet knapp. Bei jeder Frage zu Terminen und Kosten schauen sie und die Auszubildende zur Praxismanagerin, die mitschreibt.",
+          "wahl": [
+            { "text": "Fragen zu Ablauf und Kosten künftig an die Managerin richten – ohne die Inhaberin zu übergehen.", "wert": 2, "weiter": "k3", "rueck": "Du liest, wohin die Blicke gehen, und bindest beide ein." },
+            { "text": "Weiter nur mit der Inhaberin – sie ist die Chefin.", "wert": 1, "weiter": "k3", "rueck": "Förmlich richtig. Wer den Alltag regelt, sitzt aber daneben." },
+            { "text": "Die Managerin fragen: „Sie haben hier wohl eigentlich das Sagen?“", "wert": 0, "tendenz": "blossstellen", "weiter": "k3", "rueck": "Vor der Chefin ausgesprochen, bringt das alle in eine schiefe Lage." }
+          ] },
+        { "id": "k3", "sagt": "Runde 3. Ihr nennt den Monatspreis. Die Managerin, nach einer Pause: „Grundsätzlich … klingt vernünftig.“ Sie legt den Stift hin. Vorhin hat sie jede Zahl mitgeschrieben.",
+          "wahl": [
+            { "text": "„Gut, dann schicken wir den Vertrag.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k4b", "rueck": "Pause, „grundsätzlich“, hingelegter Stift – das Bündel überhörst du." },
+            { "text": "„Ich höre ein ‚grundsätzlich‘. Was müsste anders sein, damit es für Sie passt?“", "wert": 2, "weiter": "k4", "rueck": "Beobachtung als Frage, mit Ausweg." },
+            { "text": "„Wenn es am Preis liegt, können wir Ihnen beim Monatsbetrag sicher noch ein Stück entgegenkommen.“", "wert": 1, "weiter": "k4", "rueck": "Entgegenkommend. Ob es am Betrag liegt, weißt du aber noch nicht." }
+          ] },
+        { "id": "k4", "sagt": "Die Managerin: „Es ist nicht der Preis. Bei der letzten Firma kam bei jedem Problem ein anderer Techniker, und jedes Mal haben wir alles neu erklärt.“",
+          "wahl": [
+            { "text": "„Verstehe. Wäre ein fester Ansprechpartner die Lösung – zum Beispiel Miriam?“", "wert": 2, "weiter": "k5", "rueck": "Du antwortest genau auf den Vorbehalt und fragst, ob es passt." },
+            { "text": "„Keine Sorge, so etwas passiert bei uns nicht – wir sind ein eingespieltes Team.“", "wert": 1, "weiter": "k5", "rueck": "Beruhigend gemeint – aber ein Versprechen statt einer Lösung." }
+          ] },
+        { "id": "k4b", "sagt": "Die Managerin lächelt höflich: „Schicken Sie mal.“ Sie schaut zur Uhr – die nächste Behandlung beginnt gleich.",
+          "wahl": [
+            { "text": "„Mach ich. Vorher eine Frage: Gibt es einen Punkt, bei dem Sie noch zögern?“", "wert": 2, "weiter": "k4", "rueck": "Zweite Chance genutzt – kurz und mit Ausweg." },
+            { "text": "Verabschieden und auf die Unterschrift warten.", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende2", "rueck": "Der Vorbehalt bleibt unausgesprochen – und kommt später als Absage." }
+          ] },
+        { "id": "k5", "sagt": "Runde 4. Die Auszubildende hat noch nichts gesagt. Sie schaut meist auf den Tisch; wenn du sie ansiehst, blickt sie schnell weg. Die Inhaberin sagt: „Sie arbeitet am Empfang am meisten mit den Rechnern.“",
+          "wahl": [
+            { "text": "Sie freundlich ansprechen, dann den Blick lösen: „Was nervt Sie am Empfang am meisten?“ – und Zeit lassen.", "wert": 2, "weiter": "k6", "rueck": "Wenig Blick heißt nicht Desinteresse. Du machst es ihr leicht und lässt Raum." },
+            { "text": "Sie in Ruhe lassen – sie ist offensichtlich nicht interessiert.", "wert": 0, "tendenz": "einzelzeichen", "weiter": "k6", "rueck": "Wegschauen kann Schüchternheit sein, Respekt vor der Chefin oder Unsicherheit in der Runde – kein Desinteresse." },
+            { "text": "Mit der Managerin ausmachen, dass Miriam der Auszubildenden später am Empfang über die Schulter schaut.", "wert": 1, "weiter": "k6", "rueck": "Ein guter Weg, ihre Sicht zu holen – ohne Bühne. Ein kurzes Wort jetzt hätte ihr gezeigt, dass sie zählt." },
+            { "text": "Sie so lange aufmunternd anschauen, bis sie etwas sagt.", "wert": 0, "tendenz": "druck", "weiter": "k6", "rueck": "Ein langer Blick macht es Schüchternen schwerer, nicht leichter." }
+          ] },
+        { "id": "k6", "sagt": "Runde 5. Auf dem Weg nach draußen flüstert Miriam: „Du hast beim Preis ziemlich streng geguckt. Die Inhaberin hat dich zweimal angeschaut.“ Du warst nur konzentriert.",
+          "wahl": [
+            { "text": "Beim Abschied sagen, was man nicht sah: „Ich habe mich gefreut, Sie kennenzulernen.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Satz macht hörbar, was dein Gesicht nicht zeigte." },
+            { "text": "Nichts tun – man sieht mir weniger an, als Miriam denkt.", "wert": 1, "weiter": "ende3", "rueck": "Oft wahr. Aber Miriam hat etwas gesehen – ein freundlicher Satz kostet nichts." },
+            { "text": "Mich bei der Inhaberin entschuldigen, falls ich vorhin beim Preis streng oder unfreundlich gewirkt habe.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende3", "rueck": "Für ein konzentriertes Gesicht braucht es keine Entschuldigung. Ein warmer Satz genügt." }
+          ] },
+        { "id": "ende1", "sagt": "Zwei Tage später unterschreibt die Praxis.", "ende": "Das Sparring verbindet die ganze Phase: die Lage vor dem Gesicht, die Blicke der Runde statt des Titels, das leise „grundsätzlich“, die Stille ohne Verdacht – und zum Schluss deine Wirkung, ausgesprochen statt erhofft. Schau zurück: Wo hast du zuerst die Lage gelesen, wo gleich gedeutet?" },
+        { "id": "ende2", "sagt": "Eine Woche später: Die Praxis bleibt bei ihrer alten Firma.", "ende": "Der Vorbehalt war hörbar – Pause, „grundsätzlich“, der hingelegte Stift. Überhört, kam er erst als Absage zurück." },
+        { "id": "ende3", "sagt": "Die Praxis sagt zu, aber mit Probezeit: „Wir schauen mal, wie es läuft.“", "ende": "Am Ende hätte ein freundlicher Satz zu deiner Wirkung mehr gebracht als Schweigen oder eine Entschuldigung. Geh die fünf Runden noch einmal durch: Wo hast du zuerst die Lage gelesen, wo gleich gedeutet?" }
+      ],
+      "prinzipien": ["erst die Lage, dann das Gesicht", "schau, wohin die Runde bei Fragen blickt", "„grundsätzlich“ plus hingelegter Stift – nachfragen", "wenig Blick ist kein Desinteresse", "sag, was dein Gesicht nicht zeigt"],
+      "transfer": "Vor welchem Termin mit mehreren Menschen lohnt es sich, diese fünf Punkte vorher durchzugehen? Welcher fällt dir am schwersten?"
+    }
+  ]
+}

@@ -1,0 +1,400 @@
+{
+  "eintraege": [
+    { "art": "stumm", "kopf": { "id": "konter-v-0163", "faehigkeit": "konter.ruhe", "stufe": 7, "kanal": "koennen" }, "titel": "Vor dem Saal – die Sekunde üben", "schritte": ["Stell dir einen Saal mit dreißig Leuten vor.", "Jemand ruft: „Geht das auch kürzer?“", "Atme lang aus und lass den Blick über den ganzen Raum gehen, nicht nur zum Rufer.", "Sag innerlich einen Satz für alle – und dann deinen nächsten Sachsatz.", "Wiederhole es mit einem zweiten Zwischenruf."], "sekunden": 75, "pruefliste": ["Blick über den ganzen Raum?", "Ein Satz für alle formuliert?", "Zurück zur Sache?"] },
+    { "art": "stumm", "kopf": { "id": "konter-v-0164", "faehigkeit": "konter.spiel", "stufe": 7, "kanal": "koennen" }, "titel": "Den Witz der anderen tragen – im Kopf", "schritte": ["Denk an die letzte Runde, in der jemand einen Witz gemacht hat.", "Spiel innerlich drei Antworten durch: lachen, ein Stück dazulegen, zur Sache überleiten.", "Wähl die, die der Runde am meisten Raum lässt.", "Sag sie innerlich, mit einem Lächeln."], "sekunden": 60, "pruefliste": ["Drei Antworten durchgespielt?", "Die gewählt, die den anderen trägt?", "Kurz geblieben?"] },
+    { "art": "stumm", "kopf": { "id": "konter-v-0165", "faehigkeit": "konter.necken", "stufe": 7, "kanal": "koennen" }, "titel": "Der Rang-Check vor dem Necken", "schritte": ["Denk an jemanden, den du gern neckst.", "Frag dich: Kann diese Person genauso leicht zurück?", "Hängt sie von dir ab – Arbeit, Bewertung, Einarbeitung?", "Wenn ja: Formuliere den Witz innerlich so um, dass er über dich oder über „uns“ geht."], "sekunden": 60, "pruefliste": ["Rang ehrlich geprüft?", "Abhängigkeit bedacht?", "Witz umgebaut, wo nötig?"] },
+    { "art": "stumm", "kopf": { "id": "konter-v-0166", "faehigkeit": "konter.selbstironie", "stufe": 6, "kanal": "koennen" }, "titel": "Die Selbstironie-Probe", "schritte": ["Wähl eine Kleinigkeit an dir, über die du lachen kannst.", "Formuliere innerlich einen Satz mit Übertreibung.", "Prüf: Kleinigkeit? Nicht die Kernaufgabe? Nicht schon der dritte Witz über dich heute?", "Sag ihn innerlich, mit einem Lächeln."], "sekunden": 60, "pruefliste": ["Kleinigkeit gewählt?", "Kernaufgabe ausgespart?", "Ohne Selbstabwertung?"] },
+
+    { "art": "konter", "kopf": { "id": "konter-v-0167", "faehigkeit": "konter.necken", "stufe": 7, "kanal": "koennen" }, "lage": "Du arbeitest seit zwei Monaten einen neuen Kollegen ein. In seinem ersten eigenen Angebot war ein Rechenfehler, den du gestern still korrigiert hast. In der Runde sagt er stolz:", "von": "Der neue Kollege", "spruch": "„Mein erstes Angebot – ganz allein!“", "schaerfe": 1, "muster": [{ "technik": "würdigen mit Augenzwinkern", "text": "„Ganz allein. Ich hab nur zugeschaut und gestaunt.“" }, { "technik": "Selbstironie", "text": "„Mein erstes hatte drei Fehler und einen Kaffeefleck. Deins ist besser.“" }, { "technik": "Rolle annehmen", "text": "„Ab morgen bist du der Lehrer.“" }], "kriterien": ["kein Wort über seinen Fehler vor allen", "Witz über dich oder die Lage", "Anerkennung"] },
+    { "art": "konter", "kopf": { "id": "konter-v-0168", "faehigkeit": "konter.necken", "stufe": 8, "kanal": "koennen" }, "lage": "Dr. Albers erzählt in der Runde, dass er am Wochenende beim Aufbau eines Schranks verzweifelt ist.", "von": "Dr. Albers", "spruch": "„Drei Stunden. Und eine Schraube ist übrig.“", "schaerfe": 1, "muster": [{ "technik": "mitspielen nach oben", "text": "„Die ist für den Notfall. Steht nur nicht in der Anleitung.“" }, { "technik": "Rolle annehmen", "text": "„Dann ist Ihr Schrank jetzt ein Einzelstück.“" }, { "technik": "Selbstironie", "text": "„Bei mir wären es drei Schrauben – und ein Schrank zu wenig.“" }], "kriterien": ["spielt nach oben mit", "über die Lage, nicht über ihn", "kurz"] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0169", "faehigkeit": "konter.necken", "stufe": 6, "kanal": "wissen" }, "frage": "Du leitest seit Kurzem das Team. Bisher hast du mit allen über alles gewitzelt. Was ändert sich?", "antworten": [
+      { "text": "Nichts – Humor sollte immer gleich bleiben, egal welche Rolle man hat, sonst wirkt man verkrampft.", "wert": 0, "warum": "Die Rolle verändert, wie ein Witz ankommt – auch wenn du dich nicht änderst." },
+      { "text": "Am besten gar nicht mehr witzeln.", "wert": 1, "warum": "Sicher, aber du verschenkst etwas. Es geht um das Worüber, nicht um das Ob." },
+      { "text": "Deine Witze wiegen jetzt schwerer – lieber über dich und die Lage, weniger über Einzelne.", "wert": 2, "warum": "Wer oben steht, neckt schnell härter, als er merkt. Humor über dich und die Lage verbindet weiter." },
+      { "text": "Jetzt darfst du mehr necken – du bist ja die Leitung.", "wert": 0, "tendenz": "abwerten", "warum": "Genau umgekehrt: Wer abhängig ist, kann schlecht zurück." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0170", "faehigkeit": "konter.necken", "stufe": 8, "kanal": "wissen" }, "frage": "Nach deinem Witz in der Runde lachen alle – auch der Werkstudent, über den der Witz ging. Was folgt daraus?", "antworten": [
+      { "text": "Es war in Ordnung, denn er hat ja mitgelacht.", "wert": 0, "warum": "Wer von dir abhängt, lacht oft aus Höflichkeit mit." },
+      { "text": "Wenig – wer abhängig ist, lacht oft aus Höflichkeit mit. Achte auf andere Zeichen und necke beim nächsten Mal dich selbst.", "wert": 2, "warum": "Sein Lachen beweist wenig. Blick, Ton und ob er zurückneckt sagen mehr." },
+      { "text": "Dass du ihn ab jetzt öfter necken kannst.", "wert": 0, "tendenz": "abwerten", "warum": "Aus einem Höflichkeitslachen wird so eine Rolle, aus der er schwer herauskommt." },
+      { "text": "Dass du ihn nach der Runde fragen solltest, wie es für ihn war.", "wert": 1, "warum": "Fragen ist gut – nur antwortet auch hier mancher höflich. Der nächste Witz über dich sagt mehr." }
+    ] },
+    { "art": "szene", "kopf": { "id": "konter-v-0171", "faehigkeit": "konter.necken", "stufe": 7, "kanal": "wissen" }, "beschreibung": "Familienfest. Dein zwölfjähriger Neffe hat zum ersten Mal für alle gekocht. Die Soße ist versalzen. Alle schauen zu dir, weil du sonst immer einen Spruch hast.", "frage": "Was sagst du?", "antworten": [
+      { "text": "„Na, da war wohl der Salzstreuer verliebt.“", "wert": 0, "tendenz": "abwerten", "warum": "Unter Erwachsenen ein netter Spruch – für einen Zwölfjährigen vor allen trifft er." },
+      { "text": "„Die Soße hat Charakter! Und der Rest ist richtig gut – wer hat dir das beigebracht?“", "wert": 2, "warum": "Ein kleiner, warmer Witz und echtes Lob. So lernt er: Fehler gehören dazu." },
+      { "text": "Nichts zur Soße sagen und sein Essen loben.", "wert": 1, "warum": "Freundlich. Ein warmer Witz hätte ihm noch gezeigt, dass der Fehler nicht schlimm ist." },
+      { "text": "„Salz ist gesund. In Maßen. In sehr großen Maßen.“", "wert": 0, "warum": "Witzig – aber für ihn vor der ganzen Familie ein Stich." }
+    ] },
+    { "art": "szene", "kopf": { "id": "konter-v-0172", "faehigkeit": "konter.necken", "stufe": 8, "kanal": "wissen" }, "beschreibung": "Du arbeitest seit einem Monat eine Auszubildende ein. In der Kantine erzählt sie, dass sie gern laute Rockmusik hört. Dr. Albers sitzt mit am Tisch.", "frage": "Du willst sie necken. Was passt?", "antworten": [
+      { "text": "„Ach, deshalb bist du morgens immer so müde – zu viele Konzerte?“", "wert": 0, "tendenz": "abwerten", "warum": "Vor dem Chef deutet der Witz an, sie arbeite schlecht. Von dir, die oder der sie einarbeitet, wiegt das schwer." },
+      { "text": "Gar nichts dazu sagen.", "wert": 1, "warum": "Sicher – ein freundliches Necken hätte ihr aber gezeigt, dass sie dazugehört." },
+      { "text": "„Dann weiß ich ja, warum dich unser Drucker nicht aus der Ruhe bringt.“", "wert": 2, "warum": "Leicht, über etwas Gewähltes, mit Anerkennung – und sie kann zurückgeben." },
+      { "text": "„Rockmusik? Und ich dachte, du wärst so ein braves Mädchen.“", "wert": 0, "tendenz": "abwerten", "warum": "Ein Etikett über ihr Geschlecht und ihre Art – das trifft." }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0173", "faehigkeit": "konter.necken", "stufe": 6, "kanal": "wissen" }, "auftrag": "Achte auf den Rang: Passt der Witz – oder lieber nicht?", "faecher": ["passt", "lieber nicht"], "karten": [
+      { "text": "Zum Chef nach seiner gelungenen Rede: „Jetzt wissen wir, wer hier das Mikrofon verdient.“", "fach": 0 },
+      { "text": "Zum Auszubildenden vor dem Team: „Bei dir dauert's ja immer etwas länger.“", "fach": 1 },
+      { "text": "Zu Miriam, die selbst gern neckt: „Deine Tasse hat mehr Sprüche drauf als du.“", "fach": 0 },
+      { "text": "Über den Chef, vor dem Vorstand: „Unser Chef plant gern auf den letzten Drücker.“", "fach": 1 },
+      { "text": "Beim Einarbeiten: „Mein erster Monat war chaotischer als deiner – frag Miriam.“", "fach": 0 },
+      { "text": "Als Leitung über den Einzigen, der widersprochen hat: „Unser Querdenker vom Dienst.“", "fach": 1 }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0174", "faehigkeit": "konter.necken", "stufe": 8, "kanal": "wissen" }, "auftrag": "Witze von oben: Verbindet er – oder drückt er?", "faecher": ["verbindet", "drückt"], "karten": [
+      { "text": "„Wir sind heute alle müde – ich am meisten.“", "fach": 0 },
+      { "text": "„Na, wieder mal unsere Langsamste?“", "fach": 1 },
+      { "text": "„Wer heute als Erster fertig ist, bekommt meinen Parkplatz.“", "fach": 0 },
+      { "text": "„Euer Bericht – ich hab selten so gelacht.“", "fach": 1 },
+      { "text": "„Die Folien hab ich gemacht, also: Nachsicht bitte.“", "fach": 0 },
+      { "text": "Lächelnd: „Lass das lieber, das ist zu schwer für dich.“", "fach": 1 }
+    ] },
+    { "art": "umformulieren", "kopf": { "id": "konter-v-0175", "faehigkeit": "konter.necken", "stufe": 7, "kanal": "koennen" }, "auftrag": "Du leitest die Runde. Mach aus dem Witz über einen Einzelnen einen über dich oder über „uns“.", "vorlage": "„Wie ich sehe, hat unser Werkstudent die Kaffeemaschine wieder kaputt gemacht.“", "kriterien": ["kein Einzelner im Mittelpunkt", "über dich oder uns", "leicht"], "muster": ["„Wie ich sehe, haben wir die Kaffeemaschine wieder geschafft. Ich war's vermutlich auch.“", "„Die Kaffeemaschine streikt. Wahrscheinlich gegen meine Planung.“"] },
+    { "art": "umformulieren", "kopf": { "id": "konter-v-0176", "faehigkeit": "konter.necken", "stufe": 8, "kanal": "koennen" }, "auftrag": "Mach daraus ein Necken nach oben, das den Chef vor dem Kunden gut dastehen lässt.", "vorlage": "„Albers liest seine Mails ja nur jeden zweiten Dienstag.“ – im Beisein eines Kunden", "kriterien": ["lässt den Chef gut dastehen", "vor Kunden unbedenklich", "leicht"], "muster": ["„Herr Albers hält uns den Rücken frei – die Mails beantworten wir.“", "„Unser Chef hat die großen Linien im Blick – für die Mails hat er uns.“"] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0177", "faehigkeit": "konter.necken", "stufe": 7, "kanal": "wissen" }, "frage": "Du leitest ein Projekt. Lena fragt in der Runde etwas, das im Protokoll stand. Ordne deine Reaktionen von stark nach schwach.", "eintraege": [
+      { "text": "„Gute Frage – steht auf Seite zwei, ich hab sie beim Schreiben auch gesucht.“", "warum": "Antwort plus Selbstironie: Lena verliert kein Gesicht." },
+      { "text": "„Steht im Protokoll, Seite zwei.“", "warum": "Sachlich und völlig in Ordnung." },
+      { "text": "Mit Augenzwinkern: „Wer lesen kann, ist klar im Vorteil.“", "warum": "Ein bekannter Spruch – von der Leitung vor allen trifft er trotz Augenzwinkern." },
+      { "text": "Leicht genervt: „Lena, das hatten wir doch schon.“", "warum": "Vor allen genervt – beim nächsten Mal fragt sie nicht mehr." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0178", "faehigkeit": "konter.necken", "stufe": 8, "kanal": "wissen" }, "frage": "Der neue Bereichsleiter stellt sich vor und verdreht dabei den Namen der Firma. Ordne die Reaktionen aus der Runde von stark nach schwach.", "eintraege": [
+      { "text": "Später, beim Kaffee: „Willkommen – den Namen hab ich in meiner ersten Woche auch zweimal verdreht.“", "warum": "Selbstironie nach oben – er fühlt sich willkommen, nicht ertappt." },
+      { "text": "Lächeln und nichts sagen – er korrigiert sich selbst.", "warum": "Gelassen und höflich." },
+      { "text": "Lachend: „Den Namen sollten Sie aber noch üben!“", "warum": "Vor allen nach oben geneckt, gleich am ersten Tag – riskant." },
+      { "text": "Laut lachen und mit dem Nachbarn tuscheln.", "warum": "Spott ohne Worte – der schlechteste erste Eindruck, den ihr machen könnt." }
+    ] },
+
+    { "art": "konter", "kopf": { "id": "konter-v-0179", "faehigkeit": "konter.spiel", "stufe": 7, "kanal": "koennen" }, "lage": "Betriebsversammlung. Du stellst die Jahreszahlen vor. Mitten im Satz fällt das Licht aus, nur der Beamer leuchtet noch.", "von": "Jemand aus dem Saal", "spruch": "„Na, das sind ja düstere Zahlen!“", "schaerfe": 1, "muster": [{ "technik": "weiterspinnen", "text": "„Keine Sorge – die guten kommen, sobald es hell ist.“" }, { "technik": "Rolle annehmen", "text": "„Ich wollte es dramatischer machen. Hat funktioniert.“" }, { "technik": "lachen und zur Sache", "text": "(lachen) „Im Dunkeln sieht man das Wachstum besser. Folie drei.“" }], "kriterien": ["für den ganzen Saal", "greift das Bild auf", "zurück zur Sache"] },
+    { "art": "konter", "kopf": { "id": "konter-v-0180", "faehigkeit": "konter.spiel", "stufe": 8, "kanal": "koennen" }, "lage": "Videokonferenz mit dem Team. Ein Kollege vergisst, sein Mikrofon stummzuschalten – alle hören seinen Hund bellen.", "von": "Miriam", "spruch": "„Ah, der neue Kollege hat auch eine Meinung.“", "schaerfe": 1, "muster": [{ "technik": "weiterspinnen", "text": "„Wir nehmen ihn ins Protokoll. Er ist dagegen.“" }, { "technik": "ernst zu Ende denken", "text": "„Dann stimmen wir ab – Pfoten zählen halb.“" }, { "technik": "zur Sache", "text": "„Notiert: eine Gegenstimme. Weiter mit Punkt drei.“" }], "kriterien": ["spielt Miriams Witz weiter", "stellt den Kollegen nicht bloß", "führt zur Sache"] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0181", "faehigkeit": "konter.spiel", "stufe": 6, "kanal": "wissen" }, "frage": "In der Runde macht Tarek einen guten Witz, alle lachen. Du hättest einen noch besseren. Was tust du?", "antworten": [
+      { "text": "Deinen sofort bringen – die Runde ist gerade in Stimmung, das sollte man nutzen.", "wert": 0, "tendenz": "uebertrumpfen", "warum": "Aus Mitspielen wird ein Wettbewerb – und Tareks Moment ist vorbei." },
+      { "text": "Lachen und weiter zur Sache.", "wert": 1, "warum": "Trägt seinen Witz – nur legst du nichts dazu." },
+      { "text": "Gar nichts machen, um nicht aufzufallen.", "wert": 0, "warum": "Wer still bleibt, lässt den Witz ohne Echo – und gerade das Echo verbindet." },
+      { "text": "Seinen Witz tragen: lachen, ein Stück dazulegen – deinen später einsetzen, wenn es passt.", "wert": 2, "warum": "Witz, Lachen, Weiterspinnen – so verbindet Humor eine Runde. Deinen hebst du für einen Rückgriff auf." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0182", "faehigkeit": "konter.spiel", "stufe": 8, "kanal": "wissen" }, "frage": "In einer Besprechung, in der viele um ihre Stelle fürchten, witzelt ein Kollege über die geplanten Kürzungen. Ein paar lachen gequält. Was ist klug?", "antworten": [
+      { "text": "Noch einen Witz über Kürzungen nachlegen – Lachen lockert immer.", "wert": 0, "warum": "„Immer“ trägt nicht: Wo die Sorge um Stellen groß war, fand eine Studie keinen Nutzen von Humor in Besprechungen." },
+      { "text": "Höflich mitlachen und das Thema wechseln.", "wert": 1, "warum": "Geht – doch die Sorge im Raum bleibt unausgesprochen." },
+      { "text": "Ernst bleiben und die Sorge offen ansprechen: „Viele machen sich gerade Gedanken – lasst uns sagen, was wir wissen.“", "wert": 2, "warum": "Humor hat seine Zeit. Bei echter Sorge hilft Klarheit mehr als ein Witz." },
+      { "text": "Den Kollegen zurechtweisen: „Darüber macht man keine Witze!“", "wert": 0, "tendenz": "angreifen", "warum": "Vor allen bloßgestellt – dabei wollte er vermutlich nur Druck ablassen." }
+    ] },
+    { "art": "szene", "kopf": { "id": "konter-v-0183", "faehigkeit": "konter.spiel", "stufe": 7, "kanal": "wissen" }, "beschreibung": "Hochzeit deiner Cousine. Beim Essen erzählt der Bräutigam eine Anekdote, die nicht zündet – höfliches Lächeln, Stille. Er schaut unsicher in deine Richtung.", "frage": "Was tust du?", "antworten": [
+      { "text": "Schnell selbst eine bessere Anekdote erzählen, damit die Stimmung wieder hochgeht und keiner mehr an seine denkt.", "wert": 0, "tendenz": "uebertrumpfen", "warum": "Du rettest die Stimmung auf seine Kosten." },
+      { "text": "Freundlich lächeln und weiteressen.", "wert": 1, "warum": "Höflich – ein kleines Echo hätte ihm geholfen." },
+      { "text": "Laut lachen und rufen: „Und dann? Erzähl, wie's weiterging!“", "wert": 2, "warum": "Du gibst ihm Echo und eine zweite Chance." },
+      { "text": "„Der war schwach, Herr Bräutigam!“", "wert": 0, "tendenz": "abwerten", "warum": "Vor allen Gästen trifft das härter als gemeint." }
+    ] },
+    { "art": "szene", "kopf": { "id": "konter-v-0184", "faehigkeit": "konter.spiel", "stufe": 8, "kanal": "wissen" }, "beschreibung": "Termin bei Nadine Köhler. Ihr Mitarbeiter macht einen trockenen Witz über die eigene Firma: „Bei uns ist der Kaffee das Einzige, was pünktlich kommt.“ Nadine Köhler zieht die Augenbrauen hoch.", "frage": "Was sagst du?", "antworten": [
+      { "text": "„Dann fangen wir mit dem Pünktlichen an – danke für den Kaffee.“", "wert": 2, "warum": "Du spielst leicht mit, ohne über ihre Firma zu lachen und ohne deine eigene Verlässlichkeit kleinzumachen." },
+      { "text": "Laut lachen: „Das glaub ich sofort!“", "wert": 0, "tendenz": "abwerten", "warum": "Vor der Chefin bestätigst du einen Witz über ihre Firma." },
+      { "text": "Höflich lächeln und zur Sache gehen.", "wert": 1, "warum": "Sicher – mit der Chefin im Raum völlig in Ordnung." },
+      { "text": "„Na, dann reden wir über Liefertermine wohl lieber gar nicht erst, oder?“", "wert": 0, "tendenz": "abwerten", "warum": "Ein Seitenhieb auf den Kunden, getarnt als Mitspielen." }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0185", "faehigkeit": "konter.spiel", "stufe": 6, "kanal": "wissen" }, "auftrag": "Trägt die Reaktion den Witz der Runde – oder nimmt sie ihm die Luft?", "faecher": ["trägt", "nimmt die Luft"], "karten": [
+      { "text": "lachen und ein Detail dazulegen", "fach": 0 },
+      { "text": "den Witz für alle erklären, die ihn nicht verstanden haben", "fach": 1 },
+      { "text": "„Den merk ich mir!“", "fach": 0 },
+      { "text": "sofort einen lauteren Witz zum selben Thema", "fach": 1 },
+      { "text": "den Witz später als Rückgriff aufnehmen", "fach": 0 },
+      { "text": "sofort: „Können wir bitte zur Sache?“", "fach": 1 }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0186", "faehigkeit": "konter.spiel", "stufe": 8, "kanal": "wissen" }, "auftrag": "Passt Humor in diesem Moment – oder lieber nicht?", "faecher": ["passt", "lieber nicht"], "karten": [
+      { "text": "Die Runde wartet auf einen verspäteten Kollegen.", "fach": 0 },
+      { "text": "Ein Kollege erzählt von einer schweren Diagnose.", "fach": 1 },
+      { "text": "Der Beamer fällt zum dritten Mal aus.", "fach": 0 },
+      { "text": "Gerade wurden Kündigungen angekündigt.", "fach": 1 },
+      { "text": "Das Projekt ist geschafft, alle sind erleichtert.", "fach": 0 },
+      { "text": "Eine Kundin ist sichtlich verärgert über einen Fehler.", "fach": 1 }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0187", "faehigkeit": "konter.spiel", "stufe": 7, "kanal": "wissen" }, "frage": "Großer Saal, Fragerunde. Jemand ruft: „Gibt's auch Kekse?“ Ordne von stark nach schwach.", "eintraege": [
+      { "text": "„Die gibt's nach der letzten Frage. Also: Wer hat eine?“", "warum": "Aufgegriffen, kurz, und die Fragerunde läuft weiter." },
+      { "text": "Lachen: „Gute Frage!“ – und weiter.", "warum": "Trägt den Witz, ohne Bühne." },
+      { "text": "So tun, als hättest du nichts gehört.", "warum": "Der Saal hat es gehört – ohne Echo wirkt es steif." },
+      { "text": "„Wir sind hier nicht beim Kindergeburtstag.“", "warum": "Bloßgestellt vor allen – und die gute Stimmung gleich mit." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0188", "faehigkeit": "konter.spiel", "stufe": 8, "kanal": "wissen" }, "frage": "Teamausflug. Miriam erzählt eine Geschichte, alle lachen. Ordne, wie du ihren Witz trägst – von stark nach schwach.", "eintraege": [
+      { "text": "Lachen und eine Frage, die sie weitererzählen lässt: „Und was hat er dann gesagt?“", "warum": "Ihre Geschichte bekommt Raum – das stärkste Echo." },
+      { "text": "Lachen und eine kleine eigene Ergänzung.", "warum": "Gut, solange die Ergänzung klein bleibt." },
+      { "text": "Lachen.", "warum": "Vollwertig – nur ohne Weiterspinnen." },
+      { "text": "„Das erinnert mich an was viel Lustigeres …“", "warum": "Übertrumpfen – jetzt geht es um dich." }
+    ] },
+    { "art": "buehne", "kopf": { "id": "konter-v-0189", "faehigkeit": "konter.spiel", "stufe": 7, "kanal": "koennen", "laut": true, "leise": "konter-v-0164" }, "auftrag": "Steh auf: Du moderierst eine Feier. Der Coach ruft Witze und Einwürfe dazwischen. Nimm jeden auf, leg ein Stück dazu und führ zurück zum Programm.", "sekunden": 90, "publikum": "gross", "stoerungen": ["„Gibt's auch was zu essen?“", "„Lauter, hier hinten!“", "Jemand lacht über den eigenen Witz", "Das Mikrofon pfeift"], "pruefliste": ["Jeden Einwurf aufgegriffen statt abgewürgt?", "Kurz geblieben?", "Zurück zum Programm gefunden?"] },
+    { "art": "buehne", "kopf": { "id": "konter-v-0190", "faehigkeit": "konter.spiel", "stufe": 8, "kanal": "koennen", "laut": true, "leise": "konter-v-0272" }, "auftrag": "Steh auf und erzähl eine kurze lustige Geschichte aus deiner Woche – mit der Pointe am Ende. Zum Schluss setzt du einen Rückgriff auf den Anfang.", "sekunden": 90, "publikum": "klein", "stoerungen": ["Jemand unterbricht: „Kenn ich schon!“", "Ein Telefon klingelt"], "pruefliste": ["Pointe am Ende?", "Unterbrechung gelassen aufgenommen?", "Rückgriff zum Schluss?"] },
+
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0191", "faehigkeit": "konter.grenze", "stufe": 7, "kanal": "wissen", "einfluss": "rot" }, "lage": "Nach deinem Einwand in der Runde sagt ein Kollege: „Du bist doch nur sauer, weil dein Vorschlag letztes Mal abgelehnt wurde.“", "frage": "Was steckt dahinter – und was hilft?", "antworten": [
+      { "text": "Ein wunder Punkt – erklären, dass du gar nicht mehr sauer bist.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Jetzt redet ihr über deine Gefühle statt über deinen Einwand." },
+      { "text": "Ausweichen auf die Person – zurück zum Punkt: „Mag sein. Mein Einwand bleibt: …“", "wert": 2, "warum": "Kurz stehen lassen, zurück zum Argument – das ist der Punkt, auf den er nicht eingehen wollte." },
+      { "text": "Eine Unterstellung – „Woraus schließt du das?“", "wert": 1, "warum": "Brauchbar – nur führt die Frage weiter weg vom Thema. Dein Einwand ist das bessere Argument." },
+      { "text": "Ein Angriff – „Und du bist sauer, weil keiner deine Ideen will.“", "wert": 0, "tendenz": "angreifen", "warum": "Mit gleicher Münze zurückgezahlt – der Einwand geht unter." }
+    ], "erklaerung": "Statt auf dein Argument einzugehen, geht es plötzlich um deine Gefühle oder Motive. Schopenhauer zählte das Ausweichen auf die Person zu den Kunstgriffen. Die Abwehr: kurz stehen lassen, zurück zum Argument." },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0192", "faehigkeit": "konter.grenze", "stufe": 9, "kanal": "wissen", "einfluss": "rot" }, "lage": "Ein Kollege flüstert in jeder Besprechung seinem Nachbarn etwas zu, sobald du sprichst, und beide grinsen. Heute auch vor Dr. Albers.", "frage": "Was ist das – und was hilft?", "antworten": [
+      { "text": "Zufall – nicht so wichtig nehmen.", "wert": 0, "tendenz": "vermeiden", "warum": "In jeder Besprechung ist es kein Zufall mehr." },
+      { "text": "Stilles Lacher-Holen – mitten im Satz fragen: „Wollt ihr uns allen sagen, was so lustig ist?“", "wert": 1, "warum": "Kann wirken, setzt aber dich und sie vor allen unter Druck. Unter vier Augen ist es oft leichter zu ändern." },
+      { "text": "Stilles Lacher-Holen – unter vier Augen: „Ihr tuschelt bei meinen Beiträgen. Lasst das bitte.“", "wert": 2, "warum": "Du benennst das Verhalten, nicht die Absicht – ohne Bühne." },
+      { "text": "Selbst anfangen, bei seinen Beiträgen zu tuscheln.", "wert": 0, "tendenz": "angreifen", "warum": "Dann seid ihr zu zweit unfair." }
+    ], "erklaerung": "Tuscheln und Grinsen sind Spott ohne Worte – schwer zu greifen, weil nichts gesagt wurde. Wiederholt es sich, ist es ein Muster. Benenn das Verhalten, nicht die Absicht." },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0193", "faehigkeit": "konter.grenze", "stufe": 7, "kanal": "wissen" }, "frage": "Nach deiner ruhigen Grenze dreht sich der Kollege zur Runde: „Ab jetzt nur noch mit Anwalt, Leute.“ Alle lachen. Was hilft?", "antworten": [
+      { "text": "„Das ist überhaupt nicht lustig, ich meine das ernst, und ihr lacht auch noch alle mit!“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Jetzt stehst du gegen die ganze Runde – und der Spruch hat gewonnen." },
+      { "text": "Mitlachen: „Gute Idee.“ – und dann ruhig: „Trotzdem: Der Spruch bleibt draußen.“", "wert": 2, "warum": "Du nimmst dem Lacher die Spitze und hältst die Grenze. Humor und Klarheit zusammen." },
+      { "text": "Den Raum verlassen.", "wert": 1, "warum": "Als Abschluss möglich – doch so sieht es aus, als hätte der Lacher das letzte Wort." },
+      { "text": "„Brauchst du auch – für deine Sprüche.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Gegenangriff macht aus der Grenze einen Schlagabtausch." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0194", "faehigkeit": "konter.grenze", "stufe": 9, "kanal": "wissen" }, "frage": "Ein Kollege macht seit Wochen in jeder Runde Sprüche über deine Herkunft. Gespräch unter vier Augen und ein klarer Hinweis haben nichts geändert. Was ist jetzt dran?", "antworten": [
+      { "text": "Noch einmal freundlich mit ihm reden – vielleicht hat er es beim letzten Mal einfach nicht richtig verstanden.", "wert": 1, "warum": "Ein weiterer Versuch kann klappen. Nach Wochen ohne Änderung ist Hilfe von außen aber der nächste Schritt." },
+      { "text": "Die Vorfälle mit Datum aufschreiben und mit Vorgesetzten oder einer Vertrauensstelle sprechen.", "wert": 2, "warum": "Wiederholte Sprüche über Herkunft sind kein Spaß mehr. Du darfst Hilfe holen – Notizen machen es greifbar." },
+      { "text": "Es aushalten, weil Beschwerden nur Ärger bringen.", "wert": 0, "tendenz": "vermeiden", "warum": "Verständlich – doch so etwas musst du nicht allein tragen." },
+      { "text": "Selbst Sprüche über seine Herkunft machen, damit er merkt, wie das ist.", "wert": 0, "tendenz": "angreifen", "warum": "Damit wirst du selbst übergriffig – und verlierst die stärkste Position." }
+    ] },
+    { "art": "konter", "kopf": { "id": "konter-v-0195", "faehigkeit": "konter.grenze", "stufe": 7, "kanal": "koennen" }, "lage": "Kundengespräch. Als du einen Preis nennst, wird der Kunde persönlich.", "von": "Ein Kunde", "spruch": "„Sie haben doch keine Ahnung, wie ein Betrieb funktioniert.“", "schaerfe": 3, "muster": [{ "technik": "Grenze und Sache", "text": "„So kommen wir nicht weiter. Was genau passt Ihnen am Preis nicht?“" }, { "technik": "übersetzen", "text": "„Sie haben den Eindruck, der Preis passt nicht zu Ihrem Betrieb? Zeigen Sie mir, wo es hakt.“" }, { "technik": "Sekunde", "text": "(ausatmen) „Ich höre, dass Sie verärgert sind. Lassen Sie uns über die Zahlen reden.“" }], "kriterien": ["bleibt professionell", "nimmt die Beleidigung nicht auf", "lenkt zur Sache"] },
+    { "art": "konter", "kopf": { "id": "konter-v-0196", "faehigkeit": "konter.grenze", "stufe": 8, "kanal": "koennen" }, "lage": "Teamfeier. Ein Kollege aus einer anderen Abteilung erzählt einen Witz auf Kosten von Frauen. Ein paar lachen, eine Kollegin schaut weg.", "von": "Ein Kollege", "spruch": "„… und deshalb brauchen Frauen immer zwei Parkplätze. Haha!“", "schaerfe": 3, "muster": [{ "technik": "Grenze und Rückweg", "text": "„Den lass ich mal aus. Wer will noch was trinken?“" }, { "technik": "ruhig klar", "text": "„Witze auf Kosten von Frauen sind nicht meins. Erzähl lieber von deinem Urlaub.“" }, { "technik": "nicht mitlachen", "text": "Nicht lachen, der Kollegin zunicken und das Gespräch mit ihr weiterführen." }], "kriterien": ["nicht mitlachen", "kurz und klar", "Rückweg ins Gespräch"] },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0197", "faehigkeit": "konter.grenze", "stufe": 7, "kanal": "wissen" }, "auftrag": "Eigene Grenze, für andere eintreten – oder Hilfe holen?", "faecher": ["eigene Grenze setzen", "für andere eintreten", "Hilfe holen"], "karten": [
+      { "text": "ein Spruch über dein Aussehen", "fach": 0 },
+      { "text": "ein Witz über die Herkunft einer Kollegin, die nicht im Raum ist", "fach": 1 },
+      { "text": "seit Monaten wiederholte Sprüche, trotz Gespräch", "fach": 2 },
+      { "text": "jemand nennt dich bei einem Spitznamen, den du nicht magst", "fach": 0 },
+      { "text": "ein Auszubildender wird vor der Gruppe vorgeführt", "fach": 1 },
+      { "text": "ein Vorgesetzter macht dir wiederholt anzügliche Bemerkungen", "fach": 2 }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0198", "faehigkeit": "konter.grenze", "stufe": 9, "kanal": "wissen" }, "auftrag": "Welche Abwehr passt zur Taktik?", "faecher": ["geraderücken", "nach dem Grund fragen", "Verhalten benennen"], "karten": [
+      { "text": "„Du willst also alles abschaffen?“", "fach": 0 },
+      { "text": "„Das sieht doch jeder so.“", "fach": 1 },
+      { "text": "Tuscheln und Grinsen bei jedem deiner Beiträge", "fach": 2 },
+      { "text": "„Ach, du bist also gegen die Kollegen?“", "fach": 0 },
+      { "text": "„Das haben wir schon immer so gemacht.“", "fach": 1 },
+      { "text": "ein Spruch, gefolgt von „War nur Spaß“", "fach": 2 }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0199", "faehigkeit": "konter.grenze", "stufe": 7, "kanal": "wissen" }, "frage": "Jonas ist nicht im Raum. Ein Kollege macht vor der Gruppe einen Witz über sein Stottern. Ordne die Reaktionen von stark nach schwach.", "eintraege": [
+      { "text": "„Den lass mal. Jonas ist einer der Besten hier.“", "warum": "Kurz, klar, mit Anerkennung für den, der nicht da ist." },
+      { "text": "Nicht mitlachen und später mit dem Kollegen reden.", "warum": "Gut – vor der Gruppe bleibt der Witz aber unwidersprochen." },
+      { "text": "Schweigen und weiterarbeiten.", "warum": "Schweigen wird schnell als Zustimmung gelesen." },
+      { "text": "Mitlachen, weil Jonas es ja nicht hört.", "warum": "Witze über Abwesende treffen trotzdem – und alle anderen hören mit." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0200", "faehigkeit": "konter.grenze", "stufe": 8, "kanal": "wissen" }, "frage": "Dein Vorgesetzter hat dich vor dem Team „unser Sorgenkind“ genannt. Ordne die Reaktionen vom klügsten zum riskantesten.", "eintraege": [
+      { "text": "Unter vier Augen: „Das ‚Sorgenkind‘ vor dem Team hat mich getroffen. Was steckt dahinter?“", "warum": "Grenze und Frage zugleich – nach oben ohne Publikum." },
+      { "text": "In der Runde, ruhig: „Wenn es eine Sorge gibt, sprechen wir gern darüber.“", "warum": "Klar und sachlich – vor allen nach oben etwas mutiger." },
+      { "text": "Nichts sagen und es schlucken.", "warum": "Ruhig, doch der Name bleibt hängen – und die Frage dahinter offen." },
+      { "text": "Vor allen: „Wenigstens bin ich kein Problemchef.“", "warum": "Ein Gegenangriff nach oben, vor dem Team – das schadet vor allem dir." }
+    ] },
+
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0201", "faehigkeit": "konter.rueckfrage", "stufe": 7, "kanal": "wissen", "einfluss": "rot" }, "lage": "Bei der Vereinsversammlung: „Wer gegen das neue Vereinsheim ist, will doch nur, dass der Verein eingeht.“", "frage": "Welcher Trick steckt darin – und was hilft?", "antworten": [
+      { "text": "Ein Strohmann – „So hat das keiner gesagt.“", "wert": 1, "warum": "Nah dran. Der Kern ist aber das falsche Entweder-oder: nur Heim oder Untergang." },
+      { "text": "Eine Killerphrase – lieber schweigen.", "wert": 0, "tendenz": "verstummen", "warum": "Schweigen lässt das Entweder-oder stehen." },
+      { "text": "Falsches Entweder-oder – auf die Mitte zeigen: „Man kann den Verein wollen und trotzdem nach den Kosten fragen.“", "wert": 2, "warum": "Du benennst die dritte Möglichkeit, die das Entweder-oder verschweigt." },
+      { "text": "Ein Argument – dem Heim zustimmen, damit niemand denkt, du seist gegen den Verein.", "wert": 0, "tendenz": "vermeiden", "warum": "Genau dafür ist der Trick gebaut." }
+    ], "erklaerung": "Beim falschen Entweder-oder gibt es angeblich nur zwei Möglichkeiten, und eine davon ist schlimm. Die Abwehr: die dritte Möglichkeit benennen." },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0202", "faehigkeit": "konter.rueckfrage", "stufe": 8, "kanal": "wissen", "einfluss": "rot" }, "lage": "Ein Kollege stellt dir in der Diskussion fünf Fragen ohne Pause: „Und die Kosten? Und wer macht das? Und bis wann? Und was sagt der Kunde? Und warum erst jetzt?“", "frage": "Was passiert hier – und was hilft?", "antworten": [
+      { "text": "Alle auf einmal beantworten, damit keine liegen bleibt.", "wert": 0, "warum": "Genau das will die Salve: Du wirkst gehetzt und unsicher." },
+      { "text": "„Das sind zu viele Fragen auf einmal.“", "wert": 1, "warum": "Richtig erkannt – ohne Angebot klingt es aber nach Ausweichen." },
+      { "text": "„Hast du dich extra vorbereitet, um mich hier vor allen vorzuführen?“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Gegenangriff – und keine einzige Frage ist beantwortet." },
+      { "text": "Fragensalve – Tempo rausnehmen: „Gute Fragen. Ich nehme sie der Reihe nach. Erstens …“", "wert": 2, "warum": "Ausatmen, sortieren, eine nach der anderen – du bestimmst das Tempo." }
+    ], "erklaerung": "Eine Salve von Fragen lässt keinen Raum für Antworten – wer hastig alles beantwortet, wirkt unsicher. Die Abwehr: ausatmen, sortieren, eine nach der anderen." },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0203", "faehigkeit": "konter.rueckfrage", "stufe": 7, "kanal": "wissen" }, "frage": "Ein Kollege nach deinem Vorschlag: „Interessant, dass ausgerechnet du das vorschlägst.“ Was ist die stärkste Antwort?", "antworten": [
+      { "text": "„Ich weiß, beim letzten Projekt lief nicht alles glatt, aber das hier ist doch etwas völlig anderes …“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Du verteidigst dich gegen etwas, das er gar nicht gesagt hat." },
+      { "text": "„Ausgerechnet ich? Was meinst du genau?“", "wert": 2, "warum": "Du holst den Unterton ans Licht – er muss ihn erklären." },
+      { "text": "„Danke.“", "wert": 1, "warum": "Gelassen – der Unterton bleibt aber ungeklärt." },
+      { "text": "„Interessant, dass ausgerechnet du dich beschwerst.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Spiegelbild mit Spitze – jetzt streitet ihr." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0204", "faehigkeit": "konter.rueckfrage", "stufe": 9, "kanal": "wissen" }, "frage": "Ein Kunde nach deinem Angebot, knapp: „Ambitioniert.“ Mehr nicht. Was ist am stärksten?", "antworten": [
+      { "text": "„Danke! Wir haben uns viel Mühe gegeben, das ganze Team hat wochenlang daran gesessen.“", "wert": 0, "warum": "Du nimmst es als Lob – vermutlich war es keins, und der Einwand bleibt verborgen." },
+      { "text": "„Was meinen Sie damit?“", "wert": 1, "warum": "Gute Rückfrage. Mit zwei möglichen Deutungen machst du es ihm leichter, konkret zu werden." },
+      { "text": "„Ambitioniert im Sinne von zu teuer – oder zu knapp geplant?“", "wert": 2, "warum": "Du bietest zwei Deutungen an. So fällt es ihm leicht, den echten Einwand zu nennen." },
+      { "text": "„Lieber ambitioniert als langweilig.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Konter beim Kunden, der seinen Einwand vom Tisch wischt." }
+    ] },
+    { "art": "konter", "kopf": { "id": "konter-v-0205", "faehigkeit": "konter.rueckfrage", "stufe": 7, "kanal": "koennen" }, "lage": "Projekttreffen. Du schlägst vor, die Kunden direkt zu befragen.", "von": "Ein erfahrener Kollege", "spruch": "„Ah, die Theorie aus dem Lehrbuch.“", "schaerfe": 2, "muster": [{ "technik": "Rückfrage", "text": "„Welche Erfahrung spricht aus deiner Sicht dagegen?“" }, { "technik": "übersetzen", "text": "„Du fürchtest, dass es im Alltag nicht klappt? Erzähl – du kennst die Kunden länger.“" }, { "technik": "Gerade weil", "text": "„Gerade deshalb brauch ich deine Praxis dazu.“" }], "kriterien": ["holt die Erfahrung des anderen herein", "ohne Verteidigung", "ruhig"] },
+    { "art": "konter", "kopf": { "id": "konter-v-0206", "faehigkeit": "konter.rueckfrage", "stufe": 9, "kanal": "koennen" }, "lage": "Vor versammeltem Team fragt dich der Leiter einer anderen Abteilung lächelnd:", "von": "Ein Abteilungsleiter", "spruch": "„Und Sie glauben wirklich, dass das klappt? Bei Ihrer Erfolgsquote?“", "schaerfe": 3, "muster": [{ "technik": "Rückfrage", "text": "„Welche Quote meinen Sie? Dann reden wir über Zahlen.“" }, { "technik": "Grenze und Sache", "text": "„Den Seitenhieb lasse ich liegen. Zur Frage: Ja, weil …“" }, { "technik": "übersetzen", "text": "„Sie haben Zweifel am Plan? Welcher Punkt macht Ihnen Sorgen?“" }], "kriterien": ["Sie-Form", "nimmt den Seitenhieb nicht auf", "holt die Sachfrage heraus"] },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0207", "faehigkeit": "konter.rueckfrage", "stufe": 7, "kanal": "wissen" }, "auftrag": "Welche Rückfrage passt zur Taktik?", "faecher": ["„Woraus schließt du das?“", "„Welches Argument meinst du?“", "„Wann genau?“"], "karten": [
+      { "text": "„Du willst doch nur befördert werden.“", "fach": 0 },
+      { "text": "„Das sieht doch jeder vernünftige Mensch anders.“", "fach": 1 },
+      { "text": "„Du kommst immer zu spät.“", "fach": 2 },
+      { "text": "„Dir geht's doch nur ums Geld.“", "fach": 0 },
+      { "text": "„Das ist doch längst widerlegt.“", "fach": 1 },
+      { "text": "„Nie hältst du dich an Absprachen.“", "fach": 2 }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "konter-v-0208", "faehigkeit": "konter.rueckfrage", "stufe": 8, "kanal": "wissen" }, "auftrag": "Hilft hier eine Rückfrage – oder schadet sie eher?", "faecher": ["Rückfrage hilft", "Rückfrage schadet eher"], "karten": [
+      { "text": "ein vager Vorwurf im Teamchat", "fach": 0 },
+      { "text": "ein harmloser Witz unter Freunden", "fach": 1 },
+      { "text": "„Interessant …“ – mit Unterton vom Chef", "fach": 0 },
+      { "text": "jemand trauert und sagt etwas Bitteres", "fach": 1 },
+      { "text": "eine Killerphrase in der Besprechung", "fach": 0 },
+      { "text": "ein ehrliches Kompliment, das dich verlegen macht", "fach": 1 }
+    ] },
+
+    { "art": "konter", "kopf": { "id": "konter-v-0209", "faehigkeit": "konter.ruhe", "stufe": 7, "kanal": "koennen" }, "lage": "Dein erster Vortrag vor der Geschäftsleitung. Nach zwei Minuten unterbricht dich jemand.", "von": "Ein Geschäftsführer", "spruch": "„Kommen Sie bitte zum Punkt. Was wollen Sie von uns?“", "schaerfe": 2, "muster": [{ "technik": "Sekunde und Kern", "text": "(ausatmen) „Eine Entscheidung bis Freitag: Ja oder Nein zum Umbau.“" }, { "technik": "zustimmen", "text": "„Gern. Der Punkt ist: …“" }, { "technik": "übersetzen", "text": "„Sie wollen die Entscheidungsfrage zuerst? Hier ist sie: …“" }], "kriterien": ["Pause vor der Antwort", "Kern in einem Satz", "keine Entschuldigung"] },
+    { "art": "konter", "kopf": { "id": "konter-v-0210", "faehigkeit": "konter.ruhe", "stufe": 9, "kanal": "koennen" }, "lage": "Podiumsrunde vor hundert Leuten. Du sitzt auf der Bühne.", "von": "Ein Mitdiskutant", "spruch": "„Das ist ja niedlich, was Sie da erzählen.“", "schaerfe": 3, "muster": [{ "technik": "Sekunde und Sache", "text": "(ausatmen) „Niedlich oder nicht – die Zahlen sind eindeutig: …“" }, { "technik": "Rückfrage", "text": "„Welchen Teil halten Sie für falsch?“" }, { "technik": "stehen lassen", "text": "„Danke.“ – und zum Publikum weitersprechen." }], "kriterien": ["nimmt die Abwertung nicht auf", "spricht zum Publikum", "bleibt ruhig"] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0211", "faehigkeit": "konter.ruhe", "stufe": 6, "kanal": "wissen" }, "frage": "Du sprichst gleich vor fünfzig Leuten. Was bereitest du gegen Zwischenrufe vor?", "antworten": [
+      { "text": "Für jeden denkbaren Zwischenruf eine witzige Antwort, damit dich nichts überraschen kann.", "wert": 0, "warum": "Das schafft niemand – und im Schreck sind wenige, schlichte Sätze am leichtesten abzurufen." },
+      { "text": "Zwei, drei Allzwecksätze – und den Kernsatz, zu dem du zurückkehrst.", "wert": 2, "warum": "Wenig, aber sicher: Die Sätze tragen dich über die leere Sekunde, der Kernsatz holt dich zurück." },
+      { "text": "Nichts – lieber spontan bleiben.", "wert": 1, "warum": "Kann klappen. Mit zwei vorbereiteten Sätzen bist du aber sicherer." },
+      { "text": "Zu Beginn bitten, Fragen ans Ende zu stellen.", "wert": 1, "warum": "Legitim und oft hilfreich – Zwischenrufe kommen trotzdem, dann hilft ein vorbereiteter Satz." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0212", "faehigkeit": "konter.ruhe", "stufe": 8, "kanal": "wissen" }, "frage": "Mitten in deinem Bericht lacht jemand in der letzten Reihe laut – du weißt nicht, worüber. Was tust du?", "antworten": [
+      { "text": "Fragen: „Was ist so lustig?“", "wert": 1, "warum": "Kann klären – riskiert aber, dass du eine harmlose Sache groß machst." },
+      { "text": "Kurz innehalten, freundlich in die Richtung schauen und weitersprechen.", "wert": 2, "warum": "Die Pause zeigt Ruhe, der Blick sagt: Ich habe es gesehen. Mehr braucht es meist nicht." },
+      { "text": "Unsicher werden und schneller sprechen, um möglichst rasch fertig zu sein und das Lachen hinter dich zu bringen.", "wert": 0, "warum": "Verständlich – doch Tempo wirkt getroffen, und der Inhalt leidet." },
+      { "text": "Den Vortrag unterbrechen und dich entschuldigen, falls etwas nicht stimmt.", "wert": 0, "tendenz": "kleinreden", "warum": "Du entschuldigst dich für etwas, das vielleicht gar nichts mit dir zu tun hat." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0213", "faehigkeit": "konter.ruhe", "stufe": 7, "kanal": "wissen" }, "frage": "Ein Zwischenruf bringt dich vor der Gruppe aus dem Konzept. Ordne die Schritte in der hilfreichsten Reihenfolge.", "eintraege": [
+      { "text": "Ausatmen.", "warum": "Erst der Körper – sonst bleibt der Kopf eng." },
+      { "text": "Den Blick über die ganze Gruppe gehen lassen.", "warum": "Du sprichst für alle, nicht gegen einen." },
+      { "text": "Ein kurzer Satz für alle.", "warum": "Ein Satz genügt – mehr macht den Zwischenruf größer." },
+      { "text": "Zurück zum Kernsatz.", "warum": "Der Faden ist wieder da – und mit ihm die Ruhe." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0214", "faehigkeit": "konter.ruhe", "stufe": 9, "kanal": "wissen" }, "frage": "Ein Zwischenrufer hat dich beim Auftritt erwischt. Was hilft danach am meisten? Ordne von hilfreich bis wenig hilfreich.", "eintraege": [
+      { "text": "Noch am Abend: die Lage notieren und einen Satz für das nächste Mal bauen.", "warum": "Aus dem Treppenwitz wird Vorrat – das Erlebnis ist abgeschlossen." },
+      { "text": "Mit einer Vertrauensperson kurz darüber sprechen.", "warum": "Entlastet und bringt oft eine gute Idee." },
+      { "text": "Es einfach vergessen.", "warum": "Manchmal möglich – doch der Satz für das nächste Mal fehlt." },
+      { "text": "Die Szene immer wieder im Kopf durchspielen.", "warum": "Grübeln ohne Plan hält die Szene lebendig, ohne zu helfen." }
+    ] },
+    { "art": "buehne", "kopf": { "id": "konter-v-0215", "faehigkeit": "konter.ruhe", "stufe": 8, "kanal": "koennen", "laut": true, "leise": "konter-v-0163" }, "auftrag": "Steh auf und halte eine Rede von zwei Minuten zu einem Thema deiner Wahl. Der Coach wirft drei härtere Zwischenrufe ein. Antworte für den ganzen Raum und kehr zum Kernsatz zurück.", "sekunden": 120, "publikum": "gross", "stoerungen": ["„Das glauben Sie doch selbst nicht!“", "„Zeit!“", "„Das hat schon mal jemand versucht – ging schief.“"], "pruefliste": ["Vor jeder Antwort ausgeatmet?", "Blick zum ganzen Raum?", "Kernsatz wieder aufgenommen?", "Stimme gehalten?"] },
+    { "art": "buehne", "kopf": { "id": "konter-v-0216", "faehigkeit": "konter.ruhe", "stufe": 9, "kanal": "koennen", "laut": true, "leise": "konter-v-0163" }, "auftrag": "Steh auf und stell ein heikles Ergebnis vor – etwa: Das Projekt liegt zwei Monate zurück. Sag den Kern zuerst, nimm Spott ohne Rechtfertigung, schau nach vorn.", "sekunden": 90, "publikum": "video", "stoerungen": ["„Zwei Monate? Respekt.“", "Seufzen im Raum", "„Und wer ist schuld?“"], "pruefliste": ["Kern zuerst?", "Keine Rechtfertigungsschleife?", "Nach vorn geschaut?"] },
+
+    { "art": "auswahl", "kopf": { "id": "konter-v-0217", "faehigkeit": "konter.selbstironie", "stufe": 7, "kanal": "wissen" }, "frage": "Deine Präsentation stürzt ab, der Bildschirm wird schwarz, dreißig Leute warten. Welcher Satz trägt dich am besten?", "antworten": [
+      { "text": "„Typisch, bei mir geht immer alles schief, ich bin einfach verflucht, was Technik angeht – sorry!“", "wert": 0, "tendenz": "kleinreden", "warum": "Selbstabwertung vor dreißig Leuten – das bleibt hängen." },
+      { "text": "„Moment bitte.“ – und schweigend neu starten.", "wert": 1, "warum": "Ruhig und in Ordnung. Ein leichter Satz nimmt der Wartezeit die Spannung." },
+      { "text": "„Das war der Teil mit dem Spannungsbogen. Gleich geht's weiter.“", "wert": 2, "warum": "Über die Lage, nicht über dich – und alle wissen: Du bist ruhig." },
+      { "text": "„Das liegt am Laptop der Firma, der ist uralt.“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Die Schuld abschieben wirkt kleinlich – auch wenn es stimmt." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0218", "faehigkeit": "konter.selbstironie", "stufe": 9, "kanal": "wissen" }, "frage": "Du hast vergessen, den Raum für den Workshop zu buchen. Alle mussten in die Kantine umziehen, der Workshop lief trotzdem. Was sagst du zu Beginn der Pause?", "antworten": [
+      { "text": "„Ich wollte nur testen, wie flexibel ihr seid. Bestanden! – Im Ernst: mein Fehler, nächstes Mal buche ich doppelt.“", "wert": 2, "warum": "Leichte Selbstironie, dann klare Verantwortung. Bei kleinem Schaden passt beides zusammen." },
+      { "text": "„Es tut mir so leid, ich weiß gar nicht, wie mir das passieren konnte, ich bin sonst nie so schusselig …“", "wert": 0, "tendenz": "kleinreden", "warum": "Eine lange Entschuldigung macht aus einem kleinen Fehler ein großes Thema." },
+      { "text": "Nichts sagen und hoffen, dass es keinem aufgefallen ist.", "wert": 0, "tendenz": "vermeiden", "warum": "Allen ist es aufgefallen. Ein Satz von dir hätte es abgeschlossen." },
+      { "text": "„Mein Fehler, sorry.“", "wert": 1, "warum": "Klar und ausreichend – ein Augenzwinkern hätte die Stimmung noch gehoben." }
+    ] },
+    { "art": "konter", "kopf": { "id": "konter-v-0219", "faehigkeit": "konter.selbstironie", "stufe": 7, "kanal": "koennen" }, "lage": "Du hast den Bus beim Teamausflug in die falsche Richtung gelotst. Eine Stunde Umweg.", "von": "Miriam", "spruch": "„Und hier sehen Sie unseren Navigator!“", "schaerfe": 1, "muster": [{ "technik": "Selbstironie", "text": "„Ich wollte euch nur die Landschaft zeigen. Gratis.“" }, { "technik": "zustimmen", "text": "„Navigator im Ruhestand. Ab sofort führt Tarek.“" }, { "technik": "Rolle annehmen", "text": "„Danke, danke. Autogramme gibt's an der Raststätte.“" }], "kriterien": ["lacht über das Missgeschick", "ohne Selbstabwertung", "leicht"] },
+    { "art": "konter", "kopf": { "id": "konter-v-0220", "faehigkeit": "konter.selbstironie", "stufe": 8, "kanal": "koennen" }, "lage": "Du leitest seit Kurzem das Team. In deiner ersten Ansprache hast du dich zweimal versprochen.", "von": "Tarek", "spruch": "„Starker Auftakt, Chef!“", "schaerfe": 1, "muster": [{ "technik": "Selbstironie von oben", "text": "„Ich wollte zeigen, dass Fehler bei uns erlaubt sind. Das war Absicht. Zweimal.“" }, { "technik": "zustimmen", "text": "„Danke – die Versprecher gibt's gratis dazu.“" }, { "technik": "schlicht", "text": "„Danke. Beim nächsten Mal mit halb so vielen.“" }], "kriterien": ["Selbstironie aus der neuen Rolle", "leicht", "ohne sich kleinzumachen"] },
+    { "art": "umformulieren", "kopf": { "id": "konter-v-0221", "faehigkeit": "konter.selbstironie", "stufe": 7, "kanal": "koennen" }, "auftrag": "Mach aus der Selbstabwertung Selbstironie, die deine neue Rolle nicht untergräbt.", "vorlage": "Als neue Projektleitung zum Team: „Ich hab ehrlich gesagt keine Ahnung, wie man so was leitet.“", "kriterien": ["ehrlich über das Neue", "ohne dir die Eignung abzusprechen", "leicht"], "muster": ["„Ich leite zum ersten Mal ein Projekt – ihr seid also meine Versuchskaninchen. Kekse liegen bereit.“", "„Neu in der Rolle, erfahren im Kaffeetrinken. Den Rest lernen wir gemeinsam.“"] },
+    { "art": "umformulieren", "kopf": { "id": "konter-v-0222", "faehigkeit": "konter.selbstironie", "stufe": 9, "kanal": "koennen" }, "auftrag": "Nach einem echten Fehler: erst Verantwortung, dann – höchstens – ein leichter Satz. Bau beides.", "vorlage": "Du hast eine Lieferung an den falschen Standort geschickt. Es ist geklärt, aber es gab Ärger. Heute ist Teamrunde.", "kriterien": ["Verantwortung zuerst", "Lösung genannt", "Witz nur klein und am Ende"], "muster": ["„Die Lieferung an den falschen Standort ging auf mich. Ist geklärt, der Kunde hat sie. Ab jetzt prüfe ich die Adresse zweimal.“", "„Mein Fehler, ist geklärt. Mein Navi und ich reden noch darüber.“"] },
+    { "art": "szene", "kopf": { "id": "konter-v-0223", "faehigkeit": "konter.selbstironie", "stufe": 7, "kanal": "wissen" }, "beschreibung": "Jule hat dich zu einer Tortenverkostung eingeladen – sie probiert Rezepte aus dem Kochkurs aus. Beim Hereinkommen stolperst du und rammst fast den Tortenständer. Zehn Gäste schauen dich an.", "frage": "Was sagst du?", "antworten": [
+      { "text": "„Ich wollte nur sichergehen, dass er stabil steht. Tut er!“", "wert": 2, "warum": "Über das Missgeschick gelacht – und Jules Torten sind wieder im Mittelpunkt." },
+      { "text": "„Oh nein, ich bin so ungeschickt, ich mach immer alles kaputt – Jule, entschuldige bitte vielmals!“", "wert": 0, "tendenz": "kleinreden", "warum": "Jetzt geht es um dich statt um Jules Abend." },
+      { "text": "Lächeln und dich still hinsetzen.", "wert": 1, "warum": "Völlig in Ordnung – ein leichter Satz hätte den Moment schneller aufgelöst." },
+      { "text": "„Wer stellt denn die Torte direkt an die Tür?“", "wert": 0, "tendenz": "angreifen", "warum": "Die Schuld bei Jule zu suchen, trübt ihren Abend." }
+    ] },
+    { "art": "szene", "kopf": { "id": "konter-v-0224", "faehigkeit": "konter.selbstironie", "stufe": 8, "kanal": "wissen" }, "beschreibung": "Du trainierst die Kindermannschaft deines Patenkinds. Das Spiel ging 0:7 verloren. Ein Vater ruft laut über den Platz: „Wer hat euch denn das Toreschießen beigebracht? Ach ja – du!“ Die Kinder hören zu.", "frage": "Was sagst du?", "antworten": [
+      { "text": "„Dann trainieren Sie doch nächste Woche, wenn Sie es besser können.“", "wert": 0, "tendenz": "angreifen", "warum": "Vor den Kindern ein Streit unter Erwachsenen." },
+      { "text": "„Mit diesen Kindern ist halt nicht mehr drin, die sind einfach nicht so weit wie andere.“", "wert": 0, "tendenz": "abwerten", "warum": "Du schützt dich auf Kosten der Kinder." },
+      { "text": "„Geht auf meine Kappe. Die Kinder haben gekämpft – das Tor üben wir nächste Woche.“", "wert": 2, "warum": "Selbstironie nimmt den Spruch auf dich, und die Kinder hören, dass sie gut waren." },
+      { "text": "Die Kinder einsammeln und gar nicht reagieren.", "wert": 1, "warum": "Ruhig – die Kinder hätten aber gern gehört, dass sie gut gekämpft haben." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0225", "faehigkeit": "konter.selbstironie", "stufe": 7, "kanal": "wissen" }, "frage": "Du kommst heute zum dritten Mal zu spät in eine Runde. Ordne die Sätze von angemessen bis unpassend.", "eintraege": [
+      { "text": "„Mein Fehler. Ab morgen stell ich zwei Wecker.“", "warum": "Beim dritten Mal zählt Verantwortung – kurz und mit Lösung." },
+      { "text": "„Ich arbeite an einem neuen Rekord.“", "warum": "Beim ersten Mal charmant, beim dritten wirkt es wie Kleinreden." },
+      { "text": "Eine lange Erklärung über Bahn, Stau und Wetter.", "warum": "Rechtfertigung – die anderen warten schon wieder." },
+      { "text": "„Ich bin einfach unmöglich, ich krieg nichts hin.“", "warum": "Selbstabwertung – das hilft weder dir noch der Runde." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "konter-v-0226", "faehigkeit": "konter.selbstironie", "stufe": 8, "kanal": "wissen" }, "frage": "Du leitest zum ersten Mal die Teamrunde. Ordne die Einstiege von stark nach schwach.", "eintraege": [
+      { "text": "„Ich bin neu in der Rolle – seid nachsichtig, falls ich die Tagesordnung falsch herum halte. Punkt eins: …“", "warum": "Selbstironie über das Neue, dann sofort zur Sache." },
+      { "text": "„Schön, dass ihr da seid. Punkt eins: …“", "warum": "Klar und freundlich – solide." },
+      { "text": "„Ich weiß eigentlich gar nicht, warum man mich ausgesucht hat.“", "warum": "Du sprichst dir selbst die Eignung ab – vor dem ganzen Team." },
+      { "text": "„Ab jetzt weht hier ein anderer Wind. Ich verstehe keinen Spaß.“", "warum": "Ein Auftakt, der Angst macht statt zu verbinden." }
+    ] },
+
+    { "art": "humorlabor", "kopf": { "id": "konter-v-0227", "faehigkeit": "konter.spiel", "stufe": 7, "kanal": "koennen" }, "auftrag": "Du moderierst. Der Hauptredner verspätet sich um zehn Minuten. Füll die Lücke mit einer Dreierliste für den Saal – ohne ihn bloßzustellen.", "vorlage": "„Während wir warten, drei Dinge über unseren Redner: Er ist Fachmann, er ist sympathisch, und …“", "kriterien": ["Pointe am Ende", "nicht verletzend für den Redner", "bindet den Saal ein"], "muster": ["„… er sammelt gerade Spannung für Sie.“", "„… er weiß, dass das Beste zum Schluss kommt.“"] },
+    { "art": "humorlabor", "kopf": { "id": "konter-v-0228", "faehigkeit": "konter.spiel", "stufe": 9, "kanal": "koennen" }, "auftrag": "Bau zum Schluss deiner Rede einen Rückgriff auf ein kleines Missgeschick vom Anfang.", "vorlage": "Am Anfang deiner Rede ist dir die Karteikarte heruntergefallen. Jetzt kommt dein letzter Satz.", "kriterien": ["nimmt den Anfang auf", "kurz", "leicht"], "muster": ["„Damit bin ich am Ende – und diesmal halte ich die Karte fest.“", "„Danke! Die Karte und ich bedanken uns gemeinsam.“"] },
+    { "art": "humorlabor", "kopf": { "id": "konter-v-0229", "faehigkeit": "konter.selbstironie", "stufe": 7, "kanal": "koennen" }, "auftrag": "Stell dich in einer neuen Runde mit einem selbstironischen Satz vor – über eine Kleinigkeit, nicht über deine Arbeit.", "vorlage": "„Ich kümmere mich um die Planung – und privat …“", "kriterien": ["Kleinigkeit", "nicht über die Arbeit", "sympathisch"], "muster": ["„… plane ich drei Wochen, welchen Film ich schaue, und schlafe dann ein.“", "„… bin ich der Mensch, bei dem beim Möbelaufbau immer eine Schraube übrig bleibt.“"] },
+    { "art": "humorlabor", "kopf": { "id": "konter-v-0230", "faehigkeit": "konter.selbstironie", "stufe": 8, "kanal": "koennen" }, "auftrag": "Mach aus einem kleinen Missgeschick vor Publikum eine Pointe – ein Satz, dann weiter.", "vorlage": "Du hast in der Präsentation zweimal hintereinander dieselbe Folie gezeigt.", "kriterien": ["ein Satz", "leicht", "weiter im Thema"], "muster": ["„Die war so gut, die wollte ich zweimal zeigen.“", "„Wiederholung ist die Mutter des Lernens. Weiter.“"] },
+    { "art": "dialog", "kopf": { "id": "konter-v-0231", "faehigkeit": "konter.necken", "stufe": 8, "kanal": "koennen" },
+      "gespraech": {
+        "titel": "Der neue Werkstudent", "figur": "ein Werkstudent",
+        "lage": "Du leitest ein kleines Projekt. Der Werkstudent ist seit einer Woche da. Beim Kaffee macht er selbst einen Witz über seinen Fehler von gestern.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "„Na, heute schon was kaputt gemacht? – Ich frag mich lieber selbst, bevor ihr es tut.“ Er lacht etwas zu laut.",
+            "wahl": [
+              { "text": "Lachend: „Ja, ein bisschen mehr Sorgfalt würde dir nicht schaden.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Er hat dir eine Tür geöffnet – du hast sie als Leitung zugeschlagen." },
+              { "text": "„Gestern war ein Klassiker. Mein erster Monat war schlimmer – frag Miriam.“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst seine Selbstironie auf und stellst dich daneben. So steht er nicht allein da." },
+              { "text": "„Ach, keine Sorge.“", "wert": 1, "weiter": "k2", "rueck": "Freundlich – doch er spürt, dass sein Witz ins Leere ging." }
+            ] },
+          { "id": "k1b", "sagt": "Er lacht nicht mehr. „Klar. Sorry.“",
+            "wahl": [
+              { "text": "„Halt, das war blöd von mir. Fehler gehören dazu – deine sind harmlos.“", "wert": 2, "weiter": "k2", "rueck": "Schnell zurückgenommen – gerade von der Leitung wichtig." },
+              { "text": "Austrinken und gehen.", "wert": 0, "tendenz": "ueberspielen", "weiter": "ende2", "rueck": "Er bleibt mit dem Satz allein." }
+            ] },
+          { "id": "k2", "sagt": "Er grinst erleichtert: „Miriam hat erzählt, du hast mal den Server neu gestartet. Mitten am Tag.“",
+            "wahl": [
+              { "text": "„Stimmt. Seitdem heißt der Knopf bei uns nach mir.“", "wert": 2, "weiter": "ende1", "rueck": "Selbstironie von oben: Er merkt, Fehler gehören hier dazu." },
+              { "text": "„Das war was ganz anderes, da war die Lage auch viel komplizierter, weil der Server damals …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Jetzt erklärst du dich – und die Leichtigkeit ist weg." }
+            ] },
+          { "id": "ende1", "sagt": "Am Nachmittag stellt er dir zwei Fragen – mehr als in der ganzen Woche davor.", "ende": "Von oben verbindet Selbstironie, Spott über Fehler von unten drückt. Wer seine eigenen Fehler zeigt, macht Fragen leichter." },
+          { "id": "ende2", "sagt": "Er nickt höflich und geht an seinen Platz.", "ende": "Kein Drama. Von der Leitung wirkt Selbstironie besonders entlastend – Spott und Erklärungen nehmen ihr die Wirkung." }
+        ],
+        "prinzipien": ["Selbstironie von oben", "Fehler von unten nicht necken", "Danebengegangenes zurücknehmen"]
+      } },
+    { "art": "dialog", "kopf": { "id": "konter-v-0232", "faehigkeit": "konter.grenze", "stufe": 9, "kanal": "koennen" },
+      "gespraech": {
+        "titel": "Witze über eine, die nicht da ist", "figur": "ein Abteilungsleiter",
+        "lage": "Betriebsfeier, Stehtisch. Der Leiter der Nachbarabteilung – nach der Umorganisation bald dein Chef – macht Witze über Lena, die gerade zum Buffet gegangen ist.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "„Die Neue bei euch, die mit den Farbmarkern – ist die eigentlich auch mal locker, oder nur beschriftet?“ Zwei am Tisch lachen.",
+            "wahl": [
+              { "text": "Mitlachen.", "wert": 0, "tendenz": "kleinreden", "weiter": "k1b", "rueck": "Mitlachen über eine Abwesende – das bleibt an dir hängen." },
+              { "text": "„Witze über Leute, die nicht da sind, find ich schwierig – gerade über Lena.“", "wert": 1, "weiter": "k2", "rueck": "Klar und richtig. Nach oben, vor anderen, etwas hart – ein Satz Anerkennung hätte es weicher gemacht." },
+              { "text": "„Sie ist genau – und ehrlich gesagt die Beste, die wir seit Langem hatten.“", "wert": 2, "weiter": "k2", "rueck": "Du trittst für sie ein, ohne ihn bloßzustellen – nach oben genau richtig." }
+            ] },
+          { "id": "k1b", "sagt": "Lena kommt mit ihrem Teller zurück: „Worüber lacht ihr?“",
+            "wahl": [
+              { "text": "„Über nichts Gutes – meine Schuld. Erzähl lieber von deinem neuen Ablagesystem.“", "wert": 2, "weiter": "k2", "rueck": "Ehrlich, ohne jemanden bloßzustellen – und Lena bekommt die Bühne." },
+              { "text": "„Ach, nichts.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "ende2", "rueck": "Lena spürt, dass es um sie ging." }
+            ] },
+          { "id": "k2", "sagt": "Der Abteilungsleiter hebt die Augenbrauen: „Oh, da ist aber jemand loyal.“",
+            "wahl": [
+              { "text": "„Entschuldigung, ich wollte Ihnen nicht widersprechen.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende2", "rueck": "Du nimmst die Anerkennung für Lena wieder zurück." },
+              { "text": "„Bin ich. Das wäre ich für Ihr Team auch.“", "wert": 2, "weiter": "ende1", "rueck": "Loyalität als Stärke – und ein Signal an den künftigen Chef." },
+              { "text": "Lächeln und das Thema wechseln.", "wert": 1, "weiter": "ende1", "rueck": "Gelassen – die Haltung steht auch ohne weiteren Satz." }
+            ] },
+          { "id": "ende1", "sagt": "Er nickt langsam. Später fragt er dich nach Lenas Ablagesystem.", "ende": "Für andere eintreten geht auch nach oben: über die Stärke der Person, ohne den Ranghöheren bloßzustellen." },
+          { "id": "ende2", "sagt": "Das Gespräch plätschert weiter. Der Witz über Lena bleibt am Stehtisch hängen.", "ende": "Kein Drama. Bei Witzen über Abwesende genügt oft ein Satz Anerkennung für sie – auch nach oben." }
+        ],
+        "prinzipien": ["für Abwesende eintreten", "nach oben ohne Bloßstellung", "Loyalität als Stärke"]
+      } },
+    { "art": "geschichtenbau", "kopf": { "id": "konter-v-0233", "faehigkeit": "konter.spiel", "stufe": 7, "kanal": "koennen" }, "auftrag": "Bau eine Geschichte für die Runde: ein kleines Missgeschick aus deinem Leben, mit der Pointe am Ende.", "felder": [
+      { "name": "Lage", "hilfe": "Wo, wann, wer war dabei?" },
+      { "name": "Wendung", "hilfe": "Was ging schief?" },
+      { "name": "Pointe", "hilfe": "Der Satz, der zum Schluss kommt." },
+      { "name": "Stichwort für später", "hilfe": "Welches Wort kannst du als Rückgriff wieder aufnehmen?" }
+    ], "muster": ["Lage: erster Arbeitstag, Kantine. – Wendung: Ich habe mich mit dem Tablett an den Tisch der Geschäftsleitung gesetzt und gefragt, ob sie auch neu sind. – Pointe: Einer sagte: „Ich bin seit zwanzig Jahren neu.“ – Stichwort: „seit zwanzig Jahren neu“."] },
+    { "art": "geschichtenbau", "kopf": { "id": "konter-v-0234", "faehigkeit": "konter.selbstironie", "stufe": 8, "kanal": "koennen" }, "auftrag": "Bau aus einem Fehler, über den du heute lachen kannst, eine Geschichte – mit Maß.", "felder": [
+      { "name": "Der Fehler", "hilfe": "Was ist passiert?" },
+      { "name": "Was du gelernt hast", "hilfe": "Ein Satz." },
+      { "name": "Pointe", "hilfe": "Der Satz zum Schluss." },
+      { "name": "Grenze", "hilfe": "Gibt es jemanden, für den die Geschichte nicht lustig ist? Dann lass diesen Teil weg." }
+    ], "muster": ["Fehler: Ich habe eine Mail mit „Liebe Grüße und bis Sonntag“ an den Vorstand geschickt – gemeint war meine Schwester. – Gelernt: den Empfänger zweimal prüfen. – Pointe: Der Vorstand antwortete: „Bis Sonntag.“ – Grenze: Bloßgestellt wird nur ich."] },
+    { "art": "konter", "kopf": { "id": "konter-v-0235", "faehigkeit": "konter.zustimmen", "stufe": 8, "kanal": "koennen" }, "lage": "Großes Familienfest. Dein Cousin, vor allen:", "von": "Dein Cousin", "spruch": "„Du wohnst ja immer noch zur Miete. Gibt's dafür eigentlich einen Preis?“", "schaerfe": 2, "muster": [{ "technik": "zustimmen und überzeichnen", "text": "„Ja, ich bin dreifach nominiert. Die Rede schreibe ich schon.“" }, { "technik": "zustimmen und Grenze", "text": "„Stimmt. Und das bleibt auch mein Thema.“" }, { "technik": "umdeuten", "text": "„Den Preis für Freiheit gewinne ich jedes Jahr.“" }], "kriterien": ["gibt recht, ohne sich zu rechtfertigen", "leicht vor der Runde", "klar, wo das Thema endet"] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0236", "faehigkeit": "konter.zustimmen", "stufe": 8, "kanal": "wissen" }, "frage": "Vor der Runde sagt Dr. Albers lächelnd: „Sie sind ja heute in Höchstform – drei Wortmeldungen in zehn Minuten.“ Was passt?", "antworten": [
+      { "text": "„Entschuldigung, ich wollte nicht so viel reden.“", "wert": 0, "tendenz": "kleinreden", "warum": "Er hat gelächelt – eine Entschuldigung macht daraus eine Rüge." },
+      { "text": "„Das war erst das Aufwärmen.“", "wert": 2, "warum": "Zustimmen und überzeichnen – nach oben leicht, ohne Spitze." },
+      { "text": "„Danke.“ – und die nächste Wortmeldung etwas aufheben.", "wert": 1, "warum": "Gelassen und klug – vielleicht war es auch ein freundlicher Hinweis." },
+      { "text": "„Irgendwer muss ja was sagen, wenn alle anderen hier nur schweigen und auf die Uhr schauen.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Seitenhieb auf die ganze Runde." }
+    ] },
+    { "art": "konter", "kopf": { "id": "konter-v-0237", "faehigkeit": "konter.umdeuten", "stufe": 8, "kanal": "koennen" }, "lage": "Jahresgespräch. Dr. Albers sagt freundlich:", "von": "Dr. Albers", "spruch": "„Sie stellen viele Fragen. Manchmal etwas zu viele.“", "schaerfe": 2, "muster": [{ "technik": "umdeuten und offen", "text": "„Ich will es richtig machen. Welche Fragen kann ich mir sparen?“" }, { "technik": "Gerade weil", "text": "„Gerade deshalb laufen meine Projekte selten schief. Ich höre aber: in der großen Runde weniger?“" }, { "technik": "übersetzen", "text": "„Sie meinen, ich soll mehr selbst entscheiden? Wo genau?“" }], "kriterien": ["zeigt die Rückseite", "nimmt den Hinweis an", "nach oben sachlich"] },
+    { "art": "auswahl", "kopf": { "id": "konter-v-0238", "faehigkeit": "konter.umdeuten", "stufe": 9, "kanal": "wissen" }, "frage": "Im Bewerbungsgespräch: „Sie waren lange in Teilzeit. Sind Sie überhaupt belastbar?“ Was antwortest du?", "antworten": [
+      { "text": "„Ich hatte damals eine schwierige Zeit mit der Familie, aber jetzt geht es wieder besser, und ich bin …“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Du erklärst dein Privatleben, statt deine Stärke zu zeigen." },
+      { "text": "„Ich habe in weniger Stunden dasselbe geschafft – planen kann ich also. Ein Beispiel: …“", "wert": 2, "warum": "Die Rückseite der Teilzeit – mit Beleg. So wird aus dem Zweifel ein Argument." },
+      { "text": "„Natürlich.“", "wert": 1, "warum": "Selbstbewusst – ohne Beispiel bleibt es aber eine Behauptung." },
+      { "text": "„Sind Sie denn belastbar?“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Spiegeln mit Spitze – im Bewerbungsgespräch riskant." }
+    ] },
+    { "art": "szene", "kopf": { "id": "konter-v-0239", "faehigkeit": "konter.grenze", "stufe": 8, "kanal": "wissen" }, "beschreibung": "Teamabend. Ein Kollege hat getrunken und macht Lena gegenüber anzügliche Bemerkungen. Lena lächelt angestrengt. Ihr sitzt zu viert am Tisch.", "frage": "Was tust du?", "antworten": [
+      { "text": "Nichts sagen – Lena ist erwachsen und kann sich selbst wehren.", "wert": 0, "tendenz": "vermeiden", "warum": "Anzüglichkeiten unter Alkohol und vor anderen sind schwer allein abzuwehren. Ein Satz von dir entlastet sie." },
+      { "text": "„Komm, lass das. Lena, wir wollten doch noch zur Bar.“ – und mit ihr aufstehen.", "wert": 2, "warum": "Grenze und Ausweg zugleich – Lena muss sich nicht selbst wehren." },
+      { "text": "Ihn laut vor allen anschreien.", "wert": 0, "tendenz": "angreifen", "warum": "Die Grenze stimmt, doch die Lautstärke macht eine Szene, in der Lena im Mittelpunkt steht." },
+      { "text": "Lena später fragen, ob sie Hilfe möchte.", "wert": 1, "warum": "Wichtig – im Moment selbst braucht sie aber einen Ausweg." }
+    ] },
+    { "art": "szene", "kopf": { "id": "konter-v-0240", "faehigkeit": "konter.rueckfrage", "stufe": 8, "kanal": "wissen" }, "beschreibung": "Du leitest einen Workshop mit zwanzig Leuten. Ein Teilnehmer meldet sich mit verschränkten Armen: „Das ist doch alles Theorie. Bringt in der Praxis nichts.“ Alle schauen dich an.", "frage": "Was antwortest du?", "antworten": [
+      { "text": "„Studien zeigen das Gegenteil – ich kann Ihnen gern die Quellen schicken, wenn Sie mir nicht glauben.“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Du verteidigst dich mit Belegen, statt seinen Einwand zu hören." },
+      { "text": "„Probieren Sie es erst mal aus.“", "wert": 1, "warum": "Ein fairer Vorschlag – nur bleibt sein Einwand ungehört." },
+      { "text": "„Welche Erfahrung haben Sie gemacht? Wenn es irgendwo hakt, will ich das wissen.“", "wert": 2, "warum": "Du holst seinen Einwand herein. Oft steckt eine echte Erfahrung dahinter, von der alle lernen." },
+      { "text": "„Dann sind Sie hier wohl falsch.“", "wert": 0, "tendenz": "angreifen", "warum": "Vor zwanzig Leuten abgekanzelt – das spüren alle." }
+    ] },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0241", "faehigkeit": "konter.grenze", "stufe": 9, "kanal": "wissen", "einfluss": "rot" }, "lage": "Ein Kollege lobt dich vor dem Chef: „Ohne unseren Fleißigsten wären wir verloren. Der hat ja auch sonst kein Leben.“", "frage": "Was steckt darin – und was hilft?", "antworten": [
+      { "text": "Echtes Lob – sich freuen und alles glauben.", "wert": 0, "warum": "Der zweite Satz ist der Stich." },
+      { "text": "Vergiftetes Lob – richtigstellen: „Ich habe sehr wohl ein Leben!“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Jetzt verteidigst du dein Privatleben vor dem Chef." },
+      { "text": "Vergiftetes Lob – ruhig nachfragen: „Wie meinst du den zweiten Teil?“", "wert": 1, "warum": "Geht – vor dem Chef holt es den Stich aber ins Licht. Oft genügt es, nur das Lob zu nehmen." },
+      { "text": "Vergiftetes Lob – nur das Lob annehmen: „Danke! Schön, dass es auffällt.“", "wert": 2, "warum": "Der Haken läuft ins Leere, und du stehst vor dem Chef gut da." }
+    ], "erklaerung": "Das vergiftete Lob versteckt den Stich im Nebensatz. Wer nur das Lob annimmt, lässt ihn ins Leere laufen." },
+    { "art": "kunstgriff", "kopf": { "id": "konter-v-0242", "faehigkeit": "konter.rueckfrage", "stufe": 9, "kanal": "wissen", "einfluss": "rot" }, "lage": "In der Besprechung zu deinem Budget sagt der Controller: „Wir hatten doch vereinbart, dass Sie dieses Jahr sparen.“ Eine solche Absprache gab es nicht.", "frage": "Was passiert hier – und was hilft?", "antworten": [
+      { "text": "Ein Missverständnis – zustimmen, um Streit zu vermeiden.", "wert": 0, "tendenz": "vermeiden", "warum": "Wer schweigt oder zustimmt, macht die erfundene Absprache wahr." },
+      { "text": "Eine erfundene Absprache – ruhig widersprechen: „Daran erinnere ich mich nicht. Wann und wo war das?“", "wert": 2, "warum": "Ruhig, klar, mit der Frage nach Ort und Zeit – ohne ihm Absicht vorzuwerfen." },
+      { "text": "Eine Lüge – „Das ist gelogen!“", "wert": 0, "tendenz": "angreifen", "warum": "Vielleicht stimmt es – vor anderen wird daraus aber ein Streit um Ehre statt um Zahlen." },
+      { "text": "Ein Irrtum – erst in den Mails nachsehen und dann weiterreden.", "wert": 1, "warum": "Vernünftig – sag aber gleich, dass du dich nicht erinnerst, sonst gilt die Absprache stillschweigend." }
+    ], "erklaerung": "Erfundene Tatsachen gehören zur roten Linie. Wer schweigt, akzeptiert sie. Die Abwehr: ruhig widersprechen und nach Ort und Zeit fragen." }
+  ]
+}

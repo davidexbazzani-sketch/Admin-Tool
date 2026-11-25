@@ -86,7 +86,144 @@
           "anzahl": 6
         },
         { "id": "gespraech-l-04", "art": "L", "phase": "g", "lage": "gespraech-l-04" },
-        { "id": "gespraech-s-01", "art": "S", "phase": "g", "titel": "Sparring: Das Jahresgespräch", "lage": "gespraech-l-05" }
+        { "id": "gespraech-s-01", "art": "S", "phase": "g", "titel": "Sparring: Das Jahresgespräch", "lage": "gespraech-l-05" },
+        { "id": "gespraech-2-01", "art": "E", "phase": "k", "einheit": "gespraech-2-01" },
+        {
+          "id": "gespraech-ue-008",
+          "art": "U",
+          "phase": "k",
+          "titel": "Rückmeldung, die etwas ändert",
+          "faehigkeiten": ["gespraech.feedback", "gespraech.ich"],
+          "formate": ["auswahl", "umformulieren", "fehler", "zuordnen"],
+          "band": [3, 6],
+          "anzahl": 5
+        },
+        { "id": "gespraech-2-02", "art": "E", "phase": "k", "einheit": "gespraech-2-02" },
+        {
+          "id": "gespraech-ue-009",
+          "art": "U",
+          "phase": "k",
+          "titel": "Kritik annehmen",
+          "faehigkeiten": ["gespraech.feedback", "gespraech.zuhoeren"],
+          "formate": ["auswahl", "zuordnen", "spiegeln", "rangfolge"],
+          "band": [3, 6],
+          "anzahl": 5
+        },
+        { "id": "gespraech-l-06", "art": "L", "phase": "k", "lage": "gespraech-l-06" },
+        { "id": "gespraech-a-003", "art": "A", "phase": "k", "modus": "mission" },
+        { "id": "gespraech-2-03", "art": "E", "phase": "k", "einheit": "gespraech-2-03" },
+        {
+          "id": "gespraech-ue-010",
+          "art": "U",
+          "phase": "k",
+          "titel": "Nein mit Angebot",
+          "faehigkeiten": ["gespraech.ich", "gespraech.absprache"],
+          "formate": ["umformulieren", "auswahl", "zuordnen", "rangfolge"],
+          "band": [3, 6],
+          "anzahl": 5
+        },
+        { "id": "gespraech-l-07", "art": "L", "phase": "k", "lage": "gespraech-l-07" },
+        { "id": "gespraech-2-04", "art": "E", "phase": "k", "einheit": "gespraech-2-04" },
+        {
+          "id": "gespraech-ue-011",
+          "art": "U",
+          "phase": "k",
+          "titel": "Lösungen für beide",
+          "faehigkeiten": ["gespraech.konflikt", "gespraech.fragen"],
+          "formate": ["zuordnen", "auswahl", "umformulieren", "dialog"],
+          "band": [4, 7],
+          "anzahl": 5
+        },
+        { "id": "gespraech-a-004", "art": "A", "phase": "k", "modus": "nachbereitung" },
+        { "id": "gespraech-2-05", "art": "E", "phase": "k", "einheit": "gespraech-2-05" },
+        {
+          "id": "gespraech-ue-012",
+          "art": "U",
+          "phase": "k",
+          "titel": "Widersprechen, wenn alle nicken",
+          "faehigkeiten": ["gespraech.widerspruch", "gespraech.oben"],
+          "formate": ["auswahl", "rangfolge", "umformulieren", "buehne", "stumm"],
+          "band": [4, 7],
+          "anzahl": 6
+        },
+        { "id": "gespraech-l-08", "art": "L", "phase": "k", "lage": "gespraech-l-08" },
+        { "id": "gespraech-2-06", "art": "E", "phase": "k", "einheit": "gespraech-2-06" },
+        {
+          "id": "gespraech-ue-013",
+          "art": "U",
+          "phase": "k",
+          "titel": "Nach oben: Prioritäten",
+          "faehigkeiten": ["gespraech.oben", "gespraech.absprache"],
+          "formate": ["auswahl", "umformulieren", "zuordnen", "rangfolge"],
+          "band": [4, 7],
+          "anzahl": 6
+        },
+        { "id": "gespraech-l-09", "art": "L", "phase": "k", "lage": "gespraech-l-09" },
+        { "id": "gespraech-a-005", "art": "A", "phase": "k", "modus": "wiederholung" },
+        { "id": "gespraech-s-02", "art": "S", "phase": "k", "titel": "Sparring: Der Tag der Reklamation", "lage": "gespraech-l-10" },
+        { "id": "gespraech-3-01", "art": "E", "phase": "m", "einheit": "gespraech-3-01" },
+        {
+          "id": "gespraech-ue-014",
+          "art": "U",
+          "phase": "m",
+          "titel": "Die vier Zerstörer",
+          "faehigkeiten": ["gespraech.konflikt", "gespraech.ich"],
+          "formate": ["zuordnen", "auswahl", "umformulieren", "rangfolge"],
+          "band": [5, 8],
+          "anzahl": 5
+        },
+        { "id": "gespraech-3-02", "art": "E", "phase": "m", "einheit": "gespraech-3-02" },
+        {
+          "id": "gespraech-ue-015",
+          "art": "U",
+          "phase": "m",
+          "titel": "Vier Ohren",
+          "faehigkeiten": ["gespraech.zuhoeren", "gespraech.fragen"],
+          "formate": ["auswahl", "zuordnen", "spiegeln", "wortwahl"],
+          "band": [5, 8],
+          "anzahl": 5
+        },
+        { "id": "gespraech-l-11", "art": "L", "phase": "m", "lage": "gespraech-l-11" },
+        { "id": "gespraech-a-006", "art": "A", "phase": "m", "modus": "mission" },
+        { "id": "gespraech-3-03", "art": "E", "phase": "m", "einheit": "gespraech-3-03" },
+        {
+          "id": "gespraech-ue-016",
+          "art": "U",
+          "phase": "m",
+          "titel": "Unfaire Züge kontern",
+          "faehigkeiten": ["gespraech.widerspruch", "gespraech.konflikt"],
+          "formate": ["kunstgriff", "auswahl", "konter", "zuordnen"],
+          "band": [6, 9],
+          "anzahl": 5
+        },
+        { "id": "gespraech-l-12", "art": "L", "phase": "m", "lage": "gespraech-l-12" },
+        { "id": "gespraech-3-04", "art": "E", "phase": "m", "einheit": "gespraech-3-04" },
+        {
+          "id": "gespraech-ue-017",
+          "art": "U",
+          "phase": "m",
+          "titel": "Absprachen, die halten",
+          "faehigkeiten": ["gespraech.absprache", "gespraech.feedback"],
+          "formate": ["fehler", "auswahl", "bauplan", "umformulieren"],
+          "band": [6, 9],
+          "anzahl": 6
+        },
+        { "id": "gespraech-l-13", "art": "L", "phase": "m", "lage": "gespraech-l-13" },
+        { "id": "gespraech-a-007", "art": "A", "phase": "m", "modus": "nachbereitung" },
+        { "id": "gespraech-3-05", "art": "E", "phase": "m", "einheit": "gespraech-3-05" },
+        {
+          "id": "gespraech-ue-018",
+          "art": "U",
+          "phase": "m",
+          "titel": "Das aufgeschobene Gespräch",
+          "faehigkeiten": ["gespraech.oben", "gespraech.ich", "gespraech.konflikt"],
+          "formate": ["auswahl", "umformulieren", "buehne", "stumm"],
+          "band": [6, 10],
+          "anzahl": 6
+        },
+        { "id": "gespraech-l-14", "art": "L", "phase": "m", "lage": "gespraech-l-14" },
+        { "id": "gespraech-a-008", "art": "A", "phase": "m", "modus": "wiederholung" },
+        { "id": "gespraech-s-03", "art": "S", "phase": "m", "titel": "Sparring: Das Gespräch mit Miriam", "lage": "gespraech-l-15" }
       ]
     }
   ]

@@ -164,27 +164,27 @@
       ] },
     { "art": "dialog", "kopf": { "id": "ueberzeugen-v-0070", "faehigkeit": "ueberzeugen.einwand", "stufe": 3, "kanal": "koennen", "einfluss": "fair" },
       "gespraech": {
-        "titel": "Der Vereinsbeitrag", "figur": "Frau Sommer",
-        "lage": "Du wirbst für den Nachbarschaftsverein. Frau Sommer überlegt mitzumachen. Der Beitrag ist 30 Euro im Jahr.",
+        "titel": "Der Vereinsbeitrag", "figur": "eine Nachbarin",
+        "lage": "Du wirbst für den Nachbarschaftsverein. Eine ältere Nachbarin überlegt mitzumachen. Der Beitrag ist 30 Euro im Jahr.",
         "start": "k1",
         "knoten": [
-          { "id": "k1", "sagt": "Frau Sommer: „Dreißig Euro? Wofür denn? Ich geh doch eh kaum raus.“",
+          { "id": "k1", "sagt": "Die Nachbarin: „Dreißig Euro? Wofür denn? Ich geh doch eh kaum raus.“",
             "wahl": [
               { "text": "„Verstehe. Was würde Sie denn reizen, wenn Sie mal rausgehen?“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst den Einwand auf und fragst nach ihrem Wunsch." },
-              { "text": "„Das ist doch fast nichts, nicht mal drei Euro im Monat.“", "wert": 0, "tendenz": "verteidigen", "weiter": "k1b", "rueck": "Du rechnest klein, statt zu verstehen. Ihr Punkt war ein anderer." }
+              { "text": "„Ach, das ist doch fast nichts, nicht mal drei Euro im Monat.“", "wert": 0, "tendenz": "verteidigen", "weiter": "k1b", "rueck": "Du rechnest klein, statt zu verstehen. Ihr Punkt war ein anderer." }
             ] },
-          { "id": "k1b", "sagt": "Frau Sommer: „Mag sein. Aber für Sachen, die ich nicht mache.“",
+          { "id": "k1b", "sagt": "Die Nachbarin: „Mag sein. Aber für Sachen, die ich nicht mache.“",
             "wahl": [
               { "text": "„Stimmt, dann wäre es zu viel. Was würden Sie denn gern mal machen?“", "wert": 2, "weiter": "k2", "rueck": "Anerkannt – und zurück zum Verstehen." },
               { "text": "„Dann eben nicht.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Beleidigt aufgeben." }
             ] },
-          { "id": "k2", "sagt": "Frau Sommer: „Ach, früher hab ich gern im Garten gewerkelt. Jetzt hab ich ja nur den Balkon.“",
+          { "id": "k2", "sagt": "Die Nachbarin: „Ach, früher hab ich gern im Garten gewerkelt. Jetzt hab ich ja nur den Balkon.“",
             "wahl": [
               { "text": "„Wir haben ein Gemeinschaftsbeet hinter dem Haus. Wollen Sie es sich am Samstag einmal ansehen – ganz ohne Beitritt?“", "wert": 2, "weiter": "ende1", "rueck": "Ein Nutzen aus ihrem Wunsch und ein kleiner, freier Schritt." },
               { "text": "„Wir haben auch ein Beet.“", "wert": 1, "weiter": "ende1", "rueck": "Der richtige Punkt – nur ohne Einladung." }
             ] },
-          { "id": "ende1", "sagt": "Frau Sommer: „Ein Beet? Da komme ich am Samstag mal vorbei.“", "ende": "Der Einwand war nicht das Geld, sondern der fehlende Grund. Wer fragt, findet ihn." },
-          { "id": "ende2", "sagt": "Frau Sommer zuckt mit den Schultern.", "ende": "Verteidigt und dann aufgegeben – du hast nie erfahren, was sie reizen könnte." }
+          { "id": "ende1", "sagt": "Die Nachbarin: „Ein Beet? Da komme ich am Samstag mal vorbei.“", "ende": "Der Einwand war nicht das Geld, sondern der fehlende Grund. Wer fragt, findet ihn." },
+          { "id": "ende2", "sagt": "Die Nachbarin zuckt mit den Schultern.", "ende": "Verteidigt und dann aufgegeben – du hast nie erfahren, was sie reizen könnte." }
         ],
         "prinzipien": ["Einwand erst verstehen", "nicht kleinrechnen", "Nutzen aus ihrem Wunsch", "kleiner, freier nächster Schritt"]
       } },
@@ -389,7 +389,7 @@
           { "id": "k1b", "sagt": "Käuferin: „Ich dachte so an 200.“",
             "wahl": [
               { "text": "„Davon sind wir weit weg. Neu hat es 1.200 gekostet, ich dachte an 550.“", "wert": 2, "weiter": "k2", "rueck": "Ihren Anker beiseitegelegt und deinen gesetzt." },
-              { "text": "„Dann treffen wir uns bei 375?“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ihr Anker hat die Mitte bestimmt – unter deiner Grenze." }
+              { "text": "„Gut, dann treffen wir uns doch einfach in der Mitte – sagen wir 375, okay?“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ihr Anker hat die Mitte bestimmt – unter deiner Grenze." }
             ] },
           { "id": "k2", "sagt": "Käuferin: „Hm. 400 würde ich zahlen.“",
             "wahl": [

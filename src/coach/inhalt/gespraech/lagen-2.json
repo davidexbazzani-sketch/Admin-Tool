@@ -1,0 +1,1152 @@
+{
+  "lagen": [
+    {
+      "id": "gespraech-l-06",
+      "bereich": "gespraech",
+      "phase": "k",
+      "umfeld": "kollegen",
+      "faehigkeiten": [
+        "gespraech.feedback",
+        "gespraech.zuhoeren",
+        "gespraech.absprache"
+      ],
+      "stufe": 5,
+      "titel": "Lenas erster Kundentermin",
+      "figur": "Lena Brandt",
+      "einleitung": "Du gibst Lena Rückmeldung nach ihrem ersten eigenen Kundentermin – und bekommst selbst eine. Du übst konkretes Lob, Kritik mit Frage nach ihrer Sicht und Kritik annehmen.",
+      "lage": "Lena hat heute zum ersten Mal einen Termin bei Nadine Köhler geführt, du warst dabei. Vieles lief gut. Nur hat Lena eine Lieferung in zwei Wochen zugesagt – das Lager braucht gerade vier. Und einmal hast du sie vor der Kundin korrigiert. Ihr sitzt im Auto auf dem Rückweg.",
+      "start": "k1",
+      "knoten": [
+        {
+          "id": "k1",
+          "sagt": "Lena, nach einer Weile: „Und? Wie fandest du es?“",
+          "wahl": [
+            {
+              "text": "„Magst du eine ehrliche Rückmeldung? Zwei Dinge fand ich richtig stark, eins sollten wir klären.“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Gefragt, und sie weiß, was kommt: Lob und ein Punkt. So kann sie zuhören."
+            },
+            {
+              "text": "„War gut!“ – den Liefertermin sprichst du lieber morgen an, wenn sie ausgeschlafen ist.",
+              "wert": 1,
+              "weiter": "k1b",
+              "rueck": "Freundlich. Nur weiß Frau Köhler dann seit einem Tag einen falschen Termin."
+            },
+            {
+              "text": "„Na ja, der Liefertermin war ein ziemlicher Bock. Das hätte dir bei deiner ersten Kundin nicht passieren dürfen.“",
+              "wert": 0,
+              "tendenz": "angreifen",
+              "weiter": "k4b",
+              "rueck": "Ein Urteil gleich zu Beginn – und das Gute fällt unter den Tisch."
+            }
+          ]
+        },
+        {
+          "id": "k1b",
+          "sagt": "Am nächsten Morgen. Lena strahlt: „Frau Köhler hat schon zurückgeschrieben. Sie freut sich auf die Lieferung in zwei Wochen!“",
+          "wahl": [
+            {
+              "text": "„Hast du zehn Minuten? Zwei Dinge von gestern waren stark – eins müssen wir schnell klären.“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Spät, aber nicht zu spät. Jetzt geht es noch darum, den Termin früh geradezurücken."
+            },
+            {
+              "text": "Nichts sagen. Sie freut sich gerade so – und vielleicht schafft das Lager es ja doch in zwei Wochen.",
+              "wert": 0,
+              "tendenz": "vermeiden",
+              "weiter": "ende2",
+              "rueck": "Hoffen ist kein Plan. In zwei Wochen erfährt Frau Köhler es auf die harte Tour."
+            }
+          ]
+        },
+        {
+          "id": "k2",
+          "sagt": "Lena: „Ja, gern.“ Sie dreht sich etwas zu dir, wirkt angespannt.",
+          "wahl": [
+            {
+              "text": "„Deine Antworten auf die Preisfragen – ruhig, mit Zahlen – haben sie überzeugt. Und der Einstieg mit ihrem Lager war klug.“",
+              "wert": 2,
+              "weiter": "k3",
+              "rueck": "Konkretes Lob: was genau und was es bewirkt hat. Daraus lernt sie mehr als aus „super“."
+            },
+            {
+              "text": "„Insgesamt echt gut gemacht, wirklich.“",
+              "wert": 1,
+              "weiter": "k3",
+              "rueck": "Ehrlich und freundlich – aber sie weiß nicht, was sie beim nächsten Mal wieder so machen soll."
+            },
+            {
+              "text": "„Fangen wir lieber gleich mit dem Problem an. Das Positive kennst du ja selbst, da muss ich jetzt nicht lange drum herumreden.“",
+              "wert": 0,
+              "tendenz": "abwerten",
+              "weiter": "k3",
+              "rueck": "Gerade nach dem ersten Termin weiß sie das nicht. Das Lob war echt – sag es."
+            }
+          ]
+        },
+        {
+          "id": "k3",
+          "sagt": "Lena, vorsichtig: „Und der Punkt, den wir klären sollten?“",
+          "wahl": [
+            {
+              "text": "„Mit dem Liefertermin bin ich nicht ganz glücklich.“",
+              "wert": 1,
+              "weiter": "k4",
+              "rueck": "Ehrlich, aber vage. Sie ahnt, worum es geht – genau weiß sie es nicht."
+            },
+            {
+              "text": "„Du hast Lieferung in zwei Wochen zugesagt. Das Lager braucht gerade vier. Wie kam es zu der Zusage?“",
+              "wert": 2,
+              "weiter": "k4",
+              "rueck": "Beobachtung, die Lage dahinter und eine offene Frage nach ihrer Sicht."
+            },
+            {
+              "text": "„Du hast den Liefertermin vermasselt. Den biegst du morgen gleich gerade, bevor Frau Köhler ihre Planung danach ausrichtet.“",
+              "wert": 0,
+              "tendenz": "angreifen",
+              "weiter": "k4b",
+              "rueck": "Ein Etikett und eine Anweisung. Lena erfährt nicht, wie es dazu kam – und du auch nicht."
+            }
+          ]
+        },
+        {
+          "id": "k4b",
+          "sagt": "Lena: „Okay.“ Sie schaut weg und sagt nichts mehr.",
+          "wahl": [
+            {
+              "text": "„Moment, das kam härter raus als gemeint. Vieles war richtig gut. Wie kam es zu der Zusage?“",
+              "wert": 2,
+              "weiter": "k4",
+              "rueck": "Ein Reparaturversuch: Ton zurücknehmen, Lob nachholen, nachfragen."
+            },
+            {
+              "text": "Nichts mehr sagen.",
+              "wert": 0,
+              "tendenz": "mauern",
+              "weiter": "ende2",
+              "rueck": "Die Rückmeldung ist angekommen – nur als Kränkung, nicht als Hilfe."
+            }
+          ]
+        },
+        {
+          "id": "k4",
+          "sagt": "Lena: „Sie hat so gedrängt, und ich wollte den Auftrag nicht verlieren. Und ehrlich: Dass du mich vor ihr bei den Rabatten korrigiert hast, hat mich ziemlich verunsichert.“",
+          "wahl": [
+            {
+              "text": "„Das tut mir leid.“",
+              "wert": 1,
+              "weiter": "k5",
+              "rueck": "Anerkennend. Mit einer Nachfrage wüsstest du, was genau sie gestört hat."
+            },
+            {
+              "text": "„Na ja, der Rabatt war falsch. Irgendwer musste es ja richtigstellen, sonst hätten wir jetzt zwei Probleme statt einem.“",
+              "wert": 0,
+              "tendenz": "rechtfertigen",
+              "weiter": "k5b",
+              "rueck": "Sachlich vielleicht richtig – aber ihre Kritik prallt ab. Sie sagt dir so etwas nicht noch einmal."
+            },
+            {
+              "text": "„Oh. Danke, dass du's sagst. An welcher Stelle genau?“",
+              "wert": 2,
+              "weiter": "k5",
+              "rueck": "Danke und ein Beispiel erbitten. Ob du die Kritik annimmst, entscheidest du danach."
+            }
+          ]
+        },
+        {
+          "id": "k5b",
+          "sagt": "Lena: „Ja. Klar.“ Sie wird still.",
+          "wahl": [
+            {
+              "text": "„Warte – ich hab mich gerade nur verteidigt. Was genau hat dich gestört?“",
+              "wert": 2,
+              "weiter": "k5",
+              "rueck": "Zweite Chance genutzt: Du merkst, dass du dich rechtfertigst, und fragst nach."
+            },
+            {
+              "text": "„Ach komm, da stehst du doch drüber, oder? So schlimm war das vor der Kundin nun wirklich nicht.“",
+              "wert": 0,
+              "tendenz": "abwerten",
+              "weiter": "ende2",
+              "rueck": "Ihre Kritik wird zu ihrem Problem erklärt. Damit endet das Gespräch."
+            }
+          ]
+        },
+        {
+          "id": "k5",
+          "sagt": "Lena: „Als du gesagt hast: ‚Das stimmt so nicht ganz‘ – vor Frau Köhler. Danach hab ich mich kaum noch was getraut.“",
+          "wahl": [
+            {
+              "text": "„Verstehe – vor der Kundin war das blöd für dich. Nächstes Mal sag ich's dir danach. In Ordnung?“",
+              "wert": 2,
+              "weiter": "k6",
+              "rueck": "Gespiegelt, den wahren Teil angenommen und eine Abmachung angeboten – kurz und klar."
+            },
+            {
+              "text": "„Okay. Ich denk in Ruhe drüber nach, wie ich das künftig mache, wenn wir zusammen bei Kunden sind.“",
+              "wert": 1,
+              "weiter": "k6",
+              "rueck": "Bedenkzeit ist erlaubt. Ein Satz, dass du sie verstanden hast, hätte ihr gutgetan."
+            }
+          ]
+        },
+        {
+          "id": "k6",
+          "sagt": "Lena: „Danke. Und was mach ich jetzt mit dem Liefertermin?“",
+          "wahl": [
+            {
+              "text": "„Ich ruf sie morgen selbst an und regle das.“",
+              "wert": 1,
+              "weiter": "ende3",
+              "rueck": "Das Problem ist gelöst – aber Lena lernt nicht, wie man eine Zusage zurückholt."
+            },
+            {
+              "text": "„Abwarten. Vielleicht schafft das Lager es ja doch irgendwie, und dann haben wir uns umsonst Sorgen gemacht.“",
+              "wert": 0,
+              "tendenz": "vermeiden",
+              "weiter": "ende2",
+              "rueck": "Je später Frau Köhler es erfährt, desto teurer wird es für alle."
+            },
+            {
+              "text": "„Was meinst du – rufst du sie an, spätestens morgen um zehn? Ich helf dir beim ersten Satz.“",
+              "wert": 2,
+              "weiter": "ende1",
+              "rueck": "Ihre Sache, deine Unterstützung, mit Uhrzeit. Eine Absprache, die sie stärkt."
+            }
+          ]
+        },
+        {
+          "id": "ende1",
+          "sagt": "Am nächsten Tag, 9:40 Uhr. Lena kommt an deinen Tisch: „Frau Köhler war ganz entspannt. Sie schätzt es, dass wir es so früh sagen.“",
+          "ende": "Konkretes Lob, Kritik mit Frage nach ihrer Sicht, selbst Kritik annehmen und eine Absprache mit Uhrzeit: So ändert eine Rückmeldung etwas – in beide Richtungen."
+        },
+        {
+          "id": "ende2",
+          "sagt": "Zwei Wochen später ruft Frau Köhler an: Die Lieferung ist nicht da.",
+          "ende": "Kein Drama – aber am Ende hat sich nichts geändert: Der Termin blieb falsch oder Lena blieb gekränkt. Beim nächsten Mal: bald und konkret zurückmelden, Kritik an dir annehmen – und den Termin gleich geraderücken."
+        },
+        {
+          "id": "ende3",
+          "sagt": "Du rufst Frau Köhler an, der Termin ist geklärt. Lena bedankt sich – und fragt beim nächsten Kunden lieber dich, bevor sie etwas zusagt.",
+          "ende": "Gelöst, aber nicht gelernt. Beim nächsten Mal: Lena selbst anrufen lassen und ihr beim ersten Satz helfen."
+        }
+      ],
+      "prinzipien": [
+        "fragen, ob Rückmeldung gerade passt",
+        "Lob konkret und getrennt von der Kritik",
+        "Kritik mit Frage nach ihrer Sicht",
+        "Kritik an dir: danke und ein Beispiel",
+        "Absprache mit Uhrzeit"
+      ],
+      "transfer": "Wem schuldest du gerade ein konkretes Lob – und wem eine Rückmeldung, die du aufschiebst? Schreib für beide den ersten Satz auf."
+    },
+    {
+      "id": "gespraech-l-07",
+      "bereich": "gespraech",
+      "phase": "k",
+      "umfeld": "familie",
+      "faehigkeiten": [
+        "gespraech.ich",
+        "gespraech.absprache",
+        "gespraech.zuhoeren"
+      ],
+      "stufe": 5,
+      "titel": "Tante Renates runder Geburtstag",
+      "figur": "Tante Renate",
+      "einleitung": "Tante Renate möchte, dass du ihr ganzes Fest organisierst. Du übst ein Nein mit Angebot, ruhiges Wiederholen, Schuld zu erkennen, ohne sie zu übernehmen – und eine Absprache, die alle entlastet.",
+      "lage": "Tante Renate feiert im März einen runden Geburtstag. Dein März ist schon voll: Abschluss eines großen Projekts, dazu ein Umzug im Freundeskreis, bei dem du fest zugesagt hast. Es ist Sonntagabend, das Telefon klingelt.",
+      "start": "k1",
+      "knoten": [
+        {
+          "id": "k1",
+          "sagt": "Tante Renate: „Du, im März ist doch mein Runder. Ich hab mir gedacht: Du organisierst das. Du kannst so was doch so gut!“",
+          "wahl": [
+            {
+              "text": "„Ja, klar, mach ich.“ – obwohl dein März schon voll ist.",
+              "wert": 0,
+              "tendenz": "schlucken",
+              "weiter": "k1b",
+              "rueck": "Ein Ja aus Gewohnheit. Das Fest wird gut – auf Kosten deiner Nächte."
+            },
+            {
+              "text": "„Puh, ich weiß nicht so recht. Ich hab im März echt viel um die Ohren, mit dem Projekt, dem Umzug bei Freunden und allem Drum und Dran …“",
+              "wert": 1,
+              "weiter": "k2b",
+              "rueck": "Ehrlich, aber ohne klares Nein und ohne Angebot. Das lädt zum Nachhaken ein."
+            },
+            {
+              "text": "„Schön, dass du an mich denkst. Das ganze Fest schaffe ich im März nicht – einen Teil übernehme ich gern. Was ist dir am wichtigsten?“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Wertschätzung, klares Nein zum Ganzen, ein Angebot und eine offene Frage."
+            }
+          ]
+        },
+        {
+          "id": "k2b",
+          "sagt": "Tante Renate: „Ach, das sagst du immer. Du schaffst das schon.“",
+          "wahl": [
+            {
+              "text": "„Diesmal wirklich nicht – das ganze Fest geht nicht. Einen Teil übernehme ich gern. Was ist dir am wichtigsten?“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Ruhig wiederholt und das Angebot nachgereicht. Jetzt ist es klar."
+            },
+            {
+              "text": "„Na gut … dann mach ich's halt irgendwie.“",
+              "wert": 0,
+              "tendenz": "nachgeben",
+              "weiter": "k1b",
+              "rueck": "Ein Satz hat gereicht, um dein Nein umzustoßen. Das merkt sie sich."
+            }
+          ]
+        },
+        {
+          "id": "k1b",
+          "sagt": "Drei Wochen später, elf Uhr nachts. Du sitzt an der Gästeliste. Tante Renate schreibt: „Und, wie weit bist du?“",
+          "wahl": [
+            {
+              "text": "Anrufen: „Ich muss ehrlich sein: Das Ganze schaffe ich nicht. Einen Teil übernehme ich gern. Was ist dir am wichtigsten?“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Spät, aber besser als nie. Ein zurückgenommenes Ja ist ehrlicher als ein Fest aus Erschöpfung."
+            },
+            {
+              "text": "Weitermachen und schreiben: „Läuft alles!“",
+              "wert": 0,
+              "tendenz": "schlucken",
+              "weiter": "ende2",
+              "rueck": "Nach außen ist alles gut. Nach innen wächst der Groll."
+            }
+          ]
+        },
+        {
+          "id": "k2",
+          "sagt": "Tante Renate, etwas spitz: „Am wichtigsten? Dass sich mal jemand kümmert. Nach allem, was ich für euch Kinder getan habe …“",
+          "wahl": [
+            {
+              "text": "„Du hast ja recht, entschuldige. Nach allem, was du für uns getan hast, ist das das Mindeste. Dann mach ich eben alles.“",
+              "wert": 0,
+              "tendenz": "nachgeben",
+              "weiter": "ende2",
+              "rueck": "Die Schuld hat gewirkt. Du gibst nach – aus Druck, nicht aus Überzeugung."
+            },
+            {
+              "text": "„Das ist jetzt aber ein bisschen unfair.“",
+              "wert": 1,
+              "weiter": "k3",
+              "rueck": "Richtig erkannt. Ohne Angebot klingt es aber nur nach Abwehr."
+            },
+            {
+              "text": "„Du hast viel für uns getan, danke. Das Ganze schaffe ich trotzdem nicht – Einladungen und Deko übernehme ich.“",
+              "wert": 2,
+              "weiter": "k3",
+              "rueck": "Dank anerkannt, Schuld nicht übernommen, Nein und Angebot wiederholt."
+            }
+          ]
+        },
+        {
+          "id": "k3",
+          "sagt": "Tante Renate, nach einer Pause: „… Ach, Kind. Ich will halt nicht wieder alles allein stemmen wie beim letzten Mal.“",
+          "wahl": [
+            {
+              "text": "„Dir geht's also darum, nicht allein dazustehen. Dann verteilen wir es: Ich mach Einladungen und Deko. Wer kümmert sich ums Gasthaus?“",
+              "wert": 2,
+              "weiter": "k4",
+              "rueck": "Ihr Interesse gespiegelt – und eine Lösung, die genau das bedient."
+            },
+            {
+              "text": "„Beim letzten Mal war das aber deine eigene Entscheidung, dass du alles selbst machst.“",
+              "wert": 0,
+              "tendenz": "rechthaben",
+              "weiter": "ende4",
+              "rueck": "Vielleicht stimmt es. Aber gerade hat sie gesagt, worum es ihr geht – und du antwortest mit Rechthaben."
+            },
+            {
+              "text": "„Dann frag doch die anderen auch mal.“",
+              "wert": 1,
+              "weiter": "k4",
+              "rueck": "Ein brauchbarer Gedanke. Mit deinem eigenen Angebot dazu fühlt sie sich weniger abgeschoben."
+            }
+          ]
+        },
+        {
+          "id": "k4",
+          "sagt": "Tante Renate, schon fröhlicher: „Deine Cousine kennt den Wirt, die frag ich wegen des Gasthauses. Bleiben die Einladungen – die übernimmst du? Bis wann?“",
+          "wahl": [
+            {
+              "text": "„Rechtzeitig, versprochen.“",
+              "wert": 1,
+              "weiter": "ende3",
+              "rueck": "Gut gemeint, aber ohne Datum. „Rechtzeitig“ heißt für jeden etwas anderes."
+            },
+            {
+              "text": "„Du schickst mir bis Ende Januar alle Adressen, ich verschicke die Einladungen bis Mitte Februar. Danach sag ich dir, wer zugesagt hat.“",
+              "wert": 2,
+              "weiter": "ende1",
+              "rueck": "Wer, was, bis wann – und ein Anruf, bei dem ihr draufschaut."
+            }
+          ]
+        },
+        {
+          "id": "ende1",
+          "sagt": "Im März, im Gasthaus. Die Einladungen waren pünktlich, deine Cousine hat das Essen mit dem Wirt geplant, und Tante Renate hält ein Glas hoch: „Auf meine Organisationsabteilung!“",
+          "ende": "Ein klares Nein zum Ganzen, ein Angebot, Schuld erkannt, ohne sie zu übernehmen, und eine Absprache mit Datum: So wird aus einer Überforderung ein gemeinsames Fest."
+        },
+        {
+          "id": "ende2",
+          "sagt": "Im März. Das Fest ist schön. Du bist so müde, dass du um zehn auf dem Sofa einschläfst.",
+          "ende": "Kein Drama – aber das Fest hat dich mehr gekostet als nötig. Beim nächsten Mal: klar Nein zum Ganzen, ein Angebot für einen Teil – und dabei bleiben, auch wenn Schuld ins Spiel kommt."
+        },
+        {
+          "id": "ende3",
+          "sagt": "Mitte Februar ruft Tante Renate an: „Wann gehen denn die Einladungen raus?“ Jeder hat auf den anderen gewartet – die Einladungen kommen zwei Wochen zu spät.",
+          "ende": "Fast geschafft – nur die Absprache hatte kein Datum. Beim nächsten Mal: wer, was, bis wann."
+        },
+        {
+          "id": "ende4",
+          "sagt": "Tante Renate, kühl: „Na, dann frag ich eben jemand anderen.“ Sie legt auf.",
+          "ende": "Dein Nein ist angekommen, ihr Anliegen nicht. Beim nächsten Mal: spiegeln, worum es ihr geht, und ein Angebot, das genau das bedient."
+        }
+      ],
+      "prinzipien": [
+        "Nein zum Ganzen, Ja zu einem Teil",
+        "ruhig wiederholen statt neue Gründe",
+        "Schuld erkennen, nicht übernehmen",
+        "das Interesse dahinter spiegeln",
+        "Absprache mit Datum"
+      ],
+      "transfer": "Wer bittet dich regelmäßig um mehr, als du geben willst? Schreib dein Nein mit Angebot auf – in zwei Sätzen."
+    },
+    {
+      "id": "gespraech-l-08",
+      "bereich": "gespraech",
+      "phase": "k",
+      "umfeld": "gruppe",
+      "faehigkeiten": [
+        "gespraech.widerspruch",
+        "gespraech.konflikt",
+        "gespraech.fragen"
+      ],
+      "stufe": 6,
+      "titel": "Carlas neues Programm",
+      "figur": "Carla Demir",
+      "einleitung": "In der Runde sind alle für Carlas Plan – nur du siehst ein Risiko. Du übst, früh und empfänglich zu widersprechen, Carlas Interesse zu erfragen und eine Lösung zu finden, die beide Anliegen bedient.",
+      "lage": "Teamrunde mit acht Leuten. Carla Demir will das Projekt ab Montag komplett auf ein neues Planungsprogramm umstellen. Alle nicken. Du weißt: Am Monatsende läuft die Abrechnung über die Buchhaltung, und genau dafür fehlt im neuen Programm noch die Verbindung.",
+      "start": "k1",
+      "knoten": [
+        {
+          "id": "k1",
+          "sagt": "Carla: „Also, ab Montag läuft alles über das neue Programm. Gibt's noch was? … Gut, dann …“",
+          "wahl": [
+            {
+              "text": "Nichts sagen – alle sind ja dafür.",
+              "wert": 0,
+              "tendenz": "vermeiden",
+              "weiter": "k1b",
+              "rueck": "Wer schweigt, wird mitgezählt. Dein Wissen wäre jetzt am meisten wert."
+            },
+            {
+              "text": "„Darf ich kurz einen Punkt einbringen? Die Planung wird viel übersichtlicher – nur bei der Monatsabrechnung sehe ich ein Risiko.“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Früh, mit Erlaubnis, erst gewürdigt, dann der Punkt. So hört die Runde zu."
+            },
+            {
+              "text": "„Ich hab da ein ungutes Gefühl, ehrlich gesagt.“",
+              "wert": 1,
+              "weiter": "k2b",
+              "rueck": "Mutig, dass du dich meldest. Ohne Grund weiß aber keiner, was er damit anfangen soll."
+            }
+          ]
+        },
+        {
+          "id": "k1b",
+          "sagt": "Nach der Runde, an der Kaffeemaschine. Miriam: „Na, du hast vorhin geguckt. Was war los?“",
+          "wahl": [
+            {
+              "text": "„Mir fehlt die Verbindung zur Buchhaltung. Ich geh gleich zu Carla, bevor Montag ist.“",
+              "wert": 2,
+              "weiter": "k5",
+              "rueck": "Zweite Chance: Unter vier Augen ist es noch nicht zu spät."
+            },
+            {
+              "text": "„Ach, das fällt denen am Monatsende schon selbst auf die Füße. Dann sehen sie mal, was sie davon haben.“",
+              "wert": 0,
+              "tendenz": "untergraben",
+              "weiter": "ende2",
+              "rueck": "Recht behalten im Flur, aber nichts verhindert."
+            }
+          ]
+        },
+        {
+          "id": "k5",
+          "sagt": "In Carlas Büro. Carla, zwischen zwei Mails: „Was gibt's?“",
+          "wahl": [
+            {
+              "text": "„Ich glaub, das mit Montag geht schief.“",
+              "wert": 1,
+              "weiter": "k2b",
+              "rueck": "Ehrlich, aber noch ohne Grund. Carla braucht mehr, um etwas zu ändern."
+            },
+            {
+              "text": "„Die neue Planung finde ich gut. Mir fehlt nur die Verbindung zur Buchhaltung. Können wir die Abrechnung bis dahin im alten System lassen?“",
+              "wert": 2,
+              "weiter": "k3",
+              "rueck": "Gewürdigt, konkret und gleich ein Vorschlag. So kann Carla schnell entscheiden."
+            }
+          ]
+        },
+        {
+          "id": "k2b",
+          "sagt": "Carla: „Was genau meinst du?“",
+          "wahl": [
+            {
+              "text": "„Die Abrechnung am Monatsende läuft über die Buchhaltung, und dafür fehlt im neuen Programm noch die Verbindung.“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Jetzt ist der Einwand konkret – und damit besprechbar."
+            },
+            {
+              "text": "„Na ja, nichts Bestimmtes. Ist nur so ein Gefühl, vergiss es am besten wieder. Wird schon irgendwie klappen mit dem Programm.“",
+              "wert": 0,
+              "tendenz": "kleinmachen",
+              "weiter": "ende2",
+              "rueck": "Du hattest einen echten Grund – und hast ihn zurückgezogen."
+            }
+          ]
+        },
+        {
+          "id": "k2",
+          "sagt": "Carla, leicht genervt: „Die Verbindung kommt im Lauf des Monats. Wir können nicht ewig warten, das alte System ist eine Katastrophe.“",
+          "wahl": [
+            {
+              "text": "„Dann wird das am Monatsende eben ein riesiges Chaos, und hinterher will es wieder keiner gewesen sein. Ich hab's jedenfalls gesagt.“",
+              "wert": 0,
+              "tendenz": "angreifen",
+              "weiter": "k2c",
+              "rueck": "Recht haben wollen statt lösen. Carla geht in die Abwehr."
+            },
+            {
+              "text": "„Du willst raus aus dem alten System, ich will eine sichere Abrechnung. Also: Planung ab Montag neu, Abrechnung vorerst alt?“",
+              "wert": 2,
+              "weiter": "k3",
+              "rueck": "Ihr Interesse gespiegelt, deins genannt und eine Lösung für beide."
+            },
+            {
+              "text": "„Können wir nicht einfach einen Monat später umstellen?“",
+              "wert": 1,
+              "weiter": "k2d",
+              "rueck": "Ein Vorschlag – aber er übergeht, was Carla gerade gesagt hat."
+            }
+          ]
+        },
+        {
+          "id": "k2c",
+          "sagt": "Carla, kühl: „Du hättest das ja auch früher sagen können.“",
+          "wahl": [
+            {
+              "text": "„Stimmt, das hätte ich. Noch ist es nicht zu spät: Planung Montag umstellen, Abrechnung erst mit der Verbindung?“",
+              "wert": 2,
+              "weiter": "k3",
+              "rueck": "Den wahren Teil angenommen und zurück zur Lösung. Stark."
+            },
+            {
+              "text": "„Ich hab's ja jetzt gesagt. Macht doch, was ihr wollt.“",
+              "wert": 0,
+              "tendenz": "mauern",
+              "weiter": "ende2",
+              "rueck": "Du ziehst dich zurück. Dein Punkt bleibt richtig – und ungenutzt."
+            }
+          ]
+        },
+        {
+          "id": "k2d",
+          "sagt": "Carla: „Einen Monat? Dann bleiben wir ewig im alten System hängen.“",
+          "wahl": [
+            {
+              "text": "„Was hältst du davon: Die Planung stellen wir Montag um, die Abrechnung erst, wenn die Verbindung da ist?“",
+              "wert": 2,
+              "weiter": "k3",
+              "rueck": "Du hast ihr Interesse gehört und eine Lösung gebaut, die beides bedient."
+            },
+            {
+              "text": "„Gut, dann eben Montag. War nur eine Idee – ihr werdet schon wissen, was ihr tut, und am Ende ist es ja dein Projekt.“",
+              "wert": 0,
+              "tendenz": "nachgeben",
+              "weiter": "ende2",
+              "rueck": "Beim ersten Gegenwind eingeknickt. Das Risiko bleibt."
+            }
+          ]
+        },
+        {
+          "id": "k3",
+          "sagt": "Carla überlegt: „Planung neu, Abrechnung erst mal alt – das könnte gehen. Aber wer behält den Überblick, wenn beides läuft?“",
+          "wahl": [
+            {
+              "text": "„Das ist dann dein Problem, du wolltest ja umstellen.“",
+              "wert": 0,
+              "tendenz": "angreifen",
+              "weiter": "ende2",
+              "rueck": "Die Lösung war fast da – und jetzt kippt sie in einen Vorwurf."
+            },
+            {
+              "text": "„Ich mach die Abrechnung im alten System, bis die Verbindung steht. Am 25. schauen wir zusammen drauf.“",
+              "wert": 2,
+              "weiter": "ende1",
+              "rueck": "Wer, was, bis wann und ein Termin zum Draufschauen."
+            },
+            {
+              "text": "„Das kriegen wir schon irgendwie hin.“",
+              "wert": 1,
+              "weiter": "ende3",
+              "rueck": "Zuversichtlich, aber ohne Zuständigkeit. „Irgendwie“ wird am Monatsende teuer."
+            }
+          ]
+        },
+        {
+          "id": "ende1",
+          "sagt": "Am 25. Die Verbindung läuft seit zwei Tagen, die Abrechnung ist sauber. Carla: „Gut, dass du dich gemeldet hast.“",
+          "ende": "Widersprochen, solange noch Zeit war, nach dem Interesse gefragt und eine Absprache getroffen: So wird aus einem Einwand eine bessere Entscheidung."
+        },
+        {
+          "id": "ende2",
+          "sagt": "Am Monatsende fehlen in der Abrechnung die Stunden von zwei Wochen. Dr. Albers will wissen, wie das passieren konnte.",
+          "ende": "Kein Drama – aber aus deinem Wissen ist keine Lösung geworden. Beim nächsten Mal: früh, gewürdigt, konkret – nach dem Interesse fragen und die Lösung als Absprache festhalten, statt nachzugeben, recht zu behalten oder abzuschieben."
+        },
+        {
+          "id": "ende3",
+          "sagt": "Am Monatsende klappt die Abrechnung – nach zwei langen Abenden, weil jeder dachte, der andere kümmert sich.",
+          "ende": "Die Lösung war richtig, nur die Zuständigkeit fehlte. Beim nächsten Mal: wer, was, bis wann."
+        }
+      ],
+      "prinzipien": [
+        "früh widersprechen, nicht im Flur",
+        "erst würdigen, dann der Punkt",
+        "nach dem Interesse fragen",
+        "eine Lösung für beide",
+        "Zuständigkeit festhalten"
+      ],
+      "transfer": "Wo nicken in deinem Umfeld gerade alle, obwohl du ein Risiko siehst? Schreib den Satz auf, mit dem du es früh einbringst."
+    },
+    {
+      "id": "gespraech-l-09",
+      "bereich": "gespraech",
+      "phase": "k",
+      "umfeld": "vorgesetzte",
+      "faehigkeiten": [
+        "gespraech.oben",
+        "gespraech.ich",
+        "gespraech.absprache"
+      ],
+      "stufe": 6,
+      "titel": "Die dritte dringende Sache",
+      "figur": "Dr. Henrik Albers",
+      "einleitung": "Dein Chef gibt dir eine Aufgabe, die nicht mehr in die Woche passt. Du übst ein Nein mit Angebot nach oben: Lage, Folge, Möglichkeiten, Vorschlag – und eine Absprache, die auch Pannen einplant.",
+      "lage": "Dienstagmorgen. Diese Woche liegen bei dir schon der Monatsbericht für Freitag und eine Schulung für Lena am Mittwoch. Dr. Albers ruft dich in sein Büro.",
+      "start": "k1",
+      "knoten": [
+        {
+          "id": "k1",
+          "sagt": "Dr. Albers: „Frau Köhler will bis Donnerstag ein Angebot. Das machen Sie – Sie kennen ihren Betrieb am besten.“",
+          "wahl": [
+            {
+              "text": "„Gern. Nur liegen schon der Monatsbericht und Lenas Schulung bei mir – alle drei schaffe ich nicht gut. Darf ich zwei Wege nennen?“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Bereitschaft, Lage, Folge – und das Angebot, gleich Lösungen zu nennen."
+            },
+            {
+              "text": "„Klar, kein Problem.“",
+              "wert": 0,
+              "tendenz": "schlucken",
+              "weiter": "k1b",
+              "rueck": "Er erfährt nicht, dass die Woche voll ist. Die Rechnung kommt später."
+            },
+            {
+              "text": "„Das wird knapp, ehrlich gesagt.“",
+              "wert": 1,
+              "weiter": "k1c",
+              "rueck": "Ehrlich, aber er muss nachfragen, was „knapp“ heißt."
+            }
+          ]
+        },
+        {
+          "id": "k1c",
+          "sagt": "Dr. Albers: „Knapp heißt?“",
+          "wahl": [
+            {
+              "text": "„Bericht, Schulung und Angebot zusammen schaffe ich nicht gut. Ich hätte zwei Vorschläge.“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Jetzt ist die Lage klar – und du kommst mit Lösungen."
+            },
+            {
+              "text": "„Ach, geht schon irgendwie.“",
+              "wert": 0,
+              "tendenz": "ueberspielen",
+              "weiter": "k1b",
+              "rueck": "Er hat dir die Tür geöffnet, und du hast sie wieder zugemacht."
+            }
+          ]
+        },
+        {
+          "id": "k1b",
+          "sagt": "Mittwoch, 21 Uhr. Das Angebot ist halb fertig, Lenas Schulung hast du verschoben. Dr. Albers schreibt: „Wie weit ist das Angebot?“",
+          "wahl": [
+            {
+              "text": "„Halb fertig. Ich hätte früher sagen sollen, dass es eng wird. Können wir morgen um acht kurz sprechen?“",
+              "wert": 2,
+              "weiter": "ende4",
+              "rueck": "Spät, aber ehrlich und mit Vorschlag. Am Donnerstagmorgen lässt sich noch etwas retten."
+            },
+            {
+              "text": "„Fast fertig, morgen früh haben Sie es!“ – und dann bis Mitternacht weiterarbeiten, damit es irgendwie noch klappt.",
+              "wert": 0,
+              "tendenz": "ueberspielen",
+              "weiter": "ende2",
+              "rueck": "Die Nachricht wird nicht besser, wenn sie später kommt."
+            }
+          ]
+        },
+        {
+          "id": "k2",
+          "sagt": "Dr. Albers lehnt sich zurück: „Na gut. Was schlagen Sie vor?“",
+          "wahl": [
+            {
+              "text": "„Das müssen Sie entscheiden, was wichtiger ist – ich mach dann einfach, was Sie sagen.“",
+              "wert": 1,
+              "weiter": "k2b",
+              "rueck": "Die Entscheidung liegt tatsächlich bei ihm. Aber du kennst die Termine besser – bring einen Vorschlag mit."
+            },
+            {
+              "text": "„Ich weiß auch nicht. Es ist einfach alles zu viel gerade, und die Woche war sowieso schon chaotisch, mit allem, was so anlag.“",
+              "wert": 0,
+              "tendenz": "klagen",
+              "weiter": "k2b",
+              "rueck": "Ehrlich, aber ohne Möglichkeiten. Er hat jetzt ein Problem mehr."
+            },
+            {
+              "text": "„Zwei Wege: Bericht auf Montag oder Tarek macht die Schulung. Ich würde den Bericht schieben – oder sehen Sie einen dritten?“",
+              "wert": 2,
+              "weiter": "k3",
+              "rueck": "Zwei echte Möglichkeiten, ein klarer Vorschlag und die Tür offen für einen dritten Weg. So entscheidet er in einer Minute."
+            }
+          ]
+        },
+        {
+          "id": "k2b",
+          "sagt": "Dr. Albers, knapp: „Ich kenne nicht alle Ihre Termine. Was wäre denn Ihr Vorschlag?“",
+          "wahl": [
+            {
+              "text": "„Mein Vorschlag: den Bericht auf Montag. Oder Tarek übernimmt Lenas Schulung.“",
+              "wert": 2,
+              "weiter": "k3",
+              "rueck": "Zweite Chance genutzt – jetzt hat er etwas, worüber er entscheiden kann."
+            },
+            {
+              "text": "„Dann mach ich halt alles, irgendwie.“",
+              "wert": 0,
+              "tendenz": "nachgeben",
+              "weiter": "ende2",
+              "rueck": "Aus „zu viel“ wird wieder „alles“. Die Woche bleibt unmöglich."
+            }
+          ]
+        },
+        {
+          "id": "k3",
+          "sagt": "Dr. Albers: „Montag ist zu spät, der Bericht geht Freitag an die Geschäftsleitung. Aber Tarek kann die Schulung machen.“",
+          "wahl": [
+            {
+              "text": "„Okay, wenn's sein muss.“",
+              "wert": 1,
+              "weiter": "k4",
+              "rueck": "Du trägst es mit – nur hört er den Unmut. Ein klarer Satz zum Ablauf wäre stärker."
+            },
+            {
+              "text": "„Gut, dann so: Angebot bis Donnerstag zwölf, Bericht Freitag, Tarek macht Mittwoch die Schulung. Ich sprech gleich mit ihm.“",
+              "wert": 2,
+              "weiter": "k4",
+              "rueck": "Seine Entscheidung angenommen und gleich als Absprache zusammengefasst."
+            },
+            {
+              "text": "„Aber Lena hat sich auf die Schulung mit mir gefreut, das kann ich ihr jetzt schlecht absagen – sie ist ja noch ganz neu bei uns.“",
+              "wert": 0,
+              "tendenz": "festhalten",
+              "weiter": "k4",
+              "rueck": "Verständlich – aber du hast um eine Entscheidung gebeten. Jetzt ist sie da."
+            }
+          ]
+        },
+        {
+          "id": "k4",
+          "sagt": "Dr. Albers: „Gut. Und wenn beim Angebot etwas hakt?“",
+          "wahl": [
+            {
+              "text": "„Dann sag ich Ihnen bis Mittwochmittag Bescheid – nicht erst am Donnerstag.“",
+              "wert": 2,
+              "weiter": "ende1",
+              "rueck": "Eine Frühwarnung mit Uhrzeit. Damit ist die Absprache wetterfest."
+            },
+            {
+              "text": "„Da hakt nichts, keine Sorge.“",
+              "wert": 0,
+              "tendenz": "ueberspielen",
+              "weiter": "ende3",
+              "rueck": "Ein Versprechen, das niemand halten kann. Gerade bei Angeboten hakt oft etwas."
+            },
+            {
+              "text": "„Dann melde ich mich bei Ihnen, sobald ich es merke – das kriegen wir dann schon irgendwie hin.“",
+              "wert": 1,
+              "weiter": "ende3",
+              "rueck": "Richtig gedacht, aber ohne Zeitpunkt. „Sobald ich es merke“ kann Donnerstag um elf sein – mit „bis Mittwochmittag“ wäre es verlässlich."
+            }
+          ]
+        },
+        {
+          "id": "ende1",
+          "sagt": "Donnerstag, 11:50 Uhr. Das Angebot geht raus. Dr. Albers: „Danke. Und gut, dass Sie es am Dienstag gleich gesagt haben.“",
+          "ende": "Lage, Folge, Möglichkeiten, Vorschlag – und eine Absprache mit Frühwarnung: So wird aus „zu viel“ eine Entscheidung, die dein Chef treffen kann."
+        },
+        {
+          "id": "ende2",
+          "sagt": "Freitag. Angebot und Bericht sind fertig, Lenas Schulung ist ausgefallen. Du bist erschöpft, und Dr. Albers wundert sich, warum Lena noch nicht eingearbeitet ist.",
+          "ende": "Kein Drama – aber du hast die Überlast allein getragen. Beim nächsten Mal: früh Lage und Folge nennen, Möglichkeiten und einen Vorschlag."
+        },
+        {
+          "id": "ende3",
+          "sagt": "Donnerstag, 10 Uhr. Frau Köhler fragt nach einer Sonderanfertigung, die Preise fehlen noch. Das Angebot geht erst am Nachmittag raus.",
+          "ende": "Fast gut – nur fehlte die Frühwarnung. Beim nächsten Mal: „Wenn es hakt, sage ich bis … Bescheid.“"
+        },
+        {
+          "id": "ende4",
+          "sagt": "Donnerstag, acht Uhr. Dr. Albers ruft Frau Köhler selbst an und verschiebt das Angebot auf Freitagmittag. Lenas Schulung holt ihr nächste Woche nach.",
+          "ende": "Spät, aber ehrlich – das hat die Lage gerettet. Am Dienstag wäre es eine Planungsfrage gewesen. Beim nächsten Mal: Lage und Folge gleich nennen, mit Vorschlag."
+        }
+      ],
+      "prinzipien": [
+        "Lage und Folge nennen",
+        "Möglichkeiten und ein Vorschlag",
+        "die Entscheidung beim Chef lassen",
+        "als Absprache zusammenfassen",
+        "eine Frühwarnung mit Uhrzeit"
+      ],
+      "transfer": "Was liegt gerade zu viel auf deinem Tisch? Schreib Lage, Folge, zwei Möglichkeiten und deinen Vorschlag in je einem Satz auf."
+    },
+    {
+      "id": "gespraech-l-10",
+      "bereich": "gespraech",
+      "phase": "k",
+      "umfeld": "kunden",
+      "faehigkeiten": [
+        "gespraech.zuhoeren",
+        "gespraech.feedback",
+        "gespraech.ich",
+        "gespraech.oben",
+        "gespraech.konflikt",
+        "gespraech.absprache"
+      ],
+      "stufe": 7,
+      "titel": "Sparring: Der Tag der Reklamation",
+      "figur": "Herr Petersen",
+      "sparring": true,
+      "einleitung": "Ein Tag, an dem alles zusammenkommt: ein verärgerter Kunde, ein Chef, der zu viel verspricht, eine Kollegin, die sich selbst fertigmacht, und ein Streit um den Lieferwagen. Du zeigst alles aus der Phase Können.",
+      "lage": "Montag, acht Uhr. Herr Petersen hat zum zweiten Mal falsche Ware bekommen. Lena hat die Bestellung erfasst. Um neun ist Teamrunde mit Dr. Albers. Das Telefon klingelt.",
+      "start": "k1",
+      "knoten": [
+        {
+          "id": "k1",
+          "sagt": "Herr Petersen, laut: „Zum zweiten Mal! Ich hab Ihnen genau gesagt, was ich brauche. Hört bei Ihnen eigentlich keiner zu?“",
+          "wahl": [
+            {
+              "text": "„Das kann nicht an uns liegen, wir haben das genau so ins System eingegeben, wie Sie es am Telefon bei uns bestellt haben.“",
+              "wert": 0,
+              "tendenz": "rechtfertigen",
+              "weiter": "k1b",
+              "rueck": "Verteidigung, bevor du weißt, was passiert ist. Er fühlt sich nicht gehört."
+            },
+            {
+              "text": "„Das tut mir leid, ich kümmere mich drum.“",
+              "wert": 1,
+              "weiter": "k2",
+              "rueck": "Freundlich. Er weiß aber noch nicht, ob du verstanden hast, worum es geht."
+            },
+            {
+              "text": "„Zum zweiten Mal falsche Ware – das ärgert Sie zu Recht. Danke, dass Sie gleich anrufen. Was genau ist angekommen?“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Kritik angenommen, gespiegelt und eine Frage nach dem Beispiel."
+            }
+          ]
+        },
+        {
+          "id": "k1b",
+          "sagt": "Herr Petersen, noch lauter: „Natürlich! Bei Ihnen sind immer die anderen schuld!“",
+          "wahl": [
+            {
+              "text": "„Sie haben recht, das klang nach Ausrede. Ich will verstehen, was passiert ist: Was genau ist angekommen?“",
+              "wert": 2,
+              "weiter": "k2",
+              "rueck": "Reparaturversuch: den eigenen Anteil sehen und zurück zum Zuhören."
+            },
+            {
+              "text": "„Jetzt werden Sie bitte nicht unfair.“",
+              "wert": 0,
+              "tendenz": "abwehren",
+              "weiter": "ende2",
+              "rueck": "Sein Ton war rau, aber sein Ärger berechtigt. Jetzt fühlt er sich auch noch belehrt."
+            }
+          ]
+        },
+        {
+          "id": "k2",
+          "sagt": "Herr Petersen, etwas ruhiger: „Dichtungen in 40 statt 45 Millimetern. Ich brauch die richtigen bis Mittwoch, sonst steht meine Halle.“",
+          "wahl": [
+            {
+              "text": "„Ich schau mal, was sich machen lässt.“",
+              "wert": 1,
+              "weiter": "k3",
+              "rueck": "Bemüht, aber ohne Zusage, wann er etwas hört. Er bleibt unruhig."
+            },
+            {
+              "text": "„Also 45 statt 40, bis Mittwoch, sonst steht Ihre Halle. Ich kläre das bis zehn und rufe Sie mit einem festen Termin zurück.“",
+              "wert": 2,
+              "weiter": "k3",
+              "rueck": "Gespiegelt und eine kleine, sichere Zusage mit Uhrzeit."
+            },
+            {
+              "text": "„Mittwoch? Das wird bei den Lieferzeiten im Moment ziemlich sicher nichts, da kann ich Ihnen leider wirklich gar nichts versprechen.“",
+              "wert": 0,
+              "tendenz": "abwehren",
+              "weiter": "ende2",
+              "rueck": "Ein Nein ohne Angebot. Er hört: Sein Problem ist dir egal."
+            }
+          ]
+        },
+        {
+          "id": "k3",
+          "sagt": "Teamrunde, neun Uhr. Dr. Albers: „Herr Petersen ist ein wichtiger Kunde. Sagen Sie ihm Lieferung morgen früh zu.“ Du weißt: Der Lieferant schafft frühestens Mittwochmorgen.",
+          "wahl": [
+            {
+              "text": "„Mach ich.“ – und Herrn Petersen Dienstag zusagen.",
+              "wert": 0,
+              "tendenz": "schlucken",
+              "weiter": "k3b",
+              "rueck": "Ein Versprechen, das schon jetzt nicht zu halten ist."
+            },
+            {
+              "text": "„Morgen geht nicht, erst Mittwoch früh. Wir sagen Mittwoch zu oder bringen selbst hin. Ich würd selbst fahren – vor acht ist er versorgt.“",
+              "wert": 2,
+              "weiter": "k4",
+              "rueck": "Ein Nein nach oben mit Lage, Möglichkeiten und Vorschlag."
+            },
+            {
+              "text": "„Morgen wird schwierig.“",
+              "wert": 1,
+              "weiter": "k3c",
+              "rueck": "Ehrlich, aber ohne Angaben. Er muss nachfragen."
+            }
+          ]
+        },
+        {
+          "id": "k3c",
+          "sagt": "Dr. Albers: „Schwierig heißt? Ich brauche eine Antwort, die ich vertreten kann.“",
+          "wahl": [
+            {
+              "text": "„Frühestens Mittwochmorgen. Ich würde Herrn Petersen Mittwoch acht Uhr fest zusagen – das halten wir sicher.“",
+              "wert": 2,
+              "weiter": "k4",
+              "rueck": "Jetzt hat er eine Zusage, die er vertreten kann."
+            },
+            {
+              "text": "„Gut, dann sag ich morgen zu und hoffe.“",
+              "wert": 0,
+              "tendenz": "nachgeben",
+              "weiter": "k3b",
+              "rueck": "Hoffnung ist kein Liefertermin."
+            }
+          ]
+        },
+        {
+          "id": "k3b",
+          "sagt": "Dienstag, zehn Uhr. Keine Lieferung. Herr Petersen ruft wieder an.",
+          "wahl": [
+            {
+              "text": "„Das ist mein Fehler: Ich hab Ihnen gestern zu viel versprochen. Die Ware kommt Mittwoch um acht – das ist fest.“",
+              "wert": 2,
+              "weiter": "k4",
+              "rueck": "Den eigenen Anteil übernommen und eine Zusage, die hält."
+            },
+            {
+              "text": "„Da müssen Sie sich beim Lieferanten beschweren, wir können da leider auch nichts machen, wir hängen genauso an dem dran.“",
+              "wert": 0,
+              "tendenz": "rechtfertigen",
+              "weiter": "ende2",
+              "rueck": "Du hast die Zusage gemacht. Jetzt schiebst du sie weiter."
+            }
+          ]
+        },
+        {
+          "id": "k4",
+          "sagt": "Später kommt Lena zu dir, blass: „Ich glaub, ich hab die falsche Größe eingegeben. Schon wieder. Sag's ruhig: Ich bin zu blöd dafür.“",
+          "wahl": [
+            {
+              "text": "„Nein. Zweimal wurde eine Größe vertauscht – das finden wir raus. Zeigst du mir, wie die Maske beim Bestellen aussieht?“",
+              "wert": 2,
+              "weiter": "k5",
+              "rueck": "Das Etikett zurückgewiesen, bei der Sache geblieben, offen gefragt."
+            },
+            {
+              "text": "„Ach, mach dir keinen Kopf, ist doch nicht schlimm.“",
+              "wert": 1,
+              "weiter": "k5",
+              "rueck": "Tröstlich. Aber es war schlimm für den Kunden – und die Ursache bleibt offen."
+            },
+            {
+              "text": "„Na ja, zweimal ist schon heftig. Pass halt in Zukunft besser auf, gerade bei so einem wichtigen Kunden wie Herrn Petersen.“",
+              "wert": 0,
+              "tendenz": "abwerten",
+              "weiter": "k5b",
+              "rueck": "Bestätigt ihr Urteil über sich selbst – und lehrt nichts."
+            }
+          ]
+        },
+        {
+          "id": "k5b",
+          "sagt": "Lena, leise: „Okay.“ Sie geht zurück an ihren Platz.",
+          "wahl": [
+            {
+              "text": "Hinterhergehen: „Warte – das war zu knapp. Mich interessiert, wie es passiert ist. Zeigst du's mir?“",
+              "wert": 2,
+              "weiter": "k5",
+              "rueck": "Reparaturversuch: Jetzt geht es um die Ursache statt um Schuld."
+            },
+            {
+              "text": "Sie gehen lassen.",
+              "wert": 0,
+              "tendenz": "vermeiden",
+              "weiter": "ende3",
+              "rueck": "Die Ursache bleibt unentdeckt – und kommt wieder."
+            }
+          ]
+        },
+        {
+          "id": "k5",
+          "sagt": "Lena zeigt dir die Liste: „Die 40 und die 45 stehen direkt untereinander, und beim Scrollen springt die Auswahl.“",
+          "wahl": [
+            {
+              "text": "„Dann liegt es nicht nur an dir. Das zeigen wir Tarek, der kennt das Programm. Bis dahin: Größe vor dem Absenden prüfen?“",
+              "wert": 2,
+              "weiter": "k6",
+              "rueck": "Ursache erkannt, Verantwortung geteilt, ein nächster Schritt."
+            },
+            {
+              "text": "„Okay, dann sei da einfach besonders vorsichtig und schau beim Bestellen lieber zwei-, dreimal hin, bevor du auf Absenden drückst.“",
+              "wert": 1,
+              "weiter": "k6",
+              "rueck": "Ein Anfang. Die Ursache liegt aber in der Liste – dort lässt sie sich beheben."
+            }
+          ]
+        },
+        {
+          "id": "k6",
+          "sagt": "Am Nachmittag. Tarek: „Mittwoch früh brauch ich den Lieferwagen selbst, ich hab drei Auslieferungen. Dein Petersen muss warten.“",
+          "wahl": [
+            {
+              "text": "„Petersen ist der wichtigere Kunde, das hat Dr. Albers in der Runde vor allen selbst so gesagt, das weißt du doch.“",
+              "wert": 0,
+              "tendenz": "position",
+              "weiter": "k6b",
+              "rueck": "Rang statt Interesse. Tarek fühlt sich übergangen."
+            },
+            {
+              "text": "„Was liegt bei dir an – wann, wohin? Ich brauche den Wagen nur für eine Fahrt zu Petersen, ganz früh.“",
+              "wert": 2,
+              "weiter": "k7",
+              "rueck": "Nach seinem Interesse gefragt und deins genannt."
+            },
+            {
+              "text": "„Dann lass uns Dr. Albers fragen.“",
+              "wert": 1,
+              "weiter": "k6b",
+              "rueck": "Möglich – aber ihr habt noch gar nicht geschaut, ob beides passt."
+            }
+          ]
+        },
+        {
+          "id": "k6b",
+          "sagt": "Tarek, gereizt: „Super. Und meine Kunden sind egal, oder was?“",
+          "wahl": [
+            {
+              "text": "„Nein, sind sie nicht. Lass uns schauen, was bei dir wann ansteht – vielleicht passt beides.“",
+              "wert": 2,
+              "weiter": "k7",
+              "rueck": "Zurück zu den Interessen. Der Streit wird wieder zur Planung."
+            },
+            {
+              "text": "„So hab ich das überhaupt nicht gesagt. Jetzt dreh mir nicht die Worte im Mund um, das machst du immer.“",
+              "wert": 0,
+              "tendenz": "rechtfertigen",
+              "weiter": "ende4",
+              "rueck": "Ihr streitet jetzt über Worte statt über den Wagen."
+            }
+          ]
+        },
+        {
+          "id": "k7",
+          "sagt": "Tarek: „Meine erste Tour ist um neun im Gewerbegebiet. Petersen liegt ja fast auf dem Weg …“",
+          "wahl": [
+            {
+              "text": "„Dann fahre ich um sieben zu Petersen und bin um halb neun zurück. Du hast den Wagen ab Viertel vor neun. Passt das?“",
+              "wert": 2,
+              "weiter": "ende1",
+              "rueck": "Eine Lösung für beide, mit Uhrzeit. Wer, was, bis wann."
+            },
+            {
+              "text": "„Dann teilen wir uns den Morgen irgendwie.“",
+              "wert": 1,
+              "weiter": "ende5",
+              "rueck": "Die Richtung stimmt, die Uhrzeit fehlt. „Irgendwie“ wird Mittwoch früh eng."
+            }
+          ]
+        },
+        {
+          "id": "ende1",
+          "sagt": "Mittwoch, 7:40 Uhr. Herr Petersen quittiert die richtigen Dichtungen: „Na also.“",
+          "ende": "Am Ende ist der Kunde versorgt, die Ursache gefunden und der Wagen geteilt. Was solche Tage trägt: Kritik annehmen, nur zusagen, was hält, nach Ursache und Interessen fragen – und mit Uhrzeit abschließen. Das ist Können."
+        },
+        {
+          "id": "ende2",
+          "sagt": "Herr Petersen schreibt eine Beschwerde an Dr. Albers. Er überlegt, den Lieferanten zu wechseln.",
+          "ende": "Kein Drama – aber der Kunde fühlt sich nicht gehört. Beim nächsten Mal: erst die Kritik annehmen und spiegeln, nur zusagen, was hält – und dazu stehen."
+        },
+        {
+          "id": "ende3",
+          "sagt": "Die Ware kommt Mittwoch an – mit Hängen und Würgen. Im nächsten Monat vertauscht die Bestellliste wieder eine Größe.",
+          "ende": "Die Lage ist gerettet, das Muster nicht. Beim nächsten Mal: nach der Ursache fragen, statt die Person abzuwerten."
+        },
+        {
+          "id": "ende4",
+          "sagt": "Dr. Albers entscheidet: Petersen zuerst. Tarek fährt seine Touren eine Stunde zu spät und redet zwei Tage kaum mit dir.",
+          "ende": "Der Kunde ist versorgt, der Kollege verärgert. Beim nächsten Mal: nach seinem Interesse fragen, bevor jemand anderes entscheidet."
+        },
+        {
+          "id": "ende5",
+          "sagt": "Mittwoch früh wird es eng: Tarek wartet zwanzig Minuten auf den Wagen und kommt zu spät zu seiner ersten Tour.",
+          "ende": "Gelöst, aber knapp. Beim nächsten Mal: jede Lösung mit Uhrzeit festhalten – wer hat den Wagen wann?"
+        }
+      ],
+      "prinzipien": [
+        "Kritik annehmen und spiegeln",
+        "kleine, sichere Zusagen mit Uhrzeit",
+        "Nein nach oben mit Möglichkeiten und Vorschlag",
+        "Rückmeldung zur Ursache statt zur Person",
+        "Konflikt über Interessen",
+        "Absprachen, die halten"
+      ],
+      "transfer": "Welcher Tag steht dir bevor, an dem mehrere Gespräche zusammenkommen? Nimm dir für jedes einen ersten Satz vor."
+    }
+  ]
+}

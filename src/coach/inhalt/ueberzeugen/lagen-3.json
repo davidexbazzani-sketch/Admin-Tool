@@ -1,0 +1,302 @@
+{
+  "lagen": [
+    {
+      "id": "ueberzeugen-l-11", "bereich": "ueberzeugen", "phase": "m", "umfeld": "fremde", "faehigkeiten": ["ueberzeugen.einfluss", "ueberzeugen.haltung"], "stufe": 7,
+      "titel": "Samstag im Küchenstudio", "figur": "ein Berater im Küchenstudio",
+      "einleitung": "Du bist Kunde, und mehrere rote Tricks kommen nacheinander. Du übst: erkennen, ruhig benennen, mit einer Frage antworten – und ohne Unterschrift und ohne Streit gehen.",
+      "lage": "Samstag im Küchenstudio. Du willst eine neue Küche, höchstens 9.000 Euro, und du hast dir vorgenommen, heute nichts zu unterschreiben. Ein Berater hat dir zwei Stunden lang Küchen gezeigt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Berater: „So, jetzt haben wir alles. Machen wir den Auftrag mit Eiche oder mit Stein fertig?“",
+          "wahl": [
+            { "text": "„Eiche, glaube ich.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1b", "rueck": "Du triffst eine Teilentscheidung, ohne die Hauptentscheidung getroffen zu haben." },
+            { "text": "„Oder keine von beiden – erst will ich den Gesamtpreis sehen, schriftlich.“", "wert": 2, "weiter": "k2", "rueck": "Das falsche Entweder-oder erkannt und die dritte Möglichkeit genannt." },
+            { "text": "„Ich weiß nicht so recht – was würden Sie mir denn empfehlen, was nehmen die meisten Leute?“", "wert": 1, "weiter": "k1b", "rueck": "Ehrlich unentschieden – aber jetzt entscheidet er für dich weiter." }
+          ] },
+        { "id": "k1b", "sagt": "Berater: „Eiche ist eine gute Wahl, trage ich ein. Und bei den Geräten nehmen Sie die mittleren?“",
+          "wahl": [
+            { "text": "„Moment. Ob ich hier kaufe, habe ich noch nicht entschieden. Was kostet das insgesamt?“", "wert": 2, "weiter": "k2", "rueck": "Aus der Kette ausgestiegen – mit der Frage nach dem Gesamtpreis." },
+            { "text": "„Ja, die mittleren.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k2b", "rueck": "Ein kleines Ja nach dem anderen – genau so ist die Kette gebaut." }
+          ] },
+        { "id": "k2b", "sagt": "Berater: „Wunderbar. Dann sind wir bei 8.900 Euro. Unterschreiben Sie hier, dann reserviere ich den Liefertermin.“",
+          "wahl": [
+            { "text": "„Ich unterschreibe heute nichts. Bitte geben Sie mir das Angebot mit, alles eingerechnet.“", "wert": 2, "weiter": "k3", "rueck": "Spät, aber klar: dein Vorsatz gilt." },
+            { "text": "Unterschreiben – die Zahl liegt ja unter deinem Budget, und der Berater hat sich viel Zeit genommen.", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Unter dem Budget heißt nicht: die richtige Küche zum richtigen Preis." }
+          ] },
+        { "id": "k2", "sagt": "Berater: „Insgesamt 8.900 Euro. Aber dieser Preis gilt nur heute – wir haben gerade Aktionswochen.“",
+          "wahl": [
+            { "text": "„Dann muss ich mich wohl beeilen, bevor die Aktionswochen vorbei sind.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k2b", "rueck": "Die Frist wirkt – genau dafür ist sie da." },
+            { "text": "„Das ist mir zu schnell.“", "wert": 1, "weiter": "k3", "rueck": "Gut gespürt. Die Frage, was am Montag passiert, nimmt der Frist noch mehr die Luft." },
+            { "text": "„Was passiert, wenn ich am Montag komme?“", "wert": 2, "weiter": "k3", "rueck": "Die Abwehr-Frage gegen künstlichen Zeitdruck – ruhig und ohne Vorwurf." }
+          ] },
+        { "id": "k3", "sagt": "Berater: „Heute ist der Preis sicher, Montag kann ich nichts versprechen. Ich gehe mal zu meinem Chef und kämpfe für Sie.“ Zehn Minuten später: „Er macht 500 weniger – aber nur, wenn Sie jetzt unterschreiben.“",
+          "wahl": [
+            { "text": "„Das ist aber wirklich nett von Ihnen und Ihrem Chef – dann unterschreibe ich eben gleich.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Gespielter Kampf und künstliche Frist haben gewirkt." },
+            { "text": "„Danke. Schreiben Sie mir die 8.400 bitte aufs Angebot. Gilt es, gilt es am Montag auch.“", "wert": 2, "weiter": "k4", "rueck": "Das Angebot mitgenommen, den Druck dagelassen." },
+            { "text": "„Ich unterschreibe heute nichts.“", "wert": 1, "weiter": "k4", "rueck": "Richtig und klar. Den Nachlass schriftlich mitzunehmen wäre noch besser gewesen." }
+          ] },
+        { "id": "k4", "sagt": "Berater, gekränkt: „Ich habe zwei Stunden mit Ihnen verbracht und mich beim Chef für Sie eingesetzt. Da können Sie mich jetzt nicht so hängen lassen.“",
+          "wahl": [
+            { "text": "„Na gut, Sie haben ja recht, Sie haben sich so viel Mühe gegeben. Dann unterschreibe ich eben.“", "wert": 0, "tendenz": "schuld", "weiter": "ende2", "rueck": "Eingeredete Schuld hat entschieden – nicht du." },
+            { "text": "„Das ist Ihr Job, nicht mein Problem.“", "wert": 1, "weiter": "ende3", "rueck": "Grenze gehalten – aber unnötig scharf. Danken und trotzdem gehen wirkt souveräner." },
+            { "text": "„Danke für Ihre Zeit, wirklich. Entscheiden werde ich in Ruhe. Ich melde mich bis Mittwoch.“", "wert": 2, "weiter": "ende1", "rueck": "Dank und Entscheidung getrennt – freundlich und fest." }
+          ] },
+        { "id": "ende1", "sagt": "Berater: „Na gut. Hier ist das Angebot.“ Am Montag vergleichst du in Ruhe.", "ende": "Du gehst ohne Unterschrift, mit Angebot und ohne Streit. Welche Tricks du unterwegs sofort erkannt hast, zeigen dir die Rückmeldungen." },
+        { "id": "ende2", "sagt": "Du unterschreibst. Zu Hause liest du nach: Für einen gewöhnlichen Kauf im Laden gibt es kein gesetzliches Widerrufsrecht wie an der Haustür.", "ende": "Mehrere Tricks haben zusammengewirkt. Die Abwehr: die dritte Möglichkeit nennen, fragen, was morgen ist, das Angebot schriftlich mitnehmen." },
+        { "id": "ende3", "sagt": "Berater, kühl: „Wie Sie meinen.“ Du gehst mit dem Angebot.", "ende": "Ohne Unterschrift gegangen – gut. Der scharfe Ton war unnötig: Dank und Nein passen zusammen." }
+      ],
+      "prinzipien": ["die dritte Möglichkeit nennen", "Gesamtpreis schriftlich", "fragen, was morgen passiert", "Dank und Entscheidung trennen", "ohne Streit gehen"],
+      "transfer": "Vor welchem größeren Kauf stehst du? Welche zwei Abwehr-Sätze nimmst du mit?"
+    },
+    {
+      "id": "ueberzeugen-l-12", "bereich": "ueberzeugen", "phase": "m", "umfeld": "fremde", "faehigkeiten": ["ueberzeugen.profil", "ueberzeugen.vertrauen", "ueberzeugen.bedarf"], "stufe": 7,
+      "titel": "Das Vorstellungsgespräch im Kundendienst", "figur": "der Leiter des Kundendiensts",
+      "einleitung": "Ein Vorstellungsgespräch mit einer neuen Geschichte. Du übst: wofür du stehst statt Lebenslauf, ein Beispiel mit deinem Anteil – und dem der anderen –, ein konkretes Ergebnis, eine Grenze offen und am Ende eine Frage nach seinem Bedarf.",
+      "lage": "Du bewirbst dich um eine Stelle im Kundendienst eines Versandhändlers. Der Leiter des Kundendiensts führt das Gespräch. Deine Geschichte: In deinem jetzigen Betrieb riefen viele Kunden ein zweites Mal an, weil Antworten auf Reklamationen ausblieben. Du hast feste Rückrufzeiten eingeführt; freitags gehst du mit einer Kollegin die offenen Fälle durch. Seitdem kommen zweite Anrufe nur noch halb so oft. Das Bestellprogramm des Versandhändlers kennst du nicht; mit einem ähnlichen arbeitest du seit fünf Jahren, die Anleitung hast du dir schon angesehen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Leiter: „Erzählen Sie doch mal etwas über sich.“",
+          "wahl": [
+            { "text": "„Ich bin kommunikationsstark, kundenorientiert und extrem belastbar.“", "wert": 0, "tendenz": "aufblasen", "weiter": "k1b", "rueck": "Drei Schlagworte, kein Beleg. Genau das liest er in jeder Bewerbung." },
+            { "text": "„Ich sorge dafür, dass Kunden nicht zweimal anrufen müssen. Dafür habe ich feste Rückrufzeiten eingeführt.“", "wert": 2, "weiter": "k2", "rueck": "Wofür du stehst, mit einem Beispiel – er kann gezielt nachfragen." },
+            { "text": "„Also, nach der Schule habe ich eine Ausbildung gemacht, danach war ich vier Jahre im Versand und dann zwei im Lager …“", "wert": 1, "weiter": "k2", "rueck": "Vollständig, aber ohne roten Faden. Er will hören, wofür du stehst." }
+          ] },
+        { "id": "k1b", "sagt": "Leiter: „Das schreiben viele. Woran würde ich das merken?“",
+          "wahl": [
+            { "text": "„Das merkt man einfach, wenn man ein paar Wochen mit mir zusammenarbeitet, da bin ich ganz sicher.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k2", "rueck": "Ausweichen statt Beleg – er bleibt skeptisch." },
+            { "text": "„Zum Beispiel an den Rückrufen: Dafür habe ich feste Zeiten eingeführt.“", "wert": 2, "weiter": "k2", "rueck": "Vom Schlagwort zum Beispiel – gut gerettet." }
+          ] },
+        { "id": "k2", "sagt": "Leiter: „Erzählen Sie mal genauer: Wie lief das mit den Rückrufen?“",
+          "wahl": [
+            { "text": "„Das haben wir im Team so eingeführt.“", "wert": 1, "weiter": "k3", "rueck": "Bescheiden – aber er erfährt nicht, was dein Anteil war." },
+            { "text": "„Viele riefen doppelt an. Ich habe feste Rückrufzeiten eingeführt, freitags gehe ich mit einer Kollegin die offenen Fälle durch.“", "wert": 2, "weiter": "k3", "rueck": "Lage, Aufgabe, dein Tun – „ich“, wo es deins war, und die Kollegin bleibt sichtbar." },
+            { "text": "„Das war ganz allein meine Idee und meine Arbeit, von Anfang bis Ende – ohne mich hätte sich da bis heute rein gar nichts bewegt.“", "wert": 0, "tendenz": "aneignen", "weiter": "k3", "rueck": "Die Kollegin, die freitags mitmacht, verschwindet. Fragt er dort nach, kippt deine ganze Geschichte." }
+          ] },
+        { "id": "k3", "sagt": "Leiter: „Und was hat es gebracht?“",
+          "wahl": [
+            { "text": "„Viel, sehr viel. Die Kunden waren total begeistert, sogar der Chef hat mich gelobt.“", "wert": 0, "tendenz": "vage", "weiter": "k4", "rueck": "Begeisterung ist kein Ergebnis." },
+            { "text": "„Ich glaube, die Kunden sind jetzt zufriedener.“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich, aber zu vage – du kennst ein klares Ergebnis." },
+            { "text": "„Zweite Anrufe kommen seitdem nur noch halb so oft.“", "wert": 2, "weiter": "k4", "rueck": "Ein konkretes Ergebnis – ehrlich, ohne Zuckerguss." }
+          ] },
+        { "id": "k4", "sagt": "Leiter: „Wir arbeiten mit einem eigenen Bestellprogramm. Kennen Sie sich damit aus?“",
+          "wahl": [
+            { "text": "„Dieses nicht. Mit einem ähnlichen arbeite ich seit fünf Jahren, und die Anleitung habe ich mir schon angesehen.“", "wert": 2, "weiter": "k5", "rueck": "Was fehlt, was du schon kannst, was du schon tust – glaubwürdig." },
+            { "text": "„Ja, klar, damit kenne ich mich aus.“", "wert": 0, "tendenz": "flunkern", "weiter": "k4b", "rueck": "Geschönt – und leicht zu prüfen." },
+            { "text": "„Nein, das kenne ich nicht.“", "wert": 1, "weiter": "k5", "rueck": "Ehrlich – aber du verschweigst, was du schon kannst." }
+          ] },
+        { "id": "k4b", "sagt": "Der Leiter dreht den Bildschirm zu dir: „Dann zeigen Sie mir doch kurz, wie Sie eine Rücksendung anlegen.“",
+          "wahl": [
+            { "text": "Kurz suchen, dann ehrlich: „Ich habe übertrieben. Dieses Programm kenne ich nicht – ein ähnliches seit fünf Jahren.“", "wert": 2, "weiter": "k5", "rueck": "Spät, aber gerettet: Ehrlichkeit wiegt mehr als die Übertreibung davor." },
+            { "text": "Herumklicken und so tun, als suchtest du nur den richtigen Knopf.", "wert": 0, "tendenz": "flunkern", "weiter": "ende2", "rueck": "Er sieht es – und fragt sich, was sonst noch geschönt war." }
+          ] },
+        { "id": "k5", "sagt": "Leiter: „Haben Sie noch Fragen an uns?“",
+          "wahl": [
+            { "text": "„Nein, eigentlich ist alles klar.“", "wert": 0, "tendenz": "nichtfragen", "weiter": "ende3", "rueck": "Eine verschenkte Gelegenheit, Interesse an der Sache zu zeigen." },
+            { "text": "„Welche Fälle landen bei Ihnen heute am häufigsten ein zweites Mal auf dem Tisch?“", "wert": 2, "weiter": "ende1", "rueck": "Eine Frage nach seinem Bedarf – und sie knüpft an deine Geschichte an." },
+            { "text": "„Wie viele Urlaubstage gibt es, und wie ist das mit Homeoffice und Gleitzeit geregelt?“", "wert": 1, "weiter": "ende3", "rueck": "Darf man fragen – als einzige Frage wirkt es, als ginge es nur ums Drumherum." }
+          ] },
+        { "id": "ende1", "sagt": "Leiter: „Gute Frage. Lieferverzögerungen – da rufen manche drei-, viermal an. Genau da brauche ich jemanden.“", "ende": "Deine Frage zeigt Interesse an seiner Aufgabe und verrät dir, wo deine Geschichte passt. Wie ehrlich und belegt du dich unterwegs gezeigt hast, zeigen dir die Rückmeldungen." },
+        { "id": "ende2", "sagt": "Leiter: „Danke, wir melden uns.“ Sein Blick sagt: eher nicht.", "ende": "Wer übertreibt, muss es durchhalten – im Gespräch und im Job. Ehrlich genannte Grenzen schaden weniger als aufgeflogene Übertreibung." },
+        { "id": "ende3", "sagt": "Leiter: „Gut, dann danke ich Ihnen.“", "ende": "Das Gespräch endet, bevor du gezeigt hast, dass dich die Aufgabe interessiert. Eine Frage nach seinem Bedarf öffnet mehr." }
+      ],
+      "prinzipien": ["Vorstellung statt Lebenslauf", "eigener Anteil – und der der anderen", "konkretes Ergebnis", "Grenze offen nennen, mit dem, was du schon kannst", "Frage nach dem Bedarf der anderen Seite"],
+      "transfer": "Wo stellst du dich demnächst vor – Bewerbung, neues Team, neuer Kunde? Welche Erfolgsgeschichte nimmst du mit?"
+    },
+    {
+      "id": "ueberzeugen-l-13", "bereich": "ueberzeugen", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["ueberzeugen.nutzen", "ueberzeugen.einwand", "ueberzeugen.abschluss"], "stufe": 8,
+      "titel": "Der Vorschlag im Vereinsvorstand", "figur": "der Vereinsvorstand",
+      "einleitung": "Vor mehreren überzeugen: ein Vorsitzender, eine Kassenwartin, zwei Trainer. Du übst: mit dem Problem anfangen, der Kasse eine Gegenrechnung geben, eine Sorge ernst nehmen und lösen – und am Ende klein starten und klar abstimmen lassen.",
+      "lage": "Im Vorstand eures Sportvereins schlägst du vor, Halle und Geräteraum künftig mit Chips statt mit Schlüsseln zu öffnen: einmalig 600 Euro für die Schlösser und dreißig Chips; nur der Geräteraum käme auf 200. Im letzten halben Jahr ging zweimal ein Schlüssel verloren, und jedes Mal musste ein neues Schloss her, für je 250 Euro. Einen verlorenen Chip sperrt man einfach. Am Tisch: der Vorsitzende, die Kassenwartin und zwei Trainer. Vorab hast du mit dem Vorsitzenden gesprochen; er findet die Idee gut, will aber, dass alle mitziehen. Ihr duzt euch.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Vorsitzender: „Du hast fünf Minuten. Bitte.“",
+          "wahl": [
+            { "text": "„Zweimal war im letzten halben Jahr ein Schlüssel weg – zweimal ein neues Schloss. Ich zeige kurz, was Chips jedem bringen.“", "wert": 2, "weiter": "k2", "rueck": "Das Problem der Runde zuerst – jetzt hören alle zu." },
+            { "text": "„Ich habe mir drei Schließsysteme angesehen, Prospekte gelesen, Preise verglichen und das beste rausgesucht. Es kann sehr viel …“", "wert": 1, "tendenz": "merkmale", "weiter": "k2", "rueck": "Fleißig, aber du fängst bei dir an, nicht beim Problem der Runde." },
+            { "text": "„Ich weiß, ihr habt wenig Zeit, und es ist bestimmt nicht so wichtig …“", "wert": 0, "tendenz": "kleinmachen", "weiter": "k1b", "rueck": "Du machst deinen Vorschlag klein, bevor ihn jemand kennt." }
+          ] },
+        { "id": "k1b", "sagt": "Vorsitzender: „Wenn es nicht wichtig ist, verschieben wir es.“",
+          "wahl": [
+            { "text": "„Doch, ist es: Zweimal war im letzten halben Jahr ein Schlüssel weg, zweimal musste ein neues Schloss her.“", "wert": 2, "weiter": "k2", "rueck": "Gerettet – mit dem Problem." },
+            { "text": "„Okay, dann nächstes Mal.“", "wert": 0, "tendenz": "einknicken", "weiter": "ende2", "rueck": "Die Gelegenheit ist weg." }
+          ] },
+        { "id": "k2", "sagt": "Kassenwartin: „Und was kostet der Spaß? Wir haben kein Geld zu verschenken.“",
+          "wahl": [
+            { "text": "„Das ist doch fast nichts.“", "wert": 0, "tendenz": "abwerten", "weiter": "k2b", "rueck": "Du wischst ihre Aufgabe weg – sie ist für die Kasse verantwortlich." },
+            { "text": "„Einmal 600 Euro. Die zwei neuen Schlösser haben uns im letzten halben Jahr schon 500 gekostet.“", "wert": 2, "weiter": "k3", "rueck": "Zahl und Gegenrechnung – genau, was die Kasse wissen will." },
+            { "text": "„Ein bisschen was kostet es schon, aber das lohnt sich bestimmt, ganz sicher.“", "wert": 0, "tendenz": "vage", "weiter": "k2b", "rueck": "Vage beim Geld – damit kann sie nichts vertreten." }
+          ] },
+        { "id": "k2b", "sagt": "Kassenwartin: „Für dich vielleicht. Ich muss das vor der Mitgliederversammlung vertreten.“",
+          "wahl": [
+            { "text": "„Stimmt, das ist deine Aufgabe. Konkret: einmal 600 Euro – die zwei neuen Schlösser haben schon 500 gekostet.“", "wert": 2, "weiter": "k3", "rueck": "Ihre Rolle anerkannt und geliefert, was sie braucht." },
+            { "text": "„Dann vertritt es halt.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende3", "rueck": "Jetzt ist die Kasse gegen dich." }
+          ] },
+        { "id": "k3", "sagt": "Ein Trainer: „Und wenn so ein Chip mal nicht geht? Dann steht meine Gruppe vor verschlossener Tür.“",
+          "wahl": [
+            { "text": "„Das kommt sicher nur selten vor.“", "wert": 1, "weiter": "k4", "rueck": "Ruhig, aber seine Sorge bleibt ohne Antwort." },
+            { "text": "„Die Technik ist heute wirklich ausgereift, da geht so schnell nichts kaputt.“", "wert": 0, "tendenz": "verteidigen", "weiter": "k3b", "rueck": "Eine Behauptung gegen seine Sorge – vor allen. Jetzt muss er dagegenhalten." },
+            { "text": "„Berechtigte Frage. Wann wäre das für dich am schlimmsten?“", "wert": 2, "weiter": "k4", "rueck": "Anerkannt und nachgefragt – du erfährst, wo seine Sorge genau sitzt." }
+          ] },
+        { "id": "k3b", "sagt": "Der Trainer: „Ausgereift hin oder her – wenn es klemmt, hilft mir das nichts.“",
+          "wahl": [
+            { "text": "„Stimmt. Wann wäre das für dich am schlimmsten?“", "wert": 2, "weiter": "k4", "rueck": "Zweite Chance genutzt: nach seiner Lage gefragt." },
+            { "text": "„Dann probier es eben vorher aus, wie jeder andere auch.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende3", "rueck": "Aus einer Sorge wird ein Lager gegen dich." }
+          ] },
+        { "id": "k4", "sagt": "Der Trainer: „Samstags beim Spiel. Die Gastmannschaft kommt um acht, und vom Vorstand ist keiner da.“",
+          "wahl": [
+            { "text": "„So schlimm wird das schon nicht.“", "wert": 0, "tendenz": "abwerten", "weiter": "k5", "rueck": "Du überhörst die Sorge – er bleibt skeptisch." },
+            { "text": "„Da finden wir schon eine Lösung.“", "wert": 1, "weiter": "k5", "rueck": "Zuversichtlich, aber ohne Lösung. Ein konkretes Angebot wäre stärker." },
+            { "text": "„Dann kommt ein Notschlüssel in einen Kasten mit Zahlenschloss, und jeder Trainer kennt die Zahl. Reicht dir das?“", "wert": 2, "weiter": "k5", "rueck": "Eine konkrete Lösung für genau seine Sorge – und er darf sagen, ob sie reicht." }
+          ] },
+        { "id": "k5", "sagt": "Vorsitzender: „Gut. Wie seht ihr das?“ Die Kassenwartin zuckt mit den Schultern, ein Trainer nickt, der andere schweigt.",
+          "wahl": [
+            { "text": "„Erst nur der Geräteraum für 200 Euro, bis zu den Sommerferien. Dann entscheiden wir über die Halle. Wer ist dafür?“", "wert": 2, "weiter": "ende1", "rueck": "Ein kleiner Schritt mit Termin und eine klare Frage – darüber kann eine Runde entscheiden." },
+            { "text": "„Also, ich bin gespannt, wie ihr euch entscheidet.“", "wert": 0, "tendenz": "nichtfragen", "weiter": "ende2", "rueck": "Ohne klare Frage geht die Runde mit einem Achselzucken auseinander." },
+            { "text": "„Wer jetzt nicht zustimmt, ist schuld, wenn wieder ein Schlüssel wegkommt und der Verein zahlt.“", "wert": 0, "tendenz": "schuld", "weiter": "ende3", "rueck": "Schuld einreden ist rote Linie – und vergiftet die Runde." }
+          ] },
+        { "id": "ende1", "sagt": "Vorsitzender: „Erst der Geräteraum, bis zu den Sommerferien. Wer ist dafür?“ Drei Hände gehen hoch. Die Kassenwartin: „Na gut – 200 kann ich vertreten.“", "ende": "Ein kleiner Schritt mit Termin, über den die Runde abstimmen kann. Wie du unterwegs mit Kasse und Sorge umgegangen bist, zeigen dir die Rückmeldungen." },
+        { "id": "ende2", "sagt": "Vorsitzender: „Dann vertagen wir das.“", "ende": "Ohne klare Frage vertagt eine Runde fast immer. Am Ende: Vorschlag, Termin, Abstimmung." },
+        { "id": "ende3", "sagt": "Vorsitzender: „Ich glaube, das wird heute nichts mehr.“", "ende": "Kleinmachen, Abwerten oder Schuld einreden kosten die Runde. Sorgen anerkennen, nachfragen, Lösungen anbieten." }
+      ],
+      "prinzipien": ["mit dem Problem der Runde anfangen", "Zahl mit Gegenrechnung für die Kasse", "Sorge anerkennen und nachfragen", "konkrete Lösung für die Sorge", "kleiner Schritt mit klarer Abstimmung"],
+      "transfer": "Wo willst du demnächst eine Runde überzeugen – Verein, Team, Familie? Mit wem sprichst du vorher einzeln?"
+    },
+    {
+      "id": "ueberzeugen-l-14", "bereich": "ueberzeugen", "phase": "m", "umfeld": "vorgesetzte", "faehigkeiten": ["ueberzeugen.nutzen", "ueberzeugen.abschluss", "ueberzeugen.haltung"], "stufe": 8,
+      "titel": "Zweiter Anlauf bei Dr. Albers", "figur": "Dr. Henrik Albers",
+      "einleitung": "Eine Idee nach oben, die schon einmal vertagt wurde. Du übst: an seine Worte erinnern ohne Vorwurf, Beleg aus dem eigenen Versuch, Grenzen der Idee offen nennen, klein starten – und ein echtes Nein zulassen. Ohne Taktik.",
+      "lage": "Vor drei Monaten hast du Dr. Albers vorgeschlagen, Standardangebote künftig aus festen Vorlagen zu bauen. Seine Antwort: „Nicht jetzt, erst nach dem Jahresabschluss.“ Der ist vorbei. Inzwischen hast du in deiner eigenen Arbeit zwei Vorlagen gebaut; damit ging ein Standardangebot in zwanzig Minuten raus statt in einer Stunde. Für Sonderfälle taugen sie nicht. Lena und Tarek würden einen Versuch mitmachen. Er hat zehn Minuten.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Albers: „Sie wollten mich sprechen?“",
+          "wahl": [
+            { "text": "„Ich wollte noch mal über die Vorlagen sprechen, wenn es passt.“", "wert": 1, "weiter": "k2", "rueck": "Höflich, aber ohne Nutzen. Warum sollte er jetzt zuhören?" },
+            { "text": "„Es geht wieder um die Vorlagen. Sie hatten ja damals keine Zeit.“", "wert": 0, "tendenz": "vorwurf", "weiter": "k1b", "rueck": "Klingt nach Vorwurf. Er muss sich jetzt erst rechtfertigen." },
+            { "text": "„Ja. Sie sagten: nach dem Jahresabschluss. Ich habe etwas, das bei jedem Standardangebot Zeit spart.“", "wert": 2, "weiter": "k2", "rueck": "An seine eigenen Worte erinnert, ohne Vorwurf – und gleich sein Nutzen." }
+          ] },
+        { "id": "k1b", "sagt": "Albers: „Ich hatte damals andere Prioritäten. Was gibt es?“",
+          "wahl": [
+            { "text": "„Verstehe. Jetzt gibt es Zahlen: Mit zwei Vorlagen ging ein Standardangebot in zwanzig Minuten raus statt in einer Stunde.“", "wert": 2, "weiter": "k2", "rueck": "Vom Vorwurf zum Beleg – gut gerettet." },
+            { "text": "„Die Vorlagen eben. Wie gesagt.“", "wert": 0, "tendenz": "trotz", "weiter": "ende3", "rueck": "Verstimmt und ohne Inhalt – die Tür geht zu." }
+          ] },
+        { "id": "k2", "sagt": "Albers: „Zeigen Sie mal. … Und warum soll das für alle passen? Jeder Kunde ist anders.“",
+          "wahl": [
+            { "text": "„Für Sonderfälle nicht. Für Standardangebote ging es bei mir von einer Stunde auf zwanzig Minuten.“", "wert": 2, "weiter": "k3", "rueck": "Einwand anerkannt, Grenze genannt, Beleg aus dem eigenen Versuch." },
+            { "text": "„Doch, das passt eigentlich immer.“", "wert": 0, "tendenz": "uebertreiben", "weiter": "k2b", "rueck": "Übertrieben – er kennt die Sonderfälle." },
+            { "text": "„Na ja, man könnte es ja zumindest mal versuchen, vielleicht passt es ja doch öfter, als man so denkt.“", "wert": 1, "weiter": "k3", "rueck": "Bescheiden, aber du lässt deinen Beleg ungenutzt." }
+          ] },
+        { "id": "k2b", "sagt": "Albers: „Immer? Das glaube ich nicht.“",
+          "wahl": [
+            { "text": "„Sie haben recht – Sonderfälle bleiben, wie sie sind. Für Standardangebote spart es Zeit.“", "wert": 2, "weiter": "k3", "rueck": "Korrigiert – jetzt wirkt der Rest glaubwürdig." },
+            { "text": "„Doch, wirklich.“", "wert": 0, "tendenz": "trotz", "weiter": "ende3", "rueck": "Recht behalten wollen kostet die Idee." }
+          ] },
+        { "id": "k3", "sagt": "Albers: „Und wer soll die Vorlagen für alle bauen? Für ein Projekt haben wir keine Zeit.“",
+          "wahl": [
+            { "text": "„Das schaffe ich nebenbei, gar kein Problem – ich bleibe dafür einfach ein paar Wochen abends länger.“", "wert": 0, "tendenz": "ueberversprechen", "weiter": "k4", "rueck": "Großzügig – aber ein Versprechen, das dich überlasten kann. Klein starten ist ehrlicher." },
+            { "text": "„Kein Projekt: vier Wochen Test mit Lena und Tarek. Danach entscheiden Sie anhand der Zahlen.“", "wert": 2, "weiter": "k4", "rueck": "Klein starten, mit Verbündeten, die Entscheidung bleibt bei ihm." },
+            { "text": "„Darum müsste sich eigentlich die IT kümmern.“", "wert": 0, "tendenz": "abschieben", "weiter": "ende3", "rueck": "Die Idee ist deine – wer sie abschiebt, gibt sie auf." }
+          ] },
+        { "id": "k4", "sagt": "Albers: „Hm. Ich weiß nicht. Lassen Sie mich darüber nachdenken.“",
+          "wahl": [
+            { "text": "„Das sagten Sie letztes Mal auch.“", "wert": 0, "tendenz": "vorwurf", "weiter": "ende3", "rueck": "Ein Vorwurf an den, der entscheiden soll." },
+            { "text": "„Gern. Was bräuchten Sie, um zu entscheiden? Ich kann bis Freitag eine Seite mit den Zahlen schicken.“", "wert": 2, "weiter": "k5", "rueck": "Bedenkzeit respektiert und einen kleinen nächsten Schritt angeboten." },
+            { "text": "„Okay, ich warte dann einfach.“", "wert": 1, "weiter": "ende2", "rueck": "Respektvoll, aber ohne nächsten Schritt." }
+          ] },
+        { "id": "k5", "sagt": "Albers: „Eine Seite reicht. Aber ich sage Ihnen gleich: Wenn der Vertrieb nicht mitzieht, wird das nichts.“",
+          "wahl": [
+            { "text": "„Verstanden. Soll ich vorher mit dem Vertrieb sprechen – und sagt der Nein, lassen wir es?“", "wert": 2, "weiter": "ende1", "rueck": "Seine Bedingung ernst genommen, Verbündete gesucht, ein echtes Nein erlaubt." },
+            { "text": "„Der Vertrieb zieht bestimmt mit, keine Sorge – die finden das ganz sicher genauso gut wie ich.“", "wert": 0, "tendenz": "behaupten", "weiter": "ende2", "rueck": "Eine Behauptung, die du nicht prüfen kannst. Lieber anbieten, vorher zu fragen." }
+          ] },
+        { "id": "ende1", "sagt": "Albers: „Ja, sprechen Sie mit dem Vertrieb. Dann entscheiden wir.“", "ende": "Ein klarer nächster Schritt, eine prüfbare Grundlage, ein Mitentscheider im Boot – und ein Nein bleibt möglich. Ob es ein Ja wird, entscheidet er." },
+        { "id": "ende2", "sagt": "Albers: „Ich melde mich.“ Wochen vergehen.", "ende": "Ohne klare Bitte und ohne geprüfte Grundlage versandet eine Idee oben leicht. Ein kleiner, konkreter nächster Schritt hilft beiden." },
+        { "id": "ende3", "sagt": "Albers: „Ich glaube, das passt gerade nicht.“", "ende": "Vorwurf, Übertreibung oder Abschieben schließen die Tür. Erinnern ohne Vorwurf, Grenzen anerkennen, klein starten." }
+      ],
+      "prinzipien": ["an seine Worte erinnern, ohne Vorwurf", "Beleg aus eigenem Versuch", "Grenzen der Idee offen nennen", "klein starten, Verbündete suchen", "klare Bitte und echtes Nein"],
+      "transfer": "Welche Idee hast du schon einmal vorgeschlagen und dann liegen lassen? Was wäre heute ein kleiner, prüfbarer Versuch?"
+    },
+    {
+      "id": "ueberzeugen-l-15", "bereich": "ueberzeugen", "phase": "m", "umfeld": "kunden", "faehigkeiten": ["ueberzeugen.bedarf", "ueberzeugen.nutzen", "ueberzeugen.vertrauen", "ueberzeugen.einwand", "ueberzeugen.einfluss", "ueberzeugen.abschluss", "ueberzeugen.haltung"], "stufe": 9, "sparring": true,
+      "titel": "Sparring: Der große Auftrag", "figur": "Nadine Köhler",
+      "einleitung": "Der Abschluss der Meisterschaft: drei Menschen am Tisch, drei verschiedene Fragen, ein Mitbewerber mit niedrigerer Zahl. Alles, was du gelernt hast, in einem Gespräch – und am Ende ein nächster Schritt, der ein Nein erlaubt.",
+      "lage": "Nadine Köhler will beide Standorte zusammen neu ausstatten: Rechner, Netz, Betreuung. Am Tisch: Nadine (entscheidet), ihr Werkstattleiter (skeptisch, muss damit arbeiten) und ihre Buchhalterin (achtet aufs Geld). Ein anderer Anbieter hat schon ein Angebot abgegeben. Du hast dir notiert: Gesamtpaket mit Einrichtung und festem Notdienst 24.000 Euro im Jahr, bei zwei Jahren Laufzeit 22.000, Untergrenze 21.000. Drei Werkstätten haben dir erlaubt, sie als Referenz zu nennen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Nadine: „Schön. Sie haben eine halbe Stunde. Legen Sie los.“",
+          "wahl": [
+            { "text": "„Ich habe Ihnen eine Präsentation mit zwanzig Folien mitgebracht.“", "wert": 0, "tendenz": "abspulen", "weiter": "k1b", "rueck": "Dieselbe Rede für alle – bevor du weißt, was jeder will." },
+            { "text": "„Ich fasse zusammen, was ich von Frau Köhler weiß, und zeige dann unser Angebot.“", "wert": 1, "weiter": "k2", "rueck": "Ordentlich – aber die anderen beiden kommen nicht zu Wort." },
+            { "text": "„Danke. Vorab: Was soll in einem Jahr besser laufen als heute – aus Sicht von jedem von Ihnen?“", "wert": 2, "weiter": "k2", "rueck": "Erst alle drei hören – dann weißt du, wen was überzeugt." }
+          ] },
+        { "id": "k1b", "sagt": "Werkstattleiter: „Zwanzig Folien? Ich habe um elf einen Termin.“",
+          "wahl": [
+            { "text": "„Dann lassen wir die Folien. Was soll in einem Jahr besser laufen – aus Ihrer Sicht?“", "wert": 2, "weiter": "k2", "rueck": "Umgeschaltet: vom Vortrag zum Fragen." },
+            { "text": "„Ich beeile mich.“", "wert": 0, "tendenz": "abspulen", "weiter": "k2", "rueck": "Schneller reden hilft nicht – er hört nur noch halb zu." }
+          ] },
+        { "id": "k2", "sagt": "Nadine: „Sagen Sie beide kurz, was Ihnen wichtig ist.“ Werkstattleiter: „Bei mir: dass das Bestellprogramm läuft. Mehr brauche ich nicht.“ Buchhalterin: „Und bei mir: dass ich die Kosten fürs ganze Jahr vorher kenne.“",
+          "wahl": [
+            { "text": "„Das kriegen wir alles hin, keine Sorge. Unser Paket deckt das alles ab, und noch viel mehr.“", "wert": 0, "tendenz": "zufrueh", "weiter": "k3", "rueck": "Zu früh: Nadines Ziel kennst du noch nicht." },
+            { "text": "„Also: Bestellprogramm zuverlässig, Kosten planbar. Frau Köhler, was ist Ihnen wichtig?“", "wert": 2, "weiter": "k3", "rueck": "Jeden gehört, zusammengefasst – und die Entscheiderin gefragt." },
+            { "text": "„Bestellprogramm und Planbarkeit, verstanden.“", "wert": 1, "weiter": "k3", "rueck": "Gut zusammengefasst – Nadine selbst hast du aber nicht gefragt." }
+          ] },
+        { "id": "k3", "sagt": "Nadine: „Mir ist wichtig, dass beide Standorte gleich arbeiten. Und dass ich mich nicht mehr kümmern muss.“",
+          "wahl": [
+            { "text": "„Wir bieten Rechner der neuesten Generation, schnelles Glasfaser-Netz, Fernwartung und vieles mehr.“", "wert": 0, "tendenz": "merkmale", "weiter": "k4", "rueck": "Merkmale – keiner am Tisch hat danach gefragt." },
+            { "text": "„Also: beide Standorte gleich, ein Ansprechpartner, Festpreis. Darf ich zeigen, was das jedem bringt?“", "wert": 2, "weiter": "k4", "rueck": "Ihr Wunsch in drei Punkten – und ein Angebot, jeden einzeln abzuholen." }
+          ] },
+        { "id": "k4", "sagt": "Werkstattleiter: „Schön gesagt. Aber woher weiß ich, dass das Bestellprogramm danach läuft? Das sagen alle.“",
+          "wahl": [
+            { "text": "„Darauf gebe ich Ihnen mein Wort.“", "wert": 0, "tendenz": "beteuern", "weiter": "k5", "rueck": "Beteuern ersetzt keinen Beleg – er bleibt skeptisch." },
+            { "text": "„Fragen Sie gern bei einer der drei Werkstätten nach, die ich nennen darf. Ich schreibe die Nummern auf.“", "wert": 2, "weiter": "k5", "rueck": "Prüfbar statt beteuert – er entscheidet selbst, ob er anruft." },
+            { "text": "„Ich zeige Ihnen gern, wie wir das Programm rund um die Uhr überwachen und was bei einem Ausfall passiert, Schritt für Schritt.“", "wert": 1, "weiter": "k5", "rueck": "Konkret, aber eine Vorführung ist noch kein Beleg aus dem echten Betrieb." }
+          ] },
+        { "id": "k5", "sagt": "Buchhalterin: „Und die Zahl? Der andere Anbieter liegt bei 18.000.“",
+          "wahl": [
+            { "text": "„Dann gehen wir auf 19.000.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Die fremde Zahl hat dich gezogen – unter deine eigene Grenze." },
+            { "text": "„Beide Standorte, Einrichtung, fester Notdienst, Festpreis fürs Jahr: 24.000 Euro.“ Dann Pause.", "wert": 2, "weiter": "k6", "rueck": "Wert, Zahl, Pause – die fremde Zahl hat dich nicht gezogen." },
+            { "text": "„18.000? Das kann nicht seriös sein.“", "wert": 0, "tendenz": "abwerten", "weiter": "k5b", "rueck": "Du greifst ein Angebot an, das du nicht kennst." }
+          ] },
+        { "id": "k5b", "sagt": "Buchhalterin: „Es liegt hier, schriftlich.“",
+          "wahl": [
+            { "text": "„Entschuldigung. Unseres: 24.000, alles drin. Legen wir beide nebeneinander?“", "wert": 2, "weiter": "k6", "rueck": "Korrigiert – vom Bestreiten zum Vergleichen." },
+            { "text": "„Trotzdem. Da stimmt was nicht.“", "wert": 0, "tendenz": "trotz", "weiter": "ende3", "rueck": "Vor drei Leuten auf einer Vermutung beharrt." }
+          ] },
+        { "id": "k6", "sagt": "Buchhalterin: „24.000 gegen 18.000. Das muss ich erklären können.“",
+          "wahl": [
+            { "text": "„Verständlich. Lassen Sie uns vergleichen: Was ist bei den 18.000 alles drin?“", "wert": 2, "weiter": "k7", "rueck": "Ihr Bedürfnis ernst genommen – sie braucht einen Vergleich, den sie vertreten kann." },
+            { "text": "„Dafür bekommen Sie bei mir eben Qualität, und Qualität hat nun mal ihren Preis.“", "wert": 0, "tendenz": "vage", "weiter": "k7", "rueck": "Ein Wort statt eines Vergleichs – damit kann sie nichts erklären." },
+            { "text": "„Ich kann Ihnen auf 21.000 entgegenkommen.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Nachlass, bevor du weißt, was verglichen wird." }
+          ] },
+        { "id": "k7", "sagt": "Buchhalterin: „Einrichtung ist dabei. Notdienst kostet dort extra, nach Stunden.“",
+          "wahl": [
+            { "text": "„Dann ist meins viel günstiger.“", "wert": 0, "tendenz": "uebertreiben", "weiter": "k8", "rueck": "Das weißt du nicht – es hängt davon ab, wie oft der Notdienst kommt." },
+            { "text": "„Sehen Sie, da wollte man Sie reinlegen.“", "wert": 0, "tendenz": "abwerten", "weiter": "k8", "rueck": "Eine Unterstellung, die du nicht belegen kannst." },
+            { "text": "„Dann ist meins teurer, dafür mit festem Notdienst-Preis – Ihre Planbarkeit. Sonst noch ein Punkt?“", "wert": 2, "weiter": "k8", "rueck": "Ehrlich: Du bist teurer – und sagst, wofür. Dazu die Klärungsfrage." }
+          ] },
+        { "id": "k8", "sagt": "Nadine: „Ich gebe zu, mir gefällt Ihr Angebot. Was können Sie beim Preis noch tun?“",
+          "wahl": [
+            { "text": "„Bei zwei Jahren Laufzeit 22.000 im Jahr. Bei einem Jahr bleibt es bei 24.000.“", "wert": 2, "weiter": "k9", "rueck": "Nachlass nur gegen Gegenleistung – zwei echte Möglichkeiten." },
+            { "text": "„Für Sie 21.000.“", "wert": 1, "weiter": "k9", "rueck": "Gerade noch an deiner Grenze – aber ohne Gegenleistung. Das lädt zum nächsten Drücken ein." },
+            { "text": "„Wenn Sie heute noch zusagen, mache ich 21.000 – morgen kann ich das leider nicht mehr halten.“", "wert": 0, "tendenz": "zeitdruck", "weiter": "ende3", "rueck": "Künstlicher Zeitdruck – rote Linie. Am Tisch merken es gleich drei." }
+          ] },
+        { "id": "k9", "sagt": "Werkstattleiter: „Ich bin immer noch nicht überzeugt, dass wir das brauchen.“",
+          "wahl": [
+            { "text": "„Das muss Frau Köhler entscheiden, nicht Sie.“", "wert": 0, "tendenz": "uebergehen", "weiter": "k10", "rueck": "Du übergehst den, der damit arbeiten muss – und machst ihn zum Gegner." },
+            { "text": "„Was müsste passieren, damit Sie es sind? Wäre ein Anruf bei einer der Werkstätten ein Anfang?“", "wert": 2, "weiter": "k10", "rueck": "Seinen Zweifel ernst genommen und ihm einen Weg angeboten, selbst zu prüfen." },
+            { "text": "„Verstehe. Sie werden es schon sehen.“", "wert": 1, "weiter": "k10", "rueck": "Gelassen – aber sein Zweifel bleibt am Tisch." }
+          ] },
+        { "id": "k10", "sagt": "Nadine: „Wir besprechen das intern.“",
+          "wahl": [
+            { "text": "„Klar, melden Sie sich.“", "wert": 1, "weiter": "ende4", "rueck": "Respektvoll, aber ohne Unterlage und Termin." },
+            { "text": "„Gern. Bis morgen kommt eine Seite mit beiden Möglichkeiten und den Nummern. Darf ich Donnerstag anrufen?“", "wert": 2, "weiter": "ende1", "rueck": "Unterlage für alle drei, Termin – und die Entscheidung bleibt bei ihnen." },
+            { "text": "„Können wir das nicht gleich jetzt festmachen? Sie sind doch alle drei hier, das spart uns allen Zeit.“", "wert": 0, "tendenz": "draengen", "weiter": "ende3", "rueck": "Druck auf drei Leute, die gerade um Bedenkzeit gebeten haben." }
+          ] },
+        { "id": "ende1", "sagt": "Nadine: „Donnerstag passt.“ Am Donnerstag ruft sie an: Sie sagt zu – der Werkstattleiter hat in einer der Werkstätten nachgefragt.", "ende": "Ein Abschluss mit Unterlage, Termin und Raum für ein Nein. Ob du unterwegs alle drei gehört, prüfbar belegt und Nachlass nur gegen Laufzeit gegeben hast, zeigen dir die Rückmeldungen." },
+        { "id": "ende2", "sagt": "Nadine: „Gut, dann so.“ Später rechnest du nach: Viel bleibt nicht übrig.", "ende": "Zu früh nachgegeben, bevor klar war, was verglichen wird. Erst vergleichen, dann – wenn überhaupt – Nachlass gegen Gegenleistung." },
+        { "id": "ende3", "sagt": "Nadine: „Ich glaube, wir nehmen das andere Angebot.“", "ende": "Druck, Trotz oder Abwertung vor drei Leuten kosten das Vertrauen aller drei." },
+        { "id": "ende4", "sagt": "Nadine: „Machen wir.“ Zwei Wochen hörst du nichts.", "ende": "Ohne Unterlage und Termin bleibt es in der Runde hängen. Beim nächsten Mal: Seite schicken, Anruf verabreden." }
+      ],
+      "prinzipien": ["jeden am Tisch hören", "zusammenfassen und die Entscheiderin fragen", "prüfbare Belege", "Wert, Zahl, Pause", "fremde Zahl ehrlich vergleichen", "Nachlass nur gegen Gegenleistung", "Zweifel ernst nehmen", "nächster Schritt mit Raum für ein Nein"],
+      "transfer": "Vor wem musst du demnächst mehrere Menschen gleichzeitig überzeugen? Was will jeder Einzelne hören?"
+    }
+  ]
+}

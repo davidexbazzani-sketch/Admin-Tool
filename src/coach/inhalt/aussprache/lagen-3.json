@@ -1,0 +1,261 @@
+{
+  "lagen": [
+    {
+      "id": "aussprache-l-61", "bereich": "aussprache", "phase": "m", "umfeld": "vorgesetzte", "faehigkeiten": ["aussprache.alltag", "aussprache.takt", "aussprache.konsonanten"], "stufe": 7,
+      "titel": "Die Frage in der Betriebsversammlung", "figur": "Dr. Henrik Albers",
+      "einleitung": "Eine unerwartete Frage vor vielen Leuten. Du übst, unter Druck im normalen Tempo klar zu bleiben: Mikrofon, erster Satz, Pause, Endungen.",
+      "lage": "Betriebsversammlung, achtzig Leute im großen Saal, ein Mikrofon geht herum. Dr. Albers stellt die Zahlen des Jahres vor. Plötzlich sagt er: „Zur Umstellung im Lager kann {name} sicher am besten etwas sagen.“ Das Mikrofon kommt zu dir.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Du hältst das Mikrofon. Achtzig Gesichter drehen sich zu dir. Dein Herz klopft.",
+          "wahl": [
+            { "text": "„Ich weiß nicht, ob ich das so spontan sagen kann – vielleicht lieber Carla, die hat den Überblick.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k2c", "rueck": "Verständlich, aber du kennst den Stand. Ein kurzer Satz reicht, niemand erwartet einen Vortrag." },
+            { "text": "Mikrofon eine Handbreit vor den Mund, kurz Blick in den Saal, dann: „Gern. | Kurz zum Stand.“", "wert": 2, "weiter": "k2", "rueck": "Ein kurzer, fester Anfang mit Pause. Die Anspannung ist am Anfang am höchsten – genau dort trägt ein vorbereiteter Satz." },
+            { "text": "Sofort losreden, damit keine Stille entsteht: „Ja also die Umstellung läuft eigentlich ganz gut …“", "wert": 0, "tendenz": "tempo", "weiter": "k2b", "rueck": "Die Stille hätte zwei Sekunden gedauert. Der hektische Start kostet die Enden – und dich den Halt." }
+          ] },
+        { "id": "k2", "sagt": "Der Saal ist still. Du sollst den Stand in zwei, drei Sätzen sagen.",
+          "wahl": [
+            { "text": "Im normalen Tempo, Endungen hörbar: „Das neue System läuft seit März. | Zwei von drei Hallen sind umgestellt. | Die letzte folgt im Juni.“", "wert": 2, "weiter": "k3", "rueck": "Kein Schneckentempo – aber jede Endung da und nach jedem Gedanken eine Pause. So klingt Klarheit unter Druck." },
+            { "text": "Ganz langsam, jedes Wort gedehnt, damit bloß nichts schiefgeht.", "wert": 1, "weiter": "k3", "rueck": "Kommt an, wirkt aber angestrengt. Deutlich geht auch im normalen Tempo." }
+          ] },
+        { "id": "k2b", "sagt": "Aus der dritten Reihe ruft jemand: „Lauter, bitte!“",
+          "wahl": [
+            { "text": "Kurz anhalten, Mikrofon näher, neu: „Entschuldigung. | Kurz zum Stand.“", "wert": 2, "weiter": "k2", "rueck": "Ruhiger Neuansatz – der zweite Start gelingt fast immer besser." },
+            { "text": "Weiter im selben Tempo, nur lauter.", "wert": 0, "tendenz": "lautstaerke", "weiter": "k3", "rueck": "Lauter allein macht die verschluckten Enden nur hörbarer. Immerhin weißt du jetzt, dass hinten jemand zuhört." }
+          ] },
+        { "id": "k2c", "sagt": "Dr. Albers lächelt: „Nur zwei Sätze, das reicht völlig.“",
+          "wahl": [
+            { "text": "„Gut. | Kurz zum Stand.“ – dann zwei Sätze, ruhig.", "wert": 2, "weiter": "k2", "rueck": "Mut zum kurzen Beitrag. Zwei klare Sätze schlagen jeden langen." },
+            { "text": "Das Mikrofon lächelnd weiterreichen: „Lieber beim nächsten Mal.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Die Gelegenheit ist vorbei – und mit ihr die Chance, dass man deine Arbeit sieht." }
+          ] },
+        { "id": "k3", "sagt": "Eine Kollegin fragt: „Wird es in der letzten Halle wieder Wartezeiten geben?“",
+          "wahl": [
+            { "text": "Eine kurze Pause zum Denken, dann: „Ja, | drei Tage lang. | Das haben wir eingeplant.“", "wert": 2, "weiter": "ende1", "rueck": "Pause zum Denken, ehrliche Antwort in drei Schritten. Unter Druck klar – das ist das Ziel." },
+            { "text": "„Nein, nein, das wird nicht so schlimm, glaube ich, also eher nicht, kommt drauf an.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k3b", "rueck": "Unter Druck redet man gern um die Sache herum. Die Enden verschwimmen – und die Antwort auch." },
+            { "text": "„Kurz: ja. Aber nur kurz.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich und knapp. Eine Zahl dazu hätte die Sorge besser beantwortet." }
+          ] },
+        { "id": "k3b", "sagt": "Dr. Albers: „Vielleicht noch einmal ganz konkret?“",
+          "wahl": [
+            { "text": "Durchatmen, dann im normalen Tempo: „Drei Tage Wartezeit | in der letzten Halle. | Eingeplant.“", "wert": 2, "weiter": "ende1", "rueck": "Zweiter Anlauf, diesmal konkret und mit Enden. Gerettet." },
+            { "text": "„Das kann ich jetzt nicht genau sagen.“", "wert": 1, "weiter": "ende2", "rueck": "Ehrlich – aber du wusstest es. Unter Druck rutscht das Wissen weg, wenn der Anfang fehlt." }
+          ] },
+        { "id": "ende1", "sagt": "Nach der Versammlung sagt Dr. Albers: „Kurz, klar, ehrlich. Danke.“", "ende": "Unter Druck zählt der Anfang: Mikrofon nah, kurzer erster Satz, Pause. Dann im normalen Tempo – mit Endungen und Pausen statt mit Dehnung." },
+        { "id": "ende2", "sagt": "Die Versammlung geht weiter. Beim Kaffee fragt dich jemand, wie es im Lager eigentlich läuft.", "ende": "Die Gelegenheit kommt wieder. Bereite für solche Momente zwei Sätze vor: „Kurz zum Stand: …“ – mehr braucht es nicht." }
+      ],
+      "prinzipien": ["Mikrofon nah, kurzer erster Satz, Pause", "im normalen Tempo – Endungen und Pausen statt Dehnung", "eine Pause zum Denken ist erlaubt", "konkret statt drumherum"],
+      "transfer": "Wo könntest du unerwartet gefragt werden? Wie lauten deine zwei Sätze „Kurz zum Stand: …“?"
+    },
+    {
+      "id": "aussprache-l-62", "bereich": "aussprache", "phase": "m", "umfeld": "familie", "faehigkeiten": ["aussprache.takt", "aussprache.tragen"], "stufe": 7,
+      "titel": "Der Brief zum Geburtstag", "figur": "Tante Renate",
+      "einleitung": "Du liest bei einer Familienfeier einen Brief vor. Du übst Pausenstriche, Vorauslesen, den Blick am Satzende – und Ruhe, wenn es unruhig wird.",
+      "lage": "Tante Renate hat Geburtstag. Die Familie hat ihr einen Brief geschrieben, der beim Kaffee vorgelesen werden soll – und alle haben dich ausgesucht. Zwanzig Leute, Kinder, Geschirrklappern. Tante Renate sagt, was sie denkt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Am Vorabend. Der Brief liegt vor dir, eine Seite lang.",
+          "wahl": [
+            { "text": "Einmal laut durchlesen, das reicht.", "wert": 1, "weiter": "k2b", "rueck": "Besser als gar nicht. Ohne Striche sind die Pausen morgen aber Glückssache." },
+            { "text": "Einmal still lesen, Pausenstriche setzen, das wichtigste Wort jedes Satzes unterstreichen, dann einmal laut.", "wert": 2, "weiter": "k2", "rueck": "Die Vorbereitung steht auf dem Blatt: Morgen weißt du, wo die Pausen sind." },
+            { "text": "Gar nicht ansehen – spontan klingt es herzlicher, und vorlesen kann schließlich jeder, der lesen gelernt hat.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k2b", "rueck": "Herzlich ja – aber unvorbereitet stolpert man über Sätze, die andere geschrieben haben." }
+          ] },
+        { "id": "k2", "sagt": "Beim Kaffee. Du stehst auf, das Blatt in der Hand. Es klappert noch.",
+          "wahl": [
+            { "text": "Warten, bis es still wird, Blatt auf Brusthöhe, Blick zu Tante Renate: „Liebe Renate, |“", "wert": 2, "weiter": "k3", "rueck": "Stille abwarten, Kopf oben, Blick zur Hauptperson. Der Anfang sitzt." },
+            { "text": "Gleich anfangen, das Klappern hört schon auf.", "wert": 1, "weiter": "k3b", "rueck": "Manchmal klappt das. Hier gehen die ersten Sätze im Geschirr unter." }
+          ] },
+        { "id": "k2b", "sagt": "Beim Kaffee. Du stehst auf und liest. Beim zweiten Satz merkst du: Du weißt nicht, wo der Satz endet.",
+          "wahl": [
+            { "text": "Kurz mit den Augen vorauslesen, Pause, dann ruhig weiter.", "wert": 2, "weiter": "k3", "rueck": "Vorauslesen rettet den Satz – und die kurze Pause fällt niemandem auf." },
+            { "text": "Schneller lesen, bis endlich der Punkt kommt – dann hast du es hinter dir.", "wert": 0, "tendenz": "tempo", "weiter": "k3b", "rueck": "Im Galopp verliert der Satz seinen Sinn, und das Satzende versackt." }
+          ] },
+        { "id": "k3", "sagt": "Mitten im Brief kommt der Satz: „Du hast uns gezeigt, dass man für Neues nicht zu alt ist.“ Er ist der Kern des Briefs.",
+          "wahl": [
+            { "text": "Den Satz besonders laut und feierlich betonen, damit ihn auch wirklich jeder im Raum mitbekommt.", "wert": 0, "weiter": "k4", "rueck": "Gut gemeint, kippt aber ins Pathetische. Eine Pause und ein Blick tragen mehr als Lautstärke." },
+            { "text": "Im gleichen Ton weiterlesen wie alles andere.", "wert": 1, "weiter": "k4", "rueck": "Kommt an, geht aber unter. Der Kern hätte eine Pause verdient." },
+            { "text": "Vor dem Satz kurz innehalten, ihn zu Tante Renate sprechen, am Ende aufschauen.", "wert": 2, "weiter": "k4", "rueck": "Pause davor, Blick am Ende: So bekommt der wichtigste Satz sein Gewicht." }
+          ] },
+        { "id": "k3b", "sagt": "Tante Renate ruft: „Lauter, Kind! Hier hinten versteht man nichts!“ Ein paar lachen.",
+          "wahl": [
+            { "text": "Mitlachen, kurz warten, Blatt hoch, Blick zu ihr – und mit gehaltenem Satzende weiter.", "wert": 2, "weiter": "k3", "rueck": "Sie sagt, was sie denkt – und hat recht. Kopf hoch und Ende halten hilft mehr als bloß lauter." },
+            { "text": "„Dann lies du doch!“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Ein Lacher, aber der Brief ist vorbei, bevor er richtig angefangen hat." }
+          ] },
+        { "id": "k4", "sagt": "Am Ende steht: „Wir freuen uns auf die Fahrt an die Mosel am ersten Mai.“ Das ist die Überraschung.",
+          "wahl": [
+            { "text": "Pause vor der Überraschung, dann: „Wir freuen uns | auf die Fahrt an die Mosel | am ersten Mai.“ – Blick zu ihr.", "wert": 2, "weiter": "ende1", "rueck": "Pause davor, Sinnschritte, Blick: Die Überraschung kommt an – samt Datum." },
+            { "text": "Schnell zu Ende lesen, weil alle schon klatschen wollen.", "wert": 0, "tendenz": "tempo", "weiter": "ende3", "rueck": "Die Überraschung geht im Beifall unter." }
+          ] },
+        { "id": "ende1", "sagt": "Tante Renate wischt sich über die Augen: „Mosel! Und vorgelesen hast du auch noch schön.“", "ende": "Striche vorher, Ruhe abwarten, vorauslesen, Pause vor dem Wichtigen, Blick am Satzende. So wird Vorlesen zum Sprechen zu Menschen." },
+        { "id": "ende2", "sagt": "Jemand anderes liest den Brief zu Ende.", "ende": "Ein Zuruf ist kein Angriff, sondern eine Rückmeldung. Kopf hoch, das Ende halten – dann trägt der Brief." },
+        { "id": "ende3", "sagt": "Tante Renate: „Was war das am Schluss? Mosel?“ Du sagst es noch einmal – jetzt hört es jeder.", "ende": "Die Überraschung kam doch noch an. Beim nächsten Mal: Pause davor und der Blick zur Hauptperson." }
+      ],
+      "prinzipien": ["Striche und das wichtigste Wort vorher markieren", "Ruhe abwarten, Blatt auf Brusthöhe", "vorauslesen, am Satzende aufschauen", "Pause vor dem Wichtigsten"],
+      "transfer": "Wann liest du das nächste Mal etwas vor – bei der Arbeit, im Verein, in der Familie? Was markierst du vorher auf dem Blatt?"
+    },
+    {
+      "id": "aussprache-l-63", "bereich": "aussprache", "phase": "m", "umfeld": "kollegen", "faehigkeiten": ["aussprache.tragen", "aussprache.oeffnung", "aussprache.alltag"], "stufe": 8,
+      "titel": "Lenas erster Tag in der Halle", "figur": "Lena Brandt",
+      "einleitung": "Lena ist zum ersten Mal in der lauten Produktionshalle. Du übst, im Lärm verstanden zu werden: näher ran, Gesicht zeigen, Mund auf, kurz – ohne zu schreien.",
+      "lage": "Lena Brandt soll heute die Halle kennenlernen. Die Maschinen laufen, es ist laut. Du sollst ihr zeigen, wo die Lieferscheine abgegeben werden: im Fach am Büro neben Tor drei. Ihr tragt beide Gehörschutz – Mundbild und Geste zählen jetzt doppelt. Lena ist zurückhaltend und fragt selten nach.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Ihr steht am Eingang der Halle. Lena schaut dich fragend an.",
+          "wahl": [
+            { "text": "Nichts sagen, einfach losgehen – sie wird dir schon folgen.", "wert": 1, "weiter": "k2c", "rueck": "Mitnehmen ist gut, aber Lena weiß nicht, wohin und warum. Ein kurzer Satz vorweg hilft." },
+            { "text": "Aus zwei Metern Entfernung rufen: „Wir gehen jetzt zum Büro neben Tor drei, da kommen die Lieferscheine hin!“", "wert": 0, "tendenz": "lautstaerke", "weiter": "k2b", "rueck": "Lang, laut, auf Abstand – im Lärm kommt davon das Wenigste an." },
+            { "text": "Nah an sie herantreten, Gesicht zu ihr, kurz: „Lieferscheine | zu Tor drei.“ – und zeigen.", "wert": 2, "weiter": "k2", "rueck": "Nähe, Gesicht, ein kurzer Satz, eine Geste. Das trägt im Lärm mehr als jede Lautstärke." }
+          ] },
+        { "id": "k2", "sagt": "Unterwegs zeigt Lena auf ein Schild und sagt etwas. Du verstehst es nicht.",
+          "wahl": [
+            { "text": "Stehen bleiben, näher ran, ihr zuwenden: „Noch mal?“", "wert": 2, "weiter": "k3", "rueck": "Nachfragen ist im Lärm üblich – nah und zugewandt klappt es beim zweiten Mal." },
+            { "text": "Nicken und weitergehen.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3b", "rueck": "Nicken ohne Verstehen geht im Lärm oft schief – für beide Seiten." }
+          ] },
+        { "id": "k2b", "sagt": "Lena nickt unsicher. Am Tor zwei bleibt sie stehen.",
+          "wahl": [
+            { "text": "Zu ihr gehen, Gesicht zu ihr, drei Finger zeigen: „Tor drei.“", "wert": 2, "weiter": "k2", "rueck": "Die Zahl gezeigt und gesagt – doppelt sicher." },
+            { "text": "Von weitem winken und „Weiter, hier lang!“ rufen, ohne stehen zu bleiben.", "wert": 1, "weiter": "k2", "rueck": "Sie geht weiter – aber was sie dort soll, weiß sie noch nicht." }
+          ] },
+        { "id": "k2c", "sagt": "Lena folgt dir. An Tor drei fragt sie: „Und hier?“ Eine Maschine startet gerade.",
+          "wahl": [
+            { "text": "Warten, bis du nah bei ihr stehst, dann: „Hier | die Lieferscheine. | Ins Fach.“ – und aufs Fach zeigen.", "wert": 2, "weiter": "k3", "rueck": "Kurz, nah, mit Geste – auch beim Lärm der startenden Maschine." },
+            { "text": "Laut gegen die Maschine anreden und die ganze Abgabe auf einmal erklären.", "wert": 0, "tendenz": "lautstaerke", "weiter": "k3b", "rueck": "Gegen die Maschine anzuschreien strengt die Stimme an, und der lange Satz geht unter." }
+          ] },
+        { "id": "k3", "sagt": "Am Büro. Lena fragt: „Und wann werden sie abgeholt?“",
+          "wahl": [
+            { "text": "Zur Wanduhr zeigen und mit den Schultern zucken.", "wert": 0, "tendenz": "ausweichen", "weiter": "k4", "rueck": "Die Uhr zeigt die Zeit jetzt, nicht die Abholzeit. Lena bleibt ratlos." },
+            { "text": "Mund weit auf, deutlich: „Um zwo. | Vierzehn Uhr.“ – zwei Finger zeigen.", "wert": 2, "weiter": "k4", "rueck": "Offener Mund, zweite Form der Zahl, Geste – das sitzt." },
+            { "text": "„So um zwei, glaub ich, oder halb drei, je nachdem.“", "wert": 1, "weiter": "k4", "rueck": "Kommt teilweise an. Im Lärm hilft eine klare Zahl mehr als ein „je nachdem“." }
+          ] },
+        { "id": "k3b", "sagt": "Lena tippt auf ihren Gehörschutz und schüttelt den Kopf.",
+          "wahl": [
+            { "text": "Näher ran, kurz, Mund auf: „Hier abgeben. | Ins Fach.“", "wert": 2, "weiter": "k3", "rueck": "Nähe und Kürze schlagen Kraft – und deine Stimme dankt es dir." },
+            { "text": "Noch lauter wiederholen.", "wert": 0, "tendenz": "lautstaerke", "weiter": "ende2", "rueck": "Du wirst heiser, sie versteht immer noch nicht. Lautstärke hat eine Grenze – Nähe nicht." }
+          ] },
+        { "id": "k4", "sagt": "Wieder draußen, es ist ruhiger. Lena: „Danke. In der Halle hab ich kaum etwas verstanden.“",
+          "wahl": [
+            { "text": "„Gut zu wissen. | Sag ruhig Bescheid, | wenn ich zu leise bin.“", "wert": 2, "weiter": "ende1", "rueck": "Du lädst sie zum Nachfragen ein – für jemanden, der zurückhaltend ist, viel wert." },
+            { "text": "„Ja, die anderen nuscheln da drin halt alle – das liegt nicht an mir.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende1", "rueck": "Ein Seitenhieb auf andere bringt nichts. Besser: Sag ruhig Bescheid." }
+          ] },
+        { "id": "ende1", "sagt": "Am nächsten Tag gibt Lena die Lieferscheine allein ab – am richtigen Tor.", "ende": "Im Lärm: näher ran, Gesicht zeigen, Mund auf, kurze Sätze, Zahlen zeigen. Tragen statt schreien – so verstehen dich auch Menschen, die selten nachfragen." },
+        { "id": "ende2", "sagt": "Am Abend ist deine Stimme rau. Lena hat die Lieferscheine bei Tor zwei abgegeben.", "ende": "Lautstärke allein reicht im Lärm nicht und strengt die Stimme an. Beim nächsten Mal: zwei Schritte näher, kurz, mit Geste." }
+      ],
+      "prinzipien": ["näher ran statt lauter", "Gesicht zeigen, Mund auf", "kurze Sätze, das Wichtigste zuerst", "Zahlen zeigen und zweimal sagen"],
+      "transfer": "Wo ist es bei dir laut – in der Halle, in der Kantine, am Bahnsteig, im Verein? Was tust du dort beim nächsten Mal zuerst?"
+    },
+    {
+      "id": "aussprache-l-64", "bereich": "aussprache", "phase": "m", "umfeld": "kollegen", "faehigkeiten": ["aussprache.alltag", "aussprache.hoeren"], "stufe": 8,
+      "titel": "Die hektische Woche", "figur": "Miriam Okafor",
+      "einleitung": "Nach Wochen mit festen Klar-Momenten kommt eine hektische Woche – und die alte Gewohnheit ist zurück. Du übst, eine Rückmeldung anzunehmen und den Plan zu verkleinern, statt ihn zu verwerfen.",
+      "lage": "Seit zwei Monaten sprichst du deine festen Momente im Klar-Modus. Diese Woche ist Monatsabschluss, alles brennt. Am Donnerstag sagt Miriam in der Kaffeeküche schmunzelnd: „Na, ist der Klar-Modus im Urlaub? Gestern am Telefon hab ich dich kaum verstanden.“",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Miriam grinst und wartet auf deine Antwort.",
+          "wahl": [
+            { "text": "„Ich hab gerade wirklich andere Sorgen als meine Aussprache, Miriam – der Monatsabschluss brennt.“", "wert": 1, "weiter": "k2b", "rueck": "Verständlich, und es stimmt sogar. Nachzufragen, woran sie es gemerkt hat, wäre trotzdem nützlich." },
+            { "text": "„Ach, dann war die ganze Übung ja umsonst.“", "wert": 0, "tendenz": "abwerten", "weiter": "k2c", "rueck": "Eine Woche wischt nicht zwei Monate weg. Wer jetzt alles verwirft, verliert mehr als nötig." },
+            { "text": "Lachen: „Erwischt. | Diese Woche läuft er auf Sparflamme. | Woran hast du es gemerkt?“", "wert": 2, "weiter": "k2", "rueck": "Mit Humor angenommen und gleich nachgefragt – aus der Neckerei wird eine nützliche Rückmeldung." }
+          ] },
+        { "id": "k2", "sagt": "Miriam: „Am Telefon mit dem Lager. Du hast so schnell geredet, die Bestellnummer kam in einem Rutsch.“",
+          "wahl": [
+            { "text": "„Danke. | Ab morgen halte ich wenigstens einen Moment: | Zahlen am Telefon in Gruppen.“", "wert": 2, "weiter": "k3", "rueck": "Den Plan verkleinern statt verwerfen: ein Moment, der auch in vollen Wochen hält." },
+            { "text": "„Ab morgen achte ich wieder auf alles, versprochen.“", "wert": 1, "weiter": "k3b", "rueck": "Guter Wille – aber „alles“ hat in einer hektischen Woche kaum eine Chance." }
+          ] },
+        { "id": "k2b", "sagt": "Miriam zuckt mit den Schultern: „Klar. Ich mein ja nur – das Lager hat zweimal nachgefragt.“",
+          "wahl": [
+            { "text": "„Hm, stimmt. | Was genau kam nicht an?“", "wert": 2, "weiter": "k2", "rueck": "Zweiter Anlauf: Aus der Ausrede wird eine Frage." },
+            { "text": "„Das Lager fragt sowieso immer nach, das kennen wir doch.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Vielleicht – aber diesmal lag es an der Nummer im Rutsch. Die Chance auf eine Spur ist vertan." }
+          ] },
+        { "id": "k2c", "sagt": "Miriam: „Quatsch. Sonst verstehe ich dich doch super. Nur diese Woche nicht.“",
+          "wahl": [
+            { "text": "„Stimmt eigentlich. | Dann ist es die Hektik, nicht die Übung. | Woran hast du es gemerkt?“", "wert": 2, "weiter": "k2", "rueck": "Richtig eingeordnet: ein Ausrutscher, kein Scheitern." },
+            { "text": "„Nett von dir, aber ich lass das mit dem Klar-Modus jetzt.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Zwei Monate Arbeit für eine hektische Woche hergeben – das wäre schade." }
+          ] },
+        { "id": "k3", "sagt": "Am Abend. Du hast fünf Minuten.",
+          "wahl": [
+            { "text": "Eine kurze Sprachnachricht an dich selbst mit einer Bestellnummer aufnehmen – und anhören.", "wert": 2, "weiter": "k4", "rueck": "Dein ehrlichster Spiegel: In zwei Minuten weißt du, ob die Gruppen sitzen." },
+            { "text": "Nichts – erst mal den Monatsabschluss schaffen.", "wert": 1, "weiter": "k4", "rueck": "Verständlich. Ein kleiner Moment morgen hält den Faden trotzdem." },
+            { "text": "Den Plan für nächste Woche neu schreiben – mit fünf Momenten statt drei, um alles Verpasste wieder aufzuholen.", "wert": 0, "weiter": "k4", "rueck": "Aufholen klingt gut, überfordert aber. Nach einer vollen Woche lieber klein wieder einsteigen." }
+          ] },
+        { "id": "k3b", "sagt": "Freitag. Wieder ein Anruf mit vielen Zahlen. Du merkst, dass „alles“ nicht klappt.",
+          "wahl": [
+            { "text": "Nur noch eins: die Zahlen in Gruppen. Der Rest darf heute locker sein.", "wert": 2, "weiter": "k4", "rueck": "Klein, aber fest. So übersteht der Klar-Modus auch eine volle Woche." },
+            { "text": "Frustriert aufgeben – es klappt ja eh nicht.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Es klappt nicht alles – aber eins klappt. Damit fängt es wieder an." }
+          ] },
+        { "id": "k4", "sagt": "Montag. Die Hektik ist vorbei. Miriam fragt: „Und? Ist er zurück, der Klar-Modus?“",
+          "wahl": [
+            { "text": "„Er war nur auf Sparflamme. | Jetzt sind es wieder drei Momente – | und für volle Wochen einer.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Plan für gute und einer für volle Wochen: So wird aus Übung Gewohnheit." },
+            { "text": "„Ja, jetzt wieder voll – bis zum nächsten Abschluss.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich. Ein kleiner Plan für die nächste volle Woche würde den Rückfall abfedern." }
+          ] },
+        { "id": "ende1", "sagt": "Miriam: „Gut. Dann frag ich mal das Lager, ob es noch nachfragt.“ Sie zwinkert.", "ende": "Ein Ausrutscher in einer hektischen Woche gehört dazu und wirft dich nicht zurück. Rückmeldung annehmen, den Plan verkleinern statt verwerfen, mit einem festen Moment weitermachen." },
+        { "id": "ende2", "sagt": "Ein paar Wochen später fragt das Lager wieder öfter nach.", "ende": "Eine schwere Woche ist kein Beweis, dass es nicht klappt. Beim nächsten Ausrutscher: einen Moment halten, den Rest locker lassen – und weitermachen." }
+      ],
+      "prinzipien": ["Rückmeldung annehmen und nachfragen", "den Plan verkleinern statt verwerfen", "ein fester Moment auch in vollen Wochen", "sich selbst kurz aufnehmen und anhören"],
+      "transfer": "Welche Wochen sind bei dir hektisch? Welcher eine Klar-Moment soll auch dann halten?"
+    },
+    {
+      "id": "aussprache-l-65", "bereich": "aussprache", "phase": "m", "umfeld": "gruppe", "faehigkeiten": ["aussprache.alltag", "aussprache.takt", "aussprache.tragen", "aussprache.oeffnung", "aussprache.konsonanten", "aussprache.hoeren"], "stufe": 9, "sparring": true,
+      "titel": "Sparring: Die Rede beim Jubiläum", "figur": "Dr. Henrik Albers",
+      "einleitung": "Das Sparring zum Abschluss der Meisterschaft: eine Rede vor vielen Menschen – mit Druck, einem Vorlesetext, Lärm und einer technischen Panne. Hier kommt alles zusammen.",
+      "lage": "Euer Betrieb feiert fünfzig Jahre, das Fest findet im Innenhof statt. Dr. Albers hat dich gebeten, nach ihm drei Minuten zu sprechen: ein Dank an das Team und ein kurzer Brief des Gründers, den du vorliest. Hundert Gäste, ein Mikrofon, im Hintergrund der Getränkewagen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Am Morgen. Du hast eine halbe Stunde zur Vorbereitung.",
+          "wahl": [
+            { "text": "Den Dank Wort für Wort auswendig lernen.", "wert": 1, "weiter": "k2b", "rueck": "Auswendig gibt Sicherheit, bis ein Wort fehlt. Ein fester erster Satz und Stichpunkte tragen oft weiter." },
+            { "text": "Den Brief mit Strichen versehen, den ersten Satz festlegen und zweimal laut sprechen, einmal am Mikrofon proben.", "wert": 2, "weiter": "k2", "rueck": "Vorlesetext markiert, Anfang sitzt, Technik geprüft – die drei größten Stolpersteine sind weg." },
+            { "text": "Nichts vorbereiten – frei gesprochen wirkt herzlicher, und im Notfall liest du den Brief eben ab.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k2c", "rueck": "Herzlich ja, aber der Druck auf der Bühne nimmt Unvorbereiteten zuerst die Klarheit." }
+          ] },
+        { "id": "k2", "sagt": "Du bist dran. Hundert Gesichter. Dein Herz klopft. Dr. Albers reicht dir das Mikrofon.",
+          "wahl": [
+            { "text": "Mikrofon eine Handbreit vor den Mund, Blick nach hinten, kurz warten, dann der vorbereitete erste Satz.", "wert": 2, "weiter": "k3", "rueck": "Die Anspannung ist jetzt am höchsten – genau dafür ist der erste Satz da." },
+            { "text": "Gleich loslegen, das Mikrofon in Hüfthöhe.", "wert": 0, "tendenz": "tempo", "weiter": "k3b", "rueck": "Ohne Mikrofon am Mund und ohne Pause hört hinten niemand den Anfang." }
+          ] },
+        { "id": "k2b", "sagt": "Du bist dran. Nach dem dritten Satz fehlt dir ein Wort. Stille.",
+          "wahl": [
+            { "text": "Kurz Luft holen und mit eigenen Worten weiter: „Kurz gesagt: | Danke an euch alle.“", "wert": 2, "weiter": "k3", "rueck": "Den Faden mit eigenen Worten aufgenommen – kaum jemand hat das Loch bemerkt." },
+            { "text": "Hektisch nach dem fehlenden Wort suchen und den ganzen Satz schneller von vorn anfangen.", "wert": 0, "tendenz": "tempo", "weiter": "k3b", "rueck": "Unter Druck macht Hetzen das Loch größer. Eigene Worte hätten getragen." }
+          ] },
+        { "id": "k2c", "sagt": "Du bist dran. Beim ersten Satz merkst du: Dir fehlt der Anfang.",
+          "wahl": [
+            { "text": "Kurz warten, dann schlicht: „Liebe Kolleginnen und Kollegen, | danke, dass ihr da seid.“", "wert": 2, "weiter": "k3", "rueck": "Ein schlichter Anfang mit Pause – und schon läuft es." },
+            { "text": "„Äh, ja, also, ich soll ja jetzt was sagen …“", "wert": 1, "weiter": "k3b", "rueck": "Ehrlich, aber die ersten Sekunden verpuffen – und der Druck steigt." }
+          ] },
+        { "id": "k3", "sagt": "Der Dank ist gesagt. Jetzt kommt der Brief des Gründers. Hinten klappert der Getränkewagen.",
+          "wahl": [
+            { "text": "Blatt auf Brusthöhe, nach den Strichen lesen, am Satzende aufschauen – zur hinteren Reihe.", "wert": 2, "weiter": "k4", "rueck": "Vorlesen als Sprechen zu Menschen. Auch die am Getränkewagen merken, dass sie gemeint sind." },
+            { "text": "Den Brief zügig herunterlesen, den Kopf im Blatt.", "wert": 0, "tendenz": "satzende", "weiter": "k4b", "rueck": "Der Brief klingt wie eine Bedienungsanleitung – und hinten kommt nichts an." }
+          ] },
+        { "id": "k3b", "sagt": "Von hinten ruft jemand: „Lauter!“ Ein paar Köpfe drehen sich weg.",
+          "wahl": [
+            { "text": "Mikrofon näher, kurz warten, Blick nach hinten, neu ansetzen – im normalen Tempo.", "wert": 2, "weiter": "k3", "rueck": "Technik nachgebessert, ruhig neu angesetzt. Jetzt hört auch die letzte Reihe." },
+            { "text": "Weiter wie bisher, nur ins Mikrofon schreien.", "wert": 0, "tendenz": "lautstaerke", "weiter": "k4b", "rueck": "Schreien ins Mikrofon verzerrt und strengt an – und es klingt gereizt." }
+          ] },
+        { "id": "k4", "sagt": "Plötzlich fällt das Mikrofon aus. Stille, dann Gemurmel.",
+          "wahl": [
+            { "text": "Einen Schritt nach vorn, die Stimme nach hinten tragen, kurze Sätze: „Es geht auch ohne. | Noch zwei Sätze.“", "wert": 2, "weiter": "k5", "rueck": "Näher ran, kurz, getragen statt geschrien – genau das trägt im Lärm." },
+            { "text": "Warten, bis die Technik wieder läuft – das kann ja nicht lange dauern.", "wert": 1, "weiter": "k5", "rueck": "Kann klappen. Doch die Aufmerksamkeit bröckelt mit jeder Minute." },
+            { "text": "Gegen das Gemurmel anschreien, damit dich auch ohne Mikrofon alle bis ganz hinten hören.", "wert": 0, "tendenz": "lautstaerke", "weiter": "k5b", "rueck": "Schreien strengt die Stimme an und verzerrt die Laute. Nähe und kurze Sätze tragen weiter." }
+          ] },
+        { "id": "k4b", "sagt": "Als du aufschaust, merkst du: Hinten unterhalten sich viele. Dann fällt auch noch das Mikrofon aus.",
+          "wahl": [
+            { "text": "Einen Schritt nach vorn, Blick nach hinten, kurze Sätze ohne Mikrofon: „Noch zwei Sätze – | dann gibt es Kuchen.“", "wert": 2, "weiter": "k5", "rueck": "Mit Humor und Nähe zurückgeholt. Kurz, getragen, gesehen." },
+            { "text": "Den Brief ohne Mikrofon zu Ende lesen, Kopf im Blatt.", "wert": 0, "tendenz": "satzende", "weiter": "k5b", "rueck": "Ohne Mikrofon und mit gesenktem Kopf hört nur die erste Reihe." }
+          ] },
+        { "id": "k5", "sagt": "Zum Schluss sollst du das Datum des nächsten Festes ansagen: den dreizehnten Juni.",
+          "wahl": [
+            { "text": "Pause, dann: „Am dreizehnten Juni. | Eins, drei. | Hier im Hof.“", "wert": 2, "weiter": "ende1", "rueck": "Pause, zwei Formen, der Ort dazu. Auch hinten kommt es an." },
+            { "text": "„Am dreizehnten Juni dann wieder, hoffentlich alle!“ – in den Beifall hinein.", "wert": 1, "weiter": "ende1", "rueck": "Vorn kommt es an, hinten geht es im Beifall unter. Eine Pause vorher hätte geholfen." }
+          ] },
+        { "id": "k5b", "sagt": "Dr. Albers springt ein und bringt ein Ersatzmikrofon, die Feier geht weiter. Deine Stimme kratzt.",
+          "wahl": [
+            { "text": "Einen Schluck Wasser, dann mit dem Ersatzmikrofon in Ruhe der Schluss: „Danke. | Am dreizehnten Juni | sehen wir uns wieder.“", "wert": 2, "weiter": "ende3", "rueck": "Stimme geschont, Schluss gerettet." },
+            { "text": "Das Mikrofon weitergeben und den Schluss weglassen.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Verständlich – aber der Termin fehlt, und mit ihm dein Schluss." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers: „Mit Panne und trotzdem klar. Danke.“", "ende": "Vorbereitet, Anfang fest, Vorlesen als Sprechen, im Lärm Nähe statt Kraft, die Zahl in zwei Formen. Das ist der Klar-Modus, wenn es darauf ankommt." },
+        { "id": "ende2", "sagt": "Nach dem Fest fragen viele: „Wann war das noch mal im Juni?“", "ende": "Pannen passieren. Beim nächsten Mal: Nähe statt Kraft, kurze Sätze – und den Schluss mit der Zahl nicht weglassen." },
+        { "id": "ende3", "sagt": "Die Gäste klatschen. Später fragt dich jemand nach dem Brief.", "ende": "Gerettet, mit Kratzen im Hals. Beim nächsten Mal: Nähe, Blick und kurze Sätze statt Kraft – die Stimme dankt es dir." }
+      ],
+      "prinzipien": ["vorbereiten: Striche, erster Satz, Technik", "unter Druck: Mikrofon nah, Pause, normales Tempo", "vorlesen als Sprechen zu Menschen", "im Lärm: näher ran, kurz, tragen statt schreien", "Zahlen in zwei Formen"],
+      "transfer": "Welcher große Moment steht dir bevor? Was davon bereitest du so vor wie in diesem Sparring?"
+    }
+  ]
+}

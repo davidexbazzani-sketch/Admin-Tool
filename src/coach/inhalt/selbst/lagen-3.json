@@ -1,0 +1,252 @@
+{
+  "lagen": [
+    {
+      "id": "selbst-l-11", "bereich": "selbst", "phase": "m", "umfeld": "vorgesetzte", "faehigkeiten": ["selbst.muster", "selbst.kritiker", "selbst.grenzen"], "stufe": 7,
+      "titel": "Die Mail am Freitagabend", "figur": "Dr. Henrik Albers",
+      "einleitung": "Eine knappe Mail vom Chef, ein langes Wochenende. Du übst, die Brille von früher im Moment zu erkennen, deinen Antreibern nicht blind zu folgen und in einer erwachsenen Rolle zu handeln.",
+      "lage": "Freitag, 17:45 Uhr. Kurz vor dem Feierabend kommt eine Mail von Dr. Albers: „Bitte Montag 9 Uhr kurz zu mir.“ Sonst nichts. Deine letzten zwei Projekte liefen gut.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dir rutscht der Magen weg. Ein altes, vertrautes Gefühl: „Jetzt kommt es. Ich genüge eben nicht.“",
+          "wahl": [
+            { "text": "Die Brille erkennen: „Größer als der Anlass, alt, vertraut.“ Antworten: „Gern. Worum geht es, damit ich etwas vorbereiten kann?“", "wert": 2, "weiter": "k2", "rueck": "Du trennst Tatsache – eine Mail – von Deutung und tust etwas Erwachsenes: nachfragen." },
+            { "text": "Beschließen, am Wochenende alle laufenden Projekte noch einmal gründlich durchzugehen, um am Montag für jede Kritik gewappnet zu sein.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k1b", "rueck": "Die Brille deutet, der Antreiber „Sei perfekt“ springt an – und dein Wochenende gehört der Angst." },
+            { "text": "Den Laptop zuklappen und versuchen, nicht daran zu denken.", "wert": 1, "weiter": "k1c", "rueck": "Abstand ist gut. Ungeprüft meldet sich die Brille aber gern am Sonntagabend zurück." }
+          ] },
+        { "id": "k1b", "sagt": "Samstag, 14 Uhr. Du sitzt am Laptop. Jule Marek ruft an: „Wir fahren an den See – kommst du mit?“ In dir: „Erst muss alles perfekt sein.“",
+          "wahl": [
+            { "text": "„Ja, ich komme. Vorher schreibe ich drei Punkte für Montag auf – dann ist Schluss.“", "wert": 2, "weiter": "k2", "rueck": "Du hörst den Antreiber und wählst trotzdem neu: ein begrenzter Schritt, dann dein Samstag." },
+            { "text": "„Kann leider nicht, ich muss noch die Projekte durchgehen – vielleicht nächstes Wochenende.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k2", "rueck": "Der Antreiber hat entschieden. Montag kommt so oder so – nur mit weniger Kraft." }
+          ] },
+        { "id": "k1c", "sagt": "Sonntagabend. Du liegst wach: „Ich genüge eben nicht. War schon immer so.“",
+          "wahl": [
+            { "text": "Den Damals-heute-Satz sagen: „Das fühlt sich an wie früher. Heute habe ich Belege: zwei Projekte, die gut liefen.“ Dann das Licht aus.", "wert": 2, "weiter": "k2", "rueck": "Brille erkannt, Belege daneben gestellt – du antwortest dem alten Gefühl aus dem Heute." },
+            { "text": "Im Kopf durchgehen, was du in den letzten Wochen alles falsch gemacht haben könntest.", "wert": 0, "tendenz": "gruebeln", "weiter": "k2", "rueck": "Die Brille sucht nur Beweise, die zu ihr passen. So wird die Nacht lang und der Montag schwer." }
+          ] },
+        { "id": "k2", "sagt": "Montag, 9 Uhr. Dr. Albers: „Setzen Sie sich. Keine Sorge, es ist etwas Gutes: Ich möchte Ihnen das Projekt mit Frau Köhlers Betrieb geben. Und – den Bericht für die Geschäftsleitung bräuchte ich diese Woche auch noch.“ Deine Woche ist schon voll.",
+          "wahl": [
+            { "text": "„Das Projekt gern. Den Bericht schaffe ich diese Woche nicht zusätzlich – nächsten Mittwoch ginge.“", "wert": 2, "weiter": "k3", "rueck": "Freude über das Gute, eine klare Grenze beim Zuviel – und ein Gegenvorschlag. Kein Antreiber hat entschieden." },
+            { "text": "„Natürlich, beides, kein Problem.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k2b", "rueck": "„Mach es allen recht“ und „Sei stark“ antworten für dich – erleichtert, dass es keine Kritik war." },
+            { "text": "„Darf ich bis heute Nachmittag sagen, was ich davon realistisch schaffe? Ich will nichts versprechen, was ich nicht halten kann.“", "wert": 1, "weiter": "k3", "rueck": "Bedenkzeit statt Sofort-Ja – gut. Dass der Bericht zu viel ist, wusstest du aber schon." }
+          ] },
+        { "id": "k2b", "sagt": "Mittwoch, 22 Uhr. Du sitzt noch am Bericht. In dir: „Sei stark. Niemand darf merken, dass es zu viel ist.“",
+          "wahl": [
+            { "text": "Donnerstagmorgen zu Dr. Albers: „Ich habe mich übernommen. Der Bericht wird Montag fertig – das Projekt hat Vorrang.“", "wert": 2, "weiter": "k3", "rueck": "Spät, aber erwachsen: Du sagst, was ist, statt dich still zu verbrauchen." },
+            { "text": "Durchziehen bis zwei Uhr nachts, damit der Bericht am Donnerstag pünktlich auf seinem Tisch liegt und niemand etwas merkt.", "wert": 0, "tendenz": "nachgeben", "weiter": "k3", "rueck": "Der Antreiber hat gewonnen. Er wird beim nächsten Mal nicht leiser, sondern lauter." }
+          ] },
+        { "id": "k3", "sagt": "Erstes Projekttreffen mit Nadine Köhler. Sie fragt genau: „Was genau unterscheidet Ihr Angebot von dem Ihres Vorgängers?“ Du weißt es nicht sofort. Die Brille flüstert: „Jetzt sieht sie es.“",
+          "wahl": [
+            { "text": "„Gute Frage. Ich kläre das genau und schicke es Ihnen bis morgen Mittag.“", "wert": 2, "weiter": "k4", "rueck": "Ruhig, ehrlich, mit Zusage. Nicht alles sofort zu wissen, ist kein Beweis, dass du nicht genügst." },
+            { "text": "Schnell eine Antwort erfinden, die überzeugend klingt – Hauptsache, sie merkt nicht, dass du es gerade nicht weißt.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k4", "rueck": "Erfundene Angaben sind eine rote Linie – und Frau Köhler rechnet genau. Ein ehrliches „Ich kläre das“ wirkt sicherer." },
+            { "text": "„Das weiß ich gerade nicht.“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich – gut. Mit einer Zusage, bis wann du es klärst, wäre es auch souverän." }
+          ] },
+        { "id": "k4", "sagt": "Freitagabend. Eine Woche ist vorbei. Zeit für den Rückblick.",
+          "wahl": [
+            { "text": "Notieren, wann Brille und Antreiber diese Woche gesprochen haben – und wo du anders gewählt hast.", "wert": 2, "weiter": "ende1", "rueck": "So lernst du deine Muster kennen – nicht als Urteil, sondern als Landkarte." },
+            { "text": "„Die Woche ging eigentlich nur gut, weil Dr. Albers zufällig gute Laune hatte und Frau Köhler nicht nachgehakt hat.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende2", "rueck": "Die Brille schreibt Gutes dem Glück zu. Was hast du selbst getan?" },
+            { "text": "Den Rückblick aufs Wochenende verschieben und früh schlafen.", "wert": 1, "weiter": "ende1", "rueck": "Erholung ist wichtig. Ein paar Zeilen heute Abend halten fest, was du sonst vergisst." }
+          ] },
+        { "id": "ende1", "sagt": "Du klappst den Laptop zu. Die Mail vom Freitag wirkt von hier aus ganz klein.", "ende": "Eine knappe Mail, ein großes Gefühl: Die Brille von früher erkennst du an der Wucht. Fragen statt deuten, Antreiber hören statt gehorchen, Grenzen sagen statt still schlucken – so handelst du aus dem Heute." },
+        { "id": "ende2", "sagt": "Du klappst den Laptop zu. Die Woche fühlt sich an wie: Glück gehabt.", "ende": "Die Brille hat die Woche bewertet – nicht du. Beim nächsten Mal: aufschreiben, wo du neu gewählt hast, und Gutes nicht dem Zufall schenken." }
+      ],
+      "prinzipien": ["Reaktion größer als Anlass? Brille erkennen", "Tatsache und Deutung trennen, nachfragen", "Antreiber hören, neu wählen", "Grenze beim Zuviel – mit Gegenvorschlag", "Nicht-Wissen ehrlich vertagen statt erfinden"],
+      "transfer": "Welche knappe Nachricht hat dich zuletzt umgehauen – und welche erwachsene Frage hättest du stellen können?"
+    },
+    {
+      "id": "selbst-l-12", "bereich": "selbst", "phase": "m", "umfeld": "kollegen", "faehigkeiten": ["selbst.muster", "selbst.vergleich", "selbst.grenzen"], "stufe": 7,
+      "titel": "Der neue Kollege", "figur": "der neue Kollege",
+      "einleitung": "Ein neuer Kollege regt dich auf, und eines Tages hast du einen echten Grund. Du übst, einen Schatten-Hinweis vom berechtigten Ärger zu trennen – und beides richtig zu beantworten.",
+      "lage": "Seit drei Wochen ist ein neuer Kollege im Team. In jeder Runde erzählt er von seinen Erfolgen. Dich nervt das jeden Tag mehr.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Teamrunde. Er sagt: „In meiner alten Firma habe ich so etwas in zwei Tagen gelöst.“ Dein Ärger schießt hoch. Tarek neben dir grinst nur.",
+          "wahl": [
+            { "text": "Zu Lena flüstern: „Der Angeber schon wieder.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Ein Etikett entlädt den Ärger – und beendet das Nachdenken darüber, warum er dich so trifft." },
+            { "text": "Bemerken: „Heftig, wie mich das ärgert – Tarek grinst nur. Das schaue ich mir heute Abend an.“", "wert": 2, "weiter": "k2", "rueck": "Starke Reaktion, andere teilen sie kaum – ein möglicher Schatten-Hinweis. Du merkst es dir, statt zu urteilen." },
+            { "text": "Innerlich die Augen verdrehen und nichts sagen.", "wert": 1, "weiter": "k2", "rueck": "Du bleibst fair nach außen. Der Ärger bleibt aber ungeklärt in dir." }
+          ] },
+        { "id": "k1b", "sagt": "Lena flüstert zurück: „Echt? Ich finde ihn eigentlich ganz hilfreich.“",
+          "wahl": [
+            { "text": "„Hm. Dann hat es vielleicht auch mit mir zu tun. Ich schau mir das mal an.“", "wert": 2, "weiter": "k2", "rueck": "Ein anderer Blick öffnet deinen – stark, dass du ihn zulässt." },
+            { "text": "„Du kennst ihn halt noch nicht richtig – warte mal ein paar Wochen ab.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2", "rueck": "Du verteidigst dein Urteil, statt es zu prüfen." }
+          ] },
+        { "id": "k2", "sagt": "Abends fragst du dich: Was genau regt mich an ihm so auf?",
+          "wahl": [
+            { "text": "„Dass er die Runden mit seinen Geschichten in die Länge zieht.“", "wert": 1, "weiter": "k3", "rueck": "Ein sachlicher Teil kann stimmen. Dass es nur dich so trifft, spricht für einen zweiten Blick." },
+            { "text": "„Dass er offen von seinen Erfolgen spricht. Erlaube ich mir das selbst zu wenig?“", "wert": 2, "weiter": "k3", "rueck": "Ein möglicher Schatten-Hinweis: Vielleicht regt dich auf, was du dir selbst verbietest – oder insgeheim wünschst." },
+            { "text": "„Dass er einfach ein unangenehmer Mensch ist, der sich überall in den Vordergrund drängt.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3", "rueck": "Ein Urteil über die Person erklärt nichts – weder über ihn noch über dich." }
+          ] },
+        { "id": "k3", "sagt": "Eine Woche später. In der Runde stellt er die Kundenliste vor, die du im Oktober aufgebaut hast – als seine Idee. Dr. Albers nickt anerkennend.",
+          "wahl": [
+            { "text": "Sachlich: „Kurze Ergänzung: Die Grundlage habe ich im Oktober gebaut – schön, dass du sie weiterentwickelst.“", "wert": 2, "weiter": "k4", "rueck": "Hier ist der Ärger berechtigt: Es geht um deine Arbeit. Du sagst es klar, ohne Angriff." },
+            { "text": "Nichts sagen: „Wahrscheinlich ist das nur mein Schatten.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k3b", "rueck": "Das Modell wird zur Ausrede. Nicht jeder Ärger ist Schatten – hier geht es um eine Tatsache." },
+            { "text": "„Typisch. Hauptsache, du stehst gut da.“", "wert": 0, "tendenz": "angreifen", "weiter": "k4", "rueck": "Der alte Ärger entlädt sich – und deine berechtigte Sache geht im Vorwurf unter." },
+            { "text": "Nach der Runde unter vier Augen ruhig zu ihm gehen und ihm sagen, dass die Liste ursprünglich von dir stammt.", "wert": 1, "weiter": "k4", "rueck": "Klar und fair. In der Runde gesagt, hätte es auch Dr. Albers gehört." }
+          ] },
+        { "id": "k3b", "sagt": "Dr. Albers: „Danke für die Liste, sehr gute Arbeit!“ – an ihn gerichtet.",
+          "wahl": [
+            { "text": "„Eine Ergänzung: Die Grundlage habe ich im Oktober gebaut, er hat sie erweitert.“", "wert": 2, "weiter": "k4", "rueck": "Zweite Chance genutzt: Du stellst die Tatsache richtig, ruhig und ohne Vorwurf." },
+            { "text": "Später unter vier Augen mit ihm reden und ihm sagen, dass die Grundlage der Liste ursprünglich von dir stammt.", "wert": 1, "weiter": "k4", "rueck": "Besser als schweigen. Das Lob ist aber schon falsch angekommen." }
+          ] },
+        { "id": "k4", "sagt": "Nach der Runde sprecht ihr kurz unter vier Augen. Er: „Sorry, ich wusste nicht, dass die Liste von dir ist. Wie hast du die aufgebaut?“",
+          "wahl": [
+            { "text": "„Gern. Ich habe drei Monate lang die häufigsten Fragen gesammelt und sortiert – darauf bin ich auch ein bisschen stolz.“", "wert": 2, "weiter": "ende1", "rueck": "Genau das, was dich an ihm gestört hat – in deiner eigenen Dosis. Stolz zeigen darf auch für dich sein." },
+            { "text": "„Ach, das war nicht viel. Hat sich eher so ergeben, das hätte hier eigentlich jeder hinbekommen, der die Zeit gehabt hätte.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Du verweigerst dir genau das, was er ständig tut: über die eigene Arbeit sprechen. Deine Arbeit verdient einen Satz." },
+            { "text": "„Schick ich dir per Mail.“", "wert": 1, "weiter": "ende1", "rueck": "Hilfsbereit. Ein Satz dazu, was du geleistet hast, hätte dir auch gutgetan." }
+          ] },
+        { "id": "ende1", "sagt": "Er nickt. Auf dem Heimweg denkst du noch einmal über ihn nach – und über dich.", "ende": "Zwei Arten Ärger: Der eine kann dir zeigen, was du dir nicht erlaubst – den beantwortest du mit einer kleinen eigenen Dosis. Der andere ist berechtigt – den beantwortest du sachlich und klar. Die Kunst ist, sie auseinanderzuhalten." }
+      ],
+      "prinzipien": ["starke Reaktion, die andere nicht teilen: Schatten-Hinweis prüfen", "kein Etikett für den anderen", "berechtigten Ärger sachlich ansprechen", "das Modell nie als Ausrede fürs Schweigen", "eigene Erfolge in eigener Dosis zeigen"],
+      "transfer": "Wer regt dich gerade auf – ist es eher ein Schatten-Hinweis oder berechtigter Ärger? Und was folgt daraus?"
+    },
+    {
+      "id": "selbst-l-13", "bereich": "selbst", "phase": "m", "umfeld": "freunde", "faehigkeiten": ["selbst.muster", "selbst.grenzen", "selbst.mitgefuehl"], "stufe": 7,
+      "titel": "Funkstille nach dem Streit", "figur": "Jule Marek",
+      "einleitung": "Nach einem Streit herrscht Stille. Du übst, deine Richtung – zur Nähe hin oder in den Rückzug – zu bemerken, einen Schritt in die Mitte zu gehen und verletzlich zu sagen, was war.",
+      "lage": "Donnerstag im Kochkurs habt ihr gestritten, Jule Marek und du: Wer hat vergessen, euch für den nächsten Kurs anzumelden? Du hast vor allen gesagt, dass es ihre Aufgabe war. Sie ist früh gegangen. Seitdem: nichts.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Montagabend. Keine Nachricht von Jule. Es zieht dich – in eine Richtung.",
+          "wahl": [
+            { "text": "Gleich mehrere Nachrichten schicken: „Bist du sauer?? Sag doch was!!“", "wert": 0, "tendenz": "klammern", "weiter": "k1b", "rueck": "Die Sorge drängt zur Nähe – so stark, dass sie Druck wird. Das treibt den anderen oft weiter weg." },
+            { "text": "„Dann eben nicht. Ich melde mich auch nicht mehr.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k1c", "rueck": "Rückzug schützt vor Kränkung – und lässt die Freundschaft in der Stille hängen." },
+            { "text": "Eine ruhige Nachricht: „Der Donnerstag geht mir nach. Ich würde gern mit dir reden, wenn du so weit bist.“", "wert": 2, "weiter": "k2", "rueck": "Ein Schritt in die Mitte: ehrlich, ohne Druck, mit Zeit für sie." },
+            { "text": "Noch einen Tag abwarten und aufschreiben, was in dir los ist.", "wert": 1, "weiter": "k2", "rueck": "Gut, erst bei dir zu sortieren. Ein kurzes Zeichen an sie hätte die Stille nicht so lang werden lassen." }
+          ] },
+        { "id": "k1b", "sagt": "Jule antwortet: „Ich brauche einfach ein paar Tage. Bitte hör auf zu schreiben.“",
+          "wahl": [
+            { "text": "„Okay. Ich warte. Melde dich, wenn du magst.“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst ihr Bedürfnis nach Abstand ernst – auch wenn die Sorge laut ist." },
+            { "text": "„Also bist du doch sauer! Dann sag es mir wenigstens ehrlich, statt mich hängen zu lassen.“", "wert": 0, "tendenz": "klammern", "weiter": "ende2", "rueck": "Ihre Bitte um Abstand wird zur Bestätigung deiner Sorge – und du drückst weiter." }
+          ] },
+        { "id": "k1c", "sagt": "Eine Woche später schreibt Jule: „Hey. Wollen wir reden?“ Es kostet dich Überwindung.",
+          "wahl": [
+            { "text": "„Ja. Mir fällt das gerade schwer, aber ich will.“", "wert": 2, "weiter": "k2", "rueck": "Du gehst aus dem Rückzug einen Schritt auf sie zu – und sagst sogar, dass es dir schwerfällt." },
+            { "text": "Die Nachricht ein paar Tage liegen lassen.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Der Rückzug entscheidet für dich – und ihre ausgestreckte Hand bleibt in der Luft." }
+          ] },
+        { "id": "k2", "sagt": "Ihr telefoniert. Jule: „Ich war echt verletzt am Donnerstag. Du hast vor allen gesagt, ich hätte es verbockt.“",
+          "wahl": [
+            { "text": "„Aber du hattest es ja wirklich vergessen! Ich habe nur gesagt, was alle gesehen haben – und soll mich jetzt dafür rechtfertigen?“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k3", "rueck": "Vielleicht stimmt es – aber jetzt geht es um die Art, wie du es gesagt hast." },
+            { "text": "„Das tut mir leid – vor allen war das nicht fair. Ich hatte mich so auf den Kurs gefreut und war enttäuscht.“", "wert": 2, "weiter": "k3", "rueck": "Verletzlich und verantwortlich: Du stehst zu deinem Anteil und sagst, was dahinterlag." },
+            { "text": "„Tut mir leid.“", "wert": 1, "weiter": "k3", "rueck": "Eine Entschuldigung – gut. Zu sagen, was in dir los war, hätte ihr mehr gegeben." }
+          ] },
+        { "id": "k3", "sagt": "Jule: „Danke. Weißt du, ich ziehe mich bei Streit erst mal zurück. Das hat nicht nur mit dir zu tun.“",
+          "wahl": [
+            { "text": "„Gut zu wissen. Lass uns ausmachen: Wer Abstand braucht, sagt kurz, wann er sich wieder meldet.“", "wert": 2, "weiter": "ende1", "rueck": "Ihr habt jetzt eine Brücke: Abstand mit Rückkehr – egal, wer von euch gerade Abstand braucht." },
+            { "text": "„Das ist aber ganz schön egoistisch. Ich sitze tagelang da und mache mir Sorgen, und du ziehst dich einfach zurück.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Ihr Rückzug ist ein Schutz, kein Angriff auf dich. Mit einem Vorwurf schließt sich die Tür wieder." },
+            { "text": "„Okay.“", "wert": 1, "weiter": "ende1", "rueck": "Ihr seid versöhnt. Wie ihr es nächstes Mal machen wollt, bleibt aber offen." }
+          ] },
+        { "id": "ende1", "sagt": "Am Donnerstag steht ihr wieder nebeneinander am Herd. Die Anmeldung für den nächsten Kurs habt ihr diesmal zusammen gemacht.", "ende": "Nach einem Streit zieht es die einen zur Nähe, die anderen in den Rückzug. Wer seine Richtung kennt, kann einen Schritt in die Mitte gehen: ehrlich, ohne Druck, mit Zeit – und verletzlich sagen, was war." },
+        { "id": "ende2", "sagt": "Es wird wieder still zwischen euch. Im Kochkurs steht ihr an verschiedenen Tischen.", "ende": "Druck, Rückzug oder ein Vorwurf haben entschieden – oft alte Schutzmuster. Beim nächsten Mal: die eigene Richtung bemerken, einen Schritt in die Mitte wählen und den Abstand des anderen nicht als Angriff lesen." }
+      ],
+      "prinzipien": ["die eigene Richtung bemerken: Nähe oder Rückzug", "ein Schritt in die Mitte: ehrlich, ohne Druck", "Bitte um Abstand ernst nehmen", "verletzlich sagen, was dahinterlag", "Abstand mit Rückkehr verabreden"],
+      "transfer": "Mit wem gibt es gerade Funkstille – und wie sähe dein Schritt in die Mitte aus?"
+    },
+    {
+      "id": "selbst-l-14", "bereich": "selbst", "phase": "m", "umfeld": "familie", "faehigkeiten": ["selbst.muster", "selbst.grenzen", "selbst.mitgefuehl"], "stufe": 8,
+      "titel": "Zwischen Mutter und Tante", "figur": "Tante Renate",
+      "einleitung": "Zwei Menschen streiten, und beide wollen dich auf ihrer Seite. Du übst, die Rollen im Drama-Dreieck zu erkennen und auszusteigen: fürsorglich statt rettend, bestimmt statt beschuldigend, verletzlich statt klagend.",
+      "lage": "Sonntagsessen bei deiner Mutter. Sie und Tante Renate streiten seit Wochen, wer sich um den Garten der Großmutter kümmert. Beide haben dich schon angerufen, um sich zu beschweren.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "In der Küche sagt deine Mutter leise: „Renate lässt mich mit allem allein. Kannst du nicht mal mit ihr reden? Auf dich hört sie.“",
+          "wahl": [
+            { "text": "„Klar, ich rede gleich mit ihr.“", "wert": 0, "tendenz": "retten", "weiter": "k1b", "rueck": "Gut gemeint – aber du übernimmst ihren Konflikt. Die Retter-Rolle ist schnell besetzt." },
+            { "text": "„Das klingt anstrengend für dich. Was möchtest du ihr denn selbst sagen?“", "wert": 2, "weiter": "k2", "rueck": "Fürsorglich, ohne zu übernehmen: Du hörst zu und gibst ihr die Handlung zurück." },
+            { "text": "„Ihr seid echt beide unmöglich.“", "wert": 0, "tendenz": "angreifen", "weiter": "k2", "rueck": "Ein Rundumschlag bringt dich in die Verfolger-Rolle – und beide fühlen sich jetzt angegriffen." }
+          ] },
+        { "id": "k1b", "sagt": "Du sprichst Renate im Wohnzimmer an. Sie fährt auf: „Ach, jetzt schickt sie dich vor? Und du fällst mir auch noch in den Rücken!“",
+          "wahl": [
+            { "text": "„Du hast recht, das ist eure Sache. Ich habe mich da reingehängt – ich halte mich raus.“", "wert": 2, "weiter": "k2", "rueck": "Du merkst den Rollenwechsel – vom Retten zur Zielscheibe – und steigst aus." },
+            { "text": "Deine Mutter ausführlich verteidigen und Renate erklären, was sie alles falsch macht.", "wert": 0, "tendenz": "retten", "weiter": "k2", "rueck": "Jetzt bist du mitten im Dreieck – und der Streit hat eine Person mehr." }
+          ] },
+        { "id": "k2", "sagt": "Am Tisch sagt Renate in die Runde: „Na, wenigstens einer in der Familie hat noch Zeit für mich.“ Sie sieht dich an.",
+          "wahl": [
+            { "text": "„Renate, ich mag euch beide. Den Garten klärt ihr bitte zu zweit – einmal im Monat helfe ich gern mit.“", "wert": 2, "weiter": "k3", "rueck": "Bestimmt und warm: Du sagst, was du gibst, und lässt dich nicht gegen deine Mutter einspannen." },
+            { "text": "„Ich kann ja ab jetzt jeden Samstag den Garten machen, dann habt ihr beide eure Ruhe und es gibt keinen Streit mehr.“", "wert": 0, "tendenz": "retten", "weiter": "k2b", "rueck": "Der Retter opfert sich, damit Frieden ist – und der eigentliche Streit bleibt ungelöst." },
+            { "text": "„Wer möchte noch Kartoffeln?“", "wert": 1, "weiter": "k3", "rueck": "Ablenken entschärft den Moment. Eine klare Haltung hätte das Ziehen an dir beendet." }
+          ] },
+        { "id": "k2b", "sagt": "Drei Samstage später stehst du wieder im Garten, erschöpft. In dir: „Immer bleibt alles an mir hängen.“",
+          "wahl": [
+            { "text": "Beiden sagen: „Ich habe mich übernommen. Ab nächstem Monat mache ich einen Samstag – den Rest klärt ihr.“", "wert": 2, "weiter": "k3", "rueck": "Vom Retten über das Klagen zum Ausgang: verletzlich sagen, was ist, und eine Grenze ziehen." },
+            { "text": "„Ihr nutzt mich doch alle nur aus! Jeden Samstag stehe ich hier, und keiner von euch sagt auch nur einmal Danke!“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Retter, dann Opfer, jetzt Verfolger – einmal ganz ums Dreieck." }
+          ] },
+        { "id": "k3", "sagt": "Später, beim Abwasch, sagt deine Mutter leise: „Ich weiß ja, dass ich selbst mit Renate reden sollte. Ich trau mich nur nicht.“",
+          "wahl": [
+            { "text": "„Lass mal, ich regle das für dich.“", "wert": 0, "tendenz": "retten", "weiter": "ende2", "rueck": "Die Retter-Rolle ruft noch einmal. So bleibt deine Mutter das Opfer – und du in der Mitte." },
+            { "text": "„Willst du den ersten Satz einmal an mir ausprobieren?“", "wert": 2, "weiter": "ende1", "rueck": "Unterstützen statt übernehmen – die fürsorgliche Rolle im Gewinner-Dreieck." },
+            { "text": "„Das schaffst du schon.“", "wert": 1, "weiter": "ende1", "rueck": "Ermutigend und nicht rettend. Ein kleines Angebot zum Üben hätte ihr den Schritt erleichtert." }
+          ] },
+        { "id": "ende1", "sagt": "Zwei Wochen später ruft deine Mutter an: „Ich habe mit Renate geredet. Wir wechseln uns jetzt ab.“", "ende": "Im Drama-Dreieck wollen die Beteiligten oft einen Retter, einen Schuldigen oder ein Publikum. Aussteigen heißt: zuhören statt übernehmen, klar sagen, was du gibst, und die anderen ihren Konflikt selbst lösen lassen – mit Unterstützung, wenn sie sie wollen." },
+        { "id": "ende2", "sagt": "Der Gartenstreit geht weiter – und jetzt rufen dich beide noch öfter an.", "ende": "Wer rettet, bleibt im Dreieck – und landet leicht als Opfer oder Verfolger. Beim nächsten Mal: fürsorglich zuhören, die Handlung zurückgeben, klar sagen, was du gibst." }
+      ],
+      "prinzipien": ["nicht retten: den Konflikt bei den Beteiligten lassen", "fürsorglich: zuhören und fragen, was sie selbst tun wollen", "bestimmt: sagen, was du gibst", "verletzlich statt klagend, wenn es zu viel wird"],
+      "transfer": "In welchem Streit anderer Leute steckst du gerade mittendrin – und welcher Ausgang wäre deiner?"
+    },
+    {
+      "id": "selbst-l-15", "bereich": "selbst", "phase": "m", "umfeld": "kollegen", "faehigkeiten": ["selbst.muster", "selbst.kritiker", "selbst.grenzen", "selbst.mitgefuehl", "selbst.vergleich"], "stufe": 8, "sparring": true,
+      "titel": "Die Woche, in der alles anspringt", "figur": "Dr. Henrik Albers",
+      "einleitung": "Sparring der Meisterschaft: Eine Krisenwoche, in der deine alten Muster alle auf einmal anspringen – Antreiber, Brille von früher, Drama-Dreieck, Schatten, Nähe und Abstand. Du erkennst sie im Moment und wählst neu.",
+      "lage": "Montag, Projektrunde. Dein Projekt liegt zwei Wochen hinter dem Plan. Am Tisch sitzen Dr. Albers, Carla Demir, Tarek und du.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Das Projekt liegt zwei Wochen zurück. Ich erwarte bis Freitag einen Plan von Ihnen, wie wir das aufholen.“ Dir wird heiß, und in dir startet ein Motor: „Ab jetzt keine Pause mehr.“",
+          "wahl": [
+            { "text": "„Ich bleibe ab heute jeden Abend, bis es aufgeholt ist.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1b", "rueck": "„Sei stark“ und „Streng dich an“ planen für dich – auf Kosten deiner Kraft." },
+            { "text": "Die Hitze bemerken: „Brille und Antreiber melden sich.“ Dann: „Verstanden. Welche drei Punkte sind Ihnen am wichtigsten?“", "wert": 2, "weiter": "k2", "rueck": "Du erkennst deine Muster im Moment und stellst eine erwachsene Frage, statt dich in Arbeit zu stürzen." },
+            { "text": "„In Ordnung, mache ich.“", "wert": 1, "weiter": "k2", "rueck": "Ruhig und ohne Überreaktion. Seine Prioritäten zu erfragen, hätte dir den Plan erleichtert." }
+          ] },
+        { "id": "k1b", "sagt": "Montag, 22 Uhr. Du sitzt noch im Büro. Auf dem Handy: „Kommst du heute noch nach Hause?“",
+          "wahl": [
+            { "text": "„Bin in einer halben Stunde da. Ich hab mich übernommen – ab morgen ist um sechs Schluss.“", "wert": 2, "weiter": "k2", "rueck": "Du hörst den Antreiber und setzt dir selbst eine Grenze – und dein Zuhause weiß, woran es ist." },
+            { "text": "Das Handy umdrehen und weiterarbeiten – zu Hause muss man eben noch ein bisschen warten, das hier ist jetzt wichtiger.", "wert": 0, "tendenz": "vermeiden", "weiter": "k2", "rueck": "Der Antreiber entscheidet – und der Mensch zu Hause bleibt ohne Antwort." }
+          ] },
+        { "id": "k2", "sagt": "Dienstag. Tarek kommt an deinen Platz: „Bei mir hängt alles, weil die Technik nicht liefert. Ich kann da nichts machen. Kannst du das nicht mit denen klären?“",
+          "wahl": [
+            { "text": "„Ich kläre das für dich.“", "wert": 0, "tendenz": "retten", "weiter": "k3", "rueck": "Der Retter springt ein – und du hast jetzt sein Problem zusätzlich zu deinem." },
+            { "text": "„Ärgerlich. Was genau fehlt dir – und wer ist dein Ansprechpartner dort?“", "wert": 2, "weiter": "k3", "rueck": "Fürsorglich, nicht rettend: Du hilfst ihm, selbst zu handeln." },
+            { "text": "„Mit Ausreden kommen wir jetzt auch nicht weiter.“", "wert": 0, "tendenz": "angreifen", "weiter": "k3", "rueck": "Unter Druck wird man schnell zum Verfolger. Er verteidigt sich – und das Problem bleibt." },
+            { "text": "„Sprich doch mal mit Jonas aus der Technik.“", "wert": 1, "weiter": "k3", "rueck": "Gibt ihm die Handlung zurück – gut. Ein, zwei Fragen hätten ihm geholfen, das Gespräch vorzubereiten." }
+          ] },
+        { "id": "k3", "sagt": "Mittwoch, Lenkungskreis. Carla stellt ihr Projekt vor – klar, stolz, mit Witz. Dr. Albers lobt sie vor allen. In dir brennt es: „Reine Show.“",
+          "wahl": [
+            { "text": "„Starker Stich. Was genau? Sie zeigt ihre Arbeit offen und stolz. Das darf ich auch – auf meine Art.“", "wert": 2, "weiter": "k4", "rueck": "Möglicher Schatten-Hinweis: Vielleicht erlaubst du dir selbst nicht, was dich an ihr aufregt. Dann kannst du es dir in deiner Dosis nehmen." },
+            { "text": "Später zu Tarek: „Bei Carla ist doch viel heiße Luft dabei.“", "wert": 0, "tendenz": "abwerten", "weiter": "k4", "rueck": "Missgünstiger Neid redet sie klein – und dich kein bisschen größer." },
+            { "text": "Dir vornehmen, Carla zu fragen, wie sie sich vorbereitet.", "wert": 1, "weiter": "k4", "rueck": "Gutartiger Neid, der antreibt – stark. Die Frage, ob du dir selbst etwas davon nicht erlaubst, fehlt noch." }
+          ] },
+        { "id": "k4", "sagt": "Mittwochabend. Der Mensch, mit dem du zusammenlebst, schreibt: „Wir sehen uns kaum noch. Du fehlst mir.“ Dir ist alles zu viel. Du willst nur noch Ruhe.",
+          "wahl": [
+            { "text": "„Du fehlst mir auch. Die Woche ist hart. Ich brauche heute eine Stunde für mich – danach bin ich ganz bei dir.“", "wert": 2, "weiter": "k5", "rueck": "Abstand mit Rückkehr: Du nimmst dir, was du brauchst, ohne den anderen wegzuschieben." },
+            { "text": "Nicht antworten. Später vielleicht, wenn du wieder Kraft hast – jetzt fühlt sich jede Nachricht wie noch eine Aufgabe an.", "wert": 0, "tendenz": "vermeiden", "weiter": "k4b", "rueck": "Der Rückzug schützt dich – und lässt den anderen mit der Sehnsucht allein." },
+            { "text": "„Fang du nicht auch noch an.“", "wert": 0, "tendenz": "angreifen", "weiter": "k4b", "rueck": "Die Last der Woche trifft den Menschen, der dir am nächsten ist." }
+          ] },
+        { "id": "k4b", "sagt": "Eine Stunde später kommt nur noch: „Okay. Dann nicht.“",
+          "wahl": [
+            { "text": "Hingehen: „Entschuldige. Ich bin gerade am Ende. Ich brauche kurz Ruhe – aber ich will dich nicht wegschieben.“", "wert": 2, "weiter": "k5", "rueck": "Verletzlich und klar: Du nennst dein Bedürfnis, ohne den anderen auszusperren." },
+            { "text": "„Sorry, stressige Woche.“", "wert": 1, "weiter": "k5", "rueck": "Eine Entschuldigung – gut. Zu sagen, was du brauchst, hätte mehr Nähe geschaffen." }
+          ] },
+        { "id": "k5", "sagt": "Freitag. Du stellst deinen Plan vor. Dr. Albers: „Mir ist das zu vage. Punkt drei verstehe ich nicht.“ Dein Gesicht wird heiß: „Ich genüge eben nicht.“",
+          "wahl": [
+            { "text": "„Dann geben Sie das Projekt besser jemand anderem.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k5b", "rueck": "Die Brille spricht für dich – sie macht aus einer Rückfrage zu Punkt drei ein Urteil über dich." },
+            { "text": "Brille bemerken. Dann: „Was genau fehlt Ihnen bei Punkt drei? Dann schärfe ich ihn bis Montag.“", "wert": 2, "weiter": "k6", "rueck": "Alte Wucht erkannt, im Heute geantwortet: Kritik an einem Punkt ist Kritik an einem Punkt." },
+            { "text": "„Mehr war in vier Tagen nicht drin – bei allem, was diese Woche sonst noch los war.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k6", "rueck": "Verständlich, aber jetzt verteidigst du dich, statt den Punkt zu klären." },
+            { "text": "Kurz schlucken und nicken: „Ich überarbeite ihn.“", "wert": 1, "weiter": "k6", "rueck": "Ruhig, ohne Rechtfertigung – gut. Eine Frage, was genau fehlt, hätte das Überarbeiten leichter gemacht." }
+          ] },
+        { "id": "k5b", "sagt": "Dr. Albers schüttelt den Kopf: „Nein. Ich will, dass Sie ihn schärfen. Sie kennen das Projekt am besten.“",
+          "wahl": [
+            { "text": "„Gut. Was genau fehlt Ihnen bei Punkt drei?“", "wert": 2, "weiter": "k6", "rueck": "Zurück ins Heute: eine erwachsene Frage statt des alten Gefühls." },
+            { "text": "„Okay. Ich schaue mir Punkt drei noch einmal in Ruhe an und melde mich.“", "wert": 1, "weiter": "k6", "rueck": "Du bleibst dran. Eine Frage zu Punkt drei hätte dir für Montag mehr gegeben." }
+          ] },
+        { "id": "k6", "sagt": "Freitagabend. Die Woche ist vorbei. Der Kritiker: „Eine einzige Katastrophe.“",
+          "wahl": [
+            { "text": "Rückblick: Wo haben deine Muster diese Woche gesprochen – und wo hast du neu gewählt? Ins Buch, dann Akte zu.", "wert": 2, "weiter": "ende1", "rueck": "Meisterschaft heißt nicht, dass die Muster schweigen. Sie heißt, sie zu erkennen – und öfter neu zu wählen." },
+            { "text": "„Die Woche war ein Desaster. Ich bin für so etwas nicht gemacht.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Der Kritiker zieht eine Bilanz, die nur Pannen zählt." },
+            { "text": "Das Wochenende genießen und nicht mehr an die Arbeit denken – am Montag ist früh genug, um auf die Woche zu schauen.", "wert": 1, "weiter": "ende1", "rueck": "Erholung ist richtig. Ein kurzer Rückblick hätte festgehalten, was du neu gewählt hast." }
+          ] },
+        { "id": "ende1", "sagt": "Am Montag liegt der überarbeitete Plan auf dem Tisch. Dr. Albers liest und nickt: „So können wir arbeiten.“", "ende": "Eine Woche, in der alles anspringt: Antreiber, die Brille von früher, die Rollen im Dreieck, der Schatten, der Zug zur Nähe oder in den Rückzug. Meisterschaft heißt nicht, dass sie schweigen – sondern sie im Moment zu erkennen und öfter neu zu wählen. Zähl nach: Wo ist dir das diese Woche gelungen?" },
+        { "id": "ende2", "sagt": "Das Wochenende verbringst du mit Grübeln. Am Montag liegt der Plan trotzdem auf dem Tisch – und Dr. Albers nickt.", "ende": "Der Kritiker hat die Bilanz gezogen, nicht du. Beim nächsten Mal: zählen, wo du neu gewählt hast – auch wenn es nur zwei Momente waren." }
+      ],
+      "prinzipien": ["Antreiber hören, Grenze setzen", "nicht retten, nicht verfolgen: fürsorglich und bestimmt", "Stich und Ärger als Schatten-Hinweis prüfen", "Abstand mit Rückkehr", "Kritik an einem Punkt nicht durch die alte Brille lesen", "Rückblick ohne Urteil: Wo habe ich neu gewählt?"],
+      "transfer": "Welches deiner Muster springt unter Druck als Erstes an – und woran erkennst du es im Moment?"
+    }
+  ]
+}

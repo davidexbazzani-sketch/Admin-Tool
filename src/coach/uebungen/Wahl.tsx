@@ -1,6 +1,7 @@
 // Der Coach — Erkennen: Auswahl mit gestuften Antworten (auch Wortwahl, Trick erkennen, Tonfall, Szene) und Signal-Bündel.
 // Bei manchen Aufgaben fragt der Coach vor der Auflösung, wie sicher man ist (Kalibrierung).
 import { useMemo, useState } from 'react'
+import { host } from '../host/aktiv'
 import type { Schritt, Wahl as WahlT } from '../kern/inhaltTypen'
 import { rng } from '../kern/zufall'
 import { T, mitName, useName, useZeile } from '../ansicht/hilfen'
@@ -8,6 +9,13 @@ import type { BausteinProps } from './typen'
 import { Weiter } from './Lesen'
 
 type WahlSchritt = Extract<Schritt, { art: 'auswahl' | 'wortwahl' | 'kunstgriff' | 'tonfall' | 'szene' }>
+
+/** Szenenbild (Stufe 4): ergänzt die Beschreibung, ersetzt sie nie; fehlt die Datei, bleibt nur der Text */
+export function SzenenBild({ bild }: { bild?: string }) {
+  const [da, setDa] = useState(true)
+  if (!bild || !da) return null
+  return <img src={host().bildPfad(`szenen/${bild}`)} alt="" loading="lazy" onError={() => setDa(false)} style={{ width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', borderRadius: 10, display: 'block' }} data-dc-szenenbild />
+}
 
 const SICHER = [{ w: 0.25, t: 'geraten' }, { w: 0.5, t: 'eher unsicher' }, { w: 0.75, t: 'ziemlich sicher' }, { w: 0.95, t: 'ganz sicher' }]
 
@@ -23,7 +31,7 @@ export function Auswahl({ s, onFertig }: BausteinProps<WahlSchritt>) {
   return (
     <div className="dc-spalte dc-ein" data-dc-schritt={s.art}>
       {s.art === 'kunstgriff' && <><span className="dc-ober">Trick erkennen</span><p style={{ margin: 0 }} className="dc-zitat">{s.lage}</p></>}
-      {s.art === 'szene' && <><span className="dc-ober">Szene lesen</span><p style={{ margin: 0 }} className="dc-karte-flach">{s.beschreibung}</p></>}
+      {s.art === 'szene' && <><span className="dc-ober">Szene lesen</span><SzenenBild bild={s.bild} /><p style={{ margin: 0 }} className="dc-karte-flach">{s.beschreibung}</p></>}
       {s.art === 'tonfall' && <>
         <span className="dc-ober">Tonfall</span>
         <p className="dc-gross" style={{ margin: 0 }}>„{s.satz}“</p>
@@ -61,6 +69,7 @@ export function Buendel({ s, onFertig }: BausteinProps<Extract<Schritt, { art: '
   return (
     <div className="dc-spalte dc-ein" data-dc-schritt="buendel">
       <span className="dc-ober">Signal-Bündel</span>
+      <SzenenBild bild={s.bild} />
       <p style={{ margin: 0 }} className="dc-karte-flach">{s.lage}</p>
       <p className="dc-gross" style={{ margin: 0, fontWeight: 600 }}>{s.frage}</p>
       {zeichen.map((z, i) => (

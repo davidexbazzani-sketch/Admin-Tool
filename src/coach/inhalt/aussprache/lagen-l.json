@@ -16,7 +16,7 @@
         { "id": "k1b", "sagt": "Die Verkäuferin: „Von welchen? Mit Körnern oder mit Sesam?“",
           "wahl": [
             { "text": "„Die mit Sesam. | Sechs Stück.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Gelegenheit genutzt. Jetzt hat das Wort seinen Auftritt." },
-            { "text": "Nur zeigen und nicken.", "wert": 0, "tendenz": "vermeiden", "weiter": "k2b", "rueck": "Sie greift zu den falschen. Vermeiden hat heute Körnerbrötchen gekostet." }
+            { "text": "Nur auf die Brötchen zeigen und nicken.", "wert": 0, "tendenz": "vermeiden", "weiter": "k2b", "rueck": "Sie greift zu den falschen. Vermeiden hat heute Körnerbrötchen gekostet." }
           ] },
         { "id": "k2", "sagt": "Frau Sommer, laut: „Na, das klang aber schön! Haben Sie nicht früher ein bisschen gelispelt?“",
           "wahl": [
@@ -39,7 +39,7 @@
             { "text": "„Mit Spiegel und vielen kurzen Übungen. | Ich überlege auch, zur Logopädie zu gehen.“", "wert": 2, "weiter": "ende1", "rueck": "Sachlich, ohne Scham – und ganz nebenbei sind noch ein paar S gefallen." },
             { "text": "„Ach, das ist kompliziert.“", "wert": 1, "weiter": "ende1", "rueck": "Darfst du so stehen lassen. Ein Satz mehr wäre auch eine Übung gewesen." }
           ] },
-        { "id": "ende1", "sagt": "Frau Sommer nickt anerkennend und erzählt von ihrem Enkel, der auch zur Logopädie geht.", "ende": "Das Wort gesagt statt umgangen, die Bemerkung sachlich beantwortet. Wer offen damit umgeht, nimmt solchen Momenten die Spitze – und das neue S hatte heute zwei Auftritte mehr." },
+        { "id": "ende1", "sagt": "Frau Sommer nickt anerkennend und erzählt von ihrem Neffen, der auch zur Logopädie geht.", "ende": "Das Wort gesagt statt umgangen, die Bemerkung sachlich beantwortet. Wer offen damit umgeht, nimmt solchen Momenten die Spitze – und das neue S hatte heute zwei Auftritte mehr." },
         { "id": "ende2", "sagt": "Zu Hause liegen sechs Körnerbrötchen auf dem Tisch.", "ende": "Vermeiden ist ein alter, verständlicher Schutz – aber er bremst. Nimm „Sesambrötchen“ auf deine Wortliste, übe es ein paarmal allein und sag es nächsten Samstag." }
       ],
       "prinzipien": ["das Wort sagen statt umgehen", "lieber ruhig als schnell und leise", "Bemerkungen sachlich beantworten – ohne Rechtfertigung", "Gemiedenes auf die Wortliste"],
@@ -66,7 +66,7 @@
         { "id": "k1c", "sagt": "Herr Petersen: „Ach, meine Mails lese ich erst nächste Woche. Sagen Sie's mir doch eben.“",
           "wahl": [
             { "text": "„Gern: | Sonnenstraße sechzehn, | in Essen.“", "wert": 2, "weiter": "k2", "rueck": "Gut – du hast dich auf den Satz eingelassen." },
-            { "text": "„Dann warte ich lieber.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Das Paket wartet mit – eine Woche länger." }
+            { "text": "„Dann warte ich lieber, bis Sie die Mail gelesen haben.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Das Paket wartet mit – eine Woche länger." }
           ] },
         { "id": "k2", "sagt": "Herr Petersen: „Gut. Und bis wann sind Sie zu Hause?“",
           "wahl": [

@@ -10,7 +10,7 @@
         { "id": "k1", "sagt": "Dein Entwurf beginnt so: „Guten Tag, Herr Dr. Albers, ich hoffe, Sie hatten eine gute Woche. Ich wollte mich eigentlich nur kurz bei Ihnen melden, weil sich im Team im Zuge der Diskussion über die Optimierung unserer Abläufe die Überlegung ergeben hat, …“ Wie gehst du vor?",
           "wahl": [
             { "text": "Die Bitte nach vorn: „Ich bitte Sie um die Freigabe für ein neues Abrechnungsprogramm.“ Der Rest folgt danach.", "wert": 2, "weiter": "k2", "rueck": "Albers weiß nach einem Satz, worum es geht. Alles Weitere liest er jetzt mit Absicht." },
-            { "text": "Den Anfang lassen und nur am Ende ein paar Wörter streichen – die Einleitung zeigt Respekt und schafft eine freundliche Stimmung, bevor die Bitte kommt.", "wert": 0, "tendenz": "ausweichen", "weiter": "k2b", "rueck": "Freundlich gemeint – aber die Bitte steht jetzt in Zeile acht. Albers muss sie suchen." },
+            { "text": "Den Anfang lassen, nur am Ende ein paar Wörter streichen – die Einleitung zeigt Respekt und schafft gute Stimmung, bevor die Bitte kommt.", "wert": 0, "tendenz": "ausweichen", "weiter": "k2b", "rueck": "Freundlich gemeint – aber die Bitte steht jetzt in Zeile acht. Albers muss sie suchen." },
             { "text": "Die Floskeln am Anfang streichen und dann schauen, wo die Bitte steht.", "wert": 1, "weiter": "k2", "rueck": "Guter erster Schritt. Noch klarer wird es, wenn die Bitte ganz nach vorn rückt." }
           ] },
         { "id": "k2b", "sagt": "Bevor du auf „Senden“ klickst, schaut Miriam auf deinen Bildschirm: „Zwölf Zeilen? Was willst du denn von ihm?“",
@@ -33,7 +33,7 @@
         { "id": "k4", "sagt": "Du schickst die Mail ab. Am nächsten Morgen antwortet Albers: „Klingt sinnvoll. Was kostet das, und ab wann?“",
           "wahl": [
             { "text": "„Rund 40 Euro im Monat für das ganze Team. Startklar ab dem Ersten.“", "wert": 2, "weiter": "ende1", "rueck": "Zwei Fragen, zwei kurze Antworten. Mehr braucht es nicht." },
-            { "text": "„Also die Kosten belaufen sich im Prinzip auf einen monatlichen Betrag von ungefähr 40 Euro, wobei eine Einführung zum Monatsersten möglich wäre.“", "wert": 0, "weiter": "ende2", "rueck": "Die alte Gewohnheit ist zurück: Füllwörter und Hauptwörter. Er hat nur zwei Dinge gefragt." },
+            { "text": "„Also die Kosten belaufen sich auf einen monatlichen Betrag von ungefähr 40 Euro, wobei eine Einführung zum Monatsersten möglich wäre.“", "wert": 0, "weiter": "ende2", "rueck": "Die alte Gewohnheit ist zurück: Füllwörter und Hauptwörter. Er hat nur zwei Dinge gefragt." },
             { "text": "„Die genauen Kosten schicke ich Ihnen heute noch.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich, wenn du es nicht sicher weißt. Weißt du es, sag es gleich." }
           ] },
         { "id": "ende1", "sagt": "Zehn Minuten später kommt die Antwort: „Freigegeben.“", "ende": "Bitte nach vorn, Verben statt Hauptwortketten, eine Frist statt einer Floskel. Kurz ist hier nicht unhöflich – es ist Rücksicht auf seine Zeit." },
@@ -53,12 +53,12 @@
           "wahl": [
             { "text": "„Wir ziehen Ihre Daten auf neue Rechner um. Am Umzugstag kann es sein, dass Sie ein paar Stunden nicht an Ihre Daten kommen.“", "wert": 2, "weiter": "k2", "rueck": "Alltagswörter, zwei kurze Sätze, ein Bild: der Umzug. Er nickt." },
             { "text": "„Das ist die Datenmigration in die Cloud – da gibt es temporär eine eingeschränkte Verfügbarkeit.“", "wert": 0, "tendenz": "fachsprache", "weiter": "k1b", "rueck": "Du hast die Fachwörter nur umgestellt. Er versteht genauso wenig wie vorher." },
-            { "text": "„Ach, das ist nichts Schlimmes, nur eine technische Umstellung bei uns. Das brauchen Sie gar nicht im Einzelnen zu verstehen, wir kümmern uns um alles.“", "wert": 0, "tendenz": "abwiegeln", "weiter": "k1c", "rueck": "Freundlich gemeint, aber von oben herab – und er weiß immer noch nicht, ob er betroffen ist." }
+            { "text": "„Ach, das ist nichts Schlimmes, nur eine technische Umstellung bei uns. Das brauchen Sie nicht zu verstehen, wir kümmern uns um alles.“", "wert": 0, "tendenz": "abwiegeln", "weiter": "k1c", "rueck": "Freundlich gemeint, aber von oben herab – und er weiß immer noch nicht, ob er betroffen ist." }
           ] },
         { "id": "k1b", "sagt": "Herr Petersen runzelt die Stirn: „Migration? Cloud? Sagen Sie es mir so, dass ich es zu Hause erzählen kann.“",
           "wahl": [
-            { "text": "„Entschuldigung, ich sag's anders: Wir ziehen Ihre Daten auf neue Rechner um – wie bei einem Umzug. An dem Tag kann es ein paar Stunden haken.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt: Alltagswörter und ein Bild." },
-            { "text": "„Cloud heißt, Ihre Daten liegen nicht mehr bei uns im Haus, sondern in einem großen Rechenzentrum, das man über das Internet erreicht – das ist heute ganz üblich.“", "wert": 1, "weiter": "k2", "rueck": "Besser – du erklärst. Aber er wollte wissen, was das für ihn heißt, nicht, was eine Cloud ist." }
+            { "text": "„Verzeihung, anders gesagt: Wir ziehen Ihre Daten auf neue Rechner um, wie bei einem Umzug. An dem Tag kann es ein paar Stunden haken.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt: Alltagswörter und ein Bild." },
+            { "text": "„Cloud heißt, Ihre Daten liegen nicht mehr bei uns im Haus, sondern in einem großen Rechenzentrum im Internet – das ist heute ganz üblich.“", "wert": 1, "weiter": "k2", "rueck": "Besser – du erklärst. Aber er wollte wissen, was das für ihn heißt, nicht, was eine Cloud ist." }
           ] },
         { "id": "k1c", "sagt": "Herr Petersen: „Das sagen Sie so. Kann ich nächste Woche nun Rechnungen schreiben oder nicht?“",
           "wahl": [
@@ -67,8 +67,8 @@
           ] },
         { "id": "k2", "sagt": "Er hält eine Hand hinters Ohr: „Wann genau ist das, und was soll ich da machen?“",
           "wahl": [
-            { "text": "„Am Dienstag, dem 12. Speichern Sie bitte Montagabend alles. Dienstagvormittag keine Rechnungen schreiben. Ab Mittag geht wieder alles.“", "wert": 2, "weiter": "k3", "rueck": "Ein Gedanke pro Satz, Tag und Uhrzeit, eine klare Bitte. Das kommt auch an, wenn er nicht jedes Wort hört." },
-            { "text": "„Am Dienstag, dem 12., wobei Sie Dringendes, falls es geht, schon am Montag erledigen sollten, weil vormittags, solange der Umzug läuft, nichts geht.“", "wert": 0, "weiter": "k3", "rueck": "Alles drin – aber in einem Satz mit drei Einschüben. Wer schlecht hört, verliert den Faden." },
+            { "text": "„Am Dienstag, dem 12. Speichern Sie Montagabend alles. Dienstagvormittag keine Rechnungen schreiben. Ab Mittag geht wieder alles.“", "wert": 2, "weiter": "k3", "rueck": "Ein Gedanke pro Satz, Tag und Uhrzeit, eine klare Bitte. Das kommt auch an, wenn er nicht jedes Wort hört." },
+            { "text": "„Am Dienstag, dem 12., wobei Sie Dringendes schon am Montag erledigen sollten, weil vormittags, solange der Umzug läuft, nichts geht.“", "wert": 0, "weiter": "k3", "rueck": "Alles drin – aber in einem Satz mit drei Einschüben. Wer schlecht hört, verliert den Faden." },
             { "text": "„Am Dienstag. Sie brauchen gar nichts zu tun.“", "wert": 1, "weiter": "k3", "rueck": "Kurz und klar. Nur stimmt „gar nichts“ nicht ganz: Vormittags sollte er keine Rechnungen schreiben." }
           ] },
         { "id": "k3", "sagt": "Herr Petersen faltet den Brief zusammen: „Warum schreiben Sie das nicht gleich so?“",
@@ -128,7 +128,7 @@
       "id": "ausdruck-l-04", "bereich": "ausdruck", "phase": "g", "umfeld": "familie", "faehigkeiten": ["ausdruck.register", "ausdruck.treffend", "ausdruck.diplomatie"], "stufe": 3,
       "titel": "Eine Karte für Tante Renate", "figur": "Tante Renate",
       "einleitung": "Eine Karte, in der jedes Wort zählt. Du übst, den persönlichen Ton zu treffen und Floskeln durch etwas zu ersetzen, das nur zu diesem Menschen passt.",
-      "lage": "Tante Renate ist umgezogen – in eine kleinere Wohnung mit Balkon. Am Samstag lädt sie zur Einweihung ein, du kannst nicht kommen. Also schreibst du ihr eine Karte. Renate sagt, was sie denkt – auch über Karten.",
+      "lage": "Tante Renate ist umgezogen – in eine kleinere Wohnung mit Garten. Am Samstag lädt sie zur Einweihung ein, du kannst nicht kommen. Also schreibst du ihr eine Karte. Renate sagt, was sie denkt – auch über Karten.",
       "start": "k1",
       "knoten": [
         { "id": "k1", "sagt": "Die Anrede. Was schreibst du?",
@@ -140,7 +140,7 @@
         { "id": "k2", "sagt": "Auf der Karte steht schon vorgedruckt: „Zum Einzug alles Gute!“ Was schreibst du darunter?",
           "wahl": [
             { "text": "„Alles Liebe zur neuen Wohnung und vor allem Gesundheit!“", "wert": 1, "weiter": "k3", "rueck": "Herzlich gemeint – aber so steht es auf vielen Karten." },
-            { "text": "„Ich sehe dich schon auf dem Balkon sitzen, mit Kaffee und deinen Tomaten – genau so hast du es dir gewünscht.“", "wert": 2, "weiter": "k3", "rueck": "Ein Bild, das nur zu ihr passt. Diesen Satz liest sie zweimal." },
+            { "text": "„Ich sehe dich schon im Garten sitzen, mit Kaffee und deinen Tomaten – genau so hast du es dir gewünscht.“", "wert": 2, "weiter": "k3", "rueck": "Ein Bild, das nur zu ihr passt. Diesen Satz liest sie zweimal." },
             { "text": "„Herzlichen Glückwunsch zum Bezug Ihrer neuen Räumlichkeiten.“", "wert": 0, "tendenz": "zu-steif", "weiter": "k3", "rueck": "Klingt nach Hausverwaltung, nicht nach Familie – das Register passt nicht." }
           ] },
         { "id": "k3", "sagt": "Jetzt die Absage für Samstag. Was schreibst du?",
@@ -158,9 +158,9 @@
           "wahl": [
             { "text": "„Mit freundlichen Grüßen“", "wert": 0, "tendenz": "zu-steif", "weiter": "ende1", "rueck": "Der Briefschluss fürs Amt – auf einer Familienkarte wirkt er kühl." },
             { "text": "„Liebe Grüße und lass es dir gut gehen!“", "wert": 1, "weiter": "ende1", "rueck": "Freundlich, aber austauschbar. Ein Bezug auf euer nächstes Treffen wäre wärmer." },
-            { "text": "„Bis bald – ich freu mich auf den ersten Kaffee auf deinem Balkon!“", "wert": 2, "weiter": "ende1", "rueck": "Ein Schluss, der zu euch gehört. Persönlich und leicht." }
+            { "text": "„Bis bald – ich freu mich auf den ersten Kaffee in deinem Garten!“", "wert": 2, "weiter": "ende1", "rueck": "Ein Schluss, der zu euch gehört. Persönlich und leicht." }
           ] },
-        { "id": "ende1", "sagt": "Eine Woche später schickt Renate ein Foto: deine Karte, aufgestellt auf dem Balkontisch.", "ende": "Persönlich schlägt Floskel: ein Bild, das nur zu ihr passt, eine klare Absage mit Angebot, ein Schluss, der zu euch gehört. Das Register für die Familie ist warm – nicht förmlich." },
+        { "id": "ende1", "sagt": "Eine Woche später schickt Renate ein Foto: deine Karte, aufgestellt auf dem Gartentisch.", "ende": "Persönlich schlägt Floskel: ein Bild, das nur zu ihr passt, eine klare Absage mit Angebot, ein Schluss, der zu euch gehört. Das Register für die Familie ist warm – nicht förmlich." },
         { "id": "ende2", "sagt": "Renate: „Gut, dann im März. Ich backe was.“", "ende": "Am Telefon war es klar – auf der Karte wäre es auch gegangen. Eine Absage gehört in die Karte, nicht ins Schweigen." },
         { "id": "ende3", "sagt": "Renate stellt am Samstag eine Tasse mehr auf den Tisch.", "ende": "Kein Drama – aber ein „mal sehen“ lässt den anderen warten. Klar abzusagen ist die freundlichere Antwort." }
       ],
@@ -183,7 +183,7 @@
         { "id": "k2", "sagt": "Runde 2 – der erste Satz.",
           "wahl": [
             { "text": "„Ihre neuen Geräte kommen leider nicht am Montag, sondern eine Woche später, am 21.“", "wert": 2, "weiter": "k3", "rueck": "Hauptsache zuerst, ein Weichmacher an der richtigen Stelle: „leider“." },
-            { "text": "„Wir möchten Sie hiermit in Kenntnis setzen, dass es bedauerlicherweise zu einer Verzögerung der Auslieferung Ihrer bestellten Geräte gekommen ist.“", "wert": 0, "tendenz": "aufblaehen", "weiter": "k3", "rueck": "Hauptwortstil und Streckverben – und der neue Termin fehlt." },
+            { "text": "„Wir möchten Sie hiermit in Kenntnis setzen, dass es bedauerlicherweise zu einer Verzögerung der Auslieferung Ihrer Geräte gekommen ist.“", "wert": 0, "tendenz": "aufblaehen", "weiter": "k3", "rueck": "Hauptwortstil und Streckverben – und der neue Termin fehlt." },
             { "text": "„Ich hoffe, in der Werkstatt läuft alles gut. Leider muss ich Ihnen heute etwas Unangenehmes mitteilen.“", "wert": 1, "weiter": "k3", "rueck": "Freundlich, aber die Nachricht kommt erst im dritten Satz. Bei schlechten Nachrichten lieber gleich." }
           ] },
         { "id": "k3", "sagt": "Runde 3 – der Grund. Nadine Köhler rechnet genau.",

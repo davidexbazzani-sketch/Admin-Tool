@@ -1,0 +1,295 @@
+{
+  "einheiten": [
+    {
+      "id": "ruhe-2-01", "bereich": "ruhe", "stufe": 2, "nr": 1,
+      "titel": "Der Fahrplan: Woche, Vortag, Stunde",
+      "faehigkeiten": ["ruhe.vorbereitung", "ruhe.routine"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Die Bausteine sind unterschiedlich gut belegt: Wenn-Dann-Pläne gut, Wasser statt Extra-Kaffee und kurz bewegen gestützt, Vortag und frühes Ankommen sind Praxiswissen. Dass ein Fahrplan als Ganzes hilft, ist nicht eigens untersucht.",
+      "quellen": ["webb2012", "ebrahimi2019", "liu2024", "ensari2015", "praxis-ruhe"],
+      "aha": "Aufregung kommt nicht erst in der letzten Minute. Wer vorher festlegt, was in der Woche, am Vortag und in der Stunde davor passiert, entscheidet im Ernstfall nichts mehr neu – er ruft nur noch ab.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Wann wird meist festgelegt, was dir in der ersten Minute eines Vortrags zur Verfügung steht?", "optionen": ["in der Minute davor", "am Morgen des Tages", "schon in den Tagen davor"], "richtig": 2, "loesung": "Schon in den Tagen davor", "aufloesung": "In der letzten Minute kannst du nur abrufen, was vorbereitet ist: den ersten Satz, die Routine, den Plan für den Hänger. Geprobt, geschrieben und entschieden wird vorher." },
+        { "art": "karte", "text": "Ein Fahrplan teilt die Vorbereitung in Abschnitte, jeder mit eigener Aufgabe. Die Woche davor: laut proben, erster und letzter Satz, Pläne für Pannen. Der Vortag: einmal durch, dann Schluss. Die Stunde davor: Wasser statt Extra-Kaffee, kurz bewegen, früh da sein. Fünf Minuten und die letzte Minute: ausatmen, umdeuten, Startroutine. Danach: drei Fragen. Kein Abschnitt holt nach, was ein früherer liegen ließ." },
+        { "art": "zuordnen", "kopf": { "id": "ruhe-2-01-a", "faehigkeit": "ruhe.vorbereitung", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "In welchen Abschnitt des Fahrplans gehört das?",
+          "faecher": ["die Woche davor", "der Vortag", "die Stunde davor"],
+          "karten": [
+            { "text": "zweimal laut im Stehen proben", "fach": 0 },
+            { "text": "Pläne für die drei wahrscheinlichsten Pannen schreiben", "fach": 0 },
+            { "text": "Tasche packen, Weg und Technik klären", "fach": 1 },
+            { "text": "einmal ganz durch – danach nichts mehr ändern", "fach": 1 },
+            { "text": "zehn Minuten zügig gehen", "fach": 2 },
+            { "text": "Raum und Technik vor Ort ansehen", "fach": 2 }
+          ] },
+        { "art": "fahrplan", "anlass": "Dein nächster Termin, der dich aufregt – ein Beitrag, ein Gespräch, eine Prüfung." },
+        { "art": "auswahl", "kopf": { "id": "ruhe-2-01-b", "faehigkeit": "ruhe.vorbereitung", "stufe": 5, "kanal": "wissen" },
+          "frage": "Dein Fahrplan steht. Am Vortag fragt Tarek, ob ihr abends noch „schnell die Folien aufhübscht“. Was passt zum Fahrplan?",
+          "antworten": [
+            { "text": "„Heute nicht mehr. Ich gehe einmal durch und mache dann Schluss.“", "wert": 2, "warum": "Am Vortag wird abgerufen, nicht gebaut. Jede Änderung schafft eine Stelle, die du nicht geprobt hast." },
+            { "text": "„Gern, aber höchstens eine Stunde, danach ist wirklich Schluss.“", "wert": 1, "warum": "Begrenzt ist besser als offen. Trotzdem bringt jede Änderung am Vortag neue, ungeprobte Stellen." },
+            { "text": "„Klar – und dann stellen wir gleich den ganzen Aufbau um.“", "wert": 0, "warum": "Ein neuer Aufbau am Vortag wirft die Proben weg. Frisch wirkt, was sitzt." },
+            { "text": "„Lass uns die Nacht durcharbeiten, dann sind wir sicher.“", "wert": 0, "warum": "Müdigkeit und neue Stellen machen unsicherer, nicht sicherer." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "ruhe-2-01-c", "faehigkeit": "ruhe.routine", "stufe": 5, "kanal": "wissen" },
+          "frage": "Die letzte Stunde vor deinem Vortrag. Bring die Schritte in eine sinnvolle Reihenfolge.",
+          "eintraege": [
+            { "text": "Wasser einpacken und zu Fuß oder über die Treppe zum Raum.", "warum": "Ein wenig Bewegung baut Anspannung ab, Wasser hilft gegen den trockenen Mund." },
+            { "text": "Früh da sein, Technik und Platz ausprobieren.", "warum": "Solange der Raum noch leer ist – was du schon gesehen hast, kann dich nicht mehr überraschen." },
+            { "text": "Mit zwei Anwesenden ein paar Sätze wechseln.", "warum": "Läuft die Technik, ist der Kopf frei für Menschen – und du sprichst nicht mehr vor lauter Fremden." },
+            { "text": "Fünf Minuten davor: ausatmen, Umdeute-Satz, erster Satz halblaut.", "warum": "Jetzt bekommt der Körper seine Werkzeuge." },
+            { "text": "Die letzte Minute: deine Startroutine.", "warum": "Der feste Ablauf trägt dich in den Start." }
+          ] },
+        { "art": "mission", "ref": "ruhe-m-08" }
+      ],
+      "regel": "Jeder Abschnitt hat seine Aufgabe – dann ist die letzte Minute nur noch Abrufen.",
+      "merkkarten": [
+        { "id": "ruhe-2-01-m1", "frage": "In welche Abschnitte teilt sich der Fahrplan?", "antwort": "Woche davor, Vortag, Stunde davor, fünf Minuten und letzte Minute – und danach." },
+        { "id": "ruhe-2-01-m2", "frage": "Was gehört an den Vortag?", "antwort": "Einmal ganz durch, Tasche und Weg klären, dann Schluss – nichts mehr ändern." }
+      ],
+      "mission": "ruhe-m-08"
+    },
+    {
+      "id": "ruhe-2-02", "bereich": "ruhe", "stufe": 2, "nr": 2,
+      "titel": "Proben wie im Ernstfall",
+      "faehigkeiten": ["ruhe.vorbereitung", "ruhe.fokus"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Üben unter leichtem Druck verbessert die Leistung unter Druck – gezeigt im Sport und in anderen Leistungsbereichen, für Reden eine Übertragung. Programme gegen Redeangst mit viel Üben vor Publikum wirken deutlich. Üben in der Vorstellung hilft wenig, aber messbar. Die Studie zu Aufnahmen stammt aus der Therapie sozialer Angst und hatte keine Vergleichsgruppe.",
+      "quellen": ["low2021", "ebrahimi2019", "toth2020", "videofeedback", "praxis-ruhe"],
+      "aha": "Was du nur still geprobt hast, kennt dein Kopf, aber nicht dein Körper. Probe so, wie es später wird – im Stehen, laut, mit Uhr, vor jemandem. Dann ist die Aufregung im Ernstfall eine alte Bekannte.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Lena Brandt spricht in zwei Wochen beim Kundentag zehn Minuten über die neue Bestellabwicklung.", "schwach": "Sie liest den Text abends fünfmal still am Küchentisch. Er sitzt Wort für Wort.", "stark": "Sie spricht ihn zweimal im Stehen mit Uhr, einmal vor Tarek, der zweimal dazwischenfragt, und nimmt eine Fassung mit dem Handy auf.", "frage": "Welche Vorbereitung trägt Lena am Kundentag besser?", "unterschied": "Still sitzt der Text im Kopf, aber nicht im Körper. Stehen, Uhr, ein Zuhörer und Zwischenfragen holen ein Stück Ernstfall in die Probe – Lena erlebt die Aufregung vorher in klein und weiß, wie sie sich anfühlt." },
+        { "art": "studie", "frage": "Hilft es, unter Druck zu üben?", "aufbau": "Eine Meta-Analyse fasste Studien zusammen, in denen eine Gruppe unter künstlichem Druck übte – etwa mit Zuschauern, Bewertung oder Wettbewerb – und eine andere ohne. Danach wurden beide unter Druck geprüft.", "ergebnis": "Wer unter Druck geübt hatte, schnitt unter Druck im Mittel mittelstark besser ab – Anfänger wie Erfahrene.", "grenze": "Untersucht im Sport und in anderen Bereichen mit Leistungsdruck, nicht beim Reden. Meist wurde kurz nach dem Training geprüft.", "beleg": "B", "quellen": ["low2021"] },
+        { "art": "karte", "text": "Steigere die Probe in Stufen: laut im Stehen, dann mit Uhr, dann vor einer Person, dann mit kleinen Störungen – einer Zwischenfrage, einem Klingeln. Nimm einmal eine Aufnahme auf und schreib vorher auf, wie du glaubst zu wirken. Viele sind beim Ansehen überrascht, wie ruhig sie wirken. Im Kopf proben darfst du zusätzlich – es hilft ein wenig, ersetzt aber das laute Proben nicht." },
+        { "art": "rangfolge", "kopf": { "id": "ruhe-2-02-a", "faehigkeit": "ruhe.vorbereitung", "stufe": 4, "kanal": "wissen" },
+          "frage": "Welche Probe ist dem Ernstfall am nächsten? Von nah nach fern.",
+          "eintraege": [
+            { "text": "Im Stehen vor einer Person, mit Uhr und einer Zwischenfrage.", "warum": "Zuhörer, Zeit und Störung – fast wie im Ernstfall." },
+            { "text": "Laut im Stehen mit Uhr, allein.", "warum": "Körper und Zeit sind dabei, die Zuhörer fehlen." },
+            { "text": "Laut im Sitzen am Schreibtisch.", "warum": "Du hörst den Text, aber Stand und Blick fehlen." },
+            { "text": "Still im Kopf durchgehen.", "warum": "Hilft ein wenig – vom Ernstfall am weitesten weg." }
+          ] },
+        { "art": "buehne", "kopf": { "id": "ruhe-2-02-b", "faehigkeit": "ruhe.vorbereitung", "stufe": 5, "kanal": "koennen", "laut": true, "leise": "ruhe-v-0120" },
+          "auftrag": "Steh auf und sprich die erste Minute deines nächsten Beitrags – so, als säßen die Leute schon da.", "sekunden": 60, "publikum": "klein",
+          "stoerungen": ["Jemand fragt dazwischen: „Wie war das noch mal?“", "Ein Handy klingelt.", "Jemand schaut demonstrativ auf die Uhr."],
+          "pruefliste": ["im Stehen gesprochen", "nach der Störung kurz Pause gemacht", "den Faden wiedergefunden", "danach nicht schneller geworden"] },
+        { "art": "auswahl", "kopf": { "id": "ruhe-2-02-c", "faehigkeit": "ruhe.fokus", "stufe": 5, "kanal": "wissen" },
+          "frage": "Du hast deine Probe mit dem Handy aufgenommen. Wie gehst du vor, damit die Aufnahme dir hilft?",
+          "antworten": [
+            { "text": "Vorher notieren, wie du glaubst zu wirken – dann ansehen wie bei einer fremden Person und vergleichen.", "wert": 2, "warum": "Die Vorhersage macht sichtbar, wie viel strenger dein Bild im Kopf ist als das, was andere sehen." },
+            { "text": "Jede Stelle mit „äh“ und jeden Versprecher notieren.", "wert": 0, "tendenz": "nach_innen", "warum": "So suchst du nur Belege für dein schlechtes Bild – und findest sie." },
+            { "text": "Sie lieber nicht ansehen, das macht nur nervös.", "wert": 0, "tendenz": "flucht", "warum": "Viele wirken auf der Aufnahme besser, als sie dachten – genau das verpasst du." },
+            { "text": "Sie einer Vertrauensperson zeigen und fragen, was gut war.", "wert": 1, "warum": "Ein Blick von außen hilft. Mit deiner eigenen Vorhersage vorher lernst du noch mehr daraus." }
+          ] },
+        { "art": "experiment", "auftrag": "Probe deinen nächsten Beitrag einmal vor einer Person, die zweimal dazwischenfragen darf. Notier deine Anspannung bei der Probe – und später im Ernstfall.", "dauer": "woche", "nachfrage": "Fühlte sich die Aufregung im Ernstfall vertrauter an als sonst?" },
+        { "art": "reflexion", "frage": "Was ist für dich die größte Hürde beim lauten Proben – und wie machst du sie kleiner?" }
+      ],
+      "regel": "Proben wie im Ernstfall: stehend, laut, mit Uhr – und einmal vor jemandem.",
+      "merkkarten": [
+        { "id": "ruhe-2-02-m1", "frage": "Warum reicht stilles Proben nicht?", "antwort": "Der Text sitzt im Kopf – die Aufregung erlebst du erst laut, im Stehen, vor jemandem." },
+        { "id": "ruhe-2-02-m2", "frage": "Wie hilft eine Aufnahme am meisten?", "antwort": "Vorher aufschreiben, wie du glaubst zu wirken – dann ansehen wie bei einer fremden Person und vergleichen." },
+        { "id": "ruhe-2-02-m3", "frage": "Wie steigerst du die Probe?", "antwort": "Laut im Stehen, dann mit Uhr, vor einer Person, dann mit kleinen Störungen." }
+      ]
+    },
+    {
+      "id": "ruhe-2-03", "bereich": "ruhe", "stufe": 2, "nr": 3,
+      "titel": "Drei Pannen, drei Pläne",
+      "faehigkeiten": ["ruhe.mittendrin", "ruhe.vorbereitung"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Wenn-Dann-Pläne sind über viele Studien gut belegt, auch beim Steuern von Gefühlen. Welche Pannen bei dir die wahrscheinlichsten sind und welche Handlung passt, ist Praxiswissen.",
+      "quellen": ["webb2012", "gollwitzer2006", "praxis-ruhe"],
+      "aha": "Die meisten Pannen sind vorhersehbar: der Hänger, die Technik, die schwere Frage. Wer für jede einen Wenn-Dann-Satz hat, denkt im Ernstfall nicht lange nach – er tut, was er sich vorgenommen hat.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "ruhe-2-03-a", "faehigkeit": "ruhe.vorbereitung", "stufe": 4, "kanal": "wissen" },
+          "frage": "Welcher dieser Vorsätze hilft dir im Ernstfall am ehesten weiter?",
+          "antworten": [
+            { "text": "„Bei Pannen bleibe ich einfach gelassen.“", "wert": 0, "warum": "Ein Wunsch ohne Auslöser und ohne Handlung – im Ernstfall greift er nicht." },
+            { "text": "„Wenn der Beamer streikt, dann nehme ich die Karte und erzähle die drei Punkte frei.“", "wert": 2, "warum": "Klarer Auslöser, kleine Handlung, sofort machbar – so wirken solche Pläne." },
+            { "text": "„Wenn der Beamer streikt, dann sage ich Bescheid und warte, bis er läuft.“", "wert": 1, "warum": "Auslöser und Handlung stimmen. Nur füllt Warten keine Stille – besser: mit der Karte weiter." },
+            { "text": "„Hoffentlich geht diesmal nichts schief.“", "wert": 0, "warum": "Hoffnung ist kein Plan." }
+          ] },
+        { "art": "karte", "text": "Ein Wenn-Dann-Plan verknüpft einen Auslöser mit einer Handlung: „Wenn X, dann tue ich Y.“ Der Auslöser muss sofort erkennbar sein, die Handlung klein und in Sekunden machbar. Dann übernimmt der Plan, wenn der Kopf leer ist. Für einen Auftritt reichen meist drei Pläne. So findest du die Pannen: Was ist mir schon passiert? Was befürchte ich am meisten? Was kann an Technik, Raum oder Zeit hängen?" },
+        { "art": "studie", "frage": "Wirken Wenn-Dann-Pläne auch bei Gefühlen?", "aufbau": "Forscher fassten Studien zusammen, in denen Menschen Gefühle wie Angst, Ekel oder Ärger steuern sollten. Ein Teil bekam einen Wenn-Dann-Plan, andere keine Anleitung. Eine zweite Übersicht prüfte solche Pläne bei Zielen aller Art.", "ergebnis": "Mit Plan gelang das Steuern der Gefühle deutlich besser als ohne Anleitung. Bei Zielen aller Art erreichten Menschen mit Wenn-Dann-Plan ihr Ziel im Mittel deutlich öfter.", "grenze": "Meist Laborversuche mit kurzen Aufgaben. Für Reden selbst nicht eigens geprüft – die Wirkung über so viele verschiedene Ziele spricht für eine Übertragung.", "beleg": "A", "quellen": ["webb2012", "gollwitzer2006"] },
+        { "art": "zuordnen", "kopf": { "id": "ruhe-2-03-b", "faehigkeit": "ruhe.mittendrin", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Taugt der Plan – oder fehlt ihm etwas?",
+          "faecher": ["taugt", "Auslöser fehlt", "Handlung fehlt"],
+          "karten": [
+            { "text": "„Wenn mein Kopf leer ist, dann schaue ich auf die Karte.“", "fach": 0 },
+            { "text": "„Irgendwann atme ich dann einmal lang aus.“", "fach": 1 },
+            { "text": "„Wenn mir die Stimme wegbleibt, dann bleibe ich ruhig.“", "fach": 2 },
+            { "text": "„Wenn jemand dazwischenredet, dann nicke ich und sage: Gleich dazu.“", "fach": 0 },
+            { "text": "„Zwischendurch schaue ich auf meine Karte.“", "fach": 1 },
+            { "text": "„Wenn der Beamer ausfällt, dann wird es schon gehen.“", "fach": 2 }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "ruhe-2-03-c", "faehigkeit": "ruhe.vorbereitung", "stufe": 5, "kanal": "koennen" },
+          "plan": "Drei Pannen, drei Pläne", "anlass": "Dein nächster Beitrag oder dein nächstes wichtiges Gespräch.",
+          "felder": [
+            { "name": "Panne 1: schon einmal passiert", "hilfe": "Was ist dir bei so etwas schon passiert?" },
+            { "name": "Panne 2: am meisten befürchtet", "hilfe": "Wovor hast du am meisten Sorge?" },
+            { "name": "Panne 3: Technik, Raum oder Zeit", "hilfe": "Was kann außerhalb von dir hängen?" },
+            { "name": "Je ein Wenn-Dann-Satz", "hilfe": "Auslöser, den du sofort erkennst – Handlung, die in wenigen Sekunden geht." }
+          ],
+          "muster": ["Schon passiert: Faden weg → „Wenn der Faden weg ist, dann atme ich aus und sage den letzten Satz noch einmal.“ Befürchtet: rotes Gesicht → „Wenn mir warm wird, dann schaue ich zu Tarek und spreche weiter.“ Technik: Folien laden nicht → „Wenn die Folien nicht kommen, dann erzähle ich mit der Karte.“", "Schon passiert: Stimme zu leise → „Wenn jemand ‚lauter!‘ ruft, dann lächle ich und setze lauter neu an.“ Befürchtet: Frage, die ich nicht beantworten kann → „Wenn ich es nicht weiß, dann sage ich: Das kläre ich und schicke es Ihnen.“ Zeit: wir starten verspätet → „Wenn ich nur die halbe Zeit habe, dann lasse ich Punkt zwei weg.“"] },
+        { "art": "auswahl", "kopf": { "id": "ruhe-2-03-d", "faehigkeit": "ruhe.mittendrin", "stufe": 6, "kanal": "wissen" },
+          "frage": "Dein Plan: „Wenn der Faden weg ist, dann atme ich aus und sage den letzten Satz noch einmal.“ Im Ernstfall kommt danach trotzdem nichts. Was jetzt?",
+          "antworten": [
+            { "text": "Zum nächsten Stichwort springen: „Ich komme zum zweiten Punkt.“", "wert": 2, "warum": "Ein guter Plan hat eine zweite Stufe. Was dir fehlte, fällt dir oft später von selbst wieder ein." },
+            { "text": "Den letzten Satz so lange wiederholen, bis es weitergeht.", "wert": 0, "warum": "Das Wiederholen wird zur Schleife – die Pause wächst, statt dich weiterzubringen." },
+            { "text": "„Entschuldigung, der Faden ist weg.“ – kurz durchatmen, dann zum nächsten Punkt auf der Karte.", "wert": 1, "warum": "Ehrlich und brauchbar. Die Entschuldigung kannst du dir meist sparen." },
+            { "text": "Aufhören – der Plan hat nicht gegriffen, also ist es vorbei.", "wert": 0, "tendenz": "flucht", "warum": "Ein Plan, der einmal nicht reicht, ist ein Grund für eine zweite Stufe, nicht fürs Aufgeben." }
+          ] },
+        { "art": "experiment", "auftrag": "Sag deine drei Wenn-Dann-Sätze in dieser Woche jeden Tag einmal halblaut, etwa auf dem Weg zur Arbeit. So sind sie im Ernstfall schneller da.", "dauer": "woche", "nachfrage": "Welcher deiner Pläne kam im echten Moment zum Einsatz – und hat er gegriffen?" },
+        { "art": "reflexion", "frage": "Welche Panne fürchtest du am meisten – und steht dafür jetzt ein Plan mit zweiter Stufe?" }
+      ],
+      "regel": "Drei Pannen, drei Pläne – Auslöser sofort erkennbar, Handlung in Sekunden machbar.",
+      "merkkarten": [
+        { "id": "ruhe-2-03-m1", "frage": "Was braucht ein guter Wenn-Dann-Plan?", "antwort": "Einen Auslöser, den du sofort erkennst, und eine kleine Handlung, die sofort geht." },
+        { "id": "ruhe-2-03-m2", "frage": "Wie findest du deine drei Pannen?", "antwort": "Was ist schon passiert? Was befürchte ich am meisten? Was kann an Technik, Raum oder Zeit hängen?" }
+      ]
+    },
+    {
+      "id": "ruhe-2-04", "bereich": "ruhe", "stufe": 2, "nr": 4,
+      "titel": "Anspannen und loslassen",
+      "faehigkeiten": ["ruhe.koerper", "ruhe.atem"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Entspannungstraining über Wochen senkt Angst im Mittel mittelstark; die Meta-Analyse fasst mehrere Verfahren zusammen. Die Stufen von der langen zur schnellen Fassung stammen aus der angewandten Entspannung, die in kontrollierten Studien bei Ängsten gut abschnitt. Für die kurze Fassung direkt vor einem Auftritt gibt es keine eigenen Daten.",
+      "quellen": ["manzoni2008", "oest1987", "jacobson1929"],
+      "aha": "Loslassen ist eine Fertigkeit. Wer es über Wochen übt, kommt vom langen Durchgang zur schnellen Fassung – die geht im Ernstfall in einer halben Minute, im Stehen und ohne dass es jemand merkt.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Anspannen und Loslassen wirkt am besten, wenn man es erst im Ernstfall ausprobiert – dann ist es frisch.", "urteil": "falsch", "warum": "Entspannung wirkt als Training. Ungeübt spürst du den Unterschied zwischen fest und locker kaum – im Ernstfall greift dann wenig." },
+        { "art": "karte", "text": "Die angewandte Entspannung geht in Stufen. Erst spannst du Muskelgruppen nacheinander an und lässt los, etwa eine Viertelstunde. Dann lässt du nur noch los. Später verbindest du das Loslassen mit einem Wort beim Ausatmen, etwa „ruhig“. Am Ende reicht ein Atemzug mit dem Wort, und die Schultern sinken. Jede Stufe braucht etwa ein bis zwei Wochen Übung – fang also jetzt an, nicht erst kurz vor dem großen Termin." },
+        { "art": "anleitung", "titel": "Die Kurzfassung", "schritte": ["Tut dir eine Stelle weh, lass sie aus.", "Fäuste, Unterarme und Schultern fünf Sekunden fest.", "Mit dem Ausatmen alles fallen lassen, zehn Sekunden nachspüren.", "Zehen einkrallen, Oberschenkel fest, fünf Sekunden – dann mit dem Ausatmen loslassen.", "Zum Schluss: langsam ausatmen, innerlich „ruhig“, Schultern sinken lassen."], "sekunden": 60, "stumm": true },
+        { "art": "zuordnen", "kopf": { "id": "ruhe-2-04-a", "faehigkeit": "ruhe.koerper", "stufe": 4, "kanal": "wissen" },
+          "auftrag": "Welche Stufe der angewandten Entspannung ist das?",
+          "faecher": ["lange Fassung", "nur loslassen", "schnelle Fassung"],
+          "karten": [
+            { "text": "Muskelgruppen nacheinander anspannen und lösen, Gruppe für Gruppe", "fach": 0 },
+            { "text": "jeden Abend eine Viertelstunde im Liegen", "fach": 0 },
+            { "text": "Stirn, Kiefer und Schultern gehen lassen, ohne vorher anzuspannen", "fach": 1 },
+            { "text": "in Gedanken durch den Körper wandern und nur lösen, was fest ist", "fach": 1 },
+            { "text": "ein langsamer Atemzug mit dem Wort „ruhig“ – die Schultern sinken", "fach": 2 },
+            { "text": "vor der Tür in zwanzig Sekunden lockerlassen", "fach": 2 }
+          ] },
+        { "art": "atem", "werkzeug": "ausatmen",
+          "schritte": ["Langsam durch die Nase ein – zähl bis vier.", "Langsam und lang aus – zähl bis sieben, innerlich „ruhig“.", "Beim Ausatmen Schultern und Kiefer loslassen.", "Fünf Runden."],
+          "takt": { "ein": 4, "aus": 7, "runden": 5 },
+          "hinweis": "Wird dir schwummrig: aufhören und normal weiteratmen. Nicht am Steuer.", "messen": true },
+        { "art": "auswahl", "kopf": { "id": "ruhe-2-04-b", "faehigkeit": "ruhe.koerper", "stufe": 5, "kanal": "wissen" },
+          "frage": "Carla Demir hat sechs Wochen lang geübt: erst die lange Fassung, dann nur loslassen, zuletzt mit ihrem Wort „ruhig“ beim Ausatmen. Morgen präsentiert sie. Was nimmt sie für die Minute vor der Tür?",
+          "antworten": [
+            { "text": "Die schnelle Fassung: langsam ausatmen, ihr Wort, Schultern sinken lassen.", "wert": 2, "warum": "Dafür hat sie geübt: Das Wort beim Ausatmen kennt ihr Körper jetzt – vor der Tür reicht ein Atemzug damit." },
+            { "text": "Die lange Fassung im Flur, eine Viertelstunde, so wie am Anfang jeden Abend – das Gewohnte gibt ihr schließlich Sicherheit.", "wert": 0, "warum": "Zu lang und im Flur kaum machbar. Die Wochen waren dafür da, dass jetzt ein Atemzug reicht." },
+            { "text": "Einmal Fäuste und Schultern fest, dann loslassen.", "wert": 1, "warum": "Gut und schnell. Mit ihrem geübten Wort beim Ausatmen nutzt sie noch mehr von dem, was sie aufgebaut hat." },
+            { "text": "Gar nichts – nach sechs Wochen sollte die Aufregung verschwunden sein.", "wert": 0, "warum": "Übung senkt die Anspannung, sie verschwindet nicht. Gerade jetzt holt Carla ab, was sie geübt hat." }
+          ] },
+        { "art": "experiment", "auftrag": "Übe sieben Tage lang jeden Abend die Kurzfassung aus Anspannen und Loslassen und sag beim Loslassen innerlich dein Wort. So bereitest du die nächste Stufe vor. Notier jedes Mal deine Anspannung vorher und nachher.", "dauer": "woche", "nachfrage": "Kam das Loslassen am Ende der Woche schneller als am ersten Tag?" },
+        { "art": "reflexion", "frage": "Wo sitzt deine Anspannung zuerst – Schultern, Kiefer, Hände, Bauch? Dort fängst du beim Loslassen an." }
+      ],
+      "regel": "Loslassen üben, solange es ruhig ist – dann trägt die Kurzfassung im Ernstfall.",
+      "merkkarten": [
+        { "id": "ruhe-2-04-m1", "frage": "Warum übst du Anspannen und Loslassen vorher?", "antwort": "Entspannung wirkt als Training über Wochen – ungeübt greift sie im Ernstfall wenig." },
+        { "id": "ruhe-2-04-m2", "frage": "Wie geht die schnelle Fassung?", "antwort": "Wenn die Stufen davor sitzen: langsam ausatmen, innerlich dein Wort, die Schultern sinken lassen – in einer halben Minute." }
+      ]
+    },
+    {
+      "id": "ruhe-2-05", "bereich": "ruhe", "stufe": 2, "nr": 5,
+      "titel": "Hände, Stimme, Röte: Zeichen für Zeichen",
+      "faehigkeiten": ["ruhe.koerper", "ruhe.fokus"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Für Röte, Zittern und Schwitzen gibt es klinische Studien zum Blick nach außen. Die Handgriffe für Hände, Stimme und Mund sind Praxiswissen. Dass Verstecken die Angst auf Dauer erhält, ist Teil eines gut gestützten Modells der sozialen Angst; wie stark das im Einzelfall wirkt, ist uneinheitlich untersucht.",
+      "quellen": ["mulkens2001", "boegels2006", "clarkwells1995", "mcmanus2008", "praxis-ruhe"],
+      "aha": "Jedes Zeichen hat seinen eigenen Handgriff. Und für alle gilt: Der Handgriff hilft dir beim Sprechen – nicht beim Verstecken. Was nur verbirgt, hält die Angst wach.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Menschen mit starker Angst vor dem Erröten übten, den Blick auf die Aufgabe zu richten statt auf ihr Gesicht. Was änderte sich?", "optionen": ["Sie wurden seltener rot.", "Die Angst sank – rot wurden sie im Test ähnlich stark.", "Es änderte sich nichts."], "richtig": 1, "loesung": "Die Angst sank, die Röte blieb", "aufloesung": "Die Angst hing weniger an der Farbe als an der Aufmerksamkeit darauf. Auch Übungen im Aushalten senkten die Angst; das Erröten selbst blieb. Bei Zittern und Schwitzen zeigte sich Ähnliches: Wer aufhört, das Zeichen zu beobachten, hat weniger Angst davor." },
+        { "art": "karte", "titel": "Handgriff oder Versteck?", "text": "Ein Handgriff hilft dir, deine Aufgabe zu machen: Wasser gegen den trockenen Mund, eine Karte, die du gut lesen kannst, der erste Satz etwas lauter. Ein Versteck soll das Zeichen unsichtbar machen: das Glas umklammern, damit keiner das Zittern sieht, das Gesicht wegdrehen. Verstecke kosten Aufmerksamkeit, fallen oft mehr auf als das Zeichen – und du erlebst nie, dass es auch ohne geht." },
+        { "art": "zuordnen", "kopf": { "id": "ruhe-2-05-a", "faehigkeit": "ruhe.koerper", "stufe": 5, "kanal": "wissen" },
+          "auftrag": "Handgriff oder Versteck?",
+          "faecher": ["Handgriff", "Versteck"],
+          "karten": [
+            { "text": "vor dem ersten Satz einen Schluck Wasser", "fach": 0 },
+            { "text": "das Glas den ganzen Vortrag umklammern, damit niemand das Zittern sieht", "fach": 1 },
+            { "text": "Karteikarten, weil du sie leichter lesen kannst", "fach": 0 },
+            { "text": "die Hände hinter dem Rücken verstecken", "fach": 1 },
+            { "text": "den ersten Satz etwas lauter und langsamer sprechen", "fach": 0 },
+            { "text": "nur noch leise sprechen, damit das Zittern in der Stimme nicht auffällt", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ruhe-2-05-b", "faehigkeit": "ruhe.koerper", "stufe": 5, "kanal": "wissen" },
+          "frage": "Beim Vorlesen des Protokolls in der Vereinsversammlung wird deine Stimme dünn und zittert leicht. Was hilft am ehesten?",
+          "antworten": [
+            { "text": "Das Blatt näher ans Gesicht halten und leiser lesen, damit es keinem auffällt.", "wert": 0, "tendenz": "kruecke", "warum": "Ein Versteck: Leiser macht die Stimme meist noch dünner, und du hörst sie umso genauer." },
+            { "text": "Ausatmen, den nächsten Satz etwas lauter und langsamer, Blick kurz in den Raum.", "wert": 2, "warum": "Mehr Luft und Zeit stützen die Stimme, und der Blick holt dich aus dem Lauschen auf dich selbst." },
+            { "text": "Kurz räuspern und normal weiterlesen.", "wert": 1, "warum": "Geht einmal. Ausatmen und etwas lauter stützen die Stimme verlässlicher als Räuspern." },
+            { "text": "Erklären, dass du leider etwas erkältet bist und deshalb heute so heiser klingst.", "wert": 0, "tendenz": "kruecke", "warum": "Eine kleine Ausrede lenkt erst recht auf die Stimme – und du erlebst nicht, dass es auch so geht." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ruhe-2-05-c", "faehigkeit": "ruhe.fokus", "stufe": 6, "kanal": "koennen" },
+          "auftrag": "Mach aus dem Beobachter-Gedanken einen Satz, der dich zur Aufgabe bringt.",
+          "vorlage": "„Jetzt werde ich rot. Alle sehen es. Das muss ich irgendwie verbergen.“",
+          "kriterien": ["nimmt das Zeichen zur Kenntnis, ohne dagegen anzukämpfen", "lenkt auf die Aufgabe oder die Zuhörer", "kurz genug für den Moment"],
+          "muster": ["„Mir wird warm. Egal – nächster Punkt, Blick zu Lena.“", "„Rot darf sein. Was sollen sie am Ende wissen?“", "„Da ist die Wärme. Ich bleibe bei meiner Frage an die Runde.“"] },
+        { "art": "rangfolge", "kopf": { "id": "ruhe-2-05-d", "faehigkeit": "ruhe.koerper", "stufe": 6, "kanal": "wissen" },
+          "frage": "Deine Hände zittern sichtbar, während du deinen Plan an der Pinnwand erklärst. Was hilft am meisten? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "Die Hände etwas tun lassen: auf den Plan zeigen, ruhig gestikulieren.", "warum": "Die Hände arbeiten für deine Sache – das Zittern läuft nebenher und fällt kaum auf." },
+            { "text": "Einmal Fäuste fest und loslassen, dann weiter.", "warum": "Ein guter Handgriff, kurz und unauffällig." },
+            { "text": "Immer wieder auf die Hände schauen, ob es nachlässt.", "warum": "Der Scheinwerfer auf das Zeichen macht es größer – und dich unruhiger." }
+          ] },
+        { "art": "experiment", "auftrag": "Wähl das Zeichen, das dich am meisten stört, und leg dir einen Handgriff dafür zurecht. Lass in der nächsten Runde ein Versteck bewusst weg – etwa das Glas, das du sonst umklammerst.", "dauer": "woche", "nachfrage": "Was ist passiert, als du das Versteck weggelassen hast – und was hattest du befürchtet?" },
+        { "art": "reflexion", "frage": "Welches Zeichen stört dich am meisten – und was ist dein Handgriff dafür?" }
+      ],
+      "regel": "Handgriff statt Versteck: Was dir beim Sprechen hilft, bleibt – was nur verbirgt, geht.",
+      "merkkarten": [
+        { "id": "ruhe-2-05-m1", "frage": "Was unterscheidet Handgriff und Versteck?", "antwort": "Ein Handgriff hilft dir beim Sprechen. Ein Versteck soll das Zeichen verbergen – und hält die Angst wach." },
+        { "id": "ruhe-2-05-m2", "frage": "Was hilft bei dünner Stimme?", "antwort": "Ausatmen, dann den nächsten Satz etwas lauter und langsamer." },
+        { "id": "ruhe-2-05-m3", "frage": "Was hilft bei Röte?", "antwort": "Nicht dagegen ankämpfen, Blick auf die Aufgabe – die Angst hängt mehr an der Aufmerksamkeit als an der Farbe." }
+      ]
+    },
+    {
+      "id": "ruhe-2-06", "bereich": "ruhe", "stufe": 2, "nr": 6,
+      "titel": "Mittendrin: wenn es dich erwischt",
+      "faehigkeiten": ["ruhe.mittendrin", "ruhe.atem", "ruhe.umdeuten"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass die Aufregung im Lauf einer Rede meist sinkt und andere viel weniger bemerken, als man glaubt, ist gestützt; Wenn-Dann-Pläne sind gut belegt. Die Handgriffe für den Moment sind Praxiswissen. Wie viel ein einzelner Ausatmer mitten im Sprechen bringt, ist nicht untersucht.",
+      "quellen": ["behnke2004", "savitsky2003", "webb2012", "praxis-ruhe"],
+      "aha": "Wellen mittendrin haben Auslöser – wer seine kennt, erkennt sie früher. Eine Welle ist kein Rückfall: Sie steigt und sinkt wieder, wenn du weitermachst. Satz zu Ende, Pause, lang aus – dann weiter.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Carla Demir ist mitten in ihrer Präsentation, als die Geschäftsführerin hereinkommt und sich in die erste Reihe setzt. Carlas Herz macht einen Satz.", "schwach": "Carla spricht schneller, überspringt eine Folie und entschuldigt sich zweimal.", "stark": "Carla beendet ihren Satz, macht eine kurze Pause, atmet langsam und lang aus, nickt der Geschäftsführerin zu und sagt: „Wir sind gerade bei den Kosten.“", "frage": "Was macht der zweite Weg anders?", "unterschied": "Carla lässt die Welle kommen, ohne vor ihr davonzulaufen. Pause und Ausatmen geben dem Körper Zeit, der kurze Satz holt die Neue ins Thema – und Carla zurück in ihren Faden." },
+        { "art": "karte", "text": "Wellen mittendrin haben Auslöser: eine Zwischenfrage, ein strenges Gesicht, ein Versprecher, jemand kommt herein. Die Aufregung steigt dann noch einmal – und sinkt wieder, wenn du weitermachst. Was hilft: erst den Satz zu Ende, dann Pause, langsam und lang ausatmen, Füße spüren. Dann der Kopf: dein Umdeute-Satz in drei Wörtern, etwa „Energie, gut so“, und der nächste Punkt. Langsamer weiter, nicht schneller." },
+        { "art": "rangfolge", "kopf": { "id": "ruhe-2-06-a", "faehigkeit": "ruhe.mittendrin", "stufe": 5, "kanal": "wissen" },
+          "frage": "Eine Welle Herzklopfen mitten im Vortrag. Bring die Schritte in die hilfreiche Reihenfolge.",
+          "eintraege": [
+            { "text": "Den angefangenen Satz zu Ende sprechen.", "warum": "So bleibt der Faden heil, und die Pause wirkt gewollt." },
+            { "text": "Pause und einmal langsam und lang ausatmen.", "warum": "Erst bekommt der Körper Zeit." },
+            { "text": "Innerlich: „Energie. Gut so.“", "warum": "Dann gibt der Kopf der Welle eine Richtung." },
+            { "text": "Blick zu einer Person – nächster Punkt, etwas langsamer.", "warum": "Der Blick nach außen bringt dich zurück zur Aufgabe." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ruhe-2-06-b", "faehigkeit": "ruhe.umdeuten", "stufe": 5, "kanal": "wissen" },
+          "frage": "Mitten in deinem Bericht rast dein Herz wieder, obwohl es eben schon besser war. Welcher Gedanke hilft?",
+          "antworten": [
+            { "text": "„Jetzt kommt alles zurück – der gute Anfang war wohl nur Glück, und gleich merken es alle.“", "wert": 0, "tendenz": "katastrophe", "warum": "Eine Welle ist kein Rückfall. Sie gehört zum Verlauf und sinkt wieder." },
+            { "text": "„Eine Welle. Die kenne ich – sie geht auch wieder.“", "wert": 2, "warum": "Du benennst, was passiert, und weißt, wie es weitergeht. Das nimmt der Welle den Schrecken." },
+            { "text": "„Ich darf mir nichts anmerken lassen.“", "wert": 0, "tendenz": "unterdruecken", "warum": "Gegen das Gefühl zu arbeiten macht es eher lauter." },
+            { "text": "„Gleich bin ich fertig, das halte ich noch aus.“", "wert": 1, "warum": "Trägt dich durch, zählt aber nur die Minuten. Benennen und weitermachen gibt mehr Halt." }
+          ] },
+        { "art": "dialog", "kopf": { "id": "ruhe-2-06-c", "faehigkeit": "ruhe.mittendrin", "stufe": 6, "kanal": "wissen" },
+          "gespraech": { "titel": "Die Frage von der Seite", "figur": "Dr. Henrik Albers", "lage": "Du stellst in der Abteilungsrunde die Zahlen des Quartals vor. Es läuft gut – bis Dr. Albers eine Frage stellt.", "start": "k1", "knoten": [
+            { "id": "k1", "sagt": "Dr. Albers: „Die Zahl auf Folie fünf – woher kommt die?“ Du spürst, wie dir das Blut ins Gesicht schießt.", "wahl": [
+              { "text": "Pause, langsam ausatmen, auf die Folie schauen: „Die kommt aus der Lagerliste vom Oktober.“", "wert": 2, "weiter": "k2", "rueck": "Erst der Körper, dann die Antwort. Die Röte darf bleiben – du bist bei der Frage." },
+              { "text": "Hastig: „Äh, die ist, also, die müsste aus … Moment, sorry, ich schau gleich nach, das ist jetzt blöd …“", "wert": 0, "tendenz": "flucht", "weiter": "k1b", "rueck": "Die Hast macht aus einer einfachen Frage einen Hänger." },
+              { "text": "„Die genaue Quelle sehe ich nach und schicke sie Ihnen heute.“", "wert": 1, "weiter": "k2", "rueck": "Ehrlich und sachlich. Du wusstest es aber – eine Pause hätte gereicht, um es gleich zu sagen." }
+            ] },
+            { "id": "k1b", "sagt": "Dr. Albers: „Ganz in Ruhe.“", "wahl": [
+              { "text": "Ausatmen, Blick auf die Folie: „Aus der Lagerliste vom Oktober.“", "wert": 2, "weiter": "k2", "rueck": "Sein Satz ist eine Einladung zur Pause – du nimmst sie an." }
+            ] },
+            { "id": "k2", "sagt": "Er nickt. Du weißt nicht mehr, wo du vor der Frage warst.", "wahl": [
+              { "text": "„Damit zurück zu den Kosten.“ – Blick aufs Stichwort, etwas langsamer weiter.", "wert": 2, "weiter": "ende1", "rueck": "Ein Satz zurück zum Faden – mehr braucht es nicht." },
+              { "text": "Noch einmal von vorn anfangen, damit alle wieder drin sind.", "wert": 0, "weiter": "ende1", "rueck": "Gut gemeint, kostet aber Zeit und Aufmerksamkeit. Ein kurzer Satz zurück zum Faden reicht." }
+            ] },
+            { "id": "ende1", "sagt": "Die Runde folgt dir wieder.", "ende": "Erst der Körper, dann die Antwort, dann ein Satz zurück zum Faden. Die Röte war da – und sie hat nichts entschieden." }
+          ], "prinzipien": ["erst ausatmen, dann antworten", "Röte darf bleiben", "ein Satz zurück zum Faden"] } },
+        { "art": "wenndann", "anlass": "Wellen mittendrin", "wenn": ["Wenn jemand Wichtiges hereinkommt,", "Wenn mir mitten im Satz warm wird,", "Wenn mich eine Frage aus dem Konzept bringt,"], "dann": ["… beende ich meinen Satz und sage kurz, wo wir gerade sind.", "… schaue ich zu einer Person und spreche ruhig weiter.", "… atme ich langsam aus und sage: „Lassen Sie mich kurz sortieren.“"] },
+        { "art": "mission", "ref": "ruhe-m-07" }
+      ],
+      "regel": "Eine Welle ist kein Rückfall: Satz zu Ende, Pause, lang aus – langsamer weiter.",
+      "merkkarten": [
+        { "id": "ruhe-2-06-m1", "frage": "Was tust du bei einer Welle mittendrin zuerst?", "antwort": "Den Satz zu Ende, dann Pause und langsam und lang ausatmen – erst danach der Kopf." },
+        { "id": "ruhe-2-06-m2", "frage": "Was bedeutet eine Welle mittendrin?", "antwort": "Keinen Rückfall: Die Aufregung steigt bei einem Auslöser noch einmal und sinkt wieder, wenn du weitermachst." },
+        { "id": "ruhe-2-06-m3", "frage": "Welche Auslöser bringen typische Wellen mittendrin?", "antwort": "Eine Zwischenfrage, ein strenges Gesicht, ein Versprecher, jemand kommt herein – wer seine kennt, erkennt die Welle früher." }
+      ],
+      "mission": "ruhe-m-07"
+    }
+  ]
+}

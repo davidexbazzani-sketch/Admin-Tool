@@ -1,0 +1,616 @@
+{
+  "einheiten": [
+    {
+      "id": "gespraech-3-01",
+      "bereich": "gespraech",
+      "stufe": 3,
+      "nr": 1,
+      "titel": "Die vier Zerstörer und ihre Gegenmittel",
+      "faehigkeiten": ["gespraech.konflikt", "gespraech.ich"],
+      "dauerMin": 7,
+      "beleg": "B",
+      "belegHinweis": "Die vier Muster stammen aus Beobachtungsstudien mit Paaren; ein harter Einstieg sagte dort Trennungen voraus. Die berühmten Vorhersage-Quoten sind umstritten, und für Freunde und Kollegen ist es eine Übertragung.",
+      "quellen": ["gottman1999", "carrere1999"],
+      "aha": "Nicht ob ihr streitet, entscheidet, sondern wie. Vier Muster vergiften jeden Streit – und für jedes gibt es ein Gegenmittel, das du mitten im Streit einsetzen kannst.",
+      "schritte": [
+        {
+          "art": "mythos",
+          "aussage": "Wer oft streitet, hat eine schlechte Beziehung.",
+          "urteil": "falsch",
+          "warum": "In der Paarforschung zählte weniger, wie oft gestritten wurde, sondern wie: Ein harter Einstieg, Verachtung und Mauern sagten mehr voraus als die Zahl der Streits. Auch viele stabile Paare streiten lebhaft."
+        },
+        {
+          "art": "karte",
+          "text": "Die vier Zerstörer und ihre Gegenmittel: Kritik am Charakter („Du bist so egoistisch“) → eine Beschwerde über ein Verhalten mit Wunsch. Verachtung (Spott, Augenrollen) → Wertschätzung zeigen, auch im Streit. Rechtfertigung → den eigenen Anteil sehen, und sei er klein. Mauern (innerlich abschalten) → eine Pause ansagen, mit Uhrzeit für die Rückkehr. Dazu Reparaturversuche: „Moment, das kam falsch raus.“"
+        },
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-3-01-a", "faehigkeit": "gespraech.konflikt", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Zerstörer oder Gegenmittel?",
+          "faecher": ["Zerstörer", "Gegenmittel"],
+          "karten": [
+            { "text": "„Na klar, der Herr Perfekt hat wieder alles im Griff.“", "fach": 0 },
+            { "text": "„Stimmt, den Termin hab ich verschwitzt. Das ist mein Teil.“", "fach": 1 },
+            { "text": "Arme verschränkt, Blick aufs Handy, keine Antwort mehr.", "fach": 0 },
+            { "text": "„Ich bin gerade zu geladen. Lass uns um acht weiterreden.“", "fach": 1 },
+            { "text": "„Du denkst halt immer nur an dich.“", "fach": 0 },
+            { "text": "„Mir hat gefehlt, dass du Bescheid sagst. Schreibst du künftig kurz?“", "fach": 1 },
+            { "text": "„Ich konnte gar nicht anders, bei dem, was du vorher gemacht hast.“", "fach": 0 },
+            { "text": "„Moment – das kam schärfer raus, als ich es meinte.“", "fach": 1 }
+          ]
+        },
+        {
+          "art": "umformulieren",
+          "kopf": { "id": "gespraech-3-01-b", "faehigkeit": "gespraech.ich", "stufe": 7, "kanal": "koennen" },
+          "auftrag": "Dein Mitbewohner sagt: „Du hast schon wieder den Müll nicht runtergebracht.“ Mach aus der Rechtfertigung eine Antwort, die deinen Anteil anerkennt.",
+          "vorlage": "„Ich hatte diese Woche drei Spätschichten, wann hätte ich das denn bitte machen sollen?“",
+          "kriterien": ["erkennt den eigenen Anteil an", "ohne Gegenvorwurf", "darf einen Wunsch oder ein Angebot enthalten"],
+          "muster": [
+            "„Stimmt, der Müll ist liegen geblieben. Ich bring ihn gleich runter.“",
+            "„Hast recht, das war meine Woche. Die Spätschichten haben's mir schwer gemacht – tauschen wir, wenn's wieder so kommt?“",
+            "„Mein Fehler. Ich stell mir für nächste Woche eine Erinnerung.“"
+          ]
+        },
+        {
+          "art": "dialog",
+          "kopf": { "id": "gespraech-3-01-c", "faehigkeit": "gespraech.konflikt", "stufe": 7, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Das Augenrollen",
+            "figur": "Sven",
+            "lage": "Ihr plant zu viert eine Hüttenwoche. Du schlägst vor, die Kosten nach Nächten aufzuteilen. Sven rollt mit den Augen.",
+            "start": "k1",
+            "knoten": [
+              {
+                "id": "k1",
+                "sagt": "Sven: „Na klar. Der Buchhalter hat gesprochen. Wollen wir auch noch die Brötchen einzeln abrechnen?“",
+                "wahl": [
+                  {
+                    "text": "„Besser als dein Chaos vom letzten Mal, wo am Ende keiner mehr wusste, wer eigentlich was bezahlt hat.“",
+                    "wert": 0,
+                    "tendenz": "angreifen",
+                    "weiter": "k2b",
+                    "rueck": "Verachtung mit Verachtung beantwortet. Jetzt geht es nicht mehr um die Hütte."
+                  },
+                  {
+                    "text": "„Autsch, das kam spitz an. Mir geht's darum, dass es für alle fair ist – was stört dich an der Idee?“",
+                    "wert": 2,
+                    "weiter": "k2",
+                    "rueck": "Den Spott benannt, ohne zurückzuschlagen, und nach seinem Interesse gefragt."
+                  },
+                  {
+                    "text": "Nichts mehr sagen und aufs Handy schauen.",
+                    "wert": 0,
+                    "tendenz": "mauern",
+                    "weiter": "k2b",
+                    "rueck": "Mauern. Der Ärger bleibt in dir, und die Planung geht ohne dich weiter."
+                  }
+                ]
+              },
+              {
+                "id": "k2",
+                "sagt": "Sven, etwas ruhiger: „Ich find das kleinlich. Ich komm eh nur drei Nächte, und dann zahl ich weniger – da komm ich mir blöd vor.“",
+                "wahl": [
+                  {
+                    "text": "„Ah, dir ist es unangenehm, weniger zu zahlen. Mir war wichtig, dass keiner draufzahlt. Wie wär's: Nächte teilen, Einkauf zusammen?“",
+                    "wert": 2,
+                    "weiter": "ende1",
+                    "rueck": "Gespiegelt, dein Interesse genannt, ein Vorschlag für beide."
+                  },
+                  {
+                    "text": "„Dann zahl doch einfach freiwillig mehr, wenn du dich blöd fühlst.“",
+                    "wert": 0,
+                    "tendenz": "abwerten",
+                    "weiter": "ende2",
+                    "rueck": "Sein Gefühl wird abgetan. Die Stimmung bleibt gereizt."
+                  }
+                ]
+              },
+              {
+                "id": "k2b",
+                "sagt": "Die anderen schauen betreten. Sven: „Ach, vergiss es. Macht doch, was ihr wollt.“",
+                "wahl": [
+                  {
+                    "text": "„Stopp, das lief gerade schief – auch von mir. Was hat dich an der Idee gestört?“",
+                    "wert": 2,
+                    "weiter": "k2",
+                    "rueck": "Ein Reparaturversuch mit eigenem Anteil. Damit öffnet sich das Gespräch wieder."
+                  },
+                  {
+                    "text": "„Gut, dann machen wir's eben so, wie ich gesagt habe. Wer nicht mitreden will, muss halt mitzahlen.“",
+                    "wert": 0,
+                    "tendenz": "position",
+                    "weiter": "ende2",
+                    "rueck": "Gewonnen auf dem Papier, verloren in der Stimmung."
+                  }
+                ]
+              },
+              {
+                "id": "ende1",
+                "sagt": "Sven: „Okay, das passt. Und sorry für den Buchhalter.“",
+                "ende": "Ob gleich oder nach einem Reparaturversuch: den Spott nicht weiter erwidert, nach dem Wozu gefragt und einen Vorschlag für beide gemacht – so wird aus Verachtung wieder ein Gespräch."
+              },
+              {
+                "id": "ende2",
+                "sagt": "Die Planung geht weiter, aber zwischen dir und Sven bleibt es kühl.",
+                "ende": "Kein Drama – aber ein Zerstörer hat gewirkt: Spott, Abwerten oder Rechthaben. Beim nächsten Mal: nicht erwidern, sein Gefühl ernst nehmen, einen Vorschlag für beide machen."
+              }
+            ],
+            "prinzipien": ["Verachtung nicht erwidern", "den Spott ruhig benennen", "einen Reparaturversuch wagen", "nach dem Interesse fragen"]
+          }
+        },
+        {
+          "art": "reflexion",
+          "frage": "Welcher der vier Zerstörer rutscht dir im Streit am ehesten raus? Schreib das Gegenmittel als Satz auf, den du dann sagen willst.",
+          "insBuch": "saetze"
+        },
+        {
+          "art": "karte",
+          "titel": "Wenn Streit Angst macht",
+          "text": "Diese Gegenmittel gelten für Streit unter Menschen, die einander nichts Böses wollen. Hast du Angst vor deinem Partner, deiner Partnerin oder jemandem in deiner Familie, wirst du bedroht, kontrolliert oder verletzt, dann liegt es nicht an deinen Worten. Dann ist nicht ein besserer Satz gefragt, sondern Unterstützung – auch anonym."
+        },
+        { "art": "fachhilfe", "thema": "belaestigung" }
+      ],
+      "regel": "Beschwerde statt Etikett, Respekt statt Spott, Anteil statt Ausrede, Pause statt Mauer.",
+      "merkkarten": [
+        {
+          "id": "gespraech-3-01-m1",
+          "frage": "Die vier Zerstörer?",
+          "antwort": "Kritik am Charakter, Verachtung, Rechtfertigung, Mauern."
+        },
+        {
+          "id": "gespraech-3-01-m2",
+          "frage": "Das Gegenmittel gegen Mauern?",
+          "antwort": "Eine Pause ansagen – mit Uhrzeit, wann ihr weiterredet."
+        },
+        {
+          "id": "gespraech-3-01-m3",
+          "frage": "Was ist ein Reparaturversuch?",
+          "antwort": "Ein kleines Signal mitten im Streit: „Moment, das kam falsch raus.“"
+        }
+      ]
+    },
+    {
+      "id": "gespraech-3-02",
+      "bereich": "gespraech",
+      "stufe": 3,
+      "nr": 2,
+      "titel": "Vier Ohren: hören, was gemeint ist",
+      "faehigkeiten": ["gespraech.zuhoeren", "gespraech.fragen"],
+      "dauerMin": 7,
+      "beleg": "D",
+      "belegHinweis": "Die vier Seiten einer Nachricht sind ein Denkmodell von Schulz von Thun, nicht empirisch geprüft. Dass Nachfragen treffsicherer macht als Raten, ist dagegen in Experimenten gestützt.",
+      "quellen": ["schulzvonthun1981", "watzlawick1967", "eyal2018"],
+      "aha": "Jeder Satz hat vier Seiten – und du hörst nicht alle gleich laut. Wer weiß, auf welchem Ohr er gerade hört, kann nachfragen, statt sich zu ärgern.",
+      "schritte": [
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-3-02-a", "faehigkeit": "gespraech.zuhoeren", "stufe": 6, "kanal": "wissen" },
+          "frage": "Miriam, beim Blick in die Kaffeeküche: „Die Spülmaschine ist ja schon wieder voll.“ Was kann sie damit meinen?",
+          "antworten": [
+            {
+              "text": "Nur eine Feststellung – mehr steckt nicht dahinter.",
+              "wert": 1,
+              "warum": "Möglich. Aber du hörst dann nur das Sachohr – und überhörst vielleicht eine Bitte."
+            },
+            {
+              "text": "Sie wirft dir vor, dass du nie ausräumst.",
+              "wert": 0,
+              "tendenz": "gedankenlesen",
+              "warum": "Das ist das Beziehungsohr auf Anschlag. Vielleicht stimmt es – du weißt es aber nicht."
+            },
+            {
+              "text": "Alles Mögliche: eine Feststellung, ihr Ärger, eine Spitze, eine Bitte. Was genau, verrät erst eine Nachfrage.",
+              "wert": 2,
+              "warum": "Genau: Sache, Selbstkundgabe, Beziehung, Appell. Welche Seite gemeint ist, klärst du durch Fragen, nicht durch Raten."
+            }
+          ]
+        },
+        {
+          "art": "karte",
+          "text": "Ein Satz sagt etwas über die Sache, verrät etwas über den Sprecher, zeigt, wie er zu dir steht, und will etwas erreichen. Viele hören vor allem auf einem Ohr: Wer auf dem Beziehungsohr lauscht, fühlt sich schnell angegriffen. Wer nur das Sachohr hat, überhört Bitten. Raten hilft nicht – frag nach: „Wie meinst du das?“, „Ist das eine Bitte an mich?“, „Hör ich da Ärger raus?“"
+        },
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-3-02-b", "faehigkeit": "gespraech.zuhoeren", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Dr. Albers sagt: „Der Bericht kam erst um halb sechs.“ Welche Seite hört man in diesen Deutungen?",
+          "faecher": ["Sache", "Selbstkundgabe", "Beziehung", "Appell"],
+          "karten": [
+            { "text": "„Der Bericht ist um 17:30 Uhr eingegangen.“", "fach": 0 },
+            { "text": "„Ich war unter Zeitdruck und bin nervös geworden.“", "fach": 1 },
+            { "text": "„Auf Sie kann ich mich nicht verlassen.“", "fach": 2 },
+            { "text": "„Schicken Sie ihn künftig früher.“", "fach": 3 },
+            { "text": "„Ich ärgere mich, weil ich ihn heute noch durchsehen wollte.“", "fach": 1 },
+            { "text": "„Ich traue Ihnen Besseres zu.“", "fach": 2 },
+            { "text": "„Sagen Sie Bescheid, wenn es später wird.“", "fach": 3 },
+            { "text": "„Die Abgabe lag nach der Frist.“", "fach": 0 }
+          ]
+        },
+        {
+          "art": "spiegeln",
+          "kopf": { "id": "gespraech-3-02-c", "faehigkeit": "gespraech.zuhoeren", "stufe": 7, "kanal": "koennen" },
+          "von": "Tante Renate, beim Kaffee",
+          "aussage": "„Na, ihr habt ja auch viel zu tun. Bei euch ruft ja keiner mehr an.“",
+          "kriterien": ["spricht die vermutete Seite als Frage an", "ohne Rechtfertigung", "lädt sie ein, mehr zu sagen"],
+          "muster": [
+            "„Klingt, als hättest du dir mehr Anrufe gewünscht. Stimmt das?“",
+            "„Hör ich da raus, dass du uns vermisst?“",
+            "„Ist das eine Spitze oder ein Wunsch? Ich frag lieber, bevor ich's falsch verstehe.“"
+          ]
+        },
+        {
+          "art": "wortwahl",
+          "kopf": { "id": "gespraech-3-02-d", "faehigkeit": "gespraech.fragen", "stufe": 7, "kanal": "wissen" },
+          "frage": "Tarek sagt nach deinem Vorschlag nur: „Interessant.“ Du bist unsicher, wie er es meint. Welche Frage klärt das am besten?",
+          "antworten": [
+            { "text": "„Interessant gut oder interessant schlecht?“", "wert": 2, "warum": "Locker und direkt. Er kann sagen, wie er es meint, ohne sich zu rechtfertigen." },
+            { "text": "„Du findest es also blöd.“", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine Vermutung als Tatsache. Er muss sich jetzt gegen deine Deutung wehren." },
+            { "text": "„Was meinst du genau?“", "wert": 1, "warum": "Offen und gut. Auf ein knappes „Interessant“ folgt darauf aber leicht wieder ein knappes „Na ja“ – die Frage mit beiden Deutungen macht es ihm leichter, Farbe zu bekennen." },
+            { "text": "Gar nicht fragen – er sagt schon, wenn ihn was stört.", "wert": 0, "tendenz": "vermeiden", "warum": "Vielleicht. Vielleicht deutest du aber stillschweigend weiter – in die falsche Richtung." }
+          ]
+        },
+        {
+          "art": "experiment",
+          "auftrag": "Wenn dich heute ein Satz ärgert oder kränkt: Frag dich zuerst, auf welchem Ohr du ihn gehört hast. Dann frag einmal nach, wie er gemeint war.",
+          "dauer": "heute",
+          "nachfrage": "War die Antwort freundlicher oder harmloser, als dein Ohr es dir eingeflüstert hatte?"
+        },
+        {
+          "art": "reflexion",
+          "frage": "Auf welchem Ohr hörst du am lautesten – Sache, Selbstkundgabe, Beziehung oder Appell? Wann hilft dir das, und wann bringt es dich in Streit?"
+        }
+      ],
+      "regel": "Merk, auf welchem Ohr du hörst – und frag nach, statt zu deuten.",
+      "merkkarten": [
+        {
+          "id": "gespraech-3-02-m1",
+          "frage": "Die vier Seiten einer Nachricht?",
+          "antwort": "Sache, Selbstkundgabe, Beziehung, Appell."
+        },
+        {
+          "id": "gespraech-3-02-m2",
+          "frage": "Was hilft, wenn ein Satz auf dem Beziehungsohr ankommt?",
+          "antwort": "Nachfragen statt deuten: „Wie meinst du das?“ oder „Hör ich da Ärger raus?“"
+        }
+      ]
+    },
+    {
+      "id": "gespraech-3-03",
+      "bereich": "gespraech",
+      "stufe": 3,
+      "nr": 3,
+      "titel": "Unfaire Züge erkennen und kontern",
+      "faehigkeiten": ["gespraech.widerspruch", "gespraech.konflikt"],
+      "dauerMin": 7,
+      "beleg": "P",
+      "belegHinweis": "Die Einordnung unfairer Gesprächszüge und die Antworten darauf sind Praxiswissen aus Kommunikationstraining und Mediation; über das Gespräch selbst zu sprechen geht auf ein Denkmodell zurück.",
+      "quellen": ["watzlawick1967", "praxis-gespraech"],
+      "aha": "Unfaire Züge wirken, solange keiner sie anspricht. Benenn den Zug ruhig, geh zurück zur Sache – und wird eine rote Linie überschritten, diskutierst du nicht weiter, sondern ziehst eine Grenze.",
+      "schritte": [
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-3-03-a", "faehigkeit": "gespraech.widerspruch", "stufe": 6, "kanal": "wissen" },
+          "auftrag": "Fair, Taktik oder rote Linie?",
+          "faecher": ["fair", "Taktik", "rote Linie"],
+          "karten": [
+            { "text": "„Ich sehe das anders – darf ich sagen, warum?“", "fach": 0 },
+            { "text": "„Lieber Dienstag oder Donnerstag?“ – beides geht wirklich.", "fach": 1 },
+            { "text": "„Das hast du nie gesagt, das bildest du dir ein.“ – obwohl es so war.", "fach": 2 },
+            { "text": "„Ich brauch die Antwort bis heute Abend.“ – ohne dass es eilt.", "fach": 2 },
+            { "text": "„Du willst also das ganze Projekt kippen?“ – auf den Vorschlag, eine Woche zu schieben.", "fach": 2 },
+            { "text": "„Lass uns erst die Fakten klären, dann bewerten.“", "fach": 0 },
+            { "text": "Nach dem eigenen Angebot bewusst schweigen und warten.", "fach": 1 },
+            { "text": "Jemand redet lange weiter, damit du nicht zu Wort kommst.", "fach": 2 },
+            { "text": "„Das muss ich erst noch abstimmen.“ – und das stimmt.", "fach": 1 }
+          ]
+        },
+        {
+          "art": "karte",
+          "text": "Gegen unfaire Züge in drei Stufen: 1. Den Zug benennen, ohne Vorwurf: „Ich würde den Satz gern zu Ende bringen.“ 2. Zurück zur Sache: „Mein Punkt war …“ 3. Hört es nicht auf: eine Grenze oder eine Vertagung: „So rede ich nicht weiter. Lass uns morgen sprechen.“ Bei roten Linien – Lügen über das Gesagte, Zermürben, Schuld einreden – nicht weiter diskutieren: festhalten, aufschreiben, Unterstützung holen."
+        },
+        {
+          "art": "kunstgriff",
+          "kopf": { "id": "gespraech-3-03-b", "faehigkeit": "gespraech.widerspruch", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "In der Vereinssitzung sagt der Kassenwart: „Entweder wir erhöhen den Beitrag um zehn Euro, oder der Verein ist in zwei Jahren pleite.“",
+          "frage": "Was passiert hier – und was hilft?",
+          "antworten": [
+            {
+              "text": "Eine Entweder-oder-Falle. Hilft: „Gibt es noch andere Wege – kleinere Erhöhung, Sponsoren, Ausgaben prüfen?“",
+              "wert": 2,
+              "warum": "Erkannt und den Rahmen geöffnet, ohne den Kassenwart anzugreifen. Seine Sorge bleibt ernst genommen."
+            },
+            {
+              "text": "Eine Drohung. Hilft: „Das ist Panikmache, und das weißt du auch.“",
+              "wert": 0,
+              "tendenz": "angreifen",
+              "warum": "Hinter der Falle steckt vielleicht eine echte Sorge. Der Vorwurf macht aus der Sachfrage einen Streit."
+            },
+            {
+              "text": "Eine Entweder-oder-Falle. Hilft: zustimmen – er kennt die Zahlen am besten, und Streit bringt den Verein auch nicht weiter.",
+              "wert": 1,
+              "warum": "Richtig erkannt, aber dann doch in die Falle gegangen. Vielleicht gibt es einen Weg, den keiner geprüft hat."
+            }
+          ],
+          "erklaerung": "Die Entweder-oder-Falle stellt zwei Wege als die einzigen hin und verschweigt die übrigen, um zu drängen – das gehört zur roten Linie. Oft steckt eine echte Sorge dahinter. Abwehr: den Rahmen öffnen – „Welche Möglichkeiten gibt es noch?“ – und die Sorge anerkennen."
+        },
+        {
+          "art": "konter",
+          "kopf": { "id": "gespraech-3-03-c", "faehigkeit": "gespraech.widerspruch", "stufe": 7, "kanal": "koennen" },
+          "lage": "Teamrunde. Du stellst deinen Vorschlag vor. Zum dritten Mal fällt dir jemand ins Wort.",
+          "von": "ein Kollege aus dem Vertrieb",
+          "spruch": "„Ja, ja, schon klar, aber das Entscheidende ist doch …“",
+          "schaerfe": 2,
+          "muster": [
+            { "technik": "den Zug benennen", "text": "„Ich würde den Gedanken gern zu Ende bringen. Danach bist du dran.“" },
+            { "technik": "ruhig weitersprechen", "text": "Leicht die Hand heben, ruhig und gleich laut weiterreden, bis der Satz fertig ist." },
+            { "technik": "über die Runde", "text": "„Mir ist wichtig, dass jeder ausreden kann – das gilt für uns alle.“" }
+          ],
+          "kriterien": ["ohne Vorwurf an die Person", "klar, dass du ausreden willst", "danach zurück zur Sache"]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-3-03-d", "faehigkeit": "gespraech.konflikt", "stufe": 7, "kanal": "wissen", "einfluss": "rot" },
+          "frage": "Du schlägst vor, den Projektstart um eine Woche zu schieben. Ein Kollege: „Du willst also das ganze Projekt kippen? Das kann ja nicht dein Ernst sein.“ Was tust du?",
+          "antworten": [
+            {
+              "text": "Ausführlich erklären, warum das Projekt trotzdem wichtig ist und du es nie kippen wolltest – mit allen Gründen.",
+              "wert": 0,
+              "tendenz": "rechtfertigen",
+              "warum": "Du verteidigst eine Meinung, die du nie hattest. Dein echter Vorschlag geht unter."
+            },
+            {
+              "text": "„Das hab ich nicht gesagt. Mein Vorschlag ist: eine Woche später starten, weil die Tests fehlen.“",
+              "wert": 2,
+              "warum": "Ruhig richtiggestellt und den echten Punkt wiederholt. Die verdrehte Fassung bekommt keine Bühne."
+            },
+            {
+              "text": "„Jetzt verdrehst du mir aber die Worte im Mund, das ist echt unfair.“",
+              "wert": 1,
+              "warum": "Richtig erkannt. Ohne deinen echten Vorschlag danach bleibt aber nur der Vorwurf hängen."
+            }
+          ]
+        },
+        {
+          "art": "wenndann",
+          "anlass": "Unfaire Züge im Gespräch",
+          "wenn": ["mir jemand ins Wort fällt", "jemand meine Aussage verdreht", "es trotz allem nicht aufhört"],
+          "dann": ["sage ich: „Ich bring den Satz kurz zu Ende.“", "sage ich: „Das hab ich nicht gesagt. Mein Punkt ist …“", "vertage ich: „So rede ich nicht weiter. Lass uns morgen sprechen.“"]
+        },
+        {
+          "art": "reflexion",
+          "frage": "Welcher unfaire Zug bringt dich am schnellsten aus dem Takt? Schreib den Satz auf, mit dem du ihn künftig benennst.",
+          "insBuch": "saetze"
+        }
+      ],
+      "regel": "Benennen, zurück zur Sache – und bei roten Linien Grenze statt Diskussion.",
+      "merkkarten": [
+        {
+          "id": "gespraech-3-03-m1",
+          "frage": "Die drei Stufen gegen unfaire Züge?",
+          "antwort": "Den Zug benennen, zurück zur Sache, Grenze oder Vertagung."
+        },
+        {
+          "id": "gespraech-3-03-m2",
+          "frage": "Jemand verdreht deine Aussage. Was tust du?",
+          "antwort": "Richtigstellen und deinen echten Punkt wiederholen – nicht die verdrehte Fassung verteidigen."
+        },
+        {
+          "id": "gespraech-3-03-m3",
+          "frage": "Woran erkennst du eine rote Linie?",
+          "antwort": "Lügen über das Gesagte, Zermürben, Schuld einreden, ein Nein übergehen, ein falsches Entweder-oder, erfundener Zeitdruck. Dann nicht diskutieren, sondern Grenze und Unterstützung."
+        }
+      ]
+    },
+    {
+      "id": "gespraech-3-04",
+      "bereich": "gespraech",
+      "stufe": 3,
+      "nr": 4,
+      "titel": "Absprachen, die halten",
+      "faehigkeiten": ["gespraech.absprache", "gespraech.ich"],
+      "dauerMin": 7,
+      "beleg": "P",
+      "belegHinweis": "Dass Wenn-dann-Pläne Vorsätze stärken, zeigt eine Meta-Analyse – für den Einzelnen. Dass gemeinsame Wenn-dann-Abmachungen Absprachen stärken, ist eine Übertragung; der Rest ist Praxiswissen.",
+      "quellen": ["gollwitzer2006", "praxis-gespraech"],
+      "aha": "Absprachen scheitern selten am bösen Willen, sondern an Lücken: Was heißt fertig? Was, wenn es hakt? Wer diese zwei Fragen mit klärt, braucht später kaum nachzuhalten.",
+      "schritte": [
+        {
+          "art": "vergleich",
+          "lage": "Du und Tarek teilt euch die Vorbereitung für den Kundentag. Am Ende der Besprechung:",
+          "schwach": "„Gut, du machst die Präsentation, ich die Einladungen. Bis nächste Woche.“",
+          "stark": "„Du machst die Präsentation – fertig heißt: zehn Folien, Zahlen geprüft – bis Mittwoch zwölf Uhr. Ich verschicke die Einladungen bis Montag. Hakt was, sagen wir's sofort. Dienstag um neun schauen wir kurz drauf.“",
+          "frage": "Was hat die zweite Absprache, das der ersten fehlt?",
+          "unterschied": "Was „fertig“ heißt, eine genaue Uhrzeit, was passiert, wenn es hakt, und ein Termin zum Draufschauen. Genau an diesen Lücken scheitern Absprachen."
+        },
+        {
+          "art": "karte",
+          "text": "Eine Absprache, die hält, beantwortet fünf Fragen: Wer? Was genau – woran merken wir, dass es fertig ist? Bis wann? Was tun wir, wenn es hakt? Wann schauen wir wieder drauf? Der letzte Punkt ersetzt das Hinterherlaufen: Ihr habt den Blick vereinbart, also ist er keine Kontrolle. Platzt eine Absprache trotzdem: Beobachtung, offene Frage, neu vereinbaren – nicht gleich Strafe."
+        },
+        {
+          "art": "studie",
+          "frage": "Helfen Wenn-dann-Pläne, Vorsätze umzusetzen?",
+          "aufbau": "Eine Meta-Analyse fasste viele Studien zusammen, in denen Menschen ihren Vorsatz entweder nur als Ziel fassten oder als Plan: „Wenn Situation X eintritt, dann tue ich Y.“",
+          "ergebnis": "Mit Wenn-dann-Plan setzten die Menschen ihre Vorsätze im Mittel deutlich häufiger um – ein mittelstarker Effekt.",
+          "grenze": "Untersucht wurden Vorsätze Einzelner. Dass ein gemeinsamer Plan („Wenn es hakt, dann sagen wir es am selben Tag“) Absprachen stärkt, liegt nahe, ist aber eine Übertragung.",
+          "beleg": "B",
+          "quellen": ["gollwitzer2006"]
+        },
+        {
+          "art": "fehler",
+          "kopf": { "id": "gespraech-3-04-a", "faehigkeit": "gespraech.absprache", "stufe": 7, "kanal": "wissen" },
+          "auftrag": "Eine Absprache im Verein zum Sommerfest. Markier die Lücken.",
+          "teile": [
+            { "t": "„Also, die Getränke übernimmt jemand von uns,", "fehler": "„Jemand“ ist niemand. Wer genau?" },
+            { "t": "Jule kümmert sich ums Essen,", "fehler": "Was heißt „kümmern“ – einkaufen, kochen, organisieren? Woran merkt ihr, dass es erledigt ist?" },
+            { "t": "die Bänke holt Sven am Freitag um zehn beim Bauhof ab," },
+            { "t": "und irgendwann vorher reden wir noch mal.“", "fehler": "Kein Termin – so wird das Nachfragen zur Kontrolle." }
+          ]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-3-04-b", "faehigkeit": "gespraech.ich", "stufe": 8, "kanal": "wissen" },
+          "frage": "Ein Kollege aus dem Vertrieb hat eine klare Absprache zum dritten Mal nicht eingehalten – trotz Termin und Frühwarnung. Was ist jetzt der beste Schritt?",
+          "antworten": [
+            {
+              "text": "„Das ist das dritte Mal. Was ist los, und was brauchst du? Klappt es wieder nicht, gebe ich die Aufgabe an Dr. Albers zurück.“",
+              "wert": 2,
+              "warum": "Beobachtung, eine echte Frage – und eine klare Folge, ruhig gesagt statt gedroht. So nimmst du es ernst, ohne zu strafen."
+            },
+            {
+              "text": "Die Aufgabe ab jetzt einfach selbst machen.",
+              "wert": 0,
+              "tendenz": "uebernehmen",
+              "warum": "Kurzfristig ruhig, langfristig trägst du seine Arbeit – und das Muster bleibt."
+            },
+            {
+              "text": "„Auf dich ist einfach kein Verlass.“",
+              "wert": 0,
+              "tendenz": "angreifen",
+              "warum": "Ein Urteil über die Person. Er verteidigt sich, statt zu sagen, woran es liegt."
+            },
+            {
+              "text": "Noch einmal eine Absprache treffen, diesmal schriftlich per Mail.",
+              "wert": 1,
+              "warum": "Schriftlich hilft. Ohne die Frage, woran es bisher gescheitert ist, scheitert die vierte Absprache aber wohl genauso."
+            }
+          ]
+        },
+        {
+          "art": "bauplan",
+          "kopf": { "id": "gespraech-3-04-c", "faehigkeit": "gespraech.absprache", "stufe": 7, "kanal": "koennen" },
+          "plan": "Meine Absprache, die hält",
+          "anlass": "Eine Aufgabe, die du demnächst mit jemandem verteilst – im Beruf, im Verein oder zu Hause.",
+          "felder": [
+            { "name": "Wer macht was?", "hilfe": "Ein Name pro Aufgabe, kein „wir“ und kein „jemand“." },
+            { "name": "Woran merken wir, dass es fertig ist?", "hilfe": "Was genau liegt am Ende vor?" },
+            { "name": "Bis wann?", "hilfe": "Tag und Uhrzeit." },
+            { "name": "Wenn es hakt, dann …", "hilfe": "Wer sagt wem wann Bescheid?" },
+            { "name": "Wann schauen wir drauf?", "hilfe": "Ein kurzer Termin vor der Frist." }
+          ],
+          "muster": [
+            "Wer: Jule das Essen, Sven die Getränke. Fertig: Buffet für vierzig Leute steht. Bis: Samstag 14:30 Uhr. Wenn es hakt: in die Gruppe schreiben, spätestens Freitagabend. Draufschauen: Donnerstag 19 Uhr kurz telefonieren.",
+            "Wer: Ich die Präsentation. Fertig: zehn Folien, Zahlen von Tarek geprüft. Bis: Mittwoch 12 Uhr. Wenn es hakt: Ich sag es Tarek am selben Tag. Draufschauen: Dienstag 16 Uhr, zehn Minuten."
+          ]
+        },
+        {
+          "art": "reflexion",
+          "frage": "Welche Absprache in deinem Leben platzt immer wieder? Welche der fünf Fragen fehlt dort – und wie könntest du sie beim nächsten Mal stellen?"
+        }
+      ],
+      "regel": "Wer, was genau, bis wann, was wenn es hakt, wann schauen wir drauf.",
+      "merkkarten": [
+        {
+          "id": "gespraech-3-04-m1",
+          "frage": "Die zwei Fragen, an denen Absprachen meist scheitern?",
+          "antwort": "Woran merken wir, dass es fertig ist? Und was tun wir, wenn es hakt?"
+        },
+        {
+          "id": "gespraech-3-04-m2",
+          "frage": "Wie hältst du nach, ohne zu kontrollieren?",
+          "antwort": "Den Blick gleich mit vereinbaren: „Dienstag um neun schauen wir kurz drauf.“"
+        },
+        {
+          "id": "gespraech-3-04-m3",
+          "frage": "Eine Absprache ist geplatzt. Was jetzt?",
+          "antwort": "Beobachtung, offene Frage nach dem Grund, neu vereinbaren – erst bei Wiederholung eine klare Folge."
+        }
+      ]
+    },
+    {
+      "id": "gespraech-3-05",
+      "bereich": "gespraech",
+      "stufe": 3,
+      "nr": 5,
+      "titel": "Das Gespräch, das du aufschiebst",
+      "faehigkeiten": ["gespraech.konflikt", "gespraech.oben", "gespraech.ich"],
+      "dauerMin": 7,
+      "beleg": "B",
+      "belegHinweis": "Dass ehrliche Gespräche angenehmer und verbindender sind als erwartet, zeigen mehrere Studien einer Forschergruppe. Dass der Einstieg einen Streit prägt, stammt aus der Paarforschung. Vorbereitung mit Wunsch, Hindernis und Plan ist für Ziele gut untersucht, für Gespräche eine Übertragung.",
+      "quellen": ["levine2018", "carrere1999", "oettingen2014", "praxis-gespraech"],
+      "aha": "Das Gespräch, das du vor dir herschiebst, ist in deinem Kopf meist schlimmer als in echt. Mit einem ersten Satz, einem Ziel und einem Plan B schrumpft es auf seine wirkliche Größe.",
+      "schritte": [
+        {
+          "art": "studie",
+          "frage": "Ist Ehrlichkeit so unangenehm, wie wir fürchten?",
+          "aufbau": "Menschen sollten drei Tage lang in allen Gesprächen ganz ehrlich sein – andere sollten besonders freundlich oder aufmerksam sein. Im Labor führten andere ein gezieltes ehrliches Gespräch mit einem Menschen, der ihnen nahesteht.",
+          "ergebnis": "Die ehrlichen Gespräche waren angenehmer und verbindender als erwartet. Auch die Zuhörer reagierten weniger negativ, als die Sprechenden befürchtet hatten.",
+          "grenze": "Eine Forschergruppe, kurze Zeiträume. Gemeint ist ehrlich und rücksichtsvoll, nicht verletzend. Und es geht um Gespräche ohne Gefahr – bei Drohung gilt anderes.",
+          "beleg": "B",
+          "quellen": ["levine2018"]
+        },
+        {
+          "art": "karte",
+          "text": "Warum wir aufschieben: Das Gespräch wirkt groß, der Moment nie passend, und jeder Tag Schweigen macht es schwerer. Der Plan: um einen Termin bitten, nicht zwischen Tür und Angel. Einen ersten Satz aufschreiben – dein Anliegen, kein Vorwurf. Dein Ziel und ein Plan B, falls es anders läuft. Im Gespräch erst zuhören. Kocht es hoch: Pause und neuer Termin. Schluss: wer, was, bis wann."
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-3-05-a", "faehigkeit": "gespraech.oben", "stufe": 8, "kanal": "wissen" },
+          "frage": "Seit Monaten übernimmst du Aufgaben einer Teamleitung, ohne dass es je besprochen wurde. Jetzt hast du einen Termin bei Dr. Albers. Welcher erste Satz trägt am besten?",
+          "antworten": [
+            {
+              "text": "„Ich mache seit Monaten die Arbeit einer Teamleitung, und keiner sagt was dazu. So geht das einfach nicht weiter.“",
+              "wert": 0,
+              "tendenz": "angreifen",
+              "warum": "Ein harter Einstieg. Er hört einen Vorwurf und verteidigt sich, bevor er dein Anliegen kennt."
+            },
+            {
+              "text": "„Ich würde gern klären, welche Aufgaben ich im Team habe. Seit dem Frühjahr mache ich die Einsatzplanung.“",
+              "wert": 2,
+              "warum": "Sanfter Einstieg mit Anliegen und Beobachtung. Er weiß, worum es geht, und kann zuhören."
+            },
+            {
+              "text": "„Ach, eigentlich ist es nichts Großes, nur eine Kleinigkeit zu meinen Aufgaben …“",
+              "wert": 0,
+              "tendenz": "kleinmachen",
+              "warum": "So klein gemacht, dass er es auch klein behandeln wird."
+            },
+            {
+              "text": "„Ich würde gern über meine Rolle im Team sprechen.“",
+              "wert": 1,
+              "warum": "Klar und ruhig. Mit einer konkreten Beobachtung weiß er gleich, worum es genau geht."
+            }
+          ]
+        },
+        {
+          "art": "woop",
+          "anlass": "Das Gespräch, das du schon lange vor dir herschiebst",
+          "beispiel": {
+            "wunsch": "Mit meiner Schwester klären, wer sich um die Arzttermine unseres Vaters kümmert.",
+            "ergebnis": "Ich bin nicht mehr allein zuständig und schlafe ruhiger.",
+            "hindernis": "Sobald sie sagt „Du wohnst doch näher“, schlucke ich alles runter.",
+            "plan": "Wenn sie das sagt, dann antworte ich: „Stimmt. Und trotzdem brauche ich Entlastung – was kannst du übernehmen?“"
+          }
+        },
+        {
+          "art": "gespraechskarte",
+          "anlass": "Das aufgeschobene Gespräch – mit Kollegin, Chef, Familie oder Freund.",
+          "beispiel": {
+            "ziel": "Klären, welche Aufgaben ich im Team offiziell habe.",
+            "erster": "„Mir ist wichtig, dass wir meine Aufgaben im Team klären.“",
+            "wunsch": "„Ich wünsche mir, dass die Einsatzplanung offiziell bei mir liegt – oder an jemand anderen geht.“",
+            "planB": "Will er sich nicht festlegen: einen Termin in vier Wochen vereinbaren und bis dahin aufschreiben, was ich übernehme."
+          }
+        },
+        { "art": "mission", "ref": "gespraech-m-10" }
+      ],
+      "regel": "Termin, erster Satz, Ziel, Plan B – dann zuhören, und am Ende wer, was, bis wann.",
+      "merkkarten": [
+        {
+          "id": "gespraech-3-05-m1",
+          "frage": "Wie unangenehm ist ein ehrliches Gespräch meist?",
+          "antwort": "Weniger als befürchtet – in Studien angenehmer und verbindender als erwartet."
+        },
+        {
+          "id": "gespraech-3-05-m2",
+          "frage": "Was gehört in die Vorbereitung?",
+          "antwort": "Ein Termin, der erste Satz, dein Ziel und ein Plan B."
+        },
+        {
+          "id": "gespraech-3-05-m3",
+          "frage": "Und wenn es im Gespräch hochkocht?",
+          "antwort": "Pause ansagen und einen neuen Termin vereinbaren – nicht durchziehen um jeden Preis."
+        }
+      ],
+      "mission": "gespraech-m-10"
+    }
+  ]
+}
