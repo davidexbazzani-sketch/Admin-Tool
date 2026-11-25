@@ -1,0 +1,275 @@
+{
+  "lagen": [
+    {
+      "id": "ueberzeugen-l-01", "bereich": "ueberzeugen", "phase": "g", "umfeld": "telefon", "faehigkeiten": ["ueberzeugen.bedarf", "ueberzeugen.nutzen", "ueberzeugen.haltung"], "stufe": 3,
+      "titel": "Der Anruf: Nadine Köhler meldet sich", "figur": "Nadine Köhler",
+      "einleitung": "Eine mögliche Kundin ruft an und will als Erstes den Preis wissen. Du übst: erst fragen, die Folgen hören, zusammenfassen – dann Nutzen und nächster Schritt.",
+      "lage": "Nadine Köhler führt einen Betrieb mit zwölf Leuten. Eine Bekannte hat dich empfohlen. Sie ruft an und hat zehn Minuten.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Nadine: „Guten Tag. Mir wurde gesagt, Sie kümmern sich um die Technik in kleinen Betrieben. Was kostet das bei Ihnen?“",
+          "wahl": [
+            { "text": "„Das hängt davon ab, was Sie brauchen. Darf ich zwei, drei Fragen stellen? Dann kann ich es Ihnen genau sagen.“", "wert": 2, "weiter": "k2", "rueck": "Du fragst zuerst – und sagst, warum. Sie bekommt ihre Antwort, nur später und passender." },
+            { "text": "„Zwischen 200 und 900 im Monat. Was brauchen Sie denn?“", "wert": 1, "weiter": "k2", "rueck": "Ehrlich und schnell – aber die große Spanne erschreckt eher. Erst fragen wäre stärker." },
+            { "text": "„Unser Rundum-Paket kostet 900 im Monat, da ist wirklich alles drin – Sie müssen sich dann um gar nichts mehr kümmern.“", "wert": 0, "tendenz": "zufrueh", "weiter": "k1b", "rueck": "Preis vor Problem: Für sie ist das nur eine hohe Zahl." }
+          ] },
+        { "id": "k1b", "sagt": "Nadine: „900? Das ist mehr, als ich dachte. Wir sind nur zwölf Leute.“",
+          "wahl": [
+            { "text": "„Dann ist das Paket vermutlich zu groß für Sie. Darf ich fragen, wie es bei Ihnen gerade läuft?“", "wert": 2, "weiter": "k2", "rueck": "Gut gerettet: ehrlich eingeordnet und zurück zum Fragen." },
+            { "text": "„Aber da ist wirklich alles drin: Sicherung, Wartung, Notdienst …“", "wert": 0, "tendenz": "merkmale", "weiter": "ende2", "rueck": "Merkmale gegen einen Preis-Schreck – sie hört nur noch zu, um höflich aufzulegen." }
+          ] },
+        { "id": "k2", "sagt": "Nadine: „Ehrlich gesagt läuft es meistens. Aber letzten Monat war der Server einen Tag weg, und keiner wusste, wen man anruft.“",
+          "wahl": [
+            { "text": "„Was hat Sie dieser Tag gekostet?“", "wert": 2, "weiter": "k3", "rueck": "Die Folgen-Frage: Jetzt sagt sie selbst, was das Problem wert ist." },
+            { "text": "„Das kenne ich. Wie oft kommt so etwas vor?“", "wert": 1, "weiter": "k3", "rueck": "Gute Frage nach der Häufigkeit. Die Frage nach den Folgen wäre noch stärker." },
+            { "text": "„Genau dafür haben wir unseren Notdienst, rund um die Uhr erreichbar.“", "wert": 0, "tendenz": "zufrueh", "weiter": "k2b", "rueck": "Du springst sofort zur Lösung. Sie hat noch nicht gesagt, wie schlimm es war." }
+          ] },
+        { "id": "k2b", "sagt": "Nadine: „Rund um die Uhr brauchen wir nicht. Wir arbeiten von sieben bis vier.“",
+          "wahl": [
+            { "text": "„Verstehe. Was ist an so einem Tag liegen geblieben?“", "wert": 2, "weiter": "k3", "rueck": "Zurück zu ihr – zweite Chance genutzt." },
+            { "text": "„Die Überwachung läuft auch automatisch und meldet alles sofort.“", "wert": 0, "tendenz": "merkmale", "weiter": "ende2", "rueck": "Noch ein Merkmal. Sie wollte etwas anderes." }
+          ] },
+        { "id": "k3", "sagt": "Nadine: „Die Rechnungen gingen einen Tag später raus, zwei Leute saßen herum, und ich habe den halben Tag telefoniert.“",
+          "wahl": [
+            { "text": "„Wenn ich Sie richtig verstehe: Es geht weniger um Technik als darum, dass jemand zuständig ist und schnell da ist. Stimmt das?“", "wert": 2, "weiter": "k4", "rueck": "Zusammengefasst und bestätigen lassen – jetzt fühlt sie sich verstanden." },
+            { "text": "„Das ist ärgerlich. Da können wir helfen.“", "wert": 1, "weiter": "k4", "rueck": "Freundlich, aber allgemein. Eine Zusammenfassung zeigt, dass du zugehört hast." }
+          ] },
+        { "id": "k4", "sagt": "Nadine: „Genau. Was würden Sie mir vorschlagen?“",
+          "wahl": [
+            { "text": "„Ein fester Ansprechpartner, der zu Ihren Zeiten in zwei Stunden reagiert. Das heißt: kein halber Tag mehr am Telefon. Soll ich bis Freitag ein Angebot schicken?“", "wert": 2, "weiter": "ende1", "rueck": "Nutzen-Brücke und eine klare Frage nach dem nächsten Schritt." },
+            { "text": "„Ich schicke Ihnen mal unsere Unterlagen.“", "wert": 1, "weiter": "ende3", "rueck": "Höflich – aber ohne Nutzen und ohne klaren nächsten Schritt." },
+            { "text": "„Am besten nehmen Sie gleich das Rundum-Paket, dann ist alles erledigt. Das nehmen die meisten Betriebe Ihrer Größe, und Sie haben ab sofort Ruhe mit der Technik.“", "wert": 0, "tendenz": "ueberreden", "weiter": "ende2", "rueck": "Zu groß, zu schnell, zu viel Druck. Sie zieht sich zurück." }
+          ] },
+        { "id": "ende1", "sagt": "Nadine: „Ja, gern. Freitag passt.“", "ende": "Erst gefragt, dann zusammengefasst, dann Nutzen und nächster Schritt. Sie hat selbst gesagt, was ihr Problem kostet – dein Vorschlag ist jetzt eine Antwort." },
+        { "id": "ende2", "sagt": "Nadine: „Ich überlege es mir.“ Sie legt auf.", "ende": "Zu früh angeboten oder mit Merkmalen geantwortet: Sie hat sich nicht verstanden gefühlt. Beim nächsten Mal zuerst die Folgen-Frage." },
+        { "id": "ende3", "sagt": "Nadine: „Gut, schicken Sie mal.“ Die Unterlagen landen auf ihrem Stapel.", "ende": "Gute Fragen, guter Draht – am Ende fehlten der Nutzen und die Bitte um den nächsten Schritt." }
+      ],
+      "prinzipien": ["erst fragen, dann vorschlagen", "die Folgen-Frage stellen", "zusammenfassen und bestätigen lassen", "Nutzen-Brücke", "um den nächsten Schritt bitten"],
+      "transfer": "Wer fragt dich demnächst um Rat oder nach einem Preis? Welche Folgen-Frage stellst du, bevor du antwortest?"
+    },
+    {
+      "id": "ueberzeugen-l-02", "bereich": "ueberzeugen", "phase": "g", "umfeld": "vorgesetzte", "faehigkeiten": ["ueberzeugen.nutzen", "ueberzeugen.vertrauen", "ueberzeugen.abschluss"], "stufe": 3,
+      "titel": "Die Idee beim Chef", "figur": "Dr. Henrik Albers",
+      "einleitung": "Eine Idee nach oben verkaufen: fünf Minuten, ein Vorgesetzter zwischen zwei Terminen. Du übst Nutzen für ihn, einen ehrlichen Haken und eine kleine, klare Bitte – ohne Taktik.",
+      "lage": "Du willst, dass das Team die Urlaubsplanung künftig über einen gemeinsamen Kalender macht statt über Mails. Dr. Albers hat zwischen zwei Terminen fünf Minuten.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Albers: „Sie wollten mich sprechen? Ich habe fünf Minuten.“",
+          "wahl": [
+            { "text": "„Danke. Ich habe einen Vorschlag, der uns jeden Monat Abstimmungsarbeit spart. Darf ich ihn in drei Minuten zeigen?“", "wert": 2, "weiter": "k2", "rueck": "Nutzen zuerst, Zeit respektiert – er weiß, warum er zuhören soll." },
+            { "text": "„Es geht um die Urlaubsplanung. Ich habe mir da was überlegt, das sich in anderen Abteilungen schon bewährt hat – darf ich kurz?“", "wert": 1, "weiter": "k2", "rueck": "Klar, aber ohne Grund zuzuhören. Ein Nutzen-Satz zum Einstieg wäre stärker." },
+            { "text": "„Ach, eigentlich ist es nicht so wichtig, nur so eine Idee …“", "wert": 0, "tendenz": "kleinmachen", "weiter": "k1b", "rueck": "Du machst deine Idee klein, bevor er sie kennt." }
+          ] },
+        { "id": "k1b", "sagt": "Albers schaut auf die Uhr: „Dann vielleicht ein andermal?“",
+          "wahl": [
+            { "text": "„Doch, es lohnt sich: Es spart uns jeden Monat Abstimmungsarbeit. Drei Minuten?“", "wert": 2, "weiter": "k2", "rueck": "Gefangen – mit dem Nutzen." },
+            { "text": "„Ja, kein Problem.“", "wert": 0, "tendenz": "nichtfragen", "weiter": "ende2", "rueck": "Die Gelegenheit ist weg." }
+          ] },
+        { "id": "k2", "sagt": "Albers: „Bitte. Worum geht es?“",
+          "wahl": [
+            { "text": "„Urlaub läuft über Mails. Im Frühjahr waren drei gleichzeitig weg. Ein gemeinsamer Kalender verhindert das – für Sie heißt das: keine Engpässe mehr ausbügeln.“", "wert": 2, "weiter": "k3", "rueck": "Problem mit Beispiel, Lösung, Nutzen für ihn – in drei Sätzen." },
+            { "text": "„Der Kalender hat Farben für jede Abteilung, Erinnerungen, eine Wochenansicht, eine App fürs Handy und lässt sich mit unserem Mailprogramm verbinden.“", "wert": 1, "tendenz": "merkmale", "weiter": "k2b", "rueck": "Merkmale. Ihn interessiert, was es für das Team und für ihn ändert." },
+            { "text": "„Ich finde, wir sind da total altmodisch unterwegs.“", "wert": 0, "tendenz": "abwerten", "weiter": "k2b", "rueck": "Kritik an der bisherigen Lösung, die er vielleicht selbst eingeführt hat. Gesicht wahren geht anders." }
+          ] },
+        { "id": "k2b", "sagt": "Albers: „Und was hätten wir davon?“",
+          "wahl": [
+            { "text": "„Keine Engpässe mehr wie im Frühjahr, als drei gleichzeitig weg waren. Und weniger Mails für alle.“", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance: Jetzt kommt der Nutzen." },
+            { "text": "„Es ist halt moderner.“", "wert": 0, "weiter": "ende2", "rueck": "Moderner ist kein Grund." }
+          ] },
+        { "id": "k3", "sagt": "Albers: „Klingt vernünftig. Was ist der Haken?“",
+          "wahl": [
+            { "text": "„Am Anfang tragen alle ihre Termine einmal ein – etwa eine halbe Stunde. Ich würde das vorbereiten und erklären.“", "wert": 2, "weiter": "k4", "rueck": "Ehrlicher Nachteil, gleich eingeordnet – und du bringst die Lösung mit." },
+            { "text": "„Es gibt keinen. Das ist nur Vorteil.“", "wert": 0, "tendenz": "aufblasen", "weiter": "k3b", "rueck": "Ohne Haken klingt es zu gut. Er wird misstrauisch." }
+          ] },
+        { "id": "k3b", "sagt": "Albers: „Es gibt immer einen Haken.“",
+          "wahl": [
+            { "text": "„Stimmt: Am Anfang eine halbe Stunde Eintragen. Das bereite ich vor.“", "wert": 2, "weiter": "k4", "rueck": "Gut gerettet." },
+            { "text": "„Wirklich nicht, ich habe das genau geprüft.“", "wert": 0, "tendenz": "verteidigen", "weiter": "ende2", "rueck": "Jetzt verteidigst du – und er glaubt dir weniger." }
+          ] },
+        { "id": "k4", "sagt": "Albers: „Gut. Und jetzt?“",
+          "wahl": [
+            { "text": "„Darf ich es im nächsten Teamtreffen vorstellen und mit zwei Kollegen einen Monat testen?“", "wert": 2, "weiter": "ende1", "rueck": "Eine klare, kleine Bitte um den nächsten Schritt." },
+            { "text": "„Ich schicke Ihnen mal eine Mail dazu.“", "wert": 1, "weiter": "ende3", "rueck": "Kein Nein – aber auch keine Entscheidung." }
+          ] },
+        { "id": "ende1", "sagt": "Albers: „Machen Sie das. Erzählen Sie mir dann, wie es lief.“", "ende": "Nutzen für ihn, ein Beispiel, ein ehrlicher Haken und eine kleine, klare Bitte – so verkauft man eine Idee nach oben." },
+        { "id": "ende2", "sagt": "Albers: „Lassen Sie uns das ein andermal besprechen.“", "ende": "Klein gemacht, mit Merkmalen geantwortet oder den Haken bestritten – dann fehlt der Grund, Ja zu sagen. Beim nächsten Mal: Nutzen für ihn zuerst." },
+        { "id": "ende3", "sagt": "Albers nickt und geht zum nächsten Termin. Die Mail liegt eine Woche ungelesen.", "ende": "Gut vorgestellt, aber ohne Bitte bleibt es eine Idee. Am Ende gehört eine kleine, klare Frage hin." }
+      ],
+      "prinzipien": ["Nutzen für den, der entscheidet, zuerst", "Problem mit Beispiel", "ehrlicher Haken mit Lösung", "kleine, klare Bitte", "keine Taktik nach oben"],
+      "transfer": "Welche Idee schiebst du seit Wochen vor dir her? Schreib den ersten Satz: der Nutzen für den, der entscheidet."
+    },
+    {
+      "id": "ueberzeugen-l-03", "bereich": "ueberzeugen", "phase": "g", "umfeld": "kunden", "faehigkeiten": ["ueberzeugen.einwand", "ueberzeugen.abschluss", "ueberzeugen.einfluss"], "stufe": 4,
+      "titel": "Die Preisverhandlung", "figur": "Nadine Köhler",
+      "einleitung": "Die Kundin will Ja sagen – aber billiger. Sie setzt einen Anker, schweigt und muss abstimmen. Du übst: Grenze kennen, Interessen erfragen, Gegenleistung statt Nachlass, Schweigen aushalten.",
+      "lage": "Nadine Köhler will dein Angebot annehmen: 350 Euro im Monat für Betreuung, Wartung und Notfälle. Heute verhandelt sie. Du hast dir vorher überlegt: Unter 300 lohnt es sich für dich nicht, und du hast genug andere Anfragen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Nadine: „Ihr Angebot gefällt mir. Aber 350 ist zu viel. Ich zahle 200.“",
+          "wahl": [
+            { "text": "„Davon sind wir weit weg. Lassen Sie uns kurz anschauen, was Ihnen am wichtigsten ist – dann reden wir über den Preis.“", "wert": 2, "weiter": "k2", "rueck": "Du lässt ihren Anker nicht stehen, diskutierst ihn aber auch nicht – zurück zu den Interessen." },
+            { "text": "„Dann treffen wir uns einfach in der Mitte: 275. Das ist fair für beide Seiten, und wir können gleich heute noch loslegen.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1b", "rueck": "Die Mitte zwischen deinem Preis und ihrem Anker: Ihre Zahl hat dein Ergebnis bestimmt – und es liegt unter deiner Grenze." },
+            { "text": "„200? Das ist ja lächerlich.“", "wert": 0, "tendenz": "angreifen", "weiter": "k1c", "rueck": "Empörung kostet Vertrauen. Ihr Anker ist Taktik, kein Angriff." }
+          ] },
+        { "id": "k1b", "sagt": "Nadine lächelt: „275 klingt gut. Und die Einrichtung machen Sie dann ohne Aufpreis?“",
+          "wahl": [
+            { "text": "„Moment – da war ich zu schnell. Unter 300 lohnt es sich für mich nicht. Was ist Ihnen am wichtigsten?“", "wert": 2, "weiter": "k2", "rueck": "Ehrlich zurückgerudert. Unangenehm – aber besser als ein Vertrag, der sich nicht lohnt." },
+            { "text": "„Na gut, die Einrichtung schenke ich Ihnen.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Zweimal nachgegeben, nichts bekommen." }
+          ] },
+        { "id": "k1c", "sagt": "Nadine: „Na, so lächerlich auch nicht. Andere machen es günstiger.“",
+          "wahl": [
+            { "text": "„Entschuldigung, das war unnötig. Was ist Ihnen an der Betreuung am wichtigsten?“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: entschuldigt und zurück zu ihren Interessen." },
+            { "text": "„Dann fragen Sie doch die anderen.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Trotzig. Das Gespräch kühlt ab." }
+          ] },
+        { "id": "k2", "sagt": "Nadine: „Wichtig ist mir, dass bei einem Ausfall schnell jemand da ist. Die monatliche Wartung brauche ich eigentlich nicht so oft.“",
+          "wahl": [
+            { "text": "„Dann setzen wir die Wartung auf vierteljährlich. Das kostet 310 im Monat. Schnelle Hilfe bei Ausfällen bleibt.“", "wert": 2, "weiter": "k3", "rueck": "Gegenleistung statt Nachlass: weniger Umfang, niedrigerer Preis – über deiner Grenze." },
+            { "text": "„Die Wartung ist aber wichtig, damit gar nicht erst etwas ausfällt.“", "wert": 1, "weiter": "k3", "rueck": "Fachlich richtig – aber du überhörst, was sie dir anbietet: einen Hebel für den Preis." }
+          ] },
+        { "id": "k3", "sagt": "Nadine sagt nichts. Sie schaut dich an und wartet.",
+          "wahl": [
+            { "text": "Ruhig zurückschauen und abwarten.", "wert": 2, "weiter": "k4", "rueck": "Du hältst die Pause aus und verhandelst nicht gegen dich selbst." },
+            { "text": "„Was meinen Sie?“", "wert": 1, "weiter": "k4", "rueck": "Eine Frage ist besser als Nachgeben – nötig war sie nicht." },
+            { "text": "„… oder sagen wir 290? Da komme ich Ihnen gern entgegen.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ihr Schweigen hat dich Geld gekostet – und unter deine Grenze gebracht." }
+          ] },
+        { "id": "k4", "sagt": "Nadine: „Ich muss das noch mit meinem Mann abstimmen. Der macht bei uns die Zahlen.“",
+          "wahl": [
+            { "text": "„Gern. Was wird ihm wichtig sein? Dann schicke ich Ihnen beiden eine Seite dazu – und wir sprechen am Donnerstag?“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst die Abstimmung ernst, hilfst dabei und vereinbarst einen festen Termin." },
+            { "text": "„Natürlich. Melden Sie sich, wenn Sie gesprochen haben.“", "wert": 1, "weiter": "ende3", "rueck": "Respektvoll, aber ohne nächsten Schritt." },
+            { "text": "„Das können Sie doch eigentlich auch allein entscheiden, oder? Sie kennen den Betrieb ja mindestens genauso gut wie er.“", "wert": 0, "tendenz": "ueberreden", "weiter": "ende2", "rueck": "Du übergehst eine echte Abstimmung. Das weckt Gegenwehr – bei beiden." }
+          ] },
+        { "id": "ende1", "sagt": "Am Donnerstag ruft Nadine an: „Wir machen es.“", "ende": "Anker nicht übernommen, nach Interessen gefragt, Gegenleistung statt Nachlass, Schweigen ausgehalten, die Abstimmung ernst genommen. So endet eine Verhandlung, nach der beide gern zusammenarbeiten." },
+        { "id": "ende2", "sagt": "Ihr einigt euch – auf etwas, mit dem du nicht zufrieden bist. Oder gar nicht.", "ende": "Wer ohne Gegenleistung nachgibt oder sich ärgert, zeigt dem anderen, dass Drücken sich lohnt. Beim nächsten Mal: Grenze vorher festlegen, Interessen erfragen, nur gegen Gegenleistung." },
+        { "id": "ende3", "sagt": "Eine Woche vergeht. Du weißt nicht, wo es steht.", "ende": "Fast gut. Mit einem festen Termin wäre der nächste Schritt sicher gewesen." }
+      ],
+      "prinzipien": ["eigene Grenze vorher kennen", "fremden Anker nicht übernehmen", "Interessen statt Positionen", "Gegenleistung statt Nachlass", "Schweigen aushalten", "Abstimmung ernst nehmen – mit Termin"],
+      "transfer": "Wo verhandelst du demnächst – privat oder beruflich? Leg vorher deine Grenze und deine Alternative fest."
+    },
+    {
+      "id": "ueberzeugen-l-04", "bereich": "ueberzeugen", "phase": "g", "umfeld": "fremde", "faehigkeiten": ["ueberzeugen.einfluss", "ueberzeugen.abschluss", "ueberzeugen.haltung"], "stufe": 4,
+      "titel": "Der Handyvertrag", "figur": "ein Verkäufer im Laden",
+      "einleitung": "Diesmal bist du der Kunde. Der Verkäufer nutzt Taktiken und überschreitet die rote Linie. Du übst, beides zu erkennen und ruhig abzuwehren.",
+      "lage": "Samstag im Handyladen. Du willst einen Vertrag mit 20 Gigabyte, höchstens 25 Euro im Monat. Sven ist mitgekommen. Ein Verkäufer kommt auf dich zu.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Verkäufer: „Sie wollen doch sicher auch ein schnelles Netz, oder? Und viel Datenvolumen ist heute wichtig, stimmt's?“",
+          "wahl": [
+            { "text": "„Ich weiß, was ich brauche: 20 Gigabyte, höchstens 25 Euro im Monat. Was haben Sie da?“", "wert": 2, "weiter": "k2", "rueck": "Du steigst aus der Ja-Kette aus und setzt deinen eigenen Rahmen." },
+            { "text": "„Hm, ja, schon …“", "wert": 1, "weiter": "k1b", "rueck": "Zwei kleine Ja – genau darauf zielt die Kette. Kein Drama, aber jetzt führt er." },
+            { "text": "„Ja, klar, beides wichtig. Was können Sie mir da empfehlen? Sie kennen sich ja am besten aus.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1b", "rueck": "Du gibst ihm den Rahmen. Jetzt verkauft er, was er will." }
+          ] },
+        { "id": "k1b", "sagt": "Verkäufer: „Dann ist das hier ideal: 80 Gigabyte, neues Handy dabei, nur 59 Euro im Monat.“",
+          "wahl": [
+            { "text": "„Das ist mehr, als ich brauche. Ich suche 20 Gigabyte für höchstens 25 Euro.“", "wert": 2, "weiter": "k2", "rueck": "Zurück zu deinem Rahmen. Der hohe Vergleichspreis ändert nichts an deinem Bedarf." },
+            { "text": "„Oh, 59 … und was wäre etwas günstiger?“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1c", "rueck": "Jetzt vergleichst du mit seinem Anker. Das Nächste wird dir billig vorkommen." }
+          ] },
+        { "id": "k1c", "sagt": "Verkäufer: „Dann nehmen Sie den für 39 – ein Schnäppchen dagegen.“",
+          "wahl": [
+            { "text": "„Gegen den anderen ja. Gegen meinen Plan nicht: 25 Euro, 20 Gigabyte.“", "wert": 2, "weiter": "k2", "rueck": "Du prüfst gegen deinen Bedarf, nicht gegen das Angebot daneben. So verliert der Kontrast seine Kraft." },
+            { "text": "„Stimmt, das klingt fair.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Der Kontrast hat gewirkt: 14 Euro über deinem Plan, jeden Monat." }
+          ] },
+        { "id": "k2", "sagt": "Verkäufer: „Da hätte ich was für 22 Euro. Aber der Preis gilt nur heute – morgen ist die Aktion vorbei.“ Sven flüstert: „Steht online bis Monatsende.“",
+          "wahl": [
+            { "text": "„Dann schaue ich mir das in Ruhe an. Geben Sie mir bitte alles schriftlich mit – die Gesamtkosten über die Laufzeit?“", "wert": 2, "weiter": "k3", "rueck": "Erfundene Frist erkannt, ruhig reagiert und nach dem Gesamtpreis gefragt." },
+            { "text": "„Nur heute? Online steht etwas anderes.“", "wert": 1, "weiter": "k3", "rueck": "Nachfragen ist gut, ruhig bleiben auch. Noch stärker: gleich nach dem Gesamtpreis fragen." },
+            { "text": "„Okay, dann schnell.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k2b", "rueck": "Unterschreiben unter erfundenem Zeitdruck – genau das sollte passieren." }
+          ] },
+        { "id": "k2b", "sagt": "Der Verkäufer legt den Vertrag hin: „Hier unterschreiben. Ach ja: plus 30 Euro Anschlussgebühr, und ab dem 13. Monat sind es 32 Euro.“",
+          "wahl": [
+            { "text": "„Moment. Dann ist das ein anderes Angebot. Ich unterschreibe heute nichts und rechne zu Hause.“", "wert": 2, "weiter": "ende1", "rueck": "Lockpreis mit Nachschlag erkannt – und das erste Ja zurückgenommen. Stark." },
+            { "text": "Unterschreiben – jetzt ist es ja fast erledigt.", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Wer schon zugesagt hat, steigt ungern aus. Genau darauf baut der Nachschlag." }
+          ] },
+        { "id": "k3", "sagt": "Verkäufer: „Schriftlich? Ich habe mir jetzt so viel Zeit für Sie genommen. Da können Sie mich doch nicht hängen lassen.“",
+          "wahl": [
+            { "text": "„Danke für Ihre Zeit. Entscheiden werde ich trotzdem in Ruhe. Bitte die Gesamtkosten auf einem Blatt.“", "wert": 2, "weiter": "k4", "rueck": "Eingeredete Schuld erkannt und freundlich zurückgegeben. Gefühl und Entscheidung bleiben getrennt." },
+            { "text": "Schweigen und auf das Blatt warten.", "wert": 1, "weiter": "k4", "rueck": "Ruhig – das geht. Ein freundlicher Satz hätte die Lage klarer gemacht." },
+            { "text": "„Stimmt, Sie haben sich echt Mühe gegeben … also gut.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Schuldgefühl statt Bedarf hat entschieden." }
+          ] },
+        { "id": "k4", "sagt": "Auf dem Blatt: 30 Euro Anschluss, ab dem 13. Monat 32 Euro. Der Verkäufer: „Also, unterschreiben wir?“",
+          "wahl": [
+            { "text": "„Nein, danke. Ich vergleiche das zu Hause.“", "wert": 2, "weiter": "ende1", "rueck": "Klares Nein – ohne Begründung, die er bearbeiten könnte." },
+            { "text": "„Hm, eigentlich ist mir das zu teuer, weil …“", "wert": 0, "tendenz": "verteidigen", "weiter": "k4b", "rueck": "Gründe sind Futter für Gegenargumente." }
+          ] },
+        { "id": "k4b", "sagt": "Verkäufer: „Ach, die 30 Euro erlasse ich Ihnen. Dann passt's doch!“",
+          "wahl": [
+            { "text": "„Es bleibt beim Nein. Ich vergleiche zu Hause.“", "wert": 2, "weiter": "ende1", "rueck": "Das Nein wiederholt statt neu begründet." },
+            { "text": "„Na gut, wenn Sie die 30 erlassen …“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Ein kleines Zugeständnis lässt den teuren Rest vergessen." }
+          ] },
+        { "id": "ende1", "sagt": "Zu Hause findest du in zehn Minuten einen Vertrag für 21 Euro, ohne Anschlussgebühr. Sven: „Respekt.“", "ende": "Ja-Kette, Kontrast, erfundene Frist, eingeredete Schuld, Nachschlag – erkannt. Deine Abwehr: eigener Rahmen, Gesamtpreis schriftlich, eine Nacht Abstand, ein Nein ohne Begründung." },
+        { "id": "ende2", "sagt": "Du gehst mit einem Vertrag nach Hause, der jeden Monat mehr kostet als geplant.", "ende": "Kein Drama – aber teuer. Diese Mittel wirken auf jeden. Die Abwehr: den eigenen Rahmen vorher festlegen, Gesamtpreis schriftlich, nichts unter Zeitdruck unterschreiben." }
+      ],
+      "prinzipien": ["eigenen Rahmen vorher festlegen", "gegen den eigenen Bedarf prüfen, nicht gegen das Angebot daneben", "erfundene Fristen erkennen", "Gesamtpreis schriftlich", "Gefühl und Entscheidung trennen", "ein Nein wiederholen statt begründen"],
+      "transfer": "Welchen Kauf planst du als Nächstes – Auto, Vertrag, Küche? Schreib vorher auf, was du brauchst, was es höchstens kosten darf, und deinen Satz für „nur noch heute“."
+    },
+    {
+      "id": "ueberzeugen-l-05", "bereich": "ueberzeugen", "phase": "g", "umfeld": "kunden", "faehigkeiten": ["ueberzeugen.profil", "ueberzeugen.bedarf", "ueberzeugen.nutzen", "ueberzeugen.vertrauen", "ueberzeugen.einwand", "ueberzeugen.abschluss", "ueberzeugen.haltung"], "stufe": 5, "sparring": true,
+      "titel": "Sparring: Das Erstgespräch", "figur": "Nadine Köhler",
+      "einleitung": "Das Sparring zum Abschluss der Grundlagen: zwanzig Minuten bei einer möglichen Kundin. Vorstellung, Bedarf, Nutzen, ehrlicher Nachteil, Preis, Einwand, Entscheidung – alles in einem Gespräch.",
+      "lage": "Nadine Köhler hat dich in ihren Betrieb eingeladen: zwölf Leute, ein Büro, eine Werkstatt. Sie hat zwanzig Minuten. Am Ende soll klar sein, wie es weitergeht – oder dass es nicht passt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Nadine: „Schön, dass Sie da sind. Erzählen Sie mal – was machen Sie genau?“",
+          "wahl": [
+            { "text": "„Ich sorge dafür, dass in kleinen Betrieben die Technik nicht im Weg steht – zuletzt bei einem Umzug übers Wochenende. Aber wie läuft es bei Ihnen?“", "wert": 2, "weiter": "k2", "rueck": "Kurze Vorstellung mit Beispiel – und der Ball geht gleich an sie." },
+            { "text": "„Ich bin IT-Dienstleister, seit zehn Jahren selbstständig.“", "wert": 1, "weiter": "k2", "rueck": "Stimmt, aber eine Schublade. Ein Satz zum Nutzen hätte mehr gezeigt." },
+            { "text": "Zehn Minuten lang Leistungen, Zertifikate und Referenzen aufzählen.", "wert": 0, "tendenz": "merkmale", "weiter": "k1b", "rueck": "Die halbe Zeit ist weg, und du weißt nichts über sie." }
+          ] },
+        { "id": "k1b", "sagt": "Nadine schaut auf die Uhr: „Beeindruckend. Wir haben aber nur noch zehn Minuten.“",
+          "wahl": [
+            { "text": "„Dann lieber Sie: Was ärgert Sie an der Technik gerade am meisten?“", "wert": 2, "weiter": "k2", "rueck": "Zurück zu ihr – gut gerettet." },
+            { "text": "„Dann schnell noch die Preise …“", "wert": 0, "tendenz": "zufrueh", "weiter": "ende2", "rueck": "Preis vor Problem. Sie hört nur noch höflich zu." }
+          ] },
+        { "id": "k2", "sagt": "Nadine: „Die Rechner sind alt, und letzten Monat war die Werkstatt zwei Tage ohne Auftragssystem.“",
+          "wahl": [
+            { "text": "„Was hat Sie das gekostet?“", "wert": 2, "weiter": "k3", "rueck": "Die Folgen-Frage – jetzt redet sie über den Wert." },
+            { "text": "„Wie alt sind die Rechner denn?“", "wert": 1, "weiter": "k3", "rueck": "Eine Lage-Frage. Gut, aber die Folgen sind wichtiger." },
+            { "text": "„Dann brauchen Sie neue Rechner. Ich kann Ihnen zwölf Stück besorgen.“", "wert": 0, "tendenz": "zufrueh", "weiter": "k2b", "rueck": "Lösung vor Verständnis – und vielleicht die falsche." }
+          ] },
+        { "id": "k2b", "sagt": "Nadine: „Neue Rechner? Die laufen eigentlich. Das war nicht das Problem.“",
+          "wahl": [
+            { "text": "„Sie haben recht, ich war zu schnell. Was ist an den zwei Tagen passiert?“", "wert": 2, "weiter": "k3", "rueck": "Fehler zugegeben, zurück zum Problem." },
+            { "text": "„Aber alte Rechner sind immer ein Risiko.“", "wert": 0, "tendenz": "verteidigen", "weiter": "ende2", "rueck": "Du verteidigst deinen Schnellschuss." }
+          ] },
+        { "id": "k3", "sagt": "Nadine: „Zwei Tage keine Aufträge, Kunden vertröstet. Und ich wusste nicht, wen ich anrufen soll.“",
+          "wahl": [
+            { "text": "„Wenn ich Sie richtig verstehe: Sie brauchen weniger neue Technik als jemanden, der zuständig ist und schnell da ist. Stimmt das?“", "wert": 2, "weiter": "k4", "rueck": "Zusammengefasst – sie fühlt sich verstanden." },
+            { "text": "„Da kann ich helfen.“", "wert": 1, "weiter": "k4", "rueck": "Freundlich, aber ohne zu zeigen, dass du verstanden hast." }
+          ] },
+        { "id": "k4", "sagt": "Nadine: „Genau. Was schlagen Sie vor?“",
+          "wahl": [
+            { "text": "„Feste Betreuung, Hilfe in zwei Stunden. Das heißt: Ein Ausfall kostet Stunden statt Tage. Ehrlich gesagt verhindere ich bei den alten Rechnern nicht jeden Ausfall.“", "wert": 2, "weiter": "k5", "rueck": "Nutzen-Brücke und ein ehrlicher Nachteil – glaubwürdig." },
+            { "text": "„Feste Betreuung mit Überwachung, Fernwartung und Sicherung.“", "wert": 1, "tendenz": "merkmale", "weiter": "k5", "rueck": "Richtig, aber als Merkmale. Was heißt das für ihren nächsten Ausfall?" },
+            { "text": "„Mit mir haben Sie keinen Ausfall mehr, versprochen.“", "wert": 0, "tendenz": "aufblasen", "weiter": "k5", "rueck": "Ein Versprechen, das du nicht halten kannst. Sie glaubt dir jetzt weniger." }
+          ] },
+        { "id": "k5", "sagt": "Nadine: „Was kostet das?“",
+          "wahl": [
+            { "text": "„350 Euro im Monat.“ – und ruhig abwarten.", "wert": 2, "weiter": "k6", "rueck": "Klare Zahl, keine Entschuldigung, Pause." },
+            { "text": "„Leider nicht ganz billig, 350 – aber da lässt sich reden …“", "wert": 0, "tendenz": "nachgeben", "weiter": "k6", "rueck": "Du lädst sie zum Drücken ein, bevor sie etwas gesagt hat." }
+          ] },
+        { "id": "k6", "sagt": "Nadine: „Hm. Das ist mir zu teuer.“",
+          "wahl": [
+            { "text": "„Verstehe. Womit vergleichen Sie?“", "wert": 2, "weiter": "k7", "rueck": "Erst verstehen." },
+            { "text": "„Dann 280.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k6b", "rueck": "Nachlass beim ersten Zögern." },
+            { "text": "„Das ist ein fairer Preis, wirklich – das zahlen andere Betriebe auch.“", "wert": 0, "tendenz": "verteidigen", "weiter": "k6b", "rueck": "Verteidigen bringt nichts ans Licht." }
+          ] },
+        { "id": "k6b", "sagt": "Nadine: „Ich weiß nicht. Ich muss darüber nachdenken.“",
+          "wahl": [
+            { "text": "„Gern. Worüber genau – vielleicht kann ich es gleich klären?“", "wert": 2, "weiter": "k7", "rueck": "Zweite Chance: Du findest heraus, was offen ist." },
+            { "text": "„Natürlich. Darf ich mich am Freitag melden?“", "wert": 1, "weiter": "ende3", "rueck": "Mit nächstem Schritt – aber der Einwand bleibt ungeklärt." }
+          ] },
+        { "id": "k7", "sagt": "Nadine: „Mit dem, was die zwei Tage gekostet haben, wäre es das eigentlich wert. Ich habe nur Sorge, mich lange zu binden.“",
+          "wahl": [
+            { "text": "„Dann fangen wir mit drei Monaten an. Wenn es nicht passt, hören wir auf. Wollen wir das so machen?“", "wert": 2, "weiter": "ende1", "rueck": "Den wahren Einwand gelöst und klar um die Entscheidung gebeten." },
+            { "text": "„Wenn Ihnen Bindung nicht passt, bin ich vielleicht nicht der Richtige. Dann wäre ein Notdienst auf Abruf besser.“", "wert": 1, "weiter": "ende4", "rueck": "Ehrlich und fair – nur hättest du ihre Sorge auch lösen können." },
+            { "text": "„Wenn Sie heute unterschreiben, gebe ich zehn Prozent – aber nur heute.“", "wert": 0, "tendenz": "ueberreden", "weiter": "ende2", "rueck": "Erfundener Zeitdruck – rote Linie. Sie merkt es." }
+          ] },
+        { "id": "ende1", "sagt": "Nadine: „Ja, so machen wir es.“ Sie gibt dir die Hand.", "ende": "Vorstellung mit Beispiel, Fragen bis zu den Folgen, Zusammenfassung, Nutzen mit ehrlichem Nachteil, Preis ohne Entschuldigung, Einwand verstanden, klare Frage. Das ist die Grundausstattung." },
+        { "id": "ende2", "sagt": "Nadine bedankt sich höflich und bringt dich zur Tür.", "ende": "Ein Nein ist in Ordnung, wenn es nicht passt. Hier kam es, weil sie sich nicht verstanden oder gedrängt fühlte. Beim nächsten Mal: fragen, zusammenfassen, Nutzen, Preis, Pause." },
+        { "id": "ende3", "sagt": "Nadine: „Ich melde mich.“ Am Freitag rufst du an – sie will noch warten.", "ende": "Fast. Der eigentliche Einwand blieb offen, darum blieb auch die Entscheidung offen. Frag nach, was hinter „nachdenken“ steckt." },
+        { "id": "ende4", "sagt": "Nadine: „Danke, dass Sie so ehrlich sind. Ich denke darüber nach – und ich empfehle Sie weiter.“", "ende": "Auch ein Nein kann ein guter Ausgang sein: Du hast gesagt, wann du nicht passt. Das schafft Vertrauen und Empfehlungen. Hier hätte ein kurzer Einstieg ihre Sorge sogar gelöst." }
+      ],
+      "prinzipien": ["Vorstellung mit Beispiel, dann der Ball zu ihr", "die Folgen-Frage", "zusammenfassen", "Nutzen mit ehrlichem Nachteil", "Preis nennen und schweigen", "den Einwand verstehen", "klar um die Entscheidung bitten", "ein Nein darf ein guter Ausgang sein"],
+      "transfer": "Welches Gespräch steht dir bevor, in dem du jemanden gewinnen willst – Kundin, Chef, Verein? Geh die Prinzipien einmal für genau dieses Gespräch durch."
+    }
+  ]
+}

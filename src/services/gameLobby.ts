@@ -70,7 +70,7 @@ const walletPath = (u: string): string => `${ROOT}/wallets/${safe(u)}.json`
 // ── Wallet (Coins) ────────────────────────────────────────────────────────────
 export async function getWallet(username: string): Promise<Wallet> {
   try {
-    const w = await api().netReadJson<Wallet>(walletPath(username))
+    const w = await api().netReadJsonAsync<Wallet>(walletPath(username))
     if (w && typeof w.coins === 'number' && isFinite(w.coins)) return w
   } catch { /* noch keins → Startguthaben */ }
   return { username: lc(username), coins: STARTING_COINS, updatedAt: nowIso() }
@@ -78,7 +78,7 @@ export async function getWallet(username: string): Promise<Wallet> {
 export async function getCoins(username: string): Promise<number> { return (await getWallet(username)).coins }
 async function setCoins(username: string, coins: number): Promise<void> {
   const payload: Wallet = { username: lc(username), coins: Math.max(0, Math.round(coins)), updatedAt: nowIso() }
-  try { await api().netWriteJson(walletPath(username), payload) } catch { /* egal */ }
+  try { await api().netWriteJsonAsync(walletPath(username), payload) } catch { /* egal */ }
 }
 async function addCoins(username: string, delta: number): Promise<void> {
   const w = await getWallet(username)
@@ -88,21 +88,21 @@ async function addCoins(username: string, delta: number): Promise<void> {
 // ── Präsenz / Lobby ───────────────────────────────────────────────────────────
 export async function writeLobby(me: PlayerRef, status: 'idle' | 'in-match' = 'idle', matchId?: string): Promise<void> {
   const payload: LobbyEntry = { username: lc(me.username), displayName: me.displayName || me.username, at: nowIso(), status, matchId }
-  try { await api().netWriteJson(lobbyPath(me.username), payload) } catch { /* offline → egal */ }
+  try { await api().netWriteJsonAsync(lobbyPath(me.username), payload) } catch { /* offline → egal */ }
 }
 export async function clearLobby(username: string): Promise<void> {
-  try { await api().netDeleteFile(lobbyPath(username)) } catch { /* egal */ }
+  try { await api().netDeleteFileAsync(lobbyPath(username)) } catch { /* egal */ }
 }
 export async function listLobby(): Promise<ListedLobby[]> {
   try {
-    const files = await api().netListDir(`${ROOT}/lobby`)
+    const files = await api().netListDirAsync(`${ROOT}/lobby`)
     if (!Array.isArray(files)) return []
     const now = Date.now()
     const out: ListedLobby[] = []
     for (const f of files) {
       if (!f.toLowerCase().endsWith('.json')) continue
       try {
-        const d = await api().netReadJson<LobbyEntry>(`${ROOT}/lobby/${f}`)
+        const d = await api().netReadJsonAsync<LobbyEntry>(`${ROOT}/lobby/${f}`)
         if (!d || !d.username || !d.at) continue
         const ts = new Date(d.at).getTime()
         if (isNaN(ts)) continue
@@ -117,34 +117,34 @@ export async function listLobby(): Promise<ListedLobby[]> {
 
 // ── Einladungen ─────────────────────────────────────────────────────────────
 export async function sendInvite(toUsername: string, inv: Invite): Promise<void> {
-  try { await api().netWriteJson(invitePath(toUsername), inv) } catch { /* egal */ }
+  try { await api().netWriteJsonAsync(invitePath(toUsername), inv) } catch { /* egal */ }
 }
 export async function readInvite(meUsername: string): Promise<Invite | null> {
   try {
-    const inv = await api().netReadJson<Invite>(invitePath(meUsername))
+    const inv = await api().netReadJsonAsync<Invite>(invitePath(meUsername))
     if (!inv || !inv.matchId || !inv.at) return null
     if (Date.now() - new Date(inv.at).getTime() > INVITE_TTL_MS) return null   // abgelaufen
     return inv
   } catch { return null }
 }
 export async function clearInvite(meUsername: string): Promise<void> {
-  try { await api().netDeleteFile(invitePath(meUsername)) } catch { /* egal */ }
+  try { await api().netDeleteFileAsync(invitePath(meUsername)) } catch { /* egal */ }
 }
 
 // ── Match ─────────────────────────────────────────────────────────────────────
 export async function loadMatch(id: string): Promise<Match | null> {
   try {
-    const m = await api().netReadJson<Match>(matchPath(id))
+    const m = await api().netReadJsonAsync<Match>(matchPath(id))
     if (m && m.id && Array.isArray(m.board)) return m
   } catch { /* weg */ }
   return null
 }
 async function saveMatch(m: Match): Promise<boolean> {
   m.updatedAt = nowIso()
-  try { return await api().netWriteJson(matchPath(m.id), m) } catch { return false }
+  try { return await api().netWriteJsonAsync(matchPath(m.id), m) } catch { return false }
 }
 export async function deleteMatch(id: string): Promise<void> {
-  try { await api().netDeleteFile(matchPath(id)) } catch { /* egal */ }
+  try { await api().netDeleteFileAsync(matchPath(id)) } catch { /* egal */ }
 }
 
 /** Neues Match: Herausforderer = Rot (beginnt), Ziel = Gelb. Schreibt zugleich die Einladung. */
@@ -279,7 +279,7 @@ export function colorOf(m: Match, username: string): Color | null {
 /** Laufendes/wartendes Match des Nutzers finden (zum Wiedereinstieg beim Öffnen). */
 export async function findMyActiveMatch(username: string): Promise<Match | null> {
   try {
-    const files = await api().netListDir(`${ROOT}/matches`)
+    const files = await api().netListDirAsync(`${ROOT}/matches`)
     if (!Array.isArray(files)) return null
     let best: Match | null = null
     for (const f of files) {

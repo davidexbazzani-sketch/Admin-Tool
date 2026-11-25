@@ -26,7 +26,7 @@ export default function GameInviteController() {
 
   const tick = useCallback(async () => {
     if (!username) return
-    if (screen === 'games') { setInvite(null); return }   // der Screen übernimmt
+    if (screen === 'vier-gewinnt') { setInvite(null); return }   // der Screen übernimmt
     const inv = await readInvite(username)
     if (inv && !dismissed.current.has(inv.matchId)) setInvite(inv)
     else if (!inv) setInvite(null)
@@ -52,7 +52,7 @@ export default function GameInviteController() {
       dismissed.current.add(invite.matchId)
       await acceptMatch(invite.matchId, username)
       setInvite(null)
-      setScreen('games')
+      setScreen('vier-gewinnt')
     } finally { setBusy(false) }
   }, [invite, busy, username, setScreen])
 
@@ -63,7 +63,7 @@ export default function GameInviteController() {
     setInvite(null)
   }, [invite, username])
 
-  if (!invite || screen === 'games') return null
+  if (!invite || screen === 'vier-gewinnt') return null
 
   return (
     <div className="fixed bottom-4 right-4 z-[70] w-80 rounded-xl border border-emerald-500/50 bg-card shadow-2xl">

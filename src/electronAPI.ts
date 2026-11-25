@@ -161,6 +161,9 @@ declare global {
       authUpdateUser(userId: string, patch: Record<string, unknown>): Promise<boolean>
       authUpdatePassword(userId: string, newPassword: string): Promise<boolean>
       authDeleteUser(userId: string): Promise<boolean>
+      authVormerken(p: { corpId: string; displayName?: string; role: 'master_admin' | 'admin' | 'user'; createdBy: string }): Promise<{ ok: true; user: AppUser } | { ok: false; error: string }>
+      /** Passwort der Einstellungen „Für alle“ prüfen (Hash-Vergleich im Main-Prozess, Wartezeit nach 5 Fehlversuchen) */
+      verwaltungPruefe(pw: string): Promise<{ ok: boolean; warteSek?: number; rest?: number }>
 
       // ── Activity logging ──────────────────────────────────────────────────
       logActivity(entry: {
@@ -187,6 +190,14 @@ declare global {
       netReadJsonAsync<T = unknown>(relativePath: string): Promise<T | null>
       netWriteJsonAsync(relativePath: string, data: unknown): Promise<boolean>
       netDeleteFileAsync(relativePath: string): Promise<boolean>
+      /** Nur anlegen, wenn es die Datei noch nicht gibt — der Dateiserver entscheidet, wer zuerst war. */
+      netCreateExclusiveAsync(relativePath: string, data: unknown): Promise<'ok' | 'vorhanden' | 'fehler'>
+      /** Wie netReadJsonAsync, sagt aber, warum nichts kam: Datei fehlt / unlesbar / Laufwerk nicht erreichbar. */
+      netReadJsonStatusAsync(relativePath: string): Promise<{ status: 'ok' | 'fehlt' | 'kaputt' | 'fehler'; daten?: unknown }>
+      /** Wie netListDirAsync, sagt aber, ob das Laufwerk antwortet (ok: false) oder das Verzeichnis nur leer ist/fehlt. */
+      netListDirStatusAsync(relativePath: string): Promise<{ ok: boolean; namen: string[] }>
+      /** Ein leeres Verzeichnis entfernen (liegt noch etwas darin, bleibt es stehen). */
+      netDeleteEmptyDirAsync(relativePath: string): Promise<boolean>
       netIsAvailable(): Promise<boolean>
       netGetBasePath(): Promise<string>
       netSetBasePath(path: string): Promise<boolean>
@@ -207,6 +218,36 @@ declare global {
       // ── Wissenssuche (MiniSearch-Volltextindex) ───────────────────────────
       knowledgeLoad(loadSensitive?: boolean): Promise<{ ok: boolean; dir: string | null; core: KnowledgeBundle | null; sensitive: KnowledgeBundle | null; builtAt: string | null; source: 'net' | 'local' | null; error?: string }>
       knowledgeStatus(): Promise<{ ok: boolean; dir: string | null; builtAt: string | null; source: 'net' | 'local' | null }>
+
+      // ── Brain Trainer: Ergebnisse je Benutzer lokal + verschlüsselt (Windows-DPAPI), nie im Netz ──
+      brainLaden(benutzer: string): Promise<{ ok: boolean; daten: string | null; verschluesselung: boolean; fehler?: string }>
+      brainSpeichern(benutzer: string, json: string): Promise<{ ok: boolean; fehler?: string }>
+      brainLoeschen(benutzer: string): Promise<boolean>
+      italianoLaden(benutzer: string): Promise<{ ok: boolean; daten: string | null; verschluesselung: boolean; fehler?: string }>
+      italianoSpeichern(benutzer: string, json: string): Promise<{ ok: boolean; fehler?: string }>
+      italianoLoeschen(benutzer: string): Promise<boolean>
+      // Terra Incognita: Spielstand + aufgedeckte Karte, lokal und verschlüsselt; „beiseite“ legt eine unlesbare Datei weg, statt sie zu überschreiben
+      terraLaden(benutzer: string): Promise<{ ok: boolean; daten: string | null; verschluesselung: boolean; fehler?: string }>
+      terraSpeichern(benutzer: string, json: string): Promise<{ ok: boolean; fehler?: string }>
+      terraLoeschen(benutzer: string): Promise<boolean>
+      terraBeiseite(benutzer: string, kennung?: string): Promise<boolean>
+      terraKarteLaden(benutzer: string): Promise<{ ok: boolean; daten: string | null; verschluesselung: boolean; fehler?: string }>
+      terraKarteSpeichern(benutzer: string, json: string): Promise<{ ok: boolean; fehler?: string }>
+      terraKarteLoeschen(benutzer: string): Promise<boolean>
+      terraKarteBeiseite(benutzer: string, kennung?: string): Promise<boolean>
+      // Der Coach: Lernstand, Buch, Vergleichsaufnahmen — lokal und verschlüsselt (Zugriff nur über src/coach/host/adminTool.ts)
+      coachLaden(benutzer: string): Promise<{ ok: boolean; daten: string | null; verschluesselung: boolean; fehler?: string }>
+      coachSpeichern(benutzer: string, json: string): Promise<{ ok: boolean; fehler?: string }>
+      coachLoeschen(benutzer: string): Promise<boolean>
+      coachBeiseite(benutzer: string, kennung?: string): Promise<boolean>
+      coachBuchLaden(benutzer: string): Promise<{ ok: boolean; daten: string | null; verschluesselung: boolean; fehler?: string }>
+      coachBuchSpeichern(benutzer: string, json: string): Promise<{ ok: boolean; fehler?: string }>
+      coachBuchLoeschen(benutzer: string): Promise<boolean>
+      coachBuchBeiseite(benutzer: string, kennung?: string): Promise<boolean>
+      coachTonLaden(benutzer: string): Promise<{ ok: boolean; daten: string | null; verschluesselung: boolean; fehler?: string }>
+      coachTonSpeichern(benutzer: string, json: string): Promise<{ ok: boolean; fehler?: string }>
+      coachTonLoeschen(benutzer: string): Promise<boolean>
+      coachTonBeiseite(benutzer: string, kennung?: string): Promise<boolean>
 
       // ── System info ───────────────────────────────────────────────────────
       getWindowsUsername(): Promise<string>

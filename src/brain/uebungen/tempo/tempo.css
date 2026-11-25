@@ -1,0 +1,100 @@
+/* Tempo-Familie (Reaktionszeit, Symbol-Suche, Zahlen-Symbol-Code, Zahlen verbinden).
+   Farben nur über --bt-…; alle Klassen beginnen mit bt-tempo-. */
+
+/* ── gemeinsam ── */
+.bt-tempo-zeichen {
+  flex: none; display: flex; align-items: center; justify-content: center; padding: 9px;
+  border-radius: 12px; border: 1px solid var(--bt-rand); background: var(--bt-bg2);
+}
+.bt-tempo-zeichen[data-ziel] { border-color: var(--bt-akzent); background: var(--bt-akzent-weich); }
+.bt-tempo-blitz { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+/* „.bt-app button { font: inherit }“ in brain.css wiegt schwerer als eine einzelne Klasse — Schrift an
+   Knöpfen deshalb mit „.bt-app“ davor festlegen. */
+.bt-app .bt-tempo-antwort { min-width: 170px; font: 600 17px/1.2 var(--bt-schrift); }
+.bt-tempo-antwort .bt-taste { margin-left: 6px; }
+
+/* ── Reaktionszeit ── */
+.bt-tempo-rk-feld {
+  width: 100%; max-width: 620px; height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  border-radius: 22px; border: 2px solid var(--bt-rand); background: var(--bt-flaeche); color: var(--bt-ink);
+  font: 600 58px/1 var(--bt-schrift); letter-spacing: -0.02em; user-select: none; touch-action: manipulation;
+  /* bewusst ohne Übergang: das Signal muss von einem Bild aufs nächste da sein */
+  transition: none;
+}
+.bt-tempo-rk-feld[data-klickbar] { cursor: pointer; }
+.bt-tempo-rk-feld[data-zustand='warten'] { border-style: dashed; color: var(--bt-stumm); }
+.bt-tempo-rk-feld[data-zustand='los'] { background: var(--bt-akzent); border-color: var(--bt-akzent); color: var(--bt-akzent-ink); }
+.bt-tempo-rk-feld[data-zustand='pfeil'] { border-color: var(--bt-akzent); background: var(--bt-flaeche2); }
+.bt-tempo-rk-feld[data-zustand='stopp'] { border-color: var(--bt-akzent2); background: var(--bt-akzent2-weich); color: var(--bt-akzent2); }
+.bt-tempo-rk-feld[data-zustand='gut'] { border-color: var(--bt-gut); background: var(--bt-gut-weich); color: var(--bt-gut); }
+.bt-tempo-rk-feld[data-zustand='schlecht'] { border-color: var(--bt-schlecht); background: var(--bt-schlecht-weich); color: var(--bt-schlecht); }
+.bt-tempo-rk-klein { font-size: 24px; letter-spacing: 0; }
+.bt-tempo-rk-mittel { font-size: 34px; letter-spacing: -0.01em; }
+.bt-tempo-rk-kreuz { font-size: 64px; font-weight: 400; }
+
+.bt-tempo-rk-verlauf { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.bt-tempo-rk-marke {
+  min-width: 46px; padding: 3px 6px; border-radius: 8px; border: 1px solid var(--bt-rand); background: var(--bt-flaeche);
+  color: var(--bt-stumm); font-size: 12px; text-align: center;
+}
+.bt-tempo-rk-marke[data-jetzt] { border-color: var(--bt-akzent); color: var(--bt-ink); }
+.bt-tempo-rk-marke[data-gut] { border-color: transparent; background: var(--bt-gut-weich); color: var(--bt-gut); }
+.bt-tempo-rk-marke[data-schlecht] { border-color: transparent; background: var(--bt-schlecht-weich); color: var(--bt-schlecht); }
+
+.bt-tempo-rk-tasten { display: grid; gap: 6px; grid-template-columns: repeat(2, 62px); grid-template-areas: 'links rechts'; }
+.bt-tempo-rk-tasten[data-vier] { grid-template-columns: repeat(3, 62px); grid-template-areas: '. oben .' 'links unten rechts'; }
+.bt-tempo-rk-knopf { height: 46px; color: var(--bt-ink); }
+
+/* ── Symbol-Suche ── */
+.bt-tempo-ss-buehne { display: flex; align-items: stretch; justify-content: center; gap: 22px; flex-wrap: wrap; width: 100%; }
+.bt-tempo-ss-tafel {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px 18px 18px;
+  border-radius: 18px; border: 1px solid var(--bt-rand); background: var(--bt-flaeche);
+}
+.bt-tempo-ss-tafel[data-art='ziele'] { border-color: var(--bt-akzent); }
+.bt-tempo-ss-tafel[data-art='ziele'] .bt-label { color: var(--bt-akzent-stark); }
+.bt-tempo-ss-zeichen { display: flex; gap: 8px; align-items: center; min-height: 88px; }
+
+/* ── Zahlen-Symbol-Code ── */
+.bt-tempo-zs-oben { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
+.bt-tempo-zs-legende {
+  display: grid; grid-template-columns: repeat(9, 76px); gap: 6px; padding: 10px; border-radius: 18px;
+  border: 1px solid var(--bt-rand); background: var(--bt-flaeche);
+}
+.bt-tempo-zs-legende[data-neu] { animation: bt-tempo-neu .9s ease-out; }
+@keyframes bt-tempo-neu {
+  from { border-color: var(--bt-akzent2); box-shadow: 0 0 0 4px var(--bt-akzent2-weich); }
+  to { border-color: var(--bt-rand); box-shadow: 0 0 0 4px transparent; }
+}
+.bt-tempo-zs-zelle {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 5px 4px 7px;
+  border-radius: 11px; border: 1px solid var(--bt-rand); background: var(--bt-bg2);
+}
+.bt-tempo-zs-zelle > .bt-zahl { font-size: 19px; line-height: 1.15; color: var(--bt-akzent-stark); }
+.bt-tempo-zs-bild { width: 50px; height: 50px; display: block; }
+.bt-tempo-zs-hinweis { min-height: 18px; }
+.bt-tempo-zs-gemischt { color: var(--bt-akzent2); animation: bt-tempo-aus 1.8s ease-in forwards; }
+@keyframes bt-tempo-aus { 0%, 65% { opacity: 1; } 100% { opacity: 0; } }
+.bt-tempo-zs-mitte { display: flex; align-items: center; justify-content: center; gap: 44px; flex-wrap: wrap; }
+.bt-tempo-zs-reiz {
+  position: relative; width: 172px; height: 172px; padding: 26px; border-radius: 22px;
+  border: 2px solid var(--bt-akzent); background: var(--bt-flaeche);
+}
+.bt-tempo-zs-block { display: grid; grid-template-columns: repeat(3, 54px); grid-auto-rows: 54px; gap: 5px; }
+.bt-app .bt-tempo-zs-taste { font: 600 22px/1 var(--bt-schrift); color: var(--bt-ink); }
+
+/* ── Zahlen verbinden ── */
+.bt-tempo-vb-feld {
+  display: block; width: 100%; max-width: 1000px; border-radius: 18px; border: 1px solid var(--bt-rand);
+  background: var(--bt-flaeche); user-select: none; touch-action: manipulation;
+}
+.bt-tempo-vb-ziel { display: inline-block; min-width: 1.5em; text-align: center; color: var(--bt-akzent-stark); font-variant-numeric: tabular-nums; }
+.bt-tempo-vb-linie { fill: none; stroke: var(--bt-akzent); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; opacity: .75; }
+.bt-tempo-vb-kreis { cursor: pointer; }
+.bt-tempo-vb-kreis circle { fill: var(--bt-flaeche2); stroke: var(--bt-stumm); stroke-width: 2; }
+.bt-tempo-vb-kreis text { fill: var(--bt-ink); font-family: var(--bt-schrift); font-weight: 600; font-variant-numeric: tabular-nums; pointer-events: none; }
+.bt-tempo-vb-kreis:hover:not([data-fertig]) circle { stroke: var(--bt-akzent); }
+.bt-tempo-vb-kreis[data-fertig] { cursor: default; }
+.bt-tempo-vb-kreis[data-fertig] circle { fill: color-mix(in srgb, var(--bt-akzent) 26%, var(--bt-flaeche)); stroke: var(--bt-akzent); }
+.bt-tempo-vb-kreis[data-fertig] text { fill: var(--bt-akzent-stark); }
+.bt-tempo-vb-kreis[data-schlecht] circle { fill: color-mix(in srgb, var(--bt-schlecht) 22%, var(--bt-flaeche)); stroke: var(--bt-schlecht); }

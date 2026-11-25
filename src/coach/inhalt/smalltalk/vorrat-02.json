@@ -1,0 +1,380 @@
+{
+  "eintraege": [
+    { "art": "anschluss", "kopf": { "id": "smalltalk-v-0048", "faehigkeit": "smalltalk.nachfragen", "stufe": 2, "kanal": "koennen" },
+      "von": "Carla Demir", "aussage": "„Puh, die Präsentation ist durch. Ich war vorher so nervös – aber am Ende hat Dr. Albers sogar genickt.“",
+      "kriterien": ["greift einen Aufhänger auf (nervös, genickt, durch)", "würdigt kurz", "lädt zum Erzählen ein"],
+      "muster": ["„Er hat genickt? Glückwunsch! Wie hat sich das angefühlt?“", "„Geschafft – und das trotz Nervosität. Was war der beste Moment?“"] },
+    { "art": "anschluss", "kopf": { "id": "smalltalk-v-0049", "faehigkeit": "smalltalk.nachfragen", "stufe": 3, "kanal": "koennen" },
+      "von": "Jule Marek", "aussage": "„Ich hab gestern zum ersten Mal Sauerteig angesetzt. Der lebt jetzt in meinem Kühlschrank und hat einen Namen.“",
+      "kriterien": ["nimmt den Aufhänger auf, bei dem sie lebendig wird", "offene Frage", "spielt gern mit"],
+      "muster": ["„Er hat einen Namen? Welchen?“", "„Was hat dich auf Sauerteig gebracht?“"] },
+    { "art": "anschluss", "kopf": { "id": "smalltalk-v-0050", "faehigkeit": "smalltalk.nachfragen", "stufe": 3, "kanal": "koennen" },
+      "von": "Tante Renate", "aussage": "„Ich hab jetzt einen Kurs am Computer gemacht. Stell dir vor, ich kann jetzt Fotos verschicken.“",
+      "kriterien": ["würdigt die neue Fähigkeit ohne gönnerhaften Ton", "fragt nach ihrem Erleben", "duzt, wie in der Familie üblich"],
+      "muster": ["„Toll! Was war das erste Foto, das du verschickt hast?“", "„Respekt – was hat dich im Kurs am meisten überrascht?“"] },
+    { "art": "anschluss", "kopf": { "id": "smalltalk-v-0051", "faehigkeit": "smalltalk.nachfragen", "stufe": 4, "kanal": "koennen" },
+      "von": "Dr. Henrik Albers", "aussage": "„Nächste Woche bin ich weg. Meine Tochter heiratet – im Norden, an einem See. Ich soll eine Rede halten.“",
+      "kriterien": ["siezt", "greift persönlich, aber nicht zu tief auf", "würdigt den Anlass"],
+      "muster": ["„Herzlichen Glückwunsch! Eine Rede für die eigene Tochter – haben Sie schon eine Idee?“", "„Wie schön! Ist das Ihre erste Rede als Brautvater?“"] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0052", "faehigkeit": "smalltalk.nachfragen", "stufe": 2, "kanal": "wissen" },
+      "frage": "Tarek: „Ich war am Wochenende beim Konzert meiner alten Schulband – die gibt es jetzt seit zwanzig Jahren.“ Welche Antwort greift am besten auf?",
+      "antworten": [
+        { "text": "„Zwanzig Jahre! Wie war's, sie wieder zu hören?“", "wert": 2, "warum": "Gewürdigt und nach dem Erleben gefragt." },
+        { "text": "„Was für Musik machen die, welche Instrumente, und wie viele sind sie?“", "wert": 0, "tendenz": "ausfragen", "warum": "Drei Faktenfragen auf einmal – ein kleines Verhör." },
+        { "text": "„Ich war gestern auch auf einem Konzert, unglaublich laut, und hinter uns hat einer die ganze Zeit mitgesungen …“", "wert": 0, "tendenz": "uebertrumpfen", "warum": "Sein Aufhänger wird zu deiner Geschichte." },
+        { "text": "„Warst du früher selbst in der Band?“", "wert": 1, "warum": "Ein guter Aufhänger – die Frage nach dem Erleben öffnet noch mehr." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0053", "faehigkeit": "smalltalk.nachfragen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Woran erkennst du im Gespräch den stärksten Aufhänger?",
+      "antworten": [
+        { "text": "Am Wort, bei dem der andere lebendig wird – Stimme, Augen, Tempo.", "wert": 2, "warum": "Dort liegt, was ihm wichtig ist – und worüber er gern erzählt." },
+        { "text": "Am Wort, das zuletzt gefallen ist.", "wert": 1, "warum": "Oft ein guter Anschluss – aber nicht immer das, was ihm am wichtigsten ist." },
+        { "text": "Am Thema, zu dem du selbst am meisten erzählen kannst.", "wert": 0, "tendenz": "uebertrumpfen", "warum": "Dann führst du das Gespräch zu dir." },
+        { "text": "Am Wort, das am ungewöhnlichsten klingt.", "wert": 0, "warum": "Ungewöhnlich ist nicht gleich wichtig." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0054", "faehigkeit": "smalltalk.nachfragen", "stufe": 4, "kanal": "wissen" },
+      "frage": "Lena erzählt: „Ich bin gestern nach der Arbeit noch ins Tierheim. Ich geh da jetzt jeden Mittwoch mit Hunden raus.“ Was ist die stärkste Antwort?",
+      "antworten": [
+        { "text": "„Jeden Mittwoch – schön! Wie bist du darauf gekommen?“", "wert": 2, "warum": "Gewürdigt, dann eine offene Frage nach ihrem Weg." },
+        { "text": "„Mit Hunden? Ich hab ja eher Angst vor Hunden, seit mich als Kind einer gebissen hat, damals im Urlaub …“", "wert": 0, "tendenz": "themenwechsel", "warum": "Ehrlich – aber jetzt geht es um deine Geschichte." },
+        { "text": "„Wie viele Hunde sind da, wie lange gehst du mit ihnen, und bekommst du dafür etwas?“", "wert": 0, "tendenz": "ausfragen", "warum": "Ein Fragebogen statt eines Gesprächs." },
+        { "text": "„Das ist ja toll von dir.“", "wert": 1, "warum": "Eine Würdigung – mit einer Frage hinterher wird ein Gespräch daraus." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0055", "faehigkeit": "smalltalk.nachfragen", "stufe": 5, "kanal": "wissen" },
+      "frage": "Herr Petersen sagt beim Kundentermin nebenbei: „Seit meine Frau im Pflegeheim ist, bin ich abends viel allein.“ Was ist angemessen?",
+      "antworten": [
+        { "text": "Nicken und rasch zum Vertrag zurückkommen, damit es für ihn nicht unangenehm wird.", "wert": 0, "tendenz": "ausweichen", "warum": "Er hat etwas Persönliches geteilt – Übergehen fühlt sich kalt an." },
+        { "text": "„Das klingt schwer. Wie geht es Ihnen damit?“", "wert": 2, "warum": "Gewürdigt und eine offene Tür – er entscheidet, ob er mehr erzählt." },
+        { "text": "„Dann gehen Sie doch in einen Verein, da lernt man Leute kennen, das hilft wirklich, glauben Sie mir.“", "wert": 0, "tendenz": "ratschlag", "warum": "Ein schneller Rat überspringt, was er gerade fühlt." },
+        { "text": "„Das tut mir leid.“", "wert": 1, "warum": "Mitfühlend. Eine kleine Frage zeigt, dass du auch zuhören möchtest." }
+      ] },
+    { "art": "blitz", "kopf": { "id": "smalltalk-v-0056", "faehigkeit": "smalltalk.nachfragen", "stufe": 2, "kanal": "koennen", "uhr": true },
+      "auftrag": "Miriam sagt: „Ich hab mir einen Hund aus dem Tierheim geholt.“ Sammle Anschlussfragen.", "ziel": 4, "sekunden": 45,
+      "beispiele": ["„Wie heißt er?“", "„Wie war die erste Nacht?“", "„Was hat dich zu ihm geführt?“"] },
+    { "art": "blitz", "kopf": { "id": "smalltalk-v-0057", "faehigkeit": "smalltalk.nachfragen", "stufe": 3, "kanal": "koennen", "uhr": true },
+      "auftrag": "Jemand erwähnt nebenbei: „Ich war früher Rettungsschwimmerin.“ Sammle Anschlussfragen.", "ziel": 4, "sekunden": 45,
+      "beispiele": ["„Wo war das?“", "„Was war dein aufregendster Tag?“", "„Schwimmst du heute noch?“"] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0058", "faehigkeit": "smalltalk.nachfragen", "stufe": 2, "kanal": "wissen" },
+      "frage": "Jonas: „Ich hatte gestern meine erste Gitarrenstunde.“ Welche Antwort zeigt am besten, dass du zugehört hast?",
+      "antworten": [
+        { "text": "„Die erste! Und – wie war's?“", "wert": 2, "warum": "Aufgegriffen und nach dem Erleben gefragt." },
+        { "text": "„Gitarre ist cool.“", "wert": 1, "warum": "Freundlich, aber es schließt eher. Eine Frage öffnet." },
+        { "text": "„Ich spiele seit zehn Jahren – die ersten Monate sind die schlimmsten, da tun die Finger weh, und die Akkorde …“", "wert": 0, "tendenz": "uebertrumpfen", "warum": "Seine Premiere wird zu deinem Erfahrungsbericht." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0059", "faehigkeit": "smalltalk.nachfragen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Miriam erzählt, dass sie nach acht Jahren den Job wechselt. Welche Antwort würdigt am besten?",
+      "antworten": [
+        { "text": "„Nach acht Jahren – ein großer Schritt. Wie fühlt es sich an?“", "wert": 2, "warum": "Gewürdigt, was es ihr bedeutet, dann eine offene Frage." },
+        { "text": "„Warum denn? War was?“", "wert": 0, "tendenz": "ausfragen", "warum": "„Warum“ klingt schnell nach Rechtfertigung – und nach Klatsch." },
+        { "text": "„Glückwunsch! Wohin geht's?“", "wert": 1, "warum": "Freundlich und neugierig – eine Würdigung des großen Schritts fehlt noch." },
+        { "text": "„Endlich! Ich hätte das an deiner Stelle schon vor Jahren gemacht, ehrlich gesagt – bei dem Chef.“", "wert": 0, "tendenz": "abwerten", "warum": "Du bewertest ihren Weg – und lästerst nebenbei." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0060", "faehigkeit": "smalltalk.nachfragen", "stufe": 4, "kanal": "wissen" },
+      "frage": "Frau Sommer: „Mein Mann hätte heute Geburtstag gehabt.“ Welche Antwort passt am besten?",
+      "antworten": [
+        { "text": "„Denken Sie heute viel an ihn?“", "wert": 2, "warum": "Leise und offen – sie entscheidet, wie viel sie erzählt." },
+        { "text": "„Oh – wie alt wäre er geworden?“", "wert": 1, "warum": "Eine Tür, nur beim Fakt. Nach ihr zu fragen ist wärmer." },
+        { "text": "„Das Leben geht weiter, Frau Sommer – Kopf hoch, Sie haben noch so viel vor sich!“", "wert": 0, "tendenz": "abblocken", "warum": "Aufmunternd gemeint, aber es schiebt ihr Gefühl weg." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "smalltalk-v-0061", "faehigkeit": "smalltalk.nachfragen", "stufe": 3, "kanal": "koennen" },
+      "auftrag": "Tarek erzählt, dass er abends die Meisterschule besucht. Mach aus dem Verhör ein Aufgreifen mit Würdigung.", "vorlage": "„Wie lange dauert das? Was kostet das? Und was verdienst du danach?“",
+      "kriterien": ["würdigt den Aufwand", "eine Frage statt drei", "Geld nicht als erstes Thema"],
+      "muster": ["„Abends noch die Meisterschule – Respekt. Wie schaffst du das neben der Arbeit?“", "„Meister! Was reizt dich daran am meisten?“"] },
+    { "art": "umformulieren", "kopf": { "id": "smalltalk-v-0062", "faehigkeit": "smalltalk.nachfragen", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Jule erzählt vom misslungenen Kuchen für den Geburtstag ihrer Mutter. Mach aus dem Übertrumpfen ein Würdigen.", "vorlage": "„Ach, das ist noch gar nichts – mir ist mal eine ganze Hochzeitstorte vom Tisch gerutscht!“",
+      "kriterien": ["bleibt bei ihrer Geschichte", "zeigt Verständnis", "höchstens kurz etwas Eigenes, dann zurück zu ihr"],
+      "muster": ["„Ausgerechnet für deine Mutter – ärgerlich! Wie hat sie reagiert?“", "„So was passiert immer im falschen Moment. Was hast du dann gemacht?“"] },
+    { "art": "bauplan", "kopf": { "id": "smalltalk-v-0063", "faehigkeit": "smalltalk.nachfragen", "stufe": 3, "kanal": "koennen" },
+      "plan": "Aufgreifen – würdigen – ergänzen", "anlass": "Miriam erzählt: „Ich hab endlich den Motorradführerschein.“",
+      "felder": [
+        { "name": "Aufgreifen", "hilfe": "Welches Wort nimmst du auf?" },
+        { "name": "Würdigen", "hilfe": "Was bedeutet es ihr – ein Satz." },
+        { "name": "Ergänzen", "hilfe": "Eine Frage oder ein Satz von dir." }
+      ],
+      "muster": ["Aufgreifen: „Endlich?“ Würdigen: „Da hast du ja lange drauf hingearbeitet.“ Ergänzen: „Wohin geht die erste Tour?“", "Aufgreifen: „Motorrad!“ Würdigen: „Das wolltest du doch schon ewig.“ Ergänzen: „Wie war die Prüfung?“"] },
+    { "art": "bauplan", "kopf": { "id": "smalltalk-v-0064", "faehigkeit": "smalltalk.nachfragen", "stufe": 4, "kanal": "koennen" },
+      "plan": "Der Faden nach hinten", "anlass": "Das Gespräch mit einem Bekannten stockt. Vor zehn Minuten hat er erwähnt, dass er im Herbst umzieht.",
+      "felder": [
+        { "name": "Was hat er vorhin erwähnt?", "hilfe": "Ein Wort oder ein Satz." },
+        { "name": "Deine Brücke", "hilfe": "„Du hattest vorhin … erwähnt –“" },
+        { "name": "Deine Frage", "hilfe": "Offen, nach Erleben oder Plan." }
+      ],
+      "muster": ["Erwähnt: Umzug im Herbst. Brücke: „Du hattest vorhin den Umzug erwähnt –“ Frage: „Worauf freust du dich am neuen Ort?“", "Erwähnt: Umzug. Brücke: „Apropos Herbst –“ Frage: „Wie weit seid ihr mit den Kisten?“"] },
+    { "art": "spiegeln", "kopf": { "id": "smalltalk-v-0065", "faehigkeit": "smalltalk.nachfragen", "stufe": 3, "kanal": "koennen" },
+      "von": "Lena Brandt", "aussage": "„Ich hab heute meine erste eigene Präsentation gehalten. Ich glaub, es lief ganz okay … aber ich weiß nicht.“",
+      "kriterien": ["benennt ihre Unsicherheit freundlich", "drängt nicht", "lässt Raum zum Weitererzählen"],
+      "muster": ["„Klingt, als wärst du erleichtert und noch nicht ganz sicher.“", "„Geschafft – und jetzt kommen die Zweifel hinterher?“"] },
+    { "art": "spiegeln", "kopf": { "id": "smalltalk-v-0066", "faehigkeit": "smalltalk.nachfragen", "stufe": 4, "kanal": "koennen" },
+      "von": "Tarek Yılmaz", "aussage": "„Mein Vater zieht zu uns. Ist eigentlich gut so … aber die Wohnung ist halt klein, und na ja.“",
+      "kriterien": ["benennt beide Seiten", "ohne Ratschlag", "lässt ihm die Wahl, mehr zu sagen"],
+      "muster": ["„Klingt nach einer guten Lösung – und nach ganz schön wenig Platz.“", "„Gut für deinen Vater, eng für euch – beides auf einmal.“"] },
+    { "art": "zuordnen", "kopf": { "id": "smalltalk-v-0067", "faehigkeit": "smalltalk.nachfragen", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Jonas: „Ich bin am Wochenende meinen ersten Halbmarathon gelaufen.“ Greift die Antwort auf – oder wechselt sie das Thema?",
+      "faecher": ["greift auf", "wechselt das Thema"],
+      "karten": [
+        { "text": "„Der erste? Wie lief's?“", "fach": 0 },
+        { "text": "„Hast du schon die neue Kaffeemaschine gesehen?“", "fach": 1 },
+        { "text": "„Respekt! Hast du lange trainiert?“", "fach": 0 },
+        { "text": "„Ich müsste mal wieder zum Friseur.“", "fach": 1 },
+        { "text": "„Was war der härteste Kilometer?“", "fach": 0 },
+        { "text": "„Am Wochenende war doch auch das Stadtfest, oder?“", "fach": 1 }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "smalltalk-v-0068", "faehigkeit": "smalltalk.erzaehlen", "stufe": 2, "kanal": "koennen" },
+      "auftrag": "Mach aus der nackten Frage „Aussage plus Frage“.", "vorlage": "„Hast du Haustiere?“",
+      "kriterien": ["ein Satz von dir vorweg", "dann die Frage", "kurz"],
+      "muster": ["„Bei uns wohnt seit Kurzem ein Kater, der nachts Socken klaut. Hast du auch Tiere?“", "„Ich hätte gern einen Hund, aber die Wohnung ist zu klein. Hast du Haustiere?“"] },
+    { "art": "umformulieren", "kopf": { "id": "smalltalk-v-0069", "faehigkeit": "smalltalk.erzaehlen", "stufe": 3, "kanal": "koennen" },
+      "auftrag": "Die Antwort ist zu knapp. Gib einen Aufhänger mit – und den Ball zurück.", "vorlage": "Frage: „Wie war dein Wochenende?“ – Antwort: „Gut.“",
+      "kriterien": ["ein Aufhänger mit kleinem Haken", "kein Monolog", "eine Frage zurück"],
+      "muster": ["„Gut – ich war zum ersten Mal bouldern und hab heute Muskelkater an Stellen, die ich nicht kannte. Und deins?“", "„Ruhig. Ich hab endlich das Regal aufgebaut – eine Schraube blieb übrig. Was hast du gemacht?“"] },
+    { "art": "umformulieren", "kopf": { "id": "smalltalk-v-0070", "faehigkeit": "smalltalk.erzaehlen", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Kürz den Monolog zu einer 30-Sekunden-Geschichte mit Ball zurück.", "vorlage": "„Also, wir sind Freitag los, erst Stau, dann Pause an der Raststätte, dann wieder Stau, dann waren wir da, das Hotel war okay, am Samstag hat es geregnet, am Sonntag auch, und dann sind wir zurück, wieder Stau …“",
+      "kriterien": ["ein Haken statt einer Aufzählung", "höchstens vier Sätze", "eine Frage zurück"],
+      "muster": ["„Wir waren übers Wochenende am Meer – und es hat durchgeregnet. Am Ende saßen wir mit Wildfremden im Café und haben Karten gespielt. War trotzdem schön. Warst du schon mal bei Regen am Meer?“", "„Drei Tage Meer, drei Tage Regen – der beste Moment war ein Kartenspiel mit Fremden im Café. Und bei dir?“"] },
+    { "art": "bauplan", "kopf": { "id": "smalltalk-v-0071", "faehigkeit": "smalltalk.erzaehlen", "stufe": 3, "kanal": "koennen" },
+      "plan": "Die 30-Sekunden-Geschichte", "anlass": "Jemand fragt: „Wie bist du eigentlich zu deinem Beruf gekommen?“",
+      "felder": [
+        { "name": "Wo und wann", "hilfe": "Ein Satz zur Lage." },
+        { "name": "Der Haken", "hilfe": "Was war überraschend oder anders?" },
+        { "name": "Was dann passierte", "hilfe": "Ein, zwei Sätze." },
+        { "name": "Schluss und Ball zurück", "hilfe": "Ein Satz zum Ende – dann eine Frage." }
+      ],
+      "muster": ["Nach der Schule wollte ich eigentlich Tiermedizin studieren. Im Praktikum hab ich gemerkt, dass ich lieber Listen ordne als Hunde. Seitdem bin ich im Einkauf – und sehr zufrieden. Wie war das bei dir?", "Ich bin über ein Plakat für einen Ferienjob hier gelandet, eigentlich für sechs Wochen. Das ist jetzt neun Jahre her. Hast du auch so einen Zufall erlebt?"] },
+    { "art": "bauplan", "kopf": { "id": "smalltalk-v-0072", "faehigkeit": "smalltalk.erzaehlen", "stufe": 4, "kanal": "koennen" },
+      "plan": "Eine kleine Panne erzählen", "anlass": "In der Mittagspause erzählen alle von ihrem Montag.",
+      "felder": [
+        { "name": "Wo und wann", "hilfe": "Ein Satz zur Lage." },
+        { "name": "Der Haken", "hilfe": "Was ging schief?" },
+        { "name": "Was dann passierte", "hilfe": "Ein, zwei Sätze." },
+        { "name": "Schluss und Ball zurück", "hilfe": "Ein Satz zum Ende – dann eine Frage." }
+      ],
+      "muster": ["Heute früh hab ich hoch konzentriert Kaffee gekocht – und dann die Tasse in den Kühlschrank gestellt. Die Milch stand neben der Maschine. Ich glaub, ich brauch noch einen. Wie war dein Morgen?", "Ich wollte im Bus schnell eine Mail schicken und hab sie an meine Mutter statt an den Kunden geschickt. Sie fand das Angebot gut. Ist dir so was auch schon passiert?"] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0073", "faehigkeit": "smalltalk.erzaehlen", "stufe": 2, "kanal": "wissen" },
+      "frage": "Was macht aus Fragen ein Gespräch statt eines Verhörs?",
+      "antworten": [
+        { "text": "Möglichst viele Fragen hintereinander.", "wert": 0, "tendenz": "ausfragen", "warum": "Dann muss er alles liefern – und du bleibst unsichtbar." },
+        { "text": "Ab und zu ein Satz von dir vor der Frage.", "wert": 2, "warum": "Aussage plus Frage – so entsteht ein Austausch." },
+        { "text": "Gar keine Fragen, nur eigene Geschichten.", "wert": 0, "tendenz": "monolog", "warum": "Dann wird es eine Rede." },
+        { "text": "Fragen zu dem, was der andere schon erzählt hat.", "wert": 1, "warum": "Gut – das ist Aufgreifen. Ein Satz von dir dazu macht es zum Austausch." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0074", "faehigkeit": "smalltalk.erzaehlen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Wie lang darf eine Geschichte im Smalltalk ungefähr sein?",
+      "antworten": [
+        { "text": "Etwa eine halbe Minute – dann den Ball zurückgeben.", "wert": 2, "warum": "Lang genug für einen Haken, kurz genug fürs Gespräch." },
+        { "text": "So lange, bis alle Einzelheiten erzählt sind.", "wert": 0, "tendenz": "monolog", "warum": "Einzelheiten ermüden – der Haken zählt." },
+        { "text": "Ein einziger Satz, mehr ist schon zu viel.", "wert": 1, "warum": "Kurz ist gut – mit einem kleinen Haken darf es etwas mehr sein." },
+        { "text": "Fünf Minuten, damit es sich lohnt.", "wert": 0, "tendenz": "monolog", "warum": "Das ist eine Rede, kein Gespräch." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0075", "faehigkeit": "smalltalk.erzaehlen", "stufe": 4, "kanal": "wissen" },
+      "frage": "Für die Mittagspause hast du zwei Geschichten: den Tauchurlaub in einem fernen Land und das verregnete Grillfest am Samstag. Welche kommt wahrscheinlich besser an?",
+      "antworten": [
+        { "text": "Das verregnete Grillfest – das kennen alle und können mitreden.", "wert": 2, "warum": "In Versuchen hörten Zuhörer lieber von Vertrautem – sie konnten Lücken selbst füllen." },
+        { "text": "Der Tauchurlaub – je ungewöhnlicher, desto spannender.", "wert": 0, "warum": "Das glaubten auch die Erzähler im Versuch – die Zuhörer sahen es anders." },
+        { "text": "Beide hintereinander, damit für jeden etwas dabei ist.", "wert": 0, "tendenz": "monolog", "warum": "Zwei Geschichten am Stück werden schnell zum Vortrag." },
+        { "text": "Der Tauchurlaub, mit vielen Erklärungen, damit alle folgen können.", "wert": 1, "warum": "Neues geht, wenn es verständlich ist – nur wird es dann leicht lang." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "smalltalk-v-0076", "faehigkeit": "smalltalk.erzaehlen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Jemand fragt: „Wie war der Umzug?“ Ordne die Antworten von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Anstrengend – bis wir merkten, dass der Schrank nicht durchs Treppenhaus passt. Er steht jetzt bei den Nachbarn. Bist du auch schon mal umgezogen?“", "warum": "Ein kleiner Haken, kurz – und der Ball geht zurück." },
+        { "text": "„Geschafft, danke. Die Kisten stehen noch überall.“", "warum": "Freundlich mit Aufhänger – nur ohne Frage zurück." },
+        { "text": "„Ging so.“", "warum": "Ehrlich, aber zu – kaum Stoff." },
+        { "text": "Jeden Karton einzeln aufzählen, samt Stockwerk und Inhalt", "warum": "Ein Monolog ohne Haken und ohne Frage." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "smalltalk-v-0077", "faehigkeit": "smalltalk.erzaehlen", "stufe": 4, "kanal": "wissen" },
+      "frage": "Bring die Bausteine der 30-Sekunden-Geschichte in die richtige Reihenfolge.",
+      "eintraege": [
+        { "text": "Wo und wann – ein Satz zur Lage", "warum": "Setzt den Rahmen." },
+        { "text": "Der Haken – was anders lief als gedacht", "warum": "Macht die Geschichte hörenswert." },
+        { "text": "Was dann passierte", "warum": "Löst den Haken auf." },
+        { "text": "Schluss und Ball zurück", "warum": "Gibt dem anderen das Wort." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0078", "faehigkeit": "smalltalk.erzaehlen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Nadine Köhler fragt dich beim Empfang: „Und was machen Sie bei Ihrer Firma?“ Welche Antwort lädt am ehesten zum Weiterreden ein?",
+      "antworten": [
+        { "text": "„Einkauf.“", "wert": 0, "tendenz": "abblocken", "warum": "Richtig, aber zu – sie hat nichts zum Anknüpfen." },
+        { "text": "„Ich sorge im Einkauf dafür, dass für unsere Geräte die richtigen Teile da sind. Was steht bei Ihnen in der Werkstatt?“", "wert": 2, "warum": "Ein Satz von dir mit Bezug zu ihr – und der Ball geht zurück." },
+        { "text": "„Ich bin zuständig für Rohstoffe, Rahmenverträge, Lieferantenbewertung und Abstimmungen.“", "wert": 0, "tendenz": "monolog", "warum": "Eine Stellenbeschreibung – kein Aufhänger, keine Frage." },
+        { "text": "„Einkauf – Teile für unsere Geräte.“", "wert": 1, "warum": "Mit Aufhänger. Eine Frage zurück macht ein Gespräch daraus." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "smalltalk-v-0079", "faehigkeit": "smalltalk.tiefe", "stufe": 2, "kanal": "wissen" },
+      "frage": "Jonas: „Ich hab am Wochenende meine Großeltern besucht.“ Welche Anschlussfrage öffnet am meisten? Von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Wie war es, sie wiederzusehen?“", "warum": "Erleben – er erzählt, was ihm wichtig ist." },
+        { "text": "„Wo wohnen die denn?“", "warum": "Ein Fakt, aber ein Aufhänger für mehr." },
+        { "text": "„War's weit?“", "warum": "Geschlossen – schnell beantwortet." },
+        { "text": "„Und, sonst so?“", "warum": "Lässt seinen Aufhänger fallen." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "smalltalk-v-0080", "faehigkeit": "smalltalk.tiefe", "stufe": 3, "kanal": "wissen" },
+      "frage": "Herr Petersen: „Ich restauriere gerade ein altes Segelboot.“ Ordne die Anschlussfragen: Welche lädt am meisten zum Erzählen ein?",
+      "eintraege": [
+        { "text": "„Was gefällt Ihnen an der Arbeit am Boot am meisten?“", "warum": "Erleben – er kann erzählen, was ihm wichtig ist." },
+        { "text": "„Wie sind Sie dazu gekommen?“", "warum": "Offen und persönlich – etwas weiter weg vom Jetzt." },
+        { "text": "„Wie lang ist das Boot?“", "warum": "Ein Fakt – schnell beantwortet." },
+        { "text": "„Lohnt sich das überhaupt, bei den Preisen?“", "warum": "Abwertend und ums Geld – das schließt." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "smalltalk-v-0081", "faehigkeit": "smalltalk.tiefe", "stufe": 4, "kanal": "wissen" },
+      "frage": "Jule: „Ich habe meinen sicheren Job gekündigt und eröffne ein kleines Café.“ Ihr kennt euch seit drei Wochen. Ordne die Antworten von passend nach unpassend.",
+      "eintraege": [
+        { "text": "„Mutig! Was hat dich zu dem Schritt gebracht?“", "warum": "Gewürdigt und nach ihrem Weg gefragt – sie wählt die Tiefe." },
+        { "text": "„Wann macht das Café auf?“", "warum": "Ein freundlicher Fakt – eine Tür, aber noch flach." },
+        { "text": "„Hast du keine Angst, pleitezugehen?“", "warum": "Zu schwer für den Anfang – klingt nach Zweifel." },
+        { "text": "„Und was sagt dein Partner dazu?“", "warum": "Übergriffig – ihre Beziehung und das Urteil anderer sind nicht dein Thema." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0082", "faehigkeit": "smalltalk.tiefe", "stufe": 3, "kanal": "wissen" },
+      "frage": "Tarek: „Ich war am Samstag beim Fußballspiel meines Sohnes.“ Welche Frage geht eine Stufe tiefer, ohne zu drängen?",
+      "antworten": [
+        { "text": "„Wie war's für dich, am Rand zu stehen?“", "wert": 2, "warum": "Eine Frage nach seinem Erleben – leicht und persönlich." },
+        { "text": "„Habt ihr gewonnen?“", "wert": 1, "warum": "Ein Fakt – gut zum Start, öffnet aber wenig." },
+        { "text": "„Und macht dir das keine Sorgen, dass er so viel Zeit mit Fußball verbringt statt mit der Schule?“", "wert": 0, "tendenz": "uebergriffig", "warum": "Ein Urteil über seine Erziehung – zu tief und zu schwer." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0083", "faehigkeit": "smalltalk.tiefe", "stufe": 4, "kanal": "wissen" },
+      "frage": "Du hast nach dem Erleben gefragt, und dein Gegenüber antwortet nur knapp: „Ganz okay.“ Was tust du?",
+      "antworten": [
+        { "text": "Auf seiner Stufe bleiben und etwas Leichtes anbieten – er bestimmt das Tempo.", "wert": 2, "warum": "Wer ausweicht, darf das. Das Gespräch bleibt freundlich." },
+        { "text": "Tiefer nachbohren: „Und was steckt wirklich dahinter?“", "wert": 0, "tendenz": "uebergriffig", "warum": "Bohren wirkt übergriffig, wenn jemand gerade ausgewichen ist." },
+        { "text": "Selbst etwas Persönliches erzählen, als Angebot – ohne Erwartung.", "wert": 1, "warum": "Kann die Tür öffnen. Geht er nicht mit, ist das in Ordnung." },
+        { "text": "Das Gespräch sofort beenden – das wird offensichtlich nichts.", "wert": 0, "tendenz": "katastrophe", "warum": "Eine knappe Antwort ist kein Urteil über dich – vielleicht ist das Thema nur nicht seins." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0084", "faehigkeit": "smalltalk.tiefe", "stufe": 5, "kanal": "wissen" },
+      "frage": "Was sagen Experimente über tiefere Gespräche mit Fremden am ehesten?",
+      "antworten": [
+        { "text": "Sie sind fast immer peinlich und gehören nur unter gute Freunde.", "wert": 0, "warum": "Das erwarteten die Teilnehmenden – erlebt haben sie es anders." },
+        { "text": "Sie sind meist weniger peinlich, als man vorher glaubt.", "wert": 2, "warum": "Und verbindender – man unterschätzt das Interesse des anderen." },
+        { "text": "Ob sie gelingen, hängt so sehr vom Einzelfall ab, dass sich nichts Allgemeines sagen lässt.", "wert": 1, "warum": "Im Einzelfall stimmt das. Im Schnitt zeigen die Versuche aber klar: besser als erwartet." },
+        { "text": "Sie gelingen nur, wenn man sich vorher schon gut kennt.", "wert": 0, "warum": "In den Versuchen gelangen sie auch unter Fremden." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "smalltalk-v-0085", "faehigkeit": "smalltalk.tiefe", "stufe": 3, "kanal": "koennen" },
+      "auftrag": "Mach aus der Faktenfrage eine Frage nach dem Erleben.", "vorlage": "„Wie viele Tage warst du im Urlaub?“",
+      "kriterien": ["fragt nach dem Erleben", "offen", "nicht zu schwer"],
+      "muster": ["„Was hat dir im Urlaub am besten gefallen?“", "„Gab es einen Moment, an den du noch oft denkst?“"] },
+    { "art": "umformulieren", "kopf": { "id": "smalltalk-v-0086", "faehigkeit": "smalltalk.tiefe", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Mach aus der Warum-Frage eine Wie- oder Was-Frage.", "vorlage": "„Warum machst du denn Ehrenamt bei der Essensausgabe?“",
+      "kriterien": ["ohne Rechtfertigungs-Druck", "fragt nach Erleben oder Weg", "kurz"],
+      "muster": ["„Wie bist du dazu gekommen?“", "„Was gibt dir die Arbeit dort?“"] },
+    { "art": "umformulieren", "kopf": { "id": "smalltalk-v-0087", "faehigkeit": "smalltalk.tiefe", "stufe": 5, "kanal": "koennen" },
+      "auftrag": "Leg selbst eine Stufe vor, bevor du tiefer fragst.", "vorlage": "„Was bedeutet dir deine Arbeit?“",
+      "kriterien": ["ein ehrlicher Satz von dir zuerst", "dann die Frage", "leicht genug für Bekannte"],
+      "muster": ["„An meiner Arbeit sind mir die Kollegen am wichtigsten. Was ist es bei dir?“", "„Für mich ist das Beste, wenn ich etwas Fertiges in der Hand halte. Was macht dir an deiner Arbeit Freude?“"] },
+    { "art": "dialog", "kopf": { "id": "smalltalk-v-0088", "faehigkeit": "smalltalk.tiefe", "stufe": 5, "kanal": "koennen" },
+      "gespraech": {
+        "titel": "Wiedersehen im Kochkurs", "figur": "Jule Marek",
+        "lage": "Kochkurs, dritte Woche. Jule schneidet neben dir Gemüse.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Jule: „Ich hatte gestern meinen ersten Auftrag als Konditorin – eine Hochzeitstorte.“",
+            "wahl": [
+              { "text": "„Und, wie viele Stockwerke?“", "wert": 1, "weiter": "k2b", "rueck": "Freundlich neugierig – noch beim Fakt." },
+              { "text": "„Die erste! Wie war es, sie abzuliefern?“", "wert": 2, "weiter": "k2", "rueck": "Gewürdigt und nach dem Erleben gefragt." },
+              { "text": "„Ich back ja auch gern – letztes Jahr hab ich meinem Bruder eine Torte gemacht, die ist leider in der Mitte eingesackt …“", "wert": 0, "tendenz": "uebertrumpfen", "weiter": "k2b", "rueck": "Ihre Premiere wird zu deiner Geschichte." }
+            ] },
+          { "id": "k2", "sagt": "Jule strahlt: „Ich hab vor Aufregung kaum geschlafen. Als die Braut sie gesehen hat, hat sie geweint – vor Freude.“",
+            "wahl": [
+              { "text": "„Klingt nach einem großen Tag. Vor meinem ersten Kundenauftrag hatte ich auch schlaflose Nächte.“", "wert": 1, "weiter": "ende1", "rueck": "Verständnis und etwas Eigenes – eine Frage zurück hätte ihr den Ball gegeben." },
+              { "text": "„Wie schön. Was hat dir das bedeutet?“", "wert": 2, "weiter": "ende1", "rueck": "Vom Erleben zur Bedeutung – sie entscheidet, wie viel sie erzählt." },
+              { "text": "„Geweint? Hoffentlich nicht wegen des Preises!“", "wert": 0, "tendenz": "spruch", "weiter": "ende2", "rueck": "Ein Witz an der falschen Stelle – ihr Moment kippt." }
+            ] },
+          { "id": "k2b", "sagt": "Jule: „Drei.“ Sie schneidet weiter.",
+            "wahl": [
+              { "text": "„Drei! Wie hat es sich angefühlt, als sie fertig war?“", "wert": 2, "weiter": "k2", "rueck": "Zurück zum Erleben – jetzt erzählt sie." },
+              { "text": "„Aha. Was kochen wir heute eigentlich?“", "wert": 0, "tendenz": "themenwechsel", "weiter": "ende2", "rueck": "Ihr Stolz bleibt liegen." }
+            ] },
+          { "id": "ende1", "sagt": "Jule erzählt, dass sie zum ersten Mal das Gefühl hatte, den richtigen Beruf gewählt zu haben.", "ende": "Würdigen, Erleben, Bedeutung – Stufe für Stufe. Jule hat dir etwas erzählt, das sie nicht jedem erzählt." },
+          { "id": "ende2", "sagt": "Jule lächelt höflich. Das Gespräch geht zurück zum Gemüse.", "ende": "Eine Tür nicht genommen. Wenn jemand etwas erzählt, auf das er stolz ist, ist die Frage nach dem Erleben meist willkommen." }
+        ],
+        "prinzipien": ["erst würdigen", "vom Fakt zum Erleben zur Bedeutung", "keine Witze über den Moment des anderen", "beim Thema des anderen bleiben"]
+      } },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0089", "faehigkeit": "smalltalk.abschluss", "stufe": 2, "kanal": "wissen" },
+      "frage": "Welcher Satz beendet ein Gespräch am freundlichsten?",
+      "antworten": [
+        { "text": "„War schön, mit dir zu reden – ich hol mir noch was zu trinken. Bis später!“", "wert": 2, "warum": "Würdigung, Grund, Ausblick." },
+        { "text": "„Okay, tschüss.“", "wert": 1, "warum": "Klar – nur ohne Würdigung etwas kühl." },
+        { "text": "„Sorry, ich will dich nicht langweilen, du hast sicher Besseres zu tun.“", "wert": 0, "tendenz": "kleinreden", "warum": "Du machst dich klein und unterstellst dem anderen Langeweile." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0090", "faehigkeit": "smalltalk.abschluss", "stufe": 3, "kanal": "wissen" },
+      "frage": "Das Gespräch mit einem Gast läuft aus – ihr wiederholt euch schon. Was tust du?",
+      "antworten": [
+        { "text": "Das Ende ankündigen: „Bevor ich weiterziehe – wie hieß das Café, das du erwähnt hast?“", "wert": 2, "warum": "Ein weicher Übergang: Er kann noch etwas sagen und fühlt sich nicht stehen gelassen." },
+        { "text": "Noch ein neues Thema anfangen, damit bloß keine Pause entsteht.", "wert": 0, "tendenz": "ausweichen", "warum": "Das verlängert, was beide beenden möchten." },
+        { "text": "Gehen, wenn er gerade woanders hinschaut.", "wert": 0, "tendenz": "verschwinden", "warum": "Er dreht sich um – und du bist weg." },
+        { "text": "„Ich lass dich mal weiterziehen.“", "wert": 1, "warum": "Freundlich – mit einem Satz Würdigung wäre es wärmer." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0091", "faehigkeit": "smalltalk.abschluss", "stufe": 4, "kanal": "wissen" },
+      "frage": "Du willst ein Gespräch beenden, ohne den anderen allein stehen zu lassen. Was ist der eleganteste Weg?",
+      "antworten": [
+        { "text": "Ihn mit jemandem bekannt machen – mit einem Aufhänger – und dann gehen.", "wert": 2, "warum": "Beide haben ein Thema, und du kannst freundlich gehen." },
+        { "text": "Sagen, dass du kurz telefonieren musst, obwohl das nicht stimmt.", "wert": 0, "tendenz": "ausrede", "warum": "Eine erfundene Ausrede fliegt leicht auf. Ein schlichter, wahrer Grund reicht." },
+        { "text": "Bleiben, bis jemand dazukommt – egal, wie lange das dauert.", "wert": 0, "tendenz": "ausweichen", "warum": "Höflich – auf deine Kosten." },
+        { "text": "„Ich schau mal nach den anderen. Schön, dich kennengelernt zu haben!“", "wert": 1, "warum": "Freundlich und klar – ein Bekanntmachen wäre noch eleganter." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0092", "faehigkeit": "smalltalk.abschluss", "stufe": 2, "kanal": "wissen" },
+      "frage": "Welche Fassung macht den Grund für deinen Abgang am freundlichsten?",
+      "antworten": [
+        { "text": "„Ich muss hier weg.“", "wert": 0, "tendenz": "verschwinden", "warum": "Klingt nach Flucht." },
+        { "text": "„Ich will noch kurz zu Carla, bevor sie geht.“", "wert": 2, "warum": "Ein konkreter, wahrer Grund – niemand fühlt sich abgewimmelt." },
+        { "text": "„Ich hab noch was zu erledigen.“", "wert": 1, "warum": "Geht – ein konkreter Grund klingt ehrlicher." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0093", "faehigkeit": "smalltalk.abschluss", "stufe": 3, "kanal": "wissen" },
+      "frage": "Frau Sommer erzählt im Treppenhaus, und gleich beginnt dein Termin. Welcher Satz würdigt und beendet zugleich?",
+      "antworten": [
+        { "text": "„Ich höre Ihnen gern zu, Frau Sommer – jetzt hab ich aber einen Termin. Erzählen Sie mir morgen den Rest?“", "wert": 2, "warum": "Würdigung, Grund, Ausblick – ein freundlicher Schluss." },
+        { "text": "„Ja, ja … mhm … ja.“ – und dabei Schritt für Schritt Richtung Tür gehen.", "wert": 0, "tendenz": "verschwinden", "warum": "Unklar für sie – und es dauert länger als ein freundlicher Satz." },
+        { "text": "„Ich muss leider los, Frau Sommer.“", "wert": 1, "warum": "Klar und mit Namen. Ein Satz Würdigung macht es wärmer." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0094", "faehigkeit": "smalltalk.abschluss", "stufe": 5, "kanal": "wissen" },
+      "frage": "Du beendest beim Sommerfest ein Gespräch mit Dr. Albers. Welche Fassung passt am besten?",
+      "antworten": [
+        { "text": "„Danke für den Wandertipp, Dr. Albers! Ich schau mal nach meinem Team – schönen Abend noch.“", "wert": 2, "warum": "Würdigung, Grund, Abschied – auch nach oben einfach freundlich." },
+        { "text": "„Na dann, ich will Sie auch nicht länger von Wichtigerem abhalten, Sie haben heute sicher noch viele andere Gesprächspartner.“", "wert": 0, "tendenz": "kleinreden", "warum": "Du machst dich und das Gespräch kleiner, als es war." },
+        { "text": "„Schönen Abend noch!“", "wert": 1, "warum": "Freundlich – mit einem Dank für das Gespräch wäre es runder." }
+      ] },
+    { "art": "szene", "kopf": { "id": "smalltalk-v-0095", "faehigkeit": "smalltalk.abschluss", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Beim Empfang stehst du seit einer halben Stunde mit derselben Person zusammen. Ihr seid beide etwas stiller geworden. Sie schaut kurz zum Buffet.",
+      "frage": "Was ist jetzt ein guter Zug?",
+      "antworten": [
+        { "text": "„Wollen wir uns mal unter die Leute mischen? War schön mit dir!“", "wert": 2, "warum": "Würdigung und ein gemeinsamer Ausweg – keiner wird stehen gelassen." },
+        { "text": "Schnell ein neues Thema suchen, damit die Stille bloß nicht peinlich wird.", "wert": 0, "tendenz": "ausweichen", "warum": "Ihr Blick zum Buffet war ein Zeichen – beide wären gern weitergezogen." },
+        { "text": "„Ich glaub, ich hol mir auch was vom Buffet.“", "wert": 1, "warum": "Ein Grund – mit einem Satz Würdigung wäre es rund." }
+      ] },
+    { "art": "szene", "kopf": { "id": "smalltalk-v-0096", "faehigkeit": "smalltalk.abschluss", "stufe": 4, "kanal": "wissen" },
+      "beschreibung": "Ein Bekannter erzählt dir am Telefon ausführlich vom Ärger mit seinem Vermieter. In zehn Minuten hast du einen Termin.",
+      "frage": "Wie beendest du das Gespräch?",
+      "antworten": [
+        { "text": "„Klingt echt nervig. Ich hab gleich einen Termin – darf ich dich morgen anrufen, wie es weitergeht?“", "wert": 2, "warum": "Gewürdigt, Grund genannt, Ausblick gegeben." },
+        { "text": "Weiter zuhören und den Termin knapp verpassen, weil es dir unhöflich vorkommt, ihn mitten im Ärger zu unterbrechen.", "wert": 0, "tendenz": "ausweichen", "warum": "Höflich zu ihm – auf deine Kosten." },
+        { "text": "„Du, ich muss jetzt los.“", "wert": 1, "warum": "Klar – ein Satz Würdigung und ein Ausblick machen es wärmer." },
+        { "text": "So tun, als wäre die Verbindung schlecht, und auflegen.", "wert": 0, "tendenz": "ausrede", "warum": "Eine kleine Lüge – und er ruft vermutlich gleich wieder an." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "smalltalk-v-0097", "faehigkeit": "smalltalk.abschluss", "stufe": 3, "kanal": "wissen" },
+      "frage": "Ordne die Abgänge von stark nach schwach.",
+      "eintraege": [
+        { "text": "„War schön, von deiner Reise zu hören! Ich will noch kurz zu Carla. Bis später, Jule!“", "warum": "Würdigung, Grund, Abschied mit Namen." },
+        { "text": "„Ich hol mir noch was zu trinken – bis später!“", "warum": "Grund und Ausblick, aber ohne Würdigung." },
+        { "text": "„Ich muss mal.“", "warum": "Knapp und ohne Würdigung – klingt nach Flucht." },
+        { "text": "Wortlos weggehen, während sie noch redet", "warum": "Lässt sie stehen." }
+      ] },
+    { "art": "dialog", "kopf": { "id": "smalltalk-v-0098", "faehigkeit": "smalltalk.abschluss", "stufe": 4, "kanal": "koennen" },
+      "gespraech": {
+        "titel": "Nach dem Lauftreff", "figur": "Sven",
+        "lage": "Nach dem Lauftreff. Sven erzählt dir auf dem Parkplatz von seinem Ärger im Büro. Du bist müde und willst nach Hause.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Sven: „… und dann sagt der doch tatsächlich, ich soll das bis Montag fertig haben. Kannst du dir das vorstellen?“",
+            "wahl": [
+              { "text": "„Ärgerlich. Ich bin echt platt – wollen wir morgen beim Kaffee weiterreden?“", "wert": 2, "weiter": "ende1", "rueck": "Gewürdigt, ehrlicher Grund, ein Ausblick." },
+              { "text": "„Ja, unglaublich.“ – und weiter nicken, obwohl dir die Augen zufallen und du nur noch nach Hause willst.", "wert": 0, "tendenz": "ausweichen", "weiter": "k2", "rueck": "Freundlich – aber du bist gar nicht mehr richtig da." },
+              { "text": "„Ich muss jetzt heim.“", "wert": 1, "weiter": "ende2", "rueck": "Ehrlich – nur kurz angebunden, gerade jetzt, wo er sich ärgert." }
+            ] },
+          { "id": "k2", "sagt": "Zwanzig Minuten später. Sven: „… na ja, genug von mir. Wie geht's dir eigentlich?“",
+            "wahl": [
+              { "text": "„Ehrlich gesagt bin ich ziemlich müde. Lass uns morgen weiterreden – ich will hören, wie es ausgeht.“", "wert": 2, "weiter": "ende1", "rueck": "Spät, aber gut: ehrlich, gewürdigt, mit Ausblick." },
+              { "text": "„Gut, gut!“ – und noch eine halbe Stunde bleiben.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Höflich – auf deine Kosten." }
+            ] },
+          { "id": "ende1", "sagt": "Sven grinst: „Klar. Danke fürs Zuhören.“", "ende": "Zugehört, gewürdigt, ehrlich gesagt, was du brauchst – und ein Ausblick. Ein Abgang, der die Freundschaft stärkt." },
+          { "id": "ende2", "sagt": "Sven: „Okay … bis dann.“", "ende": "Rechtzeitig – gut. Ein Satz zu seinem Ärger und ein Ausblick hätten ihm gezeigt, dass du ihn gehört hast." },
+          { "id": "ende3", "sagt": "Um zehn bist du zu Hause, völlig erledigt.", "ende": "Freundlich zu ihm – auf deine Kosten. Gespräche enden selten von selbst; dein Abgang darf früher kommen." }
+        ],
+        "prinzipien": ["erst würdigen", "ein ehrlicher Grund", "ein Ausblick statt einer Ausrede", "früh den Anfang vom Ende machen"]
+      } }
+  ]
+}

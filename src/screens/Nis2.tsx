@@ -10,6 +10,7 @@ import {
   FileSpreadsheet, Search, AlertTriangle, Check, X, Monitor, Users, Clock, GraduationCap,
 } from 'lucide-react'
 import AwarenessView from '../components/nis2/AwarenessView'
+import { useBereiche } from '../store/menuSichtbarStore'
 import { useAuthStore } from '../store/authStore'
 import { PersonInfoButton } from '../components/person/PersonDossier'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
@@ -37,9 +38,11 @@ function groupAccessByPc(u: AdminUser): { pc: string; vias: string[] }[] {
 }
 
 export default function Nis2() {
+  // Kacheln je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const { sichtbar } = useBereiche('nis2')
   const [view, setView] = useState<'hub' | 'access' | 'awareness'>('hub')
-  if (view === 'access') return <AccessCheckView onBack={() => setView('hub')} />
-  if (view === 'awareness') return <AwarenessView onBack={() => setView('hub')} />
+  if (view === 'access' && sichtbar('access')) return <AccessCheckView onBack={() => setView('hub')} />
+  if (view === 'awareness' && sichtbar('awareness')) return <AwarenessView onBack={() => setView('hub')} />
 
   return (
     <div className="flex flex-col h-full bg-background">
@@ -52,20 +55,20 @@ export default function Nis2() {
       </div>
       <div className="flex-1 overflow-y-auto p-6">
         <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
-          <button onClick={() => setView('access')}
+          {sichtbar('access') && <button onClick={() => setView('access')}
             className="text-left rounded-xl border border-border bg-card p-5 hover:border-primary/40 hover:bg-accent/20 transition-colors">
             <div className="w-10 h-10 rounded-lg bg-blue-500/15 flex items-center justify-center mb-3"><KeyRound size={20} className="text-blue-400" /></div>
             <h3 className="font-semibold text-foreground">Zugänge-Check</h3>
             <p className="text-xs text-muted-foreground mt-1">Alle PCs scannen: wer hat lokale Adminrechte? Abgleich mit der Liste genehmigter Admins.</p>
             <span className="mt-3 inline-flex items-center gap-1 text-xs text-primary font-medium">Öffnen <ChevronRight size={13} /></span>
-          </button>
-          <button onClick={() => setView('awareness')}
+          </button>}
+          {sichtbar('awareness') && <button onClick={() => setView('awareness')}
             className="text-left rounded-xl border border-border bg-card p-5 hover:border-primary/40 hover:bg-accent/20 transition-colors">
             <div className="w-10 h-10 rounded-lg bg-emerald-500/15 flex items-center justify-center mb-3"><GraduationCap size={20} className="text-emerald-400" /></div>
             <h3 className="font-semibold text-foreground">Awareness-Schulung</h3>
             <p className="text-xs text-muted-foreground mt-1">Schulungsübersicht (Excel) hochladen: wer hat bestanden, wer ist offen — mit AD-Status, Abteilung und Mail an die Vorgesetzten.</p>
             <span className="mt-3 inline-flex items-center gap-1 text-xs text-primary font-medium">Öffnen <ChevronRight size={13} /></span>
-          </button>
+          </button>}
           <div className="rounded-xl border border-dashed border-border/70 bg-card/40 p-5 flex items-center justify-center text-center">
             <p className="text-xs text-muted-foreground/70">Weitere NIS2-Kacheln folgen …</p>
           </div>

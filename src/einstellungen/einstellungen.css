@@ -1,0 +1,55 @@
+/* ── Einstellungen: Signalfarben, in Hell und Dunkel getrennt gestuft (Tailwind dark: greift im Tool nie) ── */
+.es-app {
+  --es-ok: #34d399;
+  --es-warn: #fbbf24;
+  --es-fehler: #f87171;
+  --es-info: #60a5fa;
+  --es-gold: #fbbf24;
+}
+.light .es-app {
+  --es-ok: #047857;
+  --es-warn: #a16207;
+  --es-fehler: #b91c1c;
+  --es-info: #1d4ed8;
+  --es-gold: #a16207;
+}
+.es-ok { color: var(--es-ok); }
+.es-warn { color: var(--es-warn); }
+.es-fehler { color: var(--es-fehler); }
+.es-info { color: var(--es-info); }
+.es-gold { color: var(--es-gold); }
+
+.es-box-ok, .es-box-warn, .es-box-fehler, .es-box-info { border-width: 1px; border-style: solid; }
+.es-box-ok { background: color-mix(in srgb, var(--es-ok) 10%, transparent); border-color: color-mix(in srgb, var(--es-ok) 35%, transparent); }
+.es-box-warn { background: color-mix(in srgb, var(--es-warn) 10%, transparent); border-color: color-mix(in srgb, var(--es-warn) 38%, transparent); }
+.es-box-fehler { background: color-mix(in srgb, var(--es-fehler) 10%, transparent); border-color: color-mix(in srgb, var(--es-fehler) 38%, transparent); }
+.es-box-info { background: color-mix(in srgb, var(--es-info) 9%, transparent); border-color: color-mix(in srgb, var(--es-info) 30%, transparent); }
+
+/* Kacheln der Übersicht */
+.es-kachel {
+  display: flex; flex-direction: column; gap: 10px; text-align: left;
+  border-radius: 12px; border: 1px solid hsl(var(--border)); background: hsl(var(--card));
+  padding: 16px; min-height: 132px; transition: border-color .15s, background-color .15s, transform .15s;
+}
+.es-kachel:hover:not(:disabled) { border-color: hsl(var(--primary) / .55); background: hsl(var(--accent) / .35); }
+.es-kachel:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+.es-kachel:disabled { cursor: not-allowed; opacity: .55; }
+.es-symbol {
+  width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  background: hsl(var(--primary) / .12); color: hsl(var(--primary));
+}
+.es-symbol-alle { background: color-mix(in srgb, var(--es-gold) 14%, transparent); color: var(--es-gold); }
+
+/* Schalter */
+.es-schalter { position: relative; width: 34px; height: 20px; border-radius: 999px; background: hsl(var(--border)); transition: background-color .15s; flex-shrink: 0; }
+.es-schalter[aria-checked="true"] { background: var(--es-ok); }
+.es-schalter > span { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 999px; background: #fff; transition: transform .15s; box-shadow: 0 1px 2px rgb(0 0 0 / .25); }
+.es-schalter[aria-checked="true"] > span { transform: translateX(14px); }
+.es-schalter:disabled { opacity: .5; cursor: not-allowed; }
+.es-schalter:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+
+/* Wochenplan */
+.es-chip { display: inline-flex; align-items: center; gap: 4px; border-radius: 6px; padding: 2px 6px; font-size: 11px; line-height: 16px; max-width: 100%;
+  border: 1px solid hsl(var(--border)); background: hsl(var(--background)); color: hsl(var(--foreground)); white-space: nowrap; }
+.es-chip > .es-chip-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.es-chip:hover { border-color: hsl(var(--primary) / .6); }

@@ -1,0 +1,62 @@
+/* Der Coach — Farbwelt „Trainingscamp“. Gilt im Raum (.dc-app) und auf der Erinnerungskarte (.dc-karte-aussen).
+   Das Tool schaltet nur die Klasse .light am <html> um; Tailwind-„dark:“-Varianten greifen hier nie.
+   Dunkel: Beton-Anthrazit, Kreideweiß, Seil-Rot, Glocken-Gelb, Leder-Sand. Hell: Kreide-Grund, dunkle Schrift, dasselbe Rot.
+   Kontraste nach WCAG AA (Text ≥ 4,5:1 auf Grund und Fläche). Zustände nie nur über Farbe. */
+.dc-app, .dc-karte-aussen {
+  --dc-schrift: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --dc-titel: 'Bahnschrift SemiBold Condensed', 'Bahnschrift Condensed', 'Bahnschrift', 'Arial Narrow', 'Segoe UI', sans-serif;
+  --dc-bg: #141518;
+  --dc-bg2: #1A1C20;
+  --dc-flaeche: #212328;
+  --dc-flaeche2: #2A2D33;
+  --dc-rand: #3A3E46;
+  --dc-ink: #F2EFE8;
+  --dc-leise: #B9B4AA;
+  --dc-stumm: #8C887F;
+  --dc-rot: #E8493D;
+  --dc-rot-stark: #FF6355;
+  --dc-rot-ink: #FFFFFF;
+  --dc-rot-weich: rgba(232, 73, 61, 0.16);
+  --dc-gelb: #F2B632;
+  --dc-gelb-ink: #1A1404;
+  --dc-gelb-weich: rgba(242, 182, 50, 0.15);
+  --dc-sand: #C9A47A;
+  --dc-sand-weich: rgba(201, 164, 122, 0.14);
+  --dc-gut: #5CC98A;
+  --dc-gut-weich: rgba(92, 201, 138, 0.15);
+  --dc-schlecht: #F0727A;
+  --dc-schlecht-weich: rgba(240, 114, 122, 0.15);
+  --dc-band: repeating-linear-gradient(-45deg, rgba(242, 182, 50, 0.92) 0 10px, rgba(26, 20, 4, 0.92) 10px 20px);
+  --dc-schatten: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --dc-radius: 10px;
+  --dc-viz-1: #E8493D;
+  --dc-viz-2: #C9A47A;
+  --dc-viz-raster: #2E3138;
+}
+.light .dc-app, .light .dc-karte-aussen {
+  --dc-bg: #EFECE5;
+  --dc-bg2: #E6E2D9;
+  --dc-flaeche: #FBFAF6;
+  --dc-flaeche2: #F1EEE7;
+  --dc-rand: #D3CDC1;
+  --dc-ink: #1C1D21;
+  --dc-leise: #4C4A45;
+  --dc-stumm: #6B6760;
+  --dc-rot: #C2362B;
+  --dc-rot-stark: #A82A20;
+  --dc-rot-ink: #FFFFFF;
+  --dc-rot-weich: rgba(194, 54, 43, 0.1);
+  --dc-gelb: #9A6A00;
+  --dc-gelb-ink: #FFFFFF;
+  --dc-gelb-weich: rgba(214, 160, 30, 0.16);
+  --dc-sand: #7D5D3A;
+  --dc-sand-weich: rgba(125, 93, 58, 0.1);
+  --dc-gut: #1F7A4A;
+  --dc-gut-weich: rgba(31, 122, 74, 0.1);
+  --dc-schlecht: #B3262F;
+  --dc-schlecht-weich: rgba(179, 38, 47, 0.08);
+  --dc-schatten: 0 8px 22px rgba(40, 30, 10, 0.14);
+  --dc-viz-1: #C2362B;
+  --dc-viz-2: #8C6A43;
+  --dc-viz-raster: #DDD8CD;
+}

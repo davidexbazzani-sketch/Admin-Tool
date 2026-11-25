@@ -1,0 +1,350 @@
+{
+  "level": 6,
+  "tage": [
+    {
+      "tag": 26,
+      "titel": "Das Wetter: Regnet es morgen?",
+      "ziel": "Danach kannst du über das Wetter sprechen und sagen, was du gerade machst.",
+      "woerter": [
+        { "it": "che tempo fa?", "de": "wie ist das Wetter?", "art": "p", "aus": "che TEM-po FA", "bsp": { "it": "Che tempo fa oggi a Bolzano?", "de": "Wie ist das Wetter heute in Bozen?" }, "emoji": "🌦️", "hinweis": "«Il tempo» heißt «das Wetter» und auch «die Zeit»." },
+        { "it": "fa caldo", "de": "es ist warm / heiß", "art": "p", "aus": "fa CAL-do", "bsp": { "it": "Oggi fa caldo: c'è il sole.", "de": "Heute ist es warm: Die Sonne scheint." }, "emoji": "🥵", "hinweis": "Wörtlich «es macht warm» – beim Wetter steht fare, nicht essere." },
+        { "it": "fa freddo", "de": "es ist kalt", "art": "p", "aus": "fa FRED-do", "bsp": { "it": "La sera fa freddo.", "de": "Abends ist es kalt." }, "emoji": "🧊" },
+        { "it": "piove", "de": "es regnet", "art": "p", "aus": "PIO-ve", "bsp": { "it": "Oggi piove: prendo l'autobus.", "de": "Heute regnet es: Ich nehme den Bus." }, "emoji": "🌧️", "hinweis": "Ohne «es». Grundform: «piovere»." },
+        { "it": "nevica", "de": "es schneit", "art": "p", "aus": "NE-vi-ca", "bsp": { "it": "Nevica e fa molto freddo.", "de": "Es schneit und es ist sehr kalt." }, "emoji": "🌨️", "hinweis": "Betonung auf der ersten Silbe. Grundform: «nevicare»." },
+        { "it": "il sole", "de": "die Sonne", "art": "n", "aus": "il SO-le", "bsp": { "it": "Oggi c'è il sole.", "de": "Heute scheint die Sonne." }, "emoji": "🌞", "hinweis": "Im Italienischen männlich. «Die Sonne scheint» heißt einfach «c'è il sole»." },
+        { "it": "la nuvola", "de": "die Wolke", "art": "n", "aus": "la NU-vo-la", "bsp": { "it": "Non c'è una nuvola!", "de": "Keine einzige Wolke!" }, "emoji": "☁️", "hinweis": "Betonung auf der ersten Silbe: NU-vo-la." },
+        { "it": "la pioggia", "de": "der Regen", "art": "n", "aus": "la PIOG-gia", "bsp": { "it": "Con la pioggia prendo la macchina.", "de": "Bei Regen nehme ich das Auto." }, "emoji": "☔", "hinweis": "«ggia» klingt wie «ddscha» – das i hört man nicht." },
+        { "it": "il temporale", "de": "das Gewitter", "art": "n", "aus": "il tem-po-RA-le", "bsp": { "it": "Domani c'è un temporale.", "de": "Morgen gibt es ein Gewitter." }, "emoji": "⛈️" },
+        { "it": "il cielo", "de": "der Himmel", "art": "n", "aus": "il CIE-lo", "bsp": { "it": "Il cielo è blu.", "de": "Der Himmel ist blau." }, "emoji": "🌤️", "hinweis": "«cie» klingt wie «tsche»." },
+        { "it": "fare", "de": "machen / tun", "art": "v", "aus": "FA-re", "bsp": { "it": "Oggi ho molto da fare.", "de": "Heute habe ich viel zu tun." }, "emoji": "🛠️", "hinweis": "Unregelmäßig: faccio, fai, fa, facciamo, fate, fanno." },
+        { "it": "l'ombrello", "de": "der Regenschirm", "art": "n", "aus": "l'om-BREL-lo", "bsp": { "it": "Piove! Hai un ombrello?", "de": "Es regnet! Hast du einen Regenschirm?" }, "emoji": "☂️" }
+      ],
+      "grammatik": {
+        "titel": "fare (machen) – und wie man über das Wetter spricht",
+        "erklaerung": "**fare** (machen, tun) ist unregelmäßig – alle Formen stehen in der Tabelle. Du brauchst es ständig: «fare colazione» (frühstücken), «fare una foto», «fare un giro» (einen Bummel machen).\nAuch das Wetter «macht» man auf Italienisch: **«Che tempo fa?»** – «**Fa caldo**», «**fa freddo**», «fa bel tempo», «fa brutto tempo».\nBei Regen und Schnee genügt das Verb allein, ohne «es»: **piove**, **nevica**. Bei Sonne und Wind sagst du **c'è**: «c'è il sole», «c'è vento».\n**Falle:** «Fa freddo» beschreibt das Wetter. Wenn *dir* kalt ist, nimmst du avere: «**Ho freddo**» – nie «sono freddo».",
+        "tabelle": { "kopf": ["Person", "fare", "Deutsch"], "zeilen": [["io", "faccio", "ich mache"], ["tu", "fai", "du machst"], ["lui / lei", "fa", "er / sie macht"], ["noi", "facciamo", "wir machen"], ["voi", "fate", "ihr macht"], ["loro", "fanno", "sie machen"]] },
+        "beispiele": [
+          { "it": "Che cosa fai domani?", "de": "Was machst du morgen?" },
+          { "it": "Oggi fa bel tempo: c'è il sole.", "de": "Heute ist schönes Wetter: Die Sonne scheint." },
+          { "it": "A Bolzano piove e fa freddo.", "de": "In Bozen regnet es und es ist kalt." }
+        ],
+        "uebungen": [
+          { "satz": "Io ___ colazione con Giulia.", "loesung": "faccio", "falsch": ["fai", "fa", "fate"], "de": "Ich frühstücke mit Giulia." },
+          { "satz": "Che tempo ___ oggi a Bolzano?", "loesung": "fa", "falsch": ["fai", "fanno", "facciamo"], "de": "Wie ist das Wetter heute in Bozen?", "warum": "Das Wetter steht immer in der dritten Person Einzahl: fa." },
+          { "satz": "Marco, tu che cosa ___ oggi?", "loesung": "fai", "falsch": ["fa", "faccio", "fanno"], "de": "Marco, was machst du heute?" },
+          { "satz": "Noi ___ una foto con Marco.", "loesung": "facciamo", "falsch": ["fate", "fanno", "faccio"], "de": "Wir machen ein Foto mit Marco." },
+          { "satz": "Voi che cosa ___ domani?", "loesung": "fate", "falsch": ["fanno", "facciamo", "fai"], "de": "Was macht ihr morgen?" },
+          { "satz": "Giulia e Marco ___ un giro in città.", "loesung": "fanno", "falsch": ["fa", "fate", "facciamo"], "de": "Giulia und Marco machen einen Bummel durch die Stadt.", "warum": "Zwei Personen = «loro» → fanno, mit doppeltem n." },
+          { "satz": "A Bolzano oggi ___ e fa molto freddo.", "loesung": "nevica", "falsch": ["fa nevica", "è nevica", "c'è nevica"], "de": "In Bozen schneit es heute und es ist sehr kalt.", "warum": "«nevica» ist schon das ganze Verb – ohne fa, è oder c'è davor." },
+          { "satz": "Io ___ freddo, ma Marco ha caldo.", "loesung": "ho", "falsch": ["faccio", "fa", "è"], "de": "Mir ist kalt, aber Marco ist es warm.", "warum": "Wie man sich fühlt, sagt man mit avere: ho freddo. «Fa freddo» beschreibt nur das Wetter." }
+        ]
+      },
+      "dialog": {
+        "titel": "Che tempo fa?",
+        "ort": "Bozen, am Vormittag: Ben, Giulia und Marco sitzen vor einem Café in der Altstadt",
+        "zeilen": [
+          { "wer": "giulia", "it": "Che bella giornata! C'è il sole e fa caldo.", "de": "Was für ein schöner Tag! Die Sonne scheint und es ist warm." },
+          { "wer": "marco", "it": "Fa troppo caldo per me. Che cosa facciamo oggi?", "de": "Mir ist es zu heiß. Was machen wir heute?" },
+          { "wer": "giulia", "it": "Oggi facciamo un giro in città. Domani andiamo in montagna: la pagina sei è lì.", "de": "Heute machen wir einen Bummel durch die Stadt. Morgen fahren wir in die Berge: Seite sechs ist dort." },
+          { "wer": "ben", "it": "In montagna? E che tempo fa lì?", "de": "In den Bergen? Und wie ist das Wetter dort?" },
+          { "wer": "marco", "it": "Ma Ben, il cielo è blu! Non c'è una nuvola.", "de": "Aber Ben, der Himmel ist blau! Keine einzige Wolke." },
+          { "wer": "donna", "als": "Cameriera", "it": "Oggi sì. Ma in montagna il tempo cambia in fretta: domani piove.", "de": "Heute ja. Aber in den Bergen ändert sich das Wetter schnell: Morgen regnet es." },
+          { "wer": "marco", "it": "Domani piove? Con questo sole? Impossibile!", "de": "Morgen regnet es? Bei dieser Sonne? Unmöglich!" },
+          { "wer": "donna", "als": "Cameriera", "it": "E in alto fa freddo. Qualche volta nevica anche a giugno.", "de": "Und oben ist es kalt. Manchmal schneit es sogar im Juni." },
+          { "wer": "ben", "it": "Neve a giugno? Marco, hai una giacca?", "de": "Schnee im Juni? Marco, hast du eine Jacke?" },
+          { "wer": "marco", "it": "Una giacca? Ho una maglietta e basta!", "de": "Eine Jacke? Ich habe ein T-Shirt, und das reicht!" }
+        ],
+        "fragen": [
+          { "frage": "Was haben die drei heute vor?", "richtig": "Einen Bummel durch die Stadt", "falsch": ["Eine Wanderung in den Bergen", "Eine Fahrt nach Venedig", "Einen Tag am See"] },
+          { "frage": "Wovor warnt die Kellnerin?", "richtig": "In den Bergen schlägt das Wetter schnell um – morgen regnet es", "falsch": ["In der Stadt wird es heute zu heiß", "Die Straße in die Berge ist gesperrt", "Das Café schließt gleich"] },
+          { "frage": "Was hat Marco statt einer Jacke dabei?", "richtig": "Nur ein T-Shirt", "falsch": ["Einen Pullover", "Einen Regenschirm", "Einen Schal"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Du telefonierst mit einer Freundin in Rom und möchtest wissen, wie das Wetter dort ist.", "richtig": "Che tempo fa a Roma?", "falsch": ["Che tempo fai a Roma?", "Che ora è a Roma?", "Come stai a Roma?"], "de": "Wie ist das Wetter in Rom?" },
+          { "lage": "Draußen regnet es und es ist kalt. Sag das deinem Kollegen.", "richtig": "Oggi piove e fa freddo.", "falsch": ["Oggi fa piove e fa freddo.", "Oggi c'è il sole e fa caldo.", "Oggi nevica e fa caldo."], "de": "Heute regnet es und es ist kalt." },
+          { "lage": "Du triffst zwei Freunde und fragst sie, was sie heute machen.", "richtig": "Che cosa fate oggi?", "falsch": ["Che cosa fai oggi?", "Che cosa fanno oggi?", "Che tempo fa oggi?"], "de": "Was macht ihr heute?" }
+        ],
+        "folge": "Kein Wölkchen am Himmel über Bozen – behält Marco recht oder die Kellnerin mit ihrer Warnung?"
+      },
+      "wissen": { "titel": "Hundekälte und Wetter in Uniform", "text": "«Il tempo» heißt zugleich «das Wetter» und «die Zeit» – «Non ho tempo» hat also nichts mit Regen zu tun. Ist es richtig kalt, sagen Italiener «Fa un freddo cane!», wörtlich «eine Hundekälte». Gießt es in Strömen, heißt es «Piove a catinelle» – es regnet wie aus Waschschüsseln. Und der Wetterbericht im Staatsfernsehen kommt traditionell von der Luftwaffe: Offiziere in Uniform vor der Wetterkarte gehören seit Jahrzehnten dazu." }
+    },
+    {
+      "tag": 27,
+      "titel": "Monate und Jahreszeiten",
+      "ziel": "Danach kannst du Monate und Jahreszeiten nennen, das Datum sagen und nach dem Geburtstag fragen.",
+      "woerter": [
+        { "it": "il mese", "de": "der Monat", "art": "n", "aus": "il ME-se", "bsp": { "it": "Un anno ha dodici mesi.", "de": "Ein Jahr hat zwölf Monate." }, "emoji": "🗓️" },
+        { "it": "la stagione", "de": "die Jahreszeit", "art": "n", "aus": "la sta-GIO-ne", "bsp": { "it": "L'estate è la mia stagione preferita.", "de": "Der Sommer ist meine Lieblingsjahreszeit." }, "emoji": "🍃", "hinweis": "Heißt auch «die Saison»." },
+        { "it": "la primavera", "de": "der Frühling", "art": "n", "aus": "la pri-ma-VE-ra", "bsp": { "it": "In primavera fa bel tempo.", "de": "Im Frühling ist schönes Wetter." }, "emoji": "🌸" },
+        { "it": "l'estate", "de": "der Sommer", "art": "n", "aus": "l'e-STA-te", "bsp": { "it": "In estate fa molto caldo.", "de": "Im Sommer ist es sehr heiß." }, "emoji": "🏖️", "hinweis": "Weiblich: «l'estate è calda»." },
+        { "it": "l'autunno", "de": "der Herbst", "art": "n", "aus": "l'au-TUN-no", "bsp": { "it": "In autunno piove spesso.", "de": "Im Herbst regnet es oft." }, "emoji": "🍂" },
+        { "it": "l'inverno", "de": "der Winter", "art": "n", "aus": "l'in-VER-no", "bsp": { "it": "In inverno nevica.", "de": "Im Winter schneit es." }, "emoji": "⛄" },
+        { "it": "gennaio", "de": "Januar", "art": "x", "aus": "gen-NA-io", "bsp": { "it": "L'anno comincia a gennaio.", "de": "Das Jahr beginnt im Januar." }, "emoji": "🎆", "hinweis": "Monate schreibt man klein und ohne Artikel." },
+        { "it": "giugno", "de": "Juni", "art": "x", "aus": "GIU-gno", "bsp": { "it": "Il mio compleanno è a giugno.", "de": "Mein Geburtstag ist im Juni." }, "emoji": "🌻", "hinweis": "«gno» klingt wie «njo»." },
+        { "it": "luglio", "de": "Juli", "art": "x", "aus": "LU-glio", "bsp": { "it": "A luglio vado in Italia.", "de": "Im Juli fahre ich nach Italien." }, "emoji": "🍉", "hinweis": "«glio» klingt wie «ljo»." },
+        { "it": "agosto", "de": "August", "art": "x", "aus": "a-GO-sto", "bsp": { "it": "Ad agosto fa troppo caldo in città.", "de": "Im August ist es in der Stadt zu heiß." }, "emoji": "🏝️", "hinweis": "Vor «agosto» wird «a» zu «ad»: «ad agosto»." },
+        { "it": "dicembre", "de": "Dezember", "art": "x", "aus": "di-CEM-bre", "bsp": { "it": "A dicembre fa freddo e nevica.", "de": "Im Dezember ist es kalt und es schneit." }, "emoji": "🎄" },
+        { "it": "il compleanno", "de": "der Geburtstag", "art": "n", "aus": "il com-ple-AN-no", "bsp": { "it": "Quando è il tuo compleanno?", "de": "Wann hast du Geburtstag?" }, "emoji": "🎁", "hinweis": "«Buon compleanno!» heißt «Alles Gute zum Geburtstag!»." }
+      ],
+      "grammatik": {
+        "titel": "Das Datum – und a / in bei Monaten und Jahreszeiten",
+        "erklaerung": "Das **Datum** bildest du mit **il + Zahl + Monat**: «il tre maggio», «il venti giugno» – ohne Punkt und ohne «di»; Monate schreibt man klein. Nur der Erste ist eine Ordnungszahl: «**il primo** luglio». Vor Vokal steht **l'**: «l'otto marzo», «l'undici agosto».\nNach dem Datum fragst du: «**Che giorno è oggi?**» – «Oggi è il venti giugno.»\n**Falle:** Das deutsche «am» fällt weg: «Am 3. Juli fahren wir» heißt «Partiamo il tre luglio».\nBei **Monaten** steht **a** (seltener «in»), ohne Artikel: «a giugno», «ad agosto». Bei **Jahreszeiten** steht **in**: «in primavera», «in estate», «in autunno», «in inverno».",
+        "tabelle": { "kopf": ["Monat", "Deutsch", "Monat", "Deutsch"], "zeilen": [["gennaio", "Januar", "luglio", "Juli"], ["febbraio", "Februar", "agosto", "August"], ["marzo", "März", "settembre", "September"], ["aprile", "April", "ottobre", "Oktober"], ["maggio", "Mai", "novembre", "November"], ["giugno", "Juni", "dicembre", "Dezember"]] },
+        "beispiele": [
+          { "it": "Oggi è il venti giugno.", "de": "Heute ist der 20. Juni." },
+          { "it": "A dicembre andiamo a Torino.", "de": "Im Dezember fahren wir nach Turin." },
+          { "it": "In estate andiamo in montagna.", "de": "Im Sommer fahren wir in die Berge." }
+        ],
+        "uebungen": [
+          { "satz": "Natale è a ___.", "loesung": "dicembre", "falsch": ["gennaio", "agosto", "giugno"], "de": "Weihnachten ist im Dezember." },
+          { "satz": "A luglio e ad agosto è ___.", "loesung": "estate", "falsch": ["inverno", "autunno", "primavera"], "de": "Im Juli und im August ist Sommer." },
+          { "satz": "Oggi è ___ venti giugno.", "loesung": "il", "falsch": ["lo", "la", "in"], "de": "Heute ist der 20. Juni." },
+          { "satz": "___ inverno fa freddo e nevica.", "loesung": "In", "falsch": ["A", "Al", "Nel"], "de": "Im Winter ist es kalt und es schneit.", "warum": "Jahreszeiten stehen mit «in» – ohne Artikel." },
+          { "satz": "Il mio compleanno è ___ maggio.", "loesung": "a", "falsch": ["al", "nel", "il"], "de": "Mein Geburtstag ist im Mai.", "warum": "Monate stehen mit «a» – ohne Artikel." },
+          { "satz": "Partiamo ___ tre luglio.", "loesung": "il", "falsch": ["al", "a", "nel"], "de": "Wir fahren am 3. Juli ab.", "warum": "Vor dem Datum steht nur «il» – das deutsche «am» wird nicht übersetzt." },
+          { "satz": "Oggi è il trenta aprile, domani è il ___ maggio.", "loesung": "primo", "falsch": ["uno", "un", "prima"], "de": "Heute ist der 30. April, morgen ist der 1. Mai.", "warum": "Nur der Erste des Monats ist eine Ordnungszahl; danach geht es mit due, tre, quattro weiter." },
+          { "satz": "Il compleanno di mia sorella è ___ agosto.", "loesung": "l'otto", "falsch": ["il otto", "lo otto", "all'otto"], "de": "Der Geburtstag meiner Schwester ist am 8. August.", "warum": "Vor Vokal wird «il» zu «l'»: l'otto, l'undici." }
+        ]
+      },
+      "dialog": {
+        "titel": "L'indovinello della nonna",
+        "ort": "Am Abend in Bozen: Nonna Rosa ruft an, Giulia stellt das Handy auf laut",
+        "zeilen": [
+          { "wer": "nonna", "it": "Pronto, Giulia! Che giorno è oggi?", "de": "Hallo, Giulia! Welcher Tag ist heute?" },
+          { "wer": "giulia", "it": "Ciao nonna! Oggi è il venti giugno. Perché?", "de": "Hallo Oma! Heute ist der 20. Juni. Warum?" },
+          { "wer": "nonna", "it": "Ecco un indovinello: la pagina sei è in una casa. Questa casa dorme in autunno, in inverno e in primavera.", "de": "Hier ein Rätsel: Seite sechs ist in einem Haus. Dieses Haus schläft im Herbst, im Winter und im Frühling." },
+          { "wer": "ben", "it": "Una casa dorme? Non capisco.", "de": "Ein Haus schläft? Das verstehe ich nicht." },
+          { "wer": "nonna", "it": "A giugno si sveglia. È aperta solo in estate, fino a settembre.", "de": "Im Juni wacht es auf. Es ist nur im Sommer geöffnet, bis September." },
+          { "wer": "giulia", "it": "In montagna, aperta solo in estate … Un rifugio!", "de": "In den Bergen, nur im Sommer geöffnet … Eine Berghütte!" },
+          { "wer": "nonna", "it": "Brava! È il rifugio di Marta. Apre domani, il ventuno giugno: il primo giorno d'estate.", "de": "Gut gemacht! Es ist die Hütte von Marta. Sie öffnet morgen, am 21. Juni: am ersten Sommertag." },
+          { "wer": "marco", "it": "Domani comincia l'estate? Perfetto: sole, caldo e maglietta!", "de": "Morgen fängt der Sommer an? Perfekt: Sonne, Wärme und T-Shirt!" },
+          { "wer": "nonna", "it": "Marco, Marco … In montagna l'estate arriva tardi. Buonanotte, ragazzi!", "de": "Marco, Marco … In den Bergen kommt der Sommer spät. Gute Nacht, ihr Lieben!" }
+        ],
+        "fragen": [
+          { "frage": "Welches Datum ist heute im Dialog?", "richtig": "Der 20. Juni", "falsch": ["Der 21. Juni", "Der 20. Juli", "Der 2. Juni"] },
+          { "frage": "Was ist die Lösung von Nonna Rosas Rätsel?", "richtig": "Eine Berghütte, die nur im Sommer geöffnet ist", "falsch": ["Ein Hotel am See", "Ein Haus, in dem niemand mehr wohnt", "Ein Café in der Altstadt"] },
+          { "frage": "Wann öffnet die Hütte?", "richtig": "Morgen, am 21. Juni", "falsch": ["Heute Abend", "Erst im Juli", "Sie ist schon seit Mai geöffnet"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Jemand fragt dich nach dem heutigen Datum. Es ist der 3. Mai.", "richtig": "Oggi è il tre maggio.", "falsch": ["Oggi è tre di maggio.", "Oggi è il terzo maggio.", "Oggi è al tre maggio."], "de": "Heute ist der 3. Mai." },
+          { "lage": "Du erzählst, dass du im August nach Italien fährst.", "richtig": "Ad agosto vado in Italia.", "falsch": ["Al agosto vado in Italia.", "Nel agosto vado in Italia.", "Il agosto vado in Italia."], "de": "Im August fahre ich nach Italien." },
+          { "lage": "Du möchtest wissen, wann deine Kollegin Geburtstag hat.", "richtig": "Quando è il tuo compleanno?", "falsch": ["Quanti anni hai?", "Che giorno è oggi?", "Qual è la tua stagione preferita?"], "de": "Wann hast du Geburtstag?" }
+        ],
+        "folge": "Die Hütte öffnet morgen – aber wer ist Marta, und warum warnt Nonna Rosa, dass der Sommer in den Bergen spät kommt?"
+      },
+      "wissen": { "titel": "Warum der September die Sieben im Namen trägt", "text": "In «settembre», «ottobre», «novembre» und «dicembre» stecken die Zahlen sette, otto, nove und dieci – dabei sind es die Monate neun bis zwölf. Der Grund: Das alte römische Jahr begann im März. «Luglio» erinnert an Julius Cäsar, «agosto» an Kaiser Augustus. Auf ihn geht auch «Ferragosto» am 15. August zurück, der Höhepunkt der italienischen Sommerferien." }
+    },
+    {
+      "tag": 28,
+      "titel": "Kleidung: Was trägst du?",
+      "ziel": "Danach kannst du sagen, was du trägst, und auf Kleidungsstücke zeigen: dieses hier, das dort.",
+      "woerter": [
+        { "it": "la giacca", "de": "die Jacke", "art": "n", "aus": "la GIAC-ca", "bsp": { "it": "Questa giacca è molto calda.", "de": "Diese Jacke ist sehr warm." }, "emoji": "🧥", "hinweis": "Mehrzahl: le giacche – mit h, damit das c hart bleibt." },
+        { "it": "il maglione", "de": "der Pullover", "art": "n", "aus": "il ma-GLIO-ne", "bsp": { "it": "In inverno porto un maglione.", "de": "Im Winter trage ich einen Pullover." }, "emoji": "🧶", "hinweis": "«glio» klingt wie «ljo»." },
+        { "it": "le scarpe", "de": "die Schuhe", "art": "n", "aus": "le SCAR-pe", "bsp": { "it": "Queste scarpe sono troppo piccole.", "de": "Diese Schuhe sind zu klein." }, "emoji": "👟", "hinweis": "Einzahl: la scarpa." },
+        { "it": "i pantaloni", "de": "die Hose", "art": "n", "aus": "i pan-ta-LO-ni", "bsp": { "it": "I pantaloni di Marco sono corti.", "de": "Marcos Hose ist kurz." }, "emoji": "👖", "hinweis": "Immer Mehrzahl – auch wenn es nur eine Hose ist." },
+        { "it": "il cappello", "de": "der Hut", "art": "n", "aus": "il cap-PEL-lo", "bsp": { "it": "Con il sole porto un cappello.", "de": "Bei Sonne trage ich einen Hut." }, "emoji": "👒", "hinweis": "Nicht verwechseln: «i capelli» (ein p) sind die Haare. Die Mütze heißt «il berretto»." },
+        { "it": "la sciarpa", "de": "der Schal", "art": "n", "aus": "la SCIAR-pa", "bsp": { "it": "La donna porta una sciarpa rossa.", "de": "Die Frau trägt einen roten Schal." }, "emoji": "🧣", "hinweis": "«scia» klingt wie «scha»." },
+        { "it": "i guanti", "de": "die Handschuhe", "art": "n", "aus": "i GUAN-ti", "bsp": { "it": "Dove sono i miei guanti?", "de": "Wo sind meine Handschuhe?" }, "emoji": "🧤", "hinweis": "Einzahl: il guanto." },
+        { "it": "portare", "de": "tragen / bringen", "art": "v", "aus": "por-TA-re", "bsp": { "it": "Oggi porto una giacca leggera.", "de": "Heute trage ich eine leichte Jacke." }, "emoji": "👔", "hinweis": "Kleidung tragen – und auch etwas bringen: «Porto il caffè»." },
+        { "it": "la maglietta", "de": "das T-Shirt", "art": "n", "aus": "la ma-GLIET-ta", "bsp": { "it": "Marco porta sempre una maglietta.", "de": "Marco trägt immer ein T-Shirt." }, "emoji": "👕" },
+        { "it": "i vestiti", "de": "die Kleidung / die Kleider", "art": "n", "aus": "i ve-STI-ti", "bsp": { "it": "Questi vestiti sono troppo leggeri.", "de": "Diese Kleider sind zu leicht." }, "emoji": "👗", "hinweis": "Einzahl «il vestito»: das Kleid oder der Anzug." },
+        { "it": "gli scarponi", "de": "die Bergschuhe / die Wanderstiefel", "art": "n", "aus": "gli scar-PO-ni", "bsp": { "it": "Ben porta gli scarponi.", "de": "Ben trägt Bergschuhe." }, "emoji": "🥾", "hinweis": "Einzahl: lo scarpone – wörtlich ein «großer Schuh»." },
+        { "it": "leggero", "de": "leicht", "art": "a", "aus": "leg-GE-ro", "bsp": { "it": "Questa giacca è troppo leggera.", "de": "Diese Jacke ist zu leicht." }, "emoji": "🪶", "hinweis": "Gegenteil: «pesante» – schwer, bei Kleidung auch dick und warm." }
+      ],
+      "grammatik": {
+        "titel": "questo und quello: alle Formen",
+        "erklaerung": "**questo** (dieser hier) zeigt auf Nahes und hat vier Formen: quest**o** maglione, quest**a** giacca, quest**i** guanti, quest**e** scarpe. Vor Vokal wird es in der Einzahl oft zu **quest'**: «quest'ombrello».\n**quello** (der dort) zeigt auf Entferntes. Vor einem Nomen verhält es sich wie der bestimmte Artikel: **il → quel**, **lo → quello**, **l' → quell'**, **la → quella**, **i → quei**, **gli → quegli**, **le → quelle**.\n**Merksatz:** Denk dir den Artikel und setze «que-» davor: il maglione → quel maglione, gli scarponi → quegli scarponi.\n**Falle:** «quello maglione» und «quelli guanti» sind falsch. «Quelli» gibt es nur allein, ohne Nomen: «Quali guanti? – Quelli!»",
+        "tabelle": { "kopf": ["Artikel", "quello", "Beispiel"], "zeilen": [["il", "quel", "quel maglione"], ["lo", "quello", "quello zaino"], ["l'", "quell'", "quell'ombrello"], ["la", "quella", "quella giacca"], ["i", "quei", "quei guanti"], ["gli", "quegli", "quegli scarponi"], ["le", "quelle", "quelle scarpe"]] },
+        "beispiele": [
+          { "it": "Questa giacca è calda, quella è leggera.", "de": "Diese Jacke ist warm, die dort ist leicht." },
+          { "it": "Quanto costano quei guanti?", "de": "Wie viel kosten die Handschuhe dort?" },
+          { "it": "Quell'ombrello è di Giulia.", "de": "Der Regenschirm dort gehört Giulia." }
+        ],
+        "uebungen": [
+          { "satz": "___ giacca è bella.", "loesung": "Questa", "falsch": ["Questo", "Questi", "Queste"], "de": "Diese Jacke ist schön." },
+          { "satz": "___ guanti sono di Giulia.", "loesung": "Questi", "falsch": ["Queste", "Questo", "Questa"], "de": "Diese Handschuhe gehören Giulia." },
+          { "satz": "___ scarpe sono troppo leggere.", "loesung": "Quelle", "falsch": ["Quei", "Quegli", "Quella"], "de": "Die Schuhe dort sind zu leicht." },
+          { "satz": "___ maglione è molto caldo.", "loesung": "Quel", "falsch": ["Quello", "Quei", "Quella"], "de": "Der Pullover dort ist sehr warm.", "warum": "il maglione → quel maglione." },
+          { "satz": "___ zaino è di Marco.", "loesung": "Quello", "falsch": ["Quel", "Quell'", "Quei"], "de": "Der Rucksack dort gehört Marco.", "warum": "lo zaino → quello zaino: vor z steht «lo», also «quello»." },
+          { "satz": "___ è di Ben, non di Marco.", "loesung": "Quell'ombrello", "falsch": ["Quel ombrello", "Quello ombrello", "Quella ombrello"], "de": "Der Regenschirm dort gehört Ben, nicht Marco.", "warum": "l'ombrello → quell'ombrello: vor Vokal mit Apostroph." },
+          { "satz": "___ pantaloni sono troppo grandi.", "loesung": "Quei", "falsch": ["Quelli", "Quegli", "Quelle"], "de": "Die Hose dort ist zu groß.", "warum": "i pantaloni → quei pantaloni. «Quelli» steht nur allein, ohne Nomen." },
+          { "satz": "___ scarponi costano cento euro.", "loesung": "Quegli", "falsch": ["Quei", "Quelli", "Quelle"], "de": "Die Bergschuhe dort kosten hundert Euro.", "warum": "gli scarponi → quegli scarponi: vor s + Konsonant steht «gli»." }
+        ]
+      },
+      "dialog": {
+        "titel": "Con quelle scarpe?",
+        "ort": "Am nächsten Morgen an der Talstation der Seilbahn – Marco kommt wie immer zu spät",
+        "zeilen": [
+          { "wer": "giulia", "it": "Marco, sei in ritardo! E che cosa porti?", "de": "Marco, du bist zu spät! Und was hast du da an?" },
+          { "wer": "marco", "it": "Questa maglietta, questi pantaloni corti e queste scarpe leggere. È estate!", "de": "Dieses T-Shirt, diese kurze Hose und diese leichten Schuhe. Es ist Sommer!" },
+          { "wer": "ben", "it": "Con quelle scarpe in montagna? Io porto questi scarponi e questo maglione.", "de": "Mit den Schuhen in die Berge? Ich trage diese Bergschuhe und diesen Pullover." },
+          { "wer": "giulia", "it": "Vedi quel negozio? Lì hanno giacche, guanti e scarponi. Prendi una giacca, Marco?", "de": "Siehst du den Laden dort? Da gibt es Jacken, Handschuhe und Bergschuhe. Nimmst du eine Jacke, Marco?" },
+          { "wer": "marco", "it": "Quei guanti e quegli scarponi costano troppo! No, grazie. Il cielo è blu.", "de": "Die Handschuhe und die Bergschuhe dort kosten zu viel! Nein, danke. Der Himmel ist blau." },
+          { "wer": "ben", "it": "Giulia, vedi quella donna? Quella con la sciarpa rossa.", "de": "Giulia, siehst du die Frau dort? Die mit dem roten Schal." },
+          { "wer": "giulia", "it": "Ancora lei! E prende la nostra funivia.", "de": "Schon wieder sie! Und sie nimmt unsere Seilbahn." },
+          { "wer": "marco", "it": "Una sciarpa a giugno? Quella donna ha freddo!", "de": "Ein Schal im Juni? Die Frau friert wohl!" },
+          { "wer": "ben", "it": "O quella donna conosce la montagna …", "de": "Oder die Frau kennt die Berge …" }
+        ],
+        "fragen": [
+          { "frage": "Was trägt Marco?", "richtig": "T-Shirt, kurze Hose und leichte Schuhe", "falsch": ["Pullover und Bergschuhe", "Jacke, Handschuhe und Hut", "Einen roten Schal"] },
+          { "frage": "Warum kauft Marco im Laden nichts?", "richtig": "Ihm ist alles zu teuer – und der Himmel ist ja blau", "falsch": ["Der Laden ist geschlossen", "Er hat schon eine Jacke im Rucksack", "Die Seilbahn fährt gleich ab"] },
+          { "frage": "Wen entdeckt Ben an der Seilbahn?", "richtig": "Die Frau mit dem roten Schal", "falsch": ["Luca aus Mailand", "Nonna Rosa", "Die Kellnerin vom Vortag"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Im Geschäft zeigst du auf einen Pullover weiter hinten im Regal und fragst nach dem Preis.", "richtig": "Quanto costa quel maglione?", "falsch": ["Quanto costa quello maglione?", "Quanto costa quei maglione?", "Quanto costa quella maglione?"], "de": "Wie viel kostet der Pullover dort?" },
+          { "lage": "Du hältst ein Paar Handschuhe in der Hand und sagst, dass sie dir gehören.", "richtig": "Questi guanti sono miei.", "falsch": ["Questo guanti sono miei.", "Queste guanti sono mie.", "Quelli guanti sono miei."], "de": "Diese Handschuhe gehören mir." },
+          { "lage": "Ein Freund fragt vor der Wanderung: «Che cosa porti domani?» Du trägst Jacke und Bergschuhe.", "richtig": "Porto una giacca e gli scarponi.", "falsch": ["Porti una giacca e gli scarponi.", "Porto una maglietta e i pantaloni corti.", "Domani fa caldo."], "de": "Ich trage eine Jacke und Bergschuhe." }
+        ],
+        "folge": "Was macht die Frau mit dem roten Schal in derselben Seilbahn – und wer ist am Ende richtig angezogen?"
+      },
+      "wissen": { "titel": "Die Hose kommt aus dem Theater", "text": "Die «pantaloni» verdanken ihren Namen einer Theaterfigur: Pantalone, dem geizigen alten Kaufmann aus Venedig in der Commedia dell'arte, der auf der Bühne lange, enge Hosen trug. Über das französische «pantalon» wurde daraus das Wort für die Hose. Und Vorsicht beim Sprechen: «il cappello» mit langem p ist der Hut, «i capelli» mit einem p sind die Haare." }
+    },
+    {
+      "tag": 29,
+      "titel": "In den Bergen",
+      "ziel": "Danach kannst du von einer Bergtour erzählen und richtig zwischen «andare», «venire» und «uscire» wählen.",
+      "woerter": [
+        { "it": "la montagna", "de": "der Berg / das Gebirge", "art": "n", "aus": "la mon-TA-gna", "bsp": { "it": "Domani andiamo in montagna.", "de": "Morgen fahren wir in die Berge." }, "emoji": "⛰️", "hinweis": "«in montagna» = in den Bergen / in die Berge – ohne Artikel." },
+        { "it": "il sentiero", "de": "der Pfad / der Wanderweg", "art": "n", "aus": "il sen-TIE-ro", "bsp": { "it": "Il sentiero sale ancora: sono stanco!", "de": "Der Pfad steigt noch weiter an: Ich bin müde!" }, "emoji": "🧭" },
+        { "it": "il rifugio", "de": "die Berghütte / die Schutzhütte", "art": "n", "aus": "il ri-FU-gio", "bsp": { "it": "Il rifugio è aperto da giugno a settembre.", "de": "Die Hütte ist von Juni bis September geöffnet." }, "emoji": "🛖", "hinweis": "Wörtlich «die Zuflucht». Mehrzahl: i rifugi." },
+        { "it": "la neve", "de": "der Schnee", "art": "n", "aus": "la NE-ve", "bsp": { "it": "In montagna c'è la neve anche a giugno.", "de": "In den Bergen liegt auch im Juni Schnee." }, "emoji": "❄️", "hinweis": "Weiblich: la neve." },
+        { "it": "salire", "de": "hinaufsteigen / einsteigen", "art": "v", "aus": "sa-LI-re", "bsp": { "it": "Saliamo a piedi o in funivia?", "de": "Gehen wir zu Fuß hinauf oder fahren wir mit der Seilbahn?" }, "emoji": "⬆️", "hinweis": "Unregelmäßig bei io und loro: salgo, salgono." },
+        { "it": "scendere", "de": "hinuntergehen / aussteigen", "art": "v", "aus": "SCEN-de-re", "bsp": { "it": "Scendiamo: fa troppo freddo!", "de": "Wir steigen ab: Es ist zu kalt!" }, "emoji": "⬇️", "hinweis": "Betonung auf der ersten Silbe: SCEN-de-re." },
+        { "it": "camminare", "de": "gehen / wandern (zu Fuß)", "art": "v", "aus": "cam-mi-NA-re", "bsp": { "it": "Oggi camminiamo tre ore.", "de": "Heute wandern wir drei Stunden." }, "emoji": "🚶", "hinweis": "Die Bewegung selbst. Zu einem Ziel gehen heißt «andare»." },
+        { "it": "la cima", "de": "der Gipfel", "art": "n", "aus": "la CI-ma", "bsp": { "it": "La cima è molto alta.", "de": "Der Gipfel ist sehr hoch." }, "emoji": "🏔️" },
+        { "it": "venire", "de": "kommen", "art": "v", "aus": "ve-NI-re", "bsp": { "it": "Vengo anch'io!", "de": "Ich komme auch mit!" }, "emoji": "🙋", "hinweis": "Unregelmäßig: vengo, vieni, viene, veniamo, venite, vengono." },
+        { "it": "uscire", "de": "hinausgehen / ausgehen", "art": "v", "aus": "u-SCI-re", "bsp": { "it": "Oggi non usciamo: piove.", "de": "Heute gehen wir nicht raus: Es regnet." }, "emoji": "🚪", "hinweis": "Unregelmäßig: esco, esci, esce, usciamo, uscite, escono." },
+        { "it": "la funivia", "de": "die Seilbahn", "art": "n", "aus": "la fu-ni-VI-a", "bsp": { "it": "Prendiamo la funivia.", "de": "Wir nehmen die Seilbahn." }, "emoji": "🚠", "hinweis": "Betonung auf dem zweiten i: fu-ni-VI-a." },
+        { "it": "il bosco", "de": "der Wald", "art": "n", "aus": "il BO-sco", "bsp": { "it": "Il sentiero attraversa il bosco.", "de": "Der Pfad führt durch den Wald." }, "emoji": "🌲", "hinweis": "Mehrzahl: i boschi – mit h, damit das c hart bleibt." }
+      ],
+      "grammatik": {
+        "titel": "venire und uscire – und: andare oder venire?",
+        "erklaerung": "Zwei wichtige unregelmäßige Verben: **venire** (kommen) und **uscire** (hinausgehen, ausgehen). Bei *noi* und *voi* sind beide regelmäßig: veniamo, venite – usciamo, uscite. Sonst wechselt der Stamm: **vengo, vieni, viene, vengono** und **esco, esci, esce, escono**.\n**andare oder venire?** «Andare» führt vom Sprecher weg an einen anderen Ort: «Vado a Bolzano.» «Venire» führt dorthin, wo du oder dein Gesprächspartner seid – und heißt auch «mitkommen»: «Vieni con noi?» – «Sì, vengo!»\n**Falle:** «Aus dem Haus gehen» ist nicht andare, sondern uscire: «Esco di casa alle otto.» Und «Da dove vieni?» fragt nach der Herkunft: «Vengo da Amburgo.»",
+        "tabelle": { "kopf": ["Person", "venire", "uscire"], "zeilen": [["io", "vengo", "esco"], ["tu", "vieni", "esci"], ["lui / lei", "viene", "esce"], ["noi", "veniamo", "usciamo"], ["voi", "venite", "uscite"], ["loro", "vengono", "escono"]] },
+        "beispiele": [
+          { "it": "Vieni in montagna con noi?", "de": "Kommst du mit uns in die Berge?" },
+          { "it": "La sera usciamo con gli amici.", "de": "Abends gehen wir mit den Freunden aus." },
+          { "it": "Domani vado a Venezia. Vieni anche tu?", "de": "Morgen fahre ich nach Venedig. Kommst du auch mit?" }
+        ],
+        "uebungen": [
+          { "satz": "Io ___ da Amburgo.", "loesung": "vengo", "falsch": ["vieni", "viene", "vengono"], "de": "Ich komme aus Hamburg." },
+          { "satz": "Marco, tu ___ con noi?", "loesung": "vieni", "falsch": ["viene", "vengo", "vengono"], "de": "Marco, kommst du mit uns?" },
+          { "satz": "I miei amici ___ da Torino.", "loesung": "vengono", "falsch": ["vengo", "viene", "venite"], "de": "Meine Freunde kommen aus Turin." },
+          { "satz": "La sera Ben ___ con gli amici.", "loesung": "esce", "falsch": ["esco", "esci", "escono"], "de": "Abends geht Ben mit den Freunden aus." },
+          { "satz": "Noi non ___: piove troppo.", "loesung": "usciamo", "falsch": ["esciamo", "uscite", "escono"], "de": "Wir gehen nicht raus: Es regnet zu stark.", "warum": "Bei noi und voi bleibt das u: usciamo, uscite." },
+          { "satz": "La mattina ___ di casa alle otto.", "loesung": "esco", "falsch": ["vado", "vengo", "salgo"], "de": "Morgens gehe ich um acht aus dem Haus.", "warum": "«Aus dem Haus gehen» heißt «uscire di casa»." },
+          { "satz": "Marco, tu dove ___ domani? – Vado a Verona.", "loesung": "vai", "falsch": ["vieni", "vado", "va"], "de": "Marco, wohin fährst du morgen? – Ich fahre nach Verona.", "warum": "Weg vom Sprecher an einen anderen Ort: andare." },
+          { "satz": "Domani andiamo in montagna. ___ con noi?", "loesung": "Vieni", "falsch": ["Vai", "Vado", "Vanno"], "de": "Morgen fahren wir in die Berge. Kommst du mit?", "warum": "Wer den Sprecher begleitet, «kommt mit»: immer venire, nie andare." }
+        ]
+      },
+      "dialog": {
+        "titel": "Nevica a giugno!",
+        "ort": "Auf dem Bergpfad hoch über Bozen: Der Himmel wird dunkel",
+        "zeilen": [
+          { "wer": "giulia", "it": "Il sentiero sale ancora. Marco, vieni?", "de": "Der Pfad steigt noch weiter an. Marco, kommst du?" },
+          { "wer": "marco", "it": "Vengo, vengo … Ma da dove vengono quelle nuvole?", "de": "Ich komme ja, ich komme … Aber woher kommen die Wolken dort?" },
+          { "wer": "ben", "it": "Vengono da quella cima. Fa freddo e c'è molto vento.", "de": "Sie kommen von dem Gipfel dort. Es ist kalt und sehr windig." },
+          { "wer": "marco", "it": "Ragazzi, io ho freddo. Scendiamo?", "de": "Leute, mir ist kalt. Steigen wir ab?" },
+          { "wer": "giulia", "it": "No! Il rifugio è vicino: saliamo ancora un po'.", "de": "Nein! Die Hütte ist nah: Wir steigen noch ein Stück hinauf." },
+          { "wer": "ben", "it": "Giulia … questa non è pioggia. Nevica!", "de": "Giulia … das ist kein Regen. Es schneit!" },
+          { "wer": "marco", "it": "Nevica a giugno! E io porto una maglietta e i pantaloni corti!", "de": "Es schneit im Juni! Und ich trage ein T-Shirt und eine kurze Hose!" },
+          { "wer": "giulia", "it": "Non vedo il sentiero. Dove andiamo adesso?", "de": "Ich sehe den Pfad nicht mehr. Wohin gehen wir jetzt?" },
+          { "wer": "donna", "als": "Voce", "it": "Ehi, voi! Il rifugio è qui! Venite!", "de": "He, ihr da! Die Hütte ist hier! Kommt!" },
+          { "wer": "ben", "it": "Vedo una luce … e una donna esce da una casa!", "de": "Ich sehe ein Licht … und eine Frau kommt aus einem Haus!" }
+        ],
+        "fragen": [
+          { "frage": "Warum will Marco umkehren?", "richtig": "Ihm ist kalt", "falsch": ["Er hat Hunger", "Seine Schuhe sind kaputt", "Er hat seinen Rucksack vergessen"] },
+          { "frage": "Was fällt vom Himmel?", "richtig": "Schnee – mitten im Juni", "falsch": ["Nur Regen", "Hagel", "Nichts, es ist bloß windig"] },
+          { "frage": "Wie endet die Szene?", "richtig": "Eine Stimme ruft sie zur Hütte, Ben sieht ein Licht", "falsch": ["Die drei steigen zur Seilbahn ab", "Marco findet den Pfad wieder", "Giulia ruft Nonna Rosa an"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Deine Freunde sagen: «Oggi andiamo in pizzeria.» Du willst mit.", "richtig": "Vengo anch'io!", "falsch": ["Vado anch'io!", "Viene anch'io!", "Venite anche voi?"], "de": "Ich komme auch mit!" },
+          { "lage": "Du fährst morgen in die Berge und fragst eine Freundin, ob sie mitkommt.", "richtig": "Vieni con me in montagna?", "falsch": ["Vai con me in montagna?", "Vengono con me in montagna?", "Dove vai in montagna?"], "de": "Kommst du mit mir in die Berge?" },
+          { "lage": "Es regnet in Strömen. Du sagst deinem Mitbewohner, dass du heute nicht aus dem Haus gehst.", "richtig": "Oggi non esco.", "falsch": ["Oggi non usco.", "Oggi non vado di casa.", "Oggi non salgo."], "de": "Heute gehe ich nicht raus." }
+        ],
+        "folge": "Wer ruft da aus dem Schneetreiben – und schaffen es die drei bis zur Hütte?"
+      },
+      "wissen": { "titel": "Der berühmteste Wanderer von Bozen", "text": "In Bozen liegt Ötzi, die rund 5300 Jahre alte Gletschermumie. Wanderer fanden ihn 1991 hoch oben in den Ötztaler Alpen; heute ist er im Südtiroler Archäologiemuseum zu sehen – samt Ausrüstung: Fellmütze, Mantel aus Fell und Schuhe, die mit Gras gepolstert waren. Für die Berge war er also besser angezogen als Marco. Auf Italienisch heißt er «l'Uomo venuto dal ghiaccio», der Mann aus dem Eis." }
+    },
+    {
+      "tag": 30,
+      "titel": "In der Hütte",
+      "ziel": "Danach kannst du sagen, wie es dir geht, was du brauchst und worauf du Lust hast.",
+      "woerter": [
+        { "it": "la zuppa", "de": "die Suppe", "art": "n", "aus": "la ZUP-pa", "bsp": { "it": "La zuppa è molto calda.", "de": "Die Suppe ist sehr heiß." }, "emoji": "🍲" },
+        { "it": "il fuoco", "de": "das Feuer", "art": "n", "aus": "il FUO-co", "bsp": { "it": "Nel rifugio c'è un bel fuoco.", "de": "In der Hütte brennt ein schönes Feuer." }, "emoji": "🔥" },
+        { "it": "la coperta", "de": "die Decke", "art": "n", "aus": "la co-PER-ta", "bsp": { "it": "Hai una coperta per me?", "de": "Hast du eine Decke für mich?" }, "emoji": "🛌", "hinweis": "Die Decke zum Zudecken. Die Zimmerdecke heißt «il soffitto»." },
+        { "it": "bagnato", "de": "nass", "art": "a", "aus": "ba-GNA-to", "bsp": { "it": "Le mie scarpe sono bagnate.", "de": "Meine Schuhe sind nass." }, "emoji": "💦", "hinweis": "Verwandt mit «il bagno» (das Bad)." },
+        { "it": "asciutto", "de": "trocken", "art": "a", "aus": "a-SCIUT-to", "bsp": { "it": "Hai una maglietta asciutta?", "de": "Hast du ein trockenes T-Shirt?" }, "emoji": "🏜️", "hinweis": "«sciu» klingt wie «schu»." },
+        { "it": "avere bisogno di", "de": "brauchen", "art": "p", "aus": "a-VE-re bi-SO-gno di", "bsp": { "it": "Ho bisogno di una giacca.", "de": "Ich brauche eine Jacke." }, "emoji": "🆘", "hinweis": "Wörtlich «Bedarf haben an» – nie ohne «di»." },
+        { "it": "avere voglia di", "de": "Lust haben auf", "art": "p", "aus": "a-VE-re VO-glia di", "bsp": { "it": "Ho voglia di una zuppa calda.", "de": "Ich habe Lust auf eine heiße Suppe." }, "emoji": "😋", "hinweis": "Auch mit Verb: «Ho voglia di dormire» – ich habe Lust zu schlafen." },
+        { "it": "stare", "de": "bleiben / sein / (gut, schlecht) gehen", "art": "v", "aus": "STA-re", "bsp": { "it": "Che bello stare qui davanti al fuoco!", "de": "Wie schön, hier vor dem Feuer zu sein!" }, "emoji": "🧘", "hinweis": "Formen: sto, stai, sta, stiamo, state, stanno." },
+        { "it": "dare", "de": "geben", "art": "v", "aus": "DA-re", "bsp": { "it": "Ho una cosa da dare a Giulia.", "de": "Ich habe Giulia etwas zu geben." }, "emoji": "🤲", "hinweis": "Formen: do, dai, dà, diamo, date, danno – «dà» mit Akzent." },
+        { "it": "avere freddo", "de": "frieren", "art": "p", "aus": "a-VE-re FRED-do", "bsp": { "it": "Marco ha freddo: non ha una giacca.", "de": "Marco friert: Er hat keine Jacke." }, "emoji": "🥶", "hinweis": "Gegenteil: «avere caldo». Das Wetter dagegen: «fa freddo»." },
+        { "it": "accendere", "de": "anzünden / einschalten", "art": "v", "aus": "ac-CEN-de-re", "bsp": { "it": "Marta accende il fuoco.", "de": "Marta zündet das Feuer an." }, "emoji": "🕯️", "hinweis": "Betonung: ac-CEN-de-re. Auch «accendere la luce» – das Licht einschalten." },
+        { "it": "scaldarsi", "de": "sich aufwärmen", "art": "v", "aus": "scal-DAR-si", "bsp": { "it": "Marco si scalda davanti al fuoco.", "de": "Marco wärmt sich vor dem Feuer auf." }, "emoji": "♨️", "hinweis": "Reflexiv wie «lavarsi»: mi scaldo, ti scaldi, si scalda …" }
+      ],
+      "grammatik": {
+        "titel": "stare und dare",
+        "erklaerung": "**stare** kennst du schon aus «Come stai?» – «Sto bene». Es sagt, **wie es jemandem geht**, und bedeutet auch «bleiben, sich aufhalten»: «Oggi sto a casa» – heute bleibe ich zu Hause.\n**dare** heißt «geben». Wer etwas bekommt, wird mit **a** angeschlossen: «Do una coperta **a** Marco.» Merke dir auch «dare una mano» (helfen) und «dare un esame» (eine Prüfung ablegen).\nBeide Verben sind kurz und einander sehr ähnlich: sto – do, stai – dai, stiamo – diamo, state – date, stanno – danno.\n**Falle:** «**dà**» (er gibt) trägt einen Akzent, denn «da» ohne Akzent ist die Präposition. «**sta**» schreibt man dagegen ohne Akzent. Und: «Mir geht es gut» heißt «Sto bene», nie «Sono bene».",
+        "tabelle": { "kopf": ["Person", "stare", "dare"], "zeilen": [["io", "sto", "do"], ["tu", "stai", "dai"], ["lui / lei", "sta", "dà"], ["noi", "stiamo", "diamo"], ["voi", "state", "date"], ["loro", "stanno", "danno"]] },
+        "beispiele": [
+          { "it": "Come state? – Stiamo bene, grazie.", "de": "Wie geht es euch? – Uns geht es gut, danke." },
+          { "it": "Marta dà una zuppa a Giulia.", "de": "Marta gibt Giulia eine Suppe." },
+          { "it": "Oggi nevica: stiamo qui nel rifugio.", "de": "Heute schneit es: Wir bleiben hier in der Hütte." }
+        ],
+        "uebungen": [
+          { "satz": "Io ___ bene, grazie.", "loesung": "sto", "falsch": ["stai", "sta", "do"], "de": "Mir geht es gut, danke." },
+          { "satz": "E tu, Giulia, come ___?", "loesung": "stai", "falsch": ["sta", "sto", "state"], "de": "Und du, Giulia, wie geht es dir?" },
+          { "satz": "Noi ___ qui davanti al fuoco.", "loesung": "stiamo", "falsch": ["state", "stanno", "sto"], "de": "Wir bleiben hier vor dem Feuer." },
+          { "satz": "Io ___ la zuppa a Ben.", "loesung": "do", "falsch": ["dai", "dà", "sto"], "de": "Ich gebe Ben die Suppe." },
+          { "satz": "Marta ___ una coperta a Marco.", "loesung": "dà", "falsch": ["da", "dai", "danno"], "de": "Marta gibt Marco eine Decke.", "warum": "«dà» (gibt) mit Akzent – «da» ohne Akzent ist die Präposition." },
+          { "satz": "Voi ___ una mano a Giulia?", "loesung": "date", "falsch": ["dai", "danno", "diamo"], "de": "Helft ihr Giulia?", "warum": "«dare una mano» heißt «helfen» – wörtlich «eine Hand geben»." },
+          { "satz": "Giulia e Marco ___ il quaderno a Ben.", "loesung": "danno", "falsch": ["dano", "stanno", "dà"], "de": "Giulia und Marco geben Ben das Heft.", "warum": "Zwei Personen = «loro» → danno, mit doppeltem n." },
+          { "satz": "Ben ha freddo e non ___ bene.", "loesung": "sta", "falsch": ["è", "stà", "dà"], "de": "Ben friert und es geht ihm nicht gut.", "warum": "Wie es jemandem geht, sagt man mit stare, nicht mit essere. Und «sta» hat keinen Akzent." }
+        ]
+      },
+      "dialog": {
+        "titel": "Davanti al fuoco",
+        "ort": "In der Berghütte: Draußen schneit es, drinnen brennt das Feuer",
+        "zeilen": [
+          { "wer": "donna", "als": "Marta", "it": "Ecco tre coperte. Siete bagnati! Qui davanti al fuoco state bene.", "de": "Hier sind drei Decken. Ihr seid ja nass! Hier vor dem Feuer habt ihr es gut." },
+          { "wer": "marco", "it": "Grazie, signora! Ho freddo, ho fame e ho bisogno di vestiti asciutti.", "de": "Danke, Signora! Mir ist kalt, ich habe Hunger und ich brauche trockene Kleider." },
+          { "wer": "donna", "als": "Marta", "it": "Do una zuppa calda a tutti. Come state adesso?", "de": "Ich gebe allen eine heiße Suppe. Wie geht es euch jetzt?" },
+          { "wer": "giulia", "it": "Stiamo bene, grazie! Lei è Marta? Io sono Giulia, la nipote di Rosa. E loro sono Marco e Ben.", "de": "Uns geht es gut, danke! Sind Sie Marta? Ich bin Giulia, die Enkelin von Rosa. Und das sind Marco und Ben." },
+          { "wer": "donna", "als": "Marta", "it": "La nipote di Rosa! Mia madre è una vecchia amica di Rosa. La pagina sei è qui.", "de": "Die Enkelin von Rosa! Meine Mutter ist eine alte Freundin von Rosa. Seite sechs ist hier." },
+          { "wer": "giulia", "it": "Davvero? Ho tanta voglia di vedere quella pagina!", "de": "Wirklich? Ich habe so große Lust, diese Seite zu sehen!" },
+          { "wer": "donna", "als": "Marta", "it": "Un momento. Ben, tu sei tedesco, vero? Qui parliamo anche tedesco.", "de": "Einen Moment. Ben, du bist Deutscher, nicht wahr? Hier sprechen wir auch Deutsch." },
+          { "wer": "ben", "it": "Perfetto! Allora parliamo tedesco?", "de": "Perfekt! Dann sprechen wir Deutsch?" },
+          { "wer": "donna", "als": "Marta", "it": "Eh no! Prima dai un esame: la pagina è per chi parla italiano.", "de": "O nein! Erst legst du eine Prüfung ab: Die Seite ist für den, der Italienisch spricht." },
+          { "wer": "ben", "it": "Un esame? Adesso? Va bene. Ma prima la zuppa!", "de": "Eine Prüfung? Jetzt? Na gut. Aber erst die Suppe!" }
+        ],
+        "fragen": [
+          { "frage": "Was gibt Marta den dreien als Erstes?", "richtig": "Drei Decken", "falsch": ["Die Seite sechs", "Trockene Schuhe", "Einen Zimmerschlüssel"] },
+          { "frage": "Woher kennt Marta Nonna Rosa?", "richtig": "Martas Mutter ist eine alte Freundin von Rosa", "falsch": ["Marta ist Rosas Schwester", "Sie haben zusammen in Turin gekocht", "Sie kennt sie gar nicht"] },
+          { "frage": "Was muss Ben tun, bevor er die Seite bekommt?", "richtig": "Eine Prüfung auf Italienisch ablegen", "falsch": ["Die Suppe bezahlen", "Das Feuer anzünden", "Auf Deutsch um die Seite bitten"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Du bist vom Regen durchnässt und brauchst eine Decke.", "richtig": "Ho bisogno di una coperta.", "falsch": ["Ho bisogno una coperta.", "Sono bisogno di una coperta.", "Ho voglia di una zuppa."], "de": "Ich brauche eine Decke." },
+          { "lage": "Ein Freund fragt: «Come stai?» Dir geht es gut, dir ist nur kalt.", "richtig": "Sto bene, ma ho freddo.", "falsch": ["Sono bene, ma ho freddo.", "Sto bene, ma sono freddo.", "Do bene, ma faccio freddo."], "de": "Mir geht es gut, aber mir ist kalt." },
+          { "lage": "Marco friert. Du fragst einen Freund, ob er ihm eine Decke gibt.", "richtig": "Dai una coperta a Marco?", "falsch": ["Stai una coperta a Marco?", "Da una coperta a Marco?", "Danno una coperta a Marco?"], "de": "Gibst du Marco eine Decke?" }
+        ],
+        "folge": "Besteht Ben Martas Prüfung – nass, müde und mit einem Teller Suppe vor sich?"
+      },
+      "wissen": { "titel": "Bolzano oder Bozen? Beides!", "text": "In Südtirol – auf Italienisch «Alto Adige» – sind Italienisch und Deutsch Amtssprachen, in einigen Tälern kommt Ladinisch dazu. Deshalb stehen auf den Ortsschildern beide Namen: «Bolzano – Bozen». Auch die Küche mischt beides: Aus dem deutschen «Knödel» wurden die «canederli», die in vielen Berghütten auf der Karte stehen – oft «in brodo», also in der Brühe." }
+    }
+  ],
+  "pruefung": {
+    "lesetext": {
+      "titel": "Neve a giugno",
+      "it": "Oggi è il ventuno giugno: comincia l'estate. A Bolzano c'è il sole e fa caldo, ma noi andiamo in montagna. Io porto un maglione, una giacca e gli scarponi. Marco porta una maglietta, i pantaloni corti e scarpe leggere. «È estate!», dice. Prendiamo la funivia e camminiamo due ore: il sentiero sale nel bosco. Ma in montagna il tempo cambia in fretta. Arrivano molte nuvole, c'è vento e fa freddo. Nevica a giugno! Marco ha molto freddo e non vediamo il sentiero. Ecco una luce! Una donna esce dal rifugio: «Venite qui!» Si chiama Marta. Nel rifugio c'è un bel fuoco. Marta dà una coperta e una zuppa calda a tutti. Adesso stiamo bene: i vestiti sono asciutti e Marco ha ancora fame. Accanto al fuoco c'è anche una sciarpa rossa. Di chi è? E la pagina sei? È qui, dice Marta. Ma prima do un esame d'italiano. Non ho paura, ma ho bisogno di un caffè!",
+      "fragen": [
+        { "frage": "Welches Datum ist es?", "richtig": "Der 21. Juni, Sommeranfang", "falsch": ["Der 20. Juni", "Der 21. Juli", "Der 1. Juni"] },
+        { "frage": "Was trägt Marco auf der Wanderung?", "richtig": "T-Shirt, kurze Hose und leichte Schuhe", "falsch": ["Pullover, Jacke und Bergschuhe", "Eine Decke und einen roten Schal", "Jacke und Handschuhe"] },
+        { "frage": "Was passiert unterwegs mit dem Wetter?", "richtig": "Es wird kalt und beginnt zu schneien", "falsch": ["Es bleibt sonnig und warm", "Es gibt ein Gewitter mit starkem Regen", "Es wird nur etwas windig"] },
+        { "frage": "Was gibt Marta allen in der Hütte?", "richtig": "Eine Decke und eine heiße Suppe", "falsch": ["Trockene Schuhe und Tee", "Die Seite sechs", "Einen roten Schal"] }
+      ]
+    }
+  }
+}

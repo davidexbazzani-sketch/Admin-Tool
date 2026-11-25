@@ -1,0 +1,310 @@
+{
+  "eintraege": [
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0001", "faehigkeit": "antrieb.ziele", "stufe": 1, "kanal": "wissen" }, "frage": "Welches dieser Ziele ist konkret?", "antworten": [
+      { "text": "„Mehr Zeit für mich.“", "wert": 0, "tendenz": "vage", "warum": "Schöner Wunsch – aber wann, wie viel, wofür? So bleibt er ein Gefühl." },
+      { "text": "„Samstags eine Stunde ohne Handy spazieren gehen.“", "wert": 2, "warum": "Was, wann, wie lange – am Samstagabend weißt du, ob es geklappt hat." },
+      { "text": "„Irgendwann mal wieder etwas Kreatives machen, wenn es zeitlich passt.“", "wert": 0, "tendenz": "vage", "warum": "„Irgendwann“ und „wenn es passt“ sind die beiden sichersten Wege, dass es nicht passiert." },
+      { "text": "„Öfter rausgehen.“", "wert": 1, "warum": "Die Richtung stimmt. Mit Tag und Dauer wird daraus ein Ziel." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0002", "faehigkeit": "antrieb.ziele", "stufe": 2, "kanal": "wissen" }, "frage": "Dr. Albers fragt im Jahresgespräch nach deinem Ziel fürs nächste Quartal. Welche Antwort ist am klarsten?", "antworten": [
+      { "text": "„Ich gebe mein Bestes.“", "wert": 0, "tendenz": "vage", "warum": "Kein Maßstab – damit kann am Ende niemand etwas anfangen, auch du nicht." },
+      { "text": "„Ich will mich weiterentwickeln, fachlich und persönlich.“", "wert": 0, "tendenz": "vage", "warum": "Klingt gut, lässt sich aber nicht prüfen." },
+      { "text": "„Bis Ende März lerne ich die neue Auswertung und stelle sie einmal im Team vor.“", "wert": 2, "warum": "Konkret, fordernd, mit Datum und einem Ergebnis, das man sehen kann." },
+      { "text": "„Ich will die neue Auswertung lernen.“", "wert": 1, "warum": "Konkreter Inhalt. Es fehlen noch Datum und Maß." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0003", "faehigkeit": "antrieb.ziele", "stufe": 3, "kanal": "wissen" }, "frage": "Jule Marek will „endlich fit werden“. Was ist der beste nächste Schritt für ihr Ziel?", "antworten": [
+      { "text": "Es konkret machen: „Zweimal pro Woche 30 Minuten Rad, dienstags und samstags.“", "wert": 2, "warum": "Was, wie oft, wann – fordernd, aber machbar." },
+      { "text": "Ein Foto von einer durchtrainierten Person an den Kühlschrank hängen.", "wert": 0, "tendenz": "traeumen", "warum": "Das schöne Bild allein macht eher satt als fit." },
+      { "text": "Gleich jeden Tag eine Stunde trainieren, damit es schneller geht und sich die ganze Mühe auch wirklich lohnt.", "wert": 0, "tendenz": "ueberladen", "warum": "Zu groß für den Anfang. Nach wenigen Tagen ist die Luft raus." },
+      { "text": "Sich in einem Sportverein anmelden.", "wert": 1, "warum": "Ein guter Rahmen. Wie oft und wann sie geht, ist damit aber noch offen." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0004", "faehigkeit": "antrieb.ziele", "stufe": 4, "kanal": "wissen" }, "frage": "Lena soll eine neue Software nutzen, die sie kaum kennt. Welches Ziel hilft ihr in den ersten zwei Wochen am meisten?", "antworten": [
+      { "text": "„In zwei Wochen bin ich so schnell wie Jonas.“", "wert": 0, "tendenz": "vergleichen", "warum": "Ein Leistungsziel, bevor sie den Weg kennt – und dazu ein Vergleich, der drückt." },
+      { "text": "„Drei Funktionen ausprobieren, die ich täglich brauche, und notieren, was hakt.“", "wert": 2, "warum": "Bei Neuem hilft ein Lernziel: Wege finden und ausprobieren." },
+      { "text": "„Ich schau mal, wie es läuft.“", "wert": 0, "tendenz": "vage", "warum": "Ohne Ziel lernt sie nur nebenbei – oder gar nicht." },
+      { "text": "„Jeden Tag eine halbe Stunde mit der Software arbeiten, auch wenn ich dabei noch sehr langsam bin.“", "wert": 1, "warum": "Gut: regelmäßig und ehrlich. Noch besser mit einer Lernfrage dazu: Was probiere ich heute aus?" }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "antrieb-v-0005", "faehigkeit": "antrieb.ziele", "stufe": 2, "kanal": "wissen" }, "auftrag": "Nur ein Wunsch – oder schon ein konkretes Ziel?", "faecher": ["nur ein Wunsch", "konkretes Ziel"], "karten": [
+      { "text": "Mehr lesen.", "fach": 0 },
+      { "text": "Bis Sonntag das Buch auf dem Nachttisch zu Ende lesen.", "fach": 1 },
+      { "text": "Fitter werden.", "fach": 0 },
+      { "text": "Montags und donnerstags 20 Minuten Rad fahren.", "fach": 1 },
+      { "text": "Weniger Stress.", "fach": 0 },
+      { "text": "Freitags um 16 Uhr das Mailprogramm schließen.", "fach": 1 }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "antrieb-v-0006", "faehigkeit": "antrieb.ziele", "stufe": 3, "kanal": "wissen" }, "auftrag": "Carla plant mit WOOP. Ergebnis, Hindernis in ihr oder Hindernis außen? Für den Plan zählt vor allem das innere.", "faecher": ["Ergebnis", "Hindernis in mir", "Hindernis außen"], "karten": [
+      { "text": "„Ich fühle mich fitter.“", "fach": 0 },
+      { "text": "„Nach der Arbeit bin ich zu bequem.“", "fach": 1 },
+      { "text": "„Es regnet oft.“", "fach": 2 },
+      { "text": "„Ich traue mich nicht allein ins Fitnessstudio.“", "fach": 1 },
+      { "text": "„Ich bin stolz auf mich.“", "fach": 0 },
+      { "text": "„Der Chef setzt spontane Termine an.“", "fach": 2 }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "antrieb-v-0007", "faehigkeit": "antrieb.ziele", "stufe": 2, "kanal": "wissen" }, "frage": "Welches Ziel trägt am besten? Von stark nach schwach.", "eintraege": [
+      { "text": "„Bis zum Sommer zweimal pro Woche schwimmen – dienstags und samstags.“", "warum": "Was, wie oft, wann und bis wann – prüfbar und machbar." },
+      { "text": "„Öfter schwimmen gehen.“", "warum": "Konkretes Tun, aber ohne Maß." },
+      { "text": "„Sportlicher werden.“", "warum": "Eine Richtung, kein Ziel." },
+      { "text": "„Endlich ein anderer Mensch werden.“", "warum": "Ein Wunsch über die ganze Person – nichts, was man diese Woche tun kann." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "antrieb-v-0008", "faehigkeit": "antrieb.ziele", "stufe": 3, "kanal": "wissen" }, "frage": "Welcher Plan ist am vollständigsten? Von stark nach schwach.", "eintraege": [
+      { "text": "Wunsch, schönstes Ergebnis, inneres Hindernis und ein Wenn-Dann dafür.", "warum": "Alle vier Schritte – so wird aus dem Traum ein Vorhaben." },
+      { "text": "Wunsch, Ergebnis und Hindernis – aber noch kein Plan.", "warum": "Das Hindernis ist erkannt. Ohne Wenn-Dann bleibt es aber stehen." },
+      { "text": "Wunsch und ein schönes Bild vom Ergebnis.", "warum": "Motiviert kurz, macht aber eher satt als aktiv." },
+      { "text": "Nur der Wunsch.", "warum": "Ein Anfang – mehr noch nicht." }
+    ] },
+    { "art": "umformulieren", "kopf": { "id": "antrieb-v-0009", "faehigkeit": "antrieb.ziele", "stufe": 2, "kanal": "koennen" }, "auftrag": "Mach das vage Ziel konkret: was, wie oft, wann.", "vorlage": "„Ich will mehr mit meinen Freunden unternehmen.“", "kriterien": ["nennt eine Handlung", "nennt Häufigkeit oder Zeitpunkt", "lässt sich am Ende prüfen"], "muster": ["„Einmal im Monat lade ich zwei Freunde zum Essen ein – immer am ersten Samstag.“", "„Diese Woche rufe ich Sven an und schlage ihm zwei Termine vor.“"] },
+    { "art": "umformulieren", "kopf": { "id": "antrieb-v-0010", "faehigkeit": "antrieb.ziele", "stufe": 3, "kanal": "koennen" }, "auftrag": "Mach aus „mein Bestes geben“ ein forderndes, aber machbares Ziel.", "vorlage": "„Bei der Weiterbildung gebe ich mein Bestes.“", "kriterien": ["hat einen Maßstab", "fordert dich, ist aber schaffbar", "hat ein Datum oder einen Zeitraum"], "muster": ["„Bis zum Kursende löse ich jede Übungsaufgabe selbst und frage bei zwei Themen gezielt nach.“", "„Ich bestehe die Abschlussprüfung im ersten Anlauf – und lerne dafür zweimal pro Woche eine Stunde.“"] },
+    { "art": "umformulieren", "kopf": { "id": "antrieb-v-0011", "faehigkeit": "antrieb.ziele", "stufe": 4, "kanal": "koennen" }, "auftrag": "Formuliere das Weg-von-Ziel als Hin-zu-Ziel: Was tust du stattdessen?", "vorlage": "„Ich will nicht mehr jeden Abend auf dem Sofa hängen.“", "kriterien": ["sagt, was du stattdessen tust", "konkret", "freundlich zu dir"], "muster": ["„Nach dem Abendessen gehe ich 15 Minuten raus.“", "„Dienstags und donnerstags spiele ich abends Gitarre statt fernzusehen.“"] },
+    { "art": "bauplan", "kopf": { "id": "antrieb-v-0012", "faehigkeit": "antrieb.ziele", "stufe": 3, "kanal": "koennen" }, "plan": "WOOP im Beruf", "anlass": "Ein Vorhaben in der Arbeit, das seit Wochen liegen bleibt.", "felder": [
+      { "name": "Wunsch", "hilfe": "Was willst du in den nächsten Wochen schaffen? Ein Satz." },
+      { "name": "Ergebnis", "hilfe": "Was wäre das Schönste daran?" },
+      { "name": "Hindernis", "hilfe": "Was in dir hält dich ab – eine Gewohnheit, ein Gefühl, ein Gedanke?" },
+      { "name": "Plan", "hilfe": "Wenn [Hindernis], dann [kleine Handlung]." }
+    ], "muster": ["Wunsch: Die Ablage bis Monatsende umstellen. Ergebnis: Ich finde alles in einer Minute. Hindernis: Ich fange lieber mit dringenden Mails an. Plan: Wenn ich montags den Rechner hochfahre, sortiere ich zuerst zehn Minuten – erst dann öffne ich die Mails.", "Wunsch: Den Fachkurs anmelden. Ergebnis: Mehr Sicherheit bei Kundenfragen. Hindernis: Angst, mich zu blamieren. Plan: Wenn ich denke „Das kann ich eh nicht“, frage ich Jonas, wie sein Kurs war."] },
+    { "art": "bauplan", "kopf": { "id": "antrieb-v-0013", "faehigkeit": "antrieb.ziele", "stufe": 4, "kanal": "koennen" }, "plan": "Ziel konkret", "anlass": "Ein Wunsch, den du in ein prüfbares Ziel verwandelst.", "felder": [
+      { "name": "Was genau?", "hilfe": "Eine Handlung, kein Gefühl." },
+      { "name": "Wie oft oder wie viel?", "hilfe": "Fordernd, aber machbar." },
+      { "name": "Wann und wo?", "hilfe": "Tag, Uhrzeit oder fester Ablauf." },
+      { "name": "Woran merke ich, dass ich es geschafft habe?", "hilfe": "Etwas, das man sehen oder zählen kann." }
+    ], "muster": ["Was: Italienisch üben. Wie oft: an fünf Tagen pro Woche zehn Minuten. Wann: nach dem Frühstück am Küchentisch. Geschafft: Ende Mai kann ich mich zwei Minuten vorstellen.", "Was: Ordnung in den Papierkram. Wie viel: jede Woche ein Ordner. Wann: sonntags nach dem Kaffee. Geschafft: Im März liegt kein Stapel mehr auf dem Schreibtisch."] },
+
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0014", "faehigkeit": "antrieb.warum", "stufe": 1, "kanal": "wissen" }, "frage": "Was ist ein Wert?", "antworten": [
+      { "text": "Eine Richtung, die dir wichtig ist – etwa „verlässlich sein“.", "wert": 2, "warum": "Ein Wert gibt Richtung, ohne je „fertig“ zu sein. Daraus lassen sich Ziele ableiten." },
+      { "text": "Ein Ziel mit Datum.", "wert": 0, "warum": "Das ist ein Ziel. Ein Wert hat kein Enddatum." },
+      { "text": "Etwas, das andere von dir erwarten und das du deshalb unbedingt erfüllen solltest.", "wert": 0, "tendenz": "uebernehmen", "warum": "Das sind Erwartungen anderer. Ein Wert ist das, was dir selbst wichtig ist." },
+      { "text": "Etwas, das dir Freude macht.", "wert": 1, "warum": "Oft hängt beides zusammen. Ein Wert bleibt dir aber auch an mühsamen Tagen wichtig." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0015", "faehigkeit": "antrieb.warum", "stufe": 2, "kanal": "wissen" }, "frage": "Tarek will programmieren lernen, „weil man das heute können sollte“. Was fragst du ihn?", "antworten": [
+      { "text": "„Welchen Kurs nimmst du?“", "wert": 0, "warum": "Eine Werkzeugfrage. Den Grund lässt sie offen." },
+      { "text": "„Wozu willst du es – gibt es einen Grund, der wirklich deiner ist?“", "wert": 2, "warum": "Ein eigener Grund trägt weiter als ein „man sollte“." },
+      { "text": "„Dann gleich drei Programmiersprachen?“", "wert": 0, "tendenz": "ueberladen", "warum": "Mehr vom selben fremden Ziel macht es nicht eigener." },
+      { "text": "„Wann fängst du an?“", "wert": 1, "warum": "Eine gute Planungsfrage – nur kommt sie vor der wichtigeren nach dem Warum." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0016", "faehigkeit": "antrieb.warum", "stufe": 3, "kanal": "wissen" }, "frage": "Dein Ziel „jeden Morgen um fünf aufstehen“ fühlt sich nur nach Pflicht an. Was ist der beste Schritt?", "antworten": [
+      { "text": "Fragen, wozu du früh aufstehen willst – vielleicht passt ein anderer Weg dorthin besser.", "wert": 2, "warum": "Der eigene Grund zeigt, welcher Weg zu dir passt." },
+      { "text": "Trotzdem durchziehen. Pflicht ist Pflicht.", "wert": 0, "tendenz": "durchhalten", "warum": "Ohne eigenen Grund wird jeder Morgen zum Kampf." },
+      { "text": "Das Ziel streichen und gar nichts mehr vornehmen, weil Vorsätze bei dir ohnehin nie funktionieren.", "wert": 0, "tendenz": "verallgemeinern", "warum": "Ein unpassendes Ziel sagt nichts über dich. Es lässt sich ersetzen." },
+      { "text": "Den Wecker auf sechs stellen.", "wert": 1, "warum": "Weniger hart – gut. Die Frage nach dem Wozu bleibt aber offen." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0017", "faehigkeit": "antrieb.warum", "stufe": 4, "kanal": "wissen" }, "frage": "Was weiß man über Ziele, die zu den eigenen Werten passen?", "antworten": [
+      { "text": "Sie werden ausdauernder verfolgt und machen beim Erreichen zufriedener.", "wert": 2, "warum": "Beides zeigen Längsschnittstudien – mehr Ausdauer unterwegs, mehr Zufriedenheit am Ziel." },
+      { "text": "Sie sind leichter, deshalb erreicht man sie öfter.", "wert": 0, "warum": "Sie sind nicht leichter – man bleibt nur eher dran." },
+      { "text": "Kein Unterschied, Hauptsache konkret.", "wert": 0, "warum": "Konkret hilft – der eigene Grund hilft zusätzlich." },
+      { "text": "Sie machen beim Verfolgen mehr Freude, weil man eher dranbleibt, wenn es einem selbst etwas bedeutet.", "wert": 1, "warum": "Stimmt in der Richtung. Dazu kommt: Das Ankommen macht auch zufriedener." }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "antrieb-v-0018", "faehigkeit": "antrieb.warum", "stufe": 2, "kanal": "wissen" }, "auftrag": "Will ich – oder soll ich? Ordne die Gründe.", "faecher": ["eigener Grund", "übernommenes „Soll“"], "karten": [
+      { "text": "„Ich laufe, weil ich danach den Kopf frei habe.“", "fach": 0 },
+      { "text": "„Ich laufe, weil in meinem Alter jetzt alle laufen.“", "fach": 1 },
+      { "text": "„Ich lerne Italienisch, weil ich mich im Urlaub unterhalten will.“", "fach": 0 },
+      { "text": "„Ich mache den Kurs, weil es im Lebenslauf gut aussieht.“", "fach": 1 },
+      { "text": "„Ich koche frisch, weil es mir Freude macht.“", "fach": 0 },
+      { "text": "„Ich nehme ab, weil meine Tante das ständig sagt.“", "fach": 1 }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "antrieb-v-0019", "faehigkeit": "antrieb.warum", "stufe": 3, "kanal": "wissen" }, "auftrag": "Wert oder Ziel?", "faecher": ["Wert (Richtung)", "Ziel (erreichbar)"], "karten": [
+      { "text": "Für meine Freunde da sein.", "fach": 0 },
+      { "text": "Bis Mai den Erste-Hilfe-Kurs machen.", "fach": 1 },
+      { "text": "Neugierig bleiben.", "fach": 0 },
+      { "text": "Im Herbst zehn Kilometer am Stück laufen.", "fach": 1 },
+      { "text": "Gut für meinen Körper sorgen.", "fach": 0 },
+      { "text": "Jeden Sonntag eine Stunde mit dem Rad raus.", "fach": 1 }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "antrieb-v-0020", "faehigkeit": "antrieb.warum", "stufe": 2, "kanal": "wissen" }, "frage": "Welcher Grund trägt an einem verregneten Abend am weitesten? Von stark nach schwach.", "eintraege": [
+      { "text": "„Ich will mit meinen Neffen toben können, ohne nach zehn Minuten außer Atem zu sein.“", "warum": "Ein eigener, lebendiger Grund mit einem Bild, das dir etwas bedeutet." },
+      { "text": "„Ich will fitter werden.“", "warum": "Eigen, aber blass. Er zieht weniger als ein konkretes Bild." },
+      { "text": "„Ich sollte mehr Sport machen.“", "warum": "Ein „Soll“ – es klingt nach Pflicht, nicht nach dir." },
+      { "text": "„Sonst schimpft mein Arzt wieder.“", "warum": "Ein Grund aus Druck von außen. Er zieht kurz, trägt aber selten weit." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "antrieb-v-0021", "faehigkeit": "antrieb.warum", "stufe": 3, "kanal": "wissen" }, "frage": "Kein Ziel in Sicht – welcher erste Schritt hilft am meisten? Von stark nach schwach.", "eintraege": [
+      { "text": "Einen kleinen Versuch für vier Wochen starten, der dich neugierig macht.", "warum": "Ziele wachsen oft aus Versuchen. Du lernst durch Tun, was dir liegt." },
+      { "text": "Eine Woche notieren, was dir Kraft gibt und was sie zieht.", "warum": "Ein guter Blick nach innen – daraus sollte dann ein Versuch werden." },
+      { "text": "Lange über den Sinn des Lebens nachdenken.", "warum": "Kann anregen, führt aber selten von allein zu einem Schritt." },
+      { "text": "Das Ziel eines Freundes übernehmen.", "warum": "Fremde Ziele tragen selten – es fehlt der eigene Grund." }
+    ] },
+    { "art": "umformulieren", "kopf": { "id": "antrieb-v-0022", "faehigkeit": "antrieb.warum", "stufe": 2, "kanal": "koennen" }, "auftrag": "Mach aus dem Soll-Satz einen Will-Satz – mit deinem eigenen Grund.", "vorlage": "„Ich sollte mal wieder meine Eltern anrufen.“", "kriterien": ["nennt einen eigenen Grund", "klingt nach dir, nicht nach Pflicht", "darf ehrlich sein"], "muster": ["„Ich rufe Mama am Sonntag an, weil ich wissen will, wie es ihrem Knie geht.“", "„Ich will hören, was sie im Urlaub erlebt haben – darum rufe ich heute Abend an.“"] },
+    { "art": "umformulieren", "kopf": { "id": "antrieb-v-0023", "faehigkeit": "antrieb.warum", "stufe": 3, "kanal": "koennen" }, "auftrag": "Mach aus einem Wert einen kleinen Wunsch für diese Woche.", "vorlage": "Wert: „Ich will neugierig bleiben.“", "kriterien": ["passt zum Wert", "lässt sich diese Woche tun", "konkret"], "muster": ["„Am Samstag gehe ich in die Ausstellung im Rathaus, die ich noch nicht kenne.“", "„Ich frage Jonas, ob er mir zeigt, wie er die Messwerte auswertet.“"] },
+    { "art": "bauplan", "kopf": { "id": "antrieb-v-0024", "faehigkeit": "antrieb.warum", "stufe": 3, "kanal": "koennen" }, "plan": "Die Wozu-Leiter", "anlass": "Ein Vorhaben, für das dir an schlechten Tagen der Grund fehlt.", "felder": [
+      { "name": "Vorhaben", "hilfe": "Was willst du tun?" },
+      { "name": "Wozu?", "hilfe": "Die erste Antwort, auch wenn sie banal klingt." },
+      { "name": "Und wozu ist dir das wichtig?", "hilfe": "Eine Stufe tiefer." },
+      { "name": "Und wozu das?", "hilfe": "Meist taucht hier ein Mensch, ein Gefühl oder ein Bild auf." },
+      { "name": "Der Satz für schlechte Tage", "hilfe": "Der Grund in deinen Worten, kurz." }
+    ], "muster": ["Vorhaben: abends Rücken-Übungen. Wozu? Weniger Schmerzen. Wozu? Länger am Stück sitzen und arbeiten können. Wozu? Im Sommer mit Freunden wandern statt abzusagen. Satz: „Zehn Minuten für die Wanderung im Juli.“", "Vorhaben: Papierkram sortieren. Wozu? Ordnung. Wozu? Nicht mehr nachts grübeln. Wozu? Ruhig schlafen. Satz: „Ein Ordner heute – eine ruhige Nacht mehr.“"] },
+    { "art": "bauplan", "kopf": { "id": "antrieb-v-0025", "faehigkeit": "antrieb.warum", "stufe": 4, "kanal": "koennen" }, "plan": "Neugier-Experiment", "anlass": "Für Zeiten ohne großes Ziel: etwas klein und befristet ausprobieren.", "felder": [
+      { "name": "Was macht mich neugierig?", "hilfe": "Auch etwas Kleines, auch etwas Ungewohntes." },
+      { "name": "Kleinster Versuch", "hilfe": "Ein Schnuppertermin, ein Gespräch, ein Abend." },
+      { "name": "Wie lange?", "hilfe": "Zum Beispiel vier Wochen, einmal pro Woche." },
+      { "name": "Woran merke ich danach, ob es zu mir passt?", "hilfe": "Ein Gefühl, eine Frage, ein Zeichen." }
+    ], "muster": ["Neugierig auf: Töpfern. Versuch: ein Schnupperabend im Kurs der Volkshochschule. Dauer: vier Wochen, dienstags. Danach: Freue ich mich auf den Dienstag?", "Neugierig auf: Ehrenamt. Versuch: einmal bei der Essensausgabe im Viertel mithelfen und mit zwei Leuten dort reden. Dauer: drei Samstage. Danach: Hatte ich danach mehr Energie als vorher?"] },
+    { "art": "dialog", "kopf": { "id": "antrieb-v-0026", "faehigkeit": "antrieb.warum", "stufe": 3, "kanal": "koennen" }, "gespraech": {
+      "titel": "Ohne Ziel", "figur": "Jule Marek",
+      "lage": "Nach dem Kochkurs steht ihr noch kurz zusammen. Jule seufzt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Jule: „Alle reden ständig von ihren großen Lebenszielen. Ich hab keins. Stimmt was nicht mit mir?“",
+          "wahl": [
+            { "text": "„Gar nichts. Viele haben kein großes Ziel. Was ist dir denn im Alltag wichtig?“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst den Druck raus und fragst nach Werten – der Richtung hinter möglichen Zielen." },
+            { "text": "„Dann setz dir halt eins. Ohne Ziel kommt man nicht weiter.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Das erhöht den Druck – und ein Ziel aus Druck trägt selten." },
+            { "text": "„Ach, Ziele werden überschätzt. Mach dir keinen Kopf und lebe einfach in den Tag hinein, das ist auch völlig in Ordnung.“", "wert": 1, "weiter": "k2", "rueck": "Entlastet – gut. Ein Blick auf das, was ihr wichtig ist, hilft trotzdem weiter." }
+          ] },
+        { "id": "k2", "sagt": "Jule: „Wichtig? Hm. Dass ich draußen bin. Und dass ich ab und zu was Neues lerne.“",
+          "wahl": [
+            { "text": "„Dann mach daraus ein richtig großes Lebensziel, irgendwas mit Natur.“", "wert": 0, "tendenz": "ueberladen", "weiter": "ende2", "rueck": "Zu groß, zu früh. Aus einem Wert wird nicht sofort ein Lebensziel." },
+            { "text": "„Gibt es etwas, das du klein und für ein paar Wochen ausprobieren könntest?“", "wert": 2, "weiter": "ende1", "rueck": "Ein Neugier-Experiment – der kleinste Weg vom Wert zum Schritt." },
+            { "text": "„Schön. Dann weißt du ja, was zählt.“", "wert": 1, "weiter": "ende1", "rueck": "Bestätigt sie – gut. Ein kleiner Versuch würde daraus einen nächsten Schritt machen." }
+          ] },
+        { "id": "ende1", "sagt": "Jule überlegt: „Es gibt im Frühling einen Kochkurs draußen im Wald … vielleicht probier ich den einfach.“", "ende": "Kein Ziel zu haben ist kein Mangel. Werte geben Richtung, ein kleiner Versuch macht daraus einen nächsten Schritt." },
+        { "id": "ende2", "sagt": "Jule zuckt mit den Schultern: „Na toll. Jetzt fühl ich mich noch schlechter.“", "ende": "Druck erzeugt kein Ziel. Besser: nach Werten fragen und einen kleinen, befristeten Versuch anregen." }
+      ],
+      "prinzipien": ["kein Ziel ist kein Mangel", "nach Werten fragen", "klein und befristet ausprobieren", "keinen Druck aufbauen"]
+    } },
+
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0027", "faehigkeit": "antrieb.plan", "stufe": 1, "kanal": "wissen" }, "frage": "Was gehört in einen Wenn-Dann-Plan?", "antworten": [
+      { "text": "Ein fester Moment und eine kleine Handlung.", "wert": 2, "warum": "Kommt der Moment, startet die Handlung fast von selbst." },
+      { "text": "Ein Gefühl, auf das man wartet, und eine große Handlung.", "wert": 0, "warum": "Gefühle kommen unzuverlässig – und große Handlungen schreckt man ab." },
+      { "text": "Nur das Ziel, möglichst ehrgeizig.", "wert": 0, "warum": "Ein Ziel ist noch kein Plan. Es fehlt das Wann und Wie." },
+      { "text": "Ein Ziel und ein Datum, bis wann es erledigt sein soll.", "wert": 1, "warum": "Ein Datum hilft. Erst der Moment im Alltag sagt dir aber, wann du anfängst." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0028", "faehigkeit": "antrieb.plan", "stufe": 2, "kanal": "wissen" }, "frage": "Welcher Auslöser kommt am sichersten?", "antworten": [
+      { "text": "„Wenn ich Zeit habe …“", "wert": 0, "tendenz": "vage", "warum": "Zeit „hat“ man selten – sie muss einen festen Platz bekommen." },
+      { "text": "„Wenn ich nach dem Abendessen den Tisch abräume …“", "wert": 2, "warum": "Ein Ablauf, der jeden Tag sicher kommt." },
+      { "text": "„Wenn ich in Stimmung bin …“", "wert": 0, "warum": "Stimmungen schwanken. Darauf ist kein Verlass." },
+      { "text": "„Am Wochenende …“", "wert": 1, "warum": "Ein Zeitraum, kein Moment. Mit einem Ablauf dazu wird er sicher." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0029", "faehigkeit": "antrieb.plan", "stufe": 3, "kanal": "wissen" }, "frage": "Jonas will nach Feierabend 15 Minuten Fachartikel lesen, landet aber immer im Gespräch an der Tür. Welcher Plan passt?", "antworten": [
+      { "text": "„Wenn ich den Rechner herunterfahre, öffne ich vorher den Artikel und lese die erste Seite.“", "wert": 2, "warum": "Der Auslöser liegt vor dem Gespräch – und die Handlung ist klein." },
+      { "text": "„Ich lese, wenn mal Ruhe ist.“", "wert": 0, "tendenz": "vage", "warum": "Ruhe kommt selten von selbst." },
+      { "text": "„Ich gehe einfach nicht mehr ins Gespräch.“", "wert": 0, "warum": "Ein Verbot statt eines Plans – und die Gespräche sind ihm vielleicht wichtig." },
+      { "text": "„Ich lese die Artikel am Wochenende.“", "wert": 1, "warum": "Kann klappen, braucht aber einen festen Moment am Wochenende." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0030", "faehigkeit": "antrieb.plan", "stufe": 4, "kanal": "wissen" }, "frage": "Dein Plan lautet: „Wenn es regnet, laufe ich nicht.“ Was ist daran das Problem?", "antworten": [
+      { "text": "Er plant das Ausfallen, nicht den Ersatz – besser: „Wenn es regnet, dann …“ mit einer Alternative.", "wert": 2, "warum": "Ein guter Hindernis-Plan hält dich im Takt, statt das Hindernis zu bestätigen." },
+      { "text": "Gar keins, Regen ist ein guter Grund.", "wert": 0, "warum": "Manchmal ja. Regnet es oft, fällt das Vorhaben aber dauernd aus." },
+      { "text": "Laufen im Regen ist gefährlich, deshalb sollte man bei schlechtem Wetter grundsätzlich gar nicht erst etwas planen.", "wert": 0, "warum": "Zu pauschal. Ein Ersatz drinnen oder eine kurze Runde findet sich meist." },
+      { "text": "Er klärt wenigstens, was bei Regen passiert.", "wert": 1, "warum": "Stimmt – nur ist das, was passiert, ein Ausfall. Ein Ersatzplan wäre stärker." }
+    ] },
+    { "art": "umformulieren", "kopf": { "id": "antrieb-v-0031", "faehigkeit": "antrieb.plan", "stufe": 2, "kanal": "koennen" }, "auftrag": "Mach aus dem Vorsatz einen Wenn-Dann-Plan.", "vorlage": "„Ich will mehr Obst essen.“", "kriterien": ["ein Auslöser, der sicher kommt", "eine kleine, klare Handlung", "„Wenn …, dann …“"], "muster": ["„Wenn ich mir mittags Kaffee hole, nehme ich einen Apfel aus der Schale mit.“", "„Wenn ich abends den Rucksack packe, lege ich eine Banane hinein.“"] },
+    { "art": "umformulieren", "kopf": { "id": "antrieb-v-0032", "faehigkeit": "antrieb.plan", "stufe": 3, "kanal": "koennen" }, "auftrag": "Mach aus dem Vorsatz einen Wenn-Dann-Plan.", "vorlage": "„Ich will mich öfter bei meiner Oma melden.“", "kriterien": ["ein fester Moment in deiner Woche", "eine kleine Handlung", "realistisch"], "muster": ["„Wenn ich sonntags den Tisch abgeräumt habe, rufe ich Oma an.“", "„Wenn ich mittwochs in der Bahn sitze, schicke ich Oma ein Foto von meiner Woche.“"] },
+    { "art": "umformulieren", "kopf": { "id": "antrieb-v-0033", "faehigkeit": "antrieb.plan", "stufe": 4, "kanal": "koennen" }, "auftrag": "Schreib einen Wenn-Dann-Plan für das wahrscheinlichste Hindernis.", "vorlage": "Vorhaben: abends 20 Minuten lernen. Hindernis: „Nach der Arbeit bin ich zu müde.“", "kriterien": ["das Hindernis ist der Auslöser", "die Antwort ist kleiner oder anders, nicht gar nichts", "machbar an einem müden Abend"], "muster": ["„Wenn ich zu müde bin, lerne ich nur fünf Minuten am Küchentisch.“", "„Wenn ich müde heimkomme, lerne ich zuerst zehn Minuten – vor dem Essen, im Sitzen.“"] },
+    { "art": "zuordnen", "kopf": { "id": "antrieb-v-0034", "faehigkeit": "antrieb.plan", "stufe": 2, "kanal": "wissen" }, "auftrag": "Auslöser oder Handlung?", "faecher": ["Wenn (Auslöser)", "Dann (Handlung)"], "karten": [
+      { "text": "nach dem Zähneputzen am Abend", "fach": 0 },
+      { "text": "zwei Seiten lesen", "fach": 1 },
+      { "text": "sobald ich das Büro abschließe", "fach": 0 },
+      { "text": "die Treppe nehmen", "fach": 1 },
+      { "text": "wenn der Wasserkocher läuft", "fach": 0 },
+      { "text": "fünf Kniebeugen machen", "fach": 1 }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "antrieb-v-0035", "faehigkeit": "antrieb.plan", "stufe": 3, "kanal": "wissen" }, "auftrag": "Sicherer Auslöser oder wackliger?", "faecher": ["sicher", "wacklig"], "karten": [
+      { "text": "nach dem Mittagessen", "fach": 0 },
+      { "text": "wenn ich Lust habe", "fach": 1 },
+      { "text": "wenn ich den Schlüssel ins Schloss stecke", "fach": 0 },
+      { "text": "wenn mal Ruhe ist", "fach": 1 },
+      { "text": "montags nach der Teamrunde", "fach": 0 },
+      { "text": "wenn ich daran denke", "fach": 1 }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "antrieb-v-0036", "faehigkeit": "antrieb.plan", "stufe": 2, "kanal": "wissen" }, "frage": "Welcher Plan hält am ehesten? Von stark nach schwach.", "eintraege": [
+      { "text": "„Wenn ich sonntags den Kaffee koche, trage ich die drei Termine für die Woche ein.“", "warum": "Fester Auslöser, klare und kleine Handlung." },
+      { "text": "„Sonntags plane ich die Woche.“", "warum": "Ein Tag, aber kein Moment – und „planen“ ist dehnbar." },
+      { "text": "„Ich plane meine Woche besser.“", "warum": "Ein Vorsatz ohne Wann und Wie." },
+      { "text": "„Ich will organisierter sein.“", "warum": "Ein Wunsch über die Person, kein Plan." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "antrieb-v-0037", "faehigkeit": "antrieb.plan", "stufe": 3, "kanal": "wissen" }, "frage": "Das Hindernis: „Abends lande ich auf dem Sofa.“ Welcher Plan hilft am meisten? Von stark nach schwach.", "eintraege": [
+      { "text": "„Wenn ich heimkomme, ziehe ich die Sportsachen an, bevor ich mich hinsetze.“", "warum": "Der Plan greift vor dem Hindernis." },
+      { "text": "„Wenn ich doch auf dem Sofa lande, stehe ich nach der ersten Folge auf.“", "warum": "Ein Plan fürs Hindernis – aber das Sofa hat dann schon einen Vorsprung." },
+      { "text": "„Ich versuche, nicht aufs Sofa zu gehen.“", "warum": "Ein Vorsatz ohne Auslöser." },
+      { "text": "„Ich hoffe, dass ich abends mehr Energie habe.“", "warum": "Hoffnung ist kein Plan." }
+    ] },
+    { "art": "fehler", "kopf": { "id": "antrieb-v-0038", "faehigkeit": "antrieb.plan", "stufe": 3, "kanal": "wissen" }, "auftrag": "Miriams Plan für die Woche. Markier die Stellen, an denen er wackelt.", "teile": [
+      { "t": "Wenn" }, { "t": "ich" },
+      { "t": "Zeit", "fehler": "Wackliger Auslöser – Zeit kommt nie sicher." },
+      { "t": "habe," }, { "t": "mache" }, { "t": "ich" },
+      { "t": "irgendwann", "fehler": "Kein Zeitpunkt – „irgendwann“ ist nie." },
+      { "t": "diese" }, { "t": "Woche" },
+      { "t": "ganz" }, { "t": "viel", "fehler": "Kein Maß – woran merkt sie, dass es genug war?" },
+      { "t": "Sport," }, { "t": "am" }, { "t": "besten" }, { "t": "jeden", "fehler": "Zu groß für den Anfang – nach dem ersten Ausfall kippt der ganze Plan." },
+      { "t": "Tag." }
+    ] },
+
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0039", "faehigkeit": "antrieb.start", "stufe": 1, "kanal": "wissen" }, "frage": "Was ist der kleinste sinnvolle Anfang für „Keller aufräumen“?", "antworten": [
+      { "text": "Eine Kiste nach oben tragen.", "wert": 2, "warum": "Klein, sichtbar, sofort erledigt – und oft folgt die zweite." },
+      { "text": "Einen ganzen Samstag einplanen.", "wert": 0, "tendenz": "ueberladen", "warum": "Der große Block macht den Anfang schwer und lässt sich leicht verschieben." },
+      { "text": "Warten, bis er richtig voll ist.", "wert": 0, "tendenz": "aufschieben", "warum": "Dann ist der Berg nur größer." },
+      { "text": "Erst eine Liste aller Kisten schreiben, damit du den Überblick behältst.", "wert": 1, "warum": "Ordnet – aber du tust noch nichts im Keller. Eine Kiste wäre der direktere Anfang." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0040", "faehigkeit": "antrieb.start", "stufe": 2, "kanal": "wissen" }, "frage": "Warum hilft die Zwei-Minuten-Fassung beim Anfangen?", "antworten": [
+      { "text": "Der Anfang wird so klein, dass das unangenehme Gefühl kaum Halt findet.", "wert": 2, "warum": "Man schiebt meist das Gefühl am Anfang. Klein gemacht, verliert es seine Wucht." },
+      { "text": "Weil zwei Minuten reichen, um das Vorhaben fertigzumachen.", "wert": 0, "warum": "Fertig wird es selten – darum geht es auch nicht. Es geht ums Anfangen." },
+      { "text": "Weil kleine Dinge nicht zählen.", "wert": 0, "warum": "Gerade kleine Dinge zählen – sie sind der Weg hinein." },
+      { "text": "Weil man danach oft weitermacht.", "wert": 1, "warum": "Oft, ja. Der Kern: Der kleine Anfang nimmt dem Gefühl die Wucht – auch wenn du aufhörst." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0041", "faehigkeit": "antrieb.start", "stufe": 3, "kanal": "wissen" }, "frage": "Tarek soll bis Donnerstag eine Präsentation bauen und scrollt stattdessen durch Nachrichten. Was hilft am ehesten?", "antworten": [
+      { "text": "Die Datei öffnen und nur die Überschrift der ersten Folie tippen.", "wert": 2, "warum": "Ein winziger Anfang, der in zwei Minuten geht – oft folgt die zweite Folie." },
+      { "text": "Noch fünf Minuten Nachrichten, dann ist er bereit.", "wert": 0, "tendenz": "aufschieben", "warum": "Aus fünf Minuten werden leicht fünfzig. Bereit fühlt man sich selten vorher." },
+      { "text": "Sich sagen, dass er unter Druck am besten arbeitet und darum ruhig bis Mittwochabend warten kann.", "wert": 0, "tendenz": "aufschieben", "warum": "Ein verbreiteter Glaube. Meist wird es nur enger – und das unangenehme Gefühl größer." },
+      { "text": "Das Handy in die Schublade legen.", "wert": 1, "warum": "Gut: eine Hürde für die Ablenkung. Der Anfang selbst fehlt noch." }
+    ] },
+    { "art": "auswahl", "kopf": { "id": "antrieb-v-0042", "faehigkeit": "antrieb.start", "stufe": 4, "kanal": "wissen" }, "frage": "Du schiebst eine Antwort an einen verärgerten Kunden. Was steckt wahrscheinlich dahinter – und was hilft?", "antworten": [
+      { "text": "Das unangenehme Gefühl – also nur die Anrede und den ersten Satz schreiben.", "wert": 2, "warum": "Der kleinste Anfang nimmt dem Gefühl die Wucht." },
+      { "text": "Faulheit – also strenger mit dir sein.", "wert": 0, "tendenz": "abwerten", "warum": "Ein Urteil statt einer Erklärung. Strenge macht das Gefühl eher größer." },
+      { "text": "Zu wenig Zeit – also auf einen ruhigen Tag warten, an dem nichts anderes ansteht und du dich ganz darauf konzentrieren kannst.", "wert": 0, "tendenz": "aufschieben", "warum": "Der ruhige Tag kommt selten. Bis dahin wird der Kunde nicht ruhiger." },
+      { "text": "Unsicherheit – also erst Miriam fragen, wie sie es schreiben würde.", "wert": 1, "warum": "Hilfe holen ist gut. Danach braucht es trotzdem deinen ersten Satz." }
+    ] },
+    { "art": "umformulieren", "kopf": { "id": "antrieb-v-0043", "faehigkeit": "antrieb.start", "stufe": 2, "kanal": "koennen" }, "auftrag": "Mach aus dem Vorhaben eine Zwei-Minuten-Fassung.", "vorlage": "„Den Termin für die Vorsorge ausmachen.“", "kriterien": ["unter zwei Minuten", "sichtbare Handlung", "heute machbar"], "muster": ["„Die Nummer der Praxis heraussuchen und ins Handy speichern.“", "„Die Seite der Praxis öffnen und auf ‚Termine‘ klicken.“"] },
+    { "art": "umformulieren", "kopf": { "id": "antrieb-v-0044", "faehigkeit": "antrieb.start", "stufe": 3, "kanal": "koennen" }, "auftrag": "Mach aus dem Vorhaben eine Zwei-Minuten-Fassung.", "vorlage": "„Die Fotos vom letzten Urlaub sortieren.“", "kriterien": ["unter zwei Minuten", "sichtbare Handlung", "der erste Schritt, nicht das Ganze"], "muster": ["„Den Ordner öffnen und zehn unscharfe Fotos löschen.“", "„Einen Ordner ‚Die besten‘ anlegen und das erste Foto hineinziehen.“"] },
+    { "art": "rangfolge", "kopf": { "id": "antrieb-v-0045", "faehigkeit": "antrieb.start", "stufe": 2, "kanal": "wissen" }, "frage": "„Steuererklärung“ – welcher erste Schritt bringt dich am ehesten ins Tun? Von stark nach schwach.", "eintraege": [
+      { "text": "Den Ordner mit den Belegen auf den Küchentisch legen und aufschlagen.", "warum": "Sofort machbar – und das Werkzeug liegt danach im Weg." },
+      { "text": "Am Samstag zwei Stunden dafür reservieren.", "warum": "Ein Termin hilft, der Anfang liegt aber noch in der Zukunft." },
+      { "text": "Ein Video ansehen, wie andere es machen.", "warum": "Fühlt sich nach Vorbereitung an, ist aber noch kein Anfang." },
+      { "text": "Abwarten, bis die Frist näher rückt.", "warum": "Dann kommt Zeitdruck zum unangenehmen Gefühl dazu." }
+    ] },
+    { "art": "rangfolge", "kopf": { "id": "antrieb-v-0046", "faehigkeit": "antrieb.start", "stufe": 3, "kanal": "wissen" }, "frage": "Du hast keine Lust anzufangen. Was hilft am meisten? Von stark nach schwach.", "eintraege": [
+      { "text": "Fünf Minuten mit Wecker – danach darfst du aufhören.", "warum": "Der Anfang verliert sein Gewicht, und du bist drin." },
+      { "text": "Mit dem leichtesten Teil anfangen.", "warum": "Guter Einstieg – mit fester Zeitspanne noch verlässlicher." },
+      { "text": "Erst den Schreibtisch aufräumen.", "warum": "Fühlt sich nützlich an, verschiebt aber den eigentlichen Anfang." },
+      { "text": "Warten, bis die Lust kommt.", "warum": "Die Lust kommt meist erst nach dem Anfangen." }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "antrieb-v-0047", "faehigkeit": "antrieb.start", "stufe": 2, "kanal": "wissen" }, "auftrag": "Zwei-Minuten-Fassung – oder doch zu groß?", "faecher": ["Zwei-Minuten-Fassung", "zu groß für den Anfang"], "karten": [
+      { "text": "die Laufschuhe anziehen", "fach": 0 },
+      { "text": "eine Stunde joggen", "fach": 1 },
+      { "text": "das Buch aufschlagen", "fach": 0 },
+      { "text": "ein ganzes Kapitel lesen", "fach": 1 },
+      { "text": "die erste Zeile tippen", "fach": 0 },
+      { "text": "die ganze Bewerbung schreiben", "fach": 1 }
+    ] },
+    { "art": "zuordnen", "kopf": { "id": "antrieb-v-0048", "faehigkeit": "antrieb.start", "stufe": 3, "kanal": "wissen" }, "auftrag": "Ausweichen vor dem Gefühl – oder ein guter Grund, zu verschieben?", "faecher": ["Ausweichen", "guter Grund"], "karten": [
+      { "text": "„Erst noch schnell die Küche putzen, dann lerne ich.“", "fach": 0 },
+      { "text": "„Die Kita ruft an, mein Kind hat Fieber.“", "fach": 1 },
+      { "text": "„Noch ein Video, dann fange ich an.“", "fach": 0 },
+      { "text": "„Ich habe Fieber und lege mich hin.“", "fach": 1 },
+      { "text": "„Ich warte, bis ich mich bereit fühle.“", "fach": 0 },
+      { "text": "„Die Unterlagen vom Amt sind noch nicht da.“", "fach": 1 }
+    ] },
+    { "art": "kritiker", "kopf": { "id": "antrieb-v-0049", "faehigkeit": "antrieb.start", "stufe": 3, "kanal": "koennen" }, "satz": "Was sagst du dir, wenn du etwas schiebst? Schreib den Satz auf – und darunter eine Fassung, die das Gefühl benennt und den Anfang klein macht.", "kriterien": ["benennt das Gefühl statt „faul“", "macht den Anfang klein", "freundlich"], "muster": ["„Ich bin so faul.“ → „Ich habe keine Lust auf das Unklare daran. Ich öffne nur die Datei.“", "„Das schaffe ich eh nicht.“ → „Ich weiß noch nicht, wie. Zwei Minuten: Ich schreibe die erste Frage auf.“"] },
+    { "art": "dialog", "kopf": { "id": "antrieb-v-0050", "faehigkeit": "antrieb.start", "stufe": 3, "kanal": "koennen" }, "gespraech": {
+      "titel": "Die leere Mail", "figur": "Miriam Okafor",
+      "lage": "Montagmorgen. Du sollst Herrn Petersen schreiben, dass sich seine Lieferung verzögert. Miriam kommt an deinem Platz vorbei.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Miriam: „Du sitzt seit zwanzig Minuten vor einer leeren Mail. Alles gut?“",
+          "wahl": [
+            { "text": "„Ich weiß nicht, wie ich anfangen soll. Ich schreib einfach mal die Anrede.“", "wert": 2, "weiter": "k2", "rueck": "Der kleinste Anfang. Ab hier wird es leichter." },
+            { "text": "„Ich warte, bis mir der perfekte erste Satz einfällt, sonst klingt es unprofessionell.“", "wert": 0, "tendenz": "aufschieben", "weiter": "k1b", "rueck": "Der perfekte Satz kommt selten auf Bestellung – eher beim Schreiben." },
+            { "text": "„Ich hol mir erst noch einen Kaffee.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k1b", "rueck": "Verständlich – aber der Kaffee verschiebt nur das Gefühl." }
+          ] },
+        { "id": "k1b", "sagt": "Miriam: „Und wenn der perfekte Moment nicht kommt?“",
+          "wahl": [
+            { "text": "„Stimmt. Dann eben die Anrede und ein schlichter erster Satz.“", "wert": 2, "weiter": "k2", "rueck": "Gut umgeschaltet: schlicht schlägt perfekt." },
+            { "text": "„Dann schreibe ich morgen.“", "wert": 0, "tendenz": "aufschieben", "weiter": "ende2", "rueck": "Morgen wartet dasselbe Gefühl – und ein ungeduldiger Kunde." }
+          ] },
+        { "id": "k2", "sagt": "Miriam: „Und dann?“",
+          "wahl": [
+            { "text": "„Ein Satz, was ich ihm sagen will. Den Rest überarbeite ich später.“", "wert": 2, "weiter": "ende1", "rueck": "Erst schreiben, dann feilen – so kommt die Mail in Gang." },
+            { "text": "„Jetzt muss jedes Wort sitzen, bevor ich weiterschreibe.“", "wert": 0, "tendenz": "perfektion", "weiter": "ende2", "rueck": "Perfekt im ersten Anlauf bremst. Ein Entwurf darf holpern." },
+            { "text": "„Kannst du nachher drüberlesen?“", "wert": 1, "weiter": "ende1", "rueck": "Gute Hilfe – vorausgesetzt, du schreibst jetzt den Entwurf." }
+          ] },
+        { "id": "ende1", "sagt": "Zehn Minuten später ist die Mail an Herrn Petersen raus.", "ende": "Anrede, ein schlichter Satz, dann weiter: Der kleinste Anfang bricht das Eis. Feilen geht hinterher." },
+        { "id": "ende2", "sagt": "Mittags ist die Mail immer noch leer. Herr Petersen ruft an.", "ende": "Kein Drama – das kennen viele. Beim nächsten Mal: die Anrede tippen und einen schlichten Satz. Der Rest kommt beim Schreiben." }
+      ],
+      "prinzipien": ["den Anfang winzig machen", "schlicht schlägt perfekt", "erst schreiben, dann feilen"]
+    } }
+  ]
+}

@@ -6,6 +6,7 @@
 // Engine + Regelwerk aus resources/Ticket Zuweisung (gebündelt), 303/303-Parität.
 
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 import {
   Ticket, RefreshCw, Loader2, FileUp, CalendarDays, AlertTriangle, ChevronDown, ChevronRight,
   ClipboardList, Users, CalendarRange, BookOpen, Pencil,
@@ -50,7 +51,9 @@ export default function TicketAssignment() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [nonce, setNonce] = useState(0)
-  const [tab, setTab] = useState<Tab>('a')
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const [tab, setTab] = useBereichZustand<Tab>('ticket-assignment', 'a')
+  const { sichtbar: reiterSichtbar } = useBereiche('ticket-assignment')
   const [callerNames, setCallerNames] = useState<string[]>([])
   const [msg, setMsg] = useState('')
 
@@ -176,7 +179,7 @@ export default function TicketAssignment() {
 
       {/* Tabs */}
       <div className="shrink-0 flex items-center gap-1 px-4 pt-2 border-b border-border">
-        {TABS.map(t => (
+        {TABS.filter(t => reiterSichtbar(t.id)).map(t => (
           <button key={t.id} onClick={() => setTab(t.id)}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-t-md border-b-2 ${tab === t.id ? 'border-primary text-foreground font-medium' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>
             {t.icon}{t.label}

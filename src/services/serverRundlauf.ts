@@ -24,11 +24,13 @@ import {
 } from './serverMonitor'
 import { melde } from './serverEreignisse'
 import { ladeSoll, speichereIst, type IstStand, type SollZustand, type Zusammenfassung } from './serverZustand'
-import { eigeneKennung, eigenerRechner, eigenesKonto, BEVORZUGTER_MELDER } from './serverMelder'
+import { eigeneKennung, eigenerRechner, eigenesKonto, vorzugsName } from './serverMelder'
 import { istClusterKnoten } from './serverSchonung'
+import { ladeServerLaeufe, type ServerLaeufe } from './serverLaeufe'
 
 export const RUNDLAUF_PFAD = 'server_monitor/rundlauf.json'
-/** Pause zwischen zwei Servern (Nutzerwunsch: 5 s). */
+/** Pause zwischen zwei Servern (Nutzerwunsch: 5 s) — Standard; einstellbar in Einstellungen →
+ *  „Automatik & Scans“ (5/10/30/60 s, nie kürzer), ebenso an/aus (services/serverLaeufe.ts). */
 export const RUNDLAUF_PAUSE_MS = 5_000
 /** Lebenszeichen des Besitzers — auch während langer Prüfungen (SEAL, Nachprüfung). */
 export const LEBENSZEICHEN_MS = 60_000
@@ -175,16 +177,20 @@ const kurz = (r?: string) => (r || '').trim().toUpperCase().split('.')[0]
 const uhr = (iso?: string) => { const t = Date.parse(iso || ''); return isNaN(t) ? '' : new Date(t).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) }
 
 /** Anzeige im Server-Bildschirm (Chip neben „Meldungen von …“). */
-export function rundlaufText(s: RundlaufStand | null | undefined, jetzt = Date.now()): { aktiv: boolean; text: string; titel: string } {
+export function rundlaufText(s: RundlaufStand | null | undefined, jetzt = Date.now(), einst?: Pick<ServerLaeufe, 'rundlauf'> | null): { aktiv: boolean; text: string; titel: string } {
+  const pause = Math.max(5, einst?.rundlauf.pauseSek ?? 5)
   const titel = [
     'Dienste & Prüfungen laufen automatisch als Rundlauf:',
-    '• immer nur EIN Server zur Zeit, 5 s Pause bis zum nächsten',
+    `• immer nur EIN Server zur Zeit, ${pause} s Pause bis zum nächsten`,
     '• Reihenfolge wie die Kacheln — nach dem letzten wieder der erste',
-    `• geprüft wird von ${BEVORZUGTER_MELDER}; ist ${BEVORZUGTER_MELDER} aus, übernimmt der nächste PC mit offenem Tool`,
+    `• geprüft wird von ${vorzugsName()}; ist ${vorzugsName()} aus, übernimmt der nächste PC mit offenem Tool`,
     `• SEAL-sysstatus (Plossys) nur jede ${SEAL_JEDE_RUNDE}. Runde bzw. sofort bei einem Fehler`,
     '• gerade wieder erreichbare Server kommen sofort dran',
     'Nur lesend — es wird nichts auf den Servern geändert.',
   ].join('\n')
+  if (einst && !einst.rundlauf.an) {
+    return { aktiv: false, text: 'Dienst-Prüfung ausgeschaltet (Einstellungen › Automatik & Scans)', titel }
+  }
   const t = Date.parse(s?.at || '')
   if (!s?.besitzer || isNaN(t) || jetzt - t >= SPERRE_VERWAIST_MS) {
     return { aktiv: false, text: 'Dienst-Prüfung pausiert – kein berechtigter PC mit offenem Tool', titel }
@@ -241,6 +247,8 @@ export interface RundlaufOptionen {
   warte?: (ms: number) => Promise<void>
   /** nur für Tests: Lebenszeichen-Takt */
   lebenszeichenMs?: number
+  /** nur für Tests: Einstellung „an/aus, Pause“ (sonst settings/server_laeufe.json) */
+  laeufe?: () => Promise<ServerLaeufe>
 }
 
 let aktiveSchleife: { stop: () => void } | null = null
@@ -273,12 +281,19 @@ export function starteRundlauf(o: RundlaufOptionen): () => void {
   }
 
   let besitzer = false
+  const ladeLaeufe = o.laeufe || (() => ladeServerLaeufe())
   const schleife = async () => {
     let stoerung: StoerungsStand = KEINE_STOERUNG
     while (aktiv) {
       try {
         // 1) Recht prüfen (BQ8069 bzw. Vertretung) — ohne Recht: abgeben und warten
         if (!(await o.darf())) {
+          if (besitzer) { await gebeFrei(); besitzer = false }
+          await warte(WARTEN_OHNE_RECHT_MS); continue
+        }
+        // 1b) In den Einstellungen ausgeschaltet? → abgeben und später wieder nachsehen
+        const laeufe = await ladeLaeufe()
+        if (!laeufe.rundlauf.an) {
           if (besitzer) { await gebeFrei(); besitzer = false }
           await warte(WARTEN_OHNE_RECHT_MS); continue
         }
@@ -361,7 +376,8 @@ export function starteRundlauf(o: RundlaufOptionen): () => void {
           // 6) neues Problem sofort melden (Popup, Mail, Historie)
           if (e.ereignis && !stoerung.aktiv) await melde([e.ereignis], meldeZiele(cfg.tiles), o.by()).catch(() => [])
           // 7) Startzeit gleich mit auswerten (keine weitere Fernabfrage; nur bei neuem Start wird der Grund gelesen)
-          if (e.boot) await runRebootCheck(o.by(), [e.host], { bekannt: { [k]: e.boot }, auto: true }).catch(() => undefined)
+          //    — nur, wenn die Neustart-Erkennung eingeschaltet ist
+          if (e.boot && laeufe.neustart.an) await runRebootCheck(o.by(), [e.host], { bekannt: { [k]: e.boot }, auto: true }).catch(() => undefined)
         }
 
         // 8) Zeiger weiter
@@ -373,8 +389,8 @@ export function starteRundlauf(o: RundlaufOptionen): () => void {
             zuletzt: e ? { host: e.host, am: iso(), ok: e.erreichbar && e.probleme === 0, dauerMs, mitSeal: e.mitSeal || undefined } : s.zuletzt,
           }
         })
-        // 9) Pause bis zum nächsten Server
-        await warte(RUNDLAUF_PAUSE_MS)
+        // 9) Pause bis zum nächsten Server (Einstellung, nie kürzer als 5 s)
+        await warte(Math.max(RUNDLAUF_PAUSE_MS, laeufe.rundlauf.pauseSek * 1000))
       } catch {
         await warte(WARTEN_OHNE_RECHT_MS)
       }

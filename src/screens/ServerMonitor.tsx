@@ -40,6 +40,8 @@ import { api } from '../electronAPI'
 import type { InventoryItem } from '../types/auth'
 import { ladeLeiter, leiterText, type Leiter } from '../services/automatikLeiter'
 import { ladeRundlauf, rundlaufText, type RundlaufStand } from '../services/serverRundlauf'
+import { ladeServerLaeufe, type ServerLaeufe } from '../services/serverLaeufe'
+import { useBereiche } from '../store/menuSichtbarStore'
 
 // ── Historie-Dialog je Server (frei beschreibbar, automatischer Zeitstempel) ──
 function fmtStamp(iso: string, dateOnly?: boolean): string {
@@ -471,6 +473,8 @@ export default function ServerMonitor() {
   const [fUmgebung, setFUmgebung] = useState<UmgebungFilter>('alle')
   const [nurAuffaellig, setNurAuffaellig] = useState(false)
   const [showDism, setShowDism] = useState(false)
+  // „Health Check“ im Kopf je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const { sichtbar: bereichSichtbar } = useBereiche('server')
   const [dismBericht, setDismBericht] = useState<Pick<DismBericht, 'md' | 'json' | 'vorschlag' | 'titel'> | null>(null)
   const dismLaeuft = useDismScanStore(s => !!s.lauf && !s.lauf.fertigAm)
   const dismOffen = useDismScanStore(s => !!s.lauf)
@@ -493,10 +497,11 @@ export default function ServerMonitor() {
   // Wer ist der EINE Automatik-PC (BQ8069 bzw. Vertretung)? + Stand der Dienst-Schleife (Rundlauf)
   const [leiter, setLeiter] = useState<Leiter | null>(null)
   const [rundlauf, setRundlauf] = useState<RundlaufStand | null>(null)
+  const [laeufe, setLaeufe] = useState<ServerLaeufe | null>(null)
   const refreshStatus = useCallback(async () => {
     try { setStatus(await loadServerStatus()) } catch { /* offline */ }
-    const [l, r] = await Promise.all([ladeLeiter(), ladeRundlauf()])
-    setLeiter(l); setRundlauf(r)
+    const [l, r, e] = await Promise.all([ladeLeiter(), ladeRundlauf(), ladeServerLaeufe().catch(() => null)])
+    setLeiter(l); setRundlauf(r); setLaeufe(e)
   }, [])
 
   // Initial: Config laden (bei leer → aus Inventar befüllen) + Status + Polling.
@@ -689,7 +694,7 @@ export default function ServerMonitor() {
           )
         })()}
         {(() => {
-          const r = rundlaufText(rundlauf)
+          const r = rundlaufText(rundlauf, Date.now(), laeufe)
           return (
             <span title={r.titel} data-rundlauf={r.aktiv ? 'aktiv' : 'pausiert'}
               className={`inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border ${r.aktiv ? 'border-border bg-muted/40 text-foreground' : 'border-dashed border-border text-muted-foreground'}`}>
@@ -706,11 +711,11 @@ export default function ServerMonitor() {
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-violet-500/40 bg-violet-500/10 text-violet-500 font-medium hover:bg-violet-500/20 disabled:opacity-40">
             {measuring ? <Loader size={12} className="animate-spin" /> : <MemoryStick size={12} />}Auslastung messen
           </button>
-          <button onClick={() => setShowDism(v => !v)} data-knopf="dism-panel"
+          {bereichSichtbar('healthcheck') && <button onClick={() => setShowDism(v => !v)} data-knopf="dism-panel"
             title={`Health Check für alle Server öffnen (Start, Fortschritt, Ergebnisse, Bericht).\n\n${HEALTH_TOOLTIP}`}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-teal-500/40 bg-teal-500/10 text-teal-500 font-medium hover:bg-teal-500/20">
             {dismLaeuft ? <Loader size={12} className="animate-spin" /> : <ScanSearch size={12} />}Health Check
-          </button>
+          </button>}
           <button onClick={() => setShowMeldungen(v => !v)} title="Mail-Meldungen (Offline, Neustart/Herunterfahren, Probleme) für alle Server auf einmal setzen — auch mehrere Empfänger"
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-border hover:bg-accent text-muted-foreground hover:text-foreground">
             <Mail size={12} />Mail-Meldungen für alle
@@ -761,7 +766,7 @@ export default function ServerMonitor() {
         </div>
       )}
 
-      {showDism && (
+      {showDism && bereichSichtbar('healthcheck') && (
         <DismPanel tiles={tiles} status={status} metaVon={dismMeta} by={by}
           onBericht={b => setDismBericht(b)} onSchliessen={() => setShowDism(false)} onOeffnen={oeffneHealth} />
       )}

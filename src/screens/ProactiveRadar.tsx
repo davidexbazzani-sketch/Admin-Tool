@@ -5,6 +5,7 @@
 // Dossiers. Reiner Ansichts-Screen — kein Popup, keine E-Mail (nur per Klick).
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 import {
   Radar, RefreshCw, Loader2, Download, Search, Settings2, ChevronUp, ChevronDown,
   AlertTriangle, ShieldAlert, CalendarClock, X, Mail, Send, Eye, Power,
@@ -51,7 +52,9 @@ async function exportCsv(filename: string, header: string[], rows: string[][]) {
 }
 
 export default function ProactiveRadar() {
-  const [tab, setTab] = useState<Tab>('leasing')
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const [tab, setTab] = useBereichZustand<Tab>('proactive-radar', 'leasing')
+  const { sichtbar: reiterSichtbar } = useBereiche('proactive-radar')
   const [weekendCount, setWeekendCount] = useState<number | null>(null)
   const [fehlerCount, setFehlerCount] = useState<number | null>(null)
   const [settings, setSettings] = useState<RadarSettings>(DEFAULT_RADAR_SETTINGS)
@@ -109,10 +112,10 @@ export default function ProactiveRadar() {
         </div>
         {/* Tabs */}
         <div className="flex items-center gap-1.5 mt-3">
-          <TabBtn active={tab === 'leasing'} onClick={() => setTab('leasing')} icon={<CalendarClock size={14} />} label={`Geräte-Leasing (${leasing.length})`} />
-          <TabBtn active={tab === 'hygiene'} onClick={() => setTab('hygiene')} icon={<ShieldAlert size={14} />} label={`AD-Hygiene (${hygiene.length})`} />
-          <TabBtn active={tab === 'weekend'} onClick={() => setTab('weekend')} icon={<Power size={14} />} label={weekendCount == null ? 'Wochenend-Check' : `Wochenend-Check (${weekendCount})`} />
-          <TabBtn active={tab === 'fehler'} onClick={() => setTab('fehler')} icon={<Bug size={14} />} label={fehlerCount == null ? 'PC-Fehler' : `PC-Fehler (${fehlerCount})`} />
+          {reiterSichtbar('leasing') && <TabBtn active={tab === 'leasing'} onClick={() => setTab('leasing')} icon={<CalendarClock size={14} />} label={`Geräte-Leasing (${leasing.length})`} />}
+          {reiterSichtbar('hygiene') && <TabBtn active={tab === 'hygiene'} onClick={() => setTab('hygiene')} icon={<ShieldAlert size={14} />} label={`AD-Hygiene (${hygiene.length})`} />}
+          {reiterSichtbar('weekend') && <TabBtn active={tab === 'weekend'} onClick={() => setTab('weekend')} icon={<Power size={14} />} label={weekendCount == null ? 'Wochenend-Check' : `Wochenend-Check (${weekendCount})`} />}
+          {reiterSichtbar('fehler') && <TabBtn active={tab === 'fehler'} onClick={() => setTab('fehler')} icon={<Bug size={14} />} label={fehlerCount == null ? 'PC-Fehler' : `PC-Fehler (${fehlerCount})`} />}
         </div>
       </div>
 

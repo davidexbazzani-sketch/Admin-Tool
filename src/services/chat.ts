@@ -36,6 +36,25 @@ export interface ChatNutzer {
 /** Angehängte Datei (z. B. Erklärvideo) — liegt unter chat/dateien/<id>/<name> im Tool-Netzordner */
 export interface ChatDatei { name: string; rel: string; bytes: number }
 
+/**
+ * Herausforderung zu einem Duell (Pausenraum): 4 gewinnt, Brain-Duell oder Seegefecht (Terra Incognita). Die
+ * Nachricht trägt den lesbaren Text UND diese Angaben — der Chat zeigt daran „Annehmen / Ablehnen“. Ältere
+ * Tool-Versionen sehen nur den Text.
+ */
+export interface ChatDuell {
+  art: 'vier-gewinnt' | 'brain' | 'terra'
+  /** Kennung der Partie (4 gewinnt) bzw. des Brain-Duells */
+  id: string
+  /** z. B. „Kopfrechnen · 2 min“ */
+  titel: string
+  /** bis wann die Einladung gilt (ISO) */
+  gueltigBis: string
+}
+
+/** Seegefecht-Einladung (Terra Incognita). Eigenes Feld statt `duell`: Tool-Versionen mit Duell-Karten, aber ohne
+ *  Seegefecht, hielten es sonst für „4 gewinnt“ — so sehen sie nur den Text. */
+export interface ChatSeegefecht { id: string; titel: string; gueltigBis: string }
+
 export interface ChatNachricht {
   id: string
   from: string
@@ -45,6 +64,8 @@ export interface ChatNachricht {
   text: string
   at: string
   datei?: ChatDatei
+  duell?: ChatDuell
+  seegefecht?: ChatSeegefecht
 }
 
 export interface PosteingangHinweis { id: string; from: string; fromDisplay: string; at: string; vorschau: string }
@@ -112,13 +133,15 @@ export async function ladeNutzer(): Promise<ChatNutzer[]> {
 }
 
 // ── Senden ────────────────────────────────────────────────────────────────────
-export async function sende(ich: ChatIch, an: { username: string; displayName: string }, text: string, datei?: ChatDatei): Promise<ChatNachricht | null> {
+export async function sende(ich: ChatIch, an: { username: string; displayName: string }, text: string, datei?: ChatDatei, duell?: ChatDuell, seegefecht?: ChatSeegefecht): Promise<ChatNachricht | null> {
   const t = text.replace(/\s+$/, '').slice(0, MAX_ZEICHEN)
   if (!t.trim()) return null
   const n: ChatNachricht = {
     id: neueId(ich.username), from: lc(ich.username), fromDisplay: ich.displayName || ich.username,
     to: lc(an.username), toDisplay: an.displayName || an.username, text: t, at: new Date().toISOString(),
     ...(datei ? { datei } : {}),
+    ...(duell ? { duell } : {}),
+    ...(seegefecht ? { seegefecht } : {}),
   }
   // Erst die Nachricht, dann der Hinweis — ohne gespeicherte Nachricht kein „ungelesen"
   if (!(await api().netWriteJsonAsync(`${gespraechOrdner(n.from, n.to)}/${n.id}.json`, n))) return null

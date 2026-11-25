@@ -1,0 +1,287 @@
+{
+  "einheiten": [
+    {
+      "id": "mut-1-01", "bereich": "mut", "stufe": 1, "nr": 1,
+      "titel": "Wie Angst sich füttert",
+      "faehigkeiten": ["mut.verstehen"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Der Kreislauf aus Ausweichen und Erleichterung ist Kern eines klinischen Modells der sozialen Angst mit breiter Stütze. Die Lernregel dahinter ist ein altes Denkmodell, in Einzelheiten umstritten.",
+      "quellen": ["clarkwells1995", "craske2014", "mowrer1960", "mayowilson2014"],
+      "aha": "Jedes Ausweichen bringt sofort Erleichterung – und macht die Angst beim nächsten Mal größer. Denn die Befürchtung wird nie geprüft.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer einer unangenehmen Lage ausweicht, schont sich – beim nächsten Mal fällt es leichter.", "urteil": "falsch", "warum": "Meist ist es umgekehrt. Die Erleichterung nach dem Ausweichen belohnt das Ausweichen. Und weil du nicht erlebst, wie es gelaufen wäre, bleibt die Befürchtung so groß, wie sie war." },
+        { "art": "karte", "text": "Angst warnt: „Das wird schlimm.“ Du weichst aus – rufst nicht an, sagst nichts, gehst nicht hin. Sofort wird es leichter. Diese Erleichterung merkt sich der Kopf: „Ausweichen hat mich gerettet.“ Ob die Befürchtung gestimmt hätte, erfährst du nie. Beim nächsten Mal ist die Hürde höher. Raus kommst du nur in die andere Richtung: hingehen und prüfen, was wirklich passiert." },
+        { "art": "zuordnen", "kopf": { "id": "mut-1-01-a", "faehigkeit": "mut.verstehen", "stufe": 1, "kanal": "wissen" },
+          "auftrag": "Ausweichen oder sich stellen?",
+          "faecher": ["ausweichen", "sich stellen"],
+          "karten": [
+            { "text": "eine Mail schreiben, obwohl ein Anruf schneller wäre – nur weil der Anruf Herzklopfen macht", "fach": 0 },
+            { "text": "die Frage in der Runde stellen, obwohl das Herz klopft", "fach": 1 },
+            { "text": "kurz vor dem Treffen absagen", "fach": 0 },
+            { "text": "zum Fest gehen, auch wenn du nur eine Stunde bleibst", "fach": 1 },
+            { "text": "in der Besprechung nicken, obwohl du einen Einwand hast", "fach": 0 },
+            { "text": "im Laden sagen, dass die Ware nicht in Ordnung ist", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "mut-1-01-b", "faehigkeit": "mut.verstehen", "stufe": 2, "kanal": "wissen" },
+          "frage": "Lena sagt ihren kurzen Bericht im Verein ab und ist sofort erleichtert. Was ist beim nächsten Mal am wahrscheinlichsten?",
+          "antworten": [
+            { "text": "Nichts Besonderes – Angst kommt und geht von allein.", "wert": 0, "tendenz": "kleinreden", "warum": "Angst schwankt, ja. Aber Ausweichen ist nicht neutral: Es lehrt den Kopf, dass Absagen schützt." },
+            { "text": "Es wird eher schwerer: Die Erleichterung belohnt das Absagen.", "wert": 2, "warum": "Genau. Und ihre Befürchtung wurde nie geprüft – sie bleibt so groß, wie sie war." },
+            { "text": "Sie hat eine Gelegenheit verpasst, zu prüfen, ob ihre Befürchtung überhaupt stimmt.", "wert": 1, "warum": "Richtig – dazu kommt noch: Die Erleichterung macht das Absagen beim nächsten Mal verlockender." },
+            { "text": "Es wird leichter, weil sie sich diesmal erholen konnte.", "wert": 0, "tendenz": "vermeiden", "warum": "Erholung ist gut – aber hier hat sie nur die Hürde erhöht." }
+          ] },
+        { "art": "karte", "titel": "Wenn es mehr ist", "text": "Dieser Bereich ist für alltägliche Unsicherheit. Wenn du seit Langem stark darunter leidest – Arbeit, Einkauf oder Telefon meidest, Panikattacken erlebst oder Alkohol brauchst, um unter Leute zu gehen –, ist das kein Zeichen von Schwäche. Es ist ein guter Grund, dir Unterstützung zu holen. Verhaltenstherapie ist dafür gut untersucht; der Coach kann sie begleiten, aber nicht ersetzen." },
+        { "art": "fachhilfe", "thema": "seele" },
+        { "art": "mission", "ref": "mut-m-01" }
+      ],
+      "regel": "Ausweichen erleichtert jetzt und kostet später – prüfen statt meiden.",
+      "merkkarten": [
+        { "id": "mut-1-01-m1", "frage": "Warum wird Angst durch Ausweichen größer?", "antwort": "Die Erleichterung belohnt das Ausweichen – und die Befürchtung wird nie geprüft." },
+        { "id": "mut-1-01-m2", "frage": "Welche kleinen Formen von Ausweichen gibt es?", "antwort": "Schreiben statt anrufen, schweigen statt fragen, nicken statt widersprechen, kurz vorher absagen." },
+        { "id": "mut-1-01-m3", "frage": "Wann holst du dir Unterstützung?", "antwort": "Wenn du seit Langem stark leidest: Arbeit, Einkauf oder Telefon meidest, Panikattacken hast oder Alkohol brauchst." }
+      ],
+      "mission": "mut-m-01"
+    },
+    {
+      "id": "mut-1-02", "bereich": "mut", "stufe": 1, "nr": 2,
+      "titel": "Die Befürchtung auf dem Prüfstand",
+      "faehigkeiten": ["mut.vorhersage"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Gut begründetes Lernmodell aus der Forschung zu Übungen gegen Angst. Gezeigt ist, dass das Sinken der Angst während einer Übung den Erfolg nicht verlässlich vorhersagt; die Befürchtungs-Probe selbst ist Praxis der Verhaltenstherapie.",
+      "quellen": ["craske2014", "praxis-mut"],
+      "aha": "Du lernst nicht durchs Aushalten, sondern durch den Abgleich: Was habe ich befürchtet – und was ist wirklich passiert?",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Tarek stellt zum ersten Mal in einer großen Runde eine Frage. Was hilft am meisten dabei, dass es ihm beim nächsten Mal leichter fällt?", "optionen": ["dass seine Angst während der Frage spürbar sinkt", "dass er vorher weiß, was er befürchtet, und hinterher sieht, was passiert ist", "dass er die Frage möglichst lange vorbereitet"], "richtig": 1, "loesung": "Vorher die Befürchtung kennen, hinterher abgleichen", "aufloesung": "Lange galt: Eine Übung wirkt, wenn die Angst dabei sinkt. Heute zeigt die Forschung: Das sagt wenig über den Erfolg. Am meisten lernt, wessen Befürchtung sichtbar nicht eintritt – oder sich als aushaltbar erweist." },
+        { "art": "karte", "text": "Die Befürchtungs-Probe hat zwei Teile. Vorher: Was genau befürchte ich? Wie wahrscheinlich ist das, von 0 bis 100? Woran würde ich es merken? Nachher: Ist es eingetreten? Was ist wirklich passiert? Wichtig ist, dass die Befürchtung prüfbar ist. „Ich blamiere mich“ lässt sich nicht prüfen. „Mindestens zwei lachen über meine Frage“ schon." },
+        { "art": "auswahl", "kopf": { "id": "mut-1-02-a", "faehigkeit": "mut.vorhersage", "stufe": 2, "kanal": "wissen" },
+          "frage": "Welche Befürchtung lässt sich hinterher am besten prüfen?",
+          "antworten": [
+            { "text": "„Ich blamiere mich.“", "wert": 0, "warum": "Zu vage – hinterher kannst du alles als Blamage deuten oder nichts." },
+            { "text": "„Dr. Albers findet die Frage überflüssig.“", "wert": 1, "warum": "Schon konkreter. Aber woran würdest du es merken? Schreib dazu, was er sagen oder tun würde." },
+            { "text": "„Mindestens zwei verdrehen die Augen, wenn ich frage.“", "wert": 2, "warum": "Das kann man sehen oder nicht sehen – hinterher weißt du es." },
+            { "text": "„Es wird irgendwie unangenehm werden, und das merken dann alle.“", "wert": 0, "tendenz": "katastrophe", "warum": "Unangenehm wird es vielleicht – das ist erlaubt. Prüfen lässt sich so ein Satz nicht." }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "mut-1-02-b", "faehigkeit": "mut.vorhersage", "stufe": 3, "kanal": "koennen" },
+          "plan": "Befürchtungs-Probe", "anlass": "Eine kleine Sache, der du diese Woche gern ausweichen würdest.",
+          "felder": [
+            { "name": "Die Lage", "hilfe": "Was hast du vor, wann und wo?" },
+            { "name": "Was genau befürchtest du?", "hilfe": "So, dass man es sehen oder hören könnte." },
+            { "name": "Wie wahrscheinlich ist das (0–100)?", "hilfe": "Dein Bauchgefühl, ehrlich." },
+            { "name": "Hinterher: Was ist passiert?", "hilfe": "Füll es nach der Sache aus – eingetreten oder nicht?" }
+          ],
+          "muster": ["Lage: Im Baumarkt nach einer Schraube fragen, die ich nicht beschreiben kann. Befürchtung: Der Verkäufer seufzt und lässt mich stehen. Wahrscheinlichkeit: 60. Hinterher: Er hat nachgefragt und mich zum Regal gebracht.", "Lage: Im Verein vorschlagen, das Treffen zu verlegen. Befürchtung: Jemand sagt „Das haben wir immer so gemacht“ und alle nicken. Wahrscheinlichkeit: 70. Hinterher: Einer war dagegen, zwei fanden die Idee gut."] },
+        { "art": "umformulieren", "kopf": { "id": "mut-1-02-c", "faehigkeit": "mut.vorhersage", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Mach aus der vagen Befürchtung eine, die du hinterher prüfen kannst.",
+          "vorlage": "„Wenn ich die Jacke zurückgebe, wird das total peinlich.“",
+          "kriterien": ["beschreibt, was man sehen oder hören würde", "lässt sich hinterher mit Ja oder Nein beantworten", "nennt eine Wahrscheinlichkeit"],
+          "muster": ["„Die Verkäuferin fragt spitz, warum ich sie getragen habe. Wahrscheinlichkeit: 50.“", "„Ich bekomme das Geld nicht zurück und muss diskutieren. Wahrscheinlichkeit: 40.“"] },
+        { "art": "mission", "ref": "mut-m-02" }
+      ],
+      "regel": "Erst aufschreiben, was du befürchtest – dann prüfen, was passiert.",
+      "merkkarten": [
+        { "id": "mut-1-02-m1", "frage": "Was lernst du aus einer Mission am meisten?", "antwort": "Den Abgleich: befürchtet – passiert. Nicht, ob die Angst dabei sank." },
+        { "id": "mut-1-02-m2", "frage": "Wann ist eine Befürchtung prüfbar?", "antwort": "Wenn sie beschreibt, was man sehen oder hören würde – „Zwei lachen“ statt „Ich blamiere mich“." }
+      ],
+      "mission": "mut-m-02"
+    },
+    {
+      "id": "mut-1-03", "bereich": "mut", "stufe": 1, "nr": 3,
+      "titel": "Der Scheinwerfer ist kleiner, als du denkst",
+      "faehigkeiten": ["mut.vorhersage", "mut.aufmerksamkeit"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Mehrere Experimente, vor allem mit Studierenden. Die Grundbefunde sind mehrfach gezeigt, die genauen Werte schwanken. Im Einzelfall kann ein Gespräch natürlich schlecht laufen – nur seltener, als man glaubt.",
+      "quellen": ["gilovich2000", "boothby2018", "savitsky2003"],
+      "aha": "Andere bemerken deine Patzer und deine Nervosität viel weniger, als du glaubst – und mögen dich mehr, als du denkst. „Alle haben es gemerkt“ ist eine Vorhersage.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Studierende mussten mit einem peinlichen T-Shirt in einen Raum voller Leute. Wie viele Anwesende konnten hinterher sagen, was darauf war?", "optionen": ["fast alle", "etwa die Hälfte – so viele, wie die Träger glaubten", "deutlich weniger – etwa ein Viertel"], "richtig": 2, "loesung": "Deutlich weniger, als die Träger glaubten", "aufloesung": "Die Träger schätzten etwa die Hälfte, tatsächlich war es etwa ein Viertel. Wir überschätzen, wie sehr andere auf uns achten – sie sind mit sich selbst beschäftigt." },
+        { "art": "studie", "frage": "Wie gut kommst du nach einem Gespräch wirklich an?", "aufbau": "Fremde unterhielten sich eine Weile. Danach schätzte jeder, wie sehr der andere ihn mochte – und sagte, wie sehr er selbst den anderen mochte. Ähnlich wurde es mit neuen Mitbewohnern und in einem Workshop untersucht.", "ergebnis": "Die meisten unterschätzten, wie sehr sie gemocht wurden. Unter Mitbewohnern hielt sich die Lücke über Monate.", "grenze": "Studien einer Forschergruppe. Sie zeigen den Durchschnitt – ein einzelnes Gespräch kann auch schlecht laufen.", "beleg": "B", "quellen": ["boothby2018"] },
+        { "art": "karte", "text": "Drei Täuschungen auf einmal: Wir glauben, andere achten stark auf uns (Scheinwerfer). Wir glauben, man sieht uns die Nervosität an (Durchsichtigkeit). Und wir unterschätzen, wie gut wir ankommen. Für dich heißt das: „Alle haben es gemerkt“ und „Das lief schlecht“ sind Vorhersagen, keine Befunde. Prüf sie – am einfachsten, indem du nachfragst." },
+        { "art": "auswahl", "kopf": { "id": "mut-1-03-a", "faehigkeit": "mut.vorhersage", "stufe": 2, "kanal": "wissen" },
+          "frage": "Du hast dich in der Runde bei einer Zahl versprochen und es korrigiert. Danach denkst du: „Das haben alle gemerkt.“ Was ist die beste Deutung?",
+          "antworten": [
+            { "text": "„Ein paar haben es vielleicht bemerkt – die meisten schon vergessen.“", "wert": 2, "warum": "Realistisch: Du leugnest nichts, gibst dem Patzer aber nicht mehr Gewicht, als er für andere hat." },
+            { "text": "„Alle haben es gemerkt, und das bleibt bei ihnen hängen – bestimmt noch wochenlang.“", "wert": 0, "tendenz": "katastrophe", "warum": "So fühlt es sich an – aber das ist der Scheinwerfer im Kopf, nicht das, was andere erleben." },
+            { "text": "„Ich weiß es nicht – ich kann ja nachfragen.“", "wert": 1, "warum": "Ehrlich und prüfbar. Dazu gehört das Wissen, dass man solche Patzer fast immer überschätzt." },
+            { "text": "„Niemand hat es gemerkt.“", "wert": 0, "tendenz": "kleinreden", "warum": "Das weißt du nicht – und brauchst du nicht. Wichtiger ist: Für die anderen war es eine Kleinigkeit." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "mut-1-03-b", "faehigkeit": "mut.aufmerksamkeit", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Was nehmen die anderen eher wahr – und was spürst vor allem du?",
+          "faecher": ["nehmen die anderen eher wahr", "spürst vor allem du"],
+          "karten": [
+            { "text": "dein Herzklopfen", "fach": 1 },
+            { "text": "ob deine Frage zur Sache passt", "fach": 0 },
+            { "text": "das Flattern im Magen", "fach": 1 },
+            { "text": "ob du freundlich schaust", "fach": 0 },
+            { "text": "dass deine Knie weich sind", "fach": 1 },
+            { "text": "was du inhaltlich sagst", "fach": 0 }
+          ] },
+        { "art": "reflexion", "frage": "Welcher kleine Patzer geht dir noch nach? Was glaubst du heute: Wie viele der Anwesenden denken noch daran?" },
+        { "art": "mission", "ref": "mut-m-03" }
+      ],
+      "regel": "„Alle haben es gemerkt“ ist eine Vorhersage – prüf sie.",
+      "merkkarten": [
+        { "id": "mut-1-03-m1", "frage": "Was zeigt der Scheinwerfer-Effekt?", "antwort": "Wir überschätzen, wie sehr andere unsere Patzer und unser Aussehen bemerken." },
+        { "id": "mut-1-03-m2", "frage": "Wie gut kommst du nach einem Gespräch meist an?", "antwort": "Besser, als du glaubst: Man unterschätzt, wie sehr der andere einen mochte." }
+      ],
+      "mission": "mut-m-03"
+    },
+    {
+      "id": "mut-1-04", "bereich": "mut", "stufe": 1, "nr": 4,
+      "titel": "Blick nach außen",
+      "faehigkeiten": ["mut.aufmerksamkeit"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Gestützt durch klinische Studien und Experimente mit sozial ängstlichen Menschen; für alltägliche Unsicherheit eine begründete Übertragung. Aufmerksamkeits-Spiele am Bildschirm haben sich dagegen kaum bewährt.",
+      "quellen": ["boegels2006", "mcmanus2008", "clarkwells1995", "videofeedback", "cristea2015"],
+      "aha": "Wer sich im Gespräch selbst beobachtet, fühlt sich unsicherer und hört schlechter zu. Der Blick auf den anderen entlastet – und lässt sich zur Gewohnheit machen.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Im Kochkurs erzählt dir Jule Marek von ihrem Urlaub. Du bist ein bisschen nervös.", "schwach": "Du denkst: Wie schaue ich gerade? Was sage ich gleich? Hoffentlich merkt sie nichts.", "stark": "Du achtest auf Jule: Sie erzählt von einer Fähre und lacht dabei. Du fragst: „Und – warst du seekrank?“", "frage": "Was ändert sich durch den zweiten Blick?", "unterschied": "Im ersten Fall bist du mit dir beschäftigt – dir entgeht, was Jule anbietet, und die Unsicherheit wächst. Im zweiten bist du bei ihr: Die Frage ergibt sich von selbst, und für Selbstbeobachtung bleibt wenig Platz." },
+        { "art": "karte", "text": "Bei Unsicherheit dreht sich der Blick nach innen: Man beobachtet sich wie von außen und hält dieses innere Bild für das, was andere sehen. Das Bild ist meist strenger als die Wirklichkeit. Der Ausweg ist eine Gewohnheit: im Gespräch zwei Details am Gegenüber wahrnehmen, fragen „Was will er eigentlich?“ – und das eigene Bild ab und zu mit einer Aufnahme vergleichen." },
+        { "art": "zuordnen", "kopf": { "id": "mut-1-04-a", "faehigkeit": "mut.aufmerksamkeit", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Blick nach innen oder nach außen?",
+          "faecher": ["nach innen", "nach außen"],
+          "karten": [
+            { "text": "„Klinge ich gerade komisch?“", "fach": 0 },
+            { "text": "„Sie hat eben zweimal den Namen ihres Chefs genannt.“", "fach": 1 },
+            { "text": "„Hoffentlich werde ich nicht rot.“", "fach": 0 },
+            { "text": "„Was will er eigentlich von mir wissen?“", "fach": 1 },
+            { "text": "den nächsten Satz im Kopf vorformulieren, während der andere spricht", "fach": 0 },
+            { "text": "hören, welches Wort sie betont", "fach": 1 }
+          ] },
+        { "art": "mythos", "aussage": "Ein Aufmerksamkeitsspiel am Handy trainiert soziale Angst einfach weg.", "urteil": "falsch", "warum": "Solche Bildschirm-Trainings zeigten in einer Auswertung von 49 Studien zu Angst und Depression nur kleine Effekte – nach Bereinigung nicht mehr sicher. Was wirkt, ist der Blick nach außen im echten Gespräch, nicht am Bildschirm." },
+        { "art": "auswahl", "kopf": { "id": "mut-1-04-b", "faehigkeit": "mut.aufmerksamkeit", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du hast einen zweiminütigen Probe-Beitrag mit dem Handy aufgenommen. Wie schaust du ihn am besten an?",
+          "antworten": [
+            { "text": "Gleich ansehen und auf jeden Fehler achten.", "wert": 0, "tendenz": "nach_innen", "warum": "Wer Fehler sucht, findet sie – und bestätigt nur das strenge innere Bild." },
+            { "text": "Ansehen und danach eine vertraute Person fragen, welchen Eindruck sie von dir hatte.", "wert": 1, "warum": "Eine gute Ergänzung. Noch stärker wird es, wenn du vorher aufschreibst, wie du zu wirken glaubst." },
+            { "text": "Vorher notieren, wie du zu wirken glaubst – dann wie bei einem Fremden ansehen.", "wert": 2, "warum": "So vergleichst du dein inneres Bild mit dem, was andere sehen. In einer Studie wirkten fast alle besser als vorhergesagt." },
+            { "text": "Lieber gar nicht ansehen – das ist nur unangenehm.", "wert": 0, "tendenz": "vermeiden", "warum": "Verständlich – aber dann bleibt das strenge Bild im Kopf ungeprüft." }
+          ] },
+        { "art": "reflexion", "frage": "In welchem Gespräch bist du diese Woche am meisten bei dir statt beim anderen? Welches Detail am Gegenüber nimmst du dir dort vor?" },
+        { "art": "mission", "ref": "mut-m-04" }
+      ],
+      "regel": "Zwei Details am Gegenüber – dann bleibt wenig Platz für den Blick auf dich.",
+      "merkkarten": [
+        { "id": "mut-1-04-m1", "frage": "Warum macht Selbstbeobachtung unsicher?", "antwort": "Man hält das strenge innere Bild für das, was andere sehen – und hört dem anderen schlechter zu." },
+        { "id": "mut-1-04-m2", "frage": "Wie schaust du eine eigene Aufnahme an?", "antwort": "Vorher die Vorhersage notieren, dann ansehen wie bei einer fremden Person und vergleichen." }
+      ],
+      "mission": "mut-m-04"
+    },
+    {
+      "id": "mut-1-05", "bereich": "mut", "stufe": 1, "nr": 5,
+      "titel": "Deine Leiter",
+      "faehigkeiten": ["mut.leiter"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Belegt sind Programme, in denen Menschen sich ihren Ängsten schrittweise stellen – oft mit Fachleuten. Die Leiter mit Anspannung von 0 bis 100 und der Einstieg bei 30 bis 40 sind übliches Vorgehen aus der Praxis. Ob die strenge Reihenfolge nötig ist, ist offen; Abwechseln scheint zu helfen.",
+      "quellen": ["ebrahimi2019", "mayowilson2014", "craske2014", "praxis-mut"],
+      "aha": "Der richtige Schritt ist der, der Herzklopfen macht – nicht Panik. Wer Sprosse für Sprosse geht und jede prüft, kommt weiter als mit einem großen Sprung.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Lena will lernen, in der Teamrunde einen Einwand anzumelden. Mit welcher Sprosse fängt sie am besten an?", "optionen": ["gleich mit dem Einwand vor allen – dann hat sie es hinter sich", "mit einem Schritt, der ihr etwa 30 bis 40 von 100 Anspannung macht", "mit etwas, das sie überhaupt nicht aufregt"], "richtig": 1, "loesung": "Ein Schritt mit etwa 30 bis 40 Anspannung", "aufloesung": "Zu groß endet oft in Panik und Rückzug, zu klein bringt keine neue Erfahrung. Dazwischen liegt die Sprosse, an der man lernt: Herzklopfen ja, Panik nein." },
+        { "art": "karte", "text": "Ganz oben auf deiner Leiter steht das Ziel. Darunter acht bis zehn Sprossen, jede mit deiner geschätzten Anspannung von 0 bis 100. Du startest bei 30 bis 40, gehst jede Sprosse mehrmals – gern an verschiedenen Orten – und machst dabei jedes Mal die Befürchtungs-Probe. Ist eine Sprosse zu groß, mach sie kleiner. Die Leiter ist ein Plan, kein Gesetz: Ab und zu darfst du auch springen." },
+        { "art": "rangfolge", "kopf": { "id": "mut-1-05-a", "faehigkeit": "mut.leiter", "stufe": 2, "kanal": "wissen" },
+          "frage": "Lenas Leiter: Sie hat jede Sprosse mit ihrer Anspannung (0–100) bewertet. Ordne von der leichtesten zur schwersten.",
+          "eintraege": [
+            { "text": "Einer Kollegin allein eine Frage zum Projekt stellen (25)", "warum": "Ein Gegenüber, sachlich, kaum Publikum – der Einstieg." },
+            { "text": "In der Vierer-Runde eine Frage stellen (40)", "warum": "Mehr Zuhörer, aber noch klein und vertraut." },
+            { "text": "In der Vierer-Runde eine eigene Meinung sagen (55)", "warum": "Eine Meinung macht angreifbarer als eine Frage." },
+            { "text": "In der Teamrunde eine Frage stellen (65)", "warum": "Größere Runde, Vorgesetzter dabei." },
+            { "text": "In der Teamrunde einen Einwand anmelden (85)", "warum": "Das Ziel: widersprechen, wenn alle nicken." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "mut-1-05-b", "faehigkeit": "mut.leiter", "stufe": 3, "kanal": "wissen" },
+          "frage": "Lena hat die Sprosse „Frage in der Vierer-Runde“ einmal geschafft. Was ist der beste nächste Schritt?",
+          "antworten": [
+            { "text": "Die nächste Sprosse: eine eigene Meinung in der Vierer-Runde.", "wert": 1, "warum": "Kann passen – sicherer wird es, wenn die erste Sprosse sich ein paarmal bewährt hat." },
+            { "text": "Gleich der Einwand vor dem ganzen Team.", "wert": 0, "tendenz": "zu_gross", "warum": "Ein Sprung über drei Sprossen endet oft in Panik – und dann im Rückzug." },
+            { "text": "Dieselbe Sprosse noch ein paarmal, auch anderswo.", "wert": 2, "warum": "Wiederholen und wechseln macht aus einer Ausnahme eine Erfahrung, die überall gilt." },
+            { "text": "Erst mal Pause – sie hat ja schon viel geschafft.", "wert": 0, "tendenz": "vermeiden", "warum": "Eine Pause ist erlaubt. Aber wer jetzt lange aussetzt, verschenkt den Schwung." }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "mut-1-05-c", "faehigkeit": "mut.leiter", "stufe": 3, "kanal": "koennen" },
+          "plan": "Meine Leiter", "anlass": "Etwas, dem du bisher ausweichst – in der Arbeit, im Verein oder privat.",
+          "felder": [
+            { "name": "Mein Ziel ganz oben", "hilfe": "Was willst du können? Mit Anspannung 0–100." },
+            { "name": "Eine Sprosse um 30 bis 40", "hilfe": "Herzklopfen ja, Panik nein – das ist dein Einstieg." },
+            { "name": "Eine Sprosse um 50 bis 60", "hilfe": "Etwas mehr Publikum, etwas mehr Meinung." },
+            { "name": "Eine Sprosse um 70 bis 80", "hilfe": "Kurz vor dem Ziel." }
+          ],
+          "muster": ["Ziel: Am Telefon bei Behörden selbst anrufen statt zu mailen (80). Sprosse 35: Beim Bäcker anrufen und fragen, bis wann geöffnet ist. Sprosse 55: Beim Arzt einen Termin verschieben. Sprosse 75: Bei der Krankenkasse eine Frage klären.", "Ziel: Im Verein einen Vorschlag machen (75). Sprosse 30: Nach der Sitzung einer Person die Idee erzählen. Sprosse 50: In der Sitzung eine Frage stellen. Sprosse 65: Eine Meinung zu einem fremden Vorschlag sagen."] },
+        { "art": "reflexion", "frage": "Welche Sprosse um 30 bis 40 gehst du als erste – und wann genau?" },
+        { "art": "mission", "ref": "mut-m-05" }
+      ],
+      "regel": "Herzklopfen ja, Panik nein – und jede Sprosse mehr als einmal.",
+      "merkkarten": [
+        { "id": "mut-1-05-m1", "frage": "Wo steigst du in deine Leiter ein?", "antwort": "Bei einer Sprosse mit etwa 30 bis 40 von 100 Anspannung: Herzklopfen, keine Panik." },
+        { "id": "mut-1-05-m2", "frage": "Was tust du, wenn eine Sprosse zu groß ist?", "antwort": "Sie kleiner machen – kürzer, vertrauter, leichter. Aber gehen." },
+        { "id": "mut-1-05-m3", "frage": "Warum eine Sprosse mehrmals gehen?", "antwort": "Wiederholen und Orte wechseln macht aus einer Ausnahme eine Erfahrung, die überall gilt." }
+      ],
+      "mission": "mut-m-05"
+    },
+    {
+      "id": "mut-1-06", "bereich": "mut", "stufe": 1, "nr": 6,
+      "titel": "Krücken weglassen",
+      "faehigkeiten": ["mut.sicherheit"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Kleine klinische Studien und Experimente stützen die Richtung, das Modell dahinter ist breit gestützt. Ob ein gezielter, vorübergehender Einsatz am Anfang schadet, ist umstritten – darum Schritt für Schritt.",
+      "quellen": ["wells1995", "mcmanus2008", "clarkwells1995", "blakey2016"],
+      "aha": "Was dich im Moment schützt, verhindert, dass du lernst: Es geht auch ohne. Lass die Krücken weg – eine nach der anderen.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "mut-1-06-a", "faehigkeit": "mut.sicherheit", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Werkzeug oder Krücke?",
+          "faecher": ["Werkzeug – hilft dir zu handeln", "Krücke – soll das Befürchtete verhindern"],
+          "karten": [
+            { "text": "jeden Satz vom Blatt ablesen, damit bloß kein Hänger passiert", "fach": 1 },
+            { "text": "eine Karte mit fünf Stichworten", "fach": 0 },
+            { "text": "ständig aufs Handy schauen, damit dich niemand anspricht", "fach": 1 },
+            { "text": "dir vorher überlegen, worüber du gern reden würdest", "fach": 0 },
+            { "text": "den nächsten Satz im Kopf vorformulieren, während der andere spricht", "fach": 1 },
+            { "text": "nachfragen, wenn du etwas nicht verstanden hast", "fach": 0 }
+          ] },
+        { "art": "karte", "text": "Krücken sollen das Befürchtete verhindern: ablesen, Blick meiden, nur mit einer vertrauten Person hingehen, das Glas umklammern, damit keiner das Zittern sieht. Im Moment fühlt es sich sicherer an. Hinterher denkst du: „Gut gegangen – nur wegen der Krücke.“ Eine Stichwortkarte oder Wasser gegen den trockenen Mund sind Werkzeuge. Zur Krücke wird ein Hilfsmittel, wenn du glaubst, ohne würde es schiefgehen." },
+        { "art": "studie", "frage": "Was passiert, wenn man die Krücken weglässt?", "aufbau": "Acht Menschen mit starker sozialer Angst gingen je zweimal in eine gefürchtete Lage: einmal wie gewohnt mit ihren Schutzhandlungen, einmal ohne sie. Vorher und nachher gaben sie an, wie ängstlich sie waren und wie sehr sie an die befürchtete Katastrophe glaubten.", "ergebnis": "Ohne Schutzhandlungen sanken die Angst und der Glaube an die Katastrophe deutlich stärker.", "grenze": "Sehr kleine Studie mit jeweils einer Übung. Spätere Experimente stützen die Richtung; ob ein gezielter, vorübergehender Einsatz schadet, ist umstritten.", "beleg": "B", "quellen": ["wells1995", "mcmanus2008", "blakey2016"] },
+        { "art": "auswahl", "kopf": { "id": "mut-1-06-b", "faehigkeit": "mut.sicherheit", "stufe": 3, "kanal": "wissen" },
+          "frage": "Miriam lädt dich zu ihrem Geburtstag ein. Außer ihr kennst du dort kaum jemanden. Welcher Plan macht dich am ehesten mutiger?",
+          "antworten": [
+            { "text": "Hingehen und eine Krücke bewusst weglassen – etwa nicht die ganze Zeit neben Miriam bleiben.", "wert": 2, "warum": "Du bist da und lernst etwas Neues: Es geht auch ohne den sicheren Hafen." },
+            { "text": "Hingehen, aber vor allem aufs Handy schauen, damit es bloß nicht peinlich wird – sicher ist sicher.", "wert": 0, "tendenz": "kruecke", "warum": "Du bist da – aber hinterher denkst du: Gut gegangen, weil ich mich versteckt habe." },
+            { "text": "Absagen, um niemanden zu belasten.", "wert": 0, "tendenz": "vermeiden", "warum": "Das fühlt sich rücksichtsvoll an, ist aber Ausweichen – und die Hürde wächst." },
+            { "text": "Hingehen und alle Krücken auf einmal weglassen.", "wert": 1, "warum": "Mutig – aber alles auf einmal ist oft zu viel. Eine nach der anderen trägt weiter." }
+          ] },
+        { "art": "mythos", "aussage": "Krücken sind immer schädlich – also sofort alle weg.", "urteil": "teils", "warum": "Krücken halten die Angst am Leben, wenn du dich auf sie verlässt. Ob ein gezielter, vorübergehender Einsatz am Anfang schadet, ist in Studien umstritten. Darum baust du sie ab: eine nach der anderen." },
+        { "art": "reflexion", "frage": "Schreib deine drei häufigsten Krücken auf. Welche lässt du zuerst weg – und wobei?" },
+        { "art": "mission", "ref": "mut-m-06" }
+      ],
+      "regel": "Eine Krücke nach der anderen weglassen – erst dann erlebst du, dass es ohne geht.",
+      "merkkarten": [
+        { "id": "mut-1-06-m1", "frage": "Was macht ein Hilfsmittel zur Krücke?", "antwort": "Wenn es das Befürchtete verhindern soll und du glaubst, ohne würde es schiefgehen." },
+        { "id": "mut-1-06-m2", "frage": "Warum halten Krücken die Angst am Leben?", "antwort": "Du schreibst den guten Ausgang der Krücke zu – und erlebst nie, dass es auch ohne geht." }
+      ],
+      "mission": "mut-m-06"
+    },
+    {
+      "id": "mut-1-07", "bereich": "mut", "stufe": 1, "nr": 7,
+      "titel": "Ein Nein sagen, ein Nein hören",
+      "faehigkeiten": ["mut.nein", "mut.ablehnung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Menschen unterschätzen, wie oft andere Ja sagen, und dass Erfahrung die Furcht vor Ablehnung senkt, ist in Studien gezeigt. Die Nein-Formel ist Praxiswissen aus dem Selbstsicherheitstraining; zu Ablehnungs-Übungen gibt es keine eigenen Studien.",
+      "quellen": ["flynn2008", "sandstrom2022", "speed2018", "smith1975", "praxis-mut"],
+      "aha": "Ein Nein gilt der Bitte, nicht dem Menschen – ob du es sagst oder hörst. Beides lässt sich üben, und beides ist kleiner, als es sich anfühlt.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Menschen sollten Fremde um einen kleinen Gefallen bitten. Vorher schätzten sie, wie viele Ja sagen würden. Wie lag die Schätzung?", "optionen": ["zu hoch – es sagten weniger Ja als gedacht", "ungefähr richtig", "zu niedrig – teils um bis zur Hälfte"], "richtig": 2, "loesung": "Zu niedrig – es sagten deutlich mehr Ja", "aufloesung": "Die Bittenden unterschätzten die Hilfsbereitschaft der anderen, in den Versuchen um bis zur Hälfte. Die Angst vor dem Nein ist oft größer als das Nein selbst." },
+        { "art": "karte", "text": "Ein Nein sagen geht in drei Teilen: würdigen – Nein – Angebot. „Danke, dass du an mich denkst. Das schaffe ich nicht. Was ich tun kann: …“ Ein Grund reicht, das Angebot nur, wenn du es ehrlich meinst. Ein Nein hören heißt: Danke sagen, nicht nachhaken – und sortieren: Lag es an der Bitte, an der Lage oder an mir? Fast immer an den ersten beiden." },
+        { "art": "umformulieren", "kopf": { "id": "mut-1-07-a", "faehigkeit": "mut.nein", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Sven bittet dich, ihm am Samstag beim Umzug zu helfen. Du willst nicht. Mach aus deiner Antwort ein Nein in drei Teilen.",
+          "vorlage": "„Oh, puh, also eigentlich passt es mir Samstag nicht so gut, weil ich noch so viel zu tun hab und vielleicht kommt meine Mutter und … tut mir echt leid …“",
+          "kriterien": ["würdigt die Bitte", "klares Nein ohne Entschuldigungs-Kette", "höchstens ein Grund", "ein Angebot nur, wenn du es ehrlich meinst"],
+          "muster": ["„Schön, dass du an mich denkst. Samstag schaffe ich nicht. Ich kann dir Freitagabend beim Packen helfen.“", "„Danke fürs Fragen. Beim Umzug bin ich diesmal nicht dabei. Zur Einweihung komme ich gern.“"] },
+        { "art": "auswahl", "kopf": { "id": "mut-1-07-b", "faehigkeit": "mut.ablehnung", "stufe": 3, "kanal": "wissen" },
+          "frage": "Nach dem Kochkurs fragst du Jule, ob sie dich ein Stück im Auto mitnimmt. Sie sagt: „Heute leider nicht.“ Welche Deutung ist am hilfreichsten?",
+          "antworten": [
+            { "text": "„Sie mag mich nicht.“", "wert": 0, "tendenz": "katastrophe", "warum": "Das ist eine Vermutung über dich – das Nein galt einer Fahrt an einem Abend." },
+            { "text": "„Sie hat sicher ihre Gründe. Vielleicht frag ich ein andermal.“", "wert": 1, "warum": "Brauchbar: Du nimmst es nicht persönlich und bleibst offen. Noch klarer: Das Nein galt dem Abend – über dich sagt es nichts." },
+            { "text": "„Es passt ihr heute nicht. Das sagt nichts über mich.“", "wert": 2, "warum": "Genau: Das Nein gilt der Bitte und dem Abend, nicht dir." },
+            { "text": "„Hätte ich bloß nicht gefragt.“", "wert": 0, "tendenz": "vermeiden", "warum": "Die Frage war mutig und harmlos. Wer jetzt nicht mehr fragt, lässt das Nein größer werden, als es war." }
+          ] },
+        { "art": "experiment", "auftrag": "Bitte diese Woche einmal um etwas Kleines, bei dem ein Nein gut möglich ist – im Privatleben, freundlich, ohne nachzuhaken. Schreib vorher auf, was du befürchtest.", "dauer": "woche", "nachfrage": "Was hast du befürchtet – und was ist passiert? Und wie hat sich das Nein oder Ja danach angefühlt?" },
+        { "art": "mission", "ref": "mut-m-07" }
+      ],
+      "regel": "Würdigen – Nein – Angebot. Und ein Nein, das du hörst, gilt der Bitte.",
+      "merkkarten": [
+        { "id": "mut-1-07-m1", "frage": "Die drei Teile eines Neins?", "antwort": "Würdigen – Nein – Angebot (nur, wenn du es ehrlich meinst). Ein Grund reicht." },
+        { "id": "mut-1-07-m2", "frage": "Was tust du, wenn du ein Nein hörst?", "antwort": "Danke sagen, nicht nachhaken – und sortieren: Bitte, Lage oder ich? Meist nicht ich." },
+        { "id": "mut-1-07-m3", "frage": "Wie oft sagen andere auf eine kleine Bitte Ja?", "antwort": "Öfter, als man denkt – in Versuchen wurde das um bis zur Hälfte unterschätzt." }
+      ],
+      "mission": "mut-m-07"
+    }
+  ]
+}

@@ -4,9 +4,10 @@
 // Software:   installierte Programme, Rollen, Betriebssystem (aus der Analyse)
 // Komplett-Diagnose: alle gespeicherten Läufe mit Datum/Uhrzeit + Ergebnis; Lösungswege nur mit PIN 0506
 // Schnell-Health-Check: letzter DISM- + SFC-Lauf mit Erklärung der Befehle, Verlauf
+// HCI-Fragebogen: die zwölf Fragen des Dienstleisters, aus dem Server gelesen (nur lesend), als Excel-Blatt
 // Beheben nur nach Rückfrage; jede Aktion landet in Server-Historie + Geräte-Dossier.
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   X, RefreshCw, Loader2, CheckCircle2, XCircle, AlertTriangle, Clock, ScanSearch, Save, Search,
   ListChecks, Package, Play, RotateCcw, Plus, Info,
@@ -17,11 +18,15 @@ import {
 } from '../../services/serverZustand'
 import { SEAL_ABFRAGE, sealBefehlFehler, istSealSonderpunkt } from '../../services/sealStatus'
 import { setzePruefZusammenfassung } from '../../services/serverMonitor'
+import { useBereiche } from '../../store/menuSichtbarStore'
 import ZertifikateReiter from './ZertifikateReiter'
 import DiagnoseReiter from './DiagnoseReiter'
 import HealthReiter from './HealthReiter'
 import { addHistoryEntry } from '../../services/serverHistory'
 import { logDeviceAction } from '../../services/deviceDossier'
+
+// erst beim Öffnen des Reiters laden (bringt den Excel-Export mit)
+const HciBogenAnsicht = lazy(() => import('../../hciFragebogen/HciBogenAnsicht'))
 
 interface Props {
   host: string
@@ -33,7 +38,7 @@ interface Props {
   startReiter?: Reiter
 }
 
-export type Reiter = 'status' | 'einrichten' | 'zertifikate' | 'software' | 'diagnose' | 'health'
+export type Reiter = 'status' | 'einrichten' | 'zertifikate' | 'software' | 'diagnose' | 'health' | 'hci'
 
 const GRUPPEN: { titel: string; typen: Pruefpunkt['typ'][] }[] = [
   { titel: 'Dienste', typen: ['dienst'] },
@@ -53,7 +58,10 @@ const zeit = (iso?: string) => {
 }
 
 export default function ServerZustandPanel({ host, bezeichnung, by, onClose, onGeaendert, startReiter }: Props) {
-  const [reiter, setReiter] = useState<Reiter>(startReiter || 'status')
+  // Reiter außer „Status“ je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte); ausgeblendet → Status
+  const { sichtbar: reiterSichtbar } = useBereiche('server')
+  const [reiterRoh, setReiter] = useState<Reiter>(startReiter || 'status')
+  const reiter: Reiter = reiterRoh !== 'status' && !reiterSichtbar(reiterRoh) ? 'status' : reiterRoh
   const [soll, setSoll] = useState<SollZustand | null>(null)
   const [ist, setIst] = useState<IstStand | null>(null)
   const [inv, setInv] = useState<Inventar | null>(null)
@@ -120,8 +128,8 @@ export default function ServerZustandPanel({ host, bezeichnung, by, onClose, onG
           </div>
           <button onClick={onClose} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent" title="Schließen (Esc)"><X size={16} /></button>
         </div>
-        <div className="shrink-0 px-5 pt-2 border-b border-border flex gap-1">
-          {([['status', 'Status'], ['einrichten', 'Einrichten'], ['zertifikate', 'Zertifikate'], ['software', 'Software'], ['diagnose', 'Komplett-Diagnose'], ['health', 'Schnell-Health-Check']] as [Reiter, string][]).map(([r, t]) => (
+        <div className="shrink-0 px-5 pt-2 border-b border-border flex gap-1 flex-wrap">
+          {([['status', 'Status'], ['einrichten', 'Einrichten'], ['zertifikate', 'Zertifikate'], ['software', 'Software'], ['diagnose', 'Komplett-Diagnose'], ['health', 'Schnell-Health-Check'], ['hci', 'HCI-Fragebogen']] as [Reiter, string][]).filter(([r]) => r === 'status' || reiterSichtbar(r)).map(([r, t]) => (
             <button key={r} onClick={() => setReiter(r)} data-reiter={r}
               className={`px-3 py-1.5 text-xs font-medium rounded-t-md border-b-2 -mb-px ${reiter === r ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>{t}</button>
           ))}
@@ -159,6 +167,10 @@ export default function ServerZustandPanel({ host, bezeichnung, by, onClose, onG
             <DiagnoseReiter host={host} />
           ) : reiter === 'health' ? (
             <HealthReiter host={host} bezeichnung={bezeichnung} by={by} />
+          ) : reiter === 'hci' ? (
+            <Suspense fallback={<div className="flex items-center justify-center gap-2 py-16 text-sm text-muted-foreground"><Loader2 size={16} className="animate-spin" />Lade…</div>}>
+              <HciBogenAnsicht host={host} bezeichnung={bezeichnung} by={by} />
+            </Suspense>
           ) : (
             <SoftwareReiter inv={inv} onAnalysieren={() => setReiter('einrichten')} />
           )}

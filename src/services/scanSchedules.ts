@@ -81,6 +81,20 @@ export function latestWeeklySlot(now: Date, days: number[], time: string): Date 
   return null
 }
 
+/** Nächster Zeitpunkt an einem der `days` um `time` NACH now (Vorschau 0–7 Tage), sonst null. */
+export function naechsterSlot(now: Date, days: number[], time: string): Date | null {
+  if (!days || days.length === 0) return null
+  const [hh, mm] = time.split(':').map(n => parseInt(n, 10))
+  if (isNaN(hh) || isNaN(mm)) return null
+  const set = new Set(days)
+  for (let vor = 0; vor < 8; vor++) {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + vor, hh, mm, 0, 0)
+    if (d.getTime() <= now.getTime()) continue
+    if (set.has(d.getDay())) return d
+  }
+  return null
+}
+
 /** Fällig, wenn aktiviert UND der jüngste passende Slot nach dem letzten Lauf liegt. */
 export function isConfiguredDue(cfg: ScanScheduleConfig, lastRunAt: string | null | undefined, now = Date.now()): boolean {
   if (!cfg.enabled) return false

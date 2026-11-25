@@ -1,0 +1,152 @@
+{
+  "bereich": "lesen",
+  "spur": "kern",
+  "szenarien": [
+    { "id": "lesen-fc-001", "faehigkeit": "lesen.beobachten", "stufe": 2, "frage": "Im Zug sitzt dir eine Frau gegenüber. Sie schaut immer wieder aufs Handy und seufzt. Welcher Gedanke trennt Sehen und Deuten?", "antworten": [
+      { "text": "„Sie hat Liebeskummer.“", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine ganze Geschichte aus zwei Zeichen." },
+      { "text": "„Sie wartet wohl auf eine wichtige Nachricht, die einfach nicht kommen will.“", "wert": 1, "warum": "Eine harmlose Deutung – aber eben schon eine Deutung." },
+      { "text": "„Sie seufzt und schaut aufs Handy. Warum, weiß ich nicht.“", "wert": 2, "warum": "Beobachtung ohne Deutung – mehrere Erklärungen bleiben offen." }
+    ] },
+    { "id": "lesen-fc-002", "faehigkeit": "lesen.beobachten", "stufe": 3, "frage": "Du schreibst die Notiz zu einem Kundengespräch für die Akte. Welcher Satz gehört hinein?", "antworten": [
+      { "text": "„Die Kundin hat zweimal nach den Lieferzeiten gefragt.“", "wert": 2, "warum": "Eine Beobachtung, die auch andere nachvollziehen können." },
+      { "text": "„Die Kundin war misstrauisch.“", "wert": 0, "tendenz": "etikett", "warum": "Ein Urteil über die Kundin, das in der Akte stehen bleibt." },
+      { "text": "„Die Kundin wirkte bei den Lieferzeiten etwas skeptisch und hat dort länger überlegt.“", "wert": 1, "warum": "Nah an der Beobachtung, aber „skeptisch“ ist schon eine Deutung." },
+      { "text": "„Die Kundin wird wohl abspringen.“", "wert": 0, "tendenz": "uebersicher", "warum": "Eine Vorhersage aus einer Deutung – nichts davon wurde gesehen." }
+    ] },
+    { "id": "lesen-fc-003", "faehigkeit": "lesen.beobachten", "stufe": 5, "frage": "Beim ersten Treffen mit deinem neuen Vermieter spricht er leise, schaut kaum hoch und gibt dir einen schlaffen Händedruck. Wie gehst du mit deinem Eindruck um?", "antworten": [
+      { "text": "Als ersten Eindruck merken – und sehen, wie er sich bei Absprachen verhält.", "wert": 2, "warum": "Der Eindruck bleibt eine Vermutung, die du an seinem Verhalten prüfst." },
+      { "text": "Er ist ein Schwächling, mit dem kann man es machen.", "wert": 0, "tendenz": "etikett", "warum": "Ein Urteil aus Sekunden – und eine schlechte Grundlage für ein Mietverhältnis." },
+      { "text": "Er ist eben schüchtern, das sagt nichts weiter über ihn als Vermieter, also abhaken.", "wert": 1, "warum": "Gelassen, aber auch das ist eine Deutung. Sein Verhalten wird mehr zeigen." }
+    ] },
+    { "id": "lesen-fc-004", "faehigkeit": "lesen.koerper", "stufe": 3, "frage": "Gartenfest im Oktober, früher Abend. Fast alle Gäste stehen mit verschränkten Armen und eng beieinander. Was sagt das am ehesten?", "antworten": [
+      { "text": "Die Stimmung ist schlecht – alle machen dicht.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Dieselbe Haltung bei fast allen gleichzeitig spricht für die Lage, nicht für die Stimmung." },
+      { "text": "Vor allem, dass es kühl ist.", "wert": 2, "warum": "Wenn alle dasselbe tun, liegt die Erklärung meist in der Lage. Wie die Stimmung ist, zeigen eher Gespräche und Lachen." },
+      { "text": "Kann man nicht wissen – vielleicht kalt, vielleicht schlechte Stimmung, vielleicht beides zugleich.", "wert": 1, "warum": "Vorsichtig, gut. Die Lage liefert hier aber schon eine starke Erklärung." },
+      { "text": "Die Gäste verstehen sich nicht.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Dass sie eng beieinanderstehen, spricht eher dagegen." }
+    ] },
+    { "id": "lesen-fc-005", "faehigkeit": "lesen.koerper", "stufe": 4, "frage": "Bei der Geburtstagsfeier deines Patenkinds sitzt ein Gast die ganze Zeit mit dem Rücken zur Gruppe am Fenster. Was ist am klügsten?", "antworten": [
+      { "text": "Ihn in Ruhe lassen.", "wert": 1, "warum": "Respektvoll – vielleicht will er genau das. Ein kurzes Angebot würde es klären." },
+      { "text": "Kurz hingehen und etwas anbieten, ein Getränk oder ein paar Worte – und gehen, wenn er Ruhe will.", "wert": 2, "warum": "Die Abwendung kann vieles heißen: Er kennt niemanden, er braucht Ruhe, er telefoniert gleich. Ein Angebot lässt ihm die Wahl." },
+      { "text": "Ihn als unfreundlich abhaken.", "wert": 0, "tendenz": "etikett", "warum": "Ein Urteil über den Menschen aus einer Sitzhaltung." },
+      { "text": "Die anderen fragen, was mit dem los ist und warum er sich so seltsam absondert.", "wert": 0, "tendenz": "laestern", "warum": "Über ihn statt mit ihm – das macht es für ihn eher schwerer." }
+    ] },
+    { "id": "lesen-fc-006", "faehigkeit": "lesen.koerper", "stufe": 5, "frage": "Ein Freund liest eine Nachricht auf dem Handy, reißt den Mund auf, die Augen weit. Was denkst du?", "antworten": [
+      { "text": "Eine starke Reaktion – ob gut oder schlecht, zeigt erst, was er dann tut oder sagt.", "wert": 2, "warum": "Bei starken Gefühlen ist das Gesicht oft mehrdeutig. Körper, Worte und Lage helfen weiter." },
+      { "text": "Schlechte Nachrichten.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Überraschung kann auch Freude sein. Das Gesicht allein reicht hier nicht." },
+      { "text": "Gute Nachrichten.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Ebenso geraten wie das Gegenteil." },
+      { "text": "Fragen: „Was ist los?“", "wert": 1, "warum": "Fragen ist gut. Ein kurzer Moment Abwarten gibt ihm aber erst Zeit, selbst zu reagieren." }
+    ] },
+    { "id": "lesen-fc-007", "faehigkeit": "lesen.grundlinie", "stufe": 2, "frage": "Deine Nachbarin ist immer sehr direkt und knapp. Heute sagt sie im Vorbeigehen nur: „Ihr Auto steht schief.“ Was liest du heraus?", "antworten": [
+      { "text": "Sie ist sauer auf mich und will mir das jetzt auf diese Art zeigen.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Knapp ist ihre Grundlinie. Daraus Ärger zu lesen, übersieht, wie sie immer ist." },
+      { "text": "Das ist ihre Art – kein Zeichen für Ärger.", "wert": 2, "warum": "Gemessen an ihrer Grundlinie ist nichts anders als sonst." },
+      { "text": "Sie will mir einen Gefallen tun.", "wert": 1, "warum": "Möglich und freundlich gedacht. Vor allem ist es aber einfach ihre direkte Art." }
+    ] },
+    { "id": "lesen-fc-008", "faehigkeit": "lesen.grundlinie", "stufe": 3, "frage": "Ein Kollege, der sonst immer pünktlich war, kommt seit zwei Wochen jeden Tag als Letzter und ist mittags verschwunden. Was ist der beste nächste Schritt?", "antworten": [
+      { "text": "Ihn darauf ansprechen, dass er in letzter Zeit ziemlich nachlässig geworden ist.", "wert": 0, "tendenz": "etikett", "warum": "Aus einer Veränderung wird ein Urteil über ihn." },
+      { "text": "Es Dr. Albers melden.", "wert": 0, "warum": "Bevor du etwas weißt, machst du eine Veränderung zu einem Fall." },
+      { "text": "Die Veränderung bemerken, an die Lage denken und bei Gelegenheit ein offenes Ohr anbieten.", "wert": 2, "warum": "Du siehst die Abweichung, unterstellst nichts und machst ein Angebot." },
+      { "text": "Abwarten.", "wert": 1, "warum": "Nicht verkehrt. Eine Veränderung über Wochen ist aber ein guter Anlass für ein freundliches Wort." }
+    ] },
+    { "id": "lesen-fc-009", "faehigkeit": "lesen.grundlinie", "stufe": 5, "frage": "Was spricht am ehesten dafür, dass eine Veränderung bei jemandem etwas bedeutet?", "antworten": [
+      { "text": "Sie ist besonders auffällig, zum Beispiel ein Zucken im Gesicht oder ein Kratzen am Hals.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Auffällig heißt nicht aussagekräftig. Manche Zeichen sind schlicht Gewohnheit." },
+      { "text": "Andere haben sie auch bemerkt.", "wert": 1, "warum": "Ein Hinweis, dass sie wirklich da ist – über die Bedeutung sagt es noch nichts." },
+      { "text": "Sie beginnt zu einem bestimmten Zeitpunkt und betrifft mehreres zugleich.", "wert": 2, "warum": "Zeitpunkt und mehrere Zeichen zusammen machen aus einer Abweichung einen Hinweis." }
+    ] },
+    { "id": "lesen-fc-010", "faehigkeit": "lesen.buendel", "stufe": 3, "frage": "Im Vorstellungsgespräch nickt die Interviewerin, macht Notizen und fragt zu deinem letzten Projekt nach. Gegen Ende schaut sie einmal auf die Uhr. Was liest du?", "antworten": [
+      { "text": "Das meiste spricht für Interesse. Der Blick zur Uhr allein sagt wenig.", "wert": 2, "warum": "Mehrere Zeichen in eine Richtung – ein einzelnes Gegenzeichen hebt sie nicht auf." },
+      { "text": "Sie hat genug – die Uhr verrät es.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Ein Einzelzeichen wiegt hier schwerer als drei andere. Vielleicht hat sie nur den nächsten Termin im Blick." },
+      { "text": "Kann man nicht sagen, Leute, die Gespräche führen, sind eben zu allen freundlich und interessiert.", "wert": 1, "warum": "Vorsichtig, gut. Nachfragen zum Projekt gehen aber über Höflichkeit hinaus." }
+    ] },
+    { "id": "lesen-fc-011", "faehigkeit": "lesen.buendel", "stufe": 4, "frage": "Welche Kombination spricht am ehesten dafür, dass jemand ein Gespräch beenden möchte?", "antworten": [
+      { "text": "Kürzere Antworten.", "wert": 1, "warum": "Ein Hinweis – allein kann es auch Müdigkeit oder Nachdenken sein." },
+      { "text": "Kürzere Antworten, Blick zur Tür, Jacke schon an.", "wert": 2, "warum": "Drei Zeichen in eine Richtung, aus Worten und Körper." },
+      { "text": "Verschränkte Arme, übereinandergeschlagene Beine und eine gerunzelte Stirn.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Drei Haltungen, die alle vieles heißen können – keines zeigt Richtung Ausgang." }
+    ] },
+    { "id": "lesen-fc-012", "faehigkeit": "lesen.buendel", "stufe": 5, "frage": "Du schlägst deiner Schwester vor, die Eltern an Weihnachten gemeinsam zu besuchen. Sie sagt „Ja, schon …“, schaut aufs Handy und wechselt das Thema. Was ist die beste Einschätzung?", "antworten": [
+      { "text": "Sie hat Ja gesagt – also ist es abgemacht.", "wert": 0, "tendenz": "ueberhoeren", "warum": "Das Wort ist ein Zeichen. Zögern, Blick weg und Themenwechsel zeigen woandershin." },
+      { "text": "Mehrere Zeichen für ein Aber – später freundlich nachfragen.", "wert": 2, "warum": "Du liest das Bündel als Vermutung und prüfst sie in einem ruhigen Moment." },
+      { "text": "Sie will nicht und traut sich nicht, es mir zu sagen, weil ich sonst beleidigt wäre.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Aus einem Aber wird eine ganze Geschichte über ihre Gründe." },
+      { "text": "Unklar – abwarten, ob sie von selbst darauf zurückkommt.", "wert": 1, "warum": "Geduldig. Nur kommen viele nicht von selbst darauf zurück." }
+    ] },
+    { "id": "lesen-fc-013", "faehigkeit": "lesen.gesicht", "stufe": 2, "frage": "Ein Kollege lächelt, während er dir erzählt, dass sein Projekt gestrichen wurde. Was ist am wahrscheinlichsten?", "antworten": [
+      { "text": "Es ist ihm egal.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Ein Lächeln heißt nicht Gleichgültigkeit – es kann Verlegenheit oder Galgenhumor sein." },
+      { "text": "Das Lächeln kann Verlegenheit oder Galgenhumor sein – egal ist es ihm deshalb nicht.", "wert": 2, "warum": "Dasselbe Gesicht kann in verschiedenen Lagen Verschiedenes heißen." },
+      { "text": "Er überspielt etwas.", "wert": 1, "warum": "Gut möglich – aber auch das ist eine Deutung. Er kann es auch wirklich gelassen nehmen." },
+      { "text": "Er freut sich insgeheim, dass er jetzt weniger Arbeit hat.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine Unterstellung, die aus einem Lächeln nicht zu holen ist." }
+    ] },
+    { "id": "lesen-fc-014", "faehigkeit": "lesen.gesicht", "stufe": 4, "frage": "Ein Bekannter erzählt: „Ich hab einen Kurs gemacht – jetzt sehe ich an Mikroausdrücken, wenn jemand lügt.“ Was stimmt?", "antworten": [
+      { "text": "Stimmt – geübte Leute erkennen das.", "wert": 0, "tendenz": "glaeubig", "warum": "In einer unabhängigen Prüfung verbesserte genau so ein Training die Lügenerkennung nicht." },
+      { "text": "Solche Ausdrücke sind selten, und das Training half in einer unabhängigen Prüfung nicht beim Lügenerkennen.", "wert": 2, "warum": "Flüchtige Ausdrücke kamen in einer Studie in rund 2 Prozent der Fälle vor; das Training brachte nichts." },
+      { "text": "Vielleicht hilft es ein bisschen, aber man sollte sich nicht allein darauf verlassen, sondern es nur ergänzend nutzen.", "wert": 1, "warum": "Vorsichtig, gut – aber verlassen sollte man sich darauf gar nicht." }
+    ] },
+    { "id": "lesen-fc-015", "faehigkeit": "lesen.gesicht", "stufe": 6, "frage": "Eine neue Kollegin zeigt kaum Mimik, auch wenn alle lachen. Ein Kollege meint: „Die ist kalt.“ Was sagst du?", "antworten": [
+      { "text": "„Wenig im Gesicht heißt nicht wenig Gefühl. Lernen wir sie erst mal kennen.“", "wert": 2, "warum": "Du hältst die Deutung offen und lädst zum Kennenlernen ein." },
+      { "text": "„Vielleicht ist sie autistisch oder hat irgendeine andere Störung, das würde es erklären.“", "wert": 0, "tendenz": "diagnose", "warum": "Aus Alltagsverhalten stellt man keine Diagnosen – und es hilft niemandem." },
+      { "text": "„Stimmt, die passt nicht so richtig zu uns.“", "wert": 0, "tendenz": "etikett", "warum": "Ein Urteil aus wenigen Tagen und einem Zeichen." },
+      { "text": "Nichts sagen.", "wert": 1, "warum": "Du machst nicht mit – gut. Ein Satz dagegen hilft ihr mehr." }
+    ] },
+    { "id": "lesen-fc-016", "faehigkeit": "lesen.stimme", "stufe": 3, "frage": "Am Telefon sagt deine Mutter: „Mir geht's gut.“ Leise, langsam, mit einem Seufzer davor. Was tust du?", "antworten": [
+      { "text": "„Okay, schön!“ – und weiter zum nächsten Thema.", "wert": 0, "tendenz": "ueberhoeren", "warum": "Ton und Wort passen nicht zusammen – das überhörst du." },
+      { "text": "Mir merken, dass sie anders klingt als sonst, und morgen noch mal anrufen, um zu hören, wie es dann ist.", "wert": 1, "warum": "Aufmerksam und geduldig. Eine sanfte Frage jetzt würde es schneller klären." },
+      { "text": "„Du klingst müde. Wirklich alles gut?“", "wert": 2, "warum": "Du nennst, was du hörst, und fragst offen nach." },
+      { "text": "„Du klingst ja furchtbar – was ist passiert?“", "wert": 0, "tendenz": "dramatisieren", "warum": "Eine starke Deutung, die sie in die Ecke drängt." }
+    ] },
+    { "id": "lesen-fc-017", "faehigkeit": "lesen.stimme", "stufe": 4, "frage": "Warum lohnt es sich, bei wichtigen Gesprächen besonders auf die Stimme zu achten?", "antworten": [
+      { "text": "Weil man an der Stimme Lügen erkennt.", "wert": 0, "tendenz": "glaeubig", "warum": "Auch an der Stimme erkennt man Lügen kaum besser als der Zufall." },
+      { "text": "Weil Tempo, Pausen und Zögern oft verraten, wie ein Satz gemeint ist.", "wert": 2, "warum": "Die Stimme trägt viel – in Experimenten lasen Menschen Gefühle an ihr allein sogar etwas genauer." },
+      { "text": "Weil laut einer bekannten Formel die Stimme viel mehr wirkt als jedes Wort, das man sagt.", "wert": 0, "tendenz": "glaeubig", "warum": "Die Formel 7-38-55 gilt nicht für Gespräche – sie stammt aus Versuchen mit einzelnen Wörtern." },
+      { "text": "Weil am Telefon das Gesicht fehlt.", "wert": 1, "warum": "Ein Grund – aber auch im Gespräch von Angesicht trägt die Stimme viel." }
+    ] },
+    { "id": "lesen-fc-018", "faehigkeit": "lesen.stimme", "stufe": 6, "frage": "Ein Kunde sagt am Ende eines Telefonats schnell und laut: „Ja, ja, machen wir alles so!“ und legt fast sofort auf. Sonst verabschiedet er sich ausführlich. Was tust du?", "antworten": [
+      { "text": "Er ist begeistert – loslegen.", "wert": 0, "tendenz": "ueberhoeren", "warum": "Laut und schnell ist hier eher Eile als Begeisterung – gemessen an seiner Grundlinie." },
+      { "text": "Kurz schriftlich zusammenfassen und um Bestätigung bitten.", "wert": 2, "warum": "Vielleicht Eile, vielleicht Abwimmeln – eine Bestätigung klärt es, ohne ihm etwas zu unterstellen." },
+      { "text": "Umsetzen wie besprochen, er hat ja zugestimmt und wird sich schon melden, wenn etwas nicht passt.", "wert": 1, "warum": "Die Worte zählen. Aber der Ton weicht ab – eine kurze Bestätigung kostet nichts." },
+      { "text": "Zurückrufen und fragen, warum er so unfreundlich war.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Aus Eile wird Unfreundlichkeit – und ein Vorwurf." }
+    ] },
+    { "id": "lesen-fc-019", "faehigkeit": "lesen.pruefen", "stufe": 2, "frage": "Dein Mitbewohner kommt nach Hause, stellt die Tasche ab und sagt kaum etwas. Welcher Satz ist am besten?", "antworten": [
+      { "text": "„Was hab ich denn jetzt schon wieder falsch gemacht, dass du so schweigst?“", "wert": 0, "tendenz": "gedankenlesen", "warum": "Du beziehst seine Stille auf dich – eine Deutung, die er erst widerlegen muss." },
+      { "text": "„Du bist so still heute. Magst du erzählen?“", "wert": 2, "warum": "Beobachtung plus offene Frage – er kann reden oder nicht." },
+      { "text": "„Schlechter Tag, oder?“", "wert": 1, "warum": "Freundlich, aber die Antwort ist schon vorgegeben." },
+      { "text": "„Lass deine schlechte Laune bitte nicht an mir aus.“", "wert": 0, "tendenz": "vorwurf", "warum": "Ein Vorwurf für etwas, das er noch gar nicht getan hat." }
+    ] },
+    { "id": "lesen-fc-020", "faehigkeit": "lesen.pruefen", "stufe": 4, "frage": "Ein Teammitglied sagt in der Videokonferenz nichts mehr, seit sein Vorschlag abgelehnt wurde. Was ist am besten?", "antworten": [
+      { "text": "Nichts tun – er ist erwachsen.", "wert": 1, "warum": "Respektvoll. Aber eine kurze, offene Frage gibt ihm die Wahl, ob er reden will." },
+      { "text": "Vor allen fragen, ob er jetzt beleidigt ist.", "wert": 0, "tendenz": "bloßstellen", "warum": "Eine Deutung vor der Gruppe – das macht es schwerer, nicht leichter." },
+      { "text": "Danach kurz anrufen: „Du warst danach sehr still. Wie geht's dir mit der Entscheidung?“", "wert": 2, "warum": "Unter vier Augen, mit Beobachtung und offener Frage." }
+    ] },
+    { "id": "lesen-fc-021", "faehigkeit": "lesen.pruefen", "stufe": 5, "frage": "Ein Verkäufer im Möbelhaus sagt nach zwei Minuten: „Ich sehe sofort: Sie sind jemand, der Qualität schätzt, aber kein Geld zum Fenster hinauswirft.“ Wie ordnest du das ein?", "antworten": [
+      { "text": "Er hat mich gut erkannt – dem kann ich vertrauen.", "wert": 0, "tendenz": "glaeubig", "warum": "Der Satz passt auf fast jeden – genau deshalb wirkt er so treffend." },
+      { "text": "Ein Satz, der auf fast jeden passt und Nähe schaffen soll. Ich bleibe bei meinen eigenen Kriterien.", "wert": 2, "warum": "Du erkennst den Barnum-Satz und lässt ihn deine Entscheidung nicht lenken." },
+      { "text": "Ein Betrüger – ich gehe sofort.", "wert": 0, "tendenz": "abwerten", "warum": "Freundliche Verkaufssätze sind noch kein Betrug. Es reicht, sie nicht als Menschenkenntnis zu nehmen." },
+      { "text": "Vielleicht stimmt es ja, und er kann mir deshalb besonders gut zeigen, was zu mir passt.", "wert": 1, "warum": "Beratung kann helfen – aber nicht, weil er dich durchschaut hätte. Bleib bei deinen eigenen Kriterien." }
+    ] },
+    { "id": "lesen-fc-022", "faehigkeit": "lesen.eigen", "stufe": 2, "frage": "Du bist neu im Sportverein. Wie wirkst du in den ersten Minuten am ehesten sympathisch?", "antworten": [
+      { "text": "Gleich erzählen, was du sportlich schon alles erreicht hast, damit sie wissen, wer du bist.", "wert": 0, "tendenz": "kompetenz-zuerst", "warum": "Erst Wärme, dann Kompetenz – Leistung zuerst wirkt schnell wie Abstand." },
+      { "text": "Dich anderen zuwenden, Namen merken, nachfragen.", "wert": 2, "warum": "Zuwendung, Namen und Interesse sind gut lesbare Zeichen von Wärme." },
+      { "text": "Abwarten, bis jemand auf dich zukommt.", "wert": 1, "warum": "Verständlich, aber andere lesen Zurückhaltung leicht als Abstand." }
+    ] },
+    { "id": "lesen-fc-023", "faehigkeit": "lesen.eigen", "stufe": 4, "frage": "Du willst einem Kollegen zeigen, dass du seine Hilfe bei einer Abgabe sehr geschätzt hast. Was kommt am sichersten an?", "antworten": [
+      { "text": "Ihm die ganze Woche besonders freundlich zunicken – das versteht er schon.", "wert": 0, "tendenz": "durchsichtig", "warum": "Andere lesen dich schlechter, als du denkst. Freundliches Nicken kann vieles heißen." },
+      { "text": "Ihm einen Kaffee hinstellen.", "wert": 1, "warum": "Eine nette Geste – mit einem Satz dazu kommt sie sicher an." },
+      { "text": "Es ihm sagen: „Danke, das hat mir viel Arbeit erspart.“", "wert": 2, "warum": "Ausgesprochen ist eindeutig – nichts muss erraten werden." }
+    ] },
+    { "id": "lesen-fc-024", "faehigkeit": "lesen.eigen", "stufe": 5, "frage": "Bei deinem Abschied aus dem alten Team bist du gerührt, sagst aber wenig. Später hörst du: „Dem war der Abschied wohl egal.“ Was machst du daraus?", "antworten": [
+      { "text": "Die haben mich falsch eingeschätzt – das ist ihr Problem.", "wert": 0, "tendenz": "trotz", "warum": "Sie konnten nur sehen, was zu sehen war – und das war wenig." },
+      { "text": "Ich schreibe ihnen noch, wie viel mir das Team bedeutet hat.", "wert": 2, "warum": "Was du fühlst, sieht man nicht automatisch. Gesagt kommt es an." },
+      { "text": "Beim nächsten Abschied mehr lächeln, damit man es mir ansieht, auch wenn es mir schwerfällt.", "wert": 1, "warum": "Zeichen helfen etwas – ein Satz ist aber eindeutiger als jedes Lächeln." },
+      { "text": "Mich ärgern, dass ich so verschlossen bin.", "wert": 0, "tendenz": "selbstabwertung", "warum": "Wenig zu zeigen ist keine Schwäche. Es reicht, das Wichtige zu sagen." }
+    ] }
+  ],
+  "selbstbild": [
+    { "id": "lesen-sb-1", "text": "Ich kann beschreiben, was ich sehe, ohne es gleich zu deuten.", "faehigkeit": "lesen.beobachten" },
+    { "id": "lesen-sb-2", "text": "Bei vertrauten Menschen merke ich, wenn sie anders sind als sonst.", "faehigkeit": "lesen.grundlinie" },
+    { "id": "lesen-sb-3", "text": "Aus einem einzelnen Zeichen ziehe ich keine festen Schlüsse.", "faehigkeit": "lesen.buendel" },
+    { "id": "lesen-sb-4", "text": "Wenn ich etwas über jemanden vermute, frage ich nach, statt mir sicher zu sein.", "faehigkeit": "lesen.pruefen" },
+    { "id": "lesen-sb-5", "text": "Ich weiß ungefähr, wie ich auf andere wirke – und sage, was man mir nicht ansieht.", "faehigkeit": "lesen.eigen" }
+  ],
+  "verhalten": [
+    { "id": "lesen-vh-1", "text": "Wie oft hast du in den letzten zwei Wochen eine Vermutung über jemanden als Frage angesprochen?", "faehigkeit": "lesen.pruefen" },
+    { "id": "lesen-vh-2", "text": "Wie oft ist dir in den letzten zwei Wochen aufgefallen, dass jemand anders war als sonst?", "faehigkeit": "lesen.grundlinie" },
+    { "id": "lesen-vh-3", "text": "Wie oft hast du in den letzten zwei Wochen ausgesprochen, was du fühlst, statt darauf zu bauen, dass man es dir ansieht?", "faehigkeit": "lesen.eigen" }
+  ]
+}

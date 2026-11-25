@@ -13,6 +13,7 @@ import ScanPanel from '../components/hardwareInventory/ScanPanel'
 import ResultsView from '../components/hardwareInventory/ResultsView'
 import LostDevicesView from '../components/hardwareInventory/LostDevicesView'
 import PickupsView from '../components/hardwareInventory/PickupsView'
+import { useBereiche } from '../store/menuSichtbarStore'
 import { ladePickups, ladeStatus, offeneGeraete } from '../services/pickups'
 
 type View = { kind: 'list' } | { kind: 'scan'; runId: string } | { kind: 'results'; runId: string } | { kind: 'lost' } | { kind: 'pickups' }
@@ -30,6 +31,8 @@ export default function HardwareInventory() {
   const currentUserName = user?.displayName || user?.username || ''
 
   const [view, setView] = useState<View>({ kind: 'list' })
+  // „Verlorene Geräte“ und „Pick-Ups“ je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const { sichtbar } = useBereiche('hardware-inventory')
   const [runs, setRuns] = useState<InventoryRunSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -98,10 +101,10 @@ export default function HardwareInventory() {
       />
     )
   }
-  if (view.kind === 'lost') {
+  if (view.kind === 'lost' && sichtbar('lost')) {
     return <LostDevicesView currentUser={currentUserName} onBack={() => setView({ kind: 'list' })} />
   }
-  if (view.kind === 'pickups') {
+  if (view.kind === 'pickups' && sichtbar('pickups')) {
     return <PickupsView currentUser={currentUserName} onBack={() => setView({ kind: 'list' })} />
   }
 
@@ -116,15 +119,15 @@ export default function HardwareInventory() {
         </div>
         <div className="ml-auto flex items-center gap-2">
           <button onClick={() => reload(true)} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/40 border border-border" title="Aktualisieren"><RefreshCw size={13} className={loading ? 'animate-spin' : ''} /></button>
-          <button onClick={() => setView({ kind: 'lost' })} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-amber-500/40 text-amber-300 hover:bg-amber-500/10" title="Verloren gemeldete Geräte verwalten">
+          {sichtbar('lost') && <button onClick={() => setView({ kind: 'lost' })} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-amber-500/40 text-amber-300 hover:bg-amber-500/10" title="Verloren gemeldete Geräte verwalten">
             <PackageX size={14} />Verlorene Geräte
-          </button>
-          <button onClick={() => setView({ kind: 'pickups' })} className="relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-sky-500/40 text-sky-300 hover:bg-sky-500/10"
+          </button>}
+          {sichtbar('pickups') && <button onClick={() => setView({ kind: 'pickups' })} className="relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-sky-500/40 text-sky-300 hover:bg-sky-500/10"
             title={`Hier werden die abgeholten Geräte erfasst (Abholschein als Foto, PDF oder Excel hochladen).${pickupsOffen ? `
 ${pickupsOffen} Abholung(en) mit Geräten, die noch nicht auf „In transit" stehen.` : ''}`}>
             <Truck size={14} />Pick-Ups
             {pickupsOffen > 0 && <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[10px] leading-4 text-center">{pickupsOffen}</span>}
-          </button>
+          </button>}
           <button onClick={() => setImportOpen(true)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:opacity-90">
             <Plus size={14} />Neue Inventur starten
           </button>

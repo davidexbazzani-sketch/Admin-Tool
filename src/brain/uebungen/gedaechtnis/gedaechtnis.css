@@ -1,0 +1,135 @@
+/* Brain Trainer — Familie Gedächtnis (N-Back, Zahlenspanne, Blockspanne, Muster merken, Paare merken).
+   Farben nur über die Variablen --bt-… aus brain.css (dunkel und hell). Klassen mit Präfix bt-ged-. */
+
+/* ── gemeinsame Teile ── */
+.bt-ged-kopfzeile { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; min-height: 34px; }
+.bt-ged-unterzeile { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 40px; }
+/* Knöpfe der Familie: Schriftstärke ausdrücklich setzen (die allgemeine Regel „.bt-app button { font: inherit }“
+   ist stärker als .bt-knopf und würde sie sonst auf normal zurückstellen) */
+.bt-knopf.bt-ged-knopf { font-weight: 600; font-size: 14px; }
+.bt-knopf.bt-ged-knopf[data-klein] { padding: 6px 13px; font-size: 13px; }
+
+/* Richtung der Wiedergabe: vorwärts ruhig, RÜCKWÄRTS unübersehbar */
+.bt-ged-modus {
+  display: inline-flex; align-items: center; gap: 7px; padding: 5px 13px; border-radius: 999px;
+  font: 600 12.5px/1.2 var(--bt-schrift); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+  background: var(--bt-akzent-weich); color: var(--bt-akzent-stark);
+}
+.bt-ged-modus[data-rueck] { background: var(--bt-akzent2); color: var(--bt-akzent-ink); box-shadow: 0 0 0 4px var(--bt-akzent2-weich); }
+
+/* Rückmeldung als Pille */
+.bt-ged-meldung {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 34px; padding: 6px 16px; border-radius: 999px;
+  font: 600 14px/1.2 var(--bt-schrift); color: var(--bt-leise); white-space: nowrap;
+}
+.bt-ged-meldung[data-art='gut'] { background: var(--bt-gut-weich); color: var(--bt-gut); }
+.bt-ged-meldung[data-art='schlecht'] { background: var(--bt-schlecht-weich); color: var(--bt-schlecht); }
+.bt-ged-meldung[data-art='warn'] { background: color-mix(in srgb, var(--bt-warn) 16%, transparent); color: var(--bt-warn); }
+
+/* kleine Zählpunkte (wie viele Glieder schon gezeigt/angeklickt) */
+.bt-ged-punkte { display: flex; align-items: center; gap: 7px; min-height: 12px; }
+.bt-ged-punkt { width: 10px; height: 10px; border-radius: 50%; background: var(--bt-flaeche2); border: 1px solid var(--bt-rand); transition: background .12s, border-color .12s; }
+.bt-ged-punkt[data-an] { background: var(--bt-akzent); border-color: var(--bt-akzent); }
+
+/* Legende unter einem ausgewerteten Feld */
+.bt-ged-legende { display: inline-flex; align-items: center; gap: 14px; font-size: 12px; color: var(--bt-leise); }
+.bt-ged-legende > span { display: inline-flex; align-items: center; gap: 6px; }
+.bt-ged-legende i { display: inline-block; width: 13px; height: 13px; border-radius: 4px; border: 1.5px solid var(--bt-rand); }
+.bt-ged-legende i[data-gut] { background: var(--bt-gut-weich); border-color: var(--bt-gut); }
+.bt-ged-legende i[data-schlecht] { background: var(--bt-schlecht-weich); border-color: var(--bt-schlecht); }
+.bt-ged-legende i[data-verpasst] { background: var(--bt-akzent-weich); border: 1.5px dashed var(--bt-akzent); }
+
+/* ── N-Back ── */
+.bt-ged-nb { display: flex; align-items: flex-start; justify-content: center; gap: 30px; width: 100%; max-width: 860px; margin-top: 6px; }
+.bt-ged-nb-links { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.bt-ged-nb-raster {
+  display: grid; grid-template-columns: repeat(3, 112px); grid-auto-rows: 112px; gap: 10px; padding: 14px;
+  border-radius: 22px; background: var(--bt-flaeche); border: 2px solid var(--bt-rand); transition: border-color .12s;
+}
+.bt-ged-nb-raster[data-art='gut'] { border-color: var(--bt-gut); }
+.bt-ged-nb-raster[data-art='schlecht'] { border-color: var(--bt-schlecht); }
+.bt-ged-nb-raster[data-art='warn'] { border-color: var(--bt-warn); }
+.bt-ged-nb-zelle { border-radius: 15px; background: var(--bt-bg2); border: 1.5px solid var(--bt-rand); transition: background .07s, border-color .07s, box-shadow .07s; }
+.bt-ged-nb-zelle[data-an] { background: var(--bt-akzent); border-color: var(--bt-akzent); box-shadow: 0 0 0 4px var(--bt-akzent-weich), 0 0 28px var(--bt-akzent-weich); }
+.bt-ged-nb-zelle[data-an][data-art='gut'] { background: var(--bt-gut); border-color: var(--bt-gut); box-shadow: 0 0 0 4px var(--bt-gut-weich), 0 0 28px var(--bt-gut-weich); }
+.bt-ged-nb-zelle[data-an][data-art='schlecht'] { background: var(--bt-schlecht); border-color: var(--bt-schlecht); box-shadow: 0 0 0 4px var(--bt-schlecht-weich), 0 0 28px var(--bt-schlecht-weich); }
+.bt-ged-nb-seite { width: 316px; display: flex; flex-direction: column; gap: 14px; padding: 20px; }
+.bt-ged-nb-n { font: 600 46px/1 var(--bt-schrift); letter-spacing: -0.03em; color: var(--bt-akzent-stark); }
+.bt-ged-nb-regel { font-size: 14.5px; line-height: 1.45; margin: 0; }
+.bt-ged-nb-regel b { color: var(--bt-akzent-stark); font-family: var(--bt-schrift); }
+.bt-ged-nb-kette { display: flex; align-items: flex-start; gap: 7px; }
+.bt-ged-nb-glied { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; color: var(--bt-stumm); min-width: 34px; }
+.bt-ged-nb-glied > i { display: block; width: 30px; height: 30px; border-radius: 8px; border: 1.5px dashed var(--bt-rand); }
+.bt-ged-nb-glied[data-rolle] { color: var(--bt-akzent-stark); font-weight: 600; }
+.bt-ged-nb-glied[data-rolle] > i { border: 1.5px solid var(--bt-akzent); background: var(--bt-akzent-weich); }
+.bt-ged-nb-glied[data-rolle='jetzt'] > i { background: var(--bt-akzent); }
+.bt-ged-nb-seite .bt-ged-nb-knopf { width: 100%; padding: 15px 22px; font-size: 17px; font-weight: 600; }
+.bt-ged-nb-stand { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── Zahlenspanne ── */
+.bt-ged-zs-reiz { min-width: 260px; min-height: 212px; font-size: 112px; font-variant-numeric: tabular-nums; }
+.bt-ged-zs-reiz > span { animation: bt-ged-pop .16s ease-out; }
+.bt-ged-zs-reiz[data-rueck] { border-color: var(--bt-akzent2); }
+@keyframes bt-ged-pop { from { opacity: 0; transform: scale(.82); } }
+.bt-ged-schlitze { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.bt-ged-schlitz {
+  display: flex; align-items: center; justify-content: center; width: 54px; height: 64px; border-radius: 13px;
+  border: 1.5px solid var(--bt-rand); background: var(--bt-flaeche); font: 600 32px/1 var(--bt-schrift); font-variant-numeric: tabular-nums;
+}
+.bt-ged-schlitz[data-aktiv] { border-color: var(--bt-akzent); box-shadow: 0 0 0 3px var(--bt-akzent-weich); }
+.bt-ged-schlitz[data-gut] { border-color: var(--bt-gut); background: var(--bt-gut-weich); }
+.bt-ged-schlitz[data-schlecht] { border-color: var(--bt-schlecht); background: var(--bt-schlecht-weich); }
+.bt-ged-schlitze[data-klein] .bt-ged-schlitz { width: 42px; height: 48px; border-radius: 10px; font-size: 24px; }
+/* Beschriftung links; rechts gleich viel Luft, damit die Ziffern in der Mitte bleiben */
+.bt-ged-schlitz-zeile { display: flex; align-items: center; gap: 14px; padding-right: 124px; }
+.bt-ged-schlitz-zeile > .bt-label { width: 110px; text-align: right; white-space: nowrap; }
+.bt-ged-pad { display: grid; grid-template-columns: repeat(3, 72px); grid-auto-rows: 52px; gap: 8px; }
+.bt-ged-pad .bt-feld { font: 600 23px/1 var(--bt-schrift); color: var(--bt-ink); }
+.bt-ged-pad .bt-feld:disabled { opacity: .4; cursor: not-allowed; }
+.bt-ged-pad .bt-knopf { padding: 0; font-size: 16px; font-weight: 600; }
+
+/* ── Corsi-Blockspanne ── */
+.bt-ged-brett { position: relative; flex: none; border-radius: 22px; background: var(--bt-flaeche); border: 1.5px solid var(--bt-rand); }
+.bt-ged-brett[data-rueck] { border-color: var(--bt-akzent2); }
+.bt-ged-brett .bt-ged-block {
+  position: absolute; display: flex; align-items: center; justify-content: center; padding: 0; border-radius: 15px;
+  border: 1.5px solid color-mix(in srgb, var(--bt-akzent) 38%, var(--bt-rand));
+  background: color-mix(in srgb, var(--bt-akzent) 17%, var(--bt-flaeche2));
+  font: 600 26px/1 var(--bt-schrift); font-variant-numeric: tabular-nums; color: var(--bt-ink);
+  cursor: pointer; user-select: none; transition: background .08s, border-color .08s, box-shadow .08s, transform .08s;
+}
+.bt-ged-block:disabled { cursor: default; }
+.bt-ged-block:hover:not(:disabled) { border-color: var(--bt-akzent); }
+.bt-ged-block:active:not(:disabled) { transform: scale(.96); }
+.bt-ged-block[data-an] { background: var(--bt-akzent); border-color: var(--bt-akzent); color: var(--bt-akzent-ink); box-shadow: 0 0 0 5px var(--bt-akzent-weich), 0 0 30px var(--bt-akzent-weich); }
+.bt-ged-block[data-gut] { background: var(--bt-gut-weich); border-color: var(--bt-gut); color: var(--bt-gut); }
+.bt-ged-block[data-schlecht] { background: var(--bt-schlecht-weich); border-color: var(--bt-schlecht); color: var(--bt-schlecht); }
+
+/* ── Muster merken ── */
+.bt-ged-mu-gitter { display: grid; gap: 8px; padding: 12px; border-radius: 22px; background: var(--bt-flaeche); border: 1.5px solid var(--bt-rand); }
+.bt-ged-mu-gitter .bt-feld { background: var(--bt-bg2); padding: 0; }
+.bt-ged-mu-gitter .bt-feld:disabled { cursor: default; }
+.bt-ged-mu-gitter .bt-feld[data-an] { background: var(--bt-akzent); border-color: var(--bt-akzent); color: var(--bt-akzent-ink); }
+.bt-ged-mu-gitter .bt-feld[data-gut] { background: var(--bt-gut-weich); border-color: var(--bt-gut); color: var(--bt-gut); }
+.bt-ged-mu-gitter .bt-feld[data-schlecht] { background: var(--bt-schlecht-weich); border-color: var(--bt-schlecht); color: var(--bt-schlecht); }
+.bt-ged-mu-gitter .bt-feld[data-verpasst] { background: var(--bt-akzent-weich); border: 2px dashed var(--bt-akzent); color: var(--bt-akzent-stark); }
+
+/* ── Paare merken ── */
+.bt-ged-karten { display: grid; gap: 8px; }
+.bt-ged-karte {
+  position: relative; display: flex; align-items: center; justify-content: center; padding: 0; border-radius: 13px;
+  border: 1.5px solid color-mix(in srgb, var(--bt-akzent) 45%, var(--bt-rand));
+  background: color-mix(in srgb, var(--bt-akzent) 24%, var(--bt-flaeche));
+  cursor: pointer; user-select: none; transition: border-color .12s, transform .08s, opacity .25s;
+}
+/* Rückseite: schlichtes Zeichen in der Mitte */
+.bt-ged-karte::after { content: ''; width: 30%; height: 30%; border-radius: 30%; border: 2px solid color-mix(in srgb, var(--bt-akzent) 55%, transparent); transform: rotate(45deg); }
+.bt-ged-karte:hover:not([data-offen]):not([data-gefunden]) { border-color: var(--bt-akzent); transform: translateY(-1px); }
+.bt-ged-karte:active:not([data-offen]):not([data-gefunden]) { transform: scale(.97); }
+.bt-ged-karte[data-offen], .bt-ged-karte[data-gefunden] { background: var(--bt-flaeche); cursor: default; }
+.bt-ged-karte[data-offen]::after, .bt-ged-karte[data-gefunden]::after { display: none; }
+.bt-ged-karte[data-offen] { border-color: var(--bt-akzent); box-shadow: 0 0 0 3px var(--bt-akzent-weich); }
+.bt-ged-karte[data-fehl] { border-color: var(--bt-schlecht); box-shadow: 0 0 0 3px var(--bt-schlecht-weich); }
+.bt-ged-karte[data-gefunden] { border-color: var(--bt-gut); background: var(--bt-gut-weich); opacity: .72; }
+.bt-ged-karte-bild { font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif; line-height: 1; animation: bt-ged-auf .16s ease-out; }
+@keyframes bt-ged-auf { from { transform: scaleX(.15); opacity: .3; } }

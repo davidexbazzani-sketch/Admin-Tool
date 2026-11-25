@@ -1,0 +1,350 @@
+{
+  "einheiten": [
+    {
+      "id": "lesen-1-01", "bereich": "lesen", "stufe": 1, "nr": 1,
+      "titel": "Die 7-Prozent-Legende",
+      "faehigkeiten": ["lesen.beobachten", "lesen.koerper"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Woher die Formel stammt und wofür sie nicht gilt, ist gut belegt. Dass einzelne Gesten keine feste Bedeutung haben, stützen Meta-Analysen zu Mimik und Lügen-Hinweisen; eine Liste aller Gesten wurde nie geprüft.",
+      "quellen": ["mehrabian1967", "friedman2008", "depaulo2003"],
+      "aha": "Die berühmte Zahl stammt aus einem Versuch mit einzelnen Wörtern – nicht aus Gesprächen. Und Körpersprache ist kein Wörterbuch: Was eine Geste heißt, hängt von Person und Lage ab.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Nur 7 Prozent der Wirkung kommen aus den Worten – der Rest ist Körpersprache und Stimme.", "urteil": "falsch", "warum": "Die Formel stammt aus Versuchen mit einzelnen Wörtern in widersprüchlichem Ton. In einem echten Gespräch trägt der Inhalt viel. Gezeigt wurde nur: Passen Wort und Ton nicht zusammen, achten viele eher auf den Ton." },
+        { "art": "studie", "frage": "Woher kommt die Zahl 7-38-55?", "aufbau": "1967 hörten Versuchspersonen einzelne Wörter wie „danke“ oder „vielleicht“, gesprochen in freundlichem, neutralem oder unfreundlichem Ton – teils mit Fotos von Gesichtern. Sie sollten sagen, wie die sprechende Person zu ihnen steht.", "ergebnis": "Passten Wort, Ton und Gesicht nicht zusammen, richteten sie sich eher nach Ton und Gesicht. Aus zwei solchen Versuchen wurde später die Formel 7-38-55.", "grenze": "Einzelne Wörter, nur Zu- oder Abneigung, kleine Gruppen. Mehrabian selbst schreibt, die Formel gelte nicht, wenn jemand nicht über Gefühle spricht. Mehr dazu im Bereich Stimme.", "beleg": "B", "quellen": ["mehrabian1967"] },
+        { "art": "karte", "titel": "Kein Wörterbuch", "text": "Ratgeber versprechen gern ein Wörterbuch: Arme verschränkt heißt Abwehr, an die Nase fassen heißt Lüge. Die Forschung findet für einzelne Gesten kaum feste Bedeutungen. In einem Versuch hielten Menschen mit verschränkten Armen bei einer schweren Aufgabe sogar länger durch. Körpersprache zeigt etwas – was, hängt von Person und Lage ab. Darum lernst du hier kein Wörterbuch, sondern ein Vorgehen." },
+        { "art": "zuordnen", "kopf": { "id": "lesen-1-01-a", "faehigkeit": "lesen.koerper", "stufe": 1, "kanal": "wissen" },
+          "auftrag": "Mythos oder gut begründet?",
+          "faecher": ["Mythos", "gut begründet"],
+          "karten": [
+            { "text": "Verschränkte Arme heißen Ablehnung.", "fach": 0 },
+            { "text": "Wer sich an die Nase fasst, lügt.", "fach": 0 },
+            { "text": "Nur 7 Prozent der Wirkung kommen aus Worten.", "fach": 0 },
+            { "text": "Widersprechen sich Wort und Ton, achten viele eher auf den Ton.", "fach": 1 },
+            { "text": "Was eine Geste bedeutet, hängt von Person und Lage ab.", "fach": 1 },
+            { "text": "Verschränkte Arme können auch Kälte oder Nachdenken heißen.", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "lesen-1-01-b", "faehigkeit": "lesen.koerper", "stufe": 2, "kanal": "wissen" },
+          "frage": "Du erklärst in der Teamrunde einen Vorschlag. Miriam verschränkt dabei die Arme. Welcher Gedanke ist am klügsten?",
+          "antworten": [
+            { "text": "„Sie ist dagegen. Ich schwäche den Vorschlag lieber gleich ab, bevor sie etwas sagt.“", "wert": 0, "tendenz": "einzelzeichen", "warum": "Ein einzelnes Zeichen als Urteil – und du änderst deinen Vorschlag wegen einer Vermutung." },
+            { "text": "„Kann vieles heißen. Was zeigt sie sonst noch?“", "wert": 2, "warum": "Du bleibst offen und schaust nach weiteren Zeichen, bevor du etwas daraus machst." },
+            { "text": "„Ihr ist bestimmt nur kalt.“", "wert": 1, "warum": "Eine gute zweite Erklärung – aber ebenso geraten wie „Ablehnung“. Besser: offen bleiben und mehr ansehen." },
+            { "text": "„Ist egal – Körpersprache ist sowieso Unsinn.“", "wert": 0, "tendenz": "abwerten", "warum": "Körpersprache zeigt durchaus etwas, nur nicht wie ein Wörterbuch. Wer gar nicht hinsieht, verpasst Hinweise." }
+          ] },
+        { "art": "reflexion", "frage": "Welche „Bedeutung“ einer Geste hast du bisher für sicher gehalten? Was könnte sie noch heißen?" }
+      ],
+      "regel": "Körpersprache ist kein Wörterbuch – sie braucht Person und Lage.",
+      "merkkarten": [
+        { "id": "lesen-1-01-m1", "frage": "Woher stammt die Formel 7-38-55?", "antwort": "Aus Versuchen mit einzelnen Wörtern in widersprüchlichem Ton – nicht aus echten Gesprächen." },
+        { "id": "lesen-1-01-m2", "frage": "Was heißen verschränkte Arme?", "antwort": "Allein fast nichts: Kälte, Bequemlichkeit, Nachdenken – oder auch Ablehnung. Es braucht mehr Zeichen und die Lage." }
+      ]
+    },
+    {
+      "id": "lesen-1-02", "bereich": "lesen", "stufe": 1, "nr": 2,
+      "titel": "Beobachten ist nicht deuten",
+      "faehigkeiten": ["lesen.beobachten"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Die Trennung von Beobachtung und Deutung ist bewährtes Praxiswissen. Gestützt wird sie durch die Forschung zum Bestätigungsfehler: Eine früh festgelegte Deutung lenkt, was man danach noch sieht.",
+      "quellen": ["praxis-lesen", "nickerson1998"],
+      "aha": "„Sie verschränkt die Arme“ ist eine Beobachtung. „Sie lehnt ab“ ist eine Deutung. Wer beides trennt, hält mehrere Erklärungen offen – und hat etwas, das er nachfragen kann.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Nach der Besprechung fragt Dr. Albers dich, wie Tarek die neue Aufgabe aufgenommen hat.", "schwach": "„Er war total genervt und hält nichts davon.“", "stark": "„Er hat kaum etwas gesagt und zweimal aufs Handy geschaut. Ob das an der Aufgabe lag, weiß ich nicht.“", "frage": "Welche Antwort hilft Albers mehr?", "unterschied": "Die erste ist eine Deutung, die wie eine Tatsache klingt – und Tarek bekommt ein Etikett. Die zweite sagt, was zu sehen war, und lässt offen, was es heißt. Darauf kann Albers aufbauen." },
+        { "art": "karte", "text": "Eine Beobachtung ist, was eine Kamera aufnehmen würde: „Sie schaut auf den Boden.“ Eine Deutung ist, was du daraus machst: „Sie schämt sich.“ Deuten ist menschlich und geht blitzschnell. Der Trick ist, den Schritt zu bemerken – und zu jeder Deutung eine zweite, harmlose zu finden. Wer so liest, bleibt offen. Und eine Beobachtung lässt sich viel leichter ansprechen als ein Urteil." },
+        { "art": "zuordnen", "kopf": { "id": "lesen-1-02-a", "faehigkeit": "lesen.beobachten", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Beobachtung oder Deutung?",
+          "faecher": ["Beobachtung", "Deutung"],
+          "karten": [
+            { "text": "Er tippt mit dem Fuß.", "fach": 0 },
+            { "text": "Er ist ungeduldig.", "fach": 1 },
+            { "text": "Sie hat seit zehn Minuten nichts gesagt.", "fach": 0 },
+            { "text": "Sie ist beleidigt.", "fach": 1 },
+            { "text": "Er lacht laut und lange.", "fach": 0 },
+            { "text": "Er will sich einschmeicheln.", "fach": 1 },
+            { "text": "Sie runzelt die Stirn, als die Zahl kommt.", "fach": 0 },
+            { "text": "Ihr passt die Zahl nicht.", "fach": 1 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "lesen-1-02-b", "faehigkeit": "lesen.beobachten", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Mach aus der Deutung eine Beobachtung – und nenn zwei mögliche Erklärungen.",
+          "vorlage": "„Lena hat keine Lust auf das Projekt.“ (Lena hat in der Besprechung nichts gesagt und ihren Block nicht aufgeschlagen.)",
+          "kriterien": ["beschreibt nur, was zu sehen war", "nennt mindestens zwei Erklärungen", "ohne Etikett"],
+          "muster": ["„Lena hat nichts gesagt und den Block zugelassen. Vielleicht passt ihr das Projekt nicht – vielleicht war sie mit dem Kopf woanders.“", "„Sie war still und hat nicht mitgeschrieben. Kann Zurückhaltung sein, kann Müdigkeit sein, kann Skepsis sein.“"] },
+        { "art": "auswahl", "kopf": { "id": "lesen-1-02-c", "faehigkeit": "lesen.beobachten", "stufe": 2, "kanal": "wissen" },
+          "frage": "Herr Petersen bekommt dein Angebot. Welcher Satz über ihn ist eine reine Beobachtung?",
+          "antworten": [
+            { "text": "„Er fand den Preis offensichtlich zu hoch.“", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine Deutung, die wie eine Tatsache klingt. Vielleicht hat er die Zahl nur nicht verstanden – er hört nicht mehr gut." },
+            { "text": "„Er hat beim Preis kurz gestockt und dann ‚hm‘ gesagt.“", "wert": 2, "warum": "Nur das, was zu sehen und zu hören war. Was es bedeutet, bleibt offen – und lässt sich erfragen." },
+            { "text": "„Er hat beim Preis gestockt – wohl, weil er überrascht war.“", "wert": 1, "warum": "Beginnt als Beobachtung und kippt in eine Deutung. Die Deutung ist möglich, aber nur eine von mehreren." },
+            { "text": "„Man hat gleich gemerkt, dass er mit dem Angebot nicht zufrieden war.“", "wert": 0, "tendenz": "gedankenlesen", "warum": "„Man hat gemerkt“ macht aus einem Eindruck eine Gewissheit. Wer gemerkt hat, was genau?" }
+          ] },
+        { "art": "mission", "ref": "lesen-m-01" }
+      ],
+      "regel": "Erst sagen, was du siehst – dann, was es heißen könnte. In der Mehrzahl.",
+      "merkkarten": [
+        { "id": "lesen-1-02-m1", "frage": "Wie erkennst du eine Beobachtung?", "antwort": "Eine Kamera könnte sie aufnehmen: „Sie schaut auf den Boden“ – nicht „Sie schämt sich“." },
+        { "id": "lesen-1-02-m2", "frage": "Was tust du mit einer Deutung?", "antwort": "Eine zweite, harmlose Erklärung danebenstellen – und offen bleiben." }
+      ],
+      "mission": "lesen-m-01"
+    },
+    {
+      "id": "lesen-1-03", "bereich": "lesen", "stufe": 1, "nr": 3,
+      "titel": "Die Grundlinie",
+      "faehigkeiten": ["lesen.grundlinie"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Mit der Grundlinie zu vergleichen ist bewährtes Praxiswissen aus Befragung und Beratung. Dass Ausdrücke zwischen Menschen und Lagen stark schwanken, ist gut belegt; wie viel der Vergleich genau bringt, ist nicht gemessen.",
+      "quellen": ["praxis-lesen", "navarro2008", "barrett2019"],
+      "aha": "Auffällig ist nicht, wie jemand ist – sondern was sich ändert. Wer still ist, ist nicht verdächtig. Wer plötzlich still wird, verdient einen zweiten Blick.",
+      "schritte": [
+        { "art": "vergleich", "lage": "In der Montagsrunde sagen zwei kein Wort: Lena, die seit drei Wochen im Team ist und meist zuhört, und Tarek, der sonst jede Runde mit einem Witz eröffnet.", "schwach": "„Beide sind still – beide haben wohl ein Problem.“", "stark": "„Bei Lena ist Stille ihre gewohnte Art. Bei Tarek ist sie neu – da lohnt ein zweiter Blick.“", "frage": "Welche Einschätzung ist klüger?", "unterschied": "Dasselbe Verhalten bedeutet bei zwei Menschen etwas anderes. Entscheidend ist der Vergleich mit dem, wie jemand sonst ist – seiner Grundlinie." },
+        { "art": "karte", "titel": "Das Gewohnte kennen", "text": "Die Grundlinie ist das Gewohnte einer Person: wie schnell sie spricht, wie laut, wie viel sie lacht, wohin sie beim Nachdenken schaut, wie ruhig ihre Hände sind. Erst vor diesem Hintergrund fällt auf, was anders ist. Achte auch auf den Zeitpunkt: Nach welchem Thema hat es sich geändert? Und denk an die Lage – Müdigkeit, Kälte oder eine schlechte Nachricht verschieben jede Grundlinie." },
+        { "art": "szene", "kopf": { "id": "lesen-1-03-a", "faehigkeit": "lesen.grundlinie", "stufe": 3, "kanal": "wissen" },
+          "beschreibung": "Kantine, Mittagspause. Miriam sitzt dir gegenüber. Sonst ist sie die Erste mit einem Spruch und erzählt mit Händen und Füßen. Heute isst sie schweigend, dreht ihr Handy um, nimmt es wieder in die Hand, legt es weg. Auf deine Frage nach dem Wochenende sagt sie nur: „Ging so.“ Am Nebentisch lacht jemand laut, sie schaut nicht hin.",
+          "frage": "Was ist die beste Einschätzung?",
+          "antworten": [
+            { "text": "Sie ist sauer auf mich, weil ich gestern ihren Vorschlag nicht unterstützt habe.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Möglich – aber du beziehst eine deutliche Veränderung sofort auf dich. Dafür spricht hier nichts Bestimmtes." },
+            { "text": "Jeder hat mal einen stillen Tag – das muss nichts heißen.", "wert": 1, "warum": "Kann sein. Aber bei ihr ist es eine klare Abweichung von der Grundlinie – nicht gleich wegwischen." },
+            { "text": "Etwas ist anders als sonst. Was, weiß ich nicht. Ich behalte es im Blick und lasse ihr Raum zu reden.", "wert": 2, "warum": "Du bemerkst die Abweichung, ohne sie zu deuten, und bleibst ansprechbar." },
+            { "text": "Sie hat bestimmt Ärger zu Hause – das frage ich sie gleich vor allen am Tisch.", "wert": 0, "tendenz": "uebersicher", "warum": "Eine Deutung als Gewissheit – und vor allen gefragt, bringt es sie in Verlegenheit." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "lesen-1-03-b", "faehigkeit": "lesen.grundlinie", "stufe": 3, "kanal": "wissen" },
+          "frage": "Wo lernst du die Grundlinie eines Menschen am besten kennen?",
+          "antworten": [
+            { "text": "Beim ersten Kennenlernen – da zeigt sich jeder, wie er ist.", "wert": 0, "warum": "Beim Kennenlernen sind viele aufgeregt oder besonders höflich. Das ist eher eine Ausnahme als das Gewohnte." },
+            { "text": "An mehreren gewöhnlichen Tagen, in entspannten Momenten.", "wert": 2, "warum": "Das Gewohnte zeigt sich im Gewöhnlichen – über mehrere Tage, nicht in einem Moment." },
+            { "text": "In einer hitzigen Besprechung, weil man da am meisten von jemandem sieht.", "wert": 0, "warum": "Unter Druck zeigt sich die Abweichung, nicht die Grundlinie." },
+            { "text": "Durch das, was andere über die Person erzählen.", "wert": 1, "warum": "Gibt Hinweise – ersetzt aber das eigene Hinsehen nicht. Auch andere lesen nur ungefähr." }
+          ] },
+        { "art": "wenndann", "anlass": "Wenn dir bei jemandem etwas anders vorkommt als sonst", "wenn": ["… jemand stiller oder lauter ist als gewöhnlich", "… die Veränderung bei einem bestimmten Thema begann", "… du schon eine Erklärung im Kopf hast"], "dann": ["… merke ich es mir und schaue, ob es so bleibt", "… merke ich mir das Thema als möglichen Anlass", "… suche ich eine zweite, harmlose Erklärung"] },
+        { "art": "mission", "ref": "lesen-m-02" }
+      ],
+      "regel": "Nicht wie jemand ist, zählt – sondern was sich ändert.",
+      "merkkarten": [
+        { "id": "lesen-1-03-m1", "frage": "Was ist die Grundlinie?", "antwort": "Das Gewohnte einer Person: Tempo, Lautstärke, Blick, Hände, Lachen." },
+        { "id": "lesen-1-03-m2", "frage": "Welche zwei Fragen stellst du bei einer Veränderung?", "antwort": "Seit wann – nach welchem Thema? Und: Welche Lage könnte es erklären?" }
+      ],
+      "mission": "lesen-m-02"
+    },
+    {
+      "id": "lesen-1-04", "bereich": "lesen", "stufe": 1, "nr": 4,
+      "titel": "Drei Zeichen, eine Richtung",
+      "faehigkeiten": ["lesen.buendel", "lesen.stimme"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Dass einzelne Zeichen nur schwach mit Gedanken und Gefühlen zusammenhängen, zeigen Meta-Analysen. Dass ein Bündel deutlich besser trifft, ist Praxiswissen. Zur Stimme gibt es eine Experimentreihe einer Arbeitsgruppe.",
+      "quellen": ["depaulo2003", "kraus2017", "praxis-lesen"],
+      "aha": "Ein Zeichen ist keins. Erst mehrere Zeichen in dieselbe Richtung, passend zur Lage, ergeben eine Vermutung – und die Stimme gehört mit ins Bündel.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer sich beim Reden an die Nase fasst, lügt.", "urteil": "falsch", "warum": "Für einzelne Gesten wie an die Nase fassen, wegschauen oder zappeln fand die Forschung keinen verlässlichen Zusammenhang mit Lügen. Ein Zeichen allein sagt fast nichts – auch nicht über andere Gefühle." },
+        { "art": "karte", "titel": "Das Bündel", "text": "Ein Bündel heißt: Mindestens drei Zeichen zeigen in dieselbe Richtung, sie passen zur Lage, und sie weichen von der Grundlinie ab. Dazu gehören Körper, Gesicht, Worte – und die Stimme: kürzere Antworten, langsameres Tempo, ein Zögern vor dem Ja. In Versuchen lasen Menschen Gefühle allein an der Stimme sogar etwas genauer als mit Bild. Zeigen die Zeichen in verschiedene Richtungen, heißt das: Du weißt es noch nicht." },
+        { "art": "buendel", "kopf": { "id": "lesen-1-04-a", "faehigkeit": "lesen.buendel", "stufe": 3, "kanal": "wissen" },
+          "lage": "Du stellst Carla Demir einen neuen Zeitplan vor. Sie leitet das Projekt und ist sonst offen und schnell mit ihrer Meinung.",
+          "frage": "Welche Zeichen sprechen eher dafür, dass sie Bedenken hat?",
+          "zeichen": [
+            { "text": "Sie sagt „Hm, ja …“ und macht danach eine lange Pause.", "stuetzt": true, "warum": "Bei ihr ungewohnt: Zögern vor einer Zustimmung deutet auf ein unausgesprochenes Aber." },
+            { "text": "Sie blättert zur Seite mit den Lieferterminen zurück.", "stuetzt": true, "warum": "Sie bleibt genau an der Stelle hängen, um die es geht." },
+            { "text": "Sie fragt: „Und wenn die Zulieferung später kommt?“", "stuetzt": true, "warum": "Eine Frage nach dem Risiko – das deutlichste Zeichen, weil es in Worten kommt." },
+            { "text": "Sie hat die Beine übereinandergeschlagen.", "stuetzt": false, "warum": "Eine Sitzhaltung, die viele ständig einnehmen. Ohne Bezug zur Grundlinie sagt sie nichts." },
+            { "text": "Sie trinkt einen Schluck Kaffee.", "stuetzt": false, "warum": "Alltag – kein Zeichen." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "lesen-1-04-b", "faehigkeit": "lesen.stimme", "stufe": 2, "kanal": "wissen" },
+          "frage": "Herr Petersen sagt am Telefon: „Ja … das können wir so machen.“ Langsam, mit Pause nach dem Ja. Sonst sagt er schnell und laut zu. Was hörst du?",
+          "antworten": [
+            { "text": "Er ist einverstanden – er hat ja Ja gesagt.", "wert": 1, "warum": "Die Worte zählen. Aber Ton und Tempo weichen von seiner Grundlinie ab – das gehört mit ins Bild." },
+            { "text": "Er lügt. Wer so zögert, meint es nicht ehrlich.", "wert": 0, "tendenz": "uebersicher", "warum": "Zögern ist kein Lügenzeichen. Es kann Nachdenken, Vorbehalt oder Müdigkeit sein." },
+            { "text": "Ein anderes Ja als sonst – vielleicht mit Vorbehalt. Ich achte auf mehr Zeichen.", "wert": 2, "warum": "Du hörst die Abweichung und hältst sie als Vermutung fest, nicht als Urteil." },
+            { "text": "Am Telefon lässt sich ohne Gesicht ohnehin nichts herauslesen, also gilt nur das Wort.", "wert": 0, "warum": "Im Gegenteil: In Experimenten schätzten Menschen Gefühle allein an der Stimme sogar etwas genauer ein als mit Bild." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "lesen-1-04-c", "faehigkeit": "lesen.buendel", "stufe": 3, "kanal": "wissen" },
+          "auftrag": "Ein Kollege bleibt nach der Besprechung bei dir stehen. Was spricht eher für Eile, was eher für Interesse – und was sagt allein wenig?",
+          "faecher": ["eher Eile", "eher Interesse", "sagt allein wenig"],
+          "karten": [
+            { "text": "Er hält seine Jacke schon in der Hand.", "fach": 0 },
+            { "text": "Er antwortet knapp und schaut zur Tür.", "fach": 0 },
+            { "text": "Er fragt nach und erzählt von sich.", "fach": 1 },
+            { "text": "Er stellt seine Tasche wieder ab.", "fach": 1 },
+            { "text": "Er verschränkt die Arme.", "fach": 2 },
+            { "text": "Er reibt sich die Augen.", "fach": 2 }
+          ] },
+        { "art": "mission", "ref": "lesen-m-03" }
+      ],
+      "regel": "Ein Zeichen ist keins. Drei in dieselbe Richtung sind eine Vermutung.",
+      "merkkarten": [
+        { "id": "lesen-1-04-m1", "frage": "Wann wird aus Zeichen eine Vermutung?", "antwort": "Wenn mindestens drei in dieselbe Richtung zeigen, zur Lage passen und von der Grundlinie abweichen." },
+        { "id": "lesen-1-04-m2", "frage": "Was gehört neben Körper und Gesicht ins Bündel?", "antwort": "Worte und Stimme: Tempo, Pausen, Zögern, Ton." },
+        { "id": "lesen-1-04-m3", "frage": "Die Zeichen zeigen in verschiedene Richtungen. Was heißt das?", "antwort": "Dass du es noch nicht weißt – ein Grund, weiter hinzusehen oder zu fragen." }
+      ],
+      "mission": "lesen-m-03"
+    },
+    {
+      "id": "lesen-1-05", "bereich": "lesen", "stufe": 1, "nr": 5,
+      "titel": "Zuwendung und Abwendung",
+      "faehigkeiten": ["lesen.koerper"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Dass der Körper bei starken Gefühlen mehr verrät als das Gesicht, zeigt eine Experimentreihe. Dass Füße, Rumpf und Blick die Aufmerksamkeit zeigen, ist Praxiswissen und als einzelnes Zeichen nicht geprüft.",
+      "quellen": ["aviezer2012", "praxis-lesen", "navarro2008"],
+      "aha": "Füße, Oberkörper, Blick: Wohin zeigt die Aufmerksamkeit? Abwendung heißt selten „Ich mag dich nicht“, oft eher „Ich muss gleich woanders sein“.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Forscher zeigten Fotos von Tennisprofis direkt nach einem gewonnenen oder verlorenen entscheidenden Punkt. Woran erkannten Betrachter am besten, ob jemand gewonnen hatte?", "optionen": ["am Gesicht", "am Körper", "an beidem gleich gut"], "richtig": 1, "loesung": "Am Körper", "aufloesung": "Nur am Gesicht ließen sich Jubel und Verzweiflung nicht unterscheiden – am Körper schon. Sahen die Betrachter das ganze Bild, glaubten sie trotzdem, das Gefühl im Gesicht gelesen zu haben." },
+        { "art": "karte", "titel": "Wohin zeigt es?", "text": "Füße, Oberkörper und Blick wenden sich oft dem zu, was gerade zählt – dem Gegenüber oder der Tür. Zuwendung: bleibt stehen, dreht sich zu dir, beugt sich vor, fragt nach. Abwendung: Füße zum Ausgang, Blick zur Uhr, Tasche schon in der Hand, Antworten werden kürzer. Das heißt selten „Er mag dich nicht“, eher „Er muss gleich woanders sein“. Und es ist ein Anlass, das Gespräch anzupassen." },
+        { "art": "szene", "kopf": { "id": "lesen-1-05-a", "faehigkeit": "lesen.koerper", "stufe": 3, "kanal": "wissen" },
+          "beschreibung": "Flur, kurz vor zwölf. Du erzählst Tarek ausführlich von deinem Ärger mit der Reisekostenabrechnung. Er steht schräg zu dir, die Füße zeigen zum Treppenhaus. Er nickt, sagt zweimal „Mhm“ und schaut zur Uhr über der Tür. Unter dem Arm hält er seine Brotdose.",
+          "frage": "Was tust du?",
+          "antworten": [
+            { "text": "Weitererzählen – er nickt ja, also hört er zu.", "wert": 0, "tendenz": "uebersehen", "warum": "Nicken ist hier eher Höflichkeit. Füße, Blick zur Uhr und Brotdose zeigen in eine andere Richtung." },
+            { "text": "Den Satz noch zu Ende bringen und dann von selbst aufhören.", "wert": 1, "warum": "Rücksichtsvoll. Noch leichter wird es für ihn, wenn du es aussprichst." },
+            { "text": "Ihn fragen, warum er heute so unhöflich ist und dir gar nicht richtig zuhört.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Aus „Er will los“ wird ein Vorwurf. Vielleicht hat er einfach Hunger oder ist verabredet." },
+            { "text": "„Ich halte dich auf – erzähl ich dir später fertig?“", "wert": 2, "warum": "Du liest das Bündel und machst es ihm leicht, zu gehen – ohne Vorwurf." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "lesen-1-05-b", "faehigkeit": "lesen.koerper", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Eher Zuwendung oder eher Abwendung?",
+          "faecher": ["eher Zuwendung", "eher Abwendung"],
+          "karten": [
+            { "text": "Der Oberkörper dreht sich zu dir.", "fach": 0 },
+            { "text": "Die Füße zeigen zum Ausgang.", "fach": 1 },
+            { "text": "Sie stellt ihre Tasche ab.", "fach": 0 },
+            { "text": "Er zieht schon die Jacke an.", "fach": 1 },
+            { "text": "Sie beugt sich vor, als du leiser wirst.", "fach": 0 },
+            { "text": "Der Blick wandert immer wieder zum Handy.", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "lesen-1-05-c", "faehigkeit": "lesen.koerper", "stufe": 3, "kanal": "wissen" },
+          "frage": "Frau Sommer erzählt im Treppenhaus von ihrem Enkel. Du merkst: Du stehst selbst schon halb zur Haustür gedreht, den Schlüssel in der Hand. Was ist am fairsten?",
+          "antworten": [
+            { "text": "Mich ihr bewusst zuwenden und zuhören, solange es geht.", "wert": 1, "warum": "Freundlich – wenn du wirklich Zeit hast. Wenn nicht, schiebst du das Gehen nur auf." },
+            { "text": "Weiter höflich nicken – vermutlich merkt sie gar nicht, dass ich gehen will.", "wert": 0, "tendenz": "ausweichen", "warum": "Vielleicht merkt sie es wirklich nicht – dann redet sie weiter, und du stehst unruhig da. Aussprechen hilft euch beiden." },
+            { "text": "Ehrlich sagen: „Ich muss gleich los – erzählen Sie mir den Rest morgen?“", "wert": 2, "warum": "Dein Körper sagt es ohnehin halb. Wer es ausspricht, macht es freundlich und klar." },
+            { "text": "Auf das Handy schauen, bis sie es von selbst versteht.", "wert": 0, "tendenz": "andeuten", "warum": "Ein Zeichen statt eines Satzes – unklar und weniger freundlich als ein kurzes Wort." }
+          ] },
+        { "art": "reflexion", "frage": "Bei wem merkst du am ehesten, dass er eigentlich gehen will? Woran – und was machst du dann?" }
+      ],
+      "regel": "Wohin Füße, Rumpf und Blick zeigen, dahin will oft auch der Kopf.",
+      "merkkarten": [
+        { "id": "lesen-1-05-m1", "frage": "Woran erkennst du Abwendung?", "antwort": "Füße zum Ausgang, Blick zur Uhr oder zum Handy, Tasche in der Hand, kürzere Antworten – im Bündel." },
+        { "id": "lesen-1-05-m2", "frage": "Was verrät bei starken Gefühlen mehr: Gesicht oder Körper?", "antwort": "In Versuchen der Körper. Das Gesicht allein war bei Jubel und Verzweiflung kaum zu unterscheiden." }
+      ]
+    },
+    {
+      "id": "lesen-1-06", "bereich": "lesen", "stufe": 1, "nr": 6,
+      "titel": "Lügen sieht man nicht",
+      "faehigkeiten": ["lesen.pruefen", "lesen.gesicht", "lesen.eigen"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Mehrere Meta-Analysen mit Zehntausenden Urteilen; meist im Labor gemessen. Die Befunde zur Blickrichtung und zum Mikroausdruck-Training stammen aus einzelnen guten Studien.",
+      "quellen": ["bond2006", "depaulo2003", "hartwig2011", "wiseman2012", "jordan2019", "porter2008", "gilovich1998", "savitsky2003"],
+      "aha": "Auch Profis liegen beim Erkennen von Lügen kaum über dem Münzwurf. Wer zweifelt, fragt nach Einzelheiten und prüft Tatsachen – statt Gesichter zu deuten.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "In über 200 Forschungsarbeiten sollten Menschen entscheiden: Lüge oder Wahrheit? Wie oft lagen sie im Mittel richtig?", "optionen": ["etwa 54 von 100 Mal", "etwa 70 von 100 Mal", "etwa 85 von 100 Mal"], "richtig": 0, "loesung": "Etwa 54 von 100 Mal", "aufloesung": "Ein Münzwurf schafft 50. Lügen selbst wurden nur zu 47 Prozent erkannt – man hält vieles eher für wahr. Und wer beruflich Aussagen beurteilt, war im Schnitt nicht treffsicherer." },
+        { "art": "mythos", "aussage": "Lügner schauen weg und zappeln.", "urteil": "falsch", "warum": "Weder Blickabwenden noch Zappeln hängen verlässlich mit Lügen zusammen. Viele Lügner kontrollieren gerade das – und viele Ehrliche sind einfach nervös." },
+        { "art": "karte", "titel": "Keine Wundermittel", "text": "Auch die bekannten Wundermittel halten nicht. Die Blickrichtung („nach oben rechts heißt erfunden“) fand in drei Studien keine Stütze. Flüchtige Gesichtsausdrücke sind selten, und ein Training dafür verbesserte die Lügenerkennung nicht. Was eher hilft: offen nach Einzelheiten fragen und mit Tatsachen abgleichen. Und umgekehrt gilt: Deine eigene Nervosität sieht man dir weniger an, als du glaubst." },
+        { "art": "auswahl", "kopf": { "id": "lesen-1-06-a", "faehigkeit": "lesen.eigen", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du machst gleich eine kurze Ansage vor dem Team. Deine Hände zittern leicht. Was sehen die anderen wahrscheinlich?",
+          "antworten": [
+            { "text": "Alle sehen sofort, wie nervös ich bin, und halten mich für unsicher.", "wert": 0, "tendenz": "katastrophe", "warum": "Menschen überschätzen deutlich, wie sichtbar ihre Nervosität ist. Die meisten sehen davon wenig." },
+            { "text": "Das lässt sich nicht sagen – jeder Zuhörer ist anders.", "wert": 1, "warum": "Stimmt im Einzelfall. Im Mittel überschätzen Menschen aber, wie viel man ihnen ansieht." },
+            { "text": "Weniger, als ich fürchte.", "wert": 2, "warum": "Die Illusion der Durchsichtigkeit: Was du innen stark spürst, sieht man außen viel schwächer." },
+            { "text": "Am besten verstecke ich die Hände, sonst wirkt alles, was ich sage, unsicher.", "wert": 0, "tendenz": "verstecken", "warum": "Verstecken lenkt eher die Aufmerksamkeit nach innen. Ein leichtes Zittern fällt kaum auf." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "lesen-1-06-b", "faehigkeit": "lesen.pruefen", "stufe": 3, "kanal": "wissen" },
+          "auftrag": "Du zweifelst, ob eine Geschichte stimmt. Was hilft eher, was führt in die Irre?",
+          "faecher": ["hilft eher", "führt in die Irre"],
+          "karten": [
+            { "text": "offen nach Einzelheiten fragen", "fach": 0 },
+            { "text": "mit bekannten Tatsachen abgleichen", "fach": 0 },
+            { "text": "sich Zeit lassen, statt sofort zu urteilen", "fach": 0 },
+            { "text": "auf die Blickrichtung achten", "fach": 1 },
+            { "text": "auf Zappeln und Nasefassen achten", "fach": 1 },
+            { "text": "dem eigenen Gespür vertrauen, weil man Menschen kennt", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "lesen-1-06-c", "faehigkeit": "lesen.pruefen", "stufe": 4, "kanal": "wissen" },
+          "frage": "Tarek sagt, er habe die Datei für den Kunden gestern noch verschickt. Er schaut dabei zur Seite und reibt sich den Nacken. Du hast Zweifel. Was tust du?",
+          "antworten": [
+            { "text": "„Du schaust weg – sag lieber gleich, wenn du es vergessen hast.“", "wert": 0, "tendenz": "anklagen", "warum": "Ein Mythos als Anklage. Wegschauen beweist nichts – und Tarek steht unter Verdacht, ohne dass du etwas weißt." },
+            { "text": "„Weißt du noch, an welche Adresse? Dann such ich sie im Verlauf.“", "wert": 2, "warum": "Eine offene Frage nach Einzelheiten und ein Blick auf die Tatsachen – fair und klärend." },
+            { "text": "Abwarten, ob die Datei beim Kunden noch auftaucht.", "wert": 1, "warum": "Ohne Vorwurf, gut. Wenn es eilt, klärt eine freundliche Frage nach Einzelheiten aber schneller." },
+            { "text": "Nichts sagen und ihm innerlich ab jetzt weniger trauen.", "wert": 0, "tendenz": "misstrauen", "warum": "Ein Urteil aufgrund von Zeichen, die nichts beweisen – und Tarek kann nichts richtigstellen." }
+          ] },
+        { "art": "reflexion", "frage": "Wann hast du zuletzt geglaubt, jemanden durchschaut zu haben? Hast du später erfahren, ob du richtiglagst?" }
+      ],
+      "regel": "Lügen sieht man kaum – Einzelheiten erfragen und Tatsachen prüfen hilft mehr.",
+      "merkkarten": [
+        { "id": "lesen-1-06-m1", "frage": "Wie gut erkennen Menschen Lügen im Mittel?", "antwort": "Zu etwa 54 Prozent – kaum besser als ein Münzwurf. Fachleute waren nicht besser." },
+        { "id": "lesen-1-06-m2", "frage": "Was hilft bei Zweifeln mehr als jedes Zeichen?", "antwort": "Offen nach Einzelheiten fragen und mit Tatsachen abgleichen." },
+        { "id": "lesen-1-06-m3", "frage": "Was ist die Illusion der Durchsichtigkeit?", "antwort": "Man glaubt, andere sähen einem Nervosität oder Gefühle deutlich an. Meist sehen sie viel weniger." }
+      ]
+    },
+    {
+      "id": "lesen-1-07", "bereich": "lesen", "stufe": 1, "nr": 7,
+      "titel": "Fragen schlägt Raten",
+      "faehigkeiten": ["lesen.pruefen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "In 25 Experimenten machte Hineinversetzen nicht treffsicherer; im abschließenden Versuch machte Nachfragen treffsicherer. Der Barnum-Versuch ist ein bekannter Klassiker. Wie man eine Vermutung am besten als Frage stellt, ist Praxiswissen.",
+      "quellen": ["eyal2018", "forer1949", "ickes1997", "praxis-lesen"],
+      "aha": "Eine gute Frage bringt mehr als jedes Deuten: Beobachtung nennen, Vermutung als Eindruck, Ausweg lassen – dann zuhören.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "lesen-1-07-a", "faehigkeit": "lesen.pruefen", "stufe": 2, "kanal": "wissen" },
+          "frage": "Miriam ist seit der Besprechung kurz angebunden. Über Tareks Witz lacht sie nicht, dir antwortet sie mit „Mhm“. Welcher erste Satz ist am besten?",
+          "antworten": [
+            { "text": "„Du bist sauer, weil Albers deinen Vorschlag abgelehnt hat, oder?“", "wert": 1, "warum": "Eine Frage, ja – aber mit fertiger Deutung. Liegst du daneben, muss sie sich erst davon abgrenzen." },
+            { "text": "„Ich hab den Eindruck, seit der Besprechung beschäftigt dich was. Stimmt das?“", "wert": 2, "warum": "Beobachtung, Eindruck statt Tatsache, Ausweg – sie kann frei antworten." },
+            { "text": "„Was ist denn heute mit dir los?“", "wert": 0, "tendenz": "vorwurf", "warum": "Klingt schnell nach Vorwurf. Und ohne Beobachtung weiß sie nicht, worauf du dich beziehst." },
+            { "text": "Nichts sagen – wenn sie reden will, kommt sie schon von selbst zu mir.", "wert": 0, "tendenz": "vermeiden", "warum": "Manchmal richtig. Aber viele warten, bis jemand fragt – und du bleibst bei deiner Vermutung." }
+          ] },
+        { "art": "karte", "titel": "Die Prüf-Frage", "text": "Sich in andere hineinzuversetzen fühlt sich treffsicher an. In vielen Experimenten wurden Menschen dadurch aber nicht genauer – manchmal nur sicherer. Genauer wurde, wer fragte. Eine gute Prüf-Frage hat drei Teile: was du beobachtet hast, deine Vermutung als Eindruck, und einen Ausweg („Stimmt das?“, „Oder täusche ich mich?“). Dann: still sein und zuhören." },
+        { "art": "rangfolge", "kopf": { "id": "lesen-1-07-b", "faehigkeit": "lesen.pruefen", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du schlägst vor, den Kochkurs-Abend auf Donnerstag zu legen. Jule sagt leise „Passt schon“ und schaut dabei nicht auf. Ordne die Antworten von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Klingt noch nicht ganz nach Ja. Was wäre dir lieber?“", "warum": "Nennt die Beobachtung sanft und lädt ihre eigentliche Meinung ein." },
+            { "text": "„Sicher? Du wirkst nicht begeistert.“", "warum": "Prüft die Vermutung, klingt aber ein wenig nach Vorhalt." },
+            { "text": "„Super, dann machen wir das so.“", "warum": "Nimmt das Wort beim Wort und überhört das Zögern." },
+            { "text": "„Du willst doch eigentlich gar nicht.“", "warum": "Gedankenlesen als Behauptung – sie muss sich verteidigen." }
+          ] },
+        { "art": "kunstgriff", "kopf": { "id": "lesen-1-07-c", "faehigkeit": "lesen.pruefen", "stufe": 4, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Auf einem Seminar „Menschen durchschauen“ sagt der Trainer vor der Gruppe zu dir: „Sie wirken nach außen gelassen, zweifeln innerlich aber oft an sich. Und Sie haben eine Erfahrung gemacht, die Sie vorsichtiger gemacht hat.“ Ein paar nicken.",
+          "frage": "Was steckt am ehesten dahinter?",
+          "antworten": [
+            { "text": "Ein echter Menschenkenner, der in Sekunden mehr sieht als andere.", "wert": 0, "tendenz": "glaeubig", "warum": "Die Sätze wirken persönlich – passen aber auf fast jeden. Das ist kein Beweis für einen besonderen Blick." },
+            { "text": "Er hat sich vorher über dich erkundigt.", "wert": 1, "warum": "Gibt es auch. Hier reicht aber schon, dass diese Sätze auf fast alle passen." },
+            { "text": "Cold Reading: Sätze, die auf fast jeden passen und nur persönlich wirken.", "wert": 2, "warum": "Genau so funktioniert die Masche: allgemein reden, Reaktion beobachten, Treffer ausbauen." },
+            { "text": "Gute Intuition – so etwas lässt sich eben nicht erklären.", "wert": 0, "tendenz": "glaeubig", "warum": "Es lässt sich erklären: mit dem Barnum-Effekt. Wer das weiß, ist schwer zu beeindrucken." }
+          ],
+          "erklaerung": "In einem bekannten Versuch bekamen Studierende angeblich persönliche Beschreibungen – alle dieselbe. Im Schnitt fanden sie sie sehr zutreffend. Cold Reading nutzt das: allgemeine Sätze sagen, die Reaktion beobachten, Treffer ausbauen. Abwehr: „Hätte das auch auf andere gepasst? Woran genau sehen Sie das?“" },
+        { "art": "dialog", "kopf": { "id": "lesen-1-07-d", "faehigkeit": "lesen.pruefen", "stufe": 4, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Tarek nach dem Gespräch", "figur": "Tarek Yılmaz",
+            "lage": "Tarek kommt aus dem Büro von Dr. Albers. Er sagt nichts, setzt sich, tippt schnell und seufzt einmal laut. Sonst erzählt er sofort, wie es war.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Tarek schaut kurz auf, dann wieder auf den Bildschirm.",
+                "wahl": [
+                  { "text": "„Albers hat dir den Kopf gewaschen, oder?“", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k2b", "rueck": "Eine fertige Deutung. Liegst du daneben, muss er sich erst dagegen wehren." },
+                  { "text": "„Du bist seit dem Gespräch ziemlich still. Magst du erzählen – oder lieber nicht?“", "wert": 2, "weiter": "k2", "rueck": "Beobachtung plus offene Frage mit Ausweg. Er kann wählen." },
+                  { "text": "Nichts sagen und erst mal abwarten.", "wert": 1, "weiter": "k2c", "rueck": "Respektvoll. Nur weiß er nicht, ob du ansprechbar bist." }
+                ] },
+              { "id": "k2", "sagt": "„Ach … er will, dass ich das Projekt an Lena abgebe.“ Er zuckt mit den Schultern. „Ist schon okay.“",
+                "wahl": [
+                  { "text": "„Na dann ist ja gut.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende2", "rueck": "Das Schulterzucken und der Seufzer davor passen nicht zu „okay“. Du hast das Zögern überhört." },
+                  { "text": "„Klingt nicht ganz nach okay. Was stört dich daran?“", "wert": 2, "weiter": "k3", "rueck": "Du sprichst den Widerspruch zwischen Wort und Ton freundlich an." },
+                  { "text": "„Das ist doch unfair. An deiner Stelle würde ich mich sofort beschweren.“", "wert": 0, "tendenz": "uebernehmen", "weiter": "ende2", "rueck": "Du weißt noch gar nicht, was ihn stört – und gibst schon einen Rat." }
+                ] },
+              { "id": "k2b", "sagt": "„Nein, hat er nicht.“ Tarek klingt jetzt gereizt. „Wieso, sieht man mir das an?“",
+                "wahl": [
+                  { "text": "„Sorry, war geraten. Du warst nur so still. Magst du erzählen?“", "wert": 2, "weiter": "k2", "rueck": "Gut gerettet: Du nimmst die Deutung zurück und kehrst zur Beobachtung zurück." },
+                  { "text": "„Ein bisschen schon, ehrlich gesagt. So wie du dasitzt, siehst du ziemlich geknickt aus.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Du bleibst bei deiner Deutung, obwohl er gerade widersprochen hat." }
+                ] },
+              { "id": "k2c", "sagt": "Zehn Minuten später seufzt Tarek wieder und schiebt die Tastatur weg.",
+                "wahl": [
+                  { "text": "„Du seufzt heute ganz schön. Willst du drüber reden?“", "wert": 2, "weiter": "k2", "rueck": "Jetzt ist das Bündel deutlicher – und deine Frage bleibt offen." },
+                  { "text": "Kopfhörer aufsetzen und weiterarbeiten, damit er in Ruhe nachdenken kann.", "wert": 1, "weiter": "ende3", "rueck": "Rücksichtsvoll gemeint. Er weiß aber nicht, dass du für ihn da wärst." }
+                ] },
+              { "id": "k3", "sagt": "„Dass er mich nicht mal gefragt hat. Abgegeben hätte ich es vielleicht sogar. Aber so fühlt es sich an, als wäre ich nicht gut genug.“",
+                "wahl": [
+                  { "text": "„Also nicht das Abgeben stört dich, sondern dass du nicht gefragt wurdest?“", "wert": 2, "weiter": "ende1", "rueck": "Du fasst zusammen und prüfst, ob du richtig verstanden hast." },
+                  { "text": "„Ach, Albers meint das bestimmt nicht so. Der hat gerade einfach viel um die Ohren.“", "wert": 1, "weiter": "ende1", "rueck": "Tröstend gemeint – aber du deutest jetzt Albers, statt Tarek zuzuhören." }
+                ] },
+              { "id": "ende1", "sagt": "Tarek nickt langsam. „Ich glaub, ich sag ihm morgen, dass ich gern gefragt worden wäre.“", "ende": "Du hast gefragt statt geraten – und etwas erfahren, das kein Blick verraten hätte: Es ging nicht ums Projekt, sondern ums Gefragtwerden." },
+              { "id": "ende2", "sagt": "Tarek dreht sich zum Bildschirm. „Lass mal, passt schon.“", "ende": "Gedeutet statt gefragt oder das Zögern überhört – dann bleibt der andere mit seinem Thema allein. Beim nächsten Mal: Beobachtung nennen, fragen, zuhören." },
+              { "id": "ende3", "sagt": "Tarek arbeitet schweigend weiter.", "ende": "Ruhe lassen ist manchmal richtig. Eine offene Frage hätte ihm aber die Wahl gegeben, ob er reden will." }
+            ],
+            "prinzipien": ["Beobachtung statt Deutung nennen", "Vermutung als Frage mit Ausweg", "„okay“ ist nicht immer okay – Wort und Ton vergleichen", "zuhören und zusammenfassen"]
+          } },
+        { "art": "mission", "ref": "lesen-m-04" }
+      ],
+      "regel": "Eine gute Frage bringt mehr als jedes Deuten.",
+      "merkkarten": [
+        { "id": "lesen-1-07-m1", "frage": "Die drei Teile einer Prüf-Frage?", "antwort": "Beobachtung, Vermutung als Eindruck, Ausweg: „Ich habe den Eindruck … Stimmt das?“" },
+        { "id": "lesen-1-07-m2", "frage": "Macht Hineinversetzen treffsicherer?", "antwort": "In Experimenten nicht – manchmal nur selbstsicherer. Fragen machte treffsicherer." },
+        { "id": "lesen-1-07-m3", "frage": "Woran erkennst du Cold Reading?", "antwort": "Die Sätze würden auf fast jeden passen. Frag: „Woran genau sehen Sie das?“" }
+      ],
+      "mission": "lesen-m-04"
+    }
+  ]
+}

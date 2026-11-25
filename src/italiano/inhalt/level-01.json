@@ -1,0 +1,342 @@
+{
+  "level": 1,
+  "tage": [
+    {
+      "tag": 1,
+      "titel": "Ciao! Begrüßen und verabschieden",
+      "ziel": "Danach kannst du jemanden auf Italienisch begrüßen, dich bedanken und dich verabschieden.",
+      "woerter": [
+        { "it": "ciao", "de": "hallo / tschüss", "art": "p", "aus": "CIA-o", "bsp": { "it": "Ciao, Giulia!", "de": "Hallo, Giulia!" }, "emoji": "👋", "hinweis": "Nur unter Leuten, die sich duzen – zur Begrüßung und zum Abschied." },
+        { "it": "buongiorno", "de": "guten Morgen / guten Tag", "art": "p", "aus": "buon-GIOR-no", "bsp": { "it": "Buongiorno, signora!", "de": "Guten Tag, gnädige Frau!" }, "emoji": "☀️", "hinweis": "Bis zum frühen Nachmittag, auch förmlich." },
+        { "it": "buonasera", "de": "guten Abend", "art": "p", "aus": "buo-na-SE-ra", "bsp": { "it": "Buonasera a tutti!", "de": "Guten Abend allerseits!" }, "emoji": "🌆" },
+        { "it": "buonanotte", "de": "gute Nacht", "art": "p", "aus": "buo-na-NOT-te", "bsp": { "it": "Buonanotte, a domani!", "de": "Gute Nacht, bis morgen!" }, "emoji": "🌙" },
+        { "it": "arrivederci", "de": "auf Wiedersehen", "art": "p", "aus": "ar-ri-ve-DER-ci", "bsp": { "it": "Arrivederci, signor Rossi!", "de": "Auf Wiedersehen, Herr Rossi!" }, "emoji": "🚪" },
+        { "it": "grazie", "de": "danke", "art": "p", "aus": "GRA-zie", "bsp": { "it": "Grazie mille!", "de": "Tausend Dank!" }, "emoji": "🙏" },
+        { "it": "prego", "de": "bitte / gern geschehen", "art": "p", "aus": "PRE-go", "bsp": { "it": "Grazie! – Prego!", "de": "Danke! – Gern geschehen!" }, "emoji": "🤝", "hinweis": "Antwort auf «grazie» – oder wenn man etwas anbietet." },
+        { "it": "per favore", "de": "bitte (bei einer Bitte)", "art": "p", "aus": "per fa-VO-re", "bsp": { "it": "Un caffè, per favore.", "de": "Einen Kaffee, bitte." }, "emoji": "☕" },
+        { "it": "sì", "de": "ja", "art": "x", "aus": "SÌ", "bsp": { "it": "Sì, grazie!", "de": "Ja, danke!" }, "emoji": "✅", "hinweis": "Mit Akzent. «si» ohne Akzent bedeutet «sich»." },
+        { "it": "no", "de": "nein", "art": "x", "aus": "NO", "bsp": { "it": "No, grazie.", "de": "Nein, danke." }, "emoji": "❌" },
+        { "it": "scusa", "de": "entschuldige", "art": "p", "aus": "SCU-sa", "bsp": { "it": "Scusa, Ben!", "de": "Entschuldige, Ben!" }, "emoji": "😅", "hinweis": "Zu jemandem, den du duzt. Förmlich: «scusi»." },
+        { "it": "a presto", "de": "bis bald", "art": "p", "aus": "a PRE-sto", "bsp": { "it": "Ciao, a presto!", "de": "Tschüss, bis bald!" }, "emoji": "🔜" }
+      ],
+      "grammatik": {
+        "titel": "Aussprache: c und g",
+        "erklaerung": "Italienisch spricht man fast so, wie man es schreibt. Zwei Buchstaben musst du dir merken:\n**c** und **g** klingen vor **e** und **i** weich: «ci» wie *tschi*, «ge» wie *dsche*. Vor a, o, u klingen sie hart wie *k* und *g*.\nEin **h** macht sie wieder hart: «chi» klingt wie *ki*, «ghe» wie *ge*.\nIn «cia», «cio», «gia», «gio» hörst du das i kaum: «ciao» klingt wie *tschao*, «buongiorno» wie *buon-dschorno*.\nBetont wird meist die **vorletzte Silbe**: **GRA**-zie, buon-**GIOR**-no, ar-ri-ve-**DER**-ci.",
+        "tabelle": { "kopf": ["Schreibung", "klingt wie", "Beispiel"], "zeilen": [["ce, ci", "tsche, tschi", "arrivederci"], ["ge, gi", "dsche, dschi", "buongiorno"], ["che, chi", "ke, ki", "perché, chi"], ["ghe, ghi", "ge, gi", "spaghetti"], ["ca, co, cu", "ka, ko, ku", "scusa, caffè"]] },
+        "beispiele": [
+          { "it": "ciao", "de": "klingt wie «tschao»" },
+          { "it": "arrivederci", "de": "klingt wie «arriwedertschi»" },
+          { "it": "spaghetti", "de": "klingt wie «spagetti» – das h hält das g hart" }
+        ],
+        "uebungen": [
+          { "satz": "«ciao» klingt wie ___.", "loesung": "tschao", "falsch": ["kiao", "ziao", "sao"], "de": "c vor i klingt weich: tsch.", "warum": "c + i = tsch, das i hört man kaum." },
+          { "satz": "Das c in «arrivederci» klingt wie ___.", "loesung": "tsch", "falsch": ["k", "z", "s"], "de": "c vor i klingt wie tsch." },
+          { "satz": "Das c in «scusa» klingt wie ___.", "loesung": "k", "falsch": ["tsch", "z", "sch"], "de": "c vor u klingt hart wie k.", "warum": "Vor a, o und u ist c immer hart." },
+          { "satz": "Das g in «buongiorno» klingt wie ___.", "loesung": "dsch", "falsch": ["g", "k", "j"], "de": "g vor i klingt weich: dsch." },
+          { "satz": "«chi» klingt wie ___.", "loesung": "ki", "falsch": ["tschi", "schi", "chi wie in «ich»"], "de": "Das h macht das c hart.", "warum": "ch gibt es nur vor e und i – und es klingt immer wie k." },
+          { "satz": "Das g in «prego» klingt wie ___.", "loesung": "g", "falsch": ["dsch", "k", "ch"], "de": "g vor o klingt hart wie im Deutschen." },
+          { "satz": "In «buonasera» ist die Silbe ___ betont.", "loesung": "SE", "falsch": ["BUO", "NA", "RA"], "de": "Betont wird meist die vorletzte Silbe: buo-na-SE-ra." },
+          { "satz": "In «grazie» ist die Silbe ___ betont.", "loesung": "GRA", "falsch": ["ZIE", "E", "ZI"], "de": "GRA-zie: «zie» ist eine einzige Silbe, davor liegt die Betonung." }
+        ]
+      },
+      "dialog": {
+        "titel": "Al bar di Piero",
+        "ort": "Ein kleines Café in Turin, früh am Morgen",
+        "zeilen": [
+          { "wer": "uomo", "als": "Piero", "it": "Buongiorno!", "de": "Guten Morgen!" },
+          { "wer": "ben", "it": "Buongiorno! Un caffè, per favore.", "de": "Guten Morgen! Einen Kaffee, bitte." },
+          { "wer": "uomo", "als": "Piero", "it": "Sì, prego!", "de": "Ja, bitte sehr!" },
+          { "wer": "ben", "it": "Grazie.", "de": "Danke." },
+          { "wer": "giulia", "it": "Oh no! No, no, no!", "de": "Oh nein! Nein, nein, nein!" },
+          { "wer": "ben", "it": "Scusa … tutto bene?", "de": "Entschuldige … alles in Ordnung?" },
+          { "wer": "giulia", "it": "Sì, sì. Grazie. Ciao!", "de": "Ja, ja. Danke. Tschüss!" },
+          { "wer": "ben", "it": "Ciao … a presto?", "de": "Tschüss … bis bald?" }
+        ],
+        "fragen": [
+          { "frage": "Was bestellt Ben?", "richtig": "Einen Kaffee", "falsch": ["Einen Tee", "Ein Wasser", "Ein Brötchen"] },
+          { "frage": "Welche Tageszeit ist es?", "richtig": "Morgens – man grüßt mit «buongiorno»", "falsch": ["Abends – man grüßt mit «buonasera»", "Nachts – man sagt «buonanotte»", "Das erfährt man nicht"] },
+          { "frage": "Wie verabschiedet sich Giulia?", "richtig": "Mit «Ciao!»", "falsch": ["Mit «Arrivederci!»", "Mit «Buonanotte!»", "Sie geht, ohne etwas zu sagen"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Du kommst morgens in eine Bäckerei. Wie grüßt du?", "richtig": "Buongiorno!", "falsch": ["Buonanotte!", "Arrivederci!", "Prego!"], "de": "Guten Morgen!" },
+          { "lage": "Jemand hält dir die Tür auf. Was sagst du?", "richtig": "Grazie!", "falsch": ["Scusa!", "No!", "Buonasera!"], "de": "Danke!" },
+          { "lage": "Du stößt im Café versehentlich einen Bekannten an.", "richtig": "Scusa!", "falsch": ["Prego!", "A presto!", "Sì!"], "de": "Entschuldige!" }
+        ],
+        "folge": "Warum ist die Frau am Nebentisch so aufgeregt – und was steht in dem alten Heft vor ihr?"
+      },
+      "wissen": { "titel": "Ciao kommt aus Venedig", "text": "«Ciao» stammt vom venezianischen «s-ciavo» – wörtlich «Sklave», gemeint war «(ich bin) Ihr Diener». Aus der höflichen Floskel wurde der lockerste Gruß Italiens. Man sagt ihn nur zu Leuten, die man duzt; im Geschäft oder bei Fremden grüßt du besser mit «buongiorno» oder «buonasera»." }
+    },
+    {
+      "tag": 2,
+      "titel": "Wie heißt du? Sich vorstellen",
+      "ziel": "Danach kannst du sagen, wie du heißt und woher du kommst – und andere danach fragen.",
+      "woerter": [
+        { "it": "mi chiamo", "de": "ich heiße", "art": "p", "aus": "mi CHIA-mo", "bsp": { "it": "Mi chiamo Ben.", "de": "Ich heiße Ben." }, "emoji": "🙋", "hinweis": "«chia» klingt wie «kja»." },
+        { "it": "come ti chiami?", "de": "wie heißt du?", "art": "p", "aus": "CO-me ti CHIA-mi", "bsp": { "it": "Ciao! Come ti chiami?", "de": "Hallo! Wie heißt du?" }, "emoji": "❓" },
+        { "it": "piacere", "de": "freut mich / angenehm", "art": "p", "aus": "pia-CE-re", "bsp": { "it": "Piacere, sono Giulia.", "de": "Freut mich, ich bin Giulia." }, "emoji": "😊" },
+        { "it": "io", "de": "ich", "art": "x", "aus": "I-o", "bsp": { "it": "Io sono Ben.", "de": "Ich bin Ben." }, "emoji": "👤" },
+        { "it": "tu", "de": "du", "art": "x", "aus": "TU", "bsp": { "it": "E tu?", "de": "Und du?" }, "emoji": "🫵" },
+        { "it": "lui", "de": "er", "art": "x", "aus": "LU-i", "bsp": { "it": "Lui è Piero.", "de": "Er ist Piero." }, "emoji": "👨" },
+        { "it": "lei", "de": "sie (eine Frau)", "art": "x", "aus": "LE-i", "bsp": { "it": "Lei è Giulia.", "de": "Sie ist Giulia." }, "emoji": "👩", "hinweis": "Großgeschrieben ist «Lei» die höfliche Anrede: «Sie»." },
+        { "it": "di dove sei?", "de": "woher kommst du?", "art": "p", "aus": "di DO-ve SE-i", "bsp": { "it": "Di dove sei, Ben?", "de": "Woher kommst du, Ben?" }, "emoji": "🗺️" },
+        { "it": "tedesco", "de": "deutsch / Deutscher", "art": "a", "aus": "te-DE-sco", "bsp": { "it": "Ben è tedesco.", "de": "Ben ist Deutscher." }, "emoji": "🇩🇪", "hinweis": "Eine Frau sagt: «sono tedesca»." },
+        { "it": "italiano", "de": "italienisch / Italiener", "art": "a", "aus": "i-ta-LIA-no", "bsp": { "it": "Piero è italiano.", "de": "Piero ist Italiener." }, "emoji": "🇮🇹", "hinweis": "Eine Frau: «italiana»." },
+        { "it": "la Germania", "de": "Deutschland", "art": "n", "aus": "la Ger-MA-nia", "bsp": { "it": "Amburgo è in Germania.", "de": "Hamburg liegt in Deutschland." }, "emoji": "🏰" },
+        { "it": "l'Italia", "de": "Italien", "art": "n", "aus": "l'i-TA-lia", "bsp": { "it": "Torino è in Italia.", "de": "Turin liegt in Italien." }, "emoji": "🍝" }
+      ],
+      "grammatik": {
+        "titel": "essere (sein): ich, du, er, sie",
+        "erklaerung": "Das wichtigste Verb heißt **essere** (sein). Für eine Person gibt es drei Formen:\n**io sono** – ich bin · **tu sei** – du bist · **lui / lei è** – er / sie ist.\nDas Wörtchen io, tu, lui oder lei kannst du meist weglassen, weil die Verbform schon zeigt, wer gemeint ist: «Sono Ben» heißt «Ich bin Ben».\nAchte auf den Akzent: **è** heißt «ist», **e** ohne Akzent heißt «und».\nHerkunft drückst du mit **di** aus: «Sono di Amburgo» – ich bin aus Hamburg.",
+        "tabelle": { "kopf": ["Person", "essere", "Deutsch"], "zeilen": [["io", "sono", "ich bin"], ["tu", "sei", "du bist"], ["lui / lei", "è", "er / sie ist"]] },
+        "beispiele": [
+          { "it": "Io sono Giulia.", "de": "Ich bin Giulia." },
+          { "it": "Sei tedesco?", "de": "Bist du Deutscher?" },
+          { "it": "Lei è di Torino.", "de": "Sie ist aus Turin." }
+        ],
+        "uebungen": [
+          { "satz": "Io ___ Ben.", "loesung": "sono", "falsch": ["sei", "è", "chiami"], "de": "Ich bin Ben." },
+          { "satz": "Tu ___ italiana?", "loesung": "sei", "falsch": ["sono", "è", "chiami"], "de": "Bist du Italienerin?" },
+          { "satz": "Lui ___ Piero.", "loesung": "è", "falsch": ["sei", "sono", "e"], "de": "Er ist Piero.", "warum": "«è» mit Akzent heißt «ist»; «e» ohne Akzent heißt «und»." },
+          { "satz": "Giulia ___ di Torino.", "loesung": "è", "falsch": ["sono", "sei", "di"], "de": "Giulia ist aus Turin." },
+          { "satz": "Mi chiamo Ben. ___ tedesco, di Amburgo.", "loesung": "Sono", "falsch": ["Sei", "È", "Mi"], "de": "Ich heiße Ben. Ich bin Deutscher, aus Hamburg.", "warum": "Ohne «io»: Die Form «sono» zeigt schon, dass ich gemeint bin." },
+          { "satz": "E tu, Ben, di dove ___?", "loesung": "sei", "falsch": ["sono", "è", "tu"], "de": "Und du, Ben, woher kommst du?" },
+          { "satz": "Lei ___ Giulia, lui è Piero.", "loesung": "è", "falsch": ["sei", "sono", "e"], "de": "Sie ist Giulia, er ist Piero." },
+          { "satz": "Io sono di Amburgo ___ tu sei di Torino.", "loesung": "e", "falsch": ["è", "sei", "di"], "de": "Ich bin aus Hamburg und du bist aus Turin.", "warum": "Hier fehlt «und» – also «e» ohne Akzent." }
+        ]
+      },
+      "dialog": {
+        "titel": "Piacere!",
+        "ort": "Im Café: Die Frau vom Vortag sitzt wieder am selben Tisch",
+        "zeilen": [
+          { "wer": "giulia", "it": "Ciao! Io sono Giulia. E tu, come ti chiami?", "de": "Hallo! Ich bin Giulia. Und du, wie heißt du?" },
+          { "wer": "ben", "it": "Piacere! Mi chiamo Ben.", "de": "Freut mich! Ich heiße Ben." },
+          { "wer": "giulia", "it": "Piacere, Ben. Di dove sei?", "de": "Freut mich, Ben. Woher kommst du?" },
+          { "wer": "ben", "it": "Sono tedesco, di Amburgo. E tu? Sei italiana?", "de": "Ich bin Deutscher, aus Hamburg. Und du? Bist du Italienerin?" },
+          { "wer": "giulia", "it": "Sì, sono italiana. Sono di Torino!", "de": "Ja, ich bin Italienerin. Ich bin aus Turin!" },
+          { "wer": "ben", "it": "E lui? Lui è di Torino?", "de": "Und er? Ist er aus Turin?" },
+          { "wer": "giulia", "it": "Piero? No, lui è di Napoli.", "de": "Piero? Nein, er ist aus Neapel." },
+          { "wer": "uomo", "als": "Piero", "it": "Piacere, Ben! Io sono Piero.", "de": "Freut mich, Ben! Ich bin Piero." }
+        ],
+        "fragen": [
+          { "frage": "Woher kommt Ben?", "richtig": "Aus Hamburg", "falsch": ["Aus Turin", "Aus Neapel", "Aus Berlin"] },
+          { "frage": "Woher kommt Piero?", "richtig": "Aus Neapel", "falsch": ["Aus Turin", "Aus Hamburg", "Aus Rom"] },
+          { "frage": "Was sagt Ben, als Giulia sich vorstellt?", "richtig": "«Piacere!»", "falsch": ["«Arrivederci!»", "«Prego!»", "«Scusa!»"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Jemand fragt dich: «Come ti chiami?» Du heißt Anna.", "richtig": "Mi chiamo Anna.", "falsch": ["Sono di Anna.", "Come ti chiami Anna?", "Lei è Anna."], "de": "Ich heiße Anna." },
+          { "lage": "Du möchtest wissen, woher dein Gegenüber kommt.", "richtig": "Di dove sei?", "falsch": ["Come ti chiami?", "Sei tu?", "Dove è lui?"], "de": "Woher kommst du?" },
+          { "lage": "Jemand stellt sich dir vor. Wie reagierst du freundlich?", "richtig": "Piacere!", "falsch": ["Per favore!", "Buonanotte!", "No, grazie."], "de": "Freut mich!" }
+        ],
+        "folge": "Giulia legt ein altes, fleckiges Heft auf den Tisch. Was hat es damit auf sich?"
+      },
+      "wissen": { "titel": "Du oder Sie?", "text": "Unter jungen Leuten, Kollegen und in lockerer Runde duzt man sich in Italien schnell. Bei Älteren, im Geschäft oder auf dem Amt bleibt man beim höflichen «Lei» – wörtlich «sie». Deshalb heißt «Wie heißen Sie?» «Come si chiama?». Oft bietet jemand das Du an mit «Diamoci del tu!»." }
+    },
+    {
+      "tag": 3,
+      "titel": "Wie geht's? Über das Befinden sprechen",
+      "ziel": "Danach kannst du fragen, wie es jemandem geht, und sagen, wie du dich fühlst.",
+      "woerter": [
+        { "it": "come stai?", "de": "wie geht es dir?", "art": "p", "aus": "CO-me STA-i", "bsp": { "it": "Ciao Ben, come stai?", "de": "Hallo Ben, wie geht es dir?" }, "emoji": "🙂" },
+        { "it": "bene", "de": "gut", "art": "a", "aus": "BE-ne", "bsp": { "it": "Sto bene, grazie.", "de": "Mir geht es gut, danke." }, "emoji": "👍" },
+        { "it": "male", "de": "schlecht", "art": "a", "aus": "MA-le", "bsp": { "it": "Oggi sto male.", "de": "Heute geht es mir schlecht." }, "emoji": "👎" },
+        { "it": "così così", "de": "so lala", "art": "p", "aus": "co-SÌ co-SÌ", "bsp": { "it": "Come stai? – Così così.", "de": "Wie geht's? – So lala." }, "emoji": "🤷" },
+        { "it": "molto", "de": "sehr / viel", "art": "x", "aus": "MOL-to", "bsp": { "it": "Sto molto bene.", "de": "Mir geht es sehr gut." }, "emoji": "➕" },
+        { "it": "stanco", "de": "müde", "art": "a", "aus": "STAN-co", "bsp": { "it": "Ben è stanco.", "de": "Ben ist müde." }, "emoji": "😴", "hinweis": "Eine Frau ist «stanca»." },
+        { "it": "felice", "de": "glücklich", "art": "a", "aus": "fe-LI-ce", "bsp": { "it": "Giulia è felice.", "de": "Giulia ist glücklich." }, "emoji": "😄", "hinweis": "Gleiche Form für Mann und Frau." },
+        { "it": "triste", "de": "traurig", "art": "a", "aus": "TRI-ste", "bsp": { "it": "Oggi sono triste.", "de": "Heute bin ich traurig." }, "emoji": "😢" },
+        { "it": "anche", "de": "auch", "art": "x", "aus": "AN-che", "bsp": { "it": "Anche io sono stanco.", "de": "Auch ich bin müde." }, "emoji": "🤝", "hinweis": "Meist verkürzt: «anch'io»." },
+        { "it": "oggi", "de": "heute", "art": "x", "aus": "OG-gi", "bsp": { "it": "Oggi siamo a Torino.", "de": "Heute sind wir in Turin." }, "emoji": "📅" },
+        { "it": "ma", "de": "aber", "art": "x", "aus": "MA", "bsp": { "it": "Sono stanco, ma felice.", "de": "Ich bin müde, aber glücklich." }, "emoji": "↔️" },
+        { "it": "non", "de": "nicht", "art": "x", "aus": "NON", "bsp": { "it": "Non sono triste.", "de": "Ich bin nicht traurig." }, "emoji": "🚫", "hinweis": "Steht immer direkt vor dem Verb." }
+      ],
+      "grammatik": {
+        "titel": "essere: wir, ihr, sie – und die Verneinung mit non",
+        "erklaerung": "Jetzt kommt die Mehrzahl von **essere**:\n**noi siamo** – wir sind · **voi siete** – ihr seid · **loro sono** – sie sind.\nAchtung: «sono» heißt «ich bin» und auch «sie sind». Wer gemeint ist, zeigt der Zusammenhang.\nVerneint wird ganz einfach: **non** steht direkt **vor dem Verb**. «Sono stanco» – ich bin müde; «Non sono stanco» – ich bin nicht müde.\nNach dem Befinden fragst du mit «Come stai?». Die Antwort beginnt mit «Sto …»: «Sto bene» – mir geht es gut.",
+        "tabelle": { "kopf": ["Person", "essere", "Deutsch"], "zeilen": [["io", "sono", "ich bin"], ["tu", "sei", "du bist"], ["lui / lei", "è", "er / sie ist"], ["noi", "siamo", "wir sind"], ["voi", "siete", "ihr seid"], ["loro", "sono", "sie sind"]] },
+        "beispiele": [
+          { "it": "Noi siamo a Torino.", "de": "Wir sind in Turin." },
+          { "it": "Voi siete stanchi?", "de": "Seid ihr müde?" },
+          { "it": "Loro non sono tristi.", "de": "Sie sind nicht traurig." }
+        ],
+        "uebungen": [
+          { "satz": "Noi ___ a Torino.", "loesung": "siamo", "falsch": ["siete", "sei", "è"], "de": "Wir sind in Turin." },
+          { "satz": "Voi ___ italiani?", "loesung": "siete", "falsch": ["siamo", "sono", "sei"], "de": "Seid ihr Italiener?" },
+          { "satz": "Giulia e Piero ___ a Torino.", "loesung": "sono", "falsch": ["è", "siete", "siamo"], "de": "Giulia und Piero sind in Turin.", "warum": "Zwei Personen = «loro» → sono." },
+          { "satz": "Io ___ sono triste.", "loesung": "non", "falsch": ["no", "ma", "e"], "de": "Ich bin nicht traurig.", "warum": "«no» heißt «nein»; «nicht» heißt «non»." },
+          { "satz": "Ben e io ___ felici.", "loesung": "siamo", "falsch": ["sono", "siete", "è"], "de": "Ben und ich sind glücklich.", "warum": "Ben und ich = «wir» → siamo." },
+          { "satz": "Oggi Giulia non ___ felice.", "loesung": "è", "falsch": ["sono", "sei", "siamo"], "de": "Heute ist Giulia nicht glücklich." },
+          { "satz": "Tu e Giulia ___ di Torino?", "loesung": "siete", "falsch": ["siamo", "sono", "sei"], "de": "Seid ihr – du und Giulia – aus Turin?", "warum": "Du und Giulia = «ihr» → siete." },
+          { "satz": "Loro ___ stanchi, ma felici.", "loesung": "sono", "falsch": ["siamo", "siete", "è"], "de": "Sie sind müde, aber glücklich." }
+        ]
+      },
+      "dialog": {
+        "titel": "Come stai?",
+        "ort": "Am nächsten Morgen im Café",
+        "zeilen": [
+          { "wer": "ben", "it": "Ciao Giulia! Come stai?", "de": "Hallo Giulia! Wie geht es dir?" },
+          { "wer": "giulia", "it": "Ciao Ben. Così così. Oggi sono triste.", "de": "Hallo Ben. So lala. Heute bin ich traurig." },
+          { "wer": "ben", "it": "Triste? Ma perché?", "de": "Traurig? Aber warum?" },
+          { "wer": "giulia", "it": "Il quaderno di Nonna Rosa non è completo.", "de": "Das Heft von Oma Rosa ist nicht vollständig." },
+          { "wer": "ben", "it": "Non è completo?", "de": "Es ist nicht vollständig?" },
+          { "wer": "giulia", "it": "No. Molte pagine non sono qui.", "de": "Nein. Viele Seiten sind nicht hier." },
+          { "wer": "ben", "it": "Ma oggi siamo a Torino: siamo felici!", "de": "Aber heute sind wir in Turin: Wir sind glücklich!" },
+          { "wer": "giulia", "it": "Va bene. Oggi siamo felici. Grazie, Ben.", "de": "In Ordnung. Heute sind wir glücklich. Danke, Ben." }
+        ],
+        "fragen": [
+          { "frage": "Wie geht es Giulia?", "richtig": "So lala – sie ist traurig", "falsch": ["Sehr gut", "Sie ist müde", "Sie ist krank"] },
+          { "frage": "Was ist mit dem Heft von Nonna Rosa?", "richtig": "Es ist nicht vollständig – viele Seiten fehlen", "falsch": ["Es ist verschwunden", "Es ist nass geworden", "Es gehört Piero"] },
+          { "frage": "Wie muntert Ben Giulia auf?", "richtig": "Er sagt: Heute sind wir in Turin, wir sind glücklich", "falsch": ["Er bestellt ihr einen Kaffee", "Er verspricht, die Seiten zu kaufen", "Er sagt, er sei auch traurig"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Ein Freund fragt: «Come stai?» Dir geht es richtig gut.", "richtig": "Sto molto bene, grazie!", "falsch": ["Sono molto male.", "Come stai?", "Non, grazie."], "de": "Mir geht es sehr gut, danke!" },
+          { "lage": "Du willst sagen, dass du heute nicht müde bist.", "richtig": "Oggi non sono stanco.", "falsch": ["Oggi no sono stanco.", "Oggi sono non stanco.", "Oggi siamo stanco."], "de": "Heute bin ich nicht müde." },
+          { "lage": "Deine Freundin sagt: «Sono felice!» Du bist es auch.", "richtig": "Anch'io sono felice!", "falsch": ["Ma io sono felice!", "Anche tu sei triste!", "Non sono felice!"], "de": "Ich bin auch glücklich!" }
+        ],
+        "folge": "Viele Seiten fehlen – aber wie viele genau? Und wo sind sie geblieben?"
+      },
+      "wissen": { "titel": "Come stai? ist ernst gemeint", "text": "Auf «Come stai?» antwortet man in Italien gern ausführlicher als mit einem knappen «gut». «Bene, grazie, e tu?» ist die höfliche Kurzform. Wer «Tutto bene?» fragt, will wissen, ob alles in Ordnung ist – darauf passt «Sì, tutto bene» oder ein ehrliches «Insomma», was etwa «na ja» bedeutet." }
+    },
+    {
+      "tag": 4,
+      "titel": "Zahlen und Alter",
+      "ziel": "Danach kannst du bis zehn zählen und sagen, wie alt du bist.",
+      "woerter": [
+        { "it": "zero", "de": "null", "art": "x", "aus": "ZE-ro", "bsp": { "it": "Il numero è zero.", "de": "Die Nummer ist null." }, "emoji": "0️⃣", "hinweis": "Das z klingt weich wie «ds»." },
+        { "it": "uno", "de": "eins", "art": "x", "aus": "U-no", "bsp": { "it": "Uno, due, tre!", "de": "Eins, zwei, drei!" }, "emoji": "1️⃣" },
+        { "it": "due", "de": "zwei", "art": "x", "aus": "DU-e", "bsp": { "it": "Due caffè, per favore.", "de": "Zwei Kaffee, bitte." }, "emoji": "2️⃣" },
+        { "it": "tre", "de": "drei", "art": "x", "aus": "TRE", "bsp": { "it": "Siamo in tre.", "de": "Wir sind zu dritt." }, "emoji": "3️⃣" },
+        { "it": "quattro", "de": "vier", "art": "x", "aus": "QUAT-tro", "bsp": { "it": "Ho quattro amici.", "de": "Ich habe vier Freunde." }, "emoji": "4️⃣" },
+        { "it": "cinque", "de": "fünf", "art": "x", "aus": "CIN-que", "bsp": { "it": "Cinque pagine sono qui.", "de": "Fünf Seiten sind hier." }, "emoji": "5️⃣", "hinweis": "«cin» klingt wie «tschin»." },
+        { "it": "sei", "de": "sechs", "art": "x", "aus": "SE-i", "bsp": { "it": "Ha sei anni.", "de": "Er ist sechs Jahre alt." }, "emoji": "6️⃣", "hinweis": "«sei» heißt auch «du bist»." },
+        { "it": "sette", "de": "sieben", "art": "x", "aus": "SET-te", "bsp": { "it": "Sette giorni.", "de": "Sieben Tage." }, "emoji": "7️⃣" },
+        { "it": "otto", "de": "acht", "art": "x", "aus": "OT-to", "bsp": { "it": "Otto caffè? No, grazie!", "de": "Acht Kaffee? Nein, danke!" }, "emoji": "8️⃣" },
+        { "it": "nove", "de": "neun", "art": "x", "aus": "NO-ve", "bsp": { "it": "Ho nove euro.", "de": "Ich habe neun Euro." }, "emoji": "9️⃣" },
+        { "it": "dieci", "de": "zehn", "art": "x", "aus": "DIE-ci", "bsp": { "it": "Dieci pagine, non nove!", "de": "Zehn Seiten, nicht neun!" }, "emoji": "🔟" },
+        { "it": "l'anno", "de": "das Jahr", "art": "n", "aus": "l'AN-no", "bsp": { "it": "Ho trent'anni.", "de": "Ich bin dreißig Jahre alt." }, "emoji": "🎂", "hinweis": "Mehrzahl: gli anni. Vor «anni» fällt der Endvokal der Zahl oft weg: trent'anni." }
+      ],
+      "grammatik": {
+        "titel": "avere (haben) – und wie man sein Alter sagt",
+        "erklaerung": "Das zweite wichtige Verb ist **avere** (haben). Das **h** am Anfang ist stumm: «ho» klingt wie *o*, «hai» wie *ai*.\nIm Italienischen **hat** man sein Alter: «Ho trent'anni» heißt wörtlich «Ich habe dreißig Jahre». Sag also nie «sono trent'anni».\nNach dem Alter fragst du mit **«Quanti anni hai?»** – wie viele Jahre hast du?\nAuch hier darfst du io, tu, lui, lei weglassen: «Ho due amici» – ich habe zwei Freunde.",
+        "tabelle": { "kopf": ["Person", "avere", "Deutsch"], "zeilen": [["io", "ho", "ich habe"], ["tu", "hai", "du hast"], ["lui / lei", "ha", "er / sie hat"], ["noi", "abbiamo", "wir haben"], ["voi", "avete", "ihr habt"], ["loro", "hanno", "sie haben"]] },
+        "beispiele": [
+          { "it": "Quanti anni hai?", "de": "Wie alt bist du?" },
+          { "it": "Ho dieci euro.", "de": "Ich habe zehn Euro." },
+          { "it": "Nonna Rosa ha un quaderno.", "de": "Oma Rosa hat ein Heft." }
+        ],
+        "uebungen": [
+          { "satz": "Io ___ due amici.", "loesung": "ho", "falsch": ["hai", "ha", "sono"], "de": "Ich habe zwei Freunde." },
+          { "satz": "E tu, Ben, quanti anni ___?", "loesung": "hai", "falsch": ["sei", "ho", "ha"], "de": "Und du, Ben, wie alt bist du?", "warum": "Das Alter «hat» man: avere, nicht essere." },
+          { "satz": "Giulia ___ trent'anni.", "loesung": "ha", "falsch": ["è", "hai", "ho"], "de": "Giulia ist dreißig Jahre alt." },
+          { "satz": "Noi ___ un quaderno.", "loesung": "abbiamo", "falsch": ["avete", "hanno", "siamo"], "de": "Wir haben ein Heft." },
+          { "satz": "Voi ___ dieci euro?", "loesung": "avete", "falsch": ["abbiamo", "hanno", "siete"], "de": "Habt ihr zehn Euro?" },
+          { "satz": "Ben e Giulia ___ un'idea.", "loesung": "hanno", "falsch": ["ha", "sono", "avete"], "de": "Ben und Giulia haben eine Idee.", "warum": "Zwei Personen = «loro» → hanno." },
+          { "satz": "Ho otto ___.", "loesung": "anni", "falsch": ["anno", "anna", "ani"], "de": "Ich bin acht Jahre alt.", "warum": "Mehrzahl von «anno» ist «anni»." },
+          { "satz": "Piero non ___ la pagina.", "loesung": "ha", "falsch": ["è", "ho", "hanno"], "de": "Piero hat die Seite nicht." }
+        ]
+      },
+      "dialog": {
+        "titel": "Quanti anni hai?",
+        "ort": "Im Café: Giulia blättert im Heft ihrer Großmutter",
+        "zeilen": [
+          { "wer": "ben", "it": "Quanti anni ha Nonna Rosa?", "de": "Wie alt ist Oma Rosa?" },
+          { "wer": "giulia", "it": "Ha ottantaquattro anni. E tu, quanti anni hai?", "de": "Sie ist vierundachtzig. Und du, wie alt bist du?" },
+          { "wer": "ben", "it": "Ho trentadue anni. E il quaderno?", "de": "Ich bin zweiunddreißig. Und das Heft?" },
+          { "wer": "giulia", "it": "Il quaderno ha sessant'anni!", "de": "Das Heft ist sechzig Jahre alt!" },
+          { "wer": "ben", "it": "E quante pagine non sono qui? Due? Tre?", "de": "Und wie viele Seiten sind nicht hier? Zwei? Drei?" },
+          { "wer": "giulia", "it": "No, Ben. Ventiquattro!", "de": "Nein, Ben. Vierundzwanzig!" },
+          { "wer": "ben", "it": "Ventiquattro pagine? E dove sono?", "de": "Vierundzwanzig Seiten? Und wo sind sie?" },
+          { "wer": "giulia", "it": "Non lo so. Ma ho un'idea: una pagina è qui a Torino!", "de": "Ich weiß es nicht. Aber ich habe eine Idee: Eine Seite ist hier in Turin!" }
+        ],
+        "fragen": [
+          { "frage": "Wie alt ist Ben?", "richtig": "32 Jahre", "falsch": ["30 Jahre", "84 Jahre", "24 Jahre"] },
+          { "frage": "Wie viele Seiten fehlen im Heft?", "richtig": "24", "falsch": ["2", "3", "60"] },
+          { "frage": "Was vermutet Giulia?", "richtig": "Eine der Seiten ist hier in Turin", "falsch": ["Alle Seiten sind in Hamburg", "Piero hat das Heft gestohlen", "Die Seiten sind verbrannt"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Du möchtest wissen, wie alt dein neuer Bekannter ist.", "richtig": "Quanti anni hai?", "falsch": ["Come stai?", "Quanti anni sei?", "Di dove sei?"], "de": "Wie alt bist du?" },
+          { "lage": "Du bestellst für dich und zwei Freunde je einen Kaffee.", "richtig": "Tre caffè, per favore.", "falsch": ["Due caffè, per favore.", "Sei caffè, grazie.", "Un caffè, prego."], "de": "Drei Kaffee, bitte." },
+          { "lage": "Jemand fragt nach deinem Alter. Du bist zehn Jahre alt.", "richtig": "Ho dieci anni.", "falsch": ["Sono dieci anni.", "Ha dieci anni.", "Ho dieci anno."], "de": "Ich bin zehn Jahre alt." }
+        ],
+        "folge": "Eine der 24 Seiten soll hier in Turin sein. Aber bei wem?"
+      },
+      "wissen": { "titel": "Die Null reiste über Pisa", "text": "Die arabischen Ziffern samt der Null machte der Mathematiker Leonardo Fibonacci aus Pisa um 1200 in Europa bekannt. Aus dem arabischen «sifr» wurde im Italienischen «zefiro» und schließlich «zero». Übrigens: Die Zahlen von elf bis sechzehn enden auf -dici (undici, dodici, tredici …), ab siebzehn dreht es sich um: diciassette, diciotto, diciannove." }
+    },
+    {
+      "tag": 5,
+      "titel": "Im Café: Was ist das? Wo ist …?",
+      "ziel": "Danach kannst du nach Dingen und Personen fragen: was, wer, wo?",
+      "woerter": [
+        { "it": "il caffè", "de": "der Kaffee / das Café", "art": "n", "aus": "il caf-FÈ", "bsp": { "it": "Il caffè è molto buono.", "de": "Der Kaffee ist sehr gut." }, "emoji": "☕", "hinweis": "«Un caffè» ist in Italien immer ein Espresso." },
+        { "it": "l'acqua", "de": "das Wasser", "art": "n", "aus": "l'AC-qua", "bsp": { "it": "Un'acqua, per favore.", "de": "Ein Wasser, bitte." }, "emoji": "💧" },
+        { "it": "il quaderno", "de": "das Heft", "art": "n", "aus": "il qua-DER-no", "bsp": { "it": "Il quaderno è di Nonna Rosa.", "de": "Das Heft gehört Oma Rosa." }, "emoji": "📓" },
+        { "it": "la pagina", "de": "die Seite", "art": "n", "aus": "la PA-gi-na", "bsp": { "it": "Dov'è la pagina?", "de": "Wo ist die Seite?" }, "emoji": "📄", "hinweis": "Betonung ausnahmsweise auf der ersten Silbe." },
+        { "it": "la ricetta", "de": "das Rezept", "art": "n", "aus": "la ri-CET-ta", "bsp": { "it": "La ricetta è un segreto.", "de": "Das Rezept ist ein Geheimnis." }, "emoji": "📜" },
+        { "it": "il tavolo", "de": "der Tisch", "art": "n", "aus": "il TA-vo-lo", "bsp": { "it": "Il quaderno è sul tavolo.", "de": "Das Heft liegt auf dem Tisch." }, "emoji": "🪑" },
+        { "it": "la sedia", "de": "der Stuhl", "art": "n", "aus": "la SE-dia", "bsp": { "it": "La sedia è libera?", "de": "Ist der Stuhl frei?" }, "emoji": "💺" },
+        { "it": "la nonna", "de": "die Großmutter / Oma", "art": "n", "aus": "la NON-na", "bsp": { "it": "La nonna di Giulia ha ottantaquattro anni.", "de": "Giulias Oma ist vierundachtzig." }, "emoji": "👵", "hinweis": "Der Großvater heißt «il nonno»." },
+        { "it": "l'amico", "de": "der Freund", "art": "n", "aus": "l'a-MI-co", "bsp": { "it": "Piero è un amico.", "de": "Piero ist ein Freund." }, "emoji": "🧑‍🤝‍🧑", "hinweis": "Freundin: «l'amica». Mehrzahl: gli amici." },
+        { "it": "dove", "de": "wo", "art": "x", "aus": "DO-ve", "bsp": { "it": "Dove sei?", "de": "Wo bist du?" }, "emoji": "📍", "hinweis": "«Dov'è …?» = Wo ist …?" },
+        { "it": "che cosa", "de": "was", "art": "x", "aus": "che CO-sa", "bsp": { "it": "Che cosa hai?", "de": "Was hast du?" }, "emoji": "❔", "hinweis": "Man sagt auch kurz «cosa». «Was ist das?» heißt «Che cos'è?»." },
+        { "it": "chi", "de": "wer", "art": "x", "aus": "CHI", "bsp": { "it": "Chi è lui?", "de": "Wer ist er?" }, "emoji": "🕵️" }
+      ],
+      "grammatik": {
+        "titel": "Aussprache: gn, gli, sc und doppelte Buchstaben",
+        "erklaerung": "Noch vier Laute, dann kannst du alles vorlesen:\n**gn** klingt wie *nj*: «signora» = *sinjora*, «lasagne» = *lasanje*.\n**gli** klingt wie *lj*: «famiglia» = *familja*, «gli amici» = *lji amitschi*.\n**sc** vor **e** und **i** klingt wie *sch*: «pesce» = *pesche*. Vor a, o, u bleibt es *sk*: «scusa», «tedesco».\n**Doppelte Konsonanten** spricht man hörbar länger: «nonna», «caffè», «sette», «otto». Das ist wichtig, denn «nono» heißt «der neunte» und «nonno» heißt «Großvater».\n**qu** klingt wie *ku*: «quaderno», «acqua».",
+        "tabelle": { "kopf": ["Schreibung", "klingt wie", "Beispiel"], "zeilen": [["gn", "nj", "signora"], ["gli", "lj", "famiglia"], ["sce, sci", "sche, schi", "pesce"], ["sca, sco, scu", "ska, sko, sku", "scusa"], ["qu", "ku", "quaderno"]] },
+        "beispiele": [
+          { "it": "la signora", "de": "klingt wie «la sinjora»" },
+          { "it": "gli amici", "de": "klingt wie «lji amitschi»" },
+          { "it": "la nonna", "de": "das doppelte n hört man deutlich länger" }
+        ],
+        "uebungen": [
+          { "satz": "Das gn in «signora» klingt wie ___.", "loesung": "nj", "falsch": ["gn", "ng", "n"], "de": "gn = nj, wie in «Lasagne»." },
+          { "satz": "«gli» in «gli amici» klingt wie ___.", "loesung": "lji", "falsch": ["gli", "kli", "dschli"], "de": "gli = lj." },
+          { "satz": "Das sc in «pesce» klingt wie ___.", "loesung": "sch", "falsch": ["sk", "s", "tsch"], "de": "sc vor e und i klingt wie sch." },
+          { "satz": "Das sc in «tedesco» klingt wie ___.", "loesung": "sk", "falsch": ["sch", "tsch", "s"], "de": "sc vor o bleibt sk.", "warum": "Nur vor e und i wird sc zu sch." },
+          { "satz": "«quaderno» beginnt wie ___.", "loesung": "kua", "falsch": ["kva", "ka", "tschua"], "de": "qu = ku, das u bleibt ein Vokal – kein deutsches «kw»." },
+          { "satz": "In «nonna» spricht man das n ___.", "loesung": "länger als ein einfaches n", "falsch": ["genau wie ein einfaches n", "gar nicht", "wie nj"], "de": "Doppelte Konsonanten spricht man hörbar länger." },
+          { "satz": "In «pagina» ist die Silbe ___ betont.", "loesung": "PA", "falsch": ["GI", "NA", "keine"], "de": "PA-gi-na – eine Ausnahme von der Regel mit der vorletzten Silbe." },
+          { "satz": "Das g in «pagina» klingt wie ___.", "loesung": "dsch", "falsch": ["g", "k", "nj"], "de": "g vor i klingt weich: dsch." }
+        ]
+      },
+      "dialog": {
+        "titel": "La prima pagina",
+        "ort": "Im Café: Giulia und Ben fragen den Barista",
+        "zeilen": [
+          { "wer": "giulia", "it": "Piero, dov'è la pagina di Nonna Rosa?", "de": "Piero, wo ist die Seite von Oma Rosa?" },
+          { "wer": "uomo", "als": "Piero", "it": "La pagina? Che cosa … ah! La ricetta!", "de": "Die Seite? Was … ah! Das Rezept!" },
+          { "wer": "ben", "it": "Sì! Chi ha la ricetta?", "de": "Ja! Wer hat das Rezept?" },
+          { "wer": "uomo", "als": "Piero", "it": "Io! La pagina è qui nel bar.", "de": "Ich! Die Seite ist hier im Café." },
+          { "wer": "giulia", "it": "Grazie, Piero! Sei un amico!", "de": "Danke, Piero! Du bist ein Freund!" },
+          { "wer": "uomo", "als": "Piero", "it": "Un momento! Prima un caffè e un piccolo esame per Ben.", "de": "Moment! Erst einen Kaffee und eine kleine Prüfung für Ben." },
+          { "wer": "ben", "it": "Un esame? Per me?", "de": "Eine Prüfung? Für mich?" },
+          { "wer": "uomo", "als": "Piero", "it": "Sì! Nonna Rosa dice: la pagina è per chi parla italiano.", "de": "Ja! Oma Rosa sagt: Die Seite ist für den, der Italienisch spricht." }
+        ],
+        "fragen": [
+          { "frage": "Wer hat die erste Seite?", "richtig": "Piero, der Barista", "falsch": ["Ben", "Nonna Rosa", "Niemand weiß es"] },
+          { "frage": "Was muss vorher geschehen?", "richtig": "Ben muss eine kleine Prüfung bestehen", "falsch": ["Giulia muss die Seite bezahlen", "Sie müssen nach Neapel fahren", "Piero muss Nonna Rosa anrufen"] },
+          { "frage": "Für wen ist die Seite laut Nonna Rosa bestimmt?", "richtig": "Für den, der Italienisch spricht", "falsch": ["Für den, der am meisten zahlt", "Für Giulias Familie", "Für Piero"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Du suchst dein Heft. Frag einen Freund, wo es ist.", "richtig": "Dov'è il quaderno?", "falsch": ["Chi è il quaderno?", "Che cosa è la sedia?", "Dove sei?"], "de": "Wo ist das Heft?" },
+          { "lage": "Auf dem Tisch liegt etwas Unbekanntes. Du fragst, was das ist.", "richtig": "Che cos'è?", "falsch": ["Chi è?", "Dov'è?", "Come stai?"], "de": "Was ist das?" },
+          { "lage": "Im Café möchtest du ein Wasser bestellen.", "richtig": "Un'acqua, per favore.", "falsch": ["Un caffè, grazie.", "Dov'è l'acqua?", "L'acqua è qui."], "de": "Ein Wasser, bitte." }
+        ],
+        "folge": "Besteht Ben Pieros Prüfung – und bekommt Giulia die erste Seite zurück?"
+      },
+      "wissen": { "titel": "Kaffee trinkt man im Stehen", "text": "In einer italienischen Bar trinkt man den Espresso meist im Stehen am Tresen, «al banco». Am Tisch sitzen kostet oft mehr. Cappuccino gilt als Frühstücksgetränk – nach dem Mittagessen bestellt ihn kaum ein Italiener. Und Vorsicht: «un latte» ist einfach ein Glas Milch." }
+    }
+  ],
+  "pruefung": {
+    "lesetext": {
+      "titel": "Ben a Torino",
+      "it": "Ciao! Mi chiamo Ben. Sono tedesco, di Amburgo, e ho trentadue anni. Oggi sono a Torino, in Italia. Sono in un bar: ho un caffè e un'acqua. Il barista è Piero. Piero è di Napoli, ma oggi è qui a Torino. Giulia è un'amica. Lei è italiana, di Torino, e ha trent'anni. Oggi Giulia è triste: il quaderno di Nonna Rosa non è completo. Nonna Rosa è la nonna di Giulia e ha ottantaquattro anni. Il quaderno ha molte ricette, ma ventiquattro pagine non sono qui. Dove sono? Una pagina è nel bar di Piero! Io sono stanco, ma sono anche molto felice: sono in Italia e ho due amici.",
+      "fragen": [
+        { "frage": "Woher kommt Ben?", "richtig": "Aus Hamburg", "falsch": ["Aus Turin", "Aus Neapel", "Aus Rom"] },
+        { "frage": "Warum ist Giulia traurig?", "richtig": "Das Heft von Nonna Rosa ist nicht vollständig", "falsch": ["Sie ist müde", "Piero ist nach Neapel gefahren", "Ben fährt nach Hause"] },
+        { "frage": "Wer ist Nonna Rosa?", "richtig": "Giulias Großmutter", "falsch": ["Bens Großmutter", "Die Besitzerin des Cafés", "Pieros Mutter"] },
+        { "frage": "Wie fühlt sich Ben am Ende?", "richtig": "Müde, aber sehr glücklich", "falsch": ["Traurig und müde", "Schlecht", "Das sagt er nicht"] }
+      ]
+    }
+  }
+}

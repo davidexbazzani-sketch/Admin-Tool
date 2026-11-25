@@ -42,6 +42,7 @@ import {
   type KioskMeta,
 } from '../services/presentationKiosk'
 import { useAuthStore, useIsMasterAdmin } from '../store/authStore'
+import { useBereiche } from '../store/menuSichtbarStore'
 
 type Section = 'home' | 'browse' | 'editor' | 'kiosks' | 'edge'
 
@@ -59,8 +60,11 @@ export default function PresentationMode() {
   const user = useAuthStore(s => s.session?.user)
   const isMaster = useIsMasterAdmin()
   const currentUser = user?.displayName || user?.username || ''
-  // Navigation: Startseite mit 3 Bereichen
-  const [section, setSection] = useState<Section>('home')
+  // Navigation: Startseite mit Bereichen — je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte);
+  // ein ausgeblendeter Bereich (auch „Bearbeiten“ aus der Liste heraus) führt zurück zur Startseite
+  const { sichtbar } = useBereiche('presentation-mode')
+  const [gewaehlt, setSection] = useState<Section>('home')
+  const section: Section = gewaehlt !== 'home' && !sichtbar(gewaehlt) ? 'home' : gewaehlt
   const [kioskMeta, setKioskMetaState] = useState<Record<string, KioskMeta>>({})
   const [myKiosks, setMyKiosks] = useState<Set<string>>(new Set())
   const [config, setConfig] = useState<PresentationConfig>(makeEmptyConfig())
@@ -768,17 +772,17 @@ export default function PresentationMode() {
             </div>
             <p className="text-xs text-muted-foreground mb-5">Präsentationen (z. B. Info-Displays in der Halle) verwalten und auf Kiosk-Playern anzeigen.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <button onClick={() => setSection('browse')} className="text-left rounded-xl border border-border bg-card hover:border-blue-500/40 hover:bg-blue-500/5 p-5 transition-colors">
+              {sichtbar('browse') && <button onClick={() => setSection('browse')} className="text-left rounded-xl border border-border bg-card hover:border-blue-500/40 hover:bg-blue-500/5 p-5 transition-colors">
                 <ListVideo size={26} className="text-blue-400 mb-3" />
                 <h3 className="text-sm font-semibold text-foreground mb-1">Vorhandene Präsentationen</h3>
                 <p className="text-xs text-muted-foreground">Zentrale und lokal gespeicherte Präsentationen ansehen, öffnen und abspielen.</p>
-              </button>
-              <button onClick={openNewPresentation} className="text-left rounded-xl border border-border bg-card hover:border-emerald-500/40 hover:bg-emerald-500/5 p-5 transition-colors">
+              </button>}
+              {sichtbar('editor') && <button onClick={openNewPresentation} className="text-left rounded-xl border border-border bg-card hover:border-emerald-500/40 hover:bg-emerald-500/5 p-5 transition-colors">
                 <Plus size={26} className="text-emerald-400 mb-3" />
                 <h3 className="text-sm font-semibold text-foreground mb-1">Neue Präsentation erstellen</h3>
                 <p className="text-xs text-muted-foreground">Von Grund auf neu — direkt abspielen oder lokal bzw. zentral speichern.</p>
-              </button>
-              {isMaster && (
+              </button>}
+              {isMaster && sichtbar('kiosks') && (
                 <button onClick={() => setSection('kiosks')} className="text-left rounded-xl border border-border bg-card hover:border-purple-500/40 hover:bg-purple-500/5 p-5 transition-colors">
                   <Tv size={26} className="text-purple-400 mb-3" />
                   <h3 className="text-sm font-semibold text-foreground mb-1 flex items-center gap-2">
@@ -788,11 +792,11 @@ export default function PresentationMode() {
                   <p className="text-xs text-muted-foreground">Alle Präsentations-Kioske sehen (online/offline), verwalten, bearbeiten, benennen und Notizen hinterlegen.</p>
                 </button>
               )}
-              <button onClick={() => setSection('edge')} className="text-left rounded-xl border border-border bg-card hover:border-cyan-500/40 hover:bg-cyan-500/5 p-5 transition-colors">
+              {sichtbar('edge') && <button onClick={() => setSection('edge')} className="text-left rounded-xl border border-border bg-card hover:border-cyan-500/40 hover:bg-cyan-500/5 p-5 transition-colors">
                 <ExternalLink size={26} className="text-cyan-400 mb-3" />
                 <h3 className="text-sm font-semibold text-foreground mb-1">Edge-Anzeige (SSO)</h3>
                 <p className="text-xs text-muted-foreground">Externes Edge-Fenster – volle Anmeldung. Für SSO-Seiten (z. B. eMaint/Microsoft), die der interne Browser nicht anmelden kann.</p>
-              </button>
+              </button>}
             </div>
           </div>
         )}

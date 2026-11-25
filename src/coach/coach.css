@@ -1,0 +1,123 @@
+/* Der Coach — Formen. Klassen beginnen mit dc-, Farben nur über --dc-… (farben.css). */
+@import './farben.css';
+
+.dc-app { position: relative; display: flex; flex: 1; width: 100%; height: 100%; background: var(--dc-bg); color: var(--dc-ink); font-family: var(--dc-schrift); font-size: 14px; line-height: 1.5; overflow: hidden; }
+:where(.dc-app) button { font: inherit; color: inherit; }
+.dc-app *:focus-visible { outline: 2px solid var(--dc-gelb); outline-offset: 2px; }
+.dc-app ::selection { background: var(--dc-rot); color: var(--dc-rot-ink); }
+
+/* Navigation links */
+.dc-nav { width: 168px; flex: none; display: flex; flex-direction: column; gap: 2px; padding: 14px 10px; background: var(--dc-bg2); border-right: 1px solid var(--dc-rand); }
+.dc-marke { display: flex; align-items: center; gap: 8px; padding: 4px 6px 14px; font-family: var(--dc-titel); font-weight: 700; font-size: 20px; letter-spacing: 0.04em; text-transform: uppercase; }
+.dc-marke i { width: 6px; height: 22px; background: var(--dc-rot); display: inline-block; transform: skewX(-12deg); }
+.dc-nav button { display: flex; align-items: center; gap: 9px; text-align: left; padding: 8px 10px; border-radius: 8px; border: 0; background: transparent; cursor: pointer; color: var(--dc-leise); }
+.dc-nav button:hover:not(:disabled) { background: var(--dc-flaeche); color: var(--dc-ink); }
+.dc-nav button[aria-current='page'] { background: var(--dc-flaeche2); color: var(--dc-ink); box-shadow: inset 3px 0 0 var(--dc-rot); }
+.dc-nav button:disabled { opacity: 0.45; cursor: default; }
+.dc-nav .dc-nav-unten { margin-top: auto; }
+.dc-nav .dc-notfall { color: var(--dc-gelb); }
+
+.dc-inhalt { flex: 1; min-width: 0; overflow-y: auto; padding: 20px 26px 32px; }
+.dc-breit { max-width: 980px; margin: 0 auto; }
+
+/* Typografie */
+.dc-h1 { font-family: var(--dc-titel); font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.1; margin: 0; }
+.dc-h2 { font-family: var(--dc-titel); font-size: 19px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin: 0; }
+.dc-h3 { font-size: 15px; font-weight: 700; margin: 0; }
+.dc-ober { font-family: var(--dc-titel); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dc-rot); font-weight: 700; }
+.dc-leise { color: var(--dc-leise); }
+.dc-stumm { color: var(--dc-stumm); }
+.dc-klein { font-size: 12px; }
+.dc-gross { font-size: 16px; }
+.dc-zahl { font-variant-numeric: tabular-nums; }
+
+/* Flächen */
+.dc-karte { background: var(--dc-flaeche); border: 1px solid var(--dc-rand); border-radius: var(--dc-radius); padding: 18px; box-shadow: var(--dc-schatten); }
+.dc-karte-flach { background: var(--dc-flaeche); border: 1px solid var(--dc-rand); border-radius: var(--dc-radius); padding: 14px; }
+.dc-band { height: 8px; background: var(--dc-band); border-radius: 2px; }
+.dc-spalte { display: flex; flex-direction: column; gap: 12px; }
+.dc-reihe { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.dc-raster { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.dc-trenner { height: 1px; background: var(--dc-rand); border: 0; margin: 4px 0; }
+
+/* Knöpfe */
+.dc-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 9px 16px; border-radius: 8px; border: 1px solid transparent; background: var(--dc-rot); color: var(--dc-rot-ink); font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--dc-titel); font-size: 15px; transition: transform 0.08s, background 0.15s; }
+.dc-knopf:hover:not(:disabled) { background: var(--dc-rot-stark); }
+.dc-knopf:active:not(:disabled) { transform: translateY(1px); }
+.dc-knopf:disabled { opacity: 0.45; cursor: default; }
+.dc-knopf-gross { padding: 12px 24px; font-size: 18px; }
+.dc-knopf-leise { background: var(--dc-flaeche2); color: var(--dc-ink); border-color: var(--dc-rand); font-family: var(--dc-schrift); text-transform: none; letter-spacing: 0; font-weight: 600; font-size: 14px; }
+.dc-knopf-leise:hover:not(:disabled) { background: var(--dc-rand); }
+.dc-knopf-nackt { background: transparent; color: var(--dc-leise); border: 0; font-family: var(--dc-schrift); text-transform: none; letter-spacing: 0; font-weight: 600; font-size: 13px; padding: 6px 8px; }
+.dc-knopf-nackt:hover:not(:disabled) { background: var(--dc-flaeche2); color: var(--dc-ink); }
+.dc-knopf-gelb { background: var(--dc-gelb); color: var(--dc-gelb-ink); }
+.dc-knopf-gelb:hover:not(:disabled) { background: var(--dc-gelb); filter: brightness(1.08); }
+
+/* Chips */
+.dc-chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--dc-flaeche2); border: 1px solid var(--dc-rand); color: var(--dc-leise); white-space: nowrap; }
+.dc-chip-rot { background: var(--dc-rot-weich); color: var(--dc-rot); border-color: transparent; }
+.dc-chip-gelb { background: var(--dc-gelb-weich); color: var(--dc-gelb); border-color: transparent; }
+.dc-chip-gut { background: var(--dc-gut-weich); color: var(--dc-gut); border-color: transparent; }
+.dc-beleg { font-family: var(--dc-titel); font-weight: 700; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px; background: var(--dc-sand-weich); color: var(--dc-sand); border: 1px solid var(--dc-sand); }
+
+/* Auswahl-Felder (Antworten, Karten) */
+.dc-wahl { display: flex; align-items: flex-start; gap: 10px; text-align: left; width: 100%; padding: 11px 14px; border-radius: 9px; border: 1px solid var(--dc-rand); background: var(--dc-flaeche2); cursor: pointer; transition: border-color 0.12s, background 0.12s; }
+.dc-wahl:hover:not(:disabled) { border-color: var(--dc-leise); }
+.dc-wahl[data-an='1'] { border-color: var(--dc-gelb); box-shadow: inset 0 0 0 1px var(--dc-gelb); }
+.dc-wahl[data-gut='1'] { border-color: var(--dc-gut); background: var(--dc-gut-weich); }
+.dc-wahl[data-mittel='1'] { border-color: var(--dc-gelb); background: var(--dc-gelb-weich); }
+.dc-wahl[data-schlecht='1'] { border-color: var(--dc-schlecht); background: var(--dc-schlecht-weich); }
+.dc-wahl:disabled { cursor: default; }
+.dc-wahl .dc-zeichen { flex: none; width: 20px; font-weight: 800; }
+
+.dc-eingabe { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--dc-rand); background: var(--dc-bg2); color: var(--dc-ink); font: inherit; resize: vertical; }
+.dc-eingabe:focus { outline: 2px solid var(--dc-gelb); outline-offset: 0; }
+.dc-schalter { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.dc-schalter input { width: 18px; height: 18px; accent-color: var(--dc-rot); }
+
+/* Lauf: Fortschritt oben */
+.dc-lauf { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+.dc-fortschritt { height: 6px; background: var(--dc-flaeche2); border-radius: 999px; overflow: hidden; }
+.dc-fortschritt > i { display: block; height: 100%; background: var(--dc-rot); border-radius: 999px; transition: width 0.3s; }
+.dc-rueck { border-left: 3px solid var(--dc-gelb); padding: 8px 12px; background: var(--dc-gelb-weich); border-radius: 0 8px 8px 0; }
+.dc-rueck[data-gut='1'] { border-color: var(--dc-gut); background: var(--dc-gut-weich); }
+.dc-rueck[data-schlecht='1'] { border-color: var(--dc-schlecht); background: var(--dc-schlecht-weich); }
+.dc-zitat { border-left: 3px solid var(--dc-sand); padding: 6px 12px; font-style: italic; }
+
+/* Bruno */
+.dc-bruno { display: flex; gap: 12px; align-items: flex-end; }
+.dc-bruno-bild { flex: none; width: 64px; height: 64px; border-radius: 50%; overflow: hidden; background: var(--dc-flaeche2); border: 2px solid var(--dc-rot); display: flex; align-items: center; justify-content: center; }
+.dc-bruno-bild img { width: 100%; height: 100%; object-fit: cover; }
+.dc-bruno-figur { border-radius: 12px; }
+.dc-bruno-figur img { object-position: center top; }
+.dc-raumbild { width: 100%; border-radius: var(--dc-radius); overflow: hidden; border: 1px solid var(--dc-rand); flex: none; }
+.dc-raumbild img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dc-blase { position: relative; background: var(--dc-flaeche2); border: 1px solid var(--dc-rand); padding: 10px 14px; border-radius: 12px 12px 12px 2px; font-weight: 600; }
+
+/* Strecke (Reise) */
+.dc-strecke svg { width: 100%; height: auto; display: block; }
+
+/* Atemkreis */
+.dc-atem { width: 200px; height: 200px; margin: 0 auto; position: relative; display: flex; align-items: center; justify-content: center; }
+.dc-atem-kreis { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, var(--dc-rot-weich), transparent 70%); border: 3px solid var(--dc-rot); transform: scale(var(--dc-atem-skala, 0.55)); transition-property: transform; transition-timing-function: ease-in-out; }
+.dc-atem-text { position: relative; font-family: var(--dc-titel); font-size: 22px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* Reiter */
+.dc-reiter { display: flex; gap: 4px; border-bottom: 1px solid var(--dc-rand); margin-bottom: 14px; flex-wrap: wrap; }
+.dc-reiter button { border: 0; background: transparent; padding: 8px 12px; cursor: pointer; color: var(--dc-leise); border-bottom: 3px solid transparent; font-weight: 600; }
+.dc-reiter button[aria-selected='true'] { color: var(--dc-ink); border-bottom-color: var(--dc-rot); }
+
+/* Schleier und Dialoge */
+.dc-schleier { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); display: flex; align-items: center; justify-content: center; z-index: 20; padding: 20px; }
+.dc-dialog { width: min(560px, 100%); max-height: 100%; overflow-y: auto; }
+
+/* Balken (Form je Fähigkeit) */
+.dc-balken { height: 8px; background: var(--dc-flaeche2); border-radius: 999px; overflow: hidden; }
+.dc-balken > i { display: block; height: 100%; background: var(--dc-viz-1); }
+
+.dc-ein { animation: dc-ein 0.22s ease-out; }
+@keyframes dc-ein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.dc-glocke { animation: dc-glocke 0.6s ease-out; }
+@keyframes dc-glocke { 0% { transform: rotate(0); } 20% { transform: rotate(-12deg); } 40% { transform: rotate(10deg); } 60% { transform: rotate(-6deg); } 100% { transform: rotate(0); } }
+.dc-app[data-ruhig='1'] *, .dc-app[data-ruhig='1'] *::before { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .dc-app *, .dc-app *::before { animation: none !important; transition: none !important; } }

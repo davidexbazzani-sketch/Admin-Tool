@@ -18,9 +18,18 @@
 //     damit eine Übernahme durch BQ8069 sofort greift.
 // Nicht betroffen (bewusst je PC): Popups/Erinnerungen des angemeldeten Benutzers, Chat, Spiele,
 // eigener Outlook-Kalender, Bildschirme, die gerade offen sind (Live-Ansichten).
+//
+// Seit 18.11.2026 ist einstellbar, WELCHER PC (mit welchem Windows-Konto) der Automatik-PC ist
+// (Einstellungen → „Automatik-PC“, nur mit PIN; Datei automatik/vorgabe.json, siehe serverMelder.ts).
+// Jeder Admin-PC liest die Vorgabe jede Minute neu. „BQ8069“ in den Kommentaren hier steht für
+// „der PC laut Vorgabe“ — ohne gespeicherte Vorgabe ist das weiter BQ8069 / DE5CG4453Q1N.
+// Ob der AKTUELLE Automatik-PC der bevorzugte ist, wird aus der Vorgabe berechnet (nicht aus dem
+// Merker in der Datei) — sonst könnte nach einer Änderung der alte PC nie abgelöst werden.
+// Jeder Admin-PC trägt sich außerdem in automatik/rechner/<PC>.json ein (PC, Konto, Benutzer) —
+// daraus entsteht die Auswahlliste in den Einstellungen.
 
 import { api } from '../electronAPI'
-import { istBevorzugt, eigenerRechner, eigenesKonto, BEVORZUGTER_MELDER } from './serverMelder'
+import { istBevorzugt, eigenerRechner, eigenesKonto, ladeVorgabe, vorzugsName } from './serverMelder'
 
 export const LEITER_PFAD = 'automatik/leiter.json'
 export const LEITER_HERZ_MS = 60_000
@@ -59,7 +68,7 @@ export type Entscheidung = 'leiter' | 'uebernehmen' | 'nicht'
  * - uebernehmen: Automatik-PC werden (Claim + Gegenprobe)
  * - nicht: ein anderer ist Automatik-PC
  */
-export function entscheide(o: { token: string; bevorzugt: boolean; leiter: Leiter | null | undefined; jetzt?: number }): Entscheidung {
+export function entscheide(o: { token: string; bevorzugt: boolean; leiter: Leiter | null | undefined; jetzt?: number; /** ist der aktuelle Automatik-PC laut Vorgabe der bevorzugte? (ohne Angabe: Merker aus der Datei) */ leiterBevorzugt?: boolean }): Entscheidung {
   const jetzt = o.jetzt ?? Date.now()
   const l = o.leiter
   if (l?.token && l.token === o.token) return 'leiter'
@@ -67,7 +76,7 @@ export function entscheide(o: { token: string; bevorzugt: boolean; leiter: Leite
   if (!aktiv) return 'uebernehmen'
   // BQ8069 übernimmt sofort von einer Vertretung — aber nicht von einem anderen BQ8069-Fenster
   // (z. B. zweite Sitzung), sonst würden sich zwei bevorzugte Fenster ständig abwechseln.
-  if (o.bevorzugt && !l!.bevorzugt) return 'uebernehmen'
+  if (o.bevorzugt && !(o.leiterBevorzugt ?? l!.bevorzugt)) return 'uebernehmen'
   return 'nicht'
 }
 
@@ -76,18 +85,22 @@ const kontoKurz = (k?: string) => ((k || '').trim().toUpperCase().split('\\').po
 
 /** Anzeige „Automatik-PC: …“ (Server-Bildschirm u. a.). */
 export function leiterText(l: Leiter | null | undefined, jetzt = Date.now()): { aktiv: boolean; bevorzugt: boolean; text: string; titel: string } {
+  const n = vorzugsName()
   const titel = [
     'Alle automatischen Scans (Server-Prüfungen, Geräte-, Netzwerk-, Drucker-, Software-Scans, Mails …) laufen auf GENAU EINEM PC:',
-    `• bevorzugt ${BEVORZUGTER_MELDER} — sobald dort das Tool läuft, übernimmt er sofort`,
-    `• ist ${BEVORZUGTER_MELDER} aus, übernimmt genau EIN anderer Admin-PC mit offenem Tool (bis ${BEVORZUGTER_MELDER} zurück ist)`,
+    `• bevorzugt ${n} — sobald dort das Tool läuft, übernimmt er sofort`,
+    `• ist ${n} aus, übernimmt genau EIN anderer Admin-PC mit offenem Tool (bis ${n} zurück ist)`,
     'Nie derselbe Scan von mehreren PCs.',
+    'Welcher PC das ist, steht in Einstellungen → „Automatik-PC“.',
   ].join('\n')
-  if (!leiterAktiv(l, jetzt)) return { aktiv: false, bevorzugt: false, text: `Automatik-PC: keiner aktiv – ${BEVORZUGTER_MELDER} aus, kein Admin-Tool offen`, titel }
-  const wer = l!.bevorzugt ? `${BEVORZUGTER_MELDER}${kurz(l!.rechner) && kurz(l!.rechner) !== BEVORZUGTER_MELDER ? ` (${kurz(l!.rechner)})` : ''}`
+  if (!leiterAktiv(l, jetzt)) return { aktiv: false, bevorzugt: false, text: `Automatik-PC: keiner aktiv – ${n} aus, kein Admin-Tool offen`, titel }
+  // aus der Vorgabe berechnet, nicht aus dem Merker der Datei (der stammt evtl. von vor einer Änderung)
+  const bev = istBevorzugt(l!.rechner, l!.konto)
+  const wer = bev ? `${n}${kurz(l!.rechner) && kurz(l!.rechner) !== n ? ` (${kurz(l!.rechner)})` : ''}`
     : `${kurz(l!.rechner) || 'unbekannt'}${l!.konto ? ` (${kontoKurz(l!.konto)})` : ''}`
   return {
-    aktiv: true, bevorzugt: !!l!.bevorzugt,
-    text: l!.bevorzugt ? `Automatik-PC: ${wer}` : `Automatik-PC: ${wer} – Vertretung, ${BEVORZUGTER_MELDER} ist aus`,
+    aktiv: true, bevorzugt: bev,
+    text: bev ? `Automatik-PC: ${wer}` : `Automatik-PC: ${wer} – Vertretung, ${n} ist aus`,
     titel,
   }
 }
@@ -116,6 +129,37 @@ async function ich(): Promise<{ rechner: string; konto: string; bevorzugt: boole
   return { rechner, konto, bevorzugt: istBevorzugt(rechner, konto) }
 }
 
+// ── Bekannte Admin-PCs (Auswahlliste für die Vorgabe) ────────────────────────
+export const TEILNEHMER_ORDNER = 'automatik/rechner'
+/** so oft trägt sich ein offenes Admin-Tool neu ein */
+export const TEILNEHMER_ALLE_MS = 15 * 60_000
+/** ältere Einträge erscheinen nicht mehr in der Auswahl */
+export const TEILNEHMER_MAX_ALTER_MS = 120 * 86_400_000
+export interface Teilnehmer { rechner: string; konto?: string; benutzer?: string; at: string }
+let teilnehmerGemeldet = 0
+
+async function meldeTeilnehmer(me: { rechner: string; konto: string }): Promise<void> {
+  const name = (me.rechner || '').replace(/[^A-Z0-9-]/gi, '')
+  if (!name || Date.now() - teilnehmerGemeldet < TEILNEHMER_ALLE_MS) return
+  teilnehmerGemeldet = Date.now()
+  try { await api().netWriteJsonAsync(`${TEILNEHMER_ORDNER}/${name}.json`, { rechner: me.rechner, konto: me.konto || undefined, benutzer: benutzerFn() || undefined, at: new Date().toISOString() } satisfies Teilnehmer) } catch { /* nur Komfort */ }
+}
+
+/** Admin-PCs, auf denen das Tool (ab dieser Version) mit Admin-Anmeldung lief — neueste zuerst. */
+export async function ladeTeilnehmer(jetzt = Date.now()): Promise<Teilnehmer[]> {
+  let namen: string[] = []
+  try { namen = (await api().netListDirAsync(TEILNEHMER_ORDNER)) || [] } catch { return [] }
+  const aus: Teilnehmer[] = []
+  for (const n of namen.filter(x => /\.json$/i.test(x)).slice(0, 60)) {
+    try {
+      const t = await api().netReadJsonAsync<Teilnehmer>(`${TEILNEHMER_ORDNER}/${n}`)
+      const zeit = Date.parse(t?.at || '')
+      if (t && typeof t.rechner === 'string' && t.rechner && !isNaN(zeit) && jetzt - zeit < TEILNEHMER_MAX_ALTER_MS) aus.push({ rechner: kurz(t.rechner), konto: t.konto ? kontoKurz(t.konto) : undefined, benutzer: t.benutzer, at: t.at })
+    } catch { /* Datei unlesbar → auslassen */ }
+  }
+  return aus.sort((a, b) => b.at.localeCompare(a.at))
+}
+
 let pruefLauf: Promise<boolean> | null = null
 /**
  * Einmal entscheiden (und ggf. Lebenszeichen schreiben bzw. übernehmen). Läuft nie doppelt.
@@ -126,13 +170,18 @@ export function pruefeLeiter(): Promise<boolean> {
   if (pruefLauf) return pruefLauf
   pruefLauf = (async () => {
     try {
+      // Vorgabe (welcher PC ist der Automatik-PC?) jede Minute neu lesen — eine Änderung in den
+      // Einstellungen wirkt so auf allen PCs ohne Neustart.
+      await ladeVorgabe()
       const me = await ich()
+      void meldeTeilnehmer(me)
       const l = await ladeLeiter()
-      const e = entscheide({ token: TOKEN, bevorzugt: me.bevorzugt, leiter: l })
+      const e = entscheide({ token: TOKEN, bevorzugt: me.bevorzugt, leiter: l, leiterBevorzugt: l ? istBevorzugt(l.rechner, l.konto) : false })
       const jetzt = new Date().toISOString()
       if (e === 'nicht') { letzteEntscheidung = { ich: false, leiter: l, am: Date.now() }; return false }
       if (e === 'leiter') {
-        const neu: Leiter = { ...l!, at: jetzt, benutzer: benutzerFn() || l!.benutzer }
+        // Merker „bevorzugt“ nachführen (die Vorgabe kann sich geändert haben)
+        const neu: Leiter = { ...l!, at: jetzt, benutzer: benutzerFn() || l!.benutzer, bevorzugt: me.bevorzugt }
         await schreibe(neu)
         letzteEntscheidung = { ich: true, leiter: neu, am: Date.now() }
         return true
@@ -202,7 +251,7 @@ export function starteAutomatikLeiter(o: { benutzer: () => string; warte?: (ms: 
 
 /** Nur für Tests: Zustand zurücksetzen. */
 export function _leiterZuruecksetzen(): void {
-  teilnehmen = false; benutzerFn = () => ''; letzteEntscheidung = { ich: false, leiter: null, am: 0 }; pruefLauf = null
+  teilnehmen = false; benutzerFn = () => ''; letzteEntscheidung = { ich: false, leiter: null, am: 0 }; pruefLauf = null; teilnehmerGemeldet = 0
   warteFn = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
 }
 export const _leiterToken = () => TOKEN

@@ -1,0 +1,309 @@
+/* Terra Incognita — Farben und Formen. Alles gilt nur unter .ti-app.
+   Das Tool schaltet nur die Klasse .light am <html> um; Tailwind-„dark:“-Varianten greifen hier nie.
+   Dunkel: Nachtkarte (tiefblau, goldene Tinte). Hell: Pergament (Sepia). */
+.ti-app {
+  --ti-schrift: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --ti-zier: Georgia, Cambria, 'Times New Roman', serif;
+  --ti-bg: #0A1626;
+  --ti-bg2: #0E1D31;
+  --ti-flaeche: #12263E;
+  --ti-flaeche2: #183150;
+  --ti-rand: #2A4767;
+  --ti-rand-stark: #3C628A;
+  --ti-ink: #F3E3BC;
+  --ti-leise: #B9C3CF;
+  --ti-stumm: #8493A4;
+  --ti-gold: #E2BF78;
+  --ti-gold-stark: #FFD27A;
+  --ti-gold-ink: #1B1304;
+  --ti-gold-weich: rgba(226, 191, 120, 0.14);
+  --ti-gut: #8FD6A8;
+  --ti-gut-weich: rgba(143, 214, 168, 0.14);
+  --ti-warn: #F2B866;
+  --ti-gefahr: #FF8A6B;
+  --ti-gefahr-weich: rgba(255, 138, 107, 0.14);
+  --ti-blau: #7FB6E6;
+  --ti-papier: #F4E7C6;
+  --ti-papier-ink: #33250F;
+  --ti-schatten: 0 14px 40px rgba(0, 6, 16, 0.6);
+  --ti-radius: 12px;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--ti-bg);
+  color: var(--ti-ink);
+  font-family: var(--ti-schrift);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+.light .ti-app {
+  --ti-bg: #E9DDBF;
+  --ti-bg2: #EFE4C9;
+  --ti-flaeche: #F6EDD6;
+  --ti-flaeche2: #FBF4E2;
+  --ti-rand: #CDB98C;
+  --ti-rand-stark: #A98F5C;
+  --ti-ink: #33250F;
+  --ti-leise: #5F5038;
+  --ti-stumm: #86765A;
+  --ti-gold: #8A5A12;
+  --ti-gold-stark: #6E4408;
+  --ti-gold-ink: #FFF8E6;
+  --ti-gold-weich: rgba(138, 90, 18, 0.12);
+  --ti-gut: #2F7A4A;
+  --ti-gut-weich: rgba(47, 122, 74, 0.12);
+  --ti-warn: #9A5B14;
+  --ti-gefahr: #A8321C;
+  --ti-gefahr-weich: rgba(168, 50, 28, 0.1);
+  --ti-blau: #2C6A9C;
+  --ti-papier: #FBF4E2;
+  --ti-papier-ink: #33250F;
+  --ti-schatten: 0 14px 36px rgba(70, 50, 10, 0.25);
+}
+
+.ti-app { container-type: inline-size; container-name: ti; }
+.ti-app *, .ti-app *::before, .ti-app *::after { box-sizing: border-box; }
+/* schmale Fenster (das Tool hat links ein Menü): erst die kleinen Beschriftungen weglassen, dann die Knopftexte */
+@container ti (max-width: 1180px) { .ti-kopf .ti-wert small { display: none; } .ti-kopf { gap: 7px; padding: 8px 10px; } }
+@container ti (max-width: 980px) { .ti-kopf .ti-lang { display: none; } .ti-titel { font-size: 16px; } }
+@container ti (max-width: 800px) { .ti-titel { display: none; } .ti-balken { width: 56px; } }
+:where(.ti-app) button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:where(.ti-app) button:disabled { cursor: default; }
+.ti-app :focus-visible { outline: 2px solid var(--ti-gold-stark); outline-offset: 2px; border-radius: 4px; }
+:where(.ti-app) h1, :where(.ti-app) h2, :where(.ti-app) h3, :where(.ti-app) p { margin: 0; }
+
+/* Karte */
+.ti-karte { position: absolute; inset: 0; overflow: hidden; cursor: crosshair; touch-action: none; user-select: none; background: var(--ti-bg); }
+.ti-karte canvas { position: absolute; left: 0; top: 0; display: block; }
+
+/* ── Kopfleiste ── */
+/* Die Kopfleiste bricht um, wenn es eng wird (lange Werte, schmales Fenster): Knöpfe rutschen dann in eine zweite
+   Zeile — nie aus dem Fenster. */
+.ti-kopf { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; row-gap: 6px; padding: 8px 14px; background: var(--ti-bg2); border-bottom: 1px solid var(--ti-rand); min-height: 52px; z-index: 5; }
+.ti-titel { font-family: var(--ti-zier); font-style: italic; font-size: 19px; font-weight: 600; color: var(--ti-gold-stark); letter-spacing: 0.3px; white-space: nowrap; }
+.ti-zurueck { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 6px; font-size: 12px; color: var(--ti-leise); }
+.ti-zurueck:hover { background: var(--ti-flaeche); color: var(--ti-ink); }
+.ti-wert { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--ti-flaeche); border: 1px solid var(--ti-rand); font-size: 12.5px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ti-wert small { font-weight: 400; color: var(--ti-leise); font-size: 11px; }
+.ti-wert-gold { color: var(--ti-gold-stark); }
+.ti-wert-knapp { border-color: var(--ti-gefahr); color: var(--ti-gefahr); background: var(--ti-gefahr-weich); }
+.ti-balken { width: 92px; height: 8px; border-radius: 4px; background: var(--ti-bg); border: 1px solid var(--ti-rand); overflow: hidden; }
+.ti-balken > i { display: block; height: 100%; background: var(--ti-gut); border-radius: 3px; transition: width 0.25s; }
+.ti-balken.knapp > i { background: var(--ti-warn); }
+.ti-balken.leer > i { background: var(--ti-gefahr); }
+.ti-leiste { display: inline-flex; gap: 2px; padding: 2px; border-radius: 9px; background: var(--ti-flaeche); border: 1px solid var(--ti-rand); margin-left: auto; }
+.ti-leiste button { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 7px; font-size: 12px; color: var(--ti-leise); white-space: nowrap; }
+.ti-leiste button:hover { background: var(--ti-flaeche2); color: var(--ti-ink); }
+.ti-leiste button.an { background: var(--ti-gold-weich); color: var(--ti-gold-stark); }
+.ti-punkt { width: 7px; height: 7px; border-radius: 50%; background: var(--ti-gold-stark); display: inline-block; }
+
+/* ── Knöpfe ── */
+.ti-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid var(--ti-rand-stark); color: var(--ti-ink); background: var(--ti-flaeche2); white-space: nowrap; transition: background 0.12s, border-color 0.12s, transform 0.06s; }
+.ti-knopf:hover:not(:disabled) { border-color: var(--ti-gold); background: var(--ti-gold-weich); }
+.ti-knopf:active:not(:disabled) { transform: translateY(1px); }
+.ti-knopf:disabled { opacity: 0.45; }
+.ti-knopf-gold { background: var(--ti-gold); border-color: var(--ti-gold); color: var(--ti-gold-ink); }
+.ti-knopf-gold:hover:not(:disabled) { background: var(--ti-gold-stark); border-color: var(--ti-gold-stark); }
+.ti-knopf-leise { border-color: transparent; background: transparent; color: var(--ti-leise); font-weight: 500; }
+.ti-knopf-leise:hover:not(:disabled) { background: var(--ti-flaeche); border-color: var(--ti-rand); color: var(--ti-ink); }
+.ti-knopf-klein { padding: 4px 9px; font-size: 12px; border-radius: 6px; }
+
+/* ── Tafeln über der Karte ── */
+.ti-buehne { position: relative; flex: 1; min-height: 0; }
+.ti-tafel { background: color-mix(in srgb, var(--ti-bg2) 94%, transparent); border: 1px solid var(--ti-rand); border-radius: var(--ti-radius); box-shadow: var(--ti-schatten); backdrop-filter: blur(6px); }
+.ti-ecke { position: absolute; z-index: 3; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.ti-ecke > * { pointer-events: auto; }
+.ti-ecke-lu { left: 12px; bottom: 12px; max-width: 370px; }
+.ti-ecke-ru { right: 12px; bottom: 12px; max-width: 330px; align-items: flex-end; }
+.ti-ecke-ro { right: 12px; top: 12px; align-items: flex-end; }
+.ti-ecke-lo { left: 12px; top: 12px; max-width: 340px; }
+.ti-notiz { padding: 10px 12px; font-size: 12.5px; }
+.ti-notiz h3 { font-family: var(--ti-zier); font-size: 15px; font-weight: 600; color: var(--ti-gold-stark); margin-bottom: 2px; }
+.ti-notiz p { color: var(--ti-leise); }
+.ti-reihe { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ti-zoom { display: flex; flex-direction: column; gap: 2px; padding: 3px; }
+.ti-zoom button { width: 30px; height: 30px; border-radius: 7px; font-size: 17px; line-height: 1; color: var(--ti-leise); display: flex; align-items: center; justify-content: center; }
+.ti-zoom button:hover { background: var(--ti-flaeche2); color: var(--ti-ink); }
+.ti-wind { display: flex; align-items: center; gap: 9px; padding: 7px 11px 7px 8px; font-size: 12px; }
+.ti-wind b { display: block; font-size: 12.5px; }
+.ti-wind span { color: var(--ti-leise); }
+
+/* ── Blätter (Dialoge): helles Papier, auch in der Nachtkarte ── */
+.ti-schleier { position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 18px; background: rgba(3, 9, 18, 0.62); animation: ti-ein 0.16s ease-out; }
+.light .ti-schleier { background: rgba(60, 44, 16, 0.4); }
+.ti-blatt {
+  width: min(560px, 100%); max-height: 100%; overflow: auto; background: var(--ti-papier); color: var(--ti-papier-ink); border-radius: 10px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(90, 66, 30, 0.35); animation: ti-auf 0.2s ease-out;
+  --ti-ink: #33250F; --ti-leise: #5F5038; --ti-stumm: #86765A; --ti-rand: #CDB98C; --ti-rand-stark: #A98F5C; --ti-flaeche: #EFE3C4; --ti-flaeche2: #F8EFD8;
+  --ti-gold: #8A5A12; --ti-gold-stark: #6E4408; --ti-gold-ink: #FFF8E6; --ti-gold-weich: rgba(138, 90, 18, 0.12); --ti-gut: #2F7A4A; --ti-gut-weich: rgba(47, 122, 74, 0.12);
+  --ti-gefahr: #A8321C; --ti-gefahr-weich: rgba(168, 50, 28, 0.1); --ti-warn: #9A5B14; --ti-bg: #E9DDBF; --ti-bg2: #EFE4C9; --ti-blau: #2C6A9C;
+}
+.ti-blatt-breit { width: min(860px, 100%); }
+.ti-blatt-bild { display: block; width: 100%; height: 170px; object-fit: cover; border-radius: 10px 10px 0 0; }
+.ti-blatt-in { padding: 18px 22px 20px; }
+.ti-blatt h2 { font-family: var(--ti-zier); font-size: 22px; font-weight: 600; line-height: 1.25; margin-bottom: 6px; }
+.ti-blatt h3 { font-family: var(--ti-zier); font-size: 16px; font-weight: 600; margin: 12px 0 4px; }
+.ti-prosa { font-family: var(--ti-zier); font-size: 15px; line-height: 1.6; }
+.ti-ueber { font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--ti-gold); font-weight: 700; margin-bottom: 2px; }
+.ti-folgen { margin: 12px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.ti-folgen li { padding: 6px 10px; border-radius: 6px; background: var(--ti-flaeche); font-size: 13px; font-weight: 600; }
+.ti-wahl { display: flex; flex-direction: column; gap: 7px; margin-top: 14px; }
+.ti-wahl button { text-align: left; padding: 10px 13px; border-radius: 8px; border: 1px solid var(--ti-rand-stark); background: var(--ti-flaeche2); font-size: 13.5px; font-weight: 600; }
+.ti-wahl button:hover:not(:disabled) { border-color: var(--ti-gold); background: var(--ti-gold-weich); }
+.ti-wahl button:disabled { opacity: 0.5; }
+.ti-wahl small { display: block; font-weight: 400; color: var(--ti-leise); font-size: 11.5px; }
+.ti-fuss { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; flex-wrap: wrap; align-items: center; }
+.ti-eingabe { width: 100%; padding: 8px 10px; border-radius: 7px; border: 1px solid var(--ti-rand-stark); background: var(--ti-flaeche2); color: var(--ti-ink); font: inherit; font-size: 14px; }
+.ti-eingabe:focus { outline: 2px solid var(--ti-gold); outline-offset: 0; }
+
+/* ── Hafen und große Tafeln ── */
+.ti-raum { position: absolute; inset: 0; z-index: 10; display: flex; background: color-mix(in srgb, var(--ti-bg) 88%, transparent); backdrop-filter: blur(3px); animation: ti-ein 0.16s ease-out; }
+.ti-raum-in { margin: 14px auto; width: min(980px, calc(100% - 28px)); display: flex; flex-direction: column; background: var(--ti-bg2); border: 1px solid var(--ti-rand); border-radius: 14px; box-shadow: var(--ti-schatten); overflow: hidden; }
+.ti-raum-kopf { flex: none; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--ti-rand); position: relative; }
+.ti-raum-kopf h2 { font-family: var(--ti-zier); font-size: 22px; font-weight: 600; color: var(--ti-gold-stark); line-height: 1.2; }
+.ti-raum-kopf p { font-size: 12px; color: var(--ti-leise); }
+.ti-reiter { flex: none; display: flex; gap: 2px; padding: 6px 10px 0; border-bottom: 1px solid var(--ti-rand); overflow-x: auto; }
+.ti-reiter button { padding: 8px 13px; font-size: 13px; font-weight: 600; color: var(--ti-leise); border-radius: 8px 8px 0 0; border: 1px solid transparent; border-bottom: 0; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.ti-reiter button:hover { color: var(--ti-ink); background: var(--ti-flaeche); }
+.ti-reiter button.an { color: var(--ti-gold-stark); background: var(--ti-flaeche); border-color: var(--ti-rand); }
+.ti-raum-leib { flex: 1; min-height: 0; overflow: auto; padding: 16px; }
+.ti-kasten { background: var(--ti-flaeche); border: 1px solid var(--ti-rand); border-radius: 10px; padding: 12px 14px; }
+.ti-kasten h3 { font-family: var(--ti-zier); font-size: 16px; font-weight: 600; color: var(--ti-gold-stark); margin-bottom: 4px; }
+.ti-kasten p { color: var(--ti-leise); font-size: 13px; }
+.ti-gitter { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.ti-tabelle { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ti-tabelle th { text-align: left; font-weight: 600; color: var(--ti-stumm); font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; padding: 6px 8px; border-bottom: 1px solid var(--ti-rand); }
+.ti-tabelle td { padding: 7px 8px; border-bottom: 1px solid color-mix(in srgb, var(--ti-rand) 55%, transparent); vertical-align: middle; }
+.ti-tabelle tr:last-child td { border-bottom: 0; }
+.ti-zahl { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ti-marke { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.4px; white-space: nowrap; }
+.ti-marke-gut { background: var(--ti-gut-weich); color: var(--ti-gut); }
+.ti-marke-gold { background: var(--ti-gold-weich); color: var(--ti-gold-stark); }
+.ti-marke-grau { background: var(--ti-flaeche2); color: var(--ti-stumm); }
+.ti-marke-rot { background: var(--ti-gefahr-weich); color: var(--ti-gefahr); }
+.ti-leise { color: var(--ti-leise); }
+.ti-stumm { color: var(--ti-stumm); font-size: 12px; }
+.ti-fehler { color: var(--ti-gefahr); font-size: 12.5px; font-weight: 600; }
+.ti-menge { display: inline-flex; align-items: center; gap: 4px; }
+.ti-menge button { width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--ti-rand-stark); background: var(--ti-flaeche2); font-weight: 700; }
+.ti-menge button:hover:not(:disabled) { border-color: var(--ti-gold); }
+.ti-menge button:disabled { opacity: 0.4; }
+
+/* ── kurze Rückmeldung oben in der Mitte ── */
+.ti-toasts { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); z-index: 30; display: flex; flex-direction: column; gap: 6px; align-items: center; pointer-events: none; }
+.ti-toast { padding: 7px 14px; border-radius: 999px; background: var(--ti-flaeche2); border: 1px solid var(--ti-gold); color: var(--ti-ink); font-size: 13px; font-weight: 600; box-shadow: var(--ti-schatten); animation: ti-auf 0.2s ease-out; }
+
+/* ── Seegefecht (Stufe 2) ── */
+.ti-gross-bild { width: 220px; max-width: 100%; height: 124px; object-fit: cover; border-radius: 8px; flex: none; }
+.ti-kampf { z-index: 15; }
+.ti-kampf-in { margin: 12px auto; width: min(1180px, calc(100% - 24px)); display: flex; flex-direction: column; background: var(--ti-bg2); border: 1px solid var(--ti-rand); border-radius: 14px; box-shadow: var(--ti-schatten); overflow: hidden; }
+.ti-kampf-kopf { flex: none; display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--ti-rand); color: var(--ti-gold-stark); }
+.ti-kampf-kopf h2 { font-family: var(--ti-zier); font-size: 20px; font-weight: 600; line-height: 1.2; }
+.ti-kampf-kopf p { font-size: 12px; color: var(--ti-leise); }
+.ti-kampf-leib { flex: 1; min-height: 0; display: flex; }
+.ti-kampf-feld { position: relative; flex: 1; min-width: 0; min-height: 260px; background: var(--ti-bg); }
+.ti-kampf-feld svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.ti-kampf-tafel { flex: none; width: 330px; display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-left: 1px solid var(--ti-rand); overflow: auto; }
+@container ti (max-width: 860px) { .ti-kampf-leib { flex-direction: column; } .ti-kampf-tafel { width: auto; border-left: 0; border-top: 1px solid var(--ti-rand); max-height: 48%; } }
+.ti-kampf-dran { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); padding: 5px 12px; border-radius: 999px; background: color-mix(in srgb, var(--ti-bg2) 90%, transparent); border: 1px solid var(--ti-rand); font-size: 12.5px; font-weight: 600; color: var(--ti-gold-stark); white-space: nowrap; }
+.ti-kampf-werte { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: 12px; color: var(--ti-leise); }
+.ti-kampf-werte > b { width: 100%; font-family: var(--ti-zier); font-size: 15px; color: var(--ti-ink); }
+.ti-kampf-werte span b { color: var(--ti-ink); }
+.ti-kampf-mun { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.ti-kampf-mun button { padding: 6px 4px; border-radius: 7px; border: 1px solid var(--ti-rand); background: var(--ti-flaeche); font-size: 12px; font-weight: 600; color: var(--ti-leise); display: flex; flex-direction: column; align-items: center; }
+.ti-kampf-mun button small { font-weight: 400; font-size: 10.5px; color: var(--ti-stumm); }
+.ti-kampf-mun button.an { border-color: var(--ti-gold); background: var(--ti-gold-weich); color: var(--ti-gold-stark); }
+.ti-kampf-breit { display: flex; flex-direction: column; gap: 6px; }
+.ti-kampf-breit .ti-knopf { flex-direction: column; align-items: flex-start; white-space: normal; text-align: left; padding: 7px 11px; }
+.ti-kampf-breit .ti-knopf small { font-weight: 400; font-size: 11px; color: var(--ti-leise); }
+.ti-kampf-log { flex: 1; min-height: 90px; max-height: 240px; overflow: auto; padding: 8px 10px; border-radius: 8px; background: var(--ti-flaeche); border: 1px solid var(--ti-rand); font-size: 12px; color: var(--ti-leise); display: flex; flex-direction: column; gap: 3px; }
+.ti-kampf-log p.runde { color: var(--ti-gold); font-weight: 600; text-align: center; margin-top: 4px; }
+.ti-kampf-feinde { display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.ti-kampf-feinde div { display: flex; justify-content: space-between; gap: 8px; padding: 4px 8px; border-radius: 6px; background: var(--ti-gefahr-weich); }
+.ti-kampf-feinde div.weg { opacity: 0.55; background: var(--ti-flaeche); }
+.ti-kampf-feinde span { color: var(--ti-leise); text-align: right; }
+
+/* das Feld */
+.ti-k-see1 { stop-color: #13304C; }
+.ti-k-see2 { stop-color: #0A1A2D; }
+.light .ti-k-see1 { stop-color: #DCE5D8; }
+.light .ti-k-see2 { stop-color: #CBD4C2; }
+.ti-k-hex { fill: transparent; stroke: rgba(226, 191, 120, 0.16); stroke-width: 1; }
+.light .ti-k-hex { stroke: rgba(78, 59, 38, 0.2); }
+.ti-k-hex.rand { stroke-dasharray: 3 3; stroke: rgba(226, 191, 120, 0.34); }
+.light .ti-k-hex.rand { stroke: rgba(78, 59, 38, 0.38); }
+.ti-k-hex.kann { fill: rgba(255, 210, 122, 0.13); stroke: rgba(255, 210, 122, 0.5); cursor: pointer; }
+.light .ti-k-hex.kann { fill: rgba(154, 91, 20, 0.12); stroke: rgba(154, 91, 20, 0.5); }
+.ti-k-hex.kann.hover { fill: rgba(255, 210, 122, 0.3); }
+.light .ti-k-hex.kann.hover { fill: rgba(154, 91, 20, 0.26); }
+.ti-k-hex.bogen { fill: rgba(255, 138, 107, 0.16); }
+.ti-k-felsen { fill: #5B4B3A; stroke: #2B1E12; stroke-width: 1.2; pointer-events: none; }
+.light .ti-k-felsen { fill: #9C8462; stroke: #4E3B26; }
+.ti-k-pfad { fill: none; stroke: var(--ti-gold-stark); stroke-width: 2.2; stroke-dasharray: 5 4; stroke-linecap: round; pointer-events: none; }
+
+/* Schiffe und Ungeheuer */
+.ti-k-figur { transition: transform 0.14s linear; pointer-events: none; }
+.ti-k-figur.weg { opacity: 0.35; }
+.ti-k-ring { fill: none; stroke: var(--ti-gold-stark); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.ti-k-ziel { fill: none; stroke: var(--ti-gefahr); stroke-width: 1.6; }
+.ti-k-gefangen { fill: none; stroke: #B05ACF; stroke-width: 2; stroke-dasharray: 2 3; }
+.ti-k-schiff .ti-k-rumpf { fill: #7A5531; stroke: #2B1E12; stroke-width: 1.2; }
+.ti-k-schiff.feind .ti-k-rumpf { fill: #2A2522; stroke: #E0533F; stroke-width: 1.6; }
+.light .ti-k-schiff.feind .ti-k-rumpf { stroke: #A8321C; }
+.ti-k-schiff .ti-k-deck { stroke: rgba(0, 0, 0, 0.35); stroke-width: 1; }
+.ti-k-schiff .ti-k-segel { fill: none; stroke: #F6EBCD; stroke-width: 4; stroke-linecap: round; }
+.ti-k-schiff.feind .ti-k-segel { stroke: #A79F90; }
+.ti-k-schiff .ti-k-mast { fill: #2B1E12; }
+.ti-k-schiff .ti-k-flagge { fill: #FFD27A; stroke: #6E4408; stroke-width: 0.6; }
+.ti-k-schiff.feind .ti-k-flagge { fill: #D23B2A; stroke: #400; }
+.ti-k-schiff.geist .ti-k-rumpf { fill: rgba(190, 230, 220, 0.32); stroke: rgba(210, 255, 240, 0.85); }
+.ti-k-schiff.geist .ti-k-segel { stroke: rgba(220, 255, 245, 0.55); }
+.light .ti-k-schiff.geist .ti-k-rumpf { fill: rgba(60, 110, 100, 0.3); stroke: rgba(30, 80, 70, 0.8); }
+.light .ti-k-schiff.geist .ti-k-segel { stroke: rgba(40, 90, 80, 0.5); }
+.ti-k-krake path { fill: none; stroke: #8E3B6E; stroke-width: 4; stroke-linecap: round; }
+.ti-k-krake circle { fill: #A1477E; stroke: #4A1638; stroke-width: 1.2; }
+.ti-k-krake .ti-k-auge { fill: #FFE27A; stroke: none; }
+.ti-k-schlange path { fill: none; stroke: #3E8F62; stroke-width: 6; stroke-linecap: round; }
+.ti-k-schlange .ti-k-kopf { fill: #3E8F62; stroke: #15402A; }
+.ti-k-schlange.unten path, .ti-k-schlange.unten .ti-k-kopf { opacity: 0.22; }
+.ti-k-welle { fill: none; stroke: rgba(160, 210, 240, 0.5); stroke-width: 1.2; }
+.light .ti-k-welle { stroke: rgba(40, 90, 130, 0.45); }
+.ti-k-fort rect { fill: #7A6A58; stroke: #2B1E12; stroke-width: 1.1; }
+.ti-k-fort .ti-k-fels { fill: #5B4B3A; stroke: #2B1E12; }
+.ti-k-fort .ti-k-wimpel { fill: #1A1A1A; stroke: #1A1A1A; stroke-width: 1.2; }
+.ti-k-balken .grund { fill: rgba(0, 0, 0, 0.45); }
+.light .ti-k-balken .grund { fill: rgba(60, 44, 16, 0.25); }
+.ti-k-balken .gut { fill: var(--ti-gut); }
+.ti-k-balken .warn { fill: var(--ti-warn); }
+.ti-k-balken .gefahr { fill: var(--ti-gefahr); }
+.ti-k-balken .crew { fill: var(--ti-blau); }
+.ti-k-balken .tuch { fill: #EFE6CC; }
+.light .ti-k-balken .tuch { fill: #8A7A5A; }
+
+/* Wirkungen: kurz und dann vorbei (keine Dauerschleife) */
+.ti-k-rauch circle, .ti-k-treffer circle, .ti-k-platsch circle, .ti-k-enter path, .ti-k-biss circle { transform-box: fill-box; transform-origin: center; }
+.ti-k-rauch circle { fill: rgba(230, 230, 230, 0.55); animation: ti-k-rauch 0.9s ease-out forwards; }
+.light .ti-k-rauch circle { fill: rgba(90, 80, 70, 0.35); }
+.ti-k-kugel { stroke: #FFD27A; stroke-width: 2; stroke-dasharray: 2 8; animation: ti-k-aus 0.42s linear forwards; }
+.ti-k-treffer circle { fill: #FF8A3B; opacity: 0.85; animation: ti-k-blitz 0.8s ease-out forwards; }
+.ti-k-treffer .kern { fill: #FFF2B0; }
+.ti-k-platsch circle { fill: none; stroke: #CFE8FF; stroke-width: 2; animation: ti-k-platsch 0.8s ease-out forwards; }
+.light .ti-k-platsch circle { stroke: #2C6A9C; }
+.ti-k-enter path { stroke: #FFE7A0; stroke-width: 3; stroke-linecap: round; animation: ti-k-blitz 0.9s ease-out forwards; }
+.light .ti-k-enter path { stroke: #6E4408; }
+.ti-k-biss circle { fill: rgba(210, 40, 40, 0.55); animation: ti-k-blitz 0.9s ease-out forwards; }
+.ti-k-zahl { font-size: 15px; font-weight: 700; fill: #FFE7A0; paint-order: stroke; stroke: rgba(0, 0, 0, 0.7); stroke-width: 3px; animation: ti-k-steig 1.3s ease-out forwards; pointer-events: none; }
+.ti-k-zahl.schlecht { fill: #FF9B80; }
+.light .ti-k-zahl { fill: #6E4408; stroke: rgba(255, 248, 230, 0.9); }
+.light .ti-k-zahl.schlecht { fill: #A8321C; }
+@keyframes ti-k-rauch { from { opacity: 1; transform: scale(0.6); } to { opacity: 0; transform: scale(1.6); } }
+@keyframes ti-k-aus { from { opacity: 1; } to { opacity: 0; } }
+@keyframes ti-k-blitz { from { opacity: 1; transform: scale(0.5); } to { opacity: 0; transform: scale(1.4); } }
+@keyframes ti-k-platsch { from { opacity: 1; transform: scale(0.4); } to { opacity: 0; transform: scale(1.5); } }
+@keyframes ti-k-steig { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-18px); } }
+
+@keyframes ti-ein { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ti-auf { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .ti-app * { animation: none !important; transition: none !important; } }

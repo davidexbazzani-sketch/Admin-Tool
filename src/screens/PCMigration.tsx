@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 import {
   ArrowRightLeft, Monitor, CheckCircle, XCircle, Loader, Wifi,
   ChevronRight, ChevronDown, RefreshCw, Play, Download,
@@ -95,7 +96,9 @@ export default function PCMigration() {
   const performer = session?.user.displayName ?? session?.user.username ?? 'Unknown'
 
   // ── Tab / Phase ─────────────────────────────────────────────────────────
-  const [mainTab,  setMainTab]  = useState<MainTab>('wizard')
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const [mainTab,  setMainTab]  = useBereichZustand<MainTab>('pc-migration', 'wizard')
+  const { sichtbar: reiterSichtbar } = useBereiche('pc-migration')
   const [phase,    setPhase]    = useState<MigrationPhase>('connect')
 
   // ── Connection ──────────────────────────────────────────────────────────
@@ -738,7 +741,7 @@ export default function PCMigration() {
         <ArrowRightLeft size={20} className="text-primary" />
         <h1 className="text-base font-bold text-foreground">PC-Migration / Gerätetausch</h1>
         <div className="ml-auto flex items-center bg-muted/30 rounded-lg p-0.5 gap-0.5">
-          {(['wizard', 'history', 'templates'] as const).map(t => (
+          {(['wizard', 'history', 'templates'] as const).filter(t => reiterSichtbar(t)).map(t => (
             <button key={t} onClick={() => setMainTab(t)}
               className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md transition-colors ${mainTab === t ? 'bg-card text-foreground font-medium shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>
               {t === 'wizard'    && <ArrowRightLeft size={11} />}

@@ -37,6 +37,11 @@ export type Screen =
   | 'pruffeld-zoll'
   | 'verwaltungsgebaeude'
   | 'games'
+  | 'vier-gewinnt'
+  | 'brain-trainer'
+  | 'parla-italiano'
+  | 'terra-incognita'
+  | 'der-coach'
 
 export type Prefix = 'DE' | 'DEHAM' | 'DESCH' | 'Sonstige'
 

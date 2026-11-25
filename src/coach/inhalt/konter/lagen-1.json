@@ -1,0 +1,190 @@
+{
+  "lagen": [
+    {
+      "id": "konter-l-01", "bereich": "konter", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["konter.spiel", "konter.ruhe"], "stufe": 2,
+      "titel": "Montag in der Kaffeeküche", "figur": "Tarek Yılmaz",
+      "einleitung": "Du spielst eine ganze Szene durch: Mitspielen, Lachen, die Sekunde gewinnen. Jede Wahl hat Folgen.",
+      "lage": "Montag, 8:50 Uhr. Die Kaffeemaschine blinkt rot. Tarek und Miriam stehen davor, du kommst mit deiner Tasse dazu.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Tarek: „Sie hat beschlossen, dass Montag ist. Und dass sie nicht mitmacht.“",
+          "wahl": [
+            { "text": "„Kluge Maschine. Ich hätte gern ihren Vertrag.“", "wert": 2, "weiter": "k2", "rueck": "Du greifst Tareks Bild auf und legst etwas dazu – Miriam lacht." },
+            { "text": "„Ja, die ist echt dauernd kaputt.“", "wert": 1, "weiter": "k2b", "rueck": "Stimmt – aber das Spiel endet hier. Tarek sucht noch einen Mitspieler." },
+            { "text": "„Habt ihr schon den Hausmeister angerufen? Der kennt sich mit dem Ding aus.“", "wert": 0, "tendenz": "verstummen", "weiter": "k2b", "rueck": "Sachlich richtig, aber du lässt Tareks Witz fallen." }
+          ] },
+        { "id": "k2", "sagt": "Miriam: „Wir sollten ihr eine Kündigung schreiben. Mit Kopie an den Betriebsrat.“",
+          "wahl": [
+            { "text": "„Ich formuliere. Betreff: Mangelnde Motivation seit Quartal drei.“", "wert": 2, "weiter": "k3", "rueck": "Ja, und – du baust das Bild weiter. Jetzt spielen drei mit." },
+            { "text": "Lachen: „Der war gut.“", "wert": 2, "weiter": "k3", "rueck": "Ehrliches Lachen ist eine vollwertige Antwort." },
+            { "text": "„Ich hab gestern im Laden eine bessere Maschine gesehen, die kann sogar …“", "wert": 0, "tendenz": "uebertrumpfen", "weiter": "k3b", "rueck": "Du wechselst das Thema zu dir. Das Spiel ist vorbei." }
+          ] },
+        { "id": "k2b", "sagt": "Tarek zuckt mit den Schultern und schaut aufs Handy. Kurze Stille. Dann Miriam: „Na ja. Ohne Kaffee wird das heute nichts mit mir.“",
+          "wahl": [
+            { "text": "„Ich auch nicht. Ich bin ohne Kaffee nur ein Bildschirmschoner.“", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance genutzt: Selbstironie mit Maß holt die Stimmung zurück." },
+            { "text": "„Stimmt.“", "wert": 1, "weiter": "ende2", "rueck": "Freundlich, aber das Gespräch versandet." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers kommt herein, sieht die blinkende Maschine und sagt trocken: „Ich nehme an, das ist kein Streik der Belegschaft?“",
+          "wahl": [
+            { "text": "„Nur eine Einzelperson, Herr Albers. Wir verhandeln noch.“", "wert": 2, "weiter": "ende1", "rueck": "Du spielst auch nach oben mit – freundlich, über die Lage, nicht über die Person." },
+            { "text": "Verlegen lächeln und Platz machen.", "wert": 1, "weiter": "ende1", "rueck": "Völlig in Ordnung – nur verschenkst du die Gelegenheit, mitzuspielen." },
+            { "text": "„Nein, die ist einfach kaputt, Herr Albers. Ich melde es gleich beim Hausmeister.“", "wert": 1, "weiter": "ende1", "rueck": "Pflichtbewusst – aber Albers hat einen Witz gemacht." }
+          ] },
+        { "id": "k3b", "sagt": "Miriam nickt höflich. Tarek ist schon wieder auf dem Weg zum Schreibtisch.",
+          "wahl": [
+            { "text": "„Sorry, ich hab euch unterbrochen. Was war mit der Kündigung?“", "wert": 2, "weiter": "ende1", "rueck": "Stark: Du merkst es selbst und gibst das Gespräch zurück." },
+            { "text": "Weiter von deiner Maschine erzählen.", "wert": 0, "tendenz": "uebertrumpfen", "weiter": "ende2", "rueck": "Jetzt redest du allein." }
+          ] },
+        { "id": "ende1", "sagt": "Die Maschine piept und gibt doch noch Kaffee. Alle lachen.", "ende": "Die Szene hat gezeigt: Niemand verlangt, dass du der Witzigste bist. Wer mitspielt, gehört dazu – auch gegenüber dem Chef." },
+        { "id": "ende2", "sagt": "Alle gehen mit leeren Tassen zurück an den Platz.", "ende": "Kein Drama – aber die Gelegenheit war da. Beim nächsten Mal: aufgreifen und ein Stück dazulegen." }
+      ],
+      "prinzipien": ["Bild aufgreifen statt Thema wechseln", "Lachen ist eine vollwertige Antwort", "nicht übertrumpfen", "nach oben über die Lage scherzen"],
+      "transfer": "Wer in deiner Umgebung macht solche Sprüche? Beim nächsten Mal spielst du einen Zug mit."
+    },
+    {
+      "id": "konter-l-02", "bereich": "konter", "phase": "g", "umfeld": "gruppe", "faehigkeiten": ["konter.rueckfrage", "konter.zustimmen", "konter.ruhe"], "stufe": 3,
+      "titel": "Der Spruch in der Besprechung", "figur": "ein Kollege",
+      "einleitung": "Ein Spruch vor dem ganzen Team. Du übst Ruhe, Rückfrage und Zustimmen – ohne Rechtfertigung.",
+      "lage": "Teambesprechung, acht Leute, Dr. Albers leitet. Du stellst kurz den Stand deines Vorhabens vor. Du bist eine Woche hinter dem Plan.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Ein Kollege, laut genug für alle: „Eine Woche? Bei dem Tempo erleben wir das Ergebnis ja noch vor der Rente.“ Ein paar lachen.",
+          "wahl": [
+            { "text": "Ausatmen, ihn ruhig ansehen, eine Sekunde warten.", "wert": 2, "weiter": "k2", "rueck": "Die Pause nimmt dem Spruch das Tempo. Alle schauen jetzt auf dich – und du bist ruhig." },
+            { "text": "„Das lag an den Zulieferungen, die kamen erst …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2b", "rueck": "Du rechtfertigst dich – damit bekommt der Spruch Gewicht." },
+            { "text": "„Deine Ergebnisse habe ich auch noch nicht gesehen.“", "wert": 0, "tendenz": "angreifen", "weiter": "k2c", "rueck": "Gegenangriff vor dem Chef – aus Spaß wird Streit." }
+          ] },
+        { "id": "k2", "sagt": "Die Runde wartet auf deine Antwort.",
+          "wahl": [
+            { "text": "„Zur Rente? Ich hatte mit der Enkelgeneration gerechnet. Im Ernst: Wir liegen eine Woche hinten und holen sie bis Monatsende auf.“", "wert": 2, "weiter": "k3", "rueck": "Zustimmen, überzeichnen – und dann sachlich. Die beste Mischung vor Vorgesetzten." },
+            { "text": "„Wie meinst du das – siehst du ein Problem, das ich übersehe?“", "wert": 2, "weiter": "k3r", "rueck": "Ruhige Rückfrage: Jetzt muss er seinen Spruch einordnen." },
+            { "text": "„Kann man so sehen.“ – und weiter im Stand.", "wert": 1, "weiter": "k3", "rueck": "Souverän stehen gelassen. Etwas kühl, aber sicher." }
+          ] },
+        { "id": "k2b", "sagt": "Der Kollege grinst: „Ja, ja, die Zulieferungen.“ Jetzt lachen mehr.",
+          "wahl": [
+            { "text": "Durchatmen. „Stimmt, Ausreden hab ich genug. Lösungen auch: Bis Monatsende sind wir wieder im Plan.“", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance genutzt: Zustimmen nimmt die Spitze, dann zur Sache." },
+            { "text": "Weiter erklären, warum es nicht deine Schuld ist.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Je länger die Erklärung, desto schwächer wirkst du." }
+          ] },
+        { "id": "k2c", "sagt": "Stille. Dr. Albers: „Bitte, wir bleiben sachlich.“",
+          "wahl": [
+            { "text": "„Sie haben recht. Also: eine Woche hinten, bis Monatsende aufgeholt.“", "wert": 2, "weiter": "k3", "rueck": "Gut gefangen. Der Gegenangriff bleibt trotzdem hängen." },
+            { "text": "„Er hat angefangen.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Das klingt nach Schulhof." }
+          ] },
+        { "id": "k3r", "sagt": "Der Kollege: „Nee, war nur Spaß. Passt schon.“",
+          "wahl": [
+            { "text": "„Gut. Dann weiter: Bis Monatsende sind wir wieder im Plan.“", "wert": 2, "weiter": "k3", "rueck": "Die Rückfrage hat gewirkt: Der Spruch ist zurückgenommen, du bist beim Thema." },
+            { "text": "„Dann lass solche Sprüche.“", "wert": 1, "weiter": "k3", "rueck": "Verständlich, aber nachtreten war nicht nötig – er hat schon zurückgezogen." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers nickt: „Gut. Was brauchen Sie, damit das klappt?“", "wahl": [
+            { "text": "„Die Freigabe der Daten bis Mittwoch.“", "wert": 2, "weiter": "ende1", "rueck": "Klar, konkret – die Szene endet bei der Sache." },
+            { "text": "„Nichts, das schaffe ich schon irgendwie.“", "wert": 1, "weiter": "ende1", "rueck": "Tapfer – aber eine klare Bitte wäre stärker gewesen." }
+          ] },
+        { "id": "ende1", "sagt": "Die Besprechung geht weiter. Niemand redet mehr über den Spruch.", "ende": "Ruhe in der ersten Sekunde, dann Zustimmen oder Rückfrage – und zurück zur Sache. So geht Schlagfertigkeit vor Vorgesetzten." },
+        { "id": "ende2", "sagt": "Die Besprechung geht weiter, aber die Stimmung ist angespannt.", "ende": "Rechtfertigen und Zurückschießen geben dem Spruch Macht. Beim nächsten Mal: ausatmen, zustimmen oder nachfragen." }
+      ],
+      "prinzipien": ["erst ausatmen, dann antworten", "nicht rechtfertigen", "zustimmen und überzeichnen", "ruhig zurückfragen", "zurück zur Sache"],
+      "transfer": "Gibt es in deinen Besprechungen jemanden, der gern stichelt? Leg dir eine Rückfrage für ihn zurecht."
+    },
+    {
+      "id": "konter-l-03", "bereich": "konter", "phase": "g", "umfeld": "familie", "faehigkeiten": ["konter.umdeuten", "konter.spiel", "konter.zustimmen"], "stufe": 3,
+      "titel": "Familienfest bei Tante Renate", "figur": "Tante Renate",
+      "einleitung": "Familie sagt, was sie denkt – und trifft oft wunde Punkte. Du übst Umdeuten und gelassenes Mitspielen.",
+      "lage": "Sonntag, Kaffee und Kuchen bei der Familie. Tante Renate sitzt neben dir.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Tante Renate: „Und, machst du immer noch was mit Computern? Das kann doch bald eine Maschine.“",
+          "wahl": [
+            { "text": "„Ja – und irgendwer muss den Maschinen ja erklären, was sie tun sollen. Das bin ich.“", "wert": 2, "weiter": "k2", "rueck": "Umgedeutet: Aus „bald überflüssig“ wird „unverzichtbar“. Freundlich und klar." },
+            { "text": "„Nein, das ist viel komplizierter, als du denkst – lass mich dir das mal genauer erklären …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2b", "rueck": "Ein Vortrag als Verteidigung – Renate hört nach dem zweiten Satz nicht mehr zu." },
+            { "text": "„Ja, Tante Renate.“", "wert": 1, "weiter": "k2", "rueck": "Friedlich – aber du lässt die Gelegenheit liegen." }
+          ] },
+        { "id": "k2", "sagt": "Renate: „Du siehst übrigens müde aus. Schläfst du genug?“",
+          "wahl": [
+            { "text": "„Ich trainiere für einen Wettbewerb im Müde-Aussehen. Wie war ich?“", "wert": 2, "weiter": "k3", "rueck": "Zustimmen und überzeichnen – Renate lacht und der Satz ist entschärft." },
+            { "text": "„Danke, dass du dir Sorgen machst. Es war eine volle Woche, am Wochenende schlafe ich aus.“", "wert": 2, "weiter": "k3", "rueck": "Auch stark: Du hörst die Fürsorge hinter dem Satz und würdigst sie." },
+            { "text": "„Und du siehst alt aus.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Das trifft – und verdirbt den Nachmittag." }
+          ] },
+        { "id": "k2b", "sagt": "Renate unterbricht: „Ja, ja. Und du siehst müde aus.“",
+          "wahl": [
+            { "text": "„Das kommt vom Erklären. Willst du noch ein Stück Kuchen?“", "wert": 2, "weiter": "k3", "rueck": "Selbstironie und Themenwechsel mit Wärme – gut gerettet." },
+            { "text": "Seufzen und schweigen.", "wert": 1, "tendenz": "verstummen", "weiter": "k3", "rueck": "Geht – aber du bleibst getroffen zurück." }
+          ] },
+        { "id": "k3", "sagt": "Renate, nach einer Pause: „Früher warst du ja nicht so schlagfertig.“",
+          "wahl": [
+            { "text": "„Ich hatte eine gute Lehrerin. Sie sitzt neben mir.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Kompliment als Konter – das verbindet." },
+            { "text": "„Ich übe.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich und sympathisch." }
+          ] },
+        { "id": "ende1", "sagt": "Renate schiebt dir das größte Stück Kuchen hin.", "ende": "Familie trifft oft wunde Punkte. Wer seine Umdeutung kennt und die Fürsorge hinter dem Satz hört, bleibt gelassen – und wird geliebt statt belehrt." },
+        { "id": "ende2", "sagt": "Eisiges Schweigen am Tisch.", "ende": "Zurückschießen gewinnt den Moment und verliert den Nachmittag. Beim nächsten Mal: umdeuten oder zustimmen und übertreiben." }
+      ],
+      "prinzipien": ["Schwächen umdeuten", "zustimmen und überzeichnen", "die Absicht hinter dem Satz hören", "nicht zurückschießen"],
+      "transfer": "Welchen Satz hörst du in deiner Familie immer wieder? Bau dir heute deine Umdeutung dafür."
+    },
+    {
+      "id": "konter-l-04", "bereich": "konter", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["konter.necken", "konter.spiel"], "stufe": 4,
+      "titel": "Die neue Kollegin", "figur": "Lena Brandt",
+      "einleitung": "Humor kann einladen oder ausschließen. Du übst Necken mit Gefühl – auf wessen Kosten geht der Witz?",
+      "lage": "Lena ist seit drei Tagen im Team, zurückhaltend und genau. Mittagspause, mehrere Kollegen am Tisch.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Lena hat ihr Essen in perfekt beschrifteten Dosen dabei. Tarek grinst schon. Du willst etwas Lustiges sagen.",
+          "wahl": [
+            { "text": "„Lena, du bist hiermit offiziell für unser Ablagesystem zuständig. Es braucht dich dringend.“", "wert": 2, "weiter": "k2", "rueck": "Der Witz macht aus ihrer Eigenart eine Stärke und lädt sie ein. Alle lachen – Lena auch." },
+            { "text": "„Oh, eine Ordnungsfanatikerin. Das kann ja heiter werden, wenn sie erst unseren Kühlschrank sieht.“", "wert": 0, "tendenz": "angreifen", "weiter": "k2b", "rueck": "Ein Etikett für eine Neue vor der Gruppe – sie fühlt sich vorgeführt." },
+            { "text": "Lieber nichts sagen.", "wert": 1, "weiter": "k2c", "rueck": "Sicher – aber Humor wäre hier eine Einladung gewesen." }
+          ] },
+        { "id": "k2", "sagt": "Lena, leise lächelnd: „Ich habe schon gesehen, wie es auf dem Laufwerk aussieht.“",
+          "wahl": [
+            { "text": "„Dann weißt du ja, warum wir dich eingestellt haben.“", "wert": 2, "weiter": "ende1", "rueck": "Mitspielen – du nimmst ihren Witz auf. Sie ist angekommen." },
+            { "text": "„Das war Tarek.“", "wert": 2, "weiter": "ende1", "rueck": "Ein leichter Seitenhieb, den Tarek verträgt – die Gruppe lacht zusammen." }
+          ] },
+        { "id": "k2b", "sagt": "Lena wird rot und schaut auf ihre Dose. Tarek lacht, sonst niemand.",
+          "wahl": [
+            { "text": "„Sorry, das kam falsch raus. Ehrlich gesagt: Ich bewundere das.“", "wert": 2, "weiter": "ende1", "rueck": "Stark repariert: Wer einen Witz zurücknimmt, gewinnt mehr als er verliert." },
+            { "text": "„War nur Spaß!“", "wert": 0, "weiter": "ende2", "rueck": "„Nur Spaß“ macht es selten besser – es schiebt die Verantwortung zu ihr." }
+          ] },
+        { "id": "k2c", "sagt": "Tarek: „Lena, bist du immer so organisiert?“ Lena nickt zögernd.",
+          "wahl": [
+            { "text": "„Bitte bring es uns bei. Wir sind hoffnungslos.“", "wert": 2, "weiter": "ende1", "rueck": "Selbstironie über die Gruppe lädt Lena ein." },
+            { "text": "Weiteressen.", "wert": 1, "weiter": "ende2", "rueck": "Neutral – die Gelegenheit zieht vorbei." }
+          ] },
+        { "id": "ende1", "sagt": "Lena erzählt von ihrem Ordnungssystem. Alle hören zu.", "ende": "Necken mit Gefühl lädt ein: Die Eigenart wird zur Stärke, und der Witz geht nicht auf Kosten der Schwächsten am Tisch." },
+        { "id": "ende2", "sagt": "Lena isst schweigend auf und geht früh.", "ende": "Witze über Neue vor der Gruppe treffen härter, als man denkt. Vor dem Spruch die Frage: Wer zahlt den Preis?" }
+      ],
+      "prinzipien": ["Wer zahlt den Preis?", "Eigenarten als Stärke zeigen", "nach unten nie verletzen", "einen danebengegangenen Witz zurücknehmen"],
+      "transfer": "Gibt es jemanden Neues in deinem Umfeld? Wie könnte ein Witz klingen, der ihn einlädt?"
+    },
+    {
+      "id": "konter-l-05", "bereich": "konter", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["konter.ruhe", "konter.spiel", "konter.zustimmen", "konter.rueckfrage", "konter.umdeuten", "konter.grenze"], "stufe": 4, "sparring": true,
+      "titel": "Sparring: Kaffeeküche – drei Schärfen", "figur": "Sven und Kollegen",
+      "einleitung": "Das Sparring zum Abschluss der Grundlagen: drei Sprüche in drei Schärfen – neckend, stichelnd, übergriffig. Jeder verlangt ein anderes Werkzeug.",
+      "lage": "Firmenfeier im Sommer. Sven, ein alter Freund, der jetzt im Haus arbeitet, ist in Form.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Runde 1 – neckend. Sven, als du ankommst: „Na, hast du dich extra schick gemacht, um mit dem Grill zu reden?“",
+          "wahl": [
+            { "text": "„Natürlich. Er ist der Einzige hier mit Feuer.“", "wert": 2, "weiter": "k2", "rueck": "Mitspielen und Rolle annehmen – genau richtig bei einem Necken." },
+            { "text": "„Wie meinst du das?“", "wert": 1, "weiter": "k2", "rueck": "Geht, aber bei einem harmlosen Necken wirkt die Rückfrage steif." },
+            { "text": "„Ich hab halt Stil, im Gegensatz zu manch anderem hier am Grill.“", "wert": 0, "tendenz": "angreifen", "weiter": "k2", "rueck": "Aus Spaß wird Spitze. Unnötig." }
+          ] },
+        { "id": "k2", "sagt": "Runde 2 – stichelnd. Ein Kollege vor der Gruppe: „Ach, du bist auch da? Ich dachte, du arbeitest noch an der Präsentation von letzter Woche.“",
+          "wahl": [
+            { "text": "„Die arbeitet jetzt an mir. Wir haben eine Pause vereinbart.“", "wert": 2, "weiter": "k3", "rueck": "Zustimmen und überzeichnen – der Stich läuft ins Leere." },
+            { "text": "„Du hättest sie früher gebraucht? Sag Bescheid.“", "wert": 2, "weiter": "k3", "rueck": "Übersetzt: Du holst den Kern heraus und bleibst freundlich." },
+            { "text": "„Die war doch längst fertig, ich habe nur noch …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k3", "rueck": "Rechtfertigen auf einer Feier – damit bleibt der Stich hängen." }
+          ] },
+        { "id": "k3", "sagt": "Runde 3 – übergriffig. Derselbe Kollege, lauter: „Bei deinem Gehalt würde ich auch die ganze Zeit am Buffet stehen.“",
+          "wahl": [
+            { "text": "Ruhig, mit Blickkontakt: „Das geht zu weit. Lass uns lieber über was anderes reden.“", "wert": 2, "weiter": "ende1", "rueck": "Grenze setzen, ohne zu schreien. Die anderen sind auf deiner Seite." },
+            { "text": "„Kann man so sehen.“ – und dich dem Nächsten zuwenden.", "wert": 2, "weiter": "ende1", "rueck": "Stehen lassen ist auch eine Grenze: Du gibst dem Spruch keine Bühne." },
+            { "text": "Mitlachen.", "wert": 0, "tendenz": "kleinreden", "weiter": "ende2", "rueck": "Mitlachen bei Übergriffen ermutigt den nächsten." },
+            { "text": "„Und bei deinem Gesicht würde ich gar nicht erst kommen.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Auf Körper zielen ist tabu – und macht dich zum zweiten Übergriffigen." }
+          ] },
+        { "id": "ende1", "sagt": "Sven klopft dir auf die Schulter: „Respekt.“", "ende": "Drei Schärfen, drei Werkzeuge: Necken – mitspielen. Sticheln – zustimmen oder übersetzen. Übergriff – Grenze oder stehen lassen. Das ist die Grundausstattung." },
+        { "id": "ende2", "sagt": "Die Stimmung kippt. Einige gehen.", "ende": "Bei Übergriffen helfen weder Mitlachen noch Zurückschlagen. Die Grenze – ruhig gesetzt – ist die stärkste Antwort." }
+      ],
+      "prinzipien": ["Necken: mitspielen", "Sticheln: zustimmen oder übersetzen", "Übergriff: Grenze oder stehen lassen", "nie auf Körper, Herkunft oder Schwächen zielen"],
+      "transfer": "Welche der drei Schärfen begegnet dir am häufigsten? Leg dir für sie einen Satz zurecht."
+    }
+  ]
+}

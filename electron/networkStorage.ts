@@ -142,6 +142,77 @@ export async function deleteFileAsync(relativePath: string): Promise<boolean> {
   try { await fsp.unlink(joinQuiet(relativePath)); return true } catch { return false }
 }
 
+/** Legt eine Datei nur an, wenn es sie noch nicht gibt — der Dateiserver entscheidet, wer zuerst war
+ *  (Terra Incognita: Erstentdecker). 'ok' = angelegt, 'vorhanden' = gab es schon, 'fehler' = nicht möglich.
+ *  Weg 1: Hilfsdatei schreiben und per festem Verweis (Hardlink) unter dem Zielnamen sichtbar machen —
+ *  das Ziel entsteht in einem Schritt mit vollständigem Inhalt. Weg 2 (kann der Server keine Verweise):
+ *  exklusiv öffnen ('wx') und schreiben. */
+export async function createExclusiveAsync(relativePath: string, data: unknown): Promise<'ok' | 'vorhanden' | 'fehler'> {
+  const full = joinQuiet(relativePath)
+  const tmp = `${full}.${process.pid}.${Date.now()}.${Math.floor(Math.random() * 1e6)}.tmp`
+  const text = JSON.stringify(data)
+  try {
+    await fsp.mkdir(full.substring(0, full.lastIndexOf('\\')), { recursive: true })
+  } catch { return 'fehler' }
+  try {
+    await fsp.writeFile(tmp, text, 'utf8')
+    try {
+      await fsp.link(tmp, full)
+      return 'ok'
+    } catch (err) {
+      const code = (err as NodeJS.ErrnoException).code
+      if (code === 'EEXIST') return 'vorhanden'
+      // Verweise nicht unterstützt → Weg 2
+    } finally {
+      try { await fsp.unlink(tmp) } catch { /* schon weg */ }
+    }
+  } catch { /* Hilfsdatei ließ sich nicht schreiben → Weg 2 versucht es direkt */ }
+  let fh: Awaited<ReturnType<typeof fsp.open>> | null = null
+  try {
+    fh = await fsp.open(full, 'wx')
+    await fh.writeFile(text, 'utf8')
+    return 'ok'
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'EEXIST' && !fh) return 'vorhanden'
+    // angelegt, aber nicht beschrieben → wieder entfernen, sonst bliebe eine leere Datei als „vergeben“ zurück
+    if (fh) { try { await fh.close() } catch { /* egal */ } fh = null; try { await fsp.unlink(full) } catch { /* egal */ } }
+    return 'fehler'
+  } finally {
+    if (fh) { try { await fh.close() } catch { /* egal */ } }
+  }
+}
+
+/** Liest JSON und sagt dazu, WARUM nichts kam: 'fehlt' (Datei gibt es sicher nicht), 'kaputt' (nicht lesbar
+ *  als JSON) oder 'fehler' (Laufwerk nicht erreichbar o. Ä.). readJsonAsync liefert in allen drei Fällen null. */
+export async function readJsonStatusAsync(relativePath: string): Promise<{ status: 'ok' | 'fehlt' | 'kaputt' | 'fehler'; daten?: unknown }> {
+  let text: string
+  try { text = await fsp.readFile(joinQuiet(relativePath), 'utf8') }
+  catch (err) {
+    if ((err as NodeJS.ErrnoException).code !== 'ENOENT') return { status: 'fehler' }
+    // ENOENT kommt auch, wenn das Laufwerk selbst nicht antwortet → „fehlt“ nur, wenn die Wurzel erreichbar ist
+    try { await fsp.access(getBasePath().replace(/\//g, '\\').replace(/\\+$/, '')) } catch { return { status: 'fehler' } }
+    return { status: 'fehlt' }
+  }
+  try { return { status: 'ok', daten: JSON.parse(text) } } catch { return { status: 'kaputt' } }
+}
+
+/** Wie listDirAsync, sagt aber, ob das Verzeichnis wirklich leer ist (oder fehlt) — oder ob das Laufwerk nicht
+ *  antwortet (Terra Incognita: „keine Berichte“ darf nie aus einem Laufwerksfehler entstehen). */
+export async function listDirStatusAsync(relativePath: string): Promise<{ ok: boolean; namen: string[] }> {
+  try { return { ok: true, namen: await fsp.readdir(joinQuiet(relativePath)) } }
+  catch (err) {
+    if ((err as NodeJS.ErrnoException).code !== 'ENOENT') return { ok: false, namen: [] }
+    // ENOENT kommt auch, wenn das Laufwerk selbst nicht antwortet → „leer“ nur, wenn die Wurzel erreichbar ist
+    try { await fsp.access(getBasePath().replace(/\//g, '\\').replace(/\\+$/, '')) } catch { return { ok: false, namen: [] } }
+    return { ok: true, namen: [] }
+  }
+}
+
+/** Ein LEERES Verzeichnis entfernen (rmdir: Liegt noch etwas darin, bleibt es stehen). */
+export async function deleteEmptyDirAsync(relativePath: string): Promise<boolean> {
+  try { await fsp.rmdir(joinQuiet(relativePath)); return true } catch { return false }
+}
+
 export function fileExists(relativePath: string): boolean {
   try { return existsSync(safeJoin(getBasePath(), relativePath)) } catch { return false }
 }

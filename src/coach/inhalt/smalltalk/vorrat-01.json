@@ -1,0 +1,343 @@
+{
+  "eintraege": [
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0001", "faehigkeit": "smalltalk.einstieg", "stufe": 1, "kanal": "wissen" },
+      "frage": "Du wartest mit anderen vor dem Kursraum, bis aufgeschlossen wird. Welcher erste Satz ist am leichtesten zu beantworten?",
+      "antworten": [
+        { "text": "„Bist du auch im Spanischkurs?“", "wert": 2, "warum": "Aus dem Anlass, leicht zu beantworten – und eine Tür zu mehr." },
+        { "text": "„Was ist deine Lebensgeschichte?“", "wert": 0, "tendenz": "ueberfallen", "warum": "Viel zu groß für den ersten Satz – das überfordert." },
+        { "text": "„Was hältst du eigentlich von der neuen Grundsteuer? Ich finde die ja ziemlich ungerecht, wenn ich ehrlich bin.“", "wert": 0, "tendenz": "streitthema", "warum": "Ein Streitthema als Einstieg setzt den anderen unter Druck." },
+        { "text": "„Schönes Wetter heute.“", "wert": 1, "warum": "Erlaubt und leicht – als Tür. Der Kurs selbst gibt aber mehr Stoff." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0002", "faehigkeit": "smalltalk.einstieg", "stufe": 2, "kanal": "wissen" },
+      "frage": "Du bist zum ersten Mal im Chor. In der Pause steht eine Frau neben dir am Wasserkocher. Was sagst du?",
+      "antworten": [
+        { "text": "„Ich bin neu hier – singst du schon lange mit?“", "wert": 2, "warum": "Etwas von dir und eine leichte Frage aus dem Anlass." },
+        { "text": "Warten, bis sie dich anspricht – schließlich ist sie schon länger dabei und kennt sich besser aus.", "wert": 0, "tendenz": "vermeiden", "warum": "Sie weiß nicht, dass du neu bist – und wartet vielleicht genauso." },
+        { "text": "„Hallo.“", "wert": 1, "warum": "Ein Anfang. Mit einem zweiten Satz aus der Lage hat sie etwas zum Anknüpfen." },
+        { "text": "„Ich hab gehört, der Chorleiter soll ziemlich streng sein – stimmt das?“", "wert": 0, "tendenz": "laestern", "warum": "Über Abwesende als erster Satz bringt sie in eine unangenehme Lage." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0003", "faehigkeit": "smalltalk.einstieg", "stufe": 3, "kanal": "wissen" },
+      "frage": "Grillfest bei Freunden. Du kennst nur die Gastgeber, und die sind gerade beschäftigt. Was ist der beste Plan?",
+      "antworten": [
+        { "text": "Mit dem Teller zu einem Tisch mit freiem Platz: „Ist hier frei? Woher kennt ihr die beiden?“", "wert": 2, "warum": "Der Anlass liefert die Frage – und am Tisch ist Reden üblich." },
+        { "text": "Bei den Gastgebern bleiben und beim Grillen helfen, bis sie Zeit haben, dich vorzustellen.", "wert": 1, "warum": "Hilfsbereit und ein guter Anfang – nur bleibst du so von ihnen abhängig." },
+        { "text": "Am Rand stehen und aufs Handy schauen, damit es aussieht, als hättest du zu tun.", "wert": 0, "tendenz": "vermeiden", "warum": "Wer beschäftigt aussieht, wird nicht angesprochen." },
+        { "text": "Gleich in die größte Runde gehen und mit einer lustigen Geschichte loslegen.", "wert": 0, "tendenz": "ueberfallen", "warum": "Mutig – aber ohne Zuhören wirkt es wie ein Auftritt." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0004", "faehigkeit": "smalltalk.einstieg", "stufe": 4, "kanal": "wissen" },
+      "frage": "Fachtagung, Kaffeepause. Neben dir steht ein älterer Herr mit Namensschild, auf dem eine Firma aus deiner Branche steht. Welcher Einstieg passt am besten?",
+      "antworten": [
+        { "text": "„Wie fanden Sie den Vortrag eben?“", "wert": 2, "warum": "Aus dem Anlass, offen – und er wählt, wie viel er sagt. Siezen passt hier." },
+        { "text": "„Hey, auch aus der Branche? Was verdient man bei euch eigentlich so?“", "wert": 0, "tendenz": "streitthema", "warum": "Ungefragt duzen und Geld als erstes Thema – zwei Stolpersteine auf einmal." },
+        { "text": "„Ah, die Konkurrenz! Na, spionieren Sie auch ein bisschen?“", "wert": 0, "tendenz": "spruch", "warum": "Als Scherz gemeint – bei Fremden kommt das schnell schief an." },
+        { "text": "„Guten Tag, ich bin {name}. Ich arbeite im Einkauf bei einem Hersteller hier aus der Gegend.“", "wert": 1, "warum": "Höflich, mit Name und Bezug. Eine Frage hinterher gibt ihm den Ball." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "smalltalk-v-0005", "faehigkeit": "smalltalk.einstieg", "stufe": 1, "kanal": "wissen" },
+      "auftrag": "Satz aus dem Raum oder Spruch?",
+      "faecher": ["aus dem Raum", "Spruch"],
+      "karten": [
+        { "text": "„Ist das der Kuchen, von dem alle reden?“", "fach": 0 },
+        { "text": "„Na, Lust auf ein Gespräch mit dem interessantesten Menschen im Raum?“", "fach": 1 },
+        { "text": "„Weißt du, wo es nachher weitergeht?“", "fach": 0 },
+        { "text": "„Kommst du öfter hierher?“", "fach": 1 },
+        { "text": "„Ganz schön windig hier oben, oder?“", "fach": 0 },
+        { "text": "„Wenn du ein Tier wärst, welches wärst du?“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "smalltalk-v-0006", "faehigkeit": "smalltalk.einstieg", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Lässt der Einstieg dem anderen die Wahl, ob er weiterredet?",
+      "faecher": ["lässt die Wahl", "setzt unter Druck"],
+      "karten": [
+        { "text": "„Lohnt sich die Suppe?“", "fach": 0 },
+        { "text": "„Sie sehen traurig aus. Was ist los?“", "fach": 1 },
+        { "text": "„Bist du auch zum ersten Mal hier?“", "fach": 0 },
+        { "text": "„Wir sollten unbedingt Nummern tauschen.“", "fach": 1 },
+        { "text": "„Darf ich mich kurz dazusetzen?“", "fach": 0 },
+        { "text": "„Erzähl mal alles über dich.“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "smalltalk-v-0007", "faehigkeit": "smalltalk.einstieg", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Gute Lage für ein Gespräch – oder lieber in Ruhe lassen?",
+      "faecher": ["gute Lage", "lieber in Ruhe lassen"],
+      "karten": [
+        { "text": "jemand steht beim Empfang mit einem Glas allein am Stehtisch", "fach": 0 },
+        { "text": "jemand sitzt mit Kopfhörern im Wartezimmer", "fach": 1 },
+        { "text": "jemand wartet wie du auf den Beginn des Kurses", "fach": 0 },
+        { "text": "jemand telefoniert hektisch und sucht dabei etwas in der Tasche", "fach": 1 },
+        { "text": "jemand steht neben dir im Aufzug, die Tür ist gerade zu", "fach": 1 },
+        { "text": "jemand lacht an der Garderobe über die viel zu kleinen Kleiderhaken", "fach": 0 }
+      ] },
+    { "art": "szene", "kopf": { "id": "smalltalk-v-0008", "faehigkeit": "smalltalk.einstieg", "stufe": 1, "kanal": "wissen" },
+      "beschreibung": "Montagmorgen im Treppenhaus. Dir kommt ein Mann entgegen, den du seit Monaten grüßt, aber noch nie gesprochen hast. Er schleppt einen Kasten Wasser.",
+      "frage": "Was ist ein guter kleiner Schritt?",
+      "antworten": [
+        { "text": "„Morgen! Schwere Fracht – soll ich die Tür aufhalten?“", "wert": 2, "warum": "Ein Satz aus der Lage und eine kleine Hilfe – so beginnt Nachbarschaft." },
+        { "text": "Grüßen wie immer und weitergehen.", "wert": 1, "warum": "Freundlich und völlig in Ordnung. Ein Satz mehr wäre ein kleiner Schritt weiter." },
+        { "text": "Schnell vorbeigehen und so tun, als hättest du ihn nicht gesehen, damit das Schweigen nicht auffällt.", "wert": 0, "tendenz": "vermeiden", "warum": "Das macht das Schweigen größer, nicht kleiner." }
+      ] },
+    { "art": "szene", "kopf": { "id": "smalltalk-v-0009", "faehigkeit": "smalltalk.einstieg", "stufe": 2, "kanal": "wissen" },
+      "beschreibung": "Sommerfest im Kleingartenverein. Am Kuchenbuffet überlegt eine Frau neben dir laut: „Bienenstich oder Käsekuchen …“",
+      "frage": "Was ist der leichteste Einstieg?",
+      "antworten": [
+        { "text": "„Schwere Wahl. Der Bienenstich soll von Frau Sommer sein – der ist berühmt.“", "wert": 2, "warum": "Sie hat dir die Vorlage geliefert – du greifst sie auf und gibst etwas dazu." },
+        { "text": "Den Bienenstich nehmen und weitergehen.", "wert": 0, "tendenz": "vermeiden", "warum": "Sie hat laut gedacht – fast eine Einladung. Die bleibt liegen." },
+        { "text": "„Nimm doch beides!“", "wert": 1, "warum": "Locker und freundlich. Mit einem zweiten Satz wird ein Gespräch daraus." },
+        { "text": "„Ich esse ja gar keinen Zucker mehr, seit drei Monaten schon …“", "wert": 0, "tendenz": "monolog", "warum": "Aus ihrer kleinen Frage wird dein Thema." }
+      ] },
+    { "art": "szene", "kopf": { "id": "smalltalk-v-0010", "faehigkeit": "smalltalk.einstieg", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Auf dem Flohmarkt stehst du am selben Stand wie ein Mann, der eine alte Kamera in der Hand dreht.",
+      "frage": "Welcher Satz passt am besten?",
+      "antworten": [
+        { "text": "„Funktioniert die noch? Mein Vater hatte genau so eine.“", "wert": 2, "warum": "Aus der Lage, mit etwas von dir – leicht zu beantworten." },
+        { "text": "„Die würde ich nicht kaufen, die ist bestimmt kaputt.“", "wert": 0, "tendenz": "abwerten", "warum": "Ungefragter Rat zu seiner Wahl – das schließt eher." },
+        { "text": "Ihm zunicken und weiterstöbern.", "wert": 1, "warum": "Freundlich. Ein Satz zur Kamera hätte ihm eine Tür geöffnet." },
+        { "text": "„Fotografierst du viel? Analog oder digital? Seit wann?“", "wert": 0, "tendenz": "ausfragen", "warum": "Drei Fragen auf einmal – ein Verhör im Kleinformat." }
+      ] },
+    { "art": "blitz", "kopf": { "id": "smalltalk-v-0011", "faehigkeit": "smalltalk.einstieg", "stufe": 1, "kanal": "koennen", "uhr": true },
+      "auftrag": "Nachbarschaftsfest, du stehst am Getränketisch. Sammle erste Sätze aus dem Raum.", "ziel": 3, "sekunden": 45,
+      "beispiele": ["„Weißt du, wer die Bowle gemacht hat?“", "„Wohnst du auch in der Nummer zwölf?“", "„Ganz schön viele Leute dieses Jahr, oder?“"] },
+    { "art": "blitz", "kopf": { "id": "smalltalk-v-0012", "faehigkeit": "smalltalk.einstieg", "stufe": 2, "kanal": "koennen", "uhr": true },
+      "auftrag": "Rückenkurs im Sportverein, du bist zum ersten Mal da. Sammle Einstiege für die Minute vor dem Start.", "ziel": 3, "sekunden": 45,
+      "beispiele": ["„Bist du schon länger dabei?“", "„Braucht man hier eine eigene Matte?“", "„Ist die Trainerin streng?“"] },
+    { "art": "blitz", "kopf": { "id": "smalltalk-v-0013", "faehigkeit": "smalltalk.einstieg", "stufe": 3, "kanal": "koennen", "uhr": true },
+      "auftrag": "Firmenempfang, ein Gast steht allein am Fenster. Sammle Einstiege mit Name und Bezug.", "ziel": 3, "sekunden": 60,
+      "beispiele": ["„Ich bin {name} aus dem Einkauf – woher kennen Sie unser Haus?“", "„Ich bin {name} und organisiere heute ein bisschen mit. Haben Sie schon etwas zu trinken?“", "„Hallo, ich bin {name}. Schöne Aussicht, oder? Sind Sie zum ersten Mal hier?“"] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0014", "faehigkeit": "smalltalk.einstieg", "stufe": 2, "kanal": "wissen" },
+      "frage": "Geburtstagsfeier bei Jule, du kennst kaum jemanden. Welcher Satz öffnet am meisten?",
+      "antworten": [
+        { "text": "„Woher kennst du Jule?“", "wert": 2, "warum": "Der Anlass verbindet euch – und dazu gibt es meist eine kleine Geschichte." },
+        { "text": "„Schöne Wohnung, oder? Ich frag mich ja immer, was so etwas in der Lage heute an Miete kostet.“", "wert": 0, "tendenz": "streitthema", "warum": "Das Geld anderer Leute ist kein guter erster Stoff." },
+        { "text": "„Hallo, ich bin {name}.“", "wert": 1, "warum": "Ein guter Anfang. Mit einer Frage hinterher kommt Bewegung hinein." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0015", "faehigkeit": "smalltalk.einstieg", "stufe": 3, "kanal": "wissen" },
+      "frage": "Du stellst dich beim Vereinsabend einer Runde älterer Mitglieder vor. Welche Fassung passt am besten?",
+      "antworten": [
+        { "text": "„Hi Leute, ich bin {name}! Was geht so bei euch?“", "wert": 0, "tendenz": "ueberspielen", "warum": "Locker gemeint – bei Älteren und Fremden schnell zu forsch." },
+        { "text": "„Guten Abend, ich bin {name} – neu in der Laufgruppe.“", "wert": 2, "warum": "Höflich, mit Bezug. Ob geduzt wird, entscheiden im Zweifel die anderen." },
+        { "text": "„Entschuldigung, dass ich störe, ich wollte nur ganz kurz …“", "wert": 1, "tendenz": "kleinreden", "warum": "Höflich, aber die Entschuldigung macht dich kleiner. Ein freundlicher Gruß reicht." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0016", "faehigkeit": "smalltalk.einstieg", "stufe": 4, "kanal": "wissen" },
+      "frage": "Ein Kollege aus dem Ausland ist seit einer Woche da. Du weißt nicht, ob man bei ihm zu Hause eher siezt oder duzt. Was sagst du?",
+      "antworten": [
+        { "text": "„Was ist dir lieber – Du oder Sie? Bei uns im Team duzen sich fast alle.“", "wert": 2, "warum": "Offen gefragt, mit einer Information – so muss keiner raten." },
+        { "text": "Einfach duzen – er wird sich schon melden, wenn es ihn stört.", "wert": 0, "tendenz": "ueberfahren", "warum": "Vielleicht meldet er sich nicht – Neue sagen selten etwas." },
+        { "text": "Siezen, bis er von sich aus das Du anbietet, auch wenn im Team sonst alle duzen.", "wert": 1, "warum": "Höflich und sicher. Wo alle duzen, kann es aber Abstand schaffen." },
+        { "text": "Jede Anrede vermeiden und nur noch ohne Du und Sie formulieren.", "wert": 0, "tendenz": "vermeiden", "warum": "Anstrengend – und es klingt mit der Zeit seltsam." }
+      ] },
+    { "art": "anschluss", "kopf": { "id": "smalltalk-v-0017", "faehigkeit": "smalltalk.einstieg", "stufe": 2, "kanal": "koennen" },
+      "von": "ein Gast am Buffet", "aussage": "„Ganz schön voll hier heute.“",
+      "kriterien": ["nimmt den Satz auf", "gibt etwas dazu – von dir oder eine Frage", "öffnet, statt zu schließen"],
+      "muster": ["„Stimmt – ich hab mich gerade bis zu den Brezeln durchgekämpft. Kennst du hier viele?“", "„Ja, und alle wollen dasselbe Stück Kuchen. Woher kennst du die Gastgeberin?“"] },
+    { "art": "anschluss", "kopf": { "id": "smalltalk-v-0018", "faehigkeit": "smalltalk.einstieg", "stufe": 3, "kanal": "koennen" },
+      "von": "eine Frau im Kurs", "aussage": "„Ich bin so froh, dass es endlich losgeht. Ich hab mich seit Wochen auf den Kurs gefreut.“",
+      "kriterien": ["greift ihre Vorfreude auf", "offene Frage oder ein Satz von dir", "freundlich, nicht ausfragend"],
+      "muster": ["„Seit Wochen? Was hat dich so neugierig gemacht?“", "„Geht mir ähnlich – ich wollte das schon ewig machen. Hast du schon Erfahrung?“"] },
+    { "art": "blitz", "kopf": { "id": "smalltalk-v-0019", "faehigkeit": "smalltalk.gruppe", "stufe": 2, "kanal": "koennen", "uhr": true },
+      "auftrag": "Eine Runde am Stehtisch spricht über Urlaub. Sammle Sätze zum Dazustellen, die ans Thema anknüpfen.", "ziel": 3, "sekunden": 45,
+      "beispiele": ["„Darf ich? Ich hab Urlaub gehört – da bin ich dabei.“", "„Ist das die Runde der Reiseberichte? Dann bleib ich.“", "„Darf ich mich dazustellen? Ich plane gerade auch.“"] },
+    { "art": "blitz", "kopf": { "id": "smalltalk-v-0020", "faehigkeit": "smalltalk.gruppe", "stufe": 3, "kanal": "koennen", "uhr": true },
+      "auftrag": "Du stehst mit zwei anderen in einer Runde, eine Kollegin steht allein daneben. Sammle Sätze, mit denen du sie hereinholst.", "ziel": 3, "sekunden": 45,
+      "beispiele": ["„Komm dazu – wir rätseln gerade, wer den Kuchen gebacken hat.“", "„Lena, kennst du schon Jonas?“", "„Wir reden übers Wochenende – was hast du vor?“"] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0021", "faehigkeit": "smalltalk.gruppe", "stufe": 2, "kanal": "wissen" },
+      "frage": "Eine Runde von vier Leuten lacht laut. Eine Person darin kennst du flüchtig. Wie kommst du dazu?",
+      "antworten": [
+        { "text": "Dich an den Rand stellen, mitlächeln und der Person, die du kennst, kurz zunicken.", "wert": 2, "warum": "Hinstellen, Blick suchen – in der nächsten Pause bist du drin." },
+        { "text": "Die Person, die du kennst, antippen und kurz zur Seite bitten.", "wert": 0, "tendenz": "herausloesen", "warum": "So ziehst du sie aus der Runde, statt dazuzukommen." },
+        { "text": "Warten, bis die Runde sich auflöst, und die Person dann ansprechen.", "wert": 1, "warum": "Geht – nur verpasst du die offene Runde." },
+        { "text": "Laut fragen: „Was ist denn so lustig?“", "wert": 0, "tendenz": "ueberfallen", "warum": "Mitten in den Witz hinein – das stoppt eher, als dass es öffnet." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0022", "faehigkeit": "smalltalk.gruppe", "stufe": 3, "kanal": "wissen" },
+      "frage": "Du stehst seit einer Minute am Rand einer Runde, die über den neuen Radweg spricht. Jetzt entsteht eine Pause. Was sagst du?",
+      "antworten": [
+        { "text": "„Darf ich was zum Radweg sagen? Ich fahr da jeden Morgen.“", "wert": 2, "warum": "Ans laufende Thema angeknüpft, mit einem Bezug zu dir." },
+        { "text": "„Ganz anderes Thema: Weiß jemand, wann das Buffet aufmacht?“", "wert": 0, "tendenz": "themenwechsel", "warum": "Ein neues Thema beim Einstieg – die Runde muss sich umstellen." },
+        { "text": "„Hallo zusammen, ich bin {name}, ich arbeite seit sechs Jahren im Einkauf und mache in meiner Freizeit gern …“", "wert": 0, "tendenz": "monolog", "warum": "Ein Vortrag über dich, bevor du Teil der Runde bist." },
+        { "text": "„Hallo! Darf ich mich dazustellen?“", "wert": 1, "warum": "Höflich und gut. Ein Satz zum Thema macht dich gleich zum Teil des Gesprächs." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0023", "faehigkeit": "smalltalk.gruppe", "stufe": 5, "kanal": "wissen" },
+      "frage": "Du stehst mitten im Gespräch in einer Dreierrunde. Ein neuer Kollege stellt sich unsicher an den Rand. Was tust du?",
+      "antworten": [
+        { "text": "Weiterreden – wenn er etwas sagen will, wird er es schon tun.", "wert": 0, "tendenz": "ausschliessen", "warum": "Neue sagen selten von selbst etwas – die Runde bleibt für ihn zu." },
+        { "text": "Einen halben Schritt zur Seite machen und ihm in einem Satz sagen, worum es gerade geht.", "wert": 2, "warum": "Kreis geöffnet, Thema geteilt – so kann er sofort einsteigen." },
+        { "text": "Ihm freundlich zunicken.", "wert": 1, "warum": "Ein gutes Zeichen. Mit einem halben Schritt und einem Satz wäre er drin." },
+        { "text": "Das Gespräch anhalten und ihn ausführlich mit Abteilung und Werdegang vorstellen.", "wert": 0, "tendenz": "ueberspielen", "warum": "Gut gemeint, aber zu viel Bühne – das ist ihm vermutlich unangenehm." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0024", "faehigkeit": "smalltalk.gruppe", "stufe": 2, "kanal": "wissen" },
+      "frage": "Welcher Satz eignet sich am besten, um dich zu einer offenen Runde zu stellen?",
+      "antworten": [
+        { "text": "„Na, worüber lästert ihr gerade?“", "wert": 0, "tendenz": "spruch", "warum": "Als Scherz gemeint – unterstellt aber etwas." },
+        { "text": "„Darf ich mich dazustellen?“", "wert": 2, "warum": "Kurz, höflich – meist willkommen." },
+        { "text": "„Störe ich?“", "wert": 1, "warum": "Höflich – lenkt den Blick aber aufs Stören statt aufs Mitreden." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0025", "faehigkeit": "smalltalk.gruppe", "stufe": 3, "kanal": "wissen" },
+      "frage": "Du willst Lena und Jonas miteinander bekannt machen. Welcher Satz hilft beiden am meisten?",
+      "antworten": [
+        { "text": "„Lena, das ist Jonas. Jonas, das ist Lena.“", "wert": 1, "warum": "Ordentlich – nur fehlt ein Aufhänger." },
+        { "text": "„Lena, das ist Jonas aus der Technik, er spielt Saxofon. Lena ist neu bei uns und läuft viel.“", "wert": 2, "warum": "Namen plus Aufhänger: Die beiden haben sofort ein Thema." },
+        { "text": "„Ihr zwei solltet euch unbedingt kennenlernen, ihr werdet euch super verstehen!“", "wert": 0, "tendenz": "ueberspielen", "warum": "Viel Druck, wenig Stoff – was sollen sie jetzt sagen?" }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0026", "faehigkeit": "smalltalk.gruppe", "stufe": 4, "kanal": "wissen" },
+      "frage": "Du warst eine Weile in einer Runde und willst zu einer anderen Gruppe wechseln. Welcher Satz passt am besten?",
+      "antworten": [
+        { "text": "Wortlos hinübergehen.", "wert": 0, "tendenz": "verschwinden", "warum": "In einer Runde fällt das auf – ein Satz reicht." },
+        { "text": "„Sorry, ihr seid mir ein bisschen zu ruhig, ich schau mal, wo mehr los ist.“", "wert": 0, "tendenz": "abwerten", "warum": "Ehrlich vielleicht, aber verletzend." },
+        { "text": "„Ich schau mal, was die anderen machen – bis später!“", "wert": 2, "warum": "Freundlich, mit Grund und Ausblick." },
+        { "text": "„Ich muss mal kurz.“", "wert": 1, "warum": "Ein Grund, aber ohne Ausblick. Ein „Bis später“ macht es freundlicher." }
+      ] },
+    { "art": "szene", "kopf": { "id": "smalltalk-v-0027", "faehigkeit": "smalltalk.gruppe", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Beim Sommerfest stehen zwei Kolleginnen dicht beieinander und reden leise. Eine wischt sich über die Augen.",
+      "frage": "Was tust du?",
+      "antworten": [
+        { "text": "Später wiederkommen – jetzt ist die Runde geschlossen.", "wert": 2, "warum": "Hier geht es um etwas Persönliches. Ein Einstieg wäre jetzt eine Störung." },
+        { "text": "Hingehen und fragen, ob alles in Ordnung ist.", "wert": 1, "warum": "Fürsorglich – nur ist schon jemand für sie da. Später einzeln nachfragen ist rücksichtsvoller." },
+        { "text": "Dich dazustellen und einen Witz machen.", "wert": 0, "tendenz": "ueberspielen", "warum": "Gut gemeint, aber du überfährst den Moment." }
+      ] },
+    { "art": "szene", "kopf": { "id": "smalltalk-v-0028", "faehigkeit": "smalltalk.gruppe", "stufe": 4, "kanal": "wissen" },
+      "beschreibung": "Hochzeit. Du sitzt am Tisch mit sechs Fremden. Zwei reden lebhaft über Fußball, die anderen schauen still in ihr Glas.",
+      "frage": "Was ist ein guter Zug?",
+      "antworten": [
+        { "text": "Dich der stillen Nachbarin zuwenden: „Woher kennst du das Brautpaar?“", "wert": 2, "warum": "Zu zweit ist leichter als in großer Runde – und der Anlass liefert die Frage." },
+        { "text": "Laut eine Frage in die ganze Runde werfen, damit alle mitreden können, auch die Stillen.", "wert": 1, "warum": "Gut gemeint – manche Stille mögen das. Zu zweit ist für viele leichter." },
+        { "text": "Auch ins Glas schauen und abwarten, bis die Reden beginnen.", "wert": 0, "tendenz": "vermeiden", "warum": "Dann sitzen vier Menschen still nebeneinander, obwohl jeder gern reden würde." },
+        { "text": "Mit starker Meinung in die Fußballdebatte, obwohl dich Fußball kaltlässt.", "wert": 0, "tendenz": "ueberspielen", "warum": "Gespieltes Interesse trägt nicht weit – Streitlust erst recht nicht." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "smalltalk-v-0029", "faehigkeit": "smalltalk.gruppe", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Öffnet das die Runde – oder schließt es sie?",
+      "faecher": ["öffnet", "schließt"],
+      "karten": [
+        { "text": "einen halben Schritt zur Seite machen", "fach": 0 },
+        { "text": "dem Neuen den Rücken zudrehen", "fach": 1 },
+        { "text": "kurz sagen, worüber ihr gerade redet", "fach": 0 },
+        { "text": "Insider-Witze, die nur zwei verstehen", "fach": 1 },
+        { "text": "den Blick auch zu dem wandern lassen, der am Rand steht", "fach": 0 },
+        { "text": "eng zusammenrücken", "fach": 1 }
+      ] },
+    { "art": "anschluss", "kopf": { "id": "smalltalk-v-0030", "faehigkeit": "smalltalk.themen", "stufe": 2, "kanal": "koennen" },
+      "von": "Miriam Okafor", "aussage": "„Ich hab am Wochenende endlich den Balkon bepflanzt. Tomaten, Basilikum – und eine Chili, mal sehen, ob die durchhält.“",
+      "kriterien": ["nimmt einen Aufhänger (Tomaten, Chili, Balkon)", "öffnet ein Thema", "kein Themenwechsel"],
+      "muster": ["„Eine Chili auf dem Balkon? Wie scharf soll die werden?“", "„Hast du einen grünen Daumen, oder ist das ein Experiment?“"] },
+    { "art": "anschluss", "kopf": { "id": "smalltalk-v-0031", "faehigkeit": "smalltalk.themen", "stufe": 3, "kanal": "koennen" },
+      "von": "Herr Petersen", "aussage": "„Nächste Woche fahre ich mit meinem Enkel an die See. Er ist sieben und will unbedingt einen Krebs fangen.“",
+      "kriterien": ["wählt einen Aufhänger", "fragt nach Erleben oder Plan", "siezt"],
+      "muster": ["„Einen Krebs! Haben Sie schon einen Eimer besorgt?“", "„Wie schön – fahren Sie öfter zusammen weg?“"] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0032", "faehigkeit": "smalltalk.themen", "stufe": 2, "kanal": "wissen" },
+      "frage": "Über das Wetter ist alles gesagt. Welche Brücke führt am besten weiter?",
+      "antworten": [
+        { "text": "„Bei dem Regen – was machst du am Wochenende, wenn's so bleibt?“", "wert": 2, "warum": "Vom Wetter zur Person – das Wetter war die Tür." },
+        { "text": "„Ja … hm.“ – und warten, ob dem anderen noch etwas einfällt.", "wert": 0, "tendenz": "vermeiden", "warum": "Dann bleibt das Gespräch in der Wetterschleife stecken." },
+        { "text": "„Das liegt übrigens am Hochdruckgebiet im Norden, das hat mit der Strömung zu tun, die sich da gerade …“", "wert": 0, "tendenz": "monolog", "warum": "Ein Wettervortrag – das Thema wird größer, nicht persönlicher." },
+        { "text": "„Wohnst du hier in der Nähe?“", "wert": 1, "warum": "Ein Wechsel ohne Brücke – aber ein brauchbarer." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0033", "faehigkeit": "smalltalk.themen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Mit einer Bekannten aus dem Kochkurs: Welches Thema passt für euer erstes längeres Gespräch am besten?",
+      "antworten": [
+        { "text": "Wie sie zum Kochen gekommen ist", "wert": 2, "warum": "Persönlich, aber leicht – und mit dem Anlass verbunden." },
+        { "text": "Was sie im Monat verdient", "wert": 0, "tendenz": "streitthema", "warum": "Geld ist bei Bekannten schnell heikel." },
+        { "text": "Ihre Meinung zur letzten Wahl", "wert": 0, "tendenz": "streitthema", "warum": "Politik früh im Gespräch schafft leicht Fronten." },
+        { "text": "Welches Rezept ihr heute gekocht habt", "wert": 1, "warum": "Sicher und naheliegend – eine Stufe persönlicher trägt weiter." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0034", "faehigkeit": "smalltalk.themen", "stufe": 4, "kanal": "wissen" },
+      "frage": "Am Stehtisch steht ein Gast, der vor einem Monat aus dem Ausland hergezogen ist. Welche Frage ist am rücksichtsvollsten?",
+      "antworten": [
+        { "text": "„Was ist dir hier am meisten aufgefallen – im Guten wie im Seltsamen?“", "wert": 2, "warum": "Offen, neugierig – und er bestimmt, was er erzählt." },
+        { "text": "„Wie steht ihr bei euch zu Religion und Politik?“", "wert": 0, "tendenz": "streitthema", "warum": "Religion und Politik sind auch über Ländergrenzen hinweg keine Einstiegsthemen." },
+        { "text": "„Woher kommst du genau?“", "wert": 1, "warum": "Naheliegend und meist in Ordnung – nur hören manche die Frage sehr oft." },
+        { "text": "„Dein Deutsch ist ja erstaunlich gut für jemanden, der neu hier ist!“", "wert": 0, "tendenz": "abwerten", "warum": "Als Lob gemeint, klingt aber nach Ausnahme. Lieber nach seinen Erfahrungen fragen." }
+      ] },
+    { "art": "blitz", "kopf": { "id": "smalltalk-v-0035", "faehigkeit": "smalltalk.themen", "stufe": 2, "kanal": "koennen", "uhr": true },
+      "auftrag": "Sammle Themen, über die du mit fast jedem reden kannst – ohne Streitthemen.", "ziel": 5, "sekunden": 60,
+      "beispiele": ["Woher jemand kommt", "Was gerade bei der Arbeit los ist", "Pläne fürs Wochenende", "Lieblingsessen", "Was man als Kind werden wollte"] },
+    { "art": "blitz", "kopf": { "id": "smalltalk-v-0036", "faehigkeit": "smalltalk.themen", "stufe": 3, "kanal": "koennen", "uhr": true },
+      "auftrag": "Das Thema ist „Garten“. Sammle Fragen, die jemanden zum Erzählen bringen.", "ziel": 5, "sekunden": 60,
+      "beispiele": ["„Was wächst bei dir gerade am besten?“", "„Wie bist du zum Gärtnern gekommen?“", "„Was war dein größter Reinfall?“"] },
+    { "art": "blitz", "kopf": { "id": "smalltalk-v-0037", "faehigkeit": "smalltalk.themen", "stufe": 4, "kanal": "koennen", "uhr": true },
+      "auftrag": "Sammle Brücken vom Wetter zur Person.", "ziel": 4, "sekunden": 45,
+      "beispiele": ["„Bei dem Wetter – Garten oder Sofa am Wochenende?“", "„Bist du eher Sommer- oder Wintermensch?“", "„Hast du schon Urlaub geplant?“"] },
+    { "art": "zuordnen", "kopf": { "id": "smalltalk-v-0038", "faehigkeit": "smalltalk.themen", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Für den ersten Smalltalk mit Fremden geeignet – oder lieber später?",
+      "faecher": ["gut für den Anfang", "lieber später – und nur, wenn der andere es anspricht"],
+      "karten": [
+        { "text": "der Anlass, der euch zusammenbringt", "fach": 0 },
+        { "text": "Gehalt und Miete", "fach": 1 },
+        { "text": "Pläne fürs Wochenende", "fach": 0 },
+        { "text": "Krankheiten", "fach": 1 },
+        { "text": "das Essen am Buffet", "fach": 0 },
+        { "text": "Religion und Politik", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "smalltalk-v-0039", "faehigkeit": "smalltalk.themen", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Welche Richtung des Themen-Kompasses steckt in der Frage?",
+      "faecher": ["Herkunft und Wohnort", "Arbeit und Vorhaben", "Freizeit", "Pläne"],
+      "karten": [
+        { "text": "„Bist du hier aufgewachsen?“", "fach": 0 },
+        { "text": "„Woran arbeitest du gerade?“", "fach": 1 },
+        { "text": "„Was machst du, wenn du nicht arbeitest?“", "fach": 2 },
+        { "text": "„Was hast du dir fürs nächste Jahr vorgenommen?“", "fach": 3 },
+        { "text": "„Wohnst du schon lange in der Gegend?“", "fach": 0 },
+        { "text": "„Spielst du ein Instrument?“", "fach": 2 },
+        { "text": "„Steht bei dir dieses Jahr noch eine Reise an?“", "fach": 3 },
+        { "text": "„Was macht euer Team gerade?“", "fach": 1 }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0040", "faehigkeit": "smalltalk.namen", "stufe": 2, "kanal": "wissen" },
+      "frage": "Vorstellungsrunde mit zehn Leuten, vor dir sind fünf dran. Was hilft dir am meisten, ihre Namen zu behalten?",
+      "antworten": [
+        { "text": "Den eigenen Satz vorher fertig haben – dann ist der Kopf frei zum Zuhören.", "wert": 2, "warum": "Wer gleich dran ist, hört schlecht. Ein fertiger Satz macht Platz für die Namen." },
+        { "text": "Den eigenen Satz im Kopf proben, bis du dran bist, damit er gut sitzt.", "wert": 0, "tendenz": "nach_innen", "warum": "Genau dann rutschen die Namen kurz vor dir weg." },
+        { "text": "Die Namen unauffällig mitschreiben.", "wert": 1, "warum": "Kann helfen – in manchen Runden wirkt es seltsam. Zuhören mit freiem Kopf geht überall." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0041", "faehigkeit": "smalltalk.namen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Nach zehn Minuten merkst du: Den Namen deines Gegenübers hast du vergessen. Was tust du?",
+      "antworten": [
+        { "text": "„Sag mir deinen Namen noch einmal? Ich will ihn mir richtig merken.“", "wert": 2, "warum": "Früh nachfragen wirkt wie Interesse – nicht wie Vergesslichkeit." },
+        { "text": "Den ganzen Abend ohne Namen auskommen und hoffen, dass ihn irgendwann jemand anderes zufällig sagt.", "wert": 0, "tendenz": "vermeiden", "warum": "Je länger du wartest, desto unangenehmer wird die Frage." },
+        { "text": "Jemand anderen leise nach dem Namen fragen.", "wert": 1, "warum": "Geht – direkt fragen ist meist einfacher und wirkt offener." },
+        { "text": "„Wie war noch mal dein Name? Ich kann mir Namen sowieso nie merken.“", "wert": 1, "tendenz": "kleinreden", "warum": "Die Frage ist gut – die Abwertung danach brauchst du nicht." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "smalltalk-v-0042", "faehigkeit": "smalltalk.namen", "stufe": 4, "kanal": "wissen" },
+      "frage": "Wie behältst du auf einer Feier am ehesten fünf neue Namen bis zum nächsten Tag?",
+      "antworten": [
+        { "text": "Jeden Namen zurücksagen und später in wachsenden Abständen innerlich abrufen.", "wert": 2, "warum": "Abrufen in Abständen rettete in einem Versuch auf einer echten Feier deutlich mehr Namen." },
+        { "text": "Zu jedem Namen ein ausgefeiltes Bild erfinden, etwa „Frau Köhler mit Kohle im Kühler“.", "wert": 1, "warum": "Kann helfen – auf einer echten Feier war es aber nicht besser als der bloße Vorsatz." },
+        { "text": "Gar keine Namen merken und alle einfach mit „du“ ansprechen.", "wert": 0, "tendenz": "vermeiden", "warum": "Geht – aber du verschenkst etwas: Viele hören ihren Namen gern." },
+        { "text": "Den Namen beim ersten Hören fünfmal schnell hintereinander denken.", "wert": 0, "warum": "Dicht hintereinander hilft weniger als Abrufen in Abständen." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0043", "faehigkeit": "smalltalk.namen", "stufe": 2, "kanal": "wissen" },
+      "frage": "Jule stellt dir eine Bekannte vor: „Das ist Nadine.“ Welche Antwort hilft dir am meisten beim Behalten?",
+      "antworten": [
+        { "text": "„Hallo Nadine, freut mich!“", "wert": 2, "warum": "Den Namen gleich zurücksagen ist das erste Abrufen." },
+        { "text": "„Hallo, freut mich!“", "wert": 1, "warum": "Freundlich – mit dem Namen darin wäre es zugleich ein Merk-Schritt." },
+        { "text": "„Hi! Woher kennt ihr euch eigentlich, Jule und du – und seit wann?“", "wert": 1, "warum": "Eine gute Frage – nur Nadines Name kommt nicht darin vor." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "smalltalk-v-0044", "faehigkeit": "smalltalk.namen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Am Ende des Abends verabschiedest du dich von jemandem, den du heute kennengelernt hast. Welcher Satz ist am stärksten?",
+      "antworten": [
+        { "text": "„Tschüss, war nett!“", "wert": 1, "warum": "Freundlich. Mit Namen und einem Ausblick bleibt mehr hängen." },
+        { "text": "„Schön, dich kennengelernt zu haben, Jonas. Viel Spaß beim Konzert!“", "wert": 2, "warum": "Name, Würdigung, ein Aufhänger fürs nächste Mal." },
+        { "text": "„Ciao, du – äh, wie warst du noch mal? Ich bin so schlecht mit Namen, ehrlich, das ist bei mir ganz schlimm.“", "wert": 0, "tendenz": "kleinreden", "warum": "Der Moment ist schon fast vorbei – früher nachzufragen wäre leichter gewesen." }
+      ] },
+    { "art": "szene", "kopf": { "id": "smalltalk-v-0045", "faehigkeit": "smalltalk.namen", "stufe": 2, "kanal": "wissen" },
+      "beschreibung": "Erster Abend im Kochkurs. Reihum sagen alle ihren Namen und ihr Lieblingsgericht. Vor dir sind vier andere dran, und du merkst, wie du deinen Satz im Kopf wiederholst.",
+      "frage": "Was hilft am meisten?",
+      "antworten": [
+        { "text": "Den Satz einmal festlegen – „Ich bin {name}, Linsensuppe“ – und dann bewusst zuhören.", "wert": 2, "warum": "Ein fertiger Satz macht den Kopf frei für die Namen der anderen." },
+        { "text": "Den Satz bis zum Schluss im Kopf proben, damit er perfekt sitzt.", "wert": 0, "tendenz": "nach_innen", "warum": "Genau so gehen die Namen kurz vor dir verloren." },
+        { "text": "Dir nur die Lieblingsgerichte merken – die Namen fragst du später.", "wert": 1, "warum": "Die Gerichte sind gute Aufhänger. Zuhören mit freiem Kopf rettet aber auch die Namen." }
+      ] },
+    { "art": "szene", "kopf": { "id": "smalltalk-v-0046", "faehigkeit": "smalltalk.namen", "stufe": 4, "kanal": "wissen" },
+      "beschreibung": "Nachbarschaftsfest. Eine Frau, mit der du vor drei Wochen lange geredet hast, begrüßt dich mit deinem Namen. Ihren hast du vergessen.",
+      "frage": "Was tust du?",
+      "antworten": [
+        { "text": "„Schön, dich zu sehen! Hilf mir – dein Name ist mir entfallen.“", "wert": 2, "warum": "Ehrlich und freundlich – die meisten nehmen das gelassen." },
+        { "text": "So tun, als wüsstest du ihn, und den ganzen Abend jede Anrede vermeiden.", "wert": 0, "tendenz": "vermeiden", "warum": "Anstrengend – und es wird mit jedem Satz schwerer." },
+        { "text": "An euer letztes Gespräch anknüpfen und hoffen, dass der Name irgendwann von selbst fällt.", "wert": 1, "warum": "Das Anknüpfen ist stark. Den Namen direkt zu erfragen ist trotzdem leichter." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "smalltalk-v-0047", "faehigkeit": "smalltalk.namen", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Hilft das beim Namenmerken – oder eher nicht?",
+      "faecher": ["hilft", "hilft wenig"],
+      "karten": [
+        { "text": "den Namen gleich zurücksagen", "fach": 0 },
+        { "text": "den eigenen Satz proben, während der andere sich vorstellt", "fach": 1 },
+        { "text": "nach einer Minute innerlich abrufen", "fach": 0 },
+        { "text": "den Namen fünfmal schnell hintereinander denken", "fach": 1 },
+        { "text": "beim Abschied den Namen nennen", "fach": 0 },
+        { "text": "nur aufs Gesicht schauen und hoffen", "fach": 1 }
+      ] }
+  ]
+}

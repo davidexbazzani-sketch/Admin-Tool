@@ -1,0 +1,115 @@
+{
+  "bereich": "smalltalk",
+  "spur": "kern",
+  "szenarien": [
+    { "id": "smalltalk-fc-001", "faehigkeit": "smalltalk.einstieg", "stufe": 2, "frage": "Du sitzt zum ersten Mal beim Stammtisch deines Wandervereins. Gegenüber sitzt eine Frau mit einer Wanderkarte. Was sagst du?", "antworten": [
+      { "text": "„Planst du schon die nächste Tour? Ich bin neu und noch ganz ohne Karte.“", "wert": 2, "warum": "Aus der Lage, mit etwas von dir – leicht zu beantworten." },
+      { "text": "„Hallo.“ – und dann erst einmal schweigend in die Speisekarte schauen.", "wert": 1, "warum": "Ein Anfang. Mit einem zweiten Satz aus der Lage wird ein Gespräch daraus." },
+      { "text": "Warten, bis der Vorsitzende dich allen vorstellt.", "wert": 0, "tendenz": "vermeiden", "warum": "Vielleicht passiert das nie – und bis dahin sitzt du still da." } ] },
+    { "id": "smalltalk-fc-002", "faehigkeit": "smalltalk.einstieg", "stufe": 4, "frage": "Auf einer Hochzeit sitzt am Nachbartisch eine ältere Dame allein. Du möchtest sie ansprechen. Was ist der beste erste Satz?", "antworten": [
+      { "text": "„Darf ich mich kurz zu Ihnen setzen? Gehören Sie zur Familie der Braut oder des Bräutigams?“", "wert": 2, "warum": "Höflich, mit Wahl für sie – und der Anlass liefert die Frage." },
+      { "text": "„Na, Sie sitzen ja auch ganz allein hier – haben die Sie etwa vergessen?“", "wert": 0, "tendenz": "spruch", "warum": "Klingt nach Mitleid und betont, was ihr unangenehm sein könnte." },
+      { "text": "„Schönes Fest, nicht wahr?“", "wert": 1, "warum": "Freundlich und leicht. Mit einer Frage zum Anlass gibt es mehr zum Anknüpfen." } ] },
+    { "id": "smalltalk-fc-003", "faehigkeit": "smalltalk.einstieg", "stufe": 6, "frage": "Pause bei einer Weiterbildung. Ein Teilnehmer steht mit Kopfhörern am Fenster und tippt aufs Handy. Daneben unterhalten sich zwei locker über das Seminar und schauen immer wieder in den Raum. Was tust du?", "antworten": [
+      { "text": "Dich zu den beiden stellen – sie sind offen, und an das Seminar kannst du anknüpfen.", "wert": 2, "warum": "Offene Haltung, gemeinsames Thema – eine gute Gelegenheit." },
+      { "text": "Den Mann mit den Kopfhörern ansprechen – der freut sich bestimmt über Gesellschaft.", "wert": 0, "warum": "Kopfhörer und Handy heißen meist: bitte nicht jetzt." },
+      { "text": "Erst einmal einen Kaffee holen und schauen, wer noch frei ist.", "wert": 1, "warum": "Kann helfen – die offene Zweierrunde ist aber gerade jetzt eine gute Gelegenheit." } ] },
+    { "id": "smalltalk-fc-004", "faehigkeit": "smalltalk.themen", "stufe": 2, "frage": "Beim Gemeindefest stockt das Gespräch mit einem Nachbarn nach einem Satz über das schöne Wetter. Welches Thema liegt am nächsten?", "antworten": [
+      { "text": "Das Fest selbst: „Bist du jedes Jahr hier?“", "wert": 2, "warum": "Der Anlass verbindet euch und ist leicht." },
+      { "text": "Die Pläne für die neue Umgehungsstraße – darüber streitet die ganze Gemeinde gerade sehr heftig.", "wert": 0, "tendenz": "streitthema", "warum": "Ein Streitthema setzt das Gespräch schnell unter Strom." },
+      { "text": "Seine Arbeit: „Was machst du beruflich?“", "wert": 1, "warum": "Geht – der Anlass liegt aber näher." } ] },
+    { "id": "smalltalk-fc-005", "faehigkeit": "smalltalk.themen", "stufe": 4, "frage": "Ein Kollege hat vor einer Viertelstunde erwähnt, dass seine Tochter bald Abitur schreibt. Jetzt entsteht eine Pause. Was tust du?", "antworten": [
+      { "text": "„Du hattest vorhin deine Tochter erwähnt – wie geht es ihr mit den Prüfungen?“", "wert": 2, "warum": "Der Faden nach hinten zeigt, dass du dir etwas gemerkt hast." },
+      { "text": "„Na ja … ganz schön ruhig heute. Ich glaub, es gibt gleich Regen, so dunkel, wie es draußen wird.“", "wert": 1, "warum": "Geht – der Faden nach hinten wäre persönlicher." },
+      { "text": "Schweigend auf die Uhr schauen, bis einer von euch beiden geht.", "wert": 0, "tendenz": "vermeiden", "warum": "Der Stoff lag schon auf dem Tisch." } ] },
+    { "id": "smalltalk-fc-006", "faehigkeit": "smalltalk.themen", "stufe": 6, "frage": "Eine neue Kollegin, die aus einem anderen Land hergezogen ist, fragt dich beim Mittagessen: „Worüber redet man hier – und worüber lieber nicht?“ Was sagst du?", "antworten": [
+      { "text": "„Arbeit, Freizeit, Pläne gehen meistens. Geld, Politik und Krankheit lieber erst, wenn man sich kennt.“", "wert": 2, "warum": "Konkret und ehrlich – damit hat sie einen Kompass." },
+      { "text": "„Ach, hier redet man über alles, da gibt es keine Regeln – frag einfach, was dich interessiert.“", "wert": 0, "warum": "Gut gemeint, aber es lässt sie mit den Stolperfallen allein." },
+      { "text": "„Am sichersten ist das Wetter.“", "wert": 1, "warum": "Stimmt als Tür – nur hat sie dann wenig für danach." } ] },
+    { "id": "smalltalk-fc-007", "faehigkeit": "smalltalk.nachfragen", "stufe": 2, "frage": "Deine Schwägerin erzählt: „Wir haben endlich einen Kitaplatz – nach acht Monaten Warten!“ Was antwortest du?", "antworten": [
+      { "text": "„Acht Monate – endlich! Wie erleichtert seid ihr?“", "wert": 2, "warum": "Gewürdigt und nach dem Erleben gefragt." },
+      { "text": "„In welcher Kita denn, wie weit ist die weg, und was kostet die im Monat?“", "wert": 0, "tendenz": "ausfragen", "warum": "Drei Faktenfragen – ihre Erleichterung bleibt unbeachtet." },
+      { "text": "„Schön.“", "wert": 1, "warum": "Freundlich, aber knapp für so eine Nachricht." } ] },
+    { "id": "smalltalk-fc-008", "faehigkeit": "smalltalk.nachfragen", "stufe": 4, "frage": "Ein Kunde erwähnt im Telefonat beiläufig: „Ich bin gerade erst aus dem Krankenhaus zurück.“ Was ist angemessen?", "antworten": [
+      { "text": "„Oh – dann erst mal gute Besserung. Geht es Ihnen wieder gut?“", "wert": 2, "warum": "Anteilnahme und eine offene Tür – er entscheidet, wie viel er sagt." },
+      { "text": "Sofort zum Auftrag zurückkommen, damit Privates bloß keine Zeit kostet.", "wert": 0, "tendenz": "ausweichen", "warum": "Er hat etwas Persönliches erwähnt – Übergehen wirkt kühl." },
+      { "text": "„Gute Besserung!“", "wert": 1, "warum": "Freundlich. Eine kleine Frage nach seinem Befinden zeigt mehr Anteilnahme." },
+      { "text": "„Was hatten Sie denn? Und wie lange waren Sie drin?“", "wert": 0, "tendenz": "uebergriffig", "warum": "Gesundheit ist privat – er bestimmt, wie viel er erzählt." } ] },
+    { "id": "smalltalk-fc-009", "faehigkeit": "smalltalk.nachfragen", "stufe": 6, "frage": "In der Mittagspause erzählt Carla von ihrem Wochenende, ihrer Schwester und einem verpassten Zug. Bei „meine Schwester“ wird ihre Stimme leiser. Welche Frage zeigt das beste Zuhören?", "antworten": [
+      { "text": "„Was war denn mit dem Zug?“", "wert": 1, "warum": "Ein Aufhänger – aber nicht der, der ihr am nächsten war." },
+      { "text": "„Du klingst nachdenklich, wenn du von deiner Schwester sprichst – alles gut bei ihr?“", "wert": 2, "warum": "Du hast gehört, wo sie lebendig – hier: leise – wurde, und lässt ihr die Wahl." },
+      { "text": "„Ich hab auch eine Schwester, mit der ist es auch nicht immer leicht, letzte Woche zum Beispiel …“", "wert": 0, "tendenz": "uebertrumpfen", "warum": "Ihr Moment wird zu deiner Geschichte." } ] },
+    { "id": "smalltalk-fc-010", "faehigkeit": "smalltalk.erzaehlen", "stufe": 2, "frage": "Erster Abend im Tanzkurs. Du fragst deinen Tanzpartner: „Woher kommst du? Was machst du? Tanzt du oft?“ Er wird immer einsilbiger. Was hilft?", "antworten": [
+      { "text": "Ein Satz von dir vor der nächsten Frage: „Ich hab zwei linke Füße. Wie bist du hier gelandet?“", "wert": 2, "warum": "Aussage plus Frage – aus dem Verhör wird ein Austausch." },
+      { "text": "Noch mehr und schnellere Fragen stellen, bis er auf eine anspringt.", "wert": 0, "tendenz": "ausfragen", "warum": "Mehr Fragen machen das Verhör nur länger." },
+      { "text": "Eine Weile nur tanzen und ihn in Ruhe lassen.", "wert": 1, "warum": "Kann passen – vielleicht will er sich konzentrieren. Ein Satz von dir lädt aber ein." } ] },
+    { "id": "smalltalk-fc-011", "faehigkeit": "smalltalk.erzaehlen", "stufe": 4, "frage": "Beim Grillabend fragt dich jemand: „Und, was hast du dieses Jahr Schönes erlebt?“ Welche Antwort trägt das Gespräch am besten?", "antworten": [
+      { "text": "„Ich imkere seit dem Frühjahr – erst gab's mehr Stiche als Honig. Und du, was Neues?“", "wert": 2, "warum": "Ein Aufhänger mit kleinem Haken – und der Ball geht zurück." },
+      { "text": "„Ich hab mit Imkern angefangen.“", "wert": 1, "warum": "Ein guter Aufhänger – mit Haken und Frage zurück wird mehr daraus." },
+      { "text": "Alle Reisen, Feste und Projekte des Jahres der Reihe nach aufzählen, damit wirklich nichts fehlt.", "wert": 0, "tendenz": "monolog", "warum": "Eine Liste ohne Haken – und ohne Frage zurück." } ] },
+    { "id": "smalltalk-fc-012", "faehigkeit": "smalltalk.erzaehlen", "stufe": 6, "frage": "Du erzählst in der Kaffeepause von deinem Wochenende. Nach einer Minute schaut deine Zuhörerin auf die Uhr. Was tust du?", "antworten": [
+      { "text": "Die Geschichte in einem Satz beenden und sie nach ihrem Wochenende fragen.", "wert": 2, "warum": "Kurz zum Schluss und den Ball zurück – sie hat jetzt die Wahl." },
+      { "text": "Schneller reden, damit du noch alles unterbringst, bevor sie gehen muss.", "wert": 0, "tendenz": "monolog", "warum": "Ihr Blick war ein Zeichen – schneller wird es nicht besser." },
+      { "text": "Abbrechen: „Ach, egal – erzähl ich ein andermal.“", "wert": 1, "warum": "Rücksichtsvoll. Ein kurzer Schluss und eine Frage an sie wären runder." } ] },
+    { "id": "smalltalk-fc-013", "faehigkeit": "smalltalk.tiefe", "stufe": 2, "frage": "Dein Nachbar erzählt, dass er jetzt jeden Morgen um sechs schwimmen geht. Welche Frage öffnet am meisten?", "antworten": [
+      { "text": "„Was gibt dir das, so früh ins Wasser zu gehen?“", "wert": 2, "warum": "Eine Frage nach dem Erleben – er kann erzählen, was ihm wichtig ist." },
+      { "text": "„In welchem Bad denn?“", "wert": 1, "warum": "Ein Fakt – gut zum Start, öffnet aber wenig." },
+      { "text": "„Um sechs? Da würden mich keine zehn Pferde hinbringen, ich bin ja eher ein Nachtmensch, ehrlich gesagt.“", "wert": 0, "tendenz": "themenwechsel", "warum": "Jetzt geht es um dich – sein Thema bleibt liegen." } ] },
+    { "id": "smalltalk-fc-014", "faehigkeit": "smalltalk.tiefe", "stufe": 4, "frage": "Auf einer Feier hast du einer Bekannten eine persönlichere Frage gestellt. Sie lacht kurz: „Ach, das ist eine lange Geschichte.“ Was tust du?", "antworten": [
+      { "text": "„Ich hab Zeit – aber nur, wenn du magst.“", "wert": 2, "warum": "Ein offenes Angebot – sie kann in beide Richtungen gehen." },
+      { "text": "„Komm schon, jetzt erzähl!“", "wert": 0, "tendenz": "uebergriffig", "warum": "Druck – dabei hat sie gerade gezögert." },
+      { "text": "Das Thema wechseln, damit es für sie auf keinen Fall unangenehm wird.", "wert": 1, "warum": "Rücksichtsvoll. Ein offenes Angebot ließe ihr aber die Wahl." } ] },
+    { "id": "smalltalk-fc-015", "faehigkeit": "smalltalk.tiefe", "stufe": 6, "frage": "Ein Kollege, den du gerade erst kennengelernt hast, erzählt, dass er nach einer schweren Krankheit wieder arbeitet. Wie gehst du am besten damit um?", "antworten": [
+      { "text": "„Schön, dass du wieder da bist. Wie ist es, zurück zu sein?“", "wert": 2, "warum": "Gewürdigt und eine Frage nach dem Jetzt – er bestimmt, wie viel er erzählt." },
+      { "text": "„Was hattest du denn genau, wie lange hat es gedauert, und bist du jetzt wieder ganz gesund?“", "wert": 0, "tendenz": "uebergriffig", "warum": "Zu tief, zu schnell – Gesundheit ist sein Thema, nicht deins." },
+      { "text": "„Schön, dass du wieder da bist.“", "wert": 1, "warum": "Freundlich. Eine leichte Frage hinterher zeigt Interesse, ohne zu bohren." } ] },
+    { "id": "smalltalk-fc-016", "faehigkeit": "smalltalk.gruppe", "stufe": 2, "frage": "Beim Vereinsfest stehen drei Leute um einen Stehtisch, lachen und schauen immer wieder in den Raum. Wie kommst du hinein?", "antworten": [
+      { "text": "Mit dem Glas an den Tisch treten, kurz zuhören und dann ans Gespräch anknüpfen.", "wert": 2, "warum": "Die Runde ist offen – hinstellen, zuhören, anknüpfen." },
+      { "text": "Von Weitem winken und hoffen, dass sie dich hereinrufen.", "wert": 1, "warum": "Ein freundliches Zeichen – hingehen ist leichter, als gerufen zu werden." },
+      { "text": "Dich an den Nachbartisch stellen und laut reden, bis sie dich bemerken.", "wert": 0, "tendenz": "ueberspielen", "warum": "Ein Auftritt statt eines Einstiegs." } ] },
+    { "id": "smalltalk-fc-017", "faehigkeit": "smalltalk.gruppe", "stufe": 4, "frage": "Beim Vereinsfest sitzt ihr zu dritt an einem langen Tisch. Neben euch setzt sich jemand allein hin, den ihr nicht kennt, und schaut ab und zu herüber. Was tust du?", "antworten": [
+      { "text": "Dich zur Seite drehen: „Wir streiten gerade über die besten Würstchen – was meinst du?“", "wert": 2, "warum": "Eine Frage zum laufenden Thema öffnet die Runde. Wer sitzt, rückt so ein Stück zur Seite." },
+      { "text": "Leiser weiterreden, damit es nicht so wirkt, als wolltet ihr sie belauschen oder anstarren.", "wert": 0, "tendenz": "ausschliessen", "warum": "Gut gemeint – aber für sie ist die Runde damit zu." },
+      { "text": "Kurz zunicken und weiterreden.", "wert": 1, "warum": "Freundlich. Eine Frage hätte sie gleich ins Gespräch geholt." } ] },
+    { "id": "smalltalk-fc-018", "faehigkeit": "smalltalk.gruppe", "stufe": 6, "frage": "Du bist auf einem Empfang, auf dem du niemanden kanntest. Nach einer Stunde merkst du, dass deine Energie nachlässt. Was ist ein guter Plan?", "antworten": [
+      { "text": "Noch ein gutes Gespräch zu zweit führen, dann freundlich verabschieden und gehen.", "wert": 2, "warum": "Energie eingeteilt, Ziel klar – und ein guter Schluss." },
+      { "text": "Dich überwinden, noch in drei große Runden zu gehen – früh gehen wirkt unhöflich.", "wert": 0, "warum": "Wer leer ist, hat wenig davon – und die anderen auch nicht." },
+      { "text": "Eine kurze Pause am Rand machen, etwas trinken und dann weitersehen, ob dir noch nach Reden ist.", "wert": 1, "warum": "Eine gute Idee – mit einem klaren Ziel danach trägt es weiter." } ] },
+    { "id": "smalltalk-fc-019", "faehigkeit": "smalltalk.abschluss", "stufe": 2, "frage": "Nach dem Elternabend unterhältst du dich mit einer Mutter. Du möchtest los, sie erzählt weiter. Was sagst du?", "antworten": [
+      { "text": "„War schön, dich kennenzulernen! Ich muss leider los – bis zum nächsten Mal.“", "wert": 2, "warum": "Würdigung, Grund, Ausblick." },
+      { "text": "„Ich muss dann.“", "wert": 1, "warum": "Klar – mit einem Satz Würdigung wird es freundlicher." },
+      { "text": "Nicken, auf die Uhr schauen, seufzen und hoffen, dass sie den Wink versteht und von selbst aufhört.", "wert": 0, "tendenz": "ausweichen", "warum": "Unklar für sie – und es dauert länger." } ] },
+    { "id": "smalltalk-fc-020", "faehigkeit": "smalltalk.abschluss", "stufe": 4, "frage": "Auf einer Messe redest du schon lange mit einem Aussteller. Ihr habt beide keine Fragen mehr. Welcher Abgang ist am besten?", "antworten": [
+      { "text": "„Danke für die Einblicke! Ich nehme Ihren Prospekt mit und schaue mich weiter um.“", "wert": 2, "warum": "Dank, Grund, Abschied – freundlich und klar." },
+      { "text": "Noch ein paar Fragen erfinden, damit der Abschied nicht so plötzlich wirkt und er nicht denkt, du hättest kein Interesse.", "wert": 0, "tendenz": "ausweichen", "warum": "Das verlängert, was beide beenden möchten." },
+      { "text": "„So, dann.“", "wert": 1, "warum": "Klar, aber knapp. Ein Dank macht es freundlicher." } ] },
+    { "id": "smalltalk-fc-021", "faehigkeit": "smalltalk.abschluss", "stufe": 6, "frage": "Sommerfest. Deine Gesprächspartnerin kennt hier außer dir niemanden. Du siehst Miriam, die – wie sie – gern segelt. Du würdest gern weiterziehen. Was tust du?", "antworten": [
+      { "text": "Die beiden bekannt machen, erwähnen, dass beide segeln – dann weiterziehen.", "wert": 2, "warum": "Ein Abgang, der beiden etwas schenkt." },
+      { "text": "Bei ihr bleiben, bis das Fest vorbei ist, obwohl du eigentlich noch mit anderen reden wolltest.", "wert": 0, "tendenz": "ausweichen", "warum": "Höflich – auf deine Kosten." },
+      { "text": "„Ich schau mal nach den anderen – bis später!“", "wert": 1, "warum": "Freundlich und klar – nur bleibt sie allein zurück." } ] },
+    { "id": "smalltalk-fc-022", "faehigkeit": "smalltalk.namen", "stufe": 2, "frage": "Ein neuer Nachbar stellt sich an der Tür mit seinem Vornamen vor. Was hilft dir am meisten, den Namen bis zum nächsten Treffen zu behalten?", "antworten": [
+      { "text": "Den Namen gleich zurücksagen und ihn am Abend und am nächsten Morgen innerlich abrufen.", "wert": 2, "warum": "Zurücksagen und Abrufen in wachsenden Abständen – das hält am besten." },
+      { "text": "Darauf vertrauen, dass er dir beim nächsten Treffen im Haus schon wieder einfällt.", "wert": 0, "warum": "Namen tragen wenig Bedeutung – ohne Abrufen rutschen sie leicht weg." },
+      { "text": "Den Namen auf einen Zettel schreiben.", "wert": 1, "warum": "Kann helfen – innerlich abrufen trägt auch ohne Zettel." } ] },
+    { "id": "smalltalk-fc-023", "faehigkeit": "smalltalk.namen", "stufe": 4, "frage": "Workshop. Den Namen der Teilnehmerin, die unmittelbar vor dir dran war, hast du verpasst. Was tust du in der Pause?", "antworten": [
+      { "text": "Zu ihr gehen: „Ich war gerade mit meinem Satz beschäftigt – wie war dein Name?“", "wert": 2, "warum": "Ehrlich und freundlich – die meisten kennen das." },
+      { "text": "Nichts – nachfragen wäre jetzt peinlich, wo ihn alle anderen kennen.", "wert": 0, "tendenz": "vermeiden", "warum": "Je länger du wartest, desto größer fühlt sich die Frage an." },
+      { "text": "Auf ihr Namensschild schauen, falls sie eins trägt – oder jemand anderen leise fragen.", "wert": 1, "warum": "Geht – nachfragen ist aber auch ein kleiner Kontakt." } ] },
+    { "id": "smalltalk-fc-024", "faehigkeit": "smalltalk.namen", "stufe": 6, "frage": "Beim Bäcker grüßt dich jemand herzlich mit deinem Namen. Ihr wart zusammen im Erste-Hilfe-Kurs – aber ihr Name fällt dir nicht ein. Was tust du?", "antworten": [
+      { "text": "„Schön, dich zu sehen! Hilf mir kurz: Wie war dein Name noch? Ich bin {name}.“", "wert": 2, "warum": "Ehrlich und freundlich – und du gehst mit ihrem Namen nach Hause." },
+      { "text": "Einen Namen raten, der dir halbwegs passend vorkommt – vielleicht stimmt er ja.", "wert": 0, "warum": "Liegst du falsch, bleibt das eher hängen als eine kurze Frage." },
+      { "text": "Freundlich ohne Namen plaudern und ihn später in der Kursliste nachsehen.", "wert": 1, "warum": "Rettet das nächste Treffen. Kurz nachfragen ginge schneller – und zeigt, dass dir der Name wichtig ist." } ] }
+  ],
+  "selbstbild": [
+    { "id": "smalltalk-sb-1", "text": "Ich finde in einer neuen Runde einen ersten Satz, ohne lange zu grübeln.", "faehigkeit": "smalltalk.einstieg" },
+    { "id": "smalltalk-sb-2", "text": "Ich höre im Gespräch, was der andere anbietet, und greife es auf.", "faehigkeit": "smalltalk.nachfragen" },
+    { "id": "smalltalk-sb-3", "text": "Ich erzähle etwas von mir, ohne ins Monologisieren zu geraten.", "faehigkeit": "smalltalk.erzaehlen" },
+    { "id": "smalltalk-sb-4", "text": "Ich kann ein Gespräch freundlich beenden, ohne mich dabei schlecht zu fühlen.", "faehigkeit": "smalltalk.abschluss" },
+    { "id": "smalltalk-sb-5", "text": "Ich behalte die Namen von Menschen, die ich neu kennenlerne.", "faehigkeit": "smalltalk.namen" }
+  ],
+  "verhalten": [
+    { "id": "smalltalk-vh-1", "text": "Wie oft hast du in den letzten zwei Wochen ein Gespräch mit jemandem begonnen, den du kaum kanntest?", "faehigkeit": "smalltalk.einstieg" },
+    { "id": "smalltalk-vh-2", "text": "Wie oft hast du in den letzten zwei Wochen nach dem Erleben gefragt statt nach Fakten?", "faehigkeit": "smalltalk.tiefe" },
+    { "id": "smalltalk-vh-3", "text": "Wie oft hast du dich in den letzten zwei Wochen zu einer Runde dazugestellt?", "faehigkeit": "smalltalk.gruppe" }
+  ]
+}

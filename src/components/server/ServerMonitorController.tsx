@@ -28,6 +28,7 @@ import { ladeServerStumm, useServerStumm } from '../../services/serverStumm'
 import { eigenerRechner, eigenesKonto, istBevorzugt, schreibeHerzschlag, HERZSCHLAG_MS } from '../../services/serverMelder'
 import { darfAutomatik } from '../../services/automatikLeiter'
 import { starteServerZiele } from '../../services/serverZieleKontext'
+import { ladeServerLaeufe } from '../../services/serverLaeufe'
 
 function windowsHinweis(titel: string, text: string, tag: string) {
   if (document.hasFocus() || useServerStumm.getState().stumm) return
@@ -38,7 +39,8 @@ function windowsHinweis(titel: string, text: string, tag: string) {
 }
 
 const POLL_MS = 60 * 1000                // Status jede Minute lesen (Popup/Blink) — sonst wird aus „alle 5 min" ein 6-min-Takt
-const PING_INTERVAL_MS = 5 * 60 * 1000   // Ping alle 5 min
+// Ping-Takt (Standard 5 min, nie schneller) und an/aus für Ping + Neustart-Erkennung:
+// Einstellungen → „Automatik & Scans“ (services/serverLaeufe.ts)
 const PING_TOLERANZ_MS = 20 * 1000       // Takt-Spiel: bei 4:40 schon fällig, damit es nicht auf 6 min rutscht
 const NEUSTART_FRISCH_MS = 5 * 60 * 1000 // Startzeit, die der Rundlauf in dieser Zeit gelesen hat, nicht noch einmal abfragen
 
@@ -77,9 +79,10 @@ export default function ServerMonitorController() {
       const [ich, konto] = await Promise.all([eigenerRechner(), eigenesKonto()])
       const recht = { darf: await darfPruefen() }
 
-      // 1) Ping fällig + nicht fremd-geclaimt → claimen und ausführen.
-      const pingDue = !status.pingRunAt || (now - new Date(status.pingRunAt).getTime()) >= PING_INTERVAL_MS - PING_TOLERANZ_MS
-      if (recht.darf && pingDue && !isStatusClaimed(status, now)) {
+      // 1) Ping fällig + nicht fremd-geclaimt → claimen und ausführen (nur, wenn eingeschaltet).
+      const laeufe = recht.darf ? await ladeServerLaeufe() : null
+      const pingDue = !status.pingRunAt || (now - new Date(status.pingRunAt).getTime()) >= (laeufe?.ping.minuten ?? 5) * 60_000 - PING_TOLERANZ_MS
+      if (recht.darf && laeufe?.ping.an && pingDue && !isStatusClaimed(status, now)) {
         const claimToken = `${username}#${Math.random().toString(36).slice(2, 10)}`
         const at = new Date().toISOString()
         // In den FRISCHEN Stand schreiben (die Dienst-Schleife schreibt parallel) …
@@ -96,7 +99,7 @@ export default function ServerMonitorController() {
           if (ping.wiederDa.length) await vorziehen(ping.wiederDa).catch(() => null)
           // 3) Neustart/Herunterfahren erkennen — alle 5 min, EIN Server zur Zeit; was der Rundlauf
           //    in den letzten 5 min schon gelesen hat, wird nicht noch einmal abgefragt
-          await runRebootCheck(user?.displayName || username, undefined, { throttle: 1, frischMs: NEUSTART_FRISCH_MS, auto: true })
+          if (laeufe.neustart.an) await runRebootCheck(user?.displayName || username, undefined, { throttle: 1, frischMs: NEUSTART_FRISCH_MS, auto: true })
         }
         status = await loadServerStatus()
       }

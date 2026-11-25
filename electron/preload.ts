@@ -96,6 +96,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   authUpdatePassword: (userId: string, newPassword: string) =>
     ipcRenderer.invoke('auth:updatePassword', userId, newPassword),
   authDeleteUser: (userId: string) => ipcRenderer.invoke('auth:deleteUser', userId),
+  authVormerken: (p: { corpId: string; displayName?: string; role: 'master_admin' | 'admin' | 'user'; createdBy: string }) =>
+    ipcRenderer.invoke('auth:vormerken', p),
+  verwaltungPruefe: (pw: string) => ipcRenderer.invoke('verwaltung:pruefe', pw),
 
   // ── Activity logging ──────────────────────────────────────────────────────
   logActivity: (entry: {
@@ -118,6 +121,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   netReadJsonAsync: (relativePath: string) => ipcRenderer.invoke('net:readJsonAsync', relativePath),
   netWriteJsonAsync: (relativePath: string, data: unknown) => ipcRenderer.invoke('net:writeJsonAsync', relativePath, data),
   netDeleteFileAsync: (relativePath: string) => ipcRenderer.invoke('net:deleteFileAsync', relativePath),
+  netCreateExclusiveAsync: (relativePath: string, data: unknown) => ipcRenderer.invoke('net:createExclusiveAsync', relativePath, data),
+  netReadJsonStatusAsync: (relativePath: string) => ipcRenderer.invoke('net:readJsonStatusAsync', relativePath),
+  netListDirStatusAsync: (relativePath: string) => ipcRenderer.invoke('net:listDirStatusAsync', relativePath),
+  netDeleteEmptyDirAsync: (relativePath: string) => ipcRenderer.invoke('net:deleteEmptyDirAsync', relativePath),
   netIsAvailable: () => ipcRenderer.invoke('net:isAvailable'),
   netGetBasePath: () => ipcRenderer.invoke('net:getBasePath'),
 
@@ -163,6 +170,37 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // ── Wissenssuche (MiniSearch-Volltextindex, Netzlaufwerk/lokal) ───────────
   knowledgeLoad: (loadSensitive?: boolean) => ipcRenderer.invoke('knowledge:load', loadSensitive !== false),
   knowledgeStatus: () => ipcRenderer.invoke('knowledge:status'),
+
+  // ── Brain Trainer: Ergebnisse je Benutzer lokal + verschlüsselt (nie auf dem Netzlaufwerk) ──
+  brainLaden: (benutzer: string) => ipcRenderer.invoke('brain:laden', benutzer),
+  brainSpeichern: (benutzer: string, json: string) => ipcRenderer.invoke('brain:speichern', benutzer, json),
+  brainLoeschen: (benutzer: string) => ipcRenderer.invoke('brain:loeschen', benutzer),
+  // Parla Italiano (Pausenraum): Lernstand je Benutzer lokal und verschlüsselt
+  italianoLaden: (benutzer: string) => ipcRenderer.invoke('italiano:laden', benutzer),
+  italianoSpeichern: (benutzer: string, json: string) => ipcRenderer.invoke('italiano:speichern', benutzer, json),
+  italianoLoeschen: (benutzer: string) => ipcRenderer.invoke('italiano:loeschen', benutzer),
+  // Terra Incognita (Pausenraum): Spielstand und aufgedeckte Karte je Benutzer lokal und verschlüsselt
+  terraLaden: (benutzer: string) => ipcRenderer.invoke('terra:laden', benutzer),
+  terraSpeichern: (benutzer: string, json: string) => ipcRenderer.invoke('terra:speichern', benutzer, json),
+  terraLoeschen: (benutzer: string) => ipcRenderer.invoke('terra:loeschen', benutzer),
+  terraBeiseite: (benutzer: string, kennung?: string) => ipcRenderer.invoke('terra:beiseite', benutzer, kennung),
+  terraKarteLaden: (benutzer: string) => ipcRenderer.invoke('terraKarte:laden', benutzer),
+  terraKarteSpeichern: (benutzer: string, json: string) => ipcRenderer.invoke('terraKarte:speichern', benutzer, json),
+  terraKarteLoeschen: (benutzer: string) => ipcRenderer.invoke('terraKarte:loeschen', benutzer),
+  terraKarteBeiseite: (benutzer: string, kennung?: string) => ipcRenderer.invoke('terraKarte:beiseite', benutzer, kennung),
+  // Der Coach (Pausenraum): Lernstand, Buch und Vergleichsaufnahmen je Benutzer lokal und verschlüsselt
+  coachLaden: (benutzer: string) => ipcRenderer.invoke('coach:laden', benutzer),
+  coachSpeichern: (benutzer: string, json: string) => ipcRenderer.invoke('coach:speichern', benutzer, json),
+  coachLoeschen: (benutzer: string) => ipcRenderer.invoke('coach:loeschen', benutzer),
+  coachBeiseite: (benutzer: string, kennung?: string) => ipcRenderer.invoke('coach:beiseite', benutzer, kennung),
+  coachBuchLaden: (benutzer: string) => ipcRenderer.invoke('coachBuch:laden', benutzer),
+  coachBuchSpeichern: (benutzer: string, json: string) => ipcRenderer.invoke('coachBuch:speichern', benutzer, json),
+  coachBuchLoeschen: (benutzer: string) => ipcRenderer.invoke('coachBuch:loeschen', benutzer),
+  coachBuchBeiseite: (benutzer: string, kennung?: string) => ipcRenderer.invoke('coachBuch:beiseite', benutzer, kennung),
+  coachTonLaden: (benutzer: string) => ipcRenderer.invoke('coachTon:laden', benutzer),
+  coachTonSpeichern: (benutzer: string, json: string) => ipcRenderer.invoke('coachTon:speichern', benutzer, json),
+  coachTonLoeschen: (benutzer: string) => ipcRenderer.invoke('coachTon:loeschen', benutzer),
+  coachTonBeiseite: (benutzer: string, kennung?: string) => ipcRenderer.invoke('coachTon:beiseite', benutzer, kennung),
 
   // ── System info ───────────────────────────────────────────────────────────
   getWindowsUsername: () => ipcRenderer.invoke('sys:getWindowsUsername'),

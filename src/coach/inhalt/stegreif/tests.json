@@ -1,0 +1,624 @@
+{
+  "bereich": "stegreif",
+  "spur": "kern",
+  "szenarien": [
+    {
+      "id": "stegreif-fc-001",
+      "faehigkeit": "stegreif.struktur",
+      "stufe": 2,
+      "frage": "Bei der Wohnungsbesichtigung fragt der Vermieter: „Warum wollen Sie umziehen?“ Wie beginnst du?",
+      "antworten": [
+        {
+          "text": "„Wir brauchen mehr Platz – im Frühjahr kommt unser zweites Kind.“",
+          "wert": 2,
+          "warum": "Antwort und Grund in einem Satz."
+        },
+        {
+          "text": "„Na ja, das ist eine längere Geschichte, wir wohnen ja seit acht Jahren in der alten Wohnung, und damals …“",
+          "wert": 0,
+          "tendenz": "umweg",
+          "warum": "Die Vorgeschichte kommt vor der Antwort."
+        },
+        {
+          "text": "„Aus mehreren Gründen.“",
+          "wert": 1,
+          "warum": "Gliedert, sagt aber noch nichts."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-002",
+      "faehigkeit": "stegreif.struktur",
+      "stufe": 3,
+      "frage": "Der Trainer deiner Laufgruppe bittet dich, in einer Minute zu sagen, wie die Saison war. Welcher Plan trägt am besten?",
+      "antworten": [
+        {
+          "text": "Jeden Lauf der Reihe nach durchgehen.",
+          "wert": 0,
+          "tendenz": "alles",
+          "warum": "Zu viel für eine Minute – die Höhepunkte gehen unter."
+        },
+        {
+          "text": "Wie es anfing, wo ihr jetzt steht, was als Nächstes kommt.",
+          "wert": 2,
+          "warum": "Gestern – heute – morgen passt auf jeden Rückblick."
+        },
+        {
+          "text": "Einfach das Schönste erzählen.",
+          "wert": 1,
+          "warum": "Lebendig – aber ohne Ordnung wird es schnell länger als geplant."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-003",
+      "faehigkeit": "stegreif.struktur",
+      "stufe": 4,
+      "frage": "In der Elternvertretung fragt jemand: „Was können wir gegen das Chaos beim Abholen tun?“ Welche Antwort ist am stärksten gebaut?",
+      "antworten": [
+        {
+          "text": "„Das Problem: Alle kommen um Punkt vier. Mein Vorschlag: zwei Abholzeiten, nach Klassen getrennt. Dann ist der Hof halb so voll.“",
+          "wert": 2,
+          "warum": "Problem – Lösung – Nutzen in drei kurzen Sätzen."
+        },
+        {
+          "text": "„Zwei Abholzeiten.“",
+          "wert": 1,
+          "warum": "Ein guter Vorschlag – ohne Problem und Nutzen überzeugt er weniger."
+        },
+        {
+          "text": "„Das Chaos ist wirklich schlimm, gestern stand ich zehn Minuten, und die Autos, und die Kinder rennen herum, und keiner …“",
+          "wert": 0,
+          "tendenz": "umweg",
+          "warum": "Die Klage ist verständlich, aber es kommt kein Vorschlag."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-004",
+      "faehigkeit": "stegreif.struktur",
+      "stufe": 5,
+      "frage": "Du merkst mitten im Satz, dass deine Antwort ausufert. Was rettet sie am ehesten?",
+      "antworten": [
+        {
+          "text": "Schneller sprechen, damit es nicht so lange dauert.",
+          "wert": 0,
+          "warum": "Tempo ersetzt keine Ordnung – es macht sie kleiner."
+        },
+        {
+          "text": "Innehalten und sagen: „Kurz gesagt: …“ – dann den Punkt.",
+          "wert": 2,
+          "warum": "Ein Schluss-Satz holt die Antwort zurück auf den Kern."
+        },
+        {
+          "text": "Fertig erzählen und hoffen, dass es keiner merkt.",
+          "wert": 1,
+          "warum": "Geht – aber ein bewusster Schluss wirkt sicherer."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-005",
+      "faehigkeit": "stegreif.kern",
+      "stufe": 2,
+      "frage": "Deine Hausärztin fragt: „Was führt Sie zu mir?“ Welcher Satz ist am hilfreichsten?",
+      "antworten": [
+        {
+          "text": "„Seit zwei Wochen habe ich nachts Husten, und er wird nicht besser.“",
+          "wert": 2,
+          "warum": "Was, seit wann, wie es sich entwickelt – der Kern in einem Satz."
+        },
+        {
+          "text": "„Ach, so dies und das. Ich weiß gar nicht, wo ich anfangen soll, es kam einiges zusammen in letzter Zeit.“",
+          "wert": 0,
+          "tendenz": "umweg",
+          "warum": "Sie muss raten, worum es geht."
+        },
+        {
+          "text": "„Mein Husten.“",
+          "wert": 1,
+          "warum": "Richtig, aber seit wann und wie stark fehlt."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-006",
+      "faehigkeit": "stegreif.kern",
+      "stufe": 3,
+      "frage": "Du sollst im Chat der Hausgemeinschaft kurz mitteilen, dass am Donnerstag das Wasser abgestellt wird. Was schreibst du?",
+      "antworten": [
+        {
+          "text": "„Liebe Nachbarn, die Hausverwaltung hat mir gestern Abend gesagt, dass es Arbeiten an den Leitungen gibt, weil …“",
+          "wert": 0,
+          "tendenz": "umweg",
+          "warum": "Das Wichtigste – wann und wie lange – fehlt am Anfang."
+        },
+        {
+          "text": "„Achtung: Donnerstag, 8 bis 12 Uhr, kein Wasser.“",
+          "wert": 2,
+          "warum": "Wann, wie lange, was – mehr braucht niemand."
+        },
+        {
+          "text": "„Donnerstag kein Wasser.“",
+          "wert": 1,
+          "warum": "Fast – die Uhrzeit fehlt, und genau die braucht jeder."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-007",
+      "faehigkeit": "stegreif.kern",
+      "stufe": 4,
+      "frage": "Du kommst aus einer langen Elternversammlung. Dein Partner fragt: „Und, was kam raus?“ Was ist der beste erste Satz?",
+      "antworten": [
+        {
+          "text": "„Lange Sitzung, viel geredet.“",
+          "wert": 0,
+          "warum": "Ein Eindruck, kein Ergebnis."
+        },
+        {
+          "text": "„Die Klassenfahrt findet statt – wir zahlen etwas mehr als gedacht.“",
+          "wert": 2,
+          "warum": "Ergebnis und Folge für euch – genau das will er wissen."
+        },
+        {
+          "text": "„Die Klassenfahrt findet statt.“",
+          "wert": 1,
+          "warum": "Das Ergebnis stimmt. Was es für euch heißt, fehlt noch."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-008",
+      "faehigkeit": "stegreif.kern",
+      "stufe": 5,
+      "frage": "Morgen hast du beim Elternabend zwei Minuten für dein Anliegen: eine Leseecke im Klassenzimmer. Wie bereitest du dich am besten vor?",
+      "antworten": [
+        {
+          "text": "Alle Argumente sammeln, die dir einfallen, und sie der Reihe nach vortragen, damit keines vergessen wird.",
+          "wert": 0,
+          "tendenz": "alles",
+          "warum": "Je mehr Punkte, desto weniger bleibt hängen."
+        },
+        {
+          "text": "Den einen Satz finden, den alle mitnehmen sollen – dazu ein Grund und ein Beispiel.",
+          "wert": 2,
+          "warum": "Erst der Kern, dann die Stütze. So tragen zwei Minuten."
+        },
+        {
+          "text": "Einen Text Wort für Wort aufschreiben und ablesen.",
+          "wert": 1,
+          "warum": "Sicher, aber steif – und bei Nachfragen hilft dir der Text nicht."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-009",
+      "faehigkeit": "stegreif.zeit",
+      "stufe": 2,
+      "frage": "Bei der Führerscheinprüfung fragt der Prüfer etwas, das du nicht sofort verstehst. Was hilft am meisten?",
+      "antworten": [
+        {
+          "text": "„Sie meinen, was ich an dieser Kreuzung beachten muss?“",
+          "wert": 2,
+          "warum": "Die Frage in eigenen Worten wiederholt – das klärt und gibt Zeit."
+        },
+        {
+          "text": "Sofort irgendetwas sagen, damit keine Pause entsteht.",
+          "wert": 0,
+          "tendenz": "schwimmen",
+          "warum": "Ohne Klarheit über die Frage wird die Antwort zum Raten."
+        },
+        {
+          "text": "Kurz still überlegen.",
+          "wert": 1,
+          "warum": "Gut – mit Blick und einem „Moment“ wirkt es ruhiger."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-010",
+      "faehigkeit": "stegreif.zeit",
+      "stufe": 3,
+      "frage": "Im Vorstellungsgespräch fragt die Personalerin: „Was war Ihr größter Fehler im Job?“ Dir fällt nicht sofort ein passendes Beispiel ein. Was tust du?",
+      "antworten": [
+        {
+          "text": "Sofort irgendeinen Fehler erzählen, damit bloß keine Pause entsteht – egal, ob er gut passt.",
+          "wert": 0,
+          "tendenz": "drauflos",
+          "warum": "Die kurze Pause hätte dir niemand übelgenommen – eine unpassende Geschichte bleibt hängen."
+        },
+        {
+          "text": "Schweigend nachdenken, bis dir etwas einfällt.",
+          "wert": 1,
+          "warum": "Besser als drauflos. Mit einem kurzen Satz dazu wirkt die Stille gewollt statt ratlos."
+        },
+        {
+          "text": "„Lassen Sie mich einen Moment überlegen – ich will ein echtes Beispiel nennen.“",
+          "wert": 2,
+          "warum": "Die angekündigte Pause: Aus der Lücke wird Denkzeit, und sie weiß, dass gleich etwas kommt."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-011",
+      "faehigkeit": "stegreif.zeit",
+      "stufe": 4,
+      "frage": "Im Radio-Interview zur Straßensanierung fragt die Reporterin plötzlich: „Und was sagen Sie den Anwohnern?“ Was gibt dir ehrlich Zeit?",
+      "antworten": [
+        {
+          "text": "„Gute Frage. Zwei Dinge …“ – und dabei den ersten Punkt suchen.",
+          "wert": 2,
+          "warum": "Laut gliedern: Die Ordnung steht, der Inhalt kommt beim Sprechen."
+        },
+        {
+          "text": "„Ähm, ja, also, den Anwohnern, ähm …“",
+          "wert": 0,
+          "tendenz": "schwimmen",
+          "warum": "Füllwörter ohne Richtung – das klingt nach Ratlosigkeit."
+        },
+        {
+          "text": "„Darauf bin ich nicht vorbereitet.“",
+          "wert": 0,
+          "tendenz": "entschuldigen",
+          "warum": "Ehrlich vielleicht, aber im Radio ein verschenkter Moment."
+        },
+        {
+          "text": "„Das ist eine wichtige Frage.“ – und dann die Antwort.",
+          "wert": 1,
+          "warum": "Gibt einen Moment. „Zwei Dinge“ hätte dir zusätzlich Ordnung gegeben."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-012",
+      "faehigkeit": "stegreif.zeit",
+      "stufe": 5,
+      "frage": "In der Fragerunde nach deinem Beitrag stellt jemand eine lange Frage mit mehreren Teilen. Was hilft dir am meisten?",
+      "antworten": [
+        {
+          "text": "„Sie fragen nach Kosten und Zeitplan – ich fange mit den Kosten an.“",
+          "wert": 2,
+          "warum": "Zusammenfassen zeigt Zuhören, ordnet die Antwort und gibt dir Zeit."
+        },
+        {
+          "text": "Mit dem Teil anfangen, der dir zuletzt im Ohr ist, und hoffen, dass die anderen Teile vergessen sind.",
+          "wert": 0,
+          "tendenz": "ausweichen",
+          "warum": "Die übrigen Teile bleiben offen – und meist fragt jemand nach."
+        },
+        {
+          "text": "Darum bitten, die Frage zu wiederholen.",
+          "wert": 1,
+          "warum": "Erlaubt und ehrlich. Selbst zusammenzufassen zeigt aber, dass du zugehört hast."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-013",
+      "faehigkeit": "stegreif.wortfluss",
+      "stufe": 2,
+      "frage": "Du sollst für die Vereinszeitung Namen für das neue Maskottchen vorschlagen. Wie gehst du vor?",
+      "antworten": [
+        {
+          "text": "Erst zwanzig Namen aufschreiben, ohne zu werten – dann die drei besten wählen.",
+          "wert": 2,
+          "warum": "Erst Menge, dann Auswahl – wo Zeit zum Auswählen ist, lohnt sich die Menge."
+        },
+        {
+          "text": "Auf den einen perfekten Namen warten.",
+          "wert": 0,
+          "tendenz": "zensor",
+          "warum": "Der Anspruch an Perfektion bremst die Einfälle."
+        },
+        {
+          "text": "Fünf Namen sammeln und gleich den besten nehmen.",
+          "wert": 1,
+          "warum": "Ein Anfang – mit mehr Auswahl findest du oft einen besseren."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-014",
+      "faehigkeit": "stegreif.wortfluss",
+      "stufe": 3,
+      "frage": "Beim Spieleabend sollst du in einer Runde „Stadt, Land, Fluss“ schneller werden. Was hilft am ehesten auch fürs spontane Reden?",
+      "antworten": [
+        {
+          "text": "Nichts – Spiele bringen fürs Reden ohnehin nichts.",
+          "wert": 0,
+          "warum": "Zu streng: Das Aufwärmen hilft, nur überträgt es sich nicht von allein."
+        },
+        {
+          "text": "Regelmäßig Einfall-Runden zu Themen machen, über die du wirklich sprechen willst.",
+          "wert": 2,
+          "warum": "Geübt wird, was man braucht – das überträgt sich am ehesten."
+        },
+        {
+          "text": "Möglichst oft „Stadt, Land, Fluss“ spielen, bis du in allen Kategorien richtig schnell und sicher bist.",
+          "wert": 1,
+          "warum": "Macht dich im Spiel besser. Für Gespräche ist es nur ein Teil des Weges."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-015",
+      "faehigkeit": "stegreif.wortfluss",
+      "stufe": 4,
+      "frage": "Du sollst auf einer Hochzeit spontan etwas über das Paar sagen, und dir fällt im ersten Moment nichts ein. Was hilft?",
+      "antworten": [
+        {
+          "text": "Den Blickwinkel wechseln: ein Ort, an dem du die beiden erlebt hast – und was dort passiert ist.",
+          "wert": 2,
+          "warum": "Ein konkreter Ort öffnet eine Erinnerung – und damit einen Anfang."
+        },
+        {
+          "text": "Absagen.",
+          "wert": 0,
+          "tendenz": "aufgeben",
+          "warum": "Möglich, aber meist gibt es mehr Einfälle, als der erste Schreck vermuten lässt."
+        },
+        {
+          "text": "Einen allgemeinen Glückwunsch sagen, der zu jedem Paar passen würde.",
+          "wert": 1,
+          "warum": "Freundlich, aber nichts Eigenes. Ein Erlebnis wäre persönlicher."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-016",
+      "faehigkeit": "stegreif.jaund",
+      "stufe": 2,
+      "frage": "Dein Nachbar schlägt vor, im Frühjahr gemeinsam die Hecke zwischen euren Gärten zu schneiden. Welche Antwort baut aus?",
+      "antworten": [
+        {
+          "text": "„Gute Idee – ich hab eine lange Leiter, die bringe ich mit.“",
+          "wert": 2,
+          "warum": "Angenommen und etwas Eigenes dazugelegt."
+        },
+        {
+          "text": "„Schon, aber das ist doch eine Menge Arbeit, und wer fährt hinterher das ganze Grünzeug weg?“",
+          "wert": 0,
+          "tendenz": "abblocken",
+          "warum": "Das Bedenken kommt, bevor die Idee eine Chance hatte."
+        },
+        {
+          "text": "„Ja, machen wir mal.“",
+          "wert": 1,
+          "warum": "Zustimmung – aber ohne eigenen Beitrag."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-017",
+      "faehigkeit": "stegreif.jaund",
+      "stufe": 3,
+      "frage": "In der Projektgruppe schlägt jemand eine Idee vor, die dir unausgereift erscheint. Was ist am klügsten?",
+      "antworten": [
+        {
+          "text": "Sofort erklären, warum das nicht klappen kann – Zeit ist knapp, da sollte man ehrlich sein.",
+          "wert": 0,
+          "tendenz": "abblocken",
+          "warum": "Ehrlich, aber zu früh. Die Idee bekommt keine Chance, besser zu werden."
+        },
+        {
+          "text": "Erst weiterdenken: „Und wenn wir das mit … verbinden?“ – Bedenken danach als Frage.",
+          "wert": 2,
+          "warum": "Erst ausbauen, dann bewerten. So wird aus einer halben Idee oft eine ganze."
+        },
+        {
+          "text": "Schweigen und abwarten, was die anderen sagen.",
+          "wert": 1,
+          "warum": "Nicht schädlich, aber du verschenkst deinen Beitrag."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-018",
+      "faehigkeit": "stegreif.jaund",
+      "stufe": 5,
+      "frage": "Carla schlägt vor, die Wochenrunde künftig im Stehen zu machen, damit sie kürzer wird. Du denkst an zwei Kollegen, die nicht lange stehen können. Was sagst du zuerst?",
+      "antworten": [
+        {
+          "text": "„Super Idee, machen wir ab Montag!“ – und deine Bedenken behältst du lieber für dich.",
+          "wert": 0,
+          "tendenz": "ueberspielen",
+          "warum": "Ja ohne Und: Das Bedenken verschwindet nicht – es kommt später als Ärger zurück."
+        },
+        {
+          "text": "„Klingt spannend. Was versprichst du dir davon?“",
+          "wert": 1,
+          "warum": "Offen und neugierig. Ein eigener Baustein hätte die Idee mitgetragen."
+        },
+        {
+          "text": "„Ja, und für alle, die nicht lange stehen können, stellen wir zwei Hocker dazu.“",
+          "wert": 2,
+          "warum": "Ausgebaut – und das Bedenken gleich als Teil der Lösung eingebaut."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-019",
+      "faehigkeit": "stegreif.assoziation",
+      "stufe": 2,
+      "frage": "Beim Abendessen erzählt deine Tischnachbarin begeistert von ihrem neuen Hund. Du hast keinen Hund. Wie findest du schnell etwas Eigenes dazu?",
+      "antworten": [
+        {
+          "text": "Stichwort aufgreifen: „Bei jedem Wetter raus? Respekt – ich schaff nur sonntags meine Runde am Fluss.“",
+          "wert": 2,
+          "warum": "Vom Stichwort „draußen bei jedem Wetter“ zu etwas Eigenem – das Gespräch bleibt bei euch beiden."
+        },
+        {
+          "text": "„Was ist es denn für eine Rasse?“",
+          "wert": 1,
+          "warum": "Hält das Gespräch – von dir kommt aber noch nichts."
+        },
+        {
+          "text": "Gleich vom eigenen Urlaub in den Bergen erzählen, auch wenn der mit Hunden und mit ihr gar nichts zu tun hat.",
+          "wert": 0,
+          "tendenz": "themawechsel",
+          "warum": "Sie bleibt mit ihrem Hund allein. Ein Stichwort aus ihrem Satz wäre die Brücke gewesen."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-020",
+      "faehigkeit": "stegreif.assoziation",
+      "stufe": 3,
+      "frage": "Bei der Abschiedsfeier einer Kollegin bittet man dich spontan um einen Satz. Dir fällt nur ein: Sie hat immer die Büropflanzen gegossen. Was machst du daraus?",
+      "antworten": [
+        {
+          "text": "Weiterdenken – gießen, wachsen: „Bei dir ist nicht nur das Grünzeug gewachsen, sondern das Team.“",
+          "wert": 2,
+          "warum": "Zwei Schritte vom Stichwort zu einem Bild – schon hast du einen Satz, der zu ihr passt."
+        },
+        {
+          "text": "„Mir fällt gerade nichts ein, sorry.“",
+          "wert": 0,
+          "warum": "Das erste Stichwort war schon da – eine kurze Kette hätte gereicht."
+        },
+        {
+          "text": "„Danke, dass du all die Jahre unsere Pflanzen gegossen hast – ohne dich wären die längst eingegangen.“",
+          "wert": 1,
+          "warum": "Ehrlich und konkret. Ein Schritt weiter, und daraus wird ein Bild, das hängen bleibt."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-021",
+      "faehigkeit": "stegreif.assoziation",
+      "stufe": 4,
+      "frage": "Im Bewerbungsgespräch erzählt die Gesprächspartnerin von ihrem Hund. Wie kommst du gut zu deinen Stärken zurück?",
+      "antworten": [
+        {
+          "text": "Nur über den Hund reden, das ist sympathisch und lockert die Stimmung für alles Weitere auf.",
+          "wert": 1,
+          "warum": "Sympathisch – aber du kommst nicht zu dem, weswegen du da bist."
+        },
+        {
+          "text": "„Mit Hunden braucht man Geduld – die brauche ich auch bei der Schulung neuer Kunden.“",
+          "wert": 2,
+          "warum": "Ein Wort aus ihrem Thema wird zur Brücke zu deiner Stärke."
+        },
+        {
+          "text": "„Zurück zum Thema: meine Stärken.“",
+          "wert": 0,
+          "warum": "Schneidet sie ab – das wirkt unhöflich."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-022",
+      "faehigkeit": "stegreif.vergleich",
+      "stufe": 2,
+      "frage": "Dein Neffe fragt, warum man Zähne auch abends putzen soll. Welche Erklärung trägt am besten?",
+      "antworten": [
+        {
+          "text": "„Wegen der Bakterien.“",
+          "wert": 1,
+          "warum": "Stimmt, bleibt aber abstrakt."
+        },
+        {
+          "text": "„Das ist wie Geschirr nach dem Essen: Bleibt es über Nacht stehen, klebt morgens alles fest.“",
+          "wert": 2,
+          "warum": "Ein Bild aus seinem Alltag, das das Prinzip zeigt."
+        },
+        {
+          "text": "„Weil man das eben so macht.“",
+          "wert": 0,
+          "warum": "Keine Erklärung – nur eine Regel."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-023",
+      "faehigkeit": "stegreif.vergleich",
+      "stufe": 3,
+      "frage": "Deine Großmutter fragt, was „die Cloud“ ist, in der deine Fotos liegen. Welcher Vergleich trifft das Prinzip?",
+      "antworten": [
+        {
+          "text": "„Wie eine Wolke am Himmel: Sie schwebt über allem, deshalb heißt sie ja auch so, und manchmal regnet es eben Daten.“",
+          "wert": 0,
+          "warum": "Ein Bild zum Namen, nicht zur Sache. Es erklärt nichts."
+        },
+        {
+          "text": "„Wie ein Schließfach bei der Bank: Die Fotos liegen nicht bei mir, aber ich komme jederzeit dran.“",
+          "wert": 2,
+          "warum": "Gleiches Prinzip – aufbewahrt woanders, Zugriff jederzeit – in einem vertrauten Bild."
+        },
+        {
+          "text": "„Wie ein großer Computer woanders.“",
+          "wert": 1,
+          "warum": "Stimmt ungefähr, bleibt aber abstrakt."
+        }
+      ]
+    },
+    {
+      "id": "stegreif-fc-024",
+      "faehigkeit": "stegreif.vergleich",
+      "stufe": 4,
+      "frage": "Du willst im Team erklären, warum kleine Fehler gleich gemeldet werden sollten, statt sie zu sammeln. Welcher Vergleich hilft am meisten?",
+      "antworten": [
+        {
+          "text": "„Das ist wie technische Schuld in der Softwareentwicklung – mit jeder weiteren Iteration steigen die Zinsen.“",
+          "wert": 0,
+          "warum": "Ein Bild aus der Fachwelt erklärt nichts, wenn man die Fachwelt nicht kennt."
+        },
+        {
+          "text": "„Wie ein kleines Loch im Fahrradreifen: Früh geflickt kostet es Minuten, später stehst du mit Platten da.“",
+          "wert": 2,
+          "warum": "Gleiches Prinzip – früh klein, spät groß – in einem vertrauten Bild."
+        },
+        {
+          "text": "„Früh melden spart uns allen Ärger, glaubt mir.“",
+          "wert": 1,
+          "warum": "Die Richtung stimmt, aber ohne Bild bleibt es eine Behauptung."
+        }
+      ]
+    }
+  ],
+  "selbstbild": [
+    {
+      "id": "stegreif-sb-1",
+      "text": "Wenn mich jemand unerwartet nach meiner Meinung fragt, beginne ich mit der Antwort.",
+      "faehigkeit": "stegreif.struktur"
+    },
+    {
+      "id": "stegreif-sb-2",
+      "text": "Ich kann sagen, worum es mir geht – in einem Satz.",
+      "faehigkeit": "stegreif.kern"
+    },
+    {
+      "id": "stegreif-sb-3",
+      "text": "Wenn mich eine Frage überrascht, nehme ich mir ruhig einen Moment, statt drauflos zu reden.",
+      "faehigkeit": "stegreif.zeit"
+    },
+    {
+      "id": "stegreif-sb-4",
+      "text": "Wenn jemand eine Idee nennt, denke ich sie erst weiter, bevor ich sie bewerte.",
+      "faehigkeit": "stegreif.jaund"
+    },
+    {
+      "id": "stegreif-sb-5",
+      "text": "Mir fallen zu einem Thema schnell mehrere Einfälle ein.",
+      "faehigkeit": "stegreif.wortfluss"
+    }
+  ],
+  "verhalten": [
+    {
+      "id": "stegreif-vh-1",
+      "text": "Wie oft hast du in den letzten zwei Wochen auf eine Frage zuerst mit der Antwort und dann mit dem Grund geantwortet?",
+      "faehigkeit": "stegreif.struktur"
+    },
+    {
+      "id": "stegreif-vh-2",
+      "text": "Wie oft hast du in den letzten zwei Wochen offen gesagt, dass du etwas nicht weißt, und es später nachgeliefert?",
+      "faehigkeit": "stegreif.zeit"
+    },
+    {
+      "id": "stegreif-vh-3",
+      "text": "Wie oft hast du in den letzten zwei Wochen eine Idee von jemand anderem zuerst ausgebaut, bevor du Bedenken genannt hast?",
+      "faehigkeit": "stegreif.jaund"
+    }
+  ]
+}

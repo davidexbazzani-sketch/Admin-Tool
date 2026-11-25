@@ -203,6 +203,57 @@ export async function createAdminUser(params: {
   return user
 }
 
+/**
+ * Benutzer per Corp ID vormerken (Einstellungen → „Benutzer & Rechte“), ohne Passwort.
+ * Bei der ersten Windows-Anmeldung findet createOrGetSsoUser den Eintrag über
+ * windowsUsername — die vorab gewählte Rolle gilt damit sofort.
+ */
+export function vormerkeBenutzer(p: { corpId: string; displayName?: string; role: 'master_admin' | 'admin' | 'user'; createdBy: string }): { ok: true; user: AppUser } | { ok: false; error: string } {
+  const corpId = (p.corpId || '').trim()
+  if (!/^[A-Za-z0-9._$-]{2,40}$/.test(corpId)) return { ok: false, error: 'Ungültige Corp ID (nur Buchstaben, Ziffern, Punkt, Strich, 2–40 Zeichen).' }
+  const users = getUsers()
+  const k = corpId.toLowerCase()
+  const vorhanden = users.find(u => u.username.toLowerCase() === k || (u.windowsUsername || '').toLowerCase() === k)
+  if (vorhanden) return { ok: false, error: `Für ${corpId} gibt es schon einen Eintrag (${vorhanden.displayName || vorhanden.username}).` }
+  const role = p.role === 'master_admin' || p.role === 'admin' ? p.role : 'user'
+  const user: AppUser = {
+    id: generateUuid(),
+    username: corpId,
+    displayName: (p.displayName || '').trim() || corpId,
+    role,
+    blockedFeatures: [],
+    status: 'active',
+    createdAt: new Date().toISOString(),
+    createdBy: p.createdBy,
+    windowsUsername: corpId,
+  }
+  users.push(user)
+  saveUsers(users)
+  return { ok: true, user }
+}
+
+// ─── Passwort für die Einstellungen „Für alle“ ───────────────────────────────
+// Nur der bcrypt-Hash steht im Code. Nach 5 Fehlversuchen 60 s Wartezeit (je Programmlauf).
+const VERWALTUNG_HASH = '$2b$12$wp3cZL54511z6yZVmfFLfOCdhteYMi8BuOl/keHqusKrsVmJJVF9a'
+const VERWALTUNG_MAX_FEHLER = 5
+const VERWALTUNG_SPERRE_MS = 60_000
+let verwaltungFehler = 0
+let verwaltungGesperrtBis = 0
+
+export async function pruefeVerwaltungsPasswort(pw: string): Promise<{ ok: boolean; warteSek?: number; rest?: number }> {
+  const jetzt = Date.now()
+  if (verwaltungGesperrtBis > jetzt) return { ok: false, warteSek: Math.ceil((verwaltungGesperrtBis - jetzt) / 1000) }
+  const ok = typeof pw === 'string' && pw.length > 0 && pw.length < 200 && await bcrypt.compare(pw, VERWALTUNG_HASH)
+  if (ok) { verwaltungFehler = 0; return { ok: true } }
+  verwaltungFehler++
+  if (verwaltungFehler >= VERWALTUNG_MAX_FEHLER) {
+    verwaltungFehler = 0
+    verwaltungGesperrtBis = jetzt + VERWALTUNG_SPERRE_MS
+    return { ok: false, warteSek: Math.ceil(VERWALTUNG_SPERRE_MS / 1000) }
+  }
+  return { ok: false, rest: VERWALTUNG_MAX_FEHLER - verwaltungFehler }
+}
+
 export async function updateUserPassword(userId: string, newPassword: string): Promise<boolean> {
   const users = getUsers()
   const idx = users.findIndex(u => u.id === userId)

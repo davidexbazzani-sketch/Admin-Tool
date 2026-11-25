@@ -10,12 +10,16 @@ import InstallLogbuch from '../components/softwareInstallations/InstallLogbuch'
 import ItAdminToolInstallation from '../components/softwareInstallations/ItAdminToolInstallation'
 import VcRedistInstallation from '../components/softwareInstallations/VcRedistInstallation'
 import { usePinSperre } from '../components/netzwerkgeraete/zugang'
+import { useBereiche } from '../store/menuSichtbarStore'
 
 // „E-Drawings" wurde am 04.11.2026 durch „3D-Viewer (FreeCAD)" ersetzt (Ferninstallation lief nicht)
 type Section = 'overview' | 'solidworks' | 'xelion' | 'jabra' | 'enaio' | 'freecad' | 'itadmintool' | 'vcredist'
 
 export default function SoftwareInstallations() {
-  const [section, setSection] = useState<Section>('overview')
+  // Kacheln lassen sich je Benutzer ausblenden (Einstellungen → Benutzer & Rechte); ausgeblendet → Übersicht
+  const { sichtbar } = useBereiche('software-installations')
+  const [gewaehlt, setSection] = useState<Section>('overview')
+  const section: Section = gewaehlt !== 'overview' && !sichtbar(gewaehlt) ? 'overview' : gewaehlt
   // „IT Admin Tool" verteilt das Tool selbst auf andere PCs → nur mit Passwort (einmal pro Besuch)
   const { mitPin, pinDialog } = usePinSperre('Die Kachel „IT Admin Tool" installiert das Tool auf anderen PCs neu — nur mit Passwort.')
 
@@ -31,7 +35,7 @@ export default function SoftwareInstallations() {
 
       {section === 'overview' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <button onClick={() => setSection('solidworks')}
+          {sichtbar('solidworks') && (<button onClick={() => setSection('solidworks')}
             className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
             <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
               <Wrench size={20} className="text-blue-400" />
@@ -41,9 +45,9 @@ export default function SoftwareInstallations() {
               <p className="text-xs text-muted-foreground mt-1">Automatisierte Installation (Schritte 1-9). Robocopy + Setup + Konfiguration in einem Durchlauf.</p>
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
-          </button>
+          </button>)}
 
-          <button onClick={() => setSection('xelion')}
+          {sichtbar('xelion') && (<button onClick={() => setSection('xelion')}
             className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
             <div className="w-10 h-10 rounded-lg bg-teal-500/20 flex items-center justify-center">
               <Phone size={20} className="text-teal-400" />
@@ -53,9 +57,9 @@ export default function SoftwareInstallations() {
               <p className="text-xs text-muted-foreground mt-1">Silent-Remote-Installation der Xelion-App (MSIX). Installer austauschbar bei neuer Version.</p>
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
-          </button>
+          </button>)}
 
-          <button onClick={() => setSection('jabra')}
+          {sichtbar('jabra') && (<button onClick={() => setSection('jabra')}
             className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
             <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
               <Headphones size={20} className="text-emerald-400" />
@@ -65,9 +69,9 @@ export default function SoftwareInstallations() {
               <p className="text-xs text-muted-foreground mt-1">Jabra Direct still im Hintergrund installieren. Prüft vorher, ob ein Jabra-Gerät angeschlossen ist.</p>
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
-          </button>
+          </button>)}
 
-          <button onClick={() => setSection('enaio')}
+          {sichtbar('enaio') && (<button onClick={() => setSection('enaio')}
             className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
             <div className="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center">
               <FileText size={20} className="text-indigo-400" />
@@ -77,9 +81,9 @@ export default function SoftwareInstallations() {
               <p className="text-xs text-muted-foreground mt-1">enaio Client + Outlook-Add-Ins übers Netzwerk installieren. Optional vorher alles von enaio vollständig entfernen (inkl. Registry-Reste).</p>
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
-          </button>
+          </button>)}
 
-          <button onClick={() => setSection('freecad')}
+          {sichtbar('freecad') && (<button onClick={() => setSection('freecad')}
             className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
             <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
               <Box size={20} className="text-orange-400" />
@@ -89,9 +93,9 @@ export default function SoftwareInstallations() {
               <p className="text-xs text-muted-foreground mt-1">3D-Modelle (STEP/IGES) ansehen ohne SOLIDWORKS/eDrawings — kostenlos, still installiert, STEP-Dateien öffnen per Doppelklick.</p>
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
-          </button>
+          </button>)}
 
-          <button onClick={() => setSection('vcredist')} data-kachel="vcredist"
+          {sichtbar('vcredist') && (<button onClick={() => setSection('vcredist')} data-kachel="vcredist"
             className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
             <div className="w-10 h-10 rounded-lg bg-violet-500/20 flex items-center justify-center">
               <Cpu size={20} className="text-violet-400" />
@@ -101,9 +105,9 @@ export default function SoftwareInstallations() {
               <p className="text-xs text-muted-foreground mt-1">Alle Visual-C++-Redistributables (2005 bis 2015–2026) einzeln oder alle auf einmal still installieren — direkt von Microsoft, Signatur geprüft.</p>
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
-          </button>
+          </button>)}
 
-          <button onClick={() => mitPin(() => setSection('itadmintool'))} data-kachel="itadmintool"
+          {sichtbar('itadmintool') && (<button onClick={() => mitPin(() => setSection('itadmintool'))} data-kachel="itadmintool"
             className="flex flex-col items-start gap-3 p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-card/80 transition-all text-left">
             <div className="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center">
               <MonitorUp size={20} className="text-sky-500" />
@@ -113,7 +117,7 @@ export default function SoftwareInstallations() {
               <p className="text-xs text-muted-foreground mt-1">Neue Version des Tools auf andere PCs verteilen: Desktop-Nachricht, Tool beenden, still installieren, Fertig-Nachricht. Nur mit Passwort.</p>
             </div>
             <span className="text-xs text-primary font-medium">Installation starten &rarr;</span>
-          </button>
+          </button>)}
         </div>
       )}
       {pinDialog}

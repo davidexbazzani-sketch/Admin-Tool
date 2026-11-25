@@ -1,0 +1,215 @@
+{
+  "lagen": [
+    {
+      "id": "ausdruck-l-01", "bereich": "ausdruck", "phase": "g", "umfeld": "vorgesetzte", "faehigkeiten": ["ausdruck.knapp", "ausdruck.verben", "ausdruck.treffend"], "stufe": 2,
+      "titel": "Die Mail an Dr. Albers", "figur": "Dr. Henrik Albers",
+      "einleitung": "Eine Mail an den Chef, die viel zu lang geraten ist. Du übst Kürzen, Verben befreien und das Anliegen nach vorn holen.",
+      "lage": "Donnerstag, 16 Uhr. Du willst Dr. Albers um die Freigabe für ein neues Abrechnungsprogramm bitten, das deinem Team viel Handarbeit spart. Dein Entwurf hat zwölf Zeilen. Albers liest Mails gern kurz.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dein Entwurf beginnt so: „Guten Tag, Herr Dr. Albers, ich hoffe, Sie hatten eine gute Woche. Ich wollte mich eigentlich nur kurz bei Ihnen melden, weil sich im Team im Zuge der Diskussion über die Optimierung unserer Abläufe die Überlegung ergeben hat, …“ Wie gehst du vor?",
+          "wahl": [
+            { "text": "Die Bitte nach vorn: „Ich bitte Sie um die Freigabe für ein neues Abrechnungsprogramm.“ Der Rest folgt danach.", "wert": 2, "weiter": "k2", "rueck": "Albers weiß nach einem Satz, worum es geht. Alles Weitere liest er jetzt mit Absicht." },
+            { "text": "Den Anfang lassen und nur am Ende ein paar Wörter streichen – die Einleitung zeigt Respekt und schafft eine freundliche Stimmung, bevor die Bitte kommt.", "wert": 0, "tendenz": "ausweichen", "weiter": "k2b", "rueck": "Freundlich gemeint – aber die Bitte steht jetzt in Zeile acht. Albers muss sie suchen." },
+            { "text": "Die Floskeln am Anfang streichen und dann schauen, wo die Bitte steht.", "wert": 1, "weiter": "k2", "rueck": "Guter erster Schritt. Noch klarer wird es, wenn die Bitte ganz nach vorn rückt." }
+          ] },
+        { "id": "k2b", "sagt": "Bevor du auf „Senden“ klickst, schaut Miriam auf deinen Bildschirm: „Zwölf Zeilen? Was willst du denn von ihm?“",
+          "wahl": [
+            { "text": "„Die Freigabe für das neue Programm.“ – und genau diesen Satz an den Anfang der Mail setzen.", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt: Miriams Frage hat die Bitte herausgekitzelt." },
+            { "text": "„Erklär ich dir später, ich muss das erst fertig formulieren.“ – und weiter an den Sätzen feilen.", "wert": 0, "weiter": "k2", "rueck": "Miriams Frage wäre ein guter Kürztest gewesen." }
+          ] },
+        { "id": "k2", "sagt": "Der nächste Absatz: „Eine Einführung des Programms würde eine deutliche Reduzierung des manuellen Erfassungsaufwands bewirken.“ Was machst du daraus?",
+          "wahl": [
+            { "text": "„Mit dem Programm tippen wir die Rechnungen nicht mehr von Hand ab. Das spart dem Team etwa einen halben Tag pro Woche.“", "wert": 2, "weiter": "k3", "rueck": "Verben statt Hauptwortkette, und eine konkrete Angabe statt „deutliche Reduzierung“." },
+            { "text": "„Das Programm reduziert den Erfassungsaufwand deutlich.“", "wert": 1, "weiter": "k3", "rueck": "Kürzer und mit Verb – gut. „Deutlich“ bleibt aber vage: Wie viel ist das?" },
+            { "text": "So lassen – Albers ist Fachmann, er versteht den Satz auch so.", "wert": 0, "weiter": "k3", "rueck": "Verstehen wird er ihn. Aber er muss übersetzen – und genau das soll ihm die Mail abnehmen." }
+          ] },
+        { "id": "k3", "sagt": "Der Schluss deines Entwurfs: „Für etwaige Rückfragen stehe ich Ihnen selbstverständlich jederzeit sehr gerne zur Verfügung.“",
+          "wahl": [
+            { "text": "Ersetzen durch: „Könnten Sie mir bis Mittwoch Bescheid geben?“", "wert": 2, "weiter": "k4", "rueck": "Eine Frist statt einer Floskel. Albers weiß, was er tun soll und bis wann." },
+            { "text": "Ersetzen durch: „Bei Fragen melden Sie sich gern.“", "wert": 1, "weiter": "k4", "rueck": "Kürzer und freundlich. Was noch fehlt, ist die Frist." },
+            { "text": "So lassen – ein Schluss mit dieser Formel gehört bei Mails an Vorgesetzte einfach zum guten Ton.", "wert": 0, "weiter": "k4", "rueck": "Solche Formeln liest kaum jemand. Den Platz bekommt besser die Frist." }
+          ] },
+        { "id": "k4", "sagt": "Du schickst die Mail ab. Am nächsten Morgen antwortet Albers: „Klingt sinnvoll. Was kostet das, und ab wann?“",
+          "wahl": [
+            { "text": "„Rund 40 Euro im Monat für das ganze Team. Startklar ab dem Ersten.“", "wert": 2, "weiter": "ende1", "rueck": "Zwei Fragen, zwei kurze Antworten. Mehr braucht es nicht." },
+            { "text": "„Also die Kosten belaufen sich im Prinzip auf einen monatlichen Betrag von ungefähr 40 Euro, wobei eine Einführung zum Monatsersten möglich wäre.“", "wert": 0, "weiter": "ende2", "rueck": "Die alte Gewohnheit ist zurück: Füllwörter und Hauptwörter. Er hat nur zwei Dinge gefragt." },
+            { "text": "„Die genauen Kosten schicke ich Ihnen heute noch.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich, wenn du es nicht sicher weißt. Weißt du es, sag es gleich." }
+          ] },
+        { "id": "ende1", "sagt": "Zehn Minuten später kommt die Antwort: „Freigegeben.“", "ende": "Bitte nach vorn, Verben statt Hauptwortketten, eine Frist statt einer Floskel. Kurz ist hier nicht unhöflich – es ist Rücksicht auf seine Zeit." },
+        { "id": "ende2", "sagt": "Albers: „Gut, freigegeben. Schicken Sie mir Kosten und Start bitte noch einmal in zwei Sätzen.“", "ende": "Kein Drama – die Freigabe kommt. Beim nächsten Mal: so knapp antworten, wie gefragt wird." }
+      ],
+      "prinzipien": ["das Anliegen in den ersten Satz", "Verben statt Hauptwortketten", "konkret statt „deutlich“", "Frist statt Floskel", "so knapp antworten, wie gefragt wird"],
+      "transfer": "Welche Mail schreibst du diese Woche nach oben? Steht deine Bitte im ersten Satz?"
+    },
+    {
+      "id": "ausdruck-l-02", "bereich": "ausdruck", "phase": "g", "umfeld": "kunden", "faehigkeiten": ["ausdruck.bildung", "ausdruck.treffend", "ausdruck.satzbau"], "stufe": 3,
+      "titel": "Herr Petersen und das Fachchinesisch", "figur": "Herr Petersen",
+      "einleitung": "Ein Brief voller Fachwörter und ein Kunde, der nachfragt. Du übst, Fachliches in Alltagswörtern und kurzen Sätzen zu erklären.",
+      "lage": "Herr Petersen, ein langjähriger Kunde, ist für einen Termin im Haus. Er hört nicht mehr gut. In der Hand hält er einen Brief deiner Firma und hält ihn dir hin.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "„Hier steht: ‚Im Zuge der Migration Ihrer Bestandsdaten in unsere Cloud-Infrastruktur kann es zu temporären Einschränkungen der Verfügbarkeit kommen.‘ Was heißt das denn auf Deutsch?“",
+          "wahl": [
+            { "text": "„Wir ziehen Ihre Daten auf neue Rechner um. Am Umzugstag kann es sein, dass Sie ein paar Stunden nicht an Ihre Daten kommen.“", "wert": 2, "weiter": "k2", "rueck": "Alltagswörter, zwei kurze Sätze, ein Bild: der Umzug. Er nickt." },
+            { "text": "„Das ist die Datenmigration in die Cloud – da gibt es temporär eine eingeschränkte Verfügbarkeit.“", "wert": 0, "tendenz": "fachsprache", "weiter": "k1b", "rueck": "Du hast die Fachwörter nur umgestellt. Er versteht genauso wenig wie vorher." },
+            { "text": "„Ach, das ist nichts Schlimmes, nur eine technische Umstellung bei uns. Das brauchen Sie gar nicht im Einzelnen zu verstehen, wir kümmern uns um alles.“", "wert": 0, "tendenz": "abwiegeln", "weiter": "k1c", "rueck": "Freundlich gemeint, aber von oben herab – und er weiß immer noch nicht, ob er betroffen ist." }
+          ] },
+        { "id": "k1b", "sagt": "Herr Petersen runzelt die Stirn: „Migration? Cloud? Sagen Sie es mir so, dass ich es zu Hause erzählen kann.“",
+          "wahl": [
+            { "text": "„Entschuldigung, ich sag's anders: Wir ziehen Ihre Daten auf neue Rechner um – wie bei einem Umzug. An dem Tag kann es ein paar Stunden haken.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt: Alltagswörter und ein Bild." },
+            { "text": "„Cloud heißt, Ihre Daten liegen nicht mehr bei uns im Haus, sondern in einem großen Rechenzentrum, das man über das Internet erreicht – das ist heute ganz üblich.“", "wert": 1, "weiter": "k2", "rueck": "Besser – du erklärst. Aber er wollte wissen, was das für ihn heißt, nicht, was eine Cloud ist." }
+          ] },
+        { "id": "k1c", "sagt": "Herr Petersen: „Das sagen Sie so. Kann ich nächste Woche nun Rechnungen schreiben oder nicht?“",
+          "wahl": [
+            { "text": "„Gute Frage. Ja – nur am Umzugstag, das ist der Dienstag, kann es ein paar Stunden haken.“", "wert": 2, "weiter": "k2", "rueck": "Jetzt beantwortest du seine eigentliche Frage – konkret, mit Tag." },
+            { "text": "„Ja, ja, das geht schon alles, machen Sie sich keine Sorgen.“", "wert": 0, "tendenz": "abwiegeln", "weiter": "ende2", "rueck": "Wieder abgewiegelt. Ob das stimmt, weiß er nicht." }
+          ] },
+        { "id": "k2", "sagt": "Er hält eine Hand hinters Ohr: „Wann genau ist das, und was soll ich da machen?“",
+          "wahl": [
+            { "text": "„Am Dienstag, dem 12. Speichern Sie bitte Montagabend alles. Dienstagvormittag keine Rechnungen schreiben. Ab Mittag geht wieder alles.“", "wert": 2, "weiter": "k3", "rueck": "Ein Gedanke pro Satz, Tag und Uhrzeit, eine klare Bitte. Das kommt auch an, wenn er nicht jedes Wort hört." },
+            { "text": "„Am Dienstag, dem 12., wobei Sie Dringendes, falls es geht, schon am Montag erledigen sollten, weil vormittags, solange der Umzug läuft, nichts geht.“", "wert": 0, "weiter": "k3", "rueck": "Alles drin – aber in einem Satz mit drei Einschüben. Wer schlecht hört, verliert den Faden." },
+            { "text": "„Am Dienstag. Sie brauchen gar nichts zu tun.“", "wert": 1, "weiter": "k3", "rueck": "Kurz und klar. Nur stimmt „gar nichts“ nicht ganz: Vormittags sollte er keine Rechnungen schreiben." }
+          ] },
+        { "id": "k3", "sagt": "Herr Petersen faltet den Brief zusammen: „Warum schreiben Sie das nicht gleich so?“",
+          "wahl": [
+            { "text": "„Da haben Sie recht. Ich gebe das weiter – und schicke Ihnen die Erklärung noch einmal schriftlich.“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst die Kritik an und machst etwas daraus." },
+            { "text": "„Das ist halt so in der Branche – die Briefe kommen aus der Rechtsabteilung, und die formulieren immer so kompliziert.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende1", "rueck": "Mag stimmen – hilft ihm aber nicht. Und es klingt, als wäre Unverständliches normal." },
+            { "text": "„Gute Frage.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich – aber zu sagen, was du damit machst, wäre stärker." }
+          ] },
+        { "id": "ende1", "sagt": "Herr Petersen steckt den Brief ein: „So versteh ich das. Danke.“", "ende": "Alltagswörter statt Fachwörter, ein Bild, ein Gedanke pro Satz, Tag und Uhrzeit. So verstehen dich Menschen, die schlecht hören – und alle anderen auch." },
+        { "id": "ende2", "sagt": "Herr Petersen geht, den Brief noch in der Hand. Am Dienstag ruft er dreimal an.", "ende": "Kein Drama – aber Abwiegeln erklärt nichts. Beim nächsten Mal: Alltagswörter und ein konkreter Tag." }
+      ],
+      "prinzipien": ["Alltagswort statt Fachwort", "sagen, was es für ihn heißt", "ein Bild aus dem Alltag", "ein Gedanke pro Satz", "Tag und Uhrzeit statt „temporär“"],
+      "transfer": "Welches Fachwort aus deiner Arbeit benutzt du so oft, dass du es gar nicht mehr hörst? Wie würdest du es Herrn Petersen erklären?"
+    },
+    {
+      "id": "ausdruck-l-03", "bereich": "ausdruck", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["ausdruck.diplomatie", "ausdruck.knapp", "ausdruck.treffend"], "stufe": 3,
+      "titel": "Die Absage an Carla", "figur": "Carla Demir",
+      "einleitung": "Eine Bitte, zu der du Nein sagen willst – schriftlich. Du übst, klar abzusagen, ohne zu verletzen: ohne Weichmacher-Nebel und ohne lange Rechtfertigung.",
+      "lage": "Carla Demir, deine Projektleiterin, schreibt dir im Chat: „Hättest du Lust, dieses Jahr die Planung fürs Sommerfest zu übernehmen? Du wärst ideal dafür!“ Du hast im Juni zwei wichtige Fristen und willst Nein sagen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dein erster Entwurf: „Hallo, Carla, das ist wirklich lieb von dir, und ich würde eigentlich auch total gern, aber ich weiß nicht, ob ich das vielleicht zeitlich irgendwie hinbekomme …“ Was tust du?",
+          "wahl": [
+            { "text": "Abschicken – so merkt sie, dass du eigentlich willst, und ist nicht enttäuscht.", "wert": 0, "tendenz": "ausweichen", "weiter": "k1b", "rueck": "Sie liest ein „vielleicht“ – und plant mit dir." },
+            { "text": "Neu schreiben: Dank, ein klares Nein, ein kurzer Grund.", "wert": 2, "weiter": "k2", "rueck": "Die drei Teile einer Absage. Jetzt geht es um die Wörter." },
+            { "text": "Das „eigentlich“ und das „irgendwie“ streichen, den Rest so lassen, weil er freundlich klingt und Carla nicht vor den Kopf stößt.", "wert": 1, "weiter": "k1b", "rueck": "Weniger Nebel – aber ein Nein steht immer noch nicht da. Sie liest ein „Ja, wenn …“." }
+          ] },
+        { "id": "k1b", "sagt": "Carla antwortet sofort: „Super! Dann setze ich dich auf die Liste und schicke dir morgen die Unterlagen.“",
+          "wahl": [
+            { "text": "„Warte – ich habe mich unklar ausgedrückt. Die Planung übernehme ich nicht, im Juni habe ich zwei Fristen. Entschuldige das Hin und Her.“", "wert": 2, "weiter": "k2b", "rueck": "Gut gefangen: klar, mit Grund, ohne lange Erklärung." },
+            { "text": "Nichts mehr schreiben und hoffen, dass sich bis morgen noch jemand anderes meldet.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "So wird es im Juni doppelt schwer – für dich und für Carla." }
+          ] },
+        { "id": "k2b", "sagt": "Carla: „Oh, schade. Okay – danke, dass du es gleich sagst.“",
+          "wahl": [
+            { "text": "„Beim Aufbau am Freitag helfe ich gern mit.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Angebot, das du halten kannst – das macht das Nein leichter." },
+            { "text": "„Tut mir echt leid, ich fühl mich richtig schlecht deswegen.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich, aber nicht nötig: Ein Nein ist kein Vergehen." }
+          ] },
+        { "id": "k2", "sagt": "Für das Nein hast du drei Fassungen im Kopf. Welche schreibst du?",
+          "wahl": [
+            { "text": "„Die Planung übernehme ich dieses Jahr nicht.“", "wert": 2, "weiter": "k3", "rueck": "Klar und ohne Vorwurf. „Dieses Jahr“ ist ehrlich und lässt die Zukunft offen, ohne etwas zu versprechen." },
+            { "text": "„Ich glaube, ich bin vielleicht nicht so ganz geeignet dafür.“", "wert": 0, "tendenz": "kleinmachen", "weiter": "k3", "rueck": "Klingt nach Selbstzweifel, nicht nach Entscheidung. Carla wird widersprechen: „Doch, gerade du!“" },
+            { "text": "„Ich kann das leider nicht machen, weil ich im Juni schon zwei Fristen habe und außerdem Urlaub und dann ja auch noch die Schulung ansteht.“", "wert": 1, "weiter": "k3", "rueck": "Das Nein ist da – aber die Liste der Gründe lädt zum Verhandeln ein: „Und nach der Schulung?“" }
+          ] },
+        { "id": "k3", "sagt": "Fehlt noch der Rahmen. Was setzt du davor und dahinter?",
+          "wahl": [
+            { "text": "Davor: „Danke, dass du an mich denkst.“ Dahinter: „Beim Aufbau am Freitag helfe ich gern.“", "wert": 2, "weiter": "ende1", "rueck": "Dank, klares Nein, ein machbares Angebot – drei Teile, freundlich und eindeutig." },
+            { "text": "Davor: „Sorry, sorry, sorry!“ Dahinter: „Ich hoffe, du bist mir nicht böse – ich mach's wieder gut, versprochen!“", "wert": 0, "tendenz": "entschuldigen", "weiter": "ende1", "rueck": "Drei Entschuldigungen machen aus einem normalen Nein ein schlechtes Gewissen – für euch beide." },
+            { "text": "Davor: „Danke für die Frage.“ Dahinter nichts.", "wert": 1, "weiter": "ende1", "rueck": "Klar und höflich. Ein kleines Angebot hätte es wärmer gemacht – wenn du eins hast." }
+          ] },
+        { "id": "ende1", "sagt": "Carla schickt einen Daumen nach oben und fragt in der Teamrunde nach Freiwilligen.", "ende": "Eine gute Absage hat drei Teile: Dank, ein klares Nein, was stattdessen geht. Höchstens ein Weichmacher, kein Stapel von Gründen – so bleibt die Beziehung heil und das Nein ein Nein." },
+        { "id": "ende2", "sagt": "Im Mai schickt Carla dir den Zeitplan fürs Sommerfest – mit deinem Namen ganz oben.", "ende": "Kein Drama – aber ein unklares Nein wird schnell zum Ja. Beim nächsten Mal: Dank, klares Nein, kurzer Grund – gleich in der ersten Nachricht." }
+      ],
+      "prinzipien": ["Dank – klares Nein – was stattdessen geht", "ein kurzer Grund genügt", "kein Weichmacher-Nebel", "Entschuldigen ist nicht nötig"],
+      "transfer": "Zu welcher Bitte willst du gerade Nein sagen? Schreib die drei Teile auf, bevor du antwortest."
+    },
+    {
+      "id": "ausdruck-l-04", "bereich": "ausdruck", "phase": "g", "umfeld": "familie", "faehigkeiten": ["ausdruck.register", "ausdruck.treffend", "ausdruck.diplomatie"], "stufe": 3,
+      "titel": "Eine Karte für Tante Renate", "figur": "Tante Renate",
+      "einleitung": "Eine Karte, in der jedes Wort zählt. Du übst, den persönlichen Ton zu treffen und Floskeln durch etwas zu ersetzen, das nur zu diesem Menschen passt.",
+      "lage": "Tante Renate ist umgezogen – in eine kleinere Wohnung mit Balkon. Am Samstag lädt sie zur Einweihung ein, du kannst nicht kommen. Also schreibst du ihr eine Karte. Renate sagt, was sie denkt – auch über Karten.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Die Anrede. Was schreibst du?",
+          "wahl": [
+            { "text": "„Sehr geehrte Frau …“ – lieber zu förmlich als zu locker, bei einer Karte kann man nichts falsch machen, wenn man sich an die Regeln hält.", "wert": 0, "tendenz": "zu-steif", "weiter": "k2", "rueck": "Für die eigene Tante viel zu steif. Renate würde lachen – oder sich wundern." },
+            { "text": "„Liebe Tante Renate,“", "wert": 2, "weiter": "k2", "rueck": "Warm und passend. So spricht man in der Familie." },
+            { "text": "„Hallo,“ – ohne Namen, dann passt es auf jeden Fall.", "wert": 1, "weiter": "k2", "rueck": "Geht, wirkt aber wie eine Nachricht an alle. Der Name macht es persönlich." }
+          ] },
+        { "id": "k2", "sagt": "Auf der Karte steht schon vorgedruckt: „Zum Einzug alles Gute!“ Was schreibst du darunter?",
+          "wahl": [
+            { "text": "„Alles Liebe zur neuen Wohnung und vor allem Gesundheit!“", "wert": 1, "weiter": "k3", "rueck": "Herzlich gemeint – aber so steht es auf vielen Karten." },
+            { "text": "„Ich sehe dich schon auf dem Balkon sitzen, mit Kaffee und deinen Tomaten – genau so hast du es dir gewünscht.“", "wert": 2, "weiter": "k3", "rueck": "Ein Bild, das nur zu ihr passt. Diesen Satz liest sie zweimal." },
+            { "text": "„Herzlichen Glückwunsch zum Bezug Ihrer neuen Räumlichkeiten.“", "wert": 0, "tendenz": "zu-steif", "weiter": "k3", "rueck": "Klingt nach Hausverwaltung, nicht nach Familie – das Register passt nicht." }
+          ] },
+        { "id": "k3", "sagt": "Jetzt die Absage für Samstag. Was schreibst du?",
+          "wahl": [
+            { "text": "„Am Samstag kann ich leider nicht kommen, ich bin auf einer Hochzeit eingeladen. Im März komme ich vorbei – dann zeigst du mir alles.“", "wert": 2, "weiter": "k4", "rueck": "Klares Nein, kurzer Grund, ein Angebot mit Zeitpunkt. Renate weiß, woran sie ist." },
+            { "text": "„Leider, leider kann ich am Samstag nicht – es tut mir so unendlich leid, ich wäre so gern …“", "wert": 0, "tendenz": "entschuldigen", "weiter": "k4", "rueck": "So viel Bedauern macht aus der Karte eine Entschuldigung. Renate fragt sich, was los ist." },
+            { "text": "Die Absage weglassen – sie merkt ja, dass du nicht da bist.", "wert": 0, "tendenz": "vermeiden", "weiter": "k3b", "rueck": "Sie merkt es – und fragt sich, warum du nichts gesagt hast." }
+          ] },
+        { "id": "k3b", "sagt": "Zwei Tage nach der Karte ruft Renate an: „Danke für die Karte, Kind. Kommst du nun am Samstag?“",
+          "wahl": [
+            { "text": "„Nein, Samstag klappt nicht – ich bin auf einer Hochzeit. Aber im März komme ich vorbei.“", "wert": 2, "weiter": "ende2", "rueck": "Klar und warm – das hätte auch auf die Karte gepasst." },
+            { "text": "„Mal sehen, ich versuch's irgendwie, vielleicht schaffe ich es ja doch noch kurz vorbeizukommen.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende3", "rueck": "Ein „mal sehen“ ist für die andere Seite ein halbes Ja." }
+          ] },
+        { "id": "k4", "sagt": "Der Schluss der Karte. Renate liest gern – aber nicht zwischen den Zeilen.",
+          "wahl": [
+            { "text": "„Mit freundlichen Grüßen“", "wert": 0, "tendenz": "zu-steif", "weiter": "ende1", "rueck": "Der Briefschluss fürs Amt – auf einer Familienkarte wirkt er kühl." },
+            { "text": "„Liebe Grüße und lass es dir gut gehen!“", "wert": 1, "weiter": "ende1", "rueck": "Freundlich, aber austauschbar. Ein Bezug auf euer nächstes Treffen wäre wärmer." },
+            { "text": "„Bis bald – ich freu mich auf den ersten Kaffee auf deinem Balkon!“", "wert": 2, "weiter": "ende1", "rueck": "Ein Schluss, der zu euch gehört. Persönlich und leicht." }
+          ] },
+        { "id": "ende1", "sagt": "Eine Woche später schickt Renate ein Foto: deine Karte, aufgestellt auf dem Balkontisch.", "ende": "Persönlich schlägt Floskel: ein Bild, das nur zu ihr passt, eine klare Absage mit Angebot, ein Schluss, der zu euch gehört. Das Register für die Familie ist warm – nicht förmlich." },
+        { "id": "ende2", "sagt": "Renate: „Gut, dann im März. Ich backe was.“", "ende": "Am Telefon war es klar – auf der Karte wäre es auch gegangen. Eine Absage gehört in die Karte, nicht ins Schweigen." },
+        { "id": "ende3", "sagt": "Renate stellt am Samstag eine Tasse mehr auf den Tisch.", "ende": "Kein Drama – aber ein „mal sehen“ lässt den anderen warten. Klar abzusagen ist die freundlichere Antwort." }
+      ],
+      "prinzipien": ["Register passend zur Familie: warm, nicht förmlich", "ein persönliches Bild statt der Floskel", "Absage klar, mit Angebot", "kein Übermaß an Entschuldigung"],
+      "transfer": "Wem schuldest du gerade eine Karte oder Nachricht? Welches Bild passt nur zu diesem Menschen?"
+    },
+    {
+      "id": "ausdruck-l-05", "bereich": "ausdruck", "phase": "g", "umfeld": "kunden", "faehigkeiten": ["ausdruck.treffend", "ausdruck.verben", "ausdruck.knapp", "ausdruck.satzbau", "ausdruck.register", "ausdruck.diplomatie"], "stufe": 4, "sparring": true,
+      "titel": "Sparring: Der Text, der raus muss", "figur": "Dr. Henrik Albers, Nadine Köhler und Miriam Okafor",
+      "einleitung": "Das Sparring zum Abschluss der Grundlagen: eine heikle Nachricht an eine Kundin, kurz vor Feierabend. Alles, was du gelernt hast, kommt in einem Text zusammen.",
+      "lage": "Freitag, 15:40 Uhr. Nadine Köhler ist inzwischen Kundin geworden. Ihre erste Bestellung – neue Geräte für die Schreinerei – kommt nicht am Montag, sondern eine Woche später: Der Lieferant hat sich verrechnet. Dr. Albers: „Schreiben Sie ihr bitte noch heute. Sie plant am Montag mit den Geräten.“",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Runde 1 – der Betreff. Was schreibst du?",
+          "wahl": [
+            { "text": "„Information“", "wert": 0, "weiter": "k2", "rueck": "Sagt nichts. Vielleicht öffnet sie die Mail erst am Montag." },
+            { "text": "„Neuer Liefertermin für Ihre Geräte: Montag, der 21.“", "wert": 2, "weiter": "k2", "rueck": "Die Hauptsache steht schon im Betreff – sie kann sofort umplanen." },
+            { "text": "„Ihre Bestellung: Liefertermin verschiebt sich“", "wert": 1, "weiter": "k2", "rueck": "Gut – nur der neue Termin fehlt noch." }
+          ] },
+        { "id": "k2", "sagt": "Runde 2 – der erste Satz.",
+          "wahl": [
+            { "text": "„Ihre neuen Geräte kommen leider nicht am Montag, sondern eine Woche später, am 21.“", "wert": 2, "weiter": "k3", "rueck": "Hauptsache zuerst, ein Weichmacher an der richtigen Stelle: „leider“." },
+            { "text": "„Wir möchten Sie hiermit in Kenntnis setzen, dass es bedauerlicherweise zu einer Verzögerung der Auslieferung Ihrer bestellten Geräte gekommen ist.“", "wert": 0, "tendenz": "aufblaehen", "weiter": "k3", "rueck": "Hauptwortstil und Streckverben – und der neue Termin fehlt." },
+            { "text": "„Ich hoffe, in der Werkstatt läuft alles gut. Leider muss ich Ihnen heute etwas Unangenehmes mitteilen.“", "wert": 1, "weiter": "k3", "rueck": "Freundlich, aber die Nachricht kommt erst im dritten Satz. Bei schlechten Nachrichten lieber gleich." }
+          ] },
+        { "id": "k3", "sagt": "Runde 3 – der Grund. Nadine Köhler rechnet genau.",
+          "wahl": [
+            { "text": "„Unser Lieferant hat sich bei der Menge verrechnet. Das ist ärgerlich, und es tut mir leid.“", "wert": 2, "weiter": "k4", "rueck": "Ehrlich, kurz, mit einer Entschuldigung, die nicht kriecht." },
+            { "text": "„Es kam zu Unregelmäßigkeiten in der Lieferkette.“", "wert": 0, "tendenz": "vernebeln", "weiter": "k4", "rueck": "Klingt nach Ausrede. Wer genau rechnet, fragt jetzt nach – und vertraut weniger." },
+            { "text": "Den Grund weglassen – sie will vor allem wissen, wann die Geräte kommen.", "wert": 1, "weiter": "k4", "rueck": "Geht. Ein ehrlicher Grund in einem Satz schafft aber Vertrauen." }
+          ] },
+        { "id": "k4", "sagt": "Runde 4 – was heißt das für ihren Montag?",
+          "wahl": [
+            { "text": "„Für die Woche bis dahin bringen wir Ihnen zwei Leihgeräte – am Montag um acht wären sie da. Passt Ihnen das?“", "wert": 2, "weiter": "k5", "rueck": "Konkret: was, wann – und eine Frage, die ihr die Wahl lässt." },
+            { "text": "„Wir versuchen natürlich, Ihnen da irgendwie entgegenzukommen, vielleicht mit einer Übergangslösung.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k5", "rueck": "„Irgendwie“, „vielleicht“ – sie weiß nicht, ob sie am Montag arbeiten kann." },
+            { "text": "„Ich rufe Sie am Montag um acht an, und wir besprechen, wie wir die Woche überbrücken.“", "wert": 1, "weiter": "k5", "rueck": "Ein klarer nächster Schritt – nur kann sie erst am Montag planen." }
+          ] },
+        { "id": "k5", "sagt": "Runde 5 – Miriam liest deinen Entwurf mit: „Gut. Aber ist das nicht zu knapp für eine Kundin? Vielleicht noch ein netter Absatz drumherum?“",
+          "wahl": [
+            { "text": "„Ich glaube, kurz ist hier freundlicher: Sie liest es am Freitagnachmittag und will vor allem wissen, was am Montag ist.“", "wert": 2, "weiter": "ende1", "rueck": "Sachlich widersprochen, mit einem Grund aus ihrer Sicht – und mit einem bewusst gesetzten Weichmacher." },
+            { "text": "„Stimmt.“ – und oben einen Absatz über die gute Zusammenarbeit ergänzen.", "wert": 1, "weiter": "ende2", "rueck": "Kann man machen – nur rutscht die Nachricht dabei nach unten." },
+            { "text": "„Nein.“", "wert": 0, "tendenz": "schroff", "weiter": "ende3", "rueck": "Klar, aber schroff. Mit einem Grund wäre es ein Argument gewesen statt Trotz." }
+          ] },
+        { "id": "ende1", "sagt": "Um 16:20 Uhr antwortet Nadine Köhler: „Danke, dass Sie gleich Bescheid geben. Dann planen wir so.“", "ende": "Betreff mit der Hauptsache, erster Satz mit der Nachricht, ein ehrlicher Grund, ein konkreter nächster Schritt, höchstens ein Weichmacher. Das ist die Grundausstattung für jeden Text, der raus muss." },
+        { "id": "ende2", "sagt": "Am Montag schreibt Nadine Köhler: „Den neuen Termin habe ich erst beim zweiten Lesen gesehen.“", "ende": "Kein Drama – sie hat es gelesen. Aber jeder Absatz vor der Nachricht kostet Aufmerksamkeit. Die Hauptsache gehört nach oben." },
+        { "id": "ende3", "sagt": "Miriam zuckt mit den Schultern: „Na gut, dein Text.“", "ende": "Der Text war stark – das Gespräch darüber weniger. Auch unter Kollegen gilt: klar in der Sache, freundlich im Ton, mit einem kurzen Grund." }
+      ],
+      "prinzipien": ["die Hauptsache in Betreff und ersten Satz", "Verben statt Hauptwortketten", "ehrlicher Grund statt Nebelwort", "konkreter nächster Schritt", "höchstens ein Weichmacher", "der Ton passt zum Empfänger"],
+      "transfer": "Welcher Text muss bei dir als Nächstes raus? Schreib zuerst den Betreff und den ersten Satz – der Rest folgt."
+    }
+  ]
+}

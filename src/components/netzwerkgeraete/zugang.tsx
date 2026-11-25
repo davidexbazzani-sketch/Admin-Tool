@@ -8,10 +8,11 @@
 // (per .gitignore ausgeschlossen, beim Build eingebunden).
 
 import { useState } from 'react'
-import { Lock, Eye, EyeOff, Copy, CheckCircle2, AlertTriangle } from 'lucide-react'
+import { Lock, Eye, EyeOff, Copy, CheckCircle2 } from 'lucide-react'
 import { api } from '../../electronAPI'
+import { TOOL_PIN, usePinSperre as usePinSperreAllgemein } from '../PinSperre'
 
-export const NETZGERAETE_PIN = '0506'
+export const NETZGERAETE_PIN = TOOL_PIN
 
 interface ZugangsDatei { benutzer?: string; geraete: { ip: string; passwort: string; benutzer?: string }[] }
 const dateien = import.meta.glob('../../../resources/Netzwerkgeraete/*.json', { eager: true, import: 'default' }) as Record<string, ZugangsDatei>
@@ -24,42 +25,10 @@ export function zugangFuer(datei: string, ip: string): { benutzer: string; passw
   return { benutzer: g.benutzer || d.benutzer || '', passwort: g.passwort }
 }
 
-/** PIN-Sperre: `mitPin(aktion)` führt die Aktion sofort aus, wenn schon entsperrt — sonst erst nach PIN. */
+/** PIN-Sperre: `mitPin(aktion)` führt die Aktion sofort aus, wenn schon entsperrt — sonst erst nach PIN.
+ *  Der Baustein selbst liegt in components/PinSperre.tsx (auch für die Einstellungen genutzt). */
 export function usePinSperre(hinweis = 'Für Passwörter und Anmeldung an den Netzwerkgeräten.') {
-  const [entsperrt, setEntsperrt] = useState(false)
-  const [wartend, setWartend] = useState<null | (() => void)>(null)
-  const [pin, setPin] = useState('')
-  const [fehler, setFehler] = useState(false)
-
-  function mitPin(aktion: () => void) {
-    if (entsperrt) { aktion(); return }
-    setPin(''); setFehler(false); setWartend(() => aktion)
-  }
-  function pruefen() {
-    if (pin.trim() !== NETZGERAETE_PIN) { setFehler(true); return }
-    setEntsperrt(true)
-    const a = wartend; setWartend(null)
-    a?.()
-  }
-
-  const pinDialog = wartend && (
-    <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-6" onClick={() => setWartend(null)}>
-      <div className="bg-card border border-border rounded-xl shadow-2xl p-5 w-full max-w-xs" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center gap-2 mb-1"><Lock size={16} className="text-blue-400" /><h3 className="text-sm font-semibold text-foreground">PIN eingeben</h3></div>
-        <p className="text-xs text-muted-foreground mb-3">{hinweis}</p>
-        <input value={pin} onChange={e => { setPin(e.target.value); setFehler(false) }} autoFocus type="password" inputMode="numeric"
-          onKeyDown={e => { if (e.key === 'Enter') pruefen() }}
-          className="w-full px-3 py-2 text-center tracking-[0.4em] text-lg rounded-md bg-background border border-border text-foreground focus:outline-none focus:border-primary" />
-        {fehler && <p className="mt-2 text-xs text-red-300 flex items-center gap-1"><AlertTriangle size={13} />PIN falsch.</p>}
-        <div className="flex gap-2 mt-4">
-          <button onClick={() => setWartend(null)} className="px-3 py-1.5 text-xs rounded-md border border-border text-muted-foreground hover:bg-accent">Abbrechen</button>
-          <button onClick={pruefen} disabled={!pin} className="ml-auto px-4 py-1.5 text-xs rounded-md font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40">Weiter</button>
-        </div>
-      </div>
-    </div>
-  )
-
-  return { entsperrt, mitPin, pinDialog }
+  return usePinSperreAllgemein(hinweis)
 }
 
 /** Zeile „Passwort ••••" mit Anzeigen/Kopieren (beides hinter der PIN). */

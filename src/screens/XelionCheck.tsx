@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 import {
   Plus, Minus, Search, Phone, Smartphone, User,
   FileSpreadsheet, FileText, Printer, Mail, CheckCircle, XCircle, FolderOpen, Paperclip,
@@ -23,7 +24,9 @@ export default function XelionCheck() {
   const isAdmin = useAppStore((s) => s.isAdmin)
 
   const [tab, setTab] = useState<Tab>('single')
-  const [view, setView] = useState<'bestand' | 'lizenzen' | 'query' | 'everphone'>('bestand')
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const [view, setView] = useBereichZustand<'bestand' | 'lizenzen' | 'query' | 'everphone'>('xelion', 'bestand')
+  const { sichtbar: reiterSichtbar } = useBereiche('xelion')
   const [singleInput, setSingleInput] = useState('')
   const [listItems, setListItems] = useState([{ id: makeId(), value: '' }])
 
@@ -198,10 +201,10 @@ export default function XelionCheck() {
         <p className="text-sm text-muted-foreground mt-1">Xelion-Durchwahlen gegen das AD prüfen — welche Nummern werden nicht mehr benutzt?</p>
       </div>
       <div className="flex gap-1 p-1 bg-muted rounded-lg">
-        <button onClick={() => setView('bestand')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'bestand' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Durchwahlen prüfen</button>
-        <button onClick={() => setView('lizenzen')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'lizenzen' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Lizenzen</button>
-        <button onClick={() => setView('query')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'query' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Abfrage</button>
-        <button onClick={() => setView('everphone')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'everphone' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Everphone-Register</button>
+        {reiterSichtbar('bestand') && <button onClick={() => setView('bestand')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'bestand' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Durchwahlen prüfen</button>}
+        {reiterSichtbar('lizenzen') && <button onClick={() => setView('lizenzen')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'lizenzen' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Lizenzen</button>}
+        {reiterSichtbar('query') && <button onClick={() => setView('query')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'query' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Abfrage</button>}
+        {reiterSichtbar('everphone') && <button onClick={() => setView('everphone')} className={`px-3 py-1.5 text-xs rounded-md font-medium ${view === 'everphone' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>Everphone-Register</button>}
       </div>
     </div>
   )

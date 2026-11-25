@@ -1,0 +1,340 @@
+{
+  "einheiten": [
+    {
+      "id": "ausdruck-1-01", "bereich": "ausdruck", "stufe": 1, "nr": 1,
+      "titel": "Treffend schlägt geschwollen",
+      "faehigkeiten": ["ausdruck.treffend", "ausdruck.bildung"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Dass unnötig gehobene Wörter und Fachwörter das Urteil über Text und Verfasser senken, zeigen einzelne Experimente mit geschriebenen Texten. Wie stark das im Gespräch wirkt, ist nicht eigens untersucht.",
+      "quellen": ["oppenheimer2006", "bullock2019"],
+      "aha": "Wer Wörter aufbläht, wirkt nicht klüger, sondern eher unsicher. Gewählt heißt genau: das Wort, das am meisten sagt – und das dein Gegenüber versteht.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Forscher ersetzten in Bewerbungsschreiben schlichte Wörter durch gehobene, längere. Wie beurteilten Leser danach die Verfasser?", "optionen": ["klüger", "kein Unterschied", "weniger intelligent"], "richtig": 2, "loesung": "weniger intelligent", "aufloesung": "Die aufgeblähten Fassungen kosteten Ansehen, nicht nur Verständnis. Dabei gab die Mehrheit der befragten Studierenden zu, genau so zu schreiben – um klüger zu wirken." },
+        { "art": "karte", "text": "Gewählt heißt genau, nicht kompliziert. Ein gehobenes Wort lohnt sich nur, wenn es mehr sagt als das einfache: „prägnant“ sagt mehr als „kurz“, nämlich kurz und treffend. „Implementieren“ sagt meist nicht mehr als „einführen“. Der Alltagswort-Test: Gibt es ein Wort, das jeder kennt und das genauso genau ist? Dann nimm es." },
+        { "art": "vergleich", "lage": "Tarek schreibt in den Teamchat, worum es in der Besprechung gehen soll.", "schwach": "„Wir sollten zeitnah eruieren, inwiefern die Implementierung der neuen Software Synergien generiert.“", "stark": "„Lasst uns bis Freitag klären, ob uns die neue Software Arbeit spart.“", "frage": "Was leistet die zweite Fassung?", "unterschied": "Sie sagt dasselbe mit Wörtern, die jeder kennt – und dazu genauer: ein Datum statt „zeitnah“, „Arbeit spart“ statt „Synergien generiert“." },
+        { "art": "wortwahl", "kopf": { "id": "ausdruck-1-01-a", "faehigkeit": "ausdruck.treffend", "stufe": 2, "kanal": "wissen" },
+          "frage": "Welches Wort ist hier das genaueste? „Die Besprechung war ___ – in zwanzig Minuten war alles entschieden.“",
+          "antworten": [
+            { "text": "effektiv", "wert": 1, "warum": "Heißt „wirksam“ – stimmt auch, sagt aber nichts darüber, wie schnell es ging." },
+            { "text": "effizient", "wert": 2, "warum": "Heißt: mit wenig Aufwand ans Ziel. Genau das sagen die zwanzig Minuten." },
+            { "text": "ganzheitlich", "wert": 0, "tendenz": "aufblaehen", "warum": "Klingt bedeutend, sagt hier nichts. Ein typisches Imponierwort." },
+            { "text": "suboptimal", "wert": 0, "warum": "Bedeutet „nicht ganz gut“ – das Gegenteil dessen, was der Satz sagt." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-1-01-b", "faehigkeit": "ausdruck.bildung", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Sag es so, dass Herr Petersen es beim ersten Hören versteht.",
+          "vorlage": "„Wir werden die Problematik zeitnah evaluieren und Ihnen anschließend eine adäquate Lösung kommunizieren.“",
+          "kriterien": ["Alltagswörter statt Fremdwörter", "ein Tag oder eine Uhrzeit statt „zeitnah“", "sagt, was als Nächstes passiert"],
+          "muster": ["„Wir schauen uns das Problem bis Mittwoch an und rufen Sie dann mit einem Vorschlag an.“", "„Ich prüfe das bis morgen Mittag und melde mich mit einer Lösung bei Ihnen.“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-1-01-c", "faehigkeit": "ausdruck.bildung", "stufe": 3, "kanal": "wissen" },
+          "frage": "Wann ist das Fachwort die bessere Wahl?",
+          "antworten": [
+            { "text": "Wenn du zeigen willst, dass du dich auskennst.", "wert": 0, "tendenz": "aufblaehen", "warum": "Genau dieser Wunsch führt zum Aufblähen – und kostet in Experimenten eher Ansehen." },
+            { "text": "Wenn du es gleich danach in einem Halbsatz erklärst – auch bei Laien.", "wert": 1, "warum": "Besser als ohne Erklärung. In einer Studie machten Erklärungen einen Fachtext aber kaum leichter. Bei Laien lieber gleich das Alltagswort." },
+            { "text": "Wenn es genauer ist als jedes Alltagswort und dein Gegenüber es sicher kennt – etwa unter Fachleuten.", "wert": 2, "warum": "Dann ist es das treffende Wort. Unter Fachleuten spart es Umwege." },
+            { "text": "In Mails an Vorgesetzte – da wirken Alltagswörter schnell zu salopp.", "wert": 0, "warum": "Auch Vorgesetzte lesen lieber klar. Salopp ist eine Frage des Tons, nicht des Wortschatzes." }
+          ] },
+        { "art": "mission", "ref": "ausdruck-m-01" }
+      ],
+      "regel": "Ein gehobenes Wort nur, wenn es genauer ist – sonst das Alltagswort.",
+      "merkkarten": [
+        { "id": "ausdruck-1-01-m1", "frage": "Wann lohnt sich ein gehobenes Wort?", "antwort": "Wenn es mehr sagt als das einfache – und dein Gegenüber es kennt." },
+        { "id": "ausdruck-1-01-m2", "frage": "Wie geht der Alltagswort-Test?", "antwort": "Gibt es ein Wort, das jeder kennt und das genauso genau ist? Dann nimm es." }
+      ],
+      "mission": "ausdruck-m-01"
+    },
+    {
+      "id": "ausdruck-1-02", "bereich": "ausdruck", "stufe": 1, "nr": 2,
+      "titel": "Verben tragen den Satz",
+      "faehigkeiten": ["ausdruck.verben"], "dauerMin": 6, "beleg": "P",
+      "quellen": ["praxis-ausdruck", "reiners1943", "schneider-profis"],
+      "aha": "„Eine Prüfung durchführen“ ist „prüfen“ mit zwei Wörtern mehr. Verben bringen Bewegung und einen Handelnden in den Satz – Hauptwortketten verstecken beides.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Dr. Albers bittet dich um einen kurzen Stand zu den offenen Rechnungen.", "schwach": "„Die Durchführung der Überprüfung der Rechnungen erfolgt bis Freitag.“", "stark": "„Ich prüfe die Rechnungen bis Freitag.“", "frage": "Was macht den zweiten Satz stärker?", "unterschied": "Er hat ein echtes Verb und einen Menschen, der handelt. Der erste versteckt beides hinter drei Hauptwörtern und einem leeren „erfolgt“." },
+        { "art": "karte", "text": "Viele Hauptwörter auf -ung, -heit oder -keit sind eingefrorene Verben: Prüfung – prüfen, Entscheidung – entscheiden. Dazu kommen Streckverben wie „durchführen“, „erfolgen“ oder „zur Anwendung bringen“, die nur Platz füllen. Taue sie auf: Such das Verb im Hauptwort und sag, wer handelt. Dann bekommt der Satz Leben." },
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-1-02-a", "faehigkeit": "ausdruck.verben", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Hauptwortstil oder Verbstil?",
+          "faecher": ["Hauptwortstil", "Verbstil"],
+          "karten": [
+            { "text": "„Nach erfolgter Prüfung erfolgt die Freigabe.“", "fach": 0 },
+            { "text": "„Wir prüfen den Antrag und geben ihn dann frei.“", "fach": 1 },
+            { "text": "„Eine Klärung der Frage ist noch nicht erfolgt.“", "fach": 0 },
+            { "text": "„Wir haben die Frage noch nicht geklärt.“", "fach": 1 },
+            { "text": "„Die Teilnahme an der Schulung ist verpflichtend.“", "fach": 0 },
+            { "text": "„Bitte nehmt alle an der Schulung teil.“", "fach": 1 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-1-02-b", "faehigkeit": "ausdruck.verben", "stufe": 2, "kanal": "koennen" },
+          "auftrag": "Befrei die Verben – und sag, wer handelt.",
+          "vorlage": "„Nach erfolgter Klärung der Zuständigkeit wird eine Weiterleitung Ihrer Anfrage vorgenommen.“",
+          "kriterien": ["echte Verben statt Hauptwörter", "sagt, wer handelt", "kürzer als die Vorlage"],
+          "muster": ["„Sobald wir wissen, wer zuständig ist, leiten wir Ihre Anfrage weiter.“", "„Wir klären, wer zuständig ist, und leiten Ihre Anfrage dann weiter.“"] },
+        { "art": "wortwahl", "kopf": { "id": "ausdruck-1-02-c", "faehigkeit": "ausdruck.verben", "stufe": 2, "kanal": "wissen" },
+          "frage": "Welches Verb ersetzt „Unterstützung leisten“ am besten? „Ich kann euch morgen ___.“",
+          "antworten": [
+            { "text": "Unterstützung geben", "wert": 0, "warum": "Wieder ein Hauptwort mit Streckverb – nur ein anderes." },
+            { "text": "helfen", "wert": 2, "warum": "Kurz, warm, jeder versteht es. Das stärkste Verb ist oft das einfachste." },
+            { "text": "unterstützen", "wert": 1, "warum": "Gut – das Verb ist befreit. „Helfen“ ist im Gespräch unter Kollegen noch direkter." },
+            { "text": "eine Hilfestellung zur Verfügung stellen", "wert": 0, "tendenz": "aufblaehen", "warum": "Sechs Wörter für eins – und es klingt nach Amt." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-1-02-d", "faehigkeit": "ausdruck.verben", "stufe": 3, "kanal": "wissen" },
+          "frage": "Wann ist das Hauptwort trotzdem richtig?",
+          "antworten": [
+            { "text": "Wenn die Sache selbst gemeint ist: „Die Prüfung ist am Montag.“", "wert": 2, "warum": "Hier ist die Prüfung ein Ereignis mit Termin. Ein Verb würde nichts verbessern." },
+            { "text": "Nie – Hauptwörter auf -ung sind immer schlechter Stil.", "wert": 0, "warum": "Zu streng. Schlecht sind Ketten und Streckverben, nicht jedes Hauptwort." },
+            { "text": "In förmlichen Briefen, weil Hauptwörter dort seriöser klingen und Behörden diesen Stil auch selbst benutzen.", "wert": 0, "tendenz": "aufblaehen", "warum": "Seriös wirkt, was verständlich ist. Auch Ämter schreiben zunehmend mit Verben." },
+            { "text": "In Stichpunkten und Überschriften, wo Kürze zählt.", "wert": 1, "warum": "Oft passend. Aber auch dort ist das Verb meist klarer: „Rechnungen prüfen“ statt „Prüfung der Rechnungen“." }
+          ] },
+        { "art": "mission", "ref": "ausdruck-m-02" }
+      ],
+      "regel": "Such das Verb im Hauptwort – und sag, wer handelt.",
+      "merkkarten": [
+        { "id": "ausdruck-1-02-m1", "frage": "Was ist ein Streckverb?", "antwort": "Ein Verb, das nur Platz füllt: „durchführen“, „erfolgen“, „vornehmen“, „zur Anwendung bringen“." },
+        { "id": "ausdruck-1-02-m2", "frage": "„In Erwägung ziehen“ – mit einem Verb?", "antwort": "„Erwägen“." }
+      ],
+      "mission": "ausdruck-m-02"
+    },
+    {
+      "id": "ausdruck-1-03", "bereich": "ausdruck", "stufe": 1, "nr": 3,
+      "titel": "Streichen, was nichts trägt",
+      "faehigkeiten": ["ausdruck.knapp"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Kürze und Prägnanz gehören zu den vier Merkmalen verständlicher Texte im Hamburger Modell. Der Streichtest selbst ist Praxiswissen aus Schreibtrainings.",
+      "quellen": ["zinsser1976", "langer-verstaendlich", "praxis-ausdruck"],
+      "aha": "Füllwörter, Floskeln und Doppelungen verlängern Sätze, ohne etwas zu sagen. Wer sie streicht, klingt klarer und sicherer – und der Streichtest findet sie in Sekunden.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Wie viele Wörter kannst du hier streichen, ohne dass Inhalt verloren geht? „Also ich wollte eigentlich nur mal ganz kurz nachfragen, ob das mit dem Termin am Donnerstag im Prinzip noch so klappt.“", "optionen": ["zwei", "fünf", "zehn oder mehr"], "richtig": 2, "loesung": "zehn oder mehr", "aufloesung": "„Klappt der Termin am Donnerstag noch?“ – 6 statt 21 Wörter, nichts verloren. Füllwörter sammeln sich unbemerkt an. Erst wer streicht, sieht sie." },
+        { "art": "karte", "text": "Füllwörter („eigentlich“, „irgendwie“, „quasi“, „halt“), Floskeln („an dieser Stelle“, „im Endeffekt“) und Doppelungen („bereits schon“, „neu renoviert“) machen Sätze länger, nicht besser. Der Streichtest: Lies den Satz ohne das Wort. Fehlt nichts, bleibt es weg. Ein freundliches „kurz“ oder „bitte“ darf bleiben, wenn es den Ton wärmer macht – nur nicht fünf davon." },
+        { "art": "fehler", "kopf": { "id": "ausdruck-1-03-a", "faehigkeit": "ausdruck.knapp", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Miriams Nachricht an das Team. Markier, was nichts trägt.",
+          "teile": [
+            { "t": "„Hallo zusammen," },
+            { "t": "an dieser Stelle", "fehler": "Floskel – es gibt keine andere Stelle." },
+            { "t": "wollte ich" },
+            { "t": "eigentlich", "fehler": "Füllwort – sie will es ja wirklich sagen." },
+            { "t": "nur kurz Bescheid geben: Die neue Kaffeemaschine ist" },
+            { "t": "im Prinzip", "fehler": "Füllwort – sie ist startklar oder nicht." },
+            { "t": "ab Montag" },
+            { "t": "sozusagen", "fehler": "Füllwort ohne Inhalt." },
+            { "t": "startklar. Die Anleitung liegt" },
+            { "t": "bereits schon", "fehler": "Doppelung – eins von beiden reicht." },
+            { "t": "daneben.“" }
+          ] },
+        { "art": "kern", "kopf": { "id": "ausdruck-1-03-b", "faehigkeit": "ausdruck.knapp", "stufe": 3, "kanal": "koennen" },
+          "absatz": "Hallo, Tarek, ich hoffe, bei dir ist alles gut und du hattest ein schönes Wochenende. Ich wollte mich nur noch einmal wegen der Sache von letzter Woche melden, also wegen der Bestellung für die neuen Bildschirme, die wir ja eigentlich schon im Oktober aufgeben wollten. Die Frage wäre jetzt, ob du mir vielleicht bis Mittwoch sagen könntest, wie viele Bildschirme dein Team im Endeffekt braucht, damit ich die Bestellung dann rausschicken kann.",
+          "hoechstWoerter": 20,
+          "kriterien": ["nennt die Frage", "nennt die Frist", "höchstens 20 Wörter"],
+          "muster": ["„Hallo, Tarek, wie viele Bildschirme braucht dein Team? Sag es mir bitte bis Mittwoch, dann bestelle ich.“", "„Tarek, ich bestelle am Mittwoch die Bildschirme. Wie viele braucht dein Team?“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-1-03-c", "faehigkeit": "ausdruck.knapp", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du kürzt eine Mail an Dr. Albers. Was streichst du zuerst?",
+          "antworten": [
+            { "text": "Den Anlauf: „Ich wollte nur kurz anmerken, dass …“", "wert": 2, "warum": "Er trägt nichts. Ohne ihn steht das Anliegen im ersten Satz." },
+            { "text": "Das Datum, bis wann du die Antwort brauchst – er sieht ja in den Kalender.", "wert": 0, "warum": "Das Datum ist Inhalt. Ohne Frist weiß er nicht, wie dringend es ist." },
+            { "text": "Den Satz, der erklärt, warum es eilt – Dr. Albers fragt schon nach, wenn ihm etwas unklar ist.", "wert": 1, "warum": "Lässt sich kürzen – aber ein knapper Grund hilft ihm, Wichtiges zuerst zu erledigen." },
+            { "text": "Das „Danke“ am Ende – nach oben wirkt es schnell unterwürfig.", "wert": 0, "warum": "Ein Danke ist Höflichkeit, kein Füllwerk. Es darf bleiben." }
+          ] },
+        { "art": "mission", "ref": "ausdruck-m-03" }
+      ],
+      "regel": "Lies den Satz ohne das Wort. Fehlt nichts, bleibt es weg.",
+      "merkkarten": [
+        { "id": "ausdruck-1-03-m1", "frage": "Wie geht der Streichtest?", "antwort": "Den Satz ohne das Wort lesen. Fehlt nichts, bleibt es weg." },
+        { "id": "ausdruck-1-03-m2", "frage": "Drei Füllwörter, die du meist streichen kannst?", "antwort": "Quasi, sozusagen, im Prinzip – und „eigentlich“ oder „irgendwie“, wenn sie nichts bedeuten." }
+      ],
+      "mission": "ausdruck-m-03"
+    },
+    {
+      "id": "ausdruck-1-04", "bereich": "ausdruck", "stufe": 1, "nr": 4,
+      "titel": "Ein Gedanke, ein Satz",
+      "faehigkeiten": ["ausdruck.satzbau"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Einfache, gegliederte Sätze sind ein Kernmerkmal verständlicher Texte im Hamburger Modell. Die Regel „Hauptsache in den Hauptsatz“ ist Stilkunde.",
+      "quellen": ["langer-verstaendlich", "praxis-ausdruck", "tucholsky1930"],
+      "aha": "Drei Gedanken in einem Satz zwingen den Leser, alles im Kopf zu behalten, bis endlich das Verb kommt. Ein Gedanke pro Satz, die Hauptsache in den Hauptsatz – und man versteht dich beim ersten Lesen.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Lena informiert das Team per Mail über einen neuen Termin.", "schwach": "„Da die Besprechung, die ursprünglich für Dienstag geplant war, an dem Carla aber, wie sich jetzt herausgestellt hat, beim Kunden ist, verschoben werden musste, findet sie am Donnerstag um zehn statt.“", "stark": "„Die Besprechung ist jetzt am Donnerstag um zehn. Carla ist am Dienstag beim Kunden, darum haben wir verschoben.“", "frage": "Warum versteht man die zweite Mail sofort?", "unterschied": "Sie sagt zuerst, was alle wissen müssen: den neuen Termin. Der Grund folgt in einem eigenen Satz. In der ersten wartet man vier Nebensätze lang auf die Nachricht." },
+        { "art": "karte", "text": "Ein Satz, ein Gedanke. Was zählt, gehört in den Hauptsatz – nicht in einen Nebensatz, der mit „wobei“ angehängt ist. Und halt die Teile des Verbs nah beisammen: Wer zwischen „haben“ und „verschoben“ zwei Zeilen einschiebt, lässt den Leser warten. Schon Tucholsky spottete über Redner, die erst am Ende verraten, worum es geht. Kurze Sätze sind kein Kinderdeutsch, sondern Rücksicht." },
+        { "art": "rangfolge", "kopf": { "id": "ausdruck-1-04-a", "faehigkeit": "ausdruck.satzbau", "stufe": 2, "kanal": "wissen" },
+          "frage": "Dieselbe Nachricht in vier Fassungen. Ordne von klar nach verworren.",
+          "eintraege": [
+            { "text": "„Der Drucker im zweiten Stock ist bis Freitag kaputt. Bitte druckt so lange im Erdgeschoss.“", "warum": "Zwei Sätze, zwei Gedanken. Die Bitte steht klar für sich." },
+            { "text": "„Bitte druckt bis Freitag im Erdgeschoss, weil der Drucker im zweiten Stock kaputt ist.“", "warum": "Ein Satz mit einem Nebensatz – die Bitte vorn, der Grund danach. Gut lesbar." },
+            { "text": "„Der Drucker im zweiten Stock, der schon letzten Monat Ärger gemacht hat, ist kaputt, sodass bis Freitag im Erdgeschoss gedruckt werden sollte.“", "warum": "Ein Einschub, der nichts zur Sache tut, und die Bitte versteckt im Nebensatz." },
+            { "text": "„Da der Drucker im zweiten Stock, der, wie ihr wisst, schon letzten Monat, als die Abrechnung anstand, Ärger gemacht hat, kaputt ist, sollte bis Freitag im Erdgeschoss gedruckt werden.“", "warum": "Drei Einschübe ineinander – der Leser wartet bis zum Schluss auf das, was er tun soll." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-1-04-b", "faehigkeit": "ausdruck.satzbau", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Teil den Schachtelsatz in zwei oder drei Sätze. Das Wichtigste zuerst.",
+          "vorlage": "„Wir möchten Sie darüber informieren, dass die Lieferung, die für den 14. geplant war, wegen eines Engpasses bei unserem Zulieferer, der uns erst gestern Bescheid gegeben hat, voraussichtlich erst am 21. bei Ihnen eintreffen wird, wofür wir um Verständnis bitten.“",
+          "kriterien": ["der neue Termin steht vorn", "ein Gedanke pro Satz", "nichts Wichtiges fehlt"],
+          "muster": ["„Ihre Lieferung kommt voraussichtlich erst am 21. statt am 14. Unser Zulieferer hat einen Engpass und uns erst gestern informiert. Das tut uns leid.“", "„Neuer Liefertermin: voraussichtlich der 21. Grund ist ein Engpass bei unserem Zulieferer, von dem wir gestern erfahren haben. Wir bitten um Verständnis.“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-1-04-c", "faehigkeit": "ausdruck.satzbau", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du schreibst Carla, dass die Folien erst Mittwoch statt Montag fertig sind. Welche Fassung macht es ihr am leichtesten?",
+          "antworten": [
+            { "text": "„Weil mir die Zahlen aus dem Einkauf noch fehlen, sind die Folien erst Mittwoch fertig.“", "wert": 1, "warum": "Ein klarer Satz – nur steht die Hauptsache hinten. Eine schlechte Nachricht liest sich leichter, wenn sie zuerst kommt." },
+            { "text": "„Die Folien sind erst am Mittwoch fertig, nicht am Montag. Mir fehlen noch die Zahlen aus dem Einkauf – ich hake heute nach.“", "wert": 2, "warum": "Erst die Nachricht, dann der Grund – jeder in einem eigenen Satz." },
+            { "text": "„Da mir die Zahlen, die der Einkauf, wie du weißt, gerade neu berechnet, fehlen, sind die Folien erst Mittwoch fertig.“", "wert": 0, "warum": "Zwei Einschübe vor der Nachricht. Carla liest den Satz zweimal." },
+            { "text": "„Folien Mittwoch.“", "wert": 0, "tendenz": "schroff", "warum": "Zu knapp: Carla weiß nicht, warum – und es klingt schroff. Kurz heißt nicht ohne Satz." }
+          ] },
+        { "art": "mission", "ref": "ausdruck-m-04" }
+      ],
+      "regel": "Ein Gedanke, ein Satz – und die Hauptsache in den Hauptsatz.",
+      "merkkarten": [
+        { "id": "ausdruck-1-04-m1", "frage": "Wohin gehört die wichtigste Information?", "antwort": "In den Hauptsatz – am besten in den ersten." },
+        { "id": "ausdruck-1-04-m2", "frage": "Wo teilst du einen Schachtelsatz?", "antwort": "Dort, wo ein neuer Gedanke beginnt – oft an „wobei“, „und“ oder „was“." }
+      ],
+      "mission": "ausdruck-m-04"
+    },
+    {
+      "id": "ausdruck-1-05", "bereich": "ausdruck", "stufe": 1, "nr": 5,
+      "titel": "Weichmacher: weg oder bewusst",
+      "faehigkeiten": ["ausdruck.knapp", "ausdruck.diplomatie"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Studien zu Absicherungen wie „vielleicht“ oder „irgendwie“ sind uneinheitlich: In manchen schwächten sie die Überzeugungskraft, in anderen machten sie keinen Unterschied. Die Faustregel „höchstens einer, und bewusst“ ist Praxiswissen.",
+      "quellen": ["blankenship2005", "brown1987", "praxis-ausdruck"],
+      "aha": "„Ich würde vielleicht vorschlagen wollen“ heißt: „Ich schlage vor.“ Gestapelte Weichmacher verstecken die Bitte. Einer, bewusst gesetzt, macht sie freundlich.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Je mehr „vielleicht“ und „eventuell“ in einer Bitte stehen, desto höflicher klingt sie.", "urteil": "teils", "warum": "Ein Weichmacher kann höflich sein. Gestapelt klingen sie unsicher und machen die Bitte schwerer zu verstehen. Freundlich wird es eher durch „bitte“, „danke“ und einen kurzen Grund." },
+        { "art": "karte", "text": "Weichmacher federn eine Aussage ab: würde, vielleicht, eventuell, eigentlich, ein bisschen, ich glaube. Einer an der richtigen Stelle ist Höflichkeit („Hättest du vielleicht kurz Zeit?“) oder Ehrlichkeit („Ich bin nicht sicher – ich prüfe es“). Drei in einem Satz sind Nebel. Studien dazu sind uneinheitlich. Für die Praxis gilt: Die Bitte selbst muss erkennbar bleiben." },
+        { "art": "fehler", "kopf": { "id": "ausdruck-1-05-a", "faehigkeit": "ausdruck.knapp", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Dein Entwurf für die Teamrunde. Markier die Weichmacher, die nur Nebel sind.",
+          "teile": [
+            { "t": "„Ich würde", "fehler": "Der Konjunktiv federt ab – „Ich schlage vor“ sagt dasselbe." },
+            { "t": "vielleicht", "fehler": "Noch eine Absicherung im selben Satz." },
+            { "t": "vorschlagen" },
+            { "t": "wollen,", "fehler": "Du willst nicht nur vorschlagen – du tust es gerade." },
+            { "t": "dass wir" },
+            { "t": "eventuell", "fehler": "Macht aus dem Vorschlag eine Vermutung." },
+            { "t": "die Besprechung" },
+            { "t": "ein bisschen", "fehler": "Wie viel? Sag lieber die Zahl: „auf 30 Minuten“." },
+            { "t": "kürzen –" },
+            { "t": "wenn das für alle passt.“" }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-1-05-b", "faehigkeit": "ausdruck.diplomatie", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Sag es klar und freundlich – mit höchstens einem Weichmacher.",
+          "vorlage": "„Ich wollte eigentlich nur ganz vorsichtig anmerken, dass die Zahlen vielleicht nicht ganz stimmen könnten.“",
+          "kriterien": ["die Aussage ist klar", "höchstens ein Weichmacher", "freundlich, ohne Vorwurf"],
+          "muster": ["„Ich glaube, die Zahlen stimmen nicht – darf ich kurz zeigen, wo?“", "„Mir ist bei den Zahlen etwas aufgefallen: In Zeile drei komme ich auf ein anderes Ergebnis.“"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-1-05-c", "faehigkeit": "ausdruck.diplomatie", "stufe": 3, "kanal": "wissen" },
+          "frage": "In welchem Satz ist der Weichmacher richtig gesetzt?",
+          "antworten": [
+            { "text": "„Ich würde vielleicht sagen, dass wir eventuell etwas spät dran sein könnten.“", "wert": 0, "warum": "Fünf Absicherungen – niemand weiß danach, ob es ein Problem gibt." },
+            { "text": "„Wir sind spät dran.“", "wert": 1, "warum": "Klar und ehrlich, ganz ohne Weichmacher. Ein Satz dazu, was jetzt passiert, würde es abrunden." },
+            { "text": "„Ich bin nicht sicher, ob die Zahl in Zeile drei stimmt – ich prüfe es bis Mittag.“", "wert": 2, "warum": "Echte Unsicherheit, offen gesagt – und mit einem Plan. So ist der Weichmacher eine Information." },
+            { "text": "„Das ist eigentlich fertig, nur fehlt irgendwie noch so ein bisschen was.“", "wert": 0, "tendenz": "ausweichen", "warum": "Was fehlt? Die Weichmacher verdecken genau die Information, die der andere braucht." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-1-05-d", "faehigkeit": "ausdruck.diplomatie", "stufe": 3, "kanal": "wissen" },
+          "auftrag": "Nebel oder bewusst gesetzt?",
+          "faecher": ["Nebel – streichen", "bewusst – darf bleiben"],
+          "karten": [
+            { "text": "„Ich würde mal eventuell sagen, dass …“", "fach": 0 },
+            { "text": "„Ich bin nicht sicher, ob das stimmt – ich prüfe es.“", "fach": 1 },
+            { "text": "„Das ist irgendwie so ein bisschen zu teuer.“", "fach": 0 },
+            { "text": "„Hättest du vielleicht morgen zehn Minuten für mich?“", "fach": 1 },
+            { "text": "„Eigentlich ist das quasi erledigt.“", "fach": 0 },
+            { "text": "„Diesmal schaffe ich es leider nicht – danke, dass du fragst.“", "fach": 1 }
+          ] },
+        { "art": "mission", "ref": "ausdruck-m-05" }
+      ],
+      "regel": "Höchstens ein Weichmacher – und nur, wo er etwas bedeutet.",
+      "merkkarten": [
+        { "id": "ausdruck-1-05-m1", "frage": "Wie viele Weichmacher verträgt ein Satz?", "antwort": "Höchstens einen – wenn er Höflichkeit oder echte Unsicherheit ausdrückt." },
+        { "id": "ausdruck-1-05-m2", "frage": "„Ich würde vielleicht vorschlagen wollen“ – klar gesagt?", "antwort": "„Ich schlage vor.“" }
+      ],
+      "mission": "ausdruck-m-05"
+    },
+    {
+      "id": "ausdruck-1-06", "bereich": "ausdruck", "stufe": 1, "nr": 6,
+      "titel": "Wortleitern",
+      "faehigkeiten": ["ausdruck.treffend", "ausdruck.wendungen"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Die Wortleiter ist Stilkunde. Gut belegt ist, wie neue Wörter haften: selbst abrufen statt wiederlesen, verteilt über mehrere Tage.",
+      "quellen": ["praxis-ausdruck", "dunlosky2013"],
+      "aha": "Statt „gut“ sag, was genau gut war: gründlich, verständlich, aufmerksam, mutig. Das genaue Wort ist das stärkere Lob – und der andere weiß, was er wieder so machen kann.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Miriam hat eine Präsentation gehalten. Welches Lob nimmt sie eher mit?", "optionen": ["„War gut!“", "„Dein Beispiel mit der Baustelle hat es für alle verständlich gemacht.“"], "richtig": 1, "loesung": "das genaue Lob", "aufloesung": "„Gut“ freut kurz und ist schnell vergessen. Das genaue Lob zeigt, dass du zugehört hast – und Miriam weiß, was sie beim nächsten Mal wieder so macht." },
+        { "art": "karte", "text": "Allerweltswörter wie „gut“, „machen“, „schwierig“ oder „sagen“ sind bequem – und blass. Die Wortleiter hilft: Frag „Was genau?“ und steig eine Sprosse höher. Gut → gründlich, verständlich, mutig. Sagen → betonen, einwenden, zusagen. Lern neue Wörter im Wortfeld und mit ihrem Partner („Bedenken äußern“) – und hol sie nach ein paar Tagen aus dem Kopf, statt sie nur wiederzulesen." },
+        { "art": "wortwahl", "kopf": { "id": "ausdruck-1-06-a", "faehigkeit": "ausdruck.treffend", "stufe": 2, "kanal": "wissen" },
+          "frage": "Tarek hat in der Tabelle einen Fehler gefunden, den alle übersehen hatten. Welches Wort trifft dein Lob? „Das war wirklich ___.“",
+          "antworten": [
+            { "text": "toll", "wert": 1, "warum": "Freundlich – aber es sagt nicht, was gut war." },
+            { "text": "fleißig", "wert": 0, "warum": "Fleiß war es nicht. Er hat genau hingesehen." },
+            { "text": "aufmerksam", "wert": 2, "warum": "Trifft genau, was er geleistet hat: Er hat bemerkt, was anderen entgangen ist." },
+            { "text": "ordentlich", "wert": 0, "warum": "Klingt nach Aufräumen – und kann sogar wie ein mäßiges Lob klingen." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-1-06-b", "faehigkeit": "ausdruck.treffend", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Wortfeld „sagen“: Welches Verb passt?",
+          "faecher": ["zusagen", "einwenden", "betonen"],
+          "karten": [
+            { "text": "„Ich komme am Freitag, ganz sicher.“", "fach": 0 },
+            { "text": "„Aber das kostet doch doppelt so viel.“", "fach": 1 },
+            { "text": "„Das Wichtigste ist: pünktlich anfangen.“", "fach": 2 },
+            { "text": "„Die Zahlen schicke ich dir bis morgen.“", "fach": 0 },
+            { "text": "„Dafür fehlt uns im Moment die Zeit.“", "fach": 1 },
+            { "text": "„Noch einmal: Ohne Unterschrift geht nichts raus.“", "fach": 2 }
+          ] },
+        { "art": "blitz", "kopf": { "id": "ausdruck-1-06-c", "faehigkeit": "ausdruck.treffend", "stufe": 2, "kanal": "koennen", "uhr": true },
+          "auftrag": "Wortleiter „schwierig“: Schreib genauere Wörter auf, so viele du findest.", "ziel": 5, "sekunden": 60,
+          "beispiele": ["heikel", "verzwickt", "aufwendig", "anspruchsvoll", "knifflig", "mühsam"] },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-1-06-d", "faehigkeit": "ausdruck.wendungen", "stufe": 2, "kanal": "wissen" },
+          "frage": "Welches Verb gehört dazu? „Wir müssen bis Freitag eine Entscheidung ___.“",
+          "antworten": [
+            { "text": "machen", "wert": 0, "warum": "Nach englischem Vorbild („make a decision“), im Deutschen unüblich." },
+            { "text": "treffen", "wert": 2, "warum": "Die feste Verbindung. So sagt man es." },
+            { "text": "fällen", "wert": 1, "warum": "Auch richtig – klingt aber gewichtiger, eher nach Gericht oder großem Beschluss." },
+            { "text": "durchführen", "wert": 0, "warum": "Ein Streckverb, das zu „Entscheidung“ nicht passt." }
+          ] },
+        { "art": "sammeln", "auftrag": "Deine erste Wortleiter: Schreib ein Allerweltswort, das du oft benutzt, und darunter genauere Wörter für verschiedene Lagen.", "mindestens": 4, "ziel": "wortliste" },
+        { "art": "mission", "ref": "ausdruck-m-06" }
+      ],
+      "regel": "Frag „Was genau?“ – und nimm das Wort, das es sagt.",
+      "merkkarten": [
+        { "id": "ausdruck-1-06-m1", "frage": "Was tust du mit einem Allerweltswort wie „gut“?", "antwort": "Fragen: Was genau? Dann das Wort nehmen, das es sagt – gründlich, verständlich, aufmerksam …" },
+        { "id": "ausdruck-1-06-m2", "frage": "Wie bleibt ein neues Wort hängen?", "antwort": "Mit Partnerwort und eigenem Satz lernen – und nach ein paar Tagen aus dem Kopf abrufen." },
+        { "id": "ausdruck-1-06-m3", "frage": "Eine Entscheidung …?", "antwort": "… treffen. Gewichtiger: fällen." }
+      ],
+      "mission": "ausdruck-m-06"
+    },
+    {
+      "id": "ausdruck-1-07", "bereich": "ausdruck", "stufe": 1, "nr": 7,
+      "titel": "Ein Inhalt, drei Tonlagen",
+      "faehigkeiten": ["ausdruck.register"], "dauerMin": 6, "beleg": "P",
+      "quellen": ["praxis-ausdruck"],
+      "aha": "Derselbe Inhalt klingt locker, sachlich oder förmlich – keine Tonlage ist besser. Stark ist, wer sie wählen kann: passend zum Gegenüber, nicht zur Gewohnheit.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "ausdruck-1-07-a", "faehigkeit": "ausdruck.register", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Locker, sachlich oder förmlich?",
+          "faecher": ["locker", "sachlich", "förmlich"],
+          "karten": [
+            { "text": "„Na, schon was von Herrn Petersen gehört?“", "fach": 0 },
+            { "text": "„Herr Petersen hat noch nicht geantwortet. Ich frage morgen nach.“", "fach": 1 },
+            { "text": "„Sehr geehrter Herr Petersen, dürfen wir Sie an unser Angebot erinnern?“", "fach": 2 },
+            { "text": "„Klappt's bei dir am Freitag?“", "fach": 0 },
+            { "text": "„Passt Ihnen Freitag um zehn?“", "fach": 1 },
+            { "text": "„Wir würden uns freuen, wenn Sie uns einen Termin nennen könnten.“", "fach": 2 }
+          ] },
+        { "art": "karte", "text": "Register sind Tonlagen. Locker: du, Umgangssprache, kurze Sätze. Sachlich: klar und freundlich, ohne Schnörkel. Förmlich: Sie, vollständige Sätze, „würden Sie“. Keins ist besser. Ein Registerfehler ist ein Ton, der nicht zum Gegenüber passt – das „Hey“ ans Amt, das „Sehr geehrte“ im Teamchat. Auch Dialekt ist ein Register, daheim oft das wärmste." },
+        { "art": "auswahl", "kopf": { "id": "ausdruck-1-07-b", "faehigkeit": "ausdruck.register", "stufe": 2, "kanal": "wissen" },
+          "frage": "Du schreibst Nadine Köhler, einer möglichen Kundin, zum ersten Mal. Welcher Einstieg passt?",
+          "antworten": [
+            { "text": "„Hi, Nadine, kurze Frage:“", "wert": 0, "tendenz": "zu-locker", "warum": "Zu vertraut für eine erste Mail an eine mögliche Kundin." },
+            { "text": "„Sehr geehrte Frau Köhler, hiermit erlaube ich mir, Bezug zu nehmen auf …“", "wert": 0, "tendenz": "zu-steif", "warum": "Förmlich ist gut, verstaubt nicht. „Hiermit erlaube ich mir“ klingt nach altem Amtsbrief." },
+            { "text": "„Guten Tag, Frau Köhler, Dr. Albers hat mir Ihre Anfrage zu den Wartungsterminen weitergegeben.“", "wert": 2, "warum": "Höflich, sachlich, und der erste Satz sagt gleich, warum du schreibst." },
+            { "text": "„Sehr geehrte Frau Köhler,“", "wert": 1, "warum": "Passt – korrekt und förmlich. Ob es steif wird, entscheidet der Satz danach." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ausdruck-1-07-c", "faehigkeit": "ausdruck.register", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Schreib dieselbe Bitte zweimal: locker für Tarek, förmlich für Herrn Petersen.",
+          "vorlage": "Der Inhalt: Du brauchst das unterschriebene Formular bis Donnerstag zurück.",
+          "kriterien": ["gleicher Inhalt in beiden Fassungen", "Anrede und Ton passen zum Empfänger", "Termin klar genannt"],
+          "muster": ["Tarek: „Kannst du mir das Formular bis Donnerstag unterschrieben zurückgeben? Danke dir!“ – Herr Petersen: „Würden Sie mir das Formular bitte bis Donnerstag unterschrieben zurückschicken? Vielen Dank.“", "Tarek: „Ich brauch das Formular mit deiner Unterschrift bis Donnerstag – klappt das?“ – Herr Petersen: „Bitte senden Sie uns das unterschriebene Formular bis Donnerstag zurück. Herzlichen Dank.“"] },
+        { "art": "wortwahl", "kopf": { "id": "ausdruck-1-07-d", "faehigkeit": "ausdruck.register", "stufe": 3, "kanal": "wissen" },
+          "frage": "Deine schriftliche Beschwerde an die Hausverwaltung: „Die Heizung in meiner Wohnung ist seit drei Tagen ___.“",
+          "antworten": [
+            { "text": "im Eimer", "wert": 0, "warum": "Umgangssprache – unter Freunden passend, im Schreiben an die Verwaltung zu salopp." },
+            { "text": "kaputt", "wert": 1, "warum": "Verständlich und nicht falsch. „Ausgefallen“ klingt im förmlichen Schreiben sachlicher." },
+            { "text": "ausgefallen", "wert": 2, "warum": "Sachlich, genau, passt ins förmliche Register." },
+            { "text": "irgendwie nicht mehr so richtig warm", "wert": 0, "tendenz": "ausweichen", "warum": "Weichmacher schwächen eine Beschwerde: Ist sie nun aus oder nicht?" }
+          ] },
+        { "art": "reflexion", "frage": "In welcher Tonlage fühlst du dich zu Hause – und in welcher wirst du steif? Schreib einen Satz, den du oft sagst, in der Tonlage, die dir schwerfällt.", "insBuch": "saetze" },
+        { "art": "mission", "ref": "ausdruck-m-07" }
+      ],
+      "regel": "Erst fragen, wer liest – dann die Tonlage wählen.",
+      "merkkarten": [
+        { "id": "ausdruck-1-07-m1", "frage": "Die drei Tonlagen?", "antwort": "Locker, sachlich, förmlich." },
+        { "id": "ausdruck-1-07-m2", "frage": "Was ist ein Registerfehler?", "antwort": "Ein Ton, der nicht zum Gegenüber passt – das „Hey“ ans Amt oder das „Sehr geehrte“ im Teamchat." }
+      ],
+      "mission": "ausdruck-m-07"
+    }
+  ]
+}

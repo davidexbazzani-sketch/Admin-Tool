@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 import { DeviceInfoButton } from '../components/device/DeviceDossier'
 import {
   Activity, RefreshCw, Loader, AlertTriangle, CheckCircle, XCircle,
@@ -450,7 +451,9 @@ export default function NetworkRadar() {
   const setScreen = useAppStore(s => s.setScreen)
   const setDevices = useAppStore(s => s.setDevices)
 
-  const [tab, setTab] = useState<Tab>('health')
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const [tab, setTab] = useBereichZustand<Tab>('network-radar', 'health')
+  const { sichtbar: reiterSichtbar } = useBereiche('network-radar')
   // Global store — survives page navigation
   const scanning = useRadarStore(s => s.scanning)
   const scanProgress = useRadarStore(s => ({ done: s.progress, total: s.total }))
@@ -597,11 +600,11 @@ $r | ConvertTo-Json -Compress`
         <Activity size={20} className="text-primary" />
         <h1 className="text-lg font-bold text-foreground">Netzwerk-Radar</h1>
         <div className="ml-auto flex gap-1">
-          <button onClick={() => setTab('health')}
+          {reiterSichtbar('health') && <button onClick={() => setTab('health')}
             className={`px-3 py-1.5 text-xs rounded-md border transition-colors ${tab === 'health' ? 'bg-primary text-primary-foreground border-primary' : 'text-muted-foreground border-border hover:bg-accent'}`}>
             Health Score
-          </button>
-          <button onClick={() => setTab('patterns')}
+          </button>}
+          {reiterSichtbar('patterns') && <button onClick={() => setTab('patterns')}
             className={`px-3 py-1.5 text-xs rounded-md border transition-colors ${tab === 'patterns' ? 'bg-primary text-primary-foreground border-primary' : 'text-muted-foreground border-border hover:bg-accent'}`}>
             Muster-Erkennung
             {patterns.filter(p => p.severity === 'critical').length > 0 && (
@@ -609,7 +612,7 @@ $r | ConvertTo-Json -Compress`
                 {patterns.filter(p => p.severity === 'critical').length}
               </span>
             )}
-          </button>
+          </button>}
         </div>
       </div>
 

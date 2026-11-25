@@ -1,0 +1,255 @@
+{
+  "lagen": [
+    {
+      "id": "mut-l-01", "bereich": "mut", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["mut.vorhersage", "mut.verstehen"], "stufe": 2,
+      "titel": "Die Frage in der Runde", "figur": "Dr. Henrik Albers",
+      "einleitung": "Du hast etwas nicht verstanden – und alle schweigen. Du übst, deine Befürchtung zu benennen, statt ihr auszuweichen, und hinterher abzugleichen.",
+      "lage": "Freitag, Teamrunde. Dr. Albers stellt eine neue Regel für die Abrechnung vor. Den zweiten Punkt hast du nicht verstanden.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „… und ab Montag gilt dann die neue Regel. Noch Fragen?“ Stille. Dein Herz klopft.",
+          "wahl": [
+            { "text": "Innerlich kurz: „Befürchtung: Alle denken, ich hab nicht aufgepasst.“ Dann die Hand heben.", "wert": 2, "weiter": "k2", "rueck": "Du benennst die Befürchtung – damit wird sie prüfbar – und handelst trotzdem." },
+            { "text": "Nichts sagen und nach der Runde Lena fragen – die erklärt es dir bestimmt in Ruhe und ohne Publikum.", "wert": 1, "tendenz": "ausweichen", "weiter": "k2b", "rueck": "Du bekommst die Antwort. Aber die Befürchtung bleibt ungeprüft, und die Hürde fürs nächste Mal wächst." },
+            { "text": "Nicken. Wird schon irgendwie gehen.", "wert": 0, "tendenz": "vermeiden", "weiter": "k2c", "rueck": "Erleichterung jetzt – das Problem kommt am Montag." }
+          ] },
+        { "id": "k2", "sagt": "Alle schauen zu dir. Wie fängst du an?",
+          "wahl": [
+            { "text": "„Vielleicht eine dumme Frage, sorry – ich hab das wohl verpasst: Gilt das auch für alte Aufträge?“", "wert": 1, "tendenz": "kleinreden", "weiter": "k3", "rueck": "Die Frage ist gestellt – das zählt. Die Entschuldigung davor hättest du dir sparen können." },
+            { "text": "„Eine Frage zum zweiten Punkt: Gilt die Regel auch für alte Aufträge?“", "wert": 2, "weiter": "k3", "rueck": "Mit der Sache begonnen – kurz, klar, ohne Entschuldigung." },
+            { "text": "„Ach, schon gut, ich les es nach.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k2c", "rueck": "Fast hättest du es getan – und dann doch den Rückzug angetreten." }
+          ] },
+        { "id": "k2b", "sagt": "Nach der Runde erklärt Lena dir den Punkt. Dann sagt sie leise: „Gut, dass du fragst – ich hatte es auch nicht verstanden.“",
+          "wahl": [
+            { "text": "„Ehrlich? Dann frag ich nächstes Mal in der Runde – für uns beide.“", "wert": 2, "weiter": "ende2", "rueck": "Du merkst: Deine Frage war nicht dumm, sondern geteilt. Gute Grundlage fürs nächste Mal." },
+            { "text": "„Puh, zum Glück musste ich es nicht vor allen fragen – das wäre mir echt unangenehm gewesen.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Die Erleichterung belohnt das Ausweichen – genau so wächst die Hürde." }
+          ] },
+        { "id": "k2c", "sagt": "Montag. Du sitzt am ersten Auftrag und weißt nicht, welche Regel gilt.",
+          "wahl": [
+            { "text": "Zu Dr. Albers gehen: „Den zweiten Punkt habe ich am Freitag nicht verstanden. Gilt die Regel auch für alte Aufträge?“", "wert": 2, "weiter": "ende2", "rueck": "Spät, aber selbst und von Angesicht – das ist schon ein Schritt." },
+            { "text": "Dr. Albers eine kurze Mail schreiben: „Kurze Rückfrage zum zweiten Punkt von Freitag – gilt die Regel auch für alte Aufträge?“", "wert": 1, "weiter": "ende2", "rueck": "Gelöst – nur schriftlich und später. Die Befürchtung von Freitag hast du nicht geprüft." },
+            { "text": "Raten und hoffen, dass es stimmt.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Das Ausweichen geht weiter – jetzt mit Folgen für die Arbeit." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers nickt: „Gute Frage. Ja, auch für alte Aufträge – das hätte ich sagen sollen.“ Zwei Kollegen schreiben mit. Nach der Runde denkst du an deine Befürchtung.",
+          "wahl": [
+            { "text": "Abgleichen: „Befürchtet: Alle denken, ich hab nicht aufgepasst. Passiert: Zwei haben mitgeschrieben.“", "wert": 2, "weiter": "ende1", "rueck": "Das ist der wirksame Teil: befürchtet – passiert. Ab in die Beweisliste." },
+            { "text": "„Hoffentlich hat keiner gemerkt, wie nervös ich war – meine Stimme hat bestimmt die ganze Zeit gezittert.“", "wert": 1, "weiter": "ende1", "rueck": "Verständlich – und vermutlich hat es kaum einer gemerkt. Stärker ist, festzuhalten, was tatsächlich passiert ist." },
+            { "text": "„Glück gehabt, dass er heute gut gelaunt war.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Wer den guten Ausgang dem Zufall zuschreibt, lernt nichts für das nächste Mal." }
+          ] },
+        { "id": "ende1", "sagt": "Auf dem Flur sagt Lena: „Danke – das wollte ich auch fragen.“", "ende": "Befürchtung benannt, Frage gestellt – und Lena hatte dieselbe Frage. Der Abgleich „befürchtet – passiert“ macht die nächste Frage leichter." },
+        { "id": "ende2", "sagt": "Die Regel ist geklärt.", "ende": "Gelöst – auf einem Umweg. Beim nächsten Mal: die Befürchtung kurz benennen und in der Runde fragen. Dann lernst du dabei auch etwas über deine Angst." },
+        { "id": "ende3", "sagt": "Am Montag gibt es Nacharbeit, weil die falsche Regel angewendet wurde.", "ende": "Ausweichen spart den unangenehmen Moment und kostet später mehr. Beim nächsten Mal: Befürchtung benennen, Hand heben, prüfen." }
+      ],
+      "prinzipien": ["die Befürchtung kurz benennen, dann handeln", "Ausweichen verschiebt nur", "mit der Sache beginnen, nicht mit einer Entschuldigung", "hinterher abgleichen: befürchtet – passiert"],
+      "transfer": "In welcher Runde hättest du zuletzt gern etwas gefragt? Welche Befürchtung hat dich abgehalten – und wie prüfst du sie beim nächsten Mal?"
+    },
+    {
+      "id": "mut-l-02", "bereich": "mut", "phase": "g", "umfeld": "fremde", "faehigkeiten": ["mut.vorhersage", "mut.aufmerksamkeit"], "stufe": 3,
+      "titel": "Die Reklamation", "figur": "eine Verkäuferin",
+      "einleitung": "Ein Gerät ist kaputt, der Laden ist voll. Du übst, hinzugehen statt auszuweichen, klar zu sagen, was du möchtest, und den Blick beim Gegenüber zu lassen.",
+      "lage": "Samstagvormittag im Elektroladen Kowalski. Du hast vor drei Tagen einen Wasserkocher gekauft, er tropft. Den Kassenbon hast du dabei. An der Kasse steht eine Schlange.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Du siehst die Schlange und denkst: „Die Verkäuferin ist sicher genervt, und hinter mir stöhnen alle.“",
+          "wahl": [
+            { "text": "Die Befürchtung kurz notieren – Wahrscheinlichkeit 70 – und dich anstellen.", "wert": 2, "weiter": "k2", "rueck": "Befürchtung festgehalten, Lage betreten. Jetzt kann sie geprüft werden." },
+            { "text": "Anstellen und bis zur Kasse aufs Handy schauen, damit du nicht ständig an die Schlange hinter dir denkst.", "wert": 1, "weiter": "k2", "rueck": "Du bleibst – gut. Aber der Blick aufs Handy hält dich im Kopf; du merkst nicht, wie die Leute um dich herum wirklich sind." },
+            { "text": "Lieber wieder gehen und es im Netz reklamieren.", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Erleichterung sofort – die Befürchtung bleibt ungeprüft." }
+          ] },
+        { "id": "k1b", "sagt": "Zu Hause wartet das Formular im Netz: Fotos, Begründung, Rücksendeschein, zwei Wochen Bearbeitung.",
+          "wahl": [
+            { "text": "Am Montag doch in den Laden – diesmal mit der Befürchtung auf einem Zettel.", "wert": 2, "weiter": "k2", "rueck": "Zweiter Anlauf. Genau so: aufschreiben und hingehen." },
+            { "text": "Den Wasserkocher behalten. Tropft halt ein bisschen – ein Lappen drunter, und gut ist.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Das Ausweichen hat jetzt einen Preis: ein kaputtes Gerät." }
+          ] },
+        { "id": "k2", "sagt": "Du bist dran. Die Verkäuferin schaut müde: „Ja, bitte?“",
+          "wahl": [
+            { "text": "„Entschuldigung, das ist mir echt unangenehm, aber ich glaube, vielleicht ist der Wasserkocher hier irgendwie kaputt, oder ich mache was falsch …“", "wert": 1, "tendenz": "kleinreden", "weiter": "k3", "rueck": "Das Anliegen kommt an – nur sehr weich. Sag ruhig klar, was du möchtest." },
+            { "text": "„Der Wasserkocher ist Schrott. Ich will mein Geld.“", "wert": 0, "tendenz": "angreifen", "weiter": "k2c", "rueck": "Klar ist nicht dasselbe wie scharf. Die Verkäuferin kann nichts für das Gerät." },
+            { "text": "„Den Wasserkocher habe ich vor drei Tagen gekauft. Er tropft. Ich hätte gern einen neuen oder das Geld zurück.“", "wert": 2, "weiter": "k3", "rueck": "Was, seit wann, was du möchtest – freundlich und klar." }
+          ] },
+        { "id": "k2c", "sagt": "Die Verkäuferin wird steif: „Moment mal. So lasse ich nicht mit mir reden.“",
+          "wahl": [
+            { "text": "„Sie haben recht, das kam zu scharf. Er tropft unten – ich hätte gern einen neuen oder das Geld zurück.“", "wert": 2, "weiter": "k3", "rueck": "Stark repariert: Wer einen scharfen Satz zurücknimmt, bringt das Gespräch zurück zur Sache." },
+            { "text": "„Ist doch wahr! Ich hab gutes Geld dafür bezahlt, und jetzt steht bei mir jeden Morgen die Küche unter Wasser.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende4", "rueck": "Jetzt geht es nur noch um den Ton, nicht mehr um den Wasserkocher." }
+          ] },
+        { "id": "k3", "sagt": "Hinter dir räuspert sich jemand. Die Verkäuferin: „Haben Sie den Bon dabei?“ Dein Blick rutscht nach innen: „Jetzt nerve ich alle.“",
+          "wahl": [
+            { "text": "Den Blick bei der Verkäuferin lassen, den Bon herausholen und hinlegen.", "wert": 2, "weiter": "k4", "rueck": "Blick nach außen: Du antwortest auf ihre Frage, nicht auf deinen Gedanken." },
+            { "text": "Hektisch in der Tasche wühlen und dich zweimal bei allen entschuldigen, dass es so lange dauert.", "wert": 1, "weiter": "k4", "rueck": "Du bleibst dran – gut. Die Entschuldigungen braucht niemand; das Räuspern galt vermutlich gar nicht dir." },
+            { "text": "„Ach, wissen Sie was, lassen wir's. So wichtig ist es nicht.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Kurz vor dem Ziel umgedreht – die Befürchtung hat gewonnen, ohne dass sie eingetreten ist." }
+          ] },
+        { "id": "k4", "sagt": "Die Verkäuferin tauscht den Wasserkocher ohne Diskussion: „Das kommt bei dem Modell öfter vor. Schönen Tag noch.“ Draußen denkst du an deine Befürchtung von vorhin.",
+          "wahl": [
+            { "text": "„Befürchtet: genervte Verkäuferin, stöhnende Schlange. Passiert: zwei Minuten, freundlich getauscht.“", "wert": 2, "weiter": "ende1", "rueck": "Abgleich gemacht. Das ist es, was den nächsten Gang zum Laden leichter macht." },
+            { "text": "„Die war heute einfach gut drauf – an einem anderen Tag hätte das bestimmt ganz anders ausgesehen.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende2", "rueck": "Zufall erklärt nichts – du hast klar gesagt, was du wolltest." }
+          ] },
+        { "id": "ende1", "sagt": "Der neue Wasserkocher tropft nicht.", "ende": "Befürchtung geprüft und widerlegt – und du warst beim Gegenüber statt bei dir. Das kommt auf deine Beweisliste." },
+        { "id": "ende2", "sagt": "Der neue Wasserkocher tropft nicht.", "ende": "Geschafft. Nur: Wer den guten Ausgang dem Zufall zuschreibt, lernt nichts für das nächste Mal. Schreib auf: befürchtet – passiert." },
+        { "id": "ende3", "sagt": "Der alte Wasserkocher bleibt in der Küche stehen.", "ende": "Ausweichen spart zwei unangenehme Minuten und kostet ein Gerät – und das Gefühl, es zu können. Beim nächsten Mal: Befürchtung aufschreiben und hingehen." },
+        { "id": "ende4", "sagt": "Die Verkäuferin holt einen Kollegen. Es dauert.", "ende": "Ein scharfer Ton ist oft die andere Seite der Angst. Klar heißt: sagen, was nicht stimmt und was du möchtest – freundlich." }
+      ],
+      "prinzipien": ["hingehen statt ausweichen", "klar sagen, was du möchtest – ohne Entschuldigung und ohne Schärfe", "den Blick beim Gegenüber lassen", "hinterher abgleichen, nicht dem Zufall danken"],
+      "transfer": "Welche Reklamation, Rückfrage oder Beschwerde schiebst du gerade vor dir her? Schreib die Befürchtung auf – und den Tag, an dem du hingehst."
+    },
+    {
+      "id": "mut-l-03", "bereich": "mut", "phase": "g", "umfeld": "gruppe", "faehigkeiten": ["mut.sicherheit", "mut.leiter", "mut.aufmerksamkeit"], "stufe": 4,
+      "titel": "Der erste Abend im Töpferkurs", "figur": "eine Teilnehmerin",
+      "einleitung": "Neue Gruppe, Vorstellungsrunde, Partnerarbeit. Du übst, Krücken wegzulassen, beim anderen zu sein und eine Sprosse deiner Leiter zu gehen.",
+      "lage": "Erster Abend eines Töpferkurses, zwölf Leute, niemand kennt sich. Deine Sprosse für heute: dich in der Runde frei vorstellen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Vor Beginn stehen alle um die Arbeitstische. Eine Frau neben dir lächelt dich an. Deine Hand will zum Handy.",
+          "wahl": [
+            { "text": "Das Handy in der Tasche lassen und zurücklächeln: „Hallo, ich bin {name}. Auch zum ersten Mal hier?“", "wert": 2, "weiter": "k2", "rueck": "Krücke weggelassen, Blick nach außen – und ein Gespräch beginnt." },
+            { "text": "Zurücklächeln und schweigen.", "wert": 1, "weiter": "k2", "rueck": "Freundlich, und das Handy bleibt weg – gut. Ein Satz hätte die Tür noch weiter geöffnet." },
+            { "text": "Kurz nicken, dann aufs Handy schauen, bis es losgeht – vielleicht kommt ja noch eine wichtige Nachricht.", "wert": 0, "tendenz": "kruecke", "weiter": "k1b", "rueck": "Sicher – und genau deshalb lernst du nichts Neues über diesen Abend." }
+          ] },
+        { "id": "k1b", "sagt": "Der Kursleiter bittet um eine Vorstellungsrunde: Name und warum man hier ist. Vor dir sind drei andere dran. Auf dem Handy steht dein vorbereiteter Satz.",
+          "wahl": [
+            { "text": "Das Handy einstecken und frei sagen, was dich herführt.", "wert": 2, "weiter": "k3", "rueck": "Genau deine Sprosse: ohne Zettel. Jetzt kannst du erleben, dass es geht." },
+            { "text": "Den vorbereiteten Satz vom Handy ablesen – so kommt sicher alles richtig heraus.", "wert": 1, "tendenz": "kruecke", "weiter": "k3b", "rueck": "Sicher – nur denkst du hinterher: Gut gegangen, wegen des Handys." }
+          ] },
+        { "id": "k2", "sagt": "Sie erzählt: „Ich bin zum ersten Mal hier und hatte noch nie Ton in der Hand.“ Dann bittet der Kursleiter um eine Vorstellungsrunde. Vor dir sind drei andere dran.",
+          "wahl": [
+            { "text": "Deinen Satz immer wieder im Kopf üben, bis du dran bist.", "wert": 0, "tendenz": "kruecke", "weiter": "k3b", "rueck": "Kopf-Proben sind eine Krücke: Du hörst nichts von den anderen und bist ganz bei dir." },
+            { "text": "Den anderen zuhören, statt deinen Satz im Kopf zu wiederholen.", "wert": 2, "weiter": "k3", "rueck": "Blick nach außen – und du sammelst nebenbei Anknüpfungspunkte." },
+            { "text": "Den Kursleiter fragen, ob du zum Schluss drankommen kannst – dann hast du mehr Zeit, dich zu sammeln.", "wert": 0, "tendenz": "vermeiden", "weiter": "k3b", "rueck": "Aufschieben verlängert nur das Warten – und die Aufregung." }
+          ] },
+        { "id": "k3", "sagt": "Du bist dran. Zwölf Gesichter schauen zu dir.",
+          "wahl": [
+            { "text": "„Ich bin {name} und eigentlich ganz schlecht in solchen Runden …“", "wert": 0, "tendenz": "kleinreden", "weiter": "k4", "rueck": "Die Entschuldigung lenkt alle Blicke auf deine Unsicherheit – die sonst kaum jemand bemerkt hätte." },
+            { "text": "„Ich bin {name}. Ich will mal etwas mit den Händen machen – und hab gerade erfahren, dass hier noch mehr zum ersten Mal sind.“", "wert": 2, "weiter": "k4", "rueck": "Frei, kurz, mit einem Faden zu jemandem im Raum. Sprosse gegangen." },
+            { "text": "„Ich bin {name}. Äh … ja. Töpfern halt.“", "wert": 1, "weiter": "k4", "rueck": "Kurz, aber frei gesagt – die Sprosse zählt. Wer vorher zuhört, findet leichter einen Anknüpfungspunkt." }
+          ] },
+        { "id": "k3b", "sagt": "Du bist dran. Weil du die ganze Zeit bei deinem Satz warst, weißt du nicht, was die anderen gesagt haben.",
+          "wahl": [
+            { "text": "Deinen Satz ruhig sagen – und dir für den Rest der Runde vornehmen, zuzuhören.", "wert": 2, "weiter": "k4", "rueck": "Gesagt, und du drehst den Blick ab jetzt nach außen." },
+            { "text": "Den Satz hastig aufsagen und auf den Boden schauen.", "wert": 0, "tendenz": "nach_innen", "weiter": "k4", "rueck": "Gesagt ist er – aber der Blick nach unten hält dich bei dir und deiner Angst." }
+          ] },
+        { "id": "k4", "sagt": "Jetzt sollen je zwei zusammen eine Schale formen. Die Frau von vorhin fragt: „Machen wir zusammen?“ Am liebsten würdest du nur zuschauen.",
+          "wahl": [
+            { "text": "„Gern – aber ich bin echt schlecht in so was.“", "wert": 1, "weiter": "ende1", "rueck": "Mitmachen: ja. Die Selbstabwertung davor ist eine kleine Krücke – sie soll die Erwartungen senken." },
+            { "text": "„Mach du lieber, ich schau zu.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Zuschauen ist sicher – und bringt keine neue Erfahrung." },
+            { "text": "„Gern. Ich forme, du sagst mir, wenn's schief wird.“", "wert": 2, "weiter": "ende1", "rueck": "Dabei, ohne Schutzschild – und mit einer kleinen Aufgabe für sie." }
+          ] },
+        { "id": "ende1", "sagt": "Die Schale wird schief, ihr lacht beide. Sie: „Nächste Woche wieder zusammen?“", "ende": "Mitgemacht statt zugeschaut. So fühlt sich eine Sprosse an: Herzklopfen am Anfang, danach ein Abend, der dir gehört. Jede Krücke, die du heute weggelassen hast, kommt auf die Beweisliste." },
+        { "id": "ende2", "sagt": "Sie formt allein und unterhält sich bald mit dem Nachbartisch.", "ende": "Zuschauen ist sicher – und lehrt dich nichts Neues. Nimm dir für nächste Woche eine Krücke vor, die du weglässt." }
+      ],
+      "prinzipien": ["die Krücke bemerken und einmal weglassen", "zuhören statt im Kopf proben", "ohne Entschuldigung vorstellen", "mitmachen statt zuschauen"],
+      "transfer": "Welche neue Gruppe steht bei dir an – ein Kurs, ein Verein, ein Team? Welche Krücke lässt du dort beim ersten Treffen weg?"
+    },
+    {
+      "id": "mut-l-04", "bereich": "mut", "phase": "g", "umfeld": "vorgesetzte", "faehigkeiten": ["mut.nein", "mut.ablehnung", "mut.vorhersage"], "stufe": 5,
+      "titel": "Noch eine Aufgabe vom Chef", "figur": "Dr. Henrik Albers",
+      "einleitung": "Dein Vorgesetzter legt etwas obendrauf. Du übst ein Nein nach oben – würdigen, Nein, Frage nach dem Vorrang – und den knappen Ton danach auszuhalten.",
+      "lage": "Donnerstag, 16 Uhr. Bis morgen um zwölf soll dein Quartalsbericht fertig sein. Du liegst knapp im Plan.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers an deinem Platz: „Können Sie bis morgen früh noch die Kundenliste für die Messe zusammenstellen? Das dauert sicher nicht lange.“ Du weißt: Das sind zwei, drei Stunden.",
+          "wahl": [
+            { "text": "„Klar, kein Problem.“ – und heute Abend länger bleiben.", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Das Ja erspart den unangenehmen Moment – und kostet dich den Abend." },
+            { "text": "„Ich helfe gern bei der Messe. Beides bis morgen früh schaffe ich nicht – was soll warten: der Bericht oder die Liste?“", "wert": 2, "weiter": "k2", "rueck": "Würdigen, klares Nein zu „beides“, die Wahl zurückgeben. So geht ein Nein nach oben." },
+            { "text": "„Ähm, also ich weiß nicht, ich hab eigentlich schon so viel, der Bericht und dann noch …“", "wert": 1, "tendenz": "rechtfertigen", "weiter": "k1c", "rueck": "Er hört ein Zögern, aber kein klares Nein – er muss raten, was du meinst." },
+            { "text": "„Nein, das geht nicht.“", "wert": 1, "weiter": "k2", "rueck": "Klar – aber ohne Würdigung und ohne Lösung klingt es nach Verweigerung. Nach oben hilft die Frage nach dem Vorrang." }
+          ] },
+        { "id": "k1b", "sagt": "21 Uhr. Die Liste ist halb fertig, der Bericht liegt unberührt. Morgen um zwölf ist Abgabe.",
+          "wahl": [
+            { "text": "Morgen früh zu Dr. Albers: „Ich habe gestern zu schnell Ja gesagt. Beides bis zwölf schaffe ich nicht. Was hat Vorrang?“", "wert": 2, "weiter": "k2b", "rueck": "Spät, aber klar. Ein Ja zurückzunehmen ist besser, als zwei Dinge halb zu machen." },
+            { "text": "Die Nacht durcharbeiten und nichts sagen.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Du schützt dich vor einem kurzen Gespräch – und zahlst mit Schlaf und Qualität." }
+          ] },
+        { "id": "k1c", "sagt": "Dr. Albers runzelt die Stirn: „Heißt das jetzt Ja oder Nein?“",
+          "wahl": [
+            { "text": "„Nein – beides schaffe ich bis morgen nicht. Was soll dafür warten?“", "wert": 2, "weiter": "k2", "rueck": "Jetzt ist es klar. Eine Nachfrage ist eine zweite Chance, kein Vorwurf." },
+            { "text": "„Doch, doch, ich mach das schon.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Aus dem Zögern wird ein Ja, das du nicht meinst." }
+          ] },
+        { "id": "k2", "sagt": "Dr. Albers überlegt. Dann, etwas knapp: „Hm. Eigentlich hatte ich gehofft, dass Sie das noch dazwischenschieben.“ Dein Magen zieht sich zusammen.",
+          "wahl": [
+            { "text": "„Es tut mir wirklich leid, ich weiß, dass Sie viel um die Ohren haben, und eigentlich …“", "wert": 1, "tendenz": "rechtfertigen", "weiter": "k3", "rueck": "Die Entschuldigungs-Kette schwächt dein Nein – er hört eher dein schlechtes Gewissen als die Frage nach dem Vorrang." },
+            { "text": "„Na gut, dann mach ich es eben doch.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Ein knapper Ton reicht, und das Nein kippt. Genau das ist die Übung: es halten." },
+            { "text": "Ruhig: „Verstehe ich. Wenn die Liste wichtiger ist, kommt der Bericht am Montag – sagen Sie mir, was Ihnen lieber ist.“", "wert": 2, "weiter": "k3", "rueck": "Du hältst das Nein zu „beides“ und bietest eine echte Wahl an. Sein Ton ist sein Ton." }
+          ] },
+        { "id": "k2b", "sagt": "Dr. Albers: „Gut, dass Sie es sagen. Der Bericht hat Vorrang. Die Liste übernimmt Tarek.“",
+          "wahl": [
+            { "text": "„Danke. Nächstes Mal sage ich es gleich.“", "wert": 2, "weiter": "ende3", "rueck": "Du nimmst etwas mit – ohne dich kleinzumachen." },
+            { "text": "Wortlos nicken und schnell zum Schreibtisch.", "wert": 1, "weiter": "ende3", "rueck": "In Ordnung. Ein kurzer Satz, was du daraus mitnimmst, hätte den Moment abgeschlossen." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers: „Gut. Der Bericht geht vor, die Liste hat Zeit bis Montagmittag.“ Er geht. Später fällt dir sein knapper Ton wieder ein.",
+          "wahl": [
+            { "text": "„Jetzt ist er sauer auf mich. Hätte ich bloß Ja gesagt.“", "wert": 0, "tendenz": "katastrophe", "weiter": "ende4", "rueck": "Eine Befürchtung, keine Tatsache. Prüf sie, statt ihr zu glauben." },
+            { "text": "Eine kurze Mail mit der Absprache schreiben – und dich darin für das Nein entschuldigen.", "wert": 1, "weiter": "ende1", "rueck": "Die Absprache festzuhalten ist gut. Die Entschuldigung brauchst du nicht – es gab nichts zu entschuldigen." },
+            { "text": "Sortieren: „Er war kurz enttäuscht – das galt der Lage, nicht mir. Die Lösung steht.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Nein, das du gesagt hast, und ein knapper Ton, den du gehört hast – beides gilt der Sache." }
+          ] },
+        { "id": "ende1", "sagt": "Freitag um zwölf liegt der Bericht bei Dr. Albers, am Montag die Liste.", "ende": "Würdigen, Nein, Frage nach dem Vorrang – und den knappen Ton der Lage zuschreiben statt dir. So sieht ein Nein nach oben aus." },
+        { "id": "ende2", "sagt": "Freitag um zwölf ist der Bericht fertig – mit Fehlern. Du bist erschöpft.", "ende": "Das schnelle Ja hat einen unangenehmen Moment erspart und dich die Nacht gekostet. Ein Nein mit der Frage nach dem Vorrang wäre kürzer gewesen." },
+        { "id": "ende3", "sagt": "Der Bericht wird pünktlich fertig.", "ende": "Spät gesagt ist besser als gar nicht. Noch leichter: gleich bei der Bitte würdigen, Nein sagen, nach dem Vorrang fragen." },
+        { "id": "ende4", "sagt": "Am Montag grüßt Dr. Albers dich wie immer und fragt nach der Liste.", "ende": "„Jetzt ist er sauer“ ist nicht eingetreten. Ein knapper Ton gilt meist der Lage. Schreib diesen Abgleich in deine Beweisliste." }
+      ],
+      "prinzipien": ["würdigen – Nein – Angebot", "nach oben: die Wahl des Vorrangs zurückgeben", "ein Grund reicht, keine Entschuldigungs-Kette", "einen knappen Ton der Lage zuschreiben, nicht dir"],
+      "transfer": "Wer legt bei dir gern noch etwas obendrauf? Schreib dir deinen Satz mit der Frage nach dem Vorrang auf."
+    },
+    {
+      "id": "mut-l-05", "bereich": "mut", "phase": "g", "umfeld": "freunde", "faehigkeiten": ["mut.verstehen", "mut.vorhersage", "mut.sicherheit", "mut.leiter", "mut.ablehnung", "mut.nein", "mut.buehne"], "stufe": 5, "sparring": true,
+      "titel": "Sparring: Der Abend mit der Mutprobe", "figur": "Sven",
+      "einleitung": "Das Sparring zum Abschluss der Grundlagen: ein Abend, vier Runden. Hingehen statt ausweichen, ein Nein aushalten, ein Nein sagen, vor anderen fragen.",
+      "lage": "Samstagabend, Büchermarkt auf dem Stadtfest. Du bist mit Sven unterwegs. Für heute hast du dir eine Mutprobe vorgenommen: eine fremde Person nach einem Buchtipp fragen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Runde 1 – hingehen. Sven: „Du wolltest doch heute jemanden nach einem Buchtipp fragen. Und?“ Ein Mann stöbert allein bei den Krimis. Dein Herz klopft.",
+          "wahl": [
+            { "text": "„Kommst du mit? Dann frag ich.“", "wert": 1, "tendenz": "kruecke", "weiter": "k2", "rueck": "Mit Sven im Rücken geht es leichter – dann ist er deine Krücke. Für den Anfang in Ordnung, nächstes Mal allein." },
+            { "text": "Die Befürchtung kurz benennen – „Er lässt mich abblitzen, 70“ – und hingehen.", "wert": 2, "weiter": "k2", "rueck": "Befürchtung prüfbar gemacht, Sprosse betreten." },
+            { "text": "„Heute ist es zu voll. Nächstes Mal.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Erleichterung sofort – und das nächste Mal wird schwerer." }
+          ] },
+        { "id": "k1b", "sagt": "Sven grinst: „Das hast du letzte Woche auch gesagt.“",
+          "wahl": [
+            { "text": "„Stimmt. Ausweichen macht es nur größer.“ – und doch hingehen.", "wert": 2, "weiter": "k2", "rueck": "Erkannt und umgedreht. Zweiter Anlauf zählt genauso." },
+            { "text": "„Mir ist heute einfach nicht danach.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k3", "rueck": "Die Mutprobe ist vertagt – ein Ausweichen mehr in der Liste." }
+          ] },
+        { "id": "k2", "sagt": "Runde 2 – ein Nein aushalten. Du sprichst den Mann an: „Darf ich kurz stören? Ich suche einen guten Krimi – haben Sie einen Tipp?“ Er schaut kaum auf: „Nee, sorry, ich hab's eilig.“",
+          "wahl": [
+            { "text": "„Nur ganz kurz, ein Titel reicht doch …“", "wert": 0, "tendenz": "nachhaken", "weiter": "k2c", "rueck": "Nach einem Nein nachzuhaken macht aus einer Bitte Druck." },
+            { "text": "„Kein Problem, danke trotzdem. Schönen Abend!“ – und weitergehen.", "wert": 2, "weiter": "k2b", "rueck": "Freundlich, ohne Nachhaken. Die Mutprobe ist geschafft – das Ziel war die Frage." },
+            { "text": "Nichts sagen und schnell weggehen.", "wert": 1, "weiter": "k2b", "rueck": "Du hast gefragt – das war das Ziel. Ein freundliches Danke hätte den Moment für dich abgeschlossen." }
+          ] },
+        { "id": "k2c", "sagt": "Der Mann runzelt die Stirn: „Ich sagte doch, ich hab keine Zeit.“",
+          "wahl": [
+            { "text": "„Klar, Entschuldigung. Schönen Abend noch.“", "wert": 2, "weiter": "k2b", "rueck": "Gut gefangen – sein Nein gilt, und du gehst." },
+            { "text": "„Ist ja gut.“ – und beleidigt weggehen.", "wert": 0, "tendenz": "angreifen", "weiter": "k2b", "rueck": "Die Kränkung macht aus einem Nein mehr, als es war." }
+          ] },
+        { "id": "k2b", "sagt": "Zurück bei Sven. In dir rumort es: „Das war peinlich.“",
+          "wahl": [
+            { "text": "„Siehst du, ich hab's gewusst. Das lass ich ab jetzt.“", "wert": 0, "tendenz": "katastrophe", "weiter": "k3", "rueck": "Ein einzelnes Nein wird zum Urteil über dich – genau so füttert man die Angst." },
+            { "text": "„Na ja, war halt Pech.“", "wert": 1, "weiter": "k3", "rueck": "Gelassen. Noch stärker: Es war kein Pech, sondern ein ganz normales Nein – und du hast es ausgehalten." },
+            { "text": "„Befürchtet: abblitzen. Passiert: ein kurzes Nein, er hatte es eilig. Ausgehalten – und gefragt habe ich.“", "wert": 2, "weiter": "k3", "rueck": "Abgleich, Sortieren, Stolz. Genau dafür war die Mutprobe da." }
+          ] },
+        { "id": "k3", "sagt": "Runde 3 – ein Nein sagen. Am Getränkestand fragt Sven: „Sag mal, leihst du mir nächstes Wochenende dein Auto? Du brauchst es doch eh nicht.“ Du willst das nicht.",
+          "wahl": [
+            { "text": "„Danke, dass du mir vertraust. Das Auto verleihe ich nicht. Beim Mietwagen-Suchen helfe ich dir gern.“", "wert": 2, "weiter": "k4", "rueck": "Würdigen – Nein – Angebot. Kein Grund nötig, und doch freundlich." },
+            { "text": "„Hm, ich weiß nicht, ich brauch es vielleicht, und die Versicherung, und …“", "wert": 1, "tendenz": "rechtfertigen", "weiter": "k3c", "rueck": "Ein Nein steckt drin – aber unter Gründen, die Sven einzeln wegräumen kann." },
+            { "text": "„Äh … na gut, wenn's sein muss.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k3b", "rueck": "Ein Ja aus Unbehagen – du ärgerst dich, bevor du ausgetrunken hast." }
+          ] },
+        { "id": "k3b", "sagt": "Sven strahlt. Du ärgerst dich schon jetzt über dein Ja.",
+          "wahl": [
+            { "text": "„Moment – ich nehme das zurück. Ich verleihe das Auto nicht. Sorry fürs Hin und Her.“", "wert": 2, "weiter": "k4", "rueck": "Ein Ja zurückzunehmen braucht Mut – und ist ehrlicher als ein Wochenende voller Groll." },
+            { "text": "Nichts sagen und das ganze Wochenende grübeln.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Der unangenehme Moment ist vermieden – das Unbehagen bleibt." }
+          ] },
+        { "id": "k3c", "sagt": "Sven: „Ach komm, für einen alten Freund! Ich pass auch gut drauf auf.“",
+          "wahl": [
+            { "text": "„Das glaub ich dir. Trotzdem: Das Auto verleihe ich nicht.“", "wert": 2, "weiter": "k4", "rueck": "Ruhig wiederholt, ohne neue Gründe – so hält ein Nein." },
+            { "text": "„Na gut, okay.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k3b", "rueck": "Beim ersten Nachhaken umgefallen – genau dafür ist die ruhige Wiederholung da." }
+          ] },
+        { "id": "k4", "sagt": "Runde 4 – vor anderen fragen. Auf der kleinen Bühne fragt die Moderatorin: „Hat jemand eine Frage an die Autorin?“ Du hast eine. Sven stupst dich an.",
+          "wahl": [
+            { "text": "Leise zu Sven: „Frag du doch.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Die Frage geht weiter – aber nicht von dir." },
+            { "text": "Die Hand heben: „Eine Frage zum Schluss Ihres Buchs: …“", "wert": 2, "weiter": "ende1", "rueck": "Mit der Sache begonnen, vor zwanzig Fremden. Das ist eine hohe Sprosse." },
+            { "text": "Die Hand heben: „Vielleicht ist das eine blöde Frage, aber …“", "wert": 1, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Gestellt – das zählt. Ohne die Entschuldigung davor wäre sie noch stärker gewesen." }
+          ] },
+        { "id": "ende1", "sagt": "Die Autorin lacht: „Das hat mich noch niemand gefragt.“ Sven: „Respekt. Vor all den Leuten.“", "ende": "Vier Runden, vier Muskeln: hingehen statt ausweichen, ein Nein aushalten, ein Nein sagen, vor anderen fragen. Und nach jeder Runde: befürchtet – passiert." },
+        { "id": "ende2", "sagt": "Das Wochenende ohne Auto ist anstrengend – und du bist sauer auf dich.", "ende": "Ein Ja aus schlechtem Gewissen kostet mehr als ein freundliches Nein. Würdigen – Nein – Angebot, und bei Nachhaken ruhig wiederholen." },
+        { "id": "ende3", "sagt": "Sven fragt. Die Autorin freut sich über die Frage.", "ende": "Deine Frage war gut – nur hat Sven den Moment bekommen. Beim nächsten Mal: Hand heben, mit der Sache beginnen." }
+      ],
+      "prinzipien": ["Befürchtung benennen, dann hingehen", "ein Nein hören: danken, nicht nachhaken, sortieren", "ein Nein sagen: würdigen – Nein – Angebot, ruhig wiederholen", "vor anderen mit der Sache beginnen"],
+      "transfer": "Welche der vier Runden fällt dir im echten Leben am schwersten? Such dir dafür die nächste kleine Sprosse."
+    }
+  ]
+}

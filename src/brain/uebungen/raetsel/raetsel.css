@@ -1,0 +1,186 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Brain Trainer — Rätsel-Familie (Sudoku, Nonogramm, Lichter aus, Schiebepuzzle,
+   Türme von Hanoi, Code knacken). Klassen mit Präfix bt-raetsel-.
+   Farben nur über die --bt-…-Variablen aus brain.css. Einzige Ausnahme: die acht
+   festen Stiftfarben von „Code knacken“ — hier als Variablen für dunkel und hell.
+   Jeder Stift trägt zusätzlich seine Ziffer, das Spiel hängt also nicht am Farbensehen.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.bt-app {
+  --bt-raetsel-f1: #FF6B6B;   /* Rot */
+  --bt-raetsel-f2: #FFA94D;   /* Orange */
+  --bt-raetsel-f3: #FFE066;   /* Gelb */
+  --bt-raetsel-f4: #69DB7C;   /* Grün */
+  --bt-raetsel-f5: #3BC9DB;   /* Türkis */
+  --bt-raetsel-f6: #74A9FF;   /* Blau */
+  --bt-raetsel-f7: #C9A0FF;   /* Violett */
+  --bt-raetsel-f8: #DEE2E6;   /* Hellgrau */
+  --bt-raetsel-f-ink: #14112B;
+}
+.light .bt-app {
+  --bt-raetsel-f1: #E03131;
+  --bt-raetsel-f2: #E8590C;
+  --bt-raetsel-f3: #B58900;
+  --bt-raetsel-f4: #2F9E44;
+  --bt-raetsel-f5: #0C8599;
+  --bt-raetsel-f6: #1971C2;
+  --bt-raetsel-f7: #7048E8;
+  --bt-raetsel-f8: #495057;
+  --bt-raetsel-f-ink: #FFFFFF;
+}
+
+/* Hinweis: brain.css setzt „.bt-app button { font: inherit; color: inherit }“. Grundregeln, die einem
+   Knopf Schrift oder Farbe geben, stehen deshalb mit „.bt-app “ davor (sonst verlieren sie). */
+
+/* ── gemeinsame Anordnung ── */
+.bt-raetsel-buehne { display: flex; align-items: flex-start; justify-content: center; gap: 28px; width: 100%; }
+.bt-raetsel-seite { flex: none; display: flex; flex-direction: column; gap: 10px; width: 200px; }
+/* Brett in der Mitte: links ein unsichtbares Gegenstück zur Seitenleiste */
+.bt-raetsel-buehne[data-mittig]::before { content: ''; flex: none; width: 200px; }
+.bt-raetsel-hinweis { max-width: 780px; font-size: 12px; line-height: 1.7; color: var(--bt-leise); text-align: center; }
+.bt-raetsel-klein { padding: 7px 12px; font-size: 13px; }
+.bt-raetsel-wert { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--bt-rand); background: var(--bt-flaeche); font-size: 12px; color: var(--bt-leise); }
+.bt-raetsel-wert b { font: 600 20px/1.1 var(--bt-schrift); color: var(--bt-ink); font-variant-numeric: tabular-nums; }
+.bt-raetsel-meldung { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 14px; font: 600 14px/1.3 var(--bt-schrift); text-align: center; }
+.bt-raetsel-meldung[data-art='gut'] { background: var(--bt-gut-weich); color: var(--bt-gut); }
+.bt-raetsel-meldung[data-art='schlecht'] { background: var(--bt-schlecht-weich); color: var(--bt-schlecht); }
+.bt-raetsel-meldung[data-art='leise'] { background: var(--bt-flaeche2); color: var(--bt-leise); }
+.bt-raetsel-fuss { min-height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; }
+
+/* ── Sudoku ── */
+.bt-raetsel-sudoku { display: grid; border: 2px solid var(--bt-leise); border-radius: 10px; overflow: hidden; background: var(--bt-flaeche); }
+.bt-app .bt-raetsel-sz {
+  position: relative; display: flex; align-items: center; justify-content: center; padding: 0; margin: 0;
+  border: 0; border-right: 1px solid var(--bt-rand); border-bottom: 1px solid var(--bt-rand); border-radius: 0;
+  background: var(--bt-flaeche); color: var(--bt-akzent-stark) !important; font-family: var(--bt-schrift); font-weight: 600;
+  font-variant-numeric: tabular-nums; cursor: pointer; user-select: none;
+}
+.bt-raetsel-sz[data-kr] { border-right: 2px solid var(--bt-leise); }
+.bt-raetsel-sz[data-ku] { border-bottom: 2px solid var(--bt-leise); }
+.bt-raetsel-sz[data-rr] { border-right: 0; }
+.bt-raetsel-sz[data-ru] { border-bottom: 0; }
+.bt-raetsel-sz[data-fest] { background: var(--bt-flaeche2); color: var(--bt-ink) !important; }
+/* data-ton: 'nachbar' (gleiche Zeile/Spalte/Kästchen wie die Auswahl) · 'gleich' (gleiche Ziffer) · 'wahl' (ausgewählt) */
+.bt-raetsel-sz[data-ton='nachbar'] { background: color-mix(in srgb, var(--bt-akzent) 9%, var(--bt-flaeche)); }
+.bt-raetsel-sz[data-fest][data-ton='nachbar'] { background: color-mix(in srgb, var(--bt-akzent) 11%, var(--bt-flaeche2)); }
+.bt-raetsel-sz[data-konflikt] { color: var(--bt-schlecht) !important; background: color-mix(in srgb, var(--bt-schlecht) 16%, var(--bt-flaeche)); }
+.bt-raetsel-sz[data-ton='gleich'] { background: color-mix(in srgb, var(--bt-akzent) 30%, var(--bt-flaeche)); }
+.bt-raetsel-sz[data-ton='wahl'] { background: color-mix(in srgb, var(--bt-akzent) 42%, var(--bt-flaeche)); box-shadow: inset 0 0 0 2px var(--bt-akzent); }
+.bt-raetsel-sz[data-gezeigt] { color: var(--bt-stumm) !important; }
+.bt-raetsel-sz:focus-visible { outline: none; }
+.bt-raetsel-notizen { position: absolute; inset: 2px; display: grid; align-items: center; justify-items: center; font: 500 10px/1 var(--bt-schrift); color: var(--bt-leise); }
+.bt-raetsel-ziffern { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.bt-app .bt-raetsel-ziffer { position: relative; height: 50px; font: 600 20px/1 var(--bt-schrift); font-variant-numeric: tabular-nums; }
+.bt-app .bt-raetsel-ziffer small { position: absolute; right: 6px; bottom: 3px; font: 500 10px/1 var(--bt-schrift); color: var(--bt-stumm); }
+
+/* ── Nonogramm ── */
+.bt-raetsel-nono { display: grid; user-select: none; }
+.bt-raetsel-nh { display: flex; font: 600 13px/1 var(--bt-schrift); color: var(--bt-ink); font-variant-numeric: tabular-nums; transition: color .15s, opacity .15s; }
+.bt-raetsel-nh[data-oben] { flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; padding-bottom: 6px; }
+.bt-raetsel-nh[data-links] { align-items: center; justify-content: flex-end; gap: 7px; padding-right: 8px; }
+.bt-raetsel-nh[data-erfuellt] { color: var(--bt-gut); opacity: .6; }
+.bt-raetsel-nfeld { display: grid; border: 2px solid var(--bt-leise); border-radius: 8px; overflow: hidden; background: var(--bt-flaeche); }
+.bt-raetsel-nz {
+  position: relative; padding: 0; margin: 0; border: 0; border-right: 1px solid var(--bt-rand); border-bottom: 1px solid var(--bt-rand); border-radius: 0;
+  background: var(--bt-flaeche); cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.bt-raetsel-nz:hover { background: var(--bt-flaeche2); }
+.bt-raetsel-nz[data-dr] { border-right: 2px solid var(--bt-leise); }
+.bt-raetsel-nz[data-du] { border-bottom: 2px solid var(--bt-leise); }
+.bt-raetsel-nz[data-rr] { border-right: 0; }
+.bt-raetsel-nz[data-ru] { border-bottom: 0; }
+.bt-raetsel-nz[data-z='1'] { background: var(--bt-akzent); }
+.bt-raetsel-nz[data-z='2']::after { content: ''; width: 46%; height: 46%; background:
+  linear-gradient(45deg, transparent 44%, var(--bt-stumm) 44%, var(--bt-stumm) 56%, transparent 56%),
+  linear-gradient(-45deg, transparent 44%, var(--bt-stumm) 44%, var(--bt-stumm) 56%, transparent 56%); }
+.bt-raetsel-nz[data-falsch] { background: var(--bt-schlecht); }
+.bt-raetsel-nz[data-fehlt] { background: color-mix(in srgb, var(--bt-akzent) 45%, var(--bt-flaeche)); }
+.bt-raetsel-nz:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--bt-akzent2); }
+.bt-raetsel-modus { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 3px; border-radius: 12px; background: var(--bt-flaeche); border: 1px solid var(--bt-rand); }
+.bt-app .bt-raetsel-modus button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 6px; border: 0; border-radius: 9px; background: transparent; color: var(--bt-leise); font-weight: 600; font-size: 12.5px; cursor: pointer; }
+.bt-app .bt-raetsel-modus button[aria-pressed='true'] { background: var(--bt-akzent); color: var(--bt-akzent-ink); }
+.bt-raetsel-probe { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1.5px solid currentColor; }
+.bt-raetsel-probe[data-voll] { background: currentColor; }
+
+/* ── Lichter aus ── */
+.bt-raetsel-lichter { display: grid; gap: 8px; padding: 12px; border-radius: 20px; background: var(--bt-flaeche); border: 1px solid var(--bt-rand); }
+.bt-raetsel-licht {
+  position: relative; display: flex; align-items: center; justify-content: center; padding: 0; border-radius: 14px;
+  border: 1.5px solid var(--bt-rand); background: var(--bt-bg2); color: var(--bt-stumm) !important; cursor: pointer;
+  transition: background .14s, border-color .14s, box-shadow .14s, transform .08s;
+}
+.bt-raetsel-licht:hover:not(:disabled) { border-color: var(--bt-akzent); }
+.bt-raetsel-licht:active:not(:disabled) { transform: scale(.95); }
+.bt-raetsel-licht:disabled { cursor: default; }
+.bt-raetsel-licht[data-an] {
+  background: radial-gradient(circle at 50% 38%, var(--bt-akzent-stark), var(--bt-akzent)); border-color: var(--bt-akzent-stark);
+  color: var(--bt-akzent-ink) !important; box-shadow: 0 0 22px color-mix(in srgb, var(--bt-akzent) 55%, transparent);
+}
+.bt-raetsel-licht > svg { opacity: .35; }
+.bt-raetsel-licht[data-an] > svg { opacity: 1; }
+.bt-raetsel-licht[data-loesung]::after { content: ''; position: absolute; inset: -5px; border-radius: 18px; border: 3px dashed var(--bt-akzent2); }
+
+/* ── Schiebepuzzle ── */
+.bt-raetsel-schiebe { position: relative; border-radius: 18px; background: var(--bt-bg2); border: 1px solid var(--bt-rand); }
+.bt-app .bt-raetsel-stein {
+  position: absolute; display: flex; align-items: center; justify-content: center; padding: 0; border-radius: 12px;
+  border: 1.5px solid var(--bt-rand); background: var(--bt-flaeche); color: var(--bt-ink) !important; font-family: var(--bt-schrift); font-weight: 600;
+  font-variant-numeric: tabular-nums; cursor: default; user-select: none; transition: left .12s ease, top .12s ease, border-color .12s, background .12s;
+}
+.bt-raetsel-stein[data-beweglich] { cursor: pointer; background: var(--bt-flaeche2); }
+.bt-raetsel-stein[data-beweglich]:hover { border-color: var(--bt-akzent); }
+.bt-raetsel-stein[data-richtig] { border-color: color-mix(in srgb, var(--bt-gut) 60%, var(--bt-rand)); color: var(--bt-gut) !important; }
+.bt-raetsel-zielbild { display: grid; gap: 3px; padding: 6px; border-radius: 10px; background: var(--bt-flaeche); border: 1px solid var(--bt-rand); }
+.bt-raetsel-zielbild > span { display: flex; align-items: center; justify-content: center; border-radius: 5px; background: var(--bt-flaeche2); font: 600 11px/1 var(--bt-schrift); color: var(--bt-leise); }
+.bt-raetsel-zielbild > span[data-luecke] { background: transparent; border: 1px dashed var(--bt-rand); }
+
+/* ── Türme von Hanoi ── */
+.bt-raetsel-staebe { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; width: 100%; max-width: 900px; }
+.bt-raetsel-stab {
+  position: relative; display: flex; flex-direction: column-reverse; align-items: center; padding: 0 14px 34px; margin: 0;
+  border-radius: 16px; border: 1.5px solid var(--bt-rand); background: var(--bt-flaeche); cursor: pointer;
+  transition: border-color .12s, background .12s;
+}
+.bt-raetsel-stab::before { content: ''; position: absolute; left: 50%; bottom: 34px; width: 8px; margin-left: -4px; top: 50px; border-radius: 4px 4px 0 0; background: var(--bt-rand); }
+.bt-raetsel-stab::after { content: ''; position: absolute; left: 7%; right: 7%; bottom: 27px; height: 7px; border-radius: 4px; background: var(--bt-rand); }
+.bt-raetsel-stab:hover { border-color: var(--bt-akzent); }
+.bt-raetsel-stab[data-wahl] { border-color: var(--bt-akzent); background: color-mix(in srgb, var(--bt-akzent) 10%, var(--bt-flaeche)); }
+.bt-raetsel-stab[data-ziel] { border-style: dashed; border-color: var(--bt-gut); }
+.bt-raetsel-stab[data-ziel][data-wahl] { border-color: var(--bt-akzent); }
+.bt-raetsel-stabkopf { position: absolute; left: 10px; right: 10px; top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.bt-raetsel-scheibe {
+  position: relative; z-index: 1; flex: none; display: flex; align-items: center; justify-content: center; border-radius: 99px;
+  font: 600 12px/1 var(--bt-schrift); color: var(--bt-akzent-ink); transition: transform .12s ease, box-shadow .12s;
+}
+.bt-raetsel-scheibe[data-gehoben] { transform: translateY(-16px); box-shadow: 0 0 0 2px var(--bt-ink); }
+
+/* ── Code knacken ── */
+.bt-raetsel-reihen { display: flex; flex-direction: column; gap: 3px; padding: 8px; border-radius: 16px; background: var(--bt-flaeche); border: 1px solid var(--bt-rand); }
+.bt-raetsel-reihe { display: flex; align-items: center; gap: 8px; padding: 3px 10px; border-radius: 11px; border: 1.5px solid transparent; }
+.bt-raetsel-reihe[data-aktiv] { border-color: var(--bt-akzent); background: var(--bt-akzent-weich); }
+.bt-raetsel-reihe[data-offen] { opacity: .4; }
+.bt-raetsel-reihe[data-treffer] { border-color: var(--bt-gut); background: var(--bt-gut-weich); }
+.bt-raetsel-nr { width: 22px; font: 600 12px/1 var(--bt-schrift); color: var(--bt-stumm); text-align: right; font-variant-numeric: tabular-nums; }
+.bt-app .bt-raetsel-stift {
+  flex: none; display: inline-flex; align-items: center; justify-content: center; padding: 0; border-radius: 50%;
+  border: 2px solid transparent; font-family: var(--bt-schrift); font-weight: 600; color: var(--bt-raetsel-f-ink) !important; user-select: none;
+}
+button.bt-raetsel-stift { cursor: pointer; transition: transform .08s, box-shadow .12s; }
+button.bt-raetsel-stift:hover:not(:disabled) { transform: scale(1.07); }
+button.bt-raetsel-stift:disabled { cursor: default; }
+.bt-raetsel-stift[data-farbe='0'] { background: var(--bt-raetsel-f1); }
+.bt-raetsel-stift[data-farbe='1'] { background: var(--bt-raetsel-f2); }
+.bt-raetsel-stift[data-farbe='2'] { background: var(--bt-raetsel-f3); }
+.bt-raetsel-stift[data-farbe='3'] { background: var(--bt-raetsel-f4); }
+.bt-raetsel-stift[data-farbe='4'] { background: var(--bt-raetsel-f5); }
+.bt-raetsel-stift[data-farbe='5'] { background: var(--bt-raetsel-f6); }
+.bt-raetsel-stift[data-farbe='6'] { background: var(--bt-raetsel-f7); }
+.bt-raetsel-stift[data-farbe='7'] { background: var(--bt-raetsel-f8); }
+.bt-raetsel-stift[data-leer] { background: var(--bt-bg2); border: 2px dashed var(--bt-rand); color: var(--bt-stumm) !important; }
+.bt-raetsel-stift[data-wahl] { box-shadow: 0 0 0 3px var(--bt-akzent); }
+.bt-raetsel-stift[data-geheim] { background: var(--bt-flaeche2); border: 2px solid var(--bt-rand); color: var(--bt-stumm) !important; }
+.bt-raetsel-urteil { display: inline-flex; align-items: center; gap: 12px; margin-left: 8px; min-width: 96px; font: 600 15px/1 var(--bt-schrift); font-variant-numeric: tabular-nums; }
+.bt-raetsel-urteil > span { display: inline-flex; align-items: center; gap: 5px; }
+.bt-raetsel-punkt { display: inline-block; width: 13px; height: 13px; border-radius: 50%; border: 2.5px solid var(--bt-warn); }
+.bt-raetsel-punkt[data-voll] { background: var(--bt-gut); border-color: var(--bt-gut); }
+.bt-raetsel-palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; justify-items: center; }

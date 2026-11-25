@@ -1,0 +1,280 @@
+{
+  "einheiten": [
+    {
+      "id": "antrieb-1-01", "bereich": "antrieb", "stufe": 1, "nr": 1,
+      "titel": "Träumen bremst, Planen zieht",
+      "faehigkeiten": ["antrieb.ziele", "antrieb.warum"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass bloßes Ausmalen mit weniger Einsatz einhergeht, zeigen mehrere Studien einer Forschungsgruppe. Dass Wunsch und Hindernis zusammen helfen, ist in einer Meta-Analyse belegt – mit kleinem bis mittlerem Effekt.",
+      "quellen": ["oettingen2002", "kappes2011", "wang2021"],
+      "aha": "Wer sich den Erfolg nur schön ausmalt, fühlt sich schon halb angekommen – und strengt sich eher weniger an. Träumen ist erlaubt. Es braucht nur einen zweiten Schritt: den Blick aufs Hindernis.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Menschen sollten sich nach einer Hüftoperation ihre Genesung ausmalen. Wer machte zwei Wochen später laut Physiotherapie die besseren Fortschritte?", "optionen": ["wer am schönsten schwärmte", "wer eher nüchtern blieb", "kein Unterschied"], "richtig": 1, "loesung": "Wer eher nüchtern blieb", "aufloesung": "Je schöner die Fantasien, desto schlechter bewerteten die Therapeuten die Fortschritte. Das schöne Bild fühlt sich an wie angekommen – und wer sich angekommen fühlt, strengt sich eher weniger an." },
+        { "art": "studie", "frage": "Kostet schönes Träumen Schwung?", "aufbau": "In mehreren Versuchen malten sich Teilnehmende einen Wunsch in schönsten Farben aus – etwa eine gelungene Prüfung oder, wenn sie durstig waren, ein kaltes Glas Wasser. Andere stellten sich dieselbe Zukunft mit Zweifeln, negativ oder neutral vor.", "ergebnis": "Nach dem schönen Ausmalen fühlten sie sich weniger tatkräftig, und ihr Blutdruck sank – gedeutet als weniger Bereitschaft, sich anzustrengen.", "grenze": "Kleine Laborstudien einer Forschungsgruppe. Ob ein sinkender Blutdruck wirklich weniger Antrieb bedeutet, ist umstritten. Träumen ist nicht verboten – es braucht einen zweiten Schritt.", "beleg": "B", "quellen": ["kappes2011", "oettingen2002"] },
+        { "art": "karte", "text": "Der zweite Schritt: Erst malst du dir das Gute aus – das darf schön sein. Dann fragst du: Was in mir steht im Weg? „Faulheit“ ist selten die ehrliche Antwort. Eher das Sofa nach der Arbeit, die Sorge, sich zu blamieren, das Handy. Wer Wunsch und Hindernis zusammen denkt, kommt eher ins Tun. Das ist kein Gegner der Zuversicht – es ist ihr Werkzeug." },
+        { "art": "auswahl", "kopf": { "id": "antrieb-1-01-a", "faehigkeit": "antrieb.ziele", "stufe": 2, "kanal": "wissen" },
+          "frage": "Tarek: „Diesen Winter mache ich aus dem Keller endlich einen Hobbyraum. Ich sehe die Werkbank schon vor mir.“ Was bringt ihn am ehesten in Gang?",
+          "antworten": [
+            { "text": "Ihn fragen, was ihn bisher abgehalten hat – und was er tut, wenn das wieder passiert.", "wert": 2, "warum": "Wunsch plus Hindernis plus Plan: So wird aus dem schönen Bild ein Vorhaben." },
+            { "text": "Ihn bestärken: Er soll sich jeden Abend genau ausmalen, wie die fertige Werkbank aussieht und wie gut sich das anfühlt.", "wert": 0, "tendenz": "traeumen", "warum": "Fühlt sich motivierend an – macht aber eher satt. Das Bild allein bringt ihn nicht in den Keller." },
+            { "text": "Einen Samstag im Kalender eintragen.", "wert": 1, "warum": "Ein Termin ist gut. Ohne Blick aufs Hindernis kippt er beim ersten verregneten Samstag auf dem Sofa." },
+            { "text": "Ihm raten, erst anzufangen, wenn er richtig Lust darauf hat.", "wert": 0, "tendenz": "aufschieben", "warum": "Die Lust kommt selten zuerst. Wer auf sie wartet, wartet oft bis zum Frühling." }
+          ] },
+        { "art": "reflexion", "frage": "Welches Vorhaben geht dir gerade nach – und was in dir hat dich bisher davon abgehalten? Fällt dir keins ein, ist das in Ordnung: Schreib auf, was dich in letzter Zeit neugierig gemacht oder gestört hat. Daraus wird später eine Richtung." },
+        { "art": "karte", "titel": "Wenn es mehr ist", "text": "Dieser Bereich ist für alltägliches Aufschieben und Durchhänger. Wenn dir aber über Wochen Freude und Antrieb fehlen, alles sinnlos oder hoffnungslos wirkt oder dich Erschöpfung lähmt, ist das kein Mangel an Willen – sondern ein guter Grund, dir Unterstützung zu holen. Der Coach ersetzt keine Therapie." },
+        { "art": "fachhilfe", "thema": "seele" },
+        { "art": "mission", "ref": "antrieb-m-01" }
+      ],
+      "regel": "Das Ziel ausmalen – dann das Hindernis benennen. Erst beides zusammen bewegt.",
+      "merkkarten": [
+        { "id": "antrieb-1-01-m1", "frage": "Was passiert, wenn man sich den Erfolg nur ausmalt?", "antwort": "Man fühlt sich schon halb angekommen – und strengt sich eher weniger an." },
+        { "id": "antrieb-1-01-m2", "frage": "Was gehört nach dem Wunsch dazu?", "antwort": "Das wichtigste Hindernis in dir – und ein Plan dafür." },
+        { "id": "antrieb-1-01-m3", "frage": "Wann holst du dir Unterstützung?", "antwort": "Wenn über Wochen Freude und Antrieb fehlen, alles sinnlos wirkt oder dich Erschöpfung lähmt." }
+      ],
+      "mission": "antrieb-m-01"
+    },
+    {
+      "id": "antrieb-1-02", "bereich": "antrieb", "stufe": 1, "nr": 2,
+      "titel": "Wenn – dann",
+      "faehigkeiten": ["antrieb.plan"], "dauerMin": 6, "beleg": "A",
+      "quellen": ["gollwitzer2006"],
+      "aha": "Ein fester Auslöser nimmt dem Willen die Arbeit ab. Kommt der Moment, ist die Entscheidung schon gefallen – du triffst sie nicht jeden Tag neu.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Zwei Vorsätze für die neue Woche.", "schwach": "„Ich will mehr lesen.“", "stark": "„Wenn ich abends ins Bett gehe, lese ich zwei Seiten, bevor ich das Handy anfasse.“", "frage": "Welcher Vorsatz wird eher wahr?", "unterschied": "Der erste ist ein Wunsch ohne Anfang. Der zweite nennt einen Auslöser, der sowieso kommt, und eine kleine Handlung. Ist der Moment da, ist die Entscheidung schon gefallen." },
+        { "art": "karte", "text": "Ein Wenn-Dann-Plan verknüpft eine Lage mit einer Handlung. Der Auslöser fällt dir dann eher auf, und die Handlung startet fast von selbst. Über 94 Studien hinweg hoben solche Pläne die Zielerreichung deutlich (d = 0,65). Gute Auslöser kommen sicher und sind konkret: eine Uhrzeit, ein Ort, ein fester Ablauf wie „nach dem Zähneputzen“." },
+        { "art": "rangfolge", "kopf": { "id": "antrieb-1-02-a", "faehigkeit": "antrieb.plan", "stufe": 2, "kanal": "wissen" },
+          "frage": "Welcher Plan ist am konkretesten? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Wenn ich am Dienstag aus der Bahn steige, gehe ich zu Fuß statt mit dem Bus nach Hause.“", "warum": "Fester Auslöser mit Tag und Ort, dazu eine klare Handlung." },
+            { "text": "„Wenn ich nach der Arbeit Zeit habe, gehe ich spazieren.“", "warum": "Ein Auslöser – aber „Zeit haben“ kommt nie sicher." },
+            { "text": "„Diese Woche bewege ich mich mehr.“", "warum": "Ein Vorsatz ohne Auslöser und ohne Maß." },
+            { "text": "„Ab jetzt bin ich ein sportlicher Mensch.“", "warum": "Ein schöner Satz über die ganze Person – aber nichts, was man morgen tun kann." }
+          ] },
+        { "art": "wenndann", "anlass": "Dein Plan für morgen – wähle oder schreib einen eigenen.", "wenn": ["ich morgens den ersten Kaffee eingieße", "ich nach der Arbeit die Jacke aufhänge", "ich mittags vom Essen zurückkomme", "ich abends den Fernseher ausmache"], "dann": ["schreibe ich die erste Zeile der Mail, die ich vor mir herschiebe", "ziehe ich die Laufschuhe an und gehe einmal um den Block", "räume ich fünf Minuten lang eine Ecke auf", "lese ich zwei Seiten im Buch auf dem Nachttisch"] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-1-02-b", "faehigkeit": "antrieb.plan", "stufe": 3, "kanal": "wissen" },
+          "frage": "Miriam will tagsüber mehr Wasser trinken. Welcher Auslöser trägt ihren Plan am besten?",
+          "antworten": [
+            { "text": "„Wenn ich Durst habe, trinke ich ein Glas.“", "wert": 0, "warum": "Genau dieser Moment kommt bisher zu selten. Der Plan hängt am Gefühl, das fehlt." },
+            { "text": "„Wenn ich mich an den Schreibtisch setze, stelle ich mir zuerst ein Glas hin.“", "wert": 2, "warum": "Ein Ablauf, der sicher jeden Tag kommt – und eine kleine, klare Handlung." },
+            { "text": "„Wenn ich daran denke, trinke ich mehr.“", "wert": 0, "tendenz": "vage", "warum": "Woran sie nicht denkt, löst nichts aus. Ein Auslöser muss von außen kommen." },
+            { "text": "„Jeden Tag um 15 Uhr, egal wo ich gerade bin und was ich mache, trinke ich ein großes Glas Wasser.“", "wert": 1, "warum": "Eine Uhrzeit ist ein Auslöser. Im vollen Alltag geht sie aber leicht unter – ein fester Ablauf ist verlässlicher." }
+          ] },
+        { "art": "mission", "ref": "antrieb-m-02" }
+      ],
+      "regel": "Kein „irgendwann“ – ein Auslöser, eine kleine Handlung: Wenn …, dann …",
+      "merkkarten": [
+        { "id": "antrieb-1-02-m1", "frage": "Was macht einen guten Auslöser aus?", "antwort": "Er kommt sicher und ist konkret: eine Uhrzeit, ein Ort, ein fester Ablauf." },
+        { "id": "antrieb-1-02-m2", "frage": "Wie stark wirken Wenn-Dann-Pläne?", "antwort": "Über 94 Studien hinweg deutlich (d = 0,65)." }
+      ],
+      "mission": "antrieb-m-02"
+    },
+    {
+      "id": "antrieb-1-03", "bereich": "antrieb", "stufe": 1, "nr": 3,
+      "titel": "Die Zwei-Minuten-Fassung",
+      "faehigkeiten": ["antrieb.start"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Dass man beim Aufschieben vor allem unangenehme Gefühle meidet und unangenehme Aufgaben besonders oft schiebt, ist gut gestützt. Die Zwei-Minuten-Fassung selbst ist bewährtes Praxiswissen, nicht eigens geprüft.",
+      "quellen": ["sirois2013", "steel2007", "fogg2019", "praxis-antrieb"],
+      "aha": "Man schiebt selten die Aufgabe, meist das Gefühl am Anfang. Mach den Anfang so klein, dass Nein-Sagen albern wäre – unter zwei Minuten. Alles danach ist Zugabe.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer etwas Großes vorhat, sollte auch groß anfangen – sonst lohnt es sich nicht.", "urteil": "falsch", "warum": "Ein großer erster Schritt macht den Anfang schwer und das Aufhören leicht. Ein winziger Anfang senkt die Hürde – und oft machst du weiter, wenn du einmal drin bist." },
+        { "art": "karte", "text": "Aufschieben hat selten mit Faulheit zu tun. Man schiebt das unangenehme Gefühl, das am Anfang wartet: Langeweile, Unsicherheit, die Größe des Bergs. Die Zwei-Minuten-Fassung schneidet den Anfang so klein, dass das Gefühl kaum Halt findet. Nicht „Steuererklärung“, sondern „Ordner auf den Tisch“. Das gilt als erledigt. Alles danach ist Zugabe." },
+        { "art": "umformulieren", "kopf": { "id": "antrieb-1-03-a", "faehigkeit": "antrieb.start", "stufe": 2, "kanal": "koennen" },
+          "auftrag": "Mach aus dem Vorhaben eine Zwei-Minuten-Fassung – etwas, das du sofort tun kannst.",
+          "vorlage": "„Ich will endlich wieder regelmäßig joggen.“",
+          "kriterien": ["dauert unter zwei Minuten", "ist eine sichtbare Handlung, kein Vorsatz", "lässt sich heute noch tun"],
+          "muster": ["„Laufschuhe anziehen und einmal vor die Haustür treten.“", "„Die Laufsachen für morgen früh rauslegen.“", "„Die Schuhe vom Schrank an die Wohnungstür stellen.“"] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-1-03-b", "faehigkeit": "antrieb.start", "stufe": 2, "kanal": "wissen" },
+          "frage": "Lena schiebt seit Wochen die Anmeldung zu einem Tabellen-Kurs vor sich her. Welche Zwei-Minuten-Fassung passt?",
+          "antworten": [
+            { "text": "Die Seite mit dem Kurs öffnen und das erste Feld ausfüllen.", "wert": 2, "warum": "Klein, sichtbar und sofort machbar. Oft ist das zweite Feld dann auch schnell gefüllt." },
+            { "text": "Am Wochenende alle Kursangebote vergleichen und dann entscheiden.", "wert": 0, "tendenz": "ueberladen", "warum": "Klingt gründlich, ist aber ein neuer großer Berg – und das Wochenende ist weit weg." },
+            { "text": "Die Anmeldung als ersten Punkt auf die Liste für morgen setzen.", "wert": 0, "tendenz": "aufschieben", "warum": "Eine Liste ist noch kein Anfang. Morgen wartet dasselbe Gefühl." },
+            { "text": "Miriam fragen, ob sie auch mitmacht, und sich dann gemeinsam anmelden.", "wert": 1, "warum": "Gemeinsam fällt es leichter. Nur hängt der Anfang jetzt an Miriams Antwort." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "antrieb-1-03-c", "faehigkeit": "antrieb.start", "stufe": 3, "kanal": "wissen" },
+          "frage": "Welcher erste Schritt bringt dich bei „Wohnung entrümpeln“ am ehesten ins Tun? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "Einen Müllsack nehmen und fünf Dinge aus der Küchenschublade aussortieren.", "warum": "Klein, sichtbar, sofort erledigt – der Berg hat eine erste Lücke." },
+            { "text": "Für Samstag zwei Stunden zum Entrümpeln in den Kalender eintragen.", "warum": "Ein Termin hilft – der Anfang liegt aber noch in der Zukunft." },
+            { "text": "Einen Plan für alle Zimmer schreiben.", "warum": "Ordnet, aber du tust noch nichts – und der Plan zeigt vor allem, wie groß der Berg ist." },
+            { "text": "Warten, bis du einen ganzen freien Tag am Stück hast.", "warum": "Der freie Tag kommt selten – und bis dahin ist der Berg noch gewachsen." }
+          ] },
+        { "art": "karte", "titel": "Danach darfst du aufhören", "text": "Die Abmachung ist ehrlich: Nach zwei Minuten darfst du aufhören. Oft machst du weiter, weil das Unangenehme im Kopf größer war als in echt. Und wenn nicht, hast du trotzdem etwas Wichtiges geübt: anzufangen. Wer an zehn Tagen zwei Minuten schafft, ist weiter als jemand, der seit zehn Tagen auf die perfekte Stunde wartet." },
+        { "art": "mission", "ref": "antrieb-m-03" }
+      ],
+      "regel": "Nicht das Ganze planen – den Anfang so klein machen, dass Nein albern wäre.",
+      "merkkarten": [
+        { "id": "antrieb-1-03-m1", "frage": "Was ist die Zwei-Minuten-Fassung?", "antwort": "Der Anfang eines Vorhabens, so klein, dass er unter zwei Minuten dauert – und als erledigt zählt." },
+        { "id": "antrieb-1-03-m2", "frage": "Was schiebt man beim Aufschieben eigentlich?", "antwort": "Meist das unangenehme Gefühl am Anfang – nicht die Aufgabe selbst." }
+      ],
+      "mission": "antrieb-m-03"
+    },
+    {
+      "id": "antrieb-1-04", "bereich": "antrieb", "stufe": 1, "nr": 4,
+      "titel": "Wunsch, Hindernis, Plan",
+      "faehigkeiten": ["antrieb.ziele", "antrieb.warum", "antrieb.plan"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Meta-Analyse über 24 Vergleiche mit kleinem bis mittlerem Effekt; es gibt Hinweise auf Veröffentlichungsverzerrung, bereinigt fällt der Effekt etwas kleiner aus. Werte als Einstieg ohne Ziel sind Praxiswissen.",
+      "quellen": ["wang2021", "oettingen2014", "sheldon1999", "hayes2005"],
+      "aha": "Erst das Gute, dann das Hindernis in dir, dann der Plan. Vier Schritte, fünf Minuten – und aus einem Traum wird ein Vorhaben. Ohne Wunsch? Dann fang bei dem an, was dir wichtig ist.",
+      "schritte": [
+        { "art": "studie", "frage": "Bringt es etwas, beim Träumen das Hindernis mitzudenken?", "aufbau": "Eine Auswertung fasste 24 Vergleiche mit zusammen fast 16.000 Teilnehmenden zusammen. Die einen gingen Wunsch, Ergebnis, Hindernis und Plan durch, die anderen nicht – bei ganz unterschiedlichen Zielen.", "ergebnis": "Wer das Verfahren nutzte, erreichte seine Ziele eher: ein kleiner bis mittlerer Effekt (g = 0,34). Mit Anleitung wirkte es stärker als nur mit einer Schreibvorlage.", "grenze": "Es gibt Hinweise, dass Studien mit schwachem Ergebnis seltener veröffentlicht wurden; bereinigt ist der Effekt etwas kleiner. Ein Werkzeug, kein Zauber.", "beleg": "A", "quellen": ["wang2021"] },
+        { "art": "karte", "text": "Das Verfahren heißt nach seinen vier Schritten WOOP. Wunsch: Was willst du in den nächsten Wochen – fordernd, aber machbar? Ergebnis: Was wäre das Schönste daran? Hindernis: Was in dir steht im Weg – eine Gewohnheit, ein Gefühl, ein Gedanke? Plan: „Wenn das Hindernis kommt, dann …“. Das Hindernis liegt bewusst in dir: Das Wetter änderst du nicht, deine Antwort darauf schon." },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-1-04-a", "faehigkeit": "antrieb.ziele", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Carla will zweimal pro Woche schwimmen gehen. Welcher WOOP-Schritt ist das?",
+          "faecher": ["Ergebnis", "Hindernis", "Plan"],
+          "karten": [
+            { "text": "„Mein Rücken fühlt sich abends wieder leicht an.“", "fach": 0 },
+            { "text": "„Nach der Arbeit lande ich auf dem Sofa.“", "fach": 1 },
+            { "text": "„Wenn ich nach Hause komme, greife ich die gepackte Tasche, bevor ich mich hinsetze.“", "fach": 2 },
+            { "text": "„Ich habe danach den Kopf frei.“", "fach": 0 },
+            { "text": "„Umziehen in der Sammelkabine ist mir unangenehm.“", "fach": 1 },
+            { "text": "„Wenn ich ans Umziehen denke, ziehe ich den Badeanzug schon zu Hause drunter.“", "fach": 2 }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "antrieb-1-04-b", "faehigkeit": "antrieb.ziele", "stufe": 3, "kanal": "koennen" },
+          "plan": "WOOP", "anlass": "Ein Wunsch für die nächsten Wochen – oder ein Wert, aus dem du einen Wunsch für diese Woche machst.",
+          "felder": [
+            { "name": "Wunsch", "hilfe": "Fordernd, aber machbar. Ein Satz." },
+            { "name": "Ergebnis", "hilfe": "Was wäre das Schönste daran? Stell es dir kurz vor." },
+            { "name": "Hindernis", "hilfe": "Was in dir steht im Weg? Eine Gewohnheit, ein Gefühl, ein Gedanke." },
+            { "name": "Plan", "hilfe": "Wenn [Hindernis], dann [kleine Handlung]." }
+          ],
+          "muster": ["Wunsch: Dreimal pro Woche 20 Minuten gehen. Ergebnis: Abends müde auf die gute Art. Hindernis: Nach der Arbeit will ich nur noch sitzen. Plan: Wenn ich die Haustür aufschließe, stelle ich die Tasche ab und gehe sofort wieder raus – ohne mich hinzusetzen.", "Wunsch: Die Bewerbung bis Monatsende abschicken. Ergebnis: Das Gefühl, es versucht zu haben. Hindernis: Angst, dass es nicht gut genug ist. Plan: Wenn ich denke „nicht gut genug“, schreibe ich trotzdem zehn Minuten und schicke den Entwurf an Tarek.", "Wert: Zeit mit Freunden. Wunsch: Diese Woche jemanden treffen, den ich lange nicht gesehen habe. Hindernis: Ich warte, dass sich die anderen melden. Plan: Wenn ich am Mittwoch Mittagspause mache, schreibe ich Sven eine Nachricht mit zwei Terminvorschlägen."] },
+        { "art": "auswahl", "kopf": { "id": "antrieb-1-04-c", "faehigkeit": "antrieb.warum", "stufe": 3, "kanal": "wissen" },
+          "frage": "Dir fällt für WOOP kein Wunsch ein. Was hilft am ehesten weiter?",
+          "antworten": [
+            { "text": "Ein Ziel nehmen, das gerade alle haben – zum Beispiel einen Halbmarathon.", "wert": 0, "tendenz": "uebernehmen", "warum": "Ein fremdes Ziel trägt selten weit. An schweren Tagen fehlt dir dann ein eigener Grund." },
+            { "text": "Einen Wert nehmen – etwa „Zeit mit Freunden“ – und fragen, was er diese Woche heißt.", "wert": 2, "warum": "Ein Wert ist eine Richtung. Daraus lässt sich ein kleiner Wunsch für diese Woche machen – ganz ohne Lebensplan." },
+            { "text": "Die Übung erst einmal lassen und abwarten, bis irgendwann von selbst ein großes Lebensziel auftaucht.", "wert": 0, "tendenz": "aufschieben", "warum": "Große Ziele tauchen selten von allein auf. Sie wachsen eher aus kleinen Versuchen." },
+            { "text": "Etwas nehmen, das dich gerade stört, und daraus einen Wunsch machen.", "wert": 1, "warum": "Auch ein Weg: Ärger zeigt, was dir wichtig ist. Formulier den Wunsch dann als Hin-zu, nicht nur als Weg-von." }
+          ] },
+        { "art": "mission", "ref": "antrieb-m-04" }
+      ],
+      "regel": "Erst das Gute, dann das Hindernis in dir, dann: Wenn …, dann …",
+      "merkkarten": [
+        { "id": "antrieb-1-04-m1", "frage": "Die vier Schritte von WOOP?", "antwort": "Wunsch, Ergebnis, Hindernis, Plan – benannt nach den englischen Anfangsbuchstaben." },
+        { "id": "antrieb-1-04-m2", "frage": "Warum sucht man das Hindernis in sich?", "antwort": "Weil du nur deine Antwort darauf ändern kannst – nicht das Wetter oder den Chef." },
+        { "id": "antrieb-1-04-m3", "frage": "Kein Wunsch in Sicht – was dann?", "antwort": "Mit einem Wert anfangen und fragen, was er diese Woche heißt." }
+      ],
+      "mission": "antrieb-m-04"
+    },
+    {
+      "id": "antrieb-1-05", "bereich": "antrieb", "stufe": 1, "nr": 5,
+      "titel": "Zählen wirkt",
+      "faehigkeiten": ["antrieb.fortschritt"], "dauerMin": 6, "beleg": "A",
+      "belegHinweis": "Die Wirkung des Beobachtens ist in einer Meta-Analyse über 138 Studien belegt. Zu Serien gibt es eine Studienreihe vor allem aus Konsum und Apps.",
+      "quellen": ["harkin2016", "silverman2023"],
+      "aha": "Wer seinen Fortschritt festhält, kommt eher an. Zähl das Tun, nicht nur das Ergebnis – ein Kreuz am Tag macht sichtbar, was sonst verschwimmt.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "In 138 Studien wurde untersucht, ob es hilft, den eigenen Fortschritt zu beobachten. Was kam heraus?", "optionen": ["bringt nichts", "hilft, im Mittel klein bis mittel", "schadet, weil es Druck macht"], "richtig": 1, "loesung": "Es hilft – im Mittel klein bis mittel (d = 0,40)", "aufloesung": "Wer hinschaut, kommt eher an. Am stärksten wirkte es, wenn der Fortschritt festgehalten oder jemandem gezeigt wurde." },
+        { "art": "karte", "text": "Zählen macht sichtbar, was sonst verschwimmt. Du siehst Lücken, bevor sie zu Pausen werden, und Fortschritt, bevor er sich anfühlt. Das Einfachste genügt: ein Zettel, sieben Kästchen, ein Kreuz für jeden Tag mit der Zwei-Minuten-Fassung. Zähl das Tun, nicht nur das Ergebnis – die Waage bewegt sich langsam, die Kreuze sofort." },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-1-05-a", "faehigkeit": "antrieb.fortschritt", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Zählt das dein Tun – oder nur das Ergebnis?",
+          "faecher": ["Tun", "Ergebnis"],
+          "karten": [
+            { "text": "Tage, an denen ich zehn Minuten geübt habe", "fach": 0 },
+            { "text": "Kilo weniger auf der Waage", "fach": 1 },
+            { "text": "Seiten, die ich heute gelesen habe", "fach": 0 },
+            { "text": "Ob ich die Prüfung bestehe", "fach": 1 },
+            { "text": "Abende ohne Handy im Bett", "fach": 0 },
+            { "text": "Kontostand am Monatsende", "fach": 1 }
+          ] },
+        { "art": "zaehler", "name": "Mein Kreuz", "auftrag": "Ein Kreuz für jeden Tag, an dem du die Zwei-Minuten-Fassung deines Vorhabens geschafft hast. Leere Tage bleiben leer – ohne Kommentar.", "tage": 7 },
+        { "art": "auswahl", "kopf": { "id": "antrieb-1-05-b", "faehigkeit": "antrieb.fortschritt", "stufe": 3, "kanal": "wissen" },
+          "frage": "Nach fünf Tagen hat Carla drei Kreuze und zwei leere Kästchen. Was ist der beste Blick darauf?",
+          "antworten": [
+            { "text": "„Drei von fünf – mehr als letzte Woche. Was war an den zwei Tagen anders?“", "wert": 2, "warum": "Sie sieht den Fortschritt und nutzt die Lücken als Hinweis für ihren Plan." },
+            { "text": "„Zwei leere Kästchen. Ab Montag fange ich lieber noch mal ganz von vorn an.“", "wert": 0, "tendenz": "allesodernichts", "warum": "Drei Kreuze sind ein Anfang, kein Grund für einen Neustart. Wer von vorn beginnt, wirft sie weg." },
+            { "text": "„Ich höre mit dem Zählen auf, die Lücken ziehen mich nur runter.“", "wert": 0, "tendenz": "vermeiden", "warum": "Die Lücken sind die nützlichste Information. Sie zeigen, wo der Plan noch hakt." },
+            { "text": "„Drei Kreuze, passt schon.“", "wert": 1, "warum": "Gelassen – gut. Noch mehr bringt die kurze Frage, was an den leeren Tagen dazwischenkam." }
+          ] },
+        { "art": "studie", "frage": "Was macht eine gerissene Serie mit uns?", "aufbau": "In sieben Studien sahen Menschen ihren Verlauf als Reihe von Tagen – mal ununterbrochen, mal mit einer Lücke.", "ergebnis": "Eine intakte Serie hielt sie eher dabei als eine gerissene. Ließ sich die Serie reparieren, war der Knick kleiner.", "grenze": "Studien vor allem aus Konsum und Apps, nicht zu Lebensvorhaben. Darum zählt im Coach der Blick auf die Woche mehr als die ununterbrochene Kette.", "beleg": "B", "quellen": ["silverman2023"] },
+        { "art": "mission", "ref": "antrieb-m-05" }
+      ],
+      "regel": "Zähl das Tun, nicht nur das Ergebnis – ein Kreuz am Tag genügt.",
+      "merkkarten": [
+        { "id": "antrieb-1-05-m1", "frage": "Wann wirkt Fortschritt-Beobachten am stärksten?", "antwort": "Wenn man ihn festhält oder jemandem zeigt." },
+        { "id": "antrieb-1-05-m2", "frage": "Was zählst du – Tun oder Ergebnis?", "antwort": "Vor allem das Tun: Es bewegt sich sofort, das Ergebnis oft erst nach Wochen." },
+        { "id": "antrieb-1-05-m3", "frage": "Was machst du mit leeren Kästchen?", "antwort": "Nichts kommentieren – nur fragen, was an dem Tag dazwischenkam." }
+      ],
+      "mission": "antrieb-m-05"
+    },
+    {
+      "id": "antrieb-1-06", "bereich": "antrieb", "stufe": 1, "nr": 6,
+      "titel": "Die Umgebung arbeitet mit",
+      "faehigkeiten": ["antrieb.gewohnheit", "antrieb.energie"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Dass die Idee vom leerlaufenden Willenstank in großen Wiederholungen kaum hielt, ist gut belegt; ebenso, dass Schlafmangel die Stimmung drückt und Bewegung das Energiegefühl hebt. Die Handgriffe zur Umgebung sind Praxiswissen.",
+      "quellen": ["hagger2016", "vohs2021", "palmer2024", "puetz2006", "clear2018", "praxis-antrieb"],
+      "aha": "Schuhe an die Tür schlägt gute Vorsätze. Was im Weg liegt, passiert eher – was einen Umweg kostet, seltener. Und Schlaf ist keine Belohnung für Vorhaben, sondern ihr Treibstoff.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer genug Willenskraft hat, braucht keine Tricks mit der Umgebung.", "urteil": "falsch", "warum": "Schon die Idee vom Willen als Tank, der leerläuft, ließ sich in großen Wiederholungen kaum bestätigen. Wer das Gewünschte leicht und die Ablenkung schwer macht, braucht weniger Willen – egal, wie viel er hat." },
+        { "art": "karte", "text": "Umgebung vor Willen: Leg das Gewünschte in den Weg – die gepackte Tasche an die Tür, das Buch aufs Kopfkissen, die Wasserflasche auf den Schreibtisch. Und leg Hürden vor das, was dich abhält – das Handy lädt im Flur, die Chips stehen im obersten Schrank. Jede Hürde weniger ist eine Entscheidung weniger. Das ist kein Eingeständnis von Schwäche, sondern kluge Planung." },
+        { "art": "zuordnen", "kopf": { "id": "antrieb-1-06-a", "faehigkeit": "antrieb.gewohnheit", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Macht das das Vorhaben leichter – oder die Ablenkung schwerer?",
+          "faecher": ["Vorhaben leichter", "Ablenkung schwerer"],
+          "karten": [
+            { "text": "Die Yogamatte bleibt ausgerollt im Wohnzimmer liegen.", "fach": 0 },
+            { "text": "Die Spiele-App wandert in einen Ordner auf der letzten Seite.", "fach": 1 },
+            { "text": "Die Wasserflasche steht gefüllt auf dem Schreibtisch.", "fach": 0 },
+            { "text": "Die Fernbedienung liegt in der Schublade im Flur.", "fach": 1 },
+            { "text": "Die Vokabelkarten liegen neben der Kaffeemaschine.", "fach": 0 },
+            { "text": "Das Handy lädt nachts im Flur statt am Bett.", "fach": 1 }
+          ] },
+        { "art": "karte", "titel": "Energie ist kein Bonus", "text": "Auch die beste Umgebung hilft wenig, wenn der Akku leer ist. Schlafmangel senkt in Studien die guten Gefühle und macht ängstlicher. Regelmäßige Bewegung hebt das Energiegefühl, kurze Pausen machen frischer. Schlaf, Bewegung und Pausen sind deshalb keine Belohnung für erledigte Vorhaben, sondern ihre Voraussetzung. Bleibt die Erschöpfung über Wochen, sprich mit deiner Hausarztpraxis." },
+        { "art": "auswahl", "kopf": { "id": "antrieb-1-06-b", "faehigkeit": "antrieb.energie", "stufe": 3, "kanal": "wissen" },
+          "frage": "Tarek will morgens vor der Arbeit laufen. Der Wecker steht auf halb sechs, abends schaut er aber bis Mitternacht Serien. Was rätst du ihm?",
+          "antworten": [
+            { "text": "Den Wecker noch früher stellen, damit er mehr Puffer hat.", "wert": 0, "warum": "Noch weniger Schlaf – damit wird jeder Morgen zum Kampf gegen sich selbst." },
+            { "text": "Um elf Handy und Fernbedienung in den Flur – oder das Laufen auf den Feierabend legen.", "wert": 2, "warum": "Er schützt den Schlaf, statt ihn zu opfern – und hängt das Vorhaben an eine Zeit, in der er Kraft hat." },
+            { "text": "Vor dem Laufen einen starken Kaffee trinken.", "wert": 0, "tendenz": "durchhalten", "warum": "Überdeckt die Müdigkeit kurz, ändert aber nichts an der Ursache." },
+            { "text": "Erst einmal nur zweimal pro Woche laufen statt jeden Morgen.", "wert": 1, "warum": "Kleiner ist gut. Die Ursache – zu wenig Schlaf – bleibt aber bestehen." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "antrieb-1-06-c", "faehigkeit": "antrieb.gewohnheit", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Bau die Umgebung für das Vorhaben um: eine Sache leichter, eine Ablenkung schwerer.",
+          "vorlage": "„Ich will abends mehr lesen statt aufs Handy zu schauen.“",
+          "kriterien": ["nennt eine Veränderung, die das Vorhaben leichter macht", "nennt eine Hürde für die Ablenkung", "lässt sich heute umsetzen"],
+          "muster": ["„Das Buch liegt auf dem Kopfkissen, das Handy lädt im Flur.“", "„Ich lege das Buch auf die Fernbedienung und stelle den Bildschirm ab 22 Uhr auf Schwarz-Weiß.“"] },
+        { "art": "mission", "ref": "antrieb-m-06" }
+      ],
+      "regel": "Mach das Gewünschte leicht und die Ablenkung umständlich – und schütz deinen Schlaf.",
+      "merkkarten": [
+        { "id": "antrieb-1-06-m1", "frage": "Was heißt „Umgebung vor Willen“?", "antwort": "Das Gewünschte in den Weg legen, der Ablenkung einen Umweg bauen – dann braucht es weniger Willen." },
+        { "id": "antrieb-1-06-m2", "frage": "Ist Willenskraft ein Tank, der leerläuft?", "antwort": "In großen Wiederholungen ließ sich das kaum bestätigen. Müdigkeit hat eher mit Schlaf und Pausen zu tun." },
+        { "id": "antrieb-1-06-m3", "frage": "Was sind Schlaf, Bewegung und Pausen für deine Vorhaben?", "antwort": "Voraussetzung, keine Belohnung." }
+      ],
+      "mission": "antrieb-m-06"
+    },
+    {
+      "id": "antrieb-1-07", "bereich": "antrieb", "stufe": 1, "nr": 7,
+      "titel": "Nie zweimal",
+      "faehigkeiten": ["antrieb.dranbleiben", "antrieb.gewohnheit"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Die Dauer der Gewohnheitsbildung stammt aus einer Übersichtsarbeit mit wenigen Messungen. Dass ein Auslassen kaum schadet, zeigt eine Einzelstudie; die Rückkehr-Belohnung eine Großstudie zum Sport. „Nie zweimal“ ist daraus abgeleitet, nicht selbst geprüft.",
+      "quellen": ["singh2024", "lally2010", "milkman2021", "breines2012", "wohl2010"],
+      "aha": "Ein ausgelassener Tag ist egal. Zwei werden leicht zur neuen Gewohnheit. Darum zählt nach einem Ausfall nicht das Nachholen, sondern der nächste kleine Schritt – freundlich, ohne Drama.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Nach 21 Tagen sitzt eine neue Gewohnheit.", "urteil": "falsch", "warum": "Die Zahl stammt nicht aus Studien. Gemessen sind meist um zwei Monate (Median), im Durchschnitt drei bis fünf – und von Mensch zu Mensch zwischen 4 und 335 Tagen." },
+        { "art": "karte", "text": "Wer das weiß, erschrickt nach drei Wochen nicht. Und noch etwas zeigte die Forschung: Ein einzelner ausgelassener Tag schadete der Gewohnheit kaum, sehr unregelmäßiges Üben dagegen schon. In einer Großstudie mit über 61.000 Fitness-Mitgliedern wirkte eine kleine Belohnung für die Rückkehr nach einem verpassten Training am besten. Faustregel: Einmal auslassen ist egal – zweimal nicht." },
+        { "art": "auswahl", "kopf": { "id": "antrieb-1-07-a", "faehigkeit": "antrieb.dranbleiben", "stufe": 2, "kanal": "wissen" },
+          "frage": "Gestern hast du dein Kreuz verpasst – ein langer Tag, keine Kraft. Was ist heute der beste Schritt?",
+          "antworten": [
+            { "text": "Heute die doppelte Menge machen, um den gestrigen Tag wieder auszugleichen.", "wert": 0, "tendenz": "allesodernichts", "warum": "Nachholen macht den Neustart schwer. Heute zählt nur, dass es wieder ein Kreuz gibt." },
+            { "text": "Bis Montag warten und dann mit frischem Plan neu beginnen.", "wert": 0, "tendenz": "aufschieben", "warum": "Bis Montag werden aus einem Tag mehrere. Ein Neustart-Moment hilft – aber nicht als Grund zu warten." },
+            { "text": "Heute die Zwei-Minuten-Fassung machen und das Kreuz setzen.", "wert": 2, "warum": "Der kleinste Schritt verhindert das zweite Mal. Genau das zählt." },
+            { "text": "Kurz aufschreiben, was gestern dazwischenkam.", "wert": 1, "warum": "Gut für den nächsten Plan. Nur ohne heutiges Kreuz bleibt es beim Nachdenken." }
+          ] },
+        { "art": "kritiker", "kopf": { "id": "antrieb-1-07-b", "faehigkeit": "antrieb.dranbleiben", "stufe": 3, "kanal": "koennen" },
+          "satz": "Was sagst du dir nach einem Ausrutscher? Schreib den Satz auf – und darunter eine Fassung, die freundlich ist und nach vorn zeigt.",
+          "kriterien": ["benennt sachlich, was passiert ist", "ohne Urteil über dich als Person", "enthält den nächsten kleinen Schritt"],
+          "muster": ["„Ich krieg nie was durchgezogen.“ → „Zwei Tage ausgelassen, weil die Woche voll war. Heute die kleine Runde.“", "„Jetzt ist eh alles kaputt.“ → „Drei Wochen lief es, zwei Tage nicht. Ein Tag ist kein Muster – morgen nach dem Frühstück geht es weiter.“"] },
+        { "art": "karte", "titel": "Warum freundlich?", "text": "Nach dem Ausrutscher meldet sich oft der Kritiker: „Typisch.“ Das fühlt sich streng an, macht den Rückweg aber schwerer – wer sich schämt, schaut lieber weg. In Versuchen wollten Menschen nach einem freundlichen Blick auf ihren Fehler eher etwas besser machen. Bei Studierenden, die stark aufgeschoben hatten, ging Selbstvergebung mit weniger Aufschieben vor der nächsten Prüfung einher." },
+        { "art": "wenndann", "anlass": "Dein Wiedereinstiegs-Plan – für den Tag, an dem du ihn brauchst.", "wenn": ["ich zweimal hintereinander ausgelassen habe", "eine Woche ganz anders läuft als geplant", "ich krank war oder verreist", "ich merke, dass ich das Kreuz-Blatt meide"], "dann": ["mache ich am nächsten Tag nur die Zwei-Minuten-Fassung", "trage ich mir für den nächsten Montag einen festen Termin ein", "fange ich mit der halben Menge wieder an – nicht mit der ganzen", "hänge ich das Blatt wieder sichtbar auf und mache heute ein Kreuz"] },
+        { "art": "mission", "ref": "antrieb-m-07" }
+      ],
+      "regel": "Einmal auslassen ist egal – zweimal nicht. Am Tag danach zählt die kleinste Fassung.",
+      "merkkarten": [
+        { "id": "antrieb-1-07-m1", "frage": "Wie lange dauert es, bis eine Gewohnheit sitzt?", "antwort": "Meist um zwei Monate (Median), im Durchschnitt drei bis fünf – sehr verschieden, von 4 bis 335 Tagen." },
+        { "id": "antrieb-1-07-m2", "frage": "Was tust du am Tag nach einem Ausfall?", "antwort": "Nicht nachholen – die Zwei-Minuten-Fassung machen und ein Kreuz setzen." },
+        { "id": "antrieb-1-07-m3", "frage": "Warum freundlich mit dir nach dem Ausrutscher?", "antwort": "Wer sich beschimpft, schaut lieber weg. Freundlichkeit macht den Neustart leichter." }
+      ],
+      "mission": "antrieb-m-07"
+    }
+  ]
+}

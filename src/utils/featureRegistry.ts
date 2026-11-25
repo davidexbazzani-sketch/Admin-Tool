@@ -56,7 +56,7 @@ export const FEATURES: FeatureDef[] = [
   { id: 'trickbox', label: 'Trickbox', category: 'Grundfunktionen', description: 'Hilfreiche Tipps und Skripte' },
 
   // ── Pausenraum ────────────────────────────────────────────────────────────
-  { id: 'games', label: 'Pausenraum', category: 'Grundfunktionen', description: '4 gewinnt live gegen andere Tool-Nutzer' },
+  { id: 'games', label: 'Pausenraum', category: 'Grundfunktionen', description: '4 gewinnt live gegen andere Tool-Nutzer, Brain Trainer (Gehirntraining, IQ-Test, Duelle), Parla Italiano (Italienisch-Kurs in 24 Leveln), Terra Incognita und Der Coach (Training für Wirkung, Mut und Antrieb in 14 Bereichen)' },
 
   // ── Einstellungen ─────────────────────────────────────────────────────────
   { id: 'settings', label: 'Einstellungen', category: 'Grundfunktionen', description: 'Programmeinstellungen verwalten' },

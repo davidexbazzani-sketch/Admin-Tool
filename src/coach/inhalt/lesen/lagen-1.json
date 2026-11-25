@@ -1,0 +1,253 @@
+{
+  "lagen": [
+    {
+      "id": "lesen-l-01", "bereich": "lesen", "phase": "g", "umfeld": "gruppe", "faehigkeiten": ["lesen.beobachten", "lesen.grundlinie"], "stufe": 2,
+      "titel": "Die stille Besprechung", "figur": "Lena Brandt",
+      "einleitung": "Eine Besprechung, in der jemand schweigt. Du übst: beobachten statt deuten, die Grundlinie kennen – und merken, was sich wirklich ändert.",
+      "lage": "Teambesprechung, sechs Leute. Dr. Albers verteilt die Aufgaben fürs neue Quartal. Lena sitzt neben dir. In Runden sagt sie meist wenig, schreibt aber sonst eifrig mit.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Albers: „Und die Kundenanrufe am Freitagnachmittag übernimmt ab sofort Lena.“ Lena legt den Stift hin, schaut auf ihren Block und sagt nichts.",
+          "wahl": [
+            { "text": "Lena ist halt still, das ist bei ihr immer so – nicht weiter beachten.", "wert": 1, "weiter": "k2b", "rueck": "Stimmt für das Schweigen. Aber dass sie den Stift hinlegt, ist neu." },
+            { "text": "Laut in die Runde: „Ich glaube, Lena ist damit gar nicht glücklich, so wie sie gerade schaut.“", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k2c", "rueck": "Eine Deutung vor allen – und ausgerechnet über die Stillste im Raum." },
+            { "text": "Innerlich festhalten: Sonst schreibt sie mit – seit der Ansage nicht mehr.", "wert": 2, "weiter": "k2", "rueck": "Genau: Nicht ihr Schweigen ist auffällig, sondern was sich geändert hat – und wann." }
+          ] },
+        { "id": "k2", "sagt": "Albers fragt in die Runde: „Passt das so für alle?“ Einige nicken. Lena nickt auch, ohne aufzusehen, und zieht die Schultern etwas hoch.",
+          "wahl": [
+            { "text": "Sie hat genickt wie alle anderen auch – also ist es für sie offenbar völlig in Ordnung.", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende2", "rueck": "Das Nicken ist ein Zeichen – Stift weg, Blick nach unten und hochgezogene Schultern sind drei andere." },
+            { "text": "Merken: Stift weg, Blick unten, Schultern hoch. Nach der Runde kurz zu ihr.", "wert": 2, "weiter": "k3", "rueck": "Drei Zeichen in eine Richtung, seit einem bestimmten Moment. Und du sprichst sie nicht vor allen an." },
+            { "text": "„Herr Albers, die Anrufe kann ich auch übernehmen.“", "wert": 1, "weiter": "k3", "rueck": "Hilfsbereit – aber du weißt noch gar nicht, was Lena stört. Vielleicht etwas ganz anderes." }
+          ] },
+        { "id": "k2b", "sagt": "Albers fragt: „Passt das so für alle?“ Lena nickt, ohne aufzusehen, und zieht die Schultern etwas hoch. Ihr Block bleibt leer.",
+          "wahl": [
+            { "text": "Weiter in die eigenen Notizen schauen und einfach die nächste Aufgabe abwarten, die gleich kommt.", "wert": 0, "tendenz": "ueberhoeren", "weiter": "ende2", "rueck": "Das Bündel wird deutlicher, und du schaust weg." },
+            { "text": "Jetzt genauer hinsehen: Stift weg, Blick unten, Schultern hoch – mehr als ihre gewohnte Stille.", "wert": 2, "weiter": "k3", "rueck": "Gut korrigiert: Gegen die Grundlinie gelesen, ist das eine Veränderung." }
+          ] },
+        { "id": "k2c", "sagt": "Stille im Raum. Lena wird rot. „Doch, doch. Passt schon.“ Albers schaut irritiert zu dir.",
+          "wahl": [
+            { "text": "„Entschuldige, das war vorschnell.“ – und nach der Runde unter vier Augen nachfragen.", "wert": 2, "weiter": "k3", "rueck": "Gut gerettet: Du nimmst die Deutung zurück und gibst ihr einen ruhigeren Rahmen." },
+            { "text": "„Na ja, man sieht es dir aber doch deutlich an, oder nicht?“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Du hältst an deiner Deutung fest – vor allen, gegen ihr Wort." }
+          ] },
+        { "id": "k3", "sagt": "Nach der Runde. Die anderen sind schon draußen. Lena packt langsam ihre Sachen.",
+          "wahl": [
+            { "text": "„Alles okay?“", "wert": 1, "weiter": "k4b", "rueck": "Freundlich, aber sehr allgemein – darauf antworten die meisten „Ja, klar“." },
+            { "text": "„Du hast aufgehört mitzuschreiben, als es um die Freitagsanrufe ging. Wie geht's dir damit?“", "wert": 2, "weiter": "k4", "rueck": "Du nennst, was du gesehen hast, und lässt sie deuten." },
+            { "text": "„Du hast Angst davor, am Telefon mit Kunden zu reden, oder? Das merkt man dir richtig deutlich an.“", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k4c", "rueck": "Eine fertige Deutung – und ein Etikett dazu." }
+          ] },
+        { "id": "k4", "sagt": "Lena atmet aus. „Ehrlich gesagt: Freitags um halb drei hole ich meine Mutter von der Physiotherapie ab. Ich hab mich nur nicht getraut, das vor allen zu sagen.“",
+          "wahl": [
+            { "text": "„Ach so – ich dachte schon, dir ist das Telefonieren mit Kunden einfach unangenehm.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich – und es zeigt, wie weit eine Deutung danebenliegen kann. Jetzt geht es um ihr Anliegen." },
+            { "text": "„Danke, dass du's sagst. Magst du mit Albers reden – oder soll ich mitkommen?“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst ihr Anliegen auf und bietest Hilfe an, ohne es ihr abzunehmen." }
+          ] },
+        { "id": "k4b", "sagt": "„Ja, ja, alles gut.“ Lena lächelt kurz und geht zur Tür. Dort bleibt sie kurz stehen, die Hand an der Klinke.",
+          "wahl": [
+            { "text": "„Du hast vorhin aufgehört mitzuschreiben. Falls doch was ist – ich hab ein Ohr.“", "wert": 2, "weiter": "k4", "rueck": "Die konkrete Beobachtung macht es ihr leichter als das allgemeine „Alles okay?“." },
+            { "text": "Sie gehen lassen – sie hat ja gesagt, dass alles gut ist, und mehr will ich nicht bohren.", "wert": 1, "weiter": "ende3", "rueck": "Respektvoll. Das Zögern an der Tür war aber eine kleine Einladung." }
+          ] },
+        { "id": "k4c", "sagt": "Lena runzelt die Stirn. „Nein. Wie kommst du darauf?“",
+          "wahl": [
+            { "text": "„War nur geraten, sorry. Mir ist aufgefallen, dass du ab da nicht mehr mitgeschrieben hast.“", "wert": 2, "weiter": "k4", "rueck": "Gut korrigiert: zurück von der Deutung zur Beobachtung." },
+            { "text": "„Na ja, du bist halt immer so still, wenn es um Kunden geht, da hab ich mir das schon gedacht.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Ihre gewohnte Stille als Beweis – genau das Gegenteil von Grundlinie lesen." }
+          ] },
+        { "id": "ende1", "sagt": "Am nächsten Tag tauscht Lena den Freitag mit Tarek. Albers sagt nur: „Gut, dass Sie es gesagt haben.“", "ende": "Ihre Stille war Gewohnheit, der hingelegte Stift war neu. Du hast die Veränderung bemerkt, ohne sie zu deuten – und ihr einen leichten Weg gegeben, es zu sagen." },
+        { "id": "ende2", "sagt": "Lena bleibt still. Am Freitag fehlt sie um halb drei bei den Kundenanrufen – sie hatte einen Termin, von dem niemand wusste.", "ende": "Ein Nicken ist ein Zeichen, das Bündel sagte etwas anderes. Und eine Deutung vor allen macht es Stillen noch schwerer. Beim nächsten Mal: beobachten, merken, unter vier Augen fragen." },
+        { "id": "ende3", "sagt": "Lena geht. Am Freitag tauscht sie selbst mit Tarek, nach einigem Hin und Her.", "ende": "Kein Drama – sie hat es selbst gelöst. Ein konkretes, offenes Ohr hätte es ihr leichter gemacht." }
+      ],
+      "prinzipien": ["Stille ist Grundlinie, der hingelegte Stift ist Veränderung", "Zeitpunkt merken: seit welchem Satz?", "Deutungen nicht vor allen aussprechen", "Beobachtung nennen statt „Alles okay?“"],
+      "transfer": "Wer in deinem Umfeld ist meist still? Woran würdest du bei ihr oder ihm merken, dass sich etwas geändert hat?"
+    },
+    {
+      "id": "lesen-l-02", "bereich": "lesen", "phase": "g", "umfeld": "kunden", "faehigkeiten": ["lesen.buendel", "lesen.stimme", "lesen.grundlinie"], "stufe": 3,
+      "titel": "Herr Petersen sagt Ja", "figur": "Herr Petersen",
+      "einleitung": "Ein Ja, das nicht wie ein Ja klingt. Du übst, Zeichen zu bündeln, auf die Stimme zu hören – und einen Vorbehalt zu verstehen, statt ihn zu überhören oder wegzudrücken.",
+      "lage": "Herr Petersen, ein langjähriger Kunde, sitzt bei dir im Besprechungsraum. Du stellst ihm das neue Wartungspaket vor. Er ist anspruchsvoll, fragt sonst viel nach und sagt deutlich, was er will.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Du nennst den Preis. Herr Petersen sagt: „Ja … ja. Machen wir.“ Er lehnt sich zurück, verschränkt die Arme und schaut aus dem Fenster. Eine Frage stellt er nicht.",
+          "wahl": [
+            { "text": "„Wunderbar, dann schicke ich Ihnen gleich heute Nachmittag den Vertrag zu.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k2b", "rueck": "Du nimmst das Wort beim Wort und überhörst, wie es klang." },
+            { "text": "Innehalten: Sonst fragt er viel – jetzt keine Frage, ein zögerndes Ja, Blick weg.", "wert": 2, "weiter": "k2", "rueck": "Gegen seine Grundlinie gelesen: mehrere Zeichen in dieselbe Richtung." },
+            { "text": "„Sie verschränken ja die Arme – also sind Sie doch nicht so überzeugt, wie Sie sagen.“", "wert": 0, "tendenz": "einzelzeichen", "weiter": "k2c", "rueck": "Ein Einzelzeichen als Urteil, ausgesprochen wie eine Tatsache." }
+          ] },
+        { "id": "k2", "sagt": "Du lässt eine kurze Pause. Herr Petersen sagt, eher leise: „Der Preis ist halt … na ja. Aber gut.“",
+          "wahl": [
+            { "text": "„Ich höre beim Preis ein Aber. Was müsste anders sein, damit es für Sie passt?“", "wert": 2, "weiter": "k3", "rueck": "Du nennst, was du hörst, und lädst den Vorbehalt ein." },
+            { "text": "„Der Preis ist wirklich fair, das kann ich Ihnen versichern, wir haben genau gerechnet.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k3b", "rueck": "Du verteidigst den Preis, bevor du weißt, was ihn stört." },
+            { "text": "„Wenn es am Preis liegt, kann ich zehn Prozent nachlassen.“", "wert": 1, "weiter": "k3", "rueck": "Entgegenkommend – aber du weißt noch nicht, ob es wirklich am Betrag liegt." }
+          ] },
+        { "id": "k2b", "sagt": "Herr Petersen nickt langsam. „Schicken Sie mal. Ich schau's mir an.“ Er packt seine Unterlagen schon zusammen.",
+          "wahl": [
+            { "text": "„Gern. Bevor Sie gehen: Ihr Ja klang etwas zögerlich. Gibt's noch einen Punkt?“", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance genutzt: Du sprichst das Zögern freundlich an." },
+            { "text": "Ihn verabschieden und in Ruhe auf seine Unterschrift warten, wie er es gesagt hat.", "wert": 1, "weiter": "ende2", "rueck": "Höflich. Aber der Vorbehalt bleibt unausgesprochen." }
+          ] },
+        { "id": "k2c", "sagt": "Herr Petersen löst die Arme. „Mir ist kalt, Ihr Raum ist eiskalt. Und was meinen Sie mit ‚nicht überzeugt‘?“",
+          "wahl": [
+            { "text": "„Entschuldigung, falsch gedeutet. Ihr Ja klang nur etwas zögerlich. Gibt's noch einen Punkt?“", "wert": 2, "weiter": "k3", "rueck": "Gut gerettet: Du nimmst die Deutung zurück und fragst nach dem, was du gehört hast." },
+            { "text": "„Na ja, so etwas sieht man doch an der Körpersprache, das weiß man doch, das ist allgemein bekannt.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Ein Mythos als Begründung – und er fühlt sich durchleuchtet." }
+          ] },
+        { "id": "k3b", "sagt": "„Hm.“ Herr Petersen schaut wieder aus dem Fenster.",
+          "wahl": [
+            { "text": "Weiter die Vorteile des Pakets aufzählen, bis er überzeugt ist.", "wert": 0, "tendenz": "ueberreden", "weiter": "ende2", "rueck": "Mehr Argumente helfen nicht, solange du nicht weißt, was ihn stört." },
+            { "text": "„Entschuldigung, ich war schnell. Was ist Ihnen beim Preis wichtig?“", "wert": 2, "weiter": "k3", "rueck": "Gut zurückgeholt: erst verstehen, dann antworten." }
+          ] },
+        { "id": "k3", "sagt": "Herr Petersen schüttelt leicht den Kopf. „Es geht nicht nur ums Geld. Letztes Jahr kam der Techniker zweimal zu spät. Wenn ich mehr zahle, will ich sicher sein, dass das nicht wieder passiert.“",
+          "wahl": [
+            { "text": "„Verstehe. Was würde Ihnen Sicherheit geben – feste Zeitfenster, schriftlich?“", "wert": 2, "weiter": "ende1", "rueck": "Du antwortest auf seinen eigentlichen Vorbehalt und fragst, was ihm hilft." },
+            { "text": "„Das war eine Ausnahme, das wird ganz sicher nicht noch einmal vorkommen, Herr Petersen.“", "wert": 1, "weiter": "ende3", "rueck": "Beruhigend gemeint – aber ein Versprechen ohne Grundlage." }
+          ] },
+        { "id": "ende1", "sagt": "Herr Petersen nickt, diesmal ohne Pause: „So machen wir's.“", "ende": "Du hast das Ja nicht beim Wort genommen, sondern gehört, wie es klang – und den Vorbehalt eingeladen. Es ging nicht um den Preis allein, sondern um Verlässlichkeit. Lesen hilft hier zu verstehen, nicht zu drücken." },
+        { "id": "ende2", "sagt": "Zwei Tage später ruft Herr Petersen an: Er möchte lieber beim alten Vertrag bleiben.", "ende": "Das zögernde Ja war ein Bündel: Pause, Blick weg, keine Frage – bei einem, der sonst viel fragt. Wer es überhört oder wegredet, erfährt den Vorbehalt später als Absage." },
+        { "id": "ende3", "sagt": "Herr Petersen: „Na, wir werden sehen.“ Er unterschreibt – ohne Begeisterung.", "ende": "Das Ja ist da, der Vorbehalt nur halb ausgeräumt. Eine Frage nach dem, was ihm Sicherheit gibt, hätte mehr geholfen als ein Versprechen." }
+      ],
+      "prinzipien": ["ein Ja klingt nicht immer wie ein Ja", "gegen die Grundlinie lesen: Wer sonst fragt und jetzt schweigt …", "Einzelzeichen wie verschränkte Arme nicht überdeuten", "den Vorbehalt einladen, nicht wegreden"],
+      "transfer": "Wann hast du zuletzt ein „Ja, schon …“ gehört, das eigentlich ein Aber war? Was hättest du fragen können?"
+    },
+    {
+      "id": "lesen-l-03", "bereich": "lesen", "phase": "g", "umfeld": "familie", "faehigkeiten": ["lesen.gesicht", "lesen.koerper", "lesen.eigen"], "stufe": 3,
+      "titel": "Sonntagsessen bei Tante Renate", "figur": "Tante Renate",
+      "einleitung": "Ein Lächeln, das nicht zum Rest passt – und ein Blick, der dich falsch einordnet. Du übst, Gesicht und Körper zusammen zu lesen und dich selbst richtigzustellen.",
+      "lage": "Sonntagsessen bei Tante Renate, die Familie sitzt am Tisch. Du erzählst, dass du über Weihnachten mit Freunden verreist – zum ersten Mal nicht bei ihr.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Renate lächelt. „Ach, wie schön für dich.“ Dann steht sie auf und räumt die Teller ab, obwohl noch nicht alle fertig sind. Sonst bleibt sie sitzen, bis der Letzte aufgegessen hat.",
+          "wahl": [
+            { "text": "Sie lächelt doch – also ist es für sie in Ordnung. Einfach weiter vom Urlaub erzählen, wie geplant.", "wert": 0, "tendenz": "einzelzeichen", "weiter": "k2b", "rueck": "Das Lächeln ist ein Zeichen. Das schnelle Abräumen gegen ihre Gewohnheit ist ein zweites, und es zeigt woandershin." },
+            { "text": "Bemerken: Lächeln – aber sofort abräumen, anders als sonst. Das passt nicht ganz zusammen.", "wert": 2, "weiter": "k2", "rueck": "Du liest Gesicht und Körper zusammen und gegen ihre Grundlinie." },
+            { "text": "„Renate, du bist beleidigt, das sieht doch jeder hier am Tisch.“", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k2c", "rueck": "Eine Deutung als Tatsache – und vor der ganzen Familie." }
+          ] },
+        { "id": "k2", "sagt": "In der Küche stellt Renate die Teller hart auf die Arbeitsplatte. Du bringst die Schüssel nach.",
+          "wahl": [
+            { "text": "„Soll ich dir beim Abwasch helfen?“", "wert": 1, "weiter": "k3b", "rueck": "Eine nette Geste – nur das Thema bleibt liegen." },
+            { "text": "„Ich hab den Eindruck, das mit Weihnachten trifft dich. Stimmt das?“", "wert": 2, "weiter": "k3", "rueck": "Unter vier Augen, als Eindruck, mit Ausweg." },
+            { "text": "„Ist doch nur ein Jahr, kein Weltuntergang.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Du antwortest auf ein Gefühl, das sie nicht ausgesprochen hat – und spielst es herunter." }
+          ] },
+        { "id": "k2b", "sagt": "Später am Tisch sagt Renate zu deiner Cousine: „Na, manche haben eben Besseres vor.“ Sie lacht dabei.",
+          "wahl": [
+            { "text": "Jetzt das Bündel sehen – Lächeln, Abräumen, Bemerkung – und nach dem Essen unter vier Augen fragen.", "wert": 2, "weiter": "k3", "rueck": "Gut korrigiert: Drei Zeichen in eine Richtung – und du wählst einen ruhigen Moment." },
+            { "text": "„Und manche nehmen eben alles gleich persönlich, Renate.“", "wert": 0, "tendenz": "angreifen", "weiter": "ende2", "rueck": "Zurückgeben macht aus einer Enttäuschung einen Streit." }
+          ] },
+        { "id": "k2c", "sagt": "Stille am Tisch. Renate: „Ich? Beleidigt? Ich räume nur ab.“ Ihre Stimme ist höher als sonst.",
+          "wahl": [
+            { "text": "„Doch, das hört man doch an deiner Stimme, die ist ganz hoch geworden, Renate.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Du bestehst auf deiner Deutung – vor allen und gegen ihr Wort." },
+            { "text": "„Entschuldige, das war vor allen nicht fair. Können wir nachher kurz reden?“", "wert": 2, "weiter": "k3", "rueck": "Du nimmst den Schnellschuss zurück und bietest einen ruhigen Rahmen an." }
+          ] },
+        { "id": "k3b", "sagt": "Renate: „Lass mal, ich mach das schon.“ Dann, ohne dich anzusehen: „Du schaust übrigens so ernst. Passt dir was nicht?“ Dabei bist du nur müde.",
+          "wahl": [
+            { "text": "„Ich bin nur müde von der Woche. Aber sag mal – geht dir das mit Weihnachten nach?“", "wert": 2, "weiter": "k3", "rueck": "Du stellst kurz richtig, wie du gelesen wirst – und nutzt die Gelegenheit für ihr Thema." },
+            { "text": "„Ich schau überhaupt nicht ernst! Wieso denkt hier eigentlich jeder, mir passt was nicht?“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende3", "rueck": "Du verteidigst dich, statt kurz richtigzustellen. Ihr Thema geht dabei unter." }
+          ] },
+        { "id": "k3", "sagt": "Renate seufzt. „Ach Kind. Weihnachten mit allen ist für mich das Schönste im Jahr. Ich hab mich einfach drauf gefreut.“",
+          "wahl": [
+            { "text": "„Ach, nächstes Jahr bin ich ja wieder da, dann feiern wir dafür umso schöner.“", "wert": 1, "weiter": "ende1", "rueck": "Tröstend gemeint. Ein konkretes Angebot für dieses Jahr würde mehr zeigen." },
+            { "text": "„Versteh ich. Feiern wir vorher einen Adventssonntag zusammen?“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst ihr Gefühl ernst und machst ein Angebot." }
+          ] },
+        { "id": "ende1", "sagt": "Renate lacht. „Den dritten Advent. Ich backe.“", "ende": "Das Lächeln allein hat wenig verraten – das Bündel schon: das Aufstehen gegen ihre Gewohnheit und was danach kam. Unter vier Augen gefragt, kam das eigentliche Gefühl: Vorfreude, die enttäuscht wurde." },
+        { "id": "ende2", "sagt": "Der Rest des Essens bleibt steif. Renate verabschiedet dich kühl.", "ende": "Vor allen gedeutet, abgewertet oder zurückgegeben – so wird aus einer Enttäuschung ein Streit. Beim nächsten Mal: Bündel bemerken, unter vier Augen fragen." },
+        { "id": "ende3", "sagt": "Ihr spült schweigend zu Ende. Renate bleibt den Rest des Nachmittags einsilbig.", "ende": "Wer falsch gelesen wird, stellt am besten kurz richtig – ohne Verteidigung. Sonst bleibt das eigentliche Thema liegen." }
+      ],
+      "prinzipien": ["ein Lächeln ist kein Beweis", "Gesicht und Körper zusammen und gegen die Grundlinie lesen", "unter vier Augen statt vor allen", "falsch gelesen? Kurz richtigstellen, nicht verteidigen"],
+      "transfer": "Bei wem in deiner Familie passen Lächeln und Rest manchmal nicht zusammen? Und wer liest dich gelegentlich falsch?"
+    },
+    {
+      "id": "lesen-l-04", "bereich": "lesen", "phase": "g", "umfeld": "freunde", "faehigkeiten": ["lesen.grundlinie", "lesen.buendel", "lesen.pruefen"], "stufe": 4,
+      "titel": "Sven ist anders als sonst", "figur": "Sven",
+      "einleitung": "Ein alter Freund verhält sich anders als sonst. Du übst, die Veränderung zu sehen, nicht zu raten – und mit einer offenen Frage eine Tür aufzumachen.",
+      "lage": "Freitagabend, ihr seid zum Billard verabredet wie jeden Monat. Sven stichelt sonst ab der ersten Minute, gewinnt gern und lacht laut.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Sven kommt zehn Minuten zu spät, sagt „Hi“, bestellt Wasser statt Bier und schaut aufs Handy. Du versenkst eine schwierige Kugel – sonst kommt sofort ein Spruch. Heute: nichts.",
+          "wahl": [
+            { "text": "„Bist du sauer auf mich, weil ich letzte Woche abgesagt hab?“", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k2b", "rueck": "Du beziehst seine Veränderung auf dich. Das liegt nahe – ist aber geraten." },
+            { "text": "Erst mal weiterspielen und schauen, ob es den ganzen Abend über so bleibt.", "wert": 1, "weiter": "k2c", "rueck": "Ruhig beobachten ist gut. Die Veränderung ist aber schon deutlich." },
+            { "text": "„Kein einziger Spruch heute – das kenn ich gar nicht von dir. Ist was?“", "wert": 2, "weiter": "k2", "rueck": "Du nennst die Veränderung, ohne sie zu deuten, und fragst offen." }
+          ] },
+        { "id": "k2", "sagt": "Sven zuckt mit den Schultern. „Stress im Job. Nix Wildes.“ Er lacht kurz, aber es klingt angestrengt.",
+          "wahl": [
+            { "text": "„Ach, Job-Stress hat doch jeder, das wird schon wieder, glaub mir.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Gut gemeint – aber du schließt die Tür, die er gerade einen Spalt geöffnet hat." },
+            { "text": "„Klingt nach mehr als nix Wildes. Magst du erzählen – oder lieber nur Billard?“", "wert": 2, "weiter": "k3", "rueck": "Du hörst den Widerspruch zwischen Wort und Ton und lässt ihm die Wahl." },
+            { "text": "„Ist es die neue Stelle? Du bist bestimmt total überfordert.“", "wert": 1, "weiter": "k3", "rueck": "Vielleicht nah dran – aber mit fertiger Deutung und einem Etikett. Lass ihn sagen, was es ist." }
+          ] },
+        { "id": "k2b", "sagt": "Sven schaut irritiert. „Was? Nein. Hat nichts mit dir zu tun.“",
+          "wahl": [
+            { "text": "„Sicher? So wie du dich heute benimmst, sieht es für mich aber ganz danach aus, ehrlich.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Du bleibst bei deiner Deutung, obwohl er widerspricht." },
+            { "text": "„Dann hab ich falsch geraten. Du wirkst nur anders als sonst – willst du erzählen?“", "wert": 2, "weiter": "k2", "rueck": "Zurück von der Deutung zur Beobachtung – und eine offene Frage." }
+          ] },
+        { "id": "k2c", "sagt": "Zwei Spiele später. Sven hat dreimal aufs Handy geschaut und verliert, ohne zu meckern. Sonst würde er sofort eine Revanche fordern.",
+          "wahl": [
+            { "text": "„Du verlierst ohne Revanche-Forderung? Jetzt mach ich mir fast Sorgen. Alles okay bei dir?“", "wert": 2, "weiter": "k2", "rueck": "Das Bündel ist jetzt klar – und du sprichst es mit einem Augenzwinkern an." },
+            { "text": "Nichts sagen – wenn er reden will, sagt er es schon von selbst.", "wert": 1, "weiter": "ende3", "rueck": "Respektvoll. Aber manche warten, bis jemand fragt." }
+          ] },
+        { "id": "k3", "sagt": "Sven legt den Queue weg. „Die neue Stelle als Abteilungsleiter. Alle gratulieren, und ich schlafe seit Wochen schlecht, weil ich Angst hab, dass ich's nicht packe. Im Haus kann ich das ja keinem sagen.“",
+          "wahl": [
+            { "text": "„Du? Du packst doch alles. Mach dir mal keinen Kopf deswegen.“", "wert": 1, "weiter": "ende1", "rueck": "Aufmunternd – aber er fühlt sich vielleicht nicht ernst genommen. Erst fragen, was er braucht." },
+            { "text": "„Danke, dass du's mir sagst. Was würde dir gerade helfen?“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst ernst, was er sagt, und fragst, statt einen Rat zu geben." }
+          ] },
+        { "id": "ende1", "sagt": "Sven atmet durch. „Tat gut, das mal loszuwerden. Revanche nächsten Monat?“", "ende": "Seine Grundlinie hat dir gezeigt, dass etwas anders ist. Was genau, hat dir kein Zeichen verraten – nur die Frage. Und du hast ihm die Wahl gelassen, ob er reden will." },
+        { "id": "ende2", "sagt": "Sven trinkt aus. „Ich bin heute nicht in Form. Lass uns Schluss machen.“", "ende": "Abgewertet oder auf dich bezogen – dann zieht sich der andere zurück. Beim nächsten Mal: Veränderung nennen, offen fragen, Ausweg lassen." },
+        { "id": "ende3", "sagt": "Ihr spielt zu Ende. Sven geht früh nach Hause.", "ende": "Kein Fehler – Ruhe lassen ist manchmal richtig. Aber die Veränderung war deutlich. Eine offene Frage hätte ihm eine Tür geöffnet." }
+      ],
+      "prinzipien": ["Veränderung gegen die Grundlinie bemerken", "nicht auf dich beziehen, was vielleicht nichts mit dir zu tun hat", "Wort und Ton vergleichen: „nix Wildes“ klang angestrengt", "fragen mit Ausweg: reden oder nur Billard"],
+      "transfer": "Bei welchem Freund würdest du sofort merken, dass etwas anders ist? Welchen Satz würdest du dann sagen?"
+    },
+    {
+      "id": "lesen-l-05", "bereich": "lesen", "phase": "g", "umfeld": "kunden", "faehigkeiten": ["lesen.beobachten", "lesen.grundlinie", "lesen.buendel", "lesen.gesicht", "lesen.koerper", "lesen.stimme", "lesen.pruefen", "lesen.eigen"], "stufe": 5, "sparring": true,
+      "titel": "Sparring: Die Verhandlung mit Nadine", "figur": "Nadine Köhler",
+      "einleitung": "Das Sparring zum Abschluss der Grundlagen: zwanzig Minuten mit einer knappen, genauen Gesprächspartnerin. Grundlinie, Gesicht, Bündel, Stimme, Nachfrage – und deine eigene Nervosität.",
+      "lage": "Zweites Gespräch mit Nadine Köhler, Geschäftsführerin einer kleinen Tischlerei. Sie hat dein Angebot für die Betreuung ihrer Computer vor sich. Vom ersten Treffen weißt du: Sie ist freundlich, spricht knapp, schaut oft auf die Uhr und rechnet alles nach.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Runde 1. Frau Köhler begrüßt dich, setzt sich und schaut gleich auf ihre Uhr. „Ich hab zwanzig Minuten.“",
+          "wahl": [
+            { "text": "Das ist ihre Art – beim ersten Treffen war es genauso. Freundlich starten, dann zur Sache.", "wert": 2, "weiter": "k2", "rueck": "Du liest die Uhr gegen ihre Grundlinie: kein Desinteresse, sondern ihr Stil." },
+            { "text": "„Wir können das gern auch auf einen anderen Tag verschieben, wenn es Ihnen heute schlecht passt.“", "wert": 1, "weiter": "k2", "rueck": "Höflich – aber sie hat die Zeit eingeplant. Die Uhr gehört zu ihrer Grundlinie." },
+            { "text": "Sie hat kaum Interesse – also nur das Nötigste sagen und den Rest gar nicht erst zeigen.", "wert": 0, "tendenz": "einzelzeichen", "weiter": "k2", "rueck": "Ein gewohntes Verhalten als Zeichen gedeutet – und dein Angebot leidet darunter." }
+          ] },
+        { "id": "k2", "sagt": "Runde 2. Beim Preis runzelt sie die Stirn, nimmt den Stift und rechnet am Rand mit. Dann: „Hm.“",
+          "wahl": [
+            { "text": "Sie ärgert sich über den Preis – sofort einen Nachlass anbieten, bevor sie abspringt.", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k3", "rueck": "Stirnrunzeln beim Rechnen ist oft schlicht Konzentration. Du verschenkst etwas wegen einer Deutung." },
+            { "text": "„Ich sehe, Sie runzeln die Stirn – zu teuer?“", "wert": 1, "weiter": "k3", "rueck": "Eine Prüf-Frage, gut – aber mitten im Rechnen unterbricht sie. Erst ausrechnen lassen." },
+            { "text": "Warten, bis sie fertig gerechnet hat.", "wert": 2, "weiter": "k3", "rueck": "Ein Gesicht braucht seine Lage: Wer rechnet, runzelt die Stirn." }
+          ] },
+        { "id": "k3", "sagt": "Runde 3. Sie legt den Stift weg. „Grundsätzlich klingt das gut.“ Dabei lehnt sie sich zurück und schaut kurz zum Fenster. Bei den Schulungen hatte sie sich noch vorgebeugt und nachgefragt.",
+          "wahl": [
+            { "text": "„Super, dann können wir ja unterschreiben.“", "wert": 0, "tendenz": "ueberhoeren", "weiter": "k4b", "rueck": "„Grundsätzlich“, zurückgelehnt, Blick weg – das Bündel hast du überhört." },
+            { "text": "Bündel lesen: „grundsätzlich“, zurückgelehnt, Blick weg – ein Vorbehalt ist möglich.", "wert": 2, "weiter": "k4", "rueck": "Worte, Stimme und Körper zeigen in eine Richtung – und weichen von vorhin ab." },
+            { "text": "Alle Vorteile des Angebots noch einmal ausführlich zusammenfassen, damit sie sicherer wird.", "wert": 1, "weiter": "k4", "rueck": "Kann helfen – trifft aber nur zufällig, was ihr fehlt." }
+          ] },
+        { "id": "k4", "sagt": "Kurze Pause. Sie schaut dich an und wartet.",
+          "wahl": [
+            { "text": "„Ich höre ein ‚grundsätzlich‘. Welcher Teil passt für Sie noch nicht?“", "wert": 2, "weiter": "k5", "rueck": "Beobachtung als Frage – sie kann frei antworten." },
+            { "text": "„Sie sind noch nicht überzeugt, das sehe ich Ihnen doch deutlich an.“", "wert": 0, "tendenz": "uebersicher", "weiter": "k5b", "rueck": "Gedankenlesen als Tatsache. Niemand mag es, wenn man ihm sagt, was er denkt." },
+            { "text": "„Das Angebot gilt übrigens nur bis heute Abend, dann wird es teurer.“", "wert": 0, "tendenz": "druck", "weiter": "k5b", "rueck": "Erfundene Eile ist eine rote Linie: Du nutzt ihr Zögern für Druck, statt es zu verstehen." }
+          ] },
+        { "id": "k4b", "sagt": "Frau Köhler lächelt höflich. „Ich muss das noch durchrechnen. Ich melde mich.“ Sie schaut auf die Uhr.",
+          "wahl": [
+            { "text": "„Gern. Darf ich vorher fragen: Gibt es einen Punkt, bei dem Sie noch zögern?“", "wert": 2, "weiter": "k5", "rueck": "Zweite Chance genutzt – eine offene Frage vor dem Abschied." },
+            { "text": "„Klar, dann warte ich ganz in Ruhe auf Ihren Anruf – lassen Sie sich ruhig Zeit damit.“", "wert": 1, "weiter": "ende2", "rueck": "Höflich. Aber der Vorbehalt bleibt unausgesprochen." }
+          ] },
+        { "id": "k5b", "sagt": "Frau Köhler zieht die Augenbrauen hoch. „Ich mag es nicht, wenn man mir sagt, was ich denke – oder mich drängt.“",
+          "wahl": [
+            { "text": "„War doch nur gut gemeint, so mache ich das eigentlich bei allen meinen Kunden.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Rechtfertigen statt zurücknehmen – das Vertrauen ist angeschlagen." },
+            { "text": "„Entschuldigung, das war daneben. Welcher Teil passt für Sie noch nicht?“", "wert": 2, "weiter": "k5", "rueck": "Gut gerettet: zurücknehmen, dann offen fragen." }
+          ] },
+        { "id": "k5", "sagt": "„Die Schulungen sind genau, was wir brauchen. Aber die Rufbereitschaft am Wochenende – da arbeitet bei uns keiner. Die zahle ich ungern mit.“",
+          "wahl": [
+            { "text": "„Die Rufbereitschaft gehört fest zum Paket, das kann ich leider nicht ändern.“", "wert": 1, "weiter": "ende3", "rueck": "Ehrlich, falls es so ist. Aber du hast ihren Vorbehalt gehört – frag wenigstens nach einer anderen Lösung." },
+            { "text": "„Dann lassen wir sie weg, und ich rechne es Ihnen neu.“", "wert": 2, "weiter": "k6", "rueck": "Du antwortest genau auf den Vorbehalt, den du herausgehört hast." }
+          ] },
+        { "id": "k6", "sagt": "Runde 4. Während du neu rechnest, merkst du: Deine Hände zittern leicht, deine Stimme ist schneller geworden. Frau Köhler wartet.",
+          "wahl": [
+            { "text": "„Entschuldigen Sie bitte, ich bin heute etwas nervös – das Thema ist mir einfach wichtig.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich und menschlich – nötig ist es nicht. Sie hat es vermutlich kaum bemerkt." },
+            { "text": "Einmal ausatmen und ruhig weiterrechnen – man sieht es mir weniger an, als ich spüre.", "wert": 2, "weiter": "ende1", "rueck": "Die Illusion der Durchsichtigkeit: Was du stark spürst, sieht man außen schwach." },
+            { "text": "Schnell eine runde Zahl nennen, damit es endlich vorbei ist.", "wert": 0, "tendenz": "flucht", "weiter": "ende3", "rueck": "Die Nervosität entscheidet für dich – und die Zahl stimmt vielleicht nicht." }
+          ] },
+        { "id": "ende1", "sagt": "Frau Köhler nickt. „So passt es. Schicken Sie mir das neu.“ Sie steht auf – nach neunzehn Minuten.", "ende": "Alles drin: ihre Grundlinie gekannt (die Uhr), das Stirnrunzeln nicht überdeutet, das Bündel bei „grundsätzlich“ gehört, mit einer Frage geprüft – und dich nicht von der eigenen Nervosität treiben lassen. Lesen hat dir geholfen zu verstehen, nicht zu drücken." },
+        { "id": "ende2", "sagt": "Eine Woche später schreibt Frau Köhler: Sie hat sich für einen anderen Anbieter entschieden.", "ende": "Der Vorbehalt war zu sehen und zu hören. Wer ihn überhört, ihr Gedanken unterstellt oder Druck macht, erfährt ihn erst als Absage." },
+        { "id": "ende3", "sagt": "Frau Köhler: „Ich denke darüber nach.“ Sie geht pünktlich.", "ende": "Fast. Du hast gut gelesen – aber am Ende keine Lösung für ihren Vorbehalt gesucht oder dich von der eigenen Nervosität treiben lassen." }
+      ],
+      "prinzipien": ["Grundlinie kennen: Die Uhr ist ihre Art", "Stirnrunzeln beim Rechnen ist nicht Ärger", "Bündel hören: „grundsätzlich“ plus Rückzug", "Vermutung als Frage – nie als Druckmittel", "die eigene Nervosität sieht man weniger, als man denkt"],
+      "transfer": "Vor welchem Gespräch in den nächsten Wochen lohnt es sich, die Grundlinie deines Gegenübers vorher zu bedenken? Was würdest du fragen, wenn ein „grundsätzlich“ kommt?"
+    }
+  ]
+}

@@ -30,11 +30,23 @@ export interface ScanStatus {
   runningElsewhere?: boolean   // eine andere Instanz führt den Scan gerade aus
 }
 
+/** Themengruppe in Einstellungen → „Automatik & Scans“ (Reihenfolge siehe SCAN_GRUPPEN). */
+export type ScanGruppe = 'server' | 'pcs' | 'netz' | 'drucker' | 'laufwerke' | 'sicherheit'
+
+export const SCAN_GRUPPEN: { id: ScanGruppe; titel: string; text: string }[] = [
+  { id: 'server', titel: 'Server', text: 'Die Prüfungen aus dem Menüpunkt „Server“.' },
+  { id: 'pcs', titel: 'PCs & Arbeitsplätze', text: 'Fehler, Änderungen, Software und Geräte-Daten der genutzten PCs.' },
+  { id: 'netz', titel: 'Netzwerk', text: 'Subnetze und Geräte im Netz.' },
+  { id: 'drucker', titel: 'Drucker', text: 'Verbundene Drucker und Drucker-IPs.' },
+  { id: 'laufwerke', titel: 'Laufwerke & Ordner', text: 'Netzlaufwerke und EuroPAR-Ordner.' },
+  { id: 'sicherheit', titel: 'Konten & Sicherheit', text: 'AD-Konten und lokale Adminrechte.' },
+]
+
 export interface ScanDef {
   id: string
   label: string
   description: string
-  cadence: string
+  gruppe: ScanGruppe
   loadStatus(): Promise<ScanStatus>
   /** Führt EINEN Lauf aus und schreibt den Zeitplan-Status fort. Läuft im Hintergrund. */
   run(by: string): Promise<{ ok: boolean; summary: string }>
@@ -45,7 +57,7 @@ const softwareScan: ScanDef = {
   id: 'software-inventory',
   label: 'Software-Inventar',
   description: 'Erfasst die installierte Software aller Computer (WinRM → Registry → PsExec). Ergebnisse verfallen nach 30 Tagen.',
-  cadence: 'automatisch alle 72 Stunden',
+  gruppe: 'pcs',
   async loadStatus() {
     const s = await loadSwSchedule()
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isSwClaimed(s) }
@@ -74,7 +86,7 @@ const printerConnScan: ScanDef = {
   id: 'printer-connections',
   label: 'Drucker-Verbindungen',
   description: 'Ermittelt je Computer die installierten Drucker (inkl. SEAL/PLOSSYS) + den Standarddrucker. Offline-Rechner behalten ihren letzten bekannten Stand.',
-  cadence: 'automatisch alle 2 Wochen · freitags 14:00',
+  gruppe: 'drucker',
   async loadStatus() {
     const s = await loadConnSchedule()
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isConnClaimed(s) }
@@ -92,7 +104,7 @@ const printerIpScan: ScanDef = {
   id: 'printer-ip',
   label: 'Drucker-IP-Scan',
   description: 'Ermittelt die IP-Adressen aller Inventar-Drucker (Inventar-IP, sonst DNS) und hinterlegt sie im Drucker-Dossier.',
-  cadence: '',
+  gruppe: 'drucker',
   async loadStatus() {
     const s = await loadIpScanSchedule()
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult === 'ok' ? 'success' : s.lastResult === 'error' ? 'error' : undefined, lastSummary: s.lastSummary, runningElsewhere: s.lastResult === 'running' }
@@ -114,7 +126,7 @@ const deviceScan: ScanDef = {
   id: 'device-scan',
   label: 'Geräte-Scan (IP/MAC/Serial) — ohne Drucker',
   description: 'Liest für Server und Computer IP-Adresse, MAC-Adresse und (wenn möglich) Seriennummer aus und hinterlegt sie in den Stammdaten. DRUCKER SIND AUSGENOMMEN: deren Daten kommen aus dem Drucker-Import der ERP-Liste (Standort-Übersicht → Kategorie Drucker) und werden hier nicht angefasst.',
-  cadence: '',
+  gruppe: 'pcs',
   async loadStatus() {
     const s = await loadDeviceScanSchedule()
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult === 'ok' ? 'success' : s.lastResult === 'error' ? 'error' : undefined, lastSummary: s.lastSummary, runningElsewhere: isDeviceScanClaimed(s) }
@@ -159,7 +171,7 @@ const radarScan: ScanDef = {
   id: 'proactive-radar',
   label: 'Proaktives Radar (AD-Hygiene)',
   description: 'Prüft AD-Konten: ausgetretene Mitarbeiter mit aktivem Konto, verwaiste Konten, Passwort-/Konto-Ablauf.',
-  cadence: '',
+  gruppe: 'sicherheit',
   async loadStatus() {
     const s = await loadRunStatus(RADAR_SCAN_SCHEDULE)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
@@ -172,7 +184,7 @@ const vlanScan: ScanDef = {
   id: 'vlan-scan',
   label: 'VLAN-/Netzwerk-Scan',
   description: 'Ping-Sweep über die Standort-Subnetze + Geräte-Zuordnung; erkennt Netz-Drift und Fremdgeräte.',
-  cadence: '',
+  gruppe: 'netz',
   async loadStatus() {
     const s = await loadRunStatus(VLAN_SCAN_SCHEDULE)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
@@ -185,7 +197,7 @@ const serverMetricsScan: ScanDef = {
   id: 'server-metrics',
   label: 'Server-Auslastung (RAM/Festplatte)',
   description: 'Liest je Server-Kachel die Arbeitsspeicher-Auslastung und die Festplatten-Kapazität (WinRM) und zeigt sie in der jeweiligen Kachel im Server-Monitor an.',
-  cadence: '',
+  gruppe: 'server',
   async loadStatus() {
     const s = await loadRunStatus(SERVER_METRICS_STATUS)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
@@ -198,7 +210,7 @@ const lostDevicesScan: ScanDef = {
   id: 'lost-devices',
   label: 'Verlorene Geräte – Online-Check',
   description: 'Prüft für alle als verloren gemeldeten Geräte per AD/Ping, ob sie online sind und wann sie zuletzt online waren. Ergebnis erscheint in der Liste „Verlorene Geräte".',
-  cadence: '',
+  gruppe: 'pcs',
   async loadStatus() {
     const s = await loadRunStatus(LOST_SCAN_SCHEDULE)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
@@ -211,7 +223,7 @@ const nis2AccessScan: ScanDef = {
   id: 'nis2-access',
   label: 'NIS2 · Zugänge-Check (lokale Admins)',
   description: 'Scannt alle Computer per WinRM auf lokale Adminrechte und listet alle Nutzer mit lokalem Admin (inkl. PCs). Abgleich mit der genehmigten Liste in NIS2 → Zugänge-Check.',
-  cadence: '',
+  gruppe: 'sicherheit',
   async loadStatus() {
     const s = await loadRunStatus(NIS2_ACCESS_STATUS)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
@@ -224,7 +236,7 @@ const networkDrivesScan: ScanDef = {
   id: 'network-drives',
   label: 'Verbundene Netzlaufwerke',
   description: 'Liest für alle Computer per WinRM die verbundenen Netzlaufwerke ein. Das Ergebnis erscheint im Geräte-„i" (hinter dem Hostnamen) unter „Verbundene Netzlaufwerke".',
-  cadence: '',
+  gruppe: 'laufwerke',
   async loadStatus() {
     const s = await loadRunStatus(NETWORK_DRIVES_STATUS)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
@@ -237,7 +249,7 @@ const europarScan: ScanDef = {
   id: EUROPAR_SCAN_ID,
   label: 'EuroPAR-Ordner (Altgeräte)',
   description: 'Prüft bei allen offenen Refresh-Checklisten, ob auf dem Altgerät C:\\EuroPAR, C:\\Local und C:\\SCHNITTDATEN liegen. Nur markierte Geräte bekommen in der Geräte-Einrichtung die EuroPAR-Kachel und werden automatisch gesichert.',
-  cadence: '',
+  gruppe: 'laufwerke',
   async loadStatus() {
     const s = await loadRunStatus(EUROPAR_SCAN_STATUS)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
@@ -250,7 +262,7 @@ const weekendCheckScan: ScanDef = {
   id: WEEKEND_CHECK_ID,
   label: 'Wochenend-Check (PCs an?)',
   description: 'Pingt sonntags alle genutzten PCs (Endgeräte-Übersicht: In use + Active) an und dokumentiert im Proaktiven Radar (Reiter „Wochenend-Check"), welche am Wochenende nicht ausgeschaltet wurden — bei eingeschalteten PCs auch, wer angemeldet ist (nur lesend). Läuft nur, wenn das Tool zur Uhrzeit (bis 2 Std. danach) bei einem Admin geöffnet ist — verpasste Messtage werden nicht nachgeholt.',
-  cadence: '',
+  gruppe: 'pcs',
   async loadStatus() {
     const s = await loadRunStatus(WEEKEND_CHECK_STATUS)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
@@ -272,7 +284,7 @@ const serverCertsScan: ScanDef = {
   id: SERVER_CERTS_SCAN_ID,
   label: 'Server-Zertifikate (Ablauf)',
   description: 'Liest je Server die Zertifikate (Speicher, IIS/http.sys, RDP, SQL, TLS-Ports) nur lesend und meldet verwendete Zertifikate 30 und 5 Tage vor Ablauf (Popup + Mail laut Kachel-Haken).',
-  cadence: '',
+  gruppe: 'server',
   async loadStatus() {
     const s = await loadRunStatus(SERVER_CERTS_STATUS)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
@@ -285,7 +297,7 @@ const pcVerlaufScan: ScanDef = {
   id: PC_VERLAUF_ID,
   label: 'Änderungsverlauf je PC (aktueller Stand, „Was hat sich geändert?")',
   description: 'Liest werktags von allen genutzten PCs (Endgeräte-Übersicht: In use + Active, keine Server) den Stand von Programmen, Windows-Updates, Treibern, Diensten, Autostart, geplanten Aufgaben, festen Netzwerkeinstellungen und BIOS und hält fest, was sich geändert hat. Nur lesend, netzschonend: höchstens 3 PCs gleichzeitig, WinRM wird nicht eingeschaltet, ein unveränderter PC schickt nur wenige hundert Bytes. Anzeige in „Gib dein Problem ein“ (Änderungen der letzten 14 Tage, passend zum Problem) und im Geräte-„i".',
-  cadence: '',
+  gruppe: 'pcs',
   async loadStatus() {
     const s = await loadRunStatus(PC_VERLAUF_STATUS)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }
@@ -298,7 +310,7 @@ const pcFehlerScan: ScanDef = {
   id: PC_FEHLER_ID,
   label: 'Proaktive Fehlersuche (PC-Fehler im Proaktiven Radar)',
   description: 'Sucht werktags auf allen genutzten PCs (keine Server) nach Fehlern, bevor sie jemand meldet: alle Windows-Ereignisprotokolle der letzten 7 Tage (Abstürze von Outlook, Teams, SolidWorks …, Bluescreens, Festplatten- und Hardwarefehler, abgestürzte Dienste, fehlgeschlagene Updates, Fehlermeldungen von Office) und ob Laufwerk I: verbunden ist. Der PC zählt selbst zusammen, übers Netz geht nur die Zusammenfassung. Nur lesend und für den Benutzer unsichtbar (kein Fenster), höchstens 3 PCs gleichzeitig. Ergebnis: Proaktives Radar → „PC-Fehler“, jeweils mit Lösungsweg.',
-  cadence: '',
+  gruppe: 'pcs',
   async loadStatus() {
     const s = await loadRunStatus(PC_FEHLER_STATUS)
     return { lastRunAt: s.lastRunAt, lastResult: s.lastResult, lastSummary: s.lastSummary, runningElsewhere: isStatusClaimed(s) }

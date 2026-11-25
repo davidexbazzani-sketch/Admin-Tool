@@ -1,0 +1,31 @@
+{
+  "//": [
+    "Parla Italiano — Dialogzeilen, die EINZELN neu vertont werden und im Lerntag das Stück aus der Dialog-Aufnahme ersetzen.",
+    "Wozu: Die Sprachausgabe hat keine Sprach-Einstellung. Eine Zeile, die nur aus Wörtern besteht, die es auch im Englischen gibt",
+    "(„Oh no! No, no, no!“), sprach sie englisch aus. Abhilfe: dieselbe Zeile mit einer Schreibweise, die nur italienisch gelesen",
+    "werden kann (nò statt no). Der Text im Tool bleibt unverändert — nur die Aufnahme entsteht aus dieser Schreibweise.",
+    "Schlüssel: Lerntag/Zeile (Zeile ab 0). text = was die Sprachausgabe für diese Zeile bekommt (fehlt = der Text der Zeile);",
+    "vor / nach = italienischer Hilfssatz im selben Abschnitt, der nach dem Teilen wegfällt.",
+    "Ablauf: node scripts/italiano-ton-auftrag.mjs --ersatz  →  vertonen, --hole  →  python scripts/italiano-ton-pruefe.py ersatz",
+    "→ npx electron scripts/italiano-ton.cjs baue …  (nimmt nur geprüfte Ersatzstücke)."
+  ],
+  "woerter": {
+    "1/9": "Nò",
+    "4/3": "Tré",
+    "72/3": "La resèpscion"
+  },
+  "zeilen": {
+    "1/4": { "text": "Oh nò! Nò, nò, nò!" },
+    "12/8": { "vor": "Allora, ascolta bene.", "text": "L'album? Sì … nò … Forse è nella Cinquecento. O forse nò." },
+    "15/9": { "vor": "Allora, ascolta bene.", "text": "Nò! La pagina è per chi parla italiano. Io sono insegnante, Ben: sei pronto per un esame?" },
+    "23/8": { "vor": "Allora, ascolta bene.", "text": "Oh nò! Corriamo, Ben!" },
+    "24/1": { "vor": "Allora, ascolta bene.", "text": "Nò. Martedì, mercoledì e giovedì lavora e non apre la porta." },
+    "29/4": { "vor": "Allora, ascolta bene.", "text": "Nò! Il rifugio è vicino: saliamo ancora un po'." },
+    "30/8": { "vor": "Allora, ascolta bene.", "text": "Eh nò! Prima dai un esame: la pagina è per chi parla italiano." },
+    "39/4": { "vor": "Allora, ascolta bene.", "text": "Nò! Tu devi tagliare la pasta. Il coltello è accanto alla farina." },
+    "58/6": { "vor": "Allora, ascolta bene.", "text": "Nò. Con la febbre deve andare dal medico. Vi consiglio la dottoressa Ilaria: ha lo studio qui dietro l'angolo." },
+    "60/2": { "vor": "Allora, ascolta bene.", "text": "Nò! Non mangiare dolci per una settimana: mangia in bianco e bevi molta acqua. E le gocce? Prendile ancora per tre giorni." },
+    "67/2": { "vor": "Allora, ascolta bene.", "text": "Subito! Oh nò! Mentre aprivo la finestra, un piatto è caduto per terra e si è rotto." },
+    "95/6": { "vor": "Allora, ascolta bene.", "text": "Nò! Raccontacelo, Angelo: è perfetto per il mio libro." }
+  }
+}

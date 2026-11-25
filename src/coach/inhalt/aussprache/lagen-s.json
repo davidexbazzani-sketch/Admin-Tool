@@ -1,0 +1,152 @@
+{
+  "lagen": [
+    {
+      "id": "aussprache-s-l-01", "bereich": "aussprache", "schwerpunkt": "stottern", "phase": "g", "umfeld": "gruppe", "faehigkeiten": ["aussprache.freisprechen"], "stufe": 3,
+      "titel": "Die Vorstellungsrunde", "figur": "Jonas Wegner",
+      "einleitung": "Eine Vorstellungsrunde zum Start eines Vorhabens. Du übst, deinen Namen und deine Aufgabe zu sagen, statt auszuweichen – mit oder ohne Stottern.",
+      "lage": "Erster Termin im neuen Vorhaben, acht Leute am Tisch. Dr. Albers bittet um eine kurze Vorstellungsrunde. Jonas aus der Technik sitzt neben dir und ist vor dir dran.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Jonas: „Jonas Wegner, Technik. Ich stottere – nehmt euch also kurz Zeit für mich. Es lohnt sich, ich kenne die Server.“ Ein paar lachen freundlich. Dann schaut Dr. Albers zu dir.",
+          "wahl": [
+            { "text": "Du nennst Namen und Aufgabe – auch wenn der Name hakt.", "wert": 2, "weiter": "k2", "rueck": "Du sagst, wer du bist. Mehr verlangt die Runde nicht." },
+            { "text": "Du nennst nur die Abteilung und lässt den Namen weg – den kennt ja eh jeder von der Teamliste.", "wert": 1, "tendenz": "vermeiden", "weiter": "k2b", "rueck": "Verständlich – der Name ist oft das schwerste Wort. Aber jetzt fehlt er." },
+            { "text": "„Ich bin nicht so wichtig, macht ruhig weiter.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k2c", "rueck": "Du machst dich kleiner, als du bist – und die Runde wird neugierig." }
+          ] },
+        { "id": "k2", "sagt": "Beim Namen bleibst du kurz hängen. Die Runde wartet, niemand sagt etwas. Dann ist der Name draußen.",
+          "wahl": [
+            { "text": "Du sagst weiter, woran du arbeitest – ohne Entschuldigung.", "wert": 2, "weiter": "k3", "rueck": "Genau so. Der Moment ist vorbei, dein Inhalt ist angekommen." },
+            { "text": "„Sorry, das dauert bei mir manchmal. Also …“ – und dann weiter mit deiner Aufgabe.", "wert": 1, "weiter": "k3", "rueck": "Ein kleines Sorry ist kein Drama. Nötig ist es nicht – du hast nichts falsch gemacht." },
+            { "text": "Du brichst ab: „Das war's eigentlich.“", "wert": 0, "tendenz": "abbrechen", "weiter": "k3", "rueck": "Schade – deine Aufgabe hätte die Runde interessiert." }
+          ] },
+        { "id": "k2b", "sagt": "Dr. Albers fragt freundlich nach: „Und Ihr Name?“",
+          "wahl": [
+            { "text": "Du sagst ihn – mit oder ohne Stottern – und dazu deine Aufgabe.", "wert": 2, "weiter": "k3", "rueck": "Zweiter Anlauf genutzt. Gesagt ist gesagt." },
+            { "text": "Du zeigst auf dein Namensschild.", "wert": 1, "tendenz": "vermeiden", "weiter": "k3", "rueck": "Funktioniert heute. Auf Dauer bleibt der Name das Wort, vor dem du dich fürchtest." }
+          ] },
+        { "id": "k2c", "sagt": "Dr. Albers: „Doch, doch. Wir wollen wissen, wer mit im Boot sitzt.“",
+          "wahl": [
+            { "text": "Du nennst Namen und Aufgabe.", "wert": 2, "weiter": "k3", "rueck": "Gut. Du gehörst dazu – und jetzt wissen es alle." },
+            { "text": "Du sagst nur den Namen.", "wert": 1, "weiter": "k3", "rueck": "Ein Anfang. Beim nächsten Mal darf die Aufgabe dazukommen." }
+          ] },
+        { "id": "k3", "sagt": "Nach der Runde, an der Kaffeemaschine, sagt Jonas: „Gut, dass du dich nicht versteckt hast. Mir hat das früher keiner vorgemacht.“",
+          "wahl": [
+            { "text": "„Danke. Wie hast du gelernt, es so offen zu sagen?“", "wert": 2, "weiter": "ende1", "rueck": "Du fragst nach – und nimmst dir ein Stück von Jonas' Erfahrung mit." },
+            { "text": "„Ach, war doch nichts.“", "wert": 1, "weiter": "ende1", "rueck": "Bescheiden. Dabei war es etwas – du hast gesprochen." },
+            { "text": "„Ich hoffe, es hat keiner gemerkt. Ich hab die ganze Zeit nur gedacht, wie das wohl klingt.“", "wert": 0, "tendenz": "verstecken", "weiter": "ende2", "rueck": "Den Wunsch kennen viele, die stottern. Verstecken kostet aber oft mehr Kraft als das Stottern selbst. Die Runde hat vor allem gehört, wer du bist und was du machst." }
+          ] },
+        { "id": "ende1", "sagt": "Jonas: „Selbsthilfegruppe, ehrlich gesagt. Und Übung. Komm gern mal mit.“", "ende": "Gezählt hat, dass du gesprochen hast. Jonas zeigt: Offenheit ist keine Heldentat, sondern eine Entscheidung, die man üben kann." },
+        { "id": "ende2", "sagt": "Jonas zuckt freundlich mit den Schultern: „Mir haben die Leute meist mehr zugetraut, als ich dachte.“", "ende": "Verstecken kostet Kraft. Vielleicht probierst du beim nächsten Mal, es gar nicht erst verbergen zu wollen." }
+      ],
+      "prinzipien": ["sagen, was du sagen wolltest", "den Namen nicht weglassen", "ohne Entschuldigung weiter", "Offenheit ist eine Wahl, keine Pflicht"],
+      "transfer": "In welcher Runde hast du zuletzt deinen Namen oder einen Beitrag weggelassen? Was sagst du dort beim nächsten Mal?"
+    },
+    {
+      "id": "aussprache-s-l-02", "bereich": "aussprache", "schwerpunkt": "stottern", "phase": "g", "umfeld": "telefon", "faehigkeiten": ["aussprache.freisprechen", "aussprache.redefluss"], "stufe": 4,
+      "titel": "Der Anruf in der Praxis", "figur": "eine Mitarbeiterin der Praxis",
+      "einleitung": "Ein Anruf, den viele lieber meiden. Du übst, anzurufen, Stille am Telefon zu erklären und zu sagen, was du brauchst.",
+      "lage": "Du brauchst einen Termin in einer Arztpraxis. Online geht es nicht, nur telefonisch. Das Telefon liegt vor dir.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Du könntest auch morgen hingehen – oder jemanden bitten, für dich anzurufen.",
+          "wahl": [
+            { "text": "Du legst dir ein Stichwort hin und rufst an.", "wert": 2, "weiter": "k2", "rueck": "Ein Stichwort ist erlaubt – und du rufst selbst an." },
+            { "text": "Du bittest jemanden, für dich anzurufen – Hauptsache, der Termin ist heute noch gebucht.", "wert": 1, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Heute vielleicht der richtige Weg. Aber der nächste Anruf kommt bestimmt." },
+            { "text": "Du verschiebst es auf morgen.", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Die Erleichterung ist echt – und der Anruf ist morgen genauso schwer." }
+          ] },
+        { "id": "k1b", "sagt": "Am nächsten Tag liegt das Telefon wieder da. Der Termin ist jetzt dringender.",
+          "wahl": [
+            { "text": "Du rufst an.", "wert": 2, "weiter": "k2", "rueck": "Gut. Jetzt zählt nur noch: anrufen." },
+            { "text": "Du gehst persönlich hin.", "wert": 1, "weiter": "ende2", "rueck": "Auch ein Weg zum Termin. Das Telefon bleibt eine Sprosse für später." }
+          ] },
+        { "id": "k2", "sagt": "„Praxis am Markt, guten Tag?“ Beim ersten Wort bleibst du hängen. Am anderen Ende ist es still.",
+          "wahl": [
+            { "text": "„Ich stottere, bleiben Sie bitte dran.“ – dann dein Anliegen.", "wert": 2, "weiter": "k3", "rueck": "Am Telefon sieht dich niemand – der Satz erklärt die Stille und hält die Leitung." },
+            { "text": "Du sprichst weiter, sobald es geht, ohne etwas zu erklären – die Stille hält die Praxis schon aus.", "wert": 1, "weiter": "k3b", "rueck": "Geht. Nur weiß die andere Seite nicht, warum es still war." },
+            { "text": "Du legst auf.", "wert": 0, "tendenz": "abbrechen", "weiter": "k2c", "rueck": "Verständlich. Aber der Termin fehlt noch." }
+          ] },
+        { "id": "k2c", "sagt": "Du sitzt vor dem Telefon. Das Herz klopft, der Termin fehlt noch.",
+          "wahl": [
+            { "text": "Du wählst noch einmal – diesmal mit dem offenen Satz gleich zu Beginn.", "wert": 2, "weiter": "k2r", "rueck": "Mutig. Der zweite Anruf ist oft leichter, als man denkt." },
+            { "text": "Du lässt es für heute.", "wert": 1, "weiter": "ende2", "rueck": "Auch das ist erlaubt. Die Sprosse wartet auf dich." }
+          ] },
+        { "id": "k2r", "sagt": "„Praxis am Markt, guten Tag?“ Du sagst: „Ich stottere, bleiben Sie bitte dran.“ – „Na klar.“",
+          "wahl": [
+            { "text": "Du sagst dein Anliegen: einen Termin für nächste Woche.", "wert": 2, "weiter": "k4", "rueck": "Genau. Gesagt, was du brauchst." }
+          ] },
+        { "id": "k3", "sagt": "„Kein Problem. Was kann ich für Sie tun?“",
+          "wahl": [
+            { "text": "Du sagst, was du brauchst: einen Termin für nächste Woche.", "wert": 2, "weiter": "k4", "rueck": "Klar und vollständig." },
+            { "text": "Du sagst „irgendwann“, weil dir der Wochentag schwerfällt.", "wert": 1, "tendenz": "vermeiden", "weiter": "k4", "rueck": "Verständlich – nur bekommst du so vielleicht einen Termin, der dir nicht passt." }
+          ] },
+        { "id": "k3b", "sagt": "„Hallo? Sind Sie noch dran?“",
+          "wahl": [
+            { "text": "„Ja – ich stottere, einen Moment.“", "wert": 2, "weiter": "k3", "rueck": "Jetzt ist die Stille erklärt. Die Mitarbeiterin wartet." },
+            { "text": "„Ja.“ – und dann gleich dein Anliegen.", "wert": 1, "weiter": "k4", "rueck": "Geht. Beim nächsten Stocken wird sie wieder nachfragen." }
+          ] },
+        { "id": "k4", "sagt": "„Dienstag um neun? Wie ist Ihr Name?“",
+          "wahl": [
+            { "text": "Du sagst deinen Namen, auch wenn er hakt.", "wert": 2, "weiter": "ende1", "rueck": "Dein Name, von dir gesagt. Das zählt." },
+            { "text": "Du buchstabierst ihn lieber gleich.", "wert": 1, "weiter": "ende1", "rueck": "Ein guter Weg, wenn er dir hilft – solange er nicht nur ein Ausweichen ist." },
+            { "text": "„Ich rufe später noch mal an.“", "wert": 0, "tendenz": "abbrechen", "weiter": "ende2", "rueck": "So kurz vor dem Ziel – schade. Der Termin war fast deiner." }
+          ] },
+        { "id": "ende1", "sagt": "„Gut, Dienstag, neun Uhr. Bis dann!“", "ende": "Der Termin steht. Es zählt nicht, wie oft du gestockt hast, sondern dass du bekommen hast, was du wolltest." },
+        { "id": "ende2", "sagt": "Für heute ist das Telefon wieder weggelegt.", "ende": "Kein Drama – ob der Termin auf anderem Weg zustande kommt oder noch offen ist: Der eigene Anruf läuft nicht weg. Vielleicht hilft beim nächsten Mal der offene Satz gleich zu Beginn." }
+      ],
+      "prinzipien": ["anrufen statt ausweichen", "Stille am Telefon erklären", "sagen, was du brauchst", "gesagt, was du sagen wolltest"],
+      "transfer": "Welchen Anruf schiebst du gerade vor dir her? Welchen Satz sagst du gleich zu Beginn?"
+    },
+    {
+      "id": "aussprache-s-l-03", "bereich": "aussprache", "schwerpunkt": "stottern", "phase": "g", "umfeld": "gruppe", "faehigkeiten": ["aussprache.freisprechen", "aussprache.redefluss"], "stufe": 5, "sparring": true,
+      "titel": "Die Besprechung", "figur": "Dr. Henrik Albers",
+      "einleitung": "Das Sparring zum Abschluss: eine Idee, eine Runde, ein Kollege, der helfen will. Du verbindest alles – melden, das eigene Wort sagen, Zuhörern sagen, was hilft.",
+      "lage": "Wöchentliche Besprechung. Dr. Albers leitet, Tarek und Jonas sind dabei. Zu Punkt drei hast du eine Idee.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Hat noch jemand etwas zu Punkt drei?“ Du hast eine Idee. Dein Herz klopft.",
+          "wahl": [
+            { "text": "Du meldest dich.", "wert": 2, "weiter": "k2", "rueck": "Der schwerste Teil ist geschafft: Du bist im Gespräch." },
+            { "text": "Du schreibst Jonas die Idee, damit er sie sagt.", "wert": 1, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Die Idee kommt so vielleicht an – aber nicht von dir." },
+            { "text": "Du schweigst.", "wert": 0, "tendenz": "vermeiden", "weiter": "k1c", "rueck": "Verständlich. Die Runde läuft weiter – ohne deine Idee." }
+          ] },
+        { "id": "k1b", "sagt": "Jonas schreibt zurück: „Gute Idee. Sag du sie – ich hör zu.“",
+          "wahl": [
+            { "text": "Du meldest dich doch.", "wert": 2, "weiter": "k2", "rueck": "Jonas hat dir den Ball zurückgegeben – und du hast ihn genommen." },
+            { "text": "Du lässt es.", "wert": 1, "weiter": "ende2", "rueck": "Heute nicht. Die Sprosse bleibt stehen." }
+          ] },
+        { "id": "k1c", "sagt": "Kurz darauf bringt Tarek fast dieselbe Idee. Dr. Albers nickt: „Gute Sache.“",
+          "wahl": [
+            { "text": "„Daran hatte ich auch gedacht – ich hätte noch eine Ergänzung.“", "wert": 2, "weiter": "k3", "rueck": "Stark: Du holst dir deinen Teil zurück und bringst etwas Neues." },
+            { "text": "Du ärgerst dich still.", "wert": 1, "weiter": "ende2", "rueck": "Der Ärger zeigt, wie wichtig dir die Idee war. Beim nächsten Mal sagst du sie." }
+          ] },
+        { "id": "k2", "sagt": "Du fängst an. Bei einem Wort blockiert es. Tarek springt hilfsbereit ein: „Kundenportal? Meinst du das Kundenportal?“",
+          "wahl": [
+            { "text": "„Danke – ich sag es gern selbst. Kundenportal, genau. Mein Vorschlag ist …“", "wert": 2, "weiter": "k3", "rueck": "Freundlich und klar. Du behältst dein Wort und deine Idee." },
+            { "text": "Du nickst und machst weiter.", "wert": 1, "weiter": "k3", "rueck": "Geht – aber Tarek wird es beim nächsten Mal wieder tun." },
+            { "text": "Du lässt Tarek weiterreden.", "wert": 0, "tendenz": "verstummen", "weiter": "k2b", "rueck": "Jetzt erklärt ein anderer deine Idee." }
+          ] },
+        { "id": "k2b", "sagt": "Tarek erklärt deine Idee – halb richtig. Dr. Albers schaut zu dir: „Sehen Sie das auch so?“",
+          "wahl": [
+            { "text": "„Fast. Der wichtige Teil ist ein anderer: …“", "wert": 2, "weiter": "k3", "rueck": "Du holst dir deine Idee zurück. Genau richtig." },
+            { "text": "„Ja, so ungefähr.“", "wert": 1, "weiter": "ende2", "rueck": "Die Idee ist in der Welt – nur nicht ganz deine." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers: „Interessant. Wie viel Aufwand wäre das?“ Die Nachfrage geht direkt an dich.",
+          "wahl": [
+            { "text": "Du antwortest, so gut du es weißt – mit oder ohne Stottern.", "wert": 2, "weiter": "k4", "rueck": "Sichtbar, sachlich, deine Antwort. Das bleibt hängen." },
+            { "text": "„Das schicke ich Ihnen lieber per Mail – dann kann ich die Zahlen in Ruhe zusammenstellen.“", "wert": 1, "tendenz": "vermeiden", "weiter": "k4", "rueck": "Manchmal sinnvoll. Hier hättest du kurz selbst antworten können – Details per Mail hätten gereicht." },
+            { "text": "„Ach, vergessen Sie's.“", "wert": 0, "tendenz": "abbrechen", "weiter": "ende2", "rueck": "Schade – die Frage zeigte echtes Interesse." }
+          ] },
+        { "id": "k4", "sagt": "Nach der Besprechung kommt Tarek zu dir: „Sag mal – wenn du an einem Wort hängst: Soll ich dann einspringen oder lieber warten?“",
+          "wahl": [
+            { "text": "„Einfach warten. Ich komm schon an – und danke, dass du fragst.“", "wert": 2, "weiter": "ende1", "rueck": "Jetzt weiß Tarek, was hilft. Beim nächsten Mal wartet er." },
+            { "text": "„Passt schon.“", "wert": 1, "weiter": "ende1", "rueck": "Nett – aber Tarek weiß nicht, was dir hilft." },
+            { "text": "„Ist doch egal, ich rede eh nicht gern.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende1", "rueck": "Du hast heute geredet – und zwar gut. Das darf Tarek ruhig wissen." }
+          ] },
+        { "id": "ende1", "sagt": "Jonas geht an dir vorbei und hebt kurz den Daumen.", "ende": "Du hast deine Idee selbst gesagt, die Nachfrage beantwortet und gezeigt, was hilft. Nicht perfekt – frei." },
+        { "id": "ende2", "sagt": "Die Besprechung ist vorbei.", "ende": "Heute ist es still geblieben. Das ist kein Urteil über dich – nur eine Sprosse, die noch wartet. Welche kleinere Sprosse davor kannst du nehmen?" }
+      ],
+      "prinzipien": ["melden statt verschieben", "das eigene Wort selbst sagen", "Zuhörern sagen, was hilft", "Nachfragen annehmen"],
+      "transfer": "In welcher Runde hattest du zuletzt eine Idee und hast sie nicht gesagt? Was ist dort deine nächste Sprosse?"
+    }
+  ]
+}

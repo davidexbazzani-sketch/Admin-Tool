@@ -1,0 +1,276 @@
+{
+  "einheiten": [
+    {
+      "id": "aussprache-n-01", "bereich": "aussprache", "schwerpunkt": "nuscheln", "stufe": 1, "nr": 1,
+      "titel": "Dein Nuschel-Muster",
+      "faehigkeiten": ["aussprache.muster"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Die sechs Muster sind ein Ordnungsschema aus der Praxis der Sprecherziehung, keine Forschungseinteilung. Dass die Aufnahme ehrlicher ist als das eigene Ohr, ist gut erklärt.",
+      "quellen": ["praxis-aussprache", "stimmeaufnahme", "krech2009"],
+      "aha": "Nuscheln ist nicht eines, sondern sechs Muster – meist sind es zwei. Wer seine kennt, ändert nicht alles, sondern genau das, was bei ihm die Deutlichkeit kostet.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "„Du nuschelst“ klingt nach einem einzigen Problem. Wie viele verschiedene Muster unterscheidet der Coach dahinter?", "optionen": ["eins", "drei", "sechs"], "richtig": 2, "loesung": "Sechs – und die meisten haben zwei davon.", "aufloesung": "Mund zu, zu schnell, zu leise, schlaffe Laute, weg gesprochen und nur in bestimmten Lagen. Darum hilft ein allgemeines „Sprich deutlicher“ so wenig: Es sagt nicht, welches Muster gemeint ist." },
+        { "art": "karte", "text": "Die sechs Muster: Mund zu – Kiefer und Lippen bewegen sich kaum. Zu schnell – Silben fallen weg, Wörter kleben zusammen. Zu leise – das Satzende versackt. Schlaffe Laute – p und b, t und d klingen gleich, Endungen fehlen. Weg gesprochen – Blick zum Bildschirm, Hand vor dem Mund. Nur in bestimmten Lagen – klar unter Freunden, undeutlich vor der Chefin. Dialekt und Akzent sind kein Muster." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-n-01-a", "faehigkeit": "aussprache.muster", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Wo setzt das Muster an?",
+          "faecher": ["am Mund und an den Lauten", "an Tempo und Stimme", "an Richtung und Lage"],
+          "karten": [
+            { "text": "Die Zähne bleiben beim Sprechen fast aufeinander.", "fach": 0 },
+            { "text": "Die Rückrufnummer kommt in einem Atemzug.", "fach": 1 },
+            { "text": "Die Hand liegt beim Reden vor dem Mund.", "fach": 2 },
+            { "text": "Aus „einundzwanzig“ wird „einzwanzig“.", "fach": 0 },
+            { "text": "Am Satzende hört man nur noch ein Murmeln.", "fach": 1 },
+            { "text": "Vor der Gruppe wird es undeutlich, zu zweit nicht.", "fach": 2 }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-n-01-b", "faehigkeit": "aussprache.muster", "stufe": 1, "kanal": "koennen", "laut": true, "leise": "aussprache-n-v-0059" },
+          "auftrag": "Deine Selbstprüfung: Lies die Zeilen so, wie du sonst sprichst – vor einem Spiegel, wenn du magst. Nimm dich auf und hör danach mit der Liste hin.",
+          "zeilen": ["Ich komme heute etwas später.", "Die Bestellung ist am Montag rausgegangen.", "Kannst du mir die Nummer noch einmal sagen?", "Wir sehen uns um halb drei am Eingang."],
+          "weise": "gewohnt",
+          "pruefliste": ["Mund zu? – Kiefer und Lippen kaum bewegt?", "Zu schnell? – Silben verschluckt?", "Zu leise? – Satzende versackt?", "Schlaffe Laute? – Endungen fehlen?", "Weg gesprochen? – Blick nach unten?"] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-n-01-c", "faehigkeit": "aussprache.muster", "stufe": 2, "kanal": "wissen" },
+          "frage": "Auf deiner Aufnahme hörst du: Endungen fehlen, der Kiefer bleibt fast zu – und dein fränkischer Klang ist deutlich. Was notierst du als deine Muster?",
+          "antworten": [
+            { "text": "Mund zu, schlaffe Laute und Dialekt.", "wert": 0, "warum": "Der Dialekt gehört nicht dazu. Man darf hören, woher du kommst – verständlich geht mit jedem Klang." },
+            { "text": "Mund zu und schlaffe Laute – der Dialekt bleibt.", "wert": 2, "warum": "Genau: zwei Muster, sauber benannt. Der Klang ist kein Problem, sondern deiner." },
+            { "text": "Mund zu – die fehlenden Endungen hängen wohl damit zusammen.", "wert": 1, "warum": "Oft stimmt das: Wenig Kiefer, wenig Platz für die Laute. Prüf aber, ob die Endungen auch mit offenem Mund fehlen." },
+            { "text": "Gar nichts – Aufnahmen klingen sowieso fremd.", "wert": 0, "tendenz": "vermeiden", "warum": "Fremd ja, falsch nein. Die Aufnahme zeigt ziemlich genau, was bei den anderen ankommt." }
+          ] },
+        { "art": "reflexion", "frage": "Welche zwei Muster erkennst du bei dir – und wann ist dir das zuletzt aufgefallen?" },
+        { "art": "mission", "ref": "aussprache-n-m-01" }
+      ],
+      "regel": "Nicht „deutlicher“ – sondern dein Muster kennen und genau dort ansetzen.",
+      "merkkarten": [
+        { "id": "aussprache-n-01-m1", "frage": "Die sechs Nuschel-Muster?", "antwort": "Mund zu, zu schnell, zu leise, schlaffe Laute, weg gesprochen, nur in bestimmten Lagen." },
+        { "id": "aussprache-n-01-m2", "frage": "Ist ein Dialekt ein Nuschel-Muster?", "antwort": "Nein. Verständlich geht mit jedem Klang – undeutlich machen Mund, Tempo, Lautstärke und Richtung." }
+      ],
+      "mission": "aussprache-n-m-01"
+    },
+    {
+      "id": "aussprache-n-02", "bereich": "aussprache", "schwerpunkt": "nuscheln", "stufe": 1, "nr": 2,
+      "titel": "Wann du undeutlich wirst",
+      "faehigkeiten": ["aussprache.muster"], "dauerMin": 7, "beleg": "D",
+      "belegHinweis": "Dass viele Menschen je nach Lage verschieden deutlich sprechen, ist Praxiswissen. Die Deutung als leise Rückversicherung ist ein Denkmodell, keine Diagnose. Die Grenze zur Arztpraxis stützt sich auf Gesundheitsportale.",
+      "quellen": ["praxis-aussprache", "poltern", "schlaganfall-sprache"],
+      "aha": "Viele nuscheln nicht immer, sondern in bestimmten Lagen und vor bestimmten Menschen. Wer seine Lage kennt, kann sich genau dort vorbereiten.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Tarek soll sagen, dass seine Auswertung erst am Montag fertig wird – einmal beim Mittagessen, einmal in der Runde mit Dr. Albers.", "schwach": "In der Runde, Blick auf den Zettel, leise und schnell: „Ich glaub, das wird bis Freitag eher nix, ähm, vielleicht so Montag.“", "stark": "Beim Mittagessen, zu Miriam: „Freitag schaffe ich nicht. Montag ist realistisch.“", "frage": "Was ändert sich zwischen beiden Fassungen – außer dem Ort?", "unterschied": "Gleicher Mensch, gleiche Nachricht. Vor dem Chef wird Tarek leiser, schneller und weicher in der Aussage. Das ist kein Charakterzug, sondern ein Muster, das an einer Lage hängt." },
+        { "art": "karte", "text": "Typische Auslöser: ein bestimmtes Gegenüber – Vorgesetzte, Fremde, eine kritische Verwandte. Ein Thema, bei dem du dir unsicher bist. Eine Nachricht, die nicht gefällt. Müdigkeit, Eile, eine große Runde. Ein Denkangebot dazu: Undeutlich zu sprechen kann eine leise Rückversicherung sein – wer sich nicht festlegt, kann nicht danebenliegen. Ob das bei dir passt, entscheidest du." },
+        { "art": "szene", "kopf": { "id": "aussprache-n-02-a", "faehigkeit": "aussprache.muster", "stufe": 3, "kanal": "wissen" },
+          "beschreibung": "Du rufst bei einer Hotline an, um eine falsche Rechnung zu reklamieren. Beim Anliegen wirst du immer leiser und hängst ein „… also, wenn das geht“ an. Die Frau am Telefon fragt zweimal nach.",
+          "frage": "Was steckt am ehesten hinter dem Nuscheln?",
+          "antworten": [
+            { "text": "Eine schlechte Verbindung – am Telefon gehen Endungen ohnehin oft verloren.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Den Anfang hat sie ja gut verstanden. Undeutlich wurde es genau beim heiklen Teil." },
+            { "text": "Die Lage: eine Bitte, die dir unangenehm ist.", "wert": 2, "warum": "Bei Reklamationen und Absagen werden viele leiser und weicher. Das zu wissen, ist der erste Schritt." },
+            { "text": "Zu leise – das Satzende versackt.", "wert": 1, "warum": "Das ist das Muster, das man hört. Die Frage ist, warum es gerade hier auftaucht." },
+            { "text": "Du bist eben kein Telefonmensch.", "wert": 0, "tendenz": "abwerten", "warum": "Ein Etikett erklärt nichts. Am Anfang des Anrufs warst du ja klar." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-n-02-b", "faehigkeit": "aussprache.muster", "stufe": 3, "kanal": "wissen" },
+          "auftrag": "Was löst bei vielen das Nuscheln aus?",
+          "faecher": ["das Gegenüber", "das Thema", "dein Zustand"],
+          "karten": [
+            { "text": "Die Geschäftsführerin sitzt mit am Tisch.", "fach": 0 },
+            { "text": "Du sollst eine Zahl nennen, bei der du unsicher bist.", "fach": 1 },
+            { "text": "Es ist Freitag, kurz vor sechs.", "fach": 2 },
+            { "text": "Ein Fremder ruft an.", "fach": 0 },
+            { "text": "Du sollst eine Absage überbringen.", "fach": 1 },
+            { "text": "Du bist in Eile und willst schnell fertig werden.", "fach": 2 }
+          ] },
+        { "art": "reflexion", "frage": "In welchen Lagen wirst du undeutlicher? Bei wem? Und bei wem nie?" },
+        { "art": "experiment", "auftrag": "Notier diese Woche drei Lagen, in denen du undeutlicher wirst – nur Ort, Person und Thema. Nichts ändern.", "dauer": "woche", "nachfrage": "Welche Lage kam mehr als einmal vor? Was haben die drei gemeinsam?" },
+        { "art": "karte", "text": "Wann es nicht am Muster liegt: Wird deine Sprache ohne erkennbaren Grund undeutlicher, gehört das in die Arztpraxis. Kommt es plötzlich – verwaschen, lallend, vielleicht mit hängendem Mundwinkel –, ist es ein Notfall, auch wenn es wieder vergeht. Sehr schnelles, stolperndes Sprechen, das man selbst kaum bemerkt, kann Poltern sein; das behandelt die Logopädie." },
+        { "art": "fachhilfe", "thema": "notfall" }
+      ],
+      "regel": "Nicht immer, sondern wann und bei wem: Die Lage verrät das Muster.",
+      "merkkarten": [
+        { "id": "aussprache-n-02-m1", "frage": "Was sind typische Auslöser fürs Nuscheln?", "antwort": "Ein bestimmtes Gegenüber, ein unsicheres oder unangenehmes Thema, Müdigkeit und Eile." },
+        { "id": "aussprache-n-02-m2", "frage": "Wann gehört undeutliche Sprache in ärztliche Hände?", "antwort": "Wenn sie ohne Grund schlechter wird – und sofort per Notruf, wenn sie plötzlich verwaschen klingt." }
+      ]
+    },
+    {
+      "id": "aussprache-n-03", "bereich": "aussprache", "schwerpunkt": "nuscheln", "stufe": 1, "nr": 3,
+      "titel": "Der Wie-bitte?-Zähler",
+      "faehigkeiten": ["aussprache.umgewoehnen", "aussprache.muster"], "dauerMin": 6, "beleg": "A",
+      "belegHinweis": "Dass festgehaltenes Beobachten beim Erreichen von Zielen hilft, zeigt eine große Meta-Analyse über viele Lebensbereiche. Der Wie-bitte?-Zähler selbst ist nicht untersucht.",
+      "quellen": ["harkin2016"],
+      "aha": "Zählen allein verändert schon. Wer abends festhält, wie oft er um Wiederholung gebeten wurde, achtet tagsüber von selbst mehr darauf.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Eine Auswertung von 138 Studien fragte: Hilft es, den eigenen Fortschritt zu beobachten? Wann wirkte das am stärksten?", "optionen": ["wenn man ihn nur im Kopf behält", "wenn man ihn festhält – aufgeschrieben oder anderen erzählt", "gar nicht – Beobachten allein ändert nichts"], "richtig": 1, "loesung": "Wenn man ihn festhält.", "aufloesung": "Beobachten half im Mittel deutlich – am meisten, wenn es aufgeschrieben oder geteilt wurde. Für dich heißt das: ein Eintrag am Abend, nicht nur ein Gefühl." },
+        { "art": "karte", "text": "Der Zähler fürs Nuscheln: Jeden Abend trägst du ein, wie oft du heute um Wiederholung gebeten wurdest. Ein „Hä?“, ein fragender Blick und eine Nachfrage im Chat zählen mit. Bei einem Mal notierst du die Lage: wer, wo, welches Muster. Mehr nicht – nicht bewerten, nicht grübeln. Nach einer Woche siehst du, wann es dich erwischt." },
+        { "art": "zaehler", "name": "Wie bitte?", "auftrag": "Zähl jeden Abend, wie oft du heute um Wiederholung gebeten wurdest – ein fragender Blick zählt mit. Notier bei einem Mal die Lage.", "tage": 7 },
+        { "art": "auswahl", "kopf": { "id": "aussprache-n-03-a", "faehigkeit": "aussprache.umgewoehnen", "stufe": 2, "kanal": "wissen" },
+          "frage": "Am dritten Abend steht bei dir eine 5. Was machst du damit?",
+          "antworten": [
+            { "text": "Eintragen und bei einem der fünf Male die Lage notieren.", "wert": 2, "warum": "Zählen und eine Spur sichern – genau das ist die Aufgabe. Die Bewertung kommt nach einer Woche." },
+            { "text": "Mich ärgern und mir vornehmen, morgen alles anders zu machen.", "wert": 0, "tendenz": "abwerten", "warum": "Ärger macht das Zählen unangenehm – und wer ungern zählt, hört bald auf." },
+            { "text": "Mit gestern vergleichen und überlegen, was anders war.", "wert": 1, "warum": "Neugierig statt streng – gut. Ein einzelner Tag schwankt aber stark. Der Wochenblick ist verlässlicher." },
+            { "text": "Morgen weniger reden, damit die Zahl sinkt.", "wert": 0, "tendenz": "vermeiden", "warum": "Weniger reden senkt den Zähler, aber nicht dein Muster. Es geht ums Verstehen, nicht ums Schweigen." }
+          ] },
+        { "art": "fehler", "kopf": { "id": "aussprache-n-03-b", "faehigkeit": "aussprache.muster", "stufe": 3, "kanal": "wissen" },
+          "auftrag": "Lenas Zähler-Notizen nach einer Woche. Markier die Einträge, die ihr eher schaden als helfen.",
+          "teile": [
+            { "t": "Montag: 3 – zweimal am Telefon, bei Zahlen." },
+            { "t": "Dienstag: 4 – peinlich, ich bin hoffnungslos.", "fehler": "Zählen, nicht bewerten. Ein Urteil verdirbt die Lust, weiterzuzählen." },
+            { "t": "Mittwoch: vergessen – also gilt die ganze Woche nicht.", "fehler": "Ein fehlender Tag macht die anderen nicht wertlos. Einfach weiterzählen." },
+            { "t": "Donnerstag: 4 – alle in der Runde mit Dr. Albers." },
+            { "t": "Freitag: 0 – ich habe aber auch kaum etwas gesagt.", "fehler": "Ehrlich bemerkt – aber Schweigen ist kein Fortschritt. Weniger reden senkt nur die Zahl." }
+          ] },
+        { "art": "reflexion", "frage": "Was schätzt du: Wie oft wirst du an einem gewöhnlichen Tag um Wiederholung gebeten? In einer Woche weißt du es." },
+        { "art": "mission", "ref": "aussprache-n-m-02" }
+      ],
+      "regel": "Zählen, nicht bewerten – und bei einem Mal die Lage notieren.",
+      "merkkarten": [
+        { "id": "aussprache-n-03-m1", "frage": "Was zählt beim Wie-bitte?-Zähler?", "antwort": "Jede Bitte um Wiederholung – auch ein „Hä?“, ein fragender Blick oder eine Nachfrage im Chat." },
+        { "id": "aussprache-n-03-m2", "frage": "Warum aufschreiben statt nur merken?", "antwort": "Festgehaltenes Beobachten wirkt stärker als bloßes Merken – ein Eintrag am Abend genügt." }
+      ],
+      "mission": "aussprache-n-m-02"
+    },
+    {
+      "id": "aussprache-n-04", "bereich": "aussprache", "schwerpunkt": "nuscheln", "stufe": 1, "nr": 4,
+      "titel": "Das Gegenmittel",
+      "faehigkeiten": ["aussprache.umgewoehnen", "aussprache.muster"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass „deutlich“ mehr bringt als bloßes „langsam“, zeigt eine Studie mit gesunden Sprechern. Die Gegenmittel je Muster sind Praxiswissen; dass kurze, verteilte Übung besser hält, stammt aus der Forschung zum Bewegungslernen.",
+      "quellen": ["stipancic2016", "lam2013", "maas2008", "praxis-aussprache"],
+      "aha": "Ein Merkmal zur Zeit – alles auf einmal ändert nichts. Zu jedem Muster gibt es ein Gegenmittel. Du übst nur deins: kurz, jeden Tag.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer nuschelt, sollte einfach langsamer sprechen.", "urteil": "teils", "warum": "Langsamer hilft oft, aber unzuverlässig: Bei gesunden Sprechern hoben „deutlich“ und „laut“ die Verständlichkeit, „langsam“ allein nicht sicher. Wer den Mund kaum bewegt, nuschelt auch im Schneckentempo." },
+        { "art": "karte", "text": "Die Gegenmittel: Mund zu – lockern, Daumenprobe, überdeutlich lesen. Zu schnell – Pausen nach Sinnschritten, Silben mitklopfen. Zu leise – zur hinteren Wand sprechen, Satzende halten. Schlaffe Laute – Silbenketten wie „pa-ta-ka“, Endungen hörbar lösen. Weg gesprochen – Kopf hoch, Hand weg, zum Menschen sprechen. Nur in bestimmten Lagen – den ersten Satz vorher halblaut sagen." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-n-04-a", "faehigkeit": "aussprache.muster", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Welches Gegenmittel gehört zu welchem Muster?",
+          "faecher": ["Schlaffe Laute", "Weg gesprochen", "Nur in bestimmten Lagen"],
+          "karten": [
+            { "text": "„pa-ta-ka“ – erst genau, dann zügig", "fach": 0 },
+            { "text": "vor dem Sprechen vom Laptop aufschauen", "fach": 1 },
+            { "text": "den ersten Satz vor dem Termin beim Chef halblaut sagen", "fach": 2 },
+            { "text": "das t in „nicht“ und „ist“ hörbar lösen", "fach": 0 },
+            { "text": "die Hand vom Kinn nehmen", "fach": 1 },
+            { "text": "den ersten Satz der heiklen Bitte vorher aufschreiben", "fach": 2 }
+          ] },
+        { "art": "lockern", "uebungen": ["Mit geschlossenen Lippen gähnen.", "Kauen wie auf einem großen Bonbon.", "Lippen flattern lassen.", "Im Wechsel Schnute ziehen und breit grinsen.", "Die Zungenspitze tippt mehrmals hinter die oberen Schneidezähne."], "sekunden": 60, "stummMoeglich": true },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-n-04-b", "faehigkeit": "aussprache.umgewoehnen", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "aussprache-n-v-0062" },
+          "auftrag": "Nur dein Gegenmittel: Sprich jede Zeile erst überdeutlich mit deinem Gegenmittel, dann klar und natürlich.",
+          "zeilen": ["Das Paket kommt am Dienstag. | Bitte unterschreiben Sie hier.", "Wir treffen uns um acht | vor dem Kino.", "Ich habe das nicht gewusst. | Danke für den Hinweis."],
+          "weise": "ueberdeutlich",
+          "pruefliste": ["Gegenmittel in der überdeutlichen Fassung klar zu hören?", "Ein Rest davon in der natürlichen Fassung?", "Nur ein Merkmal geübt – nicht alle?"] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-n-04-c", "faehigkeit": "aussprache.umgewoehnen", "stufe": 3, "kanal": "wissen" },
+          "frage": "Wann übst du dein Gegenmittel am besten?",
+          "antworten": [
+            { "text": "Nur vor wichtigen Gesprächen.", "wert": 0, "warum": "Dann ist es zu selten für eine Gewohnheit – und gerade vor wichtigen Gesprächen bist du mit dem Kopf woanders." },
+            { "text": "Lieber einmal richtig: eine halbe Stunde am Wochenende, wenn Ruhe ist und du dich konzentrieren kannst.", "wert": 1, "warum": "Besser als nichts. Kurz und jeden Tag bleibt aber deutlich besser hängen." },
+            { "text": "Zwei Minuten jeden Tag zu einer festen Zeit, etwa nach dem Zähneputzen.", "wert": 2, "warum": "Kurz, oft und an etwas geknüpft, das du sowieso tust. So wird das Üben selbst zur Gewohnheit." },
+            { "text": "Immer dann, wenn mir einfällt, dass ich nuschle.", "wert": 0, "tendenz": "ueberkontrolle", "warum": "Ohne festen Auslöser hängt alles am Zufall – oder am schlechten Gewissen." }
+          ] },
+        { "art": "mission", "ref": "aussprache-n-m-03" }
+      ],
+      "regel": "Ein Muster, ein Gegenmittel, zwei Minuten am Tag.",
+      "merkkarten": [
+        { "id": "aussprache-n-04-m1", "frage": "Warum nicht einfach langsamer sprechen?", "antwort": "Hilft oft, aber unzuverlässig. Deutliche Mundbewegung macht den Gewinn stabil." },
+        { "id": "aussprache-n-04-m2", "frage": "Das Gegenmittel zu „weg gesprochen“?", "antwort": "Kopf hoch, Hand weg vom Mund, zum Menschen sprechen statt zum Bildschirm." },
+        { "id": "aussprache-n-04-m3", "frage": "Wie oft übst du das Gegenmittel?", "antwort": "Zwei Minuten am Tag, zu einer festen Zeit – und nur dieses eine Merkmal." }
+      ],
+      "mission": "aussprache-n-m-03"
+    },
+    {
+      "id": "aussprache-n-05", "bereich": "aussprache", "schwerpunkt": "nuscheln", "stufe": 1, "nr": 5,
+      "titel": "Drei Momente im Klar-Modus",
+      "faehigkeiten": ["aussprache.umgewoehnen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Wenn-Dann-Pläne helfen nachweislich, Vorsätze umzusetzen – fürs deutliche Sprechen sind sie nicht eigens untersucht. Die Wahl der drei Momente ist Praxiswissen.",
+      "quellen": ["gollwitzer2006", "praxis-aussprache"],
+      "aha": "Name, erste Wortmeldung, Verabschiedung: In diesen drei Momenten fällt Undeutlichkeit am meisten ins Gewicht. Dort lohnt sich der Klar-Modus zuerst.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "aussprache-n-05-a", "faehigkeit": "aussprache.umgewoehnen", "stufe": 2, "kanal": "wissen" },
+          "frage": "An welcher Stelle eines Telefonats kostet Nuscheln am meisten?",
+          "antworten": [
+            { "text": "Beim „Hallo“ am Anfang.", "wert": 0, "warum": "Das „Hallo“ erwartet jeder – es kommt auch genuschelt an." },
+            { "text": "Mitten im Plaudern über das Wetter.", "wert": 0, "warum": "Hier ergänzt das Ohr fast alles aus dem Zusammenhang." },
+            { "text": "Beim eigenen Namen gleich danach.", "wert": 2, "warum": "Ein Name lässt sich nicht erraten, und das Ohr des anderen stellt sich gerade erst auf dich ein." },
+            { "text": "Bei der Verabschiedung.", "wert": 1, "warum": "Auch wichtig: Dort stehen oft Termin und Zusage. Der Name am Anfang ist aber noch heikler." }
+          ] },
+        { "art": "karte", "text": "Drei Momente tragen viel: Dein Name ist das dichteste Wort des Gesprächs. Die erste Wortmeldung stellt das Ohr der anderen auf dich ein – wer klar beginnt, wird weiter gehört. Die Verabschiedung enthält oft Zusage, Termin oder nächsten Schritt. Für jeden Moment ein Wenn-Dann-Plan: Kommt die Lage, startet der Klar-Modus fast von selbst." },
+        { "art": "wenndann", "anlass": "Deine drei Momente im Klar-Modus.", "wenn": ["ich mich vorstelle oder am Telefon abnehme", "ich in einer Runde zum ersten Mal etwas sage", "ich mich verabschiede"], "dann": ["mache ich vor meinem Namen eine kleine Pause und spreche ihn in klaren Silben", "hebe ich den Kopf und spreche den ersten Satz klar bis zum Ende", "sage ich Termin oder Zusage noch einmal deutlich, mit Blick zum Gegenüber"] },
+        { "art": "dialog", "kopf": { "id": "aussprache-n-05-b", "faehigkeit": "aussprache.umgewoehnen", "stufe": 3, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Der erste Anruf bei Nadine Köhler",
+            "figur": "Nadine Köhler",
+            "lage": "Du rufst Nadine Köhler zum ersten Mal an. Sie hat wenig Zeit und kennt dich noch nicht. Es geht um einen Termin für ein kurzes Gespräch.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "„Köhler.“",
+                "wahl": [
+                  { "text": "„Guten Tag, Frau Köhler. | Hier spricht …“ – kleine Pause vor dem Namen, dann jede Silbe.", "wert": 2, "weiter": "k2", "rueck": "Gruß, Pause, Name in Silben: Sie weiß sofort, mit wem sie spricht." },
+                  { "text": "„Ja, hallo, …-hier-wegen-dem-Termin.“ – in einem Zug.", "wert": 0, "tendenz": "tempo", "weiter": "k1b", "rueck": "Der Name geht im Galopp unter. Sie hat nur „Termin“ verstanden." },
+                  { "text": "Gleich zum Anliegen, den Namen später.", "wert": 1, "weiter": "k2", "rueck": "Spart Zeit – nur weiß sie nicht, wer da spricht." }
+                ] },
+              { "id": "k1b", "sagt": "„Entschuldigung – wer ist da?“",
+                "wahl": [
+                  { "text": "Kurz neu ansetzen: „Verzeihung. | Hier spricht …“ – diesmal mit Pause.", "wert": 2, "weiter": "k2", "rueck": "Gut gerettet. Ein Neustart kostet zwei Sekunden und spart das ganze Gespräch." },
+                  { "text": "Den Namen schneller noch einmal.", "wert": 0, "tendenz": "tempo", "weiter": "k2", "rueck": "Schneller ist nicht deutlicher. Sie notiert sich einen falschen Namen." }
+                ] },
+              { "id": "k2", "sagt": "„Ah, gut. Worum geht es?“",
+                "wahl": [
+                  { "text": "„Ich würde Ihnen gern unser Angebot zeigen – | zwanzig Minuten genügen. | Passt Ihnen nächster Dienstag?“", "wert": 2, "weiter": "k3", "rueck": "Klar, kurz, mit einer Frage am Ende, die sie leicht beantworten kann." },
+                  { "text": "„Also, es geht so um, ähm, vielleicht mal ein Treffen, wenn's passt …“", "wert": 1, "weiter": "k3", "rueck": "Freundlich, aber weich und leiser werdend. Genau dort wird es oft undeutlich." }
+                ] },
+              { "id": "k3", "sagt": "„Dienstag um zehn geht.“",
+                "wahl": [
+                  { "text": "„Prima. | Dann Dienstag, | zehn Uhr. | Bis dann, Frau Köhler.“ – Blick nach vorn, Satzende gehalten.", "wert": 2, "weiter": "ende1", "rueck": "Termin wiederholt, Ende getragen. So bleibt er hängen." },
+                  { "text": "„Super, danke, tschüss …“ – leiser werdend.", "wert": 1, "tendenz": "satzende", "weiter": "ende2", "rueck": "Freundlich, aber der Termin ist nicht noch einmal gefallen." }
+                ] },
+              { "id": "ende1", "sagt": "„Gut, ich trage es ein. Bis Dienstag.“", "ende": "Name, erster Satz, Verabschiedung – alle drei Momente im Klar-Modus. Das Gespräch dauerte keine Minute und lässt keine Frage offen." },
+              { "id": "ende2", "sagt": "Am Montag schreibt sie: „War das Dienstag um zehn oder um elf?“", "ende": "Kein Drama – aber die Verabschiedung ist ein Moment für den Klar-Modus: Termin noch einmal deutlich, dann tschüss." }
+            ],
+            "prinzipien": ["Name mit Pause und in Silben", "das Anliegen klar und kurz", "Termin bei der Verabschiedung wiederholen"]
+          } },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-n-05-c", "faehigkeit": "aussprache.umgewoehnen", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "aussprache-n-v-0063" },
+          "auftrag": "Die drei Momente laut – klar und natürlich. Setz für „…“ deinen eigenen Namen ein.",
+          "zeilen": ["Guten Tag, | ich bin …", "Darf ich kurz etwas ergänzen? | Die Lieferung kommt erst im Mai.", "Dann bis Donnerstag | um neun. | Danke Ihnen."],
+          "weise": "klar",
+          "pruefliste": ["Pause vor dem Namen?", "Erster Satz mit gehobenem Kopf?", "Termin am Ende deutlich wiederholt?"] },
+        { "art": "mission", "ref": "aussprache-n-m-04" }
+      ],
+      "regel": "Name, erster Satz, Abschied – dort zuerst klar.",
+      "merkkarten": [
+        { "id": "aussprache-n-05-m1", "frage": "Die drei Momente für den Klar-Modus?", "antwort": "Der eigene Name, die erste Wortmeldung, die Verabschiedung." },
+        { "id": "aussprache-n-05-m2", "frage": "Warum gerade die Verabschiedung?", "antwort": "Dort stehen oft Zusage, Termin oder nächster Schritt – und das Ende bleibt hängen." }
+      ],
+      "mission": "aussprache-n-m-04"
+    },
+    {
+      "id": "aussprache-n-06", "bereich": "aussprache", "schwerpunkt": "nuscheln", "stufe": 1, "nr": 6,
+      "titel": "Wochen später: der Vergleich",
+      "faehigkeiten": ["aussprache.umgewoehnen", "aussprache.muster"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Wie lange Gewohnheiten brauchen, zeigt eine Übersichtsarbeit zu Gesundheitsgewohnheiten mit wenigen, teils schwachen Studien – fürs Sprechen ist es nicht untersucht. Dass die Aufnahme ehrlicher ist als das Gefühl, ist gut erklärt.",
+      "quellen": ["singh2024", "stimmeaufnahme", "harkin2016"],
+      "aha": "Der Vergleich der Aufnahmen zeigt, was das Gefühl nicht merkt. Und ein paar Wochen sind für eine Gewohnheit ein guter Anfang – noch kein Ende.",
+      "schritte": [
+        { "art": "studie", "frage": "Wie lange dauert es, bis eine neue Gewohnheit sitzt?", "aufbau": "Eine Übersichtsarbeit von 2024 wertete 20 Studien zu Gesundheitsgewohnheiten aus. Vier davon maßen, wie lange es dauerte, bis eine Handlung fast von selbst lief.", "ergebnis": "Im Median rund zwei Monate (59 bis 66 Tage). Zwischen einzelnen Menschen reichte die Spanne von 4 bis 335 Tagen.", "grenze": "Untersucht wurden Gewohnheiten wie Bewegung oder Essen, nicht das Sprechen, und viele Studien hatten Schwächen. Als Richtwert taugt es: Rechne mit Wochen bis Monaten.", "beleg": "B", "quellen": ["singh2024"] },
+        { "art": "karte", "text": "So vergleichst du fair: derselbe Text wie bei der Startaufnahme, dasselbe Gerät, ein ähnlich ruhiger Ort. Hör beide Aufnahmen direkt hintereinander, mit der Prüfliste und mit deinem Hauptmuster im Ohr. Dazu ein Blick auf den Wie-bitte?-Zähler der letzten Wochen. Achte auf einen Punkt, der sich bewegt hat – nicht auf das, was noch fehlt." },
+        { "art": "klartext", "kopf": { "id": "aussprache-n-06-a", "faehigkeit": "aussprache.muster", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "aussprache-n-v-0060" },
+          "text": "lesetext-01",
+          "pruefliste": ["Gewohnte Fassung: Ist dein Hauptmuster schwächer als bei deiner ersten Aufnahme?", "Klare Fassung: natürlicher als am Anfang?", "Was würde ein Fremder am Telefon jetzt besser verstehen?"] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-n-06-b", "faehigkeit": "aussprache.umgewoehnen", "stufe": 4, "kanal": "wissen" },
+          "frage": "Im Vergleich hörst du: Die Endungen sind klarer, aber das Satzende versackt noch. Wie geht es weiter?",
+          "antworten": [
+            { "text": "Von vorn anfangen und alle Gegenmittel noch einmal gleichzeitig üben – solange das Satzende versackt, ist es ja nicht gut.", "wert": 0, "tendenz": "abwerten", "warum": "Die Endungen zeigen, dass das Üben wirkt. Wer das übergeht, verliert die Lust." },
+            { "text": "Noch vier Wochen genau so weiter.", "wert": 1, "warum": "Festigt, was begonnen hat. Das Satzende bekommt dabei aber keine eigene Aufmerksamkeit." },
+            { "text": "Den Fortschritt würdigen und „Satzende halten“ als nächstes Gegenmittel nehmen – die Endungen laufen mit.", "wert": 2, "warum": "Ein neues Merkmal, das alte bleibt im festen Moment. So wächst die Gewohnheit Schritt für Schritt." },
+            { "text": "Aufhören – das Wichtigste ist geschafft.", "wert": 0, "warum": "Ein paar Wochen sind meist zu kurz, damit eine Gewohnheit von allein hält. Die festen Momente weiterlaufen lassen." }
+          ] },
+        { "art": "rangfolge", "kopf": { "id": "aussprache-n-06-c", "faehigkeit": "aussprache.umgewoehnen", "stufe": 4, "kanal": "wissen" },
+          "frage": "Dein Plan für die nächsten vier Wochen. Was kommt zuerst?",
+          "eintraege": [
+            { "text": "Die festen Momente beibehalten.", "warum": "Was sitzt, soll nicht wieder wegrutschen – das ist die Grundlage." },
+            { "text": "Ein neues Gegenmittel für das nächste Muster wählen.", "warum": "Ein Merkmal zur Zeit, jetzt eben das nächste." },
+            { "text": "Eine Vertrauensperson um ein unauffälliges Zeichen bitten.", "warum": "Hilft im Alltag, wo du dich selbst nicht hörst." },
+            { "text": "In vier Wochen wieder aufnehmen und vergleichen.", "warum": "Der nächste Vergleich zeigt, ob der Plan trägt." }
+          ] },
+        { "art": "reflexion", "frage": "Was hat sich seit deiner ersten Aufnahme verändert, das du ohne Aufnahme nicht bemerkt hättest?", "insBuch": "erfolg" },
+        { "art": "mission", "ref": "aussprache-n-m-07" }
+      ],
+      "regel": "Vergleichen statt fühlen – und weiterlaufen lassen, was schon sitzt.",
+      "merkkarten": [
+        { "id": "aussprache-n-06-m1", "frage": "Wie vergleichst du zwei Aufnahmen fair?", "antwort": "Derselbe Text, dasselbe Gerät, ein ähnlich ruhiger Ort – direkt hintereinander anhören." },
+        { "id": "aussprache-n-06-m2", "frage": "Wie lange braucht eine neue Gewohnheit?", "antwort": "Meist um zwei Monate, bei manchen deutlich kürzer oder länger. Ein paar Wochen sind ein Anfang." }
+      ],
+      "mission": "aussprache-n-m-07"
+    }
+  ]
+}

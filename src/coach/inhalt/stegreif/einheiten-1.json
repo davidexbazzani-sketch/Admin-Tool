@@ -1,0 +1,327 @@
+{
+  "einheiten": [
+    {
+      "id": "stegreif-1-01", "bereich": "stegreif", "stufe": 1, "nr": 1,
+      "titel": "Vorbereitete Spontaneität",
+      "faehigkeiten": ["stegreif.struktur", "stegreif.wortfluss"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Dass allgemeines Gehirnjogging sich kaum auf den Alltag überträgt, ist gut belegt. Dass Vorrat und Baupläne spontanes Reden erleichtern, ist Praxiswissen – schon die antiken Redelehrer rieten dazu.",
+      "quellen": ["simons2016", "cicero-oratore", "quintilian-stegreif", "praxis-stegreif"],
+      "aha": "Wer aus dem Stand gut antwortet, denkt meist nicht schneller als du. Er hat Baupläne und Vorrat – und setzt sie im Moment neu zusammen.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer spontan gut redet, denkt einfach schneller als andere.", "urteil": "falsch", "warum": "Meist steckt Vorbereitung dahinter: ein paar Baupläne, Geschichten und erste Sätze, die bereitliegen. Der Anlass ist neu, die Bausteine sind es nicht." },
+        { "art": "karte", "text": "Schon Cicero ließ einen erfahrenen Redner sagen: Aus dem Stegreif zu üben ist gut, mit kurzer Bedenkzeit zu üben besser – und wer viel schreibt, klingt auch spontan geordnet. Heute weiß man außerdem: Allgemeines Gehirnjogging macht vor allem in den Spielen besser. Darum übst du hier genau das, was du brauchst – Fragen beantworten, an Lagen aus deinem Leben." },
+        { "art": "zuordnen", "kopf": { "id": "stegreif-1-01-a", "faehigkeit": "stegreif.struktur", "stufe": 1, "kanal": "wissen" },
+          "auftrag": "Welche Fragen kommen immer wieder – und welche sind echte Überraschungen?",
+          "faecher": ["kommt immer wieder", "echte Überraschung"],
+          "karten": [
+            { "text": "„Woran arbeitest du gerade?“", "fach": 0 },
+            { "text": "„Wie war dein Wochenende?“", "fach": 0 },
+            { "text": "„Was hältst du vom neuen Plan?“", "fach": 0 },
+            { "text": "„Erzählen Sie kurz etwas über sich.“", "fach": 0 },
+            { "text": "„Wenn du ein Küchengerät wärst – welches?“", "fach": 1 },
+            { "text": "„Kannst du für den erkrankten Chef die Jubiläumsrede halten?“", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-1-01-b", "faehigkeit": "stegreif.struktur", "stufe": 2, "kanal": "wissen" },
+          "frage": "Morgen ist Teamrunde, und Dr. Albers fragt gern spontan nach. Welche Vorbereitung bringt dir am meisten?",
+          "antworten": [
+            { "text": "Den eigenen Stand am Abend vorher einmal grob im Kopf durchgehen.", "wert": 1, "warum": "Hilft – aber der erste Satz fehlt dir dann trotzdem, wenn die Frage kommt." },
+            { "text": "Eine ausführliche Fassung Wort für Wort lernen, damit dir in der Runde kein einziges Wort fehlt.", "wert": 0, "tendenz": "auswendig", "warum": "Auswendig Gelerntes reißt beim ersten vergessenen Wort ab. Merk dir Punkte, nicht Sätze." },
+            { "text": "Für die zwei, drei wahrscheinlichsten Fragen je den ersten Satz zurechtlegen.", "wert": 2, "warum": "Genau das ist Vorrat: Der Anfang steht, der Rest folgt dem Bauplan." },
+            { "text": "Vorher eine Runde Gehirnjogging am Handy, um schneller zu denken.", "wert": 0, "warum": "Du wirst besser im Spiel – für die Teamrunde ist der Nutzen kaum belegt." }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "stegreif-1-01-c", "faehigkeit": "stegreif.wortfluss", "stufe": 2, "kanal": "koennen" },
+          "plan": "Eine Karte für den Vorrat",
+          "anlass": "Eine Frage, die dir immer wieder gestellt wird.",
+          "felder": [
+            { "name": "Die Frage", "hilfe": "So, wie sie meistens kommt." },
+            { "name": "Mein erster Satz", "hilfe": "Er beantwortet die Frage direkt." },
+            { "name": "Ein Beispiel oder eine kleine Geschichte", "hilfe": "Etwas, das du selbst erlebt hast." }
+          ],
+          "muster": [
+            "Frage: „Woran arbeitest du gerade?“ Erster Satz: „Ich stelle unsere Rechnungen auf ein neues Programm um.“ Beispiel: „Letzte Woche haben wir zum ersten Mal ohne Papier abgerechnet – mit nur einem Fehler.“",
+            "Frage: „Was machst du so in deiner Freizeit?“ Erster Satz: „Ich koche gern für viele Leute.“ Beispiel: „Zum letzten Geburtstag habe ich für zwanzig gekocht – und die Soße hat gerade so gereicht.“"
+          ] },
+        { "art": "reflexion", "frage": "Welche Frage hat dich zuletzt kalt erwischt? War sie wirklich so überraschend – oder hättest du sie kommen sehen können?" },
+        { "art": "mission", "ref": "stegreif-m-01" }
+      ],
+      "regel": "Der Anlass ist neu, die Bausteine nicht – leg Vorrat an.",
+      "merkkarten": [
+        { "id": "stegreif-1-01-m1", "frage": "Was steckt meist hinter einer guten spontanen Antwort?", "antwort": "Baupläne und Vorrat – nicht ein schnellerer Kopf." },
+        { "id": "stegreif-1-01-m2", "frage": "Was gehört auf eine Vorratskarte?", "antwort": "Die Frage, dein erster Satz und ein Beispiel aus deinem Leben." }
+      ],
+      "mission": "stegreif-m-01"
+    },
+    {
+      "id": "stegreif-1-02", "bereich": "stegreif", "stufe": 1, "nr": 2,
+      "titel": "Antwort zuerst",
+      "faehigkeiten": ["stegreif.struktur", "stegreif.kern"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Ein klassischer Versuch zeigt: Wer das Thema vorher kennt, versteht und behält mehr. Dass „Antwort zuerst“ im Gespräch besser ankommt, ist eine naheliegende Übertragung und Praxiswissen.",
+      "quellen": ["bransford1972", "minto", "praxis-stegreif"],
+      "aha": "Der erste Satz beantwortet die Frage. Grund und Beispiel kommen danach – und am Ende noch einmal der Punkt.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Dr. Albers im Flur: „Schaffen wir die Auswertung bis Freitag?“", "schwach": "„Also, die Daten kamen ja erst am Dienstag, dann war Tarek zwei Tage krank, und die Vorlage hat sich auch geändert … also eher nicht.“", "stark": "„Nein, Freitag wird zu knapp. Dienstag schaffen wir – die Daten kamen drei Tage später als geplant.“", "frage": "Bei welcher Antwort weiß Dr. Albers nach dem ersten Satz, woran er ist?", "unterschied": "Die erste erzählt die Vorgeschichte und versteckt das Nein am Ende. Die zweite antwortet sofort, nennt die Lösung und dann den Grund." },
+        { "art": "studie", "frage": "Hilft es, das Thema vorher zu kennen?", "aufbau": "Studierende hörten einen absichtlich rätselhaften Text – es ging ums Wäschewaschen, das Wort fiel aber nie. Eine Gruppe erfuhr das Thema vorher, eine erst hinterher, eine gar nicht.", "ergebnis": "Wer das Thema vorher kannte, fand den Text verständlicher und behielt deutlich mehr als die anderen Gruppen – auch mehr als die, die das Thema erst hinterher erfuhr.", "grenze": "Ein alter Laborversuch mit künstlich unklaren Texten. Dass er sich auf Antworten im Gespräch übertragen lässt, ist plausibel, aber nicht eigens geprüft.", "beleg": "B", "quellen": ["bransford1972"] },
+        { "art": "karte", "text": "Der Bauplan heißt Punkt – Grund – Beispiel – Punkt. Punkt: die Antwort in einem Satz. Grund: warum. Beispiel: ein Fall, eine Zahl, ein Erlebnis. Punkt: die Antwort noch einmal, kurz. Der Anfang sagt den Zuhörern, wohin es geht. Das Ende bleibt hängen. Und du weißt jederzeit, wo du gerade bist." },
+        { "art": "rangfolge", "kopf": { "id": "stegreif-1-02-a", "faehigkeit": "stegreif.struktur", "stufe": 2, "kanal": "wissen" },
+          "frage": "Miriam fragt, wohin der Teamausflug gehen soll. Bring deine Antwort in die Reihenfolge des Bauplans.",
+          "eintraege": [
+            { "text": "„Ich bin für den Kletterpark.“", "warum": "Punkt: Die Antwort steht vorn." },
+            { "text": "„Da kann jeder mitmachen, auch ohne Übung.“", "warum": "Grund: warum gerade das." },
+            { "text": "„Beim Probeklettern im Frühjahr waren sogar die Skeptiker begeistert.“", "warum": "Beispiel: ein echter Fall macht den Grund greifbar." },
+            { "text": "„Also: Kletterpark.“", "warum": "Punkt: Das Ende wiederholt die Antwort – sie bleibt hängen." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stegreif-1-02-b", "faehigkeit": "stegreif.kern", "stufe": 2, "kanal": "koennen" },
+          "auftrag": "Miriam fragt: „Kommst du mit zum Mittagessen?“ Bau die Antwort um – die Antwort zuerst, dann der Grund.",
+          "vorlage": "„Hm, also eigentlich hab ich ja noch die Präsentation, und Albers wollte die bis drei, aber vielleicht, wenn ich mich beeile … ich weiß nicht, eher nein.“",
+          "kriterien": ["erster Satz beantwortet die Frage", "ein Grund, nicht drei", "kein Herumdrucksen"],
+          "muster": ["„Heute nicht – die Präsentation muss bis drei fertig sein. Morgen gern.“", "„Nein, leider. Ich hänge an der Präsentation für Dr. Albers. Bringst du mir einen Kaffee mit?“"] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-1-02-c", "faehigkeit": "stegreif.kern", "stufe": 3, "kanal": "wissen" },
+          "frage": "Nadine Köhler fragt: „Lohnt sich das Wartungspaket für uns?“ Welcher erste Satz ist am stärksten?",
+          "antworten": [
+            { "text": "„Für einen Betrieb Ihrer Größe ja – vor allem wegen der Ausfälle.“", "wert": 2, "warum": "Die Antwort steht vorn, der Grund folgt sofort. Sie weiß nach einem Satz, woran sie ist." },
+            { "text": "„Das kommt darauf an. Ich erkläre Ihnen kurz die drei Varianten.“", "wert": 1, "warum": "Gegliedert und ehrlich – aber sie wartet noch auf die Antwort auf ihre Frage." },
+            { "text": "„Also, wir haben seit einigen Jahren verschiedene Pakete, und das Wartungspaket ist eines davon, das …“", "wert": 0, "tendenz": "umweg", "warum": "Vorgeschichte statt Antwort. Bei jemandem, der knapp bei Zeit ist, verlierst du sie hier." },
+            { "text": "„Ich will Ihnen nichts aufschwatzen, aber …“", "wert": 0, "tendenz": "entschuldigen", "warum": "Eine Entschuldigung vorweg schwächt alles, was danach kommt." }
+          ] },
+        { "art": "mission", "ref": "stegreif-m-05" }
+      ],
+      "regel": "Erst die Antwort, dann der Grund, dann das Beispiel – und zum Schluss noch mal der Punkt.",
+      "merkkarten": [
+        { "id": "stegreif-1-02-m1", "frage": "Wie heißen die vier Teile des Allzweck-Bauplans?", "antwort": "Punkt – Grund – Beispiel – Punkt." },
+        { "id": "stegreif-1-02-m2", "frage": "Was gehört in den ersten Satz einer Antwort?", "antwort": "Die Antwort selbst – nicht die Vorgeschichte." }
+      ],
+      "mission": "stegreif-m-05"
+    },
+    {
+      "id": "stegreif-1-03", "bereich": "stegreif", "stufe": 1, "nr": 3,
+      "titel": "Drei Dinge",
+      "faehigkeiten": ["stegreif.struktur", "stegreif.wortfluss"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass der Kurzzeitspeicher eng begrenzt ist – eher vier Dinge als sieben –, ist gut untersucht, meist mit Listen im Labor. Dass drei Punkte beim Reden am besten tragen, ist eine Übertragung aus der Praxis.",
+      "quellen": ["cowan2001", "praxis-stegreif"],
+      "aha": "„Dazu fallen mir drei Dinge ein“ ordnet dich und deine Zuhörer. Oft kommt der Inhalt erst beim Sprechen – die Ordnung trägt dich bis dahin.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Wie viele Dinge kann man im Kurzzeitgedächtnis etwa gleichzeitig festhalten?", "optionen": ["etwa zwei", "etwa vier", "etwa sieben", "etwa zwölf"], "richtig": 1, "loesung": "Etwa vier", "aufloesung": "Die berühmte „Sieben“ war eher eine grobe Schätzung. Neuere Arbeiten kommen auf etwa vier Einheiten. Drei Punkte passen also gut hinein – bei dir beim Sprechen und bei den anderen beim Zuhören." },
+        { "art": "karte", "text": "Kündige die Zahl an und zähl mit: „Dazu drei Dinge: erstens … zweitens … drittens …“ Die Ankündigung wirkt sortiert, auch wenn du noch denkst. Fallen dir nur zwei ein, sag „zwei“ – das ist kein Makel. Fertige Dreier gibt es auch: Gestern – heute – morgen. Problem – Lösung – Nutzen. Wähl einen, nicht alle." },
+        { "art": "blitz", "kopf": { "id": "stegreif-1-03-a", "faehigkeit": "stegreif.wortfluss", "stufe": 2, "kanal": "koennen", "uhr": true },
+          "auftrag": "Nenne Gründe, im Herbst statt im Sommer Urlaub zu machen.", "ziel": 5, "sekunden": 30,
+          "beispiele": ["Es ist überall leerer.", "Die Preise sind niedriger.", "Es ist nicht so heiß zum Wandern.", "Die Weinlese ist in vollem Gang.", "Man kommt erholt in den Winter."] },
+        { "art": "bauplan", "kopf": { "id": "stegreif-1-03-b", "faehigkeit": "stegreif.struktur", "stufe": 2, "kanal": "koennen" },
+          "plan": "Drei Dinge",
+          "anlass": "Lena, die neue Kollegin, fragt dich: „Was sollte ich in den ersten Wochen hier wissen?“",
+          "felder": [
+            { "name": "Ankündigung", "hilfe": "„Drei Dinge …“ oder „Zwei Dinge …“" },
+            { "name": "Erstens", "hilfe": "Das Wichtigste zuerst." },
+            { "name": "Zweitens", "hilfe": "Ein kurzer Satz genügt." },
+            { "name": "Drittens und Schluss", "hilfe": "Gern etwas Leichtes zum Abschluss." }
+          ],
+          "muster": [
+            "„Drei Dinge. Erstens: Montags um neun ist Teamrunde, da wird viel entschieden. Zweitens: Frag Jonas, wenn die Technik streikt – er erklärt gern. Drittens: Die Kaffeemaschine braucht Geduld.“",
+            "„Zwei Dinge. Erstens: Dr. Albers mag es kurz – Ergebnis zuerst. Zweitens: Niemand erwartet, dass du in der ersten Woche alles weißt. Frag lieber einmal zu viel.“"
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-1-03-c", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du hast „Dazu drei Dinge“ angekündigt. Nach dem zweiten Punkt ist der Kopf leer. Was tust du?",
+          "antworten": [
+            { "text": "Den zweiten Punkt in die Länge ziehen und hoffen, dass dir unterwegs noch ein dritter einfällt.", "wert": 0, "tendenz": "schwimmen", "warum": "Jetzt beginnt das Schwimmen. Der zweite Punkt wird verwässert, der dritte kommt trotzdem nicht." },
+            { "text": "Zusammenfassen: „Das sind die zwei, die mir am wichtigsten sind.“", "wert": 2, "warum": "Ein sauberer Schluss. Kaum jemand zählt nach – und wenn doch, ist zwei völlig in Ordnung." },
+            { "text": "Offen sagen: „Der dritte fällt mir gerade nicht ein.“", "wert": 1, "warum": "Ehrlich und nicht schlimm. Etwas eleganter ist es, die zwei als die wichtigsten zu rahmen." },
+            { "text": "Sich entschuldigen und noch einmal ganz von vorn anfangen.", "wert": 0, "tendenz": "entschuldigen", "warum": "Ein Neustart wiederholt, was alle schon gehört haben, und macht die Lücke erst groß." }
+          ] },
+        { "art": "sprechen", "kopf": { "id": "stegreif-1-03-d", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "stegreif-v-0008" },
+          "auftrag": "Sprich aus dem Stand: Was macht einen guten Arbeitstag aus? Beginne mit „Drei Dinge …“ und zähl beim Sprechen mit.",
+          "sekunden": 45,
+          "pruefliste": ["Zahl angekündigt?", "Mitgezählt: erstens, zweitens, drittens?", "Mit einem klaren Satz geendet?"] },
+        { "art": "mission", "ref": "stegreif-m-07" }
+      ],
+      "regel": "Zahl ankündigen, mitzählen, aufhören – zwei oder drei Punkte, nicht mehr.",
+      "merkkarten": [
+        { "id": "stegreif-1-03-m1", "frage": "Warum drei Punkte und nicht sieben?", "antwort": "Der Kopf hält nur wenig gleichzeitig fest – eher vier Dinge als sieben. Drei kann jeder mitzählen." },
+        { "id": "stegreif-1-03-m2", "frage": "Dir fällt der dritte Punkt nicht ein. Was nun?", "antwort": "Mit zweien schließen: „Das sind die zwei wichtigsten.“" }
+      ],
+      "mission": "stegreif-m-07"
+    },
+    {
+      "id": "stegreif-1-04", "bereich": "stegreif", "stufe": 1, "nr": 4,
+      "titel": "Zeit gewinnen",
+      "faehigkeiten": ["stegreif.zeit"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Wie kurz die Pausen im Gespräch sind, ist gemessen; dass ein sicher vorgetragener Fehler mehr schadet als offen gezeigte Unsicherheit, zeigen Laborstudien. Die Sätze zum Zeitgewinnen selbst sind Praxiswissen.",
+      "quellen": ["stivers2009", "tenney2007", "gaertig2018", "praxis-stegreif"],
+      "aha": "Die Frage zu wiederholen ist kein Schwimmen, sondern Sortieren. Eine angekündigte Pause ist Denkzeit – keine Lücke.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Wie lange dauert im Alltagsgespräch die Pause zwischen Frage und Antwort im Mittel?", "optionen": ["etwa eine Viertelsekunde", "etwa eine Sekunde", "etwa drei Sekunden"], "richtig": 0, "loesung": "Etwa eine Viertelsekunde", "aufloesung": "Gemessen in Gesprächen in zehn Sprachen: Meist folgt die Antwort nach einem Wimpernschlag. Darum fühlen sich zwei Sekunden Stille für dich so lang an. Kündigst du die Pause an, wird aus der Lücke Denkzeit." },
+        { "art": "karte", "text": "Vier Wege, Zeit zu gewinnen, ohne zu schwimmen: die Frage in eigenen Worten wiederholen („Sie möchten wissen, ob …“), die Pause ankündigen („Gute Frage – ich sortiere kurz“), zurückfragen („Meinen Sie die Kosten oder den Zeitplan?“) und laut gliedern („Dazu zwei Dinge“). Und wenn du es nicht weißt: sag, was du weißt, und wann du den Rest nachlieferst." },
+        { "art": "zuordnen", "kopf": { "id": "stegreif-1-04-a", "faehigkeit": "stegreif.zeit", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Sortieren oder schwimmen?",
+          "faecher": ["sortiert", "schwimmt"],
+          "karten": [
+            { "text": "„Sie fragen, ob wir das bis März schaffen?“", "fach": 0 },
+            { "text": "„Ähm, also, ja, das ist so eine Sache, äh …“", "fach": 1 },
+            { "text": "„Moment – das will ich richtig beantworten.“", "fach": 0 },
+            { "text": "„Wie gesagt, also, wie ich schon sagte …“", "fach": 1 },
+            { "text": "„Meinen Sie den Preis oder die Lieferzeit?“", "fach": 0 },
+            { "text": "Sofort drauflosreden und unterwegs überlegen, wohin.", "fach": 1 }
+          ] },
+        { "art": "dialog", "kopf": { "id": "stegreif-1-04-b", "faehigkeit": "stegreif.zeit", "stufe": 3, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Die Frage nach der Zahl", "figur": "Carla Demir",
+            "lage": "Projektbesprechung. Carla Demir leitet. Mitten im Gespräch wendet sie sich an dich.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Carla: „Was würde es uns kosten, wenn wir das Lager an einen Dienstleister abgeben?“",
+                "wahl": [
+                  { "text": "„Ähm, also, das ist schwer zu sagen, weil, äh, das hängt ja von vielem ab …“", "wert": 0, "tendenz": "schwimmen", "weiter": "k2b", "rueck": "Du redest, bevor du weißt, wohin. Die Runde wartet auf etwas, das nicht kommt." },
+                  { "text": "„Sie meinen die laufenden Kosten im Jahr? – Ich sortiere kurz.“", "wert": 2, "weiter": "k2", "rueck": "Frage geklärt, Pause angekündigt. Jetzt hast du Zeit – und alle wissen, dass gleich etwas kommt." },
+                  { "text": "„Das weiß ich nicht.“", "wert": 1, "weiter": "k2b", "rueck": "Ehrlich. Aber du weißt mehr, als dieser Satz zeigt – und es fehlt ein nächster Schritt." }
+                ] },
+              { "id": "k2", "sagt": "Carla nickt: „Ja, im Jahr.“ Die Runde wartet.",
+                "wahl": [
+                  { "text": "„Eine genaue Zahl habe ich nicht. Ich weiß: Die Miete fiele weg, dafür kämen Gebühren je Palette. Ich rechne es bis Donnerstag durch.“", "wert": 2, "weiter": "ende1", "rueck": "Was du weißt, was nicht, und wann du nachlieferst. Mehr kann man spontan nicht verlangen." },
+                  { "text": "„Grob geschätzt etwa die Hälfte von heute, eher weniger – das ist bei so etwas üblich.“ – obwohl du das nie gerechnet hast.", "wert": 0, "tendenz": "bluffen", "weiter": "ende2", "rueck": "Eine erfundene Zahl klingt sicher – und wird ab jetzt als deine Zahl zitiert." }
+                ] },
+              { "id": "k2b", "sagt": "Carla, freundlich: „Kein Problem. Was weißt du denn schon?“",
+                "wahl": [
+                  { "text": "Ausatmen. „Zwei Dinge weiß ich: Die Miete fiele weg, dafür zahlen wir je Palette. Die Zahl rechne ich bis Donnerstag.“", "wert": 2, "weiter": "ende1", "rueck": "Gut gefangen: laut gegliedert, ehrlich, mit nächstem Schritt." },
+                  { "text": "„Nicht viel, tut mir leid.“", "wert": 1, "weiter": "ende2", "rueck": "Bescheidener, als nötig wäre. Du hättest zwei Punkte gehabt." }
+                ] },
+              { "id": "ende1", "sagt": "Carla notiert: „Donnerstag, gut. Danke.“", "ende": "Klären, Pause ankündigen, sagen, was du weißt, nachliefern – so wird aus einer Frage, die dich kalt erwischt, eine Antwort, auf die man sich verlassen kann." },
+              { "id": "ende2", "sagt": "Die Besprechung geht weiter. Die Frage bleibt offen im Raum.", "ende": "Kein Drama – aber beim nächsten Mal: kurz sortieren, sagen, was du weißt, und einen Termin fürs Nachliefern nennen." }
+            ],
+            "prinzipien": ["Frage klären", "Pause ankündigen statt drauflosreden", "sagen, was du weißt", "nachliefern statt bluffen"]
+          } },
+        { "art": "auswahl", "kopf": { "id": "stegreif-1-04-c", "faehigkeit": "stegreif.zeit", "stufe": 3, "kanal": "wissen" },
+          "frage": "Nadine Köhler fragt: „Wie viele Betriebe nutzen das schon?“ Du kennst die Zahl nicht genau. Was sagst du?",
+          "antworten": [
+            { "text": "„Die genaue Zahl habe ich nicht hier. Ich schicke sie Ihnen heute noch.“", "wert": 2, "warum": "Offen, ohne Drama, mit Zusage. In Versuchen schadete ein sicher vorgetragener Fehler mehr als offen gezeigte Unsicherheit." },
+            { "text": "„Ungefähr zweihundert“ – das klingt gut, und so genau wird das schon niemand nachprüfen.", "wert": 0, "tendenz": "bluffen", "warum": "Eine erfundene Zahl. Fliegt sie auf, ist nicht nur die Zahl weg, sondern dein Ansehen." },
+            { "text": "„Das weiß ich leider nicht.“", "wert": 1, "warum": "Ehrlich – nur fehlt der nächste Schritt. Mit „Ich schicke sie Ihnen“ wäre es eine gute Antwort." },
+            { "text": "„Sehr viele, wirklich sehr viele.“", "wert": 0, "tendenz": "ausweichen", "warum": "Klingt nach Ausweichen. Nadine Köhler rechnet genau – sie merkt es." }
+          ] },
+        { "art": "reflexion", "frage": "Welcher Satz zum Zeitgewinnen passt zu dir? Schreib ihn so auf, wie du ihn sagen würdest.", "insBuch": "saetze" },
+        { "art": "mission", "ref": "stegreif-m-06" }
+      ],
+      "regel": "Nicht schwimmen – sortieren: wiederholen, Pause ankündigen, zurückfragen, gliedern.",
+      "merkkarten": [
+        { "id": "stegreif-1-04-m1", "frage": "Vier Wege, Zeit zu gewinnen?", "antwort": "Frage wiederholen, Pause ankündigen, zurückfragen, laut gliedern." },
+        { "id": "stegreif-1-04-m2", "frage": "Du weißt die Antwort nicht. Was sagst du?", "antwort": "Was du weißt, was nicht – und wann du den Rest nachlieferst." }
+      ],
+      "mission": "stegreif-m-06"
+    },
+    {
+      "id": "stegreif-1-05", "bereich": "stegreif", "stufe": 1, "nr": 5,
+      "titel": "Der Kern in einem Satz",
+      "faehigkeiten": ["stegreif.kern"], "dauerMin": 6, "beleg": "P",
+      "quellen": ["zinsser1976", "schneider-profis", "minto", "praxis-stegreif"],
+      "aha": "Wer den Kern nicht in einem Satz sagen kann, hat ihn noch nicht gefunden. Erst der Satz – dann alles andere.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Du sprichst Miriam auf die Mailbox, weil der Kundentermin verlegt wurde.", "schwach": "„Hi, ich bin's. Also, ich hab vorhin mit dem Kunden telefoniert, der war ganz nett, und wir haben ein bisschen über den Winter geredet, und dann meinte er, dass es am Donnerstag bei ihm schwierig wird …“", "stark": "„Hi, ich bin's. Der Termin beim Kunden ist von Donnerstag auf Freitag, zehn Uhr, verlegt. Kannst du da? Ruf mich kurz zurück.“", "frage": "Welche Nachricht kann Miriam im Gehen verstehen?", "unterschied": "Die erste erzählt, wie es dazu kam. Die zweite sagt in einem Satz, was sich ändert, und dann, was Miriam tun soll." },
+        { "art": "karte", "text": "Der Ein-Satz-Test: Stell dir vor, du hättest nur einen Satz. Welcher wäre es? Meist steckt der Kern in einer Wer-macht-was-Aussage mit einer Folge: „Der Termin ist verlegt – kannst du Freitag?“ Dann streichst du, was nichts hinzufügt: Vorgeschichte, Füllfloskeln, doppelte Begründungen. Was übrig bleibt, gehört nach vorn." },
+        { "art": "kern", "kopf": { "id": "stegreif-1-05-a", "faehigkeit": "stegreif.kern", "stufe": 2, "kanal": "koennen" },
+          "absatz": "Ich wollte nur kurz Bescheid geben, dass ich mir die Unterlagen für das Angebot jetzt noch einmal angesehen habe, und mir ist dabei aufgefallen, dass auf Seite drei bei den Preisen noch die alten Werte vom letzten Jahr stehen, was natürlich nicht so gut wäre, wenn das so rausgeht, deshalb sollten wir das vielleicht vor dem Versand morgen noch ändern, wenn das irgendwie geht.",
+          "hoechstWoerter": 15,
+          "kriterien": ["nennt das Problem", "nennt, was zu tun ist", "höchstens 15 Wörter"],
+          "muster": ["„Auf Seite drei stehen noch die alten Preise – bitte vor dem Versand morgen ändern.“", "„Vor dem Versand morgen: Preise auf Seite drei sind noch vom Vorjahr.“"] },
+        { "art": "fehler", "kopf": { "id": "stegreif-1-05-b", "faehigkeit": "stegreif.kern", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Tarek fragt, ob der Drucker wieder geht. Markier die Stellen, die nichts zur Antwort beitragen.",
+          "teile": [
+            { "t": "„Also,", "fehler": "Anlauf ohne Inhalt." },
+            { "t": "wie soll ich sagen,", "fehler": "Füllfloskel – sie verschiebt nur den Anfang." },
+            { "t": "der Techniker war heute Morgen da," },
+            { "t": "der ist übrigens neu und kommt aus dem Süden,", "fehler": "Interessant, aber für Tareks Frage ohne Belang." },
+            { "t": "und der Drucker läuft wieder." },
+            { "t": "Im Grunde genommen", "fehler": "Füllfloskel – der Satz wird ohne sie stärker." },
+            { "t": "nur Schwarz-Weiß, Farbe kommt Montag.“" }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-1-05-c", "faehigkeit": "stegreif.kern", "stufe": 3, "kanal": "wissen" },
+          "frage": "Jonas erklärt dir fünf Minuten lang, warum die neue Software ab Montag kommt, was sie kann und was sich für alle ändert. Welcher Satz trifft den Kern für dein Team?",
+          "antworten": [
+            { "text": "„Ab Montag gilt die neue Software – wir melden uns mit dem neuen Passwort an, sonst bleibt fast alles gleich.“", "wert": 2, "warum": "Was sich ändert, was das Team tun muss und was beruhigt – in einem Satz." },
+            { "text": "„Jonas hat viel über die neue Software erzählt, das war wirklich interessant.“", "wert": 0, "tendenz": "umweg", "warum": "Ein Satz über das Gespräch, nicht über den Inhalt. Das Team weiß danach nichts." },
+            { "text": "„Ab Montag kommt die neue Software.“", "wert": 1, "warum": "Richtig, aber es fehlt, was das für alle heißt – das Neue fürs Team." },
+            { "text": "„Die neue Software kann Berichte, hat eine Suche, läuft im Browser und wird ab Montag eingeführt, sagt Jonas.“", "wert": 0, "tendenz": "alles", "warum": "Eine Liste von Merkmalen. Der Kern – was ändert sich für uns? – geht darin unter." }
+          ] },
+        { "art": "mission", "ref": "stegreif-m-03" }
+      ],
+      "regel": "Erst den einen Satz finden, dann streichen, was nichts hinzufügt.",
+      "merkkarten": [
+        { "id": "stegreif-1-05-m1", "frage": "Wie geht der Ein-Satz-Test?", "antwort": "Stell dir vor, du hättest nur einen Satz. Der gehört nach vorn." },
+        { "id": "stegreif-1-05-m2", "frage": "Was streichst du zuerst?", "antwort": "Vorgeschichte, Füllfloskeln und doppelte Begründungen." }
+      ],
+      "mission": "stegreif-m-03"
+    },
+    {
+      "id": "stegreif-1-06", "bereich": "stegreif", "stufe": 1, "nr": 6,
+      "titel": "Wortfluss",
+      "faehigkeiten": ["stegreif.wortfluss", "stegreif.vergleich"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Trainings für Einfallsreichtum wirken laut Meta-Analysen im Mittel – nach Korrektur für unveröffentlichte Studien aber eher klein bis mittel. Dass kurze Einfall-Runden beim spontanen Reden helfen, ist eine Übertragung.",
+      "quellen": ["sio2024", "haase2023", "simons2016", "gentner2003"],
+      "aha": "Einfälle lassen sich aufwärmen. Wer regelmäßig in kurzer Zeit viel sammelt, ohne zu bewerten, kommt leichter ins Reden.",
+      "schritte": [
+        { "art": "studie", "frage": "Lässt sich Einfallsreichtum trainieren?", "aufbau": "Eine große Übersicht fasste 169 Studien aus fünf Jahrzehnten zusammen, darunter auch unveröffentlichte. Gemessen wurde meist, wie viele und wie neue Einfälle Menschen nach einem Training hatten.", "ergebnis": "Im Mittel ja – nach Korrektur für nicht veröffentlichte Studien aber deutlich schwächer als zunächst gedacht, eher klein bis mittel.", "grenze": "Viele Studien waren klein und methodisch schwach. Gemessen wurden Laboraufgaben, nicht Gespräche im Alltag.", "beleg": "B", "quellen": ["sio2024", "haase2023"] },
+        { "art": "karte", "text": "Drei Regeln fürs Aufwärmen. Erstens: Menge vor Güte – erst sammeln, dann auswählen. Zweitens: nicht bewerten, solange du sammelst. Drittens: Wenn es stockt, wechsle die Richtung – statt Verwendungen jetzt Orte, Menschen, Gefühle. Ein besonderer Einfall ist der Vergleich: „Das ist wie …“ Er erklärt Neues mit Bekanntem." },
+        { "art": "blitz", "kopf": { "id": "stegreif-1-06-a", "faehigkeit": "stegreif.wortfluss", "stufe": 2, "kanal": "koennen", "uhr": true },
+          "auftrag": "Was kann man alles mit einer leeren Kaffeetasse machen?", "ziel": 8, "sekunden": 60,
+          "beispiele": ["Stifte hineinstellen.", "Kräuter darin ziehen.", "Büroklammern sammeln.", "Als Briefbeschwerer nehmen.", "Einen Kreis auf Papier malen.", "Schrauben sortieren.", "Als Messbecher für Reis.", "Einer Kollegin Kekse bringen."] },
+        { "art": "auswahl", "kopf": { "id": "stegreif-1-06-b", "faehigkeit": "stegreif.wortfluss", "stufe": 2, "kanal": "wissen" },
+          "frage": "Nach zwanzig Sekunden fällt dir nichts mehr ein. Was hilft am ehesten weiter?",
+          "antworten": [
+            { "text": "Abbrechen – wenn nichts mehr kommt, ist die Quelle eben erschöpft und weiteres Grübeln bringt nichts.", "wert": 0, "tendenz": "aufgeben", "warum": "Nach einem Stocken kommen oft noch Einfälle. Die Pause ist ein Übergang, kein Ende." },
+            { "text": "Die Richtung wechseln: statt Verwendungen jetzt Orte, Menschen oder Gefühle.", "wert": 2, "warum": "Ein neuer Blickwinkel öffnet eine neue Schublade. So geht es meist schnell weiter." },
+            { "text": "Still abwarten, bis wieder etwas kommt.", "wert": 1, "warum": "Manchmal reicht das. Schneller geht es, wenn du aktiv die Richtung wechselst." },
+            { "text": "Nur noch auf einen wirklich guten Einfall warten.", "wert": 0, "tendenz": "zensor", "warum": "Jetzt bewertet der innere Zensor mit – und bremst. Beim Sammeln zählt die Menge." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stegreif-1-06-c", "faehigkeit": "stegreif.vergleich", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Tante Renate fragt, warum man nicht überall dasselbe Passwort nehmen soll. Erklär es mit einem Vergleich aus dem Alltag – in ein, zwei Sätzen.",
+          "vorlage": "„Wenn ein Dienst gehackt wird, probieren die Angreifer die Zugangsdaten bei vielen anderen Diensten aus.“",
+          "kriterien": ["Bild aus dem Alltag", "dasselbe Prinzip wie die Sache", "kurz"],
+          "muster": ["„Das ist wie ein Schlüssel für Haus, Auto und Briefkasten: Wer ihn findet, kommt überall rein.“", "„Stell dir vor, dein Hausschlüssel passt auch bei der Nachbarin. Verlierst du ihn, sind beide Türen offen.“"] },
+        { "art": "reflexion", "frage": "Wo hast du morgen eine freie Minute für eine Einfall-Runde – an der Haltestelle, beim Kaffee, auf dem Weg?" },
+        { "art": "mission", "ref": "stegreif-m-02" }
+      ],
+      "regel": "Erst Menge, dann Auswahl – und wenn es stockt, die Richtung wechseln.",
+      "merkkarten": [
+        { "id": "stegreif-1-06-m1", "frage": "Die drei Regeln fürs Aufwärmen?", "antwort": "Menge vor Güte, nicht bewerten, bei Stocken die Richtung wechseln." },
+        { "id": "stegreif-1-06-m2", "frage": "Wie erklärst du Neues schnell?", "antwort": "Mit einem Vergleich: „Das ist wie …“ – etwas Bekanntes, das genauso funktioniert." }
+      ],
+      "mission": "stegreif-m-02"
+    },
+    {
+      "id": "stegreif-1-07", "bereich": "stegreif", "stufe": 1, "nr": 7,
+      "titel": "Ja, und",
+      "faehigkeiten": ["stegreif.jaund", "stegreif.assoziation"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Kurze Improvisationsübungen erhöhten in Experimenten die Gelassenheit bei Ungewissem und teils den Einfallsreichtum. Ob das anhält und spontanes Reden direkt verbessert, ist nicht untersucht.",
+      "quellen": ["felsman2020", "schwenke2021", "impro"],
+      "aha": "„Ja, aber“ beendet eine Idee, „Ja, und“ baut sie aus. Erst weiterdenken, dann bewerten – so entsteht im Gespräch etwas, das keiner allein gehabt hätte.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Teamrunde. Tarek: „Wir könnten die Montagsrunde mal im Stehen machen.“", "schwach": "„Ja, aber dann ist es unbequem, und wer schreibt dann mit?“", "stark": "„Ja, und wer gerade redet, hält einen Ball. Dann merkt jeder, wie lange er schon spricht.“", "frage": "Nach welcher Antwort redet die Runde weiter?", "unterschied": "Die erste prüft und verwirft. Die zweite nimmt die Idee an und legt etwas dazu – Bedenken können danach immer noch kommen." },
+        { "art": "studie", "frage": "Macht Improvisieren offener für Unerwartetes?", "aufbau": "Erwachsene machten zwanzig Minuten Impro-Übungen, eine Vergleichsgruppe zwanzig Minuten ähnliche Spiele ohne Improvisieren. Vorher und nachher wurden Einfallsreichtum und Gelassenheit bei Ungewissem gemessen.", "ergebnis": "Die Impro-Gruppe wurde gelassener gegenüber Ungewissem, deutlicher als die Vergleichsgruppe. Bei den Einfällen gab es Gewinne in einem Teil der Aufgaben.", "grenze": "Zwei kurze Laborstudien, eine einzige Sitzung. Wie lange die Wirkung anhält, ist offen.", "beleg": "B", "quellen": ["felsman2020"] },
+        { "art": "karte", "text": "Im Improvisationstheater gilt: Was der andere sagt, ist ein Angebot. Du nimmst es an („Ja“) und legst etwas dazu („und“). Beim spontanen Sprechen heißt das: die Frage, das Stichwort, die Idee nicht erst prüfen, sondern daran anknüpfen. Bewerten darfst du danach. Und wenn du von etwas Gesagtem zu deinem Thema willst, bau eine Brücke: „Das erinnert mich an …“" },
+        { "art": "jaund", "kopf": { "id": "stegreif-1-07-a", "faehigkeit": "stegreif.jaund", "stufe": 2, "kanal": "koennen" },
+          "start": "Carla Demir: „Was wäre, wenn die Neuen in ihrer ersten Woche jeden Tag bei jemand anderem mitlaufen?“",
+          "kriterien": ["nimmt die Idee an", "legt einen eigenen Gedanken dazu", "kein „aber“"],
+          "muster": ["„Ja, und am Freitag erzählen sie der Runde, was ihnen bei uns aufgefallen ist.“", "„Ja, und jeder, bei dem sie mitlaufen, gibt ihnen einen Tipp mit, den er selbst gern früher gewusst hätte.“"] },
+        { "art": "zuordnen", "kopf": { "id": "stegreif-1-07-b", "faehigkeit": "stegreif.jaund", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Baut die Antwort aus – oder blockt sie ab? Die Idee: „Lass uns das Sommerfest am See machen.“",
+          "faecher": ["baut aus", "blockt ab"],
+          "karten": [
+            { "text": "„Ja, und wer mag, bringt ein Boot mit.“", "fach": 0 },
+            { "text": "„Ja, aber da gibt's doch Mücken.“", "fach": 1 },
+            { "text": "„Schön – und für Regen leihen wir uns das Bootshaus.“", "fach": 0 },
+            { "text": "„Das haben wir noch nie so gemacht.“", "fach": 1 },
+            { "text": "„Gute Idee. Dann grillen wir am Ufer.“", "fach": 0 },
+            { "text": "„Mal sehen. Wahrscheinlich eher nicht.“", "fach": 1 }
+          ] },
+        { "art": "anschluss", "kopf": { "id": "stegreif-1-07-c", "faehigkeit": "stegreif.assoziation", "stufe": 3, "kanal": "koennen" },
+          "von": "Frau Sommer am Gartenzaun",
+          "aussage": "„Mein Garten ist dieses Jahr völlig verwildert. Ich komme einfach zu nichts.“",
+          "kriterien": ["greift ein Wort oder Bild auf", "führt es einen Schritt weiter", "freundlich"],
+          "muster": ["„Verwildert ist ja fast schon modern – die Bienen danken es Ihnen. Was blüht denn gerade?“", "„Zu nichts kommen kenne ich. Bei mir ist es der Keller. Was würden Sie als Erstes angehen, wenn Sie einen freien Samstag hätten?“"] },
+        { "art": "mission", "ref": "stegreif-m-04" }
+      ],
+      "regel": "Erst ausbauen, dann bewerten – „Ja, und“ statt „Ja, aber“.",
+      "merkkarten": [
+        { "id": "stegreif-1-07-m1", "frage": "Was ist der Unterschied zwischen „Ja, aber“ und „Ja, und“?", "antwort": "„Ja, aber“ prüft und verwirft, „Ja, und“ nimmt an und legt etwas dazu." },
+        { "id": "stegreif-1-07-m2", "frage": "Wie kommst du von einem Stichwort zu deinem Thema?", "antwort": "Mit einer Brücke: ein Wort aufgreifen und weiterführen – „Das erinnert mich an …“" }
+      ],
+      "mission": "stegreif-m-04"
+    }
+  ]
+}

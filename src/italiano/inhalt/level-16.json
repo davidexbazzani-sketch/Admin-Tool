@@ -1,0 +1,352 @@
+{
+  "level": 16,
+  "tage": [
+    {
+      "tag": 76,
+      "titel": "Kleidung kaufen",
+      "ziel": "Danach kannst du Kleidung einkaufen, nach Größe und Rabatt fragen und zwei Dinge vergleichen: teurer als, weniger eng als.",
+      "woerter": [
+        { "it": "la taglia", "de": "die Größe (bei Kleidung)", "art": "n", "aus": "la TA-glia", "bsp": { "it": "Che taglia porti? – La M.", "de": "Welche Größe trägst du? – M." }, "emoji": "📏", "hinweis": "Nur für Kleidung. Bei Schuhen fragt man nach dem «numero»: Che numero porti?" },
+        { "it": "il camerino", "de": "die Umkleidekabine", "art": "n", "aus": "il ca-me-RI-no", "bsp": { "it": "Posso provare la gonna? – Sì, il camerino è lì.", "de": "Darf ich den Rock anprobieren? – Ja, die Umkleidekabine ist dort." }, "emoji": "🚪", "hinweis": "Anprobieren heißt «provare» – das Verb kennst du schon." },
+        { "it": "stretto", "de": "eng", "art": "a", "aus": "STRET-to", "bsp": { "it": "Questo maglione è troppo stretto.", "de": "Dieser Pullover ist zu eng." }, "emoji": "🤏", "hinweis": "Auch für Straßen und Gassen: una strada stretta." },
+        { "it": "largo", "de": "weit / breit", "art": "a", "aus": "LAR-go", "bsp": { "it": "Questo cappello è troppo largo per me.", "de": "Dieser Hut ist mir zu weit." }, "emoji": "↔️", "hinweis": "Falscher Freund: nicht «lang» (das heißt «lungo»). Mehrzahl mit h: larghi, larghe." },
+        { "it": "i saldi", "de": "der Schlussverkauf", "art": "n", "aus": "i SAL-di", "bsp": { "it": "A luglio ci sono i saldi.", "de": "Im Juli ist Schlussverkauf." }, "emoji": "🏷️", "hinweis": "Fast immer in der Mehrzahl. «In saldo» heißt «reduziert»: una giacca in saldo." },
+        { "it": "lo sconto", "de": "der Rabatt / der Nachlass", "art": "n", "aus": "lo SCON-to", "bsp": { "it": "C'è uno sconto del venti per cento.", "de": "Es gibt zwanzig Prozent Rabatt." }, "emoji": "💸", "hinweis": "Prozent heißt «per cento» – mit Artikel: il venti per cento. «Lo scontrino» dagegen ist der Kassenbon." },
+        { "it": "la commessa", "de": "die Verkäuferin", "art": "n", "aus": "la com-MES-sa", "bsp": { "it": "La commessa è molto gentile.", "de": "Die Verkäuferin ist sehr freundlich." }, "emoji": "🛍️", "hinweis": "Der Verkäufer im Geschäft heißt «il commesso». Nicht verwechseln mit «la scommessa» – die Wette!" },
+        { "it": "la camicia", "de": "das Hemd", "art": "n", "aus": "la ca-MI-cia", "bsp": { "it": "Marco prova una camicia blu.", "de": "Marco probiert ein blaues Hemd an." }, "emoji": "👔", "hinweis": "Mehrzahl: le camicie. Die Bluse heißt «la camicetta»." },
+        { "it": "la gonna", "de": "der Rock", "art": "n", "aus": "la GON-na", "bsp": { "it": "Giulia compra una gonna rossa.", "de": "Giulia kauft einen roten Rock." }, "emoji": "👗" },
+        { "it": "corto", "de": "kurz", "art": "a", "aus": "COR-to", "bsp": { "it": "Il maglione di Marco è troppo corto.", "de": "Marcos Pullover ist zu kurz." }, "emoji": "✂️", "hinweis": "Das Gegenteil ist «lungo». «I pantaloni corti» sind Shorts." },
+        { "it": "economico", "de": "günstig / preiswert", "art": "a", "aus": "e-co-NO-mi-co", "bsp": { "it": "Questo negozio è molto economico.", "de": "Dieses Geschäft ist sehr günstig." }, "emoji": "🪙", "hinweis": "Betonung auf «no». Mehrzahl: economici, economiche. Das Gegenteil ist «caro»." },
+        { "it": "la vetrina", "de": "das Schaufenster", "art": "n", "aus": "la ve-TRI-na", "bsp": { "it": "In vetrina c'è una bella giacca.", "de": "Im Schaufenster ist eine schöne Jacke." }, "emoji": "🪟" }
+      ],
+      "grammatik": {
+        "titel": "Komparativ: più … di, meno … di, più … che",
+        "erklaerung": "Vergleichen geht mit **più** (mehr) und **meno** (weniger): «più caro» – teurer, «meno caro» – weniger teuer. Eine eigene Endung wie das deutsche «-er» gibt es nicht.\nDas deutsche «als» heißt meist **di** – vor Namen, Nomen, Pronomen und Zahlen: «più giovane **di** Ben», «più **di** venti euro». Mit dem Artikel verschmilzt di: «più cara **della** gonna». Nach di stehen me, te, lui, lei: «più alto **di me**».\n**che** brauchst du, wenn du zwei gleichartige Dinge direkt gegenüberstellst: zwei Adjektive («più bello **che** comodo»), zwei Verben, zwei Mengen oder zwei Angaben mit Präposition («a Bari **che** a Torino»).\n**Falle:** Nach più und meno steht nie «come». «Größer als ich» heißt «più grande **di** me».",
+        "tabelle": { "kopf": ["Vergleich mit …", "als =", "Beispiel"], "zeilen": [["Name, Pronomen", "di", "più giovane di Ben / di me"], ["Nomen mit Artikel", "del, della …", "meno cara della gonna"], ["Zahl", "di", "più di venti euro"], ["zwei Adjektive", "che", "più bello che comodo"], ["zwei Verben", "che", "più facile mangiare che cucinare"], ["zwei Mengen", "che", "più gonne che camicie"], ["Angabe mit Präposition", "che", "più caldo a Bari che a Torino"]] },
+        "beispiele": [
+          { "it": "La gonna è più cara della camicia.", "de": "Der Rock ist teurer als das Hemd." },
+          { "it": "Questa taglia è meno larga di quella.", "de": "Diese Größe ist weniger weit als die da." },
+          { "it": "La camicia bianca è più bella che comoda.", "de": "Das weiße Hemd ist eher schön als bequem." }
+        ],
+        "uebungen": [
+          { "satz": "La gonna costa trenta euro, la camicia venti: la gonna è ___ cara della camicia.", "loesung": "più", "falsch": ["meno", "molto", "troppo"], "de": "Der Rock kostet dreißig Euro, das Hemd zwanzig: Der Rock ist teurer als das Hemd." },
+          { "satz": "Giulia è più giovane ___ Ben.", "loesung": "di", "falsch": ["che", "da", "come"], "de": "Giulia ist jünger als Ben." },
+          { "satz": "Questa camicia è meno cara ___ gonna.", "loesung": "della", "falsch": ["di", "che", "dalla"], "de": "Dieses Hemd ist weniger teuer als der Rock.", "warum": "di + la = della: Vor einem Nomen mit Artikel verschmilzt di." },
+          { "satz": "Marco è più pigro ___.", "loesung": "di me", "falsch": ["di io", "che io", "che me"], "de": "Marco ist fauler als ich.", "warum": "Nach di steht die betonte Form: di me, di te, di lui, di lei." },
+          { "satz": "Questa giacca costa più ___ cento euro.", "loesung": "di", "falsch": ["che", "come", "da"], "de": "Diese Jacke kostet mehr als hundert Euro.", "warum": "Vor Zahlen heißt «als» immer di." },
+          { "satz": "Questa gonna è più bella ___ comoda.", "loesung": "che", "falsch": ["di", "della", "come"], "de": "Dieser Rock ist eher schön als bequem.", "warum": "Zwei Adjektive werden gegenübergestellt – dann steht che." },
+          { "satz": "A Bari fa più caldo ___ a Torino.", "loesung": "che", "falsch": ["di", "del", "come"], "de": "In Bari ist es wärmer als in Turin.", "warum": "Vor einer Präposition (a, in, con …) steht che." },
+          { "satz": "Per Marco è più facile mangiare ___ cucinare.", "loesung": "che", "falsch": ["di", "del", "come"], "de": "Für Marco ist essen leichter als kochen.", "warum": "Zwei Verben in der Grundform werden verglichen – dann steht che." }
+        ]
+      },
+      "dialog": {
+        "titel": "Più stretta o più larga?",
+        "ort": "Bari, ein Bekleidungsgeschäft in der Neustadt – im Schaufenster hängt ein großes Schild: «Saldi»",
+        "zeilen": [
+          { "wer": "giulia", "it": "Marco, domani andiamo da Porzia, l'amica della nonna. Con quella maglietta non vieni!", "de": "Marco, morgen gehen wir zu Porzia, Omas Freundin. In diesem T-Shirt kommst du nicht mit!" },
+          { "wer": "marco", "it": "Ma questa maglietta è più comoda di una camicia!", "de": "Aber dieses T-Shirt ist bequemer als ein Hemd!" },
+          { "wer": "giulia", "it": "Ed è più vecchia della tua macchina! Luca ha pagato l'albergo: oggi la camicia la pago io.", "de": "Und es ist älter als dein Auto! Luca hat das Hotel bezahlt: Heute zahle ich das Hemd." },
+          { "wer": "marco", "it": "Scusi, ha questa camicia in una taglia più grande?", "de": "Entschuldigung, haben Sie dieses Hemd eine Nummer größer?" },
+          { "wer": "donna", "als": "Commessa", "it": "Certo. Ecco la L: è più larga della M. Il camerino è lì a destra.", "de": "Natürlich. Hier ist L: Die ist weiter als M. Die Umkleidekabine ist dort rechts." },
+          { "wer": "marco", "it": "Allora? La bianca è più stretta della blu, ma è più bella.", "de": "Und? Das weiße ist enger als das blaue, aber es ist schöner." },
+          { "wer": "giulia", "it": "È più bella che comoda: non puoi neanche respirare! Prendi la blu, ti sta molto bene.", "de": "Es ist eher schön als bequem: Du kannst ja nicht einmal atmen! Nimm das blaue, es steht dir sehr gut." },
+          { "wer": "ben", "it": "La blu è in saldo: costa meno della bianca.", "de": "Das blaue ist reduziert: Es kostet weniger als das weiße." },
+          { "wer": "donna", "als": "Commessa", "it": "Sì, meno di venti euro. Cercate Porzia? Stamattina una giornalista con una sciarpa rossa ha chiesto di lei.", "de": "Ja, weniger als zwanzig Euro. Ihr sucht Porzia? Heute Morgen hat eine Journalistin mit rotem Schal nach ihr gefragt." },
+          { "wer": "giulia", "it": "Sofia! Ancora una volta è più veloce di noi.", "de": "Sofia! Schon wieder ist sie schneller als wir." }
+        ],
+        "fragen": [
+          { "frage": "Warum soll Marco ein Hemd anprobieren?", "richtig": "Giulia will ihn im alten T-Shirt nicht zu Porzia mitnehmen", "falsch": ["Er hat seinen Koffer in Amalfi vergessen", "Er braucht ein Geschenk für Nonna Rosa", "Sein T-Shirt ist ihm zu eng geworden"] },
+          { "frage": "Was sagt Giulia über das weiße Hemd?", "richtig": "Es ist eher schön als bequem", "falsch": ["Es ist weiter als das blaue", "Es ist billiger als das blaue", "Es steht Marco sehr gut"] },
+          { "frage": "Was erzählt die Verkäuferin am Ende?", "richtig": "Eine Journalistin mit rotem Schal hat schon nach Porzia gefragt", "falsch": ["Porzia wohnt nicht mehr in Bari", "Der Schlussverkauf endet heute", "Luca hat das letzte blaue Hemd gekauft"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Du probierst im Geschäft ein Hemd an – es ist zu eng. Bitte die Verkäuferin um eine größere Größe.", "richtig": "Scusi, ha una taglia più grande?", "falsch": ["Scusi, ha una taglia più stretta?", "Scusi, ha una taglia grande più?", "Scusi, dov'è la vetrina?"], "de": "Entschuldigung, haben Sie eine größere Größe?" },
+          { "lage": "Du vergleichst zwei Jacken: Die schwarze ist teurer als die blaue. Sag das.", "richtig": "La giacca nera è più cara della giacca blu.", "falsch": ["La giacca nera è più cara che la giacca blu.", "La giacca nera è più cara come la giacca blu.", "La giacca nera è meno cara della giacca blu."], "de": "Die schwarze Jacke ist teurer als die blaue Jacke." },
+          { "lage": "Deine Freundin probiert einen sehr schicken Rock an, kann sich darin aber kaum bewegen. Was sagst du?", "richtig": "Questa gonna è più bella che comoda.", "falsch": ["Questa gonna è più bella di comoda.", "Questa gonna è più comoda che bella.", "Questa gonna è più bella come comoda."], "de": "Dieser Rock ist eher schön als bequem." }
+        ],
+        "folge": "Was will Sofia bei Porzia – und warum ist sie wieder einmal vor Ben und Giulia da?"
+      },
+      "wissen": { "titel": "Schlussverkauf nach Kalender", "text": "«I saldi» gibt es in Italien nur zweimal im Jahr: im Winter meist ab Anfang Januar, im Sommer ab Anfang Juli. Den Starttermin legen die Regionen fest. Auf dem Schild müssen der alte Preis, der Rabatt und der neue Preis stehen. Und Vorsicht bei der «taglia»: Bei Damenmode zählst du zur deutschen Größe sechs dazu – aus der 38 wird in Italien die 44." }
+    },
+    {
+      "tag": 77,
+      "titel": "Besser und am besten",
+      "ziel": "Danach kannst du sagen, was das Beste, das Schönste oder das Schlechteste ist – und mit -issimo richtig schwärmen.",
+      "woerter": [
+        { "it": "migliore", "de": "besser (Adjektiv)", "art": "a", "aus": "mi-GLIO-re", "bsp": { "it": "Questa pizza è migliore di quella di ieri.", "de": "Diese Pizza ist besser als die von gestern." }, "emoji": "📈", "hinweis": "Steigerung von «buono». Mit Artikel: il migliore – der beste. Beim Verb sagst du «meglio»." },
+        { "it": "peggiore", "de": "schlechter / schlimmer (Adjektiv)", "art": "a", "aus": "peg-GIO-re", "bsp": { "it": "Il secondo film è peggiore del primo.", "de": "Der zweite Film ist schlechter als der erste." }, "emoji": "📉", "hinweis": "Steigerung von «cattivo». Mit Artikel: il peggiore – der schlechteste. Beim Verb: «peggio»." },
+        { "it": "maggiore", "de": "größer / älter", "art": "a", "aus": "mag-GIO-re", "bsp": { "it": "Dario è il fratello maggiore di Elisa.", "de": "Dario ist Elisas älterer Bruder." }, "emoji": "🔼", "hinweis": "Bei Geschwistern heißt es «älter»: la sorella maggiore." },
+        { "it": "minore", "de": "kleiner / jünger", "art": "a", "aus": "mi-NO-re", "bsp": { "it": "Elisa è la sorella minore di Dario.", "de": "Elisa ist Darios jüngere Schwester." }, "emoji": "🔽", "hinweis": "Bei Geschwistern heißt es «jünger»: il fratello minore." },
+        { "it": "ottimo", "de": "ausgezeichnet / sehr gut", "art": "a", "aus": "OT-ti-mo", "bsp": { "it": "Il caffè di questo bar è ottimo.", "de": "Der Kaffee in dieser Bar ist ausgezeichnet." }, "emoji": "🌟", "hinweis": "Betonung vorn. Höchste Stufe von «buono» – nie mit «molto» oder «più»." },
+        { "it": "pessimo", "de": "sehr schlecht / miserabel", "art": "a", "aus": "PES-si-mo", "bsp": { "it": "Oggi il tempo è pessimo: piove da ore.", "de": "Heute ist das Wetter miserabel: Es regnet seit Stunden." }, "emoji": "😖", "hinweis": "Betonung vorn. Höchste Stufe von «cattivo»." },
+        { "it": "il massimo", "de": "das Höchste / das Maximum", "art": "n", "aus": "il MAS-si-mo", "bsp": { "it": "Questa pasta è il massimo!", "de": "Diese Pasta ist das Größte!" }, "emoji": "🔝", "hinweis": "«Al massimo» heißt «höchstens»: al massimo dieci euro." },
+        { "it": "il minimo", "de": "das Mindeste / das Minimum", "art": "n", "aus": "il MI-ni-mo", "bsp": { "it": "Grazie! – Prego, è il minimo.", "de": "Danke! – Bitte, das ist doch das Mindeste." }, "emoji": "➖", "hinweis": "«Come minimo» heißt «mindestens»: come minimo un'ora." },
+        { "it": "cattivo", "de": "schlecht / böse", "art": "a", "aus": "cat-TI-vo", "bsp": { "it": "Oggi c'è cattivo tempo.", "de": "Heute ist schlechtes Wetter." }, "emoji": "👿", "hinweis": "Das Gegenteil von «buono» – für Essen, Wetter, Ideen und für böse Menschen." },
+        { "it": "stupendo", "de": "wunderschön / großartig", "art": "a", "aus": "stu-PEN-do", "bsp": { "it": "Il mare di Bari è stupendo.", "de": "Das Meer bei Bari ist wunderschön." }, "emoji": "🤩" },
+        { "it": "preferito", "de": "Lieblings-", "art": "a", "aus": "pre-fe-RI-to", "bsp": { "it": "Qual è il tuo piatto preferito?", "de": "Was ist dein Lieblingsgericht?" }, "emoji": "❤️", "hinweis": "Von «preferire». Steht hinter dem Nomen und richtet sich danach: la mia città preferita." },
+        { "it": "confrontare", "de": "vergleichen", "art": "v", "aus": "con-fron-TA-re", "bsp": { "it": "Voglio confrontare i prezzi dei due negozi.", "de": "Ich will die Preise der beiden Geschäfte vergleichen." }, "emoji": "🔍", "hinweis": "Falscher Freund: nicht «konfrontieren», sondern «vergleichen»." }
+      ],
+      "grammatik": {
+        "titel": "Superlativ: il più …, -issimo und unregelmäßige Formen",
+        "erklaerung": "**Der, die, das …ste:** Artikel + **più** + Adjektiv. Die Gruppe folgt mit **di** – nicht mit «in»: «la città **più bella d'**Italia», «**il più** bravo **di** tutti».\n**Sehr, sehr …:** Häng **-issimo** an den Stamm: bello → **bellissimo**, buona → **buonissima**. Hat die Mehrzahl ein h, bleibt es: stanco (stanchi) → **stanchissimo** – aber simpatico (simpatici) → simpaticissimo. Auch bei Adverbien: bene → **benissimo**.\n**Unregelmäßig** sind vier Adjektive und zwei Adverbien – siehe Tabelle. «più buono» und «più grande» sind auch richtig; maggiore und minore brauchst du vor allem beim Alter.\n**Falle:** **migliore** gehört zum Nomen («un ristorante migliore»), **meglio** zum Verb («Giulia cucina meglio»). Und ottimo oder pessimo vertragen weder «più» noch «molto».",
+        "tabelle": { "kopf": ["Grundform", "Steigerung", "höchste Stufe"], "zeilen": [["buono", "migliore", "ottimo"], ["cattivo", "peggiore", "pessimo"], ["grande", "maggiore", "massimo"], ["piccolo", "minore", "minimo"], ["bene (Adverb)", "meglio", "benissimo"], ["male (Adverb)", "peggio", "malissimo"]] },
+        "beispiele": [
+          { "it": "È la gelateria migliore della città.", "de": "Das ist die beste Eisdiele der Stadt." },
+          { "it": "Le orecchiette di Porzia sono buonissime.", "de": "Porzias Orecchiette sind superlecker." },
+          { "it": "Marco è il più pigro di tutti.", "de": "Marco ist der Faulste von allen." }
+        ],
+        "uebungen": [
+          { "satz": "Queste orecchiette sono ___!", "loesung": "buonissime", "falsch": ["buonissimo", "buonissima", "buonissimi"], "de": "Diese Orecchiette sind superlecker!" },
+          { "satz": "Marco è il ___ pigro della famiglia.", "loesung": "più", "falsch": ["molto", "tanto", "troppo"], "de": "Marco ist der Faulste der Familie." },
+          { "satz": "Giulia è la più brava ___ tutti.", "loesung": "di", "falsch": ["che", "da", "a"], "de": "Giulia ist die Beste von allen.", "warum": "Die Gruppe, aus der jemand herausragt, steht mit di." },
+          { "satz": "Marco ha camminato tutto il giorno: adesso è ___.", "loesung": "stanchissimo", "falsch": ["stancissimo", "stanchissima", "molto stanchissimo"], "de": "Marco ist den ganzen Tag gelaufen: Jetzt ist er todmüde.", "warum": "stanco → stanchissimo: Das h hält das c hart, wie in der Mehrzahl «stanchi». Und vor -issimo steht nie «molto»." },
+          { "satz": "Questo è il ristorante ___ della città.", "loesung": "migliore", "falsch": ["meglio", "più migliore", "benissimo"], "de": "Das ist das beste Restaurant der Stadt.", "warum": "Beim Nomen steht das Adjektiv migliore – ohne «più», denn es ist schon gesteigert." },
+          { "satz": "Giulia cucina ___ di Marco.", "loesung": "meglio", "falsch": ["migliore", "più bene", "ottima"], "de": "Giulia kocht besser als Marco.", "warum": "Beim Verb steht das Adverb meglio; migliore gehört zu einem Nomen." },
+          { "satz": "Paolo ha vent'anni, Aldo ne ha trenta: Aldo è il fratello ___.", "loesung": "maggiore", "falsch": ["minore", "massimo", "più maggiore"], "de": "Paolo ist zwanzig, Aldo dreißig: Aldo ist der ältere Bruder.", "warum": "Älter = maggiore, jünger = minore – beide ohne «più»." },
+          { "satz": "Il pesce di questo ristorante è ___: fresco e delizioso.", "loesung": "ottimo", "falsch": ["pessimo", "più ottimo", "ottimissimo"], "de": "Der Fisch in diesem Restaurant ist ausgezeichnet: frisch und köstlich.", "warum": "ottimo ist schon die höchste Stufe – ohne «più» und ohne -issimo." }
+        ]
+      },
+      "dialog": {
+        "titel": "La migliore di Bari",
+        "ort": "Am nächsten Morgen in Bari Vecchia: In einer Gasse sitzen Frauen an Holztischen und formen Nudeln",
+        "zeilen": [
+          { "wer": "ben", "it": "Scusi, signora: dov'è la casa di Porzia?", "de": "Entschuldigung, Signora: Wo ist das Haus von Porzia?" },
+          { "wer": "donna", "als": "Signora", "it": "L'ultima porta a sinistra. Porzia è la più brava di tutte: le sue orecchiette sono buonissime!", "de": "Die letzte Tür links. Porzia ist die Beste von allen: Ihre Orecchiette sind superlecker!" },
+          { "wer": "sofia", "it": "Buongiorno! Siete in ritardo: io sono qui dalle otto.", "de": "Guten Morgen! Ihr seid spät dran: Ich bin seit acht hier." },
+          { "wer": "giulia", "it": "Sofia! Sempre prima di noi … Signora Porzia, sono Giulia, la nipote di Rosa.", "de": "Sofia! Immer vor uns da … Signora Porzia, ich bin Giulia, Rosas Enkelin." },
+          { "wer": "donna", "als": "Porzia", "it": "La nipote di Rosa! Le orecchiette di tua nonna erano ottime, ma le mie sono le migliori di Bari.", "de": "Rosas Enkelin! Die Orecchiette deiner Oma waren ausgezeichnet, aber meine sind die besten von Bari." },
+          { "wer": "giulia", "it": "Lo dicono tutti! E la pagina sedici?", "de": "Das sagen alle! Und die Seite sechzehn?" },
+          { "wer": "donna", "als": "Porzia", "it": "È nell'armadio, tra le tovaglie. Ma oggi è una pessima giornata: la mia ciotola più bella è rotta, e così non lavoro.", "de": "Sie ist im Schrank, zwischen den Tischdecken. Aber heute ist ein miserabler Tag: Meine schönste Schüssel ist kaputt, und so arbeite ich nicht." },
+          { "wer": "marco", "it": "Senza orecchiette io sto malissimo! Che facciamo?", "de": "Ohne Orecchiette geht es mir ganz schlecht! Was machen wir?" },
+          { "wer": "donna", "als": "Porzia", "it": "Andate al mercato da Vito: fa le ciotole più belle della Puglia. Chiede quaranta euro, ma voi ne pagate trenta!", "de": "Geht auf den Markt zu Vito: Er macht die schönsten Schüsseln Apuliens. Er verlangt vierzig Euro, aber ihr zahlt dreißig!" },
+          { "wer": "sofia", "it": "Trenta euro da Vito? Difficilissimo! Conosco bene quel mercato: domani vengo con voi.", "de": "Dreißig Euro bei Vito? Äußerst schwierig! Ich kenne diesen Markt gut: Morgen komme ich mit euch." }
+        ],
+        "fragen": [
+          { "frage": "Was sagt die Nachbarin über Porzia?", "richtig": "Sie ist die Beste von allen, ihre Orecchiette sind superlecker", "falsch": ["Sie ist die Älteste in der Straße", "Sie macht schon lange keine Pasta mehr", "Sie ist heute auf dem Markt"] },
+          { "frage": "Warum arbeitet Porzia heute nicht?", "richtig": "Ihre schönste Schüssel ist kaputt", "falsch": ["Sie hat keinen Grieß mehr", "Sie wartet auf einen Anruf von Rosa", "Sie hat die Seite verloren"] },
+          { "frage": "Welchen Auftrag gibt Porzia den dreien?", "richtig": "Bei Vito eine Schüssel kaufen – für dreißig statt vierzig Euro", "falsch": ["Auf dem Markt ein Kilo Orecchiette verkaufen", "Die kaputte Schüssel reparieren", "Sofia zum Bahnhof bringen"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Du hast in einer Trattoria hervorragend gegessen. Lobe die Köchin.", "richtig": "Complimenti, la pasta era buonissima!", "falsch": ["Complimenti, la pasta era molto buonissima!", "Complimenti, la pasta era pessima!", "Complimenti, la pasta era buonissimo!"], "de": "Kompliment, die Pasta war superlecker!" },
+          { "lage": "Ein Tourist fragt nach der besten Eisdiele der Stadt. Du zeigst auf die an der Ecke.", "richtig": "Quella all'angolo è la gelateria migliore della città.", "falsch": ["Quella all'angolo è la gelateria meglio della città.", "Quella all'angolo è la gelateria più migliore della città.", "Quella all'angolo è la gelateria peggiore della città."], "de": "Die an der Ecke ist die beste Eisdiele der Stadt." },
+          { "lage": "Jemand fragt nach deinen Geschwistern. Du hast einen älteren Bruder.", "richtig": "Ho un fratello maggiore.", "falsch": ["Ho un fratello più maggiore.", "Ho un fratello massimo.", "Ho un fratello minore."], "de": "Ich habe einen älteren Bruder." }
+        ],
+        "folge": "Warum will Sofia unbedingt mit auf den Markt – und worüber hat sie seit acht Uhr mit Porzia gesprochen?"
+      },
+      "wissen": { "titel": "Der Nikolaus wohnt in Bari", "text": "Der berühmteste «Einwohner» von Bari ist der heilige Nikolaus – das Vorbild für unseren Nikolaus. Seeleute aus Bari brachten seine Gebeine im Jahr 1087 aus Myra in der heutigen Türkei in ihre Stadt und bauten ihm eine Basilika. Gefeiert wird «San Nicola» gleich zweimal: am 6. Dezember und mit einem großen Fest Anfang Mai. Kein Wunder, dass «Nicola» in Bari ein besonders beliebter Vorname ist." }
+    },
+    {
+      "tag": 78,
+      "titel": "Handeln auf dem Markt",
+      "ziel": "Danach kannst du auf dem Markt um den Preis handeln und sagen, dass zwei Dinge gleich gut, gleich schön oder gleich teuer sind.",
+      "woerter": [
+        { "it": "trattare", "de": "handeln / verhandeln", "art": "v", "aus": "trat-TA-re", "bsp": { "it": "Al mercato devi trattare sul prezzo.", "de": "Auf dem Markt musst du um den Preis handeln." }, "emoji": "🤝", "hinweis": "«trattare sul prezzo» = um den Preis feilschen." },
+        { "it": "conveniente", "de": "günstig / lohnend", "art": "a", "aus": "con-ve-NIEN-te", "bsp": { "it": "Il prezzo è molto conveniente.", "de": "Der Preis ist sehr günstig." }, "emoji": "👌", "hinweis": "Nicht wie englisch «convenient»: Bequem heißt «comodo». «conveniente» lohnt sich fürs Portemonnaie." },
+        { "it": "la qualità", "de": "die Qualität", "art": "n", "aus": "la qua-li-TÀ", "bsp": { "it": "La qualità di questa borsa è ottima.", "de": "Die Qualität dieser Tasche ist ausgezeichnet." }, "emoji": "⭐", "hinweis": "Wörter mit Akzent am Ende bleiben in der Mehrzahl gleich: le qualità." },
+        { "it": "fatto a mano", "de": "handgemacht", "art": "p", "aus": "FAT-to a MA-no", "bsp": { "it": "Questo piatto è fatto a mano.", "de": "Dieser Teller ist handgemacht." }, "emoji": "✋", "hinweis": "«fatto» richtet sich nach dem Nomen: una ciotola fatta a mano." },
+        { "it": "l'offerta", "de": "das Angebot", "art": "n", "aus": "l'of-FER-ta", "bsp": { "it": "Oggi le mele sono in offerta.", "de": "Heute sind die Äpfel im Angebot." }, "emoji": "📣" },
+        { "it": "il cliente", "de": "der Kunde", "art": "n", "aus": "il cli-EN-te", "bsp": { "it": "Il cliente ha sempre ragione.", "de": "Der Kunde hat immer recht." }, "emoji": "🧑", "hinweis": "Die Kundin: la cliente." },
+        { "it": "l'affare", "de": "das Geschäft / das Schnäppchen", "art": "n", "aus": "l'af-FA-re", "bsp": { "it": "Dieci euro? È un affare!", "de": "Zehn Euro? Das ist ein Schnäppchen!" }, "emoji": "💰", "hinweis": "Männlich: un affare. Mehrzahl «gli affari» = die Geschäfte." },
+        { "it": "il venditore", "de": "der Verkäufer / der Händler", "art": "n", "aus": "il ven-di-TO-re", "bsp": { "it": "Il venditore chiede trenta euro.", "de": "Der Händler verlangt dreißig Euro." }, "emoji": "🧔", "hinweis": "Auf dem Markt. Im Geschäft bedienen «il commesso» und «la commessa». Weiblich: la venditrice." },
+        { "it": "uguale", "de": "gleich", "art": "a", "aus": "u-GUA-le", "bsp": { "it": "Il prezzo è uguale in tutti i negozi.", "de": "Der Preis ist in allen Geschäften gleich." }, "emoji": "⚖️", "hinweis": "«uguale a» = gleich wie: Questa ciotola è uguale a quella." },
+        { "it": "diverso", "de": "anders / verschieden", "art": "a", "aus": "di-VER-so", "bsp": { "it": "Ogni venditore ha un prezzo diverso.", "de": "Jeder Händler hat einen anderen Preis." }, "emoji": "🔀", "hinweis": "Mit «da»: diverso da me – anders als ich." },
+        { "it": "in contanti", "de": "bar", "art": "p", "aus": "in con-TAN-ti", "bsp": { "it": "Posso pagare in contanti?", "de": "Kann ich bar bezahlen?" }, "emoji": "💵", "hinweis": "Mit Karte zahlst du «con la carta»." },
+        { "it": "la merce", "de": "die Ware", "art": "n", "aus": "la MER-ce", "bsp": { "it": "La merce di questo venditore è ottima.", "de": "Die Ware dieses Händlers ist ausgezeichnet." }, "emoji": "📦" }
+      ],
+      "grammatik": {
+        "titel": "Gleichheit: (così) … come, (tanto) … quanto",
+        "erklaerung": "Ist etwas **genauso** … wie etwas anderes, heißt «wie» **come** oder **quanto**: «Dario è alto **come** Elisa» = «Dario è alto **quanto** Elisa».\nZur Betonung kannst du **così** oder **tanto** davorsetzen. Die Paare gehören zusammen: **così … come** und **tanto … quanto**: «tanto bella quanto cara» – ebenso schön wie teuer.\nDanach stehen me, te, lui, lei: «alto **come me**».\nMit non wird daraus «nicht so … wie»: «**Non** è caro **come** quello.»\nBeim Verb heißt es **tanto quanto**: «Marco lavora tanto quanto Giulia.» Vor einem Nomen richtet sich tanto danach: «**tanti** clienti quanti venditori».\n**Falle:** come und quanto gibt es nur bei Gleichheit. Nach più und meno bleibt es bei **di** oder **che**.",
+        "tabelle": { "kopf": ["Form", "Beispiel", "Deutsch"], "zeilen": [["come", "bella come quella", "so schön wie die da"], ["così … come", "così caro come quello", "so teuer wie der da"], ["quanto", "gentile quanto te", "so nett wie du"], ["tanto … quanto", "tanto bella quanto cara", "ebenso schön wie teuer"], ["Verb + tanto quanto", "lavora tanto quanto me", "arbeitet so viel wie ich"], ["tanti … quanti", "tanti clienti quanti venditori", "so viele Kunden wie Händler"]] },
+        "beispiele": [
+          { "it": "Questa ciotola è bella come quella.", "de": "Diese Schüssel ist so schön wie die da." },
+          { "it": "La tovaglia è tanto bella quanto cara.", "de": "Die Tischdecke ist ebenso schön wie teuer." },
+          { "it": "Non sono ricco come te.", "de": "Ich bin nicht so reich wie du." }
+        ],
+        "uebungen": [
+          { "satz": "Questa borsa è bella ___ quella.", "loesung": "come", "falsch": ["di", "che", "più"], "de": "Diese Tasche ist so schön wie die da." },
+          { "satz": "Il venditore è gentile ___ la commessa.", "loesung": "quanto", "falsch": ["di", "che", "tanto"], "de": "Der Händler ist so freundlich wie die Verkäuferin." },
+          { "satz": "Ben non è ___ pigro come Marco.", "loesung": "così", "falsch": ["più", "meno", "molto"], "de": "Ben ist nicht so faul wie Marco.", "warum": "Zu come gehört così. Nach più oder meno müsste «di» folgen." },
+          { "satz": "Marco lavora tanto ___ Giulia.", "loesung": "quanto", "falsch": ["di", "che", "più"], "de": "Marco arbeitet so viel wie Giulia.", "warum": "Beim Verb heißt «so viel wie» tanto quanto." },
+          { "satz": "Sei alto ___!", "loesung": "come me", "falsch": ["come io", "di me", "che me"], "de": "Du bist so groß wie ich!", "warum": "Nach come steht die betonte Form: come me, come te, come lui." },
+          { "satz": "Oggi al mercato ci sono ___ clienti quanti venditori.", "loesung": "tanti", "falsch": ["tanto", "tante", "così"], "de": "Heute sind auf dem Markt so viele Kunden wie Händler.", "warum": "Vor einem Nomen richtet sich tanto danach: i clienti → tanti." },
+          { "satz": "Questa tovaglia è ___ bella quanto cara.", "loesung": "tanto", "falsch": ["più", "meno", "molto"], "de": "Diese Tischdecke ist ebenso schön wie teuer.", "warum": "Zu quanto gehört tanto: tanto … quanto." },
+          { "satz": "La ciotola grande costa quaranta euro, la piccola trenta: la grande è più cara ___ piccola.", "loesung": "della", "falsch": ["come la", "quanto la", "che la"], "de": "Die große Schüssel kostet vierzig Euro, die kleine dreißig: Die große ist teurer als die kleine.", "warum": "Hier ist nichts gleich: Nach più steht di. come und quanto gibt es nur bei Gleichheit." }
+        ]
+      },
+      "dialog": {
+        "titel": "Trenta euro, non uno di più!",
+        "ort": "Am nächsten Morgen auf dem Markt von Bari: Vitos Stand mit Schüsseln, Tellern und Krügen aus Keramik",
+        "zeilen": [
+          { "wer": "uomo", "als": "Vito", "it": "Ciotole fatte a mano! La migliore qualità della Puglia!", "de": "Handgemachte Schüsseln! Die beste Qualität Apuliens!" },
+          { "wer": "giulia", "it": "Quaranta euro? Ma non è grande come quella!", "de": "Vierzig Euro? Aber sie ist nicht so groß wie die da!" },
+          { "wer": "uomo", "als": "Vito", "it": "La piccola è tanto bella quanto la grande, signorina: stesso lavoro, stessi colori. Trentotto.", "de": "Die kleine ist genauso schön wie die große, Signorina: gleiche Arbeit, gleiche Farben. Achtunddreißig." },
+          { "wer": "ben", "it": "È bella, ma non siamo ricchi come i Suoi clienti. Venticinque euro, e paghiamo in contanti.", "de": "Sie ist schön, aber wir sind nicht so reich wie Ihre Kunden. Fünfundzwanzig Euro, und wir zahlen bar." },
+          { "wer": "uomo", "als": "Vito", "it": "Venticinque? Tu tratti sul prezzo come mia nonna! Trentacinque.", "de": "Fünfundzwanzig? Du feilschst wie meine Oma! Fünfunddreißig." },
+          { "wer": "sofia", "it": "Vito, la ciotola è per Porzia. E lei non paga mai più di trenta euro.", "de": "Vito, die Schüssel ist für Porzia. Und sie zahlt nie mehr als dreißig Euro." },
+          { "wer": "uomo", "als": "Vito", "it": "Per zia Porzia? Perché non l'avete detto subito? Allora trenta euro: per la famiglia faccio un prezzo speciale.", "de": "Für Tante Porzia? Warum habt ihr das nicht gleich gesagt? Dann dreißig Euro: Für die Familie mache ich einen Sonderpreis." },
+          { "wer": "marco", "it": "Un affare! E questi cucchiai di legno sono convenienti come la ciotola?", "de": "Ein Schnäppchen! Und sind diese Holzlöffel so günstig wie die Schüssel?" },
+          { "wer": "giulia", "it": "Grazie, Sofia. Ma perché ci aiuti?", "de": "Danke, Sofia. Aber warum hilfst du uns?" },
+          { "wer": "sofia", "it": "Perché oggi voglio vedere quella pagina anch'io.", "de": "Weil ich diese Seite heute auch sehen will." }
+        ],
+        "fragen": [
+          { "frage": "Wie viel soll die Schüssel zuerst kosten?", "richtig": "Vierzig Euro", "falsch": ["Dreißig Euro", "Fünfundzwanzig Euro", "Fünfunddreißig Euro"] },
+          { "frage": "Warum geht Vito am Ende auf dreißig Euro herunter?", "richtig": "Die Schüssel ist für seine Tante Porzia", "falsch": ["Ben zahlt bar", "Die Schüssel hat einen Sprung", "Marco kauft noch Holzlöffel dazu"] },
+          { "frage": "Was antwortet Sofia auf die Frage, warum sie hilft?", "richtig": "Sie will die Seite heute auch sehen", "falsch": ["Sie ist eine alte Freundin von Vito", "Sie braucht selbst eine Schüssel", "Nonna Rosa hat sie darum gebeten"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Auf dem Markt gefällt dir eine Schüssel, aber vierzig Euro sind dir zu viel. Frag höflich nach einem Nachlass.", "richtig": "È bella, ma un po' cara. Mi fa uno sconto?", "falsch": ["È bella e conveniente. La prendo subito!", "È bella, ma un po' cara. Pago di più?", "È cara come bella. Dov'è il camerino?"], "de": "Sie ist schön, aber ein bisschen teuer. Geben Sie mir einen Rabatt?" },
+          { "lage": "Zwei Taschen kosten gleich viel. Sag, dass die rote so teuer ist wie die schwarze.", "richtig": "La borsa rossa è cara come la borsa nera.", "falsch": ["La borsa rossa è più cara come la borsa nera.", "La borsa rossa è cara che la borsa nera.", "La borsa rossa è diversa dalla borsa nera."], "de": "Die rote Tasche ist so teuer wie die schwarze Tasche." },
+          { "lage": "Ein Freund behauptet, er arbeite mehr als du. Widersprich: Du arbeitest genauso viel wie er.", "richtig": "Non è vero: lavoro tanto quanto te!", "falsch": ["Non è vero: lavoro tanto di te!", "Non è vero: lavoro più come te!", "È vero: lavoro meno di te!"], "de": "Das stimmt nicht: Ich arbeite genauso viel wie du!" }
+        ],
+        "folge": "Sofia hat beim Handeln geholfen – aber sie will die Seite mit eigenen Augen sehen. Will sie wirklich nur schauen?"
+      },
+      "wissen": { "titel": "Eine Knospe aus Keramik", "text": "Auf apulischen Märkten begegnet dir überall der «pumo»: eine Knospe aus glasierter Keramik, oft von Blättern umschlossen. Er gilt als Glücksbringer und schmückt Balkone, Treppengeländer und Tische. Berühmt für ihre Töpfer ist die Stadt Grottaglie bei Tarent – dort gibt es ein ganzes Keramikviertel. Auf solchen Märkten darfst du ruhig fragen: «Mi fa un po' di sconto?»" }
+    },
+    {
+      "tag": 79,
+      "titel": "Pasta von Hand",
+      "ziel": "Danach kannst du erklären, wie man etwas macht, und fragen, wie man etwas sagt – mit dem unpersönlichen «si».",
+      "woerter": [
+        { "it": "le orecchiette", "de": "die Orecchiette (Öhrchen-Nudeln)", "art": "n", "aus": "le o-rec-CHIET-te", "bsp": { "it": "Le orecchiette sono tipiche di Bari.", "de": "Orecchiette sind typisch für Bari." }, "emoji": "👂", "hinweis": "Wörtlich «Öhrchen» – von «l'orecchio», das Ohr. «chie» klingt wie «kje»." },
+        { "it": "l'impasto", "de": "der Teig / die Teigmasse", "art": "n", "aus": "l'im-PA-sto", "bsp": { "it": "L'impasto deve riposare mezz'ora.", "de": "Der Teig muss eine halbe Stunde ruhen." }, "emoji": "🫓", "hinweis": "Vom Verb «impastare» – kneten." },
+        { "it": "la semola", "de": "der Hartweizengrieß", "art": "n", "aus": "la SE-mo-la", "bsp": { "it": "Compro un chilo di semola.", "de": "Ich kaufe ein Kilo Hartweizengrieß." }, "emoji": "🌾", "hinweis": "Betonung vorn. Aus Hartweizen («grano duro»), gelber und körniger als «la farina»." },
+        { "it": "il mattarello", "de": "das Nudelholz", "art": "n", "aus": "il mat-ta-REL-lo", "bsp": { "it": "Dov'è il mattarello? – Nel cassetto.", "de": "Wo ist das Nudelholz? – In der Schublade." }, "emoji": "🪵" },
+        { "it": "la tradizione", "de": "die Tradition", "art": "n", "aus": "la tra-di-ZIO-ne", "bsp": { "it": "È una vecchia tradizione di famiglia.", "de": "Das ist eine alte Familientradition." }, "emoji": "🏺" },
+        { "it": "stendere", "de": "ausrollen / ausbreiten", "art": "v", "aus": "STEN-de-re", "bsp": { "it": "Devi stendere l'impasto con il mattarello.", "de": "Du musst den Teig mit dem Nudelholz ausrollen." }, "emoji": "👐", "hinweis": "Betonung vorn. Auch Wäsche hängt man so auf: stendere i panni." },
+        { "it": "il pollice", "de": "der Daumen", "art": "n", "aus": "il POL-li-ce", "bsp": { "it": "Porzia gira la pasta sul pollice.", "de": "Porzia dreht die Nudel über den Daumen." }, "emoji": "👍", "hinweis": "Betonung vorn. «Avere il pollice verde» = einen grünen Daumen haben." },
+        { "it": "le cime di rapa", "de": "der Stängelkohl", "art": "n", "aus": "le CI-me di RA-pa", "bsp": { "it": "Mangiamo orecchiette con le cime di rapa.", "de": "Wir essen Orecchiette mit Stängelkohl." }, "emoji": "🥬", "hinweis": "Ein leicht bitteres Blattgemüse, typisch für Apulien." },
+        { "it": "tipico", "de": "typisch", "art": "a", "aus": "TI-pi-co", "bsp": { "it": "È un piatto tipico della Puglia.", "de": "Das ist ein typisches Gericht aus Apulien." }, "emoji": "📍", "hinweis": "Betonung vorn. Mehrzahl: tipici, tipiche." },
+        { "it": "morbido", "de": "weich", "art": "a", "aus": "MOR-bi-do", "bsp": { "it": "L'impasto deve essere morbido.", "de": "Der Teig muss weich sein." }, "emoji": "☁️", "hinweis": "Betonung vorn. Falscher Freund: hat nichts mit «morbid» zu tun." },
+        { "it": "usare", "de": "benutzen / verwenden", "art": "v", "aus": "u-SA-re", "bsp": { "it": "Posso usare il tuo telefono?", "de": "Darf ich dein Telefon benutzen?" }, "emoji": "🔧", "hinweis": "Regelmäßig auf -are. «Si usa la semola» = man nimmt Hartweizengrieß." },
+        { "it": "il dialetto", "de": "der Dialekt", "art": "n", "aus": "il dia-LET-to", "bsp": { "it": "Mia nonna parla in dialetto.", "de": "Meine Oma spricht Dialekt." }, "emoji": "🗣️", "hinweis": "«parlare in dialetto» = Dialekt sprechen." }
+      ],
+      "grammatik": {
+        "titel": "Das unpersönliche si: si fa, si mangia, si dice",
+        "erklaerung": "Das deutsche **«man»** heißt **si** + Verb in der **3. Person Einzahl**: «In Puglia **si mangia** bene» – in Apulien isst man gut. «Come **si dice**?» – wie sagt man? «Come **si fa**?» – wie macht man das?\nDas geht in jeder Zeit: «Una volta **si faceva** tutto a mano.»\nVerneint steht **non** davor: «Qui **non si** paga.» Nach «si può» und «si deve» folgt die Grundform: «Non si può entrare.»\n**Fallen:** «man» ist nie «uomo». Und dieses **si** hat keinen Akzent – **sì** heißt «ja».\nFolgt ein Nomen in der Mehrzahl, steht auch das Verb in der Mehrzahl («si mangiano le orecchiette»). Das üben wir später; heute bleibt alles in der Einzahl.",
+        "tabelle": { "kopf": ["Italienisch", "Deutsch"], "zeilen": [["si dice", "man sagt"], ["si fa", "man macht"], ["si mangia", "man isst"], ["si può", "man kann / man darf"], ["si deve", "man muss"], ["non si sa", "man weiß es nicht"]] },
+        "beispiele": [
+          { "it": "Come si dice «Nudelholz» in italiano? – Si dice «mattarello».", "de": "Wie sagt man «Nudelholz» auf Italienisch? – Man sagt «mattarello»." },
+          { "it": "A Bari si mangia molto pesce.", "de": "In Bari isst man viel Fisch." },
+          { "it": "Qui non si può entrare.", "de": "Hier darf man nicht hinein." }
+        ],
+        "uebungen": [
+          { "satz": "In Puglia ___ mangia molto bene.", "loesung": "si", "falsch": ["sì", "se", "uomo"], "de": "In Apulien isst man sehr gut.", "warum": "«man» = si, ohne Akzent. «sì» heißt «ja», «se» heißt «wenn»." },
+          { "satz": "Come si ___ «grazie» in tedesco?", "loesung": "dice", "falsch": ["dici", "dicono", "dire"], "de": "Wie sagt man «grazie» auf Deutsch?" },
+          { "satz": "In Italia la sera si ___ tardi.", "loesung": "mangia", "falsch": ["mangiano", "mangio", "mangiare"], "de": "In Italien isst man abends spät." },
+          { "satz": "Qui non si ___ entrare: è chiuso.", "loesung": "può", "falsch": ["possono", "puoi", "potere"], "de": "Hier kann man nicht hinein: Es ist geschlossen." },
+          { "satz": "Per questa pasta si ___ la semola, non la farina.", "loesung": "usa", "falsch": ["usano", "uso", "usare"], "de": "Für diese Pasta nimmt man Hartweizengrieß, nicht Mehl.", "warum": "Nach si steht die 3. Person Einzahl: si usa." },
+          { "satz": "In cucina ___ gioca!", "loesung": "non si", "falsch": ["si non", "no si", "non sì"], "de": "In der Küche spielt man nicht!", "warum": "non steht vor si – und «nicht» heißt non, nicht no." },
+          { "satz": "Per fare le orecchiette si ___ avere pazienza.", "loesung": "deve", "falsch": ["devono", "devi", "dovere"], "de": "Um Orecchiette zu machen, muss man Geduld haben.", "warum": "si deve + Grundform: man muss …" },
+          { "satz": "Una volta si ___ tutto a mano.", "loesung": "faceva", "falsch": ["facevano", "facevi", "fare"], "de": "Früher machte man alles von Hand.", "warum": "Auch im imperfetto bleibt es bei der 3. Person Einzahl." }
+        ]
+      },
+      "dialog": {
+        "titel": "Come si fa?",
+        "ort": "Mittags vor Porzias Haustür: Auf dem Holztisch stehen die neue Schüssel, Grieß und ein Krug Wasser",
+        "zeilen": [
+          { "wer": "donna", "als": "Porzia", "it": "Che bella ciotola! Adesso si lavora. Ben, sai come si fa l'impasto?", "de": "Was für eine schöne Schüssel! Jetzt wird gearbeitet. Ben, weißt du, wie man den Teig macht?" },
+          { "wer": "ben", "it": "Si usa la farina, come a Bologna?", "de": "Nimmt man Mehl, wie in Bologna?" },
+          { "wer": "donna", "als": "Porzia", "it": "A Bari no! Qui si usa la semola con l'acqua calda, e basta.", "de": "In Bari nicht! Hier nimmt man Hartweizengrieß mit warmem Wasser, sonst nichts." },
+          { "wer": "giulia", "it": "E poi si stende con il mattarello?", "de": "Und dann rollt man ihn mit dem Nudelholz aus?" },
+          { "wer": "donna", "als": "Porzia", "it": "No, qui il mattarello non si usa. Si taglia un pezzo piccolo, si trascina con il coltello e si gira sul pollice!", "de": "Nein, das Nudelholz benutzt man hier nicht. Man schneidet ein kleines Stück ab, zieht es mit dem Messer und dreht es über den Daumen!" },
+          { "wer": "ben", "it": "La mia non è un'orecchietta: è un cappello!", "de": "Meins ist kein Öhrchen: Das ist ein Hut!" },
+          { "wer": "donna", "als": "Porzia", "it": "Piano, Ben! In Italia si dice: chi va piano, va sano e va lontano.", "de": "Langsam, Ben! In Italien sagt man: Wer langsam geht, kommt gesund und weit." },
+          { "wer": "marco", "it": "Giusto. E quando si mangia?", "de": "Richtig. Und wann isst man?" },
+          { "wer": "sofia", "it": "Porzia, come si dice «orecchiette» in dialetto? Lo scrivo subito.", "de": "Porzia, wie sagt man «Orecchiette» im Dialekt? Ich schreibe es gleich auf." },
+          { "wer": "donna", "als": "Porzia", "it": "Tu scrivi troppo! In questa strada non si scrive: si guarda, si impara e stasera si mangia.", "de": "Du schreibst zu viel! In dieser Straße schreibt man nicht: Man schaut zu, man lernt, und heute Abend isst man." }
+        ],
+        "fragen": [
+          { "frage": "Woraus macht man in Bari den Teig?", "richtig": "Aus Hartweizengrieß und warmem Wasser", "falsch": ["Aus Mehl und Eiern", "Aus Grieß und Olivenöl", "Aus Mehl und Milch"] },
+          { "frage": "Wie formt Porzia die Orecchiette?", "richtig": "Sie schneidet ein kleines Stück ab und zieht es mit dem Messer", "falsch": ["Sie rollt den Teig mit dem Nudelholz aus", "Sie drückt den Teig in eine Form", "Sie schneidet lange Streifen"] },
+          { "frage": "Was hält Porzia davon, dass Sofia alles aufschreibt?", "richtig": "Sofia schreibt ihr zu viel – hier schaut man zu und lernt", "falsch": ["Sie diktiert ihr gern jedes Wort", "Sie will das Buch selbst schreiben", "Sie bemerkt es gar nicht"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Dir fehlt ein Wort: Du willst wissen, wie man «Nudelholz» auf Italienisch sagt.", "richtig": "Come si dice «Nudelholz» in italiano?", "falsch": ["Come dice uomo «Nudelholz» in italiano?", "Come sì dice «Nudelholz» in italiano?", "Come si dici «Nudelholz» in italiano?"], "de": "Wie sagt man «Nudelholz» auf Italienisch?" },
+          { "lage": "Im Museum möchtest du fotografieren. Frag höflich, ob man das hier darf.", "richtig": "Scusi, qui si può fare una foto?", "falsch": ["Scusi, qui si possono fare una foto?", "Scusi, qui uomo può fare una foto?", "Scusi, qui si può fa una foto?"], "de": "Entschuldigung, darf man hier ein Foto machen?" },
+          { "lage": "Ein Gast fragt, wann es bei euch Abendessen gibt. Sag: Bei uns isst man um acht.", "richtig": "Da noi si mangia alle otto.", "falsch": ["Da noi si mangiano alle otto.", "Da noi sì mangia alle otto.", "Da noi si mangiare alle otto."], "de": "Bei uns isst man um acht." }
+        ],
+        "folge": "Porzia mag es nicht, dass Sofia alles mitschreibt. Holt sie die Seite heute Abend trotzdem aus dem Schrank?"
+      },
+      "wissen": { "titel": "Öhrchen vor der Haustür", "text": "«Orecchiette» heißt «Öhrchen». In Bari Vecchia kannst du zusehen, wie sie entstehen: In der Strada Arco Basso sitzen Frauen vor ihren Haustüren, formen die Nudeln von Hand und verkaufen sie gleich vom Tisch. Der Teig besteht nur aus Hartweizengrieß und Wasser. Ein kleines Messer zieht jedes Teigstück über das Brett, dann wird es über den Daumen gestülpt. Der Klassiker dazu: «con le cime di rapa»." }
+    },
+    {
+      "tag": 80,
+      "titel": "Zwischenbilanz",
+      "ziel": "Danach kannst du Zwischenbilanz ziehen – was bisher war, was noch fehlt – und setzt «ci» und «ne» sicher ein.",
+      "woerter": [
+        { "it": "finora", "de": "bisher / bis jetzt", "art": "x", "aus": "fi-NO-ra", "bsp": { "it": "Finora abbiamo visto sedici città.", "de": "Bisher haben wir sechzehn Städte gesehen." }, "emoji": "⏱️", "hinweis": "Zusammengezogen aus «fino a ora». Meist mit dem passato prossimo." },
+        { "it": "la metà", "de": "die Hälfte", "art": "n", "aus": "la me-TÀ", "bsp": { "it": "Mangio solo metà della pizza.", "de": "Ich esse nur die Hälfte der Pizza." }, "emoji": "🌗", "hinweis": "Mit Akzent; die Mehrzahl bleibt gleich. «A metà prezzo» = zum halben Preis." },
+        { "it": "l'avventura", "de": "das Abenteuer", "art": "n", "aus": "l'av-ven-TU-ra", "bsp": { "it": "Questo viaggio è una grande avventura.", "de": "Diese Reise ist ein großes Abenteuer." }, "emoji": "🧭" },
+        { "it": "mancare", "de": "fehlen", "art": "v", "aus": "man-CA-re", "bsp": { "it": "Manca solo una pagina!", "de": "Es fehlt nur noch eine Seite!" }, "emoji": "🧩", "hinweis": "Wie «piacere»: «Mi manchi» = du fehlst mir. Vor i mit h: manchi, manchiamo." },
+        { "it": "indimenticabile", "de": "unvergesslich", "art": "a", "aus": "in-di-men-ti-CA-bi-le", "bsp": { "it": "È stato un viaggio indimenticabile.", "de": "Es war eine unvergessliche Reise." }, "emoji": "✨", "hinweis": "Von «dimenticare» (vergessen). Die Betonung liegt auf «ca»." },
+        { "it": "il ricordo", "de": "die Erinnerung / das Andenken", "art": "n", "aus": "il ri-COR-do", "bsp": { "it": "Ho un bel ricordo di Venezia.", "de": "Ich habe eine schöne Erinnerung an Venedig." }, "emoji": "💭", "hinweis": "Auch das Mitbringsel ist «un ricordo»: un ricordo di Bari." },
+        { "it": "la tappa", "de": "die Etappe / die Station", "art": "n", "aus": "la TAP-pa", "bsp": { "it": "Bari è una tappa del nostro viaggio.", "de": "Bari ist eine Etappe unserer Reise." }, "emoji": "🚩" },
+        { "it": "in tutto", "de": "insgesamt", "art": "p", "aus": "in TUT-to", "bsp": { "it": "In tutto le pagine sono ventiquattro.", "de": "Insgesamt sind es vierundzwanzig Seiten." }, "emoji": "🧮", "hinweis": "An der Kasse: «In tutto fa venti euro» – das macht zusammen zwanzig Euro." },
+        { "it": "l'inizio", "de": "der Anfang", "art": "n", "aus": "l'i-NI-zio", "bsp": { "it": "All'inizio non capivo niente.", "de": "Am Anfang habe ich nichts verstanden." }, "emoji": "🌱", "hinweis": "«all'inizio» = am Anfang. Das Verb dazu heißt «iniziare»." },
+        { "it": "ci vuole", "de": "man braucht / es dauert", "art": "p", "aus": "ci VUO-le", "bsp": { "it": "Per la pasta ci vuole pazienza.", "de": "Für die Pasta braucht man Geduld." }, "emoji": "⏳", "hinweis": "Bei Mehrzahl: ci vogliono. «Ci vogliono due ore» – es dauert zwei Stunden." },
+        { "it": "ne vale la pena", "de": "es lohnt sich", "art": "p", "aus": "ne VA-le la PE-na", "bsp": { "it": "È lontano, ma ne vale la pena.", "de": "Es ist weit, aber es lohnt sich." }, "emoji": "💎", "hinweis": "Wörtlich «es ist die Mühe wert». Verneint: Non ne vale la pena.", "auch": ["vale la pena"] },
+        { "it": "il risultato", "de": "das Ergebnis", "art": "n", "aus": "il ri-sul-TA-to", "bsp": { "it": "Sono felice del risultato.", "de": "Ich bin glücklich über das Ergebnis." }, "emoji": "🎯" }
+      ],
+      "grammatik": {
+        "titel": "ci und ne im Überblick",
+        "erklaerung": "Zwei kleine Wörter, die du schon kennst – hier im Überblick:\n**ci** steht für einen **Ort** (a, in …): «Vai a Bari? – Sì, **ci** vado.» Auch bei **pensare a**: «**Ci** penso io» – ich kümmere mich darum. Fest: **c'è, ci sono, ci vuole**.\n**ne** steht für eine **Menge** – «davon»: «Quanti fratelli hai? – **Ne** ho due.» Und für alles mit **di**: «Hai bisogno della macchina? – Sì, **ne** ho bisogno.» Fest: **ne vale la pena**.\nBeide stehen **vor** dem gebeugten Verb oder hängen an der Grundform: «ci voglio tornare» = «voglio tornar**ci**».\n**Merksatz:** Wo? Wohin? → ci. Wie viele? Wovon? → ne.\n**Falle:** Im Deutschen fällt «davon» oft weg («Ich nehme zwei»). Im Italienischen nie: «**Ne** prendo due.»",
+        "tabelle": { "kopf": ["Wort", "steht für", "Beispiel"], "zeilen": [["ci", "a / in + Ort", "Ci vado domani."], ["ci", "a + Sache (pensare a)", "Ci penso io."], ["ci", "feste Wendungen", "c'è, ci sono, ci vuole"], ["ne", "eine Menge (davon)", "Ne prendo due."], ["ne", "di + Sache", "Ne ho bisogno."], ["ne", "feste Wendung", "Ne vale la pena."]] },
+        "beispiele": [
+          { "it": "Conosci Bari? – Sì, ci sono stato due volte.", "de": "Kennst du Bari? – Ja, ich war zweimal dort." },
+          { "it": "Quante orecchiette vuoi? – Ne voglio un piatto grande!", "de": "Wie viele Orecchiette willst du? – Ich will einen großen Teller (davon)!" },
+          { "it": "Il viaggio è lungo, ma ne vale la pena.", "de": "Die Reise ist lang, aber sie lohnt sich." }
+        ],
+        "uebungen": [
+          { "satz": "Vai al mercato oggi? – Sì, ___ vado alle dieci.", "loesung": "ci", "falsch": ["ne", "lo", "la"], "de": "Gehst du heute auf den Markt? – Ja, ich gehe um zehn hin." },
+          { "satz": "Quanti fratelli hai? – ___ ho due.", "loesung": "Ne", "falsch": ["Li", "Lo", "Le"], "de": "Wie viele Brüder hast du? – Ich habe zwei.", "warum": "Vor einer Mengenangabe steht ne («davon») – nicht lo, li oder le." },
+          { "satz": "Sei mai stato a Bari? – No, non ___ sono mai stato.", "loesung": "ci", "falsch": ["ne", "la", "li"], "de": "Warst du schon einmal in Bari? – Nein, ich war noch nie dort." },
+          { "satz": "Vuoi delle orecchiette? – Sì, ___ prendo un piatto.", "loesung": "ne", "falsch": ["lo", "la", "li"], "de": "Möchtest du Orecchiette? – Ja, ich nehme einen Teller (davon).", "warum": "«un piatto» nennt die Menge – also ne." },
+          { "satz": "Hai bisogno della macchina? – Sì, ___ ho bisogno stasera.", "loesung": "ne", "falsch": ["la", "lo", "li"], "de": "Brauchst du das Auto? – Ja, ich brauche es heute Abend.", "warum": "avere bisogno di → di + Sache wird zu ne." },
+          { "satz": "Pensi ancora al viaggio? – Sì, ___ penso spesso.", "loesung": "ci", "falsch": ["ne", "si", "mi"], "de": "Denkst du noch an die Reise? – Ja, ich denke oft daran.", "warum": "pensare a → a + Sache wird zu ci." },
+          { "satz": "Per imparare bene l'italiano ___ molti mesi.", "loesung": "ci vogliono", "falsch": ["ci vuole", "ne vogliono", "ne vuole"], "de": "Um gut Italienisch zu lernen, braucht man viele Monate.", "warum": "«molti mesi» ist Mehrzahl – also ci vogliono." },
+          { "satz": "Bari mi piace molto: voglio ___ presto.", "loesung": "tornarci", "falsch": ["tornarne", "tornarla", "ci tornare"], "de": "Bari gefällt mir sehr: Ich will bald wieder hin.", "warum": "An der Grundform hängt ci hinten dran: tornarci. Oder vor dem gebeugten Verb: ci voglio tornare." }
+        ]
+      },
+      "dialog": {
+        "titel": "Più della metà",
+        "ort": "Abends in Porzias Küche: Auf dem Tisch dampfen die Orecchiette – und Porzia öffnet den alten Schrank",
+        "zeilen": [
+          { "wer": "donna", "als": "Porzia", "it": "Mangiate, ragazzi! Giulia, quante tappe avete fatto finora?", "de": "Esst, Kinder! Giulia, wie viele Etappen habt ihr bisher geschafft?" },
+          { "wer": "giulia", "it": "Bari è la tappa numero sedici: ne mancano otto.", "de": "Bari ist die Etappe Nummer sechzehn: Es fehlen noch acht." },
+          { "wer": "ben", "it": "Siamo a più della metà, ed è un'avventura indimenticabile. Ho un ricordo bellissimo di tutte le città.", "de": "Wir haben mehr als die Hälfte geschafft, und es ist ein unvergessliches Abenteuer. Ich habe an alle Städte eine wunderschöne Erinnerung." },
+          { "wer": "marco", "it": "A Bari ci torno presto: ne vale la pena!", "de": "Nach Bari komme ich bald wieder: Es lohnt sich!" },
+          { "wer": "donna", "als": "Porzia", "it": "Bravi. Ecco la pagina sedici: l'ho presa dall'armadio. Ma non è ancora vostra.", "de": "Gut gemacht. Hier ist die Seite sechzehn: Ich habe sie aus dem Schrank geholt. Aber noch gehört sie euch nicht." },
+          { "wer": "sofia", "it": "Eccola! Posso fare una foto? Solo una, per il mio libro.", "de": "Da ist sie! Darf ich ein Foto machen? Nur eins, für mein Buch." },
+          { "wer": "giulia", "it": "Una foto? Ne parliamo dopo, Sofia.", "de": "Ein Foto? Darüber reden wir später, Sofia." },
+          { "wer": "donna", "als": "Porzia", "it": "Un momento! Rosa dice: la pagina è per chi sa parlare italiano. Ben, raccontami il vostro viaggio: tutte le tappe!", "de": "Moment! Rosa sagt: Die Seite ist für den, der Italienisch sprechen kann. Ben, erzähl mir von eurer Reise: alle Etappen!" },
+          { "wer": "ben", "it": "Tutte e sedici? Ci vuole molto tempo!", "de": "Alle sechzehn? Das dauert lange!" },
+          { "wer": "donna", "als": "Porzia", "it": "Abbiamo tutta la sera. Inizia da Torino – e non dimenticare niente!", "de": "Wir haben den ganzen Abend. Fang in Turin an – und vergiss nichts!" }
+        ],
+        "fragen": [
+          { "frage": "Die wievielte Etappe der Reise ist Bari?", "richtig": "Die sechzehnte – acht fehlen noch", "falsch": ["Die achte – sechzehn fehlen noch", "Die letzte", "Die zwölfte – genau die Hälfte"] },
+          { "frage": "Was möchte Sofia, als Porzia die Seite zeigt?", "richtig": "Ein Foto für ihr Buch machen", "falsch": ["Die Seite kaufen", "Die Seite laut vorlesen", "Die Seite zu Nonna Rosa bringen"] },
+          { "frage": "Welchen Beweis verlangt Porzia von Ben?", "richtig": "Er soll die ganze Reise auf Italienisch erzählen", "falsch": ["Er soll hundert Orecchiette formen", "Er soll die Seite auswendig lernen", "Er soll auf dem Markt eine zweite Schüssel kaufen"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Ein Freund fragt: «Sei mai stato a Venezia?» Du warst schon zweimal dort.", "richtig": "Sì, ci sono stato due volte.", "falsch": ["Sì, ne sono stato due volte.", "Sì, lo sono stato due volte.", "Sì, sono ci stato due volte."], "de": "Ja, ich war zweimal dort." },
+          { "lage": "Am Obststand: Die Äpfel sehen gut aus, du möchtest ein Kilo davon.", "richtig": "Ne prendo un chilo, grazie.", "falsch": ["Ci vado un chilo, grazie.", "Lo prendo un chilo, grazie.", "Prendo ne un chilo, grazie."], "de": "Ich nehme ein Kilo (davon), danke." },
+          { "lage": "Eine Bekannte fragt, ob sich der weite Weg nach Bari lohnt. Du bist begeistert.", "richtig": "Sì, ne vale la pena!", "falsch": ["Sì, ci vale la pena!", "Sì, ci vuole la pena!", "No, mi manca la pena!"], "de": "Ja, es lohnt sich!" }
+        ],
+        "folge": "Schafft es Ben, die ganze Reise auf Italienisch zu erzählen – und was hat Sofia mit einem Foto der Seite vor?"
+      },
+      "wissen": { "titel": "Am Absatz des Stiefels", "text": "Italiener nennen ihr Land gern «lo Stivale», den Stiefel. Apulien mit Bari ist der Absatz, «il tacco», Kalabrien die Stiefelspitze, «la punta». Ein anderer Kosename ist «il Belpaese», das schöne Land. Von Turin bis Bari bist du mit Ben fast den ganzen Stiefel hinuntergereist – und bis zur Spitze, nach Sizilien und Sardinien liegt noch ein schönes Stück Weg vor dir." }
+    }
+  ],
+  "pruefung": {
+    "lesetext": {
+      "titel": "Quattro giorni a Bari",
+      "it": "Ciao, sono Ben! Siamo a Bari, la tappa numero sedici del nostro viaggio. Il primo giorno Marco ha comprato una camicia blu: era in saldo, più larga e meno cara di quella bianca. Poi siamo andati a Bari Vecchia dalla signora Porzia, un'amica di Nonna Rosa. Fa la pasta a mano davanti alla porta di casa ed è la più brava della strada: le sue orecchiette sono buonissime! Al mercato abbiamo trattato con Vito per una ciotola fatta a mano. Lui chiedeva quaranta euro, ma alla fine abbiamo pagato solo trenta euro: un affare. Oggi Porzia ci ha fatto vedere come si fa l'impasto: si usa la semola con l'acqua calda, e il mattarello non si usa. La mia prima orecchietta non era bella come le sue, ma per Marco era buona quanto quelle di Porzia. Finora il viaggio è stato un'avventura indimenticabile. Mancano ancora otto tappe: ci vuole pazienza, ma ne vale la pena!",
+      "fragen": [
+        { "frage": "Welches Hemd hat Marco gekauft?", "richtig": "Das blaue: reduziert, weiter und günstiger als das weiße", "falsch": ["Das weiße: enger, aber schöner", "Gar keines – alles war zu teuer", "Beide, weil Schlussverkauf war"] },
+        { "frage": "Wie viel haben sie am Ende für die Schüssel bezahlt?", "richtig": "Dreißig Euro", "falsch": ["Vierzig Euro", "Zwanzig Euro", "Nichts – Vito hat sie verschenkt"] },
+        { "frage": "Wie macht man in Bari den Teig für die Orecchiette?", "richtig": "Mit Hartweizengrieß und warmem Wasser, ohne Nudelholz", "falsch": ["Mit Mehl und Eiern", "Mit Grieß, Öl und dem Nudelholz", "Das verrät Porzia nicht"] },
+        { "frage": "Wie zieht Ben Zwischenbilanz?", "richtig": "Ein unvergessliches Abenteuer – acht Etappen fehlen noch", "falsch": ["Die Reise ist zu Ende", "Er will zurück nach Hamburg", "Die Hälfte der Etappen fehlt noch"] }
+      ]
+    }
+  }
+}

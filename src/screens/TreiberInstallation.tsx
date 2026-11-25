@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import RolloutView from '../components/driverRollout/RolloutView'
 import { useAuthStore } from '../store/authStore'
+import { useBereiche } from '../store/menuSichtbarStore'
 import { api } from '../electronAPI'
 import { loadDevices, classifyModel, MODEL_CATEGORIES, type EndpointDevice } from '../services/endpointDevices'
 import { ensureCmsl, installCmslAllUsers, scanHosts, installierbar, type HpHostReport, type DriverItem, type DriverKlasse, type DriverStatus } from '../services/hpDrivers'
@@ -772,9 +773,11 @@ export default function TreiberInstallation() {
   const session = useAuthStore(s => s.session)
   const by = session?.user.displayName || session?.user.username || 'unbekannt'
   const [view, setView] = useState<'landing' | 'auswahl' | 'rollout'>('landing')
+  // Kacheln je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const { sichtbar } = useBereiche('treiber-installation')
 
-  if (view === 'auswahl') return <PcAuswahlView onBack={() => setView('landing')} />
-  if (view === 'rollout') return <RolloutView by={by} onBack={() => setView('landing')} />
+  if (view === 'auswahl' && sichtbar('auswahl')) return <PcAuswahlView onBack={() => setView('landing')} />
+  if (view === 'rollout' && sichtbar('rollout')) return <RolloutView by={by} onBack={() => setView('landing')} />
 
   return (
     <div className="flex flex-col h-full">
@@ -785,16 +788,16 @@ export default function TreiberInstallation() {
       </div>
       <div className="flex-1 overflow-y-auto p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
-          <button onClick={() => setView('auswahl')}
+          {sichtbar('auswahl') && <button onClick={() => setView('auswahl')}
             className="text-left rounded-xl border border-border bg-card p-5 hover:border-primary/50 hover:bg-accent/10 transition-colors">
             <div className="flex items-center gap-2 mb-2"><ListChecks size={20} className="text-primary" /><h3 className="text-base font-semibold text-foreground">PC Auswahl</h3></div>
             <p className="text-sm text-muted-foreground">PCs auswählen, auf veraltete Treiber scannen und gewählte Treiber sofort installieren — wie bisher (inkl. BIOS/Firmware opt-in).</p>
-          </button>
-          <button onClick={() => setView('rollout')}
+          </button>}
+          {sichtbar('rollout') && <button onClick={() => setView('rollout')}
             className="text-left rounded-xl border border-border bg-card p-5 hover:border-primary/50 hover:bg-accent/10 transition-colors">
             <div className="flex items-center gap-2 mb-2"><Rocket size={20} className="text-primary" /><h3 className="text-base font-semibold text-foreground">Rollout</h3></div>
             <p className="text-sm text-muted-foreground">PCs bequem auswählen (Hostname · Benutzer · Abteilung · Vorgesetzter) und veraltete Treiber geplant, unbeaufsichtigt und wiederholbar verteilen — <b>ohne BIOS/Firmware</b>. Nicht erreichte PCs werden bis zum Erfolg erneut versucht.</p>
-          </button>
+          </button>}
         </div>
       </div>
     </div>

@@ -1,0 +1,280 @@
+{
+  "einheiten": [
+    {
+      "id": "aussprache-1-01", "bereich": "aussprache", "stufe": 1, "nr": 1,
+      "titel": "So hören dich die anderen",
+      "faehigkeiten": ["aussprache.hoeren"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Dass die eigene Stimme beim Sprechen auch über die Knochen ankommt und auf der Aufnahme darum fremd klingt, ist gut erklärt. Dass Aufnahme und Prüfliste beim Üben helfen, ist Praxiswissen der Sprecherziehung.",
+      "quellen": ["stimmeaufnahme", "praxis-aussprache"],
+      "aha": "Deine Aufnahme klingt fremd, weil du dich sonst auch über die Schädelknochen hörst. Genau diese fremde Fassung hören die anderen – darum ist sie dein ehrlichster Spiegel.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Warum klingt die eigene Stimme auf einer Aufnahme so fremd?", "optionen": ["Das Mikrofon im Handy verfälscht sie.", "Beim Sprechen hörst du dich zusätzlich über die Knochen – das fehlt auf der Aufnahme.", "Beim Aufnehmen ist man nervös und spricht anders."], "richtig": 1, "loesung": "Beim Sprechen hörst du dich zusätzlich über die Knochen.", "aufloesung": "Über die Schädelknochen kommen vor allem die tiefen Anteile deiner Stimme an. Auf der Aufnahme fehlen sie – darum klingt sie dünner und fremd. Die anderen hören dich so, wie die Aufnahme klingt." },
+        { "art": "karte", "text": "Die Aufnahme ist kein Urteil über deine Stimme, sondern ein Messgerät. Fünf Fragen genügen: Bewegt sich der Mund sichtbar? Sind die Endungen zu hören? Gibt es Pausen? Hält das Satzende? Ist das Tempo ruhig? Dialekt, Akzent oder eine hohe oder tiefe Stimme stehen nicht auf der Liste. Es geht nur darum, ob man dich beim ersten Mal versteht. Ein Strich | in Übungstexten heißt: kurze Pause." },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-1-01-a", "faehigkeit": "aussprache.hoeren", "stufe": 1, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0100" },
+          "auftrag": "Deine Startaufnahme: Lies die Zeilen so, wie du sonst sprichst – nicht besonders schön. Nimm dich auf, wenn du magst.",
+          "zeilen": ["Am Dienstag habe ich einen Termin beim Zahnarzt.", "Ich komme deshalb erst gegen elf ins Büro.", "Die Unterlagen liegen auf meinem Schreibtisch.", "Ruf mich an, wenn etwas Dringendes ist."],
+          "weise": "gewohnt",
+          "pruefliste": ["Mund sichtbar bewegt?", "Endungen zu hören?", "Pausen gesetzt?", "Satzende gehalten?", "Tempo ruhig?"] },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-1-01-b", "faehigkeit": "aussprache.hoeren", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Was kostet Verständlichkeit – und was gehört einfach zu dir?",
+          "faecher": ["kostet Verständlichkeit", "gehört einfach zu dir"],
+          "karten": [
+            { "text": "Silben am Wortende fallen weg", "fach": 0 },
+            { "text": "ein norddeutscher oder bayerischer Klang", "fach": 1 },
+            { "text": "die Stimme versackt am Satzende", "fach": 0 },
+            { "text": "eine eher tiefe oder hohe Stimme", "fach": 1 },
+            { "text": "Wörter kleben ohne Pause aneinander", "fach": 0 },
+            { "text": "ein leichter Akzent aus einer anderen Sprache", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-1-01-c", "faehigkeit": "aussprache.hoeren", "stufe": 2, "kanal": "wissen" },
+          "frage": "Du hörst deine Aufnahme und findest dich furchtbar. Was hilft jetzt am meisten?",
+          "antworten": [
+            { "text": "Alles auf einmal ändern: lauter, langsamer, deutlicher.", "wert": 1, "warum": "Gut gemeint – aber wer alles zugleich ändert, hält es selten durch. Ein Merkmal zur Zeit wirkt besser." },
+            { "text": "Gar nicht mehr anhören – über Lautsprecher klingt die eigene Stimme ohnehin falsch.", "wert": 0, "tendenz": "vermeiden", "warum": "Die Aufnahme klingt fremd, aber nicht falsch. Wer sie meidet, verliert den ehrlichsten Spiegel." },
+            { "text": "Einen Punkt der Prüfliste aussuchen und beim nächsten Mal darauf achten.", "wert": 2, "warum": "Vergleichen statt verurteilen: ein Punkt, eine neue Aufnahme, ein Vergleich. So wird Fortschritt hörbar." },
+            { "text": "So lange neu aufnehmen, bis es perfekt klingt.", "wert": 0, "tendenz": "ueberkontrolle", "warum": "Perfekt gibt es nicht, und nach zehn Versuchen klingst du verkrampft. Zwei Fassungen zum Vergleichen genügen." }
+          ] },
+        { "art": "reflexion", "frage": "Was ist dir an deiner Aufnahme zuerst aufgefallen – und was davon würde ein Fremder am Telefon überhaupt bemerken?" },
+        { "art": "mission", "ref": "aussprache-m-03" }
+      ],
+      "regel": "Die Aufnahme ist kein Urteil, sondern ein Spiegel – vergleichen, nicht verurteilen.",
+      "merkkarten": [
+        { "id": "aussprache-1-01-m1", "frage": "Warum klingt die eigene Aufnahme fremd?", "antwort": "Beim Sprechen hörst du dich auch über die Knochen. Das fehlt auf der Aufnahme – so hören dich die anderen." },
+        { "id": "aussprache-1-01-m2", "frage": "Die fünf Fragen der Prüfliste?", "antwort": "Mund bewegt? Endungen zu hören? Pausen gesetzt? Satzende gehalten? Tempo ruhig?" }
+      ],
+      "mission": "aussprache-m-03"
+    },
+    {
+      "id": "aussprache-1-02", "bereich": "aussprache", "stufe": 1, "nr": 2,
+      "titel": "Der Klar-Modus steckt schon in dir",
+      "faehigkeiten": ["aussprache.hoeren", "aussprache.alltag"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Dass deutliches Sprechen die Verständlichkeit hebt, ist vielfach gezeigt – meist mit wenigen Sprechern und im Hintergrundrauschen. Dass „überdeutlich“ am meisten bringt, stammt aus Studien einer Forschergruppe.",
+      "quellen": ["smiljanic2009", "lam2013", "lam2012", "picheny1985"],
+      "aha": "Bittet man Menschen, überdeutlich zu sprechen, werden sie sofort besser verstanden. Du lernst nichts Neues – du rufst ab, was schon da ist.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Zwölf Erwachsene lasen Sätze vor – einmal wie gewohnt, einmal mit der Bitte „Sprich jedes Wort überdeutlich“. Zuhörer hörten sie in Stimmengewirr. Wie viel mehr Wörter kamen bei der überdeutlichen Fassung an?", "optionen": ["etwa 5 Prozentpunkte mehr", "etwa 25 Prozentpunkte mehr", "etwa 60 Prozentpunkte mehr"], "richtig": 1, "loesung": "Im Schnitt rund 26 Prozentpunkte mehr.", "aufloesung": "Ohne jedes Training. „Sprich deutlich“ brachte rund 15 Punkte, „Sprich wie zu jemandem, der schlecht hört“ rund 21. Die Unterschiede zwischen den Sprechern waren groß – besser verstanden wurden alle zwölf." },
+        { "art": "karte", "text": "Deutliches Sprechen hat fünf Zutaten: etwas ruhigeres Tempo, mehr Pausen, größere Mundbewegung, zu Ende gesprochene Wörter, etwas mehr Stimme. Am stärksten wirkt die Anweisung „Sprich jedes Wort überdeutlich“. Danach nimmst du die Übertreibung zurück auf „klar und natürlich“ – ein Teil der Klarheit bleibt. Das ist der Klar-Modus." },
+        { "art": "klartext", "kopf": { "id": "aussprache-1-02-a", "faehigkeit": "aussprache.hoeren", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0100" },
+          "text": "lesetext-01",
+          "pruefliste": ["Mund sichtbar bewegt?", "Wortenden zu hören?", "Pausen gesetzt?", "Die dritte Fassung klarer als die erste – und trotzdem natürlich?"] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-1-02-b", "faehigkeit": "aussprache.alltag", "stufe": 2, "kanal": "wissen" },
+          "frage": "Wann lohnt sich der Klar-Modus am meisten?",
+          "antworten": [
+            { "text": "Immer und überall, den ganzen Tag.", "wert": 1, "warum": "Gut gemeint, aber Dauerkontrolle macht steif. Feste Momente wirken besser." },
+            { "text": "Sobald jemand nachfragt.", "wert": 0, "warum": "Dann ist es schon passiert – und viele fragen gar nicht nach, sondern raten." },
+            { "text": "Bei allem mit Namen, Zahlen oder Terminen – und am Telefon.", "wert": 2, "warum": "Dort lässt sich nichts aus dem Zusammenhang erraten, und niemand sieht deinen Mund." },
+            { "text": "Nur vor großem Publikum.", "wert": 0, "warum": "Die meisten Missverständnisse entstehen im Kleinen: am Telefon, im Flur, in der Runde." }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-1-02-c", "faehigkeit": "aussprache.alltag", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0103" },
+          "auftrag": "Deine Telefonbegrüßung im Klar-Modus.",
+          "zeilen": ["Guten Morgen, {name} am Apparat.", "Was kann ich für Sie tun?"],
+          "weise": "klar",
+          "pruefliste": ["Name in klaren Silben?", "Kleine Pause vor dem Namen?", "Frage am Ende nicht verschluckt?"] },
+        { "art": "mission", "ref": "aussprache-m-04" }
+      ],
+      "regel": "Erst übertreiben, dann zurücknehmen – die Klarheit bleibt.",
+      "merkkarten": [
+        { "id": "aussprache-1-02-m1", "frage": "Welche Anweisung macht am schnellsten deutlicher?", "antwort": "„Sprich jedes Wort überdeutlich“ – danach die Übertreibung zurücknehmen." },
+        { "id": "aussprache-1-02-m2", "frage": "Die fünf Zutaten deutlichen Sprechens?", "antwort": "Ruhigeres Tempo, mehr Pausen, Mund auf, Wörter zu Ende, etwas mehr Stimme." }
+      ],
+      "mission": "aussprache-m-04"
+    },
+    {
+      "id": "aussprache-1-03", "bereich": "aussprache", "stufe": 1, "nr": 3,
+      "titel": "Mund auf",
+      "faehigkeiten": ["aussprache.oeffnung", "aussprache.vokale"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Größere Mundbewegung gehört zu den beschriebenen Merkmalen deutlichen Sprechens. Lockern, Daumenprobe und die Daumen-Faustregel sind Praxiswissen der Sprecherziehung ohne Studien bei gesunden Sprechern.",
+      "quellen": ["praxis-aussprache", "korken", "smiljanic2009"],
+      "aha": "Bleibt der Kiefer fast zu, fehlt den Lauten der Raum. Vor allem die Vokale werden eng und ähnlich – und das Ohr muss raten.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Ein Korken zwischen den Zähnen ist die beste Übung für eine klare Aussprache.", "urteil": "teils", "warum": "Die Idee stimmt: den Mund bewusst arbeiten lassen. Viele Sprechtrainer raten aber vom Korken ab – der Kiefer beißt fest, die Zunge hat wenig Platz. Die Daumenkuppe gibt nach. Belegt ist keine der beiden Übungen." },
+        { "art": "karte", "text": "Wer deutlich spricht, bewegt den Mund mehr: Der Kiefer geht weiter auf, die Lippen runden und spreizen sich sichtbar. Dann liegen die Vokale weiter auseinander, und „Miete“ klingt nicht wie „Mitte“. Faustregel: Beim „a“ passt die Daumenkuppe flach (Nagel nach oben) zwischen die Schneidezähne. Locker öffnen, nicht aufreißen – angespannt klingt es gepresst." },
+        { "art": "lockern", "uebungen": ["Mit geschlossenen Lippen gähnen.", "Kauen wie auf einem großen Bonbon.", "Die Wangen mit den Fingern von oben nach unten ausstreichen.", "Lippen flattern lassen wie ein Pferd.", "Im Wechsel Schnute ziehen und breit grinsen.", "Die Zunge vor den Zähnen kreisen lassen."], "sekunden": 90, "stummMoeglich": true },
+        { "art": "anleitung", "titel": "Die Daumenprobe", "schritte": ["Daumen waschen, dann die Kuppe flach (Nagel nach oben) zwischen die Schneidezähne legen – nicht zubeißen. Schmerzt der Kiefer, lass die Übung weg.", "Sprich langsam: „Am Abend fahren alle nach Hause.“", "Noch einmal: „Morgen kommt der große Auftrag.“", "Daumen weg und beide Sätze klar und natürlich sprechen.", "Spür nach: Wie weit geht der Kiefer jetzt auf?"], "sekunden": 60, "stumm": false, "pruefung": ["Kiefer ohne Daumen weiter offen als vorher?", "Klingt das „a“ voller?", "Nichts verkrampft?"] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-1-03-a", "faehigkeit": "aussprache.oeffnung", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0106" },
+          "auftrag": "Erst überdeutlich mit großer Mundbewegung – dann noch einmal klar und natürlich.",
+          "zeilen": ["Am Abend fahren alle nach Hause.", "Morgen kommt der große Auftrag.", "Das Paket lag den ganzen Tag am Tor.", "Wir haben alles noch einmal nachgerechnet."],
+          "weise": "ueberdeutlich",
+          "pruefliste": ["Kiefer sichtbar geöffnet?", "Lippen bewegt?", "Danach natürlich zurückgenommen?"] },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-1-03-b", "faehigkeit": "aussprache.vokale", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Was macht der Mund beim betonten Vokal? Sprich die Wörter ruhig leise mit.",
+          "faecher": ["Kiefer weit offen", "Lippen rund", "Lippen breit"],
+          "karten": [
+            { "text": "Garten", "fach": 0 },
+            { "text": "Ofen", "fach": 1 },
+            { "text": "Brief", "fach": 2 },
+            { "text": "Bahn", "fach": 0 },
+            { "text": "Tür", "fach": 1 },
+            { "text": "Tee", "fach": 2 }
+          ] },
+        { "art": "mission", "ref": "aussprache-m-01" }
+      ],
+      "regel": "Gib den Lauten Raum: Kiefer locker auf, Lippen arbeiten lassen.",
+      "merkkarten": [
+        { "id": "aussprache-1-03-m1", "frage": "Die Faustregel für die Mundöffnung?", "antwort": "Beim „a“ passt die Daumenkuppe flach (Nagel nach oben) zwischen die Schneidezähne – locker, nicht aufgerissen." },
+        { "id": "aussprache-1-03-m2", "frage": "Warum lieber Daumen als Korken?", "antwort": "Der Daumen gibt nach. Beim Korken beißt der Kiefer fest und die Zunge hat wenig Platz." }
+      ],
+      "mission": "aussprache-m-01"
+    },
+    {
+      "id": "aussprache-1-04", "bereich": "aussprache", "stufe": 1, "nr": 4,
+      "titel": "Die Enden zählen",
+      "faehigkeiten": ["aussprache.konsonanten", "aussprache.tragen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Hörbar gelöste Konsonanten und mitgesprochene Laute gehören zu den gut beschriebenen Merkmalen deutlichen Sprechens. Dass gezieltes Üben der Wortenden und des Satzendes im Alltag hilft, ist Praxiswissen.",
+      "quellen": ["smiljanic2009", "quintilian", "praxis-aussprache"],
+      "aha": "Wer „nich“ und „is“ sagt, lässt den Zuhörer raten. Am Telefon und im Lärm fehlen ihm dann genau die Laute, die den Sinn tragen – das Ende von Wort und Satz.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Am Telefon fragt Herr Petersen, ob seine Bestellung fertig ist. Er hört nicht mehr gut.", "schwach": "„Ham wir noch nich geschafft, is erst morgen fertig.“", "stark": "„Das haben wir noch nicht geschafft. Es ist erst morgen fertig.“", "frage": "Was hört Herr Petersen in der zweiten Fassung, was ihm in der ersten fehlt?", "unterschied": "Die Enden: das t in „nicht“ und „ist“, das „-ben“ in „haben“. Genau an diesen Stellen müsste er sonst raten. Unter Freunden ist die lockere Fassung völlig in Ordnung – am Telefon kostet sie Verständlichkeit." },
+        { "art": "karte", "text": "Im Deutschen stecken Zeit, Zahl und Fall oft am Wortende: sagt oder sagte, Kunde oder Kunden, dem oder den. Darum: p, t und k am Ende hörbar lösen, „-en“ mitsprechen. Und den Satz bis zum letzten Wort tragen – die Stimme darf sinken, aber nicht verschwinden. Schon Quintilian riet, Wörter ganz auszusprechen, ohne jeden Buchstaben einzeln abzuzählen." },
+        { "art": "fehler", "kopf": { "id": "aussprache-1-04-a", "faehigkeit": "aussprache.konsonanten", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "So klingt eine lockere Sprachnachricht. Markier die Stellen, an denen am Telefon ein Wortende fehlt.",
+          "teile": [
+            { "t": "Hallo" }, { "t": "Tarek," }, { "t": "ich" },
+            { "t": "hab", "fehler": "„habe“ – im Satz ist das e kein Muss, am Telefon hilft es." },
+            { "t": "die" }, { "t": "Liste" },
+            { "t": "nich", "fehler": "„nicht“ – ohne das t kippt leicht der Sinn." },
+            { "t": "gefunden." },
+            { "t": "Is", "fehler": "„Ist“ – mit t ist der Anfang der Frage klar zu hören." },
+            { "t": "die" }, { "t": "vielleicht" }, { "t": "noch" }, { "t": "im" }, { "t": "Büro?" }, { "t": "Ruf" }, { "t": "mich" },
+            { "t": "ma", "fehler": "„mal“ – das l fehlt." },
+            { "t": "an." }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-1-04-b", "faehigkeit": "aussprache.konsonanten", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0112" },
+          "auftrag": "Sprich jedes Wortende hörbar – erst überdeutlich, dann klar.",
+          "zeilen": ["Ich rufe Sie morgen gegen zehn zurück.", "Das habe ich nicht gewusst.", "Wir haben den Termin verschoben.", "Es ist nicht weit, nur bis zur Ampel."],
+          "weise": "ueberdeutlich",
+          "pruefliste": ["t in „nicht“ und „ist“ zu hören?", "„-en“ am Ende mitgesprochen?", "p, t, k am Wortende gelöst?"] },
+        { "art": "lautleiter", "kopf": { "id": "aussprache-1-04-c", "faehigkeit": "aussprache.tragen", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0115" },
+          "laut": "Satzende halten",
+          "stufen": [
+            { "s": "Wort", "zeilen": ["Termin", "Dienstag", "verschoben"] },
+            { "s": "Wortgruppe", "zeilen": ["am Dienstag", "um halb drei", "ins Büro"] },
+            { "s": "kurzer Satz", "zeilen": ["Der Termin ist am Dienstag.", "Wir treffen uns im Büro."] },
+            { "s": "langer Satz", "zeilen": ["Der Termin ist am Dienstag um halb drei bei uns im Büro.", "Bitte bringen Sie die Unterlagen vom letzten Gespräch mit."] }
+          ],
+          "pruefliste": ["Letztes Wort so gut zu hören wie das erste?", "Stimme senkt sich, ohne leiser zu werden?", "Danach kurz gelöst und neu eingeatmet?"] },
+        { "art": "experiment", "auftrag": "Achte heute nur auf zwei Wörter: das t in „nicht“ und „ist“ – bei der Arbeit oder am Telefon.", "dauer": "heute", "nachfrage": "Wann ist dir das t aufgefallen – und wann kam es schon von selbst?" },
+        { "art": "mission", "ref": "aussprache-m-02" }
+      ],
+      "regel": "Sprich Wörter und Sätze zu Ende – dort steckt oft der Sinn.",
+      "merkkarten": [
+        { "id": "aussprache-1-04-m1", "frage": "Welche zwei kleinen Wörter lohnen am meisten?", "antwort": "„nicht“ und „ist“ – mit hörbarem t." },
+        { "id": "aussprache-1-04-m2", "frage": "Was heißt „Satzende halten“?", "antwort": "Die Stimme darf am Ende sinken, aber nicht leiser werden – das letzte Wort trägt oft das Wichtigste." }
+      ],
+      "mission": "aussprache-m-02"
+    },
+    {
+      "id": "aussprache-1-05", "bereich": "aussprache", "stufe": 1, "nr": 5,
+      "titel": "Pausen statt Bremsen",
+      "faehigkeiten": ["aussprache.takt"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Deutliches Sprechen enthält mehr Pausen. Bloß langsamer zu sprechen brachte gesunden Sprechern in einer Studie keinen sicheren Gewinn; deutlich bei normalem Tempo wirkte in einer kleinen Studie. Wo genau die Pause sitzt, ist Praxiswissen.",
+      "quellen": ["stipancic2016", "krause2019", "smiljanic2009", "quintilian"],
+      "aha": "Wer nur langsamer spricht, klingt schnell künstlich – und wird nicht unbedingt besser verstanden. Kurze Pausen nach Sinnschritten geben dem Ohr Zeit, ohne dass du dehnen musst.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer langsam spricht, wird verstanden.", "urteil": "teils", "warum": "Langsamer hilft oft, aber nicht zuverlässig: In einer Studie brachte bloßes Langsamsprechen gesunden Sprechern keinen sicheren Gewinn, deutliches Sprechen schon. Stabil wird es mit deutlicher Mundbewegung – und mit Pausen an der richtigen Stelle." },
+        { "art": "studie", "frage": "Geht deutlich auch ohne Schneckentempo?", "aufbau": "Acht ältere Zuhörer mit gutem Gehör hörten Sätze im Rauschen: wie gewohnt gesprochen, deutlich bei normalem Tempo und deutlich und langsam.", "ergebnis": "Deutlich bei normalem Tempo brachte rund 14 Prozentpunkte mehr verstandene Wörter, deutlich und langsam rund 23.", "grenze": "Sehr kleine Gruppe, Unsinnssätze, geübte Sprecher. Die Richtung passt zu anderen Studien, die genauen Zahlen sind unsicher.", "beleg": "B", "quellen": ["krause2019"] },
+        { "art": "karte", "text": "Ein Gedanke, ein Atem: Nach jedem Sinnschritt kurz anhalten, dazwischen ruhig weitersprechen. Die Pause sitzt nach der Wortgruppe, nicht mitten darin. Einen verlässlichen Richtwert, wie schnell man im Deutschen sprechen sollte, gibt es nicht. Der Coach vergleicht dich darum nur mit deiner eigenen Startaufnahme." },
+        { "art": "auswahl", "kopf": { "id": "aussprache-1-05-a", "faehigkeit": "aussprache.takt", "stufe": 2, "kanal": "wissen" },
+          "frage": "Wo sitzen die Pausen gut? Der Strich steht für eine kurze Pause.",
+          "antworten": [
+            { "text": "„Bitte bringen Sie | den Vertrag am | Montag ins Büro mit.“", "wert": 0, "warum": "Die zweite Pause zerreißt „am Montag“. Pausen gehören hinter eine Wortgruppe, nicht hinein." },
+            { "text": "„Bitte bringen Sie den Vertrag | am Montag | ins Büro mit.“", "wert": 2, "warum": "Jede Pause steht nach einem Sinnschritt: was, wann, wohin. So kann das Ohr mitsortieren." },
+            { "text": "„Bitte | bringen | Sie | den | Vertrag | am | Montag | ins | Büro | mit.“", "wert": 0, "tendenz": "tempo", "warum": "Nach jedem Wort eine Pause klingt abgehackt und künstlich – der Zusammenhang geht verloren." },
+            { "text": "„Bitte bringen Sie den Vertrag am Montag | ins Büro mit.“", "wert": 1, "warum": "Die Pause sitzt richtig, aber der Anfang ist lang. Vor „am Montag“ hilft noch eine – dort steckt die Zeitangabe." }
+          ] },
+        { "art": "klartext", "kopf": { "id": "aussprache-1-05-b", "faehigkeit": "aussprache.takt", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0118" },
+          "text": "Am Montag beginnt die neue Woche. | Zuerst kommt die Besprechung um neun. | Danach haben wir Zeit für Fragen. | Bitte bringt eure Listen mit | und denkt an die Zahlen vom Mai.",
+          "pruefliste": ["An jedem Strich kurz angehalten?", "Dazwischen in normalem Tempo?", "Klingt es natürlich statt gedehnt?"] },
+        { "art": "sprechen", "kopf": { "id": "aussprache-1-05-c", "faehigkeit": "aussprache.takt", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0119" },
+          "auftrag": "Erklär, wie man von deiner Haustür zum nächsten Bäcker kommt – mit einer kleinen Pause nach jedem Wegstück.",
+          "sekunden": 45,
+          "pruefliste": ["Nach jedem Wegstück eine Pause?", "Wörter dazwischen nicht gedehnt?", "Straßennamen und Zahlen deutlich?"] },
+        { "art": "mission", "ref": "aussprache-m-08" }
+      ],
+      "regel": "Nicht dehnen – nach jedem Sinnschritt kurz anhalten.",
+      "merkkarten": [
+        { "id": "aussprache-1-05-m1", "frage": "Was hilft dem Ohr mehr als bloßes Langsamsprechen?", "antwort": "Kurze Pausen nach Sinnschritten – und deutliche Mundbewegung." },
+        { "id": "aussprache-1-05-m2", "frage": "Wo gehört die Pause hin?", "antwort": "Hinter eine Wortgruppe, nicht mitten hinein: „den Vertrag | am Montag | ins Büro“." }
+      ],
+      "mission": "aussprache-m-08"
+    },
+    {
+      "id": "aussprache-1-06", "bereich": "aussprache", "stufe": 1, "nr": 6,
+      "titel": "Namen, Zahlen, Adressen",
+      "faehigkeiten": ["aussprache.alltag", "aussprache.takt"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Die Buchstabiertafel ist genormt. Bremsen vor dichten Wörtern und Zahlen in Gruppen sind Praxiswissen.",
+      "quellen": ["praxis-aussprache", "din5009"],
+      "aha": "Bei Namen und Zahlen hilft kein Zusammenhang beim Raten. Vor dichten Wörtern braucht das Ohr eine kleine Pause – dann Silbe für Silbe.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "aussprache-1-06-a", "faehigkeit": "aussprache.alltag", "stufe": 2, "kanal": "wissen" },
+          "frage": "Herr Petersen soll dich zurückrufen. Wie kommt deine Nummer am sichersten an?",
+          "antworten": [
+            { "text": "Zügig in einem Atemzug – das klingt geübt.", "wert": 0, "tendenz": "tempo", "warum": "Gerade was mitgeschrieben werden soll, braucht Zeit. Eine Kette ohne Pause merkt sich kaum jemand." },
+            { "text": "Ganz langsam, jede Ziffer einzeln mit Pause.", "wert": 1, "warum": "Kommt an, ist aber mühsam. Elf Einzelziffern sind schwerer zu behalten als vier kleine Gruppen." },
+            { "text": "Lieber gar nicht aussprechen – die Nummer schicke ich ihm per Mail, da kann er sie nicht falsch hören.", "wert": 0, "tendenz": "vermeiden", "warum": "Manchmal klug – aber Herr Petersen sitzt gerade nicht am Rechner. Die Nummer am Telefon durchgeben zu können, lohnt sich." },
+            { "text": "Kurz ankündigen, dann in kleinen Gruppen – und am Ende noch einmal.", "wert": 2, "warum": "Die Ankündigung holt den Stift, die Gruppen passen ins Gedächtnis, die Wiederholung sichert ab." }
+          ] },
+        { "art": "karte", "text": "Dichte Wörter sind Namen, Zahlen, Termine, Mailadressen und neue Begriffe – alles, was man nicht aus dem Zusammenhang erraten kann. Davor eine kleine Pause, dann Silbe für Silbe, Zahlen in Zweier- oder Dreiergruppen. Was leicht verwechselt wird, sagst du ein zweites Mal anders: „am vierzehnten – eins, vier“, „zwo“ statt „zwei“." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-1-06-b", "faehigkeit": "aussprache.takt", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Wo bremst du kurz – und was darf einfach fließen?",
+          "faecher": ["vorher kurz bremsen", "darf fließen"],
+          "karten": [
+            { "text": "die Rückrufnummer", "fach": 0 },
+            { "text": "„Schönen Tag noch.“", "fach": 1 },
+            { "text": "dein Nachname", "fach": 0 },
+            { "text": "„Ich wollte nur kurz Bescheid sagen.“", "fach": 1 },
+            { "text": "die Uhrzeit des Termins", "fach": 0 },
+            { "text": "„Vielen Dank für Ihren Anruf.“", "fach": 1 }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-1-06-c", "faehigkeit": "aussprache.alltag", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0104" },
+          "auftrag": "Vor jeder dichten Stelle kurz bremsen, dann Silbe für Silbe.",
+          "zeilen": ["Wegner mit e, wie Essen.", "Der Termin ist am vierzehnten, | nicht am vierzigsten.", "Meine Nummer: null – drei – null, | zwo – drei, | eins – zwo – fünf, | null – eins – vier.", "Die Mail geht an lena punkt brandt | at beispiel punkt de."],
+          "weise": "klar",
+          "pruefliste": ["Vor Name und Zahl kurz gebremst?", "Zahlen in Gruppen?", "Vierzehn und vierzig klar unterschieden?"] },
+        { "art": "anleitung", "titel": "Dein Name nach der Buchstabiertafel", "schritte": ["Schreib deinen Nachnamen auf.", "Such zu jedem Buchstaben das Wort der Tafel – seit 2022 sind es Städte: Aachen, Berlin, Chemnitz, Düsseldorf, Essen …", "Sprich die Reihe einmal halblaut oder in Gedanken durch.", "Achte auf Buchstaben, die oft verwechselt werden: b und p, d und t, m und n."], "sekunden": 60, "stumm": true, "pruefung": ["Kannst du deinen Namen ohne Nachdenken buchstabieren?", "Die alte Tafel mit Vornamen geht genauso – Hauptsache, sie sitzt."] },
+        { "art": "sammeln", "auftrag": "Deine eigene Übungsliste: Welche Namen, Nummern und Wörter musst du oft durchgeben? Eins pro Zeile.", "mindestens": 3, "ziel": "wortliste" },
+        { "art": "mission", "ref": "aussprache-m-05" }
+      ],
+      "regel": "Vor Namen und Zahlen bremsen – dann Silbe für Silbe, in kleinen Gruppen.",
+      "merkkarten": [
+        { "id": "aussprache-1-06-m1", "frage": "Was sind „dichte Wörter“?", "antwort": "Namen, Zahlen, Termine, Mailadressen, neue Begriffe – alles, was man nicht erraten kann." },
+        { "id": "aussprache-1-06-m2", "frage": "Wie gibst du eine Telefonnummer durch?", "antwort": "Ankündigen, in kleinen Gruppen sprechen, am Ende noch einmal." }
+      ],
+      "mission": "aussprache-m-05"
+    },
+    {
+      "id": "aussprache-1-07", "bereich": "aussprache", "stufe": 1, "nr": 7,
+      "titel": "Dein Moment für Klarheit",
+      "faehigkeiten": ["aussprache.alltag"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Wenn-Dann-Pläne und das Festhalten von Fortschritt beim Umsetzen von Vorsätzen helfen, zeigen Meta-Analysen – fürs deutliche Sprechen sind sie nicht eigens untersucht. Dass feste Momente besser tragen als Dauerkontrolle, ist Praxiswissen.",
+      "quellen": ["gollwitzer2006", "harkin2016", "maas2008"],
+      "aha": "Den ganzen Tag auf die Aussprache zu achten, macht steif und hält nicht. Ein fester Moment am Tag – mit einem klaren Auslöser – wird zur Gewohnheit.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Zwei Vorsätze nach dem Training.", "schwach": "„Ab jetzt spreche ich immer deutlich.“", "stark": "„Wenn ich am Telefon abnehme, sage ich meinen Namen in klaren Silben.“", "frage": "Welcher Vorsatz hält länger?", "unterschied": "Der zweite nennt einen Auslöser und eine kleine, klare Handlung. „Immer“ hat keinen Anfang – und ist nach dem ersten hektischen Tag vergessen." },
+        { "art": "karte", "text": "Ein Wenn-Dann-Plan verknüpft eine Lage mit einer Handlung. Kommt die Lage, startet die Handlung fast von selbst – das ist für viele Vorsätze gut belegt. Dazu passt, was man übers Bewegungslernen weiß: Viele kurze Wiederholungen über Tage verteilt bleiben besser hängen als eine lange Übung. Ein Moment am Tag genügt für den Anfang." },
+        { "art": "auswahl", "kopf": { "id": "aussprache-1-07-a", "faehigkeit": "aussprache.alltag", "stufe": 3, "kanal": "wissen" },
+          "frage": "Welcher Moment eignet sich am besten als erster Klar-Moment?",
+          "antworten": [
+            { "text": "Die große Präsentation in drei Monaten – da zählt es wirklich, also lohnt sich die Übung dort.", "wert": 0, "warum": "Zu selten und zu aufgeladen. Eine Gewohnheit wächst an kleinen, häufigen Gelegenheiten." },
+            { "text": "Der erste Satz in der Montagsrunde.", "wert": 1, "warum": "Guter Moment mit klarem Auslöser – nur einmal pro Woche. Für den Anfang wirkt etwas Tägliches schneller." },
+            { "text": "Die Telefonbegrüßung – jeden Tag mehrmals, mit dem eigenen Namen.", "wert": 2, "warum": "Täglich, klarer Auslöser, kurz und mit dem Wort, das am häufigsten falsch ankommt: deinem Namen." },
+            { "text": "Immer dann, wenn ich mich gerade daran erinnere.", "wert": 0, "warum": "Ohne festen Auslöser hängt alles am Zufall. Genau das nimmt der Plan dir ab." }
+          ] },
+        { "art": "wenndann", "anlass": "Dein Klar-Moment für die nächsten Wochen.", "wenn": ["ich am Telefon abnehme", "ich in der Runde zum ersten Mal etwas sage", "ich mich bei jemandem Neuem vorstelle", "ich eine Rückrufnummer durchgebe"], "dann": ["sage ich meinen Namen in klaren Silben", "spreche ich den ersten Satz klar und halte das Satzende", "mache ich vor dem Namen eine kleine Pause", "spreche ich die Zahlen in Gruppen und wiederhole sie"] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-1-07-b", "faehigkeit": "aussprache.alltag", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "aussprache-v-0103" },
+          "auftrag": "Probier deinen Moment einmal laut aus – klar und natürlich.",
+          "zeilen": ["Guten Tag, hier spricht {name}.", "Kurz zu mir: Ich bin {name} und kümmere mich um die Bestellungen.", "Darf ich etwas ergänzen? Mir ist bei Punkt zwei etwas aufgefallen."],
+          "weise": "klar",
+          "pruefliste": ["Name in klaren Silben?", "Satzende gehalten?", "Klingt es nach dir – nicht nach Bühne?"] },
+        { "art": "zaehler", "name": "Wie bitte?", "auftrag": "Zähl jeden Abend, wie oft du heute um Wiederholung gebeten wurdest. Nur zählen, nicht bewerten.", "tage": 14 },
+        { "art": "mission", "ref": "aussprache-m-06" }
+      ],
+      "regel": "Ein fester Moment mit klarem Auslöser trägt weiter als „ab jetzt immer“.",
+      "merkkarten": [
+        { "id": "aussprache-1-07-m1", "frage": "Warum keine Dauerkontrolle?", "antwort": "Sie macht steif und hält nicht. Ein fester Moment mit Auslöser wird zur Gewohnheit." },
+        { "id": "aussprache-1-07-m2", "frage": "Wie ist ein Wenn-Dann-Plan gebaut?", "antwort": "Wenn diese Lage kommt, dann tue ich diese kleine Handlung – zum Beispiel: Wenn ich abnehme, sage ich meinen Namen klar." }
+      ],
+      "mission": "aussprache-m-06"
+    }
+  ]
+}

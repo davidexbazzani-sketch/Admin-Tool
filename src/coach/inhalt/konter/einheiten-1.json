@@ -1,0 +1,295 @@
+{
+  "einheiten": [
+    {
+      "id": "konter-1-01", "bereich": "konter", "stufe": 1, "nr": 1,
+      "titel": "Mitspielen statt kontern",
+      "faehigkeiten": ["konter.spiel"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Improvisationsübungen fördern nachweislich Einfallsreichtum und Gelassenheit bei Ungewissem. Dass genau diese Technik schlagfertiger macht, ist Praxiswissen.",
+      "quellen": ["felsman2020", "kurtz2017"],
+      "aha": "Wenn jemand witzig ist, musst du nicht witziger sein. Greif das Bild auf und geh einen Schritt weiter – das genügt, und es verbindet.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Der Drucker streikt zum dritten Mal. Tarek: „Für den Drucker gründe ich bald eine Selbsthilfegruppe.“", "schwach": "„Ja, der nervt echt.“", "stark": "„Ich bring Kekse mit. Treffen wir uns dienstags?“", "frage": "Was macht die zweite Antwort anders?", "unterschied": "Sie nimmt Tareks Bild ernst und baut es aus. Die erste stimmt nur zu – damit ist das Spiel vorbei." },
+        { "art": "karte", "text": "Witzige Menschen suchen selten einen Gegner. Sie suchen jemanden, der mitspielt. Das Prinzip kommt aus dem Improvisationstheater: annehmen, was der andere anbietet, und ein Stück dazulegen. Kurz: Ja, und." },
+        { "art": "auswahl", "kopf": { "id": "konter-1-01-a", "faehigkeit": "konter.spiel", "stufe": 2, "kanal": "wissen" },
+          "frage": "Miriam schaut auf dein überquellendes Postfach: „Dein Postfach hat Burn-out.“ Welche Antwort spielt mit?",
+          "antworten": [
+            { "text": "„Es ist seit Montag krankgeschrieben. Ich mache die Vertretung.“", "wert": 2, "warum": "Du nimmst das Bild an und führst es weiter." },
+            { "text": "Lachen und sagen: „Der war gut.“", "wert": 1, "warum": "Ehrliches Lachen ist eine vollwertige Antwort. Nur geht das Spiel nicht weiter." },
+            { "text": "„Deins sieht auch nicht besser aus, wenn ich mal ehrlich sein darf.“", "wert": 0, "tendenz": "angreifen", "warum": "Das dreht den Spieß um. Aus dem Spiel wird ein Schlagabtausch." },
+            { "text": "„Ich habe eben viel zu tun.“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Du verteidigst dich gegen etwas, das kein Angriff war." }
+          ] },
+        { "art": "konter", "kopf": { "id": "konter-1-01-b", "faehigkeit": "konter.spiel", "stufe": 3, "kanal": "koennen" },
+          "lage": "Montagmorgen, Kaffeeküche. Die Maschine gibt nur noch heißes Wasser.", "von": "Tarek", "spruch": "„Die Maschine hat innerlich gekündigt.“", "schaerfe": 1,
+          "muster": [
+            { "technik": "weiterspinnen", "text": "„Dann brauchen wir ein Abschiedsgeschenk. Entkalker.“" },
+            { "technik": "Rolle annehmen", "text": "„Ich rede mit ihr. Wir hatten immer einen guten Draht.“" },
+            { "technik": "ernst zu Ende denken", "text": "„Verständlich. Seit Jahren kein Urlaub.“" }
+          ],
+          "kriterien": ["greift das Bild auf", "fügt etwas hinzu", "bleibt freundlich"] },
+        { "art": "reflexion", "frage": "Wer in deinem Umfeld macht gern solche Sprüche? Bei wem probierst du es zuerst aus?" },
+        { "art": "mission", "ref": "konter-m-02" }
+      ],
+      "regel": "Nicht übertrumpfen – aufgreifen und einen Schritt weitergehen.",
+      "merkkarten": [
+        { "id": "konter-1-01-m1", "frage": "Jemand macht einen Scherz. Was ist deine Aufgabe?", "antwort": "Mitspielen: das Bild annehmen und ein Stück dazulegen." },
+        { "id": "konter-1-01-m2", "frage": "Dir fällt nichts ein. Was geht immer?", "antwort": "Ehrlich lachen und es sagen: „Der war gut.“" }
+      ],
+      "mission": "konter-m-02"
+    },
+    {
+      "id": "konter-1-02", "bereich": "konter", "stufe": 1, "nr": 2,
+      "titel": "Die gewonnene Sekunde",
+      "faehigkeiten": ["konter.ruhe"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Dass Anspannung das Denken einengt und Abstand im Selbstgespräch beruhigt, ist untersucht. Die Sekunden-Regel selbst ist Praxiswissen.",
+      "quellen": ["kross2014", "praxis-konter"],
+      "aha": "Wer nach einem Spruch einmal ausatmet und den anderen ruhig ansieht, hat schon geantwortet. Gelassenheit wirkt stärker als jeder hastige Satz.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Was wirkt auf Zuhörer souveräner: eine sofortige, mittelmäßige Antwort oder zwei Sekunden Ruhe und dann ein schlichter Satz?", "optionen": ["die sofortige Antwort", "zwei Sekunden Ruhe, dann ein schlichter Satz", "kein Unterschied"], "richtig": 1, "loesung": "Zwei Sekunden Ruhe, dann ein schlichter Satz", "aufloesung": "Hast in der Antwort klingt nach Getroffensein. Eine ruhige Pause zeigt: Du lässt dich nicht treiben. Und in diesen zwei Sekunden wird dein Kopf wieder frei." },
+        { "art": "karte", "text": "Ein Spruch vor anderen löst eine kleine Schreckreaktion aus: Puls hoch, Denken eng. Genau dann soll dir etwas einfallen – das klappt selten. Darum zuerst den Körper beruhigen: einmal lang ausatmen, den anderen ansehen. Wer innerlich den eigenen Namen sagt („{name}, ganz ruhig“), gewinnt zusätzlich Abstand." },
+        { "art": "auswahl", "kopf": { "id": "konter-1-02-a", "faehigkeit": "konter.ruhe", "stufe": 2, "kanal": "wissen" },
+          "frage": "Sven, vor der ganzen Runde: „Na, auch schon wach?“ Was ist der beste erste Schritt?",
+          "antworten": [
+            { "text": "Ausatmen, ihn ansehen, kurz lächeln – dann antworten oder es stehen lassen.", "wert": 2, "warum": "Die Pause nimmt dem Spruch das Tempo und gibt dir Zeit." },
+            { "text": "Sofort zurückfeuern, bevor die anderen lachen – wer zögert, steht schnell als Ziel da.", "wert": 0, "tendenz": "angreifen", "warum": "Unter Zeitdruck kommt selten das Beste – und es wirkt getroffen." },
+            { "text": "Erklären, warum du später kamst.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Damit machst du aus einem Spruch eine Anklage." },
+            { "text": "So tun, als hättest du nichts gehört.", "wert": 1, "warum": "Manchmal richtig – aber Wegsehen wirkt schnell verunsichert. Ein ruhiger Blick ist stärker." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "konter-1-02-b", "faehigkeit": "konter.ruhe", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Was wirkt gelassen, was wirkt getroffen?",
+          "faecher": ["gelassen", "getroffen"],
+          "karten": [
+            { "text": "ein ruhiges „Aha.“ mit Blickkontakt", "fach": 0 },
+            { "text": "ein langer Satz, der erklärt", "fach": 1 },
+            { "text": "eine Sekunde Pause, dann „Kann man so sehen.“", "fach": 0 },
+            { "text": "rot werden und wegsehen", "fach": 1 },
+            { "text": "ein Lächeln und weitermachen", "fach": 0 },
+            { "text": "„Das stimmt doch gar nicht!“ – laut", "fach": 1 }
+          ] },
+        { "art": "anleitung", "titel": "Die Sekunde üben", "schritte": ["Denk an einen Spruch, der dich mal getroffen hat.", "Sag ihn dir innerlich vor.", "Atme einmal lang aus.", "Stell dir vor, wie du die Person ruhig ansiehst.", "Sag innerlich: „Aha.“"], "sekunden": 40, "stumm": true },
+        { "art": "konter", "kopf": { "id": "konter-1-02-c", "faehigkeit": "konter.ruhe", "stufe": 2, "kanal": "koennen" },
+          "lage": "Du kommst zwei Minuten zu spät in die Besprechung.", "von": "Ein Kollege", "spruch": "„Ah, die Majestät beehrt uns.“", "schaerfe": 2,
+          "muster": [
+            { "technik": "Sekunde und Allzwecksatz", "text": "(ausatmen, lächeln) „Guten Morgen zusammen.“ – und Platz nehmen." },
+            { "technik": "Zustimmen", "text": "„Die Majestät bittet um Verzeihung und hält sich ab jetzt kurz.“" },
+            { "technik": "Untertreiben", "text": "„Nur ein kleiner Auftritt.“" }
+          ],
+          "kriterien": ["kein Rechtfertigen", "ruhiger Ton", "kurz"] },
+        { "art": "mission", "ref": "konter-m-07" }
+      ],
+      "regel": "Erst ausatmen, dann antworten – die Ruhe ist schon die halbe Antwort.",
+      "merkkarten": [
+        { "id": "konter-1-02-m1", "frage": "Was tust du in der ersten Sekunde nach einem Spruch?", "antwort": "Einmal lang ausatmen und den anderen ruhig ansehen." },
+        { "id": "konter-1-02-m2", "frage": "Warum fällt einem im Schreck nichts ein?", "antwort": "Die Anspannung macht das Denken eng. Erst der Körper, dann der Kopf." }
+      ],
+      "mission": "konter-m-07"
+    },
+    {
+      "id": "konter-1-03", "bereich": "konter", "stufe": 1, "nr": 3,
+      "titel": "Rückfrage: Wie meinst du das?",
+      "faehigkeiten": ["konter.rueckfrage"], "dauerMin": 6, "beleg": "P",
+      "quellen": ["praxis-konter", "freud1905"],
+      "aha": "Eine ruhige Rückfrage gibt den Ball zurück. Wer seinen Spruch erklären muss, merkt oft selbst, wie er klingt – und war es ernst gemeint, weißt du jetzt, worum es geht.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Auf einen Spruch muss man mit einem noch besseren Spruch antworten.", "urteil": "falsch", "warum": "Die schlichte Rückfrage ist oft stärker: Sie kostet keinen Einfall und lässt den anderen arbeiten." },
+        { "art": "karte", "text": "„Wie meinst du das?“ – ruhig, ohne Unterton, mit Blickkontakt. Die Frage wirkt, weil sie den Spruch ernst nimmt. Ein Witz verliert, wenn man ihn erklären muss; eine versteckte Kritik kommt auf den Tisch, wo man sachlich darüber reden kann. Eng verwandt: das Übersetzen – du holst den sachlichen Kern heraus." },
+        { "art": "rangfolge", "kopf": { "id": "konter-1-03-a", "faehigkeit": "konter.rueckfrage", "stufe": 3, "kanal": "wissen" },
+          "frage": "Dr. Albers: „Ich hatte die Zahlen eigentlich gestern erwartet.“ Ordne die Antworten von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Was brauchen Sie bis wann? Dann richte ich mich danach.“", "warum": "Übersetzt den Vorwurf in eine Absprache – sachlich und lösungsorientiert." },
+            { "text": "„Wie meinen Sie das – hätte ich Sie früher informieren sollen?“", "warum": "Gute Rückfrage, klärt den Kern. Etwas weniger zielgerichtet." },
+            { "text": "„Die Vorlage kam erst spät, und dann hatte ich noch …“", "warum": "Rechtfertigung – erklärt die Vergangenheit statt die Zukunft zu klären." },
+            { "text": "„Eigentlich, ja? Eigentlich hatte ich auch Urlaub geplant.“", "warum": "Ironie nach oben – riskant und unsachlich." }
+          ] },
+        { "art": "konter", "kopf": { "id": "konter-1-03-b", "faehigkeit": "konter.rueckfrage", "stufe": 3, "kanal": "koennen" },
+          "lage": "Du stellst in der Teamrunde einen Vorschlag vor.", "von": "Ein Kollege", "spruch": "„Typisch – wieder so eine Idee aus dem Elfenbeinturm.“", "schaerfe": 2,
+          "muster": [
+            { "technik": "Rückfrage", "text": "„Was genau stört dich daran?“" },
+            { "technik": "Übersetzen", "text": "„Du meinst, es ist zu weit weg vom Alltag? Sag mir, wo es hakt.“" },
+            { "technik": "Präzisieren lassen", "text": "„Typisch? Woran denkst du da?“" }
+          ],
+          "kriterien": ["nicht verteidigen", "nach dem Kern fragen", "ruhig bleiben"] },
+        { "art": "auswahl", "kopf": { "id": "konter-1-03-c", "faehigkeit": "konter.rueckfrage", "stufe": 3, "kanal": "wissen" },
+          "frage": "Wann ist die Rückfrage NICHT die beste Wahl?",
+          "antworten": [
+            { "text": "Wenn jemand einfach einen harmlosen Witz gemacht hat.", "wert": 2, "warum": "Dann wirkt „Wie meinst du das?“ humorlos. Mitspielen passt besser." },
+            { "text": "Wenn der Spruch eine versteckte Kritik enthält, die du lieber überhören möchtest.", "wert": 0, "warum": "Genau dafür ist die Rückfrage gemacht." },
+            { "text": "Wenn dich ein Vorgesetzter spitz anspricht.", "wert": 0, "warum": "Sachlich gestellt, ist die Rückfrage gerade nach oben stark." },
+            { "text": "Wenn dir sonst nichts einfällt.", "wert": 1, "warum": "Sie geht fast immer – nur bei echtem Spaß wirkt sie steif." }
+          ] },
+        { "art": "reflexion", "frage": "Welcher Spruch hat dich zuletzt geärgert? Schreib auf, wie die Rückfrage darauf geklungen hätte.", "insBuch": "konter" },
+        { "art": "mission", "ref": "konter-m-07" }
+      ],
+      "regel": "Nicht verteidigen – nachfragen. Wer erklären muss, verliert die Spitze.",
+      "merkkarten": [
+        { "id": "konter-1-03-m1", "frage": "Die einfachste Antwort auf eine Stichelei?", "antwort": "Ruhig zurückfragen: „Wie meinst du das?“" },
+        { "id": "konter-1-03-m2", "frage": "Was heißt „übersetzen“?", "antwort": "Den sachlichen Kern aus dem Spruch holen und darauf antworten." }
+      ],
+      "mission": "konter-m-07"
+    },
+    {
+      "id": "konter-1-04", "bereich": "konter", "stufe": 1, "nr": 4,
+      "titel": "Zustimmen und draufsetzen",
+      "faehigkeiten": ["konter.zustimmen"], "dauerMin": 6, "beleg": "P",
+      "quellen": ["praxis-konter", "bergson"],
+      "aha": "Wer einem Spruch zustimmt und ihn übertreibt, nimmt ihm die Spitze. Es gibt nichts mehr zu gewinnen – und die Lacher sind auf deiner Seite.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Miriam: „Du und deine Ordner. Du bist der Einzige, der noch Papier liebt.“", "schwach": "„Papier ist halt sicherer, wenn der Server ausfällt …“", "stark": "„Ich lese ihnen abends vor. Sie mögen Krimis.“", "frage": "Warum wirkt die zweite Antwort stärker?", "unterschied": "Die erste rechtfertigt sich. Die zweite stimmt zu und übertreibt – damit ist der Spruch erledigt, und Miriam lacht mit dir statt über dich." },
+        { "art": "karte", "text": "Zustimmen und überzeichnen funktioniert in zwei Zügen: Erst gibst du dem Spruch recht („Stimmt“), dann treibst du ihn ins Absurde. Der Philosoph Bergson sah im Komischen das Übertriebene, Mechanische – genau das erzeugst du. Wichtig: nur bei harmlosen Sprüchen. Bei echten Kränkungen ist eine Grenze besser." },
+        { "art": "zuordnen", "kopf": { "id": "konter-1-04-a", "faehigkeit": "konter.zustimmen", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Welche Antwort stimmt zu und überzeichnet – welche rechtfertigt sich?",
+          "faecher": ["zustimmen und überzeichnen", "rechtfertigen"],
+          "karten": [
+            { "text": "„Du bist ja heute schick.“ – „Ich heirate heute dreimal.“", "fach": 0 },
+            { "text": "„Du bist ja heute schick.“ – „Ich hab nachher noch einen Termin.“", "fach": 1 },
+            { "text": "„Schon wieder Salat?“ – „Ich bin praktisch ein Kaninchen.“", "fach": 0 },
+            { "text": "„Schon wieder Salat?“ – „Mein Arzt hat gesagt …“", "fach": 1 },
+            { "text": "„Du kommst nie pünktlich.“ – „Ich arbeite an einem Weltrekord.“", "fach": 0 },
+            { "text": "„Du kommst nie pünktlich.“ – „Die Bahn hatte wieder Verspätung.“", "fach": 1 }
+          ] },
+        { "art": "konter", "kopf": { "id": "konter-1-04-b", "faehigkeit": "konter.zustimmen", "stufe": 3, "kanal": "koennen" },
+          "lage": "Familienfeier. Du nimmst dir ein drittes Stück Kuchen.", "von": "Tante Renate", "spruch": "„Na, da hat aber jemand Hunger.“", "schaerfe": 1,
+          "muster": [
+            { "technik": "zustimmen und überzeichnen", "text": "„Ich trainiere für die Meisterschaft im Kuchenessen. Das hier ist Pflicht.“" },
+            { "technik": "zustimmen", "text": "„Stimmt. Und das ist erst die Vorspeise.“" },
+            { "technik": "Rolle annehmen", "text": "„Ich habe mir das Stück vom Mund abgespart. Seit Weihnachten.“" }
+          ],
+          "kriterien": ["gibt dem Spruch recht", "übertreibt deutlich", "bleibt freundlich"] },
+        { "art": "auswahl", "kopf": { "id": "konter-1-04-c", "faehigkeit": "konter.zustimmen", "stufe": 3, "kanal": "wissen" },
+          "frage": "Ein Kollege sagt in der Runde: „Bei deinem Tempo werden wir Weihnachten fertig.“ Welche Antwort stimmt zu und überzeichnet?",
+          "antworten": [
+            { "text": "„Weihnachten welchen Jahres? Ich hab mich noch nicht festgelegt.“", "wert": 2, "warum": "Zustimmung plus Übertreibung – der Spruch läuft ins Leere." },
+            { "text": "„Ich bin nicht langsam, ich bin gründlich – das ist etwas anderes.“", "wert": 1, "warum": "Gutes Umdeuten – aber keine Zustimmung." },
+            { "text": "„Du könntest ja helfen, statt zu reden.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Gegenangriff – aus dem Spruch wird Streit." },
+            { "text": "„Es lag an den fehlenden Unterlagen.“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Rechtfertigen macht dich zum Angeklagten." }
+          ] },
+        { "art": "mission", "ref": "konter-m-06" }
+      ],
+      "regel": "Stimm zu und übertreib – dann gibt es nichts mehr zu gewinnen.",
+      "merkkarten": [
+        { "id": "konter-1-04-m1", "frage": "Die zwei Züge von „Zustimmen und überzeichnen“?", "antwort": "Erst recht geben, dann ins Absurde übertreiben." },
+        { "id": "konter-1-04-m2", "frage": "Wann passt Zustimmen und überzeichnen nicht?", "antwort": "Bei echten Kränkungen – dann lieber eine Grenze setzen." }
+      ],
+      "mission": "konter-m-06"
+    },
+    {
+      "id": "konter-1-05", "bereich": "konter", "stufe": 1, "nr": 5,
+      "titel": "Umdeuten",
+      "faehigkeiten": ["konter.umdeuten"], "dauerMin": 6, "beleg": "P",
+      "quellen": ["praxis-konter"],
+      "aha": "Jede angebliche Schwäche hat eine Rückseite: pingelig heißt gründlich, langsam heißt sorgfältig, stur heißt verlässlich. Wer die Rückseite kennt, hat den Konter schon.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "„Du bist so pingelig.“ Welche Rückseite passt am besten?", "optionen": ["„Ich bin halt so.“", "„Gründlich. Dafür ruft später keiner an.“", "„Und du bist schlampig.“"], "richtig": 1, "loesung": "„Gründlich. Dafür ruft später keiner an.“", "aufloesung": "Umdeuten heißt: dieselbe Eigenschaft, positiv benannt – und am besten mit dem Nutzen für die anderen." },
+        { "art": "karte", "text": "Umdeuten nimmt den Vorwurf an und dreht ihn um. Es funktioniert, weil fast jede Eigenschaft zwei Seiten hat. Eine Spielart ist „Gerade weil“: „Du bist ja noch neu.“ – „Gerade deshalb sehe ich, was euch nicht mehr auffällt.“ Wer seine eigenen wunden Punkte vorher umgedeutet hat, ist bei Sprüchen darüber kaum noch zu treffen." },
+        { "art": "umformulieren", "kopf": { "id": "konter-1-05-a", "faehigkeit": "konter.umdeuten", "stufe": 2, "kanal": "koennen" },
+          "auftrag": "Deute die „Schwäche“ in eine Stärke um – in einem Satz.",
+          "vorlage": "„Du bist ganz schön stur.“",
+          "kriterien": ["nennt die positive Rückseite", "kurz", "ohne Gegenangriff"],
+          "muster": ["„Verlässlich. Was ich sage, gilt.“", "„Standhaft. Hat sich bisher bewährt.“"] },
+        { "art": "auswahl", "kopf": { "id": "konter-1-05-b", "faehigkeit": "konter.umdeuten", "stufe": 3, "kanal": "wissen" },
+          "frage": "„Du bist ja noch ganz neu hier.“ Welche Antwort nutzt „Gerade weil“?",
+          "antworten": [
+            { "text": "„Gerade deshalb stelle ich die Fragen, die sich keiner mehr traut.“", "wert": 2, "warum": "Der Vorwurf wird zur Stärke – elegant und ohne Angriff." },
+            { "text": "„Ich habe aber schon zehn Jahre Erfahrung.“", "wert": 1, "warum": "Sachlich, aber ein bisschen Rechtfertigung." },
+            { "text": "„Und du bist schon viel zu lange hier.“", "wert": 0, "tendenz": "angreifen", "warum": "Ein Gegenangriff – das vergiftet die Stimmung." },
+            { "text": "„Stimmt, tut mir leid.“", "wert": 0, "tendenz": "kleinreden", "warum": "Du entschuldigst dich für etwas, das kein Fehler ist." }
+          ] },
+        { "art": "kritiker", "kopf": { "id": "konter-1-05-c", "faehigkeit": "konter.umdeuten", "stufe": 3, "kanal": "koennen" },
+          "satz": "Eine Eigenschaft, über die schon mal jemand gelästert hat – oder über die du selbst lästerst.",
+          "kriterien": ["nennt die Eigenschaft", "findet die Rückseite", "glaubwürdig für dich"],
+          "muster": ["„Ich bin langsam.“ → „Ich bin sorgfältig – bei mir muss keiner nacharbeiten.“", "„Ich bin still.“ → „Ich höre zu – deshalb weiß ich oft mehr.“"] },
+        { "art": "reflexion", "frage": "Schreib deine eigene Umdeutung auf – den Satz, den du beim nächsten Spruch darüber sagst.", "insBuch": "konter" },
+        { "art": "mission", "ref": "konter-m-03" }
+      ],
+      "regel": "Jede Schwäche hat eine Rückseite – kenn sie, bevor der Spruch kommt.",
+      "merkkarten": [
+        { "id": "konter-1-05-m1", "frage": "„Pingelig“ umgedeutet?", "antwort": "Gründlich – dafür ruft später keiner an." },
+        { "id": "konter-1-05-m2", "frage": "Wie geht „Gerade weil“?", "antwort": "Den Vorwurf als Grund für eine Stärke nehmen: „Gerade deshalb …“" }
+      ],
+      "mission": "konter-m-03"
+    },
+    {
+      "id": "konter-1-06", "bereich": "konter", "stufe": 1, "nr": 6,
+      "titel": "Die Dreierregel",
+      "faehigkeiten": ["konter.spiel", "konter.necken"], "dauerMin": 6, "beleg": "D",
+      "belegHinweis": "Die Erklärung über eine enttäuschte Erwartung ist ein altes Denkmodell (Kant) mit moderner Stütze. Die Dreierregel selbst ist Handwerk aus Komik und Rhetorik.",
+      "quellen": ["kant", "mcgraw2010"],
+      "aha": "Zwei Erwartbare, dann die Überraschung. Die ersten beiden bauen ein Muster, das dritte bricht es – und genau dieser Bruch bringt das Lachen.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Jemand fragt, was du fürs Wochenende planst.", "schwach": "„Ausschlafen, einkaufen, vielleicht Sport.“", "stark": "„Ausschlafen, einkaufen und endlich herausfinden, was die Taste mit dem Halbmond an der Waschmaschine macht.“", "frage": "Was macht die zweite Antwort lustig?", "unterschied": "Die ersten zwei Punkte sind erwartbar, der dritte bricht aus – und ist dabei nah am Alltag aller." },
+        { "art": "karte", "text": "Kant beschrieb das Lachen als Spannung, die sich plötzlich in nichts auflöst. Die Dreierregel nutzt genau das: Zwei Glieder bauen eine Erwartung auf, das dritte zerstört sie harmlos. Die Pointe gehört ans Ende, und sie wirkt am besten, wenn sie aus dem echten Leben stammt." },
+        { "art": "humorlabor", "kopf": { "id": "konter-1-06-a", "faehigkeit": "konter.spiel", "stufe": 2, "kanal": "koennen" },
+          "auftrag": "Finde das überraschende dritte Glied.",
+          "vorlage": "„Für die Besprechung brauche ich nur drei Dinge: Kaffee, die Zahlen und …“",
+          "kriterien": ["bricht das Muster", "harmlos", "passt in den Büroalltag"],
+          "muster": ["„… ein Wunder.“", "„… jemanden, der weiß, wie der Beamer angeht.“", "„… eine Ausrede für Punkt drei.“"] },
+        { "art": "rangfolge", "kopf": { "id": "konter-1-06-b", "faehigkeit": "konter.necken", "stufe": 3, "kanal": "wissen" },
+          "frage": "Welche Dreierliste funktioniert am besten? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Mein Kühlschrank enthält Milch, Butter und große Hoffnungen.“", "warum": "Klares Muster, überraschender und harmloser Bruch am Ende." },
+            { "text": "„Mein Kühlschrank enthält Hoffnungen, Milch und Butter.“", "warum": "Die Pointe steht vorn – dann verpufft sie." },
+            { "text": "„Mein Kühlschrank enthält Milch, Butter und Käse.“", "warum": "Kein Bruch, also kein Witz." },
+            { "text": "„Mein Kühlschrank enthält Milch, Butter und die Reste meiner Würde.“", "warum": "Witzig gemeint, aber selbstabwertend – im Büro schnell zu viel." }
+          ] },
+        { "art": "humorlabor", "kopf": { "id": "konter-1-06-c", "faehigkeit": "konter.spiel", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Bau eine eigene Dreierliste zu deinem Montag.",
+          "vorlage": "„Mein Montag besteht aus …“",
+          "kriterien": ["zwei erwartbare Glieder", "überraschendes drittes Glied am Ende", "harmlos"],
+          "muster": ["„… vierzig Mails, drei Besprechungen und einem tiefen Seufzer der Kaffeemaschine.“", "„… Aufstehen, Pendeln und dem festen Vorsatz, nächste Woche alles anders zu machen.“"] },
+        { "art": "mission", "ref": "konter-m-04" }
+      ],
+      "regel": "Zwei Erwartbare, dann der Bruch – und die Pointe immer ans Ende.",
+      "merkkarten": [
+        { "id": "konter-1-06-m1", "frage": "Wie ist eine Dreierliste gebaut?", "antwort": "Zwei Erwartbare bauen ein Muster, das dritte bricht es." },
+        { "id": "konter-1-06-m2", "frage": "Wohin gehört die Pointe?", "antwort": "Ans Ende – vorn verpufft sie." }
+      ],
+      "mission": "konter-m-04"
+    },
+    {
+      "id": "konter-1-07", "bereich": "konter", "stufe": 1, "nr": 7,
+      "titel": "Übertreiben, untertreiben, wörtlich",
+      "faehigkeiten": ["konter.necken", "konter.spiel"], "dauerMin": 7, "beleg": "P",
+      "quellen": ["praxis-konter", "bergson"],
+      "aha": "Drei Werkzeuge, die fast immer gehen: Mach etwas riesig, mach es winzig – oder nimm ein Sprachbild beim Wort.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "konter-1-07-a", "faehigkeit": "konter.necken", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Welche Technik steckt dahinter?",
+          "faecher": ["übertreiben", "untertreiben", "wörtlich nehmen"],
+          "karten": [
+            { "text": "„Der Schreibtisch ist ja aufgeräumt.“ – „Ich habe zwei Tage Urlaub dafür genommen.“", "fach": 0 },
+            { "text": "Nach einem großen Stromausfall: „Kleine Verschnaufpause für die Technik.“", "fach": 1 },
+            { "text": "„Du hast wohl Tomaten auf den Augen.“ – „Nur eine. Die andere ist im Salat.“", "fach": 2 },
+            { "text": "„Ist es kalt hier?“ – „Die Pinguine haben sich schon beschwert.“", "fach": 0 },
+            { "text": "Nach drei Stunden Stau: „Kleiner Umweg.“", "fach": 1 },
+            { "text": "„Mir platzt gleich der Kragen.“ – „Soll ich dir Nadel und Faden holen?“", "fach": 2 }
+          ] },
+        { "art": "karte", "text": "Übertreiben bläht eine Kleinigkeit maßlos auf. Untertreiben schrumpft etwas Großes – trockener Humor lebt davon. Wörtlich nehmen dreht ein Sprachbild um: Deutsch ist voll davon (Tomaten auf den Augen, auf dem Schlauch stehen, hinterm Mond leben). Alle drei funktionieren, weil sie die Erwartung harmlos brechen." },
+        { "art": "blitz", "kopf": { "id": "konter-1-07-b", "faehigkeit": "konter.necken", "stufe": 2, "kanal": "koennen", "uhr": true },
+          "auftrag": "Übertreib: Wie voll ist es heute in der Kantine?", "ziel": 5, "sekunden": 60,
+          "beispiele": ["„Die Schlange reicht bis in den Nachbarort.“", "„Man bekommt eine Wartenummer und ein Zelt.“", "„Die Ersten haben schon Freundschaften fürs Leben geschlossen.“"] },
+        { "art": "konter", "kopf": { "id": "konter-1-07-c", "faehigkeit": "konter.spiel", "stufe": 3, "kanal": "koennen" },
+          "lage": "Du suchst seit Minuten deine Brille. Sie sitzt auf deinem Kopf.", "von": "Miriam", "spruch": "„Du stehst echt auf dem Schlauch.“", "schaerfe": 1,
+          "muster": [
+            { "technik": "wörtlich nehmen", "text": "„Deshalb kommt bei mir auch kein Wasser an.“" },
+            { "technik": "untertreiben", "text": "„Ich teste nur, wie lange ihr mir zuseht.“" },
+            { "technik": "übertreiben", "text": "„Ich stehe nicht drauf, ich wohne da.“" }
+          ],
+          "kriterien": ["nutzt eine der drei Techniken", "freundlich", "kurz"] },
+        { "art": "auswahl", "kopf": { "id": "konter-1-07-d", "faehigkeit": "konter.necken", "stufe": 3, "kanal": "wissen" },
+          "frage": "Wann ist Untertreiben besonders wirksam?",
+          "antworten": [
+            { "text": "Wenn alle wissen, dass etwas Großes passiert ist – das trockene Kleinreden bricht die Spannung.", "wert": 2, "warum": "Der Kontrast zwischen Lage und Wort macht den Witz." },
+            { "text": "Wenn jemand wirklich traurig ist.", "wert": 0, "warum": "Dann wirkt es herzlos. Humor braucht Harmlosigkeit." },
+            { "text": "Immer, weil es nie verletzt.", "wert": 0, "warum": "Nicht immer: Untertreiben braucht eine Lage, die alle kennen – sonst klingt es kalt." },
+            { "text": "Bei Kleinigkeiten.", "wert": 0, "warum": "Eine Kleinigkeit kleinzureden ist kein Bruch – da passt Übertreiben." }
+          ] },
+        { "art": "mission", "ref": "konter-m-05" }
+      ],
+      "regel": "Riesig, winzig oder wörtlich – eins davon passt fast immer.",
+      "merkkarten": [
+        { "id": "konter-1-07-m1", "frage": "Die drei Allzweck-Werkzeuge?", "antwort": "Übertreiben, untertreiben, wörtlich nehmen." },
+        { "id": "konter-1-07-m2", "frage": "Wann wirkt Untertreiben?", "antwort": "Wenn alle wissen, dass etwas Großes passiert ist." }
+      ],
+      "mission": "konter-m-05"
+    }
+  ]
+}

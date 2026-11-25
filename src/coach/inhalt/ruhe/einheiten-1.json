@@ -1,0 +1,274 @@
+{
+  "einheiten": [
+    {
+      "id": "ruhe-1-01", "bereich": "ruhe", "stufe": 1, "nr": 1,
+      "titel": "Was da in dir passiert",
+      "faehigkeiten": ["ruhe.verstehen"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Dass der Körper sich bei Aufregung auf Leistung einstellt, ist Grundwissen. Dass es hilft, die Zeichen als nützlich zu lesen, zeigen einzelne Studien – vor allem für das Gefühl und die Körperreaktion.",
+      "quellen": ["jamieson2012", "lazarus1984"],
+      "aha": "Herzklopfen ist kein Zeichen, dass du gleich scheiterst. Es ist dein Körper, der Energie bereitstellt – dieselben Zeichen wie vor einem Sprint.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "ruhe-1-01-a", "faehigkeit": "ruhe.verstehen", "stufe": 1, "kanal": "wissen" },
+          "auftrag": "Wofür sorgt dein Körper mit diesem Zeichen?",
+          "faecher": ["mehr Treibstoff für die Muskeln", "Kühlung", "Verdauung hat Pause"],
+          "karten": [
+            { "text": "Das Herz schlägt schneller.", "fach": 0 },
+            { "text": "Der Atem wird schneller.", "fach": 0 },
+            { "text": "Du fängst an zu schwitzen.", "fach": 1 },
+            { "text": "Auf der Stirn steht Schweiß.", "fach": 1 },
+            { "text": "Der Mund wird trocken.", "fach": 2 },
+            { "text": "Es flattert im Magen.", "fach": 2 }
+          ] },
+        { "art": "karte", "text": "Wenn etwas wichtig und ungewiss ist, fährt dein Körper hoch: Das Herz pumpt mehr Blut, der Atem holt mehr Sauerstoff, die Haut kühlt, die Verdauung wartet. Dieselben Zeichen hast du auf der Achterbahn oder vor einem Wettlauf. Gefährlich ist das nicht. Störend wird es erst, wenn du es liest als: „Gleich geht es schief.“" },
+        { "art": "mythos", "aussage": "Wer vor einem Auftritt Herzklopfen hat, ist der Lage nicht gewachsen.", "urteil": "falsch", "warum": "Herzklopfen zeigt, dass dir die Sache wichtig ist und dein Körper sich bereit macht. Auch erfahrene Rednerinnen und Redner haben es – sie lesen es nur anders." },
+        { "art": "auswahl", "kopf": { "id": "ruhe-1-01-b", "faehigkeit": "ruhe.verstehen", "stufe": 2, "kanal": "wissen" },
+          "frage": "Zwei Minuten vor deinem Beitrag merkst du, wie dein Herz klopft. Welcher Gedanke hilft am meisten?",
+          "antworten": [
+            { "text": "„Wenn die das merken, ist es aus.“", "wert": 0, "tendenz": "katastrophe", "warum": "Das macht aus einem normalen Zeichen eine Gefahr – und das Herz schlägt noch schneller." },
+            { "text": "„Mein Körper fährt hoch. Er stellt Energie bereit.“", "wert": 2, "warum": "Du benennst, was passiert, und liest es als Bereitschaft. Das nimmt dem Zeichen den Schrecken." },
+            { "text": "„Ich darf jetzt nicht aufgeregt sein, sonst geht das Ganze schief.“", "wert": 0, "tendenz": "unterdruecken", "warum": "Gegen das Gefühl anzukämpfen verstärkt es meist." },
+            { "text": "„Das geht gleich vorbei.“", "wert": 1, "warum": "Stimmt oft – nach der ersten Minute wird es leichter. Noch stärker ist es, das Zeichen als Energie zu lesen." }
+          ] },
+        { "art": "experiment", "auftrag": "Wenn du in den nächsten Tagen Herzklopfen merkst – vor einem Anruf, in einer Runde, beim Warten –, sag dir innerlich: „Mein Körper fährt hoch.“ Und dann tu, was du vorhattest.", "dauer": "woche", "nachfrage": "Wie hat es sich angefühlt, das Herzklopfen zu benennen, statt es wegzuwünschen?" },
+        { "art": "karte", "titel": "Wenn es mehr ist", "text": "Dieser Bereich ist für alltägliche Aufregung vor Auftritten, Gesprächen und Prüfungen. Wenn du Panikattacken erlebst, wichtige Situationen dauerhaft meidest oder ohne Alkohol oder Beruhigungstabletten nicht mehr auftreten magst, ist das kein Zeichen von Schwäche – sondern ein guter Grund, dir Unterstützung zu holen." },
+        { "art": "fachhilfe", "thema": "seele" }
+      ],
+      "regel": "Herzklopfen heißt: Dein Körper macht sich bereit – nicht: Du scheiterst.",
+      "merkkarten": [
+        { "id": "ruhe-1-01-m1", "frage": "Was bedeutet Herzklopfen vor einem Auftritt?", "antwort": "Der Körper stellt Energie bereit – wie vor einem Sprint. Gefährlich ist das nicht." },
+        { "id": "ruhe-1-01-m2", "frage": "Wann wird Aufregung zum Problem?", "antwort": "Wenn du die Zeichen als Beweis liest, dass es gleich schiefgeht." },
+        { "id": "ruhe-1-01-m3", "frage": "Wann solltest du dir Unterstützung holen?", "antwort": "Bei Panikattacken, dauerhaftem Meiden oder wenn es nur noch mit Alkohol oder Tabletten geht." }
+      ]
+    },
+    {
+      "id": "ruhe-1-02", "bereich": "ruhe", "stufe": 1, "nr": 2,
+      "titel": "Der Gipfel liegt am Anfang",
+      "faehigkeiten": ["ruhe.verstehen", "ruhe.vorbereitung"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Gemessen vor allem bei Studierenden in Redekursen. Der Anstieg bis zum Beginn und das Absinken in der ersten Minute zeigen sich deutlich; wie schnell die Aufregung danach sinkt, ist von Mensch zu Mensch verschieden.",
+      "quellen": ["behnke", "behnke2004"],
+      "aha": "Am stärksten ist die Aufregung kurz vor dem Start und in der ersten Minute. Danach sinkt sie, wenn du weitermachst. Das Schwerste hast du also früh hinter dir.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Wann ist die körperliche Aufregung bei einer Rede meist am stärksten?", "optionen": ["in der Mitte, wenn man müde wird", "am Ende, vor den Fragen", "kurz vor dem Start und in der ersten Minute"], "richtig": 2, "loesung": "Kurz vor dem Start und in der ersten Minute", "aufloesung": "Der Körper fährt bis zum Beginn hoch. Wer weiterspricht, merkt meist schon in der ersten Minute, wie es nachlässt – bei manchen schnell, bei anderen langsamer." },
+        { "art": "karte", "text": "Forscher haben Redner zu vielen Zeitpunkten befragt und gemessen: beim Warten, beim ersten Satz, nach einer Minute, am Ende. Die Kurve steigt bis zum Beginn und fällt dann. Das heißt zweierlei: Der schlimmste Moment kommt früh. Und wer die erste Minute gut vorbereitet, hat den Gipfel im Griff." },
+        { "art": "studie", "frage": "Was entscheidet darüber, wie aufgeregt jemand während der ganzen Rede ist?", "aufbau": "Studierende eines Redekurses gaben vor und während ihrer Rede an, wie angespannt sie waren: in Ruhe, beim Beginn, in der ersten und in der letzten Minute.", "ergebnis": "Wie stark die Anspannung bis zum Beginn stieg und wie stark sie in der ersten Minute fiel, erklärte den größten Teil der Angst während der Rede. Die letzte Minute spielte kaum eine Rolle.", "grenze": "Studierende, Selbstauskunft, eine Forschergruppe. Wie schnell es bei dir sinkt, findest du nur selbst heraus.", "beleg": "B", "quellen": ["behnke2004"] },
+        { "art": "rangfolge", "kopf": { "id": "ruhe-1-02-a", "faehigkeit": "ruhe.vorbereitung", "stufe": 2, "kanal": "wissen" },
+          "frage": "Du hast für deinen Beitrag nur zwanzig Minuten Vorbereitung. Wofür lohnen sie sich am meisten? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "Den ersten Satz festlegen und dreimal laut sagen.", "warum": "Er trägt dich durch den Gipfel der Aufregung." },
+            { "text": "Einen Plan für den Hänger: ausatmen, Stichwort, letzter Satz.", "warum": "Damit ist die wahrscheinlichste Panne vorher gelöst." },
+            { "text": "Den Mittelteil in Stichworten ordnen.", "warum": "Wichtig – aber dort ist die Aufregung schon gesunken." },
+            { "text": "Die Folien schöner gestalten.", "warum": "Sieht gut aus, hilft dir in der ersten Minute aber nicht." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ruhe-1-02-b", "faehigkeit": "ruhe.verstehen", "stufe": 3, "kanal": "wissen" },
+          "frage": "Eine Minute nach deinem Start merkst du, dass das Zittern nachlässt. Was sagt dir das?",
+          "antworten": [
+            { "text": "Der Gipfel ist vorbei – so verläuft Aufregung bei den meisten.", "wert": 2, "warum": "Genau. Das zu wissen gibt Halt beim nächsten Mal: Die erste Minute ist die schwerste." },
+            { "text": "Ich hatte heute einfach Glück.", "wert": 0, "warum": "Es ist kein Glück, sondern der übliche Verlauf. Wer es Glück nennt, lernt nichts daraus." },
+            { "text": "Jetzt darf ich auf keinen Fall nachlassen, sonst kommt das Zittern zurück.", "wert": 0, "tendenz": "katastrophe", "warum": "Die Aufregung kann wiederkommen, etwa bei einer Frage – aber du weißt jetzt, dass sie wieder sinkt." },
+            { "text": "Vielleicht war ich doch nicht so aufgeregt.", "wert": 1, "warum": "Möglich – wahrscheinlicher ist, dass du den Gipfel hinter dir hast." }
+          ] },
+        { "art": "mission", "ref": "ruhe-m-03" }
+      ],
+      "regel": "Der schlimmste Moment kommt früh – also bereite den Anfang vor wie nichts sonst.",
+      "merkkarten": [
+        { "id": "ruhe-1-02-m1", "frage": "Wann ist die Aufregung meist am stärksten?", "antwort": "Kurz vor dem Start und in der ersten Minute – danach sinkt sie." },
+        { "id": "ruhe-1-02-m2", "frage": "Was folgt daraus für die Vorbereitung?", "antwort": "Den Anfang vorbereiten wie nichts sonst: erster Satz, Plan für den Hänger." }
+      ],
+      "mission": "ruhe-m-03"
+    },
+    {
+      "id": "ruhe-1-03", "bereich": "ruhe", "stufe": 1, "nr": 3,
+      "titel": "Aufgeregt heißt bereit",
+      "faehigkeiten": ["ruhe.umdeuten"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Umstritten: Wer umdeutet, fühlt sich verlässlich zuversichtlicher. Ob die Leistung besser wird, ist offen – über viele Studien ein kleiner Gewinn, aber eine genaue Wiederholung der bekanntesten Studie fand 2025 keinen Unterschied in der Beurteilung durch Beobachter.",
+      "quellen": ["brooks2014", "poynter2025", "bosshard2024", "hofmann2009"],
+      "aha": "„Ich bin ganz ruhig“ glaubt dir dein Körper nicht. „Ich bin aufgeregt – ich bin bereit“ schon. Umdeuten passt zu dem, was du spürst.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Carla Demir steht vor der Tür zum Konferenzraum. In zwei Minuten stellt sie ihr Projekt vor.", "schwach": "Sie murmelt: „Ganz ruhig. Ganz ruhig. Bleib ruhig.“", "stark": "Sie sagt sich: „Ich bin aufgeregt. Mein Körper stellt Energie bereit. Los geht's.“", "frage": "Warum hilft der zweite Satz eher?", "unterschied": "Der erste kämpft gegen ein Gefühl, das gerade stärker ist – das macht es lauter. Der zweite bestätigt, was Carla spürt, und gibt ihm eine nützliche Richtung." },
+        { "art": "karte", "text": "Aufregung und Vorfreude fühlen sich im Körper fast gleich an. Ganz ruhig zu werden ist in zwei Minuten kaum möglich – aber du kannst entscheiden, wie du die Aufregung liest. Wer sie als Bereitschaft deutet, sieht die Lage eher als Chance statt als Bedrohung. Unterdrücken dagegen ließ in einem Versuch den Puls am stärksten steigen." },
+        { "art": "studie", "frage": "Macht der Satz „Ich bin aufgeregt“ eine Rede wirklich besser?", "aufbau": "Im ersten Versuch (2014) sagten Menschen vor einer kurzen Rede entweder „Ich bin aufgeregt“ oder „Ich bin ruhig“. Eine genaue Wiederholung prüfte das 2025 noch einmal – mit Beobachtern, die die Reden bewerteten.", "ergebnis": "Beide Male fühlten sich die Umdeuter begeisterter – weniger Angst hatten sie aber nicht. Bessere Reden fand nur der erste Versuch; in der Wiederholung bewerteten die Beobachter beide Gruppen gleich.", "grenze": "Das Gefühl verbessert sich verlässlich, die Leistung vielleicht. Über viele Studien gibt es einen kleinen Gewinn – kein Wundermittel.", "beleg": "B", "quellen": ["brooks2014", "poynter2025", "bosshard2024"] },
+        { "art": "umformulieren", "kopf": { "id": "ruhe-1-03-a", "faehigkeit": "ruhe.umdeuten", "stufe": 2, "kanal": "koennen" },
+          "auftrag": "Mach aus dem Sorgensatz eine Umdeutung – in einem Satz.",
+          "vorlage": "„Mein Herz rast. Gleich blamiere ich mich.“",
+          "kriterien": ["bestätigt das Gefühl", "gibt ihm eine nützliche Bedeutung", "kurz genug für den Moment"],
+          "muster": ["„Mein Herz rast – es macht mich bereit.“", "„Ich bin aufgeregt, weil es mir wichtig ist. Gut so.“", "„Da ist die Energie. Jetzt nutze ich sie.“"] },
+        { "art": "kritiker", "kopf": { "id": "ruhe-1-03-b", "faehigkeit": "ruhe.umdeuten", "stufe": 3, "kanal": "koennen" },
+          "satz": "Der Satz, den du dir sonst kurz vor einem aufregenden Moment sagst.",
+          "kriterien": ["nennt deinen echten Sorgensatz", "die Umdeutung passt zu dem, was du spürst", "du würdest sie dir wirklich sagen"],
+          "muster": ["„Hoffentlich merkt keiner, wie nervös ich bin.“ → „Ich bin aufgeregt – und das darf man ruhig merken.“", "„Ich kriege bestimmt keinen Ton raus.“ → „Mein Körper macht sich bereit. Erster Satz, dann läuft es.“"] },
+        { "art": "reflexion", "frage": "Schreib deinen eigenen Umdeute-Satz auf – den du vor dem nächsten echten Moment sagst.", "insBuch": "saetze" },
+        { "art": "mission", "ref": "ruhe-m-02" }
+      ],
+      "regel": "Nicht „ruhig bleiben“ – „aufgeregt heißt bereit“.",
+      "merkkarten": [
+        { "id": "ruhe-1-03-m1", "frage": "Warum hilft „Ganz ruhig“ selten?", "antwort": "Es kämpft gegen das Gefühl an – und Unterdrücken macht es eher stärker." },
+        { "id": "ruhe-1-03-m2", "frage": "Was bringt Umdeuten sicher, was vielleicht?", "antwort": "Sicher mehr Zuversicht. Vielleicht eine bessere Leistung – das ist umstritten." }
+      ],
+      "mission": "ruhe-m-02"
+    },
+    {
+      "id": "ruhe-1-04", "bereich": "ruhe", "stufe": 1, "nr": 4,
+      "titel": "Lang ausatmen",
+      "faehigkeiten": ["ruhe.atem"], "dauerMin": 6, "beleg": "A",
+      "belegHinweis": "Atemübungen senken empfundenen Stress im Mittel mäßig, und der Körper reagiert schon in einer Sitzung messbar. Fürs Gefühl direkt vor einem Auftritt gibt es nur kleine Einzelstudien, für eine einzelne Minute keine Daten – deshalb misst du es bei dir selbst. Ob das längere Ausatmen mehr bringt als langsames Atmen allein, ist uneinheitlich untersucht.",
+      "quellen": ["fincham2023", "laborde2022", "zaccaro2018", "balban2023"],
+      "aha": "Nicht tief einatmen – lang ausatmen. Das lange Ausatmen sagt dem Körper, dass er einen Gang herunterschalten darf.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer aufgeregt ist, sollte ein paarmal tief Luft holen.", "urteil": "teils", "warum": "Hastig tief einzuatmen treibt eher an und kann schwindlig machen. Was hilft, ist das lange Ausatmen danach." },
+        { "art": "karte", "text": "Beim Einatmen schlägt das Herz ein wenig schneller, beim Ausatmen ein wenig langsamer. Wer länger aus- als einatmet, schiebt den Körper Richtung Erholung. Faustregel: aus etwa doppelt so lang wie ein. Das geht im Stehen, im Sitzen, vor allen Leuten – niemand sieht, dass du gerade etwas tust." },
+        { "art": "atem", "werkzeug": "ausatmen",
+          "schritte": ["Durch die Nase einatmen – zähl bis vier.", "Lippen leicht spitzen, als wolltest du eine Kerze zum Flackern bringen.", "Langsam ausatmen – zähl bis acht.", "Sechs Runden."],
+          "takt": { "ein": 4, "aus": 8, "runden": 6 },
+          "hinweis": "Wird dir schwummrig: aufhören und normal weiteratmen. Nicht am Steuer.", "messen": true },
+        { "art": "atem", "werkzeug": "seufzer",
+          "schritte": ["Durch die Nase einatmen.", "Gleich noch einen kleinen Zug obendrauf.", "Lang durch den Mund ausatmen.", "Vier Runden."],
+          "takt": { "ein": 3, "aus": 7, "runden": 4 },
+          "hinweis": "Wird dir schwummrig: aufhören und normal weiteratmen. Nicht am Steuer.", "messen": true },
+        { "art": "auswahl", "kopf": { "id": "ruhe-1-04-a", "faehigkeit": "ruhe.atem", "stufe": 2, "kanal": "wissen" },
+          "frage": "Du stehst vor der Tür zum Besprechungsraum, noch eine Minute. Was bringt am meisten?",
+          "antworten": [
+            { "text": "Die Notizen noch einmal ganz durchgehen, damit jeder Punkt sicher sitzt.", "wert": 1, "warum": "Beruhigt manche, hält dich aber im Kopf. Besser: nur den ersten Satz." },
+            { "text": "Dreimal schnell tief Luft holen.", "wert": 0, "warum": "Schnelles tiefes Einatmen treibt eher an." },
+            { "text": "Fünfmal lang ausatmen, dann den ersten Satz halblaut.", "wert": 2, "warum": "Ausatmen senkt die Anspannung, der erste Satz gibt Halt für die schwerste Minute." },
+            { "text": "Dir sagen: Bleib ruhig, bleib ruhig.", "wert": 0, "tendenz": "unterdruecken", "warum": "Gegen das Gefühl anzukämpfen verstärkt es meist." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "ruhe-1-04-b", "faehigkeit": "ruhe.atem", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Beruhigt das eher – oder treibt es an?",
+          "faecher": ["beruhigt eher", "treibt eher an"],
+          "karten": [
+            { "text": "aus doppelt so lang wie ein", "fach": 0 },
+            { "text": "mehrmals hastig tief einatmen", "fach": 1 },
+            { "text": "zweimal ein durch die Nase, lang aus durch den Mund", "fach": 0 },
+            { "text": "die Luft anhalten, bis es drückt", "fach": 1 },
+            { "text": "durch leicht gespitzte Lippen ausatmen", "fach": 0 },
+            { "text": "schnell und flach oben in der Brust atmen", "fach": 1 }
+          ] },
+        { "art": "reflexion", "frage": "Vor welchem Moment in dieser Woche probierst du das lange Ausatmen aus – und wie angespannt bist du vorher und nachher?" },
+        { "art": "mission", "ref": "ruhe-m-01" }
+      ],
+      "regel": "Nicht tief ein – lang aus.",
+      "merkkarten": [
+        { "id": "ruhe-1-04-m1", "frage": "Worauf kommt es beim Atmen gegen Aufregung an?", "antwort": "Aufs lange Ausatmen – etwa doppelt so lang wie das Einatmen." },
+        { "id": "ruhe-1-04-m2", "frage": "Wie geht die Seufzer-Atmung?", "antwort": "Zweimal durch die Nase ein, der zweite Zug klein – dann lang durch den Mund aus." }
+      ],
+      "mission": "ruhe-m-01"
+    },
+    {
+      "id": "ruhe-1-05", "bereich": "ruhe", "stufe": 1, "nr": 5,
+      "titel": "Raus aus dem Kopf",
+      "faehigkeiten": ["ruhe.fokus", "ruhe.koerper"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Gestützt durch klinische Studien mit Menschen mit starker Angst vor Erröten, Zittern oder Schwitzen und durch ein breit belegtes Modell der sozialen Angst. Für alltägliches Lampenfieber ist es eine gut begründete Übertragung.",
+      "quellen": ["boegels2006", "mulkens2001", "clarkwells1995", "savitsky2003"],
+      "aha": "Wer sich beim Reden selbst beobachtet, füttert die Aufregung. Wer auf die Aufgabe und die Menschen schaut, hat weniger Platz für Angst.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Wie viel von deiner Nervosität bemerken die Zuhörer?", "optionen": ["fast alles", "etwa so viel, wie du spürst", "deutlich weniger, als du glaubst"], "richtig": 2, "loesung": "Deutlich weniger, als du glaubst", "aufloesung": "Redner überschätzen, wie sichtbar ihre Nervosität ist. Das Zittern in der Stimme, das Herzklopfen – das meiste spürst nur du." },
+        { "art": "karte", "text": "Aufregung lenkt den Blick nach innen: Zittert meine Stimme? Werde ich rot? Dieser Scheinwerfer im Kopf macht alles größer, und du hältst dein inneres Bild für das, was andere sehen. Der Ausweg: die Aufmerksamkeit bewusst nach außen richten – auf die Aufgabe, den Raum, eine Person. Bei Angst vor dem Erröten sank so die Angst, obwohl die Röte gleich blieb." },
+        { "art": "anleitung", "titel": "Blick nach außen", "schritte": ["Benenn innerlich drei Dinge im Raum: eine Farbe, ein Geräusch, einen Gegenstand.", "Such dir eine Person und schau sie an – oder stell sie dir vor.", "Frag dich: Was sollen die Leute am Ende wissen?", "Bleib bei dieser Antwort, nicht bei dir."], "sekunden": 45, "stumm": true },
+        { "art": "auswahl", "kopf": { "id": "ruhe-1-05-a", "faehigkeit": "ruhe.fokus", "stufe": 2, "kanal": "wissen" },
+          "frage": "Mitten in deinem Beitrag denkst du: „Jetzt merken alle, wie meine Stimme zittert.“ Was hilft am meisten?",
+          "antworten": [
+            { "text": "Genau hinhören, ob die Stimme wirklich zittert.", "wert": 0, "tendenz": "nach_innen", "warum": "Damit richtest du den Scheinwerfer noch stärker auf dich." },
+            { "text": "Eine Person anschauen und an deine Kernaussage denken.", "wert": 2, "warum": "Der Blick nach außen nimmt der Selbstbeobachtung den Platz." },
+            { "text": "Kurz sagen: „Sorry, ich bin etwas nervös.“", "wert": 1, "warum": "Kann entlasten – lenkt aber die Aufmerksamkeit aller auf deine Nervosität." },
+            { "text": "Schneller reden, damit es bald vorbei ist.", "wert": 0, "tendenz": "flucht", "warum": "Tempo verstärkt das Zittern und den Eindruck von Hast." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "ruhe-1-05-b", "faehigkeit": "ruhe.koerper", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Welches Zeichen – welche Hilfe?",
+          "faecher": ["Karte statt Blatt, Hände ans Pult", "Wasser, Zungenspitze an den Gaumen", "Blick auf die Aufgabe, weitermachen"],
+          "karten": [
+            { "text": "Die Hände zittern.", "fach": 0 },
+            { "text": "Das Papier raschelt hörbar.", "fach": 0 },
+            { "text": "Der Mund ist trocken.", "fach": 1 },
+            { "text": "Die Zunge klebt beim Sprechen.", "fach": 1 },
+            { "text": "Du merkst, dass du rot wirst.", "fach": 2 },
+            { "text": "Dir wird warm im Gesicht.", "fach": 2 }
+          ] },
+        { "art": "experiment", "auftrag": "Sei in deiner nächsten Besprechung eine Minute lang ganz bei einer Person: Was sagt sie, wie schaut sie, was will sie? Achte nur darauf, nicht auf dich.", "dauer": "woche", "nachfrage": "Was ist mit deiner eigenen Anspannung passiert, während du bei der anderen Person warst?" },
+        { "art": "reflexion", "frage": "Welches Zeichen beobachtest du an dir am meisten – und wohin lenkst du beim nächsten Mal stattdessen den Blick?" }
+      ],
+      "regel": "Den Scheinwerfer drehen: weg von dir, hin zur Aufgabe.",
+      "merkkarten": [
+        { "id": "ruhe-1-05-m1", "frage": "Warum füttert Selbstbeobachtung die Aufregung?", "antwort": "Sie macht jedes Zeichen größer, und man hält das innere Bild für das, was andere sehen." },
+        { "id": "ruhe-1-05-m2", "frage": "Wie geht der Blick nach außen?", "antwort": "Drei Dinge im Raum, eine Person ansehen, fragen: Was sollen die Leute am Ende wissen?" },
+        { "id": "ruhe-1-05-m3", "frage": "Was hilft gegen zitternde Hände?", "antwort": "Nichts Loses halten: Karte statt Blatt, Hände ans Pult." }
+      ]
+    },
+    {
+      "id": "ruhe-1-06", "bereich": "ruhe", "stufe": 1, "nr": 6,
+      "titel": "Die erste Minute gehört dir",
+      "faehigkeiten": ["ruhe.vorbereitung", "ruhe.mittendrin"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass die Aufregung am Anfang am größten ist, ist gemessen; dass Wenn-Dann-Pläne auch Gefühle steuern, ist gut belegt. Dass ein fester erster Satz hilft, ist Praxiswissen.",
+      "quellen": ["behnke2004", "webb2012", "praxis-ruhe"],
+      "aha": "Liegt der Gipfel am Anfang, wird der Anfang vorbereitet wie nichts sonst: ein fester erster Satz – und ein Plan, falls du hängen bleibst.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Lena Brandt stellt in der Teamrunde zum ersten Mal ihr Vorhaben vor.", "schwach": "„Ähm, ja, also, ich bin nicht so gut in so was, aber ich versuch's mal …“", "stark": "„Unser Lager braucht zwei Tage für eine Bestellung. Ich zeige euch, wie wir auf einen kommen.“", "frage": "Was macht der zweite Anfang anders?", "unterschied": "Er beginnt mit der Sache, nicht mit einer Entschuldigung. Er ist kurz, vorbereitet und zieht die Aufmerksamkeit auf das Thema – weg von Lenas Nervosität." },
+        { "art": "karte", "text": "Ein guter erster Satz ist kurz, sagt etwas zur Sache und lässt sich auswendig. Du sprichst ihn langsam, mit einer kleinen Pause danach. Er trägt dich durch die Sekunden, in denen der Kopf am leersten ist. Dazu gehört ein Plan für die wahrscheinlichste Panne – meist der Hänger." },
+        { "art": "bauplan", "kopf": { "id": "ruhe-1-06-a", "faehigkeit": "ruhe.vorbereitung", "stufe": 3, "kanal": "koennen" },
+          "plan": "Erster Satz", "anlass": "Dein nächster Beitrag – in einer Besprechung, einem Verein, einer Runde.",
+          "felder": [
+            { "name": "Worum geht es?", "hilfe": "Das Thema in wenigen Wörtern." },
+            { "name": "Was sollen die anderen am Ende wissen oder tun?", "hilfe": "Ein Satz, kein Absatz." },
+            { "name": "Dein erster Satz", "hilfe": "Kurz, zur Sache, ohne Entschuldigung. Höchstens fünfzehn Wörter." }
+          ],
+          "muster": ["Thema: Urlaubsplanung. Ziel: Bis Freitag tragen alle ihre Wünsche ein. Erster Satz: „Ich brauche von euch bis Freitag eine Sache – eure Urlaubswünsche.“", "Thema: neues Ablagesystem. Ziel: Wir testen es einen Monat. Erster Satz: „Wir suchen im Schnitt zehn Minuten nach jeder Datei. Ich habe eine Idee dagegen.“"] },
+        { "art": "sprechen", "kopf": { "id": "ruhe-1-06-b", "faehigkeit": "ruhe.vorbereitung", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "ruhe-v-0024" },
+          "auftrag": "Steh auf und sag deinen ersten Satz dreimal halblaut – langsam, mit einer kleinen Pause danach.", "sekunden": 40,
+          "pruefliste": ["im Stehen gesprochen", "langsamer als im Alltag", "Pause nach dem Satz", "ohne Entschuldigung davor"] },
+        { "art": "wenndann", "anlass": "Hänger in der ersten Minute", "wenn": ["Wenn ich nach dem ersten Satz den Faden verliere,", "Wenn mein Kopf plötzlich leer ist,", "Wenn mir die Stimme wegbleibt,"], "dann": ["… atme ich lang aus und schaue auf mein Stichwort.", "… sage ich meinen ersten Satz einfach noch einmal anders.", "… nehme ich einen Schluck Wasser und spreche etwas lauter weiter."] },
+        { "art": "auswahl", "kopf": { "id": "ruhe-1-06-c", "faehigkeit": "ruhe.mittendrin", "stufe": 3, "kanal": "wissen" },
+          "frage": "Nach zwei Sätzen ist dein Kopf leer. Alle schauen dich an. Was tust du?",
+          "antworten": [
+            { "text": "Schnell irgendwas sagen, damit keine Stille entsteht.", "wert": 0, "tendenz": "flucht", "warum": "Hast erzeugt den nächsten Hänger. Die Stille wirkt auf andere kürzer als auf dich." },
+            { "text": "„Entschuldigung, ich bin so nervös, ich weiß gerade nicht weiter.“", "wert": 1, "warum": "Ehrlich und menschlich – aber du kannst dir den Satz meist sparen. Die Pause reicht." },
+            { "text": "Pause, ausatmen, aufs Stichwort schauen, den letzten Satz noch einmal sagen.", "wert": 2, "warum": "Dein vorbereiteter Plan. Die Pause fällt kaum auf, und der letzte Satz bringt dich zurück in den Fluss." },
+            { "text": "Abbrechen und später weitermachen.", "wert": 0, "tendenz": "flucht", "warum": "Abbrechen macht den Hänger groß – und das nächste Mal schwerer." }
+          ] },
+        { "art": "mission", "ref": "ruhe-m-05" }
+      ],
+      "regel": "Den ersten Satz kennen, den Hänger planen – dann gehört die erste Minute dir.",
+      "merkkarten": [
+        { "id": "ruhe-1-06-m1", "frage": "Was macht einen guten ersten Satz aus?", "antwort": "Kurz, zur Sache, auswendig, langsam gesprochen – ohne Entschuldigung." },
+        { "id": "ruhe-1-06-m2", "frage": "Dein Plan für den Hänger?", "antwort": "Pause, ausatmen, Stichwort, den letzten Satz noch einmal – dann langsamer weiter." }
+      ],
+      "mission": "ruhe-m-05"
+    },
+    {
+      "id": "ruhe-1-07", "bereich": "ruhe", "stufe": 1, "nr": 7,
+      "titel": "Deine 60 Sekunden",
+      "faehigkeiten": ["ruhe.routine", "ruhe.atem"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Feste Abläufe vor der Ausführung sind im Sport gut belegt, auch unter Druck. Für Reden und Gespräche ist das eine begründete Übertragung, nicht eigens untersucht. Eine oft zitierte Studie zu Ritualen vor Auftritten wurde zurückgezogen und wird hier nicht verwendet.",
+      "quellen": ["rupprecht2021", "webb2012"],
+      "aha": "Unter Druck trägt ein fester Ablauf besser als ein guter Vorsatz. Deine 60 Sekunden nehmen dir in der letzten Minute das Entscheiden ab.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Vor wichtigen Momenten sollte man spontan bleiben – feste Abläufe machen nur steif.", "urteil": "falsch", "warum": "Im Sport verbessern feste Abläufe vor der Ausführung die Leistung deutlich, gerade unter Druck. Spontan darfst du danach sein – der Ablauf gilt nur für die letzte Minute." },
+        { "art": "karte", "text": "Eine Startroutine besteht aus drei bis fünf Bausteinen, immer in derselben Reihenfolge. Sie beschäftigt Körper und Kopf mit etwas Bekanntem, wenn die Aufregung am höchsten ist. Damit sie trägt, übst du sie auch vor gewöhnlichen Terminen – bis sie von selbst abläuft. Carla Demir macht ihre seit Jahren vor jeder Präsentation." },
+        { "art": "rangfolge", "kopf": { "id": "ruhe-1-07-a", "faehigkeit": "ruhe.routine", "stufe": 2, "kanal": "wissen" },
+          "frage": "So sieht Carlas Startroutine aus. Bring sie in eine sinnvolle Reihenfolge – was kommt zuerst?",
+          "eintraege": [
+            { "text": "Beide Füße fest auf den Boden.", "warum": "Der Stand gibt Halt – alles Weitere baut darauf auf." },
+            { "text": "Einmal lang ausatmen.", "warum": "Der Körper schaltet einen Gang herunter." },
+            { "text": "Innerlich: „Carla, du bist bereit.“", "warum": "Der Satz mit Namen schafft Abstand und Zuversicht." },
+            { "text": "Blick zu einem freundlichen Gesicht.", "warum": "Der Blick geht nach außen – zur ersten Zuhörerin." },
+            { "text": "Den ersten Satz sagen.", "warum": "Der Start – vorbereitet und langsam." }
+          ] },
+        { "art": "routine", "bausteine": ["Stand: beide Füße fest, Knie locker", "Einmal lang ausatmen", "Seufzer-Atmung, zwei Runden", "Mein Satz zum Umdeuten", "Mich mit Namen ansprechen", "Hände einmal anspannen und loslassen", "Blick zu einem freundlichen Gesicht", "Ein Schluck Wasser", "Den ersten Satz innerlich sagen"], "mindestens": 3, "hoechstens": 5 },
+        { "art": "anleitung", "titel": "Einmal durchspielen", "schritte": ["Stell dir die Tür vor, durch die du gleich gehst.", "Geh deine Bausteine der Reihe nach durch – in echtem Tempo.", "Achte darauf, dass alles zusammen unter einer Minute bleibt.", "Spiel es gleich noch zweimal."], "sekunden": 90, "stumm": true },
+        { "art": "auswahl", "kopf": { "id": "ruhe-1-07-b", "faehigkeit": "ruhe.routine", "stufe": 3, "kanal": "wissen" },
+          "frage": "Wann übst du deine Startroutine am besten?",
+          "antworten": [
+            { "text": "Nur vor wirklich wichtigen Auftritten – sonst nutzt sie sich ab.", "wert": 0, "warum": "Dann ist sie im Ernstfall fremd. Ein Ablauf trägt erst, wenn er von selbst läuft." },
+            { "text": "Auch vor gewöhnlichen Besprechungen und Anrufen.", "wert": 2, "warum": "So wird sie zur Gewohnheit und läuft im Ernstfall ab, ohne dass du nachdenken musst." },
+            { "text": "Am Abend davor einmal im Kopf.", "wert": 1, "warum": "Besser als nichts – aber die Routine sitzt erst, wenn du sie oft und im echten Moment machst." },
+            { "text": "Gar nicht – sie entsteht von selbst.", "wert": 0, "warum": "Von selbst entsteht meist eher Grübeln als ein hilfreicher Ablauf." }
+          ] },
+        { "art": "mission", "ref": "ruhe-m-04" }
+      ],
+      "regel": "Drei bis fünf Bausteine, immer gleich – auch wenn nichts auf dem Spiel steht.",
+      "merkkarten": [
+        { "id": "ruhe-1-07-m1", "frage": "Woraus besteht eine Startroutine?", "antwort": "Drei bis fünf feste Bausteine, immer in derselben Reihenfolge, zusammen unter einer Minute." },
+        { "id": "ruhe-1-07-m2", "frage": "Warum übst du sie auch vor gewöhnlichen Terminen?", "antwort": "Damit sie im Ernstfall von selbst abläuft." }
+      ],
+      "mission": "ruhe-m-04"
+    }
+  ]
+}

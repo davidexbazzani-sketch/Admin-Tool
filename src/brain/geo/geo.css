@@ -1,0 +1,100 @@
+/* Geographie — Weltkarte und „Land finden“. Alle Farben kommen aus den --bt-…-Variablen
+   (hell und dunkel getrennt gemischt), nichts ist fest verdrahtet. */
+
+.bt-geo-karte {
+  --bt-geo-meer: var(--bt-bg2);
+  --bt-geo-land: color-mix(in srgb, var(--bt-akzent) 30%, var(--bt-flaeche2));
+  --bt-geo-ueber: color-mix(in srgb, var(--bt-akzent) 68%, var(--bt-flaeche2));
+  --bt-geo-grenze: var(--bt-bg2);
+  position: relative;
+  width: 100%;
+  border-radius: var(--bt-radius);
+  border: 1px solid var(--bt-rand);
+  background: var(--bt-geo-meer);
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+}
+.light .bt-geo-karte {
+  --bt-geo-meer: var(--bt-bg2);
+  --bt-geo-land: color-mix(in srgb, var(--bt-akzent) 42%, var(--bt-flaeche));
+  --bt-geo-ueber: color-mix(in srgb, var(--bt-akzent) 78%, var(--bt-flaeche));
+  --bt-geo-grenze: var(--bt-flaeche);
+}
+.bt-geo-karte > svg { display: block; width: 100%; height: 100%; cursor: grab; }
+.bt-geo-karte[data-zieht] > svg { cursor: grabbing; }
+
+/* die ganze Welt hängt an EINER Gruppe: Zoomen und Schieben ändern nur deren transform */
+.bt-geo-welt { transform-origin: 0 0; }
+.bt-geo-sanft { transition: transform .22s cubic-bezier(.2, .7, .3, 1); }
+
+.bt-geo-land {
+  fill: var(--bt-geo-land);
+  fill-rule: evenodd;
+  stroke: var(--bt-geo-grenze);
+  stroke-width: .8px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  transition: fill .12s;
+}
+.bt-geo-klickbar .bt-geo-land { cursor: pointer; }
+.bt-geo-klickbar .bt-geo-land:hover { fill: var(--bt-geo-ueber); }
+
+/* Kleinstländer: sichtbarer Punkt + größere unsichtbare Trefferfläche (beide bleiben beim Zoomen gleich groß) */
+.bt-geo-treffer, .bt-geo-punkt, .bt-geo-ring, .bt-geo-kern { fill: none; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.bt-geo-treffer { stroke: transparent; stroke-width: 15px; pointer-events: stroke; }
+.bt-geo-punkt { stroke: var(--bt-ink); stroke-width: 6px; pointer-events: stroke; opacity: .82; transition: stroke .12s, stroke-width .12s; }
+.bt-geo-klickbar .bt-geo-klein { cursor: pointer; }
+.bt-geo-klickbar .bt-geo-klein:hover .bt-geo-punkt { stroke: var(--bt-akzent2); stroke-width: 10px; opacity: 1; }
+
+/* Markierungen nach der Antwort */
+.bt-geo-marke { fill-rule: evenodd; stroke: var(--bt-ink); stroke-width: 1.4px; stroke-linejoin: round; vector-effect: non-scaling-stroke; pointer-events: none; }
+.bt-geo-marke[data-marke='ziel'] { fill: var(--bt-akzent2); }
+.bt-geo-marke[data-marke='gut'] { fill: var(--bt-gut); }
+.bt-geo-marke[data-marke='schlecht'] { fill: var(--bt-schlecht); }
+.bt-geo-ring { stroke-width: 30px; opacity: .34; pointer-events: none; animation: bt-geo-puls 1.1s ease-in-out infinite; }
+.bt-geo-kern { stroke-width: 9px; pointer-events: none; }
+.bt-geo-ring[data-marke='ziel'], .bt-geo-kern[data-marke='ziel'] { stroke: var(--bt-akzent2); }
+.bt-geo-ring[data-marke='gut'], .bt-geo-kern[data-marke='gut'] { stroke: var(--bt-gut); }
+.bt-geo-ring[data-marke='schlecht'], .bt-geo-kern[data-marke='schlecht'] { stroke: var(--bt-schlecht); }
+@keyframes bt-geo-puls { 50% { stroke-width: 40px; opacity: .2; } }
+
+/* Namensschilder (liegen als HTML über der Karte und wandern mit) */
+.bt-geo-schild {
+  position: absolute; left: 0; top: 0; pointer-events: none; white-space: nowrap;
+  padding: 2px 9px; border-radius: 8px; border: 1.5px solid var(--bt-rand); background: var(--bt-flaeche); color: var(--bt-ink);
+  font: 600 12.5px/1.5 var(--bt-schrift); box-shadow: var(--bt-schatten);
+}
+.bt-geo-schild[data-marke='gut'] { border-color: var(--bt-gut); }
+.bt-geo-schild[data-marke='schlecht'] { border-color: var(--bt-schlecht); }
+.bt-geo-schild[data-marke='ziel'] { border-color: var(--bt-akzent2); }
+
+/* Knöpfe und Hinweise auf der Karte */
+.bt-geo-knoepfe { position: absolute; right: 10px; top: 10px; display: flex; flex-direction: column; gap: 5px; }
+.bt-geo-knoepfe button {
+  display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; padding: 0; border-radius: 9px;
+  border: 1px solid var(--bt-rand); background: var(--bt-flaeche); color: var(--bt-leise); cursor: pointer; transition: color .12s, border-color .12s;
+}
+.bt-geo-knoepfe button:hover:not(:disabled) { color: var(--bt-ink); border-color: var(--bt-akzent); }
+.bt-geo-knoepfe button:disabled { opacity: .4; cursor: default; }
+.bt-geo-hinweis { position: absolute; right: 12px; bottom: 8px; pointer-events: none; font-size: 11px; color: var(--bt-stumm); }
+
+/* „Land finden“ */
+.bt-geo-finden { gap: 10px; }
+.bt-geo-finden .bt-aufgabe em { font-style: normal; color: var(--bt-akzent-stark); }
+.bt-geo-meldung {
+  position: absolute; left: 12px; bottom: 10px; display: flex; align-items: center; gap: 12px; max-width: calc(100% - 200px);
+  padding: 7px 8px 7px 14px; border-radius: 12px; border: 1.5px solid var(--bt-rand); background: var(--bt-flaeche);
+  font-size: 13.5px; box-shadow: var(--bt-schatten);
+}
+.bt-geo-meldung b { font-family: var(--bt-schrift); }
+.bt-geo-meldung[data-art='gut'] { border-color: var(--bt-gut); }
+.bt-geo-meldung[data-art='gut'] b { color: var(--bt-gut); }
+.bt-geo-meldung[data-art='schlecht'] { border-color: var(--bt-schlecht); }
+.bt-geo-meldung[data-art='schlecht'] b { color: var(--bt-schlecht); }
+.bt-geo-meldung[data-art='neutral'] { padding-right: 14px; color: var(--bt-leise); }
+.bt-geo-meldung .bt-knopf { padding: 5px 12px; font-size: 13px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bt-geo-ring { animation: none; }
+}

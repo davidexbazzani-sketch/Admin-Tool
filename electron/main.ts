@@ -12,71 +12,21 @@ import { registerKnowledgeSearchIpc } from './knowledgeSearchIpc'
 import { registriereSlideSchema, bedieneSlideProtokoll, erlaubeOrdner, setzeVendorOrdner } from './slideProtocol'
 import { registriereAufnahme } from './aufnahme'
 import * as zugriffe from './zugriffsProtokoll'
+import { registriereBrainSpeicher } from './brainSpeicher'
 
 // Wissenssuche-IPC (knowledge:load / knowledge:status) einmalig registrieren.
 registerKnowledgeSearchIpc()
+
+// Brain Trainer (Pausenraum): Ergebnisse je Benutzer lokal und verschlüsselt (brain:laden/speichern/loeschen).
+registriereBrainSpeicher()
 
 // Server-Zugriffsprotokoll + Schonung der Cluster-Knoten (siehe electron/zugriffsProtokoll.ts).
 // Basis nur als Pfad — geschrieben wird asynchron, ein nicht erreichbares Netzlaufwerk blockiert nie.
 zugriffe.richteEin({ basis: () => { try { return ns.getBasePath() } catch { return '' } }, pc: hostname() })
 
-// ========= WISSENSDATENBANK + GURU DEBUG =========
-try {
-  const _dbgBase = ns.getBasePath()
-  console.log('=== NETZWERK-DEBUG START ===')
-  console.log('BasePath:', _dbgBase)
-  console.log('BasePath exists:', existsSync(_dbgBase))
-
-  // Test knowledge_base subdir
-  const _kbDir = _dbgBase + '\\knowledge_base'
-  console.log('KB dir:', _kbDir, 'exists:', existsSync(_kbDir))
-
-  // Try listing files
-  if (existsSync(_kbDir)) {
-    const { readdirSync, statSync } = require('fs')
-    const files = readdirSync(_kbDir) as string[]
-    console.log('Files in knowledge_base:', files)
-    for (const f of files) {
-      try {
-        const st = statSync(_kbDir + '\\' + f)
-        console.log(`  ${f}: ${st.size} bytes (${Math.round(st.size/1024)} KB)`)
-      } catch {}
-    }
-  }
-
-  // Try reading wissensdatenbank.json directly
-  const _wPath = _kbDir + '\\wissensdatenbank.json'
-  if (existsSync(_wPath)) {
-    const raw = readFileSync(_wPath, 'utf-8')
-    console.log('wissensdatenbank.json: read OK,', raw.length, 'chars')
-    const data = JSON.parse(raw)
-    console.log('  Type:', typeof data, 'IsArray:', Array.isArray(data))
-    if (Array.isArray(data)) {
-      console.log('  Array length:', data.length)
-      if (data[0]) console.log('  First item keys:', Object.keys(data[0]))
-    } else if (typeof data === 'object' && data !== null) {
-      const keys = Object.keys(data)
-      console.log('  Object keys:', keys)
-      for (const k of keys.slice(0, 5)) {
-        const v = data[k]
-        console.log(`    "${k}": type=${typeof v}, isArray=${Array.isArray(v)}, length=${Array.isArray(v) ? v.length : 'n/a'}`)
-        if (Array.isArray(v) && v[0]) console.log(`      first item keys: ${Object.keys(v[0])}`)
-      }
-    }
-  } else {
-    console.log('wissensdatenbank.json NOT FOUND at', _wPath)
-  }
-
-  // Try guru_brain files
-  for (const gf of ['guru_brain.json', 'guru_brain_starter.json', 'guru_requests.json', 'guru_requests_starter.json']) {
-    const gp = _kbDir + '\\' + gf
-    console.log(`${gf}: exists=${existsSync(gp)}${existsSync(gp) ? ', size=' + statSync(gp).size : ''}`)
-  }
-} catch (e: unknown) {
-  console.error('DEBUG ERROR:', (e as Error).message)
-}
-console.log('=== NETZWERK-DEBUG ENDE ===')
-// ========= ENDE DEBUG =========
+// (17.11.2026) Hier stand ein Debug-Block, der VOR dem Fenster die Wissensdatenbank synchron vom
+// Netzlaufwerk las und parste — nur für Log-Ausgaben. Entfernt: er hielt den Start auf, besonders
+// bei langsamem Netz / Home Office.
 
 // NOTE: Hardware acceleration intentionally ENABLED.
 // Disabling it (disableHardwareAcceleration) forces CPU-only software rendering.
@@ -154,7 +104,7 @@ function createWindow() {
     minWidth: 900,
     minHeight: 600,
     frame: false,
-    backgroundColor: '#0f172a',
+    backgroundColor: '#0B1220',   // = Grund der Start-Animation (start.html) → kein Farbsprung vor dem ersten Bild
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -165,11 +115,12 @@ function createWindow() {
     titleBarStyle: 'hidden',
   })
 
+  // start.html = index.html + Start-Animation (Logo) — nur das Hauptfenster; Unterfenster laden index.html
   if (isDev) {
-    mainWindow.loadURL('http://localhost:5173')
+    mainWindow.loadURL('http://localhost:5173/start.html')
     mainWindow.webContents.openDevTools({ mode: 'detach' })
   } else {
-    mainWindow.loadFile(join(__dirname, '../dist/index.html'))
+    mainWindow.loadFile(join(__dirname, '../dist/start.html'))
   }
 
   mainWindow.once('ready-to-show', () => {
@@ -1896,6 +1847,16 @@ ipcMain.handle('auth:deleteUser', (_e, userId: string) => {
   return auth.deleteUser(userId)
 })
 
+// Benutzer per Corp ID vormerken (Einstellungen → „Benutzer & Rechte“)
+ipcMain.handle('auth:vormerken', (_e, p: { corpId: string; displayName?: string; role: 'master_admin' | 'admin' | 'user'; createdBy: string }) => {
+  try { return auth.vormerkeBenutzer(p) } catch (e) { return { ok: false, error: e instanceof Error ? e.message : String(e) } }
+})
+
+// Passwort für die Einstellungen „Für alle“ (nur Hash-Vergleich, mit Wartezeit nach Fehlversuchen)
+ipcMain.handle('verwaltung:pruefe', async (_e, pw: string) => {
+  try { return await auth.pruefeVerwaltungsPasswort(pw) } catch { return { ok: false } }
+})
+
 // Log an activity
 ipcMain.handle('auth:log', (_e, entry: Parameters<typeof auth.writeActivityLog>[0]) => {
   auth.writeActivityLog(entry)
@@ -1946,6 +1907,11 @@ ipcMain.handle('net:listDirAsync', (_e, relativePath: string) => ns.listDirAsync
 ipcMain.handle('net:readJsonAsync', (_e, relativePath: string) => ns.readJsonAsync(relativePath))
 ipcMain.handle('net:writeJsonAsync', (_e, relativePath: string, data: unknown) => ns.writeJsonAsync(relativePath, data))
 ipcMain.handle('net:deleteFileAsync', (_e, relativePath: string) => ns.deleteFileAsync(relativePath))
+// Zusätze für Terra Incognita (Pausenraum): exklusiv anlegen + Lesen mit Auskunft, warum nichts kam
+ipcMain.handle('net:createExclusiveAsync', (_e, relativePath: string, data: unknown) => ns.createExclusiveAsync(relativePath, data))
+ipcMain.handle('net:readJsonStatusAsync', (_e, relativePath: string) => ns.readJsonStatusAsync(relativePath))
+ipcMain.handle('net:listDirStatusAsync', (_e, relativePath: string) => ns.listDirStatusAsync(relativePath))
+ipcMain.handle('net:deleteEmptyDirAsync', (_e, relativePath: string) => ns.deleteEmptyDirAsync(relativePath))
 ipcMain.handle('net:getBasePath', () => ns.getBasePath())
 ipcMain.handle('net:setBasePath', (_e, path: string) => { ns.setBasePath(path); return true })
 ipcMain.handle('net:copyLocalFileAsync', (_e, localPath: string, relativePath: string) => ns.copyLocalFileAsync(localPath, relativePath))

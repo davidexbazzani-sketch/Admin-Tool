@@ -3,8 +3,9 @@
 // Synchronisation ausschließlich über das Netzlaufwerk (Polling), siehe gameLobby.ts.
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
-import { Gamepad2, Swords, Loader, Trophy, X, RefreshCw, LogOut, Users, Handshake, Coins } from 'lucide-react'
+import { Gamepad2, Swords, Loader, Trophy, X, RefreshCw, LogOut, Users, Handshake, Coins, ArrowLeft } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
+import { useAppStore } from '../store/appStore'
 import {
   writeLobby, clearLobby, listLobby, readInvite, clearInvite,
   createMatch, acceptMatch, applyMove, leaveMatch, createRematch, loadMatch, colorOf, findMyActiveMatch,
@@ -18,6 +19,7 @@ const COLOR_LABEL = (c: Color): string => (c === 'red' ? 'Rot' : 'Gelb')
 
 export default function Games() {
   const user = useAuthStore(s => s.session?.user)
+  const setScreen = useAppStore(s => s.setScreen)
   const meRef = useRef<PlayerRef>({ username: user?.username || '', displayName: user?.displayName || user?.username || '' })
   meRef.current = { username: user?.username || '', displayName: user?.displayName || user?.username || '' }
   const meName = meRef.current.username
@@ -155,8 +157,9 @@ export default function Games() {
   return (
     <div className="flex flex-col h-full">
       <div className="shrink-0 px-6 py-4 border-b border-border flex items-center gap-3">
+        <button onClick={() => setScreen('games')} className="flex items-center gap-1 px-2 py-1 text-xs rounded-md text-muted-foreground hover:text-foreground hover:bg-accent" title="Zurück zum Pausenraum"><ArrowLeft size={14} />Pausenraum</button>
         <Gamepad2 size={20} className="text-primary" />
-        <h1 className="text-lg font-bold text-foreground">Pausenraum — 4 gewinnt</h1>
+        <h1 className="text-lg font-bold text-foreground">4 gewinnt</h1>
         <span className="text-xs text-muted-foreground">Live gegen andere Tool-Nutzer</span>
         <div className="ml-auto flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-300 text-sm font-semibold tabular-nums" title={`Einsatz pro Runde: ${STAKE} Coins · Gewinner erhält ${STAKE * 2}`}>

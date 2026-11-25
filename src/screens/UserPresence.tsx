@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 import {
   MonitorSmartphone, Search, Loader, RefreshCw, Send, Terminal, Zap, X,
   CheckCircle, XCircle, Monitor, Wifi, WifiOff, UserSearch, AlertTriangle,
@@ -70,7 +71,9 @@ export default function UserPresence() {
   const authUser = useAuthStore(s => s.session?.user)
   const currentUser = authUser?.displayName || authUser?.username || 'unbekannt'
 
-  const [mode, setMode] = useState<Mode>('single')
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const [mode, setMode] = useBereichZustand<Mode>('user-presence', 'single')
+  const { sichtbar: reiterSichtbar } = useBereiche('user-presence')
   const [users, setUsers] = useState<AdUserListItem[]>([])
   const [loadingUsers, setLoadingUsers] = useState(false)
   // Inventar (Geraet -> zugewiesener Benutzer) fuer den Fast-Path der Einzel-Suche
@@ -642,10 +645,10 @@ export default function UserPresence() {
           <p className="text-xs text-muted-foreground">Findet per IP (DNS-unabhängig), an welchem Gerät ein Benutzer gerade angemeldet ist.</p>
         </div>
         <div className="flex rounded-md border border-border overflow-hidden">
-          <button onClick={() => setMode('single')} className={`px-3 py-1.5 text-xs flex items-center gap-1.5 ${mode === 'single' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent/40'}`}><UserSearch size={13} />Einzelne Suche</button>
-          <button onClick={() => setMode('mass')} className={`px-3 py-1.5 text-xs flex items-center gap-1.5 ${mode === 'mass' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent/40'}`}><ListChecks size={13} />Massen-Scan</button>
-          <button onClick={() => setMode('dns')} className={`px-3 py-1.5 text-xs flex items-center gap-1.5 ${mode === 'dns' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent/40'}`}><Globe size={13} />DNS-Check</button>
-          <button onClick={() => setMode('winrm')} className={`px-3 py-1.5 text-xs flex items-center gap-1.5 ${mode === 'winrm' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent/40'}`}><AlertTriangle size={13} />WinRM/DNS-Fehler</button>
+          {reiterSichtbar('single') && <button onClick={() => setMode('single')} className={`px-3 py-1.5 text-xs flex items-center gap-1.5 ${mode === 'single' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent/40'}`}><UserSearch size={13} />Einzelne Suche</button>}
+          {reiterSichtbar('mass') && <button onClick={() => setMode('mass')} className={`px-3 py-1.5 text-xs flex items-center gap-1.5 ${mode === 'mass' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent/40'}`}><ListChecks size={13} />Massen-Scan</button>}
+          {reiterSichtbar('dns') && <button onClick={() => setMode('dns')} className={`px-3 py-1.5 text-xs flex items-center gap-1.5 ${mode === 'dns' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent/40'}`}><Globe size={13} />DNS-Check</button>}
+          {reiterSichtbar('winrm') && <button onClick={() => setMode('winrm')} className={`px-3 py-1.5 text-xs flex items-center gap-1.5 ${mode === 'winrm' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent/40'}`}><AlertTriangle size={13} />WinRM/DNS-Fehler</button>}
         </div>
       </div>
 

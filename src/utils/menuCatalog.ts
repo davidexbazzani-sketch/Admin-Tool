@@ -89,12 +89,20 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
   { id: 'knowledge-search', label: 'Wissenssuche', category: 'Sonstiges' },
   { id: 'it-guru',        label: 'IT Guru',          category: 'Sonstiges' },
   { id: 'games',          label: 'Pausenraum',       category: 'Sonstiges' },
+  // Räume des Pausenraums (Kacheln, nicht in der Sidebar)
+  // „Der Coach“ (seit 25.11.2026) steht als oberste Kachel. masterAdminOnly + Gründer-Prüfung in der Kachel:
+  // bis zur Freigabe durch den Auftraggeber nur für ihn sichtbar.
+  { id: 'der-coach',      label: 'Der Coach',        category: 'Sonstiges', elternteil: 'games', masterAdminOnly: true },
+  { id: 'vier-gewinnt',   label: '4 gewinnt',        category: 'Sonstiges', elternteil: 'games' },
+  { id: 'brain-trainer',  label: 'Brain Trainer',    category: 'Sonstiges', elternteil: 'games' },
+  { id: 'parla-italiano', label: 'Parla Italiano',   category: 'Sonstiges', elternteil: 'games' },
+  { id: 'terra-incognita', label: 'Terra Incognita', category: 'Sonstiges', elternteil: 'games' },
 
   { id: 'results', label: 'Ergebnisse', category: 'Ergebnisse', topLevel: true },
 
   // Einstellungen
+  // („Benutzerverwaltung“ ist seit 19.11.2026 die Kachel „Benutzer & Rechte“ in den Einstellungen.)
   { id: 'settings',        label: 'Einstellungen',      category: 'Einstellungen', alwaysVisible: true },
-  { id: 'user-management', label: 'Benutzerverwaltung', category: 'Einstellungen', masterAdminOnly: true },
   { id: 'user-logs',       label: 'Benutzer-Logs',      category: 'Einstellungen', masterAdminOnly: true },
   { id: 'bug-mailbox',     label: 'Bug-Meldungen',      category: 'Einstellungen', masterAdminOnly: true },
 ]
@@ -103,3 +111,134 @@ export const MENU_CATALOG: MenuCatalogItem[] = [
 export function kinderVon(id: string): MenuCatalogItem[] { return MENU_CATALOG.filter(m => m.elternteil === id) }
 /** Obermenüpunkt eines Unterpunkts (oder undefined). */
 export function elternVon(id: string): Screen | undefined { return MENU_CATALOG.find(m => m.id === id)?.elternteil }
+
+// ── Unterbereiche innerhalb eines Menüpunkts (Kacheln oder Reiter der ersten Ebene) ──
+// Lassen sich in Einstellungen → „Benutzer & Rechte“ je Benutzer (oder für alle) ausblenden.
+// `key` = der Zustandswert, mit dem der Bildschirm den Bereich öffnet — NIE umbenennen, sonst
+// gehen gespeicherte Ausblendungen verloren. Neuer Bildschirm mit Kacheln/Reitern? → hier
+// eintragen und im Bildschirm `useBereiche(id)` bzw. `useBereichZustand(id, start)` benutzen
+// (src/store/menuSichtbarStore.ts). Unterpunkte mit `elternteil` (Pausenraum, Client Geräte)
+// stehen NICHT hier, sondern kommen aus MENU_CATALOG (kinderVon).
+export interface BereichDef { key: string; label: string }
+
+export const BEREICHE: Partial<Record<Screen, BereichDef[]>> = {
+  'software-installations': [
+    { key: 'solidworks', label: 'SolidWorks 2024 SP5' },
+    { key: 'xelion', label: 'Xelion Desktop' },
+    { key: 'jabra', label: 'Jabra Software' },
+    { key: 'enaio', label: 'Enaio' },
+    { key: 'freecad', label: '3D-Viewer (FreeCAD)' },
+    { key: 'vcredist', label: 'Visual C++ Laufzeit' },
+    { key: 'itadmintool', label: 'IT Admin Tool' },
+  ],
+  'pc-diagnosis': [
+    { key: 'voll', label: 'Komplett-Diagnose' },
+    { key: 'sap', label: 'SAP Fehlersuche' },
+    { key: 'sw', label: 'SolidWorks Diagnose' },
+    { key: 'netz', label: 'Netzwerk Probleme' },
+    { key: 'ueberwachung', label: 'Überwachung über Zeit' },
+  ],
+  'presentation-mode': [
+    { key: 'browse', label: 'Vorhandene Präsentationen' },
+    { key: 'editor', label: 'Präsentationen erstellen und bearbeiten' },
+    { key: 'kiosks', label: 'Kiosk-Clients' },
+    { key: 'edge', label: 'Edge-Anzeige (SSO)' },
+  ],
+  'nis2': [
+    { key: 'access', label: 'Zugänge-Check' },
+    { key: 'awareness', label: 'Awareness-Schulung' },
+  ],
+  'treiber-installation': [
+    { key: 'auswahl', label: 'PC Auswahl' },
+    { key: 'rollout', label: 'Rollout' },
+  ],
+  'hardware-inventory': [
+    { key: 'lost', label: 'Verlorene Geräte' },
+    { key: 'pickups', label: 'Pick-Ups' },
+  ],
+  'infra-marine': [
+    { key: 'incident-response', label: 'Incident Response' },
+    { key: 'permissions', label: 'Berechtigungen beantragen' },
+    { key: 'toner', label: 'Tonerbestellung' },
+    { key: 'visitor', label: 'Externe Besucher' },
+    { key: 'server-perf', label: 'Server Performance' },
+  ],
+  'drucker': [
+    { key: 'uebersicht', label: 'Übersicht' },
+    { key: 'lager', label: 'Toner-Lager' },
+    { key: 'charts', label: 'Charts' },
+    { key: 'verbinden', label: 'Drucker verbinden' },
+  ],
+  'onboarding': [
+    { key: 'overview', label: 'Übersicht' },
+    { key: 'deploy', label: 'Verteilen' },
+    { key: 'map', label: 'Karten-Editor' },
+    { key: 'settings', label: 'Einstellungen' },
+  ],
+  'ticket-assignment': [
+    { key: 'a', label: 'Ticket eingeben' },
+    { key: 'c', label: 'Team-Übersicht' },
+    { key: 'kalender', label: 'Abwesenheiten' },
+    { key: 'd', label: 'Hilfe' },
+  ],
+  'accessory-inventory': [
+    { key: 'bestand', label: 'Bestand' },
+    { key: 'headsets', label: 'Headset Vergabe' },
+  ],
+  'usv': [
+    { key: 'usv', label: 'USV' },
+    { key: 'telefonanlage', label: 'Telefonanlage' },
+  ],
+  'proactive-radar': [
+    { key: 'leasing', label: 'Geräte-Leasing' },
+    { key: 'hygiene', label: 'AD-Hygiene' },
+    { key: 'weekend', label: 'Wochenend-Check' },
+    { key: 'fehler', label: 'PC-Fehler' },
+  ],
+  'network-radar': [
+    { key: 'health', label: 'Health Score' },
+    { key: 'patterns', label: 'Muster-Erkennung' },
+  ],
+  'xelion': [
+    { key: 'bestand', label: 'Durchwahlen prüfen' },
+    { key: 'lizenzen', label: 'Lizenzen' },
+    { key: 'query', label: 'Abfrage' },
+    { key: 'everphone', label: 'Everphone-Register' },
+  ],
+  'pc-migration': [
+    { key: 'wizard', label: 'Assistent' },
+    { key: 'history', label: 'Verlauf' },
+    { key: 'templates', label: 'Vorlagen' },
+  ],
+  'user-presence': [
+    { key: 'single', label: 'Einzelne Suche' },
+    { key: 'mass', label: 'Massen-Scan' },
+    { key: 'dns', label: 'DNS-Check' },
+    { key: 'winrm', label: 'WinRM/DNS-Fehler' },
+  ],
+  'location-overview': [
+    { key: 'Computer', label: 'Computer' },
+    { key: 'Server', label: 'Server' },
+    { key: 'Drucker', label: 'Drucker' },
+    { key: 'Sonstige', label: 'Sonstige' },
+  ],
+  'drucker-uebersicht': [
+    { key: 'halle', label: 'Halle & Zoll' },
+    { key: 'verwaltung', label: 'Verwaltungsgebäude' },
+  ],
+  // Server: Reiter im Server-Fenster („Status“ bleibt immer) + das Feld „Health Check“ im Kopf
+  'server': [
+    { key: 'einrichten', label: 'Reiter „Einrichten“' },
+    { key: 'zertifikate', label: 'Reiter „Zertifikate“' },
+    { key: 'software', label: 'Reiter „Software“' },
+    { key: 'diagnose', label: 'Reiter „Komplett-Diagnose“' },
+    { key: 'health', label: 'Reiter „Schnell-Health-Check“' },
+    { key: 'hci', label: 'Reiter „HCI-Fragebogen“' },
+    { key: 'healthcheck', label: 'Health Check (DISM + SFC) im Kopf' },
+  ],
+}
+
+/** Unterbereiche eines Menüpunkts für die Rechte-Ansicht: Unterpunkte (elternteil) + BEREICHE. */
+export function unterbereicheVon(id: string): BereichDef[] {
+  return [...kinderVon(id).map(k => ({ key: k.id as string, label: k.label })), ...(BEREICHE[id as Screen] || [])]
+}

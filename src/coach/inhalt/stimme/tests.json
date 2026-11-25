@@ -1,0 +1,114 @@
+{
+  "bereich": "stimme",
+  "spur": "kern",
+  "szenarien": [
+    { "id": "stimme-fc-001", "faehigkeit": "stimme.klang", "stufe": 2, "frage": "Du nimmst die Ansage für deine Mailbox auf. Beim Anhören klingst du angespannt und höher als im Gespräch. Was tust du beim zweiten Versuch?", "antworten": [
+      { "text": "Vorher „mmh“ summen und den Text in dieser Höhe sprechen.", "wert": 2, "warum": "So startest du in deiner bequemen Lage." },
+      { "text": "Die Stimme absichtlich tief machen, damit die Ansage seriös klingt.", "wert": 0, "warum": "Gedrückt klingt gepresst." },
+      { "text": "Etwas langsamer sprechen.", "wert": 1, "warum": "Hilft der Ruhe – die Höhe holt aber das Mmh zurück." } ] },
+    { "id": "stimme-fc-002", "faehigkeit": "stimme.klang", "stufe": 4, "frage": "Eine Kollegin übernimmt bald eine Teamleitung und fragt dich, ob sie „tiefer sprechen“ üben sollte. Was rätst du?", "antworten": [
+      { "text": "„Lieber deine bequeme Lage finden – gedrückt klingt angestrengt und ermüdet die Stimme.“", "wert": 2, "warum": "Die eigene entspannte Lage trägt besser als eine gespielte." },
+      { "text": "„Ja, tiefere Stimmen wirken in Studien kompetenter – das solltest du dir antrainieren.“", "wert": 0, "warum": "Die Laborbefunde beruhen auf verstellten Aufnahmen; Drücken schadet eher." },
+      { "text": "„Mach dir um die Stimme keine Gedanken, achte auf den Inhalt.“", "wert": 1, "warum": "Inhalt zählt – eine bequeme Stimme hilft ihm aber." } ] },
+    { "id": "stimme-fc-003", "faehigkeit": "stimme.klang", "stufe": 6, "frage": "Eine Freundin ist Lehrerin. Seit fünf Wochen klingt sie heiser, auch in den Ferien wird es nicht besser. Sie sagt: „Berufsrisiko.“ Was rätst du ihr?", "antworten": [
+      { "text": "„Dann schon dich die restlichen Ferien und trink viel Tee – das gibt sich bestimmt noch.“", "wert": 0, "warum": "Schonen ist gut – nach mehr als vier Wochen gehört Heiserkeit aber abgeklärt." },
+      { "text": "„Lass das in einer HNO-Praxis anschauen – nach über vier Wochen rät man dazu.“", "wert": 2, "warum": "So empfiehlt es die Leitlinie bei Heiserkeit über vier Wochen." },
+      { "text": "„Frag mal in deiner Hausarztpraxis nach.“", "wert": 1, "warum": "Ein guter erster Schritt – meist folgt die Überweisung zur HNO-Praxis." } ] },
+    { "id": "stimme-fc-004", "faehigkeit": "stimme.atem", "stufe": 2, "frage": "Du liest bei einer Feier einen längeren Text vor, und am Ende der Sätze wird deine Stimme dünn. Was hilft am ehesten?", "antworten": [
+      { "text": "Den Text vorher in kurze Atemstücke einteilen und an den Strichen loslassen.", "wert": 2, "warum": "Ein Gedanke, ein Atem." },
+      { "text": "Vorher ein paarmal tief Luft holen und den Brustkorb weit machen, damit genug Vorrat da ist.", "wert": 0, "warum": "Volltanken spannt an und reicht trotzdem nicht." },
+      { "text": "Etwas langsamer lesen.", "wert": 1, "warum": "Hilft ein wenig – die Atemstücke helfen mehr." } ] },
+    { "id": "stimme-fc-005", "faehigkeit": "stimme.atem", "stufe": 4, "frage": "Mitten in einem Satz merkst du, dass die Luft nicht bis zum Ende reicht. Was tust du?", "antworten": [
+      { "text": "An der nächsten Sinngrenze kurz anhalten und Luft kommen lassen.", "wert": 2, "warum": "So bleibt der Gedanke ganz, und die Stimme behält Kraft." },
+      { "text": "Mit dem Rest der Luft durchpressen – Hauptsache, der Satz bleibt am Stück.", "wert": 0, "warum": "Pressen strengt an und klingt eng." },
+      { "text": "Gleich dort anhalten, Luft holen und weiter.", "wert": 1, "warum": "Besser als pressen – an einer Sinngrenze fällt es weniger auf." } ] },
+    { "id": "stimme-fc-006", "faehigkeit": "stimme.atem", "stufe": 5, "frage": "Beim Sprechen hebst du beim Einatmen sichtbar die Schultern. Was hilft?", "antworten": [
+      { "text": "Die Schultern unten lassen und am Satzende den Bauch loslassen – die Luft kommt dann von allein.", "wert": 2, "warum": "So atmest du ruhig und ohne Anspannung im Hals." },
+      { "text": "Nichts – Hauptsache, genug Luft.", "wert": 0, "warum": "Hochgezogene Schultern spannen auch den Hals an." },
+      { "text": "In längeren Pausen durch die Nase einatmen.", "wert": 1, "warum": "Geht in längeren Pausen gut. Gegen die hochgezogenen Schultern hilft aber erst das Loslassen am Satzende." } ] },
+    { "id": "stimme-fc-007", "faehigkeit": "stimme.pause", "stufe": 2, "frage": "Du stellst in der Runde eine Zahl vor, die alle überraschen wird. Wie bringst du sie?", "antworten": [
+      { "text": "Kurze Pause davor, dann die Zahl, dann kurz still.", "wert": 2, "warum": "Die Pause kündigt an, die Stille lässt wirken." },
+      { "text": "Ohne Pause mitten im Satz, dann ist die Überraschung größer und alle horchen auf.", "wert": 0, "warum": "Dann rauscht die Zahl vorbei." },
+      { "text": "Mit der Ankündigung „Achtung, jetzt kommt was“.", "wert": 1, "warum": "Weckt Aufmerksamkeit – eine Pause tut es leiser." } ] },
+    { "id": "stimme-fc-008", "faehigkeit": "stimme.pause", "stufe": 4, "frage": "Ein Kollege stellt dir in der Besprechung eine knifflige Frage. Was tust du in den ersten Sekunden?", "antworten": [
+      { "text": "Kurz still nachdenken, dann antworten.", "wert": 2, "warum": "Die Pause zeigt, dass du die Frage ernst nimmst." },
+      { "text": "Sofort antworten und beim Reden überlegen, damit keine peinliche Stille entsteht.", "wert": 0, "warum": "Denken und Reden zugleich macht die Antwort unsicher." },
+      { "text": "„Gute Frage“ sagen und dann überlegen.", "wert": 1, "warum": "Gewinnt Zeit – eine stille Pause tut es auch." } ] },
+    { "id": "stimme-fc-009", "faehigkeit": "stimme.pause", "stufe": 3, "frage": "Du hörst deine Aufnahme und zählst drei Ähs in einer Minute. Wie schätzt du das ein?", "antworten": [
+      { "text": "Kein Grund zur Sorge. Die stille Pause kannst du trotzdem weiter üben.", "wert": 2, "warum": "Bis etwa fünf je Minute schadeten Füllwörter in einer Studie nicht." },
+      { "text": "Viel zu viele – ein guter Redner hat gar keine.", "wert": 0, "warum": "Null ist kein sinnvolles Ziel." },
+      { "text": "Zählen allein sagt wenig – hör lieber, ob die Ähs an Stellen stehen, die stören.", "wert": 1, "warum": "Gute Frage an die Aufnahme. Drei je Minute sind aber unbedenklich." } ] },
+    { "id": "stimme-fc-010", "faehigkeit": "stimme.betonung", "stufe": 2, "frage": "Deine Chefin fragt: „Ist der Bericht für Montag?“ Er ist für Dienstag. Wie sagst du: „Der Bericht ist für Dienstag“?", "antworten": [
+      { "text": "Mit dem Ton auf „Dienstag“.", "wert": 2, "warum": "Das ist das Neue und der Gegensatz zu „Montag“." },
+      { "text": "Mit dem Ton auf „Bericht“, damit klar ist, worum es geht.", "wert": 0, "warum": "Den Bericht hat sie selbst genannt." },
+      { "text": "Ohne besondere Betonung, ganz sachlich, damit es nicht wie eine Korrektur klingt.", "wert": 1, "warum": "Höflich, aber der neue Tag sticht nicht heraus." } ] },
+    { "id": "stimme-fc-011", "faehigkeit": "stimme.betonung", "stufe": 4, "frage": "Du liest deinem Team eine Mitteilung vor, und hinterher weiß keiner mehr, was neu war. Was hilft beim nächsten Mal am meisten?", "antworten": [
+      { "text": "Vorher das Neue markieren und genau dort den Ton setzen.", "wert": 2, "warum": "Wer vorher entscheidet, macht das Neue hörbar." },
+      { "text": "Insgesamt lauter und mit mehr Nachdruck vorlesen, damit es ernster klingt.", "wert": 0, "warum": "Nachdruck auf allem hebt nichts heraus." },
+      { "text": "Langsamer vorlesen, damit alle mitkommen.", "wert": 1, "warum": "Hilft beim Mitkommen – das Neue hebt erst der Ton heraus." } ] },
+    { "id": "stimme-fc-012", "faehigkeit": "stimme.betonung", "stufe": 6, "frage": "Du willst überzeugen, dass ein neuer Ablauf besser ist. Was macht deine Stimme laut Studien eher überzeugend?", "antworten": [
+      { "text": "Wechsel in Lautstärke und Betonung – das klingt zuversichtlich.", "wert": 2, "warum": "In Versuchen wirkten so sprechende Redner zuversichtlicher und überzeugender." },
+      { "text": "Gleichmäßig leise und sachlich, damit es auf keinen Fall nach Verkaufen klingt.", "wert": 0, "warum": "Gleichförmig wirkt eher unbeteiligt." },
+      { "text": "Dauerhaft etwas lauter als sonst.", "wert": 1, "warum": "Etwas mehr Stimme hilft – der Wechsel macht den Unterschied." } ] },
+    { "id": "stimme-fc-013", "faehigkeit": "stimme.tempo", "stufe": 2, "frage": "Du weist eine neue Kollegin in ihre Aufgaben ein. Was sprichst du langsamer?", "antworten": [
+      { "text": "Was sie sich merken soll: Namen, Zahlen, die wichtigste Regel.", "wert": 2, "warum": "Langsam heißt: Das ist wichtig." },
+      { "text": "Alles gleichmäßig langsam, weil sie ja neu ist und sonst überfordert wäre.", "wert": 0, "warum": "Gleichmäßig langsam wird zäh und hebt nichts heraus." },
+      { "text": "Den Teil, den du selbst kompliziert findest.", "wert": 1, "warum": "Oft richtig – entscheidend ist, was sie behalten soll." } ] },
+    { "id": "stimme-fc-014", "faehigkeit": "stimme.tempo", "stufe": 4, "frage": "Nach deinem Vortrag sagt jemand: „Am Ende warst du ganz schön schnell.“ Was ist der wahrscheinlichste Grund – und was hilft?", "antworten": [
+      { "text": "Aufregung oder Zeitnot treiben das Tempo – beim nächsten Mal nach jedem Abschnitt eine Pause einplanen.", "wert": 2, "warum": "Geplante Bremsen halten das Tempo." },
+      { "text": "Du sprichst eben schnell – daran lässt sich nichts ändern.", "wert": 0, "warum": "Tempo lässt sich steuern, vor allem mit Pausen." },
+      { "text": "Zu viel Stoff – beim nächsten Mal weniger einpacken.", "wert": 1, "warum": "Oft ein Teil des Grundes. Pausen gehören trotzdem dazu." } ] },
+    { "id": "stimme-fc-015", "faehigkeit": "stimme.tempo", "stufe": 5, "frage": "Nach deiner Probe sagt Miriam: „Nicht zu schnell – aber du warst die ganze Zeit gleich schnell.“ Was nimmst du mit?", "antworten": [
+      { "text": "Den Wechsel üben: Wichtiges langsamer und mit Pause, Bekanntes zügiger.", "wert": 2, "warum": "Nicht das eine richtige Tempo trägt, sondern der Wechsel." },
+      { "text": "Nichts – solange es nicht zu schnell ist, passt das Tempo doch, und gleichmäßig wirkt ruhig.", "wert": 0, "warum": "Gleichmaß ermüdet – ohne Wechsel hört man nicht, was wichtig ist." },
+      { "text": "Insgesamt etwas langsamer sprechen.", "wert": 1, "warum": "Kann helfen. Mehr bringt der Wechsel: langsamer beim Wichtigen, zügiger beim Bekannten." } ] },
+    { "id": "stimme-fc-016", "faehigkeit": "stimme.aufbau", "stufe": 2, "frage": "Bei der Versammlung deines Vereins sollst du ankündigen, dass das Training künftig donnerstags stattfindet. Womit beginnst du?", "antworten": [
+      { "text": "„Kurz zum Training: Ab nächster Woche ist es donnerstags.“", "wert": 2, "warum": "Zweck und Kern gleich am Anfang." },
+      { "text": "„Also, ihr wisst ja, wir hatten lange überlegt, und mit der Halle gab es da am Mittwoch so ein Problem …“", "wert": 0, "warum": "Die Vorgeschichte kommt vor der Nachricht." },
+      { "text": "„Ich habe eine Neuigkeit für euch.“", "wert": 1, "warum": "Weckt Aufmerksamkeit – die Neuigkeit selbst sollte gleich folgen." } ] },
+    { "id": "stimme-fc-017", "faehigkeit": "stimme.aufbau", "stufe": 4, "frage": "Am Ende deines Updates merkst du, dass du vergessen hast, um etwas zu bitten. Was tust du?", "antworten": [
+      { "text": "„Eine Sache noch – meine Bitte: …“ und sie klar nennen.", "wert": 2, "warum": "Die Bitte gehört ans Ende – auch nachträglich." },
+      { "text": "Nichts mehr sagen – die anderen fragen schon nach, wenn sie etwas brauchen.", "wert": 0, "warum": "Du brauchst etwas, nicht sie. Ohne Bitte passiert oft nichts." },
+      { "text": "Die Bitte später per Mail nachschicken.", "wert": 1, "warum": "Besser als nichts – im Raum gesagt wirkt sie stärker." } ] },
+    { "id": "stimme-fc-018", "faehigkeit": "stimme.aufbau", "stufe": 6, "frage": "Du hast für eine kurze Rede bei einer Vereinsfeier zehn gute Ideen. Wie gehst du vor?", "antworten": [
+      { "text": "Die drei stärksten auswählen und zwischen Zweck und Schluss setzen.", "wert": 2, "warum": "Drei Schritte tragen, zehn erschlagen." },
+      { "text": "Alle zehn unterbringen, notfalls etwas schneller sprechen.", "wert": 0, "warum": "Dann bleibt keine hängen." },
+      { "text": "Mit der besten anfangen und schauen, wohin es führt.", "wert": 1, "warum": "Starker Anfang – aber ohne Plan fehlt oft der Schluss." } ] },
+    { "id": "stimme-fc-019", "faehigkeit": "stimme.bild", "stufe": 3, "frage": "Bei der Mitgliederversammlung willst du sagen, dass der Spendenlauf 4.000 Euro gebracht hat. Wie bleibt die Zahl hängen?", "antworten": [
+      { "text": "„4.000 Euro – damit bekommt jede Jugendmannschaft neue Trikots.“", "wert": 2, "warum": "Die Zahl bekommt ein Bild, das alle vor Augen haben." },
+      { "text": "„Der Spendenlauf war ein schöner Erfolg für alle, die mitgemacht und mitgeholfen haben.“", "wert": 0, "warum": "Ohne Zahl und ohne Bild bleibt nur eine Floskel." },
+      { "text": "„Wir haben 4.000 Euro gesammelt.“", "wert": 1, "warum": "Klar – mit einem Bild bliebe die Zahl länger hängen." } ] },
+    { "id": "stimme-fc-020", "faehigkeit": "stimme.bild", "stufe": 5, "frage": "Du willst bei einem Geburtstag zeigen, wie hilfsbereit deine Nachbarin ist. Was wirkt am stärksten?", "antworten": [
+      { "text": "Eine kleine Geschichte, in der sie geholfen hat.", "wert": 2, "warum": "Ein echter Fall zeigt, was eine Eigenschaft nur behauptet." },
+      { "text": "Eine Aufzählung ihrer Stärken: hilfsbereit, freundlich, zuverlässig und immer gut gelaunt.", "wert": 1, "warum": "Freundlich gemeint – eine Geschichte zeigt es aber." },
+      { "text": "Der Satz „Sie ist wirklich ein sehr hilfsbereiter Mensch.“", "wert": 0, "warum": "Eine Behauptung ohne Bild bleibt blass." } ] },
+    { "id": "stimme-fc-021", "faehigkeit": "stimme.bild", "stufe": 7, "frage": "In einer Präsentation willst du zeigen, dass euer neuer Weg besser ist als der alte. Welcher Satz trägt am meisten?", "antworten": [
+      { "text": "„Nicht mehr Arbeit – weniger Wege.“", "wert": 2, "warum": "Ein Kontrast macht den Unterschied hörbar." },
+      { "text": "„Der neue Weg hat im Vergleich zum alten einige Vorteile, die ich gleich erläutern werde.“", "wert": 0, "warum": "Lang und ohne Bild." },
+      { "text": "„Der neue Weg ist besser.“", "wert": 1, "warum": "Klar, aber ohne Gegensatz und ohne Bild." } ] },
+    { "id": "stimme-fc-022", "faehigkeit": "stimme.auftritt", "stufe": 3, "frage": "Du stehst vor der Runde und merkst, dass du von einem Bein aufs andere wippst. Was hilft?", "antworten": [
+      { "text": "Beide Füße fest auf den Boden, Knie locker.", "wert": 2, "warum": "Ein fester Stand nimmt das Wippen." },
+      { "text": "Dich an die Wand lehnen.", "wert": 0, "warum": "Wirkt schnell lustlos – und du stehst nicht frei." },
+      { "text": "Ein paar Schritte gehen und dann wieder stehen bleiben.", "wert": 1, "warum": "Bewegung mit Absicht ist in Ordnung – danach fest stehen." } ] },
+    { "id": "stimme-fc-023", "faehigkeit": "stimme.auftritt", "stufe": 5, "frage": "Du erklärst einer Gruppe, wie eine Maschine aufgebaut ist. Was tun deine Hände am besten?", "antworten": [
+      { "text": "Zeigen, wie die Teile liegen und sich bewegen.", "wert": 2, "warum": "Gesten, die Abläufe zeigen, helfen beim Verstehen besonders." },
+      { "text": "Ruhig auf dem Rücken bleiben, damit sich alle ganz auf deine Worte konzentrieren können.", "wert": 0, "warum": "Passende Gesten lenken nicht ab, sie helfen." },
+      { "text": "Ab und zu auf die Folie zeigen.", "wert": 1, "warum": "Hilft – Gesten, die den Ablauf nachzeichnen, noch mehr." } ] },
+    { "id": "stimme-fc-024", "faehigkeit": "stimme.auftritt", "stufe": 7, "frage": "Kurz vor deinem Vortrag zittern dir die Hände. Ein Kollege rät: „Steck sie in die Hosentaschen, dann sieht's keiner.“ Was stimmt am ehesten?", "antworten": [
+      { "text": "Die Hände locker vor dem Körper lassen und für ein paar Gesten nutzen.", "wert": 2, "warum": "Gesten helfen dir beim Sprechen und den anderen beim Verstehen – die Hände haben eine Aufgabe statt ein Versteck." },
+      { "text": "Gute Idee – Hauptsache, keiner sieht das Zittern. Auf Gesten verzichtest du heute einfach.", "wert": 0, "warum": "Versteckt werden die Hände steif, und die Gesten fehlen – dabei helfen sie dir beim Sprechen und den anderen beim Verstehen." },
+      { "text": "Die Stichwortkarte in beide Hände nehmen.", "wert": 1, "warum": "Gibt Halt. Eine Hand für die Karte, eine frei für Gesten wirkt lebendiger." } ] }
+  ],
+  "selbstbild": [
+    { "id": "stimme-sb-1", "text": "Ich spreche in einer Tonlage, die sich für mich bequem anfühlt.", "faehigkeit": "stimme.klang" },
+    { "id": "stimme-sb-2", "text": "Mir geht beim Sprechen selten die Luft aus.", "faehigkeit": "stimme.atem" },
+    { "id": "stimme-sb-3", "text": "Vor einem wichtigen Satz kann ich eine Pause aushalten.", "faehigkeit": "stimme.pause" },
+    { "id": "stimme-sb-4", "text": "Man hört, was mir in meinem Beitrag wichtig ist.", "faehigkeit": "stimme.betonung" },
+    { "id": "stimme-sb-5", "text": "Wenn ich etwas vortrage, wissen die anderen nach dem ersten Satz, worum es geht.", "faehigkeit": "stimme.aufbau" }
+  ],
+  "verhalten": [
+    { "id": "stimme-vh-1", "text": "Wie oft hast du in den letzten zwei Wochen vor einem wichtigen Satz bewusst eine Pause gemacht?", "faehigkeit": "stimme.pause" },
+    { "id": "stimme-vh-2", "text": "Wie oft hast du in den letzten zwei Wochen einen Beitrag mit einem Zwecksatz begonnen?", "faehigkeit": "stimme.aufbau" },
+    { "id": "stimme-vh-3", "text": "Wie oft hast du in den letzten zwei Wochen deine Stimme vor einem Gespräch kurz vorbereitet – mit „mmh“, Wasser oder langem Ausatmen?", "faehigkeit": "stimme.klang" }
+  ]
+}

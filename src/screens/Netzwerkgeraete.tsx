@@ -3,8 +3,9 @@
 // Eintrag in GERAETE + eigene Komponente unter components/netzwerkgeraete/.
 // Die Screen-Kennung bleibt 'usv', damit gespeicherte Favoriten/Ausblendungen gelten.
 
-import { lazy, Suspense, useState, type ReactNode } from 'react'
+import { lazy, Suspense, type ReactNode } from 'react'
 import { BatteryCharging, Network, Phone } from 'lucide-react'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 
 const USV = lazy(() => import('./USV'))
 const Telefonanlage = lazy(() => import('../components/netzwerkgeraete/Telefonanlage'))
@@ -18,10 +19,12 @@ const GERAETE: { id: GeraetId; name: string; info: string; icon: ReactNode }[] =
 const MERK_KEY = 'netzwerkgeraete.reiter'
 
 export default function Netzwerkgeraete() {
-  const [aktiv, setAktiv] = useState<GeraetId>(() => {
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte) — auch der gemerkte Reiter
+  const [aktiv, setAktiv] = useBereichZustand<GeraetId>('usv', () => {
     try { const v = localStorage.getItem(MERK_KEY); if (v === 'usv' || v === 'telefonanlage') return v } catch { /* egal */ }
     return 'usv'
   })
+  const { sichtbar } = useBereiche('usv')
   function waehle(id: GeraetId) {
     setAktiv(id)
     try { localStorage.setItem(MERK_KEY, id) } catch { /* egal */ }
@@ -38,7 +41,7 @@ export default function Netzwerkgeraete() {
           <span className="text-xs text-muted-foreground">Geräte im Netz, die keine PCs sind — mit Zugang und Anleitung.</span>
         </div>
         <div className="flex flex-wrap gap-2 mt-3">
-          {GERAETE.map(g => (
+          {GERAETE.filter(g => sichtbar(g.id)).map(g => (
             <button key={g.id} onClick={() => waehle(g.id)}
               className={`flex items-center gap-2.5 px-3 py-2 rounded-lg border text-left transition-colors ${aktiv === g.id ? 'border-primary/60 bg-primary/10' : 'border-border hover:bg-accent'}`}>
               {g.icon}
@@ -53,9 +56,9 @@ export default function Netzwerkgeraete() {
 
       <div className="flex-1 min-h-0">
         <Suspense fallback={laden}>
-          {aktiv === 'usv' ? <USV /> : (
+          {aktiv === 'usv' ? <USV /> : aktiv === 'telefonanlage' ? (
             <div className="h-full overflow-auto px-6 py-4"><Telefonanlage /></div>
-          )}
+          ) : null}
         </Suspense>
       </div>
     </div>

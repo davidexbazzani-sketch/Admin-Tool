@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { CalendarClock, UserPlus, ExternalLink } from 'lucide-react'
-import { useAuthStore, useIsAdmin, useIsMasterAdmin } from '../../store/authStore'
+import { useAuthStore } from '../../store/authStore'
 import { useAppStore } from '../../store/appStore'
 import {
   listEmployees, loadReminderDismissals, dismissReminder, computeActiveReminders,
   formatGermanDate, type ActiveReminder,
 } from '../../services/employees'
-import { loadUserMenuOverrides, getHiddenForUser } from '../../services/userMenuVisibility'
-import { computeMenuVisible } from '../../utils/menuVisibility'
+import { useMenuSichtbar } from '../../store/menuSichtbarStore'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 
 /**
@@ -32,33 +31,16 @@ function daysLabel(days: number): string {
 export default function EmployeeReminderController() {
   const user = useAuthStore(s => s.session?.user)
   const username = user?.username || ''
-  const isAdmin = useIsAdmin()
-  const isMaster = useIsMasterAdmin()
-  const hiddenMenuIds = useAppStore(s => s.hiddenMenuIds)
-  const menuMinRole = useAppStore(s => s.menuMinRole)
   const setReminderCount = useAppStore(s => s.setEmployeeReminderCount)
   const setScreen = useAppStore(s => s.setScreen)
 
-  const [userOverride, setUserOverride] = useState<Set<string> | null>(null)
   const [reminders, setReminders] = useState<ActiveReminder[]>([])
   const [popupOpen, setPopupOpen] = useState(false)
   const lastSignature = useRef<string>('')
 
-  useEffect(() => {
-    if (!username) return
-    let cancelled = false
-    ;(async () => {
-      try {
-        const o = await loadUserMenuOverrides()
-        if (!cancelled) setUserOverride(getHiddenForUser(o, user?.id || ''))
-      } catch { /* ignore */ }
-    })()
-    return () => { cancelled = true }
-  }, [username, user?.id])
-
-  const menuVisible = useCallback((): boolean => computeMenuVisible(MENU_ID, {
-    isAdmin, isMaster, userOverride, hidden: hiddenMenuIds, minRole: menuMinRole, builtinAdminOnly: true,
-  }), [isAdmin, isMaster, userOverride, hiddenMenuIds, menuMinRole])
+  // Sichtbarkeit wie in der Sidebar (dieselbe Auswertung, utils/sichtbarkeit.ts → Store).
+  const sichtbar = useMenuSichtbar(s => s.sichtbar ? s.sichtbar[MENU_ID] === true : false)
+  const menuVisible = useCallback((): boolean => sichtbar, [sichtbar])
 
   const tick = useCallback(async () => {
     if (!username) return

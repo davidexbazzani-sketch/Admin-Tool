@@ -1,0 +1,140 @@
+{
+  "lagen": [
+    {
+      "id": "aussprache-l-l-01", "bereich": "aussprache", "schwerpunkt": "lispeln", "phase": "g", "umfeld": "fremde", "faehigkeiten": ["aussprache.einschleifen"], "stufe": 3,
+      "titel": "Sechs Sesambrötchen", "figur": "Frau Sommer",
+      "einleitung": "Ein Wort, das man lieber umgeht – und eine Nachbarin, die alles kommentiert. Du übst, das Wort trotzdem zu sagen und auf eine Bemerkung sachlich zu antworten. Der Strich | steht für eine kleine Pause.",
+      "lage": "Samstagmorgen, volle Bäckerei. Du willst sechs Sesambrötchen – ein Wort, um das du früher immer einen Bogen gemacht hast. Hinter dir in der Schlange steht Frau Sommer, deine redselige Nachbarin.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Die Verkäuferin: „Was darf's sein?“",
+          "wahl": [
+            { "text": "Ruhig, mit dem neuen S: „Sechs Sesambrötchen, | bitte.“", "wert": 2, "weiter": "k2", "rueck": "Gesagt, was du wolltest – mit dem Wort, das du sonst umgehst. Genau das ist Einschleifen." },
+            { "text": "„Ein halbes Dutzend von denen da.“ – mit Fingerzeig.", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Geschickt umschifft – aber das Wort bleibt ungeübt, und der Umweg kostet Klarheit." },
+            { "text": "„Sechs Sesambrötchen“ – schnell und leise, damit es keiner hört.", "wert": 1, "weiter": "k2", "rueck": "Gesagt ist gesagt – das zählt. Leise und schnell rutscht aber das alte S am ehesten zurück." }
+          ] },
+        { "id": "k1b", "sagt": "Die Verkäuferin: „Von welchen? Mit Körnern oder mit Sesam?“",
+          "wahl": [
+            { "text": "„Die mit Sesam. | Sechs Stück.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Gelegenheit genutzt. Jetzt hat das Wort seinen Auftritt." },
+            { "text": "Nur zeigen und nicken.", "wert": 0, "tendenz": "vermeiden", "weiter": "k2b", "rueck": "Sie greift zu den falschen. Vermeiden hat heute Körnerbrötchen gekostet." }
+          ] },
+        { "id": "k2", "sagt": "Frau Sommer, laut: „Na, das klang aber schön! Haben Sie nicht früher ein bisschen gelispelt?“",
+          "wahl": [
+            { "text": "Freundlich und sachlich: „Ja, ich übe gerade daran. | Schön, dass man es hört.“", "wert": 2, "weiter": "k3", "rueck": "Offen und ohne Rechtfertigung. So verliert die Bemerkung ihre Spitze." },
+            { "text": "Lachen: „Ach, ein bisschen.“ – und schnell das Thema wechseln, bevor noch mehr Leute zuhören.", "wert": 1, "weiter": "k3", "rueck": "Völlig in Ordnung – du schuldest niemandem eine Erklärung." },
+            { "text": "Nichts sagen und schnell mit der Tüte gehen.", "wert": 0, "tendenz": "vermeiden", "weiter": "k2c", "rueck": "Verständlich. Aber so bleibt das Gefühl, dass Lispeln etwas Peinliches wäre – und das ist es nicht." }
+          ] },
+        { "id": "k2b", "sagt": "Draußen ruft Frau Sommer dir nach: „Wollten Sie nicht immer Sesam? Das sind doch Körner!“",
+          "wahl": [
+            { "text": "„Stimmt. | Ich hab mich nicht getraut, es zu sagen. | Nächsten Samstag sage ich es.“", "wert": 2, "weiter": "ende2", "rueck": "Ehrlich zu dir selbst – und ein fester Moment für nächste Woche." },
+            { "text": "„Ach, ist doch egal.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Egal ist es dir offenbar nicht – sonst hättest du das Wort nicht umgangen." }
+          ] },
+        { "id": "k2c", "sagt": "Vor der Tür sagt Frau Sommer: „Entschuldigung, das war ungeschickt von mir. Ich fand nur, es klang gut.“",
+          "wahl": [
+            { "text": "„Schon gut. | Ich übe gerade – und es freut mich, dass es auffällt.“", "wert": 2, "weiter": "k3", "rueck": "Gut gerettet: Aus einem unangenehmen Moment wird ein Lob, das du annehmen kannst." },
+            { "text": "„Hm.“ – und weitergehen.", "wert": 1, "weiter": "ende2", "rueck": "Du darfst das Gespräch beenden. Ihr Lob nimmst du so nur nicht mit." }
+          ] },
+        { "id": "k3", "sagt": "Frau Sommer: „Und wie macht man das als Erwachsener?“",
+          "wahl": [
+            { "text": "„Mit Spiegel und vielen kurzen Übungen. | Ich überlege auch, zur Logopädie zu gehen.“", "wert": 2, "weiter": "ende1", "rueck": "Sachlich, ohne Scham – und ganz nebenbei sind noch ein paar S gefallen." },
+            { "text": "„Ach, das ist kompliziert.“", "wert": 1, "weiter": "ende1", "rueck": "Darfst du so stehen lassen. Ein Satz mehr wäre auch eine Übung gewesen." }
+          ] },
+        { "id": "ende1", "sagt": "Frau Sommer nickt anerkennend und erzählt von ihrem Enkel, der auch zur Logopädie geht.", "ende": "Das Wort gesagt statt umgangen, die Bemerkung sachlich beantwortet. Wer offen damit umgeht, nimmt solchen Momenten die Spitze – und das neue S hatte heute zwei Auftritte mehr." },
+        { "id": "ende2", "sagt": "Zu Hause liegen sechs Körnerbrötchen auf dem Tisch.", "ende": "Vermeiden ist ein alter, verständlicher Schutz – aber er bremst. Nimm „Sesambrötchen“ auf deine Wortliste, übe es ein paarmal allein und sag es nächsten Samstag." }
+      ],
+      "prinzipien": ["das Wort sagen statt umgehen", "lieber ruhig als schnell und leise", "Bemerkungen sachlich beantworten – ohne Rechtfertigung", "Gemiedenes auf die Wortliste"],
+      "transfer": "Welches Wort umgehst du beim Einkaufen oder Bestellen? Wann sagst du es diese Woche?"
+    },
+    {
+      "id": "aussprache-l-l-02", "bereich": "aussprache", "schwerpunkt": "lispeln", "phase": "g", "umfeld": "telefon", "faehigkeiten": ["aussprache.einschleifen", "aussprache.slaut"], "stufe": 4,
+      "titel": "Die Adresse am Telefon", "figur": "Herr Petersen",
+      "einleitung": "Am Telefon gibt es kein Mundbild – jeder Laut zählt. Du übst, eine Adresse mit vielen S ruhig durchzugeben, statt sie zu verstecken, und Zahlen bei einer Rückfrage anders zu sagen.",
+      "lage": "Herr Petersen, ein langjähriger Kunde, will dir eine Musterlieferung nach Hause schicken lassen. Er hört nicht mehr gut. Deine Adresse: Sonnenstraße sechzehn in Essen – voller S.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Herr Petersen: „Wohin soll das Paket gehen?“",
+          "wahl": [
+            { "text": "Kurz die Zunge in Ruhelage, dann ruhig: „Sonnenstraße sechzehn, | in Essen.“", "wert": 2, "weiter": "k2", "rueck": "Ruhig, mit Pausen, jedes S bewusst. So kommt die Adresse an." },
+            { "text": "Schnell und leise, damit das S nicht auffällt – Hauptsache, die Adresse ist ausgesprochen.", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Wer das S versteckt, versteckt die ganze Adresse mit." },
+            { "text": "„Ich schicke Ihnen die Adresse per Mail.“", "wert": 1, "weiter": "k1c", "rueck": "Manchmal klug – hier umgehst du aber genau den Satz, den du üben willst." }
+          ] },
+        { "id": "k1b", "sagt": "Herr Petersen: „Wie bitte? Sonnenstraße sechzig?“",
+          "wahl": [
+            { "text": "„Sechzehn. | Eins, sechs.“ – ruhig, mit dem neuen S.", "wert": 2, "weiter": "k2", "rueck": "Anders gesagt statt nur wiederholt – und das S hatte einen zweiten Anlauf." },
+            { "text": "„Ja, ja, so ungefähr.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Lieber falsch als noch einmal das S – das kostet dich das Paket." }
+          ] },
+        { "id": "k1c", "sagt": "Herr Petersen: „Ach, meine Mails lese ich erst nächste Woche. Sagen Sie's mir doch eben.“",
+          "wahl": [
+            { "text": "„Gern: | Sonnenstraße sechzehn, | in Essen.“", "wert": 2, "weiter": "k2", "rueck": "Gut – du hast dich auf den Satz eingelassen." },
+            { "text": "„Dann warte ich lieber.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Das Paket wartet mit – eine Woche länger." }
+          ] },
+        { "id": "k2", "sagt": "Herr Petersen: „Gut. Und bis wann sind Sie zu Hause?“",
+          "wahl": [
+            { "text": "„Bis sechs Uhr. | Samstags | bis zwölf.“", "wert": 2, "weiter": "k3", "rueck": "Klar, mit Pausen – und „sechs“ und „Samstag“ ohne Umweg." },
+            { "text": "„Bis abends.“", "wert": 1, "tendenz": "vermeiden", "weiter": "k3", "rueck": "Kommt an, ist aber ungenau – und die „sechs“ hast du elegant umschifft." }
+          ] },
+        { "id": "k3", "sagt": "Herr Petersen: „Ich wiederhole: Sonnenstraße sechzig, Essen, bis sechs.“",
+          "wahl": [
+            { "text": "„Fast: | sechzehn, nicht sechzig. | Eins, sechs.“", "wert": 2, "weiter": "ende1", "rueck": "Ruhig korrigiert, die Zahl in zwei Formen. Jetzt stimmt alles." },
+            { "text": "Nichts sagen – du willst das S nicht noch einmal sagen.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Der Fehler bleibt stehen – und das Paket geht an die falsche Hausnummer." }
+          ] },
+        { "id": "ende1", "sagt": "Herr Petersen: „Sonnenstraße sechzehn. Notiert. Kommt am Donnerstag.“", "ende": "Am Telefon hilft kein Mundbild – nur Ruhe, Pausen und eine zweite Form der Zahl. Jedes S, das du gesagt statt umgangen hast, war eine Übung im Ernstfall." },
+        { "id": "ende2", "sagt": "Eine Woche später landet das Paket bei den Nachbarn in Nummer sechzig.", "ende": "Vermeiden kostet am Telefon doppelt: das Üben und die Klarheit. Beim nächsten Mal: Zunge in Ruhelage, dann die Adresse ruhig und mit Pausen." }
+      ],
+      "prinzipien": ["Zunge kurz in Ruhelage, dann ruhig sprechen", "die Adresse sagen statt verstecken", "Zahlen bei Rückfragen anders sagen", "korrigieren, auch wenn ein S darin steckt"],
+      "transfer": "Welchen Satz mit S musst du oft am Telefon sagen – Adresse, Name, Kundennummer? Leg ihn auf deine Wortliste."
+    },
+    {
+      "id": "aussprache-l-l-03", "bereich": "aussprache", "schwerpunkt": "lispeln", "phase": "g", "umfeld": "familie", "faehigkeiten": ["aussprache.einschleifen", "aussprache.slaut"], "stufe": 5, "sparring": true,
+      "titel": "Sparring: Der sechzigste Geburtstag", "figur": "Tante Renate",
+      "einleitung": "Das Sparring zum Abschluss: eine Familienfeier mit einer Tante, die sagt, was sie denkt. Ein Trinkspruch mit S, zwei Minuten Gespräch mit Blick aufs S und eine direkte Frage – hier kommt alles zusammen.",
+      "lage": "Dein Onkel wird sechzig. Die ganze Familie sitzt am Tisch. Tante Renate sitzt dir gegenüber. Früher hast du auf solchen Feiern kaum etwas gesagt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Tante Renate: „Na, du sagst ja wieder gar nichts. Früher war das wegen dem Lispeln, oder?“",
+          "wahl": [
+            { "text": "„Stimmt, früher habe ich viel vermieden. | Ich übe gerade – heute sage ich sogar was.“", "wert": 2, "weiter": "k2", "rueck": "Offen, freundlich, mit einem Augenzwinkern. Damit gehört der Moment dir." },
+            { "text": "„Lass mal, Tante Renate.“", "wert": 1, "weiter": "k2", "rueck": "Eine Grenze zu setzen ist erlaubt. Danach wartet trotzdem eine Gelegenheit zu sprechen." },
+            { "text": "Schweigen und auf den Teller schauen – so eine Frage vor der ganzen Familie verdient keine Antwort.", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Verständlich. Aber so bestätigt der Moment das alte Muster." }
+          ] },
+        { "id": "k1b", "sagt": "Tante Renate: „War nicht böse gemeint. Sag doch was zum Onkel – der wird heute sechzig.“",
+          "wahl": [
+            { "text": "Die Zunge kurz in Ruhelage, dann: „Gut. | Ich sage was.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt. Genau das ist Mut im Kleinen." },
+            { "text": "„Nein, mach du.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Heute nicht – auch das ist eine Entscheidung." }
+          ] },
+        { "id": "k2", "sagt": "Alle heben die Gläser. Dein Onkel schaut dich erwartungsvoll an.",
+          "wahl": [
+            { "text": "Ruhig, mit dem neuen S: „Lieber Onkel, | auf sechzig gute Jahre – | und auf alles, was noch kommt!“", "wert": 2, "weiter": "k3", "rueck": "Ein Trinkspruch mit S, ruhig gesprochen. Dein Onkel strahlt." },
+            { "text": "„Auf dich, Onkel!“ – kurz und ohne ein einziges S.", "wert": 1, "tendenz": "vermeiden", "weiter": "k3", "rueck": "Gesprochen hast du – gut. Die S-Wörter hast du aber elegant umschifft." },
+            { "text": "Den Trinkspruch so schnell und leise, dass nur der Onkel ihn hört.", "wert": 0, "tendenz": "vermeiden", "weiter": "k2b", "rueck": "Gesagt, aber versteckt. Für den Rest des Tisches war es nur ein Murmeln." }
+          ] },
+        { "id": "k2b", "sagt": "Tante Renate ruft: „Lauter, man hört ja nichts!“",
+          "wahl": [
+            { "text": "Lächeln, noch einmal ruhig: „Auf sechzig gute Jahre!“", "wert": 2, "weiter": "k3", "rueck": "Neu angesetzt, vor allen – und mit S. Stark." },
+            { "text": "„Ach, das war's schon.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Der Moment geht vorbei, und mit ihm die Übung." }
+          ] },
+        { "id": "k3", "sagt": "Später fragt Tante Renate: „Und, wie läuft's bei dir sonst so?“",
+          "wahl": [
+            { "text": "Die ersten zwei Minuten bewusst aufs S achten, dann frei weitererzählen.", "wert": 2, "weiter": "k4", "rueck": "Kurze, feste Phase mit Blick aufs S – das Gespräch bleibt lebendig." },
+            { "text": "Das ganze Gespräch jedes S überwachen.", "wert": 0, "tendenz": "ueberkontrolle", "weiter": "k3b", "rueck": "Dauerkontrolle kostet den Faden und macht steif." },
+            { "text": "Gar nicht aufs S achten, einfach erzählen – beim Plaudern mit der Familie zählt der Inhalt, nicht der Laut.", "wert": 1, "weiter": "k4", "rueck": "Das Gespräch läuft – gut. Eine kurze Phase mit Blick aufs S wäre eine Übung mehr gewesen." }
+          ] },
+        { "id": "k3b", "sagt": "Nach fünf Minuten merkst du: Du hast kaum mitbekommen, was Tante Renate gerade erzählt hat.",
+          "wahl": [
+            { "text": "Die Kontrolle loslassen und zuhören – zwei Minuten genügen.", "wert": 2, "weiter": "k4", "rueck": "Gut gemerkt. Das Gespräch ist wichtiger als jedes einzelne S." },
+            { "text": "Weiter jedes S überwachen.", "wert": 0, "tendenz": "ueberkontrolle", "weiter": "ende2", "rueck": "Am Ende des Abends bist du erschöpft – und weißt nicht mehr, worüber ihr gesprochen habt." }
+          ] },
+        { "id": "k4", "sagt": "Tante Renate mustert dich: „Sag mal – dein S klingt anders als früher. Machst du da was?“",
+          "wahl": [
+            { "text": "„Ja, ich übe seit ein paar Wochen. | Und ich überlege, zur Logopädie zu gehen.“", "wert": 2, "weiter": "ende1", "rueck": "Offen und selbstverständlich. So wird aus der Frage ein Lob." },
+            { "text": "„Nö, wieso?“", "wert": 1, "weiter": "ende1", "rueck": "Darfst du – du schuldest niemandem eine Erklärung. Offenheit nimmt solchen Fragen aber meist die Spitze." }
+          ] },
+        { "id": "ende1", "sagt": "Tante Renate hebt ihr Glas: „Na dann – auf dein S!“", "ende": "Ein Trinkspruch mit S, zwei Minuten mit Blick aufs S, eine offene Antwort. Nicht jedes S war perfekt – aber du hast gesagt, was du sagen wolltest, statt zu schweigen. Darum geht es beim Einschleifen." },
+        { "id": "ende2", "sagt": "Auf der Heimfahrt denkst du: Heute habe ich mich wieder klein gemacht.", "ende": "Das passiert – Vermeiden ist ein alter Schutz, und Dauerkontrolle ist sein Zwilling. Nimm dir für die nächste Feier einen kurzen Satz mit S vor und übe ihn vorher ein paarmal allein." },
+        { "id": "ende3", "sagt": "Tante Renate spricht den Trinkspruch. Du stößt mit an.", "ende": "Heute nicht – das ist in Ordnung. Schreib dir einen kurzen Trinkspruch mit S auf und übe ihn: Die nächste Feier kommt bestimmt." }
+      ],
+      "prinzipien": ["offen statt vermeiden", "ein vorbereiteter Satz mit S", "kurze Phasen mit Blick aufs S statt Dauerkontrolle", "gesagt zählt mehr als perfekt"],
+      "transfer": "Welche Feier oder Runde steht bei dir als Nächstes an? Welchen kurzen Satz mit S nimmst du dir dafür vor?"
+    }
+  ]
+}

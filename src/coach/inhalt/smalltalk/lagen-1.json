@@ -1,0 +1,950 @@
+{
+ "lagen": [
+  {
+   "id": "smalltalk-l-01",
+   "bereich": "smalltalk",
+   "phase": "g",
+   "umfeld": "kollegen",
+   "faehigkeiten": [
+    "smalltalk.einstieg",
+    "smalltalk.nachfragen",
+    "smalltalk.themen"
+   ],
+   "stufe": 2,
+   "titel": "Kaffeeküche mit Lena",
+   "figur": "Lena Brandt",
+   "einleitung": "Lena ist neu und zurückhaltend. Du übst, mit einem Satz aus dem Raum anzufangen, Aufhänger zu hören und einen davon aufzugreifen.",
+   "lage": "Dienstag, zehn Uhr, Kaffeeküche. Lena ist seit drei Wochen im Team und wartet neben dir, bis die Maschine durchgelaufen ist. Bisher habt ihr nur „Hallo“ gesagt.",
+   "start": "k1",
+   "knoten": [
+    {
+     "id": "k1",
+     "sagt": "Die Maschine brummt. Lena schaut auf ihre Tasse. Stille.",
+     "wahl": [
+      {
+       "text": "„Die braucht morgens immer eine Weile. Hast du dich schon an unseren Kaffee gewöhnt?“",
+       "wert": 2,
+       "weiter": "k2",
+       "rueck": "Ein Satz aus dem Raum, leicht zu beantworten – und er passt zu ihren ersten Wochen."
+      },
+      {
+       "text": "Lächeln, nicken und aufs Handy schauen, bis der Kaffee endlich fertig ist.",
+       "wert": 0,
+       "tendenz": "vermeiden",
+       "weiter": "k1b",
+       "rueck": "Bequem – aber jetzt warten zwei Menschen schweigend nebeneinander."
+      },
+      {
+       "text": "„Und, wie gefällt's dir bei uns?“",
+       "wert": 1,
+       "weiter": "k2b",
+       "rueck": "Freundlich und offen – nur sehr allgemein. Lena kann knapp antworten."
+      }
+     ]
+    },
+    {
+     "id": "k1b",
+     "sagt": "Der Kaffee ist durch. Lena nimmt ihre Tasse und will gehen.",
+     "wahl": [
+      {
+       "text": "„Warte kurz – bist du gut angekommen bei uns? Die ersten Wochen sind ja immer viel.“",
+       "wert": 2,
+       "weiter": "k2b",
+       "rueck": "Spät, aber ehrlich – und mit einem Satz Verständnis."
+      },
+      {
+       "text": "Ihr den Vortritt lassen und „Schönen Tag“ sagen.",
+       "wert": 1,
+       "weiter": "ende3",
+       "rueck": "Freundlich. Ein Gespräch ist es noch nicht."
+      }
+     ]
+    },
+    {
+     "id": "k2",
+     "sagt": "Lena: „Geht so – zu Hause hatte ich eine Siebträgermaschine.“ Sie lächelt. „Ist noch viel Neues. Ich komme aus Leipzig und kenne hier bisher nur meine Vermieterin.“",
+     "wahl": [
+      {
+       "text": "„Leipzig! Was vermisst du von dort am meisten?“",
+       "wert": 2,
+       "weiter": "k3",
+       "rueck": "Du greifst einen Aufhänger auf und fragst nach ihrem Erleben."
+      },
+      {
+       "text": "„Ich war auch mal in Leipzig, auf einem Konzert – das war vielleicht ein Abend, wir sind erst um vier ins Hotel …“",
+       "wert": 0,
+       "tendenz": "uebertrumpfen",
+       "weiter": "k2c",
+       "rueck": "Jetzt geht es um dich. Ihr Aufhänger liegt ungenutzt da."
+      },
+      {
+       "text": "„Und in welcher Abteilung warst du vorher?“",
+       "wert": 1,
+       "tendenz": "ausfragen",
+       "weiter": "k2d",
+       "rueck": "Geht – wirkt aber wie eine Liste. Sie hat dir Persönlicheres angeboten."
+      }
+     ]
+    },
+    {
+     "id": "k2b",
+     "sagt": "Lena: „Gut, danke.“ Sie nippt an ihrem Kaffee. Dann: „Ist noch viel Neues.“",
+     "wahl": [
+      {
+       "text": "„Was ist denn am meisten anders als in deiner alten Firma?“",
+       "wert": 2,
+       "weiter": "k3",
+       "rueck": "Du nimmst den kleinen Aufhänger „viel Neues“ auf – und gibst ihr Raum."
+      },
+      {
+       "text": "„Das wird schon.“",
+       "wert": 0,
+       "tendenz": "abblocken",
+       "weiter": "ende3",
+       "rueck": "Nett gemeint – aber es schließt das Thema, statt es zu öffnen."
+      },
+      {
+       "text": "„Kenn ich. In meiner ersten Woche hier hab ich mich dreimal im Treppenhaus verlaufen.“",
+       "wert": 1,
+       "weiter": "k3",
+       "rueck": "Etwas von dir – das entspannt. Eine Frage hinterher gibt ihr den Ball zurück."
+      }
+     ]
+    },
+    {
+     "id": "k2c",
+     "sagt": "Lena hört höflich zu und nickt. Dann schaut sie kurz auf die Uhr.",
+     "wahl": [
+      {
+       "text": "„Aber genug von mir – was vermisst du von Leipzig?“",
+       "wert": 2,
+       "weiter": "k3",
+       "rueck": "Gut gerettet: zurück zu ihrem Aufhänger."
+      },
+      {
+       "text": "„… und am nächsten Morgen sind wir dann noch …“ – weitererzählen.",
+       "wert": 0,
+       "tendenz": "monolog",
+       "weiter": "ende2",
+       "rueck": "Die Uhr war ein Zeichen. Jetzt ist es ein Monolog."
+      }
+     ]
+    },
+    {
+     "id": "k2d",
+     "sagt": "Lena: „Buchhaltung, in einer kleinen Firma.“ Pause.",
+     "wahl": [
+      {
+       "text": "„Und was ist hier am meisten anders als dort?“",
+       "wert": 2,
+       "weiter": "k3",
+       "rueck": "Vom Fakt zum Erleben – jetzt kann sie erzählen."
+      },
+      {
+       "text": "„Aha. Und wie lange warst du da?“",
+       "wert": 0,
+       "tendenz": "ausfragen",
+       "weiter": "ende2",
+       "rueck": "Noch eine Frage von der Liste – das Gespräch wird zum Fragebogen."
+      }
+     ]
+    },
+    {
+     "id": "k3",
+     "sagt": "Lena lacht kurz. Dann: „Ach, vieles. Am meisten fehlt mir aber meine Laufgruppe von früher. Hier hab ich noch keine gefunden.“",
+     "wahl": [
+      {
+       "text": "„Laufen ist nicht so meins, ich bin eher Sofa und Serie – was schaust du denn gerade so?“",
+       "wert": 0,
+       "tendenz": "themenwechsel",
+       "weiter": "ende2",
+       "rueck": "Ehrlich – aber du ziehst das Gespräch weg von dem, was ihr wichtig ist."
+      },
+      {
+       "text": "„Miriam läuft doch! Frag sie mal. Wie weit läufst du so?“",
+       "wert": 2,
+       "weiter": "ende1",
+       "rueck": "Aufhänger aufgegriffen, ein Kontakt angeboten – und eine Frage, die sie gern beantwortet."
+      },
+      {
+       "text": "„Gibt's hier bestimmt auch.“",
+       "wert": 1,
+       "weiter": "ende2",
+       "rueck": "Freundlich – mit einem konkreten Tipp oder einer Frage wird mehr daraus."
+      }
+     ]
+    },
+    {
+     "id": "ende1",
+     "sagt": "Lena: „Miriam? Gute Idee. Ich lauf so zehn Kilometer, am liebsten früh.“ Ihr redet, bis der Kaffee kalt ist.",
+     "ende": "Ein Satz aus dem Raum, ein Aufhänger aufgegriffen – und Lena hat einen Kontakt mehr. So fängt Ankommen an."
+    },
+    {
+     "id": "ende2",
+     "sagt": "Lena nickt freundlich. Dann klingelt ihr Telefon, und sie geht an ihren Platz.",
+     "ende": "Ein freundlicher Anfang – nur ihre Aufhänger blieben liegen. Beim nächsten Mal: beim Thema des anderen bleiben und eins davon aufgreifen."
+    },
+    {
+     "id": "ende3",
+     "sagt": "Lena lächelt und geht zurück an ihren Platz.",
+     "ende": "Freundlich, aber kein Gespräch. Ein Satz aus dem Raum und eine offene Frage hätten ihr eine Tür geöffnet – sie ist neu und wartet vielleicht darauf."
+    }
+   ],
+   "prinzipien": [
+    "ein Satz aus dem Raum",
+    "Aufhänger aufgreifen",
+    "nicht übertrumpfen",
+    "beim Thema des anderen bleiben"
+   ],
+   "transfer": "Wer ist bei dir neu oder steht oft allein an der Kaffeemaschine? Welcher Satz aus dem Raum passt dort?"
+  },
+  {
+   "id": "smalltalk-l-02",
+   "bereich": "smalltalk",
+   "phase": "g",
+   "umfeld": "fremde",
+   "faehigkeiten": [
+    "smalltalk.einstieg",
+    "smalltalk.nachfragen",
+    "smalltalk.gruppe"
+   ],
+   "stufe": 3,
+   "titel": "Der erste Elternabend",
+   "figur": "ein Vater aus der Klasse",
+   "einleitung": "Eine Runde, in der du niemanden kennst. Du übst den Einstieg über den Anlass, das Aufgreifen und Würdigen – und dich zu einer kleinen Runde dazuzustellen.",
+   "lage": "Erster Elternabend der neuen Klasse – für dein Kind oder in Vertretung für dein Patenkind, dessen Eltern heute nicht können. Bis zum Beginn sind noch zehn Minuten. Du kennst niemanden. Neben dir sitzt ein Vater und blättert in der Einladung.",
+   "start": "k1",
+   "knoten": [
+    {
+     "id": "k1",
+     "sagt": "Der Vater neben dir seufzt leise über dem Stapel Papier.",
+     "wahl": [
+      {
+       "text": "„Ganz schön viel Papier für einen Abend, oder? Ich hab nur die erste Seite geschafft.“",
+       "wert": 2,
+       "weiter": "k2",
+       "rueck": "Ein Satz aus dem Anlass, leicht zu beantworten – und ein bisschen von dir."
+      },
+      {
+       "text": "Die eigene Einladung lesen, bis es losgeht – vielleicht spricht er dich ja an.",
+       "wert": 0,
+       "tendenz": "vermeiden",
+       "weiter": "k1b",
+       "rueck": "Ruhig – nur sitzt ihr jetzt beide schweigend da."
+      },
+      {
+       "text": "„Na, auch Pflichttermin?“",
+       "wert": 1,
+       "weiter": "k2",
+       "rueck": "Freundlich mit Augenzwinkern. Etwas aus dem Anlass gibt ihm mehr zum Anknüpfen."
+      }
+     ]
+    },
+    {
+     "id": "k1b",
+     "sagt": "Er dreht sich zu dir: „Entschuldigung – wissen Sie, wie lange das heute ungefähr geht?“",
+     "wahl": [
+      {
+       "text": "„Bis neun, steht hier. Ganz schön viel Papier für einen Abend, oder?“",
+       "wert": 2,
+       "weiter": "k2",
+       "rueck": "Er hat angefangen – und du nimmst den Faden auf."
+      },
+      {
+       "text": "Nicken und weiterlesen.",
+       "wert": 0,
+       "tendenz": "vermeiden",
+       "weiter": "ende3",
+       "rueck": "Eine offene Tür, die wieder zugeht."
+      }
+     ]
+    },
+    {
+     "id": "k2",
+     "sagt": "Er lacht: „Geht mir genauso. Wir sind erst im Sommer hergezogen – ich hab keine Ahnung, wie das hier läuft. An der alten Schule war alles anders.“",
+     "wahl": [
+      {
+       "text": "„Erst im Sommer? Dann haben Sie ja einiges hinter sich. Was war an der alten Schule anders?“",
+       "wert": 2,
+       "weiter": "k3",
+       "rueck": "Erst gewürdigt, dann einen Aufhänger aufgegriffen."
+      },
+      {
+       "text": "„Ach, hier läuft das alles ganz entspannt, keine Sorge – das schaffen Sie schon, das schafft hier jeder irgendwann.“",
+       "wert": 0,
+       "tendenz": "abblocken",
+       "weiter": "k3",
+       "rueck": "Gut gemeint – aber du gehst über seinen Satz hinweg, statt ihn aufzugreifen."
+      },
+      {
+       "text": "„Woher kommen Sie denn?“",
+       "wert": 1,
+       "weiter": "k3",
+       "rueck": "Ein Aufhänger, gut. Mit einem Satz Würdigung vorweg wird es wärmer."
+      }
+     ]
+    },
+    {
+     "id": "k3",
+     "sagt": "Er erzählt: „Wir kommen aus dem Norden. Dort gab es eine Elterngruppe im Chat, da wusste man immer Bescheid. Hier kenne ich noch niemanden.“ Vorn an der Tafel stehen drei Eltern im Halbkreis und reden über die Klassenfahrt.",
+     "wahl": [
+      {
+       "text": "„Mir geht's genauso, ich kenne hier auch keinen.“",
+       "wert": 1,
+       "weiter": "ende2",
+       "rueck": "Ehrlich und verbindend. Ihr bleibt aber zu zweit – die Runde vorn wäre eine Gelegenheit gewesen."
+      },
+      {
+       "text": "„Die da vorn scheinen sich zu kennen. Wollen wir uns kurz dazustellen? Vielleicht wissen die es.“",
+       "wert": 2,
+       "weiter": "k4",
+       "rueck": "Du hast die offene Runde gesehen – und nimmst ihn gleich mit."
+      },
+      {
+       "text": "„Solche Chatgruppen sind eh nur Stress. Im Verein kommen da nachts um elf noch Nachrichten …“",
+       "wert": 0,
+       "tendenz": "monolog",
+       "weiter": "ende2",
+       "rueck": "Dein Ärger über Chatgruppen ist verständlich – nur geht sein Anliegen dabei unter."
+      }
+     ]
+    },
+    {
+     "id": "k4",
+     "sagt": "Ihr stellt euch an den Rand der Runde. Eine Mutter erzählt gerade: „… und letztes Jahr ging die Fahrt an einen See. Schön, aber teuer.“ Kurze Pause.",
+     "wahl": [
+      {
+       "text": "„Teuer? Wird so was hier gemeinsam besprochen? Wir sind beide neu.“",
+       "wert": 2,
+       "weiter": "ende1",
+       "rueck": "Erst zugehört, dann in der Pause ans laufende Thema angeknüpft – und gesagt, wer ihr seid."
+      },
+      {
+       "text": "Gleich fragen, ob es eine Chatgruppe gibt, während die Mutter noch erzählt.",
+       "wert": 0,
+       "tendenz": "ueberfallen",
+       "weiter": "ende4",
+       "rueck": "Das Anliegen ist gut – nur der Moment nicht. Erst zuhören, dann in der Pause fragen."
+      },
+      {
+       "text": "Am Rand stehen bleiben und zuhören.",
+       "wert": 1,
+       "weiter": "ende1",
+       "rueck": "Zuhören ist der richtige erste Schritt. In der Pause hättet ihr anknüpfen können – die Lücke war da."
+      }
+     ]
+    },
+    {
+     "id": "ende1",
+     "sagt": "Die Mutter dreht sich zu euch: „Ihr seid neu, oder? Es gibt eine Chatgruppe – ich trag euch nachher ein.“ Dann geht der Elternabend los.",
+     "ende": "Einstieg über den Anlass, aufgegriffen, gewürdigt – und gemeinsam in eine offene Runde. Aus zwei Fremden sind zwei Bekannte mit Draht zur Klasse geworden."
+    },
+    {
+     "id": "ende2",
+     "sagt": "Der Elternabend beginnt. Ihr sitzt nebeneinander und hört zu.",
+     "ende": "Ein Gespräch zu zweit – gut. Die offene Runde vorn wäre der nächste Schritt gewesen: hinstellen, zuhören, in der Pause anknüpfen."
+    },
+    {
+     "id": "ende3",
+     "sagt": "Der Elternabend beginnt. Neben dir liest der Vater weiter.",
+     "ende": "Ruhig, aber ohne Kontakt. Der Anlass liefert hier den leichtesten ersten Satz – die anderen Eltern sind oft genauso neu."
+    },
+    {
+     "id": "ende4",
+     "sagt": "Die Mutter stockt kurz und antwortet knapp: „Ja, gibt es.“ Die Runde redet weiter über die Fahrt.",
+     "ende": "Ihr seid drin – mit einem kleinen Holperer. Wer erst zuhört und in der Pause anknüpft, wird leichter Teil der Runde."
+    }
+   ],
+   "prinzipien": [
+    "der Anlass liefert den ersten Satz",
+    "aufgreifen und würdigen",
+    "erst zuhören, dann in der Pause anknüpfen",
+    "gemeinsam in eine offene Runde"
+   ],
+   "transfer": "Wo bist du demnächst in einer Runde, in der du kaum jemanden kennst? Welcher Satz aus dem Anlass passt dort?"
+  },
+  {
+   "id": "smalltalk-l-03",
+   "bereich": "smalltalk",
+   "phase": "g",
+   "umfeld": "kunden",
+   "faehigkeiten": [
+    "smalltalk.einstieg",
+    "smalltalk.erzaehlen",
+    "smalltalk.tiefe",
+    "smalltalk.nachfragen"
+   ],
+   "stufe": 4,
+   "titel": "Der Empfang",
+   "figur": "Nadine Köhler",
+   "einleitung": "Smalltalk mit einer möglichen Kundin, die wenig Zeit hat. Du übst den Einstieg, Aussage plus Frage, leise Aufhänger und eine Stufe tiefer – ohne Verkaufsgespräch.",
+   "lage": "Jubiläumsempfang deiner Firma, Stehtische, Häppchen. Nadine Köhler, die eine kleine Schreinerei führt und vielleicht Kundin wird, steht allein mit einem Glas Wasser. Dr. Albers hat dich gebeten, dich um die Gäste zu kümmern.",
+   "start": "k1",
+   "knoten": [
+    {
+     "id": "k1",
+     "sagt": "Frau Köhler schaut sich im Raum um, als suche sie ein bekanntes Gesicht.",
+     "wahl": [
+      {
+       "text": "„Guten Abend! Ich bin {name} aus dem Einkauf. Sind Sie zum ersten Mal bei uns im Haus?“",
+       "wert": 2,
+       "weiter": "k2",
+       "rueck": "Name, Bezug und eine leichte Frage aus dem Anlass."
+      },
+      {
+       "text": "„Darf ich Ihnen gleich unsere neuen Angebote zeigen? Die Unterlagen habe ich hier, und gerade gibt es etwas für Betriebe Ihrer Größe.“",
+       "wert": 0,
+       "tendenz": "verkaufen",
+       "weiter": "k1b",
+       "rueck": "Ein Empfang ist kein Verkaufsgespräch. So fühlt sie sich bedrängt."
+      },
+      {
+       "text": "„Schöner Abend, oder?“",
+       "wert": 1,
+       "weiter": "k2",
+       "rueck": "Freundlich – nur gibt es ihr wenig zum Anknüpfen. Mit Name und Frage wird mehr daraus."
+      }
+     ]
+    },
+    {
+     "id": "k1b",
+     "sagt": "Sie lächelt dünn: „Heute Abend bitte nicht. Ich bin nur kurz da.“",
+     "wahl": [
+      {
+       "text": "„Verstehe – dann nur Gesellschaft. Sind Sie zum ersten Mal bei uns?“",
+       "wert": 2,
+       "weiter": "k2",
+       "rueck": "Gut umgeschwenkt: vom Verkauf zum Gespräch."
+      },
+      {
+       "text": "„Schade. Ich lege Ihnen die Unterlagen einfach an Ihren Platz.“",
+       "wert": 0,
+       "tendenz": "verkaufen",
+       "weiter": "ende3",
+       "rueck": "Ihr Nein galt der Verkaufsrunde – du machst trotzdem weiter."
+      }
+     ]
+    },
+    {
+     "id": "k2",
+     "sagt": "Sie lächelt: „Nadine Köhler, ich hab eine kleine Schreinerei. Ich bin zum ersten Mal hier – und ehrlich gesagt nur kurz, morgen früh kommt eine große Lieferung.“",
+     "wahl": [
+      {
+       "text": "„Eine Schreinerei! Mein erster selbst gebauter Tisch wackelt bis heute. Was bauen Sie gerade?“",
+       "wert": 2,
+       "weiter": "k3",
+       "rueck": "Aussage plus Frage – mit einer kleinen Geschichte, die zu ihr passt."
+      },
+      {
+       "text": "„Wie viele Leute arbeiten bei Ihnen, seit wann gibt es den Betrieb, und wie läuft's?“",
+       "wert": 0,
+       "tendenz": "ausfragen",
+       "weiter": "k2b",
+       "rueck": "Ein Verhör – und das Geschäft ist ein heikles Thema. Sie wird knapp."
+      },
+      {
+       "text": "„Oh, dann will ich Sie nicht aufhalten. Schönen Abend noch!“",
+       "wert": 1,
+       "weiter": "ende3",
+       "rueck": "Rücksichtsvoll – aber sie ist ja gekommen. Zwei gute Minuten hätte sie gern gehabt."
+      }
+     ]
+    },
+    {
+     "id": "k2b",
+     "sagt": "Frau Köhler: „Sieben Leute. Den Rest behalte ich lieber für mich.“ Sie lächelt, aber knapper.",
+     "wahl": [
+      {
+       "text": "„Entschuldigung, das war zu direkt. Was bauen Sie denn am liebsten?“",
+       "wert": 2,
+       "weiter": "k3",
+       "rueck": "Gut repariert: zurück zu dem, was sie gern erzählt."
+      },
+      {
+       "text": "„Sieben – und wie viele davon sind Auszubildende?“",
+       "wert": 0,
+       "tendenz": "ausfragen",
+       "weiter": "ende3",
+       "rueck": "Der Fragebogen läuft weiter – sie zieht sich zurück."
+      }
+     ]
+    },
+    {
+     "id": "k3",
+     "sagt": "Frau Köhler lebt auf: „Gerade eine Treppe für ein altes Bauernhaus. Jede Stufe ist anders, nichts ist gerade. Mein Vater hätte das geliebt.“",
+     "wahl": [
+      {
+       "text": "„Ihr Vater war auch Schreiner?“",
+       "wert": 2,
+       "weiter": "k4",
+       "rueck": "Du hörst den leisen Aufhänger und gehst eine Stufe tiefer – sie entscheidet, wie viel sie erzählt."
+      },
+      {
+       "text": "„Was kostet so eine Treppe denn?“",
+       "wert": 0,
+       "tendenz": "ausfragen",
+       "weiter": "k3b",
+       "rueck": "Geld ist früh ein heikles Thema – und der persönlichste Aufhänger bleibt liegen."
+      },
+      {
+       "text": "„Klingt nach einer Menge Arbeit. Wie lange brauchen Sie dafür?“",
+       "wert": 1,
+       "weiter": "k3b",
+       "rueck": "Würdigt die Arbeit und fragt nach – noch beim Fakt. Das Wort „Vater“ wäre die Tür gewesen."
+      }
+     ]
+    },
+    {
+     "id": "k3b",
+     "sagt": "Frau Köhler antwortet knapp und schaut kurz auf die Uhr.",
+     "wahl": [
+      {
+       "text": "„Sie sagten, Ihr Vater hätte das geliebt – hat er Ihnen das Handwerk beigebracht?“",
+       "wert": 2,
+       "weiter": "k4",
+       "rueck": "Der Faden nach hinten: Du greifst den persönlichsten Aufhänger doch noch auf."
+      },
+      {
+       "text": "„Und welche Hölzer nehmen Sie dafür?“",
+       "wert": 1,
+       "weiter": "ende2",
+       "rueck": "Ein Faktenfaden – höflich, aber er trägt nicht mehr weit."
+      }
+     ]
+    },
+    {
+     "id": "k4",
+     "sagt": "Sie erzählt: „Ja, in seiner Werkstatt bin ich groß geworden. Seit er nicht mehr arbeiten kann, führe ich sie. Manchmal frage ich mich, ob ich es so mache, wie er es gewollt hätte.“",
+     "wahl": [
+      {
+       "text": "„Das klingt nach viel Verantwortung – und nach Stolz. Was würde er zu Ihrer Treppe sagen?“",
+       "wert": 2,
+       "weiter": "ende1",
+       "rueck": "Gespiegelt, gewürdigt und eine Frage, die sie gern beantwortet."
+      },
+      {
+       "text": "„Ach, er wäre sicher stolz. Haben Sie die Häppchen da hinten schon probiert?“",
+       "wert": 0,
+       "tendenz": "themenwechsel",
+       "weiter": "ende2",
+       "rueck": "Gut gemeint – aber du gehst schnell weg, gerade als es persönlich wurde."
+      },
+      {
+       "text": "„Mein Vater hatte auch einen Betrieb. Als ich klein war, hat er mich immer mitgenommen, und …“",
+       "wert": 1,
+       "weiter": "ende4",
+       "rueck": "Etwas Eigenes zeigt Nähe. Achte darauf, dass ihr Moment ihrer bleibt – eine Frage zurück hilft."
+      }
+     ]
+    },
+    {
+     "id": "ende1",
+     "sagt": "Frau Köhler lacht: „Er würde sagen: Stufe drei knarzt.“ Ihr Telefon brummt – die Lieferung. „Schön, dass wir gesprochen haben.“",
+     "ende": "Einstieg mit Name und Frage, etwas von dir, ein leiser Aufhänger, eine Stufe tiefer – ganz ohne Verkauf. So entsteht Vertrauen."
+    },
+    {
+     "id": "ende2",
+     "sagt": "Frau Köhler nickt freundlich. Bald darauf verabschiedet sie sich: die Lieferung morgen früh.",
+     "ende": "Höflich, aber an der Oberfläche geblieben oder schnell dorthin zurückgekehrt. Persönliche Aufhänger wie „Vater“ lohnen ein zweites Hinhören – und ein Verweilen."
+    },
+    {
+     "id": "ende3",
+     "sagt": "Frau Köhler geht bald. Am Ausgang winkt sie kurz.",
+     "ende": "Kein großer Fehler, aber kaum Kontakt. Auch wer wenig Zeit hat, freut sich über zwei gute Minuten: Name, eine Frage, ein Aufhänger."
+    },
+    {
+     "id": "ende4",
+     "sagt": "Frau Köhler hört zu und lächelt. Dann brummt ihr Telefon – die Lieferung. „Schön, dass wir gesprochen haben.“",
+     "ende": "Ihr habt euch beide etwas geöffnet – das verbindet. Mit einer Frage zurück wäre ihr Moment noch ein Stück länger ihrer geblieben."
+    }
+   ],
+   "prinzipien": [
+    "Name und eine Frage aus dem Anlass",
+    "Aussage plus Frage statt Verhör",
+    "leise Aufhänger hören",
+    "eine Stufe tiefer – sie bestimmt das Tempo",
+    "ein Empfang ist kein Verkaufsgespräch"
+   ],
+   "transfer": "Mit wem führst du demnächst ein Gespräch, das nicht ums Geschäft gehen soll? Welche Frage nach dem Erleben passt dort?"
+  },
+  {
+   "id": "smalltalk-l-04",
+   "bereich": "smalltalk",
+   "phase": "g",
+   "umfeld": "fremde",
+   "faehigkeiten": [
+    "smalltalk.nachfragen",
+    "smalltalk.tiefe",
+    "smalltalk.abschluss"
+   ],
+   "stufe": 4,
+   "titel": "Frau Sommer im Treppenhaus",
+   "figur": "Frau Sommer",
+   "einleitung": "Frau Sommer erzählt gern und viel. Du übst, zuzuhören und zu würdigen – und das Gespräch trotzdem freundlich und rechtzeitig zu beenden.",
+   "lage": "Samstag, halb eins. Du kommst mit zwei schweren Einkaufstaschen nach Hause, um eins bist du zum Mittagessen verabredet. Im Treppenhaus steht Frau Sommer, deine Nachbarin, und strahlt dich an.",
+   "start": "k1",
+   "knoten": [
+    {
+     "id": "k1",
+     "sagt": "Frau Sommer: „Ach, gut, dass ich Sie sehe! Stellen Sie sich vor: Meine Tochter hat gestern angerufen – sie bekommt ein Kind. Ich werde Oma!“",
+     "wahl": [
+      {
+       "text": "„Wie schön, Frau Sommer – herzlichen Glückwunsch! Das erste Enkelkind?“",
+       "wert": 2,
+       "weiter": "k2",
+       "rueck": "Erst gewürdigt, dann eine Frage – für so eine Nachricht genau richtig."
+      },
+      {
+       "text": "„Glückwunsch! Ich bin gerade nur so in Eile, die Sachen müssen in den Kühlschrank, und um eins bin ich verabredet …“",
+       "wert": 1,
+       "weiter": "k2b",
+       "rueck": "Ehrlich und mit Glückwunsch – nur sehr knapp für so eine Nachricht."
+      },
+      {
+       "text": "Lächeln, „Schön“ sagen und schon mal die Treppe hochgehen.",
+       "wert": 0,
+       "tendenz": "verschwinden",
+       "weiter": "k2b",
+       "rueck": "Für sie ist das eine große Nachricht – „Schön“ im Vorbeigehen kommt kühl an."
+      }
+     ]
+    },
+    {
+     "id": "k2b",
+     "sagt": "Frau Sommer: „Oh – natürlich, Sie haben zu tun.“ Sie klingt ein wenig enttäuscht.",
+     "wahl": [
+      {
+       "text": "„Warten Sie – zwei Minuten hab ich. Das erste Enkelkind?“",
+       "wert": 2,
+       "weiter": "k2",
+       "rueck": "Kurz umgeschwenkt – zwei Minuten Aufmerksamkeit sind ein großes Geschenk."
+      },
+      {
+       "text": "„Erzählen Sie mir ein andermal mehr – ich freu mich sehr für Sie!“",
+       "wert": 2,
+       "weiter": "ende2",
+       "rueck": "Würdigung und Ausblick – ein kurzer, freundlicher Abgang. Sie freut sich aufs nächste Mal."
+      }
+     ]
+    },
+    {
+     "id": "k2",
+     "sagt": "Frau Sommer strahlt: „Das erste! Im April soll es kommen. Ich hab schon angefangen zu stricken – aber ehrlich gesagt hab ich ein bisschen Angst, dass ich zu weit weg wohne.“",
+     "wahl": [
+      {
+       "text": "„Wie weit ist es denn zu Ihrer Tochter?“",
+       "wert": 1,
+       "weiter": "k3",
+       "rueck": "Eine ordentliche Faktenfrage. Die Sorge, die sie gerade geteilt hat, bleibt aber liegen."
+      },
+      {
+       "text": "„Zu weit weg – Sie wären gern oft dabei. Was wünschen Sie sich als Oma?“",
+       "wert": 2,
+       "weiter": "k3",
+       "rueck": "Gespiegelt und eine Stufe tiefer – sie fühlt sich verstanden."
+      },
+      {
+       "text": "„Ach was, heute gibt es doch Videoanrufe – das ist kein Problem.“",
+       "wert": 0,
+       "tendenz": "abblocken",
+       "weiter": "k3",
+       "rueck": "Gut gemeint – aber du redest ihre Sorge weg, statt sie zu hören."
+      }
+     ]
+    },
+    {
+     "id": "k3",
+     "sagt": "Frau Sommer erzählt und erzählt – von ihrer Tochter, vom Stricken, von ihrer eigenen Oma. Du schaust kurz auf die Uhr: Viertel vor eins. Das Eis in deiner Tasche wird weich.",
+     "wahl": [
+      {
+       "text": "„Ich freu mich so für Sie, Frau Sommer! Ich bin um eins verabredet und muss los – erzählen Sie mir nächste Woche vom Stricken?“",
+       "wert": 2,
+       "weiter": "ende1",
+       "rueck": "Würdigen, Grund, Ausblick, Name – ein Abgang, der ihre Freude bei ihr lässt."
+      },
+      {
+       "text": "Weiter zuhören und nicken, obwohl die Zeit drängt – unterbrechen wäre doch unhöflich.",
+       "wert": 0,
+       "tendenz": "ausweichen",
+       "weiter": "k4",
+       "rueck": "Höflich gemeint – aber Gespräche enden selten von selbst zur rechten Zeit."
+      },
+      {
+       "text": "„Ich muss jetzt wirklich los, tschüss!“ – und die Treppe hoch.",
+       "wert": 1,
+       "weiter": "ende4",
+       "rueck": "Klar – nach so einer Nachricht aber knapp. Mit einem Satz Würdigung bleibt die Freude bei ihr."
+      }
+     ]
+    },
+    {
+     "id": "k4",
+     "sagt": "Zehn nach eins. Dein Handy brummt: „Wo bleibst du?“ Frau Sommer erzählt gerade von der Taufe ihrer Tochter vor dreißig Jahren.",
+     "wahl": [
+      {
+       "text": "„Frau Sommer, was für eine schöne Geschichte – ich bin leider schon zu spät. Erzählen Sie mir den Rest nächste Woche?“",
+       "wert": 2,
+       "weiter": "ende5",
+       "rueck": "Spät, aber freundlich: gewürdigt, Grund, Ausblick."
+      },
+      {
+       "text": "Weiter zuhören und schreiben, dass es später wird.",
+       "wert": 0,
+       "tendenz": "vermeiden",
+       "weiter": "ende3",
+       "rueck": "Höflich zu ihr – auf Kosten deiner Verabredung."
+      }
+     ]
+    },
+    {
+     "id": "ende1",
+     "sagt": "Frau Sommer lacht: „Versprochen! Und jetzt ab mit Ihnen.“ Du bist pünktlich um eins am Tisch.",
+     "ende": "Zugehört, gewürdigt, eine Stufe tiefer gefragt – und trotzdem pünktlich. Ein Abgang mit Ausblick fühlt sich für beide wie ein schöner Schluss an."
+    },
+    {
+     "id": "ende2",
+     "sagt": "Frau Sommer winkt: „Bis bald!“ Du schaffst es pünktlich.",
+     "ende": "Freundlich und rechtzeitig gegangen, die große Neuigkeit gewürdigt. Beim nächsten Treffen hast du deinen ersten Satz schon: „Wie geht es der werdenden Oma?“"
+    },
+    {
+     "id": "ende3",
+     "sagt": "Halb zwei. Deine Verabredung hat schon bestellt, das Eis ist Suppe.",
+     "ende": "Aus Höflichkeit geblieben – auf deine Kosten. Frau Sommer hätte einen freundlichen Abgang verstanden; Gespräche enden selten von selbst zur rechten Zeit."
+    },
+    {
+     "id": "ende4",
+     "sagt": "Frau Sommer ruft dir ein „Ach so, ja – tschüss!“ hinterher.",
+     "ende": "Pünktlich – gut. Nach einer so großen Nachricht hätte ein Satz Würdigung mit Ausblick den Abschied wärmer gemacht."
+    },
+    {
+     "id": "ende5",
+     "sagt": "Frau Sommer erschrickt: „Oh, gehen Sie, gehen Sie!“ Du kommst eine Viertelstunde zu spät.",
+     "ende": "Spät, aber freundlich gegangen. Der Abgang darf früher kommen – Würdigung und Ausblick funktionieren auch nach fünf Minuten."
+    }
+   ],
+   "prinzipien": [
+    "erst würdigen, dann fragen",
+    "Sorgen hören statt wegreden",
+    "würdigen – Grund – Ausblick",
+    "früh genug den Anfang vom Ende machen"
+   ],
+   "transfer": "Wer in deinem Umfeld erzählt gern und lange? Leg dir einen Abgang mit Würdigung und Ausblick zurecht."
+  },
+  {
+   "id": "smalltalk-l-05",
+   "bereich": "smalltalk",
+   "phase": "g",
+   "umfeld": "gruppe",
+   "faehigkeiten": [
+    "smalltalk.einstieg",
+    "smalltalk.namen",
+    "smalltalk.nachfragen",
+    "smalltalk.gruppe",
+    "smalltalk.tiefe",
+    "smalltalk.abschluss"
+   ],
+   "stufe": 5,
+   "sparring": true,
+   "titel": "Sparring: Die Weihnachtsfeier",
+   "figur": "Jonas Wegner und Lena Brandt",
+   "einleitung": "Das Sparring zum Abschluss der Grundlagen: ein Abend in fünf Momenten – Einstieg, Name, Runde, Tiefe, Abgang. Jede Wahl hat Folgen.",
+   "lage": "Weihnachtsfeier der Firma im großen Saal. Der Rest deiner Abteilung ist noch nicht da, Miriam ist krank. Am Glühweinstand kennst du niemanden. Ein paar Schritte weiter steht Lena allein am Rand.",
+   "start": "k1",
+   "knoten": [
+    {
+     "id": "k1",
+     "sagt": "Am Glühweinstand wartet neben dir ein Mann aus einer anderen Abteilung.",
+     "wahl": [
+      {
+       "text": "„Weißt du, ob der mit oder ohne Schuss ist? Ich bin {name}, aus dem Einkauf.“",
+       "wert": 2,
+       "weiter": "k2",
+       "rueck": "Ein Satz aus der Lage, dazu Name und Bezug."
+      },
+      {
+       "text": "Mit dem Glühwein in eine ruhige Ecke gehen und abwarten, bis deine Abteilung kommt – dann kennst du wenigstens jemanden.",
+       "wert": 0,
+       "tendenz": "vermeiden",
+       "weiter": "k1b",
+       "rueck": "Sicher – aber der Abend läuft ohne dich an."
+      },
+      {
+       "text": "„Ganz schön voll hier.“",
+       "wert": 1,
+       "weiter": "k2",
+       "rueck": "Ein Satz aus der Lage, etwas knapp. Mit Name und Bezug gibt es mehr zum Anknüpfen."
+      }
+     ]
+    },
+    {
+     "id": "k1b",
+     "sagt": "Eine Viertelstunde später. Am Glühweinstand steht ein Mann allein, Lena wartet ein paar Schritte daneben.",
+     "wahl": [
+      {
+       "text": "Zum Mann gehen: „Hallo! Ich bin {name}, aus dem Einkauf. Auch noch ohne Abteilung?“",
+       "wert": 2,
+       "weiter": "k2",
+       "rueck": "Spät, aber gut: ein Satz aus der Lage mit Name und Bezug."
+      },
+      {
+       "text": "In der Ecke bleiben.",
+       "wert": 0,
+       "tendenz": "vermeiden",
+       "weiter": "ende3",
+       "rueck": "Der sichere Platz – und ein leerer Abend."
+      }
+     ]
+    },
+    {
+     "id": "k2",
+     "sagt": "Der Mann lächelt: „Jonas, aus der Technik. Ich bin zum ersten Mal auf der Feier – letztes Jahr lag ich krank im Bett.“",
+     "wahl": [
+      {
+       "text": "„Freut mich, Jonas. Dann ist heute Premiere – was hast du gehört, was einen hier erwartet?“",
+       "wert": 2,
+       "weiter": "k3",
+       "rueck": "Name zurückgesagt, Aufhänger aufgegriffen."
+      },
+      {
+       "text": "„Krank an Weihnachten ist blöd. Ich hatte mal an Silvester Grippe, das war vielleicht ein Jahreswechsel, mit Fieber und allem …“",
+       "wert": 0,
+       "tendenz": "uebertrumpfen",
+       "weiter": "k3",
+       "rueck": "Sein Aufhänger wird zu deiner Geschichte – und sein Name ist schon fast weg."
+      },
+      {
+       "text": "„Freut mich. Und was machst du in der Technik genau?“",
+       "wert": 1,
+       "tendenz": "ausfragen",
+       "weiter": "k3",
+       "rueck": "Interesse ist da – nur sein Name und sein Aufhänger bleiben liegen."
+      }
+     ]
+    },
+    {
+     "id": "k3",
+     "sagt": "Ihr redet ein paar Sätze. Lena steht mit ihrer Tasse ganz in eurer Nähe und schaut herüber.",
+     "wahl": [
+      {
+       "text": "Einen halben Schritt zur Seite machen: „Lena, komm dazu! Wir warten auch noch auf unsere Leute.“",
+       "wert": 2,
+       "weiter": "k4",
+       "rueck": "Kreis geöffnet, Lena hereingeholt – mit einem Satz, der für alle passt."
+      },
+      {
+       "text": "Weiter mit Jonas reden und Lena nicht weiter beachten – sie findet bestimmt gleich ihre Abteilung oder jemanden, den sie kennt.",
+       "wert": 0,
+       "tendenz": "ausschliessen",
+       "weiter": "k4b",
+       "rueck": "Ihr zwei seid gut im Gespräch – nur bleibt Lena draußen. Ein halber Schritt hätte gereicht."
+      },
+      {
+       "text": "Lena kurz zunicken und lächeln.",
+       "wert": 1,
+       "weiter": "k4b",
+       "rueck": "Ein freundliches Zeichen. Mit einem Satz und einem halben Schritt wäre sie in der Runde."
+      }
+     ]
+    },
+    {
+     "id": "k4",
+     "sagt": "Lena stellt sich dazu. Jonas erzählt: „Ich bin eigentlich wegen der Musik gekommen. Ich spiele seit zwanzig Jahren Saxofon – heute spielt die Band von einem Freund.“",
+     "wahl": [
+      {
+       "text": "„Saxofon, aha. Wie viel kostet so ein Instrument eigentlich, und kann man das noch lernen, wenn man älter ist?“",
+       "wert": 1,
+       "tendenz": "ausfragen",
+       "weiter": "k5",
+       "rueck": "Neugierig – nur der Preis ist früh ein heikles Thema. Nach dem Erleben zu fragen öffnet mehr."
+      },
+      {
+       "text": "„Zwanzig Jahre – Respekt! Was gefällt dir daran nach so langer Zeit noch?“",
+       "wert": 2,
+       "weiter": "k5",
+       "rueck": "Gewürdigt und eine Stufe tiefer – und Lena hört mit."
+      },
+      {
+       "text": "„Ich hab früher Blockflöte gespielt, ganz furchtbar …“ – und eine lange Geschichte erzählen.",
+       "wert": 0,
+       "tendenz": "monolog",
+       "weiter": "k5",
+       "rueck": "Eine eigene Geschichte ist gut – nur nicht als Monolog. Kurz, und dann den Ball zurück."
+      }
+     ]
+    },
+    {
+     "id": "k4b",
+     "sagt": "Lena geht weiter. Jonas erzählt: „Ich bin eigentlich wegen der Musik gekommen – ich spiele seit zwanzig Jahren Saxofon.“",
+     "wahl": [
+      {
+       "text": "„Zwanzig Jahre! Was gefällt dir daran nach so langer Zeit noch?“",
+       "wert": 2,
+       "weiter": "k5",
+       "rueck": "Eine Stufe tiefer – jetzt erzählt er."
+      },
+      {
+       "text": "„Ah. Und, schon was gegessen?“",
+       "wert": 0,
+       "tendenz": "themenwechsel",
+       "weiter": "ende2",
+       "rueck": "Gerade als es persönlich wurde, zurück zum Buffet."
+      }
+     ]
+    },
+    {
+     "id": "k5",
+     "sagt": "Die Band beginnt. Jonas erzählt begeistert weiter. Da siehst du Dr. Albers, mit dem du heute noch kurz sprechen wolltest – er zieht schon den Mantel an.",
+     "wahl": [
+      {
+       "text": "„Jonas, das war schön! Ich will kurz zu Dr. Albers, bevor er geht. Erzählst du mir später, was die Band spielt?“",
+       "wert": 2,
+       "weiter": "ende1",
+       "rueck": "Würdigen, Grund, Ausblick – und sein Name zum Abschied."
+      },
+      {
+       "text": "In einer Pause verschwinden und hoffen, dass es Jonas bei der lauten Musik nicht auffällt.",
+       "wert": 0,
+       "tendenz": "verschwinden",
+       "weiter": "ende2",
+       "rueck": "Bequem – aber er bleibt mitten im Satz allein zurück."
+      },
+      {
+       "text": "„Ich muss mal kurz weg.“",
+       "wert": 1,
+       "weiter": "ende4",
+       "rueck": "Ein Grund – aber ohne Würdigung und Namen klingt es nach Flucht."
+      }
+     ]
+    },
+    {
+     "id": "ende1",
+     "sagt": "Jonas: „Mach ich – bis gleich!“ Du erwischst Dr. Albers noch an der Garderobe. In der Pause winkt Jonas dich zu sich an die Bühne.",
+     "ende": "Einstieg aus der Lage, Name behalten, Kreis geöffnet, eine Stufe tiefer – und ein Abgang, der neugierig aufs Wiedersehen macht. Das sind die Grundlagen, an einem einzigen Abend."
+    },
+    {
+     "id": "ende2",
+     "sagt": "Der Abend geht weiter, und ihr verliert euch aus den Augen.",
+     "ende": "Ein freundlicher Abend mit kleinen verpassten Türen. Fürs nächste Fest: Aufhänger hören, eine Stufe tiefer, den Kreis öffnen – und mit Namen gehen."
+    },
+    {
+     "id": "ende3",
+     "sagt": "Deine Abteilung kommt erst zum Essen. Bis dahin stehst du in der Ecke.",
+     "ende": "Abwarten fühlt sich sicher an – aber die anderen wollen meist auch. Ein Satz aus der Lage hätte gereicht."
+    },
+    {
+     "id": "ende4",
+     "sagt": "Jonas schaut kurz irritiert: „Ah – okay.“ Du erreichst Dr. Albers noch.",
+     "ende": "Rechtzeitig gegangen – gut. Mit Namen, Würdigung und Ausblick wäre es ein schöner Abschied geworden statt eines kleinen Ruckelns."
+    }
+   ],
+   "prinzipien": [
+    "ein Satz aus der Lage, mit Name und Bezug",
+    "den Namen gleich zurücksagen",
+    "den Kreis öffnen, andere hereinholen",
+    "eine Stufe tiefer",
+    "würdigen – Grund – Ausblick – Name"
+   ],
+   "transfer": "Welche Feier steht bei dir als Nächstes an? Nimm dir zwei Dinge vor: einen ersten Satz aus der Lage und einen Abgang mit Namen."
+  }
+ ]
+}

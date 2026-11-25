@@ -27,6 +27,7 @@ import { parseExcelSheet, extractFromExcel, type ExcelSheetData } from '../utils
 import { batchAdLookup } from '../services/adUserLookup'
 import ComputerSyncHinweis from '../components/location/ComputerSyncHinweis'
 import ServerListeDialog from '../components/server/ServerListeDialog'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 
 const log = createLogger('location-overview')
 
@@ -70,7 +71,9 @@ export default function LocationOverview() {
   const setDevices = useAppStore(s => s.setDevices)
   const seededRef  = useRef(false)
 
-  const [activeCategory, setActiveCategory] = useState<string>('Computer')
+  // Kategorien je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const [activeCategory, setActiveCategory] = useBereichZustand<string>('location-overview', 'Computer')
+  const { sichtbar: kategorieSichtbar } = useBereiche('location-overview')
   const [items, setItems]     = useState<InventoryItem[]>([])
   const [loading, setLoading] = useState(true)
   const [ipScanBusy, setIpScanBusy] = useState(false)
@@ -785,7 +788,7 @@ export default function LocationOverview() {
       <div className="flex flex-1 overflow-hidden">
         {/* Category sidebar */}
         <div className="w-44 shrink-0 border-r border-border py-3 space-y-0.5 px-2">
-          {DEFAULT_CATEGORIES.map(cat => {
+          {DEFAULT_CATEGORIES.filter(cat => kategorieSichtbar(cat)).map(cat => {
             const count = items.filter(i => i.category === cat).length
             return (
               <button key={cat} onClick={() => { setActiveCategory(cat); setSelected(new Set()); setSearch('') }}

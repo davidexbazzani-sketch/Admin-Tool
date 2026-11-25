@@ -1,0 +1,213 @@
+// Wort-Analogien „A : B = C : ?“ — selbst geschriebene Aufgaben (keine Übernahme aus Tests oder Rätselbüchern).
+// Jede Aufgabe: Schwierigkeitslage t (1 = alltäglich, anschaulich … 5 = seltene Wörter, feine Beziehung),
+// Art der Beziehung, das Wortpaar links, das Paar rechts (das zweite Wort ist die Lösung),
+// mindestens vier verlockende, aber eindeutig falsche Antworten und ein Satz zur Erklärung.
+// Regel beim Schreiben: Unter den falschen Antworten darf keine sein, die sich ebenfalls vertreten ließe.
+
+export type Lage = 1 | 2 | 3 | 4 | 5
+
+export const BEZIEHUNG = {
+  teil: 'Teil und Ganzes',
+  art: 'Art und Oberbegriff',
+  gegen: 'Gegensatz',
+  grad: 'Steigerung',
+  werk: 'Werkzeug und Verwendung',
+  taetig: 'Tätigkeit',
+  ort: 'Ort',
+  stoff: 'Material',
+  folge: 'Ursache und Folge',
+  abhilfe: 'Bedürfnis und Abhilfe',
+  fehlt: 'Fehlende Fähigkeit',
+  verfall: 'Verfall',
+  zweck: 'Funktion',
+  reihe: 'Reihenfolge',
+  merkmal: 'Merkmal',
+  raum: 'Fläche und Körper',
+  form: 'Stoff und Form',
+  plan: 'Anleitung und Ergebnis',
+  mass: 'Maß und Messung',
+  erzeugnis: 'Erzeuger und Erzeugnis',
+  person: 'Person und Aufgabe',
+  partner: 'Gegenüber',
+  menge: 'Einzelnes und Menge',
+  zeichen: 'Zeichen und Bedeutung',
+  werden: 'Entwicklung',
+  lohn: 'Entgelt',
+} as const
+export type Beziehung = keyof typeof BEZIEHUNG
+
+export interface Analogie {
+  t: Lage
+  r: Beziehung
+  a: string
+  b: string
+  c: string
+  /** die Lösung */
+  d: string
+  /** falsche Antworten (mindestens vier) */
+  f: string[]
+  /** Erklärung in einem Satz */
+  e: string
+}
+
+const A = (t: Lage, r: Beziehung, links: string, rechts: string, falsch: string, e: string): Analogie => {
+  const [a, b] = links.split(':')
+  const [c, d] = rechts.split(':')
+  return { t, r, a, b, c, d, f: falsch.split('|'), e }
+}
+
+export const ANALOGIEN: Analogie[] = [
+  // ── Lage 1: alltägliche Wörter, offensichtliche Beziehung ──────────────────
+  A(1, 'taetig', 'Vogel:fliegen', 'Fisch:schwimmen', 'Wasser|angeln|Flosse|laufen', 'Der Vogel bewegt sich fliegend fort, der Fisch schwimmend.'),
+  A(1, 'merkmal', 'Tag:hell', 'Nacht:dunkel', 'Mond|schlafen|spät|Abend', 'Am Tag ist es hell, in der Nacht dunkel.'),
+  A(1, 'teil', 'Hand:Finger', 'Fuß:Zehe', 'Schuh|Bein|Knie|Socke', 'Die Hand hat Finger, der Fuß hat Zehen.'),
+  A(1, 'zweck', 'Auge:sehen', 'Ohr:hören', 'Musik|laut|riechen|Kopf', 'Mit dem Auge sieht man, mit dem Ohr hört man.'),
+  A(1, 'taetig', 'Hund:bellen', 'Katze:miauen', 'Maus|wiehern|Fell|kratzen', 'Der Hund bellt, die Katze miaut – jeweils der Laut des Tieres.'),
+  A(1, 'merkmal', 'Sommer:heiß', 'Winter:kalt', 'Schnee|Mantel|Herbst|warm', 'Der Sommer ist die heiße, der Winter die kalte Jahreszeit.'),
+  A(1, 'erzeugnis', 'Kuh:Milch', 'Huhn:Ei', 'Hahn|Küken|Stall|Korn', 'Die Kuh gibt Milch, das Huhn legt Eier.'),
+  A(1, 'ort', 'Schuh:Fuß', 'Hut:Kopf', 'Mantel|Krempe|Schal|Hand', 'Den Schuh trägt man am Fuß, den Hut auf dem Kopf.'),
+  A(1, 'werk', 'Stift:schreiben', 'Schere:schneiden', 'Papier|scharf|kleben|Messer', 'Mit dem Stift schreibt man, mit der Schere schneidet man.'),
+  A(1, 'erzeugnis', 'Bäcker:Brot', 'Schneider:Kleidung', 'Nadel|Schere|Stoff|Faden', 'Der Bäcker stellt Brot her, der Schneider Kleidung.'),
+  A(1, 'reihe', 'Montag:Dienstag', 'Januar:Februar', 'Dezember|März|Winter|Jahr', 'Auf Montag folgt Dienstag, auf Januar folgt Februar.'),
+  A(1, 'werden', 'Welpe:Hund', 'Kalb:Kuh', 'Stall|Milch|Lamm|Fohlen', 'Aus dem Welpen wird ein Hund, aus dem Kalb eine Kuh.'),
+  A(1, 'merkmal', 'Ball:rund', 'Würfel:eckig', 'spielen|Zahl|sechs|Glück', 'Ein Ball ist rund, ein Würfel eckig – es geht um die Form.'),
+  A(1, 'ort', 'Schule:Lehrer', 'Krankenhaus:Arzt', 'Patient|Bett|Medizin|Krankenwagen', 'In der Schule arbeitet der Lehrer, im Krankenhaus der Arzt.'),
+  A(1, 'abhilfe', 'hungrig:essen', 'müde:schlafen', 'Bett|gähnen|Nacht|wach', 'Gegen Hunger hilft Essen, gegen Müdigkeit Schlafen.'),
+  A(1, 'ort', 'Auto:Straße', 'Zug:Schiene', 'Bahnhof|Wagen|Fahrkarte|Lokomotive', 'Das Auto fährt auf der Straße, der Zug auf der Schiene.'),
+  A(1, 'gegen', 'klein:groß', 'kurz:lang', 'breit|schmal|dick|hoch', 'Groß ist das Gegenteil von klein, lang das Gegenteil von kurz.'),
+  A(1, 'stoff', 'Fenster:Glas', 'Tisch:Holz', 'Stuhl|Platte|Küche|Bein', 'Ein Fenster besteht aus Glas, ein Tisch meist aus Holz.'),
+  A(1, 'merkmal', 'Zitrone:sauer', 'Zucker:süß', 'Löffel|Tee|Kuchen|salzig', 'Die Zitrone schmeckt sauer, Zucker schmeckt süß.'),
+  A(1, 'person', 'Flugzeug:Pilot', 'Schiff:Kapitän', 'Matrose|Hafen|Anker|Segel', 'Das Flugzeug führt der Pilot, das Schiff der Kapitän.'),
+  A(1, 'gegen', 'oben:unten', 'vorne:hinten', 'links|seitlich|außen|mitten', 'Unten ist das Gegenteil von oben, hinten das Gegenteil von vorne.'),
+  A(1, 'zweck', 'Stuhl:sitzen', 'Bett:schlafen', 'Kissen|müde|Zimmer|stehen', 'Auf dem Stuhl sitzt man, im Bett schläft man.'),
+  A(1, 'werk', 'Seife:waschen', 'Handtuch:abtrocknen', 'Bad|nass|Wasser|duschen', 'Mit Seife wäscht man sich, mit dem Handtuch trocknet man sich ab.'),
+  A(1, 'partner', 'Vater:Sohn', 'Mutter:Tochter', 'Schwester|Oma|Tante|Bruder', 'Vater und Sohn sind Elternteil und Kind – ebenso Mutter und Tochter.'),
+  A(1, 'art', 'Apfel:Obst', 'Karotte:Gemüse', 'Hase|Garten|orange|Salat', 'Der Apfel ist ein Obst, die Karotte ein Gemüse.'),
+  A(1, 'zweck', 'Wasser:trinken', 'Luft:atmen', 'Wind|Lunge|fliegen|Himmel', 'Wasser trinkt man, Luft atmet man.'),
+  A(1, 'erzeugnis', 'Lampe:Licht', 'Ofen:Wärme', 'Küche|Holz|Kuchen|Kohle', 'Die Lampe spendet Licht, der Ofen Wärme.'),
+  A(1, 'werk', 'Maler:Pinsel', 'Friseur:Schere', 'Haar|Spiegel|Salon|Bart', 'Der Maler arbeitet mit dem Pinsel, der Friseur mit der Schere.'),
+
+  // ── Lage 2: geläufige Wörter, Beziehung mit einem Gedankenschritt ──────────
+  A(2, 'mass', 'Uhr:Zeit', 'Waage:Gewicht', 'Kilo|Küche|schwer|Zeiger', 'Die Uhr misst die Zeit, die Waage das Gewicht.'),
+  A(2, 'werk', 'Hammer:Nagel', 'Schraubenzieher:Schraube', 'Mutter|Werkzeug|drehen|Bohrer', 'Mit dem Hammer treibt man den Nagel ein, mit dem Schraubenzieher die Schraube.'),
+  A(2, 'werden', 'Raupe:Schmetterling', 'Kaulquappe:Frosch', 'Teich|Fisch|Ei|Fliege', 'Aus der Raupe wird ein Schmetterling, aus der Kaulquappe ein Frosch.'),
+  A(2, 'erzeugnis', 'Dichter:Gedicht', 'Komponist:Sinfonie', 'Orchester|Dirigent|Geige|Bühne', 'Der Dichter schreibt Gedichte, der Komponist Sinfonien.'),
+  A(2, 'werk', 'Besen:kehren', 'Schaufel:graben', 'Sand|Eimer|Garten|harken', 'Mit dem Besen kehrt man, mit der Schaufel gräbt man.'),
+  A(2, 'teil', 'Fisch:Schuppen', 'Vogel:Federn', 'Flügel|Nest|Schnabel|Eier', 'Den Fisch bedecken Schuppen, den Vogel Federn.'),
+  A(2, 'teil', 'Ast:Baum', 'Arm:Körper', 'Hand|Bein|Ellbogen|Muskel', 'Der Ast geht vom Baum ab wie der Arm vom Körper.'),
+  A(2, 'folge', 'Kälte:frieren', 'Hitze:schwitzen', 'Sommer|Sonne|trinken|brennen', 'Bei Kälte friert man, bei Hitze schwitzt man.'),
+  A(2, 'grad', 'gehen:rennen', 'sprechen:schreien', 'flüstern|hören|schweigen|singen', 'Rennen ist die gesteigerte Form von Gehen, Schreien die von Sprechen.'),
+  A(2, 'stoff', 'Mehl:Brot', 'Trauben:Wein', 'Rebe|Kern|Winzer|Glas', 'Aus Mehl wird Brot gemacht, aus Trauben Wein.'),
+  A(2, 'partner', 'Verkäufer:Kunde', 'Arzt:Patient', 'Praxis|Rezept|Pfleger|Medizin', 'Der Verkäufer bedient den Kunden, der Arzt behandelt den Patienten.'),
+  A(2, 'person', 'Stadt:Bürgermeister', 'Schule:Direktor', 'Lehrer|Hausmeister|Klasse|Schüler', 'Die Stadt leitet der Bürgermeister, die Schule der Direktor.'),
+  A(2, 'ort', 'Nest:Vogel', 'Bau:Fuchs', 'Wald|Höhle|Jäger|Reh', 'Der Vogel wohnt im Nest, der Fuchs im Bau.'),
+  A(2, 'ort', 'See:Ufer', 'Meer:Küste', 'Welle|Insel|Hafen|Salz', 'Der Rand des Sees ist das Ufer, der Rand des Meeres die Küste.'),
+  A(2, 'teil', 'Kette:Glied', 'Mauer:Stein', 'Zaun|Wand|Maurer|Tor', 'Eine Kette besteht aus Gliedern, eine Mauer aus Steinen.'),
+  A(2, 'fehlt', 'sehen:blind', 'hören:taub', 'stumm|leise|Ohr|laut', 'Wer nicht sehen kann, ist blind – wer nicht hören kann, ist taub.'),
+  A(2, 'ort', 'Fisch:Aquarium', 'Vogel:Käfig', 'Nest|Feder|Futter|Baum', 'Im Haus hält man Fische im Aquarium und Vögel im Käfig.'),
+  A(2, 'gegen', 'Ankunft:Abfahrt', 'Begrüßung:Abschied', 'Reise|Gruß|Besuch|Winken', 'Abfahrt ist das Gegenstück zur Ankunft, Abschied das zur Begrüßung.'),
+  A(2, 'gegen', 'voll:leer', 'offen:geschlossen', 'Tür|weit|frei|locker', 'Leer ist das Gegenteil von voll, geschlossen das Gegenteil von offen.'),
+  A(2, 'stoff', 'Schmied:Eisen', 'Tischler:Holz', 'Hobel|Tisch|Säge|Werkstatt', 'Der Schmied bearbeitet Eisen, der Tischler Holz.'),
+  A(2, 'partner', 'Hahn:Henne', 'Hengst:Stute', 'Fohlen|Pferd|Reiter|Kuh', 'Hahn und Henne sind Männchen und Weibchen – beim Pferd Hengst und Stute.'),
+  A(2, 'partner', 'Frage:Antwort', 'Problem:Lösung', 'Aufgabe|Sorge|Fehler|Rätsel', 'Auf eine Frage gehört eine Antwort, zu einem Problem eine Lösung.'),
+  A(2, 'ort', 'Koch:Küche', 'Pilot:Cockpit', 'Flügel|Uniform|Passagier|Landung', 'Der Koch arbeitet in der Küche, der Pilot im Cockpit.'),
+  A(2, 'person', 'Dirigent:Orchester', 'Trainer:Mannschaft', 'Spiel|Stadion|Schiedsrichter|Sieg', 'Der Dirigent leitet das Orchester, der Trainer die Mannschaft.'),
+  A(2, 'grad', 'Hügel:Berg', 'Bach:Fluss', 'Quelle|Ufer|Teich|Wasser', 'Ein Berg ist ein großer Hügel, ein Fluss ein großer Bach.'),
+  A(2, 'merkmal', 'Feder:leicht', 'Blei:schwer', 'Metall|Gewicht|Kugel|Stift', 'Die Feder gilt als besonders leicht, Blei als besonders schwer.'),
+  A(2, 'zeichen', 'Kleeblatt:Glück', 'Herz:Liebe', 'Blut|Arzt|Puls|Brust', 'Das Kleeblatt steht für Glück, das Herz für Liebe.'),
+  A(2, 'reihe', 'vorgestern:gestern', 'morgen:übermorgen', 'heute|Woche|bald|später', 'Jeweils einen Tag weiter: auf vorgestern folgt gestern, auf morgen übermorgen.'),
+  A(2, 'partner', 'Wirt:Gast', 'Vermieter:Mieter', 'Wohnung|Miete|Nachbar|Makler', 'Der Wirt hat Gäste, der Vermieter hat Mieter.'),
+
+  // ── Lage 3: mittlere Wörter, die Beziehung muss genau gefasst werden ───────
+  A(3, 'teil', 'Kapitel:Buch', 'Strophe:Gedicht', 'Reim|Dichter|Zeile|Vers', 'Ein Buch gliedert sich in Kapitel, ein Gedicht in Strophen.'),
+  A(3, 'werden', 'Ferkel:Schwein', 'Kitz:Reh', 'Hirsch|Wald|Hase|Fohlen', 'Das Ferkel ist das Junge des Schweins, das Kitz das Junge des Rehs.'),
+  A(3, 'ort', 'Garage:Auto', 'Hangar:Flugzeug', 'Pilot|Flughafen|Landebahn|Halle', 'Das Auto steht in der Garage, das Flugzeug im Hangar.'),
+  A(3, 'teil', 'Wurzel:Pflanze', 'Fundament:Haus', 'Beton|Keller|Dach|Maurer', 'Die Wurzel verankert die Pflanze im Boden, das Fundament das Haus.'),
+  A(3, 'folge', 'Regen:Überschwemmung', 'Funke:Brand', 'Rauch|Hitze|Feuerwehr|Asche', 'Zu viel Regen führt zur Überschwemmung, ein Funke zum Brand.'),
+  A(3, 'werk', 'Biologe:Mikroskop', 'Astronom:Teleskop', 'Stern|Planet|Sternwarte|Lupe', 'Der Biologe forscht mit dem Mikroskop, der Astronom mit dem Teleskop.'),
+  A(3, 'teil', 'Rinde:Baum', 'Schale:Orange', 'Kern|Saft|Stiel|Blüte', 'Die Rinde umhüllt den Baum, die Schale die Orange.'),
+  A(3, 'verfall', 'Eisen:Rost', 'Brot:Schimmel', 'Krümel|Hefe|Kruste|Bäcker', 'Eisen verdirbt durch Rost, Brot durch Schimmel.'),
+  A(3, 'zweck', 'Sprache:Grammatik', 'Spiel:Regeln', 'Würfel|Gewinner|Spaß|Brett', 'Die Grammatik ordnet die Sprache, die Regeln ordnen das Spiel.'),
+  A(3, 'gegen', 'Lob:Tadel', 'Belohnung:Strafe', 'Preis|Geschenk|Fehler|Dank', 'Tadel ist das Gegenteil von Lob, Strafe das Gegenteil von Belohnung.'),
+  A(3, 'raum', 'Kreis:Kugel', 'Quadrat:Würfel', 'Rechteck|Fläche|Ecke|Pyramide', 'Die Kugel ist das räumliche Gegenstück zum Kreis, der Würfel das zum Quadrat.'),
+  A(3, 'zweck', 'Lunge:atmen', 'Magen:verdauen', 'essen|Bauch|Hunger|schlucken', 'Die Lunge dient dem Atmen, der Magen dem Verdauen.'),
+  A(3, 'erzeugnis', 'Regisseur:Film', 'Architekt:Gebäude', 'Baustelle|Maurer|Zirkel|Stadt', 'Der Regisseur gestaltet den Film, der Architekt das Gebäude.'),
+  A(3, 'ort', 'Insel:Meer', 'Oase:Wüste', 'Palme|Quelle|Kamel|Schatten', 'Die Insel ist vom Meer umgeben, die Oase von der Wüste.'),
+  A(3, 'stoff', 'Bildhauer:Stein', 'Töpfer:Ton', 'Vase|Scheibe|Ofen|Krug', 'Der Bildhauer formt Stein, der Töpfer Ton.'),
+  A(3, 'gegen', 'Mut:Feigheit', 'Fleiß:Faulheit', 'Arbeit|Eifer|Müdigkeit|Schwäche', 'Feigheit ist das Gegenteil von Mut, Faulheit das Gegenteil von Fleiß.'),
+  A(3, 'zweck', 'Fahrrad:Lenker', 'Schiff:Steuerrad', 'Anker|Mast|Kiel|Bug', 'Das Fahrrad steuert man mit dem Lenker, das Schiff mit dem Steuerrad.'),
+  A(3, 'stoff', 'Papier:Holz', 'Glas:Sand', 'Fenster|Scherbe|Flasche|Stein', 'Papier wird aus Holz hergestellt, Glas aus Sand.'),
+  A(3, 'plan', 'Bauplan:Haus', 'Rezept:Gericht', 'Koch|Zutat|Küche|Kochbuch', 'Nach dem Bauplan entsteht das Haus, nach dem Rezept das Gericht.'),
+  A(3, 'werk', 'Lineal:Gerade', 'Zirkel:Kreis', 'Winkel|Spitze|Radius|Geometrie', 'Mit dem Lineal zeichnet man Geraden, mit dem Zirkel Kreise.'),
+  A(3, 'reihe', 'Säugling:Kleinkind', 'Jugendlicher:Erwachsener', 'Kind|Greis|Schüler|Eltern', 'Jeweils der nächste Lebensabschnitt: Säugling – Kleinkind, Jugendlicher – Erwachsener.'),
+  A(3, 'ort', 'Astronaut:Raumstation', 'Bergmann:Bergwerk', 'Gipfel|Kohle|Helm|Höhle', 'Der Astronaut arbeitet in der Raumstation, der Bergmann im Bergwerk.'),
+  A(3, 'art', 'Eiche:Laubbaum', 'Fichte:Nadelbaum', 'Tanne|Wald|Zapfen|Holz', 'Die Eiche ist ein Laubbaum, die Fichte ein Nadelbaum.'),
+  A(3, 'art', 'Wal:Säugetier', 'Hai:Fisch', 'Meer|Flosse|Delfin|Reptil', 'Der Wal ist ein Säugetier, der Hai ein Fisch.'),
+  A(3, 'werk', 'Chirurg:Skalpell', 'Holzfäller:Axt', 'Baum|Wald|Stamm|Hobel', 'Der Chirurg schneidet mit dem Skalpell, der Holzfäller schlägt mit der Axt.'),
+  A(3, 'teil', 'Speiche:Rad', 'Sprosse:Leiter', 'Stufe|Treppe|Geländer|Dach', 'Die Speiche ist Teil des Rades, die Sprosse Teil der Leiter.'),
+  A(3, 'erzeugnis', 'Biene:Wabe', 'Spinne:Netz', 'Fliege|Faden|Beute|Bein', 'Die Biene baut Waben, die Spinne baut Netze.'),
+  A(3, 'erzeugnis', 'Winzer:Wein', 'Imker:Honig', 'Biene|Wabe|Stich|Blüte', 'Der Winzer erzeugt Wein, der Imker Honig.'),
+  A(3, 'folge', 'kaufen:bezahlen', 'leihen:zurückgeben', 'schenken|behalten|verkaufen|borgen', 'Wer kauft, muss bezahlen – wer leiht, muss zurückgeben.'),
+  A(3, 'reihe', 'Dienstag:Donnerstag', 'Mai:Juli', 'Juni|August|März|Sommer', 'Jeweils der übernächste: Dienstag – Donnerstag, Mai – Juli.'),
+
+  // ── Lage 4: seltenere Wörter, feinere Beziehungen ──────────────────────────
+  A(4, 'grad', 'Brise:Sturm', 'Nieseln:Wolkenbruch', 'Nebel|Tau|Hagel|Wolke', 'Die Brise ist ein schwacher, der Sturm ein starker Wind – Nieseln ist schwacher, der Wolkenbruch starker Regen.'),
+  A(4, 'menge', 'Zahn:Gebiss', 'Feder:Gefieder', 'Flügel|Vogel|Kissen|Schnabel', 'Alle Zähne zusammen bilden das Gebiss, alle Federn das Gefieder.'),
+  A(4, 'menge', 'Berg:Gebirge', 'Insel:Archipel', 'Halbinsel|Atoll|Küste|Kontinent', 'Eine Gruppe von Bergen ist ein Gebirge, eine Gruppe von Inseln ein Archipel.'),
+  A(4, 'gegen', 'schmal:breit', 'seicht:tief', 'flach|nass|klar|hoch', 'Breit ist das Gegenteil von schmal, tief das Gegenteil von seicht.'),
+  A(4, 'mass', 'Temperatur:Grad', 'Spannung:Volt', 'Strom|Watt|Ampere|Kabel', 'Die Temperatur misst man in Grad, die elektrische Spannung in Volt.'),
+  A(4, 'partner', 'Ente:Erpel', 'Gans:Ganter', 'Küken|Schwan|Feder|Henne', 'Das Männchen der Ente heißt Erpel, das der Gans Ganter.'),
+  A(4, 'zeichen', 'Symptom:Krankheit', 'Rauch:Feuer', 'Asche|Schornstein|Nebel|Qualm', 'Ein Symptom zeigt eine Krankheit an, Rauch ein Feuer.'),
+  A(4, 'teil', 'Wort:Silbe', 'Molekül:Atom', 'Zelle|Stoff|Kern|Chemie', 'Ein Wort setzt sich aus Silben zusammen, ein Molekül aus Atomen.'),
+  A(4, 'zeichen', 'Karte:Gelände', 'Partitur:Musik', 'Dirigent|Noten|Orchester|Instrument', 'Die Karte bildet das Gelände ab, die Partitur hält die Musik fest.'),
+  A(4, 'taetig', 'Münze:prägen', 'Buch:drucken', 'lesen|leihen|Verlag|Seite', 'Münzen werden geprägt, Bücher gedruckt – so werden sie hergestellt.'),
+  A(4, 'form', 'Gold:Barren', 'Brot:Laib', 'Scheibe|Kruste|Krümel|Teig', 'Gold wird zum Barren geformt, Brot zum Laib.'),
+  A(4, 'teil', 'Holz:Splitter', 'Glas:Scherbe', 'Fenster|Sprung|Sand|Spiegel', 'Ein Bruchstück von Holz ist ein Splitter, eines von Glas eine Scherbe.'),
+  A(4, 'partner', 'Friseur:Kunde', 'Anwalt:Mandant', 'Richter|Zeuge|Kanzlei|Urteil', 'Wer zum Friseur geht, ist Kunde – wer zum Anwalt geht, ist Mandant.'),
+  A(4, 'grad', 'sehen:betrachten', 'hören:lauschen', 'schweigen|rufen|verstehen|überhören', 'Betrachten ist aufmerksames Sehen, Lauschen aufmerksames Hören.'),
+  A(4, 'art', 'Smaragd:Edelstein', 'Platin:Edelmetall', 'Schmuck|Silber|Erz|Ring', 'Der Smaragd ist ein Edelstein, Platin ein Edelmetall.'),
+  A(4, 'art', 'Frosch:Amphibie', 'Eidechse:Reptil', 'Insekt|Schlange|Säugetier|Lurch', 'Der Frosch ist eine Amphibie, die Eidechse ein Reptil.'),
+  A(4, 'gegen', 'konkret:abstrakt', 'Praxis:Theorie', 'Übung|Arzt|Erfahrung|Plan', 'Abstrakt ist das Gegenteil von konkret, Theorie das Gegenstück zur Praxis.'),
+  A(4, 'grad', 'Angst:Panik', 'Ärger:Wut', 'Kummer|Streit|Unmut|Reue', 'Panik ist gesteigerte Angst, Wut gesteigerter Ärger.'),
+  A(4, 'grad', 'nippen:trinken', 'naschen:essen', 'Zucker|kauen|kosten|Hunger', 'Nippen ist Trinken in kleinen Mengen, Naschen ist Essen in kleinen Mengen.'),
+  A(4, 'teil', 'Klinge:Messer', 'Zinke:Gabel', 'Löffel|Griff|Besteck|Spitze', 'Die Klinge ist der wirksame Teil des Messers, die Zinke der der Gabel.'),
+  A(4, 'erzeugnis', 'Müller:Mehl', 'Gerber:Leder', 'Fell|Stoff|Schuh|Farbe', 'Der Müller stellt Mehl her, der Gerber Leder (aus Fellen und Häuten).'),
+  A(4, 'person', 'Meteorologe:Wetter', 'Seismologe:Erdbeben', 'Vulkan|Sterne|Meer|Höhlen', 'Der Meteorologe erforscht das Wetter, der Seismologe Erdbeben.'),
+  A(4, 'mass', 'Knoten:Geschwindigkeit', 'Hektar:Fläche', 'Länge|Feld|Gewicht|Bauer', 'Knoten ist ein Maß für Geschwindigkeit, Hektar ein Maß für Fläche.'),
+  A(4, 'zeichen', 'Note:Ton', 'Buchstabe:Laut', 'Wort|Schrift|Alphabet|Stift', 'Die Note ist das Zeichen für einen Ton, der Buchstabe das für einen Laut.'),
+  A(4, 'gegen', 'Dissonanz:Harmonie', 'Chaos:Ordnung', 'Lärm|Unruhe|Zufall|Anfang', 'Harmonie ist das Gegenteil von Dissonanz, Ordnung das Gegenteil von Chaos.'),
+  A(4, 'folge', 'Verletzung:Narbe', 'Feuer:Asche', 'Rauch|Hitze|Flamme|Holz', 'Von der Verletzung bleibt die Narbe zurück, vom Feuer die Asche.'),
+  A(4, 'erzeugnis', 'Wolle:Schaf', 'Seide:Raupe', 'Stoff|Kleid|Faden|Baumwolle', 'Wolle stammt vom Schaf, Seide von der Seidenraupe.'),
+  A(4, 'erzeugnis', 'Arzt:Diagnose', 'Richter:Urteil', 'Gericht|Strafe|Gesetz|Anklage', 'Der Arzt stellt die Diagnose, der Richter fällt das Urteil.'),
+  A(4, 'reihe', 'Larve:Puppe', 'Knospe:Blüte', 'Blatt|Frucht|Zweig|Samen', 'Jeweils die nächste Stufe: Aus der Larve wird die Puppe, aus der Knospe die Blüte.'),
+
+  // ── Lage 5: Bildungswortschatz, die Beziehung liegt nicht auf der Hand ─────
+  A(5, 'grad', 'Geiz:Sparsamkeit', 'Tollkühnheit:Mut', 'Angst|Feigheit|Leichtsinn|Gefahr', 'Geiz ist übertriebene Sparsamkeit, Tollkühnheit übertriebener Mut.'),
+  A(5, 'reihe', 'Prolog:Epilog', 'Ouvertüre:Finale', 'Oper|Arie|Akt|Pause', 'Prolog und Epilog rahmen ein Buch ein, Ouvertüre und Finale eine Oper – Anfang und Schluss.'),
+  A(5, 'menge', 'Löwe:Rudel', 'Wildschwein:Rotte', 'Herde|Meute|Schar|Horde', 'Löwen leben im Rudel, Wildschweine in der Rotte.'),
+  A(5, 'taetig', 'Analyse:zerlegen', 'Synthese:verbinden', 'trennen|prüfen|untersuchen|lösen', 'Bei der Analyse wird etwas zerlegt, bei der Synthese zusammengefügt.'),
+  A(5, 'taetig', 'Getreide:dreschen', 'Trauben:keltern', 'pflücken|gären|trinken|gießen', 'Nach der Ernte wird Getreide gedroschen, Trauben werden gekeltert (ausgepresst).'),
+  A(5, 'art', 'Sonate:Musikstück', 'Sonett:Gedicht', 'Lied|Strophe|Reim|Roman', 'Die Sonate ist eine Form des Musikstücks, das Sonett eine Form des Gedichts.'),
+  A(5, 'grad', 'Tümpel:Ozean', 'Rinnsal:Strom', 'Quelle|Tropfen|Kanal|Pfütze', 'Vom kleinsten zum größten: Tümpel und Ozean bei stehendem, Rinnsal und Strom bei fließendem Wasser.'),
+  A(5, 'teil', 'Akt:Drama', 'Satz:Sinfonie', 'Wort|Grammatik|Punkt|Dirigent', 'Ein Drama gliedert sich in Akte, eine Sinfonie in Sätze.'),
+  A(5, 'zeichen', 'Waage:Gerechtigkeit', 'Lorbeer:Sieg', 'Gewürz|Kranz|Baum|Frieden', 'Die Waage ist das Sinnbild der Gerechtigkeit, der Lorbeer das des Sieges.'),
+  A(5, 'erzeugnis', 'Schuster:Schuhe', 'Böttcher:Fässer', 'Hüte|Seile|Körbe|Töpfe', 'Der Schuster fertigt Schuhe, der Böttcher Fässer.'),
+  A(5, 'person', 'Ornithologe:Vögel', 'Entomologe:Insekten', 'Fische|Pflanzen|Wörter|Reptilien', 'Der Ornithologe erforscht Vögel, der Entomologe Insekten (mit Wörtern befasst sich der Etymologe).'),
+  A(5, 'mass', 'Lichtjahr:Entfernung', 'Karat:Gewicht', 'Glanz|Härte|Preis|Größe', 'Das Lichtjahr ist ein Maß für Entfernung, das Karat ein Gewichtsmaß für Edelsteine.'),
+  A(5, 'folge', 'Schwerkraft:fallen', 'Auftrieb:steigen', 'sinken|tauchen|wiegen|ziehen', 'Die Schwerkraft lässt Dinge fallen, der Auftrieb lässt sie steigen.'),
+  A(5, 'gegen', 'Altruismus:Egoismus', 'Demut:Hochmut', 'Mut|Bescheidenheit|Armut|Wehmut', 'Egoismus ist das Gegenteil von Altruismus, Hochmut das Gegenteil von Demut.'),
+  A(5, 'grad', 'Meinung:Überzeugung', 'Vermutung:Gewissheit', 'Zweifel|Ahnung|Frage|Irrtum', 'Die Überzeugung ist eine gefestigte Meinung, die Gewissheit eine bestätigte Vermutung.'),
+  A(5, 'werden', 'Skizze:Gemälde', 'Entwurf:Reinschrift', 'Idee|Notiz|Papier|Korrektur', 'Die Skizze ist die Vorstufe des Gemäldes, der Entwurf die der Reinschrift.'),
+  A(5, 'art', 'Bronze:Legierung', 'Granit:Gestein', 'Marmor|Berg|Kiesel|Härte', 'Bronze gehört zu den Legierungen, Granit zu den Gesteinen.'),
+  A(5, 'zweck', 'Niere:filtern', 'Leber:entgiften', 'pumpen|atmen|kauen|schlucken', 'Die Niere filtert das Blut, die Leber entgiftet es.'),
+  A(5, 'lohn', 'Zins:Kredit', 'Miete:Wohnung', 'Vermieter|Kaution|Eigentum|Nebenkosten', 'Zins zahlt man für einen Kredit, Miete für eine Wohnung.'),
+  A(5, 'lohn', 'Honorar:Anwalt', 'Gage:Schauspieler', 'Arbeiter|Beamter|Soldat|Rentner', 'Der Anwalt erhält ein Honorar, der Schauspieler eine Gage.'),
+  A(5, 'taetig', 'Verb:konjugieren', 'Substantiv:deklinieren', 'steigern|trennen|betonen|buchstabieren', 'Verben werden konjugiert, Substantive dekliniert (gesteigert werden Adjektive).'),
+  A(5, 'menge', 'Zunft:Handwerker', 'Gilde:Kaufleute', 'Bauern|Ritter|Seeleute|Soldaten', 'In der Zunft schlossen sich Handwerker zusammen, in der Gilde Kaufleute.'),
+  A(5, 'teil', 'Elle:Unterarm', 'Schienbein:Unterschenkel', 'Knie|Oberschenkel|Fuß|Wade', 'Die Elle ist ein Knochen des Unterarms, das Schienbein einer des Unterschenkels.'),
+  A(5, 'taetig', 'Tangente:berühren', 'Sekante:schneiden', 'halbieren|umkreisen|verdoppeln|messen', 'Die Tangente berührt den Kreis, die Sekante schneidet ihn.'),
+  A(5, 'partner', 'Zähler:Nenner', 'Dividend:Divisor', 'Quotient|Produkt|Faktor|Summand', 'Der Zähler steht über dem Nenner – beim Teilen entspricht dem der Dividend, der durch den Divisor geteilt wird.'),
+  A(5, 'mass', 'Dezibel:Lautstärke', 'Hertz:Frequenz', 'Stromstärke|Spannung|Helligkeit|Radio', 'In Dezibel misst man die Lautstärke, in Hertz die Frequenz.'),
+  A(5, 'ort', 'Präfix:Wortanfang', 'Suffix:Wortende', 'Wortstamm|Silbe|Satzende|Betonung', 'Das Präfix steht am Wortanfang, das Suffix am Wortende.'),
+  A(5, 'art', 'Kardinalzahl:drei', 'Ordinalzahl:dritter', 'dreifach|Drittel|dreimal|dreizehn', 'Kardinalzahlen zählen (drei), Ordinalzahlen geben die Stelle in einer Reihe an (dritter).'),
+]

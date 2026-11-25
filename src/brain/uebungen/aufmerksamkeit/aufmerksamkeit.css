@@ -1,0 +1,105 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Aufmerksamkeit — Auftritt der vier Übungen (Stroop, Go/No-Go, Flanker, Aufgabenwechsel).
+   Alle Klassen beginnen mit bt-auf-. Farben kommen aus den --bt-…-Variablen aus brain.css.
+   Einzige Ausnahme: die vier festen Reizfarben der Farbwort-Aufgabe. Sie stehen hier einmal für
+   dunkel und einmal für hell — jeweils so gewählt, dass jede Farbe auf der Fläche gut lesbar ist
+   und die vier klar auseinanderzuhalten sind (Gelb ist auf Weiß dunkler und goldener).
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.bt-app {
+  --bt-auf-rot: #FF5C6C;
+  --bt-auf-blau: #4AA8FF;
+  --bt-auf-gruen: #3FD97F;
+  --bt-auf-gelb: #FFD33D;
+}
+.light .bt-app {
+  --bt-auf-rot: #D3223A;
+  --bt-auf-blau: #1A63DD;
+  --bt-auf-gruen: #0E8A42;
+  --bt-auf-gelb: #B98A00;
+}
+
+/* ── Bühne: feste Größe, damit zwischen Pause, Reiz und Rückmeldung nichts springt ── */
+.bt-reiz.bt-auf-buehne {
+  position: relative; flex-direction: column; gap: 6px;
+  width: 100%; max-width: 560px; height: 216px; min-height: 0; padding: 14px 24px; overflow: hidden;
+}
+.bt-reiz.bt-auf-buehne.bt-auf-hoch { height: 252px; }
+.bt-reiz.bt-auf-buehne.bt-auf-breit { max-width: 640px; height: 236px; }
+.bt-auf-mitte { display: flex; align-items: center; justify-content: center; height: 100px; }
+.bt-auf-fix { font: 400 40px/1 var(--bt-schrift); color: var(--bt-stumm); user-select: none; }
+.bt-auf-bereit { font: 400 15px/1.9 var(--bt-schrift); letter-spacing: 0; color: var(--bt-leise); text-align: center; }
+/* Rückmeldungszeile mit fester Höhe */
+.bt-auf-meldung { height: 20px; font: 600 13px/20px var(--bt-schrift); letter-spacing: 0; color: var(--bt-leise); white-space: nowrap; }
+.bt-auf-meldung[data-art='schlecht'] { color: var(--bt-schlecht); }
+.bt-auf-meldung[data-art='gut'] { color: var(--bt-gut); }
+.bt-auf-meldung[data-art='warn'] { color: var(--bt-warn); }
+.bt-auf-fuss { min-height: 18px; text-align: center; }
+
+/* ── Antwortknöpfe ── */
+/* Schrift ausdrücklich setzen: „.bt-app button { font: inherit }“ wiegt schwerer als die Schrift von .bt-feld/.bt-knopf */
+.bt-feld.bt-auf-wahl { min-width: 150px; height: 60px; gap: 10px; padding: 0 16px; font: 600 16px/1.2 var(--bt-schrift); color: var(--bt-ink); }
+.bt-feld.bt-auf-wahl .bt-taste, .bt-feld.bt-auf-seite .bt-taste { min-width: 26px; padding: 3px 7px; font-size: 13px; }
+
+/* ── Stroop ── */
+.bt-auf-wort { font: 600 80px/1 var(--bt-schrift); letter-spacing: 0.03em; user-select: none; }
+.bt-auf-wort[data-farbe='rot'] { color: var(--bt-auf-rot); }
+.bt-auf-wort[data-farbe='blau'] { color: var(--bt-auf-blau); }
+.bt-auf-wort[data-farbe='gruen'] { color: var(--bt-auf-gruen); }
+.bt-auf-wort[data-farbe='gelb'] { color: var(--bt-auf-gelb); }
+.bt-auf-punkt { display: inline-block; flex: none; width: 16px; height: 16px; border-radius: 50%; }
+.bt-auf-punkt[data-farbe='rot'] { background: var(--bt-auf-rot); }
+.bt-auf-punkt[data-farbe='blau'] { background: var(--bt-auf-blau); }
+.bt-auf-punkt[data-farbe='gruen'] { background: var(--bt-auf-gruen); }
+.bt-auf-punkt[data-farbe='gelb'] { background: var(--bt-auf-gelb); }
+/* Hinweis über dem Wort (ab Stufe 8): FARBE = Pille, WORT = Kästchen — nicht nur an der Farbe zu unterscheiden */
+.bt-auf-hinweis {
+  display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 16px;
+  font: 600 15px/1 var(--bt-schrift); letter-spacing: 0.14em; border: 1.5px solid transparent;
+}
+.bt-auf-hinweis[data-hinweis='farbe'] { border-radius: 999px; background: var(--bt-akzent-weich); color: var(--bt-akzent-stark); }
+.bt-auf-hinweis[data-hinweis='wort'] { border-radius: 7px; background: var(--bt-akzent2-weich); color: var(--bt-akzent2); border-color: var(--bt-akzent2); }
+.bt-auf-hinweis[data-leer] { visibility: hidden; }
+
+/* ── Go / No-Go ── */
+.bt-auf-regel {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 26px;
+  width: 100%; max-width: 760px; min-height: 58px; padding: 9px 18px;
+  border-radius: 14px; border: 1px solid var(--bt-rand); background: var(--bt-flaeche);
+  font: 600 15px/1.3 var(--bt-schrift);
+}
+.bt-auf-regel[data-neu] { border-color: var(--bt-akzent); box-shadow: 0 0 0 3px var(--bt-akzent-weich); }
+.bt-auf-regelteil { display: inline-flex; align-items: center; gap: 8px; }
+.bt-auf-regelteil[data-art='go'] > svg:first-child { color: var(--bt-gut); }
+.bt-auf-regelteil[data-art='nogo'] > svg:first-child { color: var(--bt-schlecht); }
+.bt-auf-figur { width: 150px; height: 150px; display: block; }
+.bt-auf-figur-klein { width: 36px; height: 36px; display: block; flex: none; }
+.bt-knopf.bt-auf-druck { min-width: 320px; height: 62px; font: 600 17px/1.2 var(--bt-schrift); gap: 12px; }
+
+/* ── Flanker ── */
+.bt-auf-pfeilreihe { position: absolute; left: 0; right: 0; top: 50%; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--bt-ink); }
+.bt-auf-pfeil { width: 66px; height: 66px; display: block; flex: none; }
+.bt-auf-zentrum { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; }
+.bt-auf-unten { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; }
+
+/* ── Aufgabenwechsel ── */
+.bt-auf-frage { height: 30px; font: 600 21px/30px var(--bt-schrift); letter-spacing: -0.01em; white-space: nowrap; }
+.bt-auf-frage[data-aufgabe='paritaet'] { color: var(--bt-akzent-stark); }
+.bt-auf-frage[data-aufgabe='groesse'] { color: var(--bt-akzent2); }
+.bt-auf-rahmen {
+  display: flex; align-items: center; justify-content: center; width: 148px; height: 148px; flex: none;
+  border: 5px solid transparent; color: var(--bt-ink);
+  font: 600 84px/1 var(--bt-schrift); font-variant-numeric: tabular-nums; user-select: none;
+}
+/* Aufgabe A: runder Rahmen · Aufgabe B: eckiger Rahmen */
+.bt-auf-rahmen[data-aufgabe='paritaet'] { border-radius: 50%; border-color: var(--bt-akzent); background: var(--bt-akzent-weich); }
+.bt-auf-rahmen[data-aufgabe='groesse'] { border-radius: 10px; border-color: var(--bt-akzent2); background: var(--bt-akzent2-weich); }
+.bt-feld.bt-auf-seite {
+  flex-direction: column; align-items: stretch; justify-content: center; gap: 5px;
+  width: 262px; padding: 10px 16px; font: 600 15px/1.25 var(--bt-schrift); color: var(--bt-ink);
+}
+.bt-auf-zeile { display: flex; align-items: center; gap: 10px; }
+.bt-auf-seite[data-seite='rechts'] .bt-auf-zeile { flex-direction: row-reverse; }
+.bt-auf-marke { flex: none; width: 15px; height: 15px; border: 2.5px solid var(--bt-stumm); }
+.bt-auf-marke[data-aufgabe='paritaet'] { border-radius: 50%; border-color: var(--bt-akzent); }
+.bt-auf-marke[data-aufgabe='groesse'] { border-radius: 3px; border-color: var(--bt-akzent2); }

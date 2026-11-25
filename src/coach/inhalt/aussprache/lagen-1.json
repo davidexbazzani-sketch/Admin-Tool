@@ -1,0 +1,245 @@
+{
+  "lagen": [
+    {
+      "id": "aussprache-l-51", "bereich": "aussprache", "phase": "g", "umfeld": "telefon", "faehigkeiten": ["aussprache.alltag", "aussprache.takt", "aussprache.konsonanten"], "stufe": 2,
+      "titel": "Rückruf bei Herrn Petersen", "figur": "Herr Petersen",
+      "einleitung": "Ein Telefonat mit einem Kunden, der schlecht hört. Du übst den Namen am Anfang, Bremsen vor Zahlen und das Absichern am Ende. Der Strich | steht für eine kleine Pause.",
+      "lage": "Du rufst Herrn Petersen an, einen langjährigen Kunden. Seine Lieferung kommt nicht am vierzehnten, sondern am sechzehnten. Er hört nicht mehr gut und fragt nach, wenn etwas nicht ankommt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Es klingelt dreimal. Dann: „Petersen.“",
+          "wahl": [
+            { "text": "„Guten Tag, Herr Petersen. | Hier ist {name}, | wegen Ihrer Lieferung.“ – mit kleinen Pausen.", "wert": 2, "weiter": "k2", "rueck": "Gruß, Pause, Name, Anliegen: Herr Petersen weiß sofort, wer spricht und worum es geht." },
+            { "text": "„Ja hallo, {name} hier, es geht um die Lieferung, die verschiebt sich leider.“ – in einem Zug.", "wert": 0, "tendenz": "tempo", "weiter": "k2b", "rueck": "Alles drin, aber ohne Luft. Für jemanden, der schlecht hört, ist das ein einziges langes Wort." },
+            { "text": "Gleich zur Sache, ohne Namen: „Ihre Lieferung kommt später.“", "wert": 1, "weiter": "k2c", "rueck": "Kurz und klar – nur weiß er nicht, wer da spricht. Am Telefon gehört der Name an den Anfang." }
+          ] },
+        { "id": "k2", "sagt": "Herr Petersen: „Ah, guten Tag. Worum geht es genau?“",
+          "wahl": [
+            { "text": "„Ihr Liefertermin verschiebt sich. | Nicht am vierzehnten, | sondern am sechzehnten. | Eins, sechs.“", "wert": 2, "weiter": "k3", "rueck": "Vor der Zahl gebremst, die Verwechslung gleich ausgeschlossen. Mehr Sicherheit geht kaum." },
+            { "text": "„Wir schaffen den Vierzehnten nicht, wird jetzt der Sechzehnte.“", "wert": 1, "weiter": "k3b", "rueck": "Inhaltlich richtig, aber zwei ähnliche Zahlen ohne Pause – genau da wird er stutzen." }
+          ] },
+        { "id": "k2b", "sagt": "Herr Petersen: „Wie bitte? Wer ist da?“",
+          "wahl": [
+            { "text": "Kurz innehalten, neu ansetzen: „Entschuldigung. | Hier ist {name}. | Es geht um Ihre Lieferung.“", "wert": 2, "weiter": "k2", "rueck": "Gut gerettet: Ein Neustart mit Pausen ist keine Schwäche, sondern Rücksicht." },
+            { "text": "Denselben Satz lauter wiederholen, genauso schnell.", "wert": 0, "tendenz": "lautstaerke", "weiter": "k2c", "rueck": "Lauter macht das Undeutliche nur lauter. Was fehlte, waren Pausen." }
+          ] },
+        { "id": "k2c", "sagt": "Herr Petersen, etwas ungehalten: „Später? Wer spricht denn da überhaupt?“",
+          "wahl": [
+            { "text": "„Verzeihung – {name} hier, | von Ihrem Lieferanten.“ – Pause, dann das Anliegen.", "wert": 2, "weiter": "k2", "rueck": "Erst wer, dann was. Jetzt kann er zuhören." },
+            { "text": "„Na, die Firma! Wegen der Lieferung!“ – noch lauter.", "wert": 0, "tendenz": "lautstaerke", "weiter": "ende2", "rueck": "Ruppig und immer noch ohne Namen. Er fühlt sich angeschrien statt informiert." }
+          ] },
+        { "id": "k3", "sagt": "Herr Petersen: „Am sechzehnten. Gut. Und um welche Uhrzeit?“",
+          "wahl": [
+            { "text": "„Vormittags, | zwischen neun und elf.“", "wert": 2, "weiter": "k4", "rueck": "Kurz, mit Pause vor der Zahl. Sitzt." },
+            { "text": "„So zwischen neun und elf rum, je nachdem.“", "wert": 1, "weiter": "k4", "rueck": "Kommt an, aber „rum, je nachdem“ verwischt, was eigentlich klar ist." }
+          ] },
+        { "id": "k3b", "sagt": "Herr Petersen: „Am Vierzehnten, sagen Sie?“",
+          "wahl": [
+            { "text": "„Nein – am sechzehnten. | Eins, sechs. | Zwei Tage später.“", "wert": 2, "weiter": "k3", "rueck": "Anders sagen statt nur wiederholen: Ziffern und „zwei Tage später“ – jetzt ist es eindeutig." },
+            { "text": "„Nein, am SECHZEHNTEN!“", "wert": 1, "weiter": "k3", "rueck": "Lauter kommt an, klingt aber ungeduldig. Eine zweite Form der Zahl ist sicherer." }
+          ] },
+        { "id": "k4", "sagt": "Herr Petersen: „Gut. Schreiben Sie mir das noch auf?“",
+          "wahl": [
+            { "text": "„Gern, Sie bekommen es heute schriftlich. | Zur Sicherheit: der sechzehnte, | neun bis elf. Passt das?“", "wert": 2, "weiter": "ende1", "rueck": "Zusammenfassen und nachfragen – so endet ein Telefonat ohne Missverständnis." },
+            { "text": "„Klar, kommt per Mail. Tschüss!“", "wert": 1, "weiter": "ende1", "rueck": "Freundlich – eine kurze Zusammenfassung hätte es noch sicherer gemacht." }
+          ] },
+        { "id": "ende1", "sagt": "Herr Petersen: „Wunderbar. Bei Ihnen versteht man wenigstens alles.“", "ende": "Name am Anfang, Bremse vor der Zahl, Zusammenfassung am Ende. Wer schlecht hört, braucht keine lautere Stimme – sondern Pausen und eine zweite Form der Zahl." },
+        { "id": "ende2", "sagt": "Herr Petersen legt auf. Zehn Minuten später ruft er bei deinem Chef an.", "ende": "Lauter ist nicht deutlicher. Beim nächsten Mal: Name, Pause, Anliegen – und vor jeder Zahl kurz bremsen." }
+      ],
+      "prinzipien": ["Name an den Anfang, mit Pause", "vor Zahlen bremsen", "anders sagen statt lauter", "am Ende zusammenfassen"],
+      "transfer": "Wer in deinem Umfeld hört nicht gut? Wie klingt dein erster Satz, wenn du ihn das nächste Mal anrufst?"
+    },
+    {
+      "id": "aussprache-l-52", "bereich": "aussprache", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["aussprache.tragen", "aussprache.hoeren", "aussprache.oeffnung"], "stufe": 3,
+      "titel": "Die Videokonferenz", "figur": "Tarek Yılmaz",
+      "einleitung": "Erst die Technik, dann die Sprechweise: Du übst, was in der Videokonferenz den Unterschied macht – Mikrofon, Blick, Satzende.",
+      "lage": "Videokonferenz am Nachmittag. Du arbeitest von zu Hause, der Laptop steht auf dem Küchentisch. Tarek, Miriam und Dr. Albers sind zugeschaltet. Du sollst kurz den Stand deiner Aufgabe berichten.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Tarek: „Du, sorry – du klingst, als würdest du aus dem Keller anrufen.“",
+          "wahl": [
+            { "text": "„Moment, ich hole mein Headset.“ – kurz stummschalten, Headset auf.", "wert": 2, "weiter": "k2", "rueck": "Erst die Technik. Ein Mikrofon nah am Mund bringt oft mehr als jede Sprechübung." },
+            { "text": "Näher an den Laptop beugen und lauter sprechen.", "wert": 1, "weiter": "k2b", "rueck": "Hilft ein wenig – aber der Hall der Küche bleibt im Ton." },
+            { "text": "„Geht schon, ist ja nur kurz.“ – und weiterreden, damit die Runde nicht auf dich warten muss.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k2c", "rueck": "Wenn der Ton schlecht ist, geht der Inhalt mit unter – und mit ihm dein Eindruck." }
+          ] },
+        { "id": "k2", "sagt": "Miriam: „Viel besser! Jetzt hört man dich.“ Dr. Albers: „Bitte, Ihr Stand.“",
+          "wahl": [
+            { "text": "Kopf hoch, zur Kamera: „Kurz zum Stand: | Die Liste ist fertig, | die Zahlen kommen bis Freitag.“", "wert": 2, "weiter": "k3", "rueck": "Blick zur Kamera, Pausen nach Sinnschritten, Satzende gehalten. So kommt es an." },
+            { "text": "Auf deine Notizen schauen und vorlesen, den Kopf gesenkt.", "wert": 0, "tendenz": "satzende", "weiter": "k3b", "rueck": "Die Stimme geht in den Tisch, die Satzenden versacken. Gerade dort stand das Wichtigste." }
+          ] },
+        { "id": "k2b", "sagt": "Tarek: „Etwas besser. Aber es hallt noch.“",
+          "wahl": [
+            { "text": "„Ich nehme das Headset. Eine Sekunde.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt." },
+            { "text": "„Dann bleib ich halt ganz nah dran.“", "wert": 1, "weiter": "k3b", "rueck": "Verständlich, aber du sprichst jetzt in die Tastatur – mit Blick nach unten." }
+          ] },
+        { "id": "k2c", "sagt": "Dr. Albers: „Entschuldigung, wir haben gerade nur jedes dritte Wort verstanden.“",
+          "wahl": [
+            { "text": "„Verstanden – ich hole mein Headset und fange noch einmal an.“", "wert": 2, "weiter": "k2", "rueck": "Sachlich und ohne Ausrede. Niemand nimmt dir einen Neustart übel." },
+            { "text": "„Ach, das liegt bestimmt an eurer Leitung.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Vielleicht – aber die anderen verstehen sich untereinander gut. Die Ausrede kostet mehr als der Neustart." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers: „Bis Freitag – welches Datum genau?“",
+          "wahl": [
+            { "text": "Eine kleine Pause, weil der Ton verzögert ankommt, dann: „Freitag, | der zwölfte. | Eins, zwei.“", "wert": 2, "weiter": "ende1", "rueck": "Pause wegen der Verzögerung, Zahl in zwei Formen. Mehr Sorgfalt geht kaum." },
+            { "text": "„Der Zwölfte, glaub ich.“", "wert": 1, "weiter": "ende1", "rueck": "Kommt an – das „glaub ich“ schwächt eine klare Angabe aber unnötig ab." }
+          ] },
+        { "id": "k3b", "sagt": "Miriam: „Kannst du das Letzte noch mal sagen? Das ist weggerutscht.“",
+          "wahl": [
+            { "text": "Aufschauen, das Satzende halten: „Die Zahlen | kommen bis Freitag.“", "wert": 2, "weiter": "k3", "rueck": "Kopf hoch, letztes Wort getragen. Jetzt ist es da." },
+            { "text": "Dasselbe schneller wiederholen, um Zeit zu sparen.", "wert": 0, "tendenz": "tempo", "weiter": "ende2", "rueck": "Schneller ist nicht deutlicher. Miriam gibt auf und schreibt in den Chat." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers: „Danke, klar und knapp. Nächster Punkt.“", "ende": "In der Videokonferenz kommt zuerst die Technik, dann die Sprechweise: Headset, Blick zur Kamera, Pausen, Satzende. Schlechter Ton kostet nicht nur Wörter, sondern auch Eindruck." },
+        { "id": "ende2", "sagt": "Im Chat erscheint: „Kannst du uns das bitte noch mal schreiben?“", "ende": "Kein Drama – aber dein Beitrag ist untergegangen. Beim nächsten Mal: vorher eine Probeaufnahme, Headset auf, Kopf hoch." }
+      ],
+      "prinzipien": ["erst die Technik, dann die Sprechweise", "zur Kamera sprechen, nicht zu den Notizen", "Satzende halten", "nach Fragen eine Pause wegen der Verzögerung"],
+      "transfer": "Wie klingst du in deiner nächsten Videokonferenz? Mach vorher eine kurze Probeaufnahme mit deiner Technik."
+    },
+    {
+      "id": "aussprache-l-53", "bereich": "aussprache", "phase": "g", "umfeld": "gruppe", "faehigkeiten": ["aussprache.tragen", "aussprache.takt", "aussprache.oeffnung"], "stufe": 3,
+      "titel": "Die Ansage beim Hoffest", "figur": "Frau Sommer",
+      "einleitung": "Eine Ansage ohne Mikrofon vor dreißig Leuten. Du übst, die Stimme nach hinten zu tragen, Pausen zu setzen und das Wichtigste zuerst zu sagen.",
+      "lage": "Hoffest in deiner Wohnanlage: gut dreißig Leute, Kinder, Musik aus einem kleinen Lautsprecher. Frau Sommer hat alles organisiert und bittet dich um eine Ansage: Das Essen ist fertig, die Kinder sollen zum Kuchen kommen, Abbau ist um acht.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Frau Sommer: „Sagen Sie doch kurz was? Ich hab heute schon so viel geredet, ich krächze nur noch.“",
+          "wahl": [
+            { "text": "Die Musik leiser stellen lassen, auf die Bank steigen, Blick zur hinteren Reihe.", "wert": 2, "weiter": "k2", "rueck": "Erst Ruhe und Sichtbarkeit, dann sprechen. Wer gesehen wird, wird besser verstanden." },
+            { "text": "Einfach losreden, wo du gerade stehst, mitten im Gewühl – dann hören dich wenigstens die Nächsten gut.", "wert": 0, "tendenz": "lautstaerke", "weiter": "k2b", "rueck": "Gegen Musik und Gespräche kommt keine Stimme an – und wer dich nicht sieht, hört weg." },
+            { "text": "„Lieber nicht, ich bin nicht so laut.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k2c", "rueck": "Lautstärke ist hier gar nicht das Wichtigste. Ruhe im Hof und Pausen tragen weiter als jede Kraft." }
+          ] },
+        { "id": "k2", "sagt": "Es wird ruhiger. Die ersten schauen zu dir.",
+          "wahl": [
+            { "text": "„Liebe Nachbarn! | Das Essen ist fertig. | Die Kinder bitte zum Kuchen | an den Tisch beim Tor.“", "wert": 2, "weiter": "k3", "rueck": "Kurze Sätze, Pausen dazwischen, Wichtigstes zuerst. So kommt es bis zum Zaun." },
+            { "text": "„Also, hallo, kurz, das Essen ist fertig und die Kinder können dann auch zum Kuchen, der steht da hinten, und um acht bauen wir ab.“", "wert": 0, "tendenz": "tempo", "weiter": "k3b", "rueck": "Alles in einem Atemzug – hinten kommt nur ein Brei an." }
+          ] },
+        { "id": "k2b", "sagt": "Nur die Leute direkt neben dir haben etwas gehört. Hinten wird weiter gelacht.",
+          "wahl": [
+            { "text": "Abbrechen, Musik leiser stellen lassen, erhöht hinstellen und neu beginnen.", "wert": 2, "weiter": "k2", "rueck": "Gute Entscheidung: Ein Neustart unter besseren Bedingungen schlägt jedes Schreien." },
+            { "text": "Lauter rufen, noch einmal alles auf einmal.", "wert": 0, "tendenz": "lautstaerke", "weiter": "ende2", "rueck": "Gegen Musik anschreien strengt dich an und kommt trotzdem nicht an." }
+          ] },
+        { "id": "k2c", "sagt": "Frau Sommer: „Ach bitte, Sie schaffen das. Ich halte Ihnen das Glas.“",
+          "wahl": [
+            { "text": "„Gut. Erst die Musik kurz leiser, | dann sage ich es.“", "wert": 2, "weiter": "k2", "rueck": "Mutig – und klug vorbereitet." },
+            { "text": "„Wirklich nicht. Machen Sie lieber.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Verständlich. Aber Frau Sommer krächzt jetzt eine Ansage, die kaum einer hört." }
+          ] },
+        { "id": "k3", "sagt": "Ein Vater ruft von hinten: „Und bis wann geht das Fest?“",
+          "wahl": [
+            { "text": "Dich ihm zuwenden: „Abbau ist um acht. | Um acht Uhr.“", "wert": 2, "weiter": "ende1", "rueck": "Zugewandt, die Zahl zweimal – auch ganz hinten angekommen." },
+            { "text": "„Bis acht ungefähr!“ – über die Schulter.", "wert": 1, "weiter": "ende1", "rueck": "Richtig, aber über die Schulter geht die Stimme in die andere Richtung." }
+          ] },
+        { "id": "k3b", "sagt": "Frau Sommer, leise: „Hinten haben sie nur ‚Essen‘ verstanden.“",
+          "wahl": [
+            { "text": "Noch einmal – Satz für Satz, mit Pausen und Blick nach hinten.", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance genutzt. Jetzt kommen auch Kuchen und Uhrzeit an." },
+            { "text": "„Die werden's schon merken.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Die Kinder stehen später am falschen Tisch." }
+          ] },
+        { "id": "ende1", "sagt": "Die Kinder rennen zum Kuchen. Frau Sommer flüstert: „Danke, das war perfekt.“", "ende": "Ruhe schaffen, sichtbar werden, Wichtigstes zuerst, Pausen nach jedem Satz, zur hintersten Reihe sprechen. So trägt eine Stimme ohne Mikrofon." },
+        { "id": "ende2", "sagt": "Das Essen wird kalt, die Kinder fragen fünfmal nach dem Kuchen.", "ende": "Gegen Lärm hilft nicht Kraft, sondern Vorbereitung: Musik leiser, erhöht stehen, kurze Sätze mit Pausen." }
+      ],
+      "prinzipien": ["erst Ruhe und Sichtbarkeit", "zur hintersten Reihe sprechen", "kurze Sätze mit Pausen", "das Wichtigste zuerst"],
+      "transfer": "Wo musst du manchmal etwas für viele ansagen – im Verein, in der Halle, in der Familie? Wie würdest du die erste Pause setzen?"
+    },
+    {
+      "id": "aussprache-l-54", "bereich": "aussprache", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["aussprache.takt", "aussprache.alltag", "aussprache.konsonanten"], "stufe": 4,
+      "titel": "Die Einarbeitung", "figur": "Lena Brandt",
+      "einleitung": "Wer etwas gut kennt, erklärt es oft zu schnell. Du übst, Schritte mit Pausen zu erklären und nachzufragen, ob alles angekommen ist.",
+      "lage": "Lena ist seit einer Woche im Team, zurückhaltend und genau. Du zeigst ihr, wo die Vorlagen liegen: auf Laufwerk P, im Ordner „Vorlagen“, Unterordner „Angebote“. Sie nickt viel und fragt wenig.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Lena: „Okay. Und wo genau finde ich die Angebote?“",
+          "wahl": [
+            { "text": "„Auf Laufwerk P. | Dann der Ordner ‚Vorlagen‘. | Darin ‚Angebote‘.“ – mit einer Pause nach jedem Schritt.", "wert": 2, "weiter": "k2", "rueck": "Ein Schritt, eine Pause. So kann Lena mitklicken oder mitschreiben." },
+            { "text": "„Auf P, Vorlagen, Angebote, ganz einfach.“", "wert": 0, "tendenz": "tempo", "weiter": "k2b", "rueck": "Für dich ganz einfach – für Lena drei neue Begriffe in einer Sekunde." },
+            { "text": "„Ich zeig's dir am Bildschirm.“ – und schnell klicken, ohne etwas zu sagen.", "wert": 1, "weiter": "k2c", "rueck": "Zeigen ist gut. Ohne Worte und im eigenen Tempo bleibt aber wenig hängen." }
+          ] },
+        { "id": "k2", "sagt": "Lena nickt: „Gut.“",
+          "wahl": [
+            { "text": "„Sag's mir kurz zurück – dann weiß ich, ob ich zu schnell war.“", "wert": 2, "weiter": "k3", "rueck": "Die Rückfrage geht auf deine Kappe, nicht auf ihre. So fällt das Zurücksagen leicht." },
+            { "text": "„Alles klar? Super.“", "wert": 1, "weiter": "k3b", "rueck": "Freundlich – aber auf „Alles klar?“ sagen Neue fast immer Ja." }
+          ] },
+        { "id": "k2b", "sagt": "Lena nickt, schaut aber unsicher auf ihren Bildschirm.",
+          "wahl": [
+            { "text": "„Das war zu schnell. Noch einmal in Ruhe: | Laufwerk P, | Ordner ‚Vorlagen‘, | dann ‚Angebote‘.“", "wert": 2, "weiter": "k2", "rueck": "Selbst bemerkt und neu angesetzt. Genau so." },
+            { "text": "Weitermachen – sie wird schon fragen.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3b", "rueck": "Wer neu und zurückhaltend ist, fragt selten. Ein unsicherer Blick ist schon die Frage." }
+          ] },
+        { "id": "k2c", "sagt": "Lena: „Ähm – kannst du das noch mal machen? Ich hab nicht gesehen, wo du geklickt hast.“",
+          "wahl": [
+            { "text": "Langsam klicken und jeden Schritt dazu sagen, mit kleiner Pause.", "wert": 2, "weiter": "k2", "rueck": "Zeigen und sagen im selben Takt – so bleibt es hängen." },
+            { "text": "Noch einmal klicken, genauso schnell.", "wert": 0, "tendenz": "tempo", "weiter": "k3b", "rueck": "Dasselbe Tempo bringt dasselbe Ergebnis." }
+          ] },
+        { "id": "k3", "sagt": "Lena: „Laufwerk P, Vorlagen, Angebote. Und wen frage ich nach den Preisen?“",
+          "wahl": [
+            { "text": "„Dr. Albers. | Al-bers – mit b wie Berlin.“ – damit sie seine Mail findet.", "wert": 2, "weiter": "ende1", "rueck": "Der Name kommt klar und buchstabiert an. Lena kann ihn gleich ins Adressfeld tippen." },
+            { "text": "„Frag einfach Albers.“", "wert": 1, "weiter": "ende1", "rueck": "Reicht meistens – bei einem neuen Namen hilft eine kleine Bremse." }
+          ] },
+        { "id": "k3b", "sagt": "Am Nachmittag schreibt Lena im Chat: „Sorry, wo waren noch mal die Angebote?“",
+          "wahl": [
+            { "text": "Kurz rübergehen und es Schritt für Schritt erklären – mit Pausen und Rückfrage.", "wert": 2, "weiter": "ende1", "rueck": "Spät, aber gut: Jetzt sitzt es – und Lena traut sich beim nächsten Mal eher zu fragen." },
+            { "text": "Den Pfad kommentarlos in den Chat kopieren.", "wert": 1, "weiter": "ende2", "rueck": "Hilft für heute. Gelernt hat Lena dabei nichts über die Ablage." }
+          ] },
+        { "id": "ende1", "sagt": "Lena findet die Vorlage und lächelt: „Danke, so kann ich mir das merken.“", "ende": "Wer etwas gut kennt, spricht es zu schnell. Ein Schritt, eine Pause, neue Namen kurz gebremst – und am Ende zurücksagen lassen." },
+        { "id": "ende2", "sagt": "Lena fragt in den nächsten Tagen lieber Tarek als dich.", "ende": "Kein Fehler, aber eine verpasste Gelegenheit. Beim nächsten Mal: Pausen nach jedem Schritt und eine Rückfrage, die auf deine Kappe geht." }
+      ],
+      "prinzipien": ["ein Schritt, eine Pause", "neue Namen bremsen oder buchstabieren", "zurücksagen lassen – als Frage an dich selbst", "zeigen und sagen im selben Takt"],
+      "transfer": "Was erklärst du oft, weil du es gut kennst? Wo würdest du beim nächsten Mal die Pausen setzen?"
+    },
+    {
+      "id": "aussprache-l-55", "bereich": "aussprache", "phase": "g", "umfeld": "telefon", "faehigkeiten": ["aussprache.alltag", "aussprache.takt", "aussprache.konsonanten", "aussprache.tragen", "aussprache.oeffnung", "aussprache.hoeren"], "stufe": 4, "sparring": true,
+      "titel": "Sparring: Die Mailbox-Nachricht", "figur": "Herr Petersen",
+      "einleitung": "Das Sparring zum Abschluss der Grundlagen: Name, Anliegen und Rückrufnummer in zwanzig Sekunden – und dann die Rückfrage. Hier kommt alles zusammen.",
+      "lage": "Du musst Herrn Petersen dringend erreichen: Sein Auftrag braucht bis morgen eine Unterschrift. Er geht nicht ran. Die Mailbox piept.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Piep. Die Mailbox nimmt auf.",
+          "wahl": [
+            { "text": "„Guten Tag, Herr Petersen, | hier ist {name}.“ – kleine Pause.", "wert": 2, "weiter": "k2", "rueck": "Gruß, Pause, Name: So weiß er schon nach zwei Sekunden, wer anruft." },
+            { "text": "„Ja, ich bin's, rufen Sie mal zurück.“", "wert": 0, "tendenz": "tempo", "weiter": "k2b", "rueck": "„Ich bin's“ kennt nur, wer deine Stimme sicher erkennt – am Telefon und bei schlechtem Gehör kaum jemand." },
+            { "text": "Auflegen und es später noch einmal versuchen – mit einem echten Menschen am Telefon klappt es besser.", "wert": 1, "weiter": "k2c", "rueck": "Manchmal sinnvoll – aber die Zeit drängt, und die Nachricht wäre schon da." }
+          ] },
+        { "id": "k2", "sagt": "Weiter mit dem Anliegen.",
+          "wahl": [
+            { "text": "„Es geht um Ihren Auftrag. | Wir brauchen bis morgen | Ihre Unterschrift.“", "wert": 2, "weiter": "k3", "rueck": "Ein Satz, zwei Pausen, alles drin." },
+            { "text": "„Es geht um den Auftrag, da fehlt noch was, das müssten wir dann bis morgen irgendwie noch klären.“", "wert": 1, "weiter": "k3", "rueck": "Kommt an, aber umständlich: Was genau fehlt, bleibt offen." }
+          ] },
+        { "id": "k2b", "sagt": "Dir fällt ein: Er weiß gar nicht, wer „ich“ ist.",
+          "wahl": [
+            { "text": "Sofort ergänzen: „Hier ist {name}, | von Ihrem Lieferanten.“", "wert": 2, "weiter": "k2", "rueck": "Gerettet – noch in derselben Nachricht." },
+            { "text": "Weiterreden, er erkennt die Stimme schon.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3", "rueck": "Riskant. Auf der Mailbox klingt jede Stimme fremder als im Gespräch." }
+          ] },
+        { "id": "k2c", "sagt": "Eine Stunde später: wieder die Mailbox. Die Zeit wird knapp.",
+          "wahl": [
+            { "text": "Diesmal sprechen: „Guten Tag, Herr Petersen, | hier ist {name}.“", "wert": 2, "weiter": "k2", "rueck": "Jetzt aber. Gut." },
+            { "text": "Wieder auflegen und eine kurze Mail schreiben.", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Herr Petersen liest seine Mails selten am selben Tag. Die Mailbox hätte ihn erreicht." }
+          ] },
+        { "id": "k3", "sagt": "Jetzt die Nummer.",
+          "wahl": [
+            { "text": "„Meine Nummer zum Mitschreiben: | null – vier – null, | sechs – sechs, | neun – sechs – neun, | eins – eins – vier. | Noch einmal: …“", "wert": 2, "weiter": "k4", "rueck": "Angekündigt, in Gruppen, wiederholt. Die Mailbox-Formel sitzt." },
+            { "text": "„Meine Nummer ist null-vier-null-sechs-sechs-neun-sechs-neun-eins-eins-vier.“ – in einem Zug.", "wert": 0, "tendenz": "tempo", "weiter": "k4b", "rueck": "Elf Ziffern ohne Luft. Das kann niemand mitschreiben – auch nicht beim zweiten Anhören." }
+          ] },
+        { "id": "k4", "sagt": "Zum Schluss.",
+          "wahl": [
+            { "text": "„Danke, Herr Petersen. | {name}.“ – mit gehaltenem Satzende.", "wert": 2, "weiter": "k5", "rueck": "Der Name am Ende rahmt die Nachricht. Sauber." },
+            { "text": "„Okay, dann tschüss …“ – leiser werdend.", "wert": 1, "tendenz": "satzende", "weiter": "k5", "rueck": "Freundlich, aber das Ende versackt. Der Name zum Schluss hätte gesichert, dass er weiß, wen er zurückruft." }
+          ] },
+        { "id": "k4b", "sagt": "Nach dem Auflegen denkst du: Das war sehr schnell.",
+          "wahl": [
+            { "text": "Noch einmal anrufen und nur die Nummer in Gruppen nachsprechen.", "wert": 2, "weiter": "k5", "rueck": "Stark: Fehler selbst bemerkt und behoben." },
+            { "text": "Es dabei lassen.", "wert": 0, "tendenz": "vermeiden", "weiter": "k5b", "rueck": "Eine Nachricht ohne verständliche Nummer ist fast keine Nachricht." }
+          ] },
+        { "id": "k5", "sagt": "Am Nachmittag ruft Herr Petersen über die Zentrale an: „Ich hab Ihre Nachricht. Nur am Ende hat es gerauscht – waren das zwei Einsen oder eine?“",
+          "wahl": [
+            { "text": "„Zwei Einsen, dann die Vier: | eins – eins – vier.“", "wert": 2, "weiter": "ende1", "rueck": "Anders gesagt statt nur lauter: Jetzt ist es eindeutig." },
+            { "text": "„ZWEI!“", "wert": 1, "weiter": "ende1", "rueck": "Lauter kommt meist an – die Zahl anders zu sagen ist aber sicherer und klingt freundlicher." }
+          ] },
+        { "id": "k5b", "sagt": "Am nächsten Morgen ruft Herr Petersen an: „Ich konnte Ihre Nummer nicht verstehen.“",
+          "wahl": [
+            { "text": "„Das tut mir leid. Ich sage sie Ihnen in Ruhe: | null – vier – null, | sechs – sechs, | neun – sechs – neun, | eins – eins – vier.“", "wert": 2, "weiter": "ende3", "rueck": "Gut repariert – nur einen Tag zu spät." },
+            { "text": "„Die steht doch auf unserer Webseite.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Das schiebt die Arbeit zu ihm – und klingt nach Ausrede." }
+          ] },
+        { "id": "ende1", "sagt": "Herr Petersen: „Wunderbar, notiert. Die Unterschrift kommt heute noch.“", "ende": "Name – Anliegen – Nummer in Gruppen, zweimal – Name. Und bei der Rückfrage: die Zahl anders sagen statt nur lauter. Das ist die Grundausstattung des Klar-Modus." },
+        { "id": "ende2", "sagt": "Der Auftrag bleibt liegen. Am Freitag fragt Dr. Albers nach.", "ende": "Eine Mailbox-Nachricht ist zwanzig Sekunden Klarheit: Name, Anliegen, Nummer in Gruppen, Name. Beim nächsten Mal sprichst du sie – und bremst vor der Nummer." },
+        { "id": "ende3", "sagt": "Die Unterschrift kommt – einen Tag später.", "ende": "Am Ende gut, aber teuer. Die Nummer gleich beim ersten Mal in Gruppen und zweimal – das spart den zweiten Anruf." }
+      ],
+      "prinzipien": ["Name an Anfang und Ende", "das Anliegen in einem Satz", "die Nummer ankündigen, in Gruppen, zweimal", "bei Rückfragen anders sagen statt lauter"],
+      "transfer": "Wen rufst du diese Woche an, der vielleicht nicht rangeht? Leg dir deine Mailbox-Nachricht vorher in vier Teilen zurecht."
+    }
+  ]
+}

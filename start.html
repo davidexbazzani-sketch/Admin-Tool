@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;" />
+    <title>IT Admin Tool</title>
+    <!--
+      Startseite NUR für das Hauptfenster (Unterfenster laden weiter index.html).
+      Das Logo steht direkt im HTML; src/start.ts lässt es EINMAL zeichnen und lädt erst dann das
+      große Bundle (sonst erschiene das Fenster erst, wenn alles fertig ist — gemessen ~6 s).
+      Animiert werden ausschließlich transform/opacity von HTML-Elementen: das rechnet der
+      Compositor-Thread (Grafikkarte) — flüssig, auch während der Hauptthread lädt, und ohne ihn zu bremsen.
+      Ausgeblendet wird aus src/utils/startLogo.ts, sobald das Tool bereit ist (keine Mindestdauer).
+      Logo-Vorlage: resources/it-admin-tool-logo.html · Schrift: Space Grotesk (OFL, public/fonts/).
+    -->
+    <style>
+      @font-face { font-family: 'Space Grotesk ITA'; font-style: normal; font-weight: 400; font-display: block;
+        src: url('./fonts/space-grotesk-latin-400-normal.woff2') format('woff2'); }
+      @font-face { font-family: 'Space Grotesk ITA'; font-style: normal; font-weight: 600; font-display: block;
+        src: url('./fonts/space-grotesk-latin-600-normal.woff2') format('woff2'); }
+
+      #start-logo {
+        position: fixed; inset: 0; z-index: 2147483000;
+        display: flex; align-items: center; justify-content: center;
+        background: #0B1220; overflow: hidden;
+        pointer-events: none; user-select: none;
+        /* Fenster hat keinen Rahmen und hier noch keine Titelleiste → solange das Logo steht, daran verschiebbar */
+        -webkit-app-region: drag;
+        font-family: 'Space Grotesk ITA', 'Segoe UI', system-ui, sans-serif;
+        transition: opacity .35s ease;
+        /* Rückfall ganz ohne JavaScript: nach 30 s von selbst weg */
+        animation: sl-notaus .4s 30s forwards;
+      }
+      #start-logo.weg { opacity: 0; -webkit-app-region: no-drag; }
+      #start-logo.weg .sl-buehne { transform: scale(1.04); }
+
+      /* Punktraster wie im Logo, wandert langsam; zum Rand hin abgedunkelt (eigene Ebene statt
+         mask-image, damit jede bewegte Ebene sicher im Compositor bleibt) */
+      .sl-raster-rahmen { position: absolute; inset: 0; overflow: hidden; animation: sl-ein .7s .05s ease-out both; }
+      .sl-raster {
+        position: absolute; inset: -48px;
+        background-image: radial-gradient(rgba(148,163,184,.16) 1px, transparent 1px);
+        background-size: 24px 24px;
+        will-change: transform;
+        animation: sl-drift 9s linear infinite;
+      }
+      .sl-rand {
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse 65% 65% at 50% 50%, rgba(11,18,32,0) 0%, rgba(11,18,32,.5) 50%, #0B1220 90%);
+      }
+
+      .sl-buehne {
+        position: relative; display: flex; flex-direction: column; align-items: center;
+        font-size: clamp(30px, 4.4vw, 58px);
+        transition: transform .35s ease;
+      }
+      .sl-lockup { display: flex; align-items: center; gap: .54em; }
+
+      /* Symbol: erst mittig, rückt dann nach links, wenn der Schriftzug kommt */
+      .sl-icon {
+        position: relative; width: 2.07em; height: 2.07em; flex: none; z-index: 1;
+        animation: sl-rueck .4s .4s cubic-bezier(.65,0,.35,1) both;
+      }
+      .sl-schein {
+        position: absolute; left: 50%; top: 50%;
+        width: 3.6em; height: 3.6em; margin: -1.8em 0 0 -1.8em; border-radius: 50%;
+        background: radial-gradient(circle, rgba(34,211,238,.26) 0%, rgba(34,211,238,.09) 42%, rgba(34,211,238,0) 70%);
+        will-change: transform, opacity;
+        animation: sl-ein .4s .25s ease-out both, sl-atmen 2.6s .9s ease-in-out infinite alternate;
+      }
+      /* Zeitablauf (gemessen 17.11.2026 auf einem schnellen PC): erstes Bild ~0,1 s, Fenster
+         sichtbar ~0,5 s, Anmeldung bereit ~0,95 s. Darum baut sich das Logo in ~1,1 s auf — auf
+         langsameren PCs bzw. bei langsamem Netz läuft danach die Schleife (Ladelinie, Cursor, Schein).
+         Das Laden wartet NIE auf die Animation (keine Mindestdauer). */
+      .sl-pop { position: absolute; inset: 0; animation: sl-pop .35s .1s cubic-bezier(.34,1.56,.64,1) both; }
+      .sl-ebene { position: absolute; inset: 0; }
+      .sl-ebene svg { display: block; width: 100%; height: 100%; }
+      .sl-w1 { animation: sl-winkel .26s .24s cubic-bezier(.2,.8,.2,1) both; }
+      .sl-w2 { animation: sl-winkel .26s .31s cubic-bezier(.2,.8,.2,1) both; }
+      .sl-cur {
+        transform-origin: 60.8% 66.7%; will-change: transform, opacity;
+        animation: sl-cur-auf .16s .45s cubic-bezier(.2,.8,.2,1) both, sl-blink 1.1s 1s steps(1, end) infinite;
+      }
+
+      /* Schriftzug fährt aus einer Maske hoch — erst, wenn das Symbol fast an seinem Platz ist
+         (sonst verdeckt es beim Einrücken kurz das „I“) */
+      .sl-wort { display: flex; align-items: flex-end; gap: .25em; letter-spacing: -.025em; line-height: 1; white-space: nowrap; }
+      .sl-maske { display: inline-block; overflow: hidden; padding: .1em 0 .16em; margin: -.1em 0 -.16em; }
+      .sl-maske > span { display: inline-block; animation: sl-hoch .4s cubic-bezier(.2,.8,.2,1) both; }
+      .sl-stark { font-weight: 600; color: #F1F5F9; animation-delay: .62s !important; }
+      .sl-leicht { font-weight: 400; color: #94A3B8; animation-delay: .7s !important; }
+
+      /* Ladelinie: läuft, bis das Tool bereit ist */
+      .sl-linie {
+        position: relative; align-self: stretch; height: 2px; margin-top: .95em; border-radius: 2px;
+        background: rgba(148,163,184,.14); overflow: hidden;
+        animation: sl-ein .35s .85s ease-out both;
+      }
+      .sl-linie > span {
+        position: absolute; top: 0; bottom: 0; left: 0; width: 38%;
+        background: linear-gradient(90deg, rgba(34,211,238,0), #22D3EE 50%, rgba(34,211,238,0));
+        transform: translateX(-100%); will-change: transform;
+        animation: sl-lauf 1.5s .85s cubic-bezier(.45,0,.55,1) infinite;
+      }
+
+      @keyframes sl-ein     { from { opacity: 0; } }
+      @keyframes sl-drift   { to   { transform: translate3d(24px, 24px, 0); } }
+      @keyframes sl-pop     { from { transform: scale(.6); opacity: 0; } }
+      @keyframes sl-rueck   { from { transform: translateX(3.3em); } }
+      @keyframes sl-winkel  { from { transform: translateX(-12%); opacity: 0; } }
+      @keyframes sl-cur-auf { from { transform: scaleX(0); } }
+      @keyframes sl-blink   { 0% { opacity: 1; } 50% { opacity: 0; } }
+      @keyframes sl-atmen   { to   { transform: scale(1.1); opacity: .55; } }
+      @keyframes sl-hoch    { from { transform: translateY(115%); opacity: 0; } }
+      @keyframes sl-lauf    { from { transform: translateX(-100%); } to { transform: translateX(265%); } }
+      @keyframes sl-notaus  { to   { opacity: 0; visibility: hidden; } }
+
+      @media (prefers-reduced-motion: reduce) {
+        #start-logo * { animation: none !important; }
+        .sl-linie > span { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="start-logo" role="status" aria-label="IT Admin Tool wird geladen">
+      <div class="sl-raster-rahmen"><div class="sl-raster"></div><div class="sl-rand"></div></div>
+      <div class="sl-buehne">
+        <div class="sl-lockup">
+          <div class="sl-icon">
+            <div class="sl-schein"></div>
+            <div class="sl-pop">
+              <div class="sl-ebene"><svg viewBox="0 0 120 120" aria-hidden="true"><rect x="1" y="1" width="118" height="118" rx="28" fill="#131D33" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1.5"/></svg></div>
+              <div class="sl-ebene sl-w1"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M29 40 L49 60 L29 80" fill="none" stroke="#22D3EE" stroke-opacity="0.35" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="sl-ebene sl-w2"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M49 40 L69 60 L49 80" fill="none" stroke="#22D3EE" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="sl-ebene sl-cur"><svg viewBox="0 0 120 120" aria-hidden="true"><rect x="73" y="75" width="24" height="10" rx="3" fill="#F1F5F9"/></svg></div>
+            </div>
+          </div>
+          <div class="sl-wort">
+            <span class="sl-maske"><span class="sl-stark">IT Admin</span></span>
+            <span class="sl-maske"><span class="sl-leicht">Tool</span></span>
+          </div>
+        </div>
+        <div class="sl-linie"><span></span></div>
+      </div>
+    </div>
+    <!-- start.ts lässt erst das Logo zeichnen und lädt dann das Tool (src/main.tsx) nach -->
+    <script type="module" src="/src/start.ts"></script>
+  </body>
+</html>

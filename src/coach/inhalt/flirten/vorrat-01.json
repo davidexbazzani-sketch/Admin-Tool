@@ -1,0 +1,391 @@
+{
+  "eintraege": [
+    { "art": "auswahl", "kopf": { "id": "flirten-v-0001", "faehigkeit": "flirten.haltung", "stufe": 2, "kanal": "wissen" },
+      "frage": "Woran erkennst du am ehesten, ob eine Einladung Druck macht?",
+      "antworten": [
+        { "text": "Daran, ob du dabei freundlich lächelst und einen netten Ton triffst.", "wert": 0, "warum": "Druck kann sehr freundlich klingen. Der Ton sagt wenig darüber, ob ein Nein leicht fällt." },
+        { "text": "Daran, wie leicht der andere Nein sagen kann.", "wert": 2, "warum": "Das ist der Kern: Gibt es einen Ausweg, oder wird ein Nein schwer gemacht?" },
+        { "text": "Daran, wie oft du schon gefragt hast.", "wert": 1, "warum": "Ein guter Hinweis – Nachhaken ist Druck. Aber schon die erste Frage kann drängen, wenn sie keinen Ausweg lässt." },
+        { "text": "Daran, ob der andere schnell und ohne langes Nachdenken Ja sagt.", "wert": 0, "warum": "Ein schnelles Ja kann auch ein Ja aus Verlegenheit sein. Es beweist nicht, dass kein Druck da war." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "flirten-v-0002", "faehigkeit": "flirten.haltung", "stufe": 2, "kanal": "wissen" },
+      "frage": "Eine Bekannte aus dem Yogakurs antwortet auf deine Einladung zum Frühstück: „Diese Woche ist echt voll.“ Was ist das Beste?",
+      "antworten": [
+        { "text": "Nächste Woche wieder fragen – und die Woche drauf noch einmal, bis es passt.", "wert": 0, "tendenz": "beharren", "warum": "Ein vages „ist voll“ ohne Gegenvorschlag ist oft eine höfliche Absage. Wiederholtes Fragen zwingt sie, deutlicher zu werden." },
+        { "text": "„Kein Ding! Falls du mal Lust hast, sag Bescheid.“", "wert": 2, "warum": "Freundlich, und der nächste Schritt liegt bei ihr. Will sie, meldet sie sich." },
+        { "text": "Fragen, welcher Tag ihr denn genau passen würde.", "wert": 0, "tendenz": "nachhaken", "warum": "Gut gemeint – aber ein vages „ist voll“ ist oft eine höfliche Absage, und ein Zögern gilt. Die Nachfrage bringt sie in die Klemme." },
+        { "text": "Beleidigt nichts mehr sagen und sie im Kurs übersehen.", "wert": 0, "tendenz": "gekraenkt", "warum": "Enttäuschung ist verständlich. Kälte macht ihr Nein im Nachhinein schwer." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "flirten-v-0003", "faehigkeit": "flirten.haltung", "stufe": 3, "kanal": "wissen" },
+      "frage": "Im Tanzkurs habt ihr oft zusammen getanzt. Heute sagt die Person: „Heute lieber nicht, sorry.“ Was tust du?",
+      "antworten": [
+        { "text": "„Klar!“ – und jemand anderen fragen oder eine Pause machen.", "wert": 2, "warum": "Ihr Nein ist ein Nein für heute. Du nimmst es leicht und machst dir den Abend trotzdem schön." },
+        { "text": "Fragen, ob es an dir liegt, damit du es beim nächsten Mal besser machen kannst.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Ein Nein braucht keinen Grund – und sie soll dich nicht trösten müssen." },
+        { "text": "Den Rest des Abends am Rand stehen und hoffen, dass sie später doch noch kommt.", "wert": 1, "warum": "Du respektierst ihr Nein. Den Abend darfst du dir aber ruhig selbst schön machen." },
+        { "text": "In der nächsten Runde einfach wieder fragen, vielleicht passt es dann.", "wert": 0, "tendenz": "beharren", "warum": "„Heute lieber nicht“ gilt für heute. Nochmal fragen heißt, sie zweimal Nein sagen zu lassen." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "flirten-v-0004", "faehigkeit": "flirten.haltung", "stufe": 4, "kanal": "wissen" },
+      "frage": "Auf einer Party flirtest du mit jemandem. Die Person ist deutlich betrunken, schwankt und schlägt vor, mit zu dir zu gehen. Was ist richtig?",
+      "antworten": [
+        { "text": "Mitgehen – sie hat es ja selbst vorgeschlagen.", "wert": 0, "warum": "Wer deutlich betrunken ist, kann nicht frei zustimmen. Ein Vorschlag in diesem Zustand ist keine Grundlage." },
+        { "text": "Noch einen Drink holen und schauen, wie sich der Abend entwickelt.", "wert": 0, "tendenz": "druck", "warum": "Mehr Alkohol macht die Lage nicht klarer, sondern gefährlicher." },
+        { "text": "Freundlich ablehnen und dafür sorgen, dass sie gut nach Hause kommt.", "wert": 2, "warum": "Rücksicht vor Gelegenheit. Ob da mehr ist, könnt ihr nüchtern klären." },
+        { "text": "Deine Nummer dalassen: „Meld dich, wenn du Lust hast – nüchtern.“", "wert": 1, "warum": "Respektvoll und klar. Wichtig ist dazu, dass sie gut heimkommt – mit ihren Freunden oder einem Taxi." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "flirten-v-0005", "faehigkeit": "flirten.haltung", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Lässt das Raum für ein Nein – oder macht es ein Nein schwer?",
+      "faecher": ["lässt Raum fürs Nein", "macht ein Nein schwer"],
+      "karten": [
+        { "text": "„Wenn du keine Lust hast, ist das völlig okay.“", "fach": 0 },
+        { "text": "Vor allen Freunden laut fragen, damit alle zuhören", "fach": 1 },
+        { "text": "Deine Nummer geben und sagen: „Meld dich, wenn du magst.“", "fach": 0 },
+        { "text": "„Ich hab schon für uns beide reserviert.“", "fach": 1 },
+        { "text": "Im Aufzug nach einem Date fragen", "fach": 1 },
+        { "text": "Nach dem Kurs fragen und bei Zögern sofort „Alles gut“ sagen", "fach": 0 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "flirten-v-0006", "faehigkeit": "flirten.haltung", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Ein leises Nein – oder noch offen?",
+      "faecher": ["eher ein leises Nein", "eher offen – noch kein Nein"],
+      "karten": [
+        { "text": "„Vielleicht ein andermal“ – ohne Gegenvorschlag", "fach": 0 },
+        { "text": "Setzt die Kopfhörer wieder auf", "fach": 0 },
+        { "text": "„Samstag geht nicht, aber Sonntag?“", "fach": 1 },
+        { "text": "Antwortet nur noch mit einem Wort", "fach": 0 },
+        { "text": "Fragt dich etwas zurück und lacht", "fach": 1 },
+        { "text": "Schaut zu den Freunden und tritt einen Schritt zurück", "fach": 0 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "flirten-v-0007", "faehigkeit": "flirten.haltung", "stufe": 4, "kanal": "wissen" },
+      "auftrag": "Fair – oder rote Linie?",
+      "faecher": ["fair", "rote Linie"],
+      "karten": [
+        { "text": "Ein Kompliment zu einer Idee", "fach": 0 },
+        { "text": "Ein Kompliment mit eingebautem Stich, damit der andere sich bemüht", "fach": 1 },
+        { "text": "Eine Einladung mit Ausweg", "fach": 0 },
+        { "text": "„Ich muss eigentlich gleich los“ – erfunden, damit es schnell geht", "fach": 1 },
+        { "text": "Jemanden gezielt von seinen Freunden weglotsen", "fach": 1 },
+        { "text": "Sagen, dass dir das Gespräch gefällt", "fach": 0 },
+        { "text": "Immer wieder nachschenken, damit ein Nein leiser wird", "fach": 1 }
+      ] },
+    { "art": "kunstgriff", "kopf": { "id": "flirten-v-0008", "faehigkeit": "flirten.haltung", "stufe": 3, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Auf einer Party sagt jemand zu deiner Freundin: „Schöne Haare. Echt, oder hast du da nachgeholfen?“ Dann grinst er erwartungsvoll.",
+      "frage": "Was steckt dahinter – und was hilft?",
+      "antworten": [
+        { "text": "Ein ehrliches Kompliment, etwas ungeschickt verpackt – einfach annehmen und Danke sagen.", "wert": 0, "warum": "Der zweite Teil ist der Punkt: Er stellt das Lob infrage, damit sie sich rechtfertigt." },
+        { "text": "Verdeckte Abwertung – den Stich benennen oder stehen lassen.", "wert": 2, "warum": "Die Masche will verunsichern. Wer sie erkennt, muss nicht um Anerkennung kämpfen." },
+        { "text": "Ein schiefes Kompliment – überhören.", "wert": 1, "warum": "Überhören geht. Zu wissen, dass es eine Masche ist, nimmt dem Stich zusätzlich die Wirkung." },
+        { "text": "Er ist bestimmt nur unsicher – deine Freundin sollte nett zu ihm sein, damit er sich traut.", "wert": 0, "warum": "Vielleicht ist er unsicher. Das ändert nichts daran, dass der Satz abwertet – und schützen geht vor." }
+      ],
+      "erklaerung": "„Negging“ stammt aus der Szene der Verführungsratgeber: ein Lob mit eingebautem Haken, damit der andere sich um Anerkennung bemüht. Belege für die Wirkung gibt es nicht. Abwehr: den Haken benennen („Das war jetzt ein halbes Kompliment“) oder stehen lassen – und gehen, wenn es so weitergeht." },
+    { "art": "kunstgriff", "kopf": { "id": "flirten-v-0009", "faehigkeit": "flirten.haltung", "stufe": 3, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Im Club redet jemand seit einer Weile mit deinem Freund. Er sagt immer wieder: „Hier ist es zu laut, komm, wir gehen raus – nur wir zwei.“ Dein Freund schaut dabei zu dir herüber.",
+      "frage": "Welche Masche könnte das sein – und was tust du?",
+      "antworten": [
+        { "text": "Aus der Gruppe holen – hingehen und fragen: „Alles gut? Wir wollten gleich los.“", "wert": 2, "warum": "Du gibst deinem Freund einen leichten Ausweg und den Rückhalt der Gruppe." },
+        { "text": "Gar nichts – er ist erwachsen und kann selbst entscheiden, was er will.", "wert": 1, "warum": "Er kann entscheiden, ja. Sein Blick zu dir ist aber oft eine stille Frage – ein kurzes Nachhaken schadet nicht." },
+        { "text": "Ein normales Flirtgespräch – sich lieber nicht einmischen und den beiden ihren Raum lassen.", "wert": 0, "warum": "Rausgehen kann harmlos sein. Das wiederholte Drängen weg von der Gruppe ist ein Warnzeichen." },
+        { "text": "Dem anderen laut sagen, er soll abhauen.", "wert": 0, "tendenz": "angreifen", "warum": "Das eskaliert und nimmt deinem Freund das Wort. Erst fragen, was er will." }
+      ],
+      "erklaerung": "Wer jemanden gezielt von Freunden weglotst, nimmt ihm Rückhalt und den leichten Ausweg. Unter Freunden hilft: aufeinander achten, kurz nachfragen, gemeinsam gehen." },
+    { "art": "kunstgriff", "kopf": { "id": "flirten-v-0010", "faehigkeit": "flirten.haltung", "stufe": 4, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Nach einem Abend in der Bar willst du heimgehen. Der Mann, mit dem du dich unterhalten hast, sagt: „Ich hab dir den ganzen Abend die Drinks ausgegeben. Da kannst du doch jetzt nicht einfach gehen.“",
+      "frage": "Was passiert hier – und was hilft?",
+      "antworten": [
+        { "text": "Er hat ja wirklich viel ausgegeben – noch eine Stunde bleiben ist das Mindeste.", "wert": 0, "tendenz": "nachgeben", "warum": "Ein Getränk ist ein Geschenk, keine Anzahlung. Niemand schuldet dafür Zeit oder Nähe." },
+        { "text": "Schuld erzeugen – „Danke für den Abend. Ich gehe jetzt.“ Und gehen.", "wert": 2, "warum": "Freundlich, klar, ohne Verhandlung. Die Rechnung, die er aufmacht, gibt es nicht." },
+        { "text": "Anbieten, ihm die Drinks zurückzuzahlen, damit ihr quitt seid.", "wert": 1, "warum": "Kann die Lage entschärfen. Nötig ist es nicht – und es bestätigt die falsche Rechnung." },
+        { "text": "Sich lange entschuldigen und erklären, warum du wirklich müde bist und morgen früh arbeitest.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Gehen braucht keine Begründung. Lange Erklärungen laden zum Weiterverhandeln ein." }
+      ],
+      "erklaerung": "Schuld und Mitleid zu erzeugen, um jemanden festzuhalten, ist eine rote Linie. Aus Freundlichkeit wird eine Forderung. Abwehr: danken, gehen – und Freunden Bescheid sagen, wenn es unangenehm wird." },
+    { "art": "szene", "kopf": { "id": "flirten-v-0011", "faehigkeit": "flirten.haltung", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Im Fitnessstudio trainiert ein Mann an der Hantelbank, mit großen Kopfhörern, den Blick auf seine Übung. Du findest ihn attraktiv und siehst ihn jede Woche hier.",
+      "frage": "Was passt am besten?",
+      "antworten": [
+        { "text": "Warten, bis er eine Pause macht, und ihn dann kurz antippen.", "wert": 0, "tendenz": "ortblind", "warum": "Kopfhörer und Konzentration sagen: Ich will gerade allein sein. Antippen ohne Einladung geht zu weit." },
+        { "text": "Ihn in Ruhe trainieren lassen.", "wert": 2, "warum": "Die Zeichen sind klar: Er ist für sich. Ein Ort, an dem ihr euch öfter seht, bietet auch andere Gelegenheiten." },
+        { "text": "Ihn so lange anschauen, bis er es merkt und von sich aus die Kopfhörer abnimmt.", "wert": 0, "tendenz": "druck", "warum": "Anstarren macht Druck, auch ohne Worte." },
+        { "text": "Freundlich nicken, falls sich eure Blicke treffen – mehr nicht.", "wert": 1, "warum": "Ein Nicken ist harmlos. Wichtig ist, nichts daraus zu machen, wenn er nicht reagiert." }
+      ] },
+    { "art": "szene", "kopf": { "id": "flirten-v-0012", "faehigkeit": "flirten.haltung", "stufe": 4, "kanal": "wissen" },
+      "beschreibung": "Du arbeitest seit zwei Wochen Lena Brandt ein, die neue Kollegin. Sie ist zurückhaltend, genau – und du findest sie sehr sympathisch. Sie fragt dich oft um Rat.",
+      "frage": "Was ist hier richtig?",
+      "antworten": [
+        { "text": "Kollegial und hilfsbereit bleiben – solange du sie einarbeitest, ist ein Flirt fehl am Platz.", "wert": 2, "warum": "Sie ist von dir abhängig, und ein Nein wäre für sie schwer. Bei der Arbeit gilt besondere Zurückhaltung." },
+        { "text": "Sie nach Feierabend zu einem Bier einladen – das ist ja dann schon privat.", "wert": 0, "tendenz": "ortblind", "warum": "Die Abhängigkeit endet nicht um fünf. Sie müsste dir morgen wieder begegnen – und dich um Rat fragen." },
+        { "text": "Abwarten, bis die Einarbeitung vorbei ist, und dann prüfen, ob es von ihr Zeichen gibt.", "wert": 1, "warum": "Zurückhaltung jetzt ist richtig. Auch danach gilt: bei der Arbeit Freundlichkeit nicht überdeuten." },
+        { "text": "Ihre vielen Fragen als Zeichen deuten und es vorsichtig ansprechen.", "wert": 0, "tendenz": "ueberdeuten", "warum": "Sie fragt, weil du sie einarbeitest. Das ist Arbeit, kein Signal." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "flirten-v-0013", "faehigkeit": "flirten.haltung", "stufe": 3, "kanal": "wissen" },
+      "frage": "Ordne die Einladungen von „leicht abzulehnen“ bis „schwer abzulehnen“.",
+      "eintraege": [
+        { "text": "„Hast du Lust auf einen Kaffee? Wenn nicht, ist das völlig okay.“", "warum": "Konkret und mit Ausweg im selben Satz." },
+        { "text": "„Hast du Lust auf einen Kaffee?“", "warum": "Klar und freundlich – ein Ausweg wäre noch leichter." },
+        { "text": "„Wir trinken doch noch einen Kaffee, oder?“", "warum": "Die Frage setzt das Ja schon voraus." },
+        { "text": "„Ich hab uns schon einen Tisch reserviert.“", "warum": "Hier muss der andere gegen eine fertige Planung Nein sagen." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "flirten-v-0014", "faehigkeit": "flirten.haltung", "stufe": 4, "kanal": "wissen" },
+      "frage": "Ihr habt euch online kennengelernt und trefft euch zum ersten Mal. Ordne die Orte von gut bis ungünstig.",
+      "eintraege": [
+        { "text": "Ein belebtes Café am Nachmittag", "warum": "Öffentlich, leicht zu gehen, mit Zeit zum Reden." },
+        { "text": "Ein Spaziergang im Stadtpark, tagsüber", "warum": "Auch gut. Etwas weniger leicht zu beenden als ein Café." },
+        { "text": "Eine Bar spätabends", "warum": "Laut, Alkohol, später Heimweg – nicht ideal für ein erstes Kennenlernen." },
+        { "text": "Bei dir zu Hause", "warum": "Für viele zu viel und unsicher. Erst kennenlernen, dann einladen." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "flirten-v-0015", "faehigkeit": "flirten.haltung", "stufe": 2, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "„Hast du Lust auf einen Kaffee am Samstag? …“ Welcher Zusatz macht die Einladung am leichtesten ablehnbar?",
+      "antworten": [
+        { "text": "„Ich hab schon nachgeschaut, wo es den besten gibt.“", "wert": 0, "warum": "Vorfreude ist schön – hier klingt sie nach fertiger Planung." },
+        { "text": "„Ich würde mich echt total freuen, bitte sag Ja!“", "wert": 1, "warum": "Ehrliche Freude ist gut. Das Bitten macht ein Nein aber schwerer." },
+        { "text": "„Wenn nicht, ist das völlig in Ordnung.“", "wert": 2, "warum": "Der Ausweg steht gleich dabei. So wird ein Ja freiwillig." },
+        { "text": "„Du hast doch eh nichts vor.“", "wert": 0, "tendenz": "druck", "warum": "Das nimmt dem anderen den Grund für ein Nein vorweg." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "flirten-v-0016", "faehigkeit": "flirten.haltung", "stufe": 3, "kanal": "wissen" },
+      "frage": "Du fragst nach einem Treffen. Die Antwort: „Hm, ich bin mir nicht sicher.“ Was sagst du am besten?",
+      "antworten": [
+        { "text": "„Alles gut – kein Druck.“", "wert": 2, "warum": "Du nimmst das Zögern ernst und machst es leicht. Will die Person, meldet sie sich." },
+        { "text": "„Was müsste denn passieren, damit du dir sicher bist?“", "wert": 0, "tendenz": "verhandeln", "warum": "Aus Zögern wird eine Verhandlung. Unsicherheit ist schon eine Antwort." },
+        { "text": "„Komm schon, einmal ist keinmal – du kannst ja jederzeit wieder gehen.“", "wert": 0, "tendenz": "beharren", "warum": "Überreden ist Druck, auch mit Lächeln." },
+        { "text": "„Okay … schade.“", "wert": 1, "warum": "Ehrlich, das Zögern ist angenommen. Etwas schwer im Ton – „kein Druck“ wäre leichter." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "flirten-v-0017", "faehigkeit": "flirten.haltung", "stufe": 3, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach die Nachricht so, dass ein Nein leicht fällt – und dein Interesse trotzdem klar bleibt.",
+      "vorlage": "„Ich hab für Freitag schon zwei Kinokarten gekauft – du kommst doch mit?“",
+      "kriterien": ["keine fertige Planung, die verpflichtet", "Ausweg im selben Satz", "klarer Vorschlag"],
+      "muster": ["„Freitag läuft der neue Film im Kino am Markt. Hast du Lust mitzukommen? Wenn nicht, ist das total okay.“", "„Ich würde Freitag gern ins Kino – magst du mit? Sag ruhig ab, wenn's nicht passt.“"] },
+    { "art": "umformulieren", "kopf": { "id": "flirten-v-0018", "faehigkeit": "flirten.haltung", "stufe": 4, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Formuliere freundlicher und freier – die Person soll nicht das Gefühl haben, an dir vorbeizumüssen.",
+      "vorlage": "„Ich warte nach dem Kurs draußen auf dich.“",
+      "kriterien": ["Vorschlag statt Ankündigung", "die Person entscheidet", "leicht ablehnbar"],
+      "muster": ["„Ich geh nach dem Kurs noch einen Tee trinken. Magst du mitkommen? Sonst bis nächste Woche!“", "„Wenn du Lust hast, können wir nach dem Kurs noch ein Stück zusammen gehen – sonst ganz entspannt bis Dienstag.“"] },
+    { "art": "kritiker", "kopf": { "id": "flirten-v-0019", "faehigkeit": "flirten.haltung", "stufe": 3, "kanal": "koennen" },
+      "satz": "„Wenn ich jemanden anspreche, belästige ich ihn nur.“",
+      "kriterien": ["unterscheidet Ort und Art statt alles zu verbieten", "glaubwürdig, keine Parole", "nennt, woran du ein Nein erkennst"],
+      "muster": ["„An einem passenden Ort, schlicht und mit Ausweg, ist ein Hallo keine Belästigung. Und ein Nein nehme ich sofort an.“", "„Belästigen hieße, ein Nein zu übergehen. Das tue ich nicht – ich frage einmal und höre hin.“"] },
+    { "art": "kritiker", "kopf": { "id": "flirten-v-0020", "faehigkeit": "flirten.haltung", "stufe": 4, "kanal": "koennen" },
+      "satz": "„Ich war den ganzen Abend so nett – da hätte ich wenigstens ein Date verdient.“",
+      "kriterien": ["löst die innere Rechnung auf", "lässt die Enttäuschung gelten", "ohne Vorwurf an den anderen"],
+      "muster": ["„Ich bin enttäuscht, das darf sein. Nett war ich, weil ich es sein wollte – niemand schuldet mir dafür Zuneigung.“", "„Ein schöner Abend war es trotzdem. Ein Date ist kein Lohn für Freundlichkeit.“"] },
+
+    { "art": "auswahl", "kopf": { "id": "flirten-v-0021", "faehigkeit": "flirten.ansprechen", "stufe": 2, "kanal": "wissen" },
+      "frage": "Samstag auf der Hundewiese. Neben dir steht jemand, dessen Hund gerade mit deinem tobt. Welcher Einstieg passt?",
+      "antworten": [
+        { "text": "„Die zwei verstehen sich ja prächtig. Wie heißt deiner?“", "wert": 2, "warum": "Ein Satz zur gemeinsamen Lage und eine leichte Frage. Mehr braucht es nicht." },
+        { "text": "„Na, so ein süßer Hund hat bestimmt ein süßes Herrchen – oder bist du etwa vergeben?“", "wert": 0, "tendenz": "spruch", "warum": "Ein Spruch und gleich eine sehr persönliche Frage. Zu viel für einen ersten Satz." },
+        { "text": "„Hallo.“ – und auf die Hunde schauen.", "wert": 1, "warum": "Freundlich. Mit einem Satz zur Lage fällt das Antworten leichter." },
+        { "text": "Erst mal ein Foto von den Hunden machen und es der Person zeigen, um ins Gespräch zu kommen.", "wert": 0, "warum": "Fotos von fremden Hunden – und damit oft auch von ihren Menschen – mögen viele nicht ungefragt." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "flirten-v-0022", "faehigkeit": "flirten.ansprechen", "stufe": 4, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Im Profil einer App steht: „Spiele Bass in einer Band, die nie probt.“ Welche erste Nachricht ist am stärksten?",
+      "antworten": [
+        { "text": "„Hey, wie geht's dir so heute?“", "wert": 1, "warum": "Freundlich, aber ohne Bezug. Wer viele Nachrichten bekommt, antwortet eher auf Persönliches." },
+        { "text": "„Eine Band, die nie probt – klingt nach dem besten Konzept überhaupt. Wie klingt ihr denn, wenn ihr doch mal spielt?“", "wert": 2, "warum": "Bezug aufs Profil, ein kleines Lachen und eine Frage, auf die man gern antwortet." },
+        { "text": "„Bassisten sind ja bekanntlich die mit den geschicktesten Fingern …“", "wert": 0, "tendenz": "spruch", "warum": "Ein anzüglicher Spruch als erste Nachricht. Viele empfinden das als übergriffig." },
+        { "text": "„Ich spiel seit zwölf Jahren Gitarre, war mal in drei Bands und hab sogar ein Album aufgenommen.“", "wert": 0, "tendenz": "angeben", "warum": "Ein Lebenslauf statt einer Frage. Die Person muss sich erst durchs Beeindrucken arbeiten." }
+      ] },
+    { "art": "szene", "kopf": { "id": "flirten-v-0023", "faehigkeit": "flirten.ansprechen", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Sonntagnachmittag in einer Ausstellung. Eine Frau steht schon lange vor demselben großen Bild wie du. Sie schaut kurz zu dir und lächelt.",
+      "frage": "Was ist ein guter Anfang?",
+      "antworten": [
+        { "text": "„Ich steh schon ewig davor und weiß nicht, was ich davon halten soll – du?“", "wert": 2, "warum": "Ein Satz zur gemeinsamen Lage, ehrlich und mit einer leichten Frage. Sie kann einsteigen oder nur lächeln." },
+        { "text": "„Das Bild ist schön, aber nicht so schön wie du, das muss ich einfach mal sagen.“", "wert": 0, "tendenz": "spruch", "warum": "Ein Spruch zum Aussehen. Er macht es schwer, normal zu antworten." },
+        { "text": "Zurücklächeln und weitergehen.", "wert": 1, "warum": "Freundlich und völlig in Ordnung. Ein Satz zum Bild wäre aber hier ein leichter Anfang gewesen." },
+        { "text": "Ihr eine Weile in die nächsten Räume folgen und dort auf eine Gelegenheit warten.", "wert": 0, "tendenz": "beharren", "warum": "Folgen wirkt schnell bedrohlich. Entweder jetzt ein Satz – oder gar nicht." }
+      ] },
+    { "art": "szene", "kopf": { "id": "flirten-v-0024", "faehigkeit": "flirten.ansprechen", "stufe": 4, "kanal": "wissen" },
+      "beschreibung": "Im stillen Lesesaal der Stadtbibliothek sitzt dir seit einer Stunde jemand gegenüber, der dir sehr gefällt. Alle arbeiten leise. Im Erdgeschoss gibt es ein kleines Café.",
+      "frage": "Was passt am besten?",
+      "antworten": [
+        { "text": "Einen Zettel über den Tisch schieben: „Kaffee unten?“", "wert": 0, "tendenz": "ortblind", "warum": "Leise, aber auch ein Zettel stört im Lesesaal und setzt die Person unter Zugzwang. Hier lieber gar nichts." },
+        { "text": "Flüsternd fragen, was die Person da liest.", "wert": 0, "tendenz": "ortblind", "warum": "Im Lesesaal will jeder in Ruhe arbeiten. Sprechen zwingt die Person, sich zu entscheiden – vor allen." },
+        { "text": "Im Lesesaal nichts, aber wenn ihr euch zufällig im Café trefft, ein Satz zur Lage.", "wert": 2, "warum": "Du respektierst den Ort der Stille. Im Café ist ein Gespräch üblich und leicht zu beenden." },
+        { "text": "Warten, bis die Person geht, und ihr dann folgen.", "wert": 0, "tendenz": "beharren", "warum": "Folgen macht aus Interesse etwas Bedrohliches." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "flirten-v-0025", "faehigkeit": "flirten.ansprechen", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Welche Art Einstieg ist das?",
+      "faecher": ["Name plus Lage", "ehrlich-direkt", "Spruch"],
+      "karten": [
+        { "text": "„Hallo, ich bin {name}. Bist du auch neu im Chor?“", "fach": 0 },
+        { "text": "„Ich fand dich vorhin sympathisch und wollte Hallo sagen.“", "fach": 1 },
+        { "text": "„Glaubst du an Liebe auf den ersten Blick, oder soll ich noch mal vorbeigehen?“", "fach": 2 },
+        { "text": "„Hi, ich bin {name}. Woher kennst du den Gastgeber?“", "fach": 0 },
+        { "text": "„Ich wollte dich kennenlernen – darf ich mich kurz dazustellen?“", "fach": 1 },
+        { "text": "„Hast du eine Karte? Ich hab mich in deinen Augen verirrt.“", "fach": 2 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "flirten-v-0026", "faehigkeit": "flirten.ansprechen", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Guter Moment für ein erstes Hallo – oder lieber warten oder lassen?",
+      "faecher": ["guter Moment", "lieber warten oder lassen"],
+      "karten": [
+        { "text": "Die Person steht allein am Buffet und schaut sich um", "fach": 0 },
+        { "text": "Die Person telefoniert gerade", "fach": 1 },
+        { "text": "Sie ist mitten im Gespräch mit Freunden und lacht laut", "fach": 1 },
+        { "text": "Pause im Kurs, ihr wascht beide Gemüse", "fach": 0 },
+        { "text": "Sie packt hastig ihre Sachen, weil der Bus kommt", "fach": 1 },
+        { "text": "Nach dem Vortrag stehen alle noch beim Sekt", "fach": 0 }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "flirten-v-0027", "faehigkeit": "flirten.ansprechen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Nach dem Volleyballtraining im Verein. Ordne die Einstiege von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Hi, ich bin {name}. Dein Aufschlag eben war unglaublich – wie lange spielst du schon?“", "warum": "Name, ehrliches Lob für etwas Getanes, eine Frage, auf die man gern antwortet." },
+        { "text": "„Hallo, ich bin {name}. Bist du neu hier?“", "warum": "Schlicht und freundlich – etwas allgemeiner." },
+        { "text": "„Na, ganz schön verschwitzt, was?“", "warum": "Flapsig und körperbezogen. Kann schnell unangenehm sein." },
+        { "text": "„Mit dir würde ich gern mal ein Doppel spielen – und zwar nicht nur beim Volleyball.“", "warum": "Ein anzüglicher Spruch. Er bringt die Person in eine schwierige Lage." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "flirten-v-0028", "faehigkeit": "flirten.ansprechen", "stufe": 4, "kanal": "wissen" },
+      "frage": "Ein App-Profil zeigt jemanden beim Tauchen und den Satz „Mein Lieblingsort ist unter Wasser“. Ordne die ersten Nachrichten von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Unter Wasser als Lieblingsort – was war das Schönste, das du da unten gesehen hast?“", "warum": "Greift das Profil auf und lädt zum Erzählen ein." },
+        { "text": "„Tauchen klingt spannend! Wo warst du zuletzt?“", "warum": "Bezug und Frage – etwas weniger persönlich." },
+        { "text": "„Hey :)“", "warum": "Freundlich, aber ohne Aufhänger." },
+        { "text": "„Im Neoprenanzug siehst du ja richtig heiß aus.“", "warum": "Ein Kommentar zum Körper. Viele brechen genau hier ab." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "flirten-v-0029", "faehigkeit": "flirten.ansprechen", "stufe": 2, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "Bei einer Weinprobe steht ihr nebeneinander am Tisch. Welcher erste Satz passt?",
+      "antworten": [
+        { "text": "„Ich schmecke ehrlich gesagt nur ‚rot‘. Wie geht's dir mit dem hier?“", "wert": 2, "warum": "Zur Lage, mit einem kleinen Lachen über dich selbst und einer leichten Frage." },
+        { "text": "„Ich bin übrigens absoluter Weinkenner, ich kann dir gern erklären, was du da gerade schmeckst.“", "wert": 0, "tendenz": "angeben", "warum": "Ein Vortrag statt einer Einladung zum Gespräch." },
+        { "text": "„Na, schon beschwipst?“", "wert": 0, "tendenz": "spruch", "warum": "Flapsig – und Alkohol als Thema beim ersten Satz kommt schnell schief an." },
+        { "text": "„Hi, ich bin {name}.“", "wert": 1, "warum": "Schlicht und gut. Ein Satz zur Lage dazu macht den Einstieg leichter." }
+      ] },
+    { "art": "wortwahl", "kopf": { "id": "flirten-v-0030", "faehigkeit": "flirten.ansprechen", "stufe": 3, "kanal": "wissen", "einfluss": "fair" },
+      "frage": "„Hallo, ich bin {name} …“ – Welche Fortsetzung macht es der anderen Person am leichtesten, einzusteigen?",
+      "antworten": [
+        { "text": "„… und ich hoffe, ich störe nicht, ich bin furchtbar schlecht in so was, sorry.“", "wert": 1, "warum": "Ehrlich und sympathisch. Die Entschuldigung legt aber den Fokus auf deine Unsicherheit statt aufs Gespräch." },
+        { "text": "„… woher kennst du die Gastgeberin?“", "wert": 2, "warum": "Eine leichte Frage zur Lage – darauf hat jeder eine Antwort." },
+        { "text": "„… und du bist?“", "wert": 1, "warum": "Geht. Ohne Bezug zur Lage bleibt das Gespräch danach oft stehen." },
+        { "text": "„… und ich finde, wir sollten uns heute noch besser kennenlernen.“", "wert": 0, "tendenz": "ueberziehen", "warum": "Zu schnell zu viel. Die Person soll erst einmal Hallo sagen können." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "flirten-v-0031", "faehigkeit": "flirten.ansprechen", "stufe": 3, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Mach aus dem Spruch einen schlichten Einstieg für einen Spieleabend bei Freunden.",
+      "vorlage": "„Bist du ein Würfel? Ich hab nämlich gerade eine Sechs gesehen.“",
+      "kriterien": ["Name oder Lage", "kein Spruch übers Aussehen", "eine leichte Frage"],
+      "muster": ["„Hi, ich bin {name}. Kennst du das Spiel schon, oder sind wir beide Anfänger?“", "„Hallo, ich bin {name}. Woher kennst du die anderen hier?“"] },
+    { "art": "umformulieren", "kopf": { "id": "flirten-v-0032", "faehigkeit": "flirten.ansprechen", "stufe": 4, "kanal": "koennen", "einfluss": "fair" },
+      "auftrag": "Schreib eine erste Nachricht mit Bezug aufs Profil. Im Profil: ein Foto vom Gemüsebeet und „Ich rede mit meinen Tomaten“.",
+      "vorlage": "„Hey Süße, was geht?“",
+      "kriterien": ["greift das Profil auf", "keine Kosenamen bei Fremden", "eine Frage, auf die man gern antwortet"],
+      "muster": ["„Und – antworten die Tomaten? Meine Basilikumpflanze ignoriert mich seit Wochen.“", "„Ein Gemüsebeet! Was wächst bei dir am besten – außer den Gesprächen?“"] },
+    { "art": "buendel", "kopf": { "id": "flirten-v-0033", "faehigkeit": "flirten.ansprechen", "stufe": 3, "kanal": "wissen" },
+      "lage": "Samstagmittag in einem vollen Café. Am Nachbartisch sitzt jemand allein, den du sympathisch findest.",
+      "frage": "Welche Zeichen sprechen dafür, dass die Person gerade offen für einen kurzen Satz ist?",
+      "zeichen": [
+        { "text": "Sie hat ihr Buch zugeklappt und schaut sich um.", "stuetzt": true, "warum": "Sie ist gerade nicht beschäftigt." },
+        { "text": "Euer Blick trifft sich, sie lächelt zurück.", "stuetzt": true, "warum": "Eine kleine Erwiderung – ein Satz zur Lage kann passen." },
+        { "text": "Sie trägt Kopfhörer.", "stuetzt": false, "warum": "Spricht eher dafür, dass sie für sich sein will." },
+        { "text": "Sie tippt konzentriert am Laptop.", "stuetzt": false, "warum": "Sie arbeitet – Stören wäre unpassend." },
+        { "text": "Sie fragt, ob der Stuhl neben dir frei ist, und bleibt dann sitzen.", "stuetzt": true, "warum": "Sie hat selbst einen kleinen Kontakt begonnen." }
+      ] },
+    { "art": "buendel", "kopf": { "id": "flirten-v-0034", "faehigkeit": "flirten.ansprechen", "stufe": 4, "kanal": "wissen" },
+      "lage": "Auf einer Feier steht ein Gast etwas abseits am Fenster. Du überlegst, ob du hingehst.",
+      "frage": "Welche Zeichen sprechen dafür, dass ein Hallo willkommen wäre?",
+      "zeichen": [
+        { "text": "Er schaut immer wieder zur Gruppe, als suche er Anschluss.", "stuetzt": true, "warum": "Spricht dafür, dass er gern ins Gespräch käme." },
+        { "text": "Er hat keine Kopfhörer auf und wirkt nicht in Eile.", "stuetzt": true, "warum": "Nichts spricht dagegen – zusammen mit anderem ein gutes Zeichen." },
+        { "text": "Er telefoniert leise und dreht sich zur Wand.", "stuetzt": false, "warum": "Er will gerade nicht gestört werden." },
+        { "text": "Er nickt dir freundlich zu, als du vorbeigehst.", "stuetzt": true, "warum": "Eine kleine Einladung zu einem Satz." },
+        { "text": "Er trägt ein schickes Hemd.", "stuetzt": false, "warum": "Kleidung sagt nichts über die Lust auf ein Gespräch." }
+      ] },
+
+    { "art": "buendel", "kopf": { "id": "flirten-v-0035", "faehigkeit": "flirten.signale", "stufe": 2, "kanal": "wissen" },
+      "lage": "Beim Sommerfest des Laufvereins unterhältst du dich mit einem Mann aus der Gruppe.",
+      "frage": "Welche Zeichen sprechen zusammen eher für Interesse an dir?",
+      "zeichen": [
+        { "text": "Er fragt nach, als du von deinem ersten Halbmarathon erzählst.", "stuetzt": true, "warum": "Nachfragen zeigt Neugier auf dich." },
+        { "text": "Er bleibt bei dir stehen, obwohl seine Freunde schon zum Grill gehen.", "stuetzt": true, "warum": "Er verlängert das Gespräch." },
+        { "text": "Er erzählt von sich aus etwas Persönliches.", "stuetzt": true, "warum": "Er öffnet sich – ein Zeichen von Vertrauen und Lust aufs Gespräch." },
+        { "text": "Er trägt dasselbe Vereins-T-Shirt wie du.", "stuetzt": false, "warum": "Das tragen heute alle." },
+        { "text": "Er hat dich zur Begrüßung angelächelt.", "stuetzt": false, "warum": "Höflichkeit unter Vereinsleuten, für sich allein wenig." }
+      ] },
+    { "art": "buendel", "kopf": { "id": "flirten-v-0036", "faehigkeit": "flirten.signale", "stufe": 3, "kanal": "wissen" },
+      "lage": "Du schreibst seit ein paar Tagen in einer App mit jemandem.",
+      "frage": "Welche Zeichen sprechen zusammen eher für Interesse?",
+      "zeichen": [
+        { "text": "Die Person stellt dir eigene Fragen.", "stuetzt": true, "warum": "Sie will etwas über dich wissen." },
+        { "text": "Ihre Antworten werden länger und persönlicher.", "stuetzt": true, "warum": "Sie investiert ins Gespräch." },
+        { "text": "Sie schlägt selbst ein Treffen vor.", "stuetzt": true, "warum": "Ein deutliches Zeichen." },
+        { "text": "Sie benutzt viele Smileys.", "stuetzt": false, "warum": "Das ist oft einfach ihr Schreibstil." },
+        { "text": "Sie antwortet manchmal sehr schnell.", "stuetzt": false, "warum": "Für sich allein kann das auch Zufall oder Langeweile sein." }
+      ] },
+    { "art": "buendel", "kopf": { "id": "flirten-v-0037", "faehigkeit": "flirten.signale", "stufe": 4, "kanal": "wissen" },
+      "lage": "Auf einer Party redest du seit zehn Minuten mit einer Frau.",
+      "frage": "Welche Zeichen sprechen zusammen dafür, das Gespräch freundlich zu beenden?",
+      "zeichen": [
+        { "text": "Ihre Antworten werden immer kürzer.", "stuetzt": true, "warum": "Sie gibt dem Gespräch weniger." },
+        { "text": "Sie schaut mehrmals zu ihren Freunden hinüber.", "stuetzt": true, "warum": "Ihr Blick ist schon woanders." },
+        { "text": "Sie hat ihren Körper halb abgewandt.", "stuetzt": true, "warum": "Ein deutliches Zeichen zusammen mit den anderen." },
+        { "text": "Sie hat einmal gegähnt.", "stuetzt": false, "warum": "Es ist spät – für sich allein heißt das wenig." },
+        { "text": "Sie hält ihr Glas in beiden Händen.", "stuetzt": false, "warum": "Ein Einzelzeichen ohne klare Bedeutung." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "flirten-v-0038", "faehigkeit": "flirten.signale", "stufe": 2, "kanal": "wissen" },
+      "frage": "Was erkennen Menschen in Gesprächen laut einer Studie eher richtig?",
+      "antworten": [
+        { "text": "Dass jemand nicht flirtet.", "wert": 2, "warum": "Dass jemand nicht flirtete, wurde meist richtig erkannt, echtes Flirten oft übersehen." },
+        { "text": "Dass jemand flirtet – das spürt man meistens sofort.", "wert": 0, "warum": "Gerade das wurde oft übersehen, von Männern wie von Frauen." },
+        { "text": "Beides gleich gut, wenn man aufmerksam genug ist und sich Zeit nimmt.", "wert": 0, "warum": "Die Unterschiede waren deutlich: Nicht-Flirten las man viel besser." },
+        { "text": "Kommt auf die Person an.", "wert": 1, "warum": "Stimmt im Einzelfall. Im Schnitt war das Bild aber klar." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "flirten-v-0039", "faehigkeit": "flirten.signale", "stufe": 3, "kanal": "wissen" },
+      "frage": "Die Person, mit der du sprichst, verschränkt die Arme. Was folgt daraus?",
+      "antworten": [
+        { "text": "Für sich allein wenig – es kann kalt oder bequem sein. Auf weitere Zeichen achten.", "wert": 2, "warum": "Ein Einzelzeichen ist keine Botschaft. Erst das Bündel zählt." },
+        { "text": "Sie lehnt dich ab – verschränkte Arme sind ein klares Abwehrzeichen.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Ein verbreiteter Mythos. Oft ist es nur Kälte oder Gewohnheit." },
+        { "text": "Sie fühlt sich unsicher und braucht mehr Komplimente.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Das ist Gedankenlesen – und die Lösung passt nicht zum Zeichen." },
+        { "text": "Kurz nachfragen, ob ihr kalt ist.", "wert": 1, "warum": "Freundlich und harmlos. Wichtiger ist, das Zeichen nicht zu überdeuten." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "flirten-v-0040", "faehigkeit": "flirten.signale", "stufe": 4, "kanal": "wissen" },
+      "frage": "Eine Bekannte aus dem Chor ist sonst sehr gesprächig. Heute antwortet sie dir nur knapp – und allen anderen auch. Was ist der klügste Schluss?",
+      "antworten": [
+        { "text": "Sie hat etwas gegen dich, seit du sie letzte Woche nach einem Kaffee gefragt hast.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Sie ist zu allen so. Was sich bei allen ändert, hat selten mit dir zu tun." },
+        { "text": "Heute ist etwas los bei ihr – nichts hineinlesen, freundlich bleiben.", "wert": 2, "warum": "Der Vergleich mit ihrem üblichen Verhalten und mit den anderen zeigt: Es geht nicht um dich." },
+        { "text": "Sie fragen, was los ist.", "wert": 1, "warum": "Kann freundlich sein, wenn ihr euch gut kennt. Sonst lieber Raum lassen." },
+        { "text": "Sie flirtet eigentlich, will es aber nicht zeigen.", "wert": 0, "tendenz": "ueberdeuten", "warum": "Für diese Deutung gibt es kein einziges Zeichen." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "flirten-v-0041", "faehigkeit": "flirten.signale", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Eher Zuwendung oder eher Abwendung?",
+      "faecher": ["eher Zuwendung", "eher Abwendung"],
+      "karten": [
+        { "text": "Fragt zurück", "fach": 0 },
+        { "text": "Schaut immer wieder aufs Handy", "fach": 1 },
+        { "text": "Erzählt länger als nötig", "fach": 0 },
+        { "text": "Tritt einen Schritt zurück", "fach": 1 },
+        { "text": "Lacht über deine Geschichte und erzählt eine eigene", "fach": 0 },
+        { "text": "Antwortet mit „Mhm“", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "flirten-v-0042", "faehigkeit": "flirten.signale", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Beobachtung oder Deutung?",
+      "faecher": ["Beobachtung", "Deutung"],
+      "karten": [
+        { "text": "Sie hat dreimal gelacht.", "fach": 0 },
+        { "text": "Sie findet mich toll.", "fach": 1 },
+        { "text": "Er hat nach meiner Nummer gefragt.", "fach": 0 },
+        { "text": "Er will nur nett sein.", "fach": 1 },
+        { "text": "Sie hat seit zwei Tagen nicht geantwortet.", "fach": 0 },
+        { "text": "Sie spielt mit mir.", "fach": 1 }
+      ] },
+    { "art": "szene", "kopf": { "id": "flirten-v-0043", "faehigkeit": "flirten.signale", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Im Töpferkurs sitzt du neben einem Mann. Er lacht freundlich über deine schiefe Schale, antwortet auf Fragen, erzählt aber nichts von sich und schaut öfter zur Uhr.",
+      "frage": "Was liest du am ehesten?",
+      "antworten": [
+        { "text": "Er ist schüchtern und eigentlich interessiert – du solltest mehr fragen.", "wert": 0, "tendenz": "ueberdeuten", "warum": "Möglich, aber nichts im Bündel stützt das. Mehr Fragen setzen ihn unter Druck." },
+        { "text": "Freundlich, aber eher nicht interessiert – du lässt ihm Raum.", "wert": 2, "warum": "Lachen ist Höflichkeit. Keine Gegenfragen, Blick zur Uhr – das Bündel zeigt eher weg." },
+        { "text": "Er hat einfach heute wenig Zeit.", "wert": 1, "warum": "Kann sein. Für dich ändert es wenig: Raum lassen passt in beiden Fällen." },
+        { "text": "Er mag dich nicht.", "wert": 0, "tendenz": "gedankenlesen", "warum": "So weit trägt kein Zeichen. Er ist freundlich – nur nicht mehr." }
+      ] },
+    { "art": "szene", "kopf": { "id": "flirten-v-0044", "faehigkeit": "flirten.signale", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Auf einer Hochzeit kommt eine Frau an diesem Abend schon zum dritten Mal zu dir. Sie fragt, was du am Wochenende vorhast, erzählt von ihrem Lieblingsurlaub und lacht oft.",
+      "frage": "Was ist der beste Schluss?",
+      "antworten": [
+        { "text": "Mehrere Zeichen sprechen für Interesse – zeig deins ruhig auch.", "wert": 2, "warum": "Sie sucht dich auf, fragt nach, öffnet sich. Interesse wird oft übersehen – hier darfst du es erwidern." },
+        { "text": "Sie ist sicher nur höflich, weil ihr beide zur Familie des Bräutigams gehört.", "wert": 1, "warum": "Vorsicht ist nie falsch. Aber dreimal kommen und von sich erzählen geht über Höflichkeit hinaus." },
+        { "text": "Sie ist verliebt – am besten gleich fragen, ob sie heute mit zu dir kommt.", "wert": 0, "tendenz": "ueberziehen", "warum": "Interesse am Gespräch ist kein Ja zu allem. Schritt für Schritt." },
+        { "text": "Unsicher sein und ihr lieber aus dem Weg gehen.", "wert": 0, "tendenz": "vermeiden", "warum": "So bleibt ein schönes Zeichen unbeantwortet." }
+      ] },
+    { "art": "szene", "kopf": { "id": "flirten-v-0045", "faehigkeit": "flirten.signale", "stufe": 4, "kanal": "wissen" },
+      "beschreibung": "Miriam Okafor, deine Kollegin, neckt dich gern: über deine Kaffeetassen-Sammlung, über dein Fahrrad. Heute sagt sie: „Ohne dich wäre es hier echt langweilig.“",
+      "frage": "Was liest du am ehesten?",
+      "antworten": [
+        { "text": "Sie flirtet – Necken ist doch ein klassisches Zeichen von Interesse.", "wert": 0, "tendenz": "ueberdeuten", "warum": "Miriam neckt gern und viele. Ein einzelner Satz macht daraus kein Interesse." },
+        { "text": "Freundliches Necken unter Kollegen – ein schönes Kompliment, nicht mehr.", "wert": 2, "warum": "Sie ist so, und bei der Arbeit gilt besondere Zurückhaltung. Freu dich einfach über den Satz." },
+        { "text": "Vielleicht ist da mehr – mal abwarten.", "wert": 1, "warum": "Vorsichtig, gut. Bei der Arbeit lieber nichts hineinlesen, solange nichts Klares von ihr kommt." },
+        { "text": "Sie macht sich über dich lustig.", "wert": 0, "tendenz": "abwerten", "warum": "Die Worte sind herzlich. Nicht jedes Necken ist ein Angriff." }
+      ] }
+  ]
+}

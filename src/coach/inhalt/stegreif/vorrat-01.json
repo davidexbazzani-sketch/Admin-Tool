@@ -1,0 +1,479 @@
+{
+  "eintraege": [
+    { "art": "auswahl", "kopf": { "id": "stegreif-v-0001", "faehigkeit": "stegreif.struktur", "stufe": 2, "kanal": "wissen" },
+      "frage": "Tarek fragt dich in der Kaffeeküche: „Lohnt sich das neue Fitnessstudio um die Ecke?“ Welcher Anfang folgt dem Bauplan „Antwort zuerst“?",
+      "antworten": [
+        { "text": "„Also, ich war da jetzt dreimal, das erste Mal mit meiner Schwester, die hat da so einen Gutschein gehabt …“", "wert": 0, "tendenz": "umweg", "warum": "Die Geschichte kommt vor der Antwort. Tarek weiß nach zwei Sätzen noch nicht, ob es sich lohnt." },
+        { "text": "„Für dich ja – es hat bis elf Uhr abends offen.“", "wert": 2, "warum": "Antwort und Grund in einem Satz. Den Rest kann Tarek nachfragen." },
+        { "text": "„Kommt drauf an, was du suchst.“", "wert": 1, "warum": "Eine ehrliche Rückfrage – aber du könntest schon eine erste Antwort geben." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "stegreif-v-0002", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "wissen" },
+      "frage": "Im Vorstellungsgespräch: „Was ist Ihre größte Stärke?“ Welcher Bauplan passt am besten?",
+      "antworten": [
+        { "text": "Punkt – Grund – Beispiel – Punkt: die Stärke, warum sie zählt, ein echtes Erlebnis, die Stärke noch einmal.", "wert": 2, "warum": "Das Beispiel macht die Stärke glaubwürdig, der Schluss lässt sie hängen bleiben." },
+        { "text": "Gestern – heute – morgen: dein ganzer Werdegang von der Schule bis heute.", "wert": 0, "tendenz": "alles", "warum": "Das beantwortet eine andere Frage. Die Stärke geht im Lebenslauf unter." },
+        { "text": "Drei Stärken mit je einem Satz.", "wert": 1, "warum": "Gegliedert, aber gefragt war die größte. Eine mit Beispiel wirkt stärker als drei ohne." },
+        { "text": "Gar keinen – lieber frei erzählen, das wirkt natürlicher und spontaner als jedes Schema.", "wert": 0, "warum": "Frei erzählen führt unter Druck oft in Umwege. Ein Bauplan wirkt nicht steif, wenn du frei formulierst." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "stegreif-v-0003", "faehigkeit": "stegreif.struktur", "stufe": 4, "kanal": "wissen" },
+      "frage": "Nadine Köhler: „Was hat sich bei Ihnen seit letztem Jahr verändert?“ Welcher Bauplan liegt am nächsten?",
+      "antworten": [
+        { "text": "Problem – Lösung – Nutzen", "wert": 1, "warum": "Geht, wenn die Veränderung eine Lösung war. Die Frage zielt aber auf einen Verlauf." },
+        { "text": "Gestern – heute – morgen", "wert": 2, "warum": "Die Frage fragt nach einem Verlauf. Wie es war, wie es ist, was als Nächstes kommt." },
+        { "text": "Dafür – dagegen – Fazit", "wert": 0, "warum": "Passt zu Meinungsfragen. Hier will sie keine Abwägung, sondern einen Verlauf." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "stegreif-v-0004", "faehigkeit": "stegreif.struktur", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Ordne die Sätze dem Teil des Bauplans „Punkt – Grund – Beispiel – Punkt“ zu. Frage: „Sollen wir die Weihnachtsfeier im Januar machen?“",
+      "faecher": ["Punkt", "Grund", "Beispiel"],
+      "karten": [
+        { "text": "„Ja, ich bin für Januar.“", "fach": 0 },
+        { "text": "„Im Dezember sind alle Termine voll.“", "fach": 1 },
+        { "text": "„Letztes Jahr fehlte die halbe Abteilung, weil sie andere Feiern hatte.“", "fach": 2 },
+        { "text": "„Also: Januar.“", "fach": 0 },
+        { "text": "„Im Januar ist es ruhiger, und die Lokale haben Platz.“", "fach": 1 },
+        { "text": "„Bei meinem Verein klappt das seit Jahren gut.“", "fach": 2 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "stegreif-v-0005", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Welcher Bauplan passt zu welcher Frage?",
+      "faecher": ["Gestern – heute – morgen", "Problem – Lösung – Nutzen", "Dafür – dagegen – Fazit"],
+      "karten": [
+        { "text": "„Wie hat sich dein Verein entwickelt?“", "fach": 0 },
+        { "text": "„Was schlägst du gegen die langen Wartezeiten vor?“", "fach": 1 },
+        { "text": "„Bist du für ein Tempolimit in der Siedlung?“", "fach": 2 },
+        { "text": "„Wie steht das Projekt?“", "fach": 0 },
+        { "text": "„Was können wir gegen die vollen Postfächer tun?“", "fach": 1 },
+        { "text": "„Was hältst du von der Vier-Tage-Woche?“", "fach": 2 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "stegreif-v-0006", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Gegliedert oder ungegliedert? Ein Kollege fragt, wie dein Urlaub war.",
+      "faecher": ["gegliedert", "ungegliedert"],
+      "karten": [
+        { "text": "„Zwei Dinge waren besonders: das Essen und die Ruhe.“", "fach": 0 },
+        { "text": "„Ach, war gut, also, das Hotel, und dann, ach ja, der Strand, und das Wetter …“", "fach": 1 },
+        { "text": "„Erst Regen, dann Sonne, und zum Schluss hätte ich gern verlängert.“", "fach": 0 },
+        { "text": "„Ja, also, da müsste ich weit ausholen, das war so …“", "fach": 1 },
+        { "text": "„Kurz gesagt: endlich ausgeschlafen.“", "fach": 0 },
+        { "text": "Jeden Tag der Reihe nach erzählen, vom Abflug an.", "fach": 1 }
+      ] },
+    { "art": "bauplan", "kopf": { "id": "stegreif-v-0007", "faehigkeit": "stegreif.struktur", "stufe": 2, "kanal": "koennen" },
+      "plan": "Punkt – Grund – Beispiel – Punkt",
+      "anlass": "Eine Bekannte fragt: „Sollte man im Urlaub dienstlich erreichbar sein?“",
+      "felder": [
+        { "name": "Punkt", "hilfe": "Deine Antwort in einem Satz." },
+        { "name": "Grund", "hilfe": "Ein Grund, nicht drei." },
+        { "name": "Beispiel", "hilfe": "Ein Fall aus deinem Leben oder deinem Umfeld." },
+        { "name": "Punkt", "hilfe": "Die Antwort noch einmal, kürzer." }
+      ],
+      "muster": [
+        "„Nein. Erholung braucht echte Pause. Im letzten Urlaub habe ich jeden Tag Mails gelesen und kam müder zurück, als ich losfuhr. Also: lieber eine gute Vertretung.“",
+        "„Ja, für Notfälle. Dann kann ich abschalten, weil ich weiß, dass nichts Wichtiges an mir vorbeigeht. Letztes Jahr kam ein einziger Anruf, drei Minuten. Also: erreichbar ja – aber nur für Notfälle.“"
+      ] },
+    { "art": "bauplan", "kopf": { "id": "stegreif-v-0008", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "koennen" },
+      "plan": "Drei Dinge",
+      "anlass": "Eine neue Nachbarin fragt: „Was sollte ich über unsere Straße wissen?“",
+      "felder": [
+        { "name": "Ankündigung", "hilfe": "„Drei Dinge …“ – oder ehrlich „zwei“." },
+        { "name": "Erstens", "hilfe": "Das Wichtigste zuerst." },
+        { "name": "Zweitens", "hilfe": "Ein Satz." },
+        { "name": "Drittens", "hilfe": "Gern etwas Leichtes zum Schluss." }
+      ],
+      "muster": [
+        "„Drei Dinge. Erstens: Donnerstags kommt die Müllabfuhr sehr früh. Zweitens: Frau Sommer weiß alles – und hilft gern. Drittens: Der Bäcker an der Ecke hat sonntags die besten Brötchen.“",
+        "„Zwei Dinge. Erstens: Parken ist abends schwierig, die Seitenstraße ist besser. Zweitens: Im Sommer gibt es ein Straßenfest – da lernst du alle auf einmal kennen.“"
+      ] },
+    { "art": "bauplan", "kopf": { "id": "stegreif-v-0009", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "koennen" },
+      "plan": "Problem – Lösung – Nutzen",
+      "anlass": "In der Teamrunde fragt Dr. Albers: „Hat jemand eine Idee zu den ständig vollen Besprechungsräumen?“",
+      "felder": [
+        { "name": "Problem", "hilfe": "Was genau hakt – in einem Satz." },
+        { "name": "Lösung", "hilfe": "Dein Vorschlag, konkret." },
+        { "name": "Nutzen", "hilfe": "Was haben alle davon?" }
+      ],
+      "muster": [
+        "„Viele Räume sind gebucht, aber leer, weil Termine ausfallen. Ich schlage vor: Wer zehn Minuten nach Beginn nicht da ist, gibt den Raum frei. Dann findet jeder schneller einen Platz.“",
+        "„Kurze Absprachen blockieren große Räume. Wir könnten die Ecke im Flur mit einem Stehtisch ausstatten. Dann bleiben die Räume für echte Besprechungen frei.“"
+      ] },
+    { "art": "bauplan", "kopf": { "id": "stegreif-v-0010", "faehigkeit": "stegreif.struktur", "stufe": 4, "kanal": "koennen" },
+      "plan": "Was – Was heißt das – Was jetzt",
+      "anlass": "Du rufst Miriam an: Dein Zug fällt aus, und ihr habt um zehn einen gemeinsamen Kundentermin.",
+      "felder": [
+        { "name": "Was", "hilfe": "Was ist passiert – ein Satz." },
+        { "name": "Was heißt das", "hilfe": "Die Folge für sie oder euch." },
+        { "name": "Was jetzt", "hilfe": "Dein Vorschlag oder deine Bitte." }
+      ],
+      "muster": [
+        "„Mein Zug fällt aus. Das heißt, ich bin frühestens um halb elf beim Kunden. Kannst du um zehn anfangen? Ich übernehme ab halb elf den Teil mit den Preisen.“",
+        "„Der Zug fällt aus, der nächste kommt in einer Stunde. Ich schaffe zehn Uhr nicht. Ich schlage vor, ich wähle mich per Telefon ein – rufst du mich an, wenn ihr sitzt?“"
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "stegreif-v-0011", "faehigkeit": "stegreif.struktur", "stufe": 2, "kanal": "wissen" },
+      "frage": "Jule fragt, ob sich der Kochkurs für Anfänger lohnt. Bring deine Antwort in die Reihenfolge des Bauplans.",
+      "eintraege": [
+        { "text": "„Ja, für Anfänger auf jeden Fall.“", "warum": "Punkt: Die Antwort steht vorn." },
+        { "text": "„Man kocht jedes Mal ein ganzes Menü mit.“", "warum": "Grund: warum es sich lohnt." },
+        { "text": "„Nach dem dritten Abend habe ich zum ersten Mal Gäste eingeladen.“", "warum": "Beispiel: ein eigenes Erlebnis macht den Grund greifbar." },
+        { "text": "„Also: Melde dich an.“", "warum": "Punkt: Der Schluss wiederholt die Antwort – als Aufforderung." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "stegreif-v-0012", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "wissen" },
+      "frage": "Du gibst den Stand eures Umzugs ins neue Büro durch. Bring die Teile in die Reihenfolge „Gestern – heute – morgen“.",
+      "eintraege": [
+        { "text": "„Vor einem Monat standen hier noch dreißig Kartons.“", "warum": "Gestern: wo ihr herkommt." },
+        { "text": "„Heute sind alle Arbeitsplätze eingerichtet.“", "warum": "Heute: der Stand." },
+        { "text": "„Nächste Woche kommt die Küche dazu.“", "warum": "Morgen: was als Nächstes kommt." },
+        { "text": "„Kurz gesagt: Wir sind fast fertig.“", "warum": "Der Schluss-Satz fasst alles zusammen – Ende bleibt hängen." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "stegreif-v-0013", "faehigkeit": "stegreif.struktur", "stufe": 4, "kanal": "wissen" },
+      "frage": "Carla fragt: „Warum sollten wir die Kundenumfrage verschieben?“ Ordne die Antworten von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Weil im Dezember kaum jemand antwortet. Im Januar bekommen wir mehr Rückmeldungen – letztes Jahr waren es fast doppelt so viele.“", "warum": "Grund und Beispiel, in zwei Sätzen. So überzeugt eine spontane Antwort." },
+        { "text": "„Im Dezember antworten weniger Kunden.“", "warum": "Richtig, aber ohne Beispiel bleibt es eine Behauptung." },
+        { "text": "„Also, da gibt es mehrere Gründe, Feiertage, Urlaub, Jahresabschluss, und außerdem …“", "warum": "Viele Gründe ohne Ordnung – keiner bleibt hängen." },
+        { "text": "„Das ist halt so ein Gefühl.“", "warum": "Ehrlich vielleicht, aber für eine Entscheidung zu wenig." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "stegreif-v-0014", "faehigkeit": "stegreif.struktur", "stufe": 2, "kanal": "koennen" },
+      "auftrag": "Tante Renate fragt: „Und, wie gefällt dir die neue Wohnung?“ Bring die Antwort in die Form Punkt – Grund – Beispiel.",
+      "vorlage": "„Na ja, der Umzug war anstrengend, die Möbelpacker kamen zu spät, aber jetzt, also, eigentlich gefällt sie mir, vor allem der Balkon, da sitze ich jeden Abend.“",
+      "kriterien": ["beginnt mit der Antwort", "ein Grund", "ein kurzes Beispiel"],
+      "muster": ["„Sehr gut. Vor allem wegen des Balkons – da sitze ich jeden Abend mit einem Tee.“", "„Gut! Sie ist hell und ruhig. Gestern habe ich am Fenster gelesen, bis es dunkel war.“"] },
+    { "art": "umformulieren", "kopf": { "id": "stegreif-v-0015", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "koennen" },
+      "auftrag": "Gliedere die Antwort laut in drei Punkte.",
+      "vorlage": "„Was ich am Ehrenamt mag? Ach, die Leute sind nett, und man lernt was, und irgendwie tut es auch gut, und man kommt raus, und die Leute, hab ich das schon gesagt?“",
+      "kriterien": ["kündigt die Zahl an", "drei getrennte Punkte", "keine Wiederholung"],
+      "muster": ["„Drei Dinge: die Menschen, das Lernen – und dass ich abends rauskomme.“", "„Erstens die Gemeinschaft. Zweitens lerne ich ständig dazu. Drittens tut es mir einfach gut.“"] },
+    { "art": "umformulieren", "kopf": { "id": "stegreif-v-0016", "faehigkeit": "stegreif.struktur", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Bau den Vorschlag nach Problem – Lösung – Nutzen um.",
+      "vorlage": "„Ich dachte, man könnte vielleicht, wenn alle einverstanden sind, eine Liste machen, wer wann die Spülmaschine ausräumt, weil, ja, das bleibt halt oft liegen, und dann ist es ärgerlich.“",
+      "kriterien": ["beginnt mit dem Problem", "Lösung als klarer Vorschlag", "Nutzen am Ende"],
+      "muster": ["„Die Spülmaschine bleibt oft voll stehen. Ich schlage einen Wochenplan vor. Dann ist morgens immer sauberes Geschirr da.“", "„Problem: Keiner räumt die Spülmaschine aus. Lösung: ein Plan an der Tür. Nutzen: weniger Ärger, mehr Tassen.“"] },
+    { "art": "blitz", "kopf": { "id": "stegreif-v-0017", "faehigkeit": "stegreif.struktur", "stufe": 2, "kanal": "koennen", "uhr": true },
+      "auftrag": "Gliedere in Stichworten: Wie bereitet man ein Grillfest vor? Genau drei Punkte.", "ziel": 3, "sekunden": 20,
+      "beispiele": ["Gäste und Termin", "Essen und Getränke", "Plan für Regen"] },
+    { "art": "blitz", "kopf": { "id": "stegreif-v-0018", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "koennen", "uhr": true },
+      "auftrag": "Nenne Themen, über die man mit „Gestern – heute – morgen“ gut sprechen kann.", "ziel": 5, "sekunden": 30,
+      "beispiele": ["mein Wohnort", "unser Verein", "das Projekt", "meine Arbeit", "die Familienfeiern", "mein Garten"] },
+    { "art": "sprechen", "kopf": { "id": "stegreif-v-0019", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "stegreif-v-0007" },
+      "auftrag": "Beantworte laut mit Punkt – Grund – Beispiel – Punkt: „Sollte man im Urlaub dienstlich erreichbar sein?“",
+      "sekunden": 45,
+      "pruefliste": ["Erster Satz = Antwort?", "Ein Grund, ein Beispiel?", "Mit dem Punkt geendet?"] },
+    { "art": "sprechen", "kopf": { "id": "stegreif-v-0020", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "stegreif-v-0008" },
+      "auftrag": "Erzähl einer neuen Nachbarin aus dem Stand, was sie über deine Straße wissen sollte – mit „Drei Dinge …“.",
+      "sekunden": 45,
+      "pruefliste": ["Zahl angekündigt?", "Mitgezählt?", "Klar aufgehört?"] },
+    { "art": "sprechen", "kopf": { "id": "stegreif-v-0021", "faehigkeit": "stegreif.struktur", "stufe": 4, "kanal": "koennen", "laut": true, "leise": "stegreif-v-0010" },
+      "auftrag": "Dein Zug fällt aus. Sprich die Nachricht an Miriam nach „Was – Was heißt das – Was jetzt“.",
+      "sekunden": 30,
+      "pruefliste": ["Was passiert ist, in einem Satz?", "Die Folge genannt?", "Ein klarer Vorschlag am Ende?"] },
+    { "art": "dialog", "kopf": { "id": "stegreif-v-0022", "faehigkeit": "stegreif.struktur", "stufe": 3, "kanal": "koennen" },
+      "gespraech": {
+        "titel": "Die Frage beim Elternabend", "figur": "eine Lehrerin",
+        "lage": "Elternabend. Die Lehrerin fragt in die Runde, ob die Klasse im Frühjahr ins Schullandheim fahren soll. Sie schaut dich an.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Die Lehrerin: „Wie sehen Sie das?“",
+            "wahl": [
+              { "text": "„Ich bin dafür. Die Kinder wachsen dabei zusammen – nach dem letzten Ausflug haben sie sich viel besser verstanden.“", "wert": 2, "weiter": "k2", "rueck": "Punkt, Grund, Beispiel. Die Runde weiß sofort, wo du stehst." },
+              { "text": "„Schwierige Frage. Es gibt Kosten, Aufsicht, Zeit, aber auch schöne Seiten, und die Kinder, und dann ist da noch das Wetter …“", "wert": 0, "tendenz": "alles", "weiter": "k2b", "rueck": "Alles gleichzeitig – deine Meinung bleibt unklar." },
+              { "text": "„Grundsätzlich gern.“", "wert": 1, "weiter": "k2", "rueck": "Klar, aber ohne Grund. Ein Satz mehr hätte die anderen mitgenommen." }
+            ] },
+          { "id": "k2", "sagt": "Ein anderer Vater: „Und die Kosten?“",
+            "wahl": [
+              { "text": "„Gute Frage. Dafür gibt es den Förderverein – den könnten wir fragen.“", "wert": 2, "weiter": "ende1", "rueck": "Einwand angenommen, Lösung vorgeschlagen." },
+              { "text": "„Na ja, irgendwie geht das immer.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende1", "rueck": "Klingt nach Ausweichen. Ein konkreter Vorschlag wäre stärker." }
+            ] },
+          { "id": "k2b", "sagt": "Die Lehrerin: „Und unterm Strich?“",
+            "wahl": [
+              { "text": "„Unterm Strich: dafür.“", "wert": 2, "weiter": "ende1", "rueck": "Gut gefangen – das Fazit steht." },
+              { "text": "„Das müssen die anderen entscheiden.“", "wert": 1, "weiter": "ende1", "rueck": "Bescheiden – aber du wurdest nach deiner Sicht gefragt." }
+            ] },
+          { "id": "ende1", "sagt": "Die Lehrerin notiert etwas und fragt die nächsten Eltern.", "ende": "Erst die Antwort, dann der Grund – auch beim Elternabend kommt man so am schnellsten an." }
+        ],
+        "prinzipien": ["Antwort zuerst", "ein Grund, ein Beispiel", "Fazit statt Liste"]
+      } },
+    { "art": "dialog", "kopf": { "id": "stegreif-v-0023", "faehigkeit": "stegreif.struktur", "stufe": 4, "kanal": "koennen" },
+      "gespraech": {
+        "titel": "Der Stand am Telefon", "figur": "Dr. Henrik Albers",
+        "lage": "Dr. Albers ruft dich unerwartet an, während er im Auto sitzt. Er hat zwei Minuten.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Dr. Albers: „Kurz: Wie steht's mit der Kundenliste?“",
+            "wahl": [
+              { "text": "„Also, angefangen haben wir ja im März, dann kam die Sache mit den alten Daten, und Tarek war im Urlaub …“", "wert": 0, "tendenz": "umweg", "weiter": "k1b", "rueck": "Die Vorgeschichte frisst seine zwei Minuten." },
+              { "text": "„Zu drei Vierteln fertig. Offen sind die Adressen aus dem Norden – bis Freitag sind sie drin.“", "wert": 2, "weiter": "k2", "rueck": "Stand, Rest, Termin. Mehr braucht er im Auto nicht." },
+              { "text": "„Läuft gut.“", "wert": 1, "weiter": "k2", "rueck": "Beruhigend, aber er weiß nicht, wie weit ihr seid." }
+            ] },
+          { "id": "k1b", "sagt": "Dr. Albers: „Moment – fertig oder nicht?“",
+            "wahl": [
+              { "text": "„Zu drei Vierteln. Der Rest ist bis Freitag drin.“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen. Jetzt hat er, was er braucht." },
+              { "text": "„Das ist kompliziert.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Für ihn heißt das: Ich weiß es nicht." }
+            ] },
+          { "id": "k2", "sagt": "Dr. Albers: „Gut. Brauchen Sie etwas von mir?“",
+            "wahl": [
+              { "text": "„Ja: eine Freigabe für die Daten aus dem Norden.“", "wert": 2, "weiter": "ende1", "rueck": "Eine klare Bitte. Er kann sofort Ja sagen." },
+              { "text": "„Nein, das schaffe ich schon irgendwie.“", "wert": 1, "weiter": "ende1", "rueck": "Tapfer – aber wenn du etwas brauchst, ist jetzt der Moment." }
+            ] },
+          { "id": "ende1", "sagt": "Dr. Albers: „Gut. Danke.“ Er legt auf.", "ende": "Ein Anruf ohne Vorwarnung: Stand, Rest, Termin – und eine klare Bitte. Fertig in einer Minute." },
+          { "id": "ende2", "sagt": "Dr. Albers: „Gut, schicken Sie mir das per Mail.“", "ende": "Kein Drama. Beim nächsten Mal: Stand in einem Satz, dann der Rest." }
+        ],
+        "prinzipien": ["Stand zuerst", "Rest und Termin", "klare Bitte"]
+      } },
+
+    { "art": "auswahl", "kopf": { "id": "stegreif-v-0024", "faehigkeit": "stegreif.kern", "stufe": 2, "kanal": "wissen" },
+      "frage": "Du sollst in einem Satz sagen, worum es im Film ging, den du gestern gesehen hast. Welcher Satz trifft den Kern?",
+      "antworten": [
+        { "text": "„Eine Köchin verliert ihr Restaurant und baut sich mit einem Foodtruck ein neues Leben auf.“", "wert": 2, "warum": "Wer, was, wohin – in einem Satz. Danach kann man nachfragen." },
+        { "text": "„Ein toller Film, wirklich, mit guten Schauspielern und schöner Musik.“", "wert": 0, "tendenz": "umweg", "warum": "Eine Bewertung, kein Inhalt. Dein Gegenüber weiß nicht, worum es ging." },
+        { "text": "„Es geht um eine Köchin.“", "wert": 1, "warum": "Ein Anfang – aber noch kein Kern. Was passiert mit ihr?" }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "stegreif-v-0025", "faehigkeit": "stegreif.kern", "stufe": 3, "kanal": "wissen" },
+      "frage": "Woran erkennst du am ehesten, dass du den Kern einer Sache noch nicht gefunden hast?",
+      "antworten": [
+        { "text": "Du sprichst schon drei Minuten und bist noch nicht beim Punkt.", "wert": 1, "warum": "Ein Warnzeichen – aber erst hinterher. Der Satz-Test zeigt es vorher." },
+        { "text": "Du kannst es nicht in einem Satz sagen.", "wert": 2, "warum": "Der Ein-Satz-Test: Gelingt er nicht, ist der Kern noch nicht klar – für dich und für andere." },
+        { "text": "Du hast keine Zahlen und Fakten parat, mit denen du deine Aussage untermauern könntest.", "wert": 0, "warum": "Zahlen stützen einen Kern. Ob du ihn hast, zeigen sie nicht." },
+        { "text": "Die anderen nicken nicht.", "wert": 0, "warum": "Nicken hat viele Gründe. Ob du den Kern hast, prüfst du besser selbst." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "stegreif-v-0026", "faehigkeit": "stegreif.kern", "stufe": 4, "kanal": "wissen" },
+      "frage": "Jonas erklärt: „Der Server ist zu 95 Prozent voll, die Sicherung läuft deshalb nachts nicht mehr durch, und wenn wir nichts tun, verlieren wir im Ernstfall die Daten eines Tages.“ Welcher Satz trifft den Kern für Dr. Albers?",
+      "antworten": [
+        { "text": "„Der Server ist zu 95 Prozent voll.“", "wert": 1, "warum": "Die Ursache, aber nicht, warum es ihn kümmern sollte." },
+        { "text": "„Jonas hat ein technisches Problem mit dem Server, das er gern erklären würde.“", "wert": 0, "tendenz": "umweg", "warum": "Ein Satz über ein Gespräch, nicht über die Sache. Albers erfährt nichts." },
+        { "text": "„Wir brauchen mehr Speicher, sonst sind im Ernstfall die Daten eines ganzen Tages weg.“", "wert": 2, "warum": "Was zu tun ist und warum – aus Sicht dessen, der entscheidet." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "stegreif-v-0027", "faehigkeit": "stegreif.kern", "stufe": 2, "kanal": "koennen" },
+      "auftrag": "Kürze die Sprachnachricht auf das, was Sven wissen muss – höchstens zwei Sätze.",
+      "vorlage": "„Hey Sven, du, ich wollte nur sagen, also, das mit Samstag, ich hab nochmal nachgeschaut, und der Platz ist ab vierzehn Uhr frei, nicht ab zwölf, wie wir dachten, das heißt, wir müssten später anfangen, wenn das für dich okay ist, sag mal Bescheid.“",
+      "kriterien": ["neue Uhrzeit vorn", "Bitte um Antwort", "höchstens zwei Sätze"],
+      "muster": ["„Samstag geht erst ab vierzehn Uhr. Passt dir das?“", "„Hey Sven, der Platz ist Samstag erst ab zwei frei. Sag kurz, ob das geht.“"] },
+    { "art": "umformulieren", "kopf": { "id": "stegreif-v-0028", "faehigkeit": "stegreif.kern", "stufe": 3, "kanal": "koennen" },
+      "auftrag": "Bring die Antwort auf die Frage „Brauchst du Hilfe beim Umzug?“ auf den Kern.",
+      "vorlage": "„Ach, das ist lieb, dass du fragst, eigentlich habe ich schon einiges organisiert, aber ehrlich gesagt, für die Waschmaschine bräuchte ich noch jemanden, die ist so schwer, und mein Bruder kann erst später.“",
+      "kriterien": ["Antwort zuerst", "was genau gebraucht wird", "wann"],
+      "muster": ["„Ja – für die Waschmaschine. Hast du Samstagvormittag Zeit?“", "„Gern, aber nur für eins: die Waschmaschine. Das wäre eine große Hilfe.“"] },
+    { "art": "umformulieren", "kopf": { "id": "stegreif-v-0029", "faehigkeit": "stegreif.kern", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Schreib den ersten Satz einer Mail an Nadine Köhler, der ihr sofort sagt, worum es geht.",
+      "vorlage": "„Sehr geehrte Frau Köhler, ich hoffe, es geht Ihnen gut. Wie bei unserem Gespräch letzte Woche angesprochen, haben wir uns intern noch einmal beraten und sind zu dem Ergebnis gekommen, dass wir Ihnen ein angepasstes Angebot machen möchten, das …“",
+      "kriterien": ["Kern im ersten Satz", "was sie davon hat oder tun soll", "keine Vorrede"],
+      "muster": ["„Wie besprochen: Das neue Angebot liegt bei, die Wartung ist jetzt im Preis enthalten.“", "„Gute Nachricht vorweg: Wir können die Wartung ohne Aufpreis anbieten – Details anbei.“"] },
+    { "art": "rangfolge", "kopf": { "id": "stegreif-v-0030", "faehigkeit": "stegreif.kern", "stufe": 2, "kanal": "wissen" },
+      "frage": "Frau Sommer fragt, warum die Straße gesperrt ist. Ordne die Antworten von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Bis Freitag wird die Wasserleitung erneuert – zu Fuß kommen Sie durch.“", "warum": "Was, wie lange, was es für sie heißt. Der ganze Kern in einem Satz." },
+        { "text": "„Wegen Bauarbeiten.“", "warum": "Stimmt, aber sie weiß nicht, wie lange und ob sie durchkommt." },
+        { "text": "„Ach, da war ein Schreiben von der Stadt, das kam letzte Woche, glaube ich, oder vorletzte …“", "warum": "Die Vorgeschichte ohne die eigentliche Antwort." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "stegreif-v-0031", "faehigkeit": "stegreif.kern", "stufe": 3, "kanal": "wissen" },
+      "frage": "Du sollst die Besprechung für Lena zusammenfassen, die nicht dabei war. Ordne von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Ergebnis: Wir starten im März. Für dich heißt das: Du übernimmst ab Februar die Schulungen.“", "warum": "Ergebnis und was es für sie bedeutet – der Kern für genau diese Person." },
+        { "text": "„Wir starten im März.“", "warum": "Richtig, aber ohne den Teil, der Lena betrifft." },
+        { "text": "„Wir haben lange diskutiert, es gab verschiedene Meinungen, Tarek war skeptisch …“", "warum": "Der Verlauf statt des Ergebnisses." },
+        { "text": "„War eine lange Besprechung.“", "warum": "Ein Eindruck, kein Inhalt." }
+      ] },
+    { "art": "bauplan", "kopf": { "id": "stegreif-v-0032", "faehigkeit": "stegreif.kern", "stufe": 2, "kanal": "koennen" },
+      "plan": "Der Ein-Satz-Kern",
+      "anlass": "Jemand fragt dich: „Und was machst du so beruflich?“",
+      "felder": [
+        { "name": "Für wen?", "hilfe": "Menschen, Kunden, Kollegen." },
+        { "name": "Was tust du für sie?", "hilfe": "Ein Verb, kein Titel." },
+        { "name": "Der eine Satz", "hilfe": "Beides zusammen." }
+      ],
+      "muster": ["Für wen: kleine Betriebe. Was: Ich sorge dafür, dass ihre Rechner laufen. Satz: „Ich sorge dafür, dass in kleinen Betrieben die Rechner laufen.“", "Für wen: Kinder. Was: Ich bringe ihnen Schwimmen bei. Satz: „Ich bringe Kindern das Schwimmen bei.“"] },
+    { "art": "bauplan", "kopf": { "id": "stegreif-v-0033", "faehigkeit": "stegreif.kern", "stufe": 3, "kanal": "koennen" },
+      "plan": "Kern – dann Rest",
+      "anlass": "Du kommst zu spät zum Vereinstreffen und sollst kurz erklären, was beim Gespräch mit der Gemeinde herauskam.",
+      "felder": [
+        { "name": "Der Kern", "hilfe": "Das Ergebnis in einem Satz." },
+        { "name": "Was es für uns heißt", "hilfe": "Folge für den Verein." },
+        { "name": "Der Rest – nur auf Nachfrage", "hilfe": "Was du weglässt, bis jemand fragt." }
+      ],
+      "muster": ["Kern: „Wir bekommen die Halle – aber nur dienstags.“ Folge: „Das Training am Donnerstag müssen wir verlegen.“ Rest: wie das Gespräch lief, wer dabei war.", "Kern: „Der Zuschuss kommt, halb so hoch wie beantragt.“ Folge: „Wir müssen bei den Trikots sparen.“ Rest: die Begründung der Gemeinde."] },
+    { "art": "kern", "kopf": { "id": "stegreif-v-0034", "faehigkeit": "stegreif.kern", "stufe": 2, "kanal": "koennen" },
+      "absatz": "Ich wollte dir nur sagen, dass ich heute leider nicht wie geplant zum Laufen kommen kann, weil bei mir in der Arbeit noch etwas dazwischengekommen ist, das ich unbedingt fertig machen muss, aber vielleicht können wir es ja auf morgen verschieben, wenn dir das passt, ich hätte ab sechs Zeit.",
+      "hoechstWoerter": 12,
+      "kriterien": ["Absage klar", "neuer Vorschlag", "höchstens 12 Wörter"],
+      "muster": ["„Heute schaffe ich es nicht – morgen ab sechs?“", "„Laufen heute fällt aus. Passt dir morgen um sechs?“"] },
+    { "art": "kern", "kopf": { "id": "stegreif-v-0035", "faehigkeit": "stegreif.kern", "stufe": 3, "kanal": "koennen" },
+      "absatz": "Bei der Kontrolle der Lieferung heute Morgen ist uns aufgefallen, dass von den bestellten vierzig Stühlen nur dreißig angekommen sind, die restlichen zehn sind laut Spediteur noch im Lager, sollen aber erst nächste Woche kommen, was für die Veranstaltung am Samstag natürlich ein Problem ist, weil wir mit allen vierzig gerechnet haben.",
+      "hoechstWoerter": 18,
+      "kriterien": ["nennt das Problem", "nennt die Folge für Samstag", "höchstens 18 Wörter"],
+      "muster": ["„Zehn Stühle fehlen und kommen erst nach Samstag – wir brauchen Ersatz.“", "„Für Samstag fehlen zehn Stühle; die Nachlieferung kommt zu spät.“"] },
+    { "art": "kern", "kopf": { "id": "stegreif-v-0036", "faehigkeit": "stegreif.kern", "stufe": 3, "kanal": "koennen" },
+      "absatz": "Ich habe mir die drei Angebote für den neuen Drucker angeschaut und verglichen, und eigentlich sind sie sich ziemlich ähnlich, aber das mittlere hat den Vorteil, dass die Patronen deutlich günstiger sind, was auf ein Jahr gerechnet am meisten ausmacht, auch wenn das Gerät selbst etwas teurer ist als das billigste.",
+      "hoechstWoerter": 15,
+      "kriterien": ["Empfehlung vorn", "ein Grund", "höchstens 15 Wörter"],
+      "muster": ["„Ich empfehle das mittlere Angebot – die Patronen sind viel günstiger.“", "„Das mittlere: teurer in der Anschaffung, aber auf ein Jahr am günstigsten.“"] },
+    { "art": "kern", "kopf": { "id": "stegreif-v-0037", "faehigkeit": "stegreif.kern", "stufe": 4, "kanal": "koennen" },
+      "absatz": "Wie ihr wisst, haben wir in den letzten Monaten verschiedene Möglichkeiten geprüft, wie wir die Wartezeiten am Telefon verringern können, und dabei ist herausgekommen, dass die meisten Anrufe zwischen neun und elf eingehen, wenn gleichzeitig die Teamrunde stattfindet, weshalb wir vorschlagen würden, die Teamrunde auf den Nachmittag zu verlegen, damit vormittags alle erreichbar sind.",
+      "hoechstWoerter": 15,
+      "kriterien": ["Vorschlag vorn", "Grund in wenigen Wörtern", "höchstens 15 Wörter"],
+      "muster": ["„Wir verlegen die Teamrunde auf nachmittags – vormittags kommen die meisten Anrufe.“", "„Vorschlag: Teamrunde nachmittags, damit wir zur Stoßzeit am Telefon sind.“"] },
+    { "art": "fehler", "kopf": { "id": "stegreif-v-0038", "faehigkeit": "stegreif.kern", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Miriam fragt, ob der Termin morgen bleibt. Markier, was den Kern verdeckt.",
+      "teile": [
+        { "t": "„Also,", "fehler": "Anlauf ohne Inhalt." },
+        { "t": "ich sag mal so,", "fehler": "Füllfloskel – der Satz wird ohne sie stärker." },
+        { "t": "der Termin bleibt," },
+        { "t": "aber wie gesagt,", "fehler": "„Wie gesagt“ – es war noch gar nicht gesagt." },
+        { "t": "eine Stunde später, um elf.“" }
+      ] },
+    { "art": "fehler", "kopf": { "id": "stegreif-v-0039", "faehigkeit": "stegreif.kern", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Die Kassenwartin im Verein fasst zusammen. Markier die Stellen, die man streichen kann, ohne dass etwas fehlt.",
+      "teile": [
+        { "t": "„Im Grunde genommen", "fehler": "Füllfloskel." },
+        { "t": "haben wir dieses Jahr" },
+        { "t": "eigentlich", "fehler": "Schwächt ab, ohne etwas zu sagen." },
+        { "t": "ein Plus von 300 Euro." },
+        { "t": "Das ist, sagen wir mal, quasi", "fehler": "Zwei Weichmacher hintereinander." },
+        { "t": "doppelt so viel wie letztes Jahr.“" }
+      ] },
+    { "art": "fehler", "kopf": { "id": "stegreif-v-0040", "faehigkeit": "stegreif.kern", "stufe": 4, "kanal": "wissen" },
+      "auftrag": "Eine Antwort auf die Frage „Was ist das Ergebnis der Umfrage?“ Markier, was vor oder neben dem Kern steht und ihn verdrängt.",
+      "teile": [
+        { "t": "„Bevor ich zum Ergebnis komme, kurz zur Methode:", "fehler": "Vorrede vor dem Kern – die Methode kann warten, bis jemand fragt." },
+        { "t": "wir haben zweihundert Kunden angeschrieben, davon haben siebzig geantwortet.", "fehler": "Zahlen zum Vorgehen, nicht zum Ergebnis." },
+        { "t": "Das Ergebnis:" },
+        { "t": "Die meisten wünschen sich kürzere Lieferzeiten." },
+        { "t": "Was ich persönlich auch total verstehe, weil ich selbst ungern warte.", "fehler": "Eine Meinung, die vom Kern wegführt." }
+      ] },
+
+    { "art": "auswahl", "kopf": { "id": "stegreif-v-0041", "faehigkeit": "stegreif.zeit", "stufe": 2, "kanal": "wissen" },
+      "frage": "Eine Frage überrascht dich. Was gibt dir am ehesten zwei Sekunden, ohne zu schwimmen?",
+      "antworten": [
+        { "text": "Sofort mit „Ähm, also …“ anfangen und dann weitersehen.", "wert": 0, "tendenz": "schwimmen", "warum": "Du sprichst, bevor du weißt, wohin. So beginnt das Schwimmen." },
+        { "text": "Die Frage in eigenen Worten wiederholen.", "wert": 2, "warum": "Zeigt, dass du zugehört hast, klärt Missverständnisse – und schenkt dir Zeit." },
+        { "text": "Schweigend nach unten schauen, bis dir etwas einfällt.", "wert": 1, "warum": "Die Pause ist gut. Mit Blick auf die Person und einem „Moment“ wirkt sie ruhiger." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "stegreif-v-0042", "faehigkeit": "stegreif.zeit", "stufe": 3, "kanal": "wissen" },
+      "frage": "Beim Bewerbungsgespräch: „Wo sehen Sie sich in fünf Jahren?“ Du hast darüber nie nachgedacht. Was ist am besten?",
+      "antworten": [
+        { "text": "„Gute Frage – ich sortiere kurz.“ Ausatmen, dann laut gliedern: „Zwei Dinge sind mir wichtig …“", "wert": 2, "warum": "Angekündigte Pause und eine Ordnung. So entsteht die Antwort beim Sprechen." },
+        { "text": "„Darüber habe ich noch nie nachgedacht.“", "wert": 1, "warum": "Ehrlich, aber du verschenkst die Chance. Zwei Sätze dazu findest du auch spontan." },
+        { "text": "Schnell etwas Großes sagen, zum Beispiel „Abteilungsleitung“, weil das immer gut ankommt und ehrgeizig klingt.", "wert": 0, "tendenz": "bluffen", "warum": "Ein Ziel, das nicht deins ist, fällt bei der nächsten Nachfrage auseinander." },
+        { "text": "Die Frage überhören und von deiner jetzigen Stelle erzählen.", "wert": 0, "tendenz": "ausweichen", "warum": "Ausweichen fällt auf – gerade im Gespräch, in dem genau zugehört wird." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "stegreif-v-0043", "faehigkeit": "stegreif.zeit", "stufe": 4, "kanal": "wissen" },
+      "frage": "Mitten in deiner Antwort verlierst du den Faden. Was hilft am ehesten?",
+      "antworten": [
+        { "text": "Den letzten Satz wiederholen – oft kommt der Gedanke damit zurück.", "wert": 2, "warum": "Die Wiederholung gibt dem Kopf einen Anlauf. Für die Zuhörer klingt sie wie eine Betonung." },
+        { "text": "Schnell weiterreden, damit niemand die Lücke bemerkt.", "wert": 0, "tendenz": "schwimmen", "warum": "Ohne Faden wird das Reden zum Kreisen. Die Lücke wird so eher größer." },
+        { "text": "Sich ausführlich entschuldigen und erklären, dass man heute müde und nicht ganz bei der Sache ist.", "wert": 0, "tendenz": "entschuldigen", "warum": "Die Entschuldigung lenkt alle auf die Lücke – die meisten hatten sie kaum bemerkt." },
+        { "text": "Offen fragen: „Wo war ich stehen geblieben?“", "wert": 1, "warum": "Ehrlich und menschlich. Mit „Genau: …“ hinterher ist es eine gute Rettung." }
+      ] },
+    { "art": "dialog", "kopf": { "id": "stegreif-v-0044", "faehigkeit": "stegreif.zeit", "stufe": 3, "kanal": "koennen" },
+      "gespraech": {
+        "titel": "Die Frage im Farbenladen", "figur": "ein Kunde",
+        "lage": "Du hilfst samstags im Farbenladen eines Freundes aus. Ein Kunde fragt dich nach einer Farbe, von der du wenig weißt.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Der Kunde: „Taugt die Farbe auch für draußen?“",
+            "wahl": [
+              { "text": "„Für draußen? Moment, ich schaue kurz aufs Etikett.“", "wert": 2, "weiter": "k2", "rueck": "Frage wiederholt, Pause angekündigt – und du suchst die Antwort, statt zu raten." },
+              { "text": "„Klar, die hält alles aus.“", "wert": 0, "tendenz": "bluffen", "weiter": "k2b", "rueck": "Geraten. Blättert die Farbe im Winter ab, kommt er wieder." },
+              { "text": "„Keine Ahnung, ich bin nur Aushilfe.“", "wert": 1, "weiter": "k2c", "rueck": "Ehrlich, aber er steht ohne Antwort da." }
+            ] },
+          { "id": "k2", "sagt": "Auf dem Etikett steht „nur für innen“.",
+            "wahl": [
+              { "text": "„Die hier ist nur für innen. Ich frage, welche wir für draußen haben.“", "wert": 2, "weiter": "ende1", "rueck": "Klar, ehrlich, mit nächstem Schritt." },
+              { "text": "„Na ja, unter einem Dach geht das vielleicht auch, so schlimm wird es schon nicht sein.“", "wert": 0, "tendenz": "bluffen", "weiter": "ende1", "rueck": "Eine Vermutung als Rat – darauf sollte er sich nicht verlassen." }
+            ] },
+          { "id": "k2b", "sagt": "Der Kunde: „Steht das irgendwo? Auf der Dose sehe ich nichts.“",
+            "wahl": [
+              { "text": "„Da war ich zu schnell. Lassen Sie uns aufs Etikett schauen.“", "wert": 2, "weiter": "k2", "rueck": "Gut korrigiert. Nachsehen statt nachlegen." },
+              { "text": "„Das weiß man doch.“", "wert": 0, "tendenz": "bluffen", "weiter": "ende2", "rueck": "Er merkt, dass du rätst." }
+            ] },
+          { "id": "k2c", "sagt": "Der Kunde: „Und wen kann ich fragen?“",
+            "wahl": [
+              { "text": "„Moment, ich schaue aufs Etikett – und sonst hole ich den Chef.“", "wert": 2, "weiter": "k2", "rueck": "Jetzt hat er einen Weg zur Antwort." },
+              { "text": "„Weiß ich auch nicht.“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Er geht ohne Antwort." }
+            ] },
+          { "id": "ende1", "sagt": "Der Kunde nickt: „Gut, dass Sie nachgeschaut haben.“", "ende": "Wiederholen, nachsehen, ehrlich antworten – mehr braucht eine Frage nicht, auf die man nicht vorbereitet ist." },
+          { "id": "ende2", "sagt": "Der Kunde stellt die Dose zurück und geht.", "ende": "Kein Drama. Beim nächsten Mal: „Moment, ich schaue nach“ – das ist schneller als jedes Raten." }
+        ],
+        "prinzipien": ["Frage wiederholen", "nachsehen statt raten", "Weg zur Antwort zeigen"]
+      } },
+    { "art": "dialog", "kopf": { "id": "stegreif-v-0045", "faehigkeit": "stegreif.zeit", "stufe": 4, "kanal": "koennen" },
+      "gespraech": {
+        "titel": "Die breite Frage", "figur": "Nadine Köhler",
+        "lage": "Erstes Gespräch mit Nadine Köhler. Sie lehnt sich zurück und stellt eine sehr allgemeine Frage.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Nadine Köhler: „Erzählen Sie mal – was können Sie denn so?“",
+            "wahl": [
+              { "text": "Alles aufzählen, was dein Betrieb anbietet, von A bis Z.", "wert": 0, "tendenz": "alles", "weiter": "k2b", "rueck": "Die Liste ist lang – und sie hört nicht, was davon für sie zählt." },
+              { "text": "„Gern. Damit ich das Passende erzähle: Geht es Ihnen eher um die Technik oder um die Betreuung?“", "wert": 2, "weiter": "k2", "rueck": "Eine Rückfrage, die die Frage enger macht – und dir Zeit gibt." },
+              { "text": "„Eigentlich alles rund um Rechner und Netzwerke.“", "wert": 1, "weiter": "k2", "rueck": "Kurz und wahr – aber noch nicht auf sie zugeschnitten." }
+            ] },
+          { "id": "k2", "sagt": "„Um die Betreuung. Unsere Leute verlieren zu viel Zeit mit kleinen Störungen.“",
+            "wahl": [
+              { "text": "„Genau dafür sind wir da: Kleine Störungen lösen wir meist am selben Tag aus der Ferne.“", "wert": 2, "weiter": "ende1", "rueck": "Jetzt passt deine Antwort zu ihrem Problem." },
+              { "text": "„Da müsste ich mal schauen, was wir da genau haben.“", "wert": 1, "weiter": "ende1", "rueck": "Ehrlich, aber das wüsstest du eigentlich." }
+            ] },
+          { "id": "k2b", "sagt": "Sie schaut auf die Uhr: „Und was davon brauche ich?“",
+            "wahl": [
+              { "text": "„Gute Frage – was kostet Sie heute am meisten Zeit?“", "wert": 2, "weiter": "k2", "rueck": "Gut umgeschwenkt: zurückfragen statt weiter aufzählen." },
+              { "text": "„Eigentlich alles davon.“", "wert": 0, "tendenz": "alles", "weiter": "ende2", "rueck": "Für sie klingt das nach: Ich weiß es nicht." }
+            ] },
+          { "id": "ende1", "sagt": "Sie nickt: „Das klingt nach dem, was wir suchen.“", "ende": "Eine breite Frage erst eng machen – dann passt die Antwort. Zurückfragen ist hier kein Ausweichen, sondern Zuhören." },
+          { "id": "ende2", "sagt": "„Schicken Sie mir einfach mal etwas.“ Sie steht auf.", "ende": "Kein Drama. Beim nächsten Mal: Bei sehr breiten Fragen zuerst zurückfragen, was gemeint ist." }
+        ],
+        "prinzipien": ["breite Fragen eng machen", "zurückfragen statt aufzählen", "Antwort auf ihr Problem"]
+      } },
+    { "art": "rangfolge", "kopf": { "id": "stegreif-v-0046", "faehigkeit": "stegreif.zeit", "stufe": 2, "kanal": "wissen" },
+      "frage": "Eine Frage trifft dich unvorbereitet. Bring die Schritte in eine sinnvolle Reihenfolge.",
+      "eintraege": [
+        { "text": "Ausatmen und die Person ansehen.", "warum": "Zuerst die Ruhe – sie macht den Kopf frei." },
+        { "text": "Die Frage in eigenen Worten wiederholen.", "warum": "Klärt, was gemeint ist, und gibt dir Zeit." },
+        { "text": "Mit der Antwort beginnen.", "warum": "Der erste echte Satz beantwortet die Frage." },
+        { "text": "Mit „Kurz gesagt: …“ schließen.", "warum": "Ein klares Ende statt eines Auslaufens." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "stegreif-v-0047", "faehigkeit": "stegreif.zeit", "stufe": 3, "kanal": "wissen" },
+      "frage": "Herr Petersen fragt nach einem Liefertermin, den du nicht kennst. Ordne die Antworten von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Das weiß ich nicht genau. Ich frage im Lager nach und rufe Sie bis Mittag an.“", "warum": "Ehrlich, mit nächstem Schritt und Zeitpunkt." },
+        { "text": "„Das weiß ich nicht, ich melde mich.“", "warum": "Ehrlich, aber ohne Zeitpunkt bleibt es vage." },
+        { "text": "„Ähm, also, das ist so eine Sache mit den Lieferungen …“", "warum": "Schwimmen – er bekommt weder Antwort noch Zusage." },
+        { "text": "„Nächste Woche bestimmt.“ – ohne es zu wissen.", "warum": "Eine geratene Zusage. Hält sie nicht, verlierst du mehr als eine Antwort." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "stegreif-v-0048", "faehigkeit": "stegreif.zeit", "stufe": 2, "kanal": "koennen" },
+      "auftrag": "Ersetze das Schwimmen am Anfang durch einen Satz, der ehrlich Zeit gewinnt.",
+      "vorlage": "„Ähm, ja, also, gute Frage, ähm, da muss ich, also, ja …“",
+      "kriterien": ["kündigt eine kurze Pause an", "ruhig", "kein „ähm“"],
+      "muster": ["„Gute Frage – ich sortiere kurz.“", "„Moment, das will ich richtig beantworten.“"] },
+    { "art": "umformulieren", "kopf": { "id": "stegreif-v-0049", "faehigkeit": "stegreif.zeit", "stufe": 3, "kanal": "koennen" },
+      "auftrag": "Mach aus dem Bluff eine ehrliche Antwort mit nächstem Schritt.",
+      "vorlage": "„Wie viele Teilnehmer hatten wir letztes Jahr? So hundertfünfzig, schätze ich mal, ungefähr.“ (Du weißt es nicht.)",
+      "kriterien": ["sagt offen, dass du es nicht weißt", "nennt, was du weißt", "nennt, wann du nachlieferst"],
+      "muster": ["„Die genaue Zahl habe ich nicht im Kopf – es waren mehr als im Jahr davor. Ich schaue nach und sage es dir heute.“", "„Weiß ich nicht sicher. Miriam hat die Liste – ich frage sie gleich.“"] },
+    { "art": "umformulieren", "kopf": { "id": "stegreif-v-0050", "faehigkeit": "stegreif.zeit", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Die Frage ist sehr breit. Schreib eine Rückfrage, die sie enger macht.",
+      "vorlage": "Dr. Albers: „Was halten Sie eigentlich vom neuen System?“",
+      "kriterien": ["bietet zwei Richtungen an", "freundlich", "kurz"],
+      "muster": ["„Meinen Sie die Bedienung oder die Auswertungen?“", "„Aus Sicht unseres Teams oder für die Kunden?“"] },
+    { "art": "kern", "kopf": { "id": "stegreif-v-0051", "faehigkeit": "stegreif.zeit", "stufe": 3, "kanal": "koennen" },
+      "absatz": "Ja, also, das ist eine gute Frage, darüber haben wir auch schon öfter gesprochen, und es gibt da verschiedene Sichtweisen, aber wenn ich ehrlich bin, glaube ich, dass wir das neue Programm frühestens im Sommer einführen sollten, weil vorher die Schulungen nicht fertig sind.",
+      "hoechstWoerter": 20,
+      "kriterien": ["kurze Brücke statt Anlauf", "Antwort direkt danach", "höchstens 20 Wörter"],
+      "muster": ["„Gute Frage – der Kern ist: frühestens im Sommer, weil die Schulungen vorher nicht fertig sind.“", "„Kurz gesagt: Sommer. Vorher sind die Schulungen nicht fertig.“"] },
+    { "art": "kern", "kopf": { "id": "stegreif-v-0052", "faehigkeit": "stegreif.zeit", "stufe": 4, "kanal": "koennen" },
+      "absatz": "Puh, da bin ich jetzt ehrlich gesagt nicht so richtig vorbereitet drauf, aber ich versuche es mal, also, ich würde sagen, dass der Umbau der Kantine sich lohnt, weil die Schlangen mittags einfach zu lang sind und viele deshalb lieber auswärts essen gehen.",
+      "hoechstWoerter": 18,
+      "kriterien": ["keine Entschuldigung vorweg", "Antwort zuerst", "höchstens 18 Wörter"],
+      "muster": ["„Spontan gesagt: Der Umbau lohnt sich – die Schlangen mittags sind zu lang.“", "„Ja, er lohnt sich. Viele essen wegen der Schlangen lieber auswärts.“"] },
+    { "art": "fehler", "kopf": { "id": "stegreif-v-0053", "faehigkeit": "stegreif.zeit", "stufe": 2, "kanal": "wissen" },
+      "auftrag": "Markier die Stellen, an denen jemand schwimmt, statt Zeit zu gewinnen.",
+      "teile": [
+        { "t": "„Ähm, also, ja,", "fehler": "Füllgeräusche ohne Richtung – eine angekündigte Pause wäre ruhiger." },
+        { "t": "Sie fragen nach dem Zeitplan?" },
+        { "t": "Moment, ich sortiere kurz." },
+        { "t": "Wie gesagt, wie ich schon sagte,", "fehler": "Wiederholung von etwas, das noch nicht gesagt war." },
+        { "t": "wir liegen eine Woche hinten.“" }
+      ] },
+    { "art": "fehler", "kopf": { "id": "stegreif-v-0054", "faehigkeit": "stegreif.zeit", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Jemand weiß die Antwort nicht. Markier, wo er sich selbst schadet.",
+      "teile": [
+        { "t": "„Das weiß ich gerade nicht genau." },
+        { "t": "Aber es sind sicher so um die achtzig Prozent,", "fehler": "Eine geratene Zahl, als wäre sie sicher – sie wird ab jetzt zitiert." },
+        { "t": "tut mir leid, ich bin heute wirklich schlecht vorbereitet,", "fehler": "Die Entschuldigung macht die Lücke größer, als sie ist." },
+        { "t": "ich schaue nach und melde mich bis morgen.“" }
+      ] }
+  ]
+}

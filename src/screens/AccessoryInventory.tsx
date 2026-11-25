@@ -12,6 +12,7 @@ import {
 import HeadsetVergabe from '../components/accessoryInventory/HeadsetVergabe'
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 import {
   ladeLager, aendereLager, patchesAnwenden, neuerArtikel, loadHistory, bestellVorschlag, unterwegsJeArtikel,
   setHistoryLineArrived, setHistorySentToSascha, deleteHistoryEntry,
@@ -51,8 +52,11 @@ const REITER_KEY = 'zubehoer.reiter'
 export default function AccessoryInventory() {
   const user = useAuthStore(s => s.session?.user)
   const von = user?.displayName || user?.username || 'unbekannt'
-  const [reiter, setReiter] = useState<Reiter>(() => { try { return localStorage.getItem(REITER_KEY) === 'headsets' ? 'headsets' : 'bestand' } catch { return 'bestand' } })
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte) — auch der gemerkte Reiter
+  const [reiter, setReiter] = useBereichZustand<Reiter>('accessory-inventory', () => { try { return localStorage.getItem(REITER_KEY) === 'headsets' ? 'headsets' : 'bestand' } catch { return 'bestand' } })
+  const { sichtbar } = useBereiche('accessory-inventory')
   const [headsetsGeladen, setHeadsetsGeladen] = useState(reiter === 'headsets')
+  if (reiter === 'headsets' && !headsetsGeladen) setHeadsetsGeladen(true)
   const wechsel = (r: Reiter) => { setReiter(r); if (r === 'headsets') setHeadsetsGeladen(true); try { localStorage.setItem(REITER_KEY, r) } catch { /* egal */ } }
   const REITER: { id: Reiter; label: string; icon: JSX.Element }[] = [
     { id: 'bestand', label: 'Bestand', icon: <Cable size={14} /> },
@@ -61,14 +65,14 @@ export default function AccessoryInventory() {
   return (
     <div className="flex flex-col h-full bg-background">
       <div className="flex gap-1 border-b border-border px-5 pt-1.5 shrink-0" data-zubehoer-reiter>
-        {REITER.map(r => (
+        {REITER.filter(r => sichtbar(r.id)).map(r => (
           <button key={r.id} onClick={() => wechsel(r.id)} data-reiter={r.id}
             className={`inline-flex items-center gap-1.5 px-3 py-2 text-sm border-b-2 -mb-px ${reiter === r.id ? 'border-primary text-foreground font-semibold' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>
             {r.icon}{r.label}
           </button>
         ))}
       </div>
-      <div className={reiter === 'bestand' ? 'flex-1 min-h-0' : 'hidden'}><BestandAnsicht von={von} /></div>
+      {sichtbar('bestand') && <div className={reiter === 'bestand' ? 'flex-1 min-h-0' : 'hidden'}><BestandAnsicht von={von} /></div>}
       {headsetsGeladen && <div className={reiter === 'headsets' ? 'flex-1 min-h-0' : 'hidden'}><HeadsetVergabe von={von} /></div>}
     </div>
   )

@@ -1,0 +1,323 @@
+{
+  "einheiten": [
+    {
+      "id": "stimme-1-01", "bereich": "stimme", "stufe": 1, "nr": 1,
+      "titel": "Deine Stimme hat ein Zuhause",
+      "faehigkeiten": ["stimme.klang"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass tiefere Stimmen im Labor öfter führungsstark wirken, zeigen mehrere Studien – meist mit künstlich verstellten Aufnahmen; wie stark das im Alltag wirkt, ist wenig untersucht. Das „mmh“ und die bequeme Lage sind Praxiswissen der Stimmpädagogik. Die Vier-Wochen-Grenze bei Heiserkeit stammt aus der deutschen Leitlinie.",
+      "quellen": ["klofstad2012", "aungputs2020", "praxis-stimme", "dysphonie2022"],
+      "aha": "Ein zustimmendes „mmh“ führt dich meist in die Tonlage, in der deine Stimme ohne Anstrengung klingt. Von dort aus trägt sie – ganz ohne Drücken.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer kompetent wirken will, sollte seine Stimme tiefer drücken.", "urteil": "falsch", "warum": "Im Labor wirkten künstlich tiefer gemachte Stimmen oft führungsstärker. Wer seine Stimme aber nach unten drückt, klingt gepresst und ermüdet schneller. Die eigene bequeme Lage ist die bessere Wahl." },
+        { "art": "karte", "text": "Jede Stimme hat einen Bereich, in dem sie ohne Mühe klingt – die bequeme Sprechstimmlage, in der Sprecherziehung Indifferenzlage genannt. So findest du sie: Stell dir vor, jemand erzählt dir etwas, und du stimmst mit geschlossenem Mund zu: „mmh“. Locker, nicht gesungen. Die Höhe dieses „mmh“ ist ein guter Startpunkt für deinen ersten Satz. Unter Anspannung rutscht die Stimme oft darüber." },
+        { "art": "studie", "frage": "Klingen tiefe Stimmen wirklich nach Führung?", "aufbau": "Forscher nahmen Männer und Frauen mit einem Wahlkampfsatz auf und machten jede Aufnahme digital höher und tiefer. Die Zuhörer sollten entscheiden, wen sie wählen würden.", "ergebnis": "Bei Männer- und bei Frauenstimmen wurde öfter die tiefere Fassung gewählt.", "grenze": "Eine erfundene Wahl, ein einziger Satz, künstlich verstellte Stimmen. Die Forscher warnen selbst davor, das auf echte Wahlen zu übertragen. Übersichten finden die Wirkung im Labor deutlich; für den Alltag fehlen gute Daten.", "beleg": "B", "quellen": ["klofstad2012", "aungputs2020"] },
+        { "art": "nachsprechen", "kopf": { "id": "stimme-1-01-a", "faehigkeit": "stimme.klang", "stufe": 1, "kanal": "koennen", "laut": true, "leise": "stimme-v-0109" },
+          "auftrag": "Erst das zustimmende „mmh“, dann ohne Pause den Satz – in derselben Höhe. Nimm dich auf, wenn du magst.",
+          "zeilen": ["Mmh – ja, genau.", "Mmh – guten Morgen zusammen.", "Mmh – hier spricht {name}.", "Mmh – ich bin gleich bei dir."],
+          "weise": "klar",
+          "pruefliste": ["Kein Druck im Hals?", "Beginnt der Satz in der Höhe des „mmh“?", "Klingt es nach dir – nicht gespielt?"] },
+        { "art": "zuordnen", "kopf": { "id": "stimme-1-01-b", "faehigkeit": "stimme.klang", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Was schont die Stimme – und was strengt sie an?",
+          "faecher": ["schont", "strengt an"],
+          "karten": [
+            { "text": "über den Tag verteilt Wasser trinken", "fach": 0 },
+            { "text": "in der lauten Kantine gegen den Lärm anreden", "fach": 1 },
+            { "text": "zwischen zwei langen Telefonaten ein paar Minuten schweigen", "fach": 0 },
+            { "text": "sich alle paar Minuten kräftig räuspern", "fach": 1 },
+            { "text": "statt Räuspern einmal schlucken", "fach": 0 },
+            { "text": "die Stimme bewusst tiefer drücken, um ernster zu klingen", "fach": 1 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "stimme-1-01-c", "faehigkeit": "stimme.klang", "stufe": 2, "kanal": "wissen" },
+          "frage": "Deine Stimme ist seit fünf Wochen heiser, ohne dass du erkältet warst. Was ist der beste nächste Schritt?",
+          "antworten": [
+            { "text": "Erst einmal weniger reden, viel trinken und abwarten.", "wert": 0, "tendenz": "vermeiden", "warum": "Schonen ist gut – nach fünf Wochen ersetzt es aber nicht die Abklärung." },
+            { "text": "Einen Termin in der Arztpraxis machen, am besten in einer HNO-Praxis.", "wert": 2, "warum": "Heiserkeit, die länger als vier Wochen anhält, soll laut Leitlinie ärztlich abgeklärt werden. Dort lässt sich der Kehlkopf ansehen." },
+            { "text": "Mit Stimmübungen aus dem Netz trainieren.", "wert": 0, "warum": "Training ohne Befund kann eine angeschlagene Stimme zusätzlich belasten. Erst abklären, dann üben." },
+            { "text": "Bis zum Termin laute Gespräche meiden und Sprechpausen einlegen.", "wert": 1, "warum": "Sinnvoll als Begleitung – der Termin in der Praxis gehört trotzdem dazu." }
+          ] },
+        { "art": "fachhilfe", "thema": "logopaedie" },
+        { "art": "mission", "ref": "stimme-m-01" }
+      ],
+      "regel": "Sprich aus deinem „mmh“ heraus – nicht von unten gedrückt.",
+      "merkkarten": [
+        { "id": "stimme-1-01-m1", "frage": "Wie findest du deine bequeme Tonlage?", "antwort": "Zustimmend „mmh“ summen und den Satz in derselben Höhe beginnen." },
+        { "id": "stimme-1-01-m2", "frage": "Ab wann gehört Heiserkeit in die Arztpraxis?", "antwort": "Wenn sie länger als vier Wochen anhält – am besten in die HNO-Praxis." },
+        { "id": "stimme-1-01-m3", "frage": "Tiefer drücken, um kompetent zu wirken?", "antwort": "Lieber nicht. Gedrückt klingt angestrengt und ermüdet. Die eigene, entspannte Lage trägt besser." }
+      ],
+      "mission": "stimme-m-01"
+    },
+    {
+      "id": "stimme-1-02", "bereich": "stimme", "stufe": 1, "nr": 2,
+      "titel": "Atem trägt den Satz",
+      "faehigkeiten": ["stimme.atem"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Lehre der Stimmpädagogik (u. a. Coblenzer und Muhar); kontrollierte Studien bei gesunden Sprechern gibt es nicht. Dass langsames Atmen den Körper beruhigt, ist dagegen gut untersucht.",
+      "quellen": ["praxis-stimme", "coblenzer1976", "laborde2022"],
+      "aha": "Ein Gedanke, ein Atem. Wer einen langen Satz auf einer Luft durchziehen will, wird am Ende leise und gepresst – zwei kurze Sätze tragen weiter.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Tarek erklärt in der Runde, warum die Lieferung später kommt.", "schwach": "„Die Lieferung kommt später, weil der Lieferant sein Lager umgebaut hat und deshalb die Bestellungen vom Mai erst jetzt bearbeitet, was auch unsere zweite Bestellung betrifft, die …“ – die Stimme wird immer dünner.", "stark": "„Die Lieferung kommt später. | Der Lieferant hat sein Lager umgebaut. | Davon ist auch unsere zweite Bestellung betroffen.“", "frage": "Warum klingt Tarek in der zweiten Fassung ruhiger?", "unterschied": "Jeder Gedanke bekommt seinen eigenen Atem. Am Strich holt er Luft, ohne dass es auffällt – und gerät nie in die Atemnot, die die Stimme dünn macht." },
+        { "art": "karte", "text": "Du brauchst vor dem Sprechen nicht tief Luft zu holen. Normal einatmen genügt. Spannend ist das Ende: Wenn ein Gedanke fertig ist, lass den Bauch kurz los. Die Luft strömt dann von allein wieder ein – lautlos und ohne die Schultern zu heben. In der Stimmpädagogik heißt das Abspannen. Ein Strich | in den Übungstexten zeigt dir die Stelle dafür." },
+        { "art": "atem", "werkzeug": "ausatmen",
+          "schritte": ["Eine Hand locker auf den Bauch, unterhalb der Rippen.", "Durch die Nase einatmen – zähl bis drei.", "Auf ein leises „fff“ ausatmen – zähl bis sechs.", "Am Ende den Bauch einfach loslassen: Die Luft kommt von allein.", "Fünf Runden."],
+          "takt": { "ein": 3, "aus": 6, "runden": 5 },
+          "hinweis": "Wird dir schwummrig: aufhören und normal weiteratmen. Nicht am Steuer.", "messen": false },
+        { "art": "nachsprechen", "kopf": { "id": "stimme-1-02-a", "faehigkeit": "stimme.atem", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "stimme-v-0111" },
+          "auftrag": "Am Strich den Bauch loslassen und neue Luft kommen lassen. Erst langsam, dann im Gesprächstempo.",
+          "zeilen": ["Ich habe mir die Zahlen angesehen. | Sie sind besser als gedacht.", "Der Termin bleibt am Montag. | Nur der Raum ändert sich. | Wir treffen uns im zweiten Stock.", "Bitte schickt mir eure Rückmeldung bis Freitag. | Dann kann ich die Liste fertig machen. | Danke euch."],
+          "weise": "klar",
+          "pruefliste": ["Am Strich Luft kommen lassen, ohne zu schnappen?", "Schultern unten geblieben?", "Letztes Wort jedes Stücks noch kräftig?"] },
+        { "art": "auswahl", "kopf": { "id": "stimme-1-02-b", "faehigkeit": "stimme.atem", "stufe": 2, "kanal": "wissen" },
+          "frage": "Du willst einen langen Gedanken sagen und merkst, dass er nicht auf einen Atem passt. Was tust du?",
+          "antworten": [
+            { "text": "Vorher besonders tief einatmen, damit die Luft bis zum Ende reicht.", "wert": 0, "tendenz": "ueberkontrolle", "warum": "Volltanken spannt eher an – und die Stimme wird am Ende trotzdem eng." },
+            { "text": "Den Gedanken in zwei Sätze teilen.", "wert": 2, "warum": "Ein Gedanke, ein Atem – dazwischen kommt die Luft von allein. Das hilft dir und dem Zuhörer." },
+            { "text": "Schneller sprechen, damit der Satz fertig ist, bevor die Luft ausgeht.", "wert": 0, "tendenz": "tempo", "warum": "Dann wird es eng und hastig, und der Zuhörer verliert den Anschluss." },
+            { "text": "Mitten im Satz kurz Luft holen, wo sie gerade ausgeht.", "wert": 1, "warum": "Besser als Atemnot. An einer Sinngrenze wirkt die Atempause aber ruhiger als mitten im Gedanken." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "stimme-1-02-c", "faehigkeit": "stimme.atem", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Mach aus dem Schachtelsatz eine Sprechfassung: kurze Sätze, je ein Gedanke. Setz einen Strich | dort, wo du Luft holst.",
+          "vorlage": "„Wir haben die Umfrage, die im Herbst gelaufen ist und an der fast alle teilgenommen haben, ausgewertet, und dabei hat sich gezeigt, dass die meisten sich kürzere Besprechungen wünschen.“",
+          "kriterien": ["höchstens ein Gedanke je Satz", "Striche an Sinngrenzen", "nichts Wichtiges verloren"],
+          "muster": ["„Die Umfrage vom Herbst ist ausgewertet. | Fast alle haben mitgemacht. | Das Ergebnis: | Die meisten wünschen sich kürzere Besprechungen.“", "„Wir haben die Herbstumfrage ausgewertet. | Die meisten wollen kürzere Besprechungen. | Und fast alle haben mitgemacht.“"] },
+        { "art": "mission", "ref": "stimme-m-02" }
+      ],
+      "regel": "Ein Gedanke, ein Atem – am Satzende den Bauch loslassen.",
+      "merkkarten": [
+        { "id": "stimme-1-02-m1", "frage": "Brauchst du vor dem Sprechen tief Luft?", "antwort": "Nein. Normal einatmen genügt – wichtig ist, am Ende des Gedankens den Bauch loszulassen." },
+        { "id": "stimme-1-02-m2", "frage": "Was tust du mit einem Gedanken, der nicht auf einen Atem passt?", "antwort": "In zwei Sätze teilen – dazwischen kommt die Luft von allein." }
+      ],
+      "mission": "stimme-m-02"
+    },
+    {
+      "id": "stimme-1-03", "bereich": "stimme", "stufe": 1, "nr": 3,
+      "titel": "Punkt. Pause.",
+      "faehigkeiten": ["stimme.pause"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Dass Wörter nach einer stillen Pause besser behalten werden, zeigt eine Laborstudie mit einzelnen Sätzen. Dass die Pause vor dem Kernsatz in einer Rede genauso wirkt, ist Praxiswissen.",
+      "quellen": ["macgregor2010", "praxis-stimme"],
+      "aha": "Die Pause ist kein Loch, sondern ein Ausrufezeichen. Zwei Sekunden Stille vor dem wichtigsten Satz sagen: Jetzt kommt es.",
+      "schritte": [
+        { "art": "studie", "frage": "Behalten Zuhörer ein Wort besser, wenn davor eine Pause lag?", "aufbau": "Teilnehmende hörten Sätze, bei denen vor dem letzten Wort mal eine kurze stille Pause lag, mal nicht. Später wurden sie überraschend gefragt, welche Wörter sie gehört hatten.", "ergebnis": "Wörter, vor denen eine Pause lag, wurden häufiger wiedererkannt.", "grenze": "Laborstudie mit einzelnen Sätzen und Hirnstrommessung. Ob es in einer Rede genauso wirkt, ist nicht geprüft – die Richtung passt aber zu dem, was gute Redner seit jeher tun.", "beleg": "B", "quellen": ["macgregor2010"] },
+        { "art": "karte", "text": "Die Pause vor dem Kernsatz kündigt an: Jetzt kommt das Wichtigste. Die Pause danach lässt den Satz wirken. Zwei Sekunden reichen; dir kommen sie anfangs lang vor. Diese Pause ist etwas anderes als die kleine Atempause nach jedem Sinnschritt: Sie ist selten und bewusst gesetzt, höchstens ein paarmal pro Beitrag. In den Übungen steht dafür ein Doppelstrich ||." },
+        { "art": "tonfall", "kopf": { "id": "stimme-1-03-a", "faehigkeit": "stimme.pause", "stufe": 2, "kanal": "wissen" },
+          "satz": "Unser Vorschlag: Wir starten schon im März.",
+          "fassungen": [
+            { "betont": "Unser Vorschlag: Wir starten schon im März.", "bedeutung": "in einem Zug – der März geht leicht unter" },
+            { "betont": "Unser Vorschlag: || Wir starten schon im März.", "bedeutung": "die Pause nach dem Doppelpunkt macht neugierig" },
+            { "betont": "Unser Vorschlag: Wir starten || schon im MÄRZ. ||", "bedeutung": "Pause vor dem Neuen und Stille danach – der März bleibt hängen" }
+          ],
+          "frage": "Du willst, dass sich alle den Starttermin merken. Welche Fassung passt am besten?",
+          "antworten": [
+            { "text": "Die erste – ohne Pausen wirkt es entschlossen und spart allen Zeit.", "wert": 0, "tendenz": "tempo", "warum": "Entschlossen vielleicht, aber der Termin rauscht vorbei." },
+            { "text": "Die dritte: Pause vor dem Neuen, Stille danach.", "wert": 2, "warum": "Die Pause hebt den März heraus, die Stille danach lässt ihn wirken." },
+            { "text": "Die zweite: Die Pause nach dem Doppelpunkt reicht.", "wert": 1, "warum": "Sie macht neugierig – den Termin selbst hebt aber erst eine Pause direkt davor heraus." }
+          ] },
+        { "art": "sprechen", "kopf": { "id": "stimme-1-03-b", "faehigkeit": "stimme.pause", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "stimme-v-0114" },
+          "auftrag": "Erzähl in drei, vier Sätzen, was dir an deiner Arbeit gefällt. Vor dem wichtigsten Satz: zwei Sekunden Pause, Blick heben – danach noch einmal kurz still.",
+          "sekunden": 40,
+          "pruefliste": ["Pause vor dem Kernsatz wirklich gehalten?", "Nach dem Kernsatz kurz still?", "Nicht mehr als zwei, drei solche Pausen?"] },
+        { "art": "auswahl", "kopf": { "id": "stimme-1-03-c", "faehigkeit": "stimme.pause", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du stellst im Team einen Plan vor. Wo setzt du die lange Pause?",
+          "antworten": [
+            { "text": "Nach jedem Satz – dann wirkt alles gleich bedeutsam.", "wert": 0, "warum": "Wenn jede Pause lang ist, hebt keine mehr etwas heraus – und es wird zäh." },
+            { "text": "Ganz am Anfang, bevor du etwas sagst, damit alle zur Ruhe kommen.", "wert": 1, "warum": "Ein ruhiger Start ist gut – die wichtigste Pause gehört aber vor den Kernsatz." },
+            { "text": "Vor dem Satz, der die Entscheidung oder die Bitte enthält.", "wert": 2, "warum": "Genau dort soll die Aufmerksamkeit am höchsten sein." },
+            { "text": "Gar nicht – Pausen könnten wirken, als wüsstest du nicht weiter.", "wert": 0, "tendenz": "vermeiden", "warum": "Eine gewählte Pause mit Blick in die Runde wirkt gesammelt, nicht ratlos." }
+          ] },
+        { "art": "mission", "ref": "stimme-m-03" }
+      ],
+      "regel": "Vor dem Kernsatz zwei Sekunden Stille – danach noch einmal kurz.",
+      "merkkarten": [
+        { "id": "stimme-1-03-m1", "frage": "Wo sitzt die lange Pause?", "antwort": "Vor dem wichtigsten Satz – und kurz danach." },
+        { "id": "stimme-1-03-m2", "frage": "Wie oft setzt du sie?", "antwort": "Selten: ein paarmal pro Beitrag. Sonst hebt sie nichts mehr heraus." }
+      ],
+      "mission": "stimme-m-03"
+    },
+    {
+      "id": "stimme-1-04", "bereich": "stimme", "stufe": 1, "nr": 4,
+      "titel": "Betonen heißt entscheiden",
+      "faehigkeiten": ["stimme.betonung"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Dass die Betonung die Bedeutung eines Satzes verschiebt, ist sprachliches Grundwissen. Dass eine lebendige Stimme überzeugender wirkt, zeigt eine Versuchsreihe. Die Regel „ein Hauptwort je Gedanke“ ist Praxiswissen.",
+      "quellen": ["praxis-stimme", "vanzant2020"],
+      "aha": "Derselbe Satz, vier Betonungen, vier Bedeutungen. Wer betont, entscheidet, was der Zuhörer für wichtig hält – und wer alles betont, entscheidet nichts.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "„Ich habe dir das Angebot nicht geschickt.“ Wie viele verschiedene Bedeutungen kann dieser Satz allein durch die Betonung bekommen?", "optionen": ["eine – die Wörter stehen ja fest", "zwei – Frage oder Aussage", "fast so viele, wie er wichtige Wörter hat"], "richtig": 2, "loesung": "Fast so viele, wie er wichtige Wörter hat.", "aufloesung": "ICH habe … – sondern jemand anderes. … DIR … – sondern jemand anderem. … das ANGEBOT … – sondern etwas anderes. … NICHT geschickt – entgegen dem, was behauptet wird. Die Wörter bleiben gleich, die Botschaft wechselt." },
+        { "art": "karte", "text": "Im Deutschen bekommt in jedem Gedanken meist ein Wort den Hauptton. Welches, entscheidest du: Was ist neu? Was ist der Gegensatz? Was soll hängen bleiben? Das bekommt den Ton – etwas lauter, etwas höher oder etwas länger. Bekanntes darf leise bleiben. In den Übungen steht das betonte Wort in GROSSBUCHSTABEN." },
+        { "art": "tonfall", "kopf": { "id": "stimme-1-04-a", "faehigkeit": "stimme.betonung", "stufe": 2, "kanal": "wissen" },
+          "satz": "Wir brauchen die Zahlen bis Freitag.",
+          "fassungen": [
+            { "betont": "WIR brauchen die Zahlen bis Freitag.", "bedeutung": "wir – nicht ein anderes Team" },
+            { "betont": "Wir brauchen die ZAHLEN bis Freitag.", "bedeutung": "die Zahlen – nicht den Text" },
+            { "betont": "Wir brauchen die Zahlen bis FREITAG.", "bedeutung": "Freitag – nicht erst nächste Woche" }
+          ],
+          "frage": "Miriam fragt: „Reicht es, wenn ich euch die Zahlen nächste Woche schicke?“ Welche Betonung antwortet ihr?",
+          "antworten": [
+            { "text": "Die dritte: Wir brauchen die Zahlen bis FREITAG.", "wert": 2, "warum": "Der Termin ist das Neue und der Gegensatz zu „nächste Woche“ – er bekommt den Ton." },
+            { "text": "Die zweite: Wir brauchen die ZAHLEN bis Freitag.", "wert": 0, "warum": "Um welche Unterlagen es geht, war nicht die Frage. Der Ton liegt auf dem falschen Gegensatz." },
+            { "text": "Die erste: WIR – damit klar ist, wer hier drängt.", "wert": 0, "warum": "Wer drängt, wollte Miriam nicht wissen. Ihre Frage zielt auf den Termin." },
+            { "text": "Die dritte – und dazu auch ZAHLEN betonen, doppelt hält besser.", "wert": 1, "warum": "Der Termin kommt an. Der zweite Ton macht den Satz aber unruhig – ein Hauptwort genügt." }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "stimme-1-04-b", "faehigkeit": "stimme.betonung", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "stimme-v-0117" },
+          "auftrag": "Sprich jede Zeile mit dem Ton auf dem großgeschriebenen Wort. Lauter, höher oder länger – probier aus, was zu dir passt.",
+          "zeilen": ["Der Termin bleibt. Nur der RAUM ändert sich.", "Nicht MEHR Besprechungen. BESSERE.", "Ich habe die Liste GESTERN geschickt, nicht heute.", "Das schaffen wir – wenn wir JETZT anfangen."],
+          "weise": "klar",
+          "pruefliste": ["Das große Wort deutlich herausgehoben?", "Der Rest ruhig und leiser?", "Klingt es nach Gespräch, nicht nach Vortrag?"] },
+        { "art": "studie", "frage": "Macht eine lebendige Stimme überzeugender?", "aufbau": "Sprecher nahmen Empfehlungen auf – einmal mit dem Ziel zu überzeugen, einmal ohne. Andere hörten die Aufnahmen und entschieden, ob sie der Empfehlung folgen.", "ergebnis": "Wer überzeugen wollte, sprach lauter und wechselte die Lautstärke mehr. Die Zuhörer folgten öfter – weil die Sprecher zuversichtlicher klangen, sogar wenn sie die Absicht durchschauten.", "grenze": "Nur Tonaufnahmen, eine Forschergruppe. Die Stimme wirkte über den Eindruck von Zuversicht – ein schwacher Inhalt wird dadurch nicht stark.", "beleg": "B", "quellen": ["vanzant2020"] },
+        { "art": "zuordnen", "kopf": { "id": "stimme-1-04-c", "faehigkeit": "stimme.betonung", "stufe": 3, "kanal": "wissen" },
+          "auftrag": "Herr Petersen fragt: „Kommt meine Lieferung am Montag?“ Du antwortest: „Ihre Lieferung kommt am Mittwoch – dafür komplett.“ Welche Wörter sind neu für ihn, welche kennt er schon?",
+          "faecher": ["neu – bekommt den Ton", "bekannt – bleibt leise"],
+          "karten": [
+            { "text": "Lieferung", "fach": 1 },
+            { "text": "Mittwoch", "fach": 0 },
+            { "text": "kommt", "fach": 1 },
+            { "text": "komplett", "fach": 0 },
+            { "text": "Ihre", "fach": 1 }
+          ] },
+        { "art": "mission", "ref": "stimme-m-04" }
+      ],
+      "regel": "Je Gedanke ein Hauptwort: das Neue bekommt den Ton, das Bekannte bleibt leise.",
+      "merkkarten": [
+        { "id": "stimme-1-04-m1", "frage": "Welches Wort bekommt den Ton?", "antwort": "Das neue oder gegensätzliche – das, was hängen bleiben soll." },
+        { "id": "stimme-1-04-m2", "frage": "Was passiert, wenn du alles betonst?", "antwort": "Nichts sticht heraus – der Zuhörer muss raten, was zählt." }
+      ],
+      "mission": "stimme-m-04"
+    },
+    {
+      "id": "stimme-1-05", "bereich": "stimme", "stufe": 1, "nr": 5,
+      "titel": "Tempo wechseln",
+      "faehigkeiten": ["stimme.tempo"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Einen belastbaren deutschen Richtwert fürs Sprechtempo gibt es nicht. Dass ein lebendiger Sprechfluss klüger wirken lässt, zeigt eine Versuchsreihe; der Tempowechsel selbst ist Praxiswissen.",
+      "quellen": ["praxis-stimme", "schroeder2015"],
+      "aha": "Wichtiges langsam, Bekanntes zügig. Nicht das Durchschnittstempo zählt, sondern der Wechsel – er sagt dem Zuhörer, wo er aufpassen soll.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Miriam berichtet in der Runde vom neuen Ablauf für Urlaubsanträge.", "schwach": "Alles im selben flotten Tempo: die bekannte Vorgeschichte, die neue Frist, die neue Ansprechperson.", "stark": "Die Vorgeschichte zügig („Ihr kennt das alte Formular …“), dann deutlich ruhiger: „Neu ist: Anträge bis zum FÜNFZEHNTEN. | Und zwar an Lena.“", "frage": "Was nehmen die Zuhörer aus der zweiten Fassung mit?", "unterschied": "Frist und Ansprechperson – weil Miriam genau dort ruhiger wird. In der ersten Fassung ist alles gleich schnell, also scheint alles gleich wichtig." },
+        { "art": "karte", "text": "Gutes Tempo ist ein Wechsel. Zügig: Rückblick, Überleitung, was alle schon kennen. Langsam: Zahlen, Namen, Termine, der Kernsatz. Wie schnell „richtig“ ist, lässt sich fürs Deutsche nicht in Wörtern pro Minute festlegen – es gibt keinen verlässlichen Richtwert. Darum vergleicht dich der Coach nur mit dir selbst: Nimm heute eine Minute auf und hör sie in ein paar Wochen wieder an." },
+        { "art": "zuordnen", "kopf": { "id": "stimme-1-05-a", "faehigkeit": "stimme.tempo", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Dein Zwei-Minuten-Update. Was darf zügig laufen, wo wirst du langsamer?",
+          "faecher": ["zügig", "langsam"],
+          "karten": [
+            { "text": "„Wie letzte Woche besprochen …“", "fach": 0 },
+            { "text": "die neue Zahl: 240 Bestellungen", "fach": 1 },
+            { "text": "die Begrüßung der Runde", "fach": 0 },
+            { "text": "dein Kernsatz: „Wir brauchen eine zweite Person im Lager.“", "fach": 1 },
+            { "text": "die Erinnerung, worum es im Projekt geht", "fach": 0 },
+            { "text": "der Termin für die Entscheidung", "fach": 1 }
+          ] },
+        { "art": "sprechen", "kopf": { "id": "stimme-1-05-b", "faehigkeit": "stimme.tempo", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "stimme-v-0120" },
+          "auftrag": "Erzähl, wie dein letzter Arbeitstag lief. Das Gewohnte zügig, eine Zahl und den wichtigsten Moment bewusst langsam. Nimm dich auf, wenn du magst – das ist deine Vergleichsaufnahme für später.",
+          "sekunden": 60,
+          "pruefliste": ["Gibt es hörbar schnelle und langsame Stellen?", "Zahl und wichtigster Moment langsam?", "Am Ende nicht schneller geworden?"] },
+        { "art": "auswahl", "kopf": { "id": "stimme-1-05-c", "faehigkeit": "stimme.tempo", "stufe": 3, "kanal": "wissen" },
+          "frage": "Mitten in deinem Beitrag merkst du, dass du immer schneller wirst. Was hilft am meisten?",
+          "antworten": [
+            { "text": "Mitten im Satz abbrechen und dich entschuldigen.", "wert": 0, "tendenz": "rechtfertigen", "warum": "Die Entschuldigung lenkt alle Blicke auf das Tempo – die Pause allein hätte gereicht." },
+            { "text": "Den Satz zu Ende sprechen, kurz still werden und ruhiger neu beginnen.", "wert": 2, "warum": "Die Pause unterbricht den Sog. Der neue Satz ist die Chance für ein neues Tempo." },
+            { "text": "Ab jetzt jedes Wort sehr gedehnt sprechen.", "wert": 0, "tendenz": "ueberkontrolle", "warum": "Dann klingt es künstlich. Es geht um den Wechsel, nicht um Schneckentempo." },
+            { "text": "Einfach weitermachen – Hauptsache, du kommst durch.", "wert": 1, "warum": "Kein Drama, durchkommen zählt auch. Eine kurze Pause hätte dir und den Zuhörern aber Luft gegeben." }
+          ] },
+        { "art": "mission", "ref": "stimme-m-05" }
+      ],
+      "regel": "Bekanntes zügig, Wichtiges langsam – der Wechsel zeigt, was zählt.",
+      "merkkarten": [
+        { "id": "stimme-1-05-m1", "frage": "Was sprichst du langsam?", "antwort": "Zahlen, Namen, Termine und den Kernsatz." },
+        { "id": "stimme-1-05-m2", "frage": "Wie schnell ist richtig?", "antwort": "Dafür gibt es keinen festen Wert. Vergleich dich mit deiner eigenen Aufnahme." }
+      ],
+      "mission": "stimme-m-05"
+    },
+    {
+      "id": "stimme-1-06", "bereich": "stimme", "stufe": 1, "nr": 6,
+      "titel": "Das Äh ist nicht dein Feind",
+      "faehigkeiten": ["stimme.pause"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Eine Online-Studie zeigt, dass einige Füllwörter je Minute nicht schaden, viele schon. Dass ein „äh“ das folgende Wort sogar besser behalten lässt, fanden Laborstudien – eine deutsche Wiederholung nicht durchgängig. Das stille Luftholen ist Praxiswissen.",
+      "quellen": ["laske2024", "corley2007", "fraundorf2011", "praxis-stimme"],
+      "aha": "Ein paar Ähs schaden nicht – die stille Pause ist nur die schönere Wahl. Wer jedes Äh jagt, verkrampft; wer still Luft holt, gewinnt Zeit.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Ein guter Vortrag hat kein einziges Äh.", "urteil": "falsch", "warum": "Auch geübte Redner sagen ab und zu „äh“. Schädlich wird es erst, wenn es sehr viele werden. Null ist kein sinnvolles Ziel." },
+        { "art": "studie", "frage": "Wie viele Ähs verträgt eine Rede?", "aufbau": "Teilnehmende bewerteten online kurze Reden, in die 0, 2, 5 oder 12 Füllwörter je Minute eingebaut waren.", "ergebnis": "Bis fünf je Minute litt der Eindruck kaum. Bei zwölf je Minute wurde die Rede schlechter bewertet.", "grenze": "Eine Studie mit Aufnahmen, kein echter Saal. Die Zahlen sind ein grober Anhaltspunkt, keine Grenze, die man mitzählen sollte.", "beleg": "B", "quellen": ["laske2024"] },
+        { "art": "karte", "text": "Füllwörter füllen die Pause, in der du den nächsten Gedanken suchst. Die Pause selbst ist nicht das Problem – im Gegenteil. Darum ersetzt du das „ähm“ nicht durch ein anderes Wort wie „sozusagen“, sondern durch Stille: Mund zu, durch die Nase Luft holen, weiter. Von außen klingt das wie eine bewusste Pause. Üb es in Ruhe – beim Auftritt selbst denkst du an deine Zuhörer, nicht an die Ähs." },
+        { "art": "fehler", "kopf": { "id": "stimme-1-06-a", "faehigkeit": "stimme.pause", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "So klang eine Sprachnachricht an das Team. Markier die Füllwörter, die du durch eine stille Pause ersetzen würdest.",
+          "teile": [
+            { "t": "Also,", "fehler": "„Also“ als Anlauf – ohne ihn beginnt der Satz klarer." },
+            { "t": "ähm,", "fehler": "Hier hilft stilles Luftholen vor dem ersten Wort." },
+            { "t": "kurz" }, { "t": "zum" }, { "t": "Stand:" }, { "t": "Die" }, { "t": "Lieferung" }, { "t": "kommt" },
+            { "t": "sozusagen", "fehler": "„sozusagen“ füllt nur – die Lieferung kommt ja wirklich." },
+            { "t": "am" }, { "t": "Donnerstag." },
+            { "t": "Ähm,", "fehler": "Vor dem neuen Gedanken: still Luft holen statt „ähm“." },
+            { "t": "und" }, { "t": "für" }, { "t": "Freitag" }, { "t": "brauche" }, { "t": "ich" },
+            { "t": "quasi", "fehler": "„quasi“ schwächt die Bitte ab – du brauchst die Leute wirklich." },
+            { "t": "noch" }, { "t": "zwei" }, { "t": "Leute" }, { "t": "im" }, { "t": "Lager." }
+          ] },
+        { "art": "sprechen", "kopf": { "id": "stimme-1-06-b", "faehigkeit": "stimme.pause", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "stimme-v-0115" },
+          "auftrag": "Erklär in einer Minute, wie man dein Lieblingsessen kocht. Wenn du den nächsten Schritt suchst: Mund zu, still Luft holen, weiter. Nimm dich auf und zähl beim Anhören die Ähs – nur zählen, nicht bewerten.",
+          "sekunden": 60,
+          "pruefliste": ["Mindestens einmal still Luft geholt statt „ähm“?", "Ähs gezählt – ohne dich zu ärgern?", "Den Faden behalten?"] },
+        { "art": "auswahl", "kopf": { "id": "stimme-1-06-c", "faehigkeit": "stimme.pause", "stufe": 3, "kanal": "wissen" },
+          "frage": "Beim Anhören deiner Aufnahme zählst du elf Ähs in einer Minute. Was ist der beste nächste Schritt?",
+          "antworten": [
+            { "text": "Gar nichts – Füllwörter schaden ja nicht, das hat eine Studie gezeigt.", "wert": 0, "warum": "Bei wenigen stimmt das. Bei rund zwölf je Minute litt der Eindruck in der Studie aber schon." },
+            { "text": "Ab sofort beim Sprechen auf jedes Äh lauern und es sofort unterdrücken.", "wert": 0, "tendenz": "ueberkontrolle", "warum": "Wer beim Sprechen jedes Äh jagt, verliert den Faden. Üben ja – aber in Ruhe, nicht mitten im Gespräch." },
+            { "text": "Nachsehen, wo die Ähs stehen, und genau an diesen Stellen die stille Pause üben.", "wert": 2, "warum": "Du findest dein Muster – etwa vor einem neuen Gedanken – und übst gezielt an der Stelle, wo das Äh entsteht." },
+            { "text": "In einer Woche noch einmal aufnehmen und schauen, ob es weniger werden.", "wert": 1, "warum": "Vergleichen ist gut – mit einer gezielten Übung dazwischen geht es schneller." }
+          ] },
+        { "art": "mission", "ref": "stimme-m-06" }
+      ],
+      "regel": "Nicht das Äh jagen – die stille Pause üben.",
+      "merkkarten": [
+        { "id": "stimme-1-06-m1", "frage": "Wie viele Ähs sind zu viele?", "antwort": "In einer Studie schadeten bis etwa fünf je Minute nicht, zwölf schon. Null ist kein Ziel." },
+        { "id": "stimme-1-06-m2", "frage": "Womit ersetzt du das Ähm?", "antwort": "Mit Stille: Mund zu, still Luft holen, weiter." }
+      ],
+      "mission": "stimme-m-06"
+    },
+    {
+      "id": "stimme-1-07", "bereich": "stimme", "stufe": 1, "nr": 7,
+      "titel": "Fünf Sätze, die tragen",
+      "faehigkeiten": ["stimme.aufbau"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Der Fünfsatz stammt aus der deutschen Sprecherziehung, das Prinzip „Ziel zuerst“ aus der Beratungspraxis. Beides ist bewährt, aber nicht in Studien geprüft.",
+      "quellen": ["praxis-stimme", "minto"],
+      "aha": "Zweck, drei Schritte, Aufforderung: Mit fünf Sätzen weiß jeder, worum es geht, wo du gerade bist und was er jetzt tun soll.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Lena soll in der Runde ihren Vorschlag zur neuen Ablage vorstellen.", "schwach": "„Ja, also, ich hab mir mal Gedanken gemacht wegen der Ablage, weil das ja manchmal schwierig ist, und dann dachte ich, man könnte vielleicht … ja. Das war's eigentlich.“", "stark": "„Ich möchte, dass wir heute über die neue Ablage entscheiden. | Erstens: Wir suchen zu lange. | Zweitens: Ein Ordner je Kunde löst das. | Drittens: Die Umstellung dauert zwei Tage. | Meine Bitte: Lasst es uns ab Monatsanfang testen.“", "frage": "Was weiß die Runde nach der zweiten Fassung, was sie nach der ersten nicht weiß?", "unterschied": "Was Lena will, warum, und was die anderen jetzt tun sollen. Die erste Fassung hat einen Anfang, aber keinen Weg und keinen Schluss." },
+        { "art": "karte", "text": "Der Fünfsatz stammt aus der deutschen Sprecherziehung. Klassisch steht der Zweck erst im fünften Satz; hier holst du ihn nach vorn, wie beim Prinzip „Antwort zuerst“. Satz 1: Was willst du erreichen? Die Sätze 2 bis 4: drei Schritte – Gründe, Stand oder Beispiele. Satz 5: die Aufforderung – was sollen die anderen jetzt tun? Es müssen nicht genau fünf Sätze sein. Aber jeder Teil sollte da sein." },
+        { "art": "zuordnen", "kopf": { "id": "stimme-1-07-a", "faehigkeit": "stimme.aufbau", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Tarek schlägt ein gemeinsames Mittagessen im Team vor. Welcher Satz gehört wohin?",
+          "faecher": ["Zweck", "Schritt", "Aufforderung"],
+          "karten": [
+            { "text": "„Ich schlage vor, dass wir einmal im Monat zusammen essen gehen.“", "fach": 0 },
+            { "text": "„Wir sitzen Tür an Tür, reden aber fast nur über Arbeit.“", "fach": 1 },
+            { "text": "„Die Kantine reserviert uns ab zehn Leuten einen eigenen Tisch.“", "fach": 1 },
+            { "text": "„Beim letzten Mal kamen sogar die Kollegen aus dem Lager mit.“", "fach": 1 },
+            { "text": "„Meine Bitte: Sagt mir heute, ob der erste Donnerstag passt.“", "fach": 2 }
+          ] },
+        { "art": "bauplan", "kopf": { "id": "stimme-1-07-b", "faehigkeit": "stimme.aufbau", "stufe": 3, "kanal": "koennen" },
+          "plan": "Fünfsatz",
+          "anlass": "Ein Anliegen, das du demnächst in einer Runde vorbringen willst – oder, zum Üben: ein Wasserspender für die Abteilung.",
+          "felder": [
+            { "name": "Zweck", "hilfe": "Was willst du erreichen? Ein Satz." },
+            { "name": "Schritt 1", "hilfe": "Ein Grund, ein Stand oder ein Beispiel." },
+            { "name": "Schritt 2", "hilfe": "Der nächste Grund oder ein Beleg." },
+            { "name": "Schritt 3", "hilfe": "Das stärkste Argument zuletzt." },
+            { "name": "Aufforderung", "hilfe": "Was sollen die anderen jetzt tun oder entscheiden?" }
+          ],
+          "muster": ["Zweck: Ich möchte, dass wir einen Wasserspender bekommen. Schritt 1: Im Sommer schleppen wir Kisten in den dritten Stock. Schritt 2: Die Abteilung nebenan hat einen und ist zufrieden. Schritt 3: Auf ein Jahr gerechnet ist er nicht teurer als die Kisten. Aufforderung: Gebt mir bis Freitag Bescheid, dann frage ich bei Dr. Albers an.", "Zweck: Ich will die Montagsrunde kürzer machen. Schritt 1: Sie dauert meist eine Stunde. Schritt 2: Die Hälfte davon sind Themen für zwei Leute. Schritt 3: Mit fester Tagesordnung schaffen wir es in einer halben Stunde. Aufforderung: Lasst es uns vier Wochen lang ausprobieren."] },
+        { "art": "sprechen", "kopf": { "id": "stimme-1-07-c", "faehigkeit": "stimme.aufbau", "stufe": 3, "kanal": "koennen", "laut": true, "leise": "stimme-v-0122" },
+          "auftrag": "Sprich deinen Fünfsatz laut – als säße die Runde vor dir. Vor dem Zwecksatz einmal ausatmen, vor der Aufforderung eine Pause.",
+          "sekunden": 60,
+          "pruefliste": ["Zweck im ersten Satz?", "Drei Schritte hörbar getrennt?", "Am Ende eine klare Bitte statt „Das war's“?"] },
+        { "art": "auswahl", "kopf": { "id": "stimme-1-07-d", "faehigkeit": "stimme.aufbau", "stufe": 3, "kanal": "wissen" },
+          "frage": "Welcher Schluss passt am besten zu einem Vorschlag in der Teamrunde?",
+          "antworten": [
+            { "text": "„Das war's von meiner Seite. Noch Fragen?“", "wert": 0, "warum": "Höflich, aber ohne Ziel – der Vorschlag verpufft." },
+            { "text": "„Zusammengefasst: Ein Ordner je Kunde spart uns Suchzeit.“", "wert": 1, "warum": "Ein guter Kernsatz zum Schluss. Was die anderen jetzt tun sollen, fehlt noch." },
+            { "text": "„Ich hoffe, ich habe euch nicht zu lange aufgehalten.“", "wert": 0, "tendenz": "kleinreden", "warum": "Eine Entschuldigung zum Schluss – sie bleibt als letzter Eindruck hängen." },
+            { "text": "„Meine Bitte: Lasst uns heute entscheiden, ob wir es ab März testen.“", "wert": 2, "warum": "Ein klarer nächster Schritt – die Runde weiß, was jetzt von ihr erwartet wird." }
+          ] },
+        { "art": "mission", "ref": "stimme-m-07" }
+      ],
+      "regel": "Zweck, drei Schritte, Aufforderung – Anfang und Schluss zuerst planen.",
+      "merkkarten": [
+        { "id": "stimme-1-07-m1", "frage": "Die fünf Sätze?", "antwort": "Zweck – drei Schritte – Aufforderung." },
+        { "id": "stimme-1-07-m2", "frage": "Was gehört an den Schluss?", "antwort": "Eine klare Bitte oder der nächste Schritt – nicht „Das war's“." }
+      ],
+      "mission": "stimme-m-07"
+    }
+  ]
+}

@@ -11,6 +11,7 @@
 import { useState } from 'react'
 import { Rocket, Map, Settings2, LayoutList } from 'lucide-react'
 import { useAppStore } from '../store/appStore'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 import OnboardingOverview from '../components/onboarding/OnboardingOverview'
 import DeployPanel from '../components/onboarding/DeployPanel'
 import MarkerEditor from '../components/onboarding/MarkerEditor'
@@ -29,7 +30,9 @@ export default function Onboarding() {
   const setOnboardingPreselectId = useAppStore(s => s.setOnboardingPreselectId)
   // Kommt man aus der Mitarbeiterverwaltung (Vorauswahl gesetzt), direkt in
   // den Verteilen-Tab springen — sonst mit der Übersicht starten.
-  const [tab, setTab] = useState<Tab>(() => useAppStore.getState().onboardingPreselectId ? 'deploy' : 'overview')
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const [tab, setTab] = useBereichZustand<Tab>('onboarding', () => useAppStore.getState().onboardingPreselectId ? 'deploy' : 'overview')
+  const { sichtbar } = useBereiche('onboarding')
   const [deploySource, setDeploySource] = useState<'employee' | 'ad'>('employee')
 
   function deployFor(employeeId: string) {
@@ -57,7 +60,7 @@ export default function Onboarding() {
       </div>
 
       <div className="shrink-0 flex items-center gap-1 border-b border-border mb-4">
-        {TABS.map(t => (
+        {TABS.filter(t => sichtbar(t.id)).map(t => (
           <button key={t.id} onClick={() => setTab(t.id)}
             className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 -mb-px ${tab === t.id ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>
             {t.icon}{t.label}

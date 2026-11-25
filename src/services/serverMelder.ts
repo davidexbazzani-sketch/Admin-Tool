@@ -32,14 +32,63 @@ export interface LaufVon { rechner: string; konto?: string; benutzer?: string; a
 const kurz = (r?: string) => (r || '').trim().toUpperCase().split('.')[0]
 /** Konto ohne Domäne: „CORP\bq8069“ bzw. „bq8069@corp…“ → „BQ8069“. */
 const kontoKurz = (k?: string) => ((k || '').trim().toUpperCase().split('\\').pop() || '').split('@')[0]
+export const rechnerKurz = kurz
+export const kontoOhneDomaene = kontoKurz
+
+// ── Vorgabe: Welcher PC (mit welchem Windows-Konto) ist der Automatik-PC? ─────
+// Seit 18.11.2026 einstellbar (Einstellungen → „Automatik-PC“, nur mit PIN). Die Vorgabe liegt auf dem
+// Netzlaufwerk und gilt für ALLE; jeder Admin-PC liest sie jede Minute neu (automatikLeiter.ts).
+// Solange nichts gespeichert ist, gilt der bisherige feste Wert (BQ8069 / DE5CG4453Q1N).
+export interface AutomatikVorgabe { rechner: string; konto: string; geaendertAm?: string; geaendertVon?: string }
+export const VORGABE_PFAD = 'automatik/vorgabe.json'
+let vorgabe: AutomatikVorgabe | null = null
+
+/** PC-Name groß ohne Domäne, Konto groß ohne Domäne; beides leer → keine Vorgabe. */
+export function bereinigeVorgabe(v: Partial<AutomatikVorgabe> | null | undefined): AutomatikVorgabe | null {
+  if (!v || typeof v !== 'object') return null
+  const rechner = kurz(String(v.rechner || '')), konto = kontoKurz(String(v.konto || ''))
+  if (!rechner && !konto) return null
+  return { rechner, konto, geaendertAm: v.geaendertAm, geaendertVon: v.geaendertVon }
+}
+/** Gespeicherte Vorgabe (null = nichts gespeichert, es gilt der feste Standard). */
+export const vorgabeSofort = (): AutomatikVorgabe | null => vorgabe
+export function setzeVorgabe(v: Partial<AutomatikVorgabe> | null | undefined): void { vorgabe = bereinigeVorgabe(v) }
+/** Was gerade gilt — die gespeicherte Vorgabe oder der feste Standard. */
+export const wirksameVorgabe = (): { rechner: string; konto: string; standard: boolean } =>
+  (vorgabe ? { rechner: vorgabe.rechner, konto: vorgabe.konto, standard: false } : { rechner: BEVORZUGTER_RECHNER, konto: BEVORZUGTER_MELDER, standard: true })
+/** Name des Automatik-PCs für Texte: das Konto (wie bisher „BQ8069“), sonst der PC-Name. */
+export const vorzugsName = (): string => { const w = wirksameVorgabe(); return w.konto || w.rechner }
+
+/** Vorgabe vom Netzlaufwerk lesen und übernehmen. Datei fehlt → Standard. */
+export async function ladeVorgabe(): Promise<AutomatikVorgabe | null> {
+  try { setzeVorgabe(await api().netReadJsonAsync<AutomatikVorgabe>(VORGABE_PFAD)) } catch { /* Netzlaufwerk weg: letzten Stand behalten */ }
+  return vorgabe
+}
+/** Vorgabe speichern (gilt für alle). `null` = zurück zum festen Standard. */
+export async function speichereVorgabe(v: { rechner: string; konto: string } | null, von: string): Promise<boolean> {
+  const neu = v ? bereinigeVorgabe({ ...v, geaendertAm: new Date().toISOString(), geaendertVon: von }) : null
+  try {
+    // „kein Eintrag“ wird als leere Vorgabe gespeichert (mit Stempel), damit sichtbar bleibt, wer zurückgesetzt hat
+    const ok = await api().netWriteJsonAsync(VORGABE_PFAD, neu ?? { rechner: '', konto: '', geaendertAm: new Date().toISOString(), geaendertVon: von })
+    if (ok) vorgabe = neu
+    return !!ok
+  } catch { return false }
+}
+
 /**
- * Ist das der bevorzugte Melder? BQ8069 ist das WINDOWS-KONTO des Nutzers (sein PC heißt DE5CG4453Q1N) —
- * bis 17.11.2026 wurde nur der PC-Name verglichen, dadurch galt BQ8069 immer als „aus“ und jeder PC mit
- * offenem Tool machte die automatischen Prüfungen (auch PCs ohne Zugriff auf die Server). Jetzt zählt
- * der PC-Name ODER das angemeldete Konto.
+ * Ist das der Automatik-PC laut Vorgabe?
+ * • Gespeicherte Vorgabe: PC-Name UND Konto müssen passen (ein leeres Feld zählt als „egal“).
+ * • Nichts gespeichert (fester Standard): BQ8069 ist das WINDOWS-KONTO des Nutzers (sein PC heißt
+ *   DE5CG4453Q1N) — bis 17.11.2026 wurde nur der PC-Name verglichen, dadurch galt BQ8069 immer als „aus“.
+ *   Seitdem zählt dort der PC-Name ODER das angemeldete Konto; das bleibt so.
  */
-export const istBevorzugt = (rechner?: string, konto?: string) =>
-  kurz(rechner) === BEVORZUGTER_MELDER || kurz(rechner) === BEVORZUGTER_RECHNER || (!!konto && kontoKurz(konto) === BEVORZUGTER_MELDER)
+export const istBevorzugt = (rechner?: string, konto?: string): boolean => {
+  const v = vorgabe
+  if (!v) return kurz(rechner) === BEVORZUGTER_MELDER || kurz(rechner) === BEVORZUGTER_RECHNER || (!!konto && kontoKurz(konto) === BEVORZUGTER_MELDER)
+  const pcPasst = !v.rechner || kurz(rechner) === v.rechner
+  const kontoPasst = !v.konto || (!!konto && kontoKurz(konto) === v.konto)
+  return pcPasst && kontoPasst
+}
 
 let eigener: Promise<string> | null = null
 let eigenerSync = ''
@@ -80,11 +129,12 @@ export function melderAktiv(h: MelderHerzschlag | null | undefined, jetzt = Date
  */
 export function darfServerPruefen(o: { ich: string; konto?: string; herzschlag: MelderHerzschlag | null | undefined; letzterLauf?: string | null; jetzt?: number }): { darf: boolean; grund: string } {
   const jetzt = o.jetzt ?? Date.now()
-  if (istBevorzugt(o.ich, o.konto)) return { darf: true, grund: `${BEVORZUGTER_MELDER} ist der bevorzugte Rechner für Server-Meldungen` }
-  if (!melderAktiv(o.herzschlag, jetzt)) return { darf: true, grund: `${BEVORZUGTER_MELDER} ist aus – dieser PC vertritt` }
+  const n = vorzugsName()
+  if (istBevorzugt(o.ich, o.konto)) return { darf: true, grund: `${n} ist der bevorzugte Rechner für Server-Meldungen` }
+  if (!melderAktiv(o.herzschlag, jetzt)) return { darf: true, grund: `${n} ist aus – dieser PC vertritt` }
   const l = o.letzterLauf ? Date.parse(o.letzterLauf) : NaN
-  if (!isNaN(l) && jetzt - l > NOTFALL_UEBERNAHME_MS) return { darf: true, grund: `${BEVORZUGTER_MELDER} ist an, prüft aber seit über ${Math.round(NOTFALL_UEBERNAHME_MS / 60_000)} min nicht – dieser PC vertritt` }
-  return { darf: false, grund: `${BEVORZUGTER_MELDER} ist an und verschickt die Server-Meldungen` }
+  if (!isNaN(l) && jetzt - l > NOTFALL_UEBERNAHME_MS) return { darf: true, grund: `${n} ist an, prüft aber seit über ${Math.round(NOTFALL_UEBERNAHME_MS / 60_000)} min nicht – dieser PC vertritt` }
+  return { darf: false, grund: `${n} ist an und verschickt die Server-Meldungen` }
 }
 
 /**
@@ -129,12 +179,13 @@ export function schreibeHerzschlag(benutzer: string, weg = false): Promise<void>
 
 /** Anzeige für den Server-Bildschirm: Wer verschickt die Meldungen gerade? */
 export function melderText(h: MelderHerzschlag | null | undefined, von: LaufVon | null | undefined, jetzt = Date.now()): { aktiv: boolean; text: string; titel: string } {
-  const titel = `Automatische Server-Meldungen (Mail, Popups) kommen bevorzugt von ${BEVORZUGTER_MELDER}. Ist ${BEVORZUGTER_MELDER} aus (kein Lebenszeichen seit ${Math.round(MELDER_AUS_NACH_MS / 60_000)} min), übernimmt ein anderer PC mit offenem Tool – bis ${BEVORZUGTER_MELDER} wieder da ist.`
-  if (melderAktiv(h, jetzt)) return { aktiv: true, text: `Meldungen von ${BEVORZUGTER_MELDER}${h && kurz(h.rechner) !== BEVORZUGTER_MELDER ? ` (${kurz(h.rechner)})` : ''}`, titel }
+  const n = vorzugsName()
+  const titel = `Automatische Server-Meldungen (Mail, Popups) kommen bevorzugt von ${n}. Ist ${n} aus (kein Lebenszeichen seit ${Math.round(MELDER_AUS_NACH_MS / 60_000)} min), übernimmt ein anderer PC mit offenem Tool – bis ${n} wieder da ist.`
+  if (melderAktiv(h, jetzt)) return { aktiv: true, text: `Meldungen von ${n}${h && kurz(h.rechner) !== n ? ` (${kurz(h.rechner)})` : ''}`, titel }
   const fremd = von && !istBevorzugt(von.rechner, von.konto) && jetzt - Date.parse(von.at) < 30 * 60_000
   return {
     aktiv: false,
-    text: fremd ? `${BEVORZUGTER_MELDER} aus – Meldungen von ${kurz(von!.rechner)}${von!.benutzer ? ` (${von!.benutzer})` : ''}` : `${BEVORZUGTER_MELDER} aus – Vertretung durch den nächsten offenen PC`,
+    text: fremd ? `${n} aus – Meldungen von ${kurz(von!.rechner)}${von!.benutzer ? ` (${von!.benutzer})` : ''}` : `${n} aus – Vertretung durch den nächsten offenen PC`,
     titel,
   }
 }

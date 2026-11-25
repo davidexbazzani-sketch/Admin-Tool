@@ -1,0 +1,252 @@
+{
+  "lagen": [
+    {
+      "id": "stimme-l-01", "bereich": "stimme", "phase": "g", "umfeld": "telefon", "faehigkeiten": ["stimme.klang", "stimme.atem", "stimme.pause"], "stufe": 2,
+      "titel": "Die Telefonansage im Team", "figur": "Tarek Yılmaz",
+      "einleitung": "Morgens in der Telefonrunde gibst du eine Änderung durch. Du übst die bequeme Tonlage, kurze Sätze auf einem Atem und die Pause vor dem, was alle wissen müssen.",
+      "lage": "Montag, 8:30 Uhr, Telefonrunde des Teams, acht Leute sind zugeschaltet, keine Kamera. Du sollst durchgeben, dass die Kundenhotline ab Mittwoch eine Stunde früher besetzt ist – und wer dafür eingeteilt ist. Tarek leitet die Runde.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Noch zwei Minuten bis zum Start. Deine Stimme ist vom Wochenende noch belegt und sitzt etwas hoch.",
+          "wahl": [
+            { "text": "Einmal „mmh“ summen und einen Schluck Wasser trinken.", "wert": 2, "weiter": "k2", "rueck": "Das Mmh holt die Stimme in ihre bequeme Lage, das Wasser hilft gegen den belegten Hals." },
+            { "text": "Mehrmals kräftig räuspern, bis sich der Hals endlich frei anfühlt.", "wert": 0, "weiter": "k2b", "rueck": "Räuspern reizt die Stimmlippen eher, als dass es befreit. Ein Schluck oder einmal Schlucken ist schonender." },
+            { "text": "Die Notizen noch einmal überfliegen, damit nichts fehlt.", "wert": 1, "weiter": "k2", "rueck": "Kann beruhigen – für die Stimme selbst tut es nichts." }
+          ] },
+        { "id": "k2b", "sagt": "Der Hals kratzt jetzt mehr. Tarek: „Guten Morgen zusammen. Du hast was Neues zur Hotline?“",
+          "wahl": [
+            { "text": "Einen Schluck trinken, kurz „mmh“, dann: „Ja. Ab Mittwoch ist die Hotline schon um sieben besetzt.“", "wert": 2, "weiter": "k3", "rueck": "Gerettet: Wasser statt Räuspern, und das Mmh bringt die Stimme in ihre Lage." },
+            { "text": "Ohne Pause loslegen: „Ja, guten Morgen, ab Mittwoch ist die Hotline schon um sieben besetzt“ – und dabei noch zweimal räuspern.", "wert": 0, "weiter": "k3", "rueck": "Jedes Räuspern reizt weiter – und klingt am Telefon unruhig." }
+          ] },
+        { "id": "k2", "sagt": "Tarek: „Guten Morgen zusammen. Du hast was Neues zur Hotline?“",
+          "wahl": [
+            { "text": "„Ja. Ab Mittwoch ist die Hotline eine Stunde früher besetzt, also ab sieben Uhr, und zwar im Wechsel von Miriam, Jonas und mir, wobei …“", "wert": 0, "tendenz": "tempo", "weiter": "k3b", "rueck": "Alles auf einem Atem – am Ende wird die Stimme dünn, und die Namen gehen unter." },
+            { "text": "„Ja. Ab Mittwoch beginnt die Hotline früher. | Und zwar um sieben Uhr.“", "wert": 2, "weiter": "k3", "rueck": "Kurze Sätze, je ein Gedanke – und die Uhrzeit bekommt ihren eigenen Satz." },
+            { "text": "„Ja, kurz zur Hotline – ab Mittwoch ändert sich etwas, ich sag's gleich genau.“", "wert": 1, "weiter": "k3", "rueck": "Freundlicher Anlauf, aber noch keine Information. Alle warten auf die Uhrzeit." }
+          ] },
+        { "id": "k3b", "sagt": "Stille in der Leitung. Dann Miriam: „Sorry, ab wann genau? Und wer?“",
+          "wahl": [
+            { "text": "„Ab sieben Uhr. | Eingeteilt sind Miriam, Jonas und ich.“", "wert": 2, "weiter": "k4", "rueck": "Zweite Chance genutzt: zwei kurze Sätze, und jede Information bekommt Luft." },
+            { "text": "„Hab ich doch gerade gesagt: ab sieben, Miriam, Jonas und ich.“", "wert": 0, "tendenz": "abwerten", "weiter": "k4", "rueck": "Gereizt und wieder in einem Zug – die Nachfrage war ein Zeichen, kein Angriff." },
+            { "text": "„Ab sieben. Den Plan mit allen Namen schicke ich nachher noch einmal per Mail herum.“", "wert": 1, "weiter": "k4", "rueck": "Die Uhrzeit sitzt, und die Mail sichert ab. Wer eingeteilt ist, hätte aber in einen Satz gepasst." }
+          ] },
+        { "id": "k3", "sagt": "Jetzt kommt das, was alle wissen müssen: ab wann genau – und wer die frühen Schichten übernimmt.",
+          "wahl": [
+            { "text": "Kurz still werden, dann: „Ab sieben Uhr. | Die frühen Schichten übernehmen || Miriam, Jonas und ich.“", "wert": 2, "weiter": "k4", "rueck": "Die Pause vor den Namen sagt: Jetzt aufpassen. Genau das bleibt hängen." },
+            { "text": "In einem Zug weiter: „Und die Schichten machen Miriam, Jonas und ich, und wer tauschen will, meldet sich bitte bei mir.“", "wert": 1, "weiter": "k4", "rueck": "Alles drin, aber die Namen rutschen durch. Eine kleine Pause davor hätte sie herausgehoben." },
+            { "text": "„Wer die Schichten übernimmt, kläre ich noch.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k4", "rueck": "Dabei stand es schon fest. Jetzt bleibt eine Lücke, und alle fragen später nach." }
+          ] },
+        { "id": "k4", "sagt": "Tarek: „Danke. Noch Fragen?“ Jonas: „Gilt das auch in der Ferienwoche?“ Laut Plan: ja.",
+          "wahl": [
+            { "text": "Sofort losreden: „Ja – also – ich glaube – doch, ja.“", "wert": 0, "tendenz": "tempo", "weiter": "ende1", "rueck": "Denken und Sprechen zugleich – die Antwort klingt unsicherer, als sie ist." },
+            { "text": "Kurz überlegen, dann: „Ja, auch in der Ferienwoche.“", "wert": 2, "weiter": "ende1", "rueck": "Eine kleine Pause zum Nachdenken, dann eine klare, kurze Antwort." },
+            { "text": "„Ich schaue nach und melde mich bis Mittag.“", "wert": 1, "weiter": "ende1", "rueck": "Verbindlich, wenn du es wirklich nicht weißt. Hier stand es im Plan – die Pause zum Nachdenken hätte genügt." }
+          ] },
+        { "id": "ende1", "sagt": "Tarek: „Danke dir. Dann weiter zum nächsten Punkt.“", "ende": "Bequeme Tonlage, ein Gedanke pro Atem, die Pause vor dem Wichtigen: Am Telefon trägt die Stimme alles – und kurze Sätze kommen an." }
+      ],
+      "prinzipien": ["vorher „mmh“ und ein Schluck statt Räuspern", "ein Gedanke, ein Atem", "Pause vor dem, was alle wissen müssen", "erst kurz still denken, dann antworten"],
+      "transfer": "Wann sprichst du als Nächstes am Telefon vor mehreren? Welchen langen Satz teilst du dann in zwei?"
+    },
+    {
+      "id": "stimme-l-02", "bereich": "stimme", "phase": "g", "umfeld": "kunden", "faehigkeiten": ["stimme.pause", "stimme.betonung", "stimme.klang"], "stufe": 3,
+      "titel": "Die Videokonferenz mit Störungen", "figur": "Nadine Köhler",
+      "einleitung": "Ein Videotermin mit einer möglichen Kundin – und die Leitung hakt. Du übst, den Kernsatz zu betonen, bei Aussetzern zu warten und zu wiederholen und ruhig zu bleiben, wenn es eng wird.",
+      "lage": "Dienstag, 14 Uhr. Nadine Köhler, Geschäftsführerin eines kleinen Betriebs, hat dir zwanzig Minuten gegeben. Du sollst ihr erklären, was euer Wartungsangebot bringt. Ihr Bild friert immer wieder kurz ein.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Frau Köhler: „So, ich höre. Was haben Sie für mich?“ Ihr Bild steht still, der Ton läuft.",
+          "wahl": [
+            { "text": "„Kurz gesagt: Mit unserer Wartung stehen Ihre Maschinen SELTENER still.“", "wert": 2, "weiter": "k2", "rueck": "Kernsatz zuerst, das entscheidende Wort betont – sie weiß sofort, worum es geht." },
+            { "text": "„Ich stelle Ihnen zuerst kurz unsere Firma vor …“", "wert": 0, "tendenz": "ausweichen", "weiter": "k1b", "rueck": "Sie hat zwanzig Minuten und rechnet genau. Die Firmengeschichte kann warten." },
+            { "text": "„Hören Sie mich gut? Ihr Bild ist gerade eingefroren.“", "wert": 1, "weiter": "k2", "rueck": "Verständlich – der Ton läuft aber. Erst die Sache, dann die Technik." }
+          ] },
+        { "id": "k1b", "sagt": "Frau Köhler, nach einer Weile: „Entschuldigung – was ist der Kern? Ich habe gleich den nächsten Termin.“",
+          "wahl": [
+            { "text": "Kurze Pause, dann: „Der Kern: || Ihre Maschinen stehen SELTENER still.“", "wert": 2, "weiter": "k2", "rueck": "Gut gefangen: Pause, Kernsatz, ein betontes Wort." },
+            { "text": "„Dazu komme ich gleich, nur noch ein Satz zu unserer Geschichte.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k2", "rueck": "Sie hat nach dem Kern gefragt. Jetzt ist die Geduld knapp." }
+          ] },
+        { "id": "k2", "sagt": "Mitten in deinem zweiten Satz: „… Sie sind gerade … weg … noch mal?“ Der Ton ist kurz abgebrochen.",
+          "wahl": [
+            { "text": "Warten, bis die Leitung steht, dann: „Noch mal: Wir kommen zweimal im Jahr – BEVOR etwas kaputtgeht.“", "wert": 2, "weiter": "k3", "rueck": "Pause, bis die Leitung steht, dann der Satz noch einmal – mit dem wichtigen Wort betont." },
+            { "text": "Deutlich lauter weitersprechen, damit es diesmal durchkommt.", "wert": 0, "weiter": "k3", "rueck": "Lauter hilft gegen einen Aussetzer nicht – der Ton fehlt ja ganz. Und die Stimme wird gepresst." },
+            { "text": "„Oh nein, sorry, das liegt bestimmt an meinem Netz, das ist heute den ganzen Tag so …“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2b", "rueck": "Die lange Entschuldigung kostet ihre Zeit – und der Satz fehlt immer noch." },
+            { "text": "„Ich schreibe Ihnen die zwei Punkte gleich in den Chat.“", "wert": 1, "weiter": "k3", "rueck": "Gute Absicherung. Gesagt werden sollte der Satz trotzdem noch einmal." }
+          ] },
+        { "id": "k2b", "sagt": "Frau Köhler schaut auf die Uhr: „Schon gut. Was wollten Sie sagen?“",
+          "wahl": [
+            { "text": "„Wir kommen zweimal im Jahr – BEVOR etwas kaputtgeht.“", "wert": 2, "weiter": "k3", "rueck": "Zurück zur Sache, kurz und betont." },
+            { "text": "„Also, wo war ich … ach ja, die Wartung, die ist im Grunde so aufgebaut, dass …“", "wert": 0, "weiter": "k3", "rueck": "Kein Drama, aber jetzt suchst du vor ihr nach dem Faden. Der Kernsatz hätte genügt." }
+          ] },
+        { "id": "k3", "sagt": "Frau Köhler: „Und was kostet mich das?“",
+          "wahl": [
+            { "text": "Kurz Luft holen, dann ruhig: „Achthundert Euro im Jahr.“ – das Satzende nach unten.", "wert": 2, "weiter": "k4", "rueck": "Ruhig und mit fallendem Ende klingt die Zahl selbstverständlich, nicht nach Rechtfertigung." },
+            { "text": "„Also, eigentlich gar nicht so viel – so ungefähr achthundert?“", "wert": 0, "tendenz": "kleinreden", "weiter": "k4", "rueck": "Mit Anlauf und fragendem Ende klingt der Preis, als wärst du selbst nicht überzeugt." },
+            { "text": "„Achthundert Euro im Jahr“ – schnell, um es hinter dir zu haben.", "wert": 1, "weiter": "k4", "rueck": "Die Zahl stimmt, aber im Schnelldurchgang klingt sie nach Unbehagen. Ruhig und mit Pause davor wirkt sie sicherer." }
+          ] },
+        { "id": "k4", "sagt": "Das Bild friert wieder ein. Als es zurückkommt, sagt sie: „Ich muss gleich weiter. Was ist der nächste Schritt?“",
+          "wahl": [
+            { "text": "„Schauen Sie sich alles in Ruhe an und melden Sie sich gern, wann immer es Ihnen passt.“", "wert": 1, "weiter": "ende2", "rueck": "Freundlich, aber offen. Bei knapper Zeit versandet so etwas leicht." },
+            { "text": "„Ich schicke Ihnen heute das Angebot. || Passt Donnerstag für einen kurzen Anruf?“", "wert": 2, "weiter": "ende1", "rueck": "Ein klarer nächster Schritt, eine kleine Pause, eine konkrete Frage." },
+            { "text": "„Haben Sie noch Fragen? Vielleicht ist wegen der Technik etwas untergegangen?“", "wert": 0, "tendenz": "ausweichen", "weiter": "ende2", "rueck": "Sie hat nach dem nächsten Schritt gefragt – nicht nach Fragen." }
+          ] },
+        { "id": "ende1", "sagt": "Frau Köhler nickt: „Donnerstag passt. Bis dann.“", "ende": "Trotz Aussetzern ist dein Kernsatz angekommen – weil du gewartet, wiederholt und betont hast, statt lauter zu werden oder dich lange zu entschuldigen." },
+        { "id": "ende2", "sagt": "Frau Köhler: „Ich melde mich.“ Dann ist sie weg.", "ende": "Kein Drama – sie kann sich melden. Beim nächsten Mal: am Ende einen festen Schritt vorschlagen, ruhig und mit einer kleinen Pause davor." }
+      ],
+      "prinzipien": ["Kernsatz zuerst, das wichtige Wort betont", "bei Aussetzern warten und wiederholen statt lauter werden", "kurz statt lang entschuldigen", "Zahlen ruhig, das Satzende nach unten"],
+      "transfer": "Welchen Satz würdest du in deiner nächsten Videokonferenz wiederholen, wenn der Ton abbricht?"
+    },
+    {
+      "id": "stimme-l-03", "bereich": "stimme", "phase": "g", "umfeld": "familie", "faehigkeiten": ["stimme.tempo", "stimme.pause", "stimme.betonung", "stimme.atem"], "stufe": 3,
+      "titel": "Der Toast auf der Hochzeit", "figur": "Tante Renate",
+      "einleitung": "Bei der Hochzeit deiner Cousine sollst du ein paar Worte sagen. Du übst Tempo, Pausen und Betonung – und was du tust, wenn dir mittendrin die Luft ausgeht.",
+      "lage": "Samstagabend, Hochzeit deiner Cousine, sechzig Gäste. Nach dem Hauptgang bittet dich das Paar um ein paar Worte. Tante Renate sitzt am Nachbartisch und sagt, was sie denkt.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Du stehst auf, das Glas in der Hand. Es wird langsam ruhiger. Tante Renate, nicht ganz leise: „Na, jetzt bin ich gespannt.“",
+          "wahl": [
+            { "text": "Warten, bis es still ist, einmal ausatmen, dann der erste Satz.", "wert": 2, "weiter": "k2", "rueck": "Die Stille gehört schon zu deinem Auftritt. Wer in die Unruhe hineinredet, wird überhört." },
+            { "text": "Sofort loslegen, solange noch alle reden.", "wert": 0, "tendenz": "tempo", "weiter": "k1b", "rueck": "Die Hälfte redet noch – und dein Anfang geht unter." },
+            { "text": "Mit dem Löffel ans Glas klopfen und gleich anfangen.", "wert": 1, "weiter": "k2", "rueck": "Das holt die Aufmerksamkeit. Gib der Stille danach noch einen Atemzug, bevor du sprichst." }
+          ] },
+        { "id": "k1b", "sagt": "Hinten lacht jemand über etwas anderes. Ein paar Gäste schauen dich fragend an.",
+          "wahl": [
+            { "text": "Innehalten, warten, bis es still ist, und noch einmal von vorn: „Liebes Brautpaar …“", "wert": 2, "weiter": "k2", "rueck": "Neu anfangen ist erlaubt. Mit Stille im Raum kommt der Anfang an." },
+            { "text": "Lauter werden und einfach weiterreden – wer zuhören will, hört schon zu, und die anderen kriegen es später mit.", "wert": 0, "weiter": "k2", "rueck": "Gegen Unruhe anreden strengt die Stimme an – und ein Teil der Gäste bleibt trotzdem draußen." }
+          ] },
+        { "id": "k2", "sagt": "Alle schauen dich an. Du erzählst die Geschichte, die du vorbereitet hast: wie du dem Paar vor ein paar Jahren beim Umzug geholfen hast.",
+          "wahl": [
+            { "text": "Den Anfang zügig erzählen und langsamer werden, je näher die Pointe kommt.", "wert": 2, "weiter": "k3", "rueck": "Bekanntes zügig, Wichtiges langsam – so baut sich Spannung auf." },
+            { "text": "Alles im selben ruhigen, gleichmäßigen Tempo, damit es würdig klingt – es ist ja eine Hochzeit.", "wert": 0, "weiter": "k3", "rueck": "Würdig ja, aber gleichförmig. Die Gäste hören nicht, wo es spannend wird." },
+            { "text": "Möglichst schnell erzählen, damit es nicht zu lang wird.", "wert": 0, "tendenz": "tempo", "weiter": "k2b", "rueck": "Kürzen geht über Weglassen, nicht über Tempo. Jetzt wird die Luft knapp." },
+            { "text": "Die Geschichte in zwei schnellen Sätzen erzählen, ohne Aufbau, und gleich zum Glückwunsch kommen.", "wert": 1, "weiter": "k4", "rueck": "Kurz ist bei einem Toast gut, und die Gäste lachen. Mit etwas Aufbau und einer Pause vor der Pointe hätte die Geschichte noch mehr getragen." }
+          ] },
+        { "id": "k2b", "sagt": "Dir geht die Luft aus, die Stimme wird dünn. Ein Satz ist erst halb gesagt.",
+          "wahl": [
+            { "text": "Satz zu Ende bringen, kurz still werden, Luft kommen lassen – und ruhiger weiter.", "wert": 2, "weiter": "k3", "rueck": "Die Pause rettet Atem und Tempo. Für die Gäste klingt sie wie Absicht." },
+            { "text": "Den Rest noch schneller herausdrücken, damit es vorbei ist.", "wert": 0, "tendenz": "tempo", "weiter": "k3", "rueck": "Dann wird die Stimme eng, und die Pointe rauscht vorbei." },
+            { "text": "„Moment, ich muss kurz Luft holen“ – lachen und weiter.", "wert": 1, "weiter": "k3", "rueck": "Sympathisch und ehrlich. Die stille Pause hätte es auch ohne Ansage getan." }
+          ] },
+        { "id": "k3", "sagt": "Jetzt kommt die Pointe: Beim Umzug hat das Paar als Erstes die Kaffeemaschine ausgepackt – das Bett erst drei Tage später.",
+          "wahl": [
+            { "text": "„Und was haben sie als Erstes ausgepackt? || Die KAFFEEMASCHINE. || Das Bett kam drei Tage später.“", "wert": 2, "weiter": "k4", "rueck": "Pause vor der Pointe, das eine Wort betont, Pause danach – Zeit zum Lachen." },
+            { "text": "„Und dann haben sie ja zuerst die Kaffeemaschine ausgepackt und das Bett erst drei Tage später, was typisch für die beiden war.“", "wert": 0, "weiter": "k4", "rueck": "Die Pointe läuft im Satz mit und wird gleich erklärt. Das Lachen kommt verspätet oder gar nicht." },
+            { "text": "„Ihr glaubt nicht, was sie zuerst ausgepackt haben: die Kaffeemaschine!“ – laut und schnell.", "wert": 1, "weiter": "k4", "rueck": "Der Spannungsbogen ist da, aber im Tempo geht er unter. Eine Pause vor dem Wort hätte gereicht." }
+          ] },
+        { "id": "k4", "sagt": "Gelächter. Tante Renate ruft: „Typisch!“ Alle lachen noch mehr. Du willst zum Schluss kommen.",
+          "wahl": [
+            { "text": "Das Lachen abklingen lassen, dann: „Auf euch beide!“ – Glas heben.", "wert": 2, "weiter": "ende1", "rueck": "Du lässt dem Lachen seinen Raum und schließt klar: mit dem Glas." },
+            { "text": "Ins Lachen hinein weiterreden.", "wert": 0, "tendenz": "tempo", "weiter": "ende2", "rueck": "Wer ins Lachen hineinredet, wird überhört – und nimmt den Gästen ihren Moment." },
+            { "text": "„Ja, also … das war's eigentlich. Prost!“", "wert": 1, "weiter": "ende2", "rueck": "Das Glas ist da, aber der Schluss verpufft. Ein letzter Satz an das Paar hätte ihn getragen." }
+          ] },
+        { "id": "ende1", "sagt": "Alle heben die Gläser. Tante Renate zwinkert dir zu: „Gar nicht schlecht.“", "ende": "Stille abwarten, Bekanntes zügig, vor der Pointe eine Pause, das eine Wort betont – und dem Lachen Zeit lassen. So trägt ein Toast." },
+        { "id": "ende2", "sagt": "Ein paar Gäste heben das Glas, andere reden schon wieder.", "ende": "Kein Drama – die Geschichte kam an. Beim nächsten Mal: das Lachen abwarten und mit einem klaren Satz ans Paar enden." }
+      ],
+      "prinzipien": ["Stille abwarten vor dem ersten Satz", "Bekanntes zügig, zur Pointe hin langsamer", "Pause vor und nach der Pointe", "dem Lachen Raum lassen"],
+      "transfer": "Bei welcher Feier könntest du als Nächstes ein paar Worte sagen? Welche kleine Geschichte hättest du dafür?"
+    },
+    {
+      "id": "stimme-l-04", "bereich": "stimme", "phase": "g", "umfeld": "vorgesetzte", "faehigkeiten": ["stimme.aufbau", "stimme.pause", "stimme.betonung", "stimme.tempo"], "stufe": 4,
+      "titel": "Die Präsentation vor Dr. Albers", "figur": "Dr. Henrik Albers",
+      "einleitung": "Fünf Minuten, um einen Vorschlag vor der Leitungsrunde zu vertreten. Du übst den Aufbau mit Zwecksatz, die Pause vor dem Kern, die betonte Zahl und das Tempo, wenn eine Zwischenfrage kommt.",
+      "lage": "Donnerstag, Leitungsrunde mit Dr. Albers und vier Abteilungsleitungen. Du stellst deinen Vorschlag vor: ein Ablageordner je Kunde statt verstreuter Dateien. Du hast fünf Minuten.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Bitte, Sie haben das Wort.“",
+          "wahl": [
+            { "text": "„Ich möchte heute erreichen, dass wir eine Kundenablage vier Wochen lang testen.“", "wert": 2, "weiter": "k2", "rueck": "Zweck im ersten Satz – die Runde weiß, worauf sie achten soll." },
+            { "text": "„Wir verlieren jeden Tag Zeit mit Suchen. Dazu habe ich einen Vorschlag.“", "wert": 1, "weiter": "k2", "rueck": "Guter Einstieg über das Problem. Was du am Ende willst, fehlt noch." },
+            { "text": "„Ich weiß, Sie haben wenig Zeit, deshalb versuche ich, mich kurz zu fassen, auch wenn das Thema eigentlich größer ist.“", "wert": 0, "tendenz": "kleinreden", "weiter": "k2", "rueck": "Eine Entschuldigung kostet die erste halbe Minute und lenkt auf das Falsche." }
+          ] },
+        { "id": "k2", "sagt": "Dein erster Punkt: wie viel Zeit das Suchen kostet. Deine Zahl: rund zwanzig Minuten pro Person und Tag.",
+          "wahl": [
+            { "text": "„Erstens: || Wir suchen jeden Tag rund ZWANZIG Minuten nach Dateien. || Pro Person.“", "wert": 2, "weiter": "k3", "rueck": "Gezählt, Pause, die Zahl betont und langsam – sie bleibt hängen." },
+            { "text": "„Wir suchen ziemlich viel, so zwanzig Minuten ungefähr.“", "wert": 0, "tendenz": "kleinreden", "weiter": "k3", "rueck": "Mit Weichmachern und im Nebensatz klingt die Zahl unsicher." },
+            { "text": "„Erstens: Wir suchen rund zwanzig Minuten pro Person und Tag.“ – zügig gesprochen.", "wert": 1, "weiter": "k3", "rueck": "Klar gebaut. Langsamer und mit Pause davor würde die Zahl stärker wirken." }
+          ] },
+        { "id": "k3", "sagt": "Mitten im zweiten Punkt hebt Dr. Albers die Hand: „Kurze Frage: Wer pflegt diese Ablage?“",
+          "wahl": [
+            { "text": "Kurz innehalten, dann: „Jede Abteilung ihre eigenen Kunden. || Mehr dazu in Punkt drei.“", "wert": 2, "weiter": "k4", "rueck": "Die Pause zeigt: Du hast gehört. Die Antwort ist kurz, und dein Aufbau bleibt." },
+            { "text": "Schneller weitersprechen: „Genau, also, das ist so: Die Abteilungen …“", "wert": 0, "tendenz": "tempo", "weiter": "k3b", "rueck": "Unter Druck wirst du schneller – die Antwort klingt gehetzt." },
+            { "text": "„Das weiß ich noch nicht genau, das müssten wir dann sehen.“", "wert": 0, "tendenz": "ausweichen", "weiter": "k4", "rueck": "Du hast die Antwort in Punkt drei vorbereitet – jetzt klingt es, als fehlte sie." },
+            { "text": "„Darf ich das nach Punkt drei beantworten?“", "wert": 1, "weiter": "k4", "rueck": "Höflich und geordnet. Weil die Antwort kurz ist, hättest du sie gleich geben können." }
+          ] },
+        { "id": "k3b", "sagt": "Dr. Albers: „Langsam, bitte. Wer genau?“",
+          "wahl": [
+            { "text": "Satz beenden, ausatmen, dann ruhiger: „Jede Abteilung pflegt ihre eigenen Kunden.“", "wert": 2, "weiter": "k4", "rueck": "Gebremst – jetzt sitzt die Antwort." },
+            { "text": "„Ja, Entschuldigung, ich bin etwas nervös. Das machen die Abteilungen.“", "wert": 1, "weiter": "k4", "rueck": "Ehrlich, und die Antwort ist da. Ohne die Entschuldigung wirkt sie sicherer." }
+          ] },
+        { "id": "k4", "sagt": "Dein dritter Punkt ist durch. Noch eine Minute.",
+          "wahl": [
+            { "text": "Pause, dann: „Meine Bitte: || Lassen Sie uns ab März vier Wochen testen.“", "wert": 2, "weiter": "ende1", "rueck": "Ein klarer Schluss mit Aufforderung – und eine Pause, die ihm Gewicht gibt." },
+            { "text": "„Ja, das war's eigentlich von meiner Seite. Danke.“", "wert": 0, "weiter": "ende2", "rueck": "Der Vorschlag ist gesagt, aber die Bitte fehlt – die Runde weiß nicht, was sie jetzt tun soll." },
+            { "text": "„Zusammengefasst: weniger Suchen, klare Zuständigkeit, zwei Tage Umstellung.“", "wert": 1, "weiter": "ende2", "rueck": "Eine starke Zusammenfassung. Mit einer Bitte am Ende wäre sie vollständig." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers: „Gut. Wir testen ab März. Schicken Sie mir den Plan.“", "ende": "Zweck zuerst, die Zahl langsam und betont, Ruhe bei der Zwischenfrage, die Bitte am Schluss: So wird aus einem Vorschlag eine Entscheidung." },
+        { "id": "ende2", "sagt": "Dr. Albers: „Danke. Und was genau sollen wir jetzt beschließen?“", "ende": "Kein Drama – die Frage gibt dir die Chance, deine Bitte noch zu sagen. Beim nächsten Mal steht sie von selbst am Ende." }
+      ],
+      "prinzipien": ["Zwecksatz zuerst", "Zahl langsam und betont", "bei Zwischenfragen erst innehalten", "Schluss mit Bitte"],
+      "transfer": "Welchen Vorschlag würdest du gern einmal vor einer Runde vertreten? Wie lautet dein Zwecksatz?"
+    },
+    {
+      "id": "stimme-l-05", "bereich": "stimme", "phase": "g", "umfeld": "gruppe", "faehigkeiten": ["stimme.klang", "stimme.atem", "stimme.pause", "stimme.betonung", "stimme.tempo", "stimme.aufbau"], "stufe": 4, "sparring": true,
+      "titel": "Sparring: Die zehn Minuten vorn", "figur": "Carla Demir",
+      "einleitung": "Das Sparring zum Abschluss der Grundlagen: zehn Minuten vor der Abteilung, von der Minute davor bis zur Frage am Ende. Alles kommt vor – Tonlage, Atem, Pausen, Betonung, Tempo und Aufbau.",
+      "lage": "Monatsrunde der Abteilung, fünfzehn Leute. Du stellst vor, wie neue Kolleginnen und Kollegen künftig eingearbeitet werden sollen. Carla Demir leitet die Runde und gibt dir zehn Minuten. Miriam sitzt in der ersten Reihe.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Carla: „Noch zwei Minuten, dann bist du dran.“ Dein Mund ist trocken, die Stimme fühlt sich eng an.",
+          "wahl": [
+            { "text": "Ein Schluck Wasser, einmal „mmh“, zweimal lang ausatmen.", "wert": 2, "weiter": "k2", "rueck": "Wasser, bequeme Tonlage, langer Atem – die Stimme ist bereit." },
+            { "text": "Schnell noch durch die Folien klicken und ein paar Sätze umformulieren, damit alles sitzt.", "wert": 0, "weiter": "k2", "rueck": "Jetzt umbauen bringt Unruhe – und für die Stimme tut es nichts." },
+            { "text": "Ein paarmal kräftig räuspern.", "wert": 0, "weiter": "k2", "rueck": "Räuspern reizt eher. Ein Schluck Wasser hilft dem trockenen Hals mehr." },
+            { "text": "Den ersten Satz still im Kopf durchgehen.", "wert": 1, "weiter": "k2", "rueck": "Gibt Halt – die Stimme selbst braucht aber Wasser und Atem." }
+          ] },
+        { "id": "k2", "sagt": "Du stehst vorn. Fünfzehn Gesichter. Carla nickt dir zu.",
+          "wahl": [
+            { "text": "„Ich möchte heute erreichen, dass neue Kollegen bei uns nach vier Wochen sicher arbeiten können.“", "wert": 2, "weiter": "k3", "rueck": "Zweck im ersten Satz, in deiner Tonlage – alle wissen, worum es geht." },
+            { "text": "„Hallo, ich soll was zur Einarbeitung sagen, hoffentlich wird es nicht zu langweilig.“", "wert": 0, "tendenz": "kleinreden", "weiter": "k2b", "rueck": "Die Entschuldigung kommt vor dem Inhalt. So startest du gegen dich selbst." },
+            { "text": "„Kennt ihr das? Man ist neu und weiß nicht, wen man fragen soll …“ – und dann eine längere Geschichte.", "wert": 1, "weiter": "k3", "rueck": "Ein lebendiger Einstieg – nur kommt der Zweck zu spät. Nach zwei Sätzen sollten alle wissen, was du willst." }
+          ] },
+        { "id": "k2b", "sagt": "Ein paar schauen aufs Handy. Miriam lächelt dir aufmunternd zu.",
+          "wahl": [
+            { "text": "Kurze Pause, Blick zu Miriam, dann: „Worum es mir geht: Neue sollen nach vier Wochen sicher arbeiten können.“", "wert": 2, "weiter": "k3", "rueck": "Gefangen: Die Pause setzt neu an, der Zweck holt die Runde zurück." },
+            { "text": "Schneller werden und gleich zur nächsten Folie springen, damit niemand abschaltet und die Handys wieder weggelegt werden.", "wert": 0, "tendenz": "tempo", "weiter": "k3", "rueck": "Tempo holt niemanden zurück – ein klarer Satz schon." }
+          ] },
+        { "id": "k3", "sagt": "Erster Baustein: eine feste Ansprechperson. In deinen Notizen steht ein langer Satz: „Jeder Neue bekommt eine feste Ansprechperson, die in den ersten vier Wochen täglich eine Viertelstunde Zeit hat und die Fragen sammelt.“",
+          "wahl": [
+            { "text": "Drei Stücke: „Jeder Neue bekommt eine feste Ansprechperson. | Sie hat vier Wochen täglich eine Viertelstunde. | Sie sammelt die Fragen.“", "wert": 2, "weiter": "k4", "rueck": "Ein Gedanke, ein Atem – die Stimme bleibt kräftig bis zum Ende." },
+            { "text": "Den Satz genau so ablesen, wie er in den Notizen steht.", "wert": 0, "weiter": "k3b", "rueck": "Ein Schachtelsatz auf einem Atem – am Ende wird die Stimme dünn, und der Blick klebt am Blatt." },
+            { "text": "Nur den Anfang sagen: „Jeder Neue bekommt eine feste Ansprechperson.“ Den Rest weglassen.", "wert": 1, "weiter": "k4", "rueck": "Klar und kurz. Die Viertelstunde am Tag ist aber genau das, was die Runde wissen sollte." }
+          ] },
+        { "id": "k3b", "sagt": "Mitten im Satz geht dir die Luft aus. Die letzten Wörter sind kaum zu hören.",
+          "wahl": [
+            { "text": "Kurz anhalten, Bauch loslassen, Luft kommen lassen und den Rest als eigenen Satz sagen.", "wert": 2, "weiter": "k4", "rueck": "Gerettet: Aus einem zu langen Satz werden zwei." },
+            { "text": "Mit dem letzten Rest Luft weiterpressen, damit der Satz am Stück bleibt und niemand die Unterbrechung bemerkt.", "wert": 0, "weiter": "k4", "rueck": "Gepresst klingt angestrengt, und die Stimme ermüdet." }
+          ] },
+        { "id": "k4", "sagt": "Jetzt dein wichtigster Punkt: Ohne zwei Stunden pro Woche für die Ansprechperson klappt das Ganze nicht. Das sollen alle behalten.",
+          "wahl": [
+            { "text": "Den Punkt im selben Tempo wie alles andere sagen.", "wert": 0, "weiter": "k5", "rueck": "Dann geht der wichtigste Satz in der Menge unter." },
+            { "text": "Pause, dann: „Das Wichtigste: || Die Ansprechperson braucht ZWEI Stunden pro Woche.“", "wert": 2, "weiter": "k5", "rueck": "Pause davor, das eine Wort betont, Stille danach – der Kern sitzt." },
+            { "text": "Jedes Wort im Satz kräftig betonen, damit ihn keiner überhört.", "wert": 0, "weiter": "k5", "rueck": "Wenn alles betont ist, sticht nichts heraus. Ein Wort genügt." },
+            { "text": "Den Punkt am Ende noch einmal wiederholen.", "wert": 1, "weiter": "k5", "rueck": "Wiederholen hilft. Mit Pause und Betonung sitzt er aber schon beim ersten Mal." }
+          ] },
+        { "id": "k5", "sagt": "Miriam meldet sich: „Zwei Stunden pro Woche – woher sollen die kommen?“ Es wird still.",
+          "wahl": [
+            { "text": "Kurz innehalten, dann ruhig: „Aus der Nacharbeit, die wir uns damit sparen.“", "wert": 2, "weiter": "k6", "rueck": "Die Pause zeigt, dass du die Frage ernst nimmst. Die Antwort ist ruhig und konkret." },
+            { "text": "Sofort und schneller als vorher: „Also, das ist so, die kommen, ähm, also das hatte ich ja vorhin schon …“", "wert": 0, "tendenz": "tempo", "weiter": "k6", "rueck": "Unter Druck schneller und voller Füllwörter – die Antwort klingt unsicherer, als sie ist." },
+            { "text": "„Gute Frage. Ich rechne das genau nach und melde mich bis Freitag.“", "wert": 1, "weiter": "k6", "rueck": "Verbindlich. Wenn du die Antwort schon kennst, sag sie gleich – kurz und ruhig." }
+          ] },
+        { "id": "k6", "sagt": "Carla: „Noch eine Minute.“",
+          "wahl": [
+            { "text": "„Ja, dann wär's das eigentlich von meiner Seite. Danke euch allen fürs Zuhören.“", "wert": 0, "weiter": "ende2", "rueck": "Freundlich, aber der Vortrag endet ohne Ziel." },
+            { "text": "„Kurz zusammengefasst: feste Ansprechperson, zwei Stunden pro Woche, vier Wochen.“", "wert": 1, "weiter": "ende2", "rueck": "Gute Zusammenfassung. Mit einer Bitte am Ende wäre sie vollständig." },
+            { "text": "Pause, dann: „Meine Bitte: || Wer ab Mai Ansprechperson sein möchte, sagt mir bis Freitag Bescheid.“", "wert": 2, "weiter": "ende1", "rueck": "Ein Schluss mit Aufforderung – die Runde weiß, was jetzt zu tun ist." }
+          ] },
+        { "id": "ende1", "sagt": "Carla: „Danke. Ich trag mich als Erste ein.“ Zwei weitere Hände gehen hoch.", "ende": "Wasser und Mmh vorher, Zweck zuerst, ein Gedanke pro Atem, Pause und Betonung beim Kern, Ruhe bei der Frage, Bitte am Schluss – das ist die Grundausstattung." },
+        { "id": "ende2", "sagt": "Carla: „Danke. Und wie geht es jetzt weiter?“ Einige stehen schon auf.", "ende": "Kein Drama – der Inhalt war gut. Was fehlte, war der letzte Satz: die Bitte. Beim nächsten Mal steht sie in deinen Notizen ganz unten." }
+      ],
+      "prinzipien": ["Stimme vorbereiten: Wasser, Mmh, Atem", "Zwecksatz zuerst", "ein Gedanke, ein Atem", "Pause und Betonung beim Kernsatz", "bei Fragen erst innehalten", "Schluss mit Aufforderung"],
+      "transfer": "Welcher Auftritt steht bei dir als Nächstes an? Welche zwei Werkzeuge aus diesem Sparring nimmst du mit?"
+    }
+  ]
+}

@@ -10,6 +10,7 @@ import DruckerListe from '../components/drucker/DruckerListe'
 import TonerLager from '../components/drucker/TonerLager'
 import DruckerCharts from '../components/drucker/DruckerCharts'
 import DruckerVerbinden from '../components/drucker/DruckerVerbinden'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 
 type Reiter = 'uebersicht' | 'lager' | 'charts' | 'verbinden'
 const REITER: { id: Reiter; label: string; icon: JSX.Element }[] = [
@@ -26,7 +27,9 @@ export interface DruckerDaten {
 }
 
 export default function Drucker() {
-  const [reiter, setReiter] = useState<Reiter>('uebersicht')
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte); Sprung zum Lager fällt dann auf den ersten sichtbaren zurück
+  const [reiter, setReiter] = useBereichZustand<Reiter>('drucker', 'uebersicht')
+  const { sichtbar } = useBereiche('drucker')
   const [daten, setDaten] = useState<DruckerDaten | null>(null)
   const [bestellenFuer, setBestellenFuer] = useState<string | null>(null)
 
@@ -47,7 +50,7 @@ export default function Drucker() {
       </div>
 
       <div className="flex gap-1 border-b border-border">
-        {REITER.map(r => (
+        {REITER.filter(r => sichtbar(r.id)).map(r => (
           <button key={r.id} onClick={() => setReiter(r.id)}
             className={`inline-flex items-center gap-1.5 px-3 py-2 text-sm border-b-2 -mb-px ${reiter === r.id ? 'border-primary text-foreground font-semibold' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>
             {r.icon}{r.label}

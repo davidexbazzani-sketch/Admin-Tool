@@ -14,12 +14,13 @@ import { useRadarStore } from '../store/radarStore'
 import { api } from '../electronAPI'
 import type { Screen } from '../types'
 import FavoritesPanel from './FavoritesPanel'
-import { loadUserMenuOverrides, getHiddenForUser } from '../services/userMenuVisibility'
 import { loadUserMenuOrders, getOrderForUser, saveUserMenuOrder, clearUserMenuOrder, type MenuOrderEntry } from '../services/userMenuOrder'
 import { PDF_TOOLS_ENABLED } from '../pdftools/config'
-import { MENU_CATALOG, kinderVon, elternVon, type MenuCatalogItem } from '../utils/menuCatalog'
+import { MENU_CATALOG, elternVon, type MenuCatalogItem } from '../utils/menuCatalog'
 import { useMenuSichtbar } from '../store/menuSichtbarStore'
-import { parseMenuVisibility, computeMenuVisible } from '../utils/menuVisibility'
+import { ladeMeineRechte, type MeineRechte } from '../services/benutzerRechte'
+import { berechneAlles, istGruender, type Rolle } from '../utils/sichtbarkeit'
+import { onAppFocus } from '../utils/appFocus'
 
 // Icons je Menüpunkt (Datenliste kommt aus dem zentralen menuCatalog).
 const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
@@ -77,9 +78,13 @@ const ITEM_ICONS: Partial<Record<Screen, React.ReactNode>> = {
   'server': <Server size={18} />,
   'it-guru': <Lightbulb size={18} />,
   'games': <Gamepad2 size={18} />,
+  'vier-gewinnt': <Gamepad2 size={18} />,
+  'brain-trainer': <Gamepad2 size={18} />,
+  'parla-italiano': <Gamepad2 size={18} />,
+  'terra-incognita': <Gamepad2 size={18} />,
+  'der-coach': <Gamepad2 size={18} />,
   'results': <BarChart3 size={18} />,
   'settings': <Settings size={18} />,
-  'user-management': <Users size={18} />,
   'user-logs': <FileText size={18} />,
   'bug-mailbox': <Bug size={18} />,
 }
@@ -92,8 +97,6 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   'Sonstiges': <Boxes size={16} />,
   'Einstellungen': <Settings size={16} />,
 }
-
-const MENU_VISIBILITY_PATH = 'settings/menu_visibility.json'
 
 interface NavItem {
   id: Screen
@@ -120,10 +123,10 @@ export default function Sidebar() {
   const isAdmin   = useIsAdmin()
   const user      = session?.user
   // Geschützter Gründer-Master (Davidxe): ihm kann nichts ausgeblendet werden.
-  const isFounder = !!user?.isFounder || (user?.username?.toLowerCase() === 'davidxe')
+  const isFounder = istGruender(user)
 
-  // Per-user override: when present, replaces global hiddenMenuIds for this user.
-  const [userOverride, setUserOverride] = useState<Set<string> | null>(null)
+  // Rechte dieses Benutzers (Einstellungen → „Benutzer & Rechte“): Modus, Menüpunkte, Unterbereiche.
+  const [meine, setMeine] = useState<MeineRechte | null>(null)
 
   // Aufgeklappte Kategorien (Standard: alle zu)
   const [openCats, setOpenCats] = useState<Set<string>>(new Set())
@@ -134,33 +137,34 @@ export default function Sidebar() {
   const [dragId, setDragId] = useState<string | null>(null)
   const [dragOverId, setDragOverId] = useState<string | null>(null)
 
-  // Load menu visibility (global + per-user override) from server on mount
+  // Rechte (global + eigene) laden: beim Anmelden und beim Zurückkehren ins Fenster
+  // (höchstens alle 5 min, gebündelt über onAppFocus) — so greifen Änderungen aus
+  // „Benutzer & Rechte“ ohne Neustart. Zwei kleine Dateien, asynchron gelesen.
+  const verwaltungsStand = useMenuSichtbar(s => s.stand)
   useEffect(() => {
+    if (!user?.id) return
     let cancelled = false
-    ;(async () => {
+    const laden = async () => {
       try {
-        const data = await api().netReadJson<unknown>(MENU_VISIBILITY_PATH)
-        if (!cancelled && data) {
-          const v = parseMenuVisibility(data)
-          setHiddenMenuIds(v.hidden)
-          setMenuMinRole(v.minRole)
-        }
-      } catch { /* offline or not found — all visible */ }
+        const m = await ladeMeineRechte(user)
+        if (cancelled) return
+        setHiddenMenuIds(m.global.hidden)
+        setMenuMinRole(m.global.minRole)
+        setMeine(m)
+      } catch { /* offline — alles sichtbar wie bisher */ }
+    }
+    void laden()
+    const abmelden = onAppFocus(() => { void laden() })
+    return () => { cancelled = true; abmelden() }
+  }, [setHiddenMenuIds, setMenuMinRole, user?.id, user?.username, user?.windowsUsername, verwaltungsStand])
 
-      // Per-user overrides + persönliche Menü-Reihenfolge
-      if (user?.id) {
-        try {
-          const overrides = await loadUserMenuOverrides()
-          if (!cancelled) setUserOverride(getHiddenForUser(overrides, user.id))
-        } catch { /* ignore */ }
-        try {
-          const orders = await loadUserMenuOrders()
-          if (!cancelled) setUserOrder(getOrderForUser(orders, user.id))
-        } catch { /* ignore */ }
-      }
-    })()
+  // Persönliche Menü-Reihenfolge
+  useEffect(() => {
+    if (!user?.id) return
+    let cancelled = false
+    void loadUserMenuOrders().then(orders => { if (!cancelled) setUserOrder(getOrderForUser(orders, user.id)) }).catch(() => {})
     return () => { cancelled = true }
-  }, [setHiddenMenuIds, setMenuMinRole, user?.id])
+  }, [user?.id, verwaltungsStand])
 
   // Aufklappbare Kategorien (standardmaessig zu). "Startbildschirm" bleibt oben
   // und "Ergebnisse" + Kategorie "Einstellungen" unten. Remote Doc & Abfrage-
@@ -254,37 +258,30 @@ export default function Sidebar() {
   const serverAlarmCount = useAppStore(s => s.serverAlarmCount)
   const serverStumm = useServerStumm(s => s.stumm)
 
-  // Global never-hide list (so master admin can never lock themself out).
-  // Per-user overrides take precedence over this and can hide everything —
-  // useful for kiosk-style accounts (e.g. "presentation only").
-  const ALWAYS_VISIBLE_GLOBAL = new Set<string>(['home', 'settings', 'user-management', 'user-logs', 'bug-mailbox'])
+  // Zentrale Auswertung (utils/sichtbarkeit.ts): Gründer → feste Rollengrenze → Modus des
+  // Benutzers (Standard / Alle außer / Nur ausgewählte) → Unterbereiche. Ergebnis für ALLE
+  // Katalog-Punkte + ausgeblendete Unterbereiche → Store (Kacheln, Reiter, Wache in App.tsx).
+  const rolle: Rolle = isMaster ? 'master_admin' : isAdmin ? 'admin' : 'user'
+  const alles = useMemo(() => berechneAlles({
+    rolle,
+    gruender: isFounder,
+    recht: meine?.recht ?? null,
+    standardBereiche: meine?.standardBereiche ?? {},
+    hidden: hiddenMenuIds,
+    minRole: menuMinRole,
+  }), [rolle, isFounder, meine, hiddenMenuIds, menuMinRole])
 
   function isVisible(item: NavItem): boolean {
-    // Obermenüpunkt (z. B. „Client Geräte“): nur, wenn mindestens ein Unterpunkt sichtbar ist
-    const kinder = kinderVon(item.id)
-    if (kinder.length && !kinder.some(k => isVisible({ id: k.id, label: k.label, icon: null, adminOnly: k.adminOnly, masterAdminOnly: k.masterAdminOnly }))) return false
     // Feature-Flag: PDF-Werkzeuge-Modul abschaltbar
     if (item.id === 'pdf-tools' && !PDF_TOOLS_ENABLED) return false
-    // Zentrale Auswertung (fest verankerte Rolle + globales Ausblenden +
-    // konfigurierte Mindest-Rolle + per-Benutzer-Override).
-    return computeMenuVisible(item.id, {
-      isAdmin,
-      isMaster,
-      isFounder,
-      userOverride,
-      hidden: hiddenMenuIds,
-      minRole: menuMinRole,
-      alwaysVisibleGlobal: ALWAYS_VISIBLE_GLOBAL,
-      builtinAdminOnly: item.adminOnly,
-      builtinMasterOnly: item.masterAdminOnly,
-    })
+    return alles.sichtbar[item.id] !== false
   }
 
   // Alle Eintraege flach (fuer Kiosk-Fallback)
   const visibleItems = MENU.flatMap(s => s.kind === 'item' ? [s.item] : s.items).filter(isVisible)
-  const kinderSichtbar = MENU_CATALOG.filter(c => c.elternteil).map(c => c.id + ':' + (isVisible({ id: c.id, label: c.label, icon: null, adminOnly: c.adminOnly, masterAdminOnly: c.masterAdminOnly }) ? 1 : 0)).join(',')
   const setzeSichtbar = useMenuSichtbar(st => st.setze)
-  useEffect(() => { setzeSichtbar(Object.fromEntries(kinderSichtbar.split(',').filter(Boolean).map(x => { const [id, v] = x.split(':'); return [id, v === '1'] }))) }, [kinderSichtbar, setzeSichtbar])
+  useEffect(() => { setzeSichtbar(alles.sichtbar, alles.bereiche) }, [alles, setzeSichtbar])
+  const eigeneAuswahl = !isFounder && !!meine?.recht && meine.recht.modus !== 'standard'
 
   function toggleCat(name: string) {
     setOpenCats(prev => {
@@ -383,15 +380,19 @@ export default function Sidebar() {
 
   // Kiosk fallback: if the user landed on a screen that's hidden for them
   // (e.g. default 'home' is hidden), jump to the first visible item once.
+  // Seit 19.11.2026 zeigt App.tsx bei einem ausgeblendeten Bildschirm einen Hinweis — umgeleitet wird
+  // nur noch beim Start (Startseite ausgeblendet) und bei „Nur ausgewählte“ (Kiosk-Konten).
   useEffect(() => {
-    if (!userOverride || isMaster) return
+    if (!eigeneAuswahl) return
     if (visibleItems.length === 0) return
+    if (!MENU_CATALOG.some(c => c.id === screen)) return     // z. B. Remote Doc über die Startseite
+    if (screen !== 'home' && meine?.recht?.modus !== 'nur') return
     const unterpunktSichtbar = !!elternVon(screen) && visibleItems.some(i => i.id === elternVon(screen)) && isVisible({ id: screen, label: '', icon: null })
     if (!visibleItems.some(i => i.id === screen) && !unterpunktSichtbar) {
       setScreen(visibleItems[0].id)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userOverride, screen])
+  }, [eigeneAuswahl, screen, alles])
 
   // Role display
   const roleLabel = user?.role === 'master_admin'

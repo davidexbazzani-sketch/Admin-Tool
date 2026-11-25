@@ -18,6 +18,15 @@ export interface AdUserDirectory {
   loadedAt: string   // ISO-Zeitstempel der letzten AD-Abfrage
 }
 
+/** Wie readCentralAdUsers, aber asynchron gelesen (blockiert den Hauptprozess nicht). */
+export async function readCentralAdUsersAsync(): Promise<AdUserDirectory | null> {
+  try {
+    const d = await api().netReadJsonAsync<AdUserDirectory>(CENTRAL_FILE)
+    if (d && Array.isArray(d.users) && d.users.length > 0 && typeof d.loadedAt === 'string') return d
+  } catch { /* Datei fehlt oder Netzlaufwerk nicht erreichbar */ }
+  return null
+}
+
 export async function readCentralAdUsers(): Promise<AdUserDirectory | null> {
   try {
     const d = await api().netReadJson<AdUserDirectory>(CENTRAL_FILE)

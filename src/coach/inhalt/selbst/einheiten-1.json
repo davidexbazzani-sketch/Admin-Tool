@@ -1,0 +1,337 @@
+{
+  "einheiten": [
+    {
+      "id": "selbst-1-01", "bereich": "selbst", "stufe": 1, "nr": 1,
+      "titel": "Selbstvertrauen kommt nach dem Tun",
+      "faehigkeiten": ["selbst.beweise"], "dauerMin": 6, "beleg": "A",
+      "belegHinweis": "Die vier Quellen der Selbstwirksamkeit sind eine Theorie mit sehr breiter Stützung; dass eigene Erfolge am stärksten wirken, gilt im Mittel. Selbstwert-Programme wirken insgesamt klein bis mittel – kein schneller Umbau.",
+      "quellen": ["bandura1997", "niveau2021"],
+      "aha": "Selbstvertrauen ist kein Gefühl, auf das du warten kannst. Es ist die Erinnerung an Dinge, die du getan hast – darum wächst es mit dem Tun, auch mit kleinem.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Erst braucht man Selbstvertrauen – dann kann man Neues wagen.", "urteil": "falsch", "warum": "Meist ist es umgekehrt: Wer etwas wagt und es schafft, gewinnt Zutrauen. Das Gefühl kommt nach dem Tun, selten davor." },
+        { "art": "karte", "text": "Woher kommt das Zutrauen, etwas zu schaffen? Die Forschung nennt vier Quellen. Am stärksten: eigene Erfolge – auch kleine. Dann Vorbilder, die dir ähneln und es geschafft haben. Dann glaubwürdiger Zuspruch. Und schließlich, wie du deine Körperzeichen deutest: Herzklopfen als Bereitschaft statt als Warnung. Darum fängt dieser Bereich beim Tun an." },
+        { "art": "rangfolge", "kopf": { "id": "selbst-1-01-a", "faehigkeit": "selbst.beweise", "stufe": 2, "kanal": "wissen" },
+          "frage": "Lena Brandt soll ihre erste Präsentation halten. Was stärkt ihr Zutrauen am meisten? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "Sie hat vorher schon einmal einen kurzen Teil im Team vorgestellt.", "warum": "Eigenes Gelingen ist die stärkste Quelle – auch wenn es klein war." },
+            { "text": "Sie hat gesehen, wie Carla, die auch sehr aufgeregt ist, ihre Präsentation geschafft hat.", "warum": "Ein Vorbild, das ihr ähnelt, macht Mut: Wenn sie es kann, kann ich es auch." },
+            { "text": "Tarek sagt ihr: „Du kennst das Thema am besten.“", "warum": "Glaubwürdiger Zuspruch hilft – weniger als eigenes Erleben." },
+            { "text": "Auf ihrem Bildschirm klebt ein Zettel: „Du bist stark!“", "warum": "Ein allgemeiner Spruch ohne eigenes Erleben trägt am wenigsten." }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "selbst-1-01-b", "faehigkeit": "selbst.beweise", "stufe": 2, "kanal": "wissen" },
+          "frage": "Lena soll bald die Teamrunde leiten. Sie sagt: „Ich warte, bis ich mich bereit fühle.“ Was rätst du ihr?",
+          "antworten": [
+            { "text": "Ein Buch über Selbstbewusstsein lesen.", "wert": 1, "warum": "Wissen kann helfen. Zutrauen wächst aber vor allem aus eigenem Tun." },
+            { "text": "Vorher zweimal einen kleinen Teil der Runde übernehmen.", "wert": 2, "warum": "Kleine, sichere Erfolge sind die stärkste Quelle des Zutrauens. Danach fühlt sich die ganze Runde machbarer an." },
+            { "text": "Absagen, bis das Gefühl von selbst kommt.", "wert": 0, "tendenz": "vermeiden", "warum": "Das Gefühl kommt selten von allein – und jedes Ausweichen macht den nächsten Anlauf schwerer." },
+            { "text": "Sich jeden Morgen sagen: „Ich bin eine geborene Leiterin.“", "wert": 0, "tendenz": "parole", "warum": "Ein Satz, den man sich nicht glaubt, ersetzt kein Erleben." }
+          ] },
+        { "art": "reflexion", "frage": "Denk an etwas, das du dir anfangs nicht zugetraut hast und dann doch geschafft hast – im Beruf, im Verein, zu Hause. Schreib es als ersten Eintrag in deine Beweisliste: „Ich habe …“", "insBuch": "erfolg" },
+        { "art": "karte", "titel": "Wenn es mehr ist", "text": "Dieser Bereich ist für alltägliche Selbstzweifel. Wenn du über Wochen niedergeschlagen bist, kaum Hoffnung spürst, dich so abwertest, dass der Alltag stockt, oder an Selbstverletzung denkst, ist das kein Zeichen von Schwäche – sondern ein guter Grund, dir Unterstützung zu holen. Der Coach ersetzt keine Therapie." },
+        { "art": "fachhilfe", "thema": "seele" },
+        { "art": "mission", "ref": "selbst-m-02" }
+      ],
+      "regel": "Nicht auf das Gefühl warten – eine kleine Sache tun und sie aufschreiben.",
+      "merkkarten": [
+        { "id": "selbst-1-01-m1", "frage": "Was ist die stärkste Quelle des Selbstvertrauens?", "antwort": "Eigene Erfolge – auch kleine. Danach Vorbilder, Zuspruch und die Deutung der Körperzeichen." },
+        { "id": "selbst-1-01-m2", "frage": "Was kommt zuerst: Selbstvertrauen oder Tun?", "antwort": "Meist das Tun. Das Zutrauen folgt dem Gelingen." },
+        { "id": "selbst-1-01-m3", "frage": "Wann holst du dir Unterstützung?", "antwort": "Bei wochenlanger Niedergeschlagenheit, Hoffnungslosigkeit, lähmender Selbstabwertung oder Gedanken an Selbstverletzung." }
+      ],
+      "mission": "selbst-m-02"
+    },
+    {
+      "id": "selbst-1-02", "bereich": "selbst", "stufe": 1, "nr": 2,
+      "titel": "Der innere Kritiker",
+      "faehigkeiten": ["selbst.kritiker", "selbst.muster"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Denkfehler erkennen und prüfen ist ein Kern der kognitiven Therapie, die in Selbstwert-Programmen am besten abschnitt. Dass die Signalwörter beim Erkennen helfen, ist Praxiswissen; die Antreiber sind ein Denkmodell.",
+      "quellen": ["beck1979", "burns1980", "niveau2021", "kahler1975"],
+      "aha": "Der innere Kritiker spricht in „immer“, „nie“ und „typisch“. Er macht aus einem Fehler ein Urteil über dich. An diesen Wörtern erkennst du ihn – und kannst ihn prüfen.",
+      "schritte": [
+        { "art": "zuordnen", "kopf": { "id": "selbst-1-02-a", "faehigkeit": "selbst.kritiker", "stufe": 1, "kanal": "wissen" },
+          "auftrag": "Ist das eine Tatsache – oder ein Urteil über die ganze Person?",
+          "faecher": ["Tatsache", "Urteil über mich"],
+          "karten": [
+            { "text": "Ich habe die Frist um einen Tag verpasst.", "fach": 0 },
+            { "text": "Ich bin unzuverlässig.", "fach": 1 },
+            { "text": "Bei der Präsentation habe ich zweimal den Faden verloren.", "fach": 0 },
+            { "text": "Ich kann einfach nicht reden.", "fach": 1 },
+            { "text": "Die Mail hatte drei Tippfehler.", "fach": 0 },
+            { "text": "Typisch ich.", "fach": 1 }
+          ] },
+        { "art": "karte", "text": "Der innere Kritiker hat feste Muster. Er verallgemeinert („immer“, „nie“), er klebt Etiketten („Ich bin unfähig“), er liest Gedanken („Alle halten mich für …“) und kennt nur Alles oder Nichts. Über eine Tatsache kannst du reden und sie ändern. Über ein Urteil kannst du nur grübeln. Darum ist der erste Schritt: hinhören und die Wörter erkennen." },
+        { "art": "fehler", "kopf": { "id": "selbst-1-02-b", "faehigkeit": "selbst.kritiker", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "So redet Tarek nach einer holprigen Präsentation mit sich. Markier die Stellen, an denen sein Kritiker übertreibt.",
+          "teile": [
+            { "t": "Das" }, { "t": "war" }, { "t": "mal" },
+            { "t": "wieder", "fehler": "„Wieder“ macht aus einem Mal ein Muster." },
+            { "t": "typisch.", "fehler": "Ein Etikett statt einer Beschreibung: Was genau lief schief?" },
+            { "t": "Ich" }, { "t": "verhaue" },
+            { "t": "jede", "fehler": "Alles oder nichts: Jede? Auch die vom letzten Monat, die gut lief?" },
+            { "t": "Präsentation," }, { "t": "und" },
+            { "t": "alle", "fehler": "Gedankenlesen: Woher weiß er, was alle gedacht haben?" },
+            { "t": "haben" }, { "t": "gesehen," }, { "t": "dass" }, { "t": "ich" }, { "t": "keine" },
+            { "t": "Ahnung", "fehler": "Ein Urteil über die ganze Person – dabei ging es um zwei Minuten." },
+            { "t": "habe." }, { "t": "Der" }, { "t": "Teil" }, { "t": "mit" }, { "t": "den" }, { "t": "Zahlen" }, { "t": "lief" }, { "t": "ganz" }, { "t": "gut." }
+          ] },
+        { "art": "kritiker", "kopf": { "id": "selbst-1-02-c", "faehigkeit": "selbst.kritiker", "stufe": 3, "kanal": "koennen" },
+          "satz": "Ein Satz, den dein innerer Kritiker oft zu dir sagt – wörtlich, so wie er klingt.",
+          "kriterien": ["wörtlich aufgeschrieben, nicht beschönigt", "Signalwörter erkannt (immer, nie, typisch, alle)", "eine genauere Fassung daneben, die nur beschreibt, was war"],
+          "muster": ["„Ich kriege nie etwas fertig.“ → „Zwei Sachen sind diese Woche liegen geblieben. Eine mache ich morgen früh.“", "„Alle finden mich langweilig.“ → „Beim Mittagessen war ich still. Was die anderen dachten, weiß ich nicht.“", "„Typisch, ich bin zu blöd für Technik.“ → „Das neue Programm verstehe ich noch nicht. Ich frage Jonas nach dem einen Schritt.“"] },
+        { "art": "karte", "titel": "Woher die Stimme kommt", "text": "Manchmal klingt der Kritiker wie eine alte Regel: „Sei perfekt!“ oder „Mach es allen recht!“. Die Transaktionsanalyse nennt solche Regeln Antreiber – ein Denkmodell, kein Befund. Manche erkennen darin eine Stimme von früher. Wichtig ist nicht, woher sie kommt, sondern was du heute damit machst: Du darfst prüfen, ob die Regel noch gilt." },
+        { "art": "auswahl", "kopf": { "id": "selbst-1-02-d", "faehigkeit": "selbst.kritiker", "stufe": 3, "kanal": "wissen" },
+          "frage": "Nach einem holprigen Anruf bei Herrn Petersen sagt dein Kritiker: „Du kannst einfach nicht mit Kunden.“ Welche Antwort prüft ihn am besten?",
+          "antworten": [
+            { "text": "„Stimmt nicht, ich bin super mit Kunden.“", "wert": 0, "tendenz": "parole", "warum": "Eine Gegenbehauptung ohne Belege – der Kritiker findet sofort ein Gegenbeispiel." },
+            { "text": "„Dieser Anruf war holprig, andere nicht. Nächstes Mal liegen die Zahlen bereit.“", "wert": 2, "warum": "Du begrenzt das Urteil auf den einen Anruf, nennst Gegenbelege und einen nächsten Schritt." },
+            { "text": "„Stimmt wohl. Kundenanrufe überlasse ich ab jetzt lieber den Kolleginnen und Kollegen.“", "wert": 0, "tendenz": "vermeiden", "warum": "So bestätigst du den Kritiker – und nimmst dir die Chance auf Gegenbeweise." },
+            { "text": "„Egal, war ja nur ein Anruf.“", "wert": 1, "tendenz": "kleinreden", "warum": "Nimmt Druck raus. Geprüft ist der Satz damit aber nicht – er kommt beim nächsten Anruf wieder." }
+          ] },
+        { "art": "mission", "ref": "selbst-m-01" }
+      ],
+      "regel": "Hör auf „immer“, „nie“, „typisch“ – und frag: Was genau ist passiert?",
+      "merkkarten": [
+        { "id": "selbst-1-02-m1", "frage": "Woran erkennst du den inneren Kritiker?", "antwort": "An Verallgemeinerungen, Etiketten und Gedankenlesen: immer, nie, typisch, alle." },
+        { "id": "selbst-1-02-m2", "frage": "Was ist der Unterschied zwischen Tatsache und Urteil?", "antwort": "Eine Tatsache beschreibt, was passiert ist. Ein Urteil bewertet die ganze Person." },
+        { "id": "selbst-1-02-m3", "frage": "Was ist ein innerer Antreiber?", "antwort": "Eine alte Regel wie „Sei perfekt!“ – ein Denkmodell aus der Transaktionsanalyse." }
+      ],
+      "mission": "selbst-m-01"
+    },
+    {
+      "id": "selbst-1-03", "bereich": "selbst", "stufe": 1, "nr": 3,
+      "titel": "Wie mit einem Freund",
+      "faehigkeiten": ["selbst.mitgefuehl", "selbst.kritiker"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Übungen in Selbstmitgefühl senken über 27 randomisierte Studien im Mittel Selbstkritik und Grübeln – mit Hinweisen auf Veröffentlichungsverzerrung. Dass Freundlichkeit mit sich lernbereit macht, zeigen einzelne Experimente.",
+      "quellen": ["ferrari2019", "breines2012", "neff2003", "kross2014"],
+      "aha": "Freundlich mit dir zu sein macht dich nicht bequem, sondern lernbereit. Wer sich nach einem Fehler nicht fertigmacht, schaut eher hin und will es beim nächsten Mal besser machen.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Miriam Okafor hat in einer Mail an alle Kunden den falschen Termin genannt. Abends geht ihr das nicht aus dem Kopf.", "schwach": "„Wie kann man so blöd sein? Ich mache echt alles kaputt.“", "stark": "„Das war ärgerlich, Miriam. So etwas passiert vielen. Morgen früh schickst du die Korrektur – dann ist es erledigt.“", "frage": "Welcher Satz hilft Miriam morgen eher weiter?", "unterschied": "Der erste macht aus einem Fehler ein Urteil über sie und lässt sie grübeln. Der zweite nimmt den Ärger ernst, erinnert daran, dass sie nicht allein ist, und führt zu einem nächsten Schritt. Mit dem eigenen Namen gewinnt sie Abstand." },
+        { "art": "studie", "frage": "Macht Freundlichkeit mit sich selbst bequem?", "aufbau": "Studierende schrieben einen schweren Test und schnitten schlecht ab. Ein Teil bekam danach eine freundliche Botschaft: Viele finden den Test schwer, sei nicht zu hart mit dir. Andere bekamen eine Botschaft zur Stärkung des Selbstwerts oder gar keine.", "ergebnis": "Wer die freundliche Botschaft bekam, lernte danach länger für einen zweiten Test. In weiteren Versuchen wollten Menschen nach Selbstmitgefühl eher einen Fehler wiedergutmachen und sich bessern.", "grenze": "Einzelne Experimente mit Studierenden und kurzen Zeiträumen. Über viele Studien senken Übungen in Selbstmitgefühl im Mittel die Selbstkritik – auch hier ist mit etwas Verzerrung zu rechnen.", "beleg": "B", "quellen": ["breines2012", "ferrari2019"] },
+        { "art": "karte", "text": "Selbstmitgefühl hat drei Teile. Erstens Freundlichkeit: Du sprichst mit dir wie mit jemandem, den du magst. Zweitens Verbundenheit: Fehler machen alle – du bist damit nicht allein. Drittens Abstand: Du nimmst das Gefühl wahr, ohne es aufzublasen. Das ist kein Schönreden. Der Fehler bleibt ein Fehler – nur wirst du nicht mehr selbst zum Fehler. Selbstmitleid ist verständlich, hilft aber selten weiter." },
+        { "art": "kritiker", "kopf": { "id": "selbst-1-03-a", "faehigkeit": "selbst.mitgefuehl", "stufe": 3, "kanal": "koennen" },
+          "satz": "Was sagst du dir nach einem Fehler, der dich ärgert? Schreib den Satz auf – und darunter, was du einem guten Freund in derselben Lage sagen würdest.",
+          "kriterien": ["benennt, was passiert ist, ohne Etikett", "erkennt an, dass es ärgert oder wehtut", "erinnert daran, dass es anderen auch passiert", "enthält einen nächsten Schritt"],
+          "muster": ["„Ich Trottel, wieder vergessen.“ → „Ärgerlich, dass ich den Termin vergessen habe. Das passiert vielen. Ich rufe an und entschuldige mich.“", "„Ich bin so peinlich.“ → „Der Witz kam nicht an. Das kennt jeder. Morgen ist das vergessen – und ich bleibe trotzdem ich.“"] },
+        { "art": "zuordnen", "kopf": { "id": "selbst-1-03-b", "faehigkeit": "selbst.mitgefuehl", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Selbstmitgefühl, Selbstmitleid oder Selbstbeschimpfung?",
+          "faecher": ["Selbstmitgefühl", "Selbstmitleid", "Selbstbeschimpfung"],
+          "karten": [
+            { "text": "„Das war schwer. Anderen geht es auch so. Was brauche ich jetzt?“", "fach": 0 },
+            { "text": "„Immer trifft es mich. Niemand hat es so schwer wie ich.“", "fach": 1 },
+            { "text": "„Ich bin so ein Idiot.“", "fach": 2 },
+            { "text": "„Das tut weh – und morgen schaue ich, was ich ändern kann.“", "fach": 0 },
+            { "text": "„Warum passiert so was immer nur mir?“", "fach": 1 },
+            { "text": "„Mit mir kann man echt nichts anfangen.“", "fach": 2 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "selbst-1-03-c", "faehigkeit": "selbst.mitgefuehl", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du hast in der Runde eine falsche Zahl genannt. Abends arbeitet es in dir. Was hilft am ehesten?",
+          "antworten": [
+            { "text": "Alles noch dreimal im Kopf durchspielen, damit es dir nicht noch einmal passiert.", "wert": 0, "tendenz": "gruebeln", "warum": "Grübeln fühlt sich nach Vorsorge an, bringt aber kein neues Wissen – nur neue Sorgen." },
+            { "text": "Dir sagen: „Vergiss es einfach.“", "wert": 1, "warum": "Ablenken kann kurz helfen. Freundlich hinschauen und einen Schritt festlegen trägt weiter." },
+            { "text": "„{name}, das war ärgerlich – und passiert anderen auch. Morgen korrigierst du es.“", "wert": 2, "warum": "Freundlich, mit Abstand durch den Namen, und mit einem nächsten Schritt." },
+            { "text": "Dir vornehmen, in Besprechungen nichts mehr zu sagen.", "wert": 0, "tendenz": "vermeiden", "warum": "Das schützt kurz und nimmt dir alle künftigen Gegenbeweise." }
+          ] },
+        { "art": "fachhilfe", "thema": "seele" },
+        { "art": "mission", "ref": "selbst-m-04" }
+      ],
+      "regel": "Sprich nach einem Fehler mit dir, wie du mit einem guten Freund sprechen würdest.",
+      "merkkarten": [
+        { "id": "selbst-1-03-m1", "frage": "Was sind die drei Teile des Selbstmitgefühls?", "antwort": "Freundlichkeit mit dir, Verbundenheit (es passiert allen), Abstand zum Gefühl." },
+        { "id": "selbst-1-03-m2", "frage": "Macht Selbstmitgefühl bequem?", "antwort": "Eher nicht: In Versuchen wollten Menschen danach eher etwas besser machen und lernten länger." },
+        { "id": "selbst-1-03-m3", "frage": "Wie geht die Freundes-Probe?", "antwort": "Fragen, was du einem Freund in derselben Lage sagen würdest – und es dir selbst sagen." }
+      ],
+      "mission": "selbst-m-04"
+    },
+    {
+      "id": "selbst-1-04", "bereich": "selbst", "stufe": 1, "nr": 4,
+      "titel": "Deine Beweisliste",
+      "faehigkeiten": ["selbst.beweise", "selbst.vergleich"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Übungen wie „drei gute Dinge“ hoben in Studien das Wohlbefinden; eine Wiederholung fand kleinere Effekte. Die Beweisliste ist eine Abwandlung, nicht eigens untersucht. Dass Schlechtes stärker haftet, stützt sich auf eine Übersichtsarbeit; der Blick aufs eigene Gestern auf eine Studienreihe.",
+      "quellen": ["seligman2005", "mongrain2012", "baumeister2001", "gerber2018", "wilsonross2001"],
+      "aha": "Pannen merkt sich der Kopf von allein. Erfolge rutschen durch. Wer sie nicht aufschreibt, vergleicht sich am Ende nur mit seinen Fehlern – und mit den Besten der anderen.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "Was haftet bei den meisten Menschen länger: ein Lob oder eine Kritik von gleichem Gewicht?", "optionen": ["das Lob", "die Kritik", "beides gleich"], "richtig": 1, "loesung": "Meist die Kritik", "aufloesung": "Schlechtes wirkt im Mittel stärker und bleibt länger hängen als Gutes. Das ist kein Fehler von dir, sondern verbreitet. Gegenmittel: das Gute bewusst festhalten." },
+        { "art": "karte", "text": "Die Beweisliste ist einfach: jeden Abend ein Satz, „Heute habe ich …“. Nicht was gut lief, sondern was du getan hast – auch Kleines. So sammelst du Belege, die der Kritiker nicht wegreden kann. Ähnliche Übungen hoben in Studien das Wohlbefinden; eine Wiederholung fand kleinere Effekte als die erste Studie. Kein Wundermittel also – aber ein Werkzeug, das wenig kostet." },
+        { "art": "rangfolge", "kopf": { "id": "selbst-1-04-a", "faehigkeit": "selbst.beweise", "stufe": 2, "kanal": "wissen" },
+          "frage": "Welcher Eintrag in die Beweisliste ist am stärksten? Von stark nach schwach.",
+          "eintraege": [
+            { "text": "„Heute habe ich bei Herrn Petersen zweimal nachgefragt und den Auftrag geklärt.“", "warum": "Eigenes Tun, konkret – ein Beleg, den man nicht wegreden kann." },
+            { "text": "„Heute habe ich die Präsentation gehalten.“", "warum": "Auch eigenes Tun, aber ohne Einzelheit." },
+            { "text": "„Heute war ein guter Tag.“", "warum": "Ein schönes Gefühl, aber keine Handlung von dir." },
+            { "text": "„Heute ist zum Glück nichts schiefgegangen.“", "warum": "Misst nur, dass keine Panne kam – und schreibt das Gute dem Glück zu." }
+          ] },
+        { "art": "reflexion", "frage": "Dein Eintrag für heute: Was hast du heute oder gestern getan – auch etwas Kleines? Schreib es als „Ich habe …“.", "insBuch": "erfolg" },
+        { "art": "karte", "titel": "Mit wem du dich vergleichst", "text": "Menschen vergleichen sich am liebsten nach oben – und schätzen sich danach meist schlechter ein. Die Beweisliste erlaubt einen anderen Vergleich: mit dir selbst vor ein paar Wochen. Der zeigt meist Fortschritt, und er ist fair: gleiche Ausgangslage, gleiche Person." },
+        { "art": "auswahl", "kopf": { "id": "selbst-1-04-b", "faehigkeit": "selbst.vergleich", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du liest abends deine Beweisliste. Danach siehst du im Netz, dass eine Bekannte befördert wurde. Welcher Vergleich hilft dir am meisten?",
+          "antworten": [
+            { "text": "Ihr gratulieren und dir sagen, dass du so weit nie kommst.", "wert": 0, "tendenz": "verallgemeinern", "warum": "Die Gratulation ist schön – der Satz danach ist der Kritiker mit einem „nie“." },
+            { "text": "Das Handy weglegen und an etwas anderes denken.", "wert": 1, "warum": "Entlastet. Du verschenkst aber den Blick auf deinen eigenen Fortschritt." },
+            { "text": "Mit dir selbst vor ein paar Wochen.", "wert": 2, "warum": "Der Vergleich mit dem eigenen Gestern ist fair – und zeigt meist Fortschritt." },
+            { "text": "Mit ihr: Was hat sie, was dir fehlt?", "wert": 0, "tendenz": "vergleichen", "warum": "Nach oben vergleichen drückt meist die eigene Einschätzung – ohne dass du etwas lernst." }
+          ] },
+        { "art": "mission", "ref": "selbst-m-03" }
+      ],
+      "regel": "Jeden Abend ein Satz: „Heute habe ich …“ – und vergleich dich mit deinem Gestern.",
+      "merkkarten": [
+        { "id": "selbst-1-04-m1", "frage": "Was gehört in die Beweisliste?", "antwort": "Was du getan hast, konkret – nicht nur, was gut lief." },
+        { "id": "selbst-1-04-m2", "frage": "Warum aufschreiben?", "antwort": "Schlechtes haftet von allein stärker. Gutes rutscht ohne Notiz durch." },
+        { "id": "selbst-1-04-m3", "frage": "Welcher Vergleich ist fair?", "antwort": "Der mit dir selbst vor ein paar Wochen – er zeigt meist Fortschritt." }
+      ],
+      "mission": "selbst-m-03"
+    },
+    {
+      "id": "selbst-1-05", "bereich": "selbst", "stufe": 1, "nr": 5,
+      "titel": "Stärken im Einsatz",
+      "faehigkeiten": ["selbst.staerken", "selbst.vergleich"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "„Eine Stärke neu einsetzen“ hob in einer Studie das Wohlbefinden über Monate; Wiederholungen fanden schwächere Effekte. Dass erreichbare Vorbilder anspornen, zeigen Experimente mit Studierenden.",
+      "quellen": ["seligman2005", "mongrain2012", "lockwood1997", "gerber2018"],
+      "aha": "Eine Stärke, die du kennst, ist schön. Eine Stärke, die du bewusst in einer neuen Lage einsetzt, wird zum Beweis – und zieht dich weg vom Vergleich mit anderen.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Eine Stärke ist etwas, das man besser kann als alle anderen.", "urteil": "falsch", "warum": "Eine Stärke ist, was dir leichtfällt, dir Kraft gibt und was andere an dir schätzen. Ob jemand anderes es noch besser kann, spielt keine Rolle." },
+        { "art": "studie", "frage": "Bringt es etwas, eine Stärke bewusst neu einzusetzen?", "aufbau": "Erwachsene machten online eine Woche lang eine Übung, zum Beispiel jeden Tag eine eigene Stärke auf neue Art einsetzen. Eine Vergleichsgruppe schrieb über frühe Erinnerungen.", "ergebnis": "Wer Stärken neu einsetzte, war noch Monate später zufriedener und weniger niedergeschlagen als die Vergleichsgruppe.", "grenze": "In einer Wiederholung stieg die Zufriedenheit – nach einer angenehmen Vergleichsübung aber ebenso, und die Niedergeschlagenheit sank nicht stärker. Die Effekte sind klein – die Übung kostet aber auch wenig.", "beleg": "B", "quellen": ["seligman2005", "mongrain2012"] },
+        { "art": "selbstbild", "aussagen": [
+          { "id": "selbst-1-05-s1", "text": "Ich kann drei Dinge nennen, die mir leichtfallen.", "faehigkeit": "selbst.staerken" },
+          { "id": "selbst-1-05-s2", "text": "Ich weiß, wofür andere mich schätzen.", "faehigkeit": "selbst.staerken" },
+          { "id": "selbst-1-05-s3", "text": "Ich setze meine Stärken auch außerhalb meiner gewohnten Aufgaben ein.", "faehigkeit": "selbst.staerken" },
+          { "id": "selbst-1-05-s4", "text": "Wenn andere glänzen, denke ich eher an meinen eigenen Weg als an meine Lücken.", "faehigkeit": "selbst.vergleich" }
+        ] },
+        { "art": "zuordnen", "kopf": { "id": "selbst-1-05-a", "faehigkeit": "selbst.staerken", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Welche Stärke steckt hinter dem, was die Person tut?",
+          "faecher": ["Geduld", "Genauigkeit", "Humor"],
+          "karten": [
+            { "text": "Jonas erklärt der neuen Kollegin das Programm zum dritten Mal – ohne Seufzen.", "fach": 0 },
+            { "text": "Lena findet in der Tabelle den einen Rechenfehler, der allen entgangen ist.", "fach": 1 },
+            { "text": "Tarek bringt die gestresste Runde mit einem Satz zum Lachen.", "fach": 2 },
+            { "text": "Frau Sommer hört sich die Sorgen des Nachbarskinds in Ruhe an.", "fach": 0 },
+            { "text": "Carla prüft jede Zahl ihrer Folien zweimal.", "fach": 1 },
+            { "text": "Miriam nimmt eine Panne mit einem Augenzwinkern.", "fach": 2 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "selbst-1-05-b", "faehigkeit": "selbst.staerken", "stufe": 3, "kanal": "wissen" },
+          "frage": "Lena Brandt ist sehr genau. In Besprechungen sagt sie kaum etwas. Wie könnte sie ihre Stärke neu einsetzen?",
+          "antworten": [
+            { "text": "Sich vornehmen, endlich lockerer zu werden.", "wert": 0, "warum": "Damit arbeitet sie an einer Schwäche statt mit einer Stärke – und hat keinen konkreten Schritt." },
+            { "text": "Ihre Genauigkeit weiter vor allem in Tabellen zeigen – da fällt sie auf.", "wert": 1, "warum": "Dort nutzt sie die Stärke schon. Neu einsetzen hieße: in einer Lage, in der sie sonst still bleibt." },
+            { "text": "Sich mit Miriam vergleichen, die immer spontan etwas sagt.", "wert": 0, "tendenz": "vergleichen", "warum": "Ein Vergleich mit einer ganz anderen Stärke drückt nur – Lena muss nicht wie Miriam werden." },
+            { "text": "Vorher die Unterlagen prüfen und zwei offene Punkte als Frage einbringen.", "wert": 2, "warum": "Ihre Genauigkeit wird zum Beitrag in einer neuen Lage – passend zu ihr, ohne sich zu verbiegen." }
+          ] },
+        { "art": "karte", "titel": "Stärken statt Vergleich", "text": "Wer sich mit der Besten im Raum misst, schätzt sich danach meist schlechter ein. Wer auf die eigenen Stärken schaut, fragt etwas anderes: Was kann ich hier beitragen? Und wenn dich jemand beeindruckt: Ein Vorbild spornt eher an, wenn sein Weg auch deiner sein könnte – nicht wenn es unerreichbar wirkt." },
+        { "art": "reflexion", "frage": "Nenne drei deiner Stärken. Wo setzt du eine davon diese Woche in einer neuen Lage ein?" },
+        { "art": "mission", "ref": "selbst-m-07" }
+      ],
+      "regel": "Nicht an Lücken feilen – eine Stärke in einer neuen Lage einsetzen.",
+      "merkkarten": [
+        { "id": "selbst-1-05-m1", "frage": "Was ist eine Stärke?", "antwort": "Was dir leichtfällt, Kraft gibt und was andere an dir schätzen – egal, ob jemand es besser kann." },
+        { "id": "selbst-1-05-m2", "frage": "Was bringt „Stärke neu einsetzen“ laut Forschung?", "antwort": "Etwas mehr Zufriedenheit – kleine Effekte, aber eine billige Übung." },
+        { "id": "selbst-1-05-m3", "frage": "Welches Vorbild spornt an?", "antwort": "Eines, dessen Weg auch deiner sein könnte." }
+      ],
+      "mission": "selbst-m-07"
+    },
+    {
+      "id": "selbst-1-06", "bereich": "selbst", "stufe": 1, "nr": 6,
+      "titel": "Lob annehmen",
+      "faehigkeiten": ["selbst.beweise", "selbst.haltung"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Dass Menschen mit wenig Selbstwert Lob eher abwehren und konkretes Nachdenken hilft, zeigen einzelne Experimente. Zur Haltung gibt es zwei Meta-Analysen: aufrecht hebt das eigene Empfinden leicht, Hormone nicht. Die Form „Danke – Punkt“ ist Praxiswissen.",
+      "quellen": ["kille2017", "marigold2007", "koerner2022", "elkjaer2022", "praxis-selbst"],
+      "aha": "„Danke, das freut mich.“ – Punkt. Wer Lob abwehrt, wirft einen Beweis weg. Wer es annimmt, aufrecht und mit Blick, nimmt ihn mit in die Beweisliste.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Dr. Henrik Albers sagt in der Teamrunde zu Lena Brandt: „Ihre Auswertung war richtig gut gemacht.“", "schwach": "Lena schaut auf den Tisch: „Ach, das war nichts Besonderes. Tarek hat ja auch viel geholfen …“", "stark": "Lena sieht ihn an: „Danke, das freut mich.“", "frage": "Was macht die zweite Antwort stärker?", "unterschied": "Die erste wehrt das Lob ab und macht Lena kleiner, als sie ist. Die zweite nimmt es an – kurz, mit Blick, ohne Erklärung. Hat Tarek wirklich mitgeholfen, kann sie es nach dem Danke sagen: „Tarek und ich haben gut zusammengearbeitet.“" },
+        { "art": "karte", "text": "Warum prallt Lob so oft ab? Wer wenig von sich hält, dem passt das Lob nicht ins Bild – also wird es kleingeredet, zurückgegeben oder erklärt. Leichter wird es, wenn du konkret bleibst: Wofür genau hat mich jemand gelobt? Was hat er gesehen? Ein konkretes Lob lässt sich schwerer wegwischen und gehört abends in die Beweisliste." },
+        { "art": "dialog", "kopf": { "id": "selbst-1-06-a", "faehigkeit": "selbst.beweise", "stufe": 3, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Lob in der Kaffeeküche", "figur": "Miriam Okafor",
+            "lage": "Du hast vorhin im Team deine Auswertung vorgestellt. In der Kaffeeküche kommt Miriam auf dich zu.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Miriam: „Deine Präsentation vorhin war echt stark. Vor allem die Grafik mit den Lieferzeiten.“",
+                "wahl": [
+                  { "text": "„Ach, die war doch total chaotisch.“", "wert": 0, "tendenz": "abwehren", "weiter": "k1b", "rueck": "Du widersprichst ihrem Urteil – und nimmst dir einen Beweis." },
+                  { "text": "„Danke, das freut mich. An der Grafik habe ich lange gesessen.“", "wert": 2, "weiter": "k2", "rueck": "Annehmen und den eigenen Anteil nennen – ohne Übertreibung." },
+                  { "text": "„Danke! Deine letzte war aber noch besser.“", "wert": 1, "tendenz": "ueberspielen", "weiter": "k2", "rueck": "Freundlich – aber du schiebst das Lob gleich weiter, statt es zu halten." }
+                ] },
+              { "id": "k1b", "sagt": "Miriam: „Chaotisch? Ich fand sie richtig klar. Ehrlich.“",
+                "wahl": [
+                  { "text": "„Okay – danke. Das tut gut zu hören.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt: Du lässt ihr Urteil stehen." },
+                  { "text": "„Du bist nur nett.“", "wert": 0, "tendenz": "abwehren", "weiter": "ende2", "rueck": "Jetzt muss sie ihr Lob verteidigen. Das macht Loben mühsam." }
+                ] },
+              { "id": "k2", "sagt": "Miriam: „Wie bist du eigentlich auf die Idee mit der Grafik gekommen?“",
+                "wahl": [
+                  { "text": "„Ach, eher Zufall.“", "wert": 0, "tendenz": "kleinreden", "weiter": "ende1", "rueck": "Schade – du schreibst deine eigene Idee dem Glück zu." },
+                  { "text": "Kurz erzählen, dass dich die vielen Rückfragen zu Lieferzeiten darauf gebracht haben.", "wert": 2, "weiter": "ende1", "rueck": "Du nennst deinen Anteil sachlich. Genau das gehört heute Abend in die Beweisliste." }
+                ] },
+              { "id": "ende1", "sagt": "Miriam nickt: „Mach das öfter so.“ Sie nimmt ihren Kaffee und geht.", "ende": "Ein Lob anzunehmen heißt: Danke sagen, nicht kleinreden, nicht zurückloben – und den eigenen Anteil kennen. Schreib es dir heute Abend auf." },
+              { "id": "ende2", "sagt": "Miriam zuckt mit den Schultern: „Na gut.“ Sie geht zurück an ihren Platz.", "ende": "Wer Lob mehrmals abwehrt, bekommt es seltener – nicht weil er es nicht verdient, sondern weil Loben mühsam wird. Beim nächsten Mal: „Danke, das freut mich.“" }
+            ],
+            "prinzipien": ["Danke sagen – Punkt", "nicht kleinreden, nicht zurückloben", "den eigenen Anteil sachlich nennen", "das Lob abends in die Beweisliste"]
+          } },
+        { "art": "studie", "frage": "Macht eine Siegerpose wirklich selbstbewusster?", "aufbau": "Zwei große Übersichten fassten viele Experimente zusammen, in denen Menschen eine Haltung einnahmen: aufrecht, breit, zusammengesunken oder neutral.", "ergebnis": "Aufrecht statt zusammengesunken hebt das eigene Empfinden etwas. Hormone änderten sich nicht verlässlich, aufs Verhalten wirkt es schwächer. Der Effekt kommt vor allem daher, dass Zusammensinken das Gefühl drückt.", "grenze": "Viele kleine Studien, oft ohne gute Vergleichsgruppe. Mehr als ein leichtes Plus fürs eigene Gefühl ist nicht drin – aber das kostet nichts.", "beleg": "A", "quellen": ["koerner2022", "elkjaer2022"] },
+        { "art": "umformulieren", "kopf": { "id": "selbst-1-06-b", "faehigkeit": "selbst.beweise", "stufe": 2, "kanal": "koennen" },
+          "auftrag": "Mach aus der Abwehr eine Annahme – kurz und ohne Gegenlob.",
+          "vorlage": "„Ach was, das hätte doch jeder hingekriegt.“",
+          "kriterien": ["beginnt mit Danke oder einer Freude", "ohne Kleinreden", "ohne Gegenlob", "höchstens zwei Sätze"],
+          "muster": ["„Danke, das freut mich.“", "„Danke – da habe ich mir auch Mühe gegeben.“", "„Schön, dass es dir aufgefallen ist.“"] },
+        { "art": "auswahl", "kopf": { "id": "selbst-1-06-c", "faehigkeit": "selbst.haltung", "stufe": 3, "kanal": "wissen" },
+          "frage": "Dr. Albers lobt dich im Flur für einen gelösten Kundenfall. Wie nimmst du es am besten an?",
+          "antworten": [
+            { "text": "Im Weitergehen über die Schulter: „Danke, danke.“", "wert": 1, "warum": "Freundlich, aber im Vorbeigehen – das Lob landet nur halb." },
+            { "text": "Auf den Boden schauen und murmeln: „War doch nichts.“", "wert": 0, "tendenz": "kleinreden", "warum": "Blick und Satz machen dich beide kleiner. Er hat es anders gesehen." },
+            { "text": "Stehen bleiben, ihn ansehen: „Danke, das freut mich.“", "wert": 2, "warum": "Aufrecht, mit Blick, kurz – so kommt das Lob bei dir an." },
+            { "text": "Sofort aufzählen, was an dem Fall noch schiefgelaufen ist.", "wert": 0, "tendenz": "abwehren", "warum": "Ehrlich gemeint, aber du drehst ein Lob in eine Fehlerliste. Die Punkte kannst du später sachlich ansprechen." }
+          ] },
+        { "art": "mission", "ref": "selbst-m-06" }
+      ],
+      "regel": "Lob annehmen: stehen bleiben, ansehen, „Danke, das freut mich.“ – Punkt.",
+      "merkkarten": [
+        { "id": "selbst-1-06-m1", "frage": "Wie nimmst du ein Lob an?", "antwort": "„Danke, das freut mich.“ – ohne Kleinreden, ohne Gegenlob, mit Blick." },
+        { "id": "selbst-1-06-m2", "frage": "Was bringt eine aufrechte Haltung laut Forschung?", "antwort": "Ein leichtes Plus fürs eigene Empfinden – keine Hormon-Wirkung." },
+        { "id": "selbst-1-06-m3", "frage": "Was hilft, wenn Lob abprallt?", "antwort": "Konkret werden: Wofür genau? Was hat der andere gesehen?" }
+      ],
+      "mission": "selbst-m-06"
+    },
+    {
+      "id": "selbst-1-07", "bereich": "selbst", "stufe": 1, "nr": 7,
+      "titel": "Sätze, die du dir glaubst",
+      "faehigkeiten": ["selbst.kritiker", "selbst.muster", "selbst.grenzen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Ob Parolen schaden, ist umstritten: eine Studie dafür, zwei Wiederholungen dagegen. Sicher ist nur, dass sie nicht zuverlässig helfen. Dass Absagen weniger kosten als befürchtet, zeigt eine Studienreihe zu Einladungen. Die Antreiber und Erlauber-Sätze sind ein Denkmodell.",
+      "quellen": ["wood2009", "flynn2020", "givi2024", "kahler1975"],
+      "aha": "Parolen, die du dir nicht glaubst, helfen nicht zuverlässig. Sätze, die stimmen und dir etwas erlauben, tragen weiter – auch dann, wenn du Nein sagen willst.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer sich jeden Morgen „Ich bin großartig“ sagt, gewinnt Selbstvertrauen.", "urteil": "falsch", "warum": "Sätze, die man sich nicht glaubt, helfen nicht zuverlässig. In einer Studie fühlten sich Menschen mit wenig Selbstwert danach sogar schlechter – Wiederholungen fanden keinen Unterschied. Ein Wundermittel ist es jedenfalls nicht." },
+        { "art": "studie", "frage": "Können Parolen schaden?", "aufbau": "Menschen mit viel und mit wenig Selbstwert sagten sich den Satz „Ich bin ein liebenswerter Mensch“ immer wieder vor; Vergleichsgruppen taten das nicht. Danach wurde ihre Stimmung gemessen.", "ergebnis": "In der ersten Studie fühlten sich Menschen mit wenig Selbstwert danach schlechter, Menschen mit viel Selbstwert etwas besser. Zwei spätere Wiederholungen fanden in keiner Gruppe einen Unterschied.", "grenze": "Ob Parolen schaden, ist offen. Belegt ist nur: Sie helfen nicht zuverlässig – erst recht nicht, wenn man sie sich nicht glaubt.", "beleg": "U", "quellen": ["wood2009", "flynn2020"] },
+        { "art": "karte", "text": "Glaubwürdige Sätze nennen Gefühl und Können zugleich („Ich bin nervös und kann es trotzdem“) oder beschreiben einen Weg („Ich lerne gerade, ruhiger mit Kritik umzugehen“). Gegen alte Antreiber helfen Erlauber-Sätze: „Ich darf Nein sagen und trotzdem gemocht werden.“ Das ist nicht nur nett: Wer absagt, überschätzt in Versuchen deutlich, wie enttäuscht der andere ist." },
+        { "art": "zuordnen", "kopf": { "id": "selbst-1-07-a", "faehigkeit": "selbst.kritiker", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Parole oder glaubwürdiger Satz?",
+          "faecher": ["Parole", "glaubwürdiger Satz"],
+          "karten": [
+            { "text": "„Ich bin der Beste.“", "fach": 0 },
+            { "text": "„Ich bin aufgeregt und gut vorbereitet.“", "fach": 1 },
+            { "text": "„Mich kann nichts erschüttern.“", "fach": 0 },
+            { "text": "„Ich habe das schon zweimal geschafft.“", "fach": 1 },
+            { "text": "„Alle lieben mich.“", "fach": 0 },
+            { "text": "„Ich lerne gerade, Nein zu sagen.“", "fach": 1 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "selbst-1-07-b", "faehigkeit": "selbst.muster", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Gib dem alten Antreiber einen Erlauber-Satz an die Seite – einen, den du dir glauben kannst.",
+          "vorlage": "„Ich muss es allen recht machen, sonst mag mich keiner.“",
+          "kriterien": ["nimmt den Antreiber ernst, ohne dich zu beschimpfen", "erlaubt dir etwas Neues", "klingt glaubwürdig, nicht wie eine Parole"],
+          "muster": ["„Ich darf Nein sagen und trotzdem gemocht werden.“", "„Manche sind kurz enttäuscht. Das halte ich aus – und sie meist auch.“", "„Ich helfe gern – wenn ich es will, nicht weil ich muss.“"] },
+        { "art": "auswahl", "kopf": { "id": "selbst-1-07-c", "faehigkeit": "selbst.grenzen", "stufe": 3, "kanal": "wissen" },
+          "frage": "Tarek fragt dich zum dritten Mal in diesem Monat, ob du seinen Spätdienst übernimmst. Du willst nicht. In dir meldet sich: „Wer Nein sagt, ist egoistisch.“ Was hilft dir am meisten?",
+          "antworten": [
+            { "text": "„Ich bin der großzügigste Kollege überhaupt – ich schaffe alles, auch noch den Samstag.“", "wert": 0, "tendenz": "parole", "warum": "Eine Parole, die du dir gerade nicht glaubst – und die dich zum nächsten Ja treibt." },
+            { "text": "„Ich darf Nein sagen. Tarek ist wohl weniger enttäuscht, als ich fürchte.“", "wert": 2, "warum": "Ein Erlauber-Satz, der stimmt – und die Sorge auf ihre wahre Größe bringt." },
+            { "text": "Ihm sagen, dass du es dir überlegst.", "wert": 1, "warum": "Bedenkzeit ist ein guter Schritt. Den inneren Satz hast du damit aber noch nicht geprüft." },
+            { "text": "„Egoistisch nicht – aber ein Nein kann ich mir nicht leisten.“", "wert": 0, "tendenz": "nachgeben", "warum": "Der Antreiber gewinnt wieder. Dein Recht auf ein Nein hängt nicht davon ab, ob es bequem ist." }
+          ] },
+        { "art": "reflexion", "frage": "Schreib deinen glaubwürdigen Satz auf – einen, den du vor einer schwierigen Lage oder vor einem Nein sagen kannst.", "insBuch": "saetze" },
+        { "art": "mission", "ref": "selbst-m-05" }
+      ],
+      "regel": "Keine Parolen – Sätze, die stimmen und dir etwas erlauben.",
+      "merkkarten": [
+        { "id": "selbst-1-07-m1", "frage": "Was weiß man über Parolen wie „Ich bin großartig“?", "antwort": "Sie helfen nicht zuverlässig. Ob sie bei wenig Selbstwert schaden, ist umstritten." },
+        { "id": "selbst-1-07-m2", "frage": "Was macht einen Satz glaubwürdig?", "antwort": "Er nennt Gefühl und Können zugleich oder beschreibt einen Weg – und du nimmst ihn dir ab." },
+        { "id": "selbst-1-07-m3", "frage": "Was hilft gegen „Mach es allen recht“?", "antwort": "Ein Erlauber-Satz: „Ich darf Nein sagen und trotzdem gemocht werden.“" }
+      ],
+      "mission": "selbst-m-05"
+    }
+  ]
+}

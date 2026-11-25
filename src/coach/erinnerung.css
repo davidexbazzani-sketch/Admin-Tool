@@ -1,0 +1,13 @@
+/* Der Coach — Erinnerungskarte unten rechts im Tool (außerhalb des Raums). Klein, damit nicht das große CSS geladen wird. */
+@import './farben.css';
+.dc-karte-aussen { position: fixed; right: 20px; bottom: 20px; z-index: 40; width: 330px; border-radius: 12px; overflow: hidden; background: var(--dc-flaeche); color: var(--dc-ink); border: 1px solid var(--dc-rand); box-shadow: var(--dc-schatten); font-family: var(--dc-schrift); font-size: 14px; }
+.dc-ea-band { height: 6px; background: var(--dc-band); }
+.dc-ea-innen { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.dc-ea-kopf { display: flex; align-items: center; justify-content: space-between; }
+.dc-ea-titel { font-family: var(--dc-titel); text-transform: uppercase; letter-spacing: 0.06em; font-size: 16px; }
+.dc-ea-zu, .dc-ea-leise, .dc-ea-link { background: transparent; border: 0; color: var(--dc-leise); cursor: pointer; font: inherit; padding: 4px; border-radius: 6px; }
+.dc-ea-link { text-align: left; color: var(--dc-ink); text-decoration: underline; padding: 0; }
+.dc-ea-leise:hover, .dc-ea-zu:hover { background: var(--dc-flaeche2); color: var(--dc-ink); }
+.dc-ea-knoepfe { display: flex; justify-content: flex-end; gap: 8px; }
+.dc-ea-los { background: var(--dc-rot); color: var(--dc-rot-ink); border: 0; border-radius: 8px; padding: 6px 12px; font-weight: 700; cursor: pointer; font-family: var(--dc-titel); text-transform: uppercase; letter-spacing: 0.05em; }
+.dc-ea-fuss { font-size: 11px; color: var(--dc-stumm); }

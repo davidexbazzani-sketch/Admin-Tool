@@ -12,8 +12,6 @@ import UserInfo from './screens/UserInfo'
 import XelionCheck from './screens/XelionCheck'
 import RemoteDoc from './screens/RemoteDoc'
 import Trickkiste from './screens/Trickkiste'
-import Settings from './screens/Settings'
-import UserManagement from './screens/UserManagement'
 import UserLogs from './screens/UserLogs'
 import LocationOverview from './screens/LocationOverview'
 import DepartmentsOverview from './screens/DepartmentsOverview'
@@ -67,6 +65,7 @@ import ErrorFlashOverlay from './components/ErrorFlashOverlay'
 import AutomatikLeiterController from './components/AutomatikLeiterController'
 import GeplanteAufgabenController from './components/scans/GeplanteAufgabenController'
 import { darfAutomatik } from './services/automatikLeiter'
+import { startLogoAusblenden } from './utils/startLogo'
 import { DossierProvider, PersonDossierSlot } from './components/person/PersonDossier'
 import { DeviceDossierProvider, DeviceDossierSlot } from './components/device/DeviceDossier'
 import { PrinterDossierProvider, PrinterDossierSlot } from './components/printer/PrinterDossier'
@@ -85,7 +84,10 @@ import { ensureDailyAdUsers } from './services/adUserDirectory'
 import LockScreen from './components/LockScreen'
 import { loadAppLock, canBypassLock, type AppLock } from './services/appLock'
 
+import AusgeblendetHinweis, { useAusgeblendet } from './components/AusgeblendetHinweis'
+
 // Lazy-loaded screens (per Performance-Regeln: erst laden wenn geöffnet)
+const Einstellungen = lazy(() => import('./einstellungen/Einstellungen'))
 const AufnahmeLeiste = lazy(() => import('./aufnahme/AufnahmeLeiste'))
 const ITGuru = lazy(() => import('./screens/ITGuru'))
 const PCDiagnosis = lazy(() => import('./screens/PCDiagnosis'))
@@ -103,6 +105,24 @@ const OtDevices = lazy(() => import('./screens/OtDevices'))
 const PruffeldZoll = lazy(() => import('./screens/PruffeldZoll'))
 const Verwaltungsgebaeude = lazy(() => import('./screens/Verwaltungsgebaeude'))
 const Games = lazy(() => import('./screens/Games'))
+const Pausenraum = lazy(() => import('./screens/Pausenraum'))
+// Brain Trainer: eigenständiger Bereich im Pausenraum — wird erst beim Öffnen geladen
+const BrainTrainer = lazy(() => import('./brain/BrainTrainer'))
+// Parla Italiano: Italienisch-Kurs im Pausenraum — wird erst beim Öffnen geladen
+const ParlaItaliano = lazy(() => import('./italiano/ParlaItaliano'))
+// Terra Incognita: Entdecker-Spiel im Pausenraum — wird erst beim Öffnen geladen, nichts davon im Hauptpaket
+const TerraIncognita = lazy(() => import('./terra/TerraIncognita'))
+// Der Coach: Training für Wirkung, Mut und Antrieb im Pausenraum — wird erst beim Öffnen geladen, nichts davon im Hauptpaket
+const DerCoach = lazy(() => import('./coach/DerCoach'))
+// … und seine Erinnerung ans Training (nachgeladen über Spaeter, frühestens 75 s nach dem Start)
+const CoachErinnerung = lazy(() => import('./coach/Erinnerung'))
+// … und die tägliche Erinnerung daran: wird erst eine Weile nach dem Start geholt, damit der Start nicht langsamer wird
+const ItalienischErinnerung = lazy(() => import('./italiano/Erinnerung'))
+function Spaeter({ nachMs, children }: { nachMs: number; children: React.ReactNode }) {
+  const [da, setDa] = useState(false)
+  useEffect(() => { const t = setTimeout(() => setDa(true), nachMs); return () => clearTimeout(t) }, [nachMs])
+  return da ? <Suspense fallback={null}>{children}</Suspense> : null
+}
 const Onboarding = lazy(() => import('./screens/Onboarding'))
 const Licenses = lazy(() => import('./screens/Licenses'))
 const HardwareInventory = lazy(() => import('./screens/HardwareInventory'))
@@ -138,8 +158,9 @@ function renderScreen(screen: Screen) {
     case 'remote-doc':        return <RemoteDoc />
     case 'trickbox':          return <Trickkiste />
     case 'it-guru':           return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ITGuru /></Suspense>
-    case 'settings':          return <Settings />
-    case 'user-management':   return <UserManagement />
+    case 'settings':          return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Einstellungen /></Suspense>
+    // frühere „Benutzerverwaltung“ → Einstellungen, Kachel „Benutzer & Rechte“
+    case 'user-management':   return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Einstellungen startKachel="benutzer" /></Suspense>
     case 'user-logs':         return <UserLogs />
     case 'location-overview': return <LocationOverview />
     case 'departments-overview': return <DepartmentsOverview />
@@ -162,7 +183,12 @@ function renderScreen(screen: Screen) {
     case 'ot-devices': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><OtDevices /></Suspense>
     case 'pruffeld-zoll': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><PruffeldZoll /></Suspense>
     case 'verwaltungsgebaeude': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Verwaltungsgebaeude /></Suspense>
-    case 'games': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Games /></Suspense>
+    case 'games': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Pausenraum /></Suspense>
+    case 'vier-gewinnt': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Games /></Suspense>
+    case 'brain-trainer': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><BrainTrainer /></Suspense>
+    case 'parla-italiano': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ParlaItaliano /></Suspense>
+    case 'terra-incognita': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><TerraIncognita /></Suspense>
+    case 'der-coach': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><DerCoach /></Suspense>
     case 'licenses': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><Licenses /></Suspense>
     case 'hardware-inventory': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><HardwareInventory /></Suspense>
     case 'accessory-inventory': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><AccessoryInventory /></Suspense>
@@ -191,6 +217,16 @@ function renderScreen(screen: Screen) {
     case 'server': return <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground">Laden...</div>}><ServerMonitor /></Suspense>
     default:                  return <Home />
   }
+}
+
+/**
+ * Wache: ist ein Bildschirm für diesen Benutzer ausgeblendet (Einstellungen → „Benutzer & Rechte“),
+ * erscheint ein Hinweis statt des Inhalts — auch bei direkten Sprüngen (Startseite, Chat-Duell,
+ * Server-Popups …). Solange die Rechte noch nicht berechnet sind, gilt alles als sichtbar.
+ */
+function Bildschirm({ screen }: { screen: Screen }) {
+  const aus = useAusgeblendet(screen)
+  return aus ? <AusgeblendetHinweis screen={screen} /> : renderScreen(screen)
 }
 
 export default function App() {
@@ -349,6 +385,18 @@ export default function App() {
     else document.documentElement.classList.remove('light')
   }, [settings.theme])
 
+  // Start-Animation (Logo aus start.html): weg, sobald der erste echte Bildschirm gezeichnet ist
+  // (Anmeldung, Sperrbildschirm oder Tool). Keine Mindestdauer — verlängert den Start nie.
+  // Sicherheitsnetz: nach 20 s in jedem Fall weg (z. B. wenn authInit hängt).
+  useEffect(() => {
+    const t = setTimeout(startLogoAusblenden, 20_000)
+    return () => clearTimeout(t)
+  }, [])
+  useEffect(() => {
+    if (!initialized) return
+    requestAnimationFrame(() => requestAnimationFrame(startLogoAusblenden))
+  }, [initialized])
+
   // Show nothing until initialized (avoids flash of login screen)
   if (!initialized) {
     return (
@@ -397,7 +445,7 @@ export default function App() {
           <Sidebar />
           <main className="flex-1 overflow-hidden relative">
             <ErrorBoundary key={screen}>
-              {renderScreen(screen)}
+              <Bildschirm screen={screen} />
             </ErrorBoundary>
             <BugReportWidget currentScreen={screen} />
             {/* zuerst: bestimmt den EINEN Automatik-PC (BQ8069 bevorzugt) — alle Scans fragen ihn */}
@@ -434,6 +482,8 @@ export default function App() {
             <AufnahmeController />
             <TonerWarnungController />
             <MonitorController />
+            <Spaeter nachMs={45000}><ItalienischErinnerung /></Spaeter>
+            <Spaeter nachMs={75000}><CoachErinnerung /></Spaeter>
             <ErrorFlashOverlay />
           </main>
         </div>

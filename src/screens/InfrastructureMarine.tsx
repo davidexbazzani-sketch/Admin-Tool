@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import { Shield, AlertTriangle, KeyRound, Printer, UserPlus, Activity } from 'lucide-react'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 import IncidentResponse from '../components/infra/IncidentResponse'
 import PermissionsOverview from '../components/infra/PermissionsOverview'
 import TonerOrder from '../components/infra/TonerOrder'
@@ -17,7 +17,9 @@ const SECTIONS: Array<{ id: Section; label: string; icon: typeof AlertTriangle }
 ]
 
 export default function InfrastructureMarine() {
-  const [activeSection, setActiveSection] = useState<Section>('incident-response')
+  // Reiter je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const [activeSection, setActiveSection] = useBereichZustand<Section>('infra-marine', 'incident-response')
+  const { sichtbar } = useBereiche('infra-marine')
 
   return (
     <div className="flex flex-col h-full overflow-y-auto p-6">
@@ -30,7 +32,7 @@ export default function InfrastructureMarine() {
       </div>
 
       <div className="flex gap-1 bg-muted/30 rounded-lg p-1 mb-5 shrink-0 overflow-x-auto">
-        {SECTIONS.map(s => {
+        {SECTIONS.filter(s => sichtbar(s.id)).map(s => {
           const isActive = activeSection === s.id
           const Icon = s.icon
           return (

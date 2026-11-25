@@ -1,0 +1,324 @@
+/* Parla Italiano — eigene Farbwelt und Formen (nichts davon wirkt außerhalb von .pi-app).
+   Das Tool schaltet nur die Klasse .light um; Tailwind-„dark:“-Varianten greifen hier nie.
+   Farben: Terrakotta, Olivgrün, Azurblau auf warmem Grund — bewusst anders als der Rest des Tools. */
+
+.pi-app {
+  --pi-schrift: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --pi-zier: Georgia, Cambria, 'Times New Roman', serif;
+  --pi-bg: #16120E;
+  --pi-bg2: #1D1813;
+  --pi-flaeche: #251F19;
+  --pi-flaeche2: #30281F;
+  --pi-rand: #46392B;
+  --pi-ink: #F7EFE3;
+  --pi-leise: #C6B7A2;
+  --pi-stumm: #948673;
+  --pi-akzent: #EA7B4B;
+  --pi-akzent-stark: #F49468;
+  --pi-akzent-ink: #1F1008;
+  --pi-akzent-weich: rgba(234, 123, 75, 0.16);
+  --pi-gruen: #93BD6C;
+  --pi-gruen-weich: rgba(147, 189, 108, 0.16);
+  --pi-blau: #64B4DC;
+  --pi-blau-weich: rgba(100, 180, 220, 0.16);
+  --pi-gut: #5ECB8C;
+  --pi-gut-weich: rgba(94, 203, 140, 0.16);
+  --pi-schlecht: #F2727C;
+  --pi-schlecht-weich: rgba(242, 114, 124, 0.16);
+  --pi-gold: #F2C14E;
+  --pi-gold-weich: rgba(242, 193, 78, 0.16);
+  --pi-schatten: 0 10px 30px rgba(8, 5, 2, 0.5);
+  --pi-radius: 16px;
+  /* Diagramme: eigene, geprüfte Stufen */
+  --pi-viz-1: #E0703F;
+  --pi-viz-2: #4595C2;
+  --pi-viz-grau: #6E6252;
+  --pi-viz-raster: #352B20;
+  /* eine Farbe, vier Stufen (wenig → viel): im Dunkeln wird es heller */
+  --pi-viz-s1: #4A2E1F;
+  --pi-viz-s2: #8A4A2A;
+  --pi-viz-s3: #C9653A;
+  --pi-viz-s4: #F49468;
+
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--pi-bg);
+  color: var(--pi-ink);
+  font-family: var(--pi-schrift);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+.light .pi-app {
+  --pi-bg: #FBF6EE;
+  --pi-bg2: #F4ECDF;
+  --pi-flaeche: #FFFFFF;
+  --pi-flaeche2: #F8F1E5;
+  --pi-rand: #E4D7C3;
+  --pi-ink: #2A2118;
+  --pi-leise: #6B5D4C;
+  --pi-stumm: #9A8C79;
+  --pi-akzent: #C2512A;
+  --pi-akzent-stark: #A84320;
+  --pi-akzent-ink: #FFFFFF;
+  --pi-akzent-weich: rgba(194, 81, 42, 0.1);
+  --pi-gruen: #4C772B;
+  --pi-gruen-weich: rgba(76, 119, 43, 0.11);
+  --pi-blau: #1C7AA8;
+  --pi-blau-weich: rgba(28, 122, 168, 0.1);
+  --pi-gut: #1C8650;
+  --pi-gut-weich: rgba(28, 134, 80, 0.11);
+  --pi-schlecht: #C6364A;
+  --pi-schlecht-weich: rgba(198, 54, 74, 0.09);
+  --pi-gold: #A26D00;
+  --pi-gold-weich: rgba(162, 109, 0, 0.11);
+  --pi-schatten: 0 10px 28px rgba(110, 80, 40, 0.14);
+  --pi-viz-1: #C2512A;
+  --pi-viz-2: #1C7AA8;
+  --pi-viz-grau: #BBAE9A;
+  --pi-viz-raster: #EDE3D3;
+  --pi-viz-s1: #F3D9CB;
+  --pi-viz-s2: #E5A888;
+  --pi-viz-s3: #D2733F;
+  --pi-viz-s4: #A84320;
+}
+
+.pi-app *, .pi-app *::before, .pi-app *::after { box-sizing: border-box; }
+:where(.pi-app) button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:where(.pi-app) button:disabled { cursor: default; }
+.pi-app :focus-visible { outline: 2px solid var(--pi-akzent); outline-offset: 2px; border-radius: 6px; }
+.pi-app h1, .pi-app h2, .pi-app h3, .pi-app p { margin: 0; }
+
+/* ── Kopf ── */
+.pi-kopf { display: flex; align-items: center; gap: 14px; padding: 10px 20px; border-bottom: 1px solid var(--pi-rand); background: var(--pi-bg2); flex-wrap: wrap; }
+.pi-marke { display: flex; align-items: center; gap: 9px; font-family: var(--pi-zier); font-size: 19px; font-weight: 700; letter-spacing: 0.2px; white-space: nowrap; }
+.pi-marke em { font-style: italic; color: var(--pi-akzent); }
+.pi-flagge { display: inline-flex; width: 22px; height: 15px; border-radius: 3px; overflow: hidden; box-shadow: 0 0 0 1px var(--pi-rand); flex-shrink: 0; }
+.pi-flagge i { flex: 1; }
+.pi-flagge i:nth-child(1) { background: #2E8B57; }
+.pi-flagge i:nth-child(2) { background: #F5F0E6; }
+.pi-flagge i:nth-child(3) { background: #D1432F; }
+.pi-nav { display: flex; gap: 2px; flex-wrap: wrap; }
+.pi-nav button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 10px; color: var(--pi-leise); font-weight: 600; font-size: 13px; }
+.pi-nav button:hover:not(:disabled) { background: var(--pi-flaeche2); color: var(--pi-ink); }
+.pi-nav button[aria-current='page'] { background: var(--pi-akzent-weich); color: var(--pi-akzent-stark); }
+.pi-nav button:disabled { opacity: 0.45; }
+.pi-inhalt { flex: 1; min-height: 0; overflow-y: auto; padding: 22px 24px 40px; }
+.pi-breite { max-width: 980px; margin: 0 auto; }
+.pi-schmal { max-width: 680px; margin: 0 auto; }
+
+/* ── Schrift ── */
+.pi-h1 { font-family: var(--pi-zier); font-size: 27px; font-weight: 700; line-height: 1.2; }
+.pi-h2 { font-family: var(--pi-zier); font-size: 20px; font-weight: 700; line-height: 1.25; }
+.pi-h3 { font-size: 14px; font-weight: 700; }
+.pi-leise { color: var(--pi-leise); }
+.pi-stumm { color: var(--pi-stumm); }
+.pi-klein { font-size: 12px; }
+.pi-zahl { font-variant-numeric: tabular-nums; }
+.pi-it { font-family: var(--pi-zier); font-size: 1.08em; }
+.pi-ober { font-size: 11px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: var(--pi-akzent-stark); }
+
+/* ── Bausteine ── */
+.pi-karte { background: var(--pi-flaeche); border: 1px solid var(--pi-rand); border-radius: var(--pi-radius); padding: 18px; }
+.pi-karte-flach { background: var(--pi-flaeche2); border: 1px solid var(--pi-rand); border-radius: 12px; padding: 12px 14px; }
+.pi-raster { display: grid; gap: 14px; }
+.pi-raster-2 { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+.pi-raster-3 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.pi-reihe { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.pi-spalte { display: flex; flex-direction: column; gap: 14px; }
+
+.pi-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; border-radius: 12px; font-weight: 700; background: var(--pi-akzent); color: var(--pi-akzent-ink); transition: transform 0.12s, background 0.12s; }
+.pi-knopf:hover:not(:disabled) { background: var(--pi-akzent-stark); }
+.pi-knopf:active:not(:disabled) { transform: translateY(1px); }
+.pi-knopf:disabled { opacity: 0.45; }
+.pi-knopf-gross { padding: 13px 26px; font-size: 16px; border-radius: 14px; }
+.pi-knopf-leise { background: var(--pi-flaeche2); color: var(--pi-ink); border: 1px solid var(--pi-rand); }
+.pi-knopf-leise:hover:not(:disabled) { background: var(--pi-rand); }
+.pi-knopf-nackt { background: transparent; color: var(--pi-leise); padding: 7px 10px; font-weight: 600; }
+.pi-knopf-nackt:hover:not(:disabled) { background: var(--pi-flaeche2); color: var(--pi-ink); }
+.pi-knopf-gruen { background: var(--pi-gut); color: #08130C; }
+.light .pi-app .pi-knopf-gruen { color: #FFFFFF; }
+.pi-knopf-gruen:hover:not(:disabled) { background: var(--pi-gut); filter: brightness(1.08); }
+
+.pi-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: var(--pi-flaeche2); color: var(--pi-leise); border: 1px solid var(--pi-rand); white-space: nowrap; }
+.pi-chip-akzent { background: var(--pi-akzent-weich); color: var(--pi-akzent-stark); border-color: transparent; }
+.pi-chip-gruen { background: var(--pi-gruen-weich); color: var(--pi-gruen); border-color: transparent; }
+.pi-chip-gold { background: var(--pi-gold-weich); color: var(--pi-gold); border-color: transparent; }
+.pi-chip-blau { background: var(--pi-blau-weich); color: var(--pi-blau); border-color: transparent; }
+
+.pi-symbol { width: 38px; height: 38px; border-radius: 11px; display: inline-flex; align-items: center; justify-content: center; background: var(--pi-akzent-weich); color: var(--pi-akzent-stark); flex-shrink: 0; }
+.pi-symbol-gruen { background: var(--pi-gruen-weich); color: var(--pi-gruen); }
+.pi-symbol-blau { background: var(--pi-blau-weich); color: var(--pi-blau); }
+.pi-symbol-gold { background: var(--pi-gold-weich); color: var(--pi-gold); }
+
+.pi-balken { height: 8px; border-radius: 999px; background: var(--pi-flaeche2); overflow: hidden; }
+.pi-balken > i { display: block; height: 100%; border-radius: 999px; background: var(--pi-akzent); transition: width 0.35s ease; }
+.pi-balken-gruen > i { background: var(--pi-gut); }
+
+/* Bild mit festem Seitenverhältnis; lädt erst, wenn es zu sehen ist */
+.pi-bild { position: relative; overflow: hidden; border-radius: 14px; background: var(--pi-flaeche2); aspect-ratio: 16 / 9; }
+.pi-bild img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.pi-bild-zu img { filter: grayscale(1) blur(7px) brightness(0.55); transform: scale(1.08); }
+.pi-bild-schild { position: absolute; left: 10px; bottom: 9px; right: 10px; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; color: #FFF8EE; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.75); font-weight: 700; }
+
+.pi-bild-schild .pi-chip { background: rgba(20, 14, 8, 0.8); color: #FFE9C8; border-color: transparent; text-shadow: none; }
+
+/* Auftakt mit Bild */
+.pi-held { position: relative; border-radius: 20px; overflow: hidden; min-height: 190px; display: flex; align-items: flex-end; background: var(--pi-flaeche2); border: 1px solid var(--pi-rand); }
+.pi-held > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.pi-held::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(18, 12, 6, 0.86) 0%, rgba(18, 12, 6, 0.62) 42%, rgba(18, 12, 6, 0.05) 78%); }
+.pi-held-text { position: relative; z-index: 1; padding: 22px 24px; color: #FFF6EA; max-width: 560px; }
+.pi-held-text .pi-leise { color: rgba(255, 246, 234, 0.82); }
+
+/* ── Aufgaben ── */
+.pi-lauf { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+.pi-lauf-kopf { display: flex; align-items: center; gap: 12px; }
+.pi-frage { font-size: 22px; font-weight: 700; line-height: 1.3; }
+.pi-frage.pi-it { font-size: 25px; font-weight: 700; }
+.pi-optionen { display: grid; gap: 10px; }
+.pi-option { text-align: left; padding: 13px 16px; border-radius: 13px; border: 1.5px solid var(--pi-rand); background: var(--pi-flaeche); font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 12px; transition: border-color 0.12s, background 0.12s; }
+:where(.pi-app) button.pi-option { background: var(--pi-flaeche); border: 1.5px solid var(--pi-rand); }
+.pi-option:hover:not(:disabled) { border-color: var(--pi-akzent); background: var(--pi-akzent-weich); }
+.pi-option kbd { font: inherit; font-size: 11px; font-weight: 700; width: 22px; height: 22px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; background: var(--pi-flaeche2); color: var(--pi-stumm); flex-shrink: 0; }
+.pi-option[data-stand='richtig'] { border-color: var(--pi-gut); background: var(--pi-gut-weich); }
+.pi-option[data-stand='falsch'] { border-color: var(--pi-schlecht); background: var(--pi-schlecht-weich); }
+.pi-option[data-stand='blass'] { opacity: 0.5; }
+
+.pi-kacheln { display: flex; flex-wrap: wrap; gap: 8px; min-height: 46px; }
+.pi-kachel { padding: 8px 13px; border-radius: 11px; border: 1.5px solid var(--pi-rand); background: var(--pi-flaeche); font-family: var(--pi-zier); font-size: 16px; font-weight: 600; }
+:where(.pi-app) button.pi-kachel { background: var(--pi-flaeche); border: 1.5px solid var(--pi-rand); }
+.pi-kachel:hover:not(:disabled) { border-color: var(--pi-akzent); }
+.pi-kachel[data-weg='1'] { opacity: 0.25; }
+.pi-bauplatz { min-height: 62px; padding: 10px; border-radius: 14px; border: 2px dashed var(--pi-rand); background: var(--pi-flaeche2); display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
+.pi-bauplatz[data-stand='richtig'] { border-color: var(--pi-gut); border-style: solid; }
+.pi-bauplatz[data-stand='falsch'] { border-color: var(--pi-schlecht); border-style: solid; }
+
+.pi-eingabe { width: 100%; padding: 13px 15px; border-radius: 13px; border: 1.5px solid var(--pi-rand); background: var(--pi-flaeche); color: var(--pi-ink); font-family: var(--pi-zier); font-size: 19px; outline: none; }
+.pi-eingabe:focus { border-color: var(--pi-akzent); }
+.pi-eingabe[data-stand='richtig'] { border-color: var(--pi-gut); background: var(--pi-gut-weich); }
+.pi-eingabe[data-stand='falsch'] { border-color: var(--pi-schlecht); background: var(--pi-schlecht-weich); }
+.pi-eingabe-klein { display: inline-block; width: auto; min-width: 110px; padding: 5px 10px; font-size: 18px; border-radius: 9px; }
+.pi-akzente { display: flex; gap: 6px; flex-wrap: wrap; }
+.pi-akzente button { width: 34px; height: 32px; border-radius: 8px; border: 1px solid var(--pi-rand); background: var(--pi-flaeche2); font-family: var(--pi-zier); font-size: 16px; }
+.pi-akzente button:hover { border-color: var(--pi-akzent); }
+
+.pi-paare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+.pi-paar { padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--pi-rand); background: var(--pi-flaeche); font-weight: 600; text-align: left; min-height: 48px; }
+:where(.pi-app) button.pi-paar { background: var(--pi-flaeche); border: 1.5px solid var(--pi-rand); }
+.pi-paar:hover:not(:disabled) { border-color: var(--pi-akzent); }
+.pi-paar[data-stand='gewaehlt'] { border-color: var(--pi-akzent); background: var(--pi-akzent-weich); }
+.pi-paar[data-stand='fertig'] { border-color: var(--pi-gut); background: var(--pi-gut-weich); opacity: 0.6; }
+.pi-paar[data-stand='falsch'] { border-color: var(--pi-schlecht); background: var(--pi-schlecht-weich); animation: pi-wackeln 0.3s; }
+
+.pi-meldung { border-radius: 14px; padding: 13px 16px; display: flex; gap: 12px; align-items: flex-start; }
+.pi-meldung[data-art='richtig'] { background: var(--pi-gut-weich); color: var(--pi-gut); }
+.pi-meldung[data-art='falsch'] { background: var(--pi-schlecht-weich); color: var(--pi-schlecht); }
+.pi-meldung[data-art='fast'] { background: var(--pi-gold-weich); color: var(--pi-gold); }
+.pi-meldung b { display: block; }
+.pi-meldung span { color: var(--pi-ink); }
+
+.pi-laut { width: 44px; height: 44px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--pi-blau-weich); color: var(--pi-blau); flex-shrink: 0; }
+:where(.pi-app) button.pi-laut { background: var(--pi-blau-weich); }
+.pi-laut:hover:not(:disabled) { filter: brightness(1.15); }
+.pi-laut-gross { width: 84px; height: 84px; }
+.pi-laut[data-an='1'] { animation: pi-puls 0.9s ease-in-out infinite; }
+
+/* Wortkarte */
+.pi-wortkarte { text-align: center; padding: 30px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.pi-wortkarte .pi-emoji { font-size: 54px; line-height: 1; }
+.pi-wortkarte .pi-wort { font-family: var(--pi-zier); font-size: 38px; font-weight: 700; line-height: 1.15; }
+.pi-wortkarte .pi-aus { font-size: 14px; letter-spacing: 0.6px; color: var(--pi-akzent-stark); font-weight: 700; }
+.pi-wortkarte .pi-de { font-size: 19px; color: var(--pi-leise); }
+.pi-beispiel { margin-top: 8px; padding: 12px 16px; border-radius: 12px; background: var(--pi-flaeche2); border-left: 3px solid var(--pi-akzent); text-align: left; width: 100%; }
+
+/* Grammatik */
+.pi-text p + p { margin-top: 8px; }
+.pi-text b { color: var(--pi-akzent-stark); }
+.pi-tabelle { width: 100%; border-collapse: collapse; font-size: 14px; }
+.pi-tabelle th { text-align: left; font-size: 11px; letter-spacing: 0.7px; text-transform: uppercase; color: var(--pi-stumm); padding: 6px 10px; border-bottom: 1px solid var(--pi-rand); }
+.pi-tabelle td { padding: 7px 10px; border-bottom: 1px solid var(--pi-rand); }
+.pi-tabelle tr:last-child td { border-bottom: 0; }
+.pi-tabelle td:nth-child(2) { font-family: var(--pi-zier); font-weight: 700; font-size: 15px; }
+
+/* Dialog */
+.pi-sprech { display: flex; gap: 10px; align-items: flex-end; max-width: 88%; }
+.pi-sprech[data-seite='r'] { align-self: flex-end; flex-direction: row-reverse; }
+.pi-sprech-blase { padding: 10px 14px; border-radius: 16px 16px 16px 4px; background: var(--pi-flaeche2); border: 1px solid var(--pi-rand); }
+.pi-sprech[data-seite='r'] .pi-sprech-blase { border-radius: 16px 16px 4px 16px; background: var(--pi-akzent-weich); border-color: transparent; }
+.pi-sprech[data-an='1'] .pi-sprech-blase { box-shadow: 0 0 0 2px var(--pi-blau); }
+.pi-kopfbild { width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; color: #FFF; }
+
+/* Lesetext */
+.pi-lesetext { padding: 16px 18px; border-radius: 14px; background: var(--pi-flaeche2); border: 1px solid var(--pi-rand); font-family: var(--pi-zier); font-size: 16px; line-height: 1.65; max-height: 240px; overflow-y: auto; }
+
+/* Reise */
+.pi-karte-it path.land { fill: var(--pi-flaeche2); stroke: var(--pi-rand); stroke-width: 1.5; stroke-linejoin: round; }
+.pi-karte-it .weg { fill: none; stroke: var(--pi-rand); stroke-width: 2; stroke-dasharray: 3 5; stroke-linecap: round; }
+.pi-karte-it .weg-fertig { fill: none; stroke: var(--pi-akzent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.pi-karte-it circle.ort { fill: var(--pi-flaeche); stroke: var(--pi-stumm); stroke-width: 1.5; }
+.pi-karte-it circle.ort-fertig { fill: var(--pi-akzent); stroke: var(--pi-bg); stroke-width: 1.5; }
+.pi-karte-it circle.ort-hier { fill: var(--pi-gold); stroke: var(--pi-bg); stroke-width: 2; }
+.pi-karte-it text { font-size: 9px; font-weight: 700; fill: var(--pi-leise); font-family: var(--pi-schrift); }
+.pi-karte-it text.hier { fill: var(--pi-ink); font-size: 10.5px; }
+
+.pi-stempel { width: 46px; height: 46px; border-radius: 50%; border: 2px dashed var(--pi-rand); display: inline-flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: var(--pi-stumm); line-height: 1.1; }
+.pi-stempel[data-da='1'] { border: 2px solid var(--pi-akzent); color: var(--pi-akzent-stark); background: var(--pi-akzent-weich); transform: rotate(-8deg); }
+.pi-stempel[data-da='1']:nth-child(even) { transform: rotate(6deg); }
+.pi-stempel[data-heute='1'] { border-color: var(--pi-gold); border-style: solid; color: var(--pi-gold); }
+
+.pi-liste { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.pi-zeile { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; }
+.pi-zeile + .pi-zeile { border-top: 1px solid var(--pi-rand); border-radius: 0; }
+.pi-zeile[data-ich='1'] { background: var(--pi-akzent-weich); border-radius: 12px; border-top-color: transparent; }
+
+/* Dialogfenster */
+.pi-schleier { position: absolute; inset: 0; z-index: 30; background: rgba(10, 6, 2, 0.62); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.pi-dialog { width: min(560px, 100%); max-height: 100%; overflow-y: auto; box-shadow: var(--pi-schatten); }
+
+.pi-sterne { display: inline-flex; gap: 3px; color: var(--pi-rand); }
+.pi-sterne [data-an='1'] { color: var(--pi-gold); }
+
+/* ── Diagramme ── */
+.pi-dia { position: relative; }
+.pi-dia > svg { display: block; width: 100%; height: auto; overflow: visible; }
+.pi-dia text { font-size: 12px; fill: var(--pi-stumm); font-family: var(--pi-schrift); }
+.pi-dia .raster { stroke: var(--pi-viz-raster); stroke-width: 1; }
+.pi-dia .balken { fill: var(--pi-viz-1); }
+.pi-dia .balken[data-an='1'] { filter: brightness(1.2); }
+.pi-dia .treffer { fill: transparent; }
+.pi-tipp { position: absolute; z-index: 5; pointer-events: none; transform: translate(-50%, -100%); background: var(--pi-ink); color: var(--pi-bg); border-radius: 8px; padding: 5px 9px; font-size: 12px; font-weight: 600; white-space: nowrap; box-shadow: var(--pi-schatten); }
+.pi-heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 14px); gap: 3px; }
+.pi-heat i { width: 14px; height: 14px; border-radius: 3px; background: var(--pi-viz-raster); display: block; }
+.pi-heat i[data-s='1'] { background: var(--pi-viz-s1); }
+.pi-heat i[data-s='2'] { background: var(--pi-viz-s2); }
+.pi-heat i[data-s='3'] { background: var(--pi-viz-s3); }
+.pi-heat i[data-s='4'] { background: var(--pi-viz-s4); }
+.pi-heat i[data-heute='1'] { outline: 2px solid var(--pi-ink); outline-offset: 1px; }
+.pi-heat i[data-joker='1'] { background: var(--pi-gold); opacity: 0.55; }
+
+/* ── Feier und Abzeichen ── */
+.pi-konfetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 2; border-radius: inherit; }
+.pi-konfetti i { position: absolute; top: -14px; width: 8px; height: 12px; border-radius: 2px; opacity: 0; animation: pi-fallen 2.6s ease-in forwards; }
+@keyframes pi-fallen { 0% { opacity: 1; transform: translateY(0) rotate(0); } 85% { opacity: 1; } 100% { opacity: 0; transform: translateY(460px) rotate(560deg); } }
+/* heller Grund in beiden Farbwelten: dunkle Symbole (Fußspuren, Hut) wären auf dunklem Grund kaum zu sehen */
+.pi-abzeichen { width: 64px; height: 64px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; line-height: 1; background: radial-gradient(circle at 35% 30%, #FFF8E7 0%, #F6E3B4 70%, #EBCF8B 100%); border: 2px solid var(--pi-gold); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18); flex-shrink: 0; }
+.pi-abzeichen[data-offen='1'] { filter: grayscale(1); opacity: 0.4; border-style: dashed; border-color: var(--pi-rand); background: var(--pi-flaeche2); }
+.pi-abzeichen-klein { width: 44px; height: 44px; font-size: 19px; }
+.pi-abzeichen-gross { width: 104px; height: 104px; font-size: 48px; }
+@keyframes pi-aufploppen { 0% { transform: scale(0.3) rotate(-20deg); opacity: 0; } 70% { transform: scale(1.12) rotate(4deg); opacity: 1; } 100% { transform: none; } }
+.pi-aufploppen { animation: pi-aufploppen 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+
+/* ── Bewegung ── */
+@keyframes pi-ein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes pi-wackeln { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+@keyframes pi-puls { 0%, 100% { box-shadow: 0 0 0 0 var(--pi-blau-weich); } 50% { box-shadow: 0 0 0 9px var(--pi-blau-weich); } }
+@keyframes pi-stempeln { 0% { opacity: 0; transform: scale(2.2) rotate(-25deg); } 60% { opacity: 1; transform: scale(0.92) rotate(-8deg); } 100% { transform: scale(1) rotate(-8deg); } }
+.pi-ein { animation: pi-ein 0.28s ease both; }
+.pi-stempeln { animation: pi-stempeln 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+@media (prefers-reduced-motion: reduce) {
+  .pi-ein, .pi-stempeln, .pi-aufploppen, .pi-laut[data-an='1'], .pi-paar[data-stand='falsch'] { animation: none; }
+  .pi-konfetti { display: none; }
+  .pi-balken > i, .pi-knopf, .pi-option { transition: none; }
+}

@@ -1,0 +1,310 @@
+{
+  "einheiten": [
+    {
+      "id": "aussprache-s-01", "bereich": "aussprache", "schwerpunkt": "stottern", "stufe": 1, "nr": 1,
+      "titel": "Was Stottern ist – und was nicht",
+      "faehigkeiten": ["aussprache.redefluss"], "dauerMin": 6, "beleg": "A",
+      "belegHinweis": "Grundlage sind die deutsche Leitlinie (Fassung 2016, wird überarbeitet) und ihre Zusammenfassung im Ärzteblatt. Was genau im Gehirn anders läuft, ist noch nicht vollständig geklärt.",
+      "quellen": ["neumann2017", "baekstottern", "bvssfakten", "chor", "s3stottern"],
+      "aha": "Stottern ist neurologisch und erblich mitbedingt. Es hat nichts mit Nervosität, Erziehung oder Klugheit zu tun – und es ist nicht deine Schuld.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Menschen stottern, weil sie nervös sind.", "urteil": "falsch",
+          "warum": "Aufregung kann Stottern verstärken – verursacht wird es von einer Veranlagung, die das Zusammenspiel der Sprech-Areale im Gehirn betrifft. In Zwillingsstudien ist der erbliche Anteil hoch." },
+        { "art": "karte", "text": "Wer stottert, weiß genau, was er sagen will. Das Sprechen gerät unwillkürlich ins Stocken: Laute oder Silben wiederholen sich, werden gedehnt, oder ein Wort bleibt stecken. Etwa fünf von hundert Kindern fangen an zu stottern; bei rund drei Vierteln verliert es sich wieder. Unter Erwachsenen stottert weniger als einer von hundert – Männer etwa viermal so oft wie Frauen." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-s-01-a", "faehigkeit": "aussprache.redefluss", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Was ist belegt, was ist ein Irrtum?",
+          "faecher": ["belegt", "Irrtum"],
+          "karten": [
+            { "text": "Die Veranlagung ist der wichtigste Faktor.", "fach": 0 },
+            { "text": "Müdigkeit und Zeitdruck können es verstärken.", "fach": 0 },
+            { "text": "Es beginnt meist in der frühen Kindheit.", "fach": 0 },
+            { "text": "Es zeigt, dass jemand schüchtern ist.", "fach": 1 },
+            { "text": "Die Eltern haben etwas falsch gemacht.", "fach": 1 },
+            { "text": "Wer sich genug anstrengt, kann es lassen.", "fach": 1 }
+          ] },
+        { "art": "studie", "frage": "Was passiert, wenn Menschen, die stottern, zusammen mit einer zweiten Stimme lesen?",
+          "aufbau": "Seit Jahrzehnten vergleichen Forschende: Menschen, die stottern, lesen einen Text allein – und denselben Text im Chor mit einer zweiten Stimme.",
+          "ergebnis": "Im Chor geht das Stottern sofort und fast ganz zurück – in den Studien um 90 bis 100 Prozent.",
+          "grenze": "Im Alltag spricht niemand im Chor, als Werkzeug taugt das nicht. Warum es wirkt, ist umstritten. Aber es zeigt: Mit Wollen oder Willensschwäche hat Stottern nichts zu tun.",
+          "beleg": "B", "quellen": ["chor"] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-s-01-b", "faehigkeit": "aussprache.redefluss", "stufe": 2, "kanal": "wissen" },
+          "frage": "Jemand rät dir gut gemeint: „Denk doch erst nach, bevor du redest.“ Welche Antwort passt am besten?",
+          "antworten": [
+            { "text": "Nichts sagen und das Thema wechseln.", "wert": 1, "warum": "Verständlich und manchmal genau richtig. Auf Dauer bleibt der Irrtum so stehen." },
+            { "text": "„Danke. Ich weiß genau, was ich sagen will – am meisten hilft mir, wenn du mich ausreden lässt.“", "wert": 2, "warum": "Du ordnest den Rat freundlich ein und sagst, was wirklich hilft." },
+            { "text": "„Stimmt, du hast recht. Ich sollte mich vorher besser sammeln und mich beim Reden mehr konzentrieren.“", "wert": 0, "tendenz": "abwerten", "warum": "Stottern ist keine Frage der Konzentration. Wer stottert, weiß, was er sagen will – das Sprechen stockt." }
+          ] },
+        { "art": "reflexion", "frage": "Welcher Irrtum über das Stottern ist dir am häufigsten begegnet? Was würdest du heute darauf sagen?", "insBuch": "saetze" },
+        { "art": "fachhilfe", "thema": "stottern" }
+      ],
+      "regel": "Es liegt nicht an dir – und es lässt sich etwas tun.",
+      "merkkarten": [
+        { "id": "aussprache-s-01-m1", "frage": "Was ist die wichtigste Ursache des Stotterns?", "antwort": "Eine erbliche Veranlagung, die das Zusammenspiel beim Sprechen betrifft – nicht Nervosität, nicht Erziehung." },
+        { "id": "aussprache-s-01-m2", "frage": "Was hilft im Gespräch mit Menschen, die stottern?", "antwort": "Blickkontakt, Geduld, ausreden lassen – keine Ratschläge." },
+        { "id": "aussprache-s-01-m3", "frage": "Was zeigt das Lesen im Chor?", "antwort": "Das Stottern geht fast ganz zurück. Mit Wollen hat es also nichts zu tun." }
+      ]
+    },
+    {
+      "id": "aussprache-s-02", "bereich": "aussprache", "schwerpunkt": "stottern", "stufe": 1, "nr": 2,
+      "titel": "Der Eisberg",
+      "faehigkeiten": ["aussprache.redefluss", "aussprache.freisprechen"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Das Eisberg-Bild ist ein Denkmodell aus Therapie und Selbsthilfe. Belegt ist: Viele Erwachsene, die stottern, leben mit Angst und Vermeiden, und ihre Lebensqualität ist in seelischen und sozialen Bereichen geringer.",
+      "quellen": ["bvssfakten", "iverach2018", "craig2009", "menzies2008", "sheehan"],
+      "aha": "Was man hört, ist der kleinere Teil. Darunter liegen oft Anspannung, Vermeiden und Scham – und genau dort lässt sich viel bewegen.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "275 Erwachsene, die vor einer Stottertherapie standen, wurden untersucht. Wie viele von ihnen hatten eine soziale Angststörung?",
+          "optionen": ["etwa jeder Zwanzigste", "knapp jeder Dritte", "fast alle"], "richtig": 1,
+          "loesung": "Knapp jeder Dritte – 82 von 275.",
+          "aufloesung": "Die Angst erklärt das Stottern nicht – sie wächst oft aus den Erfahrungen damit. Und sie lässt sich gezielt behandeln, etwa mit Verhaltenstherapie. Schränkt dich die Angst vor dem Sprechen stark ein, frag in deiner Hausarztpraxis nach psychotherapeutischer Hilfe – als Ergänzung zur Stottertherapie." },
+        { "art": "karte", "text": "Über dem Wasser liegt, was andere hören und sehen: Wiederholungen, Dehnungen, Blockaden, Anspannung im Gesicht. Darunter liegt oft der größere Teil: Wörter heimlich austauschen, Sätze umbauen, Anrufe meiden, sich nicht melden – dazu Scham und Frust. Das Bild stammt aus Therapie und Selbsthilfe. Es zeigt: Das Vermeiden kostet oft mehr Kraft als das Stottern selbst." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-s-02-a", "faehigkeit": "aussprache.freisprechen", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Liegt das über oder unter dem Wasser?",
+          "faecher": ["über dem Wasser", "unter dem Wasser"],
+          "karten": [
+            { "text": "Ein Laut wiederholt sich.", "fach": 0 },
+            { "text": "Ein Wort bleibt stecken.", "fach": 0 },
+            { "text": "Anspannung im Gesicht", "fach": 0 },
+            { "text": "Ein Wort heimlich gegen ein anderes tauschen", "fach": 1 },
+            { "text": "Lieber eine Mail als ein Anruf", "fach": 1 },
+            { "text": "Scham nach einem Gespräch", "fach": 1 },
+            { "text": "Sich in der Runde nicht melden", "fach": 1 }
+          ] },
+        { "art": "vergleich", "lage": "Du erklärst in der Runde einen Ablauf. Vor dem Wort „Freigabe“ spürst du, dass es haken könnte.",
+          "schwach": "Du sagst stattdessen „das Okay von oben“ und lässt den Rest der Erklärung weg.",
+          "stark": "Du sagst „Freigabe“, auch wenn es einen Moment dauert, und erklärst zu Ende.",
+          "frage": "Was kostet der erste Weg – obwohl niemand ein Stottern gehört hat?",
+          "unterschied": "Die Erklärung wird ungenau, und du hast weniger gesagt, als du sagen wolltest. Der zweite Weg kostet einen Moment – und du hast gesagt, was du sagen wolltest." },
+        { "art": "auswahl", "kopf": { "id": "aussprache-s-02-b", "faehigkeit": "aussprache.freisprechen", "stufe": 3, "kanal": "wissen" },
+          "frage": "Warum hält Vermeiden die Angst oft am Leben?",
+          "antworten": [
+            { "text": "Weil Vermeiden auf Dauer anstrengend ist – das ständige Ausweichen kostet Kraft und macht dadurch noch mehr Druck.", "wert": 1, "warum": "Stimmt auch – das ständige Planen kostet Kraft. Der Kern ist aber: Die Befürchtung wird nie widerlegt." },
+            { "text": "Gar nicht – wer meidet, hat keine Angst mehr.", "wert": 0, "tendenz": "vermeiden", "warum": "Kurzfristig ist die Erleichterung echt. Langfristig wird die Liste der Dinge länger, die man meidet." },
+            { "text": "Wer meidet, erlebt nie, dass es auch gut ausgehen kann – die Befürchtung bleibt ungeprüft.", "wert": 2, "warum": "Genau darum setzen Therapien gegen Sprechangst beim schrittweisen Sich-Stellen an." }
+          ] },
+        { "art": "experiment", "auftrag": "Achte diese Woche darauf, wo du ausweichst: ein getauschtes Wort, eine Frage, die du nicht gestellt hast, ein Anruf, aus dem eine Mail wurde. Notier es nur – ohne Urteil und ohne etwas ändern zu wollen.", "dauer": "woche", "nachfrage": "Was hast du gemieden – und was hätte es dich gekostet, es zu sagen?" },
+        { "art": "fachhilfe", "thema": "stottern" }
+      ],
+      "regel": "Das Vermeiden kostet oft mehr als das Stottern selbst.",
+      "merkkarten": [
+        { "id": "aussprache-s-02-m1", "frage": "Was liegt beim Eisberg unter dem Wasser?", "antwort": "Vermeiden, Wörter tauschen, Angst und Scham – was andere meist nicht sehen." },
+        { "id": "aussprache-s-02-m2", "frage": "Warum hält Vermeiden die Angst am Leben?", "antwort": "Weil man nie erlebt, dass es auch gut ausgehen kann." }
+      ]
+    },
+    {
+      "id": "aussprache-s-03", "bereich": "aussprache", "schwerpunkt": "stottern", "stufe": 1, "nr": 3,
+      "titel": "Zwei Wege der Therapie",
+      "faehigkeiten": ["aussprache.redefluss"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Grundlage ist die deutsche S3-Leitlinie von 2016. Sie wird als abgelaufen geführt und überarbeitet; eine neue Fassung lag bei Redaktionsschluss nicht vor. Für die Stottermodifikation sind die Belege schwächer.",
+      "quellen": ["neumann2017", "s3stottern", "baekstottern", "aerzteblattstottern", "bvssfakten", "vanriper"],
+      "aha": "Es gibt anerkannte Therapien – am besten belegt ist die Sprechrestrukturierung. Und es gibt klare Zeichen, an denen du unseriöse Angebote erkennst.",
+      "schritte": [
+        { "art": "auswahl", "kopf": { "id": "aussprache-s-03-a", "faehigkeit": "aussprache.redefluss", "stufe": 3, "kanal": "wissen" },
+          "frage": "Welcher Weg hat für Erwachsene laut deutscher Leitlinie die stärksten Belege?",
+          "antworten": [
+            { "text": "Stottermodifikation – das Stottern selbst verändern", "wert": 1, "warum": "Anerkannt und für viele passend. Die Leitlinie sagt hier „kann“ – die Belege sind schwächer." },
+            { "text": "Atemübungen allein", "wert": 0, "warum": "Dafür fehlen Belege; als Hauptbehandlung rät die Leitlinie davon ab." },
+            { "text": "Sprechrestrukturierung – eine veränderte Sprechweise lernen", "wert": 2, "warum": "Hier sind die Belege am stärksten, mit großen gemessenen Verbesserungen. Die Leitlinie empfiehlt sie deutlich." },
+            { "text": "Hypnose", "wert": 0, "warum": "Für eine Wirkung aufs Stottern gibt es keinen Beleg." }
+          ] },
+        { "art": "karte", "text": "Sprechrestrukturierung, auch Fluency Shaping: Du lernst eine veränderte Sprechweise – weiche Stimmeinsätze, gedehnte Laute, gebundenes Sprechen. Sie soll Stottern gar nicht erst entstehen lassen. Anfangs klingt sie ungewohnt, mit Übung natürlicher; im Alltag braucht sie dauerhaft Aufmerksamkeit. Für diesen Weg spricht die Leitlinie die stärkste Empfehlung aus." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-s-03-b", "faehigkeit": "aussprache.redefluss", "stufe": 3, "kanal": "wissen" },
+          "auftrag": "Welcher Weg steckt dahinter?",
+          "faecher": ["Sprechrestrukturierung", "Stottermodifikation", "ohne Beleg"],
+          "karten": [
+            { "text": "eine neue, weiche Sprechweise einüben", "fach": 0 },
+            { "text": "Wörter gebunden aneinanderhängen", "fach": 0 },
+            { "text": "aus einer Blockade herausgleiten", "fach": 1 },
+            { "text": "Situationen nicht mehr ausweichen", "fach": 1 },
+            { "text": "einen Stotter-Moment bewusst nachbessern", "fach": 1 },
+            { "text": "Tabletten gegen Stottern", "fach": 2 },
+            { "text": "Hypnose", "fach": 2 },
+            { "text": "nur Atemübungen", "fach": 2 }
+          ] },
+        { "art": "karte", "text": "Stottermodifikation geht auf Charles Van Riper zurück und heißt auch Nicht-Vermeidungs-Ansatz. Du lernst, hinzuschauen statt zu verstecken, die Angst vor dem Stottern abzubauen und einzelne Stotter-Momente zu verändern, etwa aus einer Blockade herauszugleiten. Die Leitlinie sagt hier „kann“ – die Belege sind schwächer. Beide Wege lassen sich kombinieren." },
+        { "art": "auswahl", "kopf": { "id": "aussprache-s-03-c", "faehigkeit": "aussprache.redefluss", "stufe": 3, "kanal": "wissen" },
+          "frage": "Ein Kurs wirbt: „In zehn Tagen stotterfrei – mit unserer Atemmethode.“ Was sagt dir das?",
+          "antworten": [
+            { "text": "Erst nachfragen: Gibt es dazu Studien, und wie geht es den Teilnehmenden ein Jahr nach dem Kurs? Dann entscheiden.", "wert": 1, "warum": "Klug – ehrliche Anbieter können das beantworten. Das Versprechen allein ist aber schon ein Warnzeichen." },
+            { "text": "Vorsicht: Schnelle Versprechen und Atemverfahren allein passen nicht zu dem, was die Forschung zeigt.", "wert": 2, "warum": "Die Leitlinie warnt genau vor solchen Angeboten. Seriöse Therapie braucht Zeit und übt den Alltag." },
+            { "text": "Klingt gut – zehn Tage sind schnell vorbei.", "wert": 0, "warum": "Solche Kurse wirken oft kurz und halten im Alltag selten. Das kostet Geld und Hoffnung." }
+          ] },
+        { "art": "karte", "text": "So findest du gute Hilfe: Erste Anlaufstelle ist die Hausarztpraxis, sie stellt die Verordnung aus. Frag in der Praxis, nach welchem Verfahren gearbeitet und wie der Alltag geübt wird. Gibt es nach drei Monaten mit wöchentlichen Sitzungen keinen Fortschritt, rät die Leitlinie, das Vorgehen zu überprüfen. Gute Therapie will leichteres Sprechen und weniger Last – keine Perfektion." },
+        { "art": "experiment", "auftrag": "Schau dir heute die Seite der Bundesvereinigung Stottern & Selbsthilfe an (www.bvss.de). Such dir eine Sache heraus: eine Gruppe in deiner Nähe, ein Online-Treffen oder die kostenlose Beratung am Telefon.", "dauer": "heute", "nachfrage": "Was hast du gefunden – und was davon könntest du dir vorstellen?" },
+        { "art": "fachhilfe", "thema": "stottern" }
+      ],
+      "regel": "Seriöse Hilfe braucht Zeit – wer schnelle Wunder verspricht, ist unseriös.",
+      "merkkarten": [
+        { "id": "aussprache-s-03-m1", "frage": "Welcher Therapieweg hat die stärksten Belege?", "antwort": "Die Sprechrestrukturierung (Fluency Shaping). Stottermodifikation und Kombination: „kann“." },
+        { "id": "aussprache-s-03-m2", "frage": "Woran erkennst du ein unseriöses Angebot?", "antwort": "Schnelle, vollständige Erfolge; nur Atem- oder Rhythmusübungen; Tabletten oder Hypnose." },
+        { "id": "aussprache-s-03-m3", "frage": "Nach drei Monaten wird nichts besser – was nun?", "antwort": "Das Vorgehen mit der Fachperson besprechen und wenn nötig wechseln." }
+      ]
+    },
+    {
+      "id": "aussprache-s-04", "bereich": "aussprache", "schwerpunkt": "stottern", "stufe": 1, "nr": 4,
+      "titel": "Kostproben",
+      "faehigkeiten": ["aussprache.redefluss"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Die Bausteine stammen aus anerkannten Therapien. Ob kurzes Ausprobieren allein etwas verändert, ist nicht untersucht – hier geht es nur ums Kennenlernen.",
+      "quellen": ["neumann2017", "s3stottern", "bvssfakten", "vanriper"],
+      "aha": "Weich einsetzen, dehnen, herausgleiten, nachbessern: So fühlen sich die Bausteine der Therapie an. Kennenlernen ja – üben gehört zu Fachleuten.",
+      "schritte": [
+        { "art": "mythos", "aussage": "Wer die Techniken kennt, braucht keine Therapie.", "urteil": "falsch",
+          "warum": "Eine Technik hilft erst, wenn sie über Wochen unter Anleitung geübt und in schwierige Lagen übertragen wird. Genau an diesem Übertrag scheitern Schnell-Methoden." },
+        { "art": "karte", "text": "Vier Bausteine aus anerkannten Therapien: Weicher Einsatz – die Stimme beginnt wie ein Hauch und wird dann voll. Dehnen – der erste Laut wird etwas gezogen, die Wörter hängen aneinander. Herausgleiten – in einer Blockade nicht abbrechen, sondern den Laut lösen und weitergleiten. Nachbessern – nach einem Stotter-Moment das Wort noch einmal bewusst sprechen." },
+        { "art": "zuordnen", "kopf": { "id": "aussprache-s-04-a", "faehigkeit": "aussprache.redefluss", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Welcher Baustein ist gemeint?",
+          "faecher": ["weicher Einsatz", "Dehnen", "Herausgleiten", "Nachbessern"],
+          "karten": [
+            { "text": "Die Stimme setzt sanft ein statt mit Druck.", "fach": 0 },
+            { "text": "Der erste Laut darf etwas länger klingen.", "fach": 1 },
+            { "text": "Die Wörter gehen wie ein Band ineinander über.", "fach": 1 },
+            { "text": "Ein festsitzendes Wort wird gelöst, statt neu anzulaufen.", "fach": 2 },
+            { "text": "Nach dem Stocken das Wort noch einmal in Ruhe sprechen.", "fach": 3 }
+          ] },
+        { "art": "nachsprechen", "kopf": { "id": "aussprache-s-04-b", "faehigkeit": "aussprache.redefluss", "stufe": 2, "kanal": "koennen", "laut": true, "leise": "aussprache-s-v-0012" },
+          "auftrag": "Freiwillige Kostprobe, ohne Uhr und ohne Bewertung: Lass bei jedem Wort die Stimme leise wie ein Hauch beginnen und dann voll werden. Spür nur, wie sich das anfühlt.",
+          "zeilen": ["Abend", "Ofen", "immer", "Urlaub", "Ein Apfel am Abend."],
+          "weise": "frei",
+          "pruefliste": ["Ich habe es ohne Eile ausprobiert.", "Ich habe gespürt, wie die Stimme sanft beginnt.", "Ich weiß jetzt, wie sich ein weicher Einsatz anfühlt."] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-s-04-c", "faehigkeit": "aussprache.redefluss", "stufe": 3, "kanal": "wissen" },
+          "frage": "Wozu dient diese Kostprobe?",
+          "antworten": [
+            { "text": "Damit du nie mehr stotterst.", "wert": 0, "warum": "Das kann keine Technik versprechen. Ziel einer Therapie ist leichteres Sprechen, nicht Perfektion." },
+            { "text": "Zum Kennenlernen – damit du weißt, wovon in einer Therapie die Rede ist.", "wert": 2, "warum": "Genau das. Üben würdest du die Bausteine mit einer Fachperson, Schritt für Schritt." },
+            { "text": "Damit du sie ab morgen im Alltag einsetzt.", "wert": 1, "warum": "Probier gern – aber erwarte nicht zu viel. Ohne Anleitung halten Techniken im Alltag selten." }
+          ] },
+        { "art": "karte", "text": "Ehrlich gesagt: Techniken sind kein Schalter. In Therapien werden sie über Wochen geübt – erst in leichten, dann in schwierigen Lagen. Und auch danach gibt es Tage mit mehr Stottern. Das heißt nicht, dass du etwas falsch machst. Viele verbinden Technik mit Offenheit: Wer nicht mehr versteckt, steht unter weniger Druck." },
+        { "art": "reflexion", "frage": "Welcher Baustein hat dich am meisten angesprochen? Was würdest du eine Fachperson dazu fragen?" },
+        { "art": "fachhilfe", "thema": "stottern" }
+      ],
+      "regel": "Kennenlernen hier – lernen mit Fachleuten.",
+      "merkkarten": [
+        { "id": "aussprache-s-04-m1", "frage": "Was ist ein weicher Einsatz?", "antwort": "Die Stimme beginnt wie ein Hauch und wird dann voll – statt mit Druck." },
+        { "id": "aussprache-s-04-m2", "frage": "Was heißt Herausgleiten?", "antwort": "In einer Blockade nicht abbrechen, sondern den Laut lösen und weitergleiten." },
+        { "id": "aussprache-s-04-m3", "frage": "Wo lernt man die Techniken?", "antwort": "In einer Therapie – über Wochen und mit Übertrag in den Alltag." }
+      ]
+    },
+    {
+      "id": "aussprache-s-05", "bereich": "aussprache", "schwerpunkt": "stottern", "stufe": 1, "nr": 5,
+      "titel": "Der offene Satz",
+      "faehigkeiten": ["aussprache.freisprechen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Ein Experiment mit 173 Teilnehmenden zeigt die Wirkung auf Zuhörer – mit Videos, nicht in echten Gesprächen. Dass das Offenlegen Druck nimmt, berichten viele Menschen, die stottern; gut untersucht ist es nicht.",
+      "quellen": ["byrd2017", "bvssfakten", "baekstottern"],
+      "aha": "Wer das Stottern selbst kurz anspricht, wirkt auf andere eher offen und selbstsicher – und nimmt Druck aus dem Raum. Ob und wann, entscheidest du.",
+      "schritte": [
+        { "art": "studie", "frage": "Wie wirkt es auf Zuhörer, wenn jemand sein Stottern gleich zu Beginn anspricht?",
+          "aufbau": "173 Erwachsene sahen kurze Videos von Sprechern, die stottern – einmal mit einem Satz zu Beginn wie „Nur dass du es weißt: Ich stottere manchmal“, einmal ohne.",
+          "ergebnis": "Mit dem Satz wurden die Sprecher eher als freundlich, aufgeschlossen und selbstsicher eingeschätzt; ohne ihn eher als schüchtern oder unfreundlich.",
+          "grenze": "Videos statt echter Gespräche, Teilnehmende aus den USA. Und: Ob du es sagst, bleibt deine Wahl.",
+          "beleg": "B", "quellen": ["byrd2017"] },
+        { "art": "karte", "text": "Ein offener Satz ist kurz, sachlich und ohne Entschuldigung. Er sagt, was ist, und was dem anderen hilft – zum Beispiel: „Kurz vorab: Ich stottere. Das heißt nur, dass ich manchmal einen Moment länger brauche.“ Du schuldest niemandem diesen Satz. Er ist ein Werkzeug, kein Bekenntnis – besonders nützlich bei Fremden und am Telefon, wo Stille missverstanden werden kann." },
+        { "art": "wortwahl", "kopf": { "id": "aussprache-s-05-a", "faehigkeit": "aussprache.freisprechen", "stufe": 2, "kanal": "wissen" },
+          "frage": "Welche Fassung des offenen Satzes ist am stärksten?",
+          "antworten": [
+            { "text": "„Tut mir leid, ich stottere – das ist bestimmt anstrengend für Sie.“", "wert": 0, "tendenz": "abwerten", "warum": "Die Entschuldigung macht aus dem Stottern eine Zumutung. Das ist es nicht." },
+            { "text": "„Ich stottere manchmal. Lassen Sie mir dann einfach einen Moment.“", "wert": 2, "warum": "Sachlich, kurz, mit einer klaren Bitte – der andere weiß sofort, was hilft." },
+            { "text": "„Ich stottere, also nicht wundern.“", "wert": 1, "warum": "Offen und kurz. Etwas abwehrend – eine Bitte macht es freundlicher." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "aussprache-s-05-b", "faehigkeit": "aussprache.freisprechen", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Mach daraus einen offenen Satz ohne Entschuldigung.",
+          "vorlage": "„Entschuldigung, ich stottere leider, ich hoffe, das stört nicht zu sehr.“",
+          "kriterien": ["ohne Entschuldigung", "kurz und sachlich", "sagt, was hilft"],
+          "muster": ["„Ich stottere manchmal – wenn es hakt, warte einfach kurz.“", "„Kurz vorab: Ich stottere. Am Inhalt ändert das nichts.“", "„Ich stottere. Lass mich ausreden, dann passt alles.“"] },
+        { "art": "dialog", "kopf": { "id": "aussprache-s-05-c", "faehigkeit": "aussprache.freisprechen", "stufe": 3, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Die Einführung", "figur": "Lena Brandt",
+            "lage": "Lena ist neu im Team. Du sollst ihr heute das Bestellsystem zeigen. Ihr kennt euch noch nicht.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Lena: „Hallo, ich bin Lena. Du zeigst mir das Bestellsystem?“",
+                "wahl": [
+                  { "text": "„Ja, gern. Kurz vorab: Ich stottere manchmal – lass mir dann einfach einen Moment.“", "wert": 2, "weiter": "k2", "rueck": "Kurz, sachlich, ohne Entschuldigung. Lena weiß jetzt, was hilft." },
+                  { "text": "„Ja, gern. Komm, ich zeig's dir.“", "wert": 1, "weiter": "k2b", "rueck": "Völlig in Ordnung – den offenen Satz brauchst du nicht immer. Mal sehen, wie es weitergeht." },
+                  { "text": "„Ich schick dir erst mal die Anleitung, lies die in Ruhe durch – dann zeig ich dir nachher nur noch die kniffligen Stellen.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Verständlich – aber so fällt das Gespräch aus, und Lena wundert sich." }
+                ] },
+              { "id": "k1b", "sagt": "Lena: „Oh, okay. Ich dachte, wir gehen es zusammen durch?“",
+                "wahl": [
+                  { "text": "„Stimmt, zusammen ist besser. Kurz vorab: Ich stottere manchmal – lass mir dann einen Moment.“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt – und gleich gesagt, was hilft." },
+                  { "text": "„Klar, komm.“", "wert": 1, "weiter": "k2b", "rueck": "Gut, ihr setzt euch zusammen." }
+                ] },
+              { "id": "k2", "sagt": "Lena: „Gut zu wissen, danke. Leg los.“ Ihr setzt euch an den Bildschirm. Beim Wort „Freigabe“ hakt es.",
+                "wahl": [
+                  { "text": "Du bleibst beim Wort, bis es kommt, und erklärst weiter.", "wert": 2, "weiter": "k3", "rueck": "Lena hat gewartet, wie du es dir gewünscht hast. Gesagt, was du sagen wolltest." },
+                  { "text": "Du tauschst das Wort schnell gegen „das Okay vom Chef“ – Lena versteht es auch so, und es geht weiter.", "wert": 1, "tendenz": "vermeiden", "weiter": "k3", "rueck": "Verständlich. Nur heißt der Knopf im System „Freigabe“ – Lena wird ihn suchen." },
+                  { "text": "„Sorry, sorry, das ist mir echt peinlich.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3", "rueck": "Du entschuldigst dich für etwas, das kein Fehler ist. Lena hatte nichts gegen das Warten." }
+                ] },
+              { "id": "k2b", "sagt": "Ihr setzt euch an den Bildschirm. Beim Wort „Freigabe“ hakt es. Lena springt ein: „Meinst du die Freigabe?“",
+                "wahl": [
+                  { "text": "„Ja, genau. Ich stottere manchmal – wenn du kurz wartest, sag ich's selbst.“", "wert": 2, "weiter": "k3", "rueck": "Der offene Satz im richtigen Moment – jetzt weiß Lena, was hilft." },
+                  { "text": "Du nickst und machst weiter.", "wert": 1, "weiter": "k3", "rueck": "Geht – aber Lena wird dir weiter Wörter abnehmen." },
+                  { "text": "Du lässt sie ab jetzt das meiste selbst vorlesen.", "wert": 0, "tendenz": "vermeiden", "weiter": "k3", "rueck": "Du ziehst dich zurück – und erklärst dein eigenes System nicht mehr." }
+                ] },
+              { "id": "k3", "sagt": "Am Ende fragt Lena: „Darf ich was fragen? Was hilft dir am meisten, wenn wir reden?“",
+                "wahl": [
+                  { "text": "„Ach, nichts, passt schon.“", "wert": 1, "weiter": "ende1", "rueck": "Freundlich – aber Lena weiß jetzt nicht, was dir guttut." },
+                  { "text": "„Ausreden lassen und Blickkontakt – mehr nicht. Danke, dass du fragst.“", "wert": 2, "weiter": "ende1", "rueck": "Klar und herzlich. So eine Frage ist ein Geschenk – du hast es angenommen." },
+                  { "text": "„Am besten schreiben wir uns einfach im Chat – das geht schneller und ist für uns beide bequemer.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende2", "rueck": "Schreiben ist manchmal praktisch. Hier weicht es einer guten Frage aus." }
+                ] },
+              { "id": "ende1", "sagt": "Lena: „Mach ich. Danke für die Einführung.“", "ende": "Du hast das System selbst erklärt und gesagt, was dir hilft. Ein offener Satz ist ein Werkzeug – du entscheidest, wann du ihn nutzt." },
+              { "id": "ende2", "sagt": "Lena: „Okay … klar.“ Sie wirkt ein wenig unsicher.", "ende": "Beim nächsten Mal könntest du Lena sagen, was hilft. Sie wollte es wirklich wissen." }
+            ],
+            "prinzipien": ["kurz, sachlich, ohne Entschuldigung", "sagen, was hilft", "das eigene Wort selbst sagen", "Offenheit ist eine Wahl"]
+          } },
+        { "art": "reflexion", "frage": "Schreib deinen eigenen offenen Satz auf – so, wie er zu dir passt. Wem würdest du ihn zuerst sagen?", "insBuch": "saetze" },
+        { "art": "fachhilfe", "thema": "stottern" },
+        { "art": "mission", "ref": "aussprache-s-m-01" }
+      ],
+      "regel": "Kurz, sachlich, ohne Entschuldigung – und du entscheidest, wann.",
+      "merkkarten": [
+        { "id": "aussprache-s-05-m1", "frage": "Wie klingt ein guter offener Satz?", "antwort": "Kurz, sachlich, ohne Entschuldigung, mit einer Bitte: „Ich stottere manchmal – lass mir einen Moment.“" },
+        { "id": "aussprache-s-05-m2", "frage": "Wie wirkt der Satz auf Zuhörer?", "antwort": "In einem Experiment eher freundlich, aufgeschlossen und selbstsicher." }
+      ],
+      "mission": "aussprache-s-m-01"
+    },
+    {
+      "id": "aussprache-s-06", "bereich": "aussprache", "schwerpunkt": "stottern", "stufe": 1, "nr": 6,
+      "titel": "Deine Leiter",
+      "faehigkeiten": ["aussprache.freisprechen"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Schrittweises Sich-Stellen ist Kern verhaltenstherapeutischer Programme. In einer kontrollierten Studie mit 32 Erwachsenen senkte so ein Programm Angst und Vermeiden – am Stottern selbst änderte es nichts. Die Leiter im Coach ersetzt keine Therapie.",
+      "quellen": ["menzies2008", "beilby2012", "bvssfakten"],
+      "aha": "Jeder Satz, den du früher gemieden hättest, zählt – ob mit oder ohne Stottern. Kleine Sprossen, von leicht nach schwer.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "32 Erwachsene, die stottern, bekamen Sprechtraining – eine per Los bestimmte Gruppe vorher zusätzlich ein Programm gegen soziale Angst, mit schrittweisem Sich-Stellen. Was änderte das Zusatzprogramm?",
+          "optionen": ["Sie stotterten seltener.", "Angst und Vermeiden gingen deutlicher zurück.", "Gar nichts."], "richtig": 1,
+          "loesung": "Angst und Vermeiden gingen deutlicher zurück – am Stottern selbst änderte es nichts.",
+          "aufloesung": "Ein Jahr später hatte in der Gruppe mit Zusatzprogramm niemand mehr eine soziale Phobie; mit Sprechtraining allein blieb sie bestehen. Deshalb zielt die Leiter aufs Vermeiden – nicht aufs Stottern." },
+        { "art": "karte", "text": "Eine Leiter hat Sprossen von leicht nach schwer: einem vertrauten Menschen davon erzählen, ein Wort sagen, das du sonst tauschst, bestellen, was du wirklich willst, später telefonieren oder in einer Runde etwas sagen. Es zählt allein, dass du gesprochen hast – mit oder ohne Stottern. Die Frage danach lautet nur: Hast du gesagt, was du sagen wolltest?" },
+        { "art": "rangfolge", "kopf": { "id": "aussprache-s-06-a", "faehigkeit": "aussprache.freisprechen", "stufe": 3, "kanal": "wissen" },
+          "frage": "Ordne die Gedanken nach einer Sprosse von hilfreich bis wenig hilfreich.",
+          "eintraege": [
+            { "text": "„Ich habe gesagt, was ich sagen wollte.“", "warum": "Genau das zählt – unabhängig davon, wie es klang." },
+            { "text": "„Es hat gehakt, aber ich bin drangeblieben.“", "warum": "Stark. Nur der Blick aufs Haken ist gar nicht nötig." },
+            { "text": "„Ich habe es geschafft, aber nur knapp.“", "warum": "Ehrlich, aber kleiner gemacht, als es war." },
+            { "text": "„Ich habe zweimal gestottert, also war es nichts.“", "warum": "Hier zählt das Falsche: Die Leiter misst Sprechen, nicht Stottern." }
+          ] },
+        { "art": "kritiker", "kopf": { "id": "aussprache-s-06-b", "faehigkeit": "aussprache.freisprechen", "stufe": 3, "kanal": "koennen" },
+          "satz": "„Wenn ich da anrufe, blamiere ich mich.“",
+          "kriterien": ["prüft die Befürchtung", "hält am Anliegen fest", "freundlich zu dir"],
+          "muster": ["„Vielleicht hakt es. Dann sage ich: Ich stottere, einen Moment. Den Termin will ich trotzdem.“", "„Viele warten, wenn ich kurz sage, was los ist. Und wenn jemand ungeduldig ist, sagt das mehr über ihn als über mich.“"] },
+        { "art": "auswahl", "kopf": { "id": "aussprache-s-06-c", "faehigkeit": "aussprache.freisprechen", "stufe": 4, "kanal": "wissen" },
+          "frage": "Eine Sprosse fühlt sich viel zu hoch an. Was ist klug?",
+          "antworten": [
+            { "text": "Zähne zusammenbeißen und mit Gewalt durch.", "wert": 0, "tendenz": "ueberspielen", "warum": "Mit Gewalt wird es eher eine schlechte Erfahrung. Kleine Schritte tragen weiter." },
+            { "text": "Die Sprosse erst mal auslassen und mit der nächsten weitermachen – später kommst du mit mehr Schwung zurück.", "wert": 1, "warum": "Geht – solange „später“ einen Termin bekommt." },
+            { "text": "Eine kleinere Zwischensprosse bauen, etwa dasselbe erst einer vertrauten Person sagen.", "wert": 2, "warum": "So bleibt die Leiter begehbar, und du sammelst gute Erfahrungen." },
+            { "text": "Die Leiter ganz lassen – ist eh nichts für mich.", "wert": 0, "tendenz": "vermeiden", "warum": "Verständlicher Gedanke an einem schweren Tag. Morgen darf die Sprosse kleiner sein." }
+          ] },
+        { "art": "wenndann", "anlass": "Deine erste Sprosse",
+          "wenn": ["Wenn ich heute ein Wort austauschen will,", "Wenn ich beim Bäcker bestelle,", "Wenn mich jemand nach meinem Namen fragt,"],
+          "dann": ["… sage ich genau das Wort, das ich meine.", "… nehme ich, was ich wirklich will.", "… sage ich ihn – mit oder ohne Stottern."] },
+        { "art": "fachhilfe", "thema": "stottern" },
+        { "art": "mission", "ref": "aussprache-s-m-03" }
+      ],
+      "regel": "Es zählt, dass du gesprochen hast – nicht, wie es klang.",
+      "merkkarten": [
+        { "id": "aussprache-s-06-m1", "frage": "Was zählt auf der Leiter?", "antwort": "Dass du gesagt hast, was du sagen wolltest – nicht, ob du gestottert hast." },
+        { "id": "aussprache-s-06-m2", "frage": "Eine Sprosse ist zu hoch – was nun?", "antwort": "Eine kleinere Zwischensprosse bauen." }
+      ],
+      "mission": "aussprache-s-m-03"
+    }
+  ]
+}

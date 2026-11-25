@@ -8,6 +8,7 @@ import { Printer, Search, RefreshCw, Loader2, X, Trash2, MapPin, Crosshair, Aler
 import { api } from '../electronAPI'
 import { useAuthStore } from '../store/authStore'
 import { useMapIntentStore } from '../store/mapIntentStore'
+import { useBereiche, useBereichZustand } from '../store/menuSichtbarStore'
 import { PrinterInfoButton } from '../components/printer/PrinterDossier'
 import PlanViewer from '../components/otDevices/PlanViewer'
 import { ladeDruckerListe, type DruckerZiel } from '../services/druckerFlotte'
@@ -20,7 +21,9 @@ export default function DruckerUebersicht() {
   const user = useAuthStore(s => s.session?.user)
   const ich = user?.displayName || user?.username || 'unbekannt'
 
-  const [plan, setPlan] = useState<DruckerPlanId>('halle')
+  // Pläne je Benutzer ausblendbar (Einstellungen → Benutzer & Rechte)
+  const [plan, setPlan] = useBereichZustand<DruckerPlanId>('drucker-uebersicht', 'halle')
+  const { sichtbar: planSichtbar } = useBereiche('drucker-uebersicht')
   const [pdfs, setPdfs] = useState<Partial<Record<DruckerPlanId, string>>>({})
   const [planFehler, setPlanFehler] = useState('')
   const [seiten, setSeiten] = useState<Partial<Record<DruckerPlanId, number>>>({})
@@ -134,7 +137,7 @@ export default function DruckerUebersicht() {
           <p className="text-[11px] text-muted-foreground">{marker.length} Drucker eingezeichnet{bestand ? ` · ${fehlend.length} aus dem Bestand noch nicht` : ''}</p>
         </div>
         <div className="inline-flex rounded-md border border-border overflow-hidden text-xs ml-2" data-plan-umschalter>
-          {DRUCKER_PLAENE.map(p => (
+          {DRUCKER_PLAENE.filter(p => planSichtbar(p.id)).map(p => (
             <button key={p.id} onClick={() => { setPlan(p.id); setGewaehltId(null); setBlinktId(null) }}
               className={`px-3 py-1.5 ${plan === p.id ? 'bg-primary/15 text-primary font-semibold' : 'text-muted-foreground hover:text-foreground'}`}>{p.titel} <span className="opacity-60">{zahl(p.id)}</span></button>
           ))}

@@ -1,0 +1,377 @@
+{
+  "eintraege": [
+    { "art": "szene", "kopf": { "id": "lesen-v-0046", "faehigkeit": "lesen.stimme", "stufe": 4, "kanal": "wissen" },
+      "beschreibung": "Telefonat. Du erklärst Herrn Petersen die neue Rechnung. Er fragt zweimal „Wie bitte?“ und wird dabei jedes Mal etwas lauter. Im Hintergrund läuft ein Radio.",
+      "frage": "Was ist die beste Lesart – und was tust du?",
+      "antworten": [
+        { "text": "Er ist verärgert über die Rechnung – also erst einmal beschwichtigen.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Lauter werden kann hier schlicht heißen: Er versteht dich schlecht. Er hört nicht mehr gut, dazu das Radio." },
+        { "text": "Er versteht schlecht. Langsamer, deutlicher, die Zahl einzeln wiederholen.", "wert": 2, "warum": "Du liest die Stimme mit Lage und Person zusammen: schlechtes Hören, Lärm im Hintergrund." },
+        { "text": "Lauter sprechen.", "wert": 1, "warum": "Hilft ein wenig. Deutlicher und langsamer hilft meist mehr als nur lauter." },
+        { "text": "Er will die Rechnung nicht verstehen, weil er nicht bezahlen möchte, und spielt auf Zeit.", "wert": 0, "tendenz": "uebersicher", "warum": "Eine Unterstellung ohne jeden Anhalt – die einfache Erklärung liegt näher." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "lesen-v-0047", "faehigkeit": "lesen.stimme", "stufe": 3, "kanal": "wissen" },
+      "frage": "Du fragst Miriam, ob du ihren Teil der Präsentation kürzen darfst. Sie sagt in flachem Ton, ohne aufzusehen: „Ja, mach ruhig.“ Ordne deine Reaktionen von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Klingt nicht ganz überzeugt. Passt es dir wirklich – oder lieber zusammen ansehen?“", "warum": "Nennt, was du hörst, und bietet einen Weg an, ohne ihr etwas zu unterstellen." },
+        { "text": "Kurz warten, ob noch etwas kommt.", "warum": "Gibt ihr Raum – manchmal kommt das Aber von selbst." },
+        { "text": "„Danke!“ – und sofort kürzen.", "warum": "Nimmt das Wort, überhört den Ton." },
+        { "text": "„Warum bist du denn jetzt so genervt?“", "warum": "Eine Deutung als Vorwurf – sie muss sich erst verteidigen." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "lesen-v-0048", "faehigkeit": "lesen.stimme", "stufe": 5, "kanal": "wissen" },
+      "frage": "Am Telefon sagt eine Kundin zu deinem Angebot: „Mhm … klingt eigentlich interessant.“ Ordne die Antworten von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Ich höre ein ‚eigentlich‘. Was fehlt Ihnen noch?“", "warum": "Greift das Zögern auf und lädt den Vorbehalt ein." },
+        { "text": "Eine kleine Pause lassen.", "warum": "Oft kommt der Vorbehalt dann von selbst." },
+        { "text": "Die Vorteile noch einmal aufzählen.", "warum": "Gut gemeint, aber du weißt nicht, was ihr fehlt." },
+        { "text": "„Dann machen wir es gleich fest, bevor die Plätze weg sind.“", "warum": "Druck statt Frage – das Zögern wird überhört. Ist die Knappheit erfunden, ist das eine rote Linie." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "lesen-v-0049", "faehigkeit": "lesen.stimme", "stufe": 3, "kanal": "koennen" },
+      "auftrag": "Mach aus der Deutung eine Beobachtung über die Stimme – und eine offene Frage.",
+      "vorlage": "„Sie klingen genervt.“ (Ein Kunde spricht am Telefon plötzlich schneller und kürzer.)",
+      "kriterien": ["nennt, was zu hören ist", "fragt offen", "ohne Unterstellung"],
+      "muster": ["„Sie sprechen gerade schneller als vorhin – passt Ihnen etwas am Termin nicht?“", "„Ich merke, wir sind kürzer geworden. Sollen wir lieber später weitersprechen?“"] },
+    { "art": "umformulieren", "kopf": { "id": "lesen-v-0050", "faehigkeit": "lesen.stimme", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Formulier eine Frage, die das Zögern einlädt, ohne zu drängen.",
+      "vorlage": "Tarek sagt zu deinem Vorschlag, die Abläufe zu ändern, sehr gedehnt: „Kann man machen …“",
+      "kriterien": ["greift das Zögern auf", "lässt einen Ausweg", "kein Vorwurf"],
+      "muster": ["„Klingt nach einem Aber. Was stört dich daran?“", "„Kann man machen – oder sollte man? Sag ruhig, wenn du Bedenken hast.“"] },
+    { "art": "kunstgriff", "kopf": { "id": "lesen-v-0051", "faehigkeit": "lesen.stimme", "stufe": 4, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Seminaranbieter wirbt: „Mit unserer Stimm-Analyse erkennen Sie fast jede Lüge am Telefon. Unsere Absolventen führt keiner mehr hinters Licht.“ Der Kurs ist teuer.",
+      "frage": "Was steckt dahinter?",
+      "antworten": [
+        { "text": "Ein Versprechen, das die Forschung nicht trägt – Lügen erkennt man kaum besser als der Zufall.", "wert": 2, "warum": "Über viele Studien lagen Menschen kaum über dem Münzwurf. Ein „fast jede Lüge“-Versprechen ist Werbung, kein Befund." },
+        { "text": "Eine neue Methode, die man ausprobieren sollte.", "wert": 0, "tendenz": "glaeubig", "warum": "Neu klingt gut – aber die Behauptung widerspricht allem, was man über Lügenerkennung weiß." },
+        { "text": "Übertreibung – an der Stimme hört man zwar manches, aber sicher nicht „fast jede Lüge“.", "wert": 1, "warum": "Gut, dass du zweifelst. Nur ist es mehr als eine Übertreibung: Lügen erkennt man auch an der Stimme kaum besser als der Zufall." },
+        { "text": "Wenn es so teuer ist, wird es auch etwas taugen.", "wert": 0, "tendenz": "glaeubig", "warum": "Ein hoher Preis ist kein Beleg – eher ein Grund, genauer hinzusehen." }
+      ],
+      "erklaerung": "Die Stimme verrät Gefühle erstaunlich gut, Lügen aber kaum. Über viele Studien lag die Trefferquote bei Lüge oder Wahrheit nur knapp über dem Zufall. Wer „fast jede Lüge“ verspricht, verkauft Hoffnung. Abwehr: nach unabhängigen Studien fragen – nicht nach Erfahrungsberichten." },
+    { "art": "kunstgriff", "kopf": { "id": "lesen-v-0052", "faehigkeit": "lesen.stimme", "stufe": 5, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Anruf. Eine gehetzte, besorgte Stimme: „Hier ist der Sicherheitsdienst Ihrer Bank. Ihr Konto wird gerade angegriffen! Sie müssen jetzt sofort die Nummer bestätigen, die Sie gleich per Nachricht bekommen!“",
+      "frage": "Was passiert hier?",
+      "antworten": [
+        { "text": "Die Sorge in der Stimme klingt echt – also schnell handeln.", "wert": 0, "tendenz": "glaeubig", "warum": "Gespielte Gefühle sind genau das Werkzeug: Eile und Sorge sollen dich am Nachdenken hindern." },
+        { "text": "Gespielte Dringlichkeit, um Druck zu machen. Auflegen und die Bank selbst über die bekannte Nummer anrufen.", "wert": 2, "warum": "Du erkennst die vorgetäuschten Signale und prüfst über einen Weg, den du selbst wählst." },
+        { "text": "Nachfragen, wie der Mitarbeiter heißt.", "wert": 1, "warum": "Ein Anfang – aber Namen lassen sich erfinden. Sicher ist nur der Rückruf über die bekannte Nummer." },
+        { "text": "Die Nummer bestätigen, aber danach sofort das Passwort ändern.", "wert": 0, "tendenz": "glaeubig", "warum": "Dann ist es meist schon zu spät. Nichts bestätigen, was ein Anrufer verlangt." }
+      ],
+      "erklaerung": "Wer täuschen will, spielt Gefühle vor: Sorge, Eile, Freundlichkeit. Die Stimme soll dich mitreißen, damit du nicht prüfst. Abwehr: Tempo rausnehmen, auflegen, selbst über einen bekannten Weg nachfragen. Eine echte Bank drängt dich nicht am Telefon." },
+    { "art": "auswahl", "kopf": { "id": "lesen-v-0053", "faehigkeit": "lesen.gesicht", "stufe": 2, "kanal": "wissen" },
+      "frage": "Jemand runzelt beim Zuhören die Stirn. Was heißt das?",
+      "antworten": [
+        { "text": "Ärger.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Ein Stirnrunzeln kommt bei Ärger vor – aber auch bei vielem anderen." },
+        { "text": "Allein unklar: Konzentration, Skepsis, schlechte Sicht, Kopfweh oder Ärger. Die Lage entscheidet mit.", "wert": 2, "warum": "Ein Gesicht braucht seine Lage. Ohne sie bleibt jede Deutung geraten." },
+        { "text": "Er versteht etwas nicht.", "wert": 1, "warum": "Eine gute Möglichkeit, gerade beim Zuhören. Aber eben nur eine." },
+        { "text": "Er hält dich für unfähig und lässt dich das jetzt mit seinem Blick ganz deutlich spüren, ohne ein Wort.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine Deutung über dich, die aus einer Falte auf der Stirn nicht zu holen ist." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "lesen-v-0054", "faehigkeit": "lesen.gesicht", "stufe": 3, "kanal": "wissen" },
+      "frage": "Eine Verkäuferin lächelt dich an – mit Lachfältchen an den Augen. Heißt das, sie freut sich wirklich?",
+      "antworten": [
+        { "text": "Ja, dieses Lächeln kann man nicht fälschen.", "wert": 0, "tendenz": "uebersicher", "warum": "Viele können auch dieses Lächeln auf Wunsch zeigen. Ein Beweis ist es nicht." },
+        { "text": "Es spricht eher für Freude – ein Beweis ist es nicht.", "wert": 2, "warum": "Das Lächeln mit Lachfältchen hängt öfter mit echter Freude zusammen, lässt sich aber auch bewusst zeigen." },
+        { "text": "Nein, im Verkauf ist jedes Lächeln gespielt.", "wert": 0, "tendenz": "abwerten", "warum": "Auch im Beruf kann man sich echt freuen. Die Rolle macht ein Lächeln nicht automatisch falsch." },
+        { "text": "Man kann es nicht wissen, und es ist auch egal – Hauptsache, sie ist freundlich zu mir.", "wert": 1, "warum": "Gelassen und vernünftig. Ganz gleichgültig ist es nicht: Es spricht eher für echte Freude." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "lesen-v-0055", "faehigkeit": "lesen.gesicht", "stufe": 4, "kanal": "wissen" },
+      "frage": "Du gibst einer Kollegin, die aus einem anderen Land kommt, Rückmeldung zu Fehlern in ihrem Bericht. Sie lächelt dabei. Was ist der beste Gedanke?",
+      "antworten": [
+        { "text": "Sie nimmt die Kritik nicht ernst.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Lächeln kann je nach Person und Herkunft auch Verlegenheit oder Höflichkeit sein." },
+        { "text": "Lächeln heißt nicht überall dasselbe – vielleicht Verlegenheit. Später fragen, wie es ankam.", "wert": 2, "warum": "Du rechnest mit anderen Bedeutungen und prüfst, statt zu deuten." },
+        { "text": "Erst mal nichts hineinlesen und bei der Sache bleiben.", "wert": 1, "warum": "Vorsichtig, gut. Ob deine Rückmeldung angekommen ist, weißt du so aber nicht – später kurz nachfragen hilft." },
+        { "text": "Strenger werden, bis sie aufhört zu lächeln.", "wert": 0, "tendenz": "angreifen", "warum": "Du gehst gegen ein Zeichen vor, dessen Bedeutung du nicht kennst." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "lesen-v-0056", "faehigkeit": "lesen.gesicht", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Gut begründet oder Mythos?",
+      "faecher": ["gut begründet", "Mythos"],
+      "karten": [
+        { "text": "Dasselbe Gesicht kann je nach Lage Verschiedenes bedeuten.", "fach": 0 },
+        { "text": "Bei starken Gefühlen verrät der Körper oft mehr als das Gesicht.", "fach": 0 },
+        { "text": "Menschen aus verschiedenen Kulturen stellen sich Gefühle im Gesicht teils verschieden vor.", "fach": 0 },
+        { "text": "Ein Stirnrunzeln heißt Ärger.", "fach": 1 },
+        { "text": "Flüchtige Gesichtsausdrücke entlarven jeden Lügner.", "fach": 1 },
+        { "text": "Wer beim Lügen nach oben rechts schaut, erfindet etwas.", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "lesen-v-0057", "faehigkeit": "lesen.gesicht", "stufe": 4, "kanal": "wissen" },
+      "auftrag": "Derselbe Ausdruck, verschiedene Lagen. Was liegt jeweils am nächsten?",
+      "faecher": ["eher Konzentration", "eher Unmut", "eher die Lage"],
+      "karten": [
+        { "text": "Stirnrunzeln beim Nachrechnen einer Tabelle", "fach": 0 },
+        { "text": "Zusammengepresste Lippen beim Einfädeln einer Nadel", "fach": 0 },
+        { "text": "Stirnrunzeln, verschränkte Arme und Kopfschütteln, als ihr Vorschlag abgelehnt wird", "fach": 1 },
+        { "text": "Zusammengepresste Lippen und ein knappes „Schön.“ nach einer Absage", "fach": 1 },
+        { "text": "Zusammengekniffene Augen in der Mittagssonne", "fach": 2 },
+        { "text": "Gerötete Augen am Ende einer Nachtschicht", "fach": 2 }
+      ] },
+    { "art": "szene", "kopf": { "id": "lesen-v-0058", "faehigkeit": "lesen.gesicht", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Sportplatz, Jugendspiel. Ein Vater am Spielfeldrand: Augen zusammengekniffen, Mund weit offen, das Gesicht verzerrt. Beide Arme hat er nach oben gerissen, die Fäuste geballt. Auf dem Platz liegen sich Spieler in den Armen.",
+      "frage": "Freut er sich oder ärgert er sich?",
+      "antworten": [
+        { "text": "Er ärgert sich – das Gesicht ist ganz verzerrt.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Bei starken Gefühlen sehen Jubel und Wut im Gesicht oft ähnlich aus." },
+        { "text": "Am Gesicht allein schwer zu sagen. Hochgerissene Arme und die jubelnden Spieler sprechen für Freude.", "wert": 2, "warum": "Körper und Lage verraten bei starken Gefühlen oft mehr als das Gesicht." },
+        { "text": "Kann man nicht sagen.", "wert": 1, "warum": "Am Gesicht allein stimmt das. Mit Körper und Lage hast du aber gute Hinweise." },
+        { "text": "Er ist einer dieser Eltern, die am Rand immer übertreiben und zu viel Druck machen.", "wert": 0, "tendenz": "etikett", "warum": "Aus einem Moment wird ein Urteil über einen Menschen, den du nicht kennst." }
+      ] },
+    { "art": "szene", "kopf": { "id": "lesen-v-0059", "faehigkeit": "lesen.gesicht", "stufe": 4, "kanal": "wissen" },
+      "beschreibung": "Teamrunde. Dr. Albers lobt Lena vor allen für ihre genaue Auswertung. Lena schaut auf den Tisch, wird rot, lächelt nur mit einem Mundwinkel und sagt leise: „Danke.“",
+      "frage": "Was ist die wahrscheinlichste Lesart?",
+      "antworten": [
+        { "text": "Sie mag kein Lob und ist unzufrieden mit Albers.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Nichts spricht gegen Albers. Lob vor allen ist für Zurückhaltende oft einfach unangenehm." },
+        { "text": "Lob vor der Gruppe ist ihr eher unangenehm – freuen kann sie sich trotzdem.", "wert": 2, "warum": "Verlegenheit und Freude schließen sich nicht aus. Ihre zurückhaltende Grundlinie passt dazu." },
+        { "text": "Sie findet ihre Arbeit selbst nicht gut.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Eine Deutung über ihr Selbstbild, die das Gesicht nicht hergibt." },
+        { "text": "Sie ist eben schüchtern, mehr steckt da nicht dahinter – das ist einfach ihre Art bei solchen Dingen.", "wert": 1, "warum": "Passt zu ihrer Art. Ob sie sich freut, bleibt damit aber offen – und wahrscheinlich tut sie es." }
+      ] },
+    { "art": "szene", "kopf": { "id": "lesen-v-0060", "faehigkeit": "lesen.gesicht", "stufe": 5, "kanal": "wissen" },
+      "beschreibung": "Kaffeeküche. Ein Kollege aus der IT erzählt dir, dass sein Antrag für ein eigenes Projekt endlich genehmigt wurde. Sein Gesicht bleibt dabei ruhig, die Stimme gleichmäßig. Er erzählt sehr ausführlich, was er als Erstes vorhat.",
+      "frage": "Wie liest du das am besten?",
+      "antworten": [
+        { "text": "Es ist ihm eigentlich egal – sonst würde er sich mehr freuen.", "wert": 0, "tendenz": "einzelzeichen", "warum": "Manche zeigen Freude kaum im Gesicht. Die Ausführlichkeit spricht eher dafür, dass es ihm viel bedeutet." },
+        { "text": "Er zeigt wenig im Gesicht – aber wie ausführlich er erzählt, spricht dafür, dass es ihm wichtig ist.", "wert": 2, "warum": "Du liest die Worte und das Verhalten mit, nicht nur das Gesicht. Wenig sichtbares Gefühl heißt nicht wenig Gefühl." },
+        { "text": "„Freust du dich gar nicht?“", "wert": 1, "warum": "Fragen ist gut – aber die Frage legt nahe, dass etwas mit ihm nicht stimmt. Besser: „Klingt, als hättest du lange darauf gewartet.“" },
+        { "text": "Er ist bestimmt autistisch.", "wert": 0, "tendenz": "diagnose", "warum": "Aus Alltagsverhalten stellt man keine Diagnosen. Und es ist für die Lesart auch gar nicht nötig." }
+      ] },
+    { "art": "kunstgriff", "kopf": { "id": "lesen-v-0061", "faehigkeit": "lesen.gesicht", "stufe": 4, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Bekannter erzählt dir mit Tränen in den Augen von einer finanziellen Notlage und bittet um Geld. Es ist das dritte Mal in diesem Jahr, jedes Mal mit einer anderen Geschichte. Zurückgezahlt hat er bisher nichts.",
+      "frage": "Worauf baust du deine Entscheidung am besten?",
+      "antworten": [
+        { "text": "Auf die Tränen – so etwas kann man nicht spielen.", "wert": 0, "tendenz": "glaeubig", "warum": "Gefühle lassen sich zeigen, auch wenn sie nicht echt sind – und sie können echt sein und trotzdem ausgenutzt werden." },
+        { "text": "Auf das Muster: drei Bitten, wechselnde Geschichten, nichts zurück. Freundlich, aber klar Nein sagen.", "wert": 2, "warum": "Taten und Muster sind verlässlicher als jedes Gesicht." },
+        { "text": "Noch einmal helfen, aber eine schriftliche Rückzahlung vereinbaren.", "wert": 1, "warum": "Ein Schutz – doch das bisherige Muster spricht dagegen, dass er sich daran hält." },
+        { "text": "Ihn vor anderen fragen, ob er schon wieder lügt.", "wert": 0, "tendenz": "anklagen", "warum": "Bloßstellen hilft niemandem. Ein ruhiges Nein unter vier Augen reicht." }
+      ],
+      "erklaerung": "Wer etwas will, kann Gefühle zeigen, die er nicht hat – oder echte Gefühle als Druckmittel nutzen. Das Gesicht hilft dir hier wenig. Abwehr: auf Taten, Muster und Tatsachen schauen und eine Nacht darüber schlafen." },
+    { "art": "auswahl", "kopf": { "id": "lesen-v-0062", "faehigkeit": "lesen.eigen", "stufe": 2, "kanal": "wissen" },
+      "frage": "Erster Arbeitstag einer neuen Kollegin in deinem Team. Was zeigt ihr am ehesten, dass du es gut mit ihr meinst?",
+      "antworten": [
+        { "text": "Ihr gleich erklären, welche Projekte du schon geleitet hast, damit sie weiß, an wen sie sich wenden kann.", "wert": 0, "tendenz": "kompetenz-zuerst", "warum": "Kompetenz zuerst wirkt schnell wie Abstand. Beim ersten Eindruck zählt zuerst Wärme." },
+        { "text": "Sie mit Namen begrüßen, dich ihr zuwenden und fragen, wie ihr Start war.", "wert": 2, "warum": "Name, Zuwendung, Interesse – das sind gut lesbare Zeichen von Wärme." },
+        { "text": "Sie erst einmal in Ruhe ankommen lassen.", "wert": 1, "warum": "Rücksichtsvoll, aber sie weiß dann nicht, dass du ansprechbar bist. Ein kurzer Gruß kostet nichts." },
+        { "text": "Lustige Geschichten über die anderen erzählen.", "wert": 0, "warum": "Lästern über andere wirkt nicht warm, sondern wirft die Frage auf, was du über sie erzählen wirst." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "lesen-v-0063", "faehigkeit": "lesen.eigen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Du hörst Miriams Vorschlag konzentriert zu, die Stirn gerunzelt. Sie fragt: „Bist du dagegen?“ Was antwortest du?",
+      "antworten": [
+        { "text": "„Nein, ich denke nur nach. Mir gefällt die Idee.“", "wert": 2, "warum": "Du stellst kurz richtig, wie du gelesen wurdest – und sagst, was man nicht sehen konnte." },
+        { "text": "„Wieso, seh ich etwa so aus? Ich hab doch gar nichts gesagt!“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Verteidigung macht aus einem Missverständnis einen Streit." },
+        { "text": "„Ich schau immer so.“", "wert": 1, "warum": "Stimmt vielleicht und klärt etwas. Was du von ihrem Vorschlag hältst, weiß sie aber immer noch nicht." },
+        { "text": "Lächeln und nichts sagen.", "wert": 0, "warum": "Sie bleibt im Unklaren. Andere lesen dich schlechter, als du denkst – also sag es." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "lesen-v-0064", "faehigkeit": "lesen.eigen", "stufe": 4, "kanal": "wissen" },
+      "frage": "Nach einem Streit mit Carla warst du die ganze Woche besonders freundlich zu ihr. Du denkst: „Sie weiß jetzt, dass es mir leidtut.“ Was ist wahrscheinlicher?",
+      "antworten": [
+        { "text": "Sie hat es gemerkt – Freundlichkeit ist ja deutlich genug.", "wert": 0, "tendenz": "durchsichtig", "warum": "Was du meinst, ist innen klar – außen kann Freundlichkeit vieles heißen." },
+        { "text": "Sie hat es vielleicht weniger gemerkt, als ich denke. Ich sag es ihr.", "wert": 2, "warum": "Wir überschätzen, wie gut andere unsere Gefühle lesen. Ein Satz ist eindeutiger als eine Woche Zeichen." },
+        { "text": "Sie denkt wahrscheinlich, ich will mich bei ihr einschmeicheln, weil ich etwas von ihr brauche.", "wert": 0, "tendenz": "gedankenlesen", "warum": "Jetzt liest du ihre Gedanken – in die andere Richtung. Genauso ungewiss." },
+        { "text": "Wenn es ihr wichtig ist, spricht sie mich an.", "wert": 1, "warum": "Möglich. Aber sie weiß vielleicht gar nicht, dass du darüber reden willst." }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "lesen-v-0065", "faehigkeit": "lesen.eigen", "stufe": 3, "kanal": "wissen" },
+      "auftrag": "Was zeigt eher Wärme, was eher Kompetenz?",
+      "faecher": ["eher Wärme", "eher Kompetenz"],
+      "karten": [
+        { "text": "jemanden mit Namen begrüßen", "fach": 0 },
+        { "text": "nach dem Befinden fragen und zuhören", "fach": 0 },
+        { "text": "sich zum Gegenüber drehen und lächeln", "fach": 0 },
+        { "text": "eine klare Zahl nennen", "fach": 1 },
+        { "text": "ruhig einen Plan in drei Schritten erklären", "fach": 1 },
+        { "text": "eine Frage genau und knapp beantworten", "fach": 1 }
+      ] },
+    { "art": "zuordnen", "kopf": { "id": "lesen-v-0066", "faehigkeit": "lesen.eigen", "stufe": 4, "kanal": "wissen" },
+      "auftrag": "Überschätzt du hier, wie gut man dich lesen kann – oder ist der Gedanke brauchbar?",
+      "faecher": ["überschätzt die eigene Durchsichtigkeit", "brauchbarer Gedanke"],
+      "karten": [
+        { "text": "„Alle haben gesehen, wie rot ich wurde.“", "fach": 0 },
+        { "text": "„Mein Ärger stand mir doch ins Gesicht geschrieben.“", "fach": 0 },
+        { "text": "„Er muss gemerkt haben, dass ich mich freue.“", "fach": 0 },
+        { "text": "„Was ich fühle, sage ich besser dazu.“", "fach": 1 },
+        { "text": "„Wie ich gewirkt habe, kann mir eine Vertrauensperson sagen.“", "fach": 1 },
+        { "text": "„Nervosität sieht man meist schwächer, als man sie spürt.“", "fach": 1 }
+      ] },
+    { "art": "szene", "kopf": { "id": "lesen-v-0067", "faehigkeit": "lesen.eigen", "stufe": 3, "kanal": "wissen" },
+      "beschreibung": "Videoanruf mit acht Leuten. Deine Kamera ist unten am Laptop, du siehst also von unten ins Bild, hinter dir ist ein helles Fenster. Du hörst konzentriert zu, nickst nicht und sagst lange nichts.",
+      "frage": "Wie wirkst du vermutlich – und was hilft?",
+      "antworten": [
+        { "text": "Ganz normal – die anderen wissen ja, dass ich zuhöre.", "wert": 0, "tendenz": "durchsichtig", "warum": "Andere sehen dein Zuhören nicht. Im kleinen, dunklen Bild von unten wirkt Stille schnell abwesend oder streng." },
+        { "text": "Vielleicht abwesend oder streng. Ein Nicken, ein kurzes „Verstehe“ und Licht von vorn helfen.", "wert": 2, "warum": "Du denkst an deine Wirkung im Bild und gibst den anderen Zeichen, die sie lesen können." },
+        { "text": "Kamera aus, dann gibt es kein Problem.", "wert": 1, "warum": "Löst das Bild, aber nicht die Stille. Ein kurzes „Verstehe“ zeigt, dass du dabei bist." },
+        { "text": "Ich wirke bestimmt arrogant, und alle reden nach dem Anruf hinter meinem Rücken schon darüber.", "wert": 0, "tendenz": "katastrophe", "warum": "Andere achten weniger auf dich, als du fürchtest. Kleine Zeichen reichen völlig." }
+      ] },
+    { "art": "szene", "kopf": { "id": "lesen-v-0068", "faehigkeit": "lesen.eigen", "stufe": 4, "kanal": "wissen" },
+      "beschreibung": "Vorstellungsgespräch in einem kühlen Raum. Du sitzt zurückgelehnt und hast die Arme verschränkt, weil dir kalt ist. Die Frau, die das Gespräch führt, schaut zweimal kurz auf deine Arme.",
+      "frage": "Was ist am klügsten?",
+      "antworten": [
+        { "text": "Nichts tun – sie weiß ja nicht, dass mir kalt ist, aber das ist ihr Problem.", "wert": 0, "tendenz": "trotz", "warum": "Andere können nur sehen, was sie sehen. Ein Satz kostet dich nichts." },
+        { "text": "Kurz sagen „Mir ist etwas kalt hier“ – und dich zuwenden.", "wert": 2, "warum": "Du sagst, was man nicht sieht, und zeigst Zuwendung. So kann aus der Haltung kein Missverständnis werden." },
+        { "text": "Die Arme schnell lösen und den Rest des Gesprächs darauf achten, sie bloß nicht mehr zu verschränken.", "wert": 1, "warum": "Löst das Bild, kostet aber Aufmerksamkeit, die du fürs Gespräch brauchst. Ein Satz ist einfacher." },
+        { "text": "Mich entschuldigen, dass ich so abweisend wirke.", "wert": 0, "tendenz": "kleinreden", "warum": "Du bestätigst eine Deutung, die sie vielleicht gar nicht hatte." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "lesen-v-0069", "faehigkeit": "lesen.eigen", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Sag, was man nicht sieht: Formulier einen Satz, damit dein ernstes Gesicht nicht als Ablehnung gelesen wird.",
+      "vorlage": "(Du hörst dir Miriams Vorschlag mit ernstem Gesicht an und rechnest im Kopf mit. Sie wird unsicher.)",
+      "kriterien": ["sagt, was gerade in dir vorgeht", "kurz", "gibt eine Rückmeldung zur Sache"],
+      "muster": ["„Ich schau ernst, weil ich mitrechne – bisher gefällt mir das.“", "„Nicht erschrecken, das ist mein Rechengesicht. Klingt gut so weit.“"] },
+    { "art": "auswahl", "kopf": { "id": "lesen-v-0070", "faehigkeit": "lesen.pruefen", "stufe": 2, "kanal": "wissen" },
+      "frage": "Welche Frage prüft eine Vermutung am fairsten?",
+      "antworten": [
+        { "text": "„Dir passt der Termin nicht, oder?“", "wert": 1, "warum": "Eine Frage – aber sie legt die Antwort schon nahe. Ein Nein fällt so schwerer." },
+        { "text": "„Ich seh dir doch an, dass dir der Termin nicht passt.“", "wert": 0, "tendenz": "uebersicher", "warum": "Keine Frage, sondern eine Behauptung über seine Gedanken." },
+        { "text": "„Kann es sein, dass dir der Termin nicht passt?“", "wert": 2, "warum": "Vermutung als Möglichkeit – er kann leicht Ja oder Nein sagen." },
+        { "text": "„Warum bist du eigentlich schon wieder gegen den Termin, den wir zusammen ausgemacht haben?“", "wert": 0, "tendenz": "vorwurf", "warum": "Ein Vorwurf in Frageform – und „schon wieder“ macht es zum Etikett." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "lesen-v-0071", "faehigkeit": "lesen.pruefen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Du fragst: „Ich hab den Eindruck, dich beschäftigt was. Stimmt das?“ Die Antwort: „Nein, alles gut.“ Was tust du?",
+      "antworten": [
+        { "text": "Nachbohren, bis die Wahrheit rauskommt – man sieht doch, dass etwas ist.", "wert": 0, "tendenz": "bedraengen", "warum": "Ein Nein gilt. Wer bohrt, macht aus einem Angebot ein Verhör." },
+        { "text": "Es so stehen lassen und offen bleiben.", "wert": 2, "warum": "Die Frage hat die Tür gezeigt. Ob er hindurchgeht, entscheidet er." },
+        { "text": "Später noch einmal anders fragen.", "wert": 1, "warum": "Einmal später nachfassen kann passen, wenn das Bündel bleibt. Nicht öfter." },
+        { "text": "Beleidigt sein, weil er sich nicht öffnet.", "wert": 0, "tendenz": "gekraenkt", "warum": "Er schuldet dir keine Auskunft. Deine Frage war ein Angebot, kein Anspruch." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "lesen-v-0072", "faehigkeit": "lesen.pruefen", "stufe": 4, "kanal": "wissen" },
+      "frage": "Dein Nachbar sagt, er habe dein Paket nie bekommen. Laut Zusteller wurde es bei ihm abgegeben. Er schaut beim Reden auf den Boden. Was ist der beste Schritt?",
+      "antworten": [
+        { "text": "„Sie schauen weg – Sie haben es also doch.“", "wert": 0, "tendenz": "anklagen", "warum": "Wegschauen beweist nichts. Du klagst ihn auf Grund eines Mythos an." },
+        { "text": "Freundlich die Tatsachen nennen und offen fragen, ob jemand anders bei ihm angenommen haben könnte.", "wert": 2, "warum": "Tatsachen und eine offene Frage nach Einzelheiten klären mehr als jedes Zeichen – und bleiben fair." },
+        { "text": "Beim Zusteller nachfragen, wo genau abgegeben wurde.", "wert": 1, "warum": "Ein guter Weg, Tatsachen zu prüfen. Mit dem Nachbarn zu reden, ist trotzdem schneller." },
+        { "text": "Nichts sagen und ihm in Zukunft misstrauen, man weiß ja jetzt, wie er ist.", "wert": 0, "tendenz": "misstrauen", "warum": "Ein Urteil über ihn ohne Prüfung – und das Paket bleibt verschwunden." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "lesen-v-0073", "faehigkeit": "lesen.pruefen", "stufe": 3, "kanal": "wissen" },
+      "frage": "Frau Sommer, sonst sehr redselig, grüßt seit einer Woche nur noch kurz. Ordne deine Möglichkeiten von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Frau Sommer, Sie sind in letzter Zeit so still. Geht es Ihnen gut?“", "warum": "Beobachtung plus offene Frage – sie kann erzählen oder abwinken." },
+        { "text": "„Alles in Ordnung bei Ihnen?“", "warum": "Freundlich, aber ohne Beobachtung bekommst du meist nur „Ja, danke“." },
+        { "text": "Nichts sagen und abwarten.", "warum": "Respektvoll, aber sie weiß nicht, dass du es bemerkt hast." },
+        { "text": "„Man sieht ja, dass bei Ihnen was nicht stimmt – erzählen Sie mal.“", "warum": "Eine Deutung plus Aufforderung – das bedrängt mehr, als es öffnet." }
+      ] },
+    { "art": "rangfolge", "kopf": { "id": "lesen-v-0074", "faehigkeit": "lesen.pruefen", "stufe": 5, "kanal": "wissen" },
+      "frage": "Du stellst Dr. Albers einen Plan vor. Er sagt in flachem Ton „Interessant“ und blättert weiter. Ordne deine Antworten von stark nach schwach.",
+      "eintraege": [
+        { "text": "„Ich höre noch Zweifel. Was müsste geklärt sein, damit es für Sie passt?“", "warum": "Nennt den Eindruck, lässt Raum und fragt nach dem, was fehlt." },
+        { "text": "„Haben Sie dazu noch Fragen?“", "warum": "Offen, aber leicht mit „Nein“ zu beantworten – der Zweifel bleibt vielleicht ungesagt." },
+        { "text": "„Danke!“ – und weiter im Plan.", "warum": "Nimmt „interessant“ als Zustimmung und überhört den Ton." },
+        { "text": "„Sie finden es schlecht, oder?“", "warum": "Gedankenlesen mit Unterstellung – er muss erst widersprechen." }
+      ] },
+    { "art": "umformulieren", "kopf": { "id": "lesen-v-0075", "faehigkeit": "lesen.pruefen", "stufe": 3, "kanal": "koennen" },
+      "auftrag": "Mach aus der Behauptung eine Prüf-Frage mit Ausweg.",
+      "vorlage": "„Du bist enttäuscht, dass ich nicht mitkomme.“",
+      "kriterien": ["als Eindruck, nicht als Tatsache", "mit Ausweg", "ohne Vorwurf"],
+      "muster": ["„Ich hab den Eindruck, du hättest dich gefreut, wenn ich mitkomme. Stimmt das?“", "„Kann es sein, dass dich das ein bisschen enttäuscht – oder täusch ich mich?“"] },
+    { "art": "umformulieren", "kopf": { "id": "lesen-v-0076", "faehigkeit": "lesen.pruefen", "stufe": 4, "kanal": "koennen" },
+      "auftrag": "Bau eine Prüf-Frage aus drei Teilen: Beobachtung, Eindruck, Ausweg.",
+      "vorlage": "(Carla hat beim Teil über das Budget zweimal den Kopf geschüttelt und danach nichts mehr gesagt.)",
+      "kriterien": ["nennt die Beobachtung", "Vermutung als Eindruck", "lässt einen Ausweg"],
+      "muster": ["„Beim Budget hast du zweimal den Kopf geschüttelt. Ich hab den Eindruck, da passt was nicht – liege ich richtig?“", "„Du warst nach dem Budget still. Hast du Bedenken, oder täusch ich mich?“"] },
+    { "art": "umformulieren", "kopf": { "id": "lesen-v-0077", "faehigkeit": "lesen.pruefen", "stufe": 5, "kanal": "koennen" },
+      "auftrag": "Sprich die Stimmung in der Runde an – ohne Namen, ohne Vorwurf, mit einer Frage.",
+      "vorlage": "(Nach deinem Vorschlag ist es still. Mehrere schauen auf ihre Unterlagen, niemand fragt etwas.)",
+      "kriterien": ["beschreibt die Lage, nicht Personen", "Eindruck statt Urteil", "lädt zur Antwort ein"],
+      "muster": ["„Es ist gerade sehr still. Ich hab den Eindruck, da sind noch Bedenken. Wer mag anfangen?“", "„Vielleicht war das zu schnell. Was fehlt euch noch, um es einzuschätzen?“"] },
+    { "art": "kunstgriff", "kopf": { "id": "lesen-v-0078", "faehigkeit": "lesen.pruefen", "stufe": 3, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Auf einer Feier legt eine Bekannte zum Spaß Karten und sagt zu dir: „Du stehst vor einer Entscheidung, bei der du unsicher bist. Und es gibt jemanden, der mehr von dir erwartet, als du geben willst.“",
+      "frage": "Was steckt dahinter?",
+      "antworten": [
+        { "text": "Sätze, die auf fast jeden passen – sie wirken nur persönlich.", "wert": 2, "warum": "Jeder steht vor irgendeiner Entscheidung, jeder kennt Erwartungen anderer. So funktioniert Cold Reading." },
+        { "text": "Sie hat ein gutes Gespür für Menschen.", "wert": 0, "tendenz": "glaeubig", "warum": "Die Sätze verlangen kein Gespür – sie passen auf fast jeden." },
+        { "text": "Zufall – manchmal trifft man eben.", "wert": 1, "warum": "Fast. Es ist kein Zufall, sondern Absicht: Die Sätze sind so gebaut, dass sie auf fast jeden passen." },
+        { "text": "Sie weiß etwas über mich von gemeinsamen Freunden und tut jetzt geheimnisvoll.", "wert": 0, "warum": "Möglich, aber unnötig: Diese Sätze würden auch ohne jedes Vorwissen passen." }
+      ],
+      "erklaerung": "Cold Reading lebt von Barnum-Sätzen: allgemein genug für alle, persönlich klingend für jeden. Wer dann aufmerksam deine Reaktion beobachtet, kann Treffer ausbauen. Zum Spaß harmlos – als Masche in Beratung oder Verkauf eine rote Linie. Abwehr: „Hätte das auch auf meinen Nachbarn gepasst?“" },
+    { "art": "kunstgriff", "kopf": { "id": "lesen-v-0079", "faehigkeit": "lesen.pruefen", "stufe": 4, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Kollege sagt: „Ich erkenne Lügner sofort.“ Er erzählt drei Fälle, in denen er recht hatte, und schlägt vor, bei Bewerbungsgesprächen auf sein Gespür zu hören.",
+      "frage": "Was ist hier das Problem?",
+      "antworten": [
+        { "text": "Er erzählt nur seine Treffer. Die Fehlschüsse zählt niemand mit – und im Mittel liegen Menschen kaum über dem Zufall.", "wert": 2, "warum": "Die Trefferliste: Treffer bleiben im Gedächtnis, Fehler fallen nicht auf. So wächst ein Ruf, der nicht stimmt." },
+        { "text": "Drei Fälle sind zu wenig – bei zehn Treffern wäre es glaubwürdig.", "wert": 1, "warum": "Richtig, dass drei Fälle wenig sind. Aber auch zehn erzählte Treffer sagen nichts ohne die Fehlschüsse." },
+        { "text": "Kein Problem – manche Menschen haben das eben.", "wert": 0, "tendenz": "glaeubig", "warum": "Über viele Studien hinweg zeigten sich kaum Unterschiede zwischen Menschen beim Lügenerkennen." },
+        { "text": "Er lügt selbst.", "wert": 0, "warum": "Wahrscheinlich glaubt er es wirklich. Das Problem ist die Rechnung ohne Fehlschüsse." }
+      ],
+      "erklaerung": "Wer viel rät, trifft manchmal – und wer nur die Treffer erzählt, wirkt wie ein Menschenkenner. Bei Bewerbungen kann das Unschuldigen schaden, etwa Nervösen. Abwehr: Fehlschüsse mitzählen und bei Entscheidungen auf Tatsachen statt auf Gespür setzen." },
+    { "art": "kunstgriff", "kopf": { "id": "lesen-v-0080", "faehigkeit": "lesen.pruefen", "stufe": 5, "kanal": "wissen", "einfluss": "rot" },
+      "lage": "Ein Streit unter Mitbewohnern. Er sagt: „Du schaust weg – also stimmt es, du hast die Rechnung nicht bezahlt!“ Du hast sie bezahlt, schaust aber beim Nachdenken immer zur Seite.",
+      "frage": "Was passiert hier – und wie antwortest du?",
+      "antworten": [
+        { "text": "Ein Mythos als Beweis. Ruhig: „Woran ich schaue, beweist nichts. Lass uns aufs Konto sehen.“", "wert": 2, "warum": "Du erkennst den Körpersprache-Vorwurf und lenkst auf Tatsachen, ohne dich zu rechtfertigen." },
+        { "text": "Ihm ab jetzt fest in die Augen schauen, damit er mir glaubt.", "wert": 0, "tendenz": "anpassen", "warum": "Du spielst sein Spiel mit. Starrer Blick beweist genauso wenig." },
+        { "text": "„Das stimmt nicht! Ich schwöre, ich hab bezahlt, wirklich, du kannst mir glauben!“", "wert": 0, "tendenz": "rechtfertigen", "warum": "Beteuern wirkt unter Druck eher verdächtig – und ändert nichts an seinem falschen Maßstab." },
+        { "text": "Den Kontoauszug zeigen.", "wert": 1, "warum": "Tatsachen klären es. Noch besser, wenn du dazu ruhig sagst, dass Wegschauen kein Beweis ist." }
+      ],
+      "erklaerung": "Den Blick als Lügenbeweis zu nehmen, ist ein Mythos – und manchmal ein Druckmittel, um jemanden ins Unrecht zu setzen. Abwehr: nicht rechtfertigen, nicht beteuern, ruhig auf Tatsachen lenken." },
+    { "art": "dialog", "kopf": { "id": "lesen-v-0081", "faehigkeit": "lesen.pruefen", "stufe": 4, "kanal": "koennen" },
+      "gespraech": {
+        "titel": "Carla vor der Präsentation", "figur": "Carla Demir",
+        "lage": "Zehn Minuten vor Carlas großer Präsentation. Sie sitzt blass im Flur, spricht nicht, blättert in ihren Karten und bewegt lautlos die Lippen.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Carla schaut kurz auf und nickt dir zu.",
+            "wahl": [
+              { "text": "„Du bist ja total nervös! Soll ich dir einen Tee holen?“", "wert": 0, "tendenz": "gedankenlesen", "weiter": "k2b", "rueck": "Fürsorglich – aber du sagst ihr, was sie fühlt, und das kurz vor dem Auftritt." },
+              { "text": "„Ich lass dich in Ruhe – oder brauchst du gerade was?“", "wert": 2, "weiter": "k2", "rueck": "Du bietest an, statt zu deuten. Sie entscheidet." },
+              { "text": "Leise vorbeigehen.", "wert": 1, "weiter": "ende2", "rueck": "Rücksichtsvoll. Sie weiß nur nicht, dass sie dich hätte fragen können." }
+            ] },
+          { "id": "k2", "sagt": "„Nee, alles gut. Ich geh meinen Anfang durch – das mach ich vor jedem Vortrag so.“",
+            "wahl": [
+              { "text": "„Alles klar. Viel Erfolg – ich sitz in der zweiten Reihe.“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst ihre Antwort an. Was nach Nervosität aussah, ist ihre Routine." },
+              { "text": "„Sicher? Du siehst wirklich echt blass aus, so kenn ich dich gar nicht.“", "wert": 0, "tendenz": "uebersicher", "weiter": "k2b", "rueck": "Sie hat geantwortet. Wer nachbohrt, setzt seine Deutung über ihr Wort." }
+            ] },
+          { "id": "k2b", "sagt": "Carla atmet hörbar aus. „Danke, ich brauch jetzt eigentlich nur Ruhe.“",
+            "wahl": [
+              { "text": "„Verstanden. Ich bin dann weg – du machst das gut.“", "wert": 2, "weiter": "ende1", "rueck": "Gut gerettet: Du nimmst ihr Signal an und gehst." },
+              { "text": "„Ich mein ja nur, du wirkst echt angespannt, vielleicht hilft dir Reden?“", "wert": 0, "tendenz": "bedraengen", "weiter": "ende2", "rueck": "Sie hat klar gesagt, was sie braucht. Jetzt geht es um deine Deutung, nicht um sie." }
+            ] },
+          { "id": "ende1", "sagt": "Carla lächelt kurz und blättert weiter.", "ende": "Blass und still vor dem Auftritt – das war ihre Routine, keine Krise. Gefragt statt gedeutet, und ihre Antwort ernst genommen." },
+          { "id": "ende2", "sagt": "Carla geht in den Saal, ohne noch einmal aufzusehen.", "ende": "Kein Drama. Aber eine kurze, offene Frage hätte geklärt, was sie braucht – und ein „Nein, danke“ gilt dann auch." }
+        ],
+        "prinzipien": ["Grundlinie vor Auftritten kennen", "anbieten statt deuten", "eine Antwort ernst nehmen", "Ruhe ist auch eine Antwort"]
+      } },
+    { "art": "dialog", "kopf": { "id": "lesen-v-0082", "faehigkeit": "lesen.pruefen", "stufe": 5, "kanal": "koennen" },
+      "gespraech": {
+        "titel": "Jule nach einem langen Tag", "figur": "Jule Marek",
+        "lage": "Nach dem Kochkurs. Jule erzählt sonst begeistert und viel. Heute sagt sie auf deine Frage nach der Woche: „Läuft super!“ Dabei gähnt sie, reibt sich die Augen und packt ihre Messer langsamer ein als sonst.",
+        "start": "k1",
+        "knoten": [
+          { "id": "k1", "sagt": "Jule schaut dich kurz an und lächelt müde.",
+            "wahl": [
+              { "text": "„Klingt super, aber du siehst ganz schön müde aus. War es viel diese Woche?“", "wert": 2, "weiter": "k2", "rueck": "Du nennst den Widerspruch freundlich und fragst offen." },
+              { "text": "„Super! Erzähl mal, was alles gut läuft.“", "wert": 1, "weiter": "k2b", "rueck": "Nimmt sie beim Wort – geht, aber du überhörst, wie müde sie ist." },
+              { "text": "„Du bist doch total überarbeitet, das sieht man dir an, du solltest dringend mal kürzertreten.“", "wert": 0, "tendenz": "uebernehmen", "weiter": "k2c", "rueck": "Deutung plus Rat – sie hat noch gar nichts erzählt." }
+            ] },
+          { "id": "k2", "sagt": "Jule lacht kurz. „Erwischt. Diese Woche war echt viel, zwei Leute sind krank. Aber es macht auch Spaß.“",
+            "wahl": [
+              { "text": "„Beides auf einmal – anstrengend und schön. Wie kommst du gerade zu Pausen?“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst beide Seiten ernst und fragst weiter, statt zu urteilen." },
+              { "text": "„Dann stell halt neue Leute ein, ist doch klar, so kann das ja nicht weitergehen.“", "wert": 0, "tendenz": "uebernehmen", "weiter": "ende2", "rueck": "Ein schneller Rat überrollt, was sie gerade erzählt hat." }
+            ] },
+          { "id": "k2b", "sagt": "„Ach, viel zu tun, aber gut.“ Sie gähnt wieder.",
+            "wahl": [
+              { "text": "„Du gähnst schon zum zweiten Mal – war's eine lange Woche?“", "wert": 2, "weiter": "k2", "rueck": "Jetzt nennst du die Beobachtung, mit einem Lächeln." },
+              { "text": "„Na dann, schönes Wochenende und bis nächste Woche beim Kurs!“", "wert": 1, "weiter": "ende2", "rueck": "Freundlich. Sie hätte vielleicht gern mehr erzählt." }
+            ] },
+          { "id": "k2c", "sagt": "Jule hebt die Augenbrauen. „Na danke. So schlimm seh ich hoffentlich nicht aus.“",
+            "wahl": [
+              { "text": "„Sorry, das kam falsch rüber. Du wirkst nur müde – war's eine lange Woche?“", "wert": 2, "weiter": "k2", "rueck": "Gut gerettet: zurück von der Deutung zur Beobachtung und zur Frage." },
+              { "text": "„Doch, ehrlich, du siehst richtig fertig aus.“", "wert": 0, "tendenz": "uebersicher", "weiter": "ende2", "rueck": "Du bleibst bei der Deutung – und kränkst sie dabei." }
+            ] },
+          { "id": "ende1", "sagt": "Jule erzählt von ihrer Woche, bis der Kursraum abgeschlossen wird.", "ende": "„Läuft super“ und ein müdes Gesicht schließen sich nicht aus. Du hast beides gehört und nachgefragt – statt zu entscheiden, was davon stimmt." },
+          { "id": "ende2", "sagt": "Jule winkt und geht zur Bahn.", "ende": "Kein Drama. Aber die Zeichen waren deutlich – eine freundliche Frage zur Beobachtung hätte ihr Raum gegeben." }
+        ],
+        "prinzipien": ["Worte und Zeichen vergleichen", "den Widerspruch freundlich nennen", "nicht deuten, nicht gleich raten", "zwei Gefühle können zugleich stimmen"]
+      } },
+    { "art": "umformulieren", "kopf": { "id": "lesen-v-0083", "faehigkeit": "lesen.grundlinie", "stufe": 3, "kanal": "koennen" },
+      "auftrag": "Beschreib statt des Etiketts, was im Vergleich zu sonst anders ist.",
+      "vorlage": "„Tarek ist heute irgendwie komisch.“",
+      "kriterien": ["nennt, wie er sonst ist", "nennt, was heute anders ist", "ohne Deutung"],
+      "muster": ["„Tarek macht sonst bei jeder Gelegenheit Witze – heute hat er in der Pause kaum etwas gesagt.“", "„Sonst kommt er mittags zu uns rüber. Heute ist er am Platz geblieben und hat Kopfhörer aufgesetzt.“"] },
+    { "art": "szene", "kopf": { "id": "lesen-v-0084", "faehigkeit": "lesen.pruefen", "stufe": 4, "kanal": "wissen" },
+      "beschreibung": "Teamessen im Restaurant. Lena isst nur ein paar Bissen von ihrem Teller, lehnt das Dessert ab, lächelt und sagt: „War alles lecker.“ Sie unterhält sich angeregt mit ihrer Nachbarin.",
+      "frage": "Was tust du?",
+      "antworten": [
+        { "text": "Vor allen am Tisch fragen, ob ihr das Essen nicht geschmeckt hat oder ob etwas nicht stimmt.", "wert": 0, "tendenz": "bloßstellen", "warum": "Essen und Körper sind persönliche Themen. Vor allen gefragt, bringt es sie in Verlegenheit." },
+        { "text": "Nichts. Sie wirkt gut gelaunt – und nicht jede Beobachtung braucht eine Frage.", "wert": 2, "warum": "Das Bündel zeigt eher Wohlbefinden. Beim Essen ist Zurückhaltung respektvoll." },
+        { "text": "Ihr später leise sagen, dass sie mehr essen sollte.", "wert": 0, "tendenz": "bevormunden", "warum": "Ein Rat zu ihrem Körper, um den sie nicht gebeten hat." },
+        { "text": "Merken und schauen, ob es öfter so ist.", "wert": 1, "warum": "Aufmerksam, ohne einzugreifen. Bei einem einzelnen Essen gibt es aber wenig zu bemerken." }
+      ] },
+    { "art": "auswahl", "kopf": { "id": "lesen-v-0085", "faehigkeit": "lesen.beobachten", "stufe": 4, "kanal": "wissen" },
+      "frage": "Du sitzt bei einem Vorstellungsgespräch mit im Raum. Nach dreißig Sekunden hast du einen klaren Eindruck vom Bewerber. Wie gehst du damit um?",
+      "antworten": [
+        { "text": "Darauf vertrauen – der erste Eindruck stimmt meistens.", "wert": 0, "tendenz": "uebersicher", "warum": "Erste Eindrücke entstehen schnell und einig, sind aber anfällig für Aussehen, Stil und Akzent." },
+        { "text": "Als Vermutung notieren und im Gespräch gezielt prüfen – auch, was dagegen spricht.", "wert": 2, "warum": "So nutzt du den Eindruck, ohne dich von ihm lenken zu lassen." },
+        { "text": "Den Eindruck ganz verdrängen.", "wert": 0, "warum": "Das gelingt kaum – besser bewusst machen und prüfen." },
+        { "text": "Die anderen im Raum fragen, ob sie nach dem Anfang denselben Eindruck vom Bewerber haben.", "wert": 1, "warum": "Hilft ein wenig – aber auch viele können sich gleich irren. Prüfen lässt es sich nur im Gespräch." }
+      ] }
+  ]
+}

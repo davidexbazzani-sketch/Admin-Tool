@@ -1,0 +1,352 @@
+{
+  "level": 5,
+  "tage": [
+    {
+      "tag": 21,
+      "titel": "Wie spät ist es?",
+      "ziel": "Danach kannst du nach der Uhrzeit fragen, sagen, wie spät es ist, und eine Uhrzeit ausmachen.",
+      "woerter": [
+        { "it": "l'ora", "de": "die Stunde / die Uhrzeit", "art": "n", "aus": "l'O-ra", "bsp": { "it": "A che ora è il treno?", "de": "Um wie viel Uhr fährt der Zug?" }, "emoji": "🕐", "hinweis": "Mehrzahl: le ore. «ora» allein heißt auch «jetzt»." },
+        { "it": "che ore sono?", "de": "wie spät ist es?", "art": "p", "aus": "che O-re SO-no", "bsp": { "it": "Scusi, che ore sono?", "de": "Entschuldigen Sie, wie spät ist es?" }, "emoji": "🤔", "hinweis": "Genauso richtig: «Che ora è?»", "auch": ["che ora è?"] },
+        { "it": "l'orologio", "de": "die Uhr", "art": "n", "aus": "l'o-ro-LO-gio", "bsp": { "it": "Non ho l'orologio: che ore sono?", "de": "Ich habe keine Uhr dabei: Wie spät ist es?" }, "emoji": "⌚", "hinweis": "Mehrzahl: gli orologi. Dasselbe Wort für Armbanduhr und Wanduhr." },
+        { "it": "adesso", "de": "jetzt", "art": "x", "aus": "a-DES-so", "bsp": { "it": "Adesso sono le dieci.", "de": "Jetzt ist es zehn Uhr." }, "emoji": "⏳", "hinweis": "Gleichbedeutend und genauso häufig: «ora».", "auch": ["ora"] },
+        { "it": "mezzogiorno", "de": "Mittag / zwölf Uhr mittags", "art": "x", "aus": "mez-zo-GIOR-no", "bsp": { "it": "A mezzogiorno ho fame.", "de": "Um zwölf Uhr mittags habe ich Hunger." }, "emoji": "🌞", "hinweis": "Bei der Uhrzeit ohne Artikel: «è mezzogiorno», «a mezzogiorno»." },
+        { "it": "mezzanotte", "de": "Mitternacht", "art": "x", "aus": "mez-za-NOT-te", "bsp": { "it": "È mezzanotte: buonanotte!", "de": "Es ist Mitternacht: gute Nacht!" }, "emoji": "🌃", "hinweis": "Auch ohne Artikel: «a mezzanotte» = um Mitternacht." },
+        { "it": "e un quarto", "de": "Viertel nach", "art": "p", "aus": "e un QUAR-to", "bsp": { "it": "Sono le sei e un quarto.", "de": "Es ist Viertel nach sechs." }, "hinweis": "«un quarto» = ein Viertel. Viertel vor heißt «meno un quarto»." },
+        { "it": "e mezza", "de": "halb (bei der Uhrzeit)", "art": "p", "aus": "e MEZ-za", "bsp": { "it": "Sono le sette e mezza.", "de": "Es ist halb acht." }, "emoji": "🕢", "hinweis": "Achtung: «le sette e mezza» ist 7:30, also halb acht! Auch richtig: «e mezzo».", "auch": ["e mezzo"] },
+        { "it": "meno", "de": "weniger / vor (bei der Uhrzeit)", "art": "x", "aus": "ME-no", "bsp": { "it": "Sono le otto meno dieci.", "de": "Es ist zehn vor acht." }, "emoji": "➖" },
+        { "it": "in punto", "de": "genau / Punkt (bei der Uhrzeit)", "art": "p", "aus": "in PUN-to", "bsp": { "it": "Sono le otto in punto.", "de": "Es ist Punkt acht." }, "emoji": "🎯" },
+        { "it": "presto", "de": "früh / bald", "art": "a", "aus": "PRE-sto", "bsp": { "it": "È presto: sono le sei.", "de": "Es ist früh: Es ist sechs Uhr." }, "emoji": "🌅", "hinweis": "Du kennst es aus «a presto» – bis bald." },
+        { "it": "tardi", "de": "spät", "art": "a", "aus": "TAR-di", "bsp": { "it": "È tardi, andiamo!", "de": "Es ist spät, gehen wir!" }, "emoji": "🦉", "hinweis": "«zu spät» heißt «troppo tardi»." }
+      ],
+      "grammatik": {
+        "titel": "Die Uhrzeit: è l'una, sono le … – und a che ora?",
+        "erklaerung": "Nach der Uhrzeit fragst du mit **«Che ore sono?»** – oder mit «Che ora è?», beides ist richtig.\nDie Antwort steht in der Mehrzahl, denn gemeint sind «le ore», die Stunden: **Sono le due**, **sono le otto**. Nur bei eins, Mittag und Mitternacht steht die Einzahl: **È l'una**, **è mezzogiorno**, **è mezzanotte**.\nMinuten hängst du mit **e** an: «le otto e dieci», «e un quarto», «e mezza». In der zweiten halben Stunde rechnet man meist mit **meno** zurück: «le nove meno un quarto» ist Viertel vor neun.\nFalle für Deutsche: **«Le sette e mezza» ist halb acht**, nicht halb sieben!\n«Um wie viel Uhr?» heißt **«A che ora?»** – die Antwort: **alle** otto, **all'**una, **a** mezzogiorno.",
+        "tabelle": { "kopf": ["Uhrzeit", "Italienisch"], "zeilen": [["1:00", "È l'una."], ["8:00", "Sono le otto (in punto)."], ["8:10", "Sono le otto e dieci."], ["8:15", "Sono le otto e un quarto."], ["8:30", "Sono le otto e mezza."], ["8:45", "Sono le nove meno un quarto."], ["8:50", "Sono le nove meno dieci."], ["12:00 / 0:00", "È mezzogiorno. / È mezzanotte."], ["um 8 / um 1", "alle otto / all'una"]] },
+        "beispiele": [
+          { "it": "Che ore sono? – Sono le tre.", "de": "Wie spät ist es? – Es ist drei Uhr." },
+          { "it": "È l'una e mezza.", "de": "Es ist halb zwei." },
+          { "it": "A che ora è l'autobus? – Alle nove e dieci.", "de": "Um wie viel Uhr fährt der Bus? – Um zehn nach neun." }
+        ],
+        "uebungen": [
+          { "satz": "Che ore sono? – ___ le due.", "loesung": "Sono", "falsch": ["È", "Ha", "Siamo"], "de": "Wie spät ist es? – Es ist zwei Uhr." },
+          { "satz": "Che ora è? – ___ l'una.", "loesung": "È", "falsch": ["Sono", "Sei", "Ha"], "de": "Wie spät ist es? – Es ist ein Uhr.", "warum": "Nur bei «l'una» steht die Einzahl: è." },
+          { "satz": "8:30 – Sono le otto e ___.", "loesung": "mezza", "falsch": ["un quarto", "dieci", "meno"], "de": "Es ist halb neun.", "warum": "Man zählt von der vollen Stunde weiter: acht und eine halbe." },
+          { "satz": "A che ora è il treno? – ___ nove.", "loesung": "Alle", "falsch": ["A", "Al", "Alla"], "de": "Um wie viel Uhr fährt der Zug? – Um neun.", "warum": "a + le (ore) = alle." },
+          { "satz": "8:45 – Sono le nove ___ un quarto.", "loesung": "meno", "falsch": ["e", "in", "alle"], "de": "Es ist Viertel vor neun.", "warum": "Neun weniger ein Viertel." },
+          { "satz": "Andiamo in centro ___ mezzogiorno.", "loesung": "a", "falsch": ["alle", "al", "all'"], "de": "Wir gehen um zwölf Uhr mittags ins Zentrum.", "warum": "Vor «mezzogiorno» und «mezzanotte» steht kein Artikel – nur «a»." },
+          { "satz": "Il treno per Verona è ___.", "loesung": "all'una", "falsch": ["alle una", "a l'una", "alla una"], "de": "Der Zug nach Verona fährt um eins.", "warum": "a + l'una = all'una." },
+          { "satz": "7:30 – Sono le ___ e mezza.", "loesung": "sette", "falsch": ["otto", "sei", "nove"], "de": "Es ist halb acht.", "warum": "Deutsch «halb acht», italienisch «sieben und eine halbe»: le sette e mezza." }
+        ]
+      },
+      "dialog": {
+        "titel": "Alle otto in punto",
+        "ort": "Sonntagabend in Verona, am Empfang einer kleinen Pension",
+        "zeilen": [
+          { "wer": "donna", "als": "Signora Pina", "it": "Buonasera! Benvenuti a Verona.", "de": "Guten Abend! Willkommen in Verona." },
+          { "wer": "giulia", "it": "Buonasera, signora. Cerchiamo il signor Bruno, l'orologiaio. Abita qui vicino?", "de": "Guten Abend. Wir suchen Herrn Bruno, den Uhrmacher. Wohnt er hier in der Nähe?" },
+          { "wer": "donna", "als": "Signora Pina", "it": "Sì, il suo negozio è qui accanto. Ma adesso è chiuso: è tardi.", "de": "Ja, sein Laden ist gleich nebenan. Aber jetzt ist er geschlossen: Es ist spät." },
+          { "wer": "ben", "it": "Scusi, che ore sono?", "de": "Entschuldigen Sie, wie spät ist es?" },
+          { "wer": "donna", "als": "Signora Pina", "it": "Sono le otto e un quarto. Il signor Bruno ha una regola: i clienti entrano solo alle otto in punto.", "de": "Es ist Viertel nach acht. Herr Bruno hat eine Regel: Kunden kommen nur Punkt acht herein." },
+          { "wer": "marco", "it": "Alle otto in punto? Di mattina? È troppo presto!", "de": "Punkt acht? Morgens? Das ist doch viel zu früh!" },
+          { "wer": "donna", "als": "Signora Pina", "it": "Di mattina, sì. Alle otto e un minuto la porta è chiusa.", "de": "Morgens, ja. Um eine Minute nach acht ist die Tür zu." },
+          { "wer": "giulia", "it": "Allora domani alle otto meno dieci siamo davanti alla sua porta. Anche tu, Marco!", "de": "Dann stehen wir morgen um zehn vor acht vor seiner Tür. Du auch, Marco!" },
+          { "wer": "ben", "it": "E a che ora è la colazione, signora?", "de": "Und um wie viel Uhr gibt es Frühstück?" },
+          { "wer": "donna", "als": "Signora Pina", "it": "Alle sette e mezza. E a mezzanotte, tutti a letto!", "de": "Um halb acht. Und um Mitternacht: alle ins Bett!" }
+        ],
+        "fragen": [
+          { "frage": "Wie spät ist es, als die drei in der Pension ankommen?", "richtig": "Viertel nach acht am Abend", "falsch": ["Viertel vor acht am Abend", "Punkt acht am Morgen", "Halb acht am Abend"] },
+          { "frage": "Wann lässt Signor Bruno Kunden herein?", "richtig": "Nur morgens um Punkt acht", "falsch": ["Nur abends um Viertel nach acht", "Den ganzen Vormittag", "Nur um Mitternacht"] },
+          { "frage": "Um wie viel Uhr gibt es in der Pension Frühstück?", "richtig": "Um halb acht", "falsch": ["Um halb sieben", "Um sieben", "Um zehn vor acht"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Du hast keine Uhr dabei und fragst eine Dame auf der Straße nach der Uhrzeit.", "richtig": "Scusi, che ore sono?", "falsch": ["Scusi, che ora sono?", "Scusi, quanti anni ha?", "Scusi, a che ora?"], "de": "Entschuldigen Sie, wie spät ist es?" },
+          { "lage": "Es ist 7:30 Uhr. Jemand fragt dich: «Che ore sono?»", "richtig": "Sono le sette e mezza.", "falsch": ["Sono le otto e mezza.", "È le sette e mezza.", "Sono le sei e mezza."], "de": "Es ist halb acht." },
+          { "lage": "Am Bahnhof: Du möchtest wissen, um wie viel Uhr der Zug nach Verona fährt.", "richtig": "A che ora è il treno per Verona?", "falsch": ["Che ora è il treno per Verona?", "Che ore sono a Verona?", "Quanto costa il treno per Verona?"], "de": "Um wie viel Uhr fährt der Zug nach Verona?" }
+        ],
+        "folge": "Punkt acht Uhr morgens vor Signor Brunos Tür – ob Marco das schafft?"
+      },
+      "wissen": { "titel": "Venti e trenta oder halb neun?", "text": "Fahrpläne, Öffnungszeiten und das Fernsehprogramm nennen die Zeit in Italien im 24-Stunden-Format: «alle 20:30» liest man «alle venti e trenta». Im Gespräch zählt man lieber nur bis zwölf und sagt «alle otto e mezza». Wer es genau braucht, hängt die Tageszeit an: «alle otto di mattina» oder «alle otto di sera»." }
+    },
+    {
+      "tag": 22,
+      "titel": "Mein Tag",
+      "ziel": "Danach kannst du deinen Tagesablauf beschreiben – vom Frühstück bis zum Abendessen.",
+      "woerter": [
+        { "it": "la colazione", "de": "das Frühstück", "art": "n", "aus": "la co-la-ZIO-ne", "bsp": { "it": "La colazione è alle sette e mezza.", "de": "Das Frühstück ist um halb acht." }, "emoji": "🥐", "hinweis": "«frühstücken» heißt «fare colazione»." },
+        { "it": "il pranzo", "de": "das Mittagessen", "art": "n", "aus": "il PRAN-zo", "bsp": { "it": "Il pranzo è all'una.", "de": "Das Mittagessen ist um eins." }, "emoji": "🍝", "hinweis": "«a pranzo» = mittags, zum Mittagessen." },
+        { "it": "la cena", "de": "das Abendessen", "art": "n", "aus": "la CE-na", "bsp": { "it": "La cena è alle otto.", "de": "Das Abendessen ist um acht." }, "emoji": "🍽️", "hinweis": "«a cena» = abends, zum Abendessen." },
+        { "it": "la mattina", "de": "der Morgen / der Vormittag", "art": "n", "aus": "la mat-TI-na", "bsp": { "it": "La mattina prendo un caffè.", "de": "Morgens trinke ich einen Kaffee." }, "emoji": "🌄", "hinweis": "Für «morgens» genügt der Artikel, ohne Präposition: «la mattina». Auch möglich: «di mattina»." },
+        { "it": "il pomeriggio", "de": "der Nachmittag", "art": "n", "aus": "il po-me-RIG-gio", "bsp": { "it": "Il pomeriggio lavoro in ufficio.", "de": "Nachmittags arbeite ich im Büro." }, "emoji": "🌤️" },
+        { "it": "la sera", "de": "der Abend", "art": "n", "aus": "la SE-ra", "bsp": { "it": "La sera vediamo un film.", "de": "Abends sehen wir einen Film." }, "emoji": "🌆", "hinweis": "Steckt in «buonasera»." },
+        { "it": "domani", "de": "morgen", "art": "x", "aus": "do-MA-ni", "bsp": { "it": "Domani mattina prendiamo il treno.", "de": "Morgen früh nehmen wir den Zug." }, "emoji": "📆", "hinweis": "«domani mattina» = morgen früh, «a domani» = bis morgen." },
+        { "it": "mangiare", "de": "essen", "art": "v", "aus": "man-GIA-re", "bsp": { "it": "A pranzo mangio un panino.", "de": "Mittags esse ich ein belegtes Brötchen." }, "emoji": "🍴", "hinweis": "Ein Verb auf -are. Nur ein i bei tu und noi: mangi, mangiamo." },
+        { "it": "leggere", "de": "lesen", "art": "v", "aus": "LEG-ge-re", "bsp": { "it": "Leggo il giornale a colazione.", "de": "Ich lese beim Frühstück die Zeitung." }, "emoji": "📖", "hinweis": "Betonung vorn. «leggo» mit hartem g, «leggi» und «legge» mit weichem g (dsch)." },
+        { "it": "scrivere", "de": "schreiben", "art": "v", "aus": "SCRI-ve-re", "bsp": { "it": "Giulia scrive una ricetta.", "de": "Giulia schreibt ein Rezept." }, "emoji": "✍️", "hinweis": "Betonung auf der ersten Silbe." },
+        { "it": "vedere", "de": "sehen", "art": "v", "aus": "ve-DE-re", "bsp": { "it": "Vedi quella chiesa?", "de": "Siehst du die Kirche dort?" }, "emoji": "👀" },
+        { "it": "chiudere", "de": "schließen / zumachen", "art": "v", "aus": "CHIU-de-re", "bsp": { "it": "La farmacia chiude alle otto.", "de": "Die Apotheke schließt um acht." }, "emoji": "🔒", "hinweis": "Betonung auf der ersten Silbe. «chiuso» = geschlossen." }
+      ],
+      "grammatik": {
+        "titel": "Verben auf -ere im Präsens",
+        "erklaerung": "Die zweite große Gruppe sind die Verben auf **-ere**: leggere, scrivere, vedere, chiudere – und prendere, das du schon kennst.\nNimm **-ere** weg und häng an: **-o, -i, -e, -iamo, -ete, -ono**.\nGegenüber den Verben auf -are ändern sich nur drei Formen: lui/lei **-e** (nicht -a), voi **-ete** (nicht -ate), loro **-ono** (nicht -ano).\nBetonung: Bei «loro» liegt sie wie bei «io» auf dem Stamm – **SCRI**-vo-no, **LEG**-go-no. Auch viele Grundformen betont man vorn: **LEG**-ge-re, **SCRI**-ve-re; aber ve-**DE**-re.\nAussprache-Falle **leggere**: «leggo» und «leggono» haben ein hartes g, alle anderen Formen ein weiches (*dsch*).",
+        "tabelle": { "kopf": ["Person", "scrivere", "vedere", "Endung"], "zeilen": [["io", "scrivo", "vedo", "-o"], ["tu", "scrivi", "vedi", "-i"], ["lui / lei", "scrive", "vede", "-e"], ["noi", "scriviamo", "vediamo", "-iamo"], ["voi", "scrivete", "vedete", "-ete"], ["loro", "scrivono", "vedono", "-ono"]] },
+        "beispiele": [
+          { "it": "Ben legge il giornale.", "de": "Ben liest die Zeitung." },
+          { "it": "La sera scriviamo a Nonna Rosa.", "de": "Abends schreiben wir Oma Rosa." },
+          { "it": "Vedete il duomo?", "de": "Seht ihr den Dom?" }
+        ],
+        "uebungen": [
+          { "satz": "Io ___ il quaderno di Nonna Rosa.", "loesung": "leggo", "falsch": ["leggi", "legge", "leggono"], "de": "Ich lese das Heft von Oma Rosa." },
+          { "satz": "Tu ___ quella signora?", "loesung": "vedi", "falsch": ["vedo", "vede", "vedete"], "de": "Siehst du die Dame dort?" },
+          { "satz": "Giulia ___ una ricetta.", "loesung": "scrive", "falsch": ["scrivi", "scrivo", "scrivono"], "de": "Giulia schreibt ein Rezept.", "warum": "lui/lei endet bei den Verben auf -ere auf -e." },
+          { "satz": "Noi ___ il treno alle otto.", "loesung": "prendiamo", "falsch": ["prendete", "prendono", "prendo"], "de": "Wir nehmen den Zug um acht." },
+          { "satz": "La pensione ___ a mezzanotte.", "loesung": "chiude", "falsch": ["chiudi", "chiudono", "chiudete"], "de": "Die Pension schließt um Mitternacht." },
+          { "satz": "Voi ___ il giornale la mattina?", "loesung": "leggete", "falsch": ["leggate", "leggiamo", "leggono"], "de": "Lest ihr morgens die Zeitung?", "warum": "voi endet hier auf -ete, nicht auf -ate." },
+          { "satz": "Ben e Marco ___ un film.", "loesung": "vedono", "falsch": ["vede", "vedete", "vediamo"], "de": "Ben und Marco sehen einen Film.", "warum": "Zwei Personen = «loro» → -ono." },
+          { "satz": "Io scrivo a Nonna Rosa e loro ___ a Luca.", "loesung": "scrivono", "falsch": ["scrive", "scrivete", "scriviamo"], "de": "Ich schreibe Oma Rosa, und sie schreiben Luca." }
+        ]
+      },
+      "dialog": {
+        "titel": "A cena in pensione",
+        "ort": "Am selben Abend beim Essen im Speisesaal der Pension",
+        "zeilen": [
+          { "wer": "giulia", "it": "Allora, domani: la colazione è alle sette e mezza e alle otto meno dieci siamo da Bruno.", "de": "Also, morgen: Frühstück gibt es um halb acht, und um zehn vor acht sind wir bei Bruno." },
+          { "wer": "marco", "it": "Così presto? La mattina io prendo solo un caffè.", "de": "So früh? Morgens nehme ich nur einen Kaffee." },
+          { "wer": "ben", "it": "Io la sera leggo e scrivo le parole nuove. E tu, Marco?", "de": "Ich lese abends und schreibe die neuen Wörter auf. Und du, Marco?" },
+          { "wer": "marco", "it": "Io non leggo: la sera vedo un film.", "de": "Ich lese nicht: Abends sehe ich einen Film." },
+          { "wer": "giulia", "it": "E a pranzo e a cena mangi per tre!", "de": "Und mittags und abends isst du für drei!" },
+          { "wer": "ben", "it": "Giulia, vedi quella donna con la sciarpa rossa?", "de": "Giulia, siehst du die Frau dort mit dem roten Schal?" },
+          { "wer": "giulia", "it": "Sì, è di nuovo qui. Legge il giornale … no, scrive in un quaderno!", "de": "Ja, sie ist schon wieder da. Sie liest Zeitung … nein, sie schreibt in ein Heft!" },
+          { "wer": "ben", "it": "Scrive, ma guarda noi. Perché?", "de": "Sie schreibt, aber sie schaut zu uns herüber. Warum?" },
+          { "wer": "donna", "als": "Signora Pina", "it": "Signori, la cucina chiude alle nove. E a mezzanotte chiudo la porta!", "de": "Meine Herrschaften, die Küche schließt um neun. Und um Mitternacht schließe ich die Tür ab!" },
+          { "wer": "giulia", "it": "Marco, questa sera niente film: domani vediamo Bruno!", "de": "Marco, heute Abend kein Film: Morgen sehen wir Bruno!" }
+        ],
+        "fragen": [
+          { "frage": "Was macht Ben abends?", "richtig": "Er liest und schreibt die neuen Wörter auf", "falsch": ["Er sieht einen Film", "Er kocht mit Giulia", "Er geht um neun ins Bett"] },
+          { "frage": "Was tut die Frau mit dem roten Schal?", "richtig": "Sie schreibt in ein Heft und schaut zu ihnen herüber", "falsch": ["Sie liest die Speisekarte", "Sie isst mit Marco zu Abend", "Sie fragt nach der Uhrzeit"] },
+          { "frage": "Wann schließt Signora Pina die Tür der Pension?", "richtig": "Um Mitternacht", "falsch": ["Um neun Uhr", "Um acht Uhr", "Um halb acht"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Jemand fragt, was du abends machst. Du liest ein Buch.", "richtig": "La sera leggo un libro.", "falsch": ["La sera legge un libro.", "La sera leggio un libro.", "La mattina scrivo un libro."], "de": "Abends lese ich ein Buch." },
+          { "lage": "Du fragst die Wirtin höflich, wann die Pension abends schließt.", "richtig": "Scusi, a che ora chiude la pensione?", "falsch": ["Scusi, a che ora chiuda la pensione?", "Scusi, a che ora è la colazione?", "Scusi, che ore sono?"], "de": "Entschuldigen Sie, um wie viel Uhr schließt die Pension?" },
+          { "lage": "Du stehst mit zwei Freunden auf einem Platz und fragst sie, ob sie den Dom sehen.", "richtig": "Vedete il duomo?", "falsch": ["Vedate il duomo?", "Leggete il duomo?", "Chiudete il duomo?"], "de": "Seht ihr den Dom?" }
+        ],
+        "folge": "Was schreibt die Frau mit dem roten Schal in ihr Heft – und warum beobachtet sie die drei?"
+      },
+      "wissen": { "titel": "Süßes Frühstück, spätes Abendessen", "text": "Das italienische Frühstück ist klein und süß: ein Cappuccino und ein Cornetto, oft im Stehen an der Bar. Wurst, Käse oder Eier am Morgen sind unüblich. Dafür isst man später als in Deutschland: mittags gegen 13 Uhr, abends selten vor 20 Uhr – im Süden oft noch später. Viele Restaurants öffnen abends erst gegen halb acht." }
+    },
+    {
+      "tag": 23,
+      "titel": "Morgens",
+      "ziel": "Danach kannst du erzählen, was du morgens tust: aufwachen, aufstehen, dich waschen und anziehen.",
+      "woerter": [
+        { "it": "svegliarsi", "de": "aufwachen", "art": "v", "aus": "sve-GLIAR-si", "bsp": { "it": "Marco si sveglia tardi.", "de": "Marco wacht spät auf." }, "emoji": "🥱", "hinweis": "Nur ein i bei tu und noi: ti svegli, ci svegliamo." },
+        { "it": "alzarsi", "de": "aufstehen", "art": "v", "aus": "al-ZAR-si", "bsp": { "it": "Giulia si alza presto.", "de": "Giulia steht früh auf." }, "emoji": "🛏️" },
+        { "it": "lavarsi", "de": "sich waschen", "art": "v", "aus": "la-VAR-si", "bsp": { "it": "Marco si lava in cinque minuti.", "de": "Marco wäscht sich in fünf Minuten." }, "emoji": "💦" },
+        { "it": "vestirsi", "de": "sich anziehen", "art": "v", "aus": "ve-STIR-si", "bsp": { "it": "Perché non ti vesti? È tardi!", "de": "Warum ziehst du dich nicht an? Es ist spät!" }, "emoji": "👕", "hinweis": "Ein Verb auf -ire (kommt im nächsten Lerntag): mi vesto, ti vesti, si veste." },
+        { "it": "riposarsi", "de": "sich ausruhen", "art": "v", "aus": "ri-po-SAR-si", "bsp": { "it": "La nonna si riposa il pomeriggio.", "de": "Die Oma ruht sich nachmittags aus." }, "emoji": "🛋️" },
+        { "it": "addormentarsi", "de": "einschlafen", "art": "v", "aus": "ad-dor-men-TAR-si", "bsp": { "it": "Marco si addormenta davanti a un film.", "de": "Marco schläft vor einem Film ein." }, "emoji": "😴" },
+        { "it": "prepararsi", "de": "sich fertig machen", "art": "v", "aus": "pre-pa-RAR-si", "bsp": { "it": "Giulia si prepara in dieci minuti.", "de": "Giulia macht sich in zehn Minuten fertig." }, "emoji": "🪞" },
+        { "it": "la doccia", "de": "die Dusche", "art": "n", "aus": "la DOC-cia", "bsp": { "it": "La doccia è libera?", "de": "Ist die Dusche frei?" }, "emoji": "🚿", "hinweis": "«duschen» heißt «fare la doccia»." },
+        { "it": "lo spazzolino", "de": "die Zahnbürste", "art": "n", "aus": "lo spaz-zo-LI-no", "bsp": { "it": "Dov'è il mio spazzolino?", "de": "Wo ist meine Zahnbürste?" }, "emoji": "🪥", "hinweis": "Ganz genau: «lo spazzolino da denti»." },
+        { "it": "il dentifricio", "de": "die Zahnpasta", "art": "n", "aus": "il den-ti-FRI-cio", "bsp": { "it": "Marco, hai il dentifricio?", "de": "Marco, hast du die Zahnpasta?" }, "emoji": "🦷" },
+        { "it": "l'asciugamano", "de": "das Handtuch", "art": "n", "aus": "l'a-sciu-ga-MA-no", "bsp": { "it": "Vorrei un asciugamano, per favore.", "de": "Ich hätte gern ein Handtuch, bitte." }, "emoji": "🧖", "hinweis": "Mehrzahl: gli asciugamani. «sciu» klingt wie «schu»." },
+        { "it": "il sapone", "de": "die Seife", "art": "n", "aus": "il sa-PO-ne", "bsp": { "it": "Mi lavo con il sapone.", "de": "Ich wasche mich mit Seife." }, "emoji": "🧼" }
+      ],
+      "grammatik": {
+        "titel": "Reflexive Verben im Präsens",
+        "erklaerung": "Morgens tut man im Italienischen vieles «sich»: **svegliarsi** (aufwachen), **alzarsi** (aufstehen), **lavarsi** (sich waschen). Das **-si** am Ende der Grundform zeigt: Das Verb ist reflexiv.\nSo geht es: -si weg, das Verb wie gewohnt beugen und **mi, ti, si, ci, vi, si** davorsetzen: «mi alzo», «ti alzi», «si alza» …\nEins kennst du schon aus Level 1: **mi chiamo** heißt wörtlich «ich nenne mich».\nDie Verneinung steht vor dem Wörtchen: «**Non mi** alzo presto.»\nFalle für Deutsche: Aufwachen, aufstehen und einschlafen sind nur im Italienischen reflexiv – **mi** sveglio, **mi** alzo, **mi** addormento. Und das Wörtchen steht **vor** dem Verb, nicht dahinter wie in «ich wasche mich».",
+        "tabelle": { "kopf": ["Person", "alzarsi", "Deutsch"], "zeilen": [["io", "mi alzo", "ich stehe auf"], ["tu", "ti alzi", "du stehst auf"], ["lui / lei", "si alza", "er / sie steht auf"], ["noi", "ci alziamo", "wir stehen auf"], ["voi", "vi alzate", "ihr steht auf"], ["loro", "si alzano", "sie stehen auf"]] },
+        "beispiele": [
+          { "it": "Mi sveglio alle sette.", "de": "Ich wache um sieben auf." },
+          { "it": "Marco non si alza presto.", "de": "Marco steht nicht früh auf." },
+          { "it": "Ci laviamo e ci vestiamo.", "de": "Wir waschen uns und ziehen uns an." }
+        ],
+        "uebungen": [
+          { "satz": "Io ___ alle sette.", "loesung": "mi alzo", "falsch": ["si alzo", "mi alziamo", "alzo mi"], "de": "Ich stehe um sieben auf." },
+          { "satz": "Tu ___ presto la mattina?", "loesung": "ti svegli", "falsch": ["ti sveglii", "si svegli", "ti svegliate"], "de": "Wachst du morgens früh auf?", "warum": "Zu «tu» gehört «ti» – und «svegli» schreibt man mit nur einem i." },
+          { "satz": "Marco ___ in cinque minuti.", "loesung": "si lava", "falsch": ["si lavo", "si lavano", "lava si"], "de": "Marco wäscht sich in fünf Minuten." },
+          { "satz": "Voi ___ presto?", "loesung": "vi alzate", "falsch": ["si alzate", "ti alzate", "vi alzare"], "de": "Steht ihr früh auf?" },
+          { "satz": "Ben e Giulia ___ alle sei e mezza.", "loesung": "si svegliano", "falsch": ["si sveglia", "si svegliamo", "svegliano si"], "de": "Ben und Giulia wachen um halb sieben auf.", "warum": "Zwei Personen = «loro» → si svegliano." },
+          { "satz": "La sera io ___ presto.", "loesung": "mi addormento", "falsch": ["si addormento", "mi addormentiamo", "addormento mi"], "de": "Abends schlafe ich früh ein.", "warum": "Im Deutschen ohne «sich», im Italienischen reflexiv: mi addormento." },
+          { "satz": "Marco è pigro: ___ presto.", "loesung": "non si alza", "falsch": ["si non alza", "non alza si", "si alza non"], "de": "Marco ist faul: Er steht nicht früh auf.", "warum": "Reihenfolge: non – si – Verb." },
+          { "satz": "Domani noi ___ alle sei.", "loesung": "ci svegliamo", "falsch": ["ci svegliiamo", "si svegliamo", "ci svegliare"], "de": "Morgen wachen wir um sechs auf.", "warum": "Zu «noi» gehört «ci» – und «svegliamo» hat nur ein i." }
+        ]
+      },
+      "dialog": {
+        "titel": "Marco, ti svegli?",
+        "ort": "Montagmorgen in der Pension, vor Marcos Zimmertür – und kurz darauf vor Signor Brunos Laden",
+        "zeilen": [
+          { "wer": "giulia", "it": "Marco! Sono le sette e mezza! Ti svegli o no?", "de": "Marco! Es ist halb acht! Wachst du jetzt auf oder nicht?" },
+          { "wer": "marco", "it": "Mmm, sì, mi sveglio. Ancora cinque minuti!", "de": "Mmm, ja, ich wache ja auf. Noch fünf Minuten!" },
+          { "wer": "ben", "it": "Io mi alzo alle sei e mezza, mi lavo, mi vesto – e alle sette sono pronto.", "de": "Ich stehe um halb sieben auf, wasche mich, ziehe mich an – und um sieben bin ich fertig." },
+          { "wer": "giulia", "it": "Bravo, Ben! Marco, ti alzi adesso? Alle otto in punto siamo da Bruno!", "de": "Bravo, Ben! Marco, stehst du jetzt auf? Punkt acht sind wir bei Bruno!" },
+          { "wer": "marco", "it": "Sì, sì, mi alzo. Dov'è l'asciugamano? E lo spazzolino?", "de": "Ja, ja, ich stehe auf. Wo ist das Handtuch? Und die Zahnbürste?" },
+          { "wer": "giulia", "it": "In bagno, accanto alla doccia! Ti lavi e ti vesti in cinque minuti, va bene?", "de": "Im Bad, neben der Dusche! Du wäschst dich und ziehst dich in fünf Minuten an, okay?" },
+          { "wer": "marco", "it": "Va bene, mi preparo subito. Ma prima mi riposo un momento …", "de": "Gut, ich mache mich sofort fertig. Aber erst ruhe ich mich einen Moment aus …" },
+          { "wer": "ben", "it": "Giulia, sono le otto meno cinque – e Marco si addormenta di nuovo!", "de": "Giulia, es ist fünf vor acht – und Marco schläft schon wieder ein!" },
+          { "wer": "giulia", "it": "Oh no! Corriamo, Ben!", "de": "Oh nein! Laufen wir, Ben!" },
+          { "wer": "uomo", "als": "Signor Bruno", "it": "Sono le otto e due minuti. Troppo tardi. La porta è chiusa.", "de": "Es ist zwei Minuten nach acht. Zu spät. Die Tür ist zu." }
+        ],
+        "fragen": [
+          { "frage": "Um wie viel Uhr steht Ben auf?", "richtig": "Um halb sieben", "falsch": ["Um halb sechs", "Um halb acht", "Um sieben"] },
+          { "frage": "Was sucht Marco?", "richtig": "Das Handtuch und die Zahnbürste", "falsch": ["Die Seife und die Zahnpasta", "Seinen Wecker", "Seine Kamera"] },
+          { "frage": "Was passiert um fünf vor acht?", "richtig": "Marco schläft wieder ein", "falsch": ["Marco steht fertig angezogen vor der Tür", "Signor Bruno öffnet seinen Laden", "Die drei frühstücken zusammen"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Ein Kollege fragt: «A che ora ti alzi?» Du stehst um halb sieben auf.", "richtig": "Mi alzo alle sei e mezza.", "falsch": ["Alzo alle sei e mezza.", "Ti alzi alle sei e mezza.", "Mi alzo alle sette e mezza."], "de": "Ich stehe um halb sieben auf." },
+          { "lage": "Im Bad der Pension fehlt ein Handtuch. Du bittest die Wirtin darum.", "richtig": "Vorrei un asciugamano, per favore.", "falsch": ["Vorrei uno spazzolino, per favore.", "Dov'è la doccia, per favore?", "Mi lavo con il sapone."], "de": "Ich hätte gern ein Handtuch, bitte." },
+          { "lage": "Du erzählst, dass du dich nachmittags ausruhst.", "richtig": "Il pomeriggio mi riposo.", "falsch": ["Il pomeriggio riposo mi.", "Il pomeriggio si riposo.", "Il pomeriggio mi sveglio."], "de": "Nachmittags ruhe ich mich aus." }
+        ],
+        "folge": "Zwei Minuten zu spät, und die Tür bleibt zu. Gibt Signor Bruno ihnen noch eine Chance?"
+      },
+      "wissen": { "titel": "Das Bidet ist Vorschrift", "text": "In fast jedem italienischen Badezimmer steht neben der Toilette ein Bidet – und das ist kein Zufall: Seit einer Verordnung von 1975 muss jede Wohnung mindestens ein Bad mit WC, Bidet, Wanne oder Dusche und Waschbecken haben. Auch in Pensionen und Hotels gehört es meist dazu. Der Name kommt übrigens aus dem Französischen und bedeutete ursprünglich «Pony»." }
+    },
+    {
+      "tag": 24,
+      "titel": "Die Woche",
+      "ziel": "Danach kannst du die Wochentage nennen, sagen, was du wann machst – und ob du etwas verstehst.",
+      "woerter": [
+        { "it": "lunedì", "de": "Montag", "art": "x", "aus": "lu-ne-DÌ", "bsp": { "it": "Lunedì andiamo a Verona.", "de": "Am Montag fahren wir nach Verona." }, "emoji": "🌙", "hinweis": "Wochentage schreibt man klein. Ohne Artikel: «lunedì» = am Montag." },
+        { "it": "martedì", "de": "Dienstag", "art": "x", "aus": "mar-te-DÌ", "bsp": { "it": "Martedì il museo è chiuso.", "de": "Am Dienstag ist das Museum geschlossen." }, "emoji": "🏛️" },
+        { "it": "mercoledì", "de": "Mittwoch", "art": "x", "aus": "mer-co-le-DÌ", "bsp": { "it": "Mercoledì c'è il mercato.", "de": "Am Mittwoch ist Markt." }, "emoji": "🧺" },
+        { "it": "giovedì", "de": "Donnerstag", "art": "x", "aus": "gio-ve-DÌ", "bsp": { "it": "Giovedì parto per Roma.", "de": "Am Donnerstag fahre ich nach Rom." }, "emoji": "🚆" },
+        { "it": "venerdì", "de": "Freitag", "art": "x", "aus": "ve-ner-DÌ", "bsp": { "it": "Venerdì mangiamo il pesce.", "de": "Am Freitag essen wir Fisch." }, "emoji": "🐟" },
+        { "it": "sabato", "de": "Samstag", "art": "x", "aus": "SA-ba-to", "bsp": { "it": "Sabato dormo fino a tardi.", "de": "Am Samstag schlafe ich lange." }, "emoji": "🛌", "hinweis": "Betonung auf der ersten Silbe." },
+        { "it": "domenica", "de": "Sonntag", "art": "x", "aus": "do-ME-ni-ca", "bsp": { "it": "La domenica non lavoro.", "de": "Sonntags arbeite ich nicht." }, "emoji": "☀️", "hinweis": "Der einzige weibliche Wochentag. Mit Artikel = regelmäßig: «la domenica» sonntags, «il lunedì» montags." },
+        { "it": "la settimana", "de": "die Woche", "art": "n", "aus": "la set-ti-MA-na", "bsp": { "it": "Questa settimana siamo a Verona.", "de": "Diese Woche sind wir in Verona." }, "emoji": "🗓️" },
+        { "it": "il fine settimana", "de": "das Wochenende", "art": "n", "aus": "il FI-ne set-ti-MA-na", "bsp": { "it": "Il fine settimana dormo molto.", "de": "Am Wochenende schlafe ich viel." }, "emoji": "🎉", "hinweis": "Männlich, obwohl «la settimana» weiblich ist. Mehrzahl unverändert: i fine settimana." },
+        { "it": "dormire", "de": "schlafen", "art": "v", "aus": "dor-MI-re", "bsp": { "it": "Marco dorme fino a mezzogiorno.", "de": "Marco schläft bis zwölf Uhr mittags." }, "emoji": "💤" },
+        { "it": "partire", "de": "abfahren / abreisen", "art": "v", "aus": "par-TI-re", "bsp": { "it": "Il treno parte alle nove.", "de": "Der Zug fährt um neun ab." }, "emoji": "🚂", "hinweis": "Das Ziel steht mit «per»: «parto per Roma»." },
+        { "it": "capire", "de": "verstehen", "art": "v", "aus": "ca-PI-re", "bsp": { "it": "Mi dispiace, non capisco.", "de": "Tut mir leid, ich verstehe nicht." }, "emoji": "💡", "hinweis": "Mit -isc-: capisco, capisci, capisce – siehe Grammatik." }
+      ],
+      "grammatik": {
+        "titel": "Verben auf -ire – auch mit -isc-",
+        "erklaerung": "Die dritte Gruppe endet auf **-ire**. Es gibt zwei Sorten.\n**Sorte 1** – dormire, partire, aprire (öffnen), sentire (hören) – geht fast wie -ere: dorm**o**, dorm**i**, dorm**e**, dorm**iamo**, dorm**ite**, dorm**ono**. Neu ist nur voi: **-ite**.\n**Sorte 2** schiebt bei io, tu, lui/lei und loro ein **-isc-** ein: capire → cap**isc**o, cap**isc**i, cap**isc**e, capiamo, capite, cap**isc**ono. Genauso gehen **finire** (beenden, aufhören) und **preferire** (lieber mögen, vorziehen).\nMerksatz: **noi und voi nie mit -isc-.**\nAussprache: «capisco» und «capiscono» mit *sk*, «capisci» und «capisce» mit *sch*.\nLern die Sorte am besten gleich mit: dormire – dormo, capire – capisco.",
+        "tabelle": { "kopf": ["Person", "dormire", "capire", "preferire"], "zeilen": [["io", "dormo", "capisco", "preferisco"], ["tu", "dormi", "capisci", "preferisci"], ["lui / lei", "dorme", "capisce", "preferisce"], ["noi", "dormiamo", "capiamo", "preferiamo"], ["voi", "dormite", "capite", "preferite"], ["loro", "dormono", "capiscono", "preferiscono"]] },
+        "beispiele": [
+          { "it": "Il fine settimana dormo fino a tardi.", "de": "Am Wochenende schlafe ich lange." },
+          { "it": "Capisci l'italiano? – Sì, capisco bene.", "de": "Verstehst du Italienisch? – Ja, ich verstehe gut." },
+          { "it": "Il film finisce a mezzanotte.", "de": "Der Film endet um Mitternacht." }
+        ],
+        "uebungen": [
+          { "satz": "Io ___ otto ore.", "loesung": "dormo", "falsch": ["dormi", "dorme", "dormisco"], "de": "Ich schlafe acht Stunden.", "warum": "dormire gehört zur Sorte ohne -isc-." },
+          { "satz": "Il treno ___ alle nove.", "loesung": "parte", "falsch": ["parti", "parto", "partisce"], "de": "Der Zug fährt um neun ab." },
+          { "satz": "Tu ___ l'italiano?", "loesung": "capisci", "falsch": ["capi", "capisce", "capite"], "de": "Verstehst du Italienisch?", "warum": "capire braucht -isc-: (tu) capisci." },
+          { "satz": "Marco ___ dormire.", "loesung": "preferisce", "falsch": ["preferisci", "prefere", "preferiscono"], "de": "Marco schläft lieber." },
+          { "satz": "Voi ___ fino a tardi?", "loesung": "dormite", "falsch": ["dormete", "dormiamo", "dormono"], "de": "Schlaft ihr lange?", "warum": "Bei den Verben auf -ire endet voi auf -ite." },
+          { "satz": "Noi ___ tutto.", "loesung": "capiamo", "falsch": ["capisciamo", "capite", "capiscono"], "de": "Wir verstehen alles.", "warum": "noi und voi nie mit -isc-." },
+          { "satz": "Ben e Giulia ___ domani.", "loesung": "partono", "falsch": ["partiscono", "parte", "partite"], "de": "Ben und Giulia reisen morgen ab.", "warum": "partire geht wie dormire – ohne -isc-." },
+          { "satz": "Voi ___ il lavoro alle sei?", "loesung": "finite", "falsch": ["finiscete", "finiamo", "finiscono"], "de": "Seid ihr um sechs mit der Arbeit fertig?", "warum": "Auch bei finire: voi ohne -isc- → finite." }
+        ]
+      },
+      "dialog": {
+        "titel": "Solo venerdì!",
+        "ort": "Montagvormittag, zurück in der Pension: Signora Pina kennt Brunos Wochenplan",
+        "zeilen": [
+          { "wer": "giulia", "it": "Signora Pina, il signor Bruno apre anche domani?", "de": "Signora Pina, macht Herr Bruno auch morgen auf?" },
+          { "wer": "donna", "als": "Signora Pina", "it": "No. Martedì, mercoledì e giovedì lavora e non apre la porta.", "de": "Nein. Dienstag, Mittwoch und Donnerstag arbeitet er und macht die Tür nicht auf." },
+          { "wer": "ben", "it": "E venerdì?", "de": "Und am Freitag?" },
+          { "wer": "donna", "als": "Signora Pina", "it": "Venerdì sì, alle otto in punto. Ma sabato parte per un mese!", "de": "Am Freitag ja, Punkt acht. Aber am Samstag verreist er für einen Monat!" },
+          { "wer": "giulia", "it": "Capisci, Marco? Abbiamo solo venerdì!", "de": "Verstehst du, Marco? Wir haben nur den Freitag!" },
+          { "wer": "marco", "it": "Capisco, capisco. Ma perché alle otto? Io preferisco le dieci.", "de": "Ich verstehe ja. Aber warum um acht? Mir ist zehn Uhr lieber." },
+          { "wer": "ben", "it": "Tu dormi troppo, Marco. Il fine settimana dormi fino a mezzogiorno!", "de": "Du schläfst zu viel, Marco. Am Wochenende schläfst du bis mittags!" },
+          { "wer": "marco", "it": "Va bene! Venerdì mi sveglio alle sei. Promesso!", "de": "Schon gut! Am Freitag wache ich um sechs auf. Versprochen!" },
+          { "wer": "giulia", "it": "Tu, alle sei? Vediamo. Io scrivo un biglietto a Bruno: «Venerdì alle otto siamo qui.»", "de": "Du, um sechs? Mal sehen. Ich schreibe Bruno einen Zettel: «Am Freitag um acht sind wir hier.»" },
+          { "wer": "ben", "it": "Così la nostra settimana a Verona finisce venerdì – con la pagina cinque!", "de": "Dann endet unsere Woche in Verona am Freitag – mit Seite fünf!" }
+        ],
+        "fragen": [
+          { "frage": "An welchen Tagen macht Signor Bruno die Tür nicht auf?", "richtig": "Dienstag, Mittwoch und Donnerstag", "falsch": ["Montag, Dienstag und Mittwoch", "Freitag und Samstag", "Nur am Sonntag"] },
+          { "frage": "Warum ist der Freitag die letzte Gelegenheit?", "richtig": "Am Samstag verreist Signor Bruno für einen Monat", "falsch": ["Am Samstag schließt die Pension", "Am Freitag fährt Marco nach Hause", "Am Samstag ist der Laden schon verkauft"] },
+          { "frage": "Was verspricht Marco?", "richtig": "Am Freitag um sechs aufzuwachen", "falsch": ["Bis Freitag gar nicht mehr zu schlafen", "Bruno einen Zettel zu schreiben", "Am Freitag um zehn fertig zu sein"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Eine Dame spricht sehr schnell Italienisch mit dir. Sag höflich, dass du nicht verstehst.", "richtig": "Scusi, non capisco.", "falsch": ["Scusi, non capo.", "Scusi, non capisci.", "Scusi, non dormo."], "de": "Entschuldigen Sie, ich verstehe nicht." },
+          { "lage": "Du erzählst, dass du am Samstag nach Venedig abreist.", "richtig": "Sabato parto per Venezia.", "falsch": ["Sabato partisco per Venezia.", "Sabato dormo a Venezia.", "Domenica parte per Venezia."], "de": "Am Samstag reise ich nach Venedig ab." },
+          { "lage": "Kaffee oder Tee? Du möchtest lieber Tee.", "richtig": "Preferisco il tè.", "falsch": ["Prefero il tè.", "Preferisci il tè?", "Finisco il caffè."], "de": "Ich nehme lieber Tee." }
+        ],
+        "folge": "Marco will am Freitag um sechs wach sein. Hält er sein Versprechen?"
+      },
+      "wissen": { "titel": "Planeten im Kalender", "text": "Fünf Wochentage sind nach Himmelskörpern und römischen Göttern benannt: lunedì nach dem Mond (Luna), martedì nach Mars, mercoledì nach Merkur, giovedì nach Jupiter (Giove) und venerdì nach Venus (Venere). Das «dì» am Ende ist ein altes Wort für «Tag». Nur das Wochenende tanzt aus der Reihe: «sabato» kommt vom Sabbat, «domenica» vom lateinischen «dies dominica», dem Tag des Herrn." }
+    },
+    {
+      "tag": 25,
+      "titel": "Ein Termin um acht",
+      "ziel": "Danach kannst du sagen, wie oft du etwas tust, einen Termin ausmachen und dich für eine Verspätung entschuldigen.",
+      "woerter": [
+        { "it": "l'appuntamento", "de": "der Termin / die Verabredung", "art": "n", "aus": "l'ap-pun-ta-MEN-to", "bsp": { "it": "Ho un appuntamento alle otto.", "de": "Ich habe um acht einen Termin." }, "emoji": "📝" },
+        { "it": "puntuale", "de": "pünktlich", "art": "a", "aus": "pun-TUA-le", "bsp": { "it": "Ben è sempre puntuale.", "de": "Ben ist immer pünktlich." }, "emoji": "✅", "hinweis": "Gleiche Form für Mann und Frau. Mehrzahl: puntuali." },
+        { "it": "in ritardo", "de": "zu spät / verspätet", "art": "p", "aus": "in ri-TAR-do", "bsp": { "it": "Scusa, sono in ritardo!", "de": "Entschuldige, ich bin zu spät!" }, "emoji": "🐢" },
+        { "it": "in anticipo", "de": "zu früh / vor der Zeit", "art": "p", "aus": "in an-TI-ci-po", "bsp": { "it": "Siamo in anticipo: sono le otto meno dieci.", "de": "Wir sind zu früh dran: Es ist zehn vor acht." }, "emoji": "🐇", "hinweis": "Betonung auf «ti»: an-TI-ci-po." },
+        { "it": "arrivare", "de": "ankommen", "art": "v", "aus": "ar-ri-VA-re", "bsp": { "it": "A che ora arriva il treno?", "de": "Um wie viel Uhr kommt der Zug an?" }, "emoji": "🏁" },
+        { "it": "la sveglia", "de": "der Wecker", "art": "n", "aus": "la SVE-glia", "bsp": { "it": "La sveglia suona alle sei.", "de": "Der Wecker klingelt um sechs." }, "emoji": "⏰", "hinweis": "Verwandt mit «svegliarsi» – aufwachen." },
+        { "it": "mai", "de": "nie", "art": "x", "aus": "MAI", "bsp": { "it": "Non arrivo mai in ritardo.", "de": "Ich komme nie zu spät." }, "emoji": "🙅", "hinweis": "Im Satz immer mit «non» vor dem Verb: non … mai." },
+        { "it": "sempre", "de": "immer", "art": "x", "aus": "SEM-pre", "bsp": { "it": "Marco ha sempre fame.", "de": "Marco hat immer Hunger." }, "emoji": "♾️" },
+        { "it": "spesso", "de": "oft", "art": "x", "aus": "SPES-so", "bsp": { "it": "Prendo spesso l'autobus.", "de": "Ich nehme oft den Bus." }, "emoji": "🔁" },
+        { "it": "qualche volta", "de": "manchmal", "art": "p", "aus": "QUAL-che VOL-ta", "bsp": { "it": "Qualche volta vado a piedi.", "de": "Manchmal gehe ich zu Fuß." }, "emoji": "🎲", "hinweis": "Nach «qualche» steht immer die Einzahl – wörtlich «manches Mal».", "auch": ["a volte"] },
+        { "it": "raramente", "de": "selten", "art": "x", "aus": "ra-ra-MEN-te", "bsp": { "it": "Giulia arriva raramente in ritardo.", "de": "Giulia kommt selten zu spät." }, "emoji": "🌠", "auch": ["di rado"] },
+        { "it": "il sonno", "de": "der Schlaf", "art": "n", "aus": "il SON-no", "bsp": { "it": "Ho sonno: buonanotte!", "de": "Ich bin müde: gute Nacht!" }, "emoji": "😪", "hinweis": "«avere sonno» = schläfrig sein – gebaut wie «avere fame»." }
+      ],
+      "grammatik": {
+        "titel": "Wie oft? – und die doppelte Verneinung non … mai",
+        "erklaerung": "Wie oft? **sempre** (immer) – **spesso** (oft) – **qualche volta** (manchmal) – **raramente** (selten) – **mai** (nie).\nDiese Wörter stehen meist **gleich hinter dem Verb**: «Arrivo sempre puntuale», «Marco dorme spesso fino a tardi». «Qualche volta» steht gern am Satzanfang.\nJetzt die Falle für Deutsche: Mit **mai** brauchst du **zwei** Verneinungen – **non** vor dem Verb, **mai** dahinter: «**Non** arrivo **mai** in ritardo.» Wörtlich «ich komme nicht nie zu spät» – im Italienischen ist genau das richtig.\nBei reflexiven Verben: non + mi/ti/si + Verb + mai → «Marco **non si** alza **mai** presto.»\nNur als kurze Antwort steht mai allein: «Arrivi in ritardo? – **Mai!**»",
+        "tabelle": { "kopf": ["Wie oft?", "Italienisch", "Beispiel"], "zeilen": [["immer", "sempre", "Ben è sempre puntuale."], ["oft", "spesso", "Marco arriva spesso in ritardo."], ["manchmal", "qualche volta", "Qualche volta arrivo in anticipo."], ["selten", "raramente", "Giulia arriva raramente in ritardo."], ["nie", "non … mai", "Bruno non aspetta mai."]] },
+        "beispiele": [
+          { "it": "Non arrivo mai in ritardo.", "de": "Ich komme nie zu spät." },
+          { "it": "Marco non si sveglia mai presto.", "de": "Marco wacht nie früh auf." },
+          { "it": "Giulia arriva spesso in anticipo.", "de": "Giulia kommt oft zu früh." }
+        ],
+        "uebungen": [
+          { "satz": "Marco ___ arriva mai puntuale.", "loesung": "non", "falsch": ["no", "mai", "ma"], "de": "Marco kommt nie pünktlich.", "warum": "«mai» braucht «non» vor dem Verb." },
+          { "satz": "Non arrivo ___ in ritardo: sono sempre puntuale.", "loesung": "mai", "falsch": ["ma", "no", "non"], "de": "Ich komme nie zu spät: Ich bin immer pünktlich." },
+          { "satz": "Ben è ___ puntuale: non arriva mai in ritardo.", "loesung": "sempre", "falsch": ["mai", "raramente", "non"], "de": "Ben ist immer pünktlich: Er kommt nie zu spät.", "warum": "Ohne «non» kann «mai» hier nicht stehen – und «raramente» passt nicht zu «nie zu spät»." },
+          { "satz": "Tu arrivi in ritardo? – Io? ___! Sono sempre puntuale.", "loesung": "Mai", "falsch": ["Non", "Sempre", "Spesso"], "de": "Kommst du zu spät? – Ich? Nie! Ich bin immer pünktlich.", "warum": "Als kurze Antwort steht «mai» allein, ohne «non»." },
+          { "satz": "Lunedì arrivo puntuale, martedì in ritardo: sono puntuale solo ___.", "loesung": "qualche volta", "falsch": ["sempre", "mai", "non"], "de": "Am Montag komme ich pünktlich, am Dienstag zu spät: Ich bin nur manchmal pünktlich." },
+          { "satz": "Il signor Bruno ___.", "loesung": "non aspetta mai", "falsch": ["mai non aspetta", "non mai aspetta", "aspetta non mai"], "de": "Herr Bruno wartet nie.", "warum": "«non» vor dem Verb, «mai» dahinter." },
+          { "satz": "Marco ___ presto.", "loesung": "non si alza mai", "falsch": ["non mai si alza", "si non alza mai", "non si mai alza"], "de": "Marco steht nie früh auf.", "warum": "Reihenfolge: non – si – Verb – mai." },
+          { "satz": "Io ___ fino a mezzogiorno: mi alzo sempre alle sei.", "loesung": "non dormo mai", "falsch": ["dormo mai", "dormo sempre", "mai non dormo"], "de": "Ich schlafe nie bis mittags: Ich stehe immer um sechs auf.", "warum": "Deutsch «nie» = italienisch «non … mai», mit beiden Teilen." }
+        ]
+      },
+      "dialog": {
+        "titel": "L'orologio di Bruno",
+        "ort": "Freitagmorgen, fünf vor acht, vor Signor Brunos Uhrmacherladen",
+        "zeilen": [
+          { "wer": "giulia", "it": "Sono le otto meno cinque: siamo in anticipo. Ma dov'è Marco?", "de": "Es ist fünf vor acht: Wir sind zu früh dran. Aber wo ist Marco?" },
+          { "wer": "ben", "it": "Dorme ancora. La sveglia suona, ma lui non si sveglia mai.", "de": "Er schläft noch. Der Wecker klingelt, aber er wacht nie auf." },
+          { "wer": "giulia", "it": "Marco è sempre in ritardo! Non arriva mai puntuale.", "de": "Marco ist immer zu spät! Er kommt nie pünktlich." },
+          { "wer": "uomo", "als": "Signor Bruno", "it": "Buongiorno. Sono le otto in punto. Siete puntuali: bene.", "de": "Guten Morgen. Es ist Punkt acht. Sie sind pünktlich: gut." },
+          { "wer": "giulia", "it": "Buongiorno, signor Bruno. Abbiamo un appuntamento. Io sono la nipote di Rosa e lui è Ben.", "de": "Guten Morgen, Herr Bruno. Wir haben einen Termin. Ich bin Rosas Enkelin, und das ist Ben." },
+          { "wer": "uomo", "als": "Signor Bruno", "it": "Rosa! Penso spesso a lei. La sua pagina è qui, in questo orologio.", "de": "Rosa! Ich denke oft an sie. Ihre Seite ist hier, in dieser Uhr." },
+          { "wer": "marco", "it": "Arrivo, arrivo! Sono qui! Scusate il ritardo!", "de": "Ich komme, ich komme! Ich bin da! Entschuldigt die Verspätung!" },
+          { "wer": "uomo", "als": "Signor Bruno", "it": "Sono le otto e un minuto. Lei aspetta fuori: io non apro mai due volte.", "de": "Es ist eine Minute nach acht. Sie warten draußen: Ich mache nie zweimal auf." },
+          { "wer": "ben", "it": "Mi dispiace, signor Bruno. Marco arriva raramente puntuale, ma è un amico.", "de": "Tut mir leid, Herr Bruno. Marco kommt selten pünktlich, aber er ist ein Freund." },
+          { "wer": "uomo", "als": "Signor Bruno", "it": "Qualche volta anche gli amici aspettano. E Lei, Ben? La pagina è per chi parla italiano: prima un piccolo esame!", "de": "Manchmal warten auch Freunde. Und Sie, Ben? Die Seite ist für den, der Italienisch spricht: erst eine kleine Prüfung!" }
+        ],
+        "fragen": [
+          { "frage": "Wer steht um Punkt acht vor Signor Brunos Tür?", "richtig": "Giulia und Ben", "falsch": ["Giulia, Ben und Marco", "Nur Marco", "Niemand – alle kommen zu spät"] },
+          { "frage": "Wo bewahrt Signor Bruno die Seite auf?", "richtig": "In einer Uhr", "falsch": ["In einem Rezeptheft", "In der Pension bei Signora Pina", "Unter einem Wecker"] },
+          { "frage": "Was verlangt Signor Bruno, bevor er die Seite herausgibt?", "richtig": "Eine kleine Prüfung: Ben soll zeigen, dass er Italienisch kann", "falsch": ["Geld für die alte Uhr", "Eine Entschuldigung von Marco", "Einen Brief von Nonna Rosa"] }
+        ],
+        "rollenspiel": [
+          { "lage": "Du kommst zehn Minuten zu spät zu einem Termin beim Arzt. Entschuldige dich.", "richtig": "Scusi, sono in ritardo.", "falsch": ["Scusi, sono in anticipo.", "Scusi, sono puntuale.", "Scusi, non sono mai."], "de": "Entschuldigen Sie, ich bin zu spät." },
+          { "lage": "Eine Kollegin fragt, ob du oft zu spät kommst. Du kommst nie zu spät.", "richtig": "No, non arrivo mai in ritardo.", "falsch": ["No, arrivo mai in ritardo.", "No, non mai arrivo in ritardo.", "No, arrivo spesso in ritardo."], "de": "Nein, ich komme nie zu spät." },
+          { "lage": "Du möchtest in einer Werkstatt einen Termin für Freitag um acht ausmachen.", "richtig": "Vorrei un appuntamento per venerdì alle otto.", "falsch": ["Vorrei una sveglia per venerdì alle otto.", "Ho sonno venerdì alle otto.", "Vorrei un appuntamento per sabato a mezzogiorno."], "de": "Ich hätte gern einen Termin für Freitag um acht." }
+        ],
+        "folge": "Seite 5 steckt in der alten Uhr. Besteht Ben die Prüfung von Signor Bruno?"
+      },
+      "wissen": { "titel": "Veronas Glocken gaben den Takt vor", "text": "Lange bevor jeder eine Uhr trug, gaben in Verona Glocken den Takt vor. Auf der 84 Meter hohen Torre dei Lamberti an der Piazza delle Erbe läuteten zwei berühmte: Die «Marangona» schlug die Stunden, zeigte die Arbeitszeiten an und warnte bei Feuer. Die größere «Rengo» rief den Stadtrat zusammen – oder die Bürger zu den Waffen." }
+    }
+  ],
+  "pruefung": {
+    "lesetext": {
+      "titel": "Una settimana a Verona",
+      "it": "Sono a Verona con Giulia e Marco. Dormiamo in una piccola pensione. La mattina mi sveglio alle sei e mezza, mi alzo, mi lavo e mi vesto. Alle sette e mezza c'è la colazione: prendo un caffè e leggo il giornale. Anche Giulia si alza presto e scrive a Nonna Rosa. Marco non si sveglia mai presto: dorme sempre fino a tardi e arriva spesso in ritardo. Il signor Bruno ha un negozio di orologi accanto alla pensione. Lui apre la porta solo il lunedì e il venerdì, alle otto in punto. Lunedì arriviamo alle otto e due minuti: troppo tardi, la porta è chiusa! Martedì, mercoledì e giovedì aspettiamo. Il pomeriggio visitiamo la città, la sera Giulia e io leggiamo e Marco vede un film. Venerdì Giulia e io siamo puntuali, ma Marco dorme ancora. Il signor Bruno non aspetta mai: alle otto e un minuto chiude la porta. Adesso Marco capisce: preferisce una sveglia molto grande!",
+      "fragen": [
+        { "frage": "Wann wacht Ben morgens auf?", "richtig": "Um halb sieben", "falsch": ["Um halb sechs", "Um halb acht", "Um sieben"] },
+        { "frage": "An welchen Tagen öffnet Signor Bruno die Tür?", "richtig": "Montags und freitags", "falsch": ["Dienstags, mittwochs und donnerstags", "Jeden Tag außer Sonntag", "Nur am Wochenende"] },
+        { "frage": "Warum klappt es am Montag nicht?", "richtig": "Sie kommen zwei Minuten zu spät", "falsch": ["Signor Bruno ist verreist", "Sie finden den Laden nicht", "Die Pension ist noch abgeschlossen"] },
+        { "frage": "Was macht Marco abends?", "richtig": "Er sieht einen Film", "falsch": ["Er liest die Zeitung", "Er schreibt an Nonna Rosa", "Er geht früh ins Bett"] }
+      ]
+    }
+  }
+}

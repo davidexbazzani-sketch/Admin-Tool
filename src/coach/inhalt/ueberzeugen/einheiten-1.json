@@ -1,0 +1,337 @@
+{
+  "einheiten": [
+    {
+      "id": "ueberzeugen-1-01", "bereich": "ueberzeugen", "stufe": 1, "nr": 1,
+      "titel": "Verkaufen heißt entscheiden helfen",
+      "faehigkeiten": ["ueberzeugen.haltung", "ueberzeugen.einfluss"], "dauerMin": 6, "beleg": "B",
+      "belegHinweis": "Dass Druck Ärger und Gegenwehr auslöst, ist in vielen Studien gezeigt. Der Zusatz „Sag gern Nein“ hat in sauberen Studien keinen sicheren Effekt – er steht hier als Haltung, nicht als Wirkversprechen.",
+      "quellen": ["rains2013", "brehm1966", "fillon2023"],
+      "aha": "Druck weckt Gegenwehr. Wer dem anderen hilft, eine gute Entscheidung zu treffen, statt sie ihm abzunehmen, bekommt Zusagen, die halten – und hört ein Nein ohne Groll.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Du bietest Nadine Köhler an, die Technik ihres Betriebs zu betreuen. Sie zögert.", "schwach": "„Sie werden es bereuen, wenn Sie jetzt nicht zugreifen. Das Angebot gilt nur diese Woche.“", "stark": "„Lassen Sie uns erst schauen, ob es überhaupt passt. Wenn nicht, sage ich Ihnen das auch.“", "frage": "Bei wem würdest du lieber kaufen?", "unterschied": "Der erste Satz macht Druck – und weckt Gegenwehr. Der zweite stellt dich auf ihre Seite: Ihr prüft gemeinsam, ob es passt. Entscheiden darf sie." },
+        { "art": "karte", "text": "Menschen wollen frei entscheiden. Wer sich gedrängt fühlt, wird ärgerlich und sucht Gegenargumente – die Forschung nennt das Reaktanz, den Trotz bei bedrohter Freiheit. Überzeugen heißt darum: dem anderen eine gute Entscheidung ermöglichen. Überreden heißt: sie ihm abnehmen. Der Test für jedes Mittel: Würde es auch wirken, wenn der andere genau wüsste, was du tust?" },
+        { "art": "mythos", "aussage": "Wer gut verkauft, lässt kein Nein gelten.", "urteil": "falsch", "warum": "Ein übergangenes Nein ist die rote Linie. Wer ein Nein annimmt und einmal fragt, woran es lag, bleibt im Gespräch – und wird später eher wieder gefragt." },
+        { "art": "studie", "frage": "Erhöht der Zusatz „Aber du entscheidest“ die Zustimmung zu einer Bitte?", "aufbau": "Forscher sammelten 52 Experimente, in denen eine Bitte mit oder ohne diesen Zusatz gestellt wurde. Dann prüften sie, wie sauber jede Studie gemacht war.", "ergebnis": "Über alle Studien sah es nach einem mittleren Effekt aus. Nur sieben Studien hatten ein geringes Verzerrungsrisiko – und sie zeigten zusammen keinen sicheren Effekt.", "grenze": "Viele Einzelstudien waren zu klein. Der Satz ist darum kein Zauberwort. Er bleibt richtig, weil er stimmt – nicht, weil er wirkt.", "beleg": "U", "quellen": ["fillon2023"] },
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-1-01-a", "faehigkeit": "ueberzeugen.einfluss", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Fair, Taktik oder rote Linie?",
+          "faecher": ["fair – wirkt auch durchschaut", "Taktik – ohne Lüge, mit Preis", "rote Linie – nur erkennen"],
+          "karten": [
+            { "text": "Nach dem Bedarf fragen, bevor du etwas anbietest.", "fach": 0 },
+            { "text": "Einen echten Nachteil nennen und einordnen.", "fach": 0 },
+            { "text": "Zuerst eine ehrgeizige, aber begründbare Zahl nennen.", "fach": 1 },
+            { "text": "Nach dem Preis schweigen und abwarten.", "fach": 1 },
+            { "text": "„Nur noch heute“ sagen, obwohl es morgen genauso gilt.", "fach": 2 },
+            { "text": "Ein Nein so lange bearbeiten, bis der andere nachgibt.", "fach": 2 }
+          ] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-1-01-b", "faehigkeit": "ueberzeugen.haltung", "stufe": 2, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Nadine Köhler sagt: „Ich weiß nicht, ob das gerade der richtige Zeitpunkt ist.“ Was antwortest du?",
+          "antworten": [
+            { "text": "„Der richtige Zeitpunkt kommt nie. Am besten fangen wir gleich an.“", "wert": 0, "tendenz": "ueberreden", "warum": "Du übergehst ihr Zögern. Das weckt Gegenwehr." },
+            { "text": "„Was müsste passen, damit es der richtige Zeitpunkt ist? Und wenn es gerade nicht passt, ist das in Ordnung.“", "wert": 2, "warum": "Du fragst nach dem Grund und lässt die Tür für ein Nein offen." },
+            { "text": "„Aber ich habe Ihnen doch gezeigt, wie viel Sie sparen.“", "wert": 0, "tendenz": "verteidigen", "warum": "Du verteidigst dein Angebot, statt ihr Zögern zu verstehen." },
+            { "text": "„Verstehe. Darf ich mich in drei Monaten noch einmal melden? Dann ist das Thema vielleicht ohnehin wieder dringender.“", "wert": 1, "warum": "Respektvoll – aber du erfährst nicht, was hinter dem Zögern steckt." }
+          ] },
+        { "art": "mission", "ref": "ueberzeugen-m-02" }
+      ],
+      "regel": "Hilf entscheiden – und lass das Nein leicht.",
+      "merkkarten": [
+        { "id": "ueberzeugen-1-01-m1", "frage": "Überzeugen oder überreden – was ist der Unterschied?", "antwort": "Überzeugen ermöglicht eine gute Entscheidung. Überreden nimmt sie dem anderen ab." },
+        { "id": "ueberzeugen-1-01-m2", "frage": "Ist „Sag gern Nein“ ein Zaubersatz?", "antwort": "Nein – ein sicherer Effekt ist nicht belegt. Du sagst ihn, weil er stimmt." },
+        { "id": "ueberzeugen-1-01-m3", "frage": "Der Test für jedes Mittel?", "antwort": "Würde es auch wirken, wenn der andere genau wüsste, was ich tue?" }
+      ],
+      "mission": "ueberzeugen-m-02"
+    },
+    {
+      "id": "ueberzeugen-1-02", "bereich": "ueberzeugen", "stufe": 1, "nr": 2,
+      "titel": "Erst das Problem, dann die Lösung",
+      "faehigkeiten": ["ueberzeugen.bedarf"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Die vier Fragen sind Praxiswissen aus Auswertungen von Verkaufsgesprächen. Gut belegt ist das Umfeld: Wer zuhört und sein Angebot anpasst, verkauft besser.",
+      "quellen": ["rackham", "itani2019", "franke2006", "grant2013"],
+      "aha": "Wer zu früh anbietet, verkauft an der Sache vorbei. Vier Fragen – Lage, Problem, Folgen, Wunsch – machen aus einem Angebot eine Antwort.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "In einer Studie mit 340 Telefonverkäufern: Wer verkaufte über drei Monate am meisten?", "optionen": ["die Geselligsten und Redefreudigsten", "die Stillsten", "die in der Mitte"], "richtig": 2, "loesung": "Die in der Mitte", "aufloesung": "Sie lagen vor beiden Extremen. Vermutlich, weil sie genug Schwung zum Überzeugen haben – und genug Ruhe zum Zuhören. Eine Einzelstudie, aber sie passt zu vielen Studien über das Zuhören." },
+        { "art": "karte", "text": "Vier Fragen, bevor du etwas vorschlägst: Lage („Wie läuft das bei Ihnen heute?“), Problem („Was kostet daran am meisten Nerven?“), Folgen („Was passiert, wenn es so bleibt?“), Wunsch („Woran würden Sie merken, dass es gelöst ist?“). Die Folgen-Frage ist die wichtigste: Erst wenn der andere selbst sagt, was das Problem kostet, hat dein Vorschlag einen Wert." },
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-1-02-a", "faehigkeit": "ueberzeugen.bedarf", "stufe": 2, "kanal": "wissen", "einfluss": "fair" },
+          "auftrag": "Welche Frage gehört an welche Stelle?",
+          "faecher": ["Lage", "Problem", "Folgen", "Wunsch"],
+          "karten": [
+            { "text": "„Wie viele Leute arbeiten bei Ihnen mit dem System?“", "fach": 0 },
+            { "text": "„Wer kümmert sich bisher um die Rechner?“", "fach": 0 },
+            { "text": "„Was ärgert Sie daran am meisten?“", "fach": 1 },
+            { "text": "„Wo hakt es im Alltag?“", "fach": 1 },
+            { "text": "„Was kostet Sie ein Tag, an dem nichts geht?“", "fach": 2 },
+            { "text": "„Was passiert, wenn das im Frühjahr wieder vorkommt?“", "fach": 2 },
+            { "text": "„Wie sähe ein guter Montagmorgen für Sie aus?“", "fach": 3 },
+            { "text": "„Woran würden Sie merken, dass es gelöst ist?“", "fach": 3 }
+          ] },
+        { "art": "anschluss", "kopf": { "id": "ueberzeugen-1-02-b", "faehigkeit": "ueberzeugen.bedarf", "stufe": 3, "kanal": "koennen", "einfluss": "fair" },
+          "von": "Nadine Köhler",
+          "aussage": "„Ehrlich gesagt: Die Rechner laufen meistens. Nur wenn was ist, weiß keiner, wen man anrufen soll.“",
+          "kriterien": ["greift ihren Punkt auf", "fragt nach Folgen oder Häufigkeit", "noch kein Angebot"],
+          "muster": ["„Wann war das zuletzt – und was ist dann liegen geblieben?“", "„Was hat Sie so ein Tag zuletzt gekostet?“", "„Wer springt dann bisher ein?“"] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-1-02-c", "faehigkeit": "ueberzeugen.bedarf", "stufe": 3, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Nadine hat zwei Minuten von ihrem Problem erzählt. Was tust du jetzt?",
+          "antworten": [
+            { "text": "Sofort dein Paket vorstellen – jetzt weißt du ja, was sie braucht.", "wert": 0, "tendenz": "zufrueh", "warum": "Du glaubst es zu wissen. Ohne Bestätigung verkaufst du leicht an der Sache vorbei." },
+            { "text": "Erklären, welche Technik du einsetzt.", "wert": 0, "tendenz": "merkmale", "warum": "Sie hat ein Problem beschrieben, keine Technik-Frage gestellt." },
+            { "text": "Kurz zusammenfassen und fragen, ob du es richtig verstanden hast.", "wert": 2, "warum": "So merkt sie, dass du zugehört hast – und du prüfst, ob dein Vorschlag das Richtige trifft." },
+            { "text": "Noch eine Frage stellen, bevor du etwas vorschlägst.", "wert": 1, "warum": "Gut, solange es kein Verhör wird. Eine Zusammenfassung wäre jetzt stärker." }
+          ] },
+        { "art": "mission", "ref": "ueberzeugen-m-05" }
+      ],
+      "regel": "Erst vier Fragen, dann zusammenfassen – dann der Vorschlag.",
+      "merkkarten": [
+        { "id": "ueberzeugen-1-02-m1", "frage": "Die vier Fragen vor einem Vorschlag?", "antwort": "Lage, Problem, Folgen, Wunsch." },
+        { "id": "ueberzeugen-1-02-m2", "frage": "Welche der vier Fragen ist die wichtigste?", "antwort": "Die Folgen-Frage: Was kostet es, wenn es so bleibt?" }
+      ],
+      "mission": "ueberzeugen-m-05"
+    },
+    {
+      "id": "ueberzeugen-1-03", "bereich": "ueberzeugen", "stufe": 1, "nr": 3,
+      "titel": "Nutzen statt Merkmale",
+      "faehigkeiten": ["ueberzeugen.nutzen"], "dauerMin": 6, "beleg": "P",
+      "belegHinweis": "Die Nutzen-Argumentation ist bewährtes Praxiswissen aus dem Verkauf. Gut belegt ist das Umfeld: Wer zuhört und sein Vorgehen an das Gegenüber anpasst, verkauft besser.",
+      "quellen": ["praxis-ueberzeugen", "franke2006", "itani2019"],
+      "aha": "Niemand will eine Funktion. Jeder will, was sie für ihn tut. Die Brücke heißt: „… das heißt für dich …“",
+      "schritte": [
+        { "art": "vergleich", "lage": "Nadine Köhler fragt, was die neue Datensicherung bringt.", "schwach": "„Sie sichert stündlich, verschlüsselt und an zwei Standorten.“", "stark": "„Wenn morgen ein Rechner ausfällt, arbeiten Sie nach einer Stunde weiter – mit dem Stand von heute.“", "frage": "Welche Antwort würde sie weitererzählen?", "unterschied": "Die erste beschreibt das Gerät, die zweite ihren Montagmorgen. Merkmale informieren, Nutzen überzeugt." },
+        { "art": "karte", "text": "Ein Merkmal sagt, was etwas ist. Ein Nutzen sagt, was der andere davon hat. Dazwischen liegt eine Brücke aus vier Wörtern: „… das heißt für dich …“ (oder „für Sie“). Sie zwingt dich, die Sache vom Gegenüber aus zu sehen – und zeigt dir sofort, ob du sein Problem verstanden hast." },
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-1-03-a", "faehigkeit": "ueberzeugen.nutzen", "stufe": 2, "kanal": "wissen", "einfluss": "fair" },
+          "auftrag": "Merkmal oder Nutzen?",
+          "faecher": ["Merkmal", "Nutzen"],
+          "karten": [
+            { "text": "Das Gerät wiegt 900 Gramm.", "fach": 0 },
+            { "text": "Du trägst es den ganzen Tag, ohne es zu merken.", "fach": 1 },
+            { "text": "Wir sind seit zwölf Jahren am Markt.", "fach": 0 },
+            { "text": "Du hast in fünf Jahren noch denselben Ansprechpartner.", "fach": 1 },
+            { "text": "Der Kurs hat acht Abende.", "fach": 0 },
+            { "text": "Nach acht Abenden kannst du im Urlaub ein Essen bestellen.", "fach": 1 }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-1-03-b", "faehigkeit": "ueberzeugen.nutzen", "stufe": 3, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Bau die Brücke: Mach aus dem Merkmal einen Nutzen für eine Handwerksmeisterin mit sechs Leuten.",
+          "vorlage": "„Unsere Software hat eine automatische Terminerinnerung.“",
+          "kriterien": ["nennt eine Folge für ihren Alltag", "spricht sie direkt an", "bleibt wahr"],
+          "muster": ["„Ihre Kunden bekommen am Vortag eine Nachricht – das heißt für Sie: weniger Fahrten vor verschlossene Türen.“", "„Die Erinnerung geht von allein raus. Das heißt für Sie: Niemand im Büro muss abends noch telefonieren.“"] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-1-03-c", "faehigkeit": "ueberzeugen.nutzen", "stufe": 3, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Du weißt noch nicht, was deinem Gegenüber wichtig ist. Was tust du?",
+          "antworten": [
+            { "text": "Erst fragen: „Was soll danach leichter sein als heute?“", "wert": 2, "warum": "Ohne sein Problem zu kennen, ist jeder Nutzen geraten." },
+            { "text": "Die drei beliebtesten Vorteile nennen.", "wert": 1, "warum": "Besser als Merkmale – trifft aber nur zufällig." },
+            { "text": "Alle Funktionen der Reihe nach erklären.", "wert": 0, "tendenz": "merkmale", "warum": "Viel Information, kein Grund zu entscheiden." },
+            { "text": "Gleich den Preis nennen, damit es schnell geht – dann weiß er sofort, woran er ist.", "wert": 0, "tendenz": "zufrueh", "warum": "Ein Preis ohne erkannten Nutzen wirkt immer zu hoch." }
+          ] },
+        { "art": "mission", "ref": "ueberzeugen-m-04" }
+      ],
+      "regel": "Sag nicht, was es ist. Sag, was der andere davon hat.",
+      "merkkarten": [
+        { "id": "ueberzeugen-1-03-m1", "frage": "Wie heißt die Brücke vom Merkmal zum Nutzen?", "antwort": "„… das heißt für dich …“ – oder „für Sie“." },
+        { "id": "ueberzeugen-1-03-m2", "frage": "Was kommt vor jedem Nutzen-Satz?", "antwort": "Die Frage, was der andere braucht." }
+      ],
+      "mission": "ueberzeugen-m-04"
+    },
+    {
+      "id": "ueberzeugen-1-04", "bereich": "ueberzeugen", "stufe": 1, "nr": 4,
+      "titel": "In 30 Sekunden: wofür du stehst",
+      "faehigkeiten": ["ueberzeugen.profil"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Der Bauplan ist Praxiswissen. Belegt ist: Offen genannte Leistung kommt besser an als getarntes Eigenlob, und im Vorstellungsgespräch zahlt sich ehrliche Selbstdarstellung aus, geschönte im Schnitt nicht.",
+      "quellen": ["praxis-ueberzeugen", "sezer2018", "peck2017", "ho2021"],
+      "aha": "„Und was machst du so?“ ist eine Einladung. Wer nur die Berufsbezeichnung nennt, lässt sie liegen. Besser: für wen, welches Problem, was du tust – und ein Beispiel.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Geburtstagsfeier bei Freunden. Jule Marek fragt: „Und was machst du so?“", "schwach": "„Ich bin Sachbearbeiterin im Einkauf.“", "stark": "„Ich sorge dafür, dass bei uns nie das Material ausgeht. Letzten Monat habe ich einen Lieferanten gefunden, der in zwei Tagen liefert statt in zwei Wochen.“", "frage": "Bei welcher Antwort kann Jule weiterfragen?", "unterschied": "Die Berufsbezeichnung ist eine Schublade. Die zweite Antwort zeigt, wofür du stehst – und das Beispiel liefert gleich Stoff fürs Gespräch." },
+        { "art": "karte", "text": "Vier Teile, zusammen etwa 30 Sekunden: Für wen arbeitest du? Welches Problem löst du? Was tust du dafür? Und ein kurzes Beispiel, am besten mit Ergebnis. Ehrlich und konkret, keine Werbesprache. Wer offen sagt, was er gut kann, kommt besser an als jemand, der sein Lob tarnt („Ich hasse es, dass mich alle fragen“)." },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-1-04-a", "faehigkeit": "ueberzeugen.profil", "stufe": 2, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Welche Antwort auf „Was machst du so?“ ist offen, ohne aufzuschneiden?",
+          "antworten": [
+            { "text": "„Ich bin die beste Buchhalterin der Stadt, ehrlich – frag ruhig herum, bei mir stimmt jede Zahl auf den Cent.“", "wert": 0, "tendenz": "aufblasen", "warum": "Ohne Beleg wirkt das aufgeblasen – und lädt zum Gegenbeweis ein." },
+            { "text": "„Ich bin Buchhalterin.“", "wert": 1, "warum": "Stimmt, gibt aber wenig her. Ein Satz zum Nutzen würde das Gespräch öffnen." },
+            { "text": "„Ich mache die Buchhaltung für zwölf Handwerksbetriebe – damit die sich aufs Handwerk konzentrieren können.“", "wert": 2, "warum": "Für wen, was, welcher Nutzen – sachlich und überprüfbar." },
+            { "text": "„Ach, nur Buchhaltung. Nichts Spannendes.“", "wert": 0, "tendenz": "kleinmachen", "warum": "Du machst dich klein, bevor der andere urteilen kann." }
+          ] },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-1-04-b", "faehigkeit": "ueberzeugen.profil", "stufe": 3, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Mach aus dem getarnten Eigenlob einen offenen, sachlichen Satz.",
+          "vorlage": "„Puh, ich bin völlig erledigt – der Chef will jedes schwierige Projekt nur von mir.“",
+          "kriterien": ["nennt die Leistung offen", "sachlich, ohne Klage", "mit einem Beispiel oder Beleg"],
+          "muster": ["„Ich übernehme oft die schwierigen Projekte – zuletzt die Umstellung der Lagersoftware.“", "„Darauf bin ich stolz: Die letzten drei kniffligen Projekte liefen über meinen Tisch, alle im Zeitplan.“"] },
+        { "art": "bauplan", "kopf": { "id": "ueberzeugen-1-04-c", "faehigkeit": "ueberzeugen.profil", "stufe": 3, "kanal": "koennen", "einfluss": "fair" },
+          "plan": "Meine Vorstellung in 30 Sekunden",
+          "anlass": "Jemand fragt dich auf einer Feier, bei einem Treffen oder im Vorstellungsgespräch: „Was machen Sie so?“",
+          "felder": [
+            { "name": "Für wen?", "hilfe": "Kunden, Kollegen, ein Betrieb, eine Abteilung." },
+            { "name": "Welches Problem?", "hilfe": "Was wäre ohne dich schwieriger?" },
+            { "name": "Was tust du?", "hilfe": "In Alltagswörtern, ohne Fachbegriffe." },
+            { "name": "Ein Beispiel", "hilfe": "Ein Fall aus den letzten Wochen, gern mit Ergebnis." }
+          ],
+          "muster": ["Für wen: kleine Arztpraxen. Problem: Technik, die im Weg steht. Was ich tue: einrichten, warten, erreichbar sein. Beispiel: Letzten Monat lief eine Praxis nach dem Umzug am Montag um acht wieder.", "Für wen: unser Vertrieb. Problem: Angebote dauern zu lang. Was ich tue: Ich baue Vorlagen und Preislisten. Beispiel: Seit Januar geht ein Standardangebot in zehn Minuten raus statt in einer Stunde."] },
+        { "art": "reflexion", "frage": "Wo fragt dich in den nächsten zwei Wochen jemand, was du machst? Schreib deine Vorstellung dafür auf.", "insBuch": "saetze" },
+        { "art": "mission", "ref": "ueberzeugen-m-03" }
+      ],
+      "regel": "Nicht die Berufsbezeichnung – sag, für wen du welches Problem löst.",
+      "merkkarten": [
+        { "id": "ueberzeugen-1-04-m1", "frage": "Die vier Teile der Vorstellung in 30 Sekunden?", "antwort": "Für wen, welches Problem, was ich tue, ein Beispiel." },
+        { "id": "ueberzeugen-1-04-m2", "frage": "Warum wirkt getarntes Eigenlob schlecht?", "antwort": "Es wirkt unaufrichtig. Offen und sachlich kommt besser an." }
+      ],
+      "mission": "ueberzeugen-m-03"
+    },
+    {
+      "id": "ueberzeugen-1-05", "bereich": "ueberzeugen", "stufe": 1, "nr": 5,
+      "titel": "Ehrlich überzeugt besser",
+      "faehigkeiten": ["ueberzeugen.vertrauen"], "dauerMin": 7, "beleg": "A",
+      "belegHinweis": "Zwei Meta-Analysen. Wichtig ist der Zusatz: Nur mit Einordnung macht der Nachteil glaubwürdiger – unbeantwortet schwächt er.",
+      "quellen": ["allen1991", "okeefe1999"],
+      "aha": "Wer einen Nachteil offen nennt und ihn einordnet, wirkt glaubwürdiger als jeder Lobredner. Aber nur mit Einordnung – ein Nachteil, der unbeantwortet stehen bleibt, schwächt.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Herr Petersen fragt dich, ob er die neue Abrechnungssoftware nehmen soll.", "schwach": "„Die ist in jeder Hinsicht perfekt. Sie werden begeistert sein.“", "stark": "„Die Umstellung kostet Sie ein, zwei Wochen Eingewöhnung. Danach sparen Sie bei jeder Rechnung die doppelte Eingabe.“", "frage": "Wem glaubt Herr Petersen eher?", "unterschied": "Lob ohne Haken klingt nach Verkauf. Der ehrlich genannte Nachteil macht den Vorteil glaubwürdig – weil er gleich eingeordnet wird." },
+        { "art": "studie", "frage": "Soll man Gegenargumente selbst ansprechen?", "aufbau": "Zwei Meta-Analysen verglichen Botschaften, die nur Vorteile nennen, mit solchen, die auch Gegenargumente nennen – mit und ohne Antwort darauf.", "ergebnis": "Zweiseitig mit Antwort überzeugte mehr als einseitig und wirkte glaubwürdiger. Zweiseitig ohne Antwort überzeugte weniger als einseitig.", "grenze": "In der Werbung gab es kaum Unterschiede – dort gibt es aber nur wenige Studien. Entscheidend ist das Einordnen.", "beleg": "A", "quellen": ["allen1991", "okeefe1999"] },
+        { "art": "karte", "text": "Der zweiseitige Satz hat drei Teile: den echten Nachteil („Günstiger geht es woanders“), die Einordnung („Dafür …“) und – wenn es passt – für wen es trotzdem nichts ist. Das Letzte ist ein starker Vertrauensbeweis: Du sagst auch, wann du nicht der Richtige bist. Erfundene Nachteile („Mein einziger Fehler: Ich arbeite zu viel“) durchschaut jeder." },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-1-05-a", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 3, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Mach aus dem einseitigen Lob einen zweiseitigen Satz: Nachteil nennen und einordnen.",
+          "vorlage": "„Unser Wartungsvertrag ist unschlagbar – besser geht es nicht.“",
+          "kriterien": ["nennt einen echten Nachteil", "ordnet ihn ehrlich ein", "bleibt wahr und konkret"],
+          "muster": ["„Der Vertrag bindet Sie für ein Jahr. Dafür kommt jemand innerhalb von vier Stunden, wenn etwas ausfällt.“", "„Billiger ist es, nur im Notfall jemanden zu rufen. Mit dem Vertrag zahlen Sie dafür nie den Notdienstpreis.“"] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-1-05-b", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 3, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Du empfiehlst Miriam ein Fahrrad, mit dem du sehr zufrieden bist. Welcher Satz baut am meisten Vertrauen auf?",
+          "antworten": [
+            { "text": "„Ich fahre es seit drei Jahren täglich, ohne eine Reparatur.“", "wert": 1, "warum": "Ein starker, echter Beleg – nur der Nachteil fehlt." },
+            { "text": "„Es ist schwerer als die meisten – fürs Treppenhaus nervig. Für den Arbeitsweg ist es das Beste, das ich hatte.“", "wert": 2, "warum": "Echter Nachteil, ehrlich eingeordnet. So klingt eine Empfehlung, der man glaubt." },
+            { "text": "„Es hat einen Nachteil: Es ist schwer.“ – und dann nichts mehr.", "wert": 0, "warum": "Ein Nachteil ohne Einordnung schwächt deine Empfehlung." },
+            { "text": "„Es ist perfekt, glaub mir.“", "wert": 0, "tendenz": "aufblasen", "warum": "Ohne Haken und Beleg klingt es nach Werbung." }
+          ] },
+        { "art": "zuordnen", "kopf": { "id": "ueberzeugen-1-05-c", "faehigkeit": "ueberzeugen.vertrauen", "stufe": 2, "kanal": "wissen", "einfluss": "fair" },
+          "auftrag": "Zweiseitig mit Antwort, zweiseitig ohne Antwort – oder einseitig?",
+          "faecher": ["zweiseitig mit Antwort", "zweiseitig ohne Antwort", "einseitig"],
+          "karten": [
+            { "text": "„Die Lieferung dauert zwei Wochen. Dafür ist alles auf Maß gefertigt.“", "fach": 0 },
+            { "text": "„Die Lieferung dauert zwei Wochen.“ – Punkt.", "fach": 1 },
+            { "text": "„Bestes Material, beste Verarbeitung, bester Service.“", "fach": 2 },
+            { "text": "„Wir sind nicht die Schnellsten. Dafür muss bei uns nichts zweimal gemacht werden.“", "fach": 0 },
+            { "text": "„Ehrlich gesagt ist es teurer als die anderen.“ – und Schweigen.", "fach": 1 },
+            { "text": "„Sie werden es lieben.“", "fach": 2 }
+          ] },
+        { "art": "mission", "ref": "ueberzeugen-m-01" }
+      ],
+      "regel": "Nenn den Nachteil – und ordne ihn ein. Nennen allein schwächt.",
+      "merkkarten": [
+        { "id": "ueberzeugen-1-05-m1", "frage": "Wann macht ein genannter Nachteil glaubwürdiger?", "antwort": "Wenn du ihn gleich einordnest. Unbeantwortet schwächt er." },
+        { "id": "ueberzeugen-1-05-m2", "frage": "Ein starker Vertrauensbeweis?", "antwort": "Sagen, für wen dein Angebot nichts ist." }
+      ],
+      "mission": "ueberzeugen-m-01"
+    },
+    {
+      "id": "ueberzeugen-1-06", "bereich": "ueberzeugen", "stufe": 1, "nr": 6,
+      "titel": "Der Einwand ist eine Frage",
+      "faehigkeiten": ["ueberzeugen.einwand"], "dauerMin": 7, "beleg": "P",
+      "belegHinweis": "Die vier Schritte sind Praxiswissen aus Verkaufsschulung und Gesprächsauswertungen. Dass Verluste schwerer wiegen als Gewinne, ist dagegen gut belegt.",
+      "quellen": ["praxis-ueberzeugen", "rackham", "brown2024"],
+      "aha": "„Zu teuer“ heißt selten Nein. Oft heißt es: „Ich sehe den Wert noch nicht.“ Wer erst nachfragt, statt zu verteidigen, erfährt, worum es wirklich geht.",
+      "schritte": [
+        { "art": "vergleich", "lage": "Nadine Köhler sieht dein Angebot an: „Das ist mir zu teuer.“", "schwach": "„Das ist aber ein fairer Preis! Andere verlangen viel mehr, und bei uns ist alles dabei …“", "stark": "„Verstehe. Womit vergleichen Sie gerade?“", "frage": "Welche Antwort bringt dich weiter?", "unterschied": "Die erste verteidigt – jetzt muss Nadine ihren Einwand verteidigen. Die zweite fragt nach. Vielleicht vergleicht sie mit einem kleineren Angebot, vielleicht fehlt ihr ein Nutzen." },
+        { "art": "karte", "text": "Vier Schritte: Verstehen („Womit vergleichen Sie?“), Anerkennen („Berechtigter Punkt, das ist viel Geld“), Klären („Ist der Preis der einzige Punkt?“) – erst dann Antworten. Hinter Einwänden steckt oft Verlustangst: Das Alte aufzugeben fühlt sich größer an, als das Neue zu gewinnen. Wer das anerkennt, statt zu streiten, nimmt Druck heraus." },
+        { "art": "rangfolge", "kopf": { "id": "ueberzeugen-1-06-a", "faehigkeit": "ueberzeugen.einwand", "stufe": 2, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Bring die vier Schritte bei einem Einwand in die richtige Reihenfolge.",
+          "eintraege": [
+            { "text": "„Womit vergleichen Sie gerade?“", "warum": "Verstehen: erst herausfinden, was hinter dem Einwand steckt." },
+            { "text": "„Das ist ein berechtigter Punkt.“", "warum": "Anerkennen: Der andere muss seinen Einwand nicht mehr verteidigen." },
+            { "text": "„Ist das der einzige Punkt – oder gibt es noch etwas?“", "warum": "Klären: sonst beantwortest du den falschen Einwand." },
+            { "text": "„Dann zeige ich Ihnen, was in den 1.200 Euro steckt.“", "warum": "Antworten – jetzt gezielt." }
+          ] },
+        { "art": "dialog", "kopf": { "id": "ueberzeugen-1-06-b", "faehigkeit": "ueberzeugen.einwand", "stufe": 3, "kanal": "koennen", "einfluss": "fair" },
+          "gespraech": {
+            "titel": "„Zu teuer“", "figur": "Nadine Köhler",
+            "lage": "Du hast Nadine ein Angebot für die Betreuung ihrer Technik geschickt: 350 Euro im Monat. Sie ruft an.",
+            "start": "k1",
+            "knoten": [
+              { "id": "k1", "sagt": "Nadine: „Ich habe Ihr Angebot gelesen. Ehrlich gesagt: 350 im Monat ist mir zu viel.“",
+                "wahl": [
+                  { "text": "„Danke, dass Sie es offen sagen. Womit vergleichen Sie gerade?“", "wert": 2, "weiter": "k2", "rueck": "Anerkennen und verstehen – jetzt erfährst du, was dahintersteckt." },
+                  { "text": "„Ich kann Ihnen auf 300 entgegenkommen.“", "wert": 0, "tendenz": "nachgeben", "weiter": "k1b", "rueck": "Nachlass beim ersten Zögern: Du weißt noch nicht, worum es geht – und der Preis wirkt jetzt beliebig." },
+                  { "text": "„350 ist ein sehr fairer Preis für das, was Sie bekommen – andere verlangen dafür deutlich mehr.“", "wert": 0, "tendenz": "verteidigen", "weiter": "k1c", "rueck": "Du verteidigst – jetzt muss sie ihren Einwand verteidigen." }
+                ] },
+              { "id": "k1b", "sagt": "Nadine: „Hm. Und wenn ich noch mal frage, gehen Sie auf 250?“",
+                "wahl": [
+                  { "text": "„Nein. Lassen Sie uns lieber schauen, was Sie brauchen. Womit vergleichen Sie?“", "wert": 2, "weiter": "k2", "rueck": "Gut gerettet: zurück zum Verstehen." },
+                  { "text": "„Na gut, 280 – aber das ist mein letztes Wort.“", "wert": 0, "tendenz": "nachgeben", "weiter": "ende2", "rueck": "Jetzt verhandelst du gegen dich selbst." }
+                ] },
+              { "id": "k1c", "sagt": "Nadine: „Mag sein. Trotzdem ist es mir zu viel.“",
+                "wahl": [
+                  { "text": "„Verstehe. Womit vergleichen Sie – und was ist Ihnen am wichtigsten?“", "wert": 2, "weiter": "k2", "rueck": "Zweite Chance genutzt: vom Verteidigen zum Fragen." },
+                  { "text": "„Dann schicke ich Ihnen eine kleinere Variante.“", "wert": 1, "weiter": "ende2", "rueck": "Kann passen – aber du rätst, statt zu fragen." }
+                ] },
+              { "id": "k2", "sagt": "Nadine: „Mein Neffe macht das bisher nebenbei. Kostet nichts. Nur ist er halt selten da, wenn was ist.“",
+                "wahl": [
+                  { "text": "„Also bisher kein Geld – aber manchmal ein halber Tag Stillstand. Ist der Preis der einzige Punkt?“", "wert": 2, "weiter": "k3", "rueck": "Du fasst zusammen, machst die Folgen sichtbar und klärst, ob noch etwas dahintersteckt." },
+                  { "text": "„Dann sind 350 im Vergleich natürlich viel.“", "wert": 1, "weiter": "k3", "rueck": "Ehrlich, aber du lässt den eigentlichen Punkt liegen: die Zeit, wenn der Neffe fehlt." },
+                  { "text": "„Na ja, ein Neffe ist eben kein Fachmann.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Du greifst ihren Neffen an – und damit ihre bisherige Entscheidung. Gesicht wahren geht anders." }
+                ] },
+              { "id": "k3", "sagt": "Nadine: „Ehrlich gesagt will ich ihn auch nicht kränken. Er macht das gern.“",
+                "wahl": [
+                  { "text": "„Das verstehe ich. Er könnte die kleinen Dinge behalten, und ich übernehme Sicherung und Notfälle. Würde das passen?“", "wert": 2, "weiter": "ende1", "rueck": "Du nimmst den wahren Einwand ernst und findest eine Lösung, bei der alle ihr Gesicht wahren." },
+                  { "text": "„Dann sprechen Sie erst mit ihm und melden sich.“", "wert": 1, "weiter": "ende1", "rueck": "Respektvoll – nur ohne Vorschlag und ohne nächsten Schritt." }
+                ] },
+              { "id": "ende1", "sagt": "Nadine: „Das könnte gehen. Schicken Sie mir das so?“", "ende": "Der Preis war nicht das ganze Problem. Verstehen, anerkennen, klären – dann trifft die Antwort." },
+              { "id": "ende2", "sagt": "Nadine: „Ich melde mich.“ Sie meldet sich nicht.", "ende": "Wer verteidigt oder sofort nachlässt, erfährt nie, worum es ging. Beim nächsten Mal: erst fragen." }
+            ],
+            "prinzipien": ["erst verstehen, dann antworten", "anerkennen statt verteidigen", "kein Nachlass beim ersten Zögern", "nach dem wahren Einwand fragen"]
+          } },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-1-06-c", "faehigkeit": "ueberzeugen.einwand", "stufe": 3, "kanal": "wissen", "einfluss": "fair" },
+          "frage": "Jemand sagt: „Klingt gut, aber ich muss noch darüber nachdenken.“ Was hilft am meisten?",
+          "antworten": [
+            { "text": "„Natürlich. Darf ich mich am Freitag melden?“", "wert": 1, "warum": "Respektvoll und mit nächstem Schritt – nur der eigentliche Punkt bleibt unklar." },
+            { "text": "„Da gibt es eigentlich nichts nachzudenken – das Angebot ist eindeutig, die Zahlen sprechen doch für sich.“", "wert": 0, "tendenz": "ueberreden", "warum": "Du nimmst ihm die Entscheidung ab. Das weckt Gegenwehr." },
+            { "text": "„Okay, melden Sie sich, wenn Sie so weit sind.“", "wert": 0, "tendenz": "nichtfragen", "warum": "Ohne Frage und ohne Termin versandet es meist." },
+            { "text": "„Gern. Worüber genau möchten Sie nachdenken – vielleicht kann ich das gleich klären?“", "wert": 2, "warum": "Du respektierst die Bedenkzeit und erfährst, was noch offen ist." }
+          ] },
+        { "art": "mission", "ref": "ueberzeugen-m-06" }
+      ],
+      "regel": "Bei einem Einwand erst fragen – dann antworten.",
+      "merkkarten": [
+        { "id": "ueberzeugen-1-06-m1", "frage": "Die vier Schritte bei einem Einwand?", "antwort": "Verstehen, anerkennen, klären, antworten." },
+        { "id": "ueberzeugen-1-06-m2", "frage": "Was heißt „zu teuer“ oft?", "antwort": "„Ich sehe den Wert noch nicht“ – oder: „Ich vergleiche mit etwas anderem.“" }
+      ],
+      "mission": "ueberzeugen-m-06"
+    },
+    {
+      "id": "ueberzeugen-1-07", "bereich": "ueberzeugen", "stufe": 1, "nr": 7,
+      "titel": "Fragen kostet nichts",
+      "faehigkeiten": ["ueberzeugen.abschluss", "ueberzeugen.einfluss"], "dauerMin": 7, "beleg": "B",
+      "belegHinweis": "Belegt ist, dass Bittende unterschätzen, wie oft andere Ja sagen (Experimente zu Alltagsbitten), und dass die erste Zahl im Schnitt hilft (Meta-Analyse, meist Laborverhandlungen). Die Formulierungen sind Praxiswissen.",
+      "quellen": ["flynn2008", "bohns2016", "petrowsky2025", "barton2022"],
+      "aha": "Viele Zusagen scheitern nicht am Nein, sondern daran, dass nie gefragt wurde. Eine klare Frage am Ende ist kein Druck – sie hilft dem anderen, zu entscheiden.",
+      "schritte": [
+        { "art": "schaetzen", "frage": "In Experimenten sollten Leute Fremde um einen kleinen Gefallen bitten. Vorher schätzten sie, wie viele sie fragen müssten. Wie lag die Schätzung?", "optionen": ["zu niedrig – sie mussten mehr Leute fragen", "ungefähr richtig", "zu hoch – es sagten mehr Ja als gedacht"], "richtig": 2, "loesung": "Zu hoch", "aufloesung": "Die Bittenden unterschätzten deutlich, wie bereit andere sind. Wir denken an die Kosten des Ja – und vergessen, wie unangenehm vielen ein Nein ist." },
+        { "art": "karte", "text": "Am Ende eines guten Gesprächs steht eine klare Frage: „Wollen wir das so machen?“ oder „Was brauchen Sie noch, um zu entscheiden?“ Beim Geld gilt: Wert zusammenfassen, Zahl nennen, schweigen. Wer zuerst eine begründbare Zahl nennt, liegt im Schnitt vorn. Das ist eine Taktik: Sie wirkt ohne Lüge, kostet aber Vertrauen, wenn die Zahl überzogen ist." },
+        { "art": "umformulieren", "kopf": { "id": "ueberzeugen-1-07-a", "faehigkeit": "ueberzeugen.abschluss", "stufe": 2, "kanal": "koennen", "einfluss": "fair" },
+          "auftrag": "Mach aus der vagen Andeutung eine klare Bitte um den nächsten Schritt.",
+          "vorlage": "„Also, wenn Sie irgendwann mal Lust haben, könnten wir ja vielleicht mal schauen, ob man da eventuell was machen könnte.“",
+          "kriterien": ["eine klare Frage", "ein konkreter nächster Schritt", "lässt ein Nein zu"],
+          "muster": ["„Wollen wir nächste Woche einen Termin machen, an dem ich mir das vor Ort ansehe?“", "„Soll ich Ihnen bis Freitag ein Angebot schicken – oder passt es gerade nicht?“"] },
+        { "art": "auswahl", "kopf": { "id": "ueberzeugen-1-07-b", "faehigkeit": "ueberzeugen.abschluss", "stufe": 3, "kanal": "wissen", "einfluss": "taktik" },
+          "frage": "Du verkaufst dein altes Fahrrad über eine Kleinanzeige. Der Käufer steht vor dir: „Was wollen Sie dafür?“ Was tust du?",
+          "antworten": [
+            { "text": "„250 – aber da lässt sich bestimmt noch was machen.“", "wert": 0, "tendenz": "nachgeben", "warum": "Du verhandelst gegen dich selbst, bevor er etwas gesagt hat." },
+            { "text": "„250 Euro.“ – und dann ruhig abwarten.", "wert": 2, "warum": "Klare Zahl, keine Entschuldigung, Pause. Die Zahl ist dein Anker – begründbar, nicht überzogen." },
+            { "text": "„Was würden Sie denn geben? Ich habe keine Ahnung.“", "wert": 0, "tendenz": "kleinmachen", "warum": "Jetzt setzt er den Anker – meist niedrig." },
+            { "text": "„250 Euro – es ist erst zwei Jahre alt und frisch gewartet.“", "wert": 1, "warum": "Gut begründet. Nur: Je mehr du nachschiebst, desto mehr klingt es nach Rechtfertigung." }
+          ] },
+        { "art": "kunstgriff", "kopf": { "id": "ueberzeugen-1-07-c", "faehigkeit": "ueberzeugen.einfluss", "stufe": 3, "kanal": "wissen", "einfluss": "rot" },
+          "lage": "Du willst einen neuen Handyvertrag. Der Verkäufer: „Der Preis gilt nur noch heute – morgen ist er weg.“ Auf der Internetseite steht dasselbe Angebot bis Monatsende.",
+          "frage": "Was passiert hier – und was tust du?",
+          "antworten": [
+            { "text": "Erfundene Frist – ruhig sagen: „Dann schaue ich morgen noch mal“, und gehen.", "wert": 2, "warum": "Die Frist ist erfunden, also rote Linie. Wer eine Nacht wartet, nimmt ihr die Wirkung." },
+            { "text": "Erfundene Frist – nachfragen: „Online steht bis Monatsende. Stimmt das nicht?“", "wert": 1, "warum": "Richtig erkannt und ruhig geprüft. Gehen und eine Nacht abwarten ist noch sicherer." },
+            { "text": "Schnell unterschreiben, bevor es weg ist.", "wert": 0, "tendenz": "nachgeben", "warum": "Genau darauf zielt der Trick." },
+            { "text": "Den Verkäufer laut einen Lügner nennen.", "wert": 0, "tendenz": "angreifen", "warum": "Ärger hilft dir nicht. Ruhig gehen ist stärker." }
+          ],
+          "erklaerung": "Knappheit wirkt nachweislich – darum wird sie gern erfunden. Die Abwehr ist fast immer gleich: fragen, was morgen passiert, und eine Nacht darüber schlafen." },
+        { "art": "reflexion", "frage": "Wo hast du zuletzt nicht gefragt – und nie erfahren, ob es ein Ja gewesen wäre?" },
+        { "art": "mission", "ref": "ueberzeugen-m-07" }
+      ],
+      "regel": "Frag klar nach dem nächsten Schritt – das Nein darf kommen.",
+      "merkkarten": [
+        { "id": "ueberzeugen-1-07-m1", "frage": "Woran scheitern viele Zusagen?", "antwort": "Daran, dass nie gefragt wurde." },
+        { "id": "ueberzeugen-1-07-m2", "frage": "Den Preis nennen – in drei Schritten?", "antwort": "Wert zusammenfassen, Zahl nennen, schweigen." },
+        { "id": "ueberzeugen-1-07-m3", "frage": "Was tust du bei „Nur noch heute“?", "antwort": "Fragen, was morgen passiert – und eine Nacht darüber schlafen." }
+      ],
+      "mission": "ueberzeugen-m-07"
+    }
+  ]
+}

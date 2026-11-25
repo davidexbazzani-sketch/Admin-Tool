@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AlertTriangle, Calendar, X, ExternalLink } from 'lucide-react'
-import { useAuthStore, useIsAdmin, useIsMasterAdmin } from '../../store/authStore'
+import { useAuthStore } from '../../store/authStore'
 import { useAppStore } from '../../store/appStore'
 import {
   listLicenses, loadDismissals, dismissAlarm, computeActiveAlarms,
   sendPendingEmails, formatGermanDate,
   type ActiveAlarm,
 } from '../../services/licenses'
-import { loadUserMenuOverrides, getHiddenForUser } from '../../services/userMenuVisibility'
-import { computeMenuVisible } from '../../utils/menuVisibility'
+import { useMenuSichtbar } from '../../store/menuSichtbarStore'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 import { darfAutomatik } from '../../services/automatikLeiter'
 
@@ -33,35 +32,17 @@ const MENU_ID = 'licenses' as const
 export default function LicenseAlarmController() {
   const user = useAuthStore(s => s.session?.user)
   const username = user?.username || ''
-  const isAdmin = useIsAdmin()
-  const isMaster = useIsMasterAdmin()
-  const hiddenMenuIds = useAppStore(s => s.hiddenMenuIds)
-  const menuMinRole = useAppStore(s => s.menuMinRole)
   const setLicensesAlarmCount = useAppStore(s => s.setLicensesAlarmCount)
   const setScreen = useAppStore(s => s.setScreen)
 
-  const [userOverride, setUserOverride] = useState<Set<string> | null>(null)
   const [alarms, setAlarms] = useState<ActiveAlarm[]>([])
   const [popupOpen, setPopupOpen] = useState(false)
   const lastAlarmSignature = useRef<string>('')
 
-  // Per-User-Override laden (gleiche Mechanik wie Sidebar)
-  useEffect(() => {
-    if (!username) return
-    let cancelled = false
-    ;(async () => {
-      try {
-        const o = await loadUserMenuOverrides()
-        if (!cancelled) setUserOverride(getHiddenForUser(o, user?.id || ''))
-      } catch { /* ignore */ }
-    })()
-    return () => { cancelled = true }
-  }, [username, user?.id])
-
-  // Sichtbarkeit für diesen User berechnen (Sidebar-Regeln 1:1)
-  const menuVisible = useCallback((): boolean => computeMenuVisible(MENU_ID, {
-    isAdmin, isMaster, userOverride, hidden: hiddenMenuIds, minRole: menuMinRole, builtinAdminOnly: true,
-  }), [isAdmin, isMaster, userOverride, hiddenMenuIds, menuMinRole])
+  // Sichtbarkeit wie in der Sidebar (dieselbe Auswertung, utils/sichtbarkeit.ts → Store).
+  // Noch nicht berechnet → kein Popup (die Sidebar rechnet direkt nach dem Anmelden).
+  const sichtbar = useMenuSichtbar(s => s.sichtbar ? s.sichtbar[MENU_ID] === true : false)
+  const menuVisible = useCallback((): boolean => sichtbar, [sichtbar])
 
   const tick = useCallback(async () => {
     if (!username) return

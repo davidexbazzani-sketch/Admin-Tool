@@ -1,0 +1,687 @@
+{
+  "einheiten": [
+    {
+      "id": "gespraech-1-01",
+      "bereich": "gespraech",
+      "stufe": 1,
+      "nr": 1,
+      "titel": "Erst verstehen",
+      "faehigkeiten": ["gespraech.zuhoeren"],
+      "dauerMin": 6,
+      "beleg": "B",
+      "belegHinweis": "Eine Studie zeigt: Nach Zusammenfassen und Nachfragen fühlen sich Menschen verstandener als nach einem Rat – mit kleinen Effekten. Eine Meta-Analyse verbindet Gehörtwerden mit besseren Beziehungen, meist als Zusammenhang.",
+      "quellen": ["weger2014", "kluger2024"],
+      "aha": "Ein Satz, der zeigt, dass du verstanden hast, gehört vor jeden Rat. Danach fühlt sich der andere gehört – und du weißt, ob dein Rat überhaupt gefragt ist.",
+      "schritte": [
+        {
+          "art": "vergleich",
+          "lage": "Miriam, sichtlich genervt: „Ich sitz seit zwei Stunden an der Tabelle, und jetzt stimmt die Summe schon wieder nicht.“",
+          "schwach": "„Nimm doch die Vorlage vom letzten Jahr, die ist viel einfacher.“",
+          "stark": "„Zwei Stunden, und dann stimmt die Summe nicht – das nervt. Woran hängt's?“",
+          "frage": "Was macht die zweite Antwort anders?",
+          "unterschied": "Sie zeigt erst, dass du Miriams Lage verstanden hast, und fragt dann nach. Der schnelle Rat überspringt sie – und passt vielleicht gar nicht."
+        },
+        {
+          "art": "karte",
+          "text": "Wer etwas erzählt, will zuerst gehört werden. Ein schneller Rat sagt oft unbeabsichtigt: „Dein Problem ist klein.“ Darum die Reihenfolge: erst in einem Satz zurückgeben, was du verstanden hast, dann nachfragen – und Rat erst, wenn er gewünscht ist. Das kostet einen Satz und erspart oft ein langes Missverständnis."
+        },
+        {
+          "art": "studie",
+          "frage": "Was kommt besser an: Rat oder Zuhören?",
+          "aufbau": "115 Studierende führten je ein Gespräch mit geschulten Gesprächspartnern. Die antworteten entweder mit aktivem Zuhören (zusammenfassen, nachfragen), mit Ratschlägen oder mit einem bloßen „Aha, verstehe“.",
+          "ergebnis": "Nach aktivem Zuhören fühlten sich die Studierenden am stärksten verstanden. Zufrieden mit dem Gespräch waren sie nach Zuhören und nach Rat gleichermaßen – beides besser als ein bloßes „Aha“.",
+          "grenze": "Kleine Unterschiede, Studierende, je ein einziges Gespräch. Rat ist also nicht falsch – nur fühlt man sich damit weniger verstanden.",
+          "beleg": "B",
+          "quellen": ["weger2014"]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-1-01-a", "faehigkeit": "gespraech.zuhoeren", "stufe": 2, "kanal": "wissen" },
+          "frage": "Tarek: „Heute rufen alle Kunden gleichzeitig an, ich komm zu gar nichts.“ Welche Antwort zeigt, dass du verstanden hast?",
+          "antworten": [
+            {
+              "text": "„Stell doch das Telefon für eine Stunde auf die Zentrale um, dann hast du endlich mal Ruhe für den Rest.“",
+              "wert": 0,
+              "tendenz": "ratschlag",
+              "warum": "Vielleicht ein guter Tipp – aber zu früh. Tarek weiß noch nicht, ob du ihn verstanden hast."
+            },
+            {
+              "text": "„Alle auf einmal – und deine eigene Arbeit bleibt liegen?“",
+              "wert": 2,
+              "warum": "Du gibst seine Lage in eigenen Worten zurück. Jetzt erzählt er weiter oder fragt selbst nach Hilfe."
+            },
+            { "text": "„Oh je, das klingt anstrengend.“", "wert": 1, "warum": "Freundlich und mitfühlend. Ein Stück konkreter, und er merkt, dass du genau zugehört hast." },
+            { "text": "„Kenn ich. Bei mir war es gestern noch schlimmer.“", "wert": 0, "tendenz": "uebertrumpfen", "warum": "Jetzt geht es um dich. Sein Anliegen bleibt liegen." }
+          ]
+        },
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-1-01-b", "faehigkeit": "gespraech.zuhoeren", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Lena erzählt, dass ihr erster Kundentermin holprig lief. Welche Antwort bleibt bei ihr, welche übernimmt das Gespräch?",
+          "faecher": ["bleibt bei Lena", "übernimmt das Gespräch"],
+          "karten": [
+            { "text": "„Holprig – an welcher Stelle denn?“", "fach": 0 },
+            { "text": "„Mein erster Termin damals war eine Katastrophe, pass auf …“", "fach": 1 },
+            { "text": "„Du hattest dich so gut vorbereitet, und dann lief es anders?“", "fach": 0 },
+            { "text": "„Sei beim nächsten Mal einfach selbstbewusster.“", "fach": 1 },
+            { "text": "„Wie geht es dir jetzt damit?“", "fach": 0 },
+            { "text": "„Ach, das wird schon, mach dir keinen Kopf.“", "fach": 1 }
+          ]
+        },
+        {
+          "art": "reflexion",
+          "frage": "Wann hast du zuletzt einen Rat gegeben, obwohl niemand danach gefragt hat? Wie hätte der Satz geklungen, der zuerst zeigt: Ich hab dich verstanden?"
+        },
+        { "art": "mission", "ref": "gespraech-m-01" }
+      ],
+      "regel": "Erst zusammenfassen, dann antworten – Rat erst, wenn er gewünscht ist.",
+      "merkkarten": [
+        {
+          "id": "gespraech-1-01-m1",
+          "frage": "Woran merkt jemand, dass du ihn verstanden hast?",
+          "antwort": "Du gibst in einem Satz in eigenen Worten zurück, was er gesagt hat – bevor du antwortest."
+        },
+        {
+          "id": "gespraech-1-01-m2",
+          "frage": "Rat oder Zuhören – was zuerst?",
+          "antwort": "Zuhören. Den Rat danach, wenn er gewünscht ist: „Willst du einen Tipp oder erst mal erzählen?“"
+        }
+      ],
+      "mission": "gespraech-m-01"
+    },
+    {
+      "id": "gespraech-1-02",
+      "bereich": "gespraech",
+      "stufe": 1,
+      "nr": 2,
+      "titel": "Spiegeln",
+      "faehigkeiten": ["gespraech.zuhoeren"],
+      "dauerMin": 6,
+      "beleg": "P",
+      "belegHinweis": "Dass Zurückgeben in eigenen Worten das Gefühl stärkt, verstanden zu werden, stützt eine Studie zum aktiven Zuhören. Wie man gut spiegelt, ist Praxiswissen.",
+      "quellen": ["weger2014", "gordon1970", "praxis-gespraech"],
+      "aha": "Spiegeln ist kein Nachplappern. Du gibst den Kern in eigenen Worten zurück – als Angebot, das der andere korrigieren darf.",
+      "schritte": [
+        {
+          "art": "mythos",
+          "aussage": "Aktiv zuhören heißt, die Worte des anderen zu wiederholen.",
+          "urteil": "falsch",
+          "warum": "Wer nur Wörter wiederholt, klingt wie ein Papagei. Gutes Spiegeln fasst den Kern in eigenen Worten zusammen – oft mit dem Gefühl, das mitschwingt."
+        },
+        {
+          "art": "karte",
+          "text": "Spiegeln hat drei Zutaten: den Kern statt aller Einzelheiten, eigene Worte statt Echo, einen fragenden Ton. „Wenn ich dich richtig verstehe, …“ oder „Dir ist also wichtig, dass …“. Hörst du ein Gefühl heraus, darfst du es vorsichtig benennen. Was du nicht tust: deuten („Du bist halt Perfektionistin“). Liegst du daneben, korrigiert dich der andere – und du weißt mehr."
+        },
+        {
+          "art": "rangfolge",
+          "kopf": { "id": "gespraech-1-02-a", "faehigkeit": "gespraech.zuhoeren", "stufe": 3, "kanal": "wissen" },
+          "frage": "Lena: „Ich hab die Liste dreimal geprüft, und trotzdem hat Dr. Albers einen Fehler gefunden.“ Ordne die Antworten von stark nach schwach.",
+          "eintraege": [
+            {
+              "text": "„Du warst gründlich, und es ist trotzdem passiert – das ärgert dich, oder?“",
+              "warum": "Kern und Gefühl in eigenen Worten, als Frage. Lena kann bestätigen oder korrigieren."
+            },
+            { "text": "„Trotz dreimal Prüfen ist ein Fehler durchgerutscht.“", "warum": "Guter Kern in eigenen Worten. Das Gefühl dahinter bleibt noch unberührt." },
+            { "text": "„Dreimal geprüft, und trotzdem hat er einen Fehler gefunden.“", "warum": "Fast wörtlich wiederholt – ein Echo. Freundlich, aber es zeigt wenig Verstehen." },
+            { "text": "„Du bist halt Perfektionistin, das kenn ich.“", "warum": "Eine Deutung über ihre Person. Lena muss sich jetzt eher verteidigen als weitererzählen." }
+          ]
+        },
+        {
+          "art": "spiegeln",
+          "kopf": { "id": "gespraech-1-02-b", "faehigkeit": "gespraech.zuhoeren", "stufe": 3, "kanal": "koennen" },
+          "von": "Frau Sommer, im Treppenhaus",
+          "aussage": "„Seit die Neuen oben eingezogen sind, schlafe ich kaum noch. Jeden Abend Getrampel bis Mitternacht, und gestern auch noch Musik.“",
+          "kriterien": ["gibt den Kern in eigenen Worten wieder", "benennt höchstens vorsichtig ein Gefühl", "kein Rat, keine Bewertung der Nachbarn"],
+          "muster": [
+            "„Sie kommen abends gar nicht mehr zur Ruhe.“",
+            "„Klingt, als wären Sie ziemlich erschöpft – jeden Abend bis Mitternacht.“",
+            "„Wenn ich Sie richtig verstehe, ist es nicht ein Abend, sondern schon eine ganze Weile so?“"
+          ]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-1-02-c", "faehigkeit": "gespraech.zuhoeren", "stufe": 3, "kanal": "wissen" },
+          "frage": "Du spiegelst Tarek: „Du fühlst dich also übergangen.“ Er: „Nee, so meinte ich das nicht.“ Was jetzt?",
+          "antworten": [
+            { "text": "„Doch, ein bisschen klang es schon so.“", "wert": 0, "tendenz": "rechthaben", "warum": "Jetzt streitet ihr über deine Deutung statt über sein Anliegen." },
+            {
+              "text": "„Okay, dann hab ich es falsch verstanden. Wie meinst du es?“",
+              "wert": 2,
+              "warum": "Ein Spiegel, der danebenliegt, ist kein Fehler – er lädt zur Korrektur ein. Jetzt erfährst du, worum es geht."
+            },
+            {
+              "text": "„Entschuldige, ich wollte dir nichts unterstellen, das tut mir leid, ich bin manchmal zu schnell.“",
+              "wert": 1,
+              "warum": "Höflich, aber zu viel Entschuldigung. Eine kurze Nachfrage bringt euch weiter als die Rechtfertigung."
+            },
+            {
+              "text": "Das Thema wechseln, bevor es peinlich wird.",
+              "wert": 0,
+              "tendenz": "ausweichen",
+              "warum": "Dann bleibt das Missverständnis stehen, und du erfährst nicht, was er meinte."
+            }
+          ]
+        },
+        { "art": "mission", "ref": "gespraech-m-02" }
+      ],
+      "regel": "Kern statt Echo, eigene Worte, fragender Ton – und Korrektur willkommen.",
+      "merkkarten": [
+        {
+          "id": "gespraech-1-02-m1",
+          "frage": "Was unterscheidet Spiegeln vom Nachplappern?",
+          "antwort": "Du gibst den Kern in eigenen Worten zurück, nicht die Wörter des anderen."
+        },
+        {
+          "id": "gespraech-1-02-m2",
+          "frage": "Dein Spiegel liegt daneben. Was tust du?",
+          "antwort": "Dankbar korrigieren lassen: „Dann hab ich's falsch verstanden. Wie meinst du es?“"
+        }
+      ],
+      "mission": "gespraech-m-02"
+    },
+    {
+      "id": "gespraech-1-03",
+      "bereich": "gespraech",
+      "stufe": 1,
+      "nr": 3,
+      "titel": "Offene Fragen",
+      "faehigkeiten": ["gespraech.fragen"],
+      "dauerMin": 6,
+      "beleg": "B",
+      "belegHinweis": "Dass Fragen – besonders Anschlussfragen – sympathischer machen, zeigt eine viel zitierte Studienreihe; eine Neuauswertung hat Einwände erhoben, die Autoren haben widersprochen. Dass „Warum?“ verhörend klingt, ist Praxiswissen.",
+      "quellen": ["huang2017", "kluger2019", "praxis-gespraech"],
+      "aha": "„Was hat dazu geführt?“ öffnet, „Warum?“ verhört. Und die beste Frage steckt meist im letzten Satz des anderen.",
+      "schritte": [
+        {
+          "art": "schaetzen",
+          "frage": "In Versuchen unterhielten sich Fremde kurz miteinander. Ein Teil sollte viele Fragen stellen. Wie wirkten die Vielfrager auf ihr Gegenüber?",
+          "optionen": ["eher aufdringlich – weniger sympathisch", "sympathischer", "kein Unterschied"],
+          "richtig": 1,
+          "loesung": "sympathischer",
+          "aufloesung": "Wer mehr fragte, wurde sympathischer gefunden – vor allem mit Anschlussfragen, die auf das eben Gesagte eingehen. Eine Neuauswertung hat die Auswertung kritisiert; die Richtung gilt trotzdem als gestützt."
+        },
+        {
+          "art": "karte",
+          "text": "Geschlossene Fragen („Hat's geklappt?“) bekommen ein Ja oder Nein. Offene Fragen beginnen mit was, wie, woran oder welche und geben Raum. Vorsicht mit „Warum?“: Es klingt schnell nach Anklage und lädt zur Rechtfertigung ein. „Wie kam es dazu?“ fragt nach der Lage statt nach Schuld. Am stärksten ist die Anschlussfrage: ein Wort aus dem letzten Satz aufgreifen und dort weiterfragen."
+        },
+        {
+          "art": "umformulieren",
+          "kopf": { "id": "gespraech-1-03-a", "faehigkeit": "gespraech.fragen", "stufe": 2, "kanal": "koennen" },
+          "auftrag": "Mach aus der Warum-Frage eine offene Frage ohne Vorwurf.",
+          "vorlage": "„Warum hast du mir das nicht früher gesagt?“",
+          "kriterien": ["offen (nicht mit Ja oder Nein zu beantworten)", "fragt nach der Lage, nicht nach Schuld", "freundlicher Ton"],
+          "muster": [
+            "„Wie kam es, dass ich es erst jetzt erfahre?“",
+            "„Was hat es dir schwer gemacht, es früher anzusprechen?“",
+            "„Was bräuchtest du, damit du so etwas künftig früher sagst?“"
+          ]
+        },
+        {
+          "art": "anschluss",
+          "kopf": { "id": "gespraech-1-03-b", "faehigkeit": "gespraech.fragen", "stufe": 3, "kanal": "koennen" },
+          "von": "Miriam",
+          "aussage": "„Ich überlege, ob ich mich auf die Stelle in der Planung bewerbe. Aber eigentlich mag ich mein Team hier.“",
+          "kriterien": ["greift ein Wort oder einen Gedanken aus ihrem Satz auf", "offen gestellt", "drängt nicht in eine Richtung"],
+          "muster": ["„Was reizt dich an der Planung?“", "„Und was würdest du hier am meisten vermissen?“", "„Wie fühlt sich das an, wenn du dir beides vorstellst?“"]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-1-03-c", "faehigkeit": "gespraech.fragen", "stufe": 3, "kanal": "wissen" },
+          "frage": "Jule erzählt beim Kochkurs: „Der erste Tag in meinem Café war … na ja.“ Welche Frage öffnet am meisten?",
+          "antworten": [
+            { "text": "„Hat es dir denn wenigstens ein bisschen gefallen?“", "wert": 1, "warum": "Freundlich gemeint, aber geschlossen. Mit Glück erzählt sie trotzdem weiter." },
+            {
+              "text": "„Warum hast du auch deinen sicheren Job gekündigt?“",
+              "wert": 0,
+              "tendenz": "verhoeren",
+              "warum": "Das klingt nach Vorwurf. Jetzt rechtfertigt sie sich, statt zu erzählen."
+            },
+            { "text": "„Was war daran ‚na ja‘?“", "wert": 2, "warum": "Eine Anschlussfrage genau auf ihr Wort. Offen, neugierig, ohne Urteil." },
+            {
+              "text": "„Na ja, aller Anfang ist schwer – das wird schon, mach dir mal keinen Kopf darüber.“",
+              "wert": 0,
+              "tendenz": "abwerten",
+              "warum": "Du schließt das Thema, bevor sie es geöffnet hat."
+            }
+          ]
+        },
+        { "art": "mission", "ref": "gespraech-m-03" }
+      ],
+      "regel": "Offen fragen: was, wie, woran – und dort weiter, wo der andere aufgehört hat.",
+      "merkkarten": [
+        {
+          "id": "gespraech-1-03-m1",
+          "frage": "Was statt „Warum hast du …?“",
+          "antwort": "„Wie kam es dazu?“ oder „Was hat dazu geführt?“ – nach der Lage fragen, nicht nach Schuld."
+        },
+        { "id": "gespraech-1-03-m2", "frage": "Wo findest du die beste nächste Frage?", "antwort": "Im letzten Satz des anderen: ein Wort aufgreifen und dort weiterfragen." }
+      ],
+      "mission": "gespraech-m-03"
+    },
+    {
+      "id": "gespraech-1-04",
+      "bereich": "gespraech",
+      "stufe": 1,
+      "nr": 4,
+      "titel": "Beobachtung statt Urteil",
+      "faehigkeiten": ["gespraech.ich", "gespraech.feedback"],
+      "dauerMin": 7,
+      "beleg": "P",
+      "belegHinweis": "Belegt ist (Meta-Analyse): Rückmeldung macht die Leistung in über einem Drittel der Fälle schlechter – nach Deutung der Autoren eher, wenn sie auf die Person statt auf die Aufgabe zielt. Die Trennung von Beobachtung und Urteil selbst ist Praxiswissen.",
+      "quellen": ["klugerdenisi1996", "rosenberg2003", "praxis-gespraech"],
+      "aha": "„Du bist unzuverlässig“ ist ein Urteil – dagegen kann man sich nur wehren. „Die Zahlen kamen Dienstag statt Montag“ ist eine Beobachtung – darüber kann man reden.",
+      "schritte": [
+        {
+          "art": "schaetzen",
+          "frage": "Eine große Auswertung hat Hunderte Versuche zur Rückmeldung bei der Arbeit und beim Lernen zusammengefasst. Wie oft wurde die Leistung danach schlechter?",
+          "optionen": ["fast nie", "in über einem Drittel der Fälle", "in etwa der Hälfte"],
+          "richtig": 1,
+          "loesung": "in über einem Drittel der Fälle",
+          "aufloesung": "Im Mittel hilft Rückmeldung. Aber in über einem Drittel der Fälle schadete sie – die Autoren vermuten: vor allem, wenn sie die Person trifft statt die Aufgabe."
+        },
+        {
+          "art": "karte",
+          "text": "Eine Beobachtung ist, was eine Kamera aufnehmen würde: „Du kamst heute zwanzig Minuten nach Beginn.“ Ein Urteil ist ein Etikett: „Du bist unpünktlich.“ Auch „immer“ und „nie“ machen aus einer Beobachtung ein Urteil. Rückmeldung bleibt bei der Aufgabe, wenn sie vier Schritte hat: die Beobachtung, die Wirkung, eine offene Frage nach der Sicht des anderen – und ein nächster Schritt, den ihr gemeinsam festlegt."
+        },
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-1-04-a", "faehigkeit": "gespraech.ich", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Beobachtung oder Urteil?",
+          "faecher": ["Beobachtung", "Urteil"],
+          "karten": [
+            { "text": "„Der Bericht kam Dienstag statt Montag.“", "fach": 0 },
+            { "text": "„Du bist unzuverlässig.“", "fach": 1 },
+            { "text": "„Du hast mich in der Runde zweimal unterbrochen.“", "fach": 0 },
+            { "text": "„Du hältst dich wohl für was Besseres.“", "fach": 1 },
+            { "text": "„Im Angebot fehlen die Seiten vier bis sechs.“", "fach": 0 },
+            { "text": "„Du kommst immer zu spät.“", "fach": 1 },
+            { "text": "„Die Spülmaschine war heute Morgen noch voll.“", "fach": 0 },
+            { "text": "„Dir ist das doch egal.“", "fach": 1 }
+          ]
+        },
+        {
+          "art": "umformulieren",
+          "kopf": { "id": "gespraech-1-04-b", "faehigkeit": "gespraech.ich", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Mach aus dem Urteil eine Beobachtung – was genau ist passiert?",
+          "vorlage": "„Du bist total chaotisch.“ (Ein Kollege hat zum zweiten Mal die Kundenakte nicht zurück in den Ordner gelegt.)",
+          "kriterien": ["beschreibt, was passiert ist", "ohne Etikett, ohne „immer“ und „nie“", "konkret genug, dass man darüber reden kann"],
+          "muster": ["„Die Akte Petersen lag heute und letzten Freitag nicht im Ordner.“", "„Ich hab die Akte heute wieder auf deinem Tisch gefunden statt im Ordner.“"]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-1-04-c", "faehigkeit": "gespraech.feedback", "stufe": 3, "kanal": "wissen" },
+          "frage": "Lenas erste Kundenpräsentation: Bei den Fachwörtern haben die Kunden mehrmals nachgefragt. Welche Rückmeldung bleibt bei der Aufgabe?",
+          "antworten": [
+            {
+              "text": "„Bei den Fachwörtern auf Folie zwei haben die Kunden nachgefragt. Wie hast du das erlebt?“",
+              "wert": 2,
+              "warum": "Beobachtung plus Frage nach ihrer Sicht. Lena kann selbst überlegen, was sie ändert."
+            },
+            {
+              "text": "„Du redest halt manchmal wie ein Lexikon, das kennt man ja von dir.“",
+              "wert": 0,
+              "tendenz": "angreifen",
+              "warum": "Ein Etikett über ihre Person. Lena verteidigt sich jetzt – oder zieht sich zurück."
+            },
+            {
+              "text": "„Die Präsentation war insgesamt ein bisschen zu kompliziert für die Kunden.“",
+              "wert": 1,
+              "warum": "Bei der Aufgabe, aber vage. Mit einer konkreten Stelle weiß Lena, wo sie ansetzen kann."
+            },
+            {
+              "text": "„Super gemacht!“ – und die Fachwörter lieber nicht erwähnen.",
+              "wert": 0,
+              "tendenz": "ausweichen",
+              "warum": "Freundlich, aber sie erfährt nicht, was sie verbessern könnte."
+            }
+          ]
+        },
+        { "art": "reflexion", "frage": "Welcher Ärger liegt dir gerade quer? Schreib ihn als Beobachtung auf – was genau, wann, ohne Etikett.", "insBuch": "saetze" },
+        { "art": "mission", "ref": "gespraech-m-04" }
+      ],
+      "regel": "Sag, was eine Kamera gesehen hätte – nicht, was du davon hältst.",
+      "merkkarten": [
+        {
+          "id": "gespraech-1-04-m1",
+          "frage": "Woran erkennst du eine Beobachtung?",
+          "antwort": "Eine Kamera hätte sie aufnehmen können: was, wann, ohne Etikett und ohne „immer“ oder „nie“."
+        },
+        {
+          "id": "gespraech-1-04-m2",
+          "frage": "Die vier Schritte einer Rückmeldung?",
+          "antwort": "Beobachtung, Wirkung, Frage nach der Sicht des anderen, gemeinsamer nächster Schritt."
+        }
+      ],
+      "mission": "gespraech-m-04"
+    },
+    {
+      "id": "gespraech-1-05",
+      "bereich": "gespraech",
+      "stufe": 1,
+      "nr": 5,
+      "titel": "Die Ich-Botschaft",
+      "faehigkeiten": ["gespraech.ich", "gespraech.absprache"],
+      "dauerMin": 7,
+      "beleg": "B",
+      "belegHinweis": "In Studien wurden Du-Vorwürfe als feindseliger erlebt als Ich-Sätze – bewertet wurden erdachte Sätze. Wie stark Ich-Botschaften in einem echten Streit wirken, ist wenig untersucht. Der Bau Beobachtung – Folge – Wunsch ist Praxis.",
+      "quellen": ["kubany1992", "rogers2018", "gordon1970"],
+      "aha": "Auffallen – Folge – Wunsch. Wer sagt, was er sieht, was es für ihn heißt und was er sich wünscht, macht aus einem Vorwurf eine Bitte, über die man reden kann.",
+      "schritte": [
+        {
+          "art": "vergleich",
+          "lage": "Tarek hat sich zum dritten Mal deinen Laptop-Adapter geliehen und nicht zurückgebracht. Heute Morgen stand dein Akku auf fünf Prozent.",
+          "schwach": "„Du denkst echt nie an andere.“",
+          "stark": "„Mein Adapter lag heute wieder bei dir. Ich hätte fast den Termin um neun verpasst. Bring ihn mir bitte bis mittags zurück – und frag kurz, bevor du ihn nimmst.“",
+          "frage": "Was macht die zweite Fassung anders?",
+          "unterschied": "Sie sagt, was passiert ist, welche Folge es hatte und was du dir wünschst – mit Zeitpunkt. Die erste ist ein Urteil über Tarek; dagegen kann er sich nur wehren."
+        },
+        {
+          "art": "karte",
+          "text": "Die Ich-Botschaft hat drei Teile: 1. Was ist mir aufgefallen? (eine Beobachtung) 2. Was heißt das für mich? (die Folge – oder wie es mir damit geht) 3. Was wünsche ich mir? Der Wunsch ist eine Bitte, keine Forderung: konkret, machbar, mit einem Wer und Bis-wann. Sagt der andere Nein, ist das der Anfang einer Absprache: „Was ginge stattdessen?“"
+        },
+        {
+          "art": "studie",
+          "frage": "Klingen Ich-Sätze wirklich weniger feindselig?",
+          "aufbau": "In zwei Studien bewerteten Befragte – in der älteren Jugendliche – erdachte Sätze, mit denen jemand einen Streit eröffnet: anklagende Du-Sätze und Ich-Sätze.",
+          "ergebnis": "Du-Vorwürfe wurden als feindseliger erlebt und weckten mehr Lust zum Gegenschlag. Am besten schnitten Ich-Sätze ab, die die eigene und die andere Sicht nennen.",
+          "grenze": "Bewertet wurden ausgedachte Sätze, kein echter Streit. Ich-Sätze sind ein guter Anfang – keine Formel, die jeden Streit löst.",
+          "beleg": "B",
+          "quellen": ["kubany1992", "rogers2018"]
+        },
+        {
+          "art": "umformulieren",
+          "kopf": { "id": "gespraech-1-05-a", "faehigkeit": "gespraech.ich", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Eine Kollegin hat die Übergabe an dich vergessen; du hast eine Kundenanfrage zwei Tage zu spät gesehen. Mach aus dem Vorwurf eine Ich-Botschaft mit Bitte.",
+          "vorlage": "„Auf dich kann man sich echt nie verlassen!“",
+          "kriterien": ["nennt die Beobachtung", "nennt die Folge für dich", "endet mit einer konkreten Bitte"],
+          "muster": [
+            "„Die Anfrage von Herrn Petersen stand nicht in der Übergabe. Ich hab sie erst zwei Tage später gesehen. Kannst du mir künftig offene Anfragen auf die Liste setzen?“",
+            "„Mir fehlte die Übergabe am Freitag, und der Kunde hat zwei Tage gewartet. Mir wäre wichtig, dass wir eine feste Übergabeliste nutzen. Probieren wir es ab Montag?“"
+          ]
+        },
+        {
+          "art": "dialog",
+          "kopf": { "id": "gespraech-1-05-b", "faehigkeit": "gespraech.ich", "stufe": 3, "kanal": "koennen" },
+          "gespraech": {
+            "titel": "Sven kommt zu spät",
+            "figur": "Sven",
+            "lage": "Ihr seid vor dem Kino verabredet. Sven kommt 25 Minuten zu spät – zum dritten Mal in diesem Monat. Den Anfang des Films habt ihr verpasst.",
+            "start": "k1",
+            "knoten": [
+              {
+                "id": "k1",
+                "sagt": "Sven, gut gelaunt: „Na, schon lange da?“",
+                "wahl": [
+                  {
+                    "text": "„Ja. Kann man so sagen.“ – und dann schweigend reingehen.",
+                    "wert": 0,
+                    "tendenz": "schlucken",
+                    "weiter": "k2b",
+                    "rueck": "Der Ärger bleibt in dir. Sven merkt nur, dass etwas nicht stimmt – aber nicht, was."
+                  },
+                  {
+                    "text": "„Fünfundzwanzig Minuten. Und der Film läuft schon. Das ist jetzt das dritte Mal, und mich ärgert das.“",
+                    "wert": 2,
+                    "weiter": "k2",
+                    "rueck": "Beobachtung, Folge, dein Gefühl – ohne Urteil über ihn. Jetzt kann er darauf antworten."
+                  },
+                  {
+                    "text": "„Du bist echt der unzuverlässigste Mensch, den ich kenne.“",
+                    "wert": 0,
+                    "tendenz": "angreifen",
+                    "weiter": "k2c",
+                    "rueck": "Ein Urteil über seine Person. Er wird sich wehren, statt zuzuhören."
+                  }
+                ]
+              },
+              {
+                "id": "k2",
+                "sagt": "Sven, verlegen: „Sorry. Die Bahn, und dann hab ich auch zu spät losgemacht.“",
+                "wahl": [
+                  {
+                    "text": "„Danke, dass du's sagst. Mein Wunsch: Schreib mir, sobald du merkst, dass es später wird. Dann warte ich drinnen.“",
+                    "wert": 2,
+                    "weiter": "ende1",
+                    "rueck": "Ein konkreter, machbarer Wunsch. Aus dem Ärger wird eine Absprache."
+                  },
+                  {
+                    "text": "„Schon gut, ist ja nicht so schlimm.“",
+                    "wert": 1,
+                    "weiter": "ende2",
+                    "rueck": "Friedlich – aber der Wunsch bleibt ungesagt. Beim nächsten Mal steht ihr wieder hier."
+                  }
+                ]
+              },
+              {
+                "id": "k2b",
+                "sagt": "Im Kino, nach dem Film. Sven: „Alles okay? Du bist so still.“",
+                "wahl": [
+                  {
+                    "text": "„Ehrlich gesagt: Ich hab 25 Minuten gewartet, und das war das dritte Mal. Das hat mich geärgert.“",
+                    "wert": 2,
+                    "weiter": "k2",
+                    "rueck": "Zweite Chance genutzt. Auch später gesagt, wirkt eine Ich-Botschaft."
+                  },
+                  { "text": "„Alles gut.“", "wert": 0, "tendenz": "schlucken", "weiter": "ende2", "rueck": "Der Ärger bleibt und kommt beim nächsten Mal größer wieder." }
+                ]
+              },
+              {
+                "id": "k2c",
+                "sagt": "Sven, nicht mehr gut gelaunt: „Ach komm. Als ob du nie zu spät kommst.“",
+                "wahl": [
+                  {
+                    "text": "„Stimmt, das kommt vor. Mir geht's um heute: Ich hab 25 Minuten gewartet, und der Film läuft schon.“",
+                    "wert": 2,
+                    "weiter": "k2",
+                    "rueck": "Du nimmst die Spitze raus und kehrst zur Beobachtung zurück. Jetzt kann er zuhören."
+                  },
+                  {
+                    "text": "„Nicht so oft wie du. Ich glaub, ich hab in den letzten Monaten jedes Mal auf dich gewartet, nie umgekehrt.“",
+                    "wert": 0,
+                    "tendenz": "angreifen",
+                    "weiter": "ende2",
+                    "rueck": "Jetzt streitet ihr übers Zählen – und keiner hört mehr zu."
+                  }
+                ]
+              },
+              {
+                "id": "ende1",
+                "sagt": "Sven: „Mach ich. Und beim nächsten Mal geht das Popcorn auf mich.“",
+                "ende": "Beobachtung, Folge, Wunsch: So wird aus Ärger eine Bitte, die der andere erfüllen kann."
+              },
+              {
+                "id": "ende2",
+                "sagt": "Ihr geht nach dem Film ohne viele Worte nach Hause.",
+                "ende": "Kein Drama – aber der Ärger ist noch da. Beim nächsten Mal: sagen, was passiert ist, was es für dich heißt und was du dir wünschst."
+              }
+            ],
+            "prinzipien": ["Beobachtung statt Urteil", "die Folge für dich nennen", "ein konkreter, machbarer Wunsch", "auch später gesagt wirkt es noch"]
+          }
+        },
+        { "art": "mission", "ref": "gespraech-m-05" }
+      ],
+      "regel": "Auffallen – Folge – Wunsch. Und der Wunsch hat ein Wer und ein Bis-wann.",
+      "merkkarten": [
+        { "id": "gespraech-1-05-m1", "frage": "Die drei Teile der Ich-Botschaft?", "antwort": "Was mir aufgefallen ist – was es für mich heißt – was ich mir wünsche." },
+        { "id": "gespraech-1-05-m2", "frage": "Was macht aus einem Wunsch eine Absprache?", "antwort": "Wer macht was bis wann – und ein Nein darf sein: „Was ginge stattdessen?“" }
+      ],
+      "mission": "gespraech-m-05"
+    },
+    {
+      "id": "gespraech-1-06",
+      "bereich": "gespraech",
+      "stufe": 1,
+      "nr": 6,
+      "titel": "Ja-aber ersetzen",
+      "faehigkeiten": ["gespraech.widerspruch", "gespraech.oben"],
+      "dauerMin": 7,
+      "beleg": "B",
+      "belegHinweis": "Dass anerkennender, abgesicherter Widerspruch besser ankommt, stützt eine Studienreihe einer Forschergruppe (teils mit Texten). Dass viele nach oben schweigen, zeigen kleinere Studien. „Und statt aber“ ist Praxis.",
+      "quellen": ["yeomans2020", "milliken2003", "detert2011", "praxis-gespraech"],
+      "aha": "„Ja, aber“ streicht das Ja. „Den Punkt sehe ich – und ich komme zu einem anderen Schluss“ lässt beides stehen.",
+      "schritte": [
+        {
+          "art": "schaetzen",
+          "frage": "Führungskräfte aus Behörden diskutierten zu zweit umstrittene Sachfragen, bei denen sie verschiedener Meinung waren. Wer dabei anerkannte, was am anderen Standpunkt stimmt, und die eigene Sicht absicherte – wie schätzte das Gegenüber ihn ein?",
+          "optionen": ["als weniger überzeugt, also schwächer", "als besserer Teampartner und Ratgeber", "kein Unterschied"],
+          "richtig": 1,
+          "loesung": "als besserer Teampartner und Ratgeber",
+          "aufloesung": "Empfänglicher Widerspruch kam besser an – und in einem großen Online-Lexikon wurden empfängliche Autoren seltener persönlich angegriffen. Widersprechen schadet also nicht von selbst; es kommt auf das Wie an."
+        },
+        {
+          "art": "karte",
+          "text": "Empfänglich widersprechen in drei Zügen: 1. Anerkennen, was stimmt. 2. „Und“ statt „aber“, die eigene Sicht als Sicht: „Aus meiner Sicht …“, „Kann sein, dass ich etwas übersehe.“ 3. Ein Grund, am besten mit Beispiel. Nach oben hilft die Frageform: „Was spricht aus Ihrer Sicht dagegen, wenn …?“ Ist der Punkt heikel, geht auch vorher kurz unter vier Augen."
+        },
+        {
+          "art": "umformulieren",
+          "kopf": { "id": "gespraech-1-06-a", "faehigkeit": "gespraech.widerspruch", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Miriam schlägt vor, das Teamfrühstück auf Freitag zu legen. Mach aus dem Ja-aber einen empfänglichen Widerspruch.",
+          "vorlage": "„Ja, aber freitags sind doch immer die Hälfte im Homeoffice.“",
+          "kriterien": ["erkennt etwas an", "„und“ statt „aber“ oder ganz ohne Gegensatzwort", "nennt den Grund, gern mit Vorschlag"],
+          "muster": [
+            "„Freitag hat was, da ist die Woche geschafft. Und ich fürchte, da fehlt die Hälfte. Wie wäre Donnerstag?“",
+            "„Die Idee mit dem Wochenausklang mag ich. Aus meiner Sicht passt Donnerstag besser – freitags sind viele zu Hause.“"
+          ]
+        },
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-1-06-b", "faehigkeit": "gespraech.widerspruch", "stufe": 2, "kanal": "wissen" },
+          "auftrag": "Empfänglich oder abwehrend?",
+          "faecher": ["empfänglich", "abwehrend"],
+          "karten": [
+            { "text": "„Den Zeitgewinn sehe ich. Und ich sehe ein Risiko.“", "fach": 0 },
+            { "text": "„Ja, aber das bringt doch nichts.“", "fach": 1 },
+            { "text": "„Kann sein, dass ich etwas übersehe – aus meiner Sicht …“", "fach": 0 },
+            { "text": "„Das sieht doch jeder, dass das nicht klappt.“", "fach": 1 },
+            { "text": "„Da sind wir uns einig: Es muss schneller gehen.“", "fach": 0 },
+            { "text": "„Das haben wir schon immer anders gemacht.“", "fach": 1 }
+          ]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-1-06-c", "faehigkeit": "gespraech.oben", "stufe": 4, "kanal": "wissen" },
+          "frage": "Dr. Albers legt in der Runde fest: Das neue Ablagesystem startet im März. Du weißt: Im März ist Inventur, zwei Leute fehlen. Was ist der beste Weg?",
+          "antworten": [
+            {
+              "text": "Nach der Runde kurz unter vier Augen ansprechen.",
+              "wert": 1,
+              "warum": "Ein guter Weg, wenn dir die Runde heikel scheint. Nur entscheidet sich manches schon in der Runde."
+            },
+            {
+              "text": "„Darf ich kurz einen Punkt einbringen? Im März ist Inventur, da fehlen uns zwei Leute. Was halten Sie von Februar oder April?“",
+              "wert": 2,
+              "warum": "Sachlich, mit Grund und Vorschlag, als Frage. Die Entscheidung bleibt bei ihm – und alle hören den Punkt rechtzeitig."
+            },
+            { "text": "„Ja, aber im März geht das doch gar nicht.“", "wert": 0, "tendenz": "angreifen", "warum": "Der Einwand stimmt, aber ohne Grund klingt er nach Blockade." },
+            { "text": "Nichts sagen – er wird es schon selbst merken.", "wert": 0, "tendenz": "vermeiden", "warum": "Dann merkt er es im März. Dein Wissen wäre jetzt nützlich." }
+          ]
+        },
+        { "art": "reflexion", "frage": "Schreib deinen eigenen Satz, mit dem du künftig „Ja, aber“ ersetzt – so, dass er nach dir klingt.", "insBuch": "saetze" },
+        { "art": "mission", "ref": "gespraech-m-06" }
+      ],
+      "regel": "Anerkennen, „und“, deine Sicht mit Grund – nach oben gern als Frage.",
+      "merkkarten": [
+        { "id": "gespraech-1-06-m1", "frage": "Was statt „Ja, aber …“?", "antwort": "„Den Punkt sehe ich. Und ich komme zu einem anderen Schluss, weil …“" },
+        {
+          "id": "gespraech-1-06-m2",
+          "frage": "Wie bringst du einen Einwand nach oben?",
+          "antwort": "Knapp, mit Grund und Beispiel, als Frage oder Vorschlag – heikle Punkte gern vorher unter vier Augen."
+        }
+      ],
+      "mission": "gespraech-m-06"
+    },
+    {
+      "id": "gespraech-1-07",
+      "bereich": "gespraech",
+      "stufe": 1,
+      "nr": 7,
+      "titel": "Fragen statt Gedankenlesen",
+      "faehigkeiten": ["gespraech.fragen", "gespraech.konflikt"],
+      "dauerMin": 7,
+      "beleg": "B",
+      "belegHinweis": "In 25 Experimenten machte Hineinversetzen nicht treffsicherer, direktes Fragen schon. „Interessen statt Positionen“ ist Verhandlungspraxis.",
+      "quellen": ["eyal2018", "fisherury"],
+      "aha": "Sich in den anderen hineinzuversetzen macht nicht treffsicherer – nachfragen schon. Und im Konflikt fragst du nicht nur was, sondern wozu.",
+      "schritte": [
+        {
+          "art": "schaetzen",
+          "frage": "In vielen Experimenten sollten sich Menschen in andere hineinversetzen, bevor sie deren Gefühle, Vorlieben oder Meinungen einschätzten. Wurden sie dadurch treffsicherer?",
+          "optionen": ["ja, deutlich", "kaum oder gar nicht", "nur bei Fremden"],
+          "richtig": 1,
+          "loesung": "kaum oder gar nicht",
+          "aufloesung": "In 25 Experimenten half das Hineinversetzen nicht – manchmal machte es nur selbstsicherer. Treffsicherer wurde, wer den anderen direkt fragen konnte."
+        },
+        {
+          "art": "karte",
+          "text": "Gedankenlesen klingt wie eine Tatsache: „Du bist sauer, weil ich nicht gefragt habe.“ Mach daraus eine Frage: „Kann es sein, dass dich gestört hat …?“ Im Konflikt gilt dasselbe für das Warum: „Ich will den Raum am Donnerstag“ ist eine Position. Der Grund dahinter – ein Beamer, Ruhe, ein Kunde – ist das Interesse. Frag danach und nenn deins. Oft passt dann beides."
+        },
+        {
+          "art": "zuordnen",
+          "kopf": { "id": "gespraech-1-07-a", "faehigkeit": "gespraech.konflikt", "stufe": 3, "kanal": "wissen" },
+          "auftrag": "Position oder Interesse?",
+          "faecher": ["Position", "Interesse"],
+          "karten": [
+            { "text": "„Ich will den Fensterplatz.“", "fach": 0 },
+            { "text": "„Mir ist am Bildschirm schnell zu dunkel.“", "fach": 1 },
+            { "text": "„Ich nehm die Frühschicht, Punkt.“", "fach": 0 },
+            { "text": "„Ich muss um vier mein Kind abholen.“", "fach": 1 },
+            { "text": "„Das Budget bleibt bei uns.“", "fach": 0 },
+            { "text": "„Wir brauchen die Sicherheit, dass das Projekt nicht stoppt.“", "fach": 1 }
+          ]
+        },
+        {
+          "art": "umformulieren",
+          "kopf": { "id": "gespraech-1-07-b", "faehigkeit": "gespraech.fragen", "stufe": 3, "kanal": "koennen" },
+          "auftrag": "Ein Kollege grüßt seit gestern nur knapp. Mach aus dem Gedankenlesen eine Frage.",
+          "vorlage": "„Du bist sauer, weil ich dich bei der Planung nicht gefragt habe.“",
+          "kriterien": ["die Vermutung als Frage", "lässt Raum für eine ganz andere Antwort", "ohne Vorwurf"],
+          "muster": [
+            "„Ich hab den Eindruck, seit gestern ist was. Liegt es an der Planung?“",
+            "„Kann es sein, dass dich gestört hat, dass ich dich nicht gefragt habe?“",
+            "„Ist was? Ich will nicht raten.“"
+          ]
+        },
+        {
+          "art": "auswahl",
+          "kopf": { "id": "gespraech-1-07-c", "faehigkeit": "gespraech.konflikt", "stufe": 4, "kanal": "wissen" },
+          "frage": "Du und Carla habt beide den kleinen Besprechungsraum für Donnerstag um zehn gebucht. Was bringt euch am ehesten weiter?",
+          "antworten": [
+            {
+              "text": "„Wofür brauchst du ihn genau? Ich brauche vor allem Ruhe für ein Telefonat – vielleicht passt ja beides.“",
+              "wert": 2,
+              "warum": "Du fragst nach ihrem Interesse und nennst deins. Vielleicht braucht sie den Bildschirm und du nur einen stillen Ort."
+            },
+            {
+              "text": "„Lass uns eine Münze werfen, dann ist es wenigstens fair für beide.“",
+              "wert": 1,
+              "warum": "Fair und schnell. Nur bekommt einer nichts – obwohl vielleicht beide hätten bekommen können, was sie brauchen."
+            },
+            { "text": "„Ich hab zuerst gebucht.“", "wert": 0, "tendenz": "position", "warum": "Ein Streit über die Reihenfolge – und keiner erfährt, worum es dem anderen geht." },
+            { "text": "„Nimm du ihn.“", "wert": 0, "tendenz": "nachgeben", "warum": "Friedlich – aber dein Anliegen kommt gar nicht erst auf den Tisch." }
+          ]
+        },
+        {
+          "art": "karte",
+          "titel": "Wenn es kein Streit mehr ist",
+          "text": "Gesprächstechniken helfen bei Konflikten unter Menschen, die einander nichts Böses wollen. Wirst du bedroht, gezielt schikaniert oder erlebst du Gewalt – im Betrieb oder zu Hause –, ist das keine Frage der richtigen Frage – und es liegt nicht an dir. Dann holst du Hilfe: im Betrieb beim Betriebsrat, bei Vorgesetzten oder einer Vertrauensperson, privat bei Beratungsstellen."
+        },
+        { "art": "fachhilfe", "thema": "mobbing" },
+        { "art": "mission", "ref": "gespraech-m-07" }
+      ],
+      "regel": "Vermutung als Frage – und im Konflikt nicht nur was, sondern wozu.",
+      "merkkarten": [
+        {
+          "id": "gespraech-1-07-m1",
+          "frage": "Was hilft mehr, den anderen zu verstehen: hineinversetzen oder fragen?",
+          "antwort": "Fragen. Hineinversetzen machte in Experimenten nicht treffsicherer."
+        },
+        {
+          "id": "gespraech-1-07-m2",
+          "frage": "Was ist der Unterschied zwischen Position und Interesse?",
+          "antwort": "Die Position ist, was jemand will. Das Interesse ist, wozu er es will – und dort liegt oft eine Lösung für beide."
+        }
+      ],
+      "mission": "gespraech-m-07"
+    }
+  ]
+}

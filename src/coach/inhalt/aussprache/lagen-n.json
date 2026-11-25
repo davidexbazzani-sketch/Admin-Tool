@@ -1,0 +1,153 @@
+{
+  "lagen": [
+    {
+      "id": "aussprache-n-l-01", "bereich": "aussprache", "schwerpunkt": "nuscheln", "phase": "g", "umfeld": "vorgesetzte", "faehigkeiten": ["aussprache.muster", "aussprache.umgewoehnen"], "stufe": 2,
+      "titel": "Wie bitte? in der Montagsrunde", "figur": "Dr. Henrik Albers",
+      "einleitung": "Eine Runde mit dem Chef – eine typische Lage fürs Nuscheln. Du übst, den ersten Satz klar zu setzen, bei einem unsicheren Thema die Stimme zu halten und nach einem „Wie bitte?“ ruhig neu anzusetzen. Der Strich | steht für eine kleine Pause.",
+      "lage": "Montagsrunde. Dr. Albers, Tarek und Miriam sitzen am Tisch. Du sollst kurz den Stand deines Angebots berichten: verschickt, Antwort bis Mittwoch – nur die Rabattfrage ist noch offen. Vor Dr. Albers wirst du gewöhnlich leiser und schneller.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Dr. Albers: „Wie ist der Stand beim Angebot?“",
+          "wahl": [
+            { "text": "Kopf hoch, zu ihm: „Das Angebot ist raus. | Antwort erwarten wir bis Mittwoch.“", "wert": 2, "weiter": "k2", "rueck": "Erster Satz klar, Blick zum Gegenüber. So stellt sich die Runde auf dich ein." },
+            { "text": "Blick auf den Laptop, schnell: „Ja, also, das is raus, ich denk, bis Mittwoch kommt da was …“", "wert": 0, "tendenz": "tempo", "weiter": "k1b", "rueck": "Dein Muster in Reinform: schnell, zum Bildschirm, am Ende weich. Die Hälfte kommt nicht an." },
+            { "text": "„Läuft.“", "wert": 1, "weiter": "k1c", "rueck": "Deutlich, aber zu knapp – er muss nachfragen, um etwas zu erfahren." }
+          ] },
+        { "id": "k1b", "sagt": "Dr. Albers: „Wie bitte? Bis wann?“",
+          "wahl": [
+            { "text": "Kurze Pause, Kopf hoch: „Bis Mittwoch. | Das Angebot ist verschickt.“", "wert": 2, "weiter": "k2", "rueck": "Neu angesetzt statt wiederholt. Genau das ist der Klar-Modus auf Abruf." },
+            { "text": "„Mittwoch, hab ich doch gesagt.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2b", "rueck": "Gesagt schon – angekommen nicht. Der leicht gereizte Ton macht es nicht besser." }
+          ] },
+        { "id": "k1c", "sagt": "Dr. Albers: „Läuft – heißt was genau?“",
+          "wahl": [
+            { "text": "„Das Angebot ist verschickt. | Antwort bis Mittwoch.“", "wert": 2, "weiter": "k2", "rueck": "Jetzt hat er, was er braucht – in zwei klaren Sätzen." },
+            { "text": "„Na ja, so wie geplant halt.“", "wert": 0, "tendenz": "ueberspielen", "weiter": "k2b", "rueck": "Ausweichend und leise. Jetzt schaut die ganze Runde zu dir." }
+          ] },
+        { "id": "k2", "sagt": "Dr. Albers: „Gut. Und die Rabattfrage?“ – Genau das Thema, bei dem du unsicher bist. Du merkst, wie deine Stimme sinkt.",
+          "wahl": [
+            { "text": "Bewusst das Satzende halten: „Da bin ich noch unsicher. | Ich kläre es bis morgen | und schicke Ihnen die Zahl.“", "wert": 2, "weiter": "k3", "rueck": "Unsicherheit klar ausgesprochen – das wirkt sicherer als jedes Murmeln." },
+            { "text": "„Da müsste man vielleicht noch mal schauen, ob …“ – immer leiser.", "wert": 0, "tendenz": "satzende", "weiter": "k2b", "rueck": "Die Lage zieht dein Muster an. Die anderen hören nur noch ein Murmeln." },
+            { "text": "„Weiß ich noch nicht.“", "wert": 1, "weiter": "k3", "rueck": "Ehrlich und deutlich. Ein nächster Schritt dazu hätte es rund gemacht." }
+          ] },
+        { "id": "k2b", "sagt": "Miriam beugt sich zu dir: „Ich hab nichts verstanden.“ Dr. Albers runzelt die Stirn.",
+          "wahl": [
+            { "text": "Zu allen, mit gehobenem Kopf: „Noch einmal klar: | Die Rabattfrage | kläre ich bis morgen.“", "wert": 2, "weiter": "k3", "rueck": "Gut gerettet. Ein Neustart ist keine Schwäche, sondern Rücksicht." },
+            { "text": "Weiterreden, als wäre nichts gewesen.", "wert": 0, "tendenz": "ueberspielen", "weiter": "ende2", "rueck": "Die Unklarheit bleibt im Raum – und landet später wieder bei dir." }
+          ] },
+        { "id": "k3", "sagt": "Dr. Albers: „Gut. Dann bis morgen?“",
+          "wahl": [
+            { "text": "„Ja. | Bis morgen, zwölf Uhr, | haben Sie die Zahl.“", "wert": 2, "weiter": "ende1", "rueck": "Zusage mit Uhrzeit, Satzende gehalten. Klarer geht ein Abschluss nicht." },
+            { "text": "„Jo, mach ich.“ – schon halb zum Laptop gedreht.", "wert": 1, "tendenz": "satzende", "weiter": "ende1", "rueck": "Kommt an, aber die Zusage bleibt vage. Eine Uhrzeit hätte sie festgemacht." }
+          ] },
+        { "id": "ende1", "sagt": "Dr. Albers nickt und geht zum nächsten Punkt. Tarek zeigt dir unter dem Tisch einen Daumen.", "ende": "In einer Lage, die dein Muster anzieht, hast du den ersten Satz klar gesetzt, die Stimme beim unsicheren Thema gehalten und mit einer genauen Zusage geschlossen. So sieht Umgewöhnen im Alltag aus." },
+        { "id": "ende2", "sagt": "Nach der Runde fragt Tarek: „Was hast du jetzt eigentlich zur Rabattfrage gesagt?“", "ende": "Kein Drama – aber dein Beitrag ist untergegangen. Beim nächsten Mal: Kopf hoch vor dem ersten Satz, und wenn die Stimme sinkt, das Satzende bewusst halten." }
+      ],
+      "prinzipien": ["erster Satz klar, mit gehobenem Kopf", "nach „Wie bitte?“ neu ansetzen statt wiederholen", "bei unsicherem Thema das Satzende halten", "Zusage mit Termin"],
+      "transfer": "Vor wem wirst du leiser oder schneller? Wie klingt dein erster Satz, wenn du ihn beim nächsten Mal vorher einmal halblaut sagst?"
+    },
+    {
+      "id": "aussprache-n-l-02", "bereich": "aussprache", "schwerpunkt": "nuscheln", "phase": "g", "umfeld": "telefon", "faehigkeiten": ["aussprache.umgewoehnen", "aussprache.muster"], "stufe": 3,
+      "titel": "Der Rückruf in der Kantine", "figur": "Nadine Köhler",
+      "einleitung": "Ein wichtiger Anruf im falschen Moment. Du übst, erst die Lage zu ordnen und dann im Klar-Modus zu sprechen: Name, Nummer in Gruppen, Termin zum Schluss.",
+      "lage": "Mittagspause in der vollen Kantine. Du hast gerade abgebissen, als dein Handy klingelt: Nadine Köhler, eine mögliche Kundin. Sie ruft wegen deines Angebots zurück.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Das Handy klingelt. Am Tisch wird laut gelacht.",
+          "wahl": [
+            { "text": "Kurz schlucken, aufstehen, in den ruhigen Flur gehen. Dann: „Guten Tag, | hier spricht …“", "wert": 2, "weiter": "k2", "rueck": "Erst die Lage ordnen, dann sprechen. Zehn Sekunden, die das Gespräch retten." },
+            { "text": "Mit vollem Mund am Tisch abnehmen: „Mhm, hallo?“", "wert": 0, "tendenz": "oeffnung", "weiter": "k1b", "rueck": "Lärm, voller Mund, kein Name – drei Gründe auf einmal, warum sie nichts versteht." },
+            { "text": "Nicht rangehen und gleich nach dem Essen in Ruhe zurückrufen – dann hast du den Mund frei und keinen Lärm um dich.", "wert": 1, "weiter": "k1c", "rueck": "Völlig in Ordnung. Dann liegt der Anfang eben bei dir." }
+          ] },
+        { "id": "k1b", "sagt": "Nadine Köhler: „Hallo? Bin ich richtig? Bei Ihnen ist es so laut.“",
+          "wahl": [
+            { "text": "„Einen Moment bitte, ich gehe kurz raus.“ Im Flur dann Gruß und Name in klaren Silben.", "wert": 2, "weiter": "k2", "rueck": "Gut gerettet. Ein ruhiger Ort schlägt jede Lautstärke." },
+            { "text": "Am Tisch bleiben und lauter sprechen.", "wert": 0, "tendenz": "lautstaerke", "weiter": "k2b", "rueck": "Lauter gegen Lärm strengt an und macht das Undeutliche nur lauter." }
+          ] },
+        { "id": "k1c", "sagt": "Zwanzig Minuten später rufst du aus deinem Büro zurück. „Köhler.“",
+          "wahl": [
+            { "text": "„Guten Tag, Frau Köhler. | Hier spricht … | Sie hatten mich angerufen.“", "wert": 2, "weiter": "k2", "rueck": "Gruß, Pause, Name, Anlass – sie weiß sofort, wer dran ist." },
+            { "text": "„Ja, hallo, Sie hatten angerufen?“", "wert": 0, "weiter": "k2b", "rueck": "Ohne Namen muss sie raten, wer von den vielen Rückrufen gerade dran ist." }
+          ] },
+        { "id": "k2", "sagt": "Nadine Köhler: „Ich habe Ihr Angebot vor mir. Welche Nummer hatte das noch mal?“",
+          "wahl": [
+            { "text": "Kurz gebremst, dann in Gruppen: „Die Nummer: | A – zwo – vier, | sieben – null – drei.“", "wert": 2, "weiter": "k3", "rueck": "Angekündigt, in Gruppen, „zwo“ statt „zwei“. So schreibt man mit." },
+            { "text": "„A-zwovier-siebennulldrei.“ – in einem Zug.", "wert": 0, "tendenz": "tempo", "weiter": "k2c", "rueck": "Sechs Zeichen ohne Luft. Gerade das, was sie aufschreiben soll, kommt am schnellsten." }
+          ] },
+        { "id": "k2b", "sagt": "Nadine Köhler: „Entschuldigung – ich verstehe Sie kaum. Wer ist denn da?“",
+          "wahl": [
+            { "text": "Ruhige Ecke, Kopf hoch: „Verzeihung. | Hier spricht … | wegen des Angebots.“", "wert": 2, "weiter": "k2", "rueck": "Neu angesetzt, mit Name und Anlass. Jetzt kann das Gespräch beginnen." },
+            { "text": "„Na, wegen dem Angebot!“ – genervt.", "wert": 0, "tendenz": "rechtfertigen", "weiter": "ende2", "rueck": "Ohne Namen und mit gereiztem Ton – sie legt den Rückruf auf später." }
+          ] },
+        { "id": "k2c", "sagt": "Nadine Köhler: „A, zwei, vier – und dann?“",
+          "wahl": [
+            { "text": "„Sieben – null – drei. | Ich wiederhole: | A – zwo – vier, | sieben – null – drei.“", "wert": 2, "weiter": "k3", "rueck": "Ruhig neu, in Gruppen, mit Wiederholung. Jetzt stimmt die Nummer." },
+            { "text": "Die ganze Nummer noch einmal im selben Tempo.", "wert": 0, "tendenz": "tempo", "weiter": "ende2", "rueck": "Dasselbe Tempo bringt dasselbe Ergebnis. Sie notiert eine falsche Nummer." }
+          ] },
+        { "id": "k3", "sagt": "Nadine Köhler: „Gut. Dann besprechen wir das am Donnerstag. Passt Ihnen neun Uhr?“",
+          "wahl": [
+            { "text": "„Donnerstag, | neun Uhr, | passt gut. | Bis dann, Frau Köhler.“", "wert": 2, "weiter": "ende1", "rueck": "Termin wiederholt, Satzende gehalten. So bleibt nichts offen." },
+            { "text": "„Joa, passt, bis dann …“ – leiser werdend.", "wert": 1, "tendenz": "satzende", "weiter": "ende1", "rueck": "Freundlich, aber der Termin ist nicht noch einmal gefallen. Am Ende verschwindet die Stimme." }
+          ] },
+        { "id": "ende1", "sagt": "Nadine Köhler: „Prima, steht im Kalender. Bis Donnerstag.“", "ende": "Erst die Lage ordnen, dann sprechen: ruhiger Ort, Name mit Pause, Nummer in Gruppen, Termin zum Schluss. Ein kurzer Anruf, der keine Frage offen lässt." },
+        { "id": "ende2", "sagt": "Am nächsten Tag schreibt Nadine Köhler: „Ich finde Ihr Angebot nicht – können Sie es noch einmal schicken?“", "ende": "Kein Weltuntergang, aber ein Umweg. Beim nächsten Mal: kurz raus aus dem Lärm, Name in Silben, Nummer angekündigt und in Gruppen." }
+      ],
+      "prinzipien": ["erst die Lage ordnen, dann sprechen", "Name mit Pause und in Silben", "Nummern ankündigen und in Gruppen sprechen", "Termin am Schluss wiederholen"],
+      "transfer": "Wo nimmst du Anrufe oft im falschen Moment an? Was wäre dein Satz, um dir zehn Sekunden für einen ruhigen Ort zu nehmen?"
+    },
+    {
+      "id": "aussprache-n-l-03", "bereich": "aussprache", "schwerpunkt": "nuscheln", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["aussprache.muster", "aussprache.umgewoehnen"], "stufe": 4, "sparring": true,
+      "titel": "Sparring: Ein Tag mit Zeichen", "figur": "Miriam Okafor",
+      "einleitung": "Das Sparring zum Abschluss: ein ganzer Arbeitstag mit drei festen Momenten – und Miriam, die dir ein unauffälliges Zeichen gibt, wenn du undeutlich wirst. Hier kommt alles zusammen: Muster erkennen, umschalten, dranbleiben.",
+      "lage": "Montagmorgen. Du hast mit Miriam vereinbart, es heute auszuprobieren: Tippt sie sich ans Ohr, wirst du gerade undeutlich. Auf dem Plan stehen ein Anruf, die Runde mit Dr. Albers und eine offene Zahl, bei der du dir noch nicht sicher bist.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "8:15 Uhr. Miriam steckt den Kopf in dein Büro: „Bleibt es bei heute? Ich tippe ans Ohr, wenn ich dich nicht verstehe.“",
+          "wahl": [
+            { "text": "„Ja, gern. | Und sag mir abends, wie oft du tippen musstest.“", "wert": 2, "weiter": "k2", "rueck": "Zeichen und Rückmeldung – so wird aus einem Gefühl ein Messwert." },
+            { "text": "„Ach, lieber nicht. Das ist mir doch peinlich, wenn du vor allen ans Ohr tippst.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k1b", "rueck": "Verständlich. Aber das Zeichen ist genau für die Momente, in denen du dich selbst nicht hörst." },
+            { "text": "„Okay – aber nur in der Runde.“", "wert": 1, "weiter": "k2", "rueck": "Ein guter Anfang. Am Telefon wäre es auch nützlich, aber klein anfangen ist erlaubt." }
+          ] },
+        { "id": "k1b", "sagt": "Miriam: „Ganz unauffällig, versprochen. Niemand merkt was.“",
+          "wahl": [
+            { "text": "„Na gut. | Probieren wir es.“", "wert": 2, "weiter": "k2", "rueck": "Mutig. Gerade das Unangenehme bringt hier am meisten." },
+            { "text": "„Nein, wirklich nicht.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende3", "rueck": "Deine Entscheidung. Nur übst du heute ohne Spiegel von außen." }
+          ] },
+        { "id": "k2", "sagt": "9:00 Uhr. Dein Telefon klingelt. Miriam sitzt am Nachbartisch.",
+          "wahl": [
+            { "text": "Abnehmen: „Guten Morgen, | hier spricht …“ – Pause vor dem Namen, jede Silbe.", "wert": 2, "weiter": "k3", "rueck": "Erster fester Moment im Klar-Modus. Miriam hebt kurz den Daumen." },
+            { "text": "„Morgn, …-hier.“ – wie immer im Galopp.", "wert": 0, "tendenz": "tempo", "weiter": "k2b", "rueck": "Das alte Muster. Miriam tippt sich ans Ohr." }
+          ] },
+        { "id": "k2b", "sagt": "Miriam tippt sich ans Ohr. Der Anrufer schweigt kurz.",
+          "wahl": [
+            { "text": "Kurz innehalten: „Verzeihung – | hier spricht …“", "wert": 2, "weiter": "k3", "rueck": "Zeichen gesehen, umgeschaltet. Dafür ist es da." },
+            { "text": "Das Zeichen übersehen und weiterreden.", "wert": 0, "tendenz": "ueberspielen", "weiter": "k3", "rueck": "Der Anrufer fragt später noch einmal nach deinem Namen. Das nächste Zeichen nimmst du besser an." }
+          ] },
+        { "id": "k3", "sagt": "10:30 Uhr, Runde. Dr. Albers: „Wie hoch wird das Budget?“ Die Zahl ist noch nicht sicher. Du spürst, wie du leiser wirst.",
+          "wahl": [
+            { "text": "Kopf hoch, Satzende halten: „Vorläufig rund zwölftausend. | Die genaue Zahl kommt am Donnerstag.“", "wert": 2, "weiter": "k4", "rueck": "Unsicher – und trotzdem klar. Genau so klingt Fachlichkeit." },
+            { "text": "„Also, äh, so ungefähr zwölf, wahrscheinlich …“ – Blick zum Laptop.", "wert": 0, "tendenz": "satzende", "weiter": "k3b", "rueck": "Die Lage zieht das Muster an: leiser, zum Bildschirm, ohne Ende." }
+          ] },
+        { "id": "k3b", "sagt": "Miriam tippt sich ans Ohr.",
+          "wahl": [
+            { "text": "Kurze Pause, Kopf hoch: „Noch einmal: | vorläufig zwölftausend. | Genau am Donnerstag.“", "wert": 2, "weiter": "k4", "rueck": "Umgeschaltet, ohne dass es jemand gemerkt hat – außer Miriam." },
+            { "text": "Nichts sagen und schnell zum nächsten Punkt.", "wert": 0, "tendenz": "vermeiden", "weiter": "k4b", "rueck": "Die Zahl bleibt unklar. Das Zeichen war richtig – nur hast du nicht umgeschaltet." }
+          ] },
+        { "id": "k4", "sagt": "16:45 Uhr. Du packst zusammen. Dr. Albers ruft dir hinterher: „Die Zahl dann am Donnerstag?“",
+          "wahl": [
+            { "text": "Stehen bleiben, zuwenden: „Ja – | Donnerstag bis Mittag. | Schönen Abend.“", "wert": 2, "weiter": "ende1", "rueck": "Dritter Moment: die Verabschiedung mit klarer Zusage." },
+            { "text": "„Klar, mach ich, tschüss …“ – schon in der Tür.", "wert": 1, "tendenz": "satzende", "weiter": "ende2", "rueck": "Freundlich, aber über die Schulter. Die Zusage ohne Zeit bleibt vage." }
+          ] },
+        { "id": "k4b", "sagt": "Nach der Runde sagt Miriam leise: „Die Zahl hat hinten keiner mitbekommen.“",
+          "wahl": [
+            { "text": "„Danke. | Ich schreibe sie gleich in den Chat | und nehme mir den Moment fürs nächste Mal vor.“", "wert": 2, "weiter": "k4", "rueck": "Repariert und daraus gelernt. So wächst die Gewohnheit." },
+            { "text": "„Ist doch egal.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Für die anderen nicht – sie planen mit der Zahl." }
+          ] },
+        { "id": "ende1", "sagt": "Abends schreibt Miriam: „Heute musste ich kaum tippen. Vor ein paar Wochen wäre das noch anders gewesen.“", "ende": "Name, Runde, Verabschiedung – die festen Momente haben getragen. Das ist kein perfekter Tag – sondern ein Tag, an dem die neue Gewohnheit gearbeitet hat. Genau so sieht Fortschritt aus." },
+        { "id": "ende2", "sagt": "Abends schreibt Miriam: „Ein paar Mal hat's geklappt. Morgen wieder?“", "ende": "Ein gemischter Tag – völlig normal beim Umgewöhnen. Nimm einen Moment, der gut lief, und einen, an dem du morgen umschaltest, sobald das Zeichen kommt." },
+        { "id": "ende3", "sagt": "Miriam zuckt die Schultern: „Sag Bescheid, wenn du es doch willst.“", "ende": "Auch ein Nein ist eine Entscheidung. Das Angebot bleibt stehen – und deine drei Momente kannst du heute trotzdem allein im Klar-Modus sprechen." }
+      ],
+      "prinzipien": ["drei feste Momente: Name, erste Wortmeldung, Verabschiedung", "ein Zeichen von außen annehmen und umschalten", "bei unsicherem Thema die Stimme halten", "Ausrutscher reparieren statt abhaken"],
+      "transfer": "Wer könnte dir ein unauffälliges Zeichen geben? Und welche drei Momente nimmst du dir für die nächste Woche vor?"
+    }
+  ]
+}

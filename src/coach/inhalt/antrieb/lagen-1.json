@@ -1,0 +1,244 @@
+{
+  "lagen": [
+    {
+      "id": "antrieb-l-01", "bereich": "antrieb", "phase": "g", "umfeld": "freunde", "faehigkeiten": ["antrieb.plan", "antrieb.start", "antrieb.ziele"], "stufe": 2,
+      "titel": "Der Sonntagabend vor dem Montag", "figur": "Sven",
+      "einleitung": "Am Abend vor dem großen Start. Du übst, aus einem Vorsatz einen Plan zu machen: das Hindernis benennen, einen Auslöser festlegen, winzig anfangen – auch wenn jemand stichelt.",
+      "lage": "Sonntagabend. Ab morgen willst du wieder laufen gehen – nach zwei Jahren Pause. Die neuen Schuhe stehen noch im Karton im Flur. Da ruft Sven an.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Sven: „Und, ab morgen wieder Sportskanone? So wie letztes Jahr im Januar?“",
+          "wahl": [
+            { "text": "„Diesmal wird alles anders. Ich laufe jeden Tag fünf Kilometer – ich spür das einfach.“", "wert": 0, "tendenz": "ueberladen", "weiter": "k2b", "rueck": "Viel Schwung, wenig Plan. Nach zwei Jahren Pause ist jeden Tag fünf Kilometer ein Berg – und „ich spür das“ ist das schöne Bild, nicht der Weg." },
+            { "text": "„Mal sehen. Letztes Mal hat mich abends das Sofa erwischt. Das will ich diesmal einplanen.“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst den Spruch nicht übel und benennst das Hindernis in dir. Genau da setzt ein guter Plan an." },
+            { "text": "„Lass mich doch, du machst ja selbst keinen Sport.“", "wert": 0, "tendenz": "angreifen", "weiter": "k2b", "rueck": "Verständlich, dass der Spruch piekst. Nur lenkt der Gegenangriff vom Wichtigen ab: deinem Plan für morgen." }
+          ] },
+        { "id": "k2", "sagt": "Sven: „Okay. Und wie willst du das Sofa austricksen?“",
+          "wahl": [
+            { "text": "„Mit Willenskraft. Diesmal will ich es wirklich, und dann klappt das auch.“", "wert": 0, "tendenz": "wollen", "weiter": "k3", "rueck": "Wollen ist der Anfang, nicht der Weg. An müden Abenden trägt ein fester Auslöser weiter als jeder gute Vorsatz." },
+            { "text": "„Wenn ich um halb sechs heimkomme, ziehe ich die Laufsachen an, bevor ich mich hinsetze.“", "wert": 2, "weiter": "k3", "rueck": "Auslöser plus Handlung – das Sofa kommt gar nicht erst zum Zug." },
+            { "text": "„Ich stelle die Schuhe abends an die Tür, dann sehe ich sie.“", "wert": 1, "weiter": "k3", "rueck": "Gute Idee, die Schuhe im Blick helfen. Mit einem festen Moment dazu wird ein Plan daraus." }
+          ] },
+        { "id": "k2b", "sagt": "Sven lacht: „Du bist seit zwei Jahren nicht gelaufen. Was machst du am Mittwoch, wenn du nach der Arbeit platt bist?“",
+          "wahl": [
+            { "text": "„Gute Frage. Dann gehe ich wenigstens einmal um den Block – und fange überhaupt kleiner an.“", "wert": 2, "weiter": "k3", "rueck": "Zweite Chance genutzt: Du denkst das Hindernis mit und machst den Anfang kleiner." },
+            { "text": "„Dann zieh ich es trotzdem durch. Irgendwie.“", "wert": 0, "tendenz": "durchhalten", "weiter": "ende2", "rueck": "„Irgendwie“ ist kein Plan. Am Mittwochabend entscheidet dann das Sofa." }
+          ] },
+        { "id": "k3", "sagt": "Sven: „Und was ist morgen der allererste Schritt? Nicht der Plan für Februar – morgen.“",
+          "wahl": [
+            { "text": "„Morgen gehe ich zehn Minuten locker los. Mehr nicht.“", "wert": 2, "weiter": "ende1", "rueck": "Klein genug, dass Nein albern wäre. Alles danach ist Zugabe." },
+            { "text": "„Ich schau mir heute Abend noch in Ruhe ein paar Trainingspläne im Netz an, dann weiß ich, wie die Profis das machen.“", "wert": 0, "tendenz": "aufschieben", "weiter": "ende2", "rueck": "Lesen über das Laufen fühlt sich nach Anfang an, ist aber keiner. Der Schritt für morgen fehlt noch." },
+            { "text": "„Die Schuhe auspacken und an die Tür stellen – jetzt gleich.“", "wert": 1, "weiter": "k3b", "rueck": "Ein guter Zwei-Minuten-Schritt für heute Abend. Für morgen fehlt noch, was du konkret machst." }
+          ] },
+        { "id": "k3b", "sagt": "Sven: „Gut. Und morgen?“",
+          "wahl": [
+            { "text": "„Zehn Minuten locker, gleich nach der Arbeit.“", "wert": 2, "weiter": "ende1", "rueck": "Jetzt steht alles: die Schuhe im Blick, der Moment, die kleine Fassung." },
+            { "text": "„Mal sehen, wie ich mich nach der Arbeit fühle – wenn ich fit bin, gehe ich vielleicht sogar länger.“", "wert": 0, "tendenz": "aufschieben", "weiter": "ende2", "rueck": "Das Gefühl entscheidet selten fürs Laufen. Ein fester Schritt nimmt ihm die Entscheidung ab." }
+          ] },
+        { "id": "ende1", "sagt": "Montag, 17:35 Uhr. Die Schuhe stehen an der Tür. Du gehst zehn Minuten. Abends schreibt Sven: „Und?“ – du schickst ihm ein Foto deiner Schuhe.", "ende": "Hindernis benannt, Auslöser festgelegt, winzig angefangen. So übersteht ein Vorsatz den ersten müden Abend. Morgen dasselbe – mehr braucht es noch nicht." },
+        { "id": "ende2", "sagt": "Mittwochabend. Du sitzt auf dem Sofa, die Schuhe stehen noch im Karton. „Morgen dann“, denkst du.", "ende": "Kein Drama – so geht es vielen. Es fehlte kein Wille, sondern ein Plan: das Hindernis, ein Auslöser, ein winziger erster Schritt. Morgen ist ein neuer Versuch." }
+      ],
+      "prinzipien": ["das Hindernis in dir benennen", "Wenn-Dann statt „irgendwie“", "den ersten Schritt winzig machen", "Sprüche nicht übelnehmen – den Plan im Blick behalten"],
+      "transfer": "Welcher Vorsatz steht bei dir gerade vor seinem „Montag“ – und was ist dein Wenn-Dann für den ersten müden Abend?"
+    },
+    {
+      "id": "antrieb-l-02", "bereich": "antrieb", "phase": "g", "umfeld": "freunde", "faehigkeiten": ["antrieb.ziele", "antrieb.warum", "antrieb.plan"], "stufe": 3,
+      "titel": "Svens Marathon-Plan", "figur": "Sven",
+      "einleitung": "Ein Freund hat ein großes Ziel und viel Begeisterung. Du übst, ihm mit WOOP zu helfen: das Schöne ernst nehmen, nach seinem eigenen Grund fragen, das Hindernis finden und das Ziel machbar machen – ohne ihm den Traum auszureden.",
+      "lage": "Samstag im Biergarten. Sven ist seit Wochen begeistert: Im Frühjahr will er einen Marathon laufen. Bisher läuft er gar nicht.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Sven: „Ich hab mir schon die Medaille angeschaut. Und das Foto von der Ziellinie ist mein Bildschirmhintergrund. Ich sehe mich da jeden Abend durchlaufen!“",
+          "wahl": [
+            { "text": "„Klingt großartig. Was wäre für dich das Schönste daran – die Medaille oder etwas anderes?“", "wert": 2, "weiter": "k2", "rueck": "Du nimmst seine Freude ernst und fragst nach dem Ergebnis, das ihn wirklich trägt." },
+            { "text": "„Ein Marathon? Du kommst doch nicht mal die Treppe hoch ohne Pause.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Ein Lacher auf seine Kosten – und Sven macht dicht. Ehrlichkeit ja, aber nicht als Abwertung." },
+            { "text": "„Super! Schau dir das Foto jeden Abend an, glaub fest daran und bleib positiv – dann ziehst du das auch durch.“", "wert": 0, "tendenz": "traeumen", "weiter": "k2", "rueck": "Lieb gemeint. Doch das bloße Ausmalen macht eher satt als schnell." }
+          ] },
+        { "id": "k1b", "sagt": "Sven verschränkt die Arme: „Danke auch. Ich dachte, du freust dich mit.“",
+          "wahl": [
+            { "text": "„Entschuldige, das war blöd. Ich freu mich – erzähl, was dich daran reizt.“", "wert": 2, "weiter": "k2", "rueck": "Gut eingefangen. Jetzt kann er erzählen, worum es ihm geht." },
+            { "text": "„War doch nur Spaß. Du verstehst keinen Witz mehr, seit du dir das mit dem Marathon in den Kopf gesetzt hast.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Jetzt ist er gekränkt, und über den Plan redet ihr heute nicht mehr." }
+          ] },
+        { "id": "k2", "sagt": "Sven: „Ehrlich? Seit ich nur noch im Büro sitze, fühl ich mich wie ein Sofakissen. Ich will mal wieder etwas schaffen, auf das ich stolz bin.“",
+          "wahl": [
+            { "text": "„Dann kauf dir gleich die besten Laufschuhe – das motiviert ungemein, glaub mir.“", "wert": 0, "tendenz": "ersatz", "weiter": "k3", "rueck": "Neue Schuhe fühlen sich nach Start an. Das Hindernis bleibt aber unbenannt." },
+            { "text": "„Das ist ein guter Grund. Was hält dich bisher davon ab, überhaupt zu laufen?“", "wert": 2, "weiter": "k3", "rueck": "Ein eigener Grund – stolz sein – trägt weiter als eine Medaille. Jetzt fehlt das Hindernis." },
+            { "text": "„Stolz sein geht auch mit weniger. Warum nicht erst mal fünf Kilometer schaffen und dann in Ruhe weitersehen?“", "wert": 1, "weiter": "k3", "rueck": "Ein vernünftiger Gedanke – er kommt nur zu früh. Erst das Hindernis, dann die Größe des Ziels." }
+          ] },
+        { "id": "k3", "sagt": "Sven überlegt: „Wenn ich ehrlich bin: Ich fang Sachen groß an und hör nach zwei Wochen auf, wenn's zäh wird. Und morgens komm ich nicht aus dem Bett.“",
+          "wahl": [
+            { "text": "„Dann plan genau dafür: Was machst du, wenn es zäh wird?“", "wert": 2, "weiter": "k4", "rueck": "Er hat das Hindernis selbst genannt. Jetzt braucht es den Wenn-Dann-Plan dafür." },
+            { "text": "„Ach, diesmal ziehst du das durch, ich glaub an dich. Einfach nicht aufgeben, dann klappt das auch mit dem Marathon.“", "wert": 0, "tendenz": "parole", "weiter": "k4b", "rueck": "Zuspruch ist schön, aber er übergeht das Hindernis, das Sven gerade selbst benannt hat." },
+            { "text": "„Dann lauf abends statt morgens.“", "wert": 1, "weiter": "k4", "rueck": "Ein guter Teil der Lösung fürs Bett-Problem. Für die zähe Phase fehlt noch der Plan." }
+          ] },
+        { "id": "k4", "sagt": "Sven: „Okay. Wenn es zäh wird, dann lauf ich nur eine kleine Runde, statt aufzuhören. Und der Marathon?“",
+          "wahl": [
+            { "text": "„Vergiss den Marathon, das ist eh nichts für dich.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Damit streichst du seinen Traum, statt ihn zu erden. Er wird sich wehren – oder aufgeben." },
+            { "text": "„Du entscheidest. Hauptsache, du hast einen Plan für die zähen Tage.“", "wert": 1, "weiter": "ende1", "rueck": "Respektiert seine Freiheit – gut so. Ob das Ziel zu seinem Stand passt, bleibt aber offen." },
+            { "text": "„Vielleicht erst zehn Kilometer im Frühjahr als Etappe – der Marathon bleibt das große Ziel dahinter.“", "wert": 2, "weiter": "ende1", "rueck": "Konkret, fordernd und machbar: eine Etappe, die zu seinem Stand passt, ohne den Traum zu streichen." }
+          ] },
+        { "id": "k4b", "sagt": "Sven strahlt: „Danke! Ich meld mich gleich morgen an.“",
+          "wahl": [
+            { "text": "„Mach das. Und schreib dir dazu auf, was du tust, wenn es nach zwei Wochen zäh wird.“", "wert": 2, "weiter": "ende1", "rueck": "Spät, aber gut: Sein Hindernis bekommt doch noch einen Plan." },
+            { "text": "„Prost auf den Marathon!“", "wert": 0, "tendenz": "ueberspielen", "weiter": "ende3", "rueck": "Ein schöner Moment – aber das Hindernis, das er genannt hat, bleibt ohne Antwort." }
+          ] },
+        { "id": "ende1", "sagt": "Sven tippt in sein Handy: „Wenn's zäh wird: kleine Runde statt aufhören. Laufen abends, nicht morgens.“ Er grinst: „Klingt weniger nach Film. Aber mehr nach mir.“", "ende": "Du hast seinen Traum nicht ausgeredet, sondern geerdet: das Schöne, sein eigener Grund, das Hindernis in ihm und ein Plan dafür. Eine Etappe, die zu seinem Stand passt, macht das große Ziel noch greifbarer." },
+        { "id": "ende2", "sagt": "Sven wechselt das Thema. Über den Marathon redet ihr an diesem Abend nicht mehr.", "ende": "Ehrlichkeit hilft, Abwertung nicht. Wer jemandem beim Ziel helfen will, nimmt den Wunsch ernst und fragt nach dem Hindernis – statt das Ziel kleinzumachen." },
+        { "id": "ende3", "sagt": "Drei Wochen später fragst du nach. Sven winkt ab: „Lief nicht. War halt zäh.“", "ende": "Begeisterung allein trägt selten durch die zähe Phase. Das Hindernis hatte Sven selbst genannt – ein Plan dafür hätte geholfen. Beim nächsten Mal: WOOP." }
+      ],
+      "prinzipien": ["den Wunsch ernst nehmen", "nach dem eigenen Grund fragen", "das Hindernis in ihm finden", "Wenn-Dann für die zähe Phase", "das Ziel fordernd, aber passend machen"],
+      "transfer": "Bei welchem Ziel von dir fehlt noch der Blick aufs Hindernis – und welche Etappe würde zu deinem Stand passen?"
+    },
+    {
+      "id": "antrieb-l-03", "bereich": "antrieb", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["antrieb.start", "antrieb.gewohnheit", "antrieb.fortschritt"], "stufe": 3,
+      "titel": "Das Vorhaben, das seit einem Jahr liegt", "figur": "Tarek Yılmaz",
+      "einleitung": "Ein Vorhaben liegt seit einem Jahr. Du übst, ehrlich hinzuschauen, statt dich zu rechtfertigen, den Anfang winzig zu machen, die Umgebung umzubauen und den Fortschritt festzuhalten.",
+      "lage": "Mittagspause in der Kaffeeküche. Seit einem Jahr steht bei dir zu Hause ein Italienisch-Lehrbuch im Regal. Tarek erzählt, dass er im Sommer nach Neapel fährt, und fragt: „Du wolltest doch auch Italienisch lernen?“",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Tarek: „Und? Wie weit bist du?“",
+          "wahl": [
+            { "text": "„Ehrlich gesagt: gar nicht. Das Buch steht seit einem Jahr im Regal.“", "wert": 2, "weiter": "k2", "rueck": "Ehrlich und ohne Ausrede – der beste Ausgangspunkt für einen Anfang." },
+            { "text": "„Ich hatte einfach keine Zeit, das Jahr war total voll mit Arbeit, dem Umzug meiner Schwester und allem anderen.“", "wert": 0, "tendenz": "rechtfertigen", "weiter": "k2", "rueck": "Gut möglich, dass das Jahr voll war. Die Erklärung schließt das Thema aber, statt einen Anfang zu öffnen." },
+            { "text": "„Ich fang an, sobald ich mal richtig Lust drauf habe.“", "wert": 0, "tendenz": "aufschieben", "weiter": "k2", "rueck": "Die Lust kommt eher nach dem Anfangen. Auf sie zu warten, hat schon ein Jahr gekostet." }
+          ] },
+        { "id": "k2", "sagt": "Tarek: „Kenn ich. Was müsste passieren, damit du heute Abend anfängst?“",
+          "wahl": [
+            { "text": "„Ich bräuchte erst mal einen freien Abend, an dem ich in Ruhe zwei Stunden das ganze erste Kapitel durcharbeiten kann.“", "wert": 0, "tendenz": "ueberladen", "weiter": "k2b", "rueck": "Zwei Stunden in Ruhe – genau der Abend, der seit einem Jahr nicht kommt." },
+            { "text": "„Eigentlich nur: das Buch aufschlagen und die erste Seite lesen.“", "wert": 2, "weiter": "k3", "rueck": "Die Zwei-Minuten-Fassung. Klein genug, dass heute Abend nichts dagegen spricht." },
+            { "text": "„Vielleicht eine Sprach-App, die habe ich immer dabei.“", "wert": 1, "weiter": "k3", "rueck": "Kann helfen, die Hürde sinkt. Entscheidend bleibt, wann du sie öffnest." }
+          ] },
+        { "id": "k2b", "sagt": "Tarek: „Und wann kommt so ein Abend?“",
+          "wahl": [
+            { "text": "„Vermutlich nie. Dann eben kleiner: heute eine Seite.“", "wert": 2, "weiter": "k3", "rueck": "Gut erkannt: Der perfekte Abend ist der Grund, warum es ein Jahr liegt." },
+            { "text": "„Im Urlaub vielleicht, da habe ich endlich Ruhe und kann mich richtig hineinknien.“", "wert": 0, "tendenz": "aufschieben", "weiter": "ende2", "rueck": "Dann liegt es noch ein paar Monate. Der Urlaub ist auch kein leerer Abend." }
+          ] },
+        { "id": "k3", "sagt": "Tarek: „Und wo steht das Buch gerade? Hinter den Ordnern im Regal?“",
+          "wahl": [
+            { "text": "„Ja … Ich leg es heute Abend auf den Küchentisch, neben die Kaffeemaschine.“", "wert": 2, "weiter": "k4", "rueck": "Umgebung vor Willen: Was im Weg liegt, passiert eher." },
+            { "text": "„Wo es steht, ist doch egal. Wenn ich will, finde ich es.“", "wert": 0, "weiter": "k4", "rueck": "Im Prinzip ja. Im Alltag gewinnt aber, was griffbereit ist – das Regal ist ein Umweg." },
+            { "text": "„Ich stell mir eine Erinnerung im Handy für Sonntagabend, dann denke ich bestimmt daran und hole es raus.“", "wert": 1, "weiter": "k4", "rueck": "Eine Erinnerung kann anstoßen, vor allem kurz danach. Ein Buch im Blick wirkt jeden Tag." }
+          ] },
+        { "id": "k4", "sagt": "Tarek: „Weißt du was? Bis zu meinem Urlaub schreiben wir uns jeden Freitag, an wie vielen Tagen wir geübt haben.“",
+          "wahl": [
+            { "text": "„Gern. Ich häng einen Zettel mit Kästchen an den Kühlschrank und schick dir freitags die Zahl.“", "wert": 2, "weiter": "ende1", "rueck": "Festhalten und jemandem zeigen – so wirkt Fortschritt-Beobachten am stärksten." },
+            { "text": "„Lieber nicht. Sonst stehe ich blöd da, wenn ich es nicht schaffe.“", "wert": 0, "tendenz": "vermeiden", "weiter": "k4b", "rueck": "Die Sorge ist verständlich. Nur nimmst du dir damit eine der wirksamsten Hilfen." },
+            { "text": "„Okay, aber gezählt wird nur, wenn ich pro Woche eine ganze Lektion schaffe – alles andere zählt nicht.“", "wert": 1, "weiter": "ende1", "rueck": "Ein klares Maß ist gut. Zähl für den Anfang lieber die Tage mit Übung – eine Lektion ist ein großer Brocken." }
+          ] },
+        { "id": "k4b", "sagt": "Tarek: „Es geht nicht ums Gewinnen. Nur ums Hinschauen.“",
+          "wahl": [
+            { "text": "„Stimmt. Dann zähle ich auf einem Zettel – und erzähl dir freitags davon.“", "wert": 2, "weiter": "ende1", "rueck": "Gut: Festhalten, und Tarek erfährt davon – ganz ohne Wettkampf." },
+            { "text": "„Ich zähle lieber nur für mich, auf einem Zettel.“", "wert": 1, "weiter": "ende1", "rueck": "In Ordnung. Festhalten wirkt auch ohne Publikum – mit jemandem, der davon weiß, oft noch etwas mehr." }
+          ] },
+        { "id": "ende1", "sagt": "Abends liegt das Buch auf dem Küchentisch. Du liest eine Seite – und dann noch eine. Auf dem Zettel am Kühlschrank steht das erste Kreuz.", "ende": "Ein Jahr Stillstand, aufgebrochen in einer Mittagspause: ehrlich hinschauen, die Zwei-Minuten-Fassung, das Buch in den Weg legen, den Fortschritt festhalten. Der Rest ist Wiederholung." },
+        { "id": "ende2", "sagt": "Das Buch bleibt im Regal. Im Sommer schickt Tarek ein Foto aus Neapel.", "ende": "Kein Drama – große Vorhaben warten oft auf einen Abend, der nie kommt. Der Weg ist kleiner: zwei Minuten, das Buch in den Weg legen, ein Kreuz am Tag." }
+      ],
+      "prinzipien": ["ehrlich hinschauen statt rechtfertigen", "die Zwei-Minuten-Fassung statt des perfekten Abends", "Umgebung vor Willen", "Fortschritt festhalten und zeigen"],
+      "transfer": "Welches Vorhaben liegt bei dir am längsten – und wo liegt das Werkzeug dafür gerade?"
+    },
+    {
+      "id": "antrieb-l-04", "bereich": "antrieb", "phase": "g", "umfeld": "kollegen", "faehigkeiten": ["antrieb.dranbleiben", "antrieb.fortschritt", "antrieb.energie"], "stufe": 4,
+      "titel": "Der Rückfall nach drei Wochen", "figur": "Lena Brandt",
+      "einleitung": "Nach drei guten Wochen reißt die Serie. Du übst, freundlich und ohne Nachholen zurückzukommen – mit der kleinsten Fassung, einem Plan für den nächsten Ausfall und einem ehrlichen Blick auf deinen Fortschritt.",
+      "lage": "Seit drei Wochen gehst du mittags eine Viertelstunde um den Block, meistens zusammen mit Lena Brandt. Dann kam eine Woche mit Abgabe, Überstunden und einer Erkältung: fünf Tage ohne Runde. Montag, kurz vor zwölf, schaut Lena zu dir herüber.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Lena: „Gehen wir heute wieder? Oder bist du noch nicht fit?“",
+          "wahl": [
+            { "text": "„Ach, ich hab's eh verbockt. Fünf Tage nichts – das mit dem Gehen ist wohl einfach nichts für mich.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Verständlich, dass dich die Lücke ärgert. Aber fünf Tage machen drei Wochen nicht ungeschehen." },
+            { "text": "„Ja. Heute nur die kleine Runde – zum Wiedereinstieg.“", "wert": 2, "weiter": "k2", "rueck": "Die kleinste Fassung, heute. Genau das verhindert, dass aus der Lücke eine Pause wird." },
+            { "text": "„Ab nächstem Montag wieder. Diese Woche kuriere ich mich noch richtig aus, damit ich dann wieder ganz fit einsteigen kann.“", "wert": 1, "weiter": "k1c", "rueck": "Bist du noch krank, ist Schonen richtig. Fühlst du dich fit, wird aus einer Woche aber schnell ein Monat." }
+          ] },
+        { "id": "k1b", "sagt": "Lena: „Drei Wochen fast jeden Tag, dann eine Woche Pause, weil du krank warst – das ist doch kein Scheitern.“",
+          "wahl": [
+            { "text": "„Stimmt eigentlich. Gut, eine kleine Runde.“", "wert": 2, "weiter": "k2", "rueck": "Lenas Blick von außen ist genauer als dein Kritiker. Und du bist wieder unterwegs." },
+            { "text": "„Doch. Ich halte nie was durch.“", "wert": 0, "tendenz": "verallgemeinern", "weiter": "ende2", "rueck": "„Nie“ – nach drei Wochen am Stück? Der Kritiker übertreibt, und die Runde fällt aus." }
+          ] },
+        { "id": "k1c", "sagt": "Lena: „Bist du denn noch krank?“",
+          "wahl": [
+            { "text": "„Nein, eigentlich nicht mehr. Dann komm ich mit – aber nur die kurze Runde.“", "wert": 2, "weiter": "k2", "rueck": "Ehrlich geprüft und klein eingestiegen – so wird kein Monat daraus." },
+            { "text": "„Nein … aber ein Montag ist einfach der bessere Start, da fängt die Woche frisch an und ich kann alles neu planen.“", "wert": 0, "tendenz": "aufschieben", "weiter": "ende2", "rueck": "Ein Neustart-Moment kann anstoßen – als Grund zum Warten macht er die Lücke nur länger." }
+          ] },
+        { "id": "k2", "sagt": "Unterwegs fragt Lena: „Und wie machst du das, wenn wieder so eine Woche kommt?“",
+          "wahl": [
+            { "text": "„Keine Ahnung. Hoffentlich kommt keine.“", "wert": 0, "weiter": "k3", "rueck": "Solche Wochen kommen. Wer vorher plant, hat den Rückweg schon gebaut." },
+            { "text": "„Wenn ich zweimal ausfalle, mache ich am nächsten Tag nur fünf Minuten – notfalls allein ums Haus.“", "wert": 2, "weiter": "k3", "rueck": "Ein Wiedereinstiegs-Plan: Der Rückweg steht, bevor du ihn brauchst." },
+            { "text": "„In stressigen Wochen lasse ich es dann lieber ganz und nehme mir die Zeit für die Arbeit – die ist ja schließlich wichtiger.“", "wert": 0, "tendenz": "allesodernichts", "weiter": "k3", "rueck": "Gerade in vollen Wochen tut die Viertelstunde oft gut – kurze Pausen machen frischer. Ganz streichen macht den Neustart schwer." }
+          ] },
+        { "id": "k3", "sagt": "Lena: „Ich hab übrigens alle Runden im Kalender abgehakt. Siebzehn von zwanzig Arbeitstagen.“",
+          "wahl": [
+            { "text": "„Siebzehn! Ich zähl meine auch. Dann sehe ich, dass die Woche nur eine Delle war.“", "wert": 2, "weiter": "ende1", "rueck": "Zählen zeigt, was das Gefühl übersieht: Die Lücke war eine Delle, kein Absturz." },
+            { "text": "„Siebzehn – stark. Ich hab gar nicht mitgezählt.“", "wert": 1, "weiter": "ende1", "rueck": "Anerkennung für Lena – schön. Für dich lohnt das Zählen trotzdem: Es zeigt, wie klein die Lücke war." },
+            { "text": "„Bei mir wären es jetzt nur vierzehn. Das aufzuschreiben, würde mich eher runterziehen.“", "wert": 0, "tendenz": "vermeiden", "weiter": "ende1", "rueck": "Vierzehn von zwanzig ist viel. Gerade die Zahl zeigt, dass die Lücke klein war." }
+          ] },
+        { "id": "ende1", "sagt": "Nach der Runde machst du ein Kreuz in den Kalender. Am nächsten Tag geht ihr wieder – die ganze Viertelstunde.", "ende": "Einmal auslassen ist egal, zweimal nicht – und auch nach einer ganzen Woche zählt nur der nächste Tag. Kleine Fassung, freundlicher Blick, ein Plan für den nächsten Ausfall." },
+        { "id": "ende2", "sagt": "Lena geht allein. Die Woche darauf auch.", "ende": "Kein Drama – nach einer Lücke wirkt der Neustart oft größer, als er ist. Beim nächsten Mal: nicht nachholen, nicht auf Montag warten. Heute die kleinste Fassung – und freundlich mit dir." }
+      ],
+      "prinzipien": ["nach dem Ausfall: heute die kleinste Fassung", "freundlich statt „nie“ und „verbockt“", "den Rückweg vorher planen", "zählen zeigt: eine Delle ist kein Absturz", "Pausen gehören zur Energie, nicht gegen die Arbeit"],
+      "transfer": "Was ist dein Wiedereinstiegs-Plan, wenn dir das nächste Mal eine volle Woche dazwischenkommt?"
+    },
+    {
+      "id": "antrieb-l-05", "bereich": "antrieb", "phase": "g", "umfeld": "familie", "faehigkeiten": ["antrieb.warum", "antrieb.ziele", "antrieb.plan", "antrieb.start", "antrieb.gewohnheit", "antrieb.fortschritt", "antrieb.dranbleiben"], "stufe": 5, "sparring": true,
+      "titel": "Der Neustart im Januar", "figur": "Tante Renate",
+      "einleitung": "Das Sparring der Grundlagen: ein Vorsatz zum Jahresbeginn und eine Woche, in der alles dazwischenkommt. Du verbindest, was du gelernt hast – eigener Grund, ein Vorhaben statt fünf, Hindernis, Wenn-Dann, Umgebung, Zwei-Minuten-Fassung, Kreuz am Tag und „nie zweimal“.",
+      "lage": "Neujahrsfrühstück bei der Familie. Tante Renate schenkt Kaffee nach und schaut in die Runde: Wer hat welche Vorsätze? Du würdest gern wieder mehr lesen – früher hast du Bücher verschlungen.",
+      "start": "k1",
+      "knoten": [
+        { "id": "k1", "sagt": "Renate: „Na, und du? Wieder so ein Vorsatz, der bis Mitte Januar hält?“",
+          "wahl": [
+            { "text": "„Mehr lesen. Nicht, weil man das soll – früher hat es mir gutgetan, abends abzuschalten.“", "wert": 2, "weiter": "k2", "rueck": "Ein eigener Grund statt eines „Man sollte“. Der trägt an müden Abenden weiter." },
+            { "text": "„Keine Vorsätze, bringt ja eh nichts. Hält bei mir nie länger als zwei Wochen.“", "wert": 0, "tendenz": "abwerten", "weiter": "k1b", "rueck": "Verständlich nach Versuchen, die nicht geklappt haben. Doch das lag eher am Plan als an dir." },
+            { "text": "„Zwanzig Bücher dieses Jahr, mindestens. Und weniger Handy, mehr Sport und früher ins Bett.“", "wert": 0, "tendenz": "ueberladen", "weiter": "k1c", "rueck": "Vier Vorsätze auf einmal – ein Umzug des ganzen Lebens. Einer reicht für den Anfang." }
+          ] },
+        { "id": "k1b", "sagt": "Renate: „Ach was. Was würdest du denn gern mal wieder machen?“",
+          "wahl": [
+            { "text": "„Mehr lesen – das vermisse ich richtig.“", "wert": 2, "weiter": "k2", "rueck": "Da ist er, der eigene Wunsch. Klein und echt – ein guter Anfang." },
+            { "text": "„Nichts Bestimmtes. Früher hab ich halt gern gelesen.“", "wert": 1, "weiter": "k2", "rueck": "Kein großes Ziel – auch gut. Eine Erinnerung an etwas, das dir gutgetan hat, ist ein Anfang." }
+          ] },
+        { "id": "k1c", "sagt": "Renate lacht: „Alles auf einmal? Und im Februar ist dann alles auf einmal vorbei.“",
+          "wahl": [
+            { "text": "„Stimmt. Ich fang mit einem an: lesen.“", "wert": 2, "weiter": "k2", "rueck": "Ein Vorhaben jetzt, die anderen auf die Warteliste. So hat es eine Chance." },
+            { "text": "„Diesmal zieh ich alles durch.“", "wert": 0, "tendenz": "ueberladen", "weiter": "ende2", "rueck": "Viel Schwung – aber vier Baustellen gleichzeitig sind nach der ersten vollen Woche alle liegen geblieben." }
+          ] },
+        { "id": "k2", "sagt": "Renate: „Lesen, schön. Und was hat dich bisher davon abgehalten?“",
+          "wahl": [
+            { "text": "„Ehrlich? Abends greife ich automatisch zum Handy, und dann ist es elf.“", "wert": 2, "weiter": "k3", "rueck": "Das Hindernis in dir, ehrlich benannt. Jetzt lässt sich dafür planen." },
+            { "text": "„Ehrlich gesagt die Zeit – der Job frisst unter der Woche fast alles, und am Wochenende ist ständig was los.“", "wert": 1, "weiter": "k3", "rueck": "Kann stimmen. Oft steckt dahinter aber ein konkreter Moment, an dem die Zeit verschwindet – den lohnt es zu finden." },
+            { "text": "„Eigentlich nichts. Ich hab's halt nie gemacht – liegt wohl an mir, ich bin da einfach undiszipliniert.“", "wert": 0, "tendenz": "abwerten", "weiter": "k3", "rueck": "Ein Urteil über dich statt eines Hindernisses. „Undiszipliniert“ lässt sich nicht planen – ein konkreter Moment schon." }
+          ] },
+        { "id": "k3", "sagt": "Renate: „Und wie willst du das Handy austricksen?“",
+          "wahl": [
+            { "text": "„Ich nehm mir fest vor, es abends nicht mehr anzufassen.“", "wert": 0, "tendenz": "wollen", "weiter": "k4", "rueck": "Ein Vorsatz gegen einen Griff, der von selbst passiert, verliert meist. Eine Hürde im Weg hilft mehr." },
+            { "text": "„Das Handy lädt ab jetzt im Flur, das Buch liegt auf dem Kissen. Wenn ich ins Bett gehe, lese ich zwei Seiten.“", "wert": 2, "weiter": "k4", "rueck": "Umgebung, Wenn-Dann und Zwei-Minuten-Fassung – alles in einem Satz." },
+            { "text": "„Ich lese ab heute jeden Abend eine Stunde, und zwar ohne Ausnahme, auch am Wochenende.“", "wert": 1, "weiter": "k4", "rueck": "Ein klares Maß, aber groß für den Anfang – und ohne Auslöser. Zwei Seiten nach einem festen Moment tragen eher." }
+          ] },
+        { "id": "k4", "sagt": "Eine Woche später. Dienstag und Mittwoch hast du gelesen – zwei Kreuze auf dem Zettel. Dann kamen Spätdienst, Besuch und ein voller Samstag: drei leere Kästchen. Sonntag ruft Renate an: „Na, wie läuft's mit den Büchern?“",
+          "wahl": [
+            { "text": "„Drei Tage nichts. Typisch – war wohl doch wieder so ein Januar-Ding.“", "wert": 0, "tendenz": "verallgemeinern", "weiter": "k4b", "rueck": "Verständlicher Ärger. Doch drei leere Tage machen zwei gelesene nicht ungeschehen." },
+            { "text": "„Zwei Abende gelesen, dann kam die Woche dazwischen. Heute sind wieder zwei Seiten dran.“", "wert": 2, "weiter": "k5", "rueck": "Sachlich, freundlich, mit dem nächsten Schritt – heute, nicht nächsten Montag." },
+            { "text": "„Ich hol das heute nach und lese am Stück fünf Kapitel, dann bin ich wieder voll im Plan.“", "wert": 0, "tendenz": "allesodernichts", "weiter": "k4c", "rueck": "Nachholen klingt ehrgeizig, macht den Wiedereinstieg aber schwer. Heute zählt nur, dass wieder gelesen wird." }
+          ] },
+        { "id": "k4b", "sagt": "Renate: „Ach, Kind. Zwei Abende! Das ist mehr als letztes Jahr im ganzen Januar, oder?“",
+          "wahl": [
+            { "text": "„Stimmt. Heute Abend zwei Seiten – nicht mehr.“", "wert": 2, "weiter": "k5", "rueck": "Renates nüchterner Blick hat geholfen. Zurück auf den Weg, klein und heute." },
+            { "text": "„Ist trotzdem nicht genug.“", "wert": 0, "tendenz": "abwerten", "weiter": "ende2", "rueck": "Wer nur an „genug“ misst, sieht keinen Fortschritt – und hört irgendwann auf." }
+          ] },
+        { "id": "k4c", "sagt": "Renate: „Fünf Kapitel? Du hast doch gerade erst wieder angefangen.“",
+          "wahl": [
+            { "text": "„Hast recht. Zwei Seiten heute – und morgen wieder.“", "wert": 2, "weiter": "k5", "rueck": "Klug korrigiert: nicht nachholen, sondern weitermachen." },
+            { "text": "„Doch, das zieh ich heute durch – sonst ärgere ich mich die ganze Woche, dass ich hinterherhänge.“", "wert": 0, "tendenz": "allesodernichts", "weiter": "ende2", "rueck": "Wer an einem Abend alles nachholen will, ist am nächsten Tag erledigt – und lässt es dann oft ganz." }
+          ] },
+        { "id": "k5", "sagt": "Renate: „Und wenn die nächste volle Woche kommt?“",
+          "wahl": [
+            { "text": "„Dann gilt die Notfall-Fassung: eine Seite. Und nach zwei leeren Tagen am dritten nur die eine Seite.“", "wert": 2, "weiter": "ende1", "rueck": "Minimum-Tag und Wiedereinstiegs-Plan – der Rückweg ist gebaut, bevor du ihn brauchst." },
+            { "text": "„Dann ist das eben so.“", "wert": 1, "weiter": "ende1", "rueck": "Gelassen – gut. Mit einem Plan für den Rückweg wird aus Gelassenheit Verlässlichkeit." },
+            { "text": "„Dann fang ich im Februar neu an, der Monatsanfang ist schließlich ein guter Neustart.“", "wert": 0, "tendenz": "aufschieben", "weiter": "ende2", "rueck": "Ein Neustart-Moment hilft als Anstoß – nicht als Grund, wochenlang zu warten." }
+          ] },
+        { "id": "ende1", "sagt": "Ende Januar zählst du: einundzwanzig Kreuze. Beim nächsten Besuch fragt Renate nach dem Buch – und du erzählst ihr, wie es ausgeht.", "ende": "Das ist das ganze Handwerk: ein eigener Grund, ein Vorhaben statt fünf, das Hindernis benannt, Wenn-Dann und Umgebung, ein Kreuz am Tag – und nach der vollen Woche ohne Drama zurück. Nicht jeder Tag zählt. Der nächste schon." },
+        { "id": "ende2", "sagt": "Mitte Februar liegt das Buch wieder auf dem Stapel neben dem Bett, das Lesezeichen auf Seite 30.", "ende": "Kein Drama – so enden viele Januar-Vorsätze. Gescheitert ist nicht der Mensch, sondern der Plan: zu groß, ohne Hindernis, ohne Rückweg. Du kannst ihn jederzeit neu aufsetzen – mit zwei Seiten, heute Abend." }
+      ],
+      "prinzipien": ["ein eigener Grund statt „man sollte“", "ein Vorhaben statt fünf", "das Hindernis in dir benennen", "Wenn-Dann und Umgebung statt guter Vorsätze", "nach dem Ausrutscher: nicht nachholen, nicht warten – die kleinste Fassung", "Fortschritt zählen, Lücken ohne Urteil"],
+      "transfer": "Was wäre dein „Lesen“ für die nächsten vier Wochen – und wie sieht deine Notfall-Fassung für volle Wochen aus?"
+    }
+  ]
+}

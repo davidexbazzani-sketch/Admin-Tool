@@ -16,20 +16,32 @@ import { useAppStore } from '../store/appStore'
 import { useVollDiagnoseStore } from '../vollDiagnose/store'
 import { VollDiagnoseInfo, VOLLDIAGNOSE_DAUER } from '../vollDiagnose/VollDiagnoseInfo'
 import { oeffneWerkzeug } from './Startseite'
+import { useBereiche } from '../store/menuSichtbarStore'
 
 const VollDiagnose = lazy(() => import('../vollDiagnose/VollDiagnose'))
 
 type Fach = { art: 'netz' | 'sap' | 'sw'; host: string }
 
+/** Werkzeug-ID (Startseite / Assistent) → Unterbereich in BEREICHE['pc-diagnosis'] */
+const BEREICH_VON: Record<string, string> = { 'netzdiagnose': 'netz', 'sap-fehlersuche': 'sap', 'solidworks-diagnose': 'sw', 'voll-diagnose': 'voll', 'ueberwachung': 'ueberwachung' }
+
 export default function PCDiagnosis() {
-  const [fach, setFach] = useState<Fach | null>(null)
-  const [monMode, setMonMode] = useState(false)
-  const [vollOffen, setVollOffen] = useState(false)
+  const [fachRoh, setFach] = useState<Fach | null>(null)
+  const [monModeRoh, setMonMode] = useState(false)
+  const [vollOffenRoh, setVollOffen] = useState(false)
   const [vollStart, setVollStart] = useState<{ host?: string; text?: string; n: number }>({ n: 0 })
+  const [ausgeblendet, setAusgeblendet] = useState(false)
   const oeffneMonitor = useMonitorDialog(s => s.oeffne)
   const vdAktiv = useVollDiagnoseStore(s => s.aktiv)
+  // Kacheln lassen sich je Benutzer ausblenden (Einstellungen → Benutzer & Rechte); der Assistent bleibt immer
+  const { sichtbar } = useBereiche('pc-diagnosis')
+  const fach = fachRoh && sichtbar(fachRoh.art) ? fachRoh : null
+  const monMode = monModeRoh && sichtbar('ueberwachung')
+  const vollOffen = vollOffenRoh && sichtbar('voll')
 
   function werkzeug(id: string, host: string, text?: string) {
+    const bereich = BEREICH_VON[id]
+    if (bereich && !sichtbar(bereich)) { setAusgeblendet(true); setTimeout(() => setAusgeblendet(false), 4000); return }
     if (id === 'netzdiagnose') setFach({ art: 'netz', host })
     else if (id === 'sap-fehlersuche') setFach({ art: 'sap', host })
     else if (id === 'solidworks-diagnose') setFach({ art: 'sw', host })
@@ -65,32 +77,33 @@ export default function PCDiagnosis() {
       <div>
         <div className="flex items-center gap-3 flex-wrap max-w-5xl">
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2"><Stethoscope size={24} /> PC-Diagnose</h1>
-          <button onClick={() => setMonMode(true)} data-ueberwachung-knopf
+          {sichtbar('ueberwachung') && <button onClick={() => setMonMode(true)} data-ueberwachung-knopf
             className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-primary/40 text-primary text-xs font-semibold hover:bg-primary/10">
             <Activity size={14} /> Überwachung über Zeit
-          </button>
+          </button>}
         </div>
         <p className="text-sm text-muted-foreground mt-1">Komplett-Diagnose, Fachdiagnosen und „Gib dein Problem ein“ – für PCs und Server.</p>
+        {ausgeblendet && <p className="text-xs text-amber-500 mt-1" role="status" data-bereich-ausgeblendet>Dieses Werkzeug ist für dich ausgeblendet (Einstellungen → Benutzer &amp; Rechte).</p>}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-5xl">
-        <div role="button" tabIndex={0} onClick={() => setVollOffen(o => !o)} onKeyDown={e => { if (e.key === 'Enter') setVollOffen(o => !o) }} data-kachel-voll aria-expanded={vollOffen}
+        {sichtbar('voll') && <div role="button" tabIndex={0} onClick={() => setVollOffen(o => !o)} onKeyDown={e => { if (e.key === 'Enter') setVollOffen(o => !o) }} data-kachel-voll aria-expanded={vollOffen}
           className={`text-left rounded-lg border p-4 cursor-pointer transition-colors ${vollOffen ? 'border-primary bg-primary/10 ring-2 ring-primary/30' : 'border-border bg-card hover:border-primary/40 hover:bg-accent/30'}`}>
           <div className="flex items-center gap-2"><Stethoscope size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">Komplett-Diagnose</span><span className="ml-auto" onClick={e => e.stopPropagation()}><VollDiagnoseInfo klein /></span></div>
           <p className="text-[11px] text-muted-foreground mt-1">Alles prüfen, gezielt vertiefen, Ursache finden, Lösung nach Bestätigung – auch für Server. {VOLLDIAGNOSE_DAUER}.</p>
-        </div>
-        <button onClick={() => setFach({ art: 'sap', host: '' })} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
+        </div>}
+        {sichtbar('sap') && <button onClick={() => setFach({ art: 'sap', host: '' })} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
           <div className="flex items-center gap-2"><Boxes size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">SAP Fehlersuche</span></div>
           <p className="text-[11px] text-muted-foreground mt-1">Fokussiert auf SAP: Installation, Konfiguration, Netz/Kerberos, Logs, Edge — mit Vergleich &amp; Baseline.</p>
-        </button>
-        <button onClick={() => setFach({ art: 'sw', host: '' })} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
+        </button>}
+        {sichtbar('sw') && <button onClick={() => setFach({ art: 'sw', host: '' })} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
           <div className="flex items-center gap-2"><Wrench size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground"><SolidWorksHelp>SolidWorks</SolidWorksHelp> Diagnose</span></div>
           <p className="text-[11px] text-muted-foreground mt-1">Mehrere Workstations auf einmal (Typ/Status) oder Einzel-PC — Bestandsaufnahme + Lizenzserver, mit Sammel-Export.</p>
-        </button>
-        <button onClick={() => setFach({ art: 'netz', host: '' })} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
+        </button>}
+        {sichtbar('netz') && <button onClick={() => setFach({ art: 'netz', host: '' })} className="text-left rounded-lg border border-border bg-card p-4 hover:border-primary/40 hover:bg-accent/30 transition-colors">
           <div className="flex items-center gap-2"><Wifi size={18} className="text-primary" /><span className="text-sm font-semibold text-foreground">Netzwerk Probleme</span></div>
           <p className="text-[11px] text-muted-foreground mt-1">WLAN-Aussetzer analysieren: mehrere PCs + Referenz-PCs vergleichen, Fehl-Einstellungen erkennen und direkt beheben.</p>
-        </button>
+        </button>}
       </div>
 
       {vollOffen && (
