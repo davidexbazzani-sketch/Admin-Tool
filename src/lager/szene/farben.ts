@@ -26,25 +26,22 @@ export const DUNKEL: Palette = {
   lichtHimmel: 1.9, lichtBoden: 0.75, lichtSonne: 1.1,
 }
 
+// Feste Farbe je Typ (Wunsch 26.11.2026): Tower orange, Mini-PC blau, ZBook grün, Laptops hellgrau
 export const TYP_FARBE: Record<LagerTyp, string> = {
-  tower: '#24262b',
-  zbook: '#555b65',
-  elitebook: '#c7cbd1',
-  minipc: '#2f3237',
-  sonstiges: '#b48b5a',
+  tower: '#f97316',
+  zbook: '#22c55e',
+  elitebook: '#d4d7dc',
+  minipc: '#3b82f6',
+  sonstiges: '#8d6e63',
 }
 
-/** Farbe für die Legende/2D (etwas kräftiger, damit Schwarz von Schwarz unterscheidbar bleibt). */
-export const TYP_PUNKT: Record<LagerTyp, string> = {
-  tower: '#111827',
-  zbook: '#4b5563',
-  elitebook: '#9ca3af',
-  minipc: '#374151',
-  sonstiges: '#b48b5a',
-}
+/** Farbe für Legende, Listen und Regalansicht — dieselbe wie im Raum. */
+export const TYP_PUNKT: Record<LagerTyp, string> = TYP_FARBE
 
-export const MARKIERT = '#f59e0b'
-export const AUSWAHL = '#3b82f6'
+/** Rand um Geräte, die schon jemandem zugedacht sind (Namensschild in derselben Farbe). */
+export const VORGESEHEN = '#d946ef'
+export const KANTE = '#ffffff'
+export const AUSWAHL = '#facc15'
 export const TREFFER = '#06b6d4'
 
 export const ZONE_FARBE = { blau: '#2563eb', rot: '#dc2626', gelb: '#eab308', grau: '#9ca3af' } as const

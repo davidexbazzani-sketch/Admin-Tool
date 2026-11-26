@@ -35,7 +35,7 @@ function Zelle({ ort, titel, modell, auswahl, treffer, inventur, onAuswahl, klei
           return n ? <span key={t} className="inline-flex items-center gap-1 text-[11px] text-muted-foreground" title={TYP_LABEL[t]}><TypPunkt typ={t} />{n} {TYP_LABEL[t]}</span> : null
         })}
       </div>
-      {vorgesehen.length > 0 && <div className="text-[10.5px] text-amber-600 truncate" title={vorgesehen.map(g => `${g.serial} → ${g.vorgesehen[0].name}`).join('\n')}>→ {vorgesehen.map(g => g.vorgesehen[0].name).join(', ')}</div>}
+      {vorgesehen.length > 0 && <div className="text-[10.5px] text-fuchsia-500 truncate" title={vorgesehen.map(g => `${g.serial} → ${g.vorgesehen[0].name}`).join('\n')}>→ {vorgesehen.map(g => g.vorgesehen[0].name).join(', ')}</div>}
       {inv?.zustand === 'abweichung' && <div className="text-[10.5px] text-red-600">{inv.text}</div>}
     </button>
   )

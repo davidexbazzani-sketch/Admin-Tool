@@ -184,7 +184,7 @@ export default function LagerAnsicht({ currentUser, onBack }: { currentUser: str
               </div>
               <div className="absolute bottom-3 left-3 rounded-md border border-border bg-card/90 px-2.5 py-1.5 text-[11px] text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 max-w-[80%] shadow-sm">
                 {TYP_REIHE.map(t => <span key={t} className="inline-flex items-center gap-1"><TypPunkt typ={t} />{TYP_LABEL[t]}</span>)}
-                <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-amber-500" />vorgesehen</span>
+                <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm" style={{ boxShadow: 'inset 0 0 0 2px #d946ef' }} />vorgesehen (Rand)</span>
                 {trefferSet && <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-cyan-500" />Suchtreffer</span>}
                 <span className="opacity-80">· Ziehen = drehen, Rechtsklick ziehen = schieben, Rad = zoomen</span>
               </div>
@@ -242,7 +242,7 @@ function Uebersicht({ modell, onZeige }: { modell: LagerModell; onZeige: (ort: O
           <h3 className="font-semibold text-foreground mb-1">Schon vorgesehen ({vorgesehen.length})</h3>
           <div className="space-y-1">
             {vorgesehen.map(g => (
-              <button key={g.serial} onClick={() => onZeige(g.ort, g.typ)} className="w-full text-left rounded-md border border-amber-500/40 bg-amber-500/10 px-2 py-1 hover:bg-amber-500/20">
+              <button key={g.serial} onClick={() => onZeige(g.ort, g.typ)} className="w-full text-left rounded-md border border-fuchsia-500/50 bg-fuchsia-500/10 px-2 py-1 hover:bg-fuchsia-500/20">
                 <span className="font-mono">{g.serial}</span> → <span className="font-semibold">{g.vorgesehen[0].name}</span> <span className="text-muted-foreground">· {ortName(g.ort)}</span>
               </button>
             ))}

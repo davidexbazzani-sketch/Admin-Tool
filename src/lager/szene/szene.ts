@@ -8,13 +8,16 @@ import {
   Quaternion, Raycaster, Scene, SRGBColorSpace, Vector2, Vector3, WebGLRenderer, Euler,
 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js'
+import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js'
+import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js'
 import {
   BODEN_DICKE, FAECHER, FACH_BY_ORT, RAUM, REGALE, REGAL_HOEHE, REGAL_TIEFE, ZONEN, ZONE_BY_ORT, fachDrehung, fachPunkt,
   ortKurz, type Fach, type Regal, type Zone,
 } from '../aufbau'
 import { stapele, type Kasten, type Platzierung, type StapelGeraet, type StapelGruppe } from '../stapel'
 import { TYP_LABEL, type LagerTyp, type OrtId } from '../typen'
-import { AUSWAHL, DUNKEL, HELL, INVENTUR_FARBE, MARKIERT, TREFFER, TYP_FARBE, ZONE_FARBE, type Palette } from './farben'
+import { AUSWAHL, DUNKEL, HELL, INVENTUR_FARBE, KANTE, TREFFER, TYP_FARBE, VORGESEHEN, ZONE_FARBE, type Palette } from './farben'
 
 export interface SzeneGruppe { ort: OrtId; geraete: StapelGeraet[] }
 export interface Markierung { ort: OrtId; zustand: 'stimmt' | 'abweichung' | 'offen'; text?: string }
@@ -247,6 +250,9 @@ function helligkeit(s: string): number {
   return (h >>> 0) / 4294967295
 }
 
+const ECKEN: [number, number, number][] = [[-0.5, -0.5, -0.5], [0.5, -0.5, -0.5], [0.5, 0.5, -0.5], [-0.5, 0.5, -0.5], [-0.5, -0.5, 0.5], [0.5, -0.5, 0.5], [0.5, 0.5, 0.5], [-0.5, 0.5, 0.5]]
+const KANTEN: [number, number][] = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]]
+
 const nextPot = (n: number) => { let p = 64; while (p < n) p *= 2; return p }
 
 export function erzeugeSzene(o: SzeneOptionen): SzeneHandle {
@@ -320,11 +326,18 @@ export function erzeugeSzene(o: SzeneOptionen): SzeneHandle {
   kaesten.computeBoundingSphere()
 
   // Geräte
-  const geraeteMat = new MeshLambertMaterial({ color: 0xffffff })
+  // Flächen etwas nach hinten versetzt, damit die Kanten davor sauber sichtbar sind
+  const geraeteMat = new MeshLambertMaterial({ color: 0xffffff, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 })
   let geraete = new InstancedMesh(einheit, geraeteMat, 64)
   geraete.instanceMatrix.setUsage(DynamicDrawUsage)
   geraete.count = 0
   scene.add(geraete)
+  // Rand um jedes einzelne Gerät — so ist im Stapel jedes Gerät zu zählen
+  const kantenMat = new LineMaterial({ color: 0xffffff, linewidth: 1.6, vertexColors: true, worldUnits: false })
+  let kantenGeo = new LineSegmentsGeometry()
+  const kanten = new LineSegments2(kantenGeo, kantenMat)
+  kanten.visible = false
+  scene.add(kanten)
   let platz: (Platzierung & { ort: OrtId })[] = []
   const gruppen = new Map<string, { ort: OrtId; g: StapelGruppe; welt: (u: number, v: number, w: number) => [number, number, number] }>()
 
@@ -394,6 +407,7 @@ export function erzeugeSzene(o: SzeneOptionen): SzeneHandle {
   function groesse() {
     const w = Math.max(1, o.behaelter.clientWidth), h = Math.max(1, o.behaelter.clientHeight)
     renderer.setSize(w, h, false)
+    kantenMat.resolution.set(w, h)
     camera.aspect = w / h
     camera.updateProjectionMatrix()
     anfordern()
@@ -408,18 +422,30 @@ export function erzeugeSzene(o: SzeneOptionen): SzeneHandle {
 
   // ── Farben ─────────────────────────────────────────────────────────────────
   const gleich = (a: Auswahl | null, ort: OrtId, typ: LagerTyp) => !!a && a.ort === ort && (!a.typ || a.typ === typ)
-  const cBasis = new Color(), cZiel = new Color()
+  const cBasis = new Color(), cZiel = new Color(), cKante = new Color()
+  const WEISS = new Color(0xffffff)
+  /** Randfarben setzen — vorhandenen Puffer überschreiben statt neu anlegen (Hover kommt oft) */
+  function setzeKantenfarben(kf: Float32Array) {
+    if (!platz.length) return
+    const attr = kantenGeo.getAttribute('instanceColorStart') as unknown as { data?: { array: Float32Array; needsUpdate: boolean } } | undefined
+    if (attr?.data && attr.data.array.length === kf.length) { attr.data.array.set(kf); attr.data.needsUpdate = true }
+    else kantenGeo.setColors(kf)
+  }
   function faerben() {
+    const kf = new Float32Array(platz.length * 12 * 6)
     platz.forEach((p, i) => {
-      cBasis.set(p.markiert ? MARKIERT : TYP_FARBE[p.typ])
-      // jedes Gerät minimal anders hell — nebeneinander stehende Tower verschmelzen sonst zu einem Block
-      if (!p.markiert) cBasis.offsetHSL(0, 0, (helligkeit(p.serial) - 0.5) * (p.typ === 'elitebook' ? 0.05 : 0.07))
-      if (treffer?.has(p.serial)) cBasis.set(TREFFER)
-      else if (gleich(auswahl, p.ort, p.typ)) cBasis.lerp(cZiel.set(AUSWAHL), 0.55)
-      else if (gleich(hover, p.ort, p.typ)) cBasis.lerp(cZiel.set(AUSWAHL), 0.3)
+      // Typfarbe bleibt immer erhalten — Auswahl, Hover und Treffer hellen nur auf und färben den Rand
+      cBasis.set(TYP_FARBE[p.typ])
+      cBasis.offsetHSL(0, 0, (helligkeit(p.serial) - 0.5) * 0.05)
+      cKante.set(p.markiert ? VORGESEHEN : KANTE)
+      if (treffer?.has(p.serial)) { cBasis.lerp(WEISS, 0.25); cKante.set(TREFFER) }
+      else if (gleich(auswahl, p.ort, p.typ)) { cBasis.lerp(WEISS, 0.3); if (!p.markiert) cKante.set(AUSWAHL) }
+      else if (gleich(hover, p.ort, p.typ)) cBasis.lerp(WEISS, 0.18)
       geraete.setColorAt(i, cBasis)
+      for (let j = 0; j < 24; j++) { const o = i * 72 + j * 3; kf[o] = cKante.r; kf[o + 1] = cKante.g; kf[o + 2] = cKante.b }
     })
     if (geraete.instanceColor) geraete.instanceColor.needsUpdate = true
+    setzeKantenfarben(kf)
     // Flächen: Inventur-Zustand, sonst Auswahl
     let n = 0
     const flaeche = (ort: OrtId, farbe: string) => {
@@ -465,6 +491,21 @@ export function erzeugeSzene(o: SzeneOptionen): SzeneHandle {
     geraete.instanceMatrix.needsUpdate = true
     geraete.computeBoundingSphere()
     geraete.computeBoundingBox()
+    // Kanten neu aufbauen (12 Kanten je Gerät)
+    const kp = new Float32Array(platz.length * 72)
+    const m = new Matrix4(), a = new Vector3(), b = new Vector3()
+    platz.forEach((p, i) => {
+      geraete.getMatrixAt(i, m)
+      KANTEN.forEach(([x, y], j) => {
+        a.set(...ECKEN[x]).applyMatrix4(m); b.set(...ECKEN[y]).applyMatrix4(m)
+        kp.set([a.x, a.y, a.z, b.x, b.y, b.z], i * 72 + j * 6)
+      })
+    })
+    kantenGeo.dispose()
+    kantenGeo = new LineSegmentsGeometry()
+    if (platz.length) kantenGeo.setPositions(kp)
+    kanten.geometry = kantenGeo
+    kanten.visible = platz.length > 0
     etikettenBauen()
     faerben()
   }
@@ -632,6 +673,7 @@ export function erzeugeSzene(o: SzeneOptionen): SzeneHandle {
       flaechen.dispose(); flaechenMat.dispose()
       kaesten.dispose(); (kaesten.material as MeshBasicMaterial).dispose()
       geraete.dispose(); geraeteMat.dispose()
+      kantenGeo.dispose(); kantenMat.dispose()
       for (const w of waende) scene.remove(w)
       scene.clear()
       renderer.renderLists.dispose()

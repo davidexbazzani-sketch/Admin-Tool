@@ -10,7 +10,7 @@ import { TYP_LABEL, TYP_REIHE, type LagerGeraet, type LagerTyp, type OrtId } fro
 export interface InventurInfo { zustand: 'stimmt' | 'abweichung' | 'offen'; text?: string }
 
 export function TypPunkt({ typ, gross }: { typ: LagerTyp; gross?: boolean }) {
-  return <span className={`inline-block rounded-sm shrink-0 ${gross ? 'w-3 h-3' : 'w-2.5 h-2.5'}`} style={{ background: TYP_PUNKT[typ], boxShadow: 'inset 0 0 0 1px rgb(255 255 255 / 0.25)' }} />
+  return <span className={`inline-block rounded-sm shrink-0 ${gross ? 'w-3 h-3' : 'w-2.5 h-2.5'}`} style={{ background: TYP_PUNKT[typ], boxShadow: 'inset 0 0 0 1px rgb(0 0 0 / 0.28)' }} />
 }
 
 export function GeraetKarte({ g, zeigeOrt }: { g: LagerGeraet; zeigeOrt?: boolean }) {
@@ -31,7 +31,7 @@ export function GeraetKarte({ g, zeigeOrt }: { g: LagerGeraet; zeigeOrt?: boolea
         </div>
       )}
       {g.vorgesehen.map(v => (
-        <div key={v.name + v.quelle} className="flex items-start gap-1 rounded bg-amber-500/15 border border-amber-500/40 px-1.5 py-1 text-amber-700" data-lager-vorgesehen={v.name}>
+        <div key={v.name + v.quelle} className="flex items-start gap-1 rounded bg-fuchsia-500/15 border border-fuchsia-500/50 px-1.5 py-1 text-fuchsia-500" data-lager-vorgesehen={v.name}>
           <UserRound size={11} className="mt-0.5 shrink-0" />
           <span><span className="font-semibold">vorgesehen für {v.name}</span> <span className="opacity-80">· {v.quelle}</span></span>
         </div>
