@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import {
   Boxes, Plus, RefreshCw, AlertTriangle, Loader2, ChevronRight, PackageCheck,
-  Trash2, CheckCircle2, XCircle, FileSpreadsheet, PackageX, Truck,
+  Trash2, CheckCircle2, XCircle, FileSpreadsheet, PackageX, Truck, Warehouse,
 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
 import {
@@ -16,7 +16,10 @@ import PickupsView from '../components/hardwareInventory/PickupsView'
 import { useBereiche } from '../store/menuSichtbarStore'
 import { ladePickups, ladeStatus, offeneGeraete } from '../services/pickups'
 
-type View = { kind: 'list' } | { kind: 'scan'; runId: string } | { kind: 'results'; runId: string } | { kind: 'lost' } | { kind: 'pickups' }
+// „Lager einsehen“ wird erst beim Klick nachgeladen (3D erst in einer zweiten Stufe)
+const LagerAnsicht = lazy(() => import('../lager/LagerAnsicht'))
+
+type View = { kind: 'list' } | { kind: 'scan'; runId: string } | { kind: 'results'; runId: string } | { kind: 'lost' } | { kind: 'pickups' } | { kind: 'lager' }
 
 const POLL_MS = 30000
 
@@ -107,6 +110,13 @@ export default function HardwareInventory() {
   if (view.kind === 'pickups' && sichtbar('pickups')) {
     return <PickupsView currentUser={currentUserName} onBack={() => setView({ kind: 'list' })} />
   }
+  if (view.kind === 'lager' && sichtbar('lager')) {
+    return (
+      <Suspense fallback={<div className="flex items-center justify-center h-full text-muted-foreground gap-2"><Loader2 size={16} className="animate-spin" />Lager wird geladen …</div>}>
+        <LagerAnsicht currentUser={currentUserName} onBack={() => setView({ kind: 'list' })} />
+      </Suspense>
+    )
+  }
 
   // Liste
   return (
@@ -127,6 +137,10 @@ export default function HardwareInventory() {
 ${pickupsOffen} Abholung(en) mit Geräten, die noch nicht auf „In transit" stehen.` : ''}`}>
             <Truck size={14} />Pick-Ups
             {pickupsOffen > 0 && <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[10px] leading-4 text-center">{pickupsOffen}</span>}
+          </button>}
+          {sichtbar('lager') && <button onClick={() => setView({ kind: 'lager' })} data-lager-oeffnen className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-violet-500/40 text-violet-400 hover:bg-violet-500/10"
+            title="Das Lager in 3D: Regale A–T, linkes Regal, Bereiche Tim/Timo/Leihrechner — Klick auf einen Stapel zeigt die Seriennummern. Mit Mini-Inventur.">
+            <Warehouse size={14} />Lager einsehen
           </button>}
           <button onClick={() => setImportOpen(true)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:opacity-90">
             <Plus size={14} />Neue Inventur starten

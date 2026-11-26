@@ -155,6 +155,7 @@ export const BEREICHE: Partial<Record<Screen, BereichDef[]>> = {
   'hardware-inventory': [
     { key: 'lost', label: 'Verlorene Geräte' },
     { key: 'pickups', label: 'Pick-Ups' },
+    { key: 'lager', label: 'Lager einsehen' },
   ],
   'infra-marine': [
     { key: 'incident-response', label: 'Incident Response' },
