@@ -55,7 +55,9 @@ export const adminToolHost: CoachHost = {
     const u = useAuthStore.getState().session?.user
     if (!u) return false
     if (useMenuSichtbar.getState().sichtbar?.['der-coach'] === false) return false
-    return FREIGEGEBEN || u.isFounder === true || (u.username || '').toLowerCase() === 'davidxe'
+    // Davide: Tool-Konto „davidxe“, Gründer-Merkmal oder sein Windows-Konto BQ8069 (Anmeldung per Windows/SSO)
+    const w = String((u as { windowsUsername?: string }).windowsUsername || '').toLowerCase().split('\\').pop()
+    return FREIGEGEBEN || u.isFounder === true || ['davidxe', 'bq8069'].includes((u.username || '').toLowerCase().split('\\').pop() || '') || w === 'bq8069'
   },
   andereKarteSichtbar: () => !!document.querySelector('[data-pi-erinnerung]'),
   beobachte: (rueckruf) => {

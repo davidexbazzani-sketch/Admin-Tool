@@ -65,7 +65,7 @@ export interface ApprovedList {
 }
 export type ApprovalState = 'genehmigt' | 'beantragt' | 'nicht'
 
-const canon = (h: string): string => (h || '').trim().toUpperCase().split('.')[0]
+export const canon = (h: string): string => (h || '').trim().toUpperCase().split('.')[0]
 
 // ── Ergebnis / genehmigte Liste laden+speichern ──────────────────────────────
 export async function loadAccessResult(): Promise<AccessCheckResult | null> {
@@ -90,7 +90,7 @@ export async function loadAccessResult(): Promise<AccessCheckResult | null> {
   } catch { /* noch keiner */ }
   return null
 }
-async function saveAccessResult(r: AccessCheckResult): Promise<boolean> {
+export async function saveAccessResult(r: AccessCheckResult): Promise<boolean> {
   try { return await api().netWriteJson(NIS2_ACCESS_RESULT, r) } catch { return false }
 }
 
@@ -303,7 +303,8 @@ export async function runAccessCheckScanOnce(by: string, onTick?: () => void): P
           const leaf = domainMemberLeaf(m, host)
           if (leaf) {
             newHostMembers.get(ch)!.add(leaf)
-            if ((m.Class || '').trim().toLowerCase() === 'group') windowsGroupLeaves.add(leaf.toLowerCase())
+            // ObjectClass ist sprachabhängig (EN „Group“, DE „Gruppe“)
+            if (['group', 'gruppe'].includes((m.Class || '').trim().toLowerCase())) windowsGroupLeaves.add(leaf.toLowerCase())
           }
         }
       }

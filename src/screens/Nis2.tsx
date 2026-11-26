@@ -7,8 +7,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   ShieldCheck, KeyRound, ChevronLeft, ChevronRight, ChevronDown, RefreshCw, Loader2,
-  FileSpreadsheet, Search, AlertTriangle, Check, X, Monitor, Users, Clock, GraduationCap,
+  FileSpreadsheet, Search, AlertTriangle, Check, X, Monitor, Users, Clock, GraduationCap, Mail, Send, Settings2, ShieldOff,
 } from 'lucide-react'
+import { AdminNachPcs, EntzugFuerNutzer } from '../components/nis2/AdminEintraege'
+import { AdminMailDialog, AdminSammelDialog, AdminMailEinstellungen, type MailZiel } from '../components/nis2/AccessMail'
+import { ladeAccessMail, speichereAccessMailEinstellungen, setzeKontaktiert, type AccessMailStand } from '../services/nis2AccessMail'
+import { logDossierAction } from '../services/personDossier'
+import { readCentralAdUsersAsync } from '../services/adUserDirectory'
 import AwarenessView from '../components/nis2/AwarenessView'
 import { useBereiche } from '../store/menuSichtbarStore'
 import { useAuthStore } from '../store/authStore'
@@ -93,12 +98,20 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
   const [onlyUnapproved, setOnlyUnapproved] = useState(false)
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
   const [pending, setPending] = useState<{ sheet: ExcelSheetData; filename: string } | null>(null)
+  const [reiter, setReiter] = useState<'nutzer' | 'pcs'>('nutzer')
+  const [mailStand, setMailStand] = useState<AccessMailStand>({ einstellungen: {}, kontakte: [], kontaktiert: {} })
+  const [mailBySam, setMailBySam] = useState<Map<string, string>>(new Map())
+  const [mailZiel, setMailZiel] = useState<MailZiel | null>(null)
+  const [sammel, setSammel] = useState(false)
+  const [einstOffen, setEinstOffen] = useState(false)
+  const [entzug, setEntzug] = useState<{ host: string; sam: string; name: string } | null>(null)
 
   const reload = useCallback(async () => {
     setLoading(true)
     try {
-      const [r, a] = await Promise.all([loadAccessResult(), loadApprovedList()])
-      setResult(r); setApproved(a); setError('')
+      const [r, a, m, dir] = await Promise.all([loadAccessResult(), loadApprovedList(), ladeAccessMail(), readCentralAdUsersAsync()])
+      setResult(r); setApproved(a); setMailStand(m); setError('')
+      setMailBySam(new Map((dir?.users ?? []).filter(u => u.email).map(u => [u.sam.toLowerCase(), u.email!.trim()])))
     } catch { setError('Daten konnten nicht geladen werden. Netzlaufwerk erreichbar?') }
     finally { setLoading(false) }
   }, [])
@@ -119,6 +132,18 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
     for (const u of result?.users ?? []) c[approvalFor(u, approved.entries).state]++
     return c
   }, [result, approved])
+
+  const zielFuer = useCallback((u: { sam: string; displayName: string; pcs: string[] }): MailZiel => ({
+    sam: u.sam, name: u.displayName, pcs: u.pcs, mail: mailBySam.get(u.sam.toLowerCase()) ?? '',
+    kontakte: mailStand.kontakte.filter(k => k.sam.toLowerCase() === u.sam.toLowerCase()),
+    kontaktiert: mailStand.kontaktiert[u.sam.toLowerCase()],
+  }), [mailBySam, mailStand])
+  async function kontaktiertSetzen(u: { sam: string; displayName: string }, an: boolean) {
+    const neu = await setzeKontaktiert(u.sam, an, currentUser, 'manuell')
+    setMailStand(neu)
+    if (an) void logDossierAction(u.displayName, u.sam, 'NIS2 Zugänge-Check: wegen lokalem Admin-Zugang kontaktiert (von Hand angekreuzt)', currentUser, 'NIS2')
+  }
+  const ohneAntrag = useMemo(() => (result?.users ?? []).filter(u => approvalFor(u, approved.entries).state === 'nicht').map(zielFuer), [result, approved, zielFuer])
 
   async function doScan() {
     if (scanning) return
@@ -174,6 +199,10 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
         </div>
         <div className="ml-auto flex items-center gap-2">
           <button onClick={() => void reload()} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/40 border border-border" title="Aktualisieren"><RefreshCw size={13} className={loading ? 'animate-spin' : ''} /></button>
+          <button onClick={() => setEinstOffen(true)} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/40 border border-border" title="Mail-Einstellungen (Link zum Antrag, CC)"><Settings2 size={13} /></button>
+          <button onClick={() => setSammel(true)} disabled={!ohneAntrag.length} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-border text-foreground hover:bg-accent/40 disabled:opacity-40" title="Allen mit lokalem Admin-Zugang ohne Antrag eine Mail mit Link zum Konzern-Antrag schicken" data-nis2-sammel>
+            <Send size={14} />Alle ohne Antrag anschreiben
+          </button>
           <button onClick={importApproved} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-border text-foreground hover:bg-accent/40" title="Antrags-Liste importieren (Spalten Name/Status/RITM/REQ zuordnen). Stage = Completed gilt als genehmigt.">
             <FileSpreadsheet size={14} />Genehmigte importieren
           </button>
@@ -187,6 +216,10 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
 
       {/* Info-/Filterzeile */}
       <div className="shrink-0 flex items-center gap-2 px-5 py-2 border-b border-border bg-muted/5 flex-wrap">
+        <div className="flex gap-1 mr-2">
+          {(['nutzer', 'pcs'] as const).map(t => <button key={t} onClick={() => setReiter(t)} data-nis2-reiter={t} className={`px-3 py-1 text-xs rounded-md border ${reiter === t ? 'border-primary/60 bg-primary/10 text-foreground font-semibold' : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent'}`}>{t === 'nutzer' ? 'Nach Nutzern' : 'Nach PCs (Administratoren-Gruppe)'}</button>)}
+        </div>
+        {reiter === 'nutzer' && <>
         <div className="relative w-64">
           <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Name, Corp-ID, PC…" className="w-full pl-6 pr-2 py-1 rounded-md bg-card border border-border text-xs" />
@@ -198,6 +231,7 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
         <span className="text-[11px] text-muted-foreground ml-1">
           <Users size={11} className="inline mr-1" />Antrags-Liste: {approved.entries.length} Anträge{approved.importedFilename ? ` · „${approved.importedFilename}"` : ' · noch nicht importiert'}
         </span>
+        </>}
       </div>
 
       {msg && <div className="mx-5 mt-3 px-3 py-2 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 text-xs shrink-0 flex items-center gap-2"><Check size={13} />{msg}<button onClick={() => setMsg('')} className="ml-auto text-muted-foreground hover:text-foreground"><X size={12} /></button></div>}
@@ -206,7 +240,9 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
 
       {/* Tabelle */}
       <div className="flex-1 overflow-y-auto p-4">
-        {loading && !result ? (
+        {reiter === 'pcs' && result ? (
+          <AdminNachPcs result={result} entries={approved.entries} ich={currentUser} onGeaendert={() => void reload()} />
+        ) : loading && !result ? (
           <div className="flex items-center justify-center h-full text-muted-foreground gap-2"><Loader2 size={16} className="animate-spin" />Wird geladen…</div>
         ) : !result || result.users.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-3 py-16">
@@ -224,6 +260,7 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
                 <th className="px-2 py-2">Abteilung</th>
                 <th className="px-2 py-2">PCs (lokaler Admin)</th>
                 <th className="px-2 py-2">Status</th>
+                <th className="px-2 py-2">Aktion</th>
               </tr>
             </thead>
             <tbody>
@@ -244,6 +281,7 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
                           {groupAccessByPc(u).map(({ pc, vias }) => (
                             <div key={pc} className="flex items-center gap-1.5 flex-wrap text-[11px]">
                               <span className="inline-flex items-center gap-1 font-mono text-muted-foreground">{pc}<DeviceInfoButton hostname={pc} /></span>
+                              {vias.includes('direkt') && <button onClick={() => setEntzug({ host: pc, sam: u.sam, name: u.displayName })} title="Diesen lokalen Admin-Zugang auf dem PC entziehen" className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border border-red-500/40 text-red-300 hover:bg-red-500/10" data-nis2-entziehen-pc={pc}><ShieldOff size={10} />entziehen</button>}
                               {vias.map(v => (
                                 <span key={v} title={v === 'direkt' ? 'Direkt in der lokalen Administratoren-Gruppe' : `Mitglied der Gruppe ${v}`}
                                   className={`px-1.5 py-0.5 rounded ${v === 'direkt' ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30' : 'bg-blue-500/15 text-blue-300 border border-blue-500/30'}`}>
@@ -269,6 +307,18 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
                       ) : (
                         <span className="inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-full bg-red-500 text-white border border-red-600 font-semibold"><AlertTriangle size={11} />nicht genehmigt</span>
                       )}
+                    </td>
+                    <td className="px-2 py-1.5">
+                      {u.state !== 'genehmigt' && (() => { const z = zielFuer(u); const letzte = z.kontakte[z.kontakte.length - 1]; const k = z.kontaktiert; return (
+                        <div className="flex flex-col gap-1">
+                          <label className="inline-flex items-center gap-1.5 text-[11px] text-foreground cursor-pointer w-fit" title={k ? `kontaktiert ${fmtDateTime(k.at)} · ${k.quelle === 'mail' ? 'per Mail' : 'von Hand angekreuzt'} · ${k.by}` : 'Von Hand ankreuzen, wenn du die Person anders erreicht hast – beim Mailversand wird es automatisch gesetzt'}>
+                            <input type="checkbox" checked={!!k} onChange={e => void kontaktiertSetzen(u, e.target.checked)} className="accent-emerald-500" data-nis2-kontaktiert={u.sam} />
+                            Mitarbeiter kontaktiert
+                          </label>
+                          {k && <span className="text-[10px] text-muted-foreground -mt-0.5">{fmtDateTime(k.at)} · {k.quelle === 'mail' ? 'per Mail' : 'von Hand'}</span>}
+                          {u.state === 'nicht' && <button onClick={() => setMailZiel(z)} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] border border-border text-foreground hover:bg-accent/40 w-fit" title="Mail: bitte Antrag „Permanent Admin Access“ stellen" data-nis2-mail-knopf={u.sam}><Mail size={11} />Mail</button>}
+                          {letzte && <span className="text-[10px] text-muted-foreground" title={z.kontakte.map(x => `${fmtDateTime(x.at)} · ${x.art} · ${x.by}`).join('\n')}>{letzte.art === 'gesendet' ? 'Mail gesendet' : 'Outlook geöffnet'} {fmtDateTime(letzte.at)}{z.kontakte.length > 1 ? ` (${z.kontakte.length}×)` : ''}</span>}
+                        </div>) })()}
                     </td>
                   </tr>
                 )
@@ -317,6 +367,10 @@ function AccessCheckView({ onBack }: { onBack: () => void }) {
         )}
       </div>
 
+      {mailZiel && <AdminMailDialog ziel={mailZiel} einst={mailStand.einstellungen} ich={currentUser} onClose={() => setMailZiel(null)} onErledigt={() => { setMailZiel(null); setMsg(`Mail an ${mailZiel.name} protokolliert.`); void reload() }} />}
+      {sammel && <AdminSammelDialog ziele={ohneAntrag} einst={mailStand.einstellungen} ich={currentUser} onClose={() => setSammel(false)} onFertig={(n, fe) => { setSammel(false); setMsg(`${n} Mail(s) gesendet${fe ? ` · ${fe} fehlgeschlagen` : ''}.`); void reload() }} />}
+      {einstOffen && <AdminMailEinstellungen einst={mailStand.einstellungen} onClose={() => setEinstOffen(false)} onSpeichern={async e => { const neu = await speichereAccessMailEinstellungen(e); setMailStand(neu); setEinstOffen(false); setMsg('Mail-Einstellungen gespeichert.') }} />}
+      {entzug && <EntzugFuerNutzer host={entzug.host} sam={entzug.sam} name={entzug.name} ich={currentUser} onClose={() => setEntzug(null)} onFertig={ok => { const z = entzug; setEntzug(null); if (ok) { setMsg(`Zugang von ${z.name} auf ${z.host} entzogen.`); void reload() } }} />}
       {pending && (
         <ApprovedImportDialog columns={pending.sheet.columns} rows={pending.sheet.rows}
           onCancel={() => setPending(null)}
