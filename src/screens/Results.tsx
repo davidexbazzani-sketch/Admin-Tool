@@ -425,6 +425,23 @@ export default function Results() {
                           }
                         }
 
+                        // ── Mehrzeilige Antworten (Letzte Anmeldung, Passwort) vollständig zeigen ──
+                        if ((r.queryId === 'ad_lastlogon' || r.queryId === 'ad_pwd') && (r.output || r.error)) {
+                          return (
+                            <tr key={r.queryId} className="hover:bg-accent/20 transition-colors align-top" data-abfrage={r.queryId}>
+                              <td className="px-4 py-2.5 w-56 shrink-0">
+                                <span className="text-foreground text-xs">{getLabel(r.queryId)}</span>
+                              </td>
+                              <td className="px-2 py-2.5 w-20">
+                                <StatusBadge status={r.status} />
+                              </td>
+                              <td className="px-4 py-2.5 font-mono text-[11px] text-foreground max-w-0 w-full whitespace-pre-wrap break-words select-text">
+                                {r.output || r.error}
+                              </td>
+                            </tr>
+                          )
+                        }
+
                         // ── Default row ────────────────────────────────────────────────
                         return (
                           <tr key={r.queryId} className="hover:bg-accent/20 transition-colors">

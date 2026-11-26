@@ -1,5 +1,111 @@
 import type { QueryDefinition } from '../types'
 
+// Längere Skripte als String.raw (Backslashes bleiben, kein `${…}` darin); der Hostname wird erst beim Ausführen
+// eingesetzt — in einfachen Anführungszeichen, ' verdoppelt.
+const mitHost = (skript: string, h: string) => skript.replace(/__HOST__/g, () => h.replace(/'/g, "''"))
+
+/**
+ * Wer war zuletzt am PC angemeldet – und wann? Liest auf dem PC (WinRM, unsichtbar) die Anmeldungen aus dem
+ * Sicherheitsprotokoll (4624: Anmeldung 2, Entsperren 7, Remotedesktop 10, ohne Netz 11). Ist dort nichts mehr,
+ * gelten Windows-Anmeldebildschirm (LastLoggedOnSAMUser) und das Profil-Datum. Namen löst der Admin-PC im AD auf
+ * (auf dem Ziel-PC ginge das wegen des zweiten Sprungs nicht).
+ */
+const SKRIPT_LETZTE_ANMELDUNG = String.raw`$h = '__HOST__'
+$r = $null; $fehler = ''
+try {
+  $r = Invoke-Command -ComputerName $h -ErrorAction Stop -ScriptBlock {
+    $akt = try { (Get-CimInstance Win32_ComputerSystem -ErrorAction Stop).UserName } catch { $null }
+    $lp = Get-ItemProperty 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Authentication\LogonUI' -ErrorAction SilentlyContinue
+    $profil = $null
+    if ($lp.LastLoggedOnUserSID) { try { $up = Get-CimInstance Win32_UserProfile -Filter "SID='$($lp.LastLoggedOnUserSID)'" -ErrorAction Stop; $nt = Join-Path $up.LocalPath 'NTUSER.DAT'; if (Test-Path -LiteralPath $nt) { $profil = (Get-Item -LiteralPath $nt -Force).LastWriteTime } } catch {} }
+    $xp = "*[System[EventID=4624] and EventData[Data[@Name='LogonType']='2' or Data[@Name='LogonType']='7' or Data[@Name='LogonType']='10' or Data[@Name='LogonType']='11']]"
+    # ohne Leserecht bricht Get-WinEvent hart ab — dann bleibt der Rückfall (Anmeldebildschirm + Profil)
+    $ev = @(); $evFehler = ''
+    try { $ev = @(Get-WinEvent -LogName Security -FilterXPath $xp -MaxEvents 300 -ErrorAction Stop) }
+    catch { if ($_.FullyQualifiedErrorId -notlike 'NoMatchingEventsFound*') { $evFehler = $_.Exception.Message } }
+    $an = foreach ($e in $ev) {
+      $u = [string]$e.Properties[5].Value
+      if (-not $u -or $u.EndsWith('$') -or $u -match '^(DWM-|UMFD-|SYSTEM$|LOCAL SERVICE$|NETWORK SERVICE$|ANONYMOUS)') { continue }
+      [pscustomobject]@{ Zeit = $e.TimeCreated; Domaene = [string]$e.Properties[6].Value; Sam = $u; Art = [string]$e.Properties[8].Value }
+    }
+    $erstes = $null; try { $erstes = (Get-WinEvent -LogName Security -MaxEvents 1 -Oldest -ErrorAction Stop).TimeCreated } catch {}
+    [pscustomobject]@{ Aktuell = $akt; LetzterSam = $lp.LastLoggedOnSAMUser; LetzterName = $lp.LastLoggedOnDisplayName; Profil = $profil; Anmeldungen = @($an); Erstes = $erstes; Protokoll = $ev.Count; ProtokollFehler = $evFehler }
+  }
+} catch { $fehler = $_.Exception.Message }
+function Nm([string]$sam) {
+  $s = (($sam -split '\\')[-1]) -replace '[^A-Za-z0-9._-]', ''
+  if (-not $s) { return '' }
+  try { $f = ([adsisearcher]"(&(objectCategory=person)(sAMAccountName=$s))").FindOne(); if ($f -and $f.Properties['displayname'].Count) { return " ($($f.Properties['displayname'][0]))" } } catch {}
+  return ''
+}
+function Zt($t) { ([datetime]$t).ToString('dd.MM.yyyy HH:mm') }
+$art = @{ '2' = 'Anmeldung'; '7' = 'Entsperren'; '10' = 'Remotedesktop'; '11' = 'Anmeldung ohne Netz' }
+if ($fehler) { "Gerät nicht erreichbar (WinRM): $fehler" }
+else {
+  if ($r.Aktuell) { "Jetzt angemeldet: $($r.Aktuell)$(Nm $r.Aktuell)" } else { 'Jetzt angemeldet: niemand' }
+  $liste = @($r.Anmeldungen | Where-Object { $_ } | Sort-Object { [datetime]$_.Zeit } -Descending)
+  if ($liste.Count) {
+    $l = $liste[0]
+    "Zuletzt angemeldet: $($l.Domaene)\$($l.Sam)$(Nm $l.Sam) am $(Zt $l.Zeit) ($($art[$l.Art]))"
+    $weitere = @($liste | Group-Object Sam | ForEach-Object { $_.Group[0] } | Where-Object { $_.Sam -ne $l.Sam } | Select-Object -First 4)
+    if ($weitere.Count) { 'Davor angemeldet:'; foreach ($w in $weitere) { "  - $($w.Domaene)\$($w.Sam)$(Nm $w.Sam): zuletzt $(Zt $w.Zeit) ($($art[$w.Art]))" } }
+  } elseif ($r.LetzterSam) {
+    "Zuletzt angemeldet: $($r.LetzterSam)$(if ($r.LetzterName) { " ($($r.LetzterName))" } else { Nm $r.LetzterSam })"
+    if ($r.Profil) { "Wann: ungefähr – Profil zuletzt gespeichert am $(Zt $r.Profil)" } else { 'Wann: unbekannt' }
+  } else { 'Zuletzt angemeldet: keine Anmeldung gefunden' }
+  if ($r.ProtokollFehler) { "(Sicherheitsprotokoll nicht lesbar: $($r.ProtokollFehler))" } elseif ($r.Erstes) { "(Ereignisprotokoll reicht zurück bis $(Zt $r.Erstes))" }
+}`
+
+/**
+ * Wann wurde das Passwort zuletzt geändert? Für den jetzt (sonst zuletzt) angemeldeten Benutzer des PCs: pwdLastSet
+ * und Ablauf (msDS-UserPasswordExpiryTimeComputed, berücksichtigt auch abweichende Kennwortrichtlinien) — per ADSI,
+ * also ohne AD-Modul. Dazu das Computerkonto-Passwort (wechselt Windows selbst).
+ */
+const SKRIPT_PASSWORT = String.raw`$h = '__HOST__'
+$sam = $null; $quelle = ''
+try {
+  $r = Invoke-Command -ComputerName $h -ErrorAction Stop -ScriptBlock {
+    $a = try { (Get-CimInstance Win32_ComputerSystem -ErrorAction Stop).UserName } catch { $null }
+    $lp = Get-ItemProperty 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Authentication\LogonUI' -ErrorAction SilentlyContinue
+    [pscustomobject]@{ A = $a; L = $lp.LastLoggedOnSAMUser }
+  }
+  if ($r.A) { $sam = $r.A; $quelle = 'jetzt angemeldet' } elseif ($r.L) { $sam = $r.L; $quelle = 'zuletzt angemeldet' }
+} catch {
+  try { $a = (Get-WmiObject Win32_ComputerSystem -ComputerName $h -ErrorAction Stop).UserName; if ($a) { $sam = $a; $quelle = 'jetzt angemeldet' } } catch {}
+}
+function Lies([string]$filter, [string[]]$felder) { try { $s = New-Object DirectoryServices.DirectorySearcher($filter); foreach ($f in $felder) { [void]$s.PropertiesToLoad.Add($f) }; $s.FindOne() } catch { $null } }
+function Zt([int64]$ft) { [datetime]::FromFileTime($ft).ToString('dd.MM.yyyy HH:mm') }
+if ($sam) {
+  $s = (($sam -split '\\')[-1]) -replace '[^A-Za-z0-9._-]', ''
+  $u = Lies "(&(objectCategory=person)(objectClass=user)(sAMAccountName=$s))" @('displayname', 'pwdlastset', 'useraccountcontrol', 'distinguishedname')
+  if ($u) {
+    $p = $u.Properties
+    $nm = if ($p['displayname'].Count) { " ($($p['displayname'][0]))" } else { '' }
+    "Benutzer: $sam$nm – $quelle"
+    $pls = [int64]$p['pwdlastset'][0]
+    if ($pls -gt 0) { $d = [datetime]::FromFileTime($pls); "Passwort zuletzt geändert: $($d.ToString('dd.MM.yyyy HH:mm')) (vor $([int][math]::Floor(((Get-Date) - $d).TotalDays)) Tagen)" }
+    else { 'Passwort zuletzt geändert: – (muss bei der nächsten Anmeldung geändert werden)' }
+    if (([int64]$p['useraccountcontrol'][0]) -band 0x10000) { 'Ablauf: Passwort läuft nie ab' }
+    else {
+      try {
+        $b = New-Object DirectoryServices.DirectorySearcher([adsi]"LDAP://$($p['distinguishedname'][0])")
+        $b.SearchScope = 'Base'; [void]$b.PropertiesToLoad.Add('msDS-UserPasswordExpiryTimeComputed')
+        $x = $b.FindOne().Properties['msds-userpasswordexpirytimecomputed']
+        if ($x.Count) {
+          $ex = [int64]$x[0]
+          if ($ex -gt 0 -and $ex -lt [int64]::MaxValue) {
+            $ed = [datetime]::FromFileTime($ex); $rest = [int][math]::Floor(($ed - (Get-Date)).TotalDays)
+            if ($ed -lt (Get-Date)) { "Ablauf: abgelaufen seit $($ed.ToString('dd.MM.yyyy HH:mm'))" } else { "Ablauf: $($ed.ToString('dd.MM.yyyy HH:mm')) (in $rest Tagen)" }
+          } else { 'Ablauf: Passwort läuft nie ab' }
+        }
+      } catch {}
+    }
+  } else { "Benutzer: $sam – im AD nicht gefunden (AD erreichbar?)" }
+} else { 'Benutzer: niemand angemeldet und kein zuletzt angemeldeter Benutzer bekannt (PC erreichbar?)' }
+$n = (($h -split '\.')[0]) -replace '[^A-Za-z0-9_-]', ''
+$c = Lies "(&(objectCategory=computer)(name=$n))" @('pwdlastset')
+if ($c -and $c.Properties['pwdlastset'].Count) { "Computerkonto-Passwort (wechselt Windows selbst, etwa alle 30 Tage): $(Zt ([int64]$c.Properties['pwdlastset'][0]))" }`
+
 export const QUERY_DEFINITIONS: QueryDefinition[] = [
   // ── Netzwerk & Erreichbarkeit ──────────────────────────────────────────────
   {
@@ -90,7 +196,7 @@ export const QUERY_DEFINITIONS: QueryDefinition[] = [
     adminOnly: true,
     category: 'System & Hardware',
     psCommand: (h) =>
-      `$os=Get-CimInstance Win32_OperatingSystem -ComputerName "${h}" -ErrorAction Stop; $total=[math]::Round($os.TotalVisibleMemorySize/1MB,2); $free=[math]::Round($os.FreePhysicalMemory/1MB,2); $used=[math]::Round($total-$free,2); "Gesamt: ${total} GB | Frei: ${free} GB | Belegt: ${used} GB"`,
+      `$os=Get-CimInstance Win32_OperatingSystem -ComputerName "${h}" -ErrorAction Stop; $total=[math]::Round($os.TotalVisibleMemorySize/1MB,2); $free=[math]::Round($os.FreePhysicalMemory/1MB,2); $used=[math]::Round($total-$free,2); "Gesamt: $($total) GB | Frei: $($free) GB | Belegt: $($used) GB"`,
   },
   {
     id: 'sys_disk',
@@ -149,6 +255,20 @@ export const QUERY_DEFINITIONS: QueryDefinition[] = [
     category: 'Active Directory & Benutzer',
     psCommand: (h) =>
       `try{(Get-WmiObject Win32_ComputerSystem -ComputerName "${h}" -ErrorAction Stop).UserName}catch{"Nicht verfügbar"}`,
+  },
+  {
+    id: 'ad_lastlogon',
+    label: 'Zuletzt angemeldeter Benutzer (wer & wann)',
+    adminOnly: true,
+    category: 'Active Directory & Benutzer',
+    psCommand: (h) => mitHost(SKRIPT_LETZTE_ANMELDUNG, h),
+  },
+  {
+    id: 'ad_pwd',
+    label: 'Passwort zuletzt geändert',
+    adminOnly: true,
+    category: 'Active Directory & Benutzer',
+    psCommand: (h) => mitHost(SKRIPT_PASSWORT, h),
   },
   {
     id: 'ad_details',

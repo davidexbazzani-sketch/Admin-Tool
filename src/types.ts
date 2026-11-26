@@ -63,7 +63,7 @@ export type QueryId =
   | 'sys_os' | 'sys_cpu_load' | 'sys_ram' | 'sys_disk'
   | 'sys_bios' | 'sys_uptime' | 'sys_model' | 'sys_ram_modules' | 'sys_cpu_model'
   // AD (admin)
-  | 'ad_user' | 'ad_details' | 'ad_ou' | 'ad_sync'
+  | 'ad_user' | 'ad_lastlogon' | 'ad_pwd' | 'ad_details' | 'ad_ou' | 'ad_sync'
   | 'ad_bitlocker' | 'ad_gpo' | 'ad_localadmins' | 'ad_certs'
   // Security (admin)
   | 'sec_defender' | 'sec_firewall' | 'sec_pending_updates'
