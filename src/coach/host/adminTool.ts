@@ -1,8 +1,9 @@
 // Der Coach — Adapter fürs IT Admin Tool. EINZIGE Datei unter src/coach/, die etwas von außerhalb des Ordners
 // importiert (geprüft von scripts/coach-pruefe.mjs).
 //
-// Sichtbarkeit bis zur Freigabe (Wunsch des Auftraggebers, 24.11.2026): nur der Gründer. Der Menüeintrag trägt
-// masterAdminOnly; hier kommt die Gründer-Prüfung dazu, weil masterAdminOnly auch andere Master-Benutzer durchließe.
+// Sichtbarkeit (Wunsch des Auftraggebers, 26.11.2026): alle Master-Admins (und der Gründer). Der Menüeintrag trägt
+// masterAdminOnly; ausblenden lässt er sich je Benutzer unter Einstellungen → Benutzer & Rechte. Die Rollenprüfung
+// hier greift auch, solange die Menü-Sichtbarkeit noch nicht berechnet ist.
 // Zur Freigabe für alle: FREIGEGEBEN = true setzen und masterAdminOnly in src/utils/menuCatalog.ts entfernen.
 import { useAuthStore } from '../../store/authStore'
 import { useAppStore } from '../../store/appStore'
@@ -55,9 +56,10 @@ export const adminToolHost: CoachHost = {
     const u = useAuthStore.getState().session?.user
     if (!u) return false
     if (useMenuSichtbar.getState().sichtbar?.['der-coach'] === false) return false
-    // Davide: Tool-Konto „davidxe“, Gründer-Merkmal oder sein Windows-Konto BQ8069 (Anmeldung per Windows/SSO)
+    if (FREIGEGEBEN || u.role === 'master_admin' || u.isFounder === true) return true
+    // Davide: Tool-Konto „davidxe“ oder sein Windows-Konto BQ8069 (Anmeldung per Windows/SSO)
     const w = String((u as { windowsUsername?: string }).windowsUsername || '').toLowerCase().split('\\').pop()
-    return FREIGEGEBEN || u.isFounder === true || ['davidxe', 'bq8069'].includes((u.username || '').toLowerCase().split('\\').pop() || '') || w === 'bq8069'
+    return ['davidxe', 'bq8069'].includes((u.username || '').toLowerCase().split('\\').pop() || '') || w === 'bq8069'
   },
   andereKarteSichtbar: () => !!document.querySelector('[data-pi-erinnerung]'),
   beobachte: (rueckruf) => {

@@ -4,8 +4,9 @@ Raum im Pausenraum des IT Admin Tools: Trainingscamp für Wirkung, Mut und Antri
 Bruno, täglichen Lernpaketen und Aufgaben fürs echte Leben. Konzept und Plan: `derCoach/` und
 `C:\Users\User\.claude\plans\elegant-conjuring-catmull.md`. Inhalte schreiben: `inhalt/LIESMICH.md`.
 
-**Sichtbar bis zur Freigabe nur für Davide** (`host/adminTool.ts`: `FREIGEGEBEN = false`, dazu
-`masterAdminOnly` im Menü-Katalog). Zur Freigabe fallen beide Sperren.
+**Sichtbar seit 26.11.2026 für alle Master-Admins** (Menü-Katalog `masterAdminOnly`, dazu Rollenprüfung in
+`host/adminTool.ts`; je Benutzer abschaltbar unter Einstellungen → Benutzer & Rechte → Pausenraum › Der Coach).
+Zur Freigabe für alle: `FREIGEGEBEN = true` und `masterAdminOnly` entfernen.
 
 ## Grundsätze
 
