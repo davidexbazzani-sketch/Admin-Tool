@@ -5,6 +5,7 @@
 // (api().sendEmailRaw), wie die Server-Monitor-Alarme. Doppelversand-Schutz je Tag.
 
 import { api } from '../electronAPI'
+import { automatischeMail } from './mailPc'
 import type { HygieneUser } from './proactiveRadar'
 
 const CONFIG_FILE = 'radar/pwd_reminder_config.json'
@@ -242,7 +243,7 @@ export interface SendResult { sent: number; skipped: number; failed: number; ohn
  * damit auch bei mehreren offenen Tools jede Mail nur EINMAL rausgeht. `force`
  * ignoriert den Dedup-Status (für den „Jetzt senden"-Button erneut).
  */
-export async function sendReminders(targets: ReminderTarget[], now: Date, opts?: { force?: boolean }): Promise<SendResult> {
+export async function sendReminders(targets: ReminderTarget[], now: Date, opts?: { force?: boolean; /** automatischer Lauf → über die Mail-PCs */ automatisch?: boolean }): Promise<SendResult> {
   const today = dateKey(dateOnly(now))
   const ziele = recipientsToday(targets, now)
   const res: SendResult = { sent: 0, skipped: 0, failed: 0, ohneMail: 0 }
@@ -256,7 +257,8 @@ export async function sendReminders(targets: ReminderTarget[], now: Date, opts?:
     }
     const { subject, body } = buildReminderMail({ name: t.name, pwdExpiry: effectiveExpiryIso(t, now) }, now)
     try {
-      const r = await api().sendEmailRaw({ to, subject, body, html: true, smtp: '', port: 587 })
+      const mail = { to, subject, body, html: true, smtp: '', port: 587 }
+      const r = opts?.automatisch ? await automatischeMail({ ...mail, protokoll: { art: 'automatisch', quelle: 'Passwort-Erinnerung' } }) : await api().sendEmailRaw(mail)
       if (r.success) {
         res.sent++
         if (opts?.force && t.sam) await recordSam(today, t.sam)          // force: State nachtragen

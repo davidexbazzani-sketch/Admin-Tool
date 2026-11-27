@@ -16,6 +16,7 @@ import {
 } from '../../services/departureReminder'
 import { onAppFocus, ersterLaufEntzerrt } from '../../utils/appFocus'
 import { darfAutomatik } from '../../services/automatikLeiter'
+import { automatischeMail } from '../../services/mailPc'
 
 const POLL_MS = 20 * 60 * 1000
 
@@ -51,7 +52,7 @@ export default function DepartureEmailController() {
         for (const dep of due) {
           const mail = await buildDepartureReminder(dep, ctx)
           if (!mail.ok || !mail.to) continue // keine Manager-E-Mail → nur manuell (UI)
-          const res = await api().sendEmailRaw({ to: mail.to, cc: SUPPORT_CC, subject: mail.subject, body: mail.body, smtp: '', port: 587, protokoll: { art: 'automatisch', quelle: 'Austritts-Reminder (Zeitplan)' } })
+          const res = await automatischeMail({ to: mail.to, cc: SUPPORT_CC, subject: mail.subject, body: mail.body, smtp: '', port: 587, protokoll: { art: 'automatisch', quelle: 'Austritts-Reminder (Zeitplan)' } })
           if (res.success) {
             store = markSent(store, dep.id, by, new Date().toISOString())
             await saveReminderStore(store) // sofort persistieren → idempotent

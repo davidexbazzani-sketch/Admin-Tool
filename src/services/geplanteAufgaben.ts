@@ -6,6 +6,7 @@
 // vorher in scheduled_tasks/ausgefuehrt.json vermerkt — auch bei einem Wechsel des Automatik-PCs
 // innerhalb derselben Minute läuft nichts doppelt.
 import { api } from '../electronAPI'
+import { automatischeMail } from './mailPc'
 import { CATEGORIES } from '../utils/remoteCommands'
 import { ensureWinRM } from '../utils/winrmUtils'
 import type { ScheduledTask, UserEmailConfig } from '../types/auth'
@@ -22,7 +23,7 @@ export async function loadEmailCfg(username: string): Promise<UserEmailConfig | 
 
 async function sendMail(cfg: UserEmailConfig, to: string, subject: string, body: string) {
   if (!cfg.email || !cfg.smtp) return
-  await api().sendEmailRaw({ to, subject, body, smtp: cfg.smtp, port: cfg.port, useTls: cfg.useTls, from: cfg.email, method: cfg.emailMethod, protokoll: { art: 'automatisch', quelle: 'Geplante Aufgaben' } })
+  await automatischeMail({ to, subject, body, smtp: cfg.smtp, port: cfg.port, useTls: cfg.useTls, from: cfg.email, method: cfg.emailMethod, protokoll: { art: 'automatisch', quelle: 'Geplante Aufgaben' } })
 }
 
 const hhmm = (d: Date) => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`

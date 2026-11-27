@@ -63,6 +63,7 @@ import Nis2AccessScanController from './components/scans/Nis2AccessScanControlle
 import DriverRolloutController from './components/scans/DriverRolloutController'
 import ErrorFlashOverlay from './components/ErrorFlashOverlay'
 import AutomatikLeiterController from './components/AutomatikLeiterController'
+import MailPcController from './components/MailPcController'
 import GeplanteAufgabenController from './components/scans/GeplanteAufgabenController'
 import { darfAutomatik } from './services/automatikLeiter'
 import { startLogoAusblenden } from './utils/startLogo'
@@ -450,6 +451,8 @@ export default function App() {
             <BugReportWidget currentScreen={screen} />
             {/* zuerst: bestimmt den EINEN Automatik-PC (BQ8069 bevorzugt) — alle Scans fragen ihn */}
             <AutomatikLeiterController />
+            {/* automatische Mails: zuerst über die Mail-PCs (Timo/Tim), der Automatik-PC zuletzt */}
+            <MailPcController />
             <LicenseAlarmController />
             <EmployeeReminderController />
             <DepartureEmailController />

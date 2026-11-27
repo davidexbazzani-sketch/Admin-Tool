@@ -9,6 +9,7 @@
 //   licenses/dismissals/<username>.json    → per-User weggeklickte Popups
 
 import { api } from '../electronAPI'
+import { automatischeMail } from './mailPc'
 import type { UserEmailConfig } from '../types/auth'
 
 export interface LicenseAttachment {
@@ -245,7 +246,7 @@ export async function sendPendingEmails(currentUser: string): Promise<{ sent: nu
         const trailer = isLate
           ? `Hinweis: Diese ${t}-Tage-Erinnerung wäre am ${dueDate.toLocaleDateString('de-DE')} fällig gewesen, konnte aber erst jetzt verschickt werden (Tool war zwischenzeitlich nicht geöffnet).`
           : `Diese Erinnerung wurde ${t === 30 && lic.autoEmail30Days && !lic.notifyDays.includes(30) ? 'automatisch ' : ''}beim Erreichen von ${t} Tagen vor Ablauf verschickt.`
-        await api().sendEmailRaw({
+        await automatischeMail({
           to: recipients.join(', '),
           subject,
           body:

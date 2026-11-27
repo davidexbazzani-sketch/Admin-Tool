@@ -6,6 +6,7 @@
 // (Claim in status.json), alle Instanzen lesen den Status für Kacheln/Popup.
 
 import { api } from '../electronAPI'
+import { automatischeMail } from './mailPc'
 import type { InventoryItem } from '../types/auth'
 import { pingBatch } from './userPresenceScan'
 import { melde, detailsZuNeustarts, titelVon, textVon, type MeldeZiel, type ServerEreignis, type NeustartDetail } from './serverEreignisse'
@@ -341,7 +342,7 @@ export async function runPingCycle(by: string): Promise<{ online: number; offlin
         // Was hat das Tool in den 2 h davor mit dem Server gemacht? (Zugriffsprotokoll)
         try { e.zugriffe = (await zugriffeVorEreignissen([e]))[e.id] } catch { /* ohne Zeile */ }
         try {
-          const r = await api().sendEmailRaw({ to: an, subject: titelVon(e), body: textVon(e), smtp: '', port: 587 })
+          const r = await automatischeMail({ to: an, subject: titelVon(e), body: textVon(e), smtp: '', port: 587, protokoll: { art: 'automatisch', quelle: 'Server-Meldungen' } })
           if (r?.success) notified[key] = now
         } catch { /* nächster Zyklus versucht es erneut */ }
       }

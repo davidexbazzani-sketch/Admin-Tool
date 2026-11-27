@@ -1,10 +1,10 @@
 // ── PC-Überwachung: Meldungen NUR an den Ersteller ───────────────────────────
 // Chat-Nachricht vom Absender „PC-Überwachung“ in den persönlichen Posteingang des
 // Erstellers (Popup + Windows-Benachrichtigung macht der ChatController) und auf Wunsch
-// eine E-Mail an seine Adresse. Die Mail geht über das Outlook des Rechners, der gerade
-// prüft (wie beim Server-Monitor).
+// eine E-Mail an seine Adresse. Die Mail geht über die Mail-PCs (services/mailPc.ts), sonst über das
+// Outlook des Rechners, der gerade prüft (wie beim Server-Monitor).
 
-import { api } from '../electronAPI'
+import { automatischeMail } from '../services/mailPc'
 import { sende, sicher } from '../services/chat'
 import type { MonAuftrag, MonMeldung, MonZustand } from './types'
 
@@ -16,7 +16,7 @@ export async function melde(auftrag: MonAuftrag, z: MonZustand, art: MonMeldung[
   try { await sende(MONITOR_BOT, { username: auftrag.erstelltVon.username, displayName: auftrag.erstelltVon.displayName }, chatText) } catch { /* Netzlaufwerk weg — steht trotzdem im Zustand */ }
   if (auftrag.mail && auftrag.mailAn?.trim()) {
     try {
-      const r = await api().sendEmailRaw({ to: auftrag.mailAn.trim(), subject: titel, body: (mailText || chatText) + '\n\n— IT Admin Tool · PC-Überwachung', smtp: '', port: 587, protokoll: { art: 'automatisch', quelle: 'PC-Überwachung' } })
+      const r = await automatischeMail({ to: auftrag.mailAn.trim(), subject: titel, body: (mailText || chatText) + '\n\n— IT Admin Tool · PC-Überwachung', smtp: '', port: 587, protokoll: { art: 'automatisch', quelle: 'PC-Überwachung' } })
       m.mail = r.success ? 'ok' : 'fehler'
       if (!r.success) m.mailFehler = r.error || 'unbekannt'
     } catch (e) { m.mail = 'fehler'; m.mailFehler = e instanceof Error ? e.message : String(e) }

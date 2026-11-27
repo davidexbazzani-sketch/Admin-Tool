@@ -23,6 +23,7 @@ import type { Screen } from '../../../types'
 import { Abschnitt, Hinweis, Schalter, datumZeit } from '../../teile'
 
 const AutomatikPcKarte = lazy(() => import('../../../components/settings/AutomatikPcKarte'))
+const MailPcKarte = lazy(() => import('../../../components/settings/MailPcKarte'))
 
 const TAGE = [1, 2, 3, 4, 5, 6, 0]                // Mo … So (Index = Date.getDay())
 const KURZ: Record<string, string> = {
@@ -199,6 +200,7 @@ export default function AutomatikScans() {
   const [leiter, setLeiter] = useState<Leiter | null>(null)
   const [rundlauf, setRundlauf] = useState<RundlaufStand | null>(null)
   const [pcOffen, setPcOffen] = useState(false)
+  const [mailOffen, setMailOffen] = useState(false)
   const [filter, setFilter] = useState<'alle' | 'an' | 'aus'>('alle')
   const [markiert, setMarkiert] = useState<string | null>(null)
   const [meldung, setMeldung] = useState<{ ok: boolean; text: string } | null>(null)
@@ -275,6 +277,10 @@ export default function AutomatikScans() {
           {pcOffen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}Automatik-PC festlegen oder ändern
         </button>
         {pcOffen && <Suspense fallback={<Loader size={14} className="animate-spin" />}><AutomatikPcKarte entsperrt mitPin={a => a()} von={von} /></Suspense>}
+        <button onClick={() => setMailOffen(v => !v)} className="flex items-center gap-1.5 text-xs text-foreground hover:text-primary" data-mailpc-oeffnen>
+          {mailOffen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}Mail-PCs: über welche PCs automatische Mails rausgehen
+        </button>
+        {mailOffen && <Suspense fallback={<Loader size={14} className="animate-spin" />}><MailPcKarte entsperrt von={von} /></Suspense>}
       </section>
 
       <Wochenplan schedules={schedules} laeufe={laeufe} onSprung={springe} />

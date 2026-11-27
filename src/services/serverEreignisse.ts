@@ -12,6 +12,7 @@
 //   server_monitor/gelesen/<user>.json      welche Neustart-Meldungen DIESER Nutzer gelesen hat
 
 import { api } from '../electronAPI'
+import { automatischeMail } from './mailPc'
 import { addHistoryEntry } from './serverHistory'
 import { eigenerRechner, eigenerRechnerSofort, mailRechtJetzt } from './serverMelder'
 import { istClusterKnoten } from './serverSchonung'
@@ -112,7 +113,7 @@ export async function sendeWartende(jetzt = Date.now()): Promise<{ gesendet: num
   for (const e of wartend) {
     if (!e.mailAn || jetzt - new Date(e.at).getTime() > WARTEN_MAX_MS) { fehler.push(e.id); continue }
     try {
-      const r = await api().sendEmailRaw({ to: e.mailAn, subject: titelVon(e), body: textVon(e), smtp: '', port: 587 })
+      const r = await automatischeMail({ to: e.mailAn, subject: titelVon(e), body: textVon(e), smtp: '', port: 587, protokoll: { art: 'automatisch', quelle: 'Server-Meldungen' } })
       if (r?.success) ok.push(e.id); else fehler.push(e.id)
     } catch { fehler.push(e.id) }
   }
@@ -260,7 +261,7 @@ export async function melde(ereignisse: ServerEreignis[], ziele: Record<string, 
     if (sofort === null) sofort = await mailRechtJetzt()
     if (!sofort) { warten.push(e.id); wartenAn[e.id] = z!.email!; continue }
     try {
-      const r = await api().sendEmailRaw({ to: z!.email!, subject: titelVon(e), body: textVon(e), smtp: '', port: 587 })
+      const r = await automatischeMail({ to: z!.email!, subject: titelVon(e), body: textVon(e), smtp: '', port: 587, protokoll: { art: 'automatisch', quelle: 'Server-Meldungen' } })
       if (r?.success) ok.push(e.id); else fehler.push(e.id)
     } catch { fehler.push(e.id) }
   }

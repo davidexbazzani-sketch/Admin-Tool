@@ -23,7 +23,7 @@ export async function runRadarScanOnce(): Promise<{ ok: boolean; summary: string
       const cfg = await loadReminderConfig()
       if (cfg.enabled) {
         const { users } = await loadHygieneUsers()
-        const sr = await sendReminders(targetsFromUsers(users), new Date())
+        const sr = await sendReminders(targetsFromUsers(users), new Date(), { automatisch: true })
         if (sr.sent > 0 || sr.failed > 0) mailInfo = ` · ${sr.sent} Erinnerung(en) gesendet${sr.failed ? `, ${sr.failed} fehlgeschlagen` : ''}`
       }
     } catch { /* Versand best-effort */ }
